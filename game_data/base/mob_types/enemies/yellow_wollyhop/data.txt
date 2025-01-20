@@ -1,5 +1,5 @@
-name = Yellow Wollywog
-description = Once it senses prey, a Yellow Wollywog will jump in the air if it can. It will then float for a bit, and land down with force, crushing anything below.
+name = Yellow Wollyhop
+description = Once it senses prey, a Yellow Wollyhop will jump in the air if it can. It will then float for a bit, and land down with force, crushing anything below.
 
 allow_ground_attacks = true
 can_hunt = player; enemy

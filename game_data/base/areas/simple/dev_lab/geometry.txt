@@ -12320,7 +12320,7 @@ mobs{
 		p=-3104.0000 -736.0000
 	}
 	enemy{
-		type=yellow_wollywog
+		type=yellow_wollyhop
 		p=-3968.0000 -832.0000
 	}
 	bouncer{

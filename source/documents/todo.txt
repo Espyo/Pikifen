@@ -25,7 +25,6 @@ Next tasks (roughly sorted most important first)
         Change ImGuiCol_NavHighlight to ImGuiCol_NavCursor
         Add keyboard/gamepad navigation stuff?
         Switch from columns to tables
-    Rename Wollywog to Wollyhop
     Revamp sounds
         Candidate list of all needed sounds, for now
             Pikmin
@@ -110,9 +109,9 @@ Next tasks (roughly sorted most important first)
                 Water Dumple growling
                 Water Dumple waddling
                 Whiptongue bulborb slurping
-                Wollywog croaking
-                Wollywog falling
-                Wollywog jumping (and leader getting up)
+                Wollyhop croaking
+                Wollyhop falling
+                Wollyhop jumping (and leader getting up)
                 Enemy spirit floating
             Other mobs
                 Onion/ship beam
@@ -195,7 +194,7 @@ Next tasks (roughly sorted most important first)
         Onions should be shaded with hue shifting
         Red Bulborb, Fiery Blowhog, Whiptongue need a depth gradient
         Bulborbs need a few more frames for fluidity
-        Yellow Wollywog should close its eyes when shaking
+        Yellow Wollyhop should close its eyes when shaking
         Ceramic bridges should be reworked for the new bridge format
         Animate the Hocotate ship (use Helodity's zip) and the S.S. Drake
         Add a glow to the smack effect particle?
@@ -223,7 +222,7 @@ Next tasks (roughly sorted most important first)
             For the dumples, longer startup lag and endlag
             Dweevil should be slower
             Skutterchuck should wait a bit before throwing, and should throw bomb rocks
-            Do _something_ to the Yellow Wollywog
+            Do _something_ to the Yellow Wollyhop
             Puffy Blowhog should have a lower territory radius
             Beady Long Legs should rest for longer so the player has more time to throw other Pikmin at it
             Dwarf Red Bulborbs should scream to wake up nearby Red Bulborbs

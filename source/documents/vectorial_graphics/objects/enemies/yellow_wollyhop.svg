@@ -8,8 +8,8 @@
    version="1.1"
    id="svg1587"
    inkscape:version="1.3.2 (091e20e, 2023-11-25)"
-   sodipodi:docname="Yellow_Wollywog.svg"
-   inkscape:export-filename="../../../../../Game_data/Graphics/Yellow_Wollywog.png"
+   sodipodi:docname="Yellow_Wollyhop.svg"
+   inkscape:export-filename="../../../../../Game_data/Graphics/Yellow_Wollyhop.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -21,7 +21,7 @@
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:dc="http://purl.org/dc/elements/1.1/">
   <title
-     id="title2207">Yellow Wollywog spritesheet</title>
+     id="title2207">Yellow Wollyhop spritesheet</title>
   <defs
      id="defs1581">
     <inkscape:path-effect
@@ -4958,7 +4958,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title>Yellow Wollywog spritesheet</dc:title>
+        <dc:title>Yellow Wollyhop spritesheet</dc:title>
         <cc:license
            rdf:resource="https://opensource.org/licenses/MIT" />
         <dc:creator>
@@ -4971,7 +4971,7 @@
             <rdf:li>Pikifen spritesheet</rdf:li>
           </rdf:Bag>
         </dc:subject>
-        <dc:description>Spritesheet for the Yellow Wollywog in the base content of Pikifen. See https://www.pikminfanon.com/wiki/Pikifen</dc:description>
+        <dc:description>Spritesheet for the Yellow Wollyhop in the base content of Pikifen. See https://www.pikminfanon.com/wiki/Pikifen</dc:description>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -4988,7 +4988,7 @@
        height="530"
        x="0"
        y="1122.5197"
-       inkscape:export-filename="../../../../../Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="../../../../../Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <rect
@@ -5268,7 +5268,7 @@
        id="path2212-5-284"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ssssss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
        inkscape:transform-center-x="3.4008099"
@@ -5456,7 +5456,7 @@
        inkscape:transform-center-x="-2.1254897"
        inkscape:export-ydpi="96"
        inkscape:export-xdpi="96"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        sodipodi:nodetypes="ssssss"
        inkscape:connector-curvature="0"
        id="use6412-2-6"
@@ -5519,7 +5519,7 @@
     <path
        inkscape:export-ydpi="96"
        inkscape:export-xdpi="96"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        sodipodi:nodetypes="sssccs"
        inkscape:connector-curvature="0"
        id="use1740-19"
@@ -5732,7 +5732,7 @@
     <path
        inkscape:export-ydpi="96"
        inkscape:export-xdpi="96"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        sodipodi:nodetypes="sssccs"
        inkscape:connector-curvature="0"
        id="use13094"
@@ -5798,7 +5798,7 @@
        transform="matrix(1,0,0,-1,0,2334.0394)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -5809,7 +5809,7 @@
        transform="rotate(48.552833,39.418834,1178.1896)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -5820,7 +5820,7 @@
        transform="matrix(1,0,0,-1,0,2335.0394)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -5831,7 +5831,7 @@
        transform="matrix(1,0,0,-1,0,2335.0394)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -5842,7 +5842,7 @@
        transform="matrix(1,0,0,-1,0,2335.0394)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -5854,7 +5854,7 @@
        width="100%"
        height="100%"
        style="opacity:1"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -5863,7 +5863,7 @@
        id="path2212"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sssccs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -5872,7 +5872,7 @@
        id="path2210"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccsscc"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -5881,7 +5881,7 @@
        id="path2192"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="szszs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <circle
@@ -6048,7 +6048,7 @@
        transform="matrix(1,0,0,-1,0,2332.0394)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -6060,7 +6060,7 @@
        transform="rotate(48.552833,132.02737,1176.5811)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -6072,7 +6072,7 @@
        transform="matrix(1,0,0,-1,-3.3e-4,2333.039)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -6084,7 +6084,7 @@
        transform="matrix(1,0,0,-1,-3.3e-4,2333.039)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -6096,7 +6096,7 @@
        transform="matrix(1,0,0,-1,0,2333.0394)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -6108,7 +6108,7 @@
        width="100%"
        height="100%"
        style="display:inline;opacity:1"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -6117,7 +6117,7 @@
        id="path2212-9"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sssccs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -6126,7 +6126,7 @@
        id="path2210-4"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccsscc"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -6135,7 +6135,7 @@
        id="path2192-9"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="szszs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <ellipse
@@ -6323,7 +6323,7 @@
        transform="matrix(1,0,0,-1,0,2336.0394)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -6335,7 +6335,7 @@
        transform="rotate(48.552833,218.81016,1179.7982)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -6347,7 +6347,7 @@
        transform="matrix(1,0,0,-1,0,2337.0394)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -6359,7 +6359,7 @@
        transform="matrix(1,0,0,-1,0,2337.0394)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -6371,7 +6371,7 @@
        transform="matrix(1,0,0,-1,0,2337.0394)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -6383,7 +6383,7 @@
        width="100%"
        height="100%"
        style="display:inline;opacity:1"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -6392,7 +6392,7 @@
        id="path2212-1"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sssccs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -6401,7 +6401,7 @@
        id="path2210-8"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccsscc"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -6410,7 +6410,7 @@
        id="path2192-59"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="szszs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <ellipse
@@ -6598,7 +6598,7 @@
        transform="matrix(1,0,0,-1,0,2334.0396)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -6610,7 +6610,7 @@
        transform="rotate(48.552833,312.41882,1178.1897)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -6622,7 +6622,7 @@
        transform="matrix(1,0,0,-1,0,2335.0396)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -6634,7 +6634,7 @@
        transform="matrix(1,0,0,-1,0,2335.0396)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -6646,7 +6646,7 @@
        transform="matrix(1,0,0,-1,0,2335.0396)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -6658,7 +6658,7 @@
        width="100%"
        height="100%"
        style="display:inline;opacity:1"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -6667,7 +6667,7 @@
        id="path2212-6"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sssccs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -6676,7 +6676,7 @@
        id="path2210-2"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccsscc"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -6685,7 +6685,7 @@
        id="path2192-8"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="szszs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <circle
@@ -6863,7 +6863,7 @@
        transform="matrix(1,0,0,-1,0,2334.0396)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -6875,7 +6875,7 @@
        transform="rotate(48.552833,406.41883,1178.1896)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -6887,7 +6887,7 @@
        transform="matrix(1,0,0,-1,0,2335.0396)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -6899,7 +6899,7 @@
        transform="matrix(1,0,0,-1,0,2335.0396)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -6911,7 +6911,7 @@
        transform="matrix(1,0,0,-1,0,2335.0396)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -6923,7 +6923,7 @@
        width="100%"
        height="100%"
        style="display:inline;opacity:1"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -6932,7 +6932,7 @@
        id="path2212-6-0"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sssccs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -6941,7 +6941,7 @@
        id="path2210-2-7"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccsscc"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -6950,7 +6950,7 @@
        id="path2192-8-5"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="czczc"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <circle
@@ -7158,7 +7158,7 @@
        transform="matrix(0.84087604,-0.54122775,-0.54122775,-0.84087604,673.06223,2344.1143)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
        inkscape:transform-center-x="-12.281105"
@@ -7172,7 +7172,7 @@
        transform="matrix(0.95239765,-0.30485853,-0.30485853,-0.95239765,379.29738,2473.3236)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
        inkscape:transform-center-x="-4.6540082"
@@ -7180,7 +7180,7 @@
     <path
        inkscape:export-ydpi="96"
        inkscape:export-xdpi="96"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        sodipodi:nodetypes="ccssscc"
        inkscape:connector-curvature="0"
        id="use1719-3"
@@ -7195,7 +7195,7 @@
        width="100%"
        height="100%"
        style="display:inline;opacity:1"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -7204,7 +7204,7 @@
        id="path2212-4"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sssccs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -7213,7 +7213,7 @@
        id="path2210-7"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccsscc"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -7222,7 +7222,7 @@
        id="path2192-6"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="szszs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
        inkscape:transform-center-x="-23.000643"
@@ -7462,7 +7462,7 @@
     <path
        inkscape:export-ydpi="96"
        inkscape:export-xdpi="96"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        sodipodi:nodetypes="ssssss"
        inkscape:connector-curvature="0"
        id="use1715-3-3"
@@ -7503,7 +7503,7 @@
        transform="matrix(0.96584626,-0.25911581,-0.25911581,-0.96584626,326.82625,2524.2591)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -7515,13 +7515,13 @@
        transform="matrix(1,0,0,-1,2.92548,2534.4822)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
        inkscape:export-ydpi="96"
        inkscape:export-xdpi="96"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        sodipodi:nodetypes="ccssscc"
        inkscape:connector-curvature="0"
        id="use1719-3-5"
@@ -7536,7 +7536,7 @@
        width="100%"
        height="100%"
        style="display:inline;opacity:1"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -7545,7 +7545,7 @@
        id="path2212-4-2"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sssccs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -7554,7 +7554,7 @@
        id="path2210-7-6"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccsscc"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -7563,7 +7563,7 @@
        id="path2192-6-0"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="szszs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
        inkscape:transform-center-x="-22.886852"
@@ -7792,7 +7792,7 @@
     <path
        inkscape:export-ydpi="96"
        inkscape:export-xdpi="96"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        sodipodi:nodetypes="ssssss"
        inkscape:connector-curvature="0"
        id="use1715-3-3-9"
@@ -7816,7 +7816,7 @@
        transform="matrix(1,0,0,-1,0,2527.0394)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -7828,7 +7828,7 @@
        width="100%"
        height="100%"
        style="display:inline;opacity:1"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -7837,7 +7837,7 @@
        id="path2212-43"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sssccs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -7846,7 +7846,7 @@
        id="path2210-71"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccsscc"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -7855,7 +7855,7 @@
        id="path2192-3"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="szszs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <ellipse
@@ -8037,7 +8037,7 @@
        id="path2192-39"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="szszs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <ellipse
@@ -8243,7 +8243,7 @@
        transform="matrix(1,0,0,-1,0,2513.0396)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -8255,7 +8255,7 @@
        width="100%"
        height="100%"
        style="display:inline;opacity:1"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -8264,7 +8264,7 @@
        id="path2212-8"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sssccs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -8273,7 +8273,7 @@
        id="path2210-45"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccsscc"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -8282,7 +8282,7 @@
        id="path2192-0"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="szszs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <circle
@@ -8454,7 +8454,7 @@
     <path
        inkscape:export-ydpi="96"
        inkscape:export-xdpi="96"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        sodipodi:nodetypes="ssssss"
        inkscape:connector-curvature="0"
        id="use3623"
@@ -8466,7 +8466,7 @@
        id="path2192-39-8"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="szszs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <ellipse
@@ -8633,7 +8633,7 @@
        id="path2192-36"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="szszs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <ellipse
@@ -8818,7 +8818,7 @@
        id="path2212-5"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ssssss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -8968,7 +8968,7 @@
        id="path2192-36-0"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="szszs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <ellipse
@@ -9153,7 +9153,7 @@
        id="path2212-5-2"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ssssss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
        inkscape:transform-center-x="-9.0360331"
@@ -9163,7 +9163,7 @@
        inkscape:transform-center-x="-2.8889612"
        inkscape:export-ydpi="96"
        inkscape:export-xdpi="96"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        sodipodi:nodetypes="ssssss"
        inkscape:connector-curvature="0"
        id="use6412-5"
@@ -9295,7 +9295,7 @@
        id="path2192-36-06"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="szszs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <ellipse
@@ -9480,7 +9480,7 @@
        id="path2212-5-28"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ssssss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -9630,7 +9630,7 @@
        id="path2192-36-0-1"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="szszs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <ellipse
@@ -9815,7 +9815,7 @@
        id="path2212-5-2-8"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ssssss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
        inkscape:transform-center-x="-9.0360331"
@@ -9825,7 +9825,7 @@
        inkscape:transform-center-x="-2.8889612"
        inkscape:export-ydpi="96"
        inkscape:export-xdpi="96"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        sodipodi:nodetypes="ssssss"
        inkscape:connector-curvature="0"
        id="use6412-5-5"
@@ -9957,7 +9957,7 @@
        id="path2192-36-06-6"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="szszs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <ellipse
@@ -10142,7 +10142,7 @@
        id="path2212-5-28-0"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ssssss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -10249,7 +10249,7 @@
        inkscape:transform-center-x="-4.9857881"
        inkscape:export-ydpi="96"
        inkscape:export-xdpi="96"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        sodipodi:nodetypes="ssssss"
        inkscape:connector-curvature="0"
        id="use6408-8"
@@ -10260,7 +10260,7 @@
        inkscape:transform-center-x="2.0039602"
        inkscape:export-ydpi="96"
        inkscape:export-xdpi="96"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        sodipodi:nodetypes="ssssss"
        inkscape:connector-curvature="0"
        id="use6410-803"
@@ -10310,7 +10310,7 @@
        id="path2192-36-1"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="szszs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <ellipse
@@ -10495,7 +10495,7 @@
        id="path2212-5-3"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ssssss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
        inkscape:transform-center-x="-10.361989"
@@ -10505,7 +10505,7 @@
        inkscape:transform-center-x="-0.84796855"
        inkscape:export-ydpi="96"
        inkscape:export-xdpi="96"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        sodipodi:nodetypes="ssssss"
        inkscape:connector-curvature="0"
        id="use6412-2"
@@ -10517,7 +10517,7 @@
        id="path2192-5-8"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="szszs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -10526,7 +10526,7 @@
        id="path2192-5-8-5"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="szszs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -10583,7 +10583,7 @@
        id="path2192-5-8-58"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="szszs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -10639,7 +10639,7 @@
        id="path2192-5-8-5-5"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="szszs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -10693,7 +10693,7 @@
        id="path2192-5-8-58-9"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="szszs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -10749,7 +10749,7 @@
        id="path2192-5-10-9"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="szszs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -10758,7 +10758,7 @@
        id="path2192-5-2"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="szszs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
        inkscape:transform-center-x="-23.000643"
@@ -10769,7 +10769,7 @@
        id="path2192-5-2-0"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="szszs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
        inkscape:transform-center-x="-22.886852"
@@ -10780,7 +10780,7 @@
        id="path2192-5-17"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="szszs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -10789,7 +10789,7 @@
        id="path2192-5-10"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="szszs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -10798,7 +10798,7 @@
        id="path2192-5-37"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="szszs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -10807,7 +10807,7 @@
        id="path2192-5-1-4"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="szszs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -10816,7 +10816,7 @@
        id="path2192-5-1"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="szszs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -10825,7 +10825,7 @@
        id="path2192-5-3"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="szszs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -10834,7 +10834,7 @@
        id="path2192-5-7"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="szszs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -10843,7 +10843,7 @@
        id="path2192-5"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="szszs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -10852,7 +10852,7 @@
        id="path2231"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -10861,7 +10861,7 @@
        id="path2233"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -10872,7 +10872,7 @@
        transform="matrix(1,0,0,-1,0,2335.0394)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -10883,7 +10883,7 @@
        transform="matrix(1,0,0,-1,0,2335.0394)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -10892,7 +10892,7 @@
        id="path2231-0"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -10901,7 +10901,7 @@
        id="path2233-9"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -10913,7 +10913,7 @@
        transform="matrix(1,0,0,-1,0,2333.0398)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -10925,7 +10925,7 @@
        transform="matrix(1,0,0,-1,0,2333.0398)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -10934,7 +10934,7 @@
        id="path2231-7"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -10943,7 +10943,7 @@
        id="path2233-5"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -10955,7 +10955,7 @@
        transform="matrix(1,0,0,-1,0,2337.0398)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -10967,7 +10967,7 @@
        transform="matrix(1,0,0,-1,0,2337.0398)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -10976,7 +10976,7 @@
        id="path2231-4"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -10985,7 +10985,7 @@
        id="path2233-7"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -10997,7 +10997,7 @@
        transform="matrix(1,0,0,-1,0,2335.0396)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -11009,7 +11009,7 @@
        transform="matrix(1,0,0,-1,0,2335.0396)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -11018,7 +11018,7 @@
        id="path2231-4-8"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -11027,7 +11027,7 @@
        id="path2233-7-7"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -11039,7 +11039,7 @@
        transform="matrix(1,0,0,-1,0,2335.0394)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -11051,7 +11051,7 @@
        transform="matrix(1,0,0,-1,0,2335.0394)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -11060,7 +11060,7 @@
        id="path2231-8"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
        inkscape:transform-center-x="-54.836268"
@@ -11071,7 +11071,7 @@
        id="path2233-90"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
        inkscape:transform-center-x="-58.900211"
@@ -11085,7 +11085,7 @@
        transform="matrix(0.96439567,0.2644636,0.2644636,-0.96439567,-328.24871,2458.0448)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
        inkscape:transform-center-x="-0.37431462"
@@ -11099,7 +11099,7 @@
        transform="matrix(0.96439567,0.2644636,0.2644636,-0.96439567,-328.24871,2458.0448)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
        inkscape:transform-center-x="-3.1060257"
@@ -11110,7 +11110,7 @@
        id="path2231-8-6"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
        inkscape:transform-center-x="-56.250084"
@@ -11121,7 +11121,7 @@
        id="path2233-90-6"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
        inkscape:transform-center-x="-60.561107"
@@ -11135,7 +11135,7 @@
        transform="matrix(0.92373961,0.38302106,0.38302106,-0.92373961,-470.26067,2375.4763)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
        inkscape:transform-center-x="-0.29779375"
@@ -11149,7 +11149,7 @@
        transform="matrix(0.92373961,0.38302106,0.38302106,-0.92373961,-470.26067,2375.4763)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
        inkscape:transform-center-x="-2.6894084"
@@ -11160,7 +11160,7 @@
        id="path2231-80"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -11169,7 +11169,7 @@
        id="path2233-97"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -11181,7 +11181,7 @@
        transform="matrix(1,0,0,-1,0,2527.0394)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -11193,7 +11193,7 @@
        transform="matrix(1,0,0,-1,0,2527.0394)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -11202,7 +11202,7 @@
        id="path2231-72"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -11211,7 +11211,7 @@
        id="path2233-58"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
        inkscape:transform-center-x="-11.14704"
@@ -11225,7 +11225,7 @@
        transform="matrix(1,0,0,-1,0,2497.0394)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -11237,7 +11237,7 @@
        transform="matrix(1,0,0,-1,0,2497.0394)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -11246,7 +11246,7 @@
        id="path2231-3"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -11255,7 +11255,7 @@
        id="path2233-6"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
        inkscape:transform-center-x="-4.523915"
@@ -11269,7 +11269,7 @@
        transform="matrix(1,0,0,-1,0,2513.0396)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -11281,7 +11281,7 @@
        transform="matrix(1,0,0,-1,0,2513.0396)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -11290,7 +11290,7 @@
        id="path2231-72-8"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
        inkscape:transform-center-x="-7.0318533"
@@ -11304,7 +11304,7 @@
        transform="matrix(1,0,0,-1,0,2955.0394)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -11313,7 +11313,7 @@
        id="path2231-802-4"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -11322,7 +11322,7 @@
        id="path2233-1-2"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -11334,7 +11334,7 @@
        transform="matrix(1,0,0,-1,0,2766.9963)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -11346,7 +11346,7 @@
        transform="matrix(1,0,0,-1,0,2766.9963)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -11355,7 +11355,7 @@
        id="path2231-802-8"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -11364,7 +11364,7 @@
        id="path2233-1-7"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -11376,7 +11376,7 @@
        transform="matrix(1,0,0,-1,0,2766.9963)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -11388,7 +11388,7 @@
        transform="matrix(1,0,0,-1,0,2766.9963)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -11397,7 +11397,7 @@
        id="path2231-802-4-9"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -11406,7 +11406,7 @@
        id="path2233-1-2-6"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -11418,7 +11418,7 @@
        transform="matrix(1,0,0,-1,0,2766.9963)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -11430,7 +11430,7 @@
        transform="matrix(1,0,0,-1,0,2766.9963)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -11439,7 +11439,7 @@
        id="path2231-802-8-0"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -11448,7 +11448,7 @@
        id="path2233-1-7-6"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -11460,7 +11460,7 @@
        transform="matrix(1,0,0,-1,0,2766.9963)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -11472,7 +11472,7 @@
        transform="matrix(1,0,0,-1,0,2766.9963)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -11484,7 +11484,7 @@
        transform="matrix(1,0,0,-1,5.9863281e-6,2752.9963)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -11496,7 +11496,7 @@
        transform="matrix(1,0,0,-1,5.9863281e-6,2752.9963)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -11505,7 +11505,7 @@
        id="path2231-802"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -11514,7 +11514,7 @@
        id="path2233-1"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -11523,7 +11523,7 @@
        id="path2192-5-8-6"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="szszs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -11532,7 +11532,7 @@
        id="path2231-802-7"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -11541,7 +11541,7 @@
        id="path2233-1-79"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -11553,7 +11553,7 @@
        transform="matrix(1,0,0,-1,1e-5,3038.996)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -11565,7 +11565,7 @@
        transform="matrix(1,0,0,-1,1e-5,3038.996)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -11577,7 +11577,7 @@
        transform="matrix(1,0,0,-1,0,2983.0394)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -11586,7 +11586,7 @@
        id="path2210-6"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccsscc"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -11595,7 +11595,7 @@
        id="path2192-1"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="szszs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <circle
@@ -11753,7 +11753,7 @@
        id="path2192-5-31"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="szszs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -11882,7 +11882,7 @@
        id="path2192-36-6"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="szszs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <ellipse
@@ -12067,7 +12067,7 @@
        id="path2212-5-9"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ssssss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -12085,7 +12085,7 @@
        id="path2192-5-8-1"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="szszs"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -12097,7 +12097,7 @@
        transform="matrix(1,0,0,-1,0,3132.9964)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <use
@@ -12109,7 +12109,7 @@
        transform="matrix(1,0,0,-1,0,3132.9964)"
        width="100%"
        height="100%"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -12118,7 +12118,7 @@
        id="path2231-802-9"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -12127,7 +12127,7 @@
        id="path2233-1-77"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -12156,7 +12156,7 @@
        id="path2231-36"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -12165,7 +12165,7 @@
        id="path2233-75"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
        inkscape:transform-center-x="-9.6679679"
@@ -12334,7 +12334,7 @@
        id="use6488-6"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ssssss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
        inkscape:transform-center-x="-10.383023"
@@ -12345,7 +12345,7 @@
        id="use6490-2"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ssssss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
        inkscape:transform-center-x="-13.676693"
@@ -12356,7 +12356,7 @@
        id="use6492-1"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ssssss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
        inkscape:transform-center-x="-14.275465"
@@ -12396,7 +12396,7 @@
        inkscape:transform-center-x="-5.3125888"
        inkscape:export-ydpi="96"
        inkscape:export-xdpi="96"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        sodipodi:nodetypes="ssssss"
        inkscape:connector-curvature="0"
        id="use6412-2-6-7"
@@ -12593,7 +12593,7 @@
        id="path2212-5-7"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ssssss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
        inkscape:transform-center-y="-4.8003271"
@@ -12632,7 +12632,7 @@
        id="path2212-5-22"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ssssss"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollywog.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Yellow_Wollyhop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
        inkscape:transform-center-y="-5.3294123" />
