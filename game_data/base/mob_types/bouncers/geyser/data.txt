@@ -14,10 +14,11 @@ sounds {
     steam {
         file = steam
         loop = true
-        volume = 40
+        volume = 35
     }
     fountain {
         file = fountain
         loop = true
+        volume = 5
     }
 }

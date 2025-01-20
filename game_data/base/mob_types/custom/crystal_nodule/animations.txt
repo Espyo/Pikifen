@@ -23,6 +23,7 @@ animations{
 		}
 	}
 	landing{
+		loop_frame=1
 		frames{
 			landing{
 				duration=0.0100

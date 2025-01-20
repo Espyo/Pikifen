@@ -54,6 +54,9 @@ script {
             set_state idling
         }
         on_frame_signal {
+            if $underwater = true
+                play_sound slosh_quiet
+            end_if
             set_var can_find true
         }
         on_opponent_in_reach {
@@ -102,6 +105,11 @@ script {
             get_event_info hazard hazard
             if $hazard = water
                 set_var underwater false
+            end_if
+        }
+        on_frame_signal {
+            if $underwater = true
+                play_sound slosh_quiet
             end_if
         }
     }
@@ -178,6 +186,11 @@ script {
                 set_var underwater false
             end_if
         }
+        on_frame_signal {
+            if $underwater = true
+                play_sound slosh_quiet
+            end_if
+        }
     }
 
     returning {
@@ -237,6 +250,11 @@ script {
                 set_var underwater false
             end_if
         }
+        on_frame_signal {
+            if $underwater = true
+                play_sound slosh_quiet
+            end_if
+        }
     }
 
     stop_to_shake {
@@ -257,6 +275,11 @@ script {
             get_event_info hazard hazard
             if $hazard = water
                 set_var underwater false
+            end_if
+        }
+        on_frame_signal {
+            if $underwater = true
+                play_sound slosh_quiet
             end_if
         }
     }

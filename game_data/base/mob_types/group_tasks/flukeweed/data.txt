@@ -5,8 +5,8 @@ area_editor_tips = To make it capture other objects, simply place those objects 
 casts_shadow = true
 contribution_method = normal
 custom_category_name = Useful
-first_row_p1 = 8 -12
-first_row_p2 = 8 4
+first_row_p1 = -6 -10
+first_row_p2 = 6 -10
 flying_pikmin_only = true
 height = 32
 interval_between_rows = 4
@@ -19,4 +19,21 @@ pushes = false
 radius = 16
 show_health = true
 spots_z = 35
+worker_pikmin_angle = 90
 worker_pikmin_pose = carrying
+
+sounds {
+    pulled {
+        file = stretch
+        volume = 25
+        speed = 110
+        speed_deviation = 30
+        stack_min_pos = 0.8
+        random_delay = 0.2
+    }
+    dying {
+        file = pluck
+        volume = 40
+        speed = 110
+    }
+}

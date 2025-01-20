@@ -32,6 +32,12 @@ sounds {
     attack {
         file = pikmin_attack
     }
+    butt_stomp {
+        file = thump
+        speed = 70
+        speed_deviation = 10
+        volume = 80
+    }
     called {
         file = pikmin_called
     }

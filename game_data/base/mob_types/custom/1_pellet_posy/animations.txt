@@ -1,3 +1,5 @@
+name
+engine_version=0.25.0
 animations{
 	blooming{
 		frames{
@@ -12,7 +14,11 @@ animations{
 	dying{
 		frames{
 			dying_01{
-				duration=0.5000
+				duration=0.4000
+			}
+			dying_01{
+				duration=0.1000
+				sound=dying
 			}
 			dying_02{
 				duration=0.1000
@@ -846,4 +852,3 @@ body_parts{
 	pellet
 	body
 }
-engine_version=0.25.0

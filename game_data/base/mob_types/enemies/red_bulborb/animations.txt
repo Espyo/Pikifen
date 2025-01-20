@@ -1,3 +1,5 @@
+name
+engine_version=0.25.0
 animations{
 	attacking{
 		hit_rate=50
@@ -37,6 +39,7 @@ animations{
 			}
 			dying_04{
 				duration=0.1000
+				sound=thud
 			}
 			dead{
 				duration=0.5000
@@ -80,12 +83,17 @@ animations{
 		}
 	}
 	failing{
-		loop_frame=3
+		loop_frame=4
 		frames{
 			failing_01{
-				duration=0.4000
+				duration=0.1000
+				interpolate=true
 			}
 			failing_02{
+				duration=0.4000
+				sound=thud
+			}
+			failing_03{
 				duration=0.2000
 			}
 			attacking_01{
@@ -163,6 +171,7 @@ animations{
 			}
 			moving_02{
 				duration=0.1000
+				sound=step
 			}
 			moving_01{
 				duration=0.1000
@@ -175,6 +184,7 @@ animations{
 			}
 			moving_04{
 				duration=0.1000
+				sound=step
 			}
 			moving_03{
 				duration=0.1000
@@ -238,10 +248,10 @@ animations{
 	sleeping{
 		frames{
 			sleeping_01{
-				duration=0.5000
+				duration=0.8000
 			}
 			sleeping_02{
-				duration=0.5000
+				duration=0.8000
 			}
 		}
 	}
@@ -634,7 +644,8 @@ sprites{
 		file=red_bulborb
 		file_pos=677.0000 116.0000
 		file_size=193.0000 135.0000
-		offset=32.0000 0.0000
+		offset=52.4938 0.0000
+		scale=1.2124 0.8248
 		hitboxes{
 			body{
 				coords=78.0000 2.0000 0.0000
@@ -662,6 +673,37 @@ sprites{
 		}
 	}
 	failing_02{
+		file=red_bulborb
+		file_pos=677.0000 116.0000
+		file_size=193.0000 135.0000
+		offset=32.0000 0.0000
+		hitboxes{
+			body{
+				coords=78.0000 2.0000 0.0000
+				height=128.0000
+				radius=45.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			back{
+				coords=12.0000 -13.0000 0.0000
+				height=128.0000
+				radius=56.0000
+				type=0
+				value=0.8000
+				can_pikmin_latch=true
+			}
+			mouth{
+				coords=97.0000 33.0000 0.0000
+				height=128.0000
+				radius=16.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	failing_03{
 		file=red_bulborb
 		file_pos=512.0000 116.0000
 		file_size=163.0000 103.0000
@@ -1147,4 +1189,3 @@ body_parts{
 	back
 	mouth
 }
-engine_version=0.25.0

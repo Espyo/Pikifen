@@ -14,3 +14,11 @@ radius = 48
 vanish_on_drop = false
 walkable = true
 weight = 10
+
+sounds {
+    thump {
+        file = thump
+        speed = 70
+        speed_deviation = 10
+    }
+}

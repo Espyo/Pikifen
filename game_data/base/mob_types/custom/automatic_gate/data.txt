@@ -10,3 +10,12 @@ pushable = false
 pushes = true
 radius = 32
 rectangular_dimensions = 40 192
+
+sounds {
+    thud {
+        file = stomp_long
+        volume = 70
+        speed = 80
+        speed_deviation = 5
+    }
+}

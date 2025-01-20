@@ -39,3 +39,12 @@ spawns {
         angle = 0
     }
 }
+
+sounds {
+    stretch {
+        file = stretch
+        speed = 60
+        speed_deviation = 5
+        volume = 50
+    }
+}

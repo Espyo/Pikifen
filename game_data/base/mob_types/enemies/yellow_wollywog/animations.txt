@@ -21,7 +21,7 @@ animations{
 		}
 	}
 	dying{
-		loop_frame=14
+		loop_frame=15
 		frames{
 			idling_01{
 				duration=0.1000
@@ -73,6 +73,10 @@ animations{
 			}
 			dying_05{
 				duration=0.1000
+			}
+			dying_06{
+				duration=0.1000
+				sound=thump
 			}
 			dying_06{
 				duration=1.0000
@@ -209,6 +213,7 @@ animations{
 			}
 			turning_02{
 				duration=0.1000
+				sound=step
 			}
 			turning_01{
 				duration=0.1000
@@ -221,6 +226,7 @@ animations{
 			}
 			turning_04{
 				duration=0.1000
+				sound=step
 			}
 			turning_03{
 				duration=0.1000

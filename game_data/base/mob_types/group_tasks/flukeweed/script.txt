@@ -44,7 +44,7 @@ script {
             set_animation pulled
 
             get_mob_info p self group_task_power
-            if $p = 3
+            if $p <= 3
                 set_timer 1.5
             else
                 if $p = 4
@@ -58,7 +58,7 @@ script {
             add_health -20
 
             get_mob_info p self group_task_power
-            if $p = 3
+            if $p <= 3
                 set_timer 1.5
             else
                 if $p = 4
@@ -80,6 +80,7 @@ script {
             set_animation dying
             release_stored_mobs
             start_particles dust_explosion
+            set_shadow_visibility false
         }
         on_animation_end {
             delete

@@ -3,14 +3,20 @@ init {
 }
 
 script {
+    idling {
+        on_enter {
+            set_timer 1
+        }
+        on_timer {
+            play_sound fountain
+        }
+    }
     bouncing {
         on_enter {
             play_sound steam sound_id
-            play_sound fountain sound_id2
         }
         on_leave {
             stop_sound $sound_id
-            stop_sound $sound_id2
         }
     }
 }

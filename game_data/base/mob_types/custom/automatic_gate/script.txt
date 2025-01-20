@@ -20,6 +20,7 @@ script {
     closed {
         on_enter {
             set_animation closed
+            play_sound thud
             set_can_block_paths true
         }
         on_receive_message {

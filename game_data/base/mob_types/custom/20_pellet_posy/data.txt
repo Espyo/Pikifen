@@ -89,3 +89,11 @@ spawns {
         momentum = 10
     }
 }
+
+sounds{
+    dying {
+        file = plant_dying
+        volume = 10
+        speed = 135
+    }
+}

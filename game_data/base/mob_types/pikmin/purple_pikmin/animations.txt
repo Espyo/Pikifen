@@ -424,10 +424,15 @@ animations{
 	mob_landing{
 		frames{
 			mob_landing{
-				duration=0.0700
+				duration=0.0100
 				interpolate=true
 			}
-			idling_01{
+			mob_landing{
+				duration=0.0700
+				interpolate=true
+				sound=butt_stomp
+			}
+			sitting_01{
 				duration=0.4000
 			}
 		}
@@ -2134,23 +2139,24 @@ sprites{
 	}
 	mob_landing{
 		file=purple_pikmin
-		file_pos=0.0000 0.0000
-		file_size=24.0000 36.0000
+		file_pos=0.0000 74.0000
+		file_size=39.0000 34.0000
+		offset=-3.0000 0.0000
 		scale=0.8000 0.8000
 		top_visible=true
-		top_pos=-4.0000 0.0000
+		top_pos=-19.0000 0.0000
 		top_size=5.5000 10.0000
 		top_angle=0.0000
 		hitboxes{
 			top{
-				coords=-6.0000 0.0000 0.0000
+				coords=-19.0000 0.0000 0.0000
 				height=24.0000
 				radius=4.0000
 				type=2
 				value=1.0000
 			}
 			body{
-				coords=0.0000 0.0000 0.0000
+				coords=-2.0000 0.0000 0.0000
 				height=24.0000
 				radius=10.0000
 				type=1

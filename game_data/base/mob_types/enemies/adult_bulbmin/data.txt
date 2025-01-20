@@ -46,6 +46,12 @@ reaches {
 }
 
 sounds {
+    step {
+        file = stomp_quick
+        volume = 20
+        speed = 130
+        speed_deviation = 5
+    }
     bite {
         file = bite
         volume = 70
@@ -64,6 +70,11 @@ sounds {
         volume = 40
         speed = 90
         speed_deviation = 20
+    }
+    thud {
+        file = thump
+        speed = 130
+        volume = 20
     }
 }
 

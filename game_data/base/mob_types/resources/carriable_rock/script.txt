@@ -1,0 +1,14 @@
+init {
+    set_var ready false
+}
+
+script {
+    idle_waiting {
+        on_enter {
+            if $ready = true
+                play_sound thump
+            end_if
+            set_var ready true
+        }
+    }
+}

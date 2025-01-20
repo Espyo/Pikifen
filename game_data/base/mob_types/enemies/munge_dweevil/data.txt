@@ -28,3 +28,11 @@ reaches {
     fear = 80 360
     treasure = 8 360
 }
+
+sounds {
+    shaking {
+        file = shaking
+        volume = 40
+        speed = 140
+    }
+}

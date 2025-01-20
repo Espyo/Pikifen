@@ -12,7 +12,11 @@ animations{
 	dying{
 		frames{
 			dying_01{
-				duration=0.5000
+				duration=0.4000
+			}
+			dying_01{
+				duration=0.1000
+				sound=dying
 			}
 			dying_02{
 				duration=0.1000

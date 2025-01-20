@@ -44,4 +44,9 @@ sounds {
         speed = 140
         speed_deviation = 20
     }
+    thud {
+        file = thump
+        speed = 200
+        volume = 20
+    }
 }

@@ -1,3 +1,5 @@
+name
+engine_version=0.25.0
 animations{
 	attacking{
 		hit_rate=75
@@ -20,11 +22,11 @@ animations{
 	crushed{
 		frames{
 			crushed_02{
-				duration=0.0100
+				duration=0.1000
 				interpolate=true
 			}
 			crushed_01{
-				duration=0.9900
+				duration=0.9000
 			}
 		}
 	}
@@ -48,6 +50,7 @@ animations{
 			}
 			dying_04{
 				duration=0.1000
+				sound=thud
 			}
 			dying_05{
 				duration=0.5000
@@ -148,6 +151,7 @@ animations{
 			}
 			moving_02{
 				duration=0.1000
+				sound=step
 			}
 			moving_01{
 				duration=0.1000
@@ -160,6 +164,7 @@ animations{
 			}
 			moving_04{
 				duration=0.1000
+				sound=step
 			}
 			moving_03{
 				duration=0.1000
@@ -921,4 +926,3 @@ body_parts{
 	body
 	mouth
 }
-engine_version=0.25.0

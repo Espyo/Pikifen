@@ -50,3 +50,12 @@ spawns {
         angle = 180
     }
 }
+
+sounds {
+    thud {
+        file = stomp_quick
+        volume = 70
+        speed = 80
+        speed_deviation = 5
+    }
+}

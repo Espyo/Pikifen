@@ -28,7 +28,8 @@ reaches {
 sounds {
     burying {
         file = burying
-        speed_deviation = 20
+        speed = 140
+        speed_deviation = 15
         volume = 30
     }
 }

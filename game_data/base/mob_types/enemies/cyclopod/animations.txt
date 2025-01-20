@@ -1,3 +1,5 @@
+name
+engine_version=0.25.0
 animations{
 	attacking{
 		loop_frame=3
@@ -105,7 +107,7 @@ animations{
 			}
 			dying_01{
 				duration=0.0800
-				sound=swish
+				sound=swish_low
 			}
 			dying_02{
 				duration=0.1000
@@ -131,6 +133,7 @@ animations{
 			dying_05{
 				duration=0.1000
 				interpolate=true
+				sound=stretch
 			}
 			dying_06{
 				duration=0.1000
@@ -270,6 +273,7 @@ animations{
 			}
 			moving_start_02{
 				duration=0.1200
+				signal=0
 			}
 			moving_start_03{
 				duration=0.1200
@@ -286,6 +290,7 @@ animations{
 			}
 			moving_start_03{
 				duration=0.1000
+				signal=0
 			}
 			moving_start_02{
 				duration=0.1000
@@ -1697,4 +1702,3 @@ body_parts{
 	body
 	attack
 }
-engine_version=0.25.0

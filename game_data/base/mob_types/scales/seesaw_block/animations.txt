@@ -1,3 +1,5 @@
+name
+engine_version=0.25.0
 animations{
 	down{
 		frames{
@@ -17,6 +19,7 @@ animations{
 				duration=0.0800
 				interpolate=true
 				signal=0
+				sound=stretch
 			}
 			up_03{
 				duration=0.0800
@@ -91,6 +94,7 @@ animations{
 				duration=0.0800
 				interpolate=true
 				signal=0
+				sound=stretch
 			}
 			down_03{
 				duration=0.0800
@@ -293,4 +297,3 @@ sprites{
 body_parts{
 	ropes
 }
-engine_version=0.25.0

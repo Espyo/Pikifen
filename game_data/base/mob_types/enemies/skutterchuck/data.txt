@@ -29,3 +29,11 @@ reaches {
     nodule_pick_up = 5 360
     target_search = 100 180 20 360
 }
+
+sounds{
+    thud {
+        file = thump
+        speed = 160
+        volume = 15
+    }
+}

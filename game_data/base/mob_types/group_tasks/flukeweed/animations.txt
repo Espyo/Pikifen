@@ -1,8 +1,17 @@
+name
+engine_version=0.25.0
 animations{
 	dying{
 		frames{
 			dying{
-				duration=0.1000
+				duration=0.0100
+			}
+			dying{
+				duration=0.0100
+				sound=dying
+			}
+			dying{
+				duration=0.9800
 			}
 		}
 	}
@@ -29,6 +38,7 @@ animations{
 			}
 			pulled_02{
 				duration=0.0800
+				sound=pulled
 			}
 		}
 	}
@@ -66,4 +76,3 @@ sprites{
 	}
 }
 body_parts
-engine_version=0.25.0

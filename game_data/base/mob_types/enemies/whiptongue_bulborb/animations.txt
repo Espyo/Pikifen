@@ -1,3 +1,5 @@
+name
+engine_version=0.25.0
 animations{
 	attacking{
 		hit_rate=40
@@ -120,6 +122,7 @@ animations{
 			}
 			dying_05{
 				duration=0.1000
+				sound=thud
 			}
 			dying_06{
 				duration=0.7000
@@ -233,6 +236,7 @@ animations{
 			}
 			walking_02{
 				duration=0.1000
+				sound=step
 			}
 			walking_01{
 				duration=0.1000
@@ -245,6 +249,7 @@ animations{
 			}
 			walking_04{
 				duration=0.1000
+				sound=step
 			}
 			walking_03{
 				duration=0.1000
@@ -1524,4 +1529,3 @@ body_parts{
 	tongue1
 	tongue2
 }
-engine_version=0.25.0
