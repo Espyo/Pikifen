@@ -19,3 +19,13 @@ show_amount = true
 show_health = false
 size_animation_suffixes = _empty;_low;_mid;_high
 target_type = pikmin_obstacle
+
+sounds {
+    ceramic_hit {
+        file = ceramic_hit
+        volume = 50
+        speed = 80
+        speed_deviation = 10
+        random_delay = 0.05
+    }
+}

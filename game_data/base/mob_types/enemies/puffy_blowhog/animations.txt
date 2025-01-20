@@ -31,6 +31,7 @@ animations{
 			}
 			attacking_01{
 				duration=0.2000
+				sound=wing
 			}
 			idling_01{
 				duration=0.3000
@@ -239,6 +240,7 @@ animations{
 			}
 			shaking_01{
 				duration=0.1000
+				sound=shaking
 			}
 			shaking_02{
 				duration=0.1000
@@ -307,6 +309,7 @@ animations{
 			idling_01{
 				duration=0.1200
 				interpolate=true
+				sound=wing
 			}
 			idling_04{
 				duration=0.1200
@@ -360,6 +363,7 @@ animations{
 			}
 			shaking_01{
 				duration=0.1000
+				sound=shaking
 			}
 			shaking_02{
 				duration=0.1000

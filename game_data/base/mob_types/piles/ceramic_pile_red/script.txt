@@ -1,0 +1,7 @@
+script {
+    idling {
+        on_damage {
+            play_sound ceramic_hit
+        }
+    }
+}

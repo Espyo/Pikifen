@@ -32,10 +32,19 @@ reaches {
 }
 
 sounds {
+    wing {
+        file = wing_deep_whoosh
+        speed = 120
+        volume = 20
+    }
     inhaling {
         file = inhaling
         loop = true
         volume = 35
+    }
+    shaking {
+        file = shaking
+        volume = 60
     }
     exhaling {
         file = exhaling

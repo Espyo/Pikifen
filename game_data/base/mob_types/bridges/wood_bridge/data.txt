@@ -16,6 +16,11 @@ right_rail_texture = textures/wood_bridge_rail
 show_health = false
 
 sounds {
+    wood_hit {
+        file = wood_hit
+        volume = 20
+        speed_deviation = 30
+    }
     sticks {
         file = sticks
         speed_deviation = 10

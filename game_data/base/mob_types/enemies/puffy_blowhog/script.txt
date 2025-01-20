@@ -219,10 +219,12 @@ script {
                 set_flying false
                 set_shadow_visibility false
                 set_tangible false
+                play_sound exhaling sound_id
             else
                 set_shadow_visibility true
                 set_tangible true
                 set_radius 16
+                stop_sound $sound_id
             end_if
         }
         on_animation_end {
