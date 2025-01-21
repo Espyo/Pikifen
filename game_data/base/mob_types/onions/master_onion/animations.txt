@@ -1,4 +1,4 @@
-name
+name=Master Onion animations
 engine_version=0.25.0
 animations{
 	generating{

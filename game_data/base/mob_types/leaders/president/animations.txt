@@ -1,4 +1,4 @@
-name
+name=President animations
 engine_version=0.25.0
 animations{
 	dismissing{
@@ -117,6 +117,22 @@ animations{
 			}
 			idling{
 				duration=0.1000
+			}
+		}
+	}
+	ko{
+		loop_frame=2
+		frames{
+			half_lying{
+				duration=0.0700
+			}
+			lying_stretched{
+				duration=0.1000
+				interpolate=true
+				sound=thump
+			}
+			ko{
+				duration=0.5000
 			}
 		}
 	}
@@ -497,6 +513,29 @@ sprites{
 				height=46.0000
 				radius=16.0000
 				type=0
+				value=1.0000
+			}
+		}
+	}
+	ko{
+		file=president
+		file_pos=288.0000 0.0000
+		file_size=114.0000 64.0000
+		offset=-12.0000 0.0000
+		scale=0.5000 0.5000
+		hitboxes{
+			fist{
+				coords=0.0000 10.0000 0.0000
+				height=46.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=-8.0000 0.0000 0.0000
+				height=46.0000
+				radius=16.0000
+				type=2
 				value=1.0000
 			}
 		}

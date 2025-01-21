@@ -1,3 +1,4 @@
+name=S.S. Drake animations
 animations{
 	idling{
 		frames{

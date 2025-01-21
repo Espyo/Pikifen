@@ -182,6 +182,9 @@ enum LEADER_ANIM {
     //Drinking a drop.
     LEADER_ANIM_DRINKING,
     
+    //KO (dead).
+    LEADER_ANIM_KO,
+    
 };
 
 

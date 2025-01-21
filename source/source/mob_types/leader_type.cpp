@@ -74,6 +74,7 @@ anim_conversion_vector leader_type::get_anim_conversions() const {
     v.push_back(std::make_pair(LEADER_ANIM_KNOCKED_DOWN, "knocked_down"));
     v.push_back(std::make_pair(LEADER_ANIM_SPRAYING,     "spraying"));
     v.push_back(std::make_pair(LEADER_ANIM_DRINKING,     "drinking"));
+    v.push_back(std::make_pair(LEADER_ANIM_KO,           "ko"));
     return v;
 }
 

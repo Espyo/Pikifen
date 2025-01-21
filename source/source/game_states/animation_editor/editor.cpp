@@ -1371,6 +1371,12 @@ void animation_editor::setup_for_new_anim_db_post() {
         }
     }
     
+    if(loaded_mob_type && db.name == "animations") {
+        //Let's give it a proper default name, instead of the internal name
+        //in the manifest, which is just "animations".
+        db.name = loaded_mob_type->name + " animations";
+    }
+    
     if(loaded_mob_type) db.fill_sound_idx_caches(loaded_mob_type);
 }
 

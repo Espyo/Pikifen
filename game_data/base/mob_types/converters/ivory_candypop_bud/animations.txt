@@ -1,4 +1,4 @@
-name
+name=Ivory Candypop Bud animations
 engine_version=0.25.0
 animations{
 	bumped{

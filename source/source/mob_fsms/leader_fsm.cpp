@@ -1584,7 +1584,7 @@ void leader_fsm::die(mob* m, void* info1, void* info2) {
     leader_fsm::dismiss(m, info1, info2);
     m->stop_chasing();
     m->become_uncarriable();
-    m->set_animation(LEADER_ANIM_LYING);
+    m->set_animation(LEADER_ANIM_KO);
     
     game.states.gameplay->last_hurt_leader_pos = m->pos;
 }

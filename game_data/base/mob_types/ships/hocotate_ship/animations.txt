@@ -1,3 +1,4 @@
+name=Hocotate ship animations
 animations{
 	idling{
 		frames{
