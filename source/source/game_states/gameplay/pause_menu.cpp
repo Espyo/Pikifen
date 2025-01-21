@@ -193,8 +193,11 @@ pause_menu_t::~pause_menu_t() {
     game.content.bitmaps.list.free(bmp_radar_cursor);
     game.content.bitmaps.list.free(bmp_radar_pikmin);
     game.content.bitmaps.list.free(bmp_radar_treasure);
-    game.content.bitmaps.list.free(bmp_radar_enemy);
+    game.content.bitmaps.list.free(bmp_radar_enemy_alive);
+    game.content.bitmaps.list.free(bmp_radar_enemy_dead);
     game.content.bitmaps.list.free(bmp_radar_leader_bubble);
+    game.content.bitmaps.list.free(bmp_radar_leader_x);
+    game.content.bitmaps.list.free(bmp_radar_obstacle);
     game.content.bitmaps.list.free(bmp_radar_onion_skeleton);
     game.content.bitmaps.list.free(bmp_radar_onion_bulb);
     game.content.bitmaps.list.free(bmp_radar_ship);
@@ -202,8 +205,11 @@ pause_menu_t::~pause_menu_t() {
     bmp_radar_cursor = nullptr;
     bmp_radar_pikmin = nullptr;
     bmp_radar_treasure = nullptr;
-    bmp_radar_enemy = nullptr;
+    bmp_radar_enemy_alive = nullptr;
+    bmp_radar_enemy_dead = nullptr;
     bmp_radar_leader_bubble = nullptr;
+    bmp_radar_leader_x = nullptr;
+    bmp_radar_obstacle = nullptr;
     bmp_radar_onion_skeleton = nullptr;
     bmp_radar_onion_bulb = nullptr;
     bmp_radar_ship = nullptr;
@@ -514,7 +520,10 @@ void pause_menu_t::calculate_go_here_path() {
     radar_cursor_leader = nullptr;
     for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); l++) {
         leader* l_ptr = game.states.gameplay->mobs.leaders[l];
-        if(dist(l_ptr->pos, radar_cursor) <= 24.0f / radar_cam.zoom) {
+        if(
+            l_ptr->health > 0 &&
+            dist(l_ptr->pos, radar_cursor) <= 24.0f / radar_cam.zoom
+        ) {
             radar_cursor_leader = l_ptr;
             break;
         }
@@ -985,9 +994,10 @@ void pause_menu_t::draw_radar(
         if(e_ptr->parent) continue;
         
         draw_bitmap(
-            bmp_radar_enemy, e_ptr->pos,
+            e_ptr->health > 0 ? bmp_radar_enemy_alive : bmp_radar_enemy_dead,
+            e_ptr->pos,
             point(24.0f / radar_cam.zoom, 24.0f / radar_cam.zoom),
-            game.time_passed
+            e_ptr->health > 0 ? game.time_passed : 0.0f
         );
     }
     
@@ -1009,13 +1019,21 @@ void pause_menu_t::draw_radar(
         );
         draw_filled_equilateral_triangle(
             l_ptr->pos +
-            rotate_point(point(25.0f / radar_cam.zoom, 0.0f), l_ptr->angle),
+            rotate_point(point(24.5f / radar_cam.zoom, 0.0f), l_ptr->angle),
             6.0f / radar_cam.zoom,
             l_ptr->angle,
             radar_selected_leader == l_ptr ?
             al_map_rgb(0, 255, 255) :
-            COLOR_WHITE
+            l_ptr->health > 0 ?
+            COLOR_WHITE :
+            al_map_rgb(128, 128, 128)
         );
+        if(l_ptr->health <= 0) {
+            draw_bitmap(
+                bmp_radar_leader_x, l_ptr->pos,
+                point(36.0f / radar_cam.zoom, 36.0f / radar_cam.zoom)
+            );
+        }
     }
     
     //Treasure icons.
@@ -1070,6 +1088,19 @@ void pause_menu_t::draw_radar(
             point(16.0f / radar_cam.zoom, 16.0f / radar_cam.zoom),
             0.0f,
             p_ptr->pik_type->main_color
+        );
+    }
+    
+    //Obstacle icons.
+    unordered_set<mob*> obstacles;
+    for(const auto &o : game.states.gameplay->path_mgr.obstructions) {
+        obstacles.insert(o.second.begin(), o.second.end());
+    }
+    for(const auto &o : obstacles) {
+        draw_bitmap(
+            bmp_radar_obstacle, o->pos,
+            point(40.0f / radar_cam.zoom, 40.0f / radar_cam.zoom),
+            o->angle
         );
     }
     
@@ -1242,7 +1273,7 @@ void pause_menu_t::draw_radar(
         "N", game.sys_assets.fnt_slim,
         point(
             north_ind_center.x,
-            north_ind_center.y + 4.0f
+            north_ind_center.y + 1.0f
         ),
         point(12.0f, 12.0f),
         PAUSE_MENU::RADAR_HIGHEST_COLOR
@@ -2087,8 +2118,11 @@ void pause_menu_t::init_radar_page() {
     loader(bmp_radar_cursor,         "cursor");
     loader(bmp_radar_pikmin,         "pikmin");
     loader(bmp_radar_treasure,       "treasure");
-    loader(bmp_radar_enemy,          "enemy");
+    loader(bmp_radar_enemy_alive,    "enemy_alive");
+    loader(bmp_radar_enemy_dead,     "enemy_dead");
     loader(bmp_radar_leader_bubble,  "leader_bubble");
+    loader(bmp_radar_leader_x,       "leader_x");
+    loader(bmp_radar_obstacle,       "obstacle");
     loader(bmp_radar_onion_skeleton, "onion_skeleton");
     loader(bmp_radar_onion_bulb,     "onion_bulb");
     loader(bmp_radar_ship,           "ship");

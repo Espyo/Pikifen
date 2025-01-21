@@ -23,8 +23,11 @@ files{
 	cursor=radar/cursor
 	pikmin=radar/pikmin
 	treasure=radar/treasure
-	enemy=radar/enemy
+	enemy_alive=radar/enemy_alive
+	enemy_dead=radar/enemy_dead
 	leader_bubble=bubble
+	leader_x=radar/leader_x
+	obstacle=radar/obstacle
 	onion_skeleton=radar/onion_skeleton
 	onion_bulb=radar/onion_bulb
 	ship=radar/ship

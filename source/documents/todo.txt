@@ -13,6 +13,7 @@ Next tasks (roughly sorted most important first)
     --- To fix ---
     Pressing Enter on the new particle dialog (maybe others) isn't hitting Ok
     Wood bridges go backwards a bit when they create the first chunk
+    On a default area editor area, if you zoom the radar just a bit after everything doesn't fit any more, you won't be able to pan the radar enough to catch everything
 
     --- 0.26 ---
     Test -S-'s get_onion_info branch
@@ -242,7 +243,6 @@ Next tasks (roughly sorted most important first)
     Barely important format changes
         In area geometry files, path stops use the term "nr" to refer to links, even though they contain more than the end stop number
         Organize all graphics and sound files into neat sub-folders
-    The radar should show where obstacles (blocks_path == true) are, and differentiate between dead and living enemies and leaders
     Missions should have a property where the maker can specify their best score (and date)
     Add a screenshot, or better yet, a gif to the readme
     Manual updates
