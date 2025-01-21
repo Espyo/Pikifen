@@ -1,4 +1,4 @@
-name
+name=Red Bulborb animations
 engine_version=0.25.0
 animations{
 	attacking{
@@ -13,9 +13,6 @@ animations{
 			attacking_03{
 				duration=0.2000
 				sound=bite
-			}
-			attacking_04{
-				duration=0.2000
 			}
 		}
 	}
@@ -48,6 +45,9 @@ animations{
 	}
 	eating{
 		frames{
+			attacking_04{
+				duration=0.2000
+			}
 			chomping_01{
 				duration=0.3000
 			}

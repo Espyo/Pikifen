@@ -44,7 +44,7 @@ treasure::treasure(const point &pos, treasure_type* type, float angle) :
     pg.id = MOB_PARTICLE_GENERATOR_ID_SCRIPT;
     pg.follow_mob = this;
     pg.follow_angle = &this->angle;
-    pg.follow_z_offset = z + get_drawing_height() + 1.0f;
+    pg.follow_z_offset = get_drawing_height() + 1.0f;
     pg.duration_deviation = 0.1f;
     pg.emission.interval_deviation = 0.05f;
     pg.emission.shape = PARTICLE_EMISSION_SHAPE_CIRCLE;

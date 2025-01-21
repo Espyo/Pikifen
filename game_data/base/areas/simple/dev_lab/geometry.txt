@@ -12777,15 +12777,15 @@ mobs{
 	}
 	tool{
 		type=bomb_rock
-		p=1248.0000 -1152.0000
+		p=1200.0000 -1152.0000
 	}
 	tool{
 		type=bomb_rock
-		p=1248.0000 -1088.0000
+		p=1216.0000 -1088.0000
 	}
 	tool{
 		type=bomb_rock
-		p=1248.0000 -1024.0000
+		p=1232.0000 -1024.0000
 	}
 	group_task{
 		type=cardboard_box

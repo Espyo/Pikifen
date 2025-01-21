@@ -7,7 +7,6 @@ Current tasks (tasks being worked on, but not yet committed)
     Refactor the particle system's storage thing into its own util in general_utils
     Hitting Esc when on an editor state that's not the main state won't do anything
     Do we really need four snow textures?
-    When editing a mob's animations, give it the default name "<mob type> animations"
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
@@ -76,11 +75,13 @@ Next tasks (roughly sorted most important first)
                 Swarming
                 Punching
                 Getting hurt
+                Better throw sound, closer to P1/P2?
             Enemies
                 x Generic sucking in air
                 ? Generic spitting
                 x Generic big stomp
                 ? Generic exhaling (Puffy Blowhog)
+                    Make it stronger
                 ? Generic shaking
                 x Generic whisk (Burrow-nit stabbing)
                 x Generic biting

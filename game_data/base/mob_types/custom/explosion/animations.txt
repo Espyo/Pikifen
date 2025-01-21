@@ -1,4 +1,4 @@
-name
+name=Explosion animations
 engine_version=0.25.0
 animations{
 	exploding{
@@ -38,13 +38,6 @@ sprites{
 		scale=2.0000 2.0000
 		angle=0.0873
 		hitboxes{
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=28.0000
-				radius=14.0000
-				type=2
-				value=1.0000
-			}
 			explosion{
 				coords=0.0000 0.0000 -20.0000
 				height=70.0000
@@ -64,13 +57,6 @@ sprites{
 		scale=4.0000 4.0000
 		angle=0.0873
 		hitboxes{
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=28.0000
-				radius=14.0000
-				type=2
-				value=1.0000
-			}
 			explosion{
 				coords=0.0000 0.0000 -40.0000
 				height=140.0000
@@ -90,13 +76,6 @@ sprites{
 		scale=1.9000 1.9000
 		angle=0.1745
 		hitboxes{
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=28.0000
-				radius=14.0000
-				type=2
-				value=1.0000
-			}
 			explosion{
 				coords=0.0000 0.0000 -40.0000
 				height=140.0000
@@ -116,13 +95,6 @@ sprites{
 		scale=2.4000 2.4000
 		angle=0.1745
 		hitboxes{
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=28.0000
-				radius=14.0000
-				type=2
-				value=1.0000
-			}
 			explosion{
 				coords=0.0000 0.0000 -40.0000
 				height=140.0000
@@ -142,13 +114,6 @@ sprites{
 		scale=2.4000 2.4000
 		angle=0.2618
 		hitboxes{
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=28.0000
-				radius=14.0000
-				type=2
-				value=1.0000
-			}
 			explosion{
 				coords=0.0000 0.0000 -40.0000
 				height=140.0000
@@ -168,13 +133,6 @@ sprites{
 		scale=2.6000 2.6000
 		angle=0.2618
 		hitboxes{
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=28.0000
-				radius=14.0000
-				type=2
-				value=1.0000
-			}
 			explosion{
 				coords=0.0000 0.0000 -40.0000
 				height=140.0000
@@ -193,24 +151,19 @@ sprites{
 		file_size=64.0000 64.0000
 		scale=4.0000 4.0000
 		hitboxes{
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=28.0000
-				radius=14.0000
-				type=2
-				value=1.0000
-			}
 			explosion{
 				coords=0.0000 0.0000 -10.0000
 				height=40.0000
 				radius=26.0000
 				type=1
 				value=600.0000
+				hazards=explosion
+				knockback_outward=true
+				knockback=3.0000
 			}
 		}
 	}
 }
 body_parts{
-	body
 	explosion
 }

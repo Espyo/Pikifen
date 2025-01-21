@@ -46,6 +46,7 @@ sounds {
     }
     throw {
         file = throw
+        volume = 30
         speed_deviation = 5
         stack_mode = override
     }

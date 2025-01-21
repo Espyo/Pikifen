@@ -1782,8 +1782,8 @@ void editor::process_gui_base_content_warning_dialog() {
     }
     
     //Open manual button.
-    ImGui::SetupCentering(70);
-    if(ImGui::Button("Open manual", ImVec2(70, 25))) {
+    ImGui::SetupCentering(100);
+    if(ImGui::Button("Open manual", ImVec2(100, 25))) {
         open_manual("making.html#packs");
     }
 }
