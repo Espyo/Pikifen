@@ -6,7 +6,6 @@ Current tasks (tasks being worked on, but not yet committed)
     Rock Pikmin thrown at a Pellet Posy should go to the Pellet Posy when they wake up
     Refactor the particle system's storage thing into its own util in general_utils
     Hitting Esc when on an editor state that's not the main state won't do anything
-    Do we really need four snow textures?
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
