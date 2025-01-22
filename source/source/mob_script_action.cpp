@@ -2332,6 +2332,45 @@ void mob_action_runners::turn_to_target(mob_action_run_data &data) {
     }
 }
 
+void mob_action_runners::write_to_save(mob_action_run_data &data) {
+    string data2 = data.args[0];
+    string section = data.args[1];
+    data_node* section_data;
+    size_t has_child =game.cur_area_data->save_data.get_nr_of_children_by_name(section);
+    if (has_child > 0){
+        section_data = game.cur_area_data->save_data.get_child_by_name(section);
+        section_data->value = data2;
+    }
+    else{
+        game.cur_area_data->save_data.add(new data_node(section,data2));
+    }
+}
+
+void mob_action_runners::read_from_save(mob_action_run_data &data) {
+    string dest_var = data.args[0];
+    string section = data.args[1];
+
+    size_t has_child =game.cur_area_data->save_data.get_nr_of_children_by_name(section);
+    if (has_child > 0){
+        data.m->set_var(dest_var,game.cur_area_data->save_data.get_child_by_name(section)->value);
+    }else{
+        game.errors.report("Save data section("+ section+") does not exist! please check for it or create it first!");
+    }
+
+}
+
+void mob_action_runners::check_for_save(mob_action_run_data &data) {
+    string dest_var = data.args[0];
+    string section = data.args[1];
+    size_t has_child =game.cur_area_data->save_data.get_nr_of_children_by_name(section);
+    if (has_child > 0){
+        data.m->set_var(dest_var,b2s(true));
+    }else{
+        
+        data.m->set_var(dest_var,b2s(false));
+    }
+
+}
 
 /**
  * @brief Confirms if the "if", "else", "end_if", "goto", and "label" actions in

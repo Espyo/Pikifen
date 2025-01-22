@@ -149,6 +149,9 @@ namespace FILE_NAMES {
 //Area main data file.
 const string AREA_MAIN_DATA = "data.txt";
 
+//Area save data file.
+const string AREA_SAVE_DATA = "save.txt";
+
 //Area geometry file.
 const string AREA_GEOMETRY = "geometry.txt";
 

@@ -153,6 +153,17 @@ bool area_content_manager::load_area(
     
     //Main data.
     if(game.perf_mon) game.perf_mon->start_measurement("Area -- Data");
+    string save_data_file_path = area_ptr->user_data_path +
+            "/" + FILE_NAMES::AREA_SAVE_DATA;
+    if (file_exists(save_data_file_path)){
+        data_node save_file= load_data_file(save_data_file_path);
+        if(!save_file.file_was_opened) return false;
+        area_ptr->save_data = save_file;    
+    }else{
+        data_node save_file = data_node();
+        area_ptr->save_data = save_file; 
+
+    }
     area_ptr->load_main_data_from_data_node(&data_file, level);
     area_ptr->load_mission_data_from_data_node(&data_file);
     if(game.perf_mon) game.perf_mon->finish_measurement();
