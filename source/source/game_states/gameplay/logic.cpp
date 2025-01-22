@@ -212,10 +212,7 @@ void gameplay_state::do_gameplay_leader_logic(float delta_t) {
             point br = tl;
             for(size_t m = 1; m < cur_leader_ptr->group->members.size(); m++) {
                 mob* member = cur_leader_ptr->group->members[m];
-                tl.x = std::min(tl.x, member->pos.x);
-                tl.y = std::min(tl.y, member->pos.y);
-                br.x = std::max(tl.x, member->pos.x);
-                br.y = std::max(tl.y, member->pos.y);
+                update_min_max_coords(tl, br, member->pos);
             }
             group_center.x = (tl.x + br.x) / 2.0f;
             group_center.y = (tl.y + br.y) / 2.0f;
@@ -821,7 +818,7 @@ void gameplay_state::do_gameplay_logic(float delta_t) {
                     precipitation_frequency.get_random_number()
                 );
                 precipitation_timer.start();
-                precipitation.push_back(point(0, 0));
+                precipitation.push_back(point(0.0f));
             }
         
             for(size_t p = 0; p < precipitation.size();) {
@@ -941,11 +938,11 @@ void gameplay_state::do_gameplay_logic(float delta_t) {
             //Reset the positions of the last mission-end-related things,
             //since if they didn't get used in end_mission, then they
             //may be stale from here on.
-            last_enemy_killed_pos = point(LARGE_FLOAT, LARGE_FLOAT);
-            last_hurt_leader_pos = point(LARGE_FLOAT, LARGE_FLOAT);
-            last_pikmin_born_pos = point(LARGE_FLOAT, LARGE_FLOAT);
-            last_pikmin_death_pos = point(LARGE_FLOAT, LARGE_FLOAT);
-            last_ship_that_got_treasure_pos = point(LARGE_FLOAT, LARGE_FLOAT);
+            last_enemy_killed_pos = point(LARGE_FLOAT);
+            last_hurt_leader_pos = point(LARGE_FLOAT);
+            last_pikmin_born_pos = point(LARGE_FLOAT);
+            last_pikmin_death_pos = point(LARGE_FLOAT);
+            last_ship_that_got_treasure_pos = point(LARGE_FLOAT);
             
             mission_score = game.cur_area_data->mission.starting_points;
             for(size_t c = 0; c < game.mission_score_criteria.size(); c++) {

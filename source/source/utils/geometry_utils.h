@@ -53,6 +53,7 @@ struct point {
     //--- Function declarations ---
     
     point(float x, float y);
+    point(float xy);
     point();
     const point operator +(const point &p) const;
     const point operator -(const point &p) const;
@@ -64,8 +65,12 @@ struct point {
     const point operator /(float n) const;
     point operator +=(const point &p);
     point operator -=(const point &p);
+    point operator *=(const point &p);
+    point operator /=(const point &p);
     point operator +=(float n);
+    point operator -=(float n);
     point operator *=(float n);
+    point operator /=(float n);
     bool operator ==(const point &p) const;
     bool operator !=(const point &p) const;
     
@@ -249,6 +254,11 @@ float normalize_angle(float a);
 point normalize_vector(const point &v);
 bool points_are_collinear(
     const point &a, const point &b, const point &c
+);
+void update_max_coords(point &max_coords, const point &new_coords);
+void update_min_coords(point &min_coords, const point &new_coords);
+void update_min_max_coords(
+    point &min_coords, point &max_coords, const point &new_coords
 );
 void project_vertexes(
     const vector<point> &v, const point axis, float* min, float* max

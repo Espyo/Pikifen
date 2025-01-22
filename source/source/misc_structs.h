@@ -918,7 +918,7 @@ struct bitmap_effect_t {
     float rotation = 0.0f;
     
     //Scale horizontally and vertically. LARGE_FLOAT = use the other's scale.
-    point scale = point(1.0f, 1.0f);
+    point scale = point(1.0f);
     
     //Tint the bitmap by this color. Also makes it transparent.
     ALLEGRO_COLOR tint_color = COLOR_WHITE;

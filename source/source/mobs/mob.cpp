@@ -2501,14 +2501,9 @@ void mob::handle_status_effect_loss(status_type* sta_type) {
 bool mob::has_clear_line(const mob* target_mob) const {
     //First, get a bounding box of the line to check.
     //This will help with performance later.
-    point bb_tl(
-        std::min(pos.x, target_mob->pos.x),
-        std::min(pos.y, target_mob->pos.y)
-    );
-    point bb_br(
-        std::max(pos.x, target_mob->pos.x),
-        std::max(pos.y, target_mob->pos.y)
-    );
+    point bb_tl = pos;
+    point bb_br = pos;
+    update_min_max_coords(bb_tl, bb_br, target_mob->pos);
     
     const float self_max_z = z + height;
     const float target_mob_max_z = target_mob->z + target_mob->height;

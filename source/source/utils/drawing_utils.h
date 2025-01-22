@@ -122,7 +122,7 @@ void draw_text(
     const ALLEGRO_COLOR &color = COLOR_WHITE,
     int text_flags = ALLEGRO_ALIGN_CENTER,
     V_ALIGN_MODE v_align = V_ALIGN_MODE_CENTER, bitmask_8_t settings = 0,
-    const point &further_scale = point(1.0f, 1.0f)
+    const point &further_scale = point(1.0f)
 );
 void draw_text_lines(
     const string &text, const ALLEGRO_FONT* const font,
@@ -130,7 +130,7 @@ void draw_text_lines(
     const ALLEGRO_COLOR &color = COLOR_WHITE,
     int text_flags = ALLEGRO_ALIGN_CENTER,
     V_ALIGN_MODE v_align = V_ALIGN_MODE_CENTER, bitmask_8_t settings = 0,
-    const point &further_scale = point(1.0f, 1.0f)
+    const point &further_scale = point(1.0f)
 );
 void draw_textured_box(
     const point &center, const point &size, ALLEGRO_BITMAP* texture,

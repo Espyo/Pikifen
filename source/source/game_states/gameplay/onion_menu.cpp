@@ -157,7 +157,7 @@ onion_menu_t::onion_menu_t(
             game.sys_assets.fnt_standard, center,
             size * GUI::STANDARD_CONTENT_SIZE, color,
             ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
-            point(1.0f + juicy_grow_amount, 1.0f + juicy_grow_amount)
+            point(1.0f + juicy_grow_amount)
         );
     };
     gui.add_item(field_amount_text, "field");
@@ -282,7 +282,7 @@ onion_menu_t::onion_menu_t(
                 game.sys_assets.fnt_area_name, center,
                 size * GUI::STANDARD_CONTENT_SIZE, color,
                 ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
-                point(1.0f + juicy_grow_amount, 1.0f + juicy_grow_amount)
+                point(1.0f + juicy_grow_amount)
             );
         };
         gui.add_item(onion_amount_text, "onion_" + i2s(t + 1) + "_amount");
@@ -389,7 +389,7 @@ onion_menu_t::onion_menu_t(
                 game.sys_assets.fnt_area_name, center,
                 size * GUI::STANDARD_CONTENT_SIZE, color,
                 ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
-                point(1.0f + juicy_grow_amount, 1.0f + juicy_grow_amount)
+                point(1.0f + juicy_grow_amount)
             );
         };
         gui.add_item(group_amount_text, "group_" + i2s(t + 1) + "_amount");

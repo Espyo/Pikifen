@@ -45,7 +45,7 @@ struct sector_texture_t {
     //--- Members ---
     
     //Texture scale.
-    point scale = point(1.0f, 1.0f);
+    point scale = point(1.0f);
     
     //Texture translation.
     point translation;

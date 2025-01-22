@@ -320,7 +320,7 @@ void camera_t::tick(float delta_t) {
  * based on the screen_to_world_transform transformation.
  */
 void camera_t::update_box() {
-    box[0] = point(0, 0);
+    box[0] = point(0.0f);
     box[1] = point(game.win_w, game.win_h);
     al_transform_coordinates(
         &game.screen_to_world_transform,

@@ -1294,10 +1294,9 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
 void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
     if(selecting) {
     
-        float selection_x1 = std::min(selection_start.x, selection_end.x);
-        float selection_x2 = std::max(selection_start.x, selection_end.x);
-        float selection_y1 = std::min(selection_start.y, selection_end.y);
-        float selection_y2 = std::max(selection_start.y, selection_end.y);
+        point selection_tl = selection_start;
+        point selection_br = selection_start;
+        update_min_max_coords(selection_tl, selection_br, selection_end);
         selection_end = game.mouse_cursor.w_pos;
         
         switch(state) {
@@ -1310,10 +1309,10 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                 vertex* v_ptr = game.cur_area_data->vertexes[v];
                 
                 if(
-                    v_ptr->x >= selection_x1 &&
-                    v_ptr->x <= selection_x2 &&
-                    v_ptr->y >= selection_y1 &&
-                    v_ptr->y <= selection_y2
+                    v_ptr->x >= selection_tl.x &&
+                    v_ptr->x <= selection_br.x &&
+                    v_ptr->y >= selection_tl.y &&
+                    v_ptr->y <= selection_br.y
                 ) {
                     selected_vertexes.insert(v_ptr);
                 }
@@ -1325,14 +1324,14 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                     edge* e_ptr = game.cur_area_data->edges[e];
                     
                     if(
-                        e_ptr->vertexes[0]->x >= selection_x1 &&
-                        e_ptr->vertexes[0]->x <= selection_x2 &&
-                        e_ptr->vertexes[0]->y >= selection_y1 &&
-                        e_ptr->vertexes[0]->y <= selection_y2 &&
-                        e_ptr->vertexes[1]->x >= selection_x1 &&
-                        e_ptr->vertexes[1]->x <= selection_x2 &&
-                        e_ptr->vertexes[1]->y >= selection_y1 &&
-                        e_ptr->vertexes[1]->y <= selection_y2
+                        e_ptr->vertexes[0]->x >= selection_tl.x &&
+                        e_ptr->vertexes[0]->x <= selection_br.x &&
+                        e_ptr->vertexes[0]->y >= selection_tl.y &&
+                        e_ptr->vertexes[0]->y <= selection_br.y &&
+                        e_ptr->vertexes[1]->x >= selection_tl.x &&
+                        e_ptr->vertexes[1]->x <= selection_br.x &&
+                        e_ptr->vertexes[1]->y >= selection_tl.y &&
+                        e_ptr->vertexes[1]->y <= selection_br.y
                     ) {
                         selected_edges.insert(e_ptr);
                     }
@@ -1348,14 +1347,14 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                         edge* e_ptr = s_ptr->edges[e];
                         
                         if(
-                            e_ptr->vertexes[0]->x < selection_x1 ||
-                            e_ptr->vertexes[0]->x > selection_x2 ||
-                            e_ptr->vertexes[0]->y < selection_y1 ||
-                            e_ptr->vertexes[0]->y > selection_y2 ||
-                            e_ptr->vertexes[1]->x < selection_x1 ||
-                            e_ptr->vertexes[1]->x > selection_x2 ||
-                            e_ptr->vertexes[1]->y < selection_y1 ||
-                            e_ptr->vertexes[1]->y > selection_y2
+                            e_ptr->vertexes[0]->x < selection_tl.x ||
+                            e_ptr->vertexes[0]->x > selection_br.x ||
+                            e_ptr->vertexes[0]->y < selection_tl.y ||
+                            e_ptr->vertexes[0]->y > selection_br.y ||
+                            e_ptr->vertexes[1]->x < selection_tl.x ||
+                            e_ptr->vertexes[1]->x > selection_br.x ||
+                            e_ptr->vertexes[1]->y < selection_tl.y ||
+                            e_ptr->vertexes[1]->y > selection_br.y
                         ) {
                             valid_sector = false;
                             break;
@@ -1386,10 +1385,10 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                 float radius = get_mob_gen_radius(m_ptr);
                 
                 if(
-                    m_ptr->pos.x - radius >= selection_x1 &&
-                    m_ptr->pos.x + radius <= selection_x2 &&
-                    m_ptr->pos.y - radius >= selection_y1 &&
-                    m_ptr->pos.y + radius <= selection_y2
+                    m_ptr->pos.x - radius >= selection_tl.x &&
+                    m_ptr->pos.x + radius <= selection_br.x &&
+                    m_ptr->pos.y - radius >= selection_tl.y &&
+                    m_ptr->pos.y + radius <= selection_br.y
                 ) {
                     selected_mobs.insert(m_ptr);
                 }
@@ -1410,13 +1409,13 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                 
                 if(
                     s_ptr->pos.x -
-                    s_ptr->radius >= selection_x1 &&
+                    s_ptr->radius >= selection_tl.x &&
                     s_ptr->pos.x +
-                    s_ptr->radius <= selection_x2 &&
+                    s_ptr->radius <= selection_br.x &&
                     s_ptr->pos.y -
-                    s_ptr->radius >= selection_y1 &&
+                    s_ptr->radius >= selection_tl.y &&
                     s_ptr->pos.y +
-                    s_ptr->radius <= selection_y2
+                    s_ptr->radius <= selection_br.y
                 ) {
                     selected_path_stops.insert(s_ptr);
                 }
@@ -1428,14 +1427,14 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                     path_stop* s2_ptr = s_ptr->links[l]->end_ptr;
                     
                     if(
-                        s_ptr->pos.x >= selection_x1 &&
-                        s_ptr->pos.x <= selection_x2 &&
-                        s_ptr->pos.y >= selection_y1 &&
-                        s_ptr->pos.y <= selection_y2 &&
-                        s2_ptr->pos.x >= selection_x1 &&
-                        s2_ptr->pos.x <= selection_x2 &&
-                        s2_ptr->pos.y >= selection_y1 &&
-                        s2_ptr->pos.y <= selection_y2
+                        s_ptr->pos.x >= selection_tl.x &&
+                        s_ptr->pos.x <= selection_br.x &&
+                        s_ptr->pos.y >= selection_tl.y &&
+                        s_ptr->pos.y <= selection_br.y &&
+                        s2_ptr->pos.x >= selection_tl.x &&
+                        s2_ptr->pos.x <= selection_br.x &&
+                        s2_ptr->pos.y >= selection_tl.y &&
+                        s2_ptr->pos.y <= selection_br.y
                     ) {
                         selected_path_links.insert(s_ptr->links[l]);
                     }

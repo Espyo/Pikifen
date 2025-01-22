@@ -219,7 +219,7 @@ hud_t::hud_t() :
                 draw_bitmap(
                     game.sys_assets.bmp_bright_ring,
                     final_center,
-                    point(caution_ring_size, caution_ring_size),
+                    point(caution_ring_size),
                     0.0f,
                     al_map_rgba(255, 0, 0, caution_ring_alpha)
                 );
@@ -292,30 +292,30 @@ hud_t::hud_t() :
         draw_bitmap(
             bmp_hard_bubble,
             point(first_dot_x + dots_span * 0.0, dots_y),
-            point(sun_radius * 0.9, sun_radius * 0.9)
+            point(sun_radius * 0.9)
         );
         draw_bitmap(
             bmp_hard_bubble,
             point(first_dot_x + dots_span * 0.5, dots_y),
-            point(sun_radius * 0.9, sun_radius * 0.9)
+            point(sun_radius * 0.9)
         );
         draw_bitmap(
             bmp_hard_bubble,
             point(first_dot_x + dots_span * 1.0, dots_y),
-            point(sun_radius * 0.9, sun_radius * 0.9)
+            point(sun_radius * 0.9)
         );
         
         for(unsigned char h = 0; h < n_hours + 1; h++) {
             draw_bitmap(
                 bmp_hard_bubble,
                 point(first_dot_x + h * dot_interval, dots_y),
-                point(sun_radius * 0.6, sun_radius * 0.6)
+                point(sun_radius * 0.6)
             );
         }
         al_hold_bitmap_drawing(false);
         
         point sun_size =
-            point(sun_radius * 1.5, sun_radius * 1.5) +
+            point(sun_radius * 1.5) +
             sun_meter->get_juice_value();
         //Static sun.
         draw_bitmap(
@@ -582,7 +582,7 @@ hud_t::hud_t() :
             center, size,
             map_alpha(game.states.gameplay->hud->standby_items_opacity * 255),
             ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
-            point(1.0f, 1.0f) + standby_amount->get_juice_value()
+            point(1.0f + standby_amount->get_juice_value())
         );
     };
     gui.add_item(standby_amount, "standby_amount");
@@ -620,7 +620,7 @@ hud_t::hud_t() :
             i2s(cur_amount), game.sys_assets.fnt_counter,
             center, point(size.x * 0.70f, size.y * 0.50f), COLOR_WHITE,
             ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
-            point(1.0f, 1.0f) + group_amount->get_juice_value()
+            point(1.0f + group_amount->get_juice_value())
         );
     };
     gui.add_item(group_amount, "group_amount");
@@ -656,7 +656,7 @@ hud_t::hud_t() :
             i2s(cur_amount), game.sys_assets.fnt_counter,
             center, point(size.x * 0.70f, size.y * 0.50f), COLOR_WHITE,
             ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
-            point(1.0f, 1.0f) + field_amount->get_juice_value()
+            point(1.0f + field_amount->get_juice_value())
         );
     };
     gui.add_item(field_amount, "field_amount");
@@ -692,7 +692,7 @@ hud_t::hud_t() :
             i2s(total_count_nr), game.sys_assets.fnt_counter,
             center, point(size.x * 0.70f, size.y * 0.50f), COLOR_WHITE,
             ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
-            point(1.0f, 1.0f) + total_amount->get_juice_value()
+            point(1.0f + total_amount->get_juice_value())
         );
     };
     gui.add_item(total_amount, "total_amount");
@@ -755,7 +755,7 @@ hud_t::hud_t() :
             point(center.x - size.x / 2.0, center.y), size,
             map_alpha(game.states.gameplay->hud->spray_items_opacity * 255),
             ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER, 0,
-            point(1.0f, 1.0f) + spray_1_amount->get_juice_value()
+            point(1.0f + spray_1_amount->get_juice_value())
         );
     };
     gui.add_item(spray_1_amount, "spray_1_amount");
@@ -836,7 +836,7 @@ hud_t::hud_t() :
             point(center.x - size.x / 2.0, center.y), size,
             map_alpha(game.states.gameplay->hud->spray_items_opacity * 255),
             ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER, 0,
-            point(1.0f, 1.0f) + spray_2_amount->get_juice_value()
+            point(1.0f + spray_2_amount->get_juice_value())
         );
     };
     gui.add_item(spray_2_amount, "spray_2_amount");
@@ -1037,7 +1037,7 @@ hud_t::hud_t() :
                 draw_text(
                     text, game.sys_assets.fnt_counter, center, size,
                     COLOR_WHITE, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
-                    point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount)
+                    point(1.0 + juicy_grow_amount)
                 );
             };
             gui.add_item(mission_goal_cur, "mission_goal_cur");
@@ -1151,7 +1151,7 @@ hud_t::hud_t() :
                 i2s(game.states.gameplay->mission_score),
                 game.sys_assets.fnt_counter, center, size, COLOR_WHITE,
                 ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
-                point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount)
+                point(1.0 + juicy_grow_amount)
             );
         };
         gui.add_item(mission_score_points, "mission_score_points");
@@ -1534,7 +1534,7 @@ void hud_t::create_mission_fail_cond_items(bool primary) {
             draw_text(
                 text, game.sys_assets.fnt_counter, center, size,
                 COLOR_WHITE, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
-                point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount)
+                point(1.0 + juicy_grow_amount)
             );
         };
         gui.add_item(

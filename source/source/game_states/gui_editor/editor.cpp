@@ -647,7 +647,7 @@ void gui_editor::zoom_out_cmd(float input_value) {
  * or not.
  */
 void gui_editor::reset_cam(bool instantaneous) {
-    center_camera(point(0.0f, 0.0f), point(100.0f, 100.0f), instantaneous);
+    center_camera(point(0.0f), point(100.0f), instantaneous);
 }
 
 

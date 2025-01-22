@@ -918,7 +918,7 @@ void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
         draw_bitmap(
             game.sys_assets.bmp_bright_ring,
             pos,
-            point(scale, scale),
+            point(scale),
             0.0f,
             al_map_rgba(
                 WHISTLE::RING_COLORS[n][0],
@@ -965,7 +965,7 @@ void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
                 
                 draw_bitmap(
                     game.sys_assets.bmp_bright_circle,
-                    dot_pos, point(5.0f, 5.0f),
+                    dot_pos, point(5.0f),
                     0.0f, change_alpha(dot_color, dot_alpha)
                 );
             }
@@ -1015,7 +1015,7 @@ void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
         draw_text(
             i2s(n_standby_pikmin), game.sys_assets.fnt_cursor_counter,
             leader_cursor_s +
-            point(count_offset, count_offset),
+            point(count_offset),
             point(LARGE_FLOAT, game.win_h * 0.02f), color,
             ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP
         );
@@ -1216,7 +1216,7 @@ void gameplay_state::draw_message_box() {
                 40,
                 game.win_h - box_height - 16 + offset
             ),
-            point(48, 48)
+            point(48.0f)
         );
         draw_bitmap(
             hud->bmp_bubble,
@@ -1224,7 +1224,7 @@ void gameplay_state::draw_message_box() {
                 40,
                 game.win_h - box_height - 16 + offset
             ),
-            point(64, 64)
+            point(64.0f)
         );
     }
     
@@ -1238,7 +1238,7 @@ void gameplay_state::draw_message_box() {
             game.win_h - (MSG_BOX::MARGIN + MSG_BOX::PADDING + 8.0f) +
             offset
         ),
-        point(32.0f, 32.0f),
+        point(32.0f),
         msg_box->advance_button_alpha * 255
     );
     
@@ -1423,8 +1423,8 @@ void gameplay_state::draw_system_stuff() {
         draw_text_lines(
             game.maker_tools.info_print_text,
             game.sys_assets.fnt_builtin,
-            point(8, 8),
-            point(LARGE_FLOAT, LARGE_FLOAT),
+            point(8.0f),
+            point(LARGE_FLOAT),
             al_map_rgba(255, 255, 255, 128 * alpha_mult),
             ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP, TEXT_SETTING_FLAG_CANT_GROW
         );
@@ -1671,7 +1671,7 @@ void gameplay_state::draw_throw_preview() {
             
             draw_bitmap(
                 game.sys_assets.bmp_throw_invalid,
-                collision_point, point(32, 32), throw_h_angle,
+                collision_point, point(32.0f), throw_h_angle,
                 change_alpha(
                     cur_leader_ptr->throwee->type->main_color,
                     GAMEPLAY::PREVIEW_OPACITY
@@ -1719,7 +1719,7 @@ void gameplay_state::draw_throw_preview() {
             
             draw_bitmap(
                 game.sys_assets.bmp_throw_invalid,
-                collision_point, point(16, 16), throw_h_angle,
+                collision_point, point(16.0f), throw_h_angle,
                 change_alpha(
                     cur_leader_ptr->throwee->type->main_color,
                     GAMEPLAY::PREVIEW_OPACITY
@@ -1739,19 +1739,19 @@ void gameplay_state::draw_throw_preview() {
  */
 ALLEGRO_BITMAP* gameplay_state::draw_to_bitmap() {
     //First, get the full dimensions of the map.
-    float min_x = FLT_MAX, min_y = FLT_MAX, max_x = -FLT_MAX, max_y = -FLT_MAX;
+    point min_coords(FLT_MAX, FLT_MAX);
+    point max_coords(-FLT_MAX, -FLT_MAX);
     
     for(size_t v = 0; v < game.cur_area_data->vertexes.size(); v++) {
         vertex* v_ptr = game.cur_area_data->vertexes[v];
-        min_x = std::min(v_ptr->x, min_x);
-        min_y = std::min(v_ptr->y, min_y);
-        max_x = std::max(v_ptr->x, max_x);
-        max_y = std::max(v_ptr->y, max_y);
+        update_min_max_coords(
+            min_coords, max_coords, v2p(v_ptr)
+        );
     }
     
     //Figure out the scale that will fit on the image.
-    float area_w = max_x - min_x + game.maker_tools.area_image_padding;
-    float area_h = max_y - min_y + game.maker_tools.area_image_padding;
+    float area_w = max_coords.x - min_coords.x + game.maker_tools.area_image_padding;
+    float area_h = max_coords.y - min_coords.y + game.maker_tools.area_image_padding;
     float final_bmp_w = game.maker_tools.area_image_size;
     float final_bmp_h = final_bmp_w;
     float scale;
@@ -1771,8 +1771,8 @@ ALLEGRO_BITMAP* gameplay_state::draw_to_bitmap() {
     al_identity_transform(&t);
     al_translate_transform(
         &t,
-        -min_x + game.maker_tools.area_image_padding / 2.0f,
-        -min_y + game.maker_tools.area_image_padding / 2.0f
+        -min_coords.x + game.maker_tools.area_image_padding / 2.0f,
+        -min_coords.y + game.maker_tools.area_image_padding / 2.0f
     );
     al_scale_transform(&t, scale, scale);
     
@@ -1854,19 +1854,19 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
                 al_get_bitmap_height(bmp_output)
             );
         update_offset_effect_buffer(
-            point(-FLT_MAX, -FLT_MAX), point(FLT_MAX, FLT_MAX),
+            point(-FLT_MAX), point(FLT_MAX),
             game.liquid_limit_effect_caches,
             custom_liquid_limit_effect_buffer,
             true
         );
         update_offset_effect_buffer(
-            point(-FLT_MAX, -FLT_MAX), point(FLT_MAX, FLT_MAX),
+            point(-FLT_MAX), point(FLT_MAX),
             game.wall_smoothing_effect_caches,
             custom_wall_offset_effect_buffer,
             true
         );
         update_offset_effect_buffer(
-            point(-FLT_MAX, -FLT_MAX), point(FLT_MAX, FLT_MAX),
+            point(-FLT_MAX), point(FLT_MAX),
             game.wall_shadow_effect_caches,
             custom_wall_offset_effect_buffer,
             false

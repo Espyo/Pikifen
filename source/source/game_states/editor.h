@@ -331,10 +331,10 @@ protected:
         bool is_open = true;
         
         //Custom dialog position (center point). -1,-1 for default.
-        point custom_pos = point(-1.0f, -1.0f);
+        point custom_pos = point(-1.0f);
         
         //Custom dialog size. -1,-1 for default.
-        point custom_size = point(-1.0f, -1.0f);
+        point custom_size = point(-1.0f);
         
         
         //--- Function declarations ---

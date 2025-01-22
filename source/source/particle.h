@@ -113,10 +113,10 @@ struct particle_emission_struct {
     float interval_deviation = 0.0f;
     
     //Maximum random deviation of position, for square shapes.
-    point rect_outer_dist = point(0, 0);
+    point rect_outer_dist = point(0.0f);
     
     //Minimum random deviation of position, for square shapes.
-    point rect_inner_dist = point(0, 0);
+    point rect_inner_dist = point(0.0f);
     
     //Maximum radius for circular emission.
     float circle_outer_dist = 0;
@@ -198,7 +198,7 @@ struct particle {
     float friction = 0.0f;
     
     //How much the particle has been slowed since being created.
-    point total_friction_applied = point(0, 0);
+    point total_friction_applied = point(0.0f);
     
     //Blend type.
     PARTICLE_BLEND_TYPE blend_type = PARTICLE_BLEND_TYPE_NORMAL;
@@ -328,7 +328,7 @@ struct particle_generator : public content {
     float orbital_speed_deviation = 0.0f;
     
     //Maximum random deviation of speed.
-    point linear_speed_deviation = point(0, 0);
+    point linear_speed_deviation = point(0.0f);
     
     //How many degress linear speed can be rotated by.
     float linear_speed_angle_deviation = 0.0f;

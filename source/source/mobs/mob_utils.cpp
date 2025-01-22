@@ -1075,7 +1075,7 @@ float calculate_mob_physical_span(
     if(rectangular_dim.x != 0) {
         final_span =
             std::max(
-                final_span, dist(point(0, 0), rectangular_dim / 2.0).to_float()
+                final_span, dist(point(0.0f), rectangular_dim / 2.0).to_float()
             );
     }
     

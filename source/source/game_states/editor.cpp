@@ -1880,7 +1880,7 @@ void editor::process_gui_bitmap_dialog() {
                     al_get_bitmap_width(bitmap_dialog_cur_bmp_ptr),
                     al_get_bitmap_height(bitmap_dialog_cur_bmp_ptr)
                 ),
-                point(thumb_max_size, thumb_max_size)
+                point(thumb_max_size)
             );
         ImGui::Image(bitmap_dialog_cur_bmp_ptr, ImVec2(size.x, size.y));
     }

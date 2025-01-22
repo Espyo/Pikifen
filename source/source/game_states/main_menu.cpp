@@ -71,7 +71,7 @@ void main_menu_state::do_drawing() {
     draw_text(
         "Pikifen and contents are fan works. Pikmin is (c) Nintendo.",
         game.sys_assets.fnt_slim,
-        point(8, 8),
+        point(8.0f),
         point(game.win_w * 0.45f, game.win_h * 0.02f), map_alpha(192),
         ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP
     );

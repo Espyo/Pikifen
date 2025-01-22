@@ -120,8 +120,8 @@ pause_menu_t::pause_menu_t(bool start_on_radar) {
     }
     
     bool found_valid_edge = false;
-    radar_min_coords = point(FLT_MAX, FLT_MAX);
-    radar_max_coords = point(-FLT_MAX, -FLT_MAX);
+    radar_min_coords = point(FLT_MAX);
+    radar_max_coords = point(-FLT_MAX);
     
     for(size_t e = 0; e < game.cur_area_data->edges.size(); e++) {
         edge* e_ptr = game.cur_area_data->edges[e];
@@ -132,23 +132,15 @@ pause_menu_t::pause_menu_t(bool start_on_radar) {
         ) {
             continue;
         }
-        radar_min_coords.x =
-            std::min(radar_min_coords.x, e_ptr->vertexes[0]->x);
-        radar_min_coords.x =
-            std::min(radar_min_coords.x, e_ptr->vertexes[1]->x);
-        radar_max_coords.x =
-            std::max(radar_max_coords.x, e_ptr->vertexes[0]->x);
-        radar_max_coords.x =
-            std::max(radar_max_coords.x, e_ptr->vertexes[1]->x);
-        radar_min_coords.y =
-            std::min(radar_min_coords.y, e_ptr->vertexes[0]->y);
-        radar_min_coords.y =
-            std::min(radar_min_coords.y, e_ptr->vertexes[1]->y);
-        radar_max_coords.y =
-            std::max(radar_max_coords.y, e_ptr->vertexes[0]->y);
-        radar_max_coords.y =
-            std::max(radar_max_coords.y, e_ptr->vertexes[1]->y);
         found_valid_edge = true;
+        update_min_max_coords(
+            radar_min_coords, radar_max_coords,
+            v2p(e_ptr->vertexes[0])
+        );
+        update_min_max_coords(
+            radar_min_coords, radar_max_coords,
+            v2p(e_ptr->vertexes[1])
+        );
     }
     
     if(!found_valid_edge) {
@@ -967,14 +959,14 @@ void pause_menu_t::draw_radar(
                 
             draw_bitmap(
                 bmp_radar_onion_bulb, o_ptr->pos,
-                point(24.0f / radar_cam.zoom, 24.0f / radar_cam.zoom),
+                point(24.0f / radar_cam.zoom),
                 0.0f,
                 target_color
             );
         }
         draw_bitmap(
             bmp_radar_onion_skeleton, o_ptr->pos,
-            point(24.0f / radar_cam.zoom, 24.0f / radar_cam.zoom)
+            point(24.0f / radar_cam.zoom)
         );
     }
     
@@ -984,7 +976,7 @@ void pause_menu_t::draw_radar(
         
         draw_bitmap(
             bmp_radar_ship, s_ptr->pos,
-            point(24.0f / radar_cam.zoom, 24.0f / radar_cam.zoom)
+            point(24.0f / radar_cam.zoom)
         );
     }
     
@@ -996,7 +988,7 @@ void pause_menu_t::draw_radar(
         draw_bitmap(
             e_ptr->health > 0 ? bmp_radar_enemy_alive : bmp_radar_enemy_dead,
             e_ptr->pos,
-            point(24.0f / radar_cam.zoom, 24.0f / radar_cam.zoom),
+            point(24.0f / radar_cam.zoom),
             e_ptr->health > 0 ? game.time_passed : 0.0f
         );
     }
@@ -1007,11 +999,11 @@ void pause_menu_t::draw_radar(
         
         draw_bitmap(
             l_ptr->lea_type->bmp_icon, l_ptr->pos,
-            point(40.0f / radar_cam.zoom, 40.0f / radar_cam.zoom)
+            point(40.0f / radar_cam.zoom)
         );
         draw_bitmap(
             bmp_radar_leader_bubble, l_ptr->pos,
-            point(48.0f / radar_cam.zoom, 48.0f / radar_cam.zoom),
+            point(48.0f / radar_cam.zoom),
             0.0f,
             radar_selected_leader == l_ptr ?
             al_map_rgb(0, 255, 255) :
@@ -1031,7 +1023,7 @@ void pause_menu_t::draw_radar(
         if(l_ptr->health <= 0) {
             draw_bitmap(
                 bmp_radar_leader_x, l_ptr->pos,
-                point(36.0f / radar_cam.zoom, 36.0f / radar_cam.zoom)
+                point(36.0f / radar_cam.zoom)
             );
         }
     }
@@ -1042,7 +1034,7 @@ void pause_menu_t::draw_radar(
         
         draw_bitmap(
             bmp_radar_treasure, t_ptr->pos,
-            point(32.0f / radar_cam.zoom, 32.0f / radar_cam.zoom),
+            point(32.0f / radar_cam.zoom),
             sin(game.time_passed * 2.0f) * (TAU * 0.05f)
         );
     }
@@ -1057,7 +1049,7 @@ void pause_menu_t::draw_radar(
         
         draw_bitmap(
             bmp_radar_treasure, r_ptr->pos,
-            point(32.0f / radar_cam.zoom, 32.0f / radar_cam.zoom),
+            point(32.0f / radar_cam.zoom),
             sin(game.time_passed * 2.0f) * (TAU * 0.05f)
         );
     }
@@ -1074,7 +1066,7 @@ void pause_menu_t::draw_radar(
         
         draw_bitmap(
             bmp_radar_treasure, p_ptr->pos,
-            point(32.0f / radar_cam.zoom, 32.0f / radar_cam.zoom),
+            point(32.0f / radar_cam.zoom),
             sin(game.time_passed * 2.0f) * (TAU * 0.05f)
         );
     }
@@ -1085,7 +1077,7 @@ void pause_menu_t::draw_radar(
         
         draw_bitmap(
             bmp_radar_pikmin, p_ptr->pos,
-            point(16.0f / radar_cam.zoom, 16.0f / radar_cam.zoom),
+            point(16.0f / radar_cam.zoom),
             0.0f,
             p_ptr->pik_type->main_color
         );
@@ -1099,7 +1091,7 @@ void pause_menu_t::draw_radar(
     for(const auto &o : obstacles) {
         draw_bitmap(
             bmp_radar_obstacle, o->pos,
-            point(40.0f / radar_cam.zoom, 40.0f / radar_cam.zoom),
+            point(40.0f / radar_cam.zoom),
             o->angle
         );
     }
@@ -1220,7 +1212,7 @@ void pause_menu_t::draw_radar(
     //Radar cursor.
     draw_bitmap(
         bmp_radar_cursor, radar_cursor,
-        point(48.0f / radar_cam.zoom, 48.0f / radar_cam.zoom),
+        point(48.0f / radar_cam.zoom),
         game.time_passed * TAU * 0.3f
     );
     
@@ -1275,7 +1267,7 @@ void pause_menu_t::draw_radar(
             north_ind_center.x,
             north_ind_center.y + 1.0f
         ),
-        point(12.0f, 12.0f),
+        point(12.0f),
         PAUSE_MENU::RADAR_HIGHEST_COLOR
     );
     al_draw_filled_triangle(

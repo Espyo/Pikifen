@@ -283,6 +283,19 @@ point::point(float x, float y) :
 
 
 /**
+ * @brief Constructs a new point object, with the given value on both
+ * coordinates.
+ *
+ * @param xy X and Y coordinate.
+ */
+point::point(float xy) :
+    x(xy),
+    y(xy) {
+    
+}
+
+
+/**
  * @brief Constructs a new point object, with the coordinates set to 0,0.
  */
 point::point() {
@@ -345,17 +358,6 @@ const point point::operator +(float n) const {
 
 
 /**
- * @brief Multiplies the coordinates by a number.
- *
- * @param n Value to multiply both coordinates with.
- * @return The new point.
- */
-const point point::operator *(float n) const {
-    return point(x * n, y * n);
-}
-
-
-/**
  * @brief Subtracts a number from each coordinates.
  *
  * @param n Number to subtract from both coordinates.
@@ -363,6 +365,17 @@ const point point::operator *(float n) const {
  */
 const point point::operator -(float n) const {
     return point(x - n, y - n);
+}
+
+
+/**
+ * @brief Multiplies the coordinates by a number.
+ *
+ * @param n Value to multiply both coordinates with.
+ * @return The new point.
+ */
+const point point::operator *(float n) const {
+    return point(x * n, y * n);
 }
 
 
@@ -404,6 +417,32 @@ point point::operator -=(const point &p) {
 
 
 /**
+ * @brief Multiplies the coordinates of another point with this one's.
+ *
+ * @param p Point with the values to multiply by.
+ * @return The current object.
+ */
+point point::operator *=(const point &p) {
+    x *= p.x;
+    y *= p.y;
+    return point(x, y);
+}
+
+
+/**
+ * @brief Divides the coordinates of another point with this one's.
+ *
+ * @param p Point with the values to divide by.
+ * @return The current object.
+ */
+point point::operator /=(const point &p) {
+    x /= p.x;
+    y /= p.y;
+    return point(x, y);
+}
+
+
+/**
  * @brief Adds a given number to the coordinates.
  *
  * @param n Value to add to both coordinates with.
@@ -417,6 +456,19 @@ point point::operator +=(float n) {
 
 
 /**
+ * @brief Subtracts a given number from the coordinates.
+ *
+ * @param n Value to subtract from both coordinates with.
+ * @return The current object.
+ */
+point point::operator -=(float n) {
+    x -= n;
+    y -= n;
+    return point(x, y);
+}
+
+
+/**
  * @brief Multiplies the coordinates by a given number.
  *
  * @param n Value to multiply both coordinates with.
@@ -425,6 +477,19 @@ point point::operator +=(float n) {
 point point::operator *=(float n) {
     x *= n;
     y *= n;
+    return point(x, y);
+}
+
+
+/**
+ * @brief Divides the coordinates by a given number.
+ *
+ * @param n Value to divide both coordinates with.
+ * @return The current object.
+ */
+point point::operator /=(float n) {
+    x /= n;
+    y /= n;
     return point(x, y);
 }
 
@@ -804,7 +869,7 @@ void coordinates_to_angle(
         *angle = (float) atan2(coordinates.y, coordinates.x);
     }
     if(magnitude) {
-        *magnitude = dist(point(0, 0), coordinates).to_float();
+        *magnitude = dist(point(0.0f), coordinates).to_float();
     }
 }
 
@@ -1761,6 +1826,55 @@ bool points_are_collinear(
 
 
 /**
+ * @brief Given new coordinates, updates the maximum coordinates record,
+ * if the new coordinates are a new maximum in either axis.
+ * Each axis is processed separately.
+ *
+ * @param max_coords Maximum coordinates so far.
+ * @param new_coords New coordinates to process and, if necessary, update with.
+ */
+void update_max_coords(point &max_coords, const point &new_coords) {
+    max_coords.x =
+        std::max(max_coords.x, new_coords.x);
+    max_coords.y =
+        std::max(max_coords.y, new_coords.y);
+}
+
+
+/**
+ * @brief Given new coordinates, updates the minimum coordinates record,
+ * if the new coordinates are a new minimum in either axis.
+ * Each axis is processed separately.
+ *
+ * @param min_coords Minimum coordinates so far.
+ * @param new_coords New coordinates to process and, if necessary, update with.
+ */
+void update_min_coords(point &min_coords, const point &new_coords) {
+    min_coords.x =
+        std::min(min_coords.x, new_coords.x);
+    min_coords.y =
+        std::min(min_coords.y, new_coords.y);
+}
+
+
+/**
+ * @brief Given new coordinates, updates the minimum coordinates record
+ * and maximum coordinates record, if the new coordinates are a new
+ * minimum or maximum in either axis. Each axis is processed separately.
+ *
+ * @param min_coords Minimum coordinates so far.
+ * @param max_coords Maximum coordinates so far.
+ * @param new_coords New coordinates to process and, if necessary, update with.
+ */
+void update_min_max_coords(
+    point &min_coords, point &max_coords, const point &new_coords
+) {
+    update_min_coords(min_coords, new_coords);
+    update_max_coords(max_coords, new_coords);
+}
+
+
+/**
  * @brief Projects a set of vertexes onto an axis.
  *
  * @param v Vertexes to project.
@@ -1902,7 +2016,7 @@ bool rectangles_intersect(
     
     //The size of the axis results in a much bigger overlap,
     //so we correct it here.
-    min_overlap /= dist(point(0, 0), normal).to_float();
+    min_overlap /= dist(point(0.0f), normal).to_float();
     
     //Ensure the normal is facing outwards.
     point dir = rect2 - rect1;
@@ -1914,7 +2028,7 @@ bool rectangles_intersect(
         *out_overlap_dist = min_overlap;
     }
     if(out_overlap_angle) {
-        *out_overlap_angle = get_angle(point(0, 0), normal);
+        *out_overlap_angle = get_angle(point(0.0f), normal);
     }
     
     return true;

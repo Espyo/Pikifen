@@ -226,7 +226,7 @@ void draw_string_tokens(
     const vector<string_token> &tokens, const ALLEGRO_FONT* const text_font,
     const ALLEGRO_FONT* const control_font, bool controls_condensed,
     const point &where, int flags, const point &max_size,
-    const point &scale = point(1.0f, 1.0f)
+    const point &scale = point(1.0f)
 );
 void get_player_input_icon_info(
     const player_input &i, bool condensed,

@@ -255,11 +255,11 @@ void gameplay_state::end_mission(bool cleared) {
 void gameplay_state::enter() {
     update_transformations();
     
-    last_enemy_killed_pos = point(LARGE_FLOAT, LARGE_FLOAT);
-    last_hurt_leader_pos = point(LARGE_FLOAT, LARGE_FLOAT);
-    last_pikmin_born_pos = point(LARGE_FLOAT, LARGE_FLOAT);
-    last_pikmin_death_pos = point(LARGE_FLOAT, LARGE_FLOAT);
-    last_ship_that_got_treasure_pos = point(LARGE_FLOAT, LARGE_FLOAT);
+    last_enemy_killed_pos = point(LARGE_FLOAT);
+    last_hurt_leader_pos = point(LARGE_FLOAT);
+    last_pikmin_born_pos = point(LARGE_FLOAT);
+    last_pikmin_death_pos = point(LARGE_FLOAT);
+    last_ship_that_got_treasure_pos = point(LARGE_FLOAT);
     
     mission_fail_reason = (MISSION_FAIL_COND) INVALID;
     goal_indicator_ratio = 0.0f;

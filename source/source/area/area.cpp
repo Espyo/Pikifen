@@ -735,16 +735,12 @@ void area_data::generate_blockmap() {
     if(vertexes.empty()) return;
     
     //First, get the starting point and size of the blockmap.
-    point min_coords, max_coords;
-    min_coords.x = max_coords.x = vertexes[0]->x;
-    min_coords.y = max_coords.y = vertexes[0]->y;
+    point min_coords = v2p(vertexes[0]);
+    point max_coords = min_coords;
     
     for(size_t v = 0; v < vertexes.size(); v++) {
         vertex* v_ptr = vertexes[v];
-        min_coords.x = std::min(v_ptr->x, min_coords.x);
-        max_coords.x = std::max(v_ptr->x, max_coords.x);
-        min_coords.y = std::min(v_ptr->y, min_coords.y);
-        max_coords.y = std::max(v_ptr->y, max_coords.y);
+        update_min_max_coords(min_coords, max_coords, v2p(v_ptr));
     }
     
     bmap.top_left_corner = min_coords;
@@ -834,24 +830,15 @@ void area_data::generate_edges_blockmap(const vector<edge*> &edge_list) {
         //and only then thoroughly test which it is inside of.
         
         edge* e_ptr = edge_list[e];
+        point min_coords = v2p(e_ptr->vertexes[0]);
+        point max_coords = min_coords;
+        update_min_max_coords(min_coords, max_coords, v2p(e_ptr->vertexes[1]));
         
-        size_t b_min_x =
-            bmap.get_col(
-                std::min(e_ptr->vertexes[0]->x, e_ptr->vertexes[1]->x)
-            );
-        size_t b_max_x =
-            bmap.get_col(
-                std::max(e_ptr->vertexes[0]->x, e_ptr->vertexes[1]->x)
-            );
-        size_t b_min_y =
-            bmap.get_row(
-                std::min(e_ptr->vertexes[0]->y, e_ptr->vertexes[1]->y)
-            );
-        size_t b_max_y =
-            bmap.get_row(
-                std::max(e_ptr->vertexes[0]->y, e_ptr->vertexes[1]->y)
-            );
-            
+        size_t b_min_x = bmap.get_col(min_coords.x);
+        size_t b_max_x = bmap.get_col(max_coords.x);
+        size_t b_min_y = bmap.get_row(min_coords.y);
+        size_t b_max_y = bmap.get_row(max_coords.y);
+        
         for(size_t bx = b_min_x; bx <= b_max_x; bx++) {
             for(size_t by = b_min_y; by <= b_max_y; by++) {
             
@@ -863,8 +850,7 @@ void area_data::generate_edges_blockmap(const vector<edge*> &edge_list) {
                     line_seg_intersects_rectangle(
                         corner,
                         corner + GEOMETRY::BLOCKMAP_BLOCK_SIZE,
-                        point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y),
-                        point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y)
+                        v2p(e_ptr->vertexes[0]), v2p(e_ptr->vertexes[1])
                     )
                 ) {
                 

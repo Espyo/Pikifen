@@ -115,14 +115,8 @@ void polygon::clean(bool recursive) {
         //this is just a redundant point in the edge prev - next. Delete it.
         if(
             fabs(
-                get_angle(
-                    point(cur_v->x, cur_v->y),
-                    point(prev_v->x, prev_v->y)
-                ) -
-                get_angle(
-                    point(next_v->x, next_v->y),
-                    point(cur_v->x, cur_v->y)
-                )
+                get_angle(v2p(cur_v), v2p(prev_v)) -
+                get_angle(v2p(next_v), v2p(cur_v))
             ) < 0.000001
         ) {
             should_delete = true;

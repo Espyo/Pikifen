@@ -313,10 +313,9 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                 for(size_t x = 0; x < (size_t) bmp_w; x++) {
                     p = y * bmp_w + x;
                     if(!selection_pixels[p]) continue;
-                    selection_tl.x = std::min(selection_tl.x, (float) x);
-                    selection_tl.y = std::min(selection_tl.y, (float) y);
-                    selection_br.x = std::max(selection_br.x, (float) x);
-                    selection_br.y = std::max(selection_br.y, (float) y);
+                    update_min_max_coords(
+                        selection_tl, selection_br, point(x, y)
+                    );
                 }
             }
             

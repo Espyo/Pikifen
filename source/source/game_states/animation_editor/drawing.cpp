@@ -123,7 +123,7 @@ void animation_editor::draw_canvas() {
             int bmp_y = -bmp_h / 2.0;
             al_draw_bitmap(s->parent_bmp, bmp_x, bmp_y, 0);
             
-            point scene_tl = point(-1, -1);
+            point scene_tl = point(-1.0f);
             point scene_br = point(canvas_br.x + 1, canvas_br.y + 1);
             al_transform_coordinates(
                 &game.screen_to_world_transform, &scene_tl.x, &scene_tl.y

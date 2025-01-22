@@ -14,6 +14,7 @@
 #include "sector.h"
 
 #include "../game.h"
+#include "../functions.h"
 #include "geometry.h"
 
 
@@ -59,22 +60,13 @@ void sector::calculate_bounding_box() {
         return;
     }
     
-    bbox[0].x = edges[0]->vertexes[0]->x;
-    bbox[1].x = bbox[0].x;
-    bbox[0].y = edges[0]->vertexes[0]->y;
-    bbox[1].y = bbox[0].y;
+    bbox[0] = v2p(edges[0]->vertexes[0]);
+    bbox[1] = bbox[0];
     
     for(size_t e = 0; e < edges.size(); e++) {
         for(unsigned char v = 0; v < 2; v++) {
-            point coords(
-                edges[e]->vertexes[v]->x,
-                edges[e]->vertexes[v]->y
-            );
-            
-            bbox[0].x = std::min(bbox[0].x, coords.x);
-            bbox[1].x = std::max(bbox[1].x, coords.x);
-            bbox[0].y = std::min(bbox[0].y, coords.y);
-            bbox[1].y = std::max(bbox[1].y, coords.y);
+            point p = v2p(edges[e]->vertexes[v]);
+            update_min_max_coords(bbox[0], bbox[1], p);
         }
     }
 }

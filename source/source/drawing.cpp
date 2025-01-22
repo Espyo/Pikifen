@@ -205,7 +205,7 @@ void draw_button(
         text, font, center, size * GUI::STANDARD_CONTENT_SIZE, color,
         ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
         TEXT_SETTING_FLAG_CANT_GROW,
-        point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount)
+        point(1.0 + juicy_grow_amount)
     );
     
     ALLEGRO_COLOR box_tint =
@@ -246,7 +246,7 @@ void draw_fraction(
         i2s(value_nr), game.sys_assets.fnt_value, point(bottom.x, value_nr_y),
         point(LARGE_FLOAT, IN_WORLD_FRACTION::ROW_HEIGHT * scale),
         color, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_TOP, 0,
-        point(value_nr_scale, value_nr_scale)
+        point(value_nr_scale)
     );
     
     const float bar_y = bottom.y - IN_WORLD_FRACTION::ROW_HEIGHT * 2;
@@ -263,7 +263,7 @@ void draw_fraction(
         point(bottom.x, req_nr_y),
         point(LARGE_FLOAT, IN_WORLD_FRACTION::ROW_HEIGHT * scale),
         color, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_TOP, 0,
-        point(req_nr_scale, req_nr_scale)
+        point(req_nr_scale)
     );
 }
 
@@ -807,7 +807,7 @@ void draw_menu_button_icon(
     );
     draw_bitmap_in_box(
         bmp, icon_center,
-        point(button_size.y, button_size.y),
+        point(button_size.y),
         true
     );
     al_destroy_bitmap(bmp);
@@ -827,7 +827,7 @@ void draw_mob_shadow(
     float delta_z, float shadow_stretch
 ) {
 
-    point shadow_size = point(m->radius * 2.2f, m->radius * 2.2f);
+    point shadow_size = point(m->radius * 2.2f);
     if(m->rectangular_dim.x != 0) {
         shadow_size = m->rectangular_dim * 1.1f;
     }
@@ -1308,7 +1308,7 @@ void draw_string_tokens(
         case STRING_TOKEN_CHAR: {
             draw_text(
                 tokens[t].content, text_font, point(caret, where.y),
-                point(LARGE_FLOAT, LARGE_FLOAT), COLOR_WHITE,
+                point(LARGE_FLOAT), COLOR_WHITE,
                 ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP,
                 TEXT_SETTING_FLAG_CANT_GROW,
                 point(x_scale * scale.x, y_scale * scale.y)

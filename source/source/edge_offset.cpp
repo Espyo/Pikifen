@@ -484,7 +484,7 @@ void get_edge_offset_intersection(
             effect1_p0.y + (effect1_p1.y - effect1_p0.y) * r
         );
         coordinates_to_angle(
-            p - point(common_vertex->x, common_vertex->y),
+            p - v2p(common_vertex),
             out_angle, out_length
         );
     } else {
@@ -525,11 +525,7 @@ void get_next_edge(
         unsigned char other_vertex_idx = e_ptr->vertexes[0] == v_ptr ? 1 : 0;
         vertex* other_vertex = e_ptr->vertexes[other_vertex_idx];
         
-        float angle =
-            get_angle(
-                point(v_ptr->x, v_ptr->y),
-                point(other_vertex->x, other_vertex->y)
-            );
+        float angle = get_angle(v2p(v_ptr), v2p(other_vertex));
             
         float diff =
             clockwise ?
@@ -601,11 +597,7 @@ void get_next_offset_effect_edge(
         //to what side does the effect go?
         bool effect_is_cw = other_vertex_idx != unaffected_sector_idx;
         
-        float angle =
-            get_angle(
-                point(v_ptr->x, v_ptr->y),
-                point(other_vertex->x, other_vertex->y)
-            );
+        float angle = get_angle(v2p(v_ptr), v2p(other_vertex));
             
         float diff =
             clockwise ?
@@ -679,25 +671,11 @@ void update_offset_effect_buffer(
             if(!fully_on_camera) {
                 //If the sector's fully on-camera, it's faster to not bother
                 //with the edge-by-edge check.
-                point edge_tl(
-                    std::min(
-                        s_ptr->edges[e]->vertexes[0]->x,
-                        s_ptr->edges[e]->vertexes[1]->x
-                    ),
-                    std::min(
-                        s_ptr->edges[e]->vertexes[0]->y,
-                        s_ptr->edges[e]->vertexes[1]->y
-                    )
-                );
-                point edge_br(
-                    std::max(
-                        s_ptr->edges[e]->vertexes[0]->x,
-                        s_ptr->edges[e]->vertexes[1]->x
-                    ),
-                    std::max(
-                        s_ptr->edges[e]->vertexes[0]->y,
-                        s_ptr->edges[e]->vertexes[1]->y
-                    )
+                point edge_tl = v2p(s_ptr->edges[e]->vertexes[0]);
+                point edge_br = edge_tl;
+                update_min_max_coords(
+                    edge_tl, edge_br,
+                    v2p(s_ptr->edges[e]->vertexes[1])
                 );
                 
                 if(!rectangles_intersect(edge_tl, edge_br, cam_tl, cam_br)) {

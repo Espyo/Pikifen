@@ -136,7 +136,7 @@ void ship::draw_mob() {
             
         draw_bitmap(
             game.sys_assets.bmp_bright_ring,
-            control_point_final_pos, point(ring_diameter, ring_diameter),
+            control_point_final_pos, point(ring_diameter),
             0.0f,
             change_alpha(ring_color, ring_alpha)
         );
@@ -196,7 +196,7 @@ void ship::draw_mob() {
         draw_bitmap(
             game.sys_assets.bmp_bright_ring,
             ring_pos,
-            point(ring_scale, ring_scale),
+            point(ring_scale),
             0.0f,
             ring_color
         );

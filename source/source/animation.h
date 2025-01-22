@@ -91,7 +91,7 @@ public:
     point offset;
     
     //Scale multiplier.
-    point scale = point(1.0, 1.0);
+    point scale = point(1.0f);
     
     //Angle to rotate the image by.
     float angle = 0.0f;

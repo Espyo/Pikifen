@@ -54,8 +54,9 @@ bool are_walls_between(
     const point &p1, const point &p2,
     float ignore_walls_below_z, bool* out_impassable_walls
 ) {
-    point bb_tl(std::min(p1.x, p2.x), std::min(p1.y, p2.y));
-    point bb_br(std::max(p1.x, p2.x), std::max(p1.y, p2.y));
+    point bb_tl = p1;
+    point bb_br = p1;
+    update_min_max_coords(bb_tl, bb_br, p2);
     
     set<edge*> candidate_edges;
     if(
@@ -73,8 +74,7 @@ bool are_walls_between(
         if(
             !line_segs_intersect(
                 p1, p2,
-                point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y),
-                point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y),
+                v2p(e_ptr->vertexes[0]), v2p(e_ptr->vertexes[1]),
                 nullptr
             )
         ) {
@@ -474,9 +474,10 @@ float get_liquid_limit_length(edge* e_ptr) {
     //because that would result in many cases of edges that share a first
     //vertex. So it wouldn't look as random.
     //It is much more rare for two edges to share a topleftmost vertex.
-    float min_x = std::min(e_ptr->vertexes[0]->x, e_ptr->vertexes[1]->x);
-    float min_y = std::min(e_ptr->vertexes[0]->y, e_ptr->vertexes[1]->y);
-    float r = (hash_nr2(min_x, min_y) / (float) UINT32_MAX) * 5.0f;
+    point min_coords = v2p(e_ptr->vertexes[0]);
+    update_min_coords(min_coords, v2p(e_ptr->vertexes[1]));
+    float r =
+        (hash_nr2(min_coords.x, min_coords.y) / (float) UINT32_MAX) * 5.0f;
     return
         15.0f +
         12.0f * sin((game.states.gameplay->area_time_passed * 2.0f) + r);
@@ -740,12 +741,12 @@ vector<std::pair<int, string> > get_weather_table(data_node* node) {
 
 /**
  * @brief Returns the path to the program's current working directory.
- * 
+ *
  * @return The path, or an empty string on error.
  */
 string get_working_directory_path() {
     char buffer[1024];
-    char *cwd = getcwd(buffer, sizeof(buffer));
+    char* cwd = getcwd(buffer, sizeof(buffer));
     string result;
     if(cwd) result = cwd;
     return result;
@@ -754,11 +755,11 @@ string get_working_directory_path() {
 
 /**
  * @brief Opens the manual on the user's web browser in the specified page.
- * 
+ *
  * @param page Page to open, with the .html extension and any anchors.
  * @return Whether it succeeded in opening the browser.
  */
-bool open_manual(const string& page) {
+bool open_manual(const string &page) {
     //This function could have a page argument and an anchor argument,
     //and it could have included the .html extension automatically, but doing
     //it this way makes it so that the string, e.g. "page.html#anchor" is
@@ -1329,4 +1330,15 @@ string unescape_string(const string &s) {
     }
     ret.push_back(s.back());
     return ret;
+}
+
+
+/**
+ * @brief Convertes a vertex to a point.
+ *
+ * @param v Vertex to convert.
+ * @return The point.
+ */
+point v2p(const vertex* v) {
+    return point(v->x, v->y);
 }

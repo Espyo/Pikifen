@@ -218,7 +218,7 @@ void animation_database::calculate_hitbox_span() {
         for(size_t h = 0; h < s_ptr->hitboxes.size(); h++) {
             hitbox* h_ptr = &s_ptr->hitboxes[h];
             
-            float d = dist(point(0, 0), h_ptr->pos).to_float();
+            float d = dist(point(0.0f), h_ptr->pos).to_float();
             d += h_ptr->radius;
             hitbox_span = std::max(hitbox_span, d);
         }

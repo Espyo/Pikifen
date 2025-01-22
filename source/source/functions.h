@@ -141,7 +141,7 @@ ALLEGRO_COLOR get_wall_shadow_color(edge* e_ptr);
 float get_wall_shadow_length(edge* e_ptr);
 vector<std::pair<int, string> > get_weather_table(data_node* node);
 string get_working_directory_path();
-bool open_manual(const string& page);
+bool open_manual(const string &page);
 void print_info(
     const string &text,
     float total_duration = 5.0f,
@@ -181,3 +181,4 @@ void update_offset_effect_caches (
     offset_effect_length_getter_t length_getter,
     offset_effect_color_getter_t color_getter
 );
+point v2p(const vertex* v);

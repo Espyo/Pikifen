@@ -211,7 +211,7 @@ private:
     gui_manager tutorial_gui;
     
     //Top-left coordinates of the logo, in screen percentage.
-    point logo_min_screen_limit = point(10.0f, 10.0f);
+    point logo_min_screen_limit = point(10.0f);
     
     //Bottom-right coordinates of the logo, in screen percentage.
     point logo_max_screen_limit = point(90.0f, 50.0f);
@@ -235,7 +235,7 @@ private:
     float logo_pikmin_sway_min_speed = 2.5f;
     
     //Width and height of a logo Pikmin.
-    point logo_pikmin_size = point(3.5f, 3.5f);
+    point logo_pikmin_size = point(3.5f);
     
     //Map of what characters represent what Pikmin top bitmaps.
     map<unsigned char, ALLEGRO_BITMAP*> logo_type_bitmaps;

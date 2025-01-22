@@ -980,18 +980,14 @@ void animation_editor::zoom_everything_cmd(float input_value) {
             s_ptr->top_angle,
             &top_min, &top_max
         );
-        cmin.x = std::min(cmin.x, top_min.x);
-        cmin.y = std::min(cmin.y, top_min.y);
-        cmax.x = std::max(cmax.x, top_max.x);
-        cmax.y = std::max(cmax.y, top_max.y);
+        update_min_coords(cmin, top_min);
+        update_max_coords(cmax, top_max);
     }
     
     for(size_t h = 0; h < s_ptr->hitboxes.size(); h++) {
         hitbox* h_ptr = &s_ptr->hitboxes[h];
-        cmin.x = std::min(cmin.x, h_ptr->pos.x - h_ptr->radius);
-        cmin.y = std::min(cmin.y, h_ptr->pos.y - h_ptr->radius);
-        cmax.x = std::max(cmax.x, h_ptr->pos.x + h_ptr->radius);
-        cmax.y = std::max(cmax.y, h_ptr->pos.y + h_ptr->radius);
+        update_min_coords(cmin, h_ptr->pos - h_ptr->radius);
+        update_max_coords(cmax, h_ptr->pos + h_ptr->radius);
     }
     
     center_camera(cmin, cmax);

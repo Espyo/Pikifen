@@ -164,9 +164,9 @@ struct tree_shadow {
     //--- Function declarations ---
     
     explicit tree_shadow(
-        const point &center = point(), const point &size = point(100, 100),
+        const point &center = point(), const point &size = point(100.0f),
         float angle = 0, unsigned char alpha = 255,
-        const string &file_name = "", const point &sway = point(1, 1)
+        const string &file_name = "", const point &sway = point(1.0f)
     );
     ~tree_shadow();
     

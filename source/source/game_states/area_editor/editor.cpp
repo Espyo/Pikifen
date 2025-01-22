@@ -305,10 +305,10 @@ void area_editor::clear_current_area() {
     show_path_preview = false;
     path_preview.clear();
     //LARGE_FLOAT means they were never given a previous position.
-    path_preview_checkpoints[0] = point(LARGE_FLOAT, LARGE_FLOAT);
-    path_preview_checkpoints[1] = point(LARGE_FLOAT, LARGE_FLOAT);
-    cross_section_checkpoints[0] = point(LARGE_FLOAT, LARGE_FLOAT);
-    cross_section_checkpoints[1] = point(LARGE_FLOAT, LARGE_FLOAT);
+    path_preview_checkpoints[0] = point(LARGE_FLOAT);
+    path_preview_checkpoints[1] = point(LARGE_FLOAT);
+    cross_section_checkpoints[0] = point(LARGE_FLOAT);
+    cross_section_checkpoints[1] = point(LARGE_FLOAT);
     
     clear_texture_suggestions();
     
@@ -1561,77 +1561,22 @@ void area_editor::goto_problem() {
             return;
         }
         
-        point min_coords, max_coords;
-        min_coords.x = problem_edge_intersection.e1->vertexes[0]->x;
-        max_coords.x = min_coords.x;
-        min_coords.y = problem_edge_intersection.e1->vertexes[0]->y;
-        max_coords.y = min_coords.y;
+        point min_coords = v2p(problem_edge_intersection.e1->vertexes[0]);
+        point max_coords = min_coords;
         
-        min_coords.x =
-            std::min(
-                min_coords.x, problem_edge_intersection.e1->vertexes[0]->x
-            );
-        min_coords.x =
-            std::min(
-                min_coords.x, problem_edge_intersection.e1->vertexes[1]->x
-            );
-        min_coords.x =
-            std::min(
-                min_coords.x, problem_edge_intersection.e2->vertexes[0]->x
-            );
-        min_coords.x =
-            std::min(
-                min_coords.x, problem_edge_intersection.e2->vertexes[1]->x
-            );
-        max_coords.x =
-            std::max(
-                max_coords.x, problem_edge_intersection.e1->vertexes[0]->x
-            );
-        max_coords.x =
-            std::max(
-                max_coords.x, problem_edge_intersection.e1->vertexes[1]->x
-            );
-        max_coords.x =
-            std::max(
-                max_coords.x, problem_edge_intersection.e2->vertexes[0]->x
-            );
-        max_coords.x =
-            std::max(
-                max_coords.x, problem_edge_intersection.e2->vertexes[1]->x
-            );
-        min_coords.y =
-            std::min(
-                min_coords.y, problem_edge_intersection.e1->vertexes[0]->y
-            );
-        min_coords.y =
-            std::min(
-                min_coords.y, problem_edge_intersection.e1->vertexes[1]->y
-            );
-        min_coords.y =
-            std::min(
-                min_coords.y, problem_edge_intersection.e2->vertexes[0]->y
-            );
-        min_coords.y =
-            std::min(
-                min_coords.y, problem_edge_intersection.e2->vertexes[1]->y
-            );
-        max_coords.y =
-            std::max(
-                max_coords.y, problem_edge_intersection.e1->vertexes[0]->y
-            );
-        max_coords.y =
-            std::max(
-                max_coords.y, problem_edge_intersection.e1->vertexes[1]->y
-            );
-        max_coords.y =
-            std::max(
-                max_coords.y, problem_edge_intersection.e2->vertexes[0]->y
-            );
-        max_coords.y =
-            std::max(
-                max_coords.y, problem_edge_intersection.e2->vertexes[1]->y
-            );
-            
+        update_min_max_coords(
+            min_coords, max_coords,
+            v2p(problem_edge_intersection.e1->vertexes[1])
+        );
+        update_min_max_coords(
+            min_coords, max_coords,
+            v2p(problem_edge_intersection.e2->vertexes[0])
+        );
+        update_min_max_coords(
+            min_coords, max_coords,
+            v2p(problem_edge_intersection.e2->vertexes[1])
+        );
+        
         change_state(EDITOR_STATE_LAYOUT);
         select_edge(problem_edge_intersection.e1);
         select_edge(problem_edge_intersection.e2);
@@ -1663,20 +1608,11 @@ void area_editor::goto_problem() {
         }
         
         edge* e_ptr = *game.cur_area_data->problems.lone_edges.begin();
-        point min_coords, max_coords;
-        min_coords.x = e_ptr->vertexes[0]->x;
-        max_coords.x = min_coords.x;
-        min_coords.y = e_ptr->vertexes[0]->y;
-        max_coords.y = min_coords.y;
-        
-        min_coords.x = std::min(min_coords.x, e_ptr->vertexes[0]->x);
-        min_coords.x = std::min(min_coords.x, e_ptr->vertexes[1]->x);
-        max_coords.x = std::max(max_coords.x, e_ptr->vertexes[0]->x);
-        max_coords.x = std::max(max_coords.x, e_ptr->vertexes[1]->x);
-        min_coords.y = std::min(min_coords.y, e_ptr->vertexes[0]->y);
-        min_coords.y = std::min(min_coords.y, e_ptr->vertexes[1]->y);
-        max_coords.y = std::max(max_coords.y, e_ptr->vertexes[0]->y);
-        max_coords.y = std::max(max_coords.y, e_ptr->vertexes[1]->y);
+        point min_coords = v2p(e_ptr->vertexes[0]);
+        point max_coords = min_coords;
+        update_min_max_coords(
+            min_coords, max_coords, v2p(e_ptr->vertexes[1])
+        );
         
         change_state(EDITOR_STATE_LAYOUT);
         select_edge(e_ptr);
@@ -4089,10 +4025,7 @@ void area_editor::update_vertex_selection() {
     point sel_tl(FLT_MAX, FLT_MAX);
     point sel_br(-FLT_MAX, -FLT_MAX);
     for(vertex* v : selected_vertexes) {
-        sel_tl.x = std::min(sel_tl.x, v->x);
-        sel_tl.y = std::min(sel_tl.y, v->y);
-        sel_br.x = std::max(sel_br.x, v->x);
-        sel_br.y = std::max(sel_br.y, v->y);
+        update_min_max_coords(sel_tl, sel_br, v2p(v));
     }
     sel_tl.x -= AREA_EDITOR::SELECTION_TW_PADDING;
     sel_tl.y -= AREA_EDITOR::SELECTION_TW_PADDING;

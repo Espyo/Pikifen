@@ -2154,7 +2154,7 @@ void area_editor::process_gui_panel_info() {
                         al_get_bitmap_width(game.cur_area_data->thumbnail.get()),
                         al_get_bitmap_height(game.cur_area_data->thumbnail.get())
                     ),
-                    point(200, 200)
+                    point(200.0f)
                 );
             ImGui::Image(
                 (void*) game.cur_area_data->thumbnail.get(),

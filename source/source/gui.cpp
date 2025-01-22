@@ -104,7 +104,7 @@ void bullet_gui_item::def_draw_code(
             item_x_start + GUI::BULLET_RADIUS + GUI::BULLET_PADDING,
             center.y
         ),
-        point(GUI::BULLET_RADIUS * 2, GUI::BULLET_RADIUS * 2),
+        point(GUI::BULLET_RADIUS * 2),
         0.0f, this->color
     );
     float juicy_grow_amount = get_juice_value();
@@ -114,7 +114,7 @@ void bullet_gui_item::def_draw_code(
         text_space * GUI::STANDARD_CONTENT_SIZE,
         this->color, ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER,
         TEXT_SETTING_FLAG_CANT_GROW,
-        point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount)
+        point(1.0 + juicy_grow_amount)
     );
     if(selected) {
         draw_textured_box(
@@ -230,7 +230,7 @@ void check_gui_item::def_draw_code(const point &center, const point &size) {
         point(size.x * 0.95, size.y) * GUI::STANDARD_CONTENT_SIZE,
         this->color, ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER,
         TEXT_SETTING_FLAG_CANT_GROW,
-        point(1.0f + juicy_grow_amount, 1.0f + juicy_grow_amount)
+        point(1.0f + juicy_grow_amount)
     );
     
     draw_bitmap(
@@ -1013,7 +1013,7 @@ bool gui_manager::handle_player_action(const player_action &action) {
             selected_item->on_activate &&
             selected_item->is_responsive()
         ) {
-            selected_item->activate(point(LARGE_FLOAT, LARGE_FLOAT));
+            selected_item->activate(point(LARGE_FLOAT));
             auto_repeat_on = true;
             auto_repeat_duration = 0.0f;
             auto_repeat_next_activation = GUI::AUTO_REPEAT_MAX_INTERVAL;
@@ -1024,7 +1024,7 @@ bool gui_manager::handle_player_action(const player_action &action) {
         
     } case PLAYER_ACTION_TYPE_MENU_BACK: {
         if(is_down && back_item && back_item->is_responsive()) {
-            back_item->activate(point(LARGE_FLOAT, LARGE_FLOAT));
+            back_item->activate(point(LARGE_FLOAT));
         }
         break;
         
@@ -1213,7 +1213,7 @@ void gui_manager::tick(float delta_t) {
         auto_repeat_next_activation -= delta_t;
         
         while(auto_repeat_next_activation <= 0.0f) {
-            selected_item->activate(point(LARGE_FLOAT, LARGE_FLOAT));
+            selected_item->activate(point(LARGE_FLOAT));
             auto_repeat_next_activation +=
                 clamp(
                     interpolate_number(
@@ -1504,8 +1504,8 @@ void picker_gui_item::def_draw_code(const point &center, const point &size) {
     }
     ALLEGRO_COLOR arrow_highlight_color = al_map_rgb(87, 200, 208);
     ALLEGRO_COLOR arrow_regular_color = COLOR_WHITE;
-    point arrow_highlight_scale = point(1.4f, 1.4f);
-    point arrow_regular_scale = point(1.0f, 1.0f);
+    point arrow_highlight_scale = point(1.4f);
+    point arrow_regular_scale = point(1.0f);
     
     point arrow_box(
         size.x * 0.10 * GUI::STANDARD_CONTENT_SIZE,
@@ -1551,7 +1551,7 @@ void picker_gui_item::def_draw_code(const point &center, const point &size) {
         COLOR_WHITE,
         ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER,
         TEXT_SETTING_FLAG_CANT_GROW,
-        point(1.0f + juicy_grow_amount, 1.0f + juicy_grow_amount)
+        point(1.0f + juicy_grow_amount)
     );
     
     ALLEGRO_COLOR box_tint =
@@ -1739,7 +1739,7 @@ void text_gui_item::def_draw_code(const point &center, const point &size) {
                 ),
                 this->flags,
                 point(size.x, line_height),
-                point(1.0f + juicy_grow_amount, 1.0f + juicy_grow_amount)
+                point(1.0f + juicy_grow_amount)
             );
         }
         
@@ -1749,7 +1749,7 @@ void text_gui_item::def_draw_code(const point &center, const point &size) {
             this->text, this->font, point(text_x, text_y), size,
             this->color, this->flags, V_ALIGN_MODE_CENTER,
             TEXT_SETTING_FLAG_CANT_GROW,
-            point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount)
+            point(1.0 + juicy_grow_amount)
         );
         
     }
@@ -1798,6 +1798,6 @@ void tooltip_gui_item::def_draw_code(const point &center, const point &size) {
         COLOR_WHITE,
         ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
         TEXT_SETTING_FLAG_CANT_GROW,
-        point(0.7f + juicy_grow_amount, 0.7f + juicy_grow_amount)
+        point(0.7f + juicy_grow_amount)
     );
 }

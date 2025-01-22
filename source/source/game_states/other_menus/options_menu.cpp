@@ -211,7 +211,7 @@ void options_menu_t::draw() {
             "(Or wait " + i2s(capturing_input_timeout + 1) + "s to cancel...)",
             game.sys_assets.fnt_standard,
             point(game.win_w / 2.0f, game.win_h / 2.0f),
-            point(LARGE_FLOAT, LARGE_FLOAT),
+            point(LARGE_FLOAT),
             COLOR_WHITE, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
             TEXT_SETTING_FLAG_CANT_GROW
         );
