@@ -46,6 +46,9 @@ struct hazard : public content {
     
     //Status effects for mobs that interact with this hazard.
     vector<status_type*> effects;
+
+    //Do sectors with this hazard prevent vulnerable pikmin from pathfinding on it?
+    bool block_paths = true;
     
     //If it's got an associated liquid, this points to it.
     liquid* associated_liquid = nullptr;
