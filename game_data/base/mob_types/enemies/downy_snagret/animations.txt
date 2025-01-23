@@ -1,0 +1,637 @@
+name=Downy Snagret animations
+engine_version=0.25.0
+animations{
+	biting{
+		frames{
+			idling{
+				duration=0.1000
+			}
+			idling_2{
+				duration=0.2000
+			}
+			biting_1{
+				duration=0.1000
+				interpolate=true
+			}
+			biting_2{
+				duration=0.1000
+			}
+			idling{
+				duration=0.1000
+			}
+		}
+	}
+	chewing{
+		frames{
+			chewing_1{
+				duration=0.1500
+			}
+			idling{
+				duration=0.1000
+			}
+			chewing_1{
+				duration=0.1500
+			}
+			idling{
+				duration=0.1000
+			}
+			chewing_1{
+				duration=0.1000
+			}
+			chewing_3{
+				duration=0.3000
+				signal=0
+			}
+			chewing_2{
+				duration=0.1000
+			}
+			chewing_1{
+				duration=0.1000
+			}
+			idling{
+				duration=0.1000
+			}
+		}
+	}
+	dying{
+		loop_frame=5
+		frames{
+			dying_1{
+				duration=0.2000
+			}
+			dying_2{
+				duration=0.8000
+			}
+			dying_1{
+				duration=0.2000
+			}
+			dying_3{
+				duration=0.2000
+			}
+			dying_4{
+				duration=0.2000
+			}
+			dying_5{
+				duration=0.1000
+			}
+		}
+	}
+	idling{
+		frames{
+			idling{
+				duration=0.6000
+				interpolate=true
+			}
+			idling_2{
+				duration=0.6000
+				interpolate=true
+			}
+		}
+	}
+	jumping{
+		loop_frame=4
+		frames{
+			idling_2{
+				duration=0.1000
+				interpolate=true
+			}
+			idling{
+				duration=0.1000
+				interpolate=true
+			}
+			idling_2{
+				duration=0.1000
+			}
+			jumping_1{
+				duration=0.1000
+				interpolate=true
+				signal=0
+			}
+			jumping_2{
+				duration=0.1000
+			}
+		}
+	}
+	landing{
+		frames{
+			jumping_2{
+				duration=0.1000
+			}
+			jumping_3{
+				duration=0.1000
+			}
+			jumping_4{
+				duration=0.1000
+			}
+			idling_2{
+				duration=0.1000
+			}
+			idling{
+				duration=0.1000
+			}
+		}
+	}
+	shaking{
+		frames{
+			idling{
+				duration=0.1000
+			}
+			shaking_1{
+				duration=0.1000
+			}
+			shaking_2{
+				duration=0.1000
+			}
+			shaking_1{
+				duration=0.1000
+			}
+			idling{
+				duration=0.1000
+			}
+			shaking_3{
+				duration=0.1000
+			}
+			shaking_4{
+				duration=0.1000
+			}
+			shaking_3{
+				duration=0.1000
+			}
+			idling{
+				duration=0.1000
+			}
+		}
+	}
+}
+sprites{
+	biting_1{
+		file=downy_snagret
+		file_pos=92.0000 0.0000
+		file_size=102.0000 47.0000
+		offset=15.8210 0.2108
+		scale=1.1000 1.0000
+		hitboxes{
+			body{
+				coords=1.7980 0.2566 0.0000
+				height=24.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			mouth{
+				coords=55.2005 0.0929 0.0000
+				height=24.0000
+				radius=24.0000
+				type=1
+				value=1.0000
+				hazards=stab
+			}
+		}
+	}
+	biting_2{
+		file=downy_snagret
+		file_pos=94.0000 48.0000
+		file_size=96.0000 48.0000
+		offset=6.2213 0.0000
+		hitboxes{
+			body{
+				coords=3.7986 0.8050 0.0000
+				height=24.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			mouth{
+				coords=54.5464 0.0929 0.0000
+				height=24.0000
+				radius=24.0000
+				type=1
+				value=1.0000
+				hazards=stab
+			}
+		}
+	}
+	chewing_1{
+		file=downy_snagret
+		file_pos=83.0000 193.0000
+		file_size=70.0000 48.0000
+		offset=-7.5866 0.2564
+		hitboxes{
+			body{
+				coords=1.7980 0.2566 0.0000
+				height=24.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			mouth{
+				coords=20.9943 0.8050 0.0000
+				height=24.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	chewing_2{
+		file=downy_snagret
+		file_pos=84.0000 145.0000
+		file_size=66.0000 47.0000
+		offset=-9.8757 -0.3977
+		hitboxes{
+			body{
+				coords=1.7980 0.2566 0.0000
+				height=24.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			mouth{
+				coords=12.5211 -0.4411 0.0000
+				height=24.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	chewing_3{
+		file=downy_snagret
+		file_pos=83.0000 96.0000
+		file_size=59.0000 48.0000
+		offset=-15.2715 -0.7247
+		hitboxes{
+			body{
+				coords=-10.1572 0.5558 0.0000
+				height=24.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			mouth{
+				coords=0.0605 -0.6903 0.0000
+				height=24.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_1{
+		file=downy_snagret
+		file_pos=83.0000 193.0000
+		file_size=70.0000 48.0000
+		offset=-7.5866 0.2564
+		hitboxes{
+			body{
+				coords=1.7980 0.2566 0.0000
+				height=24.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+			mouth{
+				coords=20.9943 0.8050 0.0000
+				height=24.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_2{
+		file=downy_snagret
+		file_pos=84.0000 145.0000
+		file_size=66.0000 47.0000
+		offset=-9.8757 -0.3977
+		hitboxes{
+			body{
+				coords=1.7980 0.2566 0.0000
+				height=24.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+			mouth{
+				coords=12.5211 -0.4411 0.0000
+				height=24.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_3{
+		file=downy_snagret
+		file_pos=0.0000 0.0000
+		file_size=91.0000 47.0000
+		offset=3.1494 -0.1120
+		hitboxes{
+			body{
+				coords=1.7980 0.2566 0.0000
+				height=24.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+			mouth{
+				coords=33.6942 0.3884 0.0000
+				height=24.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_4{
+		file=downy_snagret
+		file_pos=155.0000 198.0000
+		file_size=79.0000 77.0000
+		offset=3.2558 0.4429
+		hitboxes{
+			body{
+				coords=1.7980 0.2566 0.0000
+				height=24.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+			mouth{
+				coords=26.5391 -8.7113 0.0000
+				height=24.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_5{
+		file=downy_snagret
+		file_pos=155.0000 96.0000
+		file_size=78.0000 100.0000
+		offset=10.6300 7.6372
+		hitboxes{
+			body{
+				coords=1.7980 0.2566 0.0000
+				height=24.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+			mouth{
+				coords=32.2131 -10.8882 0.0000
+				height=24.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	idling{
+		file=downy_snagret
+		file_pos=0.0000 0.0000
+		file_size=91.0000 47.0000
+		offset=4.2046 0.0794
+		hitboxes{
+			body{
+				coords=1.7980 0.2566 0.0000
+				height=24.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			mouth{
+				coords=33.6942 0.3884 0.0000
+				height=24.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	idling_2{
+		file=downy_snagret
+		file_pos=0.0000 48.0000
+		file_size=86.0000 47.0000
+		offset=1.4295 -0.2348
+		hitboxes{
+			body{
+				coords=-0.3902 0.4012 0.0000
+				height=24.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			mouth{
+				coords=31.5179 0.5862 0.0000
+				height=24.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	jumping_1{
+		file=downy_snagret
+		file_pos=0.0000 96.0000
+		file_size=81.0000 48.0000
+		offset=1.3067 0.1337
+		hitboxes{
+			body{
+				coords=1.7980 0.2566 0.0000
+				height=24.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			mouth{
+				coords=33.1007 0.9819 0.0000
+				height=24.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	jumping_2{
+		file=downy_snagret
+		file_pos=0.0000 145.0000
+		file_size=83.0000 48.0000
+		offset=1.3067 0.1337
+		hitboxes{
+			body{
+				coords=1.7980 0.2566 0.0000
+				height=24.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			mouth{
+				coords=33.2985 -0.2051 0.0000
+				height=24.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	jumping_3{
+		file=downy_snagret
+		file_pos=0.0000 193.0000
+		file_size=82.0000 48.0000
+		offset=1.3067 0.1337
+		hitboxes{
+			body{
+				coords=1.7980 0.2566 0.0000
+				height=24.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			mouth{
+				coords=32.1115 0.3884 0.0000
+				height=24.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	jumping_4{
+		file=downy_snagret
+		file_pos=0.0000 241.0000
+		file_size=85.0000 48.0000
+		offset=1.3067 0.1337
+		hitboxes{
+			body{
+				coords=1.7980 0.2566 0.0000
+				height=24.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			mouth{
+				coords=32.1115 0.3884 0.0000
+				height=24.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	shaking_1{
+		file=downy_snagret
+		file_pos=0.0000 48.0000
+		file_size=86.0000 47.0000
+		offset=3.1494 -0.1120
+		angle=6.1959
+		hitboxes{
+			body{
+				coords=1.7980 0.2566 0.0000
+				height=24.0000
+				radius=40.0000
+				type=1
+				value=1.0000
+				knockback_outward=true
+				knockback=3.0000
+			}
+			mouth{
+				coords=33.8802 5.0173 0.0000
+				height=24.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	shaking_2{
+		file=downy_snagret
+		file_pos=0.0000 0.0000
+		file_size=91.0000 47.0000
+		offset=3.0000 -5.0000
+		angle=6.0214
+		hitboxes{
+			body{
+				coords=1.7980 0.2566 0.0000
+				height=24.0000
+				radius=40.0000
+				type=1
+				value=1.0000
+				knockback_outward=true
+				knockback=3.0000
+			}
+			mouth{
+				coords=33.8802 5.0173 0.0000
+				height=24.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	shaking_3{
+		file=downy_snagret
+		file_pos=0.0000 48.0000
+		file_size=86.0000 47.0000
+		offset=3.1494 -0.1120
+		angle=0.0873
+		hitboxes{
+			body{
+				coords=1.7980 0.2566 0.0000
+				height=24.0000
+				radius=40.0000
+				type=1
+				value=1.0000
+				knockback_outward=true
+				knockback=3.0000
+			}
+			mouth{
+				coords=33.8802 5.0173 0.0000
+				height=24.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	shaking_4{
+		file=downy_snagret
+		file_pos=0.0000 0.0000
+		file_size=91.0000 47.0000
+		offset=3.0000 5.0000
+		angle=0.2618
+		hitboxes{
+			body{
+				coords=1.7980 0.2566 0.0000
+				height=24.0000
+				radius=40.0000
+				type=1
+				value=1.0000
+				knockback_outward=true
+				knockback=3.0000
+			}
+			mouth{
+				coords=33.8802 5.0173 0.0000
+				height=24.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+}
+body_parts{
+	body
+	mouth
+}
