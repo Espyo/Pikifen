@@ -829,7 +829,7 @@ bool mob::calculate_damage(
                 mob_type::vulnerability_t vuln =
                     victim->get_hazard_vulnerability(attack_h->hazards[h]);
                 max_vulnerability =
-                    std::max(vuln.damage_mult, max_vulnerability);
+                    std::max(vuln.effect_mult, max_vulnerability);
             }
             
             if(max_vulnerability == 0.0f) {
@@ -867,7 +867,12 @@ bool mob::calculate_damage(
         attacker_offense *= statuses[s].type->attack_multiplier;
     }
     for(size_t s = 0; s < victim->statuses.size(); s++) {
-        defense_multiplier *= victim->statuses[s].type->defense_multiplier;
+        float mult = victim->statuses[s].type->defense_multiplier - 1;
+        auto vuln_it = type->status_vulnerabilities.find(statuses[s].type);
+        if(vuln_it != type->status_vulnerabilities.end()) {
+            mult *= vuln_it->second.effect_mult;
+        }
+        defense_multiplier *= (mult + 1);
     }
     
     if(this->type->category->id == MOB_CATEGORY_PIKMIN) {
@@ -1003,7 +1008,7 @@ void mob::cause_spike_damage(mob* victim, bool is_ingestion) {
     auto v =
         victim->type->spike_damage_vulnerabilities.find(type->spike_damage);
     if(v != victim->type->spike_damage_vulnerabilities.end()) {
-        damage *= v->second.damage_mult;
+        damage *= v->second.effect_mult;
     }
     
     if(type->spike_damage->status_to_apply) {
@@ -1628,7 +1633,7 @@ bool mob::follow_path(
     } else {
         //Use the object's standard invulnerabilities.
         for(auto &v : type->hazard_vulnerabilities) {
-            if(v.second.damage_mult == 0.0f) {
+            if(v.second.effect_mult == 0.0f) {
                 final_settings.invulnerabilities.push_back(v.first);
             }
         }
@@ -1909,7 +1914,7 @@ mob_type::vulnerability_t mob::get_hazard_vulnerability(
     hazard* h_ptr
 ) const {
     mob_type::vulnerability_t vuln;
-    vuln.damage_mult = type->default_vulnerability;
+    vuln.effect_mult = type->default_vulnerability;
     
     auto v = type->hazard_vulnerabilities.find(h_ptr);
     if(v != type->hazard_vulnerabilities.end()) {
@@ -2053,7 +2058,12 @@ float mob::get_speed_multiplier() const {
     float move_speed_mult = 1.0f;
     for(size_t s = 0; s < this->statuses.size(); s++) {
         if(!statuses[s].to_delete) {
-            move_speed_mult *= this->statuses[s].type->speed_multiplier;
+            float mult = this->statuses[s].type->speed_multiplier - 1;
+            auto vuln_it = type->status_vulnerabilities.find(statuses[s].type);
+            if(vuln_it != type->status_vulnerabilities.end()) {
+                mult *= vuln_it->second.effect_mult;
+            }
+            move_speed_mult *= (mult + 1);
         }
     }
     return move_speed_mult;
@@ -2685,7 +2695,7 @@ bool mob::is_point_on(const point &p) const {
  */
 bool mob::is_resistant_to_hazards(const vector<hazard*> &hazards) const {
     for(size_t h = 0; h < hazards.size(); h++) {
-        if(get_hazard_vulnerability(hazards[h]).damage_mult != 0.0f) {
+        if(get_hazard_vulnerability(hazards[h]).effect_mult != 0.0f) {
             return false;
         }
     }
@@ -3515,7 +3525,12 @@ void mob::tick(float delta_t) {
 void mob::tick_animation(float delta_t) {
     float mult = 1.0f;
     for(size_t s = 0; s < this->statuses.size(); s++) {
-        mult *= this->statuses[s].type->anim_speed_multiplier;
+        float to_mult = this->statuses[s].type->anim_speed_multiplier - 1;
+            auto vuln_it = type->status_vulnerabilities.find(statuses[s].type);
+            if(vuln_it != type->status_vulnerabilities.end()) {
+                to_mult *= vuln_it->second.effect_mult;
+            }
+        mult *= (to_mult + 1);
     }
     
     if(mob_speed_anim_baseline != 0.0f) {
@@ -3734,7 +3749,7 @@ void mob::tick_misc_logic(float delta_t) {
         float damage_mult = 1.0f;
         auto vuln_it = type->status_vulnerabilities.find(statuses[s].type);
         if(vuln_it != type->status_vulnerabilities.end()) {
-            damage_mult = vuln_it->second.damage_mult;
+            damage_mult = vuln_it->second.effect_mult;
         }
         
         float health_before = health;

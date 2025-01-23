@@ -4363,7 +4363,7 @@ void pikmin_fsm::touched_hazard(mob* m, void* info1, void* info2) {
     
     if(p->invuln_period.time_left > 0) return;
     mob_type::vulnerability_t vuln = p->get_hazard_vulnerability(h);
-    if(vuln.damage_mult == 0.0f) return;
+    if(vuln.effect_mult == 0.0f) return;
     
     if(!vuln.status_to_apply || !vuln.status_overrides) {
         for(size_t e = 0; e < h->effects.size(); e++) {

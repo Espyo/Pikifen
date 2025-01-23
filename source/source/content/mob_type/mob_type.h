@@ -234,7 +234,7 @@ public:
         //--- Members ---
         
         //Multiply damage taken by this.
-        float damage_mult = 1.0f;
+        float effect_mult = 1.0f;
         
         //When affected by the source, receive this status effect.
         status_type* status_to_apply = nullptr;
@@ -439,16 +439,16 @@ public:
     //All damage received is multiplied by this much.
     float default_vulnerability = 1.0f;
     
-    //For every hazard, multiply damage taken by this much.
+    //For every hazard, multiply its effects by this much.
     map<hazard*, vulnerability_t> hazard_vulnerabilities;
     
     //What sort of spike damage it causes, if any.
     spike_damage_type* spike_damage = nullptr;
     
-    //For every type of spike damage, multiply damage taken by this much.
+    //For every type of spike damage, multiply its effects by this much.
     map<spike_damage_type*, vulnerability_t> spike_damage_vulnerabilities;
     
-    //For every type of status, multiply damage taken by this much.
+    //For every type of status, multiply its effects by this much.
     map<status_type*, vulnerability_t> status_vulnerabilities;
     
     //- Editor info -

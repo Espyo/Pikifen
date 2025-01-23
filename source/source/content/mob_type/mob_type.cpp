@@ -350,7 +350,7 @@ void mob_type::load_from_data_node(
         } else {
             mob_type::vulnerability_t &vuln =
                 hazard_vulnerabilities[&(hazard_it->second)];
-            vuln.damage_mult = percentage / 100.0f;
+            vuln.effect_mult = percentage / 100.0f;
             if(!status_name.empty()) {
                 vuln.status_to_apply = status_it->second;
             }
@@ -442,7 +442,7 @@ void mob_type::load_from_data_node(
             
         } else {
             auto &s = spike_damage_vulnerabilities[&(sdv_it->second)];
-            s.damage_mult = percentage / 100.0f;
+            s.effect_mult = percentage / 100.0f;
             s.status_to_apply = status_it->second;
             
         }
@@ -485,7 +485,7 @@ void mob_type::load_from_data_node(
             
         } else {
             auto &s = status_vulnerabilities[sv_it->second];
-            s.damage_mult = percentage / 100.0f;
+            s.effect_mult = percentage / 100.0f;
             if(status_override_it != game.content.status_types.list.end()) {
                 s.status_to_apply = status_override_it->second;
             }
