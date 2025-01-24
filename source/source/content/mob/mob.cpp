@@ -614,18 +614,7 @@ bool Mob::calculate_carrying_destination(
     case CARRY_DESTINATION_SHIP: {
 
         //Go to the nearest ship.
-        Ship* closest_ship = nullptr;
-        Distance closest_ship_dist;
-        
-        for(size_t s = 0; s < game.states.gameplay->mobs.ships.size(); s++) {
-            Ship* s_ptr = game.states.gameplay->mobs.ships[s];
-            Distance d(pos, s_ptr->control_point_final_pos);
-            
-            if(!closest_ship || d < closest_ship_dist) {
-                closest_ship = s_ptr;
-                closest_ship_dist = d;
-            }
-        }
+        Ship* closest_ship = calculate_carrying_ship();
         
         if(closest_ship) {
             *target_mob = closest_ship;
@@ -640,66 +629,35 @@ bool Mob::calculate_carrying_destination(
         
     } case CARRY_DESTINATION_ONION: {
 
-        //If it's meant for an Onion, we need to decide which Onion, based on
-        //the Pikmin. First, check which Onion Pikmin types are even available.
-        unordered_set<PikminType*> available_types;
-        for(size_t o = 0; o < game.states.gameplay->mobs.onions.size(); o++) {
-            Onion* o_ptr = game.states.gameplay->mobs.onions[o];
-            if(o_ptr->activated) {
-                for(
-                    size_t t = 0;
-                    t < o_ptr->oni_type->nest->pik_types.size();
-                    t++
-                ) {
-                    available_types.insert(
-                        o_ptr->oni_type->nest->pik_types[t]
-                    );
-                }
-            }
-        }
+        Onion* target = calculate_carrying_onion(added, removed, target_type);
         
-        if(available_types.empty()) {
-            //No available types?! Well...make the Pikmin stuck.
+        if(!target) {
             return false;
         }
-        
-        PikminType* decided_type =
-            decide_carry_pikmin_type(available_types, added, removed);
-            
-        //Figure out where that type's Onion is.
-        size_t closest_onion_idx = INVALID;
-        Distance closest_onion_dist;
-        for(size_t o = 0; o < game.states.gameplay->mobs.onions.size(); o++) {
-            Onion* o_ptr = game.states.gameplay->mobs.onions[o];
-            if(!o_ptr->activated) continue;
-            bool has_type = false;
-            for(
-                size_t t = 0;
-                t < o_ptr->oni_type->nest->pik_types.size();
-                t++
-            ) {
-                if(o_ptr->oni_type->nest->pik_types[t] == decided_type) {
-                    has_type = true;
-                    break;
-                }
-            }
-            if(!has_type) continue;
-            
-            Distance d(pos, o_ptr->pos);
-            if(closest_onion_idx == INVALID || d < closest_onion_dist) {
-                closest_onion_dist = d;
-                closest_onion_idx = o;
-            }
-        }
-        
-        //Finally, set the destination data.
-        *target_type = decided_type;
-        *target_mob = game.states.gameplay->mobs.onions[closest_onion_idx];
+        *target_mob = target;
         *target_point = (*target_mob)->pos;
-        
         return true;
         
         break;
+        
+    } case CARRY_DESTINATION_SHIP_NO_ONION: {
+
+        Onion* oni_target = calculate_carrying_onion(added, removed, target_type);
+        
+        if(oni_target) {
+            *target_mob = oni_target;
+            *target_point = (*target_mob)->pos;
+            return true;
+        }
+        
+        //No onion, find a ship instead.
+        Ship* shi_target = calculate_carrying_ship();
+        if(shi_target) {
+            *target_mob = shi_target;
+            *target_point = shi_target->control_point_final_pos;
+            return true;
+        }
+        return false;
         
     } case CARRY_DESTINATION_LINKED_MOB: {
 
@@ -787,6 +745,82 @@ bool Mob::calculate_carrying_destination(
     }
     
     return false;
+}
+
+onion* mob::calculate_carrying_onion(
+    mob* added, mob* removed, pikmin_type** target_type
+) const {
+    //If it's meant for an Onion, we need to decide which Onion, based on
+    //the Pikmin. First, check which Onion Pikmin types are even available.
+    unordered_set<pikmin_type*> available_types;
+    for(size_t o = 0; o < game.states.gameplay->mobs.onions.size(); o++) {
+        onion* o_ptr = game.states.gameplay->mobs.onions[o];
+        if(o_ptr->activated) {
+            for(
+                size_t t = 0;
+                t < o_ptr->oni_type->nest->pik_types.size();
+                t++
+            ) {
+                available_types.insert(
+                    o_ptr->oni_type->nest->pik_types[t]
+                );
+            }
+        }
+    }
+    
+    if(available_types.empty()) {
+        //No available types?! Well...make the Pikmin stuck.
+        return nullptr;
+    }
+    
+    pikmin_type* decided_type =
+        decide_carry_pikmin_type(available_types, added, removed);
+        
+    //Figure out where that type's Onion is.
+    size_t closest_onion_idx = INVALID;
+    dist closest_onion_dist;
+    for(size_t o = 0; o < game.states.gameplay->mobs.onions.size(); o++) {
+        onion* o_ptr = game.states.gameplay->mobs.onions[o];
+        if(!o_ptr->activated) continue;
+        bool has_type = false;
+        for(
+            size_t t = 0;
+            t < o_ptr->oni_type->nest->pik_types.size();
+            t++
+        ) {
+            if(o_ptr->oni_type->nest->pik_types[t] == decided_type) {
+                has_type = true;
+                break;
+            }
+        }
+        if(!has_type) continue;
+        
+        dist d(pos, o_ptr->pos);
+        if(closest_onion_idx == INVALID || d < closest_onion_dist) {
+            closest_onion_dist = d;
+            closest_onion_idx = o;
+        }
+    }
+    
+    *target_type = decided_type;
+    return game.states.gameplay->mobs.onions[closest_onion_idx];
+}
+
+ship* mob::calculate_carrying_ship() const {
+    //Go to the nearest ship.
+    ship* closest_ship = nullptr;
+    dist closest_ship_dist;
+    
+    for(size_t s = 0; s < game.states.gameplay->mobs.ships.size(); s++) {
+        ship* s_ptr = game.states.gameplay->mobs.ships[s];
+        dist d(pos, s_ptr->control_point_final_pos);
+        
+        if(!closest_ship || d < closest_ship_dist) {
+            closest_ship = s_ptr;
+            closest_ship_dist = d;
+        }
+    }
+    return closest_ship;
 }
 
 

@@ -1942,7 +1942,7 @@ void leader_fsm::fall_asleep(Mob* m, void* info1, void* info2) {
     leader_fsm::dismiss(m, nullptr, nullptr);
     m->stop_chasing();
     
-    m->become_carriable(CARRY_DESTINATION_ONION);
+    m->become_carriable(CARRY_DESTINATION_SHIP_NO_ONION);
     
     m->set_animation(LEADER_ANIM_LYING);
 }
