@@ -1,0 +1,8 @@
+name = Mud
+description = Mobs in mud get heavily slowed down.
+
+affects = enemies; leaders; pikmin; others
+color = 255 64 64
+speed_multiplier = 0.6
+anim_speed_multiplier = 0.6
+remove_on_hazard_leave = true

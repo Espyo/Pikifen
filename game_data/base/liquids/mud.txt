@@ -1,0 +1,9 @@
+name = Mud
+description = Slowing body of mud.
+
+shine_amount = 0.5
+body_color = 53 37 24 245
+shine_color = 79 55 28 125
+radar_color = 53 37 24
+distortion_amount = 14 4
+animation_speed = 0.3

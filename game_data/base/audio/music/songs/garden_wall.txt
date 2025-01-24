@@ -1,0 +1,12 @@
+name = Garden Wall
+
+tags = Area; Mysterious; Eerie
+maker = Helodity
+version = 1.0.0
+engine_version = 1.0.0
+notes = This song is an original creation for Pikifen.
+
+main_track = garden_wall
+mix_tracks {
+    enemy = garden_wall_enemy
+}
