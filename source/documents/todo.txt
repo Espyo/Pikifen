@@ -6,12 +6,13 @@ Current tasks (tasks being worked on, but not yet committed)
     Rock Pikmin thrown at a Pellet Posy should go to the Pellet Posy when they wake up
     Refactor the particle system's storage thing into its own util in general_utils
     Hitting Esc when on an editor state that's not the main state won't do anything
+    Update the Turbulent Tundra thumbnail
+    Scrolling water texture on scrolling sectors
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
     Pressing Enter on the new particle dialog (maybe others) isn't hitting Ok
     Wood bridges go backwards a bit when they create the first chunk
-    On a default area editor area, if you zoom the radar just a bit after everything doesn't fit any more, you won't be able to pan the radar enough to catch everything
 
     --- 0.26 ---
     Test -S-'s get_onion_info branch
@@ -249,7 +250,6 @@ Next tasks (roughly sorted most important first)
         Update screenshots that still show off the Play area
         Have a general editor tutorial, explaining the canvas, status bar, etc., and link to it in the corresponding editor tutorial pages
         Have an infobox with quick info about content, like its folder
-    Radar terrain colors should be in config.txt
     Add the options and stats menu to the pause menu
     Cook up a better logo?
     Test everything in the regression tests
@@ -933,8 +933,6 @@ Misc things (so I don't forget)
     Base game content to add
         Enemies
             Scuttlebug?
-        Areas
-            Helodity's Turbulent Tundra?
         More puzzle elements
             A cyclic lever? It automatically flips on and off over time
             A moving platform, useful to traverse a hazardous floor. Maybe Stemples?

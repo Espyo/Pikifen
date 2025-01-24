@@ -49,6 +49,10 @@ extern const ALLEGRO_COLOR DEF_NO_PIKMIN_COLOR;
 extern const float DEF_ONION_OPEN_RANGE;
 extern const float DEF_PIKMIN_CHASE_RANGE;
 extern const float DEF_PLUCK_RANGE;
+extern const ALLEGRO_COLOR DEF_RADAR_BG_COLOR;
+extern const ALLEGRO_COLOR DEF_RADAR_EDGE_COLOR;
+extern const ALLEGRO_COLOR DEF_RADAR_HIGHEST_COLOR;
+extern const ALLEGRO_COLOR DEF_RADAR_LOWEST_COLOR;
 extern const float DEF_STANDARD_LEADER_HEIGHT;
 extern const float DEF_STANDARD_LEADER_RADIUS;
 extern const float DEF_STANDARD_PIKMIN_HEIGHT;
@@ -152,6 +156,18 @@ struct game_config {
     
     //A leader can start the plucking mode if they're this close.
     float pluck_range = GAME_CONFIG::DEF_PLUCK_RANGE;
+    
+    //Color of the background in the radar.
+    ALLEGRO_COLOR radar_background_color = GAME_CONFIG::DEF_RADAR_BG_COLOR;
+    
+    //Color of edges in the radar.
+    ALLEGRO_COLOR radar_edge_color = GAME_CONFIG::DEF_RADAR_EDGE_COLOR;
+    
+    //Color for the highest sector in the radar.
+    ALLEGRO_COLOR radar_highest_color = GAME_CONFIG::DEF_RADAR_HIGHEST_COLOR;
+    
+    //Color for the lowest sector in the radar.
+    ALLEGRO_COLOR radar_lowest_color = GAME_CONFIG::DEF_RADAR_LOWEST_COLOR;
     
     //List of spray types, ordered by the game configuration.
     vector<spray_type*> spray_order;

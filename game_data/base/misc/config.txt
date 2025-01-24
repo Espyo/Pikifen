@@ -41,6 +41,11 @@ throw_max_dist = 200
 whistle_growth_speed = 180
 whistle_max_dist = 200
 
+radar_background_color = 32 24 0
+radar_edge_color = 32 24 0
+radar_highest_color = 200 200 180
+radar_lowest_color = 80 64 0
+
 message_char_interval = 0.03
 zoom_max_level = 3.0
 zoom_min_level = 0.66

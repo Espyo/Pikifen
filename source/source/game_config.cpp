@@ -88,6 +88,18 @@ const float DEF_PIKMIN_CHASE_RANGE = 200.0f;
 //Default value for the pluck range.
 const float DEF_PLUCK_RANGE = 30.0f;
 
+//Default value for the radar background color.
+const ALLEGRO_COLOR DEF_RADAR_BG_COLOR = al_map_rgb(32, 24, 0);
+
+//Default value for the radar edge color.
+const ALLEGRO_COLOR DEF_RADAR_EDGE_COLOR = DEF_RADAR_BG_COLOR;
+
+//Default value for the radar highest sector color.
+const ALLEGRO_COLOR DEF_RADAR_HIGHEST_COLOR = al_map_rgb(200, 200, 180);
+
+//Default value for the radar lowest sector color.
+const ALLEGRO_COLOR DEF_RADAR_LOWEST_COLOR = al_map_rgb(80, 64, 0);
+
 //Default value for the standard leader height.
 const float DEF_STANDARD_LEADER_HEIGHT = 46.0f;
 
@@ -173,6 +185,11 @@ void game_config::load(data_node* file) {
     rs.set("throw_max_dist", throw_max_dist);
     rs.set("whistle_growth_speed", whistle_growth_speed);
     rs.set("whistle_max_dist", whistle_max_dist);
+
+    rs.set("radar_background_color", radar_background_color);
+    rs.set("radar_edge_color", radar_edge_color);
+    rs.set("radar_highest_color", radar_highest_color);
+    rs.set("radar_lowest_color", radar_lowest_color);
     
     rs.set("message_char_interval", message_char_interval);
     rs.set("zoom_max_level", zoom_max_level);

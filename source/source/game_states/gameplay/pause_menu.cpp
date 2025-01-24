@@ -38,24 +38,12 @@ const string GUI_FILE_NAME = "pause_menu";
 //Name of the mission page GUI information file.
 const string MISSION_GUI_FILE_NAME = "pause_mission";
 
-//Background color of the radar.
-const ALLEGRO_COLOR RADAR_BG_COLOR =
-    al_map_rgb(32, 24, 0);
-    
 //Default radar zoom level.
 const float RADAR_DEF_ZOOM = 0.4f;
 
 //Name of the radar page GUI information file.
 const string RADAR_GUI_FILE_NAME = "pause_radar";
 
-//Color of the highest sector in the radar.
-const ALLEGRO_COLOR RADAR_HIGHEST_COLOR =
-    al_map_rgb(200, 200, 180);
-    
-//Color of the lowest sector in the radar.
-const ALLEGRO_COLOR RADAR_LOWEST_COLOR =
-    al_map_rgb(80, 64, 0);
-    
 //Maximum radar zoom level.
 const float RADAR_MAX_ZOOM = 4.0f;
 
@@ -855,7 +843,7 @@ void pause_menu_t::draw_radar(
     );
     
     //Background fill.
-    al_clear_to_color(PAUSE_MENU::RADAR_BG_COLOR);
+    al_clear_to_color(game.config.radar_background_color);
     
     //Draw each sector.
     for(size_t s = 0; s < game.cur_area_data->sectors.size(); s++) {
@@ -865,8 +853,8 @@ void pause_menu_t::draw_radar(
         ALLEGRO_COLOR color =
             interpolate_color(
                 s_ptr->z, lowest_sector_z, highest_sector_z,
-                PAUSE_MENU::RADAR_LOWEST_COLOR,
-                PAUSE_MENU::RADAR_HIGHEST_COLOR
+                game.config.radar_highest_color,
+                game.config.radar_lowest_color
             );
             
         for(size_t h = 0; h < s_ptr->hazards.size(); h++) {
@@ -918,7 +906,7 @@ void pause_menu_t::draw_radar(
             e_ptr->vertexes[0]->y,
             e_ptr->vertexes[1]->x,
             e_ptr->vertexes[1]->y,
-            PAUSE_MENU::RADAR_BG_COLOR,
+            game.config.radar_edge_color,
             1.5f / radar_cam.zoom
         );
     }
@@ -1259,7 +1247,7 @@ void pause_menu_t::draw_radar(
     );
     al_draw_filled_circle(
         north_ind_center.x, north_ind_center.y,
-        12.0f, PAUSE_MENU::RADAR_BG_COLOR
+        12.0f, game.config.radar_background_color
     );
     draw_text(
         "N", game.sys_assets.fnt_slim,
@@ -1268,7 +1256,7 @@ void pause_menu_t::draw_radar(
             north_ind_center.y + 1.0f
         ),
         point(12.0f),
-        PAUSE_MENU::RADAR_HIGHEST_COLOR
+        game.config.radar_highest_color
     );
     al_draw_filled_triangle(
         north_ind_center.x,
@@ -1277,7 +1265,7 @@ void pause_menu_t::draw_radar(
         north_ind_center.y - 6.0f,
         north_ind_center.x + 6.0f,
         north_ind_center.y - 6.0f,
-        PAUSE_MENU::RADAR_HIGHEST_COLOR
+        game.config.radar_highest_color
     );
     
     //Area name.
@@ -1291,11 +1279,11 @@ void pause_menu_t::draw_radar(
     );
     draw_filled_rounded_rectangle(
         area_name_center, area_name_size,
-        12.0f, PAUSE_MENU::RADAR_BG_COLOR
+        12.0f, game.config.radar_background_color
     );
     draw_text(
         game.cur_area_data->name, game.sys_assets.fnt_standard,
-        area_name_center, area_name_size, PAUSE_MENU::RADAR_HIGHEST_COLOR
+        area_name_center, area_name_size, game.config.radar_highest_color
     );
     
     //Draw some scan lines.
