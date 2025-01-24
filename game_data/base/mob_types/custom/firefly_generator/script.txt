@@ -1,0 +1,9 @@
+first_state = idling
+
+script {
+    idling {
+        on_enter {
+            start_particles fireflies 0 0 512
+        }
+    }
+}

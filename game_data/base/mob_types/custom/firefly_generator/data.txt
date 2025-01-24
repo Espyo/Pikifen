@@ -1,0 +1,6 @@
+name = Firefly generator
+description = A decorative object whose only purpose is to emit firefly particles.
+
+casts_shadow = false
+custom_category_name = Decoration
+territory_radius = 300

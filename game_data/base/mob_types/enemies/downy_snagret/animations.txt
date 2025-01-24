@@ -24,26 +24,26 @@ animations{
 	chewing{
 		frames{
 			chewing_1{
-				duration=0.1500
+				duration=0.2000
 			}
 			idling{
-				duration=0.1000
+				duration=0.2000
 			}
 			chewing_1{
-				duration=0.1500
+				duration=0.2000
 			}
 			idling{
-				duration=0.1000
+				duration=0.2000
 			}
 			chewing_1{
 				duration=0.1000
 			}
 			chewing_3{
 				duration=0.3000
-				signal=0
 			}
 			chewing_2{
 				duration=0.1000
+				signal=0
 			}
 			chewing_1{
 				duration=0.1000

@@ -52,3 +52,7 @@ sounds {
         speed_deviation = 20
     }
 }
+
+status_vulnerabilities {
+    mud = 50
+}
