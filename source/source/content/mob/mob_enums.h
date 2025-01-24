@@ -42,6 +42,9 @@ enum CARRY_DESTINATION {
     
     //To an Onion.
     CARRY_DESTINATION_ONION,
+
+    //To the ship if there is no onion.
+    CARRY_DESTINATION_SHIP_NO_ONION,
     
     //To the linked mob.
     CARRY_DESTINATION_LINKED_MOB,
