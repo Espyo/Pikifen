@@ -9,7 +9,6 @@
  */
 
 #include "shaders.h"
-#include "shaders_source.h"
 #include "functions.h"
 #include "game.h"
 

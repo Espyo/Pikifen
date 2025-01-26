@@ -20,6 +20,12 @@ TODO: Add a OpenGL extension library when it'll compile on windows
 #include <epoxy/glx.h>
 */
 
+namespace SHADER_SOURCE_FILES {
+extern const char* DEFAULT_VERT_SHADER;
+extern const char* LIQUID_FRAG_SHADER;
+};
+
+
 //Types of shaders.
 enum SHADER_TYPE {
 

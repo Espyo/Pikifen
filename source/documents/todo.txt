@@ -7,6 +7,7 @@ Current tasks (tasks being worked on, but not yet committed)
     Refactor the particle system's storage thing into its own util in general_utils
     Hitting Esc when on an editor state that's not the main state won't do anything
     Update the Turbulent Tundra thumbnail
+    The Discord server's tooltip in the main menu should say this is where you go for feedback, questions, more content, etc.
     Scrolling water texture on scrolling sectors
 
 Next tasks (roughly sorted most important first)
@@ -160,7 +161,7 @@ Next tasks (roughly sorted most important first)
     Compose and add songs
         Start with a leitmotif?
         Title screen
-        Options menu
+        Options menu and such
         Editors
         A couple of gameplay songs
             Something for DEV Lab
@@ -251,6 +252,10 @@ Next tasks (roughly sorted most important first)
         Have a general editor tutorial, explaining the canvas, status bar, etc., and link to it in the corresponding editor tutorial pages
         Have an infobox with quick info about content, like its folder
     Add the options and stats menu to the pause menu
+        The layout could maybe be like:
+                    [Restart] [Finish]
+                [Options] [Help] [Stats]
+            [Continue]             [Quit]
     Cook up a better logo?
     Test everything in the regression tests
     Test everything in DEV Lab
@@ -303,13 +308,7 @@ Next tasks (roughly sorted most important first)
                 Call max -- sets the numbers to call as many Pikmin from the Onion as possible, in equal amounts for each available type in the Onion
                 The player input to toggle changing all types together
             [NEEDS BRAINSTORMING] Maybe make it so the list of Pikmin is a scrollable list that scrolls left and right, if the Onion has more than five types. But how will this work for mouse control?
-        Pause menu
-            Add the options menu and stats menu
-                The tooltips for the options button in the main menu should mention it's also in the pause menu so players don't feel pressured to adjusting everything perfectly now before jumping in
-            The layout should probably be like:
-                      [Restart] [Finish]
-                   [Options] [Help] [Stats]
-                [Continue]             [Quit]
+            A button that makes the numbers change by 10 instead of 1 [PIKMIN 4]
         Results menu
             Show a chart with the requirements for each medal, your current run's score, your personal record score, and the maker's personal record score
         The difficulty listing in the area menu should use fire icons instead of numbers
@@ -380,17 +379,12 @@ Next tasks (roughly sorted most important first)
     Ice Pikmin
     Glow Pikmin
     Mob rotation should have acceleration too
-    Check what Pikmin 3 Deluxe and Pikmin 4 added, and gather ideas of things to implement from there
-        Dismissing should either dismiss everyone, or keep the current standby type (double-tapping will always dismiss everyone)
-        Whistling workers will either bring them to you right away, bring the excess to you while keeping the bare minimum in the confirming state, or put all whistled Pikmin in the confirming state (whistling any Pikmin in the confirming state always brings them to you)
-        When switching to a leader, all nearby idle Pikmin should be called over too
-    An option to set how close you need to be to an idle Pikmin to get it into your group: touching, close, or nearby.
     Enemy revival
         drops_corpse could probably be revamped or removed entirely
     A way to start a timer after a random amount of time, based on the coordinates; this allows stuff like a group of fire geysers to start spitting fire at different times
     Areas should be able to set their own rules, overwriting config.txt. This should be shown in the area details
+        What upgrades are on
         Maximum Pikmin in field
-        If leaders can throw other leaders
         If Onions work automatically, by ejecting Pikmin whenever the amount on field is not at max (a la Bingo Battle)
         If Onions spit out fully grown Pikmin instead of seeds (a la Dandori Battle)
     Floors-over-floors; mostly for bridges
@@ -418,15 +412,18 @@ Next tasks (roughly sorted most important first)
             Misc
                 Does it make sense to create a FOF above a bottomless pit?
                 https://www.deviantart.com/ronindude/art/Battlemap-Beach-Cave-730069774 I like the style of this -- maybe it can help with readability?
+    [NEEDS BRAINSTORMING] Re-think how missions work
+        Achieving a simple ruleset, like Collect Treasures! is difficult, achieving a complex ruleset is difficult, and the whole system doesn't support edge-cases very well (what if you want a mission where you have to get all treasures AND kill all enemies?)
+        I think it may be best to just make the system very open and customizable, and also have presets or something for the most popular types of mission
     Multiplayer
         1 struct of info for each player, multiplayer controls
         During loading, show how the screen is going to be split, and show which player is in which screen
         Split the pause menu into two menus
             The general system menu becomes its own menu. It is full-screen, pauses everything, and every player should get their pause menu input, so that if one player is busy mashing, they don't start picking options because somebody else paused
             The radar, status, and mission pages should be their own "leader monitor"-like menu. It only affects that player's screen and does not pause gameplay.
-        The Onion menu should work like the radar+status+mission menu, meaning it shouldn't pause gameplay
         HUD changes
             Split-screen logic: vertical split (better because you can increase the window size and better fit modern monitors, and also because physically chances are one player's sitting to the left of the other, and the other on the right), and four-way split
+                In the case of three players, the first two are on the top half, the third is centered on the bottom half
             Add HUD support for all the different split-screen layouts
             In competitive modes, tint each player's HUD with their team color or something
             Show each player's name in their screen somewhere
@@ -443,6 +440,7 @@ Next tasks (roughly sorted most important first)
             Group tasks can't accept Pikmin from another team
             When one team loses all their leaders, their player(s)'s screen goes black (important because if their leader mob got deleted, the engine won't be able to show anything anyway) and just has "KO" written on it or something
                 The current logic just abruptly ends the gameplay state if there are no more leaders. But it should probably be changed such that all calls to cur_leader_ptr (or the equivalent to each player's leader pointer) are protected, so that if the pointer is nullptr they just try something peaceful instead of crashing
+                Actually, the "KO" should be in a corner or something, and the player should be allowed to pan the camera to spectate
         [NEEDS BRAINSTORMING] Figure out how the game is meant to work when:
             A player's leader needs to throw another's
                 Maybe instead of Pikmin 3 Deluxe's organized method, any player can at any moment pick up another player and throw them, a la Mario Maker 2? It's mechanically simpler, and it's always fun to casually throw your friends around
@@ -477,17 +475,27 @@ Next tasks (roughly sorted most important first)
         Victory rules
             KO
                 When a team loses all Pikmin or a leader (maybe an option to make it ALL leaders instead?), they lose. Last one standing wins
-                All areas can be played with this rule
+                Compatibility data: None; all areas are compatible
             Collection
                 First team to collect a certain amount of certain treasure wins
-                For the area to be compatible with this mode, it must determine what the treasure is
-                While the area data can determine a default victory amount, the rules can override it
+                Compatibility data:
+                    What the treasure is. If not specified, a random treasure from the area is chosen
+                Default recommended values:
+                    Collections amount is 4
+                When (if) time is up:
+                    Player with the most collected gets +1 point in their overall standing. No points are awarded in the case of a first-place tie
             Capture the Flag
                 When a team collects the other team's flag they gain a point. First team to reach a certain amount of points wins
                 In the canon games, this is pretty much marble/macaroon capture. Delivering once is enough there, but here, if the amount of captures is higher than 1, the flag should respawn in its original location after being captured
-                For the area to be compatible with this mode, it must determine what the flag object is
-                While the area data can determine a default victory amount, the rules can override it
-            Objective Hunt
+                The object spawns near the Onion, some small distance away, facing like 45 degrees left of the direction from this Onion to the other area center (the average of all Onions)
+                Compatibility data:
+                    What the flag object is. If not specified, a random treasure from the game is chosen
+                    Where the flag objects spawn. If not specified, they spawn near the Onion, some small distance away, facing like 45 degrees left of the direction from this Onion to the other area center (the average of all Onions)
+                Default recommended values:
+                    Captures amount is 1
+                When (if) time is up:
+                    Player with the most captures gets 1 point in their overall standing. No points are awarded in the case of a first-place tie
+            Bingo Hunt
                 Each team has a card with objectives
                 Card modes:
                     Single-card:
@@ -498,15 +506,20 @@ Next tasks (roughly sorted most important first)
                     Random cards:
                         Each team has its own card, random
                 Victory modes:
-                    Bingo:
+                    Line:
                         First team to collect enough things to score a line wins
-                        If there is bingo, then there should be an option to allow simultaneous bingo patterns to score multiple points. Like if the final thing you collect scores 3 lines at once, you up 3 points in the overall standing. (thanks Nieton)
+                        If there is bingo, then there should be an option to allow simultaneous bingo patterns to score multiple points. Like if the final thing you collect scores 3 lines at once, you go up 3 points in the overall standing. (thanks Nieton)
                     Majority:
                         First team to clear X objectives wins, X being the highest number possible where other teams cannot possibly reach
-                For the area to be compatible with this mode, it must determine which objects are elligible to belong in the objective cell universe
+                Compatibility data:
+                    What objects are elligible to belong in the objective cell universe, including duplicates. If not specified, random treasures or enemies from the area are selected, and if there are none, choose random objects and enemies from the whole game
+                When (if) time is up:
+                    Player that's got the most incomplete (3 out of 4) line gets 1 point in their overall standing. No points are awarded in the case of a first-place tie
                 [NEEDS BRAINSTORMING] Maybe more objectives than just "Kill an X"?
             Point capture?
                 When a Pikmin is on top of a point, it slowly captures for that team, a la TF2. The more Pikmin, the quicker it captures
+                Compatibility data:
+                    Where the point is. If not specified, it spawns in the same place as a randomly-picked mob
             Build a Wonder?
                 Like in Age of Empires, you can gather materials into a spot, and once you have enough, you can start building a Wonder. If you manage to build it, you win automatically
             Tag?
@@ -520,6 +533,7 @@ Next tasks (roughly sorted most important first)
             In the ruleset editor, you can pick...
                 What victory conditions you want on (KO victory is always forcefully on)
                 What rules within those victory conditions (number of capture flags necessary to win, number of collectibles needed to win, etc.)
+                    An area can choose a recommended number, so there should be a "recommended" selection in the picker, which uses the area's recommended, or the global default for that victory condition
                 Roulette item frequency: off, normal, common
                 Roulette item bias: purely random, spawn closer to the player behind, spawn two/three/four equally close to each base but random items, same but all the same item
                 Starting Pikmin for each team
@@ -560,6 +574,7 @@ Next tasks (roughly sorted most important first)
     Buried treasure
     Breadbugs should carry treasure
     Weather improvements
+        Add a weather editor
         [NEEDS BRAINSTORMING] Maybe call it ambiance?
         All parameters (wind, blackout, precipitation, etc.) should be configurable in a single minutes table
         Make it possible to have a weighted random distribution table for what other weather conditions it can change to as time goes by
@@ -680,6 +695,7 @@ Next tasks (roughly sorted most important first)
             Cave extinction should probably be named something else, since the Pikmin species aren't necessarily extinct...
         Day number limit
             A "casual mode" option where you can disable the day number limit, if the game allows that?
+        Areas should be able to specify whether they have a "types out in the field" limit like in Pikmin 4, and if so, they can also specify how many, and what are the recommended types [PIKMIN 4]
         Today's Report
             One long page filled with everything, that the player can scroll up and down -- this way there aren't several pages the player has to mash through, and it's scalable with any number of Pikmin types, content, etc.
                 Population chart over the day, with icons for key events
@@ -694,8 +710,6 @@ Next tasks (roughly sorted most important first)
             The ability for some Candypop Buds to not spawn if the player has over X Pikmin of that type in total
             The radar should only draw visited portions (though this can be changed in config.txt)
     More editors
-        Weather editor
-        Particle editor
         Script editor
             A way to un/fold the contents of states and events
             A way to view all states, with arrows pointing to which events lead to which states
@@ -748,7 +762,6 @@ Misc things (so I don't forget)
         If a Pikmin type has black as the color, the idle glow needs to... not be black
         Water isn't fading with darkness if you have fader textures https://cdn.discordapp.com/attachments/347158607734767636/449334153763356672/Pikifen_alpha_5_24_2018_6_12_41_PM.png https://cdn.discordapp.com/attachments/459094782648778772/491739297548992513/unknown.png
             Make it use the same logic as draw_texture, where a fade sector must draw the liquid twice, with the second time fading
-        I think I found a way to do addictive blending right -- for instance, to draw a mob green, first you draw it multiplied by green (0, 255, 0, 255), then you draw an addictive sprite on top with 0, 255, 0, 128 -- seems to work well on GIMP
         Maybe water should have random sparkle particles?
         Mob shadows could just be the sprite itself again, instead of a circle? (thanks Helodity)
         A small "Got it!" for the score bar, to mark the medal you have
@@ -763,16 +776,32 @@ Misc things (so I don't forget)
                 If we can't get away with many variants, explain in the FAQ why that is
                 What if only one variant can play at a time, but multiple can be supported? Playing the base song and also the fight, task, treasure, and Spiderwort overlays means five streamed songs. But if only one is allowed to be picked at a time, it's probably still good without sacrificing performance -- the music manager would be told what conditions are currently met (leader is fighting an enemy, Pikmin are working somewhere, leader is near Spiderwort, etc.), and then play the variant for the highest priority one. When swapping variants, it should quickly fade the old variant down and fade the new one up
         Leaders should have their antenna light separated like Pikmin do
-        Pikmin animations
-            Struggling to lift
+    New options
+        Option to pause the game if the window is not focused
+        An option that changes the font to something easier to read, and decreases the effect of GUI text juice grow
+        The standby counter near the cursor should be made into an option and disabled by default
+        Dismissing should either dismiss everyone, or keep the current standby type (double-tapping will always dismiss everyone)
+        An option to set how close you need to be to an idle Pikmin to get it into your group: touching, close, or nearby.
     Mechanics
-        An option for the cursor to snap to the nearest object in-game, with an adjustable radius
-            The mouse cursor, i.e. the spinning flower, should always show where the real "player" cursor is. It's just the leader's cursor, i.e. the outer shell, that locks
-            Alternatively, a button that locks the cursor in place
+        Lock-on
+            Auto [PIKMIN 4]
+                Makes the leader cursor snap to the nearest object (or hitbox?) in-game
+                The mouse cursor, i.e. the spinning flower, should always show where the OS mouse cursor is. It's just the leader's cursor, i.e. the outer shell, that locks
+                An option to set the radius in which auto lock-on applies
+                An option to toggle this on or off
+            Manual [PIKMIN 3][PIKMIN 4]
+                A button that locks the cursor in place
                 If on the floor, it just locks the cursor there
-                If on an enemy, it locks to that position of the enemy, like its back
+                If on an enemy, it locks to that position (hitbox + offset) of the enemy, like its back
                 While locked, movement on the mouse or gyro (if gyro is ever added) is ignored -- this allows the player to recenter their perhipheral
                 An option in the options for it to either lock with holding the button, or toggling
+            Throwing or charging (or dismissing) Pikmin onto a locked-on target should make them work exclusively on that
+        Charge
+            Allow the player to pick between full-squad charging or standby type charging
+            Allow the player to pick between placing only the minimum amount of Pikmin necessary onto the task (P4) or maximum (P3)
+                Hitting charge again should use the maximum
+        Half-whistle
+            Options for whether whistling workers brings them to you right away, brings the excess to you while keeping the bare minimum in the confirming state, or put all whistled Pikmin in the confirming state (whistling any Pikmin in the confirming state always brings them to you)
         Water depth (thanks ThyCheshireCat)
             Either way, consider giving water surfaces their own Z. Not just for drawing, but for the purposes of considering something submerged, too
         Enemies could have individual territories -- a circle that can be anywhere (detached from the mob) and have any radius, and the mob has to be confined to that
@@ -782,15 +811,14 @@ Misc things (so I don't forget)
             Nectars: Work like in the engine, or like in the classics?
         Figure out what to do with sleeping now that Go Here exists. Remove it? Keep it as is? Hide it in some other place like the proposed "inventory" system?
             Maybe make it a different feature, one that makes the leader play dead so enemies stop targetting them (thanks Kolabold)
+        Add more items to the inventory, like Pikmin 4's lightning, pikpik carrots, etc.
         A "huddle" group mode, where all the Pikmin in the group are huddled very close to the leader. This will be useful for hiding spots and for lily pad stations. Dismissing in this state should dismiss on-spot instead of into separated groups
     Audio
-        Add a safeguard -- if the same sound is playing like 4 times, don't allow any more
-            However, I may want to play the same long sound multiple times with like a .5s interval between each one, which won't burst anyone's ears...
         Ducking
         Options for mono/stereo
         Footsteps should be tied to the terrain texture
         Area editor music options? Off, standard editor music, area's music, area's music but with a low-pass filter
-        The audio options menu should have a button to playback one or two sound sounds
+        The audio options menu should have a button to playback one or two sound effects
     Radar
         Details
             Sparkles on treasures
@@ -804,8 +832,7 @@ Misc things (so I don't forget)
         Smoother turns when carrying
         [NEEDS BRAINSTORMING] If a Red Pikmin is carrying a 1 pellet, and a Yellow joined, shouldn't the destination be Red, and not randomized?
         When deciding a new random Onion to go to, pick cyclically -- first go with Red (if applicable), then if the player does it again, go Yellow (if applicable), etc. (GitHub issue #8)
-        Make it so you can line the Pikmin in a non-circular fashion -- Neo suggested a parameter to stretch the circle vertically or horizontally
-        Stops could probably have a radius, to reduce the number of stops needed in a room, for instance
+            Or instead make it so the Pikmin choose the color with the smallest Pikmin population [PIKMIN 4]
         Ships and Onions should also take in enemies and treasures (respectively). In P3's Mission Mode the SPERO can take enemies, and in Bingo Battle, the Onion can take treasures
     More powerful scripting
         Object types should have a list of tags. Then, via scripting, you can ask if a mob has a specific tag or not. The tags can be anything, like "flammable", "can_be_alerted", etc.
@@ -825,6 +852,21 @@ Misc things (so I don't forget)
         New actions
             [NEEDS BRAINSTORMING] Logic for an arachnorb to turn to/chase the focused mob? (thanks Neo)
             [NEEDS BRAINSTORMING] Logic for arachnorbs to move freely, instead of only forward? (thanks Neo)
+    Upgrades
+        All of these can be toggled on or off in a mission, and can be unlocked in Story Mode
+            In the mission select menu, probably show this as icons, and only for the collected ones, so it's not a wall of text
+            In Story Mode, allow players to turn any one off
+        A way to increase the Pikmin limit, like flarlic [PIKMIN 4]
+        The ability for leaders to throw other leaders
+        Call all idle Pikmin to you [PIKMIN 4]
+        Call all Pikmin to the landing site [PIKMIN 3][PIKMIN 4]
+        Increased defense
+        Increased running speed?
+        invulnerability to certain hazards?
+        A Survey Drone? [PIKMIN 4]
+        Maybe the abilities to swarm and charge should be upgrades too?
+        Lying down?
+        Whistle upgrades?
     Mob data
         "a suggestion, when using pushes_with_hitboxes it should use the hitbox's height rather than the object's height" (thanks Helodity)
         The scale category doesn't really need to exist -- the code that gets the current weight could be something any mob could use, and a way to display a custom number atop the mob could be added to the script (thanks Helodity)
@@ -915,14 +957,14 @@ Misc things (so I don't forget)
         Foreground
     Message pop-ups
         Useful for making characters talk mid-mission, via scripting
-        Also useful for stating that an obstacle was destroyed and stuff like that from Pikmin 4
+        Also useful for stating that an obstacle was destroyed and stuff like that [PIKMIN 4]
     Areas should be able to include "decals", in the same vein as tree shadows. These are a lightweight way to add leaves, rocks, pebbles, sticks, etc. to the area's terrain without using sectors or objects
     Reorganize tree shadows - they should be building blocks that area makers can mix and match so people don't have to paint their own texture just to get a different pattern going
-    Save centiseconds in the mission's record (thanks Helodity)
+    Automatically choose Pikmin maturity in some contexts, like throwing Pikmin at nectar should automatically pick leaf Pikmin [PIKMIN 4]
+    Save centiseconds in the mission's record (and display them in a smaller font) (thanks Helodity)
     Treasure collection should probably count when the ship retrieval starts (thanks Helodity)
     The area selection menu should have a way to search with text, and to sort by default/completion/difficulty (thanks Helodity)
     The spray HUD icons should show a tiny bar with concoction progress
-    The standby counter near the cursor should be disabled by default
     The text inside of various HUD elements should be a different HUD item from the bubble that encompasses it
     If Pikmin are killed (off-screen, on-screen, or both?), the counters should have some feedback -- this also helps audibly impaired players who can't hear the Pikmin squeals
     Some way to import your friends' records (and dates) in missions
@@ -938,15 +980,7 @@ Misc things (so I don't forget)
             A moving platform, useful to traverse a hazardous floor. Maybe Stemples?
         Pellet Posies could have properties that make them regrow
         A turnstyle mob
-    Particle improvements
-        https://www.youtube.com/watch?v=bIjrSvGddDQ
-        Particles should have a secondary way of dying - shrinking instead of exclusively fading to transparent
-        Color gradients, or interpolation, or some way to get smoke from red to yellow to grey
-        The size, color, etc. parameters should be split into "start", "half", and "end" of life
-        Additive blending and normal blending
-        Spawning some distance beyond the center -- good to get the smoke from the BLL's stomp to start near the edges of the feet, not the center
-        The ability for particle generators to consist of multiple particle generators
-    Bridges and Dummies emit light during blackout (Darthvato)
+    Fix bridges and dummies emitting light during blackout (Darthvato)
     I'm getting tired of the way Onions and Candypops eject seeds. Instead, each one should store how many seeds they've spat so far, and when it's time to spit another, they hash that number to get the random angle and distance of the next spew. That way it's still consistent, but it looks random and interesting
     Should the numbers in Pikmin counters (and perhaps elsewhere?) have animated run-ups?
     The ability for any object to fade when the leader/cursor is nearby. It's important for large walkable objects that block the view, like bridges, as well as ships like the Research Pod (thanks Neo)
@@ -972,14 +1006,13 @@ Misc things (so I don't forget)
         Maybe stuff like interactables and carriable corpses should be delegated to an entity component system on the mob class
     [NEEDS BRAINSTORMING] Should I auto-fade textures on stepping height?
     The spray effect that buries Pikmin should probably only affect opponent Pikmin
-    Option to pause the game if the window is not focused
-    An option that changes the font to something easier to read, and decreases the effect of GUI text juice grow
     [NEEDS BRAINSTORMING] Look into the "Next maturity" controls -- does the way they work make sense? Why can't you switch without holding a Pikmin?
     Manual
         Revamp the scripting tutorial
             Currently, the reader learns how to make a "weird" Red Bulborb; they should instead be learning to create a new creature (though it could still use an included spritesheet)
             Add some help at the start about how it may be daunting to wrap your head around all of the FSM a mob will need, but the reader should focus on what states they need first and foremost, then connections, and then just script one event at a time, isolated
     Story mode
+        The ability for Onions to store but not produce Pikmin whose Onion hasn't been collected yet [PIKMIN 4]
         Some treasures should weigh as much as the current army, after a boss battle
     Loose thoughts
         If something is under construction, like a menu or something, add a small "WIP" blurb
@@ -1007,7 +1040,7 @@ Tasks for later on (I might never implement these)
         Hiding
         A setting that lets leaders jump (thanks Remy)
         [NEEDS BRAINSTORMING] Enemies don't care about bottomless pits and will gladly walk off when roaming -- is there any way to remedy this? Should I?
-        Warp point, like in Pikmin 3
+        Warp point [PIKMIN 3][PIKMIN 4]
             Carrying paths should be able to specify a "portal" link, which internally is considered to be 0-distance. This helps calculate the destinations without considering two warp points as being insanely far apart
     Content-making
         [NEEDS BRAINSTORMING] Colors should be able to also be in hexadecimal?
@@ -1026,7 +1059,6 @@ Tasks for later on (I might never implement these)
         And just systemic gameplay in general, like lit Pikmin lighting nearby Pikmin on fire http://www.youtube.com/watch?v=SnpAAX9CkIc
             Red Pikmin can carry flaming coals, which can set enemies on fire
     Options and modes
-        Allow the player to pick between classic group movement swarming, full-squad charging, or standby type charging
         A "peaceful" mode where Pikmin and leaders can't die
         A "Pro HUD" option that hides some HUD elements? The idea is to hide information that a pro player can just "feel". Enemy health and carrying numbers are good contenders, though a problem with hiding carrying numbers is that when the destination Onion is decided not via majority, but via tie-breaker, it's impossible to tell where they're going without the carrying number's color
         [NEEDS BRAINSTORMING] A colorblind-friendly mode?
@@ -1096,13 +1128,14 @@ Tasks for later on (I might never implement these)
             See the Pikmin 2 ending movie, for instance
         When something contributes to the mission goal, score, or fail condition, it should fly into the HUD element
     When al_clear_keyboard_state is available, use that instead of game.controls.release_all()
-    A competitive mode where each team's marble is out in the open, but you can throw Pikmin at piles of twigs, shards of iron, etc. found in the area. They carry it (like bomb rocks), and when thrown in the room where the marble is, they start working with the materials they have and build a solid block there. Creating complex mazes and traps with the blocks is what stops the enemy team from gathering the marble so easily.
+    The ability for particle generators to consist of multiple particle generators
+    A competitive mode where each team's marble is out in the open in their base, but you can throw Pikmin at piles of twigs, shards of iron, etc. found in the area. They carry it (like bomb rocks), and when thrown in the room where the marble is, they start working with the materials they have and build a solid block there. Creating complex mazes and traps with the blocks is what stops the enemy team from gathering the marble so easily.
     Missions could have unlock criteria, like a mission only unlocking if another one is cleared, or if another one has a platinum medal, or if the player beat that other one with no Pikmin deaths (thanks Helodity)
     Observation spot
         An interactable that makes the camera zoom out a lot for a few seconds, so you can get a good overview of the surrounding location
         Visually it should probably look like some animated particle marker thing, but subtle and hopefully not too video-gamey
     Story mode
-        A way to choose what landing site of the area you want to start the day in
+        A way to choose what landing site of the area you want to start the day in [PIKMIN 4]
     Discord rich presence
     [NEEDS BRAINSTORMING] Online play?
         It'd likely use deterministic lockstep https://gafferongames.com/post/deterministic_lockstep/

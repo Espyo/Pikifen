@@ -8,6 +8,8 @@
  * Shader source code.
  */
 
+#include "shaders.h"
+
 
 namespace SHADER_SOURCE_FILES {
 
@@ -15,104 +17,105 @@ namespace SHADER_SOURCE_FILES {
 
 //Allegro default vertex shader.
 const char* DEFAULT_VERT_SHADER = R"(
-    #version 430
-    in vec4 al_pos;
-    in vec4 al_color;
-    in vec2 al_texcoord;
-    uniform mat4 al_projview_matrix;
-    out vec4 varying_color;
-    out vec2 varying_texcoord;
 
-    void main()
-    {
-    varying_color = al_color;
-    varying_texcoord = al_texcoord;
-    gl_Position = al_projview_matrix * al_pos;
-    }
+#version 430
+in vec4 al_pos;
+in vec4 al_color;
+in vec2 al_texcoord;
+uniform mat4 al_projview_matrix;
+out vec4 varying_color;
+out vec2 varying_texcoord;
+
+void main()
+{
+varying_color = al_color;
+varying_texcoord = al_texcoord;
+gl_Position = al_projview_matrix * al_pos;
+}
+
     )";
+
 
 #pragma endregion
 #pragma region Liquid Fragment Shader
 
+//Fragment shader for sector liquids.
 const char* LIQUID_FRAG_SHADER = R"(
-    #version 430
-    #extension GL_ARB_shader_storage_buffer_object: enable
 
-    #ifdef GL_ES
-    precision mediump float;
-    #endif
+#version 430
+#extension GL_ARB_shader_storage_buffer_object: enable
 
-    uniform float time;
+#ifdef GL_ES
+precision mediump float;
+#endif
 
-    // 2^26, this can go to 8 million and still fit under OpenGl standards
-    // But there should almost never be this many edges in a single puddle.
-    // See https://www.khronos.org/opengl/wiki/Shader_Storage_Buffer_Object
-    #define MAX_FOAM_EDGES 65535
+//2^26, this can go to 8 million and still fit under OpenGl standards.
+//But there should almost never be this many edges in a single puddle.
+//See https://www.khronos.org/opengl/wiki/Shader_Storage_Buffer_Object
+#define MAX_FOAM_EDGES 65535
 
-    readonly layout(std430, binding = 3) buffer foam_layout
-    {
-    //Formatted as (x1, y1, x2, y2)
+readonly layout(std430, binding = 3) buffer foam_layout {
+    //Formatted as "x1, y1, x2, y2".
     readonly float foam_edges[];
-    };
+};
 
-    uniform int edge_count;
-    uniform vec4 foam_tint;
-    uniform float foam_size;
+uniform float time;
+uniform int edge_count;
+uniform vec4 foam_tint;
+uniform float foam_size;
 
-    uniform vec2 distortion_amount;
-    uniform vec4 surface_color;
+uniform vec2 distortion_amount;
+uniform vec4 surface_color;
 
-    uniform vec4 shine_color;
-    uniform float shine_amount;
+uniform vec4 shine_color;
+uniform float shine_amount;
 
-    uniform float opacity;
+uniform float opacity;
 
-    // Parameters about texture transformations and extra tints.
-    uniform vec2 tex_translation;
-    uniform vec2 tex_scale;
-    uniform float tex_rotation;
-    uniform float brightness;
+// Parameters about texture transformations and extra tints.
+uniform vec2 tex_translation;
+uniform vec2 tex_scale;
+uniform float tex_rotation;
+uniform float brightness;
 
-    uniform sampler2D al_tex;
-    uniform ivec2 bmp_size;
+uniform sampler2D al_tex;
+uniform ivec2 bmp_size;
 
-    // Texture coordinates and base color.
-    in vec2 varying_texcoord;
-    in vec4 varying_color;
+// Texture coordinates and base color.
+in vec2 varying_texcoord;
+in vec4 varying_color;
 
-    out vec4 fragColor;
+out vec4 fragColor;
 
-    //
-    // Description : Array and textureless GLSL 2D/3D/4D simplex 
-    //               noise functions.
-    //      Author : Ian McEwan, Ashima Arts.
-    //  Maintainer : stegu
-    //     Lastmod : 20201014 (stegu)
-    //     License : Copyright (C) 2011 Ashima Arts. All rights reserved.
-    //               Distributed under the MIT License. See LICENSE file.
-    //               https://github.com/ashima/webgl-noise
-    //               https://github.com/stegu/webgl-noise
-    // 
+//
+// Description : Array and textureless GLSL 2D/3D/4D simplex 
+//               noise functions.
+//      Author : Ian McEwan, Ashima Arts.
+//  Maintainer : stegu
+//     Lastmod : 20201014 (stegu)
+//     License : Copyright (C) 2011 Ashima Arts. All rights reserved.
+//               Distributed under the MIT License. See LICENSE file.
+//               https://github.com/ashima/webgl-noise
+//               https://github.com/stegu/webgl-noise
+// 
 
-    vec3 mod289(vec3 x) {
+vec3 mod289(vec3 x) {
     return x - floor(x * (1.0 / 289.0)) * 289.0;
-    }
+}
 
-    vec4 mod289(vec4 x) {
+vec4 mod289(vec4 x) {
     return x - floor(x * (1.0 / 289.0)) * 289.0;
-    }
+}
 
-    vec4 permute(vec4 x) {
-        return mod289(((x*34.0)+10.0)*x);
-    }
+vec4 permute(vec4 x) {
+    return mod289(((x*34.0)+10.0)*x);
+}
 
-    vec4 taylorInvSqrt(vec4 r)
-    {
+vec4 taylorInvSqrt(vec4 r) {
     return 1.79284291400159 - 0.85373472095314 * r;
-    }
+}
 
-    float noise(vec3 v)
-    { 
+float noise(vec3 v) {
     const vec2  C = vec2(1.0/6.0, 1.0/3.0) ;
     const vec4  D = vec4(0.0, 0.5, 1.0, 2.0);
 
@@ -184,11 +187,11 @@ const char* LIQUID_FRAG_SHADER = R"(
     m = m * m;
     return 105.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1), 
                                     dot(p2,x2), dot(p3,x3) ) );
-    }
+}
 
-    float color(vec2 xy, float timeScale) { return noise(vec3(1.5*xy, timeScale*time)); }
+float color(vec2 xy, float timeScale) { return noise(vec3(1.5*xy, timeScale*time)); }
 
-    float simplex_noise(vec2 xy, float noiseScale, vec2 step, float timeScale) {
+float simplex_noise(vec2 xy, float noiseScale, vec2 step, float timeScale) {
     float x = 0;
     x += 0.5 * color(xy * 2.0 * noiseScale - step, timeScale);
     x += 0.25 * color(xy * 4.0 * noiseScale - 2.0 * step, timeScale);
@@ -196,17 +199,18 @@ const char* LIQUID_FRAG_SHADER = R"(
     x += 0.0625 * color(xy * 16.0 * noiseScale - 6.0 * step, timeScale);
     x += 0.03125 * color(xy * 32.0 * noiseScale - 8.0 * step, timeScale);
     return x;
-    }
-    vec2 rotate(vec2 xy, float rotation) {
+}
+
+vec2 rotate(vec2 xy, float rotation) {
     vec2 product = xy;
     float c = cos(rotation);
     float s = sin(rotation);
     product.x = xy.x * c - xy.y * s;
     product.y = xy.x * s + xy.y * c;
     return product;
-    }
-    vec2 toWorldCoords(vec2 xy)
-    {
+}
+
+vec2 toWorldCoords(vec2 xy) {
     vec2 product = xy;
     product += tex_translation;
 
@@ -215,9 +219,9 @@ const char* LIQUID_FRAG_SHADER = R"(
     product = rotate(product, tex_rotation);
 
     return product;
-    }
+}
 
-    float getDistFromEdge(vec2 xy) {
+float getDistFromEdge(vec2 xy) {
 
     //Arbitrarily large number my beloved.
     float minDist = 100000;
@@ -246,15 +250,14 @@ const char* LIQUID_FRAG_SHADER = R"(
         minDist = max(1.0, min(minDist, dist));
     }
     return minDist;
-    }
+}
 
-    void main()
-    {
+void main() {
     //Define some variables that'll be used throughout the shader
     vec2 worldCoords = toWorldCoords(varying_texcoord);
     vec2 step = vec2(1.3, 1.7);
     float noiseScale = 0.01;
-    
+
     //Calculate simplex noise effects.
     float nX = simplex_noise(worldCoords, noiseScale, step, 0.3);
     nX *= distortion_amount.x;
@@ -263,7 +266,7 @@ const char* LIQUID_FRAG_SHADER = R"(
     nY *= distortion_amount.y;
     nY *= opacity;
     vec2 pEffect = rotate(vec2(nX, nY), tex_rotation);
-    
+
     //Convert from world coords to texture coords with the simplex noise effect applied.
     vec2 sample_texcoord =
         vec2(
@@ -319,7 +322,7 @@ const char* LIQUID_FRAG_SHADER = R"(
     return;
 
     // -- Edge Foam -- 
-    
+
 
     float maxDist = foam_size;
 
@@ -353,7 +356,8 @@ const char* LIQUID_FRAG_SHADER = R"(
     tmp.b = tmp.b + (foam_tint.b - tmp.b) * edgeScale;
 
     fragColor = tmp;
-    }
+}
+
     )";
 
 #pragma endregion
