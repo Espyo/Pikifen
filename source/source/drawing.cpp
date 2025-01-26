@@ -415,9 +415,9 @@ void draw_liquid(
     //Set up the shader.
     ALLEGRO_SHADER* liq_shader = game.shaders.get_shader(SHADER_TYPE_LIQUID);
     al_use_shader(liq_shader);
-    al_set_shader_float("time", time * l_ptr->anim_speed);
+    al_set_shader_float("area_time", time * l_ptr->anim_speed);
     al_set_shader_float("opacity", liquid_opacity_mult);
-    al_set_shader_float("brightness", brightness_mult);
+    al_set_shader_float("sector_brightness", brightness_mult);
     al_set_shader_float("shine_amount", l_ptr->shine_amount);
     al_set_shader_float_vector("distortion_amount", 2, &distortion_amount[0], 1);
     al_set_shader_float_vector("surface_color", 4, &liquid_tint[0], 1);
