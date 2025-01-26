@@ -330,7 +330,10 @@ void draw_liquid(
             s_ptr->liquid_drain_left / GEOMETRY::LIQUID_DRAIN_DURATION;
     }
     float brightness_mult = s_ptr->brightness / 255.0;
-    
+    float sector_scroll[2] = {
+        s_ptr->scroll.x,
+        s_ptr->scroll.y
+    };
     float distortion_amount[2] = {
         l_ptr->distortion_amount.x,
         l_ptr->distortion_amount.y
@@ -341,7 +344,6 @@ void draw_liquid(
         l_ptr->body_color.b,
         l_ptr->body_color.a
     };
-    
     float shine_color[4] = {
         l_ptr->shine_color.r,
         l_ptr->shine_color.g,
@@ -418,6 +420,7 @@ void draw_liquid(
     al_set_shader_float("area_time", time * l_ptr->anim_speed);
     al_set_shader_float("opacity", liquid_opacity_mult);
     al_set_shader_float("sector_brightness", brightness_mult);
+    al_set_shader_float_vector("sector_scroll", 2, &sector_scroll[0], 1);
     al_set_shader_float("shine_amount", l_ptr->shine_amount);
     al_set_shader_float_vector("distortion_amount", 2, &distortion_amount[0], 1);
     al_set_shader_float_vector("surface_color", 4, &liquid_tint[0], 1);

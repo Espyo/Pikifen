@@ -6,9 +6,7 @@ Current tasks (tasks being worked on, but not yet committed)
     Rock Pikmin thrown at a Pellet Posy should go to the Pellet Posy when they wake up
     Refactor the particle system's storage thing into its own util in general_utils
     Hitting Esc when on an editor state that's not the main state won't do anything
-    Update the Turbulent Tundra thumbnail
     The Discord server's tooltip in the main menu should say this is where you go for feedback, questions, more content, etc.
-    Scrolling water texture on scrolling sectors
 
 Next tasks (roughly sorted most important first)
     --- To fix ---

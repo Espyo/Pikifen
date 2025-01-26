@@ -121,6 +121,9 @@ uniform float tex_rotation;
 //Brightness of the sector.
 uniform float sector_brightness;
 
+//How far the sector has scrolled by.
+uniform vec2 sector_scroll;
+
 //The Allegro texture for the floor underneath the water.
 uniform sampler2D al_tex;
 
@@ -332,8 +335,8 @@ void main() {
 
     //Calculate simplex noise effects.
     vec2 raw_noise_value;
-    raw_noise_value.x = simplex_noise(world_coords, noise_func_scale, noise_func_step, 0.3);
-    raw_noise_value.y = simplex_noise(world_coords, noise_func_scale, noise_func_step, 0.3);
+    raw_noise_value.x = simplex_noise(world_coords - sector_scroll * area_time, noise_func_scale, noise_func_step, 0.3);
+    raw_noise_value.y = simplex_noise(world_coords - sector_scroll * area_time, noise_func_scale, noise_func_step, 0.3);
 
     vec2 final_noise_value = raw_noise_value;
     final_noise_value.x *= distortion_amount.x;
