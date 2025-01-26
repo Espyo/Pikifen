@@ -2292,10 +2292,19 @@ void editor::process_gui_new_pack_dialog() {
     static string name = "My pack!";
     static string description;
     static string maker;
+    string problem;
+    bool hit_create_button = false;
     
     //Internal name input.
     ImGui::FocusOnInputText(needs_new_pack_text_focus);
-    ImGui::InputText("Internal name", &internal_name);
+    if(
+        ImGui::InputText(
+            "Internal name", &internal_name,
+            ImGuiInputTextFlags_EnterReturnsTrue
+        )
+    ) {
+        hit_create_button = true;
+    }
     set_tooltip(
         "Internal name of the new pack.\n"
         "Remember to keep it simple, type in lowercase, and use underscores!"
@@ -2303,15 +2312,36 @@ void editor::process_gui_new_pack_dialog() {
     
     //Name input.
     ImGui::Spacer();
-    ImGui::InputText("Name", &name);
+    if(
+        ImGui::InputText(
+            "Name", &name,
+            ImGuiInputTextFlags_EnterReturnsTrue
+        )
+    ) {
+        hit_create_button = true;
+    }
     set_tooltip("Proper name of the new pack.");
     
     //Description input.
-    ImGui::InputText("Description", &description);
+    if(
+        ImGui::InputText(
+            "Description", &description,
+            ImGuiInputTextFlags_EnterReturnsTrue
+        )
+    ) {
+        hit_create_button = true;
+    }
     set_tooltip("A description of the pack.");
     
     //Maker input.
-    ImGui::InputText("Maker", &maker);
+    if(
+        ImGui::InputText(
+            "Maker", &maker,
+            ImGuiInputTextFlags_EnterReturnsTrue
+        )
+    ) {
+        hit_create_button = true;
+    }
     set_tooltip("Who made the pack. So really, type your name or nickname.");
     
     //File explanation text.
@@ -2336,7 +2366,6 @@ void editor::process_gui_new_pack_dialog() {
     }
     
     //Check if everything's ok.
-    string problem;
     if(internal_name.empty()) {
         problem = "You have to type an internal name first!";
     } else if(!is_internal_name_good(internal_name)) {
@@ -2362,6 +2391,18 @@ void editor::process_gui_new_pack_dialog() {
         ImGui::BeginDisabled();
     }
     if(ImGui::Button("Create pack", ImVec2(100, 40))) {
+        hit_create_button = true;
+    }
+    if(!problem.empty()) {
+        ImGui::EndDisabled();
+    }
+    set_tooltip(
+        problem.empty() ? "Create the pack!" : problem
+    );
+    
+    //Creation logic.
+    if(hit_create_button) {
+        if(!problem.empty()) return;
         game.content.create_pack(
             internal_name, name, description, maker
         );
@@ -2371,12 +2412,6 @@ void editor::process_gui_new_pack_dialog() {
         maker.clear();
         close_top_dialog();
     }
-    if(!problem.empty()) {
-        ImGui::EndDisabled();
-    }
-    set_tooltip(
-        problem.empty() ? "Create the pack!" : problem
-    );
 }
 
 
@@ -3411,7 +3446,7 @@ void editor::picker_info::process() {
             for(size_t c = 0; c < final_items.size(); c++) {
                 possible_choices += final_items[c].size();
             }
-            if(possible_choices == 1) {
+            if(possible_choices > 0) {
                 pick_callback(
                     final_items[0][0][0].name,
                     final_items[0][0][0].top_category,

@@ -65,7 +65,6 @@ void particle_editor::open_load_dialog() {
  * @brief Opens the "new" dialog.
  */
 void particle_editor::open_new_dialog() {
-    new_dialog.must_update = true;
     open_dialog(
         "Create a new particle generator",
         std::bind(&particle_editor::process_gui_new_dialog, this)
@@ -74,9 +73,9 @@ void particle_editor::open_new_dialog() {
     dialogs.back()->close_callback = [this] () {
         new_dialog.pack.clear();
         new_dialog.internal_name = "my_particle_generator";
-        new_dialog.problem.clear();
         new_dialog.part_gen_path.clear();
-        new_dialog.must_update = true;
+        new_dialog.last_checked_part_gen_path.clear();
+        new_dialog.part_gen_path_exists = false;
     };
     
 }
@@ -441,51 +440,71 @@ void particle_editor::process_gui_menu_bar() {
  * @brief Processes the Dear ImGui "new" dialog for this frame.
  */
 void particle_editor::process_gui_new_dialog() {
+    string problem;
+    bool hit_create_button = false;
+    
     //Pack widgets.
-    new_dialog.must_update |=
-        process_gui_new_dialog_pack_widgets(&new_dialog.pack);
-        
+    process_gui_new_dialog_pack_widgets(&new_dialog.pack);
+    
     //Internal name input.
     ImGui::Spacer();
     ImGui::FocusOnInputText(new_dialog.needs_text_focus);
-    new_dialog.must_update |=
-        ImGui::InputText("Internal name", &new_dialog.internal_name);
+    if(
+        ImGui::InputText(
+            "Internal name", &new_dialog.internal_name,
+            ImGuiInputTextFlags_EnterReturnsTrue
+        )
+    ) {
+        hit_create_button = true;
+    }
     set_tooltip(
         "Internal name of the new particle generator.\n"
         "Remember to keep it simple, type in lowercase, and use underscores!"
     );
     
     //Check if everything's ok.
-    if(new_dialog.must_update) {
-        new_dialog.problem.clear();
-        if(new_dialog.internal_name.empty()) {
-            new_dialog.problem = "You have to type an internal name first!";
-        } else if(!is_internal_name_good(new_dialog.internal_name)) {
-            new_dialog.problem =
-                "The internal name should only have lowercase letters,\n"
-                "numbers, and underscores!";
-        } else {
-            content_manifest temp_man;
-            temp_man.pack = new_dialog.pack;
-            temp_man.internal_name = new_dialog.internal_name;
-            new_dialog.part_gen_path =
-                game.content.custom_particle_gen.manifest_to_path(temp_man);
-            if(file_exists(new_dialog.part_gen_path)) {
-                new_dialog.problem =
-                    "There is already a particle generator with\n"
-                    "that internal name in that pack!";
-            }
+    content_manifest temp_man;
+    temp_man.pack = new_dialog.pack;
+    temp_man.internal_name = new_dialog.internal_name;
+    new_dialog.part_gen_path =
+        game.content.custom_particle_gen.manifest_to_path(temp_man);
+    if(new_dialog.last_checked_part_gen_path != new_dialog.part_gen_path) {
+        new_dialog.part_gen_path_exists =
+            file_exists(new_dialog.part_gen_path);
+        new_dialog.last_checked_part_gen_path = new_dialog.part_gen_path;
+    }
+    
+    if(new_dialog.internal_name.empty()) {
+        problem = "You have to type an internal name first!";
+    } else if(!is_internal_name_good(new_dialog.internal_name)) {
+        problem =
+            "The internal name should only have lowercase letters,\n"
+            "numbers, and underscores!";
+    } else {
+        if(new_dialog.part_gen_path_exists) {
+            problem =
+                "There is already a particle generator with\n"
+                "that internal name in that pack!";
         }
-        new_dialog.must_update = false;
     }
     
     //Create button.
     ImGui::Spacer();
     ImGui::SetupCentering(200);
-    if(!new_dialog.problem.empty()) {
+    if(!problem.empty()) {
         ImGui::BeginDisabled();
     }
     if(ImGui::Button("Create particle generator", ImVec2(200, 40))) {
+        hit_create_button = true;
+    }
+    if(!problem.empty()) {
+        ImGui::EndDisabled();
+    }
+    set_tooltip(problem.empty() ? "Create the particle generator!" : problem);
+    
+    //Creation logic.
+    if(hit_create_button) {
+        if(!problem.empty()) return;
         auto really_create = [ = ] () {
             create_part_gen(new_dialog.part_gen_path);
             close_top_dialog();
@@ -501,14 +520,6 @@ void particle_editor::process_gui_new_dialog() {
             really_create();
         }
     }
-    if(!new_dialog.problem.empty()) {
-        ImGui::EndDisabled();
-    }
-    set_tooltip(
-        new_dialog.problem.empty() ?
-        "Create the particle generator!" :
-        new_dialog.problem
-    );
 }
 
 

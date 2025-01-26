@@ -225,17 +225,17 @@ private:
         //Selected mob type, when picking a mob type.
         mob_type* mob_type_ptr = nullptr;
         
-        //Problem found, if any.
-        string problem;
-        
         //Internal name of the new animation database.
         string internal_name = "my_animation";
         
         //Path to the new animation database.
         string anim_path;
         
-        //Whether the dialog needs updating.
-        bool must_update = true;
+        //Last time we checked if the new database path existed, it was this.
+        string last_checked_anim_path;
+        
+        //Does a file already exist under the new animation database's path?
+        bool anim_path_exists = false;
         
         //Whether we need to focus on the text input widget.
         bool needs_text_focus = true;

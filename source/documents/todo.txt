@@ -10,7 +10,6 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Pressing Enter on the new particle dialog (maybe others) isn't hitting Ok
     Wood bridges go backwards a bit when they create the first chunk
 
     --- 0.26 ---

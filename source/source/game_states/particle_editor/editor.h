@@ -121,14 +121,14 @@ private:
         //Internal name of the new particle generator.
         string internal_name = "my_particle_generator";
         
-        //Problem found, if any.
-        string problem;
-        
         //Path to the new generator.
         string part_gen_path;
         
-        //Whether the dialog needs updating.
-        bool must_update = true;
+        //Last time we checked if the new generator path existed, it was this.
+        string last_checked_part_gen_path;
+        
+        //Does a file already exist under the new generator's path?
+        bool part_gen_path_exists = false;
         
         //Whether we need to focus on the text input widget.
         bool needs_text_focus = true;

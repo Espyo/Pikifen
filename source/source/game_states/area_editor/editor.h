@@ -855,14 +855,14 @@ private:
         //Selected area type.
         int type = AREA_TYPE_SIMPLE;
         
-        //Problem found, if any.
-        string problem;
-        
         //Path to the new area.
         string area_path;
         
-        //Whether the dialog needs updating.
-        bool must_update = true;
+        //Last time we checked if the new area path existed, it was this.
+        string last_checked_area_path;
+        
+        //Does a folder already exist under the new area's path?
+        bool area_path_exists = false;
         
         //Whether we need to focus on the text input widget.
         bool needs_text_focus = true;
