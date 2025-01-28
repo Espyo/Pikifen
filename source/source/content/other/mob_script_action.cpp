@@ -1318,11 +1318,11 @@ void mob_action_runners::get_mob_info(mob_action_run_data &data) {
 
 
 /**
- * @brief Code for the real number randomization mob script action.
+ * @brief Code for the float number randomization mob script action.
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::get_random_real(mob_action_run_data &data) {
+void mob_action_runners::get_random_float(mob_action_run_data &data) {
     data.m->vars[data.args[0]] =
         f2s(randomf(s2f(data.args[1]), s2f(data.args[2])));
 }

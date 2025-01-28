@@ -34,7 +34,8 @@
 			"args": [
 				"-j6",
 				"-f",
-				"source/gnu_make/makefile"
+				"source/gnu_make/makefile",
+				"release",
 			],
 			"options": {
 				"cwd": "${workspaceFolder}"
@@ -47,6 +48,28 @@
 				"echo": true
 			},
 			"detail": "Use make to compile the whole project in a release build."
+		},
+		{
+			"type": "shell",
+			"label": "Build Pikifen - Analyze",
+			"command": "make",
+			"args": [
+				"-j1",
+				"-f",
+				"source/gnu_make/makefile",
+				"analyze",
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+			"presentation": {
+				"reveal": "always",
+				"echo": true
+			},
+			"detail": "Use make to compile the whole project and perform a static analysis."
 		},
 		{
 			"type": "shell",

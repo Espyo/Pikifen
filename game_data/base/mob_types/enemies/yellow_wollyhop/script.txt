@@ -14,7 +14,7 @@ script {
             set_animation idling random_time_on_spawn
             stop
             set_near_reach search
-            get_random_real t 2 6
+            get_random_float t 2 6
             set_timer $t
         }
         on_leave {

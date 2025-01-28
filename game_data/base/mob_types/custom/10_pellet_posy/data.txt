@@ -15,7 +15,7 @@ team = obstacle
 area_editor_properties {
     Bloom time {
         var = bloom_time
-        type = real
+        type = float
         def_value = 240
         min_value = 0
         tooltip = Time left until the posy blooms.

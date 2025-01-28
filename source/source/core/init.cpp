@@ -1015,9 +1015,9 @@ void init_mob_actions() {
     reg_param("minimum value", MOB_ACTION_PARAM_FLOAT, false, false);
     reg_param("maximum value", MOB_ACTION_PARAM_FLOAT, false, false);
     reg_action(
-        MOB_ACTION_GET_RANDOM_REAL,
-        "get_random_real",
-        mob_action_runners::get_random_real,
+        MOB_ACTION_GET_RANDOM_FLOAT,
+        "get_random_float",
+        mob_action_runners::get_random_float,
         nullptr
     );
     

@@ -19,8 +19,8 @@ enum AEMP_TYPE {
     //Integer number.
     AEMP_TYPE_INT,
     
-    //Real number.
-    AEMP_TYPE_REAL,
+    //Float number.
+    AEMP_TYPE_FLOAT,
     
     //Boolean.
     AEMP_TYPE_BOOL,

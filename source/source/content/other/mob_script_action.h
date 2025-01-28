@@ -81,8 +81,8 @@ enum MOB_ACTION {
     //Get information about a mob.
     MOB_ACTION_GET_MOB_INFO,
     
-    //Get a random real number.
-    MOB_ACTION_GET_RANDOM_REAL,
+    //Get a random float number.
+    MOB_ACTION_GET_RANDOM_FLOAT,
     
     //Get a random integer number.
     MOB_ACTION_GET_RANDOM_INT,
@@ -694,7 +694,7 @@ void get_area_info(mob_action_run_data &data);
 void get_floor_z(mob_action_run_data &data);
 void get_mob_info(mob_action_run_data &data);
 void get_focus_var(mob_action_run_data &data);
-void get_random_real(mob_action_run_data &data);
+void get_random_float(mob_action_run_data &data);
 void get_random_int(mob_action_run_data &data);
 void goto_function(mob_action_run_data &data);
 void hold_focus(mob_action_run_data &data);

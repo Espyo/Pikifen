@@ -28,11 +28,11 @@ script {
     
     exploring {
         on_enter {
-            get_random_real x -1000 1000
-            get_random_real y -1000 1000
+            get_random_float x -1000 1000
+            get_random_float y -1000 1000
             move_to_relative $x $y
             set_animation walking normal true
-            get_random_real t 1.5 2.5
+            get_random_float t 1.5 2.5
             set_timer $t
         }
         on_opponent_in_reach {

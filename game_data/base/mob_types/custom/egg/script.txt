@@ -64,7 +64,7 @@ script {
             start_particles egg_shard_explosion
             
             if $contents = random
-                get_random_real c 1 100
+                get_random_float c 1 100
                 if $c < 55
                     set_var contents nectar
                     goto spawn

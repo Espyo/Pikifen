@@ -749,8 +749,8 @@ void mob_type::load_from_data_node(
             new_prop.type = AEMP_TYPE_TEXT;
         } else if(type_str == "int") {
             new_prop.type = AEMP_TYPE_INT;
-        } else if(type_str == "real") {
-            new_prop.type = AEMP_TYPE_REAL;
+        } else if(type_str == "float") {
+            new_prop.type = AEMP_TYPE_FLOAT;
         } else if(type_str == "bool") {
             new_prop.type = AEMP_TYPE_BOOL;
         } else if(type_str == "list") {

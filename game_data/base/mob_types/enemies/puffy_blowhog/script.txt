@@ -16,7 +16,7 @@ script {
             stop
             set_animation idling random_time_on_spawn
             set_near_reach search
-            get_random_real timeout 1 3
+            get_random_float timeout 1 3
             set_timer $timeout
         }
         on_opponent_in_reach {
@@ -33,9 +33,9 @@ script {
 
     exploring {
         on_enter {
-            get_random_real r -500 500
+            get_random_float r -500 500
             calculate x $home_x + $r
-            get_random_real r -500 500
+            get_random_float r -500 500
             calculate y $home_y + $r
             get_floor_z z $x $y
             calculate z $z + 100
@@ -64,7 +64,7 @@ script {
     chasing {
         on_enter {
             set_far_reach chase
-            get_random_real timeout 2.5 4
+            get_random_float timeout 2.5 4
             set_timer 0.5
             turn_to_target focused_mob
 

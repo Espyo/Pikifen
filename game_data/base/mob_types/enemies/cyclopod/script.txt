@@ -49,7 +49,7 @@ script {
             set_near_reach search
         }
         on_animation_end {
-            get_random_real angle 0 360
+            get_random_float angle 0 360
             turn_to_relative $angle
             set_state idling
         }
@@ -121,9 +121,9 @@ script {
             set_var flee_counter 0
         }
         on_timer {
-            get_random_real x -200 200
+            get_random_float x -200 200
             calculate x $home_x + $x
-            get_random_real y -200 200
+            get_random_float y -200 200
             calculate y $home_y + $y
             move_to_absolute $x $y
 

@@ -15,7 +15,7 @@ script {
         on_enter {
             stop
             set_animation idling random_time_on_spawn
-            get_random_real t 1.5 2.5
+            get_random_float t 1.5 2.5
             set_timer $t
             set_near_reach search
         }
@@ -29,7 +29,7 @@ script {
                 end_if
             end_if
             
-            get_random_real t 1.5 2.5
+            get_random_float t 1.5 2.5
             set_timer $t
         }
         on_opponent_in_reach {
@@ -53,10 +53,10 @@ script {
     exploring {
         on_enter {
             set_animation moving normal true
-            get_random_real t 1.5 2.5
+            get_random_float t 1.5 2.5
             set_timer $t
-            get_random_real x -1000 1000
-            get_random_real y -1000 1000
+            get_random_float x -1000 1000
+            get_random_float y -1000 1000
             move_to_relative $x $y
         }
         on_timer {
@@ -158,14 +158,14 @@ script {
             set_var time_open 0
             set_animation moving_hot
             set_timer 1
-            get_random_real x -1000 1000
-            get_random_real y -1000 1000
+            get_random_float x -1000 1000
+            get_random_float y -1000 1000
             move_to_relative $x $y
             start_particles steam 0 0 101
         }
         on_timer {
-            get_random_real x -1000 1000
-            get_random_real y -1000 1000
+            get_random_float x -1000 1000
+            get_random_float y -1000 1000
             move_to_relative $x $y
             calculate time_open $time_open + 1
             set_timer 1
@@ -187,8 +187,8 @@ script {
             stop_sound $sound_id
         }
         on_timer {
-            get_random_real x -1000 1000
-            get_random_real y -1000 1000
+            get_random_float x -1000 1000
+            get_random_float y -1000 1000
             move_to_relative $x $y
             calculate time_open $time_open + 1
             set_timer 1
