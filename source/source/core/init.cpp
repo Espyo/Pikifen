@@ -172,7 +172,7 @@ void init_controls() {
         "---", "", "", ""
     );
     
-    //MAIN.
+    //Main.
     game.controls.add_player_action_type(
         PLAYER_ACTION_TYPE_RIGHT,
         PLAYER_ACTION_CAT_MAIN,

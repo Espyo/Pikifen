@@ -392,7 +392,11 @@ void main_menu_state::init_gui_main_page() {
         open_web_browser(DISCORD_SERVER_URL);
     };
     discord_button->on_get_tooltip =
-    [] () { return "Open the project's Discord server!"; };
+    [] () {
+        return
+            "Open the project's Discord server! Discussions! Feedback! "
+            "Questions! New content!";
+    };
     main_gui.add_item(discord_button, "discord");
     
     //GitHub page button.
