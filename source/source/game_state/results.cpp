@@ -358,6 +358,7 @@ void results_state::load() {
     gui.register_coords("retry",            20, 88, 24,  8);
     gui.register_coords("continue",         50, 88, 24,  8);
     gui.register_coords("pick_area",        80, 88, 24,  8);
+    gui.register_coords("pick_area_input",  91, 91,  4,  4);
     gui.register_coords("tooltip",          50, 96, 96,  4);
     gui.read_coords(
         game.content.gui_defs.list[RESULTS::GUI_FILE_NAME].get_child_by_name("positions")
@@ -782,6 +783,9 @@ void results_state::load() {
             "Return to the area editor.";
     };
     gui.add_item(gui.back_item, "pick_area");
+    
+    //Pick an area input icon.
+    gui_add_back_input_icon(&gui, "pick_area_input");
     
     //Tooltip text.
     tooltip_gui_item* tooltip_text =

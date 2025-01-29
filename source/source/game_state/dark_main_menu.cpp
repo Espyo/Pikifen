@@ -163,6 +163,7 @@ void dark_main_menu_state::load() {
                 CONTENT_TYPE_MOB_ANIMATION,
                 CONTENT_TYPE_MOB_TYPE,
                 CONTENT_TYPE_SPIKE_DAMAGE_TYPE,
+                CONTENT_TYPE_WEATHER_CONDITION,
                 CONTENT_TYPE_HAZARD,
                 CONTENT_TYPE_SPRAY_TYPE,
                 CONTENT_TYPE_STATUS_TYPE,

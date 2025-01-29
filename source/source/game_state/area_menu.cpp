@@ -568,6 +568,7 @@ void area_menu_state::init_gui_info_page() {
  */
 void area_menu_state::init_gui_main() {
     gui.register_coords("back",          12,  5, 20,  6);
+    gui.register_coords("back_input",     3,  7,  4,  4);
     gui.register_coords("header",        40,  5, 32,  6);
     gui.register_coords("list",          20, 51, 36, 82);
     gui.register_coords("list_scroll",   40, 51,  2, 82);
@@ -592,6 +593,9 @@ void area_menu_state::init_gui_main() {
     gui.back_item->on_get_tooltip =
     [] () { return "Return to the main menu."; };
     gui.add_item(gui.back_item, "back");
+    
+    //Back input icon.
+    gui_add_back_input_icon(&gui);
     
     //Header text.
     text_gui_item* header_text =

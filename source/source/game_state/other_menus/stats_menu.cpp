@@ -30,6 +30,7 @@ const string GUI_FILE_NAME = "statistics_menu";
 stats_menu_t::stats_menu_t() {
     //Menu items.
     gui.register_coords("back",        12,  5, 20,  6);
+    gui.register_coords("back_input",   3,  7,  4,  4);
     gui.register_coords("header",      50,  5, 50,  6);
     gui.register_coords("list",        50, 51, 76, 82);
     gui.register_coords("list_scroll", 91, 51,  2, 82);
@@ -49,6 +50,9 @@ stats_menu_t::stats_menu_t() {
     gui.back_item->on_get_tooltip =
     [] () { return "Return to the previous menu."; };
     gui.add_item(gui.back_item, "back");
+    
+    //Back input icon.
+    gui_add_back_input_icon(&gui);
     
     //Header text.
     text_gui_item* header_text =

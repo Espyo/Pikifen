@@ -1681,6 +1681,7 @@ void pause_menu_t::init_confirmation_page() {
     
     //Menu items.
     confirmation_gui.register_coords("cancel",           19, 83, 30, 10);
+    confirmation_gui.register_coords("cancel_input",      5, 87,  4,  4);
     confirmation_gui.register_coords("confirm",          81, 83, 30, 10);
     confirmation_gui.register_coords("header",           50,  8, 92,  8);
     confirmation_gui.register_coords("explanation",      50, 40, 84, 20);
@@ -1709,6 +1710,9 @@ void pause_menu_t::init_confirmation_page() {
     confirmation_gui.back_item->on_get_tooltip =
     [] () { return "Return to the pause menu."; };
     confirmation_gui.add_item(confirmation_gui.back_item, "cancel");
+    
+    //Cancel input icon.
+    gui_add_back_input_icon(&confirmation_gui, "cancel_input");
     
     //Confirm button.
     button_gui_item* confirm_button =
@@ -1761,13 +1765,14 @@ void pause_menu_t::init_main_pause_menu() {
     //Menu items.
     gui.register_coords("header",           50,  5, 52,  6);
     gui.register_coords("left_page",        12,  5, 20,  6);
-    gui.register_coords("left_page_input",  3,   7,  4,  4);
+    gui.register_coords("left_page_input",   3,  7,  4,  4);
     gui.register_coords("right_page",       88,  5, 20,  6);
     gui.register_coords("right_page_input", 97,  7,  4,  4);
     gui.register_coords("line",             50, 11, 96,  2);
     gui.register_coords("area_name",        50, 20, 96,  8);
     gui.register_coords("area_subtitle",    50, 27, 88,  6);
     gui.register_coords("continue",         13, 88, 22,  8);
+    gui.register_coords("continue_input",    3, 91,  4,  4);
     gui.register_coords("retry",            50, 41, 52, 10);
     gui.register_coords("end",              50, 53, 52, 10);
     gui.register_coords("help",             50, 65, 52, 10);
@@ -1831,6 +1836,9 @@ void pause_menu_t::init_main_pause_menu() {
     gui.back_item->on_get_tooltip =
     [] () { return "Unpause and continue playing."; };
     gui.add_item(gui.back_item, "continue");
+    
+    //Continue input icon.
+    gui_add_back_input_icon(&gui, "continue_input");
     
     //Retry button.
     button_gui_item* retry_button =
@@ -1967,6 +1975,7 @@ void pause_menu_t::init_mission_page() {
     mission_gui.register_coords("right_page_input", 97,  7,  4,  4);
     mission_gui.register_coords("line",             50, 11, 96,  2);
     mission_gui.register_coords("continue",         10, 16, 16,  4);
+    mission_gui.register_coords("continue_input",    3, 17,  4,  4);
     mission_gui.register_coords("goal_header",      50, 16, 60,  4);
     mission_gui.register_coords("goal",             50, 22, 96,  4);
     mission_gui.register_coords("goal_status",      50, 26, 96,  4);
@@ -2013,6 +2022,18 @@ void pause_menu_t::init_mission_page() {
     mission_gui.back_item->on_get_tooltip =
     [] () { return "Unpause and continue playing."; };
     mission_gui.add_item(mission_gui.back_item, "continue");
+    
+    //Continue input icon.
+    gui_item* continue_input = new gui_item();
+    continue_input->on_draw =
+    [this] (const point & center, const point & size) {
+        if(!game.options.show_hud_input_icons) return;
+        player_input i =
+            game.controls.find_bind(PLAYER_ACTION_TYPE_MENU_BACK).input;
+        if(i.type == INPUT_TYPE_NONE) return;
+        draw_player_input_icon(game.sys_assets.fnt_slim, i, true, center, size);
+    };
+    mission_gui.add_item(continue_input, "continue_input");
     
     //Goal header text.
     text_gui_item* goal_header_text =
@@ -2118,6 +2139,7 @@ void pause_menu_t::init_radar_page() {
     radar_gui.register_coords("right_page_input",    97,     7,     4,    4);
     radar_gui.register_coords("line",                50,    11,    96,    2);
     radar_gui.register_coords("continue",            10,    16,    16,    4);
+    radar_gui.register_coords("continue_input",       3,    17,     4,    4);
     radar_gui.register_coords("radar",               37.5,  56.25, 70,   72.5);
     radar_gui.register_coords("group_pikmin_label",  86.25, 77.5,  22.5,  5);
     radar_gui.register_coords("group_pikmin_number", 86.25, 85,    22.5,  5);
@@ -2164,6 +2186,18 @@ void pause_menu_t::init_radar_page() {
     radar_gui.back_item->on_get_tooltip =
     [] () { return "Unpause and continue playing."; };
     radar_gui.add_item(radar_gui.back_item, "continue");
+    
+    //Continue input icon.
+    gui_item* continue_input = new gui_item();
+    continue_input->on_draw =
+    [this] (const point & center, const point & size) {
+        if(!game.options.show_hud_input_icons) return;
+        player_input i =
+            game.controls.find_bind(PLAYER_ACTION_TYPE_MENU_BACK).input;
+        if(i.type == INPUT_TYPE_NONE) return;
+        draw_player_input_icon(game.sys_assets.fnt_slim, i, true, center, size);
+    };
+    radar_gui.add_item(continue_input, "continue_input");
     
     //Radar item.
     radar_item = new gui_item();
@@ -2370,6 +2404,7 @@ void pause_menu_t::init_status_page() {
     status_gui.register_coords("right_page_input", 97,     7,    4,    4);
     status_gui.register_coords("line",             50,    11,   96,    2);
     status_gui.register_coords("continue",         10,    16,   16,    4);
+    status_gui.register_coords("continue_input",    3,    17,    4,    4);
     status_gui.register_coords("list_header",      50,    23.5, 88,    7);
     status_gui.register_coords("list",             50,    56,   88,   56);
     status_gui.register_coords("list_scroll",      97,    56,    2,   56);
@@ -2412,6 +2447,18 @@ void pause_menu_t::init_status_page() {
     status_gui.back_item->on_get_tooltip =
     [] () { return "Unpause and continue playing."; };
     status_gui.add_item(status_gui.back_item, "continue");
+    
+    //Continue input icon.
+    gui_item* continue_input = new gui_item();
+    continue_input->on_draw =
+    [this] (const point & center, const point & size) {
+        if(!game.options.show_hud_input_icons) return;
+        player_input i =
+            game.controls.find_bind(PLAYER_ACTION_TYPE_MENU_BACK).input;
+        if(i.type == INPUT_TYPE_NONE) return;
+        draw_player_input_icon(game.sys_assets.fnt_slim, i, true, center, size);
+    };
+    status_gui.add_item(continue_input, "continue_input");
     
     //Pikmin list header box.
     list_gui_item* list_header = new list_gui_item();

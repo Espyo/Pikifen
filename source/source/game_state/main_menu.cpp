@@ -206,15 +206,16 @@ void main_menu_state::init_gui_main_page() {
 #undef icon_left
     
     //Menu items.
-    main_gui.register_coords("play",    42, 58, 44, 12);
-    main_gui.register_coords("make",    58, 72, 44, 12);
-    main_gui.register_coords("help",    24, 83, 24,  6);
-    main_gui.register_coords("options", 50, 83, 24,  6);
-    main_gui.register_coords("stats",   76, 83, 24,  6);
-    main_gui.register_coords("discord", 74, 91,  4,  5);
-    main_gui.register_coords("github",  80, 91,  4,  5);
-    main_gui.register_coords("exit",    91, 91, 14,  6);
-    main_gui.register_coords("tooltip", 50, 96, 96,  4);
+    main_gui.register_coords("play",       42, 58, 44, 12);
+    main_gui.register_coords("make",       58, 72, 44, 12);
+    main_gui.register_coords("help",       24, 83, 24,  6);
+    main_gui.register_coords("options",    50, 83, 24,  6);
+    main_gui.register_coords("stats",      76, 83, 24,  6);
+    main_gui.register_coords("discord",    74, 91,  4,  5);
+    main_gui.register_coords("github",     80, 91,  4,  5);
+    main_gui.register_coords("exit",       91, 91, 14,  6);
+    main_gui.register_coords("exit_input", 97, 93,  4,  4);
+    main_gui.register_coords("tooltip",    50, 96, 96,  4);
     main_gui.read_coords(gui_file->get_child_by_name("positions"));
     
     //Play button.
@@ -453,6 +454,9 @@ void main_menu_state::init_gui_main_page() {
     };
     main_gui.add_item(main_gui.back_item, "exit");
     
+    //Exit input icon.
+    gui_add_back_input_icon(&main_gui, "exit_input");
+    
     //Tooltip text.
     tooltip_gui_item* tooltip_text =
         new tooltip_gui_item(&main_gui);
@@ -490,6 +494,7 @@ void main_menu_state::init_gui_make_page() {
     make_gui.register_coords("gui_editor",         69, 78, 34,  8);
     make_gui.register_coords("particle_editor",    31, 78, 34,  8);
     make_gui.register_coords("back",                9, 91, 14,  6);
+    make_gui.register_coords("back_input",          3, 93,  4,  4);
     make_gui.register_coords("more",               91, 91, 14,  6);
     make_gui.register_coords("tooltip",            50, 96, 96,  4);
     make_gui.read_coords(gui_file->get_child_by_name("positions"));
@@ -616,6 +621,9 @@ void main_menu_state::init_gui_make_page() {
     };
     make_gui.add_item(make_gui.back_item, "back");
     
+    //Back input icon.
+    gui_add_back_input_icon(&make_gui);
+    
     //More bullet point.
     bullet_gui_item* more_bullet =
         new bullet_gui_item("More...", game.sys_assets.fnt_standard);
@@ -661,10 +669,11 @@ void main_menu_state::init_gui_play_page() {
 #undef icon_left
     
     //Menu items.
-    play_gui.register_coords("simple",  42, 60, 60, 12.5);
-    play_gui.register_coords("mission", 44, 78, 60, 12.5);
-    play_gui.register_coords("back",     9, 91, 14,    6);
-    play_gui.register_coords("tooltip", 50, 96, 96,    4);
+    play_gui.register_coords("simple",     42, 60, 60, 12.5);
+    play_gui.register_coords("mission",    44, 78, 60, 12.5);
+    play_gui.register_coords("back",        9, 91, 14,    6);
+    play_gui.register_coords("back_input",  3, 93,  4,    4);
+    play_gui.register_coords("tooltip",    50, 96, 96,    4);
     play_gui.read_coords(gui_file->get_child_by_name("positions"));
     
     //Play a simple area button.
@@ -745,6 +754,9 @@ void main_menu_state::init_gui_play_page() {
     };
     play_gui.add_item(play_gui.back_item, "back");
     
+    //Back input icon.
+    gui_add_back_input_icon(&play_gui);
+    
     //Tooltip text.
     tooltip_gui_item* tooltip_text =
         new tooltip_gui_item(&play_gui);
@@ -766,6 +778,7 @@ void main_menu_state::init_gui_tutorial_page() {
     //Menu items.
     tutorial_gui.register_coords("question", 50,     60, 60,  12.5);
     tutorial_gui.register_coords("no",       26, 80.875, 40, 10.25);
+    tutorial_gui.register_coords("no_input",  7,     85,  4,     4);
     tutorial_gui.register_coords("yes",      74,     81, 40,    10);
     tutorial_gui.register_coords("tooltip",  50,     96, 96,     4);
     tutorial_gui.read_coords(gui_file->get_child_by_name("positions"));
@@ -803,6 +816,9 @@ void main_menu_state::init_gui_tutorial_page() {
             "Go to the standard area selection menu.";
     };
     tutorial_gui.add_item(tutorial_gui.back_item, "no");
+    
+    //No input icon.
+    gui_add_back_input_icon(&tutorial_gui, "no_input");
     
     //Yes button.
     button_gui_item* yes_button =

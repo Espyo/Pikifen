@@ -62,6 +62,7 @@ help_menu_t::help_menu_t() {
     
     //Menu items.
     gui.register_coords("back",        12,  5, 20,  6);
+    gui.register_coords("back_input",   3,  7,  4,  4);
     gui.register_coords("gameplay1",   22, 15, 36,  6);
     gui.register_coords("gameplay2",   22, 23, 36,  6);
     gui.register_coords("controls",    22, 31, 36,  6);
@@ -88,6 +89,9 @@ help_menu_t::help_menu_t() {
     gui.back_item->on_get_tooltip =
     [] () { return "Return to the previous menu."; };
     gui.add_item(gui.back_item, "back");
+    
+    //Back input icon.
+    gui_add_back_input_icon(&gui);
     
     //Gameplay basics button.
     button_gui_item* gameplay1_button =

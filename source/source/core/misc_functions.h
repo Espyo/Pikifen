@@ -21,6 +21,7 @@
 #include "../content/mob/leader.h"
 #include "../content/mob/onion.h"
 #include "../content/mob/pikmin.h"
+#include "../content/other/gui.h"
 #include "../content/other/mob_script.h"
 #include "../game_state/editor.h"
 #include "../lib/data_file/data_file.h"
@@ -141,6 +142,9 @@ ALLEGRO_COLOR get_wall_shadow_color(edge* e_ptr);
 float get_wall_shadow_length(edge* e_ptr);
 vector<std::pair<int, string> > get_weather_table(data_node* node);
 string get_working_directory_path();
+void gui_add_back_input_icon(
+    gui_manager* gui, const string &item_name = "back_input"
+);
 bool open_manual(const string &page);
 void print_info(
     const string &text,

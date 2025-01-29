@@ -290,6 +290,7 @@ void options_menu_t::handle_player_action(const player_action &action) {
 void options_menu_t::init_gui_audio_page() {
     //Menu items.
     audio_gui.register_coords("back",               12,  5,   20,  6);
+    audio_gui.register_coords("back_input",          3,  7,    4,  4);
     audio_gui.register_coords("header",             50, 10,   50,  6);
     audio_gui.register_coords("master_volume",      50, 25,   70, 10);
     audio_gui.register_coords("world_sound_volume", 50, 37.5, 65, 10);
@@ -321,6 +322,9 @@ void options_menu_t::init_gui_audio_page() {
     audio_gui.back_item->on_get_tooltip =
     [] () { return "Return to the top-level options menu."; };
     audio_gui.add_item(audio_gui.back_item, "back");
+    
+    //Back input icon.
+    gui_add_back_input_icon(&audio_gui);
     
     //Header text.
     text_gui_item* header_text =
@@ -438,6 +442,7 @@ void options_menu_t::init_gui_audio_page() {
 void options_menu_t::init_gui_control_binds_page() {
     //Menu items.
     binds_gui.register_coords("back",        12,  5, 20,  6);
+    binds_gui.register_coords("back_input",   3,  7,  4,  4);
     binds_gui.register_coords("header",      50,  5, 50,  6);
     binds_gui.register_coords("list",        50, 51, 88, 82);
     binds_gui.register_coords("list_scroll", 97, 51,  2, 82);
@@ -467,6 +472,9 @@ void options_menu_t::init_gui_control_binds_page() {
     binds_gui.back_item->on_get_tooltip =
     [] () { return "Return to the previous menu."; };
     binds_gui.add_item(binds_gui.back_item, "back");
+    
+    //Back input icon.
+    gui_add_back_input_icon(&binds_gui);
     
     //Header text.
     text_gui_item* header_text =
@@ -507,6 +515,7 @@ void options_menu_t::init_gui_control_binds_page() {
 void options_menu_t::init_gui_controls_page() {
     //Menu items.
     controls_gui.register_coords("back",          12,  5,   20,  6);
+    controls_gui.register_coords("back_input",     3,  7,    4,  4);
     controls_gui.register_coords("header",        50, 10,   50,  6);
     controls_gui.register_coords("control_binds", 50, 25,   70, 10);
     controls_gui.register_coords("cursor_speed",  50, 47.5, 70, 10);
@@ -536,6 +545,9 @@ void options_menu_t::init_gui_controls_page() {
     controls_gui.back_item->on_get_tooltip =
     [] () { return "Return to the top-level options menu."; };
     controls_gui.add_item(controls_gui.back_item, "back");
+    
+    //Back input icon.
+    gui_add_back_input_icon(&controls_gui);
     
     //Header text.
     text_gui_item* header_text =
@@ -616,6 +628,7 @@ void options_menu_t::init_gui_controls_page() {
 void options_menu_t::init_gui_graphics_page() {
     //Menu items.
     graphics_gui.register_coords("back",            12,  5,   20,  6);
+    graphics_gui.register_coords("back_input",       3,  7,    4,  4);
     graphics_gui.register_coords("header",          50, 10,   50,  6);
     graphics_gui.register_coords("fullscreen",      50, 25,   70, 10);
     graphics_gui.register_coords("resolution",      50, 42.5, 70, 10);
@@ -645,6 +658,9 @@ void options_menu_t::init_gui_graphics_page() {
     graphics_gui.back_item->on_get_tooltip =
     [] () { return "Return to the top-level options menu."; };
     graphics_gui.add_item(graphics_gui.back_item, "back");
+    
+    //Back input icon.
+    gui_add_back_input_icon(&graphics_gui);
     
     //Header text.
     text_gui_item* header_text =
@@ -734,6 +750,7 @@ void options_menu_t::init_gui_graphics_page() {
 void options_menu_t::init_gui_misc_page() {
     //Menu items.
     misc_gui.register_coords("back",                 12,  5,   20,  6);
+    misc_gui.register_coords("back_input",            3,  7,    4,  4);
     misc_gui.register_coords("header",               50, 10,   50,  6);
     misc_gui.register_coords("cursor_cam_weight",    50, 22.5, 70, 10);
     misc_gui.register_coords("show_hud_input_icons", 50, 40,   70, 10);
@@ -763,6 +780,9 @@ void options_menu_t::init_gui_misc_page() {
     misc_gui.back_item->on_get_tooltip =
     [] () { return "Return to the top-level options menu."; };
     misc_gui.add_item(misc_gui.back_item, "back");
+    
+    //Back input icon.
+    gui_add_back_input_icon(&misc_gui);
     
     //Header text.
     text_gui_item* header_text =
@@ -856,15 +876,16 @@ void options_menu_t::init_gui_top_page() {
 #undef icon_left
     
     //Menu items.
-    top_gui.register_coords("back",     12,  5, 20,  6);
-    top_gui.register_coords("header",   50, 10, 50,  6);
-    top_gui.register_coords("controls", 50, 25, 65, 10);
-    top_gui.register_coords("graphics", 50, 37, 65, 10);
-    top_gui.register_coords("audio",    50, 49, 65, 10);
-    top_gui.register_coords("packs",    50, 61, 65, 10);
-    top_gui.register_coords("misc",     50, 73, 60, 10);
-    top_gui.register_coords("advanced", 87, 86, 22,  8);
-    top_gui.register_coords("tooltip",  50, 96, 96,  4);
+    top_gui.register_coords("back",       12,  5, 20,  6);
+    top_gui.register_coords("back_input",  3,  7,  4,  4);
+    top_gui.register_coords("header",     50, 10, 50,  6);
+    top_gui.register_coords("controls",   50, 25, 65, 10);
+    top_gui.register_coords("graphics",   50, 37, 65, 10);
+    top_gui.register_coords("audio",      50, 49, 65, 10);
+    top_gui.register_coords("packs",      50, 61, 65, 10);
+    top_gui.register_coords("misc",       50, 73, 60, 10);
+    top_gui.register_coords("advanced",   87, 86, 22,  8);
+    top_gui.register_coords("tooltip",    50, 96, 96,  4);
     top_gui.read_coords(gui_file->get_child_by_name("positions"));
     
     //Back button.
@@ -878,6 +899,9 @@ void options_menu_t::init_gui_top_page() {
     top_gui.back_item->on_get_tooltip =
     [] () { return "Return to the previous menu."; };
     top_gui.add_item(top_gui.back_item, "back");
+    
+    //Back input icon.
+    gui_add_back_input_icon(&top_gui);
     
     //Header text.
     text_gui_item* header_text =

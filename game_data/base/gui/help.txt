@@ -2,6 +2,7 @@ name=Help
 description=GUI for the help menu.
 positions{
 	back=12.0000 5.0000 20.0000 6.0000
+	back_input=3.0000 7.0000 4.0000 4.0000
 	gameplay1=22.0000 15.0000 36.0000 6.0000
 	gameplay2=22.0000 23.0000 36.0000 6.0000
 	controls=22.0000 31.0000 36.0000 6.0000

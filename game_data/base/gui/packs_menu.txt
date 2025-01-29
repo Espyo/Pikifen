@@ -2,6 +2,7 @@ name=Pack management menu
 description=GUI for the pack management menu.
 positions{
 	back=12.0000 5.0000 20.0000 6.0000
+	back_input=3.0000 7.0000 4.0000 4.0000
 	header=61.0000 5.0000 74.0000 6.0000
 	list=26.0000 47.0000 48.0000 74.0000
 	list_scroll=52.0000 47.0000 2.0000 74.0000

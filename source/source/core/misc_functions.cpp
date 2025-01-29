@@ -754,6 +754,26 @@ string get_working_directory_path() {
 
 
 /**
+ * @brief Adds a GUI item that shows the input icon for going back in a menu.
+ *
+ * @param gui GUI manager to add the item to.
+ * @param item_name Internal name of the GUI item.
+ */
+void gui_add_back_input_icon(gui_manager* gui, const string &item_name) {
+    gui_item* back_input = new gui_item();
+    back_input->on_draw =
+    [] (const point & center, const point & size) {
+        if(!game.options.show_hud_input_icons) return;
+        player_input i =
+            game.controls.find_bind(PLAYER_ACTION_TYPE_MENU_BACK).input;
+        if(i.type == INPUT_TYPE_NONE) return;
+        draw_player_input_icon(game.sys_assets.fnt_slim, i, true, center, size);
+    };
+    gui->add_item(back_input, item_name);
+}
+
+
+/**
  * @brief Opens the manual on the user's web browser in the specified page.
  *
  * @param page Page to open, with the .html extension and any anchors.

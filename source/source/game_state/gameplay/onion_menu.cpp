@@ -54,6 +54,7 @@ onion_menu_t::onion_menu_t(
     
     gui.register_coords("instructions",     50,  7, 90, 20);
     gui.register_coords("cancel",           16, 85, 18, 11);
+    gui.register_coords("cancel_input",      8, 89,  4,  4);
     gui.register_coords("ok",               84, 85, 18, 11);
     gui.register_coords("field",            50, 75, 18,  4);
     gui.register_coords("select_all",       50, 87, 24,  6);
@@ -109,6 +110,9 @@ onion_menu_t::onion_menu_t(
     gui.back_item->on_get_tooltip =
     [] () { return "Forget all changes and leave the Onion menu."; };
     gui.add_item(gui.back_item, "cancel");
+    
+    //Cancel input icon.
+    gui_add_back_input_icon(&gui, "cancel_input");
     
     //Ok button.
     button_gui_item* ok_button =

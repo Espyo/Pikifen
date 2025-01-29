@@ -2,6 +2,7 @@ name=Options menu -- graphics
 description=GUI for the graphics page of the options menu
 positions{
 	back=12.0000 5.0000 20.0000 6.0000
+	back_input=3.0000 7.0000 4.0000 4.0000
 	header=50.0000 10.0000 50.0000 6.0000
 	fullscreen=50.0000 25.0000 70.0000 10.0000
 	resolution=50.0000 42.5000 70.0000 10.0000
