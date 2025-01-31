@@ -103,8 +103,11 @@ uniform vec4 surface_color;
 //Color of the caustic shines.
 uniform vec4 shine_color;
 
-//How powerful the caustic shines are (0-1).
-uniform float shine_amount;
+//Noise values under this will have no shine (0-1).
+uniform float shine_min_threshold;
+
+//Noise values above this will have full shine (0-1).
+uniform float shine_max_threshold;
 
 //Opacity of the liquid.
 uniform float opacity;
@@ -334,11 +337,9 @@ void main() {
     float noise_func_scale = 0.01;
 
     //Calculate simplex noise effects.
-    vec2 raw_noise_value;
-    raw_noise_value.x = simplex_noise(world_coords - sector_scroll * area_time, noise_func_scale, noise_func_step, 0.3);
-    raw_noise_value.y = simplex_noise(world_coords - sector_scroll * area_time, noise_func_scale, noise_func_step, 0.3);
+    float raw_noise_value = simplex_noise(world_coords - sector_scroll * area_time, noise_func_scale, noise_func_step, 0.3);
 
-    vec2 final_noise_value = raw_noise_value;
+    vec2 final_noise_value = vec2(raw_noise_value, raw_noise_value);
     final_noise_value.x *= distortion_amount.x;
     final_noise_value.x *= opacity;
     final_noise_value.y *= distortion_amount.y;
@@ -367,17 +368,33 @@ void main() {
 
     //--- Random caustic shines ---
 
-    //Get the average of each effect.
-    float shine_scale = (raw_noise_value.x + raw_noise_value.y) / 2;
+    //This value has a range of -1 to 1
+    float shine_scale = raw_noise_value;
+
+    //Convert this range to a scale of 0 to 1
+    shine_scale += 1;
+    shine_scale /= 2;
+
+    //Scale this range to be 0 whenever shine_scale is below shine_min_threshold, 
+    //and 1 whenever it is above shine_max_threshold.
+    //This formula was made through too much desmos tinkering.
+    shine_scale = 
+        (1 / (shine_max_threshold - shine_min_threshold)) * 
+        min(max(shine_min_threshold, shine_scale) - shine_min_threshold, shine_max_threshold - shine_min_threshold);
 
     //Anything below `shine_amount` will be below 0, resulting in it not showing.
-    //This puts our scale from 0 - (1 - `shine_amount`)
-    shine_scale -= (1 - shine_amount);
+    //This puts our scale from 0 - `shine_amount`
+    shine_scale -= max(0.0, min(shine_min_threshold, 1.0));
 
     //Now that we're below the threshold, multiply it to return it to a 0-1 scale.
     //Multiply by the reciprocal to bring it back to 0 - 1.
     //Add a min value of 0.1 to prevent divide by 0 errors.
-    shine_scale *= (1 / max(0.1, 1 - shine_amount));
+    shine_scale *= (1 / max(0.1, shine_min_threshold));
+
+    //Do this again, but for the max threshold
+    shine_scale += max(0.0, min(shine_max_threshold, 1.0));
+    shine_scale = min(1.0, shine_scale);
+
 
     //Since we havent actually restricted negative values yet, do that now.
     shine_scale = max(shine_scale, 0.0);
@@ -385,13 +402,14 @@ void main() {
     //Multiply by alpha and brightness after, since we want these to apply no matter what.
     shine_scale *= sector_brightness;
     shine_scale *= shine_color.a;
+    shine_scale *= opacity;
 
     //Add the shine!
     final_pixel.r = final_pixel.r + (shine_color.r - final_pixel.r) * shine_scale;
     final_pixel.g = final_pixel.g + (shine_color.g - final_pixel.g) * shine_scale;
     final_pixel.b = final_pixel.b + (shine_color.b - final_pixel.b) * shine_scale;
 
-    // TODO: remove these two lines when edge foam is shader-side.
+    // TODO: remove these two lines when edge foam becomes shader-side.
     frag_color = final_pixel;
     return;
 

@@ -49,8 +49,11 @@ struct liquid : public content {
     //Maximum displacement amount.
     point distortion_amount = point(14.0f, 4.0f);
     
-    //Noise threshold for how much of the liquid is covered in shines.
-    float shine_amount = 0.5f;
+    //Noise threshold for how much of the liquid will have no shines.
+    float shine_min_threshold = 0.5f;
+
+    //Noise threshold for how much of the liquid fully covered in shines.
+    float shine_max_threshold = 1.0f;
     
     //How fast the water animates.
     float anim_speed = 1;

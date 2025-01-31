@@ -421,7 +421,8 @@ void draw_liquid(
     al_set_shader_float("opacity", liquid_opacity_mult);
     al_set_shader_float("sector_brightness", brightness_mult);
     al_set_shader_float_vector("sector_scroll", 2, &sector_scroll[0], 1);
-    al_set_shader_float("shine_amount", l_ptr->shine_amount);
+    al_set_shader_float("shine_min_threshold", l_ptr->shine_min_threshold);
+    al_set_shader_float("shine_max_threshold", l_ptr->shine_max_threshold);
     al_set_shader_float_vector("distortion_amount", 2, &distortion_amount[0], 1);
     al_set_shader_float_vector("surface_color", 4, &liquid_tint[0], 1);
     al_set_shader_float_vector("shine_color", 4, &shine_color[0], 1);
