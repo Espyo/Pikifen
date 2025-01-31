@@ -368,10 +368,8 @@ void main() {
 
     //--- Random caustic shines ---
 
-    //This value has a range of -1 to 1
+    //This value has a range of -1 to 1. Let's convert it to 0 to 1.
     float shine_scale = raw_noise_value;
-
-    //Convert this range to a scale of 0 to 1
     shine_scale += 1;
     shine_scale /= 2;
 
@@ -391,12 +389,12 @@ void main() {
     //Add a min value of 0.1 to prevent divide by 0 errors.
     shine_scale *= (1 / max(0.1, shine_min_threshold));
 
-    //Do this again, but for the max threshold
+    //Do this again, but for the max threshold.
     shine_scale += max(0.0, min(shine_max_threshold, 1.0));
     shine_scale = min(1.0, shine_scale);
 
 
-    //Since we havent actually restricted negative values yet, do that now.
+    //Since we haven't actually restricted negative values yet, do that now.
     shine_scale = max(shine_scale, 0.0);
 
     //Multiply by alpha and brightness after, since we want these to apply no matter what.

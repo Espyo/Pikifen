@@ -472,8 +472,8 @@ bool can_take_path_stop(
         !sector_ptr->hazards.empty()
     ) {
         for(size_t sh = 0; sh < sector_ptr->hazards.size(); sh++) {
-            if(!sector_ptr->hazards[sh]->block_paths) {
-                //This hazard doesn't cause pikmin to try and avoid it.
+            if(!sector_ptr->hazards[sh]->blocks_paths) {
+                //This hazard doesn't cause Pikmin to try and avoid it.
                 continue;
             }
             bool invulnerable = false;

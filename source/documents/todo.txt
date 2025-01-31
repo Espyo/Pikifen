@@ -1,4 +1,4 @@
-Point I left on (so I can continue the next day without losing my train of thought)
+﻿Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -13,7 +13,7 @@ Next tasks (roughly sorted most important first)
 
     --- 0.26 ---
     Test -S-'s get_onion_info branch
-    Update to Dear ImGui 1.91.7
+    Update to Dear ImGui 1.91.8
         Implement shortcuts?
         Use multi-selection in the body part panel of the animation editor?
         GetWindowContentRegionMax().x + GetWindowPos().x --> GetCursorScreenPos().x + GetContentRegionAvail().x
@@ -22,6 +22,7 @@ Next tasks (roughly sorted most important first)
         Change ImGuiCol_NavHighlight to ImGuiCol_NavCursor
         Add keyboard/gamepad navigation stuff?
         Switch from columns to tables
+        Use ImGuiColorEditFlags_* ?
     Revamp sounds
         Candidate list of all needed sounds, for now
             Pikmin

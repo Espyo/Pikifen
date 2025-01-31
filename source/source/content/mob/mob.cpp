@@ -867,12 +867,12 @@ bool mob::calculate_damage(
         attacker_offense *= statuses[s].type->attack_multiplier;
     }
     for(size_t s = 0; s < victim->statuses.size(); s++) {
-        float mult = victim->statuses[s].type->defense_multiplier - 1;
+        float vuln_mult = victim->statuses[s].type->defense_multiplier - 1.0f;
         auto vuln_it = type->status_vulnerabilities.find(statuses[s].type);
         if(vuln_it != type->status_vulnerabilities.end()) {
-            mult *= vuln_it->second.effect_mult;
+            vuln_mult *= vuln_it->second.effect_mult;
         }
-        defense_multiplier *= (mult + 1);
+        defense_multiplier *= (vuln_mult + 1.0f);
     }
     
     if(this->type->category->id == MOB_CATEGORY_PIKMIN) {
@@ -2058,12 +2058,12 @@ float mob::get_speed_multiplier() const {
     float move_speed_mult = 1.0f;
     for(size_t s = 0; s < this->statuses.size(); s++) {
         if(!statuses[s].to_delete) {
-            float mult = this->statuses[s].type->speed_multiplier - 1;
+            float vuln_mult = this->statuses[s].type->speed_multiplier - 1.0f;
             auto vuln_it = type->status_vulnerabilities.find(statuses[s].type);
             if(vuln_it != type->status_vulnerabilities.end()) {
-                mult *= vuln_it->second.effect_mult;
+                vuln_mult *= vuln_it->second.effect_mult;
             }
-            move_speed_mult *= (mult + 1);
+            move_speed_mult *= (vuln_mult + 1.0f);
         }
     }
     return move_speed_mult;
@@ -3525,12 +3525,12 @@ void mob::tick(float delta_t) {
 void mob::tick_animation(float delta_t) {
     float mult = 1.0f;
     for(size_t s = 0; s < this->statuses.size(); s++) {
-        float to_mult = this->statuses[s].type->anim_speed_multiplier - 1;
+        float vuln_mult = this->statuses[s].type->anim_speed_multiplier - 1.0f;
             auto vuln_it = type->status_vulnerabilities.find(statuses[s].type);
             if(vuln_it != type->status_vulnerabilities.end()) {
-                to_mult *= vuln_it->second.effect_mult;
+                vuln_mult *= vuln_it->second.effect_mult;
             }
-        mult *= (to_mult + 1);
+        mult *= (vuln_mult + 1.0f);
     }
     
     if(mob_speed_anim_baseline != 0.0f) {

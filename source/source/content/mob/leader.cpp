@@ -201,15 +201,15 @@ leader::leader(const point &pos, leader_type* type, float angle) :
  * @return Whether it can grab.
  */
 bool leader::can_grab_group_member(mob* m) const {
-    //Check if the leader is on a hazard that the member isn't resistant to.
+    //Check if the leader is on a hazard that the member can't go to.
     if(
         ground_sector &&
         !standing_on_mob &&
         !ground_sector->hazards.empty()
     ) {
         for(size_t sh = 0; sh < ground_sector->hazards.size(); sh++) {
-            if(!ground_sector->hazards[sh]->block_paths) {
-                //This hazard doesn't cause pikmin to try and avoid it.
+            if(!ground_sector->hazards[sh]->blocks_paths) {
+                //This hazard doesn't cause Pikmin to try and avoid it.
                 continue;
             }
             if(get_hazard_vulnerability(ground_sector->hazards[sh]).effect_mult != 0.0f) {

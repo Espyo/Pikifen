@@ -35,7 +35,7 @@ void hazard::load_from_data_node(data_node* node) {
     data_node* effects_node = nullptr;
     data_node* liquid_node = nullptr;
     
-    rs.set("block_paths", block_paths);
+    rs.set("blocks_paths", blocks_paths);
     rs.set("color", main_color);
     rs.set("effects", effects_str, &effects_node);
     rs.set("liquid", liquid_str, &liquid_node);

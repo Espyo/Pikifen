@@ -36,21 +36,27 @@
     
     <table class="props-t props-t-o">
       <tr>
+        <td>blocks_paths</td>
+        <td>If true, this hazard blocks the path of Pikmin that are vulnerable to it. If false, Pikmin will still go through it even if they are vulnerable.</td>
+        <td>Boolean</td>
+        <td>true</td>
+      </tr>
+      <tr>
         <td>color</td>
         <td>A color that represents the hazard.</td>
         <td>Color</td>
         <td>0 0 0 0</td>
       </tr>
       <tr>
-        <td>liquid</td>
-        <td>If this hazard has an associated liquid (read the next section), specify its name here.</td>
-        <td>Text</td>
+        <td>effects</td>
+        <td>Status effects to apply to any Pikmin that is not invulnerable.</td>
+        <td>Text list</td>
         <td></td>
       </tr>
       <tr>
-        <td>status</td>
-        <td>Status effects to apply to any Pikmin that is not invulnerable.</td>
-        <td>Text list</td>
+        <td>liquid</td>
+        <td>If this hazard has an associated liquid (read the next section), specify its name here.</td>
+        <td>Text</td>
         <td></td>
       </tr>
     </table>
@@ -97,10 +103,16 @@
         <td>14 4</td>
       </tr>
       <tr>
-        <td>shine_amount</td>
-        <td>Amount of the surface that gets covered in shine. This number is used in some internal calculations, and ranges from 0 to 1.</td>
+        <td>shine_max_threshold</td>
+        <td>All pixels of the water have values between 0 and 1 that control their general distortion. Use this to indicate the maximum threshold (0 to 1) at which a pixel can have a shine.</td>
         <td>Number</td>
-        <td>0.6</td>
+        <td>1.0</td>
+      </tr>
+      <tr>
+        <td>shine_min_threshold</td>
+        <td>Same as above, but for the minimum threshold.</td>
+        <td>Number</td>
+        <td>0.5</td>
       </tr>
       <tr>
         <td>animation_speed</td>

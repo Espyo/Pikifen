@@ -233,7 +233,7 @@ public:
     
         //--- Members ---
         
-        //Multiply damage taken by this.
+        //Multiply the effects (damage taken, speed reduction, etc.) by this.
         float effect_mult = 1.0f;
         
         //When affected by the source, receive this status effect.
