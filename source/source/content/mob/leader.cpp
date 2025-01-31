@@ -207,12 +207,14 @@ bool leader::can_grab_group_member(mob* m) const {
         !standing_on_mob &&
         !ground_sector->hazards.empty()
     ) {
-        if(
-            !m->is_resistant_to_hazards(
-                ground_sector->hazards
-            )
-        ) {
-            return false;
+        for(size_t sh = 0; sh < ground_sector->hazards.size(); sh++) {
+            if(!ground_sector->hazards[sh]->block_paths) {
+                //This hazard doesn't cause pikmin to try and avoid it.
+                continue;
+            }
+            if(get_hazard_vulnerability(ground_sector->hazards[sh]).effect_mult != 0.0f) {
+                return false;
+            }
         }
     }
     

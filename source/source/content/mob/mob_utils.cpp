@@ -1350,7 +1350,7 @@ vector<hazard*> get_mob_type_list_invulnerabilities(
     map<hazard*, size_t> inv_instances;
     for(auto &t : types) {
         for(auto &h : t->hazard_vulnerabilities) {
-            if(h.second.damage_mult == 0.0f) {
+            if(h.second.effect_mult == 0.0f) {
                 inv_instances[h.first]++;
             }
         }
