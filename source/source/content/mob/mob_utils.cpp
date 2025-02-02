@@ -498,12 +498,12 @@ void group_t::init_spots(mob* affected_mob_ptr) {
                 alpha_spot(
                     point(
                         dist_from_center * cos(angle * s) +
-                        randomf(
+                        game.rng.f(
                             -MOB::GROUP_SPOT_MAX_DEVIATION,
                             MOB::GROUP_SPOT_MAX_DEVIATION
                         ),
                         dist_from_center * sin(angle * s) +
-                        randomf(
+                        game.rng.f(
                             -MOB::GROUP_SPOT_MAX_DEVIATION,
                             MOB::GROUP_SPOT_MAX_DEVIATION
                         )
@@ -823,7 +823,7 @@ bool pikmin_nest_t::call_pikmin(mob* m_ptr, size_t type_idx) {
         
         //Decide a leg to come out of.
         size_t leg_idx =
-            randomi(0, (int) (nest_type->leg_body_parts.size() / 2) - 1);
+            game.rng.i(0, (int) (nest_type->leg_body_parts.size() / 2) - 1);
         size_t leg_hole_bp_idx =
             m_ptr->anim.anim_db->find_body_part(
                 nest_type->leg_body_parts[leg_idx * 2]

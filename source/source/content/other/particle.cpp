@@ -108,7 +108,7 @@ void particle::tick(const float delta_t) {
     float outwards_angle = get_angle(pos - origin);
     
     if(pos == origin) {
-        outwards_angle = randomf(-180, 180);
+        outwards_angle = game.rng.f(-180, 180);
     }
     total_velocity +=
         angle_to_coordinates(outwards_angle, outwards_speed.get(t));
@@ -210,7 +210,7 @@ void particle_generator::emit(particle_manager &manager) {
         std::max(
             0,
             (int) emission.number +
-            randomi(
+            game.rng.i(
                 (int) (0 - emission.number_deviation),
                 (int) emission.number_deviation
             )
@@ -223,14 +223,14 @@ void particle_generator::emit(particle_manager &manager) {
             std::max(
                 0.0f,
                 new_p.duration +
-                randomf(-duration_deviation, duration_deviation)
+                game.rng.f(-duration_deviation, duration_deviation)
             );
         new_p.time = new_p.duration;
         
         new_p.bmp_angle +=
-            randomf(-bmp_angle_deviation, bmp_angle_deviation);
+            game.rng.f(-bmp_angle_deviation, bmp_angle_deviation);
         new_p.friction +=
-            randomf(-friction_deviation, friction_deviation);
+            game.rng.f(-friction_deviation, friction_deviation);
             
         new_p.pos = base_p_pos;
         new_p.origin = base_p_pos;
@@ -242,14 +242,14 @@ void particle_generator::emit(particle_manager &manager) {
         
         new_p.z = base_p_z;
         
-        float s_dev = randomf(-size_deviation, size_deviation);
+        float s_dev = game.rng.f(-size_deviation, size_deviation);
         for(size_t s = 0; s < new_p.size.keyframe_count(); s++) {
             auto kf = new_p.size.get_keyframe(s);
             new_p.size.set_keyframe_value((int) s, kf.second + s_dev);
         }
         
         float angle_to_use =
-            randomf(
+            game.rng.f(
                 -linear_speed_angle_deviation,
                 linear_speed_angle_deviation
             );
@@ -258,9 +258,9 @@ void particle_generator::emit(particle_manager &manager) {
         }
         
         float v_dev_x =
-            randomf(-linear_speed_deviation.x, linear_speed_deviation.x);
+            game.rng.f(-linear_speed_deviation.x, linear_speed_deviation.x);
         float v_dev_y =
-            randomf(-linear_speed_deviation.y, linear_speed_deviation.y);
+            game.rng.f(-linear_speed_deviation.y, linear_speed_deviation.y);
         for(size_t s = 0; s < new_p.linear_speed.keyframe_count(); s++) {
             auto kf = new_p.linear_speed.get_keyframe(s);
             point base = kf.second;
@@ -273,14 +273,14 @@ void particle_generator::emit(particle_manager &manager) {
         }
         
         float out_dev =
-            randomf(-outwards_speed_deviation, outwards_speed_deviation);
+            game.rng.f(-outwards_speed_deviation, outwards_speed_deviation);
         for(size_t s = 0; s < new_p.outwards_speed.keyframe_count(); s++) {
             auto kf = new_p.outwards_speed.get_keyframe(s);
             new_p.outwards_speed.set_keyframe_value((int) s, kf.second + out_dev);
         }
         
         float orb_dev =
-            randomf(-orbital_speed_deviation, orbital_speed_deviation);
+            game.rng.f(-orbital_speed_deviation, orbital_speed_deviation);
         for(size_t s = 0; s < new_p.orbital_speed.keyframe_count(); s++) {
             auto kf = new_p.orbital_speed.get_keyframe(s);
             new_p.orbital_speed.set_keyframe_value((int) s, kf.second + orb_dev);
@@ -584,7 +584,7 @@ void particle_generator::reset() {
         emission_timer = emission.interval;
     } else {
         emission_timer =
-            randomf(
+            game.rng.f(
                 std::max(0.0f, emission.interval - emission.interval_deviation),
                 emission.interval + emission.interval_deviation
             );
@@ -610,7 +610,7 @@ void particle_generator::tick(float delta_t, particle_manager &manager) {
             emission_timer = emission.interval;
         } else {
             emission_timer =
-                randomf(
+                game.rng.f(
                     std::max(
                         0.0f, emission.interval - emission.interval_deviation
                     ),
@@ -855,14 +855,14 @@ point particle_emission_struct::get_emission_offset() {
         return
             get_random_point_in_ring(
                 circle_inner_dist, circle_outer_dist,
-                circle_arc, circle_arc_rot
+                circle_arc, circle_arc_rot, &game.rng.seed
             );
         break;
         
     } case PARTICLE_EMISSION_SHAPE_RECTANGLE: {
         return
             get_random_point_in_rectangular_ring(
-                rect_inner_dist, rect_outer_dist
+                rect_inner_dist, rect_outer_dist, &game.rng.seed
             );
         break;
         

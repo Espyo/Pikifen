@@ -1128,10 +1128,11 @@ float get_point_sign(const point &p, const point &lp1, const point &lp2) {
  *
  * @param inner_dist Width and height of the inner rectangle of the ring.
  * @param outer_dist Width and height of the outer rectangle of the ring.
+ * @param seed Pointer to the randomness seed to use.
  * @return The point.
  */
 point get_random_point_in_rectangular_ring(
-    const point &inner_dist, const point &outer_dist
+    const point &inner_dist, const point &outer_dist, unsigned int* seed
 ) {
     float ring_thickness[2] {
         outer_dist.x - inner_dist.x,
@@ -1162,14 +1163,14 @@ point get_random_point_in_rectangular_ring(
     //with weighted probability depending on the area.
     size_t chosen_axis;
     if(rect_areas[0] == 0.0f && rect_areas[1] == 0.0f) {
-        chosen_axis = randomi(0, 1);
+        chosen_axis = randomi(0, 1, seed);
     } else {
-        chosen_axis = randomw(vector<float>(rect_areas, rect_areas + 2));
+        chosen_axis = randomw(vector<float>(rect_areas, rect_areas + 2), seed);
     }
     
     point p_in_rectangle(
-        randomf(0.0f, rect_sizes[chosen_axis].x),
-        randomf(0.0f, rect_sizes[chosen_axis].y)
+        randomf(0.0f, rect_sizes[chosen_axis].x, seed),
+        randomf(0.0f, rect_sizes[chosen_axis].y, seed)
     );
     point final_p;
     
@@ -1183,7 +1184,7 @@ point get_random_point_in_rectangular_ring(
         final_p.y = inner_dist.y + p_in_rectangle.y;
     }
     
-    if(randomi(0, 1) == 0) {
+    if(randomi(0, 1, seed) == 0) {
         //Return our point.
         return final_p;
     } else {
@@ -1201,22 +1202,24 @@ point get_random_point_in_rectangular_ring(
  * @param outer_dist Radius of the outer circle of the ring.
  * @param arc Arc of the ring, or M_TAU for the whole ring.
  * @param arc_rot Rotation of the arc.
+ * @param seed Pointer to the randomness seed to use.
  * @return The point.
  */
 point get_random_point_in_ring(
     float inner_dist, float outer_dist,
-    float arc, float arc_rot
+    float arc, float arc_rot, unsigned int* seed
 ) {
     //https://stackoverflow.com/q/30564015
     
     float r =
         inner_dist +
-        (outer_dist - inner_dist) * (float) sqrt(randomf(0.0f, 1.0f));
+        (outer_dist - inner_dist) * (float) sqrt(randomf(0.0f, 1.0f, seed));
         
     float theta =
         randomf(
             -arc / 2.0f + arc_rot,
-            arc / 2.0f + arc_rot
+            arc / 2.0f + arc_rot,
+            seed
         );
         
     return point(r * (float) cos(theta), r * (float) sin(theta));

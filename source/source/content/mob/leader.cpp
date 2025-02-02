@@ -150,7 +150,7 @@ leader::leader(const point &pos, leader_type* type, float angle) :
         swarm_arrows.push_back(0);
         
         particle p;
-        unsigned char color_idx = randomi(0, WHISTLE::N_DOT_COLORS);
+        unsigned char color_idx = game.rng.i(0, WHISTLE::N_DOT_COLORS);
         p.bitmap = game.sys_assets.bmp_bright_circle;
         ALLEGRO_COLOR c =
             al_map_rgba(
@@ -162,26 +162,26 @@ leader::leader(const point &pos, leader_type* type, float angle) :
         p.color = keyframe_interpolator<ALLEGRO_COLOR>(c);
         p.color.add(1, change_alpha(c, 0));
         p.duration =
-            randomf(
+            game.rng.f(
                 LEADER::SWARM_PARTICLE_MIN_DURATION,
                 LEADER::SWARM_PARTICLE_MAX_DURATION
             );
         p.friction = LEADER::SWARM_PARTICLE_FRICTION;
         p.pos = this->pos;
-        p.pos.x += randomf(-this->radius * 0.5f, this->radius * 0.5f);
-        p.pos.y += randomf(-this->radius * 0.5f, this->radius * 0.5f);
+        p.pos.x += game.rng.f(-this->radius * 0.5f, this->radius * 0.5f);
+        p.pos.y += game.rng.f(-this->radius * 0.5f, this->radius * 0.5f);
         p.priority = PARTICLE_PRIORITY_MEDIUM;
         p.size.set_keyframe_value(0, LEADER::SWARM_PARTICLE_SIZE);
         float p_speed =
             game.states.gameplay->swarm_magnitude *
             LEADER::SWARM_PARTICLE_SPEED_MULT +
-            randomf(
+            game.rng.f(
                 -LEADER::SWARM_PARTICLE_SPEED_DEVIATION,
                 LEADER::SWARM_PARTICLE_SPEED_DEVIATION
             );
         float p_angle =
             game.states.gameplay->swarm_angle +
-            randomf(
+            game.rng.f(
                 -LEADER::SWARM_PARTICLE_ANGLE_DEVIATION,
                 LEADER::SWARM_PARTICLE_ANGLE_DEVIATION
             );
@@ -567,8 +567,8 @@ void leader::dismiss() {
             
             destination +=
                 point(
-                    randomf(-5.0, 5.0),
-                    randomf(-5.0, 5.0)
+                    game.rng.f(-5.0, 5.0),
+                    game.rng.f(-5.0, 5.0)
                 );
                 
             cur_row_spot_idx++;
@@ -616,7 +616,7 @@ void leader::dismiss() {
         par.color.add(1, change_alpha(c, 0));
         par.bitmap = game.sys_assets.bmp_bright_circle;
         par.duration =
-            randomf(
+            game.rng.f(
                 LEADER::DISMISS_PARTICLE_MIN_DURATION,
                 LEADER::DISMISS_PARTICLE_MAX_DURATION
             );
@@ -625,7 +625,7 @@ void leader::dismiss() {
         par.priority = PARTICLE_PRIORITY_MEDIUM;
         par.size.set_keyframe_value(0, LEADER::DISMISS_PARTICLE_SIZE);
         float par_speed =
-            randomf(
+            game.rng.f(
                 LEADER::DISMISS_PARTICLE_MIN_SPEED,
                 LEADER::DISMISS_PARTICLE_MAX_SPEED
             );

@@ -1849,7 +1849,7 @@ void pikmin_fsm::be_attacked(mob* m, void* info1, void* info2) {
         
         //Withering.
         if(info->h2->wither_chance > 0 && pik_ptr->maturity > 0) {
-            unsigned char wither_roll = randomi(0, 100);
+            unsigned char wither_roll = game.rng.i(0, 100);
             if(wither_roll < info->h2->wither_chance) {
                 pik_ptr->increase_maturity(-1);
             }
@@ -2103,7 +2103,7 @@ void pikmin_fsm::become_idle(mob* m, void* info1, void* info2) {
         PIKMIN_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
     );
     m->set_timer(
-        randomf(PIKMIN::BORED_ANIM_MIN_DELAY, PIKMIN::BORED_ANIM_MAX_DELAY)
+        game.rng.f(PIKMIN::BORED_ANIM_MIN_DELAY, PIKMIN::BORED_ANIM_MAX_DELAY)
     );
 }
 
@@ -2218,7 +2218,7 @@ void pikmin_fsm::called_while_knocked_down(mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void pikmin_fsm::celebrate(mob* m, void* info1, void* info2) {
-    if(randomi(0, 1) == 0) {
+    if(game.rng.i(0, 1) == 0) {
         m->set_animation(PIKMIN_ANIM_BACKFLIP);
     } else {
         m->set_animation(PIKMIN_ANIM_TWIRLING);
@@ -2240,7 +2240,7 @@ void pikmin_fsm::check_boredom_anim_end(mob* m, void* info1, void* info2) {
     m->set_animation(PIKMIN_ANIM_IDLING);
     pik_ptr->in_bored_animation = false;
     m->set_timer(
-        randomf(PIKMIN::BORED_ANIM_MIN_DELAY, PIKMIN::BORED_ANIM_MAX_DELAY)
+        game.rng.f(PIKMIN::BORED_ANIM_MIN_DELAY, PIKMIN::BORED_ANIM_MAX_DELAY)
     );
 }
 
@@ -2345,7 +2345,7 @@ void pikmin_fsm::check_shaking_anim_end(mob* m, void* info1, void* info2) {
     m->set_animation(PIKMIN_ANIM_IDLING);
     pik_ptr->in_shaking_animation = false;
     m->set_timer(
-        randomf(PIKMIN::BORED_ANIM_MIN_DELAY, PIKMIN::BORED_ANIM_MAX_DELAY)
+        game.rng.f(PIKMIN::BORED_ANIM_MIN_DELAY, PIKMIN::BORED_ANIM_MAX_DELAY)
     );
 }
 
@@ -2361,7 +2361,7 @@ void pikmin_fsm::circle_opponent(mob* m, void* info1, void* info2) {
     m->stop_chasing();
     m->stop_circling();
     
-    float circle_time = randomf(0.0f, 1.0f);
+    float circle_time = game.rng.f(0.0f, 1.0f);
     //Bias the time so that there's a higher chance of picking a close angle,
     //and a lower chance of circling to a distant one. The Pikmin came here
     //to attack, not dance!
@@ -2369,7 +2369,7 @@ void pikmin_fsm::circle_opponent(mob* m, void* info1, void* info2) {
     circle_time += 0.5f;
     m->set_timer(circle_time);
     
-    bool go_cw = randomf(0.0f, 1.0f) <= 0.5f;
+    bool go_cw = game.rng.f(0.0f, 1.0f) <= 0.5f;
     m->circle_around(
         m->focused_mob, point(), m->focused_mob->radius + m->radius, go_cw,
         m->get_base_speed(), true
@@ -2461,7 +2461,7 @@ void pikmin_fsm::decide_attack(mob* m, void* info1, void* info2) {
             //Can't latch to the closest hitbox.
             
             if(
-                randomf(0.0f, 1.0f) <=
+                game.rng.f(0.0f, 1.0f) <=
                 PIKMIN::CIRCLE_OPPONENT_CHANCE_GROUNDED &&
                 can_circle
             ) {
@@ -2476,7 +2476,7 @@ void pikmin_fsm::decide_attack(mob* m, void* info1, void* info2) {
             //Can latch to the closest hitbox.
             
             if(
-                randomf(0, 1) <=
+                game.rng.f(0, 1) <=
                 PIKMIN::CIRCLE_OPPONENT_CHANCE_PRE_LATCH &&
                 can_circle
             ) {
@@ -2497,7 +2497,7 @@ void pikmin_fsm::decide_attack(mob* m, void* info1, void* info2) {
         //This Pikmin attacks by lunching forward for an impact.
         
         if(
-            randomf(0, 1) <=
+            game.rng.f(0, 1) <=
             PIKMIN::CIRCLE_OPPONENT_CHANCE_GROUNDED &&
             can_circle
         ) {
@@ -3034,7 +3034,7 @@ void pikmin_fsm::go_to_onion(mob* m, void* info1, void* info2) {
     
     //Pick a leg at random.
     pik_ptr->temp_i =
-        randomi(
+        game.rng.i(
             0, (int) (nest_ptr->nest_type->leg_body_parts.size() / 2) - 1
         );
     size_t leg_foot_bp_idx =
@@ -3506,8 +3506,8 @@ void pikmin_fsm::notify_leader_release(mob* m, void* info1, void* info2) {
 void pikmin_fsm::panic_new_chase(mob* m, void* info1, void* info2) {
     m->chase(
         point(
-            m->pos.x + randomf(-1000, 1000),
-            m->pos.y + randomf(-1000, 1000)
+            m->pos.x + game.rng.f(-1000, 1000),
+            m->pos.y + game.rng.f(-1000, 1000)
         ),
         m->z
     );
@@ -3632,7 +3632,7 @@ void pikmin_fsm::rechase_opponent(mob* m, void* info1, void* info2) {
         //The opponent cannot be chased down. Become idle.
         m->fsm.set_state(PIKMIN_STATE_IDLING);
         
-    } else if(randomf(0.0f, 1.0f) <= PIKMIN::CIRCLE_OPPONENT_CHANCE_GROUNDED) {
+    } else if(game.rng.f(0.0f, 1.0f) <= PIKMIN::CIRCLE_OPPONENT_CHANCE_GROUNDED) {
         //Circle around it a bit before attacking from a new angle.
         pik_ptr->fsm.set_state(PIKMIN_STATE_CIRCLING_OPPONENT);
         
@@ -3867,7 +3867,7 @@ void pikmin_fsm::start_boredom_anim(mob* m, void* info1, void* info2) {
     }
     
     if(boredom_anims.empty()) return;
-    size_t anim_idx = boredom_anims[randomi(0, (int) (boredom_anims.size() - 1))];
+    size_t anim_idx = boredom_anims[game.rng.i(0, (int) (boredom_anims.size() - 1))];
     m->set_animation(anim_idx, START_ANIM_OPTION_NORMAL, false);
     pik_ptr->in_bored_animation = true;
 }
@@ -4174,7 +4174,7 @@ void pikmin_fsm::stop_in_group(mob* m, void* info1, void* info2) {
     
     m->set_animation(PIKMIN_ANIM_IDLING);
     m->set_timer(
-        randomf(PIKMIN::BORED_ANIM_MIN_DELAY, PIKMIN::BORED_ANIM_MAX_DELAY)
+        game.rng.f(PIKMIN::BORED_ANIM_MIN_DELAY, PIKMIN::BORED_ANIM_MAX_DELAY)
     );
 }
 

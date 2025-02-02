@@ -11,6 +11,7 @@
 #include "decoration.h"
 
 #include "../../core/drawing.h"
+#include "../../core/game.h"
 #include "../../core/misc_functions.h"
 #include "../../util/allegro_utils.h"
 
@@ -28,7 +29,7 @@ decoration::decoration(
     mob(pos, type, angle),
     dec_type(type) {
     
-    float tint_interpol_ratio = randomf(0.0f, 1.0f);
+    float tint_interpol_ratio = game.rng.f(0.0f, 1.0f);
     ALLEGRO_COLOR tint_limit = dec_type->tint_random_maximum;
     tint_limit.a = 1.0f;
     
@@ -38,7 +39,7 @@ decoration::decoration(
             tint_limit, al_map_rgba(255, 255, 255, 255)
         );
         
-    float alpha_interpol_ratio = randomf(0.0f, 1.0f);
+    float alpha_interpol_ratio = game.rng.f(0.0f, 1.0f);
     individual_tint.a =
         interpolate_number(
             alpha_interpol_ratio, 0.0f, 1.0f,
@@ -46,13 +47,13 @@ decoration::decoration(
         );
         
     individual_rotation +=
-        randomf(
+        game.rng.f(
             -dec_type->rotation_random_variation,
             dec_type->rotation_random_variation
         );
         
     individual_scale +=
-        randomf(
+        game.rng.f(
             -dec_type->scale_random_variation,
             dec_type->scale_random_variation
         );

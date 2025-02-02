@@ -113,7 +113,7 @@ void converter::spew() {
         
         float horizontal_strength =
             CONVERTER::SPEW_H_SPEED +
-            randomf(
+            game.rng.f(
                 -CONVERTER::SPEW_H_SPEED_DEVIATION,
                 CONVERTER::SPEW_H_SPEED_DEVIATION
             );

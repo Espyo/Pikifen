@@ -183,7 +183,7 @@ void onion::generate() {
         
         float horizontal_strength =
             ONION::SPEW_H_SPEED +
-            randomf(
+            game.rng.f(
                 -ONION::SPEW_H_SPEED_DEVIATION,
                 ONION::SPEW_H_SPEED_DEVIATION
             );

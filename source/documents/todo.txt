@@ -5,7 +5,6 @@ Current tasks (tasks being worked on, but not yet committed)
     Add an "outward angle" option for particles
     Rock Pikmin thrown at a Pellet Posy should go to the Pellet Posy when they wake up
     Hitting Esc when on an editor state that's not the main state won't do anything
-    Add control bind icons for going back in menus
 
 Next tasks (roughly sorted most important first)
     --- To fix ---

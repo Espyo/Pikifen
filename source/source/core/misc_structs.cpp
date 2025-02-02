@@ -1375,6 +1375,48 @@ void reader_setter::set(
 
 
 /**
+ * @brief Returns a random float between the provided range, inclusive.
+ *
+ * @param minimum Minimum value that can be generated, inclusive.
+ * @param maximum Maximum value that can be generated, inclusive.
+ * @return The random number.
+ */
+float rng_manager::f(float minimum, float maximum) {
+    return randomf(minimum, maximum, &seed);
+}
+
+
+/**
+ * @brief Returns a random integer between the provided range, inclusive.
+ *
+ * @param minimum Minimum value that can be generated, inclusive.
+ * @param maximum Maximum value that can be generated, inclusive.
+ * @return The random number.
+ */
+int rng_manager::i(int minimum, int maximum) {
+    return randomi(minimum, maximum, &seed);
+}
+
+
+/**
+ * @brief Initializes the random number generator, using the current time as
+ * the seed.
+ */
+void rng_manager::init() {
+    seed = time(nullptr);
+}
+
+
+/**
+ * @brief Initializes the random number generator with the given seed.
+ */
+void rng_manager::init(unsigned int seed) {
+    this->seed = seed;
+}
+
+
+
+/**
  * @brief Constructs a new script var reader object.
  *
  * @param vars Map of variables to read from.

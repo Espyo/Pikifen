@@ -967,13 +967,13 @@ void main_menu_state::load() {
                     (r / (float) map_total_rows)
                 );
                 
-            unsigned char h_side = randomi(0, 1);
-            unsigned char v_side = randomi(0, 1);
+            unsigned char h_side = game.rng.i(0, 1);
+            unsigned char v_side = game.rng.i(0, 1);
             
             pik.pos =
                 point(
-                    randomf(0, game.win_w * 0.5),
-                    randomf(0, game.win_h * 0.5)
+                    game.rng.f(0, game.win_w * 0.5),
+                    game.rng.f(0, game.win_h * 0.5)
                 );
                 
             if(h_side == 0) {
@@ -987,10 +987,10 @@ void main_menu_state::load() {
                 pik.pos.y += game.win_h * 1.2;
             }
             
-            pik.angle = randomf(0, TAU);
-            pik.speed = randomf(logo_pikmin_min_speed, logo_pikmin_max_speed);
+            pik.angle = game.rng.f(0, TAU);
+            pik.speed = game.rng.f(logo_pikmin_min_speed, logo_pikmin_max_speed);
             pik.sway_speed =
-                randomf(logo_pikmin_sway_min_speed, logo_pikmin_sway_max_speed);
+                game.rng.f(logo_pikmin_sway_min_speed, logo_pikmin_sway_max_speed);
             pik.sway_var = 0;
             pik.reached_destination = false;
             logo_pikmin.push_back(pik);

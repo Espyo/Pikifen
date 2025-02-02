@@ -998,7 +998,7 @@ void animation_instance::skip_ahead_randomly() {
         total_duration += cur_anim->frames[f].duration;
     }
     
-    tick(randomf(0, total_duration));
+    tick(game.rng.f(0, total_duration));
 }
 
 

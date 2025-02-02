@@ -555,6 +555,26 @@ struct mouse_cursor_t {
 
 
 /**
+ * @brief Manages random number generation.
+ */
+struct rng_manager {
+    //--- Members ---
+    
+    //The current randomness seed.
+    unsigned int seed = 0;
+
+
+    //--- Function declarations ---
+
+    void init();
+    void init(unsigned int seed);
+    int i(int minimum, int maximum);
+    float f(float minimum, float maximum);
+};
+
+
+
+/**
  * @brief This structure makes reading values in data files
  * and setting them to variables much easier.
  * On the set functions, specify the name of the child and the variable.

@@ -350,7 +350,7 @@ bool audio_manager::emit(size_t source_id) {
     playback_ptr->base_gain = source_ptr->config.gain;
     if(source_ptr->config.gain_deviation != 0.0f) {
         playback_ptr->base_gain +=
-            randomf(
+            game.rng.f(
                 -source_ptr->config.gain_deviation,
                 source_ptr->config.gain_deviation
             );
@@ -391,7 +391,7 @@ bool audio_manager::emit(size_t source_id) {
     float speed = source_ptr->config.speed;
     if(source_ptr->config.speed_deviation != 0.0f) {
         speed +=
-            randomf(
+            game.rng.f(
                 -source_ptr->config.speed_deviation,
                 source_ptr->config.speed_deviation
             );
@@ -653,7 +653,7 @@ bool audio_manager::schedule_emission(size_t source_id, bool first) {
     source_ptr->emit_time_left = first ? 0.0f : source_ptr->config.interval;
     if(first || source_ptr->config.interval > 0.0f) {
         source_ptr->emit_time_left +=
-            randomf(0, source_ptr->config.random_delay);
+            game.rng.f(0, source_ptr->config.random_delay);
     }
     
     return true;

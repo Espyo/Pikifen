@@ -534,11 +534,11 @@ void mob::arachnorb_plan_logic(
         break;
         
     } case MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_CW_TURN: {
-        amount_to_turn = randomf(min_turn_angle, TAU * 0.25);
+        amount_to_turn = game.rng.f(min_turn_angle, TAU * 0.25);
         break;
         
     } case MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_CCW_TURN: {
-        amount_to_turn = randomf(-TAU * 0.25, -min_turn_angle);
+        amount_to_turn = game.rng.f(-TAU * 0.25, -min_turn_angle);
         break;
         
     }
@@ -1248,7 +1248,7 @@ pikmin_type* mob::decide_carry_pikmin_type(
         } else {
             decided_type =
                 majority_types[
-                    randomi(0, (int) majority_types.size() - 1)
+                    game.rng.i(0, (int) majority_types.size() - 1)
                 ];
         }
     }
@@ -2927,7 +2927,7 @@ void mob::release_stored_mobs() {
             release(m_ptr);
             m_ptr->stored_inside_another = nullptr;
             m_ptr->time_alive = 0.0f;
-            float a = randomf(0, TAU);
+            float a = game.rng.f(0, TAU);
             const float momentum = 100;
             m_ptr->speed.x = cos(a) * momentum;
             m_ptr->speed.y = sin(a) * momentum;
@@ -3234,7 +3234,7 @@ mob* mob::spawn(const mob_type::spawn_t* info, mob_type* type_ptr) {
         new_mob->links.push_back(this);
     }
     if(info->momentum != 0) {
-        float a = randomf(0, TAU);
+        float a = game.rng.f(0, TAU);
         new_mob->speed.x = cos(a) * info->momentum;
         new_mob->speed.y = sin(a) * info->momentum;
         new_mob->speed_z = info->momentum * 7;

@@ -428,7 +428,7 @@ bool pikmin::process_attack_miss(hitbox_interaction* info) {
     unsigned char hit_rate = info->mob2->anim.cur_anim->hit_rate;
     if(hit_rate == 0) return false;
     
-    unsigned char hit_roll = randomi(0, 100);
+    unsigned char hit_roll = game.rng.i(0, 100);
     if(hit_roll > hit_rate) {
         //This attack was randomly decided to be a miss.
         //Record this animation so it won't be considered a hit next frame.
@@ -513,7 +513,7 @@ void pikmin::tick_class_specifics(float delta_t) {
         );
         par.bitmap = game.sys_assets.bmp_pikmin_spirit;
         par.friction = 0.8;
-        point base_speed = point(randomf(-20, 20), randomf(-70, -30));
+        point base_speed = point(game.rng.f(-20, 20), game.rng.f(-70, -30));
         par.linear_speed = keyframe_interpolator<point>(base_speed);
         par.linear_speed.add(1, point(point(base_speed.x, base_speed.y - 20)));
         par.color.set_keyframe_value(0, change_alpha(pik_type->main_color, 0));

@@ -198,6 +198,9 @@ public:
     
     //Performance monitor.
     performance_monitor_t* perf_mon = nullptr;
+
+    //Randomness manager.
+    rng_manager rng;
     
     //Database of all sector types and their names.
     enum_name_database sector_types;

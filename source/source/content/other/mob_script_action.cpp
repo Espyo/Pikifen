@@ -960,7 +960,7 @@ void mob_action_runners::follow_path_randomly(mob_action_run_data &data) {
     if(!choices.empty()) {
         size_t tries = 0;
         while(!final_stop && tries < 5) {
-            size_t c = randomi(0, (int) choices.size() - 1);
+            size_t c = game.rng.i(0, (int) choices.size() - 1);
             if(
                 dist(choices[c]->pos, data.m->pos) >
                 PATHS::DEF_CHASE_TARGET_DISTANCE
@@ -1324,7 +1324,7 @@ void mob_action_runners::get_mob_info(mob_action_run_data &data) {
  */
 void mob_action_runners::get_random_float(mob_action_run_data &data) {
     data.m->vars[data.args[0]] =
-        f2s(randomf(s2f(data.args[1]), s2f(data.args[2])));
+        f2s(game.rng.f(s2f(data.args[1]), s2f(data.args[2])));
 }
 
 
@@ -1335,7 +1335,7 @@ void mob_action_runners::get_random_float(mob_action_run_data &data) {
  */
 void mob_action_runners::get_random_int(mob_action_run_data &data) {
     data.m->vars[data.args[0]] =
-        i2s(randomi(s2i(data.args[1]), s2i(data.args[2])));
+        i2s(game.rng.i(s2i(data.args[1]), s2i(data.args[2])));
 }
 
 

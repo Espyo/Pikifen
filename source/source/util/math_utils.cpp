@@ -206,12 +206,15 @@ float interpolate_number(
  *
  * @param minimum Minimum value that can be generated, inclusive.
  * @param maximum Maximum value that can be generated, inclusive.
+ * @param seed Pointer to the randomness seed to use.
  * @return The random number.
  */
-float randomf(float minimum, float maximum) {
+float randomf(float minimum, float maximum, unsigned int* seed) {
     if(minimum == maximum) return minimum;
     if(minimum > maximum) std::swap(minimum, maximum);
-    return (float) rand() / ((float) RAND_MAX / (maximum - minimum)) + minimum;
+    return
+        (float) rand_r(seed) /
+        ((float) RAND_MAX / (maximum - minimum)) + minimum;
 }
 
 
@@ -220,12 +223,13 @@ float randomf(float minimum, float maximum) {
  *
  * @param minimum Minimum value that can be generated, inclusive.
  * @param maximum Maximum value that can be generated, inclusive.
+ * @param seed Pointer to the randomness seed to use.
  * @return The random number.
  */
-int randomi(int minimum, int maximum) {
+int randomi(int minimum, int maximum, unsigned int* seed) {
     if(minimum == maximum) return minimum;
     if(minimum > maximum) std::swap(minimum, maximum);
-    return ((rand()) % (maximum - minimum + 1)) + minimum;
+    return ((rand_r(seed)) % (maximum - minimum + 1)) + minimum;
 }
 
 
@@ -234,14 +238,15 @@ int randomi(int minimum, int maximum) {
  * item.
  *
  * @param weights A vector with the weight of each item.
+ * @param seed Pointer to the randomness seed to use.
  * @return Index of the chosen item, or 0 on error.
  */
-size_t randomw(const vector<float> &weights) {
+size_t randomw(const vector<float> &weights, unsigned int* seed) {
     float weight_sum = 0.0f;
     for(size_t i = 0; i < weights.size(); i++) {
         weight_sum += weights[i];
     }
-    float r = randomf(0.0f, weight_sum);
+    float r = randomf(0.0f, weight_sum, seed);
     for(size_t i = 0; i < weights.size(); i++) {
         if(r < weights[i]) return i;
         r -= weights[i];

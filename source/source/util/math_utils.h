@@ -79,8 +79,8 @@ float interpolate_number(
     float input, float input_start, float input_end,
     float output_start, float output_end
 );
-float randomf(float min, float max);
-int randomi(int min, int max);
-size_t randomw(const vector<float> &weights);
+float randomf(float min, float max, unsigned int* seed);
+int randomi(int min, int max, unsigned int* seed);
+size_t randomw(const vector<float> &weights, unsigned int* seed);
 int sum_and_wrap(int nr, int sum, int wrap_limit);
 float wrap_float(float nr, float minimum, float maximum);
