@@ -916,6 +916,27 @@ private:
     );
     string find_good_first_texture();
     void find_problems();
+    void find_problems_bridge_path();
+    void find_problems_intersecting_edge();
+    void find_problems_lone_edge();
+    void find_problems_lone_path_stop();
+    void find_problems_missing_leader();
+    void find_problems_missing_texture();
+    void find_problems_mob_inside_walls();
+    void find_problems_mob_links_to_self();
+    void find_problems_mob_stored_in_loop();
+    void find_problems_no_goal_mob();
+    void find_problems_no_score_criteria();
+    void find_problems_non_simple_sector();
+    void find_problems_oob_mob();
+    void find_problems_oob_path_stop();
+    void find_problems_overlapping_vertex();
+    void find_problems_path_stop_on_link();
+    void find_problems_path_stops_intersecting();
+    void find_problems_pikmin_over_limit();
+    void find_problems_typeless_mob();
+    void find_problems_unknown_texture();
+    void find_problems_unknown_tree_shadow();
     void finish_circle_sector();
     void finish_layout_moving();
     void finish_new_sector_drawing();
@@ -1111,6 +1132,18 @@ private:
     void process_gui();
     void process_gui_control_panel();
     void process_gui_delete_area_dialog();
+    void process_gui_grading_criterion_widgets(
+        int* value_ptr, MISSION_SCORE_CRITERIA criterion_idx,
+        const string &widget_label, const string &tooltip
+    );
+    void process_gui_grading_medal_widgets(
+        int* requirement_ptr, const string &widget_label,
+        int widget_min_value, int widget_max_value,
+        const string &tooltip
+    );
+    void process_gui_grading_mode_widgets(
+        int value, const string &widget_label, const string &tooltip
+    );
     void process_gui_load_dialog();
     void process_gui_new_dialog();
     void process_gui_menu_bar();
@@ -1122,6 +1155,11 @@ private:
     void process_gui_panel_layout();
     void process_gui_panel_main();
     void process_gui_panel_mission();
+    void process_gui_panel_mission_fail(bool* day_duration_needs_update);
+    void process_gui_panel_mission_goal_be();
+    void process_gui_panel_mission_goal_ct();
+    void process_gui_panel_mission_goal_gte();
+    void process_gui_panel_mission_grading();
     void process_gui_panel_mob();
     void process_gui_panel_mobs();
     void process_gui_panel_path_link();

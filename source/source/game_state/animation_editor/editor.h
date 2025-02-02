@@ -335,7 +335,11 @@ private:
     void process_gui_new_dialog();
     void process_gui_options_dialog();
     void process_gui_panel_animation();
+    void process_gui_panel_animation_data();
+    void process_gui_panel_animation_header();
     void process_gui_panel_body_part();
+    void process_gui_panel_frame(frame* frame_ptr);
+    void process_gui_panel_frame_header(frame* frame_ptr);
     void process_gui_panel_info();
     void process_gui_panel_main();
     void process_gui_panel_options();

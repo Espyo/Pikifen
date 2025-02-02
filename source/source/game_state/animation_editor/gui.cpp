@@ -846,7 +846,6 @@ void animation_editor::process_gui_options_dialog() {
 
 /**
  * @brief Processes the Dear ImGui animation control panel for this frame.
- *
  */
 void animation_editor::process_gui_panel_animation() {
     ImGui::BeginChild("animation");
@@ -858,7 +857,109 @@ void animation_editor::process_gui_panel_animation() {
     
     //Panel title text.
     panel_title("ANIMATIONS");
+
+    process_gui_panel_animation_header();
     
+    if(cur_anim_i.cur_anim) {
+        
+        //Animation data node.
+        if(saveable_tree_node("animation", "Animation data")) {
+            process_gui_panel_animation_data();
+            ImGui::TreePop();
+        }
+        
+        //Frames node.
+        ImGui::Spacer();
+        if(saveable_tree_node("animation", "Frames")) {
+            frame* frame_ptr = nullptr;
+            if(
+                cur_anim_i.cur_frame_idx == INVALID &&
+                !cur_anim_i.cur_anim->frames.empty()
+            ) {
+                cur_anim_i.cur_frame_idx = 0;
+                cur_anim_i.cur_frame_time = 0.0f;
+            }
+            if(cur_anim_i.valid_frame()) {
+                frame_ptr =
+                    &(cur_anim_i.cur_anim->frames[cur_anim_i.cur_frame_idx]);
+            }
+
+            process_gui_panel_frame_header(frame_ptr);
+            if(frame_ptr) {
+                process_gui_panel_frame(frame_ptr);
+            }
+            
+            ImGui::TreePop();
+        }
+    }
+    
+    ImGui::EndChild();
+}
+
+
+/**
+ * @brief Processes the Dear ImGui animation control panel's animation
+ * data for this frame.
+ */
+void animation_editor::process_gui_panel_animation_data() {
+    //Loop frame value.
+    int loop_frame = (int) cur_anim_i.cur_anim->loop_frame + 1;
+    if(
+        ImGui::DragInt(
+            "Loop frame", &loop_frame, 0.1f, 1,
+            cur_anim_i.cur_anim->frames.empty() ?
+            1 :
+            (int) cur_anim_i.cur_anim->frames.size()
+        )
+    ) {
+        changes_mgr.mark_as_changed();
+    }
+    set_tooltip(
+        "The animation loops back to this frame when it "
+        "reaches the last one.",
+        "", WIDGET_EXPLANATION_DRAG
+    );
+    loop_frame =
+        clamp(
+            loop_frame, 1,
+            cur_anim_i.cur_anim->frames.empty() ?
+            1 :
+            cur_anim_i.cur_anim->frames.size()
+        );
+    cur_anim_i.cur_anim->loop_frame = loop_frame - 1;
+    
+    //Hit rate slider.
+    int hit_rate = cur_anim_i.cur_anim->hit_rate;
+    if(ImGui::SliderInt("Hit rate", &hit_rate, 0, 100)) {
+        changes_mgr.mark_as_changed();
+        cur_anim_i.cur_anim->hit_rate = hit_rate;
+    }
+    set_tooltip(
+        "If this attack can knock back Pikmin, this indicates "
+        "the chance that it will hit.\n"
+        "0 means it will always miss, 50 means it will hit "
+        "half the time, etc.",
+        "", WIDGET_EXPLANATION_SLIDER
+    );
+    
+    //Animation information text.
+    ImGui::TextDisabled("(Animation info)");
+    string anim_info_str =
+        "Total duration: " + f2s(cur_anim_i.cur_anim->get_duration()) + "s";
+    if(cur_anim_i.cur_anim->loop_frame != 0) {
+        anim_info_str +=
+            "\nLoop segment duration: " +
+            f2s(cur_anim_i.cur_anim->get_loop_duration()) + "s";
+    }
+    set_tooltip(anim_info_str);
+}
+
+
+/**
+ * @brief Processes the Dear ImGui animation control panel's animation
+ * header for this frame.
+ */
+void animation_editor::process_gui_panel_animation_header() {
     //Current animation text.
     size_t cur_anim_idx = INVALID;
     if(cur_anim_i.cur_anim) {
@@ -1057,408 +1158,7 @@ void animation_editor::process_gui_panel_animation() {
         if(input_popup("renameAnim", "New name:", &rename_anim_name)) {
             rename_animation(cur_anim_i.cur_anim, rename_anim_name);
         }
-        
-        //Animation data node.
-        if(saveable_tree_node("animation", "Animation data")) {
-        
-            //Loop frame value.
-            int loop_frame = (int) cur_anim_i.cur_anim->loop_frame + 1;
-            if(
-                ImGui::DragInt(
-                    "Loop frame", &loop_frame, 0.1f, 1,
-                    cur_anim_i.cur_anim->frames.empty() ?
-                    1 :
-                    (int) cur_anim_i.cur_anim->frames.size()
-                )
-            ) {
-                changes_mgr.mark_as_changed();
-            }
-            set_tooltip(
-                "The animation loops back to this frame when it "
-                "reaches the last one.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            loop_frame =
-                clamp(
-                    loop_frame, 1,
-                    cur_anim_i.cur_anim->frames.empty() ?
-                    1 :
-                    cur_anim_i.cur_anim->frames.size()
-                );
-            cur_anim_i.cur_anim->loop_frame = loop_frame - 1;
-            
-            //Hit rate slider.
-            int hit_rate = cur_anim_i.cur_anim->hit_rate;
-            if(ImGui::SliderInt("Hit rate", &hit_rate, 0, 100)) {
-                changes_mgr.mark_as_changed();
-                cur_anim_i.cur_anim->hit_rate = hit_rate;
-            }
-            set_tooltip(
-                "If this attack can knock back Pikmin, this indicates "
-                "the chance that it will hit.\n"
-                "0 means it will always miss, 50 means it will hit "
-                "half the time, etc.",
-                "", WIDGET_EXPLANATION_SLIDER
-            );
-            
-            //Animation information text.
-            ImGui::TextDisabled("(Animation info)");
-            string anim_info_str =
-                "Total duration: " + f2s(cur_anim_i.cur_anim->get_duration()) + "s";
-            if(cur_anim_i.cur_anim->loop_frame != 0) {
-                anim_info_str +=
-                    "\nLoop segment duration: " +
-                    f2s(cur_anim_i.cur_anim->get_loop_duration()) + "s";
-            }
-            set_tooltip(anim_info_str);
-            
-            ImGui::TreePop();
-        }
-        
-        //Frame list node.
-        ImGui::Spacer();
-        if(saveable_tree_node("animation", "Frame list")) {
-        
-            frame* frame_ptr = nullptr;
-            if(
-                cur_anim_i.cur_frame_idx == INVALID &&
-                !cur_anim_i.cur_anim->frames.empty()
-            ) {
-                cur_anim_i.cur_frame_idx = 0;
-                cur_anim_i.cur_frame_time = 0.0f;
-            }
-            if(cur_anim_i.valid_frame()) {
-                frame_ptr =
-                    &(cur_anim_i.cur_anim->frames[cur_anim_i.cur_frame_idx]);
-            }
-            
-            //Current frame text.
-            ImGui::Text(
-                "Current frame: %s / %i",
-                frame_ptr ? i2s(cur_anim_i.cur_frame_idx + 1).c_str() : "--",
-                (int) cur_anim_i.cur_anim->frames.size()
-            );
-            
-            if(frame_ptr) {
-                //Play/pause button.
-                if(
-                    ImGui::ImageButton(
-                        "playButton",
-                        editor_icons[EDITOR_ICON_PLAY_PAUSE],
-                        ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
-                    )
-                ) {
-                    play_animation_cmd(1.0f);
-                }
-                set_tooltip(
-                    "Play or pause the animation.\n"
-                    "Hold Shift to start from the beginning.",
-                    "Spacebar"
-                );
-                
-                //Previous frame button.
-                ImGui::SameLine();
-                if(
-                    ImGui::ImageButton(
-                        "prevFrameButton",
-                        editor_icons[EDITOR_ICON_PREVIOUS],
-                        ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
-                    )
-                ) {
-                    anim_playing = false;
-                    if(!cur_anim_i.cur_anim->frames.empty()) {
-                        if(cur_anim_i.cur_frame_idx == INVALID) {
-                            cur_anim_i.cur_frame_idx = 0;
-                        } else if(cur_anim_i.cur_frame_idx == 0) {
-                            cur_anim_i.cur_frame_idx =
-                                cur_anim_i.cur_anim->frames.size() - 1;
-                        } else {
-                            cur_anim_i.cur_frame_idx--;
-                        }
-                        cur_anim_i.cur_frame_time = 0.0f;
-                    }
-                }
-                set_tooltip(
-                    "Previous frame."
-                );
-                
-                //Next frame button.
-                ImGui::SameLine();
-                if(
-                    ImGui::ImageButton(
-                        "nextFrameButton",
-                        editor_icons[EDITOR_ICON_NEXT],
-                        ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
-                    )
-                ) {
-                    anim_playing = false;
-                    if(!cur_anim_i.cur_anim->frames.empty()) {
-                        if(
-                            cur_anim_i.cur_frame_idx ==
-                            cur_anim_i.cur_anim->frames.size() - 1 ||
-                            cur_anim_i.cur_frame_idx == INVALID
-                        ) {
-                            cur_anim_i.cur_frame_idx = 0;
-                        } else {
-                            cur_anim_i.cur_frame_idx++;
-                        }
-                        cur_anim_i.cur_frame_time = 0.0f;
-                    }
-                }
-                set_tooltip(
-                    "Next frame."
-                );
-                
-                ImGui::SameLine();
-            }
-            
-            //Add frame button.
-            if(
-                ImGui::ImageButton(
-                    "addFrameButton",
-                    editor_icons[EDITOR_ICON_ADD],
-                    ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
-                )
-            ) {
-                if(
-                    cur_anim_i.cur_frame_idx <
-                    cur_anim_i.cur_anim->loop_frame
-                ) {
-                    //Let the loop frame stay the same.
-                    cur_anim_i.cur_anim->loop_frame++;
-                }
-                anim_playing = false;
-                if(cur_anim_i.cur_frame_idx != INVALID) {
-                    cur_anim_i.cur_frame_idx++;
-                    cur_anim_i.cur_frame_time = 0.0f;
-                    cur_anim_i.cur_anim->frames.insert(
-                        cur_anim_i.cur_anim->frames.begin() +
-                        cur_anim_i.cur_frame_idx,
-                        frame(
-                            cur_anim_i.cur_anim->frames[
-                                cur_anim_i.cur_frame_idx - 1
-                            ]
-                        )
-                    );
-                } else {
-                    cur_anim_i.cur_anim->frames.push_back(frame());
-                    cur_anim_i.cur_frame_idx = 0;
-                    cur_anim_i.cur_frame_time = 0.0f;
-                    set_best_frame_sprite();
-                }
-                frame_ptr =
-                    &(cur_anim_i.cur_anim->frames[cur_anim_i.cur_frame_idx]);
-                changes_mgr.mark_as_changed();
-                set_status(
-                    "Added frame #" + i2s(cur_anim_i.cur_frame_idx + 1) + "."
-                );
-            }
-            set_tooltip(
-                "Add a new frame after the curret one, by copying "
-                "data from the current one."
-            );
-            
-            if(frame_ptr) {
-            
-                //Delete frame button.
-                ImGui::SameLine();
-                if(
-                    ImGui::ImageButton(
-                        "delFrameButton",
-                        editor_icons[EDITOR_ICON_REMOVE],
-                        ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
-                    )
-                ) {
-                    size_t deleted_frame_idx = cur_anim_i.cur_frame_idx;
-                    if(cur_anim_i.cur_frame_idx != INVALID) {
-                        cur_anim_i.cur_anim->delete_frame(
-                            cur_anim_i.cur_frame_idx
-                        );
-                    }
-                    if(cur_anim_i.cur_anim->frames.empty()) {
-                        cur_anim_i.cur_frame_idx = INVALID;
-                        frame_ptr = nullptr;
-                    } else if(
-                        cur_anim_i.cur_frame_idx >=
-                        cur_anim_i.cur_anim->frames.size()
-                    ) {
-                        cur_anim_i.cur_frame_idx =
-                            cur_anim_i.cur_anim->frames.size() - 1;
-                        frame_ptr =
-                            &(
-                                cur_anim_i.cur_anim->frames[
-                                    cur_anim_i.cur_frame_idx
-                                ]
-                            );
-                    }
-                    anim_playing = false;
-                    cur_anim_i.cur_frame_time = 0.0f;
-                    changes_mgr.mark_as_changed();
-                    set_status(
-                        "Deleted frame #" + i2s(deleted_frame_idx + 1) + "."
-                    );
-                }
-                set_tooltip(
-                    "Delete the current frame."
-                );
-                
-            }
-            
-            if(frame_ptr) {
-            
-                //Sprite combobox.
-                vector<string> sprite_names;
-                for(size_t s = 0; s < db.sprites.size(); s++) {
-                    sprite_names.push_back(db.sprites[s]->name);
-                }
-                if(
-                    ImGui::Combo(
-                        "Sprite", &frame_ptr->sprite_name, sprite_names, 15
-                    )
-                ) {
-                    frame_ptr->sprite_idx =
-                        db.find_sprite(frame_ptr->sprite_name);
-                    frame_ptr->sprite_ptr =
-                        db.sprites[frame_ptr->sprite_idx];
-                    changes_mgr.mark_as_changed();
-                }
-                set_tooltip(
-                    "The sprite to use for this frame."
-                );
-                
-                //Duration value.
-                if(
-                    ImGui::DragFloat(
-                        "Duration", &frame_ptr->duration, 0.0005, 0.0f, FLT_MAX
-                    )
-                ) {
-                    cur_anim_i.cur_frame_time = 0.0f;
-                    changes_mgr.mark_as_changed();
-                }
-                set_tooltip(
-                    "How long this frame lasts for, in seconds.",
-                    "", WIDGET_EXPLANATION_DRAG
-                );
-                
-                //Interpolate checkbox.
-                if(
-                    ImGui::Checkbox("Interpolate", &frame_ptr->interpolate)
-                ) {
-                    changes_mgr.mark_as_changed();
-                }
-                set_tooltip(
-                    "If true, the transformation data (sprite translation,\n"
-                    "sprite rotation, etc.) on this frame will smoothly\n"
-                    "interpolate until it meets the transformation\n"
-                    "data of the next frame.\n"
-                    "This does not affect the bitmap or hitboxes."
-                );
-                
-                //Signal checkbox.
-                bool use_signal = (frame_ptr->signal != INVALID);
-                if(ImGui::Checkbox("Signal", &use_signal)) {
-                    if(use_signal) {
-                        frame_ptr->signal = 0;
-                    } else {
-                        frame_ptr->signal = INVALID;
-                    }
-                    changes_mgr.mark_as_changed();
-                }
-                set_tooltip(
-                    "Whether a signal event should be sent to the script\n"
-                    "when this frame starts."
-                );
-                
-                //Signal value.
-                if(use_signal) {
-                    ImGui::SameLine();
-                    int f_signal = (int) frame_ptr->signal;
-                    if(
-                        ImGui::DragInt("##signal", &f_signal, 0.1, 0, INT_MAX)
-                    ) {
-                        changes_mgr.mark_as_changed();
-                        frame_ptr->signal = f_signal;
-                    }
-                    set_tooltip(
-                        "Number of the signal.",
-                        "", WIDGET_EXPLANATION_DRAG
-                    );
-                }
-                
-                if(loaded_mob_type) {
-                
-                    //Sound checkbox.
-                    bool use_sound = (!frame_ptr->sound.empty());
-                    if(ImGui::Checkbox("Sound", &use_sound)) {
-                        if(use_sound) {
-                            frame_ptr->sound = NONE_OPTION;
-                        } else {
-                            frame_ptr->sound.clear();
-                        }
-                        changes_mgr.mark_as_changed();
-                        db.fill_sound_idx_caches(loaded_mob_type);
-                    }
-                    set_tooltip(
-                        "Whether a sound should play when this frame starts."
-                    );
-                    
-                    if(use_sound) {
-                    
-                        //Sound combobox.
-                        ImGui::SameLine();
-                        vector<string> sounds = { NONE_OPTION };
-                        for(
-                            size_t s = 0;
-                            s < loaded_mob_type->sounds.size();
-                            s++
-                        ) {
-                            sounds.push_back(loaded_mob_type->sounds[s].name);
-                        }
-                        if(
-                            ImGui::Combo(
-                                "##sound",
-                                &frame_ptr->sound,
-                                sounds,
-                                15
-                            )
-                        ) {
-                            db.fill_sound_idx_caches(loaded_mob_type);
-                            changes_mgr.mark_as_changed();
-                        }
-                        set_tooltip(
-                            "Name of the sound in the object's data."
-                        );
-                    }
-                    
-                }
-                
-                //Apply duration to all button.
-                ImGui::Spacer();
-                if(ImGui::Button("Apply duration to all frames")) {
-                    float d =
-                        cur_anim_i.cur_anim->frames[
-                            cur_anim_i.cur_frame_idx
-                        ].duration;
-                    for(
-                        size_t i = 0;
-                        i < cur_anim_i.cur_anim->frames.size();
-                        i++
-                    ) {
-                        cur_anim_i.cur_anim->frames[i].duration = d;
-                    }
-                    cur_anim_i.cur_frame_time = 0.0f;
-                    changes_mgr.mark_as_changed();
-                    set_status(
-                        "Applied the duration " + f2s(d) + " to all frames."
-                    );
-                }
-            }
-            
-            ImGui::TreePop();
-        }
     }
-    
-    ImGui::EndChild();
 }
 
 
@@ -1644,6 +1344,343 @@ void animation_editor::process_gui_panel_body_part() {
     }
     
     ImGui::EndChild();
+}
+
+
+/**
+ * @brief Processes the Dear ImGui animation control panel's frame info for this
+ * frame.
+ * 
+ * @param frame_ptr Pointer to the currently selected frame.
+ */
+void animation_editor::process_gui_panel_frame(frame* frame_ptr) {
+    //Sprite combobox.
+    vector<string> sprite_names;
+    for(size_t s = 0; s < db.sprites.size(); s++) {
+        sprite_names.push_back(db.sprites[s]->name);
+    }
+    if(
+        ImGui::Combo(
+            "Sprite", &frame_ptr->sprite_name, sprite_names, 15
+        )
+    ) {
+        frame_ptr->sprite_idx =
+            db.find_sprite(frame_ptr->sprite_name);
+        frame_ptr->sprite_ptr =
+            db.sprites[frame_ptr->sprite_idx];
+        changes_mgr.mark_as_changed();
+    }
+    set_tooltip(
+        "The sprite to use for this frame."
+    );
+    
+    //Duration value.
+    if(
+        ImGui::DragFloat(
+            "Duration", &frame_ptr->duration, 0.0005, 0.0f, FLT_MAX
+        )
+    ) {
+        cur_anim_i.cur_frame_time = 0.0f;
+        changes_mgr.mark_as_changed();
+    }
+    set_tooltip(
+        "How long this frame lasts for, in seconds.",
+        "", WIDGET_EXPLANATION_DRAG
+    );
+    
+    //Interpolate checkbox.
+    if(
+        ImGui::Checkbox("Interpolate", &frame_ptr->interpolate)
+    ) {
+        changes_mgr.mark_as_changed();
+    }
+    set_tooltip(
+        "If true, the transformation data (sprite translation,\n"
+        "sprite rotation, etc.) on this frame will smoothly\n"
+        "interpolate until it meets the transformation\n"
+        "data of the next frame.\n"
+        "This does not affect the bitmap or hitboxes."
+    );
+    
+    //Signal checkbox.
+    bool use_signal = (frame_ptr->signal != INVALID);
+    if(ImGui::Checkbox("Signal", &use_signal)) {
+        if(use_signal) {
+            frame_ptr->signal = 0;
+        } else {
+            frame_ptr->signal = INVALID;
+        }
+        changes_mgr.mark_as_changed();
+    }
+    set_tooltip(
+        "Whether a signal event should be sent to the script\n"
+        "when this frame starts."
+    );
+    
+    //Signal value.
+    if(use_signal) {
+        ImGui::SameLine();
+        int f_signal = (int) frame_ptr->signal;
+        if(
+            ImGui::DragInt("##signal", &f_signal, 0.1, 0, INT_MAX)
+        ) {
+            changes_mgr.mark_as_changed();
+            frame_ptr->signal = f_signal;
+        }
+        set_tooltip(
+            "Number of the signal.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
+    }
+    
+    if(loaded_mob_type) {
+    
+        //Sound checkbox.
+        bool use_sound = (!frame_ptr->sound.empty());
+        if(ImGui::Checkbox("Sound", &use_sound)) {
+            if(use_sound) {
+                frame_ptr->sound = NONE_OPTION;
+            } else {
+                frame_ptr->sound.clear();
+            }
+            changes_mgr.mark_as_changed();
+            db.fill_sound_idx_caches(loaded_mob_type);
+        }
+        set_tooltip(
+            "Whether a sound should play when this frame starts."
+        );
+        
+        if(use_sound) {
+        
+            //Sound combobox.
+            ImGui::SameLine();
+            vector<string> sounds = { NONE_OPTION };
+            for(
+                size_t s = 0;
+                s < loaded_mob_type->sounds.size();
+                s++
+            ) {
+                sounds.push_back(loaded_mob_type->sounds[s].name);
+            }
+            if(
+                ImGui::Combo(
+                    "##sound",
+                    &frame_ptr->sound,
+                    sounds,
+                    15
+                )
+            ) {
+                db.fill_sound_idx_caches(loaded_mob_type);
+                changes_mgr.mark_as_changed();
+            }
+            set_tooltip(
+                "Name of the sound in the object's data."
+            );
+        }
+        
+    }
+    
+    //Apply duration to all button.
+    ImGui::Spacer();
+    if(ImGui::Button("Apply duration to all frames")) {
+        float d =
+            cur_anim_i.cur_anim->frames[
+                cur_anim_i.cur_frame_idx
+            ].duration;
+        for(
+            size_t i = 0;
+            i < cur_anim_i.cur_anim->frames.size();
+            i++
+        ) {
+            cur_anim_i.cur_anim->frames[i].duration = d;
+        }
+        cur_anim_i.cur_frame_time = 0.0f;
+        changes_mgr.mark_as_changed();
+        set_status(
+            "Applied the duration " + f2s(d) + " to all frames."
+        );
+    }
+}
+
+
+/**
+ * @brief Processes the Dear ImGui animation control panel's frame
+ * header for this frame.
+ */
+void animation_editor::process_gui_panel_frame_header(
+    frame* frame_ptr
+) {
+    //Current frame text.
+    ImGui::Text(
+        "Current frame: %s / %i",
+        frame_ptr ? i2s(cur_anim_i.cur_frame_idx + 1).c_str() : "--",
+        (int) cur_anim_i.cur_anim->frames.size()
+    );
+    
+    if(frame_ptr) {
+        //Play/pause button.
+        if(
+            ImGui::ImageButton(
+                "playButton",
+                editor_icons[EDITOR_ICON_PLAY_PAUSE],
+                ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
+            )
+        ) {
+            play_animation_cmd(1.0f);
+        }
+        set_tooltip(
+            "Play or pause the animation.\n"
+            "Hold Shift to start from the beginning.",
+            "Spacebar"
+        );
+        
+        //Previous frame button.
+        ImGui::SameLine();
+        if(
+            ImGui::ImageButton(
+                "prevFrameButton",
+                editor_icons[EDITOR_ICON_PREVIOUS],
+                ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
+            )
+        ) {
+            anim_playing = false;
+            if(!cur_anim_i.cur_anim->frames.empty()) {
+                if(cur_anim_i.cur_frame_idx == INVALID) {
+                    cur_anim_i.cur_frame_idx = 0;
+                } else if(cur_anim_i.cur_frame_idx == 0) {
+                    cur_anim_i.cur_frame_idx =
+                        cur_anim_i.cur_anim->frames.size() - 1;
+                } else {
+                    cur_anim_i.cur_frame_idx--;
+                }
+                cur_anim_i.cur_frame_time = 0.0f;
+            }
+        }
+        set_tooltip(
+            "Previous frame."
+        );
+        
+        //Next frame button.
+        ImGui::SameLine();
+        if(
+            ImGui::ImageButton(
+                "nextFrameButton",
+                editor_icons[EDITOR_ICON_NEXT],
+                ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
+            )
+        ) {
+            anim_playing = false;
+            if(!cur_anim_i.cur_anim->frames.empty()) {
+                if(
+                    cur_anim_i.cur_frame_idx ==
+                    cur_anim_i.cur_anim->frames.size() - 1 ||
+                    cur_anim_i.cur_frame_idx == INVALID
+                ) {
+                    cur_anim_i.cur_frame_idx = 0;
+                } else {
+                    cur_anim_i.cur_frame_idx++;
+                }
+                cur_anim_i.cur_frame_time = 0.0f;
+            }
+        }
+        set_tooltip(
+            "Next frame."
+        );
+        
+        ImGui::SameLine();
+    }
+    
+    //Add frame button.
+    if(
+        ImGui::ImageButton(
+            "addFrameButton",
+            editor_icons[EDITOR_ICON_ADD],
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
+        )
+    ) {
+        if(
+            cur_anim_i.cur_frame_idx <
+            cur_anim_i.cur_anim->loop_frame
+        ) {
+            //Let the loop frame stay the same.
+            cur_anim_i.cur_anim->loop_frame++;
+        }
+        anim_playing = false;
+        if(cur_anim_i.cur_frame_idx != INVALID) {
+            cur_anim_i.cur_frame_idx++;
+            cur_anim_i.cur_frame_time = 0.0f;
+            cur_anim_i.cur_anim->frames.insert(
+                cur_anim_i.cur_anim->frames.begin() +
+                cur_anim_i.cur_frame_idx,
+                frame(
+                    cur_anim_i.cur_anim->frames[
+                        cur_anim_i.cur_frame_idx - 1
+                    ]
+                )
+            );
+        } else {
+            cur_anim_i.cur_anim->frames.push_back(frame());
+            cur_anim_i.cur_frame_idx = 0;
+            cur_anim_i.cur_frame_time = 0.0f;
+            set_best_frame_sprite();
+        }
+        frame_ptr =
+            &(cur_anim_i.cur_anim->frames[cur_anim_i.cur_frame_idx]);
+        changes_mgr.mark_as_changed();
+        set_status(
+            "Added frame #" + i2s(cur_anim_i.cur_frame_idx + 1) + "."
+        );
+    }
+    set_tooltip(
+        "Add a new frame after the curret one, by copying "
+        "data from the current one."
+    );
+    
+    if(frame_ptr) {
+    
+        //Delete frame button.
+        ImGui::SameLine();
+        if(
+            ImGui::ImageButton(
+                "delFrameButton",
+                editor_icons[EDITOR_ICON_REMOVE],
+                ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
+            )
+        ) {
+            size_t deleted_frame_idx = cur_anim_i.cur_frame_idx;
+            if(cur_anim_i.cur_frame_idx != INVALID) {
+                cur_anim_i.cur_anim->delete_frame(
+                    cur_anim_i.cur_frame_idx
+                );
+            }
+            if(cur_anim_i.cur_anim->frames.empty()) {
+                cur_anim_i.cur_frame_idx = INVALID;
+                frame_ptr = nullptr;
+            } else if(
+                cur_anim_i.cur_frame_idx >=
+                cur_anim_i.cur_anim->frames.size()
+            ) {
+                cur_anim_i.cur_frame_idx =
+                    cur_anim_i.cur_anim->frames.size() - 1;
+                frame_ptr =
+                    &(
+                        cur_anim_i.cur_anim->frames[
+                            cur_anim_i.cur_frame_idx
+                        ]
+                    );
+            }
+            anim_playing = false;
+            cur_anim_i.cur_frame_time = 0.0f;
+            changes_mgr.mark_as_changed();
+            set_status(
+                "Deleted frame #" + i2s(deleted_frame_idx + 1) + "."
+            );
+        }
+        set_tooltip(
+            "Delete the current frame."
+        );
+
+    }
 }
 
 

@@ -674,9 +674,141 @@ string area_editor::find_good_first_texture() {
  * When it's done, sets the appropriate problem-related variables.
  */
 void area_editor::find_problems() {
+    //First, clear any problem info.
     clear_problems();
     
-    //Check intersecting edges.
+    //Now, check for each of the clauses.
+    find_problems_intersecting_edge();
+    if(problem_type != EPT_NONE_YET) return;
+    
+    find_problems_overlapping_vertex();
+    if(problem_type != EPT_NONE_YET) return;
+    
+    find_problems_non_simple_sector();
+    if(problem_type != EPT_NONE_YET) return;
+    
+    find_problems_lone_edge();
+    if(problem_type != EPT_NONE_YET) return;
+    
+    find_problems_missing_leader();
+    if(problem_type != EPT_NONE_YET) return;
+    
+    find_problems_typeless_mob();
+    if(problem_type != EPT_NONE_YET) return;
+    
+    find_problems_oob_mob();
+    if(problem_type != EPT_NONE_YET) return;
+    
+    find_problems_mob_inside_walls();
+    if(problem_type != EPT_NONE_YET) return;
+    
+    find_problems_mob_links_to_self();
+    if(problem_type != EPT_NONE_YET) return;
+    
+    find_problems_mob_stored_in_loop();
+    if(problem_type != EPT_NONE_YET) return;
+    
+    find_problems_pikmin_over_limit();
+    if(problem_type != EPT_NONE_YET) return;
+    
+    find_problems_bridge_path();
+    if(problem_type != EPT_NONE_YET) return;
+    
+    find_problems_oob_path_stop();
+    if(problem_type != EPT_NONE_YET) return;
+    
+    find_problems_lone_path_stop();
+    if(problem_type != EPT_NONE_YET) return;
+    
+    find_problems_path_stop_on_link();
+    if(problem_type != EPT_NONE_YET) return;
+    
+    find_problems_missing_texture();
+    if(problem_type != EPT_NONE_YET) return;
+    
+    find_problems_unknown_texture();
+    if(problem_type != EPT_NONE_YET) return;
+    
+    find_problems_path_stops_intersecting();
+    if(problem_type != EPT_NONE_YET) return;
+    
+    find_problems_unknown_tree_shadow();
+    if(problem_type != EPT_NONE_YET) return;
+    
+    find_problems_no_goal_mob();
+    if(problem_type != EPT_NONE_YET) return;
+    
+    find_problems_no_score_criteria();
+    if(problem_type != EPT_NONE_YET) return;
+    
+    //All good!
+    problem_type = EPT_NONE;
+    problem_title = "None!";
+    problem_description.clear();
+}
+
+
+/**
+ * @brief Checks for any pile-to-bridge paths blocked by said bridge in the
+ * area, and fills the problem info if so.
+ */
+void area_editor::find_problems_bridge_path() {
+    for(size_t m = 0; m < game.cur_area_data->mob_generators.size(); m++) {
+        mob_gen* m_ptr = game.cur_area_data->mob_generators[m];
+        if(!m_ptr->type) continue;
+        if(m_ptr->type->category->id != MOB_CATEGORY_PILES) {
+            continue;
+        }
+        
+        for(size_t l = 0; l < m_ptr->links.size(); l++) {
+            if(!m_ptr->links[l]->type) continue;
+            if(m_ptr->links[l]->type->category->id != MOB_CATEGORY_BRIDGES) {
+                continue;
+            }
+            
+            path_follow_settings settings;
+            settings.flags =
+                PATH_FOLLOW_FLAG_SCRIPT_USE |
+                PATH_FOLLOW_FLAG_LIGHT_LOAD |
+                PATH_FOLLOW_FLAG_AIRBORNE;
+            vector<path_stop*> path;
+            get_path(
+                m_ptr->pos, m_ptr->links[l]->pos,
+                settings, path,
+                nullptr, nullptr, nullptr
+            );
+            
+            for(size_t s = 1; s < path.size(); s++) {
+                if(
+                    circle_intersects_line_seg(
+                        m_ptr->links[l]->pos,
+                        get_mob_gen_radius(m_ptr->links[l]),
+                        path[s - 1]->pos,
+                        path[s]->pos
+                    )
+                ) {
+                    problem_mob_ptr = m_ptr->links[l];
+                    problem_type = EPT_PILE_BRIDGE_PATH;
+                    problem_title =
+                        "Bridge is blocking the path to itself!";
+                    problem_description =
+                        "The path Pikmin must take from a pile to this "
+                        "bridge is blocked by the unbuilt bridge object "
+                        "itself. Move the path stop to some place a bit "
+                        "before the bridge object.";
+                    return;
+                }
+            }
+        }
+    }
+}
+
+
+/**
+ * @brief Checks for any intersecting edges in the area, and fills the problem
+ * info if so.
+ */
+void area_editor::find_problems_intersecting_edge() {
     vector<edge_intersection> intersections = get_intersecting_edges();
     if(!intersections.empty()) {
         float r;
@@ -711,72 +843,65 @@ void area_editor::find_problems() {
                 floor(ei_ptr->e1->vertexes[0]->y + sin(a) * r *
                       d.to_float())
             ) + "). Edges should never cross each other.";
-        return;
     }
-    
-    //Check overlapping vertexes.
-    for(size_t v = 0; v < game.cur_area_data->vertexes.size(); v++) {
-        vertex* v1_ptr = game.cur_area_data->vertexes[v];
-        
-        for(size_t v2 = v + 1; v2 < game.cur_area_data->vertexes.size(); v2++) {
-            vertex* v2_ptr = game.cur_area_data->vertexes[v2];
-            
-            if(v1_ptr->x == v2_ptr->x && v1_ptr->y == v2_ptr->y) {
-                problem_vertex_ptr = v1_ptr;
-                problem_type = EPT_OVERLAPPING_VERTEXES;
-                problem_title = "Overlapping vertexes!";
-                problem_description =
-                    "They are very close together at (" +
-                    f2s(problem_vertex_ptr->x) + "," +
-                    f2s(problem_vertex_ptr->y) + "), and should likely "
-                    "be merged together.";
-                return;
-            }
-        }
-    }
-    
-    //Check non-simple sectors.
-    if(!game.cur_area_data->problems.non_simples.empty()) {
-        problem_type = EPT_BAD_SECTOR;
-        problem_title = "Non-simple sector!";
-        switch(game.cur_area_data->problems.non_simples.begin()->second) {
-        case TRIANGULATION_ERROR_LONE_EDGES: {
-            problem_description =
-                "It contains lone edges. Try clearing them up.";
-            break;
-        } case TRIANGULATION_ERROR_NOT_CLOSED: {
-            problem_description =
-                "It is not closed. Try closing it.";
-            break;
-        } case TRIANGULATION_ERROR_NO_EARS: {
-            problem_description =
-                "There's been a triangulation error. Try undoing or "
-                "deleting the sector, and then rebuild it. Make sure there "
-                "are no gaps, and keep it simple.";
-            break;
-        } case TRIANGULATION_ERROR_INVALID_ARGS: {
-            problem_description =
-                "An unknown error has occured with the sector.";
-            break;
-        } case TRIANGULATION_ERROR_NONE: {
-            problem_description.clear();
-            break;
-        }
-        }
-        return;
-    }
-    
-    //Check lone edges.
+}
+
+
+/**
+ * @brief Checks for any lone edges in the area, and fills the problem
+ * info if so.
+ */
+void area_editor::find_problems_lone_edge() {
     if(!game.cur_area_data->problems.lone_edges.empty()) {
         problem_type = EPT_LONE_EDGE;
         problem_title = "Lone edge!";
         problem_description =
             "Likely leftover of something that went wrong. "
             "You probably want to drag one vertex into the other.";
-        return;
     }
-    
-    //Check for the existence of a leader object.
+}
+
+
+/**
+ * @brief Checks for any lone path stops in the area, and fills the problem
+ * info if so.
+ */
+void area_editor::find_problems_lone_path_stop() {
+    for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
+        path_stop* s_ptr = game.cur_area_data->path_stops[s];
+        bool has_link = false;
+        
+        if(!s_ptr->links.empty()) continue; //Duh, this means it has links.
+        
+        for(size_t s2 = 0; s2 < game.cur_area_data->path_stops.size(); s2++) {
+            path_stop* s2_ptr = game.cur_area_data->path_stops[s2];
+            if(s2_ptr == s_ptr) continue;
+            
+            if(s2_ptr->get_link(s_ptr)) {
+                has_link = true;
+                break;
+            }
+            
+            if(has_link) break;
+        }
+        
+        if(!has_link) {
+            problem_path_stop_ptr = s_ptr;
+            problem_type = EPT_LONE_PATH_STOP;
+            problem_title = "Lone path stop!";
+            problem_description =
+                "Either connect it to another stop, or delete it.";
+            return;
+        }
+    }
+}
+
+
+/**
+ * @brief Checks for any missing leaders in the area, and fills the problem
+ * info if so.
+ */
+void area_editor::find_problems_missing_leader() {
     bool has_leader = false;
     for(size_t m = 0; m < game.cur_area_data->mob_generators.size(); m++) {
         if(
@@ -793,36 +918,39 @@ void area_editor::find_problems() {
         problem_title = "No leader!";
         problem_description =
             "You need at least one leader to actually play.";
-        return;
     }
-    
-    //Objects with no type.
-    for(size_t m = 0; m < game.cur_area_data->mob_generators.size(); m++) {
-        if(!game.cur_area_data->mob_generators[m]->type) {
-            problem_mob_ptr = game.cur_area_data->mob_generators[m];
-            problem_type = EPT_TYPELESS_MOB;
-            problem_title = "Mob with no type!";
+}
+
+
+/**
+ * @brief Checks for any missing texture in the area, and fills the problem
+ * info if so.
+ */
+void area_editor::find_problems_missing_texture() {
+    for(size_t s = 0; s < game.cur_area_data->sectors.size(); s++) {
+        sector* s_ptr = game.cur_area_data->sectors[s];
+        if(s_ptr->edges.empty()) continue;
+        if(s_ptr->is_bottomless_pit) continue;
+        if(
+            s_ptr->texture_info.file_name.empty() &&
+            !s_ptr->is_bottomless_pit && !s_ptr->fade
+        ) {
+            problem_sector_ptr = s_ptr;
+            problem_type = EPT_UNKNOWN_TEXTURE;
+            problem_title = "Sector with missing texture!";
             problem_description =
-                "It has an invalid category or type set. "
-                "Give it a proper type or delete it.";
+                "Give it a valid texture.";
             return;
         }
     }
-    
-    //Objects out of bounds.
-    for(size_t m = 0; m < game.cur_area_data->mob_generators.size(); m++) {
-        mob_gen* m_ptr = game.cur_area_data->mob_generators[m];
-        if(!get_sector(m_ptr->pos, nullptr, false)) {
-            problem_mob_ptr = m_ptr;
-            problem_type = EPT_MOB_OOB;
-            problem_title = "Mob out of bounds!";
-            problem_description =
-                "Move it to somewhere inside the area's geometry.";
-            return;
-        }
-    }
-    
-    //Objects inside walls.
+}
+
+
+/**
+ * @brief Checks for any mobs are inside walls in the area, and fills the
+ * problem info if so.
+ */
+void area_editor::find_problems_mob_inside_walls() {
     for(size_t m = 0; m < game.cur_area_data->mob_generators.size(); m++) {
         mob_gen* m_ptr = game.cur_area_data->mob_generators[m];
         if(!m_ptr->type) continue;
@@ -907,13 +1035,17 @@ void area_editor::find_problems() {
                         "Move it to somewhere where it has more space.";
                     return;
                 }
-                
             }
         }
-        
     }
-    
-    //Objects that link to themselves.
+}
+
+
+/**
+ * @brief Checks for any mob that links to itself in the area, and fills
+ * the problem info if so.
+ */
+void area_editor::find_problems_mob_links_to_self() {
     for(size_t m = 0; m < game.cur_area_data->mob_generators.size(); m++) {
         mob_gen* m_ptr = game.cur_area_data->mob_generators[m];
         for(size_t l = 0; l < m_ptr->links.size(); l++) {
@@ -929,8 +1061,14 @@ void area_editor::find_problems() {
             }
         }
     }
-    
-    //Objects stored inside other objects in a loop.
+}
+
+
+/**
+ * @brief Checks for any mobs stored in other mobs in a loop in the area,
+ * and fills the problem info if so.
+ */
+void area_editor::find_problems_mob_stored_in_loop() {
     for(size_t m = 0; m < game.cur_area_data->mob_generators.size(); m++) {
         mob_gen* m_ptr = game.cur_area_data->mob_generators[m];
         if(m_ptr->stored_inside == INVALID) continue;
@@ -956,76 +1094,126 @@ void area_editor::find_problems() {
             next_idx = next_ptr->stored_inside;
         }
     }
-    
-    //Over the limit of Pikmin.
-    size_t n_pikmin_mobs = 0;
-    for(size_t m = 0; m < game.cur_area_data->mob_generators.size(); m++) {
-        mob_gen* m_ptr = game.cur_area_data->mob_generators[m];
-        if(m_ptr->type->category->id == MOB_CATEGORY_PIKMIN) {
-            n_pikmin_mobs++;
-            if(n_pikmin_mobs > game.config.max_pikmin_in_field) {
-                problem_type = EPT_PIKMIN_OVER_LIMIT;
-                problem_title = "Over the Pikmin limit!";
-                problem_description =
-                    "There are more Pikmin in the area than the limit allows. "
-                    "This means some of them will not appear. Current limit: "
-                    + i2s(game.config.max_pikmin_in_field) + ".";
-                return;
-            }
+}
+
+
+/**
+ * @brief Checks for any missing mission goal mob in the area, and fills the
+ * problem info if so.
+ */
+void area_editor::find_problems_no_goal_mob() {
+    if(
+        game.cur_area_data->type == AREA_TYPE_MISSION &&
+        (
+            game.cur_area_data->mission.goal == MISSION_GOAL_COLLECT_TREASURE ||
+            game.cur_area_data->mission.goal == MISSION_GOAL_BATTLE_ENEMIES ||
+            game.cur_area_data->mission.goal == MISSION_GOAL_GET_TO_EXIT
+        )
+    ) {
+        if(get_mission_required_mob_count() == 0) {
+            problem_type = EPT_NO_GOAL_MOBS;
+            problem_title = "No mission goal mobs!";
+            problem_description =
+                "This mission's goal requires some mobs, yet there are none.";
+            return;
         }
     }
-    
-    //Path from pile to bridge is blocked by said bridge.
-    for(size_t m = 0; m < game.cur_area_data->mob_generators.size(); m++) {
-        mob_gen* m_ptr = game.cur_area_data->mob_generators[m];
-        if(!m_ptr->type) continue;
-        if(m_ptr->type->category->id != MOB_CATEGORY_PILES) {
-            continue;
+}
+
+
+/**
+ * @brief Checks for any missing mission score criterion in the area, and
+ * fills the problem info if so.
+ */
+void area_editor::find_problems_no_score_criteria() {
+    if(
+        game.cur_area_data->type == AREA_TYPE_MISSION &&
+        game.cur_area_data->mission.grading_mode == MISSION_GRADING_MODE_POINTS
+    ) {
+        bool has_any_criterion = false;
+        for(size_t c = 0; c < game.mission_score_criteria.size(); c++) {
+            if(
+                game.mission_score_criteria[c]->get_multiplier(
+                    &game.cur_area_data->mission
+                ) != 0
+            ) {
+                has_any_criterion = true;
+                break;
+            }
         }
-        
-        for(size_t l = 0; l < m_ptr->links.size(); l++) {
-            if(!m_ptr->links[l]->type) continue;
-            if(m_ptr->links[l]->type->category->id != MOB_CATEGORY_BRIDGES) {
-                continue;
-            }
-            
-            path_follow_settings settings;
-            settings.flags =
-                PATH_FOLLOW_FLAG_SCRIPT_USE |
-                PATH_FOLLOW_FLAG_LIGHT_LOAD |
-                PATH_FOLLOW_FLAG_AIRBORNE;
-            vector<path_stop*> path;
-            get_path(
-                m_ptr->pos, m_ptr->links[l]->pos,
-                settings, path,
-                nullptr, nullptr, nullptr
-            );
-            
-            for(size_t s = 1; s < path.size(); s++) {
-                if(
-                    circle_intersects_line_seg(
-                        m_ptr->links[l]->pos,
-                        get_mob_gen_radius(m_ptr->links[l]),
-                        path[s - 1]->pos,
-                        path[s]->pos
-                    )
-                ) {
-                    problem_mob_ptr = m_ptr->links[l];
-                    problem_type = EPT_PILE_BRIDGE_PATH;
-                    problem_title =
-                        "Bridge is blocking the path to itself!";
-                    problem_description =
-                        "The path Pikmin must take from a pile to this "
-                        "bridge is blocked by the unbuilt bridge object "
-                        "itself. Move the path stop to some place a bit "
-                        "before the bridge object.";
-                    return;
-                }
-            }
+        if(!has_any_criterion) {
+            problem_type = EPT_NO_SCORE_CRITERIA;
+            problem_title = "No active score criteria!";
+            problem_description =
+                "In this mission, the player is graded according to their "
+                "score. However, none of the score criteria are active, "
+                "so the player's score will always be 0.";
+            return;
         }
     }
-    
-    //Path stops out of bounds.
+}
+
+
+/**
+ * @brief Checks for any non-simple sectors in the area, and fills the problem
+ * info if so.
+ */
+void area_editor::find_problems_non_simple_sector() {
+    if(!game.cur_area_data->problems.non_simples.empty()) {
+        problem_type = EPT_BAD_SECTOR;
+        problem_title = "Non-simple sector!";
+        switch(game.cur_area_data->problems.non_simples.begin()->second) {
+        case TRIANGULATION_ERROR_LONE_EDGES: {
+            problem_description =
+                "It contains lone edges. Try clearing them up.";
+            break;
+        } case TRIANGULATION_ERROR_NOT_CLOSED: {
+            problem_description =
+                "It is not closed. Try closing it.";
+            break;
+        } case TRIANGULATION_ERROR_NO_EARS: {
+            problem_description =
+                "There's been a triangulation error. Try undoing or "
+                "deleting the sector, and then rebuild it. Make sure there "
+                "are no gaps, and keep it simple.";
+            break;
+        } case TRIANGULATION_ERROR_INVALID_ARGS: {
+            problem_description =
+                "An unknown error has occured with the sector.";
+            break;
+        } case TRIANGULATION_ERROR_NONE: {
+            problem_description.clear();
+            break;
+        }
+        }
+    }
+}
+
+
+/**
+ * @brief Checks for any objects out of bounds in the area, and fills the
+ * problem info if so.
+ */
+void area_editor::find_problems_oob_mob() {
+    for(size_t m = 0; m < game.cur_area_data->mob_generators.size(); m++) {
+        mob_gen* m_ptr = game.cur_area_data->mob_generators[m];
+        if(!get_sector(m_ptr->pos, nullptr, false)) {
+            problem_mob_ptr = m_ptr;
+            problem_type = EPT_MOB_OOB;
+            problem_title = "Mob out of bounds!";
+            problem_description =
+                "Move it to somewhere inside the area's geometry.";
+            return;
+        }
+    }
+}
+
+
+/**
+ * @brief Checks for any out of bounds path stops in the area, and fills the
+ * problem info if so.
+ */
+void area_editor::find_problems_oob_path_stop() {
     for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
         path_stop* s_ptr = game.cur_area_data->path_stops[s];
         if(!get_sector(s_ptr->pos, nullptr, false)) {
@@ -1037,37 +1225,41 @@ void area_editor::find_problems() {
             return;
         }
     }
-    
-    //Lone path stops.
-    for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
-        path_stop* s_ptr = game.cur_area_data->path_stops[s];
-        bool has_link = false;
+}
+
+
+/**
+ * @brief Checks for any overlapping vertexes in the area, and fills the problem
+ * info if so.
+ */
+void area_editor::find_problems_overlapping_vertex() {
+    for(size_t v = 0; v < game.cur_area_data->vertexes.size(); v++) {
+        vertex* v1_ptr = game.cur_area_data->vertexes[v];
         
-        if(!s_ptr->links.empty()) continue; //Duh, this means it has links.
-        
-        for(size_t s2 = 0; s2 < game.cur_area_data->path_stops.size(); s2++) {
-            path_stop* s2_ptr = game.cur_area_data->path_stops[s2];
-            if(s2_ptr == s_ptr) continue;
+        for(size_t v2 = v + 1; v2 < game.cur_area_data->vertexes.size(); v2++) {
+            vertex* v2_ptr = game.cur_area_data->vertexes[v2];
             
-            if(s2_ptr->get_link(s_ptr)) {
-                has_link = true;
-                break;
+            if(v1_ptr->x == v2_ptr->x && v1_ptr->y == v2_ptr->y) {
+                problem_vertex_ptr = v1_ptr;
+                problem_type = EPT_OVERLAPPING_VERTEXES;
+                problem_title = "Overlapping vertexes!";
+                problem_description =
+                    "They are very close together at (" +
+                    f2s(problem_vertex_ptr->x) + "," +
+                    f2s(problem_vertex_ptr->y) + "), and should likely "
+                    "be merged together.";
+                return;
             }
-            
-            if(has_link) break;
-        }
-        
-        if(!has_link) {
-            problem_path_stop_ptr = s_ptr;
-            problem_type = EPT_LONE_PATH_STOP;
-            problem_title = "Lone path stop!";
-            problem_description =
-                "Either connect it to another stop, or delete it.";
-            return;
         }
     }
-    
-    //A stops intersects with an unrelated link.
+}
+
+
+/**
+ * @brief Checks for any path stop on top of an unrelated link in the area, and
+ * fills the problem info if so.
+ */
+void area_editor::find_problems_path_stop_on_link() {
     for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
         path_stop* s_ptr = game.cur_area_data->path_stops[s];
         for(size_t s2 = 0; s2 < game.cur_area_data->path_stops.size(); s2++) {
@@ -1097,29 +1289,82 @@ void area_editor::find_problems() {
             }
         }
     }
-    
-    //Check for missing textures.
-    for(size_t s = 0; s < game.cur_area_data->sectors.size(); s++) {
-    
-        sector* s_ptr = game.cur_area_data->sectors[s];
-        if(s_ptr->edges.empty()) continue;
-        if(s_ptr->is_bottomless_pit) continue;
-        if(
-            s_ptr->texture_info.file_name.empty() &&
-            !s_ptr->is_bottomless_pit && !s_ptr->fade
-        ) {
-            problem_sector_ptr = s_ptr;
-            problem_type = EPT_UNKNOWN_TEXTURE;
-            problem_title = "Sector with missing texture!";
+}
+
+
+/**
+ * @brief Checks for any path stops intersecting in the area, and fills the
+ * problem info if so.
+ */
+void area_editor::find_problems_path_stops_intersecting() {
+    for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
+        path_stop* s_ptr = game.cur_area_data->path_stops[s];
+        for(size_t s2 = 0; s2 < game.cur_area_data->path_stops.size(); s2++) {
+            path_stop* s2_ptr = game.cur_area_data->path_stops[s2];
+            if(s2_ptr == s_ptr) continue;
+            
+            if(dist(s_ptr->pos, s2_ptr->pos) <= 3.0) {
+                problem_path_stop_ptr = s_ptr;
+                problem_type = EPT_PATH_STOPS_TOGETHER;
+                problem_title = "Two close path stops!";
+                problem_description =
+                    "These two are very close together. Separate them.";
+                return;
+            }
+        }
+    }
+}
+
+
+/**
+ * @brief Checks for any Pikmin over the limit in the area, and fills the
+ * problem info if so.
+ */
+void area_editor::find_problems_pikmin_over_limit() {
+    size_t n_pikmin_mobs = 0;
+    for(size_t m = 0; m < game.cur_area_data->mob_generators.size(); m++) {
+        mob_gen* m_ptr = game.cur_area_data->mob_generators[m];
+        if(m_ptr->type->category->id == MOB_CATEGORY_PIKMIN) {
+            n_pikmin_mobs++;
+            if(n_pikmin_mobs > game.config.max_pikmin_in_field) {
+                problem_type = EPT_PIKMIN_OVER_LIMIT;
+                problem_title = "Over the Pikmin limit!";
+                problem_description =
+                    "There are more Pikmin in the area than the limit allows. "
+                    "This means some of them will not appear. Current limit: "
+                    + i2s(game.config.max_pikmin_in_field) + ".";
+                return;
+            }
+        }
+    }
+}
+
+
+/**
+ * @brief Checks for any mobs without a type in the area, and fills the problem
+ * info if so.
+ */
+void area_editor::find_problems_typeless_mob() {
+    for(size_t m = 0; m < game.cur_area_data->mob_generators.size(); m++) {
+        if(!game.cur_area_data->mob_generators[m]->type) {
+            problem_mob_ptr = game.cur_area_data->mob_generators[m];
+            problem_type = EPT_TYPELESS_MOB;
+            problem_title = "Mob with no type!";
             problem_description =
-                "Give it a valid texture.";
+                "It has an invalid category or type set. "
+                "Give it a proper type or delete it.";
             return;
         }
     }
-    
-    //Check for unknown textures.
+}
+
+
+/**
+ * @brief Checks for any unknown texture in the area, and fills the problem
+ * info if so.
+ */
+void area_editor::find_problems_unknown_texture() {
     for(size_t s = 0; s < game.cur_area_data->sectors.size(); s++) {
-    
         sector* s_ptr = game.cur_area_data->sectors[s];
         if(s_ptr->edges.empty()) continue;
         if(s_ptr->is_bottomless_pit) continue;
@@ -1137,26 +1382,14 @@ void area_editor::find_problems() {
             return;
         }
     }
-    
-    //Two stops intersecting.
-    for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
-        path_stop* s_ptr = game.cur_area_data->path_stops[s];
-        for(size_t s2 = 0; s2 < game.cur_area_data->path_stops.size(); s2++) {
-            path_stop* s2_ptr = game.cur_area_data->path_stops[s2];
-            if(s2_ptr == s_ptr) continue;
-            
-            if(dist(s_ptr->pos, s2_ptr->pos) <= 3.0) {
-                problem_path_stop_ptr = s_ptr;
-                problem_type = EPT_PATH_STOPS_TOGETHER;
-                problem_title = "Two close path stops!";
-                problem_description =
-                    "These two are very close together. Separate them.";
-                return;
-            }
-        }
-    }
-    
-    //Check if there are tree shadows with invalid images.
+}
+
+
+/**
+ * @brief Checks for any unknown tree shadow texture in the area, and fills the
+ * problem info if so.
+ */
+void area_editor::find_problems_unknown_tree_shadow() {
     for(size_t s = 0; s < game.cur_area_data->tree_shadows.size(); s++) {
         if(game.cur_area_data->tree_shadows[s]->bitmap == game.bmp_error) {
             problem_shadow_ptr = game.cur_area_data->tree_shadows[s];
@@ -1168,56 +1401,6 @@ void area_editor::find_problems() {
             return;
         }
     }
-    
-    //Mission goal requires some mobs, but there are none.
-    if(
-        game.cur_area_data->type == AREA_TYPE_MISSION &&
-        (
-            game.cur_area_data->mission.goal == MISSION_GOAL_COLLECT_TREASURE ||
-            game.cur_area_data->mission.goal == MISSION_GOAL_BATTLE_ENEMIES ||
-            game.cur_area_data->mission.goal == MISSION_GOAL_GET_TO_EXIT
-        )
-    ) {
-        if(get_mission_required_mob_count() == 0) {
-            problem_type = EPT_NO_GOAL_MOBS;
-            problem_title = "No mission goal mobs!";
-            problem_description =
-                "This mission's goal requires some mobs, yet there are none.";
-            return;
-        }
-    }
-    
-    //Mission is graded by points, but with no active criterioa.
-    if(
-        game.cur_area_data->type == AREA_TYPE_MISSION &&
-        game.cur_area_data->mission.grading_mode == MISSION_GRADING_MODE_POINTS
-    ) {
-        bool has_any_criterion = false;
-        for(size_t c = 0; c < game.mission_score_criteria.size(); c++) {
-            if(
-                game.mission_score_criteria[c]->get_multiplier(
-                    &game.cur_area_data->mission
-                ) != 0
-            ) {
-                has_any_criterion = true;
-                break;
-            }
-        }
-        if(!has_any_criterion) {
-            problem_type = EPT_NO_SCORE_CRITERIA;
-            problem_title = "No active score criteria!";
-            problem_description =
-                "In this mission, the player is graded according to their "
-                "score. However, none of the score criteria are active, "
-                "so the player's score will always be 0.";
-            return;
-        }
-    }
-    
-    //All good!
-    problem_type = EPT_NONE;
-    problem_title = "None!";
-    problem_description.clear();
 }
 
 

@@ -273,6 +273,127 @@ void area_editor::process_gui_delete_area_dialog() {
 
 
 /**
+ * @brief Processes the Dear ImGui widgets regarding a grading criterion
+ * for this frame.
+ * 
+ * @param value_ptr Points to the value of the points value.
+ * @param criterion_idx Criterion index.
+ * @param widget_label Label for the main value widget.
+ * @param tooltip Start of the tooltip for this criterion's value widget.
+ */
+void area_editor::process_gui_grading_criterion_widgets(
+    int* value_ptr, MISSION_SCORE_CRITERIA criterion_idx,
+    const string& widget_label, const string& tooltip
+) {
+    //Main value.
+    ImGui::SetNextItemWidth(50);
+    int points_int = *value_ptr;
+    if(ImGui::DragInt(widget_label.c_str(), &points_int, 0.1f)) {
+        register_change("mission grading change");
+        *value_ptr = points_int;
+    }
+    set_tooltip(
+        tooltip + "\n"
+        "Negative numbers means the player loses points.\n"
+        "0 means this criterion doesn't count.",
+        "", WIDGET_EXPLANATION_DRAG
+    );
+    if(*value_ptr != 0) {
+        ImGui::Indent();
+        
+        //Loss on fail checkbox.
+        int flags = game.cur_area_data->mission.point_loss_data;
+        if(
+            ImGui::CheckboxFlags(
+                ("0 points on fail##zpof" + i2s(criterion_idx)).c_str(),
+                &flags,
+                get_idx_bitmask(criterion_idx)
+            )
+        ) {
+            register_change("mission grading change");
+            game.cur_area_data->mission.point_loss_data = flags;
+        }
+        set_tooltip(
+            "If checked, the player will receive 0 points for\n"
+            "this criterion if they fail the mission."
+        );
+        
+        //Use in HUD checkbox.
+        flags = game.cur_area_data->mission.point_hud_data;
+        if(
+            ImGui::CheckboxFlags(
+                ("Use in HUD counter##uihc" + i2s(criterion_idx)).c_str(),
+                &flags, get_idx_bitmask(MISSION_SCORE_CRITERIA_PIKMIN_BORN)
+            )
+        ) {
+            register_change("mission grading change");
+            game.cur_area_data->mission.point_hud_data = flags;
+        }
+        set_tooltip(
+            "If checked, the HUD item for the score counter will\n"
+            "use this criterion in its calculation. If none of\n"
+            "the criteria are used for the HUD item, then it\n"
+            "won't even show up."
+        );
+        
+        ImGui::Unindent();
+    }
+}
+
+
+/**
+ * @brief Processes the Dear ImGui widgets regarding a grading medal
+ * requirements for this frame.
+ * 
+ * @param requirement_ptr Points to the requirement value for this medal.
+ * @param widget_label Label for the value widget.
+ * @param widget_min_value Minimum value for the value widget.
+ * @param widget_max_value Maximum value for the value widget.
+ * @param tooltip Tooltip for the value widget.
+ */
+void area_editor::process_gui_grading_medal_widgets(
+    int* requirement_ptr, const string& widget_label,
+    int widget_min_value, int widget_max_value,
+    const string& tooltip
+) {
+    //Requirement value.
+    int req = *requirement_ptr;
+    ImGui::SetNextItemWidth(90);
+    if(
+        ImGui::DragInt(
+            widget_label.c_str(), &req, 1.0f, widget_min_value, widget_max_value
+        )
+    ) {
+        register_change("mission grading change");
+        *requirement_ptr = req;
+    }
+    set_tooltip(tooltip, "", WIDGET_EXPLANATION_DRAG);
+}
+
+
+/**
+ * @brief Processes the Dear ImGui widgets regarding a grading mode
+ * for this frame.
+ * 
+ * @param value Internal value for this mode's radio button.
+ * @param widget_label Label for the radio widget.
+ * @param tooltip Tooltip for the radio widget.
+ */
+void area_editor::process_gui_grading_mode_widgets(
+    int value, const string& widget_label, const string& tooltip
+) {
+    //Radio button.
+    int mode = game.cur_area_data->mission.grading_mode;
+    if(ImGui::RadioButton(widget_label.c_str(), &mode, value)) {
+        register_change("mission grading change");
+        game.cur_area_data->mission.grading_mode =
+            (MISSION_GRADING_MODE) mode;
+    }
+    set_tooltip(tooltip);
+}
+
+
+/**
  * @brief Processes the Dear ImGui "load" dialog for this frame.
  */
 void area_editor::process_gui_load_dialog() {
@@ -2760,127 +2881,14 @@ void area_editor::process_gui_panel_mission() {
             
         }
         case MISSION_GOAL_COLLECT_TREASURE: {
-    
-            //Explanation text.
-            ImGui::TextWrapped(
-                "The player must collect certain treasures, or all of them."
-            );
-            
-            //Treasure requirements text.
-            ImGui::Spacer();
-            ImGui::Text("Treasure requirements:");
-            
-            int requires_all_option =
-                game.cur_area_data->mission.goal_all_mobs ? 0 : 1;
-                
-            //All treasures requirement radio button.
-            if(ImGui::RadioButton("All", &requires_all_option, 0)) {
-                register_change("mission requirements change");
-                game.cur_area_data->mission.goal_all_mobs =
-                    requires_all_option == 0;
-            }
-            set_tooltip(
-                "Require the player to collect all treasures "
-                "in order to reach the goal."
-            );
-            
-            ImGui::SameLine();
-            
-            //Specific treasures requirement radio button.
-            if(
-                ImGui::RadioButton("Specific ones", &requires_all_option, 1)
-            ) {
-                register_change("mission requirements change");
-                game.cur_area_data->mission.goal_all_mobs =
-                    requires_all_option == 0;
-            }
-            set_tooltip(
-                "Require the player to collect specific treasures "
-                "in order to reach the goal.\n"
-                "You must specify which treasures these are."
-            );
-            
-            if(!game.cur_area_data->mission.goal_all_mobs) {
-            
-                //Start mob selector mode button.
-                if(ImGui::Button("Pick treasures...")) {
-                    change_state(EDITOR_STATE_MOBS);
-                    sub_state = EDITOR_SUB_STATE_MISSION_MOBS;
-                }
-                set_tooltip(
-                    "Click here to start picking which treasures, piles, and\n"
-                    "resources do and do not belong to the required\n"
-                    "treasure list."
-                );
-                
-            }
-            
-            //Total objects required text.
-            size_t total_required = get_mission_required_mob_count();
-            ImGui::Text("Total objects required: %lu", total_required);
-            
+
+            process_gui_panel_mission_goal_ct();
             break;
             
         }
         case MISSION_GOAL_BATTLE_ENEMIES: {
-    
-            //Explanation text.
-            ImGui::TextWrapped(
-                "The player must defeat certain enemies, or all of them."
-            );
-            
-            //Enemy requirements text.
-            ImGui::Spacer();
-            ImGui::Text("Enemy requirements:");
-            
-            int requires_all_option =
-                game.cur_area_data->mission.goal_all_mobs ? 0 : 1;
-                
-            //All enemies requirement radio button.
-            if(ImGui::RadioButton("All", &requires_all_option, 0)) {
-                register_change("mission requirements change");
-                game.cur_area_data->mission.goal_all_mobs =
-                    requires_all_option == 0;
-            }
-            set_tooltip(
-                "Require the player to defeat all enemies "
-                "in order to reach the goal."
-            );
-            
-            ImGui::SameLine();
-            
-            //Specific enemies requirement radio button.
-            if(
-                ImGui::RadioButton("Specific ones", &requires_all_option, 1)
-            ) {
-                register_change("mission requirements change");
-                game.cur_area_data->mission.goal_all_mobs =
-                    requires_all_option == 0;
-            }
-            set_tooltip(
-                "Require the player to defeat specific enemies "
-                "in order to reach the goal.\n"
-                "You must specify which enemies these are."
-            );
-            
-            if(!game.cur_area_data->mission.goal_all_mobs) {
-            
-                //Start mob selector mode button.
-                if(ImGui::Button("Pick enemies...")) {
-                    change_state(EDITOR_STATE_MOBS);
-                    sub_state = EDITOR_SUB_STATE_MISSION_MOBS;
-                }
-                set_tooltip(
-                    "Click here to start picking which enemies do and\n"
-                    "do not belong to the required enemy list."
-                );
-                
-            }
-            
-            //Total objects required text.
-            size_t total_required = get_mission_required_mob_count();
-            ImGui::Text("Total objects required: %lu", total_required);
-            
+
+            process_gui_panel_mission_goal_be();
             break;
             
         }
@@ -2911,88 +2919,8 @@ void area_editor::process_gui_panel_mission() {
             
         }
         case MISSION_GOAL_GET_TO_EXIT: {
-    
-            //Explanation text.
-            ImGui::TextWrapped(
-                "The player must get a leader or all of them "
-                "to the exit point."
-            );
-            
-            //Start exit region selector mode button.
-            ImGui::Spacer();
-            if(ImGui::Button("Pick region...")) {
-                sub_state = EDITOR_SUB_STATE_MISSION_EXIT;
-            }
-            set_tooltip(
-                "Click here to start picking where the exit region is.\n"
-            );
-            
-            //Region center text.
-            ImGui::Text(
-                "Exit region center: %s,%s",
-                f2s(game.cur_area_data->mission.goal_exit_center.x).c_str(),
-                f2s(game.cur_area_data->mission.goal_exit_center.y).c_str()
-            );
-            
-            //Region center text.
-            ImGui::Text(
-                "Exit region size: %s x %s",
-                f2s(game.cur_area_data->mission.goal_exit_size.x).c_str(),
-                f2s(game.cur_area_data->mission.goal_exit_size.y).c_str()
-            );
-            
-            //Leader requirements text.
-            ImGui::Spacer();
-            ImGui::Text("Leader requirements:");
-            
-            int requires_all_option =
-                game.cur_area_data->mission.goal_all_mobs ? 0 : 1;
-                
-            //All leaders requirement radio button.
-            if(ImGui::RadioButton("All", &requires_all_option, 0)) {
-                register_change("mission requirements change");
-                game.cur_area_data->mission.goal_all_mobs =
-                    requires_all_option == 0;
-            }
-            set_tooltip(
-                "Require the player to bring all leaders to the exit\n"
-                "region in order to reach the mission's goal."
-            );
-            
-            ImGui::SameLine();
-            
-            //Specific leaders requirement radio button.
-            if(
-                ImGui::RadioButton("Specific ones", &requires_all_option, 1)
-            ) {
-                register_change("mission requirements change");
-                game.cur_area_data->mission.goal_all_mobs =
-                    requires_all_option == 0;
-            }
-            set_tooltip(
-                "Require the player to bring specific leaders to the exit\n"
-                "region in order to reach the mission's goal.\n"
-                "You must specify which leaders these are."
-            );
-            
-            if(!game.cur_area_data->mission.goal_all_mobs) {
-            
-                //Start mob selector mode button.
-                if(ImGui::Button("Pick leaders...")) {
-                    change_state(EDITOR_STATE_MOBS);
-                    sub_state = EDITOR_SUB_STATE_MISSION_MOBS;
-                }
-                set_tooltip(
-                    "Click here to start picking which leaders do and\n"
-                    "do not belong to the required leader list."
-                );
-                
-            }
-            
-            //Total objects required text.
-            size_t total_required = get_mission_required_mob_count();
-            ImGui::Text("Total objects required: %lu", total_required);
-            
+
+            process_gui_panel_mission_goal_gte();
             break;
             
         }
@@ -3031,923 +2959,16 @@ void area_editor::process_gui_panel_mission() {
     //Mission fail conditions node.
     ImGui::Spacer();
     if(saveable_tree_node("gameplay", "Mission fail conditions")) {
-    
-        unsigned int fail_flags =
-            (unsigned int) game.cur_area_data->mission.fail_conditions;
-        bool fail_flags_changed = false;
-        
-        //Pause menu end checkbox.
-        bool pause_menu_end_is_fail =
-            game.cur_area_data->mission.goal != MISSION_GOAL_END_MANUALLY;
-        ImGui::BeginDisabled();
-        ImGui::CheckboxFlags(
-            "End from pause menu",
-            &fail_flags,
-            get_idx_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
-        );
-        ImGui::EndDisabled();
-        if(pause_menu_end_is_fail) {
-            enable_flag(
-                game.cur_area_data->mission.fail_conditions,
-                get_idx_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
-            );
-            set_tooltip(
-                "Since reaching the mission goal automatically ends the\n"
-                "mission as a clear, if the player can go to the pause menu\n"
-                "and end there, then naturally they haven't reached the\n"
-                "goal yet. So this method of ending has to always be a fail."
-            );
-        } else {
-            disable_flag(
-                game.cur_area_data->mission.fail_conditions,
-                get_idx_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
-            );
-            set_tooltip(
-                "The current mission goal is \"end whenever you want\", so\n"
-                "ending from the pause menu is the goal, not a fail condition."
-            );
-        }
-        
-        //Time limit checkbox.
-        if(game.cur_area_data->mission.goal == MISSION_GOAL_TIMED_SURVIVAL) {
-            disable_flag(
-                fail_flags,
-                get_idx_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
-            );
-            disable_flag(
-                game.cur_area_data->mission.fail_conditions,
-                get_idx_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
-            );
-            ImGui::BeginDisabled();
-        }
-        bool time_limit_changed =
-            ImGui::CheckboxFlags(
-                "Reach the time limit",
-                &fail_flags,
-                get_idx_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
-            );
-        fail_flags_changed |= time_limit_changed;
-        if(
-            time_limit_changed &&
-            has_flag(
-                fail_flags,
-                get_idx_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
-            )
-        ) {
-            day_duration_needs_update = true;
-        }
-        if(game.cur_area_data->mission.goal == MISSION_GOAL_TIMED_SURVIVAL) {
-            ImGui::EndDisabled();
-            set_tooltip(
-                "The mission's goal is to survive for a certain amount of\n"
-                "time, so it doesn't make sense to have a time limit to\n"
-                "fail with."
-            );
-        } else {
-            set_tooltip(
-                "The mission ends as a fail if the player spends a certain\n"
-                "amount of time in the mission."
-            );
-        }
-        
-        if(
-            has_flag(
-                fail_flags,
-                get_idx_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
-            )
-        ) {
-            //Time limit values.
-            int seconds =
-                (int) game.cur_area_data->mission.fail_time_limit;
-            ImGui::Indent();
-            if(ImGui::DragTime2("Time limit", &seconds)) {
-                register_change("mission fail conditions change");
-                seconds = std::max(seconds, 1);
-                game.cur_area_data->mission.fail_time_limit = (size_t) seconds;
-                day_duration_needs_update = true;
-            }
-            set_tooltip(
-                "Time limit that, when reached, ends the mission\n"
-                "as a fail.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            ImGui::Unindent();
-        }
-        
-        //Reaching too few Pikmin checkbox.
-        fail_flags_changed |=
-            ImGui::CheckboxFlags(
-                "Reach too few Pikmin",
-                &fail_flags,
-                get_idx_bitmask(MISSION_FAIL_COND_TOO_FEW_PIKMIN)
-            );
-        set_tooltip(
-            "The mission ends as a fail if the total Pikmin count reaches\n"
-            "a certain amount or lower. 0 means this only happens with a\n"
-            "total Pikmin extinction. This fail condition isn't forced\n"
-            "because the player might still be able to reach the mission\n"
-            "goal using leaders. Or because you may want to make a mission\n"
-            "with no Pikmin in the first place (like a puzzle stage)."
-        );
-        
-        if(
-            has_flag(
-                fail_flags,
-                get_idx_bitmask(MISSION_FAIL_COND_TOO_FEW_PIKMIN)
-            )
-        ) {
-            ImGui::Indent();
-            
-            //Pikmin amount value.
-            int amount =
-                (int) game.cur_area_data->mission.fail_too_few_pik_amount;
-            ImGui::SetNextItemWidth(50);
-            if(ImGui::DragInt("Amount##fctfpa", &amount, 0.1f, 0, INT_MAX)) {
-                register_change("mission fail conditions change");
-                game.cur_area_data->mission.fail_too_few_pik_amount =
-                    (size_t) amount;
-            }
-            set_tooltip(
-                "Pikmin amount that, when reached, ends the mission\n"
-                "as a fail.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            
-            ImGui::Unindent();
-        }
-        
-        //Reaching too many Pikmin checkbox.
-        fail_flags_changed |=
-            ImGui::CheckboxFlags(
-                "Reach too many Pikmin",
-                &fail_flags,
-                get_idx_bitmask(MISSION_FAIL_COND_TOO_MANY_PIKMIN)
-            );
-        set_tooltip(
-            "The mission ends as a fail if the total Pikmin count reaches\n"
-            "a certain amount or higher."
-        );
-        
-        if(
-            has_flag(
-                fail_flags,
-                get_idx_bitmask(MISSION_FAIL_COND_TOO_MANY_PIKMIN)
-            )
-        ) {
-            ImGui::Indent();
-            
-            //Pikmin amount value.
-            int amount =
-                (int) game.cur_area_data->mission.fail_too_many_pik_amount;
-            ImGui::SetNextItemWidth(50);
-            if(ImGui::DragInt("Amount##fctmpa", &amount, 0.1f, 1, INT_MAX)) {
-                register_change("mission fail conditions change");
-                game.cur_area_data->mission.fail_too_many_pik_amount =
-                    (size_t) amount;
-            }
-            set_tooltip(
-                "Pikmin amount that, when reached, ends the mission\n"
-                "as a fail.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            
-            ImGui::Unindent();
-        }
-        
-        //Losing Pikmin checkbox.
-        fail_flags_changed |=
-            ImGui::CheckboxFlags(
-                "Lose Pikmin",
-                &fail_flags,
-                get_idx_bitmask(MISSION_FAIL_COND_LOSE_PIKMIN)
-            );
-        set_tooltip(
-            "The mission ends as a fail if a certain amount of Pikmin die."
-        );
-        
-        if(
-            has_flag(
-                fail_flags,
-                get_idx_bitmask(MISSION_FAIL_COND_LOSE_PIKMIN)
-            )
-        ) {
-            //Pikmin deaths value.
-            int amount =
-                (int) game.cur_area_data->mission.fail_pik_killed;
-            ImGui::Indent();
-            ImGui::SetNextItemWidth(50);
-            if(ImGui::DragInt("Deaths", &amount, 0.1f, 1, INT_MAX)) {
-                register_change("mission fail conditions change");
-                game.cur_area_data->mission.fail_pik_killed =
-                    (size_t) amount;
-            }
-            set_tooltip(
-                "Pikmin death amount that, when reached, ends the mission\n"
-                "as a fail.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            ImGui::Unindent();
-        }
-        
-        //Taking damage checkbox.
-        fail_flags_changed |=
-            ImGui::CheckboxFlags(
-                "Take damage",
-                &fail_flags,
-                get_idx_bitmask(MISSION_FAIL_COND_TAKE_DAMAGE)
-            );
-        set_tooltip(
-            "The mission ends as a fail if any leader loses any health."
-        );
-        
-        //Lose leaders checkbox.
-        fail_flags_changed |=
-            ImGui::CheckboxFlags(
-                "Lose leaders",
-                &fail_flags,
-                get_idx_bitmask(MISSION_FAIL_COND_LOSE_LEADERS)
-            );
-        set_tooltip(
-            "The mission ends as a fail if a certain amount of leaders get\n"
-            "KO'd. This fail condition isn't forced because the\n"
-            "player might still be able to reach the mission goal with the\n"
-            "Pikmin. Or because you may want to make a really gimmicky\n"
-            "automatic mission with no leaders."
-        );
-        
-        if(
-            has_flag(
-                fail_flags,
-                get_idx_bitmask(
-                    MISSION_FAIL_COND_LOSE_LEADERS
-                )
-            )
-        ) {
-            //Leader KOs value.
-            int amount =
-                (int) game.cur_area_data->mission.fail_leaders_kod;
-            ImGui::Indent();
-            ImGui::SetNextItemWidth(50);
-            if(ImGui::DragInt("KOs", &amount, 0.1f, 1, INT_MAX)) {
-                register_change("mission fail conditions change");
-                game.cur_area_data->mission.fail_leaders_kod =
-                    (size_t) amount;
-            }
-            set_tooltip(
-                "Leader KO amount that, when reached, ends the mission\n"
-                "as a fail.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            ImGui::Unindent();
-        }
-        
-        //Kill enemies checkbox.
-        fail_flags_changed |=
-            ImGui::CheckboxFlags(
-                "Kill enemies",
-                &fail_flags,
-                get_idx_bitmask(MISSION_FAIL_COND_KILL_ENEMIES)
-            );
-        set_tooltip(
-            "The mission ends as a fail if a certain amount of\n"
-            "enemies get killed."
-        );
-        
-        if(
-            has_flag(
-                fail_flags,
-                get_idx_bitmask(MISSION_FAIL_COND_KILL_ENEMIES)
-            )
-        ) {
-            //Enemy kills value.
-            int amount =
-                (int) game.cur_area_data->mission.fail_enemies_killed;
-            ImGui::Indent();
-            ImGui::SetNextItemWidth(50);
-            if(ImGui::DragInt("Kills", &amount, 0.1f, 1, INT_MAX)) {
-                register_change("mission fail conditions change");
-                game.cur_area_data->mission.fail_enemies_killed =
-                    (size_t) amount;
-            }
-            set_tooltip(
-                "Enemy kill amount that, when reached, ends the mission\n"
-                "as a fail.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            ImGui::Unindent();
-        }
-        
-        if(fail_flags_changed) {
-            register_change("mission fail conditions change");
-            game.cur_area_data->mission.fail_conditions =
-                (bitmask_8_t) fail_flags;
-        }
-        
-        vector<MISSION_FAIL_COND> active_conditions;
-        for(size_t c = 0; c < game.mission_fail_conds.size(); c++) {
-            if(
-                has_flag(
-                    game.cur_area_data->mission.fail_conditions,
-                    get_idx_bitmask(c)
-                )
-            ) {
-                active_conditions.push_back((MISSION_FAIL_COND) c);
-            }
-        }
-        
-        if(!active_conditions.empty()) {
-        
-            //Primary HUD condition checkbox.
-            ImGui::Spacer();
-            bool show_primary =
-                game.cur_area_data->mission.fail_hud_primary_cond != INVALID;
-            if(ImGui::Checkbox("Show primary HUD element", &show_primary)) {
-                register_change("mission fail conditions change");
-                game.cur_area_data->mission.fail_hud_primary_cond =
-                    show_primary ?
-                    (size_t) active_conditions[0] :
-                    INVALID;
-            }
-            set_tooltip(
-                "If checked, a large HUD element will appear showing\n"
-                "the most important fail condition's information."
-            );
-            
-            if(show_primary) {
-                //Primary HUD condition combobox.
-                int selected = 0;
-                bool found = false;
-                vector<string> cond_strings;
-                for(size_t c = 0; c < active_conditions.size(); c++) {
-                    size_t cond_id = active_conditions[c];
-                    cond_strings.push_back(
-                        game.mission_fail_conds[cond_id]->get_name()
-                    );
-                    if(
-                        cond_id ==
-                        game.cur_area_data->mission.fail_hud_primary_cond
-                    ) {
-                        found = true;
-                        selected = (int) c;
-                    }
-                }
-                if(!found) {
-                    game.cur_area_data->mission.fail_hud_secondary_cond = 0;
-                }
-                ImGui::Indent();
-                if(
-                    ImGui::Combo(
-                        "Primary condition", &selected, cond_strings, 15
-                    )
-                ) {
-                    register_change("mission fail conditions change");
-                    game.cur_area_data->mission.fail_hud_primary_cond =
-                        active_conditions[selected];
-                }
-                set_tooltip(
-                    "Failure condition to show in the primary HUD element."
-                );
-                ImGui::Unindent();
-            }
-            
-            //Secondary HUD condition checkbox.
-            bool show_secondary =
-                game.cur_area_data->mission.fail_hud_secondary_cond != INVALID;
-            if(ImGui::Checkbox("Show secondary HUD element", &show_secondary)) {
-                register_change("mission fail conditions change");
-                game.cur_area_data->mission.fail_hud_secondary_cond =
-                    show_secondary ?
-                    (size_t) active_conditions[0] :
-                    INVALID;
-            }
-            set_tooltip(
-                "If checked, a smaller HUD element will appear showing\n"
-                "some other fail condition's information."
-            );
-            
-            if(show_secondary) {
-                //Secondary HUD condition combobox.
-                bool found = false;
-                int selected = 0;
-                vector<string> cond_strings;
-                for(size_t c = 0; c < active_conditions.size(); c++) {
-                    size_t cond_id = active_conditions[c];
-                    cond_strings.push_back(
-                        game.mission_fail_conds[cond_id]->get_name()
-                    );
-                    if(
-                        cond_id ==
-                        game.cur_area_data->mission.fail_hud_secondary_cond
-                    ) {
-                        found = true;
-                        selected = (int) c;
-                    }
-                }
-                if(!found) {
-                    game.cur_area_data->mission.fail_hud_secondary_cond = 0;
-                }
-                ImGui::Indent();
-                if(
-                    ImGui::Combo(
-                        "Secondary condition", &selected, cond_strings, 15
-                    )
-                ) {
-                    register_change("mission fail conditions change");
-                    game.cur_area_data->mission.fail_hud_secondary_cond =
-                        active_conditions[selected];
-                }
-                set_tooltip(
-                    "Failure condition to show in the secondary HUD element."
-                );
-                ImGui::Unindent();
-            }
-            
-        } else {
-            game.cur_area_data->mission.fail_hud_primary_cond = INVALID;
-            game.cur_area_data->mission.fail_hud_secondary_cond = INVALID;
-            
-        }
-        
+
+        process_gui_panel_mission_fail(&day_duration_needs_update);
         ImGui::TreePop();
     }
     
     //Mission grading node.
     ImGui::Spacer();
     if(saveable_tree_node("gameplay", "Mission grading")) {
-    
-        //Grading mode text.
-        ImGui::Text("Grading mode:");
-        
-        int mode = game.cur_area_data->mission.grading_mode;
-        
-        //Points mode radio button.
-        if(ImGui::RadioButton("Points", &mode, 0)) {
-            register_change("mission grading change");
-            game.cur_area_data->mission.grading_mode =
-                (MISSION_GRADING_MODE) mode;
-        }
-        set_tooltip(
-            "The player's final grade depends on how many points they\n"
-            "got in different criteria."
-        );
-        
-        ImGui::SameLine();
-        
-        //Goal mode radio button.
-        if(ImGui::RadioButton("Goal", &mode, 1)) {
-            register_change("mission grading change");
-            game.cur_area_data->mission.grading_mode =
-                (MISSION_GRADING_MODE) mode;
-        }
-        set_tooltip(
-            "The player's final grade depends on whether they have reached\n"
-            "the mission goal (platinum) or not (nothing)."
-        );
-        
-        ImGui::SameLine();
-        
-        //Participation mode radio button.
-        if(ImGui::RadioButton("Participation", &mode, 2)) {
-            register_change("mission grading change");
-            game.cur_area_data->mission.grading_mode =
-                (MISSION_GRADING_MODE) mode;
-        }
-        set_tooltip(
-            "The player's final grade depends on whether they have played\n"
-            "the mission (platinum) or not (nothing)."
-        );
-        
-        if(game.cur_area_data->mission.grading_mode == MISSION_GRADING_MODE_POINTS) {
-        
-            //Points per Pikmin born value.
-            ImGui::Spacer();
-            ImGui::SetNextItemWidth(50);
-            int pppb = game.cur_area_data->mission.points_per_pikmin_born;
-            if(ImGui::DragInt("Points per Pikmin born", &pppb, 0.1f)) {
-                register_change("mission grading change");
-                game.cur_area_data->mission.points_per_pikmin_born = pppb;
-            }
-            set_tooltip(
-                "Amount of points that the player receives for each\n"
-                "Pikmin born. Negative numbers means the player loses\n"
-                "points. 0 means this criterion doesn't count.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            if(game.cur_area_data->mission.points_per_pikmin_born != 0) {
-                ImGui::Indent();
-                
-                //Pikmin born point loss on fail checkbox.
-                int flags = game.cur_area_data->mission.point_loss_data;
-                if(
-                    ImGui::CheckboxFlags(
-                        "0 points on fail##zpofpb", &flags,
-                        get_idx_bitmask(MISSION_SCORE_CRITERIA_PIKMIN_BORN)
-                    )
-                ) {
-                    register_change("mission grading change");
-                    game.cur_area_data->mission.point_loss_data = flags;
-                }
-                set_tooltip(
-                    "If checked, the player will receive 0 points for\n"
-                    "this criterion if they fail the mission."
-                );
-                
-                //Pikmin born use in HUD checkbox.
-                flags = game.cur_area_data->mission.point_hud_data;
-                if(
-                    ImGui::CheckboxFlags(
-                        "Use in HUD counter##uihpb", &flags,
-                        get_idx_bitmask(MISSION_SCORE_CRITERIA_PIKMIN_BORN)
-                    )
-                ) {
-                    register_change("mission grading change");
-                    game.cur_area_data->mission.point_hud_data = flags;
-                }
-                set_tooltip(
-                    "If checked, the HUD item for the score counter will\n"
-                    "use this criterion in its calculation. If none of\n"
-                    "the criteria are used for the HUD item, then it\n"
-                    "won't even show up."
-                );
-                
-                ImGui::Unindent();
-            }
-            
-            //Points per Pikmin death value.
-            ImGui::SetNextItemWidth(50);
-            int pppd = game.cur_area_data->mission.points_per_pikmin_death;
-            if(ImGui::DragInt("Points per Pikmin death", &pppd, 0.1f)) {
-                register_change("mission grading change");
-                game.cur_area_data->mission.points_per_pikmin_death = pppd;
-            }
-            set_tooltip(
-                "Amount of points that the player receives for each\n"
-                "Pikmin lost. Negative numbers means the player loses\n"
-                "points. 0 means this criterion doesn't count.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            if(game.cur_area_data->mission.points_per_pikmin_death != 0) {
-                ImGui::Indent();
-                
-                //Pikmin death point loss on fail checkbox.
-                int flags = game.cur_area_data->mission.point_loss_data;
-                if(
-                    ImGui::CheckboxFlags(
-                        "0 points on fail##zpofpd", &flags,
-                        get_idx_bitmask(MISSION_SCORE_CRITERIA_PIKMIN_DEATH)
-                    )
-                ) {
-                    register_change("mission grading change");
-                    game.cur_area_data->mission.point_loss_data = flags;
-                }
-                set_tooltip(
-                    "If checked, the player will receive 0 points for\n"
-                    "this criterion if they fail the mission."
-                );
-                
-                //Pikmin death use in HUD checkbox.
-                flags = game.cur_area_data->mission.point_hud_data;
-                if(
-                    ImGui::CheckboxFlags(
-                        "Use in HUD counter##uihpd", &flags,
-                        get_idx_bitmask(MISSION_SCORE_CRITERIA_PIKMIN_DEATH)
-                    )
-                ) {
-                    register_change("mission grading change");
-                    game.cur_area_data->mission.point_hud_data = flags;
-                }
-                set_tooltip(
-                    "If checked, the HUD item for the score counter will\n"
-                    "use this criterion in its calculation. If none of\n"
-                    "the criteria are used for the HUD item, then it\n"
-                    "won't even show up."
-                );
-                
-                ImGui::Unindent();
-            }
-            
-            if(
-                has_flag(
-                    game.cur_area_data->mission.fail_conditions,
-                    get_idx_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
-                )
-            ) {
-                //Points per second of time left value.
-                ImGui::SetNextItemWidth(50);
-                int ppsl = game.cur_area_data->mission.points_per_sec_left;
-                if(ImGui::DragInt("Points per second left", &ppsl, 0.1f)) {
-                    register_change("mission grading change");
-                    game.cur_area_data->mission.points_per_sec_left = ppsl;
-                }
-                set_tooltip(
-                    "Amount of points that the player receives for each\n"
-                    "second of time left, from the mission's time limit.\n"
-                    "Negative numbers means the player loses\n"
-                    "points. 0 means this criterion doesn't count.",
-                    "", WIDGET_EXPLANATION_DRAG
-                );
-                if(game.cur_area_data->mission.points_per_sec_left != 0) {
-                    ImGui::Indent();
-                    
-                    //Seconds left point loss on fail checkbox.
-                    int flags = game.cur_area_data->mission.point_loss_data;
-                    if(
-                        ImGui::CheckboxFlags(
-                            "0 points on fail##zpofsl", &flags,
-                            get_idx_bitmask(MISSION_SCORE_CRITERIA_SEC_LEFT)
-                        )
-                    ) {
-                        register_change("mission grading change");
-                        game.cur_area_data->mission.point_loss_data = flags;
-                    }
-                    set_tooltip(
-                        "If checked, the player will receive 0 points for\n"
-                        "this criterion if they fail the mission."
-                    );
-                    
-                    //Seconds left use in HUD checkbox.
-                    flags = game.cur_area_data->mission.point_hud_data;
-                    if(
-                        ImGui::CheckboxFlags(
-                            "Use in HUD counter##uihsl", &flags,
-                            get_idx_bitmask(MISSION_SCORE_CRITERIA_SEC_LEFT)
-                        )
-                    ) {
-                        register_change("mission grading change");
-                        game.cur_area_data->mission.point_hud_data = flags;
-                    }
-                    set_tooltip(
-                        "If checked, the HUD item for the score counter will\n"
-                        "use this criterion in its calculation. If none of\n"
-                        "the criteria are used for the HUD item, then it\n"
-                        "won't even show up."
-                    );
-                    
-                    ImGui::Unindent();
-                }
-            }
-            
-            //Points per second passed value.
-            ImGui::SetNextItemWidth(50);
-            int ppss = game.cur_area_data->mission.points_per_sec_passed;
-            if(ImGui::DragInt("Points per second passed", &ppss, 0.1f)) {
-                register_change("mission grading change");
-                game.cur_area_data->mission.points_per_sec_passed = ppss;
-            }
-            set_tooltip(
-                "Amount of points that the player receives for each\n"
-                "second of time that has passed. Negative numbers means the\n"
-                "player loses points. 0 means this criterion doesn't count.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            if(game.cur_area_data->mission.points_per_sec_passed != 0) {
-                ImGui::Indent();
-                
-                //Seconds passed point loss on fail checkbox.
-                int flags = game.cur_area_data->mission.point_loss_data;
-                if(
-                    ImGui::CheckboxFlags(
-                        "0 points on fail##zpofsp", &flags,
-                        get_idx_bitmask(MISSION_SCORE_CRITERIA_SEC_PASSED)
-                    )
-                ) {
-                    register_change("mission grading change");
-                    game.cur_area_data->mission.point_loss_data = flags;
-                }
-                set_tooltip(
-                    "If checked, the player will receive 0 points for\n"
-                    "this criterion if they fail the mission."
-                );
-                
-                //Seconds passed use in HUD checkbox.
-                flags = game.cur_area_data->mission.point_hud_data;
-                if(
-                    ImGui::CheckboxFlags(
-                        "Use in HUD counter##uihsp", &flags,
-                        get_idx_bitmask(MISSION_SCORE_CRITERIA_SEC_PASSED)
-                    )
-                ) {
-                    register_change("mission grading change");
-                    game.cur_area_data->mission.point_hud_data = flags;
-                }
-                set_tooltip(
-                    "If checked, the HUD item for the score counter will\n"
-                    "use this criterion in its calculation. If none of\n"
-                    "the criteria are used for the HUD item, then it\n"
-                    "won't even show up."
-                );
-                
-                ImGui::Unindent();
-            }
-            
-            //Points per treasure point gathered value.
-            ImGui::SetNextItemWidth(50);
-            int pptp = game.cur_area_data->mission.points_per_treasure_point;
-            if(
-                ImGui::DragInt("Points per treasure point", &pptp, 0.1f)
-            ) {
-                register_change("mission grading change");
-                game.cur_area_data->mission.points_per_treasure_point = pptp;
-            }
-            set_tooltip(
-                "Amount of points that the player receives for each\n"
-                "point gathered from treasures. Different treasures are worth\n"
-                "different treasure points. Negative numbers means the\n"
-                "player loses points. 0 means this criterion doesn't count.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            if(game.cur_area_data->mission.points_per_treasure_point != 0) {
-                ImGui::Indent();
-                
-                //Treasure point point loss on fail checkbox.
-                int flags = game.cur_area_data->mission.point_loss_data;
-                if(
-                    ImGui::CheckboxFlags(
-                        "0 points on fail##zpoftp", &flags,
-                        get_idx_bitmask(
-                            MISSION_SCORE_CRITERIA_TREASURE_POINTS
-                        )
-                    )
-                ) {
-                    register_change("mission grading change");
-                    game.cur_area_data->mission.point_loss_data = flags;
-                }
-                set_tooltip(
-                    "If checked, the player will receive 0 points for\n"
-                    "this criterion if they fail the mission."
-                );
-                
-                //Treasure point use in HUD checkbox.
-                flags = game.cur_area_data->mission.point_hud_data;
-                if(
-                    ImGui::CheckboxFlags(
-                        "Use in HUD counter##uihtp", &flags,
-                        get_idx_bitmask(
-                            MISSION_SCORE_CRITERIA_TREASURE_POINTS
-                        )
-                    )
-                ) {
-                    register_change("mission grading change");
-                    game.cur_area_data->mission.point_hud_data = flags;
-                }
-                set_tooltip(
-                    "If checked, the HUD item for the score counter will\n"
-                    "use this criterion in its calculation. If none of\n"
-                    "the criteria are used for the HUD item, then it\n"
-                    "won't even show up."
-                );
-                
-                ImGui::Unindent();
-            }
-            
-            //Points per enemy point gathered value.
-            ImGui::SetNextItemWidth(50);
-            int ppep = game.cur_area_data->mission.points_per_enemy_point;
-            if(ImGui::DragInt("Points per enemy point", &ppep, 0.1f)) {
-                register_change("mission grading change");
-                game.cur_area_data->mission.points_per_enemy_point = ppep;
-            }
-            set_tooltip(
-                "Amount of points that the player receives for each\n"
-                "enemy point. Different enemies are worth different\n"
-                "points. Negative numbers means the player loses points.\n"
-                "0 means this criterion doesn't count.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            if(game.cur_area_data->mission.points_per_enemy_point != 0) {
-                ImGui::Indent();
-                
-                //Enemy kill point point loss on fail checkbox.
-                int flags = game.cur_area_data->mission.point_loss_data;
-                if(
-                    ImGui::CheckboxFlags(
-                        "0 points on fail##zpofep", &flags,
-                        get_idx_bitmask(MISSION_SCORE_CRITERIA_ENEMY_POINTS)
-                    )
-                ) {
-                    register_change("mission grading change");
-                    game.cur_area_data->mission.point_loss_data = flags;
-                }
-                set_tooltip(
-                    "If checked, the player will receive 0 points for\n"
-                    "this criterion if they fail the mission."
-                );
-                
-                //Enemy kill point use in HUD checkbox.
-                flags = game.cur_area_data->mission.point_hud_data;
-                if(
-                    ImGui::CheckboxFlags(
-                        "Use in HUD counter##uihep", &flags,
-                        get_idx_bitmask(MISSION_SCORE_CRITERIA_ENEMY_POINTS)
-                    )
-                ) {
-                    register_change("mission grading change");
-                    game.cur_area_data->mission.point_hud_data = flags;
-                }
-                set_tooltip(
-                    "If checked, the HUD item for the score counter will\n"
-                    "use this criterion in its calculation. If none of\n"
-                    "the criteria are used for the HUD item, then it\n"
-                    "won't even show up."
-                );
-                
-                ImGui::Unindent();
-            }
-            
-            //Starting score value.
-            ImGui::Spacer();
-            int starting_points = game.cur_area_data->mission.starting_points;
-            ImGui::SetNextItemWidth(60);
-            if(ImGui::DragInt("Starting points", &starting_points, 1.0f)) {
-                register_change("mission grading change");
-                game.cur_area_data->mission.starting_points = starting_points;
-            }
-            set_tooltip(
-                "Starting amount of points. It can be positive or negative.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            
-            //Medal point requirements text.
-            ImGui::Spacer();
-            ImGui::Text("Medal point requirements:");
-            
-            //Bronze point requirement value.
-            int bronze_req = game.cur_area_data->mission.bronze_req;
-            ImGui::SetNextItemWidth(90);
-            if(
-                ImGui::DragInt(
-                    "Bronze", &bronze_req, 1.0f,
-                    INT_MIN,
-                    game.cur_area_data->mission.silver_req - 1
-                )
-            ) {
-                register_change("mission grading change");
-                game.cur_area_data->mission.bronze_req = bronze_req;
-            }
-            set_tooltip(
-                "To get a bronze medal, the player needs at least these\n"
-                "many points. Fewer than this, and the player gets no medal.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            
-            //Silver point requirement value.
-            int silver_req = game.cur_area_data->mission.silver_req;
-            ImGui::SetNextItemWidth(90);
-            if(
-                ImGui::DragInt(
-                    "Silver", &silver_req, 1.0f,
-                    game.cur_area_data->mission.bronze_req + 1,
-                    game.cur_area_data->mission.gold_req - 1
-                )
-            ) {
-                register_change("mission grading change");
-                game.cur_area_data->mission.silver_req = silver_req;
-            }
-            set_tooltip(
-                "To get a silver medal, the player needs at least these\n"
-                "many points.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            
-            //Gold point requirement value.
-            int gold_req = game.cur_area_data->mission.gold_req;
-            ImGui::SetNextItemWidth(90);
-            if(
-                ImGui::DragInt(
-                    "Gold", &gold_req, 1.0f,
-                    game.cur_area_data->mission.silver_req + 1,
-                    game.cur_area_data->mission.platinum_req - 1
-                )
-            ) {
-                register_change("mission grading change");
-                game.cur_area_data->mission.gold_req = gold_req;
-            }
-            set_tooltip(
-                "To get a gold medal, the player needs at least these\n"
-                "many points.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            
-            //Platinum point requirement value.
-            int platinum_req = game.cur_area_data->mission.platinum_req;
-            ImGui::SetNextItemWidth(90);
-            if(
-                ImGui::DragInt(
-                    "Platinum", &platinum_req, 1.0f,
-                    game.cur_area_data->mission.gold_req + 1,
-                    INT_MAX
-                )
-            ) {
-                register_change("mission grading change");
-                game.cur_area_data->mission.platinum_req = platinum_req;
-            }
-            set_tooltip(
-                "To get a platinum medal, the player needs at least these\n"
-                "many points.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-        }
-        
+
+        process_gui_panel_mission_grading();
         ImGui::TreePop();
         
     }
@@ -3975,6 +2996,811 @@ void area_editor::process_gui_panel_mission() {
             );
     }
     
+}
+
+
+/**
+ * @brief Processes the Dear ImGui fail conditions part of the
+ * mission control panel for this frame.
+ * 
+ * @param day_duration_needs_update The variable that dictates whether the
+ * day duration widget data later in the panel needs to be updated.
+ */
+void area_editor::process_gui_panel_mission_fail(
+    bool* day_duration_needs_update
+) {
+    unsigned int fail_flags =
+        (unsigned int) game.cur_area_data->mission.fail_conditions;
+    bool fail_flags_changed = false;
+    
+    //Pause menu end checkbox.
+    bool pause_menu_end_is_fail =
+        game.cur_area_data->mission.goal != MISSION_GOAL_END_MANUALLY;
+    ImGui::BeginDisabled();
+    ImGui::CheckboxFlags(
+        "End from pause menu",
+        &fail_flags,
+        get_idx_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
+    );
+    ImGui::EndDisabled();
+    if(pause_menu_end_is_fail) {
+        enable_flag(
+            game.cur_area_data->mission.fail_conditions,
+            get_idx_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
+        );
+        set_tooltip(
+            "Since reaching the mission goal automatically ends the\n"
+            "mission as a clear, if the player can go to the pause menu\n"
+            "and end there, then naturally they haven't reached the\n"
+            "goal yet. So this method of ending has to always be a fail."
+        );
+    } else {
+        disable_flag(
+            game.cur_area_data->mission.fail_conditions,
+            get_idx_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
+        );
+        set_tooltip(
+            "The current mission goal is \"end whenever you want\", so\n"
+            "ending from the pause menu is the goal, not a fail condition."
+        );
+    }
+    
+    //Time limit checkbox.
+    if(game.cur_area_data->mission.goal == MISSION_GOAL_TIMED_SURVIVAL) {
+        disable_flag(
+            fail_flags,
+            get_idx_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
+        );
+        disable_flag(
+            game.cur_area_data->mission.fail_conditions,
+            get_idx_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
+        );
+        ImGui::BeginDisabled();
+    }
+    bool time_limit_changed =
+        ImGui::CheckboxFlags(
+            "Reach the time limit",
+            &fail_flags,
+            get_idx_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
+        );
+    fail_flags_changed |= time_limit_changed;
+    if(
+        time_limit_changed &&
+        has_flag(
+            fail_flags,
+            get_idx_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
+        )
+    ) {
+        *day_duration_needs_update = true;
+    }
+    if(game.cur_area_data->mission.goal == MISSION_GOAL_TIMED_SURVIVAL) {
+        ImGui::EndDisabled();
+        set_tooltip(
+            "The mission's goal is to survive for a certain amount of\n"
+            "time, so it doesn't make sense to have a time limit to\n"
+            "fail with."
+        );
+    } else {
+        set_tooltip(
+            "The mission ends as a fail if the player spends a certain\n"
+            "amount of time in the mission."
+        );
+    }
+    
+    if(
+        has_flag(
+            fail_flags,
+            get_idx_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
+        )
+    ) {
+        //Time limit values.
+        int seconds =
+            (int) game.cur_area_data->mission.fail_time_limit;
+        ImGui::Indent();
+        if(ImGui::DragTime2("Time limit", &seconds)) {
+            register_change("mission fail conditions change");
+            seconds = std::max(seconds, 1);
+            game.cur_area_data->mission.fail_time_limit = (size_t) seconds;
+            *day_duration_needs_update = true;
+        }
+        set_tooltip(
+            "Time limit that, when reached, ends the mission\n"
+            "as a fail.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
+        ImGui::Unindent();
+    }
+    
+    //Reaching too few Pikmin checkbox.
+    fail_flags_changed |=
+        ImGui::CheckboxFlags(
+            "Reach too few Pikmin",
+            &fail_flags,
+            get_idx_bitmask(MISSION_FAIL_COND_TOO_FEW_PIKMIN)
+        );
+    set_tooltip(
+        "The mission ends as a fail if the total Pikmin count reaches\n"
+        "a certain amount or lower. 0 means this only happens with a\n"
+        "total Pikmin extinction. This fail condition isn't forced\n"
+        "because the player might still be able to reach the mission\n"
+        "goal using leaders. Or because you may want to make a mission\n"
+        "with no Pikmin in the first place (like a puzzle stage)."
+    );
+    
+    if(
+        has_flag(
+            fail_flags,
+            get_idx_bitmask(MISSION_FAIL_COND_TOO_FEW_PIKMIN)
+        )
+    ) {
+        ImGui::Indent();
+        
+        //Pikmin amount value.
+        int amount =
+            (int) game.cur_area_data->mission.fail_too_few_pik_amount;
+        ImGui::SetNextItemWidth(50);
+        if(ImGui::DragInt("Amount##fctfpa", &amount, 0.1f, 0, INT_MAX)) {
+            register_change("mission fail conditions change");
+            game.cur_area_data->mission.fail_too_few_pik_amount =
+                (size_t) amount;
+        }
+        set_tooltip(
+            "Pikmin amount that, when reached, ends the mission\n"
+            "as a fail.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
+        
+        ImGui::Unindent();
+    }
+    
+    //Reaching too many Pikmin checkbox.
+    fail_flags_changed |=
+        ImGui::CheckboxFlags(
+            "Reach too many Pikmin",
+            &fail_flags,
+            get_idx_bitmask(MISSION_FAIL_COND_TOO_MANY_PIKMIN)
+        );
+    set_tooltip(
+        "The mission ends as a fail if the total Pikmin count reaches\n"
+        "a certain amount or higher."
+    );
+    
+    if(
+        has_flag(
+            fail_flags,
+            get_idx_bitmask(MISSION_FAIL_COND_TOO_MANY_PIKMIN)
+        )
+    ) {
+        ImGui::Indent();
+        
+        //Pikmin amount value.
+        int amount =
+            (int) game.cur_area_data->mission.fail_too_many_pik_amount;
+        ImGui::SetNextItemWidth(50);
+        if(ImGui::DragInt("Amount##fctmpa", &amount, 0.1f, 1, INT_MAX)) {
+            register_change("mission fail conditions change");
+            game.cur_area_data->mission.fail_too_many_pik_amount =
+                (size_t) amount;
+        }
+        set_tooltip(
+            "Pikmin amount that, when reached, ends the mission\n"
+            "as a fail.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
+        
+        ImGui::Unindent();
+    }
+    
+    //Losing Pikmin checkbox.
+    fail_flags_changed |=
+        ImGui::CheckboxFlags(
+            "Lose Pikmin",
+            &fail_flags,
+            get_idx_bitmask(MISSION_FAIL_COND_LOSE_PIKMIN)
+        );
+    set_tooltip(
+        "The mission ends as a fail if a certain amount of Pikmin die."
+    );
+    
+    if(
+        has_flag(
+            fail_flags,
+            get_idx_bitmask(MISSION_FAIL_COND_LOSE_PIKMIN)
+        )
+    ) {
+        //Pikmin deaths value.
+        int amount =
+            (int) game.cur_area_data->mission.fail_pik_killed;
+        ImGui::Indent();
+        ImGui::SetNextItemWidth(50);
+        if(ImGui::DragInt("Deaths", &amount, 0.1f, 1, INT_MAX)) {
+            register_change("mission fail conditions change");
+            game.cur_area_data->mission.fail_pik_killed =
+                (size_t) amount;
+        }
+        set_tooltip(
+            "Pikmin death amount that, when reached, ends the mission\n"
+            "as a fail.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
+        ImGui::Unindent();
+    }
+    
+    //Taking damage checkbox.
+    fail_flags_changed |=
+        ImGui::CheckboxFlags(
+            "Take damage",
+            &fail_flags,
+            get_idx_bitmask(MISSION_FAIL_COND_TAKE_DAMAGE)
+        );
+    set_tooltip(
+        "The mission ends as a fail if any leader loses any health."
+    );
+    
+    //Lose leaders checkbox.
+    fail_flags_changed |=
+        ImGui::CheckboxFlags(
+            "Lose leaders",
+            &fail_flags,
+            get_idx_bitmask(MISSION_FAIL_COND_LOSE_LEADERS)
+        );
+    set_tooltip(
+        "The mission ends as a fail if a certain amount of leaders get\n"
+        "KO'd. This fail condition isn't forced because the\n"
+        "player might still be able to reach the mission goal with the\n"
+        "Pikmin. Or because you may want to make a really gimmicky\n"
+        "automatic mission with no leaders."
+    );
+    
+    if(
+        has_flag(
+            fail_flags,
+            get_idx_bitmask(
+                MISSION_FAIL_COND_LOSE_LEADERS
+            )
+        )
+    ) {
+        //Leader KOs value.
+        int amount =
+            (int) game.cur_area_data->mission.fail_leaders_kod;
+        ImGui::Indent();
+        ImGui::SetNextItemWidth(50);
+        if(ImGui::DragInt("KOs", &amount, 0.1f, 1, INT_MAX)) {
+            register_change("mission fail conditions change");
+            game.cur_area_data->mission.fail_leaders_kod =
+                (size_t) amount;
+        }
+        set_tooltip(
+            "Leader KO amount that, when reached, ends the mission\n"
+            "as a fail.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
+        ImGui::Unindent();
+    }
+    
+    //Kill enemies checkbox.
+    fail_flags_changed |=
+        ImGui::CheckboxFlags(
+            "Kill enemies",
+            &fail_flags,
+            get_idx_bitmask(MISSION_FAIL_COND_KILL_ENEMIES)
+        );
+    set_tooltip(
+        "The mission ends as a fail if a certain amount of\n"
+        "enemies get killed."
+    );
+    
+    if(
+        has_flag(
+            fail_flags,
+            get_idx_bitmask(MISSION_FAIL_COND_KILL_ENEMIES)
+        )
+    ) {
+        //Enemy kills value.
+        int amount =
+            (int) game.cur_area_data->mission.fail_enemies_killed;
+        ImGui::Indent();
+        ImGui::SetNextItemWidth(50);
+        if(ImGui::DragInt("Kills", &amount, 0.1f, 1, INT_MAX)) {
+            register_change("mission fail conditions change");
+            game.cur_area_data->mission.fail_enemies_killed =
+                (size_t) amount;
+        }
+        set_tooltip(
+            "Enemy kill amount that, when reached, ends the mission\n"
+            "as a fail.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
+        ImGui::Unindent();
+    }
+    
+    if(fail_flags_changed) {
+        register_change("mission fail conditions change");
+        game.cur_area_data->mission.fail_conditions =
+            (bitmask_8_t) fail_flags;
+    }
+    
+    vector<MISSION_FAIL_COND> active_conditions;
+    for(size_t c = 0; c < game.mission_fail_conds.size(); c++) {
+        if(
+            has_flag(
+                game.cur_area_data->mission.fail_conditions,
+                get_idx_bitmask(c)
+            )
+        ) {
+            active_conditions.push_back((MISSION_FAIL_COND) c);
+        }
+    }
+    
+    if(!active_conditions.empty()) {
+    
+        //Primary HUD condition checkbox.
+        ImGui::Spacer();
+        bool show_primary =
+            game.cur_area_data->mission.fail_hud_primary_cond != INVALID;
+        if(ImGui::Checkbox("Show primary HUD element", &show_primary)) {
+            register_change("mission fail conditions change");
+            game.cur_area_data->mission.fail_hud_primary_cond =
+                show_primary ?
+                (size_t) active_conditions[0] :
+                INVALID;
+        }
+        set_tooltip(
+            "If checked, a large HUD element will appear showing\n"
+            "the most important fail condition's information."
+        );
+        
+        if(show_primary) {
+            //Primary HUD condition combobox.
+            int selected = 0;
+            bool found = false;
+            vector<string> cond_strings;
+            for(size_t c = 0; c < active_conditions.size(); c++) {
+                size_t cond_id = active_conditions[c];
+                cond_strings.push_back(
+                    game.mission_fail_conds[cond_id]->get_name()
+                );
+                if(
+                    cond_id ==
+                    game.cur_area_data->mission.fail_hud_primary_cond
+                ) {
+                    found = true;
+                    selected = (int) c;
+                }
+            }
+            if(!found) {
+                game.cur_area_data->mission.fail_hud_secondary_cond = 0;
+            }
+            ImGui::Indent();
+            if(
+                ImGui::Combo(
+                    "Primary condition", &selected, cond_strings, 15
+                )
+            ) {
+                register_change("mission fail conditions change");
+                game.cur_area_data->mission.fail_hud_primary_cond =
+                    active_conditions[selected];
+            }
+            set_tooltip(
+                "Failure condition to show in the primary HUD element."
+            );
+            ImGui::Unindent();
+        }
+        
+        //Secondary HUD condition checkbox.
+        bool show_secondary =
+            game.cur_area_data->mission.fail_hud_secondary_cond != INVALID;
+        if(ImGui::Checkbox("Show secondary HUD element", &show_secondary)) {
+            register_change("mission fail conditions change");
+            game.cur_area_data->mission.fail_hud_secondary_cond =
+                show_secondary ?
+                (size_t) active_conditions[0] :
+                INVALID;
+        }
+        set_tooltip(
+            "If checked, a smaller HUD element will appear showing\n"
+            "some other fail condition's information."
+        );
+        
+        if(show_secondary) {
+            //Secondary HUD condition combobox.
+            bool found = false;
+            int selected = 0;
+            vector<string> cond_strings;
+            for(size_t c = 0; c < active_conditions.size(); c++) {
+                size_t cond_id = active_conditions[c];
+                cond_strings.push_back(
+                    game.mission_fail_conds[cond_id]->get_name()
+                );
+                if(
+                    cond_id ==
+                    game.cur_area_data->mission.fail_hud_secondary_cond
+                ) {
+                    found = true;
+                    selected = (int) c;
+                }
+            }
+            if(!found) {
+                game.cur_area_data->mission.fail_hud_secondary_cond = 0;
+            }
+            ImGui::Indent();
+            if(
+                ImGui::Combo(
+                    "Secondary condition", &selected, cond_strings, 15
+                )
+            ) {
+                register_change("mission fail conditions change");
+                game.cur_area_data->mission.fail_hud_secondary_cond =
+                    active_conditions[selected];
+            }
+            set_tooltip(
+                "Failure condition to show in the secondary HUD element."
+            );
+            ImGui::Unindent();
+        }
+        
+    } else {
+        game.cur_area_data->mission.fail_hud_primary_cond = INVALID;
+        game.cur_area_data->mission.fail_hud_secondary_cond = INVALID;
+        
+    }
+}
+
+
+/**
+ * @brief Processes the Dear ImGui battle enemies goal part of the
+ * mission control panel for this frame.
+ */
+void area_editor::process_gui_panel_mission_goal_be() {
+    //Explanation text.
+    ImGui::TextWrapped(
+        "The player must defeat certain enemies, or all of them."
+    );
+    
+    //Enemy requirements text.
+    ImGui::Spacer();
+    ImGui::Text("Enemy requirements:");
+    
+    int requires_all_option =
+        game.cur_area_data->mission.goal_all_mobs ? 0 : 1;
+        
+    //All enemies requirement radio button.
+    if(ImGui::RadioButton("All", &requires_all_option, 0)) {
+        register_change("mission requirements change");
+        game.cur_area_data->mission.goal_all_mobs =
+            requires_all_option == 0;
+    }
+    set_tooltip(
+        "Require the player to defeat all enemies "
+        "in order to reach the goal."
+    );
+    
+    //Specific enemies requirement radio button.
+    ImGui::SameLine();
+    if(
+        ImGui::RadioButton("Specific ones", &requires_all_option, 1)
+    ) {
+        register_change("mission requirements change");
+        game.cur_area_data->mission.goal_all_mobs =
+            requires_all_option == 0;
+    }
+    set_tooltip(
+        "Require the player to defeat specific enemies "
+        "in order to reach the goal.\n"
+        "You must specify which enemies these are."
+    );
+    
+    if(!game.cur_area_data->mission.goal_all_mobs) {
+    
+        //Start mob selector mode button.
+        if(ImGui::Button("Pick enemies...")) {
+            change_state(EDITOR_STATE_MOBS);
+            sub_state = EDITOR_SUB_STATE_MISSION_MOBS;
+        }
+        set_tooltip(
+            "Click here to start picking which enemies do and\n"
+            "do not belong to the required enemy list."
+        );
+        
+    }
+    
+    //Total objects required text.
+    size_t total_required = get_mission_required_mob_count();
+    ImGui::Text("Total objects required: %lu", total_required);
+}
+
+
+/**
+ * @brief Processes the Dear ImGui collect treasures goal part of the
+ * mission control panel for this frame.
+ */
+void area_editor::process_gui_panel_mission_goal_ct() {
+    //Explanation text.
+    ImGui::TextWrapped(
+        "The player must collect certain treasures, or all of them."
+    );
+    
+    //Treasure requirements text.
+    ImGui::Spacer();
+    ImGui::Text("Treasure requirements:");
+    
+    int requires_all_option =
+        game.cur_area_data->mission.goal_all_mobs ? 0 : 1;
+        
+    //All treasures requirement radio button.
+    if(ImGui::RadioButton("All", &requires_all_option, 0)) {
+        register_change("mission requirements change");
+        game.cur_area_data->mission.goal_all_mobs =
+            requires_all_option == 0;
+    }
+    set_tooltip(
+        "Require the player to collect all treasures "
+        "in order to reach the goal."
+    );
+    
+    //Specific treasures requirement radio button.
+    ImGui::SameLine();
+    if(
+        ImGui::RadioButton("Specific ones", &requires_all_option, 1)
+    ) {
+        register_change("mission requirements change");
+        game.cur_area_data->mission.goal_all_mobs =
+            requires_all_option == 0;
+    }
+    set_tooltip(
+        "Require the player to collect specific treasures "
+        "in order to reach the goal.\n"
+        "You must specify which treasures these are."
+    );
+    
+    if(!game.cur_area_data->mission.goal_all_mobs) {
+    
+        //Start mob selector mode button.
+        if(ImGui::Button("Pick treasures...")) {
+            change_state(EDITOR_STATE_MOBS);
+            sub_state = EDITOR_SUB_STATE_MISSION_MOBS;
+        }
+        set_tooltip(
+            "Click here to start picking which treasures, piles, and\n"
+            "resources do and do not belong to the required\n"
+            "treasure list."
+        );
+        
+    }
+    
+    //Total objects required text.
+    size_t total_required = get_mission_required_mob_count();
+    ImGui::Text("Total objects required: %lu", total_required);
+}
+
+
+/**
+ * @brief Processes the Dear ImGui get to exit goal part of the
+ * mission control panel for this frame.
+ */
+void area_editor::process_gui_panel_mission_goal_gte() {
+    //Explanation text.
+    ImGui::TextWrapped(
+        "The player must get a leader or all of them "
+        "to the exit point."
+    );
+    
+    //Start exit region selector mode button.
+    ImGui::Spacer();
+    if(ImGui::Button("Pick region...")) {
+        sub_state = EDITOR_SUB_STATE_MISSION_EXIT;
+    }
+    set_tooltip(
+        "Click here to start picking where the exit region is.\n"
+    );
+    
+    //Region center text.
+    ImGui::Text(
+        "Exit region center: %s,%s",
+        f2s(game.cur_area_data->mission.goal_exit_center.x).c_str(),
+        f2s(game.cur_area_data->mission.goal_exit_center.y).c_str()
+    );
+    
+    //Region center text.
+    ImGui::Text(
+        "Exit region size: %s x %s",
+        f2s(game.cur_area_data->mission.goal_exit_size.x).c_str(),
+        f2s(game.cur_area_data->mission.goal_exit_size.y).c_str()
+    );
+    
+    //Leader requirements text.
+    ImGui::Spacer();
+    ImGui::Text("Leader requirements:");
+    
+    int requires_all_option =
+        game.cur_area_data->mission.goal_all_mobs ? 0 : 1;
+        
+    //All leaders requirement radio button.
+    if(ImGui::RadioButton("All", &requires_all_option, 0)) {
+        register_change("mission requirements change");
+        game.cur_area_data->mission.goal_all_mobs =
+            requires_all_option == 0;
+    }
+    set_tooltip(
+        "Require the player to bring all leaders to the exit\n"
+        "region in order to reach the mission's goal."
+    );
+    
+    //Specific leaders requirement radio button.
+    ImGui::SameLine();
+    if(
+        ImGui::RadioButton("Specific ones", &requires_all_option, 1)
+    ) {
+        register_change("mission requirements change");
+        game.cur_area_data->mission.goal_all_mobs =
+            requires_all_option == 0;
+    }
+    set_tooltip(
+        "Require the player to bring specific leaders to the exit\n"
+        "region in order to reach the mission's goal.\n"
+        "You must specify which leaders these are."
+    );
+    
+    if(!game.cur_area_data->mission.goal_all_mobs) {
+    
+        //Start mob selector mode button.
+        if(ImGui::Button("Pick leaders...")) {
+            change_state(EDITOR_STATE_MOBS);
+            sub_state = EDITOR_SUB_STATE_MISSION_MOBS;
+        }
+        set_tooltip(
+            "Click here to start picking which leaders do and\n"
+            "do not belong to the required leader list."
+        );
+        
+    }
+    
+    //Total objects required text.
+    size_t total_required = get_mission_required_mob_count();
+    ImGui::Text("Total objects required: %lu", total_required);
+}
+
+
+/**
+ * @brief Processes the Dear ImGui mission grading part of the
+ * mission control panel for this frame.
+ */
+void area_editor::process_gui_panel_mission_grading() {
+    //Grading mode text.
+    ImGui::Text("Grading mode:");
+    
+    //Grading mode widgets.
+    process_gui_grading_mode_widgets(
+        0, "Points",
+        "The player's final grade depends on how many points they\n"
+        "got in different criteria."
+    );
+
+    ImGui::SameLine();
+    process_gui_grading_mode_widgets(
+        1, "Goal",
+        "The player's final grade depends on whether they have reached\n"
+        "the mission goal (platinum) or not (nothing)."
+    );
+
+    ImGui::SameLine();
+    process_gui_grading_mode_widgets(
+        2, "Participation",
+        "The player's final grade depends on whether they have played\n"
+        "the mission (platinum) or not (nothing)."
+    );
+    
+    //Grading criterion widgets.
+    if(
+        game.cur_area_data->mission.grading_mode == MISSION_GRADING_MODE_POINTS
+    ) {
+
+        ImGui::Spacer();
+        process_gui_grading_criterion_widgets(
+            &game.cur_area_data->mission.points_per_pikmin_born,
+            MISSION_SCORE_CRITERIA_PIKMIN_BORN,
+            "Points per Pikmin born",
+            "Amount of points that the player receives for each\n"
+            "Pikmin born."
+        );
+
+        process_gui_grading_criterion_widgets(
+            &game.cur_area_data->mission.points_per_pikmin_death,
+            MISSION_SCORE_CRITERIA_PIKMIN_DEATH,
+            "Points per Pikmin death",
+            "Amount of points that the player receives for each\n"
+            "Pikmin lost."
+        );
+        
+        if(
+            has_flag(
+                game.cur_area_data->mission.fail_conditions,
+                get_idx_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
+            )
+        ) {
+            process_gui_grading_criterion_widgets(
+                &game.cur_area_data->mission.points_per_sec_left,
+                MISSION_SCORE_CRITERIA_SEC_LEFT,
+                "Points per second left",
+                "Amount of points that the player receives for each\n"
+                "second of time left, from the mission's time limit."
+            );
+        }
+
+        process_gui_grading_criterion_widgets(
+            &game.cur_area_data->mission.points_per_sec_passed,
+            MISSION_SCORE_CRITERIA_SEC_PASSED,
+            "Points per second passed",
+            "Amount of points that the player receives for each\n"
+            "second of time that has passed."
+        );
+
+        process_gui_grading_criterion_widgets(
+            &game.cur_area_data->mission.points_per_treasure_point,
+            MISSION_SCORE_CRITERIA_TREASURE_POINTS,
+            "Points per treasure point",
+            "Amount of points that the player receives for each\n"
+            "point gathered from treasures. Different treasures are worth\n"
+            "different treasure points."
+        );
+
+        process_gui_grading_criterion_widgets(
+            &game.cur_area_data->mission.points_per_enemy_point,
+            MISSION_SCORE_CRITERIA_ENEMY_POINTS,
+            "Points per enemy point",
+            "Amount of points that the player receives for each\n"
+            "enemy point. Different enemies are worth different\n"
+            "points."
+        );
+        
+        //Starting score value.
+        ImGui::Spacer();
+        int starting_points = game.cur_area_data->mission.starting_points;
+        ImGui::SetNextItemWidth(60);
+        if(ImGui::DragInt("Starting points", &starting_points, 1.0f)) {
+            register_change("mission grading change");
+            game.cur_area_data->mission.starting_points = starting_points;
+        }
+        set_tooltip(
+            "Starting amount of points. It can be positive or negative.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
+        
+        //Medal point requirements text.
+        ImGui::Spacer();
+        ImGui::Text("Medal point requirements:");
+
+        //Medal point requirement widgets.
+        process_gui_grading_medal_widgets(
+            &game.cur_area_data->mission.bronze_req, "Bronze",
+            INT_MIN, game.cur_area_data->mission.silver_req - 1,
+            "To get a bronze medal, the player needs at least these\n"
+            "many points. Fewer than this, and the player gets no medal."
+        );
+
+        process_gui_grading_medal_widgets(
+            &game.cur_area_data->mission.silver_req, "Silver",
+            game.cur_area_data->mission.bronze_req + 1,
+            game.cur_area_data->mission.gold_req - 1,
+            "To get a silver medal, the player needs at least these\n"
+            "many points."
+        );
+
+        process_gui_grading_medal_widgets(
+            &game.cur_area_data->mission.gold_req, "Gold",
+            game.cur_area_data->mission.silver_req + 1,
+            game.cur_area_data->mission.platinum_req - 1,
+            "To get a gold medal, the player needs at least these\n"
+            "many points."
+        );
+
+        process_gui_grading_medal_widgets(
+            &game.cur_area_data->mission.platinum_req, "Platinum",
+            game.cur_area_data->mission.gold_req + 1, INT_MAX,
+            "To get a platinum medal, the player needs at least these\n"
+            "many points."
+        );
+    }
 }
 
 
