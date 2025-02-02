@@ -53,8 +53,8 @@ def get_documentation_problems_in_file(file_path):
         comment_lines = lines[comment_start:f.line - 1]
 
         params_documented = []
-        for l in comment_lines:
-            match = re.search(r'\* @param ([^ \.]+)', l)
+        for line in comment_lines:
+            match = re.search(r'\* @param ([^ \.]+)', line)
             if match is not None:
                 params_documented.append(match.group(1))
         

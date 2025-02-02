@@ -2476,7 +2476,7 @@ bool editor::process_gui_size_widgets(
             
         } else {
             //Keep the area.
-            double area = size.x * size.y;
+            double area = (double) size.x * (double) size.y;
             if(new_size.x != size.x) {
                 //Must adjust Y.
                 if(min_size != -FLT_MAX) {
@@ -3934,7 +3934,7 @@ bool editor::transformation_widget::handle_mouse_move(
         bool by_x;
         float w_scale = new_size.x / old_size.x;
         float h_scale = new_size.y / old_size.y;
-        double old_area = old_size.x * old_size.y;
+        double old_area = (double) old_size.x * (double) old_size.y;
         if(!scaling_y) {
             by_x = true;
         } else if(!scaling_x) {

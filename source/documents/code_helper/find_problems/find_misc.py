@@ -35,33 +35,33 @@ def get_cramped_problems_in_file(file_path):
     thing = CRAMPED_THING_INCLUDE
     empty_lines = 0
 
-    for l in file:
+    for line in file:
         line_nr = line_nr + 1
         
         if not found_thing:
-            if l.startswith('}'):
+            if line.startswith('}'):
                 found_thing = True
                 empty_lines = 0
                 thing = CRAMPED_THING_CLOSE_BRACE
-            elif l.startswith('#include'):
+            elif line.startswith('#include'):
                 found_thing = True
                 empty_lines = 0
                 thing = CRAMPED_THING_INCLUDE
-            elif l.startswith('using'):
+            elif line.startswith('using'):
                 found_thing = True
                 empty_lines = 0
                 thing = CRAMPED_THING_USING
         
         else:
-            if l == '\n':
+            if line == '\n':
                 empty_lines = empty_lines + 1
             else:
                 found_thing = False
                 ignore = False
 
-                if thing == CRAMPED_THING_INCLUDE and l.startswith('#include'):
+                if thing == CRAMPED_THING_INCLUDE and line.startswith('#include'):
                     ignore = True
-                if thing == CRAMPED_THING_USING and l.startswith('using'):
+                if thing == CRAMPED_THING_USING and line.startswith('using'):
                     ignore = True
 
                 if empty_lines == 1 and not ignore:

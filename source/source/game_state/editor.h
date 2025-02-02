@@ -64,14 +64,14 @@ public:
     
     editor();
     virtual ~editor() = default;
-    virtual void do_drawing() override = 0;
-    virtual void do_logic() override = 0;
-    virtual void handle_allegro_event(ALLEGRO_EVENT &ev) override;
-    virtual void load() override;
-    virtual void unload() override;
+    void do_drawing() override = 0;
+    void do_logic() override = 0;
+    void handle_allegro_event(ALLEGRO_EVENT &ev) override;
+    void load() override;
+    void unload() override;
     virtual void update_style();
-    virtual void update_transformations() override;
-    virtual string get_name() const override = 0;
+    void update_transformations() override;
+    string get_name() const override = 0;
     virtual string get_history_option_prefix() const = 0;
     virtual size_t get_history_size() const;
     

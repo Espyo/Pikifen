@@ -20,9 +20,9 @@ largest_y_len = 0
 largest_w_len = 0
 largest_h_len = 0
 items = []
-for l in lines:
-    l = l.strip()
-    match = re.match(r'(.+)=(.+) (.+) (.+) (.+)', l)
+for line in lines:
+    line = line.strip()
+    match = re.match(r'(.+)=(.+) (.+) (.+) (.+)', line)
     item = {
         'name': match.group(1).strip(),
         'x': str(float(match.group(2))).replace('.0', ''),

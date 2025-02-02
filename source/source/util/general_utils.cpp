@@ -8,12 +8,6 @@
  * General-purpose utilities used throughout the project.
  */
 
-// Visual Studio warnings.
-#ifdef _MSC_VER
-// Disable warning about localtime being deprecated.
-#pragma warning(disable : 4996)
-#endif
-
 #include <csignal>
 #include <time.h>
 
@@ -258,7 +252,8 @@ void timer::tick(float delta_t) {
 string get_current_time(bool file_name_friendly) {
     time_t tt;
     time(&tt);
-    struct tm t = *localtime(&tt);
+    struct tm t;
+    localtime_r(&tt, &t);
     return
         i2s(t.tm_year + 1900) +
         (file_name_friendly ? "-" : "/") +

@@ -171,7 +171,7 @@ if __name__ == '__main__':
             if len(ls) == 0:
                 print('The current directory is not Pikifen\'s directory!')
                 exit(1)
-        except:
+        except Exception:
             print('The current directory is not Pikifen\'s directory!')
             exit(1)
     
@@ -180,7 +180,7 @@ if __name__ == '__main__':
         if len(ls) == 0:
             print('The source folder ("' + source_dir_to_use + '") does not exist!')
             exit(1)
-    except:
+    except Exception:
         print('The source folder ("' + source_dir_to_use + '") does not exist!')
         exit(1)
     

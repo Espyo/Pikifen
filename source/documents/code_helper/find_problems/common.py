@@ -100,26 +100,26 @@ def get_functions_in_file(file_path):
     functions = []
     line_nr = 0
     
-    for l in lines:
+    for line in lines:
         line_nr += 1
         
-        if l[0] == ' ':
+        if line[0] == ' ':
             # Anything indented is not a function definition.
             continue
-        if l[0] == '#':
+        if line[0] == '#':
             # Preprocessor.
             continue
-        if l[0] == '/':
+        if line[0] == '/':
             # Comment.
             continue
-        if l.find('=') != -1:
+        if line.find('=') != -1:
             # Variable declaration.
             continue
         # Simplify calls to std::.
-        l = l.replace('std::', '')
+        line = line.replace('std::', '')
         
         # Style #1: function belonging to a namespace.
-        r = re.match(r'(.+)::([^\(]+)\(', l)
+        r = re.match(r'(.+)::([^\(]+)\(', line)
         
         if r is not None:
             f = Function()
@@ -139,7 +139,7 @@ def get_functions_in_file(file_path):
             continue
         
         # Style #2: simple function.
-        r = re.match(r'[^\(]+ ([^\(]+)\(', l)
+        r = re.match(r'[^\(]+ ([^\(]+)\(', line)
         
         if r is not None:
             f = Function()
@@ -166,14 +166,14 @@ def get_includes_in_file(file_path):
     includes = []
     line_nr = 0
     
-    for l in file:
+    for line in file:
         line_nr += 1
         
-        if l[0] == '/':
+        if line[0] == '/':
             # Comment.
             continue
         
-        r = re.match(r'#include (.+)', l)
+        r = re.match(r'#include (.+)', line)
         
         if r is not None:
             i = Include()
@@ -205,21 +205,21 @@ def get_namespace_constants_in_file(file_path):
     line_nr = 0
     in_namespace = None
     
-    for l in lines:
+    for line in lines:
         line_nr += 1
 
-        r = re.match(r'namespace ([A-Z_]+) ?{', l)
+        r = re.match(r'namespace ([A-Z_]+) ?{', line)
         if r is not None:
             in_namespace = r.group(1).strip()
             continue
         
-        r = re.match(r'\}', l)
+        r = re.match(r'\}', line)
         if r is not None:
             in_namespace = None
             continue
         
         if in_namespace is not None:
-            r = re.match(r'.*const [^=]+ ([A-Z_]+)(;|[^\)]+;)', l)
+            r = re.match(r'.*const [^=]+ ([A-Z_]+)(;|[^\)]+;)', line)
             
             if r is not None:
                 name = r.group(1).strip()
@@ -326,26 +326,26 @@ def pad(s, nr):
 #  @param l Token to the left of the text to remove.
 #  @param r Token to the right of the text to remove.
 #  @return The string without the text inside or the tokens.
-def remove_inside(s, l, r):
+def remove_inside(string, left_token, right_token):
     c = 0
     bracket_start = 0
     level = 0
-    while c < len(s):
-        if s[c] == l:
+    while c < len(string):
+        if string[c] == left_token:
             if level == 0:
                 level = 1
                 bracket_start = c
             else:
                 level = level + 1
-        elif s[c] == r:
+        elif string[c] == right_token:
             level = level - 1
             if level <= 0:
-                pre = s[:bracket_start]
-                pos = s[c + 1:]
-                s = pre + pos
+                pre = string[:bracket_start]
+                pos = string[c + 1:]
+                string = pre + pos
                 c = bracket_start
         c = c + 1
-    return s
+    return string
 
 
 ## Performs a system call.

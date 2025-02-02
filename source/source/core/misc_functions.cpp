@@ -11,12 +11,6 @@
 #define _USE_MATH_DEFINES
 #undef _CMATH_
 
-// Visual Studio warnings.
-#ifdef _MSC_VER
-// Disable warning about localtime being deprecated.
-#pragma warning(disable : 4996)
-#endif
-
 #include <algorithm>
 #include <iostream>
 #include <stdlib.h>
