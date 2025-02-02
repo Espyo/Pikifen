@@ -213,7 +213,11 @@ bool bridge::check_health() {
     }
     
     //Move the bridge object proper to the farthest point of the bridge.
-    point offset(chunk_width * chunks - 32.0f, 0);
+    float mob_radius =
+        rectangular_dim.x != 0.0f ?
+        rectangular_dim.x / 2.0f :
+        radius;
+    point offset(chunk_width * chunks - mob_radius, 0);
     offset = rotate_point(offset, angle);
     pos = start_pos + offset;
     z = start_z + prev_chunk_components[0]->z;

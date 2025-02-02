@@ -8,7 +8,6 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Wood bridges go backwards a bit when they create the first chunk
 
     --- 0.26 ---
     Test -S-'s get_onion_info branch
