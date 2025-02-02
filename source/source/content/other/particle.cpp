@@ -124,6 +124,10 @@ void particle::tick(const float delta_t) {
     total_velocity -= new_friction;
     
     pos += total_velocity * delta_t;
+    
+    if(bmp_angle_type == PARTICLE_ANGLE_TYPE_DIRECTION) {
+        coordinates_to_angle(total_velocity, &bmp_angle, nullptr);
+    }
 }
 
 
@@ -227,14 +231,16 @@ void particle_generator::emit(particle_manager &manager) {
             );
         new_p.time = new_p.duration;
         
-        new_p.bmp_angle +=
-            game.rng.f(-bmp_angle_deviation, bmp_angle_deviation);
+        if(new_p.bmp_angle_type == PARTICLE_ANGLE_TYPE_FIXED) {
+            new_p.bmp_angle +=
+                game.rng.f(-bmp_angle_deviation, bmp_angle_deviation);
+        }
         new_p.friction +=
             game.rng.f(-friction_deviation, friction_deviation);
             
         new_p.pos = base_p_pos;
         new_p.origin = base_p_pos;
-        point offset = emission.get_emission_offset();
+        point offset = emission.get_emission_offset(p / (float) final_nr);
         if(follow_angle) {
             offset = rotate_point(offset, *follow_angle);
         }
@@ -330,6 +336,7 @@ void particle_generator::load_from_data_node(
         ers.set("circle_inner_dist", emission.circle_inner_dist);
         ers.set("circle_arc", emission.circle_arc);
         ers.set("circle_arc_rot", emission.circle_arc_rot);
+        ers.set("evenly_spread", emission.evenly_spread);
         break;
     } case PARTICLE_EMISSION_SHAPE_RECTANGLE: {
         ers.set("rect_outer_dist", emission.rect_outer_dist);
@@ -341,14 +348,17 @@ void particle_generator::load_from_data_node(
     emission.shape = (PARTICLE_EMISSION_SHAPE) shape_int;
     
     data_node* bitmap_node = nullptr;
+    size_t angle_type_int = 0;
     size_t blend_int = 0;
     
     prs.set("bitmap", base_particle.bmp_name, &bitmap_node);
     prs.set("bitmap_angle", base_particle.bmp_angle);
+    prs.set("bitmap_angle_type", angle_type_int);
     prs.set("duration", base_particle.duration);
     prs.set("friction", base_particle.friction);
     prs.set("blend_type", blend_int);
     
+    base_particle.bmp_angle_type = (PARTICLE_ANGLE_TYPE) angle_type_int;
     base_particle.blend_type = (PARTICLE_BLEND_TYPE) blend_int;
     base_particle.bmp_angle = deg_to_rad(base_particle.bmp_angle);
     
@@ -446,6 +456,9 @@ void particle_generator::save_to_data_node(data_node* node) {
         emission_particle_node->add(
             new data_node("circle_arc_rot", f2s(emission.circle_arc_rot))
         );
+        emission_particle_node->add(
+            new data_node("evenly_spread", f2s(emission.evenly_spread))
+        );
         break;
     } case PARTICLE_EMISSION_SHAPE_RECTANGLE: {
         emission_particle_node->add(
@@ -466,6 +479,9 @@ void particle_generator::save_to_data_node(data_node* node) {
     );
     base_particle_node->add(
         new data_node("bitmap_angle", f2s(rad_to_deg(base_particle.bmp_angle)))
+    );
+    base_particle_node->add(
+        new data_node("bitmap_angle_type", i2s(base_particle.bmp_angle_type))
     );
     base_particle_node->add(
         new data_node("duration", f2s(base_particle.duration))
@@ -847,16 +863,26 @@ particle_emission_struct::particle_emission_struct(
 /**
  * @brief Returns a randomly-picked offset for a new particle.
  *
+ * @param number_ratio Ratio of which number particle this is in the emission,
+ * over the total particles to emit in this emission.
  * @return The offset.
  */
-point particle_emission_struct::get_emission_offset() {
+point particle_emission_struct::get_emission_offset(float number_ratio) {
     switch (shape) {
     case PARTICLE_EMISSION_SHAPE_CIRCLE: {
-        return
-            get_random_point_in_ring(
-                circle_inner_dist, circle_outer_dist,
-                circle_arc, circle_arc_rot, &game.rng.seed
-            );
+        if(evenly_spread) {
+            return
+                get_ratio_point_in_ring(
+                    circle_inner_dist, circle_outer_dist,
+                    circle_arc, circle_arc_rot, number_ratio
+                );
+        } else {
+            return
+                get_random_point_in_ring(
+                    circle_inner_dist, circle_outer_dist,
+                    circle_arc, circle_arc_rot, &game.rng.seed
+                );
+        }
         break;
         
     } case PARTICLE_EMISSION_SHAPE_RECTANGLE: {

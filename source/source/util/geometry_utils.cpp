@@ -1123,6 +1123,34 @@ float get_point_sign(const point &p, const point &lp1, const point &lp2) {
 
 
 /**
+ * @brief Returns a point inside of a circular ring. Used when you want multiple
+ * points inside the ring, evenly distributed. Which of the points this is
+ * is defined by the ratio, which is
+ * <current point number> / <total number of points>. The distance from the
+ * center point is the mid-point of the inner and outer ring.
+ *
+ * @param inner_dist Radius of the inner circle of the ring.
+ * @param outer_dist Radius of the outer circle of the ring.
+ * @param arc Arc of the ring, or M_TAU for the whole ring.
+ * @param arc_rot Rotation of the arc.
+ * @param ratio Ratio of the current point number.
+ * @return The point.
+ */
+point get_ratio_point_in_ring(
+    float inner_dist, float outer_dist,
+    float arc, float arc_rot, float ratio
+) {
+
+    float radius = (inner_dist + outer_dist) / 2.0f;
+    float angle1 = -arc / 2.0f + arc_rot;
+    float angle2 = arc / 2.0f + arc_rot;
+    float final_angle = (angle2 - angle1) * ratio + angle1;
+    
+    return angle_to_coordinates(final_angle, radius);
+}
+
+
+/**
  * @brief Returns a random point inside of a rectangular ring, with uniform
  * distribution.
  *

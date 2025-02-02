@@ -11,25 +11,30 @@ emission{
 	circle_inner_dist=14.8000
 	circle_arc=6.2832
 	circle_arc_rot=0.0000
+	evenly_spread=1.0000
 }
 base{
 	bitmap=pellet_posy_petal
 	bitmap_angle=0.0000
+	bitmap_angle_type=1
 	duration=2.0000
 	friction=0.7000
 	blend_type=0
 	color{
-		0.0000=255 255 255
+		0.0000=255 255 255 0
+		0.1390=255 255 255
 		1.0000=255 255 255 0
 	}
 	size{
 		0.0000=12.0000
+		1.0000=0.0000
 	}
 	linear_speed{
 		0.0000=0.0000 0.0000
+		1.0000=0.0000 20.0000
 	}
 	outwards_speed{
-		0.0000=20.0000
+		0.0000=40.0000
 	}
 	orbital_speed{
 		0.0000=0.0000
@@ -38,8 +43,9 @@ base{
 bitmap_angle_deviation=30.0000
 duration_deviation=0.3000
 friction_deviation=0.2000
-size_deviation=2.0000
+size_deviation=3.5000
 orbital_speed_deviation=0.0000
 outwards_speed_deviation=0.0000
-angle_deviation=360.0000
+angle_deviation=0.0000
 linear_speed_deviation=0.0000 0.0000
+angles_are_absolute=false

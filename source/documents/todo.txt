@@ -1,10 +1,8 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    Add an "outward angle" option for particles
-    Rock Pikmin thrown at a Pellet Posy should go to the Pellet Posy when they wake up
-    Hitting Esc when on an editor state that's not the main state won't do anything
+    
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
@@ -710,6 +708,7 @@ Next tasks (roughly sorted most important first)
             A way to view all states, with arrows pointing to which events lead to which states
             One possible layout is four columns; first one is a list of states, second is a list of events in the chosen state, third is a list of actions in the chosen event, and fourth is parameters and info about the state
             Actions that are critical to the logic flow should be colored or styled different from actions that are aesthetic
+        Weather editor
     
     
 Small tasks (for when I'm feeling lazy)
@@ -867,6 +866,7 @@ Misc things (so I don't forget)
         The scale category doesn't really need to exist -- the code that gets the current weight could be something any mob could use, and a way to display a custom number atop the mob could be added to the script (thanks Helodity)
         Resources should be able to specify what happens when they fall in the pit; carriable rocks need to respawn
     Pikmin behaviors
+        When Pikmin destroy something that drops something (Pellet Posy, Flukeweed, enemy corpse, enemy spoils, etc.), they should focus on retrieving that ASAP instead of just idling and leaving it up to chance whether they pick it up or not. This is especially important for Rock Pikmin, which usually bounce far away after attacking and killing an enemy
         Winged Pikmin that fall in the water should fly up when whistled
         Pikmin should want to go to nectar by themselves when idling
             Particularly important because Winged Pikmin don't drink nectar on their own
@@ -907,6 +907,8 @@ Misc things (so I don't forget)
         Animation editor
             Animations should be able to clone the hitbox, timing, etc. data of a different animation file. Basically if you want to create a skin of a leader, you can just clone everything and merely change the spritesheet
             A way to change all sprites' bitmap files from file A to file B (Darthvato)
+        Refactor the code so that sub-states are a bit more well-managed
+            Hitting Esc when on an sub-state that's not the main state won't do anything, for instance, unless it's manually coded to do so
         Pressing Esc on the sprite/whatever rename pop-up should cancel
             Calling ImGui::CloseCurrentPopup(); doesn't seem to work...
         Specific, niche tools for editors?

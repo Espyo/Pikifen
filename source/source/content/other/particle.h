@@ -77,6 +77,18 @@ enum PARTICLE_EMISSION_SHAPE {
 };
 
 
+//Particle bitmap angle types.
+enum PARTICLE_ANGLE_TYPE {
+
+    //Fixed all throughout.
+    PARTICLE_ANGLE_TYPE_FIXED,
+    
+    //Matches the direction of travel.
+    PARTICLE_ANGLE_TYPE_DIRECTION,
+    
+};
+
+
 //Blending modes for particle colors.
 enum PARTICLE_BLEND_TYPE {
 
@@ -130,13 +142,16 @@ struct particle_emission_struct {
     //How many radians the arc is rotated by.
     float circle_arc_rot = 0;
     
+    //Are the particles placed evenly spread? If not, they're randomly spread.
+    bool evenly_spread = false;
+    
     
     //--- Function declarations ---
     
     explicit particle_emission_struct(
         const float emission_interval = 0.0f, const size_t number = 1
     );
-    point get_emission_offset();
+    point get_emission_offset(float number_ratio);
     
 };
 
@@ -161,6 +176,9 @@ struct particle {
     
     //Angle the bitmap should be at.
     float bmp_angle = 0.0f;
+    
+    //Type of bitmap rotation.
+    PARTICLE_ANGLE_TYPE bmp_angle_type = PARTICLE_ANGLE_TYPE_FIXED;
     
     //The bitmap's internal name, or an empty string to use a circle.
     string bmp_name = "";

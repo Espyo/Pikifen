@@ -752,6 +752,7 @@ void particle_editor::process_gui_panel_generator() {
                     loaded_gen.emission.interval = 0.0f;
                     loaded_gen.emission.interval_deviation = 0.0f;
                 }
+                changes_mgr.mark_as_changed();
             }
             set_tooltip("The particles are created just once.");
             
@@ -762,6 +763,7 @@ void particle_editor::process_gui_panel_generator() {
                     loaded_gen.emission.interval = 0.01f;
                     loaded_gen.emission.interval_deviation = 0.0f;
                 }
+                changes_mgr.mark_as_changed();
             }
             set_tooltip(
                 "The particles are constantly being created\n"
@@ -871,9 +873,13 @@ void particle_editor::process_gui_panel_generator() {
         
             //Circle emission shape radio.
             int shape = loaded_gen.emission.shape;
-            ImGui::RadioButton(
-                "Circle", &shape, PARTICLE_EMISSION_SHAPE_CIRCLE
-            );
+            if(
+                ImGui::RadioButton(
+                    "Circle", &shape, PARTICLE_EMISSION_SHAPE_CIRCLE
+                )
+            ) {
+                changes_mgr.mark_as_changed();
+            }
             set_tooltip(
                 "Makes it so particles are created in a circle or \n"
                 "donut shape around the origin."
@@ -881,9 +887,13 @@ void particle_editor::process_gui_panel_generator() {
             
             //Rectangle emission shape radio.
             ImGui::SameLine();
-            ImGui::RadioButton(
-                "Rectangle", &shape, PARTICLE_EMISSION_SHAPE_RECTANGLE
-            );
+            if(
+                ImGui::RadioButton(
+                    "Rectangle", &shape, PARTICLE_EMISSION_SHAPE_RECTANGLE
+                )
+            ) {
+                changes_mgr.mark_as_changed();
+            }
             set_tooltip(
                 "Makes it so particles are created in a rectangle or \n"
                 "square shape around the origin."
@@ -963,6 +973,20 @@ void particle_editor::process_gui_panel_generator() {
                 set_tooltip(
                     "Rotate the emission arc by these many degrees.",
                     "", WIDGET_EXPLANATION_DRAG
+                );
+                
+                //Evenly spread checkbox.
+                ImGui::SetNextItemWidth(150);
+                if(
+                    ImGui::Checkbox(
+                        "Evenly spread", &loaded_gen.emission.evenly_spread
+                    )
+                ) {
+                    changes_mgr.mark_as_changed();
+                }
+                set_tooltip(
+                    "Evenly spread the particles throughout the emission\n"
+                    "area, instead of placing them randomly."
                 );
                 
                 break;
@@ -1097,41 +1121,81 @@ void particle_editor::process_gui_panel_generator() {
                 ImGui::Spacer();
                 ImGui::Text("Angle:");
                 
-                //Image angle value.
-                ImGui::Indent();
-                ImGui::SetNextItemWidth(85);
+                //Fixed angle radio.
+                int angle_type_int = loaded_gen.base_particle.bmp_angle_type;
+                ImGui::SameLine();
                 if(
-                    ImGui::SliderAngle(
-                        "##imgAngle", &loaded_gen.base_particle.bmp_angle, 0.0f
+                    ImGui::RadioButton(
+                        "Fixed", &angle_type_int,
+                        PARTICLE_ANGLE_TYPE_FIXED
                     )
                 ) {
                     changes_mgr.mark_as_changed();
                 }
                 set_tooltip(
-                    "Angle of the image.",
-                    "", WIDGET_EXPLANATION_DRAG
+                    "A particle's image angle is fixed all throughout."
                 );
                 
-                //Image angle deviation text.
+                //Direction angle radio.
                 ImGui::SameLine();
-                ImGui::Text(" +-");
-                
-                //Angle deviation value.
-                ImGui::SameLine();
-                ImGui::SetNextItemWidth(70);
                 if(
-                    ImGui::SliderAngle(
-                        "##imgAngleDev", &loaded_gen.bmp_angle_deviation, 0, 180
+                    ImGui::RadioButton(
+                        "Direction", &angle_type_int,
+                        PARTICLE_ANGLE_TYPE_DIRECTION
                     )
                 ) {
                     changes_mgr.mark_as_changed();
                 }
                 set_tooltip(
-                    "A particle's image angle varies randomly up or down\n"
-                    "by this amount.",
-                    "", WIDGET_EXPLANATION_DRAG
+                    "A particle's image angle matches the direction it's "
+                    "traveling."
                 );
-                ImGui::Unindent();
+                loaded_gen.base_particle.bmp_angle_type =
+                    (PARTICLE_ANGLE_TYPE) angle_type_int;
+                    
+                if(
+                    loaded_gen.base_particle.bmp_angle_type ==
+                    PARTICLE_ANGLE_TYPE_FIXED
+                ) {
+                
+                    //Image angle value.
+                    ImGui::Indent();
+                    ImGui::SetNextItemWidth(85);
+                    if(
+                        ImGui::SliderAngle(
+                            "##imgAngle",
+                            &loaded_gen.base_particle.bmp_angle, 0.0f
+                        )
+                    ) {
+                        changes_mgr.mark_as_changed();
+                    }
+                    set_tooltip(
+                        "Angle of the image.",
+                        "", WIDGET_EXPLANATION_DRAG
+                    );
+                    
+                    //Image angle deviation text.
+                    ImGui::SameLine();
+                    ImGui::Text(" +-");
+                    
+                    //Angle deviation value.
+                    ImGui::SameLine();
+                    ImGui::SetNextItemWidth(70);
+                    if(
+                        ImGui::SliderAngle(
+                            "##imgAngleDev",
+                            &loaded_gen.bmp_angle_deviation, 0, 180
+                        )
+                    ) {
+                        changes_mgr.mark_as_changed();
+                    }
+                    set_tooltip(
+                        "A particle's image angle varies randomly up or down\n"
+                        "by this amount.",
+                        "", WIDGET_EXPLANATION_DRAG
+                    );
+                    ImGui::Unindent();
+                }
             }
             
             ImGui::TreePop();
@@ -1165,18 +1229,26 @@ void particle_editor::process_gui_panel_generator() {
             //Normal blending radio.
             int blend_int = loaded_gen.base_particle.blend_type;
             ImGui::SameLine();
-            ImGui::RadioButton(
-                "Normal", &blend_int, PARTICLE_BLEND_TYPE_NORMAL
-            );
+            if(
+                ImGui::RadioButton(
+                    "Normal", &blend_int, PARTICLE_BLEND_TYPE_NORMAL
+                )
+            ) {
+                changes_mgr.mark_as_changed();
+            }
             set_tooltip(
                 "Particles appear on top of other particles like normal."
             );
             
             //Additive blending radio.
             ImGui::SameLine();
-            ImGui::RadioButton(
-                "Additive", &blend_int, PARTICLE_BLEND_TYPE_ADDITIVE
-            );
+            if(
+                ImGui::RadioButton(
+                    "Additive", &blend_int, PARTICLE_BLEND_TYPE_ADDITIVE
+                )
+            ) {
+                changes_mgr.mark_as_changed();
+            }
             set_tooltip(
                 "Particle colors add onto the color of particles underneath\n"
                 "them. This makes it so the more particles there are,\n"
