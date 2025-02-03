@@ -172,12 +172,10 @@ void pikmin::draw_mob() {
         //will work. In the off-chance they are different, using an average
         //will be more than enough.
         float avg_scale = (top_eff.scale.x + top_eff.scale.y) / 2.0f;
+        point top_bmp_size = get_bitmap_dimensions(top_bmp);
         top_eff.translation +=
             pos + rotate_point(top_coords, angle) * avg_scale;
-        top_eff.scale.x *=
-            top_size.x / al_get_bitmap_width(top_bmp);
-        top_eff.scale.y *=
-            top_size.y / al_get_bitmap_height(top_bmp);
+        top_eff.scale *= top_size / top_bmp_size;
         top_eff.rotation +=
             angle + top_angle;
         top_eff.glow_color =
@@ -189,13 +187,11 @@ void pikmin::draw_mob() {
     //Idle glow.
     if(is_idle) {
         bitmap_effect_t idle_eff = pik_sprite_eff;
+        point glow_bmp_size =
+            get_bitmap_dimensions(game.sys_assets.bmp_idle_glow);
         idle_eff.translation = pos;
-        idle_eff.scale.x =
-            (game.config.standard_pikmin_radius * 8) /
-            al_get_bitmap_width(game.sys_assets.bmp_idle_glow);
-        idle_eff.scale.y =
-            (game.config.standard_pikmin_radius * 8) /
-            al_get_bitmap_height(game.sys_assets.bmp_idle_glow);
+        idle_eff.scale =
+            (game.config.standard_pikmin_radius * 8) / glow_bmp_size;
         idle_eff.rotation =
             game.states.gameplay->area_time_passed *
             PIKMIN::IDLE_GLOW_SPIN_SPEED;

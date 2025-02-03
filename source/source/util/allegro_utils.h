@@ -16,6 +16,8 @@
 
 #include <allegro5/allegro.h>
 
+#include "geometry_utils.h"
+
 using std::string;
 using std::vector;
 
@@ -67,7 +69,8 @@ void al_fwrite(ALLEGRO_FILE* f, const string &s);
 string c2s(const ALLEGRO_COLOR &c);
 ALLEGRO_COLOR change_alpha(const ALLEGRO_COLOR &c, unsigned char a);
 ALLEGRO_COLOR change_color_lighting(const ALLEGRO_COLOR &c, float l);
-FS_DELETE_RESULT delete_file(const string& file_path);
+FS_DELETE_RESULT delete_file(const string &file_path);
+point get_bitmap_dimensions(ALLEGRO_BITMAP* bmp);
 string get_key_name(int keycode, bool condensed);
 void getline(ALLEGRO_FILE* file, string &line);
 bool file_exists(const string &path);

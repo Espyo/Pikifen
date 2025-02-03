@@ -671,12 +671,9 @@ void leader::draw_mob() {
         
         if(spark_s && spark_s->bitmap) {
             bitmap_effect_t spark_eff = eff;
-            point size(
-                al_get_bitmap_width(cur_s_ptr->bitmap) * eff.scale.x,
-                al_get_bitmap_height(cur_s_ptr->bitmap) * eff.scale.y
-            );
-            spark_eff.scale.x = size.x / al_get_bitmap_width(spark_s->bitmap);
-            spark_eff.scale.y = size.y / al_get_bitmap_height(spark_s->bitmap);
+            point size = get_bitmap_dimensions(cur_s_ptr->bitmap) * eff.scale;
+            point spark_size = get_bitmap_dimensions(spark_s->bitmap);
+            spark_eff.scale = size / spark_size;
             draw_bitmap_with_effects(spark_s->bitmap, spark_eff);
         }
     }

@@ -2279,10 +2279,7 @@ void area_editor::process_gui_panel_info() {
             //Thumbnail image.
             point size =
                 resize_to_box_keeping_aspect_ratio(
-                    point(
-                        al_get_bitmap_width(game.cur_area_data->thumbnail.get()),
-                        al_get_bitmap_height(game.cur_area_data->thumbnail.get())
-                    ),
+                    get_bitmap_dimensions(game.cur_area_data->thumbnail.get()),
                     point(200.0f)
                 );
             ImGui::Image(game.cur_area_data->thumbnail.get(), size);

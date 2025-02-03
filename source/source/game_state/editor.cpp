@@ -1872,10 +1872,7 @@ void editor::process_gui_bitmap_dialog() {
         const int thumb_max_size = 300;
         point size =
             resize_to_box_keeping_aspect_ratio(
-                point(
-                    al_get_bitmap_width(bitmap_dialog_cur_bmp_ptr),
-                    al_get_bitmap_height(bitmap_dialog_cur_bmp_ptr)
-                ),
+                get_bitmap_dimensions(bitmap_dialog_cur_bmp_ptr),
                 point(thumb_max_size)
             );
         ImGui::Image(bitmap_dialog_cur_bmp_ptr, size);

@@ -516,6 +516,57 @@ bool point::operator !=(const point &p) const {
 }
 
 
+/**
+ * @brief Adds a number to the coordinates.
+ *
+ * @param n Number to add to both coordinates.
+ * @param p Coordinates to add to.
+ * @return The new point.
+ */
+const point operator+(float n, const point &p) {
+    return point(n + p.x, n + p.y);
+}
+
+
+
+/**
+ * @brief Subtracts a number with the coordinates.
+ *
+ * @param n Number to subtract with both coordinates.
+ * @param p Coordinates to subtract with.
+ * @return The new point.
+ */
+const point operator-(float n, const point &p) {
+    return point(n - p.x, n - p.y);
+}
+
+
+
+/**
+ * @brief Multiplies a number by the coordinates.
+ *
+ * @param n Number to multiply with both coordinates.
+ * @param p Coordinates to multiply with.
+ * @return The new point.
+ */
+const point operator*(float n, const point &p) {
+    return point(n * p.x, n * p.y);
+}
+
+
+
+/**
+ * @brief Divides a number with the coordinates.
+ *
+ * @param n Number to divide with both coordinates.
+ * @param p Coordinates to divide with.
+ * @return The new point.
+ */
+const point operator/(float n, const point &p) {
+    return point(n / p.x, n / p.y);
+}
+
+
 
 /**
  * @brief Returns the vector coordinates of an angle.

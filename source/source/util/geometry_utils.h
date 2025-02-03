@@ -76,6 +76,11 @@ struct point {
     
 };
 
+const point operator+(float n, const point &p);
+const point operator-(float n, const point &p);
+const point operator*(float n, const point &p);
+const point operator/(float n, const point &p);
+
 
 /**
  * @brief A distance.

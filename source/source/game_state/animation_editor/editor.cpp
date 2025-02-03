@@ -125,12 +125,10 @@ animation_editor::animation_editor() :
  */
 void animation_editor::center_camera_on_sprite_bitmap(bool instant) {
     if(cur_sprite && cur_sprite->parent_bmp) {
-        int bmp_w = al_get_bitmap_width(cur_sprite->parent_bmp);
-        int bmp_h = al_get_bitmap_height(cur_sprite->parent_bmp);
-        int bmp_x = -bmp_w / 2.0;
-        int bmp_y = -bmp_h / 2.0;
+        point bmp_size = get_bitmap_dimensions(cur_sprite->parent_bmp);
+        point bmp_pos = 0.0f - bmp_size / 2.0f;
         
-        center_camera(point(bmp_x, bmp_y), point(bmp_x + bmp_w, bmp_y + bmp_h));
+        center_camera(bmp_pos, bmp_pos + bmp_size);
     } else {
         game.cam.target_zoom = 1.0f;
         game.cam.target_pos = point();

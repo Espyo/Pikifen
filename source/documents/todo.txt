@@ -9,13 +9,6 @@ Next tasks (roughly sorted most important first)
 
     --- 0.26 ---
     Test -S-'s get_onion_info branch
-    Update to Dear ImGui 1.91.8
-        Implement shortcuts?
-        Use multi-selection in the body part panel of the animation editor?
-        Use TextLink() and/or TextLinkOpenURL() for the editors' help dialogs?
-        Add keyboard/gamepad navigation stuff?
-        Switch from columns to tables
-        Use ImGuiColorEditFlags_* ?
     Revamp sounds
         Candidate list of all needed sounds, for now
             Pikmin
@@ -901,6 +894,7 @@ Misc things (so I don't forget)
             Make sectors et al have a member of the "reference" type, which is used to refer to another sector, edge, etc.? This would probably make the organization between pointers and indexes more foolproof
             Show mobs as sprites of the mob proper. In mob editing mode, also show a circle around them to help make it clear what their radius and angle are
             Add regression-testing in-game
+            Show a preview of the object's position and size when you duplicate one or are about to place it (thanks GuyWhoLikesCats)
         Animation editor
             Animations should be able to clone the hitbox, timing, etc. data of a different animation file. Basically if you want to create a skin of a leader, you can just clone everything and merely change the spritesheet
             A way to change all sprites' bitmap files from file A to file B (Darthvato)
@@ -914,7 +908,7 @@ Misc things (so I don't forget)
         An option to toggle the grid visibility
         Smooth scrolling in Dear ImGui https://github.com/ocornut/imgui/issues/2462 (thanks Nataly171)
         Customizable controls overall, including double-clicking any of the mouse buttons
-        Show a preview of the object's position and size when you duplicate one or are about to place it (thanks GuyWhoLikesCats)
+        Allow the GUI to be navigable via keyboard or joystick (this is a setting in Dear ImGui), and make it so the canvas can also be somewhat controlled, like the radar. Plus a button to switch which one is in focus
         Maybe the color scheme editor can just make use of some dark tones, some light tones, and one accent color, like how MuseScore does it
         Aesthetic
             A better font than just the built-in one

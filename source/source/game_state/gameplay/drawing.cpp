@@ -973,13 +973,12 @@ void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
     }
     
     //Leader cursor.
-    int bmp_cursor_w = al_get_bitmap_width(game.sys_assets.bmp_cursor);
-    int bmp_cursor_h = al_get_bitmap_height(game.sys_assets.bmp_cursor);
+    point bmp_cursor_size = get_bitmap_dimensions(game.sys_assets.bmp_cursor);
     
     draw_bitmap(
         game.sys_assets.bmp_cursor,
         leader_cursor_w,
-        point(bmp_cursor_w * 0.5, bmp_cursor_h * 0.5),
+        bmp_cursor_size / 2.0f,
         cursor_angle,
         change_color_lighting(
             color,
@@ -1009,7 +1008,7 @@ void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
     al_use_transform(&game.identity_transform);
     
     float count_offset =
-        std::max(bmp_cursor_w, bmp_cursor_h) * 0.18f * game.cam.zoom;
+        std::max(bmp_cursor_size.x, bmp_cursor_size.y) * 0.18f * game.cam.zoom;
         
     if(n_standby_pikmin > 0) {
         draw_text(

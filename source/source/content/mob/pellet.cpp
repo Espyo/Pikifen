@@ -55,8 +55,8 @@ void pellet::draw_mob() {
         SPRITE_BMP_EFFECT_CARRY
     );
     
-    eff.scale.x *= radius * 2.0 / al_get_bitmap_width(cur_s_ptr->bitmap);
-    eff.scale.y *= radius * 2.0 / al_get_bitmap_height(cur_s_ptr->bitmap);
+    point bmp_size = get_bitmap_dimensions(cur_s_ptr->bitmap);
+    eff.scale *= radius * 2.0f / bmp_size;
     
     draw_bitmap_with_effects(cur_s_ptr->bitmap, eff);
     draw_bitmap_with_effects(pel_type->bmp_number, eff);

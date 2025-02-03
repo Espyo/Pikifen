@@ -34,7 +34,7 @@ void draw_bitmap(
 
     if(size.x == 0 && size.y == 0) return;
     
-    point bmp_size(al_get_bitmap_width(bmp), al_get_bitmap_height(bmp));
+    point bmp_size = get_bitmap_dimensions(bmp);
     point scale = size / bmp_size;
     al_draw_tinted_scaled_rotated_bitmap(
         bmp,

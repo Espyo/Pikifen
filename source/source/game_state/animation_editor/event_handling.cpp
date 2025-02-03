@@ -264,16 +264,14 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         
     } case EDITOR_STATE_SPRITE_BITMAP: {
         if(cur_sprite && cur_sprite->parent_bmp) {
-            int bmp_w = al_get_bitmap_width(cur_sprite->parent_bmp);
-            int bmp_h = al_get_bitmap_height(cur_sprite->parent_bmp);
-            int bmp_x = -bmp_w / 2.0;
-            int bmp_y = -bmp_h / 2.0;
+            point bmp_size = get_bitmap_dimensions(cur_sprite->parent_bmp);
+            point bmp_pos = 0.0f - bmp_size / 2.0f;
             point bmp_click_pos = game.mouse_cursor.w_pos;
-            bmp_click_pos.x = floor(bmp_click_pos.x - bmp_x);
-            bmp_click_pos.y = floor(bmp_click_pos.y - bmp_y);
+            bmp_click_pos.x = floor(bmp_click_pos.x - bmp_pos.x);
+            bmp_click_pos.y = floor(bmp_click_pos.y - bmp_pos.y);
             
             if(bmp_click_pos.x < 0 || bmp_click_pos.y < 0) return;
-            if(bmp_click_pos.x > bmp_w || bmp_click_pos.y > bmp_h) return;
+            if(bmp_click_pos.x > bmp_pos.x || bmp_click_pos.y > bmp_pos.y) return;
             
             point selection_tl;
             point selection_br;
@@ -293,8 +291,8 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                     cur_sprite->file_pos.y + cur_sprite->file_size.y - 1;
             }
             
-            bool* selection_pixels = new bool[bmp_w * bmp_h];
-            memset(selection_pixels, 0, sizeof(bool) * bmp_w * bmp_h);
+            bool* selection_pixels = new bool[(int) (bmp_size.x * bmp_size.y)];
+            memset(selection_pixels, 0, sizeof(bool) * ((int) (bmp_size.x * bmp_size.y)));
             
             al_lock_bitmap(
                 cur_sprite->parent_bmp,
@@ -309,9 +307,9 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             al_unlock_bitmap(cur_sprite->parent_bmp);
             
             size_t p;
-            for(size_t y = 0; y < (size_t) bmp_h; y++) {
-                for(size_t x = 0; x < (size_t) bmp_w; x++) {
-                    p = y * bmp_w + x;
+            for(size_t y = 0; y < (size_t) bmp_size.y; y++) {
+                for(size_t x = 0; x < (size_t) bmp_size.x; x++) {
+                    p = y * bmp_size.x + x;
                     if(!selection_pixels[p]) continue;
                     update_min_max_coords(
                         selection_tl, selection_br, point(x, y)

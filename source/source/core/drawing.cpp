@@ -147,7 +147,7 @@ void draw_bitmap_with_effects(
     ALLEGRO_BITMAP* bmp, const bitmap_effect_t &effects
 ) {
 
-    point bmp_size(al_get_bitmap_width(bmp), al_get_bitmap_height(bmp));
+    point bmp_size = get_bitmap_dimensions(bmp);
     float scale_x =
         (effects.scale.x == LARGE_FLOAT) ? effects.scale.y : effects.scale.x;
     float scale_y =
@@ -990,10 +990,7 @@ void draw_mouse_cursor(const ALLEGRO_COLOR &color) {
     draw_bitmap(
         game.sys_assets.bmp_mouse_cursor,
         game.mouse_cursor.s_pos,
-        point(
-            al_get_bitmap_width(game.sys_assets.bmp_mouse_cursor),
-            al_get_bitmap_height(game.sys_assets.bmp_mouse_cursor)
-        ),
+        get_bitmap_dimensions(game.sys_assets.bmp_mouse_cursor),
         -(game.time_passed * game.config.cursor_spin_speed),
         color
     );

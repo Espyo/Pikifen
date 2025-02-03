@@ -284,6 +284,22 @@ vector<string> folder_to_vector_recursively(
 
 
 /**
+ * @brief Returns the width and height of an Allegro bitmap in a
+ * point structure.
+ *
+ * @param bmp Bitmap to check.
+ * @return The dimensions.
+ */
+point get_bitmap_dimensions(ALLEGRO_BITMAP* bmp) {
+    return
+        point(
+            al_get_bitmap_width(bmp),
+            al_get_bitmap_height(bmp)
+        );
+}
+
+
+/**
  * @brief Returns a name for the specified Allegro keyboard keycode.
  *
  * This basically makes use of al_keycode_to_name, but with some special cases

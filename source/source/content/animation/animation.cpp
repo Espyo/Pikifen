@@ -1277,16 +1277,15 @@ void sprite::set_bitmap(
         parent_bmp = game.content.bitmaps.list.get(new_file_name, node, node != nullptr);
     }
     
-    int parent_w = al_get_bitmap_width(parent_bmp);
-    int parent_h = al_get_bitmap_height(parent_bmp);
+    point parent_size = get_bitmap_dimensions(parent_bmp);
     
     file = new_file_name;
     file_pos = new_file_pos;
     file_size = new_file_size;
-    file_pos.x = clamp(new_file_pos.x, 0, parent_w - 1);
-    file_pos.y = clamp(new_file_pos.y, 0, parent_h - 1);
-    file_size.x = clamp(new_file_size.x, 0, parent_w - file_pos.x);
-    file_size.y = clamp(new_file_size.y, 0, parent_h - file_pos.y);
+    file_pos.x = clamp(new_file_pos.x, 0, parent_size.x - 1);
+    file_pos.y = clamp(new_file_pos.y, 0, parent_size.y - 1);
+    file_size.x = clamp(new_file_size.x, 0, parent_size.x - file_pos.x);
+    file_size.y = clamp(new_file_size.y, 0, parent_size.y - file_pos.y);
     
     if(parent_bmp) {
         bitmap =

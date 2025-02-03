@@ -3938,8 +3938,7 @@ void area_editor::update_reference() {
             reference_size.y == 0
         ) {
             //Let's assume this is a new reference. Reset sizes and alpha.
-            reference_size.x = al_get_bitmap_width(reference_bitmap);
-            reference_size.y = al_get_bitmap_height(reference_bitmap);
+            reference_size = get_bitmap_dimensions(reference_bitmap);
             reference_alpha = AREA_EDITOR::DEF_REFERENCE_ALPHA;
         }
     } else {

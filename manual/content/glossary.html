@@ -91,6 +91,10 @@
       <dd>An image. It contains a series of pixels, like most computer images.</dd>
       <dd>Further reading: <a href="http://en.wikipedia.org/wiki/Bitmap">Wikipedia's definition of bitmap</a>.</dd>
     </dl>
+    <dl id="branch">
+      <dt>Branch</dt>
+      <dd>A sequence of <a href="#commit">commits</a>.</dd>
+    </dl>
     <dl id="button">
       <dt>Button</dt>
       <dd>An on-screen button, or a button in the real world, that the player can press. For the latter case, it's usually a mouse button or a game <a href="#controller">controller</a> button, but it may sometimes refer to a keyboard <a href="#key">key</a> too, but never to a game <a href="#controller">controller</a> analog <a href="#stick">stick.</a></dd>
@@ -114,6 +118,14 @@
     <dl id="clear">
       <dt>Clear</dt>
       <dd>A mission being cleared means the mission has ended because the player has completed the mission's goal. It has no bearing on the medal the player receives.</dd>
+    </dl>
+    <dl id="commit">
+      <dt>Commit</dt>
+      <dd>A change made to the engine's <a href="#source-code">source code</a> or base content, using <a href="#git">git</a>. A change can be just one altered character of text, a block of text that gets deleted, an entirely new code file, a bunch of small changes spread throughout an area's geometry file, and so on.</dd>
+    </dl>
+    <dl id="compiler">
+      <dt>Compiler, compiling</dt>
+      <dd>A <a href="https://en.wikipedia.org/wiki/Compiler">compiler</a> is what grabs the <a href="#source-code">source code</a> files and generates an (.exe) binary file for you to run on your machine.</dd>
     </dl>
     <dl id="content">
       <dt>Content</dt>
@@ -206,6 +218,10 @@
     
     <h2 id="G">G</h2>
 
+    <dl id="git">
+      <dt>Git</dt>
+      <dd>The <a href="https://en.wikipedia.org/wiki/Version_control">version control system</a> used in the <i>Pikifen</i> project. This is how all changes (<a href="#commit">commits</a>) get added together into a cohesive project, it's how outside contributors can share their own changes, it's what makes it possible to go back in time to see the reason for a specific change, and so on.</dd>
+    </dl>
     <dl id="glow">
       <dt>Glow</dt>
       <dd>A way to brighten up an object. Due to Allegro limitations, it's not a real glow in the current versions of the engine because: 1. the brightness is limited to the bitmap's original pixels &#8211; darker bitmaps have a harder time becoming brighter; 2. the glow doesn't bleed and fade out, but is limited to the exact shape of the original bitmap.</dd>
@@ -323,6 +339,10 @@
       <dt>Maker tool</dt>
       <dd>Any tool that exists to help makers make content. There are tools that speed up the gameplay, tools that show <a href="#hitbox">hitbox</a> locations, etc.</dd>
       <dd>Further reading: <a href="maker_toolkit.html">Maker toolkit</a>.</dd>
+    </dl>
+    <dl id="master">
+      <dt>Master</dt>
+      <dd>Name of the main <a href="#branch">branch</a> where all of the latest <a href="#commit">commits</a> of the engine's <a href="#source-code">source code</a> go, even those mid-development that haven't been released in an official version yet.</dd>
     </dl>
     <dl id="message">
       <dt>Message</dt>
@@ -468,6 +488,10 @@
       <dt>Song track</dt>
       <dd>An audio file that, combined with other tracks in real-time, make up a <a href="#song">song</a>.</dd>
       <dd>Further reading: <a href="music.html">Making music</a>.</dd>
+    </dl>
+    <dl id="source-code">
+      <dt>Source code</dt>
+      <dd>The code files that get <a href="#compiler">compiled</a> into a playable program. In the case of <i>Pikifen</i>, the source code also includes some other tools and text notes, as well as the latest state of the engine's data and the base pack. If what you have downloaded only has the source code and not the .exe, you've downloaded the wrong thing! (Or you want to compile it yourself if you know how).</dd>
     </dl>
     <dl id="spawn">
       <dt>Spawn</dt>

@@ -1479,12 +1479,11 @@ void mob::draw_limb() {
     }
     
     float length = dist(parent_end, child_end).to_float();
+    point limb_bmp_size = get_bitmap_dimensions(limb_cur_s_ptr->bitmap);
     
     eff.translation = (parent_end + child_end) / 2.0;
-    eff.scale.x =
-        length / al_get_bitmap_width(limb_cur_s_ptr->bitmap);
-    eff.scale.y =
-        parent->limb_thickness / al_get_bitmap_height(limb_cur_s_ptr->bitmap);
+    eff.scale.x = length / limb_bmp_size.x;
+    eff.scale.y = parent->limb_thickness / limb_bmp_size.y;
     eff.rotation = p2c_angle;
     
     draw_bitmap_with_effects(limb_cur_s_ptr->bitmap, eff);
