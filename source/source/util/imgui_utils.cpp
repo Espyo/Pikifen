@@ -190,6 +190,63 @@ void ImGui::FocusOnInputText(bool &condition) {
 
 
 /**
+ * @brief Helps creating an ImGui Image using Allegro bitmaps.
+ *
+ * @param bitmap Bitmap to show on the button.
+ * @param bitmap_size Width and height of the bitmap.
+ * @param uv0 UV coordinates of the top-left coordinate.
+ * @param uv1 UV coordinates of the bottom-right coordinate.
+ * @param tint_col Tint color.
+ * @param border_col Border color.
+ * @return Whether the button was pressed.
+ */
+void ImGui::Image(
+    ALLEGRO_BITMAP* bitmap, const point &bitmap_size,
+    const point &uv0, const point &uv1,
+    const ALLEGRO_COLOR &tint_col, const ALLEGRO_COLOR &border_col
+) {
+    ImGui::Image(
+        (ImTextureID) (intptr_t) bitmap,
+        ImVec2(bitmap_size.x, bitmap_size.y),
+        ImVec2(uv0.x, uv0.y),
+        ImVec2(uv1.x, uv1.y),
+        ImVec4(tint_col.r, tint_col.g, tint_col.b, tint_col.a),
+        ImVec4(border_col.r, border_col.g, border_col.b, border_col.a)
+    );
+}
+
+
+/**
+ * @brief Helps creating an ImGui ImageButton using Allegro bitmaps.
+ *
+ * @param str_id Button widget ID.
+ * @param bitmap Bitmap to show on the button.
+ * @param bitmap_size Width and height of the bitmap.
+ * @param uv0 UV coordinates of the top-left coordinate.
+ * @param uv1 UV coordinates of the bottom-right coordinate.
+ * @param bg_col Background color.
+ * @param tint_col Tint color.
+ * @return Whether the button was pressed.
+ */
+bool ImGui::ImageButton(
+    const string &str_id, ALLEGRO_BITMAP* bitmap, const point &bitmap_size,
+    const point &uv0, const point &uv1,
+    const ALLEGRO_COLOR &bg_col,
+    const ALLEGRO_COLOR &tint_col
+) {
+    return
+        ImGui::ImageButton(
+            str_id.c_str(), (ImTextureID) (intptr_t) bitmap,
+            ImVec2(bitmap_size.x, bitmap_size.y),
+            ImVec2(uv0.x, uv0.y),
+            ImVec2(uv1.x, uv1.y),
+            ImVec4(bg_col.r, bg_col.g, bg_col.b, bg_col.a),
+            ImVec4(tint_col.r, tint_col.g, tint_col.b, tint_col.a)
+        );
+}
+
+
+/**
  * @brief Helps creating an ImGui ImageButton, followed by a centered Text.
  *
  * @param id Button widget ID.
@@ -200,7 +257,7 @@ void ImGui::FocusOnInputText(bool &condition) {
  * @return Whether the button was pressed.
  */
 bool ImGui::ImageButtonAndText(
-    const string &id, ALLEGRO_BITMAP* icon, const ImVec2 &icon_size,
+    const string &id, ALLEGRO_BITMAP* icon, const point &icon_size,
     float button_padding, const string &text
 ) {
     ImGui::BeginGroup();
@@ -208,12 +265,7 @@ bool ImGui::ImageButtonAndText(
     ImGui::PushStyleVar(
         ImGuiStyleVar_FramePadding, ImVec2(button_padding, button_padding)
     );
-    bool result =
-        ImGui::ImageButton(
-            id.c_str(),
-            icon, icon_size,
-            ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f)
-        );
+    bool result = ImGui::ImageButton(id, icon, icon_size);
     ImGui::PopStyleVar();
     
     float offset = (icon_size.y + button_padding * 2 - 16.0f) / 2.0f;
@@ -323,7 +375,7 @@ void ImGui::SetupButtonWrapping(
     float next_x2 =
         last_x2 + ImGui::GetStyle().ItemSpacing.x + next_button_width;
     float window_x2 =
-        ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMax().x;
+        GetCursorScreenPos().x + GetContentRegionAvail().x;
     if(next_button_idx < total_n_buttons && next_x2 < window_x2) {
         ImGui::SameLine();
     }

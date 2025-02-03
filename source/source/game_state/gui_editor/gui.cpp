@@ -675,7 +675,7 @@ void gui_editor::process_gui_panel_items() {
     //Item list.
     if(
         ImGui::BeginChild(
-            "itemsList", ImVec2(0.0f, 300.0f), ImGuiChildFlags_Border
+            "itemsList", ImVec2(0.0f, 300.0f), ImGuiChildFlags_Borders
         )
     ) {
         for(size_t i = 0; i < items.size(); i++) {
@@ -761,9 +761,8 @@ void gui_editor::process_gui_toolbar() {
     //Quit button.
     if(
         ImGui::ImageButton(
-            "quitButton",
-            editor_icons[EDITOR_ICON_QUIT],
-            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
+            "quitButton", editor_icons[EDITOR_ICON_QUIT],
+            point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         quit_widget_pos = get_last_widget_pos();
@@ -778,9 +777,8 @@ void gui_editor::process_gui_toolbar() {
     ImGui::SameLine();
     if(
         ImGui::ImageButton(
-            "loadButton",
-            editor_icons[EDITOR_ICON_LOAD],
-            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
+            "loadButton", editor_icons[EDITOR_ICON_LOAD],
+            point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         load_widget_pos = get_last_widget_pos();
@@ -799,7 +797,7 @@ void gui_editor::process_gui_toolbar() {
             changes_mgr.has_unsaved_changes() ?
             editor_icons[EDITOR_ICON_SAVE_UNSAVED] :
             editor_icons[EDITOR_ICON_SAVE],
-            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
+            point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         save_cmd(1.0f);
@@ -823,9 +821,8 @@ void gui_editor::process_gui_toolbar() {
     ImGui::SameLine(0, 16);
     if(
         ImGui::ImageButton(
-            "snapButton",
-            snap_mode_bmp,
-            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
+            "snapButton", snap_mode_bmp,
+            point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         snap_mode_cmd(1.0f);

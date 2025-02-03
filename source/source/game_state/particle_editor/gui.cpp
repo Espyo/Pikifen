@@ -665,7 +665,7 @@ void particle_editor::process_gui_panel_generator() {
             mgr_running ?
             editor_icons[EDITOR_ICON_STOP] :
             editor_icons[EDITOR_ICON_PLAY],
-            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
+            point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         part_mgr_playback_toggle_cmd(1.0f);
@@ -680,9 +680,8 @@ void particle_editor::process_gui_panel_generator() {
     //Clear particles button.
     if(
         ImGui::ImageButton(
-            "clearParticlesButton",
-            editor_icons[EDITOR_ICON_REMOVE],
-            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
+            "clearParticlesButton", editor_icons[EDITOR_ICON_REMOVE],
+            point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         clear_particles_cmd(1.0f);
@@ -703,7 +702,7 @@ void particle_editor::process_gui_panel_generator() {
             gen_running ?
             editor_icons[EDITOR_ICON_STOP] :
             editor_icons[EDITOR_ICON_PLAY],
-            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
+            point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         part_gen_playback_toggle_cmd(1.0f);
@@ -1080,9 +1079,8 @@ void particle_editor::process_gui_panel_generator() {
             //Remove bitmap button.
             if(
                 ImGui::ImageButton(
-                    "removeBitmap",
-                    editor_icons[EDITOR_ICON_REMOVE],
-                    ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
+                    "removeBitmap", editor_icons[EDITOR_ICON_REMOVE],
+                    point(EDITOR::ICON_BMP_SIZE)
                 )
             ) {
                 //We can't have living particles with destroyed bitmaps,
@@ -1658,9 +1656,8 @@ void particle_editor::process_gui_toolbar() {
     //Quit button.
     if(
         ImGui::ImageButton(
-            "quitButton",
-            editor_icons[EDITOR_ICON_QUIT],
-            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
+            "quitButton", editor_icons[EDITOR_ICON_QUIT],
+            point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         quit_widget_pos = get_last_widget_pos();
@@ -1675,9 +1672,8 @@ void particle_editor::process_gui_toolbar() {
     ImGui::SameLine();
     if(
         ImGui::ImageButton(
-            "loadButton",
-            editor_icons[EDITOR_ICON_LOAD],
-            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
+            "loadButton", editor_icons[EDITOR_ICON_LOAD],
+            point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         load_widget_pos = get_last_widget_pos();
@@ -1696,7 +1692,7 @@ void particle_editor::process_gui_toolbar() {
             changes_mgr.has_unsaved_changes() ?
             editor_icons[EDITOR_ICON_SAVE_UNSAVED] :
             editor_icons[EDITOR_ICON_SAVE],
-            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
+            point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         save_cmd(1.0f);
@@ -1710,9 +1706,8 @@ void particle_editor::process_gui_toolbar() {
     ImGui::SameLine(0, 16);
     if(
         ImGui::ImageButton(
-            "gridButton",
-            editor_icons[EDITOR_ICON_GRID],
-            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
+            "gridButton", editor_icons[EDITOR_ICON_GRID],
+            point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         grid_toggle_cmd(1.0f);
@@ -1726,9 +1721,8 @@ void particle_editor::process_gui_toolbar() {
     ImGui::SameLine();
     if(
         ImGui::ImageButton(
-            "silhouetteButton",
-            editor_icons[EDITOR_ICON_LEADER_SILHOUETTE],
-            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
+            "silhouetteButton", editor_icons[EDITOR_ICON_LEADER_SILHOUETTE],
+            point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         leader_silhouette_toggle_cmd(1.0f);
@@ -1742,9 +1736,8 @@ void particle_editor::process_gui_toolbar() {
     ImGui::SameLine();
     if(
         ImGui::ImageButton(
-            "emissionShapeButton",
-            editor_icons[EDITOR_ICON_MOB_RADIUS],
-            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
+            "emissionShapeButton", editor_icons[EDITOR_ICON_MOB_RADIUS],
+            point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         emission_shape_toggle_cmd(1.0f);

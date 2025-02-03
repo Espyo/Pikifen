@@ -17,6 +17,7 @@
 #include <allegro5/allegro.h>
 
 #include "../lib/imgui/imgui_impl_allegro5.h"
+#include "geometry_utils.h"
 
 
 using std::string;
@@ -45,8 +46,20 @@ bool DragTime2(
     int limit1 = INT_MAX, int limit2 = 59
 );
 void FocusOnInputText(bool &condition);
+void Image(
+    ALLEGRO_BITMAP* bitmap, const point &bitmap_size,
+    const point &uv0 = point(), const point &uv1 = point(1.0f),
+    const ALLEGRO_COLOR &tint_col = al_map_rgb(255, 255, 255),
+    const ALLEGRO_COLOR &border_col = al_map_rgba(0, 0, 0, 0)
+);
+bool ImageButton(
+    const string &str_id, ALLEGRO_BITMAP* bitmap, const point &bitmap_size,
+    const point &uv0 = point(), const point &uv1 = point(1.0f),
+    const ALLEGRO_COLOR &bg_col = al_map_rgba(0, 0, 0, 0),
+    const ALLEGRO_COLOR &tint_col = al_map_rgb(255, 255, 255)
+);
 bool ImageButtonAndText(
-    const string &id, ALLEGRO_BITMAP* icon, const ImVec2 &icon_size,
+    const string &id, ALLEGRO_BITMAP* icon, const point &icon_size,
     float button_padding, const string &text
 );
 bool ListBox(

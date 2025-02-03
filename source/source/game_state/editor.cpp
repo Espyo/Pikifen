@@ -1125,9 +1125,8 @@ bool editor::keyframe_organizer(
     string prevLabel = button_id + "prevButton";
     if(
         ImGui::ImageButton(
-            prevLabel.c_str(),
-            editor_icons[EDITOR_ICON_PREVIOUS],
-            ImVec2(EDITOR::ICON_BMP_SIZE / 2.0f, EDITOR::ICON_BMP_SIZE / 2.0f)
+            prevLabel, editor_icons[EDITOR_ICON_PREVIOUS],
+            point(EDITOR::ICON_BMP_SIZE / 2.0f)
         )
     ) {
         if(sel_keyframe_idx == 0) {
@@ -1145,9 +1144,8 @@ bool editor::keyframe_organizer(
     string nextLabel = button_id + "nextButton";
     if(
         ImGui::ImageButton(
-            nextLabel.c_str(),
-            editor_icons[EDITOR_ICON_NEXT],
-            ImVec2(EDITOR::ICON_BMP_SIZE / 2.0f, EDITOR::ICON_BMP_SIZE / 2.0f)
+            nextLabel, editor_icons[EDITOR_ICON_NEXT],
+            point(EDITOR::ICON_BMP_SIZE / 2.0f)
         )
     ) {
         if(sel_keyframe_idx == interpolator.keyframe_count() - 1) {
@@ -1165,9 +1163,8 @@ bool editor::keyframe_organizer(
     string addLabel = button_id + "addButton";
     if(
         ImGui::ImageButton(
-            addLabel.c_str(),
-            editor_icons[EDITOR_ICON_ADD],
-            ImVec2(EDITOR::ICON_BMP_SIZE / 2.0f, EDITOR::ICON_BMP_SIZE / 2.0f)
+            addLabel, editor_icons[EDITOR_ICON_ADD],
+            point(EDITOR::ICON_BMP_SIZE / 2.0f)
         )
     ) {
         float prev_t = interpolator.get_keyframe(sel_keyframe_idx).first;
@@ -1195,9 +1192,8 @@ bool editor::keyframe_organizer(
         string removeButton = button_id + "removeButton";
         if(
             ImGui::ImageButton(
-                removeButton.c_str(),
-                editor_icons[EDITOR_ICON_REMOVE],
-                ImVec2(EDITOR::ICON_BMP_SIZE / 2.0f, EDITOR::ICON_BMP_SIZE / 2.0f)
+                removeButton, editor_icons[EDITOR_ICON_REMOVE],
+                point(EDITOR::ICON_BMP_SIZE / 2.0f)
             )
         ) {
             size_t deleted_frame_idx = sel_keyframe_idx;
@@ -1882,7 +1878,7 @@ void editor::process_gui_bitmap_dialog() {
                 ),
                 point(thumb_max_size)
             );
-        ImGui::Image(bitmap_dialog_cur_bmp_ptr, ImVec2(size.x, size.y));
+        ImGui::Image(bitmap_dialog_cur_bmp_ptr, size);
     }
     
     //Next column.
@@ -2123,10 +2119,8 @@ bool editor::process_gui_mob_type_widgets(
     ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(9.0f, 9.0f));
     bool search_button_pressed =
         ImGui::ImageButton(
-            "searchButton",
-            editor_icons[EDITOR_ICON_SEARCH],
-            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
-            ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f)
+            "searchButton", editor_icons[EDITOR_ICON_SEARCH],
+            point(EDITOR::ICON_BMP_SIZE)
         );
     ImGui::PopStyleVar();
     
@@ -2924,21 +2918,21 @@ void editor::update_style() {
             );
         colors[ImGuiCol_TabHovered] =
             colors[ImGuiCol_HeaderHovered];
-        colors[ImGuiCol_TabActive] =
+        colors[ImGuiCol_TabSelected] =
             ImLerp(
                 colors[ImGuiCol_HeaderActive],
                 colors[ImGuiCol_TitleBgActive],
                 0.60f
             );
-        colors[ImGuiCol_TabUnfocused] =
+        colors[ImGuiCol_TabDimmed] =
             ImLerp(
                 colors[ImGuiCol_Tab],
                 colors[ImGuiCol_TitleBg],
                 0.80f
             );
-        colors[ImGuiCol_TabUnfocusedActive] =
+        colors[ImGuiCol_TabDimmedSelected] =
             ImLerp(
-                colors[ImGuiCol_TabActive],
+                colors[ImGuiCol_TabSelected],
                 colors[ImGuiCol_TitleBg],
                 0.40f
             );
@@ -2954,7 +2948,7 @@ void editor::update_style() {
             ImVec4(sec.r, sec.g, sec.b, 0.35f);
         colors[ImGuiCol_DragDropTarget] =
             ImVec4(sec.r * 1.3f, sec.g * 1.3f, sec.b * 1.3f, 0.90f);
-        colors[ImGuiCol_NavHighlight] =
+        colors[ImGuiCol_NavCursor] =
             ImVec4(sec.r, sec.g, sec.b, 1.0f);
         colors[ImGuiCol_NavWindowingHighlight] =
             ImVec4(pri.r, pri.g, pri.b, 0.70f);
@@ -3466,7 +3460,7 @@ void editor::picker_info::process() {
         
         if(
             ImGui::BeginChild(
-                "categoryList", ImVec2(0.0f, 80.0f), ImGuiChildFlags_Border
+                "categoryList", ImVec2(0.0f, 80.0f), ImGuiChildFlags_Borders
             )
         ) {
             for(size_t c = 0; c < new_item_top_cat_choices.size(); c++) {
@@ -3515,7 +3509,7 @@ void editor::picker_info::process() {
                 string widgetId = i2s(tc) + "-" + i2s(sc) + "-" + i2s(i);
                 ImGui::PushID(widgetId.c_str());
                 
-                ImVec2 button_size;
+                point button_size;
                 
                 if(i_ptr->bitmap) {
                 
@@ -3528,14 +3522,14 @@ void editor::picker_info::process() {
                     if(bmp_size.x > 0.0f && bmp_size.x > bmp_size.y) {
                         float ratio = bmp_size.y / bmp_size.x;
                         button_size =
-                            ImVec2(
+                            point(
                                 EDITOR::PICKER_IMG_BUTTON_MAX_SIZE,
                                 EDITOR::PICKER_IMG_BUTTON_MAX_SIZE * ratio
                             );
                     } else if(bmp_size.y > 0.0f) {
                         float ratio = bmp_size.x / bmp_size.y;
                         button_size =
-                            ImVec2(
+                            point(
                                 EDITOR::PICKER_IMG_BUTTON_MAX_SIZE * ratio,
                                 EDITOR::PICKER_IMG_BUTTON_MAX_SIZE
                             );
@@ -3556,11 +3550,9 @@ void editor::picker_info::process() {
                     );
                     bool button_pressed =
                         ImGui::ImageButton(
-                            (widgetId + "Button").c_str(),
-                            (void*) i_ptr->bitmap,
-                            button_size,
-                            ImVec2(0.0f, 0.0f),
-                            ImVec2(1.0f, 1.0f)
+                            widgetId + "Button",
+                            i_ptr->bitmap,
+                            button_size
                         );
                     ImGui::PopStyleVar();
                     
@@ -3579,8 +3571,8 @@ void editor::picker_info::process() {
                     
                 } else {
                 
-                    button_size = ImVec2(168.0f, 32.0f);
-                    if(ImGui::Button(i_ptr->name.c_str(), button_size)) {
+                    button_size = point(168.0f, 32.0f);
+                    if(ImGui::Button(i_ptr->name.c_str(), ImVec2(button_size.x, button_size.y))) {
                         pick_callback(
                             i_ptr->name, i_ptr->top_category, i_ptr->sec_category, i_ptr->info, false
                         );

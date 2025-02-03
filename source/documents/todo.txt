@@ -1,4 +1,4 @@
-Point I left on (so I can continue the next day without losing my train of thought)
+﻿Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -12,10 +12,7 @@ Next tasks (roughly sorted most important first)
     Update to Dear ImGui 1.91.8
         Implement shortcuts?
         Use multi-selection in the body part panel of the animation editor?
-        GetWindowContentRegionMax().x + GetWindowPos().x --> GetCursorScreenPos().x + GetContentRegionAvail().x
         Use TextLink() and/or TextLinkOpenURL() for the editors' help dialogs?
-        Change ImGuiChildFlags_Border to ImGuiChildFlags_Borders
-        Change ImGuiCol_NavHighlight to ImGuiCol_NavCursor
         Add keyboard/gamepad navigation stuff?
         Switch from columns to tables
         Use ImGuiColorEditFlags_* ?
@@ -997,6 +994,7 @@ Misc things (so I don't forget)
         A maker tool that just lists how many particles are active, how many mobs, bitmaps loaded, etc.
         A maker tool that lets you go frame-by-frame
         Maker tools should be bound to inputs in the same way the regular controls are, instead of being stuck in the number and F keys
+        Should they be implemented using Dear ImGui? This could allow someone to, for instance, focus on a mob and have a detailed pretty table, or even set some properties. Or to change the game speed, have a Dear ImGui pop-up appear for a second, and if they want, mess with one of the sliders there to customize the speed on the fly
     Code cleanup
         Switch angles to vectors?
         If I need intervals, I can use the code on the "misc info" text file
