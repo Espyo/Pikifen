@@ -14,6 +14,8 @@
 
 #include "imgui_utils.h"
 
+#include "allegro_utils.h"
+
 
 /**
  * @brief Helps creating an ImGui combo box, using a vector of strings for the
@@ -221,11 +223,11 @@ void ImGui::Image(
  *
  * @param str_id Button widget ID.
  * @param bitmap Bitmap to show on the button.
- * @param bitmap_size Width and height of the bitmap.
+ * @param bitmap_size Size to display the bitmap at in the GUI.
  * @param uv0 UV coordinates of the top-left coordinate.
  * @param uv1 UV coordinates of the bottom-right coordinate.
- * @param bg_col Background color.
- * @param tint_col Tint color.
+ * @param bg_col Bitmap background color.
+ * @param tint_col Bitmap tint color.
  * @return Whether the button was pressed.
  */
 bool ImGui::ImageButton(
@@ -247,11 +249,46 @@ bool ImGui::ImageButton(
 
 
 /**
+ * @brief Helps creating an ImGui ImageButton using Allegro bitmaps, and
+ * keeping the bitmap centered and in proportion, while also allowing the
+ * button size to be specified.
+ *
+ * @param str_id Button widget ID.
+ * @param bitmap Bitmap to show on the button.
+ * @param max_bitmap_size Maximum size to display the bitmap at in the GUI.
+ * @param button_size Size of the button.
+ * @param bg_col Bitmap background color.
+ * @param tint_col Bitmap tint color.
+ * @return Whether the button was pressed.
+ */
+bool ImGui::ImageButtonOrganized(
+    const string &str_id, ALLEGRO_BITMAP* bitmap,
+    const point &max_bitmap_size, const point &button_size,
+    const ALLEGRO_COLOR &bg_col, const ALLEGRO_COLOR &tint_col
+) {
+    point final_bmp_size =
+        resize_to_box_keeping_aspect_ratio(
+            get_bitmap_dimensions(bitmap), max_bitmap_size
+        );
+        
+    point padding = (button_size - final_bmp_size) / 2.0f;
+    
+    PushStyleVar(
+        ImGuiStyleVar_FramePadding, ImVec2(padding.x, padding.y)
+    );
+    bool result = ImageButton(str_id, bitmap, final_bmp_size);
+    PopStyleVar();
+    
+    return result;
+}
+
+
+/**
  * @brief Helps creating an ImGui ImageButton, followed by a centered Text.
  *
  * @param id Button widget ID.
  * @param icon Icon to show on the button.
- * @param icon_size Width and height of the icon.
+ * @param icon_size Size to display the bitmap at in the GUI.
  * @param button_padding Padding between the icon and button edges.
  * @param text The button's text.
  * @return Whether the button was pressed.

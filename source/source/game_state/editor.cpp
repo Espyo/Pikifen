@@ -60,8 +60,8 @@ const float OP_ERROR_CURSOR_THICKNESS = 5.0f;
 //Duration of the operation error red flash effect.
 const float OP_ERROR_FLASH_DURATION = 1.5f;
 
-//Picker dialog maximum button size.
-const float PICKER_IMG_BUTTON_MAX_SIZE = 160.0f;
+//Picker dialog button size.
+const float PICKER_IMG_BUTTON_SIZE = 168.0f;
 
 //Picker dialog minimum button size.
 const float PICKER_IMG_BUTTON_MIN_SIZE = 32.0f;
@@ -3512,47 +3512,14 @@ void editor::picker_info::process() {
                 
                     ImGui::BeginGroup();
                     
-                    point bmp_size(
-                        al_get_bitmap_width(i_ptr->bitmap),
-                        al_get_bitmap_height(i_ptr->bitmap)
-                    );
-                    if(bmp_size.x > 0.0f && bmp_size.x > bmp_size.y) {
-                        float ratio = bmp_size.y / bmp_size.x;
-                        button_size =
-                            point(
-                                EDITOR::PICKER_IMG_BUTTON_MAX_SIZE,
-                                EDITOR::PICKER_IMG_BUTTON_MAX_SIZE * ratio
-                            );
-                    } else if(bmp_size.y > 0.0f) {
-                        float ratio = bmp_size.x / bmp_size.y;
-                        button_size =
-                            point(
-                                EDITOR::PICKER_IMG_BUTTON_MAX_SIZE * ratio,
-                                EDITOR::PICKER_IMG_BUTTON_MAX_SIZE
-                            );
-                    }
-                    button_size.x =
-                        std::max(
-                            button_size.x,
-                            EDITOR::PICKER_IMG_BUTTON_MIN_SIZE
-                        );
-                    button_size.y =
-                        std::max(
-                            button_size.y,
-                            EDITOR::PICKER_IMG_BUTTON_MIN_SIZE
-                        );
-                        
-                    ImGui::PushStyleVar(
-                        ImGuiStyleVar_FramePadding, ImVec2(4.0f, 4.0f)
-                    );
+                    button_size = point(EDITOR::PICKER_IMG_BUTTON_SIZE);
                     bool button_pressed =
-                        ImGui::ImageButton(
+                        ImGui::ImageButtonOrganized(
                             widgetId + "Button",
                             i_ptr->bitmap,
-                            button_size
+                            button_size - 4.0f, button_size
                         );
-                    ImGui::PopStyleVar();
-                    
+                        
                     if(button_pressed) {
                         pick_callback(
                             i_ptr->name, i_ptr->top_category, i_ptr->sec_category, i_ptr->info, false
@@ -3561,14 +3528,13 @@ void editor::picker_info::process() {
                             dialog_ptr->is_open = false;
                         }
                     }
-                    ImGui::SetNextItemWidth(20.0f);
                     ImGui::TextWrapped("%s", i_ptr->name.c_str());
                     ImGui::Dummy(ImVec2(0.0f, 8.0f));
                     ImGui::EndGroup();
                     
                 } else {
                 
-                    button_size = point(168.0f, 32.0f);
+                    button_size = point(EDITOR::PICKER_IMG_BUTTON_SIZE, 32.0f);
                     if(ImGui::Button(i_ptr->name.c_str(), ImVec2(button_size.x, button_size.y))) {
                         pick_callback(
                             i_ptr->name, i_ptr->top_category, i_ptr->sec_category, i_ptr->info, false

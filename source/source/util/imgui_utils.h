@@ -58,6 +58,12 @@ bool ImageButton(
     const ALLEGRO_COLOR &bg_col = al_map_rgba(0, 0, 0, 0),
     const ALLEGRO_COLOR &tint_col = al_map_rgb(255, 255, 255)
 );
+bool ImageButtonOrganized(
+    const string &str_id, ALLEGRO_BITMAP* bitmap,
+    const point &max_bitmap_size, const point &button_size,
+    const ALLEGRO_COLOR &bg_col = al_map_rgba(0, 0, 0, 0),
+    const ALLEGRO_COLOR &tint_col = al_map_rgb(255, 255, 255)
+);
 bool ImageButtonAndText(
     const string &id, ALLEGRO_BITMAP* icon, const point &icon_size,
     float button_padding, const string &text
