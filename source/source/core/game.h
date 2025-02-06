@@ -198,7 +198,7 @@ public:
     
     //Performance monitor.
     performance_monitor_t* perf_mon = nullptr;
-
+    
     //Randomness manager.
     rng_manager rng;
     
@@ -253,6 +253,17 @@ public:
     
     //World to screen coordinate matrix. Cache for convenience.
     ALLEGRO_TRANSFORM world_to_screen_transform;
+    
+    //Engine debugging tools.
+    //Set them to true in the game_class constructor as needed.
+    struct {
+    
+        //--- Members ---
+        
+        //Show and operate on a Dear ImGui demo window.
+        bool show_dear_imgui_demo = false;
+        
+    } debug;
     
     
     //--- Function declarations ---

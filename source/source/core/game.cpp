@@ -59,7 +59,6 @@ const size_t FRAMERATE_HISTORY_SIZE = 300;
  * @brief Constructs a new game class object.
  */
 game_class::game_class() {
-
     team_internal_names[MOB_TEAM_NONE] = "none";
     team_internal_names[MOB_TEAM_PLAYER_1] = "player_1";
     team_internal_names[MOB_TEAM_PLAYER_2] = "player_2";
@@ -167,6 +166,9 @@ void game_class::check_system_key_press(const ALLEGRO_EVENT &ev) {
  */
 void game_class::do_global_drawing() {
     //Dear ImGui.
+    if(debug.show_dear_imgui_demo) {
+        ImGui::ShowDemoWindow();
+    }
     ImGui::Render();
     if(!skip_dear_imgui_frame) {
         ImGui_ImplAllegro5_RenderDrawData(ImGui::GetDrawData());
@@ -174,8 +176,10 @@ void game_class::do_global_drawing() {
         skip_dear_imgui_frame = false;
     }
     
-    //Fade manager.
-    game.fade_mgr.draw();
+    if(!debug.show_dear_imgui_demo) {
+        //Fade manager.
+        game.fade_mgr.draw();
+    }
 }
 
 

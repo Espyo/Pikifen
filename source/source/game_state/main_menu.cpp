@@ -50,6 +50,9 @@ const string TUTORIAL_GUI_FILE_NAME = "main_menu_tutorial";
  */
 void main_menu_state::do_drawing() {
     al_clear_to_color(COLOR_BLACK);
+
+    if(game.debug.show_dear_imgui_demo) return;
+
     draw_bitmap(
         bmp_menu_bg, point(game.win_w * 0.5, game.win_h * 0.5),
         point(game.win_w, game.win_h)
@@ -105,6 +108,8 @@ void main_menu_state::do_drawing() {
  * @brief Ticks a frame's worth of logic.
  */
 void main_menu_state::do_logic() {
+    if(game.debug.show_dear_imgui_demo) return;
+    
     //Animate the logo Pikmin.
     for(size_t p = 0; p < logo_pikmin.size(); p++) {
         logo_pik* pik = &logo_pikmin[p];
@@ -1002,6 +1007,7 @@ void main_menu_state::load() {
     //Finishing touches.
     game.audio.set_current_song(MAIN_MENU::SONG_NAME);
     game.fade_mgr.start_fade(true, nullptr);
+    if(game.debug.show_dear_imgui_demo) game.mouse_cursor.show();
 }
 
 
