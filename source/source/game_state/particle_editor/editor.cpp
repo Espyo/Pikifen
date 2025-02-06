@@ -23,9 +23,6 @@ namespace PARTICLE_EDITOR {
 const vector<float> GRID_INTERVALS =
 {4.0f, 8.0f, 16.0f, 32.0f, 64.0f};
 
-//Width of the text widget that shows the mouse cursor coordinates.
-const float MOUSE_COORDS_TEXT_WIDTH = 150.0f;
-
 //Name of the song to play in this state.
 const string SONG_NAME = "editors";
 

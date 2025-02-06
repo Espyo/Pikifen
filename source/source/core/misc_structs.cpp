@@ -191,6 +191,9 @@ void asset_file_names_t::load(data_node* file) {
     frs.set("area_name", fnt_area_name);
     frs.set("counter", fnt_counter);
     frs.set("cursor_counter", fnt_cursor_counter);
+    frs.set("editor_header", fnt_editor_header);
+    frs.set("editor_monospace", fnt_editor_monospace);
+    frs.set("editor_standard", fnt_editor_standard);
     frs.set("slim", fnt_slim);
     frs.set("standard", fnt_standard);
     frs.set("value", fnt_value);

@@ -22,9 +22,6 @@ namespace GUI_EDITOR {
 const vector<float> GRID_INTERVALS =
 {1.0f, 2.0f, 2.5f, 5.0f, 10.0f};
 
-//Width of the text widget that shows the mouse cursor coordinates.
-const float MOUSE_COORDS_TEXT_WIDTH = 150.0f;
-
 //Name of the song to play in this state.
 const string SONG_NAME = "editors";
 

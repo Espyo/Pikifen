@@ -45,6 +45,9 @@ const int ICON_BMP_SIZE = 24;
 //How much to zoom in/out with the keyboard keys.
 const float KEYBOARD_CAM_ZOOM = 0.25f;
 
+//Width of the text widget that shows the mouse cursor coordinates.
+const float MOUSE_COORDS_TEXT_WIDTH = 176.0f;
+
 //How quickly the operation error red flash effect cursor shakes.
 const float OP_ERROR_CURSOR_SHAKE_SPEED = 55.0f;
 
@@ -65,6 +68,9 @@ const float PICKER_IMG_BUTTON_SIZE = 168.0f;
 
 //Picker dialog minimum button size.
 const float PICKER_IMG_BUTTON_MIN_SIZE = 32.0f;
+
+//Height of the status bar.
+const float STATUS_BAR_HEIGHT = 22.0f;
 
 //Default size of the transformation widget.
 const float TW_DEF_SIZE = 32.0f;
@@ -2110,10 +2116,10 @@ bool editor::process_gui_mob_type_widgets(
     
     //Column setup.
     ImGui::Columns(2, nullptr, false);
-    ImGui::SetColumnWidth(-1, 51.0f);
+    ImGui::SetColumnWidth(-1, 62.0f);
     
     //Search button.
-    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(9.0f, 9.0f));
+    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(14.0f, 14.0f));
     bool search_button_pressed =
         ImGui::ImageButton(
             "searchButton", editor_icons[EDITOR_ICON_SEARCH],
@@ -2614,7 +2620,9 @@ void editor::process_gui_unsaved_changes_dialog() {
 bool editor::saveable_tree_node(const string &category, const string &label) {
     string node_name = get_name() + "/" + category + "/" + label;
     ImGui::SetNextItemOpen(game.options.editor_open_nodes[node_name]);
+    ImGui::PushFont(game.sys_assets.fnt_imgui_header);
     bool is_open = ImGui::TreeNode(label.c_str());
+    ImGui::PopFont();
     game.options.editor_open_nodes[node_name] = is_open;
     return is_open;
 }
@@ -3409,9 +3417,9 @@ void editor::picker_info::process() {
         ImGui::PushStyleColor(
             ImGuiCol_ButtonActive, (ImVec4) ImColor(208, 32, 32)
         );
-        if(ImGui::Button("+", ImVec2(64.0f, 32.0f))) {
-            try_make_new();
-        }
+        bool hit_create_button = ImGui::Button("+", ImVec2(64.0f, 32.0f));
+        editor_ptr->set_tooltip("Create a new item with the given name!");
+        if(hit_create_button) try_make_new();
         ImGui::PopStyleColor(3);
         ImGui::SameLine();
     }

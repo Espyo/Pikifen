@@ -31,12 +31,14 @@ extern const float DOUBLE_CLICK_TIMEOUT;
 extern const int ICON_BMP_PADDING;
 extern const int ICON_BMP_SIZE;
 extern const float KEYBOARD_CAM_ZOOM;
+extern const float MOUSE_COORDS_TEXT_WIDTH;
 extern const float OP_ERROR_CURSOR_SHAKE_SPEED;
 extern const float OP_ERROR_CURSOR_SHAKE_WIDTH;
 extern const float OP_ERROR_CURSOR_SIZE;
 extern const float OP_ERROR_CURSOR_THICKNESS;
 extern const float OP_ERROR_FLASH_DURATION;
 extern const float PICKER_IMG_BUTTON_SIZE;
+extern const float STATUS_BAR_HEIGHT;
 extern const float TW_DEF_SIZE;
 extern const float TW_HANDLE_RADIUS;
 extern const float TW_OUTLINE_THICKNESS;
@@ -820,5 +822,4 @@ protected:
     virtual void handle_rmb_down(const ALLEGRO_EVENT &ev);
     virtual void handle_rmb_drag(const ALLEGRO_EVENT &ev);
     virtual void handle_rmb_up(const ALLEGRO_EVENT &ev);
-    
 };

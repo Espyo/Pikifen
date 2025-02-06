@@ -138,7 +138,7 @@ void area_editor::process_gui() {
     process_gui_toolbar();
     
     //Draw the canvas now.
-    ImGui::BeginChild("canvas", ImVec2(0, -18));
+    ImGui::BeginChild("canvas", ImVec2(0, -EDITOR::STATUS_BAR_HEIGHT));
     ImGui::EndChild();
     is_mouse_in_gui =
         !ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem);
@@ -1321,8 +1321,9 @@ void area_editor::process_gui_options_dialog() {
         ImGui::Indent();
         ImGui::RadioButton("Basic", &interface_mode_i, 0);
         set_tooltip(
-            "Only show basic GUI items. See the \"Advanced\" option's\n"
-            "description for a list of such items."
+            "Only shows basic GUI items. Recommended for starters\n"
+            "so that the interface isn't overwhelming. See the\n"
+            "\"Advanced\" option's description for a list of such items."
         );
         
         //Advanced interface button.
@@ -1764,9 +1765,6 @@ void area_editor::process_gui_panel_edge() {
 void area_editor::process_gui_panel_gameplay() {
     ImGui::BeginChild("gameplay");
     
-    //Panel title text.
-    panel_title("GAMEPLAY");
-    
     switch(sub_state) {
     case EDITOR_SUB_STATE_MISSION_EXIT: {
 
@@ -1804,6 +1802,9 @@ void area_editor::process_gui_panel_gameplay() {
         if(ImGui::Button("Back")) {
             change_state(EDITOR_STATE_MAIN);
         }
+        
+        //Panel title text.
+        panel_title("GAMEPLAY");
         
         //Sprays node.
         ImGui::Spacer();
@@ -5572,7 +5573,7 @@ void area_editor::process_gui_status_bar() {
     ImGui::SameLine();
     float size =
         canvas_separator_x - ImGui::GetItemRectSize().x -
-        AREA_EDITOR::MOUSE_COORDS_TEXT_WIDTH;
+        EDITOR::MOUSE_COORDS_TEXT_WIDTH;
     ImGui::Dummy(ImVec2(size, 0));
     
     //Mouse coordinates text.

@@ -316,6 +316,19 @@ vector<string> split(
 
 
 /**
+ * @brief Returns whether the specified string ends with the other string.
+ * 
+ * @param s String to check.
+ * @param end End to match with.
+ * @return Whether it matches.
+ */
+bool str_ends_with(const string &s, const string &end) {
+    if(end.size() > s.size()) return false;
+    return s.compare(s.length() - end.length(), end.length(), end) == 0;
+}
+
+
+/**
  * @brief Peeks the next characters in a string, and returns whether they match
  * the specified filter.
  *
@@ -327,6 +340,19 @@ vector<string> split(
 bool str_peek(const string &s, size_t where, const string &match) {
     if(where + match.size() > s.size()) return false;
     return s.substr(where, match.size()) == match;
+}
+
+
+/**
+ * @brief Returns whether the specified string starts with the other string.
+ * 
+ * @param s String to check.
+ * @param start Start to match with.
+ * @return Whether it matches.
+ */
+bool str_starts_with(const string &s, const string &start) {
+    if(start.size() > s.size()) return false;
+    return s.compare(0, start.length(), start) == 0;
 }
 
 

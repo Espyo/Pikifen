@@ -37,9 +37,6 @@ const float HITBOX_MIN_RADIUS = 1.0f;
 //Amount to pan the camera by when using the keyboard.
 const float KEYBOARD_PAN_AMOUNT = 32.0f;
 
-//Width of the text widget that shows the mouse cursor coordinates.
-const float MOUSE_COORDS_TEXT_WIDTH = 150.0f;
-
 //Name of the song to play in this state.
 const string SONG_NAME = "editors";
 

@@ -17,6 +17,7 @@
 void init_allegro();
 void init_controls();
 void init_dear_imgui();
+void init_dear_imgui_colors();
 void init_error_bitmap();
 void init_essentials();
 void init_event_things(ALLEGRO_TIMER* &timer, ALLEGRO_EVENT_QUEUE* &queue);

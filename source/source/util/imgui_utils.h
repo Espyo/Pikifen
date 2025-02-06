@@ -26,6 +26,7 @@ using std::vector;
 
 namespace ImGui {
 
+void AdjustColorHSV(ImVec4 &color, float h_delta, float s_delta, float v_delta);
 bool Combo(
     const string &label, int* current_item, const vector<string> &items,
     int popup_max_height_in_items = -1

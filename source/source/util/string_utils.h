@@ -63,7 +63,9 @@ vector<string> split(
     string text, const string &del = " ", bool inc_empty = false,
     bool inc_del = false
 );
+bool str_ends_with(const string &s, const string &end);
 bool str_peek(const string &s, size_t where, const string &match);
+bool str_starts_with(const string &s, const string &start);
 string str_to_lower(string s);
 string str_to_sentence(string s);
 string str_to_title(string s);

@@ -18,8 +18,28 @@
 
 
 /**
- * @brief Helps creating an ImGui combo box, using a vector of strings for the
- * list of items.
+ * @brief Adjusts the hue, saturation, and value of a given Dear ImGui color.
+ *
+ * @param color Color to edit.
+ * @param h_delta Hue amount (0-1) to add or subtract.
+ * @param s_delta Saturation amount (0-1) to add or subtract.
+ * @param v_delta Value amount (0-1) to add or subtract.
+ */
+void ImGui::AdjustColorHSV(
+    ImVec4 &color, float h_delta, float s_delta, float v_delta
+) {
+    float h, s, v;
+    ImGui::ColorConvertRGBtoHSV(color.x, color.y, color.z, h, s, v);
+    h += h_delta;
+    s += s_delta;
+    v += v_delta;
+    ImGui::ColorConvertHSVtoRGB(h, s, v, color.x, color.y, color.z);
+}
+
+
+/**
+ * @brief Wrapper for creating a Dear ImGui combo box widget, but
+ * using a vector of strings for the list of items.
  *
  * @param label Combo widget label.
  * @param current_item Index number of the current selected item. -1 means none.
@@ -46,8 +66,9 @@ bool ImGui::Combo(
 
 
 /**
- * @brief Helps creating an ImGui combo box, using a string to control the
- * selection, as well as a vector of strings for the list of items.
+ * @brief Wrapper for creating a Dear ImGui combo box widget, but
+ * using a string to control the selection,
+ * as well as a vector of strings for the list of items.
  *
  * @param label Combo widget label.
  * @param current_item Name of the current selected item.
@@ -87,8 +108,9 @@ bool ImGui::Combo(
 
 
 /**
- * @brief Helps creating an ImGui combo box, using a string to control the
- * selection, as well as two vector of strings for the list of items, one with
+ * @brief Wrapper for creating a Dear ImGui combo box widget, but
+ * using a string to control the selection,
+ * as well as two vector of strings for the list of items, one with
  * the internal values of each item, another with the names to display.
  *
  * @param label Combo widget label.
@@ -130,9 +152,9 @@ bool ImGui::Combo(
 
 
 /**
- * @brief Creates two ImGui drag ints, one that sets the number of minutes,
- * one that sets the number of seconds. Though with some arguments,
- * this can be changed to hours and minutes.
+ * @brief Creates two Dear ImGui drag int widgets, one that sets the
+ * number of minutes, one that sets the number of seconds.
+ * Though with some arguments, this can be changed to hours and minutes.
  *
  * @param label Widget label.
  * @param total_amount Time in the total amount of seconds.
@@ -183,6 +205,15 @@ bool ImGui::DragTime2(
     return result;
 }
 
+
+/**
+ * @brief Makes it so Dear ImGui focuses on the next input text widget.
+ * 
+ * @param condition Only focus if this boolean is true. After setting the focus,
+ * this boolean is set to false. This is done so that Dear ImGui only focuses
+ * when you want, like when the dialog is first shown, instead of doing it
+ * every frame.
+ */
 void ImGui::FocusOnInputText(bool &condition) {
     if(!ImGui::IsAnyItemActive() && condition) {
         ImGui::SetKeyboardFocusHere();
@@ -192,7 +223,8 @@ void ImGui::FocusOnInputText(bool &condition) {
 
 
 /**
- * @brief Helps creating an ImGui Image using Allegro bitmaps.
+ * @brief Wrapper for creating a Dear ImGui combo image widget, but
+ * using Allegro bitmaps.
  *
  * @param bitmap Bitmap to show on the button.
  * @param bitmap_size Width and height of the bitmap.
@@ -219,7 +251,8 @@ void ImGui::Image(
 
 
 /**
- * @brief Helps creating an ImGui ImageButton using Allegro bitmaps.
+ * @brief Wrapper for creating a Dear ImGui image button widget, but
+ * using Allegro bitmaps.
  *
  * @param str_id Button widget ID.
  * @param bitmap Bitmap to show on the button.
@@ -249,9 +282,9 @@ bool ImGui::ImageButton(
 
 
 /**
- * @brief Helps creating an ImGui ImageButton using Allegro bitmaps, and
- * keeping the bitmap centered and in proportion, while also allowing the
- * button size to be specified.
+ * @brief Wrapper for creating a Dear ImGui image button widget, but
+ * using Allegro bitmaps, and keeping the bitmap centered and in proportion,
+ * while also allowing the button size to be specified.
  *
  * @param str_id Button widget ID.
  * @param bitmap Bitmap to show on the button.
@@ -284,7 +317,8 @@ bool ImGui::ImageButtonOrganized(
 
 
 /**
- * @brief Helps creating an ImGui ImageButton, followed by a centered Text.
+ * @brief Wrapper for creating a Dear ImGui image button widget, followed
+ * by a text widget.
  *
  * @param id Button widget ID.
  * @param icon Icon to show on the button.
@@ -321,8 +355,8 @@ bool ImGui::ImageButtonAndText(
 
 
 /**
- * @brief Helps creating an ImGui list box, using a vector of strings for the
- * list of items.
+ * @brief Wrapper for creating a Dear ImGui list box widget, but
+ * using a vector of strings for the list of items.
  *
  * @param label ListBox widget label.
  * @param current_item Index number of the current selected item.

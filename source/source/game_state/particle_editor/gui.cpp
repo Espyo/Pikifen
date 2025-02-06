@@ -119,7 +119,7 @@ void particle_editor::process_gui() {
     process_gui_toolbar();
     
     //Draw the canvas now.
-    ImGui::BeginChild("canvas", ImVec2(0, -18));
+    ImGui::BeginChild("canvas", ImVec2(0, -EDITOR::STATUS_BAR_HEIGHT));
     ImGui::EndChild();
     is_mouse_in_gui =
         !ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem);
@@ -1634,7 +1634,7 @@ void particle_editor::process_gui_status_bar() {
     ImGui::SameLine();
     float size =
         canvas_separator_x - ImGui::GetItemRectSize().x -
-        PARTICLE_EDITOR::MOUSE_COORDS_TEXT_WIDTH;
+        EDITOR::MOUSE_COORDS_TEXT_WIDTH;
     ImGui::Dummy(ImVec2(size, 0));
     
     //Mouse coordinates text.

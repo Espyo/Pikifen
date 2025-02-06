@@ -40,7 +40,6 @@ extern const ALLEGRO_COLOR MEASUREMENT_COLOR;
 extern const unsigned char MIN_CIRCLE_SECTOR_POINTS;
 extern const float MIN_GRID_INTERVAL;
 extern const float MOB_LINK_THICKNESS;
-extern const float MOUSE_COORDS_TEXT_WIDTH;
 extern const float NEW_SECTOR_ERROR_TINT_DURATION;
 extern const ALLEGRO_COLOR NON_BLOCKING_COLOR;
 extern const float PATH_LINK_THICKNESS;

@@ -22,7 +22,6 @@ extern const float FLOOD_FILL_ALPHA_THRESHOLD;
 extern const float GRID_INTERVAL;
 extern const float HITBOX_MIN_RADIUS;
 extern const float KEYBOARD_PAN_AMOUNT;
-extern const float MOUSE_COORDS_TEXT_WIDTH;
 extern const string SONG_NAME;
 extern const size_t TIMELINE_HEADER_HEIGHT;
 extern const size_t TIMELINE_HEIGHT;

@@ -48,6 +48,7 @@
 #include "../lib/imgui/imgui_impl_allegro5.h"
 #include "../util/allegro_utils.h"
 #include "../util/general_utils.h"
+#include "../util/imgui_utils.h"
 #include "../util/string_utils.h"
 #include "controls.h"
 #include "game.h"
@@ -550,13 +551,133 @@ void init_controls() {
  * @brief Initializes Dear ImGui.
  */
 void init_dear_imgui() {
+    //Misc. setup.
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGui_ImplAllegro5_Init(game.display);
     ImGui::GetIO().IniFilename = "";
     ImGui::GetIO().ConfigDragClickToInputText = true;
+    
+    //Fonts.
+    ImGuiIO &io = ImGui::GetIO();
+    ImFontConfig editor_font_cfg;
+    editor_font_cfg.OversampleH = editor_font_cfg.OversampleV = 1;
+    editor_font_cfg.PixelSnapH = true;
+
+    const auto add_font =
+    [=] (ImFont** target_var, const string& asset_internal_name, int height) {
+        const string& path =
+            game.content.bitmaps.manifests
+            [asset_internal_name].path;
+        
+        if(!str_ends_with(str_to_lower(path), ".ttf")) {
+            game.errors.report(
+                "Could not load the editor font \"" + path + "\"! Only "
+                "TTF font files are allowed."
+            );
+            return;
+        }
+        
+        *target_var =
+            io.Fonts->AddFontFromFileTTF(
+                path.c_str(), height, &editor_font_cfg
+            );
+    };
+
+    add_font(
+        &game.sys_assets.fnt_imgui_header,
+        game.asset_file_names.fnt_editor_header, 22
+    );
+    add_font(
+        &game.sys_assets.fnt_imgui_monospace,
+        game.asset_file_names.fnt_editor_monospace, 18
+    );
+    add_font(
+        &game.sys_assets.fnt_imgui_standard,
+        game.asset_file_names.fnt_editor_standard, 18
+    );
+        
+    io.FontDefault = game.sys_assets.fnt_imgui_standard;
+    
+    //Other stuff.
+    init_dear_imgui_colors();
+}
+
+
+/**
+ * @brief Initializes the Dear ImGui color style.
+ */
+void init_dear_imgui_colors() {
+    ImGuiStyle &style = ImGui::GetStyle();
+    
+    //Since the default Dear ImGui style is based around blue,
+    //we can shift the hue left to get an equivalent green.
+    //These color indexes are the ones that really have any blue hue,
+    //so only mess with these.
+    vector<ImGuiCol_> colors_to_change {
+        ImGuiCol_Border,
+        ImGuiCol_BorderShadow,
+        ImGuiCol_FrameBg,
+        ImGuiCol_FrameBgHovered,
+        ImGuiCol_FrameBgActive,
+        ImGuiCol_TitleBgActive,
+        ImGuiCol_CheckMark,
+        ImGuiCol_SliderGrab,
+        ImGuiCol_SliderGrabActive,
+        ImGuiCol_Button,
+        ImGuiCol_ButtonHovered,
+        ImGuiCol_ButtonActive,
+        ImGuiCol_Header,
+        ImGuiCol_HeaderHovered,
+        ImGuiCol_HeaderActive,
+        ImGuiCol_Separator,
+        ImGuiCol_SeparatorHovered,
+        ImGuiCol_SeparatorActive,
+        ImGuiCol_ResizeGrip,
+        ImGuiCol_ResizeGripHovered,
+        ImGuiCol_ResizeGripActive,
+        ImGuiCol_TabHovered,
+        ImGuiCol_Tab,
+        ImGuiCol_TabSelected,
+        ImGuiCol_TabSelectedOverline,
+        ImGuiCol_TabDimmed,
+        ImGuiCol_TabDimmedSelected,
+        ImGuiCol_TabDimmedSelectedOverline,
+        ImGuiCol_TextLink,
+        ImGuiCol_TextSelectedBg,
+        ImGuiCol_NavCursor,
+    };
+    
+    for(size_t c = 0; c < colors_to_change.size(); c++) {
+        ImGui::AdjustColorHSV(style.Colors[colors_to_change[c]], -0.25f, 0.0f, 0.0f);
+    }
+    
+    //Manually adjust some of them.
+    ImGui::AdjustColorHSV(
+        style.Colors[ImGuiCol_ButtonHovered], 0.0f, 0.0f, -0.30f
+    );
+    ImGui::AdjustColorHSV(
+        style.Colors[ImGuiCol_ButtonActive], 0.0f, 0.0f, -0.24f
+    );
+    ImGui::AdjustColorHSV(
+        style.Colors[ImGuiCol_SliderGrab], 0.0f, 0.0f, -0.30f
+    );
+    ImGui::AdjustColorHSV(
+        style.Colors[ImGuiCol_SliderGrabActive], 0.0f, 0.0f, -0.24f
+    );
+    ImGui::AdjustColorHSV(
+        style.Colors[ImGuiCol_HeaderHovered], 0.0f, 0.0f, -0.30f
+    );
+    ImGui::AdjustColorHSV(
+        style.Colors[ImGuiCol_HeaderActive], 0.0f, 0.0f, -0.24f
+    );
+    style.Colors[ImGuiCol_WindowBg] = ImVec4(0.05f, 0.10f, 0.10f, 1.0f);
+    style.Colors[ImGuiCol_ChildBg] = ImVec4(0.05f, 0.10f, 0.10f, 1.0f);
+    style.Colors[ImGuiCol_PopupBg] = ImVec4(0.05f, 0.10f, 0.10f, 1.0f);
+    
+    //Finally, save the default style colors.
     for(size_t c = 0; c < ImGuiCol_COUNT; c++) {
-        game.imgui_default_style[c] = ImGui::GetStyle().Colors[c];
+        game.imgui_default_style[c] = style.Colors[c];
     }
 }
 

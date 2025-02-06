@@ -72,9 +72,6 @@ const float MIN_GRID_INTERVAL = 2.0;
 //Thickness to use when drawing a mob link line.
 const float MOB_LINK_THICKNESS = 2.0f;
 
-//Width of the text widget that shows the mouse cursor coordinates.
-const float MOUSE_COORDS_TEXT_WIDTH = 150.0f;
-
 //How long to tint the new sector's line(s) red for.
 const float NEW_SECTOR_ERROR_TINT_DURATION = 1.5f;
 

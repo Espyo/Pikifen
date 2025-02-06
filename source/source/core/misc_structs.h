@@ -25,6 +25,7 @@
 #include "../content/other/hazard.h"
 #include "../content/other/particle.h"
 #include "../lib/data_file/data_file.h"
+#include "../lib/imgui/imgui.h"
 #include "../util/drawing_utils.h"
 #include "../util/general_utils.h"
 #include "../util/geometry_utils.h"
@@ -300,6 +301,15 @@ struct asset_file_names_t {
     //Font displayed next to the cursor.
     string fnt_cursor_counter = "cursor_counter_font";
     
+    //TTF Dear ImGui header font for editors.
+    string fnt_editor_header = "editor_header_font";
+    
+    //TTF Dear ImGui monospace font for editors.
+    string fnt_editor_monospace = "editor_monospace_font";
+    
+    //TTF Dear Imgui standard font for editors.
+    string fnt_editor_standard = "editor_standard_font";
+    
     //Font for slim text.
     string fnt_slim = "slim_font";
     
@@ -562,10 +572,10 @@ struct rng_manager {
     
     //The current randomness seed.
     unsigned int seed = 0;
-
-
+    
+    
     //--- Function declarations ---
-
+    
     void init();
     void init(unsigned int seed);
     int i(int minimum, int maximum);
@@ -818,6 +828,17 @@ struct system_asset_list {
     
     //Font for the carrying / money values.
     ALLEGRO_FONT* fnt_value = nullptr;
+
+    //Specifically Dear ImGui fonts.
+
+    //Header editor font for Dear ImGui.
+    ImFont* fnt_imgui_header = nullptr;
+    
+    //Monospace editor font for Dear ImGui.
+    ImFont* fnt_imgui_monospace = nullptr;
+    
+    //Standard editor font for Dear ImGui.
+    ImFont* fnt_imgui_standard = nullptr;
     
     //Sound effects.
     
