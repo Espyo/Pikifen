@@ -168,8 +168,12 @@ void gui_editor::process_gui_control_panel() {
     
     ImGui::BeginChild("panel");
     
+    //Current file header text.
+    ImGui::Text("File: ");
+    
     //Current file text.
-    ImGui::Text("Current file: %s", manifest.internal_name.c_str());
+    ImGui::SameLine();
+    mono_text("%s", manifest.internal_name.c_str());
     string file_tooltip =
         get_file_tooltip(manifest.path) + "\n\n"
         "File state: ";
@@ -217,8 +221,7 @@ void gui_editor::process_gui_delete_gui_def_dialog() {
     
     //Final warning text.
     string final_warning_str =
-        "Are you sure you want to delete the GUI definition \"" +
-        manifest.internal_name + "\"?";
+        "Are you sure you want to delete the current GUI definition?";
     ImGui::SetupCentering(ImGui::CalcTextSize(final_warning_str.c_str()).x);
     ImGui::TextColored(
         ImVec4(0.8, 0.6, 0.6, 1.0),
@@ -465,7 +468,7 @@ void gui_editor::process_gui_new_dialog() {
     }
     ImGui::Spacer();
     new_dialog.must_update |=
-        ImGui::Combo("File", &new_dialog.internal_name, gui_files);
+        mono_combo("File", &new_dialog.internal_name, gui_files);
         
     //Check if everything's ok.
     if(new_dialog.must_update) {
@@ -553,7 +556,12 @@ void gui_editor::process_gui_options_dialog() {
         
         //Increase grid interval button.
         ImGui::SameLine();
-        if(ImGui::Button("+")) {
+        if(
+            ImGui::Button(
+                "+",
+                ImVec2(ImGui::GetFrameHeight(), ImGui::GetFrameHeight())
+            )
+        ) {
             grid_interval_increase_cmd(1.0f);
         }
         set_tooltip(
@@ -565,7 +573,12 @@ void gui_editor::process_gui_options_dialog() {
         
         //Decrease grid interval button.
         ImGui::SameLine();
-        if(ImGui::Button("-")) {
+        if(
+            ImGui::Button(
+                "-",
+                ImVec2(ImGui::GetFrameHeight(), ImGui::GetFrameHeight())
+            )
+        ) {
             grid_interval_decrease_cmd(1.0f);
         }
         set_tooltip(
@@ -710,7 +723,7 @@ void gui_editor::process_gui_panel_items() {
             bool selected = cur_item == i;
             ImGui::SameLine();
             if(
-                ImGui::Selectable(items[i].name.c_str(), &selected)
+                mono_selectable(items[i].name.c_str(), &selected)
             ) {
                 cur_item = i;
             }
@@ -743,7 +756,7 @@ void gui_editor::process_gui_status_bar() {
     //Mouse coordinates text.
     if(!is_mouse_in_gui || is_m1_pressed) {
         ImGui::SameLine();
-        ImGui::Text(
+        mono_text(
             "%s, %s",
             box_string(f2s(game.mouse_cursor.w_pos.x), 7, "%").c_str(),
             box_string(f2s(game.mouse_cursor.w_pos.y), 7, "%").c_str()

@@ -165,8 +165,12 @@ void particle_editor::process_gui_control_panel() {
     
     ImGui::BeginChild("panel");
     
+    //Current file header text.
+    ImGui::Text("File: ");
+    
     //Current file text.
-    ImGui::Text("Current file: %s", manifest.internal_name.c_str());
+    ImGui::SameLine();
+    mono_text("%s", manifest.internal_name.c_str());
     string file_tooltip =
         get_file_tooltip(manifest.path) + "\n\n"
         "File state: ";
@@ -209,8 +213,7 @@ void particle_editor::process_gui_delete_part_gen_dialog() {
     
     //Final warning text.
     string final_warning_str =
-        "Are you sure you want to delete the particle generator \"" +
-        manifest.internal_name + "\"?";
+        "Are you sure you want to delete the current particle generator?";
     ImGui::SetupCentering(ImGui::CalcTextSize(final_warning_str.c_str()).x);
     ImGui::TextColored(
         ImVec4(0.8, 0.6, 0.6, 1.0),
@@ -450,7 +453,7 @@ void particle_editor::process_gui_new_dialog() {
     ImGui::Spacer();
     ImGui::FocusOnInputText(new_dialog.needs_text_focus);
     if(
-        ImGui::InputText(
+        mono_input_text(
             "Internal name", &new_dialog.internal_name,
             ImGuiInputTextFlags_EnterReturnsTrue
         )
@@ -546,7 +549,12 @@ void particle_editor::process_gui_options_dialog() {
         
         //Increase grid interval button.
         ImGui::SameLine();
-        if(ImGui::Button("+")) {
+        if(
+            ImGui::Button(
+                "+",
+                ImVec2(ImGui::GetFrameHeight(), ImGui::GetFrameHeight())
+            )
+        ) {
             grid_interval_increase_cmd(1.0f);
         }
         set_tooltip(
@@ -558,7 +566,12 @@ void particle_editor::process_gui_options_dialog() {
         
         //Decrease grid interval button.
         ImGui::SameLine();
-        if(ImGui::Button("-")) {
+        if(
+            ImGui::Button(
+                "-",
+                ImVec2(ImGui::GetFrameHeight(), ImGui::GetFrameHeight())
+            )
+        ) {
             grid_interval_decrease_cmd(1.0f);
         }
         set_tooltip(
@@ -633,7 +646,7 @@ void particle_editor::process_gui_options_dialog() {
                     split(game.options.particle_editor_bg_texture, "/").back();
             }
             ImGui::SameLine();
-            ImGui::Text("%s", file_name.c_str());
+            mono_text("%s", file_name.c_str());
             
             ImGui::Unindent();
         }
@@ -1576,7 +1589,7 @@ void particle_editor::process_gui_panel_generator() {
         
         //Version input.
         if(
-            ImGui::InputText("Version", &loaded_gen.version)
+            mono_input_text("Version", &loaded_gen.version)
         ) {
             changes_mgr.mark_as_changed();
         }
@@ -1640,7 +1653,7 @@ void particle_editor::process_gui_status_bar() {
     //Mouse coordinates text.
     if(!is_mouse_in_gui || is_m1_pressed) {
         ImGui::SameLine();
-        ImGui::Text(
+        mono_text(
             "%s, %s",
             box_string(f2s(game.mouse_cursor.w_pos.x), 7).c_str(),
             box_string(f2s(game.mouse_cursor.w_pos.y), 7).c_str()

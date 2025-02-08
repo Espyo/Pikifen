@@ -252,13 +252,7 @@ void animation_editor::process_gui_delete_anim_db_dialog() {
     
     //Final warning text.
     string final_warning_str =
-        "Are you sure you want to delete the animation database \"" +
-        (
-            loaded_mob_type ?
-            loaded_mob_type->manifest->internal_name :
-            manifest.internal_name
-        ) +
-        "\"?";
+        "Are you sure you want to delete the current animation database?";
     ImGui::SetupCentering(ImGui::CalcTextSize(final_warning_str.c_str()).x);
     ImGui::TextColored(
         ImVec4(0.8, 0.6, 0.6, 1.0),
@@ -323,7 +317,7 @@ void animation_editor::process_gui_hitbox_hazards() {
         string picked_hazard;
         if(
             list_popup(
-                "addHazard", all_hazards_list, &picked_hazard
+                "addHazard", all_hazards_list, &picked_hazard, true
             )
         ) {
             vector<string> list =
@@ -384,7 +378,7 @@ void animation_editor::process_gui_hitbox_hazards() {
         }
         
         //Hitbox hazard list.
-        ImGui::ListBox(
+        mono_list_box(
             "Hazards", &selected_hazard_idx,
             semicolon_list_to_vector(cur_hitbox->hazards_str),
             4
@@ -624,7 +618,7 @@ void animation_editor::process_gui_new_dialog() {
         //Internal name input.
         ImGui::FocusOnInputText(new_dialog.needs_text_focus);
         if(
-            ImGui::InputText(
+            mono_input_text(
                 "Internal name", &new_dialog.internal_name,
                 ImGuiInputTextFlags_EnterReturnsTrue
             )
@@ -831,7 +825,7 @@ void animation_editor::process_gui_options_dialog() {
                     split(game.options.anim_editor_bg_texture, "/").back();
             }
             ImGui::SameLine();
-            ImGui::Text("%s", file_name.c_str());
+            mono_text("%s", file_name.c_str());
             
             ImGui::Unindent();
         }
@@ -1005,7 +999,7 @@ void animation_editor::process_gui_panel_animation_header() {
         -(EDITOR::ICON_BMP_SIZE + 16.0f), EDITOR::ICON_BMP_SIZE + 6.0f
     );
     ImGui::SameLine();
-    if(ImGui::Button(anim_button_name.c_str(), anim_button_size)) {
+    if(mono_button(anim_button_name.c_str(), anim_button_size)) {
         vector<picker_item> anim_names;
         for(size_t a = 0; a < db.animations.size(); a++) {
             ALLEGRO_BITMAP* anim_frame_1 = nullptr;
@@ -1033,8 +1027,7 @@ void animation_editor::process_gui_panel_animation_header() {
                 std::placeholders::_4,
                 std::placeholders::_5
             ),
-            "",
-            true
+            "", true, true
         );
     }
     set_tooltip(
@@ -1122,7 +1115,9 @@ void animation_editor::process_gui_panel_animation_header() {
                 import_anim_names.push_back(db.animations[a]->name);
             }
             string picked_anim;
-            if(list_popup("importAnim", import_anim_names, &picked_anim)) {
+            if(
+                list_popup("importAnim", import_anim_names, &picked_anim, true)
+            ) {
                 import_animation_data(picked_anim);
                 set_status(
                     "Imported animation data from \"" + picked_anim + "\"."
@@ -1148,7 +1143,7 @@ void animation_editor::process_gui_panel_animation_header() {
         );
         
         //Rename animation popup.
-        if(input_popup("renameAnim", "New name:", &rename_anim_name)) {
+        if(input_popup("renameAnim", "New name:", &rename_anim_name, true)) {
             rename_animation(cur_anim_i.cur_anim, rename_anim_name);
         }
     }
@@ -1188,7 +1183,11 @@ void animation_editor::process_gui_panel_body_part() {
     );
     
     //Add body part popup.
-    if(input_popup("newPartName", "New body part's name:", &new_part_name)) {
+    if(
+        input_popup(
+            "newPartName", "New body part's name:", &new_part_name, true
+        )
+    ) {
         if(!new_part_name.empty()) {
             bool already_exists = false;
             for(size_t b = 0; b < db.body_parts.size(); b++) {
@@ -1275,7 +1274,7 @@ void animation_editor::process_gui_panel_body_part() {
         );
         
         //Rename body part popup.
-        if(input_popup("renamePart", "New name:", &rename_part_name)) {
+        if(input_popup("renamePart", "New name:", &rename_part_name, true)) {
             rename_body_part(
                 db.body_parts[selected_part], rename_part_name
             );
@@ -1292,7 +1291,7 @@ void animation_editor::process_gui_panel_body_part() {
             
                 //Body part selectable.
                 bool is_selected = (p == (size_t) selected_part);
-                ImGui::Selectable(
+                mono_selectable(
                     db.body_parts[p]->name.c_str(), &is_selected
                 );
                 
@@ -1350,7 +1349,7 @@ void animation_editor::process_gui_panel_frame(frame* frame_ptr) {
         sprite_names.push_back(db.sprites[s]->name);
     }
     if(
-        ImGui::Combo(
+        mono_combo(
             "Sprite", &frame_ptr->sprite_name, sprite_names, 15
         )
     ) {
@@ -1453,7 +1452,7 @@ void animation_editor::process_gui_panel_frame(frame* frame_ptr) {
                 sounds.push_back(loaded_mob_type->sounds[s].name);
             }
             if(
-                ImGui::Combo(
+                mono_combo(
                     "##sound",
                     &frame_ptr->sound,
                     sounds,
@@ -1701,7 +1700,7 @@ void animation_editor::process_gui_panel_info() {
     );
     
     //Version input.
-    if(ImGui::InputText("Version", &db.version)) {
+    if(mono_input_text("Version", &db.version)) {
         changes_mgr.mark_as_changed();
     }
     set_tooltip(
@@ -1748,9 +1747,13 @@ void animation_editor::process_gui_panel_main() {
     
     ImGui::BeginChild("main");
     
+    //Current file header text.
+    ImGui::Text("File: ");
+    
     //Current file text.
-    ImGui::Text(
-        "File: %s",
+    ImGui::SameLine();
+    mono_text(
+        "%s",
         loaded_mob_type ?
         loaded_mob_type->manifest->internal_name.c_str() :
         manifest.internal_name.c_str()
@@ -1928,7 +1931,7 @@ void animation_editor::process_gui_panel_sprite() {
         -(EDITOR::ICON_BMP_SIZE + 16.0f), EDITOR::ICON_BMP_SIZE + 6.0f
     );
     ImGui::SameLine();
-    if(ImGui::Button(sprite_button_name.c_str(), sprite_button_size)) {
+    if(mono_button(sprite_button_name.c_str(), sprite_button_size)) {
         vector<picker_item> sprite_names;
         for(size_t s = 0; s < db.sprites.size(); s++) {
             sprite_names.push_back(
@@ -1950,8 +1953,7 @@ void animation_editor::process_gui_panel_sprite() {
                 std::placeholders::_4,
                 std::placeholders::_5
             ),
-            "",
-            true
+            "", true, true
         );
     }
     set_tooltip(
@@ -2042,7 +2044,9 @@ void animation_editor::process_gui_panel_sprite() {
             }
             string picked_sprite;
             if(
-                list_popup("importSprite", import_sprite_names, &picked_sprite)
+                list_popup(
+                    "importSprite", import_sprite_names, &picked_sprite, true
+                )
             ) {
                 import_sprite_file_data(picked_sprite);
                 import_sprite_transformation_data(picked_sprite);
@@ -2072,7 +2076,7 @@ void animation_editor::process_gui_panel_sprite() {
         );
         
         //Rename sprite popup.
-        if(input_popup("renameSprite", "New name:", &rename_sprite_name)) {
+        if(input_popup("renameSprite", "New name:", &rename_sprite_name, true)) {
             rename_sprite(cur_sprite, rename_sprite_name);
         }
         
@@ -2194,7 +2198,7 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
         string picked_sprite;
         if(
             list_popup(
-                "importSpriteBitmap", import_sprite_names, &picked_sprite
+                "importSpriteBitmap", import_sprite_names, &picked_sprite, true
             )
         ) {
             import_sprite_file_data(picked_sprite);
@@ -2314,9 +2318,13 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
     //Panel title text.
     panel_title("HITBOXES");
     
+    //Hitbox name header text.
+    ImGui::Text("Hitbox: ");
+    
     //Hitbox name text.
-    ImGui::Text(
-        "Hitbox: %s",
+    ImGui::SameLine();
+    mono_text(
+        "%s",
         cur_hitbox ? cur_hitbox->body_part_name.c_str() : NONE_OPTION.c_str()
     );
     
@@ -2396,7 +2404,8 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
         string picked_sprite;
         if(
             list_popup(
-                "importSpriteHitboxes", import_sprite_names, &picked_sprite
+                "importSpriteHitboxes", import_sprite_names,
+                &picked_sprite, true
             )
         ) {
             import_sprite_hitbox_data(picked_sprite);
@@ -2656,7 +2665,7 @@ void animation_editor::process_gui_panel_sprite_top() {
         string picked_sprite;
         if(
             list_popup(
-                "importSpriteTop", import_sprite_names, &picked_sprite
+                "importSpriteTop", import_sprite_names, &picked_sprite, true
             )
         ) {
             import_sprite_top_data(picked_sprite);
@@ -2778,7 +2787,8 @@ void animation_editor::process_gui_panel_sprite_transform() {
         string picked_sprite;
         if(
             list_popup(
-                "importSpriteTransform", import_sprite_names, &picked_sprite
+                "importSpriteTransform", import_sprite_names,
+                &picked_sprite, true
             )
         ) {
             import_sprite_transformation_data(picked_sprite);
@@ -2896,7 +2906,7 @@ void animation_editor::process_gui_panel_sprite_transform() {
                     all_sprites.push_back(db.sprites[s]->name);
                 }
                 static string comparison_sprite_name;
-                ImGui::Combo(
+                mono_combo(
                     "Sprite", &comparison_sprite_name, all_sprites, 15
                 );
                 set_tooltip(
@@ -3025,7 +3035,7 @@ void animation_editor::process_gui_status_bar() {
     ) {
         showing_coords = true;
         ImGui::SameLine();
-        ImGui::Text(
+        mono_text(
             "%s, %s",
             box_string(f2s(game.mouse_cursor.w_pos.x), 7).c_str(),
             box_string(f2s(game.mouse_cursor.w_pos.y), 7).c_str()
@@ -3052,7 +3062,7 @@ void animation_editor::process_gui_status_bar() {
     //Animation time text.
     if(showing_time) {
         ImGui::SameLine();
-        ImGui::Text(
+        mono_text(
             "%ss",
             box_string(f2s(cur_time), 7).c_str()
         );

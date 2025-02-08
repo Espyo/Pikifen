@@ -404,6 +404,9 @@ protected:
         //Can the user make a new item in the picker dialog?
         bool can_make_new = false;
         
+        //Use the monospace font for items?
+        bool use_monospace = false;
+        
         //When making a new item, the user must pick between these
         //top-level category choices, if applicable.
         vector<string> new_item_top_cat_choices;
@@ -693,11 +696,13 @@ protected:
         bool needs_ctrl = false, bool needs_shift = false
     );
     bool input_popup(
-        const char* label, const char* prompt, string* text
+        const char* label, const char* prompt, string* text,
+        bool use_monospace = false
     );
     bool is_internal_name_good(const string &name) const;
     bool list_popup(
-        const char* label, const vector<string> &items, string* picked_item
+        const char* label, const vector<string> &items, string* picked_item,
+        bool use_monospace = false
     );
     void leave();
     void load_custom_mob_cat_types(bool is_area_editor);
@@ -728,6 +733,7 @@ protected:
         )> &pick_callback,
         const string &list_header = "",
         bool can_make_new = false,
+        bool use_monospace = false,
         const string &filter = ""
     );
     bool popup(const char* label, ImGuiWindowFlags flags = 0);

@@ -20,9 +20,11 @@
 
 #include "misc_functions.h"
 
+#include "../lib/imgui/imgui_stdlib.h"
 #include "../util/allegro_utils.h"
 #include "../util/backtrace.h"
 #include "../util/general_utils.h"
+#include "../util/imgui_utils.h"
 #include "../util/os_utils.h"
 #include "../util/string_utils.h"
 #include "const.h"
@@ -764,6 +766,284 @@ void gui_add_back_input_icon(gui_manager* gui, const string &item_name) {
         draw_player_input_icon(game.sys_assets.fnt_slim, i, true, center, size);
     };
     gui->add_item(back_input, item_name);
+}
+
+
+/**
+ * @brief Processes a Dear ImGui button widget, but sets the button font
+ * to be monospaced.
+ *
+ * @param label Same as you'd pass to ImGui::InputText().
+ * @param size Same as you'd pass to ImGui::InputText().
+ * @return Whether the button was activated.
+ */
+bool mono_button(const char* label, const ImVec2 &size) {
+    ImGui::PushFont(game.sys_assets.fnt_imgui_monospace);
+    bool result = ImGui::Button(label, size);
+    ImGui::PopFont();
+    
+    return result;
+}
+
+
+/**
+ * @brief Processes a Dear ImGui combo widget, but sets the box font
+ * to be monospaced.
+ *
+ * @param label Combo widget label.
+ * @param current_item Index number of the current selected item. -1 means none.
+ * @param items List of items.
+ * @param popup_max_height_in_items Maximum height of the popup,
+ * in number of items.
+ * @return Whether the value was changed.
+ */
+bool mono_combo(
+    const string &label, int* current_item, const vector<string> &items,
+    int popup_max_height_in_items
+) {
+    bool has_text = label[0] != '#';
+    ImGui::BeginGroup();
+    ImGui::PushFont(game.sys_assets.fnt_imgui_monospace);
+    bool result =
+        ImGui::Combo(
+            has_text ? "##cb" + label : label,
+            current_item, items, popup_max_height_in_items
+        );
+    ImGui::PopFont();
+    
+    if(has_text) {
+        ImGui::SameLine(0.0f, ImGui::GetStyle().ItemInnerSpacing.x);
+        ImGui::Text("%s", label.c_str());
+    }
+    ImGui::EndGroup();
+    
+    return result;
+}
+
+
+/**
+ * @brief Wrapper for creating a Dear ImGui combo box widget, but
+ * using a string to control the selection,
+ * as well as a vector of strings for the list of items.
+ *
+ * @param label Combo widget label.
+ * @param current_item Name of the current selected item.
+ * @param items List of items.
+ * @param popup_max_height_in_items Maximum height of the popup,
+ * in number of items.
+ * @return Whether the value was changed.
+ */
+bool mono_combo(
+    const string &label, string* current_item, const vector<string> &items,
+    int popup_max_height_in_items
+) {
+    bool has_text = label[0] != '#';
+    ImGui::BeginGroup();
+    ImGui::PushFont(game.sys_assets.fnt_imgui_monospace);
+    bool result =
+        ImGui::Combo(
+            has_text ? "##cb" + label : label,
+            current_item, items, popup_max_height_in_items
+        );
+    ImGui::PopFont();
+    
+    if(has_text) {
+        ImGui::SameLine(0.0f, ImGui::GetStyle().ItemInnerSpacing.x);
+        ImGui::Text("%s", label.c_str());
+    }
+    ImGui::EndGroup();
+    
+    return result;
+}
+
+
+/**
+ * @brief Wrapper for creating a Dear ImGui combo box widget, but
+ * using a string to control the selection,
+ * as well as two vector of strings for the list of items, one with
+ * the internal values of each item, another with the names to display.
+ *
+ * @param label Combo widget label.
+ * @param current_item Internal value of the current selected item.
+ * @param item_internal_values List of internal values for each item.
+ * @param item_display_names List of names to show the user for each item.
+ * @param popup_max_height_in_items Maximum height of the popup,
+ * in number of items.
+ * @return Whether the value was changed.
+ */
+bool mono_combo(
+    const string &label, string* current_item,
+    const vector<string> &item_internal_values,
+    const vector<string> &item_display_names,
+    int popup_max_height_in_items
+) {
+    bool has_text = label[0] != '#';
+    ImGui::BeginGroup();
+    ImGui::PushFont(game.sys_assets.fnt_imgui_monospace);
+    bool result =
+        ImGui::Combo(
+            has_text ? "##cb" + label : label,
+            current_item, item_internal_values,
+            item_display_names, popup_max_height_in_items
+        );
+    ImGui::PopFont();
+    
+    if(has_text) {
+        ImGui::SameLine(0.0f, ImGui::GetStyle().ItemInnerSpacing.x);
+        ImGui::Text("%s", label.c_str());
+    }
+    ImGui::EndGroup();
+    
+    return result;
+}
+
+
+/**
+ * @brief Processes a Dear ImGui input text widget, but sets the input font
+ * to be monospaced.
+ *
+ * @param label Same as you'd pass to ImGui::InputText().
+ * @param str Same as you'd pass to ImGui::InputText().
+ * @param flags Same as you'd pass to ImGui::InputText().
+ * @param callback Same as you'd pass to ImGui::InputText().
+ * @param user_data Same as you'd pass to ImGui::InputText().
+ * @return Whether the text input in the was changed by the user.
+ */
+bool mono_input_text(
+    const char* label, string* str, ImGuiInputTextFlags flags,
+    ImGuiInputTextCallback callback, void* user_data
+) {
+    bool has_text = label[0] != '#';
+    ImGui::BeginGroup();
+    ImGui::PushFont(game.sys_assets.fnt_imgui_monospace);
+    bool result =
+        ImGui::InputText(
+            has_text ? ("##ti" + string(label)).c_str() : label,
+            str, flags, callback, user_data
+        );
+    ImGui::PopFont();
+    
+    if(has_text) {
+        ImGui::SameLine(0.0f, ImGui::GetStyle().ItemInnerSpacing.x);
+        ImGui::Text("%s", label);
+    }
+    ImGui::EndGroup();
+    
+    return result;
+}
+
+
+/**
+ * @brief Processes a Dear ImGui input text with hint widget, but sets
+ * the input font to be monospaced.
+ *
+ * @param label Same as you'd pass to ImGui::InputText().
+ * @param hint Same as you'd pass to ImGui::InputText().
+ * @param str Same as you'd pass to ImGui::InputText().
+ * @param flags Same as you'd pass to ImGui::InputText().
+ * @param callback Same as you'd pass to ImGui::InputText().
+ * @param user_data Same as you'd pass to ImGui::InputText().
+ * @return Whether the text input was changed by the user.
+ */
+bool mono_input_text_with_hint(
+    const char* label, const char* hint, string* str,
+    ImGuiInputTextFlags flags, ImGuiInputTextCallback callback,
+    void* user_data
+) {
+    bool has_text = label[0] != '#';
+    bool str_empty = str->empty();
+    ImGui::BeginGroup();
+    if(!str_empty) ImGui::PushFont(game.sys_assets.fnt_imgui_monospace);
+    bool result =
+        ImGui::InputTextWithHint(
+            has_text ? ("##ti" + string(label)).c_str() : label,
+            hint, str, flags, callback, user_data
+        );
+    if(!str_empty) ImGui::PopFont();
+    
+    if(has_text) {
+        ImGui::SameLine(0.0f, ImGui::GetStyle().ItemInnerSpacing.x);
+        ImGui::Text("%s", label);
+    }
+    ImGui::EndGroup();
+    
+    return result;
+}
+
+
+/**
+ * @brief Processes a Dear ImGui list box widget, but sets
+ * the font to be monospaced.
+ *
+ * @param label Same as you'd pass to ImGui::InputText().
+ * @param current_item Same as you'd pass to ImGui::InputText().
+ * @param items Same as you'd pass to ImGui::InputText().
+ * @param height_in_items Same as you'd pass to ImGui::InputText().
+ * @return Whether the value was changed.
+ */
+bool mono_list_box(
+    const string &label, int* current_item, const vector<string> &items,
+    int height_in_items
+) {
+    bool has_text = label[0] != '#';
+    ImGui::BeginGroup();
+    ImGui::PushFont(game.sys_assets.fnt_imgui_monospace);
+    bool result =
+        ImGui::ListBox(
+            has_text ? ("##lb" + string(label)).c_str() : label,
+            current_item, items, height_in_items
+        );
+    ImGui::PopFont();
+    
+    if(has_text) {
+        ImGui::SameLine(0.0f, ImGui::GetStyle().ItemInnerSpacing.x);
+        ImGui::Text("%s", label.c_str());
+    }
+    ImGui::EndGroup();
+    
+    return result;
+}
+
+
+/**
+ * @brief Processes a Dear ImGui selectable widget, but sets
+ * the font to be monospaced.
+ *
+ * @param label Same as you'd pass to ImGui::InputText().
+ * @param selected Same as you'd pass to ImGui::InputText().
+ * @param flags Same as you'd pass to ImGui::InputText().
+ * @param size Same as you'd pass to ImGui::InputText().
+ * @return Whether the text input was changed by the user.
+ */
+bool mono_selectable(
+    const char* label, bool selected, ImGuiSelectableFlags flags,
+    const ImVec2 &size
+) {
+    ImGui::PushFont(game.sys_assets.fnt_imgui_monospace);
+    bool result = ImGui::Selectable(label, selected, flags, size);
+    ImGui::PopFont();
+    return result;
+}
+
+
+/**
+ * @brief Processes a Dear ImGui selectable widget, but sets
+ * the font to be monospaced.
+ *
+ * @param label Same as you'd pass to ImGui::InputText().
+ * @param p_selected Same as you'd pass to ImGui::InputText().
+ * @param flags Same as you'd pass to ImGui::InputText().
+ * @param size Same as you'd pass to ImGui::InputText().
+ * @return Whether the text input was changed by the user.
+ */
+bool mono_selectable(
+    const char* label, bool* p_selected, ImGuiSelectableFlags flags,
+    const ImVec2 &size
+) {
+    ImGui::PushFont(game.sys_assets.fnt_imgui_monospace);
+    bool result = ImGui::Selectable(label, p_selected, flags, size);
+    ImGui::PopFont();
+    return result;
 }
 
 

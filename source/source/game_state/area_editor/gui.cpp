@@ -238,8 +238,7 @@ void area_editor::process_gui_delete_area_dialog() {
     
     //Final warning text.
     string final_warning_str =
-        "Are you sure you want to delete the area \"" +
-        manifest.internal_name + "\"?";
+        "Are you sure you want to delete the current area?";
     ImGui::SetupCentering(ImGui::CalcTextSize(final_warning_str.c_str()).x);
     ImGui::TextColored(
         ImVec4(0.8, 0.6, 0.6, 1.0),
@@ -446,7 +445,7 @@ void area_editor::process_gui_new_dialog() {
     ImGui::Spacer();
     ImGui::FocusOnInputText(new_dialog.needs_text_focus);
     if(
-        ImGui::InputText(
+        mono_input_text(
             "Internal name", &new_dialog.internal_name,
             ImGuiInputTextFlags_EnterReturnsTrue
         )
@@ -1120,7 +1119,7 @@ void area_editor::process_gui_mob_script_vars(mob_gen* m_ptr) {
     //Finally, a widget for the entire list.
     string mob_vars = m_ptr->vars;
     ImGui::Spacer();
-    if(ImGui::InputText("Full list", &mob_vars)) {
+    if(mono_input_text("Full list", &mob_vars)) {
         register_change("object script vars change");
         m_ptr->vars = mob_vars;
     }
@@ -1354,7 +1353,12 @@ void area_editor::process_gui_options_dialog() {
         
         //Increase grid interval button.
         ImGui::SameLine();
-        if(ImGui::Button("+")) {
+        if(
+            ImGui::Button(
+                "+",
+                ImVec2(ImGui::GetFrameHeight(), ImGui::GetFrameHeight())
+            )
+        ) {
             grid_interval_increase_cmd(1.0f);
         }
         set_tooltip(
@@ -1366,7 +1370,12 @@ void area_editor::process_gui_options_dialog() {
         
         //Decrease grid interval button.
         ImGui::SameLine();
-        if(ImGui::Button("-")) {
+        if(
+            ImGui::Button(
+                "-",
+                ImVec2(ImGui::GetFrameHeight(), ImGui::GetFrameHeight())
+            )
+        ) {
             grid_interval_decrease_cmd(1.0f);
         }
         set_tooltip(
@@ -1905,7 +1914,12 @@ void area_editor::process_gui_panel_info() {
         );
         
         //Add area tags button.
-        if(ImGui::Button("+")) {
+        if(
+            ImGui::Button(
+                "+",
+                ImVec2(ImGui::GetFrameHeight(), ImGui::GetFrameHeight())
+            )
+        ) {
             ImGui::OpenPopup("addTags");
         }
         set_tooltip(
@@ -2369,7 +2383,7 @@ void area_editor::process_gui_panel_info() {
         
         //Version input.
         string version = game.cur_area_data->version;
-        if(ImGui::InputText("Version", &version)) {
+        if(mono_input_text("Version", &version)) {
             register_change("area version change");
             game.cur_area_data->version = version;
         }
@@ -2671,8 +2685,12 @@ void area_editor::process_gui_panel_main() {
     
     ImGui::BeginChild("main");
     
-    //Area name text.
-    ImGui::Text("Area folder: %s", manifest.internal_name.c_str());
+    //Current folder header text.
+    ImGui::Text("Folder: ");
+    
+    //Current folder text.
+    ImGui::SameLine();
+    mono_text("%s", manifest.internal_name.c_str());
     string folder_tooltip =
         get_folder_tooltip(manifest.path, game.cur_area_data->user_data_path) +
         "\n\n"
@@ -4287,7 +4305,7 @@ void area_editor::process_gui_panel_path_stop() {
     );
     
     //Label text.
-    ImGui::InputText("Label", &s_ptr->label);
+    mono_input_text("Label", &s_ptr->label);
     set_tooltip(
         "If this stop is part of a path that you want\n"
         "to address in a script, write the name here."
@@ -4399,7 +4417,7 @@ void area_editor::process_gui_panel_paths() {
         );
         
         //Label text.
-        ImGui::InputText("Label", &path_drawing_label);
+        mono_input_text("Label", &path_drawing_label);
         set_tooltip(
             "If the new stop is part of a path that you want\n"
             "to address in a script, write the name here."
@@ -4727,7 +4745,7 @@ void area_editor::process_gui_panel_paths() {
             
             //Select stops with label popup.
             static string label_name;
-            if(input_popup("selectStops", "Label:", &label_name)) {
+            if(input_popup("selectStops", "Label:", &label_name, true)) {
                 select_path_stops_with_label(label_name);
             }
             
@@ -5021,7 +5039,7 @@ void area_editor::process_gui_panel_sector() {
             string picked_hazard;
             if(
                 list_popup(
-                    "addHazard", all_hazards_list, &picked_hazard
+                    "addHazard", all_hazards_list, &picked_hazard, true
                 )
             ) {
                 vector<string> list =
@@ -5093,7 +5111,7 @@ void area_editor::process_gui_panel_sector() {
             if(
                 !(*selected_sectors.begin())->hazards_str.empty()
             ) {
-                ImGui::ListBox(
+                mono_list_box(
                     "Hazards", &selected_hazard_idx,
                     semicolon_list_to_vector(s_ptr->hazards_str),
                     4
@@ -5217,7 +5235,7 @@ void area_editor::process_gui_panel_sector() {
                         std::placeholders::_4,
                         std::placeholders::_5
                     ),
-                    "Suggestions:"
+                    "Suggestions:", false, true
                 );
             }
             set_tooltip(
@@ -5579,7 +5597,7 @@ void area_editor::process_gui_status_bar() {
     //Mouse coordinates text.
     if(!is_mouse_in_gui || is_m1_pressed) {
         ImGui::SameLine();
-        ImGui::Text(
+        mono_text(
             "%s, %s",
             box_string(f2s(game.mouse_cursor.w_pos.x), 7).c_str(),
             box_string(f2s(game.mouse_cursor.w_pos.y), 7).c_str()

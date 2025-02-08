@@ -16,6 +16,7 @@
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
 
+#include "../core/game.h"
 #include "../content/area/area.h"
 #include "../content/area/sector.h"
 #include "../content/mob/leader.h"
@@ -145,6 +146,44 @@ string get_working_directory_path();
 void gui_add_back_input_icon(
     gui_manager* gui, const string &item_name = "back_input"
 );
+bool mono_combo(
+    const string &label, int* current_item, const vector<string> &items,
+    int popup_max_height_in_items = -1
+);
+bool mono_combo(
+    const string &label, string* current_item, const vector<string> &items,
+    int popup_max_height_in_items = -1
+);
+bool mono_combo(
+    const string &label, string* current_item,
+    const vector<string> &item_internal_values,
+    const vector<string> &item_display_names,
+    int popup_max_height_in_items = -1
+);
+bool mono_button(
+    const char* label, const ImVec2 &size = ImVec2(0, 0)
+);
+bool mono_input_text(
+    const char* label, string* str, ImGuiInputTextFlags flags = 0,
+    ImGuiInputTextCallback callback = nullptr, void* user_data = nullptr
+);
+bool mono_input_text_with_hint(
+    const char* label, const char* hint, string* str,
+    ImGuiInputTextFlags flags = 0, ImGuiInputTextCallback callback = nullptr,
+    void* user_data = nullptr
+);
+bool mono_list_box(
+    const string &label, int* current_item, const vector<string> &items,
+    int height_in_items = -1
+);
+bool mono_selectable(
+    const char* label, bool selected = false, ImGuiSelectableFlags flags = 0,
+    const ImVec2 &size = ImVec2(0, 0)
+);
+bool mono_selectable(
+    const char* label, bool* p_selected, ImGuiSelectableFlags flags = 0,
+    const ImVec2 &size = ImVec2(0, 0)
+);
 bool open_manual(const string &page);
 void print_info(
     const string &text,
@@ -186,3 +225,18 @@ void update_offset_effect_caches (
     offset_effect_color_getter_t color_getter
 );
 point v2p(const vertex* v);
+
+
+/**
+ * @brief Processes a Dear ImGui text widget, but sets the font to be
+ * monospaced.
+ *
+ * @tparam args_t Function argument type.
+ * @param args Function arguments to pass to ImGui::Text().
+ */
+template <typename ...args_t>
+void mono_text(args_t && ...args) {
+    ImGui::PushFont(game.sys_assets.fnt_imgui_monospace);
+    ImGui::Text(std::forward<args_t>(args)...);
+    ImGui::PopFont();
+}

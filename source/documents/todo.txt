@@ -2,7 +2,8 @@
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    
+    Standardize all texts following a "browse..." sort of button
+    List boxes that list hazards (for hitboxes and for sectors) should use the proper names, not the internal names
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
@@ -264,6 +265,7 @@ Next tasks (roughly sorted most important first)
                 "--squeeze-lines=3",
                 "--style=java",
             ],
+        Make it so the ampersand for references is near the type name, not the variable name
         Document the usage of Astyle in the contributing file
     
     --- Future ---

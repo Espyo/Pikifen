@@ -777,10 +777,11 @@ void editor::handle_rmb_up(const ALLEGRO_EVENT &ev) {}
  * @param label Name of the popup.
  * @param prompt What to prompt to the user. e.g.: "New name:"
  * @param text Pointer to the starting text, as well as the user's final text.
+ * @param use_monospace Whether to use a monospace font.
  * @return Whether the user pressed Return or the Ok button.
  */
 bool editor::input_popup(
-    const char* label, const char* prompt, string* text
+    const char* label, const char* prompt, string* text, bool use_monospace
 ) {
     bool ret = false;
     needs_input_popup_text_focus = true;
@@ -790,13 +791,23 @@ bool editor::input_popup(
         }
         ImGui::Text("%s", prompt);
         ImGui::FocusOnInputText(needs_input_popup_text_focus);
-        if(
-            ImGui::InputText(
-                "##inputPopupText", text,
-                ImGuiInputTextFlags_EnterReturnsTrue |
-                ImGuiInputTextFlags_AutoSelectAll
-            )
-        ) {
+        bool hit_enter = false;
+        if(use_monospace) {
+            hit_enter =
+                mono_input_text(
+                    "##inputPopupText", text,
+                    ImGuiInputTextFlags_EnterReturnsTrue |
+                    ImGuiInputTextFlags_AutoSelectAll
+                );
+        } else {
+            hit_enter =
+                ImGui::InputText(
+                    "##inputPopupText", text,
+                    ImGuiInputTextFlags_EnterReturnsTrue |
+                    ImGuiInputTextFlags_AutoSelectAll
+                );
+        }
+        if(hit_enter) {
             ret = true;
             ImGui::CloseCurrentPopup();
         }
@@ -1388,23 +1399,31 @@ void editor::leave() {
  * @param label Name of the popup.
  * @param items List of items.
  * @param picked_item If an item was picked, set this to its name.
+ * @param use_monospace Whether to use a monospace font for the items.
  * @return Whether an item was clicked on.
  */
 bool editor::list_popup(
-    const char* label, const vector<string> &items, string* picked_item
+    const char* label, const vector<string> &items, string* picked_item,
+    bool use_monospace
 ) {
     bool ret = false;
     if(ImGui::BeginPopup(label)) {
         if(escape_was_pressed) {
             ImGui::CloseCurrentPopup();
         }
+        if(use_monospace) ImGui::PushFont(game.sys_assets.fnt_imgui_monospace);
         for(size_t i = 0; i < items.size(); i++) {
             string name = items[i];
-            if(ImGui::Selectable(name.c_str())) {
+            bool hit_button =
+                use_monospace ?
+                mono_selectable(name.c_str()) :
+                ImGui::Selectable(name.c_str());
+            if(hit_button) {
                 *picked_item = name;
                 ret = true;
             }
         }
+        if(use_monospace) ImGui::PopFont();
         ImGui::EndPopup();
     }
     return ret;
@@ -1659,6 +1678,7 @@ void editor::open_new_pack_dialog() {
  * @param list_header If not-empty, display this text above the list.
  * @param can_make_new If true, the user can create a new element,
  * by writing its name on the textbox, and pressing the "+" button.
+ * @param use_monospace Whether the items should use a monospace font.
  * @param filter Filter of names. Only items that match this will appear.
  */
 void editor::open_picker_dialog(
@@ -1669,6 +1689,7 @@ void editor::open_picker_dialog(
     )> &pick_callback,
     const string &list_header,
     bool can_make_new,
+    bool use_monospace,
     const string &filter
 ) {
     picker_info* new_picker = new picker_info(this);
@@ -1677,6 +1698,7 @@ void editor::open_picker_dialog(
     new_picker->list_header = list_header;
     new_picker->pick_callback = pick_callback;
     new_picker->can_make_new = can_make_new;
+    new_picker->use_monospace = use_monospace;
     new_picker->filter = filter;
     
     dialog_info* new_dialog = new dialog_info();
@@ -2295,7 +2317,7 @@ void editor::process_gui_new_pack_dialog() {
     //Internal name input.
     ImGui::FocusOnInputText(needs_new_pack_text_focus);
     if(
-        ImGui::InputText(
+        mono_input_text(
             "Internal name", &internal_name,
             ImGuiInputTextFlags_EnterReturnsTrue
         )
@@ -2347,15 +2369,17 @@ void editor::process_gui_new_pack_dialog() {
         "pack's data file.\n"
         "There are also more properties; check the manual "
         "for more information!\n"
-        "Pack data file path: " +
-        (
-            internal_name.empty() ?
-            "" :
-            FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
-            internal_name + "/" +
-            FILE_NAMES::PACK_DATA
-        );
+        "Pack data file path: ";
     ImGui::TextWrapped("%s", explanation.c_str());
+    
+    //Path text.
+    string path_to_show =
+        internal_name.empty() ?
+        "" :
+        FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
+        internal_name + "/" +
+        FILE_NAMES::PACK_DATA;
+    mono_text("%s", path_to_show.c_str());
     
     //Open manual button.
     if(ImGui::Button("Open manual")) {
@@ -3417,7 +3441,7 @@ void editor::picker_info::process() {
         ImGui::PushStyleColor(
             ImGuiCol_ButtonActive, (ImVec4) ImColor(208, 32, 32)
         );
-        bool hit_create_button = ImGui::Button("+", ImVec2(64.0f, 32.0f));
+        bool hit_create_button = ImGui::Button("+", ImVec2(64.0f, 0.0f));
         editor_ptr->set_tooltip("Create a new item with the given name!");
         if(hit_create_button) try_make_new();
         ImGui::PopStyleColor(3);
@@ -3430,12 +3454,22 @@ void editor::picker_info::process() {
         "Search filter";
         
     ImGui::FocusOnInputText(needs_filter_box_focus);
-    if(
-        ImGui::InputTextWithHint(
-            "##filter", filter_widget_hint.c_str(), &filter,
-            ImGuiInputTextFlags_EnterReturnsTrue
-        )
-    ) {
+    bool hit_filter_widget = false;
+    if(filter.empty()) {
+        hit_filter_widget =
+            ImGui::InputTextWithHint(
+                "##filter", filter_widget_hint.c_str(), &filter,
+                ImGuiInputTextFlags_EnterReturnsTrue
+            );
+    } else {
+        hit_filter_widget =
+            mono_input_text_with_hint(
+                "##filter", filter_widget_hint.c_str(), &filter,
+                ImGuiInputTextFlags_EnterReturnsTrue
+            );
+    }
+    
+    if(hit_filter_widget) {
         if(filter.empty()) return;
         
         if(can_make_new) {
@@ -3513,6 +3547,9 @@ void editor::picker_info::process() {
                 picker_item* i_ptr = &final_items[tc][sc][i];
                 string widgetId = i2s(tc) + "-" + i2s(sc) + "-" + i2s(i);
                 ImGui::PushID(widgetId.c_str());
+                if(use_monospace) {
+                    ImGui::PushFont(game.sys_assets.fnt_imgui_monospace);
+                }
                 
                 point button_size;
                 
@@ -3561,6 +3598,8 @@ void editor::picker_info::process() {
                 ImGui::SetupButtonWrapping(
                     button_size.x, (int) (i + 1), (int) final_items[tc][sc].size()
                 );
+                
+                if(use_monospace) ImGui::PopFont();
                 ImGui::PopID();
             }
             
