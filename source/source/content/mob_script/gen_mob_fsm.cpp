@@ -207,19 +207,6 @@ void gen_mob_fsm::carry_stop_move(mob* m, void* info1, void* info2) {
 
 
 /**
- * @brief Event handler that makes a mob die.
- *
- * @param m The mob.
- * @param info1 Unused.
- * @param info2 Unused.
- */
-void gen_mob_fsm::die(mob* m, void* info1, void* info2) {
-    if(m->type->death_state_idx == INVALID) return;
-    m->fsm.set_state(m->type->death_state_idx, info1, info2);
-}
-
-
-/**
  * @brief Event handler that makes a mob fall into a pit and vanish.
  *
  * @param m The mob.
@@ -231,6 +218,19 @@ void gen_mob_fsm::fall_down_pit(mob* m, void* info1, void* info2) {
     m->start_dying();
     m->finish_dying();
     m->to_delete = true;
+}
+
+
+/**
+ * @brief Event handler that makes a mob die.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void gen_mob_fsm::go_to_dying_state(mob* m, void* info1, void* info2) {
+    if(m->type->dying_state_idx == INVALID) return;
+    m->fsm.set_state(m->type->dying_state_idx, info1, info2);
 }
 
 

@@ -3525,10 +3525,10 @@ void mob::tick_animation(float delta_t) {
     float mult = 1.0f;
     for(size_t s = 0; s < this->statuses.size(); s++) {
         float vuln_mult = this->statuses[s].type->anim_speed_multiplier - 1.0f;
-            auto vuln_it = type->status_vulnerabilities.find(statuses[s].type);
-            if(vuln_it != type->status_vulnerabilities.end()) {
-                vuln_mult *= vuln_it->second.effect_mult;
-            }
+        auto vuln_it = type->status_vulnerabilities.find(statuses[s].type);
+        if(vuln_it != type->status_vulnerabilities.end()) {
+            vuln_mult *= vuln_it->second.effect_mult;
+        }
         mult *= (vuln_mult + 1.0f);
     }
     
@@ -3994,9 +3994,9 @@ void mob::tick_script(float delta_t) {
         }
     }
     
-    //Is it dead?
+    //Has it reached 0 health?
     if(health <= 0 && max_health != 0) {
-        fsm.run_event(MOB_EV_DEATH, this);
+        fsm.run_event(MOB_EV_ZERO_HEALTH, this);
     }
     
     //Check the focused mob.

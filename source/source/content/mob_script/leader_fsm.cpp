@@ -55,7 +55,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(leader_fsm::be_attacked);
         }
-        efc.new_event(MOB_EV_DEATH); {
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
             efc.change_state("dying");
         }
         efc.new_event(LEADER_EV_MUST_SEARCH_SEED); {
@@ -128,7 +128,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(leader_fsm::be_attacked);
         }
-        efc.new_event(MOB_EV_DEATH); {
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
             efc.change_state("dying");
         }
         efc.new_event(LEADER_EV_GO_PLUCK); {
@@ -186,7 +186,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(leader_fsm::be_attacked);
         }
-        efc.new_event(MOB_EV_DEATH); {
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
             efc.change_state("dying");
         }
         efc.new_event(LEADER_EV_GO_HERE); {
@@ -232,7 +232,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(leader_fsm::be_attacked);
         }
-        efc.new_event(MOB_EV_DEATH); {
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
             efc.change_state("dying");
         }
         efc.new_event(LEADER_EV_GO_HERE); {
@@ -284,7 +284,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::release);
             efc.run(leader_fsm::be_attacked);
         }
-        efc.new_event(MOB_EV_DEATH); {
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
             efc.change_state("dying");
         }
         efc.new_event(MOB_EV_TOUCHED_HAZARD); {
@@ -338,7 +338,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(leader_fsm::be_attacked);
         }
-        efc.new_event(MOB_EV_DEATH); {
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
             efc.change_state("dying");
         }
         efc.new_event(LEADER_EV_GO_HERE); {
@@ -394,7 +394,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::be_thrown_by_bouncer);
             efc.change_state("thrown");
         }
-        efc.new_event(MOB_EV_DEATH); {
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
             efc.change_state("dying");
         }
     }
@@ -412,7 +412,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_TOUCHED_SPRAY); {
             efc.run(leader_fsm::touched_spray);
         }
-        efc.new_event(MOB_EV_DEATH); {
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
             efc.change_state("dying");
         }
     }
@@ -539,7 +539,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(leader_fsm::be_attacked);
         }
-        efc.new_event(MOB_EV_DEATH); {
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
             efc.change_state("dying");
         }
         efc.new_event(MOB_EV_TOUCHED_TRACK); {
@@ -590,7 +590,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(leader_fsm::be_attacked);
         }
-        efc.new_event(MOB_EV_DEATH); {
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
             efc.change_state("dying");
         }
         efc.new_event(MOB_EV_TOUCHED_TRACK); {
@@ -627,7 +627,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::be_attacked);
             efc.change_state("active");
         }
-        efc.new_event(MOB_EV_DEATH); {
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
             efc.run(leader_fsm::stop_auto_pluck);
             efc.change_state("dying");
         }
@@ -702,7 +702,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::stop_auto_pluck);
             efc.run(leader_fsm::be_attacked);
         }
-        efc.new_event(MOB_EV_DEATH); {
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
             efc.run(leader_fsm::stop_auto_pluck);
             efc.change_state("dying");
         }
@@ -777,7 +777,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::stop_go_here);
             efc.run(leader_fsm::be_attacked);
         }
-        efc.new_event(MOB_EV_DEATH); {
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
             efc.run(leader_fsm::stop_go_here);
             efc.change_state("dying");
         }
@@ -827,7 +827,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::stop_go_here);
             efc.run(leader_fsm::be_attacked);
         }
-        efc.new_event(MOB_EV_DEATH); {
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
             efc.run(leader_fsm::stop_go_here);
             efc.change_state("dying");
         }
@@ -885,7 +885,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_TOUCHED_SPRAY); {
             efc.run(leader_fsm::touched_spray);
         }
-        efc.new_event(MOB_EV_DEATH); {
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
             efc.run(leader_fsm::start_waking_up);
             efc.change_state("dying");
         }
@@ -934,7 +934,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::be_attacked);
             efc.run(leader_fsm::start_waking_up);
         }
-        efc.new_event(MOB_EV_DEATH); {
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
             efc.run(leader_fsm::start_waking_up);
             efc.change_state("dying");
         }
@@ -990,7 +990,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::be_attacked);
             efc.run(leader_fsm::start_waking_up);
         }
-        efc.new_event(MOB_EV_DEATH); {
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
             efc.run(gen_mob_fsm::carry_stop_being_stuck);
             efc.run(leader_fsm::start_waking_up);
             efc.change_state("dying");
@@ -1046,7 +1046,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_TOUCHED_SPRAY); {
             efc.run(leader_fsm::touched_spray);
         }
-        efc.new_event(MOB_EV_DEATH); {
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
             efc.run(leader_fsm::start_waking_up);
             efc.run(leader_fsm::start_waking_up);
             efc.change_state("dying");
@@ -1098,7 +1098,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::be_attacked);
             efc.run(leader_fsm::start_waking_up);
         }
-        efc.new_event(MOB_EV_DEATH); {
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
             efc.run(leader_fsm::start_waking_up);
             efc.change_state("dying");
         }
@@ -1158,7 +1158,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::be_attacked);
             efc.run(leader_fsm::start_waking_up);
         }
-        efc.new_event(MOB_EV_DEATH); {
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
             efc.run(gen_mob_fsm::carry_stop_being_stuck);
             efc.run(leader_fsm::start_waking_up);
             efc.change_state("dying");
@@ -1206,7 +1206,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(leader_fsm::be_attacked);
         }
-        efc.new_event(MOB_EV_DEATH); {
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
             efc.change_state("dying");
         }
         efc.new_event(MOB_EV_TOUCHED_HAZARD); {
@@ -1271,7 +1271,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_TOUCHED_SPRAY); {
             efc.run(leader_fsm::touched_spray);
         }
-        efc.new_event(MOB_EV_DEATH); {
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
             efc.change_state("dying");
         }
     }

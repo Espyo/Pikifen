@@ -39,7 +39,7 @@ void bridge_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_FINISHED_RECEIVING_DELIVERY); {
             efc.run(bridge_fsm::check_health);
         }
-        efc.new_event(MOB_EV_DEATH); {
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
             efc.run(bridge_fsm::check_health);
             efc.run(bridge_fsm::open);
             efc.change_state("destroyed");

@@ -842,7 +842,7 @@ void mob_type::load_from_data_node(
         
         data_node* death_state_name_node =
             script_file.get_child_by_name("death_state");
-        death_state_name = death_state_name_node->value;
+        dying_state_name = death_state_name_node->value;
         
         states_ignoring_death =
             semicolon_list_to_vector(
@@ -892,16 +892,16 @@ void mob_type::load_from_data_node(
                 );
             }
             
-            if(!death_state_name.empty()) {
+            if(!dying_state_name.empty()) {
                 for(size_t s = 0; s < states.size(); s++) {
-                    if(states[s]->name == death_state_name) {
-                        death_state_idx = s;
+                    if(states[s]->name == dying_state_name) {
+                        dying_state_idx = s;
                         break;
                     }
                 }
-                if(death_state_idx == INVALID) {
+                if(dying_state_idx == INVALID) {
                     game.errors.report(
-                        "Unknown state \"" + death_state_name + "\" "
+                        "Unknown state \"" + dying_state_name + "\" "
                         "to set as the death state!",
                         death_state_name_node
                     );

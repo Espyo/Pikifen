@@ -659,20 +659,20 @@ void load_state(
         new_event_settings.push_back(0);
     }
     
-    //Inject a death event.
+    //Inject a zero health event.
     if(
-        state_node->name != mt->death_state_name &&
-        !state_ptr->events[MOB_EV_DEATH] &&
+        state_node->name != mt->dying_state_name &&
+        !state_ptr->events[MOB_EV_ZERO_HEALTH] &&
         find(
             mt->states_ignoring_death.begin(),
             mt->states_ignoring_death.end(),
             state_node->name
         ) == mt->states_ignoring_death.end() &&
-        !mt->death_state_name.empty()
+        !mt->dying_state_name.empty()
     ) {
         vector<mob_action_call*> de_actions;
-        de_actions.push_back(new mob_action_call(gen_mob_fsm::die));
-        new_events.push_back(new mob_event(MOB_EV_DEATH, de_actions));
+        de_actions.push_back(new mob_action_call(gen_mob_fsm::go_to_dying_state));
+        new_events.push_back(new mob_event(MOB_EV_ZERO_HEALTH, de_actions));
         new_event_settings.push_back(0);
     }
     

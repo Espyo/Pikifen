@@ -408,11 +408,11 @@ public:
     //Index of the state a mob starts at.
     size_t first_state_idx = INVALID;
     
-    //Name of the state to go to on death.
-    string death_state_name;
+    //Name of the state to go to when it's dying.
+    string dying_state_name;
     
-    //Index of the state to go to on death.
-    size_t death_state_idx = INVALID;
+    //Index of the state to go to when it's dying.
+    size_t dying_state_idx = INVALID;
     
     //States that ignore the death event.
     vector<string> states_ignoring_death;

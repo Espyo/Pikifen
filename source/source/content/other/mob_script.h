@@ -72,9 +72,6 @@ enum MOB_EV {
     //When it is damaged.
     MOB_EV_DAMAGE,
     
-    //When it dies.
-    MOB_EV_DEATH,
-    
     //When the mob is far away from its home.
     MOB_EV_FAR_FROM_HOME,
     
@@ -251,6 +248,9 @@ enum MOB_EV {
     
     //When the mob touches a bouncer object.
     MOB_EV_TOUCHED_BOUNCER,
+    
+    //When it has zero health.
+    MOB_EV_ZERO_HEALTH,
     
     //Events that only leaders can really handle.
     
