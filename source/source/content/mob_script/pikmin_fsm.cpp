@@ -158,6 +158,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
         }
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
+            efc.change_state("dying");
+        }
     }
     
     efc.new_state("in_group_stopped", PIKMIN_STATE_IN_GROUP_STOPPED); {
@@ -210,6 +213,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
+        }
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
+            efc.change_state("dying");
         }
     }
     
@@ -281,6 +287,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
         }
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
+            efc.change_state("dying");
+        }
     }
     
     efc.new_state("swarm_stopped", PIKMIN_STATE_SWARM_STOPPED); {
@@ -341,6 +350,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
         }
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
+            efc.change_state("dying");
+        }
     }
     
     efc.new_state("grabbed_by_leader", PIKMIN_STATE_GRABBED_BY_LEADER); {
@@ -377,6 +389,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::be_released);
             efc.run(pikmin_fsm::fall_down_pit);
         }
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
+            efc.change_state("dying");
+        }
     }
     
     efc.new_state("thrown", PIKMIN_STATE_THROWN); {
@@ -412,6 +427,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
+        }
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
+            efc.change_state("dying");
         }
     }
     
@@ -511,6 +529,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
         }
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
+            efc.change_state("dying");
+        }
     }
     
     efc.new_state("idling", PIKMIN_STATE_IDLING); {
@@ -577,6 +598,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
         }
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
+            efc.change_state("dying");
+        }
     }
     
     efc.new_state("called", PIKMIN_STATE_CALLED); {
@@ -606,6 +630,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
+        }
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
+            efc.change_state("dying");
         }
     }
     
@@ -642,6 +669,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
+        }
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
+            efc.change_state("dying");
         }
     }
     
@@ -681,6 +711,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
+        }
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
+            efc.change_state("dying");
         }
     }
     
@@ -730,6 +763,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::forget_carriable_object);
             efc.run(pikmin_fsm::fall_down_pit);
         }
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
+            efc.change_state("dying");
+        }
     }
     
     efc.new_state(
@@ -769,6 +805,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::forget_tool);
             efc.run(pikmin_fsm::fall_down_pit);
+        }
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
+            efc.change_state("dying");
         }
     }
     
@@ -814,6 +853,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::forget_group_task);
             efc.run(pikmin_fsm::fall_down_pit);
         }
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
+            efc.change_state("dying");
+        }
     }
     
     efc.new_state(
@@ -849,6 +891,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
         }
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
+            efc.change_state("dying");
+        }
     }
     
     efc.new_state("sighing", PIKMIN_STATE_SIGHING); {
@@ -882,6 +927,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::touched_eat_hitbox);
+        }
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
+            efc.change_state("dying");
         }
     }
     
@@ -922,6 +970,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
+        }
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
+            efc.change_state("dying");
         }
     }
     
@@ -973,6 +1024,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::touched_eat_hitbox);
         }
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
+            efc.change_state("dying");
+        }
     }
     
     efc.new_state("returning", PIKMIN_STATE_RETURNING); {
@@ -1009,6 +1063,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
         }
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
+            efc.change_state("dying");
+        }
     }
     
     efc.new_state("attacking_grounded", PIKMIN_STATE_ATTACKING_GROUNDED); {
@@ -1044,6 +1101,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::touched_eat_hitbox);
+        }
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
+            efc.change_state("dying");
         }
     }
     
@@ -1085,6 +1145,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
         }
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
+            efc.change_state("dying");
+        }
     }
     
     efc.new_state("grabbed_by_enemy", PIKMIN_STATE_GRABBED_BY_ENEMY); {
@@ -1094,6 +1157,10 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_RELEASED); {
             efc.run(pikmin_fsm::be_released);
             efc.change_state("idling");
+        }
+        efc.new_event(MOB_EV_SWALLOWED); {
+            efc.run(pikmin_fsm::start_dying);
+            efc.run(pikmin_fsm::finish_dying);
         }
     }
     
@@ -1151,6 +1218,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
         }
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
+            efc.change_state("knocked_down_dying");
+        }
     }
     
     efc.new_state("getting_up", PIKMIN_STATE_GETTING_UP); {
@@ -1184,6 +1254,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
         }
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
+            efc.change_state("dying");
+        }
     }
     
     efc.new_state("impact_bounce", PIKMIN_STATE_IMPACT_BOUNCE); {
@@ -1205,6 +1278,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
+        }
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
+            efc.change_state("dying");
         }
     }
     
@@ -1233,6 +1309,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
         }
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
+            efc.change_state("dying");
+        }
     }
     
     efc.new_state("helpless", PIKMIN_STATE_HELPLESS); {
@@ -1251,6 +1330,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
+        }
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
+            efc.change_state("dying");
         }
         
         //The logic to lose helplessness is in
@@ -1280,6 +1362,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
         }
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
+            efc.change_state("dying");
+        }
         
         //The logic to stop flailing is in
         //pikmin::handle_status_effect_loss();
@@ -1305,6 +1390,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
+        }
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
+            efc.change_state("dying");
         }
         
         //The logic to stop panicking is in
@@ -1339,6 +1427,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_TOUCHED_SPRAY); {
             efc.run(pikmin_fsm::touched_spray);
         }
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
+            efc.change_state("dying");
+        }
     }
     
     efc.new_state("celebrating", PIKMIN_STATE_CELEBRATING); {
@@ -1372,6 +1463,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::touched_eat_hitbox);
+        }
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
+            efc.change_state("dying");
         }
     }
     
@@ -1425,6 +1519,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::release_tool);
             efc.run(pikmin_fsm::fall_down_pit);
         }
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
+            efc.change_state("dying");
+        }
     }
     
     efc.new_state("in_group_stopped_h", PIKMIN_STATE_IN_GROUP_STOPPED_H); {
@@ -1473,6 +1570,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::release_tool);
             efc.run(pikmin_fsm::fall_down_pit);
+        }
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
+            efc.change_state("dying");
         }
     }
     
@@ -1530,6 +1630,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::release_tool);
             efc.run(pikmin_fsm::fall_down_pit);
         }
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
+            efc.change_state("dying");
+        }
     }
     
     efc.new_state("swarm_stopped_h", PIKMIN_STATE_SWARM_STOPPED_H); {
@@ -1586,6 +1689,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::release_tool);
             efc.run(pikmin_fsm::fall_down_pit);
         }
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
+            efc.change_state("dying");
+        }
     }
     
     efc.new_state("grabbed_by_leader_h", PIKMIN_STATE_GRABBED_BY_LEADER_H); {
@@ -1626,6 +1732,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::release_tool);
             efc.run(pikmin_fsm::fall_down_pit);
         }
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
+            efc.change_state("dying");
+        }
     }
     
     efc.new_state("thrown_h", PIKMIN_STATE_THROWN_H); {
@@ -1660,6 +1769,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::release_tool);
             efc.run(pikmin_fsm::fall_down_pit);
+        }
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
+            efc.change_state("dying");
         }
     }
     
@@ -1710,6 +1822,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::release_tool);
             efc.run(pikmin_fsm::fall_down_pit);
         }
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
+            efc.change_state("dying");
+        }
     }
     
     efc.new_state("idling_h", PIKMIN_STATE_IDLING_H); {
@@ -1751,6 +1866,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::release_tool);
             efc.run(pikmin_fsm::fall_down_pit);
         }
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
+            efc.change_state("dying");
+        }
     }
     
     efc.new_state("called_h", PIKMIN_STATE_CALLED_H); {
@@ -1781,6 +1899,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
         }
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
+            efc.change_state("dying");
+        }
     }
     
     efc.new_state("riding_track", PIKMIN_STATE_RIDING_TRACK); {
@@ -1793,6 +1914,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_WHISTLED); {
             efc.run(pikmin_fsm::whistled_while_riding);
         }
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
+            efc.change_state("dying");
+        }
     }
     
     efc.new_state("crushed", PIKMIN_STATE_CRUSHED); {
@@ -1800,7 +1924,25 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::be_crushed);
         }
         efc.new_event(MOB_EV_ANIMATION_END); {
-            efc.run(pikmin_fsm::die);
+            efc.run(pikmin_fsm::finish_dying);
+        }
+    }
+    
+    efc.new_state("knocked_down_dying", PIKMIN_STATE_KNOCKED_DOWN_DYING); {
+        efc.new_event(MOB_EV_ON_ENTER); {
+            efc.run(pikmin_fsm::start_knocked_down_dying);
+        }
+        efc.new_event(MOB_EV_ANIMATION_END); {
+            efc.run(pikmin_fsm::finish_dying);
+        }
+    }
+    
+    efc.new_state("dying", PIKMIN_STATE_DYING); {
+        efc.new_event(MOB_EV_ON_ENTER); {
+            efc.run(pikmin_fsm::start_dying);
+        }
+        efc.new_event(MOB_EV_ANIMATION_END); {
+            efc.run(pikmin_fsm::finish_dying);
         }
     }
     
@@ -1882,12 +2024,8 @@ void pikmin_fsm::be_attacked(mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void pikmin_fsm::be_crushed(mob* m, void* info1, void* info2) {
+    pikmin_fsm::start_dying(m, info1, info2);
     m->z = m->ground_sector->z;
-    m->leave_group();
-    pikmin_fsm::be_released(m, info1, info2);
-    pikmin_fsm::notify_leader_release(m, info1, info2);
-    pikmin_fsm::release_tool(m, nullptr, nullptr);
-    enable_flag(m->flags, MOB_FLAG_INTANGIBLE);
     m->set_animation(PIKMIN_ANIM_CRUSHED);
 }
 
@@ -2508,18 +2646,6 @@ void pikmin_fsm::decide_attack(mob* m, void* info1, void* info2) {
 
 
 /**
- * @brief When a Pikmin has to die right now.
- *
- * @param m The mob.
- * @param info1 Unused.
- * @param info2 Unused.
- */
-void pikmin_fsm::die(mob* m, void* info1, void* info2) {
-    m->set_health(false, false, 0);
-}
-
-
-/**
  * @brief When a Pikmin has to bounce back from an impact attack.
  *
  * @param m The mob.
@@ -2600,7 +2726,8 @@ void pikmin_fsm::enter_onion(mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void pikmin_fsm::fall_down_pit(mob* m, void* info1, void* info2) {
-    m->set_health(false, false, 0);
+    m->start_dying();
+    m->finish_dying();
 }
 
 
@@ -2687,6 +2814,19 @@ void pikmin_fsm::finish_drinking(mob* m, void* info1, void* info2) {
     }
     
     m->unfocus_from_mob();
+}
+
+
+/**
+ * @brief When a Pikmin finishes dying.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void pikmin_fsm::finish_dying(mob* m, void* info1, void* info2) {
+    pikmin* pik_ptr = (pikmin*) m;
+    pik_ptr->finish_dying();
 }
 
 
@@ -3868,6 +4008,38 @@ void pikmin_fsm::start_drinking(mob* m, void* info1, void* info2) {
     m->focus_on_mob(drop_ptr);
     m->face(get_angle(m->pos, drop_ptr->pos), nullptr);
     m->set_animation(PIKMIN_ANIM_DRINKING);
+}
+
+
+/**
+ * @brief When a Pikmin starts dying.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void pikmin_fsm::start_dying(mob* m, void* info1, void* info2) {
+    pikmin* pik_ptr = (pikmin*) m;
+    pik_ptr->start_dying();
+    
+    m->leave_group();
+    pikmin_fsm::be_released(m, info1, info2);
+    pikmin_fsm::notify_leader_release(m, info1, info2);
+    pikmin_fsm::release_tool(m, nullptr, nullptr);
+    m->set_animation(PIKMIN_ANIM_DYING);
+}
+
+
+/**
+ * @brief When a Pikmin is killed after being knocked down.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void pikmin_fsm::start_knocked_down_dying(mob* m, void* info1, void* info2) {
+    pikmin_fsm::start_dying(m, info1, info2);
+    m->set_animation(PIKMIN_ANIM_KNOCKED_DOWN_DYING);
 }
 
 

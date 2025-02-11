@@ -219,23 +219,79 @@ animations{
 			}
 		}
 	}
+	dying{
+		loop_frame=12
+		frames{
+			idling_01{
+				duration=0.1000
+			}
+			half_lying{
+				duration=0.2000
+				interpolate=true
+			}
+			dying_01{
+				duration=0.2000
+				interpolate=true
+			}
+			half_lying{
+				duration=0.0100
+			}
+			mid_bend{
+				duration=0.2000
+				interpolate=true
+			}
+			dying_02{
+				duration=0.2000
+				interpolate=true
+			}
+			mid_bend{
+				duration=0.0100
+			}
+			idling_01{
+				duration=0.1000
+			}
+			half_lying{
+				duration=0.1000
+			}
+			lying_02{
+				duration=0.0500
+				interpolate=true
+			}
+			lying_01{
+				duration=0.5000
+			}
+			lying_01{
+				duration=0.5000
+				interpolate=true
+			}
+			dying_03{
+				duration=0.1000
+			}
+		}
+	}
 	flailing{
 		frames{
 			flailing_01{
-				duration=0.1600
+				duration=0.0800
 				interpolate=true
 			}
 			flailing_02{
-				duration=0.1600
+				duration=0.2000
 				interpolate=true
 			}
 			flailing_01{
-				duration=0.1600
+				duration=0.0100
+			}
+			flailing_01{
+				duration=0.0800
 				interpolate=true
 			}
 			flailing_03{
-				duration=0.1600
+				duration=0.2000
 				interpolate=true
+			}
+			flailing_01{
+				duration=0.0100
 			}
 		}
 	}
@@ -279,6 +335,21 @@ animations{
 				duration=0.1000
 			}
 			half_lying{
+				duration=0.1000
+			}
+		}
+	}
+	knocked_down_dying{
+		loop_frame=2
+		frames{
+			lying_01{
+				duration=0.1000
+			}
+			lying_01{
+				duration=0.5000
+				interpolate=true
+			}
+			dying_03{
 				duration=0.1000
 			}
 		}
@@ -1073,6 +1144,89 @@ sprites{
 				height=24.0000
 				radius=8.0000
 				type=0
+				value=1.0000
+			}
+		}
+	}
+	dying_01{
+		file=rock_pikmin
+		file_pos=103.0000 0.0000
+		file_size=50.0000 52.0000
+		offset=-6.3972 2.1816
+		scale=0.5000 0.5000
+		angle=5.9805
+		top_visible=true
+		top_pos=-19.5956 6.3554
+		top_size=5.5000 10.0000
+		top_angle=5.9729
+		hitboxes{
+			top{
+				coords=-19.3564 6.2493 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=-2.0000 0.0000 0.0000
+				height=24.0000
+				radius=8.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	dying_02{
+		file=rock_pikmin
+		file_pos=0.0000 91.0000
+		file_size=27.0000 26.0000
+		offset=3.1913 1.9559
+		scale=0.5000 0.5000
+		angle=0.6617
+		top_visible=true
+		top_pos=8.4426 5.8255
+		top_size=5.5000 10.0000
+		top_angle=3.7579
+		hitboxes{
+			top{
+				coords=8.1883 5.5712 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=1.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	dying_03{
+		file=rock_pikmin
+		file_pos=154.0000 0.0000
+		file_size=82.0000 52.0000
+		offset=-0.5000 0.0000
+		scale=0.0500 0.0500
+		top_visible=true
+		top_pos=-3.0000 0.0000
+		top_size=1.0000 1.8182
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-3.0000 0.0000 0.0000
+				height=24.0000
+				radius=1.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=2.0000
+				type=2
 				value=1.0000
 			}
 		}

@@ -304,7 +304,7 @@ void mob::apply_knockback(float knockback, float knockback_angle) {
         speed.x = cos(knockback_angle) * knockback * MOB::KNOCKBACK_H_POWER;
         speed.y = sin(knockback_angle) * knockback * MOB::KNOCKBACK_H_POWER;
         speed_z = MOB::KNOCKBACK_V_POWER;
-        face(get_angle(speed) + TAU / 2, nullptr);
+        face(get_angle(speed) + TAU / 2, nullptr, true);
         start_height_effect();
     }
 }

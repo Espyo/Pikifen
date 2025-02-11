@@ -92,10 +92,13 @@ void enemy::draw_mob() {
  * @brief Logic specific to enemies for when they finish dying.
  */
 void enemy::finish_dying_class_specifics() {
+    //Corpse.
     if(ene_type->drops_corpse) {
         become_carriable(CARRY_DESTINATION_ONION);
         fsm.set_state(ENEMY_EXTRA_STATE_CARRIABLE_WAITING);
     }
+    
+    //Soul.
     particle par(
         pos, LARGE_FLOAT,
         clamp(

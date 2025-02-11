@@ -121,6 +121,8 @@ public:
     void handle_status_effect_gain(status_type* s) override;
     void handle_status_effect_loss(status_type* s) override;
     void read_script_vars(const script_var_reader &svr) override;
+    void finish_dying_class_specifics() override;
+    void start_dying_class_specifics() override;
     
 protected:
 

@@ -206,6 +206,44 @@ void pikmin::draw_mob() {
 
 
 /**
+ * @brief Logic specific to Pikmin for when they finish dying.
+ */
+void pikmin::finish_dying_class_specifics() {
+    //Essentials.
+    to_delete = true;
+    
+    //Soul.
+    particle par(
+        pos, LARGE_FLOAT,
+        radius * 2, 2.0f
+    );
+    par.bitmap = game.sys_assets.bmp_pikmin_spirit;
+    par.friction = 0.8;
+    point base_speed = point(game.rng.f(-20, 20), game.rng.f(-70, -30));
+    par.linear_speed = keyframe_interpolator<point>(base_speed);
+    par.linear_speed.add(1, point(point(base_speed.x, base_speed.y - 20)));
+    par.color.set_keyframe_value(0, change_alpha(pik_type->main_color, 0));
+    par.color.add(0.1f, pik_type->main_color);
+    par.color.add(1, change_alpha(pik_type->main_color, 0));
+    game.states.gameplay->particles.add(par);
+    
+    //Sound. Create a positional sound source instead of a mob sound source,
+    //since the Pikmin object is now practically deleted.
+    size_t dying_sound_idx =
+        pik_type->sound_data_idxs[PIKMIN_SOUND_DYING];
+    if(dying_sound_idx != INVALID) {
+        mob_type::sound_t* dying_sound =
+            &type->sounds[dying_sound_idx];
+        game.audio.create_world_pos_sound_source(
+            dying_sound->sample,
+            pos,
+            dying_sound->config
+        );
+    }
+}
+
+
+/**
  * @brief Forces the Pikmin to start carrying the given mob.
  * This quickly runs over several steps in the usual FSM logic, just to
  * instantly get to the end result.
@@ -466,6 +504,19 @@ void pikmin::read_script_vars(const script_var_reader &svr) {
 
 
 /**
+ * @brief Sets up stuff for the beginning of the Pikmin's death process.
+ */
+void pikmin::start_dying_class_specifics() {
+    game.states.gameplay->pikmin_deaths++;
+    game.states.gameplay->pikmin_deaths_per_type[pik_type]++;
+    game.states.gameplay->last_pikmin_death_pos = pos;
+    game.statistics.pikmin_deaths++;
+    
+    enable_flag(flags, MOB_FLAG_INTANGIBLE);
+}
+
+
+/**
  * @brief Starts the particle generator that leaves a trail behind
  * a thrown Pikmin.
  */
@@ -506,46 +557,6 @@ void pikmin::tick_class_specifics(float delta_t) {
         if(!carrying_mob->carry_info) {
             fsm.run_event(MOB_EV_FOCUSED_MOB_UNAVAILABLE);
         }
-    }
-    
-    //Is it dead?
-    if(health <= 0 && !is_grabbed_by_enemy) {
-        to_delete = true;
-        
-        pikmin_fsm::notify_leader_release(this, nullptr, nullptr);
-        
-        particle par(
-            pos, LARGE_FLOAT,
-            radius * 2, 2.0f
-        );
-        par.bitmap = game.sys_assets.bmp_pikmin_spirit;
-        par.friction = 0.8;
-        point base_speed = point(game.rng.f(-20, 20), game.rng.f(-70, -30));
-        par.linear_speed = keyframe_interpolator<point>(base_speed);
-        par.linear_speed.add(1, point(point(base_speed.x, base_speed.y - 20)));
-        par.color.set_keyframe_value(0, change_alpha(pik_type->main_color, 0));
-        par.color.add(0.1f, pik_type->main_color);
-        par.color.add(1, change_alpha(pik_type->main_color, 0));
-        game.states.gameplay->particles.add(par);
-        
-        //Create a positional sound source instead of a mob sound source,
-        //since the Pikmin is basically deleted.
-        size_t dying_sound_idx =
-            pik_type->sound_data_idxs[PIKMIN_SOUND_DYING];
-        if(dying_sound_idx != INVALID) {
-            mob_type::sound_t* dying_sound =
-                &type->sounds[dying_sound_idx];
-            game.audio.create_world_pos_sound_source(
-                dying_sound->sample,
-                pos,
-                dying_sound->config
-            );
-        }
-        
-        game.states.gameplay->pikmin_deaths++;
-        game.states.gameplay->pikmin_deaths_per_type[pik_type]++;
-        game.states.gameplay->last_pikmin_death_pos = pos;
-        game.statistics.pikmin_deaths++;
     }
     
     //Tick some timers.

@@ -4,19 +4,17 @@
 Current tasks (tasks being worked on, but not yet committed)
     Make the damage maker tool only damage mobs that have a max health > 0
     Standardize all texts following a "browse..." sort of button
-    List boxes that list hazards (for hitboxes and for sectors) should use the proper names, not the internal names
     Geyser sounds should be classified as ambiance sound
     Keyframe visualizers shouldn't show the graph, or the left and right arrows, if there's only one keyframe
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Changing from a particle generator with an interval to "once" makes it so no more particles can spawn in the editor
-    Bulborbs aren't getting poisoned
+    List boxes that list hazards (for hitboxes and for sectors) should use the proper names, not the internal names
+    Moving the Pikmin top with the widget isn't counting as a change
     Pressing space while trying to type a particle generator's description will pause and unpause
     When you re-enter the bitmap selection popup, it doesn't re-focus on the textbox
 
     --- 0.26 ---
-    Test -S-'s get_onion_info branch
     Revamp sounds
         Candidate list of all needed sounds, for now
             Pikmin
@@ -169,8 +167,6 @@ Next tasks (roughly sorted most important first)
         Improvements
             Sprout animations should start with nothingness, and grow into a sprout proper (as if popping out of the ground) (Helodity's made some)
                 If necessary, seeds should have their own animation
-        New animations
-            Dying? (like shrinking or something)
     Leader animations
         Improvements
             More frames, for more fluidity

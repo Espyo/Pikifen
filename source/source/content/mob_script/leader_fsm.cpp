@@ -1575,6 +1575,9 @@ void leader_fsm::die(mob* m, void* info1, void* info2) {
         return;
     }
     
+    m->start_dying();
+    m->finish_dying();
+    
     game.states.gameplay->update_available_leaders();
     if(m == game.states.gameplay->cur_leader_ptr) {
         change_to_next_leader(true, true, true);
@@ -1582,7 +1585,6 @@ void leader_fsm::die(mob* m, void* info1, void* info2) {
     
     leader_fsm::release(m, info1, info2);
     leader_fsm::dismiss(m, info1, info2);
-    m->stop_chasing();
     m->become_uncarriable();
     m->set_animation(LEADER_ANIM_KO);
     

@@ -179,8 +179,14 @@ enum PIKMIN_STATE {
     //Going to dismiss spot, whilst holding a tool.
     PIKMIN_STATE_GOING_TO_DISMISS_SPOT_H,
     
-    //Crushed, dying.
+    //Crushed, shrinking away, and dying.
     PIKMIN_STATE_CRUSHED,
+    
+    //Knocked down, shrinking away, and dying.
+    PIKMIN_STATE_KNOCKED_DOWN_DYING,
+    
+    //Collapsing, shrinking away, and dying.
+    PIKMIN_STATE_DYING,
     
     //Total amount of Pikmin object states.
     N_PIKMIN_STATES
@@ -266,8 +272,14 @@ enum PIKMIN_ANIM {
     //Sliding.
     PIKMIN_ANIM_SLIDING,
     
-    //Crushed, dying.
+    //Crushed, shrinking away, and dying.
     PIKMIN_ANIM_CRUSHED,
+    
+    //Knocked down, shrinking away, and dying.
+    PIKMIN_ANIM_KNOCKED_DOWN_DYING,
+    
+    //Collapsing, shrinking away, and dying.
+    PIKMIN_ANIM_DYING,
     
 };
 
