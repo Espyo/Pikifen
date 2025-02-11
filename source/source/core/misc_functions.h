@@ -248,7 +248,7 @@ bool adjust_keyframe_interpolator_values(
     std::function<t(const t &)> predicate
 ) {
     bool result = false;
-    size_t n_keyframes = interpolator.keyframe_count();
+    size_t n_keyframes = interpolator.get_keyframe_count();
     for(size_t k = 0; k < n_keyframes; k++) {
         const auto &orig_keyframe = interpolator.get_keyframe(k);
         interpolator.set_keyframe_value(k, predicate(orig_keyframe.second));

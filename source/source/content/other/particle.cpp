@@ -250,7 +250,7 @@ void particle_generator::emit(particle_manager &manager) {
         new_p.z = base_p_z;
         
         float s_dev = game.rng.f(-size_deviation, size_deviation);
-        for(size_t s = 0; s < new_p.size.keyframe_count(); s++) {
+        for(size_t s = 0; s < new_p.size.get_keyframe_count(); s++) {
             auto kf = new_p.size.get_keyframe(s);
             new_p.size.set_keyframe_value((int) s, kf.second + s_dev);
         }
@@ -268,7 +268,7 @@ void particle_generator::emit(particle_manager &manager) {
             game.rng.f(-linear_speed_deviation.x, linear_speed_deviation.x);
         float v_dev_y =
             game.rng.f(-linear_speed_deviation.y, linear_speed_deviation.y);
-        for(size_t s = 0; s < new_p.linear_speed.keyframe_count(); s++) {
+        for(size_t s = 0; s < new_p.linear_speed.get_keyframe_count(); s++) {
             auto kf = new_p.linear_speed.get_keyframe(s);
             point base = kf.second;
             point result = point(base.x + v_dev_x, base.y + v_dev_y);
@@ -281,14 +281,14 @@ void particle_generator::emit(particle_manager &manager) {
         
         float out_dev =
             game.rng.f(-outwards_speed_deviation, outwards_speed_deviation);
-        for(size_t s = 0; s < new_p.outwards_speed.keyframe_count(); s++) {
+        for(size_t s = 0; s < new_p.outwards_speed.get_keyframe_count(); s++) {
             auto kf = new_p.outwards_speed.get_keyframe(s);
             new_p.outwards_speed.set_keyframe_value((int) s, kf.second + out_dev);
         }
         
         float orb_dev =
             game.rng.f(-orbital_speed_deviation, orbital_speed_deviation);
-        for(size_t s = 0; s < new_p.orbital_speed.keyframe_count(); s++) {
+        for(size_t s = 0; s < new_p.orbital_speed.get_keyframe_count(); s++) {
             auto kf = new_p.orbital_speed.get_keyframe(s);
             new_p.orbital_speed.set_keyframe_value((int) s, kf.second + orb_dev);
         }
@@ -497,7 +497,7 @@ void particle_generator::save_to_data_node(data_node* node) {
     data_node* color_node = new data_node("color", "");
     base_particle_node->add(color_node);
     
-    for(size_t c = 0; c < base_particle.color.keyframe_count(); c++) {
+    for(size_t c = 0; c < base_particle.color.get_keyframe_count(); c++) {
         auto keyframe = base_particle.color.get_keyframe(c);
         color_node->add(
             new data_node(f2s(keyframe.first), c2s(keyframe.second))
@@ -507,7 +507,7 @@ void particle_generator::save_to_data_node(data_node* node) {
     data_node* size_node = new data_node("size", "");
     base_particle_node->add(size_node);
     
-    for(size_t c = 0; c < base_particle.size.keyframe_count(); c++) {
+    for(size_t c = 0; c < base_particle.size.get_keyframe_count(); c++) {
         auto keyframe = base_particle.size.get_keyframe(c);
         size_node->add(
             new data_node(f2s(keyframe.first), f2s(keyframe.second))
@@ -517,7 +517,7 @@ void particle_generator::save_to_data_node(data_node* node) {
     data_node* lin_speed_node = new data_node("linear_speed", "");
     base_particle_node->add(lin_speed_node);
     
-    for(size_t c = 0; c < base_particle.linear_speed.keyframe_count(); c++) {
+    for(size_t c = 0; c < base_particle.linear_speed.get_keyframe_count(); c++) {
         auto keyframe = base_particle.linear_speed.get_keyframe(c);
         lin_speed_node->add(
             new data_node(f2s(keyframe.first), p2s(keyframe.second))
@@ -527,7 +527,7 @@ void particle_generator::save_to_data_node(data_node* node) {
     data_node* out_speed_node = new data_node("outwards_speed", "");
     base_particle_node->add(out_speed_node);
     
-    for(size_t c = 0; c < base_particle.outwards_speed.keyframe_count(); c++) {
+    for(size_t c = 0; c < base_particle.outwards_speed.get_keyframe_count(); c++) {
         auto keyframe = base_particle.outwards_speed.get_keyframe(c);
         out_speed_node->add(
             new data_node(f2s(keyframe.first), f2s(keyframe.second))
@@ -537,7 +537,7 @@ void particle_generator::save_to_data_node(data_node* node) {
     data_node* orb_speed_node = new data_node("orbital_speed", "");
     base_particle_node->add(orb_speed_node);
     
-    for(size_t c = 0; c < base_particle.orbital_speed.keyframe_count(); c++) {
+    for(size_t c = 0; c < base_particle.orbital_speed.get_keyframe_count(); c++) {
         auto keyframe = base_particle.orbital_speed.get_keyframe(c);
         orb_speed_node->add(
             new data_node(f2s(keyframe.first), f2s(keyframe.second))

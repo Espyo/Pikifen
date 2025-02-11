@@ -881,6 +881,8 @@ void editor::keyframe_visualizer(
     keyframe_interpolator<ALLEGRO_COLOR> &interpolator,
     size_t sel_keyframe_idx
 ) {
+    if(interpolator.get_keyframe_count() <= 1) return;
+    
     //Setup.
     ImDrawList* draw_list = ImGui::GetWindowDrawList();
     ImVec2 pos = ImGui::GetCursorScreenPos();
@@ -905,7 +907,7 @@ void editor::keyframe_visualizer(
     );
     
     //Draw the rectangles of the colors between the keyframes.
-    for(size_t t = 0; t < interpolator.keyframe_count() - 1; t++) {
+    for(size_t t = 0; t < interpolator.get_keyframe_count() - 1; t++) {
         auto kf_1 = interpolator.get_keyframe(t);
         auto kf_2 = interpolator.get_keyframe(t + 1);
         ALLEGRO_COLOR c1 = kf_1.second;
@@ -926,7 +928,7 @@ void editor::keyframe_visualizer(
     }
     
     //Draw the rectangle of the color from the final keyframe to the end.
-    auto last_kf = interpolator.get_keyframe(interpolator.keyframe_count() - 1);
+    auto last_kf = interpolator.get_keyframe(interpolator.get_keyframe_count() - 1);
     ALLEGRO_COLOR c_end = last_kf.second;
     draw_list->AddRectFilled(
         ImVec2(
@@ -938,7 +940,7 @@ void editor::keyframe_visualizer(
     );
     
     //Draw the bars indicating the position of each keyframe.
-    for(size_t c = 0; c < interpolator.keyframe_count(); c++) {
+    for(size_t c = 0; c < interpolator.get_keyframe_count(); c++) {
         float time = interpolator.get_keyframe(c).first;
         float line_x = time * (ImGui::GetColumnWidth() - 1);
         ImColor col =
@@ -973,6 +975,8 @@ void editor::keyframe_visualizer(
     keyframe_interpolator<float> &interpolator,
     size_t sel_keyframe_idx
 ) {
+    if(interpolator.get_keyframe_count() <= 1) return;
+    
     //The built in plot widget doesn't allow for dynamic spacing,
     //so we need to make our own.
     
@@ -981,12 +985,18 @@ void editor::keyframe_visualizer(
     ImVec2 pos = ImGui::GetCursorScreenPos();
     ImVec2 size = ImVec2((ImGui::GetColumnWidth() - 1), 40);
     
-    float max_value = -FLT_MAX;
     float min_value = FLT_MAX;
+    float max_value = -FLT_MAX;
     
-    for(size_t t = 0; t < interpolator.keyframe_count(); t++) {
-        max_value = std::max(interpolator.get_keyframe(t).second, max_value);
+    for(size_t t = 0; t < interpolator.get_keyframe_count(); t++) {
         min_value = std::min(interpolator.get_keyframe(t).second, min_value);
+        max_value = std::max(interpolator.get_keyframe(t).second, max_value);
+    }
+    
+    if(min_value == max_value) {
+        //Add the same space above and below to get a nice line at the middle.
+        min_value -= 10.0f;
+        max_value += 10.0f;
     }
     
     //Draw the background.
@@ -1015,7 +1025,7 @@ void editor::keyframe_visualizer(
     );
     
     //Draw the chart lines between the keyframes.
-    for(size_t t = 0; t < interpolator.keyframe_count() - 1; t++) {
+    for(size_t t = 0; t < interpolator.get_keyframe_count() - 1; t++) {
         auto kf_1 = interpolator.get_keyframe(t);
         auto kf_2 = interpolator.get_keyframe(t + 1);
         float f1 = kf_1.second;
@@ -1039,7 +1049,7 @@ void editor::keyframe_visualizer(
     }
     
     //Draw the chart line from the final keyframe to the end.
-    auto last_kf = interpolator.get_keyframe(interpolator.keyframe_count() - 1);
+    auto last_kf = interpolator.get_keyframe(interpolator.get_keyframe_count() - 1);
     draw_list->AddLine(
         ImVec2(
             pos.x + size.x * last_kf.first,
@@ -1057,7 +1067,7 @@ void editor::keyframe_visualizer(
     );
     
     //Draw the bars indicating the position of each keyframe.
-    for(size_t c = 0; c < interpolator.keyframe_count(); c++) {
+    for(size_t c = 0; c < interpolator.get_keyframe_count(); c++) {
         float time = interpolator.get_keyframe(c).first;
         float line_x = time * (ImGui::GetColumnWidth() - 1);
         ImColor col =
@@ -1093,6 +1103,8 @@ void editor::keyframe_visualizer(
     keyframe_interpolator<point> &interpolator,
     size_t sel_keyframe_idx
 ) {
+    if(interpolator.get_keyframe_count() <= 1) return;
+    
     //Split the interpolator into two, one for each axis.
     keyframe_interpolator<float> x_inter(interpolator.get_keyframe(0).second.x);
     keyframe_interpolator<float> y_inter(interpolator.get_keyframe(0).second.y);
@@ -1100,7 +1112,7 @@ void editor::keyframe_visualizer(
     x_inter.set_keyframe_time(0, interpolator.get_keyframe(0).first);
     y_inter.set_keyframe_time(0, interpolator.get_keyframe(0).first);
     
-    for(size_t s = 1; s < interpolator.keyframe_count(); s++) {
+    for(size_t s = 1; s < interpolator.get_keyframe_count(); s++) {
         auto kf = interpolator.get_keyframe(s);
         x_inter.add(kf.first, kf.second.x);
         y_inter.add(kf.first, kf.second.y);
@@ -1130,50 +1142,57 @@ bool editor::keyframe_organizer(
 ) {
     bool result = false;
     
+    //First, some utility setup.
+    if(interpolator.get_keyframe_count() == 1) {
+        interpolator.set_keyframe_time(0, 0.0f);
+    }
+    
     //Current keyframe text.
     ImGui::Text(
         "Keyframe: %lu/%lu",
         sel_keyframe_idx + 1,
-        interpolator.keyframe_count()
+        interpolator.get_keyframe_count()
     );
     
-    //Previous keyframe button.
-    ImGui::SameLine();
-    string prevLabel = button_id + "prevButton";
-    if(
-        ImGui::ImageButton(
-            prevLabel, editor_icons[EDITOR_ICON_PREVIOUS],
-            point(EDITOR::ICON_BMP_SIZE / 2.0f)
-        )
-    ) {
-        if(sel_keyframe_idx == 0) {
-            sel_keyframe_idx = interpolator.keyframe_count() - 1;
-        } else {
-            sel_keyframe_idx--;
+    if(interpolator.get_keyframe_count() > 1) {
+        //Previous keyframe button.
+        ImGui::SameLine();
+        string prevLabel = button_id + "prevButton";
+        if(
+            ImGui::ImageButton(
+                prevLabel, editor_icons[EDITOR_ICON_PREVIOUS],
+                point(EDITOR::ICON_BMP_SIZE / 2.0f)
+            )
+        ) {
+            if(sel_keyframe_idx == 0) {
+                sel_keyframe_idx = interpolator.get_keyframe_count() - 1;
+            } else {
+                sel_keyframe_idx--;
+            }
         }
-    }
-    set_tooltip(
-        "Select the previous keyframe."
-    );
-    
-    //Next keyframe button.
-    ImGui::SameLine();
-    string nextLabel = button_id + "nextButton";
-    if(
-        ImGui::ImageButton(
-            nextLabel, editor_icons[EDITOR_ICON_NEXT],
-            point(EDITOR::ICON_BMP_SIZE / 2.0f)
-        )
-    ) {
-        if(sel_keyframe_idx == interpolator.keyframe_count() - 1) {
-            sel_keyframe_idx = 0;
-        } else {
-            sel_keyframe_idx++;
+        set_tooltip(
+            "Select the previous keyframe."
+        );
+        
+        //Next keyframe button.
+        ImGui::SameLine();
+        string nextLabel = button_id + "nextButton";
+        if(
+            ImGui::ImageButton(
+                nextLabel, editor_icons[EDITOR_ICON_NEXT],
+                point(EDITOR::ICON_BMP_SIZE / 2.0f)
+            )
+        ) {
+            if(sel_keyframe_idx == interpolator.get_keyframe_count() - 1) {
+                sel_keyframe_idx = 0;
+            } else {
+                sel_keyframe_idx++;
+            }
         }
+        set_tooltip(
+            "Select the next keyframe."
+        );
     }
-    set_tooltip(
-        "Select the next keyframe."
-    );
     
     //Add keyframe button.
     ImGui::SameLine();
@@ -1186,7 +1205,7 @@ bool editor::keyframe_organizer(
     ) {
         float prev_t = interpolator.get_keyframe(sel_keyframe_idx).first;
         float next_t =
-            sel_keyframe_idx == interpolator.keyframe_count() - 1 ?
+            sel_keyframe_idx == interpolator.get_keyframe_count() - 1 ?
             1.0f :
             interpolator.get_keyframe(sel_keyframe_idx + 1).first;
         float new_t = (prev_t + next_t) / 2.0f;
@@ -1203,7 +1222,7 @@ bool editor::keyframe_organizer(
         "It will go between the current one and the one after."
     );
     
-    if(interpolator.keyframe_count() > 1) {
+    if(interpolator.get_keyframe_count() > 1) {
         //Delete frame button.
         ImGui::SameLine();
         string removeButton = button_id + "removeButton";
@@ -1215,7 +1234,7 @@ bool editor::keyframe_organizer(
         ) {
             size_t deleted_frame_idx = sel_keyframe_idx;
             interpolator.remove(deleted_frame_idx);
-            if(sel_keyframe_idx == interpolator.keyframe_count()) {
+            if(sel_keyframe_idx == interpolator.get_keyframe_count()) {
                 sel_keyframe_idx--;
             }
             set_status(
@@ -1252,19 +1271,21 @@ bool editor::keyframe_editor(
     //Organizer.
     bool result = keyframe_organizer(label, interpolator, sel_keyframe_idx);
     
-    //Time value.
-    float time = interpolator.get_keyframe(sel_keyframe_idx).first;
-    if(ImGui::SliderFloat("Time", &time, 0.0f, 1.0f)) {
-        interpolator.set_keyframe_time(
-            sel_keyframe_idx, time, &sel_keyframe_idx
+    if(interpolator.get_keyframe_count() > 1) {
+        //Time value.
+        float time = interpolator.get_keyframe(sel_keyframe_idx).first;
+        if(ImGui::SliderFloat("Time", &time, 0.0f, 1.0f)) {
+            interpolator.set_keyframe_time(
+                sel_keyframe_idx, time, &sel_keyframe_idx
+            );
+            result = true;
+        }
+        set_tooltip(
+            "Time at which this keyframe occurs.\n"
+            "0 means the beginning, 1 means the end.",
+            "", WIDGET_EXPLANATION_SLIDER
         );
-        result = true;
     }
-    set_tooltip(
-        "Time at which this keyframe occurs.\n"
-        "0 means the beginning, 1 means the end.",
-        "", WIDGET_EXPLANATION_SLIDER
-    );
     
     //Color editor.
     ALLEGRO_COLOR value = interpolator.get_keyframe(sel_keyframe_idx).second;
@@ -1298,19 +1319,21 @@ bool editor::keyframe_editor(
     //Organizer.
     bool result = keyframe_organizer(label, interpolator, sel_keyframe_idx);
     
-    //Time value.
-    float time = interpolator.get_keyframe(sel_keyframe_idx).first;
-    if(ImGui::SliderFloat("Time", &time, 0.0f, 1.0f)) {
-        interpolator.set_keyframe_time(
-            sel_keyframe_idx, time, &sel_keyframe_idx
+    if(interpolator.get_keyframe_count() > 1) {
+        //Time value.
+        float time = interpolator.get_keyframe(sel_keyframe_idx).first;
+        if(ImGui::SliderFloat("Time", &time, 0.0f, 1.0f)) {
+            interpolator.set_keyframe_time(
+                sel_keyframe_idx, time, &sel_keyframe_idx
+            );
+            result = true;
+        }
+        set_tooltip(
+            "Time at which this keyframe occurs.\n"
+            "0 means the beginning, 1 means the end.",
+            "", WIDGET_EXPLANATION_SLIDER
         );
-        result = true;
     }
-    set_tooltip(
-        "Time at which this keyframe occurs.\n"
-        "0 means the beginning, 1 means the end.",
-        "", WIDGET_EXPLANATION_SLIDER
-    );
     
     //Float value.
     float value = interpolator.get_keyframe(sel_keyframe_idx).second;
@@ -1344,19 +1367,21 @@ bool editor::keyframe_editor(
     //Organizer.
     bool result = keyframe_organizer(label, interpolator, sel_keyframe_idx);
     
-    //Time value.
-    float time = interpolator.get_keyframe(sel_keyframe_idx).first;
-    if(ImGui::SliderFloat("Time", &time, 0.0f, 1.0f)) {
-        interpolator.set_keyframe_time(
-            sel_keyframe_idx, time, &sel_keyframe_idx
+    if(interpolator.get_keyframe_count() > 1) {
+        //Time value.
+        float time = interpolator.get_keyframe(sel_keyframe_idx).first;
+        if(ImGui::SliderFloat("Time", &time, 0.0f, 1.0f)) {
+            interpolator.set_keyframe_time(
+                sel_keyframe_idx, time, &sel_keyframe_idx
+            );
+            result = true;
+        }
+        set_tooltip(
+            "Time at which this keyframe occurs.\n"
+            "0 means the beginning, 1 means the end.",
+            "", WIDGET_EXPLANATION_SLIDER
         );
-        result = true;
     }
-    set_tooltip(
-        "Time at which this keyframe occurs.\n"
-        "0 means the beginning, 1 means the end.",
-        "", WIDGET_EXPLANATION_SLIDER
-    );
     
     //Float values.
     point value = interpolator.get_keyframe(sel_keyframe_idx).second;

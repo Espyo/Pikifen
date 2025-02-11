@@ -5,7 +5,6 @@ Current tasks (tasks being worked on, but not yet committed)
     Make the damage maker tool only damage mobs that have a max health > 0
     Standardize all texts following a "browse..." sort of button
     Geyser sounds should be classified as ambiance sound
-    Keyframe visualizers shouldn't show the graph, or the left and right arrows, if there's only one keyframe
 
 Next tasks (roughly sorted most important first)
     --- To fix ---

@@ -212,7 +212,7 @@ struct keyframe_interpolator {
      *
      * @return The total.
      */
-    size_t keyframe_count() {
+    size_t get_keyframe_count() {
         return keyframe_times.size();
     }
     
@@ -262,7 +262,7 @@ struct keyframe_interpolator {
             cur_idx--;
         }
         while(
-            cur_idx < (keyframe_count() - 1) &&
+            cur_idx < (get_keyframe_count() - 1) &&
             time > keyframe_times[cur_idx + 1]
         ) {
             std::swap(keyframe_times[cur_idx], keyframe_times[cur_idx + 1]);
