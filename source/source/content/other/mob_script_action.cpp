@@ -2460,6 +2460,7 @@ mob* get_trigger_mob(mob_action_run_data &data) {
         data.call->parent_event == MOB_EV_TOUCHED_OPPONENT ||
         data.call->parent_event == MOB_EV_HELD ||
         data.call->parent_event == MOB_EV_RELEASED ||
+        data.call->parent_event == MOB_EV_SWALLOWED ||
         data.call->parent_event == MOB_EV_STARTED_RECEIVING_DELIVERY ||
         data.call->parent_event == MOB_EV_FINISHED_RECEIVING_DELIVERY
     ) {

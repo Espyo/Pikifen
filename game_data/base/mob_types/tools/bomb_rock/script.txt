@@ -2,7 +2,6 @@ first_state = idling
 death_state = exploding
 
 init {
-    set_var will_be_swallowed false
     //This gets set by the engine when the Pikmin releases it gently (e.g. entering an Onion).
     set_var gentle_release false
 }
@@ -47,15 +46,13 @@ script {
     held_by_enemy {
         on_enter {
             set_animation held
-            set_var will_be_swallowed true
             remove_status bomb_rock_health_drain
         }
         on_released {
-            get_mob_info h self health
-            if $h > 0
-                set_var will_be_swallowed false
-            end_if
             set_state primed
+        }
+        on_swallowed {
+            delete
         }
     }
     
@@ -77,9 +74,7 @@ script {
     
     exploding {
         on_enter {
-            if $will_be_swallowed = false
-                spawn explosion
-            end_if
+            spawn explosion
             delete
         }
     }

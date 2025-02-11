@@ -168,6 +168,7 @@ mob_event::mob_event(
     r("on_released",                    MOB_EV_RELEASED);
     r("on_reach_destination",           MOB_EV_REACHED_DESTINATION);
     r("on_start_receiving_delivery",    MOB_EV_STARTED_RECEIVING_DELIVERY);
+    r("on_swallowed",                   MOB_EV_SWALLOWED);
     r("on_timer",                       MOB_EV_TIMER);
     r("on_touch_hazard",                MOB_EV_TOUCHED_HAZARD);
     r("on_touch_object",                MOB_EV_TOUCHED_OBJECT);

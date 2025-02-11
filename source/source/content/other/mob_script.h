@@ -123,6 +123,9 @@ enum MOB_EV {
     //When a mob that was on top of it has left. Only if this mob's walkable.
     MOB_EV_RIDER_REMOVED,
     
+    //When it is swallowed by an enemy.
+    MOB_EV_SWALLOWED,
+    
     //When it gets touched by a leader.
     MOB_EV_TOUCHED_ACTIVE_LEADER,
     

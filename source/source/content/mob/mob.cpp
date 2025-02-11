@@ -3389,11 +3389,13 @@ void mob::swallow_chomped_pikmin(size_t nr) {
     size_t total = std::min(nr, chomping_mobs.size());
     
     for(size_t p = 0; p < total; p++) {
-        if(!chomping_mobs[p]) continue;
-        chomping_mobs[p]->set_health(false, false, 0.0f);
-        chomping_mobs[p]->cause_spike_damage(this, true);
-        release(chomping_mobs[p]);
-        if(chomping_mobs[p]->type->category->id == MOB_CATEGORY_PIKMIN) {
+        mob* victim = chomping_mobs[p];
+        if(!victim) continue;
+        victim->fsm.run_event(MOB_EV_SWALLOWED);
+        victim->cause_spike_damage(this, true);
+        victim->set_health(false, false, 0.0f);
+        release(victim);
+        if(victim->type->category->id == MOB_CATEGORY_PIKMIN) {
             game.statistics.pikmin_eaten++;
         }
     }
