@@ -1,0 +1,46 @@
+name=Pikmin seed landed
+description=Dirt that comes out when a Pikmin seed hits the floor.
+engine_version=0.25.0
+emission{
+	number=8
+	number_deviation=1
+	interval=0.0000
+	interval_deviation=0.0000
+	shape=1
+	rect_outer_dist=0.0000 0.0000
+	rect_inner_dist=0.0000 0.0000
+}
+base{
+	bitmap=rock
+	bitmap_angle=0.0000
+	bitmap_angle_type=0
+	duration=1.0000
+	friction=0.0000
+	blend_type=0
+	color{
+		0.0000=160 80 32
+		1.0000=160 80 32 0
+	}
+	size{
+		0.0000=4.0000
+	}
+	linear_speed{
+		0.0000=0.0000 -50.0000
+		1.0000=0.0000 100.0000
+	}
+	outwards_speed{
+		0.0000=50.0000
+	}
+	orbital_speed{
+		0.0000=0.0000
+	}
+}
+bitmap_angle_deviation=180.0000
+duration_deviation=0.2500
+friction_deviation=0.0000
+size_deviation=2.0000
+orbital_speed_deviation=0.0000
+outwards_speed_deviation=10.0000
+angle_deviation=0.0000
+linear_speed_deviation=0.0000 0.0000
+angles_are_absolute=true

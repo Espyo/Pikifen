@@ -32,12 +32,15 @@ class mob;
 enum PARTICLE_PRIORITY {
 
     //Low priority. Might be deleted to make way for most others.
+    //Mostly useful for ambiance stuff that has no gameplay impact.
     PARTICLE_PRIORITY_LOW,
     
     //Medium priority.
+    //Mostly useful for things revolving around gameplay elements.
     PARTICLE_PRIORITY_MEDIUM,
     
     //High priority. Might delete others to make way.
+    //Mostly useful for things that are absolutely needed for gameplay clarity.
     PARTICLE_PRIORITY_HIGH,
     
 };
@@ -225,7 +228,7 @@ struct particle {
     
     //Priority. If we reached the particle limit, only spawn
     //this particle if it can replace a lower-priority one.
-    PARTICLE_PRIORITY priority;
+    PARTICLE_PRIORITY priority = PARTICLE_PRIORITY_MEDIUM;
     
     
     //--- Function declarations ---
@@ -234,7 +237,7 @@ struct particle {
         const point &pos = point(), const float z = 0.0f,
         const float initial_size = 0.0f,
         const float duration = 0.0f, const PARTICLE_PRIORITY priority =
-            PARTICLE_PRIORITY_HIGH,
+            PARTICLE_PRIORITY_MEDIUM,
         const ALLEGRO_COLOR initial_color = COLOR_WHITE
     );
     void draw();
@@ -363,7 +366,7 @@ struct particle_generator : public content {
     );
     void tick(float delta_t, particle_manager &manager);
     void emit(particle_manager &manager);
-    void reset();
+    void restart_timer();
     void load_from_data_node(data_node* node, CONTENT_LOAD_LEVEL level);
     void save_to_data_node(data_node* node);
     

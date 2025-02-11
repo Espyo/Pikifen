@@ -2193,26 +2193,34 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
         );
     }
     
-    particle p(
-        m->pos, m->z + m->get_drawing_height(),
-        52, 3.5, PARTICLE_PRIORITY_MEDIUM
+    point particle_speed_vector =
+        rotate_point(
+            point(spray_type_ref.distance_range * 0.8, 0),
+            spray_type_ref.angle
+        );
+    particle_generator pg =
+        standard_particle_gen_setup(
+            game.asset_file_names.part_spray, m
+        );
+    adjust_keyframe_interpolator_values<point>(
+        pg.base_particle.linear_speed,
+    [ = ] (const point &) { return particle_speed_vector; }
     );
-    p.bitmap = game.sys_assets.bmp_smoke;
-    p.friction = 1;
-    p.color.set_keyframe_value(0, change_alpha(spray_type_ref.main_color, 0));
-    p.color.add(0.1f, spray_type_ref.main_color);
-    p.color.add(1, change_alpha(spray_type_ref.main_color, 0));
-    
-    p.linear_speed = keyframe_interpolator<point>(
-                         rotate_point(
-                             point(spray_type_ref.distance_range * 0.8, 0), shoot_angle
-                         )
-                     );
-    particle_generator pg(0, p, 32);
+    adjust_keyframe_interpolator_values<ALLEGRO_COLOR>(
+        pg.base_particle.color,
+    [ = ] (const ALLEGRO_COLOR & c) {
+        ALLEGRO_COLOR new_c = c;
+        new_c.r = spray_type_ref.main_color.r;
+        new_c.g = spray_type_ref.main_color.g;
+        new_c.b = spray_type_ref.main_color.b;
+        new_c.a = spray_type_ref.main_color.a;
+        return new_c;
+    }
+    );
     pg.linear_speed_angle_deviation = spray_type_ref.angle_range / 2.0f;
     pg.linear_speed_deviation.x = spray_type_ref.distance_range * 0.4;
-    pg.size_deviation = 0.5;
-    pg.emit(game.states.gameplay->particles);
+    pg.base_particle.priority = PARTICLE_PRIORITY_HIGH;
+    m->particle_generators.push_back(pg);
     
     game.states.gameplay->change_spray_count(spray_idx, -1);
     
@@ -2516,15 +2524,15 @@ void leader_fsm::touched_hazard(mob* m, void* info1, void* info2) {
         }
         
         if(!already_generating) {
-            particle p(
-                m->pos, m->z,
-                0, 1, PARTICLE_PRIORITY_LOW
+            particle_generator pg =
+                standard_particle_gen_setup(
+                    game.asset_file_names.part_wave_ring, m
+                );
+            pg.follow_z_offset = 1.0f;
+            adjust_keyframe_interpolator_values<float>(
+                pg.base_particle.size,
+            [ = ] (const float & f) { return f * m->radius; }
             );
-            p.bitmap = game.sys_assets.bmp_wave_ring;
-            p.size.add(1, m->radius * 4);
-            p.color.add(1, change_alpha(COLOR_WHITE, 0));
-            particle_generator pg(0.3, p, 1);
-            pg.follow_mob = m;
             pg.id = MOB_PARTICLE_GENERATOR_ID_WAVE_RING;
             m->particle_generators.push_back(pg);
         }

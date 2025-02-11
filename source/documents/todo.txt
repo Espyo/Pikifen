@@ -2,11 +2,18 @@
     
 
 Current tasks (tasks being worked on, but not yet committed)
+    Make the damage maker tool only damage mobs that have a max health > 0
     Standardize all texts following a "browse..." sort of button
     List boxes that list hazards (for hitboxes and for sectors) should use the proper names, not the internal names
+    Geyser sounds should be classified as ambiance sound
+    Keyframe visualizers shouldn't show the graph, or the left and right arrows, if there's only one keyframe
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    Changing from a particle generator with an interval to "once" makes it so no more particles can spawn in the editor
+    Bulborbs aren't getting poisoned
+    Pressing space while trying to type a particle generator's description will pause and unpause
+    When you re-enter the bitmap selection popup, it doesn't re-focus on the textbox
 
     --- 0.26 ---
     Test -S-'s get_onion_info branch
@@ -241,6 +248,7 @@ Next tasks (roughly sorted most important first)
                 [Options] [Help] [Stats]
             [Continue]             [Quit]
     Cook up a better logo?
+    Set the version of all pieces of content to 1.0
     Test everything in the regression tests
     Test everything in DEV Lab
     Test all Pikmin and leader states
@@ -1038,7 +1046,6 @@ Tasks for later on (I might never implement these)
         [NEEDS BRAINSTORMING] A way to write out how much memory is being taken up by images, sounds, scripts, etc. so game makers can help make sure a level's not too bloated?
         If you write an event name wrong (or other things), give suggestions ("did you mean X?")
             This may become useless if there's a script editor
-        Check if the throw particles can be customized (thanks Neo)
     Roguelike mode
         Randomly generated sublevels; there's an endless amount of them until you die or run out of Pikmin
         Each sublevel has an item somewhere that when returned, improves something

@@ -34,23 +34,12 @@ treasure::treasure(const point &pos, treasure_type* type, float angle) :
         MOB_TYPE::ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
     );
     
-    particle pa(
-        pos, z + get_drawing_height() + 1.0f,
-        28.0f, 1.0f, PARTICLE_PRIORITY_LOW
-    );
-    pa.bitmap = game.sys_assets.bmp_sparkle;
-    pa.linear_speed.set_keyframe_value(0, point(0, -30));
-    particle_generator pg(0.4f, pa);
-    pg.id = MOB_PARTICLE_GENERATOR_ID_SCRIPT;
-    pg.follow_mob = this;
-    pg.follow_angle = &this->angle;
-    pg.follow_z_offset = get_drawing_height() + 1.0f;
-    pg.duration_deviation = 0.1f;
-    pg.emission.interval_deviation = 0.05f;
-    pg.emission.shape = PARTICLE_EMISSION_SHAPE_CIRCLE;
-    pg.emission.circle_outer_dist = radius * 0.75f;
-    pg.size_deviation = 4.0f;
-    pg.angles_are_absolute = true;
+    particle_generator pg =
+        standard_particle_gen_setup(
+            game.asset_file_names.part_treasure, this
+        );
+    pg.emission.circle_outer_dist *= radius;
+    pg.base_particle.priority = PARTICLE_PRIORITY_LOW;
     particle_generators.push_back(pg);
     
 }

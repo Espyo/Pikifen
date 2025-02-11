@@ -73,7 +73,7 @@ public:
     string value;
     
     //True if the node or parent(s) was created from a file
-    //that was opened successfuly.
+    //that was opened successfully.
     bool file_was_opened = false;
     
     //File path of the file used to open this node or its parent(s), if any.

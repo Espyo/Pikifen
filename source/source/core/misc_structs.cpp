@@ -210,6 +210,24 @@ void asset_file_names_t::load(data_node* file) {
     reader_setter ars(file->get_child_by_name("animations"));
     
     ars.set("sparks", anim_sparks);
+    
+    reader_setter prs(file->get_child_by_name("particle_generators"));
+    
+    prs.set("converter_insertion", part_converter_insertion);
+    prs.set("ding", part_ding);
+    prs.set("enemy_death", part_enemy_death);
+    prs.set("leader_heal", part_leader_heal);
+    prs.set("onion_generating_inside", part_onion_gen_inside);
+    prs.set("onion_insertion", part_onion_insertion);
+    prs.set("pikmin_pluck_dirt", part_pikmin_pluck_dirt);
+    prs.set("pikmin_seed_landed", part_pikmin_seed_landed);
+    prs.set("smack", part_smack);
+    prs.set("spray", part_spray);
+    prs.set("sprout_evolution", part_sprout_evolution);
+    prs.set("sprout_regression", part_sprout_regression);
+    prs.set("throw_trail", part_throw_trail);
+    prs.set("treasure", part_treasure);
+    prs.set("wave_ring", part_wave_ring);
 }
 
 

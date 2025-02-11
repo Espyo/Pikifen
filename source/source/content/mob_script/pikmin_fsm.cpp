@@ -2031,19 +2031,11 @@ void pikmin_fsm::be_thrown_after_pluck(mob* m, void* info1, void* info2) {
     m->set_animation(PIKMIN_ANIM_PLUCKING_THROWN);
     ((pikmin*) m)->start_throw_trail();
     
-    particle par(
-        m->pos, m->z + m->get_drawing_height() + 1.0,
-        12, 0.5, PARTICLE_PRIORITY_MEDIUM
-    );
-    par.color.set_keyframe_value(0, al_map_rgb(172, 164, 134));
-    par.color.add(1, al_map_rgba(172, 164, 134, 0));
-    par.outwards_speed = keyframe_interpolator<float>(70);
-    par.linear_speed.add(1, point(0, 35));
-    particle_generator pg(0, par, 12);
-    pg.emission.number_deviation = 5;
-    pg.outwards_speed_deviation = 10;
-    pg.duration_deviation = 0.3;
-    pg.emit(game.states.gameplay->particles);
+    particle_generator pg =
+        standard_particle_gen_setup(
+            game.asset_file_names.part_pikmin_pluck_dirt, m
+        );
+    m->particle_generators.push_back(pg);
 }
 
 
@@ -2654,16 +2646,16 @@ void pikmin_fsm::finish_called_anim(mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void pikmin_fsm::finish_carrying(mob* m, void* info1, void* info2) {
-    pikmin* p = (pikmin*) m;
-    engine_assert(p->carrying_mob != nullptr, m->print_state_history());
+    pikmin* pik_ptr = (pikmin*) m;
+    engine_assert(pik_ptr->carrying_mob != nullptr, m->print_state_history());
     
-    if(p->carrying_mob->carry_info->must_return) {
+    if(pik_ptr->carrying_mob->carry_info->must_return) {
         //The Pikmin should return somewhere (like a pile).
-        p->fsm.set_state(PIKMIN_STATE_RETURNING, (void*) p->carrying_mob);
+        pik_ptr->fsm.set_state(PIKMIN_STATE_RETURNING, (void*) pik_ptr->carrying_mob);
         
     } else {
         //The Pikmin can just sit and chill.
-        p->fsm.set_state(PIKMIN_STATE_CELEBRATING);
+        pik_ptr->fsm.set_state(PIKMIN_STATE_CELEBRATING);
     }
 }
 
@@ -2810,15 +2802,15 @@ void pikmin_fsm::flail_to_leader(mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void pikmin_fsm::forget_carriable_object(mob* m, void* info1, void* info2) {
-    pikmin* p = (pikmin*) m;
-    if(!p->carrying_mob) return;
+    pikmin* pik_ptr = (pikmin*) m;
+    if(!pik_ptr->carrying_mob) return;
     
-    p->carrying_mob->carry_info->spot_info[p->temp_i].state =
+    pik_ptr->carrying_mob->carry_info->spot_info[pik_ptr->temp_i].state =
         CARRY_SPOT_STATE_FREE;
-    p->carrying_mob->carry_info->spot_info[p->temp_i].pik_ptr =
+    pik_ptr->carrying_mob->carry_info->spot_info[pik_ptr->temp_i].pik_ptr =
         nullptr;
         
-    p->carrying_mob = nullptr;
+    pik_ptr->carrying_mob = nullptr;
 }
 
 
@@ -3525,10 +3517,10 @@ void pikmin_fsm::panic_new_chase(mob* m, void* info1, void* info2) {
 void pikmin_fsm::prepare_to_attack(mob* m, void* info1, void* info2) {
     engine_assert(m->focused_mob != nullptr, m->print_state_history());
     
-    pikmin* p = (pikmin*) m;
-    p->was_last_hit_dud = false;
+    pikmin* pik_ptr = (pikmin*) m;
+    pik_ptr->was_last_hit_dud = false;
     
-    if(p->focused_mob->rectangular_dim.x != 0.0f) {
+    if(pik_ptr->focused_mob->rectangular_dim.x != 0.0f) {
         bool is_inside = false;
         point target =
             get_closest_point_in_rotated_rectangle(
@@ -3538,14 +3530,14 @@ void pikmin_fsm::prepare_to_attack(mob* m, void* info1, void* info2) {
                 m->focused_mob->angle,
                 &is_inside
             );
-        p->face(get_angle(m->pos, target), nullptr);
+        pik_ptr->face(get_angle(m->pos, target), nullptr);
         
     } else {
-        p->face(0, &p->focused_mob->pos);
+        pik_ptr->face(0, &pik_ptr->focused_mob->pos);
         
     }
     
-    p->set_animation(PIKMIN_ANIM_ATTACKING);
+    pik_ptr->set_animation(PIKMIN_ANIM_ATTACKING);
 }
 
 
@@ -3687,21 +3679,11 @@ void pikmin_fsm::release_tool(mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::seed_landed(mob* m, void* info1, void* info2) {
     //Generate the rock particles that come out.
-    particle pa(
-        m->pos, m->z + m->get_drawing_height(),
-        4, 1, PARTICLE_PRIORITY_LOW
-    );
-    pa.bitmap = game.sys_assets.bmp_rock;
-    pa.color.set_keyframe_value(0, al_map_rgb(160, 80, 32));
-    pa.color.add(1, al_map_rgba(160, 80, 32, 0));
-    pa.outwards_speed = keyframe_interpolator<float>(50);
-    pa.linear_speed.add(1, point(0, 50));
-    particle_generator pg(0, pa, 8);
-    pg.emission.number_deviation = 1;
-    pg.size_deviation = 2;
-    pg.outwards_speed_deviation = 10;
-    pg.duration_deviation = 0.25;
-    pg.emit(game.states.gameplay->particles);
+    particle_generator pg =
+        standard_particle_gen_setup(
+            game.asset_file_names.part_pikmin_seed_landed, m
+        );
+    m->particle_generators.push_back(pg);
 }
 
 
@@ -3764,48 +3746,28 @@ void pikmin_fsm::sigh(mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void pikmin_fsm::sprout_evolve(mob* m, void* info1, void* info2) {
-    pikmin* p = (pikmin*) m;
-    if(p->maturity == 0 || p->maturity == 1) {
+    pikmin* pik_ptr = (pikmin*) m;
+    if(pik_ptr->maturity == 0 || pik_ptr->maturity == 1) {
         //Leaf to bud, or bud to flower.
         
-        p->maturity++;
+        pik_ptr->maturity++;
         
-        //Generate a burst of particles to symbolize the maturation.
-        particle pa(
-            m->pos, m->z + m->get_drawing_height(),
-            16, 1, PARTICLE_PRIORITY_LOW
-        );
-        pa.bitmap = game.sys_assets.bmp_sparkle;
-        pa.color.add(1, change_alpha(COLOR_WHITE, 0));
-        pa.outwards_speed = keyframe_interpolator<float>(50);
-        particle_generator pg(0, pa, 8);
-        pg.emission.number_deviation = 1;
-        pg.size_deviation = 8;
-        pg.linear_speed_deviation.x = 10;
-        pg.duration_deviation = 0.25;
-        pg.emit(game.states.gameplay->particles);
+        particle_generator pg =
+            standard_particle_gen_setup(
+                game.asset_file_names.part_sprout_evolution, pik_ptr
+            );
+        pik_ptr->particle_generators.push_back(pg);
         
     } else {
         //Flower to leaf.
         
-        p->maturity = 0;
+        pik_ptr->maturity = 0;
         
-        //Generate a dribble of particles to symbolize the regression.
-        particle pa(
-            m->pos, m->z + m->get_drawing_height(),
-            16, 1, PARTICLE_PRIORITY_LOW
-        );
-        pa.bitmap = game.sys_assets.bmp_sparkle;
-        pa.color.set_keyframe_value(0, al_map_rgb(255, 224, 224));
-        pa.color.add(1, al_map_rgb(255, 224, 224));
-        pa.outwards_speed = keyframe_interpolator<float>(50);
-        pa.linear_speed.add(1, point(0, 300));
-        particle_generator pg(0, pa, 8);
-        pg.emission.number_deviation = 1;
-        pg.size_deviation = 8;
-        pg.outwards_speed_deviation = 10;
-        pg.duration_deviation = 0.25;
-        pg.emit(game.states.gameplay->particles);
+        particle_generator pg =
+            standard_particle_gen_setup(
+                game.asset_file_names.part_sprout_regression, pik_ptr
+            );
+        pik_ptr->particle_generators.push_back(pg);
     }
 }
 
@@ -3818,8 +3780,8 @@ void pikmin_fsm::sprout_evolve(mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void pikmin_fsm::sprout_schedule_evol(mob* m, void* info1, void* info2) {
-    pikmin* p = (pikmin*) m;
-    m->set_timer(p->pik_type->sprout_evolution_time[p->maturity]);
+    pikmin* pik_ptr = (pikmin*) m;
+    m->set_timer(pik_ptr->pik_type->sprout_evolution_time[pik_ptr->maturity]);
 }
 
 
@@ -4145,13 +4107,13 @@ void pikmin_fsm::stop_being_thrown(mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void pikmin_fsm::stop_carrying(mob* m, void* info1, void* info2) {
-    pikmin* p = (pikmin*) m;
-    if(!p->carrying_mob) return;
+    pikmin* pik_ptr = (pikmin*) m;
+    if(!pik_ptr->carrying_mob) return;
     
-    p->carrying_mob->fsm.run_event(MOB_EV_CARRIER_REMOVED, (void*) p);
+    pik_ptr->carrying_mob->fsm.run_event(MOB_EV_CARRIER_REMOVED, (void*) pik_ptr);
     
-    p->carrying_mob = nullptr;
-    p->set_timer(0);
+    pik_ptr->carrying_mob = nullptr;
+    pik_ptr->set_timer(0);
 }
 
 
@@ -4322,19 +4284,19 @@ void pikmin_fsm::touched_eat_hitbox(mob* m, void* info1, void* info2) {
 void pikmin_fsm::touched_hazard(mob* m, void* info1, void* info2) {
     engine_assert(info1 != nullptr, m->print_state_history());
     
-    pikmin* p = (pikmin*) m;
-    hazard* h = (hazard*) info1;
+    pikmin* pik_ptr = (pikmin*) m;
+    hazard* haz_ptr = (hazard*) info1;
     
     if(info2) {
         //This is an attack.
         hitbox_interaction* h_info = (hitbox_interaction*) info2;
-        if(!p->process_attack_miss(h_info)) {
+        if(!pik_ptr->process_attack_miss(h_info)) {
             //It has been decided that this attack missed.
             return;
         }
     }
     
-    if(h->associated_liquid) {
+    if(haz_ptr->associated_liquid) {
         bool already_generating = false;
         for(size_t g = 0; g < m->particle_generators.size(); g++) {
             if(
@@ -4347,31 +4309,31 @@ void pikmin_fsm::touched_hazard(mob* m, void* info1, void* info2) {
         }
         
         if(!already_generating) {
-            particle par(
-                m->pos, m->z,
-                0, 1, PARTICLE_PRIORITY_LOW
+            particle_generator pg =
+                standard_particle_gen_setup(
+                    game.asset_file_names.part_wave_ring, m
+                );
+            pg.follow_z_offset = 1.0f;
+            adjust_keyframe_interpolator_values<float>(
+                pg.base_particle.size,
+            [ = ] (const float & f) { return f * m->radius; }
             );
-            par.bitmap = game.sys_assets.bmp_wave_ring;
-            par.size.add(1, m->radius * 4);
-            par.color.add(1, change_alpha(COLOR_WHITE, 0));
-            particle_generator pg(0.3, par, 1);
-            pg.follow_mob = m;
             pg.id = MOB_PARTICLE_GENERATOR_ID_WAVE_RING;
             m->particle_generators.push_back(pg);
         }
     }
     
-    if(p->invuln_period.time_left > 0) return;
-    mob_type::vulnerability_t vuln = p->get_hazard_vulnerability(h);
+    if(pik_ptr->invuln_period.time_left > 0) return;
+    mob_type::vulnerability_t vuln = pik_ptr->get_hazard_vulnerability(haz_ptr);
     if(vuln.effect_mult == 0.0f) return;
     
     if(!vuln.status_to_apply || !vuln.status_overrides) {
-        for(size_t e = 0; e < h->effects.size(); e++) {
-            p->apply_status_effect(h->effects[e], false, true);
+        for(size_t e = 0; e < haz_ptr->effects.size(); e++) {
+            pik_ptr->apply_status_effect(haz_ptr->effects[e], false, true);
         }
     }
     if(vuln.status_to_apply) {
-        p->apply_status_effect(vuln.status_to_apply, false, true);
+        pik_ptr->apply_status_effect(vuln.status_to_apply, false, true);
     }
 }
 

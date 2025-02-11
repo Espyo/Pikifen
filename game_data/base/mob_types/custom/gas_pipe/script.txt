@@ -11,8 +11,9 @@ script{
     destroyed {
         on_enter {
             set_animation destroyed
-            start_dying
             stop_particles
+            start_particles enemy_death 0 0 150
+            start_dying
         }
     }
 }

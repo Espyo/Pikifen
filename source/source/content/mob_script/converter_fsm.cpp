@@ -207,17 +207,11 @@ void converter_fsm::handle_pikmin(mob* m, void* info1, void* info2) {
         con_ptr->close();
     }
     
-    particle p(
-        m->pos, m->z + m->get_drawing_height() + 1.0,
-        24, 1.5, PARTICLE_PRIORITY_MEDIUM
-    );
-    p.bitmap = game.sys_assets.bmp_smoke;
-    p.outwards_speed = keyframe_interpolator<float>(70);
-    particle_generator pg(0, p, 15);
-    pg.emission.number_deviation = 5;
-    pg.outwards_speed_deviation = 10;
-    pg.duration_deviation = 0.5;
-    pg.emit(game.states.gameplay->particles);
+    particle_generator pg =
+        standard_particle_gen_setup(
+            game.asset_file_names.part_converter_insertion, m
+        );
+    m->particle_generators.push_back(pg);
 }
 
 

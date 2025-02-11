@@ -734,7 +734,7 @@ void particle_editor::process_gui_panel_generator() {
     set_tooltip(
         "Rotate the generator's facing angle in the editor by this much.\n"
         "You can move the generator by just dragging the mouse in the canvas.",
-        "", WIDGET_EXPLANATION_DRAG
+        "", WIDGET_EXPLANATION_SLIDER
     );
     ImGui::Unindent();
     
@@ -763,6 +763,7 @@ void particle_editor::process_gui_panel_generator() {
                 if(loaded_gen.emission.interval != 0.0f) {
                     loaded_gen.emission.interval = 0.0f;
                     loaded_gen.emission.interval_deviation = 0.0f;
+                    loaded_gen.restart_timer();
                 }
                 changes_mgr.mark_as_changed();
             }
@@ -774,6 +775,7 @@ void particle_editor::process_gui_panel_generator() {
                 if(loaded_gen.emission.interval == 0.0f) {
                     loaded_gen.emission.interval = 0.01f;
                     loaded_gen.emission.interval_deviation = 0.0f;
+                    loaded_gen.restart_timer();
                 }
                 changes_mgr.mark_as_changed();
             }
@@ -894,7 +896,7 @@ void particle_editor::process_gui_panel_generator() {
             }
             set_tooltip(
                 "Makes it so particles are created in a circle or \n"
-                "donut shape around the origin."
+                "ring shape around the origin."
             );
             
             //Rectangle emission shape radio.
@@ -908,7 +910,7 @@ void particle_editor::process_gui_panel_generator() {
             }
             set_tooltip(
                 "Makes it so particles are created in a rectangle or \n"
-                "square shape around the origin."
+                "rectangular ring shape around the origin."
             );
             loaded_gen.emission.shape = (PARTICLE_EMISSION_SHAPE)shape;
             
@@ -969,7 +971,7 @@ void particle_editor::process_gui_panel_generator() {
                 }
                 set_tooltip(
                     "Arc of the circle for particle creation.",
-                    "", WIDGET_EXPLANATION_DRAG
+                    "", WIDGET_EXPLANATION_SLIDER
                 );
                 
                 //Circle emission arc rotation value.
@@ -984,7 +986,7 @@ void particle_editor::process_gui_panel_generator() {
                 }
                 set_tooltip(
                     "Rotate the emission arc by these many degrees.",
-                    "", WIDGET_EXPLANATION_DRAG
+                    "", WIDGET_EXPLANATION_SLIDER
                 );
                 
                 //Evenly spread checkbox.
@@ -1182,7 +1184,7 @@ void particle_editor::process_gui_panel_generator() {
                     }
                     set_tooltip(
                         "Angle of the image.",
-                        "", WIDGET_EXPLANATION_DRAG
+                        "", WIDGET_EXPLANATION_SLIDER
                     );
                     
                     //Image angle deviation text.
@@ -1203,7 +1205,7 @@ void particle_editor::process_gui_panel_generator() {
                     set_tooltip(
                         "A particle's image angle varies randomly up or down\n"
                         "by this amount.",
-                        "", WIDGET_EXPLANATION_DRAG
+                        "", WIDGET_EXPLANATION_SLIDER
                     );
                     ImGui::Unindent();
                 }
@@ -1450,7 +1452,7 @@ void particle_editor::process_gui_panel_generator() {
             set_tooltip(
                 "A particle's movement angle varies randomly up or down\n"
                 "by this amount.",
-                "", WIDGET_EXPLANATION_DRAG
+                "", WIDGET_EXPLANATION_SLIDER
             );
             
             ImGui::TreePop();
@@ -1478,6 +1480,24 @@ void particle_editor::process_gui_panel_generator() {
                 changes_mgr.mark_as_changed();
             }
             
+            //Outward speed deviation value.
+            ImGui::Spacer();
+            ImGui::SetNextItemWidth(150);
+            if(
+                ImGui::DragFloat(
+                    "Speed deviation",
+                    &loaded_gen.outwards_speed_deviation,
+                    0.5f, 0.0f, FLT_MAX
+                )
+            ) {
+                changes_mgr.mark_as_changed();
+            }
+            set_tooltip(
+                "A particle's outward speed varies randomly up or down\n"
+                "by this amount.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            
             ImGui::TreePop();
         }
         
@@ -1500,6 +1520,24 @@ void particle_editor::process_gui_panel_generator() {
             ) {
                 changes_mgr.mark_as_changed();
             }
+            
+            //Orbital speed deviation value.
+            ImGui::Spacer();
+            ImGui::SetNextItemWidth(150);
+            if(
+                ImGui::DragFloat(
+                    "Speed deviation",
+                    &loaded_gen.orbital_speed_deviation,
+                    0.5f, 0.0f, FLT_MAX
+                )
+            ) {
+                changes_mgr.mark_as_changed();
+            }
+            set_tooltip(
+                "A particle's orbital speed varies randomly up or down\n"
+                "by this amount.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
             
             ImGui::TreePop();
         }

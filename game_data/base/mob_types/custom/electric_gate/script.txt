@@ -93,6 +93,7 @@ script {
             set_animation destroyed
             start_dying
             finish_dying
+            start_particles enemy_death 0 0 129
             start_particles electric_gate_explosion 0 0 129
             play_sound obstacle_cleared
             set_tangible false

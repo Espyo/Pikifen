@@ -22,6 +22,7 @@ script {
             set_animation crushing
             set_height 2
             set_health 0
+            start_particles enemy_death 0 0 200
             start_particles paper_bag_dust 0 0 200
             play_sound obstacle_cleared
             send_message_to_links paper_bag_crushed

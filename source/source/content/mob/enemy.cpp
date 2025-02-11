@@ -122,6 +122,7 @@ void enemy::finish_dying_class_specifics() {
  * @brief Sets up stuff for the beginning of the enemy's death process.
  */
 void enemy::start_dying_class_specifics() {
+    //Numbers.
     game.states.gameplay->enemy_deaths++;
     game.states.gameplay->enemy_points_collected += ene_type->points;
     game.states.gameplay->last_enemy_killed_pos = pos;
@@ -131,6 +132,7 @@ void enemy::start_dying_class_specifics() {
         game.states.gameplay->mission_remaining_mob_ids.erase(id);
     }
     
+    //Music.
     if(ene_type->is_boss) {
         switch(game.states.gameplay->boss_music_state) {
         case BOSS_MUSIC_STATE_PLAYING: {
@@ -149,4 +151,11 @@ void enemy::start_dying_class_specifics() {
         }
         }
     }
+    
+    //Particles.
+    particle_generator pg =
+        standard_particle_gen_setup(
+            game.asset_file_names.part_enemy_death, this
+        );
+    particle_generators.push_back(pg);
 }

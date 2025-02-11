@@ -356,7 +356,7 @@
       </tr>
       <tr>
         <td>particle_generator</td>
-        <td>When the damage is applied, some particles can be spawned. This is the name of the particle generator to use, if any. The particles are spawned in the position of the object that receives the damage.</td>
+        <td>When the damage is applied, some particles can be spawned. This is the name of the particle generator to use, if any. The particles are spawned in the position of the object that receives the damage. To make lasting particles, you'll want the particle generator to be on the status effect instead.</td>
         <td>Internal name</td>
         <td></td>
       </tr>
@@ -724,19 +724,6 @@
       </tr>
     </table>
 
-    <h3 id="system-asset-anims">Animations</h3>
-
-    <p>These properties belong to the <code>animations</code> block:</p>
-
-    <table class="props-t props-t-o">
-      <tr>
-        <td>sparks</td>
-        <td>Leader damage sparks.</td>
-        <td>Internal name</td>
-        <td>sparks</td>
-      </tr>
-    </table>
-
     <h3 id="system-asset-audio">Audio</h3>
 
     <p>These properties belong to the <code>audio</code> block:</p>
@@ -777,6 +764,117 @@
         <td>Plop for when the current standby Pikmin type is switched.</td>
         <td>Internal name</td>
         <td>switch_pikmin</td>
+      </tr>
+    </table>
+
+    <h3 id="system-asset-anims">Animations</h3>
+
+    <p>These properties belong to the <code>animations</code> block:</p>
+
+    <table class="props-t props-t-o">
+      <tr>
+        <td>sparks</td>
+        <td>Leader damage sparks.</td>
+        <td>Internal name</td>
+        <td>sparks</td>
+      </tr>
+    </table>
+
+    <h3 id="system-asset-part-gens">Particle generators</h3>
+
+    <p>These properties belong to the <code>particle_generators</code> block:</p>
+
+    <table class="props-t props-t-o">
+      <tr>
+        <td>converter_insertion</td>
+        <td>Dust for when a Pikmin is inserted into a Candypop Bud.</td>
+        <td>Internal name</td>
+        <td>converter_insertion</td>
+      </tr>
+      <tr>
+        <td>ding</td>
+        <td>Ding for when an attack is useless.</td>
+        <td>Internal name</td>
+        <td>ding</td>
+      </tr>
+      <tr>
+        <td>enemy_death</td>
+        <td>Sparkles that come out when an enemy dies.</td>
+        <td>Internal name</td>
+        <td>enemy_death</td>
+      </tr>
+      <tr>
+        <td>leader_heal</td>
+        <td>Sparkles for when a leader gets healed at a ship.</td>
+        <td>Internal name</td>
+        <td>leader_heal</td>
+      </tr>
+      <tr>
+        <td>onion_generating_inside</td>
+        <td>Sparkle for when an Onion generates a Pikmin inside.</td>
+        <td>Internal name</td>
+        <td>onion_generating_inside</td>
+      </tr>
+      <tr>
+        <td>onion_insertion</td>
+        <td>Puff of smoke for when something is inserted into the Onion &ndash; or ship &ndash; by being beamed up. In the case of ships, it spawns at the ship's receptacle.</td>
+        <td>Internal name</td>
+        <td>onion_insertion</td>
+      </tr>
+      <tr>
+        <td>pikmin_pluck_dirt</td>
+        <td>Dirt that comes out of the floor when a Pikmin gets plucked.</td>
+        <td>Internal name</td>
+        <td>pikmin_pluck_dirt</td>
+      </tr>
+      <tr>
+        <td>pikmin_seed_landed</td>
+        <td>Dirt that comes out of the floor when a Pikmin seed lands and gets planted.</td>
+        <td>Internal name</td>
+        <td>pikmin_seed_landed</td>
+      </tr>
+      <tr>
+        <td>smack</td>
+        <td>Smack for when an attack lands successfully.</td>
+        <td>Internal name</td>
+        <td>smack</td>
+      </tr>
+      </tr>
+      <tr>
+        <td>spray</td>
+        <td>Leader spray. When used internally by the engine, it overrides the generator's linear speed properties based on the spray's data, and multiplies (tints) the generator's particle color with the spray's main color.</td>
+        <td>Internal name</td>
+        <td>spray</td>
+      </tr>
+      <tr>
+        <td>sprout_evolution</td>
+        <td>Sparkles for when a Pikmin sprout evolves from one stage of maturity to the next.</td>
+        <td>Internal name</td>
+        <td>sprout_evolution</td>
+      </tr>
+      <tr>
+        <td>sprout_regression</td>
+        <td>Sparkles for when a Pikmin sprout regresses back to leaf maturity.</td>
+        <td>Internal name</td>
+        <td>sprout_regression</td>
+      </tr>
+      <tr>
+        <td>throw_trail</td>
+        <td>Trail left behind a thrown Pikmin or leader. When used internally by the engine, it multiplies the generator's particle radius with the object's radius, and multiplies (tints) the generator's particle color with the object's main color.</td>
+        <td>Internal name</td>
+        <td>throw_trail</td>
+      </tr>
+      <tr>
+        <td>treasure</td>
+        <td>Sparkles on top of treasures. When used internally by the engine, it multiplies the generator's particle radius with the object's radius.</td>
+        <td>Internal name</td>
+        <td>treasure</td>
+      </tr>
+      <tr>
+        <td>wave_ring</td>
+        <td>Water ripples around objects on water. When used internally by the engine, it multiplies the generator's particle radius with the object's radius.</td>
+        <td>Internal name</td>
+        <td>wave_ring</td>
       </tr>
     </table>
     

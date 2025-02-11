@@ -54,6 +54,7 @@ void particle::draw() {
     float t = 1.0f - time / duration;
     ALLEGRO_COLOR final_color = color.get(t);
     float final_size = size.get(t);
+    if(final_size <= 0.0f) return;
     
     bool used_custom_blend = false;
     int old_op = 0, old_source = 0, old_dest = 0;
@@ -592,10 +593,10 @@ void particle_generator::save_to_data_node(data_node* node) {
 
 
 /**
- * @brief Resets data about the particle generator, to make it ready to
- * be used. Call this when copying from another generator.
+ * @brief Resets timer information about the particle generator.
+ * Call this when copying from another generator.
  */
-void particle_generator::reset() {
+void particle_generator::restart_timer() {
     if(emission.interval_deviation == 0.0f) {
         emission_timer = emission.interval;
     } else {

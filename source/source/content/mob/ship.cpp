@@ -214,20 +214,11 @@ void ship::draw_mob() {
 void ship::heal_leader(leader* l) const {
     l->set_health(false, true, 1.0);
     
-    particle p(
-        l->pos, l->z + l->height, 16, 3,
-        PARTICLE_PRIORITY_LOW
-    );
-    p.bitmap = game.sys_assets.bmp_sparkle;
-    p.color.set_keyframe_value(0, al_map_rgba(192, 255, 192, 255));
-    p.color.add(1, al_map_rgba(192, 255, 192, 0));
-    p.linear_speed = keyframe_interpolator<point>(point(0, -24));
-    
-    particle_generator g(0, p, 12);
-    g.duration_deviation = 0.5;
-    g.emission.shape = PARTICLE_EMISSION_SHAPE_CIRCLE;
-    g.emission.circle_outer_dist = l->radius;
-    g.emit(game.states.gameplay->particles);
+    particle_generator pg =
+        standard_particle_gen_setup(
+            game.asset_file_names.part_leader_heal, l
+        );
+    l->particle_generators.push_back(pg);
 }
 
 

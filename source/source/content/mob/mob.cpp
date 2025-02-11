@@ -149,12 +149,6 @@ const float SWARM_MARGIN = 8.0f;
 //Basically, the tube shape's girth can reach this scale.
 const float SWARM_VERTICAL_SCALE = 0.5f;
 
-//A new "mob thrown" particle is spawned every X seconds.
-const float THROW_PARTICLE_INTERVAL = 0.02f;
-
-//A water wave ring particle lasts this long.
-const float WAVE_RING_DURATION = 1.0f;
-
 }
 
 
@@ -395,11 +389,11 @@ void mob::apply_status_effect(
     
     if(s->generates_particles) {
         particle_generator pg = *s->particle_gen;
+        pg.restart_timer();
         pg.follow_mob = this;
+        pg.follow_angle = &this->angle;
         pg.follow_pos_offset = s->particle_offset_pos;
         pg.follow_z_offset = s->particle_offset_z;
-        pg.follow_angle = &this->angle;
-        pg.reset();
         particle_generators.push_back(pg);
     }
     
@@ -1021,11 +1015,12 @@ void mob::cause_spike_damage(mob* victim, bool is_ingestion) {
     
     if(type->spike_damage->particle_gen) {
         particle_generator pg = *(type->spike_damage->particle_gen);
-        pg.base_particle.pos =
-            victim->pos + type->spike_damage->particle_offset_pos;
-        pg.base_particle.z =
-            victim->z + type->spike_damage->particle_offset_z;
-        pg.emit(game.states.gameplay->particles);
+        pg.restart_timer();
+        pg.follow_mob = victim;
+        pg.follow_angle = &victim->angle;
+        pg.follow_pos_offset = type->spike_damage->particle_offset_pos;
+        pg.follow_z_offset = type->spike_damage->particle_offset_z;
+        victim->particle_generators.push_back(pg);
     }
     
     if(
@@ -1362,40 +1357,26 @@ void mob::do_attack_effects(
     point particle_pos =
         attack_h_pos +
         point(cos(a_to_v_angle) * offset, sin(a_to_v_angle) * offset);
+    float particle_z =
+        std::max(
+            z + get_drawing_height() + 1.0f,
+            attacker->z + attacker->get_drawing_height() + 1.0f
+        );
         
     bool useless = (damage <= 0 && knockback == 0.0f);
     
     //Create the particle.
-    if(!useless) {
-        particle smack_p(
-            particle_pos,
-            std::max(z + get_drawing_height() + 1, attacker->z + attacker->get_drawing_height() + 1),
-            0, MOB::SMACK_PARTICLE_DUR, PARTICLE_PRIORITY_MEDIUM
+    string particle_internal_name =
+        useless ?
+        game.asset_file_names.part_ding :
+        game.asset_file_names.part_smack;
+    particle_generator pg =
+        standard_particle_gen_setup(
+            particle_internal_name, nullptr
         );
-        smack_p.bitmap = game.sys_assets.bmp_smack;
-        smack_p.color.set_keyframe_value(0, al_map_rgb(255, 160, 128));
-        smack_p.color.add(0.5f, al_map_rgb(255, 160, 128));
-        smack_p.color.add(1,    al_map_rgba(255, 160, 128, 0));
-        
-        smack_p.size.add(0.5f, 64);
-        smack_p.size.add(1,    0);
-        game.states.gameplay->particles.add(smack_p);
-        
-    } else {
-        particle ding_p(
-            particle_pos,
-            std::max(z + get_drawing_height() + 1, attacker->z + attacker->get_drawing_height() + 1),
-            0, MOB::SMACK_PARTICLE_DUR * 2, PARTICLE_PRIORITY_MEDIUM
-        );
-        ding_p.bitmap = game.sys_assets.bmp_wave_ring;
-        ding_p.color.set_keyframe_value(0, al_map_rgb(192, 208, 224));
-        ding_p.color.add(0.5f, al_map_rgb(192, 208, 224));
-        ding_p.color.add(1,    al_map_rgba(192, 208, 224, 0));
-        
-        ding_p.size.add(0.5f, 24);
-        game.states.gameplay->particles.add(ding_p);
-        
-    }
+    pg.base_particle.pos = particle_pos;
+    pg.base_particle.z = particle_z;
+    pg.emit(game.states.gameplay->particles);
     
     if(!useless) {
         //Play the sound.
@@ -3256,20 +3237,6 @@ void mob::start_dying() {
     for(size_t s = 0; s < statuses.size(); s++) {
         statuses[s].to_delete = true;
     }
-    
-    particle p(
-        pos, z + get_drawing_height() + 1,
-        64, 1.5, PARTICLE_PRIORITY_LOW
-    );
-    p.bitmap = game.sys_assets.bmp_sparkle;
-    p.color.set_keyframe_value(0, al_map_rgb(255, 192, 192));
-    p.color.add(1, al_map_rgba(255, 192, 192, 0));
-    p.outwards_speed = keyframe_interpolator<float>(100);
-    particle_generator pg(0, p, 25);
-    pg.emission.number_deviation = 5;
-    pg.outwards_speed_deviation = 40;
-    pg.duration_deviation = 0.5;
-    pg.emit(game.states.gameplay->particles);
     
     if(group) {
         while(!group->members.empty()) {

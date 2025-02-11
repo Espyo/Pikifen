@@ -76,6 +76,7 @@ typedef ALLEGRO_COLOR (*offset_effect_color_getter_t)(edge*);
 typedef float (*offset_effect_length_getter_t)(edge*);
 
 
+
 bool are_walls_between(
     const point &p1, const point &p2,
     float ignore_walls_below_z = -FLT_MAX, bool* out_impassable_walls = nullptr
@@ -209,6 +210,9 @@ void spew_pikmin_seed(
 vector<vector<string_token> > split_long_string_with_tokens(
     const vector<string_token> &tokens, int max_width
 );
+particle_generator standard_particle_gen_setup(
+    const string &internal_name, mob* target_mob
+);
 void start_message(const string &text, ALLEGRO_BITMAP* speaker_bmp);
 vector<string_token> tokenize_string(const string &s);
 string unescape_string(const string &s);
@@ -225,6 +229,33 @@ void update_offset_effect_caches (
     offset_effect_color_getter_t color_getter
 );
 point v2p(const vertex* v);
+
+
+
+/**
+ * @brief Goes through all keyframes in a keyframe interpolator, and lets you
+ * adjust the value in each one, by running the "predicate" function for each.
+ *
+ * @tparam t Value type for the interpolator.
+ * @param interpolator Interpolator to adjust.
+ * @param predicate Function whose argument is the original value at that
+ * keyframe, and whose return value is the new value.
+ * @return Whether the operation succeeded.
+ */
+template<typename t>
+bool adjust_keyframe_interpolator_values(
+    keyframe_interpolator<t> &interpolator,
+    std::function<t(const t &)> predicate
+) {
+    bool result = false;
+    size_t n_keyframes = interpolator.keyframe_count();
+    for(size_t k = 0; k < n_keyframes; k++) {
+        const auto &orig_keyframe = interpolator.get_keyframe(k);
+        interpolator.set_keyframe_value(k, predicate(orig_keyframe.second));
+        result = true;
+    }
+    return result;
+}
 
 
 /**

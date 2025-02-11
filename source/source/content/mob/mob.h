@@ -78,8 +78,6 @@ extern const float SMACK_PARTICLE_DUR;
 extern const float SWARM_MARGIN;
 extern const float SWARM_VERTICAL_SCALE;
 extern const float STATUS_SHAKING_TIME_MULT;
-extern const float THROW_PARTICLE_INTERVAL;
-extern const float WAVE_RING_DURATION;
 };
 
 

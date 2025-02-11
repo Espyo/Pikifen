@@ -1263,7 +1263,7 @@ bool editor::keyframe_editor(
     set_tooltip(
         "Time at which this keyframe occurs.\n"
         "0 means the beginning, 1 means the end.",
-        "", WIDGET_EXPLANATION_DRAG
+        "", WIDGET_EXPLANATION_SLIDER
     );
     
     //Color editor.
@@ -1309,7 +1309,7 @@ bool editor::keyframe_editor(
     set_tooltip(
         "Time at which this keyframe occurs.\n"
         "0 means the beginning, 1 means the end.",
-        "", WIDGET_EXPLANATION_DRAG
+        "", WIDGET_EXPLANATION_SLIDER
     );
     
     //Float value.
@@ -1355,7 +1355,7 @@ bool editor::keyframe_editor(
     set_tooltip(
         "Time at which this keyframe occurs.\n"
         "0 means the beginning, 1 means the end.",
-        "", WIDGET_EXPLANATION_DRAG
+        "", WIDGET_EXPLANATION_SLIDER
     );
     
     //Float values.

@@ -344,6 +344,53 @@ struct asset_file_names_t {
     //Leader damage spark.
     string anim_sparks = "sparks";
     
+    //Particle generators.
+    
+    //Pikmin inserted in converter.
+    string part_converter_insertion = "converter_insertion";
+    
+    //Useless attack ding.
+    string part_ding = "ding";
+    
+    //Enemy death sparkles.
+    string part_enemy_death = "enemy_death";
+    
+    //Leader being healed at a ship.
+    string part_leader_heal = "leader_heal";
+    
+    //Onion generating inside.
+    string part_onion_gen_inside = "onion_generating_inside";
+    
+    //Onion object insertion.
+    string part_onion_insertion = "onion_insertion";
+    
+    //Dirt that comes out of the floor when a Pikmin gets plucked.
+    string part_pikmin_pluck_dirt = "pikmin_pluck_dirt";
+    
+    //Dirt that comes out of the floor when a Pikmin seed lands.
+    string part_pikmin_seed_landed = "pikmin_seed_landed";
+    
+    //Successful attack smack.
+    string part_smack = "smack";
+    
+    //Leader spray.
+    string part_spray = "spray";
+    
+    //Pikmin sprout maturity evolution.
+    string part_sprout_evolution = "sprout_evolution";
+    
+    //Pikmin sprout maturity regression.
+    string part_sprout_regression = "sprout_regression";
+    
+    //Throw trail.
+    string part_throw_trail = "throw_trail";
+    
+    //Sparkles on top of treasures.
+    string part_treasure = "treasure";
+    
+    //Wave ring as a ripple around mobs on water.
+    string part_wave_ring = "wave_ring";
+    
     
     //--- Function declarations ---
     
@@ -828,9 +875,9 @@ struct system_asset_list {
     
     //Font for the carrying / money values.
     ALLEGRO_FONT* fnt_value = nullptr;
-
+    
     //Specifically Dear ImGui fonts.
-
+    
     //Header editor font for Dear ImGui.
     ImFont* fnt_imgui_header = nullptr;
     

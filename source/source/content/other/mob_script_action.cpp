@@ -2094,13 +2094,10 @@ void mob_action_runners::start_particles(mob_action_run_data &data) {
     if(data.args.size() > 3) offset_z = s2f(data.args[3]);
     
     particle_generator pg =
-        game.content.custom_particle_gen.list[data.args[0]];
-    pg.id = MOB_PARTICLE_GENERATOR_ID_SCRIPT;
-    pg.follow_mob = data.m;
-    pg.follow_angle = &data.m->angle;
+        standard_particle_gen_setup(data.args[0], data.m);
     pg.follow_pos_offset = point(offset_x, offset_y);
     pg.follow_z_offset = offset_z;
-    pg.reset();
+    pg.id = MOB_PARTICLE_GENERATOR_ID_SCRIPT;
     data.m->particle_generators.push_back(pg);
 }
 

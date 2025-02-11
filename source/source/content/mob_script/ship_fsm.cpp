@@ -134,17 +134,13 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
     }
     
     shi_ptr->mobs_being_beamed--;
-    particle p(
-        shi_ptr->receptacle_final_pos,
-        shi_ptr->z + shi_ptr->get_drawing_height(), 24, 1.5, PARTICLE_PRIORITY_MEDIUM
-    );
-    p.bitmap = game.sys_assets.bmp_smoke;
-    p.outwards_speed = keyframe_interpolator<float>(70);
-    particle_generator pg(0, p, 15);
-    pg.emission.number_deviation = 5;
-    pg.outwards_speed_deviation = 10;
-    pg.duration_deviation = 0.5;
-    pg.emit(game.states.gameplay->particles);
+    particle_generator pg =
+        standard_particle_gen_setup(
+            game.asset_file_names.part_onion_insertion, shi_ptr
+        );
+    pg.follow_pos_offset = shi_ptr->shi_type->receptacle_offset;
+    pg.follow_z_offset -= 2.0f; //Must appear below the ship's receptacle.
+    shi_ptr->particle_generators.push_back(pg);
     
 }
 

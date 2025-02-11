@@ -163,19 +163,11 @@ void onion::generate() {
         if(total_after > game.config.max_pikmin_in_field) {
             nest->pikmin_inside[t][0]++;
             
-            particle pa(
-                pos, z + get_drawing_height() + 1.0f,
-                64.0f, 1.0f, PARTICLE_PRIORITY_LOW
-            );
-            pa.bitmap = game.sys_assets.bmp_sparkle;
-            pa.outwards_speed.set_keyframe_value(0, 60.0f);
-            particle_generator pg(0.0f, pa);
-            pg.id = MOB_PARTICLE_GENERATOR_ID_SCRIPT;
-            pg.duration_deviation = 0.1f;
-            pg.emission.shape = PARTICLE_EMISSION_SHAPE_CIRCLE;
-            pg.emission.circle_outer_dist = 4;
-            pg.size_deviation = 4.0f;
-            pg.outwards_speed_deviation = 10.0f;
+            particle_generator pg =
+                standard_particle_gen_setup(
+                    game.asset_file_names.part_onion_gen_inside, this
+                );
+            pg.base_particle.priority = PARTICLE_PRIORITY_LOW;
             particle_generators.push_back(pg);
             
             return;

@@ -1505,6 +1505,28 @@ vector<vector<string_token> > split_long_string_with_tokens(
 
 
 /**
+ * @brief Sets up a typical particle generator called from code.
+ *
+ * @param internal_name Internal name of the particle generator to make use of
+ * in the game's content.
+ * @param target_mob Mob to follow and such.
+ * @return The prepared particle generator.
+ */
+particle_generator standard_particle_gen_setup(
+    const string &internal_name, mob* target_mob
+) {
+    particle_generator pg =
+        game.content.custom_particle_gen.list[internal_name];
+    pg.restart_timer();
+    pg.follow_mob = target_mob;
+    pg.follow_angle = target_mob ? &target_mob->angle : nullptr;
+    pg.follow_z_offset =
+        target_mob ? target_mob->get_drawing_height() + 1.0f : 0.0f;
+    return pg;
+}
+
+
+/**
  * @brief Starts the display of a text message.
  *
  * If the text is empty, it closes the message box.

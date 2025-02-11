@@ -470,15 +470,26 @@ void pikmin::read_script_vars(const script_var_reader &svr) {
  * a thrown Pikmin.
  */
 void pikmin::start_throw_trail() {
-    particle throw_p(
-        pos, z,
-        radius, 0.6, PARTICLE_PRIORITY_LOW,
-        change_alpha(type->main_color, 128)
+    particle_generator pg =
+        standard_particle_gen_setup(
+            game.asset_file_names.part_throw_trail, this
+        );
+    pg.follow_z_offset = 0.0f;
+    adjust_keyframe_interpolator_values<float>(
+        pg.base_particle.size,
+    [ = ] (const float & f) { return f * radius; }
     );
-    throw_p.size.add(1, 0);
-    throw_p.color.add(1, change_alpha(type->main_color, 0));
-    particle_generator pg(MOB::THROW_PARTICLE_INTERVAL, throw_p, 1);
-    pg.follow_mob = this;
+    adjust_keyframe_interpolator_values<ALLEGRO_COLOR>(
+        pg.base_particle.color,
+    [ = ] (const ALLEGRO_COLOR & c) {
+        ALLEGRO_COLOR new_c = c;
+        new_c.r *= type->main_color.r;
+        new_c.g *= type->main_color.g;
+        new_c.b *= type->main_color.b;
+        new_c.a *= type->main_color.a;
+        return new_c;
+    }
+    );
     pg.id = MOB_PARTICLE_GENERATOR_ID_THROW;
     particle_generators.push_back(pg);
 }
