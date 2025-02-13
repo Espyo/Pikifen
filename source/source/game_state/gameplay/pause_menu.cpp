@@ -219,7 +219,7 @@ void pause_menu_t::add_bullet(
         
     bullet_gui_item* bullet =
         new bullet_gui_item(
-        text, game.sys_assets.fnt_standard, color
+        text, game.sys_content.fnt_standard, color
     );
     bullet->center = point(0.50f, bullet_center_y);
     bullet->size = point(0.96f, BULLET_HEIGHT);
@@ -270,7 +270,7 @@ void pause_menu_t::add_pikmin_status_line(
     const float item_y = y1 + item_height / 2.0f + item_y_spacing;
     
     ALLEGRO_FONT* font =
-        (is_single && !is_totals) ? game.sys_assets.fnt_standard : game.sys_assets.fnt_counter;
+        (is_single && !is_totals) ? game.sys_content.fnt_standard : game.sys_content.fnt_counter;
     string tooltip_start =
         pik_type ?
         "Number of " + pik_type->name + " " :
@@ -300,7 +300,7 @@ void pause_menu_t::add_pikmin_status_line(
     
         //Totals header.
         text_gui_item* totals_header_item =
-            new text_gui_item("Total", game.sys_assets.fnt_area_name);
+            new text_gui_item("Total", game.sys_content.fnt_area_name);
         totals_header_item->center =
             point(
                 first_x + item_x_interval * 0,
@@ -678,7 +678,7 @@ button_gui_item* pause_menu_t::create_page_button(
         left ?
         "< " + page_name :
         page_name + " >",
-        game.sys_assets.fnt_standard
+        game.sys_content.fnt_standard
     );
     new_button->on_activate =
     [this, cur_gui, target_page, left] (const point &) {
@@ -723,7 +723,7 @@ void pause_menu_t::create_page_buttons(
         player_input i =
             game.controls.find_bind(PLAYER_ACTION_TYPE_MENU_PAGE_LEFT).input;
         if(i.type == INPUT_TYPE_NONE) return;
-        draw_player_input_icon(game.sys_assets.fnt_slim, i, true, center, size);
+        draw_player_input_icon(game.sys_content.fnt_slim, i, true, center, size);
     };
     cur_gui->add_item(left_page_input, "left_page_input");
     
@@ -740,7 +740,7 @@ void pause_menu_t::create_page_buttons(
         player_input i =
             game.controls.find_bind(PLAYER_ACTION_TYPE_MENU_PAGE_RIGHT).input;
         if(i.type == INPUT_TYPE_NONE) return;
-        draw_player_input_icon(game.sys_assets.fnt_slim, i, true, center, size);
+        draw_player_input_icon(game.sys_content.fnt_slim, i, true, center, size);
     };
     cur_gui->add_item(right_page_input, "right_page_input");
 }
@@ -1250,7 +1250,7 @@ void pause_menu_t::draw_radar(
         12.0f, game.config.radar_background_color
     );
     draw_text(
-        "N", game.sys_assets.fnt_slim,
+        "N", game.sys_content.fnt_slim,
         point(
             north_ind_center.x,
             north_ind_center.y + 1.0f
@@ -1282,7 +1282,7 @@ void pause_menu_t::draw_radar(
         12.0f, game.config.radar_background_color
     );
     draw_text(
-        game.cur_area_data->name, game.sys_assets.fnt_standard,
+        game.cur_area_data->name, game.sys_content.fnt_standard,
         area_name_center, area_name_size, game.config.radar_highest_color
     );
     
@@ -1314,7 +1314,7 @@ void pause_menu_t::draw_radar(
     
     //Draw a rectangle all around.
     draw_textured_box(
-        center, size, game.sys_assets.bmp_frame_box,
+        center, size, game.sys_content.bmp_frame_box,
         COLOR_TRANSPARENT_WHITE
     );
 }
@@ -1692,7 +1692,7 @@ void pause_menu_t::init_confirmation_page() {
     //Cancel button.
     confirmation_gui.back_item =
         new button_gui_item(
-        "Cancel", game.sys_assets.fnt_standard
+        "Cancel", game.sys_content.fnt_standard
     );
     confirmation_gui.back_item->on_activate =
     [this] (const point &) {
@@ -1716,7 +1716,7 @@ void pause_menu_t::init_confirmation_page() {
     
     //Confirm button.
     button_gui_item* confirm_button =
-        new button_gui_item("Confirm", game.sys_assets.fnt_standard);
+        new button_gui_item("Confirm", game.sys_content.fnt_standard);
     confirm_button->on_activate =
     [this] (const point &) {
         start_leaving_gameplay();
@@ -1729,12 +1729,12 @@ void pause_menu_t::init_confirmation_page() {
     
     //Header text.
     text_gui_item* header_text =
-        new text_gui_item("Are you sure?", game.sys_assets.fnt_area_name);
+        new text_gui_item("Are you sure?", game.sys_content.fnt_area_name);
     confirmation_gui.add_item(header_text, "header");
     
     //Explanation text.
     confirmation_explanation_text =
-        new text_gui_item("", game.sys_assets.fnt_standard);
+        new text_gui_item("", game.sys_content.fnt_standard);
     confirmation_explanation_text->line_wrap = true;
     confirmation_gui.add_item(confirmation_explanation_text, "explanation");
     
@@ -1742,7 +1742,7 @@ void pause_menu_t::init_confirmation_page() {
     text_gui_item* options_reminder_text =
         new text_gui_item(
         "You can disable this confirmation question in the options menu.",
-        game.sys_assets.fnt_standard
+        game.sys_content.fnt_standard
     );
     confirmation_gui.add_item(options_reminder_text, "options_reminder");
     
@@ -1785,7 +1785,7 @@ void pause_menu_t::init_main_pause_menu() {
     //Header.
     text_gui_item* header_text =
         new text_gui_item(
-        "PAUSED", game.sys_assets.fnt_area_name,
+        "PAUSED", game.sys_content.fnt_area_name,
         COLOR_TRANSPARENT_WHITE
     );
     gui.add_item(header_text, "header");
@@ -1809,7 +1809,7 @@ void pause_menu_t::init_main_pause_menu() {
     //Area name.
     text_gui_item* area_name_text =
         new text_gui_item(
-        game.cur_area_data->name, game.sys_assets.fnt_area_name,
+        game.cur_area_data->name, game.sys_content.fnt_area_name,
         change_alpha(COLOR_GOLD, 192)
     );
     gui.add_item(area_name_text, "area_name");
@@ -1821,14 +1821,14 @@ void pause_menu_t::init_main_pause_menu() {
             game.cur_area_data->subtitle, game.cur_area_data->type,
             game.cur_area_data->mission.goal
         ),
-        game.sys_assets.fnt_area_name,
+        game.sys_content.fnt_area_name,
         change_alpha(COLOR_WHITE, 192)
     );
     gui.add_item(area_subtitle_text, "area_subtitle");
     
     //Continue button.
     gui.back_item =
-        new button_gui_item("Continue", game.sys_assets.fnt_standard);
+        new button_gui_item("Continue", game.sys_content.fnt_standard);
     gui.back_item->on_activate =
     [this] (const point &) {
         start_closing(&gui);
@@ -1846,7 +1846,7 @@ void pause_menu_t::init_main_pause_menu() {
         game.cur_area_data->type == AREA_TYPE_SIMPLE ?
         "Restart exploration" :
         "Retry mission",
-        game.sys_assets.fnt_standard
+        game.sys_content.fnt_standard
     );
     retry_button->on_activate =
     [this] (const point &) {
@@ -1868,7 +1868,7 @@ void pause_menu_t::init_main_pause_menu() {
         game.cur_area_data->type == AREA_TYPE_SIMPLE ?
         "End exploration" :
         "End mission",
-        game.sys_assets.fnt_standard
+        game.sys_content.fnt_standard
     );
     end_button->on_activate =
     [this] (const point &) {
@@ -1893,7 +1893,7 @@ void pause_menu_t::init_main_pause_menu() {
     
     //Help button.
     button_gui_item* help_button =
-        new button_gui_item("Help", game.sys_assets.fnt_standard);
+        new button_gui_item("Help", game.sys_content.fnt_standard);
     help_button->on_activate =
     [this] (const point &) {
         gui.responsive = false;
@@ -1930,7 +1930,7 @@ void pause_menu_t::init_main_pause_menu() {
         game.states.area_ed->quick_play_area_path.empty() ?
         "Quit" :
         "Back to editor",
-        game.sys_assets.fnt_standard
+        game.sys_content.fnt_standard
     );
     quit_button->on_activate =
     [this] (const point &) {
@@ -1991,7 +1991,7 @@ void pause_menu_t::init_mission_page() {
     //Header.
     text_gui_item* header_text =
         new text_gui_item(
-        "MISSION", game.sys_assets.fnt_area_name,
+        "MISSION", game.sys_content.fnt_area_name,
         COLOR_TRANSPARENT_WHITE
     );
     mission_gui.add_item(header_text, "header");
@@ -2014,7 +2014,7 @@ void pause_menu_t::init_mission_page() {
     
     //Continue button.
     mission_gui.back_item =
-        new button_gui_item("Continue", game.sys_assets.fnt_standard);
+        new button_gui_item("Continue", game.sys_content.fnt_standard);
     mission_gui.back_item->on_activate =
     [this] (const point &) {
         start_closing(&mission_gui);
@@ -2031,13 +2031,13 @@ void pause_menu_t::init_mission_page() {
         player_input i =
             game.controls.find_bind(PLAYER_ACTION_TYPE_MENU_BACK).input;
         if(i.type == INPUT_TYPE_NONE) return;
-        draw_player_input_icon(game.sys_assets.fnt_slim, i, true, center, size);
+        draw_player_input_icon(game.sys_content.fnt_slim, i, true, center, size);
     };
     mission_gui.add_item(continue_input, "continue_input");
     
     //Goal header text.
     text_gui_item* goal_header_text =
-        new text_gui_item("Goal", game.sys_assets.fnt_area_name);
+        new text_gui_item("Goal", game.sys_content.fnt_area_name);
     mission_gui.add_item(goal_header_text, "goal_header");
     
     //Goal explanation text.
@@ -2045,7 +2045,7 @@ void pause_menu_t::init_mission_page() {
         new text_gui_item(
         game.mission_goals[game.cur_area_data->mission.goal]->
         get_player_description(&game.cur_area_data->mission),
-        game.sys_assets.fnt_standard,
+        game.sys_content.fnt_standard,
         al_map_rgb(255, 255, 200)
     );
     mission_gui.add_item(goal_text, "goal");
@@ -2054,13 +2054,13 @@ void pause_menu_t::init_mission_page() {
     text_gui_item* goal_status_text =
         new text_gui_item(
         get_mission_goal_status(),
-        game.sys_assets.fnt_standard
+        game.sys_content.fnt_standard
     );
     mission_gui.add_item(goal_status_text, "goal_status");
     
     //Fail conditions header text.
     text_gui_item* fail_header_text =
-        new text_gui_item("Fail conditions", game.sys_assets.fnt_area_name);
+        new text_gui_item("Fail conditions", game.sys_content.fnt_area_name);
     mission_gui.add_item(fail_header_text, "fail_header");
     
     //Fail condition explanation list.
@@ -2075,7 +2075,7 @@ void pause_menu_t::init_mission_page() {
     
     //Grading header text.
     text_gui_item* grading_header_text =
-        new text_gui_item("Grading", game.sys_assets.fnt_area_name);
+        new text_gui_item("Grading", game.sys_content.fnt_area_name);
     mission_gui.add_item(grading_header_text, "grading_header");
     
     //Grading explanation list.
@@ -2155,7 +2155,7 @@ void pause_menu_t::init_radar_page() {
     //Header.
     text_gui_item* header_text =
         new text_gui_item(
-        "RADAR", game.sys_assets.fnt_area_name,
+        "RADAR", game.sys_content.fnt_area_name,
         COLOR_TRANSPARENT_WHITE
     );
     radar_gui.add_item(header_text, "header");
@@ -2178,7 +2178,7 @@ void pause_menu_t::init_radar_page() {
     
     //Continue button.
     radar_gui.back_item =
-        new button_gui_item("Continue", game.sys_assets.fnt_standard);
+        new button_gui_item("Continue", game.sys_content.fnt_standard);
     radar_gui.back_item->on_activate =
     [this] (const point &) {
         start_closing(&radar_gui);
@@ -2195,7 +2195,7 @@ void pause_menu_t::init_radar_page() {
         player_input i =
             game.controls.find_bind(PLAYER_ACTION_TYPE_MENU_BACK).input;
         if(i.type == INPUT_TYPE_NONE) return;
-        draw_player_input_icon(game.sys_assets.fnt_slim, i, true, center, size);
+        draw_player_input_icon(game.sys_content.fnt_slim, i, true, center, size);
     };
     radar_gui.add_item(continue_input, "continue_input");
     
@@ -2210,7 +2210,7 @@ void pause_menu_t::init_radar_page() {
     //Group Pikmin label text.
     text_gui_item* group_pik_label_text =
         new text_gui_item(
-        "Group Pikmin:", game.sys_assets.fnt_standard,
+        "Group Pikmin:", game.sys_content.fnt_standard,
         COLOR_WHITE, ALLEGRO_ALIGN_LEFT
     );
     radar_gui.add_item(group_pik_label_text, "group_pikmin_label");
@@ -2219,7 +2219,7 @@ void pause_menu_t::init_radar_page() {
     text_gui_item* group_pik_nr_text =
         new text_gui_item(
         i2s(game.states.gameplay->get_amount_of_group_pikmin()),
-        game.sys_assets.fnt_counter,
+        game.sys_content.fnt_counter,
         COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
     );
     radar_gui.add_item(group_pik_nr_text, "group_pikmin_number");
@@ -2227,7 +2227,7 @@ void pause_menu_t::init_radar_page() {
     //Idle Pikmin label text.
     text_gui_item* idle_pik_label_text =
         new text_gui_item(
-        "Idle Pikmin:", game.sys_assets.fnt_standard,
+        "Idle Pikmin:", game.sys_content.fnt_standard,
         COLOR_WHITE, ALLEGRO_ALIGN_LEFT
     );
     radar_gui.add_item(idle_pik_label_text, "idle_pikmin_label");
@@ -2236,7 +2236,7 @@ void pause_menu_t::init_radar_page() {
     text_gui_item* idle_pik_nr_text =
         new text_gui_item(
         i2s(game.states.gameplay->get_amount_of_idle_pikmin()),
-        game.sys_assets.fnt_counter,
+        game.sys_content.fnt_counter,
         COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
     );
     radar_gui.add_item(idle_pik_nr_text, "idle_pikmin_number");
@@ -2244,7 +2244,7 @@ void pause_menu_t::init_radar_page() {
     //Field Pikmin label text.
     text_gui_item* field_pik_label_text =
         new text_gui_item(
-        "Field Pikmin:", game.sys_assets.fnt_standard,
+        "Field Pikmin:", game.sys_content.fnt_standard,
         COLOR_WHITE, ALLEGRO_ALIGN_LEFT
     );
     radar_gui.add_item(field_pik_label_text, "field_pikmin_label");
@@ -2253,13 +2253,13 @@ void pause_menu_t::init_radar_page() {
     text_gui_item* field_pik_nr_text =
         new text_gui_item(
         i2s(game.states.gameplay->get_amount_of_field_pikmin()),
-        game.sys_assets.fnt_counter, COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
+        game.sys_content.fnt_counter, COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
     );
     radar_gui.add_item(field_pik_nr_text, "field_pikmin_number");
     
     //Cursor info text.
     text_gui_item* cursor_info_text =
-        new text_gui_item("", game.sys_assets.fnt_standard);
+        new text_gui_item("", game.sys_content.fnt_standard);
     cursor_info_text->line_wrap = true;
     cursor_info_text->on_draw =
     [this, cursor_info_text] (const point & center, const point & size) {
@@ -2269,7 +2269,7 @@ void pause_menu_t::init_radar_page() {
         int line_height = al_get_font_line_height(cursor_info_text->font);
         vector<string_token> tokens = tokenize_string(cursor_info_text->text);
         set_string_token_widths(
-            tokens, game.sys_assets.fnt_standard, game.sys_assets.fnt_slim, line_height, false
+            tokens, game.sys_content.fnt_standard, game.sys_content.fnt_slim, line_height, false
         );
         vector<vector<string_token> > tokens_per_line =
             split_long_string_with_tokens(tokens, size.x);
@@ -2277,7 +2277,7 @@ void pause_menu_t::init_radar_page() {
         
         for(size_t l = 0; l < tokens_per_line.size(); l++) {
             draw_string_tokens(
-                tokens_per_line[l], game.sys_assets.fnt_standard, game.sys_assets.fnt_slim,
+                tokens_per_line[l], game.sys_content.fnt_standard, game.sys_content.fnt_slim,
                 false,
                 point(
                     center.x,
@@ -2290,7 +2290,7 @@ void pause_menu_t::init_radar_page() {
         
         //Draw a box around it.
         draw_textured_box(
-            center, size, game.sys_assets.bmp_frame_box,
+            center, size, game.sys_content.bmp_frame_box,
             COLOR_TRANSPARENT_WHITE
         );
         
@@ -2372,7 +2372,7 @@ void pause_menu_t::init_radar_page() {
         "\\k menu_radar_right \\k Pan   "
         "\\k menu_radar_zoom_in \\k"
         "\\k menu_radar_zoom_out \\k Zoom",
-        game.sys_assets.fnt_slim,
+        game.sys_content.fnt_slim,
         COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_RIGHT
     );
     instructions_text->line_wrap = true;
@@ -2416,7 +2416,7 @@ void pause_menu_t::init_status_page() {
     //Header.
     text_gui_item* header_text =
         new text_gui_item(
-        "STATUS", game.sys_assets.fnt_area_name,
+        "STATUS", game.sys_content.fnt_area_name,
         COLOR_TRANSPARENT_WHITE
     );
     status_gui.add_item(header_text, "header");
@@ -2439,7 +2439,7 @@ void pause_menu_t::init_status_page() {
     
     //Continue button.
     status_gui.back_item =
-        new button_gui_item("Continue", game.sys_assets.fnt_standard);
+        new button_gui_item("Continue", game.sys_content.fnt_standard);
     status_gui.back_item->on_activate =
     [this] (const point &) {
         start_closing(&status_gui);
@@ -2456,7 +2456,7 @@ void pause_menu_t::init_status_page() {
         player_input i =
             game.controls.find_bind(PLAYER_ACTION_TYPE_MENU_BACK).input;
         if(i.type == INPUT_TYPE_NONE) return;
-        draw_player_input_icon(game.sys_assets.fnt_slim, i, true, center, size);
+        draw_player_input_icon(game.sys_content.fnt_slim, i, true, center, size);
     };
     status_gui.add_item(continue_input, "continue_input");
     

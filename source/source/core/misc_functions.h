@@ -267,7 +267,7 @@ bool adjust_keyframe_interpolator_values(
  */
 template <typename ...args_t>
 void mono_text(args_t && ...args) {
-    ImGui::PushFont(game.sys_assets.fnt_imgui_monospace);
+    ImGui::PushFont(game.sys_content.fnt_imgui_monospace);
     ImGui::Text(std::forward<args_t>(args)...);
     ImGui::PopFont();
 }

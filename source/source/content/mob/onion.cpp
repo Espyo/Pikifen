@@ -165,7 +165,7 @@ void onion::generate() {
             
             particle_generator pg =
                 standard_particle_gen_setup(
-                    game.asset_file_names.part_onion_gen_inside, this
+                    game.sys_content_names.part_onion_gen_inside, this
                 );
             pg.base_particle.priority = PARTICLE_PRIORITY_LOW;
             particle_generators.push_back(pg);

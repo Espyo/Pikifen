@@ -98,7 +98,7 @@ void results_state::add_stat(
         
     bullet_gui_item* label_bullet =
         new bullet_gui_item(
-        label, game.sys_assets.fnt_standard, color
+        label, game.sys_content.fnt_standard, color
     );
     label_bullet->center =
         point(0.50f, stat_center_y);
@@ -109,7 +109,7 @@ void results_state::add_stat(
     
     text_gui_item* value_text =
         new text_gui_item(
-        value, game.sys_assets.fnt_counter, color, ALLEGRO_ALIGN_RIGHT
+        value, game.sys_content.fnt_counter, color, ALLEGRO_ALIGN_RIGHT
     );
     value_text->center =
         point(0.75f, stat_center_y);
@@ -143,8 +143,8 @@ void results_state::do_drawing() {
     //Background.
     al_clear_to_color(al_map_rgb(143, 149, 62));
     
-    float logo_width = al_get_bitmap_width(game.sys_assets.bmp_icon);
-    float logo_height = al_get_bitmap_height(game.sys_assets.bmp_icon);
+    float logo_width = al_get_bitmap_width(game.sys_content.bmp_icon);
+    float logo_height = al_get_bitmap_height(game.sys_content.bmp_icon);
     logo_height = game.win_w * 0.08f * (logo_width / logo_height);
     logo_width = game.win_w * 0.08f;
     draw_background_logos(
@@ -367,7 +367,7 @@ void results_state::load() {
     //Area name text.
     text_gui_item* area_name_text =
         new text_gui_item(
-        game.cur_area_data->name, game.sys_assets.fnt_area_name, COLOR_GOLD
+        game.cur_area_data->name, game.sys_content.fnt_area_name, COLOR_GOLD
     );
     gui.add_item(area_name_text, "area_name");
     text_to_animate.push_back(area_name_text);
@@ -381,7 +381,7 @@ void results_state::load() {
         );
     if(!subtitle.empty()) {
         text_gui_item* area_subtitle_text =
-            new text_gui_item(subtitle, game.sys_assets.fnt_area_name);
+            new text_gui_item(subtitle, game.sys_content.fnt_area_name);
         gui.add_item(area_subtitle_text, "area_subtitle");
         text_to_animate.push_back(area_subtitle_text);
     }
@@ -393,8 +393,8 @@ void results_state::load() {
         [goal_was_cleared] (const point & center, const point & size) {
             draw_bitmap_in_box(
                 goal_was_cleared ?
-                game.sys_assets.bmp_mission_clear :
-                game.sys_assets.bmp_mission_fail,
+                game.sys_content.bmp_mission_clear :
+                game.sys_content.bmp_mission_fail,
                 center,
                 size,
                 true
@@ -420,7 +420,7 @@ void results_state::load() {
         if(!end_reason.empty()) {
             text_gui_item* end_reason_text =
                 new text_gui_item(
-                end_reason, game.sys_assets.fnt_standard,
+                end_reason, game.sys_content.fnt_standard,
                 goal_was_cleared ?
                 al_map_rgba(112, 200, 100, 192) :
                 al_map_rgba(242, 160, 160, 192)
@@ -495,19 +495,19 @@ void results_state::load() {
             ALLEGRO_BITMAP* bmp = nullptr;
             switch(medal) {
             case MISSION_MEDAL_NONE: {
-                bmp = game.sys_assets.bmp_medal_none;
+                bmp = game.sys_content.bmp_medal_none;
                 break;
             } case MISSION_MEDAL_BRONZE: {
-                bmp = game.sys_assets.bmp_medal_bronze;
+                bmp = game.sys_content.bmp_medal_bronze;
                 break;
             } case MISSION_MEDAL_SILVER: {
-                bmp = game.sys_assets.bmp_medal_silver;
+                bmp = game.sys_content.bmp_medal_silver;
                 break;
             } case MISSION_MEDAL_GOLD: {
-                bmp = game.sys_assets.bmp_medal_gold;
+                bmp = game.sys_content.bmp_medal_gold;
                 break;
             } case MISSION_MEDAL_PLATINUM: {
-                bmp = game.sys_assets.bmp_medal_platinum;
+                bmp = game.sys_content.bmp_medal_platinum;
                 break;
             }
             }
@@ -518,7 +518,7 @@ void results_state::load() {
         //Medal reason.
         text_gui_item* medal_reason_text =
             new text_gui_item(
-            medal_reason, game.sys_assets.fnt_standard, medal_reason_color
+            medal_reason, game.sys_content.fnt_standard, medal_reason_color
         );
         gui.add_item(medal_reason_text, "medal_reason");
     }
@@ -527,7 +527,7 @@ void results_state::load() {
     string conclusion_label = "Conclusion:";
     text_gui_item* conclusion_label_text =
         new text_gui_item(
-        conclusion_label, game.sys_assets.fnt_standard,
+        conclusion_label, game.sys_content.fnt_standard,
         al_map_rgba(255, 255, 255, 192)
     );
     gui.add_item(conclusion_label_text, "conclusion_label");
@@ -585,13 +585,13 @@ void results_state::load() {
     }
     }
     text_gui_item* conclusion_text =
-        new text_gui_item(conclusion, game.sys_assets.fnt_standard);
+        new text_gui_item(conclusion, game.sys_content.fnt_standard);
     gui.add_item(conclusion_text, "conclusion");
     
     //Stats label text.
     text_gui_item* stats_label_text =
         new text_gui_item(
-        "Stats:", game.sys_assets.fnt_standard, al_map_rgba(255, 255, 255, 192)
+        "Stats:", game.sys_content.fnt_standard, al_map_rgba(255, 255, 255, 192)
     );
     gui.add_item(stats_label_text, "stats_label");
     
@@ -603,7 +603,7 @@ void results_state::load() {
             center, size, 8.0f, al_map_rgba(0, 0, 0, 40)
         );
         draw_textured_box(
-            center, size, game.sys_assets.bmp_frame_box,
+            center, size, game.sys_content.bmp_frame_box,
             COLOR_TRANSPARENT_WHITE
         );
     };
@@ -734,7 +734,7 @@ void results_state::load() {
     
     //Retry button.
     button_gui_item* retry_button =
-        new button_gui_item("Retry", game.sys_assets.fnt_standard);
+        new button_gui_item("Retry", game.sys_content.fnt_standard);
     retry_button->on_activate =
     [this] (const point &) {
         retry_area();
@@ -749,7 +749,7 @@ void results_state::load() {
         MISSION_FAIL_COND_TIME_LIMIT
     ) {
         button_gui_item* continue_button =
-            new button_gui_item("Keep playing", game.sys_assets.fnt_standard);
+            new button_gui_item("Keep playing", game.sys_content.fnt_standard);
         continue_button->on_activate =
         [this] (const point &) {
             continue_playing();
@@ -769,7 +769,7 @@ void results_state::load() {
         game.states.area_ed->quick_play_area_path.empty() ?
         "Pick an area" :
         "Back to editor",
-        game.sys_assets.fnt_standard
+        game.sys_content.fnt_standard
     );
     gui.back_item->on_activate =
     [this] (const point &) {

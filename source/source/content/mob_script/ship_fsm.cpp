@@ -136,7 +136,7 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
     shi_ptr->mobs_being_beamed--;
     particle_generator pg =
         standard_particle_gen_setup(
-            game.asset_file_names.part_onion_insertion, shi_ptr
+            game.sys_content_names.part_onion_insertion, shi_ptr
         );
     pg.follow_pos_offset = shi_ptr->shi_type->receptacle_offset;
     pg.follow_z_offset -= 2.0f; //Must appear below the ship's receptacle.

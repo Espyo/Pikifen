@@ -1121,7 +1121,7 @@ void area_editor::draw_canvas() {
                     al_map_rgb(240, 224, 160)
                 );
                 draw_text(
-                    letter, game.sys_assets.fnt_builtin,
+                    letter, game.sys_content.fnt_builtin,
                     path_preview_checkpoints[c],
                     point(
                         AREA_EDITOR::PATH_PREVIEW_CHECKPOINT_RADIUS * 1.8f /
@@ -1226,7 +1226,7 @@ void area_editor::draw_canvas() {
                 al_map_rgb(255, 255, 32)
             );
             draw_text(
-                letter, game.sys_assets.fnt_builtin,
+                letter, game.sys_content.fnt_builtin,
                 cross_section_checkpoints[p],
                 point(
                     AREA_EDITOR::CROSS_SECTION_POINT_RADIUS * 1.8f /
@@ -1660,14 +1660,14 @@ void area_editor::draw_canvas() {
                     cross_section_window_end.y - 8 -
                     ((central_sector->z - lowest_z) * proportion);
                 al_draw_tinted_scaled_bitmap(
-                    game.sys_assets.bmp_leader_silhouette_side,
+                    game.sys_content.bmp_leader_silhouette_side,
                     COLOR_TRANSPARENT_WHITE,
                     0, 0,
                     al_get_bitmap_width(
-                        game.sys_assets.bmp_leader_silhouette_side
+                        game.sys_content.bmp_leader_silhouette_side
                     ),
                     al_get_bitmap_height(
-                        game.sys_assets.bmp_leader_silhouette_side
+                        game.sys_content.bmp_leader_silhouette_side
                     ),
                     leader_silhouette_pivot_x - leader_silhouette_w / 2.0,
                     leader_silhouette_pivot_y - leader_silhouette_h,
@@ -1693,7 +1693,7 @@ void area_editor::draw_canvas() {
                     );
                     
                     draw_text(
-                        i2s(z), game.sys_assets.fnt_builtin,
+                        i2s(z), game.sys_content.fnt_builtin,
                         point(
                             (cross_section_z_window_start.x + 8),
                             line_y
@@ -1708,7 +1708,7 @@ void area_editor::draw_canvas() {
         
             draw_text(
                 "Please cross some edges.",
-                game.sys_assets.fnt_builtin,
+                game.sys_content.fnt_builtin,
                 point(
                     (
                         cross_section_window_start.x +
@@ -1836,7 +1836,7 @@ void area_editor::draw_debug_text(
     int dw = 0;
     int dh = 0;
     al_get_text_dimensions(
-        game.sys_assets.fnt_builtin, text.c_str(),
+        game.sys_content.fnt_builtin, text.c_str(),
         &dox, &doy, &dw, &dh
     );
     
@@ -1850,7 +1850,7 @@ void area_editor::draw_debug_text(
     );
     
     draw_text(
-        text, game.sys_assets.fnt_builtin, where,
+        text, game.sys_content.fnt_builtin, where,
         point(bbox_w, bbox_h) * 0.80f, color
     );
     

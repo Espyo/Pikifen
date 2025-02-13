@@ -585,19 +585,19 @@ void init_dear_imgui() {
     };
 
     add_font(
-        &game.sys_assets.fnt_imgui_header,
-        game.asset_file_names.fnt_editor_header, 22
+        &game.sys_content.fnt_imgui_header,
+        game.sys_content_names.fnt_editor_header, 22
     );
     add_font(
-        &game.sys_assets.fnt_imgui_monospace,
-        game.asset_file_names.fnt_editor_monospace, 18
+        &game.sys_content.fnt_imgui_monospace,
+        game.sys_content_names.fnt_editor_monospace, 18
     );
     add_font(
-        &game.sys_assets.fnt_imgui_standard,
-        game.asset_file_names.fnt_editor_standard, 18
+        &game.sys_content.fnt_imgui_standard,
+        game.sys_content_names.fnt_editor_standard, 18
     );
         
-    io.FontDefault = game.sys_assets.fnt_imgui_standard;
+    io.FontDefault = game.sys_content.fnt_imgui_standard;
     
     //Other stuff.
     init_dear_imgui_colors();

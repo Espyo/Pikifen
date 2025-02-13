@@ -209,7 +209,7 @@ void converter_fsm::handle_pikmin(mob* m, void* info1, void* info2) {
     
     particle_generator pg =
         standard_particle_gen_setup(
-            game.asset_file_names.part_converter_insertion, m
+            game.sys_content_names.part_converter_insertion, m
         );
     m->particle_generators.push_back(pg);
 }

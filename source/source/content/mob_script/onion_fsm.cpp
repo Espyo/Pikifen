@@ -159,7 +159,7 @@ void onion_fsm::receive_mob(mob* m, void* info1, void* info2) {
     
     particle_generator pg =
         standard_particle_gen_setup(
-            game.asset_file_names.part_onion_insertion, oni_ptr
+            game.sys_content_names.part_onion_insertion, oni_ptr
         );
     pg.follow_z_offset -= 2.0f; //Must appear below the Onion's bulb.
     oni_ptr->particle_generators.push_back(pg);

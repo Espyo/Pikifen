@@ -144,262 +144,6 @@ enum STRING_TOKEN {
 
 
 /**
- * @brief List of file names of system assets.
- */
-struct asset_file_names_t {
-
-    //--- Members ---
-    
-    //Graphics.
-    
-    //Bright circle.
-    string bmp_bright_circle = "bright_circle";
-    
-    //Bright ring.
-    string bmp_bright_ring = "bright_ring";
-    
-    //Bubble box.
-    string bmp_bubble_box = "bubble_box";
-    
-    //9-slice texture for player input buttons.
-    string bmp_button_box = "button_box";
-    
-    //Checkbox with a checkmark.
-    string bmp_checkbox_check = "checkbox_check";
-    
-    //Checkbox without a checkmark.
-    string bmp_checkbox_no_check = "checkbox_no_check";
-    
-    //Leader cursor.
-    string bmp_cursor = "cursor";
-    
-    //Discord icon.
-    string bmp_discord_icon = "discord_icon";
-    
-    //Editor icons.
-    string bmp_editor_icons = "editor_icons";
-    
-    //Enemy spirit.
-    string bmp_enemy_spirit = "enemy_spirit";
-    
-    //GUI focus box.
-    string bmp_focus_box = "focus_box";
-    
-    //9-slice texture for GUI frames.
-    string bmp_frame_box = "frame_box";
-    
-    //GitHub icon.
-    string bmp_github_icon = "github_icon";
-    
-    //A hard bubble.
-    string bmp_hard_bubble = "hud/hard_bubble";
-    
-    //Pikifen icon.
-    string bmp_icon = "icon";
-    
-    //Idle glow.
-    string bmp_idle_glow = "idle_glow";
-    
-    //9-slice texture for player input keys.
-    string bmp_key_box = "key_box";
-    
-    //Leader silhouette from the side.
-    string bmp_leader_silhouette_side = "leader_silhouette_side";
-    
-    //Leader silhouette from the top.
-    string bmp_leader_silhouette_top = "leader_silhouette_top";
-    
-    //Main menu background.
-    string bmp_main_menu = "main_menu";
-    
-    //Bronze medal.
-    string bmp_medal_bronze = "medal_bronze";
-    
-    //Gold medal.
-    string bmp_medal_gold = "medal_gold";
-    
-    //No medal.
-    string bmp_medal_none = "medal_none";
-    
-    //Platinum medal.
-    string bmp_medal_platinum = "medal_platinum";
-    
-    //Silver medal.
-    string bmp_medal_silver = "medal_silver";
-    
-    //Icons for menu buttons.
-    string bmp_menu_icons = "menu_icons";
-    
-    //Mission clear stamp.
-    string bmp_mission_clear = "mission_clear";
-    
-    //Mission fail stamp.
-    string bmp_mission_fail = "mission_fail";
-    
-    //"More..." icon.
-    string bmp_more = "more";
-    
-    //Mouse cursor.
-    string bmp_mouse_cursor = "mouse_cursor";
-    
-    //Notification.
-    string bmp_notification = "notification";
-    
-    //Pikmin spirit.
-    string bmp_pikmin_spirit = "pikmin_spirit";
-    
-    //Misc. specific player input icons.
-    string bmp_player_input_icons = "player_input_icons";
-    
-    //Randomness symbol.
-    string bmp_random = "random";
-    
-    //A rock.
-    string bmp_rock = "rock";
-    
-    //Mob shadow.
-    string bmp_shadow = "shadow";
-    
-    //Rectangular mob shadow.
-    string bmp_shadow_square = "shadow_square";
-    
-    //Smack effect.
-    string bmp_smack = "smack";
-    
-    //Smoke.
-    string bmp_smoke = "smoke";
-    
-    //Sparkle effect.
-    string bmp_sparkle = "sparkle";
-    
-    //Spotlight for blackout.
-    string bmp_spotlight = "spotlight";
-    
-    //Swarm arrow.
-    string bmp_swarm_arrow = "swarm_arrow";
-    
-    //Invalid throw marker.
-    string bmp_throw_invalid = "throw_invalid";
-    
-    //Throw preview texture.
-    string bmp_throw_preview = "throw_preview";
-    
-    //Dashed throw preview texture.
-    string bmp_throw_preview_dashed = "throw_preview_dashed";
-    
-    //Wave ring.
-    string bmp_wave_ring = "wave_ring";
-    
-    //Fonts.
-    
-    //Font for area names.
-    string fnt_area_name = "area_name_font";
-    
-    //Font for HUD counters.
-    string fnt_counter = "counter_font";
-    
-    //Font displayed next to the cursor.
-    string fnt_cursor_counter = "cursor_counter_font";
-    
-    //TTF Dear ImGui header font for editors.
-    string fnt_editor_header = "editor_header_font";
-    
-    //TTF Dear ImGui monospace font for editors.
-    string fnt_editor_monospace = "editor_monospace_font";
-    
-    //TTF Dear Imgui standard font for editors.
-    string fnt_editor_standard = "editor_standard_font";
-    
-    //Font for slim text.
-    string fnt_slim = "slim_font";
-    
-    //Font for standard text.
-    string fnt_standard = "font";
-    
-    //Font for the carrying / money values.
-    string fnt_value = "value_font";
-    
-    //Sound effects.
-    
-    //Attack.
-    string sound_attack = "attack";
-    
-    //Camera zoom level.
-    string sound_camera = "camera";
-    
-    //Menu item activation.
-    string sound_menu_activate = "menu_activate";
-    
-    //Menu item back.
-    string sound_menu_back = "menu_back";
-    
-    //Menu item selection.
-    string sound_menu_select = "menu_select";
-    
-    //Switching standby Pikmin type.
-    string sound_switch_pikmin = "switch_pikmin";
-    
-    //Global animations.
-    
-    //Leader damage spark.
-    string anim_sparks = "sparks";
-    
-    //Particle generators.
-    
-    //Pikmin inserted in converter.
-    string part_converter_insertion = "converter_insertion";
-    
-    //Useless attack ding.
-    string part_ding = "ding";
-    
-    //Enemy death sparkles.
-    string part_enemy_death = "enemy_death";
-    
-    //Leader being healed at a ship.
-    string part_leader_heal = "leader_heal";
-    
-    //Onion generating inside.
-    string part_onion_gen_inside = "onion_generating_inside";
-    
-    //Onion object insertion.
-    string part_onion_insertion = "onion_insertion";
-    
-    //Dirt that comes out of the floor when a Pikmin gets plucked.
-    string part_pikmin_pluck_dirt = "pikmin_pluck_dirt";
-    
-    //Dirt that comes out of the floor when a Pikmin seed lands.
-    string part_pikmin_seed_landed = "pikmin_seed_landed";
-    
-    //Successful attack smack.
-    string part_smack = "smack";
-    
-    //Leader spray.
-    string part_spray = "spray";
-    
-    //Pikmin sprout maturity evolution.
-    string part_sprout_evolution = "sprout_evolution";
-    
-    //Pikmin sprout maturity regression.
-    string part_sprout_regression = "sprout_regression";
-    
-    //Throw trail.
-    string part_throw_trail = "throw_trail";
-    
-    //Sparkles on top of treasures.
-    string part_treasure = "treasure";
-    
-    //Wave ring as a ripple around mobs on water.
-    string part_wave_ring = "wave_ring";
-    
-    
-    //--- Function declarations ---
-    
-    void load(data_node* file);
-    
-};
-
-
-/**
  * @brief Info about the game camera. Where it is, where it wants
  * to go, etc.
  */
@@ -713,9 +457,9 @@ struct script_var_reader {
 
 
 /**
- * @brief List of loaded system assets.
+ * @brief List of content that is needed system-wide.
  */
-struct system_asset_list {
+struct sys_content_list_t {
 
     //--- Members ---
     
@@ -911,6 +655,262 @@ struct system_asset_list {
     
     //Leader damage spark.
     animation_instance anim_sparks;
+    
+};
+
+
+/**
+ * @brief List of internal names of content that is needed by the system.
+ */
+struct sys_content_names_t {
+
+    //--- Members ---
+    
+    //Graphics.
+    
+    //Bright circle.
+    string bmp_bright_circle = "bright_circle";
+    
+    //Bright ring.
+    string bmp_bright_ring = "bright_ring";
+    
+    //Bubble box.
+    string bmp_bubble_box = "bubble_box";
+    
+    //9-slice texture for player input buttons.
+    string bmp_button_box = "button_box";
+    
+    //Checkbox with a checkmark.
+    string bmp_checkbox_check = "checkbox_check";
+    
+    //Checkbox without a checkmark.
+    string bmp_checkbox_no_check = "checkbox_no_check";
+    
+    //Leader cursor.
+    string bmp_cursor = "cursor";
+    
+    //Discord icon.
+    string bmp_discord_icon = "discord_icon";
+    
+    //Editor icons.
+    string bmp_editor_icons = "editor_icons";
+    
+    //Enemy spirit.
+    string bmp_enemy_spirit = "enemy_spirit";
+    
+    //GUI focus box.
+    string bmp_focus_box = "focus_box";
+    
+    //9-slice texture for GUI frames.
+    string bmp_frame_box = "frame_box";
+    
+    //GitHub icon.
+    string bmp_github_icon = "github_icon";
+    
+    //A hard bubble.
+    string bmp_hard_bubble = "hud/hard_bubble";
+    
+    //Pikifen icon.
+    string bmp_icon = "icon";
+    
+    //Idle glow.
+    string bmp_idle_glow = "idle_glow";
+    
+    //9-slice texture for player input keys.
+    string bmp_key_box = "key_box";
+    
+    //Leader silhouette from the side.
+    string bmp_leader_silhouette_side = "leader_silhouette_side";
+    
+    //Leader silhouette from the top.
+    string bmp_leader_silhouette_top = "leader_silhouette_top";
+    
+    //Main menu background.
+    string bmp_main_menu = "main_menu";
+    
+    //Bronze medal.
+    string bmp_medal_bronze = "medal_bronze";
+    
+    //Gold medal.
+    string bmp_medal_gold = "medal_gold";
+    
+    //No medal.
+    string bmp_medal_none = "medal_none";
+    
+    //Platinum medal.
+    string bmp_medal_platinum = "medal_platinum";
+    
+    //Silver medal.
+    string bmp_medal_silver = "medal_silver";
+    
+    //Icons for menu buttons.
+    string bmp_menu_icons = "menu_icons";
+    
+    //Mission clear stamp.
+    string bmp_mission_clear = "mission_clear";
+    
+    //Mission fail stamp.
+    string bmp_mission_fail = "mission_fail";
+    
+    //"More..." icon.
+    string bmp_more = "more";
+    
+    //Mouse cursor.
+    string bmp_mouse_cursor = "mouse_cursor";
+    
+    //Notification.
+    string bmp_notification = "notification";
+    
+    //Pikmin spirit.
+    string bmp_pikmin_spirit = "pikmin_spirit";
+    
+    //Misc. specific player input icons.
+    string bmp_player_input_icons = "player_input_icons";
+    
+    //Randomness symbol.
+    string bmp_random = "random";
+    
+    //A rock.
+    string bmp_rock = "rock";
+    
+    //Mob shadow.
+    string bmp_shadow = "shadow";
+    
+    //Rectangular mob shadow.
+    string bmp_shadow_square = "shadow_square";
+    
+    //Smack effect.
+    string bmp_smack = "smack";
+    
+    //Smoke.
+    string bmp_smoke = "smoke";
+    
+    //Sparkle effect.
+    string bmp_sparkle = "sparkle";
+    
+    //Spotlight for blackout.
+    string bmp_spotlight = "spotlight";
+    
+    //Swarm arrow.
+    string bmp_swarm_arrow = "swarm_arrow";
+    
+    //Invalid throw marker.
+    string bmp_throw_invalid = "throw_invalid";
+    
+    //Throw preview texture.
+    string bmp_throw_preview = "throw_preview";
+    
+    //Dashed throw preview texture.
+    string bmp_throw_preview_dashed = "throw_preview_dashed";
+    
+    //Wave ring.
+    string bmp_wave_ring = "wave_ring";
+    
+    //Fonts.
+    
+    //Font for area names.
+    string fnt_area_name = "area_name_font";
+    
+    //Font for HUD counters.
+    string fnt_counter = "counter_font";
+    
+    //Font displayed next to the cursor.
+    string fnt_cursor_counter = "cursor_counter_font";
+    
+    //TTF Dear ImGui header font for editors.
+    string fnt_editor_header = "editor_header_font";
+    
+    //TTF Dear ImGui monospace font for editors.
+    string fnt_editor_monospace = "editor_monospace_font";
+    
+    //TTF Dear Imgui standard font for editors.
+    string fnt_editor_standard = "editor_standard_font";
+    
+    //Font for slim text.
+    string fnt_slim = "slim_font";
+    
+    //Font for standard text.
+    string fnt_standard = "font";
+    
+    //Font for the carrying / money values.
+    string fnt_value = "value_font";
+    
+    //Sound effects.
+    
+    //Attack.
+    string sound_attack = "attack";
+    
+    //Camera zoom level.
+    string sound_camera = "camera";
+    
+    //Menu item activation.
+    string sound_menu_activate = "menu_activate";
+    
+    //Menu item back.
+    string sound_menu_back = "menu_back";
+    
+    //Menu item selection.
+    string sound_menu_select = "menu_select";
+    
+    //Switching standby Pikmin type.
+    string sound_switch_pikmin = "switch_pikmin";
+    
+    //Global animations.
+    
+    //Leader damage spark.
+    string anim_sparks = "sparks";
+    
+    //Particle generators.
+    
+    //Pikmin inserted in converter.
+    string part_converter_insertion = "converter_insertion";
+    
+    //Useless attack ding.
+    string part_ding = "ding";
+    
+    //Enemy death sparkles.
+    string part_enemy_death = "enemy_death";
+    
+    //Leader being healed at a ship.
+    string part_leader_heal = "leader_heal";
+    
+    //Onion generating inside.
+    string part_onion_gen_inside = "onion_generating_inside";
+    
+    //Onion object insertion.
+    string part_onion_insertion = "onion_insertion";
+    
+    //Dirt that comes out of the floor when a Pikmin gets plucked.
+    string part_pikmin_pluck_dirt = "pikmin_pluck_dirt";
+    
+    //Dirt that comes out of the floor when a Pikmin seed lands.
+    string part_pikmin_seed_landed = "pikmin_seed_landed";
+    
+    //Successful attack smack.
+    string part_smack = "smack";
+    
+    //Leader spray.
+    string part_spray = "spray";
+    
+    //Pikmin sprout maturity evolution.
+    string part_sprout_evolution = "sprout_evolution";
+    
+    //Pikmin sprout maturity regression.
+    string part_sprout_regression = "sprout_regression";
+    
+    //Throw trail.
+    string part_throw_trail = "throw_trail";
+    
+    //Sparkles on top of treasures.
+    string part_treasure = "treasure";
+    
+    //Wave ring as a ripple around mobs on water.
+    string part_wave_ring = "wave_ring";
+    
+    
+    //--- Function declarations ---
+    
+    void load(data_node* file);
     
 };
 

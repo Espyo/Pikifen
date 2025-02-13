@@ -300,7 +300,7 @@ void gameplay_state::draw_big_msg() {
             float y = ki_y.get(t + char_ratio * TEXT_VARIATION_DUR);
             draw_text(
                 string(1, GAMEPLAY::BIG_MSG_READY_TEXT[c]),
-                game.sys_assets.fnt_area_name,
+                game.sys_content.fnt_area_name,
                 point((game.win_w / 2.0f) + x_offset, y),
                 point(LARGE_FLOAT, game.win_h * ki_h.get(t)), COLOR_GOLD
             );
@@ -321,7 +321,7 @@ void gameplay_state::draw_big_msg() {
         
         draw_text(
             GAMEPLAY::BIG_MSG_GO_TEXT,
-            game.sys_assets.fnt_area_name,
+            game.sys_content.fnt_area_name,
             point(game.win_w / 2.0f, game.win_h / 2.0f),
             point(LARGE_FLOAT, game.win_h * ki_h.get(t)),
             change_alpha(COLOR_GOLD, 255 * ki_a.get(t))
@@ -363,7 +363,7 @@ void gameplay_state::draw_big_msg() {
             float y = ki_y.get(t + char_ratio * TEXT_VARIATION_DUR);
             
             draw_text(
-                string(1, TEXT[c]), game.sys_assets.fnt_area_name,
+                string(1, TEXT[c]), game.sys_content.fnt_area_name,
                 point((game.win_w / 2.0f) + x_offset, y),
                 point(LARGE_FLOAT, game.win_h * ki_h.get(t)),
                 change_alpha(COLOR_GOLD, 255 * alpha)
@@ -879,7 +879,7 @@ void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
                 )
             );
         draw_bitmap(
-            game.sys_assets.bmp_swarm_arrow,
+            game.sys_content.bmp_swarm_arrow,
             cur_leader_ptr->pos + pos,
             point(
                 16 * (1 + cur_leader_ptr->swarm_arrows[a] /
@@ -916,7 +916,7 @@ void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
             );
         unsigned char n = whistle.ring_colors[r];
         draw_bitmap(
-            game.sys_assets.bmp_bright_ring,
+            game.sys_content.bmp_bright_ring,
             pos,
             point(scale),
             0.0f,
@@ -964,7 +964,7 @@ void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
                 }
                 
                 draw_bitmap(
-                    game.sys_assets.bmp_bright_circle,
+                    game.sys_content.bmp_bright_circle,
                     dot_pos, point(5.0f),
                     0.0f, change_alpha(dot_color, dot_alpha)
                 );
@@ -973,10 +973,10 @@ void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
     }
     
     //Leader cursor.
-    point bmp_cursor_size = get_bitmap_dimensions(game.sys_assets.bmp_cursor);
+    point bmp_cursor_size = get_bitmap_dimensions(game.sys_content.bmp_cursor);
     
     draw_bitmap(
-        game.sys_assets.bmp_cursor,
+        game.sys_content.bmp_cursor,
         leader_cursor_w,
         bmp_cursor_size / 2.0f,
         cursor_angle,
@@ -1012,7 +1012,7 @@ void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
         
     if(n_standby_pikmin > 0) {
         draw_text(
-            i2s(n_standby_pikmin), game.sys_assets.fnt_cursor_counter,
+            i2s(n_standby_pikmin), game.sys_content.fnt_cursor_counter,
             leader_cursor_s +
             point(count_offset),
             point(LARGE_FLOAT, game.win_h * 0.02f), color,
@@ -1148,7 +1148,7 @@ void gameplay_state::draw_lighting_filter() {
             }
             
             al_draw_scaled_bitmap(
-                game.sys_assets.bmp_spotlight,
+                game.sys_content.bmp_spotlight,
                 0, 0, 64, 64,
                 pos.x - radius, pos.y - radius,
                 radius * 2.0, radius * 2.0,
@@ -1185,7 +1185,7 @@ void gameplay_state::draw_message_box() {
         msg_box->transition_in ?
         msg_box->transition_timer / GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME :
         (1 - msg_box->transition_timer / GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME);
-    int line_height = al_get_font_line_height(game.sys_assets.fnt_standard);
+    int line_height = al_get_font_line_height(game.sys_content.fnt_standard);
     float box_height = line_height * 4;
     float offset =
         box_height * ease(EASE_METHOD_IN, transition_ratio);
@@ -1204,7 +1204,7 @@ void gameplay_state::draw_message_box() {
             game.win_h - (box_height / 2.0f) - 4 + offset
         ),
         point(game.win_w - 16, box_height),
-        game.sys_assets.bmp_bubble_box
+        game.sys_content.bmp_bubble_box
     );
     
     //Draw the speaker's icon, if any.
@@ -1229,7 +1229,7 @@ void gameplay_state::draw_message_box() {
     
     //Draw the button to advance, if it's time.
     draw_player_input_icon(
-        game.sys_assets.fnt_slim,
+        game.sys_content.fnt_slim,
         game.controls.find_bind(PLAYER_ACTION_TYPE_THROW).input,
         true,
         point(
@@ -1313,7 +1313,7 @@ void gameplay_state::draw_message_box() {
             switch(cur_token.type) {
             case STRING_TOKEN_CHAR: {
                 draw_text(
-                    cur_token.content, game.sys_assets.fnt_standard,
+                    cur_token.content, game.sys_content.fnt_standard,
                     point(x, y),
                     point(token_final_width, LARGE_FLOAT),
                     map_alpha(alpha),
@@ -1324,7 +1324,7 @@ void gameplay_state::draw_message_box() {
             }
             case STRING_TOKEN_CONTROL_BIND: {
                 draw_player_input_icon(
-                    game.sys_assets.fnt_slim,
+                    game.sys_content.fnt_slim,
                     game.controls.find_bind(cur_token.content).input,
                     true,
                     point(
@@ -1411,7 +1411,7 @@ void gameplay_state::draw_system_stuff() {
         
         size_t n_lines =
             split(game.maker_tools.info_print_text, "\n", true).size();
-        int fh = al_get_font_line_height(game.sys_assets.fnt_builtin);
+        int fh = al_get_font_line_height(game.sys_content.fnt_builtin);
         //We add n_lines - 1 because there is a 1px gap between each line.
         int total_height = (int) n_lines * fh + (int) (n_lines - 1);
         
@@ -1421,7 +1421,7 @@ void gameplay_state::draw_system_stuff() {
         );
         draw_text_lines(
             game.maker_tools.info_print_text,
-            game.sys_assets.fnt_builtin,
+            game.sys_content.fnt_builtin,
             point(8.0f),
             point(LARGE_FLOAT),
             al_map_rgba(255, 255, 255, 128 * alpha_mult),
@@ -1537,7 +1537,7 @@ void gameplay_state::draw_throw_preview() {
     float texture_offset =
         fmod(
             area_time_passed * GAMEPLAY::PREVIEW_TEXTURE_TIME_MULT,
-            al_get_bitmap_width(game.sys_assets.bmp_throw_preview) *
+            al_get_bitmap_width(game.sys_content.bmp_throw_preview) *
             GAMEPLAY::PREVIEW_TEXTURE_SCALE
         );
         
@@ -1630,7 +1630,7 @@ void gameplay_state::draw_throw_preview() {
             
         for(unsigned char v = 0; v < n_vertexes; v += 4) {
             al_draw_prim(
-                vertexes, nullptr, game.sys_assets.bmp_throw_preview,
+                vertexes, nullptr, game.sys_content.bmp_throw_preview,
                 v, v + 4, ALLEGRO_PRIM_TRIANGLE_FAN
             );
         }
@@ -1663,13 +1663,13 @@ void gameplay_state::draw_throw_preview() {
                 
             for(unsigned char v = 0; v < n_vertexes; v += 4) {
                 al_draw_prim(
-                    vertexes, nullptr, game.sys_assets.bmp_throw_preview,
+                    vertexes, nullptr, game.sys_content.bmp_throw_preview,
                     v, v + 4, ALLEGRO_PRIM_TRIANGLE_FAN
                 );
             }
             
             draw_bitmap(
-                game.sys_assets.bmp_throw_invalid,
+                game.sys_content.bmp_throw_invalid,
                 collision_point, point(32.0f), throw_h_angle,
                 change_alpha(
                     cur_leader_ptr->throwee->type->main_color,
@@ -1693,7 +1693,7 @@ void gameplay_state::draw_throw_preview() {
                 
             for(unsigned char v = 0; v < n_vertexes; v += 4) {
                 al_draw_prim(
-                    vertexes, nullptr, game.sys_assets.bmp_throw_preview,
+                    vertexes, nullptr, game.sys_content.bmp_throw_preview,
                     v, v + 4, ALLEGRO_PRIM_TRIANGLE_FAN
                 );
             }
@@ -1711,13 +1711,13 @@ void gameplay_state::draw_throw_preview() {
                 
             for(unsigned char v = 0; v < n_vertexes; v += 4) {
                 al_draw_prim(
-                    vertexes, nullptr, game.sys_assets.bmp_throw_preview_dashed,
+                    vertexes, nullptr, game.sys_content.bmp_throw_preview_dashed,
                     v, v + 4, ALLEGRO_PRIM_TRIANGLE_FAN
                 );
             }
             
             draw_bitmap(
-                game.sys_assets.bmp_throw_invalid,
+                game.sys_content.bmp_throw_invalid,
                 collision_point, point(16.0f), throw_h_angle,
                 change_alpha(
                     cur_leader_ptr->throwee->type->main_color,

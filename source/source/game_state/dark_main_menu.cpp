@@ -120,7 +120,7 @@ void dark_main_menu_state::leave() {
  */
 void dark_main_menu_state::load() {
     //Resources.
-    bmp_menu_bg = game.content.bitmaps.list.get(game.asset_file_names.bmp_main_menu);
+    bmp_menu_bg = game.content.bitmaps.list.get(game.sys_content_names.bmp_main_menu);
     
     //Game content.
     game.content.reload_packs();

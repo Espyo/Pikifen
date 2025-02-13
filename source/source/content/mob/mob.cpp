@@ -1368,8 +1368,8 @@ void mob::do_attack_effects(
     //Create the particle.
     string particle_internal_name =
         useless ?
-        game.asset_file_names.part_ding :
-        game.asset_file_names.part_smack;
+        game.sys_content_names.part_ding :
+        game.sys_content_names.part_smack;
     particle_generator pg =
         standard_particle_gen_setup(
             particle_internal_name, nullptr
@@ -1384,7 +1384,7 @@ void mob::do_attack_effects(
         sound_source_config_t attack_sound_config;
         attack_sound_config.gain = 0.6f;
         game.audio.create_world_pos_sound_source(
-            game.sys_assets.sound_attack,
+            game.sys_content.sound_attack,
             pos,
             attack_sound_config
         );

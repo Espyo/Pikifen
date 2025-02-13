@@ -107,7 +107,7 @@ void enemy::finish_dying_class_specifics() {
         ),
         2, PARTICLE_PRIORITY_MEDIUM
     );
-    par.bitmap = game.sys_assets.bmp_enemy_spirit;
+    par.bitmap = game.sys_content.bmp_enemy_spirit;
     par.friction = 0.5f;
     par.linear_speed = keyframe_interpolator<point>(point(-50, -50));
     par.linear_speed.add(0.5f, point(50, -50));
@@ -158,7 +158,7 @@ void enemy::start_dying_class_specifics() {
     //Particles.
     particle_generator pg =
         standard_particle_gen_setup(
-            game.asset_file_names.part_enemy_death, this
+            game.sys_content_names.part_enemy_death, this
         );
     particle_generators.push_back(pg);
 }

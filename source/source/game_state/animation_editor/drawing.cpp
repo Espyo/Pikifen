@@ -448,7 +448,7 @@ void animation_editor::draw_side_view_hitbox(
  */
 void animation_editor::draw_side_view_leader_silhouette(float x_offset) {
     draw_bitmap(
-        game.sys_assets.bmp_leader_silhouette_side,
+        game.sys_content.bmp_leader_silhouette_side,
         point(x_offset, -game.config.standard_leader_height / 2.0),
         point(-1, game.config.standard_leader_height),
         0, al_map_rgba(240, 240, 240, 160)
@@ -592,7 +592,7 @@ void animation_editor::draw_timeline() {
                 text = text.substr(1, 3);
             }
             draw_text(
-                text, game.sys_assets.fnt_builtin,
+                text, game.sys_content.fnt_builtin,
                 point(
                     floor(x_to_use) + 2,
                     canvas_br.y - ANIM_EDITOR::TIMELINE_HEIGHT + 2
@@ -673,7 +673,7 @@ void animation_editor::draw_top_down_view_leader_silhouette(
     float x_offset
 ) {
     draw_bitmap(
-        game.sys_assets.bmp_leader_silhouette_top, point(x_offset, 0),
+        game.sys_content.bmp_leader_silhouette_top, point(x_offset, 0),
         point(-1, game.config.standard_leader_radius * 2.0f),
         0, al_map_rgba(240, 240, 240, 160)
     );

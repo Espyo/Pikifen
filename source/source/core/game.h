@@ -97,9 +97,6 @@ public:
 
     //--- Members ---
     
-    //List of asset file names.
-    asset_file_names_t asset_file_names;
-    
     //Audio.
     audio_manager audio;
     
@@ -221,8 +218,11 @@ public:
     //List of lifetime statistics.
     statistics_t statistics;
     
-    //All system assets.
-    system_asset_list sys_assets;
+    //List of internal names of content that is needed by the system.
+    sys_content_names_t sys_content_names;
+    
+    //List of content that is needed system-wide.
+    sys_content_list_t sys_content;
     
     //List of all mob team's internal names.
     string team_internal_names[N_MOB_TEAMS];

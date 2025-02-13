@@ -195,7 +195,7 @@ void particle_editor::draw_canvas() {
         float x_offset = 32.0f;
         
         draw_bitmap(
-            game.sys_assets.bmp_leader_silhouette_top, point(x_offset, 0),
+            game.sys_content.bmp_leader_silhouette_top, point(x_offset, 0),
             point(-1, game.config.standard_leader_radius * 2.0f),
             0, al_map_rgba(240, 240, 240, 160)
         );

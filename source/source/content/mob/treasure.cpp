@@ -36,7 +36,7 @@ treasure::treasure(const point &pos, treasure_type* type, float angle) :
     
     particle_generator pg =
         standard_particle_gen_setup(
-            game.asset_file_names.part_treasure, this
+            game.sys_content_names.part_treasure, this
         );
     pg.emission.circle_outer_dist *= radius;
     pg.base_particle.priority = PARTICLE_PRIORITY_LOW;

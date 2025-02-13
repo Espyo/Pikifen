@@ -274,7 +274,7 @@ void editor::draw_op_error_cursor() {
     if(error_flash_time_ratio <= 0.0f) return;
     point pos = op_error_pos;
     draw_bitmap(
-        game.sys_assets.bmp_notification,
+        game.sys_content.bmp_notification,
         point(
             pos.x,
             pos.y - EDITOR::OP_ERROR_CURSOR_SIZE
@@ -1436,7 +1436,7 @@ bool editor::list_popup(
         if(escape_was_pressed) {
             ImGui::CloseCurrentPopup();
         }
-        if(use_monospace) ImGui::PushFont(game.sys_assets.fnt_imgui_monospace);
+        if(use_monospace) ImGui::PushFont(game.sys_content.fnt_imgui_monospace);
         for(size_t i = 0; i < items.size(); i++) {
             string name = items[i];
             bool hit_button =
@@ -1461,7 +1461,7 @@ bool editor::list_popup(
 void editor::load() {
     //Icon sub-bitmaps.
     bmp_editor_icons =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_editor_icons);
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_editor_icons);
     if(bmp_editor_icons) {
         for(size_t i = 0; i < N_EDITOR_ICONS; i++) {
             editor_icons[i] =
@@ -2669,7 +2669,7 @@ void editor::process_gui_unsaved_changes_dialog() {
 bool editor::saveable_tree_node(const string &category, const string &label) {
     string node_name = get_name() + "/" + category + "/" + label;
     ImGui::SetNextItemOpen(game.options.editor_open_nodes[node_name]);
-    ImGui::PushFont(game.sys_assets.fnt_imgui_header);
+    ImGui::PushFont(game.sys_content.fnt_imgui_header);
     bool is_open = ImGui::TreeNode(label.c_str());
     ImGui::PopFont();
     game.options.editor_open_nodes[node_name] = is_open;
@@ -3573,7 +3573,7 @@ void editor::picker_info::process() {
                 string widgetId = i2s(tc) + "-" + i2s(sc) + "-" + i2s(i);
                 ImGui::PushID(widgetId.c_str());
                 if(use_monospace) {
-                    ImGui::PushFont(game.sys_assets.fnt_imgui_monospace);
+                    ImGui::PushFont(game.sys_content.fnt_imgui_monospace);
                 }
                 
                 point button_size;

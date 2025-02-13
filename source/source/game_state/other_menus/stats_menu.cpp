@@ -41,7 +41,7 @@ stats_menu_t::stats_menu_t() {
     
     //Back button.
     gui.back_item =
-        new button_gui_item("Back", game.sys_assets.fnt_standard);
+        new button_gui_item("Back", game.sys_content.fnt_standard);
     gui.back_item->on_activate =
     [this] (const point &) {
         start_closing();
@@ -58,7 +58,7 @@ stats_menu_t::stats_menu_t() {
     text_gui_item* header_text =
         new text_gui_item(
         "STATISTICS",
-        game.sys_assets.fnt_area_name, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
+        game.sys_content.fnt_area_name, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
     );
     gui.add_item(header_text, "header");
     
@@ -105,7 +105,7 @@ void stats_menu_t::add_header(const string &label) {
         (list_bottom_y == 0.0f ? STATS_OFFSET : STAT_PADDING);
         
     text_gui_item* label_text =
-        new text_gui_item(label, game.sys_assets.fnt_area_name);
+        new text_gui_item(label, game.sys_content.fnt_area_name);
     label_text->center =
         point(0.50f, stat_center_y);
     label_text->size =
@@ -136,7 +136,7 @@ text_gui_item* stats_menu_t::add_stat(
         
     bullet_gui_item* label_bullet =
         new bullet_gui_item(
-        label, game.sys_assets.fnt_standard
+        label, game.sys_content.fnt_standard
     );
     label_bullet->center =
         point(0.50f, stat_center_y);
@@ -148,7 +148,7 @@ text_gui_item* stats_menu_t::add_stat(
     
     text_gui_item* value_text =
         new text_gui_item(
-        value, game.sys_assets.fnt_counter, COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
+        value, game.sys_content.fnt_counter, COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
     );
     value_text->center =
         point(0.75f, stat_center_y);

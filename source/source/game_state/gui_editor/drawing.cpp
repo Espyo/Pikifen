@@ -93,7 +93,7 @@ void gui_editor::draw_canvas() {
             clip_x, clip_y, clip_w, clip_h
         );
         draw_text(
-            items[i].name, game.sys_assets.fnt_builtin,
+            items[i].name, game.sys_content.fnt_builtin,
             point(
                 (items[i].center.x - items[i].size.x / 2.0f) +
                 (4.0f / game.cam.zoom),

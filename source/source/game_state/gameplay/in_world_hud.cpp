@@ -140,11 +140,11 @@ void in_world_fraction::draw() {
         point pos(
             m->pos.x,
             m->pos.y - m->radius -
-            al_get_font_line_height(game.sys_assets.fnt_standard) -
+            al_get_font_line_height(game.sys_content.fnt_standard) -
             IN_WORLD_FRACTION::PADDING
         );
         draw_text(
-            i2s(value_number), game.sys_assets.fnt_standard, pos,
+            i2s(value_number), game.sys_content.fnt_standard, pos,
             point(LARGE_FLOAT, IN_WORLD_FRACTION::ROW_HEIGHT * size_mult),
             final_color
         );

@@ -2202,7 +2202,7 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
         );
     particle_generator pg =
         standard_particle_gen_setup(
-            game.asset_file_names.part_spray, m
+            game.sys_content_names.part_spray, m
         );
     adjust_keyframe_interpolator_values<point>(
         pg.base_particle.linear_speed,
@@ -2528,7 +2528,7 @@ void leader_fsm::touched_hazard(mob* m, void* info1, void* info2) {
         if(!already_generating) {
             particle_generator pg =
                 standard_particle_gen_setup(
-                    game.asset_file_names.part_wave_ring, m
+                    game.sys_content_names.part_wave_ring, m
                 );
             pg.follow_z_offset = 1.0f;
             adjust_keyframe_interpolator_values<float>(

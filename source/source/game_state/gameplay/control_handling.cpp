@@ -371,7 +371,7 @@ void gameplay_state::handle_player_action(const player_action &action) {
                 }
             }
             
-            game.audio.create_ui_sound_source(game.sys_assets.sound_camera);
+            game.audio.create_ui_sound_source(game.sys_content.sound_camera);
             
             break;
             
@@ -410,7 +410,7 @@ void gameplay_state::handle_player_action(const player_action &action) {
             sound_source_config_t cam_sound_config;
             cam_sound_config.stack_mode = SOUND_STACK_MODE_NEVER;
             game.audio.create_ui_sound_source(
-                game.sys_assets.sound_camera,
+                game.sys_content.sound_camera,
                 cam_sound_config
             );
             
@@ -501,7 +501,7 @@ void gameplay_state::handle_player_action(const player_action &action) {
                 
                 if(switch_successful) {
                     game.audio.create_ui_sound_source(
-                        game.sys_assets.sound_switch_pikmin
+                        game.sys_content.sound_switch_pikmin
                     );
                 }
             }

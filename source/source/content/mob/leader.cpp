@@ -151,7 +151,7 @@ leader::leader(const point &pos, leader_type* type, float angle) :
         
         particle p;
         unsigned char color_idx = game.rng.i(0, WHISTLE::N_DOT_COLORS);
-        p.bitmap = game.sys_assets.bmp_bright_circle;
+        p.bitmap = game.sys_content.bmp_bright_circle;
         ALLEGRO_COLOR c =
             al_map_rgba(
                 WHISTLE::DOT_COLORS[color_idx][0],
@@ -614,7 +614,7 @@ void leader::dismiss() {
             
         par.color.set_keyframe_value(0, c);
         par.color.add(1, change_alpha(c, 0));
-        par.bitmap = game.sys_assets.bmp_bright_circle;
+        par.bitmap = game.sys_content.bmp_bright_circle;
         par.duration =
             game.rng.f(
                 LEADER::DISMISS_PARTICLE_MIN_DURATION,
@@ -665,7 +665,7 @@ void leader::draw_mob() {
     
     if(invuln_period.time_left > 0.0f) {
         sprite* spark_s;
-        game.sys_assets.anim_sparks.get_sprite_data(
+        game.sys_content.anim_sparks.get_sprite_data(
             &spark_s, nullptr, nullptr
         );
         
@@ -865,7 +865,7 @@ void leader::start_auto_throwing() {
 void leader::start_throw_trail() {
     particle_generator pg =
         standard_particle_gen_setup(
-            game.asset_file_names.part_throw_trail, this
+            game.sys_content_names.part_throw_trail, this
         );
     pg.follow_z_offset = 0.0f;
     adjust_keyframe_interpolator_values<float>(

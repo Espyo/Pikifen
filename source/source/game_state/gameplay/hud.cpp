@@ -217,7 +217,7 @@ hud_t::hud_t() :
                     std::min(final_size.x, final_size.y) * caution_ring_scale;
                     
                 draw_bitmap(
-                    game.sys_assets.bmp_bright_ring,
+                    game.sys_content.bmp_bright_ring,
                     final_center,
                     point(caution_ring_size),
                     0.0f,
@@ -254,7 +254,7 @@ hud_t::hud_t() :
         player_input i =
             game.controls.find_bind(PLAYER_ACTION_TYPE_NEXT_LEADER).input;
         if(i.type == INPUT_TYPE_NONE) return;
-        draw_player_input_icon(game.sys_assets.fnt_slim, i, true, center, size);
+        draw_player_input_icon(game.sys_content.fnt_slim, i, true, center, size);
     };
     gui.add_item(leader_next_input, "leader_next_input");
     
@@ -381,7 +381,7 @@ hud_t::hud_t() :
     [this] (const point & center, const point & size) {
         draw_text(
             i2s(game.states.gameplay->day),
-            game.sys_assets.fnt_counter, center,
+            game.sys_content.fnt_counter, center,
             point(size.x * 0.70f, size.y * 0.50f)
         );
     };
@@ -428,7 +428,7 @@ hud_t::hud_t() :
             game.controls.find_bind(PLAYER_ACTION_TYPE_NEXT_TYPE).input;
         if(i.type == INPUT_TYPE_NONE) return;
         draw_player_input_icon(
-            game.sys_assets.fnt_slim, i, true, center, size,
+            game.sys_content.fnt_slim, i, true, center, size,
             game.states.gameplay->hud->standby_items_opacity * 255
         );
     };
@@ -470,7 +470,7 @@ hud_t::hud_t() :
             game.controls.find_bind(PLAYER_ACTION_TYPE_PREV_TYPE).input;
         if(i.type == INPUT_TYPE_NONE) return;
         draw_player_input_icon(
-            game.sys_assets.fnt_slim, i, true, center, size,
+            game.sys_content.fnt_slim, i, true, center, size,
             game.states.gameplay->hud->standby_items_opacity * 255
         );
     };
@@ -578,7 +578,7 @@ hud_t::hud_t() :
         }
         
         draw_text(
-            i2s(n_standby_pikmin), game.sys_assets.fnt_counter,
+            i2s(n_standby_pikmin), game.sys_content.fnt_counter,
             center, size,
             map_alpha(game.states.gameplay->hud->standby_items_opacity * 255),
             ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
@@ -617,7 +617,7 @@ hud_t::hud_t() :
         }
         
         draw_text(
-            i2s(cur_amount), game.sys_assets.fnt_counter,
+            i2s(cur_amount), game.sys_content.fnt_counter,
             center, point(size.x * 0.70f, size.y * 0.50f), COLOR_WHITE,
             ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
             point(1.0f + group_amount->get_juice_value())
@@ -653,7 +653,7 @@ hud_t::hud_t() :
         }
         
         draw_text(
-            i2s(cur_amount), game.sys_assets.fnt_counter,
+            i2s(cur_amount), game.sys_content.fnt_counter,
             center, point(size.x * 0.70f, size.y * 0.50f), COLOR_WHITE,
             ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
             point(1.0f + field_amount->get_juice_value())
@@ -689,7 +689,7 @@ hud_t::hud_t() :
         }
         
         draw_text(
-            i2s(total_count_nr), game.sys_assets.fnt_counter,
+            i2s(total_count_nr), game.sys_content.fnt_counter,
             center, point(size.x * 0.70f, size.y * 0.50f), COLOR_WHITE,
             ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
             point(1.0f + total_amount->get_juice_value())
@@ -703,7 +703,7 @@ hud_t::hud_t() :
     counters_x->on_draw =
     [this] (const point & center, const point & size) {
         draw_text(
-            "x", game.sys_assets.fnt_counter, center, size,
+            "x", game.sys_content.fnt_counter, center, size,
             map_alpha(game.states.gameplay->hud->standby_items_opacity * 255)
         );
     };
@@ -717,7 +717,7 @@ hud_t::hud_t() :
         [this] (const point & center, const point & size) {
             if(!game.states.gameplay->cur_leader_ptr) return;
             draw_text(
-                "/", game.sys_assets.fnt_counter, center, size
+                "/", game.sys_content.fnt_counter, center, size
             );
         };
         gui.add_item(counter_slash, "counters_slash_" + i2s(s + 1));
@@ -751,7 +751,7 @@ hud_t::hud_t() :
         draw_text(
             "x" +
             i2s(game.states.gameplay->spray_stats[top_spray_idx].nr_sprays),
-            game.sys_assets.fnt_counter,
+            game.sys_content.fnt_counter,
             point(center.x - size.x / 2.0, center.y), size,
             map_alpha(game.states.gameplay->hud->spray_items_opacity * 255),
             ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER, 0,
@@ -788,7 +788,7 @@ hud_t::hud_t() :
         if(i.type == INPUT_TYPE_NONE) return;
         
         draw_player_input_icon(
-            game.sys_assets.fnt_slim, i, true, center, size,
+            game.sys_content.fnt_slim, i, true, center, size,
             game.states.gameplay->hud->spray_items_opacity * 255
         );
     };
@@ -832,7 +832,7 @@ hud_t::hud_t() :
         draw_text(
             "x" +
             i2s(game.states.gameplay->spray_stats[bottom_spray_idx].nr_sprays),
-            game.sys_assets.fnt_counter,
+            game.sys_content.fnt_counter,
             point(center.x - size.x / 2.0, center.y), size,
             map_alpha(game.states.gameplay->hud->spray_items_opacity * 255),
             ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER, 0,
@@ -865,7 +865,7 @@ hud_t::hud_t() :
         if(i.type == INPUT_TYPE_NONE) return;
         
         draw_player_input_icon(
-            game.sys_assets.fnt_slim, i, true, center, size,
+            game.sys_content.fnt_slim, i, true, center, size,
             game.states.gameplay->hud->spray_items_opacity * 255
         );
     };
@@ -907,7 +907,7 @@ hud_t::hud_t() :
         if(i.type == INPUT_TYPE_NONE) return;
         
         draw_player_input_icon(
-            game.sys_assets.fnt_slim, i, true, center, size,
+            game.sys_content.fnt_slim, i, true, center, size,
             game.states.gameplay->hud->spray_items_opacity * 255
         );
     };
@@ -949,7 +949,7 @@ hud_t::hud_t() :
         if(i.type == INPUT_TYPE_NONE) return;
         
         draw_player_input_icon(
-            game.sys_assets.fnt_slim, i, true, center, size,
+            game.sys_content.fnt_slim, i, true, center, size,
             game.states.gameplay->hud->spray_items_opacity * 255
         );
     };
@@ -990,7 +990,7 @@ hud_t::hud_t() :
             );
             al_set_clipping_rectangle(cx, cy, cw, ch);
             draw_textured_box(
-                center, size, game.sys_assets.bmp_bubble_box,
+                center, size, game.sys_content.bmp_bubble_box,
                 al_map_rgba(255, 255, 255, 200)
             );
         };
@@ -1008,7 +1008,7 @@ hud_t::hud_t() :
                 [this, goal_cur_label_text]
             (const point & center, const point & size) {
                 draw_text(
-                    goal_cur_label_text, game.sys_assets.fnt_standard,
+                    goal_cur_label_text, game.sys_content.fnt_standard,
                     center, size, al_map_rgba(255, 255, 255, 128)
                 );
             };
@@ -1035,7 +1035,7 @@ hud_t::hud_t() :
                 float juicy_grow_amount =
                     mission_goal_cur->get_juice_value();
                 draw_text(
-                    text, game.sys_assets.fnt_counter, center, size,
+                    text, game.sys_content.fnt_counter, center, size,
                     COLOR_WHITE, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
                     point(1.0 + juicy_grow_amount)
                 );
@@ -1049,7 +1049,7 @@ hud_t::hud_t() :
             mission_goal_req_label->on_draw =
             [this] (const point & center, const point & size) {
                 draw_text(
-                    "Goal", game.sys_assets.fnt_standard, center, size,
+                    "Goal", game.sys_content.fnt_standard, center, size,
                     al_map_rgba(255, 255, 255, 128)
                 );
             };
@@ -1073,7 +1073,7 @@ hud_t::hud_t() :
                     text = i2s(value);
                 }
                 draw_text(
-                    text, game.sys_assets.fnt_counter, center, size
+                    text, game.sys_content.fnt_counter, center, size
                 );
             };
             gui.add_item(mission_goal_req, "mission_goal_req");
@@ -1084,7 +1084,7 @@ hud_t::hud_t() :
             mission_goal_slash->on_draw =
             [this] (const point & center, const point & size) {
                 draw_text(
-                    "/", game.sys_assets.fnt_counter, center, size
+                    "/", game.sys_content.fnt_counter, center, size
                 );
             };
             gui.add_item(mission_goal_slash, "mission_goal_slash");
@@ -1097,7 +1097,7 @@ hud_t::hud_t() :
             [this] (const point & center, const point & size) {
                 draw_text(
                     game.mission_goals[game.cur_area_data->mission.goal]->
-                    get_name(), game.sys_assets.fnt_standard,
+                    get_name(), game.sys_content.fnt_standard,
                     center, size, al_map_rgba(255, 255, 255, 128)
                 );
             };
@@ -1121,7 +1121,7 @@ hud_t::hud_t() :
                 center, size, 20.0f, al_map_rgba(86, 149, 50, 160)
             );
             draw_textured_box(
-                center, size, game.sys_assets.bmp_bubble_box,
+                center, size, game.sys_content.bmp_bubble_box,
                 al_map_rgba(255, 255, 255, 200)
             );
         };
@@ -1133,7 +1133,7 @@ hud_t::hud_t() :
         mission_score_score_label->on_draw =
         [this] (const point & center, const point & size) {
             draw_text(
-                "Score:", game.sys_assets.fnt_standard,
+                "Score:", game.sys_content.fnt_standard,
                 point(center.x + size.x / 2.0f, center.y), size,
                 al_map_rgba(255, 255, 255, 128), ALLEGRO_ALIGN_RIGHT
             );
@@ -1149,7 +1149,7 @@ hud_t::hud_t() :
             float juicy_grow_amount = mission_score_points->get_juice_value();
             draw_text(
                 i2s(game.states.gameplay->mission_score),
-                game.sys_assets.fnt_counter, center, size, COLOR_WHITE,
+                game.sys_content.fnt_counter, center, size, COLOR_WHITE,
                 ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
                 point(1.0 + juicy_grow_amount)
             );
@@ -1163,7 +1163,7 @@ hud_t::hud_t() :
         mission_score_points_label->on_draw =
         [this] (const point & center, const point & size) {
             draw_text(
-                "pts", game.sys_assets.fnt_standard,
+                "pts", game.sys_content.fnt_standard,
                 point(center.x + size.x / 2.0f, center.y), size,
                 al_map_rgba(255, 255, 255, 128), ALLEGRO_ALIGN_RIGHT
             );
@@ -1218,10 +1218,10 @@ hud_t::hud_t() :
             ALLEGRO_BITMAP* seg_icons[] = {
                 nullptr,
                 nullptr,
-                game.sys_assets.bmp_medal_bronze,
-                game.sys_assets.bmp_medal_silver,
-                game.sys_assets.bmp_medal_gold,
-                game.sys_assets.bmp_medal_platinum
+                game.sys_content.bmp_medal_bronze,
+                game.sys_content.bmp_medal_silver,
+                game.sys_content.bmp_medal_gold,
+                game.sys_content.bmp_medal_platinum
             };
             
             //Draw each segment (no medal, bronze, etc.).
@@ -1483,7 +1483,7 @@ void hud_t::create_mission_fail_cond_items(bool primary) {
         );
         al_set_clipping_rectangle(cx, cy, cw, ch);
         draw_textured_box(
-            center, size, game.sys_assets.bmp_bubble_box,
+            center, size, game.sys_content.bmp_bubble_box,
             al_map_rgba(255, 255, 255, 200)
         );
     };
@@ -1504,7 +1504,7 @@ void hud_t::create_mission_fail_cond_items(bool primary) {
             draw_text(
                 game.mission_fail_conds[cond]->
                 get_hud_label(game.states.gameplay),
-                game.sys_assets.fnt_standard, center, size,
+                game.sys_content.fnt_standard, center, size,
                 al_map_rgba(255, 255, 255, 128)
             );
         };
@@ -1532,7 +1532,7 @@ void hud_t::create_mission_fail_cond_items(bool primary) {
             }
             float juicy_grow_amount = mission_fail_cur->get_juice_value();
             draw_text(
-                text, game.sys_assets.fnt_counter, center, size,
+                text, game.sys_content.fnt_counter, center, size,
                 COLOR_WHITE, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
                 point(1.0 + juicy_grow_amount)
             );
@@ -1556,7 +1556,7 @@ void hud_t::create_mission_fail_cond_items(bool primary) {
             [this]
         (const point & center, const point & size) {
             draw_text(
-                "Fail", game.sys_assets.fnt_standard, center, size,
+                "Fail", game.sys_content.fnt_standard, center, size,
                 al_map_rgba(255, 255, 255, 128)
             );
         };
@@ -1582,7 +1582,7 @@ void hud_t::create_mission_fail_cond_items(bool primary) {
                 text = i2s(value);
             }
             draw_text(
-                text, game.sys_assets.fnt_counter, center, size
+                text, game.sys_content.fnt_counter, center, size
             );
         };
         gui.add_item(
@@ -1598,7 +1598,7 @@ void hud_t::create_mission_fail_cond_items(bool primary) {
         mission_fail_slash->on_draw =
         [this] (const point & center, const point & size) {
             draw_text(
-                "/", game.sys_assets.fnt_counter, center, size
+                "/", game.sys_content.fnt_counter, center, size
             );
         };
         gui.add_item(
@@ -1617,7 +1617,7 @@ void hud_t::create_mission_fail_cond_items(bool primary) {
             draw_text(
                 "Fail: " +
                 game.mission_fail_conds[cond]->get_name(),
-                game.sys_assets.fnt_standard, center, size,
+                game.sys_content.fnt_standard, center, size,
                 al_map_rgba(255, 255, 255, 128)
             );
         };

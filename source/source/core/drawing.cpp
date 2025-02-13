@@ -124,7 +124,7 @@ void draw_background_logos(
                     game.win_h + logo_size.y * 0.5f
                 );
             draw_bitmap(
-                game.sys_assets.bmp_icon,
+                game.sys_content.bmp_icon,
                 point(x, y),
                 point(logo_size.x, logo_size.y),
                 time_spent * rotation_speed,
@@ -212,14 +212,14 @@ void draw_button(
         selected ? al_map_rgb(87, 200, 208) : COLOR_WHITE;
         
     draw_textured_box(
-        center, size, game.sys_assets.bmp_bubble_box, box_tint
+        center, size, game.sys_content.bmp_bubble_box, box_tint
     );
     
     if(selected) {
         draw_textured_box(
             center,
             size + 10.0 + sin(game.time_passed * TAU) * 2.0f,
-            game.sys_assets.bmp_focus_box
+            game.sys_content.bmp_focus_box
         );
     }
 }
@@ -243,7 +243,7 @@ void draw_fraction(
     const float value_nr_y = bottom.y - IN_WORLD_FRACTION::ROW_HEIGHT * 3;
     const float value_nr_scale = value_nr >= requirement_nr ? 1.2f : 1.0f;
     draw_text(
-        i2s(value_nr), game.sys_assets.fnt_value, point(bottom.x, value_nr_y),
+        i2s(value_nr), game.sys_content.fnt_value, point(bottom.x, value_nr_y),
         point(LARGE_FLOAT, IN_WORLD_FRACTION::ROW_HEIGHT * scale),
         color, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_TOP, 0,
         point(value_nr_scale)
@@ -251,7 +251,7 @@ void draw_fraction(
     
     const float bar_y = bottom.y - IN_WORLD_FRACTION::ROW_HEIGHT * 2;
     draw_text(
-        "-", game.sys_assets.fnt_value, point(bottom.x, bar_y),
+        "-", game.sys_content.fnt_value, point(bottom.x, bar_y),
         point(LARGE_FLOAT, IN_WORLD_FRACTION::ROW_HEIGHT * scale),
         color, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_TOP, 0
     );
@@ -259,7 +259,7 @@ void draw_fraction(
     float req_nr_y = bottom.y - IN_WORLD_FRACTION::ROW_HEIGHT;
     float req_nr_scale = requirement_nr > value_nr ? 1.2f : 1.0f;
     draw_text(
-        i2s(requirement_nr), game.sys_assets.fnt_value,
+        i2s(requirement_nr), game.sys_content.fnt_value,
         point(bottom.x, req_nr_y),
         point(LARGE_FLOAT, IN_WORLD_FRACTION::ROW_HEIGHT * scale),
         color, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_TOP, 0,
@@ -606,7 +606,7 @@ void draw_loading_screen(
         al_set_target_bitmap(game.loading_text_bmp); {
             al_clear_to_color(COLOR_EMPTY);
             draw_text(
-                text, game.sys_assets.fnt_area_name,
+                text, game.sys_content.fnt_area_name,
                 point(text_w * 0.5f, text_h * 0.5f),
                 point(text_w, text_h),
                 COLOR_GOLD, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0
@@ -622,7 +622,7 @@ void draw_loading_screen(
         al_set_target_bitmap(game.loading_subtext_bmp); {
             al_clear_to_color(COLOR_EMPTY);
             draw_text(
-                subtext, game.sys_assets.fnt_area_name,
+                subtext, game.sys_content.fnt_area_name,
                 point(subtext_w * 0.5f, subtext_h * 0.5f),
                 point(subtext_w, subtext_h),
                 al_map_rgb(224, 224, 224),
@@ -757,22 +757,22 @@ void draw_loading_screen(
         const point text_box(game.win_w * 0.11f, game.win_h * 0.03f);
         
         if(
-            game.sys_assets.bmp_icon &&
-            game.sys_assets.bmp_icon != game.bmp_error
+            game.sys_content.bmp_icon &&
+            game.sys_content.bmp_icon != game.bmp_error
         ) {
             point icon_pos(
                 game.win_w - 8 - text_box.x - 8 - text_box.y / 2.0f,
                 game.win_h - 8 - text_box.y / 2.0f
             );
             draw_bitmap(
-                game.sys_assets.bmp_icon, icon_pos,
+                game.sys_content.bmp_icon, icon_pos,
                 point(-1, text_box.y),
                 0, al_map_rgba(255, 255, 255, opacity * 255.0)
             );
         }
         
         draw_text(
-            "Loading...", game.sys_assets.fnt_standard,
+            "Loading...", game.sys_content.fnt_standard,
             point(game.win_w - 8, game.win_h - 8), text_box,
             al_map_rgb(192, 192, 192), ALLEGRO_ALIGN_RIGHT, V_ALIGN_MODE_BOTTOM
         );
@@ -796,10 +796,10 @@ void draw_menu_button_icon(
 ) {
     //All icons are square, and in a row, so the spritesheet height works.
     int icon_size =
-        al_get_bitmap_height(game.sys_assets.bmp_menu_icons);
+        al_get_bitmap_height(game.sys_content.bmp_menu_icons);
     ALLEGRO_BITMAP* bmp =
         al_create_sub_bitmap(
-            game.sys_assets.bmp_menu_icons,
+            game.sys_content.bmp_menu_icons,
             (icon_size + 1) * (int) icon, 0,
             icon_size, icon_size
         );
@@ -855,7 +855,7 @@ void draw_mob_shadow(
     
     if(m->rectangular_dim.x != 0) {
         draw_bitmap(
-            game.sys_assets.bmp_shadow_square,
+            game.sys_content.bmp_shadow_square,
             point(m->pos.x + shadow_x + shadow_w / 2, m->pos.y),
             shadow_size,
             m->angle,
@@ -863,7 +863,7 @@ void draw_mob_shadow(
         );
     } else {
         draw_bitmap(
-            game.sys_assets.bmp_shadow,
+            game.sys_content.bmp_shadow,
             point(m->pos.x + shadow_x + shadow_w / 2, m->pos.y),
             point(shadow_w, diameter),
             0,
@@ -988,9 +988,9 @@ void draw_mouse_cursor(const ALLEGRO_COLOR &color) {
     
     //Mouse cursor graphic.
     draw_bitmap(
-        game.sys_assets.bmp_mouse_cursor,
+        game.sys_content.bmp_mouse_cursor,
         game.mouse_cursor.s_pos,
-        get_bitmap_dimensions(game.sys_assets.bmp_mouse_cursor),
+        get_bitmap_dimensions(game.sys_content.bmp_mouse_cursor),
         -(game.time_passed * game.config.cursor_spin_speed),
         color
     );
@@ -1036,10 +1036,10 @@ void draw_player_input_icon(
     if(shape == PLAYER_INPUT_ICON_SHAPE_BITMAP) {
         //All icons are square, and in a row, so the spritesheet height works.
         int icon_size =
-            al_get_bitmap_height(game.sys_assets.bmp_player_input_icons);
+            al_get_bitmap_height(game.sys_content.bmp_player_input_icons);
         ALLEGRO_BITMAP* bmp =
             al_create_sub_bitmap(
-                game.sys_assets.bmp_player_input_icons,
+                game.sys_content.bmp_player_input_icons,
                 (icon_size + 1) * (int) bitmap_sprite, 0,
                 icon_size, icon_size
             );
@@ -1075,14 +1075,14 @@ void draw_player_input_icon(
     case PLAYER_INPUT_ICON_SHAPE_RECTANGLE: {
         draw_textured_box(
             where, point(total_width, total_height),
-            game.sys_assets.bmp_key_box
+            game.sys_content.bmp_key_box
         );
         break;
     }
     case PLAYER_INPUT_ICON_SHAPE_ROUNDED: {
         draw_textured_box(
             where, point(total_width, total_height),
-            game.sys_assets.bmp_button_box
+            game.sys_content.bmp_button_box
         );
         break;
     }
@@ -1576,7 +1576,7 @@ float get_player_input_icon_width(
     if(shape == PLAYER_INPUT_ICON_SHAPE_BITMAP) {
         //All icons are square, and in a row, so the spritesheet height works.
         int bmp_height =
-            al_get_bitmap_height(game.sys_assets.bmp_player_input_icons);
+            al_get_bitmap_height(game.sys_content.bmp_player_input_icons);
         if(max_bitmap_height == 0.0f || bmp_height < max_bitmap_height) {
             return bmp_height;
         } else {

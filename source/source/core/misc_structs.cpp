@@ -139,7 +139,7 @@ const string NAMES[N_MAKER_TOOLS] = {
  *
  * @param file File to load from.
  */
-void asset_file_names_t::load(data_node* file) {
+void sys_content_names_t::load(data_node* file) {
     reader_setter grs(file->get_child_by_name("graphics"));
     
     grs.set("bright_circle", bmp_bright_circle);
@@ -729,8 +729,8 @@ void notification_t::draw() const {
     al_compose_transform(&tra, &old_tra);
     al_use_transform(&tra);
     
-    int bmp_w = al_get_bitmap_width(game.sys_assets.bmp_notification);
-    int bmp_h = al_get_bitmap_height(game.sys_assets.bmp_notification);
+    int bmp_w = al_get_bitmap_width(game.sys_content.bmp_notification);
+    int bmp_h = al_get_bitmap_height(game.sys_content.bmp_notification);
     
     float text_box_x1 = -bmp_w * 0.5 + DRAWING::NOTIFICATION_PADDING;
     float text_box_x2 = bmp_w * 0.5 - DRAWING::NOTIFICATION_PADDING;
@@ -738,7 +738,7 @@ void notification_t::draw() const {
     float text_box_y2 = DRAWING::NOTIFICATION_PADDING;
     
     draw_bitmap(
-        game.sys_assets.bmp_notification,
+        game.sys_content.bmp_notification,
         point(0, -bmp_h * 0.5),
         point(bmp_w, bmp_h),
         0,
@@ -749,7 +749,7 @@ void notification_t::draw() const {
         text_box_x1 +=
             DRAWING::NOTIFICATION_CONTROL_SIZE + DRAWING::NOTIFICATION_PADDING;
         draw_player_input_icon(
-            game.sys_assets.fnt_slim, input,
+            game.sys_content.fnt_slim, input,
             true,
             point(
                 -bmp_w * 0.5 + DRAWING::NOTIFICATION_PADDING +
@@ -765,7 +765,7 @@ void notification_t::draw() const {
     }
     
     draw_text(
-        text, game.sys_assets.fnt_standard,
+        text, game.sys_content.fnt_standard,
         point(
             (text_box_x1 + text_box_x2) * 0.5,
             (text_box_y1 + text_box_y2) * 0.5

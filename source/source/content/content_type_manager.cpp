@@ -1009,7 +1009,7 @@ void misc_config_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
         remove_extension(FILE_NAMES::SYSTEM_ASSET_FILE_NAMES);
     data_node system_asset_fn_file =
         load_data_file(manifests[sys_asset_fn_internal_name].path);
-    game.asset_file_names.load(&system_asset_fn_file);
+    game.sys_content_names.load(&system_asset_fn_file);
 }
 
 

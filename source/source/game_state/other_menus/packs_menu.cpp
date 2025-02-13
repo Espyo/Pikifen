@@ -73,7 +73,7 @@ packs_menu_t::packs_menu_t() {
     
     //Back button.
     gui.back_item =
-        new button_gui_item("Back", game.sys_assets.fnt_standard);
+        new button_gui_item("Back", game.sys_content.fnt_standard);
     gui.back_item->on_activate =
     [this] (const point &) {
         game.options.pack_order = pack_order;
@@ -93,7 +93,7 @@ packs_menu_t::packs_menu_t() {
     text_gui_item* header_text =
         new text_gui_item(
         "PACKS",
-        game.sys_assets.fnt_area_name,
+        game.sys_content.fnt_area_name,
         COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
     );
     gui.add_item(header_text, "header");
@@ -109,7 +109,7 @@ packs_menu_t::packs_menu_t() {
     //Base pack's bullet.
     bullet_gui_item* base_bullet =
         new bullet_gui_item(
-        "Base", game.sys_assets.fnt_standard, COLOR_GOLD
+        "Base", game.sys_content.fnt_standard, COLOR_GOLD
     );
     base_bullet->center =
         point(0.37f, ITEMS_OFFSET + ITEM_HEIGHT / 2.0f);
@@ -128,7 +128,7 @@ packs_menu_t::packs_menu_t() {
         bullet_gui_item* bullet =
             new bullet_gui_item(
             "",
-            game.sys_assets.fnt_standard
+            game.sys_content.fnt_standard
         );
         bullet->center = point(0.37f, row_center_y);
         bullet->size = point(0.70f, ITEM_HEIGHT);
@@ -140,7 +140,7 @@ packs_menu_t::packs_menu_t() {
         //Enable/disable checkbox.
         check_gui_item* check =
             new check_gui_item(
-            false, "", game.sys_assets.fnt_standard
+            false, "", game.sys_content.fnt_standard
         );
         check->center = point(0.78f, row_center_y);
         check->size = point(0.08f, ITEM_HEIGHT);
@@ -172,7 +172,7 @@ packs_menu_t::packs_menu_t() {
         if(p > 0) {
             button_gui_item* up_button =
                 new button_gui_item(
-                "U", game.sys_assets.fnt_standard
+                "U", game.sys_content.fnt_standard
             );
             up_button->center = point(0.87f, row_center_y);
             up_button->size = point(0.08f, ITEM_HEIGHT);
@@ -203,7 +203,7 @@ packs_menu_t::packs_menu_t() {
         if(p < pack_order.size() - 1) {
             button_gui_item* down_button =
                 new button_gui_item(
-                "D", game.sys_assets.fnt_standard
+                "D", game.sys_content.fnt_standard
             );
             down_button->center = point(0.95f, row_center_y);
             down_button->size = point(0.08f, ITEM_HEIGHT);
@@ -241,7 +241,7 @@ packs_menu_t::packs_menu_t() {
     info_box->on_draw =
     [] (const point & center, const point & size) {
         draw_textured_box(
-            center, size, game.sys_assets.bmp_frame_box,
+            center, size, game.sys_content.bmp_frame_box,
             COLOR_TRANSPARENT_WHITE
         );
     };
@@ -250,7 +250,7 @@ packs_menu_t::packs_menu_t() {
     //Pack name text.
     pack_name_text =
         new text_gui_item(
-        "", game.sys_assets.fnt_area_name, COLOR_GOLD, ALLEGRO_ALIGN_LEFT
+        "", game.sys_content.fnt_area_name, COLOR_GOLD, ALLEGRO_ALIGN_LEFT
     );
     gui.add_item(pack_name_text, "pack_name");
     
@@ -275,7 +275,7 @@ packs_menu_t::packs_menu_t() {
             );
         }
         draw_textured_box(
-            final_center, final_size, game.sys_assets.bmp_frame_box,
+            final_center, final_size, game.sys_content.bmp_frame_box,
             COLOR_TRANSPARENT_WHITE
         );
     };
@@ -284,7 +284,7 @@ packs_menu_t::packs_menu_t() {
     //Pack description text.
     pack_description_text =
         new text_gui_item(
-        "", game.sys_assets.fnt_standard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
+        "", game.sys_content.fnt_standard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
     );
     pack_description_text->line_wrap = true;
     gui.add_item(pack_description_text, "pack_description");
@@ -292,21 +292,21 @@ packs_menu_t::packs_menu_t() {
     //Pack tags text.
     pack_tags_text =
         new text_gui_item(
-        "", game.sys_assets.fnt_standard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
+        "", game.sys_content.fnt_standard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
     );
     gui.add_item(pack_tags_text, "pack_tags");
     
     //Pack maker text.
     pack_maker_text =
         new text_gui_item(
-        "", game.sys_assets.fnt_standard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
+        "", game.sys_content.fnt_standard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
     );
     gui.add_item(pack_maker_text, "pack_maker");
     
     //Pack version text.
     pack_version_text =
         new text_gui_item(
-        "", game.sys_assets.fnt_standard, COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
+        "", game.sys_content.fnt_standard, COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
     );
     gui.add_item(pack_version_text, "pack_version");
     
@@ -314,14 +314,14 @@ packs_menu_t::packs_menu_t() {
     warning_text =
         new text_gui_item(
         "You may need to restart for some of the changes to take effect.",
-        game.sys_assets.fnt_standard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
+        game.sys_content.fnt_standard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
     );
     warning_text->visible = false;
     gui.add_item(warning_text, "restart_warning");
     
     //Open folder button.
     button_gui_item* open_folder_button =
-        new button_gui_item("Open folder", game.sys_assets.fnt_standard);
+        new button_gui_item("Open folder", game.sys_content.fnt_standard);
     open_folder_button->on_activate =
     [this] (const point &) {
         open_file_explorer(FOLDER_PATHS_FROM_ROOT::GAME_DATA);

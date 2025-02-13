@@ -135,7 +135,7 @@ void ship::draw_mob() {
             shi_type->control_point_radius * 2.0f * ring_scale;
             
         draw_bitmap(
-            game.sys_assets.bmp_bright_ring,
+            game.sys_content.bmp_bright_ring,
             control_point_final_pos, point(ring_diameter),
             0.0f,
             change_alpha(ring_color, ring_alpha)
@@ -194,7 +194,7 @@ void ship::draw_mob() {
         );
         
         draw_bitmap(
-            game.sys_assets.bmp_bright_ring,
+            game.sys_content.bmp_bright_ring,
             ring_pos,
             point(ring_scale),
             0.0f,
@@ -216,7 +216,7 @@ void ship::heal_leader(leader* l) const {
     
     particle_generator pg =
         standard_particle_gen_setup(
-            game.asset_file_names.part_leader_heal, l
+            game.sys_content_names.part_leader_heal, l
         );
     l->particle_generators.push_back(pg);
 }

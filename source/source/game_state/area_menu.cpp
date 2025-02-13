@@ -59,7 +59,7 @@ void area_menu_state::add_bullet(list_gui_item* list, const string &text) {
         
     bullet_gui_item* bullet =
         new bullet_gui_item(
-        text, game.sys_assets.fnt_standard, COLOR_WHITE
+        text, game.sys_content.fnt_standard, COLOR_WHITE
     );
     bullet->center = point(0.50f, bullet_center_y);
     bullet->size = point(0.96f, BULLET_HEIGHT);
@@ -205,32 +205,32 @@ void area_menu_state::change_info(size_t area_idx) {
             !record_exists ?
             nullptr :
             area_records[area_idx].clear ?
-            game.sys_assets.bmp_mission_clear :
-            game.sys_assets.bmp_mission_fail;
+            game.sys_content.bmp_mission_clear :
+            game.sys_content.bmp_mission_fail;
         if(!record_exists) {
             cur_medal = nullptr;
         } else {
             switch(area_ptr->mission.grading_mode) {
             case MISSION_GRADING_MODE_POINTS: {
                 if(score >= area_ptr->mission.platinum_req) {
-                    cur_medal = game.sys_assets.bmp_medal_platinum;
+                    cur_medal = game.sys_content.bmp_medal_platinum;
                 } else if(score >= area_ptr->mission.gold_req) {
-                    cur_medal = game.sys_assets.bmp_medal_gold;
+                    cur_medal = game.sys_content.bmp_medal_gold;
                 } else if(score >= area_ptr->mission.silver_req) {
-                    cur_medal = game.sys_assets.bmp_medal_silver;
+                    cur_medal = game.sys_content.bmp_medal_silver;
                 } else if(score >= area_ptr->mission.bronze_req) {
-                    cur_medal = game.sys_assets.bmp_medal_bronze;
+                    cur_medal = game.sys_content.bmp_medal_bronze;
                 } else {
-                    cur_medal = game.sys_assets.bmp_medal_none;
+                    cur_medal = game.sys_content.bmp_medal_none;
                 }
                 break;
             } case MISSION_GRADING_MODE_GOAL: {
                 if(area_records[area_idx].clear) {
-                    cur_medal = game.sys_assets.bmp_medal_platinum;
+                    cur_medal = game.sys_content.bmp_medal_platinum;
                 }
                 break;
             } case MISSION_GRADING_MODE_PARTICIPATION: {
-                cur_medal = game.sys_assets.bmp_medal_platinum;
+                cur_medal = game.sys_content.bmp_medal_platinum;
                 break;
             }
             }
@@ -436,12 +436,12 @@ void area_menu_state::init_gui_info_page() {
     
         //Name text.
         info_name_text =
-            new text_gui_item("", game.sys_assets.fnt_area_name, COLOR_GOLD);
+            new text_gui_item("", game.sys_content.fnt_area_name, COLOR_GOLD);
         info_box->add_child(info_name_text);
         gui.add_item(info_name_text, "info_name");
         
         //Subtitle text.
-        subtitle_text = new text_gui_item("", game.sys_assets.fnt_area_name);
+        subtitle_text = new text_gui_item("", game.sys_content.fnt_area_name);
         info_box->add_child(subtitle_text);
         gui.add_item(subtitle_text, "subtitle");
         
@@ -463,7 +463,7 @@ void area_menu_state::init_gui_info_page() {
                 draw_bitmap(cur_thumb, final_center, final_size - 4.0f);
             }
             draw_textured_box(
-                final_center, final_size, game.sys_assets.bmp_frame_box,
+                final_center, final_size, game.sys_content.bmp_frame_box,
                 COLOR_TRANSPARENT_WHITE
             );
         };
@@ -473,7 +473,7 @@ void area_menu_state::init_gui_info_page() {
         //Description text.
         description_text =
             new text_gui_item(
-            "", game.sys_assets.fnt_standard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
+            "", game.sys_content.fnt_standard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
         );
         description_text->line_wrap = true;
         info_box->add_child(description_text);
@@ -482,13 +482,13 @@ void area_menu_state::init_gui_info_page() {
         if(area_type == AREA_TYPE_MISSION) {
             //Record label.
             text_gui_item* record_label_text =
-                new text_gui_item("Record:", game.sys_assets.fnt_standard);
+                new text_gui_item("Record:", game.sys_content.fnt_standard);
             info_box->add_child(record_label_text);
             gui.add_item(record_label_text, "record_label");
             
             //Record info.
             record_info_text =
-                new text_gui_item("", game.sys_assets.fnt_standard);
+                new text_gui_item("", game.sys_content.fnt_standard);
             info_box->add_child(record_info_text);
             gui.add_item(record_info_text, "record_info");
             
@@ -521,7 +521,7 @@ void area_menu_state::init_gui_info_page() {
             //Record date.
             record_date_text =
                 new text_gui_item(
-                "", game.sys_assets.fnt_slim, al_map_rgb(128, 128, 128)
+                "", game.sys_content.fnt_slim, al_map_rgb(128, 128, 128)
             );
             info_box->add_child(record_date_text);
             gui.add_item(record_date_text, "record_date");
@@ -530,7 +530,7 @@ void area_menu_state::init_gui_info_page() {
         //Difficulty text.
         difficulty_text =
             new text_gui_item(
-            "", game.sys_assets.fnt_standard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
+            "", game.sys_content.fnt_standard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
         );
         info_box->add_child(difficulty_text);
         gui.add_item(difficulty_text, "difficulty");
@@ -538,7 +538,7 @@ void area_menu_state::init_gui_info_page() {
         //Tags text.
         tags_text =
             new text_gui_item(
-            "", game.sys_assets.fnt_standard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
+            "", game.sys_content.fnt_standard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
         );
         info_box->add_child(tags_text);
         gui.add_item(tags_text, "tags");
@@ -546,7 +546,7 @@ void area_menu_state::init_gui_info_page() {
         //Maker text.
         maker_text =
             new text_gui_item(
-            "", game.sys_assets.fnt_standard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
+            "", game.sys_content.fnt_standard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
         );
         info_box->add_child(maker_text);
         gui.add_item(maker_text, "maker");
@@ -554,7 +554,7 @@ void area_menu_state::init_gui_info_page() {
         //Version text.
         version_text =
             new text_gui_item(
-            "", game.sys_assets.fnt_standard, COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
+            "", game.sys_content.fnt_standard, COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
         );
         info_box->add_child(version_text);
         gui.add_item(version_text, "version");
@@ -585,7 +585,7 @@ void area_menu_state::init_gui_main() {
     
     //Back button.
     gui.back_item =
-        new button_gui_item("Back", game.sys_assets.fnt_standard);
+        new button_gui_item("Back", game.sys_content.fnt_standard);
     gui.back_item->on_activate =
     [this] (const point &) {
         leave();
@@ -601,7 +601,7 @@ void area_menu_state::init_gui_main() {
     text_gui_item* header_text =
         new text_gui_item(
         "PICK AN AREA:",
-        game.sys_assets.fnt_area_name, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_LEFT
+        game.sys_content.fnt_area_name, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_LEFT
     );
     gui.add_item(header_text, "header");
     
@@ -624,7 +624,7 @@ void area_menu_state::init_gui_main() {
             
             //Area button.
             button_gui_item* area_button =
-                new button_gui_item(area_ptr->name, game.sys_assets.fnt_standard);
+                new button_gui_item(area_ptr->name, game.sys_content.fnt_standard);
             area_button->center =
                 point(
                     area_type == AREA_TYPE_MISSION ? 0.40f : 0.50f,
@@ -664,7 +664,7 @@ void area_menu_state::init_gui_main() {
                 [this, a] (const point & center, const point & size) {
                     if(area_records[a].clear) {
                         draw_bitmap_in_box(
-                            game.sys_assets.bmp_mission_clear,
+                            game.sys_content.bmp_mission_clear,
                             center, size, true
                         );
                     }
@@ -685,22 +685,22 @@ void area_menu_state::init_gui_main() {
                     case MISSION_GRADING_MODE_POINTS: {
                         int score = area_records[a].score;
                         if(score >= area_ptr->mission.platinum_req) {
-                            medal_bmp = game.sys_assets.bmp_medal_platinum;
+                            medal_bmp = game.sys_content.bmp_medal_platinum;
                         } else if(score >= area_ptr->mission.gold_req) {
-                            medal_bmp = game.sys_assets.bmp_medal_gold;
+                            medal_bmp = game.sys_content.bmp_medal_gold;
                         } else if(score >= area_ptr->mission.silver_req) {
-                            medal_bmp = game.sys_assets.bmp_medal_silver;
+                            medal_bmp = game.sys_content.bmp_medal_silver;
                         } else if(score >= area_ptr->mission.bronze_req) {
-                            medal_bmp = game.sys_assets.bmp_medal_bronze;
+                            medal_bmp = game.sys_content.bmp_medal_bronze;
                         }
                         break;
                     } case MISSION_GRADING_MODE_GOAL: {
                         if(area_records[a].clear) {
-                            medal_bmp = game.sys_assets.bmp_medal_platinum;
+                            medal_bmp = game.sys_content.bmp_medal_platinum;
                         }
                         break;
                     } case MISSION_GRADING_MODE_PARTICIPATION: {
-                        medal_bmp = game.sys_assets.bmp_medal_platinum;
+                        medal_bmp = game.sys_content.bmp_medal_platinum;
                     }
                     }
                     
@@ -720,7 +720,7 @@ void area_menu_state::init_gui_main() {
         info_box->on_draw =
         [] (const point & center, const point & size) {
             draw_textured_box(
-                center, size, game.sys_assets.bmp_frame_box,
+                center, size, game.sys_content.bmp_frame_box,
                 COLOR_TRANSPARENT_WHITE
             );
         };
@@ -728,15 +728,15 @@ void area_menu_state::init_gui_main() {
         
         //Random button.
         button_gui_item* random_button =
-            new button_gui_item("", game.sys_assets.fnt_standard);
+            new button_gui_item("", game.sys_content.fnt_standard);
         random_button->on_draw =
         [random_button] (const point & center, const point & size) {
             draw_button(
-                center, size, "", game.sys_assets.fnt_standard, COLOR_WHITE,
+                center, size, "", game.sys_content.fnt_standard, COLOR_WHITE,
                 random_button->selected
             );
             draw_bitmap_in_box(
-                game.sys_assets.bmp_random,
+                game.sys_content.bmp_random,
                 center, size - 8, true
             );
         };
@@ -754,7 +754,7 @@ void area_menu_state::init_gui_main() {
             button_gui_item* view_toggle_button =
                 new button_gui_item(
                 "Show mission specs",
-                game.sys_assets.fnt_standard
+                game.sys_content.fnt_standard
             );
             view_toggle_button->on_activate =
             [this, view_toggle_button] (const point &) {
@@ -788,7 +788,7 @@ void area_menu_state::init_gui_main() {
             specs_box->on_draw =
             [] (const point & center, const point & size) {
                 draw_textured_box(
-                    center, size, game.sys_assets.bmp_frame_box,
+                    center, size, game.sys_content.bmp_frame_box,
                     COLOR_TRANSPARENT_WHITE
                 );
             };
@@ -802,7 +802,7 @@ void area_menu_state::init_gui_main() {
         text_gui_item* no_areas_text =
             new text_gui_item(
             "No areas found! Try making your own in the area editor!",
-            game.sys_assets.fnt_standard
+            game.sys_content.fnt_standard
         );
         gui.add_item(no_areas_text, "no_areas_text");
         
@@ -836,25 +836,25 @@ void area_menu_state::init_gui_specs_page() {
     
         //Name text.
         specs_name_text =
-            new text_gui_item("", game.sys_assets.fnt_area_name, COLOR_GOLD);
+            new text_gui_item("", game.sys_content.fnt_area_name, COLOR_GOLD);
         specs_box->add_child(specs_name_text);
         gui.add_item(specs_name_text, "specs_name");
         
         //Goal header text.
         text_gui_item* goal_header_text =
-            new text_gui_item("Goal", game.sys_assets.fnt_area_name);
+            new text_gui_item("Goal", game.sys_content.fnt_area_name);
         specs_box->add_child(goal_header_text);
         gui.add_item(goal_header_text, "goal_header");
         
         //Goal explanation text.
         goal_text =
-            new text_gui_item("", game.sys_assets.fnt_standard);
+            new text_gui_item("", game.sys_content.fnt_standard);
         specs_box->add_child(goal_text);
         gui.add_item(goal_text, "goal");
         
         //Fail conditions header text.
         text_gui_item* fail_header_text =
-            new text_gui_item("Fail conditions", game.sys_assets.fnt_area_name);
+            new text_gui_item("Fail conditions", game.sys_content.fnt_area_name);
         specs_box->add_child(fail_header_text);
         gui.add_item(fail_header_text, "fail_header");
         
@@ -871,7 +871,7 @@ void area_menu_state::init_gui_specs_page() {
         
         //Grading header text.
         text_gui_item* grading_header_text =
-            new text_gui_item("Grading", game.sys_assets.fnt_area_name);
+            new text_gui_item("Grading", game.sys_content.fnt_area_name);
         specs_box->add_child(grading_header_text);
         gui.add_item(grading_header_text, "grading_header");
         
@@ -946,7 +946,7 @@ void area_menu_state::load() {
         }
     }
     
-    bmp_menu_bg = game.content.bitmaps.list.get(game.asset_file_names.bmp_main_menu);
+    bmp_menu_bg = game.content.bitmaps.list.get(game.sys_content_names.bmp_main_menu);
     
     init_gui_main();
     init_gui_info_page();

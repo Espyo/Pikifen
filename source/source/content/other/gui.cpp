@@ -99,7 +99,7 @@ void bullet_gui_item::def_draw_code(
     );
     
     draw_bitmap(
-        game.sys_assets.bmp_hard_bubble,
+        game.sys_content.bmp_hard_bubble,
         point(
             item_x_start + GUI::BULLET_RADIUS + GUI::BULLET_PADDING,
             center.y
@@ -120,7 +120,7 @@ void bullet_gui_item::def_draw_code(
         draw_textured_box(
             center,
             size + 10.0 + sin(game.time_passed * TAU) * 2.0f,
-            game.sys_assets.bmp_focus_box
+            game.sys_content.bmp_focus_box
         );
     }
 }
@@ -235,8 +235,8 @@ void check_gui_item::def_draw_code(const point &center, const point &size) {
     
     draw_bitmap(
         this->value ?
-        game.sys_assets.bmp_checkbox_check :
-        game.sys_assets.bmp_checkbox_no_check,
+        game.sys_content.bmp_checkbox_check :
+        game.sys_content.bmp_checkbox_no_check,
         this->text.empty() ?
         center :
         point((center.x + size.x * 0.5) - 40, center.y),
@@ -247,14 +247,14 @@ void check_gui_item::def_draw_code(const point &center, const point &size) {
         selected ? al_map_rgb(87, 200, 208) : COLOR_WHITE;
         
     draw_textured_box(
-        center, size, game.sys_assets.bmp_bubble_box, box_tint
+        center, size, game.sys_content.bmp_bubble_box, box_tint
     );
     
     if(selected) {
         draw_textured_box(
             center,
             size + 10.0 + sin(game.time_passed * TAU) * 2.0f,
-            game.sys_assets.bmp_focus_box
+            game.sys_content.bmp_focus_box
         );
     }
 }
@@ -283,8 +283,8 @@ bool gui_item::activate(const point &cursor_pos) {
     
     ALLEGRO_SAMPLE* sample =
         this == manager->back_item ?
-        game.sys_assets.sound_menu_back :
-        game.sys_assets.sound_menu_activate;
+        game.sys_content.sound_menu_back :
+        game.sys_content.sound_menu_activate;
     sound_source_config_t activate_sound_config;
     activate_sound_config.gain = 0.75f;
     game.audio.create_ui_sound_source(sample, activate_sound_config);
@@ -1149,7 +1149,7 @@ void gui_manager::set_selected_item(gui_item* item, bool silent) {
         select_sound_config.speed_deviation = 0.1f;
         select_sound_config.stack_min_pos = 0.01f;
         game.audio.create_ui_sound_source(
-            game.sys_assets.sound_menu_select,
+            game.sys_content.sound_menu_select,
             select_sound_config
         );
     }
@@ -1290,7 +1290,7 @@ void list_gui_item::def_child_selected_code(const gui_item* child) {
  */
 void list_gui_item::def_draw_code(const point &center, const point &size) {
     draw_textured_box(
-        center, size, game.sys_assets.bmp_frame_box,
+        center, size, game.sys_content.bmp_frame_box,
         COLOR_TRANSPARENT_WHITE
     );
     if(offset > 0.0f) {
@@ -1513,7 +1513,7 @@ void picker_gui_item::def_draw_code(const point &center, const point &size) {
     );
     draw_text(
         "<",
-        game.sys_assets.fnt_standard,
+        game.sys_content.fnt_standard,
         point(center.x - size.x * 0.45, center.y),
         arrow_box,
         real_arrow_highlight == 0 ?
@@ -1527,7 +1527,7 @@ void picker_gui_item::def_draw_code(const point &center, const point &size) {
     );
     draw_text(
         ">",
-        game.sys_assets.fnt_standard,
+        game.sys_content.fnt_standard,
         point(center.x + size.x * 0.45, center.y),
         arrow_box,
         real_arrow_highlight == 1 ?
@@ -1545,7 +1545,7 @@ void picker_gui_item::def_draw_code(const point &center, const point &size) {
     point text_box(size.x * 0.80, size.y * GUI::STANDARD_CONTENT_SIZE);
     draw_text(
         this->base_text + this->option,
-        game.sys_assets.fnt_standard,
+        game.sys_content.fnt_standard,
         point(center.x - size.x * 0.40, center.y),
         text_box,
         COLOR_WHITE,
@@ -1558,14 +1558,14 @@ void picker_gui_item::def_draw_code(const point &center, const point &size) {
         selected ? al_map_rgb(87, 200, 208) : COLOR_WHITE;
         
     draw_textured_box(
-        center, size, game.sys_assets.bmp_bubble_box, box_tint
+        center, size, game.sys_content.bmp_bubble_box, box_tint
     );
     
     if(selected) {
         draw_textured_box(
             center,
             size + 10.0 + sin(game.time_passed * TAU) * 2.0f,
-            game.sys_assets.bmp_focus_box
+            game.sys_content.bmp_focus_box
         );
     }
 }
@@ -1628,7 +1628,7 @@ void scroll_gui_item::def_draw_code(const point &center, const point &size) {
     }
     
     draw_textured_box(
-        center, size, game.sys_assets.bmp_frame_box,
+        center, size, game.sys_content.bmp_frame_box,
         al_map_rgba(255, 255, 255, alpha)
     );
     
@@ -1641,7 +1641,7 @@ void scroll_gui_item::def_draw_code(const point &center, const point &size) {
                 (size.y * bar_h * 0.5f)
             ),
             point(size.x, (size.y * bar_h)),
-            game.sys_assets.bmp_bubble_box
+            game.sys_content.bmp_bubble_box
         );
     }
 }
@@ -1724,14 +1724,14 @@ void text_gui_item::def_draw_code(const point &center, const point &size) {
         vector<string_token> tokens =
             tokenize_string(this->text);
         set_string_token_widths(
-            tokens, this->font, game.sys_assets.fnt_slim, line_height, false
+            tokens, this->font, game.sys_content.fnt_slim, line_height, false
         );
         vector<vector<string_token> > tokens_per_line =
             split_long_string_with_tokens(tokens, size.x);
             
         for(size_t l = 0; l < tokens_per_line.size(); l++) {
             draw_string_tokens(
-                tokens_per_line[l], this->font, game.sys_assets.fnt_slim,
+                tokens_per_line[l], this->font, game.sys_content.fnt_slim,
                 false,
                 point(
                     text_x,
@@ -1758,7 +1758,7 @@ void text_gui_item::def_draw_code(const point &center, const point &size) {
         draw_textured_box(
             center,
             size + 10.0 + sin(game.time_passed * TAU) * 2.0f,
-            game.sys_assets.bmp_focus_box
+            game.sys_content.bmp_focus_box
         );
     }
 }
@@ -1792,7 +1792,7 @@ void tooltip_gui_item::def_draw_code(const point &center, const point &size) {
     float juicy_grow_amount = get_juice_value();
     draw_text(
         cur_text,
-        game.sys_assets.fnt_standard,
+        game.sys_content.fnt_standard,
         center,
         size,
         COLOR_WHITE,

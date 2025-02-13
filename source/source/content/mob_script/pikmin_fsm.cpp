@@ -2171,7 +2171,7 @@ void pikmin_fsm::be_thrown_after_pluck(mob* m, void* info1, void* info2) {
     
     particle_generator pg =
         standard_particle_gen_setup(
-            game.asset_file_names.part_pikmin_pluck_dirt, m
+            game.sys_content_names.part_pikmin_pluck_dirt, m
         );
     m->particle_generators.push_back(pg);
 }
@@ -3821,7 +3821,7 @@ void pikmin_fsm::seed_landed(mob* m, void* info1, void* info2) {
     //Generate the rock particles that come out.
     particle_generator pg =
         standard_particle_gen_setup(
-            game.asset_file_names.part_pikmin_seed_landed, m
+            game.sys_content_names.part_pikmin_seed_landed, m
         );
     m->particle_generators.push_back(pg);
 }
@@ -3894,7 +3894,7 @@ void pikmin_fsm::sprout_evolve(mob* m, void* info1, void* info2) {
         
         particle_generator pg =
             standard_particle_gen_setup(
-                game.asset_file_names.part_sprout_evolution, pik_ptr
+                game.sys_content_names.part_sprout_evolution, pik_ptr
             );
         pik_ptr->particle_generators.push_back(pg);
         
@@ -3905,7 +3905,7 @@ void pikmin_fsm::sprout_evolve(mob* m, void* info1, void* info2) {
         
         particle_generator pg =
             standard_particle_gen_setup(
-                game.asset_file_names.part_sprout_regression, pik_ptr
+                game.sys_content_names.part_sprout_regression, pik_ptr
             );
         pik_ptr->particle_generators.push_back(pg);
     }
@@ -4483,7 +4483,7 @@ void pikmin_fsm::touched_hazard(mob* m, void* info1, void* info2) {
         if(!already_generating) {
             particle_generator pg =
                 standard_particle_gen_setup(
-                    game.asset_file_names.part_wave_ring, m
+                    game.sys_content_names.part_wave_ring, m
                 );
             pg.follow_z_offset = 1.0f;
             adjust_keyframe_interpolator_values<float>(

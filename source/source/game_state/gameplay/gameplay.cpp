@@ -779,15 +779,15 @@ void gameplay_state::load() {
     
     auto spark_anim_db_it =
         game.content.global_anim_dbs.list.find(
-            game.asset_file_names.anim_sparks
+            game.sys_content_names.anim_sparks
         );
     if(spark_anim_db_it == game.content.global_anim_dbs.list.end()) {
         game.errors.report(
-            "Unknown global animation \"" + game.asset_file_names.anim_sparks +
+            "Unknown global animation \"" + game.sys_content_names.anim_sparks +
             "\" when trying to load the leader damage sparks!"
         );
     } else {
-        game.sys_assets.anim_sparks.init_to_first_anim(
+        game.sys_content.anim_sparks.init_to_first_anim(
             &spark_anim_db_it->second
         );
     }
@@ -1236,7 +1236,7 @@ void gameplay_state::unload() {
     
     leader_movement.reset(); //TODO replace with a better solution.
     
-    game.sys_assets.anim_sparks.clear();
+    game.sys_content.anim_sparks.clear();
     unload_game_content();
     game.content.unload_current_area(CONTENT_LOAD_LEVEL_FULL);
     
@@ -1425,8 +1425,8 @@ msg_box_t::msg_box_t(const string &text, ALLEGRO_BITMAP* speaker_icon):
     }
     vector<string_token> tokens = tokenize_string(message);
     set_string_token_widths(
-        tokens, game.sys_assets.fnt_standard, game.sys_assets.fnt_slim,
-        al_get_font_line_height(game.sys_assets.fnt_standard), true
+        tokens, game.sys_content.fnt_standard, game.sys_content.fnt_slim,
+        al_get_font_line_height(game.sys_content.fnt_standard), true
     );
     
     vector<string_token> line;

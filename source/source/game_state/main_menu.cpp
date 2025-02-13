@@ -73,7 +73,7 @@ void main_menu_state::do_drawing() {
     
     draw_text(
         "Pikifen and contents are fan works. Pikmin is (c) Nintendo.",
-        game.sys_assets.fnt_slim,
+        game.sys_content.fnt_slim,
         point(8.0f),
         point(game.win_w * 0.45f, game.win_h * 0.02f), map_alpha(192),
         ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP
@@ -89,7 +89,7 @@ void main_menu_state::do_drawing() {
     version_text +=
         "Pikifen " + get_engine_version_string();
     draw_text(
-        version_text, game.sys_assets.fnt_slim,
+        version_text, game.sys_content.fnt_slim,
         point(game.win_w - 8, 8),
         point(game.win_w * 0.45f, game.win_h * 0.02f), map_alpha(192),
         ALLEGRO_ALIGN_RIGHT, V_ALIGN_MODE_TOP
@@ -225,7 +225,7 @@ void main_menu_state::init_gui_main_page() {
     
     //Play button.
     button_gui_item* play_button =
-        new button_gui_item("Play", game.sys_assets.fnt_area_name);
+        new button_gui_item("Play", game.sys_content.fnt_area_name);
     play_button->on_draw =
     [ = ] (const point & center, const point & size) {
         draw_menu_button_icon(
@@ -265,7 +265,7 @@ void main_menu_state::init_gui_main_page() {
     
     //Make button.
     button_gui_item* make_button =
-        new button_gui_item("Make", game.sys_assets.fnt_area_name);
+        new button_gui_item("Make", game.sys_content.fnt_area_name);
     make_button->on_draw =
     [ = ] (const point & center, const point & size) {
         draw_menu_button_icon(
@@ -297,7 +297,7 @@ void main_menu_state::init_gui_main_page() {
     
     //Help button.
     button_gui_item* help_button =
-        new button_gui_item("Help", game.sys_assets.fnt_area_name);
+        new button_gui_item("Help", game.sys_content.fnt_area_name);
     help_button->on_draw =
     [ = ] (const point & center, const point & size) {
         draw_menu_button_icon(
@@ -326,7 +326,7 @@ void main_menu_state::init_gui_main_page() {
     
     //Options button.
     button_gui_item* options_button =
-        new button_gui_item("Options", game.sys_assets.fnt_area_name);
+        new button_gui_item("Options", game.sys_content.fnt_area_name);
     options_button->on_draw =
     [ = ] (const point & center, const point & size) {
         draw_menu_button_icon(
@@ -353,7 +353,7 @@ void main_menu_state::init_gui_main_page() {
     
     //Statistics button.
     button_gui_item* stats_button =
-        new button_gui_item("Statistics", game.sys_assets.fnt_area_name);
+        new button_gui_item("Statistics", game.sys_content.fnt_area_name);
     stats_button->on_draw =
     [ = ] (const point & center, const point & size) {
         draw_menu_button_icon(
@@ -380,11 +380,11 @@ void main_menu_state::init_gui_main_page() {
     
     //Discord server button.
     button_gui_item* discord_button =
-        new button_gui_item("", game.sys_assets.fnt_area_name);
+        new button_gui_item("", game.sys_content.fnt_area_name);
     discord_button->on_draw =
     [ = ] (const point & center, const point & size) {
         draw_bitmap_in_box(
-            game.sys_assets.bmp_discord_icon, center, size * 0.8f, true
+            game.sys_content.bmp_discord_icon, center, size * 0.8f, true
         );
         draw_button(
             center, size,
@@ -407,11 +407,11 @@ void main_menu_state::init_gui_main_page() {
     
     //GitHub page button.
     button_gui_item* github_button =
-        new button_gui_item("", game.sys_assets.fnt_area_name);
+        new button_gui_item("", game.sys_content.fnt_area_name);
     github_button->on_draw =
     [ = ] (const point & center, const point & size) {
         draw_bitmap_in_box(
-            game.sys_assets.bmp_github_icon, center, size * 0.8f, true
+            game.sys_content.bmp_github_icon, center, size * 0.8f, true
         );
         draw_button(
             center, size,
@@ -430,7 +430,7 @@ void main_menu_state::init_gui_main_page() {
     
     //Exit button.
     main_gui.back_item =
-        new button_gui_item("Exit", game.sys_assets.fnt_area_name);
+        new button_gui_item("Exit", game.sys_content.fnt_area_name);
     main_gui.back_item->on_draw =
     [ = ] (const point & center, const point & size) {
         draw_menu_button_icon(
@@ -506,7 +506,7 @@ void main_menu_state::init_gui_make_page() {
     
     //Animation editor button.
     button_gui_item* anim_ed_button =
-        new button_gui_item("Animations", game.sys_assets.fnt_area_name);
+        new button_gui_item("Animations", game.sys_content.fnt_area_name);
     anim_ed_button->on_draw =
     [ = ] (const point & center, const point & size) {
         draw_menu_button_icon(
@@ -531,7 +531,7 @@ void main_menu_state::init_gui_make_page() {
     
     //Area editor button.
     button_gui_item* area_ed_button =
-        new button_gui_item("Areas", game.sys_assets.fnt_area_name);
+        new button_gui_item("Areas", game.sys_content.fnt_area_name);
     area_ed_button->on_draw =
     [ = ] (const point & center, const point & size) {
         draw_menu_button_icon(
@@ -556,7 +556,7 @@ void main_menu_state::init_gui_make_page() {
     
     //Particle editor button.
     button_gui_item* part_ed_button =
-        new button_gui_item("Particles", game.sys_assets.fnt_area_name);
+        new button_gui_item("Particles", game.sys_content.fnt_area_name);
     part_ed_button->on_draw =
     [ = ](const point & center, const point & size) {
         draw_menu_button_icon(
@@ -581,7 +581,7 @@ void main_menu_state::init_gui_make_page() {
     
     //GUI editor button.
     button_gui_item* gui_ed_button =
-        new button_gui_item("GUI", game.sys_assets.fnt_area_name);
+        new button_gui_item("GUI", game.sys_content.fnt_area_name);
     gui_ed_button->on_draw =
     [ = ] (const point & center, const point & size) {
         draw_menu_button_icon(
@@ -606,7 +606,7 @@ void main_menu_state::init_gui_make_page() {
     
     //Back button.
     make_gui.back_item =
-        new button_gui_item("Back", game.sys_assets.fnt_area_name);
+        new button_gui_item("Back", game.sys_content.fnt_area_name);
     make_gui.back_item->on_activate =
     [this] (const point &) {
         make_gui.responsive = false;
@@ -631,7 +631,7 @@ void main_menu_state::init_gui_make_page() {
     
     //More bullet point.
     bullet_gui_item* more_bullet =
-        new bullet_gui_item("More...", game.sys_assets.fnt_standard);
+        new bullet_gui_item("More...", game.sys_content.fnt_standard);
     more_bullet->on_activate =
     [] (const point &) {
         open_manual("making.html");
@@ -683,7 +683,7 @@ void main_menu_state::init_gui_play_page() {
     
     //Play a simple area button.
     button_gui_item* simple_button =
-        new button_gui_item("Simple areas", game.sys_assets.fnt_area_name);
+        new button_gui_item("Simple areas", game.sys_content.fnt_area_name);
     simple_button->on_draw =
     [ = ] (const point & center, const point & size) {
         draw_menu_button_icon(
@@ -709,7 +709,7 @@ void main_menu_state::init_gui_play_page() {
     
     //Play a mission area button.
     button_gui_item* mission_button =
-        new button_gui_item("Missions", game.sys_assets.fnt_area_name);
+        new button_gui_item("Missions", game.sys_content.fnt_area_name);
     mission_button->on_draw =
     [ = ] (const point & center, const point & size) {
         draw_menu_button_icon(
@@ -739,7 +739,7 @@ void main_menu_state::init_gui_play_page() {
     
     //Back button.
     play_gui.back_item =
-        new button_gui_item("Back", game.sys_assets.fnt_area_name);
+        new button_gui_item("Back", game.sys_content.fnt_area_name);
     play_gui.back_item->on_activate =
     [this] (const point &) {
         play_gui.responsive = false;
@@ -794,14 +794,14 @@ void main_menu_state::init_gui_tutorial_page() {
         "If you're new to Pikifen, it is recommended to play the "
         "\"Tutorial Meadow\" mission first.\n\n"
         "Do you want to play there now?",
-        game.sys_assets.fnt_standard
+        game.sys_content.fnt_standard
     );
     question_text->line_wrap = true;
     tutorial_gui.add_item(question_text, "question");
     
     //No button.
     tutorial_gui.back_item =
-        new button_gui_item("No", game.sys_assets.fnt_standard);
+        new button_gui_item("No", game.sys_content.fnt_standard);
     tutorial_gui.back_item->on_activate =
     [this] (const point &) {
         tutorial_gui.responsive = false;
@@ -827,7 +827,7 @@ void main_menu_state::init_gui_tutorial_page() {
     
     //Yes button.
     button_gui_item* yes_button =
-        new button_gui_item("Yes", game.sys_assets.fnt_standard);
+        new button_gui_item("Yes", game.sys_content.fnt_standard);
     yes_button->on_activate =
     [] (const point &) {
         game.states.gameplay->path_of_area_to_load =
@@ -901,7 +901,7 @@ void main_menu_state::load() {
     data_node* settings_file = &game.content.gui_defs.list[MAIN_MENU::GUI_FILE_NAME];
     
     //Resources.
-    bmp_menu_bg = game.content.bitmaps.list.get(game.asset_file_names.bmp_main_menu);
+    bmp_menu_bg = game.content.bitmaps.list.get(game.sys_content_names.bmp_main_menu);
     
     //Logo pikmin.
     data_node* logo_node = settings_file->get_child_by_name("logo");

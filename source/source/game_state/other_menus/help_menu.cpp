@@ -79,7 +79,7 @@ help_menu_t::help_menu_t() {
     //Back button.
     gui.back_item =
         new button_gui_item(
-        "Back", game.sys_assets.fnt_standard
+        "Back", game.sys_content.fnt_standard
     );
     gui.back_item->on_activate =
     [this] (const point &) {
@@ -95,7 +95,7 @@ help_menu_t::help_menu_t() {
     
     //Gameplay basics button.
     button_gui_item* gameplay1_button =
-        new button_gui_item("Gameplay basics", game.sys_assets.fnt_standard);
+        new button_gui_item("Gameplay basics", game.sys_content.fnt_standard);
     gameplay1_button->on_activate =
     [this] (const point &) {
         populate_tidbits(HELP_CATEGORY_GAMEPLAY1);
@@ -108,7 +108,7 @@ help_menu_t::help_menu_t() {
     
     //Gameplay advanced button.
     button_gui_item* gameplay2_button =
-        new button_gui_item("Advanced gameplay", game.sys_assets.fnt_standard);
+        new button_gui_item("Advanced gameplay", game.sys_content.fnt_standard);
     gameplay2_button->on_activate =
     [this] (const point &) {
         populate_tidbits(HELP_CATEGORY_GAMEPLAY2);
@@ -121,7 +121,7 @@ help_menu_t::help_menu_t() {
     
     //Controls button.
     button_gui_item* controls_button =
-        new button_gui_item("Controls", game.sys_assets.fnt_standard);
+        new button_gui_item("Controls", game.sys_content.fnt_standard);
     controls_button->on_activate =
     [this] (const point &) {
         populate_tidbits(HELP_CATEGORY_CONTROLS);
@@ -134,7 +134,7 @@ help_menu_t::help_menu_t() {
     
     //Pikmin button.
     button_gui_item* pikmin_button =
-        new button_gui_item("Pikmin types", game.sys_assets.fnt_standard);
+        new button_gui_item("Pikmin types", game.sys_content.fnt_standard);
     pikmin_button->on_activate =
     [this] (const point &) {
         populate_tidbits(HELP_CATEGORY_PIKMIN);
@@ -147,7 +147,7 @@ help_menu_t::help_menu_t() {
     
     //Objects button.
     button_gui_item* objects_button =
-        new button_gui_item("Objects", game.sys_assets.fnt_standard);
+        new button_gui_item("Objects", game.sys_content.fnt_standard);
     objects_button->on_activate =
     [this] (const point &) {
         populate_tidbits(HELP_CATEGORY_OBJECTS);
@@ -160,7 +160,7 @@ help_menu_t::help_menu_t() {
     
     //Manual text.
     bullet_gui_item* manual_bullet =
-        new bullet_gui_item("More help...", game.sys_assets.fnt_standard);
+        new bullet_gui_item("More help...", game.sys_content.fnt_standard);
     manual_bullet->on_activate =
     [] (const point &) {
         open_manual("home.html");
@@ -172,7 +172,7 @@ help_menu_t::help_menu_t() {
     gui.add_item(manual_bullet, "manual");
     
     //Category text.
-    category_text = new text_gui_item("Help", game.sys_assets.fnt_standard);
+    category_text = new text_gui_item("Help", game.sys_content.fnt_standard);
     gui.add_item(category_text, "category");
     
     //Tidbit list box.
@@ -199,12 +199,12 @@ help_menu_t::help_menu_t() {
     
     //Tooltip text.
     text_gui_item* tooltip_text =
-        new text_gui_item("", game.sys_assets.fnt_standard);
+        new text_gui_item("", game.sys_content.fnt_standard);
     tooltip_text->on_draw =
         [this]
     (const point & center, const point & size) {
         draw_tidbit(
-            game.sys_assets.fnt_standard, center, size,
+            game.sys_content.fnt_standard, center, size,
             gui.get_current_tooltip()
         );
     };
@@ -265,7 +265,7 @@ void help_menu_t::draw_tidbit(
     
     int line_height = al_get_font_line_height(font);
     
-    set_string_token_widths(tokens, font, game.sys_assets.fnt_slim, line_height, true);
+    set_string_token_widths(tokens, font, game.sys_content.fnt_slim, line_height, true);
     
     //Split long lines.
     vector<vector<string_token> > tokens_per_line =
@@ -286,7 +286,7 @@ void help_menu_t::draw_tidbit(
     //Draw!
     for(size_t l = 0; l < tokens_per_line.size(); l++) {
         draw_string_tokens(
-            tokens_per_line[l], game.sys_assets.fnt_standard, game.sys_assets.fnt_slim,
+            tokens_per_line[l], game.sys_content.fnt_standard, game.sys_content.fnt_slim,
             true,
             point(
                 where.x,
@@ -355,7 +355,7 @@ void help_menu_t::populate_tidbits(const HELP_CATEGORY category) {
         bullet_gui_item* tidbit_bullet =
             new bullet_gui_item(
             t_ptr->name,
-            game.sys_assets.fnt_standard
+            game.sys_content.fnt_standard
         );
         tidbit_bullet->center = point(0.50f, 0.045f + t * 0.10f);
         tidbit_bullet->size = point(1.0f, 0.09f);

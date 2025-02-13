@@ -94,14 +94,14 @@ onion_menu_t::onion_menu_t(
     //Instructions text.
     text_gui_item* instructions_text =
         new text_gui_item(
-        "Call or store Pikmin", game.sys_assets.fnt_standard, al_map_rgb(188, 230, 230)
+        "Call or store Pikmin", game.sys_content.fnt_standard, al_map_rgb(188, 230, 230)
     );
     gui.add_item(instructions_text, "instructions");
     
     //Cancel button.
     gui.back_item =
         new button_gui_item(
-        "Cancel", game.sys_assets.fnt_standard, al_map_rgb(226, 112, 112)
+        "Cancel", game.sys_content.fnt_standard, al_map_rgb(226, 112, 112)
     );
     gui.back_item->on_activate =
     [this] (const point &) {
@@ -117,7 +117,7 @@ onion_menu_t::onion_menu_t(
     //Ok button.
     button_gui_item* ok_button =
         new button_gui_item(
-        "Ok", game.sys_assets.fnt_standard, al_map_rgb(96, 226, 80)
+        "Ok", game.sys_content.fnt_standard, al_map_rgb(96, 226, 80)
     );
     ok_button->on_activate =
     [this] (const point &) {
@@ -130,7 +130,7 @@ onion_menu_t::onion_menu_t(
     
     //Field amount text.
     field_amount_text =
-        new text_gui_item("", game.sys_assets.fnt_standard);
+        new text_gui_item("", game.sys_content.fnt_standard);
     field_amount_text->on_draw =
     [this] (const point & center, const point & size) {
         int total_delta = 0;
@@ -158,7 +158,7 @@ onion_menu_t::onion_menu_t(
         draw_text(
             "Field: " +
             i2s(game.states.gameplay->mobs.pikmin_list.size() + total_delta),
-            game.sys_assets.fnt_standard, center,
+            game.sys_content.fnt_standard, center,
             size * GUI::STANDARD_CONTENT_SIZE, color,
             ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
             point(1.0f + juicy_grow_amount)
@@ -170,7 +170,7 @@ onion_menu_t::onion_menu_t(
     check_gui_item* select_all_check =
         new check_gui_item(
         &select_all,
-        "Select all", game.sys_assets.fnt_standard, al_map_rgb(188, 230, 230)
+        "Select all", game.sys_content.fnt_standard, al_map_rgb(188, 230, 230)
     );
     select_all_check->on_activate =
     [this, select_all_check] (const point &) {
@@ -206,14 +206,14 @@ onion_menu_t::onion_menu_t(
         onion_icon_items.push_back(onion_icon);
         
         button_gui_item* onion_button =
-            new button_gui_item("", game.sys_assets.fnt_standard);
+            new button_gui_item("", game.sys_content.fnt_standard);
         onion_button->on_draw =
         [this, onion_button] (const point & center, const point & size) {
             float juicy_grow_amount = onion_button->get_juice_value();
             draw_button(
                 center,
                 size + juicy_grow_amount,
-                "", game.sys_assets.fnt_standard, COLOR_WHITE,
+                "", game.sys_content.fnt_standard, COLOR_WHITE,
                 onion_button->selected
             );
         };
@@ -233,14 +233,14 @@ onion_menu_t::onion_menu_t(
     
     //Onion's all button.
     onion_all_button =
-        new button_gui_item("", game.sys_assets.fnt_standard);
+        new button_gui_item("", game.sys_content.fnt_standard);
     onion_all_button->on_draw =
     [this] (const point & center, const point & size) {
         float juicy_grow_amount = onion_all_button->get_juice_value();
         draw_button(
             center,
             size + juicy_grow_amount,
-            "", game.sys_assets.fnt_standard, COLOR_WHITE,
+            "", game.sys_content.fnt_standard, COLOR_WHITE,
             onion_all_button->selected
         );
     };
@@ -283,7 +283,7 @@ onion_menu_t::onion_menu_t(
             float juicy_grow_amount = onion_amount_text->get_juice_value();
             draw_text(
                 i2s(real_onion_amount - t_ptr->delta),
-                game.sys_assets.fnt_area_name, center,
+                game.sys_content.fnt_area_name, center,
                 size * GUI::STANDARD_CONTENT_SIZE, color,
                 ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
                 point(1.0f + juicy_grow_amount)
@@ -313,14 +313,14 @@ onion_menu_t::onion_menu_t(
         group_icon_items.push_back(group_icon);
         
         button_gui_item* group_button =
-            new button_gui_item("", game.sys_assets.fnt_standard);
+            new button_gui_item("", game.sys_content.fnt_standard);
         group_button->on_draw =
         [this, group_button] (const point & center, const point & size) {
             float juicy_grow_amount = group_button->get_juice_value();
             draw_button(
                 center,
                 size + juicy_grow_amount,
-                "", game.sys_assets.fnt_standard, COLOR_WHITE,
+                "", game.sys_content.fnt_standard, COLOR_WHITE,
                 group_button->selected
             );
         };
@@ -340,14 +340,14 @@ onion_menu_t::onion_menu_t(
     
     //Group's all button.
     group_all_button =
-        new button_gui_item("", game.sys_assets.fnt_standard);
+        new button_gui_item("", game.sys_content.fnt_standard);
     group_all_button->on_draw =
     [this] (const point & center, const point & size) {
         float juicy_grow_amount = group_all_button->get_juice_value();
         draw_button(
             center,
             size + juicy_grow_amount,
-            "", game.sys_assets.fnt_standard, COLOR_WHITE,
+            "", game.sys_content.fnt_standard, COLOR_WHITE,
             group_all_button->selected
         );
     };
@@ -390,7 +390,7 @@ onion_menu_t::onion_menu_t(
             float juicy_grow_amount = group_amount_text->get_juice_value();
             draw_text(
                 i2s(real_group_amount + t_ptr->delta),
-                game.sys_assets.fnt_area_name, center,
+                game.sys_content.fnt_area_name, center,
                 size * GUI::STANDARD_CONTENT_SIZE, color,
                 ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
                 point(1.0f + juicy_grow_amount)
@@ -405,7 +405,7 @@ onion_menu_t::onion_menu_t(
     onion_more_l_icon->on_draw =
     [this] (const point & center, const point & size) {
         draw_bitmap(
-            game.sys_assets.bmp_more,
+            game.sys_content.bmp_more,
             center,
             point(-size.x, size.y) * 0.8f,
             0, map_gray(128)
@@ -418,7 +418,7 @@ onion_menu_t::onion_menu_t(
     onion_more_r_icon->on_draw =
     [this] (const point & center, const point & size) {
         draw_bitmap(
-            game.sys_assets.bmp_more,
+            game.sys_content.bmp_more,
             center,
             size * 0.8f,
             0, map_gray(128)
@@ -431,7 +431,7 @@ onion_menu_t::onion_menu_t(
     group_more_l_icon->on_draw =
     [this] (const point & center, const point & size) {
         draw_bitmap(
-            game.sys_assets.bmp_more,
+            game.sys_content.bmp_more,
             center,
             point(-size.x, size.y) * 0.8f,
             0, map_gray(128)
@@ -444,7 +444,7 @@ onion_menu_t::onion_menu_t(
     group_more_r_icon->on_draw =
     [this] (const point & center, const point & size) {
         draw_bitmap(
-            game.sys_assets.bmp_more,
+            game.sys_content.bmp_more,
             center,
             size * 0.8f,
             0, map_gray(128)
@@ -457,12 +457,12 @@ onion_menu_t::onion_menu_t(
     prev_page_button->on_draw =
     [this] (const point & center, const point & size) {
         draw_bitmap(
-            game.sys_assets.bmp_more,
+            game.sys_content.bmp_more,
             center, point(-size.x, size.y) * 0.5f
         );
         
         draw_button(
-            center, size, "", game.sys_assets.fnt_standard, COLOR_WHITE,
+            center, size, "", game.sys_content.fnt_standard, COLOR_WHITE,
             prev_page_button->selected,
             prev_page_button->get_juice_value()
         );
@@ -482,12 +482,12 @@ onion_menu_t::onion_menu_t(
     next_page_button->on_draw =
     [this] (const point & center, const point & size) {
         draw_bitmap(
-            game.sys_assets.bmp_more,
+            game.sys_content.bmp_more,
             center, size * 0.5f
         );
         
         draw_button(
-            center, size, "", game.sys_assets.fnt_standard, COLOR_WHITE,
+            center, size, "", game.sys_content.fnt_standard, COLOR_WHITE,
             next_page_button->selected,
             next_page_button->get_juice_value()
         );

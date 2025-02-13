@@ -250,52 +250,52 @@ void load_fonts() {
     //So we load them into bitmaps first.
     
     //Area name font.
-    game.sys_assets.fnt_area_name =
+    game.sys_content.fnt_area_name =
         load_font(
-            game.asset_file_names.fnt_area_name,
+            game.sys_content_names.fnt_area_name,
             STANDARD_FONT_RANGES_SIZE / 2, STANDARD_FONT_RANGES,
             34
         );
         
     //Built-in font.
-    game.sys_assets.fnt_builtin = al_create_builtin_font();
+    game.sys_content.fnt_builtin = al_create_builtin_font();
     
     //Counter font.
-    game.sys_assets.fnt_counter =
+    game.sys_content.fnt_counter =
         load_font(
-            game.asset_file_names.fnt_counter,
+            game.sys_content_names.fnt_counter,
             COUNTER_FONT_RANGES_SIZE / 2, COUNTER_FONT_RANGES,
             32
         );
         
     //Cursor counter font.
-    game.sys_assets.fnt_cursor_counter =
+    game.sys_content.fnt_cursor_counter =
         load_font(
-            game.asset_file_names.fnt_cursor_counter,
+            game.sys_content_names.fnt_cursor_counter,
             JUST_NUMBERS_FONT_RANGES_SIZE / 2, JUST_NUMBERS_FONT_RANGES,
             16
         );
         
     //Slim font.
-    game.sys_assets.fnt_slim =
+    game.sys_content.fnt_slim =
         load_font(
-            game.asset_file_names.fnt_slim,
+            game.sys_content_names.fnt_slim,
             STANDARD_FONT_RANGES_SIZE / 2, STANDARD_FONT_RANGES,
             22
         );
         
     //Standard font.
-    game.sys_assets.fnt_standard =
+    game.sys_content.fnt_standard =
         load_font(
-            game.asset_file_names.fnt_standard,
+            game.sys_content_names.fnt_standard,
             STANDARD_FONT_RANGES_SIZE / 2, STANDARD_FONT_RANGES,
             22
         );
         
     //Value font.
-    game.sys_assets.fnt_value =
+    game.sys_content.fnt_value =
         load_font(
-            game.asset_file_names.fnt_value,
+            game.sys_content_names.fnt_value,
             VALUE_FONT_RANGES_SIZE / 2, VALUE_FONT_RANGES,
             16
         );
@@ -357,98 +357,98 @@ void load_maker_tools() {
  */
 void load_misc_graphics() {
     //Icon.
-    game.sys_assets.bmp_icon = game.content.bitmaps.list.get(game.asset_file_names.bmp_icon);
-    al_set_display_icon(game.display, game.sys_assets.bmp_icon);
+    game.sys_content.bmp_icon = game.content.bitmaps.list.get(game.sys_content_names.bmp_icon);
+    al_set_display_icon(game.display, game.sys_content.bmp_icon);
     
     //Graphics.
-    game.sys_assets.bmp_menu_icons =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_menu_icons);
-    game.sys_assets.bmp_bright_circle =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_bright_circle);
-    game.sys_assets.bmp_bright_ring =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_bright_ring);
-    game.sys_assets.bmp_bubble_box =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_bubble_box);
-    game.sys_assets.bmp_button_box =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_button_box);
-    game.sys_assets.bmp_checkbox_check =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_checkbox_check);
-    game.sys_assets.bmp_checkbox_no_check =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_checkbox_no_check);
-    game.sys_assets.bmp_cursor =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_cursor);
-    game.sys_assets.bmp_discord_icon =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_discord_icon);
-    game.sys_assets.bmp_enemy_spirit =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_enemy_spirit);
-    game.sys_assets.bmp_focus_box =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_focus_box);
-    game.sys_assets.bmp_frame_box =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_frame_box);
-    game.sys_assets.bmp_github_icon =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_github_icon);
-    game.sys_assets.bmp_hard_bubble =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_hard_bubble);
-    game.sys_assets.bmp_idle_glow =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_idle_glow);
-    game.sys_assets.bmp_key_box =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_key_box);
-    game.sys_assets.bmp_leader_silhouette_side =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_leader_silhouette_side);
-    game.sys_assets.bmp_leader_silhouette_top =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_leader_silhouette_top);
-    game.sys_assets.bmp_medal_bronze =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_medal_bronze);
-    game.sys_assets.bmp_medal_gold =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_medal_gold);
-    game.sys_assets.bmp_medal_none =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_medal_none);
-    game.sys_assets.bmp_medal_platinum =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_medal_platinum);
-    game.sys_assets.bmp_medal_silver =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_medal_silver);
-    game.sys_assets.bmp_menu_icons =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_menu_icons);
-    game.sys_assets.bmp_mission_clear =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_mission_clear);
-    game.sys_assets.bmp_mission_fail =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_mission_fail);
-    game.sys_assets.bmp_more =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_more);
-    game.sys_assets.bmp_mouse_cursor =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_mouse_cursor);
-    game.sys_assets.bmp_notification =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_notification);
-    game.sys_assets.bmp_pikmin_spirit =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_pikmin_spirit);
-    game.sys_assets.bmp_player_input_icons =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_player_input_icons);
-    game.sys_assets.bmp_random =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_random);
-    game.sys_assets.bmp_rock =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_rock);
-    game.sys_assets.bmp_shadow =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_shadow);
-    game.sys_assets.bmp_shadow_square =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_shadow_square);
-    game.sys_assets.bmp_smack =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_smack);
-    game.sys_assets.bmp_smoke =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_smoke);
-    game.sys_assets.bmp_sparkle =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_sparkle);
-    game.sys_assets.bmp_spotlight =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_spotlight);
-    game.sys_assets.bmp_swarm_arrow =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_swarm_arrow);
-    game.sys_assets.bmp_throw_invalid =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_throw_invalid);
-    game.sys_assets.bmp_throw_preview =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_throw_preview);
-    game.sys_assets.bmp_throw_preview_dashed =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_throw_preview_dashed);
-    game.sys_assets.bmp_wave_ring =
-        game.content.bitmaps.list.get(game.asset_file_names.bmp_wave_ring);
+    game.sys_content.bmp_menu_icons =
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_menu_icons);
+    game.sys_content.bmp_bright_circle =
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_bright_circle);
+    game.sys_content.bmp_bright_ring =
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_bright_ring);
+    game.sys_content.bmp_bubble_box =
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_bubble_box);
+    game.sys_content.bmp_button_box =
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_button_box);
+    game.sys_content.bmp_checkbox_check =
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_checkbox_check);
+    game.sys_content.bmp_checkbox_no_check =
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_checkbox_no_check);
+    game.sys_content.bmp_cursor =
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_cursor);
+    game.sys_content.bmp_discord_icon =
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_discord_icon);
+    game.sys_content.bmp_enemy_spirit =
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_enemy_spirit);
+    game.sys_content.bmp_focus_box =
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_focus_box);
+    game.sys_content.bmp_frame_box =
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_frame_box);
+    game.sys_content.bmp_github_icon =
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_github_icon);
+    game.sys_content.bmp_hard_bubble =
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_hard_bubble);
+    game.sys_content.bmp_idle_glow =
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_idle_glow);
+    game.sys_content.bmp_key_box =
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_key_box);
+    game.sys_content.bmp_leader_silhouette_side =
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_leader_silhouette_side);
+    game.sys_content.bmp_leader_silhouette_top =
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_leader_silhouette_top);
+    game.sys_content.bmp_medal_bronze =
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_medal_bronze);
+    game.sys_content.bmp_medal_gold =
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_medal_gold);
+    game.sys_content.bmp_medal_none =
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_medal_none);
+    game.sys_content.bmp_medal_platinum =
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_medal_platinum);
+    game.sys_content.bmp_medal_silver =
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_medal_silver);
+    game.sys_content.bmp_menu_icons =
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_menu_icons);
+    game.sys_content.bmp_mission_clear =
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_mission_clear);
+    game.sys_content.bmp_mission_fail =
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_mission_fail);
+    game.sys_content.bmp_more =
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_more);
+    game.sys_content.bmp_mouse_cursor =
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_mouse_cursor);
+    game.sys_content.bmp_notification =
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_notification);
+    game.sys_content.bmp_pikmin_spirit =
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_pikmin_spirit);
+    game.sys_content.bmp_player_input_icons =
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_player_input_icons);
+    game.sys_content.bmp_random =
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_random);
+    game.sys_content.bmp_rock =
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_rock);
+    game.sys_content.bmp_shadow =
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_shadow);
+    game.sys_content.bmp_shadow_square =
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_shadow_square);
+    game.sys_content.bmp_smack =
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_smack);
+    game.sys_content.bmp_smoke =
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_smoke);
+    game.sys_content.bmp_sparkle =
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_sparkle);
+    game.sys_content.bmp_spotlight =
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_spotlight);
+    game.sys_content.bmp_swarm_arrow =
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_swarm_arrow);
+    game.sys_content.bmp_throw_invalid =
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_throw_invalid);
+    game.sys_content.bmp_throw_preview =
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_throw_preview);
+    game.sys_content.bmp_throw_preview_dashed =
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_throw_preview_dashed);
+    game.sys_content.bmp_wave_ring =
+        game.content.bitmaps.list.get(game.sys_content_names.bmp_wave_ring);
 }
 
 
@@ -465,18 +465,18 @@ void load_misc_sounds() {
     );
     
     //Sound effects.
-    game.sys_assets.sound_attack =
-        game.content.sounds.list.get(game.asset_file_names.sound_attack);
-    game.sys_assets.sound_camera =
-        game.content.sounds.list.get(game.asset_file_names.sound_camera);
-    game.sys_assets.sound_menu_activate =
-        game.content.sounds.list.get(game.asset_file_names.sound_menu_activate);
-    game.sys_assets.sound_menu_back =
-        game.content.sounds.list.get(game.asset_file_names.sound_menu_back);
-    game.sys_assets.sound_menu_select =
-        game.content.sounds.list.get(game.asset_file_names.sound_menu_select);
-    game.sys_assets.sound_switch_pikmin =
-        game.content.sounds.list.get(game.asset_file_names.sound_switch_pikmin);
+    game.sys_content.sound_attack =
+        game.content.sounds.list.get(game.sys_content_names.sound_attack);
+    game.sys_content.sound_camera =
+        game.content.sounds.list.get(game.sys_content_names.sound_camera);
+    game.sys_content.sound_menu_activate =
+        game.content.sounds.list.get(game.sys_content_names.sound_menu_activate);
+    game.sys_content.sound_menu_back =
+        game.content.sounds.list.get(game.sys_content_names.sound_menu_back);
+    game.sys_content.sound_menu_select =
+        game.content.sounds.list.get(game.sys_content_names.sound_menu_select);
+    game.sys_content.sound_switch_pikmin =
+        game.content.sounds.list.get(game.sys_content_names.sound_switch_pikmin);
 }
 
 
@@ -580,64 +580,64 @@ void load_statistics() {
  */
 void unload_misc_resources() {
     //Graphics.
-    game.content.bitmaps.list.free(game.sys_assets.bmp_bright_circle);
-    game.content.bitmaps.list.free(game.sys_assets.bmp_bright_ring);
-    game.content.bitmaps.list.free(game.sys_assets.bmp_bubble_box);
-    game.content.bitmaps.list.free(game.sys_assets.bmp_button_box);
-    game.content.bitmaps.list.free(game.sys_assets.bmp_checkbox_check);
-    game.content.bitmaps.list.free(game.sys_assets.bmp_checkbox_no_check);
-    game.content.bitmaps.list.free(game.sys_assets.bmp_cursor);
-    game.content.bitmaps.list.free(game.sys_assets.bmp_discord_icon);
-    game.content.bitmaps.list.free(game.sys_assets.bmp_enemy_spirit);
-    game.content.bitmaps.list.free(game.sys_assets.bmp_focus_box);
-    game.content.bitmaps.list.free(game.sys_assets.bmp_frame_box);
-    game.content.bitmaps.list.free(game.sys_assets.bmp_github_icon);
-    game.content.bitmaps.list.free(game.sys_assets.bmp_hard_bubble);
-    game.content.bitmaps.list.free(game.sys_assets.bmp_icon);
-    game.content.bitmaps.list.free(game.sys_assets.bmp_idle_glow);
-    game.content.bitmaps.list.free(game.sys_assets.bmp_key_box);
-    game.content.bitmaps.list.free(game.sys_assets.bmp_leader_silhouette_side);
-    game.content.bitmaps.list.free(game.sys_assets.bmp_leader_silhouette_top);
-    game.content.bitmaps.list.free(game.sys_assets.bmp_medal_bronze);
-    game.content.bitmaps.list.free(game.sys_assets.bmp_medal_gold);
-    game.content.bitmaps.list.free(game.sys_assets.bmp_medal_none);
-    game.content.bitmaps.list.free(game.sys_assets.bmp_medal_platinum);
-    game.content.bitmaps.list.free(game.sys_assets.bmp_medal_silver);
-    game.content.bitmaps.list.free(game.sys_assets.bmp_menu_icons);
-    game.content.bitmaps.list.free(game.sys_assets.bmp_mission_clear);
-    game.content.bitmaps.list.free(game.sys_assets.bmp_mission_fail);
-    game.content.bitmaps.list.free(game.sys_assets.bmp_more);
-    game.content.bitmaps.list.free(game.sys_assets.bmp_mouse_cursor);
-    game.content.bitmaps.list.free(game.sys_assets.bmp_notification);
-    game.content.bitmaps.list.free(game.sys_assets.bmp_pikmin_spirit);
-    game.content.bitmaps.list.free(game.sys_assets.bmp_player_input_icons);
-    game.content.bitmaps.list.free(game.sys_assets.bmp_random);
-    game.content.bitmaps.list.free(game.sys_assets.bmp_rock);
-    game.content.bitmaps.list.free(game.sys_assets.bmp_shadow);
-    game.content.bitmaps.list.free(game.sys_assets.bmp_shadow_square);
-    game.content.bitmaps.list.free(game.sys_assets.bmp_smack);
-    game.content.bitmaps.list.free(game.sys_assets.bmp_smoke);
-    game.content.bitmaps.list.free(game.sys_assets.bmp_sparkle);
-    game.content.bitmaps.list.free(game.sys_assets.bmp_spotlight);
-    game.content.bitmaps.list.free(game.sys_assets.bmp_swarm_arrow);
-    game.content.bitmaps.list.free(game.sys_assets.bmp_throw_invalid);
-    game.content.bitmaps.list.free(game.sys_assets.bmp_throw_preview);
-    game.content.bitmaps.list.free(game.sys_assets.bmp_throw_preview_dashed);
-    game.content.bitmaps.list.free(game.sys_assets.bmp_wave_ring);
+    game.content.bitmaps.list.free(game.sys_content.bmp_bright_circle);
+    game.content.bitmaps.list.free(game.sys_content.bmp_bright_ring);
+    game.content.bitmaps.list.free(game.sys_content.bmp_bubble_box);
+    game.content.bitmaps.list.free(game.sys_content.bmp_button_box);
+    game.content.bitmaps.list.free(game.sys_content.bmp_checkbox_check);
+    game.content.bitmaps.list.free(game.sys_content.bmp_checkbox_no_check);
+    game.content.bitmaps.list.free(game.sys_content.bmp_cursor);
+    game.content.bitmaps.list.free(game.sys_content.bmp_discord_icon);
+    game.content.bitmaps.list.free(game.sys_content.bmp_enemy_spirit);
+    game.content.bitmaps.list.free(game.sys_content.bmp_focus_box);
+    game.content.bitmaps.list.free(game.sys_content.bmp_frame_box);
+    game.content.bitmaps.list.free(game.sys_content.bmp_github_icon);
+    game.content.bitmaps.list.free(game.sys_content.bmp_hard_bubble);
+    game.content.bitmaps.list.free(game.sys_content.bmp_icon);
+    game.content.bitmaps.list.free(game.sys_content.bmp_idle_glow);
+    game.content.bitmaps.list.free(game.sys_content.bmp_key_box);
+    game.content.bitmaps.list.free(game.sys_content.bmp_leader_silhouette_side);
+    game.content.bitmaps.list.free(game.sys_content.bmp_leader_silhouette_top);
+    game.content.bitmaps.list.free(game.sys_content.bmp_medal_bronze);
+    game.content.bitmaps.list.free(game.sys_content.bmp_medal_gold);
+    game.content.bitmaps.list.free(game.sys_content.bmp_medal_none);
+    game.content.bitmaps.list.free(game.sys_content.bmp_medal_platinum);
+    game.content.bitmaps.list.free(game.sys_content.bmp_medal_silver);
+    game.content.bitmaps.list.free(game.sys_content.bmp_menu_icons);
+    game.content.bitmaps.list.free(game.sys_content.bmp_mission_clear);
+    game.content.bitmaps.list.free(game.sys_content.bmp_mission_fail);
+    game.content.bitmaps.list.free(game.sys_content.bmp_more);
+    game.content.bitmaps.list.free(game.sys_content.bmp_mouse_cursor);
+    game.content.bitmaps.list.free(game.sys_content.bmp_notification);
+    game.content.bitmaps.list.free(game.sys_content.bmp_pikmin_spirit);
+    game.content.bitmaps.list.free(game.sys_content.bmp_player_input_icons);
+    game.content.bitmaps.list.free(game.sys_content.bmp_random);
+    game.content.bitmaps.list.free(game.sys_content.bmp_rock);
+    game.content.bitmaps.list.free(game.sys_content.bmp_shadow);
+    game.content.bitmaps.list.free(game.sys_content.bmp_shadow_square);
+    game.content.bitmaps.list.free(game.sys_content.bmp_smack);
+    game.content.bitmaps.list.free(game.sys_content.bmp_smoke);
+    game.content.bitmaps.list.free(game.sys_content.bmp_sparkle);
+    game.content.bitmaps.list.free(game.sys_content.bmp_spotlight);
+    game.content.bitmaps.list.free(game.sys_content.bmp_swarm_arrow);
+    game.content.bitmaps.list.free(game.sys_content.bmp_throw_invalid);
+    game.content.bitmaps.list.free(game.sys_content.bmp_throw_preview);
+    game.content.bitmaps.list.free(game.sys_content.bmp_throw_preview_dashed);
+    game.content.bitmaps.list.free(game.sys_content.bmp_wave_ring);
     
     //Fonts.
-    al_destroy_font(game.sys_assets.fnt_area_name);
-    al_destroy_font(game.sys_assets.fnt_counter);
-    al_destroy_font(game.sys_assets.fnt_cursor_counter);
-    al_destroy_font(game.sys_assets.fnt_slim);
-    al_destroy_font(game.sys_assets.fnt_standard);
-    al_destroy_font(game.sys_assets.fnt_value);
+    al_destroy_font(game.sys_content.fnt_area_name);
+    al_destroy_font(game.sys_content.fnt_counter);
+    al_destroy_font(game.sys_content.fnt_cursor_counter);
+    al_destroy_font(game.sys_content.fnt_slim);
+    al_destroy_font(game.sys_content.fnt_standard);
+    al_destroy_font(game.sys_content.fnt_value);
     
     //Sounds effects.
-    game.content.sounds.list.free(game.sys_assets.sound_attack);
-    game.content.sounds.list.free(game.sys_assets.sound_camera);
-    game.content.sounds.list.free(game.sys_assets.sound_menu_activate);
-    game.content.sounds.list.free(game.sys_assets.sound_menu_back);
-    game.content.sounds.list.free(game.sys_assets.sound_menu_select);
-    game.content.sounds.list.free(game.sys_assets.sound_switch_pikmin);
+    game.content.sounds.list.free(game.sys_content.sound_attack);
+    game.content.sounds.list.free(game.sys_content.sound_camera);
+    game.content.sounds.list.free(game.sys_content.sound_menu_activate);
+    game.content.sounds.list.free(game.sys_content.sound_menu_back);
+    game.content.sounds.list.free(game.sys_content.sound_menu_select);
+    game.content.sounds.list.free(game.sys_content.sound_switch_pikmin);
 }

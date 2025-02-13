@@ -188,7 +188,7 @@ void pikmin::draw_mob() {
     if(is_idle) {
         bitmap_effect_t idle_eff = pik_sprite_eff;
         point glow_bmp_size =
-            get_bitmap_dimensions(game.sys_assets.bmp_idle_glow);
+            get_bitmap_dimensions(game.sys_content.bmp_idle_glow);
         idle_eff.translation = pos;
         idle_eff.scale =
             (game.config.standard_pikmin_radius * 8) / glow_bmp_size;
@@ -198,7 +198,7 @@ void pikmin::draw_mob() {
         idle_eff.tint_color = type->main_color;
         idle_eff.glow_color = map_gray(0);
         
-        draw_bitmap_with_effects(game.sys_assets.bmp_idle_glow, idle_eff);
+        draw_bitmap_with_effects(game.sys_content.bmp_idle_glow, idle_eff);
     }
     
     draw_status_effect_bmp(this, pik_sprite_eff);
@@ -217,7 +217,7 @@ void pikmin::finish_dying_class_specifics() {
         pos, LARGE_FLOAT,
         radius * 2, 2.0f
     );
-    par.bitmap = game.sys_assets.bmp_pikmin_spirit;
+    par.bitmap = game.sys_content.bmp_pikmin_spirit;
     par.friction = 0.8;
     point base_speed = point(game.rng.f(-20, 20), game.rng.f(-70, -30));
     par.linear_speed = keyframe_interpolator<point>(base_speed);
@@ -523,7 +523,7 @@ void pikmin::start_dying_class_specifics() {
 void pikmin::start_throw_trail() {
     particle_generator pg =
         standard_particle_gen_setup(
-            game.asset_file_names.part_throw_trail, this
+            game.sys_content_names.part_throw_trail, this
         );
     pg.follow_z_offset = 0.0f;
     adjust_keyframe_interpolator_values<float>(
