@@ -431,17 +431,21 @@ void animation_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
         
     } case EDITOR_STATE_TOP: {
         if(cur_sprite && cur_sprite->top_visible) {
-            cur_transformation_widget.handle_mouse_move(
-                game.mouse_cursor.w_pos,
-                &cur_sprite->top_pos,
-                &cur_sprite->top_size,
-                &cur_sprite->top_angle,
-                1.0f / game.cam.zoom,
-                top_keep_aspect_ratio,
-                false,
-                ANIM_EDITOR::TOP_MIN_SIZE,
-                is_alt_pressed
-            );
+            if(
+                cur_transformation_widget.handle_mouse_move(
+                    game.mouse_cursor.w_pos,
+                    &cur_sprite->top_pos,
+                    &cur_sprite->top_size,
+                    &cur_sprite->top_angle,
+                    1.0f / game.cam.zoom,
+                    top_keep_aspect_ratio,
+                    false,
+                    ANIM_EDITOR::TOP_MIN_SIZE,
+                    is_alt_pressed
+                )
+            ) {
+                changes_mgr.mark_as_changed();
+            }
         }
         break;
         

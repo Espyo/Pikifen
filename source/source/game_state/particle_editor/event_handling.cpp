@@ -78,7 +78,9 @@ void particle_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
         part_mgr_playback_toggle_cmd(1.0f);
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_SPACE)) {
-        part_gen_playback_toggle_cmd(1.0f);
+        if(!gui_needs_keyboard()) {
+            part_gen_playback_toggle_cmd(1.0f);
+        }
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_D)) {
         clear_particles_cmd(1.0f);

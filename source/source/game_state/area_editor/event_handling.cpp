@@ -1454,17 +1454,26 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
         case EDITOR_STATE_GAMEPLAY: {
     
             if(sub_state == EDITOR_SUB_STATE_MISSION_EXIT) {
-                cur_transformation_widget.handle_mouse_move(
-                    snap_point(game.mouse_cursor.w_pos, true),
-                    &game.cur_area_data->mission.goal_exit_center,
-                    &game.cur_area_data->mission.goal_exit_size,
-                    nullptr,
-                    1.0f / game.cam.zoom,
-                    false,
-                    false,
-                    MISSION::EXIT_MIN_SIZE,
-                    is_alt_pressed
-                );
+                point exit_center =
+                    game.cur_area_data->mission.goal_exit_center;
+                point exit_size =
+                    game.cur_area_data->mission.goal_exit_size;
+                if(
+                    cur_transformation_widget.handle_mouse_move(
+                        snap_point(game.mouse_cursor.w_pos, true),
+                        &exit_center, &exit_size,
+                        nullptr,
+                        1.0f / game.cam.zoom,
+                        false,
+                        false,
+                        MISSION::EXIT_MIN_SIZE,
+                        is_alt_pressed
+                    )
+                ) {
+                    register_change("mission exit change");
+                    game.cur_area_data->mission.goal_exit_center = exit_center;
+                    game.cur_area_data->mission.goal_exit_size = exit_size;
+                }
             }
             break;
             

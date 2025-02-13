@@ -1053,14 +1053,14 @@ void animation_editor::process_gui_panel_animation_header() {
             )
         ) {
             duplicate_string(cur_anim_i.cur_anim->name, rename_anim_name);
-            ImGui::OpenPopup("renameAnim");
+            open_input_popup("renameAnim");
         }
         set_tooltip(
             "Rename the current animation."
         );
         
         //Rename animation popup.
-        if(input_popup("renameAnim", "New name:", &rename_anim_name, true)) {
+        if(process_gui_input_popup("renameAnim", "New name:", &rename_anim_name, true)) {
             rename_animation(cur_anim_i.cur_anim, rename_anim_name);
         }
     }
@@ -1092,7 +1092,7 @@ void animation_editor::process_gui_panel_body_part() {
         )
     ) {
         new_part_name.clear();
-        ImGui::OpenPopup("newPartName");
+        open_input_popup("newPartName");
     }
     set_tooltip(
         "Create a new body part."
@@ -1101,7 +1101,7 @@ void animation_editor::process_gui_panel_body_part() {
     
     //Add body part popup.
     if(
-        input_popup(
+        process_gui_input_popup(
             "newPartName", "New body part's name:", &new_part_name, true
         )
     ) {
@@ -1184,14 +1184,14 @@ void animation_editor::process_gui_panel_body_part() {
             duplicate_string(
                 db.body_parts[selected_part]->name, rename_part_name
             );
-            ImGui::OpenPopup("renamePart");
+            open_input_popup("renamePart");
         }
         set_tooltip(
             "Rename the current body part."
         );
         
         //Rename body part popup.
-        if(input_popup("renamePart", "New name:", &rename_part_name, true)) {
+        if(process_gui_input_popup("renamePart", "New name:", &rename_part_name, true)) {
             rename_body_part(
                 db.body_parts[selected_part], rename_part_name
             );
@@ -1986,14 +1986,14 @@ void animation_editor::process_gui_panel_sprite() {
             )
         ) {
             duplicate_string(cur_sprite->name, rename_sprite_name);
-            ImGui::OpenPopup("renameSprite");
+            open_input_popup("renameSprite");
         }
         set_tooltip(
             "Rename the current sprite."
         );
         
         //Rename sprite popup.
-        if(input_popup("renameSprite", "New name:", &rename_sprite_name, true)) {
+        if(process_gui_input_popup("renameSprite", "New name:", &rename_sprite_name, true)) {
             rename_sprite(cur_sprite, rename_sprite_name);
         }
         
@@ -2007,14 +2007,14 @@ void animation_editor::process_gui_panel_sprite() {
             )
         ) {
             resize_sprite_mult = "1.0";
-            ImGui::OpenPopup("resizeSprite");
+            open_input_popup("resizeSprite");
         }
         set_tooltip(
             "Resize the current sprite."
         );
         
         //Resize sprite popup.
-        if(input_popup("resizeSprite", "Resize by:", &resize_sprite_mult)) {
+        if(process_gui_input_popup("resizeSprite", "Resize by:", &resize_sprite_mult)) {
             resize_sprite(cur_sprite, s2f(resize_sprite_mult));
         }
         
@@ -2148,6 +2148,7 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
     //Spritesheet image name text.
     ImGui::SameLine();
     mono_text("%s", cur_sprite->bmp_name.c_str());
+    set_tooltip("Internal name:\n" + cur_sprite->bmp_name);
     
     //Sprite top-left coordinates value.
     int top_left[2] =

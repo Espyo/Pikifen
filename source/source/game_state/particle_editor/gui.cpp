@@ -1110,7 +1110,7 @@ void particle_editor::process_gui_panel_generator() {
             //Choose image button.
             ImGui::SameLine();
             if(
-                ImGui::Button("Choose image...", ImVec2(90, 30))
+                ImGui::Button("Choose image...", ImVec2(0, 30))
             ) {
                 open_bitmap_dialog(
                 [this] (const string &bmp) {
@@ -1125,10 +1125,11 @@ void particle_editor::process_gui_panel_generator() {
                 );
             }
             set_tooltip("Choose which image to use from the game's content.");
-    
+            
             //Image name text.
             ImGui::SameLine();
             mono_text("%s", loaded_gen.base_particle.bmp_name.c_str());
+            set_tooltip("Internal name:\n" + loaded_gen.base_particle.bmp_name);
             
             if(loaded_gen.base_particle.bitmap) {
             

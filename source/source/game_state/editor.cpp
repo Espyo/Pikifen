@@ -335,6 +335,21 @@ point editor::get_last_widget_pos() {
 
 
 /**
+ * @brief Returns whether or not Dear ImGui currently needs the keyboard
+ * right now.
+ *
+ * @return Whether it needs the keyboard.
+ */
+bool editor::gui_needs_keyboard() {
+    //WantCaptureKeyboard returns true if LMB is held, and I'm not quite sure
+    //why. If we know LMB is held because of the canvas, then we can
+    //safely assume it's none of Dear ImGui's business, so we can ignore
+    //WantCaptureKeyboard's true.
+    return ImGui::GetIO().WantCaptureKeyboard && !is_m1_pressed;
+}
+
+
+/**
  * @brief Handles an Allegro event for control-related things.
  *
  * @param ev Event to handle.
@@ -344,12 +359,6 @@ void editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
     
     bool is_mouse_in_canvas =
         dialogs.empty() && !is_mouse_in_gui;
-    //WantCaptureKeyboard returns true if LMB is held, and I'm not quite sure
-    //why. If we know LMB is held because of the canvas, then we can
-    //safely assume it's none of Dear ImGui's business, so we can ignore
-    //WantCaptureKeyboard's true.
-    bool does_imgui_need_keyboard =
-        ImGui::GetIO().WantCaptureKeyboard && !is_m1_pressed;
         
     if(
         ev.type == ALLEGRO_EVENT_MOUSE_AXES ||
@@ -394,7 +403,7 @@ void editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
         ) {
             //Double-click.
             
-            if(does_imgui_need_keyboard) {
+            if(gui_needs_keyboard()) {
                 //If Dear ImGui needs the keyboard, then a textbox is likely
                 //in use. Clicking could change the state of the editor's data,
                 //so ignore it now, and let Dear ImGui close the box.
@@ -421,7 +430,7 @@ void editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
         } else {
             //Single-click.
             
-            if(does_imgui_need_keyboard) {
+            if(gui_needs_keyboard()) {
                 //If Dear ImGui needs the keyboard, then a textbox is likely
                 //in use. Clicking could change the state of the editor's data,
                 //so ignore it now, and let Dear ImGui close the box.
@@ -535,7 +544,7 @@ void editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
         
         if(dialogs.empty()) {
             handle_key_down_anywhere(ev);
-            if(!does_imgui_need_keyboard) {
+            if(!gui_needs_keyboard()) {
                 handle_key_down_canvas(ev);
             }
         }
@@ -573,7 +582,7 @@ void editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
         
         if(dialogs.empty()) {
             handle_key_up_anywhere(ev);
-            if(!does_imgui_need_keyboard) {
+            if(!gui_needs_keyboard()) {
                 handle_key_up_canvas(ev);
             }
         }
@@ -583,7 +592,7 @@ void editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
         
         if(dialogs.empty()) {
             handle_key_char_anywhere(ev);
-            if(!does_imgui_need_keyboard) {
+            if(!gui_needs_keyboard()) {
                 handle_key_char_canvas(ev);
             }
         }
@@ -768,61 +777,6 @@ void editor::handle_rmb_drag(const ALLEGRO_EVENT &ev) {}
  * @param ev Event to process.
  */
 void editor::handle_rmb_up(const ALLEGRO_EVENT &ev) {}
-
-
-/**
- * @brief Displays a popup, if applicable, and fills it with a text input
- * for the user to type something in.
- *
- * @param label Name of the popup.
- * @param prompt What to prompt to the user. e.g.: "New name:"
- * @param text Pointer to the starting text, as well as the user's final text.
- * @param use_monospace Whether to use a monospace font.
- * @return Whether the user pressed Return or the Ok button.
- */
-bool editor::input_popup(
-    const char* label, const char* prompt, string* text, bool use_monospace
-) {
-    bool ret = false;
-    needs_input_popup_text_focus = true;
-    if(ImGui::BeginPopup(label)) {
-        if(escape_was_pressed) {
-            ImGui::CloseCurrentPopup();
-        }
-        ImGui::Text("%s", prompt);
-        ImGui::FocusOnInputText(needs_input_popup_text_focus);
-        bool hit_enter = false;
-        if(use_monospace) {
-            hit_enter =
-                mono_input_text(
-                    "##inputPopupText", text,
-                    ImGuiInputTextFlags_EnterReturnsTrue |
-                    ImGuiInputTextFlags_AutoSelectAll
-                );
-        } else {
-            hit_enter =
-                ImGui::InputText(
-                    "##inputPopupText", text,
-                    ImGuiInputTextFlags_EnterReturnsTrue |
-                    ImGuiInputTextFlags_AutoSelectAll
-                );
-        }
-        if(hit_enter) {
-            ret = true;
-            ImGui::CloseCurrentPopup();
-        }
-        if(ImGui::Button("Cancel")) {
-            ImGui::CloseCurrentPopup();
-        }
-        ImGui::SameLine();
-        if(ImGui::Button("Ok")) {
-            ret = true;
-            ImGui::CloseCurrentPopup();
-        }
-        ImGui::EndPopup();
-    }
-    return ret;
-}
 
 
 /**
@@ -1637,6 +1591,7 @@ void editor::open_bitmap_dialog(
     ) {
         bitmap_dialog_new_bmp_name = new_bmp_name;
     };
+    bitmap_dialog_picker.needs_filter_box_focus = true;
     
     open_dialog(
         "Choose a bitmap",
@@ -1691,6 +1646,18 @@ void editor::open_help_dialog(
     help_dialog_page = page;
     open_dialog("Help", std::bind(&editor::process_gui_help_dialog, this));
     dialogs.back()->custom_size = point(400, 0);
+}
+
+
+/**
+ * @brief Opens an input popup with a given name. Its logic must be run with
+ * a call to process_gui_input_popup().
+ *
+ * @param label Name of the popup.
+ */
+void editor::open_input_popup(const char* label) {
+    needs_input_popup_text_focus = true;
+    ImGui::OpenPopup(label);
 }
 
 
@@ -2238,6 +2205,60 @@ void editor::process_gui_history(
         ImGui::TreePop();
         
     }
+}
+
+
+/**
+ * @brief Processes a popup, if applicable, opened via open_input_popup(),
+ * filling it with a text input for the user to type something in.
+ *
+ * @param label Name of the popup.
+ * @param prompt What to prompt to the user. e.g.: "New name:"
+ * @param text Pointer to the starting text, as well as the user's final text.
+ * @param use_monospace Whether to use a monospace font.
+ * @return Whether the user pressed Return or the Ok button.
+ */
+bool editor::process_gui_input_popup(
+    const char* label, const char* prompt, string* text, bool use_monospace
+) {
+    bool ret = false;
+    if(ImGui::BeginPopup(label)) {
+        if(escape_was_pressed) {
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::Text("%s", prompt);
+        ImGui::FocusOnInputText(needs_input_popup_text_focus);
+        bool hit_enter = false;
+        if(use_monospace) {
+            hit_enter =
+                mono_input_text(
+                    "##inputPopupText", text,
+                    ImGuiInputTextFlags_EnterReturnsTrue |
+                    ImGuiInputTextFlags_AutoSelectAll
+                );
+        } else {
+            hit_enter =
+                ImGui::InputText(
+                    "##inputPopupText", text,
+                    ImGuiInputTextFlags_EnterReturnsTrue |
+                    ImGuiInputTextFlags_AutoSelectAll
+                );
+        }
+        if(hit_enter) {
+            ret = true;
+            ImGui::CloseCurrentPopup();
+        }
+        if(ImGui::Button("Cancel")) {
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::SameLine();
+        if(ImGui::Button("Ok")) {
+            ret = true;
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
+    }
+    return ret;
 }
 
 

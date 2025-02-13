@@ -1524,10 +1524,11 @@ void area_editor::process_gui_panel_details() {
                 set_tooltip(
                     "Choose which texture to use from the game's content."
                 );
-    
+                
                 //Tree shadow image name text.
                 ImGui::SameLine();
                 mono_text("%s", selected_shadow->bmp_name.c_str());
+                set_tooltip("Internal name:\n" + selected_shadow->bmp_name);
                 
                 //Tree shadow center value.
                 point shadow_center = selected_shadow->center;
@@ -2276,6 +2277,7 @@ void area_editor::process_gui_panel_info() {
         );
         
         //Thumbnail remove button.
+        ImGui::SameLine();
         if(ImGui::Button("Remove thumbnail")) {
             remove_thumbnail();
             thumbnail_needs_saving = true;
@@ -2326,10 +2328,11 @@ void area_editor::process_gui_panel_info() {
             "Choose which background image to use from the game's content.\n"
             "This repeating texture can be seen when looking at the void."
         );
-    
+        
         //Background image name text.
         ImGui::SameLine();
         mono_text("%s", game.cur_area_data->bg_bmp_name.c_str());
+        set_tooltip("Internal name:\n" + game.cur_area_data->bg_bmp_name);
         
         //Background color value.
         ALLEGRO_COLOR bg_color = game.cur_area_data->bg_color;
@@ -4744,7 +4747,7 @@ void area_editor::process_gui_panel_paths() {
             
             //Select stops with label button.
             if(ImGui::Button("Select all stops with label...")) {
-                ImGui::OpenPopup("selectStops");
+                open_input_popup("selectStops");
             }
             set_tooltip(
                 "Selects all stops that have the specified label.\n"
@@ -4753,7 +4756,7 @@ void area_editor::process_gui_panel_paths() {
             
             //Select stops with label popup.
             static string label_name;
-            if(input_popup("selectStops", "Label:", &label_name, true)) {
+            if(process_gui_input_popup("selectStops", "Label:", &label_name, true)) {
                 select_path_stops_with_label(label_name);
             }
             
@@ -5172,6 +5175,7 @@ void area_editor::process_gui_panel_sector() {
             //Sector texture name text.
             ImGui::SameLine();
             mono_text("%s", s_ptr->texture_info.bmp_name.c_str());
+            set_tooltip("Internal name:\n" + s_ptr->texture_info.bmp_name);
             
             ImGui::Unindent();
             
@@ -5367,29 +5371,18 @@ void area_editor::process_gui_panel_tools() {
             if(!f.empty() && !f[0].empty()) {
                 reference_file_path = f[0];
             }
+            update_reference();
         }
         set_tooltip(
             "Browse for a file on your disk to use."
         );
-    
+        
         //Reference image name text.
         string ref_file_name =
             get_path_last_component(reference_file_path);
         ImGui::SameLine();
         mono_text("%s", ref_file_name.c_str());
         set_tooltip("Full path:\n" + reference_file_path);
-        
-        //Reference image file name input.
-        ImGui::SameLine();
-        ImGui::InputText("Bitmap", &reference_file_path);
-        set_tooltip(
-            "File name of the reference image, anywhere on the disk.\n"
-            "Extension included. e.g.: \"sketch_2.jpg\""
-        );
-        
-        if(old_ref_file_name != reference_file_path) {
-            update_reference();
-        }
         
         //Reference center value.
         ImGui::DragFloat2("Center", (float*) &reference_center);

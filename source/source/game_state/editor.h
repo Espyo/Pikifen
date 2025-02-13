@@ -417,6 +417,9 @@ protected:
         //If there's an associated dialog meant to auto-close, specify it here.
         dialog_info* dialog_ptr = nullptr;
         
+        //Do we need to focus on the filter text box?
+        bool needs_filter_box_focus = true;
+        
         //--- Function declarations ---
         
         explicit picker_info(editor* editor_ptr);
@@ -434,9 +437,6 @@ protected:
         
         //Second-level category the user picked for the new item, if applicable.
         string new_item_sec_cat;
-        
-        //Do we need to focus on the filter text box?
-        bool needs_filter_box_focus = true;
         
     };
     
@@ -691,13 +691,10 @@ protected:
     );
     void draw_op_error_cursor();
     point get_last_widget_pos();
+    bool gui_needs_keyboard();
     bool key_check(
         int pressed_key, int match_key,
         bool needs_ctrl = false, bool needs_shift = false
-    );
-    bool input_popup(
-        const char* label, const char* prompt, string* text,
-        bool use_monospace = false
     );
     bool is_internal_name_good(const string &name) const;
     bool list_popup(
@@ -724,6 +721,7 @@ protected:
     void open_help_dialog(
         const string &message, const string &page
     );
+    void open_input_popup(const char* label);
     void open_message_dialog(
         const string &title, const string &message,
         const std::function<void()> &ok_callback = nullptr
@@ -746,13 +744,17 @@ protected:
     void process_gui_bitmap_dialog();
     void process_gui_editor_style();
     bool process_gui_hazard_management_widgets(
-        vector<string>& hazard_inames, int& selected_hazard_idx
+        vector<string> &hazard_inames, int &selected_hazard_idx
     );
     void process_gui_help_dialog();
     void process_gui_history(
         const std::function<string(const string &)> &name_display_callback,
         const std::function<void(const string &)> &pick_callback,
         const std::function<string(const string &)> &tooltip_callback
+    );
+    bool process_gui_input_popup(
+        const char* label, const char* prompt, string* text,
+        bool use_monospace = false
     );
     void process_gui_message_dialog();
     bool process_gui_mob_type_widgets(
