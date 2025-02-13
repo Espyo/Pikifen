@@ -139,7 +139,7 @@ void area_data::clear() {
     weather_name.clear();
     day_time_start = AREA::DEF_DAY_TIME_START;
     day_time_speed = AREA::DEF_DAY_TIME_SPEED;
-    bg_bmp_file_name.clear();
+    bg_bmp_name.clear();
     bg_color = COLOR_BLACK;
     bg_dist = 2.0f;
     bg_bmp_zoom = 1.0f;
@@ -218,14 +218,14 @@ void area_data::cleanup(bool* out_deleted_sectors) {
 void area_data::clone(area_data &other) {
     other.clear();
     
-    if(!other.bg_bmp_file_name.empty() && other.bg_bmp) {
-        game.content.bitmaps.list.free(other.bg_bmp_file_name);
+    if(!other.bg_bmp_name.empty() && other.bg_bmp) {
+        game.content.bitmaps.list.free(other.bg_bmp_name);
     }
-    other.bg_bmp_file_name = bg_bmp_file_name;
-    if(other.bg_bmp_file_name.empty()) {
+    other.bg_bmp_name = bg_bmp_name;
+    if(other.bg_bmp_name.empty()) {
         other.bg_bmp = nullptr;
     } else {
-        other.bg_bmp = game.content.bitmaps.list.get(bg_bmp_file_name, nullptr, false);
+        other.bg_bmp = game.content.bitmaps.list.get(bg_bmp_name, nullptr, false);
     }
     other.bg_bmp_zoom = bg_bmp_zoom;
     other.bg_color = bg_color;
@@ -297,9 +297,9 @@ void area_data::clone(area_data &other) {
         sector* s_ptr = sectors[s];
         sector* os_ptr = other.sectors[s];
         s_ptr->clone(os_ptr);
-        os_ptr->texture_info.file_name = s_ptr->texture_info.file_name;
+        os_ptr->texture_info.bmp_name = s_ptr->texture_info.bmp_name;
         os_ptr->texture_info.bitmap =
-            game.content.bitmaps.list.get(s_ptr->texture_info.file_name, nullptr, false);
+            game.content.bitmaps.list.get(s_ptr->texture_info.bmp_name, nullptr, false);
         os_ptr->edges.reserve(s_ptr->edges.size());
         os_ptr->edge_idxs.reserve(s_ptr->edge_idxs.size());
         for(size_t e = 0; e < s_ptr->edges.size(); e++) {
@@ -361,10 +361,10 @@ void area_data::clone(area_data &other) {
         ot_ptr->alpha = t_ptr->alpha;
         ot_ptr->angle = t_ptr->angle;
         ot_ptr->center = t_ptr->center;
-        ot_ptr->file_name = t_ptr->file_name;
+        ot_ptr->bmp_name = t_ptr->bmp_name;
         ot_ptr->size = t_ptr->size;
         ot_ptr->sway = t_ptr->sway;
-        ot_ptr->bitmap = game.content.bitmaps.list.get(t_ptr->file_name, nullptr, false);
+        ot_ptr->bitmap = game.content.bitmaps.list.get(t_ptr->bmp_name, nullptr, false);
     }
     
     other.manifest = manifest;
@@ -928,7 +928,7 @@ void area_data::load_main_data_from_data_node(
     rs.set("weather", weather_name, &weather_node);
     rs.set("day_time_start", day_time_start);
     rs.set("day_time_speed", day_time_speed);
-    rs.set("bg_bmp", bg_bmp_file_name);
+    rs.set("bg_bmp", bg_bmp_name);
     rs.set("bg_color", bg_color);
     rs.set("bg_dist", bg_dist);
     rs.set("bg_zoom", bg_bmp_zoom);
@@ -967,8 +967,8 @@ void area_data::load_main_data_from_data_node(
         }
     }
     
-    if(level >= CONTENT_LOAD_LEVEL_FULL && !bg_bmp_file_name.empty()) {
-        bg_bmp = game.content.bitmaps.list.get(bg_bmp_file_name, node);
+    if(level >= CONTENT_LOAD_LEVEL_FULL && !bg_bmp_name.empty()) {
+        bg_bmp = game.content.bitmaps.list.get(bg_bmp_name, node);
     }
 }
 
@@ -1207,7 +1207,7 @@ void area_data::load_geometry_from_data_node(
         new_sector->z = s2f(sector_data->get_child_by_name("z")->value);
         new_sector->fade = s2b(sector_data->get_child_by_name("fade")->value);
         
-        new_sector->texture_info.file_name =
+        new_sector->texture_info.bmp_name =
             sector_data->get_child_by_name("texture")->value;
         new_sector->texture_info.rot =
             s2f(sector_data->get_child_by_name("texture_rotate")->value);
@@ -1232,7 +1232,7 @@ void area_data::load_geometry_from_data_node(
             
         if(!new_sector->fade && !new_sector->is_bottomless_pit) {
             new_sector->texture_info.bitmap =
-                game.content.bitmaps.list.get(new_sector->texture_info.file_name, nullptr);
+                game.content.bitmaps.list.get(new_sector->texture_info.bmp_name, nullptr);
         }
         
         data_node* hazards_node = sector_data->get_child_by_name("hazards");
@@ -1425,8 +1425,8 @@ void area_data::load_geometry_from_data_node(
                     "alpha"
                 )->get_value_or_default("255")
             );
-        s_ptr->file_name = shadow_node->get_child_by_name("file")->value;
-        s_ptr->bitmap = game.content.bitmaps.list.get(s_ptr->file_name, nullptr);
+        s_ptr->bmp_name = shadow_node->get_child_by_name("file")->value;
+        s_ptr->bitmap = game.content.bitmaps.list.get(s_ptr->bmp_name, nullptr);
         
         words = split(shadow_node->get_child_by_name("sway")->value);
         s_ptr->sway.x = (words.size() >= 1 ? s2f(words[0]) : 0);
@@ -1434,7 +1434,7 @@ void area_data::load_geometry_from_data_node(
         
         if(s_ptr->bitmap == game.bmp_error && level >= CONTENT_LOAD_LEVEL_FULL) {
             game.errors.report(
-                "Unknown tree shadow texture \"" + s_ptr->file_name + "\"!",
+                "Unknown tree shadow texture \"" + s_ptr->bmp_name + "\"!",
                 shadow_node
             );
         }
@@ -1832,11 +1832,11 @@ void area_data::save_geometry_to_data_node(data_node* node) {
             );
         }
         
-        if(!s_ptr->texture_info.file_name.empty()) {
+        if(!s_ptr->texture_info.bmp_name.empty()) {
             sector_node->add(
                 new data_node(
                     "texture",
-                    s_ptr->texture_info.file_name
+                    s_ptr->texture_info.bmp_name
                 )
             );
         }
@@ -2008,7 +2008,7 @@ void area_data::save_geometry_to_data_node(data_node* node) {
         if(s_ptr->alpha != 255) {
             shadow_node->add(new data_node("alpha", i2s(s_ptr->alpha)));
         }
-        shadow_node->add(new data_node("file", s_ptr->file_name));
+        shadow_node->add(new data_node("file", s_ptr->bmp_name));
         shadow_node->add(
             new data_node("sway", f2s(s_ptr->sway.x) + " " + f2s(s_ptr->sway.y))
         );
@@ -2037,7 +2037,7 @@ void area_data::save_main_data_to_data_node(data_node* node) {
         )
     );
     node->add(
-        new data_node("bg_bmp", bg_bmp_file_name)
+        new data_node("bg_bmp", bg_bmp_name)
     );
     node->add(
         new data_node("bg_color", c2s(bg_color))
@@ -2500,15 +2500,15 @@ void mob_gen::clone(mob_gen* destination, bool include_position) const {
  * @param size Width and height.
  * @param angle Angle it is rotated by.
  * @param alpha How opaque it is [0-255].
- * @param file_name Name of the file with the tree shadow's texture.
+ * @param bmp_name Internal name of the tree shadow texture's bitmap.
  * @param sway Multiply the sway distance by this much, horizontally and
  * vertically.
  */
 tree_shadow::tree_shadow(
     const point &center, const point &size, float angle,
-    unsigned char alpha, const string &file_name, const point &sway
+    unsigned char alpha, const string &bmp_name, const point &sway
 ) :
-    file_name(file_name),
+    bmp_name(bmp_name),
     bitmap(nullptr),
     center(center),
     size(size),
@@ -2524,5 +2524,5 @@ tree_shadow::tree_shadow(
  *
  */
 tree_shadow::~tree_shadow() {
-    game.content.bitmaps.list.free(file_name);
+    game.content.bitmaps.list.free(bmp_name);
 }

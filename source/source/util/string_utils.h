@@ -47,6 +47,7 @@ string b2s(bool b);
 void duplicate_string(const string &orig_str, string &new_str);
 string f2s(float f);
 string get_matching_string_starts(const string &s1, const string &s2);
+string get_path_last_component(const string& s);
 bool is_number(const string &s);
 string pad_string(const string &s, size_t size, char padding);
 string remove_extension(const string &s);

@@ -242,7 +242,7 @@ struct particle {
     );
     void draw();
     void set_bitmap(
-        const string &new_file_name,
+        const string &new_bmp_name,
         data_node* node = nullptr
     );
     void tick(float delta_t);

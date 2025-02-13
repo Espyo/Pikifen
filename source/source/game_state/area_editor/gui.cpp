@@ -1502,18 +1502,18 @@ void area_editor::process_gui_panel_details() {
                 if(ImGui::Button("Choose image...")) {
                     open_bitmap_dialog(
                     [this] (const string &bmp) {
-                        if(bmp != selected_shadow->file_name) {
+                        if(bmp != selected_shadow->bmp_name) {
                             //New image, delete the old one.
                             register_change("tree shadow image change");
                             if(selected_shadow->bitmap != game.bmp_error) {
                                 game.content.bitmaps.list.free(
-                                    selected_shadow->file_name
+                                    selected_shadow->bmp_name
                                 );
                             }
-                            selected_shadow->file_name = bmp;
+                            selected_shadow->bmp_name = bmp;
                             selected_shadow->bitmap =
                                 game.content.bitmaps.list.get(
-                                    selected_shadow->file_name, nullptr, false
+                                    selected_shadow->bmp_name, nullptr, false
                                 );
                         }
                         set_status("Picked a tree shadow image successfully.");
@@ -1524,6 +1524,10 @@ void area_editor::process_gui_panel_details() {
                 set_tooltip(
                     "Choose which texture to use from the game's content."
                 );
+    
+                //Tree shadow image name text.
+                ImGui::SameLine();
+                mono_text("%s", selected_shadow->bmp_name.c_str());
                 
                 //Tree shadow center value.
                 point shadow_center = selected_shadow->center;
@@ -2312,7 +2316,7 @@ void area_editor::process_gui_panel_info() {
             open_bitmap_dialog(
             [this] (const string &bmp) {
                 register_change("area background change");
-                game.cur_area_data->bg_bmp_file_name = bmp;
+                game.cur_area_data->bg_bmp_name = bmp;
                 set_status("Picked a background image successfully.");
             },
             FOLDER_NAMES::TEXTURES
@@ -2322,6 +2326,10 @@ void area_editor::process_gui_panel_info() {
             "Choose which background image to use from the game's content.\n"
             "This repeating texture can be seen when looking at the void."
         );
+    
+        //Background image name text.
+        ImGui::SameLine();
+        mono_text("%s", game.cur_area_data->bg_bmp_name.c_str());
         
         //Background color value.
         ALLEGRO_COLOR bg_color = game.cur_area_data->bg_color;
@@ -5162,7 +5170,7 @@ void area_editor::process_gui_panel_sector() {
                 register_change("sector bottomless pit change");
                 s_ptr->is_bottomless_pit = sector_bottomless_pit;
                 if(!sector_bottomless_pit) {
-                    update_sector_texture(s_ptr, s_ptr->texture_info.file_name);
+                    update_sector_texture(s_ptr, s_ptr->texture_info.bmp_name);
                 }
             }
             set_tooltip(
@@ -5200,7 +5208,7 @@ void area_editor::process_gui_panel_sector() {
             register_change("sector texture type change");
             s_ptr->fade = texture_type == 0;
             if(!s_ptr->fade) {
-                update_sector_texture(s_ptr, s_ptr->texture_info.file_name);
+                update_sector_texture(s_ptr, s_ptr->texture_info.bmp_name);
             }
         }
         
@@ -5247,7 +5255,7 @@ void area_editor::process_gui_panel_sector() {
             
             //Sector texture name text.
             ImGui::SameLine();
-            ImGui::Text("%s", s_ptr->texture_info.file_name.c_str());
+            mono_text("%s", s_ptr->texture_info.bmp_name.c_str());
             
             ImGui::Unindent();
             
@@ -5426,7 +5434,7 @@ void area_editor::process_gui_panel_tools() {
     //Reference image node.
     if(saveable_tree_node("tools", "Reference image")) {
     
-        string old_ref_file_name = reference_file_name;
+        string old_ref_file_name = reference_file_path;
         
         //Browse for a reference image button.
         if(ImGui::Button("Browse...")) {
@@ -5441,22 +5449,29 @@ void area_editor::process_gui_panel_tools() {
                 );
                 
             if(!f.empty() && !f[0].empty()) {
-                reference_file_name = f[0];
+                reference_file_path = f[0];
             }
         }
         set_tooltip(
             "Browse for a file on your disk to use."
         );
+    
+        //Reference image name text.
+        string ref_file_name =
+            get_path_last_component(reference_file_path);
+        ImGui::SameLine();
+        mono_text("%s", ref_file_name.c_str());
+        set_tooltip("Full path:\n" + reference_file_path);
         
         //Reference image file name input.
         ImGui::SameLine();
-        ImGui::InputText("Bitmap", &reference_file_name);
+        ImGui::InputText("Bitmap", &reference_file_path);
         set_tooltip(
             "File name of the reference image, anywhere on the disk.\n"
             "Extension included. e.g.: \"sketch_2.jpg\""
         );
         
-        if(old_ref_file_name != reference_file_name) {
+        if(old_ref_file_name != reference_file_path) {
             update_reference();
         }
         
@@ -5727,7 +5742,7 @@ void area_editor::process_gui_toolbar() {
         "Ctrl + Y"
     );
     
-    if(!reference_file_name.empty()) {
+    if(!reference_file_path.empty()) {
     
         //Reference image toggle button.
         ImGui::SameLine();

@@ -25,7 +25,7 @@
 sector::~sector() {
     for(size_t t = 0; t < 2; t++) {
         if(texture_info.bitmap && texture_info.bitmap != game.bmp_error) {
-            game.content.bitmaps.list.free(texture_info.file_name);
+            game.content.bitmaps.list.free(texture_info.bmp_name);
         }
     }
 }

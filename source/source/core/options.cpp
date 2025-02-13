@@ -250,7 +250,7 @@ void options_t::load(data_node* file) {
     string packs_disabled_str;
     
     rs.set("ambiance_volume", ambiance_volume);
-    rs.set("anim_editor_bg_texture", anim_editor_bg_texture);
+    rs.set("anim_editor_bg_path", anim_editor_bg_path);
     rs.set("area_editor_advanced_mode", area_editor_advanced_mode);
     rs.set("area_editor_backup_interval", area_editor_backup_interval);
     rs.set("area_editor_grid_interval", area_editor_grid_interval);
@@ -293,7 +293,7 @@ void options_t::load(data_node* file) {
     rs.set("music_volume", music_volume);
     rs.set("pack_order", pack_load_order_str);
     rs.set("packs_disabled", packs_disabled_str);
-    rs.set("particle_editor_bg_texture", particle_editor_bg_texture);
+    rs.set("particle_editor_bg_path", particle_editor_bg_path);
     rs.set("particle_editor_grid_interval", particle_editor_grid_interval);
     rs.set("resolution", resolution_str);
     rs.set("smooth_scaling", smooth_scaling);
@@ -447,8 +447,8 @@ void options_t::save(data_node* file) const {
     );
     file->add(
         new data_node(
-            "anim_editor_bg_texture",
-            anim_editor_bg_texture
+            "anim_editor_bg_path",
+            anim_editor_bg_path
         )
     );
     file->add(
@@ -699,8 +699,8 @@ void options_t::save(data_node* file) const {
     );
     file->add(
         new data_node(
-            "particle_editor_bg_texture",
-            particle_editor_bg_texture
+            "particle_editor_bg_path",
+            particle_editor_bg_path
         )
     );
     file->add(

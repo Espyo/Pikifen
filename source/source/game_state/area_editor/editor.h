@@ -726,8 +726,8 @@ private:
     //Bitmap of the reference image.
     ALLEGRO_BITMAP* reference_bitmap = nullptr;
     
-    //File name of the reference image.
-    string reference_file_name;
+    //File path of the reference image.
+    string reference_file_path;
     
     //Keep the aspect ratio when resizing the reference?
     bool reference_keep_aspect_ratio = true;

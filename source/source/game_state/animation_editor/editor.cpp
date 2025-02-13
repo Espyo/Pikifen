@@ -461,14 +461,14 @@ void animation_editor::import_animation_data(const string &name) {
 
 
 /**
- * @brief Imports the sprite file data from a different sprite to the current.
+ * @brief Imports the sprite bitmap data from a different sprite to the current.
  *
- * @param name Name of the animation to import.
+ * @param name Name of the sprite to import from.
  */
-void animation_editor::import_sprite_file_data(const string &name) {
+void animation_editor::import_sprite_bmp_data(const string &name) {
     sprite* s = db.sprites[db.find_sprite(name)];
     
-    cur_sprite->set_bitmap(s->file, s->file_pos, s->file_size);
+    cur_sprite->set_bitmap(s->bmp_name, s->bmp_pos, s->bmp_size);
     
     changes_mgr.mark_as_changed();
 }
@@ -572,10 +572,10 @@ void animation_editor::load() {
     game.audio.set_current_song(ANIM_EDITOR::SONG_NAME, false);
     
     //Set the background.
-    if(!game.options.anim_editor_bg_texture.empty()) {
+    if(!game.options.anim_editor_bg_path.empty()) {
         bg =
             load_bmp(
-                game.options.anim_editor_bg_texture,
+                game.options.anim_editor_bg_path,
                 nullptr, false, false, false
             );
         use_bg = true;
@@ -631,7 +631,7 @@ void animation_editor::load_anim_db_file(
         map<string, size_t> file_uses_map;
         vector<std::pair<size_t, string> > file_uses_vector;
         for(size_t f = 0; f < db.sprites.size(); f++) {
-            file_uses_map[db.sprites[f]->file]++;
+            file_uses_map[db.sprites[f]->bmp_name]++;
         }
         for(auto &u : file_uses_map) {
             file_uses_vector.push_back(make_pair(u.second, u.first));
@@ -964,7 +964,7 @@ void animation_editor::zoom_everything_cmd(float input_value) {
     
     point cmin, cmax;
     get_transformed_rectangle_bounding_box(
-        s_ptr->offset, s_ptr->file_size * s_ptr->scale,
+        s_ptr->offset, s_ptr->bmp_size * s_ptr->scale,
         s_ptr->angle, &cmin, &cmax
     );
     

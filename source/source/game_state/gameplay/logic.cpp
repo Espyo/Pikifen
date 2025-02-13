@@ -1352,7 +1352,7 @@ void gameplay_state::do_menu_logic() {
             sector_light_str =
                 box_string(i2s(mouse_sector->brightness), 3);
             sector_tex_str =
-                mouse_sector->texture_info.file_name;
+                mouse_sector->texture_info.bmp_name;
         }
         
         string str =

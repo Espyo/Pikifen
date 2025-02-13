@@ -64,14 +64,14 @@ public:
     //Texture used for the right rail.
     ALLEGRO_BITMAP* bmp_right_rail_texture = nullptr;
     
-    //File name of the main texture.
-    string main_texture_file_name;
+    //Internal name of the main texture bitmap.
+    string main_texture_bmp_name;
     
-    //File name of the left rail texture.
-    string left_rail_texture_file_name;
+    //Internal name of the left rail texture bitmap.
+    string left_rail_texture_bmp_name;
     
-    //File name of the right rail texture.
-    string right_rail_texture_file_name;
+    //Internal name of the right rail texture bitmap.
+    string right_rail_texture_bmp_name;
     
     //Width of each rail.
     float rail_width = 16.0f;

@@ -123,7 +123,7 @@ void clear_area_textures() {
             s_ptr->texture_info.bitmap &&
             s_ptr->texture_info.bitmap != game.bmp_error
         ) {
-            game.content.bitmaps.list.free(s_ptr->texture_info.file_name);
+            game.content.bitmaps.list.free(s_ptr->texture_info.bmp_name);
             s_ptr->texture_info.bitmap = nullptr;
         }
     }

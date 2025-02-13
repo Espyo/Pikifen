@@ -136,6 +136,20 @@ string get_matching_string_starts(const string &s1, const string &s2) {
 
 
 /**
+ * @brief Given a path in a string, returns the last component, be it
+ * a folder or a file.
+ * 
+ * @param s The string to check.
+ * @return The last component, or an empty string on error.
+ */
+string get_path_last_component(const string& s) {
+    vector<string> components = split(s, "/");
+    if(!components.empty()) return components.back();
+    return "";
+}
+
+
+/**
  * @brief Checks if the contents of a string are a number or not.
  *
  * @param s String to check.

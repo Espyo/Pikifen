@@ -278,7 +278,7 @@ void area_editor::clear_circle_sector() {
  * @brief Clears the currently loaded area data.
  */
 void area_editor::clear_current_area() {
-    reference_file_name.clear();
+    reference_file_path.clear();
     update_reference();
     clear_selection();
     clear_circle_sector();
@@ -290,7 +290,7 @@ void area_editor::clear_current_area() {
     
     if(game.cur_area_data) {
         for(size_t s = 0; s < game.cur_area_data->tree_shadows.size(); s++) {
-            game.content.bitmaps.list.free(game.cur_area_data->tree_shadows[s]->file_name);
+            game.content.bitmaps.list.free(game.cur_area_data->tree_shadows[s]->bmp_name);
         }
     }
     
@@ -1859,7 +1859,7 @@ void area_editor::load_area_folder(
     vector<std::pair<string, size_t> > texture_uses_vector;
     
     for(size_t s = 0; s < game.cur_area_data->sectors.size(); s++) {
-        const string &n = game.cur_area_data->sectors[s]->texture_info.file_name;
+        const string &n = game.cur_area_data->sectors[s]->texture_info.bmp_name;
         if(n.empty()) continue;
         texture_uses_map[n]++;
     }
@@ -1927,7 +1927,7 @@ void area_editor::load_reference() {
     data_node file(game.cur_area_data->user_data_path + "/" + FILE_NAMES::AREA_REFERENCE_CONFIG);
     
     if(file.file_was_opened) {
-        reference_file_name = file.get_child_by_name("file")->value;
+        reference_file_path = file.get_child_by_name("file")->value;
         reference_center = s2p(file.get_child_by_name("center")->value);
         reference_size = s2p(file.get_child_by_name("size")->value);
         reference_alpha =
@@ -1939,7 +1939,7 @@ void area_editor::load_reference() {
         show_reference = s2b(file.get_child_by_name("visible")->value);
         
     } else {
-        reference_file_name.clear();
+        reference_file_path.clear();
         reference_center = point();
         reference_size = point();
         reference_alpha = 0;
@@ -2018,7 +2018,7 @@ void area_editor::pick_texture(
     if(name == "Choose another...") {
         open_bitmap_dialog(
         [this, s_ptr] (const string &bmp) {
-            if(s_ptr->texture_info.file_name == bmp) return;
+            if(s_ptr->texture_info.bmp_name == bmp) return;
             register_change("sector texture change");
             update_texture_suggestions(bmp);
             update_sector_texture(s_ptr, bmp);
@@ -2028,7 +2028,7 @@ void area_editor::pick_texture(
         FOLDER_NAMES::TEXTURES
         );
     } else {
-        if(s_ptr->texture_info.file_name == name) return;
+        if(s_ptr->texture_info.bmp_name == name) return;
         register_change("sector texture change");
         update_texture_suggestions(name);
         update_sector_texture(s_ptr, name);
@@ -3209,7 +3209,7 @@ void area_editor::save_reference() {
     
     data_node reference_file("", "");
     reference_file.add(
-        new data_node("file", reference_file_name)
+        new data_node("file", reference_file_path)
     );
     reference_file.add(
         new data_node(
@@ -3926,9 +3926,9 @@ void area_editor::update_reference() {
     }
     reference_bitmap = nullptr;
     
-    if(!reference_file_name.empty()) {
+    if(!reference_file_path.empty()) {
         reference_bitmap =
-            load_bmp(reference_file_name, nullptr, false, true, true);
+            load_bmp(reference_file_path, nullptr, false, true, true);
             
         if(
             reference_size.x == 0 ||
@@ -3954,8 +3954,8 @@ void area_editor::update_reference() {
 void area_editor::update_sector_texture(
     sector* s_ptr, const string &internal_name
 ) {
-    game.content.bitmaps.list.free(s_ptr->texture_info.file_name);
-    s_ptr->texture_info.file_name = internal_name;
+    game.content.bitmaps.list.free(s_ptr->texture_info.bmp_name);
+    s_ptr->texture_info.bmp_name = internal_name;
     s_ptr->texture_info.bitmap = game.content.bitmaps.list.get(internal_name);
 }
 

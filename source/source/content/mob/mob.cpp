@@ -2620,7 +2620,7 @@ bool mob::is_off_camera() const {
     sprite* s_ptr;
     anim.get_sprite_data(&s_ptr, nullptr, nullptr);
     if(s_ptr) {
-        point sprite_size = s_ptr->file_size;
+        point sprite_size = s_ptr->bmp_size;
         sprite_bound =
             std::max(
                 sprite_size.x / 2.0,

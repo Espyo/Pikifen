@@ -540,9 +540,9 @@ void animation_database::load_from_data_node(data_node* node) {
                     "255 255 255 255"
                 )
             );
-        new_s->file = sprite_node->get_child_by_name("file")->value;
+        new_s->bmp_name = sprite_node->get_child_by_name("file")->value;
         new_s->set_bitmap(
-            new_s->file, new_s->file_pos, new_s->file_size,
+            new_s->bmp_name, new_s->bmp_pos, new_s->bmp_size,
             sprite_node->get_child_by_name("file")
         );
         new_s->top_visible =
@@ -682,9 +682,9 @@ void animation_database::save_to_data_node(
         data_node* sprite_node = new data_node(sprites[s]->name, "");
         sprites_node->add(sprite_node);
         
-        sprite_node->add(new data_node("file",      s_ptr->file));
-        sprite_node->add(new data_node("file_pos",  p2s(s_ptr->file_pos)));
-        sprite_node->add(new data_node("file_size", p2s(s_ptr->file_size)));
+        sprite_node->add(new data_node("file",      s_ptr->bmp_name));
+        sprite_node->add(new data_node("file_pos",  p2s(s_ptr->bmp_pos)));
+        sprite_node->add(new data_node("file_size", p2s(s_ptr->bmp_size)));
         if(s_ptr->offset.x != 0.0 || s_ptr->offset.y != 0.0) {
             sprite_node->add(new data_node("offset", p2s(s_ptr->offset)));
         }
@@ -1141,8 +1141,8 @@ sprite::sprite(
 ) :
     name(name),
     parent_bmp(b),
-    file_pos(b_pos),
-    file_size(b_size),
+    bmp_pos(b_pos),
+    bmp_size(b_size),
     bitmap(
         b ?
         al_create_sub_bitmap(b, b_pos.x, b_pos.y, b_size.x, b_size.y) :
@@ -1161,9 +1161,9 @@ sprite::sprite(
 sprite::sprite(const sprite &s2) :
     name(s2.name),
     parent_bmp(nullptr),
-    file(s2.file),
-    file_pos(s2.file_pos),
-    file_size(s2.file_size),
+    bmp_name(s2.bmp_name),
+    bmp_pos(s2.bmp_pos),
+    bmp_size(s2.bmp_size),
     offset(s2.offset),
     scale(s2.scale),
     angle(s2.angle),
@@ -1175,7 +1175,7 @@ sprite::sprite(const sprite &s2) :
     bitmap(nullptr),
     hitboxes(s2.hitboxes) {
     
-    set_bitmap(file, file_pos, file_size);
+    set_bitmap(bmp_name, bmp_pos, bmp_size);
 }
 
 
@@ -1221,8 +1221,8 @@ sprite &sprite::operator=(const sprite &s2) {
     if(this != &s2) {
         name = s2.name;
         parent_bmp = nullptr;
-        file_pos = s2.file_pos;
-        file_size = s2.file_size;
+        bmp_pos = s2.bmp_pos;
+        bmp_size = s2.bmp_size;
         offset = s2.offset;
         scale = s2.scale;
         angle = s2.angle;
@@ -1233,7 +1233,7 @@ sprite &sprite::operator=(const sprite &s2) {
         top_visible = s2.top_visible;
         bitmap = nullptr;
         hitboxes = s2.hitboxes;
-        set_bitmap(s2.file, file_pos, file_size);
+        set_bitmap(s2.bmp_name, bmp_pos, bmp_size);
     }
     
     return *this;
@@ -1246,52 +1246,52 @@ sprite &sprite::operator=(const sprite &s2) {
  * If the file name string is empty, sets to a nullptr bitmap
  * (and still unloads the old bitmap).
  *
- * @param new_file_name File name of the bitmap.
- * @param new_file_pos Top-left coordinates of the sub-bitmap inside the bitmap.
- * @param new_file_size Dimensions of the sub-bitmap.
+ * @param new_bmp_name Internal name of the bitmap.
+ * @param new_bmp_pos Top-left coordinates of the sub-bitmap inside the bitmap.
+ * @param new_bmp_size Dimensions of the sub-bitmap.
  * @param node If not nullptr, this will be used to report an error with,
  * in case something happens.
  */
 void sprite::set_bitmap(
-    const string &new_file_name,
-    const point &new_file_pos, const point &new_file_size,
+    const string &new_bmp_name,
+    const point &new_bmp_pos, const point &new_bmp_size,
     data_node* node
 ) {
     if(bitmap) {
         al_destroy_bitmap(bitmap);
         bitmap = nullptr;
     }
-    if(new_file_name != file && parent_bmp) {
-        game.content.bitmaps.list.free(file);
+    if(new_bmp_name != bmp_name && parent_bmp) {
+        game.content.bitmaps.list.free(bmp_name);
         parent_bmp = nullptr;
     }
     
-    if(new_file_name.empty()) {
-        file.clear();
-        file_size = point();
-        file_pos = point();
+    if(new_bmp_name.empty()) {
+        bmp_name.clear();
+        bmp_size = point();
+        bmp_pos = point();
         return;
     }
     
-    if(new_file_name != file || !parent_bmp) {
-        parent_bmp = game.content.bitmaps.list.get(new_file_name, node, node != nullptr);
+    if(new_bmp_name != bmp_name || !parent_bmp) {
+        parent_bmp = game.content.bitmaps.list.get(new_bmp_name, node, node != nullptr);
     }
     
     point parent_size = get_bitmap_dimensions(parent_bmp);
     
-    file = new_file_name;
-    file_pos = new_file_pos;
-    file_size = new_file_size;
-    file_pos.x = clamp(new_file_pos.x, 0, parent_size.x - 1);
-    file_pos.y = clamp(new_file_pos.y, 0, parent_size.y - 1);
-    file_size.x = clamp(new_file_size.x, 0, parent_size.x - file_pos.x);
-    file_size.y = clamp(new_file_size.y, 0, parent_size.y - file_pos.y);
+    bmp_name = new_bmp_name;
+    bmp_pos = new_bmp_pos;
+    bmp_size = new_bmp_size;
+    bmp_pos.x = clamp(new_bmp_pos.x, 0, parent_size.x - 1);
+    bmp_pos.y = clamp(new_bmp_pos.y, 0, parent_size.y - 1);
+    bmp_size.x = clamp(new_bmp_size.x, 0, parent_size.x - bmp_pos.x);
+    bmp_size.y = clamp(new_bmp_size.y, 0, parent_size.y - bmp_pos.y);
     
     if(parent_bmp) {
         bitmap =
             al_create_sub_bitmap(
-                parent_bmp, file_pos.x, file_pos.y,
-                file_size.x, file_size.y
+                parent_bmp, bmp_pos.x, bmp_pos.y,
+                bmp_size.x, bmp_size.y
             );
     }
 }

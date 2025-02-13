@@ -137,14 +137,14 @@ void animation_editor::draw_canvas() {
                 switch(x) {
                 case 0: {
                     rec_tl.x = scene_tl.x;
-                    rec_br.x = bmp_x + s->file_pos.x;
+                    rec_br.x = bmp_x + s->bmp_pos.x;
                     break;
                 } case 1: {
-                    rec_tl.x = bmp_x + s->file_pos.x;
-                    rec_br.x = bmp_x + s->file_pos.x + s->file_size.x;
+                    rec_tl.x = bmp_x + s->bmp_pos.x;
+                    rec_br.x = bmp_x + s->bmp_pos.x + s->bmp_size.x;
                     break;
                 } default: {
-                    rec_tl.x = bmp_x + s->file_pos.x + s->file_size.x;
+                    rec_tl.x = bmp_x + s->bmp_pos.x + s->bmp_size.x;
                     rec_br.x = scene_br.x;
                     break;
                 }
@@ -156,14 +156,14 @@ void animation_editor::draw_canvas() {
                     switch(y) {
                     case 0: {
                         rec_tl.y = scene_tl.y;
-                        rec_br.y = bmp_y + s->file_pos.y;
+                        rec_br.y = bmp_y + s->bmp_pos.y;
                         break;
                     } case 1: {
-                        rec_tl.y = bmp_y + s->file_pos.y;
-                        rec_br.y = bmp_y + s->file_pos.y + s->file_size.y;
+                        rec_tl.y = bmp_y + s->bmp_pos.y;
+                        rec_br.y = bmp_y + s->bmp_pos.y + s->bmp_size.y;
                         break;
                     } default: {
-                        rec_tl.y = bmp_y + s->file_pos.y + s->file_size.y;
+                        rec_tl.y = bmp_y + s->bmp_pos.y + s->bmp_size.y;
                         rec_br.y = scene_br.y;
                         break;
                     }
@@ -177,15 +177,15 @@ void animation_editor::draw_canvas() {
                 }
             }
             
-            if(s->file_size.x > 0 && s->file_size.y > 0) {
+            if(s->bmp_size.x > 0 && s->bmp_size.y > 0) {
             
                 unsigned char outline_alpha =
                     255 * ((sin(cur_hitbox_alpha) / 2.0) + 0.5);
                 al_draw_rectangle(
-                    bmp_x + s->file_pos.x + 0.5,
-                    bmp_y + s->file_pos.y + 0.5,
-                    bmp_x + s->file_pos.x + s->file_size.x - 0.5,
-                    bmp_y + s->file_pos.y + s->file_size.y - 0.5,
+                    bmp_x + s->bmp_pos.x + 0.5,
+                    bmp_y + s->bmp_pos.y + 0.5,
+                    bmp_x + s->bmp_pos.x + s->bmp_size.x - 0.5,
+                    bmp_y + s->bmp_pos.y + s->bmp_size.y - 0.5,
                     al_map_rgba(224, 192, 0, outline_alpha), 1.0
                 );
             }
@@ -254,7 +254,7 @@ void animation_editor::draw_canvas() {
         }
         
         if(state == EDITOR_STATE_SPRITE_TRANSFORM) {
-            point cur_sprite_size = cur_sprite->scale * cur_sprite->file_size;
+            point cur_sprite_size = cur_sprite->scale * cur_sprite->bmp_size;
             cur_transformation_widget.draw(
                 &cur_sprite->offset,
                 &cur_sprite_size,
@@ -380,8 +380,8 @@ void animation_editor::draw_comparison() {
             comparison_sprite->bitmap,
             comparison_sprite->offset,
             point(
-                comparison_sprite->file_size.x * comparison_sprite->scale.x,
-                comparison_sprite->file_size.y * comparison_sprite->scale.y
+                comparison_sprite->bmp_size.x * comparison_sprite->scale.x,
+                comparison_sprite->bmp_size.y * comparison_sprite->scale.y
             ),
             comparison_sprite->angle, tint
         );
@@ -466,7 +466,7 @@ void animation_editor::draw_side_view_sprite(const sprite* s) {
     ALLEGRO_COLOR color = COLOR_EMPTY;
     
     get_transformed_rectangle_bounding_box(
-        s->offset, s->file_size * s->scale, s->angle,
+        s->offset, s->bmp_size * s->scale, s->angle,
         &min, &max
     );
     max.y = 0; //Bottom aligns with the floor.
@@ -740,8 +740,8 @@ void animation_editor::draw_top_down_view_sprite(sprite* s) {
         draw_bitmap(
             s->bitmap, coords,
             point(
-                s->file_size.x * scale.x,
-                s->file_size.y * scale.y
+                s->bmp_size.x * scale.x,
+                s->bmp_size.y * scale.y
             ),
             angle, tint
         );

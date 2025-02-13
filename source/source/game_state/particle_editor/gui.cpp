@@ -601,7 +601,7 @@ void particle_editor::process_gui_options_dialog() {
                     al_destroy_bitmap(bg);
                     bg = nullptr;
                 }
-                game.options.particle_editor_bg_texture.clear();
+                game.options.particle_editor_bg_path.clear();
             }
         }
         set_tooltip(
@@ -623,14 +623,14 @@ void particle_editor::process_gui_options_dialog() {
                     );
                     
                 if(!f.empty() && !f[0].empty()) {
-                    game.options.particle_editor_bg_texture = f[0];
+                    game.options.particle_editor_bg_path = f[0];
                     if(bg) {
                         al_destroy_bitmap(bg);
                         bg = nullptr;
                     }
                     bg =
                         load_bmp(
-                            game.options.particle_editor_bg_texture,
+                            game.options.particle_editor_bg_path,
                             nullptr, false, false, false
                         );
                 }
@@ -639,14 +639,12 @@ void particle_editor::process_gui_options_dialog() {
                 "Browse for which texture file on your disk to use."
             );
             
-            //Background texture name.
-            string file_name;
-            if(!game.options.particle_editor_bg_texture.empty()) {
-                file_name =
-                    split(game.options.particle_editor_bg_texture, "/").back();
-            }
+            //Background texture name text.
+            string bg_file_name =
+                get_path_last_component(game.options.particle_editor_bg_path);
             ImGui::SameLine();
-            mono_text("%s", file_name.c_str());
+            mono_text("%s", bg_file_name.c_str());
+            set_tooltip("Full path:\n" + game.options.particle_editor_bg_path);
             
             ImGui::Unindent();
         }
@@ -1112,7 +1110,7 @@ void particle_editor::process_gui_panel_generator() {
             //Choose image button.
             ImGui::SameLine();
             if(
-                ImGui::Button("Choose image...", ImVec2(180, 30))
+                ImGui::Button("Choose image...", ImVec2(90, 30))
             ) {
                 open_bitmap_dialog(
                 [this] (const string &bmp) {
@@ -1127,6 +1125,10 @@ void particle_editor::process_gui_panel_generator() {
                 );
             }
             set_tooltip("Choose which image to use from the game's content.");
+    
+            //Image name text.
+            ImGui::SameLine();
+            mono_text("%s", loaded_gen.base_particle.bmp_name.c_str());
             
             if(loaded_gen.base_particle.bitmap) {
             

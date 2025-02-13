@@ -353,10 +353,10 @@ void particle_editor::load() {
     part_mgr = particle_manager(game.options.max_particles);
     
     //Set the background.
-    if(!game.options.particle_editor_bg_texture.empty()) {
+    if(!game.options.particle_editor_bg_path.empty()) {
         bg =
             load_bmp(
-                game.options.particle_editor_bg_texture,
+                game.options.particle_editor_bg_path,
                 nullptr, false, false, false
             );
         use_bg = true;

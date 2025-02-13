@@ -59,8 +59,8 @@ struct sector_texture_t {
     //Texture tint.
     ALLEGRO_COLOR tint = COLOR_WHITE;
     
-    //File name of the texture bitmap.
-    string file_name;
+    //Internal name of the texture bitmap.
+    string bmp_name;
     
 };
 

@@ -138,31 +138,31 @@ void particle::tick(const float delta_t) {
  * If the file name string is empty, sets to a nullptr bitmap
  * (and still unloads the old bitmap).
  *
- * @param new_file_name File name of the bitmap.
+ * @param new_bmp_name Internal name of the bitmap.
  * @param node If not nullptr, this will be used to report an error with,
  * in case something happens.
  */
 void particle::set_bitmap(
-    const string &new_file_name, data_node* node
+    const string &new_bmp_name, data_node* node
 ) {
-    if(new_file_name != bmp_name && bitmap) {
+    if(new_bmp_name != bmp_name && bitmap) {
         game.content.bitmaps.list.free(bmp_name);
         bitmap = nullptr;
     }
     
-    if(new_file_name.empty()) {
+    if(new_bmp_name.empty()) {
         bmp_name.clear();
         return;
     }
     
-    if(new_file_name != bmp_name || !bitmap) {
+    if(new_bmp_name != bmp_name || !bitmap) {
         bitmap =
             game.content.bitmaps.list.get(
-                new_file_name, node, node != nullptr
+                new_bmp_name, node, node != nullptr
             );
     }
     
-    bmp_name = new_file_name;
+    bmp_name = new_bmp_name;
 }
 
 

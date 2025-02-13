@@ -254,7 +254,7 @@ private:
     string get_file_tooltip(const string &path) const;
     void handle_lmb_drag_in_timeline();
     void import_animation_data(const string &name);
-    void import_sprite_file_data(const string &name);
+    void import_sprite_bmp_data(const string &name);
     void import_sprite_hitbox_data(const string &name);
     void import_sprite_top_data(const string &name);
     void import_sprite_transformation_data(const string &name);

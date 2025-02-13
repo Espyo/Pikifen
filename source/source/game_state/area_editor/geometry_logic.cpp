@@ -451,7 +451,7 @@ sector* area_editor::create_sector_for_layout_drawing(const sector* copy_from) {
     
     if(copy_from) {
         copy_from->clone(new_sector);
-        update_sector_texture(new_sector, copy_from->texture_info.file_name);
+        update_sector_texture(new_sector, copy_from->texture_info.bmp_name);
     } else {
         if(!texture_suggestions.empty()) {
             update_sector_texture(new_sector, texture_suggestions[0].name);
@@ -932,7 +932,7 @@ void area_editor::find_problems_missing_texture() {
         if(s_ptr->edges.empty()) continue;
         if(s_ptr->is_bottomless_pit) continue;
         if(
-            s_ptr->texture_info.file_name.empty() &&
+            s_ptr->texture_info.bmp_name.empty() &&
             !s_ptr->is_bottomless_pit && !s_ptr->fade
         ) {
             problem_sector_ptr = s_ptr;
@@ -1369,16 +1369,16 @@ void area_editor::find_problems_unknown_texture() {
         if(s_ptr->edges.empty()) continue;
         if(s_ptr->is_bottomless_pit) continue;
         
-        if(s_ptr->texture_info.file_name.empty()) continue;
+        if(s_ptr->texture_info.bmp_name.empty()) continue;
         
         const auto &texture_it =
-            game.content.bitmaps.manifests.find(s_ptr->texture_info.file_name);
+            game.content.bitmaps.manifests.find(s_ptr->texture_info.bmp_name);
         if(texture_it == game.content.bitmaps.manifests.end()) {
             problem_sector_ptr = s_ptr;
             problem_type = EPT_UNKNOWN_TEXTURE;
             problem_title = "Sector with unknown texture!";
             problem_description =
-                "Texture name: \"" + s_ptr->texture_info.file_name + "\".";
+                "Texture name: \"" + s_ptr->texture_info.bmp_name + "\".";
             return;
         }
     }
@@ -1397,7 +1397,7 @@ void area_editor::find_problems_unknown_tree_shadow() {
             problem_title = "Tree shadow with invalid texture!";
             problem_description =
                 "Texture name: \"" +
-                game.cur_area_data->tree_shadows[s]->file_name + "\".";
+                game.cur_area_data->tree_shadows[s]->bmp_name + "\".";
             return;
         }
     }
@@ -2025,7 +2025,7 @@ void area_editor::homogenize_selected_sectors() {
     for(auto s = selected_sectors.begin(); s != selected_sectors.end(); ++s) {
         if(s == selected_sectors.begin()) continue;
         base->clone(*s);
-        update_sector_texture(*s, base->texture_info.file_name);
+        update_sector_texture(*s, base->texture_info.bmp_name);
     }
 }
 
@@ -2362,7 +2362,7 @@ void area_editor::paste_sector_properties() {
     
     for(sector* s : selected_sectors) {
         copy_buffer_sector->clone(s);
-        update_sector_texture(s, copy_buffer_sector->texture_info.file_name);
+        update_sector_texture(s, copy_buffer_sector->texture_info.bmp_name);
     }
     
     update_all_edge_offset_caches();
@@ -2397,7 +2397,7 @@ void area_editor::paste_sector_texture() {
     register_change("sector texture paste");
     
     for(sector* s : selected_sectors) {
-        update_sector_texture(s, copy_buffer_sector->texture_info.file_name);
+        update_sector_texture(s, copy_buffer_sector->texture_info.bmp_name);
     }
     
     set_status("Successfully pasted sector texture.");

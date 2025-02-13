@@ -126,7 +126,7 @@ struct options_t {
     float ambiance_volume = OPTIONS::DEF_AMBIANCE_VOLUME;
     
     //Background texture for the animation editor, if any.
-    string anim_editor_bg_texture = OPTIONS::DEF_ANIM_EDITOR_BG_TEXTURE;
+    string anim_editor_bg_path = OPTIONS::DEF_ANIM_EDITOR_BG_TEXTURE;
     
     //Use the advanced interface mode in the area editor?
     bool area_editor_advanced_mode = OPTIONS::DEF_AREA_EDITOR_ADVANCED_MODE;
@@ -261,7 +261,7 @@ struct options_t {
         OPTIONS::DEF_PARTICLE_EDITOR_GRID_INTERVAL;
         
     //Background texture for the particle editor, if any.
-    string particle_editor_bg_texture =
+    string particle_editor_bg_path =
         OPTIONS::DEF_PARTICLE_EDITOR_BG_TEXTURE;
         
     //True to use interpolation when graphics are scaled up/down.

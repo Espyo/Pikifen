@@ -77,14 +77,14 @@ public:
     //Parent bitmap, normally a spritesheet.
     ALLEGRO_BITMAP* parent_bmp = nullptr;
     
-    //File name where the parent bitmap is at.
-    string file;
+    //Internal name of the parent bitmap it belongs to.
+    string bmp_name;
     
-    //Top-left corner of the sprite inside the image file.
-    point file_pos;
+    //Top-left corner of the sprite inside the parent bitmap.
+    point bmp_pos;
     
-    //Size of the sprite inside the image file.
-    point file_size;
+    //Size of the sprite inside the parent bitmap.
+    point bmp_size;
     
     //Offset. Move the sprite left/right/up/down to align with
     //the previous frames and such.
@@ -136,8 +136,8 @@ public:
         float height = 0, float radius = 0
     );
     void set_bitmap(
-        const string &new_file_name,
-        const point &new_file_pos, const point &new_file_size,
+        const string &new_bmp_name,
+        const point &new_bmp_pos, const point &new_bmp_size,
         data_node* node = nullptr
     );
     

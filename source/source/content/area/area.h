@@ -139,8 +139,8 @@ struct tree_shadow {
 
     //--- Members ---
     
-    //File name of the tree shadow texture.
-    string file_name;
+    //Internal name of the tree shadow texture.
+    string bmp_name;
     
     //Tree shadow texture.
     ALLEGRO_BITMAP* bitmap = nullptr;
@@ -166,7 +166,7 @@ struct tree_shadow {
     explicit tree_shadow(
         const point &center = point(), const point &size = point(100.0f),
         float angle = 0, unsigned char alpha = 255,
-        const string &file_name = "", const point &sway = point(1.0f)
+        const string &bmp_name = "", const point &sway = point(1.0f)
     );
     ~tree_shadow();
     
@@ -210,8 +210,8 @@ struct area_data : public content {
     //Bitmap of the background.
     ALLEGRO_BITMAP* bg_bmp = nullptr;
     
-    //File name of the background bitmap.
-    string bg_bmp_file_name;
+    //Internal name of the background bitmap.
+    string bg_bmp_name;
     
     //Zoom the background by this much.
     float bg_bmp_zoom = 1.0f;

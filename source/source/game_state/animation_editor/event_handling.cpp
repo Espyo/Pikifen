@@ -151,7 +151,7 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
     
     switch(state) {
     case EDITOR_STATE_SPRITE_TRANSFORM: {
-        point cur_sprite_size = cur_sprite->scale * cur_sprite->file_size;
+        point cur_sprite_size = cur_sprite->scale * cur_sprite->bmp_size;
         if(
             cur_transformation_widget.handle_mouse_down(
                 game.mouse_cursor.w_pos,
@@ -161,7 +161,7 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                 1.0f / game.cam.zoom
             )
         ) {
-            cur_sprite->scale = cur_sprite_size / cur_sprite->file_size;
+            cur_sprite->scale = cur_sprite_size / cur_sprite->bmp_size;
         }
         break;
         
@@ -277,18 +277,18 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             point selection_br;
             if(
                 (
-                    cur_sprite->file_size.x == 0 ||
-                    cur_sprite->file_size.y == 0
+                    cur_sprite->bmp_size.x == 0 ||
+                    cur_sprite->bmp_size.y == 0
                 ) || !sprite_bmp_add_mode
             ) {
                 selection_tl = bmp_click_pos;
                 selection_br = bmp_click_pos;
             } else {
-                selection_tl = cur_sprite->file_pos;
+                selection_tl = cur_sprite->bmp_pos;
                 selection_br.x =
-                    cur_sprite->file_pos.x + cur_sprite->file_size.x - 1;
+                    cur_sprite->bmp_pos.x + cur_sprite->bmp_size.x - 1;
                 selection_br.y =
-                    cur_sprite->file_pos.y + cur_sprite->file_size.y - 1;
+                    cur_sprite->bmp_pos.y + cur_sprite->bmp_size.y - 1;
             }
             
             bool* selection_pixels = new bool[(int) (bmp_size.x * bmp_size.y)];
@@ -319,10 +319,10 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             
             delete[] selection_pixels;
             
-            cur_sprite->file_pos = selection_tl;
-            cur_sprite->file_size = selection_br - selection_tl + 1;
+            cur_sprite->bmp_pos = selection_tl;
+            cur_sprite->bmp_size = selection_br - selection_tl + 1;
             cur_sprite->set_bitmap(
-                cur_sprite->file, cur_sprite->file_pos, cur_sprite->file_size
+                cur_sprite->bmp_name, cur_sprite->bmp_pos, cur_sprite->bmp_size
             );
             changes_mgr.mark_as_changed();
         }
@@ -358,7 +358,7 @@ void animation_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
     
     switch(state) {
     case EDITOR_STATE_SPRITE_TRANSFORM: {
-        point cur_sprite_size = cur_sprite->scale * cur_sprite->file_size;
+        point cur_sprite_size = cur_sprite->scale * cur_sprite->bmp_size;
         if(
             cur_transformation_widget.handle_mouse_move(
                 game.mouse_cursor.w_pos,
@@ -372,7 +372,7 @@ void animation_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                 is_alt_pressed
             )
         ) {
-            cur_sprite->scale = cur_sprite_size / cur_sprite->file_size;
+            cur_sprite->scale = cur_sprite_size / cur_sprite->bmp_size;
             changes_mgr.mark_as_changed();
         }
         break;

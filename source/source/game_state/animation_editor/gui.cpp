@@ -780,7 +780,7 @@ void animation_editor::process_gui_options_dialog() {
                     al_destroy_bitmap(bg);
                     bg = nullptr;
                 }
-                game.options.anim_editor_bg_texture.clear();
+                game.options.anim_editor_bg_path.clear();
             }
         }
         set_tooltip(
@@ -802,14 +802,14 @@ void animation_editor::process_gui_options_dialog() {
                     );
                     
                 if(!f.empty() && !f[0].empty()) {
-                    game.options.anim_editor_bg_texture = f[0];
+                    game.options.anim_editor_bg_path = f[0];
                     if(bg) {
                         al_destroy_bitmap(bg);
                         bg = nullptr;
                     }
                     bg =
                         load_bmp(
-                            game.options.anim_editor_bg_texture,
+                            game.options.anim_editor_bg_path,
                             nullptr, false, false, false
                         );
                 }
@@ -818,14 +818,12 @@ void animation_editor::process_gui_options_dialog() {
                 "Browse for which texture file on your disk to use."
             );
             
-            //Background texture name.
-            string file_name;
-            if(!game.options.anim_editor_bg_texture.empty()) {
-                file_name =
-                    split(game.options.anim_editor_bg_texture, "/").back();
-            }
+            //Background texture name text.
+            string file_name =
+                get_path_last_component(game.options.anim_editor_bg_path);
             ImGui::SameLine();
             mono_text("%s", file_name.c_str());
+            set_tooltip("Full path:\n" + game.options.anim_editor_bg_path);
             
             ImGui::Unindent();
         }
@@ -2048,7 +2046,7 @@ void animation_editor::process_gui_panel_sprite() {
                     "importSprite", import_sprite_names, &picked_sprite, true
                 )
             ) {
-                import_sprite_file_data(picked_sprite);
+                import_sprite_bmp_data(picked_sprite);
                 import_sprite_transformation_data(picked_sprite);
                 import_sprite_hitbox_data(picked_sprite);
                 import_sprite_top_data(picked_sprite);
@@ -2201,7 +2199,7 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
                 "importSpriteBitmap", import_sprite_names, &picked_sprite, true
             )
         ) {
-            import_sprite_file_data(picked_sprite);
+            import_sprite_bmp_data(picked_sprite);
             center_camera_on_sprite_bitmap(false);
             set_status(
                 "Imported file data from \"" + picked_sprite + "\"."
@@ -2216,7 +2214,7 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
         open_bitmap_dialog(
         [this] (const string &bmp) {
             cur_sprite->set_bitmap(
-                bmp, cur_sprite->file_pos, cur_sprite->file_size
+                bmp, cur_sprite->bmp_pos, cur_sprite->bmp_size
             );
             last_spritesheet_used = bmp;
             center_camera_on_sprite_bitmap(true);
@@ -2228,17 +2226,21 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
     }
     set_tooltip("Choose which spritesheet to use from the game's content.");
     
+    //Spritesheet image name text.
+    ImGui::SameLine();
+    mono_text("%s", cur_sprite->bmp_name.c_str());
+    
     //Sprite top-left coordinates value.
     int top_left[2] =
-    { (int) cur_sprite->file_pos.x, (int) cur_sprite->file_pos.y };
+    { (int) cur_sprite->bmp_pos.x, (int) cur_sprite->bmp_pos.y };
     if(
         ImGui::DragInt2(
             "Top-left", top_left, 0.05f, 0.0f, INT_MAX
         )
     ) {
         cur_sprite->set_bitmap(
-            cur_sprite->file,
-            point(top_left[0], top_left[1]), cur_sprite->file_size
+            cur_sprite->bmp_name,
+            point(top_left[0], top_left[1]), cur_sprite->bmp_size
         );
         changes_mgr.mark_as_changed();
     }
@@ -2249,15 +2251,15 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
     
     //Sprite size value.
     int size[2] =
-    { (int) cur_sprite->file_size.x, (int) cur_sprite->file_size.y };
+    { (int) cur_sprite->bmp_size.x, (int) cur_sprite->bmp_size.y };
     if(
         ImGui::DragInt2(
             "Size", size, 0.05f, 0.0f, INT_MAX
         )
     ) {
         cur_sprite->set_bitmap(
-            cur_sprite->file,
-            cur_sprite->file_pos, point(size[0], size[1])
+            cur_sprite->bmp_name,
+            cur_sprite->bmp_pos, point(size[0], size[1])
         );
         changes_mgr.mark_as_changed();
     }
@@ -2280,20 +2282,20 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
     );
     
     if(
-        cur_sprite->file_pos.x != 0.0f ||
-        cur_sprite->file_pos.y != 0.0f ||
-        cur_sprite->file_size.x != 0.0f ||
-        cur_sprite->file_size.y != 0.0f
+        cur_sprite->bmp_pos.x != 0.0f ||
+        cur_sprite->bmp_pos.y != 0.0f ||
+        cur_sprite->bmp_size.x != 0.0f ||
+        cur_sprite->bmp_size.y != 0.0f
     ) {
     
         //Clear selection button.
         if(
             ImGui::Button("Clear selection")
         ) {
-            cur_sprite->file_pos = point();
-            cur_sprite->file_size = point();
+            cur_sprite->bmp_pos = point();
+            cur_sprite->bmp_size = point();
             cur_sprite->set_bitmap(
-                cur_sprite->file, cur_sprite->file_pos, cur_sprite->file_size
+                cur_sprite->bmp_name, cur_sprite->bmp_pos, cur_sprite->bmp_size
             );
             changes_mgr.mark_as_changed();
         }
