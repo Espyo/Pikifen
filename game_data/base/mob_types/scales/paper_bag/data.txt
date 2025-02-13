@@ -39,7 +39,7 @@ children {
 sounds {
     obstacle_cleared {
         file = obstacle_cleared
-        type = world_global
+        type = gameplay_global
     }
 }
 

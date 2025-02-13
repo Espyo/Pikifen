@@ -2,16 +2,12 @@
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    Make the damage maker tool only damage mobs that have a max health > 0
-    Standardize all texts following a "browse..." sort of button
-    Geyser sounds should be classified as ambiance sound
+    
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    List boxes that list hazards (for hitboxes and for sectors) should use the proper names, not the internal names
-    Moving the Pikmin top with the widget isn't counting as a change
-    Pressing space while trying to type a particle generator's description will pause and unpause
-    When you re-enter the bitmap selection popup, it doesn't re-focus on the textbox
+    Refactor: Find stuff that's joining strings, especially with ";", and call join() instead
+    Texture picker dialog has the images not in a grid because long text is pushing some askew
 
     --- 0.26 ---
     Revamp sounds
@@ -1133,6 +1129,7 @@ Tasks for later on (I might never implement these)
     [NEEDS BRAINSTORMING] Online play?
         It'd likely use deterministic lockstep https://gafferongames.com/post/deterministic_lockstep/
         Good luck with floating point determinism lol
+            https://github.com/MikeLankamp/fpm
         Should it send the events, or "controller" state? If the former, be careful with the player mashing the keyboard and sending many events in one frame. If the latter, there'll be a lot of duplicated info
     Weird known issues
         An enemy that's already petrified can't be petrified again. Unless it's got the "petrified_cracking" or "petrified_cracked" statuses instead

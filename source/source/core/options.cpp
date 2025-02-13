@@ -22,7 +22,7 @@
 namespace OPTIONS {
 
 //Default value for the ambiance sound volume.
-const float DEF_AMBIANCE_VOLUME = 1.0f;
+const float DEF_AMBIANCE_SOUND_VOLUME = 1.0f;
 
 //Default value for the animation editor background texture.
 const char* DEF_ANIM_EDITOR_BG_TEXTURE = "";
@@ -104,6 +104,9 @@ const bool DEF_EDITOR_USE_CUSTOM_STYLE = false;
 //Default value for whether the player is an engine developer.
 const bool DEF_ENGINE_DEVELOPER = false;
 
+//Default value for gameplay sound effects volume.
+const float DEF_GAMEPLAY_SOUND_VOLUME = 1.0f;
+
 //Default value for the GUI editor grid interval.
 const float DEF_GUI_EDITOR_GRID_INTERVAL = 2.5f;
 
@@ -167,9 +170,6 @@ const unsigned int DEF_WIN_H = 768;
 
 //Default value for the window width.
 const unsigned int DEF_WIN_W = 1024;
-
-//Default value for world sound effects volume.
-const float DEF_WORLD_SOUND_VOLUME = 1.0f;
 
 //Default value for the middle zoom level.
 const float DEF_ZOOM_MID_LEVEL = 1.4f;
@@ -249,7 +249,7 @@ void options_t::load(data_node* file) {
     string pack_load_order_str;
     string packs_disabled_str;
     
-    rs.set("ambiance_volume", ambiance_volume);
+    rs.set("ambiance_sound_volume", ambiance_sound_volume);
     rs.set("anim_editor_bg_path", anim_editor_bg_path);
     rs.set("area_editor_advanced_mode", area_editor_advanced_mode);
     rs.set("area_editor_backup_interval", area_editor_backup_interval);
@@ -279,6 +279,7 @@ void options_t::load(data_node* file) {
     rs.set("editor_text_color", editor_text_color);
     rs.set("editor_use_custom_style", editor_use_custom_style);
     rs.set("engine_developer", engine_developer);
+    rs.set("gameplay_sound_volume", gameplay_sound_volume);
     rs.set("fps", target_fps);
     rs.set("fullscreen", intended_win_fullscreen);
     rs.set("gui_editor_grid_interval", gui_editor_grid_interval);
@@ -301,7 +302,6 @@ void options_t::load(data_node* file) {
     rs.set("true_fullscreen", true_fullscreen);
     rs.set("ui_sound_volume", ui_sound_volume);
     rs.set("window_position_hack", window_position_hack);
-    rs.set("world_sound_volume", world_sound_volume);
     
     auto_throw_mode =
         (AUTO_THROW_MODE)
@@ -345,11 +345,11 @@ void options_t::load(data_node* file) {
         intended_win_h = std::max(1, s2i(resolution_parts[1]));
     }
     
-    ambiance_volume = clamp(ambiance_volume, 0.0f, 1.0f);
+    ambiance_sound_volume = clamp(ambiance_sound_volume, 0.0f, 1.0f);
+    gameplay_sound_volume = clamp(gameplay_sound_volume, 0.0f, 1.0f);
     master_volume = clamp(master_volume, 0.0f, 1.0f);
     music_volume = clamp(music_volume, 0.0f, 1.0f);
     ui_sound_volume = clamp(ui_sound_volume, 0.0f, 1.0f);
-    world_sound_volume = clamp(world_sound_volume, 0.0f, 1.0f);
     
     //Force the editor styles to be opaque, otherwise there can be problems.
     editor_primary_color.a = 1.0f;
@@ -441,8 +441,8 @@ void options_t::save(data_node* file) const {
     
     file->add(
         new data_node(
-            "ambiance_volume",
-            f2s(ambiance_volume)
+            "ambiance_sound_volume",
+            f2s(ambiance_sound_volume)
         )
     );
     file->add(
@@ -621,6 +621,12 @@ void options_t::save(data_node* file) const {
     );
     file->add(
         new data_node(
+            "gameplay_sound_volume",
+            f2s(gameplay_sound_volume)
+        )
+    );
+    file->add(
+        new data_node(
             "gui_editor_grid_interval",
             f2s(gui_editor_grid_interval)
         )
@@ -738,12 +744,6 @@ void options_t::save(data_node* file) const {
         new data_node(
             "window_position_hack",
             b2s(window_position_hack)
-        )
-    );
-    file->add(
-        new data_node(
-            "world_sound_volume",
-            f2s(world_sound_volume)
         )
     );
 }

@@ -68,14 +68,17 @@ extern const float SONG_SOFTENED_GAIN;
 //Types of sound effects.
 enum SOUND_TYPE {
 
-    //In-world global sound effect, like a chime or name call.
-    SOUND_TYPE_WORLD_GLOBAL,
+    //In-world gameplay sound played globally, like a chime or name call.
+    SOUND_TYPE_GAMEPLAY_GLOBAL,
     
-    //In-world sound effect from a specific position in the game world.
-    SOUND_TYPE_WORLD_POS,
+    //In-world gameplay sound from a specific position, like a Pikmin yawning.
+    SOUND_TYPE_GAMEPLAY_POS,
     
-    //In-world ambient sound effect.
-    SOUND_TYPE_WORLD_AMBIANCE,
+    //In-world ambient sound played globally, like birds chirping.
+    SOUND_TYPE_AMBIANCE_GLOBAL,
+    
+    //In-world ambient sound effect from a specific position, like a waterfall.
+    SOUND_TYPE_AMBIANCE_POS,
     
     //UI sound effect, that persists through pausing the gameplay.
     SOUND_TYPE_UI,
@@ -230,7 +233,7 @@ struct sound_source_t {
     ALLEGRO_SAMPLE* sample = nullptr;
     
     //Type of sound effect.
-    SOUND_TYPE type = SOUND_TYPE_WORLD_GLOBAL;
+    SOUND_TYPE type = SOUND_TYPE_GAMEPLAY_GLOBAL;
     
     //Configuration.
     sound_source_config_t config;
@@ -346,26 +349,20 @@ public:
     
     //--- Function declarations ---
     
+    size_t create_mob_sound_source(
+        ALLEGRO_SAMPLE* sample, mob* m_ptr, bool ambiance = false,
+        const sound_source_config_t &config = sound_source_config_t()
+    );
+    size_t create_global_sound_source(
+        ALLEGRO_SAMPLE* sample, bool ambiance = false,
+        const sound_source_config_t &config = sound_source_config_t()
+    );
+    size_t create_pos_sound_source(
+        ALLEGRO_SAMPLE* sample, const point &pos, bool ambiance = false,
+        const sound_source_config_t &config = sound_source_config_t()
+    );
     size_t create_ui_sound_source(
         ALLEGRO_SAMPLE* sample,
-        const sound_source_config_t &config = sound_source_config_t()
-    );
-    size_t create_mob_sound_source(
-        ALLEGRO_SAMPLE* sample,
-        mob* m_ptr,
-        const sound_source_config_t &config = sound_source_config_t()
-    );
-    size_t create_world_ambiance_sound_source(
-        ALLEGRO_SAMPLE* sample,
-        const sound_source_config_t &config = sound_source_config_t()
-    );
-    size_t create_world_global_sound_source(
-        ALLEGRO_SAMPLE* sample,
-        const sound_source_config_t &config = sound_source_config_t()
-    );
-    size_t create_world_pos_sound_source(
-        ALLEGRO_SAMPLE* sample,
-        const point &pos,
         const sound_source_config_t &config = sound_source_config_t()
     );
     bool destroy_sound_source(size_t source_id);
@@ -376,8 +373,8 @@ public:
     void handle_world_pause();
     void handle_world_unpause();
     void init(
-        float master_volume, float world_sound_volume, float music_volume,
-        float ambiance_volume, float ui_sound_volume
+        float master_volume, float gameplay_sound_volume, float music_volume,
+        float ambiance_sound_volume, float ui_sound_volume
     );
     void mark_mix_track_status(MIX_TRACK_TYPE track_type);
     bool rewind_song(const string &name);
@@ -392,8 +389,8 @@ public:
     void stop_all_playbacks(const ALLEGRO_SAMPLE* filter = nullptr);
     void tick(float delta_t);
     void update_volumes(
-        float master_volume, float world_sound_volume, float music_volume,
-        float ambiance_volume, float ui_sound_volume
+        float master_volume, float gameplay_sound_volume, float music_volume,
+        float ambiance_sound_volume, float ui_sound_volume
     );
     
 private:
@@ -403,14 +400,14 @@ private:
     //Master mixer.
     ALLEGRO_MIXER* master_mixer = nullptr;
     
-    //General in-world sound effect mixer.
-    ALLEGRO_MIXER* world_sound_mixer = nullptr;
+    //In-world gameplay sound effect mixer.
+    ALLEGRO_MIXER* gameplay_sound_mixer = nullptr;
     
     //Music mixer.
     ALLEGRO_MIXER* music_mixer = nullptr;
     
     //In-world ambiance sound effect mixer.
-    ALLEGRO_MIXER* world_ambiance_sound_mixer = nullptr;
+    ALLEGRO_MIXER* ambiance_sound_mixer = nullptr;
     
     //UI sound effect mixer.
     ALLEGRO_MIXER* ui_sound_mixer = nullptr;

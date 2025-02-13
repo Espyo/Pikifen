@@ -23,8 +23,8 @@
         <th>Option</th><th>Description</th><th>Default</th><th>Performance impact?</th>
       </tr>
       <tr>
-        <th><code>ambiance_volume</code></th>
-        <td>Volume for ambiance sounds, from 0 to 1.</td>
+        <th><code>ambiance_sound_volume</code></th>
+        <td>Volume for in-world ambiance sound effects, from 0 to 1.</td>
         <td><code>1</code></td>
         <td>No</td>
       </tr>
@@ -191,6 +191,12 @@
         <td><b>Yes</b></td>
       </tr>
       <tr>
+        <th><code>gameplay_sound_volume</code></th>
+        <td>Volume for in-world gameplay sound effects, from 0 to 1.</td>
+        <td><code>1</code></td>
+        <td>No</td>
+      </tr>
+      <tr>
         <th><code>fullscreen</code></th>
         <td>Is the window fullscreen (<code>true</code>) or windowed (<code>false</code>)? Note that if the specified resolution doesn't work in fullscreen, the engine will revert the option to windowed mode.</td>
         <td><code>false</code></td>
@@ -296,12 +302,6 @@
         <th><code>window_position_hack</code></th>
         <td>For some users, the game window does not appear, although the engine is definitely running fine. This is because it somehow gets placed out of the screen. Set this to <code>true</code> to force it to appear inside the screen.</td>
         <td><code>false</code></td>
-        <td>No</td>
-      </tr>
-      <tr>
-        <th><code>world_sound_volume</code></th>
-        <td>Volume for in-world sound effects, from 0 to 1.</td>
-        <td><code>1</code></td>
         <td>No</td>
       </tr>
       <tr>

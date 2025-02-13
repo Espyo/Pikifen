@@ -458,9 +458,9 @@ void load_misc_graphics() {
 void load_misc_sounds() {
     game.audio.init(
         game.options.master_volume,
-        game.options.world_sound_volume,
+        game.options.gameplay_sound_volume,
         game.options.music_volume,
-        game.options.ambiance_volume,
+        game.options.ambiance_sound_volume,
         game.options.ui_sound_volume
     );
     

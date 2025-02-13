@@ -258,7 +258,7 @@ public:
         ALLEGRO_SAMPLE* sample = nullptr;
         
         //Type of sound.
-        SOUND_TYPE type = SOUND_TYPE_WORLD_POS;
+        SOUND_TYPE type = SOUND_TYPE_GAMEPLAY_POS;
         
         //Configuration.
         sound_source_config_t config;

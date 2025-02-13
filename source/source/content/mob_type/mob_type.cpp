@@ -668,12 +668,14 @@ void mob_type::load_from_data_node(
         new_sound.sample = game.content.sounds.list.get(file_str, file_node);
         
         if(type_node) {
-            if(type_str == "world_global") {
-                new_sound.type = SOUND_TYPE_WORLD_GLOBAL;
-            } else if(type_str == "world_pos") {
-                new_sound.type = SOUND_TYPE_WORLD_POS;
-            } else if(type_str == "world_ambiance") {
-                new_sound.type = SOUND_TYPE_WORLD_AMBIANCE;
+            if(type_str == "gameplay_global") {
+                new_sound.type = SOUND_TYPE_GAMEPLAY_GLOBAL;
+            } else if(type_str == "gameplay_pos") {
+                new_sound.type = SOUND_TYPE_GAMEPLAY_POS;
+            } else if(type_str == "ambiance_global") {
+                new_sound.type = SOUND_TYPE_AMBIANCE_GLOBAL;
+            } else if(type_str == "ambiance_pos") {
+                new_sound.type = SOUND_TYPE_AMBIANCE_POS;
             } else if(type_str == "ui") {
                 new_sound.type = SOUND_TYPE_UI;
             } else {

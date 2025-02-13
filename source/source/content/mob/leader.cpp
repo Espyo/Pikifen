@@ -900,9 +900,9 @@ void leader::start_whistling() {
         mob_type::sound_t* whistling_sound =
             &type->sounds[whistling_sound_idx];
         whistle_sound_source_id =
-            game.audio.create_world_pos_sound_source(
+            game.audio.create_pos_sound_source(
                 whistling_sound->sample,
-                game.states.gameplay->leader_cursor_w,
+                game.states.gameplay->leader_cursor_w, false,
                 whistling_sound->config
             );
     }

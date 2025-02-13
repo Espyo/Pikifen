@@ -1481,9 +1481,9 @@ void leader_fsm::become_active(mob* m, void* info1, void* info2) {
         if(name_call_sound_idx != INVALID) {
             mob_type::sound_t* name_call_sound =
                 &m->type->sounds[name_call_sound_idx];
-            game.audio.create_world_global_sound_source(
+            game.audio.create_global_sound_source(
                 name_call_sound->sample,
-                name_call_sound->config
+                false, name_call_sound->config
             );
         }
     }

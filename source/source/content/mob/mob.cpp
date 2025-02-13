@@ -1383,10 +1383,9 @@ void mob::do_attack_effects(
         
         sound_source_config_t attack_sound_config;
         attack_sound_config.gain = 0.6f;
-        game.audio.create_world_pos_sound_source(
+        game.audio.create_pos_sound_source(
             game.sys_content.sound_attack,
-            pos,
-            attack_sound_config
+            pos, false, attack_sound_config
         );
         
         //Damage squash and stretch animation.
@@ -2773,22 +2772,28 @@ size_t mob::play_sound(size_t sound_data_idx) {
     mob_type::sound_t* sound = &type->sounds[sound_data_idx];
     
     switch(sound->type) {
-    case SOUND_TYPE_WORLD_GLOBAL: {
+    case SOUND_TYPE_GAMEPLAY_GLOBAL: {
         return
-            game.audio.create_world_global_sound_source(
-                sound->sample, sound->config
+            game.audio.create_global_sound_source(
+                sound->sample, false, sound->config
             );
         break;
-    } case SOUND_TYPE_WORLD_POS: {
+    } case SOUND_TYPE_GAMEPLAY_POS: {
         return
             game.audio.create_mob_sound_source(
-                sound->sample, this, sound->config
+                sound->sample, this, false, sound->config
             );
         break;
-    } case SOUND_TYPE_WORLD_AMBIANCE: {
+    } case SOUND_TYPE_AMBIANCE_GLOBAL: {
         return
-            game.audio.create_world_ambiance_sound_source(
-                sound->sample, sound->config
+            game.audio.create_global_sound_source(
+                sound->sample, true, sound->config
+            );
+        break;
+    } case SOUND_TYPE_AMBIANCE_POS: {
+        return
+            game.audio.create_mob_sound_source(
+                sound->sample, this, true, sound->config
             );
         break;
     } case SOUND_TYPE_UI: {

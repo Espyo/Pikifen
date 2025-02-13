@@ -270,14 +270,14 @@ struct options_menu_t {
     //Master volume picker widget.
     options_menu_picker_gui_item<float>* master_vol_picker = nullptr;
     
-    //World sound effects volume picker widget.
-    options_menu_picker_gui_item<float>* world_sound_vol_picker = nullptr;
+    //Gameplay sound effects volume picker widget.
+    options_menu_picker_gui_item<float>* gameplay_sound_vol_picker = nullptr;
     
     //Music volume picker widget.
     options_menu_picker_gui_item<float>* music_vol_picker = nullptr;
     
-    //Ambiance sound volume picker widget.
-    options_menu_picker_gui_item<float>* ambiance_vol_picker = nullptr;
+    //Ambiance sound effects volume picker widget.
+    options_menu_picker_gui_item<float>* ambiance_sound_vol_picker = nullptr;
     
     //UI sound effects volume picker widget.
     options_menu_picker_gui_item<float>* ui_sound_vol_picker = nullptr;

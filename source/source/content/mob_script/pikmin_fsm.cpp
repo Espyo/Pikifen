@@ -2144,8 +2144,7 @@ void pikmin_fsm::be_thrown(mob* m, void* info1, void* info2) {
         throw_sound_config.stack_mode = SOUND_STACK_MODE_OVERRIDE;
         game.audio.create_mob_sound_source(
             throw_sound->sample,
-            m,
-            throw_sound_config
+            m, false, throw_sound_config
         );
     }
     

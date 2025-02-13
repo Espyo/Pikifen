@@ -289,15 +289,15 @@ void options_menu_t::handle_player_action(const player_action &action) {
  */
 void options_menu_t::init_gui_audio_page() {
     //Menu items.
-    audio_gui.register_coords("back",               12,  5,   20,  6);
-    audio_gui.register_coords("back_input",          3,  7,    4,  4);
-    audio_gui.register_coords("header",             50, 10,   50,  6);
-    audio_gui.register_coords("master_volume",      50, 25,   70, 10);
-    audio_gui.register_coords("world_sound_volume", 50, 37.5, 65, 10);
-    audio_gui.register_coords("music_volume",       50, 50,   65, 10);
-    audio_gui.register_coords("ambiance_volume",    50, 62.5, 65, 10);
-    audio_gui.register_coords("ui_sound_volume",    50, 75,   65, 10);
-    audio_gui.register_coords("tooltip",            50, 96,   96,  4);
+    audio_gui.register_coords("back",                  12,  5,   20,  6);
+    audio_gui.register_coords("back_input",             3,  7,    4,  4);
+    audio_gui.register_coords("header",                50, 10,   50,  6);
+    audio_gui.register_coords("master_volume",         50, 25,   70, 10);
+    audio_gui.register_coords("gameplay_sound_volume", 50, 37.5, 65, 10);
+    audio_gui.register_coords("music_volume",          50, 50,   65, 10);
+    audio_gui.register_coords("ambiance_sound_volume", 50, 62.5, 65, 10);
+    audio_gui.register_coords("ui_sound_volume",       50, 75,   65, 10);
+    audio_gui.register_coords("tooltip",               50, 96,   96,  4);
     audio_gui.read_coords(
         game.content.gui_defs.list[OPTIONS_MENU::AUDIO_GUI_FILE_NAME].
         get_child_by_name("positions")
@@ -347,9 +347,9 @@ void options_menu_t::init_gui_audio_page() {
     auto update_volumes = [this] () {
         game.audio.update_volumes(
             game.options.master_volume,
-            game.options.world_sound_volume,
+            game.options.gameplay_sound_volume,
             game.options.music_volume,
-            game.options.ambiance_volume,
+            game.options.ambiance_sound_volume,
             game.options.ui_sound_volume
         );
     };
@@ -368,19 +368,19 @@ void options_menu_t::init_gui_audio_page() {
     master_vol_picker->init();
     audio_gui.add_item(master_vol_picker, "master_volume");
     
-    //World sound effects volume picker.
-    world_sound_vol_picker =
+    //Gameplay sound effects volume picker.
+    gameplay_sound_vol_picker =
         new options_menu_picker_gui_item<float>(
-        "World sound effects volume: ",
-        &game.options.world_sound_volume,
-        OPTIONS::DEF_WORLD_SOUND_VOLUME,
+        "Gameplay sound effects volume: ",
+        &game.options.gameplay_sound_volume,
+        OPTIONS::DEF_GAMEPLAY_SOUND_VOLUME,
         preset_volume_values,
         preset_volume_names,
-        "Volume for in-world sound effects specifically."
+        "Volume for in-world gameplay sound effects specifically."
     );
-    world_sound_vol_picker->after_change = update_volumes;
-    world_sound_vol_picker->init();
-    audio_gui.add_item(world_sound_vol_picker, "world_sound_volume");
+    gameplay_sound_vol_picker->after_change = update_volumes;
+    gameplay_sound_vol_picker->init();
+    audio_gui.add_item(gameplay_sound_vol_picker, "gameplay_sound_volume");
     
     //Music volume picker.
     music_vol_picker =
@@ -397,18 +397,18 @@ void options_menu_t::init_gui_audio_page() {
     audio_gui.add_item(music_vol_picker, "music_volume");
     
     //Ambiance sound volume picker.
-    ambiance_vol_picker =
+    ambiance_sound_vol_picker =
         new options_menu_picker_gui_item<float>(
-        "Ambiance volume: ",
-        &game.options.ambiance_volume,
-        OPTIONS::DEF_AMBIANCE_VOLUME,
+        "Ambiance sound effects volume: ",
+        &game.options.ambiance_sound_volume,
+        OPTIONS::DEF_AMBIANCE_SOUND_VOLUME,
         preset_volume_values,
         preset_volume_names,
-        "Volume for ambiance sound specifically."
+        "Volume for in-world ambiance sound effects specifically."
     );
-    ambiance_vol_picker->after_change = update_volumes;
-    ambiance_vol_picker->init();
-    audio_gui.add_item(ambiance_vol_picker, "ambiance_volume");
+    ambiance_sound_vol_picker->after_change = update_volumes;
+    ambiance_sound_vol_picker->init();
+    audio_gui.add_item(ambiance_sound_vol_picker, "ambiance_sound_volume");
     
     //UI sound effects volume picker.
     ui_sound_vol_picker =

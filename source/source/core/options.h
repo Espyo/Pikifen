@@ -62,7 +62,7 @@ enum LEAVING_CONFIRMATION_MODE {
 
 
 namespace OPTIONS {
-extern const float DEF_AMBIANCE_VOLUME;
+extern const float DEF_AMBIANCE_SOUND_VOLUME;
 extern const char* DEF_ANIM_EDITOR_BG_TEXTURE;
 extern const bool DEF_AREA_EDITOR_ADVANCED_MODE;
 extern const float DEF_AREA_EDITOR_BACKUP_INTERVAL;
@@ -89,6 +89,7 @@ extern const ALLEGRO_COLOR DEF_EDITOR_TEXT_COLOR;
 extern const bool DEF_EDITOR_USE_CUSTOM_STYLE;
 extern const bool DEF_EDITOR_SHOW_TOOLTIPS;
 extern const bool DEF_ENGINE_DEVELOPER;
+extern const float DEF_GAMEPLAY_SOUND_VOLUME;
 extern const float DEF_GUI_EDITOR_GRID_INTERVAL;
 extern const bool DEF_GUI_EDITOR_SNAP;
 extern const float DEF_PARTICLE_EDITOR_GRID_INTERVAL;
@@ -110,7 +111,6 @@ extern const bool DEF_WIN_FULLSCREEN;
 extern const unsigned int DEF_WIN_H;
 extern const bool DEF_WINDOW_POSITION_HACK;
 extern const unsigned int DEF_WIN_W;
-extern const float DEF_WORLD_SOUND_VOLUME;
 extern const float DEF_ZOOM_MID_LEVEL;
 }
 
@@ -123,7 +123,7 @@ struct options_t {
     //--- Members ---
     
     //Ambiance sound volume (0 - 1).
-    float ambiance_volume = OPTIONS::DEF_AMBIANCE_VOLUME;
+    float ambiance_sound_volume = OPTIONS::DEF_AMBIANCE_SOUND_VOLUME;
     
     //Background texture for the animation editor, if any.
     string anim_editor_bg_path = OPTIONS::DEF_ANIM_EDITOR_BG_TEXTURE;
@@ -206,6 +206,9 @@ struct options_t {
     //Is the player a developer of the engine?
     bool engine_developer = OPTIONS::DEF_ENGINE_DEVELOPER;
     
+    //Gameplay sound effects volume (0 - 1).
+    float gameplay_sound_volume = OPTIONS::DEF_GAMEPLAY_SOUND_VOLUME;
+    
     //Grid interval in the GUI editor, in units.
     float gui_editor_grid_interval = OPTIONS::DEF_GUI_EDITOR_GRID_INTERVAL;
     
@@ -282,9 +285,6 @@ struct options_t {
     //Should we force the window's positioning?
     //(on some machines it appears out-of-bounds by default)
     bool window_position_hack = OPTIONS::DEF_WINDOW_POSITION_HACK;
-    
-    //World sound effects volume (0 - 1).
-    float world_sound_volume = OPTIONS::DEF_WORLD_SOUND_VOLUME;
     
     //Set the camera's middle zoom level to this amount.
     float zoom_mid_level = OPTIONS::DEF_ZOOM_MID_LEVEL;

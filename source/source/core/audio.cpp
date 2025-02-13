@@ -61,27 +61,80 @@ const float SONG_SOFTENED_GAIN = 0.4f;
 }
 
 
+
 /**
- * @brief Creates a mob sound effect source and returns its ID.
+ * @brief Creates an in-world global sound effect source and returns its ID.
  *
- * This is like create_world_pos_sound_source, but ties the source to the mob,
+ * This is basically how you can get the engine to produce a sound that doesn't
+ * involve a position in the game world.
+ *
+ * @param sample Sound sample that this source will emit.
+ * @param ambiance Whether it's an ambiance sound or a gameplay sound.
+ * @param config Configuration.
+ * @return The ID, or 0 on failure.
+ */
+size_t audio_manager::create_global_sound_source(
+    ALLEGRO_SAMPLE* sample, bool ambiance,
+    const sound_source_config_t &config
+) {
+    return create_sound_source(
+        sample,
+        ambiance ? SOUND_TYPE_AMBIANCE_GLOBAL : SOUND_TYPE_GAMEPLAY_GLOBAL,
+        config, point()
+    );
+}
+
+
+/**
+ * @brief Creates an in-world mob sound effect source and returns its ID.
+ *
+ * This is like create_pos_sound_source, but ties the source to the mob,
  * meaning the audio manager is responsible for updating the source's position
  * every frame to match the mob's.
  *
  * @param sample Sound sample that this source will emit.
  * @param m_ptr Pointer to the mob.
+ * @param ambiance Whether it's an ambiance sound or a gameplay sound.
  * @param config Configuration.
  * @return The ID, or 0 on failure.
  */
 size_t audio_manager::create_mob_sound_source(
     ALLEGRO_SAMPLE* sample,
-    mob* m_ptr,
+    mob* m_ptr, bool ambiance,
     const sound_source_config_t &config
 ) {
     size_t source_id =
-        create_sound_source(sample, SOUND_TYPE_WORLD_POS, config, m_ptr->pos);
+        create_sound_source(
+            sample,
+            ambiance ? SOUND_TYPE_AMBIANCE_POS : SOUND_TYPE_GAMEPLAY_POS,
+            config, m_ptr->pos
+        );
     mob_sources[source_id] = m_ptr;
     return source_id;
+}
+
+
+/**
+ * @brief Creates an in-world positional sound effect source and returns its ID.
+ *
+ * This is basically how you can get the engine to produce a sound that
+ * involves a position in the game world.
+ *
+ * @param sample Sound sample that this source will emit.
+ * @param pos Starting position in the game world.
+ * @param ambiance Whether it's an ambiance sound or a gameplay sound.
+ * @param config Configuration.
+ * @return The ID, or 0 on failure.
+ */
+size_t audio_manager::create_pos_sound_source(
+    ALLEGRO_SAMPLE* sample, const point &pos, bool ambiance,
+    const sound_source_config_t &config
+) {
+    return create_sound_source(
+        sample,
+        ambiance ? SOUND_TYPE_AMBIANCE_POS : SOUND_TYPE_GAMEPLAY_POS,
+        config, pos
+    );
 }
 
 
@@ -142,69 +195,13 @@ size_t audio_manager::create_ui_sound_source(
 
 
 /**
- * @brief Creates an in-world ambiance sound effect source and returns its ID.
- *
- * This is basically how you can get the engine to produce a sound that doesn't
- * involve a position in the game world, and is just decorative ambiance.
- *
- * @param sample Sound sample that this source will emit.
- * @param config Configuration.
- * @return The ID, or 0 on failure.
- */
-size_t audio_manager::create_world_ambiance_sound_source(
-    ALLEGRO_SAMPLE* sample,
-    const sound_source_config_t &config
-) {
-    return create_sound_source(sample, SOUND_TYPE_WORLD_AMBIANCE, config, point());
-}
-
-
-/**
- * @brief Creates an in-world global sound effect source and returns its ID.
- *
- * This is basically how you can get the engine to produce a sound that doesn't
- * involve a position in the game world.
- *
- * @param sample Sound sample that this source will emit.
- * @param config Configuration.
- * @return The ID, or 0 on failure.
- */
-size_t audio_manager::create_world_global_sound_source(
-    ALLEGRO_SAMPLE* sample,
-    const sound_source_config_t &config
-) {
-    return create_sound_source(sample, SOUND_TYPE_WORLD_GLOBAL, config, point());
-}
-
-
-/**
- * @brief Creates an in-world positional sound effect source and returns its ID.
- *
- * This is basically how you can get the engine to produce a sound that
- * involves a position in the game world.
- *
- * @param sample Sound sample that this source will emit.
- * @param pos Starting position in the game world.
- * @param config Configuration.
- * @return The ID, or 0 on failure.
- */
-size_t audio_manager::create_world_pos_sound_source(
-    ALLEGRO_SAMPLE* sample,
-    const point &pos,
-    const sound_source_config_t &config
-) {
-    return create_sound_source(sample, SOUND_TYPE_WORLD_POS, config, pos);
-}
-
-
-/**
  * @brief Destroys the audio manager.
  */
 void audio_manager::destroy() {
     al_detach_voice(voice);
-    al_destroy_mixer(world_sound_mixer);
+    al_destroy_mixer(gameplay_sound_mixer);
     al_destroy_mixer(music_mixer);
-    al_destroy_mixer(world_ambiance_sound_mixer);
+    al_destroy_mixer(ambiance_sound_mixer);
     al_destroy_mixer(ui_sound_mixer);
     al_destroy_mixer(master_mixer);
     al_destroy_voice(voice);
@@ -365,12 +362,13 @@ bool audio_manager::emit(size_t source_id) {
     
     ALLEGRO_MIXER* mixer = nullptr;
     switch(source_ptr->type) {
-    case SOUND_TYPE_WORLD_GLOBAL:
-    case SOUND_TYPE_WORLD_POS: {
-        mixer = world_sound_mixer;
+    case SOUND_TYPE_GAMEPLAY_GLOBAL:
+    case SOUND_TYPE_GAMEPLAY_POS: {
+        mixer = gameplay_sound_mixer;
         break;
-    } case SOUND_TYPE_WORLD_AMBIANCE: {
-        mixer = world_ambiance_sound_mixer;
+    } case SOUND_TYPE_AMBIANCE_GLOBAL: {
+    } case SOUND_TYPE_AMBIANCE_POS: {
+        mixer = ambiance_sound_mixer;
         break;
     } case SOUND_TYPE_UI: {
         mixer = ui_sound_mixer;
@@ -471,9 +469,10 @@ void audio_manager::handle_world_pause() {
         if(!source_ptr) continue;
         
         if(
-            source_ptr->type == SOUND_TYPE_WORLD_GLOBAL ||
-            source_ptr->type == SOUND_TYPE_WORLD_POS ||
-            source_ptr->type == SOUND_TYPE_WORLD_AMBIANCE
+            source_ptr->type == SOUND_TYPE_GAMEPLAY_GLOBAL ||
+            source_ptr->type == SOUND_TYPE_GAMEPLAY_POS ||
+            source_ptr->type == SOUND_TYPE_AMBIANCE_GLOBAL ||
+            source_ptr->type == SOUND_TYPE_AMBIANCE_POS
         ) {
             playback_ptr->state = SOUND_PLAYBACK_STATE_PAUSING;
         }
@@ -507,9 +506,10 @@ void audio_manager::handle_world_unpause() {
         if(!source_ptr) continue;
         
         if(
-            source_ptr->type == SOUND_TYPE_WORLD_GLOBAL ||
-            source_ptr->type == SOUND_TYPE_WORLD_POS ||
-            source_ptr->type == SOUND_TYPE_WORLD_AMBIANCE
+            source_ptr->type == SOUND_TYPE_GAMEPLAY_GLOBAL ||
+            source_ptr->type == SOUND_TYPE_GAMEPLAY_POS ||
+            source_ptr->type == SOUND_TYPE_AMBIANCE_GLOBAL ||
+            source_ptr->type == SOUND_TYPE_AMBIANCE_POS
         ) {
             playback_ptr->state = SOUND_PLAYBACK_STATE_UNPAUSING;
             al_set_sample_instance_playing(
@@ -540,14 +540,14 @@ void audio_manager::handle_world_unpause() {
  * @brief Initializes the audio manager.
  *
  * @param master_volume Volume of the master mixer.
- * @param world_sound_volume Volume of the in-world sound effects mixer.
+ * @param gameplay_sound_volume Volume of the gameplay sound effects mixer.
  * @param music_volume Volume of the music mixer.
- * @param ambiance_volume Volume of the ambiance sounds mixer.
+ * @param ambiance_sound_volume Volume of the ambiance sounds mixer.
  * @param ui_sound_volume Volume of the UI sound effects mixer.
  */
 void audio_manager::init(
-    float master_volume, float world_sound_volume, float music_volume,
-    float ambiance_volume, float ui_sound_volume
+    float master_volume, float gameplay_sound_volume, float music_volume,
+    float ambiance_sound_volume, float ui_sound_volume
 ) {
     //Main voice.
     voice =
@@ -562,12 +562,12 @@ void audio_manager::init(
         );
     al_attach_mixer_to_voice(master_mixer, voice);
     
-    //World sound effects mixer.
-    world_sound_mixer =
+    //Gameplay sound effects mixer.
+    gameplay_sound_mixer =
         al_create_mixer(
             44100, ALLEGRO_AUDIO_DEPTH_FLOAT32, ALLEGRO_CHANNEL_CONF_2
         );
-    al_attach_mixer_to_mixer(world_sound_mixer, master_mixer);
+    al_attach_mixer_to_mixer(gameplay_sound_mixer, master_mixer);
     
     //Music mixer.
     music_mixer =
@@ -576,12 +576,12 @@ void audio_manager::init(
         );
     al_attach_mixer_to_mixer(music_mixer, master_mixer);
     
-    //World ambiance sounds mixer.
-    world_ambiance_sound_mixer =
+    //Ambiance sounds mixer.
+    ambiance_sound_mixer =
         al_create_mixer(
             44100, ALLEGRO_AUDIO_DEPTH_FLOAT32, ALLEGRO_CHANNEL_CONF_2
         );
-    al_attach_mixer_to_mixer(world_ambiance_sound_mixer, master_mixer);
+    al_attach_mixer_to_mixer(ambiance_sound_mixer, master_mixer);
     
     //UI sound effects mixer.
     ui_sound_mixer =
@@ -593,9 +593,9 @@ void audio_manager::init(
     //Set all of the mixer volumes.
     update_volumes(
         master_volume,
-        world_sound_volume,
+        gameplay_sound_volume,
         music_volume,
-        ambiance_volume,
+        ambiance_sound_volume,
         ui_sound_volume
     );
     
@@ -1144,7 +1144,7 @@ void audio_manager::update_playback_target_gain_and_pan(size_t playback_idx) {
     if(playback_ptr->state == SOUND_PLAYBACK_STATE_DESTROYED) return;
     
     sound_source_t* source_ptr = get_source(playback_ptr->source_id);
-    if(!source_ptr || source_ptr->type != SOUND_TYPE_WORLD_POS) return;
+    if(!source_ptr || source_ptr->type != SOUND_TYPE_GAMEPLAY_POS) return;
     
     //Calculate screen and camera things.
     point screen_size = cam_br - cam_tl;
@@ -1181,26 +1181,26 @@ void audio_manager::update_playback_target_gain_and_pan(size_t playback_idx) {
  * @brief Updates the volumes of all mixers.
  *
  * @param master_volume Volume of the master mixer.
- * @param world_sound_volume Volume of the in-world sound effects mixer.
+ * @param gameplay_sound_volume Volume of the gameplay sound effects mixer.
  * @param music_volume Volume of the music mixer.
- * @param ambiance_volume Volume of the ambiance sounds mixer.
+ * @param ambiance_sound_volume Volume of the ambiance sounds mixer.
  * @param ui_sound_volume Volume of the UI sound effects mixer.
  */
 void audio_manager::update_volumes(
-    float master_volume, float world_sound_volume, float music_volume,
-    float ambiance_volume, float ui_sound_volume
+    float master_volume, float gameplay_sound_volume, float music_volume,
+    float ambiance_sound_volume, float ui_sound_volume
 ) {
     master_volume = clamp(master_volume, 0.0f, 1.0f);
     al_set_mixer_gain(master_mixer, master_volume);
     
-    world_sound_volume = clamp(world_sound_volume, 0.0f, 1.0f);
-    al_set_mixer_gain(world_sound_mixer, world_sound_volume);
+    gameplay_sound_volume = clamp(gameplay_sound_volume, 0.0f, 1.0f);
+    al_set_mixer_gain(gameplay_sound_mixer, gameplay_sound_volume);
     
     music_volume = clamp(music_volume, 0.0f, 1.0f);
     al_set_mixer_gain(music_mixer, music_volume);
     
-    ambiance_volume = clamp(ambiance_volume, 0.0f, 1.0f);
-    al_set_mixer_gain(world_ambiance_sound_mixer, ambiance_volume);
+    ambiance_sound_volume = clamp(ambiance_sound_volume, 0.0f, 1.0f);
+    al_set_mixer_gain(ambiance_sound_mixer, ambiance_sound_volume);
     
     ui_sound_volume = clamp(ui_sound_volume, 0.0f, 1.0f);
     al_set_mixer_gain(ui_sound_mixer, ui_sound_volume);

@@ -18,6 +18,7 @@ sounds {
     }
     fountain {
         file = fountain
+        type = ambiance_pos
         loop = true
         volume = 5
     }

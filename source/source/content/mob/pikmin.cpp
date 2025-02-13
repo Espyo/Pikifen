@@ -234,10 +234,9 @@ void pikmin::finish_dying_class_specifics() {
     if(dying_sound_idx != INVALID) {
         mob_type::sound_t* dying_sound =
             &type->sounds[dying_sound_idx];
-        game.audio.create_world_pos_sound_source(
+        game.audio.create_pos_sound_source(
             dying_sound->sample,
-            pos,
-            dying_sound->config
+            pos, false, dying_sound->config
         );
     }
 }
