@@ -294,98 +294,17 @@ void animation_editor::process_gui_hitbox_hazards() {
     if(saveable_tree_node("hitbox", "Hazards")) {
     
         static int selected_hazard_idx = 0;
-        
-        //Hitbox hazard addition button.
+        vector<string> hazard_inames =
+            semicolon_list_to_vector(cur_hitbox->hazards_str);
         if(
-            ImGui::ImageButton(
-                "hitboxAddButton", editor_icons[EDITOR_ICON_ADD],
-                point(EDITOR::ICON_BMP_SIZE)
+            process_gui_hazard_management_widgets(
+                hazard_inames, selected_hazard_idx
             )
         ) {
-            ImGui::OpenPopup("addHazard");
+            changes_mgr.mark_as_changed();
+            cur_hitbox->hazards_str = join(hazard_inames, ";");
         }
-        set_tooltip(
-            "Add a new hazard to the list of hazards this hitbox has.\n"
-            "Click to open a pop-up for you to choose from."
-        );
-        
-        //Hitbox hazard addition popup.
-        vector<string> all_hazards_list;
-        for(auto &h : game.content.hazards.list) {
-            all_hazards_list.push_back(h.first);
-        }
-        string picked_hazard;
-        if(
-            list_popup(
-                "addHazard", all_hazards_list, &picked_hazard, true
-            )
-        ) {
-            vector<string> list =
-                semicolon_list_to_vector(cur_hitbox->hazards_str);
-            if(
-                std::find(list.begin(), list.end(), picked_hazard) ==
-                list.end()
-            ) {
-                if(!cur_hitbox->hazards_str.empty()) {
-                    cur_hitbox->hazards_str += ";";
-                }
-                cur_hitbox->hazards_str += picked_hazard;
-                selected_hazard_idx = (int) list.size();
-                changes_mgr.mark_as_changed();
-                set_status(
-                    "Added hazard \"" + picked_hazard + "\" to the hitbox."
-                );
-            }
-        }
-        
-        //Hitbox hazard removal button.
-        if(selected_hazard_idx >= 0 && !cur_hitbox->hazards_str.empty()) {
-            ImGui::SameLine();
-            if(
-                ImGui::ImageButton(
-                    "hitboxRemButton", editor_icons[EDITOR_ICON_REMOVE],
-                    point(EDITOR::ICON_BMP_SIZE)
-                )
-            ) {
-                vector<string> list =
-                    semicolon_list_to_vector(cur_hitbox->hazards_str);
-                if(selected_hazard_idx < (int) list.size()) {
-                    string hazard_name = list[selected_hazard_idx];
-                    cur_hitbox->hazards_str.clear();
-                    for(size_t h = 0; h < list.size(); h++) {
-                        if(h == (size_t) selected_hazard_idx) continue;
-                        cur_hitbox->hazards_str += list[h] + ";";
-                    }
-                    if(!cur_hitbox->hazards_str.empty()) {
-                        //Delete the trailing semicolon.
-                        cur_hitbox->hazards_str.pop_back();
-                    }
-                    selected_hazard_idx =
-                        std::min(
-                            selected_hazard_idx, (int) list.size() - 2
-                        );
-                    changes_mgr.mark_as_changed();
-                    set_status(
-                        "Removed hazard \"" + hazard_name +
-                        "\" from the hitbox."
-                    );
-                }
-            }
-            set_tooltip(
-                "Remove the selected hazard from the list of "
-                "hazards this hitbox has."
-            );
-        }
-        
-        //Hitbox hazard list.
-        mono_list_box(
-            "Hazards", &selected_hazard_idx,
-            semicolon_list_to_vector(cur_hitbox->hazards_str),
-            4
-        );
-        set_tooltip(
-            "List of hazards this hitbox has."
-        );
+        set_tooltip("List of hazards this hitbox has.");
         
         ImGui::TreePop();
     }

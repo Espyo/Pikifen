@@ -5024,110 +5024,26 @@ void area_editor::process_gui_panel_sector() {
         if(saveable_tree_node("layout", "Hazards")) {
         
             static int selected_hazard_idx = 0;
-            
-            //Sector hazard addition button.
+            vector<string> hazard_inames =
+                semicolon_list_to_vector(s_ptr->hazards_str);
             if(
-                ImGui::ImageButton(
-                    "addHazardButton", editor_icons[EDITOR_ICON_ADD],
-                    point(EDITOR::ICON_BMP_SIZE)
+                process_gui_hazard_management_widgets(
+                    hazard_inames, selected_hazard_idx
                 )
             ) {
-                ImGui::OpenPopup("addHazard");
-            }
-            set_tooltip(
-                "Add a new hazard to the list of hazards this sector has.\n"
-                "Click to open a pop-up for you to choose from."
-            );
-            
-            //Sector hazard addition popup.
-            vector<string> all_hazards_list;
-            for(auto &h : game.content.hazards.list) {
-                all_hazards_list.push_back(h.first);
-            }
-            string picked_hazard;
-            if(
-                list_popup(
-                    "addHazard", all_hazards_list, &picked_hazard, true
-                )
-            ) {
-                vector<string> list =
-                    semicolon_list_to_vector(s_ptr->hazards_str);
-                if(
-                    std::find(
-                        list.begin(), list.end(), picked_hazard
-                    ) == list.end()
-                ) {
-                    register_change("sector hazard addition");
-                    if(!s_ptr->hazards_str.empty()) {
-                        s_ptr->hazards_str += ";";
-                    }
-                    s_ptr->hazards_str += picked_hazard;
-                    s_ptr->hazards.push_back(&(game.content.hazards.list[picked_hazard]));
-                    selected_hazard_idx = (int) list.size();
-                    set_status(
-                        "Added hazard \"" + picked_hazard +
-                        "\" to the sector."
+                register_change("sector hazard changes");
+                s_ptr->hazards_str = join(hazard_inames, ";");
+                s_ptr->hazards.clear();
+                for(size_t h = 0; h < hazard_inames.size(); h++) {
+                    s_ptr->hazards.push_back(
+                        &(game.content.hazards.list[hazard_inames[h]])
                     );
                 }
             }
+            set_tooltip("List of hazards this sector has.");
             
-            //Sector hazard removal button.
-            if(
-                selected_hazard_idx >= 0 &&
-                !(*selected_sectors.begin())->hazards_str.empty()
-            ) {
-                ImGui::SameLine();
-                if(
-                    ImGui::ImageButton(
-                        "remHazardButton", editor_icons[EDITOR_ICON_REMOVE],
-                        point(EDITOR::ICON_BMP_SIZE)
-                    )
-                ) {
-                    vector<string> list =
-                        semicolon_list_to_vector(s_ptr->hazards_str);
-                    if(selected_hazard_idx < (int) list.size()) {
-                        register_change("sector hazard removal");
-                        string hazard_name = list[selected_hazard_idx];
-                        s_ptr->hazards_str.clear();
-                        s_ptr->hazards.clear();
-                        for(size_t h = 0; h < list.size(); h++) {
-                            if(h == (size_t) selected_hazard_idx) continue;
-                            s_ptr->hazards_str += list[h] + ";";
-                            s_ptr->hazards.push_back(&(game.content.hazards.list[list[h]]));
-                        }
-                        if(!s_ptr->hazards_str.empty()) {
-                            //Delete the trailing semicolon.
-                            s_ptr->hazards_str.pop_back();
-                        }
-                        selected_hazard_idx =
-                            std::min(
-                                selected_hazard_idx, (int) list.size() - 2
-                            );
-                        set_status(
-                            "Removed hazard \"" + hazard_name +
-                            "\" from the sector."
-                        );
-                    }
-                }
-                set_tooltip(
-                    "Remove the selected hazard from the list of "
-                    "hazards this sector has."
-                );
-            }
-            
-            //Sector hazard list.
-            if(
-                !(*selected_sectors.begin())->hazards_str.empty()
-            ) {
-                mono_list_box(
-                    "Hazards", &selected_hazard_idx,
-                    semicolon_list_to_vector(s_ptr->hazards_str),
-                    4
-                );
-                set_tooltip(
-                    "List of hazards this sector has."
-                );
-                
+            if(!hazard_inames.empty()) {
+                //Sector hazard floor only checkbox.
                 bool sector_hazard_floor = s_ptr->hazard_floor;
                 if(ImGui::Checkbox("Floor only", &sector_hazard_floor)) {
                     register_change("sector hazard floor option change");

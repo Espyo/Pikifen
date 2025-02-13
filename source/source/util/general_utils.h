@@ -25,8 +25,13 @@ using std::string;
 using std::vector;
 
 
+//Bitmask with 8 bits.
 typedef uint8_t bitmask_8_t;
+
+//Bitmask with 16 bits.
 typedef uint16_t bitmask_16_t;
+
+//Bitmask with 32 bits.
 typedef uint32_t bitmask_32_t;
 
 
@@ -469,6 +474,30 @@ vector<t> filter_vector_with_ban_list(
             std::find(ban_list.begin(), ban_list.end(), result[i]) !=
             ban_list.end()
         ) {
+            result.erase(result.begin() + i);
+        } else {
+            i++;
+        }
+    }
+    return result;
+}
+
+
+/**
+ * @brief Removes all instances of a given item inside of a vector.
+ *
+ * @tparam t Type of the vector's contents.
+ * @param item Item to compare with.
+ * @param vec Vector to check.
+ * @return The finished vector.
+ */
+template<typename t>
+vector<t> remove_all_in_vector(
+    const t &item, const vector<t> &vec
+) {
+    vector<t> result = vec;
+    for(size_t i = 0; i < result.size();) {
+        if(result[i] == item) {
             result.erase(result.begin() + i);
         } else {
             i++;

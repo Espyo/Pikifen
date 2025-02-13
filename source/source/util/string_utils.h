@@ -49,6 +49,7 @@ string f2s(float f);
 string get_matching_string_starts(const string &s1, const string &s2);
 string get_path_last_component(const string& s);
 bool is_number(const string &s);
+string join(const vector<string>& parts, const string& delimiter);
 string pad_string(const string &s, size_t size, char padding);
 string remove_extension(const string &s);
 string replace_all(

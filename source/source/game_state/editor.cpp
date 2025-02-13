@@ -1456,6 +1456,44 @@ bool editor::list_popup(
 
 
 /**
+ * @brief Displays a popup, if applicable, and fills it with selectable items
+ * from a list.
+ *
+ * @param label Name of the popup.
+ * @param items List of items.
+ * @param picked_item_idx If an item was picked, set this to its index.
+ * @param use_monospace Whether to use a monospace font for the items.
+ * @return Whether an item was clicked on.
+ */
+bool editor::list_popup(
+    const char* label, const vector<string> &items, int* picked_item_idx,
+    bool use_monospace
+) {
+    bool ret = false;
+    if(ImGui::BeginPopup(label)) {
+        if(escape_was_pressed) {
+            ImGui::CloseCurrentPopup();
+        }
+        if(use_monospace) ImGui::PushFont(game.sys_content.fnt_imgui_monospace);
+        for(size_t i = 0; i < items.size(); i++) {
+            string name = items[i];
+            bool hit_button =
+                use_monospace ?
+                mono_selectable(name.c_str()) :
+                ImGui::Selectable(name.c_str());
+            if(hit_button) {
+                *picked_item_idx = i;
+                ret = true;
+            }
+        }
+        if(use_monospace) ImGui::PopFont();
+        ImGui::EndPopup();
+    }
+    return ret;
+}
+
+
+/**
  * @brief Loads things common for all editors.
  */
 void editor::load() {
@@ -2018,6 +2056,103 @@ void editor::process_gui_editor_style() {
         );
         ImGui::TreePop();
     }
+}
+
+
+/**
+ * @brief Processes the Dear ImGui widgets that let users add or remove
+ * hazards in a list.
+ *
+ * @param hazard_inames List with the hazards' internal names.
+ * @param selected_hazard_idx Index of the currently selected hazard on
+ * the list.
+ * @return Whether the list was modified.
+ */
+bool editor::process_gui_hazard_management_widgets(
+    vector<string> &hazard_inames, int &selected_hazard_idx
+) {
+    bool result = false;
+    
+    //Hazard addition button.
+    if(
+        ImGui::ImageButton(
+            "hitboxAddButton", editor_icons[EDITOR_ICON_ADD],
+            point(EDITOR::ICON_BMP_SIZE)
+        )
+    ) {
+        ImGui::OpenPopup("addHazard");
+    }
+    set_tooltip(
+        "Add a new hazard to the list.\n"
+        "Click to open a pop-up for you to choose from."
+    );
+    
+    //Hitbox hazard addition popup.
+    vector<string> all_hazard_inames;
+    vector<string> all_hazard_names;
+    for(auto &h : game.content.hazards.list) {
+        all_hazard_inames.push_back(h.first);
+        all_hazard_names.push_back(h.second.name);
+    }
+    
+    int added_hazard_idx = -1;
+    if(
+        list_popup(
+            "addHazard", all_hazard_names, &added_hazard_idx, true
+        )
+    ) {
+        string hazard_iname = all_hazard_inames[added_hazard_idx];
+        string hazard_name = all_hazard_names[added_hazard_idx];
+        if(
+            std::find(hazard_inames.begin(), hazard_inames.end(), hazard_iname) ==
+            hazard_inames.end()
+        ) {
+            hazard_inames.push_back(hazard_iname);
+            selected_hazard_idx = (int) hazard_inames.size() - 1;
+            result = true;
+        }
+    }
+    
+    //Hazard removal button.
+    if(
+        selected_hazard_idx >= 0 &&
+        selected_hazard_idx < (int) hazard_inames.size()
+    ) {
+        ImGui::SameLine();
+        if(
+            ImGui::ImageButton(
+                "hitboxRemButton", editor_icons[EDITOR_ICON_REMOVE],
+                point(EDITOR::ICON_BMP_SIZE)
+            )
+        ) {
+            string hazard_iname = hazard_inames[selected_hazard_idx];
+            hazard_inames = remove_all_in_vector(hazard_iname, hazard_inames);
+            selected_hazard_idx =
+                std::min(
+                    selected_hazard_idx, (int) hazard_inames.size() - 1
+                );
+            result = true;
+        }
+        set_tooltip(
+            "Remove the selected hazard from the list."
+        );
+    }
+    
+    //Hazard list.
+    if(!hazard_inames.empty()) {
+        vector<string> hazard_names;
+        for(size_t h = 0; h < hazard_inames.size(); h++) {
+            hazard_names.push_back(
+                game.content.hazards.list[hazard_inames[h]].name
+            );
+        }
+        mono_list_box(
+            "Hazards", &selected_hazard_idx, hazard_names,
+            std::min(hazard_names.size(), (size_t) 4)
+        );
+    }
+    
+    return result;
 }
 
 

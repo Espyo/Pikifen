@@ -704,6 +704,10 @@ protected:
         const char* label, const vector<string> &items, string* picked_item,
         bool use_monospace = false
     );
+    bool list_popup(
+        const char* label, const vector<string> &items, int* picked_item_idx,
+        bool use_monospace = false
+    );
     void leave();
     void load_custom_mob_cat_types(bool is_area_editor);
     void open_base_content_warning_dialog(
@@ -741,6 +745,9 @@ protected:
     void process_gui_base_content_warning_dialog();
     void process_gui_bitmap_dialog();
     void process_gui_editor_style();
+    bool process_gui_hazard_management_widgets(
+        vector<string>& hazard_inames, int& selected_hazard_idx
+    );
     void process_gui_help_dialog();
     void process_gui_history(
         const std::function<string(const string &)> &name_display_callback,
