@@ -389,17 +389,21 @@ bool does_edge_have_wall_shadow(
 /**
  * @brief Returns the mob that is closest to the mouse cursor.
  *
+ * @param must_have_health If true, only count enemies that have health
+ * (health and max health > 0).
  * @return The mob.
  */
-mob* get_closest_mob_to_cursor() {
+mob* get_closest_mob_to_cursor(bool must_have_health) {
     dist closest_mob_to_cursor_dist;
     mob* closest_mob_to_cursor = nullptr;
     
     for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
         mob* m_ptr = game.states.gameplay->mobs.all[m];
         
-        if(!m_ptr->fsm.cur_state) continue;
+        bool has_health = m_ptr->health > 0.0f && m_ptr->max_health > 0.0f;
+        if(must_have_health && !has_health) continue;
         if(m_ptr->is_stored_inside_mob()) continue;
+        if(!m_ptr->fsm.cur_state) continue;
         
         dist d = dist(game.mouse_cursor.w_pos, m_ptr->pos);
         if(!closest_mob_to_cursor || d < closest_mob_to_cursor_dist) {

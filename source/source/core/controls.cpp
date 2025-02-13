@@ -471,7 +471,7 @@ void gameplay_state::process_system_key_press(int keycode) {
             break;
             
         } case MAKER_TOOL_TYPE_HURT_MOB: {
-            mob* m = get_closest_mob_to_cursor();
+            mob* m = get_closest_mob_to_cursor(true);
             if(m) {
                 m->set_health(
                     true, true, -game.maker_tools.mob_hurting_ratio

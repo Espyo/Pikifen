@@ -95,7 +95,7 @@ bool does_edge_have_wall_shadow(
 void draw_edge_offset_on_buffer(
     const vector<edge_offset_cache> &caches, size_t e_idx
 );
-mob* get_closest_mob_to_cursor();
+mob* get_closest_mob_to_cursor(bool must_have_health = false);
 void get_edge_offset_edge_info(
     edge* e_ptr, vertex* end_vertex, unsigned char end_idx,
     float edge_process_angle,
