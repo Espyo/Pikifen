@@ -6,8 +6,7 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Refactor: Find stuff that's joining strings, especially with ";", and call join() instead
-    Texture picker dialog has the images not in a grid because long text is pushing some askew
+
 
     --- 0.26 ---
     Revamp sounds
@@ -191,10 +190,9 @@ Next tasks (roughly sorted most important first)
         A tall grass mob
         Nuggets
         Add Helodity's Plasm Wraith
-        Mobs for decorative pebbles, stones, and sticks
+        Mobs for decorative pebbles, stones, sticks, cobwebs
     More particles
         Dust particles while walking
-        Dust poof when a leader lands from a height
         There should be some petal particle effects when a Pikmin loses their maturity
         Paper bags should do one final puff of dust when they finish their squashing animation. The particles should also be more brown than white
         More across the board -- check all mobs too

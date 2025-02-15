@@ -90,6 +90,12 @@ const float MENU_ENTRY_HUD_MOVE_TIME = 0.4f;
 //How long the HUD moves for when a menu is exited.
 const float MENU_EXIT_HUD_MOVE_TIME = 0.5f;
 
+//When a leader lands, this is the maximum size of the particles.
+extern const float LEADER_LAND_PART_MAX_SIZE = 64.0f;
+
+//When a leader lands, scale the particles by the fall distance and this factor.
+extern const float LEADER_LAND_PART_SIZE_MULT = 0.1f;
+
 //Opacity of the throw preview.
 const unsigned char PREVIEW_OPACITY = 160;
 

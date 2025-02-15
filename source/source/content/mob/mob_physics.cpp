@@ -774,6 +774,7 @@ void mob::tick_vertical_movement_physics(
             disable_flag(flags, MOB_FLAG_WAS_THROWN);
             fsm.run_event(MOB_EV_LANDED);
             stop_height_effect();
+            highest_midair_z = FLT_MAX;
             
         } else if(z <= ground_sector->z) {
             z = ground_sector->z;
@@ -781,6 +782,7 @@ void mob::tick_vertical_movement_physics(
             disable_flag(flags, MOB_FLAG_WAS_THROWN);
             fsm.run_event(MOB_EV_LANDED);
             stop_height_effect();
+            highest_midair_z = FLT_MAX;
             
             if(ground_sector->is_bottomless_pit) {
                 fsm.run_event(MOB_EV_BOTTOMLESS_PIT);
@@ -794,6 +796,11 @@ void mob::tick_vertical_movement_physics(
                 new_on_hazard = ground_sector->hazards[h];
             }
         }
+    }
+    
+    if(z > ground_sector->z) {
+        if(highest_midair_z == FLT_MAX) highest_midair_z = z;
+        else highest_midair_z = std::max(z, highest_midair_z);
     }
     
     //Due to framerate imperfections, thrown Pikmin/leaders can reach higher
@@ -815,6 +822,7 @@ void mob::tick_vertical_movement_physics(
         }
     }
     
+    //Check if any hazards have been left.
     if(new_on_hazard != on_hazard && on_hazard != nullptr) {
         fsm.run_event(
             MOB_EV_LEFT_HAZARD,

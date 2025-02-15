@@ -3337,6 +3337,33 @@ void mob::stop_following_path() {
  * @brief From here on out, stop using the height effect.
  */
 void mob::stop_height_effect() {
+    if(
+        type->category->id == MOB_CATEGORY_LEADERS &&
+        highest_midair_z != FLT_MAX
+    ) {
+        float distance_fallen = highest_midair_z - z;
+        if(distance_fallen > 0.0f) {
+            particle_generator pg =
+                standard_particle_gen_setup(
+                    game.sys_content_names.part_leader_land, this
+                );
+            adjust_keyframe_interpolator_values<float>(
+                pg.base_particle.size,
+            [ = ] (const float & s) {
+                return
+                    std::min(
+                        GAMEPLAY::LEADER_LAND_PART_MAX_SIZE,
+                        s * distance_fallen *
+                        GAMEPLAY::LEADER_LAND_PART_SIZE_MULT
+                    );
+            }
+            );
+            pg.follow_z_offset = 1.0f;
+            pg.base_particle.priority = PARTICLE_PRIORITY_HIGH;
+            particle_generators.push_back(pg);
+        }
+    }
+    
     height_effect_pivot = LARGE_FLOAT;
 }
 

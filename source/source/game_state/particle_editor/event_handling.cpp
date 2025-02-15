@@ -83,7 +83,9 @@ void particle_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
         }
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_D)) {
-        clear_particles_cmd(1.0f);
+        if(!gui_needs_keyboard()) {
+            clear_particles_cmd(1.0f);
+        }
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_P, true)) {
         leader_silhouette_toggle_cmd(1.0f);

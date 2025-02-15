@@ -46,6 +46,8 @@ extern const float CAMERA_SMOOTHNESS_MULT;
 extern const unsigned char COLLISION_OPACITY;
 extern const float ENEMY_MIX_DISTANCE;
 extern const int FOG_BITMAP_SIZE;
+extern const float LEADER_LAND_PART_MAX_SIZE;
+extern const float LEADER_LAND_PART_SIZE_MULT;
 extern const unsigned char PREVIEW_OPACITY;
 extern const float PREVIEW_TEXTURE_SCALE;
 extern const float PREVIEW_TEXTURE_TIME_MULT;

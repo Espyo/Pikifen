@@ -609,7 +609,7 @@ With just a leader:
 1. Move
 2. Slide against walls
 3. Walk on edges
-4. Walk off an edge and try to move in mid-air
+4. Walk off an edge and try to move in midair
 5. Go up and down a rising bridge
 6. Go up and down a rising bridge while also rubbing against the rail
 7. Walk against all the test walls in the DEV Lab

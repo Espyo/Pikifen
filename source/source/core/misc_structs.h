@@ -874,6 +874,9 @@ struct sys_content_names_t {
     //Leader being healed at a ship.
     string part_leader_heal = "leader_heal";
     
+    //Leader landed on the floor after some height.
+    string part_leader_land = "leader_land";
+    
     //Onion generating inside.
     string part_onion_gen_inside = "onion_generating_inside";
     

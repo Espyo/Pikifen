@@ -146,6 +146,10 @@ public:
     
     //How much the mob moved this frame, if it's walkable.
     point walkable_moved;
+
+    //Highest value of the Z coordinate since the last time it was grounded.
+    //FLT_MAX = not midair.
+    float highest_midair_z = 0.0f;
     
     //-Complex states-
     

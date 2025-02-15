@@ -698,7 +698,7 @@ void particle_editor::process_gui_panel_generator() {
         clear_particles_cmd(1.0f);
     }
     set_tooltip(
-        "Delete all existing particles."
+        "Delete all existing particles.", "D"
     );
     ImGui::Unindent();
     

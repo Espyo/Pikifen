@@ -217,6 +217,7 @@ void sys_content_names_t::load(data_node* file) {
     prs.set("ding", part_ding);
     prs.set("enemy_death", part_enemy_death);
     prs.set("leader_heal", part_leader_heal);
+    prs.set("leader_land", part_leader_land);
     prs.set("onion_generating_inside", part_onion_gen_inside);
     prs.set("onion_insertion", part_onion_insertion);
     prs.set("pikmin_pluck_dirt", part_pikmin_pluck_dirt);

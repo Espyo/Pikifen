@@ -24,7 +24,7 @@
 
     <p>A track object doesn't do much except for idling and waiting for leaders or Pikmin to draw near. It has information on how objects get transported around, which includes who can ride it, at what speed, how they pose while riding, and if they can stop riding by being whistled out of it.</p>
 
-    <p>When an object wants to ride a track, it goes to where the track's first body part is located. Then, it moves linearly to where the second body part is. If there is a third body part, it moves there afterwards, and so on. Objects move from one body part to the next at the specified speed, but this is in ratio per second. This means that if the value is 0.5, it takes two seconds to go from the first body part to the second, another two to go from that to the third, etc. Riders can be in mid-air whilst riding, and will fall to the floor if they cancel out of the ride.</p>
+    <p>When an object wants to ride a track, it goes to where the track's first body part is located. Then, it moves linearly to where the second body part is. If there is a third body part, it moves there afterwards, and so on. Objects move from one body part to the next at the specified speed, but this is in ratio per second. This means that if the value is 0.5, it takes two seconds to go from the first body part to the second, another two to go from that to the third, etc. Riders can be in midair whilst riding, and will fall to the floor if they cancel out of the ride.</p>
 
     <p>Track objects are hardcoded to not do anything, but there is logic in the engine for when a Pikmin or leader gets close, to go to it and start riding, if applicable.</p>
 
