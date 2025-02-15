@@ -1025,7 +1025,7 @@ void area_data::load_mission_data_from_data_node(data_node* node) {
         }
     }
     vector<string> mission_required_mobs_strs =
-        split(required_mobs_str, ";");
+        semicolon_list_to_vector(required_mobs_str);
     mission.goal_mob_idxs.reserve(
         mission_required_mobs_strs.size()
     );
@@ -2103,16 +2103,16 @@ void area_data::save_mission_data_to_data_node(data_node* node) {
                 b2s(mission.goal_all_mobs)
             )
         );
-        string mission_mob_idxs;
-        for(size_t i : mission.goal_mob_idxs) {
-            if(!mission_mob_idxs.empty()) mission_mob_idxs += ";";
-            mission_mob_idxs += i2s(i);
+        vector<string> mission_mob_idx_strs;
+        for(auto m : mission.goal_mob_idxs) {
+            mission_mob_idx_strs.push_back(i2s(m));
         }
-        if(!mission_mob_idxs.empty()) {
+        string mission_mob_idx_str = join(mission_mob_idx_strs, ";");
+        if(!mission_mob_idx_str.empty()) {
             node->add(
                 new data_node(
                     "mission_required_mobs",
-                    mission_mob_idxs
+                    mission_mob_idx_str
                 )
             );
         }

@@ -49,7 +49,6 @@ string f2s(float f);
 string get_matching_string_starts(const string &s1, const string &s2);
 string get_path_last_component(const string& s);
 bool is_number(const string &s);
-string join(const vector<string>& parts, const string& delimiter);
 string pad_string(const string &s, size_t size, char padding);
 string remove_extension(const string &s);
 string replace_all(
@@ -85,3 +84,24 @@ string time_to_str3(
 string trim_spaces(const string &s, bool left_only = false);
 string trim_with_ellipsis(const string &s, size_t size);
 string word_wrap(const string &s, size_t n_chars_per_line);
+
+
+
+/**
+ * @brief Joins a list of strings together into one final string,
+ * using a delimiter between them.
+ * 
+ * @tparam t Type of the container of parts.
+ * @param parts Parts to join.
+ * @param delimiter The delimiter to place between each part.
+ * @return The joined string.
+ */
+template<typename t>
+string join(const t& parts, const string& delimiter = " ") {
+    string result;
+    for(const auto& p : parts) {
+        if(!result.empty()) result += ";";
+        result += p;
+    }
+    return result;
+}

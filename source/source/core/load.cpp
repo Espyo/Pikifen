@@ -56,7 +56,7 @@ void load_area_mission_record(
             file->get_child_by_name(
                 mission_record_entry_name
             )->value,
-            ";"
+            ";", true
         );
         
     if(record_parts.size() == 3) {
@@ -171,7 +171,7 @@ void load_editor_history(editor* ed_ptr, reader_setter &rs) {
         string option_name = ed_ptr->get_history_option_prefix() + i2s(h + 1);
         string option_value;
         rs.set(option_name, option_value);
-        vector<string> parts = split(option_value, ";");
+        vector<string> parts = semicolon_list_to_vector(option_value);
         if(parts.size() >= 1) {
             ed_ptr->history[h].first = parts[0];
         }

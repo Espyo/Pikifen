@@ -44,7 +44,7 @@ help_menu_t::help_menu_t() {
         category_tidbits.reserve(n_tidbits);
         for(size_t t = 0; t < n_tidbits; t++) {
             vector<string> parts =
-                split(category_node->get_child(t)->name, ";");
+                semicolon_list_to_vector(category_node->get_child(t)->name);
             tidbit new_t;
             new_t.name = parts.size() > 0 ? parts[0] : "";
             new_t.description = parts.size() > 1 ? parts[1] : "";

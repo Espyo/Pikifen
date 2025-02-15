@@ -421,23 +421,15 @@ void options_t::save(data_node* file) const {
     }
     
     //Figure out the value for the editor tree node preferences.
-    string open_nodes_str;
+    vector<string> open_nodes_strs;
     for(auto &n : editor_open_nodes) {
-        if(n.second) {
-            open_nodes_str += n.first + ";";
-        }
+        if(n.second) open_nodes_strs.push_back(n.first);
     }
-    if(!open_nodes_str.empty()) open_nodes_str.pop_back();
+    string open_nodes_str = join(open_nodes_strs, ";");
     
     //Other options.
-    string pack_load_order_str;
-    for(size_t p = 0; p < pack_order.size(); p++) {
-        pack_load_order_str += (p > 0 ? ";" : "") + pack_order[p];
-    }
-    string packs_disabled_str;
-    for(size_t p = 0; p < packs_disabled.size(); p++) {
-        packs_disabled_str += (p > 0 ? ";" : "") + packs_disabled[p];
-    }
+    string pack_load_order_str = join(pack_order, ";");
+    string packs_disabled_str = join(packs_disabled, ";");
     
     file->add(
         new data_node(

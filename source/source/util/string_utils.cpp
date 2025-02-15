@@ -167,24 +167,6 @@ bool is_number(const string &s) {
 
 
 /**
- * @brief Joins a list of strings together into one final string,
- * using a delimiter between them.
- * 
- * @param parts Parts to join.
- * @param delimiter The delimiter to place between each part.
- * @return The joined string.
- */
-string join(const vector<string>& parts, const string& delimiter) {
-    string result;
-    for(size_t p = 0; p < parts.size(); p++) {
-        result += parts[p];
-        if(p != parts.size() - 1) result += delimiter;
-    }
-    return result;
-}
-
-
-/**
  * @brief Pads a given string such that it is at least the given size.
  * It uses the provided character to pad out the remaining space.
  * This only pads the left side of the string.

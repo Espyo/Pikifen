@@ -3542,6 +3542,7 @@ void editor::picker_info::process() {
     vector<vector<vector<picker_item> > > final_items;
     string filter_lower = str_to_lower(filter);
     
+    //Figure out the items.
     for(size_t i = 0; i < items.size(); i++) {
         if(!filter.empty()) {
             string name_lower = str_to_lower(items[i].name);
@@ -3582,6 +3583,7 @@ void editor::picker_info::process() {
         final_items[top_cat_idx][sec_cat_idx].push_back(items[i]);
     }
     
+    //Stuff for creating a new item.
     auto try_make_new = [this] () {
         if(filter.empty()) return;
         
@@ -3613,6 +3615,7 @@ void editor::picker_info::process() {
     };
     
     if(can_make_new) {
+        //"New" button.
         ImGui::PushStyleColor(
             ImGuiCol_Button, (ImVec4) ImColor(192, 32, 32)
         );
@@ -3629,6 +3632,7 @@ void editor::picker_info::process() {
         ImGui::SameLine();
     }
     
+    //Search filter input.
     string filter_widget_hint =
         can_make_new ?
         "Search filter or new item name" :
@@ -3675,6 +3679,7 @@ void editor::picker_info::process() {
         }
     }
     
+    //New item category pop-up.
     if(editor_ptr->popup("newItemCategory")) {
         ImGui::Text("%s", "What is the category of the new item?");
         
@@ -3684,6 +3689,7 @@ void editor::picker_info::process() {
             )
         ) {
             for(size_t c = 0; c < new_item_top_cat_choices.size(); c++) {
+                //Item selectable.
                 if(ImGui::Selectable(new_item_top_cat_choices[c].c_str())) {
                     new_item_top_cat = new_item_top_cat_choices[c];
                     ImGui::CloseCurrentPopup();
@@ -3692,22 +3698,28 @@ void editor::picker_info::process() {
             }
             ImGui::EndChild();
         }
+        
+        //Cancel button.
         if(ImGui::Button("Cancel")) {
             ImGui::CloseCurrentPopup();
         }
+        
         ImGui::EndPopup();
     }
     
+    //List header text.
     if(!list_header.empty()) {
         ImGui::Text("%s", list_header.c_str());
     }
     
+    //Item list.
     ImGui::BeginChild("list");
     
     for(size_t tc = 0; tc < final_items.size(); tc++) {
     
         bool top_cat_opened = true;
         if(!top_cat_names[tc].empty()) {
+            //Top category node.
             ImGui::SetNextItemOpen(true, ImGuiCond_Once);
             top_cat_opened = ImGui::TreeNode(top_cat_names[tc].c_str());
         }
@@ -3718,6 +3730,7 @@ void editor::picker_info::process() {
         
             bool sec_cat_opened = true;
             if(!sec_cat_names[tc][sc].empty()) {
+                //Secondary category node.
                 ImGui::SetNextItemOpen(true, ImGuiCond_Once);
                 sec_cat_opened = ImGui::TreeNode(sec_cat_names[tc][sc].c_str());
             }
@@ -3738,6 +3751,7 @@ void editor::picker_info::process() {
                 
                     ImGui::BeginGroup();
                     
+                    //Item image button.
                     button_size = point(EDITOR::PICKER_IMG_BUTTON_SIZE);
                     bool button_pressed =
                         ImGui::ImageButtonOrganized(
@@ -3754,12 +3768,21 @@ void editor::picker_info::process() {
                             dialog_ptr->is_open = false;
                         }
                     }
-                    ImGui::TextWrapped("%s", i_ptr->name.c_str());
+                    
+                    //Item name text.
+                    string display_name =
+                        trim_with_ellipsis(
+                            get_path_last_component(i_ptr->name), 18
+                        );
+                    ImGui::TextWrapped("%s", display_name.c_str());
+                    
+                    //Item spacer widget.
                     ImGui::Dummy(ImVec2(0.0f, 8.0f));
                     ImGui::EndGroup();
                     
                 } else {
                 
+                    //Item button.
                     button_size = point(EDITOR::PICKER_IMG_BUTTON_SIZE, 32.0f);
                     if(ImGui::Button(i_ptr->name.c_str(), ImVec2(button_size.x, button_size.y))) {
                         pick_callback(
