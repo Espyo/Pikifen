@@ -164,8 +164,8 @@ const string GAME_CONFIG = "config.txt";
 //Mob type animation file.
 const string MOB_TYPE_ANIMATION = "animations.txt";
 
-//System asset file names file.
-const string SYSTEM_ASSET_FILE_NAMES = "system_asset_file_names.txt";
+//System content names file.
+const string SYSTEM_CONTENT_NAMES = "system_content_names.txt";
 
 //Error log file.
 const string ERROR_LOG = "error_log.txt";
@@ -335,12 +335,13 @@ const string WEATHER =
 
 //Paths to game content files from a pack's folder.
 namespace FILE_PATHS_FROM_PACK {
+
 //Game configuration file.
 const string GAME_CONFIG =
     FOLDER_PATHS_FROM_PACK::MISC + FILE_NAMES::GAME_CONFIG;
     
-//System asset file names file.
-const string SYSTEM_ASSET_FILE_NAMES =
-    FOLDER_PATHS_FROM_PACK::MISC + FILE_NAMES::SYSTEM_ASSET_FILE_NAMES;
+//System content names file.
+const string SYSTEM_CONTENT_NAMES =
+    FOLDER_PATHS_FROM_PACK::MISC + FILE_NAMES::SYSTEM_CONTENT_NAMES;
     
 }

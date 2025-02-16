@@ -453,7 +453,7 @@ void gameplay_state::draw_debug_tools() {
         al_map_rgba(0, 0, 0, 200)
     );
     al_draw_text(
-        game.sys_assets.fnt_builtin,
+        game.sys_content.fnt_builtin,
         al_map_rgb(255, 64, 64),
         RAW_STICK_VIEWER_X, RAW_STICK_VIEWER_Y + RAW_STICK_VIEWER_SIZE + 1,
         ALLEGRO_ALIGN_LEFT,
@@ -468,7 +468,7 @@ void gameplay_state::draw_debug_tools() {
         ).c_str()
     );
     al_draw_text(
-        game.sys_assets.fnt_builtin,
+        game.sys_content.fnt_builtin,
         al_map_rgb(255, 64, 64),
         RAW_STICK_VIEWER_X, RAW_STICK_VIEWER_Y + RAW_STICK_VIEWER_SIZE + 1 + 8,
         ALLEGRO_ALIGN_LEFT,
@@ -555,7 +555,7 @@ void gameplay_state::draw_debug_tools() {
         al_map_rgba(0, 0, 0, 200)
     );
     al_draw_text(
-        game.sys_assets.fnt_builtin,
+        game.sys_content.fnt_builtin,
         al_map_rgb(255, 64, 64),
         CLEAN_STICK_VIEWER_X,
         CLEAN_STICK_VIEWER_Y + CLEAN_STICK_VIEWER_SIZE + 1,
@@ -571,7 +571,7 @@ void gameplay_state::draw_debug_tools() {
         ).c_str()
     );
     al_draw_text(
-        game.sys_assets.fnt_builtin,
+        game.sys_content.fnt_builtin,
         al_map_rgb(255, 64, 64),
         CLEAN_STICK_VIEWER_X, CLEAN_STICK_VIEWER_Y + CLEAN_STICK_VIEWER_SIZE +
         1 + 8,

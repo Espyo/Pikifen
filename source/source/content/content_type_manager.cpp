@@ -1004,12 +1004,12 @@ void misc_config_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
         game.config.name.empty() ? "Pikifen" : game.config.name.c_str()
     );
     
-    //System asset file names.
-    string sys_asset_fn_internal_name =
-        remove_extension(FILE_NAMES::SYSTEM_ASSET_FILE_NAMES);
-    data_node system_asset_fn_file =
-        load_data_file(manifests[sys_asset_fn_internal_name].path);
-    game.sys_content_names.load(&system_asset_fn_file);
+    //System content names.
+    string scn_file_internal_name =
+        remove_extension(FILE_NAMES::SYSTEM_CONTENT_NAMES);
+    data_node scn_file =
+        load_data_file(manifests[scn_file_internal_name].path);
+    game.sys_content_names.load(&scn_file);
 }
 
 

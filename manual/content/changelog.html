@@ -47,10 +47,17 @@
       <li><span class="cl-c">Changed</span> the style of all editors to be less basic and more green.</li>
       <li><span class="cl-a">Added</span> a <a href="particle.html">particle editor</a>. (Thanks Helodity)</li>
       <li>
+        Content organization:
+        <ul>
+          <li><span class="cl-c">Changed</span> from system asset names to system content names. The list now also includes more things that used to be hardcoded.</li>
+          <li><span class="cl-a">Added</span> generic properties to all pieces of content that have their data read from a <a href="making.html#data-file">data file</a>.</li>
+        </ul>
+      </li>
+      <li>
         Sound features:
         <ul>
-          <li><span class="cl-a">Added</span> some sounds to the <a href="misc_config.html">system assets</a>.</li>
-          <li><span class="cl-a">Added</span> <code>hard_bubble</code> and <code>frame_box</code> to the <a href="misc_config.html">system assets</a>.</li>
+          <li><span class="cl-a">Added</span> some sounds to the <a href="misc_config.html">system content names</a>.</li>
+          <li><span class="cl-a">Added</span> <code>hard_bubble</code> and <code>frame_box</code> to the <a href="misc_config.html">system content names</a>.</li>
           <li><span class="cl-a">Added</span> the <code>loop</code> property to <a href="mob_type.html">object type</a> sound data.</li>
           <li><span class="cl-a">Added</span> expected sounds to <a href="mob_onion.html">Onion</a> object types.</li>
           <li><span class="cl-a">Added</span> the <code>set_song_pos_near_loop</code> <a href="maker_toolkit.html">maker tool</a>.</li>
@@ -65,12 +72,6 @@
           <li><span class="cl-a">Added</span> the ability to hold Shift while pressing the play/stop button in the animation editor in order to start from the beginning.</li>
         </ul>
       </li>
-      <li>
-        Content organization:
-        <ul>
-          <li><span class="cl-a">Added</span> generic properties to all pieces of content that have their data read from a <a href="making.html#data-file">data file</a>.</li>
-        </ul>
-      </li>
       <li><span class="cl-a">Added</span> the <code>idle_bump_delay</code> property to the <a href="misc_config.html">game configuration</a>.</li>
       <li><span class="cl-a">Added</span> the <code>tags</code> property to <a href="music.html">songs</a>.</li>
       <li><span class="cl-a">Added</span> a second argument to the <code>play_sound</code> <a href="script.html">object script action</a> for the sound ID.</li>
@@ -79,7 +80,7 @@
       <li><span class="cl-a">Added</span> icons to the menu <a href="gui.html">GUIs</a>.</li>
       <li><span class="cl-a">Added</span> Discord and GitHub buttons to the main menu <a href="gui.html">GUI</a>.</li>
       <li><span class="cl-a">Added</span> a "show blocking sectors" mode to the review panel of the <a href="area.html">area editor</a>.</li>
-      <li><span class="cl-a">Added</span> the game fonts to the <a href="misc_config.html#system-asset">system assets</a>.</li>
+      <li><span class="cl-a">Added</span> the game fonts to the <a href="misc_config.html#system-content">system content names</a>.</li>
       <li><span class="cl-a">Added</span> an option to set a custom background in the <a href="animation.html">animation editor</a>.</li>
       <li><span class="cl-a">Added</span> a <code>global</code> block to <a href="script.html">scripts</a>. Events in this block will have their actions run regardless of the current state.</li>
       <li><span class="cl-a">Added</span> a parameter to the <code>set_animation</code> <a href="script.html">script action</a> that makes the animation speed depend on the object's speed.</li>
@@ -111,7 +112,7 @@
           <li><span class="cl-c">Changed</span> the names of area backup files so they match the names of normal area files. i.e. removed the <code>_backup</code> in their names.</li>
           <li><span class="cl-c">Changed</span> the "maker notes" property for areas from <code>notes</code> to <code>maker_notes</code>.</li>
           <li><span class="cl-c">Changed</span> the <code>title</code>property in songs to instead be <code>name</code>. Because of the overall internal name change, the internal name that used to be in the <code>name</code> property is now the file name, meaning boss and menu music must be changed accordingly.</li>
-          <li><span class="cl-c">Changed</span> where system animations are loaded. Instead of <code>system_animations.txt</code>, it's an <code>animations</code> block in <code>system_asset_file_names.txt</code>.</li>
+          <li><span class="cl-c">Changed</span> where system content is loaded from. Instead of <code>system_asset_file_names.txt</code>, it's in <code>system_content_names.txt</code>. Animation names loaded from <code>system_animations.txt</code> are now also loaded from the new file.</li>
         </ul>
         <li><span class="cl-c">Changed</span> how <a href="particle.html">particles</a> work entirely.</li>
         <li><span class="cl-c">Changed</span> the <code>get_random_decimal</code> <a href="script.html">script action</a> to <code>get_random_float</code>.</li>

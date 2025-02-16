@@ -135,7 +135,7 @@ const string NAMES[N_MAKER_TOOLS] = {
 
 
 /**
- * @brief Loads the asset file names from a file.
+ * @brief Loads the system content names from a file.
  *
  * @param file File to load from.
  */
