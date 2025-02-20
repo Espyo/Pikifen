@@ -318,9 +318,10 @@ private:
     void leader_silhouette_toggle_cmd(float input_value);
     void load_cmd(float input_value);
     void mob_radius_toggle_cmd(float input_value);
-    void play_animation_cmd(float input_value);
+    void play_pause_anim_cmd(float input_value);
     void quit_cmd(float input_value);
     void reload_cmd(float input_value);
+    void restart_anim_cmd(float input_value);
     void save_cmd(float input_value);
     void zoom_and_pos_reset_cmd(float input_value);
     void zoom_everything_cmd(float input_value);

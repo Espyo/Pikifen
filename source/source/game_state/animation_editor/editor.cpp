@@ -98,7 +98,8 @@ animation_editor::animation_editor() :
     register_cmd(&animation_editor::delete_anim_db_cmd, "delete_anim_db");
     register_cmd(&animation_editor::load_cmd, "load");
     register_cmd(&animation_editor::mob_radius_toggle_cmd, "mob_radius_toggle");
-    register_cmd(&animation_editor::play_animation_cmd, "play_animation");
+    register_cmd(&animation_editor::play_pause_anim_cmd, "play_pause_anim");
+    register_cmd(&animation_editor::restart_anim_cmd, "restart_anim");
     register_cmd(&animation_editor::quit_cmd, "quit");
     register_cmd(&animation_editor::reload_cmd, "reload");
     register_cmd(&animation_editor::save_cmd, "save");
@@ -856,27 +857,23 @@ void animation_editor::pick_anim_db_file(
 
 
 /**
- * @brief Code to run for the play animation command.
+ * @brief Code to run for the play/pause animation command.
  *
  * @param input_value Value of the player input for the command.
  */
-void animation_editor::play_animation_cmd(float input_value) {
+void animation_editor::play_pause_anim_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
     if(!cur_anim_i.valid_frame()) {
         anim_playing = false;
+        return;
+    }
+    
+    anim_playing = !anim_playing;
+    if(anim_playing) {
+        set_status("Animation playback started.");
     } else {
-        anim_playing = !anim_playing;
-        if(anim_playing) {
-            if(is_shift_pressed) {
-                cur_anim_i.to_start();
-                set_status("Animation playback started from the beginning.");
-            } else {
-                set_status("Animation playback started.");
-            }
-        } else {
-            set_status("Animation playback stopped.");
-        }
+        set_status("Animation playback stopped.");
     }
 }
 
@@ -914,6 +911,25 @@ void animation_editor::reload_cmd(float input_value) {
     [this] () { load_anim_db_file(string(manifest.path), false); },
     std::bind(&animation_editor::save_anim_db, this)
     );
+}
+
+
+/**
+ * @brief Code to run for the restart animation command.
+ *
+ * @param input_value Value of the player input for the command.
+ */
+void animation_editor::restart_anim_cmd(float input_value) {
+    if(input_value < 0.5f) return;
+    
+    if(!cur_anim_i.valid_frame()) {
+        anim_playing = false;
+        return;
+    }
+    
+    cur_anim_i.to_start();
+    anim_playing = true;
+    set_status("Animation playback started from the beginning.");
 }
 
 

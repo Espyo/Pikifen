@@ -1431,11 +1431,25 @@ void animation_editor::process_gui_panel_frame_header(
                 point(EDITOR::ICON_BMP_SIZE)
             )
         ) {
-            play_animation_cmd(1.0f);
+            if(is_shift_pressed) {
+                restart_anim_cmd(1.0f);
+            } else {
+                play_pause_anim_cmd(1.0f);
+            }
+        }
+        if(ImGui::BeginPopupContextItem()) {
+            //From the beginning selectable.
+            if(ImGui::Selectable("From the beginning")) {
+                restart_anim_cmd(1.0f);
+                ImGui::CloseCurrentPopup();
+            }
+            
+            ImGui::EndPopup();
         }
         set_tooltip(
             "Play or pause the animation.\n"
-            "Hold Shift to start from the beginning.",
+            "Hold Shift to start from the beginning.\n"
+            "Right click for more options.",
             "Spacebar"
         );
         
