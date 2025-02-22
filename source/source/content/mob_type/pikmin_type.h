@@ -329,7 +329,7 @@ enum PIKMIN_ATTACK {
 
 
 /**
- * @brief Pikmin types, almost the basic meat of the fangames.
+ * @brief Pikmin types, almost the basic meat of the fan games.
  * The canon ones (at the time of writing this) are
  * Red, Yellow, Blue, White, Purple, Bulbmin, Winged, and Rock,
  * but with the engine, loads of fan-made ones can be made.

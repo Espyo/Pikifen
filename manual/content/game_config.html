@@ -1,0 +1,321 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Pikifen manual</title>
+  <meta name="description" content="The Pikifen user manual">
+  
+  <link rel="stylesheet" href="../data/style.css">
+  <script src="../data/script.js"></script>
+</head>
+
+<body onload="setup('Game configuration', ['Making content'], ['making.html']);">
+  <div id="page-content">
+    
+    <p>Some settings about how the game works can be configured in a <a href="making.html#data-file">data file</a>. It can be found in <code>game_data/&lt;<a href="making.html#packs">pack</a>&gt;/misc/config.txt</code>. Create it if it does not exist. This file a piece of <a href="making.html#content">content</a>, so you should know how content works in the engine in general before starting.</p>
+
+    <p>The following properties exist:</p>
+
+    <h2 id="basics">Basics</h2>
+
+    <table class="props-t props-t-o">
+      <tr>
+        <td>game_name</td>
+        <td>Name of the fan game.</td>
+        <td>Text</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>game_version</td>
+        <td>Version of the fan game. Can be anything, but the preferred format is something like "1.2.3".</td>
+        <td>Text</td>
+        <td></td>
+      </tr>
+    </table>
+
+    <h2 id="carrying">Carrying</h2>
+
+    <table class="props-t props-t-o">
+      <tr>
+        <td>carrying_color_move</td>
+        <td>Color to use for the carrying numbers when an object that is meant for the ship is being carried.</td>
+        <td>Color</td>
+        <td>255 255 255</td>
+      </tr>
+      <tr>
+        <td>carrying_color_stop</td>
+        <td>Same as above, but for when the object is not moving.</td>
+        <td>Color</td>
+        <td>102 191 191</td>
+      </tr>
+      <tr>
+        <td>carrying_speed_base_mult</td>
+        <td>When an object is being carried, its movement speed depends on the carriers' average speed (and more). With 0 carriers, the average speed is multiplied by base_mult, and with all spots taken, it's multiplied by max_mult. This property controls the base value. In other words, this controls how high the slowest speed of a carried object is.</td>
+        <td>Number</td>
+        <td>0.5</td>
+      </tr>
+      <tr>
+        <td>carrying_speed_max_mult</td>
+        <td>Same as above, but the max_mult. In other words, this controls how high the fastest speed of a carried object is.</td>
+        <td>Number</td>
+        <td>0.8</td>
+      </tr>
+      <tr>
+        <td>carrying_speed_weight_mult</td>
+        <td>For every 1 unit of weight, decrease the carrying speed by this much.</td>
+        <td>Number</td>
+        <td>0.0004</td>
+      </tr>
+    </table>
+    
+    <h2 id="day-time">Day time</h2>
+    
+    <table class="props-t props-t-o">
+      <tr>
+        <td>day_minutes_start</td>
+        <td>Time of day when gameplay starts. This follows a format similar to real life, so 0 is midnight, 60 is 1 AM, 120 is 2 AM, 420 is 7 AM. This is only used for the Sun Meter HUD item.</td>
+        <td>Number</td>
+        <td>420</td>
+      </tr>
+      <tr>
+        <td>day_minutes_end</td>
+        <td>Same as above, but for when gameplay ends.</td>
+        <td>Number</td>
+        <td>1140</td>
+      </tr>
+    </table>
+    
+    <h2 id="pikmin-basics">Pikmin basics</h2>
+
+    <table class="props-t props-t-o">
+      <tr>
+        <td>pikmin_order</td>
+        <td>Preferred order to sort Pikmin with. Used when swapping Pikmin, dismissing them, organizing them in an Onion, etc. Types you do not specify will be sorted alphabetically and go to the end of the list.</td>
+        <td>Text list</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>standard_pikmin_height</td>
+        <td>The height of a "standard" Pikmin, i.e. a Pikmin that's not shorter or taller than most. Used to help calculate some physics logic.</td>
+        <td>Number</td>
+        <td>24</td>
+      </tr>
+      <tr>
+        <td>standard_pikmin_radius</td>
+        <td>The radius of a "standard" Pikmin, i.e. a Pikmin that's not skinnier or fatter than most. Used to help calculate some physics logic.</td>
+        <td>Number</td>
+        <td>5</td>
+      </tr>
+    </table>
+
+    <h2 id="leader-basics">Leader basics</h2>
+
+    <table class="props-t props-t-o">
+      <tr>
+        <td>leader_order</td>
+        <td>Like <code>pikmin_order</code>, but for the leaders.</td>
+        <td>Text list</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>standard_leader_height</td>
+        <td>Like <code>standard_pikmin_height</code>, but for the leaders.</td>
+        <td>Number</td>
+        <td>46</td>
+      </tr>
+      <tr>
+        <td>standard_leader_radius</td>
+        <td>Like <code>standard_pikmin_radius</code>, but for the leaders.</td>
+        <td>Number</td>
+        <td>16</td>
+      </tr>
+      <tr>
+        <td>spray_order</td>
+        <td>Like <code>pikmin_order</code>, but for sprays.</td>
+        <td>Text list</td>
+        <td></td>
+      </tr>
+    </table>
+
+    <h2 id="pikmin-details">Pikmin details</h2>
+
+    <table class="props-t props-t-o">
+      <tr>
+        <td>idle_bump_delay</td>
+        <td>In order for an idle Pikmin to be bumped, it must be away from the active leader for these many seconds first.</td>
+        <td>Number</td>
+        <td>5</td>
+      </tr>
+      <tr>
+        <td>idle_bump_range</td>
+        <td>Minimum distance between an idle Pikmin and the active leader for the Pikmin to be called to the group.</td>
+        <td>Number</td>
+        <td>50</td>
+      </tr>
+      <tr>
+        <td>idle_task_range</td>
+        <td>Minimum distance between a Pikmin and a task before the Pikmin can take the task, when the Pikmin is idling.</td>
+        <td>Number</td>
+        <td>50</td>
+      </tr>
+      <tr>
+        <td>swarm_task_range</td>
+        <td>Same as above, but for a Pikmin in the group during swarming.</td>
+        <td>Number</td>
+        <td>3</td>
+      </tr>
+      <tr>
+        <td>max_pikmin_in_field</td>
+        <td>Maximum number of Pikmin that can be on the field.</td>
+        <td>Number</td>
+        <td>100</td>
+      </tr>
+      <tr>
+        <td>maturity_power_mult</td>
+        <td>Every maturity level, add this much to a Pikmin's attack power, as a ratio (e.g. 0.1 adds 10% more).</td>
+        <td>Number</td>
+        <td>0.1</td>
+      </tr>
+      <tr>
+        <td>maturity_speed_mult</td>
+        <td>Same as <code>maturity_power_mult</code>, but for the movement speed.</td>
+        <td>Number</td>
+        <td>0.1</td>
+      </tr>
+      <tr>
+        <td>pikmin_chase_range</td>
+        <td>Pikmin will chase after enemies unless they're this far away.</td>
+        <td>Number</td>
+        <td>200</td>
+      </tr>
+    </table>
+
+    <h2 id="leader-details">Leader details</h2>
+
+    <table class="props-t props-t-o">
+      <tr>
+        <td>can_throw_leaders</td>
+        <td>Whether it's possible for leaders to throw other leaders.</td>
+        <td>Boolean</td>
+        <td>true</td>
+      </tr>
+      <tr>
+        <td>cursor_max_dist</td>
+        <td>Maximum distance away from the leader that their cursor can go to.</td>
+        <td>Number</td>
+        <td>200</td>
+      </tr>
+      <tr>
+        <td>cursor_spin_speed</td>
+        <td>How quickly the mouse cursor's icon spins, in degrees per second.</td>
+        <td>Number</td>
+        <td>180</td>
+      </tr>
+      <tr>
+        <td>next_pluck_range</td>
+        <td>When auto-plucking, a leader will only choose the next Pikmin if it is within this distance. Also affects the range at which idle leaders will go pluck.</td>
+        <td>Number</td>
+        <td>160</td>
+      </tr>
+      <tr>
+        <td>no_pikmin_color</td>
+        <td>Color that represents the absence of Pikmin.</td>
+        <td>Color</td>
+        <td>191 230 230</td>
+      </tr>
+      <tr>
+        <td>onion_open_range</td>
+        <td>Leaders can open an Onion if they're within this range from the center of the Onion object.</td>
+        <td>Number</td>
+        <td>24</td>
+      </tr>
+      <tr>
+        <td>group_member_grab_range</td>
+        <td>A leader can grab the closest group member only if it is within this distance.</td>
+        <td>Number</td>
+        <td>64</td>
+      </tr>
+      <tr>
+        <td>pluck_range</td>
+        <td>A leader can pluck a Pikmin only if it is within this distance.</td>
+        <td>Number</td>
+        <td>30</td>
+      </tr>
+      <tr>
+        <td>throw_max_dist</td>
+        <td>Maximum distance away from the leader that a throw can be aimed to.</td>
+        <td>Number</td>
+        <td>200</td>
+      </tr>
+      <tr>
+        <td>whistle_growth_speed</td>
+        <td>How quickly the whistle's radius grows in size, in pixels per second.</td>
+        <td>Number</td>
+        <td>180</td>
+      </tr>
+      <tr>
+        <td>whistle_max_dist</td>
+        <td>Maximum distance away from the leader that the whistle can focus on.</td>
+        <td>Number</td>
+        <td></td>
+      </tr>
+    </table>
+
+    <h2 id="game-config-radar">Radar</h2>
+    
+    <table class="props-t props-t-o">
+      <tr>
+        <td>radar_background_color</td>
+        <td>Color to use for the background in the radar.</td>
+        <td>Color</td>
+        <td>32 24 0</td>
+      </tr>
+      <tr>
+        <td>radar_edge_color</td>
+        <td>Color to use for sector edges in the radar.</td>
+        <td>Color</td>
+        <td>32 24 0</td>
+      </tr>
+      <tr>
+        <td>radar_highest_color</td>
+        <td>Color to use for the highest sector of the area in the radar.</td>
+        <td>Color</td>
+        <td>200 200 180</td>
+      </tr>
+      <tr>
+        <td>radar_lowest_color</td>
+        <td>Color to use for the lowest sector of the area in the radar.</td>
+        <td>Color</td>
+        <td>80 64 0</td>
+      </tr>
+    </table>
+
+    <h2 id="game-config-misc">Misc.</h2>
+    
+    <table class="props-t props-t-o">
+      <tr>
+        <td>message_char_interval</td>
+        <td>Time interval between characters when displaying a message, in seconds. 0 shows the entire text instantly.</td>
+        <td>Number</td>
+        <td>0.03</td>
+      </tr>
+      <tr>
+        <td>zoom_max_level</td>
+        <td>Maximum level of zoom (i.e. how close the camera can get).</td>
+        <td>Number</td>
+        <td>3</td>
+      </tr>
+      <tr>
+        <td>zoom_min_level</td>
+        <td>Minimum level of zoom (i.e. how far away the camera can get).</td>
+        <td>Number</td>
+        <td>0.66</td>
+      </tr>
+    </table>
+    
+  </div>
+</body>
+
+</html>

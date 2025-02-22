@@ -58,6 +58,19 @@ th {
   padding: 6px;
 }
 
+table.making-tutorials {
+  border: none;
+  border-collapse: initial;
+}
+
+table.making-tutorials td,
+table.making-tutorials th {
+  border: none;
+  border-collapse: initial;
+  padding: initial;
+  vertical-align: top;
+}
+
 th {
   background-color: rgba(0, 0, 0, 0.1);
 }

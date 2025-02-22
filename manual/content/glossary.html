@@ -500,7 +500,7 @@
     <dl id="spike">
       <dt>Spike</dt>
       <dd>Spike damage is a special type of damage that only happens in retaliation. When an <a href="#object">object</a> is hurt, if it has spike damage configured, it will automatically hurt its attacker as well. Another type of spike damage happens when a Pikmin is swallowed; this allows White Pikmin to cause some damage to their predators.</dd>
-      <dd>Further reading: <a href="misc_config.html">Misc. configurations</a>.</dd>
+      <dd>Further reading: <a href="spike_damage.html">Spike damage</a>.</dd>
     </dl>
     <dl id="spoil">
       <dt>Spoil</dt>
@@ -551,6 +551,10 @@
     <dl id="texture">
       <dt>Texture</dt>
       <dd>Textures are just <a href="#bitmap">bitmaps</a>, although the term is more commonly used when the image portrays terrain, and is meant to tile over and over, like dirt, grass, stone, etc.</dd>
+    </dl>
+    <dl id="tint">
+      <dt>Tint</dt>
+      <dd>An operation done when drawing graphics, where the pixel colors are tinted with a new color. Internally, the red, green, blue, and alpha components, with values ranging from 0 to 1, are <a href="https://en.wikipedia.org/wiki/Blend_modes#Multiply">multiplied</a> by the tint color's components. Because of how multiplications on numbers from 0 to 1 work, this will always create a darker color, and some components of the color may be unchanged. It's a limited, but fast system.</dd>
     </dl>
     <dl id="top">
       <dt>Top</dt>

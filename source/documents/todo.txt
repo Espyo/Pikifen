@@ -1,4 +1,4 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -157,10 +157,6 @@ Next tasks (roughly sorted most important first)
         Other people's songs
     Use a screenshot for the title screen
         The left side should be all organic, and the right side should have some DEV Lab stuff. The bottom should probably be something special but not attention-grabbing, the top should give space for the Pikmin to form the letters, and the topmost pixels should probably help the disclaimer text and version number readable, but not call attention
-    Pikmin animations
-        Improvements
-            Sprout animations should start with nothingness, and grow into a sprout proper (as if popping out of the ground) (Helodity's made some)
-                If necessary, seeds should have their own animation
     Leader animations
         Improvements
             More frames, for more fluidity
@@ -264,6 +260,7 @@ Next tasks (roughly sorted most important first)
             ],
         Make it so the ampersand for references is near the type name, not the variable name
         Document the usage of Astyle in the contributing file
+    Make sure the readme's <50MB size claim is correct
     
     --- Future ---
     A way to port content from previous versions
@@ -644,10 +641,10 @@ Next tasks (roughly sorted most important first)
                     Perhaps an action to start controlling a given mob from here on, so that actions apply to that mob only. To make sure there are no leaks, each "start_controlling_mob" action must have an equivalent closing "end_controlling_mob" within the same event.
         Sprouts between areas, days, etc.
             Don't forget that sprouts should turn into flowers overnight
-        Objects should be able to specify what days they do and don't appear in
-        Enemies respawning after some days
-            A way to specify if the mob should come back the next day if its collectible hasn't been reclaimed yet?
-        Treasures that started moving after being carried should start recording their coordinates, so that when the player comes back, the treasure spawns there instead of the original spot
+        Object spawning rules
+            Objects should be able to specify what days they do and don't appear in
+            Objects should also be able to specify when they respawn
+                A way to specify if the mob should come back the next day if its collectible hasn't been reclaimed yet?
         Area unlocking
         Pause menu
             When "end day" is chosen, it should warn about idle Pikmin that will get left behind
@@ -655,7 +652,6 @@ Next tasks (roughly sorted most important first)
             A "story" page with a summary of how close you are to your goal, misc. story mode progress, and how long you've been playing for (useful for speedruns)
         Radar menu stats page
             Total Pokos (or whatever point systems exist) collected
-        Pellet Posies, Candypop Buds, etc. should only cycle between the colors available
         The ability for dead flower Pikmin to leave a sprout for the next day. The game settings can specify the change of a dead flower leaving it behind (including 0% to disable the feature)
         Sunset
             On-screen warning
@@ -689,6 +685,8 @@ Next tasks (roughly sorted most important first)
         Final stats
             Completion time, in seconds
         Misc.
+            Treasures that started moving after being carried should start recording their coordinates, so that when the player comes back, the treasure spawns there instead of the original spot
+            Pellet Posies, Candypop Buds, etc. should only cycle between the colors available
             The ability for some Candypop Buds to not spawn if the player has over X Pikmin of that type in total
             The radar should only draw visited portions (though this can be changed in config.txt)
     More editors
@@ -800,7 +798,8 @@ Misc things (so I don't forget)
         Ducking
         Options for mono/stereo
         Footsteps should be tied to the terrain texture
-        Area editor music options? Off, standard editor music, area's music, area's music but with a low-pass filter
+        Editor music options: off, standard editor music, area's music (area editor only), area's music but with a low-pass filter (area editor only)
+            Mix tracks, like for when the player is drawing something, or dragging something, or whatever else
         The audio options menu should have a button to playback one or two sound effects
     Radar
         Details
@@ -870,6 +869,7 @@ Misc things (so I don't forget)
         Try to find some way for Pikmin to smoothly follow behind when they are faster than the leaders. Right now, they quickly catch up to where they should be in the group, stop, and then slowly accelerate back to continue catching up, over and over
         When they finish breaking a gate, or delivering something, they should probably return to the closest leader's group, right?
         When they kill an enemy that leaves a corpse, they should stay near it, waiting for the enemy to finish dying, so they can carry it right away
+        [NEEDS BRAINSTORMING] Should Pikmin seeds that land on the ground have a state where they sprout pops out of the ground?
     Add shaders
         Can the grid in the editors be more contrasting? Darker on top of light things and vice-versa...
         Make the water ripples be via shader
