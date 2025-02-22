@@ -32,7 +32,6 @@ extern const string GRAPHICS_GUI_FILE_NAME;
 extern const float HUD_MOVE_TIME;
 extern const float INPUT_CAPTURE_TIMEOUT_DURATION;
 extern const string MISC_GUI_FILE_NAME;
-extern const string SONG_NAME;
 extern const string TOP_GUI_FILE_NAME;
 }
 

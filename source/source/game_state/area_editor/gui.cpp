@@ -2077,7 +2077,7 @@ void area_editor::process_gui_panel_info() {
                 game.audio.set_current_song(preview_song);
                 previewing = true;
             } else if(can_stop_previewing) {
-                game.audio.set_current_song(AREA_EDITOR::SONG_NAME, false);
+                game.audio.set_current_song(game.sys_content_names.sng_editors, false);
                 preview_song.clear();
                 previewing = false;
             }

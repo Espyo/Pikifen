@@ -37,9 +37,6 @@ const float HITBOX_MIN_RADIUS = 1.0f;
 //Amount to pan the camera by when using the keyboard.
 const float KEYBOARD_PAN_AMOUNT = 32.0f;
 
-//Name of the song to play in this state.
-const string SONG_NAME = "editors";
-
 //How tall the animation timeline header is.
 const size_t TIMELINE_HEADER_HEIGHT = 12;
 
@@ -570,7 +567,7 @@ void animation_editor::load() {
     side_view = false;
     
     change_state(EDITOR_STATE_MAIN);
-    game.audio.set_current_song(ANIM_EDITOR::SONG_NAME, false);
+    game.audio.set_current_song(game.sys_content_names.sng_editors, false);
     
     //Set the background.
     if(!game.options.anim_editor_bg_path.empty()) {

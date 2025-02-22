@@ -36,9 +36,6 @@ const string MAKE_GUI_FILE_NAME = "main_menu_make";
 //Name of the play page GUI information file.
 const string PLAY_GUI_FILE_NAME = "main_menu_play";
 
-//Name of the song to play in this state.
-const string SONG_NAME = "menus";
-
 //Name of the tutorial question page GUI information file.
 const string TUTORIAL_GUI_FILE_NAME = "main_menu_tutorial";
 
@@ -50,9 +47,9 @@ const string TUTORIAL_GUI_FILE_NAME = "main_menu_tutorial";
  */
 void main_menu_state::do_drawing() {
     al_clear_to_color(COLOR_BLACK);
-
+    
     if(game.debug.show_dear_imgui_demo) return;
-
+    
     draw_bitmap(
         bmp_menu_bg, point(game.win_w * 0.5, game.win_h * 0.5),
         point(game.win_w, game.win_h)
@@ -1005,7 +1002,7 @@ void main_menu_state::load() {
     }
     
     //Finishing touches.
-    game.audio.set_current_song(MAIN_MENU::SONG_NAME);
+    game.audio.set_current_song(game.sys_content_names.sng_menus);
     game.fade_mgr.start_fade(true, nullptr);
     if(game.debug.show_dear_imgui_demo) game.mouse_cursor.show();
 }

@@ -23,9 +23,6 @@ namespace PARTICLE_EDITOR {
 const vector<float> GRID_INTERVALS =
 {4.0f, 8.0f, 16.0f, 32.0f, 64.0f};
 
-//Name of the song to play in this state.
-const string SONG_NAME = "editors";
-
 //Maximum zoom level possible in the editor.
 const float ZOOM_MAX_LEVEL = 64;
 
@@ -348,7 +345,7 @@ void particle_editor::load() {
     );
     
     //Misc. setup.
-    game.audio.set_current_song(PARTICLE_EDITOR::SONG_NAME, false);
+    game.audio.set_current_song(game.sys_content_names.sng_editors, false);
     
     part_mgr = particle_manager(game.options.max_particles);
     

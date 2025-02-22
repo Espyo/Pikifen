@@ -23,9 +23,6 @@ namespace RESULTS {
 //Name of the GUI information file.
 const string GUI_FILE_NAME = "results_menu";
 
-//Name of the song to play in this state.
-const string SONG_NAME = "menus";
-
 }
 
 
@@ -793,7 +790,7 @@ void results_state::load() {
     gui.add_item(tooltip_text, "tooltip");
     
     //Finishing touches.
-    game.audio.set_current_song(RESULTS::SONG_NAME);
+    game.audio.set_current_song(game.sys_content_names.sng_editors);
     game.fade_mgr.start_fade(true, nullptr);
     gui.set_selected_item(gui.back_item, true);
     gui_time_spent = 0.0f;

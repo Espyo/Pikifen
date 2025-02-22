@@ -140,95 +140,105 @@ const string NAMES[N_MAKER_TOOLS] = {
  * @param file File to load from.
  */
 void sys_content_names_t::load(data_node* file) {
-    reader_setter grs(file->get_child_by_name("graphics"));
+    reader_setter gra_rs(file->get_child_by_name("graphics"));
     
-    grs.set("bright_circle", bmp_bright_circle);
-    grs.set("bright_ring", bmp_bright_ring);
-    grs.set("bubble_box", bmp_bubble_box);
-    grs.set("checkbox_check", bmp_checkbox_check);
-    grs.set("checkbox_no_check", bmp_checkbox_no_check);
-    grs.set("player_input_icons", bmp_player_input_icons);
-    grs.set("cursor", bmp_cursor);
-    grs.set("discord_icon", bmp_discord_icon);
-    grs.set("editor_icons", bmp_editor_icons);
-    grs.set("enemy_spirit", bmp_enemy_spirit);
-    grs.set("focus_box", bmp_focus_box);
-    grs.set("frame_box", bmp_frame_box);
-    grs.set("github_icon", bmp_github_icon);
-    grs.set("hard_bubble", bmp_hard_bubble);
-    grs.set("icon", bmp_icon);
-    grs.set("idle_glow", bmp_idle_glow);
-    grs.set("leader_silhouette_side", bmp_leader_silhouette_side);
-    grs.set("leader_silhouette_top", bmp_leader_silhouette_top);
-    grs.set("main_menu", bmp_main_menu);
-    grs.set("medal_bronze", bmp_medal_bronze);
-    grs.set("medal_gold", bmp_medal_gold);
-    grs.set("medal_none", bmp_medal_none);
-    grs.set("medal_platinum", bmp_medal_platinum);
-    grs.set("medal_silver", bmp_medal_silver);
-    grs.set("menu_icons", bmp_menu_icons);
-    grs.set("mission_clear", bmp_mission_clear);
-    grs.set("mission_fail", bmp_mission_fail);
-    grs.set("more", bmp_more);
-    grs.set("mouse_cursor", bmp_mouse_cursor);
-    grs.set("notification", bmp_notification);
-    grs.set("pikmin_spirit", bmp_pikmin_spirit);
-    grs.set("random", bmp_random);
-    grs.set("rock", bmp_rock);
-    grs.set("shadow", bmp_shadow);
-    grs.set("smack", bmp_smack);
-    grs.set("smoke", bmp_smoke);
-    grs.set("sparkle", bmp_sparkle);
-    grs.set("spotlight", bmp_spotlight);
-    grs.set("swarm_arrow", bmp_swarm_arrow);
-    grs.set("throw_invalid", bmp_throw_invalid);
-    grs.set("throw_preview", bmp_throw_preview);
-    grs.set("throw_preview_dashed", bmp_throw_preview_dashed);
-    grs.set("wave_ring", bmp_wave_ring);
+    gra_rs.set("bright_circle", bmp_bright_circle);
+    gra_rs.set("bright_ring", bmp_bright_ring);
+    gra_rs.set("bubble_box", bmp_bubble_box);
+    gra_rs.set("button_box", bmp_button_box);
+    gra_rs.set("checkbox_check", bmp_checkbox_check);
+    gra_rs.set("checkbox_no_check", bmp_checkbox_no_check);
+    gra_rs.set("cursor", bmp_cursor);
+    gra_rs.set("discord_icon", bmp_discord_icon);
+    gra_rs.set("editor_icons", bmp_editor_icons);
+    gra_rs.set("enemy_spirit", bmp_enemy_spirit);
+    gra_rs.set("focus_box", bmp_focus_box);
+    gra_rs.set("frame_box", bmp_frame_box);
+    gra_rs.set("github_icon", bmp_github_icon);
+    gra_rs.set("hard_bubble", bmp_hard_bubble);
+    gra_rs.set("icon", bmp_icon);
+    gra_rs.set("idle_glow", bmp_idle_glow);
+    gra_rs.set("key_box", bmp_key_box);
+    gra_rs.set("leader_silhouette_side", bmp_leader_silhouette_side);
+    gra_rs.set("leader_silhouette_top", bmp_leader_silhouette_top);
+    gra_rs.set("main_menu", bmp_main_menu);
+    gra_rs.set("medal_bronze", bmp_medal_bronze);
+    gra_rs.set("medal_gold", bmp_medal_gold);
+    gra_rs.set("medal_none", bmp_medal_none);
+    gra_rs.set("medal_platinum", bmp_medal_platinum);
+    gra_rs.set("medal_silver", bmp_medal_silver);
+    gra_rs.set("menu_icons", bmp_menu_icons);
+    gra_rs.set("mission_clear", bmp_mission_clear);
+    gra_rs.set("mission_fail", bmp_mission_fail);
+    gra_rs.set("more", bmp_more);
+    gra_rs.set("mouse_cursor", bmp_mouse_cursor);
+    gra_rs.set("notification", bmp_notification);
+    gra_rs.set("pikmin_spirit", bmp_pikmin_spirit);
+    gra_rs.set("player_input_icons", bmp_player_input_icons);
+    gra_rs.set("random", bmp_random);
+    gra_rs.set("rock", bmp_rock);
+    gra_rs.set("shadow", bmp_shadow);
+    gra_rs.set("shadow_square", bmp_shadow_square);
+    gra_rs.set("smack", bmp_smack);
+    gra_rs.set("smoke", bmp_smoke);
+    gra_rs.set("sparkle", bmp_sparkle);
+    gra_rs.set("spotlight", bmp_spotlight);
+    gra_rs.set("swarm_arrow", bmp_swarm_arrow);
+    gra_rs.set("throw_invalid", bmp_throw_invalid);
+    gra_rs.set("throw_preview", bmp_throw_preview);
+    gra_rs.set("throw_preview_dashed", bmp_throw_preview_dashed);
+    gra_rs.set("wave_ring", bmp_wave_ring);
     
-    reader_setter frs(file->get_child_by_name("fonts"));
+    reader_setter fnt_rs(file->get_child_by_name("fonts"));
     
-    frs.set("area_name", fnt_area_name);
-    frs.set("counter", fnt_counter);
-    frs.set("cursor_counter", fnt_cursor_counter);
-    frs.set("editor_header", fnt_editor_header);
-    frs.set("editor_monospace", fnt_editor_monospace);
-    frs.set("editor_standard", fnt_editor_standard);
-    frs.set("slim", fnt_slim);
-    frs.set("standard", fnt_standard);
-    frs.set("value", fnt_value);
+    fnt_rs.set("area_name", fnt_area_name);
+    fnt_rs.set("counter", fnt_counter);
+    fnt_rs.set("cursor_counter", fnt_cursor_counter);
+    fnt_rs.set("editor_header", fnt_editor_header);
+    fnt_rs.set("editor_monospace", fnt_editor_monospace);
+    fnt_rs.set("editor_standard", fnt_editor_standard);
+    fnt_rs.set("slim", fnt_slim);
+    fnt_rs.set("standard", fnt_standard);
+    fnt_rs.set("value", fnt_value);
     
-    reader_setter srs(file->get_child_by_name("sounds"));
+    reader_setter snd_rs(file->get_child_by_name("sounds"));
     
-    srs.set("attack", sound_attack);
-    srs.set("camera", sound_camera);
-    srs.set("menu_activate", sound_menu_activate);
-    srs.set("menu_back", sound_menu_back);
-    srs.set("menu_select", sound_menu_select);
-    srs.set("switch_pikmin", sound_switch_pikmin);
+    snd_rs.set("attack", sound_attack);
+    snd_rs.set("camera", sound_camera);
+    snd_rs.set("menu_activate", sound_menu_activate);
+    snd_rs.set("menu_back", sound_menu_back);
+    snd_rs.set("menu_select", sound_menu_select);
+    snd_rs.set("switch_pikmin", sound_switch_pikmin);
     
-    reader_setter ars(file->get_child_by_name("animations"));
+    reader_setter sng_rs(file->get_child_by_name("songs"));
     
-    ars.set("sparks", anim_sparks);
+    sng_rs.set("boss", sng_boss);
+    sng_rs.set("boss_victory", sng_boss_victory);
+    sng_rs.set("editors", sng_editors);
+    sng_rs.set("menus", sng_menus);
     
-    reader_setter prs(file->get_child_by_name("particle_generators"));
+    reader_setter ani_rs(file->get_child_by_name("animations"));
     
-    prs.set("converter_insertion", part_converter_insertion);
-    prs.set("ding", part_ding);
-    prs.set("enemy_death", part_enemy_death);
-    prs.set("leader_heal", part_leader_heal);
-    prs.set("leader_land", part_leader_land);
-    prs.set("onion_generating_inside", part_onion_gen_inside);
-    prs.set("onion_insertion", part_onion_insertion);
-    prs.set("pikmin_pluck_dirt", part_pikmin_pluck_dirt);
-    prs.set("pikmin_seed_landed", part_pikmin_seed_landed);
-    prs.set("smack", part_smack);
-    prs.set("spray", part_spray);
-    prs.set("sprout_evolution", part_sprout_evolution);
-    prs.set("sprout_regression", part_sprout_regression);
-    prs.set("throw_trail", part_throw_trail);
-    prs.set("treasure", part_treasure);
-    prs.set("wave_ring", part_wave_ring);
+    ani_rs.set("sparks", anim_sparks);
+    
+    reader_setter par_rs(file->get_child_by_name("particle_generators"));
+    
+    par_rs.set("converter_insertion", part_converter_insertion);
+    par_rs.set("ding", part_ding);
+    par_rs.set("enemy_death", part_enemy_death);
+    par_rs.set("leader_heal", part_leader_heal);
+    par_rs.set("leader_land", part_leader_land);
+    par_rs.set("onion_generating_inside", part_onion_gen_inside);
+    par_rs.set("onion_insertion", part_onion_insertion);
+    par_rs.set("pikmin_pluck_dirt", part_pikmin_pluck_dirt);
+    par_rs.set("pikmin_seed_landed", part_pikmin_seed_landed);
+    par_rs.set("smack", part_smack);
+    par_rs.set("spray", part_spray);
+    par_rs.set("sprout_evolution", part_sprout_evolution);
+    par_rs.set("sprout_regression", part_sprout_regression);
+    par_rs.set("throw_trail", part_throw_trail);
+    par_rs.set("treasure", part_treasure);
+    par_rs.set("wave_ring", part_wave_ring);
 }
 
 

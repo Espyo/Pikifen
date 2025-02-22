@@ -105,9 +105,6 @@ const float SELECTION_EFFECT_SPEED = TAU * 2;
 //Padding for the transformation widget when manipulating the selection.
 const float SELECTION_TW_PADDING = 8.0f;
 
-//Name of the song to play in this state.
-const string SONG_NAME = "editors";
-
 //Wait this long before letting a new repeat undo operation be saved.
 const float UNDO_SAVE_LOCK_DURATION = 1.0f;
 
@@ -1798,7 +1795,7 @@ void area_editor::load() {
     clear_selection();
     
     change_state(EDITOR_STATE_MAIN);
-    game.audio.set_current_song(AREA_EDITOR::SONG_NAME, false);
+    game.audio.set_current_song(game.sys_content_names.sng_editors, false);
     
     //Automatically load a file if needed, or show the load dialog.
     if(!quick_play_area_path.empty()) {

@@ -32,9 +32,6 @@ const string INFO_GUI_FILE_NAME = "area_menu_info";
 //How long to animate the page swapping for.
 const float PAGE_SWAP_DURATION = 0.5f;
 
-//Name of the song to play in this state.
-const string SONG_NAME = "menus";
-
 //Path to the mission specs GUI information file.
 const string SPECS_GUI_FILE_NAME = "area_menu_specs";
 
@@ -960,7 +957,7 @@ void area_menu_state::load() {
     }
     
     //Finishing touches.
-    game.audio.set_current_song(AREA_MENU::SONG_NAME);
+    game.audio.set_current_song(game.sys_content_names.sng_menus);
     game.fade_mgr.start_fade(true, nullptr);
     
 }

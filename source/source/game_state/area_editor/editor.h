@@ -51,7 +51,6 @@ extern const float QUICK_PREVIEW_DURATION;
 extern const unsigned char SELECTION_COLOR[3];
 extern const float SELECTION_EFFECT_SPEED;
 extern const float SELECTION_TW_PADDING;
-extern const string SONG_NAME;
 extern const float UNDO_SAVE_LOCK_DURATION;
 extern const float VERTEX_MERGE_RADIUS;
 extern const float ZOOM_MAX_LEVEL;

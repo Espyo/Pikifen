@@ -549,12 +549,12 @@ void gameplay_state::do_gameplay_leader_logic(float delta_t) {
         if(near_boss) {
             switch(boss_music_state) {
             case BOSS_MUSIC_STATE_NEVER_PLAYED: {
-                game.audio.set_current_song(GAMEPLAY::BOSS_SONG_NAME, true, false);
+                game.audio.set_current_song(game.sys_content_names.sng_boss, true, false);
                 boss_music_state = BOSS_MUSIC_STATE_PLAYING;
                 break;
             } case BOSS_MUSIC_STATE_PAUSED: {
             } case BOSS_MUSIC_STATE_VICTORY: {
-                game.audio.set_current_song(GAMEPLAY::BOSS_SONG_NAME, false);
+                game.audio.set_current_song(game.sys_content_names.sng_boss, false);
                 boss_music_state = BOSS_MUSIC_STATE_PLAYING;
             } default: {
                 break;

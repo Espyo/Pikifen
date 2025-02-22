@@ -144,7 +144,7 @@ void enemy::start_dying_class_specifics() {
             if(!near_boss) {
                 //Only play the victory fanfare if they're not near another one.
                 game.audio.set_current_song(
-                    GAMEPLAY::BOSS_VICTORY_SONG_NAME, true, false, false
+                    game.sys_content_names.sng_boss_victory, true, false, false
                 );
                 game.states.gameplay->boss_music_state =
                     BOSS_MUSIC_STATE_VICTORY;

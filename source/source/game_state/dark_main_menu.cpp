@@ -188,7 +188,7 @@ void dark_main_menu_state::load() {
     menu_to_load = DARK_MAIN_MENU_MENU_HELP;
     
     //Finishing touches.
-    game.audio.set_current_song(MAIN_MENU::SONG_NAME);
+    game.audio.set_current_song(game.sys_content_names.sng_menus);
     game.fade_mgr.start_fade(true, nullptr);
 }
 

@@ -855,6 +855,20 @@ struct sys_content_names_t {
     //Switching standby Pikmin type.
     string sound_switch_pikmin = "switch_pikmin";
     
+    //Songs.
+    
+    //Boss theme.
+    string sng_boss = "boss";
+    
+    //Boss victory theme.
+    string sng_boss_victory = "boss_victory";
+    
+    //Editors.
+    string sng_editors = "editors";
+    
+    //Menus.
+    string sng_menus = "menus";
+    
     //Global animations.
     
     //Leader damage spark.

@@ -47,9 +47,6 @@ const float INPUT_CAPTURE_TIMEOUT_DURATION = 5.0f;
 //Name of the misc menu GUI information file.
 const string MISC_GUI_FILE_NAME = "options_menu_misc";
 
-//Name of the song to play in this state.
-const string SONG_NAME = "menus";
-
 //Name of the top-level menu GUI information file.
 const string TOP_GUI_FILE_NAME = "options_menu_top";
 

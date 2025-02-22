@@ -39,8 +39,6 @@ extern const string BIG_MSG_MISSION_FAILED_TEXT;
 extern const float BIG_MSG_READY_DUR;
 extern const string BIG_MSG_READY_TEXT;
 extern const float BOSS_MUSIC_DISTANCE;
-extern const string BOSS_SONG_NAME;
-extern const string BOSS_VICTORY_SONG_NAME;
 extern const float CAMERA_BOX_MARGIN;
 extern const float CAMERA_SMOOTHNESS_MULT;
 extern const unsigned char COLLISION_OPACITY;

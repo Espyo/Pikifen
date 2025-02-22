@@ -63,12 +63,6 @@ const string BIG_MSG_READY_TEXT = "READY?";
 //Distance between current leader and boss before the boss music kicks in.
 const float BOSS_MUSIC_DISTANCE = 300.0f;
 
-//Name of the boss theme song.
-const string BOSS_SONG_NAME = "boss";
-
-//Name of the boss victory theme song.
-const string BOSS_VICTORY_SONG_NAME = "boss_victory";
-
 //Something is only considered off-camera if it's beyond this extra margin.
 const float CAMERA_BOX_MARGIN = 128.0f;
 
@@ -771,7 +765,7 @@ void gameplay_state::load() {
     boss_music_state = BOSS_MUSIC_STATE_NEVER_PLAYED;
     game.audio.set_current_song("");
     game.audio.on_song_finished = [this] (const string &name) {
-        if(name == GAMEPLAY::BOSS_VICTORY_SONG_NAME) {
+        if(name == game.sys_content_names.sng_boss_victory) {
             switch(boss_music_state) {
             case BOSS_MUSIC_STATE_VICTORY: {
                 game.audio.set_current_song(game.cur_area_data->song_name, false);

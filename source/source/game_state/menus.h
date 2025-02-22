@@ -32,7 +32,6 @@ namespace AREA_MENU {
 extern const string GUI_FILE_NAME;
 extern const string INFO_GUI_FILE_NAME;
 extern const float PAGE_SWAP_DURATION;
-extern const string SONG_NAME;
 extern const string SPECS_GUI_FILE_NAME;
 }
 
@@ -42,14 +41,12 @@ extern const string GUI_FILE_NAME;
 extern const float HUD_MOVE_TIME;
 extern const string MAKE_GUI_FILE_NAME;
 extern const string PLAY_GUI_FILE_NAME;
-extern const string SONG_NAME;
 extern const string TUTORIAL_GUI_FILE_NAME;
 }
 
 
 namespace RESULTS {
 extern const string GUI_FILE_NAME;
-extern const string SONG_NAME;
 }
 
 

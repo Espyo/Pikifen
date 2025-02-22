@@ -22,9 +22,6 @@ namespace GUI_EDITOR {
 const vector<float> GRID_INTERVALS =
 {1.0f, 2.0f, 2.5f, 5.0f, 10.0f};
 
-//Name of the song to play in this state.
-const string SONG_NAME = "editors";
-
 //Maximum zoom level possible in the editor.
 const float ZOOM_MAX_LEVEL = 64.0f;
 
@@ -324,7 +321,7 @@ void gui_editor::load() {
     //Misc. setup.
     must_recenter_cam = true;
     
-    game.audio.set_current_song(GUI_EDITOR::SONG_NAME, false);
+    game.audio.set_current_song(game.sys_content_names.sng_editors, false);
     
     //Automatically load a file if needed, or show the load dialog.
     if(!auto_load_file.empty()) {
