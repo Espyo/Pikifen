@@ -27,7 +27,7 @@ void particle_editor::open_load_dialog() {
     
     //Set up the picker's behavior and data.
     vector<picker_item> file_items;
-    for(const auto &g : game.content.custom_particle_gen.list) {
+    for(const auto &g : game.content.particle_gen.list) {
         content_manifest* man = g.second.manifest;
         file_items.push_back(
             picker_item(
@@ -470,7 +470,7 @@ void particle_editor::process_gui_new_dialog() {
     temp_man.pack = new_dialog.pack;
     temp_man.internal_name = new_dialog.internal_name;
     new_dialog.part_gen_path =
-        game.content.custom_particle_gen.manifest_to_path(temp_man);
+        game.content.particle_gen.manifest_to_path(temp_man);
     if(new_dialog.last_checked_part_gen_path != new_dialog.part_gen_path) {
         new_dialog.part_gen_path_exists =
             file_exists(new_dialog.part_gen_path);

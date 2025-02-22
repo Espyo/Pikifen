@@ -151,8 +151,8 @@ void status_type::load_from_data_node(data_node* node, CONTENT_LOAD_LEVEL level)
     
     if(particle_gen_node) {
         if(
-            game.content.custom_particle_gen.list.find(particle_gen_str) ==
-            game.content.custom_particle_gen.list.end()
+            game.content.particle_gen.list.find(particle_gen_str) ==
+            game.content.particle_gen.list.end()
         ) {
             game.errors.report(
                 "Unknown particle generator \"" +
@@ -162,7 +162,7 @@ void status_type::load_from_data_node(data_node* node, CONTENT_LOAD_LEVEL level)
             generates_particles =
                 true;
             particle_gen =
-                &game.content.custom_particle_gen.list[particle_gen_str];
+                &game.content.particle_gen.list[particle_gen_str];
             particle_offset_pos =
                 s2p(particle_offset_str, &particle_offset_z);
         }

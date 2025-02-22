@@ -27,9 +27,6 @@ enum CONTENT_TYPE {
     //Bitmap.
     CONTENT_TYPE_BITMAP,
     
-    //Custom particle generator.
-    CONTENT_TYPE_CUSTOM_PARTICLE_GEN,
-    
     //Global animation.
     CONTENT_TYPE_GLOBAL_ANIMATION,
     
@@ -50,6 +47,9 @@ enum CONTENT_TYPE {
     
     //Mob type.
     CONTENT_TYPE_MOB_TYPE,
+    
+    //Particle generator.
+    CONTENT_TYPE_PARTICLE_GEN,
     
     //Sound.
     CONTENT_TYPE_SOUND,

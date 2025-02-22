@@ -137,7 +137,7 @@ void dark_main_menu_state::load() {
     case DARK_MAIN_MENU_MENU_HELP: {
         game.content.load_all(
         vector<CONTENT_TYPE> {
-            CONTENT_TYPE_CUSTOM_PARTICLE_GEN,
+            CONTENT_TYPE_PARTICLE_GEN,
             CONTENT_TYPE_GLOBAL_ANIMATION,
             CONTENT_TYPE_LIQUID,
             CONTENT_TYPE_STATUS_TYPE,
@@ -169,7 +169,7 @@ void dark_main_menu_state::load() {
                 CONTENT_TYPE_STATUS_TYPE,
                 CONTENT_TYPE_LIQUID,
                 CONTENT_TYPE_GLOBAL_ANIMATION,
-                CONTENT_TYPE_CUSTOM_PARTICLE_GEN,
+                CONTENT_TYPE_PARTICLE_GEN,
             }
             );
             leave();

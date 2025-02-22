@@ -718,8 +718,8 @@ bool mob_action_loaders::start_chomping(mob_action_call &call) {
  */
 bool mob_action_loaders::start_particles(mob_action_call &call) {
     if(
-        game.content.custom_particle_gen.list.find(call.args[0]) ==
-        game.content.custom_particle_gen.list.end()
+        game.content.particle_gen.list.find(call.args[0]) ==
+        game.content.particle_gen.list.end()
     ) {
         call.custom_error =
             "Unknown particle generator \"" + call.args[0] + "\"!";

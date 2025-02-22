@@ -150,45 +150,6 @@ public:
 
 /**
  * @brief Responsible for loading and storing game content
- * custom particle generators into memory.
- */
-class custom_particle_gen_content_manager : public content_type_manager {
-
-public:
-
-    //--- Members ---
-    
-    //List of custom particle generators.
-    map<string, particle_generator> list;
-    
-    //Manifests.
-    map<string, content_manifest> manifests;
-    
-    
-    //--- Function declarations ---
-    
-    void clear_manifests() override;
-    void fill_manifests() override;
-    string get_name() const override;
-    string get_perf_mon_measurement_name() const override;
-    void load_all(CONTENT_LOAD_LEVEL level) override;
-    string manifest_to_path(const content_manifest &manifest) const;
-    void path_to_manifest(
-        const string &path, content_manifest* out_manifest = nullptr
-    ) const;
-    void unload_all(CONTENT_LOAD_LEVEL level) override;
-    
-    
-private:
-
-    //--- Function declarations ---
-    void load_generator(content_manifest* manifest, CONTENT_LOAD_LEVEL level);
-    
-};
-
-
-/**
- * @brief Responsible for loading and storing game content
  * global animations into memory.
  */
 class global_anim_content_manager : public content_type_manager {
@@ -454,6 +415,45 @@ private:
     void load_mob_types_of_category(mob_category* category, CONTENT_LOAD_LEVEL level);
     void unload_mob_type(mob_type* mt, CONTENT_LOAD_LEVEL level);
     void unload_mob_types_of_category(mob_category* category, CONTENT_LOAD_LEVEL level);
+};
+
+
+/**
+ * @brief Responsible for loading and storing game content
+ * particle generators into memory.
+ */
+class particle_gen_content_manager : public content_type_manager {
+
+public:
+
+    //--- Members ---
+    
+    //List of particle generators.
+    map<string, particle_generator> list;
+    
+    //Manifests.
+    map<string, content_manifest> manifests;
+    
+    
+    //--- Function declarations ---
+    
+    void clear_manifests() override;
+    void fill_manifests() override;
+    string get_name() const override;
+    string get_perf_mon_measurement_name() const override;
+    void load_all(CONTENT_LOAD_LEVEL level) override;
+    string manifest_to_path(const content_manifest &manifest) const;
+    void path_to_manifest(
+        const string &path, content_manifest* out_manifest = nullptr
+    ) const;
+    void unload_all(CONTENT_LOAD_LEVEL level) override;
+    
+    
+private:
+
+    //--- Function declarations ---
+    void load_generator(content_manifest* manifest, CONTENT_LOAD_LEVEL level);
+    
 };
 
 

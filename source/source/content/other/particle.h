@@ -52,7 +52,7 @@ enum MOB_PARTICLE_GENERATOR_ID {
     //None.
     MOB_PARTICLE_GENERATOR_ID_NONE,
     
-    //Custom particle generator issued by the script.
+    //Particle generator issued by the script.
     MOB_PARTICLE_GENERATOR_ID_SCRIPT,
     
     //Trail effect left behind by a throw.

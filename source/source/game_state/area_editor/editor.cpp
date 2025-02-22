@@ -1766,7 +1766,7 @@ void area_editor::load() {
     game.content.reload_packs();
     game.content.load_all(
     vector<CONTENT_TYPE> {
-        CONTENT_TYPE_CUSTOM_PARTICLE_GEN,
+        CONTENT_TYPE_PARTICLE_GEN,
         CONTENT_TYPE_STATUS_TYPE,
         CONTENT_TYPE_SPIKE_DAMAGE_TYPE,
         CONTENT_TYPE_GLOBAL_ANIMATION,
@@ -3828,7 +3828,7 @@ void area_editor::unload() {
         CONTENT_TYPE_GLOBAL_ANIMATION,
         CONTENT_TYPE_SPIKE_DAMAGE_TYPE,
         CONTENT_TYPE_STATUS_TYPE,
-        CONTENT_TYPE_CUSTOM_PARTICLE_GEN,
+        CONTENT_TYPE_PARTICLE_GEN,
     }
     );
 }

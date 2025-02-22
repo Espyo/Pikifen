@@ -43,8 +43,8 @@ void spike_damage_type::load_from_data_node(data_node* node) {
     
     if(particle_generator_node) {
         if(
-            game.content.custom_particle_gen.list.find(particle_generator_name) ==
-            game.content.custom_particle_gen.list.end()
+            game.content.particle_gen.list.find(particle_generator_name) ==
+            game.content.particle_gen.list.end()
         ) {
             game.errors.report(
                 "Unknown particle generator \"" +
@@ -52,7 +52,7 @@ void spike_damage_type::load_from_data_node(data_node* node) {
             );
         } else {
             particle_gen =
-                &game.content.custom_particle_gen.list[particle_generator_name];
+                &game.content.particle_gen.list[particle_generator_name];
             particle_offset_pos =
                 s2p(
                     node->get_child_by_name("particle_offset")->value,

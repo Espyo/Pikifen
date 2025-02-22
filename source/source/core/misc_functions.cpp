@@ -1520,7 +1520,7 @@ particle_generator standard_particle_gen_setup(
     const string &internal_name, mob* target_mob
 ) {
     particle_generator pg =
-        game.content.custom_particle_gen.list[internal_name];
+        game.content.particle_gen.list[internal_name];
     pg.restart_timer();
     pg.follow_mob = target_mob;
     pg.follow_angle = target_mob ? &target_mob->angle : nullptr;

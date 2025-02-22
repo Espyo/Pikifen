@@ -1140,7 +1140,7 @@ void gameplay_state::load_game_content() {
     game.content.load_all(
     vector<CONTENT_TYPE> {
         CONTENT_TYPE_GUI,
-        CONTENT_TYPE_CUSTOM_PARTICLE_GEN,
+        CONTENT_TYPE_PARTICLE_GEN,
         CONTENT_TYPE_GLOBAL_ANIMATION,
         CONTENT_TYPE_LIQUID,
         CONTENT_TYPE_STATUS_TYPE,
@@ -1287,7 +1287,7 @@ void gameplay_state::unload_game_content() {
         CONTENT_TYPE_STATUS_TYPE,
         CONTENT_TYPE_LIQUID,
         CONTENT_TYPE_GLOBAL_ANIMATION,
-        CONTENT_TYPE_CUSTOM_PARTICLE_GEN,
+        CONTENT_TYPE_PARTICLE_GEN,
         CONTENT_TYPE_GUI,
     }
     );

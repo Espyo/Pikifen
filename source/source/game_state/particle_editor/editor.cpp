@@ -119,7 +119,7 @@ void particle_editor::create_part_gen(
     
     //Create a particle generator with some defaults.
     loaded_gen = particle_generator();
-    game.content.custom_particle_gen.path_to_manifest(
+    game.content.particle_gen.path_to_manifest(
         part_gen_path, &manifest
     );
     loaded_gen.manifest = &manifest;
@@ -290,7 +290,7 @@ void particle_editor::draw_canvas_imgui_callback(
  */
 string particle_editor::get_file_tooltip(const string &path) const {
     content_manifest temp_manif;
-    game.content.custom_particle_gen.path_to_manifest(
+    game.content.particle_gen.path_to_manifest(
         path, &temp_manif
     );
     return
@@ -342,7 +342,7 @@ void particle_editor::load() {
     game.content.reload_packs();
     game.content.load_all(
     vector<CONTENT_TYPE> {
-        CONTENT_TYPE_CUSTOM_PARTICLE_GEN,
+        CONTENT_TYPE_PARTICLE_GEN,
     },
     CONTENT_LOAD_LEVEL_BASIC
     );
@@ -469,12 +469,12 @@ void particle_editor::pick_part_gen_file(
 void particle_editor::reload_part_gens() {
     game.content.unload_all(
     vector<CONTENT_TYPE> {
-        CONTENT_TYPE_CUSTOM_PARTICLE_GEN,
+        CONTENT_TYPE_PARTICLE_GEN,
     }
     );
     game.content.load_all(
     vector<CONTENT_TYPE> {
-        CONTENT_TYPE_CUSTOM_PARTICLE_GEN,
+        CONTENT_TYPE_PARTICLE_GEN,
     },
     CONTENT_LOAD_LEVEL_BASIC
     );
@@ -826,7 +826,7 @@ void particle_editor::unload() {
     
     game.content.unload_all(
     vector<CONTENT_TYPE> {
-        CONTENT_TYPE_CUSTOM_PARTICLE_GEN,
+        CONTENT_TYPE_PARTICLE_GEN,
     }
     );
 }

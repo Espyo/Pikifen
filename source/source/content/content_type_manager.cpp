@@ -417,119 +417,6 @@ void content_type_manager::fill_manifests_map_from_pack(
 /**
  * @brief Clears the manifests.
  */
-void custom_particle_gen_content_manager::clear_manifests() {
-    manifests.clear();
-}
-
-
-/**
- * @brief Fills in the manifests.
- */
-void custom_particle_gen_content_manager::fill_manifests() {
-    fill_manifests_map(manifests, FOLDER_PATHS_FROM_PACK::PARTICLE_GENERATORS, false);
-}
-
-
-/**
- * @brief Returns the content type's name.
- *
- * @return The name.
- */
-string custom_particle_gen_content_manager::get_name() const {
-    return "particle generator";
-}
-
-
-/**
- * @brief Returns the name to use for the performance monitor, if any.
- *
- * @return The name.
- */
-string custom_particle_gen_content_manager::get_perf_mon_measurement_name() const {
-    return "Custom particle generators";
-}
-
-
-/**
- * @brief Loads all content in the manifests.
- *
- * @param level Level to load at.
- */
-void custom_particle_gen_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
-    for(auto &g : manifests) {
-        load_generator(&g.second, level);
-    }
-}
-
-
-/**
- * @brief Loads a user-made particle generator.
- *
- * @param manifest Manifest of the particle generator.
- * @param level Level to load at.
- */
-void custom_particle_gen_content_manager::load_generator(
-    content_manifest* manifest, CONTENT_LOAD_LEVEL level
-) {
-    data_node file = load_data_file(manifest->path);
-    if(!file.file_was_opened) return;
-    
-    particle_generator new_pg;
-    new_pg.manifest = manifest;
-    new_pg.load_from_data_node(&file, level);
-    list[manifest->internal_name] = new_pg;
-}
-
-
-/**
- * @brief Returns the path to a custom particle generator given a manifest
- * (that's missing the path).
- *
- * @param manifest Manifest of the generator.
- * @return The path.
- */
-string custom_particle_gen_content_manager::manifest_to_path(
-    const content_manifest &manifest
-) const {
-    return
-        FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
-        manifest.pack + "/" +
-        FOLDER_PATHS_FROM_PACK::PARTICLE_GENERATORS + "/" +
-        manifest.internal_name + ".txt";
-}
-
-
-/**
- * @brief Returns the manifest of a custom particle generator given its path.
- *
- * @param path Path to the generator.
- * @param out_manifest If not nullptr, the manifest is returned here.
- */
-void custom_particle_gen_content_manager::path_to_manifest(
-    const string &path, content_manifest* out_manifest
-) const {
-    if(out_manifest) {
-        out_manifest->fill_from_path(path);
-    }
-}
-
-
-/**
- * @brief Unloads all loaded content.
- *
- * @param level Load level. Should match the level used to load the content.
- */
-void custom_particle_gen_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
-    for(auto g = list.begin(); g != list.end(); ++g) {
-        game.content.bitmaps.list.free(g->second.base_particle.bitmap);
-    }
-    list.clear();
-}
-
-
-/**
- * @brief Clears the manifests.
- */
 void global_anim_content_manager::clear_manifests() {
     manifests.clear();
 }
@@ -1502,6 +1389,119 @@ void mob_type_content_manager::unload_mob_types_of_category(mob_category* catego
     }
     
     category->clear_types();
+}
+
+
+/**
+ * @brief Clears the manifests.
+ */
+void particle_gen_content_manager::clear_manifests() {
+    manifests.clear();
+}
+
+
+/**
+ * @brief Fills in the manifests.
+ */
+void particle_gen_content_manager::fill_manifests() {
+    fill_manifests_map(manifests, FOLDER_PATHS_FROM_PACK::PARTICLE_GENERATORS, false);
+}
+
+
+/**
+ * @brief Returns the content type's name.
+ *
+ * @return The name.
+ */
+string particle_gen_content_manager::get_name() const {
+    return "particle generator";
+}
+
+
+/**
+ * @brief Returns the name to use for the performance monitor, if any.
+ *
+ * @return The name.
+ */
+string particle_gen_content_manager::get_perf_mon_measurement_name() const {
+    return "Particle generators";
+}
+
+
+/**
+ * @brief Loads all content in the manifests.
+ *
+ * @param level Level to load at.
+ */
+void particle_gen_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
+    for(auto &g : manifests) {
+        load_generator(&g.second, level);
+    }
+}
+
+
+/**
+ * @brief Loads a user-made particle generator.
+ *
+ * @param manifest Manifest of the particle generator.
+ * @param level Level to load at.
+ */
+void particle_gen_content_manager::load_generator(
+    content_manifest* manifest, CONTENT_LOAD_LEVEL level
+) {
+    data_node file = load_data_file(manifest->path);
+    if(!file.file_was_opened) return;
+    
+    particle_generator new_pg;
+    new_pg.manifest = manifest;
+    new_pg.load_from_data_node(&file, level);
+    list[manifest->internal_name] = new_pg;
+}
+
+
+/**
+ * @brief Returns the path to a particle generator given a manifest
+ * (that's missing the path).
+ *
+ * @param manifest Manifest of the generator.
+ * @return The path.
+ */
+string particle_gen_content_manager::manifest_to_path(
+    const content_manifest &manifest
+) const {
+    return
+        FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
+        manifest.pack + "/" +
+        FOLDER_PATHS_FROM_PACK::PARTICLE_GENERATORS + "/" +
+        manifest.internal_name + ".txt";
+}
+
+
+/**
+ * @brief Returns the manifest of a particle generator given its path.
+ *
+ * @param path Path to the generator.
+ * @param out_manifest If not nullptr, the manifest is returned here.
+ */
+void particle_gen_content_manager::path_to_manifest(
+    const string &path, content_manifest* out_manifest
+) const {
+    if(out_manifest) {
+        out_manifest->fill_from_path(path);
+    }
+}
+
+
+/**
+ * @brief Unloads all loaded content.
+ *
+ * @param level Load level. Should match the level used to load the content.
+ */
+void particle_gen_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
+    for(auto g = list.begin(); g != list.end(); ++g) {
+        game.content.bitmaps.list.free(g->second.base_particle.bitmap);
+    }
+    list.clear();
 }
 
 

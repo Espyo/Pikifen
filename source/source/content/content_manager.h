@@ -66,9 +66,6 @@ struct content_manager {
     //Bitmaps.
     bitmap_content_manager bitmaps;
     
-    //Custom particle generators.
-    custom_particle_gen_content_manager custom_particle_gen;
-    
     //Global animation databases.
     global_anim_content_manager global_anim_dbs;
     
@@ -89,6 +86,9 @@ struct content_manager {
     
     //Mob types.
     mob_type_content_manager mob_types;
+    
+    //Particle generators.
+    particle_gen_content_manager particle_gen;
     
     //Songs.
     song_content_manager songs;

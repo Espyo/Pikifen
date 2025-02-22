@@ -40,9 +40,6 @@ content_type_manager* content_manager::get_mgr_ptr(CONTENT_TYPE type) {
     } case CONTENT_TYPE_BITMAP: {
         return &bitmaps;
         break;
-    } case CONTENT_TYPE_CUSTOM_PARTICLE_GEN: {
-        return &custom_particle_gen;
-        break;
     } case CONTENT_TYPE_GLOBAL_ANIMATION: {
         return &global_anim_dbs;
         break;
@@ -63,6 +60,9 @@ content_type_manager* content_manager::get_mgr_ptr(CONTENT_TYPE type) {
         break;
     } case CONTENT_TYPE_MOB_TYPE: {
         return &mob_types;
+        break;
+    } case CONTENT_TYPE_PARTICLE_GEN: {
+        return &particle_gen;
         break;
     } case CONTENT_TYPE_SONG: {
         return &songs;
