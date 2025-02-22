@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   width="532"
+   width="561"
    height="1130"
    id="svg7091"
    version="1.1"
-   inkscape:version="1.3.2 (091e20e, 2023-11-25)"
-   sodipodi:docname="Leaders.svg"
-   inkscape:export-filename="../../../../Game_data/Graphics/President_icon.png"
+   inkscape:version="1.4 (e7c3feb, 2024-10-09)"
+   sodipodi:docname="leaders.svg"
+   inkscape:export-filename="/home/andre/Programming/C++/Pikifen/game_data/base/graphics/olimar.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -7004,6 +7004,228 @@
        y1="14.999999"
        x2="153"
        y2="18.999998" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Olimar_shoe"
+       id="linearGradient71"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.9318516,-0.51763809,0.51763809,1.9318516,-127.08775,-1942.2957)"
+       x1="56.033504"
+       y1="1030.2372"
+       x2="55.16748"
+       y2="1029.7372" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Olimar_glove"
+       id="linearGradient74"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1,0,0,-1,374.00001,64.365848)"
+       x1="162"
+       y1="14.999999"
+       x2="153"
+       y2="18.999998" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Olimar_shoe"
+       id="linearGradient75"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.9318516,0.51763809,0.51763809,-1.9318516,-195.19358,2006.2957)"
+       x1="56.033504"
+       y1="1030.2372"
+       x2="55.16748"
+       y2="1029.7372" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Olimar_glove"
+       id="linearGradient76"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(309.51043,-0.36584839)"
+       x1="162"
+       y1="14.999999"
+       x2="153"
+       y2="18.999998" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Louie_shoe"
+       id="linearGradient83"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.9318516,-0.51763809,0.51763809,1.9318516,-116.08775,-1742.6971)"
+       x1="56.033504"
+       y1="1030.2372"
+       x2="55.16748"
+       y2="1029.7372" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Louie_glove"
+       id="linearGradient84"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1,0,0,-1,391.99988,265.59856)"
+       x1="162"
+       y1="14.999999"
+       x2="153"
+       y2="18.999998" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Louie_shoe"
+       id="linearGradient85"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.9318516,0.51763809,0.51763809,-1.9318516,-181.19358,2206.2957)"
+       x1="56.033504"
+       y1="1030.2372"
+       x2="55.16748"
+       y2="1029.7372" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Louie_glove"
+       id="linearGradient86"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(326.99988,198.00004)"
+       x1="162"
+       y1="14.999999"
+       x2="153"
+       y2="18.999998" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#President_suit"
+       id="radialGradient93"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1,0,0,0.81825762,345.99971,74.719505)"
+       cx="210"
+       cy="436.63571"
+       fx="210"
+       fy="436.63571"
+       r="8.1204348" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#President_suit"
+       id="radialGradient94"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.7889801,0.05307116,-0.03388863,1.1423545,159.20229,-67.43555)"
+       cx="253.09381"
+       cy="380.32141"
+       fx="253.09381"
+       fy="380.32141"
+       r="17.5" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Alph_shoe"
+       id="linearGradient99"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.9318516,-0.51763809,0.51763809,1.9318516,-127.39675,-1342.29)"
+       x1="56.033504"
+       y1="1030.2372"
+       x2="55.16748"
+       y2="1029.7372" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Alph_glove"
+       id="linearGradient100"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.93424199,0,0,-1,385.75157,664.37151)"
+       x1="162"
+       y1="14.999999"
+       x2="153"
+       y2="18.999998" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Alph_shoe"
+       id="linearGradient101"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.9318516,0.51763809,0.51763809,-1.9318516,-192.39675,2606.2896)"
+       x1="56.033504"
+       y1="1030.2372"
+       x2="55.16748"
+       y2="1029.7372" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Alph_glove"
+       id="linearGradient102"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.93424199,0,0,1,325.02584,599.62803)"
+       x1="162"
+       y1="14.999999"
+       x2="153"
+       y2="18.999998" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Brittany_glove"
+       id="linearGradient109"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1,0,0,-1,384.99318,868.99128)"
+       x1="162"
+       y1="14.999999"
+       x2="153"
+       y2="18.999998" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Brittany_shoe"
+       id="linearGradient110"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.9318516,-0.51763809,0.51763809,1.9318516,-125.19375,-1143.6884)"
+       x1="56.033504"
+       y1="1030.2372"
+       x2="55.16748"
+       y2="1029.7372" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Brittany_glove"
+       id="linearGradient111"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(318.03288,799.62827)"
+       x1="162"
+       y1="14.999999"
+       x2="153"
+       y2="18.999998" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Brittany_shoe"
+       id="linearGradient112"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.9318516,0.51763809,0.51763809,-1.9318516,-189.19375,2808.6884)"
+       x1="56.033504"
+       y1="1030.2372"
+       x2="55.16748"
+       y2="1029.7372" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Charlie_shoe"
+       id="linearGradient117"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.9318516,-0.51763809,0.51763809,1.9318516,-79.087999,-949.27973)"
+       x1="56.296322"
+       y1="1030.3175"
+       x2="55.272594"
+       y2="1029.7086" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Charlie_glove"
+       id="linearGradient118"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.1963327,0,0,-1.6311877,401.98854,1080.6234)"
+       x1="162"
+       y1="14.999999"
+       x2="153"
+       y2="18.999998" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Charlie_shoe"
+       id="linearGradient119"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.9318516,0.51763809,0.51763809,-1.9318516,-144.08775,3013.2793)"
+       x1="56.296322"
+       y1="1030.3175"
+       x2="55.272594"
+       y2="1029.7086" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Charlie_glove"
+       id="linearGradient120"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.1963327,0,0,1.6311877,336.98879,983.37616)"
+       x1="162"
+       y1="14.999999"
+       x2="153"
+       y2="18.999998" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -7012,11 +7234,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.73982301"
-     inkscape:cx="332.51196"
-     inkscape:cy="565"
+     inkscape:zoom="1.5"
+     inkscape:cx="161"
+     inkscape:cy="84"
      inkscape:document-units="px"
-     inkscape:current-layer="layer2"
+     inkscape:current-layer="g3094"
      showgrid="true"
      inkscape:window-width="1872"
      inkscape:window-height="1051"
@@ -7052,8 +7274,8 @@
        visible="true"
        enabled="true"
        snapvisiblegridlinesonly="true"
-       originx="0"
-       originy="5.7220459e-06"
+       originx="3.8146973e-06"
+       originy="6.6757202e-06"
        spacingy="1"
        spacingx="1"
        units="px" />
@@ -7088,65 +7310,65 @@
      id="layer2"
      inkscape:label="Grid"
      style="display:inline"
-     transform="translate(-50)">
+     transform="translate(-49.999996)">
     <rect
        style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#40c040;fill-opacity:1;stroke:none;stroke-width:9.82615;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:markers stroke fill;stop-color:#000000"
        id="rect5"
-       width="532"
+       width="561"
        height="130"
        x="50"
        y="1000"
-       inkscape:export-filename="../../../../Game_data/Graphics/Charlie.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/game_data/base/graphics/charlie.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <rect
        style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#40c040;fill-opacity:1;stroke:none;stroke-width:8.99694;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:markers stroke fill;stop-color:#000000"
        id="rect4"
-       width="446"
+       width="517"
        height="130"
        x="50"
        y="800"
-       inkscape:export-filename="../../../../Game_data/Graphics/Brittany.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/game_data/base/graphics/brittany.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <rect
        style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#40c040;fill-opacity:1;stroke:none;stroke-width:8.68909;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:markers stroke fill;stop-color:#000000"
        id="rect3"
-       width="416"
+       width="509"
        height="130"
-       x="50"
+       x="49.999996"
        y="600"
-       inkscape:export-filename="../../../../Game_data/Graphics/Alph.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/game_data/base/graphics/alph.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <rect
-       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#40c040;fill-opacity:1;stroke:none;stroke-width:9.27506;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:markers stroke fill;stop-color:#000000"
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#40c040;fill-opacity:1;stroke:none;stroke-width:9.27505;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:markers stroke fill;stop-color:#000000"
        id="rect2"
-       width="474"
+       width="533"
        height="130"
        x="50"
        y="400"
-       inkscape:export-filename="../../../../Game_data/Graphics/President.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/game_data/base/graphics/president.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <rect
        style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#40c040;fill-opacity:1;stroke:none;stroke-width:8.87508;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:markers stroke fill;stop-color:#000000"
        id="rect1"
-       width="434"
+       width="523"
        height="130"
        x="50"
        y="200"
-       inkscape:export-filename="../../../../Game_data/Graphics/Louie.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/game_data/base/graphics/louie.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <rect
        style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#40c040;fill-opacity:1;stroke:none;stroke-width:8.68909;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:markers stroke fill;stop-color:#000000"
        id="rect572"
-       width="416"
+       width="509.00003"
        height="130"
-       x="50"
+       x="49.999996"
        y="0"
-       inkscape:export-filename="../../../../Game_data/Graphics/Olimar.png"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/game_data/base/graphics/olimar.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <rect
@@ -7882,13 +8104,134 @@
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Charlie.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
+    <rect
+       style="fill:#008000;fill-opacity:1;stroke:none;stroke-width:1"
+       id="rect17"
+       width="64"
+       height="64"
+       x="429"
+       y="-64"
+       transform="scale(1,-1)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Olimar.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="fill:#008000;fill-opacity:1;stroke:none;stroke-width:1"
+       id="rect18"
+       width="64"
+       height="64"
+       x="494"
+       y="-1.3500312e-13"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Olimar.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="fill:#008000;fill-opacity:1;stroke:none;stroke-width:1"
+       id="rect76"
+       width="64"
+       height="64"
+       x="443"
+       y="200"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Louie.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="fill:#008000;fill-opacity:1;stroke:none;stroke-width:1"
+       id="rect77"
+       width="64"
+       height="64"
+       x="508"
+       y="200"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Louie.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="display:inline;fill:#008000;fill-opacity:1;stroke:none;stroke-width:1"
+       id="rect86"
+       width="64"
+       height="64"
+       x="453"
+       y="400"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/President.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="display:inline;fill:#008000;fill-opacity:1;stroke:none;stroke-width:1"
+       id="rect87"
+       width="64"
+       height="64"
+       x="518"
+       y="400"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/President.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="fill:#008000;fill-opacity:1;stroke:none;stroke-width:1"
+       id="rect94"
+       width="64"
+       height="64"
+       x="428.99976"
+       y="599.99976"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Alph.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="fill:#008000;fill-opacity:1;stroke:none;stroke-width:1"
+       id="rect95"
+       width="64"
+       height="64"
+       x="493.99976"
+       y="599.99976"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Alph.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="fill:#008000;fill-opacity:1;stroke:none;stroke-width:1"
+       id="rect102"
+       width="64"
+       height="64"
+       x="437"
+       y="800"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Brittany.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="fill:#008000;fill-opacity:1;stroke:none;stroke-width:1"
+       id="rect103"
+       width="64"
+       height="64"
+       x="501.99997"
+       y="800"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Brittany.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="display:inline;fill:#008000;fill-opacity:1;stroke:none;stroke-width:1"
+       id="rect112"
+       width="64"
+       height="64"
+       x="480.99976"
+       y="999.99976"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Charlie.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="display:inline;fill:#008000;fill-opacity:1;stroke:none;stroke-width:1"
+       id="rect113"
+       width="64"
+       height="64"
+       x="545.99951"
+       y="999.99976"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Charlie.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
   </g>
   <g
      inkscape:label="Sprites"
      inkscape:groupmode="layer"
      id="layer1"
      style="display:inline;opacity:1"
-     transform="translate(-50)">
+     transform="translate(-49.999996)">
     <path
        id="path2157-7"
        style="display:inline;vector-effect:none;fill:url(#linearGradient3900);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
@@ -20099,6 +20442,448 @@
        xlink:href="#path1"
        id="use1"
        transform="translate(63,865)"
+       style="display:inline;opacity:1" />
+    <path
+       style="fill:url(#linearGradient76);fill-opacity:1;stroke:none;stroke-width:1"
+       d="m 467.51043,13.634109 c 3.59913,-0.1 4.79695,0.649 5,3 0.20305,2.351 -4.04954,2.7852 -6,3 -1.95046,0.2148 -4.6643,1.0926 -5,-1 -0.3357,-2.0926 2.40087,-4.9002 6,-5 z"
+       id="path18"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="zzzzz"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Olimar.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="fill:url(#linearGradient75);fill-opacity:1;stroke:none;stroke-width:1"
+       d="M 458.52297,47.983821 445,51.607287 l -3.10583,-11.59111 13.52297,-3.623466 z"
+       id="path19"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Olimar.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g3094"
+       id="use19"
+       transform="matrix(0.99851093,0.05232974,-0.05232974,0.99851093,380.79662,-4.243394)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Olimar.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       style="stroke-width:1.00012" />
+    <path
+       style="fill:url(#linearGradient74);fill-opacity:1;stroke:none;stroke-width:1"
+       d="m 532,50.365891 c 3.59913,0.1 4.79695,-0.649 5,-3 0.20305,-2.351 -4.04954,-2.7852 -6,-3 -1.95046,-0.2148 -4.6643,-1.0926 -5,1 -0.3357,2.0926 2.40087,4.9002 6,5 z"
+       id="path20"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="zzzzz"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Olimar.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="fill:url(#linearGradient71);fill-opacity:1;stroke:none;stroke-width:1"
+       d="M 526.6288,16.016179 513.10583,12.392713 510,23.983823 l 13.52297,3.623466 z"
+       id="path21"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Olimar.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g3094"
+       id="use25"
+       transform="matrix(0.99851093,-0.05232974,-0.05232974,-0.99851093,445.79662,68.243394)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Olimar.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       style="stroke-width:1.00012" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1"
+       id="use60"
+       transform="translate(378.99999)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1"
+       id="use70"
+       transform="translate(443.99999)" />
+    <path
+       style="fill:url(#linearGradient86);fill-opacity:1;stroke:none;stroke-width:1"
+       d="m 484.99988,212 c 3.59913,-0.1 4.79695,0.649 5,3 0.20305,2.351 -4.04954,2.7852 -6,3 -1.95046,0.2148 -4.6643,1.0926 -5,-1 -0.3357,-2.0926 2.40087,-4.9002 6,-5 z"
+       id="path77"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="zzzzz"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Louie.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="fill:url(#linearGradient85);fill-opacity:1;stroke:none;stroke-width:1"
+       d="M 472.52297,247.98382 459,251.60729 l -3.10583,-11.59111 13.52297,-3.62347 z"
+       id="path78"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Louie.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g3111"
+       id="use80"
+       transform="matrix(0.99851093,0.05232974,-0.05232974,0.99851093,405.26256,-3.945576)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Louie.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       style="stroke-width:1.00012" />
+    <path
+       style="fill:url(#linearGradient84);fill-opacity:1;stroke:none;stroke-width:1"
+       d="m 549.99988,251.5986 c 3.59913,0.1 4.79695,-0.649 5,-3 0.20305,-2.351 -4.04954,-2.7852 -6,-3 -1.95046,-0.2148 -4.6643,-1.0926 -5,1 -0.3357,2.0926 2.40087,4.9002 6,5 z"
+       id="path80"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="zzzzz"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Louie.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="fill:url(#linearGradient83);fill-opacity:1;stroke:none;stroke-width:1"
+       d="M 537.6288,215.61478 524.10583,211.99131 521,223.58242 l 13.52297,3.62347 z"
+       id="path81"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Louie.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g3111"
+       id="use81"
+       transform="matrix(0.99851093,-0.05232975,0.05232974,0.99851093,445.98156,4.6365053)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Louie.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       style="stroke-width:1.00012" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1"
+       id="use82"
+       transform="translate(393.00001,200)"
+       style="display:inline;opacity:1" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1"
+       id="use83"
+       transform="translate(458.00001,200)"
+       style="display:inline;opacity:1" />
+    <path
+       style="font-variation-settings:normal;display:inline;opacity:1;vector-effect:none;fill:#e1dda0;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;stop-color:#000000;stop-opacity:1"
+       d="m 497,404.49685 c 3.59913,-0.1474 4.79696,0.95676 5,4.42268 0.20305,3.4659 -4.04954,4.10602 -6,4.42268 -1.95046,0.31666 -4.66429,1.61074 -5,-1.47424 -0.3357,-3.08496 2.40088,-7.224 6,-7.37112 z"
+       id="path87"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="zzzzz"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/President.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="font-variation-settings:normal;display:inline;opacity:1;vector-effect:none;fill:url(#radialGradient94);fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+       d="m 481.99971,449.00001 c -3.87638,-6.89124 -18.78358,-0.88759 -15,7 3.78358,7.88759 18.87638,-0.10876 15,-7 z"
+       id="path88"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="zzz"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/President.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="font-variation-settings:normal;display:inline;opacity:1;vector-effect:none;fill:#e1dda0;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;stop-color:#000000;stop-opacity:1"
+       d="m 561,459.25698 c 3.59913,0.1474 4.79696,-0.95676 5,-4.42268 0.20305,-3.4659 -4.04954,-4.10602 -6,-4.42268 -1.95046,-0.31666 -4.66429,-1.61074 -5,1.47424 -0.3357,3.08496 2.40088,7.224 6,7.37112 z"
+       id="path89"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="zzzzz"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/President.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="display:inline;fill:url(#radialGradient93);fill-opacity:1;stroke:none;stroke-width:1"
+       d="m 546.99972,414.75382 c -3.87638,6.89124 -18.78358,0.88759 -15,-7 3.78358,-7.88759 18.87638,0.10876 15,7 z"
+       id="path90"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="zzz"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/President.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g3401"
+       id="use90"
+       transform="matrix(0.99851441,0.05232932,-0.05233035,0.99851101,425.72837,-3.6479908)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/President.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       style="stroke-width:1.00012" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g3401"
+       id="use91"
+       transform="matrix(0.99851441,-0.05232932,0.05233035,0.99851101,445.51497,4.9342585)"
+       width="100%"
+       height="100%"
+       style="display:inline;stroke-width:1.00012"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/President.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1"
+       id="use92"
+       transform="translate(403,400.00001)"
+       style="display:inline;opacity:1" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1"
+       id="use93"
+       transform="translate(468,400.00001)"
+       style="display:inline;opacity:1" />
+    <path
+       style="display:inline;fill:url(#linearGradient102);fill-opacity:1;stroke:none;stroke-width:0.999995"
+       d="m 472.63607,613.62799 c 3.36246,-0.1 4.48151,0.649 4.67121,3 0.1897,2.351 -3.78325,2.7852 -5.60545,3 -1.8222,0.2148 -4.35759,1.0926 -4.67121,-1 -0.31363,-2.0926 2.24299,-4.9002 5.60545,-5 z"
+       id="path95"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="zzzzz"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Alph.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="display:inline;fill:url(#linearGradient101);fill-opacity:1;stroke:none;stroke-width:1"
+       d="m 461.3198,647.9777 -13.52297,3.62347 -3.10583,-11.59111 13.52297,-3.62347 z"
+       id="path96"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Alph.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g3129"
+       id="use96"
+       transform="matrix(0.99851093,0.05232975,-0.05232974,0.99851093,412.19423,-3.3501792)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Alph.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       style="stroke-width:1.00012" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1"
+       id="use97"
+       transform="translate(378.99976,599.99977)"
+       style="display:inline;opacity:1" />
+    <path
+       style="display:inline;fill:url(#linearGradient100);fill-opacity:1;stroke:none;stroke-width:0.999995"
+       d="m 533.3618,650.37155 c 3.36246,0.1 4.48151,-0.649 4.67121,-3 0.1897,-2.351 -3.78325,-2.7852 -5.60545,-3 -1.8222,-0.2148 -4.35759,-1.0926 -4.67121,1 -0.31363,2.0926 2.24299,4.9002 5.60545,5 z"
+       id="path97"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="zzzzz"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Alph.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="display:inline;fill:url(#linearGradient99);fill-opacity:1;stroke:none;stroke-width:1"
+       d="m 526.3198,616.02184 -13.52297,-3.62347 -3.10583,11.59111 13.52297,3.62347 z"
+       id="path98"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Alph.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g3129"
+       id="use98"
+       transform="matrix(0.99851093,-0.05232975,-0.05232974,-0.99851093,477.19423,1267.3497)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Alph.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       style="stroke-width:1.00012" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1"
+       id="use99"
+       transform="translate(443.99976,599.99977)"
+       style="display:inline;opacity:1" />
+    <path
+       style="display:inline;fill:url(#linearGradient112);fill-opacity:1;stroke:none;stroke-width:1"
+       d="M 464.5228,850.37653 450.99983,854 447.894,842.40889 l 13.52297,-3.62347 z"
+       id="path103"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Brittany.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="display:inline;fill:url(#linearGradient111);fill-opacity:1;stroke:none;stroke-width:1"
+       d="m 476.03288,813.62823 c 3.59913,-0.1 4.79695,0.649 5,3 0.20305,2.351 -4.04954,2.7852 -6,3 -1.95046,0.2148 -4.6643,1.0926 -5,-1 -0.3357,-2.0926 2.40087,-4.9002 6,-5 z"
+       id="path104"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="zzzzz"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Brittany.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="display:inline;fill:url(#linearGradient110);fill-opacity:1;stroke:none;stroke-width:1"
+       d="M 528.5228,814.62347 514.99983,811 l -3.10583,11.59111 13.52297,3.62347 z"
+       id="path105"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Brittany.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="display:inline;fill:url(#linearGradient109);fill-opacity:1;stroke:none;stroke-width:1"
+       d="m 542.99317,854.99132 c 3.59913,0.1 4.79695,-0.649 5,-3 0.20305,-2.351 -4.04954,-2.7852 -6,-3 -1.95046,-0.2148 -4.6643,-1.0926 -5,1 -0.3357,2.0926 2.40087,4.9002 6,5 z"
+       id="path106"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="zzzzz"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Brittany.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g3169"
+       id="use106"
+       transform="matrix(0.99851093,0.05232975,-0.05232974,0.99851093,430.66041,-3.0521325)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Brittany.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       style="stroke-width:1.00012" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g3169"
+       id="use107"
+       transform="matrix(0.99851093,-0.05232975,0.05232974,0.99851093,408.58372,5.5299464)"
+       width="100%"
+       height="100%"
+       style="display:inline;stroke-width:1.00012"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Brittany.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1"
+       id="use108"
+       transform="translate(386.99999,800)"
+       style="display:inline;opacity:1" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1"
+       id="use109"
+       transform="translate(451.99999,800)"
+       style="display:inline;opacity:1" />
+    <path
+       style="display:inline;fill:url(#linearGradient120);fill-opacity:1;stroke:none;stroke-width:1"
+       d="m 526.00935,1006.2127 c 4.30576,-0.1631 5.73875,1.0586 5.98167,4.8936 0.24291,3.8349 -4.8446,4.5432 -7.178,4.8935 -2.3334,0.3504 -5.58006,1.7823 -5.98167,-1.6312 -0.4016,-3.4134 2.87224,-7.9931 7.178,-8.1559 z"
+       id="path113"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="zzzzz"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Charlie.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="display:inline;fill:url(#linearGradient119);fill-opacity:1;stroke:none;stroke-width:1"
+       d="m 514,1053.9998 -18,5 -3,-12 18,-5 z"
+       id="path114"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Charlie.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g3229"
+       id="use114"
+       transform="matrix(0.99851093,0.05232975,-0.05232974,0.99851093,485.12615,-2.7545494)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Charlie.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       style="stroke-width:1.00012" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1"
+       id="use115"
+       transform="translate(430.99975,999.99977)"
+       style="display:inline;opacity:1" />
+    <path
+       style="display:inline;fill:url(#linearGradient118);fill-opacity:1;stroke:none;stroke-width:1"
+       d="m 591.0091,1057.7869 c 4.30576,0.1631 5.73875,-1.0586 5.98167,-4.8936 0.24291,-3.8349 -4.8446,-4.5432 -7.178,-4.8935 -2.3334,-0.3504 -5.58006,-1.7823 -5.98167,1.6312 -0.4016,3.4134 2.87224,7.9931 7.178,8.1559 z"
+       id="path115"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="zzzzz"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Charlie.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="display:inline;fill:url(#linearGradient117);fill-opacity:1;stroke:none;stroke-width:1"
+       d="m 578.99975,1009.9998 -18,-5 -3,12 18,5 z"
+       id="path116"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Charlie.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g3229"
+       id="use116"
+       transform="matrix(0.99851093,-0.05232975,-0.05232974,-0.99851093,550.1259,2066.7542)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Charlie.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       style="stroke-width:1.00012" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1"
+       id="use117"
+       transform="translate(495.9995,999.99977)"
        style="display:inline;opacity:1" />
   </g>
 </svg>
