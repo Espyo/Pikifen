@@ -1259,7 +1259,7 @@ void animation_editor::process_gui_panel_body_part() {
  *
  * @param frame_ptr Pointer to the currently selected frame.
  */
-void animation_editor::process_gui_panel_frame(frame* frame_ptr) {
+void animation_editor::process_gui_panel_frame(frame* &frame_ptr) {
     //Sprite combobox.
     vector<string> sprite_names;
     for(size_t s = 0; s < db.sprites.size(); s++) {
@@ -1414,7 +1414,7 @@ void animation_editor::process_gui_panel_frame(frame* frame_ptr) {
  * header for this frame.
  */
 void animation_editor::process_gui_panel_frame_header(
-    frame* frame_ptr
+    frame* &frame_ptr
 ) {
     //Current frame text.
     ImGui::Text(
