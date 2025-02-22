@@ -19,7 +19,7 @@ animations{
 				duration=0.1000
 				interpolate=true
 			}
-			ducking_stretched{
+			ducking_stretched_01{
 				duration=0.1250
 				interpolate=true
 			}
@@ -27,7 +27,7 @@ animations{
 				duration=0.1250
 				interpolate=true
 			}
-			ducking_squashed{
+			ducking_squashed_01{
 				duration=0.1250
 				interpolate=true
 			}
@@ -35,7 +35,7 @@ animations{
 				duration=0.1250
 				interpolate=true
 			}
-			ducking_stretched{
+			ducking_stretched_01{
 				duration=0.1250
 				interpolate=true
 			}
@@ -43,7 +43,7 @@ animations{
 				duration=0.1250
 				interpolate=true
 			}
-			ducking_squashed{
+			ducking_squashed_01{
 				duration=0.1250
 				interpolate=true
 			}
@@ -161,6 +161,14 @@ animations{
 		frames{
 			half_limbo{
 				duration=0.1000
+				interpolate=true
+			}
+			pain{
+				duration=0.1000
+				interpolate=true
+			}
+			half_limbo{
+				duration=0.0100
 			}
 			idling{
 				duration=0.1000
@@ -180,7 +188,7 @@ animations{
 				duration=0.1400
 				interpolate=true
 			}
-			ducking_squashed{
+			ducking_squashed_01{
 				duration=0.0500
 				interpolate=true
 			}
@@ -258,14 +266,18 @@ animations{
 		}
 	}
 	throwing{
-		loop_frame=2
+		loop_frame=3
 		frames{
 			wind-up{
 				duration=0.0500
 			}
-			ducking{
+			ducking_stretched_02{
 				duration=0.1000
+				interpolate=true
 				sound=throw
+			}
+			ducking{
+				duration=0.0100
 			}
 			idling{
 				duration=0.1000
@@ -335,7 +347,7 @@ sprites{
 			}
 		}
 	}
-	ducking_squashed{
+	ducking_squashed_01{
 		file=louie
 		file_pos=0.0000 65.0000
 		file_size=54.0000 64.0000
@@ -381,12 +393,35 @@ sprites{
 			}
 		}
 	}
-	ducking_stretched{
+	ducking_stretched_01{
 		file=louie
 		file_pos=0.0000 65.0000
 		file_size=54.0000 64.0000
 		offset=3.0000 0.0000
 		scale=0.5500 0.4545
+		hitboxes{
+			fist{
+				coords=10.0000 10.0000 0.0000
+				height=46.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=46.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	ducking_stretched_02{
+		file=louie
+		file_pos=0.0000 65.0000
+		file_size=54.0000 64.0000
+		offset=6.7716 0.0000
+		scale=0.6897 0.3624
 		hitboxes{
 			fist{
 				coords=10.0000 10.0000 0.0000
@@ -656,6 +691,29 @@ sprites{
 			}
 		}
 	}
+	pain{
+		file=louie
+		file_pos=110.0000 65.0000
+		file_size=66.0000 64.0000
+		offset=-5.5302 0.0000
+		scale=0.3646 0.6858
+		hitboxes{
+			fist{
+				coords=0.0000 10.0000 0.0000
+				height=46.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=-10.0000 0.0000 0.0000
+				height=46.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
 	punch{
 		file=louie
 		file_pos=351.0000 65.0000
@@ -683,13 +741,13 @@ sprites{
 		file=louie
 		file_pos=351.0000 65.0000
 		file_size=82.0000 64.0000
-		offset=12.0000 0.0000
-		scale=0.5500 0.4545
+		offset=17.0574 0.0000
+		scale=0.6734 0.3712
 		hitboxes{
 			fist{
-				coords=25.0000 0.0000 -20.0000
+				coords=30.0000 0.0000 -20.0000
 				height=86.0000
-				radius=10.0000
+				radius=14.0000
 				type=1
 				value=8.0000
 			}
