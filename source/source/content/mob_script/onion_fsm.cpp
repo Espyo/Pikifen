@@ -126,6 +126,11 @@ void onion_fsm::receive_mob(mob* m, void* info1, void* info2) {
     switch(delivery->type->category->id) {
     case MOB_CATEGORY_ENEMIES: {
         seeds = ((enemy*) delivery)->ene_type->pikmin_seeds;
+
+        if(game.cur_area_data->mission.enemy_points_on_collection) {
+            game.states.gameplay->enemy_points_collected += ((enemy*) delivery)->ene_type->points;
+        }
+
         break;
     } case MOB_CATEGORY_PELLETS: {
         pellet* pel_ptr = (pellet*) delivery;

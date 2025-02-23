@@ -3753,6 +3753,26 @@ void area_editor::process_gui_panel_mission_grading() {
             "enemy point. Different enemies are worth different\n"
             "points."
         );
+
+        //Add the enemy point collection type
+        if(game.cur_area_data->mission.points_per_enemy_point != 0) {
+            ImGui::Indent();
+            //Award points on collection checkbox
+            if(
+                ImGui::Checkbox(
+                    "Award points on collection",
+                    &game.cur_area_data->mission.enemy_points_on_collection
+                )
+            ) {
+                register_change("mission grading change");
+            }
+            set_tooltip(
+                "If checked, enemy points will be awarded on enemy\n"
+                "collection. If unchecked, enemy points will be awarded\n"
+                "on enemy death."
+            );
+            ImGui::Unindent();
+        }
         
         //Starting score value.
         ImGui::Spacer();

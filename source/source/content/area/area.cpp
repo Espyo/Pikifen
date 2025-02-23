@@ -167,6 +167,7 @@ void area_data::clear() {
     mission.points_per_sec_passed = 0;
     mission.points_per_treasure_point = 0;
     mission.points_per_enemy_point = 0;
+    mission.enemy_points_on_collection = false;
     mission.point_loss_data = 0;
     mission.point_hud_data = 255;
     mission.starting_points = 0;
@@ -406,6 +407,7 @@ void area_data::clone(area_data &other) {
     other.mission.points_per_sec_passed = mission.points_per_sec_passed;
     other.mission.points_per_treasure_point = mission.points_per_treasure_point;
     other.mission.points_per_enemy_point = mission.points_per_enemy_point;
+    other.mission.enemy_points_on_collection = mission.enemy_points_on_collection;
     other.mission.point_loss_data = mission.point_loss_data;
     other.mission.point_hud_data = mission.point_hud_data;
     other.mission.starting_points = mission.starting_points;
@@ -1009,6 +1011,7 @@ void area_data::load_mission_data_from_data_node(data_node* node) {
     rs.set("mission_points_per_sec_passed", mission.points_per_sec_passed);
     rs.set("mission_points_per_treasure_point", mission.points_per_treasure_point);
     rs.set("mission_points_per_enemy_point", mission.points_per_enemy_point);
+    rs.set("enemy_points_on_collection", mission.enemy_points_on_collection);
     rs.set("mission_point_loss_data", mission.point_loss_data);
     rs.set("mission_point_hud_data", mission.point_hud_data);
     rs.set("mission_starting_points", mission.starting_points);
@@ -2287,6 +2290,12 @@ void area_data::save_mission_data_to_data_node(data_node* node) {
                 new data_node(
                     "mission_points_per_enemy_point",
                     i2s(mission.points_per_enemy_point)
+                )
+            );
+            node->add(
+                new data_node(
+                    "enemy_points_on_collection",
+                    b2s(mission.enemy_points_on_collection)
                 )
             );
         }
