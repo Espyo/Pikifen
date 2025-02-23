@@ -1,4 +1,4 @@
-name=swamp_area
+name=Emerald Grove
 engine_version=0.25.0
 subtitle=Find your ship
 difficulty=4
@@ -18,7 +18,8 @@ mission_fail_too_few_pik_amount=0
 mission_fail_leaders_kod=1
 mission_grading_mode=0
 mission_points_per_treasure_point=1
-mission_points_per_enemy_collection_point=1
+mission_points_per_enemy_point=5
+enemy_points_on_collection=true
 mission_point_hud_data=251
 mission_bronze_req=1000
 mission_silver_req=2000

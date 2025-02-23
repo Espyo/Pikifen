@@ -11,10 +11,10 @@ script {
         }
 		on_timer {
 			get_random_int jumps 2 5
-			get_random_real x -1000 1000
+			get_random_float x -1000 1000
 			get_mob_info cur_x self x
 			calculate x $x + $cur_x
-            get_random_real y -1000 1000
+            get_random_float y -1000 1000
 			get_mob_info cur_y self y
 			calculate y $y + $cur_y
 			set_state exploring_jumping
