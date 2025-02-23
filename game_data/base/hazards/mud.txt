@@ -1,7 +1,7 @@
-name = Water
-description = Any body of water on the floor. Pikmin that cannot swim will start struggling and eventually drown.
+name = Mud
+description = Any body of mud on the floor. Pikmin and leaders will be heavily slowed down.
 
-block_paths = false
+blocks_paths = false
 color = 0 0 255
 effects = mud
 liquid = mud
