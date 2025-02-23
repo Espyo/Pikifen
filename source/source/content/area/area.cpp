@@ -376,6 +376,7 @@ void Area::clone(Area &other) {
     other.mission.points_per_sec_passed = mission.points_per_sec_passed;
     other.mission.points_per_treasure_point = mission.points_per_treasure_point;
     other.mission.points_per_enemy_point = mission.points_per_enemy_point;
+    other.mission.enemy_points_on_collection = mission.enemy_points_on_collection;
     other.mission.point_loss_data = mission.point_loss_data;
     other.mission.point_hud_data = mission.point_hud_data;
     other.mission.starting_points = mission.starting_points;
@@ -981,6 +982,7 @@ void Area::load_mission_data_from_data_node(DataNode* node) {
     rs.set("mission_points_per_sec_passed", mission.points_per_sec_passed);
     rs.set("mission_points_per_treasure_point", mission.points_per_treasure_point);
     rs.set("mission_points_per_enemy_point", mission.points_per_enemy_point);
+    rs.set("enemy_points_on_collection", mission.enemy_points_on_collection);
     rs.set("mission_point_loss_data", mission.point_loss_data);
     rs.set("mission_point_hud_data", mission.point_hud_data);
     rs.set("mission_starting_points", mission.starting_points);
@@ -1701,7 +1703,7 @@ void Area::save_geometry_to_data_node(DataNode* node) {
     //Vertexes.
     DataNode* vertexes_node = node->addNew("vertexes");
     for(size_t v = 0; v < vertexes.size(); v++) {
-
+    
         //Vertex.
         Vertex* v_ptr = vertexes[v];
         vertexes_node->addNew("v", p2s(v2p(v_ptr)));
@@ -1710,12 +1712,12 @@ void Area::save_geometry_to_data_node(DataNode* node) {
     //Edges.
     DataNode* edges_node = node->addNew("edges");
     for(size_t e = 0; e < edges.size(); e++) {
-
+    
         //Edge.
         Edge* e_ptr = edges[e];
         DataNode* edge_node = edges_node->addNew("e");
         GetterWriter egw(edge_node);
-
+        
         string s_str;
         for(size_t s = 0; s < 2; s++) {
             if(e_ptr->sector_idxs[s] == INVALID) s_str += "-1";
@@ -1725,7 +1727,7 @@ void Area::save_geometry_to_data_node(DataNode* node) {
         s_str.erase(s_str.size() - 1);
         string v_str =
             i2s(e_ptr->vertex_idxs[0]) + " " + i2s(e_ptr->vertex_idxs[1]);
-
+            
         egw.get("s", s_str);
         egw.get("v", v_str);
         
@@ -1749,7 +1751,7 @@ void Area::save_geometry_to_data_node(DataNode* node) {
     //Sectors.
     DataNode* sectors_node = node->addNew("sectors");
     for(size_t s = 0; s < sectors.size(); s++) {
-
+    
         //Sector.
         Sector* s_ptr = sectors[s];
         DataNode* sector_node = sectors_node->addNew("s");
@@ -1809,7 +1811,7 @@ void Area::save_geometry_to_data_node(DataNode* node) {
     //Mobs.
     DataNode* mobs_node = node->addNew("mobs");
     for(size_t m = 0; m < mob_generators.size(); m++) {
-
+    
         //Mob.
         MobGen* m_ptr = mob_generators[m];
         string cat_name = "unknown";
@@ -1848,7 +1850,7 @@ void Area::save_geometry_to_data_node(DataNode* node) {
     //Path stops.
     DataNode* path_stops_node = node->addNew("path_stops");
     for(size_t s = 0; s < path_stops.size(); s++) {
-
+    
         //Path stop.
         PathStop* s_ptr = path_stops[s];
         DataNode* path_stop_node = path_stops_node->addNew("s");
@@ -1880,7 +1882,7 @@ void Area::save_geometry_to_data_node(DataNode* node) {
     //Tree shadows.
     DataNode* shadows_node = node->addNew("tree_shadows");
     for(size_t s = 0; s < tree_shadows.size(); s++) {
-
+    
         //Tree shadow.
         TreeShadow* s_ptr = tree_shadows[s];
         DataNode* shadow_node = shadows_node->addNew("shadow");
@@ -1909,7 +1911,7 @@ void Area::save_geometry_to_data_node(DataNode* node) {
 void Area::save_main_data_to_data_node(DataNode* node) {
     //Content metadata.
     save_metadata_to_data_node(node);
-
+    
     GetterWriter gw(node);
     
     //Main data.
@@ -1934,7 +1936,7 @@ void Area::save_main_data_to_data_node(DataNode* node) {
  */
 void Area::save_mission_data_to_data_node(DataNode* node) {
     GetterWriter gw(node);
-
+    
     if(mission.goal != MISSION_GOAL_END_MANUALLY) {
         string goal_name = game.mission_goals[mission.goal]->get_name();
         gw.get("mission_goal", goal_name);
@@ -2040,6 +2042,9 @@ void Area::save_mission_data_to_data_node(DataNode* node) {
         }
         if(mission.points_per_enemy_point != 0) {
             gw.get("mission_points_per_enemy_point", mission.points_per_enemy_point);
+        }
+        if(mission.enemy_points_on_collection) {
+            gw.get("enemy_points_on_collection", mission.enemy_points_on_collection);
         }
         if(mission.point_loss_data > 0) {
             gw.get("mission_point_loss_data", mission.point_loss_data);

@@ -64,6 +64,13 @@ void ship_fsm::receive_mob(Mob* m, void* info1, void* info2) {
     Ship* shi_ptr = (Ship*) m;
     
     switch(delivery->type->category->id) {
+    case MOB_CATEGORY_ENEMIES: {
+        if(game.cur_area_data->mission.enemy_points_on_collection) {
+            game.states.gameplay->enemy_points_collected += ((enemy*) delivery)->ene_type->points;
+        }
+        break;
+
+    }
     case MOB_CATEGORY_TREASURES: {
         Treasure* tre_ptr = (Treasure*) delivery;
         game.states.gameplay->treasures_collected++;
