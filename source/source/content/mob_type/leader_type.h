@@ -30,6 +30,9 @@ enum LEADER_STATE {
     //Idling.
     LEADER_STATE_IDLING,
     
+    //Called.
+    LEADER_STATE_CALLED,
+    
     //Active.
     LEADER_STATE_ACTIVE,
     
@@ -162,6 +165,9 @@ enum LEADER_ANIM {
 
     //Idling.
     LEADER_ANIM_IDLING,
+    
+    //Called.
+    LEADER_ANIM_CALLED,
     
     //Walking.
     LEADER_ANIM_WALKING,

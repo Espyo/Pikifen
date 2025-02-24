@@ -1,6 +1,22 @@
 name=Alph animations
 engine_version=0.25.0
 animations{
+	called{
+		frames{
+			idling{
+				duration=0.0500
+				interpolate=true
+			}
+			idling_big{
+				duration=0.1000
+				interpolate=true
+			}
+			idling{
+				duration=0.2000
+				interpolate=true
+			}
+		}
+	}
 	dismissing{
 		frames{
 			ducking{
@@ -504,6 +520,28 @@ sprites{
 		file_pos=0.0000 0.0000
 		file_size=64.0000 64.0000
 		scale=0.5000 0.5000
+		hitboxes{
+			fist{
+				coords=10.0000 10.0000 0.0000
+				height=46.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=46.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	idling_big{
+		file=alph
+		file_pos=0.0000 0.0000
+		file_size=64.0000 64.0000
+		scale=0.6500 0.6500
 		hitboxes{
 			fist{
 				coords=10.0000 10.0000 0.0000

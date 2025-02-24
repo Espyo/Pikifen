@@ -42,15 +42,14 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::search_seed);
         }
         efc.new_event(MOB_EV_WHISTLED); {
-            efc.run(leader_fsm::join_group);
-            efc.change_state("in_group_chasing");
+            efc.change_state("called");
         }
         efc.new_event(LEADER_EV_ACTIVATED); {
             efc.run(leader_fsm::become_active);
             efc.change_state("active");
         }
         efc.new_event(MOB_EV_LANDED); {
-            efc.run(leader_fsm::stop);
+            efc.run(leader_fsm::stand_still);
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(leader_fsm::be_attacked);
@@ -82,6 +81,30 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
     }
     
+    efc.new_state("called", LEADER_STATE_CALLED); {
+        efc.new_event(MOB_EV_ON_ENTER); {
+            efc.run(leader_fsm::called);
+        }
+        efc.new_event(MOB_EV_ANIMATION_END); {
+            efc.run(leader_fsm::finish_called_anim);
+        }
+        efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
+            efc.run(leader_fsm::be_attacked);
+        }
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
+            efc.change_state("dying");
+        }
+        efc.new_event(MOB_EV_TOUCHED_HAZARD); {
+            efc.run(leader_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EV_LEFT_HAZARD); {
+            efc.run(leader_fsm::left_hazard);
+        }
+        efc.new_event(MOB_EV_TOUCHED_SPRAY); {
+            efc.run(leader_fsm::touched_spray);
+        }
+    }
+    
     efc.new_state("active", LEADER_STATE_ACTIVE); {
         efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(leader_fsm::enter_active);
@@ -93,7 +116,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::tick_active_state);
         }
         efc.new_event(LEADER_EV_INACTIVATED); {
-            efc.run(leader_fsm::stop);
+            efc.run(leader_fsm::stand_still);
             efc.run(leader_fsm::become_inactive);
             efc.change_state("idling");
         }
@@ -102,7 +125,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::set_walk_anim);
         }
         efc.new_event(LEADER_EV_MOVE_END); {
-            efc.run(leader_fsm::stop);
+            efc.run(leader_fsm::stand_still);
             efc.run(leader_fsm::set_stop_anim);
         }
         efc.new_event(LEADER_EV_HOLDING); {
@@ -181,7 +204,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::move);
         }
         efc.new_event(LEADER_EV_MOVE_END); {
-            efc.run(leader_fsm::stop);
+            efc.run(leader_fsm::stand_still);
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(leader_fsm::be_attacked);
@@ -224,7 +247,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::move);
         }
         efc.new_event(LEADER_EV_MOVE_END); {
-            efc.run(leader_fsm::stop);
+            efc.run(leader_fsm::stand_still);
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_A_N); {
             efc.run(leader_fsm::check_punch_damage);
@@ -273,7 +296,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::set_walk_anim);
         }
         efc.new_event(LEADER_EV_MOVE_END); {
-            efc.run(leader_fsm::stop);
+            efc.run(leader_fsm::stand_still);
             efc.run(leader_fsm::set_stop_anim);
         }
         efc.new_event(LEADER_EV_START_WHISTLE); {
@@ -329,7 +352,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::move);
         }
         efc.new_event(LEADER_EV_MOVE_END); {
-            efc.run(leader_fsm::stop);
+            efc.run(leader_fsm::stand_still);
         }
         efc.new_event(LEADER_EV_HOLDING); {
             efc.run(leader_fsm::grab_mob);
@@ -373,7 +396,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::move);
         }
         efc.new_event(LEADER_EV_MOVE_END); {
-            efc.run(leader_fsm::stop);
+            efc.run(leader_fsm::stand_still);
         }
         efc.new_event(LEADER_EV_GO_HERE); {
             efc.run(leader_fsm::start_go_here);
@@ -449,7 +472,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::get_knocked_back);
         }
         efc.new_event(MOB_EV_LANDED); {
-            efc.run(leader_fsm::stop);
+            efc.run(leader_fsm::stand_still);
             efc.run(leader_fsm::get_knocked_down);
             efc.change_state("knocked_down");
         }
@@ -475,7 +498,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::get_knocked_back);
         }
         efc.new_event(MOB_EV_LANDED); {
-            efc.run(leader_fsm::stop);
+            efc.run(leader_fsm::stand_still);
             efc.run(leader_fsm::get_knocked_down);
             efc.change_state("inactive_knocked_down");
         }
@@ -793,9 +816,8 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.change_state("inactive_plucking");
         }
         efc.new_event(MOB_EV_WHISTLED); {
-            efc.run(leader_fsm::join_group);
             efc.run(leader_fsm::stop_auto_pluck);
-            efc.change_state("in_group_chasing");
+            efc.change_state("called");
         }
         efc.new_event(LEADER_EV_CANCEL); {
             efc.run(leader_fsm::stop_auto_pluck);
@@ -915,8 +937,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
     efc.new_state("inactive_mid_go_here", LEADER_STATE_INACTIVE_MID_GO_HERE); {
         efc.new_event(MOB_EV_WHISTLED); {
             efc.run(leader_fsm::stop_go_here);
-            efc.run(leader_fsm::join_group);
-            efc.change_state("in_group_chasing");
+            efc.change_state("called");
         }
         efc.new_event(LEADER_EV_ACTIVATED); {
             efc.run(leader_fsm::become_active);
@@ -1637,6 +1658,27 @@ void leader_fsm::become_inactive(mob* m, void* info1, void* info2) {
 
 
 /**
+ * @brief When a leader is called and must jump in surprise.
+ *
+ * @param m The mob.
+ * @param info1 Pointer to the leader that called.
+ * @param info2 Unused.
+ */
+void leader_fsm::called(mob* m, void* info1, void* info2) {
+    engine_assert(info1 != nullptr, m->print_state_history());
+    
+    leader* lea_ptr = (leader*) m;
+    mob* caller = (mob*) info1;
+    
+    leader_fsm::stand_still(m, info1, info2);
+    
+    lea_ptr->focus_on_mob(caller);
+    
+    lea_ptr->set_animation(LEADER_ANIM_CALLED);
+}
+
+
+/**
  * @brief When a leader that is knocked down is called over by another leader,
  * by whistling them.
  *
@@ -1854,6 +1896,26 @@ void leader_fsm::fall_down_pit(mob* m, void* info1, void* info2) {
     m->set_health(true, true, -0.2);
     m->invuln_period.start();
     m->respawn();
+}
+
+
+/**
+ * @brief When a leader finished the animation for when it's called.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void leader_fsm::finish_called_anim(mob* m, void* info1, void* info2) {
+    leader* lea_ptr = (leader*) m;
+    mob* caller = lea_ptr->focused_mob;
+    
+    if(lea_ptr) {
+        leader_fsm::join_group(m, (void*) caller, info2);
+        lea_ptr->fsm.set_state(LEADER_STATE_IN_GROUP_CHASING, info1, info2);
+    } else {
+        lea_ptr->fsm.set_state(LEADER_STATE_IDLING, info1, info2);
+    }
 }
 
 
@@ -2107,12 +2169,19 @@ void leader_fsm::idle_or_rejoin(mob* m, void* info1, void* info2) {
 void leader_fsm::join_group(mob* m, void* info1, void* info2) {
     leader* lea_ptr = (leader*) m;
     leader* caller = (leader*) info1;
+    mob* top_leader = caller;
     
-    caller->add_to_group(lea_ptr);
+    if(top_leader->following_group) {
+        //If this leader is following another one,
+        //then the new leader should be in the group of that top leader.
+        top_leader = top_leader->following_group;
+    }
+    
+    top_leader->add_to_group(lea_ptr);
     while(!lea_ptr->group->members.empty()) {
         mob* member = lea_ptr->group->members[0];
         member->leave_group();
-        caller->add_to_group(member);
+        top_leader->add_to_group(member);
     }
 }
 
@@ -2457,6 +2526,22 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
 
 
 /**
+ * @brief When a leader stops moving.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void leader_fsm::stand_still(mob* m, void* info1, void* info2) {
+    m->stop_circling();
+    m->stop_following_path();
+    m->stop_chasing();
+    m->stop_turning();
+    m->speed.x = m->speed.y = 0;
+}
+
+
+/**
  * @brief When a leader must start chasing another.
  *
  * @param m The mob.
@@ -2605,22 +2690,6 @@ void leader_fsm::start_waking_up(mob* m, void* info1, void* info2) {
     delete m->delivery_info;
     m->delivery_info = nullptr;
     m->set_animation(LEADER_ANIM_GETTING_UP);
-}
-
-
-/**
- * @brief When a leader stops moving.
- *
- * @param m The mob.
- * @param info1 Unused.
- * @param info2 Unused.
- */
-void leader_fsm::stop(mob* m, void* info1, void* info2) {
-    m->stop_circling();
-    m->stop_following_path();
-    m->stop_chasing();
-    m->stop_turning();
-    m->speed.x = m->speed.y = 0;
 }
 
 

@@ -163,7 +163,6 @@ Next tasks (roughly sorted most important first)
         The left side should be all organic, and the right side should have some DEV Lab stuff. The bottom should probably be something special but not attention-grabbing, the top should give space for the Pikmin to form the letters, and the topmost pixels should probably help the disclaimer text and version number readable, but not call attention
     Leader animations
         New animations
-            Called
             Bored
             Thrown (add to the logic of bouncers too, including Pikmin)
             Climbing (add the track logic too)

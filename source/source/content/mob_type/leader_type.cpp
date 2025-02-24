@@ -68,6 +68,7 @@ leader_type::leader_type() :
 anim_conversion_vector leader_type::get_anim_conversions() const {
     anim_conversion_vector v;
     v.push_back(std::make_pair(LEADER_ANIM_IDLING,       "idling"));
+    v.push_back(std::make_pair(LEADER_ANIM_CALLED,       "called"));
     v.push_back(std::make_pair(LEADER_ANIM_WALKING,      "walking"));
     v.push_back(std::make_pair(LEADER_ANIM_PLUCKING,     "plucking"));
     v.push_back(std::make_pair(LEADER_ANIM_GETTING_UP,   "getting_up"));
