@@ -38,6 +38,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(leader_fsm::enter_idle);
         }
+        efc.new_event(MOB_EV_ON_LEAVE); {
+            efc.run(leader_fsm::clear_boredom_data);
+        }
         efc.new_event(MOB_EV_ON_TICK); {
             efc.run(leader_fsm::search_seed);
         }
@@ -56,6 +59,12 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_ZERO_HEALTH); {
             efc.change_state("dying");
+        }
+        efc.new_event(MOB_EV_TIMER); {
+            efc.run(leader_fsm::start_boredom_anim);
+        }
+        efc.new_event(MOB_EV_ANIMATION_END); {
+            efc.run(leader_fsm::check_boredom_anim_end);
         }
         efc.new_event(LEADER_EV_MUST_SEARCH_SEED); {
             efc.run(leader_fsm::search_seed);
@@ -695,6 +704,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(leader_fsm::stop_in_group);
         }
+        efc.new_event(MOB_EV_ON_LEAVE); {
+            efc.run(leader_fsm::clear_boredom_data);
+        }
         efc.new_event(MOB_EV_SPOT_IS_FAR); {
             efc.change_state("in_group_chasing");
         }
@@ -705,6 +717,12 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_GRABBED_BY_FRIEND); {
             efc.run(leader_fsm::be_grabbed_by_friend);
             efc.change_state("held_by_leader");
+        }
+        efc.new_event(MOB_EV_TIMER); {
+            efc.run(leader_fsm::start_boredom_anim);
+        }
+        efc.new_event(MOB_EV_ANIMATION_END); {
+            efc.run(leader_fsm::check_boredom_anim_end);
         }
         efc.new_event(LEADER_EV_MUST_SEARCH_SEED); {
             efc.run(leader_fsm::search_seed);
@@ -1697,6 +1715,25 @@ void leader_fsm::called_while_knocked_down(mob* m, void* info1, void* info2) {
 
 
 /**
+ * @brief When a leader should check if the animation that ended is a boredom
+ * animation.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void leader_fsm::check_boredom_anim_end(mob* m, void* info1, void* info2) {
+    leader* lea_ptr = (leader*) m;
+    if(!lea_ptr->in_bored_animation) return;
+    m->set_animation(LEADER_ANIM_IDLING);
+    lea_ptr->in_bored_animation = false;
+    m->set_timer(
+        game.rng.f(LEADER::BORED_ANIM_MIN_DELAY, LEADER::BORED_ANIM_MAX_DELAY)
+    );
+}
+
+
+/**
  * @brief When a leader should check how much damage they've caused
  * with their punch.
  *
@@ -1717,6 +1754,32 @@ void leader_fsm::check_punch_damage(mob* m, void* info1, void* info2) {
     ) {
         game.statistics.punch_damage_caused += damage;
     }
+}
+
+
+/**
+ * @brief When a leader has to clear any data about being bored.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void leader_fsm::clear_boredom_data(mob* m, void* info1, void* info2) {
+    leader* lea_ptr = (leader*) m;
+    leader_fsm::clear_timer(m, info1, info2);
+    lea_ptr->in_bored_animation = false;
+}
+
+
+/**
+ * @brief When a Pikmin has to clear any timer set.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void leader_fsm::clear_timer(mob* m, void* info1, void* info2) {
+    m->set_timer(0);
 }
 
 
@@ -1862,6 +1925,10 @@ void leader_fsm::enter_idle(mob* m, void* info1, void* info2) {
     m->unfocus_from_mob();
     m->set_animation(
         LEADER_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
+    );
+    
+    m->set_timer(
+        game.rng.f(LEADER::BORED_ANIM_MIN_DELAY, LEADER::BORED_ANIM_MAX_DELAY)
     );
 }
 
@@ -2542,6 +2609,40 @@ void leader_fsm::stand_still(mob* m, void* info1, void* info2) {
 
 
 /**
+ * @brief When a leader should start a random boredom animation.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void leader_fsm::start_boredom_anim(mob* m, void* info1, void* info2) {
+    leader* lea_ptr = (leader*) m;
+    
+    size_t looking_around_anim_idx =
+        m->type->anim_db->find_animation("looking_around");
+    size_t sitting_anim_idx =
+        m->type->anim_db->find_animation("sitting");
+    size_t lounging_anim_idx =
+        m->type->anim_db->find_animation("stretching");
+    vector<size_t> boredom_anims;
+    if(looking_around_anim_idx != INVALID) {
+        boredom_anims.push_back(looking_around_anim_idx);
+    }
+    if(sitting_anim_idx != INVALID) {
+        boredom_anims.push_back(sitting_anim_idx);
+    }
+    if(lounging_anim_idx != INVALID) {
+        boredom_anims.push_back(lounging_anim_idx);
+    }
+    
+    if(boredom_anims.empty()) return;
+    size_t anim_idx = boredom_anims[game.rng.i(0, (int) (boredom_anims.size() - 1))];
+    m->set_animation(anim_idx, START_ANIM_OPTION_NORMAL, false);
+    lea_ptr->in_bored_animation = true;
+}
+
+
+/**
  * @brief When a leader must start chasing another.
  *
  * @param m The mob.
@@ -2750,6 +2851,9 @@ void leader_fsm::stop_go_here(mob* m, void* info1, void* info2) {
 void leader_fsm::stop_in_group(mob* m, void* info1, void* info2) {
     m->stop_chasing();
     leader_fsm::set_stop_anim(m, nullptr, nullptr);
+    m->set_timer(
+        game.rng.f(LEADER::BORED_ANIM_MIN_DELAY, LEADER::BORED_ANIM_MAX_DELAY)
+    );
 }
 
 

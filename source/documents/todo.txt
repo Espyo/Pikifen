@@ -9,6 +9,7 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    Clicking to select a part of the spritesheet isn't working
     Geyser sound effects play even off-screen?
     If two hazards have the same name, the hazard selector pop-up will complain
 
@@ -164,6 +165,8 @@ Next tasks (roughly sorted most important first)
     Leader animations
         New animations
             Bored
+                Sitting
+                Stretching
             Thrown (add to the logic of bouncers too, including Pikmin)
             Climbing (add the track logic too)
             Sliding (add the track logic too)

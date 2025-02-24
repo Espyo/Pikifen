@@ -147,6 +147,62 @@ animations{
 			}
 		}
 	}
+	looking_around{
+		frames{
+			idling{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_01{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_02{
+				duration=0.2000
+				interpolate=true
+			}
+			looking_around_03{
+				duration=0.6000
+				interpolate=true
+			}
+			looking_around_03{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_02{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_01{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_04{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_05{
+				duration=0.2000
+				interpolate=true
+			}
+			looking_around_06{
+				duration=0.6000
+				interpolate=true
+			}
+			looking_around_06{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_05{
+				duration=0.1000
+				interpolate=true
+			}
+			looking_around_04{
+				duration=0.1000
+				interpolate=true
+			}
+		}
+	}
 	lying{
 		loop_frame=2
 		frames{
@@ -668,6 +724,150 @@ sprites{
 			}
 			body{
 				coords=-14.0000 0.0000 0.0000
+				height=46.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_01{
+		file=louie
+		file_pos=0.0000 0.0000
+		file_size=64.0000 64.0000
+		offset=0.0000 1.0000
+		scale=0.5000 0.5000
+		angle=0.4887
+		hitboxes{
+			fist{
+				coords=10.0000 10.0000 0.0000
+				height=46.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=46.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_02{
+		file=louie
+		file_pos=434.0000 65.0000
+		file_size=64.0000 64.0000
+		offset=-0.5000 1.5000
+		scale=0.5000 0.5000
+		angle=0.8727
+		hitboxes{
+			fist{
+				coords=10.0000 10.0000 0.0000
+				height=46.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=46.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_03{
+		file=louie
+		file_pos=434.0000 65.0000
+		file_size=64.0000 64.0000
+		offset=-1.0000 2.0000
+		scale=0.5000 0.5000
+		angle=1.0472
+		hitboxes{
+			fist{
+				coords=10.0000 10.0000 0.0000
+				height=46.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=46.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_04{
+		file=louie
+		file_pos=0.0000 0.0000
+		file_size=64.0000 64.0000
+		offset=-0.5000 -1.0000
+		scale=0.5000 0.5000
+		angle=5.7945
+		hitboxes{
+			fist{
+				coords=10.0000 10.0000 0.0000
+				height=46.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=46.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_05{
+		file=louie
+		file_pos=499.0000 65.0000
+		file_size=64.0000 64.0000
+		offset=-1.0000 -2.0000
+		scale=0.5000 0.5000
+		angle=5.4105
+		hitboxes{
+			fist{
+				coords=10.0000 10.0000 0.0000
+				height=46.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=46.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	looking_around_06{
+		file=louie
+		file_pos=499.0000 65.0000
+		file_size=64.0000 64.0000
+		offset=-1.0000 -2.0000
+		scale=0.5000 0.5000
+		angle=5.2360
+		hitboxes{
+			fist{
+				coords=10.0000 10.0000 0.0000
+				height=46.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
 				height=46.0000
 				radius=16.0000
 				type=0

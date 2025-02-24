@@ -30,6 +30,12 @@ const float AUTO_THROW_COOLDOWN_MIN_DURATION = THROW_COOLDOWN_DURATION * 1.2f;
 //Auto-throw cooldown lowers at this speed.
 const float AUTO_THROW_COOLDOWN_SPEED = 0.3f;
 
+//Maximum amount of time for the random boredom animation delay.
+const float BORED_ANIM_MAX_DELAY = 5.0f;
+
+//Minimum amount of time for hte random boredom animation delay.
+const float BORED_ANIM_MIN_DELAY = 1.0f;
+
 //Members cannot go past this range from the angle of dismissal.
 const float DISMISS_ANGLE_RANGE = TAU / 2;
 

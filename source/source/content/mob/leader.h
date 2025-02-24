@@ -26,6 +26,8 @@ namespace LEADER {
 extern const float AUTO_THROW_COOLDOWN_MAX_DURATION;
 extern const float AUTO_THROW_COOLDOWN_MIN_DURATION;
 extern const float AUTO_THROW_COOLDOWN_SPEED;
+extern const float BORED_ANIM_MAX_DELAY;
+extern const float BORED_ANIM_MIN_DELAY;
 extern const float DISMISS_ANGLE_RANGE;
 extern const float DISMISS_MEMBER_SIZE_MULTIPLIER;
 extern const size_t DISMISS_PARTICLE_AMOUNT;
@@ -135,6 +137,9 @@ public:
     
     //Timer for the animation of the health wheel's caution ring.
     float health_wheel_caution_timer = 0.0f;
+    
+    //Is it currently doing some boredom-related animation?
+    bool in_bored_animation = false;
     
     //Temporary variable. Hacky, but effective. Only use within the same state!
     size_t temp_i = 0;
