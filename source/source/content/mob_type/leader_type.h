@@ -124,6 +124,9 @@ enum LEADER_STATE {
     //Thrown.
     LEADER_STATE_THROWN,
     
+    //Thrown, inactive.
+    LEADER_STATE_INACTIVE_THROWN,
+    
     //Drinking a drop.
     LEADER_STATE_DRINKING,
     

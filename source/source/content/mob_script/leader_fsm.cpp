@@ -547,7 +547,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_TOUCHED_BOUNCER); {
             efc.run(leader_fsm::be_thrown_by_bouncer);
-            efc.change_state("thrown");
+            efc.change_state("inactive_thrown");
         }
         efc.new_event(MOB_EV_TOUCHED_HAZARD); {
             efc.run(leader_fsm::touched_hazard);
@@ -1245,6 +1245,31 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
             efc.run(leader_fsm::fall_down_pit);
+            efc.change_state("active");
+        }
+    }
+    
+    efc.new_state("inactive_thrown", LEADER_STATE_INACTIVE_THROWN); {
+        efc.new_event(MOB_EV_ON_LEAVE); {
+            efc.run(leader_fsm::stop_being_thrown);
+        }
+        efc.new_event(MOB_EV_LANDED); {
+            efc.run(leader_fsm::land);
+        }
+        efc.new_event(MOB_EV_TOUCHED_HAZARD); {
+            efc.run(leader_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EV_LEFT_HAZARD); {
+            efc.run(leader_fsm::left_hazard);
+        }
+        efc.new_event(MOB_EV_TOUCHED_SPRAY); {
+            efc.run(leader_fsm::touched_spray);
+        }
+        efc.new_event(MOB_EV_TOUCHED_BOUNCER); {
+            efc.run(leader_fsm::be_thrown_by_bouncer);
+        }
+        efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
+            efc.run(leader_fsm::fall_down_pit);
             efc.change_state("idling");
         }
     }
@@ -1421,7 +1446,11 @@ void leader_fsm::be_thrown(mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void leader_fsm::be_thrown_by_bouncer(mob* m, void* info1, void* info2) {
-    ((leader*) m)->start_throw_trail();
+    leader* lea_ptr = (leader*) m;
+    lea_ptr->start_throw_trail();
+    if(!lea_ptr->active) {
+        lea_ptr->leave_group();
+    }
 }
 
 
