@@ -136,6 +136,9 @@ public:
     //Timer for the animation of the health wheel's caution ring.
     float health_wheel_caution_timer = 0.0f;
     
+    //Temporary variable. Hacky, but effective. Only use within the same state!
+    size_t temp_i = 0;
+    
     
     //--- Function declarations ---
     

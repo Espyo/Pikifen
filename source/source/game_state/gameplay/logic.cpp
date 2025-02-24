@@ -253,6 +253,22 @@ void gameplay_state::do_gameplay_leader_logic(float delta_t) {
         notification_done = true;
     }
     
+    //Get up notification.
+    if(
+        !notification_done &&
+        cur_leader_ptr->fsm.cur_state->id == LEADER_STATE_KNOCKED_DOWN
+    ) {
+        notification.set_enabled(true);
+        notification.set_contents(
+            game.controls.find_bind(PLAYER_ACTION_TYPE_WHISTLE).input,
+            "Get up",
+            point(
+                cur_leader_ptr->pos.x,
+                cur_leader_ptr->pos.y - cur_leader_ptr->radius
+            )
+        );
+        notification_done = true;
+    }
     //Auto-throw stop notification.
     if(
         !notification_done &&

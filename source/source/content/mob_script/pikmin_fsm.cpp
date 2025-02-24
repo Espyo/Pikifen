@@ -1181,6 +1181,10 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_TOUCHED_SPRAY); {
             efc.run(pikmin_fsm::touched_spray);
         }
+        efc.new_event(MOB_EV_TOUCHED_BOUNCER); {
+            efc.run(pikmin_fsm::be_thrown_by_bouncer);
+            efc.change_state("thrown");
+        }
         efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
         }

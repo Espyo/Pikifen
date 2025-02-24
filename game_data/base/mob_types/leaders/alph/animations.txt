@@ -104,18 +104,13 @@ animations{
 			}
 		}
 	}
-	knocked_down{
+	knocked_back{
+		loop_frame=1
 		frames{
-			half_lying{
-				duration=0.1000
-			}
-			lying{
-				duration=1.0000
-			}
-			half_lying{
-				duration=0.1000
-			}
 			idling{
+				duration=0.1000
+			}
+			half_lying{
 				duration=0.1000
 			}
 		}

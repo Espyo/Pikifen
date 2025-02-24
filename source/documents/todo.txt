@@ -5,14 +5,14 @@
     create an RC
 
 Current tasks (tasks being worked on, but not yet committed)
-    
+    Pikmin getting up animation could have the same juice as the leader one
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    
+    Geyser sound effects play even off-screen?
+    If two hazards have the same name, the hazard selector pop-up will complain
 
     --- 0.26 ---
-    Leaders should have knocked back and knocked down animations and states like Pikmin, and should be able to get up faster by right-clicking
     Revamp sounds
         Candidate list of all needed sounds, for now
             Pikmin
@@ -163,7 +163,6 @@ Next tasks (roughly sorted most important first)
         The left side should be all organic, and the right side should have some DEV Lab stuff. The bottom should probably be something special but not attention-grabbing, the top should give space for the Pikmin to form the letters, and the topmost pixels should probably help the disclaimer text and version number readable, but not call attention
     Leader animations
         New animations
-            Idling (bobbing a bit so they aren't static)
             Called
             Bored
             Thrown (add to the logic of bouncers too, including Pikmin)

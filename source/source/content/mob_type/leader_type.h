@@ -18,6 +18,8 @@
 
 
 namespace LEADER_TYPE {
+extern const float DEF_KNOCKED_DOWN_DURATION;
+extern const float DEF_KNOCKED_DOWN_WHISTLE_BONUS;
 extern const float DEF_WHISTLE_RANGE;
 }
 
@@ -55,11 +57,23 @@ enum LEADER_STATE {
     //In pain, inactive.
     LEADER_STATE_INACTIVE_PAIN,
     
-    //Knocked back.
+    //Getting knocked back.
     LEADER_STATE_KNOCKED_BACK,
     
-    //Knocked back, inactive.
+    //Getting knocked back, inactive.
     LEADER_STATE_INACTIVE_KNOCKED_BACK,
+    
+    //Knocked down on the floor.
+    LEADER_STATE_KNOCKED_DOWN,
+    
+    //Knocked down on the floor, inactive.
+    LEADER_STATE_INACTIVE_KNOCKED_DOWN,
+    
+    //Getting up from the floor.
+    LEADER_STATE_GETTING_UP,
+    
+    //Getting up from the floor, inactive.
+    LEADER_STATE_INACTIVE_GETTING_UP,
     
     //Dying.
     LEADER_STATE_DYING,
@@ -177,7 +191,7 @@ enum LEADER_ANIM {
     LEADER_ANIM_PAIN,
     
     //Knocked down.
-    LEADER_ANIM_KNOCKED_DOWN,
+    LEADER_ANIM_KNOCKED_BACK,
     
     //Spraying.
     LEADER_ANIM_SPRAYING,
@@ -231,6 +245,12 @@ public:
     
     //How high it can reach when thrown.
     float max_throw_height = 0.0f;
+    
+    //How long it stays on the floor for after knocked down, if left alone.
+    float knocked_down_duration = LEADER_TYPE::DEF_KNOCKED_DOWN_DURATION;
+    
+    //A whistled Pikmin that got knocked down loses this much in lie-down time.
+    float knocked_down_whistle_bonus = LEADER_TYPE::DEF_KNOCKED_DOWN_WHISTLE_BONUS;
     
     //Standby icon.
     ALLEGRO_BITMAP* bmp_icon = nullptr;

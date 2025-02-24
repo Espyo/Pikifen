@@ -446,17 +446,12 @@ void leader_fsm::create_fsm(mob_type* typ) {
     
     efc.new_state("knocked_back", LEADER_STATE_KNOCKED_BACK); {
         efc.new_event(MOB_EV_ON_ENTER); {
-            efc.run(leader_fsm::set_knocked_back_anim);
-        }
-        efc.new_event(LEADER_EV_INACTIVATED); {
-            efc.run(leader_fsm::become_inactive);
-            efc.change_state("inactive_knocked_back");
+            efc.run(leader_fsm::get_knocked_back);
         }
         efc.new_event(MOB_EV_LANDED); {
-            efc.run(leader_fsm::lose_momentum);
-        }
-        efc.new_event(MOB_EV_ANIMATION_END); {
-            efc.change_state("active");
+            efc.run(leader_fsm::stop);
+            efc.run(leader_fsm::get_knocked_down);
+            efc.change_state("knocked_down");
         }
         efc.new_event(MOB_EV_TOUCHED_HAZARD); {
             efc.run(leader_fsm::touched_hazard);
@@ -477,17 +472,41 @@ void leader_fsm::create_fsm(mob_type* typ) {
         "inactive_knocked_back", LEADER_STATE_INACTIVE_KNOCKED_BACK
     ); {
         efc.new_event(MOB_EV_ON_ENTER); {
-            efc.run(leader_fsm::set_knocked_back_anim);
-        }
-        efc.new_event(LEADER_EV_ACTIVATED); {
-            efc.run(leader_fsm::become_active);
-            efc.change_state("knocked_back");
+            efc.run(leader_fsm::get_knocked_back);
         }
         efc.new_event(MOB_EV_LANDED); {
-            efc.run(leader_fsm::lose_momentum);
+            efc.run(leader_fsm::stop);
+            efc.run(leader_fsm::get_knocked_down);
+            efc.change_state("inactive_knocked_down");
         }
-        efc.new_event(MOB_EV_ANIMATION_END); {
-            efc.change_state("idling");
+        efc.new_event(MOB_EV_TOUCHED_HAZARD); {
+            efc.run(leader_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EV_LEFT_HAZARD); {
+            efc.run(leader_fsm::left_hazard);
+        }
+        efc.new_event(MOB_EV_TOUCHED_BOUNCER); {
+            efc.run(leader_fsm::be_thrown_by_bouncer);
+            efc.change_state("inactive_thrown");
+        }
+        efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
+            efc.run(leader_fsm::fall_down_pit);
+        }
+    }
+    
+    efc.new_state("knocked_down", LEADER_STATE_KNOCKED_DOWN); {
+        efc.new_event(LEADER_EV_INACTIVATED); {
+            efc.run(leader_fsm::become_inactive);
+            efc.change_state("inactive_knocked_down");
+        }
+        efc.new_event(LEADER_EV_CANCEL); {
+            efc.run(leader_fsm::get_up_faster);
+        }
+        efc.new_event(MOB_EV_TIMER); {
+            efc.change_state("getting_up");
+        }
+        efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
+            efc.run(leader_fsm::be_attacked);
         }
         efc.new_event(MOB_EV_TOUCHED_HAZARD); {
             efc.run(leader_fsm::touched_hazard);
@@ -501,7 +520,91 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
             efc.run(leader_fsm::fall_down_pit);
-            efc.change_state("idling");
+        }
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
+            efc.change_state("dying");
+        }
+    }
+    
+    efc.new_state(
+        "inactive_knocked_down", LEADER_STATE_INACTIVE_KNOCKED_DOWN
+    ); {
+        efc.new_event(LEADER_EV_ACTIVATED); {
+            efc.run(leader_fsm::become_active);
+            efc.change_state("knocked_down");
+        }
+        efc.new_event(MOB_EV_TIMER); {
+            efc.change_state("inactive_getting_up");
+        }
+        efc.new_event(MOB_EV_WHISTLED); {
+            efc.run(leader_fsm::get_up_faster);
+            efc.run(leader_fsm::called_while_knocked_down);
+        }
+        efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
+            efc.run(leader_fsm::be_attacked);
+        }
+        efc.new_event(MOB_EV_TOUCHED_HAZARD); {
+            efc.run(leader_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EV_LEFT_HAZARD); {
+            efc.run(leader_fsm::left_hazard);
+        }
+        efc.new_event(MOB_EV_TOUCHED_BOUNCER); {
+            efc.run(leader_fsm::be_thrown_by_bouncer);
+            efc.change_state("inactive_thrown");
+        }
+        efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
+            efc.run(leader_fsm::fall_down_pit);
+        }
+        efc.new_event(MOB_EV_ZERO_HEALTH); {
+            efc.change_state("dying");
+        }
+    }
+    
+    efc.new_state("getting_up", LEADER_STATE_GETTING_UP); {
+        efc.new_event(MOB_EV_ON_ENTER); {
+            efc.run(leader_fsm::start_getting_up);
+        }
+        efc.new_event(MOB_EV_ANIMATION_END); {
+            efc.run(leader_fsm::finish_getting_up);
+        }
+        efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
+            efc.run(leader_fsm::be_attacked);
+        }
+        efc.new_event(MOB_EV_TOUCHED_HAZARD); {
+            efc.run(leader_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EV_LEFT_HAZARD); {
+            efc.run(leader_fsm::left_hazard);
+        }
+        efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
+            efc.run(leader_fsm::fall_down_pit);
+        }
+    }
+    
+    efc.new_state(
+        "inactive_getting_up", LEADER_STATE_INACTIVE_GETTING_UP
+    ); {
+        efc.new_event(MOB_EV_ON_ENTER); {
+            efc.run(leader_fsm::start_getting_up);
+        }
+        efc.new_event(MOB_EV_ANIMATION_END); {
+            efc.run(leader_fsm::finish_getting_up);
+        }
+        efc.new_event(MOB_EV_WHISTLED); {
+            efc.run(leader_fsm::called_while_knocked_down);
+        }
+        efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
+            efc.run(leader_fsm::be_attacked);
+        }
+        efc.new_event(MOB_EV_TOUCHED_HAZARD); {
+            efc.run(leader_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EV_LEFT_HAZARD); {
+            efc.run(leader_fsm::left_hazard);
+        }
+        efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
+            efc.run(leader_fsm::fall_down_pit);
         }
     }
     
@@ -1534,6 +1637,24 @@ void leader_fsm::become_inactive(mob* m, void* info1, void* info2) {
 
 
 /**
+ * @brief When a leader that is knocked down is called over by another leader,
+ * by whistling them.
+ *
+ * @param m The mob.
+ * @param info1 Pointer to the leader that called.
+ * @param info2 Unused.
+ */
+void leader_fsm::called_while_knocked_down(mob* m, void* info1, void* info2) {
+    engine_assert(info1 != nullptr, m->print_state_history());
+    
+    leader* lea_ptr = (leader*) m;
+    mob* caller = (mob*) info1;
+    
+    lea_ptr->focus_on_mob(caller);
+}
+
+
+/**
  * @brief When a leader should check how much damage they've caused
  * with their punch.
  *
@@ -1696,6 +1817,7 @@ void leader_fsm::enter_active(mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void leader_fsm::enter_idle(mob* m, void* info1, void* info2) {
+    m->unfocus_from_mob();
     m->set_animation(
         LEADER_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
     );
@@ -1766,6 +1888,33 @@ void leader_fsm::finish_drinking(mob* m, void* info1, void* info2) {
 
 
 /**
+ * @brief When a leader finishes getting up from being knocked down.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void leader_fsm::finish_getting_up(mob* m, void* info1, void* info2) {
+    mob* prev_focused_mob = m->focused_mob;
+    
+    if(m == game.states.gameplay->cur_leader_ptr) {
+        m->fsm.set_state(LEADER_STATE_ACTIVE);
+    } else {
+        m->fsm.set_state(LEADER_STATE_IDLING);
+    }
+    
+    if(prev_focused_mob) {
+        if(
+            prev_focused_mob->type->category->id == MOB_CATEGORY_LEADERS &&
+            !m->can_hunt(prev_focused_mob)
+        ) {
+            m->fsm.run_event(MOB_EV_WHISTLED, (void*) prev_focused_mob);
+        }
+    }
+}
+
+
+/**
  * @brief When the leader finishes the animation of the current pluck.
  *
  * @param m The mob.
@@ -1776,6 +1925,63 @@ void leader_fsm::finish_pluck(mob* m, void* info1, void* info2) {
     leader* lea_ptr = (leader*) m;
     lea_ptr->stop_chasing();
     lea_ptr->set_animation(LEADER_ANIM_IDLING);
+}
+
+
+/**
+ * @brief When a leader needs gets knocked back.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void leader_fsm::get_knocked_back(mob* m, void* info1, void* info2) {
+    m->unfocus_from_mob();
+    m->set_animation(LEADER_ANIM_KNOCKED_BACK);
+}
+
+
+/**
+ * @brief When a leader gets knocked back and lands on the floor.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void leader_fsm::get_knocked_down(mob* m, void* info1, void* info2) {
+    leader* lea_ptr = (leader*) m;
+    
+    //Let's use the "temp" variable to specify whether or not
+    //it already received the getting up timer bonus.
+    lea_ptr->temp_i = 0;
+    
+    m->set_timer(lea_ptr->lea_type->knocked_down_duration);
+    
+    m->set_animation(LEADER_ANIM_LYING);
+}
+
+
+/**
+ * @brief When a leader must get up faster from being knocked down.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void leader_fsm::get_up_faster(mob* m, void* info1, void* info2) {
+    leader* lea_ptr = (leader*) m;
+    
+    //Let's use the "temp" variable to specify whether or not
+    //it already received the getting up timer bonus.
+    if(lea_ptr->temp_i == 1) return;
+    
+    lea_ptr->script_timer.time_left =
+        std::max(
+            0.01f,
+            lea_ptr->script_timer.time_left -
+            lea_ptr->lea_type->knocked_down_whistle_bonus
+        );
+    lea_ptr->temp_i = 1;
 }
 
 
@@ -2076,18 +2282,6 @@ void leader_fsm::search_seed(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::set_knocked_back_anim(mob* m, void* info1, void* info2) {
-    m->set_animation(LEADER_ANIM_KNOCKED_DOWN);
-}
-
-
-/**
- * @brief When a leader needs to change to the knocked back animation.
- *
- * @param m The mob.
- * @param info1 Unused.
- * @param info2 Unused.
- */
 void leader_fsm::set_pain_anim(mob* m, void* info1, void* info2) {
     m->set_animation(LEADER_ANIM_PAIN);
 }
@@ -2293,6 +2487,18 @@ void leader_fsm::start_drinking(mob* m, void* info1, void* info2) {
 
 
 /**
+ * @brief When a leader starts getting up from being knocked down.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void leader_fsm::start_getting_up(mob* m, void* info1, void* info2) {
+    m->set_animation(LEADER_ANIM_GETTING_UP);
+}
+
+
+/**
  * @brief When a leader starts a Go Here walk.
  *
  * @param m The mob.
@@ -2410,7 +2616,11 @@ void leader_fsm::start_waking_up(mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void leader_fsm::stop(mob* m, void* info1, void* info2) {
+    m->stop_circling();
+    m->stop_following_path();
     m->stop_chasing();
+    m->stop_turning();
+    m->speed.x = m->speed.y = 0;
 }
 
 

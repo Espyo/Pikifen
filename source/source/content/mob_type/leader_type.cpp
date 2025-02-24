@@ -21,6 +21,12 @@
 
 namespace LEADER_TYPE {
 
+//How long a leader that got knocked down stays on the floor for, if left alone.
+const float DEF_KNOCKED_DOWN_DURATION = 1.8f;
+
+//A whistled leader that got knocked down loses this much in lie-down time.
+const float DEF_KNOCKED_DOWN_WHISTLE_BONUS = 1.2f;
+
 //The whistle can't go past this radius, by default.
 const float DEF_WHISTLE_RANGE = 80.0f;
 
@@ -71,7 +77,7 @@ anim_conversion_vector leader_type::get_anim_conversions() const {
     v.push_back(std::make_pair(LEADER_ANIM_PUNCHING,     "punching"));
     v.push_back(std::make_pair(LEADER_ANIM_LYING,        "lying"));
     v.push_back(std::make_pair(LEADER_ANIM_PAIN,         "pain"));
-    v.push_back(std::make_pair(LEADER_ANIM_KNOCKED_DOWN, "knocked_down"));
+    v.push_back(std::make_pair(LEADER_ANIM_KNOCKED_BACK, "knocked_back"));
     v.push_back(std::make_pair(LEADER_ANIM_SPRAYING,     "spraying"));
     v.push_back(std::make_pair(LEADER_ANIM_DRINKING,     "drinking"));
     v.push_back(std::make_pair(LEADER_ANIM_KO,           "ko"));
@@ -87,6 +93,8 @@ anim_conversion_vector leader_type::get_anim_conversions() const {
 void leader_type::load_cat_properties(data_node* file) {
     reader_setter rs(file);
     
+    rs.set("knocked_down_duration", knocked_down_duration);
+    rs.set("knocked_down_whistle_bonus", knocked_down_whistle_bonus);
     rs.set("max_throw_height", max_throw_height);
     rs.set("whistle_range", whistle_range);
     
