@@ -1,4 +1,4 @@
-name = White Spectralid
+name = White Spectralids
 description = A simple, gentle flying creature. It's hard to hit, but likes to stop and rest at home periodically.
 
 can_hunt = player; enemy

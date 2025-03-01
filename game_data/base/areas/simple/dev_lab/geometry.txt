@@ -12355,7 +12355,7 @@ mobs{
 		vars=text=Enemies, peaceful
 	}
 	enemy{
-		type=white_spectralid
+		type=white_spectralids
 		p=-768.0000 -1312.0000
 	}
 	bouncer{

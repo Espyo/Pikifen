@@ -5963,7 +5963,7 @@ mobs{
 		p=-112.0000 272.0000
 	}
 	enemy{
-		type=white_spectralid
+		type=white_spectralids
 		p=1152.0000 -864.0000
 	}
 	enemy{
@@ -5991,7 +5991,7 @@ mobs{
 		p=213.2596 -556.7504
 	}
 	enemy{
-		type=white_spectralid
+		type=white_spectralids
 		p=223.1530 436.8431
 		angle=2.0204
 	}
@@ -6098,19 +6098,19 @@ mobs{
 		angle=2.8431
 	}
 	enemy{
-		type=white_spectralid
+		type=white_spectralids
 		p=1418.3999 -1017.0000
 	}
 	enemy{
-		type=white_spectralid
+		type=white_spectralids
 		p=1785.6000 -1036.7999
 	}
 	enemy{
-		type=white_spectralid
+		type=white_spectralids
 		p=1159.2000 -1107.0000
 	}
 	enemy{
-		type=white_spectralid
+		type=white_spectralids
 		p=1517.3999 -1222.2000
 	}
 	decoration{
@@ -6304,7 +6304,7 @@ mobs{
 		p=232.0000 192.0000
 	}
 	enemy{
-		type=white_spectralid
+		type=white_spectralids
 		p=-94.7534 409.4564
 		angle=-1.0163
 	}
@@ -6335,27 +6335,27 @@ mobs{
 		stored_inside=107
 	}
 	enemy{
-		type=white_spectralid
+		type=white_spectralids
 		p=-880.7999 1132.7999
 		stored_inside=60
 	}
 	enemy{
-		type=white_spectralid
+		type=white_spectralids
 		p=-823.2000 1219.2000
 		stored_inside=60
 	}
 	enemy{
-		type=white_spectralid
+		type=white_spectralids
 		p=-1053.6000 1363.2000
 		stored_inside=60
 	}
 	enemy{
-		type=white_spectralid
+		type=white_spectralids
 		p=-1139.9999 1219.2000
 		stored_inside=60
 	}
 	enemy{
-		type=white_spectralid
+		type=white_spectralids
 		p=-1024.7999 1104.0000
 		stored_inside=60
 	}

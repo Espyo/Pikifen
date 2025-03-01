@@ -8312,7 +8312,7 @@ mobs{
 		angle=2.0702
 	}
 	enemy{
-		type=white_spectralid
+		type=white_spectralids
 		p=-240.0000 204.0000
 	}
 	custom{
