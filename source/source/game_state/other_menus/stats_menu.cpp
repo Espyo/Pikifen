@@ -297,16 +297,7 @@ void stats_menu_t::populate_stats_list() {
     for(size_t a = 0; a < game.content.areas.list[AREA_TYPE_MISSION].size(); a++) {
         area_data* area_ptr = game.content.areas.list[AREA_TYPE_MISSION][a];
         mission_record record;
-        load_area_mission_record(
-            &mission_records_file,
-            area_ptr->name,
-            get_subtitle_or_mission_goal(
-                area_ptr->subtitle, AREA_TYPE_MISSION, area_ptr->mission.goal
-            ),
-            area_ptr->maker,
-            area_ptr->version,
-            record
-        );
+        load_area_mission_record(&mission_records_file, area_ptr, record);
         if(record.clear) {
             mission_clears++;
         }

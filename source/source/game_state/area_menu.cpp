@@ -326,6 +326,13 @@ void area_menu_state::change_info(size_t area_idx) {
                     add_bullet(grading_list, loss_notes[l]);
                 }
             }
+            if(!mission.maker_record_date.empty()) {
+                add_bullet(
+                    grading_list,
+                    "Maker's record: " + i2s(mission.maker_record) +
+                    " (" + mission.maker_record_date + ")"
+                );
+            }
             break;
         }
         case MISSION_GRADING_MODE_GOAL: {
@@ -928,16 +935,7 @@ void area_menu_state::load() {
             area_data* area_ptr = game.content.areas.list[AREA_TYPE_MISSION][a];
             mission_record record;
             
-            load_area_mission_record(
-                &mission_records,
-                area_ptr->name,
-                get_subtitle_or_mission_goal(
-                    area_ptr->subtitle, area_type, area_ptr->mission.goal
-                ),
-                area_ptr->maker,
-                area_ptr->version,
-                record
-            );
+            load_area_mission_record(&mission_records, area_ptr, record);
             
             area_records.push_back(record);
         }

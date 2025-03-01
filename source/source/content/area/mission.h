@@ -246,6 +246,12 @@ struct mission_data {
     
     //Platinum medal point requirement.
     int platinum_req = MISSION::DEF_MEDAL_REQ_PLATINUM;
+
+    //The maker's record.
+    int maker_record = 0;
+
+    //The date of the maker's record, or empty for no record.
+    string maker_record_date = "";
     
 };
 

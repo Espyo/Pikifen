@@ -33,23 +33,14 @@ using std::set;
  * @brief Loads a mission's record.
  *
  * @param file File data node to load from.
- * @param area_name Name of the area.
- * @param area_subtitle Area subtitle, or mission goal if none.
- * @param area_maker Area maker.
- * @param area_version Area version.
+ * @param area_ptr The area's data.
  * @param record Record object to fill.
  */
 void load_area_mission_record(
-    data_node* file,
-    const string &area_name, const string &area_subtitle,
-    const string &area_maker, const string &area_version,
-    mission_record &record
+    data_node* file, area_data* area_ptr, mission_record &record
 ) {
     string mission_record_entry_name =
-        area_name + ";" +
-        area_subtitle + ";" +
-        area_maker + ";" +
-        area_version;
+        get_mission_record_entry_name(area_ptr);
         
     vector<string> record_parts =
         split(

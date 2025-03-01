@@ -115,6 +115,7 @@ ALLEGRO_COLOR get_ledge_smoothing_color(edge* e_ptr);
 ALLEGRO_COLOR get_liquid_limit_color(edge* e_ptr);
 float get_ledge_smoothing_length(edge* e_ptr);
 float get_liquid_limit_length(edge* e_ptr);
+string get_mission_record_entry_name(area_data* area_ptr);
 void get_next_edge(
     vertex* v_ptr, float pivot_angle, bool clockwise,
     const edge* ignore, edge** out_edge, float* out_angle, float* out_diff

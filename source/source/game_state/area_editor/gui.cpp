@@ -3801,6 +3801,37 @@ void area_editor::process_gui_panel_mission_grading() {
             "To get a platinum medal, the player needs at least these\n"
             "many points."
         );
+        
+        //Maker record value.
+        ImGui::Spacer();
+        int maker_record = game.cur_area_data->mission.maker_record;
+        ImGui::SetNextItemWidth(60);
+        if(ImGui::DragInt("Maker's record", &maker_record, 1.0f)) {
+            register_change("maker record change");
+            game.cur_area_data->mission.maker_record = maker_record;
+        }
+        set_tooltip(
+            "Specify your best score here, if you want.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
+        
+        //Maker record date input.
+        string maker_record_date =
+            game.cur_area_data->mission.maker_record_date;
+        ImGui::SetNextItemWidth(120);
+        if(
+            mono_input_text(
+                "Date (YYYY/MM/DD)", &maker_record_date
+            )
+        ) {
+            register_change("maker record change");
+            game.cur_area_data->mission.maker_record_date = maker_record_date;
+        }
+        set_tooltip(
+            "Specify the date in which you got your best score here,\n"
+            "if you want. Your record will only be saved if you write a date.\n"
+            "The format must be YYYY/MM/DD."
+        );
     }
 }
 

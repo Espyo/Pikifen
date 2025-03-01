@@ -56,7 +56,7 @@ const float JUICY_GROW_TEXT_LOW_MULT = 0.02f;
 const float JUICY_GROW_TEXT_MEDIUM_MULT = 0.05f;
 
 //Standard size of the content inside of a GUI item, in ratio.
-const float STANDARD_CONTENT_SIZE = 0.80f;
+const point STANDARD_CONTENT_SIZE = point(0.95f, 0.80f);
 
 }
 
@@ -1508,8 +1508,8 @@ void picker_gui_item::def_draw_code(const point &center, const point &size) {
     point arrow_regular_scale = point(1.0f);
     
     point arrow_box(
-        size.x * 0.10 * GUI::STANDARD_CONTENT_SIZE,
-        size.y * GUI::STANDARD_CONTENT_SIZE
+        size.x * 0.10 * GUI::STANDARD_CONTENT_SIZE.x,
+        size.y * GUI::STANDARD_CONTENT_SIZE.y
     );
     draw_text(
         "<",
@@ -1542,7 +1542,7 @@ void picker_gui_item::def_draw_code(const point &center, const point &size) {
     
     float juicy_grow_amount = this->get_juice_value();
     
-    point text_box(size.x * 0.80, size.y * GUI::STANDARD_CONTENT_SIZE);
+    point text_box(size.x * 0.80, size.y * GUI::STANDARD_CONTENT_SIZE.y);
     draw_text(
         this->base_text + this->option,
         game.sys_content.fnt_standard,

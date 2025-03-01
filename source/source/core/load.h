@@ -24,10 +24,7 @@ using std::string;
 
 
 void load_area_mission_record(
-    data_node* file,
-    const string &area_name, const string &area_subtitle,
-    const string &area_maker, const string &area_version,
-    mission_record &record
+    data_node* file, area_data* area_ptr, mission_record &record
 );
 ALLEGRO_AUDIO_STREAM* load_audio_stream(
     const string &file_name, data_node* node = nullptr,

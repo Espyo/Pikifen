@@ -29,3 +29,5 @@ mission_bronze_req=50
 mission_silver_req=100
 mission_gold_req=150
 mission_platinum_req=200
+mission_maker_record=228
+mission_maker_record_date=2025/03/01

@@ -143,37 +143,7 @@ void area_data::clear() {
     bg_color = COLOR_BLACK;
     bg_dist = 2.0f;
     bg_bmp_zoom = 1.0f;
-    mission.goal = MISSION_GOAL_END_MANUALLY;
-    mission.goal_all_mobs = true;
-    mission.goal_mob_idxs.clear();
-    mission.goal_amount = 1;
-    mission.goal_exit_center = point();
-    mission.goal_exit_size =
-        point(
-            MISSION::EXIT_MIN_SIZE,
-            MISSION::EXIT_MIN_SIZE
-        );
-    mission.fail_conditions = 0;
-    mission.fail_too_few_pik_amount = 0;
-    mission.fail_too_many_pik_amount = 1;
-    mission.fail_pik_killed = 1;
-    mission.fail_leaders_kod = 1;
-    mission.fail_enemies_killed = 1;
-    mission.fail_time_limit = MISSION::DEF_TIME_LIMIT;
-    mission.grading_mode = MISSION_GRADING_MODE_GOAL;
-    mission.points_per_pikmin_born = 0;
-    mission.points_per_pikmin_death = 0;
-    mission.points_per_sec_left = 0;
-    mission.points_per_sec_passed = 0;
-    mission.points_per_treasure_point = 0;
-    mission.points_per_enemy_point = 0;
-    mission.point_loss_data = 0;
-    mission.point_hud_data = 255;
-    mission.starting_points = 0;
-    mission.bronze_req = MISSION::DEF_MEDAL_REQ_BRONZE;
-    mission.silver_req = MISSION::DEF_MEDAL_REQ_SILVER;
-    mission.gold_req = MISSION::DEF_MEDAL_REQ_GOLD;
-    mission.platinum_req = MISSION::DEF_MEDAL_REQ_PLATINUM;
+    mission = mission_data();
     
     problems.non_simples.clear();
     problems.lone_edges.clear();
@@ -413,6 +383,8 @@ void area_data::clone(area_data &other) {
     other.mission.silver_req = mission.silver_req;
     other.mission.gold_req = mission.gold_req;
     other.mission.platinum_req = mission.platinum_req;
+    other.mission.maker_record = mission.maker_record;
+    other.mission.maker_record_date = mission.maker_record_date;
     
     other.problems.non_simples.clear();
     other.problems.lone_edges.clear();
@@ -1016,6 +988,8 @@ void area_data::load_mission_data_from_data_node(data_node* node) {
     rs.set("mission_silver_req", mission.silver_req);
     rs.set("mission_gold_req", mission.gold_req);
     rs.set("mission_platinum_req", mission.platinum_req);
+    rs.set("mission_maker_record", mission.maker_record);
+    rs.set("mission_maker_record_date", mission.maker_record_date);
     
     mission.goal = MISSION_GOAL_END_MANUALLY;
     for(size_t g = 0; g < game.mission_goals.size(); g++) {
@@ -2338,6 +2312,20 @@ void area_data::save_mission_data_to_data_node(data_node* node) {
                 i2s(mission.platinum_req)
             )
         );
+        if(!mission.maker_record_date.empty()) {
+            node->add(
+                new data_node(
+                    "mission_maker_record",
+                    i2s(mission.maker_record)
+                )
+            );
+            node->add(
+                new data_node(
+                    "mission_maker_record_date",
+                    mission.maker_record_date
+                )
+            );
+        }
     }
 }
 

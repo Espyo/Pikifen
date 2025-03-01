@@ -261,45 +261,36 @@ void results_state::load() {
     }
     
     //Record loading and saving logic.
-    bool old_record_clear = false;
-    int old_record_score = 0;
+    mission_record old_record;
     
     data_node mission_records;
     mission_records.load_file(FILE_PATHS_FROM_ROOT::MISSION_RECORDS, true, false, true);
-    string mission_record_entry_name =
-        game.cur_area_data->name + ";" +
-        get_subtitle_or_mission_goal(
-            game.cur_area_data->subtitle, game.cur_area_data->type,
-            game.cur_area_data->mission.goal
-        ) + ";" +
-        game.cur_area_data->maker + ";" +
-        game.cur_area_data->version;
+    string record_entry_name =
+        get_mission_record_entry_name(game.cur_area_data);
     data_node* entry_node;
-    if(
-        mission_records.get_nr_of_children_by_name(mission_record_entry_name) >
-        0
-    ) {
+    if(mission_records.get_nr_of_children_by_name(record_entry_name) > 0) {
         entry_node =
-            mission_records.get_child_by_name(mission_record_entry_name);
+            mission_records.get_child_by_name(record_entry_name);
     } else {
-        entry_node = new data_node(mission_record_entry_name, "");
+        entry_node = new data_node(record_entry_name, "");
         mission_records.add(entry_node);
     }
     
     vector<string> old_record_parts = split(entry_node->value, ";", true);
     
     if(old_record_parts.size() == 3) {
-        old_record_clear = old_record_parts[0] == "1";
-        old_record_score = s2i(old_record_parts[1]);
+        old_record.clear = old_record_parts[0] == "1";
+        old_record.score = s2i(old_record_parts[1]);
+        old_record.date = s2i(old_record_parts[2]);
     }
     
     bool is_new_record = false;
-    if(!old_record_clear && goal_was_cleared) {
+    if(!old_record.clear && goal_was_cleared) {
         is_new_record = true;
-    } else if(old_record_clear == goal_was_cleared) {
+    } else if(old_record.clear == goal_was_cleared) {
         if(
             game.cur_area_data->mission.grading_mode == MISSION_GRADING_MODE_POINTS &&
-            old_record_score < final_mission_score
+            old_record.score < final_mission_score
         ) {
             is_new_record = true;
         }
@@ -559,9 +550,9 @@ void results_state::load() {
                 "so the result won't be saved.";
         } else if(
             game.cur_area_data->mission.grading_mode == MISSION_GRADING_MODE_POINTS &&
-            old_record_clear &&
+            old_record.clear &&
             !goal_was_cleared &&
-            old_record_score < final_mission_score
+            old_record.score < final_mission_score
         ) {
             conclusion =
                 "High score, but the old record was a "
@@ -716,18 +707,30 @@ void results_state::load() {
         game.cur_area_data->type == AREA_TYPE_MISSION &&
         game.cur_area_data->mission.grading_mode == MISSION_GRADING_MODE_POINTS
     ) {
+        //Final score bullet.
         add_stat(
             "Final score:",
             i2s(final_mission_score),
             COLOR_GOLD
         );
         
+        //Old record bullet:
         add_stat(
-            "Old high score:",
-            i2s(old_record_score),
+            "Previous record:",
+            old_record.date.empty() ? "-" : i2s(old_record.score),
             COLOR_WHITE
         );
+        
+        //Maker's record bullet.
+        if(!game.cur_area_data->mission.maker_record_date.empty()) {
+            add_stat(
+                "Maker's record:",
+                i2s(game.cur_area_data->mission.maker_record),
+                COLOR_WHITE
+            );
+        }
     }
+    
     
     //Retry button.
     button_gui_item* retry_button =

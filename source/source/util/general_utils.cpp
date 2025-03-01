@@ -243,7 +243,8 @@ void timer::tick(float delta_t) {
 
 
 /**
- * @brief Returns a string representing the current date and time.
+ * @brief Returns a string representing the current date and time,
+ * in ISO 8601 format (YYYY/MM/DD)).
  *
  * @param file_name_friendly If true, slashes become dashes,
  * and semicolons become dots.

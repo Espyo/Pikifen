@@ -485,6 +485,25 @@ float get_liquid_limit_length(edge* e_ptr) {
 
 
 /**
+ * @brief Returns the name of the entry in a player records data file that
+ * refers to the given area.
+ *
+ * @param area_ptr The area.
+ * @return The entry name.
+ */
+string get_mission_record_entry_name(area_data* area_ptr) {
+    return
+        area_ptr->name + ";" +
+        get_subtitle_or_mission_goal(
+            area_ptr->subtitle, area_ptr->type,
+            area_ptr->mission.goal
+        ) + ";" +
+        area_ptr->maker + ";" +
+        area_ptr->version;
+}
+
+
+/**
  * @brief Returns an area's subtitle or, if none is specified,
  * the mission's goal.
  *
