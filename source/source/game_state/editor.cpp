@@ -2057,15 +2057,17 @@ bool editor::process_gui_hazard_management_widgets(
     //Hitbox hazard addition popup.
     vector<string> all_hazard_inames;
     vector<string> all_hazard_names;
+    vector<string> all_hazard_labels;
     for(auto &h : game.content.hazards.list) {
         all_hazard_inames.push_back(h.first);
         all_hazard_names.push_back(h.second.name);
+        all_hazard_labels.push_back(h.second.name + "##" + h.first);
     }
     
     int added_hazard_idx = -1;
     if(
         list_popup(
-            "addHazard", all_hazard_names, &added_hazard_idx, true
+            "addHazard", all_hazard_labels, &added_hazard_idx, true
         )
     ) {
         string hazard_iname = all_hazard_inames[added_hazard_idx];
