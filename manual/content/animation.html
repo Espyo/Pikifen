@@ -55,25 +55,6 @@
       </ul></dd>
     </dl>
     
-    <h3 id="using">Using the animation editor</h3>
-    
-    <dl>
-      <dt><b>The left-hand side is your canvas.</b></dt>
-      <dd>It shows you what the current sprite or animation looks like.</dd>
-      <dt><b>The right-hand side contains panels for you to edit properties with.</b><dt>
-      <dd>Depending on what you are editing, you can create body parts, choose a file for a sprite, set the timing for an animation's frame, etc.</dd>
-      <dt><b>The bottom-left is the status bar. It can help if you get stuck.</b></dt>
-      <dd>The status bar will let you know what just happened, whether an operation finished successfully, or something went wrong. If you're confused, check it out.</dd>
-      <dt><b>In the canvas, the left mouse button can be used to adjust some properties too.</b></dt>
-      <dd>For instance, if you're positioning a hitbox in a sprite, you can either use the panel to write the coordinates, or you can just drag the hitbox directly inside the canvas.</dd>
-      <dt><b>Use the right mouse button to pan, and the mouse wheel to zoom.</b></dt>
-      <dd>In the canvas, the right mouse button and mouse wheel control your view. Clicking and double-clicking the mouse wheel will also reset your zoom level and camera position, respectively.</dd>
-      <dt><b>Notes</b></dt>
-      <dd><ul>
-        <li>Check out the controls for the editor <a href="#controls">here</a>.</li>
-      </ul></dd>
-    </dl>
-    
     <h2 id="guide">Guide</h2>
     
     <h3 id="picking-file">Picking the animation database file</h3>
@@ -85,6 +66,10 @@
       <dd>To do so, from the engine's main menu, choose the "Animation editor" option.</dd>
       <dt><b>In the dialog, pick the object you are editing.</b></dt>
       <dd>When you boot the animation editor, you will be right away asked to pick an object to edit. There are multiple ways for you to select with, so go with the method you find most convenient. For this tutorial, pick your new enemy.</dd>
+      <dt><b>Notes</b></dt>
+      <dd><ul>
+        <li>You can learn more about how editors work <a href="editor.html">here</a>.</li>
+      </ul></dd>
     </dl>
     
     <h3 id="body-part">Making a body part</h3>
@@ -201,33 +186,23 @@
     <p>The folders <code>game_data/&lt;<a href="making.html#packs">pack</a>&gt;/animations</code> contain a list of custom animation databases that aren't necessarily bound to an object. These can include animations expected by other types of content, like the status effects or liquids, or even things expected by the engine, like the sparks around a hurt leader. These follow the same rules as all <a href="making.html#content">content</a>.</p>
 
     <h2 id="controls">Controls</h2>
-
-    <p>Though you can just use your mouse on the canvas and GUI, and use the keybord to type text on some GUI widgets, the animation editor has many other controls and shortcuts you can make use of.</p>
-    <p>Some controls will only work if the canvas is focused (i.e. if beforehand you have clicked inside the canvas with any mouse button), others only when the GUI is focused, and others regardless of focus. As a general rule, if it's a key that usually writes text or messes with textboxes, then you will need to focus on the canvas to get it to do the action, otherwise pressing the key would just interact with the widgets in the GUI.</p>
-    <p>Some menu items have keyboard shortcuts, which show up in the item itself, to the right. Some widgets also have keyboard shortcuts, and if you have tooltips on (they can be enabled in the menu bar's "Help" menu), you can keep your cursor over them to learn what they are. In addition some widgets have special controls in and of themselves, due to the way they were implemented in <a href="https://github.com/ocornut/imgui">Dear ImGui</a>, and these controls also show up in tooltips. Other than that, here are some general keyboard and mouse controls for the animation editor:</p>
+    
+    <p>On top of the general <a href="editor.html#controls">editor controls</a>, and the animation editor's shortcut keys, the following controls also exist:</p>
     
     <table>
-      <tr><th>Action</th><th>Focus</th><th>Control</th></tr>
-      <tr><td>Pan camera</td><td>Canvas</td><td>Arrow keys, or right mouse button</td></tr>
-      <tr><td>Zoom in and out</td><td>Canvas</td><td>Plus/Minus, or mouse wheel</td></tr>
-      <tr><td>Reset zoom; press again to reset camera position</td><td>Canvas</td><td>Zero, or middle mouse button</td></tr>
-      <tr><td>Change camera to fit whole scene snugly</td><td>Canvas</td><td>Home</td></tr>
-      <tr><td>Quit out of certain panels</td><td>GUI</td><td>Escape</td></tr>
       <tr><td>When scaling with the on-canvas transformation widget, lock the center instead</td><td>Canvas</td><td>Alt</td></tr>
     </table>
 
     <h2 id="tips">Tips</h2>
     
     <ul>
-      <li>Remember to save periodically. Although rare, it is possible for the editor to crash, or for you to quit accidentally, causing you to lose unsaved progress. Plus if you make a mistake, you can always go back that way.</li>
+      <li>Check out the general <a href="editor.html#tips">editor tips</a>.</li>
       <li>When making a spritesheet, try to add at least one row or column of empty pixels between each frame. Without this padding, some in-game sprites will have artifacts from a sprite right next to them, and when you click a section of the spritesheet to specify the bitmap, the editor could interpret a nearby pose as part of the same one.</li>
       <li>Due to the way graphics rendering works, it's recommended that spritesheets have a row and a column of empty pixels at the far bottom and far right.</li>
       <li>If your graphics are twice the resolution of your in-game size, you can enter the special tools from the main menu, and use the "Set all scales" tool. If they're twice as big, use the value "0.5" in this tool.</li>
       <li>If you have an enemy shaking animation, and only want a percentage of the Pikmin to be shaken of, you can lower the shake animation's "hit rate". For instance, if you use <code>70</code>, that means only 70% of the Pikmin that are latched on will get knocked off, on average. This can be used for other attacks too, not just shaking. This feature only affects Pikmin.</li>
       <li>When editing a sprite's hitboxes, if you have a large hitbox selected and you want to select one that's covered up by it, you can just click an area that is overlapped by both hitboxes, and the editor will toggle between the hitboxes in that spot.</li>
       <li>Pikmin immune to the hazards of a hitbox will completely ignore that hitbox. If you want immune Pikmin to still be hurt in some way, you should make a new hitbox (without hazards) and overlap it with the regular hazard hitbox. This is useful for example if you want a Pikmin that's immune to stabbing to still get knocked backwards when hit. Make this hitbox lower priority than the hazard one, otherwise all Pikmin will get hit by it first and never get the chance to interact with the hazard one!</li>
-      <li>Use the options (in the menu bar) to customize the editor to your liking.</li>
-      <li>Although most of the work is done in the editor, you are free to edit the <a href="making.html#data-file">data file</a> manually if you need to fine-tune some numbers. Be careful, though!</li>
     </ul>
 
   </div>

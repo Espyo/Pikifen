@@ -1,0 +1,98 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Pikifen manual</title>
+  <meta name="description" content="The Pikifen user manual">
+  
+  <link rel="stylesheet" href="../data/style.css">
+  <script src="../data/script.js"></script>
+</head>
+
+<body onload="setup('Editor', ['Making content'], ['making.html']);">
+  <div id="page-content">
+    
+    <h2 id="overview">Overview</h2>
+
+    <p><i>Pikifen</i> has a few editors that you can use when making content. For some content, you have to roll up your sleeves and edit <a href="making.html#data-file">data files</a> by hand, or move around some images or sounds, but for other content it's much easier to use its corresponding editor for a smoother experience.</p>
+
+    <p>Every editor is different, but they share some traits in common. This page will focus on those parts.</p>
+    
+    <h2 id="canvas">Canvas</h2>
+
+    <dl>
+      <dt><b>The left-hand side is the canvas.</b></dt>
+      <dd>It's a large rectangle where the engine draws a representation of whatever it is you're editing.</dd>
+
+      <dt><b>Most of the time you can control coordinate-based things here.</b></dt>
+      <dd>If the editor and mode you are in allows it, you can select things, drag them to move them, resize them, pinpoint specific coordinates, etc., instead of editing numbers blindly.</dd>
+      
+      <dt><b>Operations are done with the left mouse button.</b></dt>
+      <dd>As stated above, whenever you need to select something, move something, etc., you use the left mouse button.</dd>
+
+      <dt><b>Pan with the right mouse button (by default).</b></dt>
+      <dd>To move the "camera" of the editor and see stuff around where you are looking, just hold the right mouse button and move the mouse. You can change which button controls this in any editor's options dialog.</dd>
+      
+      <dt><b>Zoom in and out with the mouse wheel.</b></dt>
+      <dd>Scrolling the mouse wheel up zooms in, and down zooms out.</dd>
+
+      <dt><b>The origin is represented with a cross.</b></dt>
+      <dd>If it makes sense in the context of the editor, you will see some sort of cross in the canvas that highlights where the origin of the scene is. You can also think of this as the center point. Basically, it's where coordinates 0,0 are.</dd>
+    </dl>
+
+    <h2 id="other-components">Other components</h2>
+
+    <dl>
+      <dt><b>The right-hand side is the control panel.</b></dt>
+      <dd>It's a not-so-large rectangle that contains information about your content or parts of it, as well as some <a href="#widgets">widgets</a> for you to customize them with.</dd>
+
+      <dt><b>The bar at the top is the menu bar.</b></dt>
+      <dd>In it, you can find some quick functionalities, the options dialog, and more.</dd>
+      
+      <dt><b>The bar below that is the toolbar, with common tools.</b></dt>
+      <dd>It contains a number of useful tools that are always accessible, because you are expected to need them often while using the editor.</dd>
+      
+      <dt><b>The bar at the bottom is the status bar, with news and the mouse coordinates.</b></dt>
+      <dd>It tells you some information about what's going on. If some sort of error happens or you can't understand what happened, be sure to consult it. It also shows the content coordinates of where your mouse cursor is when you're on the canvas.</dd>
+    </dl>
+
+    <h2 id="widgets">Widgets</h2>
+
+    <dl>
+      <dt><b>A widget is a textbox, button, checkbox, and so on.</b></dt>
+      <dd>There are several widgets with which you can customize things, but they're for the most part stuff you'll find in other programs.</dd>
+      
+      <dt><b>To learn more about what a widget does, or how it even works, check its tooltip.</b></dt>
+      <dd>By leaving your mouse cursor on top of a widget, you will get a brief tooltip explaining in some detail what that widget controls. Some widgets are controlled in special ways, so you can also make use of the tooltip to figure out how to operate them.</dd>
+
+      <dt><b>Some widgets have shortcut keys, noted in their tooltip.</b></dt>
+      <dd>Because you are expected to do some operations over and over, the engine provides some shortcut keys that trigger those operations. These save time compared to moving your hand from the keyboard to the mouse, or moving the mouse cursor somewhere else, or having to navigate inside some nested menus! Some shortcuts only work when you're focused on the canvas (i.e. the last thing you clicked was the canvas).</dd>
+    </dl>
+
+    <h2 id="general-controls">General controls</h2>
+
+    <p>Each editor has its own set of controls and shortcuts, but these ones are common to all of them.</p>
+
+    <table>
+      <tr><th>Action</th><th>Focus</th><th>Control</th></tr>
+      <tr><td>Pan camera</td><td>Canvas</td><td>Arrow keys, or right mouse button</td></tr>
+      <tr><td>Zoom in and out</td><td>Canvas</td><td>Plus/Minus, or mouse wheel</td></tr>
+      <tr><td>Reset zoom; press again to reset camera position</td><td>Canvas</td><td>Zero, or middle mouse button</td></tr>
+      <tr><td>Change camera to fit whole scene snugly</td><td>Canvas</td><td>Home</td></tr>
+      <tr><td>Quit out of certain panels</td><td>GUI</td><td>Escape</td></tr>
+    </table>
+
+    <h2 id="tips">Tips</h2>
+
+    <ul>
+      <li>Use the options (in the menu bar) to customize the editor to your liking!</li>
+      <li>Although it's recommended to use the editors, you can still edit the files by hand if you know how they work. Be careful!</li>
+      <li>Remember to save periodically. Although rare, it is possible for an editor to crash, or for you to quit accidentally, causing you to lose unsaved progress. Plus if you make a mistake, you can always go back to the last time you saved.</li>
+    </ul>
+    
+  </div>
+</body>
+
+</html>
