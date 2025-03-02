@@ -2622,7 +2622,7 @@ void leader_fsm::start_boredom_anim(mob* m, void* info1, void* info2) {
         m->type->anim_db->find_animation("looking_around");
     size_t sitting_anim_idx =
         m->type->anim_db->find_animation("sitting");
-    size_t lounging_anim_idx =
+    size_t stretching_anim_idx =
         m->type->anim_db->find_animation("stretching");
     vector<size_t> boredom_anims;
     if(looking_around_anim_idx != INVALID) {
@@ -2631,8 +2631,8 @@ void leader_fsm::start_boredom_anim(mob* m, void* info1, void* info2) {
     if(sitting_anim_idx != INVALID) {
         boredom_anims.push_back(sitting_anim_idx);
     }
-    if(lounging_anim_idx != INVALID) {
-        boredom_anims.push_back(lounging_anim_idx);
+    if(stretching_anim_idx != INVALID) {
+        boredom_anims.push_back(stretching_anim_idx);
     }
     
     if(boredom_anims.empty()) return;

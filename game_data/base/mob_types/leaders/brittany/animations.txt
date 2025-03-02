@@ -296,6 +296,53 @@ animations{
 			}
 		}
 	}
+	sitting{
+		frames{
+			idling{
+				duration=0.1000
+			}
+			half_lying{
+				duration=0.1000
+			}
+			sitting_01{
+				duration=0.0800
+				interpolate=true
+			}
+			sitting_02{
+				duration=0.5000
+				interpolate=true
+			}
+			sitting_03{
+				duration=0.5000
+				interpolate=true
+			}
+			sitting_02{
+				duration=0.5000
+				interpolate=true
+			}
+			sitting_03{
+				duration=0.5000
+				interpolate=true
+			}
+			sitting_02{
+				duration=0.5000
+				interpolate=true
+			}
+			sitting_03{
+				duration=0.0100
+			}
+			half_lying{
+				duration=0.1000
+			}
+			idling_big{
+				duration=0.0800
+				interpolate=true
+			}
+			idling{
+				duration=0.1000
+			}
+		}
+	}
 	spraying{
 		frames{
 			ducking{
@@ -325,6 +372,101 @@ animations{
 			}
 			ducking{
 				duration=0.1500
+			}
+			idling{
+				duration=0.1000
+			}
+		}
+	}
+	stretching{
+		frames{
+			ducking{
+				duration=0.1000
+			}
+			idling{
+				duration=0.1000
+			}
+			half_limbo{
+				duration=0.1000
+			}
+			stretching_01{
+				duration=0.0500
+				interpolate=true
+			}
+			stretching_02{
+				duration=0.0500
+				interpolate=true
+			}
+			stretching_01{
+				duration=0.0500
+				interpolate=true
+			}
+			stretching_02{
+				duration=0.0500
+				interpolate=true
+			}
+			stretching_01{
+				duration=0.0500
+				interpolate=true
+			}
+			stretching_02{
+				duration=0.0500
+				interpolate=true
+			}
+			stretching_01{
+				duration=0.0500
+				interpolate=true
+			}
+			stretching_02{
+				duration=0.0500
+				interpolate=true
+			}
+			stretching_01{
+				duration=0.0500
+				interpolate=true
+			}
+			stretching_02{
+				duration=0.0500
+				interpolate=true
+			}
+			stretching_01{
+				duration=0.0500
+				interpolate=true
+			}
+			stretching_02{
+				duration=0.0500
+				interpolate=true
+			}
+			stretching_01{
+				duration=0.0500
+				interpolate=true
+			}
+			stretching_02{
+				duration=0.0500
+				interpolate=true
+			}
+			stretching_01{
+				duration=0.0500
+				interpolate=true
+			}
+			stretching_02{
+				duration=0.0500
+				interpolate=true
+			}
+			stretching_01{
+				duration=0.0500
+				interpolate=true
+			}
+			stretching_02{
+				duration=0.0500
+				interpolate=true
+			}
+			stretching_01{
+				duration=0.0500
+				interpolate=true
+			}
+			half_limbo{
+				duration=0.1000
 			}
 			idling{
 				duration=0.1000
@@ -1035,6 +1177,75 @@ sprites{
 			}
 		}
 	}
+	sitting_01{
+		file=brittany
+		file_pos=0.0000 130.0000
+		file_size=71.0000 64.0000
+		offset=-5.0000 0.0000
+		scale=0.5500 0.5500
+		hitboxes{
+			fist{
+				coords=10.0000 10.0000 0.0000
+				height=46.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=46.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	sitting_02{
+		file=brittany
+		file_pos=0.0000 130.0000
+		file_size=71.0000 64.0000
+		offset=-5.0000 0.0000
+		scale=0.5000 0.5000
+		hitboxes{
+			fist{
+				coords=10.0000 10.0000 0.0000
+				height=46.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=46.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	sitting_03{
+		file=brittany
+		file_pos=0.0000 130.0000
+		file_size=71.0000 64.0000
+		offset=-4.0000 0.0000
+		scale=0.5000 0.5000
+		hitboxes{
+			fist{
+				coords=10.0000 10.0000 0.0000
+				height=46.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=46.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
 	spraying_01{
 		file=brittany
 		file_pos=0.0000 65.0000
@@ -1076,6 +1287,52 @@ sprites{
 			}
 			body{
 				coords=0.0000 0.0000 0.0000
+				height=46.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	stretching_01{
+		file=brittany
+		file_pos=72.0000 130.0000
+		file_size=67.0000 64.0000
+		offset=-10.0000 0.0000
+		scale=0.5000 0.5000
+		hitboxes{
+			fist{
+				coords=0.0000 10.0000 0.0000
+				height=46.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=-10.0000 0.0000 0.0000
+				height=46.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	stretching_02{
+		file=brittany
+		file_pos=72.0000 130.0000
+		file_size=67.0000 64.0000
+		offset=-9.0000 0.0000
+		scale=0.5000 0.5000
+		hitboxes{
+			fist{
+				coords=0.0000 10.0000 0.0000
+				height=46.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=-10.0000 0.0000 0.0000
 				height=46.0000
 				radius=16.0000
 				type=0

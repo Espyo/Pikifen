@@ -1,4 +1,4 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     dev lab music
         adjust the drums on the next section to better match the flute
     refactor the height effect using the new max z variable, maybe?
@@ -11,7 +11,6 @@ Next tasks (roughly sorted most important first)
     --- To fix ---
     Clicking to select a part of the spritesheet isn't working
     Geyser sound effects play even off-screen?
-    If two hazards have the same name, the hazard selector pop-up will complain
 
     --- 0.26 ---
     Revamp sounds
@@ -118,7 +117,8 @@ Next tasks (roughly sorted most important first)
                 Cardboard box being dragged
                 Kingcap and Spotcap being damaged
                 Kingcap and Spotcap exploding
-                Paper bag deflating
+                Paper bag deflating crinkling
+                Paper bag deflating air
                 Pellet Posy being hit
                 Stone button
                 Stone lever
@@ -164,9 +164,6 @@ Next tasks (roughly sorted most important first)
         The left side should be all organic, and the right side should have some DEV Lab stuff. The bottom should probably be something special but not attention-grabbing, the top should give space for the Pikmin to form the letters, and the topmost pixels should probably help the disclaimer text and version number readable, but not call attention
     Leader animations
         New animations
-            Bored
-                Sitting
-                Stretching
             Thrown (add to the logic of bouncers too, including Pikmin)
             Climbing (add the track logic too)
             Sliding (add the track logic too)
@@ -190,9 +187,6 @@ Next tasks (roughly sorted most important first)
         Add Helodity's Plasm Wraith
         Mobs for decorative pebbles, stones, sticks, cobwebs
     More particles
-        Dust particles while walking
-        There should be some petal particle effects when a Pikmin loses their maturity
-        Paper bags should do one final puff of dust when they finish their squashing animation. The particles should also be more brown than white
         More across the board -- check all mobs too
     Let players dismiss with no Pikmin for fun, but make it not as impactful
     Other base content changes
@@ -211,12 +205,10 @@ Next tasks (roughly sorted most important first)
         Leaders should be a bit faster
         Leader damage from enemies should be standardized
         Leaf Pikmin should be able to follow leaders in walking
-        Rename the Spectralid to Spectralids
         Water Dumples should wander around a small bit
         Maybe decrease the territory radius of the base enemies? (thanks Nataly171)
         When a Pikmin latches, offset its position randomly slightly. This way, if the player throws many Pikmin at the same spot, there's at least some variety
         Bitter sprays should last for a short time
-        Add some randomness to the pitch of mob sounds?
         Make Rock Pikmin colors darker (thanks Nataly171)
         Style Tutorial Meadow to be more DEV Lab-like
         Add Pro Controller controls to the default controls
@@ -227,7 +219,6 @@ Next tasks (roughly sorted most important first)
     Add a screenshot, or better yet, a gif to the readme
     Manual updates
         Update screenshots that still show off the Play area
-        Have a general editor tutorial, explaining the canvas, status bar, etc., and link to it in the corresponding editor tutorial pages
         Have an infobox with quick info about content, like its folder
     Add the options and stats menu to the pause menu
         The layout could maybe be like:
@@ -739,9 +730,12 @@ Misc things (so I don't forget)
                 When shaking the screen, the multiplier of the amount to shake should be trauma^2 or trauma^3 so it's smooth
                 Don't offset the camera negatively, but use something like offsetX = maxOffset * shake_mult * GetPerlinNoise(seed, time);  offsetY = maxOffset * shake_mult * GetPerlinNoise(seed + 1, time);
                     Or instead of PerlinNoise, use simple value noise http://www.scratchapixel.com/lessons/procedural-generation-virtual-worlds/procedural-patterns-noise-part-1/creating-simple-1D-noise
+        Leaders getting hurt should make their HUD icon turn red and shake
         Mobs shrinking or increasing in size because of their height should be limited -- fall too much and your dimensions turn negative
         Loading screen area names and subtitles should have custom colors like https://cdn.discordapp.com/attachments/212795100818833408/1095572527583080488/image.png (thanks Captain Salty)
         On a walkable object, if you have a leader and their Pikmin on top, the Pikmin will kinda jerk along, not very smoothly
+        There should be some petal particle effects when a Pikmin loses their maturity
+            Each Pikmin type needs to specify its own petal color
         If a Pikmin type has black as the color, the idle glow needs to... not be black
         Water isn't fading with darkness if you have fader textures https://cdn.discordapp.com/attachments/347158607734767636/449334153763356672/Pikifen_alpha_5_24_2018_6_12_41_PM.png https://cdn.discordapp.com/attachments/459094782648778772/491739297548992513/unknown.png
             Make it use the same logic as draw_texture, where a fade sector must draw the liquid twice, with the second time fading
@@ -800,6 +794,7 @@ Misc things (so I don't forget)
         Ducking
         Options for mono/stereo
         Footsteps should be tied to the terrain texture
+            Also dust particles?
         Editor music options: off, standard editor music, area's music (area editor only), area's music but with a low-pass filter (area editor only)
             Mix tracks, like for when the player is drawing something, or dragging something, or whatever else
         The audio options menu should have a button to playback one or two sound effects
@@ -912,27 +907,26 @@ Misc things (so I don't forget)
         Allow the GUI to be navigable via keyboard or joystick (this is a setting in Dear ImGui), and make it so the canvas can also be somewhat controlled, like the radar. Plus a button to switch which one is in focus
         Maybe the color scheme editor can just make use of some dark tones, some light tones, and one accent color, like how MuseScore does it
         Aesthetic
-            A better font than just the built-in one
-            The theme should definitely be green-based
+            Have SOMETHING moving... If the player doesn't touch anything, the screen shouldn't be mistakable with a frozen game
+            Style it after the KopPad? (thanks Helodity)
             Juice
                 Pop sound and pop line particles when something gets created
                 Poof sound and puff of smoke particles when something gets deleted
                 Change the cursor for when you're dragging, drawing, placing something new, etc.
+                    Normal cursor
+                    For when you're drawing something
+                    For when you can place something
+                    For when the thing you're hovering over can be un/selected
+                    For when the thing you're hovering over can be dragged
+                    For when the thing you're hovering over can be deleted
+                    For when you're panning
+                    For when you're zooming
+                The snapped cursor position should interpolate smoothly (but if you finish your operation when it's interpolating, it should finish instantly)
                 Glow and grow the new sector, object, etc. when it is created
                 Slightly grow the current thing when you select it, or maybe when you drag it?
-                The snapped cursor position should interpolate smoothly (but if you finish your operation when it's interpolating, it should finish instantly)
                 When you're going to place something new:
                     Show a dotted outline of the location the new thing will go to
                     As the cursor moves, the icon for the thing wobbles around, as if fixed to an anchor at the mouse
-            Cursors
-                Normal cursor
-                For when you're drawing something
-                For when you can place something
-                For when the thing you're hovering over can be un/selected
-                For when the thing you're hovering over can be dragged
-                For when the thing you're hovering over can be deleted
-                For when you're panning
-                For when you're zooming
     Area sections?
         Large rectangles that are imposed on the area to specify certain things
         Ideas of sections
