@@ -9,8 +9,7 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Clicking to select a part of the spritesheet isn't working
-    Geyser sound effects play even off-screen?
+    
 
     --- 0.26 ---
     Revamp sounds

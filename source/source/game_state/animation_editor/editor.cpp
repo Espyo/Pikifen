@@ -518,6 +518,8 @@ void animation_editor::import_sprite_transformation_data(const string &name) {
     cur_sprite->scale = s->scale;
     cur_sprite->angle = s->angle;
     cur_sprite->tint = s->tint;
+    
+    changes_mgr.mark_as_changed();
 }
 
 

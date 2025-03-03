@@ -405,14 +405,17 @@ void pikmin::handle_status_effect_loss(status_type* sta_type) {
  * This makes sure that the maturity doesn't overflow.
  *
  * @param amount Amount to increase by.
+ * @return Whether it changed the maturity.
  */
-void pikmin::increase_maturity(int amount) {
+bool pikmin::increase_maturity(int amount) {
     int old_maturity = maturity;
     int new_maturity = maturity + amount;
     maturity = clamp(new_maturity, 0, N_MATURITIES - 1);
+    
     if(maturity > old_maturity) {
         game.statistics.pikmin_blooms++;
     }
+    return maturity != old_maturity;
 }
 
 

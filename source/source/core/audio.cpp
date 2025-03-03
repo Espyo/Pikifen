@@ -77,11 +77,12 @@ size_t audio_manager::create_global_sound_source(
     ALLEGRO_SAMPLE* sample, bool ambiance,
     const sound_source_config_t &config
 ) {
-    return create_sound_source(
-        sample,
-        ambiance ? SOUND_TYPE_AMBIANCE_GLOBAL : SOUND_TYPE_GAMEPLAY_GLOBAL,
-        config, point()
-    );
+    return
+        create_sound_source(
+            sample,
+            ambiance ? SOUND_TYPE_AMBIANCE_GLOBAL : SOUND_TYPE_GAMEPLAY_GLOBAL,
+            config, point()
+        );
 }
 
 
@@ -130,11 +131,12 @@ size_t audio_manager::create_pos_sound_source(
     ALLEGRO_SAMPLE* sample, const point &pos, bool ambiance,
     const sound_source_config_t &config
 ) {
-    return create_sound_source(
-        sample,
-        ambiance ? SOUND_TYPE_AMBIANCE_POS : SOUND_TYPE_GAMEPLAY_POS,
-        config, pos
-    );
+    return
+        create_sound_source(
+            sample,
+            ambiance ? SOUND_TYPE_AMBIANCE_POS : SOUND_TYPE_GAMEPLAY_POS,
+            config, pos
+        );
 }
 
 
@@ -1144,7 +1146,12 @@ void audio_manager::update_playback_target_gain_and_pan(size_t playback_idx) {
     if(playback_ptr->state == SOUND_PLAYBACK_STATE_DESTROYED) return;
     
     sound_source_t* source_ptr = get_source(playback_ptr->source_id);
-    if(!source_ptr || source_ptr->type != SOUND_TYPE_GAMEPLAY_POS) return;
+    if(!source_ptr) return;
+    
+    bool is_positional =
+        source_ptr->type == SOUND_TYPE_GAMEPLAY_POS ||
+        source_ptr->type == SOUND_TYPE_AMBIANCE_POS;
+    if(!is_positional) return;
     
     //Calculate screen and camera things.
     point screen_size = cam_br - cam_tl;

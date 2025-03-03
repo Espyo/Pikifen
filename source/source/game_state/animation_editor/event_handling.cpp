@@ -271,7 +271,7 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             bmp_click_pos.y = floor(bmp_click_pos.y - bmp_pos.y);
             
             if(bmp_click_pos.x < 0 || bmp_click_pos.y < 0) return;
-            if(bmp_click_pos.x > bmp_pos.x || bmp_click_pos.y > bmp_pos.y) return;
+            if(bmp_click_pos.x > bmp_size.x || bmp_click_pos.y > bmp_size.y) return;
             
             point selection_tl;
             point selection_br;

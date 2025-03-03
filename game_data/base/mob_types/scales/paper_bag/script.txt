@@ -12,23 +12,29 @@ script {
         on_weight_added {
             get_mob_info t self weight
             if $t >= $goal_number
-                set_state crushed
+                set_state crushed_1
             end_if
         }
     }
     
-    crushed {
+    crushed_1 {
         on_enter {
             set_animation crushing
             set_height 2
             set_health 0
-            start_particles enemy_death 0 0 200
             start_particles paper_bag_dust 0 0 200
             play_sound obstacle_cleared
             send_message_to_links paper_bag_crushed
         }
         on_animation_end {
             stop_particles
+            set_state crushed_2
+        }
+    }
+    
+    crushed_2 {
+        on_enter {
+            start_particles paper_bag_final_dust 0 0 20
         }
     }
 }

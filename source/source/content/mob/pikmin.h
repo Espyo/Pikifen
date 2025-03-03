@@ -109,7 +109,7 @@ public:
     pikmin(const point &pos, pikmin_type* type, float angle);
     void force_carry(mob* m);
     bool process_attack_miss(hitbox_interaction* info);
-    void increase_maturity(int amount);
+    bool increase_maturity(int amount);
     void latch(mob* m, const hitbox* h);
     void start_throw_trail();
     bool can_receive_status(status_type* s) const override;

@@ -311,6 +311,7 @@ animations{
 			sitting_02{
 				duration=0.5000
 				interpolate=true
+				sound=thump
 			}
 			sitting_03{
 				duration=0.5000
