@@ -5,20 +5,20 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Area menu state class and area menu state-related functions.
+ * Area selection menu struct and related functions.
  */
 
 #include <algorithm>
 
-#include "menus.h"
+#include "area_menu.h"
 
-#include "../core/drawing.h"
-#include "../core/misc_functions.h"
-#include "../core/game.h"
-#include "../core/load.h"
-#include "../util/allegro_utils.h"
-#include "../util/general_utils.h"
-#include "../util/string_utils.h"
+#include "../../core/drawing.h"
+#include "../../core/misc_functions.h"
+#include "../../core/game.h"
+#include "../../core/load.h"
+#include "../../util/allegro_utils.h"
+#include "../../util/general_utils.h"
+#include "../../util/string_utils.h"
 
 
 namespace AREA_MENU {
@@ -39,13 +39,61 @@ const string SPECS_GUI_FILE_NAME = "area_menu_specs";
 
 
 /**
+ * @brief Constructs a new area menu object.
+ */
+area_menu_t::area_menu_t(AREA_TYPE area_type) :
+    area_type(area_type) {
+    //Mission records.
+    if(area_type == AREA_TYPE_MISSION) {
+        data_node mission_records;
+        mission_records.load_file(FILE_PATHS_FROM_ROOT::MISSION_RECORDS, true, false, true);
+        
+        for(size_t a = 0; a < game.content.areas.list[AREA_TYPE_MISSION].size(); a++) {
+            area_data* area_ptr = game.content.areas.list[AREA_TYPE_MISSION][a];
+            mission_record record;
+            
+            load_area_mission_record(&mission_records, area_ptr, record);
+            
+            area_records.push_back(record);
+        }
+    }
+    
+    init_gui_main();
+    init_gui_info_page();
+    if(area_type == AREA_TYPE_MISSION && !game.content.areas.list[AREA_TYPE_MISSION].empty()) {
+        init_gui_specs_page();
+        specs_box->visible = false;
+        specs_box->responsive = false;
+    }
+    if(first_area_button) {
+        gui.set_selected_item(first_area_button, true);
+    }
+    
+    //Finishing touches.
+    game.audio.set_current_song(game.sys_content_names.sng_menus);
+    game.fade_mgr.start_fade(true, nullptr);
+    
+}
+
+
+/**
+ * @brief Destroys the area menu object.
+ */
+area_menu_t::~area_menu_t() {
+    //Menu items.
+    gui.destroy();
+    
+}
+
+
+/**
  * @brief Adds a new bullet point to either the fail condition list, or the
  * grading explanation list.
  *
  * @param list List to add to.
  * @param text Text.
  */
-void area_menu_state::add_bullet(list_gui_item* list, const string &text) {
+void area_menu_t::add_bullet(list_gui_item* list, const string &text) {
     size_t bullet_idx = list->children.size();
     const float BULLET_HEIGHT = 0.18f;
     const float BULLET_PADDING = 0.01f;
@@ -68,7 +116,7 @@ void area_menu_state::add_bullet(list_gui_item* list, const string &text) {
 /**
  * @brief Animates the GUI items inside of the info and specs pages.
  */
-void area_menu_state::animate_info_and_specs() {
+void area_menu_t::animate_info_and_specs() {
     info_name_text->start_juice_animation(
         gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
     );
@@ -122,7 +170,7 @@ void area_menu_state::animate_info_and_specs() {
  *
  * @param area_idx Index of the newly-selected area.
  */
-void area_menu_state::change_info(size_t area_idx) {
+void area_menu_t::change_info(size_t area_idx) {
     if(area_idx == cur_area_idx) return;
     cur_area_idx = area_idx;
     
@@ -363,62 +411,35 @@ void area_menu_state::change_info(size_t area_idx) {
 /**
  * @brief Draws the area menu.
  */
-void area_menu_state::do_drawing() {
-    al_clear_to_color(COLOR_BLACK);
-    draw_bitmap(
-        bmp_menu_bg, point(game.win_w * 0.5, game.win_h * 0.5),
-        point(game.win_w, game.win_h), 0, map_gray(64)
-    );
-    
+void area_menu_t::draw() {
     gui.draw();
-    
-    draw_mouse_cursor(GAME::CURSOR_STANDARD_COLOR);
 }
 
 
 /**
- * @brief Ticks time by one frame of logic.
- */
-void area_menu_state::do_logic() {
-    vector<player_action> player_actions = game.controls.new_frame();
-    if(!game.fade_mgr.is_fading()) {
-        for(size_t a = 0; a < player_actions.size(); a++) {
-            gui.handle_player_action(player_actions[a]);
-        }
-    }
-    
-    gui.tick(game.delta_t);
-    
-    game.fade_mgr.tick(game.delta_t);
-}
-
-
-/**
- * @brief Returns the name of this state.
- *
- * @return The name.
- */
-string area_menu_state::get_name() const {
-    return "area menu";
-}
-
-
-/**
- * @brief Handles Allegro events.
+ * @brief Handles an Allegro event.
  *
  * @param ev Event to handle.
  */
-void area_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
-    if(game.fade_mgr.is_fading()) return;
-    
-    gui.handle_event(ev);
+void area_menu_t::handle_event(const ALLEGRO_EVENT &ev) {
+    if(!closing) gui.handle_event(ev);
+}
+
+
+/**
+ * @brief Handles a player action.
+ *
+ * @param action Data about the player action.
+ */
+void area_menu_t::handle_player_action(const player_action &action) {
+    gui.handle_player_action(action);
 }
 
 
 /**
  * @brief Initializes the area info page GUI items.
  */
-void area_menu_state::init_gui_info_page() {
+void area_menu_t::init_gui_info_page() {
     gui.register_coords("info_name",    36,  6, 68,  8);
     gui.register_coords("subtitle",     36, 16, 68,  8);
     gui.register_coords("thumbnail",    85, 14, 26, 24);
@@ -570,7 +591,7 @@ void area_menu_state::init_gui_info_page() {
 /**
  * @brief Initializes the main GUI items.
  */
-void area_menu_state::init_gui_main() {
+void area_menu_t::init_gui_main() {
     gui.register_coords("back",          12,  5, 20,  6);
     gui.register_coords("back_input",     3,  7,  4,  4);
     gui.register_coords("header",        40,  5, 32,  6);
@@ -589,13 +610,16 @@ void area_menu_state::init_gui_main() {
     
     //Back button.
     gui.back_item =
-        new button_gui_item("Back", game.sys_content.fnt_standard);
+        new button_gui_item(
+        "Back", game.sys_content.fnt_standard
+    );
     gui.back_item->on_activate =
     [this] (const point &) {
-        leave();
+        start_closing();
+        if(back_callback) back_callback();
     };
     gui.back_item->on_get_tooltip =
-    [] () { return "Return to the main menu."; };
+    [] () { return "Return to the previous menu."; };
     gui.add_item(gui.back_item, "back");
     
     //Back input icon.
@@ -822,7 +846,7 @@ void area_menu_state::init_gui_main() {
 /**
  * @brief Initializes the mission specs page GUI items.
  */
-void area_menu_state::init_gui_specs_page() {
+void area_menu_t::init_gui_specs_page() {
     gui.register_coords("specs_name",     50,  5, 96,  6);
     gui.register_coords("goal_header",    50, 13, 96,  6);
     gui.register_coords("goal",           50, 21, 96,  6);
@@ -894,98 +918,26 @@ void area_menu_state::init_gui_specs_page() {
 
 
 /**
- * @brief Leaves the area menu and goes into the title screen.
+ * @brief Starts the closing process.
  */
-void area_menu_state::leave() {
-    game.fade_mgr.start_fade(false, [] () {
-        game.states.title_screen->page_to_load = MAIN_MENU_PAGE_PLAY;
-        game.change_state(game.states.title_screen);
-    });
+void area_menu_t::start_closing() {
+    closing = true;
+    closing_timer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
 }
 
 
 /**
- * @brief Loads the area menu into memory.
+ * @brief Ticks time by one frame of logic.
  */
-void area_menu_state::load() {
-    bmp_menu_bg = nullptr;
-    first_area_button = nullptr;
-    cur_area_idx = INVALID;
-    cur_thumb = nullptr;
-    cur_stamp = nullptr;
-    cur_medal = nullptr;
-    show_mission_specs = false;
+void area_menu_t::tick(float delta_t) {
+    //Tick the GUI.
+    gui.tick(game.delta_t);
     
-    //Game content.
-    game.content.reload_packs();
-    game.content.load_all(
-    vector<CONTENT_TYPE> {
-        CONTENT_TYPE_AREA,
-        CONTENT_TYPE_GUI,
-    },
-    CONTENT_LOAD_LEVEL_BASIC
-    );
-    
-    //Mission records.
-    if(area_type == AREA_TYPE_MISSION) {
-        data_node mission_records;
-        mission_records.load_file(FILE_PATHS_FROM_ROOT::MISSION_RECORDS, true, false, true);
-        
-        for(size_t a = 0; a < game.content.areas.list[AREA_TYPE_MISSION].size(); a++) {
-            area_data* area_ptr = game.content.areas.list[AREA_TYPE_MISSION][a];
-            mission_record record;
-            
-            load_area_mission_record(&mission_records, area_ptr, record);
-            
-            area_records.push_back(record);
+    //Tick the menu closing.
+    if(closing) {
+        closing_timer -= delta_t;
+        if(closing_timer <= 0.0f) {
+            to_delete = true;
         }
     }
-    
-    bmp_menu_bg = game.content.bitmaps.list.get(game.sys_content_names.bmp_title_screen_bg);
-    
-    init_gui_main();
-    init_gui_info_page();
-    if(area_type == AREA_TYPE_MISSION && !game.content.areas.list[AREA_TYPE_MISSION].empty()) {
-        init_gui_specs_page();
-        specs_box->visible = false;
-        specs_box->responsive = false;
-    }
-    if(first_area_button) {
-        gui.set_selected_item(first_area_button, true);
-    }
-    
-    //Finishing touches.
-    game.audio.set_current_song(game.sys_content_names.sng_menus);
-    game.fade_mgr.start_fade(true, nullptr);
-    
-}
-
-
-/**
- * @brief Unloads the area menu from memory.
- */
-void area_menu_state::unload() {
-
-    //Resources.
-    game.content.bitmaps.list.free(bmp_menu_bg);
-    bmp_menu_bg = nullptr;
-    
-    //Menu items.
-    gui.destroy();
-    
-    //Misc
-    area_buttons.clear();
-    area_records.clear();
-    
-    cur_thumb = nullptr;
-    cur_stamp = nullptr;
-    cur_medal = nullptr;
-    
-    game.content.unload_all(
-    vector<CONTENT_TYPE> {
-        CONTENT_TYPE_GUI,
-        CONTENT_TYPE_AREA,
-    }
-    );
-    
 }

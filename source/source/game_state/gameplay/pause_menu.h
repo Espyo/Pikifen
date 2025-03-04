@@ -51,7 +51,7 @@ enum GAMEPLAY_LEAVE_TARGET {
     //Leave in order to end the exploration/mission.
     GAMEPLAY_LEAVE_TARGET_END,
     
-    //Leave in order to go to the area selection.
+    //Leave in order to go to the area selection menu.
     GAMEPLAY_LEAVE_TARGET_AREA_SELECT,
     
 };

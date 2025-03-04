@@ -531,7 +531,6 @@ void game_class::unregister_audio_stream_source(ALLEGRO_AUDIO_STREAM* stream) {
 void game_state_list::destroy() {
     delete animation_ed;
     delete area_ed;
-    delete area_menu;
     delete annex_screen;
     delete gameplay;
     delete gui_ed;
@@ -541,7 +540,6 @@ void game_state_list::destroy() {
     
     animation_ed = nullptr;
     area_ed = nullptr;
-    area_menu = nullptr;
     gameplay = nullptr;
     gui_ed = nullptr;
     particle_ed = nullptr;
@@ -556,7 +554,6 @@ void game_state_list::destroy() {
 void game_state_list::init() {
     animation_ed = new animation_editor();
     area_ed = new area_editor();
-    area_menu = new area_menu_state();
     annex_screen = new annex_screen_state();
     gameplay = new gameplay_state();
     gui_ed = new gui_editor();

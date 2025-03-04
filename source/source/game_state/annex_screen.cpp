@@ -26,6 +26,7 @@ void annex_screen_state::do_drawing() {
         point(game.win_w, game.win_h), 0, map_gray(64)
     );
     
+    if(area_menu) area_menu->draw();
     if(help_menu) help_menu->draw();
     if(options_menu) options_menu->draw();
     if(stats_menu) stats_menu->draw();
@@ -41,12 +42,27 @@ void annex_screen_state::do_logic() {
     vector<player_action> player_actions = game.controls.new_frame();
     if(!game.fade_mgr.is_fading()) {
         for(size_t a = 0; a < player_actions.size(); a++) {
-            if(help_menu)
+            if(area_menu) {
+                area_menu->handle_player_action(player_actions[a]);
+            }
+            if(help_menu) {
                 help_menu->handle_player_action(player_actions[a]);
-            if(options_menu)
+            }
+            if(options_menu) {
                 options_menu->handle_player_action(player_actions[a]);
-            if(stats_menu)
+            }
+            if(stats_menu) {
                 stats_menu->handle_player_action(player_actions[a]);
+            }
+        }
+    }
+    
+    if(area_menu) {
+        if(!area_menu->to_delete) {
+            area_menu->tick(game.delta_t);
+        } else {
+            delete area_menu;
+            area_menu = nullptr;
         }
     }
     
@@ -99,6 +115,7 @@ string annex_screen_state::get_name() const {
 void annex_screen_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;
     
+    if(area_menu) area_menu->handle_event(ev);
     if(help_menu) help_menu->handle_event(ev);
     if(options_menu) options_menu->handle_event(ev);
     if(stats_menu) stats_menu->handle_event(ev);
@@ -134,6 +151,15 @@ void annex_screen_state::load() {
     
     //Load the intended concrete menu.
     switch(menu_to_load) {
+    case ANNEX_SCREEN_MENU_AREA_SELECTION: {
+        area_menu = new area_menu_t(area_menu_area_type);
+        area_menu->back_callback =
+        [this] () {
+            game.states.title_screen->page_to_load = MAIN_MENU_PAGE_PLAY;
+            leave();
+        };
+        break;
+    }
     case ANNEX_SCREEN_MENU_HELP: {
         game.content.load_all(
         vector<CONTENT_TYPE> {
@@ -172,16 +198,23 @@ void annex_screen_state::load() {
                 CONTENT_TYPE_PARTICLE_GEN,
             }
             );
+            game.states.title_screen->page_to_load = MAIN_MENU_PAGE_MAIN;
             leave();
         };
         break;
     } case ANNEX_SCREEN_MENU_OPTIONS: {
         options_menu = new options_menu_t();
-        options_menu->back_callback = [this] () { leave(); };
+        options_menu->back_callback = [this] () {
+            game.states.title_screen->page_to_load = MAIN_MENU_PAGE_MAIN;
+            leave();
+        };
         break;
     } case ANNEX_SCREEN_MENU_STATS: {
         stats_menu = new stats_menu_t();
-        stats_menu->back_callback = [this] () { leave(); };
+        stats_menu->back_callback = [this] () {
+            game.states.title_screen->page_to_load = MAIN_MENU_PAGE_MAIN;
+            leave();
+        };
         break;
     }
     }
@@ -201,6 +234,10 @@ void annex_screen_state::unload() {
     game.content.bitmaps.list.free(bmp_menu_bg);
     
     //Menus.
+    if(area_menu) {
+        delete area_menu;
+        area_menu = nullptr;
+    }
     if(help_menu) {
         delete help_menu;
         help_menu = nullptr;

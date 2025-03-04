@@ -223,8 +223,11 @@ void results_state::leave() {
         AREA_TYPE area_type = game.cur_area_data->type;
         game.unload_loaded_state(game.states.gameplay);
         if(game.states.area_ed->quick_play_area_path.empty()) {
-            game.states.area_menu->area_type = area_type;
-            game.change_state(game.states.area_menu);
+            game.states.annex_screen->area_menu_area_type =
+                area_type;
+            game.states.annex_screen->menu_to_load =
+                ANNEX_SCREEN_MENU_AREA_SELECTION;
+            game.change_state(game.states.annex_screen);
         } else {
             game.change_state(game.states.area_ed);
         }

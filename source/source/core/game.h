@@ -58,9 +58,6 @@ struct game_state_list {
     //Area editor.
     area_editor* area_ed = nullptr;
     
-    //Area selection menu.
-    area_menu_state* area_menu = nullptr;
-    
     //Annex screen for misc. menus.
     annex_screen_state* annex_screen = nullptr;
     

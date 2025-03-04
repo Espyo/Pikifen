@@ -696,8 +696,11 @@ void title_screen_state::init_gui_play_page() {
     simple_button->on_activate =
     [] (const point &) {
         game.fade_mgr.start_fade(false, [] () {
-            game.states.area_menu->area_type = AREA_TYPE_SIMPLE;
-            game.change_state(game.states.area_menu);
+            game.states.annex_screen->area_menu_area_type =
+                AREA_TYPE_SIMPLE;
+            game.states.annex_screen->menu_to_load =
+                ANNEX_SCREEN_MENU_AREA_SELECTION;
+            game.change_state(game.states.annex_screen);
         });
     };
     simple_button->on_get_tooltip =
@@ -722,8 +725,11 @@ void title_screen_state::init_gui_play_page() {
     mission_button->on_activate =
     [] (const point &) {
         game.fade_mgr.start_fade(false, [] () {
-            game.states.area_menu->area_type = AREA_TYPE_MISSION;
-            game.change_state(game.states.area_menu);
+            game.states.annex_screen->area_menu_area_type =
+                AREA_TYPE_MISSION;
+            game.states.annex_screen->menu_to_load =
+                ANNEX_SCREEN_MENU_AREA_SELECTION;
+            game.change_state(game.states.annex_screen);
         });
     };
     mission_button->on_get_tooltip =

@@ -664,7 +664,7 @@ void gameplay_state::init_hud() {
 
 /**
  * @brief Leaves the gameplay state and enters the title screen,
- * or area selection, or etc.
+ * or annex screen, or etc.
  *
  * @param target Where to leave to.
  */
@@ -693,8 +693,11 @@ void gameplay_state::leave(const GAMEPLAY_LEAVE_TARGET target) {
         break;
     } case GAMEPLAY_LEAVE_TARGET_AREA_SELECT: {
         if(game.states.area_ed->quick_play_area_path.empty()) {
-            game.states.area_menu->area_type = game.cur_area_data->type;
-            game.change_state(game.states.area_menu);
+            game.states.annex_screen->area_menu_area_type =
+                game.cur_area_data->type;
+            game.states.annex_screen->menu_to_load =
+                ANNEX_SCREEN_MENU_AREA_SELECTION;
+            game.change_state(game.states.annex_screen);
         } else {
             game.change_state(game.states.area_ed);
         }
