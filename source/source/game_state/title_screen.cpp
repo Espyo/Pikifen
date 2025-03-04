@@ -10,7 +10,7 @@
 
 #include <algorithm>
 
-#include "menus.h"
+#include "title_screen.h"
 
 #include "../core/drawing.h"
 #include "../core/misc_functions.h"
@@ -19,7 +19,6 @@
 #include "../util/allegro_utils.h"
 #include "../util/os_utils.h"
 #include "../util/string_utils.h"
-#include "other_menus/options_menu.h"
 
 
 namespace TITLE_SCREEN {

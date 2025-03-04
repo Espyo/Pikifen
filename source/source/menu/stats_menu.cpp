@@ -10,10 +10,10 @@
 
 #include "stats_menu.h"
 
-#include "../../core/misc_functions.h"
-#include "../../core/game.h"
-#include "../../core/load.h"
-#include "../../util/string_utils.h"
+#include "../core/misc_functions.h"
+#include "../core/game.h"
+#include "../core/load.h"
+#include "../util/string_utils.h"
 
 
 namespace STATS_MENU {

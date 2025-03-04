@@ -16,10 +16,10 @@
 #include "../../content/other/gui.h"
 #include "../../content/other/mob_script.h"
 #include "../../core/drawing.h"
+#include "../../menu/help_menu.h"
 #include "../../util/drawing_utils.h"
 #include "../../util/general_utils.h"
 #include "../../util/geometry_utils.h"
-#include "../other_menus/help_menu.h"
 
 class pikmin_type;
 

@@ -11,11 +11,11 @@
 
 #include "packs_menu.h"
 
-#include "../../core/misc_functions.h"
-#include "../../core/game.h"
-#include "../../core/load.h"
-#include "../../util/os_utils.h"
-#include "../../util/string_utils.h"
+#include "../core/misc_functions.h"
+#include "../core/game.h"
+#include "../core/load.h"
+#include "../util/os_utils.h"
+#include "../util/string_utils.h"
 
 
 namespace PACKS_MENU {

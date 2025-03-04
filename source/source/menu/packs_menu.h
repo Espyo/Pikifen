@@ -16,7 +16,7 @@
 
 #include <allegro5/allegro.h>
 
-#include "../../content/other/gui.h"
+#include "../content/other/gui.h"
 
 using std::map;
 using std::string;

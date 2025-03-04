@@ -10,9 +10,9 @@
 
 #include "help_menu.h"
 
-#include "../../core/misc_functions.h"
-#include "../../core/game.h"
-#include "../../util/string_utils.h"
+#include "../core/misc_functions.h"
+#include "../core/game.h"
+#include "../util/string_utils.h"
 
 
 namespace HELP_MENU {

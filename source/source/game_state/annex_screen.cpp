@@ -10,9 +10,10 @@
 
 #include <algorithm>
 
+#include "annex_screen.h"
+
 #include "../core/game.h"
 #include "../util/allegro_utils.h"
-#include "menus.h"
 
 
 /**

@@ -13,8 +13,8 @@
 #include <string>
 #include <vector>
 
-#include "../../content/area/area.h"
-#include "../../content/other/gui.h"
+#include "../content/area/area.h"
+#include "../content/other/gui.h"
 
 using std::string;
 using std::vector;

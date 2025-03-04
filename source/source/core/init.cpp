@@ -44,7 +44,6 @@
 #include "../content/other/mob_script.h"
 #include "../game_state/game_state.h"
 #include "../game_state/gameplay/gameplay.h"
-#include "../game_state/menus.h"
 #include "../lib/imgui/imgui_impl_allegro5.h"
 #include "../util/allegro_utils.h"
 #include "../util/general_utils.h"

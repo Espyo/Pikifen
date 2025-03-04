@@ -14,8 +14,8 @@
 #include <map>
 #include <string>
 
-#include "../../content/other/gui.h"
-#include "../../core/options.h"
+#include "../content/other/gui.h"
+#include "../core/options.h"
 #include "packs_menu.h"
 
 using std::map;

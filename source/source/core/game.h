@@ -18,12 +18,13 @@
 #include "../content/content_manager.h"
 #include "../content/other/mob_script_action.h"
 #include "../game_state/animation_editor/editor.h"
+#include "../game_state/annex_screen.h"
 #include "../game_state/area_editor/editor.h"
 #include "../game_state/gameplay/gameplay.h"
 #include "../game_state/gui_editor/editor.h"
-#include "../game_state/menus.h"
 #include "../game_state/particle_editor/editor.h"
 #include "../game_state/results.h"
+#include "../game_state/title_screen.h"
 #include "../lib/controls_manager/controls_manager.h"
 #include "audio.h"
 #include "game_config.h"
@@ -73,7 +74,7 @@ struct game_state_list {
     //Title screen.
     title_screen_state* title_screen = nullptr;
     
-    //Area results menu.
+    //Area results screen.
     results_state* results = nullptr;
     
     
