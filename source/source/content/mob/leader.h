@@ -93,6 +93,12 @@ public:
     //Is the leader currently in the walking animation?
     bool is_in_walking_anim = false;
     
+    //Is the leader currently turning in place, in the active state?
+    bool is_active_turning = false;
+    
+    //Is the leader currently walking, in the active state?
+    bool is_active_walking = false;
+    
     //Time until the next arrow in the list of swarm arrows appears.
     timer swarm_next_arrow_timer = timer(LEADER::SWARM_ARROW_INTERVAL);
     

@@ -119,7 +119,8 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(leader_fsm::enter_active);
         }
         efc.new_event(MOB_EV_ON_LEAVE); {
-            efc.run(leader_fsm::set_stop_anim);
+            efc.run(leader_fsm::set_is_walking_false);
+            efc.run(leader_fsm::set_is_turning_false);
         }
         efc.new_event(MOB_EV_ON_TICK); {
             efc.run(leader_fsm::tick_active_state);
@@ -131,11 +132,11 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(LEADER_EV_MOVE_START); {
             efc.run(leader_fsm::move);
-            efc.run(leader_fsm::set_walk_anim);
+            efc.run(leader_fsm::set_is_walking_true);
         }
         efc.new_event(LEADER_EV_MOVE_END); {
             efc.run(leader_fsm::stand_still);
-            efc.run(leader_fsm::set_stop_anim);
+            efc.run(leader_fsm::set_is_walking_false);
         }
         efc.new_event(LEADER_EV_HOLDING); {
             efc.run(leader_fsm::grab_mob);
@@ -302,11 +303,11 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(LEADER_EV_MOVE_START); {
             efc.run(leader_fsm::move);
-            efc.run(leader_fsm::set_walk_anim);
+            efc.run(leader_fsm::set_is_walking_true);
         }
         efc.new_event(LEADER_EV_MOVE_END); {
             efc.run(leader_fsm::stand_still);
-            efc.run(leader_fsm::set_stop_anim);
+            efc.run(leader_fsm::set_is_walking_false);
         }
         efc.new_event(LEADER_EV_START_WHISTLE); {
             efc.change_state("whistling");
@@ -2080,6 +2081,8 @@ void leader_fsm::get_knocked_back(mob* m, void* info1, void* info2) {
 void leader_fsm::get_knocked_down(mob* m, void* info1, void* info2) {
     leader* lea_ptr = (leader*) m;
     
+    lea_ptr->stop_turning();
+    
     //Let's use the "temp" variable to specify whether or not
     //it already received the getting up timer bonus.
     lea_ptr->temp_i = 0;
@@ -2148,7 +2151,7 @@ void leader_fsm::go_pluck(mob* m, void* info1, void* info2) {
         }
     }
     
-    leader_fsm::set_walk_anim(m, nullptr, nullptr);
+    leader_fsm::set_is_walking_true(m, nullptr, nullptr);
 }
 
 
@@ -2412,6 +2415,92 @@ void leader_fsm::search_seed(mob* m, void* info1, void* info2) {
 
 
 /**
+ * @brief When a leader needs to update its animation in the active state.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void leader_fsm::set_correct_active_anim(mob* m, void* info1, void* info2) {
+    leader* lea_ptr = (leader*) m;
+    bool must_use_walking_anim =
+        lea_ptr->is_active_walking || lea_ptr->is_active_turning;
+        
+    if(must_use_walking_anim && !lea_ptr->is_in_walking_anim) {
+        lea_ptr->is_in_walking_anim = true;
+        lea_ptr->set_animation(LEADER_ANIM_WALKING);
+    } else if(!must_use_walking_anim && lea_ptr->is_in_walking_anim) {
+        lea_ptr->is_in_walking_anim = false;
+        lea_ptr->set_animation(LEADER_ANIM_IDLING);
+    }
+}
+
+
+/**
+ * @brief When a leader is no longer turning in place.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void leader_fsm::set_is_turning_false(mob* m, void* info1, void* info2) {
+    leader* lea_ptr = (leader*) m;
+    if(lea_ptr->is_active_turning) {
+        lea_ptr->is_active_turning = false;
+        leader_fsm::set_correct_active_anim(m, info1, info2);
+    }
+}
+
+
+/**
+ * @brief When a leader starts turning in place.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void leader_fsm::set_is_turning_true(mob* m, void* info1, void* info2) {
+    leader* lea_ptr = (leader*) m;
+    if(!lea_ptr->is_active_turning) {
+        lea_ptr->is_active_turning = true;
+        leader_fsm::set_correct_active_anim(m, info1, info2);
+    }
+}
+
+
+/**
+ * @brief When a leader is no longer walking.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void leader_fsm::set_is_walking_false(mob* m, void* info1, void* info2) {
+    leader* lea_ptr = (leader*) m;
+    if(lea_ptr->is_active_walking) {
+        lea_ptr->is_active_walking = false;
+        leader_fsm::set_correct_active_anim(m, info1, info2);
+    }
+}
+
+
+/**
+ * @brief When a leader starts walking.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void leader_fsm::set_is_walking_true(mob* m, void* info1, void* info2) {
+    leader* lea_ptr = (leader*) m;
+    if(!lea_ptr->is_active_walking) {
+        lea_ptr->is_active_walking = true;
+        leader_fsm::set_correct_active_anim(m, info1, info2);
+    }
+}
+
+
+/**
  * @brief When a leader needs to change to the knocked back animation.
  *
  * @param m The mob.
@@ -2420,41 +2509,6 @@ void leader_fsm::search_seed(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::set_pain_anim(mob* m, void* info1, void* info2) {
     m->set_animation(LEADER_ANIM_PAIN);
-}
-
-
-/**
- * @brief When a leader needs to change to the idling animation.
- *
- * @param m The mob.
- * @param info1 Unused.
- * @param info2 Unused.
- */
-void leader_fsm::set_stop_anim(mob* m, void* info1, void* info2) {
-    leader* lea_ptr = (leader*) m;
-    if(lea_ptr->is_in_walking_anim) {
-        lea_ptr->is_in_walking_anim = false;
-        lea_ptr->set_animation(LEADER_ANIM_IDLING);
-    }
-}
-
-
-/**
- * @brief When a leader needs to change to the walking animation.
- *
- * @param m The mob.
- * @param info1 Unused.
- * @param info2 Unused.
- */
-void leader_fsm::set_walk_anim(mob* m, void* info1, void* info2) {
-    leader* lea_ptr = (leader*) m;
-    if(!lea_ptr->is_in_walking_anim) {
-        lea_ptr->is_in_walking_anim = true;
-        lea_ptr->set_animation(
-            LEADER_ANIM_WALKING, START_ANIM_OPTION_NORMAL, true,
-            lea_ptr->type->move_speed
-        );
-    }
 }
 
 
@@ -2603,7 +2657,6 @@ void leader_fsm::stand_still(mob* m, void* info1, void* info2) {
     m->stop_circling();
     m->stop_following_path();
     m->stop_chasing();
-    m->stop_turning();
     m->speed.x = m->speed.y = 0;
 }
 
@@ -2716,7 +2769,7 @@ void leader_fsm::start_go_here(mob* m, void* info1, void* info2) {
             LEADER_STATE_INACTIVE_MID_GO_HERE
         );
         lea_ptr->mid_go_here = true;
-        leader_fsm::set_walk_anim(m, nullptr, nullptr);
+        leader_fsm::set_is_walking_true(m, nullptr, nullptr);
     }
 }
 
@@ -2850,7 +2903,7 @@ void leader_fsm::stop_go_here(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::stop_in_group(mob* m, void* info1, void* info2) {
     m->stop_chasing();
-    leader_fsm::set_stop_anim(m, nullptr, nullptr);
+    leader_fsm::set_is_walking_false(m, nullptr, nullptr);
     m->set_timer(
         game.rng.f(LEADER::BORED_ANIM_MIN_DELAY, LEADER::BORED_ANIM_MAX_DELAY)
     );
@@ -2878,6 +2931,14 @@ void leader_fsm::stop_whistle(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::tick_active_state(mob* m, void* info1, void* info2) {
     m->face(get_angle(m->pos, game.states.gameplay->leader_cursor_w), nullptr);
+    
+    bool should_be_turning =
+        get_angle_smallest_dif(m->angle, m->intended_turn_angle) > TAU / 300.0f;
+    if(should_be_turning) {
+        leader_fsm::set_is_turning_true(m, info1, info2);
+    } else {
+        leader_fsm::set_is_turning_false(m, info1, info2);
+    }
 }
 
 
@@ -2994,7 +3055,7 @@ void leader_fsm::update_in_group_chasing(mob* m, void* info1, void* info2) {
         CHASE_FLAG_ANY_ANGLE, target_dist
     );
     
-    leader_fsm::set_walk_anim(m, nullptr, nullptr);
+    leader_fsm::set_is_walking_true(m, nullptr, nullptr);
 }
 
 
