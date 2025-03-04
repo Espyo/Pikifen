@@ -203,10 +203,10 @@ vertexes{
 	v=421.5717 773.8945
 	v=71.6331 612.1671
 	v=257.8643 834.1627
-	v=-2064.0000 -2560.0000
-	v=2815.0449 -2688.9551
-	v=2479.0449 3087.0449
-	v=-2304.9551 2399.0449
+	v=-2688.0000 -1200.0000
+	v=2224.0000 -3392.0000
+	v=3232.0000 256.0000
+	v=-476.4788 2865.4175
 	v=896.0000 640.0000
 	v=1001.0682 1152.5649
 	v=463.2088 1163.2449
@@ -233,11 +233,11 @@ vertexes{
 	v=-1944.9259 867.7335
 	v=-570.3478 693.1146
 	v=-1619.7676 1162.6536
-	v=-2214.6958 943.8636
-	v=-2251.7888 1483.4739
+	v=-2957.8071 1057.5159
+	v=-2532.7517 2265.5747
 	v=-1142.7155 706.6872
 	v=-1385.9335 1004.6715
-	v=-2249.4741 1398.2045
+	v=-2992.5854 1511.8568
 	v=-1503.9465 441.8643
 	v=-635.7322 281.4584
 	v=-677.2544 364.5030
@@ -354,7 +354,7 @@ vertexes{
 	v=-1725.8110 -632.3177
 	v=-1921.3019 -619.5286
 	v=-2001.6907 -630.4907
-	v=-2143.6860 -707.2034
+	v=-2781.8875 -724.6884
 	v=-1153.9547 -378.3624
 	v=-1214.2462 -330.8599
 	v=-1296.4620 -272.3954
@@ -366,7 +366,7 @@ vertexes{
 	v=-1769.6594 -226.7200
 	v=-1846.3942 -206.6227
 	v=-1963.3232 -208.4497
-	v=-2162.9355 -259.6263
+	v=-2801.1370 -277.1113
 	v=-671.5992 -564.2139
 	v=-430.4531 -521.2280
 	v=-424.5611 -609.6008
@@ -467,13 +467,13 @@ vertexes{
 	v=974.8694 -1487.0347
 	v=893.3799 -1479.0626
 	v=680.3786 -1618.6378
-	v=444.3406 -2625.7925
+	v=481.5850 -3354.1255
 	v=476.5151 -2522.9919
 	v=457.7620 -2397.0779
 	v=404.1815 -2311.3491
 	v=396.1444 -2236.3364
 	v=389.7475 -2155.8296
-	v=660.4482 -2632.4409
+	v=697.6926 -3360.7739
 	v=689.8820 -2505.1938
 	v=673.8077 -2414.1069
 	v=636.3015 -2328.3784
@@ -688,6 +688,9 @@ vertexes{
 	v=1390.5360 169.4160
 	v=1355.5588 -582.9591
 	v=1348.0536 -603.3066
+	v=1622.3364 2399.7107
+	v=3529.9573 -1828.3936
+	v=-1146.8325 -3376.3154
 }
 edges{
 	e{
@@ -1737,11 +1740,11 @@ edges{
 	}
 	e{
 		s=100 -1
-		v=206 205
+		v=206 690
 	}
 	e{
 		s=100 -1
-		v=207 206
+		v=207 689
 	}
 	e{
 		s=46 110
@@ -3110,7 +3113,7 @@ edges{
 	}
 	e{
 		s=-1 106
-		v=204 468
+		v=204 691
 	}
 	e{
 		s=89 99
@@ -4260,6 +4263,18 @@ edges{
 		s=131 138
 		v=655 659
 	}
+	e{
+		s=100 -1
+		v=689 206
+	}
+	e{
+		s=100 -1
+		v=690 205
+	}
+	e{
+		s=-1 106
+		v=691 468
+	}
 }
 sectors{
 	s{
@@ -5068,201 +5083,201 @@ sectors{
 mobs{
 	leader{
 		type=olimar
-		p=512.0000 -592.0000
+		p=-1024.0000 -32.0000
 	}
 	pikmin{
 		type=winged_pikmin
-		p=512.0000 -592.0000
-		vars=maturity=0
-	}
-	pikmin{
-		type=winged_pikmin
-		p=544.0000 -592.0000
+		p=-1024.0000 -32.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=winged_pikmin
-		p=528.0000 -576.0000
+		p=-992.0000 -32.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=winged_pikmin
-		p=480.0000 -592.0000
+		p=-1008.0000 -16.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=winged_pikmin
-		p=496.0000 -608.0000
+		p=-1056.0000 -32.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=winged_pikmin
-		p=528.0000 -608.0000
+		p=-1040.0000 -48.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=winged_pikmin
-		p=480.0000 -560.0000
+		p=-1008.0000 -48.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=winged_pikmin
-		p=544.0000 -624.0000
+		p=-1056.0000 0.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=winged_pikmin
-		p=496.0000 -576.0000
+		p=-992.0000 -64.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=winged_pikmin
-		p=512.0000 -624.0000
+		p=-1040.0000 -16.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=winged_pikmin
-		p=480.0000 -624.0000
+		p=-1024.0000 -64.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=winged_pikmin
-		p=544.0000 -560.0000
+		p=-1056.0000 -64.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=winged_pikmin
-		p=512.0000 -560.0000
+		p=-992.0000 0.0000
+		vars=maturity=0
+	}
+	pikmin{
+		type=winged_pikmin
+		p=-1024.0000 0.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=red_pikmin
-		p=512.0000 -592.0000
+		p=-1024.0000 -32.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=red_pikmin
-		p=544.0000 -592.0000
+		p=-992.0000 -32.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=red_pikmin
-		p=480.0000 -560.0000
+		p=-1056.0000 0.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=red_pikmin
-		p=544.0000 -624.0000
+		p=-992.0000 -64.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=red_pikmin
-		p=496.0000 -576.0000
+		p=-1040.0000 -16.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=red_pikmin
-		p=512.0000 -624.0000
+		p=-1024.0000 -64.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=red_pikmin
-		p=480.0000 -624.0000
+		p=-1056.0000 -64.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=red_pikmin
-		p=496.0000 -608.0000
+		p=-1040.0000 -48.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=red_pikmin
-		p=528.0000 -608.0000
+		p=-1008.0000 -48.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=red_pikmin
-		p=544.0000 -560.0000
+		p=-992.0000 0.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=red_pikmin
-		p=512.0000 -560.0000
+		p=-1024.0000 0.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=red_pikmin
-		p=480.0000 -592.0000
+		p=-1056.0000 -32.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=red_pikmin
-		p=528.0000 -576.0000
+		p=-1008.0000 -16.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=white_pikmin
-		p=512.0000 -592.0000
+		p=-1024.0000 -32.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=white_pikmin
-		p=544.0000 -592.0000
+		p=-992.0000 -32.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=white_pikmin
-		p=480.0000 -560.0000
+		p=-1056.0000 0.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=white_pikmin
-		p=544.0000 -624.0000
+		p=-992.0000 -64.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=white_pikmin
-		p=496.0000 -576.0000
+		p=-1040.0000 -16.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=white_pikmin
-		p=512.0000 -624.0000
+		p=-1024.0000 -64.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=white_pikmin
-		p=480.0000 -624.0000
+		p=-1056.0000 -64.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=white_pikmin
-		p=496.0000 -608.0000
+		p=-1040.0000 -48.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=white_pikmin
-		p=528.0000 -608.0000
+		p=-1008.0000 -48.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=white_pikmin
-		p=544.0000 -560.0000
+		p=-992.0000 0.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=white_pikmin
-		p=512.0000 -560.0000
+		p=-1024.0000 0.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=white_pikmin
-		p=480.0000 -592.0000
+		p=-1056.0000 -32.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=white_pikmin
-		p=528.0000 -576.0000
+		p=-1008.0000 -16.0000
 		vars=maturity=0
 	}
 	pile{
@@ -5491,7 +5506,7 @@ mobs{
 	}
 	ship{
 		type=hocotate_ship
-		p=-1129.1785 130.2410
+		p=-1120.0000 112.0000
 		angle=-0.9085
 	}
 	group_task{
@@ -5548,21 +5563,21 @@ mobs{
 	}
 	enemy{
 		type=red_bulborb
-		p=-832.0000 64.0000
-		angle=3.0702
+		p=544.0000 -624.0000
+		angle=2.2948
 	}
 	enemy{
 		type=crumbug
-		p=-871.4620 -867.3248
+		p=-560.0000 -1264.0000
 	}
 	enemy{
 		type=crumbug
-		p=-829.1100 -789.2703
+		p=-592.0000 -1152.0000
 		angle=-1.6058
 	}
 	enemy{
 		type=crumbug
-		p=-781.0530 -867.7024
+		p=-720.0000 -1200.0000
 		angle=2.4440
 	}
 	custom{
@@ -5585,15 +5600,15 @@ mobs{
 	}
 	enemy{
 		type=dwarf_red_bulborb
-		p=-993.6559 -35.3278
+		p=16.0000 -176.0000
 	}
 	enemy{
 		type=dwarf_red_bulborb
-		p=-1152.0000 -16.0000
+		p=-128.0000 -16.0000
 	}
 	enemy{
 		type=dwarf_red_bulborb
-		p=-1040.0000 -160.0000
+		p=144.0000 64.0000
 	}
 	bouncer{
 		type=geyser
@@ -5625,62 +5640,62 @@ mobs{
 	}
 	pikmin{
 		type=white_pikmin
-		p=512.0000 -640.0000
+		p=-1024.0000 -80.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=winged_pikmin
-		p=512.0000 -640.0000
+		p=-1024.0000 -80.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=red_pikmin
-		p=512.0000 -640.0000
+		p=-1024.0000 -80.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=winged_pikmin
-		p=560.0000 -592.0000
+		p=-976.0000 -32.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=red_pikmin
-		p=560.0000 -592.0000
+		p=-976.0000 -32.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=white_pikmin
-		p=560.0000 -592.0000
+		p=-976.0000 -32.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=winged_pikmin
-		p=512.0000 -544.0000
+		p=-1024.0000 16.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=red_pikmin
-		p=512.0000 -544.0000
+		p=-1024.0000 16.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=white_pikmin
-		p=512.0000 -544.0000
+		p=-1024.0000 16.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=winged_pikmin
-		p=464.0000 -592.0000
+		p=-1072.0000 -32.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=red_pikmin
-		p=464.0000 -592.0000
+		p=-1072.0000 -32.0000
 		vars=maturity=0
 	}
 	pikmin{
 		type=white_pikmin
-		p=464.0000 -592.0000
+		p=-1072.0000 -32.0000
 		vars=maturity=0
 	}
 	converter{
@@ -5933,7 +5948,37 @@ mobs{
 	}
 	custom{
 		type=firefly_generator
-		p=-1024.0000 16.0000
+		p=-960.0000 32.0000
+	}
+	enemy{
+		type=beady_long_legs
+		p=192.0000 -528.0000
+		angle=1.8232
+	}
+	resource{
+		type=chocolate_square
+		p=96.0000 -592.0000
+		stored_inside=193
+	}
+	resource{
+		type=chocolate_square
+		p=288.0000 -464.0000
+		stored_inside=193
+	}
+	resource{
+		type=chocolate_square
+		p=192.0000 -624.0000
+		stored_inside=193
+	}
+	resource{
+		type=chocolate_square
+		p=288.0000 -592.0000
+		stored_inside=193
+	}
+	resource{
+		type=chocolate_square
+		p=144.0000 -432.0000
+		stored_inside=193
 	}
 }
 path_stops{
@@ -6095,7 +6140,8 @@ path_stops{
 		pos=-119.3549 -910.0061
 		links{
 			nr=2 1
-			nr=32
+			nr=79
+			nr=82
 		}
 	}
 	s{
@@ -6192,9 +6238,10 @@ path_stops{
 		pos=-126.1502 -1131.6869
 		links{
 			nr=31
-			nr=19
 			nr=33
 			nr=76 1
+			nr=80
+			nr=81
 		}
 	}
 	s{
@@ -6538,12 +6585,40 @@ path_stops{
 			nr=30 1
 		}
 	}
+	s{
+		pos=-56.1211 -955.4259
+		links{
+			nr=19
+			nr=80
+		}
+	}
+	s{
+		pos=-54.1308 -1047.9753
+		links{
+			nr=79
+			nr=32
+		}
+	}
+	s{
+		pos=-198.4282 -1043.9948
+		links{
+			nr=32
+			nr=82
+		}
+	}
+	s{
+		pos=-200.4186 -944.4792
+		links{
+			nr=81
+			nr=19
+		}
+	}
 }
 tree_shadows{
 	shadow{
-		pos=212.4559 -191.2707
-		size=6166.3291 6130.1162
-		angle=3.3617
+		pos=-320.0000 -432.0000
+		size=7336.5454 7486.4971
+		angle=12.8117
 		file=textures/tree_shadow
 		sway=1.0000 1.0000
 	}
