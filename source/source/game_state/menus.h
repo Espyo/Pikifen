@@ -36,7 +36,7 @@ extern const string SPECS_GUI_FILE_NAME;
 }
 
 
-namespace MAIN_MENU {
+namespace TITLE_SCREEN {
 extern const string GUI_FILE_NAME;
 extern const float HUD_MOVE_TIME;
 extern const string MAKE_GUI_FILE_NAME;
@@ -65,32 +65,32 @@ enum MAIN_MENU_PAGE {
 };
 
 
-//Specific menus of the "dark" main menu.
-enum DARK_MAIN_MENU_MENU {
+//Specific menus of the annex screen.
+enum ANNEX_SCREEN_MENU {
 
     //Help.
-    DARK_MAIN_MENU_MENU_HELP,
+    ANNEX_SCREEN_MENU_HELP,
     
     //Options.
-    DARK_MAIN_MENU_MENU_OPTIONS,
+    ANNEX_SCREEN_MENU_OPTIONS,
     
     //Statistics.
-    DARK_MAIN_MENU_MENU_STATS,
+    ANNEX_SCREEN_MENU_STATS,
     
 };
 
 
 /**
- * @brief Info about the "dark", full-screen main menu.
+ * @brief Info about the annex screen used for misc. menus.
  */
-class dark_main_menu_state : public game_state {
+class annex_screen_state : public game_state {
 
 public:
 
     //--- Members ---
     
     //What specific menu to load when it is created.
-    DARK_MAIN_MENU_MENU menu_to_load = DARK_MAIN_MENU_MENU_HELP;
+    ANNEX_SCREEN_MENU menu_to_load = ANNEX_SCREEN_MENU_HELP;
     
     //Information about the current help menu, if any+.
     help_menu_t* help_menu = nullptr;
@@ -128,9 +128,9 @@ private:
 
 
 /**
- * @brief Info about the main menu.
+ * @brief Info about the title screen.
  */
-class main_menu_state : public game_state {
+class title_screen_state : public game_state {
 
 public:
 

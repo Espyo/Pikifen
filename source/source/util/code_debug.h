@@ -28,10 +28,10 @@
  * This only applies to operations in the project's code
  * (hence the find-and-replace). This helps in debugging memory leaks in
  * two instances of the same state of execution.
- * For instance, you enter the main menu, start recording, enter a different
- * menu, and return to the main menu. Everything that got allocated since
+ * For instance, you enter the title screen, start recording, enter a different
+ * menu, and return to the title screen. Everything that got allocated since
  * recording should've been freed by now since the program is in the same
- * state it was before (the main menu). With this tool, it is possible to see
+ * state it was before (the title screen). With this tool, it is possible to see
  * what addresses were allocated, but not freed.
  * The only information that is given is the memory address (whose content can
  * be inspected if you paused execution with a breakpoint), and the file + line

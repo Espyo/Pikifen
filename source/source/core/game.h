@@ -61,8 +61,8 @@ struct game_state_list {
     //Area selection menu.
     area_menu_state* area_menu = nullptr;
     
-    //"Dark", full-screen main menu.
-    dark_main_menu_state* dark_main_menu = nullptr;
+    //Annex screen for misc. menus.
+    annex_screen_state* annex_screen = nullptr;
     
     //Gameplay state.
     gameplay_state* gameplay = nullptr;
@@ -73,8 +73,8 @@ struct game_state_list {
     //GUI editor state.
     particle_editor* particle_ed = nullptr;
     
-    //Main menu.
-    main_menu_state* main_menu = nullptr;
+    //Title screen.
+    title_screen_state* title_screen = nullptr;
     
     //Area results menu.
     results_state* results = nullptr;
@@ -285,7 +285,7 @@ private:
 
     //--- Members ---
     
-    //Current game state: main menu, gameplay, etc.
+    //Current game state: title screen, gameplay, etc.
     game_state* cur_state = nullptr;
     
     //Queue of Allegro events.

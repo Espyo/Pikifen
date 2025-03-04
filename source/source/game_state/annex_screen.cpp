@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * "Dark", full-screen main menu state class and related functions.
+ * Annex screen state class and related functions.
  */
 
 #include <algorithm>
@@ -16,9 +16,9 @@
 
 
 /**
- * @brief Draws the dark main menu.
+ * @brief Draws the annex screen state.
  */
-void dark_main_menu_state::do_drawing() {
+void annex_screen_state::do_drawing() {
     al_clear_to_color(COLOR_BLACK);
     
     draw_bitmap(
@@ -37,7 +37,7 @@ void dark_main_menu_state::do_drawing() {
 /**
  * @brief Ticks one frame's worth of logic.
  */
-void dark_main_menu_state::do_logic() {
+void annex_screen_state::do_logic() {
     vector<player_action> player_actions = game.controls.new_frame();
     if(!game.fade_mgr.is_fading()) {
         for(size_t a = 0; a < player_actions.size(); a++) {
@@ -86,8 +86,8 @@ void dark_main_menu_state::do_logic() {
  *
  * @return The name.
  */
-string dark_main_menu_state::get_name() const {
-    return "dark main menu";
+string annex_screen_state::get_name() const {
+    return "annex screen";
 }
 
 
@@ -96,7 +96,7 @@ string dark_main_menu_state::get_name() const {
  *
  * @param ev Event to handle.
  */
-void dark_main_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
+void annex_screen_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;
     
     if(help_menu) help_menu->handle_event(ev);
@@ -106,21 +106,21 @@ void dark_main_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
 
 
 /**
- * @brief Leaves the dark main menu and goes to the regular main menu.
+ * @brief Leaves the annex screen state and goes to the title screen.
  */
-void dark_main_menu_state::leave() {
+void annex_screen_state::leave() {
     game.fade_mgr.start_fade(false, [] () {
-        game.change_state(game.states.main_menu);
+        game.change_state(game.states.title_screen);
     });
 }
 
 
 /**
- * @brief Loads the dark main menu into memory.
+ * @brief Loads the annex screen state into memory.
  */
-void dark_main_menu_state::load() {
+void annex_screen_state::load() {
     //Resources.
-    bmp_menu_bg = game.content.bitmaps.list.get(game.sys_content_names.bmp_main_menu);
+    bmp_menu_bg = game.content.bitmaps.list.get(game.sys_content_names.bmp_title_screen_bg);
     
     //Game content.
     game.content.reload_packs();
@@ -134,7 +134,7 @@ void dark_main_menu_state::load() {
     
     //Load the intended concrete menu.
     switch(menu_to_load) {
-    case DARK_MAIN_MENU_MENU_HELP: {
+    case ANNEX_SCREEN_MENU_HELP: {
         game.content.load_all(
         vector<CONTENT_TYPE> {
             CONTENT_TYPE_PARTICLE_GEN,
@@ -175,17 +175,17 @@ void dark_main_menu_state::load() {
             leave();
         };
         break;
-    } case DARK_MAIN_MENU_MENU_OPTIONS: {
+    } case ANNEX_SCREEN_MENU_OPTIONS: {
         options_menu = new options_menu_t();
         options_menu->back_callback = [this] () { leave(); };
         break;
-    } case DARK_MAIN_MENU_MENU_STATS: {
+    } case ANNEX_SCREEN_MENU_STATS: {
         stats_menu = new stats_menu_t();
         stats_menu->back_callback = [this] () { leave(); };
         break;
     }
     }
-    menu_to_load = DARK_MAIN_MENU_MENU_HELP;
+    menu_to_load = ANNEX_SCREEN_MENU_HELP;
     
     //Finishing touches.
     game.audio.set_current_song(game.sys_content_names.sng_menus);
@@ -194,9 +194,9 @@ void dark_main_menu_state::load() {
 
 
 /**
- * @brief Unloads the dark main menu from memory.
+ * @brief Unloads the annex screen state from memory.
  */
-void dark_main_menu_state::unload() {
+void annex_screen_state::unload() {
     //Resources.
     game.content.bitmaps.list.free(bmp_menu_bg);
     

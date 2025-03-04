@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Main menu state class and main menu state-related functions.
+ * Title screen state class and title screen state-related functions.
  */
 
 #include <algorithm>
@@ -22,7 +22,7 @@
 #include "other_menus/options_menu.h"
 
 
-namespace MAIN_MENU {
+namespace TITLE_SCREEN {
 
 //Name of the GUI information file.
 const string GUI_FILE_NAME = "main_menu";
@@ -43,9 +43,9 @@ const string TUTORIAL_GUI_FILE_NAME = "main_menu_tutorial";
 
 
 /**
- * @brief Draws the main menu.
+ * @brief Draws the title screen.
  */
-void main_menu_state::do_drawing() {
+void title_screen_state::do_drawing() {
     al_clear_to_color(COLOR_BLACK);
     
     if(game.debug.show_dear_imgui_demo) return;
@@ -104,7 +104,7 @@ void main_menu_state::do_drawing() {
 /**
  * @brief Ticks a frame's worth of logic.
  */
-void main_menu_state::do_logic() {
+void title_screen_state::do_logic() {
     if(game.debug.show_dear_imgui_demo) return;
     
     //Animate the logo Pikmin.
@@ -166,8 +166,8 @@ void main_menu_state::do_logic() {
  *
  * @return The name.
  */
-string main_menu_state::get_name() const {
-    return "main menu";
+string title_screen_state::get_name() const {
+    return "title screen";
 }
 
 
@@ -176,7 +176,7 @@ string main_menu_state::get_name() const {
  *
  * @param ev Event to handle.
  */
-void main_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
+void title_screen_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;
     
     main_gui.handle_event(ev);
@@ -189,8 +189,8 @@ void main_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
 /**
  * @brief Loads the GUI elements for the main menu's main page.
  */
-void main_menu_state::init_gui_main_page() {
-    data_node* gui_file = &game.content.gui_defs.list[MAIN_MENU::GUI_FILE_NAME];
+void title_screen_state::init_gui_main_page() {
+    data_node* gui_file = &game.content.gui_defs.list[TITLE_SCREEN::GUI_FILE_NAME];
     
     //Button icon positions.
     data_node* icons_node = gui_file->get_child_by_name("icons_to_the_left");
@@ -240,19 +240,19 @@ void main_menu_state::init_gui_main_page() {
         main_gui.responsive = false;
         main_gui.start_animation(
             GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
-            MAIN_MENU::HUD_MOVE_TIME
+            TITLE_SCREEN::HUD_MOVE_TIME
         );
         if(game.statistics.area_entries == 0) {
             tutorial_gui.responsive = true;
             tutorial_gui.start_animation(
                 GUI_MANAGER_ANIM_LEFT_TO_CENTER,
-                MAIN_MENU::HUD_MOVE_TIME
+                TITLE_SCREEN::HUD_MOVE_TIME
             );
         } else {
             play_gui.responsive = true;
             play_gui.start_animation(
                 GUI_MANAGER_ANIM_LEFT_TO_CENTER,
-                MAIN_MENU::HUD_MOVE_TIME
+                TITLE_SCREEN::HUD_MOVE_TIME
             );
         }
     };
@@ -280,12 +280,12 @@ void main_menu_state::init_gui_main_page() {
         main_gui.responsive = false;
         main_gui.start_animation(
             GUI_MANAGER_ANIM_CENTER_TO_LEFT,
-            MAIN_MENU::HUD_MOVE_TIME
+            TITLE_SCREEN::HUD_MOVE_TIME
         );
         make_gui.responsive = true;
         make_gui.start_animation(
             GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
-            MAIN_MENU::HUD_MOVE_TIME
+            TITLE_SCREEN::HUD_MOVE_TIME
         );
     };
     make_button->on_get_tooltip =
@@ -310,7 +310,7 @@ void main_menu_state::init_gui_main_page() {
     help_button->on_activate =
     [this] (const point &) {
         game.fade_mgr.start_fade(false, [] () {
-            game.change_state(game.states.dark_main_menu);
+            game.change_state(game.states.annex_screen);
         });
     };
     help_button->on_get_tooltip =
@@ -339,9 +339,9 @@ void main_menu_state::init_gui_main_page() {
     options_button->on_activate =
     [] (const point &) {
         game.fade_mgr.start_fade(false, [] () {
-            game.states.dark_main_menu->menu_to_load =
-                DARK_MAIN_MENU_MENU_OPTIONS;
-            game.change_state(game.states.dark_main_menu);
+            game.states.annex_screen->menu_to_load =
+                ANNEX_SCREEN_MENU_OPTIONS;
+            game.change_state(game.states.annex_screen);
         });
     };
     options_button->on_get_tooltip =
@@ -366,9 +366,9 @@ void main_menu_state::init_gui_main_page() {
     stats_button->on_activate =
     [] (const point &) {
         game.fade_mgr.start_fade(false, [] () {
-            game.states.dark_main_menu->menu_to_load =
-                DARK_MAIN_MENU_MENU_STATS;
-            game.change_state(game.states.dark_main_menu);
+            game.states.annex_screen->menu_to_load =
+                ANNEX_SCREEN_MENU_STATS;
+            game.change_state(game.states.annex_screen);
         });
     };
     stats_button->on_get_tooltip =
@@ -474,8 +474,8 @@ void main_menu_state::init_gui_main_page() {
 /**
  * @brief Loads the GUI elements for the main menu's make page.
  */
-void main_menu_state::init_gui_make_page() {
-    data_node* gui_file = &game.content.gui_defs.list[MAIN_MENU::MAKE_GUI_FILE_NAME];
+void title_screen_state::init_gui_make_page() {
+    data_node* gui_file = &game.content.gui_defs.list[TITLE_SCREEN::MAKE_GUI_FILE_NAME];
     
     //Button icon positions.
     data_node* icons_node = gui_file->get_child_by_name("icons_to_the_left");
@@ -609,12 +609,12 @@ void main_menu_state::init_gui_make_page() {
         make_gui.responsive = false;
         make_gui.start_animation(
             GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
-            MAIN_MENU::HUD_MOVE_TIME
+            TITLE_SCREEN::HUD_MOVE_TIME
         );
         main_gui.responsive = true;
         main_gui.start_animation(
             GUI_MANAGER_ANIM_LEFT_TO_CENTER,
-            MAIN_MENU::HUD_MOVE_TIME
+            TITLE_SCREEN::HUD_MOVE_TIME
         );
     };
     make_gui.back_item->on_get_tooltip =
@@ -656,8 +656,8 @@ void main_menu_state::init_gui_make_page() {
 /**
  * @brief Loads the GUI elements for the main menu's play page.
  */
-void main_menu_state::init_gui_play_page() {
-    data_node* gui_file = &game.content.gui_defs.list[MAIN_MENU::PLAY_GUI_FILE_NAME];
+void title_screen_state::init_gui_play_page() {
+    data_node* gui_file = &game.content.gui_defs.list[TITLE_SCREEN::PLAY_GUI_FILE_NAME];
     
     //Button icon positions.
     data_node* icons_node = gui_file->get_child_by_name("icons_to_the_left");
@@ -742,12 +742,12 @@ void main_menu_state::init_gui_play_page() {
         play_gui.responsive = false;
         play_gui.start_animation(
             GUI_MANAGER_ANIM_CENTER_TO_LEFT,
-            MAIN_MENU::HUD_MOVE_TIME
+            TITLE_SCREEN::HUD_MOVE_TIME
         );
         main_gui.responsive = true;
         main_gui.start_animation(
             GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
-            MAIN_MENU::HUD_MOVE_TIME
+            TITLE_SCREEN::HUD_MOVE_TIME
         );
     };
     play_gui.back_item->on_get_tooltip =
@@ -774,8 +774,8 @@ void main_menu_state::init_gui_play_page() {
 /**
  * @brief Loads the GUI elements for the main menu's tutorial question page.
  */
-void main_menu_state::init_gui_tutorial_page() {
-    data_node* gui_file = &game.content.gui_defs.list[MAIN_MENU::TUTORIAL_GUI_FILE_NAME];
+void title_screen_state::init_gui_tutorial_page() {
+    data_node* gui_file = &game.content.gui_defs.list[TITLE_SCREEN::TUTORIAL_GUI_FILE_NAME];
     
     //Menu items.
     tutorial_gui.register_coords("question", 50,     60, 60,  12.5);
@@ -804,12 +804,12 @@ void main_menu_state::init_gui_tutorial_page() {
         tutorial_gui.responsive = false;
         tutorial_gui.start_animation(
             GUI_MANAGER_ANIM_CENTER_TO_LEFT,
-            MAIN_MENU::HUD_MOVE_TIME
+            TITLE_SCREEN::HUD_MOVE_TIME
         );
         play_gui.responsive = true;
         play_gui.start_animation(
             GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
-            MAIN_MENU::HUD_MOVE_TIME
+            TITLE_SCREEN::HUD_MOVE_TIME
         );
     };
     tutorial_gui.back_item->on_get_tooltip =
@@ -857,9 +857,9 @@ void main_menu_state::init_gui_tutorial_page() {
 
 
 /**
- * @brief Loads the main menu into memory.
+ * @brief Loads the title screen into memory.
  */
-void main_menu_state::load() {
+void title_screen_state::load() {
     draw_loading_screen("", "", 1.0);
     al_flip_display();
     
@@ -895,10 +895,10 @@ void main_menu_state::load() {
     }
     page_to_load = MAIN_MENU_PAGE_MAIN;
     
-    data_node* settings_file = &game.content.gui_defs.list[MAIN_MENU::GUI_FILE_NAME];
+    data_node* settings_file = &game.content.gui_defs.list[TITLE_SCREEN::GUI_FILE_NAME];
     
     //Resources.
-    bmp_menu_bg = game.content.bitmaps.list.get(game.sys_content_names.bmp_main_menu);
+    bmp_menu_bg = game.content.bitmaps.list.get(game.sys_content_names.bmp_title_screen_bg);
     
     //Logo pikmin.
     data_node* logo_node = settings_file->get_child_by_name("logo");
@@ -1009,9 +1009,9 @@ void main_menu_state::load() {
 
 
 /**
- * @brief Unloads the main menu from memory.
+ * @brief Unloads the title screen from memory.
  */
-void main_menu_state::unload() {
+void title_screen_state::unload() {
     //Resources.
     game.content.bitmaps.list.free(bmp_menu_bg);
     bmp_menu_bg = nullptr;

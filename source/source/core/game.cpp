@@ -492,7 +492,7 @@ int game_class::start() {
             maker_tools.auto_start_option;
         change_state(states.particle_ed);
     } else {
-        change_state(states.main_menu);
+        change_state(states.title_screen);
     }
     
     return 0;
@@ -532,11 +532,11 @@ void game_state_list::destroy() {
     delete animation_ed;
     delete area_ed;
     delete area_menu;
-    delete dark_main_menu;
+    delete annex_screen;
     delete gameplay;
     delete gui_ed;
     delete particle_ed;
-    delete main_menu;
+    delete title_screen;
     delete results;
     
     animation_ed = nullptr;
@@ -545,7 +545,7 @@ void game_state_list::destroy() {
     gameplay = nullptr;
     gui_ed = nullptr;
     particle_ed = nullptr;
-    main_menu = nullptr;
+    title_screen = nullptr;
     results = nullptr;
 }
 
@@ -557,11 +557,11 @@ void game_state_list::init() {
     animation_ed = new animation_editor();
     area_ed = new area_editor();
     area_menu = new area_menu_state();
-    dark_main_menu = new dark_main_menu_state();
+    annex_screen = new annex_screen_state();
     gameplay = new gameplay_state();
     gui_ed = new gui_editor();
     particle_ed = new particle_editor();
-    main_menu = new main_menu_state();
+    title_screen = new title_screen_state();
     results = new results_state();
 }
 

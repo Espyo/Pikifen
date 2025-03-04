@@ -17,7 +17,6 @@ graphics {
     idle_glow = idle_glow
     leader_silhouette_side = leader_silhouette_side
     leader_silhouette_top = leader_silhouette_top
-    main_menu = main_menu
     medal_bronze = medal_bronze
     medal_gold = medal_gold
     medal_none = medal_none
@@ -42,6 +41,7 @@ graphics {
     throw_invalid = throw_invalid
     throw_preview = throw_preview
     throw_preview_dashed = throw_preview_dashed
+    title_screen_bg = title_screen_bg
     wave_ring = wave_ring
 }
 

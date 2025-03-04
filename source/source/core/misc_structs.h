@@ -725,9 +725,6 @@ struct sys_content_names_t {
     //Leader silhouette from the top.
     string bmp_leader_silhouette_top = "leader_silhouette_top";
     
-    //Main menu background.
-    string bmp_main_menu = "main_menu";
-    
     //Bronze medal.
     string bmp_medal_bronze = "medal_bronze";
     
@@ -802,6 +799,9 @@ struct sys_content_names_t {
     
     //Dashed throw preview texture.
     string bmp_throw_preview_dashed = "throw_preview_dashed";
+    
+    //Title screen background.
+    string bmp_title_screen_bg = "title_screen_bg";
     
     //Wave ring.
     string bmp_wave_ring = "wave_ring";

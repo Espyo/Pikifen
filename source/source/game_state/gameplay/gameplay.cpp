@@ -663,7 +663,7 @@ void gameplay_state::init_hud() {
 
 
 /**
- * @brief Leaves the gameplay state and enters the main menu,
+ * @brief Leaves the gameplay state and enters the title screen,
  * or area selection, or etc.
  *
  * @param target Where to leave to.
@@ -799,7 +799,7 @@ void gameplay_state::load() {
             CONTENT_LOAD_LEVEL_FULL, false
         )
     ) {
-        game.change_state(game.states.main_menu, true);
+        game.change_state(game.states.title_screen, true);
         return;
     }
     

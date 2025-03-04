@@ -161,7 +161,6 @@ void sys_content_names_t::load(data_node* file) {
     gra_rs.set("key_box", bmp_key_box);
     gra_rs.set("leader_silhouette_side", bmp_leader_silhouette_side);
     gra_rs.set("leader_silhouette_top", bmp_leader_silhouette_top);
-    gra_rs.set("main_menu", bmp_main_menu);
     gra_rs.set("medal_bronze", bmp_medal_bronze);
     gra_rs.set("medal_gold", bmp_medal_gold);
     gra_rs.set("medal_none", bmp_medal_none);
@@ -187,6 +186,7 @@ void sys_content_names_t::load(data_node* file) {
     gra_rs.set("throw_invalid", bmp_throw_invalid);
     gra_rs.set("throw_preview", bmp_throw_preview);
     gra_rs.set("throw_preview_dashed", bmp_throw_preview_dashed);
+    gra_rs.set("title_screen_bg", bmp_title_screen_bg);
     gra_rs.set("wave_ring", bmp_wave_ring);
     
     reader_setter fnt_rs(file->get_child_by_name("fonts"));

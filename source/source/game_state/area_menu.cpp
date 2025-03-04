@@ -894,12 +894,12 @@ void area_menu_state::init_gui_specs_page() {
 
 
 /**
- * @brief Leaves the area menu and goes into the main menu.
+ * @brief Leaves the area menu and goes into the title screen.
  */
 void area_menu_state::leave() {
     game.fade_mgr.start_fade(false, [] () {
-        game.states.main_menu->page_to_load = MAIN_MENU_PAGE_PLAY;
-        game.change_state(game.states.main_menu);
+        game.states.title_screen->page_to_load = MAIN_MENU_PAGE_PLAY;
+        game.change_state(game.states.title_screen);
     });
 }
 
@@ -941,7 +941,7 @@ void area_menu_state::load() {
         }
     }
     
-    bmp_menu_bg = game.content.bitmaps.list.get(game.sys_content_names.bmp_main_menu);
+    bmp_menu_bg = game.content.bitmaps.list.get(game.sys_content_names.bmp_title_screen_bg);
     
     init_gui_main();
     init_gui_info_page();
