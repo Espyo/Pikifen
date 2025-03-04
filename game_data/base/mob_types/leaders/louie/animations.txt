@@ -86,7 +86,7 @@ animations{
 			half_lying{
 				duration=0.0700
 			}
-			idling{
+			idling_big{
 				duration=0.0500
 				interpolate=true
 			}
