@@ -23,14 +23,11 @@ void annex_screen_state::do_drawing() {
     al_clear_to_color(COLOR_BLACK);
     
     draw_bitmap(
-        bmp_menu_bg, point(game.win_w * 0.5, game.win_h * 0.5),
+        bmp_bg, point(game.win_w * 0.5, game.win_h * 0.5),
         point(game.win_w, game.win_h), 0, map_gray(64)
     );
     
-    if(area_menu) area_menu->draw();
-    if(help_menu) help_menu->draw();
-    if(options_menu) options_menu->draw();
-    if(stats_menu) stats_menu->draw();
+    if(cur_menu) cur_menu->draw();
     
     draw_mouse_cursor(GAME::CURSOR_STANDARD_COLOR);
 }
@@ -41,56 +38,19 @@ void annex_screen_state::do_drawing() {
  */
 void annex_screen_state::do_logic() {
     vector<player_action> player_actions = game.controls.new_frame();
+    
     if(!game.fade_mgr.is_fading()) {
         for(size_t a = 0; a < player_actions.size(); a++) {
-            if(area_menu) {
-                area_menu->handle_player_action(player_actions[a]);
-            }
-            if(help_menu) {
-                help_menu->handle_player_action(player_actions[a]);
-            }
-            if(options_menu) {
-                options_menu->handle_player_action(player_actions[a]);
-            }
-            if(stats_menu) {
-                stats_menu->handle_player_action(player_actions[a]);
-            }
+            if(cur_menu) cur_menu->handle_player_action(player_actions[a]);
         }
     }
     
-    if(area_menu) {
-        if(area_menu->loaded) {
-            area_menu->tick(game.delta_t);
+    if(cur_menu) {
+        if(cur_menu->loaded) {
+            cur_menu->tick(game.delta_t);
         } else {
-            delete area_menu;
-            area_menu = nullptr;
-        }
-    }
-    
-    if(help_menu) {
-        if(help_menu->loaded) {
-            help_menu->tick(game.delta_t);
-        } else {
-            delete help_menu;
-            help_menu = nullptr;
-        }
-    }
-    
-    if(options_menu) {
-        if(options_menu->loaded) {
-            options_menu->tick(game.delta_t);
-        } else {
-            delete options_menu;
-            options_menu = nullptr;
-        }
-    }
-    
-    if(stats_menu) {
-        if(stats_menu->loaded) {
-            stats_menu->tick(game.delta_t);
-        } else {
-            delete stats_menu;
-            stats_menu = nullptr;
+            delete cur_menu;
+            cur_menu = nullptr;
         }
     }
     
@@ -116,10 +76,7 @@ string annex_screen_state::get_name() const {
 void annex_screen_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;
     
-    if(area_menu) area_menu->handle_event(ev);
-    if(help_menu) help_menu->handle_event(ev);
-    if(options_menu) options_menu->handle_event(ev);
-    if(stats_menu) stats_menu->handle_event(ev);
+    if(cur_menu) cur_menu->handle_allegro_event(ev);
 }
 
 
@@ -138,8 +95,11 @@ void annex_screen_state::leave() {
  */
 void annex_screen_state::load() {
     //Resources.
-    bmp_menu_bg = game.content.bitmaps.list.get(game.sys_content_names.bmp_title_screen_bg);
-    
+    bmp_bg =
+        game.content.bitmaps.list.get(
+            game.sys_content_names.bmp_title_screen_bg
+        );
+        
     //Game content.
     game.content.reload_packs();
     game.content.load_all(
@@ -153,15 +113,14 @@ void annex_screen_state::load() {
     //Load the intended concrete menu.
     switch(menu_to_load) {
     case ANNEX_SCREEN_MENU_AREA_SELECTION: {
-        area_menu = new area_menu_t();
+        area_menu_t* area_menu = new area_menu_t();
         area_menu->area_type = area_menu_area_type;
         area_menu->leave_callback =
         [this] () {
             game.states.title_screen->page_to_load = MAIN_MENU_PAGE_PLAY;
             leave();
         };
-        area_menu->load();
-        area_menu->enter();
+        cur_menu = area_menu;
         break;
         
     } case ANNEX_SCREEN_MENU_HELP: {
@@ -185,7 +144,7 @@ void annex_screen_state::load() {
         },
         CONTENT_LOAD_LEVEL_FULL
         );
-        help_menu = new help_menu_t();
+        help_menu_t* help_menu = new help_menu_t();
         help_menu->unload_callback =
         [this] () {
             game.content.unload_all(
@@ -208,32 +167,32 @@ void annex_screen_state::load() {
             game.states.title_screen->page_to_load = MAIN_MENU_PAGE_MAIN;
             leave();
         };
-        help_menu->load();
-        help_menu->enter();
+        cur_menu = help_menu;
         break;
         
     } case ANNEX_SCREEN_MENU_OPTIONS: {
-        options_menu = new options_menu_t();
+        options_menu_t* options_menu = new options_menu_t();
         options_menu->leave_callback = [this] () {
             game.states.title_screen->page_to_load = MAIN_MENU_PAGE_MAIN;
             leave();
         };
-        options_menu->load();
-        options_menu->enter();
+        cur_menu = options_menu;
         break;
         
     } case ANNEX_SCREEN_MENU_STATS: {
-        stats_menu = new stats_menu_t();
+        stats_menu_t* stats_menu = new stats_menu_t();
         stats_menu->leave_callback = [this] () {
             game.states.title_screen->page_to_load = MAIN_MENU_PAGE_MAIN;
             leave();
         };
-        stats_menu->load();
-        stats_menu->enter();
+        cur_menu = stats_menu;
         break;
         
     }
     }
+    
+    cur_menu->load();
+    cur_menu->enter();
     menu_to_load = ANNEX_SCREEN_MENU_HELP;
     
     //Finishing touches.
@@ -247,28 +206,13 @@ void annex_screen_state::load() {
  */
 void annex_screen_state::unload() {
     //Resources.
-    game.content.bitmaps.list.free(bmp_menu_bg);
+    game.content.bitmaps.list.free(bmp_bg);
     
     //Menus.
-    if(area_menu) {
-        area_menu->unload();
-        delete area_menu;
-        area_menu = nullptr;
-    }
-    if(help_menu) {
-        help_menu->unload();
-        delete help_menu;
-        help_menu = nullptr;
-    }
-    if(options_menu) {
-        options_menu->unload();
-        delete options_menu;
-        options_menu = nullptr;
-    }
-    if(stats_menu) {
-        stats_menu->unload();
-        delete stats_menu;
-        stats_menu = nullptr;
+    if(cur_menu) {
+        cur_menu->unload();
+        delete cur_menu;
+        cur_menu = nullptr;
     }
     
     //Game content.

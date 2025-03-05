@@ -844,8 +844,6 @@ void area_menu_t::init_gui_specs_page() {
  * @brief Loads the menu.
  */
 void area_menu_t::load() {
-    guis.push_back(&gui);
-    
     //Mission records.
     if(area_type == AREA_TYPE_MISSION) {
         data_node mission_records;
@@ -861,6 +859,7 @@ void area_menu_t::load() {
         }
     }
     
+    //Initialize the GUIs.
     init_gui_main();
     init_gui_info_page();
     if(area_type == AREA_TYPE_MISSION && !game.content.areas.list[AREA_TYPE_MISSION].empty()) {
@@ -872,9 +871,7 @@ void area_menu_t::load() {
         gui.set_selected_item(first_area_button, true);
     }
     
-    //Finishing touches.
-    game.audio.set_current_song(game.sys_content_names.sng_menus);
-    game.fade_mgr.start_fade(true, nullptr);
-    
+    //Finish the menu class setup.
+    guis.push_back(&gui);
     menu_t::load();
 }

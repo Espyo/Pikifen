@@ -42,12 +42,12 @@ void menu_t::enter() {
  *
  * @param ev The event.
  */
-void menu_t::handle_event(const ALLEGRO_EVENT &ev) {
+void menu_t::handle_allegro_event(const ALLEGRO_EVENT &ev) {
     if(!loaded || !active) return;
     
     for(size_t g = 0; g < guis.size(); g++) {
         if(guis[g]) {
-            guis[g]->handle_event(ev);
+            guis[g]->handle_allegro_event(ev);
         }
     }
 }

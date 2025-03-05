@@ -178,10 +178,10 @@ string title_screen_state::get_name() const {
 void title_screen_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;
     
-    main_gui.handle_event(ev);
-    play_gui.handle_event(ev);
-    make_gui.handle_event(ev);
-    tutorial_gui.handle_event(ev);
+    main_gui.handle_allegro_event(ev);
+    play_gui.handle_allegro_event(ev);
+    make_gui.handle_allegro_event(ev);
+    tutorial_gui.handle_allegro_event(ev);
 }
 
 

@@ -1498,13 +1498,13 @@ string pause_menu_t::get_mission_goal_status() {
  *
  * @param ev Event to handle.
  */
-void pause_menu_t::handle_event(const ALLEGRO_EVENT &ev) {
-    gui.handle_event(ev);
-    radar_gui.handle_event(ev);
-    status_gui.handle_event(ev);
-    mission_gui.handle_event(ev);
-    confirmation_gui.handle_event(ev);
-    if(help_menu) help_menu->handle_event(ev);
+void pause_menu_t::handle_allegro_event(const ALLEGRO_EVENT &ev) {
+    gui.handle_allegro_event(ev);
+    radar_gui.handle_allegro_event(ev);
+    status_gui.handle_allegro_event(ev);
+    mission_gui.handle_allegro_event(ev);
+    confirmation_gui.handle_allegro_event(ev);
+    if(help_menu) help_menu->handle_allegro_event(ev);
     
     //Handle some radar logic.
     point radar_center;

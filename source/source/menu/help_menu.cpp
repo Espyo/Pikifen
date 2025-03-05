@@ -81,8 +81,7 @@ void help_menu_t::draw_tidbit(
  * @brief Loads the menu.
  */
 void help_menu_t::load() {
-    guis.push_back(&gui);
-    
+    //Initial setup.
     const vector<string> category_node_names {
         "gameplay_basics", "advanced_gameplay", "controls", "", "objects"
     };
@@ -116,6 +115,19 @@ void help_menu_t::load() {
         tidbits[HELP_CATEGORY_PIKMIN].push_back(new_t);
     }
     
+    //Initialize the GUIs.
+    init_gui_main(gui_file);
+    
+    //Finish the menu class setup.
+    guis.push_back(&gui);
+    menu_t::load();
+}
+
+
+/**
+ * @brief Initializes the main GUI.
+ */
+void help_menu_t::init_gui_main(data_node* gui_file) {
     //Menu items.
     gui.register_coords("back",        12,  5, 20,  6);
     gui.register_coords("back_input",   3,  7,  4,  4);
@@ -271,8 +283,6 @@ void help_menu_t::load() {
     [this] () {
         cur_tidbit = nullptr;
     };
-    
-    menu_t::load();
 }
 
 

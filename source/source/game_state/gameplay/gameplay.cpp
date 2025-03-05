@@ -634,9 +634,9 @@ string gameplay_state::get_name() const {
 void gameplay_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     //Handle the Onion menu first so events don't bleed from gameplay to it.
     if(onion_menu) {
-        onion_menu->handle_event(ev);
+        onion_menu->handle_allegro_event(ev);
     } else if(pause_menu) {
-        pause_menu->handle_event(ev);
+        pause_menu->handle_allegro_event(ev);
     }
     
     //Check if there are system key presses.
@@ -649,7 +649,7 @@ void gameplay_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     }
     
     //Finally, let the HUD handle events.
-    hud->gui.handle_event(ev);
+    hud->gui.handle_allegro_event(ev);
     
 }
 

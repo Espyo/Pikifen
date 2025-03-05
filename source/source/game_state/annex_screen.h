@@ -49,17 +49,8 @@ public:
     //What specific menu to load when it is created.
     ANNEX_SCREEN_MENU menu_to_load = ANNEX_SCREEN_MENU_HELP;
     
-    //Information about the current area selection menu, if any.
-    area_menu_t* area_menu = nullptr;
-    
-    //Information about the current help menu, if any.
-    help_menu_t* help_menu = nullptr;
-    
-    //Information about the current options menu, if any.
-    options_menu_t* options_menu = nullptr;
-    
-    //Information about the current statistics menu, if any.
-    stats_menu_t* stats_menu = nullptr;
+    //Information about the current menu, if any.
+    menu_t* cur_menu = nullptr;
     
     //Type of area that the area menu is dealing with.
     AREA_TYPE area_menu_area_type = AREA_TYPE_SIMPLE;
@@ -79,8 +70,8 @@ private:
 
     //--- Members ---
     
-    //Bitmap of the menu background.
-    ALLEGRO_BITMAP* bmp_menu_bg = nullptr;
+    //Bitmap of the background.
+    ALLEGRO_BITMAP* bmp_bg = nullptr;
     
     
     //--- Function declarations ---

@@ -61,6 +61,7 @@ private:
     text_gui_item* add_stat(
         const string &label, const string &value, const string &description
     );
+    void init_gui_main();
     void populate_stats_list();
     void update_runtime_value_text();
     

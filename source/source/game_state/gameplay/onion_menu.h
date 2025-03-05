@@ -159,7 +159,7 @@ struct onion_menu_t {
     void confirm();
     void go_to_page(size_t page);
     void grow_buttons();
-    void handle_event(const ALLEGRO_EVENT &ev);
+    void handle_allegro_event(const ALLEGRO_EVENT &ev);
     void handle_player_action(const player_action &action);
     void start_closing();
     void tick(float delta_t);

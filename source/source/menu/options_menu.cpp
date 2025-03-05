@@ -144,7 +144,7 @@ void options_menu_t::draw() {
  *
  * @param ev The event.
  */
-void options_menu_t::handle_event(const ALLEGRO_EVENT &ev) {
+void options_menu_t::handle_allegro_event(const ALLEGRO_EVENT &ev) {
     if(!active) return;
     
     switch(capturing_input) {
@@ -178,8 +178,8 @@ void options_menu_t::handle_event(const ALLEGRO_EVENT &ev) {
     }
     }
     
-    menu_t::handle_event(ev);
-    if(packs_menu) packs_menu->handle_event(ev);
+    menu_t::handle_allegro_event(ev);
+    if(packs_menu) packs_menu->handle_allegro_event(ev);
 }
 
 
@@ -1028,13 +1028,6 @@ void options_menu_t::init_gui_top_page() {
  * @brief Loads the menu.
  */
 void options_menu_t::load() {
-    guis.push_back(&top_gui);
-    guis.push_back(&controls_gui);
-    guis.push_back(&binds_gui);
-    guis.push_back(&graphics_gui);
-    guis.push_back(&audio_gui);
-    guis.push_back(&misc_gui);
-    
     //Let's fill in the list of preset resolutions. For that, we'll get
     //the display modes fetched by Allegro. These are usually nice round
     //resolutions, and they work on fullscreen mode.
@@ -1077,7 +1070,7 @@ void options_menu_t::load() {
         }
     }
     
-    //And now do the typical loading process.
+    //Init the GUIs.
     init_gui_top_page();
     init_gui_controls_page();
     init_gui_control_binds_page();
@@ -1085,6 +1078,13 @@ void options_menu_t::load() {
     init_gui_audio_page();
     init_gui_misc_page();
     
+    //Finish the menu class setup.
+    guis.push_back(&top_gui);
+    guis.push_back(&controls_gui);
+    guis.push_back(&binds_gui);
+    guis.push_back(&graphics_gui);
+    guis.push_back(&audio_gui);
+    guis.push_back(&misc_gui);
     menu_t::load();
 }
 

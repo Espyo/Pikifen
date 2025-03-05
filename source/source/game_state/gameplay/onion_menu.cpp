@@ -688,8 +688,8 @@ void onion_menu_t::grow_buttons() {
  *
  * @param ev Event to handle.
  */
-void onion_menu_t::handle_event(const ALLEGRO_EVENT &ev) {
-    if(!closing) gui.handle_event(ev);
+void onion_menu_t::handle_allegro_event(const ALLEGRO_EVENT &ev) {
+    if(!closing) gui.handle_allegro_event(ev);
 }
 
 

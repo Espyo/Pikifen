@@ -95,11 +95,9 @@ text_gui_item* stats_menu_t::add_stat(
 
 
 /**
- * @brief Loads the menu.
+ * @brief Initializes the main GUI.
  */
-void stats_menu_t::load() {
-    guis.push_back(&gui);
-    
+void stats_menu_t::init_gui_main() {
     //Menu items.
     gui.register_coords("back",        12,  5, 20,  6);
     gui.register_coords("back_input",   3,  7,  4,  4);
@@ -152,7 +150,18 @@ void stats_menu_t::load() {
     
     //Finishing touches.
     gui.set_selected_item(gui.back_item, true);
+}
+
+
+/**
+ * @brief Loads the menu.
+ */
+void stats_menu_t::load() {
+    //Initialize the GUIs.
+    init_gui_main();
     
+    //Finish the class menu setup.
+    guis.push_back(&gui);
     menu_t::load();
 }
 

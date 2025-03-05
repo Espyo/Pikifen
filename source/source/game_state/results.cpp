@@ -211,7 +211,7 @@ string results_state::get_name() const {
 void results_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;
     
-    gui.handle_event(ev);
+    gui.handle_allegro_event(ev);
 }
 
 

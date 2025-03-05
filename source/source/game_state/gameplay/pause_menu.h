@@ -136,7 +136,7 @@ struct pause_menu_t {
     explicit pause_menu_t(bool start_on_radar);
     ~pause_menu_t();
     void draw();
-    void handle_event(const ALLEGRO_EVENT &ev);
+    void handle_allegro_event(const ALLEGRO_EVENT &ev);
     void handle_player_action(const player_action &action);
     void tick(float delta_t);
     

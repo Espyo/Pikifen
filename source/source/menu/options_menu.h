@@ -217,7 +217,7 @@ public:
     
     void draw() override;
     void load() override;
-    void handle_event(const ALLEGRO_EVENT &ev) override;
+    void handle_allegro_event(const ALLEGRO_EVENT &ev) override;
     void handle_player_action(const player_action &action) override;
     void unload() override;
     void tick(float delta_t);

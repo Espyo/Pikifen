@@ -112,6 +112,7 @@ private:
         const ALLEGRO_FONT* const font, const point &where,
         const point &max_size, const string &text
     );
+    void init_gui_main(data_node* gui_file);
     void populate_tidbits(const HELP_CATEGORY category);
     
 };

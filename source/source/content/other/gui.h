@@ -548,7 +548,7 @@ public:
     bool get_item_draw_info(
         gui_item* item, point* draw_center, point* draw_size
     );
-    void handle_event(const ALLEGRO_EVENT &ev);
+    void handle_allegro_event(const ALLEGRO_EVENT &ev);
     bool handle_player_action(const player_action &action);
     void hide_items();
     void read_coords(data_node* node);

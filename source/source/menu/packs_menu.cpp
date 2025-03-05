@@ -92,31 +92,9 @@ void packs_menu_t::change_info(int idx) {
 
 
 /**
- * @brief Loads the menu.
+ * @brief Initializes the main GUI.
  */
-void packs_menu_t::load() {
-    guis.push_back(&gui);
-    
-    //Fill the menu's lists of packs.
-    pack_order =
-        sort_vector_with_preference_list(
-            game.content.packs.manifests_sans_base_raw,
-            game.options.pack_order
-        );
-    packs_disabled = game.options.packs_disabled;
-    
-    //Get the thumbnails.
-    for(
-        size_t p = 0; p < game.content.packs.manifests_with_base_raw.size(); p++
-    ) {
-        string pack = game.content.packs.manifests_with_base_raw[p];
-        string thumb_path =
-            FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" + pack + "/thumbnail.png";
-        ALLEGRO_BITMAP* thumb_bmp =
-            load_bmp(thumb_path, nullptr, true, false, false);
-        pack_thumbs[pack] = thumb_bmp;
-    }
-    
+void packs_menu_t::init_gui_main() {
     //Menu items.
     gui.register_coords("back",               12,    5, 20,  6);
     gui.register_coords("back_input",          3,    7,  4,  4);
@@ -410,7 +388,38 @@ void packs_menu_t::load() {
     //Finishing touches.
     gui.set_selected_item(gui.back_item, true);
     change_info(-1);
+}
+
+
+/**
+ * @brief Loads the menu.
+ */
+void packs_menu_t::load() {
+    //Fill the menu's lists of packs.
+    pack_order =
+        sort_vector_with_preference_list(
+            game.content.packs.manifests_sans_base_raw,
+            game.options.pack_order
+        );
+    packs_disabled = game.options.packs_disabled;
     
+    //Get the thumbnails.
+    for(
+        size_t p = 0; p < game.content.packs.manifests_with_base_raw.size(); p++
+    ) {
+        string pack = game.content.packs.manifests_with_base_raw[p];
+        string thumb_path =
+            FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" + pack + "/thumbnail.png";
+        ALLEGRO_BITMAP* thumb_bmp =
+            load_bmp(thumb_path, nullptr, true, false, false);
+        pack_thumbs[pack] = thumb_bmp;
+    }
+    
+    //Initialize the GUIs.
+    init_gui_main();
+    
+    //Finish the menu class setup.
+    guis.push_back(&gui);
     menu_t::load();
 }
 

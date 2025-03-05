@@ -797,7 +797,7 @@ bool gui_manager::get_item_draw_info(
  *
  * @param ev Event.
  */
-void gui_manager::handle_event(const ALLEGRO_EVENT &ev) {
+void gui_manager::handle_allegro_event(const ALLEGRO_EVENT &ev) {
     if(!responsive) return;
     if(anim_timer.get_ratio_left() > 0.0f && ignore_input_on_animation) return;
     
