@@ -15,6 +15,7 @@
 #include <string>
 
 #include "../content/other/gui.h"
+#include "menu.h"
 
 using std::map;
 using std::string;
@@ -53,32 +54,22 @@ enum HELP_CATEGORY {
  * @brief Info about the help menu currently being presented to
  * the player.
  */
-struct help_menu_t {
-    public:
-    
+class help_menu_t : public menu_t {
+public:
+
     //--- Members ---
     
     //GUI manager.
     gui_manager gui;
     
-    //Callback for when the "Back" button is pressed to leave the menu.
-    std::function<void()> back_callback;
-    
-    //Is the struct meant to be deleted?
-    bool to_delete = false;
-    
     
     //--- Function declarations ---
-    help_menu_t();
-    ~help_menu_t();
-    void draw();
-    void handle_event(const ALLEGRO_EVENT &ev);
-    void handle_player_action(const player_action &action);
-    void tick(float delta_t);
+    void load() override;
+    void unload() override;
     
     
-    private:
-    
+private:
+
     //--- Misc. declarations ---
     
     /**
@@ -102,12 +93,6 @@ struct help_menu_t {
     
     //--- Members ---
     
-    //Is it currently closing?
-    bool closing = false;
-    
-    //Time left until the menu finishes closing.
-    float closing_timer = 0.0f;
-    
     //All tidbits.
     map<HELP_CATEGORY, vector<tidbit> > tidbits;
     
@@ -128,6 +113,5 @@ struct help_menu_t {
         const point &max_size, const string &text
     );
     void populate_tidbits(const HELP_CATEGORY category);
-    void start_closing();
     
 };

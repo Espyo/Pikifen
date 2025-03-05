@@ -24,9 +24,65 @@ const string GUI_FILE_NAME = "help";
 
 
 /**
- * @brief Constructs a new help menu object.
+ * @brief Draws some help tidbit's text.
+ *
+ * @param font Font to use.
+ * @param where Coordinates to draw the text on.
+ * @param max_size Maximum width or height the text can occupy.
+ * A value of zero in one of these coordinates makes it not have a
+ * limit in that dimension.
+ * @param text Text to draw.
  */
-help_menu_t::help_menu_t() {
+void help_menu_t::draw_tidbit(
+    const ALLEGRO_FONT* const font, const point &where,
+    const point &max_size, const string &text
+) {
+    //Get the tokens that make up the tidbit.
+    vector<string_token> tokens = tokenize_string(text);
+    if(tokens.empty()) return;
+    
+    int line_height = al_get_font_line_height(font);
+    
+    set_string_token_widths(tokens, font, game.sys_content.fnt_slim, line_height, true);
+    
+    //Split long lines.
+    vector<vector<string_token> > tokens_per_line =
+        split_long_string_with_tokens(tokens, max_size.x);
+        
+    if(tokens_per_line.empty()) return;
+    
+    //Figure out if we need to scale things vertically.
+    //Control bind icons that are bitmaps will have their width unchanged,
+    //otherwise this would turn into a cat-and-mouse game of the Y scale
+    //shrinking causing a token width to shrink, which could cause the
+    //Y scale to grow, ad infinitum.
+    float y_scale = 1.0f;
+    if(tokens_per_line.size() * line_height > max_size.y) {
+        y_scale = max_size.y / (tokens_per_line.size() * (line_height + 4));
+    }
+    
+    //Draw!
+    for(size_t l = 0; l < tokens_per_line.size(); l++) {
+        draw_string_tokens(
+            tokens_per_line[l], game.sys_content.fnt_standard, game.sys_content.fnt_slim,
+            true,
+            point(
+                where.x,
+                where.y + l * (line_height + 4) * y_scale -
+                (tokens_per_line.size() * line_height * y_scale / 2.0f)
+            ),
+            ALLEGRO_ALIGN_CENTER, point(max_size.x, line_height * y_scale)
+        );
+    }
+}
+
+
+/**
+ * @brief Loads the menu.
+ */
+void help_menu_t::load() {
+    guis.push_back(&gui);
+    
     const vector<string> category_node_names {
         "gameplay_basics", "advanced_gameplay", "controls", "", "objects"
     };
@@ -83,8 +139,7 @@ help_menu_t::help_menu_t() {
     );
     gui.back_item->on_activate =
     [this] (const point &) {
-        start_closing();
-        if(back_callback) back_callback();
+        leave();
     };
     gui.back_item->on_get_tooltip =
     [] () { return "Return to the previous menu."; };
@@ -216,105 +271,8 @@ help_menu_t::help_menu_t() {
     [this] () {
         cur_tidbit = nullptr;
     };
-}
-
-
-/**
- * @brief Destroys the help menu object.
- */
-help_menu_t::~help_menu_t() {
-    for(size_t c = 0; c < N_HELP_CATEGORIES; c++) {
-        if(c == HELP_CATEGORY_PIKMIN) continue;
-        for(size_t t = 0; t < tidbits[(HELP_CATEGORY) c].size(); t++) {
-            if(tidbits[(HELP_CATEGORY) c][t].image) {
-                game.content.bitmaps.list.free(tidbits[(HELP_CATEGORY) c][t].image);
-            }
-        }
-    }
-    tidbits.clear();
     
-    gui.destroy();
-}
-
-
-/**
- * @brief Draws the help menu.
- */
-void help_menu_t::draw() {
-    gui.draw();
-}
-
-
-/**
- * @brief Draws some help tidbit's text.
- *
- * @param font Font to use.
- * @param where Coordinates to draw the text on.
- * @param max_size Maximum width or height the text can occupy.
- * A value of zero in one of these coordinates makes it not have a
- * limit in that dimension.
- * @param text Text to draw.
- */
-void help_menu_t::draw_tidbit(
-    const ALLEGRO_FONT* const font, const point &where,
-    const point &max_size, const string &text
-) {
-    //Get the tokens that make up the tidbit.
-    vector<string_token> tokens = tokenize_string(text);
-    if(tokens.empty()) return;
-    
-    int line_height = al_get_font_line_height(font);
-    
-    set_string_token_widths(tokens, font, game.sys_content.fnt_slim, line_height, true);
-    
-    //Split long lines.
-    vector<vector<string_token> > tokens_per_line =
-        split_long_string_with_tokens(tokens, max_size.x);
-        
-    if(tokens_per_line.empty()) return;
-    
-    //Figure out if we need to scale things vertically.
-    //Control bind icons that are bitmaps will have their width unchanged,
-    //otherwise this would turn into a cat-and-mouse game of the Y scale
-    //shrinking causing a token width to shrink, which could cause the
-    //Y scale to grow, ad infinitum.
-    float y_scale = 1.0f;
-    if(tokens_per_line.size() * line_height > max_size.y) {
-        y_scale = max_size.y / (tokens_per_line.size() * (line_height + 4));
-    }
-    
-    //Draw!
-    for(size_t l = 0; l < tokens_per_line.size(); l++) {
-        draw_string_tokens(
-            tokens_per_line[l], game.sys_content.fnt_standard, game.sys_content.fnt_slim,
-            true,
-            point(
-                where.x,
-                where.y + l * (line_height + 4) * y_scale -
-                (tokens_per_line.size() * line_height * y_scale / 2.0f)
-            ),
-            ALLEGRO_ALIGN_CENTER, point(max_size.x, line_height * y_scale)
-        );
-    }
-}
-
-
-/**
- * @brief Handles an Allegro event.
- *
- * @param ev The event.
- */
-void help_menu_t::handle_event(const ALLEGRO_EVENT &ev) {
-    if(!closing) gui.handle_event(ev);
-}
-
-/**
- * @brief Handles a player action.
- *
- * @param action Data about the player action.
- */
-void help_menu_t::handle_player_action(const player_action &action) {
-    gui.handle_player_action(action);
+    menu_t::load();
 }
 
 
@@ -379,28 +337,18 @@ void help_menu_t::populate_tidbits(const HELP_CATEGORY category) {
 
 
 /**
- * @brief Starts the closing process.
+ * @brief Unloads the menu.
  */
-void help_menu_t::start_closing() {
-    closing = true;
-    closing_timer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
-}
-
-
-/**
- * @brief Ticks time by one frame of logic.
- *
- * @param delta_t How long the frame's tick is, in seconds.
- */
-void help_menu_t::tick(float delta_t) {
-    //Tick the GUI.
-    gui.tick(delta_t);
-    
-    //Tick the menu closing.
-    if(closing) {
-        closing_timer -= delta_t;
-        if(closing_timer <= 0.0f) {
-            to_delete = true;
+void help_menu_t::unload() {
+    for(size_t c = 0; c < N_HELP_CATEGORIES; c++) {
+        if(c == HELP_CATEGORY_PIKMIN) continue;
+        for(size_t t = 0; t < tidbits[(HELP_CATEGORY) c].size(); t++) {
+            if(tidbits[(HELP_CATEGORY) c][t].image) {
+                game.content.bitmaps.list.free(tidbits[(HELP_CATEGORY) c][t].image);
+            }
         }
     }
+    tidbits.clear();
+    
+    menu_t::unload();
 }

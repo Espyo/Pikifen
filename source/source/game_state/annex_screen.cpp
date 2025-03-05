@@ -59,7 +59,7 @@ void annex_screen_state::do_logic() {
     }
     
     if(area_menu) {
-        if(!area_menu->to_delete) {
+        if(area_menu->loaded) {
             area_menu->tick(game.delta_t);
         } else {
             delete area_menu;
@@ -68,7 +68,7 @@ void annex_screen_state::do_logic() {
     }
     
     if(help_menu) {
-        if(!help_menu->to_delete) {
+        if(help_menu->loaded) {
             help_menu->tick(game.delta_t);
         } else {
             delete help_menu;
@@ -77,7 +77,7 @@ void annex_screen_state::do_logic() {
     }
     
     if(options_menu) {
-        if(!options_menu->to_delete) {
+        if(options_menu->loaded) {
             options_menu->tick(game.delta_t);
         } else {
             delete options_menu;
@@ -86,7 +86,7 @@ void annex_screen_state::do_logic() {
     }
     
     if(stats_menu) {
-        if(!stats_menu->to_delete) {
+        if(stats_menu->loaded) {
             stats_menu->tick(game.delta_t);
         } else {
             delete stats_menu;
@@ -153,15 +153,18 @@ void annex_screen_state::load() {
     //Load the intended concrete menu.
     switch(menu_to_load) {
     case ANNEX_SCREEN_MENU_AREA_SELECTION: {
-        area_menu = new area_menu_t(area_menu_area_type);
-        area_menu->back_callback =
+        area_menu = new area_menu_t();
+        area_menu->area_type = area_menu_area_type;
+        area_menu->leave_callback =
         [this] () {
             game.states.title_screen->page_to_load = MAIN_MENU_PAGE_PLAY;
             leave();
         };
+        area_menu->load();
+        area_menu->enter();
         break;
-    }
-    case ANNEX_SCREEN_MENU_HELP: {
+        
+    } case ANNEX_SCREEN_MENU_HELP: {
         game.content.load_all(
         vector<CONTENT_TYPE> {
             CONTENT_TYPE_PARTICLE_GEN,
@@ -183,7 +186,7 @@ void annex_screen_state::load() {
         CONTENT_LOAD_LEVEL_FULL
         );
         help_menu = new help_menu_t();
-        help_menu->back_callback =
+        help_menu->unload_callback =
         [this] () {
             game.content.unload_all(
             vector<CONTENT_TYPE> {
@@ -199,24 +202,36 @@ void annex_screen_state::load() {
                 CONTENT_TYPE_PARTICLE_GEN,
             }
             );
+        };
+        help_menu->leave_callback =
+        [this] () {
             game.states.title_screen->page_to_load = MAIN_MENU_PAGE_MAIN;
             leave();
         };
+        help_menu->load();
+        help_menu->enter();
         break;
+        
     } case ANNEX_SCREEN_MENU_OPTIONS: {
         options_menu = new options_menu_t();
-        options_menu->back_callback = [this] () {
+        options_menu->leave_callback = [this] () {
             game.states.title_screen->page_to_load = MAIN_MENU_PAGE_MAIN;
             leave();
         };
+        options_menu->load();
+        options_menu->enter();
         break;
+        
     } case ANNEX_SCREEN_MENU_STATS: {
         stats_menu = new stats_menu_t();
-        stats_menu->back_callback = [this] () {
+        stats_menu->leave_callback = [this] () {
             game.states.title_screen->page_to_load = MAIN_MENU_PAGE_MAIN;
             leave();
         };
+        stats_menu->load();
+        stats_menu->enter();
         break;
+        
     }
     }
     menu_to_load = ANNEX_SCREEN_MENU_HELP;
@@ -236,18 +251,22 @@ void annex_screen_state::unload() {
     
     //Menus.
     if(area_menu) {
+        area_menu->unload();
         delete area_menu;
         area_menu = nullptr;
     }
     if(help_menu) {
+        help_menu->unload();
         delete help_menu;
         help_menu = nullptr;
     }
     if(options_menu) {
+        options_menu->unload();
         delete options_menu;
         options_menu = nullptr;
     }
     if(stats_menu) {
+        stats_menu->unload();
         delete stats_menu;
         stats_menu = nullptr;
     }

@@ -16,6 +16,7 @@
 #include "../core/game.h"
 #include "../core/load.h"
 #include "../util/string_utils.h"
+#include "menu.h"
 
 
 namespace OPTIONS_MENU {
@@ -50,79 +51,6 @@ const string MISC_GUI_FILE_NAME = "options_menu_misc";
 //Name of the top-level menu GUI information file.
 const string TOP_GUI_FILE_NAME = "options_menu_top";
 
-}
-
-
-/**
- * @brief Constructs a new options menu object.
- */
-options_menu_t::options_menu_t() {
-    //Let's fill in the list of preset resolutions. For that, we'll get
-    //the display modes fetched by Allegro. These are usually nice round
-    //resolutions, and they work on fullscreen mode.
-    int n_modes = al_get_num_display_modes();
-    for(int d = 0; d < n_modes; d++) {
-        ALLEGRO_DISPLAY_MODE d_info;
-        if(!al_get_display_mode(d, &d_info)) continue;
-        if(d_info.width < SMALLEST_WIN_WIDTH) continue;
-        if(d_info.height < SMALLEST_WIN_HEIGHT) continue;
-        resolution_presets.push_back(
-            std::make_pair(d_info.width, d_info.height)
-        );
-    }
-    
-    //In case things go wrong, at least add these presets.
-    resolution_presets.push_back(
-        std::make_pair(OPTIONS::DEF_WIN_W, OPTIONS::DEF_WIN_H)
-    );
-    resolution_presets.push_back(
-        std::make_pair(SMALLEST_WIN_WIDTH, SMALLEST_WIN_HEIGHT)
-    );
-    
-    //Sort the list.
-    sort(
-        resolution_presets.begin(), resolution_presets.end(),
-    [] (std::pair<int, int> p1, std::pair<int, int> p2) -> bool {
-        if(p1.first == p2.first) {
-            return p1.second < p2.second;
-        }
-        return p1.first < p2.first;
-    }
-    );
-    
-    //Remove any duplicates.
-    for(size_t p = 0; p < resolution_presets.size() - 1;) {
-        if(resolution_presets[p] == resolution_presets[p + 1]) {
-            resolution_presets.erase(resolution_presets.begin() + (p + 1));
-        } else {
-            p++;
-        }
-    }
-    
-    //And now do the typical loading process.
-    init_gui_top_page();
-    init_gui_controls_page();
-    init_gui_control_binds_page();
-    init_gui_graphics_page();
-    init_gui_audio_page();
-    init_gui_misc_page();
-}
-
-
-/**
- * @brief Destroys the options menu object.
- */
-options_menu_t::~options_menu_t() {
-    top_gui.destroy();
-    controls_gui.destroy();
-    binds_gui.destroy();
-    graphics_gui.destroy();
-    audio_gui.destroy();
-    misc_gui.destroy();
-    if(packs_menu) {
-        delete packs_menu;
-        packs_menu = nullptr;
-    }
 }
 
 
@@ -187,12 +115,7 @@ void options_menu_t::delete_bind(
  * @brief Draws the options menu.
  */
 void options_menu_t::draw() {
-    top_gui.draw();
-    controls_gui.draw();
-    binds_gui.draw();
-    graphics_gui.draw();
-    audio_gui.draw();
-    misc_gui.draw();
+    menu_t::draw();
     if(packs_menu) packs_menu->draw();
     
     if(capturing_input == 1) {
@@ -222,7 +145,7 @@ void options_menu_t::draw() {
  * @param ev The event.
  */
 void options_menu_t::handle_event(const ALLEGRO_EVENT &ev) {
-    if(closing) return;
+    if(!active) return;
     
     switch(capturing_input) {
     case 0: {
@@ -255,14 +178,10 @@ void options_menu_t::handle_event(const ALLEGRO_EVENT &ev) {
     }
     }
     
-    top_gui.handle_event(ev);
-    controls_gui.handle_event(ev);
-    binds_gui.handle_event(ev);
-    graphics_gui.handle_event(ev);
-    audio_gui.handle_event(ev);
-    misc_gui.handle_event(ev);
+    menu_t::handle_event(ev);
     if(packs_menu) packs_menu->handle_event(ev);
 }
+
 
 /**
  * @brief Handles a player action.
@@ -271,12 +190,7 @@ void options_menu_t::handle_event(const ALLEGRO_EVENT &ev) {
  */
 void options_menu_t::handle_player_action(const player_action &action) {
     if(capturing_input != 0) return;
-    top_gui.handle_player_action(action);
-    controls_gui.handle_player_action(action);
-    binds_gui.handle_player_action(action);
-    graphics_gui.handle_player_action(action);
-    audio_gui.handle_player_action(action);
-    misc_gui.handle_player_action(action);
+    menu_t::handle_player_action(action);
     if(packs_menu) packs_menu->handle_player_action(action);
 }
 
@@ -890,8 +804,8 @@ void options_menu_t::init_gui_top_page() {
         new button_gui_item("Back", game.sys_content.fnt_standard);
     top_gui.back_item->on_activate =
     [this] (const point &) {
-        start_closing();
-        if(back_callback) back_callback();
+        save_options();
+        leave();
     };
     top_gui.back_item->on_get_tooltip =
     [] () { return "Return to the previous menu."; };
@@ -1032,7 +946,8 @@ void options_menu_t::init_gui_top_page() {
             GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
             OPTIONS_MENU::HUD_MOVE_TIME
         );
-        packs_menu->back_callback = [ = ] () {
+        packs_menu->leave_callback = [ = ] () {
+            packs_menu->unload_timer = OPTIONS_MENU::HUD_MOVE_TIME;
             packs_menu->gui.responsive = false;
             packs_menu->gui.start_animation(
                 GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
@@ -1044,6 +959,8 @@ void options_menu_t::init_gui_top_page() {
                 OPTIONS_MENU::HUD_MOVE_TIME
             );
         };
+        packs_menu->load();
+        packs_menu->enter();
     };
     packs_button->on_get_tooltip =
     [] () { return "Manage any content packs you have installed."; };
@@ -1104,6 +1021,71 @@ void options_menu_t::init_gui_top_page() {
     //Finishing touches.
     game.fade_mgr.start_fade(true, nullptr);
     top_gui.set_selected_item(controls_button, true);
+}
+
+
+/**
+ * @brief Loads the menu.
+ */
+void options_menu_t::load() {
+    guis.push_back(&top_gui);
+    guis.push_back(&controls_gui);
+    guis.push_back(&binds_gui);
+    guis.push_back(&graphics_gui);
+    guis.push_back(&audio_gui);
+    guis.push_back(&misc_gui);
+    
+    //Let's fill in the list of preset resolutions. For that, we'll get
+    //the display modes fetched by Allegro. These are usually nice round
+    //resolutions, and they work on fullscreen mode.
+    int n_modes = al_get_num_display_modes();
+    for(int d = 0; d < n_modes; d++) {
+        ALLEGRO_DISPLAY_MODE d_info;
+        if(!al_get_display_mode(d, &d_info)) continue;
+        if(d_info.width < SMALLEST_WIN_WIDTH) continue;
+        if(d_info.height < SMALLEST_WIN_HEIGHT) continue;
+        resolution_presets.push_back(
+            std::make_pair(d_info.width, d_info.height)
+        );
+    }
+    
+    //In case things go wrong, at least add these presets.
+    resolution_presets.push_back(
+        std::make_pair(OPTIONS::DEF_WIN_W, OPTIONS::DEF_WIN_H)
+    );
+    resolution_presets.push_back(
+        std::make_pair(SMALLEST_WIN_WIDTH, SMALLEST_WIN_HEIGHT)
+    );
+    
+    //Sort the list.
+    sort(
+        resolution_presets.begin(), resolution_presets.end(),
+    [] (std::pair<int, int> p1, std::pair<int, int> p2) -> bool {
+        if(p1.first == p2.first) {
+            return p1.second < p2.second;
+        }
+        return p1.first < p2.first;
+    }
+    );
+    
+    //Remove any duplicates.
+    for(size_t p = 0; p < resolution_presets.size() - 1;) {
+        if(resolution_presets[p] == resolution_presets[p + 1]) {
+            resolution_presets.erase(resolution_presets.begin() + (p + 1));
+        } else {
+            p++;
+        }
+    }
+    
+    //And now do the typical loading process.
+    init_gui_top_page();
+    init_gui_controls_page();
+    init_gui_control_binds_page();
+    init_gui_graphics_page();
+    init_gui_audio_page();
+    init_gui_misc_page();
+    
+    menu_t::load();
 }
 
 
@@ -1482,43 +1464,20 @@ void options_menu_t::restore_default_binds(
 
 
 /**
- * @brief Starts the closing process.
- */
-void options_menu_t::start_closing() {
-    closing = true;
-    closing_timer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
-    save_options();
-}
-
-
-/**
  * @brief Ticks time by one frame of logic.
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
 void options_menu_t::tick(float delta_t) {
-    //Tick the GUIs.
-    top_gui.tick(game.delta_t);
-    binds_gui.tick(game.delta_t);
-    controls_gui.tick(game.delta_t);
-    graphics_gui.tick(game.delta_t);
-    audio_gui.tick(game.delta_t);
-    misc_gui.tick(game.delta_t);
+    menu_t::tick(delta_t);
     
+    //Tick the GUIs.
     if(packs_menu) {
-        if(!packs_menu->to_delete) {
+        if(packs_menu->loaded) {
             packs_menu->tick(game.delta_t);
         } else {
             delete packs_menu;
             packs_menu = nullptr;
-        }
-    }
-    
-    //Tick the menu closing.
-    if(closing) {
-        closing_timer -= delta_t;
-        if(closing_timer <= 0.0f) {
-            to_delete = true;
         }
     }
     
@@ -1546,4 +1505,18 @@ void options_menu_t::trigger_restart_warning() {
             gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
         );
     }
+}
+
+
+/**
+ * @brief Unloads the menu.
+ */
+void options_menu_t::unload() {
+    if(packs_menu) {
+        packs_menu->unload();
+        delete packs_menu;
+        packs_menu = nullptr;
+    }
+    
+    menu_t::unload();
 }

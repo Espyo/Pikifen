@@ -15,6 +15,7 @@
 
 #include "../content/area/area.h"
 #include "../content/other/gui.h"
+#include "menu.h"
 
 using std::string;
 using std::vector;
@@ -32,10 +33,10 @@ extern const string SPECS_GUI_FILE_NAME;
  * @brief Info about the area selection currently being presented to
  * the player.
  */
-struct area_menu_t {
+class area_menu_t : public menu_t {
 
-    public:
-    
+public:
+
     //--- Members ---
     
     //Type of area that the menu is dealing with.
@@ -44,31 +45,14 @@ struct area_menu_t {
     //Main GUI.
     gui_manager gui;
     
-    //Callback for when the "Back" button is pressed to leave the menu.
-    std::function<void()> back_callback;
-    
-    //Is the struct meant to be deleted?
-    bool to_delete = false;
-    
     
     //--- Function declarations ---
     
-    area_menu_t(AREA_TYPE area_type);
-    ~area_menu_t();
-    void draw();
-    void handle_event(const ALLEGRO_EVENT &ev);
-    void handle_player_action(const player_action &action);
-    void tick(float delta_t);
+    void load() override;
     
-    private:
-    
+private:
+
     //--- Members ---
-    
-    //Is it currently closing?
-    bool closing = false;
-    
-    //Time left until the menu finishes closing.
-    float closing_timer = 0.0f;
     
     //Button for each area available.
     vector<gui_item*> area_buttons;
@@ -151,6 +135,5 @@ struct area_menu_t {
     void init_gui_main();
     void init_gui_info_page();
     void init_gui_specs_page();
-    void start_closing();
     
 };

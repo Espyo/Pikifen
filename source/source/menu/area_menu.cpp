@@ -39,54 +39,6 @@ const string SPECS_GUI_FILE_NAME = "area_menu_specs";
 
 
 /**
- * @brief Constructs a new area menu object.
- */
-area_menu_t::area_menu_t(AREA_TYPE area_type) :
-    area_type(area_type) {
-    //Mission records.
-    if(area_type == AREA_TYPE_MISSION) {
-        data_node mission_records;
-        mission_records.load_file(FILE_PATHS_FROM_ROOT::MISSION_RECORDS, true, false, true);
-        
-        for(size_t a = 0; a < game.content.areas.list[AREA_TYPE_MISSION].size(); a++) {
-            area_data* area_ptr = game.content.areas.list[AREA_TYPE_MISSION][a];
-            mission_record record;
-            
-            load_area_mission_record(&mission_records, area_ptr, record);
-            
-            area_records.push_back(record);
-        }
-    }
-    
-    init_gui_main();
-    init_gui_info_page();
-    if(area_type == AREA_TYPE_MISSION && !game.content.areas.list[AREA_TYPE_MISSION].empty()) {
-        init_gui_specs_page();
-        specs_box->visible = false;
-        specs_box->responsive = false;
-    }
-    if(first_area_button) {
-        gui.set_selected_item(first_area_button, true);
-    }
-    
-    //Finishing touches.
-    game.audio.set_current_song(game.sys_content_names.sng_menus);
-    game.fade_mgr.start_fade(true, nullptr);
-    
-}
-
-
-/**
- * @brief Destroys the area menu object.
- */
-area_menu_t::~area_menu_t() {
-    //Menu items.
-    gui.destroy();
-    
-}
-
-
-/**
  * @brief Adds a new bullet point to either the fail condition list, or the
  * grading explanation list.
  *
@@ -409,34 +361,6 @@ void area_menu_t::change_info(size_t area_idx) {
 
 
 /**
- * @brief Draws the area menu.
- */
-void area_menu_t::draw() {
-    gui.draw();
-}
-
-
-/**
- * @brief Handles an Allegro event.
- *
- * @param ev Event to handle.
- */
-void area_menu_t::handle_event(const ALLEGRO_EVENT &ev) {
-    if(!closing) gui.handle_event(ev);
-}
-
-
-/**
- * @brief Handles a player action.
- *
- * @param action Data about the player action.
- */
-void area_menu_t::handle_player_action(const player_action &action) {
-    gui.handle_player_action(action);
-}
-
-
-/**
  * @brief Initializes the area info page GUI items.
  */
 void area_menu_t::init_gui_info_page() {
@@ -615,8 +539,7 @@ void area_menu_t::init_gui_main() {
     );
     gui.back_item->on_activate =
     [this] (const point &) {
-        start_closing();
-        if(back_callback) back_callback();
+        leave();
     };
     gui.back_item->on_get_tooltip =
     [] () { return "Return to the previous menu."; };
@@ -918,26 +841,40 @@ void area_menu_t::init_gui_specs_page() {
 
 
 /**
- * @brief Starts the closing process.
+ * @brief Loads the menu.
  */
-void area_menu_t::start_closing() {
-    closing = true;
-    closing_timer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
-}
-
-
-/**
- * @brief Ticks time by one frame of logic.
- */
-void area_menu_t::tick(float delta_t) {
-    //Tick the GUI.
-    gui.tick(game.delta_t);
+void area_menu_t::load() {
+    guis.push_back(&gui);
     
-    //Tick the menu closing.
-    if(closing) {
-        closing_timer -= delta_t;
-        if(closing_timer <= 0.0f) {
-            to_delete = true;
+    //Mission records.
+    if(area_type == AREA_TYPE_MISSION) {
+        data_node mission_records;
+        mission_records.load_file(FILE_PATHS_FROM_ROOT::MISSION_RECORDS, true, false, true);
+        
+        for(size_t a = 0; a < game.content.areas.list[AREA_TYPE_MISSION].size(); a++) {
+            area_data* area_ptr = game.content.areas.list[AREA_TYPE_MISSION][a];
+            mission_record record;
+            
+            load_area_mission_record(&mission_records, area_ptr, record);
+            
+            area_records.push_back(record);
         }
     }
+    
+    init_gui_main();
+    init_gui_info_page();
+    if(area_type == AREA_TYPE_MISSION && !game.content.areas.list[AREA_TYPE_MISSION].empty()) {
+        init_gui_specs_page();
+        specs_box->visible = false;
+        specs_box->responsive = false;
+    }
+    if(first_area_button) {
+        gui.set_selected_item(first_area_button, true);
+    }
+    
+    //Finishing touches.
+    game.audio.set_current_song(game.sys_content_names.sng_menus);
+    game.fade_mgr.start_fade(true, nullptr);
+    
+    menu_t::load();
 }

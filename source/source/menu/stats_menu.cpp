@@ -25,73 +25,6 @@ const string GUI_FILE_NAME = "statistics_menu";
 
 
 /**
- * @brief Constructs a new statistics menu object.
- */
-stats_menu_t::stats_menu_t() {
-    //Menu items.
-    gui.register_coords("back",        12,  5, 20,  6);
-    gui.register_coords("back_input",   3,  7,  4,  4);
-    gui.register_coords("header",      50,  5, 50,  6);
-    gui.register_coords("list",        50, 51, 76, 82);
-    gui.register_coords("list_scroll", 91, 51,  2, 82);
-    gui.register_coords("tooltip",     50, 96, 96,  4);
-    gui.read_coords(
-        game.content.gui_defs.list[STATS_MENU::GUI_FILE_NAME].get_child_by_name("positions")
-    );
-    
-    //Back button.
-    gui.back_item =
-        new button_gui_item("Back", game.sys_content.fnt_standard);
-    gui.back_item->on_activate =
-    [this] (const point &) {
-        start_closing();
-        if(back_callback) back_callback();
-    };
-    gui.back_item->on_get_tooltip =
-    [] () { return "Return to the previous menu."; };
-    gui.add_item(gui.back_item, "back");
-    
-    //Back input icon.
-    gui_add_back_input_icon(&gui);
-    
-    //Header text.
-    text_gui_item* header_text =
-        new text_gui_item(
-        "STATISTICS",
-        game.sys_content.fnt_area_name, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
-    );
-    gui.add_item(header_text, "header");
-    
-    //Statistics list.
-    stats_list = new list_gui_item();
-    gui.add_item(stats_list, "list");
-    
-    //Statistics list scrollbar.
-    scroll_gui_item* list_scroll = new scroll_gui_item();
-    list_scroll->list_item = stats_list;
-    gui.add_item(list_scroll, "list_scroll");
-    
-    //Tooltip text.
-    tooltip_gui_item* tooltip_text =
-        new tooltip_gui_item(&gui);
-    gui.add_item(tooltip_text, "tooltip");
-    
-    populate_stats_list();
-    
-    //Finishing touches.
-    gui.set_selected_item(gui.back_item, true);
-}
-
-
-/**
- * @brief Destroys the statistics menu object.
- */
-stats_menu_t::~stats_menu_t() {
-    gui.destroy();
-}
-
-
-/**
  * @brief Adds a new header to the stats list GUI item.
  * @param label Name of the header.
  */
@@ -162,29 +95,65 @@ text_gui_item* stats_menu_t::add_stat(
 
 
 /**
- * @brief Draws the statistics menu.
+ * @brief Loads the menu.
  */
-void stats_menu_t::draw() {
-    gui.draw();
-}
-
-
-/**
- * @brief Handles an Allegro event.
- *
- * @param ev The event.
- */
-void stats_menu_t::handle_event(const ALLEGRO_EVENT &ev) {
-    if(!closing) gui.handle_event(ev);
-}
-
-/**
- * @brief Handles a player action.
- *
- * @param action Data about the player action.
- */
-void stats_menu_t::handle_player_action(const player_action &action) {
-    gui.handle_player_action(action);
+void stats_menu_t::load() {
+    guis.push_back(&gui);
+    
+    //Menu items.
+    gui.register_coords("back",        12,  5, 20,  6);
+    gui.register_coords("back_input",   3,  7,  4,  4);
+    gui.register_coords("header",      50,  5, 50,  6);
+    gui.register_coords("list",        50, 51, 76, 82);
+    gui.register_coords("list_scroll", 91, 51,  2, 82);
+    gui.register_coords("tooltip",     50, 96, 96,  4);
+    gui.read_coords(
+        game.content.gui_defs.list[STATS_MENU::GUI_FILE_NAME].get_child_by_name("positions")
+    );
+    
+    //Back button.
+    gui.back_item =
+        new button_gui_item("Back", game.sys_content.fnt_standard);
+    gui.back_item->on_activate =
+    [this] (const point &) {
+        save_statistics();
+        leave();
+    };
+    gui.back_item->on_get_tooltip =
+    [] () { return "Return to the previous menu."; };
+    gui.add_item(gui.back_item, "back");
+    
+    //Back input icon.
+    gui_add_back_input_icon(&gui);
+    
+    //Header text.
+    text_gui_item* header_text =
+        new text_gui_item(
+        "STATISTICS",
+        game.sys_content.fnt_area_name, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
+    );
+    gui.add_item(header_text, "header");
+    
+    //Statistics list.
+    stats_list = new list_gui_item();
+    gui.add_item(stats_list, "list");
+    
+    //Statistics list scrollbar.
+    scroll_gui_item* list_scroll = new scroll_gui_item();
+    list_scroll->list_item = stats_list;
+    gui.add_item(list_scroll, "list_scroll");
+    
+    //Tooltip text.
+    tooltip_gui_item* tooltip_text =
+        new tooltip_gui_item(&gui);
+    gui.add_item(tooltip_text, "tooltip");
+    
+    populate_stats_list();
+    
+    //Finishing touches.
+    gui.set_selected_item(gui.back_item, true);
+    
+    menu_t::load();
 }
 
 
@@ -328,33 +297,13 @@ void stats_menu_t::populate_stats_list() {
 
 
 /**
- * @brief Starts the closing process.
- */
-void stats_menu_t::start_closing() {
-    closing = true;
-    closing_timer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
-    save_statistics();
-}
-
-
-/**
  * @brief Ticks time by one frame of logic.
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
 void stats_menu_t::tick(float delta_t) {
+    menu_t::tick(delta_t);
     update_runtime_value_text();
-    
-    //Tick the GUI.
-    gui.tick(delta_t);
-    
-    //Tick the menu closing.
-    if(closing) {
-        closing_timer -= delta_t;
-        if(closing_timer <= 0.0f) {
-            to_delete = true;
-        }
-    }
 }
 
 

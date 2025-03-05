@@ -189,45 +189,10 @@ public:
  * @brief Info about the options menu currently being presented to
  * the player.
  */
-struct options_menu_t {
-    public:
-    
+class options_menu_t : public menu_t {
+public:
+
     //--- Members ---
-    
-    //Callback for when the "Back" button is pressed to leave the menu.
-    std::function<void()> back_callback;
-    
-    //Is the struct meant to be deleted?
-    bool to_delete = false;
-    
-    
-    //--- Function declarations ---
-    options_menu_t();
-    ~options_menu_t();
-    void draw();
-    void handle_event(const ALLEGRO_EVENT &ev);
-    void handle_player_action(const player_action &action);
-    void tick(float delta_t);
-    
-    
-    private:
-    
-    //--- Members ---
-    
-    //Is it currently closing?
-    bool closing = false;
-    
-    //Time left until the menu finishes closing.
-    float closing_timer = 0.0f;
-    
-    //Known good resolution presets.
-    vector<std::pair<int, int> > resolution_presets;
-    
-    //Currently selected resolution.
-    std::pair<int, int> cur_resolution_option;
-    
-    //Bitmap of the menu background.
-    ALLEGRO_BITMAP* bmp_menu_bg = nullptr;
     
     //GUI for the top-level page.
     gui_manager top_gui;
@@ -246,6 +211,30 @@ struct options_menu_t {
     
     //GUI for the misc. options page.
     gui_manager misc_gui;
+    
+    
+    //--- Function declarations ---
+    
+    void draw() override;
+    void load() override;
+    void handle_event(const ALLEGRO_EVENT &ev) override;
+    void handle_player_action(const player_action &action) override;
+    void unload() override;
+    void tick(float delta_t);
+    
+    
+private:
+
+    //--- Members ---
+    
+    //Known good resolution presets.
+    vector<std::pair<int, int> > resolution_presets;
+    
+    //Currently selected resolution.
+    std::pair<int, int> cur_resolution_option;
+    
+    //Bitmap of the menu background.
+    ALLEGRO_BITMAP* bmp_menu_bg = nullptr;
     
     //Information about the current pack management menu, if any.
     packs_menu_t* packs_menu = nullptr;
@@ -317,7 +306,6 @@ struct options_menu_t {
     void init_gui_graphics_page();
     void init_gui_misc_page();
     void init_gui_top_page();
-    void start_closing();
     void trigger_restart_warning();
     void choose_input(
         const PLAYER_ACTION_TYPE action_type, size_t bind_idx

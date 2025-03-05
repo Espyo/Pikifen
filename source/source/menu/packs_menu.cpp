@@ -27,9 +27,76 @@ const string GUI_FILE_NAME = "packs_menu";
 
 
 /**
- * @brief Constructs a new pack management menu object.
+ * @brief Changes the info that's being shown about the currently-selected
+ * pack.
+ *
+ * @param idx Index of the pack. -1 for the base pack, -2 for nothing.
  */
-packs_menu_t::packs_menu_t() {
+void packs_menu_t::change_info(int idx) {
+    //Figure out what pack this is.
+    pack* pack_ptr = nullptr;
+    string new_pack_name;
+    if(idx == -1) {
+        new_pack_name = FOLDER_NAMES::BASE_PACK;
+        pack_ptr = &game.content.packs.list[new_pack_name];
+    } else if(idx >= 0 && idx < (int) pack_order.size()) {
+        new_pack_name = pack_order[idx];
+        pack_ptr = &game.content.packs.list[new_pack_name];
+    }
+    
+    if(cur_pack_name == new_pack_name) {
+        return;
+    }
+    
+    cur_pack_name = new_pack_name;
+    if(!pack_ptr) {
+        pack_name_text->text.clear();
+        pack_description_text->text.clear();
+        pack_tags_text->text.clear();
+        pack_maker_text->text.clear();
+        pack_version_text->text.clear();
+        return;
+    }
+    
+    //Fill the GUI items.
+    pack_name_text->text =
+        pack_ptr->name;
+    pack_name_text->start_juice_animation(
+        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
+    );
+    
+    pack_description_text->text =
+        pack_ptr->description;
+    pack_description_text->start_juice_animation(
+        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
+    );
+    
+    pack_tags_text->text =
+        (pack_ptr->tags.empty() ? "" : "Tags: " + pack_ptr->tags);
+    pack_tags_text->start_juice_animation(
+        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
+    );
+    
+    pack_maker_text->text =
+        (pack_ptr->maker.empty() ? "" : "Maker: " + pack_ptr->maker);
+    pack_maker_text->start_juice_animation(
+        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
+    );
+    
+    pack_version_text->text =
+        (pack_ptr->version.empty() ? "" : "Version: " + pack_ptr->version);
+    pack_version_text->start_juice_animation(
+        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
+    );
+}
+
+
+/**
+ * @brief Loads the menu.
+ */
+void packs_menu_t::load() {
+    guis.push_back(&gui);
+    
     //Fill the menu's lists of packs.
     pack_order =
         sort_vector_with_preference_list(
@@ -78,9 +145,8 @@ packs_menu_t::packs_menu_t() {
     [this] (const point &) {
         game.options.pack_order = pack_order;
         game.options.packs_disabled = packs_disabled;
-        start_closing();
         save_options();
-        if(back_callback) back_callback();
+        leave();
     };
     gui.back_item->on_get_tooltip =
     [] () { return "Return to the previous menu."; };
@@ -344,110 +410,8 @@ packs_menu_t::packs_menu_t() {
     //Finishing touches.
     gui.set_selected_item(gui.back_item, true);
     change_info(-1);
-}
-
-
-/**
- * @brief Destroys the pack management menu object.
- */
-packs_menu_t::~packs_menu_t() {
-    for(auto &t : pack_thumbs) {
-        al_destroy_bitmap(t.second);
-    }
-    pack_thumbs.clear();
-    gui.destroy();
-}
-
-
-/**
- * @brief Changes the info that's being shown about the currently-selected
- * pack.
- *
- * @param idx Index of the pack. -1 for the base pack, -2 for nothing.
- */
-void packs_menu_t::change_info(int idx) {
-    //Figure out what pack this is.
-    pack* pack_ptr = nullptr;
-    string new_pack_name;
-    if(idx == -1) {
-        new_pack_name = FOLDER_NAMES::BASE_PACK;
-        pack_ptr = &game.content.packs.list[new_pack_name];
-    } else if(idx >= 0 && idx < (int) pack_order.size()) {
-        new_pack_name = pack_order[idx];
-        pack_ptr = &game.content.packs.list[new_pack_name];
-    }
     
-    if(cur_pack_name == new_pack_name) {
-        return;
-    }
-    
-    cur_pack_name = new_pack_name;
-    if(!pack_ptr) {
-        pack_name_text->text.clear();
-        pack_description_text->text.clear();
-        pack_tags_text->text.clear();
-        pack_maker_text->text.clear();
-        pack_version_text->text.clear();
-        return;
-    }
-    
-    //Fill the GUI items.
-    pack_name_text->text =
-        pack_ptr->name;
-    pack_name_text->start_juice_animation(
-        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
-    );
-    
-    pack_description_text->text =
-        pack_ptr->description;
-    pack_description_text->start_juice_animation(
-        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
-    );
-    
-    pack_tags_text->text =
-        (pack_ptr->tags.empty() ? "" : "Tags: " + pack_ptr->tags);
-    pack_tags_text->start_juice_animation(
-        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
-    );
-    
-    pack_maker_text->text =
-        (pack_ptr->maker.empty() ? "" : "Maker: " + pack_ptr->maker);
-    pack_maker_text->start_juice_animation(
-        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
-    );
-    
-    pack_version_text->text =
-        (pack_ptr->version.empty() ? "" : "Version: " + pack_ptr->version);
-    pack_version_text->start_juice_animation(
-        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
-    );
-}
-
-
-/**
- * @brief Draws the pack management menu.
- */
-void packs_menu_t::draw() {
-    gui.draw();
-}
-
-
-/**
- * @brief Handles an Allegro event.
- *
- * @param ev The event.
- */
-void packs_menu_t::handle_event(const ALLEGRO_EVENT &ev) {
-    if(!closing) gui.handle_event(ev);
-}
-
-/**
- * @brief Handles a player action.
- *
- * @param action Data about the player action.
- */
-void packs_menu_t::handle_player_action(const player_action &action) {
-    gui.handle_player_action(action);
+    menu_t::load();
 }
 
 
@@ -467,34 +431,6 @@ void packs_menu_t::populate_packs_list() {
 
 
 /**
- * @brief Starts the closing process.
- */
-void packs_menu_t::start_closing() {
-    closing = true;
-    closing_timer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
-}
-
-
-/**
- * @brief Ticks time by one frame of logic.
- *
- * @param delta_t How long the frame's tick is, in seconds.
- */
-void packs_menu_t::tick(float delta_t) {
-    //Tick the GUI.
-    gui.tick(delta_t);
-    
-    //Tick the menu closing.
-    if(closing) {
-        closing_timer -= delta_t;
-        if(closing_timer <= 0.0f) {
-            to_delete = true;
-        }
-    }
-}
-
-
-/**
  * @brief Triggers the restart warning at the bottom of the screen.
  */
 void packs_menu_t::trigger_restart_warning() {
@@ -504,4 +440,17 @@ void packs_menu_t::trigger_restart_warning() {
             gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
         );
     }
+}
+
+
+/**
+ * @brief Unloads the menu.
+ */
+void packs_menu_t::unload() {
+    for(auto &t : pack_thumbs) {
+        al_destroy_bitmap(t.second);
+    }
+    pack_thumbs.clear();
+    
+    menu_t::unload();
 }

@@ -166,6 +166,7 @@ pause_menu_t::~pause_menu_t() {
     confirmation_gui.destroy();
     
     if(help_menu) {
+        help_menu->unload();
         delete help_menu;
         help_menu = nullptr;
     }
@@ -1907,7 +1908,8 @@ void pause_menu_t::init_main_pause_menu() {
             GUI_MANAGER_ANIM_DOWN_TO_CENTER,
             GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
         );
-        help_menu->back_callback = [this] () {
+        help_menu->leave_callback = [this] () {
+            help_menu->unload_timer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
             help_menu->gui.responsive = false;
             help_menu->gui.start_animation(
                 GUI_MANAGER_ANIM_CENTER_TO_DOWN,
@@ -1919,6 +1921,8 @@ void pause_menu_t::init_main_pause_menu() {
                 GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
             );
         };
+        help_menu->load();
+        help_menu->enter();
     };
     help_button->on_get_tooltip =
     [] () { return "Some quick help and tips about how to play."; };
@@ -2719,7 +2723,7 @@ void pause_menu_t::tick(float delta_t) {
     confirmation_gui.tick(delta_t);
     
     if(help_menu) {
-        if(!help_menu->to_delete) {
+        if(help_menu->loaded) {
             help_menu->tick(game.delta_t);
         } else {
             delete help_menu;
