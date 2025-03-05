@@ -1,0 +1,16 @@
+name = We Do Science
+description = Theme for a busy laboratory, with some whimsy mixed in.
+
+tags = Area; Pop; Weird
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0
+notes = This song is an original creation for Pikifen.
+
+loop_start = 14.769
+loop_end = 162.461
+
+main_track = we_do_science
+mix_tracks {
+    enemy = we_do_science_enemy
+}
