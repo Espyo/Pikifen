@@ -18,6 +18,9 @@
 #include "../util/string_utils.h"
 
 
+using DrawInfo = GuiItem::DrawInfo;
+
+
 namespace PACKS_MENU {
 
 //Name of the pack management menu GUI information file.
@@ -155,9 +158,9 @@ void PacksMenu::init_gui_main() {
         new BulletGuiItem(
         "Base", game.sys_content.fnt_standard, COLOR_GOLD
     );
-    base_bullet->center =
+    base_bullet->ratio_center =
         Point(0.37f, ITEMS_OFFSET + ITEM_HEIGHT / 2.0f);
-    base_bullet->size =
+    base_bullet->ratio_size =
         Point(0.70f, ITEM_HEIGHT);
     base_bullet->on_selected =
     [this] () { change_info(-1); };
@@ -174,8 +177,8 @@ void PacksMenu::init_gui_main() {
             "",
             game.sys_content.fnt_standard
         );
-        bullet->center = Point(0.37f, row_center_y);
-        bullet->size = Point(0.70f, ITEM_HEIGHT);
+        bullet->ratio_center = Point(0.37f, row_center_y);
+        bullet->ratio_size = Point(0.70f, ITEM_HEIGHT);
         bullet->on_selected = [p, this] () { change_info((int) p); };
         packs_list->add_child(bullet);
         gui.add_item(bullet);
@@ -186,8 +189,8 @@ void PacksMenu::init_gui_main() {
             new CheckGuiItem(
             false, "", game.sys_content.fnt_standard
         );
-        check->center = Point(0.78f, row_center_y);
-        check->size = Point(0.08f, ITEM_HEIGHT);
+        check->ratio_center = Point(0.78f, row_center_y);
+        check->ratio_size = Point(0.08f, ITEM_HEIGHT);
         check->on_activate =
         [p, check, this] (const Point & pos) {
             check->def_activate_code();
@@ -218,8 +221,8 @@ void PacksMenu::init_gui_main() {
                 new ButtonGuiItem(
                 "U", game.sys_content.fnt_standard
             );
-            up_button->center = Point(0.87f, row_center_y);
-            up_button->size = Point(0.08f, ITEM_HEIGHT);
+            up_button->ratio_center = Point(0.87f, row_center_y);
+            up_button->ratio_size = Point(0.08f, ITEM_HEIGHT);
             up_button->on_activate =
             [p, this] (const Point &) {
                 std::iter_swap(
@@ -249,8 +252,8 @@ void PacksMenu::init_gui_main() {
                 new ButtonGuiItem(
                 "D", game.sys_content.fnt_standard
             );
-            down_button->center = Point(0.95f, row_center_y);
-            down_button->size = Point(0.08f, ITEM_HEIGHT);
+            down_button->ratio_center = Point(0.95f, row_center_y);
+            down_button->ratio_size = Point(0.08f, ITEM_HEIGHT);
             down_button->on_activate =
             [p, this] (const Point &) {
                 std::iter_swap(
@@ -283,9 +286,9 @@ void PacksMenu::init_gui_main() {
     //Info box item.
     GuiItem* info_box = new GuiItem();
     info_box->on_draw =
-    [] (const Point & center, const Point & size) {
+    [] (const DrawInfo & draw) {
         draw_textured_box(
-            center, size, game.sys_content.bmp_frame_box,
+            draw.center, draw.size, game.sys_content.bmp_frame_box,
             COLOR_TRANSPARENT_WHITE
         );
     };
@@ -301,16 +304,16 @@ void PacksMenu::init_gui_main() {
     //Pack thumbnail.
     GuiItem* pack_thumb_item = new GuiItem();
     pack_thumb_item->on_draw =
-    [this] (const Point & center, const Point & size) {
+    [this] (const DrawInfo & draw) {
         //Make it a square.
         Point final_size(
-            std::min(size.x, size.y),
-            std::min(size.x, size.y)
+            std::min(draw.size.x, draw.size.y),
+            std::min(draw.size.x, draw.size.y)
         );
         //Align it to the top-right corner.
         Point final_center(
-            (center.x + size.x / 2.0f) - final_size.x / 2.0f,
-            (center.y - size.y / 2.0f) + final_size.y / 2.0f
+            (draw.center.x + draw.size.x / 2.0f) - final_size.x / 2.0f,
+            (draw.center.y - draw.size.y / 2.0f) + final_size.y / 2.0f
         );
         if(!cur_pack_name.empty() && pack_thumbs[cur_pack_name]) {
             draw_bitmap(

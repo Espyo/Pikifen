@@ -19,6 +19,9 @@
 #include "menu.h"
 
 
+using DrawInfo = GuiItem::DrawInfo;
+
+
 namespace OPTIONS_MENU {
 
 //Name of the audio menu GUI information file.
@@ -822,12 +825,12 @@ void OptionsMenu::init_gui_top_page() {
     ButtonGuiItem* controls_button =
         new ButtonGuiItem("Controls", game.sys_content.fnt_standard);
     controls_button->on_draw =
-    [ = ] (const Point & center, const Point & size) {
+    [ = ] (const DrawInfo & draw) {
         draw_menu_button_icon(
-            MENU_ICON_CONTROLS, center, size, controls_icon_left
+            MENU_ICON_CONTROLS, draw.center, draw.size, controls_icon_left
         );
         draw_button(
-            center, size,
+            draw.center, draw.size,
             controls_button->text, controls_button->font,
             controls_button->color, controls_button->selected,
             controls_button->get_juice_value()
@@ -854,12 +857,12 @@ void OptionsMenu::init_gui_top_page() {
     ButtonGuiItem* graphics_button =
         new ButtonGuiItem("Graphics", game.sys_content.fnt_standard);
     graphics_button->on_draw =
-    [ = ] (const Point & center, const Point & size) {
+    [ = ] (const DrawInfo & draw) {
         draw_menu_button_icon(
-            MENU_ICON_GRAPHICS, center, size, graphics_icon_left
+            MENU_ICON_GRAPHICS, draw.center, draw.size, graphics_icon_left
         );
         draw_button(
-            center, size,
+            draw.center, draw.size,
             graphics_button->text, graphics_button->font,
             graphics_button->color, graphics_button->selected,
             graphics_button->get_juice_value()
@@ -886,12 +889,12 @@ void OptionsMenu::init_gui_top_page() {
     ButtonGuiItem* audio_button =
         new ButtonGuiItem("Audio", game.sys_content.fnt_standard);
     audio_button->on_draw =
-    [ = ] (const Point & center, const Point & size) {
+    [ = ] (const DrawInfo & draw) {
         draw_menu_button_icon(
-            MENU_ICON_AUDIO, center, size, audio_icon_left
+            MENU_ICON_AUDIO, draw.center, draw.size, audio_icon_left
         );
         draw_button(
-            center, size,
+            draw.center, draw.size,
             audio_button->text, audio_button->font,
             audio_button->color, audio_button->selected,
             audio_button->get_juice_value()
@@ -918,12 +921,12 @@ void OptionsMenu::init_gui_top_page() {
     ButtonGuiItem* packs_button =
         new ButtonGuiItem("Packs", game.sys_content.fnt_standard);
     packs_button->on_draw =
-    [ = ] (const Point & center, const Point & size) {
+    [ = ] (const DrawInfo & draw) {
         draw_menu_button_icon(
-            MENU_ICON_PACKS, center, size, packs_icon_left
+            MENU_ICON_PACKS, draw.center, draw.size, packs_icon_left
         );
         draw_button(
-            center, size,
+            draw.center, draw.size,
             packs_button->text, packs_button->font,
             packs_button->color, packs_button->selected,
             packs_button->get_juice_value()
@@ -966,12 +969,12 @@ void OptionsMenu::init_gui_top_page() {
     ButtonGuiItem* misc_button =
         new ButtonGuiItem("Misc.", game.sys_content.fnt_standard);
     misc_button->on_draw =
-    [ = ] (const Point & center, const Point & size) {
+    [ = ] (const DrawInfo & draw) {
         draw_menu_button_icon(
-            MENU_ICON_OPTIONS_MISC, center, size, misc_icon_left
+            MENU_ICON_OPTIONS_MISC, draw.center, draw.size, misc_icon_left
         );
         draw_button(
-            center, size,
+            draw.center, draw.size,
             misc_button->text, misc_button->font,
             misc_button->color, misc_button->selected,
             misc_button->get_juice_value()
@@ -1135,12 +1138,12 @@ void OptionsMenu::populate_binds() {
             }
             TextGuiItem* section_text =
                 new TextGuiItem(section_name, game.sys_content.fnt_area_name);
-            section_text->center =
+            section_text->ratio_center =
                 Point(
                     0.50f,
                     action_y + OPTIONS_MENU::BIND_BUTTON_HEIGHT / 2.0f
                 );
-            section_text->size =
+            section_text->ratio_size =
                 Point(0.50f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
             binds_list_box->add_child(section_text);
             binds_gui.add_item(section_text);
@@ -1158,9 +1161,9 @@ void OptionsMenu::populate_binds() {
         //Action type name bullet.
         BulletGuiItem* name_bullet =
             new BulletGuiItem(action_type.name, game.sys_content.fnt_standard);
-        name_bullet->center =
+        name_bullet->ratio_center =
             Point(0.22f, cur_y);
-        name_bullet->size =
+        name_bullet->ratio_size =
             Point(0.34f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
         name_bullet->on_get_tooltip =
         [action_type] () { return action_type.description; };
@@ -1180,9 +1183,9 @@ void OptionsMenu::populate_binds() {
             }
             populate_binds();
         };
-        more_button->center =
+        more_button->ratio_center =
             Point(0.92f, cur_y);
-        more_button->size =
+        more_button->ratio_size =
             Point(0.05f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
         string tooltip =
             (showing_binds_more && action_type.id == cur_action_type) ?
@@ -1208,22 +1211,22 @@ void OptionsMenu::populate_binds() {
             };
             bind_button->on_draw =
                 [this, b, a_binds, bind_button]
-            (const Point & center, const Point & size) {
+            (const DrawInfo & draw) {
                 draw_player_input_icon(
                     game.sys_content.fnt_slim, a_binds[b].input, false,
-                    center, size * 0.8f
+                    draw.center, draw.size * 0.8f
                 );
                 
                 draw_button(
-                    center, size,
+                    draw.center, draw.size,
                     "", game.sys_content.fnt_standard, COLOR_WHITE,
                     bind_button->selected,
                     bind_button->get_juice_value()
                 );
             };
-            bind_button->center =
+            bind_button->ratio_center =
                 Point(0.63f, cur_y);
-            bind_button->size =
+            bind_button->ratio_size =
                 Point(0.34f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
             bind_button->on_get_tooltip =
             [] () { return "Change the input for this action."; };
@@ -1240,16 +1243,16 @@ void OptionsMenu::populate_binds() {
                 };
                 remove_bind_button->on_draw =
                     [this, remove_bind_button]
-                (const Point & center, const Point & size) {
+                (const DrawInfo & draw) {
                     draw_button(
-                        center, size, "X", game.sys_content.fnt_standard, COLOR_WHITE,
+                        draw.center, draw.size, "X", game.sys_content.fnt_standard, COLOR_WHITE,
                         remove_bind_button->selected,
                         remove_bind_button->get_juice_value()
                     );
                 };
-                remove_bind_button->center =
+                remove_bind_button->ratio_center =
                     Point(0.85f, cur_y);
-                remove_bind_button->size =
+                remove_bind_button->ratio_size =
                     Point(0.05f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
                 remove_bind_button->on_get_tooltip =
                 [] () { return "Remove this input from this action."; };
@@ -1283,16 +1286,16 @@ void OptionsMenu::populate_binds() {
             };
             bind_button->on_draw =
                 [this, bind_button]
-            (const Point & center, const Point & size) {
+            (const DrawInfo & draw) {
                 draw_button(
-                    center, size, "", game.sys_content.fnt_standard, COLOR_WHITE,
+                    draw.center, draw.size, "", game.sys_content.fnt_standard, COLOR_WHITE,
                     bind_button->selected,
                     bind_button->get_juice_value()
                 );
             };
-            bind_button->center =
+            bind_button->ratio_center =
                 Point(0.63f, cur_y);
-            bind_button->size =
+            bind_button->ratio_size =
                 Point(0.34f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
             bind_button->on_get_tooltip =
             [] () { return "Choose an input for this action."; };
@@ -1311,9 +1314,9 @@ void OptionsMenu::populate_binds() {
             //Add button.
             ButtonGuiItem* add_button =
                 new ButtonGuiItem("Add...", game.sys_content.fnt_standard);
-            add_button->center =
+            add_button->ratio_center =
                 Point(0.63f, cur_y);
-            add_button->size =
+            add_button->ratio_size =
                 Point(0.34f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
             add_button->on_activate =
             [this, action_type, a_binds] (const Point &) {
@@ -1338,9 +1341,9 @@ void OptionsMenu::populate_binds() {
             //Restore default button.
             ButtonGuiItem* restore_button =
                 new ButtonGuiItem("Restore defaults", game.sys_content.fnt_standard);
-            restore_button->center =
+            restore_button->ratio_center =
                 Point(0.63f, cur_y);
-            restore_button->size =
+            restore_button->ratio_size =
                 Point(0.34f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
             restore_button->on_activate =
             [this, action_type] (const Point &) {
@@ -1363,9 +1366,9 @@ void OptionsMenu::populate_binds() {
                 new TextGuiItem(
                 "Default:", game.sys_content.fnt_standard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
             );
-            default_label_text->center =
+            default_label_text->ratio_center =
                 Point(0.63f, cur_y);
-            default_label_text->size =
+            default_label_text->ratio_size =
                 Point(0.30f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
             binds_list_box->add_child(default_label_text);
             binds_gui.add_item(default_label_text);
@@ -1377,14 +1380,14 @@ void OptionsMenu::populate_binds() {
             PlayerInput def_input =
                 game.controls.str_to_input(action_type.default_bind_str);
             GuiItem* default_icon = new GuiItem();
-            default_icon->center =
+            default_icon->ratio_center =
                 Point(0.68f, cur_y);
-            default_icon->size =
+            default_icon->ratio_size =
                 Point(0.17f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
             default_icon->on_draw =
-            [def_input] (const Point & center, const Point & size) {
+            [def_input] (const DrawInfo & draw) {
                 draw_player_input_icon(
-                    game.sys_content.fnt_slim, def_input, false, center, size
+                    game.sys_content.fnt_slim, def_input, false, draw.center, draw.size
                 );
             };
             binds_list_box->add_child(default_icon);
@@ -1395,18 +1398,18 @@ void OptionsMenu::populate_binds() {
         if(a < all_player_action_types.size() - 1) {
             //Spacer line.
             GuiItem* line = new GuiItem();
-            line->center =
+            line->ratio_center =
                 Point(
                     0.50f, binds_list_box->get_child_bottom() + 0.02f
                 );
-            line->size = Point(0.90f, 0.02f);
+            line->ratio_size = Point(0.90f, 0.02f);
             line->on_draw =
-            [] (const Point & center, const Point & size) {
+            [] (const DrawInfo & draw) {
                 al_draw_line(
-                    center.x - size.x / 2.0f,
-                    center.y,
-                    center.x + size.x / 2.0f,
-                    center.y,
+                    draw.center.x - draw.size.x / 2.0f,
+                    draw.center.y,
+                    draw.center.x + draw.size.x / 2.0f,
+                    draw.center.y,
                     COLOR_TRANSPARENT_WHITE,
                     1.0f
                 );

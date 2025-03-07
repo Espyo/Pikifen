@@ -21,6 +21,9 @@
 #include "../util/string_utils.h"
 
 
+using DrawInfo = GuiItem::DrawInfo;
+
+
 namespace AREA_MENU {
 
 //Name of the main GUI information file.
@@ -58,8 +61,8 @@ void AreaMenu::add_bullet(ListGuiItem* list, const string &text) {
         new BulletGuiItem(
         text, game.sys_content.fnt_standard, COLOR_WHITE
     );
-    bullet->center = Point(0.50f, bullet_center_y);
-    bullet->size = Point(0.96f, BULLET_HEIGHT);
+    bullet->ratio_center = Point(0.50f, bullet_center_y);
+    bullet->ratio_size = Point(0.96f, BULLET_HEIGHT);
     list->add_child(bullet);
     gui.add_item(bullet);
 }
@@ -397,16 +400,16 @@ void AreaMenu::init_gui_info_page() {
         //Thumbnail.
         GuiItem* thumb_item = new GuiItem();
         thumb_item->on_draw =
-        [this] (const Point & center, const Point & size) {
+        [this] (const DrawInfo & draw) {
             //Make it a square.
             Point final_size(
-                std::min(size.x, size.y),
-                std::min(size.x, size.y)
+                std::min(draw.size.x, draw.size.y),
+                std::min(draw.size.x, draw.size.y)
             );
             //Align it to the top-right corner.
             Point final_center(
-                (center.x + size.x / 2.0f) - final_size.x / 2.0f,
-                (center.y - size.y / 2.0f) + final_size.y / 2.0f
+                (draw.center.x + draw.size.x / 2.0f) - final_size.x / 2.0f,
+                (draw.center.y - draw.size.y / 2.0f) + final_size.y / 2.0f
             );
             if(cur_thumb) {
                 draw_bitmap(cur_thumb, final_center, final_size - 4.0f);
@@ -444,10 +447,10 @@ void AreaMenu::init_gui_info_page() {
             //Record stamp.
             GuiItem* record_stamp_item = new GuiItem();
             record_stamp_item->on_draw =
-            [this] (const Point & center, const Point & size) {
+            [this] (const DrawInfo & draw) {
                 if(cur_stamp) {
                     draw_bitmap_in_box(
-                        cur_stamp, center, size, true
+                        cur_stamp, draw.center, draw.size, true
                     );
                 }
             };
@@ -457,10 +460,10 @@ void AreaMenu::init_gui_info_page() {
             //Record medal.
             GuiItem* record_medal_item = new GuiItem();
             record_medal_item->on_draw =
-            [this] (const Point & center, const Point & size) {
+            [this] (const DrawInfo & draw) {
                 if(cur_medal) {
                     draw_bitmap_in_box(
-                        cur_medal, center, size, true
+                        cur_medal, draw.center, draw.size, true
                     );
                 }
             };
@@ -576,12 +579,12 @@ void AreaMenu::init_gui_main() {
             //Area button.
             ButtonGuiItem* area_button =
                 new ButtonGuiItem(area_ptr->name, game.sys_content.fnt_standard);
-            area_button->center =
+            area_button->ratio_center =
                 Point(
                     area_type == AREA_TYPE_MISSION ? 0.40f : 0.50f,
                     center_y
                 );
-            area_button->size =
+            area_button->ratio_size =
                 Point(
                     area_type == AREA_TYPE_MISSION ? 0.80f : 1.00f,
                     BUTTON_HEIGHT
@@ -607,16 +610,16 @@ void AreaMenu::init_gui_main() {
             if(area_type == AREA_TYPE_MISSION) {
                 //Stamp item.
                 GuiItem* stamp_item = new GuiItem();
-                stamp_item->center =
+                stamp_item->ratio_center =
                     Point(0.85f, center_y - (BUTTON_HEIGHT * 0.15f));
-                stamp_item->size =
+                stamp_item->ratio_size =
                     Point(0.12f, BUTTON_HEIGHT * 0.60f);
                 stamp_item->on_draw =
-                [this, a] (const Point & center, const Point & size) {
+                [this, a] (const DrawInfo & draw) {
                     if(area_records[a].clear) {
                         draw_bitmap_in_box(
                             game.sys_content.bmp_mission_clear,
-                            center, size, true
+                            draw.center, draw.size, true
                         );
                     }
                 };
@@ -625,12 +628,12 @@ void AreaMenu::init_gui_main() {
                 
                 //Medal item.
                 GuiItem* medal_item = new GuiItem();
-                medal_item->center =
+                medal_item->ratio_center =
                     Point(0.95f, center_y + (BUTTON_HEIGHT * 0.15f));
-                medal_item->size =
+                medal_item->ratio_size =
                     Point(0.12f, BUTTON_HEIGHT * 0.60f);
                 medal_item->on_draw =
-                [this, area_ptr, a] (const Point & center, const Point & size) {
+                [this, area_ptr, a] (const DrawInfo & draw) {
                     ALLEGRO_BITMAP* medal_bmp = nullptr;
                     switch(area_ptr->mission.grading_mode) {
                     case MISSION_GRADING_MODE_POINTS: {
@@ -657,7 +660,7 @@ void AreaMenu::init_gui_main() {
                     
                     if(medal_bmp) {
                         draw_bitmap_in_box(
-                            medal_bmp, center, size, true
+                            medal_bmp, draw.center, draw.size, true
                         );
                     }
                 };
@@ -669,9 +672,9 @@ void AreaMenu::init_gui_main() {
         //Info box item.
         info_box = new GuiItem();
         info_box->on_draw =
-        [] (const Point & center, const Point & size) {
+        [] (const DrawInfo & draw) {
             draw_textured_box(
-                center, size, game.sys_content.bmp_frame_box,
+                draw.center, draw.size, game.sys_content.bmp_frame_box,
                 COLOR_TRANSPARENT_WHITE
             );
         };
@@ -681,14 +684,14 @@ void AreaMenu::init_gui_main() {
         ButtonGuiItem* random_button =
             new ButtonGuiItem("", game.sys_content.fnt_standard);
         random_button->on_draw =
-        [random_button] (const Point & center, const Point & size) {
+        [random_button] (const DrawInfo & draw) {
             draw_button(
-                center, size, "", game.sys_content.fnt_standard, COLOR_WHITE,
+                draw.center, draw.size, "", game.sys_content.fnt_standard, COLOR_WHITE,
                 random_button->selected
             );
             draw_bitmap_in_box(
                 game.sys_content.bmp_random,
-                center, size - 8, true
+                draw.center, draw.size - 8, true
             );
         };
         random_button->on_activate =
@@ -737,9 +740,9 @@ void AreaMenu::init_gui_main() {
             //Specs box item.
             specs_box = new GuiItem();
             specs_box->on_draw =
-            [] (const Point & center, const Point & size) {
+            [] (const DrawInfo & draw) {
                 draw_textured_box(
-                    center, size, game.sys_content.bmp_frame_box,
+                    draw.center, draw.size, game.sys_content.bmp_frame_box,
                     COLOR_TRANSPARENT_WHITE
                 );
             };

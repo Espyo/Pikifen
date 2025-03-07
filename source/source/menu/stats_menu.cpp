@@ -39,9 +39,9 @@ void StatsMenu::add_header(const string &label) {
         
     TextGuiItem* label_text =
         new TextGuiItem(label, game.sys_content.fnt_area_name);
-    label_text->center =
+    label_text->ratio_center =
         Point(0.50f, stat_center_y);
-    label_text->size =
+    label_text->ratio_size =
         Point(0.96f, HEADER_HEIGHT);
     stats_list->add_child(label_text);
     gui.add_item(label_text);
@@ -71,9 +71,9 @@ TextGuiItem* StatsMenu::add_stat(
         new BulletGuiItem(
         label, game.sys_content.fnt_standard
     );
-    label_bullet->center =
+    label_bullet->ratio_center =
         Point(0.50f, stat_center_y);
-    label_bullet->size =
+    label_bullet->ratio_size =
         Point(0.96f, STAT_HEIGHT);
     label_bullet->on_get_tooltip = [description] () { return description; };
     stats_list->add_child(label_bullet);
@@ -83,9 +83,9 @@ TextGuiItem* StatsMenu::add_stat(
         new TextGuiItem(
         value, game.sys_content.fnt_counter, COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
     );
-    value_text->center =
+    value_text->ratio_center =
         Point(0.75f, stat_center_y);
-    value_text->size =
+    value_text->ratio_size =
         Point(0.44f, STAT_HEIGHT);
     stats_list->add_child(value_text);
     gui.add_item(value_text);

@@ -18,6 +18,9 @@
 #include "../util/string_utils.h"
 
 
+using DrawInfo = GuiItem::DrawInfo;
+
+
 namespace RESULTS {
 
 //Name of the GUI information file.
@@ -97,9 +100,9 @@ void Results::add_stat(
         new BulletGuiItem(
         label, game.sys_content.fnt_standard, color
     );
-    label_bullet->center =
+    label_bullet->ratio_center =
         Point(0.50f, stat_center_y);
-    label_bullet->size =
+    label_bullet->ratio_size =
         Point(0.96f, STAT_HEIGHT);
     stats_list->add_child(label_bullet);
     gui.add_item(label_bullet);
@@ -108,9 +111,9 @@ void Results::add_stat(
         new TextGuiItem(
         value, game.sys_content.fnt_counter, color, ALLEGRO_ALIGN_RIGHT
     );
-    value_text->center =
+    value_text->ratio_center =
         Point(0.75f, stat_center_y);
-    value_text->size =
+    value_text->ratio_size =
         Point(0.44f, STAT_HEIGHT);
     stats_list->add_child(value_text);
     gui.add_item(value_text);
@@ -381,13 +384,12 @@ void Results::load() {
         //Goal stamp image item.
         GuiItem* goal_stamp_item = new GuiItem;
         goal_stamp_item->on_draw =
-        [goal_was_cleared] (const Point & center, const Point & size) {
+        [goal_was_cleared] (const DrawInfo & draw) {
             draw_bitmap_in_box(
                 goal_was_cleared ?
                 game.sys_content.bmp_mission_clear :
                 game.sys_content.bmp_mission_fail,
-                center,
-                size,
+                draw.center, draw.size,
                 true
             );
         };
@@ -482,7 +484,7 @@ void Results::load() {
         //Medal image item.
         GuiItem* medal_item = new GuiItem;
         medal_item->on_draw =
-        [medal] (const Point & center, const Point & size) {
+        [medal] (const DrawInfo & draw) {
             ALLEGRO_BITMAP* bmp = nullptr;
             switch(medal) {
             case MISSION_MEDAL_NONE: {
@@ -502,7 +504,7 @@ void Results::load() {
                 break;
             }
             }
-            draw_bitmap_in_box(bmp, center, size, true);
+            draw_bitmap_in_box(bmp, draw.center, draw.size, true);
         };
         gui.add_item(medal_item, "medal");
         
@@ -589,12 +591,12 @@ void Results::load() {
     //Stats box.
     stats_list = new ListGuiItem();
     stats_list->on_draw =
-    [this] (const Point & center, const Point & size) {
+    [this] (const DrawInfo & draw) {
         draw_filled_rounded_rectangle(
-            center, size, 8.0f, al_map_rgba(0, 0, 0, 40)
+            draw.center, draw.size, 8.0f, al_map_rgba(0, 0, 0, 40)
         );
         draw_textured_box(
-            center, size, game.sys_content.bmp_frame_box,
+            draw.center, draw.size, game.sys_content.bmp_frame_box,
             COLOR_TRANSPARENT_WHITE
         );
     };

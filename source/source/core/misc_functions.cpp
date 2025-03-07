@@ -781,12 +781,12 @@ string get_working_directory_path() {
 void gui_add_back_input_icon(GuiManager* gui, const string &item_name) {
     GuiItem* back_input = new GuiItem();
     back_input->on_draw =
-    [] (const Point & center, const Point & size) {
+    [] (const GuiItem::DrawInfo & draw) {
         if(!game.options.show_hud_input_icons) return;
         PlayerInput i =
             game.controls.find_bind(PLAYER_ACTION_TYPE_MENU_BACK).input;
         if(i.type == INPUT_TYPE_NONE) return;
-        draw_player_input_icon(game.sys_content.fnt_slim, i, true, center, size);
+        draw_player_input_icon(game.sys_content.fnt_slim, i, true, draw.center, draw.size);
     };
     gui->add_item(back_input, item_name);
 }

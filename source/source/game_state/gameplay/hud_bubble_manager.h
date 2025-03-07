@@ -18,6 +18,9 @@
 using std::map;
 
 
+using DrawInfo = GuiItem::DrawInfo;
+
+
 //Methods for a HUD bubble to move.
 enum HUD_BUBBLE_MOVE_METHOD {
 
@@ -121,12 +124,11 @@ struct HudBubbleManager {
     * @param id ID of the registered bubble.
     * @param content The content the bubble should use is returned here.
     * A default-constructed object is returned on error.
-    * @param pos The final position it should use is returned here.
-    * @param size The final size it should use is returned here.
+    * @param draw The final drawing information it should use is returned here.
     */
     void get_drawing_info(
         size_t id,
-        t* content, Point* pos, Point* size
+        t* content, DrawInfo* draw
     ) {
         float transition_anim_ratio = transition_timer / transition_duration;
         
@@ -136,11 +138,8 @@ struct HudBubbleManager {
             return;
         }
         
-        bool visible =
-            hud->get_item_draw_info(
-                it->second.bubble, pos, size
-            );
-            
+        bool visible = hud->get_item_draw_info(it->second.bubble, draw);
+        
         if(!visible) {
             *content = t();
             return;
@@ -183,11 +182,13 @@ struct HudBubbleManager {
         
         if(match_it != bubbles.end()) {
             match_ptr = match_it->second.bubble;
+            DrawInfo match_draw;
             if(
-                !hud->get_item_draw_info(
-                    match_ptr, &match_pos, &match_size
-                )
+                hud->get_item_draw_info(match_ptr, &match_draw)
             ) {
+                match_pos = match_draw.center;
+                match_size = match_draw.size;
+            } else {
                 match_ptr = nullptr;
             }
         }
@@ -197,28 +198,28 @@ struct HudBubbleManager {
             //This bubble is heading to a new spot.
             
             Point match_pivot(
-                (pos->x + match_pos.x) / 2.0f,
-                (pos->y + match_pos.y) / 2.0f
+                (draw->center.x + match_pos.x) / 2.0f,
+                (draw->center.y + match_pos.y) / 2.0f
             );
             float mov_ratio =
                 ease(EASE_METHOD_IN_OUT_BACK, 1.0f - transition_anim_ratio);
             float pivot_dist =
-                Distance(*pos, match_pivot).to_float();
+                Distance(draw->center, match_pivot).to_float();
                 
             if(transition_anim_ratio > 0.5f) {
                 //First half of the animation. Move to the first half.
                 switch(move_method) {
                 case HUD_BUBBLE_MOVE_METHOD_STRAIGHT: {
-                    *pos =
+                    draw->center =
                         interpolate_point(
                             ease(EASE_METHOD_OUT, 1.0f - transition_anim_ratio),
                             0.0f, 1.0f,
-                            *pos, match_pos
+                            draw->center, match_pos
                         );
                     break;
                 } case HUD_BUBBLE_MOVE_METHOD_CIRCLE: {
-                    float match_start_angle = get_angle(match_pivot, *pos);
-                    *pos =
+                    float match_start_angle = get_angle(match_pivot, draw->center);
+                    draw->center =
                         match_pivot +
                         rotate_point(
                             Point(pivot_dist, 0.0f),
@@ -227,27 +228,27 @@ struct HudBubbleManager {
                     break;
                 }
                 }
-                *size =
+                draw->size =
                     interpolate_point(
                         ease(EASE_METHOD_OUT, 1.0f - transition_anim_ratio),
                         0.0f, 1.0f,
-                        *size, match_size
+                        draw->size, match_size
                     );
                     
             } else {
                 //Second half of the animation. Move from the first half.
                 switch(move_method) {
                 case HUD_BUBBLE_MOVE_METHOD_STRAIGHT: {
-                    *pos =
+                    draw->center =
                         interpolate_point(
                             ease(EASE_METHOD_OUT, 1.0f - transition_anim_ratio),
                             0.0f, 1.0f,
-                            match_pos, *pos
+                            match_pos, draw->center
                         );
                     break;
                 } case HUD_BUBBLE_MOVE_METHOD_CIRCLE: {
                     float match_start_angle = get_angle(match_pivot, match_pos);
-                    *pos =
+                    draw->center =
                         match_pivot +
                         rotate_point(
                             Point(pivot_dist, 0.0f),
@@ -256,11 +257,11 @@ struct HudBubbleManager {
                     break;
                 }
                 }
-                *size =
+                draw->size =
                     interpolate_point(
                         ease(EASE_METHOD_OUT, 1.0f - transition_anim_ratio),
                         0.0f, 1.0f,
-                        match_size, *size
+                        match_size, draw->size
                     );
                     
             }
@@ -270,11 +271,11 @@ struct HudBubbleManager {
             
             if(transition_anim_ratio > 0.5f) {
                 //First half of the animation. Fade out.
-                *size *= ease(EASE_METHOD_OUT, (transition_anim_ratio - 0.5f) * 2.0f);
+                draw->size *= ease(EASE_METHOD_OUT, (transition_anim_ratio - 0.5f) * 2.0f);
                 
             } else {
                 //Second half of the animation. Fade in.
-                *size *= ease(EASE_METHOD_OUT, 1 - transition_anim_ratio * 2.0f);
+                draw->size *= ease(EASE_METHOD_OUT, 1 - transition_anim_ratio * 2.0f);
                 
             }
         }

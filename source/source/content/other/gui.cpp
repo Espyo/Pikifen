@@ -20,6 +20,9 @@
 #include "../../util/string_utils.h"
 
 
+using DrawInfo = GuiItem::DrawInfo;
+
+
 namespace GUI {
 
 //Interval between auto-repeat activations, at the slowest speed.
@@ -77,8 +80,8 @@ BulletGuiItem::BulletGuiItem(
     color(color) {
     
     on_draw =
-    [this] (const Point & center, const Point & size) {
-        this->def_draw_code(center, size);
+    [this] (const DrawInfo & draw) {
+        this->def_draw_code(draw);
     };
 }
 
@@ -87,22 +90,22 @@ BulletGuiItem::BulletGuiItem(
  * @brief Default bullet GUI item draw code.
  */
 void BulletGuiItem::def_draw_code(
-    const Point &center, const Point &size
+    const DrawInfo &draw
 ) {
-    float item_x_start = center.x - size.x * 0.5;
+    float item_x_start = draw.center.x - draw.size.x * 0.5;
     float text_x_offset =
         GUI::BULLET_RADIUS * 2 +
         GUI::BULLET_PADDING * 2;
     Point text_space(
-        std::max(1.0f, size.x - text_x_offset),
-        size.y
+        std::max(1.0f, draw.size.x - text_x_offset),
+        draw.size.y
     );
     
     draw_bitmap(
         game.sys_content.bmp_hard_bubble,
         Point(
             item_x_start + GUI::BULLET_RADIUS + GUI::BULLET_PADDING,
-            center.y
+            draw.center.y
         ),
         Point(GUI::BULLET_RADIUS * 2),
         0.0f, this->color
@@ -110,7 +113,7 @@ void BulletGuiItem::def_draw_code(
     float juicy_grow_amount = get_juice_value();
     draw_text(
         this->text, this->font,
-        Point(item_x_start + text_x_offset, center.y),
+        Point(item_x_start + text_x_offset, draw.center.y),
         text_space * GUI::STANDARD_CONTENT_SIZE,
         this->color, ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER,
         TEXT_SETTING_FLAG_CANT_GROW,
@@ -118,8 +121,8 @@ void BulletGuiItem::def_draw_code(
     );
     if(selected) {
         draw_textured_box(
-            center,
-            size + 10.0 + sin(game.time_passed * TAU) * 2.0f,
+            draw.center,
+            draw.size + 10.0 + sin(game.time_passed * TAU) * 2.0f,
             game.sys_content.bmp_focus_box
         );
     }
@@ -142,8 +145,8 @@ ButtonGuiItem::ButtonGuiItem(
     color(color) {
     
     on_draw =
-    [this] (const Point & center, const Point & size) {
-        this->def_draw_code(center, size);
+    [this] (const DrawInfo & draw) {
+        this->def_draw_code(draw);
     };
 }
 
@@ -152,10 +155,11 @@ ButtonGuiItem::ButtonGuiItem(
  * @brief Default button GUI item draw code.
  */
 void ButtonGuiItem::def_draw_code(
-    const Point &center, const Point &size
+    const DrawInfo  &draw
 ) {
     draw_button(
-        center, size, this->text, this->font, this->color, selected,
+        draw.center, draw.size,
+        this->text, this->font, this->color, selected,
         get_juice_value()
     );
 }
@@ -180,8 +184,8 @@ CheckGuiItem::CheckGuiItem(
     color(color) {
     
     on_draw =
-    [this] (const Point & center, const Point & size) {
-        this->def_draw_code(center, size);
+    [this] (const DrawInfo & draw) {
+        this->def_draw_code(draw);
     };
     
     on_activate =
@@ -222,12 +226,12 @@ void CheckGuiItem::def_activate_code() {
 /**
  * @brief Default check GUI item draw code.
  */
-void CheckGuiItem::def_draw_code(const Point &center, const Point &size) {
+void CheckGuiItem::def_draw_code(const DrawInfo &draw) {
     float juicy_grow_amount = get_juice_value();
     draw_text(
         this->text, this->font,
-        Point(center.x - size.x * 0.45, center.y),
-        Point(size.x * 0.95, size.y) * GUI::STANDARD_CONTENT_SIZE,
+        Point(draw.center.x - draw.size.x * 0.45, draw.center.y),
+        Point(draw.size.x * 0.95, draw.size.y) * GUI::STANDARD_CONTENT_SIZE,
         this->color, ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER,
         TEXT_SETTING_FLAG_CANT_GROW,
         Point(1.0f + juicy_grow_amount)
@@ -238,8 +242,8 @@ void CheckGuiItem::def_draw_code(const Point &center, const Point &size) {
         game.sys_content.bmp_checkbox_check :
         game.sys_content.bmp_checkbox_no_check,
         this->text.empty() ?
-        center :
-        Point((center.x + size.x * 0.5) - 40, center.y),
+        draw.center :
+        Point((draw.center.x + draw.size.x * 0.5) - 40, draw.center.y),
         Point(32, -1)
     );
     
@@ -247,13 +251,13 @@ void CheckGuiItem::def_draw_code(const Point &center, const Point &size) {
         selected ? al_map_rgb(87, 200, 208) : COLOR_WHITE;
         
     draw_textured_box(
-        center, size, game.sys_content.bmp_bubble_box, box_tint
+        draw.center, draw.size, game.sys_content.bmp_bubble_box, box_tint
     );
     
     if(selected) {
         draw_textured_box(
-            center,
-            size + 10.0 + sin(game.time_passed * TAU) * 2.0f,
+            draw.center,
+            draw.size + 10.0 + sin(game.time_passed * TAU) * 2.0f,
             game.sys_content.bmp_focus_box
         );
     }
@@ -330,7 +334,7 @@ float GuiItem::get_child_bottom() {
         bottommost =
             std::max(
                 bottommost,
-                c_ptr->center.y + (c_ptr->size.y / 2.0f)
+                c_ptr->ratio_center.y + (c_ptr->ratio_size.y / 2.0f)
             );
     }
     return bottommost;
@@ -412,13 +416,13 @@ Point GuiItem::get_reference_center() {
             parent->get_reference_size() - (parent->padding * 2.0f);
         Point parent_c =
             parent->get_reference_center();
-        Point result = center * parent_s;
+        Point result = ratio_center * parent_s;
         result.x += parent_c.x - parent_s.x / 2.0f;
         result.y += parent_c.y - parent_s.y / 2.0f;
         result.y -= parent_s.y * parent->offset;
         return result;
     } else {
-        return Point(center.x * game.win_w, center.y * game.win_h);
+        return Point(ratio_center.x * game.win_w, ratio_center.y * game.win_h);
     }
 }
 
@@ -436,7 +440,7 @@ Point GuiItem::get_reference_size() {
         mult.x = game.win_w;
         mult.y = game.win_h;
     }
-    return size * mult;
+    return ratio_size * mult;
 }
 
 
@@ -566,11 +570,11 @@ GuiManager::GuiManager() {
 void GuiManager::add_item(GuiItem* item, const string &id) {
     auto c = registered_centers.find(id);
     if(c != registered_centers.end()) {
-        item->center = c->second;
+        item->ratio_center = c->second;
     }
     auto s = registered_sizes.find(id);
     if(s != registered_sizes.end()) {
-        item->size = s->second;
+        item->ratio_size = s->second;
     }
     
     items.push_back(item);
@@ -610,27 +614,27 @@ void GuiManager::draw() {
         
         if(!i_ptr->on_draw) continue;
         
-        Point draw_center = i_ptr->get_reference_center();
-        Point draw_size = i_ptr->get_reference_size();
+        DrawInfo draw;
+        draw.center = i_ptr->get_reference_center();
+        draw.size = i_ptr->get_reference_size();
         
-        if(!get_item_draw_info(i_ptr, &draw_center, &draw_size)) continue;
+        if(!get_item_draw_info(i_ptr, &draw)) continue;
         
         if(i_ptr->parent) {
-            Point parent_c;
-            Point parent_s;
-            if(!get_item_draw_info(i_ptr->parent, &parent_c, &parent_s)) {
+            DrawInfo parent_draw;
+            if(!get_item_draw_info(i_ptr->parent, &parent_draw)) {
                 continue;
             }
             al_get_clipping_rectangle(&ocr_x, &ocr_y, &ocr_w, &ocr_h);
             al_set_clipping_rectangle(
-                (parent_c.x - parent_s.x / 2.0f) + 1,
-                (parent_c.y - parent_s.y / 2.0f) + 1,
-                parent_s.x - 2,
-                parent_s.y - 2
+                (parent_draw.center.x - parent_draw.size.x / 2.0f) + 1,
+                (parent_draw.center.y - parent_draw.size.y / 2.0f) + 1,
+                parent_draw.size.x - 2,
+                parent_draw.size.y - 2
             );
         }
         
-        i_ptr->on_draw(draw_center, draw_size);
+        i_ptr->on_draw(draw);
         
         if(i_ptr->parent) {
             al_set_clipping_rectangle(ocr_x, ocr_y, ocr_w, ocr_h);
@@ -660,10 +664,10 @@ string GuiManager::get_current_tooltip() {
  * @return True if the item exists and is meant to be drawn, false otherwise.
  */
 bool GuiManager::get_item_draw_info(
-    GuiItem* item, Point* draw_center, Point* draw_size
+    GuiItem* item, DrawInfo* draw
 ) {
     if(!item->is_visible()) return false;
-    if(item->size.x == 0.0f) return false;
+    if(item->ratio_size.x == 0.0f) return false;
     
     Point final_center = item->get_reference_center();
     Point final_size = item->get_reference_size();
@@ -785,8 +789,8 @@ bool GuiManager::get_item_draw_info(
         }
     }
     
-    *draw_center = final_center;
-    *draw_size = final_size;
+    draw->center = final_center;
+    draw->size = final_size;
     return true;
 }
 
@@ -847,8 +851,8 @@ void GuiManager::handle_allegro_event(const ALLEGRO_EVENT &ev) {
     }
     
     for(size_t i = 0; i < items.size(); i++) {
-        if(items[i]->is_responsive() && items[i]->on_event) {
-            items[i]->on_event(ev);
+        if(items[i]->is_responsive() && items[i]->on_allegro_event) {
+            items[i]->on_allegro_event(ev);
         }
     }
     
@@ -1249,14 +1253,14 @@ ListGuiItem::ListGuiItem() :
     
     padding = 8.0f;
     on_draw =
-    [this] (const Point & center, const Point & size) {
-        this->def_draw_code(center, size);
+    [this] (const DrawInfo & draw) {
+        this->def_draw_code(draw);
     };
     on_tick =
     [this] (float delta_t) {
         this->def_tick_code(delta_t);
     };
-    on_event =
+    on_allegro_event =
     [this] (const ALLEGRO_EVENT & ev) {
         this->def_event_code(ev);
     };
@@ -1278,7 +1282,7 @@ void ListGuiItem::def_child_selected_code(const GuiItem* child) {
     }
     target_offset =
         clamp(
-            child->center.y - 0.5f,
+            child->ratio_center.y - 0.5f,
             0.0f,
             child_bottom - 1.0f
         );
@@ -1288,9 +1292,9 @@ void ListGuiItem::def_child_selected_code(const GuiItem* child) {
 /**
  * @brief Default list GUI item draw code.
  */
-void ListGuiItem::def_draw_code(const Point &center, const Point &size) {
+void ListGuiItem::def_draw_code(const DrawInfo &draw) {
     draw_textured_box(
-        center, size, game.sys_content.bmp_frame_box,
+        draw.center, draw.size, game.sys_content.bmp_frame_box,
         COLOR_TRANSPARENT_WHITE
     );
     if(offset > 0.0f) {
@@ -1299,32 +1303,32 @@ void ListGuiItem::def_draw_code(const Point &center, const Point &size) {
         for(size_t v = 0; v < 8; v++) {
             vertexes[v].z = 0.0f;
         }
-        float y1 = center.y - size.y / 2.0f;
+        float y1 = draw.center.y - draw.size.y / 2.0f;
         float y2 = y1 + 20.0f;
         ALLEGRO_COLOR c_opaque = al_map_rgba(255, 255, 255, 64);
         ALLEGRO_COLOR c_empty = al_map_rgba(255, 255, 255, 0);
-        vertexes[0].x = center.x - size.x * 0.49;
+        vertexes[0].x = draw.center.x - draw.size.x * 0.49;
         vertexes[0].y = y1;
         vertexes[0].color = c_empty;
-        vertexes[1].x = center.x - size.x * 0.49;
+        vertexes[1].x = draw.center.x - draw.size.x * 0.49;
         vertexes[1].y = y2;
         vertexes[1].color = c_empty;
-        vertexes[2].x = center.x - size.x * 0.47;
+        vertexes[2].x = draw.center.x - draw.size.x * 0.47;
         vertexes[2].y = y1;
         vertexes[2].color = c_opaque;
-        vertexes[3].x = center.x - size.x * 0.47;
+        vertexes[3].x = draw.center.x - draw.size.x * 0.47;
         vertexes[3].y = y2;
         vertexes[3].color = c_empty;
-        vertexes[4].x = center.x + size.x * 0.47;
+        vertexes[4].x = draw.center.x + draw.size.x * 0.47;
         vertexes[4].y = y1;
         vertexes[4].color = c_opaque;
-        vertexes[5].x = center.x + size.x * 0.47;
+        vertexes[5].x = draw.center.x + draw.size.x * 0.47;
         vertexes[5].y = y2;
         vertexes[5].color = c_empty;
-        vertexes[6].x = center.x + size.x * 0.49;
+        vertexes[6].x = draw.center.x + draw.size.x * 0.49;
         vertexes[6].y = y1;
         vertexes[6].color = c_empty;
-        vertexes[7].x = center.x + size.x * 0.49;
+        vertexes[7].x = draw.center.x + draw.size.x * 0.49;
         vertexes[7].y = y2;
         vertexes[7].color = c_empty;
         al_draw_prim(
@@ -1338,32 +1342,32 @@ void ListGuiItem::def_draw_code(const Point &center, const Point &size) {
         for(size_t v = 0; v < 8; v++) {
             vertexes[v].z = 0.0f;
         }
-        float y1 = center.y + size.y / 2.0f;
+        float y1 = draw.center.y + draw.size.y / 2.0f;
         float y2 = y1 - 20.0f;
         ALLEGRO_COLOR c_opaque = al_map_rgba(255, 255, 255, 64);
         ALLEGRO_COLOR c_empty = al_map_rgba(255, 255, 255, 0);
-        vertexes[0].x = center.x - size.x * 0.49;
+        vertexes[0].x = draw.center.x - draw.size.x * 0.49;
         vertexes[0].y = y1;
         vertexes[0].color = c_empty;
-        vertexes[1].x = center.x - size.x * 0.49;
+        vertexes[1].x = draw.center.x - draw.size.x * 0.49;
         vertexes[1].y = y2;
         vertexes[1].color = c_empty;
-        vertexes[2].x = center.x - size.x * 0.47;
+        vertexes[2].x = draw.center.x - draw.size.x * 0.47;
         vertexes[2].y = y1;
         vertexes[2].color = c_opaque;
-        vertexes[3].x = center.x - size.x * 0.47;
+        vertexes[3].x = draw.center.x - draw.size.x * 0.47;
         vertexes[3].y = y2;
         vertexes[3].color = c_empty;
-        vertexes[4].x = center.x + size.x * 0.47;
+        vertexes[4].x = draw.center.x + draw.size.x * 0.47;
         vertexes[4].y = y1;
         vertexes[4].color = c_opaque;
-        vertexes[5].x = center.x + size.x * 0.47;
+        vertexes[5].x = draw.center.x + draw.size.x * 0.47;
         vertexes[5].y = y2;
         vertexes[5].color = c_empty;
-        vertexes[6].x = center.x + size.x * 0.49;
+        vertexes[6].x = draw.center.x + draw.size.x * 0.49;
         vertexes[6].y = y1;
         vertexes[6].color = c_empty;
-        vertexes[7].x = center.x + size.x * 0.49;
+        vertexes[7].x = draw.center.x + draw.size.x * 0.49;
         vertexes[7].y = y2;
         vertexes[7].color = c_empty;
         al_draw_prim(
@@ -1437,8 +1441,8 @@ PickerGuiItem::PickerGuiItem(
     cur_option_idx(cur_option_idx) {
     
     on_draw =
-    [this] (const Point & center, const Point & size) {
-        this->def_draw_code(center, size);
+    [this] (const DrawInfo & draw) {
+        this->def_draw_code(draw);
     };
     
     on_activate =
@@ -1473,14 +1477,14 @@ void PickerGuiItem::def_activate_code(const Point &cursor_pos) {
 /**
  * @brief Default picker GUI item draw code.
  */
-void PickerGuiItem::def_draw_code(const Point &center, const Point &size) {
+void PickerGuiItem::def_draw_code(const DrawInfo &draw) {
     if(this->nr_options != 0 && selected) {
         Point option_boxes_start(
-            center.x - size.x / 2.0f + 20.0f,
-            center.y + size.y / 2.0f - 12.0f
+            draw.center.x - draw.size.x / 2.0f + 20.0f,
+            draw.center.y + draw.size.y / 2.0f - 12.0f
         );
         float option_boxes_interval =
-            (size.x - 40.0f) / (this->nr_options - 0.5f);
+            (draw.size.x - 40.0f) / (this->nr_options - 0.5f);
         for(size_t o = 0; o < this->nr_options; o++) {
             float x1 = option_boxes_start.x + o * option_boxes_interval;
             float y1 = option_boxes_start.y;
@@ -1508,13 +1512,13 @@ void PickerGuiItem::def_draw_code(const Point &center, const Point &size) {
     Point arrow_regular_scale = Point(1.0f);
     
     Point arrow_box(
-        size.x * 0.10 * GUI::STANDARD_CONTENT_SIZE.x,
-        size.y * GUI::STANDARD_CONTENT_SIZE.y
+        draw.size.x * 0.10 * GUI::STANDARD_CONTENT_SIZE.x,
+        draw.size.y * GUI::STANDARD_CONTENT_SIZE.y
     );
     draw_text(
         "<",
         game.sys_content.fnt_standard,
-        Point(center.x - size.x * 0.45, center.y),
+        Point(draw.center.x - draw.size.x * 0.45, draw.center.y),
         arrow_box,
         real_arrow_highlight == 0 ?
         arrow_highlight_color :
@@ -1528,7 +1532,7 @@ void PickerGuiItem::def_draw_code(const Point &center, const Point &size) {
     draw_text(
         ">",
         game.sys_content.fnt_standard,
-        Point(center.x + size.x * 0.45, center.y),
+        Point(draw.center.x + draw.size.x * 0.45, draw.center.y),
         arrow_box,
         real_arrow_highlight == 1 ?
         arrow_highlight_color :
@@ -1542,11 +1546,11 @@ void PickerGuiItem::def_draw_code(const Point &center, const Point &size) {
     
     float juicy_grow_amount = this->get_juice_value();
     
-    Point text_box(size.x * 0.80, size.y * GUI::STANDARD_CONTENT_SIZE.y);
+    Point text_box(draw.size.x * 0.80, draw.size.y * GUI::STANDARD_CONTENT_SIZE.y);
     draw_text(
         this->base_text + this->option,
         game.sys_content.fnt_standard,
-        Point(center.x - size.x * 0.40, center.y),
+        Point(draw.center.x - draw.size.x * 0.40, draw.center.y),
         text_box,
         COLOR_WHITE,
         ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER,
@@ -1558,13 +1562,13 @@ void PickerGuiItem::def_draw_code(const Point &center, const Point &size) {
         selected ? al_map_rgb(87, 200, 208) : COLOR_WHITE;
         
     draw_textured_box(
-        center, size, game.sys_content.bmp_bubble_box, box_tint
+        draw.center, draw.size, game.sys_content.bmp_bubble_box, box_tint
     );
     
     if(selected) {
         draw_textured_box(
-            center,
-            size + 10.0 + sin(game.time_passed * TAU) * 2.0f,
+            draw.center,
+            draw.size + 10.0 + sin(game.time_passed * TAU) * 2.0f,
             game.sys_content.bmp_focus_box
         );
     }
@@ -1602,10 +1606,10 @@ ScrollGuiItem::ScrollGuiItem() :
     GuiItem() {
     
     on_draw =
-    [this] (const Point & center, const Point & size) {
-        this->def_draw_code(center, size);
+    [this] (const DrawInfo & draw) {
+        this->def_draw_code(draw);
     };
-    on_event =
+    on_allegro_event =
     [this] (const ALLEGRO_EVENT & ev) {
         this->def_event_code(ev);
     };
@@ -1615,7 +1619,7 @@ ScrollGuiItem::ScrollGuiItem() :
 /**
  * @brief Default scroll GUI item draw code.
  */
-void ScrollGuiItem::def_draw_code(const Point &center, const Point &size) {
+void ScrollGuiItem::def_draw_code(const DrawInfo &draw) {
     float bar_y = 0.0f; //Top, in height ratio.
     float bar_h = 0.0f; //In height ratio.
     float list_bottom = list_item->get_child_bottom();
@@ -1628,19 +1632,19 @@ void ScrollGuiItem::def_draw_code(const Point &center, const Point &size) {
     }
     
     draw_textured_box(
-        center, size, game.sys_content.bmp_frame_box,
+        draw.center, draw.size, game.sys_content.bmp_frame_box,
         al_map_rgba(255, 255, 255, alpha)
     );
     
     if(bar_h != 0.0f) {
         draw_textured_box(
             Point(
-                center.x,
-                (center.y - size.y * 0.5) +
-                (size.y * bar_y) +
-                (size.y * bar_h * 0.5f)
+                draw.center.x,
+                (draw.center.y - draw.size.y * 0.5) +
+                (draw.size.y * bar_y) +
+                (draw.size.y * bar_h * 0.5f)
             ),
-            Point(size.x, (size.y * bar_h)),
+            Point(draw.size.x, (draw.size.y * bar_h)),
             game.sys_content.bmp_bubble_box
         );
     }
@@ -1693,8 +1697,8 @@ TextGuiItem::TextGuiItem(
     flags(flags) {
     
     on_draw =
-    [this] (const Point & center, const Point & size) {
-        this->def_draw_code(center, size);
+    [this] (const DrawInfo & draw) {
+        this->def_draw_code(draw);
     };
 }
 
@@ -1702,24 +1706,24 @@ TextGuiItem::TextGuiItem(
 /**
  * @brief Default text GUI item draw code.
  */
-void TextGuiItem::def_draw_code(const Point &center, const Point &size) {
-    int text_x = center.x;
+void TextGuiItem::def_draw_code(const DrawInfo &draw) {
+    int text_x = draw.center.x;
     switch(this->flags) {
     case ALLEGRO_ALIGN_LEFT: {
-        text_x = center.x - size.x * 0.5;
+        text_x = draw.center.x - draw.size.x * 0.5;
         break;
     } case ALLEGRO_ALIGN_RIGHT: {
-        text_x = center.x + size.x * 0.5;
+        text_x = draw.center.x + draw.size.x * 0.5;
         break;
     }
     }
     
     float juicy_grow_amount = get_juice_value();
-    int text_y = center.y;
+    int text_y = draw.center.y;
     
     if(line_wrap) {
     
-        text_y = center.y - size.y / 2.0f;
+        text_y = draw.center.y - draw.size.y / 2.0f;
         int line_height = al_get_font_line_height(this->font);
         vector<StringToken> tokens =
             tokenize_string(this->text);
@@ -1727,7 +1731,7 @@ void TextGuiItem::def_draw_code(const Point &center, const Point &size) {
             tokens, this->font, game.sys_content.fnt_slim, line_height, false
         );
         vector<vector<StringToken> > tokens_per_line =
-            split_long_string_with_tokens(tokens, size.x);
+            split_long_string_with_tokens(tokens, draw.size.x);
             
         for(size_t l = 0; l < tokens_per_line.size(); l++) {
             draw_string_tokens(
@@ -1738,7 +1742,7 @@ void TextGuiItem::def_draw_code(const Point &center, const Point &size) {
                     text_y + l * line_height
                 ),
                 this->flags,
-                Point(size.x, line_height),
+                Point(draw.size.x, line_height),
                 Point(1.0f + juicy_grow_amount)
             );
         }
@@ -1746,7 +1750,7 @@ void TextGuiItem::def_draw_code(const Point &center, const Point &size) {
     } else {
     
         draw_text(
-            this->text, this->font, Point(text_x, text_y), size,
+            this->text, this->font, Point(text_x, text_y), draw.size,
             this->color, this->flags, V_ALIGN_MODE_CENTER,
             TEXT_SETTING_FLAG_CANT_GROW,
             Point(1.0 + juicy_grow_amount)
@@ -1756,8 +1760,8 @@ void TextGuiItem::def_draw_code(const Point &center, const Point &size) {
     
     if(selected && show_selection_box) {
         draw_textured_box(
-            center,
-            size + 10.0 + sin(game.time_passed * TAU) * 2.0f,
+            draw.center,
+            draw.size + 10.0 + sin(game.time_passed * TAU) * 2.0f,
             game.sys_content.bmp_focus_box
         );
     }
@@ -1774,8 +1778,8 @@ TooltipGuiItem::TooltipGuiItem(GuiManager* gui) :
     gui(gui) {
     
     on_draw =
-    [this] (const Point & center, const Point & size) {
-        this->def_draw_code(center, size);
+    [this] (const DrawInfo & draw) {
+        this->def_draw_code(draw);
     };
 }
 
@@ -1783,7 +1787,7 @@ TooltipGuiItem::TooltipGuiItem(GuiManager* gui) :
 /**
  * @brief Default tooltip GUI item draw code.
  */
-void TooltipGuiItem::def_draw_code(const Point &center, const Point &size) {
+void TooltipGuiItem::def_draw_code(const DrawInfo &draw) {
     string cur_text = this->gui->get_current_tooltip();
     if(cur_text != this->prev_text) {
         this->start_juice_animation(JUICE_TYPE_GROW_TEXT_LOW);
@@ -1791,12 +1795,9 @@ void TooltipGuiItem::def_draw_code(const Point &center, const Point &size) {
     }
     float juicy_grow_amount = get_juice_value();
     draw_text(
-        cur_text,
-        game.sys_content.fnt_standard,
-        center,
-        size,
-        COLOR_WHITE,
-        ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
+        cur_text, game.sys_content.fnt_standard,
+        draw.center, draw.size,
+        COLOR_WHITE, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
         TEXT_SETTING_FLAG_CANT_GROW,
         Point(0.7f + juicy_grow_amount)
     );

@@ -21,6 +21,9 @@
 #include "../util/string_utils.h"
 
 
+using DrawInfo = GuiItem::DrawInfo;
+
+
 namespace TITLE_SCREEN {
 
 //Name of the GUI information file.
@@ -223,12 +226,12 @@ void TitleScreen::init_gui_main_page() {
     ButtonGuiItem* play_button =
         new ButtonGuiItem("Play", game.sys_content.fnt_area_name);
     play_button->on_draw =
-    [ = ] (const Point & center, const Point & size) {
+    [ = ] (const DrawInfo & draw) {
         draw_menu_button_icon(
-            MENU_ICON_PLAY, center, size, play_icon_left
+            MENU_ICON_PLAY, draw.center, draw.size, play_icon_left
         );
         draw_button(
-            center, size,
+            draw.center, draw.size,
             play_button->text, play_button->font,
             play_button->color, play_button->selected,
             play_button->get_juice_value()
@@ -263,12 +266,12 @@ void TitleScreen::init_gui_main_page() {
     ButtonGuiItem* make_button =
         new ButtonGuiItem("Make", game.sys_content.fnt_area_name);
     make_button->on_draw =
-    [ = ] (const Point & center, const Point & size) {
+    [ = ] (const DrawInfo & draw) {
         draw_menu_button_icon(
-            MENU_ICON_MAKE, center, size, make_icon_left
+            MENU_ICON_MAKE, draw.center, draw.size, make_icon_left
         );
         draw_button(
-            center, size,
+            draw.center, draw.size,
             make_button->text, make_button->font,
             make_button->color, make_button->selected,
             make_button->get_juice_value()
@@ -295,12 +298,12 @@ void TitleScreen::init_gui_main_page() {
     ButtonGuiItem* help_button =
         new ButtonGuiItem("Help", game.sys_content.fnt_area_name);
     help_button->on_draw =
-    [ = ] (const Point & center, const Point & size) {
+    [ = ] (const DrawInfo & draw) {
         draw_menu_button_icon(
-            MENU_ICON_HELP, center, size, help_icon_left
+            MENU_ICON_HELP, draw.center, draw.size, help_icon_left
         );
         draw_button(
-            center, size,
+            draw.center, draw.size,
             help_button->text, help_button->font,
             help_button->color, help_button->selected,
             help_button->get_juice_value()
@@ -324,12 +327,12 @@ void TitleScreen::init_gui_main_page() {
     ButtonGuiItem* options_button =
         new ButtonGuiItem("Options", game.sys_content.fnt_area_name);
     options_button->on_draw =
-    [ = ] (const Point & center, const Point & size) {
+    [ = ] (const DrawInfo & draw) {
         draw_menu_button_icon(
-            MENU_ICON_OPTIONS, center, size, options_icon_left
+            MENU_ICON_OPTIONS, draw.center, draw.size, options_icon_left
         );
         draw_button(
-            center, size,
+            draw.center, draw.size,
             options_button->text, options_button->font,
             options_button->color, options_button->selected,
             options_button->get_juice_value()
@@ -355,12 +358,12 @@ void TitleScreen::init_gui_main_page() {
     ButtonGuiItem* stats_button =
         new ButtonGuiItem("Statistics", game.sys_content.fnt_area_name);
     stats_button->on_draw =
-    [ = ] (const Point & center, const Point & size) {
+    [ = ] (const DrawInfo & draw) {
         draw_menu_button_icon(
-            MENU_ICON_STATISTICS, center, size, stats_icon_left
+            MENU_ICON_STATISTICS, draw.center, draw.size, stats_icon_left
         );
         draw_button(
-            center, size,
+            draw.center, draw.size,
             stats_button->text, stats_button->font,
             stats_button->color, stats_button->selected,
             stats_button->get_juice_value()
@@ -386,12 +389,12 @@ void TitleScreen::init_gui_main_page() {
     ButtonGuiItem* discord_button =
         new ButtonGuiItem("", game.sys_content.fnt_area_name);
     discord_button->on_draw =
-    [ = ] (const Point & center, const Point & size) {
+    [ = ] (const DrawInfo & draw) {
         draw_bitmap_in_box(
-            game.sys_content.bmp_discord_icon, center, size * 0.8f, true
+            game.sys_content.bmp_discord_icon, draw.center, draw.size * 0.8f, true
         );
         draw_button(
-            center, size,
+            draw.center, draw.size,
             discord_button->text, discord_button->font,
             discord_button->color, discord_button->selected,
             discord_button->get_juice_value()
@@ -413,12 +416,12 @@ void TitleScreen::init_gui_main_page() {
     ButtonGuiItem* github_button =
         new ButtonGuiItem("", game.sys_content.fnt_area_name);
     github_button->on_draw =
-    [ = ] (const Point & center, const Point & size) {
+    [ = ] (const DrawInfo & draw) {
         draw_bitmap_in_box(
-            game.sys_content.bmp_github_icon, center, size * 0.8f, true
+            game.sys_content.bmp_github_icon, draw.center, draw.size * 0.8f, true
         );
         draw_button(
-            center, size,
+            draw.center, draw.size,
             github_button->text, github_button->font,
             github_button->color, github_button->selected,
             github_button->get_juice_value()
@@ -436,12 +439,12 @@ void TitleScreen::init_gui_main_page() {
     main_gui.back_item =
         new ButtonGuiItem("Exit", game.sys_content.fnt_area_name);
     main_gui.back_item->on_draw =
-    [ = ] (const Point & center, const Point & size) {
+    [ = ] (const DrawInfo & draw) {
         draw_menu_button_icon(
-            MENU_ICON_QUIT, center, size, quit_icon_left
+            MENU_ICON_QUIT, draw.center, draw.size, quit_icon_left
         );
         draw_button(
-            center, size,
+            draw.center, draw.size,
             ((ButtonGuiItem*) main_gui.back_item)->text,
             ((ButtonGuiItem*) main_gui.back_item)->font,
             ((ButtonGuiItem*) main_gui.back_item)->color,
@@ -512,12 +515,12 @@ void TitleScreen::init_gui_make_page() {
     ButtonGuiItem* anim_ed_button =
         new ButtonGuiItem("Animations", game.sys_content.fnt_area_name);
     anim_ed_button->on_draw =
-    [ = ] (const Point & center, const Point & size) {
+    [ = ] (const DrawInfo & draw) {
         draw_menu_button_icon(
-            MENU_ICON_ANIM_EDITOR, center, size, anim_editor_icon_left
+            MENU_ICON_ANIM_EDITOR, draw.center, draw.size, anim_editor_icon_left
         );
         draw_button(
-            center, size,
+            draw.center, draw.size,
             anim_ed_button->text, anim_ed_button->font,
             anim_ed_button->color, anim_ed_button->selected,
             anim_ed_button->get_juice_value()
@@ -537,12 +540,12 @@ void TitleScreen::init_gui_make_page() {
     ButtonGuiItem* area_ed_button =
         new ButtonGuiItem("Areas", game.sys_content.fnt_area_name);
     area_ed_button->on_draw =
-    [ = ] (const Point & center, const Point & size) {
+    [ = ] (const DrawInfo & draw) {
         draw_menu_button_icon(
-            MENU_ICON_AREA_EDITOR, center, size, area_editor_icon_left
+            MENU_ICON_AREA_EDITOR, draw.center, draw.size, area_editor_icon_left
         );
         draw_button(
-            center, size,
+            draw.center, draw.size,
             area_ed_button->text, area_ed_button->font,
             area_ed_button->color, area_ed_button->selected,
             area_ed_button->get_juice_value()
@@ -562,12 +565,12 @@ void TitleScreen::init_gui_make_page() {
     ButtonGuiItem* part_ed_button =
         new ButtonGuiItem("Particles", game.sys_content.fnt_area_name);
     part_ed_button->on_draw =
-    [ = ](const Point & center, const Point & size) {
+    [ = ](const DrawInfo & draw) {
         draw_menu_button_icon(
-            MENU_ICON_PARTICLE_EDITOR, center, size, particle_editor_icon_left
+            MENU_ICON_PARTICLE_EDITOR, draw.center, draw.size, particle_editor_icon_left
         );
         draw_button(
-            center, size,
+            draw.center, draw.size,
             part_ed_button->text, part_ed_button->font,
             part_ed_button->color, part_ed_button->selected,
             part_ed_button->get_juice_value()
@@ -587,12 +590,12 @@ void TitleScreen::init_gui_make_page() {
     ButtonGuiItem* gui_ed_button =
         new ButtonGuiItem("GUI", game.sys_content.fnt_area_name);
     gui_ed_button->on_draw =
-    [ = ] (const Point & center, const Point & size) {
+    [ = ] (const DrawInfo & draw) {
         draw_menu_button_icon(
-            MENU_ICON_GUI_EDITOR, center, size, gui_editor_icon_left
+            MENU_ICON_GUI_EDITOR, draw.center, draw.size, gui_editor_icon_left
         );
         draw_button(
-            center, size,
+            draw.center, draw.size,
             gui_ed_button->text, gui_ed_button->font,
             gui_ed_button->color, gui_ed_button->selected,
             gui_ed_button->get_juice_value()
@@ -689,12 +692,12 @@ void TitleScreen::init_gui_play_page() {
     ButtonGuiItem* simple_button =
         new ButtonGuiItem("Simple areas", game.sys_content.fnt_area_name);
     simple_button->on_draw =
-    [ = ] (const Point & center, const Point & size) {
+    [ = ] (const DrawInfo & draw) {
         draw_menu_button_icon(
-            MENU_ICON_SIMPLE_AREAS, center, size, simple_areas_icon_left
+            MENU_ICON_SIMPLE_AREAS, draw.center, draw.size, simple_areas_icon_left
         );
         draw_button(
-            center, size,
+            draw.center, draw.size,
             simple_button->text, simple_button->font,
             simple_button->color, simple_button->selected,
             simple_button->get_juice_value()
@@ -718,12 +721,12 @@ void TitleScreen::init_gui_play_page() {
     ButtonGuiItem* mission_button =
         new ButtonGuiItem("Missions", game.sys_content.fnt_area_name);
     mission_button->on_draw =
-    [ = ] (const Point & center, const Point & size) {
+    [ = ] (const DrawInfo & draw) {
         draw_menu_button_icon(
-            MENU_ICON_MISSIONS, center, size, missions_icon_left
+            MENU_ICON_MISSIONS, draw.center, draw.size, missions_icon_left
         );
         draw_button(
-            center, size,
+            draw.center, draw.size,
             mission_button->text, mission_button->font,
             mission_button->color, mission_button->selected,
             mission_button->get_juice_value()

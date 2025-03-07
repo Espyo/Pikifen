@@ -97,7 +97,7 @@ class GuiItem {
 
 public:
 
-    //--- Misc. declarations ---
+    //--- Misc. definitions ---
     
     //Juicy animation types for GUI items.
     enum JUICE_TYPE {
@@ -128,6 +128,16 @@ public:
         
     };
     
+    //Information about how the item should be drawn.
+    struct DrawInfo {
+    
+        //Center pixel coordinates.
+        Point center;
+        
+        //Pixel dimensions.
+        Point size;
+    };
+    
     
     //--- Members ---
     
@@ -135,10 +145,10 @@ public:
     GuiManager* manager = nullptr;
     
     //Its raw on-screen position, in screen ratio (or parent ratio).
-    Point center;
+    Point ratio_center;
     
     //Its raw width and height, in screen ratio (or parent ratio).
-    Point size;
+    Point ratio_size;
     
     //Is it currently visible?
     bool visible = true;
@@ -174,13 +184,13 @@ public:
     float juice_timer = 0.0f;
     
     //What to do when it's time to draw it.
-    std::function<void(const Point &center, const Point &size)> on_draw = nullptr;
+    std::function<void(const DrawInfo &draw)> on_draw = nullptr;
     
     //What to do when it's time to tick one frame.
     std::function<void(float time)> on_tick = nullptr;
     
     //What to do when it receives any Allegro event.
-    std::function<void(const ALLEGRO_EVENT &ev)> on_event = nullptr;
+    std::function<void(const ALLEGRO_EVENT &ev)> on_allegro_event = nullptr;
     
     //What to do when the item is activated.
     std::function<void(const Point &cursor_pos)> on_activate = nullptr;
@@ -248,7 +258,7 @@ public:
         const ALLEGRO_COLOR &color = COLOR_WHITE
     );
     
-    void def_draw_code(const Point &center, const Point &size);
+    void def_draw_code(const DrawInfo &draw);
     
 };
 
@@ -279,7 +289,7 @@ public:
         const ALLEGRO_COLOR &color = COLOR_WHITE
     );
     
-    void def_draw_code(const Point &center, const Point &size);
+    void def_draw_code(const DrawInfo &draw);
     
 };
 
@@ -322,7 +332,7 @@ public:
     );
     
     void def_activate_code();
-    void def_draw_code(const Point &center, const Point &size);
+    void def_draw_code(const DrawInfo &draw);
     
 };
 
@@ -347,7 +357,7 @@ public:
     ListGuiItem();
     
     void def_child_selected_code(const GuiItem* child);
-    void def_draw_code(const Point &center, const Point &size);
+    void def_draw_code(const DrawInfo &draw);
     void def_event_code(const ALLEGRO_EVENT  &ev);
     void def_tick_code(float delta_t);
     
@@ -391,7 +401,7 @@ public:
     );
     
     void def_activate_code(const Point &cursor_pos);
-    void def_draw_code(const Point &center, const Point &size);
+    void def_draw_code(const DrawInfo &draw);
     bool def_menu_dir_code(size_t button_id);
     void def_mouse_over_code(const Point  &cursor_pos);
     
@@ -423,7 +433,7 @@ public:
     
     ScrollGuiItem();
     
-    void def_draw_code(const Point &center, const Point &size);
+    void def_draw_code(const DrawInfo &draw);
     void def_event_code(const ALLEGRO_EVENT  &ev);
     
 };
@@ -466,7 +476,7 @@ public:
         int flags = ALLEGRO_ALIGN_CENTER
     );
     
-    void def_draw_code(const Point &center, const Point &size);
+    void def_draw_code(const DrawInfo &draw);
     
 };
 
@@ -489,7 +499,7 @@ public:
     
     explicit TooltipGuiItem(GuiManager* gui);
     
-    void def_draw_code(const Point &center, const Point &size);
+    void def_draw_code(const DrawInfo &draw);
     
     
 private:
@@ -545,9 +555,7 @@ public:
     void draw();
     void tick(float delta_t);
     string get_current_tooltip();
-    bool get_item_draw_info(
-        GuiItem* item, Point* draw_center, Point* draw_size
-    );
+    bool get_item_draw_info(GuiItem* item, GuiItem::DrawInfo* draw);
     void handle_allegro_event(const ALLEGRO_EVENT &ev);
     bool handle_player_action(const PlayerAction &action);
     void hide_items();

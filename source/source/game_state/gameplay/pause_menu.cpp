@@ -21,6 +21,9 @@
 #include "../../util/string_utils.h"
 
 
+using DrawInfo = GuiItem::DrawInfo;
+
+
 namespace PAUSE_MENU {
 
 //Name of the leaving confirmation page GUI information file.
@@ -222,8 +225,8 @@ void PauseMenu::add_bullet(
         new BulletGuiItem(
         text, game.sys_content.fnt_standard, color
     );
-    bullet->center = Point(0.50f, bullet_center_y);
-    bullet->size = Point(0.96f, BULLET_HEIGHT);
+    bullet->ratio_center = Point(0.50f, bullet_center_y);
+    bullet->ratio_size = Point(0.96f, BULLET_HEIGHT);
     list->add_child(bullet);
     mission_gui.add_item(bullet);
 }
@@ -283,17 +286,17 @@ void PauseMenu::add_pikmin_status_line(
         //Pikmin type.
         GuiItem* type_item = new GuiItem();
         type_item->on_draw =
-        [pik_type] (const Point & center, const Point & size) {
+        [pik_type] (const DrawInfo & draw) {
             draw_bitmap_in_box(
-                pik_type->bmp_icon, center, size, true
+                pik_type->bmp_icon, draw.center, draw.size, true
             );
         };
-        type_item->center =
+        type_item->ratio_center =
             Point(
                 first_x + item_x_interval * 0,
                 item_y
             );
-        type_item->size = Point(item_width, item_height);
+        type_item->ratio_size = Point(item_width, item_height);
         list->add_child(type_item);
         status_gui.add_item(type_item);
         
@@ -302,12 +305,12 @@ void PauseMenu::add_pikmin_status_line(
         //Totals header.
         TextGuiItem* totals_header_item =
             new TextGuiItem("Total", game.sys_content.fnt_area_name);
-        totals_header_item->center =
+        totals_header_item->ratio_center =
             Point(
                 first_x + item_x_interval * 0,
                 item_y
             );
-        totals_header_item->size = Point(item_width, item_height);
+        totals_header_item->ratio_size = Point(item_width, item_height);
         list->add_child(totals_header_item);
         status_gui.add_item(totals_header_item);
         
@@ -318,12 +321,12 @@ void PauseMenu::add_pikmin_status_line(
         new TextGuiItem(group_text, font);
     group_text_item->selectable = can_select;
     group_text_item->show_selection_box = can_select;
-    group_text_item->center =
+    group_text_item->ratio_center =
         Point(
             first_x + item_x_interval * 1,
             item_y
         );
-    group_text_item->size = Point(item_width, number_item_height);
+    group_text_item->ratio_size = Point(item_width, number_item_height);
     if(can_select) {
         group_text_item->on_get_tooltip =
         [tooltip_start] () {
@@ -341,12 +344,12 @@ void PauseMenu::add_pikmin_status_line(
         new TextGuiItem(idle_text, font);
     idle_text_item->selectable = can_select;
     idle_text_item->show_selection_box = can_select;
-    idle_text_item->center =
+    idle_text_item->ratio_center =
         Point(
             first_x + item_x_interval * 2,
             item_y
         );
-    idle_text_item->size = Point(item_width, number_item_height);
+    idle_text_item->ratio_size = Point(item_width, number_item_height);
     if(can_select) {
         idle_text_item->on_get_tooltip =
         [tooltip_start] () {
@@ -364,12 +367,12 @@ void PauseMenu::add_pikmin_status_line(
         new TextGuiItem(field_text, font);
     field_text_item->selectable = can_select;
     field_text_item->show_selection_box = can_select;
-    field_text_item->center =
+    field_text_item->ratio_center =
         Point(
             first_x + item_x_interval * 3,
             item_y
         );
-    field_text_item->size = Point(item_width, number_item_height);
+    field_text_item->ratio_size = Point(item_width, number_item_height);
     if(can_select) {
         field_text_item->on_get_tooltip =
         [tooltip_start] () {
@@ -387,12 +390,12 @@ void PauseMenu::add_pikmin_status_line(
         new TextGuiItem(onion_text, font);
     onion_text_item->selectable = can_select;
     onion_text_item->show_selection_box = can_select;
-    onion_text_item->center =
+    onion_text_item->ratio_center =
         Point(
             first_x + item_x_interval * 4,
             item_y
         );
-    onion_text_item->size = Point(item_width, number_item_height);
+    onion_text_item->ratio_size = Point(item_width, number_item_height);
     if(can_select) {
         onion_text_item->on_get_tooltip =
         [tooltip_start] () {
@@ -410,12 +413,12 @@ void PauseMenu::add_pikmin_status_line(
         new TextGuiItem(total_text, font, COLOR_GOLD);
     total_text_item->selectable = can_select;
     total_text_item->show_selection_box = can_select;
-    total_text_item->center =
+    total_text_item->ratio_center =
         Point(
             first_x + item_x_interval * 5,
             item_y
         );
-    total_text_item->size = Point(item_width, number_item_height);
+    total_text_item->ratio_size = Point(item_width, number_item_height);
     if(can_select) {
         total_text_item->on_get_tooltip =
         [tooltip_start] () {
@@ -430,14 +433,14 @@ void PauseMenu::add_pikmin_status_line(
     
     //Separator.
     GuiItem* separator_item = new GuiItem();
-    separator_item->center =
+    separator_item->ratio_center =
         Point(first_x + item_x_interval * 5.5f, item_y);
-    separator_item->size = Point(1.0f, item_height);
+    separator_item->ratio_size = Point(1.0f, item_height);
     separator_item->on_draw =
-    [] (const Point & center, const Point & size) {
+    [] (const DrawInfo & draw) {
         al_draw_line(
-            center.x, center.y - size.y / 2.0f,
-            center.x, center.y + size.y / 2.0f,
+            draw.center.x, draw.center.y - draw.size.y / 2.0f,
+            draw.center.x, draw.center.y + draw.size.y / 2.0f,
             COLOR_TRANSPARENT_WHITE, 5.0f
         );
     };
@@ -449,12 +452,12 @@ void PauseMenu::add_pikmin_status_line(
         new TextGuiItem(new_text, font, al_map_rgb(210, 255, 210));
     new_text_item->selectable = can_select;
     new_text_item->show_selection_box = can_select;
-    new_text_item->center =
+    new_text_item->ratio_center =
         Point(
             first_x + item_x_interval * 6,
             item_y
         );
-    new_text_item->size = Point(item_width, number_item_height);
+    new_text_item->ratio_size = Point(item_width, number_item_height);
     if(can_select) {
         new_text_item->on_get_tooltip =
         [tooltip_start] () {
@@ -472,12 +475,12 @@ void PauseMenu::add_pikmin_status_line(
         new TextGuiItem(lost_text, font, al_map_rgb(255, 210, 210));
     lost_text_item->selectable = can_select;
     lost_text_item->show_selection_box = can_select;
-    lost_text_item->center =
+    lost_text_item->ratio_center =
         Point(
             first_x + item_x_interval * 7,
             item_y
         );
-    lost_text_item->size = Point(item_width, number_item_height);
+    lost_text_item->ratio_size = Point(item_width, number_item_height);
     if(can_select) {
         lost_text_item->on_get_tooltip =
         [tooltip_start] () {
@@ -719,12 +722,12 @@ void PauseMenu::create_page_buttons(
     //Left page input icon.
     GuiItem* left_page_input = new GuiItem();
     left_page_input->on_draw =
-    [this] (const Point & center, const Point & size) {
+    [this] (const DrawInfo & draw) {
         if(!game.options.show_hud_input_icons) return;
         PlayerInput i =
             game.controls.find_bind(PLAYER_ACTION_TYPE_MENU_PAGE_LEFT).input;
         if(i.type == INPUT_TYPE_NONE) return;
-        draw_player_input_icon(game.sys_content.fnt_slim, i, true, center, size);
+        draw_player_input_icon(game.sys_content.fnt_slim, i, true, draw.center, draw.size);
     };
     cur_gui->add_item(left_page_input, "left_page_input");
     
@@ -736,12 +739,12 @@ void PauseMenu::create_page_buttons(
     //Right page input icon.
     GuiItem* right_page_input = new GuiItem();
     right_page_input->on_draw =
-    [this] (const Point & center, const Point & size) {
+    [this] (const DrawInfo & draw) {
         if(!game.options.show_hud_input_icons) return;
         PlayerInput i =
             game.controls.find_bind(PLAYER_ACTION_TYPE_MENU_PAGE_RIGHT).input;
         if(i.type == INPUT_TYPE_NONE) return;
-        draw_player_input_icon(game.sys_content.fnt_slim, i, true, center, size);
+        draw_player_input_icon(game.sys_content.fnt_slim, i, true, draw.center, draw.size);
     };
     cur_gui->add_item(right_page_input, "right_page_input");
 }
@@ -1507,14 +1510,13 @@ void PauseMenu::handle_allegro_event(const ALLEGRO_EVENT &ev) {
     if(secondary_menu) secondary_menu->handle_allegro_event(ev);
     
     //Handle some radar logic.
-    Point radar_center;
-    Point radar_size;
-    radar_gui.get_item_draw_info(radar_item, &radar_center, &radar_size);
+    DrawInfo radar_draw;
+    radar_gui.get_item_draw_info(radar_item, &radar_draw);
     bool mouse_in_radar =
         radar_gui.responsive &&
         is_point_in_rectangle(
             game.mouse_cursor.s_pos,
-            radar_center, radar_size
+            radar_draw.center, radar_draw.size
         );
         
     if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
@@ -1557,7 +1559,7 @@ void PauseMenu::handle_allegro_event(const ALLEGRO_EVENT &ev) {
             mouse_in_radar && ev.mouse.dz != 0.0f
         ) {
             //Zoom in or out, using the radar/mouse cursor as the anchor.
-            zoom_radar_with_mouse(ev.mouse.dz * 0.1f, radar_center, radar_size);
+            zoom_radar_with_mouse(ev.mouse.dz * 0.1f, radar_draw.center, radar_draw.size);
             
         }
     }
@@ -1799,10 +1801,10 @@ void PauseMenu::init_main_pause_menu() {
     //Line.
     GuiItem* line = new GuiItem();
     line->on_draw =
-    [] (const Point & center, const Point & size) {
+    [] (const DrawInfo & draw) {
         draw_filled_rounded_rectangle(
-            center,
-            Point(size.x, 3.0f),
+            draw.center,
+            Point(draw.size.x, 3.0f),
             2.0f,
             COLOR_TRANSPARENT_WHITE
         );
@@ -2095,10 +2097,10 @@ void PauseMenu::init_mission_page() {
     //Line.
     GuiItem* line = new GuiItem();
     line->on_draw =
-    [] (const Point & center, const Point & size) {
+    [] (const DrawInfo & draw) {
         draw_filled_rounded_rectangle(
-            center,
-            Point(size.x, 3.0f),
+            draw.center,
+            Point(draw.size.x, 3.0f),
             2.0f,
             COLOR_TRANSPARENT_WHITE
         );
@@ -2119,12 +2121,12 @@ void PauseMenu::init_mission_page() {
     //Continue input icon.
     GuiItem* continue_input = new GuiItem();
     continue_input->on_draw =
-    [this] (const Point & center, const Point & size) {
+    [this] (const DrawInfo & draw) {
         if(!game.options.show_hud_input_icons) return;
         PlayerInput i =
             game.controls.find_bind(PLAYER_ACTION_TYPE_MENU_BACK).input;
         if(i.type == INPUT_TYPE_NONE) return;
-        draw_player_input_icon(game.sys_content.fnt_slim, i, true, center, size);
+        draw_player_input_icon(game.sys_content.fnt_slim, i, true, draw.center, draw.size);
     };
     mission_gui.add_item(continue_input, "continue_input");
     
@@ -2259,10 +2261,10 @@ void PauseMenu::init_radar_page() {
     //Line.
     GuiItem* line = new GuiItem();
     line->on_draw =
-    [] (const Point & center, const Point & size) {
+    [] (const DrawInfo & draw) {
         draw_filled_rounded_rectangle(
-            center,
-            Point(size.x, 3.0f),
+            draw.center,
+            Point(draw.size.x, 3.0f),
             2.0f,
             COLOR_TRANSPARENT_WHITE
         );
@@ -2283,20 +2285,20 @@ void PauseMenu::init_radar_page() {
     //Continue input icon.
     GuiItem* continue_input = new GuiItem();
     continue_input->on_draw =
-    [this] (const Point & center, const Point & size) {
+    [this] (const DrawInfo & draw) {
         if(!game.options.show_hud_input_icons) return;
         PlayerInput i =
             game.controls.find_bind(PLAYER_ACTION_TYPE_MENU_BACK).input;
         if(i.type == INPUT_TYPE_NONE) return;
-        draw_player_input_icon(game.sys_content.fnt_slim, i, true, center, size);
+        draw_player_input_icon(game.sys_content.fnt_slim, i, true, draw.center, draw.size);
     };
     radar_gui.add_item(continue_input, "continue_input");
     
     //Radar item.
     radar_item = new GuiItem();
     radar_item->on_draw =
-    [this] (const Point & center, const Point & size) {
-        draw_radar(center, size);
+    [this] (const DrawInfo & draw) {
+        draw_radar(draw.center, draw.size);
     };
     radar_gui.add_item(radar_item, "radar");
     
@@ -2355,7 +2357,7 @@ void PauseMenu::init_radar_page() {
         new TextGuiItem("", game.sys_content.fnt_standard);
     cursor_info_text->line_wrap = true;
     cursor_info_text->on_draw =
-    [this, cursor_info_text] (const Point & center, const Point & size) {
+    [this, cursor_info_text] (const DrawInfo & draw) {
         if(cursor_info_text->text.empty()) return;
         
         //Draw the text.
@@ -2365,7 +2367,7 @@ void PauseMenu::init_radar_page() {
             tokens, game.sys_content.fnt_standard, game.sys_content.fnt_slim, line_height, false
         );
         vector<vector<StringToken> > tokens_per_line =
-            split_long_string_with_tokens(tokens, size.x);
+            split_long_string_with_tokens(tokens, draw.size.x);
         float text_h = tokens_per_line.size() * line_height;
         
         for(size_t l = 0; l < tokens_per_line.size(); l++) {
@@ -2373,22 +2375,22 @@ void PauseMenu::init_radar_page() {
                 tokens_per_line[l], game.sys_content.fnt_standard, game.sys_content.fnt_slim,
                 false,
                 Point(
-                    center.x,
-                    center.y - text_h / 2.0f + l * line_height
+                    draw.center.x,
+                    draw.center.y - text_h / 2.0f + l * line_height
                 ),
                 cursor_info_text->flags,
-                Point(size.x, line_height)
+                Point(draw.size.x, line_height)
             );
         }
         
         //Draw a box around it.
         draw_textured_box(
-            center, size, game.sys_content.bmp_frame_box,
+            draw.center, draw.size, game.sys_content.bmp_frame_box,
             COLOR_TRANSPARENT_WHITE
         );
         
         //Draw a connection from here to the radar cursor.
-        Point line_anchor(center.x - size.x / 2.0f - 16.0f, center.y);
+        Point line_anchor(draw.center.x - draw.size.x / 2.0f - 16.0f, draw.center.y);
         Point cursor_screen_pos = radar_cursor;
         al_transform_coordinates(
             &world_to_radar_screen_transform,
@@ -2396,7 +2398,7 @@ void PauseMenu::init_radar_page() {
         );
         
         al_draw_line(
-            center.x - size.x / 2.0f, center.y,
+            draw.center.x - draw.size.x / 2.0f, draw.center.y,
             line_anchor.x, line_anchor.y,
             COLOR_TRANSPARENT_WHITE, 2.0f
         );
@@ -2520,10 +2522,10 @@ void PauseMenu::init_status_page() {
     //Line.
     GuiItem* line = new GuiItem();
     line->on_draw =
-    [] (const Point & center, const Point & size) {
+    [] (const DrawInfo & draw) {
         draw_filled_rounded_rectangle(
-            center,
-            Point(size.x, 3.0f),
+            draw.center,
+            Point(draw.size.x, 3.0f),
             2.0f,
             COLOR_TRANSPARENT_WHITE
         );
@@ -2544,19 +2546,19 @@ void PauseMenu::init_status_page() {
     //Continue input icon.
     GuiItem* continue_input = new GuiItem();
     continue_input->on_draw =
-    [this] (const Point & center, const Point & size) {
+    [this] (const DrawInfo & draw) {
         if(!game.options.show_hud_input_icons) return;
         PlayerInput i =
             game.controls.find_bind(PLAYER_ACTION_TYPE_MENU_BACK).input;
         if(i.type == INPUT_TYPE_NONE) return;
-        draw_player_input_icon(game.sys_content.fnt_slim, i, true, center, size);
+        draw_player_input_icon(game.sys_content.fnt_slim, i, true, draw.center, draw.size);
     };
     status_gui.add_item(continue_input, "continue_input");
     
     //Pikmin list header box.
     ListGuiItem* list_header = new ListGuiItem();
     list_header->on_draw =
-    [] (const Point &, const Point &) {};
+    [] (const DrawInfo &) {};
     status_gui.add_item(list_header, "list_header");
     
     //Pikmin list box.
@@ -2571,7 +2573,7 @@ void PauseMenu::init_status_page() {
     //Pikmin totals box.
     ListGuiItem* totals = new ListGuiItem();
     totals->on_draw =
-    [] (const Point &, const Point &) {};
+    [] (const DrawInfo &) {};
     status_gui.add_item(totals, "totals");
     
     //Tooltip text.
@@ -2840,11 +2842,10 @@ void PauseMenu::tick(float delta_t) {
     }
     
     //Tick radar things.
-    Point radar_center;
-    Point radar_size;
-    radar_gui.get_item_draw_info(radar_item, &radar_center, &radar_size);
+    DrawInfo radar_draw;
+    radar_gui.get_item_draw_info(radar_item, &radar_draw);
     
-    update_radar_transformations(radar_center, radar_size);
+    update_radar_transformations(radar_draw.center, radar_draw.size);
     
     if(radar_gui.responsive) {
     
@@ -2865,7 +2866,7 @@ void PauseMenu::tick(float delta_t) {
         bool mouse_in_radar =
             is_point_in_rectangle(
                 game.mouse_cursor.s_pos,
-                radar_center, radar_size
+                radar_draw.center, radar_draw.size
             );
             
         if(mouse_in_radar) {

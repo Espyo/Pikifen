@@ -15,6 +15,9 @@
 #include "../util/string_utils.h"
 
 
+using DrawInfo = GuiItem::DrawInfo;
+
+
 namespace HELP_MENU {
 
 //Name of the help menu GUI information file.
@@ -254,12 +257,12 @@ void HelpMenu::init_gui_main(DataNode* gui_file) {
     //Image item.
     GuiItem* image_item = new GuiItem();
     image_item->on_draw =
-    [this] (const Point & center, const Point & size) {
+    [this] (const DrawInfo & draw) {
         if(cur_tidbit == nullptr) return;
         if(cur_tidbit->image == nullptr) return;
         draw_bitmap_in_box(
             cur_tidbit->image,
-            center, size, false
+            draw.center, draw.size, false
         );
     };
     gui.add_item(image_item, "image");
@@ -269,9 +272,9 @@ void HelpMenu::init_gui_main(DataNode* gui_file) {
         new TextGuiItem("", game.sys_content.fnt_standard);
     tooltip_text->on_draw =
         [this]
-    (const Point & center, const Point & size) {
+    (const DrawInfo & draw) {
         draw_tidbit(
-            game.sys_content.fnt_standard, center, size,
+            game.sys_content.fnt_standard, draw.center, draw.size,
             gui.get_current_tooltip()
         );
     };
@@ -325,8 +328,8 @@ void HelpMenu::populate_tidbits(const HELP_CATEGORY category) {
             t_ptr->name,
             game.sys_content.fnt_standard
         );
-        tidbit_bullet->center = Point(0.50f, 0.045f + t * 0.10f);
-        tidbit_bullet->size = Point(1.0f, 0.09f);
+        tidbit_bullet->ratio_center = Point(0.50f, 0.045f + t * 0.10f);
+        tidbit_bullet->ratio_size = Point(1.0f, 0.09f);
         tidbit_bullet->on_get_tooltip = [this, t_ptr] () {
             return t_ptr->description;
         };
