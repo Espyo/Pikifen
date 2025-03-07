@@ -70,7 +70,7 @@ songs {
     boss = a_boss_like_enemy
     boss_victory = a_boss_like_enemy_victory
     editors = editors
-    menus = menus
+    menus = pikifen
 }
 
 animations {
