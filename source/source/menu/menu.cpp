@@ -16,7 +16,7 @@
 /**
  * @brief Draws the menu.
  */
-void menu_t::draw() {
+void Menu::draw() {
     if(!loaded) return;
     
     for(size_t g = 0; g < guis.size(); g++) {
@@ -30,7 +30,7 @@ void menu_t::draw() {
 /**
  * @brief Enters the menu.
  */
-void menu_t::enter() {
+void Menu::enter() {
     if(!loaded) return;
     
     if(enter_callback) enter_callback();
@@ -42,7 +42,7 @@ void menu_t::enter() {
  *
  * @param ev The event.
  */
-void menu_t::handle_allegro_event(const ALLEGRO_EVENT &ev) {
+void Menu::handle_allegro_event(const ALLEGRO_EVENT &ev) {
     if(!loaded || !active) return;
     
     for(size_t g = 0; g < guis.size(); g++) {
@@ -58,7 +58,7 @@ void menu_t::handle_allegro_event(const ALLEGRO_EVENT &ev) {
  *
  * @param action Data about the player action.
  */
-void menu_t::handle_player_action(const player_action &action) {
+void Menu::handle_player_action(const PlayerAction &action) {
     if(!loaded || !active) return;
     
     for(size_t g = 0; g < guis.size(); g++) {
@@ -72,7 +72,7 @@ void menu_t::handle_player_action(const player_action &action) {
 /**
  * @brief Leaves the menu.
  */
-void menu_t::leave() {
+void Menu::leave() {
     if(!loaded) return;
     active = false;
     if(leave_callback) leave_callback();
@@ -82,7 +82,7 @@ void menu_t::leave() {
 /**
  * @brief Loads the menu.
  */
-void menu_t::load() {
+void Menu::load() {
     if(loaded) return;
     
     loaded = true;
@@ -95,7 +95,7 @@ void menu_t::load() {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void menu_t::tick(float delta_t) {
+void Menu::tick(float delta_t) {
     if(!loaded) return;
     
     //Tick the GUIs.
@@ -119,7 +119,7 @@ void menu_t::tick(float delta_t) {
 /**
  * @brief Unloads the menu.
  */
-void menu_t::unload() {
+void Menu::unload() {
     if(!loaded) return;
     
     for(size_t g = 0; g < guis.size(); g++) {

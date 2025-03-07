@@ -19,8 +19,8 @@
 /**
  * @brief Constructs a new tool category object.
  */
-tool_category::tool_category() :
-    mob_category(
+ToolCategory::ToolCategory() :
+    MobCategory(
         MOB_CATEGORY_TOOLS, "tool",
         "Tool", "Tools",
         "tools", al_map_rgb(204, 178, 139)
@@ -32,7 +32,7 @@ tool_category::tool_category() :
 /**
  * @brief Clears the list of registered types of tools.
  */
-void tool_category::clear_types() {
+void ToolCategory::clear_types() {
     for(auto &t : game.content.mob_types.list.tool) {
         delete t.second;
     }
@@ -48,10 +48,10 @@ void tool_category::clear_types() {
  * @param angle Starting angle.
  * @return The mob.
  */
-mob* tool_category::create_mob(
-    const point &pos, mob_type* type, float angle
+Mob* ToolCategory::create_mob(
+    const Point &pos, MobType* type, float angle
 ) {
-    tool* m = new tool(pos, (tool_type*) type, angle);
+    Tool* m = new Tool(pos, (ToolType*) type, angle);
     game.states.gameplay->mobs.tools.push_back(m);
     return m;
 }
@@ -62,8 +62,8 @@ mob* tool_category::create_mob(
  *
  * @return The type.
  */
-mob_type* tool_category::create_type() {
-    return new tool_type();
+MobType* ToolCategory::create_type() {
+    return new ToolType();
 }
 
 
@@ -72,12 +72,12 @@ mob_type* tool_category::create_type() {
  *
  * @param m The mob to erase.
  */
-void tool_category::erase_mob(mob* m) {
+void ToolCategory::erase_mob(Mob* m) {
     game.states.gameplay->mobs.tools.erase(
         find(
             game.states.gameplay->mobs.tools.begin(),
             game.states.gameplay->mobs.tools.end(),
-            (tool*) m
+            (Tool*) m
         )
     );
 }
@@ -90,7 +90,7 @@ void tool_category::erase_mob(mob* m) {
  * @param internal_name Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-mob_type* tool_category::get_type(const string &internal_name) const {
+MobType* ToolCategory::get_type(const string &internal_name) const {
     auto it = game.content.mob_types.list.tool.find(internal_name);
     if(it == game.content.mob_types.list.tool.end()) return nullptr;
     return it->second;
@@ -102,7 +102,7 @@ mob_type* tool_category::get_type(const string &internal_name) const {
  *
  * @param list This list gets filled with the mob type internal names.
  */
-void tool_category::get_type_names(vector<string> &list) const {
+void ToolCategory::get_type_names(vector<string> &list) const {
     for(auto &t : game.content.mob_types.list.tool) {
         list.push_back(t.first);
     }
@@ -115,6 +115,6 @@ void tool_category::get_type_names(vector<string> &list) const {
  * @param internal_name Internal name of the mob type.
  * @param type Mob type to register.
  */
-void tool_category::register_type(const string &internal_name, mob_type* type) {
-    game.content.mob_types.list.tool[internal_name] = (tool_type*) type;
+void ToolCategory::register_type(const string &internal_name, MobType* type) {
+    game.content.mob_types.list.tool[internal_name] = (ToolType*) type;
 }

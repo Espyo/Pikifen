@@ -66,7 +66,7 @@ enum TRACK_STATE {
  * @brief A type of track. Something that transports the mob up,
  * down, in a loop, etc.
  */
-class track_type : public mob_type {
+class TrackType : public MobType {
 
 public:
 
@@ -87,9 +87,9 @@ public:
     
     //--- Function declarations ---
     
-    track_type();
-    void load_cat_properties(data_node* file) override;
-    void load_cat_resources(data_node* file) override;
+    TrackType();
+    void load_cat_properties(DataNode* file) override;
+    void load_cat_resources(DataNode* file) override;
     anim_conversion_vector get_anim_conversions() const override;
     
 };

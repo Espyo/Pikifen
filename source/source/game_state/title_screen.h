@@ -46,7 +46,7 @@ enum MAIN_MENU_PAGE {
 /**
  * @brief Info about the title screen.
  */
-class title_screen_state : public game_state {
+class TitleScreen : public GameState {
 
 public:
 
@@ -72,12 +72,12 @@ private:
     /**
      * @brief Represents a Pikmin in the logo.
      */
-    struct logo_pik {
+    struct LogoPikmin {
     
         //--- Members ---
         
         //Position.
-        point pos;
+        Point pos;
         
         //Current angle.
         float angle = 0.0f;
@@ -86,7 +86,7 @@ private:
         float speed = 0.0f;
         
         //Its destination.
-        point destination;
+        Point destination;
         
         //Speed at which it sways.
         float sway_speed = 0.0f;
@@ -109,25 +109,25 @@ private:
     ALLEGRO_BITMAP* bmp_menu_bg = nullptr;
     
     //List of Pikmin that make up the logo.
-    vector<logo_pik> logo_pikmin;
+    vector<LogoPikmin> logo_pikmin;
     
     //GUI for the main page.
-    gui_manager main_gui;
+    GuiManager main_gui;
     
     //GUI for the play page.
-    gui_manager play_gui;
+    GuiManager play_gui;
     
     //GUI for the make page.
-    gui_manager make_gui;
+    GuiManager make_gui;
     
     //GUI for the tutorial question page.
-    gui_manager tutorial_gui;
+    GuiManager tutorial_gui;
     
     //Top-left coordinates of the logo, in screen percentage.
-    point logo_min_screen_limit = point(10.0f);
+    Point logo_min_screen_limit = Point(10.0f);
     
     //Bottom-right coordinates of the logo, in screen percentage.
-    point logo_max_screen_limit = point(90.0f, 50.0f);
+    Point logo_max_screen_limit = Point(90.0f, 50.0f);
     
     //Maximum speed a logo Pikmin can move at.
     float logo_pikmin_max_speed = 800.0f;
@@ -148,7 +148,7 @@ private:
     float logo_pikmin_sway_min_speed = 2.5f;
     
     //Width and height of a logo Pikmin.
-    point logo_pikmin_size = point(3.5f);
+    Point logo_pikmin_size = Point(3.5f);
     
     //Map of what characters represent what Pikmin top bitmaps.
     map<unsigned char, ALLEGRO_BITMAP*> logo_type_bitmaps;

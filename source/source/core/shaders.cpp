@@ -19,7 +19,7 @@
  * @param shader_type Type of shader.
  * @return The shader.
  */
-ALLEGRO_SHADER* shader_manager::get_shader(SHADER_TYPE shader_type) {
+ALLEGRO_SHADER* ShaderManager::get_shader(SHADER_TYPE shader_type) {
     assert(shader_type < N_SHADER_TYPES);
     
     return compiled_shaders[(int) shader_type];
@@ -29,7 +29,7 @@ ALLEGRO_SHADER* shader_manager::get_shader(SHADER_TYPE shader_type) {
 /**
  * @brief Compiles all shaders from their source.
  */
-void shader_manager::compile_shaders() {
+void ShaderManager::compile_shaders() {
     //Liquid.
     compiled_shaders[SHADER_TYPE_LIQUID] =
         al_create_shader(ALLEGRO_SHADER_GLSL);
@@ -55,7 +55,7 @@ void shader_manager::compile_shaders() {
  * @param type Allegro shader type.
  * @param source Shader source code.
  */
-void shader_manager::try_attach_shader(
+void ShaderManager::try_attach_shader(
     ALLEGRO_SHADER* shader, ALLEGRO_SHADER_TYPE type, const char* source
 ) {
     engine_assert(

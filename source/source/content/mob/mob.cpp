@@ -159,7 +159,7 @@ const float SWARM_VERTICAL_SCALE = 0.5f;
  * @param type Mob type this mob belongs to.
  * @param angle Starting angle.
  */
-mob::mob(const point &pos, mob_type* type, float angle) :
+Mob::Mob(const Point &pos, MobType* type, float angle) :
     type(type),
     pos(pos),
     angle(angle),
@@ -178,7 +178,7 @@ mob::mob(const point &pos, mob_type* type, float angle) :
     
     game.states.gameplay->next_mob_id++;
     
-    sector* sec = get_sector(pos, nullptr, true);
+    Sector* sec = get_sector(pos, nullptr, true);
     if(sec) {
         z = sec->z;
     } else {
@@ -194,7 +194,7 @@ mob::mob(const point &pos, mob_type* type, float angle) :
     }
     
     if(type->has_group) {
-        group = new group_t(this);
+        group = new Group(this);
     }
     
     update_interaction_span();
@@ -204,7 +204,7 @@ mob::mob(const point &pos, mob_type* type, float angle) :
 /**
  * @brief Destroys the mob object.
  */
-mob::~mob() {
+Mob::~Mob() {
     if(path_info) delete path_info;
     if(circling_info) delete circling_info;
     if(carry_info) delete carry_info;
@@ -223,7 +223,7 @@ mob::~mob() {
  *
  * @param new_member The new member to add.
  */
-void mob::add_to_group(mob* new_member) {
+void Mob::add_to_group(Mob* new_member) {
     //If it's already following, never mind.
     if(new_member->following_group == this) return;
     if(!group) return;
@@ -261,8 +261,8 @@ void mob::add_to_group(mob* new_member) {
  * @param victim_h Victim's hitbox that got hit.
  * @param damage Total damage the attack caused.
  */
-void mob::apply_attack_damage(
-    mob* attacker, hitbox* attack_h, hitbox* victim_h, float damage
+void Mob::apply_attack_damage(
+    Mob* attacker, Hitbox* attack_h, Hitbox* victim_h, float damage
 ) {
     //Register this hit, so the next frame doesn't hit it too.
     attacker->hit_opponents.push_back(
@@ -281,7 +281,7 @@ void mob::apply_attack_damage(
     if(damage > 0) {
         set_health(true, false, -damage);
         
-        hitbox_interaction ev_info(this, victim_h, attack_h);
+        HitboxInteraction ev_info(this, victim_h, attack_h);
         fsm.run_event(MOB_EV_DAMAGE, (void*) &ev_info);
         
         attacker->cause_spike_damage(this, false);
@@ -298,7 +298,7 @@ void mob::apply_attack_damage(
  * @param knockback Total knockback value.
  * @param knockback_angle Angle to knockback towards.
  */
-void mob::apply_knockback(float knockback, float knockback_angle) {
+void Mob::apply_knockback(float knockback, float knockback_angle) {
     if(knockback != 0) {
         stop_chasing();
         speed.x = cos(knockback_angle) * knockback * MOB::KNOCKBACK_H_POWER;
@@ -318,8 +318,8 @@ void mob::apply_knockback(float knockback, float knockback_angle) {
  * by its parent mob.
  * @param from_hazard If true, this status effect was given from a hazard.
  */
-void mob::apply_status_effect(
-    status_type* s, bool given_by_parent, bool from_hazard
+void Mob::apply_status_effect(
+    StatusType* s, bool given_by_parent, bool from_hazard
 ) {
     if(parent && parent->relay_statuses && !given_by_parent) {
         parent->m->apply_status_effect(s, false, from_hazard);
@@ -332,7 +332,7 @@ void mob::apply_status_effect(
     
     //Let's start by sending the status to the child mobs.
     for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
-        mob* m2_ptr = game.states.gameplay->mobs.all[m];
+        Mob* m2_ptr = game.states.gameplay->mobs.all[m];
         if(m2_ptr->parent && m2_ptr->parent->m == this) {
             m2_ptr->apply_status_effect(s, true, from_hazard);
         }
@@ -374,7 +374,7 @@ void mob::apply_status_effect(
     }
     
     //This status is not already inflicted. Let's do so.
-    status new_status(s);
+    Status new_status(s);
     new_status.from_hazard = from_hazard;
     this->statuses.push_back(new_status);
     handle_status_effect_gain(s);
@@ -388,7 +388,7 @@ void mob::apply_status_effect(
     }
     
     if(s->generates_particles) {
-        particle_generator pg = *s->particle_gen;
+        ParticleGenerator pg = *s->particle_gen;
         pg.restart_timer();
         pg.follow_mob = this;
         pg.follow_angle = &this->angle;
@@ -407,7 +407,7 @@ void mob::apply_status_effect(
  * @brief Does the logic that arachnorb feet need to move to their next
  * spot, based on variables set by the parent mob (the arachnorb head).
  */
-void mob::arachnorb_foot_move_logic() {
+void Mob::arachnorb_foot_move_logic() {
     if(!parent) {
         return;
     }
@@ -422,16 +422,16 @@ void mob::arachnorb_foot_move_logic() {
     
     float default_angle =
         get_angle(
-            point(),
+            Point(),
             parent->m->get_hitbox(
                 parent->limb_parent_body_part
             )->pos
         );
         
-    point final_pos = s2p(parent->m->vars["_destination_pos"]);
+    Point final_pos = s2p(parent->m->vars["_destination_pos"]);
     float final_angle = s2f(parent->m->vars["_destination_angle"]);
     
-    point offset = point(feet_normal_distance, 0);
+    Point offset = Point(feet_normal_distance, 0);
     offset = rotate_point(offset, default_angle);
     offset = rotate_point(offset, final_angle);
     
@@ -445,7 +445,7 @@ void mob::arachnorb_foot_move_logic() {
  * @brief Does the logic that arachnorb heads need to turn, based on their
  * feet's positions.
  */
-void mob::arachnorb_head_turn_logic() {
+void Mob::arachnorb_head_turn_logic() {
     if(links.empty()) return;
     
     float angle_deviation_avg = 0;
@@ -470,7 +470,7 @@ void mob::arachnorb_head_turn_logic() {
         
         float default_angle =
             get_angle(
-                point(),
+                Point(),
                 get_hitbox(
                     links[l]->parent->limb_parent_body_part
                 )->pos
@@ -495,7 +495,7 @@ void mob::arachnorb_head_turn_logic() {
  *
  * @param goal What its goal is.
  */
-void mob::arachnorb_plan_logic(
+void Mob::arachnorb_plan_logic(
     MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE goal
 ) {
     float max_step_distance = s2f(vars["max_step_distance"]);
@@ -519,7 +519,7 @@ void mob::arachnorb_plan_logic(
         
         if(fabs(amount_to_turn) < TAU * 0.05) {
             //We can also start moving towards home now.
-            amount_to_move = dist(pos, home).to_float();
+            amount_to_move = Distance(pos, home).to_float();
         }
         break;
         
@@ -543,11 +543,11 @@ void mob::arachnorb_plan_logic(
         sign(amount_to_turn) *
         std::min((double) fabs(amount_to_turn), (double) max_turn_angle);
         
-    point destination_pos = pos;
+    Point destination_pos = pos;
     float destination_angle = angle + amount_to_turn;
     normalize_angle(destination_angle);
     
-    point offset = point(amount_to_move, 0);
+    Point offset = Point(amount_to_move, 0);
     offset = rotate_point(offset, destination_angle);
     
     destination_pos += offset;
@@ -562,15 +562,15 @@ void mob::arachnorb_plan_logic(
  *
  * @param destination Where to carry it.
  */
-void mob::become_carriable(const CARRY_DESTINATION destination) {
-    carry_info = new carry_t(this, destination);
+void Mob::become_carriable(const CARRY_DESTINATION destination) {
+    carry_info = new CarryInfo(this, destination);
 }
 
 
 /**
  * @brief Sets up data for a mob to stop being carriable.
  */
-void mob::become_uncarriable() {
+void Mob::become_uncarriable() {
     if(!carry_info) return;
     
     for(size_t p = 0; p < carry_info->spot_info.size(); p++) {
@@ -602,9 +602,9 @@ void mob::become_uncarriable() {
  * Returns false if there are no available targets or if
  * something went wrong.
  */
-bool mob::calculate_carrying_destination(
-    mob* added, mob* removed,
-    pikmin_type** target_type, mob** target_mob, point* target_point
+bool Mob::calculate_carrying_destination(
+    Mob* added, Mob* removed,
+    PikminType** target_type, Mob** target_mob, Point* target_point
 ) const {
     *target_mob = nullptr;
     *target_point = pos;
@@ -614,12 +614,12 @@ bool mob::calculate_carrying_destination(
     case CARRY_DESTINATION_SHIP: {
 
         //Go to the nearest ship.
-        ship* closest_ship = nullptr;
-        dist closest_ship_dist;
+        Ship* closest_ship = nullptr;
+        Distance closest_ship_dist;
         
         for(size_t s = 0; s < game.states.gameplay->mobs.ships.size(); s++) {
-            ship* s_ptr = game.states.gameplay->mobs.ships[s];
-            dist d(pos, s_ptr->control_point_final_pos);
+            Ship* s_ptr = game.states.gameplay->mobs.ships[s];
+            Distance d(pos, s_ptr->control_point_final_pos);
             
             if(!closest_ship || d < closest_ship_dist) {
                 closest_ship = s_ptr;
@@ -642,9 +642,9 @@ bool mob::calculate_carrying_destination(
 
         //If it's meant for an Onion, we need to decide which Onion, based on
         //the Pikmin. First, check which Onion Pikmin types are even available.
-        unordered_set<pikmin_type*> available_types;
+        unordered_set<PikminType*> available_types;
         for(size_t o = 0; o < game.states.gameplay->mobs.onions.size(); o++) {
-            onion* o_ptr = game.states.gameplay->mobs.onions[o];
+            Onion* o_ptr = game.states.gameplay->mobs.onions[o];
             if(o_ptr->activated) {
                 for(
                     size_t t = 0;
@@ -663,14 +663,14 @@ bool mob::calculate_carrying_destination(
             return false;
         }
         
-        pikmin_type* decided_type =
+        PikminType* decided_type =
             decide_carry_pikmin_type(available_types, added, removed);
             
         //Figure out where that type's Onion is.
         size_t closest_onion_idx = INVALID;
-        dist closest_onion_dist;
+        Distance closest_onion_dist;
         for(size_t o = 0; o < game.states.gameplay->mobs.onions.size(); o++) {
-            onion* o_ptr = game.states.gameplay->mobs.onions[o];
+            Onion* o_ptr = game.states.gameplay->mobs.onions[o];
             if(!o_ptr->activated) continue;
             bool has_type = false;
             for(
@@ -685,7 +685,7 @@ bool mob::calculate_carrying_destination(
             }
             if(!has_type) continue;
             
-            dist d(pos, o_ptr->pos);
+            Distance d(pos, o_ptr->pos);
             if(closest_onion_idx == INVALID || d < closest_onion_dist) {
                 closest_onion_dist = d;
                 closest_onion_idx = o;
@@ -704,11 +704,11 @@ bool mob::calculate_carrying_destination(
     } case CARRY_DESTINATION_LINKED_MOB: {
 
         //If it's towards a linked mob, just go to the closest one.
-        mob* closest_link = nullptr;
-        dist closest_link_dist;
+        Mob* closest_link = nullptr;
+        Distance closest_link_dist;
         
         for(size_t s = 0; s < links.size(); s++) {
-            dist d(pos, links[s]->pos);
+            Distance d(pos, links[s]->pos);
             
             if(!closest_link || d < closest_link_dist) {
                 closest_link = links[s];
@@ -733,23 +733,23 @@ bool mob::calculate_carrying_destination(
             return false;
         }
         
-        unordered_set<pikmin_type*> available_types;
-        vector<std::pair<mob*, pikmin_type*> > mobs_per_type;
+        unordered_set<PikminType*> available_types;
+        vector<std::pair<Mob*, PikminType*> > mobs_per_type;
         
         for(size_t l = 0; l < links.size(); l++) {
             if(!links[l]) continue;
             string type_name =
                 links[l]->vars["carry_destination_type"];
-            mob_type* pik_type =
+            MobType* pik_type =
                 game.mob_categories.get(MOB_CATEGORY_PIKMIN)->
                 get_type(type_name);
             if(!pik_type) continue;
             
             available_types.insert(
-                (pikmin_type*) pik_type
+                (PikminType*) pik_type
             );
             mobs_per_type.push_back(
-                std::make_pair(links[l], (pikmin_type*) pik_type)
+                std::make_pair(links[l], (PikminType*) pik_type)
             );
         }
         
@@ -758,16 +758,16 @@ bool mob::calculate_carrying_destination(
             return false;
         }
         
-        pikmin_type* decided_type =
+        PikminType* decided_type =
             decide_carry_pikmin_type(available_types, added, removed);
             
         //Figure out which linked mob matches the decided type.
         size_t closest_target_idx = INVALID;
-        dist closest_target_dist;
+        Distance closest_target_dist;
         for(size_t m = 0; m < mobs_per_type.size(); m++) {
             if(mobs_per_type[m].second != decided_type) continue;
             
-            dist d(pos, mobs_per_type[m].first->pos);
+            Distance d(pos, mobs_per_type[m].first->pos);
             if(closest_target_idx == INVALID || d < closest_target_dist) {
                 closest_target_dist = d;
                 closest_target_idx = m;
@@ -801,8 +801,8 @@ bool mob::calculate_carrying_destination(
  * Returns true even if it will end up causing zero damage.
  * Returns false if it cannot hit (e.g. the victim hitbox is not valid).
  */
-bool mob::calculate_damage(
-    mob* victim, hitbox* attack_h, const hitbox* victim_h, float* damage
+bool Mob::calculate_damage(
+    Mob* victim, Hitbox* attack_h, const Hitbox* victim_h, float* damage
 ) const {
     float attacker_offense = 0;
     float defense_multiplier = 1;
@@ -820,7 +820,7 @@ bool mob::calculate_damage(
         if(!attack_h->hazards.empty()) {
             float max_vulnerability = 0.0f;
             for(size_t h = 0; h < attack_h->hazards.size(); h++) {
-                mob_type::vulnerability_t vuln =
+                MobType::Vulnerability vuln =
                     victim->get_hazard_vulnerability(attack_h->hazards[h]);
                 max_vulnerability =
                     std::max(vuln.effect_mult, max_vulnerability);
@@ -871,7 +871,7 @@ bool mob::calculate_damage(
     
     if(this->type->category->id == MOB_CATEGORY_PIKMIN) {
         //It's easier to calculate the maturity attack boost here.
-        pikmin* pik_ptr = (pikmin*) this;
+        Pikmin* pik_ptr = (Pikmin*) this;
         attacker_offense *=
             1 + (game.config.maturity_power_mult * pik_ptr->maturity);
     }
@@ -890,9 +890,9 @@ bool mob::calculate_damage(
  * @param kb_strength The variable to return the knockback amount to.
  * @param kb_angle The variable to return the angle of the knockback to.
  */
-void mob::calculate_knockback(
-    const mob* victim, const hitbox* attack_h,
-    hitbox* victim_h, float* kb_strength, float* kb_angle
+void Mob::calculate_knockback(
+    const Mob* victim, const Hitbox* attack_h,
+    Hitbox* victim_h, float* kb_strength, float* kb_angle
 ) const {
     if(attack_h) {
         *kb_strength = attack_h->knockback;
@@ -917,7 +917,7 @@ void mob::calculate_knockback(
  * @param v The victim to check.
  * @return Whether it can hunt.
  */
-bool mob::can_hunt(mob* v) const {
+bool Mob::can_hunt(Mob* v) const {
     //Teammates cannot hunt each other down.
     if(team == v->team && team != MOB_TEAM_NONE) return false;
     
@@ -942,7 +942,7 @@ bool mob::can_hunt(mob* v) const {
  * @param v The victim to check.
  * @return Whether it can hurt.
  */
-bool mob::can_hurt(mob* v) const {
+bool Mob::can_hurt(Mob* v) const {
     //Teammates cannot hurt each other.
     if(team == v->team && team != MOB_TEAM_NONE) return false;
     
@@ -975,7 +975,7 @@ bool mob::can_hurt(mob* v) const {
  * @param s Status type to check.
  * @return Whether it can receive the status.
  */
-bool mob::can_receive_status(status_type* s) const {
+bool Mob::can_receive_status(StatusType* s) const {
     return has_flag(s->affects, STATUS_AFFECTS_FLAG_OTHERS);
 }
 
@@ -987,7 +987,7 @@ bool mob::can_receive_status(status_type* s) const {
  * @param is_ingestion If true, the attacker just got eaten.
  * If false, it merely got hurt.
  */
-void mob::cause_spike_damage(mob* victim, bool is_ingestion) {
+void Mob::cause_spike_damage(Mob* victim, bool is_ingestion) {
     if(!type->spike_damage) return;
     
     if(type->spike_damage->ingestion_only != is_ingestion) return;
@@ -1014,7 +1014,7 @@ void mob::cause_spike_damage(mob* victim, bool is_ingestion) {
     victim->set_health(true, false, -damage);
     
     if(type->spike_damage->particle_gen) {
-        particle_generator pg = *(type->spike_damage->particle_gen);
+        ParticleGenerator pg = *(type->spike_damage->particle_gen);
         pg.restart_timer();
         pg.follow_mob = victim;
         pg.follow_angle = &victim->angle;
@@ -1051,9 +1051,9 @@ void mob::cause_spike_damage(mob* victim, bool is_ingestion) {
  * @param acceleration Speed acceleration.
  * LARGE_FLOAT makes it use the mob's standard acceleration.
  */
-void mob::chase(
-    point* orig_coords, float* orig_z,
-    const point &offset, float offset_z,
+void Mob::chase(
+    Point* orig_coords, float* orig_z,
+    const Point &offset, float offset_z,
     bitmask_8_t flags,
     float target_distance, float speed, float acceleration
 ) {
@@ -1090,8 +1090,8 @@ void mob::chase(
  * @param acceleration Speed acceleration.
  * LARGE_FLOAT makes it use the mob's standard acceleration.
  */
-void mob::chase(
-    const point &coords, float coords_z,
+void Mob::chase(
+    const Point &coords, float coords_z,
     unsigned char flags,
     float target_distance, float speed, float acceleration
 ) {
@@ -1109,9 +1109,9 @@ void mob::chase(
  * @param m The mob to be chomped.
  * @param hitbox_info Information about the hitbox that caused the chomp.
  */
-void mob::chomp(mob* m, const hitbox* hitbox_info) {
+void Mob::chomp(Mob* m, const Hitbox* hitbox_info) {
     if(m->type->category->id == MOB_CATEGORY_TOOLS) {
-        tool* too_ptr = (tool*) m;
+        Tool* too_ptr = (Tool*) m;
         if(!has_flag(too_ptr->holdability_flags, HOLDABILITY_FLAG_ENEMIES)) {
             //Enemies can't chomp this tool right now.
             return;
@@ -1145,12 +1145,12 @@ void mob::chomp(mob* m, const hitbox* hitbox_info) {
  * @param speed Speed at which to move.
  * @param can_free_move Can the mob move freely, or only forward?
  */
-void mob::circle_around(
-    mob* m, const point &p, float radius, bool clockwise,
+void Mob::circle_around(
+    Mob* m, const Point &p, float radius, bool clockwise,
     float speed, bool can_free_move
 ) {
     if(!circling_info) {
-        circling_info = new circling_t(this);
+        circling_info = new CirclingInfo(this);
     }
     circling_info->circling_mob = m;
     circling_info->circling_point = p;
@@ -1172,22 +1172,22 @@ void mob::circle_around(
  * @param removed If a Pikmin got removed from the carriers, specify it here.
  * @return The Pikmin type.
  */
-pikmin_type* mob::decide_carry_pikmin_type(
-    const unordered_set<pikmin_type*> &available_types,
-    mob* added, mob* removed
+PikminType* Mob::decide_carry_pikmin_type(
+    const unordered_set<PikminType*> &available_types,
+    Mob* added, Mob* removed
 ) const {
     //How many of each Pikmin type are carrying.
-    map<pikmin_type*, unsigned> type_quantity;
+    map<PikminType*, unsigned> type_quantity;
     //The Pikmin type with the most carriers.
-    vector<pikmin_type*> majority_types;
+    vector<PikminType*> majority_types;
     
     //Count how many of each type there are carrying.
     for(size_t p = 0; p < type->max_carriers; p++) {
-        pikmin* pik_ptr = nullptr;
+        Pikmin* pik_ptr = nullptr;
         
         if(carry_info->spot_info[p].state != CARRY_SPOT_STATE_USED) continue;
         
-        pik_ptr = (pikmin*) carry_info->spot_info[p].pik_ptr;
+        pik_ptr = (Pikmin*) carry_info->spot_info[p].pik_ptr;
         
         //If it doesn't have an Onion to carry to, it won't even count.
         if(available_types.find(pik_ptr->pik_type) == available_types.end()) {
@@ -1220,7 +1220,7 @@ pikmin_type* mob::decide_carry_pikmin_type(
         }
     }
     
-    pikmin_type* decided_type = nullptr;
+    PikminType* decided_type = nullptr;
     
     //Now let's pick an Pikmin type from the candidates.
     if(majority_types.size() == 1) {
@@ -1255,12 +1255,12 @@ pikmin_type* mob::decide_carry_pikmin_type(
 /**
  * @brief Deletes all status effects asking to be deleted.
  */
-void mob::delete_old_status_effects() {
-    vector<std::pair<status_type*, bool> > new_statuses_to_apply;
+void Mob::delete_old_status_effects() {
+    vector<std::pair<StatusType*, bool> > new_statuses_to_apply;
     bool removed_forced_sprite = false;
     
     for(size_t s = 0; s < statuses.size(); ) {
-        status &s_ptr = statuses[s];
+        Status &s_ptr = statuses[s];
         if(s_ptr.to_delete) {
             handle_status_effect_loss(s_ptr.type);
             
@@ -1325,8 +1325,8 @@ void mob::delete_old_status_effects() {
  * @param damage Total damage caused.
  * @param knockback Total knockback strength.
  */
-void mob::do_attack_effects(
-    const mob* attacker, const hitbox* attack_h, const hitbox* victim_h,
+void Mob::do_attack_effects(
+    const Mob* attacker, const Hitbox* attack_h, const Hitbox* victim_h,
     float damage, float knockback
 ) {
     if(attack_h->value == 0.0f) {
@@ -1340,8 +1340,8 @@ void mob::do_attack_effects(
     }
     
     //Calculate the particle's final position.
-    point attack_h_pos = attack_h->get_cur_pos(attacker->pos, attacker->angle);
-    point victim_h_pos = victim_h->get_cur_pos(pos, angle);
+    Point attack_h_pos = attack_h->get_cur_pos(attacker->pos, attacker->angle);
+    Point victim_h_pos = victim_h->get_cur_pos(pos, angle);
     
     float edges_d;
     float a_to_v_angle;
@@ -1354,9 +1354,9 @@ void mob::do_attack_effects(
     edges_d -= victim_h->radius;
     float offset = attack_h->radius + edges_d / 2.0;
     
-    point particle_pos =
+    Point particle_pos =
         attack_h_pos +
-        point(cos(a_to_v_angle) * offset, sin(a_to_v_angle) * offset);
+        Point(cos(a_to_v_angle) * offset, sin(a_to_v_angle) * offset);
     float particle_z =
         std::max(
             z + get_drawing_height() + 1.0f,
@@ -1370,7 +1370,7 @@ void mob::do_attack_effects(
         useless ?
         game.sys_content_names.part_ding :
         game.sys_content_names.part_smack;
-    particle_generator pg =
+    ParticleGenerator pg =
         standard_particle_gen_setup(
             particle_internal_name, nullptr
         );
@@ -1381,7 +1381,7 @@ void mob::do_attack_effects(
     if(!useless) {
         //Play the sound.
         
-        sound_source_config_t attack_sound_config;
+        SoundSourceConfig attack_sound_config;
         attack_sound_config.gain = 0.6f;
         game.audio.create_pos_sound_source(
             game.sys_content.sound_attack,
@@ -1399,18 +1399,18 @@ void mob::do_attack_effects(
 /**
  * @brief Draws the limb that connects this mob to its parent.
  */
-void mob::draw_limb() {
+void Mob::draw_limb() {
     if(!parent) return;
     if(!parent->limb_anim.anim_db) return;
-    sprite* limb_cur_s_ptr;
-    sprite* limb_next_s_ptr;
+    Sprite* limb_cur_s_ptr;
+    Sprite* limb_next_s_ptr;
     float limb_interpolation_factor;
     parent->limb_anim.get_sprite_data(
         &limb_cur_s_ptr, &limb_next_s_ptr, &limb_interpolation_factor
     );
     if(!limb_cur_s_ptr) return;
     
-    bitmap_effect_t eff;
+    BitmapEffect eff;
     get_sprite_bitmap_effects(
         limb_cur_s_ptr, limb_next_s_ptr, limb_interpolation_factor,
         &eff,
@@ -1421,7 +1421,7 @@ void mob::draw_limb() {
         SPRITE_BMP_EFFECT_DELIVERY
     );
     
-    point parent_end;
+    Point parent_end;
     if(parent->limb_parent_body_part == INVALID) {
         parent_end = parent->m->pos;
     } else {
@@ -1433,7 +1433,7 @@ void mob::draw_limb() {
             );
     }
     
-    point child_end;
+    Point child_end;
     if(parent->limb_child_body_part == INVALID) {
         child_end = pos;
     } else {
@@ -1448,18 +1448,18 @@ void mob::draw_limb() {
     if(parent->limb_parent_offset) {
         parent_end +=
             rotate_point(
-                point(parent->limb_parent_offset, 0), p2c_angle
+                Point(parent->limb_parent_offset, 0), p2c_angle
             );
     }
     if(parent->limb_child_offset) {
         child_end -=
             rotate_point(
-                point(parent->limb_child_offset, 0), p2c_angle
+                Point(parent->limb_child_offset, 0), p2c_angle
             );
     }
     
-    float length = dist(parent_end, child_end).to_float();
-    point limb_bmp_size = get_bitmap_dimensions(limb_cur_s_ptr->bitmap);
+    float length = Distance(parent_end, child_end).to_float();
+    Point limb_bmp_size = get_bitmap_dimensions(limb_cur_s_ptr->bitmap);
     
     eff.translation = (parent_end + child_end) / 2.0;
     eff.scale.x = length / limb_bmp_size.x;
@@ -1474,14 +1474,14 @@ void mob::draw_limb() {
  * @brief Draws just the mob.
  * This is a generic function, and can be overwritten by child classes.
  */
-void mob::draw_mob() {
-    sprite* cur_s_ptr;
-    sprite* next_s_ptr;
+void Mob::draw_mob() {
+    Sprite* cur_s_ptr;
+    Sprite* next_s_ptr;
     float interpolation_factor;
     get_sprite_data(&cur_s_ptr, &next_s_ptr, &interpolation_factor);
     if(!cur_s_ptr) return;
     
-    bitmap_effect_t eff;
+    BitmapEffect eff;
     get_sprite_bitmap_effects(
         cur_s_ptr, next_s_ptr, interpolation_factor,
         &eff,
@@ -1506,7 +1506,7 @@ void mob::draw_mob() {
  * @param instantly If true, the mob faces that angle instantly instead
  * of rotating towards that direction over time.
  */
-void mob::face(float new_angle, point* new_pos, bool instantly) {
+void Mob::face(float new_angle, Point* new_pos, bool instantly) {
     if(carry_info) return; //If it's being carried, it shouldn't rotate.
     intended_turn_angle = new_angle;
     intended_turn_pos = new_pos;
@@ -1521,7 +1521,7 @@ void mob::face(float new_angle, point* new_pos, bool instantly) {
 /**
  * @brief Sets up stuff for the end of the mob's dying process.
  */
-void mob::finish_dying() {
+void Mob::finish_dying() {
     release_chomped_pikmin();
     
     finish_dying_class_specifics();
@@ -1532,7 +1532,7 @@ void mob::finish_dying() {
  * @brief Sets up stuff for the end of the mob's dying process.
  * This function is meant to be overridden by child classes.
  */
-void mob::finish_dying_class_specifics() {
+void Mob::finish_dying_class_specifics() {
 }
 
 
@@ -1541,7 +1541,7 @@ void mob::finish_dying_class_specifics() {
  *
  * @param m2 The mob to focus on.
  */
-void mob::focus_on_mob(mob* m2) {
+void Mob::focus_on_mob(Mob* m2) {
     unfocus_from_mob();
     focused_mob = m2;
 }
@@ -1557,12 +1557,12 @@ void mob::focus_on_mob(mob* m2) {
  * @param acceleration Speed acceleration.
  * @return Whether there is a path available.
  */
-bool mob::follow_path(
-    const path_follow_settings &settings,
+bool Mob::follow_path(
+    const PathFollowSettings &settings,
     float speed, float acceleration
 ) {
     bool was_blocked = false;
-    path_stop* old_next_stop = nullptr;
+    PathStop* old_next_stop = nullptr;
     
     //Some setup before we begin.
     if(has_flag(settings.flags, PATH_FOLLOW_FLAG_CAN_CONTINUE) && path_info) {
@@ -1576,7 +1576,7 @@ bool mob::follow_path(
         delete path_info;
     }
     
-    path_follow_settings final_settings = settings;
+    PathFollowSettings final_settings = settings;
     
     if(carry_info) {
         //Check if this carriable is considered light load.
@@ -1620,7 +1620,7 @@ bool mob::follow_path(
     
     //Establish the mob's path-following information.
     //This also generates the path to take.
-    path_info = new path_t(this, final_settings);
+    path_info = new Path(this, final_settings);
     
     if(
         has_flag(path_info->settings.flags, PATH_FOLLOW_FLAG_CAN_CONTINUE) &&
@@ -1654,7 +1654,7 @@ bool mob::follow_path(
         
     } else if(!path_info->path.empty()) {
         //Head to the first stop.
-        path_stop* next_stop =
+        PathStop* next_stop =
             path_info->path[path_info->cur_path_stop_idx];
         float next_stop_z = z;
         if(
@@ -1689,7 +1689,7 @@ bool mob::follow_path(
  *
  * @return The base speed.
  */
-float mob::get_base_speed() const {
+float Mob::get_base_speed() const {
     return this->type->move_speed;
 }
 
@@ -1700,8 +1700,8 @@ float mob::get_base_speed() const {
  * @param out_z If not nullptr, the Z coordinate is returned here.
  * @return The (X and Y) coordinates of the target.
  */
-point mob::get_chase_target(float* out_z) const {
-    point p = chase_info.offset;
+Point Mob::get_chase_target(float* out_z) const {
+    Point p = chase_info.offset;
     if(chase_info.orig_coords) p += (*chase_info.orig_coords);
     if(out_z) {
         *out_z = chase_info.offset_z;
@@ -1720,21 +1720,21 @@ point mob::get_chase_target(float* out_z) const {
  * @param d Return the distance here, optionally.
  * @return The hitbox.
  */
-hitbox* mob::get_closest_hitbox(
-    const point &p, size_t h_type, dist* d
+Hitbox* Mob::get_closest_hitbox(
+    const Point &p, size_t h_type, Distance* d
 ) const {
-    sprite* s;
+    Sprite* s;
     get_sprite_data(&s, nullptr, nullptr);
     if(!s) return nullptr;
-    hitbox* closest_hitbox = nullptr;
+    Hitbox* closest_hitbox = nullptr;
     float closest_hitbox_dist = 0;
     
     for(size_t h = 0; h < s->hitboxes.size(); h++) {
-        hitbox* h_ptr = &s->hitboxes[h];
+        Hitbox* h_ptr = &s->hitboxes[h];
         if(h_type != INVALID && h_ptr->type != h_type) continue;
         
         float this_d =
-            dist(
+            Distance(
                 h_ptr->get_cur_pos(pos, angle_cos, angle_sin), p
             ).to_float() - h_ptr->radius;
         if(closest_hitbox == nullptr || this_d < closest_hitbox_dist) {
@@ -1764,8 +1764,8 @@ hitbox* mob::get_closest_hitbox(
  * @param out_interpolation_factor If not nullptr, the interpolation factor
  * (0 to 1) between the two is returned here.
  */
-void mob::get_sprite_data(
-    sprite** out_cur_sprite_ptr, sprite** out_next_sprite_ptr,
+void Mob::get_sprite_data(
+    Sprite** out_cur_sprite_ptr, Sprite** out_next_sprite_ptr,
     float* out_interpolation_factor
 ) const {
     if(forced_sprite) {
@@ -1790,14 +1790,14 @@ void mob::get_sprite_data(
  * Otherwise, use nullptr.
  * @return The distance.
  */
-dist mob::get_distance_between(
-    const mob* m2_ptr, const dist* regular_distance_cache
+Distance Mob::get_distance_between(
+    const Mob* m2_ptr, const Distance* regular_distance_cache
 ) const {
-    dist mob_to_hotspot_dist;
+    Distance mob_to_hotspot_dist;
     float dist_padding;
     if(m2_ptr->rectangular_dim.x != 0.0f) {
         bool is_inside = false;
-        point hotspot =
+        Point hotspot =
             get_closest_point_in_rotated_rectangle(
                 pos,
                 m2_ptr->pos, m2_ptr->rectangular_dim,
@@ -1805,16 +1805,16 @@ dist mob::get_distance_between(
                 &is_inside
             );
         if(is_inside) {
-            mob_to_hotspot_dist = dist(0.0f);
+            mob_to_hotspot_dist = Distance(0.0f);
         } else {
-            mob_to_hotspot_dist = dist(pos, hotspot);
+            mob_to_hotspot_dist = Distance(pos, hotspot);
         }
         dist_padding = radius;
     } else {
         if(regular_distance_cache) {
             mob_to_hotspot_dist = *regular_distance_cache;
         } else {
-            mob_to_hotspot_dist = dist(pos, m2_ptr->pos);
+            mob_to_hotspot_dist = Distance(pos, m2_ptr->pos);
         }
         dist_padding = radius + m2_ptr->radius;
     }
@@ -1833,7 +1833,7 @@ dist mob::get_distance_between(
  * @param fraction_color The fraction's color gets set here.
  * @return Whether the numbers should be shown.
  */
-bool mob::get_fraction_numbers_info(
+bool Mob::get_fraction_numbers_info(
     float* fraction_value_nr, float* fraction_req_nr,
     ALLEGRO_COLOR* fraction_color
 ) const {
@@ -1873,8 +1873,8 @@ bool mob::get_fraction_numbers_info(
  * @param out_spot The final coordinates are returned here.
  * @param out_dist The final distance to those coordinates is returned here.
  */
-void mob::get_group_spot_info(
-    point* out_spot, float* out_dist
+void Mob::get_group_spot_info(
+    Point* out_spot, float* out_dist
 ) const {
     out_spot->x = 0.0f;
     out_spot->y = 0.0f;
@@ -1889,10 +1889,10 @@ void mob::get_group_spot_info(
  * @param h_ptr The hazard to check.
  * @return The vulnerability info.
  */
-mob_type::vulnerability_t mob::get_hazard_vulnerability(
-    hazard* h_ptr
+MobType::Vulnerability Mob::get_hazard_vulnerability(
+    Hazard* h_ptr
 ) const {
-    mob_type::vulnerability_t vuln;
+    MobType::Vulnerability vuln;
     vuln.effect_mult = type->default_vulnerability;
     
     auto v = type->hazard_vulnerabilities.find(h_ptr);
@@ -1910,8 +1910,8 @@ mob_type::vulnerability_t mob::get_hazard_vulnerability(
  * @param idx The hitbox's index.
  * @return The hitbox.
  */
-hitbox* mob::get_hitbox(size_t idx) const {
-    sprite* s;
+Hitbox* Mob::get_hitbox(size_t idx) const {
+    Sprite* s;
     get_sprite_data(&s, nullptr, nullptr);
     if(!s) return nullptr;
     if(s->hitboxes.empty()) return nullptr;
@@ -1932,14 +1932,14 @@ hitbox* mob::get_hitbox(size_t idx) const {
  * @param vertical_dist Ratio of distance from the hitbox/body's bottom.
  * 1 is the very top.
  */
-void mob::get_hitbox_hold_point(
-    const mob* mob_to_hold, const hitbox* h_ptr,
+void Mob::get_hitbox_hold_point(
+    const Mob* mob_to_hold, const Hitbox* h_ptr,
     float* offset_dist, float* offset_angle, float* vertical_dist
 ) const {
-    point actual_h_pos = h_ptr->get_cur_pos(pos, angle_cos, angle_sin);
+    Point actual_h_pos = h_ptr->get_cur_pos(pos, angle_cos, angle_sin);
     float actual_h_z = z + h_ptr->z;
     
-    point pos_dif = mob_to_hold->pos - actual_h_pos;
+    Point pos_dif = mob_to_hold->pos - actual_h_pos;
     coordinates_to_angle(pos_dif, offset_angle, offset_dist);
     
     //Relative to 0 degrees.
@@ -1961,13 +1961,13 @@ void mob::get_hitbox_hold_point(
  *
  * @return The amount.
  */
-size_t mob::get_latched_pikmin_amount() const {
+size_t Mob::get_latched_pikmin_amount() const {
     size_t total = 0;
     for(
         size_t p = 0;
         p < game.states.gameplay->mobs.pikmin_list.size(); p++
     ) {
-        pikmin* p_ptr = game.states.gameplay->mobs.pikmin_list[p];
+        Pikmin* p_ptr = game.states.gameplay->mobs.pikmin_list[p];
         if(p_ptr->focused_mob != this) continue;
         if(p_ptr->holder.m != this) continue;
         if(!p_ptr->latched) continue;
@@ -1983,13 +1983,13 @@ size_t mob::get_latched_pikmin_amount() const {
  *
  * @return The weight.
  */
-float mob::get_latched_pikmin_weight() const {
+float Mob::get_latched_pikmin_weight() const {
     float total = 0;
     for(
         size_t p = 0;
         p < game.states.gameplay->mobs.pikmin_list.size(); p++
     ) {
-        pikmin* p_ptr = game.states.gameplay->mobs.pikmin_list[p];
+        Pikmin* p_ptr = game.states.gameplay->mobs.pikmin_list[p];
         if(p_ptr->focused_mob != this) continue;
         if(p_ptr->holder.m != this) continue;
         if(!p_ptr->latched) continue;
@@ -2002,7 +2002,7 @@ float mob::get_latched_pikmin_weight() const {
 /**
  * @brief Recalculates the max distance a mob can interact with another mob.
  */
-void mob::update_interaction_span() {
+void Mob::update_interaction_span() {
     interaction_span = physical_span;
     
     if(far_reach != INVALID) {
@@ -2033,7 +2033,7 @@ void mob::update_interaction_span() {
  *
  * @return The multiplier.
  */
-float mob::get_speed_multiplier() const {
+float Mob::get_speed_multiplier() const {
     float move_speed_mult = 1.0f;
     for(size_t s = 0; s < this->statuses.size(); s++) {
         if(!statuses[s].to_delete) {
@@ -2060,16 +2060,16 @@ float mob::get_speed_multiplier() const {
  * @param info Struct to fill the info with.
  * @param effects What effects to use. Use SPRITE_BMP_EFFECT_FLAG for this.
  */
-void mob::get_sprite_bitmap_effects(
-    sprite* s_ptr, sprite* next_s_ptr, float interpolation_factor,
-    bitmap_effect_t* info, bitmask_16_t effects
+void Mob::get_sprite_bitmap_effects(
+    Sprite* s_ptr, Sprite* next_s_ptr, float interpolation_factor,
+    BitmapEffect* info, bitmask_16_t effects
 ) const {
 
     //Animation, position, angle, etc.
     if(has_flag(effects, SPRITE_BMP_EFFECT_FLAG_STANDARD)) {
-        point eff_trans;
+        Point eff_trans;
         float eff_angle;
-        point eff_scale;
+        Point eff_scale;
         ALLEGRO_COLOR eff_tint;
         
         get_sprite_basic_effects(
@@ -2094,7 +2094,7 @@ void mob::get_sprite_bitmap_effects(
         ALLEGRO_COLOR glow_color_sum = COLOR_EMPTY;
         
         for(size_t s = 0; s < statuses.size(); s++) {
-            status_type* t = this->statuses[s].type;
+            StatusType* t = this->statuses[s].type;
             if(
                 t->tint.r == 1.0f &&
                 t->tint.g == 1.0f &&
@@ -2137,18 +2137,18 @@ void mob::get_sprite_bitmap_effects(
     
     //Sector brightness tint.
     if(has_flag(effects, SPRITE_BMP_EFFECT_FLAG_SECTOR_BRIGHTNESS)) {
-        sector* sector_ptr = center_sector;
+        Sector* sector_ptr = center_sector;
         float brightness = center_sector->brightness / 255.0;
         if(sector_ptr->fade) {
-            sector* texture_sector[2] = {nullptr, nullptr};
+            Sector* texture_sector[2] = {nullptr, nullptr};
             sector_ptr->get_texture_merge_sectors(
                 &texture_sector[0], &texture_sector[1]
             );
-            vector<edge*> fade_edges[2];
+            vector<Edge*> fade_edges[2];
             size_t n_edges = sector_ptr->edges.size();
             for(size_t e = 0; e < n_edges; e++) {
-                edge* e_ptr = sector_ptr->edges[e];
-                sector* o_sector = e_ptr->get_other_sector(sector_ptr);
+                Edge* e_ptr = sector_ptr->edges[e];
+                Sector* o_sector = e_ptr->get_other_sector(sector_ptr);
                 if(o_sector == texture_sector[0]) {
                     fade_edges[0].push_back(e_ptr);
                 }
@@ -2157,23 +2157,23 @@ void mob::get_sprite_bitmap_effects(
                 }
             }
             
-            dist closest_dist[2] = {dist(FLT_MAX), dist(FLT_MAX)};
+            Distance closest_dist[2] = {Distance(FLT_MAX), Distance(FLT_MAX)};
             for(size_t n = 0; n < 2; n++) {
                 for(size_t e = 0; e < fade_edges[n].size(); e++) {
-                    point v1 = point(fade_edges[n][e]->vertexes[0]->x, fade_edges[n][e]->vertexes[0]->y);
-                    point v2 = point(fade_edges[n][e]->vertexes[1]->x, fade_edges[n][e]->vertexes[1]->y);
+                    Point v1 = Point(fade_edges[n][e]->vertexes[0]->x, fade_edges[n][e]->vertexes[0]->y);
+                    Point v2 = Point(fade_edges[n][e]->vertexes[1]->x, fade_edges[n][e]->vertexes[1]->y);
                     float segment_ratio;
-                    point closest_pos = get_closest_point_in_line_seg(v1, v2, pos, &segment_ratio);
+                    Point closest_pos = get_closest_point_in_line_seg(v1, v2, pos, &segment_ratio);
                     if(segment_ratio < 0) {
-                        point v2_to_v1 = v2 - v1;
+                        Point v2_to_v1 = v2 - v1;
                         closest_pos -= v2_to_v1 * abs(segment_ratio);
                     }
                     if(segment_ratio > 1) {
-                        point v2_to_v1 = v2 - v1;
+                        Point v2_to_v1 = v2 - v1;
                         closest_pos -= v2_to_v1 * (segment_ratio - 1);
                     }
                     
-                    dist d(closest_pos, pos);
+                    Distance d(closest_pos, pos);
                     closest_dist[n] = closest_dist[n] <= d ? closest_dist[n] : d;
                 }
             }
@@ -2240,7 +2240,7 @@ void mob::get_sprite_bitmap_effects(
         case DELIVERY_ANIM_SUCK: {
             ALLEGRO_COLOR new_glow;
             float new_scale;
-            point new_offset;
+            Point new_offset;
             
             float shake_scale =
                 (1 - delivery_info->anim_time_ratio_left) *
@@ -2284,14 +2284,14 @@ void mob::get_sprite_bitmap_effects(
                     );
                 new_scale = ease(EASE_METHOD_OUT, new_scale);
                 
-                point target_pos = focused_mob->pos;
+                Point target_pos = focused_mob->pos;
                 
                 if(focused_mob->type->category->id == MOB_CATEGORY_SHIPS) {
-                    ship* shi_ptr = (ship*) focused_mob;
+                    Ship* shi_ptr = (Ship*) focused_mob;
                     target_pos = shi_ptr->receptacle_final_pos;
                 }
                 
-                point end_offset = target_pos - pos;
+                Point end_offset = target_pos - pos;
                 
                 float absorb_ratio =
                     interpolate_number(
@@ -2316,7 +2316,7 @@ void mob::get_sprite_bitmap_effects(
             break;
         }
         case DELIVERY_ANIM_TOSS: {
-            point new_offset;
+            Point new_offset;
             float new_scale = 1.0f;
             
             if(delivery_info->anim_time_ratio_left > 0.85) {
@@ -2440,12 +2440,12 @@ void mob::get_sprite_bitmap_effects(
  * @param bmp_scale Returns the mob size's scale to apply to the image.
  * @return The bitmap.
  */
-ALLEGRO_BITMAP* mob::get_status_bitmap(float* bmp_scale) const {
+ALLEGRO_BITMAP* Mob::get_status_bitmap(float* bmp_scale) const {
     *bmp_scale = 0.0f;
     for(size_t st = 0; st < this->statuses.size(); st++) {
-        status_type* t = this->statuses[st].type;
+        StatusType* t = this->statuses[st].type;
         if(t->overlay_animation.empty()) continue;
-        sprite* sp;
+        Sprite* sp;
         t->overlay_anim.get_sprite_data(&sp, nullptr, nullptr);
         if(!sp) return nullptr;
         *bmp_scale = t->overlay_anim_mob_scale;
@@ -2460,7 +2460,7 @@ ALLEGRO_BITMAP* mob::get_status_bitmap(float* bmp_scale) const {
  *
  * @param sta_type Status type to check.
  */
-void mob::handle_status_effect_gain(status_type* sta_type) {
+void Mob::handle_status_effect_gain(StatusType* sta_type) {
     if(sta_type->state_change_type == STATUS_STATE_CHANGE_CUSTOM) {
         size_t nr = fsm.get_state_idx(sta_type->state_change_name);
         if(nr != INVALID) {
@@ -2475,7 +2475,7 @@ void mob::handle_status_effect_gain(status_type* sta_type) {
  *
  * @param sta_type Status type to check.
  */
-void mob::handle_status_effect_loss(status_type* sta_type) {
+void Mob::handle_status_effect_loss(StatusType* sta_type) {
 }
 
 
@@ -2487,11 +2487,11 @@ void mob::handle_status_effect_loss(status_type* sta_type) {
  * @param target_mob The mob to check against.
  * @return Whether it has a clear line.
  */
-bool mob::has_clear_line(const mob* target_mob) const {
+bool Mob::has_clear_line(const Mob* target_mob) const {
     //First, get a bounding box of the line to check.
     //This will help with performance later.
-    point bb_tl = pos;
-    point bb_br = pos;
+    Point bb_tl = pos;
+    Point bb_br = pos;
     update_min_max_coords(bb_tl, bb_br, target_mob->pos);
     
     const float self_max_z = z + height;
@@ -2499,7 +2499,7 @@ bool mob::has_clear_line(const mob* target_mob) const {
     
     //Check against other mobs.
     for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
-        mob* m_ptr = game.states.gameplay->mobs.all[m];
+        Mob* m_ptr = game.states.gameplay->mobs.all[m];
         
         if(!m_ptr->type->pushes) continue;
         if(m_ptr == this || m_ptr == target_mob) continue;
@@ -2581,8 +2581,8 @@ bool mob::has_clear_line(const mob* target_mob) const {
  * @param force_above_holder If true, force the mob to be drawn above the holder.
  * @param rotation_method How should the held mob rotate?
  */
-void mob::hold(
-    mob* m, size_t hitbox_idx,
+void Mob::hold(
+    Mob* m, size_t hitbox_idx,
     float offset_dist, float offset_angle,
     float vertical_dist,
     bool force_above_holder, const HOLD_ROTATION_METHOD rotation_method
@@ -2612,14 +2612,14 @@ void mob::hold(
  *
  * @return Whether it is off-camera.
  */
-bool mob::is_off_camera() const {
+bool Mob::is_off_camera() const {
     if(parent) return false;
     
     float sprite_bound = 0;
-    sprite* s_ptr;
+    Sprite* s_ptr;
     anim.get_sprite_data(&s_ptr, nullptr, nullptr);
     if(s_ptr) {
-        point sprite_size = s_ptr->bmp_size;
+        Point sprite_size = s_ptr->bmp_size;
         sprite_bound =
             std::max(
                 sprite_size.x / 2.0,
@@ -2649,12 +2649,12 @@ bool mob::is_off_camera() const {
  * @param p Point to check.
  * @return Whether it is on top.
  */
-bool mob::is_point_on(const point &p) const {
+bool Mob::is_point_on(const Point &p) const {
     if(rectangular_dim.x == 0) {
-        return dist(p, pos) <= radius;
+        return Distance(p, pos) <= radius;
         
     } else {
-        point p_delta = p - pos;
+        Point p_delta = p - pos;
         p_delta = rotate_point(p_delta, -angle);
         p_delta += rectangular_dim / 2.0f;
         
@@ -2672,7 +2672,7 @@ bool mob::is_point_on(const point &p) const {
  * @param hazards List of hazards to check.
  * @return Whether it is resitant.
  */
-bool mob::is_resistant_to_hazards(const vector<hazard*> &hazards) const {
+bool Mob::is_resistant_to_hazards(const vector<Hazard*> &hazards) const {
     for(size_t h = 0; h < hazards.size(); h++) {
         if(get_hazard_vulnerability(hazards[h]).effect_mult != 0.0f) {
             return false;
@@ -2687,7 +2687,7 @@ bool mob::is_resistant_to_hazards(const vector<hazard*> &hazards) const {
  *
  * @return Whether it is stored.
  */
-bool mob::is_stored_inside_mob() const {
+bool Mob::is_stored_inside_mob() const {
     if(stored_inside_another) return true;
     if(parent && parent->m->stored_inside_another) return true;
     return false;
@@ -2697,10 +2697,10 @@ bool mob::is_stored_inside_mob() const {
 /**
  * @brief Removes a mob from its leader's group.
  */
-void mob::leave_group() {
+void Mob::leave_group() {
     if(!following_group) return;
     
-    mob* group_leader = following_group;
+    Mob* group_leader = following_group;
     
     group_leader->group->members.erase(
         find(
@@ -2726,7 +2726,7 @@ void mob::leave_group() {
  * @param speed Speed to move at.
  * @param acceleration Speed acceleration.
  */
-void mob::move_to_path_end(float speed, float acceleration) {
+void Mob::move_to_path_end(float speed, float acceleration) {
     if(!path_info) return;
     if(
         (
@@ -2738,7 +2738,7 @@ void mob::move_to_path_end(float speed, float acceleration) {
         chase(
             &(path_info->settings.target_mob->pos),
             &(path_info->settings.target_mob->z),
-            point(), 0.0f,
+            Point(), 0.0f,
             CHASE_FLAG_ANY_ANGLE,
             path_info->settings.final_target_distance,
             speed, acceleration
@@ -2761,7 +2761,7 @@ void mob::move_to_path_end(float speed, float acceleration) {
  * @param sound_data_idx Index of the sound data in the list.
  * @return The sound source ID.
  */
-size_t mob::play_sound(size_t sound_data_idx) {
+size_t Mob::play_sound(size_t sound_data_idx) {
     if(sound_data_idx >= type->sounds.size()) return 0;
     
     //If the area just loaded, don't play any mob sounds. This allows stuff
@@ -2769,7 +2769,7 @@ size_t mob::play_sound(size_t sound_data_idx) {
     //obstacle clear jingle.
     if(game.states.gameplay->area_time_passed <= 0.2f) return 0;
     
-    mob_type::sound_t* sound = &type->sounds[sound_data_idx];
+    MobType::Sound* sound = &type->sounds[sound_data_idx];
     
     switch(sound->type) {
     case SOUND_TYPE_GAMEPLAY_GLOBAL: {
@@ -2814,7 +2814,7 @@ size_t mob::play_sound(size_t sound_data_idx) {
  *
  * @return The string.
  */
-string mob::print_state_history() const {
+string Mob::print_state_history() const {
     string str = "State history: ";
     
     if(fsm.cur_state) {
@@ -2838,7 +2838,7 @@ string mob::print_state_history() const {
  *
  * @param svr Script var reader to use.
  */
-void mob::read_script_vars(const script_var_reader &svr) {
+void Mob::read_script_vars(const ScriptVarReader &svr) {
     string team_var;
     
     if(svr.get("team", team_var)) {
@@ -2870,7 +2870,7 @@ void mob::read_script_vars(const script_var_reader &svr) {
  *
  * @param m Mob to release.
  */
-void mob::release(mob* m) {
+void Mob::release(Mob* m) {
     for(size_t h = 0; h < holding.size(); h++) {
         if(holding[h] == m) {
             m->fsm.run_event(MOB_EV_RELEASED, (void*) this);
@@ -2893,7 +2893,7 @@ void mob::release(mob* m) {
 /**
  * @brief Safely releases all chomped Pikmin.
  */
-void mob::release_chomped_pikmin() {
+void Mob::release_chomped_pikmin() {
     for(size_t p = 0; p < chomping_mobs.size(); p++) {
         if(!chomping_mobs[p]) continue;
         release(chomping_mobs[p]);
@@ -2905,9 +2905,9 @@ void mob::release_chomped_pikmin() {
 /**
  * @brief Releases any mobs stored inside.
  */
-void mob::release_stored_mobs() {
+void Mob::release_stored_mobs() {
     for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
-        mob* m_ptr = game.states.gameplay->mobs.all[m];
+        Mob* m_ptr = game.states.gameplay->mobs.all[m];
         if(m_ptr->stored_inside_another == this) {
             release(m_ptr);
             m_ptr->stored_inside_another = nullptr;
@@ -2927,7 +2927,7 @@ void mob::release_stored_mobs() {
  *
  * @param id ID of particle generators to remove.
  */
-void mob::remove_particle_generator(const MOB_PARTICLE_GENERATOR_ID id) {
+void Mob::remove_particle_generator(const MOB_PARTICLE_GENERATOR_ID id) {
     for(size_t g = 0; g < particle_generators.size();) {
         if(particle_generators[g].id == id) {
             particle_generators.erase(particle_generators.begin() + g);
@@ -2941,7 +2941,7 @@ void mob::remove_particle_generator(const MOB_PARTICLE_GENERATOR_ID id) {
 /**
  * @brief Respawns an object back to its home.
  */
-void mob::respawn() {
+void Mob::respawn() {
     pos = home;
     center_sector = get_sector(pos, nullptr, true);
     ground_sector = center_sector;
@@ -2956,8 +2956,8 @@ void mob::respawn() {
  * @param receiver Mob that will receive the message.
  * @param msg The message.
  */
-void mob::send_message(mob* receiver, string &msg) const {
-    mob_event* ev = receiver->fsm.get_event(MOB_EV_RECEIVE_MESSAGE);
+void Mob::send_message(Mob* receiver, string &msg) const {
+    MobEvent* ev = receiver->fsm.get_event(MOB_EV_RECEIVE_MESSAGE);
     if(!ev) return;
     ev->run(receiver, (void*) &msg, (void*) this);
 }
@@ -2973,7 +2973,7 @@ void mob::send_message(mob* receiver, string &msg) const {
  * @param mob_speed_anim_baseline If not 0, the animation's speed will depend on
  * the mob's speed, using this value as a baseline (for 1.0x speed).
  */
-void mob::set_animation(
+void Mob::set_animation(
     size_t idx, const START_ANIM_OPTION options, bool pre_named,
     float mob_speed_anim_baseline
 ) {
@@ -3001,7 +3001,7 @@ void mob::set_animation(
         return;
     }
     
-    animation* new_anim = anim.anim_db->animations[final_idx];
+    Animation* new_anim = anim.anim_db->animations[final_idx];
     anim.cur_anim = new_anim;
     this->mob_speed_anim_baseline = mob_speed_anim_baseline;
     
@@ -3035,7 +3035,7 @@ void mob::set_animation(
  * @param mob_speed_anim_baseline If not 0, the animation's speed will depend on
  * the mob's speed, using this value as a baseline (for 1.0x speed).
  */
-void mob::set_animation(
+void Mob::set_animation(
     const string &name, const START_ANIM_OPTION options,
     float mob_speed_anim_baseline
 ) {
@@ -3051,7 +3051,7 @@ void mob::set_animation(
  *
  * @param blocks Whether it can block paths or not.
  */
-void mob::set_can_block_paths(bool blocks) {
+void Mob::set_can_block_paths(bool blocks) {
     if(blocks) {
         if(!can_block_paths) {
             game.states.gameplay->path_mgr.handle_obstacle_add(this);
@@ -3076,7 +3076,7 @@ void mob::set_can_block_paths(bool blocks) {
  * If false, it's the number in HP.
  * @param amount Health amount.
  */
-void mob::set_health(bool add, bool ratio, float amount) {
+void Mob::set_health(bool add, bool ratio, float amount) {
     float change = amount;
     if(ratio) change = max_health * amount;
     float base_nr = 0;
@@ -3091,7 +3091,7 @@ void mob::set_health(bool add, bool ratio, float amount) {
  *
  * @param radius New radius.
  */
-void mob::set_radius(float radius) {
+void Mob::set_radius(float radius) {
     this->radius = radius;
     physical_span =
         calculate_mob_physical_span(
@@ -3108,7 +3108,7 @@ void mob::set_radius(float radius) {
  *
  * @param rectangular_dim New rectangular dimensions.
  */
-void mob::set_rectangular_dim(const point &rectangular_dim) {
+void Mob::set_rectangular_dim(const Point &rectangular_dim) {
     this->rectangular_dim = rectangular_dim;
     physical_span =
         calculate_mob_physical_span(
@@ -3125,7 +3125,7 @@ void mob::set_rectangular_dim(const point &rectangular_dim) {
  *
  * @param time New time.
  */
-void mob::set_timer(float time) {
+void Mob::set_timer(float time) {
     script_timer.duration = time;
     script_timer.start();
 }
@@ -3137,7 +3137,7 @@ void mob::set_timer(float time) {
  * @param name The variable's name.
  * @param value The variable's new value.
  */
-void mob::set_var(const string &name, const string &value) {
+void Mob::set_var(const string &name, const string &value) {
     vars[name] = value;
 }
 
@@ -3150,7 +3150,7 @@ void mob::set_var(const string &name, const string &value) {
  * name in the information structure. If not nullptr, uses this instead.
  * @return The new mob.
  */
-mob* mob::spawn(const mob_type::spawn_t* info, mob_type* type_ptr) {
+Mob* Mob::spawn(const MobType::SpawnInfo* info, MobType* type_ptr) {
     //First, find the mob.
     if(!type_ptr) {
         type_ptr = game.mob_categories.find_mob_type(info->mob_type_name);
@@ -3174,7 +3174,7 @@ mob* mob::spawn(const mob_type::spawn_t* info, mob_type* type_ptr) {
         return nullptr;
     }
     
-    point new_xy;
+    Point new_xy;
     float new_z = 0;
     float new_angle = 0;
     
@@ -3193,7 +3193,7 @@ mob* mob::spawn(const mob_type::spawn_t* info, mob_type* type_ptr) {
         return nullptr;
     }
     
-    mob* new_mob =
+    Mob* new_mob =
         create_mob(
             type_ptr->category,
             new_xy,
@@ -3232,7 +3232,7 @@ mob* mob::spawn(const mob_type::spawn_t* info, mob_type* type_ptr) {
 /**
  * @brief Sets up stuff for the beginning of the mob's death process.
  */
-void mob::start_dying() {
+void Mob::start_dying() {
     set_health(false, false, 0.0f);
     
     stop_chasing();
@@ -3245,7 +3245,7 @@ void mob::start_dying() {
     
     if(group) {
         while(!group->members.empty()) {
-            mob* member = group->members[0];
+            Mob* member = group->members[0];
             member->fsm.run_event(
                 MOB_EV_DISMISSED,
                 (void*) & (member->pos)
@@ -3271,7 +3271,7 @@ void mob::start_dying() {
  * @brief Sets up stuff for the beginning of the mob's death process.
  * This function is meant to be overridden by child classes.
  */
-void mob::start_dying_class_specifics() {
+void Mob::start_dying_class_specifics() {
 }
 
 
@@ -3279,7 +3279,7 @@ void mob::start_dying_class_specifics() {
  * @brief Returns the height that should be used in calculating
  * drawing order.
  */
-float mob::get_drawing_height() const {
+float Mob::get_drawing_height() const {
     //We can't use FLT_MAX since multiple mobs with max height can stack.
     return height == 0 ? 1000000 : height;
 }
@@ -3288,7 +3288,7 @@ float mob::get_drawing_height() const {
  * @brief From here on out, the mob's Z changes will be reflected in the height
  * effect.
  */
-void mob::start_height_effect() {
+void Mob::start_height_effect() {
     height_effect_pivot = z;
 }
 
@@ -3296,7 +3296,7 @@ void mob::start_height_effect() {
 /**
  * @brief Makes a mob not follow any target any more.
  */
-void mob::stop_chasing() {
+void Mob::stop_chasing() {
     chase_info.state = CHASE_STATE_STOPPED;
     chase_info.orig_z = nullptr;
     
@@ -3311,7 +3311,7 @@ void mob::stop_chasing() {
 /**
  * @brief Makes the mob stop circling around a point or another mob.
  */
-void mob::stop_circling() {
+void Mob::stop_circling() {
     if(circling_info) {
         delete circling_info;
         circling_info = nullptr;
@@ -3323,7 +3323,7 @@ void mob::stop_circling() {
 /**
  * @brief Makes the mob stop following a path graph.
  */
-void mob::stop_following_path() {
+void Mob::stop_following_path() {
     if(!path_info) return;
     
     stop_chasing();
@@ -3336,14 +3336,14 @@ void mob::stop_following_path() {
 /**
  * @brief From here on out, stop using the height effect.
  */
-void mob::stop_height_effect() {
+void Mob::stop_height_effect() {
     if(
         type->category->id == MOB_CATEGORY_LEADERS &&
         highest_midair_z != FLT_MAX
     ) {
         float distance_fallen = highest_midair_z - z;
         if(distance_fallen > 0.0f) {
-            particle_generator pg =
+            ParticleGenerator pg =
                 standard_particle_gen_setup(
                     game.sys_content_names.part_leader_land, this
                 );
@@ -3371,7 +3371,7 @@ void mob::stop_height_effect() {
 /**
  * @brief Makes a mob stop riding on a track mob.
  */
-void mob::stop_track_ride() {
+void Mob::stop_track_ride() {
     if(!track_info) return;
     
     delete track_info;
@@ -3385,7 +3385,7 @@ void mob::stop_track_ride() {
 /**
  * @brief Makes a mob stop wanting to turn towards some direciton.
  */
-void mob::stop_turning() {
+void Mob::stop_turning() {
     face(angle, nullptr, true);
 }
 
@@ -3395,9 +3395,9 @@ void mob::stop_turning() {
  *
  * @param m The mob to store.
  */
-void mob::store_mob_inside(mob* m) {
+void Mob::store_mob_inside(Mob* m) {
     //First, go up the chain to make sure we're not trying to make a loop.
-    mob* temp = this;
+    Mob* temp = this;
     while(temp) {
         if(temp == m) return;
         temp = temp->stored_inside_another;
@@ -3416,12 +3416,12 @@ void mob::store_mob_inside(mob* m) {
  *
  * @param nr Number of captured opponents to swallow.
  */
-void mob::swallow_chomped_pikmin(size_t nr) {
+void Mob::swallow_chomped_pikmin(size_t nr) {
 
     size_t total = std::min(nr, chomping_mobs.size());
     
     for(size_t p = 0; p < total; p++) {
-        mob* victim = chomping_mobs[p];
+        Mob* victim = chomping_mobs[p];
         if(!victim) continue;
         victim->fsm.run_event(MOB_EV_SWALLOWED);
         victim->cause_spike_damage(this, true);
@@ -3448,7 +3448,7 @@ void mob::swallow_chomped_pikmin(size_t nr) {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void mob::tick(float delta_t) {
+void Mob::tick(float delta_t) {
     //Since the mob could be marked for deletion after any little
     //interaction with the world, and since doing logic on a mob that already
     //forgot some things due to deletion is dangerous... Let's constantly
@@ -3522,7 +3522,7 @@ void mob::tick(float delta_t) {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void mob::tick_animation(float delta_t) {
+void Mob::tick_animation(float delta_t) {
     float mult = 1.0f;
     for(size_t s = 0; s < this->statuses.size(); s++) {
         float vuln_mult = this->statuses[s].type->anim_speed_multiplier - 1.0f;
@@ -3582,10 +3582,10 @@ void mob::tick_animation(float delta_t) {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void mob::tick_brain(float delta_t) {
+void Mob::tick_brain(float delta_t) {
     //Circling around something.
     if(circling_info) {
-        point circling_center =
+        Point circling_center =
             circling_info->circling_mob ?
             circling_info->circling_mob->pos :
             circling_info->circling_point;
@@ -3619,8 +3619,8 @@ void mob::tick_brain(float delta_t) {
     ) {
     
         //Calculate where the target is.
-        point final_target_pos = get_chase_target();
-        dist horiz_dist = dist(pos, final_target_pos);
+        Point final_target_pos = get_chase_target();
+        Distance horiz_dist = Distance(pos, final_target_pos);
         float vert_dist = 0.0f;
         if(has_flag(flags, MOB_FLAG_CAN_MOVE_MIDAIR)) {
             float final_target_z = chase_info.offset_z;
@@ -3664,7 +3664,7 @@ void mob::tick_brain(float delta_t) {
                         fsm.run_event(MOB_EV_PATH_BLOCKED);
                     } else {
                         //All good. Head to the next stop.
-                        path_stop* next_stop =
+                        PathStop* next_stop =
                             path_info->path[path_info->cur_path_stop_idx];
                         float next_stop_z = z;
                         if(
@@ -3724,7 +3724,7 @@ void mob::tick_brain(float delta_t) {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void mob::tick_class_specifics(float delta_t) {
+void Mob::tick_class_specifics(float delta_t) {
 }
 
 
@@ -3733,7 +3733,7 @@ void mob::tick_class_specifics(float delta_t) {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void mob::tick_misc_logic(float delta_t) {
+void Mob::tick_misc_logic(float delta_t) {
     if(time_alive == 0.0f) {
         //This is a convenient spot to signal that the mob is ready.
         //This will only run once, and only after the mob is all set up.
@@ -3806,7 +3806,7 @@ void mob::tick_misc_logic(float delta_t) {
         health > 0.0f &&
         health < max_health;
     if(!health_wheel && should_show_health) {
-        health_wheel = new in_world_health_wheel(this);
+        health_wheel = new InWorldHealthWheel(this);
     } else if(health_wheel && !should_show_health) {
         health_wheel->start_fading();
     }
@@ -3829,7 +3829,7 @@ void mob::tick_misc_logic(float delta_t) {
         );
         
     if(!fraction && should_show_fraction) {
-        fraction = new in_world_fraction(this);
+        fraction = new InWorldFraction(this);
     } else if(fraction && !should_show_fraction) {
         fraction->start_fading();
     }
@@ -3852,10 +3852,10 @@ void mob::tick_misc_logic(float delta_t) {
     //Group stuff.
     if(group && group->members.size()) {
     
-        group_t::MODE old_mode = group->mode;
+        Group::MODE old_mode = group->mode;
         bool is_holding = !holding.empty();
         bool is_far_from_group =
-            dist(group->get_average_member_pos(), pos) >
+            Distance(group->get_average_member_pos(), pos) >
             MOB::GROUP_SHUFFLE_DIST + (group->radius + radius);
         bool is_swarming =
             game.states.gameplay->swarm_magnitude &&
@@ -3863,22 +3863,22 @@ void mob::tick_misc_logic(float delta_t) {
             
         //Find what mode we're in on this frame.
         if(is_swarming) {
-            group->mode = group_t::MODE_SWARM;
+            group->mode = Group::MODE_SWARM;
         } else if(is_holding || is_far_from_group) {
-            group->mode = group_t::MODE_FOLLOW_BACK;
+            group->mode = Group::MODE_FOLLOW_BACK;
         } else {
-            group->mode = group_t::MODE_SHUFFLE;
+            group->mode = Group::MODE_SHUFFLE;
         }
         
         //Change things depending on the mode.
         switch(group->mode) {
-        case group_t::MODE_FOLLOW_BACK: {
+        case Group::MODE_FOLLOW_BACK: {
     
             //Follow the leader's back.
             group->anchor_angle = angle + TAU / 2.0f;
-            point new_anchor_rel_pos =
+            Point new_anchor_rel_pos =
                 rotate_point(
-                    point(radius + MOB::GROUP_SPOT_INTERVAL * 2.0f, 0.0f),
+                    Point(radius + MOB::GROUP_SPOT_INTERVAL * 2.0f, 0.0f),
                     group->anchor_angle
                 );
             group->anchor = pos + new_anchor_rel_pos;
@@ -3889,14 +3889,14 @@ void mob::tick_misc_logic(float delta_t) {
             );
             break;
             
-        } case group_t::MODE_SHUFFLE: {
+        } case Group::MODE_SHUFFLE: {
     
             //Casually shuffle with the leader, if needed.
-            point mov;
-            point group_mid_point =
+            Point mov;
+            Point group_mid_point =
                 group->anchor +
                 rotate_point(
-                    point(group->radius, 0.0f),
+                    Point(group->radius, 0.0f),
                     group->anchor_angle
                 );
             move_point(
@@ -3915,13 +3915,13 @@ void mob::tick_misc_logic(float delta_t) {
             );
             break;
             
-        } case group_t::MODE_SWARM: {
+        } case Group::MODE_SWARM: {
     
             //Swarming.
             group->anchor_angle = game.states.gameplay->swarm_angle;
-            point new_anchor_rel_pos =
+            Point new_anchor_rel_pos =
                 rotate_point(
-                    point(radius + MOB::GROUP_SPOT_INTERVAL * 2.0f, 0.0f),
+                    Point(radius + MOB::GROUP_SPOT_INTERVAL * 2.0f, 0.0f),
                     group->anchor_angle
                 );
             group->anchor = pos + new_anchor_rel_pos;
@@ -3950,8 +3950,8 @@ void mob::tick_misc_logic(float delta_t) {
         }
         
         if(
-            old_mode != group_t::MODE_SHUFFLE &&
-            group->mode == group_t::MODE_SHUFFLE
+            old_mode != Group::MODE_SHUFFLE &&
+            group->mode == Group::MODE_SHUFFLE
         ) {
             //Started shuffling. Since it's a "casual" formation, we should
             //reassign the spots so Pikmin don't have to keep their order from
@@ -3981,11 +3981,11 @@ void mob::tick_misc_logic(float delta_t) {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void mob::tick_script(float delta_t) {
+void Mob::tick_script(float delta_t) {
     if(!fsm.cur_state) return;
     
     //Timer events.
-    mob_event* timer_ev = fsm.get_event(MOB_EV_TIMER);
+    MobEvent* timer_ev = fsm.get_event(MOB_EV_TIMER);
     if(script_timer.duration > 0) {
         if(script_timer.time_left > 0) {
             script_timer.tick(delta_t);
@@ -4012,8 +4012,8 @@ void mob::tick_script(float delta_t) {
         //sending MOB_EV_FOCUS_DIED could've set this to nullptr.
         if(focused_mob) {
         
-            mob* focus = focused_mob;
-            mob_event* for_ev = fsm.get_event(MOB_EV_FOCUS_OFF_REACH);
+            Mob* focus = focused_mob;
+            MobEvent* for_ev = fsm.get_event(MOB_EV_FOCUS_OFF_REACH);
             
             if(far_reach != INVALID && for_ev) {
                 float angle_to_focus = get_angle(pos, focus->pos);
@@ -4035,7 +4035,7 @@ void mob::tick_script(float delta_t) {
     //Itch event.
     if(type->itch_damage > 0 || type->itch_time > 0) {
         itch_time += delta_t;
-        mob_event* itch_ev = fsm.get_event(MOB_EV_ITCH);
+        MobEvent* itch_ev = fsm.get_event(MOB_EV_ITCH);
         if(
             itch_ev &&
             itch_damage > type->itch_damage && itch_time > type->itch_time
@@ -4055,7 +4055,7 @@ void mob::tick_script(float delta_t) {
     if(
         game.states.gameplay->cur_leader_ptr &&
         game.states.gameplay->whistle.whistling &&
-        dist(pos, game.states.gameplay->whistle.center) <=
+        Distance(pos, game.states.gameplay->whistle.center) <=
         game.states.gameplay->whistle.radius
     ) {
         fsm.run_event(
@@ -4083,15 +4083,15 @@ void mob::tick_script(float delta_t) {
     
     //Following a leader.
     if(following_group) {
-        mob_event* spot_far_ev =  fsm.get_event(MOB_EV_SPOT_IS_FAR);
+        MobEvent* spot_far_ev =  fsm.get_event(MOB_EV_SPOT_IS_FAR);
         
         if(spot_far_ev) {
-            point target_pos;
+            Point target_pos;
             float target_dist;
             
             get_group_spot_info(&target_pos, &target_dist);
             
-            dist d(pos, target_pos);
+            Distance d(pos, target_pos);
             if(d > target_dist) {
                 spot_far_ev->run(this, (void*) &target_pos);
             }
@@ -4099,9 +4099,9 @@ void mob::tick_script(float delta_t) {
     }
     
     //Far away from home.
-    mob_event* far_from_home_ev = fsm.get_event(MOB_EV_FAR_FROM_HOME);
+    MobEvent* far_from_home_ev = fsm.get_event(MOB_EV_FAR_FROM_HOME);
     if(far_from_home_ev) {
-        dist d(pos, home);
+        Distance d(pos, home);
         if(d >= type->territory_radius) {
             far_from_home_ev->run(this);
         }
@@ -4118,7 +4118,7 @@ void mob::tick_script(float delta_t) {
  *
  * @return Whether the ride is over.
  */
-bool mob::tick_track_ride() {
+bool Mob::tick_track_ride() {
     track_info->cur_cp_progress +=
         track_info->ride_speed * game.delta_t;
         
@@ -4137,20 +4137,20 @@ bool mob::tick_track_ride() {
     }
     
     //Teleport to the right spot.
-    hitbox* cur_cp =
+    Hitbox* cur_cp =
         track_info->m->get_hitbox(
             track_info->checkpoints[track_info->cur_cp_idx]
         );
-    hitbox* next_cp =
+    Hitbox* next_cp =
         track_info->m->get_hitbox(
             track_info->checkpoints[track_info->cur_cp_idx + 1]
         );
-    point cur_cp_pos =
+    Point cur_cp_pos =
         cur_cp->get_cur_pos(track_info->m->pos, track_info->m->angle);
-    point next_cp_pos =
+    Point next_cp_pos =
         next_cp->get_cur_pos(track_info->m->pos, track_info->m->angle);
         
-    point dest_xy(
+    Point dest_xy(
         interpolate_number(
             track_info->cur_cp_progress, 0.0f, 1.0f,
             cur_cp_pos.x, next_cp_pos.x
@@ -4180,7 +4180,7 @@ bool mob::tick_track_ride() {
 /**
  * @brief Makes the mob lose focus on its currently focused mob.
  */
-void mob::unfocus_from_mob() {
+void Mob::unfocus_from_mob() {
     focused_mob = nullptr;
 }
 
@@ -4194,7 +4194,7 @@ void mob::unfocus_from_mob() {
  * @param base_anim_total Total index of base animations.
  * @return The index.
  */
-size_t mob_with_anim_groups::get_animation_idx_from_base_and_group(
+size_t MobWithAnimGroups::get_animation_idx_from_base_and_group(
     size_t base_anim_idx, size_t group_idx,
     size_t base_anim_total
 ) const {

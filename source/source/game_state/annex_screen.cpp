@@ -19,12 +19,12 @@
 /**
  * @brief Draws the annex screen state.
  */
-void annex_screen_state::do_drawing() {
+void AnnexScreen::do_drawing() {
     al_clear_to_color(COLOR_BLACK);
     
     draw_bitmap(
-        bmp_bg, point(game.win_w * 0.5, game.win_h * 0.5),
-        point(game.win_w, game.win_h), 0, map_gray(64)
+        bmp_bg, Point(game.win_w * 0.5, game.win_h * 0.5),
+        Point(game.win_w, game.win_h), 0, map_gray(64)
     );
     
     if(cur_menu) cur_menu->draw();
@@ -36,8 +36,8 @@ void annex_screen_state::do_drawing() {
 /**
  * @brief Ticks one frame's worth of logic.
  */
-void annex_screen_state::do_logic() {
-    vector<player_action> player_actions = game.controls.new_frame();
+void AnnexScreen::do_logic() {
+    vector<PlayerAction> player_actions = game.controls.new_frame();
     
     if(!game.fade_mgr.is_fading()) {
         for(size_t a = 0; a < player_actions.size(); a++) {
@@ -64,7 +64,7 @@ void annex_screen_state::do_logic() {
  *
  * @return The name.
  */
-string annex_screen_state::get_name() const {
+string AnnexScreen::get_name() const {
     return "annex screen";
 }
 
@@ -74,7 +74,7 @@ string annex_screen_state::get_name() const {
  *
  * @param ev Event to handle.
  */
-void annex_screen_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
+void AnnexScreen::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;
     
     if(cur_menu) cur_menu->handle_allegro_event(ev);
@@ -84,7 +84,7 @@ void annex_screen_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
 /**
  * @brief Leaves the annex screen state and goes to the title screen.
  */
-void annex_screen_state::leave() {
+void AnnexScreen::leave() {
     game.fade_mgr.start_fade(false, [] () {
         game.change_state(game.states.title_screen);
     });
@@ -94,7 +94,7 @@ void annex_screen_state::leave() {
 /**
  * @brief Loads the annex screen state into memory.
  */
-void annex_screen_state::load() {
+void AnnexScreen::load() {
     //Resources.
     bmp_bg =
         game.content.bitmaps.list.get(
@@ -114,7 +114,7 @@ void annex_screen_state::load() {
     //Load the intended concrete menu.
     switch(menu_to_load) {
     case ANNEX_SCREEN_MENU_AREA_SELECTION: {
-        area_menu_t* area_menu = new area_menu_t();
+        AreaMenu* area_menu = new AreaMenu();
         area_menu->area_type = area_menu_area_type;
         area_menu->leave_callback =
         [this] () {
@@ -145,7 +145,7 @@ void annex_screen_state::load() {
         },
         CONTENT_LOAD_LEVEL_FULL
         );
-        help_menu_t* help_menu = new help_menu_t();
+        HelpMenu* help_menu = new HelpMenu();
         help_menu->unload_callback =
         [this] () {
             game.content.unload_all(
@@ -172,7 +172,7 @@ void annex_screen_state::load() {
         break;
         
     } case ANNEX_SCREEN_MENU_OPTIONS: {
-        options_menu_t* options_menu = new options_menu_t();
+        OptionsMenu* options_menu = new OptionsMenu();
         options_menu->leave_callback = [this] () {
             game.states.title_screen->page_to_load = MAIN_MENU_PAGE_MAIN;
             leave();
@@ -181,7 +181,7 @@ void annex_screen_state::load() {
         break;
         
     } case ANNEX_SCREEN_MENU_STATS: {
-        stats_menu_t* stats_menu = new stats_menu_t();
+        StatsMenu* stats_menu = new StatsMenu();
         stats_menu->leave_callback = [this] () {
             game.states.title_screen->page_to_load = MAIN_MENU_PAGE_MAIN;
             leave();
@@ -205,7 +205,7 @@ void annex_screen_state::load() {
 /**
  * @brief Unloads the annex screen state from memory.
  */
-void annex_screen_state::unload() {
+void AnnexScreen::unload() {
     //Resources.
     game.content.bitmaps.list.free(bmp_bg);
     

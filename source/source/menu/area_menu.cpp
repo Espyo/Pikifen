@@ -45,7 +45,7 @@ const string SPECS_GUI_FILE_NAME = "area_menu_specs";
  * @param list List to add to.
  * @param text Text.
  */
-void area_menu_t::add_bullet(list_gui_item* list, const string &text) {
+void AreaMenu::add_bullet(ListGuiItem* list, const string &text) {
     size_t bullet_idx = list->children.size();
     const float BULLET_HEIGHT = 0.18f;
     const float BULLET_PADDING = 0.01f;
@@ -54,12 +54,12 @@ void area_menu_t::add_bullet(list_gui_item* list, const string &text) {
         (BULLETS_OFFSET + BULLET_HEIGHT / 2.0f) +
         ((BULLET_HEIGHT + BULLET_PADDING) * bullet_idx);
         
-    bullet_gui_item* bullet =
-        new bullet_gui_item(
+    BulletGuiItem* bullet =
+        new BulletGuiItem(
         text, game.sys_content.fnt_standard, COLOR_WHITE
     );
-    bullet->center = point(0.50f, bullet_center_y);
-    bullet->size = point(0.96f, BULLET_HEIGHT);
+    bullet->center = Point(0.50f, bullet_center_y);
+    bullet->size = Point(0.96f, BULLET_HEIGHT);
     list->add_child(bullet);
     gui.add_item(bullet);
 }
@@ -68,49 +68,49 @@ void area_menu_t::add_bullet(list_gui_item* list, const string &text) {
 /**
  * @brief Animates the GUI items inside of the info and specs pages.
  */
-void area_menu_t::animate_info_and_specs() {
+void AreaMenu::animate_info_and_specs() {
     info_name_text->start_juice_animation(
-        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
+        GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
     );
     subtitle_text->start_juice_animation(
-        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
+        GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
     );
     description_text->start_juice_animation(
-        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
+        GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
     );
     difficulty_text->start_juice_animation(
-        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
+        GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
     );
     tags_text->start_juice_animation(
-        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
+        GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
     );
     maker_text->start_juice_animation(
-        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
+        GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
     );
     version_text->start_juice_animation(
-        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
+        GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
     );
     if(area_type == AREA_TYPE_MISSION) {
         record_info_text->start_juice_animation(
-            gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
+            GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
         );
         record_date_text->start_juice_animation(
-            gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
+            GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
         );
         specs_name_text->start_juice_animation(
-            gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
+            GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
         );
         goal_text->start_juice_animation(
-            gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
+            GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
         );
         for(size_t c = 0; c < fail_list->children.size(); c++) {
             fail_list->children[c]->start_juice_animation(
-                gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
+                GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
             );
         }
         for(size_t c = 0; c < grading_list->children.size(); c++) {
             grading_list->children[c]->start_juice_animation(
-                gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
+                GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
             );
         }
     }
@@ -122,7 +122,7 @@ void area_menu_t::animate_info_and_specs() {
  *
  * @param area_idx Index of the newly-selected area.
  */
-void area_menu_t::change_info(size_t area_idx) {
+void AreaMenu::change_info(size_t area_idx) {
     if(area_idx == cur_area_idx) return;
     cur_area_idx = area_idx;
     
@@ -147,7 +147,7 @@ void area_menu_t::change_info(size_t area_idx) {
     }
     
     //Fill in the area's info.
-    area_data* area_ptr = game.content.areas.list[area_type][area_idx];
+    Area* area_ptr = game.content.areas.list[area_type][area_idx];
     info_name_text->text = area_ptr->name;
     subtitle_text->text =
         get_subtitle_or_mission_goal(
@@ -238,14 +238,14 @@ void area_menu_t::change_info(size_t area_idx) {
     //Now fill in the mission specs.
     if(area_type == AREA_TYPE_MISSION) {
         specs_name_text->text = area_ptr->name;
-        mission_data &mission = area_ptr->mission;
+        MissionData &mission = area_ptr->mission;
         goal_text->text =
             game.mission_goals[mission.goal]->
             get_player_description(&mission);
             
         for(size_t f = 0; f < game.mission_fail_conds.size(); f++) {
             if(has_flag(mission.fail_conditions, get_idx_bitmask(f))) {
-                mission_fail* cond = game.mission_fail_conds[f];
+                MissionFail* cond = game.mission_fail_conds[f];
                 add_bullet(
                     fail_list,
                     cond->get_player_description(&mission)
@@ -281,7 +281,7 @@ void area_menu_t::change_info(size_t area_idx) {
             );
             vector<string> score_notes;
             for(size_t c = 0; c < game.mission_score_criteria.size(); c++) {
-                mission_score_criterion* c_ptr =
+                MissionScoreCriterion* c_ptr =
                     game.mission_score_criteria[c];
                 int mult = c_ptr->get_multiplier(&mission);
                 if(mult != 0) {
@@ -306,7 +306,7 @@ void area_menu_t::change_info(size_t area_idx) {
             }
             vector<string> loss_notes;
             for(size_t c = 0; c < game.mission_score_criteria.size(); c++) {
-                mission_score_criterion* c_ptr =
+                MissionScoreCriterion* c_ptr =
                     game.mission_score_criteria[c];
                 if(
                     has_flag(
@@ -363,7 +363,7 @@ void area_menu_t::change_info(size_t area_idx) {
 /**
  * @brief Initializes the area info page GUI items.
  */
-void area_menu_t::init_gui_info_page() {
+void AreaMenu::init_gui_info_page() {
     gui.register_coords("info_name",    36,  6, 68,  8);
     gui.register_coords("subtitle",     36, 16, 68,  8);
     gui.register_coords("thumbnail",    85, 14, 26, 24);
@@ -385,26 +385,26 @@ void area_menu_t::init_gui_info_page() {
     
         //Name text.
         info_name_text =
-            new text_gui_item("", game.sys_content.fnt_area_name, COLOR_GOLD);
+            new TextGuiItem("", game.sys_content.fnt_area_name, COLOR_GOLD);
         info_box->add_child(info_name_text);
         gui.add_item(info_name_text, "info_name");
         
         //Subtitle text.
-        subtitle_text = new text_gui_item("", game.sys_content.fnt_area_name);
+        subtitle_text = new TextGuiItem("", game.sys_content.fnt_area_name);
         info_box->add_child(subtitle_text);
         gui.add_item(subtitle_text, "subtitle");
         
         //Thumbnail.
-        gui_item* thumb_item = new gui_item();
+        GuiItem* thumb_item = new GuiItem();
         thumb_item->on_draw =
-        [this] (const point & center, const point & size) {
+        [this] (const Point & center, const Point & size) {
             //Make it a square.
-            point final_size(
+            Point final_size(
                 std::min(size.x, size.y),
                 std::min(size.x, size.y)
             );
             //Align it to the top-right corner.
-            point final_center(
+            Point final_center(
                 (center.x + size.x / 2.0f) - final_size.x / 2.0f,
                 (center.y - size.y / 2.0f) + final_size.y / 2.0f
             );
@@ -421,7 +421,7 @@ void area_menu_t::init_gui_info_page() {
         
         //Description text.
         description_text =
-            new text_gui_item(
+            new TextGuiItem(
             "", game.sys_content.fnt_standard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
         );
         description_text->line_wrap = true;
@@ -430,21 +430,21 @@ void area_menu_t::init_gui_info_page() {
         
         if(area_type == AREA_TYPE_MISSION) {
             //Record label.
-            text_gui_item* record_label_text =
-                new text_gui_item("Record:", game.sys_content.fnt_standard);
+            TextGuiItem* record_label_text =
+                new TextGuiItem("Record:", game.sys_content.fnt_standard);
             info_box->add_child(record_label_text);
             gui.add_item(record_label_text, "record_label");
             
             //Record info.
             record_info_text =
-                new text_gui_item("", game.sys_content.fnt_standard);
+                new TextGuiItem("", game.sys_content.fnt_standard);
             info_box->add_child(record_info_text);
             gui.add_item(record_info_text, "record_info");
             
             //Record stamp.
-            gui_item* record_stamp_item = new gui_item();
+            GuiItem* record_stamp_item = new GuiItem();
             record_stamp_item->on_draw =
-            [this] (const point & center, const point & size) {
+            [this] (const Point & center, const Point & size) {
                 if(cur_stamp) {
                     draw_bitmap_in_box(
                         cur_stamp, center, size, true
@@ -455,9 +455,9 @@ void area_menu_t::init_gui_info_page() {
             gui.add_item(record_stamp_item, "record_stamp");
             
             //Record medal.
-            gui_item* record_medal_item = new gui_item();
+            GuiItem* record_medal_item = new GuiItem();
             record_medal_item->on_draw =
-            [this] (const point & center, const point & size) {
+            [this] (const Point & center, const Point & size) {
                 if(cur_medal) {
                     draw_bitmap_in_box(
                         cur_medal, center, size, true
@@ -469,7 +469,7 @@ void area_menu_t::init_gui_info_page() {
             
             //Record date.
             record_date_text =
-                new text_gui_item(
+                new TextGuiItem(
                 "", game.sys_content.fnt_slim, al_map_rgb(128, 128, 128)
             );
             info_box->add_child(record_date_text);
@@ -478,7 +478,7 @@ void area_menu_t::init_gui_info_page() {
         
         //Difficulty text.
         difficulty_text =
-            new text_gui_item(
+            new TextGuiItem(
             "", game.sys_content.fnt_standard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
         );
         info_box->add_child(difficulty_text);
@@ -486,7 +486,7 @@ void area_menu_t::init_gui_info_page() {
         
         //Tags text.
         tags_text =
-            new text_gui_item(
+            new TextGuiItem(
             "", game.sys_content.fnt_standard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
         );
         info_box->add_child(tags_text);
@@ -494,7 +494,7 @@ void area_menu_t::init_gui_info_page() {
         
         //Maker text.
         maker_text =
-            new text_gui_item(
+            new TextGuiItem(
             "", game.sys_content.fnt_standard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
         );
         info_box->add_child(maker_text);
@@ -502,7 +502,7 @@ void area_menu_t::init_gui_info_page() {
         
         //Version text.
         version_text =
-            new text_gui_item(
+            new TextGuiItem(
             "", game.sys_content.fnt_standard, COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
         );
         info_box->add_child(version_text);
@@ -515,7 +515,7 @@ void area_menu_t::init_gui_info_page() {
 /**
  * @brief Initializes the main GUI items.
  */
-void area_menu_t::init_gui_main() {
+void AreaMenu::init_gui_main() {
     gui.register_coords("back",          12,  5, 20,  6);
     gui.register_coords("back_input",     3,  7,  4,  4);
     gui.register_coords("header",        40,  5, 32,  6);
@@ -534,11 +534,11 @@ void area_menu_t::init_gui_main() {
     
     //Back button.
     gui.back_item =
-        new button_gui_item(
+        new ButtonGuiItem(
         "Back", game.sys_content.fnt_standard
     );
     gui.back_item->on_activate =
-    [this] (const point &) {
+    [this] (const Point &) {
         leave();
     };
     gui.back_item->on_get_tooltip =
@@ -549,8 +549,8 @@ void area_menu_t::init_gui_main() {
     gui_add_back_input_icon(&gui);
     
     //Header text.
-    text_gui_item* header_text =
-        new text_gui_item(
+    TextGuiItem* header_text =
+        new TextGuiItem(
         "PICK AN AREA:",
         game.sys_content.fnt_area_name, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_LEFT
     );
@@ -559,35 +559,35 @@ void area_menu_t::init_gui_main() {
     if(!game.content.areas.list[area_type].empty()) {
     
         //Area list box.
-        list_box = new list_gui_item();
+        list_box = new ListGuiItem();
         gui.add_item(list_box, "list");
         
         //Area list scrollbar.
-        scroll_gui_item* list_scroll = new scroll_gui_item();
+        ScrollGuiItem* list_scroll = new ScrollGuiItem();
         list_scroll->list_item = list_box;
         gui.add_item(list_scroll, "list_scroll");
         
         //Items for the various areas.
         for(size_t a = 0; a < game.content.areas.list[area_type].size(); a++) {
-            area_data* area_ptr = game.content.areas.list[area_type][a];
+            Area* area_ptr = game.content.areas.list[area_type][a];
             const float BUTTON_HEIGHT = 0.09f;
             const float center_y = 0.045f + a * 0.10f;
             
             //Area button.
-            button_gui_item* area_button =
-                new button_gui_item(area_ptr->name, game.sys_content.fnt_standard);
+            ButtonGuiItem* area_button =
+                new ButtonGuiItem(area_ptr->name, game.sys_content.fnt_standard);
             area_button->center =
-                point(
+                Point(
                     area_type == AREA_TYPE_MISSION ? 0.40f : 0.50f,
                     center_y
                 );
             area_button->size =
-                point(
+                Point(
                     area_type == AREA_TYPE_MISSION ? 0.80f : 1.00f,
                     BUTTON_HEIGHT
                 );
             area_button->on_activate =
-            [this, area_ptr] (const point &) {
+            [this, area_ptr] (const Point &) {
                 game.states.gameplay->path_of_area_to_load = area_ptr->manifest->path;
                 game.fade_mgr.start_fade(false, [] () {
                     game.change_state(game.states.gameplay);
@@ -606,13 +606,13 @@ void area_menu_t::init_gui_main() {
             
             if(area_type == AREA_TYPE_MISSION) {
                 //Stamp item.
-                gui_item* stamp_item = new gui_item();
+                GuiItem* stamp_item = new GuiItem();
                 stamp_item->center =
-                    point(0.85f, center_y - (BUTTON_HEIGHT * 0.15f));
+                    Point(0.85f, center_y - (BUTTON_HEIGHT * 0.15f));
                 stamp_item->size =
-                    point(0.12f, BUTTON_HEIGHT * 0.60f);
+                    Point(0.12f, BUTTON_HEIGHT * 0.60f);
                 stamp_item->on_draw =
-                [this, a] (const point & center, const point & size) {
+                [this, a] (const Point & center, const Point & size) {
                     if(area_records[a].clear) {
                         draw_bitmap_in_box(
                             game.sys_content.bmp_mission_clear,
@@ -624,13 +624,13 @@ void area_menu_t::init_gui_main() {
                 gui.add_item(stamp_item);
                 
                 //Medal item.
-                gui_item* medal_item = new gui_item();
+                GuiItem* medal_item = new GuiItem();
                 medal_item->center =
-                    point(0.95f, center_y + (BUTTON_HEIGHT * 0.15f));
+                    Point(0.95f, center_y + (BUTTON_HEIGHT * 0.15f));
                 medal_item->size =
-                    point(0.12f, BUTTON_HEIGHT * 0.60f);
+                    Point(0.12f, BUTTON_HEIGHT * 0.60f);
                 medal_item->on_draw =
-                [this, area_ptr, a] (const point & center, const point & size) {
+                [this, area_ptr, a] (const Point & center, const Point & size) {
                     ALLEGRO_BITMAP* medal_bmp = nullptr;
                     switch(area_ptr->mission.grading_mode) {
                     case MISSION_GRADING_MODE_POINTS: {
@@ -667,9 +667,9 @@ void area_menu_t::init_gui_main() {
         }
         
         //Info box item.
-        info_box = new gui_item();
+        info_box = new GuiItem();
         info_box->on_draw =
-        [] (const point & center, const point & size) {
+        [] (const Point & center, const Point & size) {
             draw_textured_box(
                 center, size, game.sys_content.bmp_frame_box,
                 COLOR_TRANSPARENT_WHITE
@@ -678,10 +678,10 @@ void area_menu_t::init_gui_main() {
         gui.add_item(info_box, "info_box");
         
         //Random button.
-        button_gui_item* random_button =
-            new button_gui_item("", game.sys_content.fnt_standard);
+        ButtonGuiItem* random_button =
+            new ButtonGuiItem("", game.sys_content.fnt_standard);
         random_button->on_draw =
-        [random_button] (const point & center, const point & size) {
+        [random_button] (const Point & center, const Point & size) {
             draw_button(
                 center, size, "", game.sys_content.fnt_standard, COLOR_WHITE,
                 random_button->selected
@@ -692,9 +692,9 @@ void area_menu_t::init_gui_main() {
             );
         };
         random_button->on_activate =
-        [this] (const point &) {
+        [this] (const Point &) {
             size_t area_idx = game.rng.i(0, (int) (area_buttons.size() - 1));
-            area_buttons[area_idx]->on_activate(point());
+            area_buttons[area_idx]->on_activate(Point());
         };
         random_button->on_get_tooltip =
         [] () { return "Pick a random area."; };
@@ -702,15 +702,15 @@ void area_menu_t::init_gui_main() {
         
         if(area_type == AREA_TYPE_MISSION) {
             //View toggle button.
-            button_gui_item* view_toggle_button =
-                new button_gui_item(
+            ButtonGuiItem* view_toggle_button =
+                new ButtonGuiItem(
                 "Show mission specs",
                 game.sys_content.fnt_standard
             );
             view_toggle_button->on_activate =
-            [this, view_toggle_button] (const point &) {
-                gui_item* box_to_show = nullptr;
-                gui_item* box_to_hide = nullptr;
+            [this, view_toggle_button] (const Point &) {
+                GuiItem* box_to_show = nullptr;
+                GuiItem* box_to_hide = nullptr;
                 if(show_mission_specs) {
                     box_to_show = info_box;
                     box_to_hide = specs_box;
@@ -735,9 +735,9 @@ void area_menu_t::init_gui_main() {
             gui.add_item(view_toggle_button, "view_toggle");
             
             //Specs box item.
-            specs_box = new gui_item();
+            specs_box = new GuiItem();
             specs_box->on_draw =
-            [] (const point & center, const point & size) {
+            [] (const Point & center, const Point & size) {
                 draw_textured_box(
                     center, size, game.sys_content.bmp_frame_box,
                     COLOR_TRANSPARENT_WHITE
@@ -750,8 +750,8 @@ void area_menu_t::init_gui_main() {
     } else {
     
         //No areas found text.
-        text_gui_item* no_areas_text =
-            new text_gui_item(
+        TextGuiItem* no_areas_text =
+            new TextGuiItem(
             "No areas found! Try making your own in the area editor!",
             game.sys_content.fnt_standard
         );
@@ -760,8 +760,8 @@ void area_menu_t::init_gui_main() {
     }
     
     //Tooltip text.
-    tooltip_gui_item* tooltip_text =
-        new tooltip_gui_item(&gui);
+    TooltipGuiItem* tooltip_text =
+        new TooltipGuiItem(&gui);
     gui.add_item(tooltip_text, "tooltip");
 }
 
@@ -769,7 +769,7 @@ void area_menu_t::init_gui_main() {
 /**
  * @brief Initializes the mission specs page GUI items.
  */
-void area_menu_t::init_gui_specs_page() {
+void AreaMenu::init_gui_specs_page() {
     gui.register_coords("specs_name",     50,  5, 96,  6);
     gui.register_coords("goal_header",    50, 13, 96,  6);
     gui.register_coords("goal",           50, 21, 96,  6);
@@ -787,52 +787,52 @@ void area_menu_t::init_gui_specs_page() {
     
         //Name text.
         specs_name_text =
-            new text_gui_item("", game.sys_content.fnt_area_name, COLOR_GOLD);
+            new TextGuiItem("", game.sys_content.fnt_area_name, COLOR_GOLD);
         specs_box->add_child(specs_name_text);
         gui.add_item(specs_name_text, "specs_name");
         
         //Goal header text.
-        text_gui_item* goal_header_text =
-            new text_gui_item("Goal", game.sys_content.fnt_area_name);
+        TextGuiItem* goal_header_text =
+            new TextGuiItem("Goal", game.sys_content.fnt_area_name);
         specs_box->add_child(goal_header_text);
         gui.add_item(goal_header_text, "goal_header");
         
         //Goal explanation text.
         goal_text =
-            new text_gui_item("", game.sys_content.fnt_standard);
+            new TextGuiItem("", game.sys_content.fnt_standard);
         specs_box->add_child(goal_text);
         gui.add_item(goal_text, "goal");
         
         //Fail conditions header text.
-        text_gui_item* fail_header_text =
-            new text_gui_item("Fail conditions", game.sys_content.fnt_area_name);
+        TextGuiItem* fail_header_text =
+            new TextGuiItem("Fail conditions", game.sys_content.fnt_area_name);
         specs_box->add_child(fail_header_text);
         gui.add_item(fail_header_text, "fail_header");
         
         //Fail condition explanation list.
-        fail_list = new list_gui_item();
+        fail_list = new ListGuiItem();
         specs_box->add_child(fail_list);
         gui.add_item(fail_list, "fail_list");
         
         //Fail condition explanation scrollbar.
-        scroll_gui_item* fail_scroll = new scroll_gui_item();
+        ScrollGuiItem* fail_scroll = new ScrollGuiItem();
         fail_scroll->list_item = fail_list;
         specs_box->add_child(fail_scroll);
         gui.add_item(fail_scroll, "fail_scroll");
         
         //Grading header text.
-        text_gui_item* grading_header_text =
-            new text_gui_item("Grading", game.sys_content.fnt_area_name);
+        TextGuiItem* grading_header_text =
+            new TextGuiItem("Grading", game.sys_content.fnt_area_name);
         specs_box->add_child(grading_header_text);
         gui.add_item(grading_header_text, "grading_header");
         
         //Grading explanation list.
-        grading_list = new list_gui_item();
+        grading_list = new ListGuiItem();
         specs_box->add_child(grading_list);
         gui.add_item(grading_list, "grading_list");
         
         //Grading explanation scrollbar.
-        scroll_gui_item* grading_scroll = new scroll_gui_item();
+        ScrollGuiItem* grading_scroll = new ScrollGuiItem();
         grading_scroll->list_item = grading_list;
         specs_box->add_child(grading_scroll);
         gui.add_item(grading_scroll, "grading_scroll");
@@ -843,15 +843,15 @@ void area_menu_t::init_gui_specs_page() {
 /**
  * @brief Loads the menu.
  */
-void area_menu_t::load() {
+void AreaMenu::load() {
     //Mission records.
     if(area_type == AREA_TYPE_MISSION) {
-        data_node mission_records;
+        DataNode mission_records;
         mission_records.load_file(FILE_PATHS_FROM_ROOT::MISSION_RECORDS, true, false, true);
         
         for(size_t a = 0; a < game.content.areas.list[AREA_TYPE_MISSION].size(); a++) {
-            area_data* area_ptr = game.content.areas.list[AREA_TYPE_MISSION][a];
-            mission_record record;
+            Area* area_ptr = game.content.areas.list[AREA_TYPE_MISSION][a];
+            MissionRecord record;
             
             load_area_mission_record(&mission_records, area_ptr, record);
             
@@ -873,5 +873,5 @@ void area_menu_t::load() {
     
     //Finish the menu class setup.
     guis.push_back(&gui);
-    menu_t::load();
+    Menu::load();
 }

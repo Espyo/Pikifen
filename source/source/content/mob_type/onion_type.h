@@ -54,14 +54,14 @@ enum ONION_ANIM {
  * @brief An Onion type.
  * It's basically associated with one or more Pikmin types.
  */
-class onion_type : public mob_type {
+class OnionType : public MobType {
 
 public:
 
     //--- Members ---
     
     //Nest data.
-    pikmin_nest_type_t* nest = nullptr;
+    PikminNestType* nest = nullptr;
     
     //Sound data index for the pop sound. Cache for performance.
     size_t sound_pop_idx = INVALID;
@@ -69,10 +69,10 @@ public:
     
     //--- Function declarations ---
     
-    onion_type();
-    ~onion_type();
-    void load_cat_properties(data_node* file) override;
-    void load_cat_resources(data_node* file) override;
+    OnionType();
+    ~OnionType();
+    void load_cat_properties(DataNode* file) override;
+    void load_cat_resources(DataNode* file) override;
     anim_conversion_vector get_anim_conversions() const override;
     
 };

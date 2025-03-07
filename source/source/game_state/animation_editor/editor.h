@@ -35,7 +35,7 @@ extern const float ZOOM_MIN_LEVEL;
 /**
  * @brief Info about the animation editor.
  */
-class animation_editor : public editor {
+class AnimationEditor : public Editor {
 
 public:
 
@@ -47,7 +47,7 @@ public:
     
     //--- Function declarations ---
     
-    animation_editor();
+    AnimationEditor();
     void do_logic() override;
     void do_drawing() override;
     void load() override;
@@ -101,7 +101,7 @@ private:
     //--- Members ---
     
     //Currently loaded animation database.
-    animation_database db;
+    AnimationDatabase db;
     
     //Is the current animation playing?
     bool anim_playing = false;
@@ -122,19 +122,19 @@ private:
     bool comparison_blink_show = true;
     
     //Time left until the blinking comparison sprite's visibility is swapped.
-    timer comparison_blink_timer;
+    Timer comparison_blink_timer;
     
     //Comparison sprite to use in sprite comparison mode.
-    sprite* comparison_sprite = nullptr;
+    Sprite* comparison_sprite = nullptr;
     
     //Is the comparison sprite mode tinting the sprites?
     bool comparison_tint = true;
     
     //Animation instance, for when the user is editing animations.
-    animation_instance cur_anim_i;
+    AnimationInstance cur_anim_i;
     
     //Current hitbox.
-    hitbox* cur_hitbox = nullptr;
+    Hitbox* cur_hitbox = nullptr;
     
     //The alpha is calculated using the sine of this value.
     float cur_hitbox_alpha = 0.0f;
@@ -146,7 +146,7 @@ private:
     unsigned char cur_maturity = 0;
     
     //Current sprite, for when the user is editing sprites.
-    sprite* cur_sprite = nullptr;
+    Sprite* cur_sprite = nullptr;
     
     //Keep the aspect ratio when resizing the current sprite?
     bool cur_sprite_keep_aspect_ratio = true;
@@ -155,7 +155,7 @@ private:
     bool cur_sprite_keep_area = false;
     
     //The current transformation widget.
-    transformation_widget cur_transformation_widget;
+    TransformationWidget cur_transformation_widget;
     
     //Is the grid visible?
     bool grid_visible = true;
@@ -167,10 +167,10 @@ private:
     string last_spritesheet_used;
     
     //Picker info for the picker in the "load" dialog.
-    picker_info load_dialog_picker;
+    Picker load_dialog_picker;
     
     //Mob type of the currently loaded animation database, if any.
-    mob_type* loaded_mob_type = nullptr;
+    MobType* loaded_mob_type = nullptr;
     
     //Is the mob radius visible?
     bool mob_radius_visible = false;
@@ -179,7 +179,7 @@ private:
     bool leader_silhouette_visible = false;
     
     //Before entering the sprite bitmap state, this was the camera position.
-    point pre_sprite_bmp_cam_pos;
+    Point pre_sprite_bmp_cam_pos;
     
     //Before entering the sprite bitmap state, this was the camera zoom.
     float pre_sprite_bmp_cam_zoom = 1.0f;
@@ -200,13 +200,13 @@ private:
     bool use_bg = false;
     
     //Position of the load widget.
-    point load_widget_pos;
+    Point load_widget_pos;
     
     //Position of the reload widget.
-    point reload_widget_pos;
+    Point reload_widget_pos;
     
     //Position of the quit widget.
-    point quit_widget_pos;
+    Point quit_widget_pos;
     
     //Info about the "new" dialog.
     struct {
@@ -221,7 +221,7 @@ private:
         string custom_mob_cat;
         
         //Selected mob type, when picking a mob type.
-        mob_type* mob_type_ptr = nullptr;
+        MobType* mob_type_ptr = nullptr;
         
         //Internal name of the new animation database.
         string internal_name = "my_animation";
@@ -267,11 +267,11 @@ private:
     );
     void play_sound(size_t sound_idx);
     void reload_anim_dbs();
-    void rename_animation(animation* anim, const string &new_name);
-    void rename_body_part(body_part* part, const string &new_name);
-    void rename_sprite(sprite* spr, const string &new_name);
+    void rename_animation(Animation* anim, const string &new_name);
+    void rename_body_part(BodyPart* part, const string &new_name);
+    void rename_sprite(Sprite* spr, const string &new_name);
     void resize_everything(float mult);
-    void resize_sprite(sprite* s, float mult);
+    void resize_sprite(Sprite* s, float mult);
     bool save_anim_db();
     void setup_for_new_anim_db_post();
     void setup_for_new_anim_db_pre();
@@ -287,19 +287,19 @@ private:
     );
     void draw_comparison();
     void draw_side_view_hitbox(
-        hitbox* h_ptr, const ALLEGRO_COLOR &color,
+        Hitbox* h_ptr, const ALLEGRO_COLOR &color,
         const ALLEGRO_COLOR &outline_color, float outline_thickness
     );
     void draw_side_view_leader_silhouette(float x_offset);
-    void draw_side_view_sprite(const sprite* s);
+    void draw_side_view_sprite(const Sprite* s);
     void draw_timeline();
     void draw_top_down_view_hitbox(
-        hitbox* h_ptr, const ALLEGRO_COLOR &color,
+        Hitbox* h_ptr, const ALLEGRO_COLOR &color,
         const ALLEGRO_COLOR &outline_color, float outline_thickness
     );
     void draw_top_down_view_leader_silhouette(float x_offset);
-    void draw_top_down_view_mob_radius(mob_type* mt);
-    void draw_top_down_view_sprite(sprite* s);
+    void draw_top_down_view_mob_radius(MobType* mt);
+    void draw_top_down_view_sprite(Sprite* s);
     void open_load_dialog();
     void open_new_dialog();
     void open_options_dialog();
@@ -337,8 +337,8 @@ private:
     void process_gui_panel_animation_data();
     void process_gui_panel_animation_header();
     void process_gui_panel_body_part();
-    void process_gui_panel_frame(frame* &frame_ptr);
-    void process_gui_panel_frame_header(frame* &frame_ptr);
+    void process_gui_panel_frame(Frame* &frame_ptr);
+    void process_gui_panel_frame_header(Frame* &frame_ptr);
     void process_gui_panel_info();
     void process_gui_panel_main();
     void process_gui_panel_options();

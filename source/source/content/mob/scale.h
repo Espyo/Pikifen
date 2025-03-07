@@ -19,14 +19,14 @@
  * @brief A scale is something that measures the weight being applied on
  * top of it, and does something depending on the value.
  */
-class scale : public mob {
+class Scale : public Mob {
 
 public:
 
     //--- Members ---
     
     //What type of scale it is.
-    scale_type* sca_type = nullptr;
+    ScaleType* sca_type = nullptr;
     
     //Weight number that must be met to reach a goal. 0 for none. Type override.
     size_t goal_number = 0;
@@ -34,12 +34,12 @@ public:
     
     //--- Function declarations ---
     
-    scale(const point &pos, scale_type* type, float angle);
+    Scale(const Point &pos, ScaleType* type, float angle);
     float calculate_cur_weight() const;
     bool get_fraction_numbers_info(
         float* fraction_value_nr, float* fraction_req_nr,
         ALLEGRO_COLOR* fraction_color
     ) const override;
-    void read_script_vars(const script_var_reader &svr) override;
+    void read_script_vars(const ScriptVarReader &svr) override;
     
 };

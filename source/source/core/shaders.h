@@ -41,7 +41,7 @@ enum SHADER_TYPE {
 /**
  * @brief Manages everything regarding shaders.
  */
-struct shader_manager {
+struct ShaderManager {
 
     //--- Members ---
     

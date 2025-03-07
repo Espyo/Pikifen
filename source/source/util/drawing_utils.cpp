@@ -28,14 +28,14 @@
  * @param tint Tint the bitmap with this color.
  */
 void draw_bitmap(
-    ALLEGRO_BITMAP* bmp, const point &center,
-    const point &size, float angle, const ALLEGRO_COLOR &tint
+    ALLEGRO_BITMAP* bmp, const Point &center,
+    const Point &size, float angle, const ALLEGRO_COLOR &tint
 ) {
 
     if(size.x == 0 && size.y == 0) return;
     
-    point bmp_size = get_bitmap_dimensions(bmp);
-    point scale = size / bmp_size;
+    Point bmp_size = get_bitmap_dimensions(bmp);
+    Point scale = size / bmp_size;
     al_draw_tinted_scaled_rotated_bitmap(
         bmp,
         tint,
@@ -63,7 +63,7 @@ void draw_bitmap(
  * @param tint Tint the bitmap with this color.
  */
 void draw_bitmap_in_box(
-    ALLEGRO_BITMAP* bmp, const point &center, const point &box_size,
+    ALLEGRO_BITMAP* bmp, const Point &center, const Point &box_size,
     bool scale_up, float angle, const ALLEGRO_COLOR &tint
 ) {
     if(box_size.x == 0 || box_size.y == 0) return;
@@ -75,9 +75,9 @@ void draw_bitmap_in_box(
     float max_h = scale_up ? box_size.y : std::min((int) box_size.y, bmp_h);
     
     if(w_diff > h_diff) {
-        draw_bitmap(bmp, center, point(max_w, -1), angle, tint);
+        draw_bitmap(bmp, center, Point(max_w, -1), angle, tint);
     } else {
-        draw_bitmap(bmp, center, point(-1, max_h), angle, tint);
+        draw_bitmap(bmp, center, Point(-1, max_h), angle, tint);
     }
 }
 
@@ -92,12 +92,12 @@ void draw_bitmap_in_box(
  * @param thickness Thickness of the lines.
  */
 void draw_equilateral_triangle(
-    const point &center, float radius, float angle,
+    const Point &center, float radius, float angle,
     const ALLEGRO_COLOR &color, float thickness
 ) {
-    point v1 = center + rotate_point(point(radius, 0.0f), angle);
-    point v2 = center + rotate_point(point(radius, 0.0f), angle + TAU / 3.0f);
-    point v3 = center + rotate_point(point(radius, 0.0f), angle - TAU / 3.0f);
+    Point v1 = center + rotate_point(Point(radius, 0.0f), angle);
+    Point v2 = center + rotate_point(Point(radius, 0.0f), angle + TAU / 3.0f);
+    Point v3 = center + rotate_point(Point(radius, 0.0f), angle - TAU / 3.0f);
     al_draw_triangle(v1.x, v1.y, v2.x, v2.y, v3.x, v3.y, color, thickness);
 }
 
@@ -110,7 +110,7 @@ void draw_equilateral_triangle(
  * @param color Color the diamond with this color.
  */
 void draw_filled_diamond(
-    const point &center, float radius, const ALLEGRO_COLOR &color
+    const Point &center, float radius, const ALLEGRO_COLOR &color
 ) {
     ALLEGRO_VERTEX vert[4];
     for(unsigned char v = 0; v < 4; v++) {
@@ -140,12 +140,12 @@ void draw_filled_diamond(
  * @param color Its color.
  */
 void draw_filled_equilateral_triangle(
-    const point &center, float radius, float angle,
+    const Point &center, float radius, float angle,
     const ALLEGRO_COLOR &color
 ) {
-    point v1 = center + rotate_point(point(radius, 0.0f), angle);
-    point v2 = center + rotate_point(point(radius, 0.0f), angle + TAU / 3.0f);
-    point v3 = center + rotate_point(point(radius, 0.0f), angle - TAU / 3.0f);
+    Point v1 = center + rotate_point(Point(radius, 0.0f), angle);
+    Point v2 = center + rotate_point(Point(radius, 0.0f), angle + TAU / 3.0f);
+    Point v3 = center + rotate_point(Point(radius, 0.0f), angle - TAU / 3.0f);
     al_draw_filled_triangle(v1.x, v1.y, v2.x, v2.y, v3.x, v3.y, color);
 }
 
@@ -161,7 +161,7 @@ void draw_filled_equilateral_triangle(
  * @param color Color the rectangle with this color.
  */
 void draw_filled_rounded_rectangle(
-    const point &center, const point &size, float radii,
+    const Point &center, const Point &size, float radii,
     const ALLEGRO_COLOR &color
 ) {
     float final_radii = std::min(radii, size.x / 2.0f);
@@ -186,7 +186,7 @@ void draw_filled_rounded_rectangle(
  * @param thickness Thickness to use.
  */
 void draw_rotated_rectangle(
-    const point &center, const point &dimensions,
+    const Point &center, const Point &dimensions,
     float angle, const ALLEGRO_COLOR &color, float thickness
 ) {
     ALLEGRO_TRANSFORM rot_transform, old_transform;
@@ -218,7 +218,7 @@ void draw_rotated_rectangle(
  * @param thickness Line thickness.
  */
 void draw_rounded_rectangle(
-    const point &center, const point &size, float radii,
+    const Point &center, const Point &size, float radii,
     const ALLEGRO_COLOR &color, float thickness
 ) {
     float final_radii = std::min(radii, size.x / 2.0f);
@@ -250,9 +250,9 @@ void draw_rounded_rectangle(
  */
 void draw_text(
     const string &text, const ALLEGRO_FONT* const font,
-    const point &where, const point &box_size, const ALLEGRO_COLOR &color,
+    const Point &where, const Point &box_size, const ALLEGRO_COLOR &color,
     int text_flags, V_ALIGN_MODE v_align, bitmask_8_t settings,
-    const point &further_scale
+    const Point &further_scale
 ) {
     //Initial checks.
     if(text.empty()) return;
@@ -269,8 +269,8 @@ void draw_text(
     );
     
     //Figure out the scales.
-    point text_orig_size(text_orig_w, text_orig_h);
-    point text_final_scale =
+    Point text_orig_size(text_orig_w, text_orig_h);
+    Point text_final_scale =
         scale_rectangle_to_box(
             text_orig_size,
             box_size,
@@ -280,7 +280,7 @@ void draw_text(
             !has_flag(settings, TEXT_SETTING_FLAG_CANT_SHRINK_Y),
             has_flag(settings, TEXT_SETTING_FLAG_CAN_CHANGE_RATIO)
         );
-    point text_final_size = text_orig_size * text_final_scale;
+    Point text_final_size = text_orig_size * text_final_scale;
     
     //Figure out offsets.
     float v_align_offset =
@@ -323,9 +323,9 @@ void draw_text(
  */
 void draw_text_lines(
     const string &text, const ALLEGRO_FONT* const font,
-    const point &where, const point &box_size, const ALLEGRO_COLOR &color,
+    const Point &where, const Point &box_size, const ALLEGRO_COLOR &color,
     int text_flags, V_ALIGN_MODE v_align, bitmask_8_t settings,
-    const point &further_scale
+    const Point &further_scale
 ) {
     //Initial checks.
     if(text.empty()) return;
@@ -340,10 +340,10 @@ void draw_text_lines(
     get_multiline_text_dimensions(
         lines, font, &total_orig_width, &total_orig_height, &line_orig_height
     );
-    point total_orig_size(total_orig_width, total_orig_height);
+    Point total_orig_size(total_orig_width, total_orig_height);
     
     //Figure out the scales.
-    point total_final_scale =
+    Point total_final_scale =
         scale_rectangle_to_box(
             total_orig_size, box_size,
             !has_flag(settings, TEXT_SETTING_FLAG_CANT_GROW_X),
@@ -352,7 +352,7 @@ void draw_text_lines(
             !has_flag(settings, TEXT_SETTING_FLAG_CANT_SHRINK_Y),
             has_flag(settings, TEXT_SETTING_FLAG_CAN_CHANGE_RATIO)
         );
-    point total_final_size = total_orig_size * total_final_scale;
+    Point total_final_size = total_orig_size * total_final_scale;
     
     //Figure out offsets.
     float v_align_offset =
@@ -393,7 +393,7 @@ void draw_text_lines(
  * @param tint Tint the texture with this color.
  */
 void draw_textured_box(
-    const point &center, const point &size, ALLEGRO_BITMAP* texture,
+    const Point &center, const Point &size, ALLEGRO_BITMAP* texture,
     const ALLEGRO_COLOR &tint
 ) {
     //While using al_hold_bitmap_drawing is an optimization, we can't use it
@@ -404,7 +404,7 @@ void draw_textured_box(
     //Vertex total. 9 sections * 2 tris * 3 vertexes.
     constexpr size_t total_vertexes = 9 * 2 * 3;
     //Top-left coordinates.
-    const point tl = center - size / 2.0f;
+    const Point tl = center - size / 2.0f;
     //Bitmap size.
     const int bmp_w = al_get_bitmap_width(texture);
     const int bmp_h = al_get_bitmap_height(texture);
@@ -412,12 +412,12 @@ void draw_textured_box(
     //Workaround: For some reason there's a seam visible when the edges are
     //around < 6 pixels wide. I can't figure out why. So I'm bumping
     //this threshold to be 8 pixels longer than normal.
-    const point corner_treshold(
+    const Point corner_treshold(
         std::max(8.0f, size.x / 2.0f - 8),
         std::max(8.0f, size.y / 2.0f - 8)
     );
     //Corner size.
-    point corner_size(bmp_w / 3.0f, bmp_h / 3.0f);
+    Point corner_size(bmp_w / 3.0f, bmp_h / 3.0f);
     if(corner_treshold.x < corner_size.x) {
         corner_size.x = corner_treshold.x;
         corner_size.y = corner_size.x * (bmp_w / bmp_h);
@@ -578,7 +578,7 @@ void get_multiline_text_dimensions(
  * @param out_old_transform The old (current) transform is returned here.
  */
 void get_text_drawing_transforms(
-    const point &where, const point &scale,
+    const Point &where, const Point &scale,
     float text_orig_oy, float v_align_offset,
     ALLEGRO_TRANSFORM* out_text_transform, ALLEGRO_TRANSFORM* out_old_transform
 ) {

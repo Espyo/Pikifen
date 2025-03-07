@@ -531,7 +531,7 @@ enum MOB_ACTION_PARAM {
 /**
  * @brief Info about a parameter that a mob action can receive.
  */
-struct mob_action_param {
+struct MobActionParam {
 
     //--- Members ---
     
@@ -550,7 +550,7 @@ struct mob_action_param {
     
     //--- Function declarations ---
     
-    mob_action_param(
+    MobActionParam(
         const string &name,
         const MOB_ACTION_PARAM type,
         bool force_const,
@@ -563,15 +563,15 @@ struct mob_action_param {
 /**
  * @brief Info about how to run a specific instance of a mob action.
  */
-struct mob_action_run_data {
+struct MobActionRunData {
 
     //--- Members ---
     
     //Mob that will run the action.
-    mob* m = nullptr;
+    Mob* m = nullptr;
     
     //Action call information.
-    mob_action_call* call = nullptr;
+    MobActionCall* call = nullptr;
     
     //Arguments used.
     vector<string> args;
@@ -588,7 +588,7 @@ struct mob_action_run_data {
     
     //--- Function declarations ---
     
-    mob_action_run_data(mob* m, mob_action_call* call);
+    MobActionRunData(Mob* m, MobActionCall* call);
     
 };
 
@@ -598,7 +598,7 @@ struct mob_action_run_data {
  *
  * The first parameter is the data to run with.
  */
-typedef void (mob_action_code_t)(mob_action_run_data &data);
+typedef void (mob_action_code_t)(MobActionRunData &data);
 
 /**
  * @brief Function to run when a mob action is loaded from a script.
@@ -606,13 +606,13 @@ typedef void (mob_action_code_t)(mob_action_run_data &data);
  * The first parameter is the action call data.
  * Returns whether it loaded successfully.
  */
-typedef bool (mob_action_load_code_t)(mob_action_call &call);
+typedef bool (mob_action_load_code_t)(MobActionCall &call);
 
 
 /**
  * @brief Info about a mob action.
  */
-struct mob_action {
+struct MobAction {
 
     //--- Members ---
     
@@ -629,7 +629,7 @@ struct mob_action {
     mob_action_load_code_t* extra_load_logic = nullptr;
     
     //Parameters that it can take.
-    vector<mob_action_param> parameters;
+    vector<MobActionParam> parameters;
     
 };
 
@@ -638,12 +638,12 @@ struct mob_action {
  * @brief Info about how a specific call to a mob action got declared
  * in the FSM.
  */
-struct mob_action_call {
+struct MobActionCall {
 
     //--- Members ---
     
     //Action to run, if any.
-    mob_action* action = nullptr;
+    MobAction* action = nullptr;
     
     //Custom code to run, if any.
     custom_action_code_t code = nullptr;
@@ -661,145 +661,145 @@ struct mob_action_call {
     MOB_EV parent_event = MOB_EV_UNKNOWN;
     
     //Mob type that owns these calls.
-    mob_type* mt = nullptr;
+    MobType* mt = nullptr;
     
     
     //--- Function declarations ---
     
-    explicit mob_action_call(MOB_ACTION type = MOB_ACTION_UNKNOWN);
-    explicit mob_action_call(custom_action_code_t code);
-    bool load_from_data_node(data_node* dn, mob_type* mt);
-    bool run(mob* m, void* custom_data_1, void* custom_data_2);
+    explicit MobActionCall(MOB_ACTION type = MOB_ACTION_UNKNOWN);
+    explicit MobActionCall(custom_action_code_t code);
+    bool load_from_data_node(DataNode* dn, MobType* mt);
+    bool run(Mob* m, void* custom_data_1, void* custom_data_2);
     
 };
 
 
 namespace mob_action_runners {
-void add_health(mob_action_run_data &data);
-void add_health(mob_action_run_data &data);
-void arachnorb_plan_logic(mob_action_run_data &data);
-void calculate(mob_action_run_data &data);
-void delete_function(mob_action_run_data &data);
-void drain_liquid(mob_action_run_data &data);
-void finish_dying(mob_action_run_data &data);
-void focus(mob_action_run_data &data);
-void follow_path_randomly(mob_action_run_data &data);
-void follow_path_to_absolute(mob_action_run_data &data);
-void get_angle(mob_action_run_data &data);
-void get_chomped(mob_action_run_data &data);
-void get_coordinates_from_angle(mob_action_run_data &data);
-void get_distance(mob_action_run_data &data);
-void get_event_info(mob_action_run_data &data);
-void get_area_info(mob_action_run_data &data);
-void get_floor_z(mob_action_run_data &data);
-void get_mob_info(mob_action_run_data &data);
-void get_focus_var(mob_action_run_data &data);
-void get_random_float(mob_action_run_data &data);
-void get_random_int(mob_action_run_data &data);
-void goto_function(mob_action_run_data &data);
-void hold_focus(mob_action_run_data &data);
-void if_function(mob_action_run_data &data);
-void link_with_focus(mob_action_run_data &data);
-void load_focus_memory(mob_action_run_data &data);
-void move_to_absolute(mob_action_run_data &data);
-void move_to_relative(mob_action_run_data &data);
-void move_to_target(mob_action_run_data &data);
-void order_release(mob_action_run_data &data);
-void play_sound(mob_action_run_data &data);
-void print(mob_action_run_data &data);
-void receive_status(mob_action_run_data &data);
-void release(mob_action_run_data &data);
-void release_stored_mobs(mob_action_run_data &data);
-void remove_status(mob_action_run_data &data);
-void save_focus_memory(mob_action_run_data &data);
-void send_message_to_focus(mob_action_run_data &data);
-void send_message_to_links(mob_action_run_data &data);
-void send_message_to_nearby(mob_action_run_data &data);
-void set_animation(mob_action_run_data &data);
-void set_can_block_paths(mob_action_run_data &data);
-void set_far_reach(mob_action_run_data &data);
-void set_flying(mob_action_run_data &data);
-void set_gravity(mob_action_run_data &data);
-void set_health(mob_action_run_data &data);
-void set_height(mob_action_run_data &data);
-void set_hiding(mob_action_run_data &data);
-void set_holdable(mob_action_run_data &data);
-void set_huntable(mob_action_run_data &data);
-void set_limb_animation(mob_action_run_data &data);
-void set_near_reach(mob_action_run_data &data);
-void set_radius(mob_action_run_data &data);
-void set_state(mob_action_run_data &data);
-void set_sector_scroll(mob_action_run_data &data);
-void set_shadow_visibility(mob_action_run_data &data);
-void set_tangible(mob_action_run_data &data);
-void set_team(mob_action_run_data &data);
-void set_timer(mob_action_run_data &data);
-void set_var(mob_action_run_data &data);
-void show_message_from_var(mob_action_run_data &data);
-void spawn(mob_action_run_data &data);
-void stabilize_z(mob_action_run_data &data);
-void start_chomping(mob_action_run_data &data);
-void start_dying(mob_action_run_data &data);
-void start_height_effect(mob_action_run_data &data);
-void start_particles(mob_action_run_data &data);
-void stop(mob_action_run_data &data);
-void stop_chomping(mob_action_run_data &data);
-void stop_height_effect(mob_action_run_data &data);
-void stop_particles(mob_action_run_data &data);
-void stop_sound(mob_action_run_data &data);
-void stop_vertically(mob_action_run_data &data);
-void store_focus_inside(mob_action_run_data &data);
-void swallow(mob_action_run_data &data);
-void swallow_all(mob_action_run_data &data);
-void teleport_to_absolute(mob_action_run_data &data);
-void teleport_to_relative(mob_action_run_data &data);
-void throw_focus(mob_action_run_data &data);
-void turn_to_absolute(mob_action_run_data &data);
-void turn_to_relative(mob_action_run_data &data);
-void turn_to_target(mob_action_run_data &data);
+void add_health(MobActionRunData &data);
+void add_health(MobActionRunData &data);
+void arachnorb_plan_logic(MobActionRunData &data);
+void calculate(MobActionRunData &data);
+void delete_function(MobActionRunData &data);
+void drain_liquid(MobActionRunData &data);
+void finish_dying(MobActionRunData &data);
+void focus(MobActionRunData &data);
+void follow_path_randomly(MobActionRunData &data);
+void follow_path_to_absolute(MobActionRunData &data);
+void get_angle(MobActionRunData &data);
+void get_chomped(MobActionRunData &data);
+void get_coordinates_from_angle(MobActionRunData &data);
+void get_distance(MobActionRunData &data);
+void get_event_info(MobActionRunData &data);
+void get_area_info(MobActionRunData &data);
+void get_floor_z(MobActionRunData &data);
+void get_mob_info(MobActionRunData &data);
+void get_focus_var(MobActionRunData &data);
+void get_random_float(MobActionRunData &data);
+void get_random_int(MobActionRunData &data);
+void goto_function(MobActionRunData &data);
+void hold_focus(MobActionRunData &data);
+void if_function(MobActionRunData &data);
+void link_with_focus(MobActionRunData &data);
+void load_focus_memory(MobActionRunData &data);
+void move_to_absolute(MobActionRunData &data);
+void move_to_relative(MobActionRunData &data);
+void move_to_target(MobActionRunData &data);
+void order_release(MobActionRunData &data);
+void play_sound(MobActionRunData &data);
+void print(MobActionRunData &data);
+void receive_status(MobActionRunData &data);
+void release(MobActionRunData &data);
+void release_stored_mobs(MobActionRunData &data);
+void remove_status(MobActionRunData &data);
+void save_focus_memory(MobActionRunData &data);
+void send_message_to_focus(MobActionRunData &data);
+void send_message_to_links(MobActionRunData &data);
+void send_message_to_nearby(MobActionRunData &data);
+void set_animation(MobActionRunData &data);
+void set_can_block_paths(MobActionRunData &data);
+void set_far_reach(MobActionRunData &data);
+void set_flying(MobActionRunData &data);
+void set_gravity(MobActionRunData &data);
+void set_health(MobActionRunData &data);
+void set_height(MobActionRunData &data);
+void set_hiding(MobActionRunData &data);
+void set_holdable(MobActionRunData &data);
+void set_huntable(MobActionRunData &data);
+void set_limb_animation(MobActionRunData &data);
+void set_near_reach(MobActionRunData &data);
+void set_radius(MobActionRunData &data);
+void set_state(MobActionRunData &data);
+void set_sector_scroll(MobActionRunData &data);
+void set_shadow_visibility(MobActionRunData &data);
+void set_tangible(MobActionRunData &data);
+void set_team(MobActionRunData &data);
+void set_timer(MobActionRunData &data);
+void set_var(MobActionRunData &data);
+void show_message_from_var(MobActionRunData &data);
+void spawn(MobActionRunData &data);
+void stabilize_z(MobActionRunData &data);
+void start_chomping(MobActionRunData &data);
+void start_dying(MobActionRunData &data);
+void start_height_effect(MobActionRunData &data);
+void start_particles(MobActionRunData &data);
+void stop(MobActionRunData &data);
+void stop_chomping(MobActionRunData &data);
+void stop_height_effect(MobActionRunData &data);
+void stop_particles(MobActionRunData &data);
+void stop_sound(MobActionRunData &data);
+void stop_vertically(MobActionRunData &data);
+void store_focus_inside(MobActionRunData &data);
+void swallow(MobActionRunData &data);
+void swallow_all(MobActionRunData &data);
+void teleport_to_absolute(MobActionRunData &data);
+void teleport_to_relative(MobActionRunData &data);
+void throw_focus(MobActionRunData &data);
+void turn_to_absolute(MobActionRunData &data);
+void turn_to_relative(MobActionRunData &data);
+void turn_to_target(MobActionRunData &data);
 };
 
 
 namespace mob_action_loaders {
-bool arachnorb_plan_logic(mob_action_call &call);
-bool calculate(mob_action_call &call);
-bool focus(mob_action_call &call);
-bool get_area_info(mob_action_call &call);
-bool get_event_info(mob_action_call &call);
-bool get_mob_info(mob_action_call &call);
-bool hold_focus(mob_action_call &call);
-bool if_function(mob_action_call &call);
-bool move_to_target(mob_action_call &call);
-bool play_sound(mob_action_call &call);
-bool receive_status(mob_action_call &call);
-bool remove_status(mob_action_call &call);
-bool set_animation(mob_action_call &call);
-bool set_far_reach(mob_action_call &call);
-bool set_holdable(mob_action_call &call);
-bool set_near_reach(mob_action_call &call);
-bool set_team(mob_action_call &call);
-bool spawn(mob_action_call &call);
-bool stabilize_z(mob_action_call &call);
-bool start_chomping(mob_action_call &call);
-bool start_particles(mob_action_call &call);
-bool turn_to_target(mob_action_call &call);
+bool arachnorb_plan_logic(MobActionCall &call);
+bool calculate(MobActionCall &call);
+bool focus(MobActionCall &call);
+bool get_area_info(MobActionCall &call);
+bool get_event_info(MobActionCall &call);
+bool get_mob_info(MobActionCall &call);
+bool hold_focus(MobActionCall &call);
+bool if_function(MobActionCall &call);
+bool move_to_target(MobActionCall &call);
+bool play_sound(MobActionCall &call);
+bool receive_status(MobActionCall &call);
+bool remove_status(MobActionCall &call);
+bool set_animation(MobActionCall &call);
+bool set_far_reach(MobActionCall &call);
+bool set_holdable(MobActionCall &call);
+bool set_near_reach(MobActionCall &call);
+bool set_team(MobActionCall &call);
+bool spawn(MobActionCall &call);
+bool stabilize_z(MobActionCall &call);
+bool start_chomping(MobActionCall &call);
+bool start_particles(MobActionCall &call);
+bool turn_to_target(MobActionCall &call);
 
-void report_enum_error(mob_action_call &call, size_t arg_idx);
-bool load_mob_target_type(mob_action_call &call, size_t arg_idx);
+void report_enum_error(MobActionCall &call, size_t arg_idx);
+bool load_mob_target_type(MobActionCall &call, size_t arg_idx);
 };
 
 
 bool assert_actions(
-    const vector<mob_action_call*> &actions, const data_node* dn
+    const vector<MobActionCall*> &actions, const DataNode* dn
 );
-mob* get_trigger_mob(mob_action_run_data &data);
-mob* get_target_mob(
-    mob_action_run_data &data, MOB_ACTION_MOB_TARGET_TYPE type
+Mob* get_trigger_mob(MobActionRunData &data);
+Mob* get_target_mob(
+    MobActionRunData &data, MOB_ACTION_MOB_TARGET_TYPE type
 );
 void insert_event_actions(
-    mob_event* ev, const vector<mob_action_call*> &actions, bool at_end
+    MobEvent* ev, const vector<MobActionCall*> &actions, bool at_end
 );
 void load_actions(
-    mob_type* mt, data_node* node,
-    vector<mob_action_call*>* out_actions, bitmask_8_t* out_settings = 0
+    MobType* mt, DataNode* node,
+    vector<MobActionCall*>* out_actions, bitmask_8_t* out_settings = 0
 );

@@ -18,8 +18,8 @@
 /**
  * @brief Constructs a new drop type object.
  */
-drop_type::drop_type() :
-    mob_type(MOB_CATEGORY_DROPS) {
+DropType::DropType() :
+    MobType(MOB_CATEGORY_DROPS) {
     
     target_type = MOB_TARGET_FLAG_NONE;
     height = 8.0f;
@@ -31,7 +31,7 @@ drop_type::drop_type() :
 /**
  * @brief Returns the vector of animation conversions.
  */
-anim_conversion_vector drop_type::get_anim_conversions() const {
+anim_conversion_vector DropType::get_anim_conversions() const {
     anim_conversion_vector v;
     v.push_back(std::make_pair(DROP_ANIM_IDLING, "idling"));
     v.push_back(std::make_pair(DROP_ANIM_FALLING, "falling"));
@@ -46,18 +46,18 @@ anim_conversion_vector drop_type::get_anim_conversions() const {
  *
  * @param file File to read from.
  */
-void drop_type::load_cat_properties(data_node* file) {
-    reader_setter rs(file);
+void DropType::load_cat_properties(DataNode* file) {
+    ReaderSetter rs(file);
     
     string consumer_str;
     string effect_str;
     string spray_name_str;
     string status_name_str;
-    data_node* consumer_node = nullptr;
-    data_node* effect_node = nullptr;
-    data_node* spray_name_node = nullptr;
-    data_node* status_name_node = nullptr;
-    data_node* total_doses_node = nullptr;
+    DataNode* consumer_node = nullptr;
+    DataNode* effect_node = nullptr;
+    DataNode* spray_name_node = nullptr;
+    DataNode* status_name_node = nullptr;
+    DataNode* total_doses_node = nullptr;
     
     rs.set("consumer", consumer_str, &consumer_node);
     rs.set("effect", effect_str, &effect_node);

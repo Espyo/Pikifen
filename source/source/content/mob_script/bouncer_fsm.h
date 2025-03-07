@@ -17,9 +17,9 @@
  * @brief Functions about the bouncer's finite state machine and behavior.
  */
 namespace bouncer_fsm {
-void create_fsm(mob_type* typ);
+void create_fsm(MobType* typ);
 
-void handle_mob(mob* m, void* info1, void* info2);
-void set_bouncing_animation(mob* m, void* info1, void* info2);
-void set_idling_animation(mob* m, void* info1, void* info2);
+void handle_mob(Mob* m, void* info1, void* info2);
+void set_bouncing_animation(Mob* m, void* info1, void* info2);
+void set_idling_animation(Mob* m, void* info1, void* info2);
 }

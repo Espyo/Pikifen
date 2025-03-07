@@ -20,7 +20,7 @@
 /**
  * @brief Handles the drawing part of the main loop of the particle editor.
  */
-void particle_editor::do_drawing() {
+void ParticleEditor::do_drawing() {
     //The canvas drawing is handled by Dear ImGui elsewhere.
     
     al_clear_to_color(COLOR_BLACK);
@@ -32,7 +32,7 @@ void particle_editor::do_drawing() {
  * @brief Draw the canvas. This is called as a callback inside the
  * Dear ImGui rendering process.
  */
-void particle_editor::draw_canvas() {
+void ParticleEditor::draw_canvas() {
     al_set_clipping_rectangle(
         canvas_tl.x, canvas_tl.y,
         canvas_br.x - canvas_tl.x, canvas_br.y - canvas_tl.y
@@ -40,8 +40,8 @@ void particle_editor::draw_canvas() {
     
     //Background.
     if(use_bg && bg) {
-        point texture_tl = canvas_tl;
-        point texture_br = canvas_br;
+        Point texture_tl = canvas_tl;
+        Point texture_br = canvas_br;
         al_transform_coordinates(
             &game.screen_to_world_transform, &texture_tl.x, &texture_tl.y
         );
@@ -85,7 +85,7 @@ void particle_editor::draw_canvas() {
     al_use_transform(&game.world_to_screen_transform);
     
     //Particles.
-    vector<world_component> components;
+    vector<WorldComponent> components;
     components.reserve(part_mgr.get_count());
     part_mgr.fill_component_list(components, game.cam.box[0], game.cam.box[1]);
     
@@ -95,7 +95,7 @@ void particle_editor::draw_canvas() {
     
     sort(
         components.begin(), components.end(),
-    [](const world_component & c1, const world_component & c2) -> bool {
+    [](const WorldComponent & c1, const WorldComponent & c2) -> bool {
         if(c1.z == c2.z) {
             return c1.idx < c2.idx;
         }
@@ -103,7 +103,7 @@ void particle_editor::draw_canvas() {
     }
     );
     for(size_t c = 0; c < components.size(); ++c) {
-        world_component* c_ptr = &components[c];
+        WorldComponent* c_ptr = &components[c];
         if(c_ptr->particle_ptr) {
             c_ptr->particle_ptr->draw();
         }
@@ -111,8 +111,8 @@ void particle_editor::draw_canvas() {
     
     //Grid.
     if(grid_visible) {
-        point cam_top_left_corner(0, 0);
-        point cam_bottom_right_corner(canvas_br.x, canvas_br.y);
+        Point cam_top_left_corner(0, 0);
+        Point cam_bottom_right_corner(canvas_br.x, canvas_br.y);
         al_transform_coordinates(
             &game.screen_to_world_transform,
             &cam_top_left_corner.x, &cam_top_left_corner.y
@@ -195,8 +195,8 @@ void particle_editor::draw_canvas() {
         float x_offset = 32.0f;
         
         draw_bitmap(
-            game.sys_content.bmp_leader_silhouette_top, point(x_offset, 0),
-            point(-1, game.config.standard_leader_radius * 2.0f),
+            game.sys_content.bmp_leader_silhouette_top, Point(x_offset, 0),
+            Point(-1, game.config.standard_leader_radius * 2.0f),
             0, al_map_rgba(240, 240, 240, 160)
         );
     }

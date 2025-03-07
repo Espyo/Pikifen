@@ -19,8 +19,8 @@
 /**
  * @brief Constructs a new treasure category object.
  */
-treasure_category::treasure_category() :
-    mob_category(
+TreasureCategory::TreasureCategory() :
+    MobCategory(
         MOB_CATEGORY_TREASURES, "treasure",
         "Treasure", "Treasures",
         "treasures", al_map_rgb(204, 151, 71)
@@ -32,7 +32,7 @@ treasure_category::treasure_category() :
 /**
  * @brief Clears the list of registered types of treasure.
  */
-void treasure_category::clear_types() {
+void TreasureCategory::clear_types() {
     for(auto &t : game.content.mob_types.list.treasure) {
         delete t.second;
     }
@@ -48,10 +48,10 @@ void treasure_category::clear_types() {
  * @param angle Starting angle.
  * @return The mob.
  */
-mob* treasure_category::create_mob(
-    const point &pos, mob_type* type, float angle
+Mob* TreasureCategory::create_mob(
+    const Point &pos, MobType* type, float angle
 ) {
-    treasure* m = new treasure(pos, (treasure_type*) type, angle);
+    Treasure* m = new Treasure(pos, (TreasureType*) type, angle);
     game.states.gameplay->mobs.treasures.push_back(m);
     return m;
 }
@@ -62,8 +62,8 @@ mob* treasure_category::create_mob(
  *
  * @return The type.
  */
-mob_type* treasure_category::create_type() {
-    return new treasure_type();
+MobType* TreasureCategory::create_type() {
+    return new TreasureType();
 }
 
 
@@ -72,12 +72,12 @@ mob_type* treasure_category::create_type() {
  *
  * @param m The mob to erase.
  */
-void treasure_category::erase_mob(mob* m) {
+void TreasureCategory::erase_mob(Mob* m) {
     game.states.gameplay->mobs.treasures.erase(
         find(
             game.states.gameplay->mobs.treasures.begin(),
             game.states.gameplay->mobs.treasures.end(),
-            (treasure*) m
+            (Treasure*) m
         )
     );
 }
@@ -90,7 +90,7 @@ void treasure_category::erase_mob(mob* m) {
  * @param internal_name Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-mob_type* treasure_category::get_type(const string &internal_name) const {
+MobType* TreasureCategory::get_type(const string &internal_name) const {
     auto it = game.content.mob_types.list.treasure.find(internal_name);
     if(it == game.content.mob_types.list.treasure.end()) return nullptr;
     return it->second;
@@ -102,7 +102,7 @@ mob_type* treasure_category::get_type(const string &internal_name) const {
  *
  * @param list This list gets filled with the mob type internal names.
  */
-void treasure_category::get_type_names(vector<string> &list) const {
+void TreasureCategory::get_type_names(vector<string> &list) const {
     for(auto &t : game.content.mob_types.list.treasure) {
         list.push_back(t.first);
     }
@@ -115,6 +115,6 @@ void treasure_category::get_type_names(vector<string> &list) const {
  * @param internal_name Internal name of the mob type.
  * @param type Mob type to register.
  */
-void treasure_category::register_type(const string &internal_name, mob_type* type) {
-    game.content.mob_types.list.treasure[internal_name] = (treasure_type*) type;
+void TreasureCategory::register_type(const string &internal_name, MobType* type) {
+    game.content.mob_types.list.treasure[internal_name] = (TreasureType*) type;
 }

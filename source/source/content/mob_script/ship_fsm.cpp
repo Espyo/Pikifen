@@ -23,8 +23,8 @@
  *
  * @param typ Mob type to create the finite state machine for.
  */
-void ship_fsm::create_fsm(mob_type* typ) {
-    easy_fsm_creator efc;
+void ship_fsm::create_fsm(MobType* typ) {
+    EasyFsmCreator efc;
     
     efc.new_state("idling", SHIP_STATE_IDLING); {
         efc.new_event(MOB_EV_ON_ENTER); {
@@ -57,15 +57,15 @@ void ship_fsm::create_fsm(mob_type* typ) {
  * @param info1 Pointer to the mob.
  * @param info2 Unused.
  */
-void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
+void ship_fsm::receive_mob(Mob* m, void* info1, void* info2) {
     engine_assert(info1 != nullptr, m->print_state_history());
     
-    mob* delivery = (mob*) info1;
-    ship* shi_ptr = (ship*) m;
+    Mob* delivery = (Mob*) info1;
+    Ship* shi_ptr = (Ship*) m;
     
     switch(delivery->type->category->id) {
     case MOB_CATEGORY_TREASURES: {
-        treasure* tre_ptr = (treasure*) delivery;
+        Treasure* tre_ptr = (Treasure*) delivery;
         game.states.gameplay->treasures_collected++;
         game.states.gameplay->treasure_points_collected +=
             tre_ptr->tre_type->points;
@@ -84,7 +84,7 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
         break;
         
     } case MOB_CATEGORY_RESOURCES: {
-        resource* res_ptr = (resource*) delivery;
+        Resource* res_ptr = (Resource*) delivery;
         switch(res_ptr->res_type->delivery_result) {
         case RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS: {
             game.states.gameplay->treasures_collected++;
@@ -134,7 +134,7 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
     }
     
     shi_ptr->mobs_being_beamed--;
-    particle_generator pg =
+    ParticleGenerator pg =
         standard_particle_gen_setup(
             game.sys_content_names.part_onion_insertion, shi_ptr
         );
@@ -152,7 +152,7 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ship_fsm::set_anim(mob* m, void* info1, void* info2) {
+void ship_fsm::set_anim(Mob* m, void* info1, void* info2) {
     m->set_animation(
         SHIP_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
     );
@@ -166,7 +166,7 @@ void ship_fsm::set_anim(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ship_fsm::start_delivery(mob* m, void* info1, void* info2) {
-    ship* shi_ptr = (ship*) m;
+void ship_fsm::start_delivery(Mob* m, void* info1, void* info2) {
+    Ship* shi_ptr = (Ship*) m;
     shi_ptr->mobs_being_beamed++;
 }

@@ -47,7 +47,7 @@ enum DECORATION_STATE {
 /**
  * @brief A type of decoration.
  */
-class decoration_type : public mob_type {
+class DecorationType : public MobType {
 
 public:
 
@@ -68,8 +68,8 @@ public:
     
     //--- Function declarations ---
     
-    decoration_type();
-    void load_cat_properties(data_node* file) override;
+    DecorationType();
+    void load_cat_properties(DataNode* file) override;
     anim_conversion_vector get_anim_conversions() const override;
     
 };

@@ -19,18 +19,18 @@
 /**
  * @brief A mob that the current leader can interact with.
  */
-class interactable : public mob {
+class Interactable : public Mob {
 
 public:
 
     //--- Members ---
     
     //What type of interactable it is.
-    interactable_type* int_type = nullptr;
+    InteractableType* int_type = nullptr;
     
     
     //--- Function declarations ---
     
-    interactable(const point &pos, interactable_type* type, float angle);
+    Interactable(const Point &pos, InteractableType* type, float angle);
     
 };

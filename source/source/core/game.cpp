@@ -58,7 +58,7 @@ const size_t FRAMERATE_HISTORY_SIZE = 300;
 /**
  * @brief Constructs a new game class object.
  */
-game_class::game_class() {
+Game::Game() {
     team_internal_names[MOB_TEAM_NONE] = "none";
     team_internal_names[MOB_TEAM_PLAYER_1] = "player_1";
     team_internal_names[MOB_TEAM_PLAYER_2] = "player_2";
@@ -94,8 +94,8 @@ game_class::game_class() {
  * If you try to change to that state when it is not loaded,
  * things will go wrong.
  */
-void game_class::change_state(
-    game_state* new_state, bool unload_current, bool load_new
+void Game::change_state(
+    GameState* new_state, bool unload_current, bool load_new
 ) {
 
     if(cur_state && unload_current) {
@@ -122,7 +122,7 @@ void game_class::change_state(
  *
  * @param ev The Allegro event behind the key press.
  */
-void game_class::check_system_key_press(const ALLEGRO_EVENT &ev) {
+void Game::check_system_key_press(const ALLEGRO_EVENT &ev) {
     switch(ev.keyboard.keycode) {
     case ALLEGRO_KEY_F12: {
         if(has_flag(ev.keyboard.modifiers, ALLEGRO_KEYMOD_CTRL)) {
@@ -164,7 +164,7 @@ void game_class::check_system_key_press(const ALLEGRO_EVENT &ev) {
 /**
  * @brief Performs some global drawings to run every frame.
  */
-void game_class::do_global_drawing() {
+void Game::do_global_drawing() {
     //Dear ImGui.
     if(debug.show_dear_imgui_demo) {
         ImGui::ShowDemoWindow();
@@ -186,7 +186,7 @@ void game_class::do_global_drawing() {
 /**
  * @brief Performs some global logic to run every frame.
  */
-void game_class::do_global_logic() {
+void Game::do_global_logic() {
     //Cursor trail.
     if(options.draw_cursor_trail) {
         mouse_cursor.save_timer.tick(delta_t);
@@ -206,7 +206,7 @@ void game_class::do_global_logic() {
  *
  * @return The name.
  */
-string game_class::get_cur_state_name() const {
+string Game::get_cur_state_name() const {
     if(cur_state) {
         return cur_state->get_name();
     }
@@ -219,7 +219,7 @@ string game_class::get_cur_state_name() const {
  *
  * @param ev Event to handle.
  */
-void game_class::global_handle_allegro_event(const ALLEGRO_EVENT &ev) {
+void Game::global_handle_allegro_event(const ALLEGRO_EVENT &ev) {
     //Mouse cursor.
     if(
         ev.type == ALLEGRO_EVENT_MOUSE_AXES ||
@@ -244,7 +244,7 @@ void game_class::global_handle_allegro_event(const ALLEGRO_EVENT &ev) {
  * @brief The main loop of the program. Processes events,
  * ticks frames of gameplay, etc.
  */
-void game_class::main_loop() {
+void Game::main_loop() {
     //Used to calculate the time difference between the current and last frames.
     double prev_frame_start_time = 0.0;
     ALLEGRO_EVENT ev;
@@ -285,7 +285,7 @@ void game_class::main_loop() {
                 delta_t = std::min(real_delta_t, 0.2f);
                 
                 time_passed += delta_t;
-                game_state* prev_state = cur_state;
+                GameState* prev_state = cur_state;
                 
                 do_global_logic();
                 cur_state->do_logic();
@@ -331,7 +331,7 @@ void game_class::main_loop() {
 /**
  * @brief Shuts down the program, cleanly freeing everything.
  */
-void game_class::shutdown() {
+void Game::shutdown() {
     if(perf_mon) {
         perf_mon->save_log();
     }
@@ -367,7 +367,7 @@ void game_class::shutdown() {
  *
  * @param stream The audio stream.
  */
-void game_class::register_audio_stream_source(ALLEGRO_AUDIO_STREAM* stream) {
+void Game::register_audio_stream_source(ALLEGRO_AUDIO_STREAM* stream) {
     al_register_event_source(
         event_queue,
         al_get_audio_stream_event_source(stream)
@@ -381,7 +381,7 @@ void game_class::register_audio_stream_source(ALLEGRO_AUDIO_STREAM* stream) {
  * @return 0 if everything is okay, otherwise a return code to quit the
  * program with.
  */
-int game_class::start() {
+int Game::start() {
     //Allegro initializations.
     init_allegro();
     
@@ -446,10 +446,10 @@ int game_class::start() {
     load_maker_tools();
     save_maker_tools();
     
-    dummy_mob_state = new mob_state("dummy");
+    dummy_mob_state = new MobState("dummy");
     
     if(maker_tools.use_perf_mon) {
-        perf_mon = new performance_monitor_t();
+        perf_mon = new PerformanceMonitor();
     }
     
     if(
@@ -506,7 +506,7 @@ int game_class::start() {
  *
  * @param loaded_state Loaded state to unload.
  */
-void game_class::unload_loaded_state(game_state* loaded_state) {
+void Game::unload_loaded_state(GameState* loaded_state) {
     loaded_state->unload();
 }
 
@@ -517,7 +517,7 @@ void game_class::unload_loaded_state(game_state* loaded_state) {
  *
  * @param stream The audio stream.
  */
-void game_class::unregister_audio_stream_source(ALLEGRO_AUDIO_STREAM* stream) {
+void Game::unregister_audio_stream_source(ALLEGRO_AUDIO_STREAM* stream) {
     al_unregister_event_source(
         event_queue,
         al_get_audio_stream_event_source(stream)
@@ -528,7 +528,7 @@ void game_class::unregister_audio_stream_source(ALLEGRO_AUDIO_STREAM* stream) {
 /**
  * @brief Destroys the states in the list.
  */
-void game_state_list::destroy() {
+void GameStateList::destroy() {
     delete animation_ed;
     delete area_ed;
     delete annex_screen;
@@ -551,16 +551,16 @@ void game_state_list::destroy() {
 /**
  * @brief Initializes the states in the list.
  */
-void game_state_list::init() {
-    animation_ed = new animation_editor();
-    area_ed = new area_editor();
-    annex_screen = new annex_screen_state();
-    gameplay = new gameplay_state();
-    gui_ed = new gui_editor();
-    particle_ed = new particle_editor();
-    title_screen = new title_screen_state();
-    results = new results_state();
+void GameStateList::init() {
+    animation_ed = new AnimationEditor();
+    area_ed = new AreaEditor();
+    annex_screen = new AnnexScreen();
+    gameplay = new GameplayState();
+    gui_ed = new GuiEditor();
+    particle_ed = new ParticleEditor();
+    title_screen = new TitleScreen();
+    results = new Results();
 }
 
 
-game_class game;
+Game game;

@@ -17,8 +17,8 @@
 /**
  * @brief Constructs a new interactable type object.
  */
-interactable_type::interactable_type() :
-    mob_type(MOB_CATEGORY_INTERACTABLES) {
+InteractableType::InteractableType() :
+    MobType(MOB_CATEGORY_INTERACTABLES) {
     
     target_type = MOB_TARGET_FLAG_NONE;
     
@@ -30,8 +30,8 @@ interactable_type::interactable_type() :
  *
  * @param file File to read from.
  */
-void interactable_type::load_cat_properties(data_node* file) {
-    reader_setter rs(file);
+void InteractableType::load_cat_properties(DataNode* file) {
+    ReaderSetter rs(file);
     
     rs.set("prompt_text", prompt_text);
     rs.set("trigger_range", trigger_range);

@@ -39,7 +39,7 @@ enum V_ALIGN_MODE {
 /**
  * @brief Simple 2D point.
  */
-struct point {
+struct Point {
 
     //--- Members ---
     
@@ -52,34 +52,34 @@ struct point {
     
     //--- Function declarations ---
     
-    point(float x, float y);
-    point(float xy);
-    point();
-    const point operator +(const point &p) const;
-    const point operator -(const point &p) const;
-    const point operator *(const point &p) const;
-    const point operator /(const point &p) const;
-    const point operator +(float n) const;
-    const point operator -(float n) const;
-    const point operator *(float m) const;
-    const point operator /(float n) const;
-    point operator +=(const point &p);
-    point operator -=(const point &p);
-    point operator *=(const point &p);
-    point operator /=(const point &p);
-    point operator +=(float n);
-    point operator -=(float n);
-    point operator *=(float n);
-    point operator /=(float n);
-    bool operator ==(const point &p) const;
-    bool operator !=(const point &p) const;
+    Point(float x, float y);
+    Point(float xy);
+    Point();
+    const Point operator +(const Point &p) const;
+    const Point operator -(const Point &p) const;
+    const Point operator *(const Point &p) const;
+    const Point operator /(const Point &p) const;
+    const Point operator +(float n) const;
+    const Point operator -(float n) const;
+    const Point operator *(float m) const;
+    const Point operator /(float n) const;
+    Point operator +=(const Point &p);
+    Point operator -=(const Point &p);
+    Point operator *=(const Point &p);
+    Point operator /=(const Point &p);
+    Point operator +=(float n);
+    Point operator -=(float n);
+    Point operator *=(float n);
+    Point operator /=(float n);
+    bool operator ==(const Point &p) const;
+    bool operator !=(const Point &p) const;
     
 };
 
-const point operator+(float n, const point &p);
-const point operator-(float n, const point &p);
-const point operator*(float n, const point &p);
-const point operator/(float n, const point &p);
+const Point operator+(float n, const Point &p);
+const Point operator-(float n, const Point &p);
+const Point operator*(float n, const Point &p);
+const Point operator/(float n, const Point &p);
 
 
 /**
@@ -95,31 +95,31 @@ const point operator/(float n, const point &p);
  * only the squared and sqrt()'d numbers, and setting the sqrt()'d number
  * to LARGE_FLOAT if it is uncached.
  */
-struct dist {
+struct Distance {
 
     public:
     
     //--- Function declarations ---
     
-    dist(const point &p1, const point &p2);
-    explicit dist(float d = 0.0f);
-    dist &operator =(float d);
+    Distance(const Point &p1, const Point &p2);
+    explicit Distance(float d = 0.0f);
+    Distance &operator =(float d);
     bool operator <(float d2) const;
-    bool operator <(const dist &d2) const;
+    bool operator <(const Distance &d2) const;
     bool operator <=(float d2) const;
-    bool operator <=(const dist &d2) const;
+    bool operator <=(const Distance &d2) const;
     bool operator >(float d2) const;
-    bool operator >(const dist &d2) const;
+    bool operator >(const Distance &d2) const;
     bool operator >=(float d2) const;
-    bool operator >=(const dist &d2) const;
+    bool operator >=(const Distance &d2) const;
     bool operator ==(float d2) const;
-    bool operator ==(const dist &d2) const;
+    bool operator ==(const Distance &d2) const;
     bool operator !=(float d2) const;
-    bool operator !=(const dist &d2) const;
+    bool operator !=(const Distance &d2) const;
     void operator +=(float d2);
-    void operator +=(const dist &d2);
+    void operator +=(const Distance &d2);
     void operator -=(float d2);
-    void operator -=(const dist &d2);
+    void operator -=(const Distance &d2);
     float to_float();
     
     private:
@@ -139,166 +139,166 @@ struct dist {
 
 
 
-point angle_to_coordinates(
+Point angle_to_coordinates(
     float angle, float magnitude
 );
 float angular_dist_to_linear(float angular_dist, float radius);
-bool bbox_check(const point &center1, const point &center2, float r);
+bool bbox_check(const Point &center1, const Point &center2, float r);
 bool bbox_check(
-    const point &tl1, const point &br1,
-    const point &center2, float r
+    const Point &tl1, const Point &br1,
+    const Point &center2, float r
 );
 void calculate_throw(
-    const point &start_xy, float start_z,
-    const point &target_xy, float target_z,
+    const Point &start_xy, float start_z,
+    const Point &target_xy, float target_z,
     float max_h, float gravity,
-    point* req_speed_xy, float* req_speed_z, float* out_h_angle
+    Point* req_speed_xy, float* req_speed_z, float* out_h_angle
 );
 bool circle_intersects_line_seg(
-    const point &circle, float cr,
-    const point &line_p1, const point &line_p2,
+    const Point &circle, float cr,
+    const Point &line_p1, const Point &line_p2,
     float* out_lix = nullptr, float* out_liy = nullptr
 );
 bool circle_intersects_rectangle(
-    const point &circle, float cr,
-    const point &rectangle, const point &rect_dim,
+    const Point &circle, float cr,
+    const Point &rectangle, const Point &rect_dim,
     float rect_angle,
     float* out_overlap_dist = nullptr, float* out_rectangle_side_angle = nullptr
 );
 bool collinear_line_segs_intersect(
-    const point &a, const point &b, const point &c, const point &d,
-    point* out_intersection_tl = nullptr, point* out_intersection_br = nullptr
+    const Point &a, const Point &b, const Point &c, const Point &d,
+    Point* out_intersection_tl = nullptr, Point* out_intersection_br = nullptr
 );
 void coordinates_to_angle(
-    const point &coordinates, float* angle, float* magnitude
+    const Point &coordinates, float* angle, float* magnitude
 );
 float deg_to_rad(float rad);
-float dot_product(const point &v1, const point &v2);
-float get_angle(const point &focus);
-float get_angle(const point &center, const point &focus);
+float dot_product(const Point &v1, const Point &v2);
+float get_angle(const Point &focus);
+float get_angle(const Point &center, const Point &focus);
 float get_angle_cw_diff(float a1, float a2);
 float get_angle_smallest_dif(float a1, float a2);
-point get_closest_point_in_line_seg(
-    const point &l1, const point &l2, const point &p,
+Point get_closest_point_in_line_seg(
+    const Point &l1, const Point &l2, const Point &p,
     float* out_segment_ratio = nullptr
 );
-point get_closest_point_in_rotated_rectangle(
-    const point &p,
-    const point &rect_center, const point &rect_dim, float rect_angle,
+Point get_closest_point_in_rotated_rectangle(
+    const Point &p,
+    const Point &rect_center, const Point &rect_dim, float rect_angle,
     bool* out_is_inside
 );
 void get_miter_points(
-    const point &a, const point &b, const point &c, float thickness,
-    point* miter_point_1, point* miter_point_2, float max_miter_length = 0.0f
+    const Point &a, const Point &b, const Point &c, float thickness,
+    Point* miter_point_1, Point* miter_point_2, float max_miter_length = 0.0f
 );
 float get_point_sign(
-    const point &p, const point &lp1, const point &lp2
+    const Point &p, const Point &lp1, const Point &lp2
 );
-point get_ratio_point_in_ring(
+Point get_ratio_point_in_ring(
     float inner_dist, float outer_dist,
     float arc, float arc_rot, float ratio
 );
-point get_random_point_in_rectangular_ring(
-    const point &inner_dist, const point &outer_dist, unsigned int* seed
+Point get_random_point_in_rectangular_ring(
+    const Point &inner_dist, const Point &outer_dist, unsigned int* seed
 );
-point get_random_point_in_ring(
+Point get_random_point_in_ring(
     float inner_dist, float outer_dist,
     float arc, float arc_rot, unsigned int* seed
 );
 void get_transformed_rectangle_bounding_box(
-    const point &center, const point &dimensions, float angle,
-    point* min_coords, point* max_coords
+    const Point &center, const Point &dimensions, float angle,
+    Point* min_coords, Point* max_coords
 );
 float interpolate_angle(
     float input, float input_start, float input_end,
     float &output_start, float &output_end
 );
-point interpolate_point(
+Point interpolate_point(
     float input, float input_start, float input_end,
-    const point &output_start, const point &output_end
+    const Point &output_start, const Point &output_end
 );
 bool is_point_in_rectangle(
-    const point &p, const point &rect_center, const point &rect_size
+    const Point &p, const Point &rect_center, const Point &rect_size
 );
 bool is_point_in_triangle(
-    const point &p, const point &tp1, const point &tp2, const point &tp3,
+    const Point &p, const Point &tp1, const Point &tp2, const Point &tp3,
     bool loq
 );
 float linear_dist_to_angular(float linear_dist, float radius);
 bool line_segs_are_collinear(
-    const point &a, const point &b, const point &c, const point &d
+    const Point &a, const Point &b, const Point &c, const Point &d
 );
 bool line_seg_intersects_rectangle(
-    const point &r1, const point &r2,
-    const point &l1, const point &l2
+    const Point &r1, const Point &r2,
+    const Point &l1, const Point &l2
 );
 bool line_seg_intersects_rotated_rectangle(
-    const point &lp1, const point &lp2,
-    const point &rect_center, const point &rect_dim, float rect_angle
+    const Point &lp1, const Point &lp2,
+    const Point &rect_center, const Point &rect_dim, float rect_angle
 );
 bool line_segs_intersect(
-    const point &l1p1, const point &l1p2, const point &l2p1, const point &l2p2,
+    const Point &l1p1, const Point &l1p2, const Point &l2p1, const Point &l2p2,
     float* out_final_l1r, float* out_final_l2r
 );
 bool line_segs_intersect(
-    const point &l1p1, const point &l1p2, const point &l2p1, const point &l2p2,
-    point* out_intersection
+    const Point &l1p1, const Point &l1p2, const Point &l2p1, const Point &l2p2,
+    Point* out_intersection
 );
 bool lines_intersect(
-    const point &l1p1, const point &l1p2,
-    const point &l2p1, const point &l2p2,
+    const Point &l1p1, const Point &l1p2,
+    const Point &l2p1, const Point &l2p2,
     float* out_l1r, float* out_l2r
 );
 bool lines_intersect(
-    const point &l1p1, const point &l1p2,
-    const point &l2p1, const point &l2p2,
-    point* out_point
+    const Point &l1p1, const Point &l1p2,
+    const Point &l2p1, const Point &l2p2,
+    Point* out_point
 );
 void move_point(
-    const point &start, const point &target,
-    float speed, float reach_radius, point* mov,
+    const Point &start, const Point &target,
+    float speed, float reach_radius, Point* mov,
     float* angle, bool* reached, float delta_t
 );
 float normalize_angle(float a);
-point normalize_vector(const point &v);
+Point normalize_vector(const Point &v);
 bool points_are_collinear(
-    const point &a, const point &b, const point &c
+    const Point &a, const Point &b, const Point &c
 );
-void update_max_coords(point &max_coords, const point &new_coords);
-void update_min_coords(point &min_coords, const point &new_coords);
+void update_max_coords(Point &max_coords, const Point &new_coords);
+void update_min_coords(Point &min_coords, const Point &new_coords);
 void update_min_max_coords(
-    point &min_coords, point &max_coords, const point &new_coords
+    Point &min_coords, Point &max_coords, const Point &new_coords
 );
 void project_vertexes(
-    const vector<point> &v, const point axis, float* min, float* max
+    const vector<Point> &v, const Point axis, float* min, float* max
 );
-string p2s(const point &p, const float* z = nullptr);
+string p2s(const Point &p, const float* z = nullptr);
 float rad_to_deg(float deg);
 bool rectangles_intersect(
-    const point &tl1, const point &br1,
-    const point &tl2, const point &br2
+    const Point &tl1, const Point &br1,
+    const Point &tl2, const Point &br2
 );
 bool rectangles_intersect(
-    const point &rect1, const point &rect_dim1,
+    const Point &rect1, const Point &rect_dim1,
     float rect_angle1,
-    const point &rect2, const point &rect_dim2,
+    const Point &rect2, const Point &rect_dim2,
     float rect_angle2,
     float* out_overlap_dist = nullptr, float* out_overlap_angle = nullptr
 );
-point resize_to_box_keeping_aspect_ratio(
-    const point &original_size,
-    const point &box_size
+Point resize_to_box_keeping_aspect_ratio(
+    const Point &original_size,
+    const Point &box_size
 );
-point rotate_point(const point &coords, float angle);
-point s2p(const string &s, float* out_z = nullptr);
-point scale_rectangle_to_box(
-    const point &rect_size, const point &box_size,
+Point rotate_point(const Point &coords, float angle);
+Point s2p(const string &s, float* out_z = nullptr);
+Point scale_rectangle_to_box(
+    const Point &rect_size, const Point &box_size,
     bool can_grow_x, bool can_grow_y,
     bool can_shrink_x, bool can_shrink_y,
     bool can_change_ratio
 );
 size_t select_next_item_directionally(
-    const vector<point> &item_coordinates, size_t selected_item,
-    float direction, const point &loop_region
+    const vector<Point> &item_coordinates, size_t selected_item,
+    float direction, const Point &loop_region
 );
 float get_vertical_align_offset(V_ALIGN_MODE mode, float height);

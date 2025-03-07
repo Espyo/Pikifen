@@ -36,13 +36,13 @@
  * @param default_bind_str String representing of this action's default
  * control bind.
  */
-void controls_mediator::add_player_action_type(
+void ControlsMediator::add_player_action_type(
     const PLAYER_ACTION_TYPE id,
     const PLAYER_ACTION_CAT category,
     const string &name, const string &description, const string &internal_name,
     const string &default_bind_str
 ) {
-    player_action_type a;
+    PlayerActionType a;
     a.id = id;
     a.category = category;
     a.name = name;
@@ -62,10 +62,10 @@ void controls_mediator::add_player_action_type(
  * If this event does not pertain to any valid input, an input of type
  * INPUT_TYPE_NONE is returned.
  */
-player_input controls_mediator::allegro_event_to_input(
+PlayerInput ControlsMediator::allegro_event_to_input(
     const ALLEGRO_EVENT &ev
 ) const {
-    player_input input;
+    PlayerInput input;
     
     switch(ev.type) {
     case ALLEGRO_EVENT_KEY_DOWN:
@@ -130,7 +130,7 @@ player_input controls_mediator::allegro_event_to_input(
  *
  * @return The binds.
  */
-vector<control_bind> &controls_mediator::binds() {
+vector<ControlBind> &ControlsMediator::binds() {
     return mgr.binds;
 }
 
@@ -142,7 +142,7 @@ vector<control_bind> &controls_mediator::binds() {
  * @param action_type_id ID of the action type.
  * @return The bind.
  */
-control_bind controls_mediator::find_bind(
+ControlBind ControlsMediator::find_bind(
     const PLAYER_ACTION_TYPE action_type_id
 ) const {
     for(size_t b = 0; b < mgr.binds.size(); b++) {
@@ -150,7 +150,7 @@ control_bind controls_mediator::find_bind(
             return mgr.binds[b];
         }
     }
-    return control_bind();
+    return ControlBind();
 }
 
 
@@ -161,7 +161,7 @@ control_bind controls_mediator::find_bind(
  * @param action_name Name of the action.
  * @return The bind.
  */
-control_bind controls_mediator::find_bind(
+ControlBind ControlsMediator::find_bind(
     const string &action_name
 ) const {
     for(size_t b = 0; b < player_action_types.size(); b++) {
@@ -169,7 +169,7 @@ control_bind controls_mediator::find_bind(
             return find_bind(player_action_types[b].id);
         }
     }
-    return control_bind();
+    return ControlBind();
 }
 
 
@@ -178,8 +178,8 @@ control_bind controls_mediator::find_bind(
  *
  * @return The types.
  */
-const vector<player_action_type>
-&controls_mediator::get_all_player_action_types() const {
+const vector<PlayerActionType>
+&ControlsMediator::get_all_player_action_types() const {
     return player_action_types;
 }
 
@@ -190,7 +190,7 @@ const vector<player_action_type>
  * @param action_id ID of the player action.
  * @return The type, or an empty type on failure.
  */
-player_action_type controls_mediator::get_player_action_type(
+PlayerActionType ControlsMediator::get_player_action_type(
     int action_id
 ) const {
     for(size_t b = 0; b < player_action_types.size(); b++) {
@@ -198,7 +198,7 @@ player_action_type controls_mediator::get_player_action_type(
             return player_action_types[b];
         }
     }
-    return player_action_type();
+    return PlayerActionType();
 }
 
 
@@ -209,7 +209,7 @@ player_action_type controls_mediator::get_player_action_type(
  * @param action_id ID of the player action.
  * @return The name, or an empty string on failure.
  */
-string controls_mediator::get_player_action_type_internal_name(
+string ControlsMediator::get_player_action_type_internal_name(
     int action_id
 ) {
     for(size_t b = 0; b < player_action_types.size(); b++) {
@@ -227,7 +227,7 @@ string controls_mediator::get_player_action_type_internal_name(
  * @param player_action_type_id Action type to use.
  * @return The value.
  */
-float controls_mediator::get_player_action_type_value(
+float ControlsMediator::get_player_action_type_value(
     PLAYER_ACTION_TYPE player_action_type_id
 ) {
     return mgr.action_type_values[(int) player_action_type_id];
@@ -240,8 +240,8 @@ float controls_mediator::get_player_action_type_value(
  * @param ev The Allegro event.
  * @return Whether the event was handled.
  */
-bool controls_mediator::handle_allegro_event(const ALLEGRO_EVENT &ev) {
-    player_input input = allegro_event_to_input(ev);
+bool ControlsMediator::handle_allegro_event(const ALLEGRO_EVENT &ev) {
+    PlayerInput input = allegro_event_to_input(ev);
     
     if(input.type != INPUT_TYPE_NONE) {
         mgr.handle_input(input);
@@ -259,8 +259,8 @@ bool controls_mediator::handle_allegro_event(const ALLEGRO_EVENT &ev) {
  * @param i Input to read from.
  * @return The string, or an empty string on error.
  */
-string controls_mediator::input_to_str(
-    const player_input &i
+string ControlsMediator::input_to_str(
+    const PlayerInput &i
 ) const {
     switch(i.type) {
     case INPUT_TYPE_KEYBOARD_KEY: {
@@ -298,7 +298,7 @@ string controls_mediator::input_to_str(
  *
  * @return The player actions.
  */
-vector<player_action> controls_mediator::new_frame() {
+vector<PlayerAction> ControlsMediator::new_frame() {
     return mgr.new_frame();
 }
 
@@ -307,7 +307,7 @@ vector<player_action> controls_mediator::new_frame() {
  * @brief Releases all player inputs. Basically, set all of their values to 0.
  * Useful for when the game state is changed, or the window is out of focus.
  */
-void controls_mediator::release_all() {
+void ControlsMediator::release_all() {
     for(auto &a : mgr.action_type_values) {
         a.second = 0.0f;
     }
@@ -319,7 +319,7 @@ void controls_mediator::release_all() {
  *
  * @param options Options.
  */
-void controls_mediator::set_options(const controls_manager_options &options) {
+void ControlsMediator::set_options(const ControlsManagerOptions &options) {
     mgr.options = options;
 }
 
@@ -331,10 +331,10 @@ void controls_mediator::set_options(const controls_manager_options &options) {
  * @param s String to read from.
  * @return The input, or a default input instance on error.
  */
-player_input controls_mediator::str_to_input(
+PlayerInput ControlsMediator::str_to_input(
     const string &s
 ) const {
-    player_input input;
+    PlayerInput input;
     
     vector<string> parts = split(s, "_");
     size_t n_parts = parts.size();
@@ -403,7 +403,7 @@ player_input controls_mediator::str_to_input(
  *
  * @param keycode Allegro keycode of the pressed key.
  */
-void gameplay_state::process_system_key_press(int keycode) {
+void GameplayState::process_system_key_press(int keycode) {
     if(keycode == ALLEGRO_KEY_F1) {
     
         game.show_system_info = !game.show_system_info;
@@ -471,7 +471,7 @@ void gameplay_state::process_system_key_press(int keycode) {
             break;
             
         } case MAKER_TOOL_TYPE_HURT_MOB: {
-            mob* m = get_closest_mob_to_cursor(true);
+            Mob* m = get_closest_mob_to_cursor(true);
             if(m) {
                 m->set_health(
                     true, true, -game.maker_tools.mob_hurting_ratio
@@ -481,8 +481,8 @@ void gameplay_state::process_system_key_press(int keycode) {
             break;
             
         } case MAKER_TOOL_TYPE_MOB_INFO: {
-            mob* m = get_closest_mob_to_cursor();
-            mob* prev_lock_mob = game.maker_tools.info_lock;
+            Mob* m = get_closest_mob_to_cursor();
+            Mob* prev_lock_mob = game.maker_tools.info_lock;
             game.maker_tools.info_lock =
                 (game.maker_tools.info_lock == m ? nullptr : m);
             if(prev_lock_mob != nullptr && game.maker_tools.info_lock == nullptr) {
@@ -493,7 +493,7 @@ void gameplay_state::process_system_key_press(int keycode) {
             
         } case MAKER_TOOL_TYPE_NEW_PIKMIN: {
             if(mobs.pikmin_list.size() < game.config.max_pikmin_in_field) {
-                pikmin_type* new_pikmin_type =
+                PikminType* new_pikmin_type =
                     game.content.mob_types.list.pikmin.begin()->second;
                     
                 auto p = game.content.mob_types.list.pikmin.begin();
@@ -527,7 +527,7 @@ void gameplay_state::process_system_key_press(int keycode) {
             break;
             
         } case MAKER_TOOL_TYPE_TELEPORT: {
-            sector* mouse_sector =
+            Sector* mouse_sector =
                 get_sector(game.mouse_cursor.w_pos, nullptr, true);
             if(mouse_sector && cur_leader_ptr) {
                 cur_leader_ptr->chase(

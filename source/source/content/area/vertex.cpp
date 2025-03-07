@@ -21,7 +21,7 @@
  * @param x X coordinate.
  * @param y Y coordinate.
  */
-vertex::vertex(float x, float y) :
+Vertex::Vertex(float x, float y) :
     x(x),
     y(y) {
     
@@ -34,7 +34,7 @@ vertex::vertex(float x, float y) :
  * @param e_ptr Edge to add.
  * @param e_idx Index number of the edge to add.
  */
-void vertex::add_edge(edge* e_ptr, size_t e_idx) {
+void Vertex::add_edge(Edge* e_ptr, size_t e_idx) {
     for(size_t i = 0; i < edges.size(); i++) {
         if(edges[i] == e_ptr) {
             return;
@@ -52,7 +52,7 @@ void vertex::add_edge(edge* e_ptr, size_t e_idx) {
  * @param neighbor The neighbor vertex to check.
  * @return The edge, or nullptr if not found.
  */
-edge* vertex::get_edge_by_neighbor(const vertex* neighbor) const {
+Edge* Vertex::get_edge_by_neighbor(const Vertex* neighbor) const {
     for(size_t e = 0; e < edges.size(); e++) {
         if(edges[e]->get_other_vertex(this) == neighbor) {
             return edges[e];
@@ -68,7 +68,7 @@ edge* vertex::get_edge_by_neighbor(const vertex* neighbor) const {
  * @param e_ptr Edge to check.
  * @return Whether it has the edge.
  */
-bool vertex::has_edge(const edge* e_ptr) const {
+bool Vertex::has_edge(const Edge* e_ptr) const {
     for(size_t e = 0; e < edges.size(); e++) {
         if(edges[e] == e_ptr) return true;
     }
@@ -85,14 +85,14 @@ bool vertex::has_edge(const edge* e_ptr) const {
  * if the result is true.
  * @return Whether it is a second-degree neighbor.
  */
-bool vertex::is_2nd_degree_neighbor(
-    const vertex* other_v, vertex** first_neighbor
+bool Vertex::is_2nd_degree_neighbor(
+    const Vertex* other_v, Vertex** first_neighbor
 ) const {
     //Let's crawl forward through all edges and stop at the second level.
     //If other_v is at that distance, then we found it!
     
     for(size_t e1 = 0; e1 < edges.size(); e1++) {
-        vertex* next_v = edges[e1]->get_other_vertex(this);
+        Vertex* next_v = edges[e1]->get_other_vertex(this);
         
         for(size_t e2 = 0; e2 < next_v->edges.size(); e2++) {
             if(next_v->edges[e2]->get_other_vertex(next_v) == other_v) {
@@ -115,14 +115,14 @@ bool vertex::is_2nd_degree_neighbor(
  * if the result is true.
  * @return Whether it is a second-degree neighbor.
  */
-bool vertex::is_2nd_degree_neighbor(
-    const edge* other_e, vertex** first_neighbor
+bool Vertex::is_2nd_degree_neighbor(
+    const Edge* other_e, Vertex** first_neighbor
 ) const {
     //Let's crawl forward through all edges and stop at the second level.
     //If other_e is at that distance, then we found it!
     
     for(size_t e1 = 0; e1 < edges.size(); e1++) {
-        vertex* next_v = edges[e1]->get_other_vertex(this);
+        Vertex* next_v = edges[e1]->get_other_vertex(this);
         
         for(size_t e2 = 0; e2 < next_v->edges.size(); e2++) {
             if(next_v->edges[e2] == other_e) {
@@ -143,7 +143,7 @@ bool vertex::is_2nd_degree_neighbor(
  * @param other_v The vertex to compare against.
  * @return Whether it is a neighbor.
  */
-bool vertex::is_neighbor(const vertex* other_v) const {
+bool Vertex::is_neighbor(const Vertex* other_v) const {
     for(size_t e = 0; e < edges.size(); e++) {
         if(edges[e]->get_other_vertex(this) == other_v) {
             return true;
@@ -158,7 +158,7 @@ bool vertex::is_neighbor(const vertex* other_v) const {
  *
  * @param e_ptr Edge to remove.
  */
-void vertex::remove_edge(const edge* e_ptr) {
+void Vertex::remove_edge(const Edge* e_ptr) {
     size_t i = 0;
     for(; i < edges.size(); i++) {
         if(edges[i] == e_ptr) {

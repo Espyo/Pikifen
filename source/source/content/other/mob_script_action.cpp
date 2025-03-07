@@ -30,7 +30,7 @@ using std::set;
  *
  * @param type Type of mob action call.
  */
-mob_action_call::mob_action_call(MOB_ACTION type) {
+MobActionCall::MobActionCall(MOB_ACTION type) {
 
     for(size_t a = 0; a < game.mob_actions.size(); a++) {
         if(game.mob_actions[a].type == type) {
@@ -46,7 +46,7 @@ mob_action_call::mob_action_call(MOB_ACTION type) {
  *
  * @param code The function to run.
  */
-mob_action_call::mob_action_call(custom_action_code_t code) :
+MobActionCall::MobActionCall(custom_action_code_t code) :
     code(code) {
     
     for(size_t a = 0; a < game.mob_actions.size(); a++) {
@@ -65,7 +65,7 @@ mob_action_call::mob_action_call(custom_action_code_t code) :
  * @param mt Mob type this action's fsm belongs to.
  * @return Whether it was successful.
  */
-bool mob_action_call::load_from_data_node(data_node* dn, mob_type* mt) {
+bool MobActionCall::load_from_data_node(DataNode* dn, MobType* mt) {
 
     action = nullptr;
     this->mt = mt;
@@ -185,8 +185,8 @@ bool mob_action_call::load_from_data_node(data_node* dn, mob_type* mt) {
  * @param custom_data_2 Custom argument #2 to pass to the code.
  * @return Evaluation result, used only by the "if" actions.
  */
-bool mob_action_call::run(
-    mob* m, void* custom_data_1, void* custom_data_2
+bool MobActionCall::run(
+    Mob* m, void* custom_data_1, void* custom_data_2
 ) {
     //Custom code (i.e. instead of text-based script, use actual C++ code).
     if(code) {
@@ -194,7 +194,7 @@ bool mob_action_call::run(
         return false;
     }
     
-    mob_action_run_data data(m, this);
+    MobActionRunData data(m, this);
     
     //Fill the arguments. Fetch values from variables if needed.
     data.args = args;
@@ -218,7 +218,7 @@ bool mob_action_call::run(
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool mob_action_loaders::arachnorb_plan_logic(mob_action_call &call) {
+bool mob_action_loaders::arachnorb_plan_logic(MobActionCall &call) {
     if(call.args[0] == "home") {
         call.args[0] = i2s(MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_HOME);
     } else if(call.args[0] == "forward") {
@@ -241,7 +241,7 @@ bool mob_action_loaders::arachnorb_plan_logic(mob_action_call &call) {
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool mob_action_loaders::calculate(mob_action_call &call) {
+bool mob_action_loaders::calculate(MobActionCall &call) {
     if(call.args[2] == "+") {
         call.args[2] = i2s(MOB_ACTION_CALCULATE_TYPE_SUM);
     } else if(call.args[2] == "-") {
@@ -266,7 +266,7 @@ bool mob_action_loaders::calculate(mob_action_call &call) {
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool mob_action_loaders::focus(mob_action_call &call) {
+bool mob_action_loaders::focus(MobActionCall &call) {
     return load_mob_target_type(call, 0);
 }
 
@@ -277,7 +277,7 @@ bool mob_action_loaders::focus(mob_action_call &call) {
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool mob_action_loaders::get_area_info(mob_action_call &call) {
+bool mob_action_loaders::get_area_info(MobActionCall &call) {
     if(call.args[1] == "day_minutes") {
         call.args[1] = i2s(MOB_ACTION_GET_AREA_INFO_TYPE_DAY_MINUTES);
     } else if(call.args[1] == "field_pikmin") {
@@ -299,7 +299,7 @@ bool mob_action_loaders::get_area_info(mob_action_call &call) {
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool mob_action_loaders::get_event_info(mob_action_call &call) {
+bool mob_action_loaders::get_event_info(MobActionCall &call) {
     if(call.args[1] == "body_part") {
         call.args[1] = i2s(MOB_ACTION_GET_EV_INFO_TYPE_BODY_PART);
     } else if(call.args[1] == "frame_signal") {
@@ -331,7 +331,7 @@ bool mob_action_loaders::get_event_info(mob_action_call &call) {
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool mob_action_loaders::get_mob_info(mob_action_call &call) {
+bool mob_action_loaders::get_mob_info(MobActionCall &call) {
 
     if(!load_mob_target_type(call, 1)) {
         return false;
@@ -386,7 +386,7 @@ bool mob_action_loaders::get_mob_info(mob_action_call &call) {
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool mob_action_loaders::hold_focus(mob_action_call &call) {
+bool mob_action_loaders::hold_focus(MobActionCall &call) {
     size_t p_idx = call.mt->anim_db->find_body_part(call.args[0]);
     if(p_idx == INVALID) {
         call.custom_error =
@@ -404,7 +404,7 @@ bool mob_action_loaders::hold_focus(mob_action_call &call) {
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool mob_action_loaders::if_function(mob_action_call &call) {
+bool mob_action_loaders::if_function(MobActionCall &call) {
     if(call.args[1] == "=") {
         call.args[1] = i2s(MOB_ACTION_IF_OP_EQUAL);
     } else if(call.args[1] == "!=") {
@@ -432,7 +432,7 @@ bool mob_action_loaders::if_function(mob_action_call &call) {
  * @param arg_idx Index number of the mob target type argument.
  */
 bool mob_action_loaders::load_mob_target_type(
-    mob_action_call &call, size_t arg_idx
+    MobActionCall &call, size_t arg_idx
 ) {
     if(call.args[arg_idx] == "self") {
         call.args[arg_idx] = i2s(MOB_ACTION_MOB_TARGET_TYPE_SELF);
@@ -458,7 +458,7 @@ bool mob_action_loaders::load_mob_target_type(
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool mob_action_loaders::move_to_target(mob_action_call &call) {
+bool mob_action_loaders::move_to_target(MobActionCall &call) {
     if(call.args[0] == "arachnorb_foot_logic") {
         call.args[0] = i2s(MOB_ACTION_MOVE_TYPE_ARACHNORB_FOOT_LOGIC);
     } else if(call.args[0] == "away_from_focused_mob") {
@@ -485,7 +485,7 @@ bool mob_action_loaders::move_to_target(mob_action_call &call) {
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool mob_action_loaders::play_sound(mob_action_call &call) {
+bool mob_action_loaders::play_sound(MobActionCall &call) {
     for(size_t s = 0; s < call.mt->sounds.size(); s++) {
         if(call.mt->sounds[s].name == call.args[0]) {
             call.args[0] = i2s(s);
@@ -504,7 +504,7 @@ bool mob_action_loaders::play_sound(mob_action_call &call) {
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool mob_action_loaders::receive_status(mob_action_call &call) {
+bool mob_action_loaders::receive_status(MobActionCall &call) {
     if(game.content.status_types.list.find(call.args[0]) == game.content.status_types.list.end()) {
         call.custom_error =
             "Unknown status effect \"" + call.args[0] + "\"!";
@@ -520,7 +520,7 @@ bool mob_action_loaders::receive_status(mob_action_call &call) {
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool mob_action_loaders::remove_status(mob_action_call &call) {
+bool mob_action_loaders::remove_status(MobActionCall &call) {
     if(game.content.status_types.list.find(call.args[0]) == game.content.status_types.list.end()) {
         call.custom_error =
             "Unknown status effect \"" + call.args[0] + "\"!";
@@ -537,7 +537,7 @@ bool mob_action_loaders::remove_status(mob_action_call &call) {
  * @param arg_idx Index number of the argument that is an enum.
  */
 void mob_action_loaders::report_enum_error(
-    mob_action_call &call, size_t arg_idx
+    MobActionCall &call, size_t arg_idx
 ) {
     size_t param_idx = std::min(arg_idx, call.action->parameters.size() - 1);
     call.custom_error =
@@ -553,7 +553,7 @@ void mob_action_loaders::report_enum_error(
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool mob_action_loaders::set_animation(mob_action_call &call) {
+bool mob_action_loaders::set_animation(MobActionCall &call) {
     size_t a_pos = call.mt->anim_db->find_animation(call.args[0]);
     if(a_pos == INVALID) {
         call.custom_error =
@@ -584,7 +584,7 @@ bool mob_action_loaders::set_animation(mob_action_call &call) {
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool mob_action_loaders::set_far_reach(mob_action_call &call) {
+bool mob_action_loaders::set_far_reach(MobActionCall &call) {
     for(size_t r = 0; r < call.mt->reaches.size(); r++) {
         if(call.mt->reaches[r].name == call.args[0]) {
             call.args[0] = i2s(r);
@@ -602,7 +602,7 @@ bool mob_action_loaders::set_far_reach(mob_action_call &call) {
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool mob_action_loaders::set_holdable(mob_action_call &call) {
+bool mob_action_loaders::set_holdable(MobActionCall &call) {
     for(size_t a = 0; a < call.args.size(); a++) {
         if(call.args[a] == "pikmin") {
             call.args[a] = i2s(HOLDABILITY_FLAG_PIKMIN);
@@ -623,7 +623,7 @@ bool mob_action_loaders::set_holdable(mob_action_call &call) {
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool mob_action_loaders::set_near_reach(mob_action_call &call) {
+bool mob_action_loaders::set_near_reach(MobActionCall &call) {
     for(size_t r = 0; r < call.mt->reaches.size(); r++) {
         if(call.mt->reaches[r].name == call.args[0]) {
             call.args[0] = i2s(r);
@@ -641,7 +641,7 @@ bool mob_action_loaders::set_near_reach(mob_action_call &call) {
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool mob_action_loaders::set_team(mob_action_call &call) {
+bool mob_action_loaders::set_team(MobActionCall &call) {
     size_t team_nr = string_to_team_nr(call.args[0]);
     if(team_nr == INVALID) {
         report_enum_error(call, 0);
@@ -658,7 +658,7 @@ bool mob_action_loaders::set_team(mob_action_call &call) {
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool mob_action_loaders::spawn(mob_action_call &call) {
+bool mob_action_loaders::spawn(MobActionCall &call) {
     for(size_t s = 0; s < call.mt->spawns.size(); s++) {
         if(call.mt->spawns[s].name == call.args[0]) {
             call.args[0] = i2s(s);
@@ -677,7 +677,7 @@ bool mob_action_loaders::spawn(mob_action_call &call) {
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool mob_action_loaders::stabilize_z(mob_action_call &call) {
+bool mob_action_loaders::stabilize_z(MobActionCall &call) {
     if(call.args[0] == "lowest") {
         call.args[0] = i2s(MOB_ACTION_STABILIZE_Z_TYPE_LOWEST);
     } else if(call.args[0] == "highest") {
@@ -696,7 +696,7 @@ bool mob_action_loaders::stabilize_z(mob_action_call &call) {
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool mob_action_loaders::start_chomping(mob_action_call &call) {
+bool mob_action_loaders::start_chomping(MobActionCall &call) {
     for(size_t s = 1; s < call.args.size(); s++) {
         size_t p_nr = call.mt->anim_db->find_body_part(call.args[s]);
         if(p_nr == INVALID) {
@@ -716,7 +716,7 @@ bool mob_action_loaders::start_chomping(mob_action_call &call) {
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool mob_action_loaders::start_particles(mob_action_call &call) {
+bool mob_action_loaders::start_particles(MobActionCall &call) {
     if(
         game.content.particle_gen.list.find(call.args[0]) ==
         game.content.particle_gen.list.end()
@@ -735,7 +735,7 @@ bool mob_action_loaders::start_particles(mob_action_call &call) {
  * @param call Mob action call that called this.
  * @return Whether it succeeded.
  */
-bool mob_action_loaders::turn_to_target(mob_action_call &call) {
+bool mob_action_loaders::turn_to_target(MobActionCall &call) {
     if(call.args[0] == "arachnorb_head_logic") {
         call.args[0] = i2s(MOB_ACTION_TURN_TYPE_ARACHNORB_HEAD_LOGIC);
     } else if(call.args[0] == "focused_mob") {
@@ -759,7 +759,7 @@ bool mob_action_loaders::turn_to_target(mob_action_call &call) {
  * If false, it can also be a var.
  * @param is_extras If true, this is an array of them (minimum amount 0).
  */
-mob_action_param::mob_action_param(
+MobActionParam::MobActionParam(
     const string &name,
     const MOB_ACTION_PARAM type,
     bool force_const,
@@ -779,7 +779,7 @@ mob_action_param::mob_action_param(
  * @param m The mob responsible.
  * @param call Mob action call that called this.
  */
-mob_action_run_data::mob_action_run_data(mob* m, mob_action_call* call) :
+MobActionRunData::MobActionRunData(Mob* m, MobActionCall* call) :
     m(m),
     call(call) {
     
@@ -791,7 +791,7 @@ mob_action_run_data::mob_action_run_data(mob* m, mob_action_call* call) :
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::add_health(mob_action_run_data &data) {
+void mob_action_runners::add_health(MobActionRunData &data) {
     data.m->set_health(true, false, s2f(data.args[0]));
 }
 
@@ -801,7 +801,7 @@ void mob_action_runners::add_health(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::arachnorb_plan_logic(mob_action_run_data &data) {
+void mob_action_runners::arachnorb_plan_logic(MobActionRunData &data) {
     data.m->arachnorb_plan_logic(
         (MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE) s2i(data.args[0])
     );
@@ -813,7 +813,7 @@ void mob_action_runners::arachnorb_plan_logic(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::calculate(mob_action_run_data &data) {
+void mob_action_runners::calculate(MobActionRunData &data) {
     float lhs = s2f(data.args[1]);
     MOB_ACTION_CALCULATE_TYPE op =
         (MOB_ACTION_CALCULATE_TYPE) s2i(data.args[2]);
@@ -861,7 +861,7 @@ void mob_action_runners::calculate(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::delete_function(mob_action_run_data &data) {
+void mob_action_runners::delete_function(MobActionRunData &data) {
     data.m->to_delete = true;
 }
 
@@ -871,14 +871,14 @@ void mob_action_runners::delete_function(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::drain_liquid(mob_action_run_data &data) {
-    sector* s_ptr = get_sector(data.m->pos, nullptr, true);
+void mob_action_runners::drain_liquid(MobActionRunData &data) {
+    Sector* s_ptr = get_sector(data.m->pos, nullptr, true);
     if(!s_ptr) return;
     
-    vector<sector*> sectors_to_drain;
+    vector<Sector*> sectors_to_drain;
     
     s_ptr->get_neighbor_sectors_conditionally(
-    [] (sector * s) -> bool {
+    [] (Sector * s) -> bool {
         for(size_t h = 0; h < s->hazards.size(); h++) {
             if(s->hazards[h]->associated_liquid) {
                 return true;
@@ -902,7 +902,7 @@ void mob_action_runners::drain_liquid(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::finish_dying(mob_action_run_data &data) {
+void mob_action_runners::finish_dying(MobActionRunData &data) {
     data.m->finish_dying();
 }
 
@@ -912,10 +912,10 @@ void mob_action_runners::finish_dying(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::focus(mob_action_run_data &data) {
+void mob_action_runners::focus(MobActionRunData &data) {
 
     MOB_ACTION_MOB_TARGET_TYPE s = (MOB_ACTION_MOB_TARGET_TYPE) s2i(data.args[0]);
-    mob* target = get_target_mob(data, s);
+    Mob* target = get_target_mob(data, s);
     
     if(!target) return;
     
@@ -928,7 +928,7 @@ void mob_action_runners::focus(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::follow_path_randomly(mob_action_run_data &data) {
+void mob_action_runners::follow_path_randomly(MobActionRunData &data) {
     string label;
     if(data.args.size() >= 1) {
         label = data.args[0];
@@ -936,7 +936,7 @@ void mob_action_runners::follow_path_randomly(mob_action_run_data &data) {
     
     //We need to decide what the final stop is going to be.
     //First, get all eligible stops.
-    vector<path_stop*> choices;
+    vector<PathStop*> choices;
     if(label.empty()) {
         //If there's no label, then any stop is eligible.
         choices.insert(
@@ -947,7 +947,7 @@ void mob_action_runners::follow_path_randomly(mob_action_run_data &data) {
     } else {
         //If there's a label, we should only pick stops that have the label.
         for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
-            path_stop* s_ptr = game.cur_area_data->path_stops[s];
+            PathStop* s_ptr = game.cur_area_data->path_stops[s];
             if(s_ptr->label == label) {
                 choices.push_back(s_ptr);
             }
@@ -956,13 +956,13 @@ void mob_action_runners::follow_path_randomly(mob_action_run_data &data) {
     
     //Pick a stop from the choices at random, but make sure we don't
     //pick a stop that the mob is practically on already.
-    path_stop* final_stop = nullptr;
+    PathStop* final_stop = nullptr;
     if(!choices.empty()) {
         size_t tries = 0;
         while(!final_stop && tries < 5) {
             size_t c = game.rng.i(0, (int) choices.size() - 1);
             if(
-                dist(choices[c]->pos, data.m->pos) >
+                Distance(choices[c]->pos, data.m->pos) >
                 PATHS::DEF_CHASE_TARGET_DISTANCE
             ) {
                 final_stop = choices[c];
@@ -975,7 +975,7 @@ void mob_action_runners::follow_path_randomly(mob_action_run_data &data) {
     //Go! Though if something went wrong, make it follow a path to nowhere,
     //so it can emit the MOB_EV_REACHED_DESTINATION event, and hopefully
     //make it clear that there was an error.
-    path_follow_settings settings;
+    PathFollowSettings settings;
     settings.target_point = final_stop ? final_stop->pos : data.m->pos;
     enable_flag(settings.flags, PATH_FOLLOW_FLAG_CAN_CONTINUE);
     enable_flag(settings.flags, PATH_FOLLOW_FLAG_SCRIPT_USE);
@@ -991,12 +991,12 @@ void mob_action_runners::follow_path_randomly(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::follow_path_to_absolute(mob_action_run_data &data) {
+void mob_action_runners::follow_path_to_absolute(MobActionRunData &data) {
     float x = s2f(data.args[0]);
     float y = s2f(data.args[1]);
     
-    path_follow_settings settings;
-    settings.target_point = point(x, y);
+    PathFollowSettings settings;
+    settings.target_point = Point(x, y);
     enable_flag(settings.flags, PATH_FOLLOW_FLAG_CAN_CONTINUE);
     enable_flag(settings.flags, PATH_FOLLOW_FLAG_SCRIPT_USE);
     if(data.args.size() >= 3) {
@@ -1014,12 +1014,12 @@ void mob_action_runners::follow_path_to_absolute(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::get_angle(mob_action_run_data &data) {
+void mob_action_runners::get_angle(MobActionRunData &data) {
     float center_x = s2f(data.args[1]);
     float center_y = s2f(data.args[2]);
     float focus_x = s2f(data.args[3]);
     float focus_y = s2f(data.args[4]);
-    float angle = get_angle(point(center_x, center_y), point(focus_x, focus_y));
+    float angle = get_angle(Point(center_x, center_y), Point(focus_x, focus_y));
     angle = rad_to_deg(angle);
     data.m->vars[data.args[0]] = f2s(angle);
 }
@@ -1031,7 +1031,7 @@ void mob_action_runners::get_angle(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::get_area_info(mob_action_run_data &data) {
+void mob_action_runners::get_area_info(MobActionRunData &data) {
     string* var = &(data.m->vars[data.args[0]]);
     MOB_ACTION_GET_AREA_INFO_TYPE t =
         (MOB_ACTION_GET_AREA_INFO_TYPE) s2i(data.args[1]);
@@ -1055,11 +1055,11 @@ void mob_action_runners::get_area_info(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::get_chomped(mob_action_run_data &data) {
+void mob_action_runners::get_chomped(MobActionRunData &data) {
     if(data.call->parent_event == MOB_EV_HITBOX_TOUCH_EAT) {
-        ((mob*) (data.custom_data_1))->chomp(
+        ((Mob*) (data.custom_data_1))->chomp(
             data.m,
-            (hitbox*) (data.custom_data_2)
+            (Hitbox*) (data.custom_data_2)
         );
     }
 }
@@ -1070,11 +1070,11 @@ void mob_action_runners::get_chomped(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::get_coordinates_from_angle(mob_action_run_data &data) {
+void mob_action_runners::get_coordinates_from_angle(MobActionRunData &data) {
     float angle = s2f(data.args[2]);
     angle = deg_to_rad(angle);
     float magnitude = s2f(data.args[3]);
-    point p = angle_to_coordinates(angle, magnitude);
+    Point p = angle_to_coordinates(angle, magnitude);
     data.m->vars[data.args[0]] = f2s(p.x);
     data.m->vars[data.args[1]] = f2s(p.y);
 }
@@ -1085,14 +1085,14 @@ void mob_action_runners::get_coordinates_from_angle(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::get_distance(mob_action_run_data &data) {
+void mob_action_runners::get_distance(MobActionRunData &data) {
     float center_x = s2f(data.args[1]);
     float center_y = s2f(data.args[2]);
     float focus_x = s2f(data.args[3]);
     float focus_y = s2f(data.args[4]);
     data.m->vars[data.args[0]] =
         f2s(
-            dist(point(center_x, center_y), point(focus_x, focus_y)).to_float()
+            Distance(Point(center_x, center_y), Point(focus_x, focus_y)).to_float()
         );
 }
 
@@ -1102,7 +1102,7 @@ void mob_action_runners::get_distance(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::get_event_info(mob_action_run_data &data) {
+void mob_action_runners::get_event_info(MobActionRunData &data) {
     string* var = &(data.m->vars[data.args[0]]);
     MOB_ACTION_GET_EV_INFO_TYPE t =
         (MOB_ACTION_GET_EV_INFO_TYPE) s2i(data.args[1]);
@@ -1117,7 +1117,7 @@ void mob_action_runners::get_event_info(mob_action_run_data &data) {
         ) {
             *var =
                 (
-                    (hitbox_interaction*)(data.custom_data_1)
+                    (HitboxInteraction*)(data.custom_data_1)
                 )->h1->body_part_name;
         } else if(
             data.call->parent_event == MOB_EV_TOUCHED_OBJECT ||
@@ -1126,7 +1126,7 @@ void mob_action_runners::get_event_info(mob_action_run_data &data) {
         ) {
             *var =
                 data.m->get_closest_hitbox(
-                    ((mob*)(data.custom_data_1))->pos
+                    ((Mob*)(data.custom_data_1))->pos
                 )->body_part_name;
         }
         break;
@@ -1142,7 +1142,7 @@ void mob_action_runners::get_event_info(mob_action_run_data &data) {
             data.call->parent_event == MOB_EV_TOUCHED_HAZARD ||
             data.call->parent_event == MOB_EV_LEFT_HAZARD
         ) {
-            *var = ((hazard*)data.custom_data_1)->manifest->internal_name;
+            *var = ((Hazard*)data.custom_data_1)->manifest->internal_name;
         }
         break;
         
@@ -1150,14 +1150,14 @@ void mob_action_runners::get_event_info(mob_action_run_data &data) {
         if(data.call->parent_event == MOB_EV_INPUT_RECEIVED) {
             *var =
                 game.controls.get_player_action_type_internal_name(
-                    ((player_action*) (data.custom_data_1))->action_type_id
+                    ((PlayerAction*) (data.custom_data_1))->action_type_id
                 );
         }
         break;
         
     } case MOB_ACTION_GET_EV_INFO_TYPE_INPUT_VALUE: {
         if(data.call->parent_event == MOB_EV_INPUT_RECEIVED) {
-            *var = f2s(((player_action*) (data.custom_data_1))->value);
+            *var = f2s(((PlayerAction*) (data.custom_data_1))->value);
         }
         break;
         
@@ -1176,7 +1176,7 @@ void mob_action_runners::get_event_info(mob_action_run_data &data) {
         ) {
             *var =
                 (
-                    (hitbox_interaction*)(data.custom_data_1)
+                    (HitboxInteraction*)(data.custom_data_1)
                 )->h2->body_part_name;
         } else if(
             data.call->parent_event == MOB_EV_TOUCHED_OBJECT ||
@@ -1184,7 +1184,7 @@ void mob_action_runners::get_event_info(mob_action_run_data &data) {
             data.call->parent_event == MOB_EV_THROWN_PIKMIN_LANDED
         ) {
             *var =
-                ((mob*)(data.custom_data_1))->get_closest_hitbox(
+                ((Mob*)(data.custom_data_1))->get_closest_hitbox(
                     data.m->pos
                 )->body_part_name;
         }
@@ -1200,10 +1200,10 @@ void mob_action_runners::get_event_info(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::get_floor_z(mob_action_run_data &data) {
+void mob_action_runners::get_floor_z(MobActionRunData &data) {
     float x = s2f(data.args[1]);
     float y = s2f(data.args[2]);
-    sector* s = get_sector(point(x, y), nullptr, true);
+    Sector* s = get_sector(Point(x, y), nullptr, true);
     data.m->vars[data.args[0]] = f2s(s ? s->z : 0);
 }
 
@@ -1213,7 +1213,7 @@ void mob_action_runners::get_floor_z(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::get_focus_var(mob_action_run_data &data) {
+void mob_action_runners::get_focus_var(MobActionRunData &data) {
     if(!data.m->focused_mob) return;
     data.m->vars[data.args[0]] =
         data.m->focused_mob->vars[data.args[1]];
@@ -1225,9 +1225,9 @@ void mob_action_runners::get_focus_var(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::get_mob_info(mob_action_run_data &data) {
+void mob_action_runners::get_mob_info(MobActionRunData &data) {
     MOB_ACTION_MOB_TARGET_TYPE s = (MOB_ACTION_MOB_TARGET_TYPE) s2i(data.args[1]);
-    mob* target = get_target_mob(data, s);
+    Mob* target = get_target_mob(data, s);
     
     if(!target) return;
     
@@ -1247,14 +1247,14 @@ void mob_action_runners::get_mob_info(mob_action_run_data &data) {
     } case MOB_ACTION_GET_MOB_INFO_TYPE_FOCUS_DISTANCE: {
         if(target->focused_mob) {
             float d =
-                dist(target->pos, target->focused_mob->pos).to_float();
+                Distance(target->pos, target->focused_mob->pos).to_float();
             *var = f2s(d);
         }
         break;
         
     } case MOB_ACTION_GET_MOB_INFO_TYPE_GROUP_TASK_POWER: {
         if(target->type->category->id == MOB_CATEGORY_GROUP_TASKS) {
-            *var = f2s(((group_task*)target)->get_power());
+            *var = f2s(((GroupTask*)target)->get_power());
         }
         break;
         
@@ -1296,7 +1296,7 @@ void mob_action_runners::get_mob_info(mob_action_run_data &data) {
         
     } case MOB_ACTION_GET_MOB_INFO_TYPE_WEIGHT: {
         if(target->type->category->id == MOB_CATEGORY_SCALES) {
-            scale* s_ptr = (scale*)(target);
+            Scale* s_ptr = (Scale*)(target);
             *var = i2s(s_ptr->calculate_cur_weight());
         }
         break;
@@ -1322,7 +1322,7 @@ void mob_action_runners::get_mob_info(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::get_random_float(mob_action_run_data &data) {
+void mob_action_runners::get_random_float(MobActionRunData &data) {
     data.m->vars[data.args[0]] =
         f2s(game.rng.f(s2f(data.args[1]), s2f(data.args[2])));
 }
@@ -1333,7 +1333,7 @@ void mob_action_runners::get_random_float(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::get_random_int(mob_action_run_data &data) {
+void mob_action_runners::get_random_int(MobActionRunData &data) {
     data.m->vars[data.args[0]] =
         i2s(game.rng.i(s2i(data.args[1]), s2i(data.args[2])));
 }
@@ -1345,8 +1345,8 @@ void mob_action_runners::get_random_int(mob_action_run_data &data) {
  * @param data Data about the action call.
  * @param type Type of target.
  */
-mob* get_target_mob(
-    mob_action_run_data &data, MOB_ACTION_MOB_TARGET_TYPE type
+Mob* get_target_mob(
+    MobActionRunData &data, MOB_ACTION_MOB_TARGET_TYPE type
 ) {
     switch (type) {
     case MOB_ACTION_MOB_TARGET_TYPE_SELF: {
@@ -1380,7 +1380,7 @@ mob* get_target_mob(
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::hold_focus(mob_action_run_data &data) {
+void mob_action_runners::hold_focus(MobActionRunData &data) {
     if(data.m->focused_mob) {
         data.m->hold(
             data.m->focused_mob,
@@ -1397,7 +1397,7 @@ void mob_action_runners::hold_focus(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::if_function(mob_action_run_data &data) {
+void mob_action_runners::if_function(MobActionRunData &data) {
     string lhs = data.args[0];
     MOB_ACTION_IF_OP op =
         (MOB_ACTION_IF_OP) s2i(data.args[1]);
@@ -1446,7 +1446,7 @@ void mob_action_runners::if_function(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::link_with_focus(mob_action_run_data &data) {
+void mob_action_runners::link_with_focus(MobActionRunData &data) {
     if(!data.m->focused_mob) {
         return;
     }
@@ -1467,7 +1467,7 @@ void mob_action_runners::link_with_focus(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::load_focus_memory(mob_action_run_data &data) {
+void mob_action_runners::load_focus_memory(MobActionRunData &data) {
     if(data.m->focused_mob_memory.empty()) {
         return;
     }
@@ -1481,11 +1481,11 @@ void mob_action_runners::load_focus_memory(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::move_to_absolute(mob_action_run_data &data) {
+void mob_action_runners::move_to_absolute(MobActionRunData &data) {
     float x = s2f(data.args[0]);
     float y = s2f(data.args[1]);
     float z = data.args.size() > 2 ? s2f(data.args[2]) : data.m->z;
-    data.m->chase(point(x, y), z);
+    data.m->chase(Point(x, y), z);
 }
 
 
@@ -1494,11 +1494,11 @@ void mob_action_runners::move_to_absolute(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::move_to_relative(mob_action_run_data &data) {
+void mob_action_runners::move_to_relative(MobActionRunData &data) {
     float x = s2f(data.args[0]);
     float y = s2f(data.args[1]);
     float z = (data.args.size() > 2 ? s2f(data.args[2]) : 0);
-    point p = rotate_point(point(x, y), data.m->angle);
+    Point p = rotate_point(Point(x, y), data.m->angle);
     data.m->chase(data.m->pos + p, data.m->z + z);
 }
 
@@ -1508,14 +1508,14 @@ void mob_action_runners::move_to_relative(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::move_to_target(mob_action_run_data &data) {
+void mob_action_runners::move_to_target(MobActionRunData &data) {
     MOB_ACTION_MOVE_TYPE t = (MOB_ACTION_MOVE_TYPE) s2i(data.args[0]);
     
     switch(t) {
     case MOB_ACTION_MOVE_TYPE_AWAY_FROM_FOCUS: {
         if(data.m->focused_mob) {
             float a = get_angle(data.m->pos, data.m->focused_mob->pos);
-            point offset = point(2000, 0);
+            Point offset = Point(2000, 0);
             offset = rotate_point(offset, a + TAU / 2.0);
             data.m->chase(data.m->pos + offset, data.m->z);
         } else {
@@ -1552,7 +1552,7 @@ void mob_action_runners::move_to_target(mob_action_run_data &data) {
             return;
         }
         
-        point des;
+        Point des;
         for(size_t l = 0; l < data.m->links.size(); l++) {
             if(!data.m->links[l]) continue;
             des += data.m->links[l]->pos;
@@ -1572,7 +1572,7 @@ void mob_action_runners::move_to_target(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::order_release(mob_action_run_data &data) {
+void mob_action_runners::order_release(MobActionRunData &data) {
     if(data.m->holder.m) {
         data.m->holder.m->fsm.run_event(MOB_EV_RELEASE_ORDER, nullptr, nullptr);
     }
@@ -1584,7 +1584,7 @@ void mob_action_runners::order_release(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::play_sound(mob_action_run_data &data) {
+void mob_action_runners::play_sound(MobActionRunData &data) {
     size_t sound_id = data.m->play_sound(s2i(data.args[0]));
     if(data.args.size() >= 2) {
         data.m->set_var(data.args[1], i2s(sound_id));
@@ -1597,7 +1597,7 @@ void mob_action_runners::play_sound(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::print(mob_action_run_data &data) {
+void mob_action_runners::print(MobActionRunData &data) {
     string text = vector_tail_to_string(data.args, 0);
     print_info(
         "[DEBUG PRINT] " + data.m->type->name + " says:\n" + text,
@@ -1611,7 +1611,7 @@ void mob_action_runners::print(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::receive_status(mob_action_run_data &data) {
+void mob_action_runners::receive_status(MobActionRunData &data) {
     data.m->apply_status_effect(game.content.status_types.list[data.args[0]], false, false);
 }
 
@@ -1621,7 +1621,7 @@ void mob_action_runners::receive_status(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::release(mob_action_run_data &data) {
+void mob_action_runners::release(MobActionRunData &data) {
     data.m->release_chomped_pikmin();
 }
 
@@ -1631,7 +1631,7 @@ void mob_action_runners::release(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::release_stored_mobs(mob_action_run_data &data) {
+void mob_action_runners::release_stored_mobs(MobActionRunData &data) {
     data.m->release_stored_mobs();
 }
 
@@ -1641,7 +1641,7 @@ void mob_action_runners::release_stored_mobs(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::remove_status(mob_action_run_data &data) {
+void mob_action_runners::remove_status(MobActionRunData &data) {
     for(size_t s = 0; s < data.m->statuses.size(); s++) {
         if(data.m->statuses[s].type->manifest->internal_name == data.args[0]) {
             data.m->statuses[s].to_delete = true;
@@ -1655,7 +1655,7 @@ void mob_action_runners::remove_status(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::save_focus_memory(mob_action_run_data &data) {
+void mob_action_runners::save_focus_memory(MobActionRunData &data) {
     if(!data.m->focused_mob) {
         return;
     }
@@ -1669,7 +1669,7 @@ void mob_action_runners::save_focus_memory(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::send_message_to_focus(mob_action_run_data &data) {
+void mob_action_runners::send_message_to_focus(MobActionRunData &data) {
     if(!data.m->focused_mob) return;
     data.m->send_message(data.m->focused_mob, data.args[0]);
 }
@@ -1680,7 +1680,7 @@ void mob_action_runners::send_message_to_focus(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::send_message_to_links(mob_action_run_data &data) {
+void mob_action_runners::send_message_to_links(MobActionRunData &data) {
     for(size_t l = 0; l < data.m->links.size(); l++) {
         if(data.m->links[l] == data.m) continue;
         if(!data.m->links[l]) continue;
@@ -1694,14 +1694,14 @@ void mob_action_runners::send_message_to_links(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::send_message_to_nearby(mob_action_run_data &data) {
+void mob_action_runners::send_message_to_nearby(MobActionRunData &data) {
     float d = s2f(data.args[0]);
     
     for(size_t m2 = 0; m2 < game.states.gameplay->mobs.all.size(); m2++) {
         if(game.states.gameplay->mobs.all[m2] == data.m) {
             continue;
         }
-        if(dist(data.m->pos, game.states.gameplay->mobs.all[m2]->pos) > d) {
+        if(Distance(data.m->pos, game.states.gameplay->mobs.all[m2]->pos) > d) {
             continue;
         }
         
@@ -1717,7 +1717,7 @@ void mob_action_runners::send_message_to_nearby(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::set_animation(mob_action_run_data &data) {
+void mob_action_runners::set_animation(MobActionRunData &data) {
     START_ANIM_OPTION options = START_ANIM_OPTION_NORMAL;
     float mob_speed_baseline = 0.0f;
     if(data.args.size() > 1) {
@@ -1740,7 +1740,7 @@ void mob_action_runners::set_animation(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::set_can_block_paths(mob_action_run_data &data) {
+void mob_action_runners::set_can_block_paths(MobActionRunData &data) {
     data.m->set_can_block_paths(s2b(data.args[0]));
 }
 
@@ -1750,7 +1750,7 @@ void mob_action_runners::set_can_block_paths(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::set_far_reach(mob_action_run_data &data) {
+void mob_action_runners::set_far_reach(MobActionRunData &data) {
     data.m->far_reach = s2i(data.args[0]);
     data.m->update_interaction_span();
 }
@@ -1761,7 +1761,7 @@ void mob_action_runners::set_far_reach(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::set_flying(mob_action_run_data &data) {
+void mob_action_runners::set_flying(MobActionRunData &data) {
     if(s2b(data.args[0])) {
         enable_flag(data.m->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     } else {
@@ -1775,7 +1775,7 @@ void mob_action_runners::set_flying(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::set_gravity(mob_action_run_data &data) {
+void mob_action_runners::set_gravity(MobActionRunData &data) {
     data.m->gravity_mult = s2f(data.args[0]);
 }
 
@@ -1785,7 +1785,7 @@ void mob_action_runners::set_gravity(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::set_health(mob_action_run_data &data) {
+void mob_action_runners::set_health(MobActionRunData &data) {
     data.m->set_health(false, false, s2f(data.args[0]));
 }
 
@@ -1795,13 +1795,13 @@ void mob_action_runners::set_health(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::set_height(mob_action_run_data &data) {
+void mob_action_runners::set_height(MobActionRunData &data) {
     data.m->height = s2f(data.args[0]);
     
     if(data.m->type->walkable) {
         //Update the Z of mobs standing on top of it.
         for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
-            mob* m2_ptr = game.states.gameplay->mobs.all[m];
+            Mob* m2_ptr = game.states.gameplay->mobs.all[m];
             if(m2_ptr->standing_on_mob == data.m) {
                 m2_ptr->z = data.m->z + data.m->height;
             }
@@ -1815,7 +1815,7 @@ void mob_action_runners::set_height(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::set_hiding(mob_action_run_data &data) {
+void mob_action_runners::set_hiding(MobActionRunData &data) {
     if(s2b(data.args[0])) {
         enable_flag(data.m->flags, MOB_FLAG_HIDDEN);
     } else {
@@ -1829,13 +1829,13 @@ void mob_action_runners::set_hiding(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::set_holdable(mob_action_run_data &data) {
-    if(typeid(*(data.m)) == typeid(tool)) {
+void mob_action_runners::set_holdable(MobActionRunData &data) {
+    if(typeid(*(data.m)) == typeid(Tool)) {
         unsigned char flags = 0;
         for(size_t i = 0; i < data.args.size(); i++) {
             flags |= s2i(data.args[i]);
         }
-        ((tool*) (data.m))->holdability_flags = flags;
+        ((Tool*) (data.m))->holdability_flags = flags;
     }
 }
 
@@ -1845,7 +1845,7 @@ void mob_action_runners::set_holdable(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::set_huntable(mob_action_run_data &data) {
+void mob_action_runners::set_huntable(MobActionRunData &data) {
     if(s2b(data.args[0])) {
         disable_flag(data.m->flags, MOB_FLAG_NON_HUNTABLE);
     } else {
@@ -1859,7 +1859,7 @@ void mob_action_runners::set_huntable(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::set_limb_animation(mob_action_run_data &data) {
+void mob_action_runners::set_limb_animation(MobActionRunData &data) {
     if(!data.m->parent) {
         return;
     }
@@ -1884,7 +1884,7 @@ void mob_action_runners::set_limb_animation(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::set_near_reach(mob_action_run_data &data) {
+void mob_action_runners::set_near_reach(MobActionRunData &data) {
     data.m->near_reach = s2i(data.args[0]);
     data.m->update_interaction_span();
 }
@@ -1895,7 +1895,7 @@ void mob_action_runners::set_near_reach(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::set_radius(mob_action_run_data &data) {
+void mob_action_runners::set_radius(MobActionRunData &data) {
     data.m->set_radius(s2f(data.args[0]));
 }
 
@@ -1905,8 +1905,8 @@ void mob_action_runners::set_radius(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::set_sector_scroll(mob_action_run_data &data) {
-    sector* s_ptr = get_sector(data.m->pos, nullptr, true);
+void mob_action_runners::set_sector_scroll(MobActionRunData &data) {
+    Sector* s_ptr = get_sector(data.m->pos, nullptr, true);
     if(!s_ptr) return;
     
     s_ptr->scroll.x = s2f(data.args[0]);
@@ -1919,7 +1919,7 @@ void mob_action_runners::set_sector_scroll(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::set_shadow_visibility(mob_action_run_data &data) {
+void mob_action_runners::set_shadow_visibility(MobActionRunData &data) {
     if(s2b(data.args[0])) {
         disable_flag(data.m->flags, MOB_FLAG_SHADOW_INVISIBLE);
     } else {
@@ -1933,7 +1933,7 @@ void mob_action_runners::set_shadow_visibility(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::set_state(mob_action_run_data &data) {
+void mob_action_runners::set_state(MobActionRunData &data) {
     data.m->fsm.set_state(
         s2i(data.args[0]),
         data.custom_data_1,
@@ -1947,7 +1947,7 @@ void mob_action_runners::set_state(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::set_tangible(mob_action_run_data &data) {
+void mob_action_runners::set_tangible(MobActionRunData &data) {
     if(s2b(data.args[0])) {
         disable_flag(data.m->flags, MOB_FLAG_INTANGIBLE);
     } else {
@@ -1961,7 +1961,7 @@ void mob_action_runners::set_tangible(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::set_team(mob_action_run_data &data) {
+void mob_action_runners::set_team(MobActionRunData &data) {
     data.m->team = (MOB_TEAM) s2i(data.args[0]);
 }
 
@@ -1971,7 +1971,7 @@ void mob_action_runners::set_team(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::set_timer(mob_action_run_data &data) {
+void mob_action_runners::set_timer(MobActionRunData &data) {
     data.m->set_timer(s2f(data.args[0]));
 }
 
@@ -1981,7 +1981,7 @@ void mob_action_runners::set_timer(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::set_var(mob_action_run_data &data) {
+void mob_action_runners::set_var(MobActionRunData &data) {
     data.m->set_var(data.args[0], data.args[1]);
 }
 
@@ -1991,7 +1991,7 @@ void mob_action_runners::set_var(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::show_message_from_var(mob_action_run_data &data) {
+void mob_action_runners::show_message_from_var(MobActionRunData &data) {
     start_message(data.m->vars[data.args[0]], nullptr);
 }
 
@@ -2001,7 +2001,7 @@ void mob_action_runners::show_message_from_var(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::spawn(mob_action_run_data &data) {
+void mob_action_runners::spawn(MobActionRunData &data) {
     data.m->spawn(&data.m->type->spawns[s2i(data.args[0])]);
 }
 
@@ -2011,7 +2011,7 @@ void mob_action_runners::spawn(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::stabilize_z(mob_action_run_data &data) {
+void mob_action_runners::stabilize_z(MobActionRunData &data) {
     if(data.m->links.empty() || !data.m->links[0]) {
         return;
     }
@@ -2051,7 +2051,7 @@ void mob_action_runners::stabilize_z(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::start_chomping(mob_action_run_data &data) {
+void mob_action_runners::start_chomping(MobActionRunData &data) {
     data.m->chomp_max = s2i(data.args[0]);
     data.m->chomp_body_parts.clear();
     for(size_t p = 1; p < data.args.size(); p++) {
@@ -2065,7 +2065,7 @@ void mob_action_runners::start_chomping(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::start_dying(mob_action_run_data &data) {
+void mob_action_runners::start_dying(MobActionRunData &data) {
     data.m->start_dying();
 }
 
@@ -2075,7 +2075,7 @@ void mob_action_runners::start_dying(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::start_height_effect(mob_action_run_data &data) {
+void mob_action_runners::start_height_effect(MobActionRunData &data) {
     data.m->start_height_effect();
 }
 
@@ -2085,7 +2085,7 @@ void mob_action_runners::start_height_effect(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::start_particles(mob_action_run_data &data) {
+void mob_action_runners::start_particles(MobActionRunData &data) {
     float offset_x = 0;
     float offset_y = 0;
     float offset_z = 0;
@@ -2093,9 +2093,9 @@ void mob_action_runners::start_particles(mob_action_run_data &data) {
     if(data.args.size() > 2) offset_y = s2f(data.args[2]);
     if(data.args.size() > 3) offset_z = s2f(data.args[3]);
     
-    particle_generator pg =
+    ParticleGenerator pg =
         standard_particle_gen_setup(data.args[0], data.m);
-    pg.follow_pos_offset = point(offset_x, offset_y);
+    pg.follow_pos_offset = Point(offset_x, offset_y);
     pg.follow_z_offset = offset_z;
     pg.id = MOB_PARTICLE_GENERATOR_ID_SCRIPT;
     data.m->particle_generators.push_back(pg);
@@ -2107,7 +2107,7 @@ void mob_action_runners::start_particles(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::stop(mob_action_run_data &data) {
+void mob_action_runners::stop(MobActionRunData &data) {
     data.m->stop_chasing();
     data.m->stop_turning();
     data.m->stop_following_path();
@@ -2119,7 +2119,7 @@ void mob_action_runners::stop(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::stop_chomping(mob_action_run_data &data) {
+void mob_action_runners::stop_chomping(MobActionRunData &data) {
     data.m->chomp_max = 0;
     data.m->chomp_body_parts.clear();
 }
@@ -2130,7 +2130,7 @@ void mob_action_runners::stop_chomping(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::stop_height_effect(mob_action_run_data &data) {
+void mob_action_runners::stop_height_effect(MobActionRunData &data) {
     data.m->stop_height_effect();
 }
 
@@ -2140,7 +2140,7 @@ void mob_action_runners::stop_height_effect(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::stop_particles(mob_action_run_data &data) {
+void mob_action_runners::stop_particles(MobActionRunData &data) {
     data.m->remove_particle_generator(MOB_PARTICLE_GENERATOR_ID_SCRIPT);
 }
 
@@ -2150,7 +2150,7 @@ void mob_action_runners::stop_particles(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::stop_sound(mob_action_run_data &data) {
+void mob_action_runners::stop_sound(MobActionRunData &data) {
     game.audio.destroy_sound_source(s2i(data.args[0]));
 }
 
@@ -2160,7 +2160,7 @@ void mob_action_runners::stop_sound(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::stop_vertically(mob_action_run_data &data) {
+void mob_action_runners::stop_vertically(MobActionRunData &data) {
     data.m->speed_z = 0;
 }
 
@@ -2170,7 +2170,7 @@ void mob_action_runners::stop_vertically(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::store_focus_inside(mob_action_run_data &data) {
+void mob_action_runners::store_focus_inside(MobActionRunData &data) {
     if(data.m->focused_mob && !data.m->focused_mob->is_stored_inside_mob()) {
         data.m->store_mob_inside(data.m->focused_mob);
     }
@@ -2182,7 +2182,7 @@ void mob_action_runners::store_focus_inside(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::swallow(mob_action_run_data &data) {
+void mob_action_runners::swallow(MobActionRunData &data) {
     data.m->swallow_chomped_pikmin(s2i(data.args[1]));
 }
 
@@ -2192,7 +2192,7 @@ void mob_action_runners::swallow(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::swallow_all(mob_action_run_data &data) {
+void mob_action_runners::swallow_all(MobActionRunData &data) {
     data.m->swallow_chomped_pikmin(data.m->chomping_mobs.size());
 }
 
@@ -2202,10 +2202,10 @@ void mob_action_runners::swallow_all(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::teleport_to_absolute(mob_action_run_data &data) {
+void mob_action_runners::teleport_to_absolute(MobActionRunData &data) {
     data.m->stop_chasing();
     data.m->chase(
-        point(s2f(data.args[0]), s2f(data.args[1])),
+        Point(s2f(data.args[0]), s2f(data.args[1])),
         s2f(data.args[2]),
         CHASE_FLAG_TELEPORT
     );
@@ -2217,11 +2217,11 @@ void mob_action_runners::teleport_to_absolute(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::teleport_to_relative(mob_action_run_data &data) {
+void mob_action_runners::teleport_to_relative(MobActionRunData &data) {
     data.m->stop_chasing();
-    point p =
+    Point p =
         rotate_point(
-            point(s2f(data.args[0]), s2f(data.args[1])),
+            Point(s2f(data.args[0]), s2f(data.args[1])),
             data.m->angle
         );
     data.m->chase(
@@ -2237,7 +2237,7 @@ void mob_action_runners::teleport_to_relative(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::throw_focus(mob_action_run_data &data) {
+void mob_action_runners::throw_focus(MobActionRunData &data) {
     if(!data.m->focused_mob) {
         return;
     }
@@ -2256,7 +2256,7 @@ void mob_action_runners::throw_focus(mob_action_run_data &data) {
     data.m->start_height_effect();
     calculate_throw(
         data.m->focused_mob->pos, data.m->focused_mob->z,
-        point(s2f(data.args[0]), s2f(data.args[1])), s2f(data.args[2]),
+        Point(s2f(data.args[0]), s2f(data.args[1])), s2f(data.args[2]),
         max_height, MOB::GRAVITY_ADDER,
         &data.m->focused_mob->speed,
         &data.m->focused_mob->speed_z,
@@ -2270,7 +2270,7 @@ void mob_action_runners::throw_focus(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::turn_to_absolute(mob_action_run_data &data) {
+void mob_action_runners::turn_to_absolute(MobActionRunData &data) {
     if(data.args.size() == 1) {
         //Turn to an absolute angle.
         data.m->face(deg_to_rad(s2f(data.args[0])), nullptr);
@@ -2278,7 +2278,7 @@ void mob_action_runners::turn_to_absolute(mob_action_run_data &data) {
         //Turn to some absolute coordinates.
         float x = s2f(data.args[0]);
         float y = s2f(data.args[1]);
-        data.m->face(get_angle(data.m->pos, point(x, y)), nullptr);
+        data.m->face(get_angle(data.m->pos, Point(x, y)), nullptr);
     }
 }
 
@@ -2288,7 +2288,7 @@ void mob_action_runners::turn_to_absolute(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::turn_to_relative(mob_action_run_data &data) {
+void mob_action_runners::turn_to_relative(MobActionRunData &data) {
     if(data.args.size() == 1) {
         //Turn to a relative angle.
         data.m->face(data.m->angle + deg_to_rad(s2f(data.args[0])), nullptr);
@@ -2296,7 +2296,7 @@ void mob_action_runners::turn_to_relative(mob_action_run_data &data) {
         //Turn to some relative coordinates.
         float x = s2f(data.args[0]);
         float y = s2f(data.args[1]);
-        point p = rotate_point(point(x, y), data.m->angle);
+        Point p = rotate_point(Point(x, y), data.m->angle);
         data.m->face(get_angle(data.m->pos, data.m->pos + p), nullptr);
     }
 }
@@ -2307,7 +2307,7 @@ void mob_action_runners::turn_to_relative(mob_action_run_data &data) {
  *
  * @param data Data about the action call.
  */
-void mob_action_runners::turn_to_target(mob_action_run_data &data) {
+void mob_action_runners::turn_to_target(MobActionRunData &data) {
     MOB_ACTION_TURN_TYPE t = (MOB_ACTION_TURN_TYPE) s2i(data.args[0]);
     
     switch(t) {
@@ -2342,7 +2342,7 @@ void mob_action_runners::turn_to_target(mob_action_run_data &data) {
  * @return Whether it succeeded.
  */
 bool assert_actions(
-    const vector<mob_action_call*> &actions, const data_node* dn
+    const vector<MobActionCall*> &actions, const DataNode* dn
 ) {
     //Check if the "if"-related actions are okay.
     int if_level = 0;
@@ -2451,7 +2451,7 @@ bool assert_actions(
  * @param data Data about the action call.
  * @return The mob.
  */
-mob* get_trigger_mob(mob_action_run_data &data) {
+Mob* get_trigger_mob(MobActionRunData &data) {
     if(
         data.call->parent_event == MOB_EV_OBJECT_IN_REACH ||
         data.call->parent_event == MOB_EV_OPPONENT_IN_REACH ||
@@ -2464,12 +2464,12 @@ mob* get_trigger_mob(mob_action_run_data &data) {
         data.call->parent_event == MOB_EV_STARTED_RECEIVING_DELIVERY ||
         data.call->parent_event == MOB_EV_FINISHED_RECEIVING_DELIVERY
     ) {
-        return (mob*)(data.custom_data_1);
+        return (Mob*)(data.custom_data_1);
         
     } else if(
         data.call->parent_event == MOB_EV_RECEIVE_MESSAGE
     ) {
-        return(mob*)(data.custom_data_2);
+        return(Mob*)(data.custom_data_2);
         
     } else if(
         data.call->parent_event == MOB_EV_HITBOX_TOUCH_A_N ||
@@ -2477,7 +2477,7 @@ mob* get_trigger_mob(mob_action_run_data &data) {
         data.call->parent_event == MOB_EV_HITBOX_TOUCH_N_N ||
         data.call->parent_event == MOB_EV_DAMAGE
     ) {
-        return ((hitbox_interaction*)(data.custom_data_1))->mob2;
+        return ((HitboxInteraction*)(data.custom_data_1))->mob2;
         
     }
     
@@ -2493,9 +2493,9 @@ mob* get_trigger_mob(mob_action_run_data &data) {
  * @param at_end Are the actions inserted at the end?
  */
 void insert_event_actions(
-    mob_event* ev, const vector<mob_action_call*> &actions, bool at_end
+    MobEvent* ev, const vector<MobActionCall*> &actions, bool at_end
 ) {
-    vector<mob_action_call*>::iterator it =
+    vector<MobActionCall*>::iterator it =
         at_end ? ev->actions.end() : ev->actions.begin();
     ev->actions.insert(it, actions.begin(), actions.end());
 }
@@ -2511,12 +2511,12 @@ void insert_event_actions(
  * events are returned here.
  */
 void load_actions(
-    mob_type* mt, data_node* node,
-    vector<mob_action_call*>* out_actions, bitmask_8_t* out_settings
+    MobType* mt, DataNode* node,
+    vector<MobActionCall*>* out_actions, bitmask_8_t* out_settings
 ) {
     if(out_settings) *out_settings = 0;
     for(size_t a = 0; a < node->get_nr_of_children(); a++) {
-        data_node* action_node = node->get_child(a);
+        DataNode* action_node = node->get_child(a);
         if(
             out_settings && action_node->name == "custom_actions_after"
         ) {
@@ -2526,7 +2526,7 @@ void load_actions(
         ) {
             enable_flag(*out_settings, EVENT_LOAD_FLAG_GLOBAL_ACTIONS_AFTER);
         } else {
-            mob_action_call* new_a = new mob_action_call();
+            MobActionCall* new_a = new MobActionCall();
             if(new_a->load_from_data_node(action_node, mt)) {
                 out_actions->push_back(new_a);
             } else {

@@ -18,10 +18,10 @@
  * @param type Track type this mob belongs to.
  * @param angle Starting angle.
  */
-track::track(
-    const point &pos, track_type* type, float angle
+Track::Track(
+    const Point &pos, TrackType* type, float angle
 ):
-    mob(pos, type, angle),
+    Mob(pos, type, angle),
     tra_type(type) {
     
     team = MOB_TEAM_NONE;

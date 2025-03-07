@@ -139,12 +139,12 @@ const float THROW_PREVIEW_MIN_THICKNESS = 2.0f;
  * @param type Leader type this mob belongs to.
  * @param angle Starting angle.
  */
-leader::leader(const point &pos, leader_type* type, float angle) :
-    mob(pos, type, angle),
+Leader::Leader(const Point &pos, LeaderType* type, float angle) :
+    Mob(pos, type, angle),
     lea_type(type) {
     
     team = MOB_TEAM_PLAYER_1;
-    invuln_period = timer(LEADER::INVULN_PERIOD);
+    invuln_period = Timer(LEADER::INVULN_PERIOD);
     
     subgroup_type_ptr =
         game.states.gameplay->subgroup_types.get_type(
@@ -155,7 +155,7 @@ leader::leader(const point &pos, leader_type* type, float angle) :
         swarm_next_arrow_timer.start();
         swarm_arrows.push_back(0);
         
-        particle p;
+        Particle p;
         unsigned char color_idx = game.rng.i(0, WHISTLE::N_DOT_COLORS);
         p.bitmap = game.sys_content.bmp_bright_circle;
         ALLEGRO_COLOR c =
@@ -165,7 +165,7 @@ leader::leader(const point &pos, leader_type* type, float angle) :
                 WHISTLE::DOT_COLORS[color_idx][2],
                 LEADER::SWARM_PARTICLE_ALPHA * 255
             );
-        p.color = keyframe_interpolator<ALLEGRO_COLOR>(c);
+        p.color = KeyframeInterpolator<ALLEGRO_COLOR>(c);
         p.color.add(1, change_alpha(c, 0));
         p.duration =
             game.rng.f(
@@ -191,7 +191,7 @@ leader::leader(const point &pos, leader_type* type, float angle) :
                 -LEADER::SWARM_PARTICLE_ANGLE_DEVIATION,
                 LEADER::SWARM_PARTICLE_ANGLE_DEVIATION
             );
-        p.linear_speed = keyframe_interpolator<point>(rotate_point(point(p_speed, 0.0f), p_angle));
+        p.linear_speed = KeyframeInterpolator<Point>(rotate_point(Point(p_speed, 0.0f), p_angle));
         p.time = p.duration;
         p.z = this->z + this->height / 2.0f;
         game.states.gameplay->particles.add(p);
@@ -206,7 +206,7 @@ leader::leader(const point &pos, leader_type* type, float angle) :
  * @param m Group member to check.
  * @return Whether it can grab.
  */
-bool leader::can_grab_group_member(mob* m) const {
+bool Leader::can_grab_group_member(Mob* m) const {
     //Check if the leader is on a hazard that the member can't go to.
     if(
         ground_sector &&
@@ -226,7 +226,7 @@ bool leader::can_grab_group_member(mob* m) const {
     
     //Check if the mob is within range.
     if(
-        dist(m->pos, pos) >
+        Distance(m->pos, pos) >
         game.config.group_member_grab_range
     ) {
         return false;
@@ -257,7 +257,7 @@ bool leader::can_grab_group_member(mob* m) const {
  * @param s Status type to check.
  * @return Whether it can receive the status.
  */
-bool leader::can_receive_status(status_type* s) const {
+bool Leader::can_receive_status(StatusType* s) const {
     return has_flag(s->affects, STATUS_AFFECTS_FLAG_LEADERS);
 }
 
@@ -267,12 +267,12 @@ bool leader::can_receive_status(status_type* s) const {
  *
  * @return Whether it can throw.
  */
-bool leader::check_throw_ok() const {
+bool Leader::check_throw_ok() const {
     if(holding.empty()) {
         return false;
     }
     
-    mob_event* ev = fsm.get_event(LEADER_EV_THROW);
+    MobEvent* ev = fsm.get_event(LEADER_EV_THROW);
     
     if(!ev) {
         return false;
@@ -287,7 +287,7 @@ bool leader::check_throw_ok() const {
  * The group is then organized in groups, by type,
  * and is dismissed close to the leader.
  */
-void leader::dismiss() {
+void Leader::dismiss() {
     size_t n_group_members = group->members.size();
     if(n_group_members == 0) return;
     
@@ -302,10 +302,10 @@ void leader::dismiss() {
         base_angle = game.states.gameplay->swarm_angle;
     } else {
         //Leftmost member coordinate, rightmost, etc.
-        point min_coords, max_coords;
+        Point min_coords, max_coords;
         
         for(size_t m = 0; m < n_group_members; m++) {
-            mob* member_ptr = group->members[m];
+            Mob* member_ptr = group->members[m];
             
             if(member_ptr->pos.x < min_coords.x || m == 0)
                 min_coords.x = member_ptr->pos.x;
@@ -317,7 +317,7 @@ void leader::dismiss() {
                 max_coords.y = member_ptr->pos.y;
         }
         
-        point group_center(
+        Point group_center(
             (min_coords.x + max_coords.x) / 2,
             (min_coords.y + max_coords.y) / 2
         );
@@ -327,7 +327,7 @@ void leader::dismiss() {
     /**
      * @brief Info about a group subgroup when being dismissed.
      */
-    struct subgroup_dismiss_t {
+    struct DismissSubgroup {
     
         //--- Members ---
         
@@ -335,18 +335,18 @@ void leader::dismiss() {
         float radius;
         
         //Group members of this subgroup type.
-        vector<mob*> members;
+        vector<Mob*> members;
         
         //Center point of the subgroup.
-        point center;
+        Point center;
         
     };
-    vector<subgroup_dismiss_t> subgroups_info;
+    vector<DismissSubgroup> subgroups_info;
     
     //Go through all subgroups and populate the vector of data.
-    subgroup_type* first_type =
+    SubgroupType* first_type =
         game.states.gameplay->subgroup_types.get_first_type();
-    subgroup_type* cur_type = first_type;
+    SubgroupType* cur_type = first_type;
     
     do {
     
@@ -360,11 +360,11 @@ void leader::dismiss() {
             bool subgroup_exists = false;
             
             for(size_t m = 0; m < n_group_members; m++) {
-                mob* m_ptr = group->members[m];
+                Mob* m_ptr = group->members[m];
                 if(m_ptr->subgroup_type_ptr != cur_type) continue;
                 
                 if(!subgroup_exists) {
-                    subgroups_info.push_back(subgroup_dismiss_t());
+                    subgroups_info.push_back(DismissSubgroup());
                     subgroup_exists = true;
                 }
                 
@@ -407,7 +407,7 @@ void leader::dismiss() {
      * We place the first subgroup, then some padding, then the next group,
      * etc. For every subgroup we place, we must update the thickness.
      */
-    struct row_t {
+    struct Row {
     
         //--- Members ---
         
@@ -426,7 +426,7 @@ void leader::dismiss() {
         
         //--- Function definitions ---
         
-        row_t() {
+        Row() {
             dist_between_center = 0;
             thickness = 0;
             angle_occupation = 0;
@@ -435,8 +435,8 @@ void leader::dismiss() {
     };
     
     bool done = false;
-    vector<row_t> rows;
-    row_t cur_row;
+    vector<Row> rows;
+    Row cur_row;
     cur_row.dist_between_center = LEADER::DISMISS_SUBGROUP_DISTANCE;
     size_t cur_row_idx = 0;
     size_t cur_subgroup_idx = 0;
@@ -555,7 +555,7 @@ void leader::dismiss() {
         
         for(size_t m = 0; m < subgroups_info[s].members.size(); m++) {
         
-            point destination;
+            Point destination;
             
             if(cur_row_idx == 0) {
                 destination = subgroups_info[s].center;
@@ -572,7 +572,7 @@ void leader::dismiss() {
             }
             
             destination +=
-                point(
+                Point(
                     game.rng.f(-5.0, 5.0),
                     game.rng.f(-5.0, 5.0)
                 );
@@ -607,7 +607,7 @@ void leader::dismiss() {
     //Final things.
     play_sound(lea_type->sound_data_idxs[LEADER_SOUND_DISMISSING]);
     for(size_t p = 0; p < LEADER::DISMISS_PARTICLE_AMOUNT; p++) {
-        particle par;
+        Particle par;
         const unsigned char* color_idx =
             WHISTLE::DOT_COLORS[p % WHISTLE::N_DOT_COLORS];
         ALLEGRO_COLOR c =
@@ -636,7 +636,7 @@ void leader::dismiss() {
                 LEADER::DISMISS_PARTICLE_MAX_SPEED
             );
         float par_angle = TAU / LEADER::DISMISS_PARTICLE_AMOUNT * p;
-        par.linear_speed = keyframe_interpolator<point>(rotate_point(point(par_speed, 0.0f), par_angle));
+        par.linear_speed = KeyframeInterpolator<Point>(rotate_point(Point(par_speed, 0.0f), par_angle));
         par.time = par.duration;
         par.z = z + height / 2.0f;
         game.states.gameplay->particles.add(par);
@@ -648,16 +648,16 @@ void leader::dismiss() {
 /**
  * @brief Draw a leader mob.
  */
-void leader::draw_mob() {
-    mob::draw_mob();
+void Leader::draw_mob() {
+    Mob::draw_mob();
     
-    sprite* cur_s_ptr;
-    sprite* next_s_ptr;
+    Sprite* cur_s_ptr;
+    Sprite* next_s_ptr;
     float interpolation_factor;
     get_sprite_data(&cur_s_ptr, &next_s_ptr, &interpolation_factor);
     if(!cur_s_ptr) return;
     
-    bitmap_effect_t eff;
+    BitmapEffect eff;
     get_sprite_bitmap_effects(
         cur_s_ptr, next_s_ptr, interpolation_factor,
         &eff,
@@ -670,15 +670,15 @@ void leader::draw_mob() {
     );
     
     if(invuln_period.time_left > 0.0f) {
-        sprite* spark_s;
+        Sprite* spark_s;
         game.sys_content.anim_sparks.get_sprite_data(
             &spark_s, nullptr, nullptr
         );
         
         if(spark_s && spark_s->bitmap) {
-            bitmap_effect_t spark_eff = eff;
-            point size = get_bitmap_dimensions(cur_s_ptr->bitmap) * eff.scale;
-            point spark_size = get_bitmap_dimensions(spark_s->bitmap);
+            BitmapEffect spark_eff = eff;
+            Point size = get_bitmap_dimensions(cur_s_ptr->bitmap) * eff.scale;
+            Point spark_size = get_bitmap_dimensions(spark_s->bitmap);
             spark_eff.scale = size / spark_size;
             draw_bitmap_with_effects(spark_s->bitmap, spark_eff);
         }
@@ -695,7 +695,7 @@ void leader::draw_mob() {
  * @param n_members Total number of group members to dismiss.
  * @return The amount of rows.
  */
-size_t leader::get_dismiss_rows(size_t n_members) const {
+size_t Leader::get_dismiss_rows(size_t n_members) const {
     size_t members_that_fit = 1;
     size_t rows_needed = 1;
     while(members_that_fit < n_members) {
@@ -714,8 +714,8 @@ size_t leader::get_dismiss_rows(size_t n_members) const {
  * @param out_spot The final coordinates are returned here.
  * @param out_dist The final distance to those coordinates is returned here.
  */
-void leader::get_group_spot_info(
-    point* out_spot, float* out_dist
+void Leader::get_group_spot_info(
+    Point* out_spot, float* out_dist
 ) const {
     out_spot->x = 0.0f;
     out_spot->y = 0.0f;
@@ -725,14 +725,14 @@ void leader::get_group_spot_info(
         return;
     }
     
-    group_t* leader_group_ptr = following_group->group;
+    Group* leader_group_ptr = following_group->group;
     
     float distance =
         following_group->radius +
         radius + game.config.standard_pikmin_radius;
         
     for(size_t me = 0; me < leader_group_ptr->members.size(); me++) {
-        mob* member_ptr = leader_group_ptr->members[me];
+        Mob* member_ptr = leader_group_ptr->members[me];
         if(member_ptr == this) {
             break;
         } else if(member_ptr->subgroup_type_ptr == subgroup_type_ptr) {
@@ -760,15 +760,15 @@ void leader::get_group_spot_info(
  * Returns false if there were not enough Pikmin of that type in the group
  * to fulfill the order entirely.
  */
-bool leader::order_pikmin_to_onion(
-    const pikmin_type* type, pikmin_nest_t* n_ptr, size_t amount
+bool Leader::order_pikmin_to_onion(
+    const PikminType* type, PikminNest* n_ptr, size_t amount
 ) {
     //Find Pikmin of that type.
-    vector<std::pair<dist, pikmin*>> candidates;
+    vector<std::pair<Distance, Pikmin*>> candidates;
     size_t amount_ordered = 0;
     
     for(size_t m = 0; m < group->members.size(); m++) {
-        mob* mob_ptr = group->members[m];
+        Mob* mob_ptr = group->members[m];
         if(
             mob_ptr->type->category->id != MOB_CATEGORY_PIKMIN ||
             mob_ptr->type != type
@@ -778,8 +778,8 @@ bool leader::order_pikmin_to_onion(
         
         candidates.push_back(
             std::make_pair(
-                dist(mob_ptr->pos, n_ptr->m_ptr->pos),
-                (pikmin*) mob_ptr
+                Distance(mob_ptr->pos, n_ptr->m_ptr->pos),
+                (Pikmin*) mob_ptr
             )
         );
     }
@@ -789,8 +789,8 @@ bool leader::order_pikmin_to_onion(
         candidates.begin(),
         candidates.end(),
         [] (
-            const std::pair<dist, pikmin*> &p1,
-            const std::pair<dist, pikmin*> &p2
+            const std::pair<Distance, Pikmin*> &p1,
+            const std::pair<Distance, Pikmin*> &p2
     ) -> bool {
         if(p1.second->maturity != p2.second->maturity) {
             return p1.second->maturity < p2.second->maturity;
@@ -803,8 +803,8 @@ bool leader::order_pikmin_to_onion(
     //Order Pikmin, in order.
     for(size_t p = 0; p < candidates.size(); p++) {
     
-        pikmin* pik_ptr = candidates[p].second;
-        mob_event* ev = pik_ptr->fsm.get_event(MOB_EV_GO_TO_ONION);
+        Pikmin* pik_ptr = candidates[p].second;
+        MobEvent* ev = pik_ptr->fsm.get_event(MOB_EV_GO_TO_ONION);
         if(!ev) continue;
         
         ev->run(pik_ptr, (void*) n_ptr);
@@ -825,7 +825,7 @@ bool leader::order_pikmin_to_onion(
  * @brief Queues up a throw. This will cause the throw to go through whenever
  * the throw cooldown ends.
  */
-void leader::queue_throw() {
+void Leader::queue_throw() {
     if(!check_throw_ok()) {
         return;
     }
@@ -837,7 +837,7 @@ void leader::queue_throw() {
 /**
  * @brief Signals the group members that the swarm mode stopped.
  */
-void leader::signal_swarm_end() const {
+void Leader::signal_swarm_end() const {
     for(size_t m = 0; m < group->members.size(); m++) {
         group->members[m]->fsm.run_event(MOB_EV_SWARM_ENDED);
     }
@@ -847,7 +847,7 @@ void leader::signal_swarm_end() const {
 /**
  * @brief Signals the group members that the swarm mode started.
  */
-void leader::signal_swarm_start() const {
+void Leader::signal_swarm_start() const {
     for(size_t m = 0; m < group->members.size(); m++) {
         group->members[m]->fsm.run_event(MOB_EV_SWARM_STARTED);
     }
@@ -857,7 +857,7 @@ void leader::signal_swarm_start() const {
 /**
  * @brief Starts the auto-throw mode.
  */
-void leader::start_auto_throwing() {
+void Leader::start_auto_throwing() {
     auto_throwing = true;
     auto_throw_cooldown = 0.0f;
     auto_throw_cooldown_duration = LEADER::AUTO_THROW_COOLDOWN_MAX_DURATION;
@@ -868,8 +868,8 @@ void leader::start_auto_throwing() {
  * @brief Starts the particle generator that leaves a trail behind a
  * thrown leader.
  */
-void leader::start_throw_trail() {
-    particle_generator pg =
+void Leader::start_throw_trail() {
+    ParticleGenerator pg =
         standard_particle_gen_setup(
             game.sys_content_names.part_throw_trail, this
         );
@@ -897,13 +897,13 @@ void leader::start_throw_trail() {
 /**
  * @brief Makes the leader start whistling.
  */
-void leader::start_whistling() {
+void Leader::start_whistling() {
     game.states.gameplay->whistle.start_whistling();
     
     size_t whistling_sound_idx =
         lea_type->sound_data_idxs[LEADER_SOUND_WHISTLING];
     if(whistling_sound_idx != INVALID) {
-        mob_type::sound_t* whistling_sound =
+        MobType::Sound* whistling_sound =
             &type->sounds[whistling_sound_idx];
         whistle_sound_source_id =
             game.audio.create_pos_sound_source(
@@ -921,7 +921,7 @@ void leader::start_whistling() {
 /**
  * @brief Stops the auto-throw mode.
  */
-void leader::stop_auto_throwing() {
+void Leader::stop_auto_throwing() {
     auto_throwing = false;
 }
 
@@ -929,7 +929,7 @@ void leader::stop_auto_throwing() {
 /**
  * @brief Makes the leader stop whistling.
  */
-void leader::stop_whistling() {
+void Leader::stop_whistling() {
     if(!game.states.gameplay->whistle.whistling) return;
     game.states.gameplay->whistle.stop_whistling();
     game.audio.destroy_sound_source(whistle_sound_source_id);
@@ -942,13 +942,13 @@ void leader::stop_whistling() {
  *
  * @param new_pik The new Pikmin to hold.
  */
-void leader::swap_held_pikmin(mob* new_pik) {
+void Leader::swap_held_pikmin(Mob* new_pik) {
     if(holding.empty()) return;
     
-    mob* old_pik = holding[0];
+    Mob* old_pik = holding[0];
     
-    mob_event* old_pik_ev = old_pik->fsm.get_event(MOB_EV_RELEASED);
-    mob_event* new_pik_ev = new_pik->fsm.get_event(MOB_EV_GRABBED_BY_FRIEND);
+    MobEvent* old_pik_ev = old_pik->fsm.get_event(MOB_EV_RELEASED);
+    MobEvent* new_pik_ev = new_pik->fsm.get_event(MOB_EV_GRABBED_BY_FRIEND);
     
     group->sort(new_pik->subgroup_type_ptr);
     
@@ -971,7 +971,7 @@ void leader::swap_held_pikmin(mob* new_pik) {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void leader::tick_class_specifics(float delta_t) {
+void Leader::tick_class_specifics(float delta_t) {
     //Throw-related things.
     if(auto_throw_cooldown > 0.0f) {
         auto_throw_cooldown -= delta_t;
@@ -1041,7 +1041,7 @@ void leader::tick_class_specifics(float delta_t) {
 /**
  * @brief Updates variables related to how the leader's throw would go.
  */
-void leader::update_throw_variables() {
+void Leader::update_throw_variables() {
     throwee = nullptr;
     if(!holding.empty()) {
         throwee = holding[0];
@@ -1067,10 +1067,10 @@ void leader::update_throw_variables() {
     float max_height;
     switch (throwee->type->category->id) {
     case MOB_CATEGORY_PIKMIN: {
-        max_height = ((pikmin*) throwee)->pik_type->max_throw_height;
+        max_height = ((Pikmin*) throwee)->pik_type->max_throw_height;
         break;
     } case MOB_CATEGORY_LEADERS: {
-        max_height = ((leader*) throwee)->lea_type->max_throw_height;
+        max_height = ((Leader*) throwee)->lea_type->max_throw_height;
         break;
     } default: {
         max_height = std::max(128.0f, (target_z - z) * 1.2f);
@@ -1161,9 +1161,9 @@ void change_to_next_leader(
     if(keep_idx) {
         forward ? new_leader_idx-- : new_leader_idx++;
     }
-    leader* new_leader_ptr = nullptr;
+    Leader* new_leader_ptr = nullptr;
     bool searching = true;
-    leader* original_leader_ptr = game.states.gameplay->cur_leader_ptr;
+    Leader* original_leader_ptr = game.states.gameplay->cur_leader_ptr;
     bool cant_find_new_leader = false;
     bool success = false;
     
@@ -1233,12 +1233,12 @@ bool grab_closest_group_member() {
     }
     
     //Check if the leader can grab, and the group member can be grabbed.
-    mob_event* grabbed_ev =
+    MobEvent* grabbed_ev =
         game.states.gameplay->
         closest_group_member[BUBBLE_RELATION_CURRENT]->fsm.get_event(
             MOB_EV_GRABBED_BY_FRIEND
         );
-    mob_event* grabber_ev =
+    MobEvent* grabber_ev =
         game.states.gameplay->cur_leader_ptr->fsm.get_event(
             LEADER_EV_HOLDING
         );

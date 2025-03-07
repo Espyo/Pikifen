@@ -51,7 +51,7 @@ extern const float DEF_ROTATION_SPEED;
  * to create more generic mob types,
  * like some teleporter pad, or a door.
  */
-class mob_type : public content {
+class MobType : public Content {
 
 public:
 
@@ -60,7 +60,7 @@ public:
     /**
      * @brief Info about a mob's reach.
      */
-    struct reach_t {
+    struct Reach {
     
         //--- Members ---
         
@@ -84,7 +84,7 @@ public:
     /**
      * @brief Info about how a mob spawns another.
      */
-    struct spawn_t {
+    struct SpawnInfo {
     
         //--- Members ---
         
@@ -98,7 +98,7 @@ public:
         bool relative = true;
         
         //Coordenates to spawn on.
-        point coords_xy;
+        Point coords_xy;
         
         //Z coordinate to spawn on.
         float coords_z = 0.0f;
@@ -123,7 +123,7 @@ public:
     /**
      * @brief Info about how a mob can be a child of another.
      */
-    struct child_t {
+    struct Child {
     
         //--- Members ---
         
@@ -196,7 +196,7 @@ public:
      * @brief Info on a widget to present in the area editor,
      * to better help users set the properties of a mob instance.
      */
-    struct area_editor_prop_t {
+    struct AreaEditorProp {
     
         //--- Members ---
         
@@ -229,7 +229,7 @@ public:
     /**
      * @brief Info on how vulnerable the object is to a certain source.
      */
-    struct vulnerability_t {
+    struct Vulnerability {
     
         //--- Members ---
         
@@ -237,7 +237,7 @@ public:
         float effect_mult = 1.0f;
         
         //When affected by the source, receive this status effect.
-        status_type* status_to_apply = nullptr;
+        StatusType* status_to_apply = nullptr;
         
         //If "status_to_apply" overrides any status effect that'd be received.
         bool status_overrides = true;
@@ -247,7 +247,7 @@ public:
     /**
      * @brief Info on a sound effect this mob can emit.
      */
-    struct sound_t {
+    struct Sound {
     
         //--- Members ---
         
@@ -261,7 +261,7 @@ public:
         SOUND_TYPE type = SOUND_TYPE_GAMEPLAY_POS;
         
         //Configuration.
-        sound_source_config_t config;
+        SoundSourceConfig config;
         
     };
     
@@ -271,7 +271,7 @@ public:
     //- Basic information -
     
     //Mob category.
-    mob_category* category = nullptr;
+    MobCategory* category = nullptr;
     
     //Custom category name. Used in editors.
     string custom_category_name;
@@ -279,7 +279,7 @@ public:
     //- Visuals -
     
     //Database with all its animation data.
-    animation_database* anim_db = nullptr;
+    AnimationDatabase* anim_db = nullptr;
     
     //A color that represents this mob.
     ALLEGRO_COLOR main_color = al_map_rgb(128, 128, 128);
@@ -294,7 +294,7 @@ public:
     float blackout_radius = -1.0f;
     
     //List of sounds it can play.
-    vector<sound_t> sounds;
+    vector<Sound> sounds;
     
     //- Movement -
     
@@ -319,7 +319,7 @@ public:
     float height = 0.0f;
     
     //Rectangular dimensions, if it's meant to use them instead of a radius.
-    point rectangular_dim;
+    Point rectangular_dim;
     
     //Pikmin strength needed to carry it.
     float weight = 0.0f;
@@ -352,7 +352,7 @@ public:
     bool can_block_paths = false;
     
     //Override the carrying spots with these coordinates, if not-empty.
-    vector<point> custom_carry_spots;
+    vector<Point> custom_carry_spots;
     
     //- General behavior -
     
@@ -366,7 +366,7 @@ public:
     float territory_radius = 0.0f;
     
     //Information on all of its "reaches".
-    vector<reach_t> reaches;
+    vector<Reach> reaches;
     
     //After it takes this much damage, it sends an "itch" event to the FSM.
     float itch_damage = 0.0f;
@@ -395,15 +395,15 @@ public:
     bitmask_8_t inactive_logic = 0;
     
     //Custom behavior callbacks.
-    void(*draw_mob_callback)(mob* m) = nullptr;
+    void(*draw_mob_callback)(Mob* m) = nullptr;
     
     //- Script -
     
     //Actions to run on spawn.
-    vector<mob_action_call*> init_actions;
+    vector<MobActionCall*> init_actions;
     
     //The states, events and actions. Basically, the FSM.
-    vector<mob_state*> states;
+    vector<MobState*> states;
     
     //Index of the state a mob starts at.
     size_t first_state_idx = INVALID;
@@ -426,10 +426,10 @@ public:
     //Interactions with other objects
     
     //Information on everything it can spawn.
-    vector<spawn_t> spawns;
+    vector<SpawnInfo> spawns;
     
     //Information on its children mobs.
-    vector<child_t> children;
+    vector<Child> children;
     
     //Does this mob have a group of other mobs following it (e.g. leader)?
     bool has_group = false;
@@ -440,16 +440,16 @@ public:
     float default_vulnerability = 1.0f;
     
     //For every hazard, multiply its effects by this much.
-    map<hazard*, vulnerability_t> hazard_vulnerabilities;
+    map<Hazard*, Vulnerability> hazard_vulnerabilities;
     
     //What sort of spike damage it causes, if any.
-    spike_damage_type* spike_damage = nullptr;
+    SpikeDamageType* spike_damage = nullptr;
     
     //For every type of spike damage, multiply its effects by this much.
-    map<spike_damage_type*, vulnerability_t> spike_damage_vulnerabilities;
+    map<SpikeDamageType*, Vulnerability> spike_damage_vulnerabilities;
     
     //For every type of status, multiply its effects by this much.
-    map<status_type*, vulnerability_t> status_vulnerabilities;
+    map<StatusType*, Vulnerability> status_vulnerabilities;
     
     //- Editor info -
     
@@ -457,7 +457,7 @@ public:
     string area_editor_tips;
     
     //Widgets to show on the area editor, to help parametrize each mob.
-    vector<area_editor_prop_t> area_editor_props;
+    vector<AreaEditorProp> area_editor_props;
     
     //Can the player choose to place one of these in the area editor?
     bool appears_in_area_editor = true;
@@ -477,13 +477,13 @@ public:
     
     //--- Function declarations ---
     
-    explicit mob_type(MOB_CATEGORY category_id);
-    virtual ~mob_type();
+    explicit MobType(MOB_CATEGORY category_id);
+    virtual ~MobType();
     void load_from_data_node(
-        data_node* node, CONTENT_LOAD_LEVEL level, const string &folder
+        DataNode* node, CONTENT_LOAD_LEVEL level, const string &folder
     );
-    virtual void load_cat_properties(data_node* file);
-    virtual void load_cat_resources(data_node* file);
+    virtual void load_cat_properties(DataNode* file);
+    virtual void load_cat_resources(DataNode* file);
     virtual anim_conversion_vector get_anim_conversions() const;
     virtual void unload_resources();
     void add_carrying_states();
@@ -503,7 +503,7 @@ public:
  * The mob type should load a property somewhere that lists what suffixes to
  * use for each group when loading animation names from the animation database.
  */
-class mob_type_with_anim_groups {
+class MobTypeWithAnimGroups {
 
 public:
 
@@ -515,7 +515,7 @@ public:
     
     //--- Function declarations ---
     
-    virtual ~mob_type_with_anim_groups() = default;
+    virtual ~MobTypeWithAnimGroups() = default;
     anim_conversion_vector get_anim_conversions_with_groups(
         const anim_conversion_vector &v, size_t base_anim_total
     ) const;

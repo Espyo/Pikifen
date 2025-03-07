@@ -19,18 +19,18 @@
 /**
  * @brief An object that throws another mob, bouncing it away.
  */
-class bouncer : public mob {
+class Bouncer : public Mob {
 
 public:
 
     //--- Members ---
     
     //What type of bouncer it is.
-    bouncer_type* bou_type = nullptr;
+    BouncerType* bou_type = nullptr;
     
     
     //--- Function declarations ---
     
-    bouncer(const point &pos, bouncer_type* type, float angle);
+    Bouncer(const Point &pos, BouncerType* type, float angle);
     
 };

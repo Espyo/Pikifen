@@ -240,7 +240,7 @@ enum LEADER_SOUND {
  * this means you can have 3 Olimars, if you want.
  * Why would you do that, though?
  */
-class leader_type : public mob_type {
+class LeaderType : public MobType {
 
 public:
 
@@ -267,9 +267,9 @@ public:
     
     //--- Function declarations ---
     
-    leader_type();
-    void load_cat_properties(data_node* file) override;
-    void load_cat_resources(data_node* file) override;
+    LeaderType();
+    void load_cat_properties(DataNode* file) override;
+    void load_cat_resources(DataNode* file) override;
     anim_conversion_vector get_anim_conversions() const override;
     void unload_resources() override;
     

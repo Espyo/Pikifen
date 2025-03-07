@@ -19,8 +19,8 @@
 /**
  * @brief Constructs a new decoration category object.
  */
-decoration_category::decoration_category() :
-    mob_category(
+DecorationCategory::DecorationCategory() :
+    MobCategory(
         MOB_CATEGORY_DECORATIONS, "decoration",
         "Decoration", "Decorations",
         "decorations", al_map_rgb(191, 204, 139)
@@ -32,7 +32,7 @@ decoration_category::decoration_category() :
 /**
  * @brief Clears the list of registered types of decorations.
  */
-void decoration_category::clear_types() {
+void DecorationCategory::clear_types() {
     for(auto &t : game.content.mob_types.list.decoration) {
         delete t.second;
     }
@@ -48,10 +48,10 @@ void decoration_category::clear_types() {
  * @param angle Starting angle.
  * @return The mob.
  */
-mob* decoration_category::create_mob(
-    const point &pos, mob_type* type, float angle
+Mob* DecorationCategory::create_mob(
+    const Point &pos, MobType* type, float angle
 ) {
-    decoration* m = new decoration(pos, (decoration_type*) type, angle);
+    Decoration* m = new Decoration(pos, (DecorationType*) type, angle);
     game.states.gameplay->mobs.decorations.push_back(m);
     return m;
 }
@@ -62,8 +62,8 @@ mob* decoration_category::create_mob(
  *
  * @return The type.
  */
-mob_type* decoration_category::create_type() {
-    return new decoration_type();
+MobType* DecorationCategory::create_type() {
+    return new DecorationType();
 }
 
 
@@ -72,12 +72,12 @@ mob_type* decoration_category::create_type() {
  *
  * @param m The mob to erase.
  */
-void decoration_category::erase_mob(mob* m) {
+void DecorationCategory::erase_mob(Mob* m) {
     game.states.gameplay->mobs.decorations.erase(
         find(
             game.states.gameplay->mobs.decorations.begin(),
             game.states.gameplay->mobs.decorations.end(),
-            (decoration*) m
+            (Decoration*) m
         )
     );
 }
@@ -90,7 +90,7 @@ void decoration_category::erase_mob(mob* m) {
  * @param internal_name Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-mob_type* decoration_category::get_type(const string &internal_name) const {
+MobType* DecorationCategory::get_type(const string &internal_name) const {
     auto it = game.content.mob_types.list.decoration.find(internal_name);
     if(it == game.content.mob_types.list.decoration.end()) return nullptr;
     return it->second;
@@ -102,7 +102,7 @@ mob_type* decoration_category::get_type(const string &internal_name) const {
  *
  * @param list This list gets filled with the mob type internal names.
  */
-void decoration_category::get_type_names(vector<string> &list) const {
+void DecorationCategory::get_type_names(vector<string> &list) const {
     for(auto &t : game.content.mob_types.list.decoration) {
         list.push_back(t.first);
     }
@@ -115,6 +115,6 @@ void decoration_category::get_type_names(vector<string> &list) const {
  * @param internal_name Internal name of the mob type.
  * @param type Mob type to register.
  */
-void decoration_category::register_type(const string &internal_name, mob_type* type) {
-    game.content.mob_types.list.decoration[internal_name] = (decoration_type*) type;
+void DecorationCategory::register_type(const string &internal_name, MobType* type) {
+    game.content.mob_types.list.decoration[internal_name] = (DecorationType*) type;
 }

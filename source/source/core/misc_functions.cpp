@@ -47,14 +47,14 @@
  * @return Whether there are walls between.
  */
 bool are_walls_between(
-    const point &p1, const point &p2,
+    const Point &p1, const Point &p2,
     float ignore_walls_below_z, bool* out_impassable_walls
 ) {
-    point bb_tl = p1;
-    point bb_br = p1;
+    Point bb_tl = p1;
+    Point bb_br = p1;
     update_min_max_coords(bb_tl, bb_br, p2);
     
-    set<edge*> candidate_edges;
+    set<Edge*> candidate_edges;
     if(
         !game.cur_area_data->bmap.get_edges_in_region(
             bb_tl, bb_br,
@@ -118,7 +118,7 @@ void clear_area_textures() {
     if(!game.cur_area_data) return;
     
     for(size_t s = 0; s < game.cur_area_data->sectors.size(); s++) {
-        sector* s_ptr = game.cur_area_data->sectors[s];
+        Sector* s_ptr = game.cur_area_data->sectors[s];
         if(
             s_ptr->texture_info.bitmap &&
             s_ptr->texture_info.bitmap != game.bmp_error
@@ -198,17 +198,17 @@ void crash(const string &reason, const string &info, int exit_status) {
         }
         error_str += "\n  10 closest Pikmin to that leader:\n";
         
-        vector<pikmin*> closest_pikmin =
+        vector<Pikmin*> closest_pikmin =
             game.states.gameplay->mobs.pikmin_list;
         sort(
             closest_pikmin.begin(), closest_pikmin.end(),
-        [] (const pikmin * p1, const pikmin * p2) -> bool {
+        [] (const Pikmin * p1, const Pikmin * p2) -> bool {
             return
-            dist(
+            Distance(
                 game.states.gameplay->cur_leader_ptr->pos,
                 p1->pos
             ).to_float() <
-            dist(
+            Distance(
                 game.states.gameplay->cur_leader_ptr->pos,
                 p2->pos
             ).to_float();
@@ -257,7 +257,7 @@ void crash(const string &reason, const string &info, int exit_status) {
  * @return Whether it has ledge smoothing.
  */
 bool does_edge_have_ledge_smoothing(
-    edge* e_ptr, sector** out_affected_sector, sector** out_unaffected_sector
+    Edge* e_ptr, Sector** out_affected_sector, Sector** out_unaffected_sector
 ) {
     //Never-smooth walls don't have the effect.
     if(e_ptr->ledge_smoothing_length <= 0.0f) return false;
@@ -310,7 +310,7 @@ bool does_edge_have_ledge_smoothing(
  * @return Whether it has a liquid limit.
  */
 bool does_edge_have_liquid_limit(
-    edge* e_ptr, sector** out_affected_sector, sector** out_unaffected_sector
+    Edge* e_ptr, Sector** out_affected_sector, Sector** out_unaffected_sector
 ) {
     //Check if the sectors exist.
     if(!e_ptr->sectors[0] || !e_ptr->sectors[1]) return false;
@@ -352,7 +352,7 @@ bool does_edge_have_liquid_limit(
  * @return Whether it has a wall shadow.
  */
 bool does_edge_have_wall_shadow(
-    edge* e_ptr, sector** out_affected_sector, sector** out_unaffected_sector
+    Edge* e_ptr, Sector** out_affected_sector, Sector** out_unaffected_sector
 ) {
     //Never-cast walls don't cast.
     if(e_ptr->wall_shadow_length <= 0.0f) return false;
@@ -393,19 +393,19 @@ bool does_edge_have_wall_shadow(
  * (health and max health > 0).
  * @return The mob.
  */
-mob* get_closest_mob_to_cursor(bool must_have_health) {
-    dist closest_mob_to_cursor_dist;
-    mob* closest_mob_to_cursor = nullptr;
+Mob* get_closest_mob_to_cursor(bool must_have_health) {
+    Distance closest_mob_to_cursor_dist;
+    Mob* closest_mob_to_cursor = nullptr;
     
     for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
-        mob* m_ptr = game.states.gameplay->mobs.all[m];
+        Mob* m_ptr = game.states.gameplay->mobs.all[m];
         
         bool has_health = m_ptr->health > 0.0f && m_ptr->max_health > 0.0f;
         if(must_have_health && !has_health) continue;
         if(m_ptr->is_stored_inside_mob()) continue;
         if(!m_ptr->fsm.cur_state) continue;
         
-        dist d = dist(game.mouse_cursor.w_pos, m_ptr->pos);
+        Distance d = Distance(game.mouse_cursor.w_pos, m_ptr->pos);
         if(!closest_mob_to_cursor || d < closest_mob_to_cursor_dist) {
             closest_mob_to_cursor = m_ptr;
             closest_mob_to_cursor_dist = d;
@@ -435,7 +435,7 @@ string get_engine_version_string() {
  * @param e_ptr Edge with the ledge.
  * @return The color.
  */
-ALLEGRO_COLOR get_ledge_smoothing_color(edge* e_ptr) {
+ALLEGRO_COLOR get_ledge_smoothing_color(Edge* e_ptr) {
     return e_ptr->ledge_smoothing_color;
 }
 
@@ -446,7 +446,7 @@ ALLEGRO_COLOR get_ledge_smoothing_color(edge* e_ptr) {
  * @param e_ptr Edge with the ledge.
  * @return The length.
  */
-float get_ledge_smoothing_length(edge* e_ptr) {
+float get_ledge_smoothing_length(Edge* e_ptr) {
     return e_ptr->ledge_smoothing_length;
 }
 
@@ -457,7 +457,7 @@ float get_ledge_smoothing_length(edge* e_ptr) {
  * @param e_ptr Edge with the liquid limit.
  * @return The color.
  */
-ALLEGRO_COLOR get_liquid_limit_color(edge* e_ptr) {
+ALLEGRO_COLOR get_liquid_limit_color(Edge* e_ptr) {
     return {1.0f, 1.0f, 1.0f, 0.75f};
 }
 
@@ -468,13 +468,13 @@ ALLEGRO_COLOR get_liquid_limit_color(edge* e_ptr) {
  * @param e_ptr Edge with the liquid limit.
  * @return The length.
  */
-float get_liquid_limit_length(edge* e_ptr) {
+float get_liquid_limit_length(Edge* e_ptr) {
     //Let's vary the length randomly by the topleftmost edge coordinates.
     //It's better to use this than using just the first edge, for instance,
     //because that would result in many cases of edges that share a first
     //vertex. So it wouldn't look as random.
     //It is much more rare for two edges to share a topleftmost vertex.
-    point min_coords = v2p(e_ptr->vertexes[0]);
+    Point min_coords = v2p(e_ptr->vertexes[0]);
     update_min_coords(min_coords, v2p(e_ptr->vertexes[1]));
     float r =
         (hash_nr2(min_coords.x, min_coords.y) / (float) UINT32_MAX) * 5.0f;
@@ -491,7 +491,7 @@ float get_liquid_limit_length(edge* e_ptr) {
  * @param area_ptr The area.
  * @return The entry name.
  */
-string get_mission_record_entry_name(area_data* area_ptr) {
+string get_mission_record_entry_name(Area* area_ptr) {
     return
         area_ptr->name + ";" +
         get_subtitle_or_mission_goal(
@@ -548,7 +548,7 @@ string get_subtitle_or_mission_goal(
 unsigned char get_throw_preview_vertexes(
     ALLEGRO_VERTEX* vertexes,
     float start, float end,
-    const point &leader_pos, const point &cursor_pos,
+    const Point &leader_pos, const Point &cursor_pos,
     const ALLEGRO_COLOR &color,
     float u_offset, float u_scale,
     bool vary_thickness
@@ -564,7 +564,7 @@ unsigned char get_throw_preview_vertexes(
         LEADER::THROW_PREVIEW_DEF_MAX_THICKNESS :
         LEADER::THROW_PREVIEW_MIN_THICKNESS;
         
-    float leader_to_cursor_dist = dist(leader_pos, cursor_pos).to_float();
+    float leader_to_cursor_dist = Distance(leader_pos, cursor_pos).to_float();
     unsigned char cur_v = 0;
     
     auto get_thickness =
@@ -627,7 +627,7 @@ unsigned char get_throw_preview_vertexes(
     
     //Final setup on all points.
     for(unsigned char v = 0; v < cur_v; v++) {
-        point p(vertexes[v].x, vertexes[v].y);
+        Point p(vertexes[v].x, vertexes[v].y);
         
         //Apply the texture UVs.
         vertexes[v].u = vertexes[v].x / u_scale - u_offset;
@@ -678,7 +678,7 @@ map<string, string> get_var_map(const string &vars_string) {
  * @param e_ptr Edge with the wall.
  * @return The color.
  */
-ALLEGRO_COLOR get_wall_shadow_color(edge* e_ptr) {
+ALLEGRO_COLOR get_wall_shadow_color(Edge* e_ptr) {
     return e_ptr->wall_shadow_color;
 }
 
@@ -689,7 +689,7 @@ ALLEGRO_COLOR get_wall_shadow_color(edge* e_ptr) {
  * @param e_ptr Edge with the wall.
  * @return The length.
  */
-float get_wall_shadow_length(edge* e_ptr) {
+float get_wall_shadow_length(Edge* e_ptr) {
     if(e_ptr->wall_shadow_length != LARGE_FLOAT) {
         return e_ptr->wall_shadow_length;
     }
@@ -711,12 +711,12 @@ float get_wall_shadow_length(edge* e_ptr) {
  * @param node Data node with the weather table.
  * @return The table.
  */
-vector<std::pair<int, string> > get_weather_table(data_node* node) {
+vector<std::pair<int, string> > get_weather_table(DataNode* node) {
     vector<std::pair<int, string> > table;
     size_t n_points = node->get_nr_of_children();
     
     for(size_t p = 0; p < n_points; p++) {
-        data_node* point_node = node->get_child(p);
+        DataNode* point_node = node->get_child(p);
         table.push_back(make_pair(s2i(point_node->name), point_node->value));
     }
     
@@ -778,12 +778,12 @@ string get_working_directory_path() {
  * @param gui GUI manager to add the item to.
  * @param item_name Internal name of the GUI item.
  */
-void gui_add_back_input_icon(gui_manager* gui, const string &item_name) {
-    gui_item* back_input = new gui_item();
+void gui_add_back_input_icon(GuiManager* gui, const string &item_name) {
+    GuiItem* back_input = new GuiItem();
     back_input->on_draw =
-    [] (const point & center, const point & size) {
+    [] (const Point & center, const Point & size) {
         if(!game.options.show_hud_input_icons) return;
-        player_input i =
+        PlayerInput i =
             game.controls.find_bind(PLAYER_ACTION_TYPE_MENU_BACK).input;
         if(i.type == INPUT_TYPE_NONE) return;
         draw_player_input_icon(game.sys_content.fnt_slim, i, true, center, size);
@@ -1113,7 +1113,7 @@ void print_info(
  * @param s String explaining the error.
  * @param dn File to log the error into, if any.
  */
-void report_fatal_error(const string &s, const data_node* dn) {
+void report_fatal_error(const string &s, const DataNode* dn) {
     game.errors.report(s, dn);
     
     show_message_box(
@@ -1135,10 +1135,10 @@ void report_fatal_error(const string &s, const data_node* dn) {
  * @param ed_ptr Pointer to the editor.
  * @param file Data file to save to.
  */
-void save_editor_history(editor* ed_ptr, data_node* file) {
+void save_editor_history(Editor* ed_ptr, DataNode* file) {
     for(size_t h = 0; h < ed_ptr->history.size(); h++) {
         file->add(
-            new data_node(
+            new DataNode(
                 ed_ptr->get_history_option_prefix() + i2s(h + 1),
                 ed_ptr->history[h].first + ";" + ed_ptr->history[h].second
             )
@@ -1151,10 +1151,10 @@ void save_editor_history(editor* ed_ptr, data_node* file) {
  * @brief Saves the maker tools settings.
  */
 void save_maker_tools() {
-    data_node file("", "");
+    DataNode file("", "");
     
     file.add(
-        new data_node("enabled", b2s(game.maker_tools.enabled))
+        new DataNode("enabled", b2s(game.maker_tools.enabled))
     );
     
     for(unsigned char k = 0; k < 20; k++) {
@@ -1168,53 +1168,53 @@ void save_maker_tools() {
         }
         string tool_name = MAKER_TOOLS::NAMES[game.maker_tools.keys[k]];
         
-        file.add(new data_node(tool_key, tool_name));
+        file.add(new DataNode(tool_key, tool_name));
     }
     
     file.add(
-        new data_node(
+        new DataNode(
             "area_image_mobs", b2s(game.maker_tools.area_image_mobs)
         )
     );
     file.add(
-        new data_node(
+        new DataNode(
             "area_image_padding", f2s(game.maker_tools.area_image_padding)
         )
     );
     file.add(
-        new data_node(
+        new DataNode(
             "area_image_shadows", b2s(game.maker_tools.area_image_shadows)
         )
     );
     file.add(
-        new data_node(
+        new DataNode(
             "area_image_size", i2s(game.maker_tools.area_image_size)
         )
     );
     file.add(
-        new data_node(
+        new DataNode(
             "change_speed_multiplier", f2s(game.maker_tools.change_speed_mult)
         )
     );
     file.add(
-        new data_node(
+        new DataNode(
             "mob_hurting_percentage",
             f2s(game.maker_tools.mob_hurting_ratio * 100)
         )
     );
     
     file.add(
-        new data_node(
+        new DataNode(
             "auto_start_option", game.maker_tools.auto_start_option
         )
     );
     file.add(
-        new data_node(
+        new DataNode(
             "auto_start_mode", game.maker_tools.auto_start_mode
         )
     );
     file.add(
-        new data_node(
+        new DataNode(
             "performance_monitor", b2s(game.maker_tools.use_perf_mon)
         )
     );
@@ -1227,7 +1227,7 @@ void save_maker_tools() {
  * @brief Saves the player's options.
  */
 void save_options() {
-    data_node file("", "");
+    DataNode file("", "");
     
     //Save the standard options.
     game.options.save(&file);
@@ -1310,10 +1310,10 @@ void save_screenshot() {
  * @brief Saves the engine's lifetime statistics.
  */
 void save_statistics() {
-    data_node stats_file("", "");
-    const statistics_t &s = game.statistics;
+    DataNode stats_file("", "");
+    const Statistics &s = game.statistics;
     
-#define save(n, v) stats_file.add(new data_node(n, v))
+#define save(n, v) stats_file.add(new DataNode(n, v))
     
     save("startups", i2s(s.startups));
     save("runtime", f2s(s.runtime));
@@ -1352,7 +1352,7 @@ void save_statistics() {
  * @param control_condensed If true, control bind player icons are condensed.
  */
 void set_string_token_widths(
-    vector<string_token> &tokens,
+    vector<StringToken> &tokens,
     const ALLEGRO_FONT* text_font, const ALLEGRO_FONT* control_font,
     float max_control_bitmap_height, bool control_condensed
 ) {
@@ -1421,12 +1421,12 @@ void signal_handler(int signum) {
  * @param vertical_speed Vertical speed in which to spew.
  */
 void spew_pikmin_seed(
-    const point pos, float z, pikmin_type* pik_type,
+    const Point pos, float z, PikminType* pik_type,
     float angle, float horizontal_speed, float vertical_speed
 ) {
-    pikmin* new_pikmin =
+    Pikmin* new_pikmin =
         (
-            (pikmin*)
+            (Pikmin*)
             create_mob(
                 game.mob_categories.get(MOB_CATEGORY_PIKMIN),
                 pos, pik_type, angle, "", nullptr, PIKMIN_STATE_SEED
@@ -1449,16 +1449,16 @@ void spew_pikmin_seed(
  * @param max_width Maximum width of each line.
  * @return The lines.
  */
-vector<vector<string_token> > split_long_string_with_tokens(
-    const vector<string_token> &tokens, int max_width
+vector<vector<StringToken> > split_long_string_with_tokens(
+    const vector<StringToken> &tokens, int max_width
 ) {
-    vector<vector<string_token> > tokens_per_line;
+    vector<vector<StringToken> > tokens_per_line;
     if(tokens.empty()) return tokens_per_line;
     
-    tokens_per_line.push_back(vector<string_token>());
+    tokens_per_line.push_back(vector<StringToken>());
     size_t cur_line_idx = 0;
     unsigned int caret = 0;
-    vector<string_token> word_buffer;
+    vector<StringToken> word_buffer;
     unsigned int word_buffer_width = 0;
     
     for(size_t t = 0; t < tokens.size() + 1; t++) {
@@ -1479,12 +1479,12 @@ vector<vector<string_token> > split_long_string_with_tokens(
                 
             if(line_will_be_too_long) {
                 //Break to a new line before comitting the word.
-                tokens_per_line.push_back(vector<string_token>());
+                tokens_per_line.push_back(vector<StringToken>());
                 caret = 0;
                 cur_line_idx++;
                 
                 //Remove the previous line's trailing space, if any.
-                string_token &prev_tail =
+                StringToken &prev_tail =
                     tokens_per_line[cur_line_idx - 1].back();
                 if(
                     prev_tail.type == STRING_TOKEN_CHAR &&
@@ -1509,7 +1509,7 @@ vector<vector<string_token> > split_long_string_with_tokens(
             
             if(token_is_line_break) {
                 //Break the line after comitting the word.
-                tokens_per_line.push_back(vector<string_token>());
+                tokens_per_line.push_back(vector<StringToken>());
                 caret = 0;
                 cur_line_idx++;
             }
@@ -1535,10 +1535,10 @@ vector<vector<string_token> > split_long_string_with_tokens(
  * @param target_mob Mob to follow and such.
  * @return The prepared particle generator.
  */
-particle_generator standard_particle_gen_setup(
-    const string &internal_name, mob* target_mob
+ParticleGenerator standard_particle_gen_setup(
+    const string &internal_name, Mob* target_mob
 ) {
-    particle_generator pg =
+    ParticleGenerator pg =
         game.content.particle_gen.list[internal_name];
     pg.restart_timer();
     pg.follow_mob = target_mob;
@@ -1563,7 +1563,7 @@ void start_message(const string &text, ALLEGRO_BITMAP* speaker_bmp) {
     if(!text.empty()) {
         string final_text = unescape_string(text);
         game.states.gameplay->msg_box =
-            new msg_box_t(final_text, speaker_bmp);
+            new MessageBox(final_text, speaker_bmp);
         game.states.gameplay->hud->gui.start_animation(
             GUI_MANAGER_ANIM_IN_TO_OUT,
             GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
@@ -1586,9 +1586,9 @@ void start_message(const string &text, ALLEGRO_BITMAP* speaker_bmp) {
  * @param s String to tokenize.
  * @return The tokens.
  */
-vector<string_token> tokenize_string(const string &s) {
-    vector<string_token> tokens;
-    string_token cur_token;
+vector<StringToken> tokenize_string(const string &s) {
+    vector<StringToken> tokens;
+    StringToken cur_token;
     cur_token.type = STRING_TOKEN_CHAR;
     
     for(size_t c = 0; c < s.size(); c++) {
@@ -1678,6 +1678,6 @@ string unescape_string(const string &s) {
  * @param v Vertex to convert.
  * @return The point.
  */
-point v2p(const vertex* v) {
-    return point(v->x, v->y);
+Point v2p(const Vertex* v) {
+    return Point(v->x, v->y);
 }

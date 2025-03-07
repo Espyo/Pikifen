@@ -68,13 +68,13 @@ const float UNNECESSARY_ITEMS_FADE_OUT_SPEED = 0.5f;
 /**
  * @brief Constructs a new HUD struct object.
  */
-hud_t::hud_t() :
+Hud::Hud() :
     leader_icon_mgr(&gui),
     leader_health_mgr(&gui),
     standby_icon_mgr(&gui),
     spray_icon_mgr(&gui) {
     
-    data_node* hud_file_node = &game.content.gui_defs.list[HUD::GUI_FILE_NAME];
+    DataNode* hud_file_node = &game.content.gui_defs.list[HUD::GUI_FILE_NAME];
     
     gui.register_coords("time",                          0,    0,  0,  0);
     gui.register_coords("day_bubble",                    0,    0,  0,  0);
@@ -146,12 +146,12 @@ hud_t::hud_t() :
     for(size_t l = 0; l < 3; l++) {
     
         //Icon.
-        gui_item* leader_icon = new gui_item();
+        GuiItem* leader_icon = new GuiItem();
         leader_icon->on_draw =
-        [this, l] (const point & center, const point & size) {
-            leader_icon_bubble icon;
-            point final_center;
-            point final_size;
+        [this, l] (const Point & center, const Point & size) {
+            LeaderIconBubble icon;
+            Point final_center;
+            Point final_size;
             game.states.gameplay->hud->leader_icon_mgr.get_drawing_info(
                 l, &icon, &final_center, &final_size
             );
@@ -180,12 +180,12 @@ hud_t::hud_t() :
         
         
         //Health wheel.
-        gui_item* leader_health = new gui_item();
+        GuiItem* leader_health = new GuiItem();
         leader_health->on_draw =
-        [this, l] (const point & center, const point & size) {
-            leader_health_bubble health;
-            point final_center;
-            point final_size;
+        [this, l] (const Point & center, const Point & size) {
+            LeaderHealthBubble health;
+            Point final_center;
+            Point final_size;
             game.states.gameplay->hud->leader_health_mgr.get_drawing_info(
                 l, &health, &final_center, &final_size
             );
@@ -219,7 +219,7 @@ hud_t::hud_t() :
                 draw_bitmap(
                     game.sys_content.bmp_bright_ring,
                     final_center,
-                    point(caution_ring_size),
+                    Point(caution_ring_size),
                     0.0f,
                     al_map_rgba(255, 0, 0, caution_ring_alpha)
                 );
@@ -246,12 +246,12 @@ hud_t::hud_t() :
     
     
     //Next leader input.
-    gui_item* leader_next_input = new gui_item();
+    GuiItem* leader_next_input = new GuiItem();
     leader_next_input->on_draw =
-    [this] (const point & center, const point & size) {
+    [this] (const Point & center, const Point & size) {
         if(!game.options.show_hud_input_icons) return;
         if(game.states.gameplay->available_leaders.size() < 2) return;
-        player_input i =
+        PlayerInput i =
             game.controls.find_bind(PLAYER_ACTION_TYPE_NEXT_LEADER).input;
         if(i.type == INPUT_TYPE_NONE) return;
         draw_player_input_icon(game.sys_content.fnt_slim, i, true, center, size);
@@ -260,9 +260,9 @@ hud_t::hud_t() :
     
     
     //Sun Meter.
-    gui_item* sun_meter = new gui_item();
+    GuiItem* sun_meter = new GuiItem();
     sun_meter->on_draw =
-    [this, sun_meter] (const point & center, const point & size) {
+    [this, sun_meter] (const Point & center, const Point & size) {
         unsigned char n_hours =
             (
                 game.config.day_minutes_end -
@@ -291,49 +291,49 @@ hud_t::hud_t() :
         al_hold_bitmap_drawing(true);
         draw_bitmap(
             bmp_hard_bubble,
-            point(first_dot_x + dots_span * 0.0, dots_y),
-            point(sun_radius * 0.9)
+            Point(first_dot_x + dots_span * 0.0, dots_y),
+            Point(sun_radius * 0.9)
         );
         draw_bitmap(
             bmp_hard_bubble,
-            point(first_dot_x + dots_span * 0.5, dots_y),
-            point(sun_radius * 0.9)
+            Point(first_dot_x + dots_span * 0.5, dots_y),
+            Point(sun_radius * 0.9)
         );
         draw_bitmap(
             bmp_hard_bubble,
-            point(first_dot_x + dots_span * 1.0, dots_y),
-            point(sun_radius * 0.9)
+            Point(first_dot_x + dots_span * 1.0, dots_y),
+            Point(sun_radius * 0.9)
         );
         
         for(unsigned char h = 0; h < n_hours + 1; h++) {
             draw_bitmap(
                 bmp_hard_bubble,
-                point(first_dot_x + h * dot_interval, dots_y),
-                point(sun_radius * 0.6)
+                Point(first_dot_x + h * dot_interval, dots_y),
+                Point(sun_radius * 0.6)
             );
         }
         al_hold_bitmap_drawing(false);
         
-        point sun_size =
-            point(sun_radius * 1.5) +
+        Point sun_size =
+            Point(sun_radius * 1.5) +
             sun_meter->get_juice_value();
         //Static sun.
         draw_bitmap(
             bmp_sun,
-            point(first_dot_x + day_passed_ratio * dots_span, dots_y),
+            Point(first_dot_x + day_passed_ratio * dots_span, dots_y),
             sun_size
         );
         //Spinning sun.
         draw_bitmap(
             bmp_sun,
-            point(first_dot_x + day_passed_ratio * dots_span, dots_y),
+            Point(first_dot_x + day_passed_ratio * dots_span, dots_y),
             sun_size,
             sun_meter_sun_angle
         );
         //Bubble in front the sun.
         draw_bitmap(
             bmp_hard_bubble,
-            point(first_dot_x + day_passed_ratio * dots_span, dots_y),
+            Point(first_dot_x + day_passed_ratio * dots_span, dots_y),
             sun_size,
             0.0f,
             al_map_rgb(255, 192, 128)
@@ -357,7 +357,7 @@ hud_t::hud_t() :
                 post_tick_day_minutes >= checkpoint
             ) {
                 sun_meter->start_juice_animation(
-                    gui_item::JUICE_TYPE_GROW_ICON
+                    GuiItem::JUICE_TYPE_GROW_ICON
                 );
                 break;
             }
@@ -367,31 +367,31 @@ hud_t::hud_t() :
     
     
     //Day number bubble.
-    gui_item* day_bubble = new gui_item();
+    GuiItem* day_bubble = new GuiItem();
     day_bubble->on_draw =
-    [this] (const point & center, const point & size) {
+    [this] (const Point & center, const Point & size) {
         draw_bitmap_in_box(bmp_day_bubble, center, size, true);
     };
     gui.add_item(day_bubble, "day_bubble");
     
     
     //Day number text.
-    gui_item* day_nr = new gui_item();
+    GuiItem* day_nr = new GuiItem();
     day_nr->on_draw =
-    [this] (const point & center, const point & size) {
+    [this] (const Point & center, const Point & size) {
         draw_text(
             i2s(game.states.gameplay->day),
             game.sys_content.fnt_counter, center,
-            point(size.x * 0.70f, size.y * 0.50f)
+            Point(size.x * 0.70f, size.y * 0.50f)
         );
     };
     gui.add_item(day_nr, "day_number");
     
     
     //Standby group member icon.
-    gui_item* standby_icon = new gui_item();
+    GuiItem* standby_icon = new GuiItem();
     standby_icon->on_draw =
-    [this] (const point & center, const point & size) {
+    [this] (const Point & center, const Point & size) {
         game.states.gameplay->hud->draw_standby_icon(BUBBLE_RELATION_CURRENT);
     };
     gui.add_item(standby_icon, "standby_icon");
@@ -399,9 +399,9 @@ hud_t::hud_t() :
     
     
     //Next standby subgroup icon.
-    gui_item* standby_next_icon = new gui_item();
+    GuiItem* standby_next_icon = new GuiItem();
     standby_next_icon->on_draw =
-    [this] (const point & center, const point & size) {
+    [this] (const Point & center, const Point & size) {
         game.states.gameplay->hud->draw_standby_icon(BUBBLE_RELATION_NEXT);
     };
     gui.add_item(standby_next_icon, "standby_next_icon");
@@ -409,12 +409,12 @@ hud_t::hud_t() :
     
     
     //Next standby subgroup input.
-    gui_item* standby_next_input = new gui_item();
+    GuiItem* standby_next_input = new GuiItem();
     standby_next_input->on_draw =
-    [this] (const point & center, const point & size) {
+    [this] (const Point & center, const Point & size) {
         if(!game.options.show_hud_input_icons) return;
         if(!game.states.gameplay->cur_leader_ptr) return;
-        subgroup_type* next_type;
+        SubgroupType* next_type;
         game.states.gameplay->cur_leader_ptr->group->get_next_standby_type(
             false, &next_type
         );
@@ -424,7 +424,7 @@ hud_t::hud_t() :
         ) {
             return;
         }
-        player_input i =
+        PlayerInput i =
             game.controls.find_bind(PLAYER_ACTION_TYPE_NEXT_TYPE).input;
         if(i.type == INPUT_TYPE_NONE) return;
         draw_player_input_icon(
@@ -436,9 +436,9 @@ hud_t::hud_t() :
     
     
     //Previous standby subgroup icon.
-    gui_item* standby_prev_icon = new gui_item();
+    GuiItem* standby_prev_icon = new GuiItem();
     standby_prev_icon->on_draw =
-    [this] (const point & center, const point & size) {
+    [this] (const Point & center, const Point & size) {
         game.states.gameplay->hud->draw_standby_icon(BUBBLE_RELATION_PREVIOUS);
     };
     gui.add_item(standby_prev_icon, "standby_prev_icon");
@@ -446,16 +446,16 @@ hud_t::hud_t() :
     
     
     //Previous standby subgroup input.
-    gui_item* standby_prev_input = new gui_item();
+    GuiItem* standby_prev_input = new GuiItem();
     standby_prev_input->on_draw =
-    [this] (const point & center, const point & size) {
+    [this] (const Point & center, const Point & size) {
         if(!game.options.show_hud_input_icons) return;
         if(!game.states.gameplay->cur_leader_ptr) return;
-        subgroup_type* prev_type;
+        SubgroupType* prev_type;
         game.states.gameplay->cur_leader_ptr->group->get_next_standby_type(
             true, &prev_type
         );
-        subgroup_type* next_type;
+        SubgroupType* next_type;
         game.states.gameplay->cur_leader_ptr->group->get_next_standby_type(
             false, &next_type
         );
@@ -466,7 +466,7 @@ hud_t::hud_t() :
         ) {
             return;
         }
-        player_input i =
+        PlayerInput i =
             game.controls.find_bind(PLAYER_ACTION_TYPE_PREV_TYPE).input;
         if(i.type == INPUT_TYPE_NONE) return;
         draw_player_input_icon(
@@ -478,15 +478,15 @@ hud_t::hud_t() :
     
     
     //Standby group member maturity.
-    gui_item* standby_maturity_icon = new gui_item();
+    GuiItem* standby_maturity_icon = new GuiItem();
     standby_maturity_icon->on_draw =
-    [this, standby_maturity_icon] (const point & center, const point & size) {
+    [this, standby_maturity_icon] (const Point & center, const Point & size) {
         //Standby group member preparations.
-        leader* l_ptr = game.states.gameplay->cur_leader_ptr;
+        Leader* l_ptr = game.states.gameplay->cur_leader_ptr;
         if(!l_ptr || !l_ptr->group) return;
         
         ALLEGRO_BITMAP* standby_mat_bmp = nullptr;
-        mob* closest =
+        Mob* closest =
             game.states.gameplay->closest_group_member[BUBBLE_RELATION_CURRENT];
             
         if(l_ptr->group->cur_standby_type && closest) {
@@ -495,8 +495,8 @@ hud_t::hud_t() :
                 
             switch(c) {
             case SUBGROUP_TYPE_CATEGORY_PIKMIN: {
-                pikmin* p_ptr =
-                    dynamic_cast<pikmin*>(closest);
+                Pikmin* p_ptr =
+                    dynamic_cast<Pikmin*>(closest);
                 standby_mat_bmp =
                     p_ptr->pik_type->bmp_maturity_icon[p_ptr->maturity];
                 break;
@@ -530,7 +530,7 @@ hud_t::hud_t() :
             standby_mat_bmp != prev_maturity_icon
         ) {
             standby_maturity_icon->start_juice_animation(
-                gui_item::JUICE_TYPE_GROW_ICON
+                GuiItem::JUICE_TYPE_GROW_ICON
             );
             prev_standby_type = l_ptr->group->cur_standby_type;
             prev_maturity_icon = standby_mat_bmp;
@@ -540,9 +540,9 @@ hud_t::hud_t() :
     
     
     //Standby subgroup member amount bubble.
-    gui_item* standby_bubble = new gui_item();
+    GuiItem* standby_bubble = new GuiItem();
     standby_bubble->on_draw =
-    [this] (const point & center, const point & size) {
+    [this] (const Point & center, const Point & size) {
         draw_bitmap(
             bmp_counter_bubble_standby,
             center,
@@ -555,15 +555,15 @@ hud_t::hud_t() :
     
     
     //Standby subgroup member amount.
-    standby_amount = new gui_item();
+    standby_amount = new GuiItem();
     standby_amount->on_draw =
-    [this] (const point & center, const point & size) {
+    [this] (const Point & center, const Point & size) {
         size_t n_standby_pikmin = 0;
-        leader* l_ptr = game.states.gameplay->cur_leader_ptr;
+        Leader* l_ptr = game.states.gameplay->cur_leader_ptr;
         
         if(l_ptr && l_ptr->group->cur_standby_type) {
             for(size_t m = 0; m < l_ptr->group->members.size(); m++) {
-                mob* m_ptr = l_ptr->group->members[m];
+                Mob* m_ptr = l_ptr->group->members[m];
                 if(m_ptr->subgroup_type_ptr == l_ptr->group->cur_standby_type) {
                     n_standby_pikmin++;
                 }
@@ -572,7 +572,7 @@ hud_t::hud_t() :
         
         if(n_standby_pikmin != standby_count_nr) {
             standby_amount->start_juice_animation(
-                gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
+                GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
             );
             standby_count_nr = n_standby_pikmin;
         }
@@ -582,16 +582,16 @@ hud_t::hud_t() :
             center, size,
             map_alpha(game.states.gameplay->hud->standby_items_opacity * 255),
             ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
-            point(1.0f + standby_amount->get_juice_value())
+            Point(1.0f + standby_amount->get_juice_value())
         );
     };
     gui.add_item(standby_amount, "standby_amount");
     
     
     //Group Pikmin amount bubble.
-    gui_item* group_bubble = new gui_item();
+    GuiItem* group_bubble = new GuiItem();
     group_bubble->on_draw =
-    [this] (const point & center, const point & size) {
+    [this] (const Point & center, const Point & size) {
         if(!game.states.gameplay->cur_leader_ptr) return;
         draw_bitmap(
             bmp_counter_bubble_group,
@@ -603,33 +603,33 @@ hud_t::hud_t() :
     
     
     //Group Pikmin amount.
-    group_amount = new gui_item();
+    group_amount = new GuiItem();
     group_amount->on_draw =
-    [this] (const point & center, const point & size) {
+    [this] (const Point & center, const Point & size) {
         if(!game.states.gameplay->cur_leader_ptr) return;
         size_t cur_amount = game.states.gameplay->get_amount_of_group_pikmin();
         
         if(cur_amount != group_count_nr) {
             group_amount->start_juice_animation(
-                gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
+                GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
             );
             group_count_nr = cur_amount;
         }
         
         draw_text(
             i2s(cur_amount), game.sys_content.fnt_counter,
-            center, point(size.x * 0.70f, size.y * 0.50f), COLOR_WHITE,
+            center, Point(size.x * 0.70f, size.y * 0.50f), COLOR_WHITE,
             ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
-            point(1.0f + group_amount->get_juice_value())
+            Point(1.0f + group_amount->get_juice_value())
         );
     };
     gui.add_item(group_amount, "group_amount");
     
     
     //Field Pikmin amount bubble.
-    gui_item* field_bubble = new gui_item();
+    GuiItem* field_bubble = new GuiItem();
     field_bubble->on_draw =
-    [this] (const point & center, const point & size) {
+    [this] (const Point & center, const Point & size) {
         draw_bitmap(
             bmp_counter_bubble_field,
             center,
@@ -640,32 +640,32 @@ hud_t::hud_t() :
     
     
     //Field Pikmin amount.
-    field_amount = new gui_item();
+    field_amount = new GuiItem();
     field_amount->on_draw =
-    [this] (const point & center, const point & size) {
+    [this] (const Point & center, const Point & size) {
         size_t cur_amount = game.states.gameplay->get_amount_of_field_pikmin();
         
         if(cur_amount != field_count_nr) {
             field_amount->start_juice_animation(
-                gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
+                GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
             );
             field_count_nr = cur_amount;
         }
         
         draw_text(
             i2s(cur_amount), game.sys_content.fnt_counter,
-            center, point(size.x * 0.70f, size.y * 0.50f), COLOR_WHITE,
+            center, Point(size.x * 0.70f, size.y * 0.50f), COLOR_WHITE,
             ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
-            point(1.0f + field_amount->get_juice_value())
+            Point(1.0f + field_amount->get_juice_value())
         );
     };
     gui.add_item(field_amount, "field_amount");
     
     
     //Total Pikmin amount bubble.
-    gui_item* total_bubble = new gui_item();
+    GuiItem* total_bubble = new GuiItem();
     total_bubble->on_draw =
-    [this] (const point & center, const point & size) {
+    [this] (const Point & center, const Point & size) {
         draw_bitmap(
             bmp_counter_bubble_total,
             center,
@@ -676,32 +676,32 @@ hud_t::hud_t() :
     
     
     //Total Pikmin amount.
-    total_amount = new gui_item();
+    total_amount = new GuiItem();
     total_amount->on_draw =
-    [this] (const point & center, const point & size) {
+    [this] (const Point & center, const Point & size) {
         size_t cur_amount = game.states.gameplay->get_amount_of_total_pikmin();
         
         if(cur_amount != total_count_nr) {
             total_amount->start_juice_animation(
-                gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
+                GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
             );
             total_count_nr = cur_amount;
         }
         
         draw_text(
             i2s(total_count_nr), game.sys_content.fnt_counter,
-            center, point(size.x * 0.70f, size.y * 0.50f), COLOR_WHITE,
+            center, Point(size.x * 0.70f, size.y * 0.50f), COLOR_WHITE,
             ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
-            point(1.0f + total_amount->get_juice_value())
+            Point(1.0f + total_amount->get_juice_value())
         );
     };
     gui.add_item(total_amount, "total_amount");
     
     
     //Pikmin counter "x".
-    gui_item* counters_x = new gui_item();
+    GuiItem* counters_x = new GuiItem();
     counters_x->on_draw =
-    [this] (const point & center, const point & size) {
+    [this] (const Point & center, const Point & size) {
         draw_text(
             "x", game.sys_content.fnt_counter, center, size,
             map_alpha(game.states.gameplay->hud->standby_items_opacity * 255)
@@ -712,9 +712,9 @@ hud_t::hud_t() :
     
     //Pikmin counter slashes.
     for(size_t s = 0; s < 3; s++) {
-        gui_item* counter_slash = new gui_item();
+        GuiItem* counter_slash = new GuiItem();
         counter_slash->on_draw =
-        [this] (const point & center, const point & size) {
+        [this] (const Point & center, const Point & size) {
             if(!game.states.gameplay->cur_leader_ptr) return;
             draw_text(
                 "/", game.sys_content.fnt_counter, center, size
@@ -725,9 +725,9 @@ hud_t::hud_t() :
     
     
     //Spray 1 icon.
-    gui_item* spray_1_icon = new gui_item();
+    GuiItem* spray_1_icon = new GuiItem();
     spray_1_icon->on_draw =
-    [this] (const point & center, const point & size) {
+    [this] (const Point & center, const Point & size) {
         draw_spray_icon(BUBBLE_RELATION_CURRENT);
     };
     gui.add_item(spray_1_icon, "spray_1_icon");
@@ -735,9 +735,9 @@ hud_t::hud_t() :
     
     
     //Spray 1 amount.
-    spray_1_amount = new gui_item();
+    spray_1_amount = new GuiItem();
     spray_1_amount->on_draw =
-    [this] (const point & center, const point & size) {
+    [this] (const Point & center, const Point & size) {
         if(!game.states.gameplay->cur_leader_ptr) return;
         
         size_t top_spray_idx = INVALID;
@@ -752,19 +752,19 @@ hud_t::hud_t() :
             "x" +
             i2s(game.states.gameplay->spray_stats[top_spray_idx].nr_sprays),
             game.sys_content.fnt_counter,
-            point(center.x - size.x / 2.0, center.y), size,
+            Point(center.x - size.x / 2.0, center.y), size,
             map_alpha(game.states.gameplay->hud->spray_items_opacity * 255),
             ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER, 0,
-            point(1.0f + spray_1_amount->get_juice_value())
+            Point(1.0f + spray_1_amount->get_juice_value())
         );
     };
     gui.add_item(spray_1_amount, "spray_1_amount");
     
     
     //Spray 1 input.
-    gui_item* spray_1_input = new gui_item();
+    GuiItem* spray_1_input = new GuiItem();
     spray_1_input->on_draw =
-    [this] (const point & center, const point & size) {
+    [this] (const Point & center, const Point & size) {
         if(!game.options.show_hud_input_icons) return;
         if(!game.states.gameplay->cur_leader_ptr) return;
         
@@ -779,7 +779,7 @@ hud_t::hud_t() :
             return;
         }
         
-        player_input i;
+        PlayerInput i;
         if(game.content.spray_types.list.size() > 2) {
             i = game.controls.find_bind(PLAYER_ACTION_TYPE_USE_SPRAY).input;
         } else if(!game.content.spray_types.list.empty() && game.content.spray_types.list.size() <= 2) {
@@ -796,9 +796,9 @@ hud_t::hud_t() :
     
     
     //Spray 2 icon.
-    gui_item* spray_2_icon = new gui_item();
+    GuiItem* spray_2_icon = new GuiItem();
     spray_2_icon->on_draw =
-    [this] (const point & center, const point & size) {
+    [this] (const Point & center, const Point & size) {
         if(!game.states.gameplay->cur_leader_ptr) return;
         
         size_t bottom_spray_idx = INVALID;
@@ -818,9 +818,9 @@ hud_t::hud_t() :
     
     
     //Spray 2 amount.
-    spray_2_amount = new gui_item();
+    spray_2_amount = new GuiItem();
     spray_2_amount->on_draw =
-    [this] (const point & center, const point & size) {
+    [this] (const Point & center, const Point & size) {
         if(!game.states.gameplay->cur_leader_ptr) return;
         
         size_t bottom_spray_idx = INVALID;
@@ -833,19 +833,19 @@ hud_t::hud_t() :
             "x" +
             i2s(game.states.gameplay->spray_stats[bottom_spray_idx].nr_sprays),
             game.sys_content.fnt_counter,
-            point(center.x - size.x / 2.0, center.y), size,
+            Point(center.x - size.x / 2.0, center.y), size,
             map_alpha(game.states.gameplay->hud->spray_items_opacity * 255),
             ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER, 0,
-            point(1.0f + spray_2_amount->get_juice_value())
+            Point(1.0f + spray_2_amount->get_juice_value())
         );
     };
     gui.add_item(spray_2_amount, "spray_2_amount");
     
     
     //Spray 2 input.
-    gui_item* spray_2_input = new gui_item();
+    GuiItem* spray_2_input = new GuiItem();
     spray_2_input->on_draw =
-    [this] (const point & center, const point & size) {
+    [this] (const Point & center, const Point & size) {
         if(!game.options.show_hud_input_icons) return;
         if(!game.states.gameplay->cur_leader_ptr) return;
         
@@ -858,7 +858,7 @@ hud_t::hud_t() :
             return;
         }
         
-        player_input i;
+        PlayerInput i;
         if(game.content.spray_types.list.size() == 2) {
             i = game.controls.find_bind(PLAYER_ACTION_TYPE_USE_SPRAY_2).input;
         }
@@ -873,9 +873,9 @@ hud_t::hud_t() :
     
     
     //Previous spray icon.
-    gui_item* prev_spray_icon = new gui_item();
+    GuiItem* prev_spray_icon = new GuiItem();
     prev_spray_icon->on_draw =
-    [this] (const point & center, const point & size) {
+    [this] (const Point & center, const Point & size) {
         draw_spray_icon(BUBBLE_RELATION_PREVIOUS);
     };
     gui.add_item(prev_spray_icon, "spray_prev_icon");
@@ -883,9 +883,9 @@ hud_t::hud_t() :
     
     
     //Previous spray input.
-    gui_item* prev_spray_input = new gui_item();
+    GuiItem* prev_spray_input = new GuiItem();
     prev_spray_input->on_draw =
-    [this] (const point & center, const point & size) {
+    [this] (const Point & center, const Point & size) {
         if(!game.options.show_hud_input_icons) return;
         if(!game.states.gameplay->cur_leader_ptr) return;
         
@@ -900,7 +900,7 @@ hud_t::hud_t() :
         }
         if(prev_spray_idx == INVALID) return;
         
-        player_input i;
+        PlayerInput i;
         if(game.content.spray_types.list.size() >= 3) {
             i = game.controls.find_bind(PLAYER_ACTION_TYPE_PREV_SPRAY).input;
         }
@@ -915,9 +915,9 @@ hud_t::hud_t() :
     
     
     //Next spray icon.
-    gui_item* next_spray_icon = new gui_item();
+    GuiItem* next_spray_icon = new GuiItem();
     next_spray_icon->on_draw =
-    [this] (const point & center, const point & size) {
+    [this] (const Point & center, const Point & size) {
         draw_spray_icon(BUBBLE_RELATION_NEXT);
     };
     gui.add_item(next_spray_icon, "spray_next_icon");
@@ -925,9 +925,9 @@ hud_t::hud_t() :
     
     
     //Next spray input.
-    gui_item* next_spray_input = new gui_item();
+    GuiItem* next_spray_input = new GuiItem();
     next_spray_input->on_draw =
-    [this] (const point & center, const point & size) {
+    [this] (const Point & center, const Point & size) {
         if(!game.options.show_hud_input_icons) return;
         if(!game.states.gameplay->cur_leader_ptr) return;
         
@@ -942,7 +942,7 @@ hud_t::hud_t() :
         }
         if(next_spray_idx == INVALID) return;
         
-        player_input i;
+        PlayerInput i;
         if(game.content.spray_types.list.size() >= 3) {
             i = game.controls.find_bind(PLAYER_ACTION_TYPE_NEXT_SPRAY).input;
         }
@@ -959,9 +959,9 @@ hud_t::hud_t() :
     if(game.cur_area_data->type == AREA_TYPE_MISSION) {
     
         //Mission goal bubble.
-        gui_item* mission_goal_bubble = new gui_item();
+        GuiItem* mission_goal_bubble = new GuiItem();
         mission_goal_bubble->on_draw =
-        [this] (const point & center, const point & size) {
+        [this] (const Point & center, const Point & size) {
             int cx = 0;
             int cy = 0;
             int cw = 0;
@@ -1003,10 +1003,10 @@ hud_t::hud_t() :
             
         if(!goal_cur_label_text.empty()) {
             //Mission goal current label.
-            gui_item* mission_goal_cur_label = new gui_item();
+            GuiItem* mission_goal_cur_label = new GuiItem();
             mission_goal_cur_label->on_draw =
                 [this, goal_cur_label_text]
-            (const point & center, const point & size) {
+            (const Point & center, const Point & size) {
                 draw_text(
                     goal_cur_label_text, game.sys_content.fnt_standard,
                     center, size, al_map_rgba(255, 255, 255, 128)
@@ -1016,10 +1016,10 @@ hud_t::hud_t() :
             
             
             //Mission goal current.
-            gui_item* mission_goal_cur = new gui_item();
+            GuiItem* mission_goal_cur = new GuiItem();
             mission_goal_cur->on_draw =
                 [this, mission_goal_cur]
-            (const point & center, const point & size) {
+            (const Point & center, const Point & size) {
                 int value =
                     game.mission_goals[game.cur_area_data->mission.goal]->
                     get_cur_amount(game.states.gameplay);
@@ -1037,7 +1037,7 @@ hud_t::hud_t() :
                 draw_text(
                     text, game.sys_content.fnt_counter, center, size,
                     COLOR_WHITE, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
-                    point(1.0 + juicy_grow_amount)
+                    Point(1.0 + juicy_grow_amount)
                 );
             };
             gui.add_item(mission_goal_cur, "mission_goal_cur");
@@ -1045,9 +1045,9 @@ hud_t::hud_t() :
             
             
             //Mission goal requirement label.
-            gui_item* mission_goal_req_label = new gui_item();
+            GuiItem* mission_goal_req_label = new GuiItem();
             mission_goal_req_label->on_draw =
-            [this] (const point & center, const point & size) {
+            [this] (const Point & center, const Point & size) {
                 draw_text(
                     "Goal", game.sys_content.fnt_standard, center, size,
                     al_map_rgba(255, 255, 255, 128)
@@ -1057,9 +1057,9 @@ hud_t::hud_t() :
             
             
             //Mission goal requirement.
-            gui_item* mission_goal_req = new gui_item();
+            GuiItem* mission_goal_req = new GuiItem();
             mission_goal_req->on_draw =
-            [this] (const point & center, const point & size) {
+            [this] (const Point & center, const Point & size) {
                 int value =
                     game.mission_goals[game.cur_area_data->mission.goal]->
                     get_req_amount(game.states.gameplay);
@@ -1080,9 +1080,9 @@ hud_t::hud_t() :
             
             
             //Mission goal slash.
-            gui_item* mission_goal_slash = new gui_item();
+            GuiItem* mission_goal_slash = new GuiItem();
             mission_goal_slash->on_draw =
-            [this] (const point & center, const point & size) {
+            [this] (const Point & center, const Point & size) {
                 draw_text(
                     "/", game.sys_content.fnt_counter, center, size
                 );
@@ -1092,9 +1092,9 @@ hud_t::hud_t() :
         } else {
         
             //Mission goal name text.
-            gui_item* mission_goal_name = new gui_item();
+            GuiItem* mission_goal_name = new GuiItem();
             mission_goal_name->on_draw =
-            [this] (const point & center, const point & size) {
+            [this] (const Point & center, const Point & size) {
                 draw_text(
                     game.mission_goals[game.cur_area_data->mission.goal]->
                     get_name(), game.sys_content.fnt_standard,
@@ -1114,9 +1114,9 @@ hud_t::hud_t() :
     ) {
     
         //Mission score bubble.
-        gui_item* mission_score_bubble = new gui_item();
+        GuiItem* mission_score_bubble = new GuiItem();
         mission_score_bubble->on_draw =
-        [this] (const point & center, const point & size) {
+        [this] (const Point & center, const Point & size) {
             draw_filled_rounded_rectangle(
                 center, size, 20.0f, al_map_rgba(86, 149, 50, 160)
             );
@@ -1129,12 +1129,12 @@ hud_t::hud_t() :
         
         
         //Mission score "score" label.
-        gui_item* mission_score_score_label = new gui_item();
+        GuiItem* mission_score_score_label = new GuiItem();
         mission_score_score_label->on_draw =
-        [this] (const point & center, const point & size) {
+        [this] (const Point & center, const Point & size) {
             draw_text(
                 "Score:", game.sys_content.fnt_standard,
-                point(center.x + size.x / 2.0f, center.y), size,
+                Point(center.x + size.x / 2.0f, center.y), size,
                 al_map_rgba(255, 255, 255, 128), ALLEGRO_ALIGN_RIGHT
             );
         };
@@ -1142,16 +1142,16 @@ hud_t::hud_t() :
         
         
         //Mission score points.
-        gui_item* mission_score_points = new gui_item();
+        GuiItem* mission_score_points = new GuiItem();
         mission_score_points->on_draw =
             [this, mission_score_points]
-        (const point & center, const point & size) {
+        (const Point & center, const Point & size) {
             float juicy_grow_amount = mission_score_points->get_juice_value();
             draw_text(
                 i2s(game.states.gameplay->mission_score),
                 game.sys_content.fnt_counter, center, size, COLOR_WHITE,
                 ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
-                point(1.0 + juicy_grow_amount)
+                Point(1.0 + juicy_grow_amount)
             );
         };
         gui.add_item(mission_score_points, "mission_score_points");
@@ -1159,12 +1159,12 @@ hud_t::hud_t() :
         
         
         //Mission score "points" label.
-        gui_item* mission_score_points_label = new gui_item();
+        GuiItem* mission_score_points_label = new GuiItem();
         mission_score_points_label->on_draw =
-        [this] (const point & center, const point & size) {
+        [this] (const Point & center, const Point & size) {
             draw_text(
                 "pts", game.sys_content.fnt_standard,
-                point(center.x + size.x / 2.0f, center.y), size,
+                Point(center.x + size.x / 2.0f, center.y), size,
                 al_map_rgba(255, 255, 255, 128), ALLEGRO_ALIGN_RIGHT
             );
         };
@@ -1172,9 +1172,9 @@ hud_t::hud_t() :
         
         
         //Mission score ruler.
-        gui_item* mission_score_ruler = new gui_item();
+        GuiItem* mission_score_ruler = new GuiItem();
         mission_score_ruler->on_draw =
-        [this] (const point & center, const point & size) {
+        [this] (const Point & center, const Point & size) {
             //Setup.
             const float ruler_start_value =
                 game.states.gameplay->score_indicator -
@@ -1329,8 +1329,8 @@ hud_t::hud_t() :
                 }
                 draw_bitmap(
                     seg_icons[s],
-                    point(icon_x, center.y),
-                    point(-1, size.y * icon_scale),
+                    Point(icon_x, center.y),
+                    Point(-1, size.y * icon_scale),
                     0,
                     al_map_rgba(255, 255, 255, icon_alpha)
                 );
@@ -1343,8 +1343,8 @@ hud_t::hud_t() :
             if(seg_icons[last_passed_seg] && last_passed_seg == cur_seg) {
                 draw_bitmap(
                     seg_icons[last_passed_seg],
-                    point(ruler_start_x, center.y),
-                    point(-1, size.y * cur_medal_scale)
+                    Point(ruler_start_x, center.y),
+                    Point(-1, size.y * cur_medal_scale)
                 );
             }
             
@@ -1380,7 +1380,7 @@ hud_t::hud_t() :
     }
     
     
-    data_node* bitmaps_node = hud_file_node->get_child_by_name("files");
+    DataNode* bitmaps_node = hud_file_node->get_child_by_name("files");
     
 #define loader(var, name) \
     var = \
@@ -1417,7 +1417,7 @@ hud_t::hud_t() :
 /**
  * @brief Destroys the HUD struct object.
  */
-hud_t::~hud_t() {
+Hud::~Hud() {
     game.content.bitmaps.list.free(bmp_bubble);
     game.content.bitmaps.list.free(bmp_counter_bubble_field);
     game.content.bitmaps.list.free(bmp_counter_bubble_group);
@@ -1439,7 +1439,7 @@ hud_t::~hud_t() {
  * @param primary True if it's the primary HUD item,
  * false if it's the secondary.
  */
-void hud_t::create_mission_fail_cond_items(bool primary) {
+void Hud::create_mission_fail_cond_items(bool primary) {
     MISSION_FAIL_COND cond =
         primary ?
         (MISSION_FAIL_COND)
@@ -1448,9 +1448,9 @@ void hud_t::create_mission_fail_cond_items(bool primary) {
         game.cur_area_data->mission.fail_hud_secondary_cond;
         
     //Mission fail condition bubble.
-    gui_item* mission_fail_bubble = new gui_item();
+    GuiItem* mission_fail_bubble = new GuiItem();
     mission_fail_bubble->on_draw =
-    [this, primary] (const point & center, const point & size) {
+    [this, primary] (const Point & center, const Point & size) {
         int cx = 0;
         int cy = 0;
         int cw = 0;
@@ -1498,9 +1498,9 @@ void hud_t::create_mission_fail_cond_items(bool primary) {
     if(game.mission_fail_conds[cond]->has_hud_content()) {
     
         //Mission fail condition current label.
-        gui_item* mission_fail_cur_label = new gui_item();
+        GuiItem* mission_fail_cur_label = new GuiItem();
         mission_fail_cur_label->on_draw =
-        [this, cond] (const point & center, const point & size) {
+        [this, cond] (const Point & center, const Point & size) {
             draw_text(
                 game.mission_fail_conds[cond]->
                 get_hud_label(game.states.gameplay),
@@ -1517,10 +1517,10 @@ void hud_t::create_mission_fail_cond_items(bool primary) {
         
         
         //Mission fail condition current.
-        gui_item* mission_fail_cur = new gui_item();
+        GuiItem* mission_fail_cur = new GuiItem();
         mission_fail_cur->on_draw =
             [this, cond, mission_fail_cur]
-        (const point & center, const point & size) {
+        (const Point & center, const Point & size) {
             int value =
                 game.mission_fail_conds[cond]->
                 get_cur_amount(game.states.gameplay);
@@ -1534,7 +1534,7 @@ void hud_t::create_mission_fail_cond_items(bool primary) {
             draw_text(
                 text, game.sys_content.fnt_counter, center, size,
                 COLOR_WHITE, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
-                point(1.0 + juicy_grow_amount)
+                Point(1.0 + juicy_grow_amount)
             );
         };
         gui.add_item(
@@ -1551,10 +1551,10 @@ void hud_t::create_mission_fail_cond_items(bool primary) {
         
         
         //Mission fail condition requirement label.
-        gui_item* mission_fail_req_label = new gui_item();
+        GuiItem* mission_fail_req_label = new GuiItem();
         mission_fail_req_label->on_draw =
             [this]
-        (const point & center, const point & size) {
+        (const Point & center, const Point & size) {
             draw_text(
                 "Fail", game.sys_content.fnt_standard, center, size,
                 al_map_rgba(255, 255, 255, 128)
@@ -1569,9 +1569,9 @@ void hud_t::create_mission_fail_cond_items(bool primary) {
         
         
         //Mission fail condition requirement.
-        gui_item* mission_fail_req = new gui_item();
+        GuiItem* mission_fail_req = new GuiItem();
         mission_fail_req->on_draw =
-        [this, cond] (const point & center, const point & size) {
+        [this, cond] (const Point & center, const Point & size) {
             int value =
                 game.mission_fail_conds[cond]->
                 get_req_amount(game.states.gameplay);
@@ -1594,9 +1594,9 @@ void hud_t::create_mission_fail_cond_items(bool primary) {
         
         
         //Mission primary fail condition slash.
-        gui_item* mission_fail_slash = new gui_item();
+        GuiItem* mission_fail_slash = new GuiItem();
         mission_fail_slash->on_draw =
-        [this] (const point & center, const point & size) {
+        [this] (const Point & center, const Point & size) {
             draw_text(
                 "/", game.sys_content.fnt_counter, center, size
             );
@@ -1611,9 +1611,9 @@ void hud_t::create_mission_fail_cond_items(bool primary) {
     } else {
     
         //Mission fail condition name text.
-        gui_item* mission_fail_name = new gui_item();
+        GuiItem* mission_fail_name = new GuiItem();
         mission_fail_name->on_draw =
-        [this, cond] (const point & center, const point & size) {
+        [this, cond] (const Point & center, const Point & size) {
             draw_text(
                 "Fail: " +
                 game.mission_fail_conds[cond]->get_name(),
@@ -1639,11 +1639,11 @@ void hud_t::create_mission_fail_cond_items(bool primary) {
  * @param which Which spray icon to draw -- the previous type's,
  * the current type's, or the next type's.
  */
-void hud_t::draw_spray_icon(BUBBLE_RELATION which) {
+void Hud::draw_spray_icon(BUBBLE_RELATION which) {
     if(!game.states.gameplay->cur_leader_ptr) return;
     
-    point final_center;
-    point final_size;
+    Point final_center;
+    Point final_size;
     ALLEGRO_BITMAP* icon;
     game.states.gameplay->hud->spray_icon_mgr.get_drawing_info(
         which, &icon, &final_center, &final_size
@@ -1663,9 +1663,9 @@ void hud_t::draw_spray_icon(BUBBLE_RELATION which) {
  * @param which Which standby icon to draw -- the previous type's,
  * the current type's, or the next type's.
  */
-void hud_t::draw_standby_icon(BUBBLE_RELATION which) {
-    point final_center;
-    point final_size;
+void Hud::draw_standby_icon(BUBBLE_RELATION which) {
+    Point final_center;
+    Point final_size;
     ALLEGRO_BITMAP* icon;
     game.states.gameplay->hud->standby_icon_mgr.get_drawing_info(
         which, &icon, &final_center, &final_size
@@ -1700,10 +1700,10 @@ void hud_t::draw_standby_icon(BUBBLE_RELATION which) {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void hud_t::tick(float delta_t) {
+void Hud::tick(float delta_t) {
     //Update leader bubbles.
     for(size_t l = 0; l < 3; l++) {
-        leader* l_ptr = nullptr;
+        Leader* l_ptr = nullptr;
         if(l < game.states.gameplay->available_leaders.size()) {
             size_t l_idx =
                 (size_t) sum_and_wrap(
@@ -1714,7 +1714,7 @@ void hud_t::tick(float delta_t) {
             l_ptr = game.states.gameplay->available_leaders[l_idx];
         }
         
-        leader_icon_bubble icon;
+        LeaderIconBubble icon;
         icon.bmp = nullptr;
         icon.color = COLOR_EMPTY;
         if(l_ptr) {
@@ -1724,7 +1724,7 @@ void hud_t::tick(float delta_t) {
         
         leader_icon_mgr.update(l, l_ptr, icon);
         
-        leader_health_bubble health;
+        LeaderHealthBubble health;
         health.ratio = 0.0f;
         health.caution_timer = 0.0f;
         if(l_ptr) {
@@ -1740,16 +1740,16 @@ void hud_t::tick(float delta_t) {
     for(unsigned char s = 0; s < 3; s++) {
     
         ALLEGRO_BITMAP* icon = nullptr;
-        leader* cur_leader_ptr = game.states.gameplay->cur_leader_ptr;
-        mob* member = game.states.gameplay->closest_group_member[s];
-        subgroup_type* type = nullptr;
+        Leader* cur_leader_ptr = game.states.gameplay->cur_leader_ptr;
+        Mob* member = game.states.gameplay->closest_group_member[s];
+        SubgroupType* type = nullptr;
         
         if(cur_leader_ptr) {
             switch(s) {
             case BUBBLE_RELATION_PREVIOUS: {
-                subgroup_type* prev_type;
+                SubgroupType* prev_type;
                 cur_leader_ptr->group->get_next_standby_type(true, &prev_type);
-                subgroup_type* next_type;
+                SubgroupType* next_type;
                 cur_leader_ptr->group->get_next_standby_type(false, &next_type);
                 if(
                     prev_type != cur_leader_ptr->group->cur_standby_type &&
@@ -1764,7 +1764,7 @@ void hud_t::tick(float delta_t) {
                 break;
             }
             case BUBBLE_RELATION_NEXT: {
-                subgroup_type* next_type;
+                SubgroupType* next_type;
                 cur_leader_ptr->group->get_next_standby_type(false, &next_type);
                 if(next_type != cur_leader_ptr->group->cur_standby_type) {
                     type = next_type;
@@ -1779,7 +1779,7 @@ void hud_t::tick(float delta_t) {
             
             switch(cat) {
             case SUBGROUP_TYPE_CATEGORY_LEADER: {
-                leader* l_ptr = dynamic_cast<leader*>(member);
+                Leader* l_ptr = dynamic_cast<Leader*>(member);
                 icon = l_ptr->lea_type->bmp_icon;
                 break;
             } default: {

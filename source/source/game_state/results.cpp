@@ -32,7 +32,7 @@ const string GUI_FILE_NAME = "results_menu";
  *
  * @param criterion Mission score criterion to use.
  */
-void results_state::add_score_stat(const MISSION_SCORE_CRITERIA criterion) {
+void Results::add_score_stat(const MISSION_SCORE_CRITERIA criterion) {
     if(
         game.cur_area_data->type != AREA_TYPE_MISSION ||
         game.cur_area_data->mission.grading_mode != MISSION_GRADING_MODE_POINTS
@@ -40,8 +40,8 @@ void results_state::add_score_stat(const MISSION_SCORE_CRITERIA criterion) {
         return;
     }
     
-    mission_score_criterion* c_ptr = game.mission_score_criteria[criterion];
-    mission_data* mission = &game.cur_area_data->mission;
+    MissionScoreCriterion* c_ptr = game.mission_score_criteria[criterion];
+    MissionData* mission = &game.cur_area_data->mission;
     int mult = c_ptr->get_multiplier(mission);
     
     if(mult == 0) return;
@@ -81,7 +81,7 @@ void results_state::add_score_stat(const MISSION_SCORE_CRITERIA criterion) {
  * @param value Value of this stat.
  * @param color Color.
  */
-void results_state::add_stat(
+void Results::add_stat(
     const string &label, const string &value,
     const ALLEGRO_COLOR &color
 ) {
@@ -93,25 +93,25 @@ void results_state::add_stat(
         (STATS_OFFSET + STAT_HEIGHT / 2.0f) +
         ((STAT_HEIGHT + STAT_PADDING) * stat_idx);
         
-    bullet_gui_item* label_bullet =
-        new bullet_gui_item(
+    BulletGuiItem* label_bullet =
+        new BulletGuiItem(
         label, game.sys_content.fnt_standard, color
     );
     label_bullet->center =
-        point(0.50f, stat_center_y);
+        Point(0.50f, stat_center_y);
     label_bullet->size =
-        point(0.96f, STAT_HEIGHT);
+        Point(0.96f, STAT_HEIGHT);
     stats_list->add_child(label_bullet);
     gui.add_item(label_bullet);
     
-    text_gui_item* value_text =
-        new text_gui_item(
+    TextGuiItem* value_text =
+        new TextGuiItem(
         value, game.sys_content.fnt_counter, color, ALLEGRO_ALIGN_RIGHT
     );
     value_text->center =
-        point(0.75f, stat_center_y);
+        Point(0.75f, stat_center_y);
     value_text->size =
-        point(0.44f, STAT_HEIGHT);
+        Point(0.44f, STAT_HEIGHT);
     stats_list->add_child(value_text);
     gui.add_item(value_text);
     text_to_animate.push_back(value_text);
@@ -122,7 +122,7 @@ void results_state::add_stat(
  * @brief Leaves the results menu and goes back to the gameplay state to
  * continue playing the area.
  */
-void results_state::continue_playing() {
+void Results::continue_playing() {
     game.fade_mgr.start_fade(false, [] () {
         game.states.gameplay->after_hours = true;
         game.states.gameplay->mission_fail_reason =
@@ -136,7 +136,7 @@ void results_state::continue_playing() {
 /**
  * @brief Draws the results state.
  */
-void results_state::do_drawing() {
+void Results::do_drawing() {
     //Background.
     al_clear_to_color(al_map_rgb(143, 149, 62));
     
@@ -145,8 +145,8 @@ void results_state::do_drawing() {
     logo_height = game.win_w * 0.08f * (logo_width / logo_height);
     logo_width = game.win_w * 0.08f;
     draw_background_logos(
-        gui_time_spent, 6, 6, point(logo_width, logo_height), map_alpha(75),
-        point(-60.0f, 30.0f), -TAU / 6.0f
+        gui_time_spent, 6, 6, Point(logo_width, logo_height), map_alpha(75),
+        Point(-60.0f, 30.0f), -TAU / 6.0f
     );
     
     gui.draw();
@@ -158,7 +158,7 @@ void results_state::do_drawing() {
 /**
  * @brief Ticks one frame's worth of logic.
  */
-void results_state::do_logic() {
+void Results::do_logic() {
     gui_time_spent += game.delta_t;
     
     //Make the different texts grow every two or so seconds.
@@ -176,11 +176,11 @@ void results_state::do_logic() {
         old_time_cp <= (int) text_to_animate.size() - 1
     ) {
         text_to_animate[old_time_cp]->start_juice_animation(
-            gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
+            GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
         );
     }
     
-    vector<player_action> player_actions = game.controls.new_frame();
+    vector<PlayerAction> player_actions = game.controls.new_frame();
     if(!game.fade_mgr.is_fading()) {
         for(size_t a = 0; a < player_actions.size(); a++) {
             gui.handle_player_action(player_actions[a]);
@@ -198,7 +198,7 @@ void results_state::do_logic() {
  *
  * @return The name.
  */
-string results_state::get_name() const {
+string Results::get_name() const {
     return "results";
 }
 
@@ -208,7 +208,7 @@ string results_state::get_name() const {
  *
  * @param ev Event to handle.
  */
-void results_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
+void Results::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;
     
     gui.handle_allegro_event(ev);
@@ -218,7 +218,7 @@ void results_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
 /**
  * @brief Leaves the results menu and goes to the area menu.
  */
-void results_state::leave() {
+void Results::leave() {
     game.fade_mgr.start_fade(false, [] () {
         AREA_TYPE area_type = game.cur_area_data->type;
         game.unload_loaded_state(game.states.gameplay);
@@ -238,7 +238,7 @@ void results_state::leave() {
 /**
  * @brief Loads the results state into memory.
  */
-void results_state::load() {
+void Results::load() {
     bool goal_was_cleared =
         game.states.gameplay->mission_fail_reason ==
         (MISSION_FAIL_COND) INVALID;
@@ -247,7 +247,7 @@ void results_state::load() {
     final_mission_score = game.cur_area_data->mission.starting_points;
     
     for(size_t c = 0; c < game.mission_score_criteria.size(); c++) {
-        mission_score_criterion* c_ptr =
+        MissionScoreCriterion* c_ptr =
             game.mission_score_criteria[c];
         int c_score =
             c_ptr->get_score(game.states.gameplay, &game.cur_area_data->mission);
@@ -264,18 +264,18 @@ void results_state::load() {
     }
     
     //Record loading and saving logic.
-    mission_record old_record;
+    MissionRecord old_record;
     
-    data_node mission_records;
+    DataNode mission_records;
     mission_records.load_file(FILE_PATHS_FROM_ROOT::MISSION_RECORDS, true, false, true);
     string record_entry_name =
         get_mission_record_entry_name(game.cur_area_data);
-    data_node* entry_node;
+    DataNode* entry_node;
     if(mission_records.get_nr_of_children_by_name(record_entry_name) > 0) {
         entry_node =
             mission_records.get_child_by_name(record_entry_name);
     } else {
-        entry_node = new data_node(record_entry_name, "");
+        entry_node = new DataNode(record_entry_name, "");
         mission_records.add(entry_node);
     }
     
@@ -356,8 +356,8 @@ void results_state::load() {
     );
     
     //Area name text.
-    text_gui_item* area_name_text =
-        new text_gui_item(
+    TextGuiItem* area_name_text =
+        new TextGuiItem(
         game.cur_area_data->name, game.sys_content.fnt_area_name, COLOR_GOLD
     );
     gui.add_item(area_name_text, "area_name");
@@ -371,17 +371,17 @@ void results_state::load() {
             game.cur_area_data->mission.goal
         );
     if(!subtitle.empty()) {
-        text_gui_item* area_subtitle_text =
-            new text_gui_item(subtitle, game.sys_content.fnt_area_name);
+        TextGuiItem* area_subtitle_text =
+            new TextGuiItem(subtitle, game.sys_content.fnt_area_name);
         gui.add_item(area_subtitle_text, "area_subtitle");
         text_to_animate.push_back(area_subtitle_text);
     }
     
     if(game.cur_area_data->type == AREA_TYPE_MISSION) {
         //Goal stamp image item.
-        gui_item* goal_stamp_item = new gui_item;
+        GuiItem* goal_stamp_item = new GuiItem;
         goal_stamp_item->on_draw =
-        [goal_was_cleared] (const point & center, const point & size) {
+        [goal_was_cleared] (const Point & center, const Point & size) {
             draw_bitmap_in_box(
                 goal_was_cleared ?
                 game.sys_content.bmp_mission_clear :
@@ -409,8 +409,8 @@ void results_state::load() {
         }
         
         if(!end_reason.empty()) {
-            text_gui_item* end_reason_text =
-                new text_gui_item(
+            TextGuiItem* end_reason_text =
+                new TextGuiItem(
                 end_reason, game.sys_content.fnt_standard,
                 goal_was_cleared ?
                 al_map_rgba(112, 200, 100, 192) :
@@ -480,9 +480,9 @@ void results_state::load() {
         }
         
         //Medal image item.
-        gui_item* medal_item = new gui_item;
+        GuiItem* medal_item = new GuiItem;
         medal_item->on_draw =
-        [medal] (const point & center, const point & size) {
+        [medal] (const Point & center, const Point & size) {
             ALLEGRO_BITMAP* bmp = nullptr;
             switch(medal) {
             case MISSION_MEDAL_NONE: {
@@ -507,8 +507,8 @@ void results_state::load() {
         gui.add_item(medal_item, "medal");
         
         //Medal reason.
-        text_gui_item* medal_reason_text =
-            new text_gui_item(
+        TextGuiItem* medal_reason_text =
+            new TextGuiItem(
             medal_reason, game.sys_content.fnt_standard, medal_reason_color
         );
         gui.add_item(medal_reason_text, "medal_reason");
@@ -516,8 +516,8 @@ void results_state::load() {
     
     //Conclusion label text.
     string conclusion_label = "Conclusion:";
-    text_gui_item* conclusion_label_text =
-        new text_gui_item(
+    TextGuiItem* conclusion_label_text =
+        new TextGuiItem(
         conclusion_label, game.sys_content.fnt_standard,
         al_map_rgba(255, 255, 255, 192)
     );
@@ -575,21 +575,21 @@ void results_state::load() {
         break;
     }
     }
-    text_gui_item* conclusion_text =
-        new text_gui_item(conclusion, game.sys_content.fnt_standard);
+    TextGuiItem* conclusion_text =
+        new TextGuiItem(conclusion, game.sys_content.fnt_standard);
     gui.add_item(conclusion_text, "conclusion");
     
     //Stats label text.
-    text_gui_item* stats_label_text =
-        new text_gui_item(
+    TextGuiItem* stats_label_text =
+        new TextGuiItem(
         "Stats:", game.sys_content.fnt_standard, al_map_rgba(255, 255, 255, 192)
     );
     gui.add_item(stats_label_text, "stats_label");
     
     //Stats box.
-    stats_list = new list_gui_item();
+    stats_list = new ListGuiItem();
     stats_list->on_draw =
-    [this] (const point & center, const point & size) {
+    [this] (const Point & center, const Point & size) {
         draw_filled_rounded_rectangle(
             center, size, 8.0f, al_map_rgba(0, 0, 0, 40)
         );
@@ -601,7 +601,7 @@ void results_state::load() {
     gui.add_item(stats_list, "stats");
     
     //Stats list scrollbar.
-    scroll_gui_item* stats_scroll = new scroll_gui_item();
+    ScrollGuiItem* stats_scroll = new ScrollGuiItem();
     stats_scroll->list_item = stats_list;
     gui.add_item(stats_scroll, "stats_scroll");
     
@@ -736,10 +736,10 @@ void results_state::load() {
     
     
     //Retry button.
-    button_gui_item* retry_button =
-        new button_gui_item("Retry", game.sys_content.fnt_standard);
+    ButtonGuiItem* retry_button =
+        new ButtonGuiItem("Retry", game.sys_content.fnt_standard);
     retry_button->on_activate =
-    [this] (const point &) {
+    [this] (const Point &) {
         retry_area();
     };
     retry_button->on_get_tooltip =
@@ -751,10 +751,10 @@ void results_state::load() {
         game.states.gameplay->mission_fail_reason ==
         MISSION_FAIL_COND_TIME_LIMIT
     ) {
-        button_gui_item* continue_button =
-            new button_gui_item("Keep playing", game.sys_content.fnt_standard);
+        ButtonGuiItem* continue_button =
+            new ButtonGuiItem("Keep playing", game.sys_content.fnt_standard);
         continue_button->on_activate =
-        [this] (const point &) {
+        [this] (const Point &) {
             continue_playing();
         };
         continue_button->on_get_tooltip =
@@ -768,14 +768,14 @@ void results_state::load() {
     
     //Pick an area button.
     gui.back_item =
-        new button_gui_item(
+        new ButtonGuiItem(
         game.states.area_ed->quick_play_area_path.empty() ?
         "Pick an area" :
         "Back to editor",
         game.sys_content.fnt_standard
     );
     gui.back_item->on_activate =
-    [this] (const point &) {
+    [this] (const Point &) {
         leave();
     };
     gui.back_item->on_get_tooltip =
@@ -791,8 +791,8 @@ void results_state::load() {
     gui_add_back_input_icon(&gui, "pick_area_input");
     
     //Tooltip text.
-    tooltip_gui_item* tooltip_text =
-        new tooltip_gui_item(&gui);
+    TooltipGuiItem* tooltip_text =
+        new TooltipGuiItem(&gui);
     gui.add_item(tooltip_text, "tooltip");
     
     //Finishing touches.
@@ -807,7 +807,7 @@ void results_state::load() {
  * @brief Leaves the results menu and goes back to the gameplay state to retry
  * the area.
  */
-void results_state::retry_area() {
+void Results::retry_area() {
     game.fade_mgr.start_fade(false, [] () {
         game.unload_loaded_state(game.states.gameplay);
         game.change_state(game.states.gameplay);
@@ -818,7 +818,7 @@ void results_state::retry_area() {
 /**
  * @brief Unloads the results state from memory.
  */
-void results_state::unload() {
+void Results::unload() {
     //Menu items.
     gui.destroy();
 }

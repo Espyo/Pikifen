@@ -22,8 +22,8 @@
  *
  * @param typ Mob type to create the finite state machine for.
  */
-void resource_fsm::create_fsm(mob_type* typ) {
-    easy_fsm_creator efc;
+void resource_fsm::create_fsm(MobType* typ) {
+    EasyFsmCreator efc;
     
     efc.new_state("idle_waiting", RESOURCE_STATE_IDLE_WAITING); {
         efc.new_event(MOB_EV_ON_ENTER); {
@@ -176,8 +176,8 @@ void resource_fsm::create_fsm(mob_type* typ) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void resource_fsm::handle_delivery(mob* m, void* info1, void* info2) {
-    resource* res_ptr = (resource*) m;
+void resource_fsm::handle_delivery(Mob* m, void* info1, void* info2) {
+    Resource* res_ptr = (Resource*) m;
     if(
         res_ptr->res_type->delivery_result ==
         RESOURCE_DELIVERY_RESULT_DAMAGE_MOB
@@ -186,7 +186,7 @@ void resource_fsm::handle_delivery(mob* m, void* info1, void* info2) {
             true, false, -res_ptr->res_type->damage_mob_amount
         );
         
-        hitbox_interaction ev_info(res_ptr, nullptr, nullptr);
+        HitboxInteraction ev_info(res_ptr, nullptr, nullptr);
         res_ptr->fsm.run_event(MOB_EV_DAMAGE, (void*) &ev_info);
     }
 }
@@ -199,8 +199,8 @@ void resource_fsm::handle_delivery(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void resource_fsm::handle_dropped(mob* m, void* info1, void* info2) {
-    resource* res_ptr = (resource*) m;
+void resource_fsm::handle_dropped(Mob* m, void* info1, void* info2) {
+    Resource* res_ptr = (Resource*) m;
     if(!res_ptr->res_type->vanish_on_drop) return;
     
     if(res_ptr->res_type->vanish_delay == 0) {
@@ -218,8 +218,8 @@ void resource_fsm::handle_dropped(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void resource_fsm::handle_reach_destination(mob* m, void* info1, void* info2) {
-    resource* res_ptr = (resource*) m;
+void resource_fsm::handle_reach_destination(Mob* m, void* info1, void* info2) {
+    Resource* res_ptr = (Resource*) m;
     if(res_ptr->res_type->delivery_result == RESOURCE_DELIVERY_RESULT_STAY) {
         m->stop_following_path();
         m->fsm.set_state(RESOURCE_STATE_STAYING_AFTER_DELIVERY);
@@ -236,8 +236,8 @@ void resource_fsm::handle_reach_destination(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void resource_fsm::handle_start_moving(mob* m, void* info1, void* info2) {
-    resource* res_ptr = (resource*) m;
+void resource_fsm::handle_start_moving(Mob* m, void* info1, void* info2) {
+    Resource* res_ptr = (Resource*) m;
     res_ptr->set_timer(0);
 }
 
@@ -249,7 +249,7 @@ void resource_fsm::handle_start_moving(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void resource_fsm::lose_momentum(mob* m, void* info1, void* info2) {
+void resource_fsm::lose_momentum(Mob* m, void* info1, void* info2) {
     m->speed.x = 0;
     m->speed.y = 0;
     m->speed_z = 0;
@@ -263,7 +263,7 @@ void resource_fsm::lose_momentum(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void resource_fsm::start_being_delivered(mob* m, void* info1, void* info2) {
+void resource_fsm::start_being_delivered(Mob* m, void* info1, void* info2) {
     if(
         m->carry_info->intended_mob &&
         m->carry_info->intended_mob->type->category->id == MOB_CATEGORY_BRIDGES
@@ -280,8 +280,8 @@ void resource_fsm::start_being_delivered(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void resource_fsm::start_waiting(mob* m, void* info1, void* info2) {
-    resource* res_ptr = (resource*) m;
+void resource_fsm::start_waiting(Mob* m, void* info1, void* info2) {
+    Resource* res_ptr = (Resource*) m;
     
     if(res_ptr->to_delete) return;
     
@@ -310,8 +310,8 @@ void resource_fsm::start_waiting(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void resource_fsm::vanish(mob* m, void* info1, void* info2) {
-    resource* res_ptr = (resource*) m;
+void resource_fsm::vanish(Mob* m, void* info1, void* info2) {
+    Resource* res_ptr = (Resource*) m;
     if(res_ptr->res_type->return_to_pile_on_vanish && res_ptr->origin_pile) {
         res_ptr->origin_pile->change_amount(+1);
     }

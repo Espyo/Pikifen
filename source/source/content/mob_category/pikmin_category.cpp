@@ -19,8 +19,8 @@
 /**
  * @brief Constructs a new Pikmin category object.
  */
-pikmin_category::pikmin_category() :
-    mob_category(
+PikminCategory::PikminCategory() :
+    MobCategory(
         MOB_CATEGORY_PIKMIN, "pikmin",
         "Pikmin", "Pikmin",
         "pikmin", al_map_rgb(100, 204, 73)
@@ -32,7 +32,7 @@ pikmin_category::pikmin_category() :
 /**
  * @brief Clears the list of registered types of Pikmin.
  */
-void pikmin_category::clear_types() {
+void PikminCategory::clear_types() {
     for(auto &t : game.content.mob_types.list.pikmin) {
         delete t.second;
     }
@@ -48,10 +48,10 @@ void pikmin_category::clear_types() {
  * @param angle Starting angle.
  * @return The mob.
  */
-mob* pikmin_category::create_mob(
-    const point &pos, mob_type* type, float angle
+Mob* PikminCategory::create_mob(
+    const Point &pos, MobType* type, float angle
 ) {
-    pikmin* m = new pikmin(pos, (pikmin_type*) type, angle);
+    Pikmin* m = new Pikmin(pos, (PikminType*) type, angle);
     game.states.gameplay->mobs.pikmin_list.push_back(m);
     return m;
 }
@@ -62,8 +62,8 @@ mob* pikmin_category::create_mob(
  *
  * @return The type.
  */
-mob_type* pikmin_category::create_type() {
-    return new pikmin_type();
+MobType* PikminCategory::create_type() {
+    return new PikminType();
 }
 
 
@@ -72,12 +72,12 @@ mob_type* pikmin_category::create_type() {
  *
  * @param m The mob to erase.
  */
-void pikmin_category::erase_mob(mob* m) {
+void PikminCategory::erase_mob(Mob* m) {
     game.states.gameplay->mobs.pikmin_list.erase(
         find(
             game.states.gameplay->mobs.pikmin_list.begin(),
             game.states.gameplay->mobs.pikmin_list.end(),
-            (pikmin*) m
+            (Pikmin*) m
         )
     );
 }
@@ -90,7 +90,7 @@ void pikmin_category::erase_mob(mob* m) {
  * @param internal_name Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-mob_type* pikmin_category::get_type(const string &internal_name) const {
+MobType* PikminCategory::get_type(const string &internal_name) const {
     auto it = game.content.mob_types.list.pikmin.find(internal_name);
     if(it == game.content.mob_types.list.pikmin.end()) return nullptr;
     return it->second;
@@ -102,7 +102,7 @@ mob_type* pikmin_category::get_type(const string &internal_name) const {
  *
  * @param list This list gets filled with the mob type internal names.
  */
-void pikmin_category::get_type_names(vector<string> &list) const {
+void PikminCategory::get_type_names(vector<string> &list) const {
     for(auto &t : game.content.mob_types.list.pikmin) {
         list.push_back(t.first);
     }
@@ -115,6 +115,6 @@ void pikmin_category::get_type_names(vector<string> &list) const {
  * @param internal_name Internal name of the mob type.
  * @param type Mob type to register.
  */
-void pikmin_category::register_type(const string &internal_name, mob_type* type) {
-    game.content.mob_types.list.pikmin[internal_name] = (pikmin_type*) type;
+void PikminCategory::register_type(const string &internal_name, MobType* type) {
+    game.content.mob_types.list.pikmin[internal_name] = (PikminType*) type;
 }

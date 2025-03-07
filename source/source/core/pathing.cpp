@@ -42,7 +42,7 @@ const float MIN_STOP_RADIUS = 16.0f;
  * @param end_ptr The path stop at the end of this link.
  * @param end_idx Index number of the path stop at the end of this link.
  */
-path_link::path_link(path_stop* start_ptr, path_stop* end_ptr, size_t end_idx) :
+PathLink::PathLink(PathStop* start_ptr, PathStop* end_ptr, size_t end_idx) :
     start_ptr(start_ptr),
     end_ptr(end_ptr),
     end_idx(end_idx) {
@@ -57,8 +57,8 @@ path_link::path_link(path_stop* start_ptr, path_stop* end_ptr, size_t end_idx) :
  *
  * @param start_ptr The path stop at the start of this link.
  */
-void path_link::calculate_dist(const path_stop* start_ptr) {
-    distance = dist(start_ptr->pos, end_ptr->pos).to_float();
+void PathLink::calculate_dist(const PathStop* start_ptr) {
+    distance = Distance(start_ptr->pos, end_ptr->pos).to_float();
 }
 
 
@@ -68,7 +68,7 @@ void path_link::calculate_dist(const path_stop* start_ptr) {
  *
  * @param destination Path link to clone the data into.
  */
-void path_link::clone(path_link* destination) const {
+void PathLink::clone(PathLink* destination) const {
     destination->type = type;
 }
 
@@ -79,7 +79,7 @@ void path_link::clone(path_link* destination) const {
  *
  * @return Whether it's one-way.
  */
-bool path_link::is_one_way() const {
+bool PathLink::is_one_way() const {
     return end_ptr->get_link(start_ptr) == nullptr;
 }
 
@@ -87,13 +87,13 @@ bool path_link::is_one_way() const {
 /**
  * @brief Clears all info.
  */
-void path_manager::clear() {
+void PathManager::clear() {
     if(!game.cur_area_data) return;
     
     obstructions.clear();
     
     for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
-        path_stop* s_ptr = game.cur_area_data->path_stops[s];
+        PathStop* s_ptr = game.cur_area_data->path_stops[s];
         for(size_t l = 0; l < s_ptr->links.size(); l++) {
             game.cur_area_data->path_stops[s]->links[l]->blocked_by_obstacle =
                 false;
@@ -106,10 +106,10 @@ void path_manager::clear() {
  * @brief Handles the area having been loaded. It checks all path stops
  * and saves any sector hazards found.
  */
-void path_manager::handle_area_load() {
+void PathManager::handle_area_load() {
     //Go through all path stops and check if they're on hazardous sectors.
     for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
-        path_stop* s_ptr = game.cur_area_data->path_stops[s];
+        PathStop* s_ptr = game.cur_area_data->path_stops[s];
         if(!s_ptr->sector_ptr) continue;
         if(s_ptr->sector_ptr->hazards.empty()) continue;
         hazardous_stops.insert(s_ptr);
@@ -123,16 +123,16 @@ void path_manager::handle_area_load() {
  *
  * @param m Pointer to the obstacle mob that got added.
  */
-void path_manager::handle_obstacle_add(mob* m) {
+void PathManager::handle_obstacle_add(Mob* m) {
     //Add the obstacle to our list, if needed.
     bool paths_changed = false;
     
     //Go through all path links and check if they have obstacles.
     for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
-        path_stop* s_ptr = game.cur_area_data->path_stops[s];
+        PathStop* s_ptr = game.cur_area_data->path_stops[s];
         
         for(size_t l = 0; l < s_ptr->links.size(); l++) {
-            path_link* l_ptr = game.cur_area_data->path_stops[s]->links[l];
+            PathLink* l_ptr = game.cur_area_data->path_stops[s]->links[l];
             
             if(
                 circle_intersects_line_seg(
@@ -150,7 +150,7 @@ void path_manager::handle_obstacle_add(mob* m) {
     if(paths_changed) {
         //Re-calculate the paths of mobs taking paths.
         for(size_t m2 = 0; m2 < game.states.gameplay->mobs.all.size(); m2++) {
-            mob* m2_ptr = game.states.gameplay->mobs.all[m2];
+            Mob* m2_ptr = game.states.gameplay->mobs.all[m2];
             if(!m2_ptr->path_info) continue;
             
             m2_ptr->fsm.run_event(MOB_EV_PATHS_CHANGED);
@@ -165,7 +165,7 @@ void path_manager::handle_obstacle_add(mob* m) {
  *
  * @param m Pointer to the obstacle mob that got cleared.
  */
-void path_manager::handle_obstacle_remove(mob* m) {
+void PathManager::handle_obstacle_remove(Mob* m) {
     //Remove the obstacle from our list, if it's there.
     bool paths_changed = false;
     
@@ -188,7 +188,7 @@ void path_manager::handle_obstacle_remove(mob* m) {
     if(paths_changed) {
         //Re-calculate the paths of mobs taking paths.
         for(size_t m2 = 0; m2 < game.states.gameplay->mobs.all.size(); m2++) {
-            mob* m2_ptr = game.states.gameplay->mobs.all[m2];
+            Mob* m2_ptr = game.states.gameplay->mobs.all[m2];
             if(!m2_ptr->path_info) continue;
             
             m2_ptr->fsm.run_event(MOB_EV_PATHS_CHANGED);
@@ -203,7 +203,7 @@ void path_manager::handle_obstacle_remove(mob* m) {
  *
  * @param sector_ptr Pointer to the sector whose hazards got updated.
  */
-void path_manager::handle_sector_hazard_change(sector* sector_ptr) {
+void PathManager::handle_sector_hazard_change(Sector* sector_ptr) {
     //Remove relevant stops from our list.
     bool paths_changed = false;
     
@@ -227,7 +227,7 @@ void path_manager::handle_sector_hazard_change(sector* sector_ptr) {
     if(paths_changed) {
         //Re-calculate the paths of mobs taking paths.
         for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
-            mob* m_ptr = game.states.gameplay->mobs.all[m];
+            Mob* m_ptr = game.states.gameplay->mobs.all[m];
             if(!m_ptr->path_info) continue;
             
             m_ptr->fsm.run_event(MOB_EV_PATHS_CHANGED);
@@ -242,7 +242,7 @@ void path_manager::handle_sector_hazard_change(sector* sector_ptr) {
  * @param pos Its coordinates.
  * @param links List of path links, linking it to other stops.
  */
-path_stop::path_stop(const point &pos, const vector<path_link*> &links) :
+PathStop::PathStop(const Point &pos, const vector<PathLink*> &links) :
     pos(pos),
     links(links) {
     
@@ -252,7 +252,7 @@ path_stop::path_stop(const point &pos, const vector<path_link*> &links) :
 /**
  * @brief Destroys the path stop object.
  */
-path_stop::~path_stop() {
+PathStop::~PathStop() {
     while(!links.empty()) {
         delete *(links.begin());
         links.erase(links.begin());
@@ -268,10 +268,10 @@ path_stop::~path_stop() {
  * @param other_stop Pointer to the other stop.
  * @param normal Normal link? False means one-way link.
  */
-void path_stop::add_link(path_stop* other_stop, bool normal) {
+void PathStop::add_link(PathStop* other_stop, bool normal) {
     PATH_LINK_TYPE link_type = PATH_LINK_TYPE_NORMAL;
     
-    path_link* old_link_data = get_link(other_stop);
+    PathLink* old_link_data = get_link(other_stop);
     if(!old_link_data) {
         old_link_data = other_stop->get_link(this);
     }
@@ -282,12 +282,12 @@ void path_stop::add_link(path_stop* other_stop, bool normal) {
     remove_link(old_link_data);
     other_stop->remove_link(this);
     
-    path_link* new_link = new path_link(this, other_stop, INVALID);
+    PathLink* new_link = new PathLink(this, other_stop, INVALID);
     new_link->type = link_type;
     links.push_back(new_link);
     
     if(normal) {
-        new_link = new path_link(other_stop, this, INVALID);
+        new_link = new PathLink(other_stop, this, INVALID);
         new_link->type = link_type;
         other_stop->links.push_back(new_link);
     }
@@ -297,7 +297,7 @@ void path_stop::add_link(path_stop* other_stop, bool normal) {
 /**
  * @brief Calculates the distance between it and all neighbors.
  */
-void path_stop::calculate_dists() {
+void PathStop::calculate_dists() {
     for(size_t l = 0; l < links.size(); l++) {
         links[l]->calculate_dist(this);
     }
@@ -309,15 +309,15 @@ void path_stop::calculate_dists() {
  * goes through the neighbors and updates their distance back to this stop,
  * if that neighbor links back.
  */
-void path_stop::calculate_dists_plus_neighbors() {
+void PathStop::calculate_dists_plus_neighbors() {
     for(size_t l = 0; l < links.size(); l++) {
-        path_link* l_ptr = links[l];
+        PathLink* l_ptr = links[l];
         l_ptr->calculate_dist(this);
     }
     
     for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
-        path_stop* s_ptr = game.cur_area_data->path_stops[s];
-        path_link* l_ptr = s_ptr->get_link(this);
+        PathStop* s_ptr = game.cur_area_data->path_stops[s];
+        PathLink* l_ptr = s_ptr->get_link(this);
         if(l_ptr) {
             l_ptr->calculate_dist(s_ptr);
         }
@@ -330,7 +330,7 @@ void path_stop::calculate_dists_plus_neighbors() {
  *
  * @param destination Path stop to clone the data into.
  */
-void path_stop::clone(path_stop* destination) const {
+void PathStop::clone(PathStop* destination) const {
     destination->radius = radius;
     destination->flags = flags;
     destination->label = label;
@@ -345,7 +345,7 @@ void path_stop::clone(path_stop* destination) const {
  * @param other_stop Path stop to check against.
  * @return The link, or nullptr if it does not link to that stop.
  */
-path_link* path_stop::get_link(const path_stop* other_stop) const {
+PathLink* PathStop::get_link(const PathStop* other_stop) const {
     for(size_t l = 0; l < links.size(); l++) {
         if(links[l]->end_ptr == other_stop) return links[l];
     }
@@ -359,7 +359,7 @@ path_link* path_stop::get_link(const path_stop* other_stop) const {
  *
  * @param link_ptr Pointer to the link to remove.
  */
-void path_stop::remove_link(const path_link* link_ptr) {
+void PathStop::remove_link(const PathLink* link_ptr) {
     for(size_t l = 0; l < links.size(); l++) {
         if(links[l] == link_ptr) {
             delete links[l];
@@ -376,7 +376,7 @@ void path_stop::remove_link(const path_link* link_ptr) {
  *
  * @param other_stop Path stop to remove the link from.
  */
-void path_stop::remove_link(const path_stop* other_stop) {
+void PathStop::remove_link(const PathStop* other_stop) {
     for(size_t l = 0; l < links.size(); l++) {
         if(links[l]->end_ptr == other_stop) {
             delete links[l];
@@ -396,10 +396,10 @@ void path_stop::remove_link(const path_stop* other_stop) {
  * @return Whether it can be taken.
  */
 bool can_take_path_stop(
-    path_stop* stop_ptr, const path_follow_settings &settings,
+    PathStop* stop_ptr, const PathFollowSettings &settings,
     PATH_BLOCK_REASON* out_reason
 ) {
-    sector* sector_ptr = stop_ptr->sector_ptr;
+    Sector* sector_ptr = stop_ptr->sector_ptr;
     if(!sector_ptr) {
         //We're probably in the area editor, where things change too often
         //for us to cache the sector pointer and access said cache.
@@ -426,8 +426,8 @@ bool can_take_path_stop(
  * @return Whether it can take it.
  */
 bool can_take_path_stop(
-    const path_stop* stop_ptr, const path_follow_settings &settings,
-    sector* sector_ptr, PATH_BLOCK_REASON* out_reason
+    const PathStop* stop_ptr, const PathFollowSettings &settings,
+    Sector* sector_ptr, PATH_BLOCK_REASON* out_reason
 ) {
     //Check if the end stop has limitations based on the stop flags.
     if(
@@ -507,7 +507,7 @@ bool can_take_path_stop(
  * @return Whether it can traverse it.
  */
 bool can_traverse_path_link(
-    path_link* link_ptr, const path_follow_settings &settings,
+    PathLink* link_ptr, const PathFollowSettings &settings,
     PATH_BLOCK_REASON* out_reason
 ) {
     if(out_reason) *out_reason = PATH_BLOCK_REASON_NONE;
@@ -522,7 +522,7 @@ bool can_traverse_path_link(
     }
     
     //Get the start and end sectors.
-    sector* start_sector = link_ptr->start_ptr->sector_ptr;
+    Sector* start_sector = link_ptr->start_ptr->sector_ptr;
     if(!start_sector) {
         //We're probably in the area editor, where things change too often
         //for us to cache the sector pointer and access said cache.
@@ -534,7 +534,7 @@ bool can_traverse_path_link(
             return false;
         }
     }
-    sector* end_sector = link_ptr->end_ptr->sector_ptr;
+    Sector* end_sector = link_ptr->end_ptr->sector_ptr;
     if(!end_sector) {
         //Same as above.
         end_sector = get_sector(link_ptr->end_ptr->pos, nullptr, false);
@@ -578,18 +578,18 @@ bool can_traverse_path_link(
  * @param start Starting node.
  */
 void depth_first_search(
-    vector<path_stop*> &nodes, unordered_set<path_stop*> &visited,
-    path_stop* start
+    vector<PathStop*> &nodes, unordered_set<PathStop*> &visited,
+    PathStop* start
 ) {
     visited.insert(start);
-    unordered_set<path_stop*> links;
+    unordered_set<PathStop*> links;
     
     for(size_t l = 0; l < start->links.size(); l++) {
         links.insert(start->links[l]->end_ptr);
     }
     
     for(size_t n = 0; n < nodes.size(); n++) {
-        path_stop* n_ptr = nodes[n];
+        PathStop* n_ptr = nodes[n];
         if(n_ptr == start) continue;
         if(visited.find(n_ptr) != visited.end()) continue;
         if(n_ptr->get_link(start)) {
@@ -616,9 +616,9 @@ void depth_first_search(
  * @return The operation's result.
  */
 PATH_RESULT a_star(
-    vector<path_stop*> &out_path,
-    path_stop* start_node, path_stop* end_node,
-    const path_follow_settings &settings,
+    vector<PathStop*> &out_path,
+    PathStop* start_node, PathStop* end_node,
+    const PathFollowSettings &settings,
     float* out_total_dist
 ) {
     //https://en.wikipedia.org/wiki/A*_search_algorithm
@@ -626,23 +626,23 @@ PATH_RESULT a_star(
     /**
      * @brief Represents a node's data in the algorithm.
      */
-    struct node_t {
+    struct Node {
         //In the best known path to this node, this is the known
         //distance from the start node to this one.
         float since_start = FLT_MAX;
         
         //In the best known path to this node, this is the node that
         //came before this one.
-        path_stop* prev = nullptr;
+        PathStop* prev = nullptr;
         
         //Estimated distance if the final path takes this node.
         float estimated = FLT_MAX;
     };
     
     //All nodes that we want to visit.
-    unordered_set<path_stop*> to_visit;
+    unordered_set<PathStop*> to_visit;
     //Data for all the nodes.
-    map<path_stop*, node_t> data;
+    map<PathStop*, Node> data;
     
     //Part 1: Initialize the algorithm.
     to_visit.insert(start_node);
@@ -653,12 +653,12 @@ PATH_RESULT a_star(
     while(!to_visit.empty()) {
     
         //Part 2: Figure out what node to work on in this iteration.
-        path_stop* cur_node = nullptr;
+        PathStop* cur_node = nullptr;
         float cur_node_dist = 0.0f;
-        node_t cur_node_data;
+        Node cur_node_data;
         
         for(auto u = to_visit.begin(); u != to_visit.end(); u++) {
-            node_t n = data[*u];
+            Node n = data[*u];
             float est_dist = n.estimated;
             
             if(!cur_node || est_dist < cur_node_dist) {
@@ -676,7 +676,7 @@ PATH_RESULT a_star(
             float td = data[end_node].since_start;
             out_path.clear();
             out_path.push_back(end_node);
-            path_stop* next = data[end_node].prev;
+            PathStop* next = data[end_node].prev;
             while(next) {
                 out_path.insert(out_path.begin(), next);
                 next = data[next].prev;
@@ -692,8 +692,8 @@ PATH_RESULT a_star(
         
         //Part 4: Check the neighbors.
         for(size_t l = 0; l < cur_node->links.size(); l++) {
-            path_link* l_ptr = cur_node->links[l];
-            path_stop* neighbor = l_ptr->end_ptr;
+            PathLink* l_ptr = cur_node->links[l];
+            PathStop* neighbor = l_ptr->end_ptr;
             
             //Can this link be traversed?
             if(!can_traverse_path_link(l_ptr, settings)) {
@@ -709,7 +709,7 @@ PATH_RESULT a_star(
                 data[neighbor].prev = cur_node;
                 data[neighbor].estimated =
                     tentative_score +
-                    dist(neighbor->pos, end_node->pos).to_float();
+                    Distance(neighbor->pos, end_node->pos).to_float();
                 to_visit.insert(neighbor);
             }
         }
@@ -719,7 +719,7 @@ PATH_RESULT a_star(
     
     if(!has_flag(settings.flags, PATH_FOLLOW_FLAG_IGNORE_OBSTACLES)) {
         //Let's try again, this time ignoring obstacles.
-        path_follow_settings new_settings = settings;
+        PathFollowSettings new_settings = settings;
         enable_flag(new_settings.flags, PATH_FOLLOW_FLAG_IGNORE_OBSTACLES);
         PATH_RESULT new_result =
             a_star(
@@ -761,10 +761,10 @@ PATH_RESULT a_star(
  * @return The operation's result.
  */
 PATH_RESULT get_path(
-    const point &start, const point &end,
-    const path_follow_settings &settings,
-    vector<path_stop*> &full_path, float* out_total_dist,
-    path_stop** out_start_stop, path_stop** out_end_stop
+    const Point &start, const Point &end,
+    const PathFollowSettings &settings,
+    vector<PathStop*> &full_path, float* out_total_dist,
+    PathStop** out_start_stop, PathStop** out_end_stop
 ) {
 
     full_path.clear();
@@ -774,29 +774,29 @@ PATH_RESULT get_path(
         return PATH_RESULT_DIRECT_NO_STOPS;
     }
     
-    point start_to_use =
+    Point start_to_use =
         has_flag(settings.flags, PATH_FOLLOW_FLAG_FAKED_START) ?
         settings.faked_start :
         start;
         
-    point end_to_use =
+    Point end_to_use =
         has_flag(settings.flags, PATH_FOLLOW_FLAG_FAKED_END) ?
         settings.faked_end :
         end;
         
     //Start by finding the closest stops to the start and finish.
-    path_stop* closest_to_start = nullptr;
-    path_stop* closest_to_end = nullptr;
+    PathStop* closest_to_start = nullptr;
+    PathStop* closest_to_end = nullptr;
     float closest_to_start_dist = 0.0f;
     float closest_to_end_dist = 0.0f;
     
     for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
-        path_stop* s_ptr = game.cur_area_data->path_stops[s];
+        PathStop* s_ptr = game.cur_area_data->path_stops[s];
         
         float dist_to_start =
-            dist(start_to_use, s_ptr->pos).to_float() - s_ptr->radius;
+            Distance(start_to_use, s_ptr->pos).to_float() - s_ptr->radius;
         float dist_to_end =
-            dist(end_to_use, s_ptr->pos).to_float() - s_ptr->radius;
+            Distance(end_to_use, s_ptr->pos).to_float() - s_ptr->radius;
         dist_to_start = std::max(0.0f, dist_to_start);
         dist_to_end = std::max(0.0f, dist_to_end);
         
@@ -833,7 +833,7 @@ PATH_RESULT get_path(
     //Let's just check something real quick:
     //if the destination is closer than any stop,
     //just go there right away!
-    dist start_to_end_dist(start_to_use, end_to_use);
+    Distance start_to_end_dist(start_to_use, end_to_use);
     if(start_to_end_dist <= closest_to_start_dist) {
         if(out_total_dist) {
             *out_total_dist = start_to_end_dist.to_float();
@@ -867,9 +867,9 @@ PATH_RESULT get_path(
         
     if(out_total_dist && !full_path.empty()) {
         *out_total_dist +=
-            dist(start_to_use, full_path[0]->pos).to_float();
+            Distance(start_to_use, full_path[0]->pos).to_float();
         *out_total_dist +=
-            dist(full_path[full_path.size() - 1]->pos, end_to_use).to_float();
+            Distance(full_path[full_path.size() - 1]->pos, end_to_use).to_float();
     }
     
     return result;

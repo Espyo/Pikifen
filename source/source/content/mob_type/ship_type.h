@@ -43,23 +43,23 @@ enum SHIP_STATE {
  * @brief A type of ship (Hocotate ship, research pod, golden HS,
  * S.S. Drake, etc.).
  */
-class ship_type : public mob_type {
+class ShipType : public MobType {
 
 public:
 
     //--- Members ---
     
     //Nest data.
-    pikmin_nest_type_t* nest = nullptr;
+    PikminNestType* nest = nullptr;
     
     //Can a leader heal at this ship?
     bool can_heal = false;
     
     //The ship's control point is offset this much from the mob's center.
-    point control_point_offset;
+    Point control_point_offset;
     
     //The ship's receptacle is offset this much from the mob's center.
-    point receptacle_offset;
+    Point receptacle_offset;
     
     //Ship control point radius.
     float control_point_radius = 45.0f;
@@ -67,10 +67,10 @@ public:
     
     //--- Function declarations ---
     
-    ship_type();
-    ~ship_type();
-    void load_cat_properties(data_node* file) override;
-    void load_cat_resources(data_node* file) override;
+    ShipType();
+    ~ShipType();
+    void load_cat_properties(DataNode* file) override;
+    void load_cat_resources(DataNode* file) override;
     anim_conversion_vector get_anim_conversions() const override;
     
 };

@@ -21,7 +21,7 @@ using std::vector;
 /**
  * @brief Construct a new replay object.
  */
-replay::replay() {
+Replay::Replay() {
 
     clear();
 }
@@ -39,19 +39,19 @@ replay::replay() {
  * @param obstacle_list List of mobs that represent obstacles.
  * @param cur_leader_idx Index number of the current leader.
  */
-void replay::add_state(
-    const vector<leader*> &leader_list,
-    const vector<pikmin*> &pikmin_list,
-    const vector<enemy*> &enemy_list,
-    const vector<treasure*> &treasure_list,
-    const vector<onion*> &onion_list,
-    const vector<mob*> &obstacle_list,
+void Replay::add_state(
+    const vector<Leader*> &leader_list,
+    const vector<Pikmin*> &pikmin_list,
+    const vector<Enemy*> &enemy_list,
+    const vector<Treasure*> &treasure_list,
+    const vector<Onion*> &onion_list,
+    const vector<Mob*> &obstacle_list,
     size_t cur_leader_idx
 ) {
-    states.push_back(replay_state());
-    replay_state* new_state_ptr = &(states[states.size() - 1]);
+    states.push_back(ReplayState());
+    ReplayState* new_state_ptr = &(states[states.size() - 1]);
     
-    vector<mob*> new_state_mobs;
+    vector<Mob*> new_state_mobs;
     new_state_mobs.insert(
         new_state_mobs.end(), leader_list.begin(), leader_list.end()
     );
@@ -81,7 +81,7 @@ void replay::add_state(
                 );
             if(m == new_state_mobs.end()) {
                 //It isn't. That means it was removed.
-                replay_event ev(REPLAY_EVENT_REMOVED, pm);
+                ReplayEvent ev(REPLAY_EVENT_REMOVED, pm);
                 new_state_ptr->events.push_back(ev);
             }
         }
@@ -95,14 +95,14 @@ void replay::add_state(
                 );
             if(pm == prev_state_mobs.end()) {
                 //It isn't. That means it's new.
-                replay_event ev(REPLAY_EVENT_ADDED, m);
+                ReplayEvent ev(REPLAY_EVENT_ADDED, m);
                 new_state_ptr->events.push_back(ev);
             }
         }
     }
     
     if(cur_leader_idx != prev_leader_idx) {
-        replay_event ev(REPLAY_EVENT_LEADER_SWITCHED, cur_leader_idx);
+        ReplayEvent ev(REPLAY_EVENT_LEADER_SWITCHED, cur_leader_idx);
         new_state_ptr->events.push_back(ev);
         prev_leader_idx = cur_leader_idx;
     }
@@ -117,32 +117,32 @@ void replay::add_state(
     );
     for(size_t l = 0; l < leader_list.size(); l++) {
         new_state_ptr->elements.push_back(
-            replay_element(REPLAY_ELEMENT_LEADER, leader_list[l]->pos)
+            ReplayElement(REPLAY_ELEMENT_LEADER, leader_list[l]->pos)
         );
     }
     for(size_t p = 0; p < pikmin_list.size(); p++) {
         new_state_ptr->elements.push_back(
-            replay_element(REPLAY_ELEMENT_PIKMIN, pikmin_list[p]->pos)
+            ReplayElement(REPLAY_ELEMENT_PIKMIN, pikmin_list[p]->pos)
         );
     }
     for(size_t e = 0; e < enemy_list.size(); e++) {
         new_state_ptr->elements.push_back(
-            replay_element(REPLAY_ELEMENT_ENEMY, enemy_list[e]->pos)
+            ReplayElement(REPLAY_ELEMENT_ENEMY, enemy_list[e]->pos)
         );
     }
     for(size_t t = 0; t < treasure_list.size(); t++) {
         new_state_ptr->elements.push_back(
-            replay_element(REPLAY_ELEMENT_TREASURE, treasure_list[t]->pos)
+            ReplayElement(REPLAY_ELEMENT_TREASURE, treasure_list[t]->pos)
         );
     }
     for(size_t o = 0; o < onion_list.size(); o++) {
         new_state_ptr->elements.push_back(
-            replay_element(REPLAY_ELEMENT_ONION, onion_list[o]->pos)
+            ReplayElement(REPLAY_ELEMENT_ONION, onion_list[o]->pos)
         );
     }
     for(size_t o = 0; o < obstacle_list.size(); o++) {
         new_state_ptr->elements.push_back(
-            replay_element(REPLAY_ELEMENT_OBSTACLE, obstacle_list[o]->pos)
+            ReplayElement(REPLAY_ELEMENT_OBSTACLE, obstacle_list[o]->pos)
         );
     }
     
@@ -153,7 +153,7 @@ void replay::add_state(
 /**
  * @brief Clears all data about this replay.
  */
-void replay::clear() {
+void Replay::clear() {
     states.clear();
     prev_leader_idx = INVALID;
     prev_state_mobs.clear();
@@ -163,7 +163,7 @@ void replay::clear() {
 /**
  * @brief Finishes the recording of a new replay.
  */
-void replay::finish_recording() {
+void Replay::finish_recording() {
     clear();
 }
 
@@ -173,7 +173,7 @@ void replay::finish_recording() {
  *
  * @param file_path Path to the file to load from.
  */
-void replay::load_from_file(const string &file_path) {
+void Replay::load_from_file(const string &file_path) {
     clear();
     ALLEGRO_FILE* file = al_fopen(file_path.c_str(), "rb");
     
@@ -181,17 +181,17 @@ void replay::load_from_file(const string &file_path) {
     states.reserve(n_states);
     
     for(size_t s = 0; s < n_states; s++) {
-        states.push_back(replay_state());
-        replay_state* s_ptr = &states[states.size() - 1];
+        states.push_back(ReplayState());
+        ReplayState* s_ptr = &states[states.size() - 1];
         
         size_t n_elements = al_fread32be(file);
         s_ptr->elements.reserve(n_elements);
         
         for(size_t e = 0; e < n_elements; e++) {
             s_ptr->elements.push_back(
-                replay_element(
+                ReplayElement(
                     (REPLAY_ELEMENT) al_fgetc(file),
-                    point(al_fread32be(file), al_fread32be(file))
+                    Point(al_fread32be(file), al_fread32be(file))
                 )
             );
         }
@@ -202,7 +202,7 @@ void replay::load_from_file(const string &file_path) {
             
             for(size_t e = 0; e < n_events; e++) {
                 s_ptr->events.push_back(
-                    replay_event(
+                    ReplayEvent(
                         (REPLAY_EVENT) al_fgetc(file),
                         al_fread32be(file)
                     )
@@ -218,12 +218,12 @@ void replay::load_from_file(const string &file_path) {
  *
  * @param file_path Path to the file to save to.
  */
-void replay::save_to_file(const string &file_path) const {
+void Replay::save_to_file(const string &file_path) const {
     ALLEGRO_FILE* file = al_fopen(file_path.c_str(), "wb");
     
     al_fwrite32be(file, (int32_t) states.size());
     for(size_t s = 0; s < states.size(); s++) {
-        const replay_state* s_ptr = &states[s];
+        const ReplayState* s_ptr = &states[s];
         
         al_fwrite32be(file, (int32_t) s_ptr->elements.size());
         for(size_t e = 0; e < s_ptr->elements.size(); e++) {
@@ -249,8 +249,8 @@ void replay::save_to_file(const string &file_path) const {
  * @param type Type of element.
  * @param pos Its coordinates.
  */
-replay_element::replay_element(
-    const REPLAY_ELEMENT type, const point &pos
+ReplayElement::ReplayElement(
+    const REPLAY_ELEMENT type, const Point &pos
 ) :
     type(type),
     pos(pos) {
@@ -264,7 +264,7 @@ replay_element::replay_element(
  * @param type Type of event.
  * @param data Any numerical data this event needs.
  */
-replay_event::replay_event(
+ReplayEvent::ReplayEvent(
     const REPLAY_EVENT type, size_t data
 ) :
     type(type),

@@ -42,7 +42,7 @@ extern const string TOP_GUI_FILE_NAME;
  * @tparam t The type of value the picker controls.
  */
 template<typename t>
-class options_menu_picker_gui_item : public picker_gui_item {
+class OptionsMenuPickerGuiItem : public PickerGuiItem {
 
 public:
 
@@ -85,12 +85,12 @@ public:
      * @param preset_names Name of each preset.
      * @param tooltip Base tooltip.
      */
-    options_menu_picker_gui_item(
+    OptionsMenuPickerGuiItem(
         const string &base_text, t* cur_value, const t &def_value,
         const vector<t> &preset_values, const vector<string> &preset_names,
         const string &tooltip = ""
     ) :
-        picker_gui_item(base_text, ""),
+        PickerGuiItem(base_text, ""),
         cur_value(cur_value),
         def_value(def_value),
         tooltip(tooltip),
@@ -177,7 +177,7 @@ public:
         *cur_value = preset_values[cur_option_idx];
         option = get_cur_option_name();
         start_juice_animation(
-            gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
+            GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
         );
         if(after_change) after_change();
     }
@@ -189,28 +189,28 @@ public:
  * @brief Info about the options menu currently being presented to
  * the player.
  */
-class options_menu_t : public menu_t {
+class OptionsMenu : public Menu {
 public:
 
     //--- Members ---
     
     //GUI for the top-level page.
-    gui_manager top_gui;
+    GuiManager top_gui;
     
     //GUI for the controls options page.
-    gui_manager controls_gui;
+    GuiManager controls_gui;
     
     //GUI for the control binds options page.
-    gui_manager binds_gui;
+    GuiManager binds_gui;
     
     //GUI for the graphics options page.
-    gui_manager graphics_gui;
+    GuiManager graphics_gui;
     
     //GUI for the audio options page.
-    gui_manager audio_gui;
+    GuiManager audio_gui;
     
     //GUI for the misc. options page.
-    gui_manager misc_gui;
+    GuiManager misc_gui;
     
     
     //--- Function declarations ---
@@ -218,7 +218,7 @@ public:
     void draw() override;
     void load() override;
     void handle_allegro_event(const ALLEGRO_EVENT &ev) override;
-    void handle_player_action(const player_action &action) override;
+    void handle_player_action(const PlayerAction &action) override;
     void unload() override;
     void tick(float delta_t);
     
@@ -237,47 +237,47 @@ private:
     ALLEGRO_BITMAP* bmp_menu_bg = nullptr;
     
     //Information about the current pack management menu, if any.
-    packs_menu_t* packs_menu = nullptr;
+    PacksMenu* packs_menu = nullptr;
     
     //Auto-throw picker widget.
-    options_menu_picker_gui_item<AUTO_THROW_MODE>* auto_throw_picker = nullptr;
+    OptionsMenuPickerGuiItem<AUTO_THROW_MODE>* auto_throw_picker = nullptr;
     
     //Resolution picker widget.
-    options_menu_picker_gui_item<std::pair<int, int> >* resolution_picker = nullptr;
+    OptionsMenuPickerGuiItem<std::pair<int, int> >* resolution_picker = nullptr;
     
     //Cursor speed picker widget.
-    options_menu_picker_gui_item<float>* cursor_speed_picker = nullptr;
+    OptionsMenuPickerGuiItem<float>* cursor_speed_picker = nullptr;
     
     //Cursor camera weight picker widget.
-    options_menu_picker_gui_item<float>* cursor_cam_weight_picker = nullptr;
+    OptionsMenuPickerGuiItem<float>* cursor_cam_weight_picker = nullptr;
     
     //Leaving confirmation picker widget.
-    options_menu_picker_gui_item<LEAVING_CONFIRMATION_MODE>*
+    OptionsMenuPickerGuiItem<LEAVING_CONFIRMATION_MODE>*
     leaving_confirmation_picker = nullptr;
     
     //Master volume picker widget.
-    options_menu_picker_gui_item<float>* master_vol_picker = nullptr;
+    OptionsMenuPickerGuiItem<float>* master_vol_picker = nullptr;
     
     //Gameplay sound effects volume picker widget.
-    options_menu_picker_gui_item<float>* gameplay_sound_vol_picker = nullptr;
+    OptionsMenuPickerGuiItem<float>* gameplay_sound_vol_picker = nullptr;
     
     //Music volume picker widget.
-    options_menu_picker_gui_item<float>* music_vol_picker = nullptr;
+    OptionsMenuPickerGuiItem<float>* music_vol_picker = nullptr;
     
     //Ambiance sound effects volume picker widget.
-    options_menu_picker_gui_item<float>* ambiance_sound_vol_picker = nullptr;
+    OptionsMenuPickerGuiItem<float>* ambiance_sound_vol_picker = nullptr;
     
     //UI sound effects volume picker widget.
-    options_menu_picker_gui_item<float>* ui_sound_vol_picker = nullptr;
+    OptionsMenuPickerGuiItem<float>* ui_sound_vol_picker = nullptr;
     
     //Restart warning text widget.
-    text_gui_item* warning_text = nullptr;
+    TextGuiItem* warning_text = nullptr;
     
     //GUI for the "more..." options of an action type in the binds menu.
-    gui_manager binds_more_gui;
+    GuiManager binds_more_gui;
     
     //Control list GUI item.
-    list_gui_item* binds_list_box = nullptr;
+    ListGuiItem* binds_list_box = nullptr;
     
     //Is it currently capturing bind input? 0: No. 1: Capturing. 2: Finishing.
     unsigned char capturing_input = 0;
@@ -289,7 +289,7 @@ private:
     bool showing_binds_more = false;
     
     //List of binds per player action type.
-    vector<vector<control_bind> > binds_per_action_type;
+    vector<vector<ControlBind> > binds_per_action_type;
     
     //Current player action type.
     PLAYER_ACTION_TYPE cur_action_type = PLAYER_ACTION_TYPE_NONE;

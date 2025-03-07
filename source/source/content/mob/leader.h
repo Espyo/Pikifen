@@ -17,7 +17,7 @@
 #include "mob.h"
 
 
-class pikmin;
+class Pikmin;
 
 using std::size_t;
 
@@ -66,14 +66,14 @@ extern const float THROW_PREVIEW_DEF_MAX_THICKNESS;
  * @brief A leader controls Pikmin, and
  * is controlled by the player.
  */
-class leader : public mob {
+class Leader : public Mob {
 
 public:
 
     //--- Members ---
     
     //What type of leader it is.
-    leader_type* lea_type = nullptr;
+    LeaderType* lea_type = nullptr;
     
     //Is it active? i.e. being controlled by a player.
     bool active = false;
@@ -82,7 +82,7 @@ public:
     bool auto_plucking = false;
     
     //Pikmin it wants to pluck.
-    pikmin* pluck_target = nullptr;
+    Pikmin* pluck_target = nullptr;
     
     //Has the player asked for the auto-plucking to stop?
     bool queued_pluck_cancel = false;
@@ -100,7 +100,7 @@ public:
     bool is_active_walking = false;
     
     //Time until the next arrow in the list of swarm arrows appears.
-    timer swarm_next_arrow_timer = timer(LEADER::SWARM_ARROW_INTERVAL);
+    Timer swarm_next_arrow_timer = Timer(LEADER::SWARM_ARROW_INTERVAL);
     
     //List of swarm mode arrows.
     vector<float> swarm_arrows;
@@ -121,7 +121,7 @@ public:
     float auto_throw_cooldown_duration = 0.0f;
     
     //Provided there's a throw, this is the mob to throw.
-    mob* throwee = nullptr;
+    Mob* throwee = nullptr;
     
     //Provided there's a throw, this is the angle.
     float throwee_angle = 0.0f;
@@ -130,7 +130,7 @@ public:
     float throwee_max_z = 0.0f;
     
     //Provided there's a throw, this is the horizontal speed.
-    point throwee_speed;
+    Point throwee_speed;
     
     //Provided there's a throw, this is the vertical speed.
     float throwee_speed_z = 0.0f;
@@ -153,12 +153,12 @@ public:
     
     //--- Function declarations ---
     
-    leader(const point &pos, leader_type* type, float angle);
+    Leader(const Point &pos, LeaderType* type, float angle);
     bool check_throw_ok() const;
-    bool can_grab_group_member(mob* m) const;
+    bool can_grab_group_member(Mob* m) const;
     void dismiss();
     bool order_pikmin_to_onion(
-        const pikmin_type* type, pikmin_nest_t* n_ptr, size_t amount
+        const PikminType* type, PikminNest* n_ptr, size_t amount
     );
     void queue_throw();
     void signal_swarm_start() const;
@@ -168,11 +168,11 @@ public:
     void start_whistling();
     void stop_auto_throwing();
     void stop_whistling();
-    void swap_held_pikmin(mob* new_pik);
+    void swap_held_pikmin(Mob* new_pik);
     void update_throw_variables();
-    bool can_receive_status(status_type* s) const override;
+    bool can_receive_status(StatusType* s) const override;
     void get_group_spot_info(
-        point* out_spot, float* out_dist
+        Point* out_spot, float* out_dist
     ) const override;
     void draw_mob() override;
     

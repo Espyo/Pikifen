@@ -18,8 +18,8 @@
 /**
  * @brief Constructs a new converter type object.
  */
-converter_type::converter_type() :
-    mob_type(MOB_CATEGORY_CONVERTERS) {
+ConverterType::ConverterType() :
+    MobType(MOB_CATEGORY_CONVERTERS) {
     
     target_type = MOB_TARGET_FLAG_NONE;
     
@@ -30,7 +30,7 @@ converter_type::converter_type() :
 /**
  * @brief Returns the vector of animation conversions.
  */
-anim_conversion_vector converter_type::get_anim_conversions() const {
+anim_conversion_vector ConverterType::get_anim_conversions() const {
     anim_conversion_vector v;
     
     v.push_back(std::make_pair(CONVERTER_ANIM_IDLING, "idling"));
@@ -49,13 +49,13 @@ anim_conversion_vector converter_type::get_anim_conversions() const {
  *
  * @param file File to read from.
  */
-void converter_type::load_cat_properties(data_node* file) {
-    reader_setter rs(file);
+void ConverterType::load_cat_properties(DataNode* file) {
+    ReaderSetter rs(file);
     
     string pikmin_types_str;
     string type_animation_suffixes_str;
-    data_node* pikmin_types_node = nullptr;
-    data_node* type_animation_suffixes_node = nullptr;
+    DataNode* pikmin_types_node = nullptr;
+    DataNode* type_animation_suffixes_node = nullptr;
     
     rs.set("auto_conversion_timeout", auto_conversion_timeout);
     rs.set("available_pikmin_types", pikmin_types_str, &pikmin_types_node);
@@ -69,15 +69,15 @@ void converter_type::load_cat_properties(data_node* file) {
     );
     rs.set("type_change_interval", type_change_interval);
     
-    mob_category* pik_cat = game.mob_categories.get(MOB_CATEGORY_PIKMIN);
+    MobCategory* pik_cat = game.mob_categories.get(MOB_CATEGORY_PIKMIN);
     vector<string> pikmin_types_strs =
         semicolon_list_to_vector(pikmin_types_str);
         
     for(size_t t = 0; t < pikmin_types_strs.size(); t++) {
-        mob_type* type_ptr = pik_cat->get_type(pikmin_types_strs[t]);
+        MobType* type_ptr = pik_cat->get_type(pikmin_types_strs[t]);
         
         if(type_ptr) {
-            available_pikmin_types.push_back((pikmin_type*) type_ptr);
+            available_pikmin_types.push_back((PikminType*) type_ptr);
         } else {
             game.errors.report(
                 "Unknown Pikmin type \"" + pikmin_types_strs[t] + "\"!",

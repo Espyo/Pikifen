@@ -17,8 +17,8 @@
 /**
  * @brief Constructs a new tool type object.
  */
-tool_type::tool_type() :
-    mob_type(MOB_CATEGORY_TOOLS) {
+ToolType::ToolType() :
+    MobType(MOB_CATEGORY_TOOLS) {
     
     target_type = MOB_TARGET_FLAG_FRAGILE;
     hurtable_targets =
@@ -37,8 +37,8 @@ tool_type::tool_type() :
  *
  * @param file File to read from.
  */
-void tool_type::load_cat_properties(data_node* file) {
-    reader_setter rs(file);
+void ToolType::load_cat_properties(DataNode* file) {
+    ReaderSetter rs(file);
     
     rs.set("dropped_when_pikmin_is_whistled", dropped_when_pikmin_is_whistled);
     rs.set("dropped_when_pikmin_lands", dropped_when_pikmin_lands);
@@ -59,11 +59,11 @@ void tool_type::load_cat_properties(data_node* file) {
  *
  * @param file File to read from.
  */
-void tool_type::load_cat_resources(data_node* file) {
-    reader_setter rs(file);
+void ToolType::load_cat_resources(DataNode* file) {
+    ReaderSetter rs(file);
     
     string icon_str;
-    data_node* icon_node = nullptr;
+    DataNode* icon_node = nullptr;
     
     rs.set("icon", icon_str, &icon_node);
     

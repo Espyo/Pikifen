@@ -52,8 +52,8 @@ const bool DEF_AREA_EDITOR_SHOW_PATH_LINK_LENGTH = true;
 const bool DEF_AREA_EDITOR_SHOW_TERRITORY = false;
 
 //Default value for the area editor snap mode.
-const area_editor::SNAP_MODE DEF_AREA_EDITOR_SNAP_MODE =
-    area_editor::SNAP_MODE_GRID;
+const AreaEditor::SNAP_MODE DEF_AREA_EDITOR_SNAP_MODE =
+    AreaEditor::SNAP_MODE_GRID;
     
 //Default value for the area editor snap threshold.
 const size_t DEF_AREA_EDITOR_SNAP_THRESHOLD = 80;
@@ -62,8 +62,8 @@ const size_t DEF_AREA_EDITOR_SNAP_THRESHOLD = 80;
 const size_t DEF_AREA_EDITOR_UNDO_LIMIT = 20;
 
 //Default value for the area editor view mode.
-const area_editor::VIEW_MODE DEF_AREA_EDITOR_VIEW_MODE =
-    area_editor::VIEW_MODE_TEXTURES;
+const AreaEditor::VIEW_MODE DEF_AREA_EDITOR_VIEW_MODE =
+    AreaEditor::VIEW_MODE_TEXTURES;
     
 //Default value for the auto-throw mode.
 const AUTO_THROW_MODE DEF_AUTO_THROW_MODE = AUTO_THROW_MODE_OFF;
@@ -182,8 +182,8 @@ const float DEF_ZOOM_MID_LEVEL = 1.4f;
  *
  * @param file File to read from.
  */
-void options_t::load(data_node* file) {
-    reader_setter rs(file);
+void Options::load(DataNode* file) {
+    ReaderSetter rs(file);
     
     /* Load control binds. Format of a bind:
      * "p<player>_<action>=<possible control 1>;<possible control 2>;<...>"
@@ -199,22 +199,22 @@ void options_t::load(data_node* file) {
      * Check the constructor of control_info for more information.
      */
     game.controls.binds().clear();
-    const vector<player_action_type> &player_action_types =
+    const vector<PlayerActionType> &player_action_types =
         game.controls.get_all_player_action_types();
     for(unsigned char p = 0; p < MAX_PLAYERS; p++) {
         for(size_t a = 0; a < player_action_types.size(); a++) {
             string internal_name = player_action_types[a].internal_name;
             if(internal_name.empty()) continue;
-            data_node* control_node =
+            DataNode* control_node =
                 file->get_child_by_name("p" + i2s(p + 1) + "_" + internal_name);
             vector<string> possible_controls =
                 semicolon_list_to_vector(control_node->value);
                 
             for(size_t c = 0; c < possible_controls.size(); c++) {
-                player_input input =
+                PlayerInput input =
                     game.controls.str_to_input(possible_controls[c]);
                 if(input.type == INPUT_TYPE_NONE) continue;
-                control_bind new_bind;
+                ControlBind new_bind;
                 new_bind.action_type_id = player_action_types[a].id;
                 new_bind.player_nr = p;
                 new_bind.input = input;
@@ -310,16 +310,16 @@ void options_t::load(data_node* file) {
             (unsigned char) (N_AUTO_THROW_MODES - 1)
         );
     area_editor_snap_mode =
-        (area_editor::SNAP_MODE)
+        (AreaEditor::SNAP_MODE)
         std::min(
             editor_snap_mode_c,
-            (unsigned char) (area_editor::N_SNAP_MODES - 1)
+            (unsigned char) (AreaEditor::N_SNAP_MODES - 1)
         );
     area_editor_view_mode =
-        (area_editor::VIEW_MODE)
+        (AreaEditor::VIEW_MODE)
         std::min(
             editor_view_mode_c,
-            (unsigned char) (area_editor::N_VIEW_MODES - 1)
+            (unsigned char) (AreaEditor::N_VIEW_MODES - 1)
         );
     leaving_confirmation_mode =
         (LEAVING_CONFIRMATION_MODE)
@@ -367,11 +367,11 @@ void options_t::load(data_node* file) {
  *
  * @param file File to write to.
  */
-void options_t::save(data_node* file) const {
+void Options::save(DataNode* file) const {
     //First, group the controls by action and player.
     map<string, string> grouped_controls;
     
-    const vector<player_action_type> &player_action_types =
+    const vector<PlayerActionType> &player_action_types =
         game.controls.get_all_player_action_types();
     for(unsigned char p = 0; p < MAX_PLAYERS; p++) {
         string prefix = "p" + i2s((p + 1)) + "_";
@@ -383,7 +383,7 @@ void options_t::save(data_node* file) const {
     }
     
     //Write down their input strings.
-    const vector<control_bind> &all_binds = game.controls.binds();
+    const vector<ControlBind> &all_binds = game.controls.binds();
     for(unsigned char p = 0; p < MAX_PLAYERS; p++) {
         for(size_t b = 0; b < all_binds.size(); b++) {
             if(all_binds[b].player_nr != p) continue;
@@ -408,12 +408,12 @@ void options_t::save(data_node* file) const {
         //Remove the final character, which is always an extra semicolon.
         if(c.second.size()) c.second.erase(c.second.size() - 1);
         
-        file->add(new data_node(c.first, c.second));
+        file->add(new DataNode(c.first, c.second));
     }
     
     for(unsigned char p = 0; p < MAX_PLAYERS; p++) {
         file->add(
-            new data_node(
+            new DataNode(
                 "p" + i2s((p + 1)) + "_mouse_moves_cursor",
                 b2s(mouse_moves_cursor[p])
             )
@@ -432,308 +432,308 @@ void options_t::save(data_node* file) const {
     string packs_disabled_str = join(packs_disabled, ";");
     
     file->add(
-        new data_node(
+        new DataNode(
             "ambiance_sound_volume",
             f2s(ambiance_sound_volume)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "anim_editor_bg_path",
             anim_editor_bg_path
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "area_editor_advanced_mode",
             b2s(area_editor_advanced_mode)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "area_editor_backup_interval",
             f2s(area_editor_backup_interval)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "area_editor_grid_interval",
             i2s(area_editor_grid_interval)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "area_editor_selection_transformation",
             b2s(area_editor_sel_trans)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "area_editor_show_circular_info",
             b2s(area_editor_show_circular_info)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "area_editor_show_edge_length",
             b2s(area_editor_show_edge_length)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "area_editor_show_path_link_length",
             b2s(area_editor_show_path_link_length)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "area_editor_show_territory",
             b2s(area_editor_show_territory)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "area_editor_snap_mode",
             i2s(area_editor_snap_mode)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "area_editor_snap_threshold",
             i2s(area_editor_snap_threshold)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "area_editor_undo_limit",
             i2s(area_editor_undo_limit)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "area_editor_view_mode",
             i2s(area_editor_view_mode)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "auto_throw_mode",
             i2s(auto_throw_mode)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "cursor_cam_weight",
             f2s(cursor_cam_weight)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "cursor_speed",
             f2s(cursor_speed)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "draw_cursor_trail",
             b2s(draw_cursor_trail)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "editor_highlight_color",
             c2s(editor_highlight_color)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "editor_mmb_pan",
             b2s(editor_mmb_pan)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "editor_mouse_drag_threshold",
             i2s(editor_mouse_drag_threshold)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "editor_open_nodes",
             open_nodes_str
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "editor_primary_color",
             c2s(editor_primary_color)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "editor_secondary_color",
             c2s(editor_secondary_color)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "editor_show_tooltips",
             b2s(editor_show_tooltips)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "editor_text_color",
             c2s(editor_text_color)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "editor_use_custom_style",
             b2s(editor_use_custom_style)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "engine_developer",
             b2s(engine_developer)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "fps",
             i2s(target_fps)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "fullscreen",
             b2s(intended_win_fullscreen)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "gameplay_sound_volume",
             f2s(gameplay_sound_volume)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "gui_editor_grid_interval",
             f2s(gui_editor_grid_interval)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "gui_editor_snap",
             b2s(gui_editor_snap)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "joystick_max_deadzone",
             f2s(joystick_max_deadzone)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "joystick_min_deadzone",
             f2s(joystick_min_deadzone)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "leaving_confirmation_mode",
             i2s(leaving_confirmation_mode)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "master_volume",
             f2s(master_volume)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "max_particles",
             i2s(max_particles)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "middle_zoom_level",
             f2s(zoom_mid_level)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "mipmaps",
             b2s(mipmaps_enabled)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "music_volume",
             f2s(music_volume)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "pack_order",
             pack_load_order_str
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "packs_disabled",
             packs_disabled_str
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "particle_editor_grid_interval",
             i2s(particle_editor_grid_interval)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "particle_editor_bg_path",
             particle_editor_bg_path
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "resolution",
             i2s(intended_win_w) + " " +
             i2s(intended_win_h)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "smooth_scaling",
             b2s(smooth_scaling)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "show_hud_input_icons",
             b2s(show_hud_input_icons)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "true_fullscreen",
             b2s(true_fullscreen)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "ui_sound_volume",
             f2s(ui_sound_volume)
         )
     );
     file->add(
-        new data_node(
+        new DataNode(
             "window_position_hack",
             b2s(window_position_hack)
         )

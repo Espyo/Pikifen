@@ -50,7 +50,7 @@ extern const float TW_ROTATION_HANDLE_THICKNESS;
  * @brief Info about an editor. This contains data and functions common
  * to all editors in Pikifen.
  */
-class editor : public game_state {
+class Editor : public GameState {
 
 public:
 
@@ -63,8 +63,8 @@ public:
     
     //--- Function declarations ---
     
-    editor();
-    virtual ~editor() = default;
+    Editor();
+    virtual ~Editor() = default;
     void do_drawing() override = 0;
     void do_logic() override = 0;
     void handle_allegro_event(ALLEGRO_EVENT &ev) override;
@@ -249,23 +249,23 @@ protected:
      * The transformation properties are not tied to anything, and are
      * meant to be fed into the widget's functions so it can edit them.
      */
-    struct transformation_widget {
+    struct TransformationWidget {
     
         public:
         
         //--- Function declarations ---
         
         void draw(
-            const point* const center, const point* const size,
+            const Point* const center, const Point* const size,
             const float* const angle, float zoom = 1.0f
         ) const;
         bool handle_mouse_down(
-            const point &mouse_coords, const point* const center,
-            const point* const size, const float* const angle,
+            const Point &mouse_coords, const Point* const center,
+            const Point* const size, const float* const angle,
             float zoom = 1.0f
         );
         bool handle_mouse_move(
-            const point &mouse_coords, point* center, point* size, float* angle,
+            const Point &mouse_coords, Point* center, Point* size, float* angle,
             float zoom = 1.0f,
             bool keep_aspect_ratio = false,
             bool keep_area = false,
@@ -275,7 +275,7 @@ protected:
         bool handle_mouse_up();
         bool is_moving_center_handle();
         bool is_moving_handle();
-        point get_old_center() const;
+        Point get_old_center() const;
         
         private:
         
@@ -285,10 +285,10 @@ protected:
         signed char moving_handle = -1;
         
         //Old center, before the user started dragging handles.
-        point old_center;
+        Point old_center;
         
         //Old size, before the user started dragging handles.
-        point old_size;
+        Point old_size;
         
         //Old angle, before the user started dragging handles.
         float old_angle = 0.0f;
@@ -300,8 +300,8 @@ protected:
         //--- Function declarations ---
         
         void get_locations(
-            const point* const center, const point* const size,
-            const float* const angle, point* points, float* radius,
+            const Point* const center, const Point* const size,
+            const float* const angle, Point* points, float* radius,
             ALLEGRO_TRANSFORM* out_transform
         ) const;
         
@@ -310,7 +310,7 @@ protected:
     /**
      * @brief Info about a dialog box.
      */
-    class dialog_info {
+    class Dialog {
     
     public:
     
@@ -332,10 +332,10 @@ protected:
         bool is_open = true;
         
         //Custom dialog position (center point). -1,-1 for default.
-        point custom_pos = point(-1.0f);
+        Point custom_pos = Point(-1.0f);
         
         //Custom dialog size. -1,-1 for default.
-        point custom_size = point(-1.0f);
+        Point custom_size = Point(-1.0f);
         
         
         //--- Function declarations ---
@@ -347,7 +347,7 @@ protected:
     /**
      * @brief An item of a picker dialog.
      */
-    struct picker_item {
+    struct PickerItem {
     
         //--- Members ---
         
@@ -372,7 +372,7 @@ protected:
         
         //--- Function declarations ---
         
-        explicit picker_item(
+        explicit PickerItem(
             const string &name,
             const string &top_category = "", const string &second_category = "",
             void* info = nullptr, const string &tooltip = "",
@@ -384,14 +384,14 @@ protected:
     /**
      * @brief Info about a picker dialog.
      */
-    class picker_info {
+    class Picker {
     
     public:
     
         //--- Members ---
         
         //List of picker dialog items to choose from.
-        vector<picker_item> items;
+        vector<PickerItem> items;
         
         //Callback for when the user picks an item from the picker dialog.
         std::function<void(
@@ -415,14 +415,14 @@ protected:
         string filter;
         
         //If there's an associated dialog meant to auto-close, specify it here.
-        dialog_info* dialog_ptr = nullptr;
+        Dialog* dialog_ptr = nullptr;
         
         //Do we need to focus on the filter text box?
         bool needs_filter_box_focus = true;
         
         //--- Function declarations ---
         
-        explicit picker_info(editor* editor_ptr);
+        explicit Picker(Editor* editor_ptr);
         void process();
         
     private:
@@ -430,7 +430,7 @@ protected:
         //--- Members ---
         
         //Pointer to the editor that's using it.
-        editor* editor_ptr = nullptr;
+        Editor* editor_ptr = nullptr;
         
         //Top-level category the user picked for the new item, if applicable.
         string new_item_top_cat;
@@ -443,15 +443,15 @@ protected:
     /**
      * @brief Manages the user's changes and everything surrounding it.
      */
-    struct changes_manager {
+    struct ChangesManager {
     
         public:
         
         //--- Function declarations ---
         
-        explicit changes_manager(editor* ed);
+        explicit ChangesManager(Editor* ed);
         bool ask_if_unsaved(
-            const point &pos,
+            const Point &pos,
             const string &action_long, const string &action_short,
             const std::function<void()> &action_callback,
             const std::function<bool()> &save_callback
@@ -477,7 +477,7 @@ protected:
         //--- Members ---
         
         //Editor it belongs to.
-        editor* ed = nullptr;
+        Editor* ed = nullptr;
         
         //Whether the content exists on the disk.
         bool on_disk = true;
@@ -515,13 +515,13 @@ protected:
      * @brief Represents one of the editor's possible commands.
      * These are usually triggered by shortcuts.
      */
-    struct command {
+    struct Command {
     
         public:
         
         //--- Function declarations ---
         
-        command(command_func_t f, const string &n);
+        Command(command_func_t f, const string &n);
         void run(float input_value);
         
         private:
@@ -556,7 +556,7 @@ protected:
     std::function<void(const string &)> bitmap_dialog_ok_callback = nullptr;
     
     //Picker for the bitmap dialog.
-    picker_info bitmap_dialog_picker = picker_info(this);
+    Picker bitmap_dialog_picker = Picker(this);
     
     //Recommended folder in the bitmap dialog, if any. "." for graphics root.
     string bitmap_dialog_recommended_folder;
@@ -565,28 +565,28 @@ protected:
     ALLEGRO_BITMAP* bmp_editor_icons = nullptr;
     
     //Top-left corner of the canvas.
-    point canvas_tl;
+    Point canvas_tl;
     
     //Bottom right corner of the canvas.
-    point canvas_br;
+    Point canvas_br;
     
     //X coordinate of the canvas GUI separator. -1 = undefined.
     int canvas_separator_x = -1;
     
     //Manager of (unsaved) changes.
-    changes_manager changes_mgr;
+    ChangesManager changes_mgr;
     
     //List of registered commands.
-    vector<command> commands;
+    vector<Command> commands;
     
     //Maps a custom mob category name to an index of the types' vector.
     map<string, size_t> custom_cat_name_idxs;
     
     //What mob types belong in what custom mob category names.
-    vector<vector<mob_type*>> custom_cat_types;
+    vector<vector<MobType*>> custom_cat_types;
     
     //Currently open dialogs, if any.
-    vector<dialog_info*> dialogs;
+    vector<Dialog*> dialogs;
     
     //If the next click is within this time, it's a double-click.
     float double_click_time = 0.0f;
@@ -622,7 +622,7 @@ protected:
     size_t last_mouse_click = INVALID;
     
     //Screen location of the cursor on the last mouse button press.
-    point last_mouse_click_pos;
+    Point last_mouse_click_pos;
     
     //Editor sub-state during the last mouse click.
     size_t last_mouse_click_sub_state = INVALID;
@@ -631,7 +631,7 @@ protected:
     bool last_input_was_keyboard = false;
     
     //Manifest for the current content.
-    content_manifest manifest;
+    ContentManifest manifest;
     
     //Message text in the help dialog.
     string help_dialog_message;
@@ -646,7 +646,7 @@ protected:
     bool mouse_drag_confirmed = false;
     
     //Starting coordinates of a raw mouse drag.
-    point mouse_drag_start;
+    Point mouse_drag_start;
     
     //Do we need to focus on the input popup's text widget?
     bool needs_input_popup_text_focus = true;
@@ -655,10 +655,10 @@ protected:
     bool needs_new_pack_text_focus = true;
     
     //Time left in the operation error red flash effect.
-    timer op_error_flash_timer = timer(EDITOR::OP_ERROR_FLASH_DURATION);
+    Timer op_error_flash_timer = Timer(EDITOR::OP_ERROR_FLASH_DURATION);
     
     //Position of the operation error red flash effect.
-    point op_error_pos;
+    Point op_error_pos;
     
     //Current state.
     size_t state = 0;
@@ -679,7 +679,7 @@ protected:
     //--- Function declarations ---
     
     void center_camera(
-        const point &min_coords, const point &max_coords,
+        const Point &min_coords, const Point &max_coords,
         bool instantaneous = false
     );
     void close_top_dialog();
@@ -690,7 +690,7 @@ protected:
         const ALLEGRO_COLOR &major_color, const ALLEGRO_COLOR &minor_color
     );
     void draw_op_error_cursor();
-    point get_last_widget_pos();
+    Point get_last_widget_pos();
     bool gui_needs_keyboard();
     bool key_check(
         int pressed_key, int match_key,
@@ -729,7 +729,7 @@ protected:
     void open_new_pack_dialog();
     void open_picker_dialog(
         const string &title,
-        const vector<picker_item> &items,
+        const vector<PickerItem> &items,
         const std::function<void(
             const string &, const string &, const string &, void*, bool
         )> &pick_callback,
@@ -758,12 +758,12 @@ protected:
     );
     void process_gui_message_dialog();
     bool process_gui_mob_type_widgets(
-        string* custom_cat_name, mob_type** type, const string &pack_filter = ""
+        string* custom_cat_name, MobType** type, const string &pack_filter = ""
     );
     bool process_gui_new_dialog_pack_widgets(string* pack);
     void process_gui_new_pack_dialog();
     bool process_gui_size_widgets(
-        const char* label, point &size, float v_speed,
+        const char* label, Point &size, float v_speed,
         bool keep_aspect_ratio, bool keep_area,
         float min_size
     );
@@ -772,36 +772,36 @@ protected:
     void panel_title(const char* title);
     
     void keyframe_visualizer(
-        keyframe_interpolator<ALLEGRO_COLOR> &interpolator,
+        KeyframeInterpolator<ALLEGRO_COLOR> &interpolator,
         size_t sel_keyframe_idx
     );
     void keyframe_visualizer(
-        keyframe_interpolator<float> &interpolator,
+        KeyframeInterpolator<float> &interpolator,
         size_t sel_keyframe_idx
     );
     void keyframe_visualizer(
-        keyframe_interpolator<point> &interpolator,
+        KeyframeInterpolator<Point> &interpolator,
         size_t sel_keyframe_idx
     );
-    template <class inter_t>
+    template <class InterT>
     bool keyframe_organizer(
         const string &button_id,
-        keyframe_interpolator<inter_t> &interpolator,
+        KeyframeInterpolator<InterT> &interpolator,
         size_t &sel_keyframe_idx
     );
     bool keyframe_editor(
         const string &label,
-        keyframe_interpolator<float> &interpolator,
+        KeyframeInterpolator<float> &interpolator,
         size_t &sel_keyframe_idx
     );
     bool keyframe_editor(
         const string &label,
-        keyframe_interpolator<ALLEGRO_COLOR> &interpolator,
+        KeyframeInterpolator<ALLEGRO_COLOR> &interpolator,
         size_t &sel_keyframe_idx
     );
     bool keyframe_editor(
         const string &label,
-        keyframe_interpolator<point> &interpolator,
+        KeyframeInterpolator<Point> &interpolator,
         size_t &sel_keyframe_idx
     );
     
@@ -811,10 +811,10 @@ protected:
         const string &explanation, const string &shortcut = "",
         const WIDGET_EXPLANATION widget_explanation = WIDGET_EXPLANATION_NONE
     );
-    point snap_point_to_axis(const point &p, const point &anchor);
-    point snap_point_to_grid(const point &p, float grid_interval);
+    Point snap_point_to_axis(const Point &p, const Point &anchor);
+    Point snap_point_to_grid(const Point &p, float grid_interval);
     void update_history(
-        const content_manifest &manifest, const string &name
+        const ContentManifest &manifest, const string &name
     );
     void zoom_with_cursor(float new_zoom);
     virtual void handle_key_char_anywhere(const ALLEGRO_EVENT &ev);

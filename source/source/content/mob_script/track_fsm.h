@@ -17,8 +17,8 @@
  * @brief Functions about the track's finite state machine and behavior.
  */
 namespace track_fsm {
-void create_fsm(mob_type* typ);
+void create_fsm(MobType* typ);
 
-void on_touched(mob* m, void* info1, void* info2);
-void spawn(mob* m, void* info1, void* info2);
+void on_touched(Mob* m, void* info1, void* info2);
+void spawn(Mob* m, void* info1, void* info2);
 }

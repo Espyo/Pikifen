@@ -290,9 +290,9 @@ vector<string> folder_to_vector_recursively(
  * @param bmp Bitmap to check.
  * @return The dimensions.
  */
-point get_bitmap_dimensions(ALLEGRO_BITMAP* bmp) {
+Point get_bitmap_dimensions(ALLEGRO_BITMAP* bmp) {
     return
-        point(
+        Point(
             al_get_bitmap_width(bmp),
             al_get_bitmap_height(bmp)
         );

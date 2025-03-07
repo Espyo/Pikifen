@@ -30,7 +30,7 @@ using std::size_t;
  *
  * @param pos The spot's relative coordinates.
  */
-carrier_spot_t::carrier_spot_t(const point &pos) :
+CarrierSpot::CarrierSpot(const Point &pos) :
     pos(pos) {
     
 }
@@ -42,18 +42,18 @@ carrier_spot_t::carrier_spot_t(const point &pos) :
  * @param m The mob this info belongs to.
  * @param destination Where to deliver the mob.
  */
-carry_t::carry_t(
-    mob* m, const CARRY_DESTINATION destination
+CarryInfo::CarryInfo(
+    Mob* m, const CARRY_DESTINATION destination
 ) :
     m(m),
     destination(destination) {
     
     for(size_t c = 0; c < m->type->max_carriers; c++) {
-        point p;
+        Point p;
         if(m->type->custom_carry_spots.empty()) {
             float angle = TAU / m->type->max_carriers * c;
             p =
-                point(
+                Point(
                     cos(angle) *
                     (m->radius + game.config.standard_pikmin_radius),
                     sin(angle) *
@@ -62,7 +62,7 @@ carry_t::carry_t(
         } else {
             p = m->type->custom_carry_spots[c];
         }
-        spot_info.push_back(carrier_spot_t(p));
+        spot_info.push_back(CarrierSpot(p));
     }
 }
 
@@ -73,9 +73,9 @@ carry_t::carry_t(
  *
  * @return Whether it can fly.
  */
-bool carry_t::can_fly() const {
+bool CarryInfo::can_fly() const {
     for(size_t c = 0; c < spot_info.size(); c++) {
-        mob* carrier_ptr = spot_info[c].pik_ptr;
+        Mob* carrier_ptr = spot_info[c].pik_ptr;
         if(!carrier_ptr) continue;
         if(!has_flag(spot_info[c].pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR)) {
             return false;
@@ -91,11 +91,11 @@ bool carry_t::can_fly() const {
  *
  * @return The invulnerabilities.
  */
-vector<hazard*> carry_t::get_carrier_invulnerabilities() const {
+vector<Hazard*> CarryInfo::get_carrier_invulnerabilities() const {
     //Get all types to save on the amount of hazard checks.
-    unordered_set<mob_type*> carrier_types;
+    unordered_set<MobType*> carrier_types;
     for(size_t c = 0; c < spot_info.size(); c++) {
-        mob* carrier_ptr = spot_info[c].pik_ptr;
+        Mob* carrier_ptr = spot_info[c].pik_ptr;
         if(!carrier_ptr) continue;
         carrier_types.insert(carrier_ptr->type);
     }
@@ -110,7 +110,7 @@ vector<hazard*> carry_t::get_carrier_invulnerabilities() const {
  *
  * @return The speed.
  */
-float carry_t::get_speed() const {
+float CarryInfo::get_speed() const {
     if(cur_n_carriers == 0) {
         return 0;
     }
@@ -119,11 +119,11 @@ float carry_t::get_speed() const {
     
     //Begin by obtaining the average walking speed of the carriers.
     for(size_t s = 0; s < spot_info.size(); s++) {
-        const carrier_spot_t* s_ptr = &spot_info[s];
+        const CarrierSpot* s_ptr = &spot_info[s];
         
         if(s_ptr->state != CARRY_SPOT_STATE_USED) continue;
         
-        pikmin* p_ptr = (pikmin*) s_ptr->pik_ptr;
+        Pikmin* p_ptr = (Pikmin*) s_ptr->pik_ptr;
         max_speed += p_ptr->get_base_speed() * p_ptr->get_speed_multiplier();
     }
     max_speed /= cur_n_carriers;
@@ -153,7 +153,7 @@ float carry_t::get_speed() const {
  *
  * @return Whether it is empty.
  */
-bool carry_t::is_empty() const {
+bool CarryInfo::is_empty() const {
     for(size_t s = 0; s < spot_info.size(); s++) {
         if(spot_info[s].state != CARRY_SPOT_STATE_FREE) return false;
     }
@@ -166,7 +166,7 @@ bool carry_t::is_empty() const {
  *
  * @return Whether it is full.
  */
-bool carry_t::is_full() const {
+bool CarryInfo::is_full() const {
     for(size_t s = 0; s < spot_info.size(); s++) {
         if(spot_info[s].state == CARRY_SPOT_STATE_FREE) return false;
     }
@@ -182,10 +182,10 @@ bool carry_t::is_full() const {
  *
  * @param angle Angle to rotate to.
  */
-void carry_t::rotate_points(float angle) {
+void CarryInfo::rotate_points(float angle) {
     for(size_t s = 0; s < spot_info.size(); s++) {
         float s_angle = angle + (TAU / m->type->max_carriers * s);
-        point p(
+        Point p(
             cos(s_angle) *
             (m->radius + game.config.standard_pikmin_radius),
             sin(s_angle) *
@@ -201,7 +201,7 @@ void carry_t::rotate_points(float angle) {
  *
  * @param m Mob this circling info struct belongs to.
  */
-circling_t::circling_t(mob* m) :
+CirclingInfo::CirclingInfo(Mob* m) :
     m(m) {
     
 }
@@ -210,7 +210,7 @@ circling_t::circling_t(mob* m) :
 /**
  * @brief Constructs a new delivery info struct object.
  */
-delivery_t::delivery_t() :
+DeliveryInfo::DeliveryInfo() :
     color(game.config.carrying_color_move) {
 }
 
@@ -220,7 +220,7 @@ delivery_t::delivery_t() :
  *
  * @param leader_ptr Mob this group info struct belongs to.
  */
-group_t::group_t(mob* leader_ptr) :
+Group::Group(Mob* leader_ptr) :
     anchor(leader_ptr->pos),
     transform(game.identity_transform) {
 }
@@ -233,7 +233,7 @@ group_t::group_t(mob* leader_ptr) :
  * @param move_backwards If true, go through the list backwards.
  * @return Whether it succeeded.
  */
-bool group_t::change_standby_type(bool move_backwards) {
+bool Group::change_standby_type(bool move_backwards) {
     return get_next_standby_type(move_backwards, &cur_standby_type);
 }
 
@@ -242,7 +242,7 @@ bool group_t::change_standby_type(bool move_backwards) {
  * @brief Changes to a different standby subgroup type in case there are no more
  * Pikmin of the current one. Or to no type.
  */
-void group_t::change_standby_type_if_needed() {
+void Group::change_standby_type_if_needed() {
     for(size_t m = 0; m < members.size(); m++) {
         if(members[m]->subgroup_type_ptr == cur_standby_type) {
             //Never mind, there is a member of this subgroup type.
@@ -260,7 +260,7 @@ void group_t::change_standby_type_if_needed() {
  * @param type Type to check.
  * @return The amount.
  */
-size_t group_t::get_amount_by_type(const mob_type* type) const {
+size_t Group::get_amount_by_type(const MobType* type) const {
     size_t amount = 0;
     for(size_t m = 0; m < members.size(); m++) {
         if(members[m]->type == type) {
@@ -276,8 +276,8 @@ size_t group_t::get_amount_by_type(const mob_type* type) const {
  *
  * @return The average position.
  */
-point group_t::get_average_member_pos() const {
-    point avg;
+Point Group::get_average_member_pos() const {
+    Point avg;
     for(size_t m = 0; m < members.size(); m++) {
         avg += members[m]->pos;
     }
@@ -292,13 +292,13 @@ point group_t::get_average_member_pos() const {
  * @param include_leader If not nullptr, include the group leader mob.
  * @return The list of invulnerabilities.
  */
-vector<hazard*> group_t::get_group_invulnerabilities(
-    mob* include_leader
+vector<Hazard*> Group::get_group_invulnerabilities(
+    Mob* include_leader
 ) const {
     //Get all types to save on the amount of hazard checks.
-    unordered_set<mob_type*> member_types;
+    unordered_set<MobType*> member_types;
     for(size_t m = 0; m < members.size(); m++) {
-        mob* member_ptr = members[m];
+        Mob* member_ptr = members[m];
         if(!member_ptr) continue;
         member_types.insert(member_ptr->type);
     }
@@ -316,8 +316,8 @@ vector<hazard*> group_t::get_group_invulnerabilities(
  * @param new_type The new type is returned here.
  * @return Whether it succeeded.
  */
-bool group_t::get_next_standby_type(
-    bool move_backwards, subgroup_type** new_type
+bool Group::get_next_standby_type(
+    bool move_backwards, SubgroupType** new_type
 ) {
 
     if(members.empty()) {
@@ -326,14 +326,14 @@ bool group_t::get_next_standby_type(
     }
     
     bool success = false;
-    subgroup_type* starting_type = cur_standby_type;
-    subgroup_type* final_type = cur_standby_type;
+    SubgroupType* starting_type = cur_standby_type;
+    SubgroupType* final_type = cur_standby_type;
     if(!starting_type) {
         starting_type =
             game.states.gameplay->subgroup_types.get_first_type();
     }
-    subgroup_type* scanning_type = starting_type;
-    subgroup_type* leader_subgroup_type =
+    SubgroupType* scanning_type = starting_type;
+    SubgroupType* leader_subgroup_type =
         game.states.gameplay->subgroup_types.get_type(
             SUBGROUP_TYPE_CATEGORY_LEADER
         );
@@ -391,8 +391,8 @@ bool group_t::get_next_standby_type(
  * @param spot_idx Index of the spot to check.
  * @return The offset.
  */
-point group_t::get_spot_offset(size_t spot_idx) const {
-    point res = spots[spot_idx].pos;
+Point Group::get_spot_offset(size_t spot_idx) const {
+    Point res = spots[spot_idx].pos;
     al_transform_coordinates(&transform, &res.x, &res.y);
     return res;
 }
@@ -406,7 +406,7 @@ point group_t::get_spot_offset(size_t spot_idx) const {
  * @param affected_mob_ptr If this initialization is because a new mob entered
  * or left the group, this should point to said mob.
  */
-void group_t::init_spots(mob* affected_mob_ptr) {
+void Group::init_spots(Mob* affected_mob_ptr) {
     if(members.empty()) {
         spots.clear();
         radius = 0;
@@ -414,7 +414,7 @@ void group_t::init_spots(mob* affected_mob_ptr) {
     }
     
     //First, backup the old mob indexes.
-    vector<mob*> old_mobs;
+    vector<Mob*> old_mobs;
     old_mobs.resize(spots.size());
     for(size_t m = 0; m < spots.size(); m++) {
         old_mobs[m] = spots[m].mob_ptr;
@@ -425,15 +425,15 @@ void group_t::init_spots(mob* affected_mob_ptr) {
     /**
      * @brief Initial spot.
      */
-    struct alpha_spot {
+    struct AlphaSpot {
     
         //--- Members ---
         
         //Position of the spot.
-        point pos;
+        Point pos;
         
         //How far away it is from the rightmost spot.
-        dist distance_to_rightmost;
+        Distance distance_to_rightmost;
         
         
         //--- Function definitions ---
@@ -443,17 +443,17 @@ void group_t::init_spots(mob* affected_mob_ptr) {
          *
          * @param p The position.
          */
-        explicit alpha_spot(const point &p) :
+        explicit AlphaSpot(const Point &p) :
             pos(p) { }
             
     };
     
-    vector<alpha_spot> alpha_spots;
+    vector<AlphaSpot> alpha_spots;
     size_t current_wheel = 1;
     radius = game.config.standard_pikmin_radius;
     
     //Center spot first.
-    alpha_spots.push_back(alpha_spot(point()));
+    alpha_spots.push_back(AlphaSpot(Point()));
     
     while(alpha_spots.size() < members.size()) {
     
@@ -495,8 +495,8 @@ void group_t::init_spots(mob* affected_mob_ptr) {
         
         for(unsigned s = 0; s < n_spots_on_wheel; s++) {
             alpha_spots.push_back(
-                alpha_spot(
-                    point(
+                AlphaSpot(
+                    Point(
                         dist_from_center * cos(angle * s) +
                         game.rng.f(
                             -MOB::GROUP_SPOT_MAX_DEVIATION,
@@ -522,26 +522,26 @@ void group_t::init_spots(mob* affected_mob_ptr) {
     //Start by sorting the points.
     for(size_t a = 0; a < alpha_spots.size(); a++) {
         alpha_spots[a].distance_to_rightmost =
-            dist(
+            Distance(
                 alpha_spots[a].pos,
-                point(radius, 0)
+                Point(radius, 0)
             );
     }
     
     std::sort(
         alpha_spots.begin(), alpha_spots.end(),
-    [] (const alpha_spot & a1, const alpha_spot & a2) -> bool {
+    [] (const AlphaSpot & a1, const AlphaSpot & a2) -> bool {
         return a1.distance_to_rightmost < a2.distance_to_rightmost;
     }
     );
     
     //Finally, create the group spots.
     spots.clear();
-    spots.resize(members.size(), group_spot());
+    spots.resize(members.size(), GroupSpot());
     for(size_t s = 0; s < members.size(); s++) {
         spots[s] =
-            group_spot(
-                point(
+            GroupSpot(
+                Point(
                     alpha_spots[s].pos.x - radius,
                     alpha_spots[s].pos.y
                 ),
@@ -582,21 +582,21 @@ void group_t::init_spots(mob* affected_mob_ptr) {
  * @brief Assigns each mob a new spot, given how close each one of them is to
  * each spot.
  */
-void group_t::reassign_spots() {
+void Group::reassign_spots() {
     for(size_t m = 0; m < members.size(); m++) {
         members[m]->group_spot_idx = INVALID;
     }
     
     for(size_t s = 0; s < spots.size(); s++) {
-        point spot_pos = anchor + get_spot_offset(s);
-        mob* closest_mob = nullptr;
-        dist closest_dist;
+        Point spot_pos = anchor + get_spot_offset(s);
+        Mob* closest_mob = nullptr;
+        Distance closest_dist;
         
         for(size_t m = 0; m < members.size(); m++) {
-            mob* m_ptr = members[m];
+            Mob* m_ptr = members[m];
             if(m_ptr->group_spot_idx != INVALID) continue;
             
-            dist d(m_ptr->pos, spot_pos);
+            Distance d(m_ptr->pos, spot_pos);
             
             if(!closest_mob || d < closest_dist) {
                 closest_mob = m_ptr;
@@ -616,27 +616,27 @@ void group_t::reassign_spots() {
  * @param leading_type The subgroup type that will be at the front of
  * the group.
  */
-void group_t::sort(subgroup_type* leading_type) {
+void Group::sort(SubgroupType* leading_type) {
 
     for(size_t m = 0; m < members.size(); m++) {
         members[m]->group_spot_idx = INVALID;
     }
     
-    subgroup_type* cur_type = leading_type;
+    SubgroupType* cur_type = leading_type;
     size_t cur_spot = 0;
     
     while(cur_spot != spots.size()) {
-        point spot_pos = anchor + get_spot_offset(cur_spot);
+        Point spot_pos = anchor + get_spot_offset(cur_spot);
         
         //Find the member closest to this spot.
-        mob* closest_member = nullptr;
-        dist closest_dist;
+        Mob* closest_member = nullptr;
+        Distance closest_dist;
         for(size_t m = 0; m < members.size(); m++) {
-            mob* m_ptr = members[m];
+            Mob* m_ptr = members[m];
             if(m_ptr->subgroup_type_ptr != cur_type) continue;
             if(m_ptr->group_spot_idx != INVALID) continue;
             
-            dist d(m_ptr->pos, spot_pos);
+            Distance d(m_ptr->pos, spot_pos);
             
             if(!closest_member || d < closest_dist) {
                 closest_member = m_ptr;
@@ -664,7 +664,7 @@ void group_t::sort(subgroup_type* leading_type) {
 /**
  * @brief Clears the information.
  */
-void hold_t::clear() {
+void HoldInfo::clear() {
     m = nullptr;
     hitbox_idx = INVALID;
     offset_dist = 0;
@@ -679,15 +679,15 @@ void hold_t::clear() {
  * @param out_z The Z coordinate is returned here.
  * @return The (X and Y) coordinates.
  */
-point hold_t::get_final_pos(float* out_z) const {
-    if(!m) return point();
+Point HoldInfo::get_final_pos(float* out_z) const {
+    if(!m) return Point();
     
-    hitbox* h_ptr = nullptr;
+    Hitbox* h_ptr = nullptr;
     if(hitbox_idx != INVALID) {
         h_ptr = m->get_hitbox(hitbox_idx);
     }
     
-    point final_pos;
+    Point final_pos;
     
     if(h_ptr) {
         //Hitbox.
@@ -721,7 +721,7 @@ point hold_t::get_final_pos(float* out_z) const {
  *
  * @param m The parent mob.
  */
-parent_t::parent_t(mob* m) :
+Parent::Parent(Mob* m) :
     m(m) {
     
 }
@@ -733,9 +733,9 @@ parent_t::parent_t(mob* m) :
  * @param m Mob this path info struct belongs to.
  * @param settings Settings about how the path should be followed.
  */
-path_t::path_t(
-    mob* m,
-    const path_follow_settings &settings
+Path::Path(
+    Mob* m,
+    const PathFollowSettings &settings
 ) :
     m(m),
     settings(settings) {
@@ -754,14 +754,14 @@ path_t::path_t(
  * @param out_reason If not nullptr, the reason is returned here.
  * @return Whether there is a blockage.
  */
-bool path_t::check_blockage(PATH_BLOCK_REASON* out_reason) {
+bool Path::check_blockage(PATH_BLOCK_REASON* out_reason) {
     if(
         path.size() >= 2 &&
         cur_path_stop_idx > 0 &&
         cur_path_stop_idx < path.size()
     ) {
-        path_stop* cur_stop = path[cur_path_stop_idx - 1];
-        path_stop* next_stop = path[cur_path_stop_idx];
+        PathStop* cur_stop = path[cur_path_stop_idx - 1];
+        PathStop* next_stop = path[cur_path_stop_idx];
         
         return
             !can_traverse_path_link(
@@ -782,8 +782,8 @@ bool path_t::check_blockage(PATH_BLOCK_REASON* out_reason) {
  * @param m_ptr Nest mob responsible.
  * @param type Type of nest.
  */
-pikmin_nest_t::pikmin_nest_t(
-    mob* m_ptr, pikmin_nest_type_t* type
+PikminNest::PikminNest(
+    Mob* m_ptr, PikminNestType* type
 ) :
     m_ptr(m_ptr),
     nest_type(type) {
@@ -803,7 +803,7 @@ pikmin_nest_t::pikmin_nest_t(
  * @param type_idx Index of the Pikmin type, from the types this nest manages.
  * @return Whether a Pikmin spawned.
  */
-bool pikmin_nest_t::call_pikmin(mob* m_ptr, size_t type_idx) {
+bool PikminNest::call_pikmin(Mob* m_ptr, size_t type_idx) {
     if(
         game.states.gameplay->mobs.pikmin_list.size() >=
         game.config.max_pikmin_in_field
@@ -832,7 +832,7 @@ bool pikmin_nest_t::call_pikmin(mob* m_ptr, size_t type_idx) {
             m_ptr->anim.anim_db->find_body_part(
                 nest_type->leg_body_parts[leg_idx * 2 + 1]
             );
-        point spawn_coords =
+        Point spawn_coords =
             m_ptr->get_hitbox(leg_hole_bp_idx)->get_cur_pos(
                 m_ptr->pos, m_ptr->angle
             );
@@ -840,8 +840,8 @@ bool pikmin_nest_t::call_pikmin(mob* m_ptr, size_t type_idx) {
             get_angle(m_ptr->pos, spawn_coords);
             
         //Create the Pikmin.
-        pikmin* new_pikmin =
-            (pikmin*)
+        Pikmin* new_pikmin =
+            (Pikmin*)
             create_mob(
                 game.mob_categories.get(MOB_CATEGORY_PIKMIN),
                 spawn_coords, nest_type->pik_types[type_idx], spawn_angle,
@@ -854,7 +854,7 @@ bool pikmin_nest_t::call_pikmin(mob* m_ptr, size_t type_idx) {
         checkpoints.push_back(leg_hole_bp_idx);
         checkpoints.push_back(leg_foot_bp_idx);
         new_pikmin->track_info =
-            new track_t(
+            new TrackRideInfo(
             m_ptr, checkpoints, nest_type->pikmin_exit_speed
         );
         new_pikmin->leader_to_return_to = calling_leader;
@@ -872,7 +872,7 @@ bool pikmin_nest_t::call_pikmin(mob* m_ptr, size_t type_idx) {
  * @param type Type to check.
  * @return The amount.
  */
-size_t pikmin_nest_t::get_amount_by_type(const pikmin_type* type) {
+size_t PikminNest::get_amount_by_type(const PikminType* type) {
     size_t amount = 0;
     for(size_t t = 0; t < nest_type->pik_types.size(); t++) {
         if(nest_type->pik_types[t] == type) {
@@ -892,7 +892,7 @@ size_t pikmin_nest_t::get_amount_by_type(const pikmin_type* type) {
  *
  * @param svr Script var reader to use.
  */
-void pikmin_nest_t::read_script_vars(const script_var_reader &svr) {
+void PikminNest::read_script_vars(const ScriptVarReader &svr) {
     string pikmin_inside_var;
     
     if(svr.get("pikmin_inside", pikmin_inside_var)) {
@@ -919,8 +919,8 @@ void pikmin_nest_t::read_script_vars(const script_var_reader &svr) {
  * @param amount How many to call out.
  * @param l_ptr Leader responsible.
  */
-void pikmin_nest_t::request_pikmin(
-    size_t type_idx, size_t amount, leader* l_ptr
+void PikminNest::request_pikmin(
+    size_t type_idx, size_t amount, Leader* l_ptr
 ) {
     call_queue[type_idx] += amount;
     next_call_time = MOB::PIKMIN_NEST_CALL_INTERVAL;
@@ -934,7 +934,7 @@ void pikmin_nest_t::request_pikmin(
  *
  * @param p_ptr Pikmin to store.
  */
-void pikmin_nest_t::store_pikmin(pikmin* p_ptr) {
+void PikminNest::store_pikmin(Pikmin* p_ptr) {
     for(size_t t = 0; t < nest_type->pik_types.size(); t++) {
         if(p_ptr->type == nest_type->pik_types[t]) {
             pikmin_inside[t][p_ptr->maturity]++;
@@ -951,7 +951,7 @@ void pikmin_nest_t::store_pikmin(pikmin* p_ptr) {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void pikmin_nest_t::tick(float delta_t) {
+void PikminNest::tick(float delta_t) {
     if(calling_leader && calling_leader->to_delete) {
         calling_leader = nullptr;
     }
@@ -994,15 +994,15 @@ void pikmin_nest_t::tick(float delta_t) {
  *
  * @param file File to read from.
  */
-void pikmin_nest_type_t::load_properties(
-    data_node* file
+void PikminNestType::load_properties(
+    DataNode* file
 ) {
-    reader_setter rs(file);
+    ReaderSetter rs(file);
     
     string pik_types_str;
     string legs_str;
-    data_node* pik_types_node = nullptr;
-    data_node* legs_node = nullptr;
+    DataNode* pik_types_node = nullptr;
+    DataNode* legs_node = nullptr;
     
     rs.set("leg_body_parts", legs_str, &legs_node);
     rs.set("pikmin_types", pik_types_str, &pik_types_node);
@@ -1041,14 +1041,14 @@ void pikmin_nest_type_t::load_properties(
 
 
 /**
- * @brief Constructs a new track info struct object.
+ * @brief Constructs a new track ride info struct object.
  *
  * @param m Mob this track info struct belongs to.
  * @param checkpoints List of checkpoints (body part indexes) to cross.
  * @param ride_speed Speed to ride at, in ratio per second.
  */
-track_t::track_t(
-    mob* m, const vector<size_t> &checkpoints, float ride_speed
+TrackRideInfo::TrackRideInfo(
+    Mob* m, const vector<size_t> &checkpoints, float ride_speed
 ) :
     m(m),
     checkpoints(checkpoints),
@@ -1068,14 +1068,14 @@ track_t::track_t(
  */
 float calculate_mob_physical_span(
     float radius, float anim_hitbox_span,
-    const point &rectangular_dim
+    const Point &rectangular_dim
 ) {
     float final_span = std::max(radius, anim_hitbox_span);
     
     if(rectangular_dim.x != 0) {
         final_span =
             std::max(
-                final_span, dist(point(0.0f), rectangular_dim / 2.0).to_float()
+                final_span, Distance(Point(0.0f), rectangular_dim / 2.0).to_float()
             );
     }
     
@@ -1098,13 +1098,13 @@ float calculate_mob_physical_span(
  * Otherwise, use this.
  * @return The new mob.
  */
-mob* create_mob(
-    mob_category* category, const point &pos, mob_type* type,
+Mob* create_mob(
+    MobCategory* category, const Point &pos, MobType* type,
     float angle, const string &vars,
-    std::function<void(mob*)> code_after_creation,
+    std::function<void(Mob*)> code_after_creation,
     size_t first_state_override
 ) {
-    mob* m_ptr = category->create_mob(pos, type, angle);
+    Mob* m_ptr = category->create_mob(pos, type, angle);
     
     if(m_ptr->type->walkable) {
         game.states.gameplay->mobs.walkables.push_back(m_ptr);
@@ -1120,7 +1120,7 @@ mob* create_mob(
     
     if(!vars.empty()) {
         map<string, string> vars_map = get_var_map(vars);
-        script_var_reader svr(vars_map);
+        ScriptVarReader svr(vars_map);
         
         m_ptr->read_script_vars(svr);
         
@@ -1143,9 +1143,9 @@ mob* create_mob(
     };
     
     for(size_t c = 0; c < type->children.size(); c++) {
-        mob_type::child_t* child_info =
+        MobType::Child* child_info =
             &type->children[c];
-        mob_type::spawn_t* spawn_info =
+        MobType::SpawnInfo* spawn_info =
             get_spawn_info_from_child_info(m_ptr->type, &type->children[c]);
             
         if(!spawn_info) {
@@ -1157,11 +1157,11 @@ mob* create_mob(
             continue;
         }
         
-        mob* new_mob = m_ptr->spawn(spawn_info);
+        Mob* new_mob = m_ptr->spawn(spawn_info);
         
         if(!new_mob) continue;
         
-        parent_t* p_info = new parent_t(m_ptr);
+        Parent* p_info = new Parent(m_ptr);
         new_mob->parent = p_info;
         p_info->handle_damage = child_info->handle_damage;
         p_info->relay_damage = child_info->relay_damage;
@@ -1171,7 +1171,7 @@ mob* create_mob(
         p_info->relay_statuses = child_info->relay_statuses;
         if(!child_info->limb_anim_name.empty()) {
             p_info->limb_anim.anim_db = m_ptr->anim.anim_db;
-            animation* anim_to_use = nullptr;
+            Animation* anim_to_use = nullptr;
             for(size_t a = 0; a < m_ptr->anim.anim_db->animations.size(); a++) {
                 if(
                     m_ptr->anim.anim_db->animations[a]->name ==
@@ -1233,14 +1233,14 @@ mob* create_mob(
  * @param complete_destruction If true, don't bother removing it from groups
  * and such, since everything is going to be destroyed.
  */
-void delete_mob(mob* m_ptr, bool complete_destruction) {
+void delete_mob(Mob* m_ptr, bool complete_destruction) {
     if(game.maker_tools.info_lock == m_ptr) game.maker_tools.info_lock = nullptr;
     
     if(!complete_destruction) {
         m_ptr->leave_group();
         
         for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
-            mob* m2_ptr = game.states.gameplay->mobs.all[m];
+            Mob* m2_ptr = game.states.gameplay->mobs.all[m];
             if(m2_ptr->focused_mob == m_ptr) {
                 m2_ptr->fsm.run_event(MOB_EV_FOCUSED_MOB_UNAVAILABLE);
                 m2_ptr->fsm.run_event(MOB_EV_FOCUS_OFF_REACH);
@@ -1329,7 +1329,7 @@ void delete_mob(mob* m_ptr, bool complete_destruction) {
  * @param m The mob.
  * @return The string.
  */
-string get_error_message_mob_info(mob* m) {
+string get_error_message_mob_info(Mob* m) {
     return
         "type \"" + m->type->name + "\", coordinates " +
         p2s(m->pos) + ", area \"" + game.cur_area_data->name + "\"";
@@ -1343,11 +1343,11 @@ string get_error_message_mob_info(mob* m) {
  * @param types Mob types to check.
  * @return The invulnerabilities.
  */
-vector<hazard*> get_mob_type_list_invulnerabilities(
-    const unordered_set<mob_type*> &types
+vector<Hazard*> get_mob_type_list_invulnerabilities(
+    const unordered_set<MobType*> &types
 ) {
     //Count how many types are invulnerable to each detected hazard.
-    map<hazard*, size_t> inv_instances;
+    map<Hazard*, size_t> inv_instances;
     for(auto &t : types) {
         for(auto &h : t->hazard_vulnerabilities) {
             if(h.second.effect_mult == 0.0f) {
@@ -1357,7 +1357,7 @@ vector<hazard*> get_mob_type_list_invulnerabilities(
     }
     
     //Only accept those that ALL types are invulnerable to.
-    vector<hazard*> invulnerabilities;
+    vector<Hazard*> invulnerabilities;
     for(auto &i : inv_instances) {
         if(i.second == types.size()) {
             invulnerabilities.push_back(i.first);
@@ -1375,8 +1375,8 @@ vector<hazard*> get_mob_type_list_invulnerabilities(
  * @param child_info Child info to check.
  * @return The spawn info, or nullptr if not found.
  */
-mob_type::spawn_t* get_spawn_info_from_child_info(
-    mob_type* type, const mob_type::child_t* child_info
+MobType::SpawnInfo* get_spawn_info_from_child_info(
+    MobType* type, const MobType::Child* child_info
 ) {
     for(size_t s = 0; s < type->spawns.size(); s++) {
         if(type->spawns[s].name == child_info->spawn_name) {
@@ -1397,7 +1397,7 @@ mob_type::spawn_t* get_spawn_info_from_child_info(
  * @return Whether it's in reach.
  */
 bool is_mob_in_reach(
-    mob_type::reach_t* reach_t_ptr, const dist &dist_between, float angle_diff
+    MobType::Reach* reach_t_ptr, const Distance &dist_between, float angle_diff
 ) {
     bool in_reach =
         (

@@ -25,17 +25,17 @@
 /**
  * @brief Opens the "load" dialog.
  */
-void area_editor::open_load_dialog() {
+void AreaEditor::open_load_dialog() {
     reload_areas();
     
     //Set up the picker's behavior and data.
-    vector<picker_item> areas;
+    vector<PickerItem> areas;
     
     for(size_t a = 0; a < game.content.areas.list[AREA_TYPE_SIMPLE].size(); a++) {
-        area_data* area_ptr = game.content.areas.list[AREA_TYPE_SIMPLE][a];
-        content_manifest* man = area_ptr->manifest;
+        Area* area_ptr = game.content.areas.list[AREA_TYPE_SIMPLE][a];
+        ContentManifest* man = area_ptr->manifest;
         areas.push_back(
-            picker_item(
+            PickerItem(
                 area_ptr->name,
                 "Pack: " + game.content.packs.list[man->pack].name,
                 "Simple", (void*) man,
@@ -45,10 +45,10 @@ void area_editor::open_load_dialog() {
         );
     }
     for(size_t a = 0; a < game.content.areas.list[AREA_TYPE_MISSION].size(); a++) {
-        area_data* area_ptr = game.content.areas.list[AREA_TYPE_MISSION][a];
-        content_manifest* man = area_ptr->manifest;
+        Area* area_ptr = game.content.areas.list[AREA_TYPE_MISSION][a];
+        ContentManifest* man = area_ptr->manifest;
         areas.push_back(
-            picker_item(
+            PickerItem(
                 area_ptr->name,
                 "Pack: " + game.content.packs.list[man->pack].name,
                 "Mission", (void*) man,
@@ -58,11 +58,11 @@ void area_editor::open_load_dialog() {
         );
     }
     
-    load_dialog_picker = picker_info(this);
+    load_dialog_picker = Picker(this);
     load_dialog_picker.items = areas;
     load_dialog_picker.pick_callback =
         std::bind(
-            &area_editor::pick_area_folder, this,
+            &AreaEditor::pick_area_folder, this,
             std::placeholders::_1,
             std::placeholders::_2,
             std::placeholders::_3,
@@ -73,22 +73,22 @@ void area_editor::open_load_dialog() {
     //Open the dialog that will contain the picker and history.
     open_dialog(
         "Load an area or create a new one",
-        std::bind(&area_editor::process_gui_load_dialog, this)
+        std::bind(&AreaEditor::process_gui_load_dialog, this)
     );
     dialogs.back()->close_callback =
-        std::bind(&area_editor::close_load_dialog, this);
+        std::bind(&AreaEditor::close_load_dialog, this);
 }
 
 
 /**
  * @brief Opens the "new" dialog.
  */
-void area_editor::open_new_dialog() {
+void AreaEditor::open_new_dialog() {
     open_dialog(
         "Create a new area",
-        std::bind(&area_editor::process_gui_new_dialog, this)
+        std::bind(&AreaEditor::process_gui_new_dialog, this)
     );
-    dialogs.back()->custom_size = point(400, 0);
+    dialogs.back()->custom_size = Point(400, 0);
     dialogs.back()->close_callback = [this] () {
         new_dialog.pack.clear();
         new_dialog.internal_name = "my_area";
@@ -103,20 +103,20 @@ void area_editor::open_new_dialog() {
 /**
  * @brief Opens the options dialog.
  */
-void area_editor::open_options_dialog() {
+void AreaEditor::open_options_dialog() {
     open_dialog(
         "Options",
-        std::bind(&area_editor::process_gui_options_dialog, this)
+        std::bind(&AreaEditor::process_gui_options_dialog, this)
     );
     dialogs.back()->close_callback =
-        std::bind(&area_editor::close_options_dialog, this);
+        std::bind(&AreaEditor::close_options_dialog, this);
 }
 
 
 /**
  * @brief Processes Dear ImGui for this frame.
  */
-void area_editor::process_gui() {
+void AreaEditor::process_gui() {
     //Set up the entire editor window.
     ImGui::SetNextWindowPos(ImVec2(0, 0));
     ImGui::SetNextWindowSize(ImVec2(game.win_w, game.win_h));
@@ -179,7 +179,7 @@ void area_editor::process_gui() {
 /**
  * @brief Processes the Dear ImGui control panel for this frame.
  */
-void area_editor::process_gui_control_panel() {
+void AreaEditor::process_gui_control_panel() {
     ImGui::BeginChild("panel");
     
     //Basically, just show the correct panel for the current state.
@@ -221,7 +221,7 @@ void area_editor::process_gui_control_panel() {
 /**
  * @brief Processes the Dear ImGui area deletion dialog for this frame.
  */
-void area_editor::process_gui_delete_area_dialog() {
+void AreaEditor::process_gui_delete_area_dialog() {
     //Explanation text.
     string explanation_str;
     if(!changes_mgr.exists_on_disk()) {
@@ -280,7 +280,7 @@ void area_editor::process_gui_delete_area_dialog() {
  * @param widget_label Label for the main value widget.
  * @param tooltip Start of the tooltip for this criterion's value widget.
  */
-void area_editor::process_gui_grading_criterion_widgets(
+void AreaEditor::process_gui_grading_criterion_widgets(
     int* value_ptr, MISSION_SCORE_CRITERIA criterion_idx,
     const string &widget_label, const string &tooltip
 ) {
@@ -350,7 +350,7 @@ void area_editor::process_gui_grading_criterion_widgets(
  * @param widget_max_value Maximum value for the value widget.
  * @param tooltip Tooltip for the value widget.
  */
-void area_editor::process_gui_grading_medal_widgets(
+void AreaEditor::process_gui_grading_medal_widgets(
     int* requirement_ptr, const string &widget_label,
     int widget_min_value, int widget_max_value,
     const string &tooltip
@@ -378,7 +378,7 @@ void area_editor::process_gui_grading_medal_widgets(
  * @param widget_label Label for the radio widget.
  * @param tooltip Tooltip for the radio widget.
  */
-void area_editor::process_gui_grading_mode_widgets(
+void AreaEditor::process_gui_grading_mode_widgets(
     int value, const string &widget_label, const string &tooltip
 ) {
     //Radio button.
@@ -395,7 +395,7 @@ void area_editor::process_gui_grading_mode_widgets(
 /**
  * @brief Processes the Dear ImGui "load" dialog for this frame.
  */
-void area_editor::process_gui_load_dialog() {
+void AreaEditor::process_gui_load_dialog() {
     //History node.
     process_gui_history(
     [this](const string &name) -> string {
@@ -434,7 +434,7 @@ void area_editor::process_gui_load_dialog() {
 /**
  * @brief Processes the Dear ImGui "new" dialog for this frame.
  */
-void area_editor::process_gui_new_dialog() {
+void AreaEditor::process_gui_new_dialog() {
     string problem;
     bool hit_create_button = false;
     
@@ -468,7 +468,7 @@ void area_editor::process_gui_new_dialog() {
     set_tooltip("Choose this to make your area a mission area.");
     
     //Check if everything's ok.
-    content_manifest temp_man;
+    ContentManifest temp_man;
     temp_man.pack = new_dialog.pack;
     temp_man.internal_name = new_dialog.internal_name;
     new_dialog.area_path =
@@ -532,7 +532,7 @@ void area_editor::process_gui_new_dialog() {
 /**
  * @brief Processes the Dear ImGui menu bar for this frame.
  */
-void area_editor::process_gui_menu_bar() {
+void AreaEditor::process_gui_menu_bar() {
     if(ImGui::BeginMenuBar()) {
     
         //Editor menu.
@@ -897,7 +897,7 @@ void area_editor::process_gui_menu_bar() {
  *
  * @param m_ptr Mob to process.
  */
-void area_editor::process_gui_mob_script_vars(mob_gen* m_ptr) {
+void AreaEditor::process_gui_mob_script_vars(MobGen* m_ptr) {
     if(!m_ptr->type) return;
     
     map<string, string> vars_map = get_var_map(m_ptr->vars);
@@ -997,7 +997,7 @@ void area_editor::process_gui_mob_script_vars(mob_gen* m_ptr) {
     
     for(size_t p = 0; p < m_ptr->type->area_editor_props.size(); p++) {
     
-        mob_type::area_editor_prop_t* p_ptr =
+        MobType::AreaEditorProp* p_ptr =
             &m_ptr->type->area_editor_props[p];
             
         string value;
@@ -1135,7 +1135,7 @@ void area_editor::process_gui_mob_script_vars(mob_gen* m_ptr) {
 /**
  * @brief Processes the options dialog for this frame.
  */
-void area_editor::process_gui_options_dialog() {
+void AreaEditor::process_gui_options_dialog() {
     //Controls node.
     if(saveable_tree_node("options", "Controls")) {
     
@@ -1428,7 +1428,7 @@ void area_editor::process_gui_options_dialog() {
 /**
  * @brief Processes the Dear ImGui area details control panel for this frame.
  */
-void area_editor::process_gui_panel_details() {
+void AreaEditor::process_gui_panel_details() {
     ImGui::BeginChild("details");
     
     if(sub_state == EDITOR_SUB_STATE_NEW_SHADOW) {
@@ -1466,7 +1466,7 @@ void area_editor::process_gui_panel_details() {
             if(
                 ImGui::ImageButton(
                     "newShadowButton", editor_icons[EDITOR_ICON_ADD],
-                    point(EDITOR::ICON_BMP_SIZE)
+                    Point(EDITOR::ICON_BMP_SIZE)
                 )
             ) {
                 new_tree_shadow_cmd(1.0f);
@@ -1483,7 +1483,7 @@ void area_editor::process_gui_panel_details() {
                 if(
                     ImGui::ImageButton(
                         "delShadowButton", editor_icons[EDITOR_ICON_REMOVE],
-                        point(EDITOR::ICON_BMP_SIZE)
+                        Point(EDITOR::ICON_BMP_SIZE)
                     )
                 ) {
                     delete_tree_shadow_cmd(1.0f);
@@ -1531,7 +1531,7 @@ void area_editor::process_gui_panel_details() {
                 set_tooltip("Internal name:\n" + selected_shadow->bmp_name);
                 
                 //Tree shadow center value.
-                point shadow_center = selected_shadow->center;
+                Point shadow_center = selected_shadow->center;
                 if(
                     ImGui::DragFloat2("Center", (float*) &shadow_center)
                 ) {
@@ -1544,7 +1544,7 @@ void area_editor::process_gui_panel_details() {
                 );
                 
                 //Tree shadow size value.
-                point shadow_size = selected_shadow->size;
+                Point shadow_size = selected_shadow->size;
                 if(
                     process_gui_size_widgets(
                         "Size", shadow_size,
@@ -1592,7 +1592,7 @@ void area_editor::process_gui_panel_details() {
                 );
                 
                 //Tree shadow sway value.
-                point shadow_sway = selected_shadow->sway;
+                Point shadow_sway = selected_shadow->sway;
                 if(ImGui::DragFloat2("Sway", (float*) &shadow_sway, 0.1)) {
                     register_change("tree shadow sway change");
                     selected_shadow->sway = shadow_sway;
@@ -1623,8 +1623,8 @@ void area_editor::process_gui_panel_details() {
 /**
  * @brief Processes the Dear ImGui edge control panel for this frame.
  */
-void area_editor::process_gui_panel_edge() {
-    edge* e_ptr = *selected_edges.begin();
+void AreaEditor::process_gui_panel_edge() {
+    Edge* e_ptr = *selected_edges.begin();
     
     //Wall shadow node.
     if(saveable_tree_node("layout", "Wall shadow")) {
@@ -1776,7 +1776,7 @@ void area_editor::process_gui_panel_edge() {
  * @brief Processes the Dear ImGui area gameplay settings control panel for
  * this frame.
  */
-void area_editor::process_gui_panel_gameplay() {
+void AreaEditor::process_gui_panel_gameplay() {
     ImGui::BeginChild("gameplay");
     
     switch(sub_state) {
@@ -1873,7 +1873,7 @@ void area_editor::process_gui_panel_gameplay() {
 /**
  * @brief Processes the Dear ImGui area info control panel for this frame.
  */
-void area_editor::process_gui_panel_info() {
+void AreaEditor::process_gui_panel_info() {
     ImGui::BeginChild("info");
     
     //Back button.
@@ -2069,7 +2069,7 @@ void area_editor::process_gui_panel_info() {
                 can_stop_previewing ?
                 editor_icons[EDITOR_ICON_STOP] :
                 editor_icons[EDITOR_ICON_PLAY],
-                point(ImGui::GetTextLineHeight())
+                Point(ImGui::GetTextLineHeight())
             )
         ) {
             if(can_preview_selected_song) {
@@ -2298,10 +2298,10 @@ void area_editor::process_gui_panel_info() {
             ImGui::Text("None");
         } else {
             //Thumbnail image.
-            point size =
+            Point size =
                 resize_to_box_keeping_aspect_ratio(
                     get_bitmap_dimensions(game.cur_area_data->thumbnail.get()),
-                    point(200.0f)
+                    Point(200.0f)
                 );
             ImGui::Image(game.cur_area_data->thumbnail.get(), size);
         }
@@ -2435,7 +2435,7 @@ void area_editor::process_gui_panel_info() {
 /**
  * @brief Processes the Dear ImGui layout control panel for this frame.
  */
-void area_editor::process_gui_panel_layout() {
+void AreaEditor::process_gui_panel_layout() {
     ImGui::BeginChild("main");
     
     if(sub_state == EDITOR_SUB_STATE_DRAWING) {
@@ -2496,7 +2496,7 @@ void area_editor::process_gui_panel_layout() {
         if(
             ImGui::ImageButton(
                 "newSectorButton", editor_icons[EDITOR_ICON_ADD],
-                point(EDITOR::ICON_BMP_SIZE)
+                Point(EDITOR::ICON_BMP_SIZE)
             )
         ) {
             layout_drawing_cmd(1.0f);
@@ -2512,7 +2512,7 @@ void area_editor::process_gui_panel_layout() {
         if(
             ImGui::ImageButton(
                 "newCircleButton", editor_icons[EDITOR_ICON_ADD_CIRCLE_SECTOR],
-                point(EDITOR::ICON_BMP_SIZE)
+                Point(EDITOR::ICON_BMP_SIZE)
             )
         ) {
             circle_sector_cmd(1.0f);
@@ -2530,7 +2530,7 @@ void area_editor::process_gui_panel_layout() {
             if(
                 ImGui::ImageButton(
                     "delEdgesButton", editor_icons[EDITOR_ICON_REMOVE],
-                    point(EDITOR::ICON_BMP_SIZE)
+                    Point(EDITOR::ICON_BMP_SIZE)
                 )
             ) {
                 delete_edge_cmd(1.0f);
@@ -2570,7 +2570,7 @@ void area_editor::process_gui_panel_layout() {
         if(
             ImGui::ImageButton(
                 "selFilterButton", sel_filter_bmp,
-                point(EDITOR::ICON_BMP_SIZE)
+                Point(EDITOR::ICON_BMP_SIZE)
             )
         ) {
             selection_filter_cmd(1.0f);
@@ -2592,7 +2592,7 @@ void area_editor::process_gui_panel_layout() {
             if(
                 ImGui::ImageButton(
                     "clearSelButton", editor_icons[EDITOR_ICON_SELECT_NONE],
-                    point(EDITOR::ICON_BMP_SIZE)
+                    Point(EDITOR::ICON_BMP_SIZE)
                 )
             ) {
                 clear_selection();
@@ -2691,7 +2691,7 @@ void area_editor::process_gui_panel_layout() {
 /**
  * @brief Processes the Dear ImGui main control panel for this frame.
  */
-void area_editor::process_gui_panel_main() {
+void AreaEditor::process_gui_panel_main() {
     if(manifest.internal_name.empty() || !game.cur_area_data) return;
     
     ImGui::BeginChild("main");
@@ -2720,7 +2720,7 @@ void area_editor::process_gui_panel_main() {
     if(
         ImGui::ImageButtonAndText(
             "layoutButton", editor_icons[EDITOR_ICON_SECTORS],
-            point(EDITOR::ICON_BMP_SIZE),
+            Point(EDITOR::ICON_BMP_SIZE),
             24.0f, "Layout"
         )
     ) {
@@ -2734,7 +2734,7 @@ void area_editor::process_gui_panel_main() {
     if(
         ImGui::ImageButtonAndText(
             "mobsButton", editor_icons[EDITOR_ICON_MOBS],
-            point(EDITOR::ICON_BMP_SIZE),
+            Point(EDITOR::ICON_BMP_SIZE),
             24.0f, "Objects"
         )
     ) {
@@ -2748,7 +2748,7 @@ void area_editor::process_gui_panel_main() {
     if(
         ImGui::ImageButtonAndText(
             "pathsButton", editor_icons[EDITOR_ICON_PATHS],
-            point(EDITOR::ICON_BMP_SIZE),
+            Point(EDITOR::ICON_BMP_SIZE),
             24.0f, "Paths"
         )
     ) {
@@ -2763,7 +2763,7 @@ void area_editor::process_gui_panel_main() {
     if(
         ImGui::ImageButtonAndText(
             "detailsButton", editor_icons[EDITOR_ICON_DETAILS],
-            point(EDITOR::ICON_BMP_SIZE),
+            Point(EDITOR::ICON_BMP_SIZE),
             12.0f, "Details"
         )
     ) {
@@ -2777,7 +2777,7 @@ void area_editor::process_gui_panel_main() {
     if(
         ImGui::ImageButtonAndText(
             "infoButton", editor_icons[EDITOR_ICON_INFO],
-            point(EDITOR::ICON_BMP_SIZE),
+            Point(EDITOR::ICON_BMP_SIZE),
             12.0f, "Info"
         )
     ) {
@@ -2791,7 +2791,7 @@ void area_editor::process_gui_panel_main() {
     if(
         ImGui::ImageButtonAndText(
             "gameplayButton", editor_icons[EDITOR_ICON_GAMEPLAY],
-            point(EDITOR::ICON_BMP_SIZE),
+            Point(EDITOR::ICON_BMP_SIZE),
             12.0f, "Gameplay settings"
         )
     ) {
@@ -2806,7 +2806,7 @@ void area_editor::process_gui_panel_main() {
     if(
         ImGui::ImageButtonAndText(
             "reviewButton", editor_icons[EDITOR_ICON_REVIEW],
-            point(EDITOR::ICON_BMP_SIZE),
+            Point(EDITOR::ICON_BMP_SIZE),
             8.0f, "Review"
         )
     ) {
@@ -2820,7 +2820,7 @@ void area_editor::process_gui_panel_main() {
     if(
         ImGui::ImageButtonAndText(
             "toolsButton", editor_icons[EDITOR_ICON_TOOLS],
-            point(EDITOR::ICON_BMP_SIZE),
+            Point(EDITOR::ICON_BMP_SIZE),
             8.0f, "Tools"
         )
     ) {
@@ -2839,7 +2839,7 @@ void area_editor::process_gui_panel_main() {
 /**
  * @brief Processes the Dear ImGui mission control panel for this frame.
  */
-void area_editor::process_gui_panel_mission() {
+void AreaEditor::process_gui_panel_mission() {
 
     float old_mission_survival_min =
         game.cur_area_data->mission.goal_amount / 60.0f;
@@ -3007,7 +3007,7 @@ void area_editor::process_gui_panel_mission() {
  * @param day_duration_needs_update The variable that dictates whether the
  * day duration widget data later in the panel needs to be updated.
  */
-void area_editor::process_gui_panel_mission_fail(
+void AreaEditor::process_gui_panel_mission_fail(
     bool* day_duration_needs_update
 ) {
     unsigned int fail_flags =
@@ -3452,7 +3452,7 @@ void area_editor::process_gui_panel_mission_fail(
  * @brief Processes the Dear ImGui battle enemies goal part of the
  * mission control panel for this frame.
  */
-void area_editor::process_gui_panel_mission_goal_be() {
+void AreaEditor::process_gui_panel_mission_goal_be() {
     //Explanation text.
     ImGui::TextWrapped(
         "The player must defeat certain enemies, or all of them."
@@ -3515,7 +3515,7 @@ void area_editor::process_gui_panel_mission_goal_be() {
  * @brief Processes the Dear ImGui collect treasures goal part of the
  * mission control panel for this frame.
  */
-void area_editor::process_gui_panel_mission_goal_ct() {
+void AreaEditor::process_gui_panel_mission_goal_ct() {
     //Explanation text.
     ImGui::TextWrapped(
         "The player must collect certain treasures, or all of them."
@@ -3579,7 +3579,7 @@ void area_editor::process_gui_panel_mission_goal_ct() {
  * @brief Processes the Dear ImGui get to exit goal part of the
  * mission control panel for this frame.
  */
-void area_editor::process_gui_panel_mission_goal_gte() {
+void AreaEditor::process_gui_panel_mission_goal_gte() {
     //Explanation text.
     ImGui::TextWrapped(
         "The player must get a leader or all of them "
@@ -3666,7 +3666,7 @@ void area_editor::process_gui_panel_mission_goal_gte() {
  * @brief Processes the Dear ImGui mission grading part of the
  * mission control panel for this frame.
  */
-void area_editor::process_gui_panel_mission_grading() {
+void AreaEditor::process_gui_panel_mission_grading() {
     //Grading mode text.
     ImGui::Text("Grading mode:");
     
@@ -3839,14 +3839,14 @@ void area_editor::process_gui_panel_mission_grading() {
 /**
  * @brief Processes the Dear ImGui mob control panel for this frame.
  */
-void area_editor::process_gui_panel_mob() {
+void AreaEditor::process_gui_panel_mob() {
 
-    mob_gen* m_ptr = *selected_mobs.begin();
+    MobGen* m_ptr = *selected_mobs.begin();
     
     //Category and type comboboxes.
     string custom_cat_name = "";
     if(m_ptr->type) custom_cat_name = m_ptr->type->custom_category_name;
-    mob_type* type = m_ptr->type;
+    MobType* type = m_ptr->type;
     
     if(process_gui_mob_type_widgets(&custom_cat_name, &type)) {
         register_change("object type change");
@@ -3893,7 +3893,7 @@ void area_editor::process_gui_panel_mob() {
                 m < game.cur_area_data->mob_generators.size();
                 m++
             ) {
-                mob_gen* other_m_ptr = game.cur_area_data->mob_generators[m];
+                MobGen* other_m_ptr = game.cur_area_data->mob_generators[m];
                 for(size_t l = 0; l < other_m_ptr->links.size(); l++) {
                     if(other_m_ptr->links[l] == m_ptr) {
                         has_links_to = true;
@@ -3986,7 +3986,7 @@ void area_editor::process_gui_panel_mob() {
         if(
             ImGui::ImageButton(
                 "newLinkButton", editor_icons[EDITOR_ICON_ADD],
-                point(EDITOR::ICON_BMP_SIZE)
+                Point(EDITOR::ICON_BMP_SIZE)
             )
         ) {
             if(sub_state == EDITOR_SUB_STATE_ADD_MOB_LINK) {
@@ -4007,7 +4007,7 @@ void area_editor::process_gui_panel_mob() {
             if(
                 ImGui::ImageButton(
                     "delLinkButton", editor_icons[EDITOR_ICON_REMOVE],
-                    point(EDITOR::ICON_BMP_SIZE)
+                    Point(EDITOR::ICON_BMP_SIZE)
                 )
             ) {
                 if((*selected_mobs.begin())->links.size() == 1) {
@@ -4040,7 +4040,7 @@ void area_editor::process_gui_panel_mob() {
 /**
  * @brief Processes the Dear ImGui mobs control panel for this frame.
  */
-void area_editor::process_gui_panel_mobs() {
+void AreaEditor::process_gui_panel_mobs() {
     ImGui::BeginChild("mobs");
     
     if(sub_state == EDITOR_SUB_STATE_NEW_MOB) {
@@ -4177,7 +4177,7 @@ void area_editor::process_gui_panel_mobs() {
         if(
             ImGui::ImageButton(
                 "newMobButton", editor_icons[EDITOR_ICON_ADD],
-                point(EDITOR::ICON_BMP_SIZE)
+                Point(EDITOR::ICON_BMP_SIZE)
             )
         ) {
             new_mob_cmd(1.0f);
@@ -4195,7 +4195,7 @@ void area_editor::process_gui_panel_mobs() {
             if(
                 ImGui::ImageButton(
                     "delMobButtonn", editor_icons[EDITOR_ICON_REMOVE],
-                    point(EDITOR::ICON_BMP_SIZE)
+                    Point(EDITOR::ICON_BMP_SIZE)
                 )
             ) {
                 delete_mob_cmd(1.0f);
@@ -4210,7 +4210,7 @@ void area_editor::process_gui_panel_mobs() {
             if(
                 ImGui::ImageButton(
                     "dupMobButton", editor_icons[EDITOR_ICON_DUPLICATE],
-                    point(EDITOR::ICON_BMP_SIZE)
+                    Point(EDITOR::ICON_BMP_SIZE)
                 )
             ) {
                 duplicate_mobs_cmd(1.0f);
@@ -4258,8 +4258,8 @@ void area_editor::process_gui_panel_mobs() {
 /**
  * @brief Processes the Dear ImGui path link control panel for this frame.
  */
-void area_editor::process_gui_panel_path_link() {
-    path_link* l_ptr = *selected_path_links.begin();
+void AreaEditor::process_gui_panel_path_link() {
+    PathLink* l_ptr = *selected_path_links.begin();
     
     //Type combobox.
     vector<string> link_type_names;
@@ -4282,8 +4282,8 @@ void area_editor::process_gui_panel_path_link() {
 /**
  * @brief Processes the Dear ImGui path stop control panel for this frame.
  */
-void area_editor::process_gui_panel_path_stop() {
-    path_stop* s_ptr = *selected_path_stops.begin();
+void AreaEditor::process_gui_panel_path_stop() {
+    PathStop* s_ptr = *selected_path_stops.begin();
     
     //Radius value.
     float radius = s_ptr->radius;
@@ -4360,7 +4360,7 @@ void area_editor::process_gui_panel_path_stop() {
 /**
  * @brief Processes the Dear ImGui paths control panel for this frame.
  */
-void area_editor::process_gui_panel_paths() {
+void AreaEditor::process_gui_panel_paths() {
     ImGui::BeginChild("paths");
     
     if(sub_state == EDITOR_SUB_STATE_PATH_DRAWING) {
@@ -4491,7 +4491,7 @@ void area_editor::process_gui_panel_paths() {
         if(
             ImGui::ImageButton(
                 "newPathButton", editor_icons[EDITOR_ICON_ADD],
-                point(EDITOR::ICON_BMP_SIZE)
+                Point(EDITOR::ICON_BMP_SIZE)
             )
         ) {
             new_path_cmd(1.0f);
@@ -4511,7 +4511,7 @@ void area_editor::process_gui_panel_paths() {
             if(
                 ImGui::ImageButton(
                     "delPathButton", editor_icons[EDITOR_ICON_REMOVE],
-                    point(EDITOR::ICON_BMP_SIZE)
+                    Point(EDITOR::ICON_BMP_SIZE)
                 )
             ) {
                 delete_path_cmd(1.0f);
@@ -4571,9 +4571,9 @@ void area_editor::process_gui_panel_paths() {
                 (selected_path_links.size() == 1) || selection_homogenized;
             if(!ok_to_edit && selected_path_links.size() == 2) {
                 auto it = selected_path_links.begin();
-                path_link* l1 = *it;
+                PathLink* l1 = *it;
                 it++;
-                path_link* l2 = *it;
+                PathLink* l2 = *it;
                 if(
                     l1->start_ptr == l2->end_ptr &&
                     l1->end_ptr == l2->start_ptr
@@ -4804,7 +4804,7 @@ void area_editor::process_gui_panel_paths() {
 /**
  * @brief Processes the Dear ImGui review control panel for this frame.
  */
-void area_editor::process_gui_panel_review() {
+void AreaEditor::process_gui_panel_review() {
     ImGui::BeginChild("review");
     
     //Back button.
@@ -4892,14 +4892,14 @@ void area_editor::process_gui_panel_review() {
             if(show_cross_section) {
                 cross_section_window_start = canvas_tl;
                 cross_section_window_end =
-                    point(canvas_br.x * 0.5, canvas_br.y * 0.5);
+                    Point(canvas_br.x * 0.5, canvas_br.y * 0.5);
                 cross_section_z_window_start =
-                    point(
+                    Point(
                         cross_section_window_end.x,
                         cross_section_window_start.y
                     );
                 cross_section_z_window_end =
-                    point(
+                    Point(
                         cross_section_window_end.x + 48,
                         cross_section_window_end.y
                     );
@@ -5005,8 +5005,8 @@ void area_editor::process_gui_panel_review() {
 /**
  * @brief Processes the Dear ImGui sector control panel for this frame.
  */
-void area_editor::process_gui_panel_sector() {
-    sector* s_ptr = *selected_sectors.begin();
+void AreaEditor::process_gui_panel_sector() {
+    Sector* s_ptr = *selected_sectors.begin();
     
     //Sector behavior node.
     if(saveable_tree_node("layout", "Behavior")) {
@@ -5168,13 +5168,13 @@ void area_editor::process_gui_panel_sector() {
             
             //Sector texture button.
             if(ImGui::Button("Choose image...")) {
-                vector<picker_item> picker_buttons;
+                vector<PickerItem> picker_buttons;
                 
-                picker_buttons.push_back(picker_item("Choose another..."));
+                picker_buttons.push_back(PickerItem("Choose another..."));
                 
                 for(size_t s = 0; s < texture_suggestions.size(); s++) {
                     picker_buttons.push_back(
-                        picker_item(
+                        PickerItem(
                             texture_suggestions[s].name,
                             "", "", nullptr,
                             "",
@@ -5186,7 +5186,7 @@ void area_editor::process_gui_panel_sector() {
                     "Pick a texture",
                     picker_buttons,
                     std::bind(
-                        &area_editor::pick_texture, this,
+                        &AreaEditor::pick_texture, this,
                         std::placeholders::_1,
                         std::placeholders::_2,
                         std::placeholders::_3,
@@ -5217,7 +5217,7 @@ void area_editor::process_gui_panel_sector() {
         if(saveable_tree_node("layout", "Texture effects")) {
         
             //Sector texture offset value.
-            point texture_translation = s_ptr->texture_info.translation;
+            Point texture_translation = s_ptr->texture_info.translation;
             if(ImGui::DragFloat2("Offset", (float*) &texture_translation)) {
                 register_change("sector texture offset change");
                 s_ptr->texture_info.translation = texture_translation;
@@ -5230,7 +5230,7 @@ void area_editor::process_gui_panel_sector() {
             );
             
             //Sector texture scale value.
-            point texture_scale = s_ptr->texture_info.scale;
+            Point texture_scale = s_ptr->texture_info.scale;
             if(ImGui::DragFloat2("Scale", (float*) &texture_scale, 0.01)) {
                 register_change("sector texture scale change");
                 s_ptr->texture_info.scale = texture_scale;
@@ -5370,7 +5370,7 @@ void area_editor::process_gui_panel_sector() {
 /**
  * @brief Processes the Dear ImGui tools control panel for this frame.
  */
-void area_editor::process_gui_panel_tools() {
+void AreaEditor::process_gui_panel_tools() {
     ImGui::BeginChild("tools");
     
     //Back button.
@@ -5462,7 +5462,7 @@ void area_editor::process_gui_panel_tools() {
         //Load auto-backup button.
         if(ImGui::Button("Load auto-backup")) {
             changes_mgr.ask_if_unsaved(
-                point(),
+                Point(),
                 "loading the auto-backup", "load",
             [this] () {
                 bool backup_exists = false;
@@ -5538,7 +5538,7 @@ void area_editor::process_gui_panel_tools() {
 /**
  * @brief Processes the Dear ImGui status bar for this frame.
  */
-void area_editor::process_gui_status_bar() {
+void AreaEditor::process_gui_status_bar() {
     //Status bar text.
     process_gui_status_bar_text();
     
@@ -5564,14 +5564,14 @@ void area_editor::process_gui_status_bar() {
 /**
  * @brief Processes the Dear ImGui toolbar for this frame.
  */
-void area_editor::process_gui_toolbar() {
+void AreaEditor::process_gui_toolbar() {
     if(manifest.internal_name.empty() || !game.cur_area_data) return;
     
     //Quit button.
     if(
         ImGui::ImageButton(
             "quitButton", editor_icons[EDITOR_ICON_QUIT],
-            point(EDITOR::ICON_BMP_SIZE)
+            Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         quit_widget_pos = get_last_widget_pos();
@@ -5587,7 +5587,7 @@ void area_editor::process_gui_toolbar() {
     if(
         ImGui::ImageButton(
             "loadButton", editor_icons[EDITOR_ICON_LOAD],
-            point(EDITOR::ICON_BMP_SIZE)
+            Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         load_widget_pos = get_last_widget_pos();
@@ -5606,7 +5606,7 @@ void area_editor::process_gui_toolbar() {
             changes_mgr.has_unsaved_changes() ?
             editor_icons[EDITOR_ICON_SAVE_UNSAVED] :
             editor_icons[EDITOR_ICON_SAVE],
-            point(EDITOR::ICON_BMP_SIZE)
+            Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         save_cmd(1.0f);
@@ -5621,7 +5621,7 @@ void area_editor::process_gui_toolbar() {
     if(
         ImGui::ImageButton(
             "playButton", editor_icons[EDITOR_ICON_PLAY],
-            point(EDITOR::ICON_BMP_SIZE)
+            Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         quick_play_cmd(1.0f);
@@ -5638,8 +5638,8 @@ void area_editor::process_gui_toolbar() {
     if(
         ImGui::ImageButton(
             "undoButton", editor_icons[EDITOR_ICON_UNDO],
-            point(EDITOR::ICON_BMP_SIZE),
-            point(0.0f), point(1.0f),
+            Point(EDITOR::ICON_BMP_SIZE),
+            Point(0.0f), Point(1.0f),
             COLOR_EMPTY, map_alpha(undo_opacity)
         )
     ) {
@@ -5662,8 +5662,8 @@ void area_editor::process_gui_toolbar() {
     if(
         ImGui::ImageButton(
             "redoButton", editor_icons[EDITOR_ICON_UNDO],
-            point(EDITOR::ICON_BMP_SIZE),
-            point(1.0f, 0.0f), point(0.0f, 1.0f),
+            Point(EDITOR::ICON_BMP_SIZE),
+            Point(1.0f, 0.0f), Point(0.0f, 1.0f),
             COLOR_EMPTY, map_alpha(redo_opacity)
         )
     ) {
@@ -5689,7 +5689,7 @@ void area_editor::process_gui_toolbar() {
         if(
             ImGui::ImageButton(
                 "refToggleButton", editor_icons[EDITOR_ICON_REFERENCE],
-                point(EDITOR::ICON_BMP_SIZE)
+                Point(EDITOR::ICON_BMP_SIZE)
             )
         ) {
             reference_toggle_cmd(1.0f);
@@ -5744,7 +5744,7 @@ void area_editor::process_gui_toolbar() {
     if(
         ImGui::ImageButton(
             "snapButton", snap_mode_bmp,
-            point(EDITOR::ICON_BMP_SIZE)
+            Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         snap_mode_cmd(1.0f);
@@ -5761,7 +5761,7 @@ void area_editor::process_gui_toolbar() {
         if(
             ImGui::ImageButton(
                 "layoutButton", editor_icons[EDITOR_ICON_SECTORS],
-                point(EDITOR::ICON_BMP_SIZE)
+                Point(EDITOR::ICON_BMP_SIZE)
             )
         ) {
             change_state(EDITOR_STATE_LAYOUT);
@@ -5776,7 +5776,7 @@ void area_editor::process_gui_toolbar() {
         if(
             ImGui::ImageButton(
                 "mobsButton", editor_icons[EDITOR_ICON_MOBS],
-                point(EDITOR::ICON_BMP_SIZE)
+                Point(EDITOR::ICON_BMP_SIZE)
             )
         ) {
             change_state(EDITOR_STATE_MOBS);
@@ -5791,7 +5791,7 @@ void area_editor::process_gui_toolbar() {
         if(
             ImGui::ImageButton(
                 "pathsButton", editor_icons[EDITOR_ICON_PATHS],
-                point(EDITOR::ICON_BMP_SIZE)
+                Point(EDITOR::ICON_BMP_SIZE)
             )
         ) {
             change_state(EDITOR_STATE_PATHS);
@@ -5806,7 +5806,7 @@ void area_editor::process_gui_toolbar() {
         if(
             ImGui::ImageButton(
                 "detailsButton", editor_icons[EDITOR_ICON_DETAILS],
-                point(EDITOR::ICON_BMP_SIZE)
+                Point(EDITOR::ICON_BMP_SIZE)
             )
         ) {
             change_state(EDITOR_STATE_DETAILS);
@@ -5821,7 +5821,7 @@ void area_editor::process_gui_toolbar() {
         if(
             ImGui::ImageButton(
                 "previewButton", editor_icons[EDITOR_ICON_REVIEW],
-                point(EDITOR::ICON_BMP_SIZE)
+                Point(EDITOR::ICON_BMP_SIZE)
             )
         ) {
             preview_mode = !preview_mode;

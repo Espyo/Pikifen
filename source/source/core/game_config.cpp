@@ -138,8 +138,8 @@ const float DEF_ZOOM_MIN_LEVEL = 0.66f;
  *
  * @param file File to load from.
  */
-void game_config::load(data_node* file) {
-    reader_setter rs(file);
+void GameConfig::load(DataNode* file) {
+    ReaderSetter rs(file);
     string pikmin_order_str;
     string leader_order_str;
     string spray_order_str;

@@ -99,7 +99,7 @@ enum CONTENT_LOAD_LEVEL {
 /**
  * @brief A manifest record of a piece of content on the disk.
  */
-struct content_manifest {
+struct ContentManifest {
 
     //--- Members ---
     
@@ -115,8 +115,8 @@ struct content_manifest {
     
     //--- Function declarations ---
     
-    content_manifest();
-    content_manifest(const string &name, const string &path, const string &pack);
+    ContentManifest();
+    ContentManifest(const string &name, const string &path, const string &pack);
     void clear();
     void fill_from_path(const string &path);
     
@@ -127,22 +127,22 @@ struct content_manifest {
  * @brief Represents any piece of game content that can be used in the engine,
  * shared around, belong as part of another piece of content, etc.
  */
-class plain_content {
+class PlainContent {
 public:
 
     //--- Members ---
     
     //The content's manifest.
-    content_manifest* manifest = nullptr;
+    ContentManifest* manifest = nullptr;
     
 };
 
 
 /**
- * @brief Like the plain_content class, except this includes metadata
+ * @brief Like the PlainContent class, except this includes metadata
  * that can be loaded from and saved to a data file.
  */
-class content : public plain_content {
+class Content : public PlainContent {
 public:
 
     //--- Members ---
@@ -176,9 +176,9 @@ protected:
 
     //--- Function declarations ---
     
-    void load_metadata_from_data_node(data_node* node);
+    void load_metadata_from_data_node(DataNode* node);
     void reset_metadata();
-    void save_metadata_to_data_node(data_node* node) const;
+    void save_metadata_to_data_node(DataNode* node) const;
     
 };
 
@@ -186,7 +186,7 @@ protected:
 /**
  * @brief Data about an installed pack.
  */
-struct pack {
+struct Pack {
 
     //--- Members ---
     

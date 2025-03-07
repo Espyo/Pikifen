@@ -32,8 +32,8 @@ using std::unordered_set;
  *
  * @param typ Mob type to create the finite state machine for.
  */
-void leader_fsm::create_fsm(mob_type* typ) {
-    easy_fsm_creator efc;
+void leader_fsm::create_fsm(MobType* typ) {
+    EasyFsmCreator efc;
     efc.new_state("idling", LEADER_STATE_IDLING); {
         efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(leader_fsm::enter_idle);
@@ -1486,15 +1486,15 @@ void leader_fsm::create_fsm(mob_type* typ) {
  * @param info1 Pointer to the hitbox touch information structure.
  * @param info2 Unused.
  */
-void leader_fsm::be_attacked(mob* m, void* info1, void* info2) {
+void leader_fsm::be_attacked(Mob* m, void* info1, void* info2) {
     engine_assert(info1 != nullptr, m->print_state_history());
     
-    leader* lea_ptr = (leader*) m;
+    Leader* lea_ptr = (Leader*) m;
     
     if(m->invuln_period.time_left > 0.0f) return;
     m->invuln_period.start();
     
-    hitbox_interaction* info = (hitbox_interaction*) info1;
+    HitboxInteraction* info = (HitboxInteraction*) info1;
     
     float damage = 0;
     float health_before = m->health;
@@ -1539,7 +1539,7 @@ void leader_fsm::be_attacked(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::be_dismissed(mob* m, void* info1, void* info2) {
+void leader_fsm::be_dismissed(Mob* m, void* info1, void* info2) {
     m->stop_chasing();
     m->set_animation(LEADER_ANIM_IDLING);
 }
@@ -1552,7 +1552,7 @@ void leader_fsm::be_dismissed(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::be_grabbed_by_friend(mob* m, void* info1, void* info2) {
+void leader_fsm::be_grabbed_by_friend(Mob* m, void* info1, void* info2) {
     m->set_animation(LEADER_ANIM_IDLING);
 }
 
@@ -1564,7 +1564,7 @@ void leader_fsm::be_grabbed_by_friend(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::be_released(mob* m, void* info1, void* info2) {
+void leader_fsm::be_released(Mob* m, void* info1, void* info2) {
 
 }
 
@@ -1576,8 +1576,8 @@ void leader_fsm::be_released(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::be_thrown(mob* m, void* info1, void* info2) {
-    ((leader*) m)->start_throw_trail();
+void leader_fsm::be_thrown(Mob* m, void* info1, void* info2) {
+    ((Leader*) m)->start_throw_trail();
 }
 
 
@@ -1588,8 +1588,8 @@ void leader_fsm::be_thrown(mob* m, void* info1, void* info2) {
  * @param info1 Points to the bouncer mob.
  * @param info2 Unused.
  */
-void leader_fsm::be_thrown_by_bouncer(mob* m, void* info1, void* info2) {
-    leader* lea_ptr = (leader*) m;
+void leader_fsm::be_thrown_by_bouncer(Mob* m, void* info1, void* info2) {
+    Leader* lea_ptr = (Leader*) m;
     lea_ptr->start_throw_trail();
     if(!lea_ptr->active) {
         lea_ptr->leave_group();
@@ -1604,8 +1604,8 @@ void leader_fsm::be_thrown_by_bouncer(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::become_active(mob* m, void* info1, void* info2) {
-    leader* lea_ptr = (leader*) m;
+void leader_fsm::become_active(Mob* m, void* info1, void* info2) {
+    Leader* lea_ptr = (Leader*) m;
     
     if(game.states.gameplay->cur_leader_ptr) {
         game.states.gameplay->cur_leader_ptr->fsm.run_event(
@@ -1621,7 +1621,7 @@ void leader_fsm::become_active(mob* m, void* info1, void* info2) {
         lea_ptr->following_group &&
         lea_ptr->following_group->type->category->id == MOB_CATEGORY_LEADERS
     ) {
-        mob* old_leader = lea_ptr->following_group;
+        Mob* old_leader = lea_ptr->following_group;
         lea_ptr->leave_group();
         old_leader->fsm.run_event(MOB_EV_WHISTLED, (void*) lea_ptr);
     }
@@ -1651,7 +1651,7 @@ void leader_fsm::become_active(mob* m, void* info1, void* info2) {
         size_t name_call_sound_idx =
             lea_ptr->lea_type->sound_data_idxs[LEADER_SOUND_NAME_CALL];
         if(name_call_sound_idx != INVALID) {
-            mob_type::sound_t* name_call_sound =
+            MobType::Sound* name_call_sound =
                 &m->type->sounds[name_call_sound_idx];
             game.audio.create_global_sound_source(
                 name_call_sound->sample,
@@ -1669,8 +1669,8 @@ void leader_fsm::become_active(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::become_inactive(mob* m, void* info1, void* info2) {
-    leader* lea_ptr = (leader*) m;
+void leader_fsm::become_inactive(Mob* m, void* info1, void* info2) {
+    Leader* lea_ptr = (Leader*) m;
     lea_ptr->active = false;
     lea_ptr->stop_auto_throwing();
 }
@@ -1683,11 +1683,11 @@ void leader_fsm::become_inactive(mob* m, void* info1, void* info2) {
  * @param info1 Pointer to the leader that called.
  * @param info2 Unused.
  */
-void leader_fsm::called(mob* m, void* info1, void* info2) {
+void leader_fsm::called(Mob* m, void* info1, void* info2) {
     engine_assert(info1 != nullptr, m->print_state_history());
     
-    leader* lea_ptr = (leader*) m;
-    mob* caller = (mob*) info1;
+    Leader* lea_ptr = (Leader*) m;
+    Mob* caller = (Mob*) info1;
     
     leader_fsm::stand_still(m, info1, info2);
     
@@ -1705,11 +1705,11 @@ void leader_fsm::called(mob* m, void* info1, void* info2) {
  * @param info1 Pointer to the leader that called.
  * @param info2 Unused.
  */
-void leader_fsm::called_while_knocked_down(mob* m, void* info1, void* info2) {
+void leader_fsm::called_while_knocked_down(Mob* m, void* info1, void* info2) {
     engine_assert(info1 != nullptr, m->print_state_history());
     
-    leader* lea_ptr = (leader*) m;
-    mob* caller = (mob*) info1;
+    Leader* lea_ptr = (Leader*) m;
+    Mob* caller = (Mob*) info1;
     
     lea_ptr->focus_on_mob(caller);
 }
@@ -1723,8 +1723,8 @@ void leader_fsm::called_while_knocked_down(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::check_boredom_anim_end(mob* m, void* info1, void* info2) {
-    leader* lea_ptr = (leader*) m;
+void leader_fsm::check_boredom_anim_end(Mob* m, void* info1, void* info2) {
+    Leader* lea_ptr = (Leader*) m;
     if(!lea_ptr->in_bored_animation) return;
     m->set_animation(LEADER_ANIM_IDLING);
     lea_ptr->in_bored_animation = false;
@@ -1742,10 +1742,10 @@ void leader_fsm::check_boredom_anim_end(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::check_punch_damage(mob* m, void* info1, void* info2) {
+void leader_fsm::check_punch_damage(Mob* m, void* info1, void* info2) {
     engine_assert(info1 != nullptr, m->print_state_history());
     
-    hitbox_interaction* info = (hitbox_interaction*) info1;
+    HitboxInteraction* info = (HitboxInteraction*) info1;
     
     float damage = 0;
     if(
@@ -1765,8 +1765,8 @@ void leader_fsm::check_punch_damage(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::clear_boredom_data(mob* m, void* info1, void* info2) {
-    leader* lea_ptr = (leader*) m;
+void leader_fsm::clear_boredom_data(Mob* m, void* info1, void* info2) {
+    Leader* lea_ptr = (Leader*) m;
     leader_fsm::clear_timer(m, info1, info2);
     lea_ptr->in_bored_animation = false;
 }
@@ -1779,7 +1779,7 @@ void leader_fsm::clear_boredom_data(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::clear_timer(mob* m, void* info1, void* info2) {
+void leader_fsm::clear_timer(Mob* m, void* info1, void* info2) {
     m->set_timer(0);
 }
 
@@ -1791,11 +1791,11 @@ void leader_fsm::clear_timer(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::decide_pluck_action(mob* m, void* info1, void* info2) {
-    leader* lea_ptr = (leader*) m;
+void leader_fsm::decide_pluck_action(Mob* m, void* info1, void* info2) {
+    Leader* lea_ptr = (Leader*) m;
     
-    dist d;
-    pikmin* new_pikmin = nullptr;
+    Distance d;
+    Pikmin* new_pikmin = nullptr;
     
     if(!lea_ptr->queued_pluck_cancel) {
         new_pikmin =
@@ -1826,7 +1826,7 @@ void leader_fsm::decide_pluck_action(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::die(mob* m, void* info1, void* info2) {
+void leader_fsm::die(Mob* m, void* info1, void* info2) {
     if(game.states.gameplay->unloading) {
         return;
     }
@@ -1855,8 +1855,8 @@ void leader_fsm::die(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::dismiss(mob* m, void* info1, void* info2) {
-    ((leader*) m)->dismiss();
+void leader_fsm::dismiss(Mob* m, void* info1, void* info2) {
+    ((Leader*) m)->dismiss();
 }
 
 
@@ -1867,11 +1867,11 @@ void leader_fsm::dismiss(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
+void leader_fsm::do_throw(Mob* m, void* info1, void* info2) {
     engine_assert(!m->holding.empty(), m->print_state_history());
     
-    leader* leader_ptr = (leader*) m;
-    mob* holding_ptr = leader_ptr->holding[0];
+    Leader* leader_ptr = (Leader*) m;
+    Mob* holding_ptr = leader_ptr->holding[0];
     
     engine_assert(holding_ptr != nullptr, m->print_state_history());
     
@@ -1907,8 +1907,8 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::enter_active(mob* m, void* info1, void* info2) {
-    ((leader*) m)->is_in_walking_anim = false;
+void leader_fsm::enter_active(Mob* m, void* info1, void* info2) {
+    ((Leader*) m)->is_in_walking_anim = false;
     m->set_animation(
         LEADER_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
     );
@@ -1922,7 +1922,7 @@ void leader_fsm::enter_active(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::enter_idle(mob* m, void* info1, void* info2) {
+void leader_fsm::enter_idle(Mob* m, void* info1, void* info2) {
     m->unfocus_from_mob();
     m->set_animation(
         LEADER_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
@@ -1941,7 +1941,7 @@ void leader_fsm::enter_idle(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::fall_asleep(mob* m, void* info1, void* info2) {
+void leader_fsm::fall_asleep(Mob* m, void* info1, void* info2) {
     leader_fsm::dismiss(m, nullptr, nullptr);
     m->stop_chasing();
     
@@ -1959,7 +1959,7 @@ void leader_fsm::fall_asleep(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::fall_down_pit(mob* m, void* info1, void* info2) {
+void leader_fsm::fall_down_pit(Mob* m, void* info1, void* info2) {
     m->leave_group();
     m->set_health(true, true, -0.2);
     m->invuln_period.start();
@@ -1974,9 +1974,9 @@ void leader_fsm::fall_down_pit(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::finish_called_anim(mob* m, void* info1, void* info2) {
-    leader* lea_ptr = (leader*) m;
-    mob* caller = lea_ptr->focused_mob;
+void leader_fsm::finish_called_anim(Mob* m, void* info1, void* info2) {
+    Leader* lea_ptr = (Leader*) m;
+    Mob* caller = lea_ptr->focused_mob;
     
     if(lea_ptr) {
         leader_fsm::join_group(m, (void*) caller, info2);
@@ -1994,9 +1994,9 @@ void leader_fsm::finish_called_anim(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::finish_drinking(mob* m, void* info1, void* info2) {
+void leader_fsm::finish_drinking(Mob* m, void* info1, void* info2) {
     engine_assert(m->focused_mob != nullptr, m->print_state_history());
-    drop* dro_ptr = (drop*) m->focused_mob;
+    Drop* dro_ptr = (Drop*) m->focused_mob;
     
     switch(dro_ptr->dro_type->effect) {
     case DROP_EFFECT_INCREASE_SPRAYS: {
@@ -2024,8 +2024,8 @@ void leader_fsm::finish_drinking(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::finish_getting_up(mob* m, void* info1, void* info2) {
-    mob* prev_focused_mob = m->focused_mob;
+void leader_fsm::finish_getting_up(Mob* m, void* info1, void* info2) {
+    Mob* prev_focused_mob = m->focused_mob;
     
     if(m == game.states.gameplay->cur_leader_ptr) {
         m->fsm.set_state(LEADER_STATE_ACTIVE);
@@ -2051,8 +2051,8 @@ void leader_fsm::finish_getting_up(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::finish_pluck(mob* m, void* info1, void* info2) {
-    leader* lea_ptr = (leader*) m;
+void leader_fsm::finish_pluck(Mob* m, void* info1, void* info2) {
+    Leader* lea_ptr = (Leader*) m;
     lea_ptr->stop_chasing();
     lea_ptr->set_animation(LEADER_ANIM_IDLING);
 }
@@ -2065,7 +2065,7 @@ void leader_fsm::finish_pluck(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::get_knocked_back(mob* m, void* info1, void* info2) {
+void leader_fsm::get_knocked_back(Mob* m, void* info1, void* info2) {
     m->unfocus_from_mob();
     m->set_animation(LEADER_ANIM_KNOCKED_BACK);
 }
@@ -2078,8 +2078,8 @@ void leader_fsm::get_knocked_back(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::get_knocked_down(mob* m, void* info1, void* info2) {
-    leader* lea_ptr = (leader*) m;
+void leader_fsm::get_knocked_down(Mob* m, void* info1, void* info2) {
+    Leader* lea_ptr = (Leader*) m;
     
     lea_ptr->stop_turning();
     
@@ -2100,8 +2100,8 @@ void leader_fsm::get_knocked_down(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::get_up_faster(mob* m, void* info1, void* info2) {
-    leader* lea_ptr = (leader*) m;
+void leader_fsm::get_up_faster(Mob* m, void* info1, void* info2) {
+    Leader* lea_ptr = (Leader*) m;
     
     //Let's use the "temp" variable to specify whether or not
     //it already received the getting up timer bonus.
@@ -2125,11 +2125,11 @@ void leader_fsm::get_up_faster(mob* m, void* info1, void* info2) {
  * @param info1 Pointer to the Pikmin to be plucked.
  * @param info2 Unused.
  */
-void leader_fsm::go_pluck(mob* m, void* info1, void* info2) {
+void leader_fsm::go_pluck(Mob* m, void* info1, void* info2) {
     engine_assert(info1 != nullptr, m->print_state_history());
     
-    leader* lea_ptr = (leader*) m;
-    pikmin* pik_ptr = (pikmin*) info1;
+    Leader* lea_ptr = (Leader*) m;
+    Pikmin* pik_ptr = (Pikmin*) info1;
     
     lea_ptr->queued_pluck_cancel = false;
     
@@ -2137,7 +2137,7 @@ void leader_fsm::go_pluck(mob* m, void* info1, void* info2) {
     lea_ptr->pluck_target = pik_ptr;
     lea_ptr->chase(
         &pik_ptr->pos, &pik_ptr->z,
-        point(), 0.0f,
+        Point(), 0.0f,
         CHASE_FLAG_ANY_ANGLE,
         pik_ptr->radius + lea_ptr->radius
     );
@@ -2145,7 +2145,7 @@ void leader_fsm::go_pluck(mob* m, void* info1, void* info2) {
     
     //Now for the leaders in the group.
     for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); l++) {
-        leader* l2_ptr = game.states.gameplay->mobs.leaders[l];
+        Leader* l2_ptr = game.states.gameplay->mobs.leaders[l];
         if(l2_ptr->following_group == lea_ptr) {
             l2_ptr->fsm.run_event(LEADER_EV_MUST_SEARCH_SEED);
         }
@@ -2162,11 +2162,11 @@ void leader_fsm::go_pluck(mob* m, void* info1, void* info2) {
  * @param info1 Pointer to the mob to grab.
  * @param info2 Unused.
  */
-void leader_fsm::grab_mob(mob* m, void* info1, void* info2) {
+void leader_fsm::grab_mob(Mob* m, void* info1, void* info2) {
     engine_assert(info1 != nullptr, m->print_state_history());
     
-    leader* lea_ptr = (leader*) m;
-    mob* grabbed_mob = (mob*) info1;
+    Leader* lea_ptr = (Leader*) m;
+    Mob* grabbed_mob = (Mob*) info1;
     lea_ptr->hold(
         grabbed_mob, INVALID,
         LEADER::HELD_GROUP_MEMBER_H_DIST, LEADER::HELD_GROUP_MEMBER_ANGLE,
@@ -2185,10 +2185,10 @@ void leader_fsm::grab_mob(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::hazard_pikmin_share(mob* m, void* info1, void* info2) {
+void leader_fsm::hazard_pikmin_share(Mob* m, void* info1, void* info2) {
     if(m->holding.empty() || !m->holding[0]) return;
     
-    hazard* h_ptr = (hazard*) info1;
+    Hazard* h_ptr = (Hazard*) info1;
     if(m->holding[0]->on_hazard == h_ptr) {
         //The mob is already really on the hazard.
         return;
@@ -2217,8 +2217,8 @@ void leader_fsm::hazard_pikmin_share(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::idle_or_rejoin(mob* m, void* info1, void* info2) {
-    leader* lea_ptr = (leader*) m;
+void leader_fsm::idle_or_rejoin(Mob* m, void* info1, void* info2) {
+    Leader* lea_ptr = (Leader*) m;
     
     if(lea_ptr->following_group) {
         lea_ptr->fsm.set_state(LEADER_STATE_IN_GROUP_CHASING);
@@ -2236,10 +2236,10 @@ void leader_fsm::idle_or_rejoin(mob* m, void* info1, void* info2) {
  * @param info1 Pointer to the leader that called.
  * @param info2 Unused.
  */
-void leader_fsm::join_group(mob* m, void* info1, void* info2) {
-    leader* lea_ptr = (leader*) m;
-    leader* caller = (leader*) info1;
-    mob* top_leader = caller;
+void leader_fsm::join_group(Mob* m, void* info1, void* info2) {
+    Leader* lea_ptr = (Leader*) m;
+    Leader* caller = (Leader*) info1;
+    Mob* top_leader = caller;
     
     if(top_leader->following_group) {
         //If this leader is following another one,
@@ -2249,7 +2249,7 @@ void leader_fsm::join_group(mob* m, void* info1, void* info2) {
     
     top_leader->add_to_group(lea_ptr);
     while(!lea_ptr->group->members.empty()) {
-        mob* member = lea_ptr->group->members[0];
+        Mob* member = lea_ptr->group->members[0];
         member->leave_group();
         top_leader->add_to_group(member);
     }
@@ -2263,7 +2263,7 @@ void leader_fsm::join_group(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::land(mob* m, void* info1, void* info2) {
+void leader_fsm::land(Mob* m, void* info1, void* info2) {
     m->stop_chasing();
     m->speed.x = m->speed.y = 0;
     
@@ -2284,10 +2284,10 @@ void leader_fsm::land(mob* m, void* info1, void* info2) {
  * @param info1 Points to the hazard.
  * @param info2 Unused.
  */
-void leader_fsm::left_hazard(mob* m, void* info1, void* info2) {
+void leader_fsm::left_hazard(Mob* m, void* info1, void* info2) {
     engine_assert(info1 != nullptr, m->print_state_history());
     
-    hazard* h = (hazard*) info1;
+    Hazard* h = (Hazard*) info1;
     if(h->associated_liquid) {
         m->remove_particle_generator(MOB_PARTICLE_GENERATOR_ID_WAVE_RING);
     }
@@ -2301,7 +2301,7 @@ void leader_fsm::left_hazard(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::lose_momentum(mob* m, void* info1, void* info2) {
+void leader_fsm::lose_momentum(Mob* m, void* info1, void* info2) {
     m->stop_chasing();
     m->speed.x = m->speed.y = 0;
 }
@@ -2314,12 +2314,12 @@ void leader_fsm::lose_momentum(mob* m, void* info1, void* info2) {
  * @param info1 Pointer to the movement info structure.
  * @param info2 Unused.
  */
-void leader_fsm::move(mob* m, void* info1, void* info2) {
+void leader_fsm::move(Mob* m, void* info1, void* info2) {
     engine_assert(info1 != nullptr, m->print_state_history());
     
-    leader* lea_ptr = (leader*) m;
-    movement_t* mov = (movement_t*) info1;
-    point final_coords;
+    Leader* lea_ptr = (Leader*) m;
+    MovementInfo* mov = (MovementInfo*) info1;
+    Point final_coords;
     float dummy_angle;
     float dummy_magnitude;
     mov->get_info(
@@ -2338,8 +2338,8 @@ void leader_fsm::move(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::notify_pikmin_release(mob* m, void* info1, void* info2) {
-    leader* lea_ptr = (leader*) m;
+void leader_fsm::notify_pikmin_release(Mob* m, void* info1, void* info2) {
+    Leader* lea_ptr = (Leader*) m;
     if(lea_ptr->holding.empty()) return;
     lea_ptr->holding[0]->fsm.run_event(MOB_EV_RELEASED);
 }
@@ -2352,7 +2352,7 @@ void leader_fsm::notify_pikmin_release(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::punch(mob* m, void* info1, void* info2) {
+void leader_fsm::punch(Mob* m, void* info1, void* info2) {
     m->stop_turning();
     m->set_animation(LEADER_ANIM_PUNCHING);
 }
@@ -2366,8 +2366,8 @@ void leader_fsm::punch(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::queue_stop_auto_pluck(mob* m, void* info1, void* info2) {
-    leader* lea_ptr = (leader*) m;
+void leader_fsm::queue_stop_auto_pluck(Mob* m, void* info1, void* info2) {
+    Leader* lea_ptr = (Leader*) m;
     lea_ptr->queued_pluck_cancel = true;
 }
 
@@ -2379,7 +2379,7 @@ void leader_fsm::queue_stop_auto_pluck(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::release(mob* m, void* info1, void* info2) {
+void leader_fsm::release(Mob* m, void* info1, void* info2) {
     if(m->holding.empty()) return;
     //Reset the Pikmin's position to match the leader's,
     //so that the leader doesn't release the Pikmin inside a wall behind them.
@@ -2398,11 +2398,11 @@ void leader_fsm::release(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::search_seed(mob* m, void* info1, void* info2) {
-    leader* lea_ptr = (leader*) m;
+void leader_fsm::search_seed(Mob* m, void* info1, void* info2) {
+    Leader* lea_ptr = (Leader*) m;
     
-    dist d;
-    pikmin* new_pikmin = nullptr;
+    Distance d;
+    Pikmin* new_pikmin = nullptr;
     if(!lea_ptr->queued_pluck_cancel) {
         new_pikmin =
             get_closest_sprout(lea_ptr->pos, &d, false);
@@ -2421,8 +2421,8 @@ void leader_fsm::search_seed(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::set_correct_active_anim(mob* m, void* info1, void* info2) {
-    leader* lea_ptr = (leader*) m;
+void leader_fsm::set_correct_active_anim(Mob* m, void* info1, void* info2) {
+    Leader* lea_ptr = (Leader*) m;
     bool must_use_walking_anim =
         lea_ptr->is_active_walking || lea_ptr->is_active_turning;
         
@@ -2443,8 +2443,8 @@ void leader_fsm::set_correct_active_anim(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::set_is_turning_false(mob* m, void* info1, void* info2) {
-    leader* lea_ptr = (leader*) m;
+void leader_fsm::set_is_turning_false(Mob* m, void* info1, void* info2) {
+    Leader* lea_ptr = (Leader*) m;
     if(lea_ptr->is_active_turning) {
         lea_ptr->is_active_turning = false;
         leader_fsm::set_correct_active_anim(m, info1, info2);
@@ -2459,8 +2459,8 @@ void leader_fsm::set_is_turning_false(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::set_is_turning_true(mob* m, void* info1, void* info2) {
-    leader* lea_ptr = (leader*) m;
+void leader_fsm::set_is_turning_true(Mob* m, void* info1, void* info2) {
+    Leader* lea_ptr = (Leader*) m;
     if(!lea_ptr->is_active_turning) {
         lea_ptr->is_active_turning = true;
         leader_fsm::set_correct_active_anim(m, info1, info2);
@@ -2475,8 +2475,8 @@ void leader_fsm::set_is_turning_true(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::set_is_walking_false(mob* m, void* info1, void* info2) {
-    leader* lea_ptr = (leader*) m;
+void leader_fsm::set_is_walking_false(Mob* m, void* info1, void* info2) {
+    Leader* lea_ptr = (Leader*) m;
     if(lea_ptr->is_active_walking) {
         lea_ptr->is_active_walking = false;
         leader_fsm::set_correct_active_anim(m, info1, info2);
@@ -2491,8 +2491,8 @@ void leader_fsm::set_is_walking_false(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::set_is_walking_true(mob* m, void* info1, void* info2) {
-    leader* lea_ptr = (leader*) m;
+void leader_fsm::set_is_walking_true(Mob* m, void* info1, void* info2) {
+    Leader* lea_ptr = (Leader*) m;
     if(!lea_ptr->is_active_walking) {
         lea_ptr->is_active_walking = true;
         leader_fsm::set_correct_active_anim(m, info1, info2);
@@ -2507,7 +2507,7 @@ void leader_fsm::set_is_walking_true(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::set_pain_anim(mob* m, void* info1, void* info2) {
+void leader_fsm::set_pain_anim(Mob* m, void* info1, void* info2) {
     m->set_animation(LEADER_ANIM_PAIN);
 }
 
@@ -2520,10 +2520,10 @@ void leader_fsm::set_pain_anim(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::signal_stop_auto_pluck(mob* m, void* info1, void* info2) {
-    leader* lea_ptr = (leader*) m;
+void leader_fsm::signal_stop_auto_pluck(Mob* m, void* info1, void* info2) {
+    Leader* lea_ptr = (Leader*) m;
     for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); l++) {
-        leader* l2_ptr = game.states.gameplay->mobs.leaders[l];
+        Leader* l2_ptr = game.states.gameplay->mobs.leaders[l];
         if(l2_ptr->following_group == lea_ptr) {
             l2_ptr->fsm.run_event(LEADER_EV_CANCEL);
         }
@@ -2538,9 +2538,9 @@ void leader_fsm::signal_stop_auto_pluck(mob* m, void* info1, void* info2) {
  * @param info1 Pointer to a size_t with the spray's index.
  * @param info2 Unused.
  */
-void leader_fsm::spray(mob* m, void* info1, void* info2) {
+void leader_fsm::spray(Mob* m, void* info1, void* info2) {
     size_t spray_idx = *((size_t*) info1);
-    spray_type &spray_type_ref = *game.config.spray_order[spray_idx];
+    SprayType &spray_type_ref = *game.config.spray_order[spray_idx];
     
     if(game.states.gameplay->spray_stats[spray_idx].nr_sprays == 0) {
         m->fsm.set_state(LEADER_STATE_ACTIVE);
@@ -2552,7 +2552,7 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
     float shoot_angle =
         cursor_angle + ((spray_type_ref.angle) ? TAU / 2 : 0);
         
-    unordered_set<mob*> affected_mobs;
+    unordered_set<Mob*> affected_mobs;
     
     if(spray_type_ref.affects_user) {
         affected_mobs.insert(m);
@@ -2560,7 +2560,7 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
     
     if(spray_type_ref.group) {
         for(size_t gm = 0; gm < m->group->members.size(); gm++) {
-            mob* gm_ptr = m->group->members[gm];
+            Mob* gm_ptr = m->group->members[gm];
             if(
                 gm_ptr->type->category->id != MOB_CATEGORY_PIKMIN &&
                 spray_type_ref.group_pikmin_only
@@ -2580,11 +2580,11 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
         for(
             size_t am = 0; am < game.states.gameplay->mobs.all.size(); am++
         ) {
-            mob* am_ptr = game.states.gameplay->mobs.all[am];
+            Mob* am_ptr = game.states.gameplay->mobs.all[am];
             if(am_ptr == m) continue;
             
             if(
-                dist(m->pos, am_ptr->pos) >
+                Distance(m->pos, am_ptr->pos) >
                 spray_type_ref.distance_range + am_ptr->radius
             ) {
                 continue;
@@ -2608,18 +2608,18 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
         );
     }
     
-    point particle_speed_vector =
+    Point particle_speed_vector =
         rotate_point(
-            point(spray_type_ref.distance_range * 0.8, 0),
+            Point(spray_type_ref.distance_range * 0.8, 0),
             spray_type_ref.angle
         );
-    particle_generator pg =
+    ParticleGenerator pg =
         standard_particle_gen_setup(
             game.sys_content_names.part_spray, m
         );
-    adjust_keyframe_interpolator_values<point>(
+    adjust_keyframe_interpolator_values<Point>(
         pg.base_particle.linear_speed,
-    [ = ] (const point &) { return particle_speed_vector; }
+    [ = ] (const Point &) { return particle_speed_vector; }
     );
     adjust_keyframe_interpolator_values<ALLEGRO_COLOR>(
         pg.base_particle.color,
@@ -2653,7 +2653,7 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::stand_still(mob* m, void* info1, void* info2) {
+void leader_fsm::stand_still(Mob* m, void* info1, void* info2) {
     m->stop_circling();
     m->stop_following_path();
     m->stop_chasing();
@@ -2668,8 +2668,8 @@ void leader_fsm::stand_still(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::start_boredom_anim(mob* m, void* info1, void* info2) {
-    leader* lea_ptr = (leader*) m;
+void leader_fsm::start_boredom_anim(Mob* m, void* info1, void* info2) {
+    Leader* lea_ptr = (Leader*) m;
     
     size_t looking_around_anim_idx =
         m->type->anim_db->find_animation("looking_around");
@@ -2702,7 +2702,7 @@ void leader_fsm::start_boredom_anim(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::start_chasing_leader(mob* m, void* info1, void* info2) {
+void leader_fsm::start_chasing_leader(Mob* m, void* info1, void* info2) {
     m->focus_on_mob(m->following_group);
     leader_fsm::update_in_group_chasing(m, nullptr, nullptr);
 }
@@ -2715,8 +2715,8 @@ void leader_fsm::start_chasing_leader(mob* m, void* info1, void* info2) {
  * @param info1 Pointer to the drop mob.
  * @param info2 Unused.
  */
-void leader_fsm::start_drinking(mob* m, void* info1, void* info2) {
-    mob* drop_ptr = (mob*) info1;
+void leader_fsm::start_drinking(Mob* m, void* info1, void* info2) {
+    Mob* drop_ptr = (Mob*) info1;
     m->leave_group();
     m->stop_chasing();
     m->focus_on_mob(drop_ptr);
@@ -2732,7 +2732,7 @@ void leader_fsm::start_drinking(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::start_getting_up(mob* m, void* info1, void* info2) {
+void leader_fsm::start_getting_up(Mob* m, void* info1, void* info2) {
     m->set_animation(LEADER_ANIM_GETTING_UP);
 }
 
@@ -2744,11 +2744,11 @@ void leader_fsm::start_getting_up(mob* m, void* info1, void* info2) {
  * @param info1 Destination point.
  * @param info2 Unused.
  */
-void leader_fsm::start_go_here(mob* m, void* info1, void* info2) {
-    leader* lea_ptr = (leader*) m;
-    point destination = *((point*) info1);
+void leader_fsm::start_go_here(Mob* m, void* info1, void* info2) {
+    Leader* lea_ptr = (Leader*) m;
+    Point destination = *((Point*) info1);
     
-    path_follow_settings settings;
+    PathFollowSettings settings;
     settings.target_point = destination;
     
     float speed = lea_ptr->get_base_speed();
@@ -2781,8 +2781,8 @@ void leader_fsm::start_go_here(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::start_pluck(mob* m, void* info1, void* info2) {
-    leader* lea_ptr = (leader*) m;
+void leader_fsm::start_pluck(Mob* m, void* info1, void* info2) {
+    Leader* lea_ptr = (Leader*) m;
     engine_assert(lea_ptr->pluck_target != nullptr, m->print_state_history());
     
     lea_ptr->pluck_target->fsm.run_event(MOB_EV_PLUCKED, (void*) lea_ptr);
@@ -2799,8 +2799,8 @@ void leader_fsm::start_pluck(mob* m, void* info1, void* info2) {
  * @param info1 Points to the track mob.
  * @param info2 Unused.
  */
-void leader_fsm::start_riding_track(mob* m, void* info1, void* info2) {
-    track* tra_ptr = (track*) info1;
+void leader_fsm::start_riding_track(Mob* m, void* info1, void* info2) {
+    Track* tra_ptr = (Track*) info1;
     
     leader_fsm::dismiss(m, nullptr, nullptr);
     m->leave_group();
@@ -2813,7 +2813,7 @@ void leader_fsm::start_riding_track(mob* m, void* info1, void* info2) {
         checkpoints.push_back(c);
     }
     m->track_info =
-        new track_t(
+        new TrackRideInfo(
         tra_ptr, checkpoints, tra_ptr->tra_type->ride_speed
     );
     
@@ -2839,7 +2839,7 @@ void leader_fsm::start_riding_track(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::start_waking_up(mob* m, void* info1, void* info2) {
+void leader_fsm::start_waking_up(Mob* m, void* info1, void* info2) {
     m->become_uncarriable();
     delete m->delivery_info;
     m->delivery_info = nullptr;
@@ -2854,8 +2854,8 @@ void leader_fsm::start_waking_up(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::stop_auto_pluck(mob* m, void* info1, void* info2) {
-    leader* lea_ptr = (leader*) m;
+void leader_fsm::stop_auto_pluck(Mob* m, void* info1, void* info2) {
+    Leader* lea_ptr = (Leader*) m;
     if(lea_ptr->pluck_target) {
         lea_ptr->stop_chasing();
         lea_ptr->pluck_target->pluck_reserved = false;
@@ -2874,7 +2874,7 @@ void leader_fsm::stop_auto_pluck(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::stop_being_thrown(mob* m, void* info1, void* info2) {
+void leader_fsm::stop_being_thrown(Mob* m, void* info1, void* info2) {
     //Remove the throw particle generator.
     m->remove_particle_generator(MOB_PARTICLE_GENERATOR_ID_THROW);
 }
@@ -2887,8 +2887,8 @@ void leader_fsm::stop_being_thrown(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::stop_go_here(mob* m, void* info1, void* info2) {
-    leader* lea_ptr = (leader*) m;
+void leader_fsm::stop_go_here(Mob* m, void* info1, void* info2) {
+    Leader* lea_ptr = (Leader*) m;
     lea_ptr->stop_following_path();
     lea_ptr->mid_go_here = false;
 }
@@ -2901,7 +2901,7 @@ void leader_fsm::stop_go_here(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::stop_in_group(mob* m, void* info1, void* info2) {
+void leader_fsm::stop_in_group(Mob* m, void* info1, void* info2) {
     m->stop_chasing();
     leader_fsm::set_is_walking_false(m, nullptr, nullptr);
     m->set_timer(
@@ -2917,8 +2917,8 @@ void leader_fsm::stop_in_group(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::stop_whistle(mob* m, void* info1, void* info2) {
-    ((leader*) m)->stop_whistling();
+void leader_fsm::stop_whistle(Mob* m, void* info1, void* info2) {
+    ((Leader*) m)->stop_whistling();
 }
 
 
@@ -2929,7 +2929,7 @@ void leader_fsm::stop_whistle(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::tick_active_state(mob* m, void* info1, void* info2) {
+void leader_fsm::tick_active_state(Mob* m, void* info1, void* info2) {
     m->face(get_angle(m->pos, game.states.gameplay->leader_cursor_w), nullptr);
     
     bool should_be_turning =
@@ -2949,12 +2949,12 @@ void leader_fsm::tick_active_state(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::tick_track_ride(mob* m, void* info1, void* info2) {
+void leader_fsm::tick_track_ride(Mob* m, void* info1, void* info2) {
     engine_assert(m->track_info != nullptr, m->print_state_history());
     
     if(m->tick_track_ride()) {
         //Finished!
-        if(((leader*) m)->active) {
+        if(((Leader*) m)->active) {
             m->fsm.set_state(LEADER_STATE_ACTIVE, nullptr, nullptr);
         } else {
             m->fsm.set_state(LEADER_STATE_IDLING, nullptr, nullptr);
@@ -2970,12 +2970,12 @@ void leader_fsm::tick_track_ride(mob* m, void* info1, void* info2) {
  * @param info1 Pointer to the hazard.
  * @param info2 Unused.
  */
-void leader_fsm::touched_hazard(mob* m, void* info1, void* info2) {
+void leader_fsm::touched_hazard(Mob* m, void* info1, void* info2) {
     engine_assert(info1 != nullptr, m->print_state_history());
     
-    leader* l = (leader*) m;
-    hazard* h = (hazard*) info1;
-    mob_type::vulnerability_t vuln = m->get_hazard_vulnerability(h);
+    Leader* l = (Leader*) m;
+    Hazard* h = (Hazard*) info1;
+    MobType::Vulnerability vuln = m->get_hazard_vulnerability(h);
     
     if(!vuln.status_to_apply || !vuln.status_overrides) {
         for(size_t e = 0; e < h->effects.size(); e++) {
@@ -2999,7 +2999,7 @@ void leader_fsm::touched_hazard(mob* m, void* info1, void* info2) {
         }
         
         if(!already_generating) {
-            particle_generator pg =
+            ParticleGenerator pg =
                 standard_particle_gen_setup(
                     game.sys_content_names.part_wave_ring, m
                 );
@@ -3022,11 +3022,11 @@ void leader_fsm::touched_hazard(mob* m, void* info1, void* info2) {
  * @param info1 Pointer to the spray type.
  * @param info2 Unused.
  */
-void leader_fsm::touched_spray(mob* m, void* info1, void* info2) {
+void leader_fsm::touched_spray(Mob* m, void* info1, void* info2) {
     engine_assert(info1 != nullptr, m->print_state_history());
     
-    leader* l = (leader*) m;
-    spray_type* s = (spray_type*) info1;
+    Leader* l = (Leader*) m;
+    SprayType* s = (SprayType*) info1;
     
     for(size_t e = 0; e < s->effects.size(); e++) {
         l->apply_status_effect(s->effects[e], false, false);
@@ -3043,9 +3043,9 @@ void leader_fsm::touched_spray(mob* m, void* info1, void* info2) {
  *   If nullptr, the final destination is calculated in this function.
  * @param info2 Unused.
  */
-void leader_fsm::update_in_group_chasing(mob* m, void* info1, void* info2) {
-    leader* lea_ptr = (leader*) m;
-    point target_pos;
+void leader_fsm::update_in_group_chasing(Mob* m, void* info1, void* info2) {
+    Leader* lea_ptr = (Leader*) m;
+    Point target_pos;
     float target_dist;
     
     lea_ptr->get_group_spot_info(&target_pos, &target_dist);
@@ -3066,8 +3066,8 @@ void leader_fsm::update_in_group_chasing(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void leader_fsm::whistle(mob* m, void* info1, void* info2) {
-    ((leader*) m)->start_whistling();
+void leader_fsm::whistle(Mob* m, void* info1, void* info2) {
+    ((Leader*) m)->start_whistling();
 }
 
 
@@ -3079,10 +3079,10 @@ void leader_fsm::whistle(mob* m, void* info1, void* info2) {
  * @param info1 Pointer to the leader that called.
  * @param info2 Unused.
  */
-void leader_fsm::whistled_while_riding(mob* m, void* info1, void* info2) {
+void leader_fsm::whistled_while_riding(Mob* m, void* info1, void* info2) {
     engine_assert(m->track_info, m->print_state_history());
     
-    track* tra_ptr = (track*) (m->track_info->m);
+    Track* tra_ptr = (Track*) (m->track_info->m);
     
     if(!tra_ptr->tra_type->cancellable_with_whistle) {
         return;

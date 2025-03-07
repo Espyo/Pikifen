@@ -78,7 +78,7 @@ enum RESOURCE_STATE {
  * @brief A type of resource (gold nugget, bridge fragment,
  * spray ingredient, etc.).
  */
-class resource_type : public mob_type {
+class ResourceType : public MobType {
 
 public:
 
@@ -111,8 +111,8 @@ public:
     
     //--- Function declarations ---
     
-    resource_type();
-    void load_cat_properties(data_node* file) override;
+    ResourceType();
+    void load_cat_properties(DataNode* file) override;
     anim_conversion_vector get_anim_conversions() const override;
     
 };

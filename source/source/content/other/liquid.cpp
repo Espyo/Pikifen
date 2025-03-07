@@ -25,12 +25,12 @@ using std::vector;
  * @param node Data node to load from.
  * @param level Level to load at.
  */
-void liquid::load_from_data_node(data_node* node, CONTENT_LOAD_LEVEL level) {
+void Liquid::load_from_data_node(DataNode* node, CONTENT_LOAD_LEVEL level) {
     //Content metadata.
     load_metadata_from_data_node(node);
     
     //Standard data.
-    reader_setter rs(node);
+    ReaderSetter rs(node);
     string animation_str;
     
     rs.set("body_color", body_color);

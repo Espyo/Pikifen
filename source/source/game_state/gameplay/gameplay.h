@@ -111,13 +111,13 @@ enum BOSS_MUSIC_STATE {
 };
 
 
-struct msg_box_t;
+struct MessageBox;
 
 
 /**
  * @brief Standard gameplay state. This is where the action happens.
  */
-class gameplay_state : public game_state {
+class GameplayState : public GameState {
 
 public:
 
@@ -134,16 +134,16 @@ public:
     float area_time_passed = 0.0f;
     
     //Timer used to fade out the area's title when the area is entered.
-    timer area_title_fade_timer = timer(GAMEPLAY::AREA_TITLE_FADE_DURATION);
+    Timer area_title_fade_timer = Timer(GAMEPLAY::AREA_TITLE_FADE_DURATION);
     
     //Leaders available to control.
-    vector<leader*> available_leaders;
+    vector<Leader*> available_leaders;
     
     //Fog effect buffer.
     ALLEGRO_BITMAP* bmp_fog = nullptr;
     
     //Closest to player 1's leader, for the previous, current, next type.
-    mob* closest_group_member[3] = { nullptr, nullptr, nullptr };
+    Mob* closest_group_member[3] = { nullptr, nullptr, nullptr };
     
     //Is the group member closest to player 1's leader distant?
     bool closest_group_member_distant = false;
@@ -152,7 +152,7 @@ public:
     size_t cur_leader_idx = 0;
     
     //Pointer to player 1's leader. Cache for convenience.
-    leader* cur_leader_ptr = nullptr;
+    Leader* cur_leader_ptr = nullptr;
     
     //What day it is, in-game.
     size_t day = 1;
@@ -164,73 +164,73 @@ public:
     float delta_t_mult = 1.0f;
     
     //Replay of the gameplay.
-    replay gameplay_replay;
+    Replay gameplay_replay;
     
     //How many seconds of actual playtime. Only counts on player control.
     float gameplay_time_passed = 0.0f;
     
     //Information about the in-game HUD.
-    hud_t* hud = nullptr;
+    Hud* hud = nullptr;
     
     //Position of the last enemy killed. LARGE_FLOAT for none.
-    point last_enemy_killed_pos;
+    Point last_enemy_killed_pos;
     
     //Position of the last leader to get hurt. LARGE_FLOAT for none.
-    point last_hurt_leader_pos;
+    Point last_hurt_leader_pos;
     
     //Position of the last Pikmin born. LARGE_FLOAT for none.
-    point last_pikmin_born_pos;
+    Point last_pikmin_born_pos;
     
     //Position of the last Pikmin that died. LARGE_FLOAT for none.
-    point last_pikmin_death_pos;
+    Point last_pikmin_death_pos;
     
     //Position of the last ship that got a treasure. LARGE_FLOAT for none.
-    point last_ship_that_got_treasure_pos;
+    Point last_ship_that_got_treasure_pos;
     
     //Player 1's leader cursor, in screen coordinates.
-    point leader_cursor_s;
+    Point leader_cursor_s;
     
     //Sector that player 1's leader cursor is on, if any.
-    sector* leader_cursor_sector = nullptr;
+    Sector* leader_cursor_sector = nullptr;
     
     //Player 1's leader cursor, in world coordinates.
-    point leader_cursor_w;
+    Point leader_cursor_w;
     
     //List of all mobs in the area.
-    mob_lists mobs;
+    MobLists mobs;
     
     //Information about the message box currently active on player 1, if any.
-    msg_box_t* msg_box = nullptr;
+    MessageBox* msg_box = nullptr;
     
     //ID of the next mob to be created.
     size_t next_mob_id = 0;
     
     //Current notification.
-    notification_t notification;
+    Notification notification;
     
     //Manager of all particles.
-    particle_manager particles;
+    ParticleManager particles;
     
     //Path manager.
-    path_manager path_mgr;
+    PathManager path_mgr;
     
     //Path of the folder of the area to be loaded.
     string path_of_area_to_load;
     
     //All droplets of precipitation.
-    vector<point> precipitation;
+    vector<Point> precipitation;
     
     //Time until the next drop of precipitation.
-    timer precipitation_timer;
+    Timer precipitation_timer;
     
     //Spray that player 1 has currently selected.
     size_t selected_spray = 0;
     
     //How many of each spray/ingredients player 1 has.
-    vector<spray_stats_t> spray_stats;
+    vector<SprayStats> spray_stats;
     
     //All types of subgroups.
-    subgroup_type_manager subgroup_types;
+    SubgroupTypeManager subgroup_types;
     
     //Angle at which player 1 is swarming.
     float swarm_angle = 0.0f;
@@ -239,13 +239,13 @@ public:
     float swarm_magnitude = 0.0f;
     
     //Destination of player 1's throw.
-    point throw_dest;
+    Point throw_dest;
     
     //Mob that player 1's throw will land on, if any.
-    mob* throw_dest_mob = nullptr;
+    Mob* throw_dest_mob = nullptr;
     
     //Sector that player 1's throw will land on, if any.
-    sector* throw_dest_sector = nullptr;
+    Sector* throw_dest_sector = nullptr;
     
     //Are we currently loading the gameplay state?
     bool loading = false;
@@ -257,7 +257,7 @@ public:
     bool went_to_results = false;
     
     //Information about player 1's whistle.
-    whistle_t whistle;
+    Whistle whistle;
     
     //IDs of mobs remaining for the current mission goal, if applicable.
     unordered_set<size_t> mission_remaining_mob_ids;
@@ -311,25 +311,25 @@ public:
     int old_mission_score = 0;
     
     //GUI item with the mission score's text.
-    gui_item* mission_score_cur_text = nullptr;
+    GuiItem* mission_score_cur_text = nullptr;
     
     //Mission goal current count in the previous frame.
     int old_mission_goal_cur = 0;
     
     //GUI item with the mission goal current count's text.
-    gui_item* mission_goal_cur_text = nullptr;
+    GuiItem* mission_goal_cur_text = nullptr;
     
     //Mission goal primary fail condition count in the previous frame.
     int old_mission_fail_1_cur = 0;
     
     //GUI item with the mission primary fail condition current count's text.
-    gui_item* mission_fail_1_cur_text = nullptr;
+    GuiItem* mission_fail_1_cur_text = nullptr;
     
     //Mission goal secondary fail condition count in the previous frame.
     int old_mission_fail_2_cur = 0;
     
     //GUI item with the mission secondary fail condition current count's text.
-    gui_item* mission_fail_2_cur_text = nullptr;
+    GuiItem* mission_fail_2_cur_text = nullptr;
     
     //How many leaders are in the mission exit. Cache for convenience.
     size_t cur_leaders_in_mission_exit = 0;
@@ -374,10 +374,10 @@ public:
     float radar_zoom = PAUSE_MENU::RADAR_DEF_ZOOM;
     
     //Number of Pikmin born so far, per type.
-    map<pikmin_type*, long> pikmin_born_per_type;
+    map<PikminType*, long> pikmin_born_per_type;
     
     //Number of Pikmin lost so far, per type.
-    map<pikmin_type*, long> pikmin_deaths_per_type;
+    map<PikminType*, long> pikmin_deaths_per_type;
     
     
     //--- Function declarations ---
@@ -386,11 +386,11 @@ public:
     void leave(const GAMEPLAY_LEAVE_TARGET target);
     void start_leaving(const GAMEPLAY_LEAVE_TARGET target);
     void change_spray_count(size_t type_idx, signed int amount);
-    size_t get_amount_of_field_pikmin(const pikmin_type* filter = nullptr);
-    size_t get_amount_of_group_pikmin(const pikmin_type* filter = nullptr);
-    size_t get_amount_of_idle_pikmin(const pikmin_type* filter = nullptr);
-    long get_amount_of_onion_pikmin(const pikmin_type* filter = nullptr);
-    long get_amount_of_total_pikmin(const pikmin_type* filter = nullptr);
+    size_t get_amount_of_field_pikmin(const PikminType* filter = nullptr);
+    size_t get_amount_of_group_pikmin(const PikminType* filter = nullptr);
+    size_t get_amount_of_idle_pikmin(const PikminType* filter = nullptr);
+    long get_amount_of_onion_pikmin(const PikminType* filter = nullptr);
+    long get_amount_of_total_pikmin(const PikminType* filter = nullptr);
     void is_near_enemy_and_boss(bool* near_enemy, bool* near_boss);
     void update_available_leaders();
     void update_closest_group_members();
@@ -407,22 +407,22 @@ private:
     //--- Members ---
     
     //Points to an interactable close enough for player 1 to use, if any.
-    interactable* close_to_interactable_to_use = nullptr;
+    Interactable* close_to_interactable_to_use = nullptr;
     
     //Points to a nest-like object close enough for player 1 to open, if any.
-    pikmin_nest_t* close_to_nest_to_open = nullptr;
+    PikminNest* close_to_nest_to_open = nullptr;
     
     //Points to a Pikmin close enough for player 1 to pluck, if any.
-    pikmin* close_to_pikmin_to_pluck = nullptr;
+    Pikmin* close_to_pikmin_to_pluck = nullptr;
     
     //Points to a ship close enough for player 1 to heal in, if any.
-    ship* close_to_ship_to_heal = nullptr;
+    Ship* close_to_ship_to_heal = nullptr;
     
     //Ligthten player 1's cursor by this due to leader/cursor height difference.
     float cursor_height_diff_light = 0.0f;
     
     //Movement of player 1's cursor via non-mouse means.
-    movement_t cursor_movement;
+    MovementInfo cursor_movement;
     
     //Is input enabled, for reasons outside the ready_for_input variable?
     bool is_input_allowed = false;
@@ -431,13 +431,13 @@ private:
     ALLEGRO_BITMAP* lightmap_bmp = nullptr;
     
     //Movement of player 1's leader.
-    movement_t leader_movement;
+    MovementInfo leader_movement;
     
     //Information about the current Onion menu, if any.
-    onion_menu_t* onion_menu = nullptr;
+    OnionMenu* onion_menu = nullptr;
     
     //Information about the current pause menu, if any.
-    pause_menu_t* pause_menu = nullptr;
+    PauseMenu* pause_menu = nullptr;
     
     //Is the gameplay paused?
     bool paused = false;
@@ -448,13 +448,13 @@ private:
     bool ready_for_input = false;
     
     //Timer for the next replay state save.
-    timer replay_timer;
+    Timer replay_timer;
     
     //Is player 1 holding the "swarm to cursor" button?
     bool swarm_cursor = false;
     
     //Reach of player 1's swarm.
-    movement_t swarm_movement;
+    MovementInfo swarm_movement;
     
     
     //--- Function declarations ---
@@ -487,33 +487,33 @@ private:
     ALLEGRO_BITMAP* generate_fog_bitmap(
         float near_radius, float far_radius
     );
-    mob* get_closest_group_member(const subgroup_type* type, bool* distant = nullptr);
-    void handle_player_action(const player_action &action);
+    Mob* get_closest_group_member(const SubgroupType* type, bool* distant = nullptr);
+    void handle_player_action(const PlayerAction &action);
     void init_hud();
     bool is_mission_clear_met();
     bool is_mission_fail_met(MISSION_FAIL_COND* reason);
     void load_game_content();
     void mark_area_cells_active(
-        const point &top_left, const point &bottom_right
+        const Point &top_left, const Point &bottom_right
     );
     void mark_area_cells_active(
         int from_x, int to_x, int from_y, int to_y
     );
-    void process_mob_interactions(mob* m_ptr, size_t m);
+    void process_mob_interactions(Mob* m_ptr, size_t m);
     void process_mob_misc_interactions(
-        mob* m_ptr, mob* m2_ptr, size_t m, size_t m2,
-        const dist &d, const dist &d_between,
-        vector<pending_intermob_event> &pending_intermob_events
+        Mob* m_ptr, Mob* m2_ptr, size_t m, size_t m2,
+        const Distance &d, const Distance &d_between,
+        vector<PendingIntermobEvent> &pending_intermob_events
     );
     void process_mob_reaches(
-        mob* m_ptr, mob* m2_ptr, size_t m, size_t m2, const dist &d_between,
-        vector<pending_intermob_event> &pending_intermob_events
+        Mob* m_ptr, Mob* m2_ptr, size_t m, size_t m2, const Distance &d_between,
+        vector<PendingIntermobEvent> &pending_intermob_events
     );
     void process_mob_touches(
-        mob* m_ptr, mob* m2_ptr, size_t m, size_t m2, dist &d
+        Mob* m_ptr, Mob* m2_ptr, size_t m, size_t m2, Distance &d
     );
     void process_system_key_press(int keycode);
-    bool should_ignore_player_action(const player_action &action);
+    bool should_ignore_player_action(const PlayerAction &action);
     void unload_game_content();
     void update_area_active_cells();
     void update_mob_is_active_flag();
@@ -524,12 +524,12 @@ private:
 /**
  * @brief Info about the current on-screen message box, if any.
  */
-struct msg_box_t {
+struct MessageBox {
 
     //--- Members ---
     
     //Full list of message tokens, per line.
-    vector<vector<string_token> > tokens_per_line;
+    vector<vector<StringToken> > tokens_per_line;
     
     //Icon that represents the speaker, if any.
     ALLEGRO_BITMAP* speaker_icon = nullptr;
@@ -570,7 +570,7 @@ struct msg_box_t {
     
     //--- Function declarations ---
     
-    msg_box_t(const string &text, ALLEGRO_BITMAP* speaker_icon);
+    MessageBox(const string &text, ALLEGRO_BITMAP* speaker_icon);
     void advance();
     void close();
     void tick(float delta_t);

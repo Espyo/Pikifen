@@ -20,8 +20,8 @@
 /**
  * @brief Constructs a new leader category object.
  */
-leader_category::leader_category() :
-    mob_category(
+LeaderCategory::LeaderCategory() :
+    MobCategory(
         MOB_CATEGORY_LEADERS, "leader",
         "Leader", "Leaders",
         "leaders", al_map_rgb(73, 204, 204)
@@ -33,7 +33,7 @@ leader_category::leader_category() :
 /**
  * @brief Clears the list of registered types of leader.
  */
-void leader_category::clear_types() {
+void LeaderCategory::clear_types() {
     for(auto &t : game.content.mob_types.list.leader) {
         delete t.second;
     }
@@ -49,10 +49,10 @@ void leader_category::clear_types() {
  * @param angle Starting angle.
  * @return The mob.
  */
-mob* leader_category::create_mob(
-    const point &pos, mob_type* type, float angle
+Mob* LeaderCategory::create_mob(
+    const Point &pos, MobType* type, float angle
 ) {
-    leader* m = new leader(pos, (leader_type*) type, angle);
+    Leader* m = new Leader(pos, (LeaderType*) type, angle);
     game.states.gameplay->mobs.leaders.push_back(m);
     game.states.gameplay->update_available_leaders();
     return m;
@@ -64,8 +64,8 @@ mob* leader_category::create_mob(
  *
  * @return The type.
  */
-mob_type* leader_category::create_type() {
-    return new leader_type();
+MobType* LeaderCategory::create_type() {
+    return new LeaderType();
 }
 
 
@@ -74,15 +74,15 @@ mob_type* leader_category::create_type() {
  *
  * @param m The mob to erase.
  */
-void leader_category::erase_mob(mob* m) {
+void LeaderCategory::erase_mob(Mob* m) {
     game.states.gameplay->mobs.leaders.erase(
         find(
             game.states.gameplay->mobs.leaders.begin(),
             game.states.gameplay->mobs.leaders.end(),
-            (leader*) m
+            (Leader*) m
         )
     );
-    leader_fsm::die((leader*) m, nullptr, nullptr);
+    leader_fsm::die((Leader*) m, nullptr, nullptr);
 }
 
 
@@ -93,7 +93,7 @@ void leader_category::erase_mob(mob* m) {
  * @param internal_name Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-mob_type* leader_category::get_type(const string &internal_name) const {
+MobType* LeaderCategory::get_type(const string &internal_name) const {
     auto it = game.content.mob_types.list.leader.find(internal_name);
     if(it == game.content.mob_types.list.leader.end()) return nullptr;
     return it->second;
@@ -105,7 +105,7 @@ mob_type* leader_category::get_type(const string &internal_name) const {
  *
  * @param list This list gets filled with the mob type internal names.
  */
-void leader_category::get_type_names(vector<string> &list) const {
+void LeaderCategory::get_type_names(vector<string> &list) const {
     for(auto &t : game.content.mob_types.list.leader) {
         list.push_back(t.first);
     }
@@ -118,6 +118,6 @@ void leader_category::get_type_names(vector<string> &list) const {
  * @param internal_name Internal name of the mob type.
  * @param type Mob type to register.
  */
-void leader_category::register_type(const string &internal_name, mob_type* type) {
-    game.content.mob_types.list.leader[internal_name] = (leader_type*) type;
+void LeaderCategory::register_type(const string &internal_name, MobType* type) {
+    game.content.mob_types.list.leader[internal_name] = (LeaderType*) type;
 }

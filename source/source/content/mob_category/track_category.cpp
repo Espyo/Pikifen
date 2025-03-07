@@ -19,8 +19,8 @@
 /**
  * @brief Constructs a new track category object.
  */
-track_category::track_category() :
-    mob_category(
+TrackCategory::TrackCategory() :
+    MobCategory(
         MOB_CATEGORY_TRACKS, "track",
         "Track", "Tracks",
         "tracks", al_map_rgb(152, 139, 204)
@@ -32,7 +32,7 @@ track_category::track_category() :
 /**
  * @brief Clears the list of registered types of tracks.
  */
-void track_category::clear_types() {
+void TrackCategory::clear_types() {
     for(auto &t : game.content.mob_types.list.track) {
         delete t.second;
     }
@@ -48,10 +48,10 @@ void track_category::clear_types() {
  * @param angle Starting angle.
  * @return The mob.
  */
-mob* track_category::create_mob(
-    const point &pos, mob_type* type, float angle
+Mob* TrackCategory::create_mob(
+    const Point &pos, MobType* type, float angle
 ) {
-    track* m = new track(pos, (track_type*) type, angle);
+    Track* m = new Track(pos, (TrackType*) type, angle);
     game.states.gameplay->mobs.tracks.push_back(m);
     return m;
 }
@@ -62,8 +62,8 @@ mob* track_category::create_mob(
  *
  * @return The type.
  */
-mob_type* track_category::create_type() {
-    return new track_type();
+MobType* TrackCategory::create_type() {
+    return new TrackType();
 }
 
 
@@ -72,12 +72,12 @@ mob_type* track_category::create_type() {
  *
  * @param m The mob to erase.
  */
-void track_category::erase_mob(mob* m) {
+void TrackCategory::erase_mob(Mob* m) {
     game.states.gameplay->mobs.tracks.erase(
         find(
             game.states.gameplay->mobs.tracks.begin(),
             game.states.gameplay->mobs.tracks.end(),
-            (track*) m
+            (Track*) m
         )
     );
 }
@@ -90,7 +90,7 @@ void track_category::erase_mob(mob* m) {
  * @param internal_name Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-mob_type* track_category::get_type(const string &internal_name) const {
+MobType* TrackCategory::get_type(const string &internal_name) const {
     auto it = game.content.mob_types.list.track.find(internal_name);
     if(it == game.content.mob_types.list.track.end()) return nullptr;
     return it->second;
@@ -102,7 +102,7 @@ mob_type* track_category::get_type(const string &internal_name) const {
  *
  * @param list This list gets filled with the mob type internal names.
  */
-void track_category::get_type_names(vector<string> &list) const {
+void TrackCategory::get_type_names(vector<string> &list) const {
     for(auto &t : game.content.mob_types.list.track) {
         list.push_back(t.first);
     }
@@ -115,6 +115,6 @@ void track_category::get_type_names(vector<string> &list) const {
  * @param internal_name Internal name of the mob type.
  * @param type Mob type to register.
  */
-void track_category::register_type(const string &internal_name, mob_type* type) {
-    game.content.mob_types.list.track[internal_name] = (track_type*) type;
+void TrackCategory::register_type(const string &internal_name, MobType* type) {
+    game.content.mob_types.list.track[internal_name] = (TrackType*) type;
 }

@@ -17,9 +17,9 @@
  * @brief Functions about the ship's finite state machine and behavior.
  */
 namespace ship_fsm {
-void create_fsm(mob_type* typ);
+void create_fsm(MobType* typ);
 
-void receive_mob(mob* m, void* info1, void* info2);
-void set_anim(mob* m, void* info1, void* info2);
-void start_delivery(mob* m, void* info1, void* info2);
+void receive_mob(Mob* m, void* info1, void* info2);
+void set_anim(Mob* m, void* info1, void* info2);
+void start_delivery(Mob* m, void* info1, void* info2);
 }

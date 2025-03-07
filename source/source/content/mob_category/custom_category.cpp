@@ -18,8 +18,8 @@
 /**
  * @brief Constructs a new custom category object.
  */
-custom_category::custom_category() :
-    mob_category(
+CustomCategory::CustomCategory() :
+    MobCategory(
         MOB_CATEGORY_CUSTOM, "custom",
         "Custom", "Custom",
         "custom", al_map_rgb(178, 73, 204)
@@ -31,7 +31,7 @@ custom_category::custom_category() :
 /**
  * @brief Clears the list of registered types of custom mob.
  */
-void custom_category::clear_types() {
+void CustomCategory::clear_types() {
     for(auto &t : game.content.mob_types.list.custom) {
         delete t.second;
     }
@@ -47,10 +47,10 @@ void custom_category::clear_types() {
  * @param angle Starting angle.
  * @return The mob.
  */
-mob* custom_category::create_mob(
-    const point &pos, mob_type* type, float angle
+Mob* CustomCategory::create_mob(
+    const Point &pos, MobType* type, float angle
 ) {
-    mob* m = new mob(pos, type, angle);
+    Mob* m = new Mob(pos, type, angle);
     return m;
 }
 
@@ -60,8 +60,8 @@ mob* custom_category::create_mob(
  *
  * @return The type.
  */
-mob_type* custom_category::create_type() {
-    return new mob_type(MOB_CATEGORY_CUSTOM);
+MobType* CustomCategory::create_type() {
+    return new MobType(MOB_CATEGORY_CUSTOM);
 }
 
 
@@ -70,7 +70,7 @@ mob_type* custom_category::create_type() {
  *
  * @param m The mob to erase.
  */
-void custom_category::erase_mob(mob* m) { }
+void CustomCategory::erase_mob(Mob* m) { }
 
 
 /**
@@ -80,7 +80,7 @@ void custom_category::erase_mob(mob* m) { }
  * @param internal_name Internal name of the mob type to get.
  * @return The type.
  */
-mob_type* custom_category::get_type(const string &internal_name) const {
+MobType* CustomCategory::get_type(const string &internal_name) const {
     auto it = game.content.mob_types.list.custom.find(internal_name);
     if(it == game.content.mob_types.list.custom.end()) return nullptr;
     return it->second;
@@ -92,7 +92,7 @@ mob_type* custom_category::get_type(const string &internal_name) const {
  *
  * @param list This list gets filled with the mob type internal names.
  */
-void custom_category::get_type_names(vector<string> &list) const {
+void CustomCategory::get_type_names(vector<string> &list) const {
     for(auto &t : game.content.mob_types.list.custom) {
         list.push_back(t.first);
     }
@@ -105,6 +105,6 @@ void custom_category::get_type_names(vector<string> &list) const {
  * @param internal_name Internal name of the mob type.
  * @param type Mob type to register.
  */
-void custom_category::register_type(const string &internal_name, mob_type* type) {
+void CustomCategory::register_type(const string &internal_name, MobType* type) {
     game.content.mob_types.list.custom[internal_name] = type;
 }

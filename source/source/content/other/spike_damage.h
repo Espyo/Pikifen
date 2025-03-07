@@ -28,7 +28,7 @@ using std::vector;
  * When a mob is attacked, it can instantly deal some damage to the mob
  * that attacked it.
  */
-class spike_damage_type : public content {
+class SpikeDamageType : public Content {
 
 public:
 
@@ -44,20 +44,20 @@ public:
     bool is_damage_ratio = false;
     
     //Particle generator to use to generate particles, if any.
-    particle_generator* particle_gen = nullptr;
+    ParticleGenerator* particle_gen = nullptr;
     
     //Offset the particles by this much, horizontally.
-    point particle_offset_pos;
+    Point particle_offset_pos;
     
     //Offset the particles by this much, vertically.
     float particle_offset_z = 0.0f;
     
     //Apply this status effect when the spike damage is applied.
-    status_type* status_to_apply = nullptr;
+    StatusType* status_to_apply = nullptr;
     
     
     //--- Function declarations ---
     
-    void load_from_data_node(data_node* node);
+    void load_from_data_node(DataNode* node);
     
 };

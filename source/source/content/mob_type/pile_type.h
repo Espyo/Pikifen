@@ -46,14 +46,14 @@ enum PILE_STATE {
  * @brief A type of resource pile (gold nugget pile,
  * Burgeoning Spiderwort, etc.).
  */
-class pile_type : public mob_type, public mob_type_with_anim_groups {
+class PileType : public MobType, public MobTypeWithAnimGroups {
 
 public:
 
     //--- Members ---
     
     //Contents of the pile.
-    resource_type* contents = nullptr;
+    ResourceType* contents = nullptr;
     
     //How often the pile recharges its contents, if it at all does.
     float recharge_interval = 0.0f;
@@ -85,8 +85,8 @@ public:
     
     //--- Function declarations ---
     
-    pile_type();
-    void load_cat_properties(data_node* file) override;
+    PileType();
+    void load_cat_properties(DataNode* file) override;
     anim_conversion_vector get_anim_conversions() const override;
     
 };

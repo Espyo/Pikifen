@@ -23,8 +23,8 @@
  * @param type Drop type this mob belongs to.
  * @param angle Starting angle.
  */
-drop::drop(const point &pos, drop_type* type, float angle) :
-    mob(pos, type, angle),
+Drop::Drop(const Point &pos, DropType* type, float angle) :
+    Mob(pos, type, angle),
     dro_type(type),
     doses_left(dro_type->total_doses) {
     
@@ -36,14 +36,14 @@ drop::drop(const point &pos, drop_type* type, float angle) :
  * @brief Draws a drop, but with its size reflecting the doses left or
  * the process of vanishing.
  */
-void drop::draw_mob() {
-    sprite* cur_s_ptr;
-    sprite* next_s_ptr;
+void Drop::draw_mob() {
+    Sprite* cur_s_ptr;
+    Sprite* next_s_ptr;
     float interpolation_factor;
     get_sprite_data(&cur_s_ptr, &next_s_ptr, &interpolation_factor);
     if(!cur_s_ptr) return;
     
-    bitmap_effect_t eff;
+    BitmapEffect eff;
     get_sprite_bitmap_effects(
         cur_s_ptr, next_s_ptr, interpolation_factor,
         &eff,
@@ -65,7 +65,7 @@ void drop::draw_mob() {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void drop::tick_class_specifics(float delta_t) {
+void Drop::tick_class_specifics(float delta_t) {
     float intended_scale;
     
     if(doses_left == dro_type->total_doses) {

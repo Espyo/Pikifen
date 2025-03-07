@@ -21,14 +21,14 @@
  * by certain mobs. When that happens, some effect is triggered, depending
  * on what the drop is.
  */
-class drop : public mob {
+class Drop : public Mob {
 
 public:
 
     //--- Members ---
     
     //What type of drop it is.
-    drop_type* dro_type = nullptr;
+    DropType* dro_type = nullptr;
     
     //Current scale. Used for shrinking.
     float cur_scale = 1.0f;
@@ -39,7 +39,7 @@ public:
     
     //--- Function declarations ---
     
-    drop(const point &pos, drop_type* dro_type, float angle);
+    Drop(const Point &pos, DropType* dro_type, float angle);
     void draw_mob() override;
     
 protected:

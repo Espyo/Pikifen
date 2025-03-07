@@ -25,9 +25,9 @@ using std::unordered_set;
 using std::vector;
 
 
-class mob;
-struct sector;
-struct path_link;
+class Mob;
+struct Sector;
+struct PathLink;
 
 
 //Types of path link.
@@ -166,15 +166,15 @@ extern const float MIN_STOP_RADIUS;
 /**
  * @brief Settings about how a mob should follow a path.
  */
-struct path_follow_settings {
+struct PathFollowSettings {
 
     //--- Members ---
     
     //Target location.
-    point target_point;
+    Point target_point;
     
     //If the target is a mob, this points to it.
-    mob* target_mob = nullptr;
+    Mob* target_mob = nullptr;
     
     //For the final chase, from the last path stop to
     //the destination, use this for the target distance parameter.
@@ -184,16 +184,16 @@ struct path_follow_settings {
     bitmask_8_t flags = 0;
     
     //Invulnerabilities of the mob/carriers.
-    vector<hazard*> invulnerabilities;
+    vector<Hazard*> invulnerabilities;
     
     //If not empty, only follow path links with this label.
     string label;
     
     //Faked start point. Used to fake calculations.
-    point faked_start;
+    Point faked_start;
     
     //Faked end point. Used to fake calculations.
-    point faked_end;
+    Point faked_end;
     
 };
 
@@ -207,12 +207,12 @@ struct path_follow_settings {
  * Then they move stop by stop, following the connections, until they
  * reach the final stop and go wherever they need.
  */
-struct path_stop {
+struct PathStop {
 
     //--- Members ---
     
     //Coordinates.
-    point pos;
+    Point pos;
     
     //Radius.
     float radius = PATHS::MIN_STOP_RADIUS;
@@ -224,24 +224,24 @@ struct path_stop {
     string label;
     
     //Links that go to other stops.
-    vector<path_link*> links;
+    vector<PathLink*> links;
     
     //Sector it's on. Only applicable during gameplay. Cache for performance.
-    sector* sector_ptr = nullptr;
+    Sector* sector_ptr = nullptr;
     
     
     //--- Function declarations ---
     
-    explicit path_stop(
-        const point &pos = point(),
-        const vector<path_link*> &links = vector<path_link*>()
+    explicit PathStop(
+        const Point &pos = Point(),
+        const vector<PathLink*> &links = vector<PathLink*>()
     );
-    ~path_stop();
-    void clone(path_stop* destination) const;
-    void add_link(path_stop* other_stop, bool normal);
-    path_link* get_link(const path_stop* other_stop) const;
-    void remove_link(const path_link* link_ptr);
-    void remove_link(const path_stop* other_stop);
+    ~PathStop();
+    void clone(PathStop* destination) const;
+    void add_link(PathStop* other_stop, bool normal);
+    PathLink* get_link(const PathStop* other_stop) const;
+    void remove_link(const PathLink* link_ptr);
+    void remove_link(const PathStop* other_stop);
     void calculate_dists();
     void calculate_dists_plus_neighbors();
     
@@ -252,15 +252,15 @@ struct path_stop {
  * @brief Info about a path link. A path stop can link to N other
  * path stops, and this structure holds information about a connection.
  */
-struct path_link {
+struct PathLink {
 
     //--- Members ---
     
     //Pointer to the path stop at the start.
-    path_stop* start_ptr = nullptr;
+    PathStop* start_ptr = nullptr;
     
     //Pointer to the path stop at the end.
-    path_stop* end_ptr = nullptr;
+    PathStop* end_ptr = nullptr;
     
     //Index number of the path stop at the end.
     size_t end_idx = 0;
@@ -277,9 +277,9 @@ struct path_link {
     
     //--- Function declarations ---
     
-    path_link(path_stop* start_ptr, path_stop* end_ptr, size_t end_idx);
-    void calculate_dist(const path_stop* start_ptr);
-    void clone(path_link* destination) const;
+    PathLink(PathStop* start_ptr, PathStop* end_ptr, size_t end_idx);
+    void calculate_dist(const PathStop* start_ptr);
+    void clone(PathLink* destination) const;
     bool is_one_way() const;
     
 };
@@ -297,55 +297,55 @@ struct path_link {
  * obstacle affected them or not, is because this obstacle could've freed
  * a different route.
  */
-struct path_manager {
+struct PathManager {
 
     //--- Members ---
     
     //Known obstructions.
-    map<path_link*, unordered_set<mob*> > obstructions;
+    map<PathLink*, unordered_set<Mob*> > obstructions;
     
     //Stops known to have hazards.
-    unordered_set<path_stop*> hazardous_stops;
+    unordered_set<PathStop*> hazardous_stops;
     
     
     //--- Function declarations ---
     
     void handle_area_load();
-    void handle_obstacle_add(mob* m);
-    void handle_obstacle_remove(mob* m);
-    void handle_sector_hazard_change(sector* sector_ptr);
+    void handle_obstacle_add(Mob* m);
+    void handle_obstacle_remove(Mob* m);
+    void handle_sector_hazard_change(Sector* sector_ptr);
     void clear();
     
 };
 
 
 bool can_take_path_stop(
-    path_stop* stop_ptr, const path_follow_settings &settings,
+    PathStop* stop_ptr, const PathFollowSettings &settings,
     PATH_BLOCK_REASON* out_reason = nullptr
 );
 bool can_take_path_stop(
-    const path_stop* stop_ptr, const path_follow_settings &settings,
-    sector* sector_ptr, PATH_BLOCK_REASON* out_reason = nullptr
+    const PathStop* stop_ptr, const PathFollowSettings &settings,
+    Sector* sector_ptr, PATH_BLOCK_REASON* out_reason = nullptr
 );
 bool can_traverse_path_link(
-    path_link* link_ptr, const path_follow_settings &settings,
+    PathLink* link_ptr, const PathFollowSettings &settings,
     PATH_BLOCK_REASON* out_reason = nullptr
 );
 void depth_first_search(
-    vector<path_stop*> &nodes,
-    unordered_set<path_stop*> &visited, path_stop* start
+    vector<PathStop*> &nodes,
+    unordered_set<PathStop*> &visited, PathStop* start
 );
 PATH_RESULT a_star(
-    vector<path_stop*> &out_path,
-    path_stop* start_node, path_stop* end_node,
-    const path_follow_settings &settings,
+    vector<PathStop*> &out_path,
+    PathStop* start_node, PathStop* end_node,
+    const PathFollowSettings &settings,
     float* out_total_dist
 );
 PATH_RESULT get_path(
-    const point &start, const point &end,
-    const path_follow_settings &settings,
-    vector<path_stop*> &full_path, float* out_total_dist,
-    path_stop** out_start_stop, path_stop** out_end_stop
+    const Point &start, const Point &end,
+    const PathFollowSettings &settings,
+    vector<PathStop*> &full_path, float* out_total_dist,
+    PathStop** out_start_stop, PathStop** out_end_stop
 );
 string path_block_reason_to_string(PATH_BLOCK_REASON reason);
 string path_result_to_string(PATH_RESULT result);

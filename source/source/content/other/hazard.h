@@ -25,8 +25,8 @@ using std::string;
 using std::vector;
 
 
-struct liquid;
-class status_type;
+struct Liquid;
+class StatusType;
 
 
 /**
@@ -37,7 +37,7 @@ class status_type;
  * this is not necessarily the case. A hazard is just an abstract danger,
  * not an object that emits said danger.
  */
-struct hazard : public content {
+struct Hazard : public Content {
 
     //--- Members ---
     
@@ -45,17 +45,17 @@ struct hazard : public content {
     ALLEGRO_COLOR main_color = COLOR_EMPTY;
     
     //Status effects for mobs that interact with this hazard.
-    vector<status_type*> effects;
-
+    vector<StatusType*> effects;
+    
     //Do sectors with this hazard block vulnerable Pikmin paths?
     bool blocks_paths = true;
     
     //If it's got an associated liquid, this points to it.
-    liquid* associated_liquid = nullptr;
+    Liquid* associated_liquid = nullptr;
     
     
     //--- Function declarations ---
     
-    void load_from_data_node(data_node* node);
+    void load_from_data_node(DataNode* node);
     
 };

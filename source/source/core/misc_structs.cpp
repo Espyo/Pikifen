@@ -139,8 +139,8 @@ const string NAMES[N_MAKER_TOOLS] = {
  *
  * @param file File to load from.
  */
-void sys_content_names_t::load(data_node* file) {
-    reader_setter gra_rs(file->get_child_by_name("graphics"));
+void SystemContentNames::load(DataNode* file) {
+    ReaderSetter gra_rs(file->get_child_by_name("graphics"));
     
     gra_rs.set("bright_circle", bmp_bright_circle);
     gra_rs.set("bright_ring", bmp_bright_ring);
@@ -189,7 +189,7 @@ void sys_content_names_t::load(data_node* file) {
     gra_rs.set("title_screen_bg", bmp_title_screen_bg);
     gra_rs.set("wave_ring", bmp_wave_ring);
     
-    reader_setter fnt_rs(file->get_child_by_name("fonts"));
+    ReaderSetter fnt_rs(file->get_child_by_name("fonts"));
     
     fnt_rs.set("area_name", fnt_area_name);
     fnt_rs.set("counter", fnt_counter);
@@ -201,7 +201,7 @@ void sys_content_names_t::load(data_node* file) {
     fnt_rs.set("standard", fnt_standard);
     fnt_rs.set("value", fnt_value);
     
-    reader_setter snd_rs(file->get_child_by_name("sounds"));
+    ReaderSetter snd_rs(file->get_child_by_name("sounds"));
     
     snd_rs.set("attack", sound_attack);
     snd_rs.set("camera", sound_camera);
@@ -210,18 +210,18 @@ void sys_content_names_t::load(data_node* file) {
     snd_rs.set("menu_select", sound_menu_select);
     snd_rs.set("switch_pikmin", sound_switch_pikmin);
     
-    reader_setter sng_rs(file->get_child_by_name("songs"));
+    ReaderSetter sng_rs(file->get_child_by_name("songs"));
     
     sng_rs.set("boss", sng_boss);
     sng_rs.set("boss_victory", sng_boss_victory);
     sng_rs.set("editors", sng_editors);
     sng_rs.set("menus", sng_menus);
     
-    reader_setter ani_rs(file->get_child_by_name("animations"));
+    ReaderSetter ani_rs(file->get_child_by_name("animations"));
     
     ani_rs.set("sparks", anim_sparks);
     
-    reader_setter par_rs(file->get_child_by_name("particle_generators"));
+    ReaderSetter par_rs(file->get_child_by_name("particle_generators"));
     
     par_rs.set("converter_insertion", part_converter_insertion);
     par_rs.set("ding", part_ding);
@@ -250,8 +250,8 @@ void sys_content_names_t::load(data_node* file) {
  * @param report_errors Only issues errors if this is true.
  * @return The audio stream.
  */
-ALLEGRO_AUDIO_STREAM* audio_stream_manager::do_load(
-    const string &name, data_node* node, bool report_errors
+ALLEGRO_AUDIO_STREAM* AudioStreamManager::do_load(
+    const string &name, DataNode* node, bool report_errors
 ) {
     const auto &it = game.content.song_tracks.manifests.find(name);
     string path =
@@ -271,7 +271,7 @@ ALLEGRO_AUDIO_STREAM* audio_stream_manager::do_load(
  *
  * @param asset Audio stream to unload.
  */
-void audio_stream_manager::do_unload(ALLEGRO_AUDIO_STREAM* asset) {
+void AudioStreamManager::do_unload(ALLEGRO_AUDIO_STREAM* asset) {
     al_drain_audio_stream(asset);
     game.unregister_audio_stream_source(asset);
     al_destroy_audio_stream(asset);
@@ -286,8 +286,8 @@ void audio_stream_manager::do_unload(ALLEGRO_AUDIO_STREAM* asset) {
  * @param report_errors Only issues errors if this is true.
  * @return The bitmap.
  */
-ALLEGRO_BITMAP* bitmap_manager::do_load(
-    const string &name, data_node* node, bool report_errors
+ALLEGRO_BITMAP* BitmapManager::do_load(
+    const string &name, DataNode* node, bool report_errors
 ) {
     const auto &it = game.content.bitmaps.manifests.find(name);
     string path =
@@ -303,7 +303,7 @@ ALLEGRO_BITMAP* bitmap_manager::do_load(
  *
  * @param asset Bitmap to unload.
  */
-void bitmap_manager::do_unload(ALLEGRO_BITMAP* asset) {
+void BitmapManager::do_unload(ALLEGRO_BITMAP* asset) {
     if(asset != game.bmp_error) {
         al_destroy_bitmap(asset);
     }
@@ -315,7 +315,7 @@ void bitmap_manager::do_unload(ALLEGRO_BITMAP* asset) {
  *
  * @param new_pos Coordinates to place the camera at.
  */
-void camera_t::set_pos(const point &new_pos) {
+void Camera::set_pos(const Point &new_pos) {
     pos = new_pos;
     target_pos = new_pos;
 }
@@ -326,7 +326,7 @@ void camera_t::set_pos(const point &new_pos) {
  *
  * @param new_zoom Zoom to set to.
  */
-void camera_t::set_zoom(float new_zoom) {
+void Camera::set_zoom(float new_zoom) {
     zoom = new_zoom;
     target_zoom = new_zoom;
 }
@@ -337,7 +337,7 @@ void camera_t::set_zoom(float new_zoom) {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void camera_t::tick(float delta_t) {
+void Camera::tick(float delta_t) {
     pos.x +=
         (target_pos.x - pos.x) * (GAMEPLAY::CAMERA_SMOOTHNESS_MULT * delta_t);
     pos.y +=
@@ -351,9 +351,9 @@ void camera_t::tick(float delta_t) {
  * @brief Updates the camera's visibility box,
  * based on the screen_to_world_transform transformation.
  */
-void camera_t::update_box() {
-    box[0] = point(0.0f);
-    box[1] = point(game.win_w, game.win_h);
+void Camera::update_box() {
+    box[0] = Point(0.0f);
+    box[1] = Point(game.win_w, game.win_h);
     al_transform_coordinates(
         &game.screen_to_world_transform,
         &box[0].x, &box[0].y
@@ -377,7 +377,7 @@ void camera_t::update_box() {
  *
  * @param s Full error description.
  */
-void error_manager::emit_in_gameplay(const string &s) {
+void ErrorManager::emit_in_gameplay(const string &s) {
     string info_str =
         "\n\n\n"
         "ERROR: " + s + "\n\n"
@@ -391,7 +391,7 @@ void error_manager::emit_in_gameplay(const string &s) {
  *
  * @param s Full error description.
  */
-void error_manager::log_to_console(const string &s) {
+void ErrorManager::log_to_console(const string &s) {
     std::cout << s << std::endl;
 }
 
@@ -401,7 +401,7 @@ void error_manager::log_to_console(const string &s) {
  *
  * @param s Full error description.
  */
-void error_manager::log_to_file(const string &s) {
+void ErrorManager::log_to_file(const string &s) {
     string prev_error_log;
     string output = "";
     
@@ -453,7 +453,7 @@ void error_manager::log_to_file(const string &s) {
 /**
  * @brief Prepares everything for an area load.
  */
-void error_manager::prepare_area_load() {
+void ErrorManager::prepare_area_load() {
     nr_errors_on_area_load = nr_session_errors;
     first_area_load_error.clear();
 }
@@ -466,7 +466,7 @@ void error_manager::prepare_area_load() {
  * @param d If not null, this will be used to obtain the file name
  * and line that caused the error.
  */
-void error_manager::report(const string &s, const data_node* d) {
+void ErrorManager::report(const string &s, const DataNode* d) {
     string full_error = s;
     if(d) {
         full_error += " (" + d->file_path;
@@ -490,7 +490,7 @@ void error_manager::report(const string &s, const data_node* d) {
  * This will override whatever is in the "info" window, which is likely
  * the latest error, but that's okay since this information is more important.
  */
-void error_manager::report_area_load_errors() {
+void ErrorManager::report_area_load_errors() {
     if(nr_session_errors <= nr_errors_on_area_load) return;
     
     size_t nr_errors_found =
@@ -514,7 +514,7 @@ void error_manager::report_area_load_errors() {
  *
  * @return Whether it had errors.
  */
-bool error_manager::session_has_errors() {
+bool ErrorManager::session_has_errors() {
     return nr_session_errors > 0;
 }
 
@@ -522,7 +522,7 @@ bool error_manager::session_has_errors() {
 /**
  * @brief Draws the fade overlay, if there is a fade in progress.
  */
-void fade_manager::draw() {
+void FadeManager::draw() {
     if(is_fading()) {
         unsigned char alpha = (game.fade_mgr.get_perc_left()) * 255;
         al_draw_filled_rectangle(
@@ -540,7 +540,7 @@ void fade_manager::draw() {
  *
  * @return The percentage.
  */
-float fade_manager::get_perc_left() const {
+float FadeManager::get_perc_left() const {
     return time_left / GAME::FADE_DURATION;
 }
 
@@ -550,7 +550,7 @@ float fade_manager::get_perc_left() const {
  *
  * @return Whether it is a fade in.
  */
-bool fade_manager::is_fade_in() const {
+bool FadeManager::is_fade_in() const {
     return fade_in;
 }
 
@@ -560,7 +560,7 @@ bool fade_manager::is_fade_in() const {
  *
  * @return Whether it is in progress.
  */
-bool fade_manager::is_fading() const {
+bool FadeManager::is_fading() const {
     return time_left > 0;
 }
 
@@ -571,7 +571,7 @@ bool fade_manager::is_fading() const {
  * @param is_fade_in If true, this fades in. If false, fades out.
  * @param on_end Code to run when the fade finishes.
  */
-void fade_manager::start_fade(
+void FadeManager::start_fade(
     bool is_fade_in, const std::function<void()> &on_end
 ) {
     time_left = GAME::FADE_DURATION;
@@ -585,7 +585,7 @@ void fade_manager::start_fade(
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void fade_manager::tick(float delta_t) {
+void FadeManager::tick(float delta_t) {
     if(time_left == 0) return;
     time_left -= delta_t;
     if(time_left <= 0) {
@@ -598,7 +598,7 @@ void fade_manager::tick(float delta_t) {
 /**
  * @brief Constructs a new maker tools info object.
  */
-maker_tools_t::maker_tools_t() :
+MakerTools::MakerTools() :
     enabled(true),
     area_image_padding(32.0f),
     area_image_shadows(true),
@@ -619,7 +619,7 @@ maker_tools_t::maker_tools_t() :
     use_perf_mon(false),
     used_helping_tools(false) {
     
-    info_print_timer = timer(1.0f, [this] () { info_print_text.clear(); });
+    info_print_timer = Timer(1.0f, [this] () { info_print_text.clear(); });
     for(size_t k = 0; k < 20; k++) {
         keys[k] = MAKER_TOOL_TYPE_NONE;
     }
@@ -630,7 +630,7 @@ maker_tools_t::maker_tools_t() :
  * @brief Resets the states of the tools so that players can play without any
  * tool affecting the experience.
  */
-void maker_tools_t::reset_for_gameplay() {
+void MakerTools::reset_for_gameplay() {
     change_speed = false;
     collision = false;
     geometry_info = false;
@@ -646,7 +646,7 @@ void maker_tools_t::reset_for_gameplay() {
 /**
  * @brief Hides the OS mouse in the game window.
  */
-void mouse_cursor_t::hide() const {
+void MouseCursor::hide() const {
     al_hide_mouse_cursor(game.display);
 }
 
@@ -654,7 +654,7 @@ void mouse_cursor_t::hide() const {
 /**
  * @brief Initializes everything.
  */
-void mouse_cursor_t::init() {
+void MouseCursor::init() {
     hide();
     reset();
     
@@ -672,7 +672,7 @@ void mouse_cursor_t::init() {
 /**
  * @brief Resets the cursor's state.
  */
-void mouse_cursor_t::reset() {
+void MouseCursor::reset() {
     ALLEGRO_MOUSE_STATE mouse_state;
     al_get_mouse_state(&mouse_state);
     game.mouse_cursor.s_pos.x = al_get_mouse_state_axis(&mouse_state, 0);
@@ -689,7 +689,7 @@ void mouse_cursor_t::reset() {
 /**
  * @brief Shows the OS mouse in the game window.
  */
-void mouse_cursor_t::show() const {
+void MouseCursor::show() const {
     al_show_mouse_cursor(game.display);
 }
 
@@ -701,7 +701,7 @@ void mouse_cursor_t::show() const {
  * @param screen_to_world_transform Transformation to use to get the
  * screen coordinates.
  */
-void mouse_cursor_t::update_pos(
+void MouseCursor::update_pos(
     const ALLEGRO_EVENT &ev,
     ALLEGRO_TRANSFORM &screen_to_world_transform
 ) {
@@ -718,7 +718,7 @@ void mouse_cursor_t::update_pos(
 /**
  * @brief Draws the notification on-screen.
  */
-void notification_t::draw() const {
+void Notification::draw() const {
     if(visibility == 0.0f) return;
     
     float scale = ease(EASE_METHOD_OUT, visibility);
@@ -750,8 +750,8 @@ void notification_t::draw() const {
     
     draw_bitmap(
         game.sys_content.bmp_notification,
-        point(0, -bmp_h * 0.5),
-        point(bmp_w, bmp_h),
+        Point(0, -bmp_h * 0.5),
+        Point(bmp_w, bmp_h),
         0,
         map_alpha(DRAWING::NOTIFICATION_ALPHA * visibility)
     );
@@ -762,12 +762,12 @@ void notification_t::draw() const {
         draw_player_input_icon(
             game.sys_content.fnt_slim, input,
             true,
-            point(
+            Point(
                 -bmp_w * 0.5 + DRAWING::NOTIFICATION_PADDING +
                 DRAWING::NOTIFICATION_CONTROL_SIZE * 0.5,
                 -bmp_h * 0.5
             ),
-            point(
+            Point(
                 DRAWING::NOTIFICATION_CONTROL_SIZE,
                 DRAWING::NOTIFICATION_CONTROL_SIZE
             ),
@@ -777,11 +777,11 @@ void notification_t::draw() const {
     
     draw_text(
         text, game.sys_content.fnt_standard,
-        point(
+        Point(
             (text_box_x1 + text_box_x2) * 0.5,
             (text_box_y1 + text_box_y2) * 0.5
         ),
-        point(
+        Point(
             text_box_x2 - text_box_x1,
             text_box_y2 - text_box_y1
         ),
@@ -799,7 +799,7 @@ void notification_t::draw() const {
  *
  * @return The visibility.
  */
-float notification_t::get_visibility() const {
+float Notification::get_visibility() const {
     return visibility;
 }
 
@@ -807,11 +807,11 @@ float notification_t::get_visibility() const {
 /**
  * @brief Resets the whole thing.
  */
-void notification_t::reset() {
+void Notification::reset() {
     enabled = true;
     input.type = INPUT_TYPE_NONE;
     text.clear();
-    pos = point();
+    pos = Point();
     visibility = 0.0f;
 }
 
@@ -823,8 +823,8 @@ void notification_t::reset() {
  * @param text Text to show.
  * @param pos Where to show it in the game world.
  */
-void notification_t::set_contents(
-    const player_input &input, const string &text, const point &pos
+void Notification::set_contents(
+    const PlayerInput &input, const string &text, const Point &pos
 ) {
     this->input = input;
     this->text = text;
@@ -837,7 +837,7 @@ void notification_t::set_contents(
  *
  * @param enabled Whether it's enabled or not.
  */
-void notification_t::set_enabled(bool enabled) {
+void Notification::set_enabled(bool enabled) {
     this->enabled = enabled;
 }
 
@@ -847,7 +847,7 @@ void notification_t::set_enabled(bool enabled) {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void notification_t::tick(float delta_t) {
+void Notification::tick(float delta_t) {
     if(enabled) {
         visibility += NOTIFICATION::FADE_SPEED * delta_t;
     } else {
@@ -860,7 +860,7 @@ void notification_t::tick(float delta_t) {
 /**
  * @brief Constructs a new performance monitor struct object.
  */
-performance_monitor_t::performance_monitor_t() :
+PerformanceMonitor::PerformanceMonitor() :
     cur_state(PERF_MON_STATE_LOADING),
     paused(false),
     cur_state_start_time(0.0),
@@ -876,12 +876,12 @@ performance_monitor_t::performance_monitor_t() :
  *
  * @param state New state.
  */
-void performance_monitor_t::enter_state(const PERF_MON_STATE state) {
+void PerformanceMonitor::enter_state(const PERF_MON_STATE state) {
     if(paused) return;
     
     cur_state = state;
     cur_state_start_time = al_get_time();
-    cur_page = page();
+    cur_page = Page();
     
     if(cur_state == PERF_MON_STATE_FRAME) {
         frame_samples++;
@@ -892,7 +892,7 @@ void performance_monitor_t::enter_state(const PERF_MON_STATE state) {
 /**
  * @brief Finishes the latest measurement.
  */
-void performance_monitor_t::finish_measurement() {
+void PerformanceMonitor::finish_measurement() {
     if(paused) return;
     
     //Check if we were measuring something.
@@ -926,7 +926,7 @@ void performance_monitor_t::finish_measurement() {
 /**
  * @brief Leaves the current state of the monitoring process.
  */
-void performance_monitor_t::leave_state() {
+void PerformanceMonitor::leave_state() {
     if(paused) return;
     
     cur_page.duration = al_get_time() - cur_state_start_time;
@@ -988,26 +988,26 @@ void performance_monitor_t::leave_state() {
 /**
  * @brief Resets all of the performance monitor's information.
  */
-void performance_monitor_t::reset() {
+void PerformanceMonitor::reset() {
     area_name.clear();
     cur_state = PERF_MON_STATE_LOADING;
     paused = false;
     cur_state_start_time = 0.0;
     cur_measurement_start_time = 0.0;
     cur_measurement_name.clear();
-    cur_page = page();
+    cur_page = Page();
     frame_samples = 0;
-    loading_page = page();
-    frame_avg_page = page();
-    frame_fastest_page = page();
-    frame_slowest_page = page();
+    loading_page = Page();
+    frame_avg_page = Page();
+    frame_fastest_page = Page();
+    frame_slowest_page = Page();
 }
 
 
 /**
  * @brief Saves a log file with all known stats, if there is anything to save.
  */
-void performance_monitor_t::save_log() {
+void PerformanceMonitor::save_log() {
     if(loading_page.measurements.empty()) {
         //Nothing to save.
         return;
@@ -1072,7 +1072,7 @@ void performance_monitor_t::save_log() {
  *
  * @param name Name of the area.
  */
-void performance_monitor_t::set_area_name(const string &name) {
+void PerformanceMonitor::set_area_name(const string &name) {
     area_name = name;
 }
 
@@ -1082,7 +1082,7 @@ void performance_monitor_t::set_area_name(const string &name) {
  *
  * @param paused Pause value.
  */
-void performance_monitor_t::set_paused(bool paused) {
+void PerformanceMonitor::set_paused(bool paused) {
     this->paused = paused;
 }
 
@@ -1092,7 +1092,7 @@ void performance_monitor_t::set_paused(bool paused) {
  *
  * @param name Name of the measurement.
  */
-void performance_monitor_t::start_measurement(const string &name) {
+void PerformanceMonitor::start_measurement(const string &name) {
     if(paused) return;
     
     //Check if we were already measuring something.
@@ -1113,7 +1113,7 @@ void performance_monitor_t::start_measurement(const string &name) {
  *
  * @param s String to write to.
  */
-void performance_monitor_t::page::write(string &s) {
+void PerformanceMonitor::Page::write(string &s) {
     //Get the total measured time.
     double total_measured_time = 0.0;
     for(size_t m = 0; m < measurements.size(); m++) {
@@ -1145,7 +1145,7 @@ void performance_monitor_t::page::write(string &s) {
  * @param dur How long it lasted for, in seconds.
  * @param total How long the entire procedure lasted for.
  */
-void performance_monitor_t::page::write_measurement(
+void PerformanceMonitor::Page::write_measurement(
     string &str, const string &name, double dur, float total
 ) {
     float perc = dur / total * 100.0;
@@ -1169,7 +1169,7 @@ void performance_monitor_t::page::write_measurement(
  *
  * @param dn Pointer to the base data node.
  */
-reader_setter::reader_setter(data_node* dn) :
+ReaderSetter::ReaderSetter(DataNode* dn) :
     node(dn) {
     
 }
@@ -1185,10 +1185,10 @@ reader_setter::reader_setter(data_node* dn) :
  * is placed here. nullptr is placed if the property does not exist or has
  * no value.
  */
-void reader_setter::set(
-    const string &child, ALLEGRO_COLOR &var, data_node** child_node
+void ReaderSetter::set(
+    const string &child, ALLEGRO_COLOR &var, DataNode** child_node
 ) {
-    data_node* n = node->get_child_by_name(child);
+    DataNode* n = node->get_child_by_name(child);
     if(!n->value.empty()) {
         if(child_node) *child_node = n;
         var = s2c(n->value);
@@ -1208,10 +1208,10 @@ void reader_setter::set(
  * is placed here. nullptr is placed if the property does not exist or has
  * no value.
  */
-void reader_setter::set(
-    const string &child, string &var, data_node** child_node
+void ReaderSetter::set(
+    const string &child, string &var, DataNode** child_node
 ) {
-    data_node* n = node->get_child_by_name(child);
+    DataNode* n = node->get_child_by_name(child);
     if(!n->value.empty()) {
         if(child_node) *child_node = n;
         var = n->value;
@@ -1231,10 +1231,10 @@ void reader_setter::set(
  * is placed here. nullptr is placed if the property does not exist or has
  * no value.
  */
-void reader_setter::set(
-    const string &child, size_t &var, data_node** child_node
+void ReaderSetter::set(
+    const string &child, size_t &var, DataNode** child_node
 ) {
-    data_node* n = node->get_child_by_name(child);
+    DataNode* n = node->get_child_by_name(child);
     if(!n->value.empty()) {
         if(child_node) *child_node = n;
         var = s2i(n->value);
@@ -1254,10 +1254,10 @@ void reader_setter::set(
  * is placed here. nullptr is placed if the property does not exist or has
  * no value.
  */
-void reader_setter::set(
-    const string &child, int &var, data_node** child_node
+void ReaderSetter::set(
+    const string &child, int &var, DataNode** child_node
 ) {
-    data_node* n = node->get_child_by_name(child);
+    DataNode* n = node->get_child_by_name(child);
     if(!n->value.empty()) {
         if(child_node) *child_node = n;
         var = s2i(n->value);
@@ -1277,10 +1277,10 @@ void reader_setter::set(
  * is placed here. nullptr is placed if the property does not exist or has
  * no value.
  */
-void reader_setter::set(
-    const string &child, unsigned int &var, data_node** child_node
+void ReaderSetter::set(
+    const string &child, unsigned int &var, DataNode** child_node
 ) {
-    data_node* n = node->get_child_by_name(child);
+    DataNode* n = node->get_child_by_name(child);
     if(!n->value.empty()) {
         if(child_node) *child_node = n;
         var = s2i(n->value);
@@ -1300,10 +1300,10 @@ void reader_setter::set(
  * is placed here. nullptr is placed if the property does not exist or has
  * no value.
  */
-void reader_setter::set(
-    const string &child, unsigned char &var, data_node** child_node
+void ReaderSetter::set(
+    const string &child, unsigned char &var, DataNode** child_node
 ) {
-    data_node* n = node->get_child_by_name(child);
+    DataNode* n = node->get_child_by_name(child);
     if(!n->value.empty()) {
         if(child_node) *child_node = n;
         var = s2i(n->value);
@@ -1323,10 +1323,10 @@ void reader_setter::set(
  * is placed here. nullptr is placed if the property does not exist or has
  * no value.
  */
-void reader_setter::set(
-    const string &child, bool &var, data_node** child_node
+void ReaderSetter::set(
+    const string &child, bool &var, DataNode** child_node
 ) {
-    data_node* n = node->get_child_by_name(child);
+    DataNode* n = node->get_child_by_name(child);
     if(!n->value.empty()) {
         if(child_node) *child_node = n;
         var = s2b(n->value);
@@ -1346,10 +1346,10 @@ void reader_setter::set(
  * is placed here. nullptr is placed if the property does not exist or has
  * no value.
  */
-void reader_setter::set(
-    const string &child, float &var, data_node** child_node
+void ReaderSetter::set(
+    const string &child, float &var, DataNode** child_node
 ) {
-    data_node* n = node->get_child_by_name(child);
+    DataNode* n = node->get_child_by_name(child);
     if(!n->value.empty()) {
         if(child_node) *child_node = n;
         var = s2f(n->value);
@@ -1369,10 +1369,10 @@ void reader_setter::set(
  * is placed here. nullptr is placed if the property does not exist or has
  * no value.
  */
-void reader_setter::set(
-    const string &child, double &var, data_node** child_node
+void ReaderSetter::set(
+    const string &child, double &var, DataNode** child_node
 ) {
-    data_node* n = node->get_child_by_name(child);
+    DataNode* n = node->get_child_by_name(child);
     if(!n->value.empty()) {
         if(child_node) *child_node = n;
         var = s2f(n->value);
@@ -1392,10 +1392,10 @@ void reader_setter::set(
  * is placed here. nullptr is placed if the property does not exist or has
  * no value.
  */
-void reader_setter::set(
-    const string &child, point &var, data_node** child_node
+void ReaderSetter::set(
+    const string &child, Point &var, DataNode** child_node
 ) {
-    data_node* n = node->get_child_by_name(child);
+    DataNode* n = node->get_child_by_name(child);
     if(!n->value.empty()) {
         if(child_node) *child_node = n;
         var = s2p(n->value);
@@ -1413,7 +1413,7 @@ void reader_setter::set(
  * @param maximum Maximum value that can be generated, inclusive.
  * @return The random number.
  */
-float rng_manager::f(float minimum, float maximum) {
+float RngManager::f(float minimum, float maximum) {
     return randomf(minimum, maximum, &seed);
 }
 
@@ -1425,7 +1425,7 @@ float rng_manager::f(float minimum, float maximum) {
  * @param maximum Maximum value that can be generated, inclusive.
  * @return The random number.
  */
-int rng_manager::i(int minimum, int maximum) {
+int RngManager::i(int minimum, int maximum) {
     return randomi(minimum, maximum, &seed);
 }
 
@@ -1434,7 +1434,7 @@ int rng_manager::i(int minimum, int maximum) {
  * @brief Initializes the random number generator, using the current time as
  * the seed.
  */
-void rng_manager::init() {
+void RngManager::init() {
     seed = time(nullptr);
 }
 
@@ -1442,7 +1442,7 @@ void rng_manager::init() {
 /**
  * @brief Initializes the random number generator with the given seed.
  */
-void rng_manager::init(unsigned int seed) {
+void RngManager::init(unsigned int seed) {
     this->seed = seed;
 }
 
@@ -1453,7 +1453,7 @@ void rng_manager::init(unsigned int seed) {
  *
  * @param vars Map of variables to read from.
  */
-script_var_reader::script_var_reader(map<string, string> &vars) :
+ScriptVarReader::ScriptVarReader(map<string, string> &vars) :
     vars(vars) {
     
 }
@@ -1467,7 +1467,7 @@ script_var_reader::script_var_reader(map<string, string> &vars) :
  * @param dest Destination for the value.
  * @return Whether it exists.
  */
-bool script_var_reader::get(const string &name, ALLEGRO_COLOR &dest) const {
+bool ScriptVarReader::get(const string &name, ALLEGRO_COLOR &dest) const {
     auto v = vars.find(name);
     if(v == vars.end()) {
         return false;
@@ -1484,7 +1484,7 @@ bool script_var_reader::get(const string &name, ALLEGRO_COLOR &dest) const {
  * @param dest Destination for the value.
  * @return Whether it exists.
  */
-bool script_var_reader::get(const string &name, string &dest) const {
+bool ScriptVarReader::get(const string &name, string &dest) const {
     auto v = vars.find(name);
     if(v == vars.end()) {
         return false;
@@ -1501,7 +1501,7 @@ bool script_var_reader::get(const string &name, string &dest) const {
  * @param dest Destination for the value.
  * @return Whether it exists.
  */
-bool script_var_reader::get(const string &name, size_t &dest) const {
+bool ScriptVarReader::get(const string &name, size_t &dest) const {
     auto v = vars.find(name);
     if(v == vars.end()) {
         return false;
@@ -1518,7 +1518,7 @@ bool script_var_reader::get(const string &name, size_t &dest) const {
  * @param dest Destination for the value.
  * @return Whether it exists.
  */
-bool script_var_reader::get(const string &name, int &dest) const {
+bool ScriptVarReader::get(const string &name, int &dest) const {
     auto v = vars.find(name);
     if(v == vars.end()) {
         return false;
@@ -1536,7 +1536,7 @@ bool script_var_reader::get(const string &name, int &dest) const {
  * @param dest Destination for the value.
  * @return Whether it exists.
  */
-bool script_var_reader::get(const string &name, unsigned char &dest) const {
+bool ScriptVarReader::get(const string &name, unsigned char &dest) const {
     auto v = vars.find(name);
     if(v == vars.end()) {
         return false;
@@ -1553,7 +1553,7 @@ bool script_var_reader::get(const string &name, unsigned char &dest) const {
  * @param dest Destination for the value.
  * @return Whether it exists.
  */
-bool script_var_reader::get(const string &name, bool &dest) const {
+bool ScriptVarReader::get(const string &name, bool &dest) const {
     auto v = vars.find(name);
     if(v == vars.end()) {
         return false;
@@ -1570,7 +1570,7 @@ bool script_var_reader::get(const string &name, bool &dest) const {
  * @param dest Destination for the value.
  * @return Whether it exists.
  */
-bool script_var_reader::get(const string &name, float &dest) const {
+bool ScriptVarReader::get(const string &name, float &dest) const {
     auto v = vars.find(name);
     if(v == vars.end()) {
         return false;
@@ -1587,7 +1587,7 @@ bool script_var_reader::get(const string &name, float &dest) const {
  * @param dest Destination for the value.
  * @return Whether it exists.
  */
-bool script_var_reader::get(const string &name, point &dest) const {
+bool ScriptVarReader::get(const string &name, Point &dest) const {
     auto v = vars.find(name);
     if(v == vars.end()) {
         return false;
@@ -1605,8 +1605,8 @@ bool script_var_reader::get(const string &name, point &dest) const {
  * @param report_errors Only issues errors if this is true.
  * @return The audio sample.
  */
-ALLEGRO_SAMPLE* sample_manager::do_load(
-    const string &name, data_node* node, bool report_errors
+ALLEGRO_SAMPLE* SampleManager::do_load(
+    const string &name, DataNode* node, bool report_errors
 ) {
     const auto &it = game.content.sounds.manifests.find(name);
     string path =
@@ -1622,7 +1622,7 @@ ALLEGRO_SAMPLE* sample_manager::do_load(
  *
  * @param asset Audio sample to unload.
  */
-void sample_manager::do_unload(ALLEGRO_SAMPLE* asset) {
+void SampleManager::do_unload(ALLEGRO_SAMPLE* asset) {
     al_destroy_sample(asset);
 }
 
@@ -1630,7 +1630,7 @@ void sample_manager::do_unload(ALLEGRO_SAMPLE* asset) {
 /**
  * @brief Clears the list of registered subgroup types.
  */
-void subgroup_type_manager::clear() {
+void SubgroupTypeManager::clear() {
     for(size_t t = 0; t < types.size(); t++) {
         delete types[t];
     }
@@ -1643,7 +1643,7 @@ void subgroup_type_manager::clear() {
  *
  * @return The first type.
  */
-subgroup_type* subgroup_type_manager::get_first_type() const {
+SubgroupType* SubgroupTypeManager::get_first_type() const {
     return types.front();
 }
 
@@ -1654,8 +1654,8 @@ subgroup_type* subgroup_type_manager::get_first_type() const {
  * @param sgt Subgroup type to iterate from.
  * @return The next type.
  */
-subgroup_type* subgroup_type_manager::get_next_type(
-    const subgroup_type* sgt
+SubgroupType* SubgroupTypeManager::get_next_type(
+    const SubgroupType* sgt
 ) const {
     for(size_t t = 0; t < types.size(); t++) {
         if(types[t] == sgt) {
@@ -1672,8 +1672,8 @@ subgroup_type* subgroup_type_manager::get_next_type(
  * @param sgt Subgroup type to iterate from.
  * @return The previous type.
  */
-subgroup_type* subgroup_type_manager::get_prev_type(
-    const subgroup_type* sgt
+SubgroupType* SubgroupTypeManager::get_prev_type(
+    const SubgroupType* sgt
 ) const {
     for(size_t t = 0; t < types.size(); t++) {
         if(types[t] == sgt) {
@@ -1692,12 +1692,12 @@ subgroup_type* subgroup_type_manager::get_prev_type(
  * @param specific_type Specific type of mob, if you want to specify further.
  * @return The type, or nullptr if not found.
  */
-subgroup_type* subgroup_type_manager::get_type(
+SubgroupType* SubgroupTypeManager::get_type(
     const SUBGROUP_TYPE_CATEGORY category,
-    const mob_type* specific_type
+    const MobType* specific_type
 ) const {
     for(size_t t = 0; t < types.size(); t++) {
-        subgroup_type* t_ptr = types[t];
+        SubgroupType* t_ptr = types[t];
         if(
             t_ptr->category == category &&
             t_ptr->specific_type == specific_type
@@ -1717,12 +1717,12 @@ subgroup_type* subgroup_type_manager::get_type(
  * @param specific_type Specific type of mob, if you want to specify further.
  * @param icon If not nullptr, use this icon to represent this subgroup.
  */
-void subgroup_type_manager::register_type(
+void SubgroupTypeManager::register_type(
     const SUBGROUP_TYPE_CATEGORY category,
-    mob_type* specific_type,
+    MobType* specific_type,
     ALLEGRO_BITMAP* icon
 ) {
-    subgroup_type* new_sg_type = new subgroup_type();
+    SubgroupType* new_sg_type = new SubgroupType();
     
     new_sg_type->category = category;
     new_sg_type->specific_type = specific_type;
@@ -1735,7 +1735,7 @@ void subgroup_type_manager::register_type(
 /**
  * @brief Constructs a new whistle struct object.
  */
-whistle_t::whistle_t() :
+Whistle::Whistle() :
     radius(0.0f),
     fade_radius(0.0f),
     fade_timer(WHISTLE::FADE_TIME),
@@ -1778,7 +1778,7 @@ whistle_t::whistle_t() :
 /**
  * @brief Stuff to do when a leader starts whistling.
  */
-void whistle_t::start_whistling() {
+void Whistle::start_whistling() {
     for(unsigned char d = 0; d < 6; d++) {
         dot_radius[d] = -1;
     }
@@ -1791,7 +1791,7 @@ void whistle_t::start_whistling() {
 /**
  * @brief Stuff to do when a leader stops whistling.
  */
-void whistle_t::stop_whistling() {
+void Whistle::stop_whistling() {
     whistling = false;
     fade_timer.start();
     fade_radius = radius;
@@ -1807,8 +1807,8 @@ void whistle_t::stop_whistling() {
  * @param whistle_range How far the whistle can reach from the cursor center.
  * @param leader_to_cursor_dist Distance between the leader and the cursor.
  */
-void whistle_t::tick(
-    float delta_t, const point &center,
+void Whistle::tick(
+    float delta_t, const Point &center,
     float whistle_range, float leader_to_cursor_dist
 ) {
     this->center = center;

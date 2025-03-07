@@ -48,25 +48,25 @@ bool DragTime2(
 );
 void FocusOnInputText(bool &condition);
 void Image(
-    ALLEGRO_BITMAP* bitmap, const point &bitmap_size,
-    const point &uv0 = point(), const point &uv1 = point(1.0f),
+    ALLEGRO_BITMAP* bitmap, const Point &bitmap_size,
+    const Point &uv0 = Point(), const Point &uv1 = Point(1.0f),
     const ALLEGRO_COLOR &tint_col = al_map_rgb(255, 255, 255),
     const ALLEGRO_COLOR &border_col = al_map_rgba(0, 0, 0, 0)
 );
 bool ImageButton(
-    const string &str_id, ALLEGRO_BITMAP* bitmap, const point &bitmap_size,
-    const point &uv0 = point(), const point &uv1 = point(1.0f),
+    const string &str_id, ALLEGRO_BITMAP* bitmap, const Point &bitmap_size,
+    const Point &uv0 = Point(), const Point &uv1 = Point(1.0f),
     const ALLEGRO_COLOR &bg_col = al_map_rgba(0, 0, 0, 0),
     const ALLEGRO_COLOR &tint_col = al_map_rgb(255, 255, 255)
 );
 bool ImageButtonOrganized(
     const string &str_id, ALLEGRO_BITMAP* bitmap,
-    const point &max_bitmap_size, const point &button_size,
+    const Point &max_bitmap_size, const Point &button_size,
     const ALLEGRO_COLOR &bg_col = al_map_rgba(0, 0, 0, 0),
     const ALLEGRO_COLOR &tint_col = al_map_rgb(255, 255, 255)
 );
 bool ImageButtonAndText(
-    const string &id, ALLEGRO_BITMAP* icon, const point &icon_size,
+    const string &id, ALLEGRO_BITMAP* icon, const Point &icon_size,
     float button_padding, const string &text
 );
 bool ListBox(

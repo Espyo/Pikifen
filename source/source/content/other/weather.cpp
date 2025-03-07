@@ -22,7 +22,7 @@
 /**
  * @brief Constructs a new weather object.
  */
-weather::weather() {
+Weather::Weather() {
 }
 
 
@@ -35,7 +35,7 @@ weather::weather() {
  * @param bs Blackout strength information table.
  * @param pt Precipitation type.
  */
-weather::weather(
+Weather::Weather(
     const string &n, const vector<std::pair<int, ALLEGRO_COLOR> > &dl,
     const vector<std::pair<int, unsigned char> > &ss,
     const vector<std::pair<int, unsigned char> > &bs,
@@ -55,7 +55,7 @@ weather::weather(
  *
  * @return The blackout strength.
  */
-unsigned char weather::get_blackout_strength() {
+unsigned char Weather::get_blackout_strength() {
     float ratio;
     unsigned char strength1;
     unsigned char strength2;
@@ -78,7 +78,7 @@ unsigned char weather::get_blackout_strength() {
  *
  * @return The daylight color.
  */
-ALLEGRO_COLOR weather::get_daylight_color() {
+ALLEGRO_COLOR Weather::get_daylight_color() {
     float ratio;
     ALLEGRO_COLOR color1;
     ALLEGRO_COLOR color2;
@@ -101,7 +101,7 @@ ALLEGRO_COLOR weather::get_daylight_color() {
  *
  * @return The fog color.
  */
-ALLEGRO_COLOR weather::get_fog_color() {
+ALLEGRO_COLOR Weather::get_fog_color() {
     float ratio;
     ALLEGRO_COLOR color1;
     ALLEGRO_COLOR color2;
@@ -124,7 +124,7 @@ ALLEGRO_COLOR weather::get_fog_color() {
  *
  * @return The sun strength.
  */
-float weather::get_sun_strength() {
+float Weather::get_sun_strength() {
     float ratio;
     unsigned char strength1;
     unsigned char strength2;
@@ -149,12 +149,12 @@ float weather::get_sun_strength() {
  *
  * @param node Data node to load from.
  */
-void weather::load_from_data_node(data_node* node) {
+void Weather::load_from_data_node(DataNode* node) {
     //Content metadata.
     load_metadata_from_data_node(node);
     
     //Standard data.
-    reader_setter rs(node);
+    ReaderSetter rs(node);
     
     rs.set("fog_near", fog_near);
     rs.set("fog_far", fog_far);

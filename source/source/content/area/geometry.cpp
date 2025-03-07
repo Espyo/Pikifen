@@ -75,7 +75,7 @@ const float STEP_HEIGHT = 50;
 /**
  * @brief Constructs a new polygon object.
  */
-polygon::polygon() {
+Polygon::Polygon() {
 }
 
 
@@ -84,7 +84,7 @@ polygon::polygon() {
  *
  * @param vertexes Vertexes that make up the polygon.
  */
-polygon::polygon(const vector<vertex*> &vertexes) :
+Polygon::Polygon(const vector<Vertex*> &vertexes) :
     vertexes(vertexes) {
 }
 
@@ -95,12 +95,12 @@ polygon::polygon(const vector<vertex*> &vertexes) :
  *
  * @param recursive If true, clean the children polyon too recursively.
  */
-void polygon::clean(bool recursive) {
+void Polygon::clean(bool recursive) {
     for(size_t v = 0; v < vertexes.size();) {
         bool should_delete = false;
-        vertex* prev_v = get_prev_in_vector(vertexes, v);
-        vertex* cur_v = vertexes[v];
-        vertex* next_v = get_next_in_vector(vertexes, v);
+        Vertex* prev_v = get_prev_in_vector(vertexes, v);
+        Vertex* cur_v = vertexes[v];
+        Vertex* next_v = get_next_in_vector(vertexes, v);
         
         //If the distance between both vertexes is so small
         //that it's basically 0, delete this vertex from the list.
@@ -141,27 +141,27 @@ void polygon::clean(bool recursive) {
  * @brief When this polygon has children polygons, a cut must be made between it
  * and the children polygons, as to make this one holeless.
  */
-void polygon::cut() {
+void Polygon::cut() {
     if(vertexes.size() < 3) {
         //Some error happened.
         return;
     }
     
     //Start with the rightmost vertex.
-    vertex* rightmost = get_rightmost_vertex();
+    Vertex* rightmost = get_rightmost_vertex();
     
     //We have to make one cut for every inner.
     for(size_t c = 0; c < children.size(); c++) {
-        polygon* child_ptr = children[c];
-        vertex* closest_edge_v1 = nullptr;
-        vertex* closest_edge_v2 = nullptr;
+        Polygon* child_ptr = children[c];
+        Vertex* closest_edge_v1 = nullptr;
+        Vertex* closest_edge_v2 = nullptr;
         float closest_edge_r = FLT_MAX;
-        vertex* closest_vertex = nullptr;
+        Vertex* closest_vertex = nullptr;
         float closest_vertex_r = FLT_MAX;
-        vertex* best_vertex = nullptr;
+        Vertex* best_vertex = nullptr;
         
         //Find the rightmost vertex on this inner.
-        vertex* start = child_ptr->get_rightmost_vertex();
+        Vertex* start = child_ptr->get_rightmost_vertex();
         
         if(!start) {
             //Some error occured.
@@ -177,7 +177,7 @@ void polygon::cut() {
         //Let's also check the vertexes.
         //If the closest thing is a vertex, not an edge, then
         //we can skip a bunch of steps.
-        vertex* v1 = nullptr, *v2 = nullptr;
+        Vertex* v1 = nullptr, *v2 = nullptr;
         for(size_t v = 0; v < vertexes.size(); v++) {
             v1 = vertexes[v];
             v2 = get_next_in_vector(vertexes, v);
@@ -188,9 +188,9 @@ void polygon::cut() {
                 float r;
                 if(
                     line_segs_intersect(
-                        point(v1->x, v1->y), point(v2->x, v2->y),
-                        point(start->x, start->y),
-                        point(rightmost->x, start->y),
+                        Point(v1->x, v1->y), Point(v2->x, v2->y),
+                        Point(start->x, start->y),
+                        Point(rightmost->x, start->y),
                         nullptr, &r
                     )
                 ) {
@@ -228,22 +228,22 @@ void polygon::cut() {
             
             //We're on the edge closest to the vertex.
             //Go to the rightmost vertex of this edge.
-            vertex* vertex_to_compare =
+            Vertex* vertex_to_compare =
                 ::get_rightmost_vertex(closest_edge_v1, closest_edge_v2);
                 
             //Now get a list of all vertexes inside the triangle
             //marked by the inner's vertex,
             //the point on the edge,
             //and the vertex we're comparing.
-            vector<vertex*> inside_triangle;
+            vector<Vertex*> inside_triangle;
             for(size_t v = 0; v < vertexes.size(); v++) {
-                vertex* v_ptr = vertexes[v];
+                Vertex* v_ptr = vertexes[v];
                 if(
                     is_point_in_triangle(
-                        point(v_ptr->x, v_ptr->y),
-                        point(start->x, start->y),
-                        point(start->x + closest_edge_r * ray_width, start->y),
-                        point(vertex_to_compare->x, vertex_to_compare->y),
+                        Point(v_ptr->x, v_ptr->y),
+                        Point(start->x, start->y),
+                        Point(start->x + closest_edge_r * ray_width, start->y),
+                        Point(vertex_to_compare->x, vertex_to_compare->y),
                         true) &&
                     v_ptr != vertex_to_compare
                 ) {
@@ -256,11 +256,11 @@ void polygon::cut() {
             float closest_angle = FLT_MAX;
             
             for(size_t v = 0; v < inside_triangle.size(); v++) {
-                vertex* v_ptr = inside_triangle[v];
+                Vertex* v_ptr = inside_triangle[v];
                 float angle =
                     get_angle(
-                        point(start->x, start->y),
-                        point(v_ptr->x, v_ptr->y)
+                        Point(start->x, start->y),
+                        Point(v_ptr->x, v_ptr->y)
                     );
                 if(fabs(angle) < closest_angle) {
                     closest_angle = fabs(angle);
@@ -295,20 +295,20 @@ void polygon::cut() {
             float new_bridge_angle =
                 get_angle_cw_diff(
                     get_angle(
-                        point(best_vertex->x, best_vertex->y),
-                        point(start->x, start->y)
+                        Point(best_vertex->x, best_vertex->y),
+                        Point(start->x, start->y)
                     ),
                     0.0f
                 );
                 
             for(size_t v = 0; v < bridges.size(); v++) {
-                vertex* v_ptr = vertexes[bridges[v]];
-                vertex* nv_ptr = get_next_in_vector(vertexes, bridges[v]);
+                Vertex* v_ptr = vertexes[bridges[v]];
+                Vertex* nv_ptr = get_next_in_vector(vertexes, bridges[v]);
                 float a =
                     get_angle_cw_diff(
                         get_angle(
-                            point(v_ptr->x, v_ptr->y),
-                            point(nv_ptr->x, nv_ptr->y)
+                            Point(v_ptr->x, v_ptr->y),
+                            Point(nv_ptr->x, nv_ptr->y)
                         ),
                         0.0f
                     );
@@ -366,15 +366,15 @@ void polygon::cut() {
 /**
  * @brief Cuts all children polygons, as the root of the polygon tree.
  */
-void polygon::cut_all_as_root() {
+void Polygon::cut_all_as_root() {
     for(size_t o = 0; o < children.size(); o++) {
         //For each outer polygon...
-        polygon* outer_ptr = children[o];
+        Polygon* outer_ptr = children[o];
         outer_ptr->cut();
         
         for(size_t i = 0; i < outer_ptr->children.size(); i++) {
             //For each inner polygon...
-            polygon* inner_ptr = outer_ptr->children[i];
+            Polygon* inner_ptr = outer_ptr->children[i];
             
             //An inner polygon's children are outer polygons again.
             //Now that we made the cut, we can move those back to the root list.
@@ -392,7 +392,7 @@ void polygon::cut_all_as_root() {
 /**
  * @brief Destroys the polygon, deleting from memory all children, recursively.
  */
-void polygon::destroy() {
+void Polygon::destroy() {
     for(size_t c = 0; c < children.size(); c++) {
         children[c]->destroy();
         delete children[c];
@@ -405,11 +405,11 @@ void polygon::destroy() {
  *
  * @return The farthest right vertex.
  */
-vertex* polygon::get_rightmost_vertex() const {
-    vertex* rightmost = nullptr;
+Vertex* Polygon::get_rightmost_vertex() const {
+    Vertex* rightmost = nullptr;
     
     for(size_t v = 0; v < vertexes.size(); v++) {
-        vertex* v_ptr = vertexes[v];
+        Vertex* v_ptr = vertexes[v];
         if(!rightmost) {
             rightmost = v_ptr;
         } else {
@@ -429,7 +429,7 @@ vertex* polygon::get_rightmost_vertex() const {
  * @param p Polygon to insert.
  * @return Whether it got inserted.
  */
-bool polygon::insert_child(polygon* p) {
+bool Polygon::insert_child(Polygon* p) {
     //First, check if it can be inserted in a child.
     for(size_t c = 0; c < children.size(); c++) {
         if(children[c]->insert_child(p)) return true;
@@ -437,7 +437,7 @@ bool polygon::insert_child(polygon* p) {
     
     //Check if it can be inserted in the polygon proper.
     if(!vertexes.empty()) {
-        if(is_point_inside(point(p->vertexes[0]->x, p->vertexes[0]->y))) {
+        if(is_point_inside(Point(p->vertexes[0]->x, p->vertexes[0]->y))) {
             children.push_back(p);
             return true;
         }
@@ -460,11 +460,11 @@ bool polygon::insert_child(polygon* p) {
  * @param p Point to check.
  * @return Whether it is inside.
  */
-bool polygon::is_point_inside(const point &p) const {
+bool Polygon::is_point_inside(const Point &p) const {
     //http://paulbourke.net/geometry/polygonmesh/index.html#insidepoly
     
-    point p1 = point(vertexes[0]->x, vertexes[0]->y);
-    point p2;
+    Point p1 = Point(vertexes[0]->x, vertexes[0]->y);
+    Point p2;
     size_t nr_crossings = 0;
     
     for(size_t v = 1; v <= vertexes.size(); v++) {
@@ -498,7 +498,7 @@ bool polygon::is_point_inside(const point &p) const {
  * @param v2 Second vertex.
  * @param v3 Third vertex.
  */
-triangle::triangle(vertex* v1, vertex* v2, vertex* v3) {
+Triangle::Triangle(Vertex* v1, Vertex* v2, Vertex* v3) {
     points[0] = v1;
     points[1] = v2;
     points[2] = v3;
@@ -533,21 +533,21 @@ triangle::triangle(vertex* v1, vertex* v2, vertex* v3) {
  * @param excluded_edges List of edges that must not be checked, if any.
  */
 void find_trace_edge(
-    vertex* v_ptr, const vertex* prev_v_ptr, const sector* s_ptr,
+    Vertex* v_ptr, const Vertex* prev_v_ptr, const Sector* s_ptr,
     float prev_e_angle, bool best_is_closest_cw,
-    edge** next_e_ptr, float* next_e_angle, vertex** next_v_ptr,
-    unordered_set<edge*>* excluded_edges
+    Edge** next_e_ptr, float* next_e_angle, Vertex** next_v_ptr,
+    unordered_set<Edge*>* excluded_edges
 ) {
     //Info about the best candidate edge, if any.
-    edge* best_e_ptr = nullptr;
+    Edge* best_e_ptr = nullptr;
     float best_e_angle = 0;
     float best_e_angle_cw_dif = 0;
-    vertex* best_v_ptr = nullptr;
+    Vertex* best_v_ptr = nullptr;
     
     //Go through each edge to check for the best.
     for(size_t e = 0; e < v_ptr->edges.size(); e++) {
     
-        edge* e_ptr = v_ptr->edges[e];
+        Edge* e_ptr = v_ptr->edges[e];
         
         if(e_ptr->sectors[0] != s_ptr && e_ptr->sectors[1] != s_ptr) {
             //This edge is not related to our sector.
@@ -563,7 +563,7 @@ void find_trace_edge(
             continue;
         }
         
-        vertex* other_v_ptr = e_ptr->get_other_vertex(v_ptr);
+        Vertex* other_v_ptr = e_ptr->get_other_vertex(v_ptr);
         
         if(other_v_ptr == prev_v_ptr) {
             //This is where we came from.
@@ -574,8 +574,8 @@ void find_trace_edge(
         //between our vertex and this edge's other vertex.
         float e_angle =
             get_angle(
-                point(v_ptr->x, v_ptr->y),
-                point(other_v_ptr->x, other_v_ptr->y)
+                Point(v_ptr->x, v_ptr->y),
+                Point(other_v_ptr->x, other_v_ptr->y)
             );
             
         float angle_cw_dif =
@@ -610,7 +610,7 @@ void find_trace_edge(
  * @param concave_vertexes List of concave vertexes found.
  */
 void get_cce(
-    const vector<vertex*> &vertexes_left, vector<size_t> &ears,
+    const vector<Vertex*> &vertexes_left, vector<size_t> &ears,
     vector<size_t> &convex_vertexes, vector<size_t> &concave_vertexes
 ) {
     ears.clear();
@@ -644,16 +644,16 @@ void get_cce(
  * This does not take the camera zoom level into account.
  * @return The merge vertexes.
  */
-vector<std::pair<dist, vertex*> > get_merge_vertexes(
-    const point &pos, const vector<vertex*> &all_vertexes,
+vector<std::pair<Distance, Vertex*> > get_merge_vertexes(
+    const Point &pos, const vector<Vertex*> &all_vertexes,
     float merge_radius
 ) {
 
-    vector<std::pair<dist, vertex*> > result;
+    vector<std::pair<Distance, Vertex*> > result;
     for(size_t v = 0; v < all_vertexes.size(); v++) {
-        vertex* v_ptr = all_vertexes[v];
+        Vertex* v_ptr = all_vertexes[v];
         
-        dist d(pos, point(v_ptr->x, v_ptr->y));
+        Distance d(pos, Point(v_ptr->x, v_ptr->y));
         if(d <= merge_radius) {
         
             result.push_back(std::make_pair(d, v_ptr));
@@ -679,7 +679,7 @@ vector<std::pair<dist, vertex*> > get_merge_vertexes(
  * @return An error code.
  */
 TRIANGULATION_ERROR get_polys(
-    sector* s_ptr, polygon* polys
+    Sector* s_ptr, Polygon* polys
 ) {
     if(!s_ptr || !polys) return TRIANGULATION_ERROR_INVALID_ARGS;
     TRIANGULATION_ERROR result = TRIANGULATION_ERROR_NONE;
@@ -687,18 +687,18 @@ TRIANGULATION_ERROR get_polys(
     bool doing_first_polygon = true;
     
     //First, compile a list of all edges related to this sector.
-    unordered_set<edge*> edges_left(s_ptr->edges.begin(), s_ptr->edges.end());
-    unordered_set<edge*> polygon_edges_so_far;
+    unordered_set<Edge*> edges_left(s_ptr->edges.begin(), s_ptr->edges.end());
+    unordered_set<Edge*> polygon_edges_so_far;
     
     //Now trace along the edges, vertex by vertex, until we have no more left.
     while(!edges_left.empty()) {
     
         //Start with the rightmost vertex.
-        vertex* first_v_ptr = get_rightmost_vertex(edges_left);
+        Vertex* first_v_ptr = get_rightmost_vertex(edges_left);
         
         //Figure out if the polygon we are going to trace is an outer polygon
         //or an inner one.
-        polygon* new_poly = new polygon();
+        Polygon* new_poly = new Polygon();
         bool is_outer =
             get_polys_is_outer(
                 first_v_ptr, s_ptr, edges_left, doing_first_polygon
@@ -745,7 +745,7 @@ TRIANGULATION_ERROR get_polys(
  * @return Whether it is an outer polygon.
  */
 bool get_polys_is_outer(
-    vertex* v_ptr, const sector* s_ptr, const unordered_set<edge*> &edges_left,
+    Vertex* v_ptr, const Sector* s_ptr, const unordered_set<Edge*> &edges_left,
     bool doing_first_polygon
 ) {
     if(doing_first_polygon) {
@@ -758,12 +758,12 @@ bool get_polys_is_outer(
     //imagine an arrow pointing straight right. Obviously no other vertex of
     //the sector can be this way. But let's start rotating the arrow clockwise
     //along the vertex's edges and find the one closest.
-    edge* closest_edge_cw = nullptr;
+    Edge* closest_edge_cw = nullptr;
     float closest_edge_cw_angle = FLT_MAX;
     
     for(size_t e = 0; e < v_ptr->edges.size(); e++) {
     
-        edge* e_ptr = v_ptr->edges[e];
+        Edge* e_ptr = v_ptr->edges[e];
         if(e_ptr->sectors[0] != s_ptr && e_ptr->sectors[1] != s_ptr) {
             //This edge is irrelevant to our sector.
             continue;
@@ -776,11 +776,11 @@ bool get_polys_is_outer(
             continue;
         }
         
-        vertex* e_other_v_ptr = e_ptr->get_other_vertex(v_ptr);
+        Vertex* e_other_v_ptr = e_ptr->get_other_vertex(v_ptr);
         float edge_angle =
             get_angle(
-                point(v_ptr->x, v_ptr->y),
-                point(e_other_v_ptr->x, e_other_v_ptr->y)
+                Point(v_ptr->x, v_ptr->y),
+                Point(e_other_v_ptr->x, e_other_v_ptr->y)
             );
         float edge_cw_angle = get_angle_cw_diff(0.0f, edge_angle);
         if(!closest_edge_cw || edge_cw_angle < closest_edge_cw_angle) {
@@ -822,8 +822,8 @@ bool get_polys_is_outer(
  * @param edges Edges to check.
  * @return The vertex.
  */
-vertex* get_rightmost_vertex(const unordered_set<edge*> &edges) {
-    vertex* rightmost = nullptr;
+Vertex* get_rightmost_vertex(const unordered_set<Edge*> &edges) {
+    Vertex* rightmost = nullptr;
     
     for(auto &e : edges) {
         if(!rightmost) rightmost = e->vertexes[0];
@@ -848,7 +848,7 @@ vertex* get_rightmost_vertex(const unordered_set<edge*> &edges) {
  * @param v2 Second vertex to check.
  * @return The vertex.
  */
-vertex* get_rightmost_vertex(vertex* v1, vertex* v2) {
+Vertex* get_rightmost_vertex(Vertex* v1, Vertex* v2) {
     if(v1->x > v2->x) return v1;
     if(v1->x == v2->x && v1->y < v2->y) return v1;
     return v2;
@@ -862,12 +862,12 @@ vertex* get_rightmost_vertex(vertex* v1, vertex* v2) {
  * @param vertexes Vertexes to check.
  * @return Whether it is clockwise.
  */
-bool is_polygon_clockwise(vector<vertex*> &vertexes) {
+bool is_polygon_clockwise(vector<Vertex*> &vertexes) {
     //Solution by http://stackoverflow.com/a/1165943
     float sum = 0;
     for(size_t v = 0; v < vertexes.size(); v++) {
-        vertex* v_ptr = vertexes[v];
-        vertex* v2_ptr = get_next_in_vector(vertexes, v);
+        Vertex* v_ptr = vertexes[v];
+        Vertex* v2_ptr = get_next_in_vector(vertexes, v);
         sum += (v2_ptr->x - v_ptr->x) * (v2_ptr->y + v_ptr->y);
     }
     return sum < 0;
@@ -881,19 +881,19 @@ bool is_polygon_clockwise(vector<vertex*> &vertexes) {
  * @param idx Index of the vertex to check.
  * @return Whether it is convex.
  */
-bool is_vertex_convex(const vector<vertex*> &vec, size_t idx) {
-    const vertex* cur_v = vec[idx];
-    const vertex* prev_v = get_prev_in_vector(vec, idx);
-    const vertex* next_v = get_next_in_vector(vec, idx);
+bool is_vertex_convex(const vector<Vertex*> &vec, size_t idx) {
+    const Vertex* cur_v = vec[idx];
+    const Vertex* prev_v = get_prev_in_vector(vec, idx);
+    const Vertex* next_v = get_next_in_vector(vec, idx);
     float angle_prev =
         get_angle(
-            point(cur_v->x, cur_v->y),
-            point(prev_v->x, prev_v->y)
+            Point(cur_v->x, cur_v->y),
+            Point(prev_v->x, prev_v->y)
         );
     float angle_next =
         get_angle(
-            point(cur_v->x, cur_v->y),
-            point(next_v->x, next_v->y)
+            Point(cur_v->x, cur_v->y),
+            Point(next_v->x, next_v->y)
         );
         
     return get_angle_cw_diff(angle_prev, angle_next) < TAU / 2;
@@ -909,24 +909,24 @@ bool is_vertex_convex(const vector<vertex*> &vec, size_t idx) {
  * @return Whether it is an ear.
  */
 bool is_vertex_ear(
-    const vector<vertex*> &vec, const vector<size_t> &concaves, size_t idx
+    const vector<Vertex*> &vec, const vector<size_t> &concaves, size_t idx
 ) {
     //A vertex is an ear if the triangle of it, the previous, and next vertexes
     //does not contain any other vertex inside. Also, if it has vertexes inside,
     //they mandatorily are concave, so only check those.
-    const vertex* v = vec[idx];
-    const vertex* pv = get_prev_in_vector(vec, idx);
-    const vertex* nv = get_next_in_vector(vec, idx);
+    const Vertex* v = vec[idx];
+    const Vertex* pv = get_prev_in_vector(vec, idx);
+    const Vertex* nv = get_next_in_vector(vec, idx);
     
     for(size_t c = 0; c < concaves.size(); c++) {
-        const vertex* v_to_check = vec[concaves[c]];
+        const Vertex* v_to_check = vec[concaves[c]];
         if(v_to_check == v || v_to_check == pv || v_to_check == nv) continue;
         if(
             is_point_in_triangle(
-                point(v_to_check->x, v_to_check->y),
-                point(pv->x, pv->y),
-                point(v->x, v->y),
-                point(nv->x, nv->y),
+                Point(v_to_check->x, v_to_check->y),
+                Point(pv->x, pv->y),
+                Point(v->x, v->y),
+                Point(nv->x, nv->y),
                 true
             )
         ) return false;
@@ -952,26 +952,26 @@ bool is_vertex_ear(
  * @return An error code.
  */
 TRIANGULATION_ERROR trace_edges(
-    vertex* start_v_ptr, const sector* s_ptr, bool going_cw,
-    vector<vertex*>* vertexes,
-    unordered_set<edge*>* unvisited_edges,
-    unordered_set<edge*>* polygon_edges_so_far
+    Vertex* start_v_ptr, const Sector* s_ptr, bool going_cw,
+    vector<Vertex*>* vertexes,
+    unordered_set<Edge*>* unvisited_edges,
+    unordered_set<Edge*>* polygon_edges_so_far
 ) {
     if(!start_v_ptr || !s_ptr) return TRIANGULATION_ERROR_INVALID_ARGS;
     
-    vertex* v_ptr = start_v_ptr;
-    unordered_set<edge*> polygon_edges;
+    Vertex* v_ptr = start_v_ptr;
+    unordered_set<Edge*> polygon_edges;
     
     //At the start, no need to check if we're going to the previous vertex.
-    vertex* prev_v_ptr = nullptr;
+    Vertex* prev_v_ptr = nullptr;
     //At the start, assume the angle is left.
     float prev_e_angle = TAU / 2.0f;
     
-    edge* next_e_ptr = nullptr;
-    vertex* next_v_ptr = nullptr;
+    Edge* next_e_ptr = nullptr;
+    Vertex* next_v_ptr = nullptr;
     float next_e_angle = 0.0f;
     
-    edge* first_e_ptr = nullptr;
+    Edge* first_e_ptr = nullptr;
     
     TRIANGULATION_ERROR result = TRIANGULATION_ERROR_NONE;
     bool poly_done = false;
@@ -1110,11 +1110,11 @@ TRIANGULATION_ERROR trace_edges(
  * @return An error code.
  */
 TRIANGULATION_ERROR triangulate_polygon(
-    polygon* poly, vector<triangle>* triangles
+    Polygon* poly, vector<Triangle>* triangles
 ) {
 
     TRIANGULATION_ERROR result = TRIANGULATION_ERROR_NONE;
-    vector<vertex*> vertexes_left = poly->vertexes;
+    vector<Vertex*> vertexes_left = poly->vertexes;
     vector<size_t> ears;
     vector<size_t> convex_vertexes;
     vector<size_t> concave_vertexes;
@@ -1138,7 +1138,7 @@ TRIANGULATION_ERROR triangulate_polygon(
         } else {
             //The ear, the previous, and the next vertexes make a triangle.
             triangles->push_back(
-                triangle(
+                Triangle(
                     vertexes_left[ears[0]],
                     get_prev_in_vector(vertexes_left, ears[0]),
                     get_next_in_vector(vertexes_left, ears[0])
@@ -1156,7 +1156,7 @@ TRIANGULATION_ERROR triangulate_polygon(
     //Finally, add the final triangle.
     if(vertexes_left.size() == 3) {
         triangles->push_back(
-            triangle(
+            Triangle(
                 vertexes_left[1], vertexes_left[0], vertexes_left[2]
             )
         );
@@ -1178,10 +1178,10 @@ TRIANGULATION_ERROR triangulate_polygon(
  * @return An error code.
  */
 TRIANGULATION_ERROR triangulate_sector(
-    sector* s_ptr, set<edge*>* lone_edges, bool clear_lone_edges
+    Sector* s_ptr, set<Edge*>* lone_edges, bool clear_lone_edges
 ) {
     //Root of the polygon tree.
-    polygon root;
+    Polygon root;
     
     //Let's clear any "lone" edges here.
     if(clear_lone_edges) {

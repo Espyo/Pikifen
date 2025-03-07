@@ -16,7 +16,7 @@
 /**
  * @brief A type of scale (seesaw block, crushable paper bag, etc.).
  */
-class scale_type : public mob_type {
+class ScaleType : public MobType {
 
 public:
 
@@ -28,7 +28,7 @@ public:
     
     //--- Function declarations ---
     
-    scale_type();
-    void load_cat_properties(data_node* file) override;
+    ScaleType();
+    void load_cat_properties(DataNode* file) override;
     
 };

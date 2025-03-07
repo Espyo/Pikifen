@@ -72,8 +72,8 @@ const float TRANSITION_OUT_DURATION = 1.5f;
  *
  * @param m Mob it belongs to.
  */
-in_world_fraction::in_world_fraction(mob* m) :
-    in_world_hud_item(m) {
+InWorldFraction::InWorldFraction(Mob* m) :
+    InWorldHudItem(m) {
     
     transition_timer = IN_WORLD_FRACTION::TRANSITION_IN_DURATION;
 }
@@ -82,7 +82,7 @@ in_world_fraction::in_world_fraction(mob* m) :
 /**
  * @brief Draws an in-world fraction.
  */
-void in_world_fraction::draw() {
+void InWorldFraction::draw() {
     float alpha_mult = 1.0f;
     float size_mult = 1.0f;
     
@@ -131,13 +131,13 @@ void in_world_fraction::draw() {
     final_color.a *= alpha_mult;
     
     if(requirement_number > 0) {
-        point pos(m->pos.x, m->pos.y - m->radius - IN_WORLD_FRACTION::PADDING);
+        Point pos(m->pos.x, m->pos.y - m->radius - IN_WORLD_FRACTION::PADDING);
         draw_fraction(
             pos,
             value_number, requirement_number, final_color, size_mult
         );
     } else {
-        point pos(
+        Point pos(
             m->pos.x,
             m->pos.y - m->radius -
             al_get_font_line_height(game.sys_content.fnt_standard) -
@@ -145,7 +145,7 @@ void in_world_fraction::draw() {
         );
         draw_text(
             i2s(value_number), game.sys_content.fnt_standard, pos,
-            point(LARGE_FLOAT, IN_WORLD_FRACTION::ROW_HEIGHT * size_mult),
+            Point(LARGE_FLOAT, IN_WORLD_FRACTION::ROW_HEIGHT * size_mult),
             final_color
         );
     }
@@ -157,7 +157,7 @@ void in_world_fraction::draw() {
  *
  * @param new_color Color to set to.
  */
-void in_world_fraction::set_color(const ALLEGRO_COLOR &new_color) {
+void InWorldFraction::set_color(const ALLEGRO_COLOR &new_color) {
     if(color == new_color) return;
     
     color = new_color;
@@ -170,7 +170,7 @@ void in_world_fraction::set_color(const ALLEGRO_COLOR &new_color) {
  *
  * @param new_req_nr Requirement number to set to.
  */
-void in_world_fraction::set_requirement_number(float new_req_nr) {
+void InWorldFraction::set_requirement_number(float new_req_nr) {
     if(requirement_number == new_req_nr) return;
     
     bool req_was_met = value_number >= requirement_number;
@@ -193,7 +193,7 @@ void in_world_fraction::set_requirement_number(float new_req_nr) {
  *
  * @param new_value_nr Value number to set to.
  */
-void in_world_fraction::set_value_number(float new_value_nr) {
+void InWorldFraction::set_value_number(float new_value_nr) {
     if(value_number == new_value_nr) return;
     
     bool req_was_met = value_number >= requirement_number;
@@ -215,7 +215,7 @@ void in_world_fraction::set_value_number(float new_value_nr) {
 /**
  * @brief Starts fading away.
  */
-void in_world_fraction::start_fading() {
+void InWorldFraction::start_fading() {
     if(transition == IN_WORLD_HUD_TRANSITION_OUT) {
         return;
     }
@@ -229,8 +229,8 @@ void in_world_fraction::start_fading() {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void in_world_fraction::tick(float delta_t) {
-    in_world_hud_item::tick(delta_t);
+void InWorldFraction::tick(float delta_t) {
+    InWorldHudItem::tick(delta_t);
     if(grow_juice_timer > 0.0f) {
         grow_juice_timer -= delta_t;
     }
@@ -245,8 +245,8 @@ void in_world_fraction::tick(float delta_t) {
  *
  * @param m Mob it belongs to.
  */
-in_world_health_wheel::in_world_health_wheel(mob* m) :
-    in_world_hud_item(m) {
+InWorldHealthWheel::InWorldHealthWheel(Mob* m) :
+    InWorldHudItem(m) {
     
     if(m->max_health > 0.0f) {
         visible_ratio = m->health / m->max_health;
@@ -258,7 +258,7 @@ in_world_health_wheel::in_world_health_wheel(mob* m) :
 /**
  * @brief Draws an in-world health wheel.
  */
-void in_world_health_wheel::draw() {
+void InWorldHealthWheel::draw() {
     float alpha_mult = 1.0f;
     float size_mult = 1.0f;
     switch(transition) {
@@ -282,7 +282,7 @@ void in_world_health_wheel::draw() {
     
     float radius = DRAWING::DEF_HEALTH_WHEEL_RADIUS * size_mult;
     draw_health(
-        point(
+        Point(
             m->pos.x,
             m->pos.y - m->radius -
             radius - IN_WORLD_HEALTH_WHEEL::PADDING
@@ -297,7 +297,7 @@ void in_world_health_wheel::draw() {
 /**
  * @brief Starts fading away.
  */
-void in_world_health_wheel::start_fading() {
+void InWorldHealthWheel::start_fading() {
     if(transition == IN_WORLD_HUD_TRANSITION_OUT) {
         return;
     }
@@ -311,8 +311,8 @@ void in_world_health_wheel::start_fading() {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void in_world_health_wheel::tick(float delta_t) {
-    in_world_hud_item::tick(delta_t);
+void InWorldHealthWheel::tick(float delta_t) {
+    InWorldHudItem::tick(delta_t);
     
     if(m->max_health == 0.0f) return;
     
@@ -327,7 +327,7 @@ void in_world_health_wheel::tick(float delta_t) {
  *
  * @param m Mob it belongs to.
  */
-in_world_hud_item::in_world_hud_item(mob* m) :
+InWorldHudItem::InWorldHudItem(Mob* m) :
     m(m) {
     
 }
@@ -338,7 +338,7 @@ in_world_hud_item::in_world_hud_item(mob* m) :
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void in_world_hud_item::tick(float delta_t) {
+void InWorldHudItem::tick(float delta_t) {
     switch(transition) {
     case IN_WORLD_HUD_TRANSITION_IN: {
         transition_timer -= delta_t;

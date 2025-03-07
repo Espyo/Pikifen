@@ -23,7 +23,7 @@
 /**
  * @brief Clears the manifests.
  */
-void area_content_manager::clear_manifests() {
+void AreaContentManager::clear_manifests() {
     manifests.clear();
 }
 
@@ -31,9 +31,9 @@ void area_content_manager::clear_manifests() {
 /**
  * @brief Fills in the manifests.
  */
-void area_content_manager::fill_manifests() {
+void AreaContentManager::fill_manifests() {
     for(size_t t = 0; t < N_AREA_TYPES; t++) {
-        manifests.push_back(map<string, content_manifest>());
+        manifests.push_back(map<string, ContentManifest>());
         fill_manifests_map(
             manifests[t],
             t == AREA_TYPE_SIMPLE ?
@@ -54,7 +54,7 @@ void area_content_manager::fill_manifests() {
  * @param type Area type.
  * @return The manifest, or nullptr.
  */
-content_manifest* area_content_manager::find_manifest(
+ContentManifest* AreaContentManager::find_manifest(
     const string &area_name, const string &pack, AREA_TYPE type
 ) {
     for(auto &m : manifests[type]) {
@@ -71,7 +71,7 @@ content_manifest* area_content_manager::find_manifest(
  *
  * @return The name.
  */
-string area_content_manager::get_name() const {
+string AreaContentManager::get_name() const {
     return "area";
 }
 
@@ -81,7 +81,7 @@ string area_content_manager::get_name() const {
  *
  * @return The name.
  */
-string area_content_manager::get_perf_mon_measurement_name() const {
+string AreaContentManager::get_perf_mon_measurement_name() const {
     return "";
 }
 
@@ -91,9 +91,9 @@ string area_content_manager::get_perf_mon_measurement_name() const {
  *
  * @param level Level to load at.
  */
-void area_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
+void AreaContentManager::load_all(CONTENT_LOAD_LEVEL level) {
     for(size_t t = 0; t < N_AREA_TYPES; t++) {
-        list.push_back(vector<area_data*>());
+        list.push_back(vector<Area*>());
         for(auto &a : manifests[t]) {
             load_area_into_vector(&a.second, (AREA_TYPE) t, false);
         }
@@ -112,12 +112,12 @@ void area_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
  * @param from_backup If true, load from a backup, if any.
  * @return Whether it succeeded.
  */
-bool area_content_manager::load_area(
-    area_data* area_ptr, const string &requested_area_path,
-    content_manifest* manif_ptr, CONTENT_LOAD_LEVEL level, bool from_backup
+bool AreaContentManager::load_area(
+    Area* area_ptr, const string &requested_area_path,
+    ContentManifest* manif_ptr, CONTENT_LOAD_LEVEL level, bool from_backup
 ) {
     //Setup.
-    content_manifest temp_manif;
+    ContentManifest temp_manif;
     AREA_TYPE requested_area_type;
     path_to_manifest(requested_area_path, &temp_manif, &requested_area_type);
     string user_data_path =
@@ -132,11 +132,11 @@ bool area_content_manager::load_area(
     string base_folder_path = from_backup ? user_data_path : temp_manif.path;
     
     string data_file_path = base_folder_path + "/" + FILE_NAMES::AREA_MAIN_DATA;
-    data_node data_file = load_data_file(data_file_path);
+    DataNode data_file = load_data_file(data_file_path);
     if(!data_file.file_was_opened) return false;
     
     string geometry_file_path = base_folder_path + "/" + FILE_NAMES::AREA_GEOMETRY;
-    data_node geometry_file = load_data_file(geometry_file_path);
+    DataNode geometry_file = load_data_file(geometry_file_path);
     if(!geometry_file.file_was_opened) return false;
     
     area_ptr->type = requested_area_type;
@@ -196,11 +196,11 @@ bool area_content_manager::load_area(
  * @param type Type of area this is.
  * @param from_backup If true, load from a backup, if any.
  */
-void area_content_manager::load_area_into_vector(
-    content_manifest* manifest, AREA_TYPE type,
+void AreaContentManager::load_area_into_vector(
+    ContentManifest* manifest, AREA_TYPE type,
     bool from_backup
 ) {
-    area_data* new_area = new area_data();
+    Area* new_area = new Area();
     list[type].push_back(new_area);
     load_area(
         new_area, manifest->path, manifest,
@@ -217,8 +217,8 @@ void area_content_manager::load_area_into_vector(
  * @param type Type of area.
  * @return The path.
  */
-string area_content_manager::manifest_to_path(
-    const content_manifest &manifest, AREA_TYPE type
+string AreaContentManager::manifest_to_path(
+    const ContentManifest &manifest, AREA_TYPE type
 ) const {
     return
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
@@ -239,8 +239,8 @@ string area_content_manager::manifest_to_path(
  * @param out_manifest If not nullptr, the manifest is returned here.
  * @param out_type If not nullptr, the area type is returned here.
  */
-void area_content_manager::path_to_manifest(
-    const string &path, content_manifest* out_manifest, AREA_TYPE* out_type
+void AreaContentManager::path_to_manifest(
+    const string &path, ContentManifest* out_manifest, AREA_TYPE* out_type
 ) const {
     if(out_manifest) {
         out_manifest->fill_from_path(path);
@@ -261,7 +261,7 @@ void area_content_manager::path_to_manifest(
  *
  * @param level Load level. Should match the level used to load the content.
  */
-void area_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
+void AreaContentManager::unload_all(CONTENT_LOAD_LEVEL level) {
     for(size_t t = 0; t < list.size(); t++) {
         for(size_t a = 0; a < list[t].size(); a++) {
             delete list[t][a];
@@ -274,7 +274,7 @@ void area_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
 /**
  * @brief Clears the manifests.
  */
-void bitmap_content_manager::clear_manifests() {
+void BitmapContentManager::clear_manifests() {
     manifests.clear();
 }
 
@@ -282,7 +282,7 @@ void bitmap_content_manager::clear_manifests() {
 /**
  * @brief Fills in the manifests.
  */
-void bitmap_content_manager::fill_manifests() {
+void BitmapContentManager::fill_manifests() {
     fill_manifests_map(manifests, FOLDER_PATHS_FROM_PACK::GRAPHICS, false);
 }
 
@@ -292,7 +292,7 @@ void bitmap_content_manager::fill_manifests() {
  *
  * @return The name.
  */
-string bitmap_content_manager::get_name() const {
+string BitmapContentManager::get_name() const {
     return "bitmap";
 }
 
@@ -302,7 +302,7 @@ string bitmap_content_manager::get_name() const {
  *
  * @return The name.
  */
-string bitmap_content_manager::get_perf_mon_measurement_name() const {
+string BitmapContentManager::get_perf_mon_measurement_name() const {
     return "";
 }
 
@@ -312,7 +312,7 @@ string bitmap_content_manager::get_perf_mon_measurement_name() const {
  *
  * @param level Level to load at.
  */
-void bitmap_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
+void BitmapContentManager::load_all(CONTENT_LOAD_LEVEL level) {
 }
 
 
@@ -324,8 +324,8 @@ void bitmap_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
  * @param extension Extension of the bitmap file, dot included.
  * @return The path.
  */
-string bitmap_content_manager::manifest_to_path(
-    const content_manifest &manifest,
+string BitmapContentManager::manifest_to_path(
+    const ContentManifest &manifest,
     const string &extension
 ) const {
     return
@@ -343,8 +343,8 @@ string bitmap_content_manager::manifest_to_path(
  * @param out_manifest If not nullptr, the manifest is returned here.
  * @param out_type If not nullptr, the file extension is returned here.
  */
-void bitmap_content_manager::path_to_manifest(
-    const string &path, content_manifest* out_manifest, string* out_extension
+void BitmapContentManager::path_to_manifest(
+    const string &path, ContentManifest* out_manifest, string* out_extension
 ) const {
     if(out_manifest) {
         out_manifest->fill_from_path(path);
@@ -366,7 +366,7 @@ void bitmap_content_manager::path_to_manifest(
  *
  * @param level Load level. Should match the level used to load the content.
  */
-void bitmap_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
+void BitmapContentManager::unload_all(CONTENT_LOAD_LEVEL level) {
 }
 
 
@@ -378,8 +378,8 @@ void bitmap_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
  * of the pack.
  * @param folders True if the content is folders, false if it's files.
  */
-void content_type_manager::fill_manifests_map(
-    map<string, content_manifest> &manifests, const string &content_rel_path, bool folders
+void ContentTypeManager::fill_manifests_map(
+    map<string, ContentManifest> &manifests, const string &content_rel_path, bool folders
 ) {
     for(const auto &p : game.content.packs.manifests_with_base) {
         fill_manifests_map_from_pack(manifests, p, content_rel_path, folders);
@@ -396,8 +396,8 @@ void content_type_manager::fill_manifests_map(
  * of the pack.
  * @param folders True if the content is folders, false if it's files.
  */
-void content_type_manager::fill_manifests_map_from_pack(
-    map<string, content_manifest> &manifests, const string &pack_name,
+void ContentTypeManager::fill_manifests_map_from_pack(
+    map<string, ContentManifest> &manifests, const string &pack_name,
     const string &content_rel_path, bool folders
 ) {
     const string folder_path =
@@ -409,7 +409,7 @@ void content_type_manager::fill_manifests_map_from_pack(
         
     for(size_t i = 0; i < items.size(); i++) {
         string internal_name = remove_extension(items[i]);
-        manifests[internal_name] = content_manifest(internal_name, folder_path + "/" + items[i], pack_name);
+        manifests[internal_name] = ContentManifest(internal_name, folder_path + "/" + items[i], pack_name);
     }
 }
 
@@ -417,7 +417,7 @@ void content_type_manager::fill_manifests_map_from_pack(
 /**
  * @brief Clears the manifests.
  */
-void global_anim_content_manager::clear_manifests() {
+void GlobalAnimContentManager::clear_manifests() {
     manifests.clear();
 }
 
@@ -425,7 +425,7 @@ void global_anim_content_manager::clear_manifests() {
 /**
  * @brief Fills in the manifests.
  */
-void global_anim_content_manager::fill_manifests() {
+void GlobalAnimContentManager::fill_manifests() {
     fill_manifests_map(manifests, FOLDER_PATHS_FROM_PACK::GLOBAL_ANIMATIONS, false);
 }
 
@@ -435,7 +435,7 @@ void global_anim_content_manager::fill_manifests() {
  *
  * @return The name.
  */
-string global_anim_content_manager::get_name() const {
+string GlobalAnimContentManager::get_name() const {
     return "global animation database";
 }
 
@@ -445,7 +445,7 @@ string global_anim_content_manager::get_name() const {
  *
  * @return The name.
  */
-string global_anim_content_manager::get_perf_mon_measurement_name() const {
+string GlobalAnimContentManager::get_perf_mon_measurement_name() const {
     return "Global animation databases";
 }
 
@@ -455,7 +455,7 @@ string global_anim_content_manager::get_perf_mon_measurement_name() const {
  *
  * @param level Level to load at.
  */
-void global_anim_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
+void GlobalAnimContentManager::load_all(CONTENT_LOAD_LEVEL level) {
     for(auto &a : manifests) {
         load_animation_db(&a.second, level);
     }
@@ -468,9 +468,9 @@ void global_anim_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
  * @param manifest Manifest of the animation database.
  * @param level Level to load at.
  */
-void global_anim_content_manager::load_animation_db(content_manifest* manifest, CONTENT_LOAD_LEVEL level) {
-    data_node file(manifest->path);
-    animation_database db;
+void GlobalAnimContentManager::load_animation_db(ContentManifest* manifest, CONTENT_LOAD_LEVEL level) {
+    DataNode file(manifest->path);
+    AnimationDatabase db;
     db.manifest = manifest;
     db.load_from_data_node(&file);
     list[manifest->internal_name] = db;
@@ -484,8 +484,8 @@ void global_anim_content_manager::load_animation_db(content_manifest* manifest, 
  * @param manifest Manifest of the animation database.
  * @return The path.
  */
-string global_anim_content_manager::manifest_to_path(
-    const content_manifest &manifest
+string GlobalAnimContentManager::manifest_to_path(
+    const ContentManifest &manifest
 ) const {
     return
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
@@ -501,8 +501,8 @@ string global_anim_content_manager::manifest_to_path(
  * @param path Path to the animation database.
  * @param out_manifest If not nullptr, the manifest is returned here.
  */
-void global_anim_content_manager::path_to_manifest(
-    const string &path, content_manifest* out_manifest
+void GlobalAnimContentManager::path_to_manifest(
+    const string &path, ContentManifest* out_manifest
 ) const {
     if(out_manifest) {
         out_manifest->fill_from_path(path);
@@ -515,7 +515,7 @@ void global_anim_content_manager::path_to_manifest(
  *
  * @param level Load level. Should match the level used to load the content.
  */
-void global_anim_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
+void GlobalAnimContentManager::unload_all(CONTENT_LOAD_LEVEL level) {
     for(auto &a : list) {
         a.second.destroy();
     }
@@ -526,7 +526,7 @@ void global_anim_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
 /**
  * @brief Clears the manifests.
  */
-void gui_content_manager::clear_manifests() {
+void GuiContentManager::clear_manifests() {
     manifests.clear();
 }
 
@@ -534,7 +534,7 @@ void gui_content_manager::clear_manifests() {
 /**
  * @brief Fills in the manifests.
  */
-void gui_content_manager::fill_manifests() {
+void GuiContentManager::fill_manifests() {
     fill_manifests_map(manifests, FOLDER_PATHS_FROM_PACK::GUI, false);
 }
 
@@ -544,7 +544,7 @@ void gui_content_manager::fill_manifests() {
  *
  * @return The name.
  */
-string gui_content_manager::get_name() const {
+string GuiContentManager::get_name() const {
     return "GUI definition";
 }
 
@@ -554,7 +554,7 @@ string gui_content_manager::get_name() const {
  *
  * @return The name.
  */
-string gui_content_manager::get_perf_mon_measurement_name() const {
+string GuiContentManager::get_perf_mon_measurement_name() const {
     return "";
 }
 
@@ -564,7 +564,7 @@ string gui_content_manager::get_perf_mon_measurement_name() const {
  *
  * @param level Level to load at.
  */
-void gui_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
+void GuiContentManager::load_all(CONTENT_LOAD_LEVEL level) {
     for(const auto &g : manifests) {
         list[g.first] = load_data_file(g.second.path);
     }
@@ -578,8 +578,8 @@ void gui_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
  * @param manifest Manifest of the definition.
  * @return The path.
  */
-string gui_content_manager::manifest_to_path(
-    const content_manifest &manifest
+string GuiContentManager::manifest_to_path(
+    const ContentManifest &manifest
 ) const {
     return
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
@@ -595,8 +595,8 @@ string gui_content_manager::manifest_to_path(
  * @param path Path to the definition.
  * @param out_manifest If not nullptr, the manifest is returned here.
  */
-void gui_content_manager::path_to_manifest(
-    const string &path, content_manifest* out_manifest
+void GuiContentManager::path_to_manifest(
+    const string &path, ContentManifest* out_manifest
 ) const {
     if(out_manifest) {
         out_manifest->fill_from_path(path);
@@ -609,7 +609,7 @@ void gui_content_manager::path_to_manifest(
  *
  * @param level Load level. Should match the level used to load the content.
  */
-void gui_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
+void GuiContentManager::unload_all(CONTENT_LOAD_LEVEL level) {
     list.clear();
 }
 
@@ -617,7 +617,7 @@ void gui_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
 /**
  * @brief Clears the manifests.
  */
-void hazard_content_manager::clear_manifests() {
+void HazardContentManager::clear_manifests() {
     manifests.clear();
 }
 
@@ -625,7 +625,7 @@ void hazard_content_manager::clear_manifests() {
 /**
  * @brief Fills in the manifests.
  */
-void hazard_content_manager::fill_manifests() {
+void HazardContentManager::fill_manifests() {
     fill_manifests_map(manifests, FOLDER_PATHS_FROM_PACK::HAZARDS, false);
 }
 
@@ -635,7 +635,7 @@ void hazard_content_manager::fill_manifests() {
  *
  * @return The name.
  */
-string hazard_content_manager::get_name() const {
+string HazardContentManager::get_name() const {
     return "hazard";
 }
 
@@ -645,7 +645,7 @@ string hazard_content_manager::get_name() const {
  *
  * @return The name.
  */
-string hazard_content_manager::get_perf_mon_measurement_name() const {
+string HazardContentManager::get_perf_mon_measurement_name() const {
     return "Hazards";
 }
 
@@ -655,7 +655,7 @@ string hazard_content_manager::get_perf_mon_measurement_name() const {
  *
  * @param level Level to load at.
  */
-void hazard_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
+void HazardContentManager::load_all(CONTENT_LOAD_LEVEL level) {
     for(auto &h : manifests) {
         load_hazard(&h.second, level);
     }
@@ -668,13 +668,13 @@ void hazard_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
  * @param manifest Manifest of the hazard.
  * @param level Level to load at.
  */
-void hazard_content_manager::load_hazard(
-    content_manifest* manifest, CONTENT_LOAD_LEVEL level
+void HazardContentManager::load_hazard(
+    ContentManifest* manifest, CONTENT_LOAD_LEVEL level
 ) {
-    data_node file = load_data_file(manifest->path);
+    DataNode file = load_data_file(manifest->path);
     if(!file.file_was_opened) return;
     
-    hazard new_h;
+    Hazard new_h;
     new_h.manifest = manifest;
     new_h.load_from_data_node(&file);
     list[manifest->internal_name] = new_h;
@@ -688,8 +688,8 @@ void hazard_content_manager::load_hazard(
  * @param manifest Manifest of the hazard.
  * @return The path.
  */
-string hazard_content_manager::manifest_to_path(
-    const content_manifest &manifest
+string HazardContentManager::manifest_to_path(
+    const ContentManifest &manifest
 ) const {
     return
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
@@ -705,8 +705,8 @@ string hazard_content_manager::manifest_to_path(
  * @param path Path to the hazard.
  * @param out_manifest If not nullptr, the manifest is returned here.
  */
-void hazard_content_manager::path_to_manifest(
-    const string &path, content_manifest* out_manifest
+void HazardContentManager::path_to_manifest(
+    const string &path, ContentManifest* out_manifest
 ) const {
     if(out_manifest) {
         out_manifest->fill_from_path(path);
@@ -719,7 +719,7 @@ void hazard_content_manager::path_to_manifest(
  *
  * @param level Load level. Should match the level used to load the content.
  */
-void hazard_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
+void HazardContentManager::unload_all(CONTENT_LOAD_LEVEL level) {
     list.clear();
 }
 
@@ -727,7 +727,7 @@ void hazard_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
 /**
  * @brief Clears the manifests.
  */
-void liquid_content_manager::clear_manifests() {
+void LiquidContentManager::clear_manifests() {
     manifests.clear();
 }
 
@@ -735,7 +735,7 @@ void liquid_content_manager::clear_manifests() {
 /**
  * @brief Fills in the manifests.
  */
-void liquid_content_manager::fill_manifests() {
+void LiquidContentManager::fill_manifests() {
     fill_manifests_map(manifests, FOLDER_PATHS_FROM_PACK::LIQUIDS, false);
 }
 
@@ -745,7 +745,7 @@ void liquid_content_manager::fill_manifests() {
  *
  * @return The name.
  */
-string liquid_content_manager::get_name() const {
+string LiquidContentManager::get_name() const {
     return "liquid";
 }
 
@@ -755,7 +755,7 @@ string liquid_content_manager::get_name() const {
  *
  * @return The name.
  */
-string liquid_content_manager::get_perf_mon_measurement_name() const {
+string LiquidContentManager::get_perf_mon_measurement_name() const {
     return "Liquids";
 }
 
@@ -765,7 +765,7 @@ string liquid_content_manager::get_perf_mon_measurement_name() const {
  *
  * @param level Level to load at.
  */
-void liquid_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
+void LiquidContentManager::load_all(CONTENT_LOAD_LEVEL level) {
     for(auto &l : manifests) {
         load_liquid(&l.second, level);
     }
@@ -778,13 +778,13 @@ void liquid_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
  * @param manifest Manifest of the liquid.
  * @param level Level to load at.
  */
-void liquid_content_manager::load_liquid(
-    content_manifest* manifest, CONTENT_LOAD_LEVEL level
+void LiquidContentManager::load_liquid(
+    ContentManifest* manifest, CONTENT_LOAD_LEVEL level
 ) {
-    data_node file = load_data_file(manifest->path);
+    DataNode file = load_data_file(manifest->path);
     if(!file.file_was_opened) return;
     
-    liquid* new_l = new liquid();
+    Liquid* new_l = new Liquid();
     new_l->manifest = manifest;
     new_l->load_from_data_node(&file, level);
     list[manifest->internal_name] = new_l;
@@ -798,8 +798,8 @@ void liquid_content_manager::load_liquid(
  * @param manifest Manifest of the liquid.
  * @return The path.
  */
-string liquid_content_manager::manifest_to_path(
-    const content_manifest &manifest
+string LiquidContentManager::manifest_to_path(
+    const ContentManifest &manifest
 ) const {
     return
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
@@ -815,8 +815,8 @@ string liquid_content_manager::manifest_to_path(
  * @param path Path to the liquid.
  * @param out_manifest If not nullptr, the manifest is returned here.
  */
-void liquid_content_manager::path_to_manifest(
-    const string &path, content_manifest* out_manifest
+void LiquidContentManager::path_to_manifest(
+    const string &path, ContentManifest* out_manifest
 ) const {
     if(out_manifest) {
         out_manifest->fill_from_path(path);
@@ -829,7 +829,7 @@ void liquid_content_manager::path_to_manifest(
  *
  * @param level Load level. Should match the level used to load the content.
  */
-void liquid_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
+void LiquidContentManager::unload_all(CONTENT_LOAD_LEVEL level) {
     for(const auto &l : list) {
         delete l.second;
     }
@@ -840,7 +840,7 @@ void liquid_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
 /**
  * @brief Clears the manifests.
  */
-void misc_config_content_manager::clear_manifests() {
+void MiscConfigContentManager::clear_manifests() {
     manifests.clear();
 }
 
@@ -848,7 +848,7 @@ void misc_config_content_manager::clear_manifests() {
 /**
  * @brief Fills in the manifests.
  */
-void misc_config_content_manager::fill_manifests() {
+void MiscConfigContentManager::fill_manifests() {
     fill_manifests_map(manifests, FOLDER_PATHS_FROM_PACK::MISC, false);
 }
 
@@ -858,7 +858,7 @@ void misc_config_content_manager::fill_manifests() {
  *
  * @return The name.
  */
-string misc_config_content_manager::get_name() const {
+string MiscConfigContentManager::get_name() const {
     return "misc. config";
 }
 
@@ -868,7 +868,7 @@ string misc_config_content_manager::get_name() const {
  *
  * @return The name.
  */
-string misc_config_content_manager::get_perf_mon_measurement_name() const {
+string MiscConfigContentManager::get_perf_mon_measurement_name() const {
     return "";
 }
 
@@ -878,11 +878,11 @@ string misc_config_content_manager::get_perf_mon_measurement_name() const {
  *
  * @param level Level to load at.
  */
-void misc_config_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
+void MiscConfigContentManager::load_all(CONTENT_LOAD_LEVEL level) {
     //Game config.
     string config_file_internal_name =
         remove_extension(FILE_NAMES::GAME_CONFIG);
-    data_node game_config_file =
+    DataNode game_config_file =
         load_data_file(manifests[config_file_internal_name].path);
     game.config.load(&game_config_file);
     
@@ -894,7 +894,7 @@ void misc_config_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
     //System content names.
     string scn_file_internal_name =
         remove_extension(FILE_NAMES::SYSTEM_CONTENT_NAMES);
-    data_node scn_file =
+    DataNode scn_file =
         load_data_file(manifests[scn_file_internal_name].path);
     game.sys_content_names.load(&scn_file);
 }
@@ -907,8 +907,8 @@ void misc_config_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
  * @param manifest Manifest of the config.
  * @return The path.
  */
-string misc_config_content_manager::manifest_to_path(
-    const content_manifest &manifest
+string MiscConfigContentManager::manifest_to_path(
+    const ContentManifest &manifest
 ) const {
     return
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
@@ -924,8 +924,8 @@ string misc_config_content_manager::manifest_to_path(
  * @param path Path to the config.
  * @param out_manifest If not nullptr, the manifest is returned here.
  */
-void misc_config_content_manager::path_to_manifest(
-    const string &path, content_manifest* out_manifest
+void MiscConfigContentManager::path_to_manifest(
+    const string &path, ContentManifest* out_manifest
 ) const {
     if(out_manifest) {
         out_manifest->fill_from_path(path);
@@ -938,14 +938,14 @@ void misc_config_content_manager::path_to_manifest(
  *
  * @param level Load level. Should match the level used to load the content.
  */
-void misc_config_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
+void MiscConfigContentManager::unload_all(CONTENT_LOAD_LEVEL level) {
 }
 
 
 /**
  * @brief Clears the manifests.
  */
-void mob_anim_content_manager::clear_manifests() {
+void MobAnimContentManager::clear_manifests() {
     manifests.clear();
 }
 
@@ -953,11 +953,11 @@ void mob_anim_content_manager::clear_manifests() {
 /**
  * @brief Fills in the manifests.
  */
-void mob_anim_content_manager::fill_manifests() {
+void MobAnimContentManager::fill_manifests() {
     for(size_t c = 0; c < N_MOB_CATEGORIES; c++) {
-        manifests.push_back(map<string, content_manifest>());
+        manifests.push_back(map<string, ContentManifest>());
         if(c == MOB_CATEGORY_NONE) continue;
-        mob_category* category = game.mob_categories.get((MOB_CATEGORY) c);
+        MobCategory* category = game.mob_categories.get((MOB_CATEGORY) c);
         if(category->folder_name.empty()) return;
         
         for(const auto &p : game.content.packs.manifests_with_base) {
@@ -970,8 +970,8 @@ void mob_anim_content_manager::fill_manifests() {
 /**
  * @brief Fills in the manifests from a specific pack.
  */
-void mob_anim_content_manager::fill_cat_manifests_from_pack(
-    mob_category* category, const string &pack_name
+void MobAnimContentManager::fill_cat_manifests_from_pack(
+    MobCategory* category, const string &pack_name
 ) {
     const string category_path =
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
@@ -982,7 +982,7 @@ void mob_anim_content_manager::fill_cat_manifests_from_pack(
     for(size_t f = 0; f < type_folders.size(); f++) {
         string internal_name = type_folders[f];
         manifests[category->id][internal_name] =
-            content_manifest(
+            ContentManifest(
                 internal_name,
                 category_path + "/" +
                 internal_name + "/" +
@@ -998,7 +998,7 @@ void mob_anim_content_manager::fill_cat_manifests_from_pack(
  *
  * @return The name.
  */
-string mob_anim_content_manager::get_name() const {
+string MobAnimContentManager::get_name() const {
     return "mob animation database";
 }
 
@@ -1008,7 +1008,7 @@ string mob_anim_content_manager::get_name() const {
  *
  * @return The name.
  */
-string mob_anim_content_manager::get_perf_mon_measurement_name() const {
+string MobAnimContentManager::get_perf_mon_measurement_name() const {
     return "Object animation databases";
 }
 
@@ -1018,9 +1018,9 @@ string mob_anim_content_manager::get_perf_mon_measurement_name() const {
  *
  * @param level Level to load at.
  */
-void mob_anim_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
+void MobAnimContentManager::load_all(CONTENT_LOAD_LEVEL level) {
     for(size_t c = 0; c < N_MOB_CATEGORIES; c++) {
-        list.push_back(map<string, animation_database>());
+        list.push_back(map<string, AnimationDatabase>());
         for(auto &a : manifests[c]) {
             load_animation_db(&a.second, level, (MOB_CATEGORY) c);
         }
@@ -1035,9 +1035,9 @@ void mob_anim_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
  * @param level Level to load at.
  * @param category_id Mob category ID.
  */
-void mob_anim_content_manager::load_animation_db(content_manifest* manifest, CONTENT_LOAD_LEVEL level, MOB_CATEGORY category_id) {
-    data_node file(manifest->path);
-    animation_database db;
+void MobAnimContentManager::load_animation_db(ContentManifest* manifest, CONTENT_LOAD_LEVEL level, MOB_CATEGORY category_id) {
+    DataNode file(manifest->path);
+    AnimationDatabase db;
     db.manifest = manifest;
     db.load_from_data_node(&file);
     list[category_id][manifest->internal_name] = db;
@@ -1053,8 +1053,8 @@ void mob_anim_content_manager::load_animation_db(content_manifest* manifest, CON
  * @param type Mob type folder name.
  * @return The path.
  */
-string mob_anim_content_manager::manifest_to_path(
-    const content_manifest &manifest, const string &category,
+string MobAnimContentManager::manifest_to_path(
+    const ContentManifest &manifest, const string &category,
     const string &type
 ) const {
     return
@@ -1077,8 +1077,8 @@ string mob_anim_content_manager::manifest_to_path(
  * @param out_type If not nullptr, the mob type folder name
  * is returned here.
  */
-void mob_anim_content_manager::path_to_manifest(
-    const string &path, content_manifest* out_manifest,
+void MobAnimContentManager::path_to_manifest(
+    const string &path, ContentManifest* out_manifest,
     string* out_category, string* out_type
 ) const {
     if(out_manifest) {
@@ -1108,7 +1108,7 @@ void mob_anim_content_manager::path_to_manifest(
  *
  * @param level Load level. Should match the level used to load the content.
  */
-void mob_anim_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
+void MobAnimContentManager::unload_all(CONTENT_LOAD_LEVEL level) {
     for(size_t t = 0; t < list.size(); t++) {
         for(auto &a : list[t]) {
             a.second.destroy();
@@ -1121,7 +1121,7 @@ void mob_anim_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
 /**
  * @brief Clears the manifests.
  */
-void mob_type_content_manager::clear_manifests() {
+void MobTypeContentManager::clear_manifests() {
     manifests.clear();
 }
 
@@ -1129,9 +1129,9 @@ void mob_type_content_manager::clear_manifests() {
 /**
  * @brief Fills in the manifests.
  */
-void mob_type_content_manager::fill_manifests() {
+void MobTypeContentManager::fill_manifests() {
     for(size_t c = 0; c < N_MOB_CATEGORIES; c++) {
-        manifests.push_back(map<string, content_manifest>());
+        manifests.push_back(map<string, ContentManifest>());
         if(c == MOB_CATEGORY_NONE) continue;
         fill_manifests_map(
             manifests[c],
@@ -1148,7 +1148,7 @@ void mob_type_content_manager::fill_manifests() {
  *
  * @return The name.
  */
-string mob_type_content_manager::get_name() const {
+string MobTypeContentManager::get_name() const {
     return "mob type";
 }
 
@@ -1158,7 +1158,7 @@ string mob_type_content_manager::get_name() const {
  *
  * @return The name.
  */
-string mob_type_content_manager::get_perf_mon_measurement_name() const {
+string MobTypeContentManager::get_perf_mon_measurement_name() const {
     return "";
 }
 
@@ -1168,14 +1168,14 @@ string mob_type_content_manager::get_perf_mon_measurement_name() const {
  *
  * @param level Level to load at.
  */
-void mob_type_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
+void MobTypeContentManager::load_all(CONTENT_LOAD_LEVEL level) {
     //Load the categorized mob types.
     for(size_t c = 0; c < N_MOB_CATEGORIES; c++) {
         if(c == MOB_CATEGORY_NONE) {
             continue;
         }
         
-        mob_category* category = game.mob_categories.get((MOB_CATEGORY) c);
+        MobCategory* category = game.mob_categories.get((MOB_CATEGORY) c);
         if(game.perf_mon) {
             game.perf_mon->start_measurement(
                 "Object types -- " + category->name
@@ -1274,15 +1274,15 @@ void mob_type_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
  * @param category Pointer to the mob category.
  * @param level Level to load at.
  */
-void mob_type_content_manager::load_mob_types_of_category(mob_category* category, CONTENT_LOAD_LEVEL level) {
+void MobTypeContentManager::load_mob_types_of_category(MobCategory* category, CONTENT_LOAD_LEVEL level) {
     if(category->folder_name.empty()) return;
     
-    map<string, content_manifest> &man = manifests[category->id];
+    map<string, ContentManifest> &man = manifests[category->id];
     for(auto &t : man) {
-        data_node file(t.second.path + "/data.txt");
+        DataNode file(t.second.path + "/data.txt");
         if(!file.file_was_opened) continue;
         
-        mob_type* mt;
+        MobType* mt;
         mt = category->create_type();
         mt->manifest = &t.second;
         mt->load_from_data_node(&file, level, t.second.path);
@@ -1300,8 +1300,8 @@ void mob_type_content_manager::load_mob_types_of_category(mob_category* category
  * @param category Mob category folder name.
  * @return The path.
  */
-string mob_type_content_manager::manifest_to_path(
-    const content_manifest &manifest, const string &category
+string MobTypeContentManager::manifest_to_path(
+    const ContentManifest &manifest, const string &category
 ) const {
     return
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
@@ -1320,8 +1320,8 @@ string mob_type_content_manager::manifest_to_path(
  * @param out_category If not nullptr, the mob category folder name
  * is returned here.
  */
-void mob_type_content_manager::path_to_manifest(
-    const string &path, content_manifest* out_manifest, string* out_category
+void MobTypeContentManager::path_to_manifest(
+    const string &path, ContentManifest* out_manifest, string* out_category
 ) const {
     if(out_manifest) {
         out_manifest->fill_from_path(path);
@@ -1342,12 +1342,12 @@ void mob_type_content_manager::path_to_manifest(
  *
  * @param level Load level. Should match the level used to load the content.
  */
-void mob_type_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
+void MobTypeContentManager::unload_all(CONTENT_LOAD_LEVEL level) {
     game.config.leader_order.clear();
     game.config.pikmin_order.clear();
     
     for(size_t c = 0; c < N_MOB_CATEGORIES; c++) {
-        mob_category* category = game.mob_categories.get((MOB_CATEGORY) c);
+        MobCategory* category = game.mob_categories.get((MOB_CATEGORY) c);
         unload_mob_types_of_category(category, level);
     }
 }
@@ -1359,7 +1359,7 @@ void mob_type_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
  * @param mt Mob type to unload.
  * @param level Should match the level at which the content got loaded.
  */
-void mob_type_content_manager::unload_mob_type(mob_type* mt, CONTENT_LOAD_LEVEL level) {
+void MobTypeContentManager::unload_mob_type(MobType* mt, CONTENT_LOAD_LEVEL level) {
     for(size_t s = 0; s < mt->sounds.size(); s++) {
         ALLEGRO_SAMPLE* s_ptr = mt->sounds[s].sample;
         if(!s) continue;
@@ -1378,13 +1378,13 @@ void mob_type_content_manager::unload_mob_type(mob_type* mt, CONTENT_LOAD_LEVEL 
  * @param category Pointer to the mob category.
  * @param level Should match the level at which the content got loaded.
  */
-void mob_type_content_manager::unload_mob_types_of_category(mob_category* category, CONTENT_LOAD_LEVEL level) {
+void MobTypeContentManager::unload_mob_types_of_category(MobCategory* category, CONTENT_LOAD_LEVEL level) {
 
     vector<string> type_names;
     category->get_type_names(type_names);
     
     for(size_t t = 0; t < type_names.size(); t++) {
-        mob_type* mt = category->get_type(type_names[t]);
+        MobType* mt = category->get_type(type_names[t]);
         unload_mob_type(mt, level);
     }
     
@@ -1395,7 +1395,7 @@ void mob_type_content_manager::unload_mob_types_of_category(mob_category* catego
 /**
  * @brief Clears the manifests.
  */
-void particle_gen_content_manager::clear_manifests() {
+void ParticleGenContentManager::clear_manifests() {
     manifests.clear();
 }
 
@@ -1403,7 +1403,7 @@ void particle_gen_content_manager::clear_manifests() {
 /**
  * @brief Fills in the manifests.
  */
-void particle_gen_content_manager::fill_manifests() {
+void ParticleGenContentManager::fill_manifests() {
     fill_manifests_map(manifests, FOLDER_PATHS_FROM_PACK::PARTICLE_GENERATORS, false);
 }
 
@@ -1413,7 +1413,7 @@ void particle_gen_content_manager::fill_manifests() {
  *
  * @return The name.
  */
-string particle_gen_content_manager::get_name() const {
+string ParticleGenContentManager::get_name() const {
     return "particle generator";
 }
 
@@ -1423,7 +1423,7 @@ string particle_gen_content_manager::get_name() const {
  *
  * @return The name.
  */
-string particle_gen_content_manager::get_perf_mon_measurement_name() const {
+string ParticleGenContentManager::get_perf_mon_measurement_name() const {
     return "Particle generators";
 }
 
@@ -1433,7 +1433,7 @@ string particle_gen_content_manager::get_perf_mon_measurement_name() const {
  *
  * @param level Level to load at.
  */
-void particle_gen_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
+void ParticleGenContentManager::load_all(CONTENT_LOAD_LEVEL level) {
     for(auto &g : manifests) {
         load_generator(&g.second, level);
     }
@@ -1446,13 +1446,13 @@ void particle_gen_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
  * @param manifest Manifest of the particle generator.
  * @param level Level to load at.
  */
-void particle_gen_content_manager::load_generator(
-    content_manifest* manifest, CONTENT_LOAD_LEVEL level
+void ParticleGenContentManager::load_generator(
+    ContentManifest* manifest, CONTENT_LOAD_LEVEL level
 ) {
-    data_node file = load_data_file(manifest->path);
+    DataNode file = load_data_file(manifest->path);
     if(!file.file_was_opened) return;
     
-    particle_generator new_pg;
+    ParticleGenerator new_pg;
     new_pg.manifest = manifest;
     new_pg.load_from_data_node(&file, level);
     list[manifest->internal_name] = new_pg;
@@ -1466,8 +1466,8 @@ void particle_gen_content_manager::load_generator(
  * @param manifest Manifest of the generator.
  * @return The path.
  */
-string particle_gen_content_manager::manifest_to_path(
-    const content_manifest &manifest
+string ParticleGenContentManager::manifest_to_path(
+    const ContentManifest &manifest
 ) const {
     return
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
@@ -1483,8 +1483,8 @@ string particle_gen_content_manager::manifest_to_path(
  * @param path Path to the generator.
  * @param out_manifest If not nullptr, the manifest is returned here.
  */
-void particle_gen_content_manager::path_to_manifest(
-    const string &path, content_manifest* out_manifest
+void ParticleGenContentManager::path_to_manifest(
+    const string &path, ContentManifest* out_manifest
 ) const {
     if(out_manifest) {
         out_manifest->fill_from_path(path);
@@ -1497,7 +1497,7 @@ void particle_gen_content_manager::path_to_manifest(
  *
  * @param level Load level. Should match the level used to load the content.
  */
-void particle_gen_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
+void ParticleGenContentManager::unload_all(CONTENT_LOAD_LEVEL level) {
     for(auto g = list.begin(); g != list.end(); ++g) {
         game.content.bitmaps.list.free(g->second.base_particle.bitmap);
     }
@@ -1508,7 +1508,7 @@ void particle_gen_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
 /**
  * @brief Clears the manifests.
  */
-void sound_content_manager::clear_manifests() {
+void SoundContentManager::clear_manifests() {
     manifests.clear();
 }
 
@@ -1516,7 +1516,7 @@ void sound_content_manager::clear_manifests() {
 /**
  * @brief Fills in the manifests.
  */
-void sound_content_manager::fill_manifests() {
+void SoundContentManager::fill_manifests() {
     fill_manifests_map(manifests, FOLDER_PATHS_FROM_PACK::SOUNDS, false);
 }
 
@@ -1526,7 +1526,7 @@ void sound_content_manager::fill_manifests() {
  *
  * @return The name.
  */
-string sound_content_manager::get_name() const {
+string SoundContentManager::get_name() const {
     return "audio sample";
 }
 
@@ -1536,7 +1536,7 @@ string sound_content_manager::get_name() const {
  *
  * @return The name.
  */
-string sound_content_manager::get_perf_mon_measurement_name() const {
+string SoundContentManager::get_perf_mon_measurement_name() const {
     return "";
 }
 
@@ -1546,7 +1546,7 @@ string sound_content_manager::get_perf_mon_measurement_name() const {
  *
  * @param level Level to load at.
  */
-void sound_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
+void SoundContentManager::load_all(CONTENT_LOAD_LEVEL level) {
 }
 
 
@@ -1558,8 +1558,8 @@ void sound_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
  * @param extension Extension of the sample file, dot included.
  * @return The path.
  */
-string sound_content_manager::manifest_to_path(
-    const content_manifest &manifest,
+string SoundContentManager::manifest_to_path(
+    const ContentManifest &manifest,
     const string &extension
 ) const {
     return
@@ -1577,8 +1577,8 @@ string sound_content_manager::manifest_to_path(
  * @param out_manifest If not nullptr, the manifest is returned here.
  * @param out_type If not nullptr, the file extension is returned here.
  */
-void sound_content_manager::path_to_manifest(
-    const string &path, content_manifest* out_manifest, string* out_extension
+void SoundContentManager::path_to_manifest(
+    const string &path, ContentManifest* out_manifest, string* out_extension
 ) const {
     if(out_manifest) {
         out_manifest->fill_from_path(path);
@@ -1600,14 +1600,14 @@ void sound_content_manager::path_to_manifest(
  *
  * @param level Load level. Should match the level used to load the content.
  */
-void sound_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
+void SoundContentManager::unload_all(CONTENT_LOAD_LEVEL level) {
 }
 
 
 /**
  * @brief Clears the manifests.
  */
-void song_content_manager::clear_manifests() {
+void SongContentManager::clear_manifests() {
     manifests.clear();
 }
 
@@ -1615,7 +1615,7 @@ void song_content_manager::clear_manifests() {
 /**
  * @brief Fills in the manifests.
  */
-void song_content_manager::fill_manifests() {
+void SongContentManager::fill_manifests() {
     fill_manifests_map(manifests, FOLDER_PATHS_FROM_PACK::SONGS, false);
 }
 
@@ -1625,7 +1625,7 @@ void song_content_manager::fill_manifests() {
  *
  * @return The name.
  */
-string song_content_manager::get_name() const {
+string SongContentManager::get_name() const {
     return "song";
 }
 
@@ -1635,7 +1635,7 @@ string song_content_manager::get_name() const {
  *
  * @return The name.
  */
-string song_content_manager::get_perf_mon_measurement_name() const {
+string SongContentManager::get_perf_mon_measurement_name() const {
     return "";
 }
 
@@ -1645,7 +1645,7 @@ string song_content_manager::get_perf_mon_measurement_name() const {
  *
  * @param level Level to load at.
  */
-void song_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
+void SongContentManager::load_all(CONTENT_LOAD_LEVEL level) {
     for(auto &s : manifests) {
         load_song(&s.second, level);
     }
@@ -1658,11 +1658,11 @@ void song_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
  * @param manifest Manifest of the song.
  * @param level Level to load at.
  */
-void song_content_manager::load_song(content_manifest* manifest, CONTENT_LOAD_LEVEL level) {
-    data_node file = load_data_file(manifest->path);
+void SongContentManager::load_song(ContentManifest* manifest, CONTENT_LOAD_LEVEL level) {
+    DataNode file = load_data_file(manifest->path);
     if(!file.file_was_opened) return;
     
-    song new_song;
+    Song new_song;
     new_song.manifest = manifest;
     new_song.load_from_data_node(&file);
     list[manifest->internal_name] = new_song;
@@ -1676,8 +1676,8 @@ void song_content_manager::load_song(content_manifest* manifest, CONTENT_LOAD_LE
  * @param manifest Manifest of the song.
  * @return The path.
  */
-string song_content_manager::manifest_to_path(
-    const content_manifest &manifest
+string SongContentManager::manifest_to_path(
+    const ContentManifest &manifest
 ) const {
     return
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
@@ -1693,8 +1693,8 @@ string song_content_manager::manifest_to_path(
  * @param path Path to the song.
  * @param out_manifest If not nullptr, the manifest is returned here.
  */
-void song_content_manager::path_to_manifest(
-    const string &path, content_manifest* out_manifest
+void SongContentManager::path_to_manifest(
+    const string &path, ContentManifest* out_manifest
 ) const {
     if(out_manifest) {
         out_manifest->fill_from_path(path);
@@ -1707,7 +1707,7 @@ void song_content_manager::path_to_manifest(
  *
  * @param level Load level. Should match the level used to load the content.
  */
-void song_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
+void SongContentManager::unload_all(CONTENT_LOAD_LEVEL level) {
     for(auto &s : list) {
         s.second.unload();
     }
@@ -1718,7 +1718,7 @@ void song_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
 /**
  * @brief Clears the manifests.
  */
-void song_track_content_manager::clear_manifests() {
+void SongTrackContentManager::clear_manifests() {
     manifests.clear();
 }
 
@@ -1726,7 +1726,7 @@ void song_track_content_manager::clear_manifests() {
 /**
  * @brief Fills in the manifests.
  */
-void song_track_content_manager::fill_manifests() {
+void SongTrackContentManager::fill_manifests() {
     fill_manifests_map(manifests, FOLDER_PATHS_FROM_PACK::SONG_TRACKS, false);
 }
 
@@ -1736,7 +1736,7 @@ void song_track_content_manager::fill_manifests() {
  *
  * @return The name.
  */
-string song_track_content_manager::get_name() const {
+string SongTrackContentManager::get_name() const {
     return "song track";
 }
 
@@ -1746,7 +1746,7 @@ string song_track_content_manager::get_name() const {
  *
  * @return The name.
  */
-string song_track_content_manager::get_perf_mon_measurement_name() const {
+string SongTrackContentManager::get_perf_mon_measurement_name() const {
     return "";
 }
 
@@ -1756,7 +1756,7 @@ string song_track_content_manager::get_perf_mon_measurement_name() const {
  *
  * @param level Level to load at.
  */
-void song_track_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
+void SongTrackContentManager::load_all(CONTENT_LOAD_LEVEL level) {
 }
 
 
@@ -1768,8 +1768,8 @@ void song_track_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
  * @param extension Extension of the song track file, dot included.
  * @return The path.
  */
-string song_track_content_manager::manifest_to_path(
-    const content_manifest &manifest,
+string SongTrackContentManager::manifest_to_path(
+    const ContentManifest &manifest,
     const string &extension
 ) const {
     return
@@ -1787,8 +1787,8 @@ string song_track_content_manager::manifest_to_path(
  * @param out_manifest If not nullptr, the manifest is returned here.
  * @param out_type If not nullptr, the file extension is returned here.
  */
-void song_track_content_manager::path_to_manifest(
-    const string &path, content_manifest* out_manifest, string* out_extension
+void SongTrackContentManager::path_to_manifest(
+    const string &path, ContentManifest* out_manifest, string* out_extension
 ) const {
     if(out_manifest) {
         out_manifest->fill_from_path(path);
@@ -1810,7 +1810,7 @@ void song_track_content_manager::path_to_manifest(
  *
  * @param level Load level. Should match the level used to load the content.
  */
-void song_track_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
+void SongTrackContentManager::unload_all(CONTENT_LOAD_LEVEL level) {
 
 }
 
@@ -1818,7 +1818,7 @@ void song_track_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
 /**
  * @brief Clears the manifests.
  */
-void spike_damage_type_content_manager::clear_manifests() {
+void SpikeDamageTypeContentManager::clear_manifests() {
     manifests.clear();
 }
 
@@ -1826,7 +1826,7 @@ void spike_damage_type_content_manager::clear_manifests() {
 /**
  * @brief Fills in the manifests.
  */
-void spike_damage_type_content_manager::fill_manifests() {
+void SpikeDamageTypeContentManager::fill_manifests() {
     fill_manifests_map(manifests, FOLDER_PATHS_FROM_PACK::SPIKE_DAMAGES_TYPES, false);
 }
 
@@ -1836,7 +1836,7 @@ void spike_damage_type_content_manager::fill_manifests() {
  *
  * @return The name.
  */
-string spike_damage_type_content_manager::get_name() const {
+string SpikeDamageTypeContentManager::get_name() const {
     return "spike damage type";
 }
 
@@ -1846,7 +1846,7 @@ string spike_damage_type_content_manager::get_name() const {
  *
  * @return The name.
  */
-string spike_damage_type_content_manager::get_perf_mon_measurement_name() const {
+string SpikeDamageTypeContentManager::get_perf_mon_measurement_name() const {
     return "Spike damage types";
 }
 
@@ -1856,7 +1856,7 @@ string spike_damage_type_content_manager::get_perf_mon_measurement_name() const 
  *
  * @param level Level to load at.
  */
-void spike_damage_type_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
+void SpikeDamageTypeContentManager::load_all(CONTENT_LOAD_LEVEL level) {
     for(auto &s : manifests) {
         load_spike_damage_type(&s.second, level);
     }
@@ -1869,11 +1869,11 @@ void spike_damage_type_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
  * @param manifest Manifest of the spike damage type.
  * @param level Level to load at.
  */
-void spike_damage_type_content_manager::load_spike_damage_type(content_manifest* manifest, CONTENT_LOAD_LEVEL level) {
-    data_node file = load_data_file(manifest->path);
+void SpikeDamageTypeContentManager::load_spike_damage_type(ContentManifest* manifest, CONTENT_LOAD_LEVEL level) {
+    DataNode file = load_data_file(manifest->path);
     if(!file.file_was_opened) return;
     
-    spike_damage_type new_t;
+    SpikeDamageType new_t;
     new_t.manifest = manifest;
     new_t.load_from_data_node(&file);
     list[manifest->internal_name] = new_t;
@@ -1887,8 +1887,8 @@ void spike_damage_type_content_manager::load_spike_damage_type(content_manifest*
  * @param manifest Manifest of the spike damage type.
  * @return The path.
  */
-string spike_damage_type_content_manager::manifest_to_path(
-    const content_manifest &manifest
+string SpikeDamageTypeContentManager::manifest_to_path(
+    const ContentManifest &manifest
 ) const {
     return
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
@@ -1904,8 +1904,8 @@ string spike_damage_type_content_manager::manifest_to_path(
  * @param path Path to the spike damage type.
  * @param out_manifest If not nullptr, the manifest is returned here.
  */
-void spike_damage_type_content_manager::path_to_manifest(
-    const string &path, content_manifest* out_manifest
+void SpikeDamageTypeContentManager::path_to_manifest(
+    const string &path, ContentManifest* out_manifest
 ) const {
     if(out_manifest) {
         out_manifest->fill_from_path(path);
@@ -1918,7 +1918,7 @@ void spike_damage_type_content_manager::path_to_manifest(
  *
  * @param level Load level. Should match the level used to load the content.
  */
-void spike_damage_type_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
+void SpikeDamageTypeContentManager::unload_all(CONTENT_LOAD_LEVEL level) {
     list.clear();
 }
 
@@ -1926,7 +1926,7 @@ void spike_damage_type_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
 /**
  * @brief Clears the manifests.
  */
-void spray_type_content_manager::clear_manifests() {
+void SprayTypeContentManager::clear_manifests() {
     manifests.clear();
 }
 
@@ -1934,7 +1934,7 @@ void spray_type_content_manager::clear_manifests() {
 /**
  * @brief Fills in the manifests.
  */
-void spray_type_content_manager::fill_manifests() {
+void SprayTypeContentManager::fill_manifests() {
     fill_manifests_map(manifests, FOLDER_PATHS_FROM_PACK::SPRAYS, false);
 }
 
@@ -1944,7 +1944,7 @@ void spray_type_content_manager::fill_manifests() {
  *
  * @return The name.
  */
-string spray_type_content_manager::get_name() const {
+string SprayTypeContentManager::get_name() const {
     return "spray type";
 }
 
@@ -1954,7 +1954,7 @@ string spray_type_content_manager::get_name() const {
  *
  * @return The name.
  */
-string spray_type_content_manager::get_perf_mon_measurement_name() const {
+string SprayTypeContentManager::get_perf_mon_measurement_name() const {
     return "Spray types";
 }
 
@@ -1964,7 +1964,7 @@ string spray_type_content_manager::get_perf_mon_measurement_name() const {
  *
  * @param level Level to load at.
  */
-void spray_type_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
+void SprayTypeContentManager::load_all(CONTENT_LOAD_LEVEL level) {
     for(auto &s : manifests) {
         load_spray_type(&s.second, level);
     }
@@ -2014,11 +2014,11 @@ void spray_type_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
  * @param manifest Manifest of the spray type.
  * @param level Level to load at.
  */
-void spray_type_content_manager::load_spray_type(content_manifest* manifest, CONTENT_LOAD_LEVEL level) {
-    data_node file = load_data_file(manifest->path);
+void SprayTypeContentManager::load_spray_type(ContentManifest* manifest, CONTENT_LOAD_LEVEL level) {
+    DataNode file = load_data_file(manifest->path);
     if(!file.file_was_opened) return;
     
-    spray_type new_t;
+    SprayType new_t;
     new_t.manifest = manifest;
     new_t.load_from_data_node(&file, level);
     list[manifest->internal_name] = new_t;
@@ -2032,8 +2032,8 @@ void spray_type_content_manager::load_spray_type(content_manifest* manifest, CON
  * @param manifest Manifest of the spray type.
  * @return The path.
  */
-string spray_type_content_manager::manifest_to_path(
-    const content_manifest &manifest
+string SprayTypeContentManager::manifest_to_path(
+    const ContentManifest &manifest
 ) const {
     return
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
@@ -2049,8 +2049,8 @@ string spray_type_content_manager::manifest_to_path(
  * @param path Path to the spray type.
  * @param out_manifest If not nullptr, the manifest is returned here.
  */
-void spray_type_content_manager::path_to_manifest(
-    const string &path, content_manifest* out_manifest
+void SprayTypeContentManager::path_to_manifest(
+    const string &path, ContentManifest* out_manifest
 ) const {
     if(out_manifest) {
         out_manifest->fill_from_path(path);
@@ -2063,7 +2063,7 @@ void spray_type_content_manager::path_to_manifest(
  *
  * @param level Load level. Should match the level used to load the content.
  */
-void spray_type_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
+void SprayTypeContentManager::unload_all(CONTENT_LOAD_LEVEL level) {
     for(const auto &s : list) {
         game.content.bitmaps.list.free(s.second.bmp_spray);
     }
@@ -2075,7 +2075,7 @@ void spray_type_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
 /**
  * @brief Clears the manifests.
  */
-void status_type_content_manager::clear_manifests() {
+void StatusTypeContentManager::clear_manifests() {
     manifests.clear();
 }
 
@@ -2083,7 +2083,7 @@ void status_type_content_manager::clear_manifests() {
 /**
  * @brief Fills in the manifests.
  */
-void status_type_content_manager::fill_manifests() {
+void StatusTypeContentManager::fill_manifests() {
     fill_manifests_map(manifests, FOLDER_PATHS_FROM_PACK::STATUSES, false);
 }
 
@@ -2093,7 +2093,7 @@ void status_type_content_manager::fill_manifests() {
  *
  * @return The name.
  */
-string status_type_content_manager::get_name() const {
+string StatusTypeContentManager::get_name() const {
     return "status type";
 }
 
@@ -2103,7 +2103,7 @@ string status_type_content_manager::get_name() const {
  *
  * @return The name.
  */
-string status_type_content_manager::get_perf_mon_measurement_name() const {
+string StatusTypeContentManager::get_perf_mon_measurement_name() const {
     return "Status types";
 }
 
@@ -2113,8 +2113,8 @@ string status_type_content_manager::get_perf_mon_measurement_name() const {
  *
  * @param level Level to load at.
  */
-void status_type_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
-    vector<status_type*> types_with_replacements;
+void StatusTypeContentManager::load_all(CONTENT_LOAD_LEVEL level) {
+    vector<StatusType*> types_with_replacements;
     vector<string> types_with_replacements_names;
     
     for(auto &s : manifests) {
@@ -2159,11 +2159,11 @@ void status_type_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
  * @param manifest Manifest of the status type.
  * @param level Level to load at.
  */
-void status_type_content_manager::load_status_type(content_manifest* manifest, CONTENT_LOAD_LEVEL level) {
-    data_node file = load_data_file(manifest->path);
+void StatusTypeContentManager::load_status_type(ContentManifest* manifest, CONTENT_LOAD_LEVEL level) {
+    DataNode file = load_data_file(manifest->path);
     if(!file.file_was_opened) return;
     
-    status_type* new_t = new status_type();
+    StatusType* new_t = new StatusType();
     new_t->manifest = manifest;
     new_t->load_from_data_node(&file, level);
     list[manifest->internal_name] = new_t;
@@ -2177,8 +2177,8 @@ void status_type_content_manager::load_status_type(content_manifest* manifest, C
  * @param manifest Manifest of the status type.
  * @return The path.
  */
-string status_type_content_manager::manifest_to_path(
-    const content_manifest &manifest
+string StatusTypeContentManager::manifest_to_path(
+    const ContentManifest &manifest
 ) const {
     return
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
@@ -2194,8 +2194,8 @@ string status_type_content_manager::manifest_to_path(
  * @param path Path to the status type.
  * @param out_manifest If not nullptr, the manifest is returned here.
  */
-void status_type_content_manager::path_to_manifest(
-    const string &path, content_manifest* out_manifest
+void StatusTypeContentManager::path_to_manifest(
+    const string &path, ContentManifest* out_manifest
 ) const {
     if(out_manifest) {
         out_manifest->fill_from_path(path);
@@ -2208,7 +2208,7 @@ void status_type_content_manager::path_to_manifest(
  *
  * @param level Load level. Should match the level used to load the content.
  */
-void status_type_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
+void StatusTypeContentManager::unload_all(CONTENT_LOAD_LEVEL level) {
     for(auto s : list) {
         delete s.second;
     }
@@ -2219,7 +2219,7 @@ void status_type_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
 /**
  * @brief Clears the manifests.
  */
-void weather_condition_content_manager::clear_manifests() {
+void WeatherConditionContentManager::clear_manifests() {
     manifests.clear();
 }
 
@@ -2227,7 +2227,7 @@ void weather_condition_content_manager::clear_manifests() {
 /**
  * @brief Fills in the manifests.
  */
-void weather_condition_content_manager::fill_manifests() {
+void WeatherConditionContentManager::fill_manifests() {
     fill_manifests_map(manifests, FOLDER_PATHS_FROM_PACK::WEATHER, false);
 }
 
@@ -2237,7 +2237,7 @@ void weather_condition_content_manager::fill_manifests() {
  *
  * @return The name.
  */
-string weather_condition_content_manager::get_name() const {
+string WeatherConditionContentManager::get_name() const {
     return "weather condition";
 }
 
@@ -2247,7 +2247,7 @@ string weather_condition_content_manager::get_name() const {
  *
  * @return The name.
  */
-string weather_condition_content_manager::get_perf_mon_measurement_name() const {
+string WeatherConditionContentManager::get_perf_mon_measurement_name() const {
     return "Weather conditions";
 }
 
@@ -2257,7 +2257,7 @@ string weather_condition_content_manager::get_perf_mon_measurement_name() const 
  *
  * @param level Level to load at.
  */
-void weather_condition_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
+void WeatherConditionContentManager::load_all(CONTENT_LOAD_LEVEL level) {
     for(auto &w : manifests) {
         load_weather_condition(&w.second, level);
     }
@@ -2270,11 +2270,11 @@ void weather_condition_content_manager::load_all(CONTENT_LOAD_LEVEL level) {
  * @param manifest Manifest of the weather condition.
  * @param level Level to load at.
  */
-void weather_condition_content_manager::load_weather_condition(content_manifest* manifest, CONTENT_LOAD_LEVEL level) {
-    data_node file = load_data_file(manifest->path);
+void WeatherConditionContentManager::load_weather_condition(ContentManifest* manifest, CONTENT_LOAD_LEVEL level) {
+    DataNode file = load_data_file(manifest->path);
     if(!file.file_was_opened) return;
     
-    weather new_w;
+    Weather new_w;
     new_w.manifest = manifest;
     new_w.load_from_data_node(&file);
     list[manifest->internal_name] = new_w;
@@ -2288,8 +2288,8 @@ void weather_condition_content_manager::load_weather_condition(content_manifest*
  * @param manifest Manifest of the weather condition.
  * @return The path.
  */
-string weather_condition_content_manager::manifest_to_path(
-    const content_manifest &manifest
+string WeatherConditionContentManager::manifest_to_path(
+    const ContentManifest &manifest
 ) const {
     return
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
@@ -2305,8 +2305,8 @@ string weather_condition_content_manager::manifest_to_path(
  * @param path Path to the weather condition.
  * @param out_manifest If not nullptr, the manifest is returned here.
  */
-void weather_condition_content_manager::path_to_manifest(
-    const string &path, content_manifest* out_manifest
+void WeatherConditionContentManager::path_to_manifest(
+    const string &path, ContentManifest* out_manifest
 ) const {
     if(out_manifest) {
         out_manifest->fill_from_path(path);
@@ -2319,6 +2319,6 @@ void weather_condition_content_manager::path_to_manifest(
  *
  * @param level Load level. Should match the level used to load the content.
  */
-void weather_condition_content_manager::unload_all(CONTENT_LOAD_LEVEL level) {
+void WeatherConditionContentManager::unload_all(CONTENT_LOAD_LEVEL level) {
     list.clear();
 }

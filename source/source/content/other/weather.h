@@ -50,7 +50,7 @@ enum PRECIPITATION_TYPE {
  * but on a cloudy day, everything is darker
  * and grayer).
  */
-class weather : public content {
+class Weather : public Content {
 
 public:
 
@@ -80,8 +80,8 @@ public:
     
     //--- Function declarations ---
     
-    weather();
-    weather(
+    Weather();
+    Weather(
         const string &n, const vector<std::pair<int, ALLEGRO_COLOR> > &dl,
         const vector<std::pair<int, unsigned char> > &ss,
         const vector<std::pair<int, unsigned char> > &bs,
@@ -91,7 +91,7 @@ public:
     ALLEGRO_COLOR get_daylight_color();
     ALLEGRO_COLOR get_fog_color();
     float get_sun_strength();
-    void load_from_data_node(data_node* node);
+    void load_from_data_node(DataNode* node);
     
 private:
 

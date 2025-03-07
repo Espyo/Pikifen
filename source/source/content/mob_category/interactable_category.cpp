@@ -19,8 +19,8 @@
 /**
  * @brief Constructs a new interactable category object.
  */
-interactable_category::interactable_category() :
-    mob_category(
+InteractableCategory::InteractableCategory() :
+    MobCategory(
         MOB_CATEGORY_INTERACTABLES, "interactable",
         "Interactable", "Interactables",
         "interactables", al_map_rgb(204, 139, 178)
@@ -32,7 +32,7 @@ interactable_category::interactable_category() :
 /**
  * @brief Clears the list of registered types of interactables.
  */
-void interactable_category::clear_types() {
+void InteractableCategory::clear_types() {
     for(auto &t : game.content.mob_types.list.interactable) {
         delete t.second;
     }
@@ -48,10 +48,10 @@ void interactable_category::clear_types() {
  * @param angle Starting angle.
  * @return The mob.
  */
-mob* interactable_category::create_mob(
-    const point &pos, mob_type* type, float angle
+Mob* InteractableCategory::create_mob(
+    const Point &pos, MobType* type, float angle
 ) {
-    interactable* m = new interactable(pos, (interactable_type*) type, angle);
+    Interactable* m = new Interactable(pos, (InteractableType*) type, angle);
     game.states.gameplay->mobs.interactables.push_back(m);
     return m;
 }
@@ -62,8 +62,8 @@ mob* interactable_category::create_mob(
  *
  * @return The type.
  */
-mob_type* interactable_category::create_type() {
-    return new interactable_type();
+MobType* InteractableCategory::create_type() {
+    return new InteractableType();
 }
 
 
@@ -72,12 +72,12 @@ mob_type* interactable_category::create_type() {
  *
  * @param m The mob to erase.
  */
-void interactable_category::erase_mob(mob* m) {
+void InteractableCategory::erase_mob(Mob* m) {
     game.states.gameplay->mobs.interactables.erase(
         find(
             game.states.gameplay->mobs.interactables.begin(),
             game.states.gameplay->mobs.interactables.end(),
-            (interactable*) m
+            (Interactable*) m
         )
     );
 }
@@ -90,7 +90,7 @@ void interactable_category::erase_mob(mob* m) {
  * @param internal_name Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-mob_type* interactable_category::get_type(const string &internal_name) const {
+MobType* InteractableCategory::get_type(const string &internal_name) const {
     auto it = game.content.mob_types.list.interactable.find(internal_name);
     if(it == game.content.mob_types.list.interactable.end()) return nullptr;
     return it->second;
@@ -102,7 +102,7 @@ mob_type* interactable_category::get_type(const string &internal_name) const {
  *
  * @param list This list gets filled with the mob type internal names.
  */
-void interactable_category::get_type_names(vector<string> &list) const {
+void InteractableCategory::get_type_names(vector<string> &list) const {
     for(auto &t : game.content.mob_types.list.interactable) {
         list.push_back(t.first);
     }
@@ -115,6 +115,6 @@ void interactable_category::get_type_names(vector<string> &list) const {
  * @param internal_name Internal name of the mob type.
  * @param type Mob type to register.
  */
-void interactable_category::register_type(const string &internal_name, mob_type* type) {
-    game.content.mob_types.list.interactable[internal_name] = (interactable_type*) type;
+void InteractableCategory::register_type(const string &internal_name, MobType* type) {
+    game.content.mob_types.list.interactable[internal_name] = (InteractableType*) type;
 }

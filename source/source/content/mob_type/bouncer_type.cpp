@@ -20,8 +20,8 @@
 /**
  * @brief Constructs a new bouncer type object.
  */
-bouncer_type::bouncer_type() :
-    mob_type(MOB_CATEGORY_BOUNCERS) {
+BouncerType::BouncerType() :
+    MobType(MOB_CATEGORY_BOUNCERS) {
     
     target_type = MOB_TARGET_FLAG_NONE;
     walkable = true;
@@ -38,7 +38,7 @@ bouncer_type::bouncer_type() :
 /**
  * @brief Returns the vector of animation conversions.
  */
-anim_conversion_vector bouncer_type::get_anim_conversions() const {
+anim_conversion_vector BouncerType::get_anim_conversions() const {
     anim_conversion_vector v;
     v.push_back(std::make_pair(BOUNCER_ANIM_IDLING, "idling"));
     v.push_back(std::make_pair(BOUNCER_ANIM_BOUNCING, "bouncing"));
@@ -51,13 +51,13 @@ anim_conversion_vector bouncer_type::get_anim_conversions() const {
  *
  * @param file File to read from.
  */
-void bouncer_type::load_cat_properties(data_node* file) {
-    reader_setter rs(file);
+void BouncerType::load_cat_properties(DataNode* file) {
+    ReaderSetter rs(file);
     
     string riders_str;
     string riding_pose_str;
-    data_node* riders_node = nullptr;
-    data_node* riding_pose_node = nullptr;
+    DataNode* riders_node = nullptr;
+    DataNode* riding_pose_node = nullptr;
     
     rs.set("riders", riders_str, &riders_node);
     rs.set("riding_pose", riding_pose_str, &riding_pose_node);

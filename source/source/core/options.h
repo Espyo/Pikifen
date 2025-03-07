@@ -72,10 +72,10 @@ extern const bool DEF_AREA_EDITOR_SHOW_CIRCULAR_INFO;
 extern const bool DEF_AREA_EDITOR_SHOW_EDGE_LENGTH;
 extern const bool DEF_AREA_EDITOR_SHOW_PATH_LINK_LENGTH;
 extern const bool DEF_AREA_EDITOR_SHOW_TERRITORY;
-extern const area_editor::SNAP_MODE DEF_AREA_EDITOR_SNAP_MODE;
+extern const AreaEditor::SNAP_MODE DEF_AREA_EDITOR_SNAP_MODE;
 extern const size_t DEF_AREA_EDITOR_SNAP_THRESHOLD;
 extern const size_t DEF_AREA_EDITOR_UNDO_LIMIT;
-extern const area_editor::VIEW_MODE DEF_AREA_EDITOR_VIEW_MODE;
+extern const AreaEditor::VIEW_MODE DEF_AREA_EDITOR_VIEW_MODE;
 extern const AUTO_THROW_MODE DEF_AUTO_THROW_MODE;
 extern const float DEF_CURSOR_CAM_WEIGHT;
 extern const float DEF_CURSOR_SPEED;
@@ -118,7 +118,7 @@ extern const float DEF_ZOOM_MID_LEVEL;
 /**
  * @brief Game options.
  */
-struct options_t {
+struct Options {
 
     //--- Members ---
     
@@ -153,7 +153,7 @@ struct options_t {
     bool area_editor_show_territory = OPTIONS::DEF_AREA_EDITOR_SHOW_TERRITORY;
     
     //Snap mode to use.
-    area_editor::SNAP_MODE area_editor_snap_mode = OPTIONS::DEF_AREA_EDITOR_SNAP_MODE;
+    AreaEditor::SNAP_MODE area_editor_snap_mode = OPTIONS::DEF_AREA_EDITOR_SNAP_MODE;
     
     //Snap when the cursor is this close to a vertex/edge.
     size_t area_editor_snap_threshold = OPTIONS::DEF_AREA_EDITOR_SNAP_THRESHOLD;
@@ -162,7 +162,7 @@ struct options_t {
     size_t area_editor_undo_limit = OPTIONS::DEF_AREA_EDITOR_UNDO_LIMIT;
     
     //View mode to use.
-    area_editor::VIEW_MODE area_editor_view_mode = OPTIONS::DEF_AREA_EDITOR_VIEW_MODE;
+    AreaEditor::VIEW_MODE area_editor_view_mode = OPTIONS::DEF_AREA_EDITOR_VIEW_MODE;
     
     //Auto-throw mode.
     AUTO_THROW_MODE auto_throw_mode = OPTIONS::DEF_AUTO_THROW_MODE;
@@ -292,7 +292,7 @@ struct options_t {
     
     //--- Function declarations ---
     
-    void load(data_node* file);
-    void save(data_node* file) const;
+    void load(DataNode* file);
+    void save(DataNode* file) const;
     
 };

@@ -15,8 +15,8 @@
 #include "../../content/other/mob_script.h"
 #include "../../util/geometry_utils.h"
 
-class leader;
-class pikmin_type;
+class Leader;
+class PikminType;
 
 
 /**
@@ -28,24 +28,24 @@ class pikmin_type;
  * We can then go through a vector of these pending intermob events in order.
  *
  */
-struct pending_intermob_event {
+struct PendingIntermobEvent {
 
     //--- Members ---
     
     //Distance between both mobs.
-    dist d;
+    Distance d;
     
     //Pointer to the relevant event.
-    mob_event* event_ptr = nullptr;
+    MobEvent* event_ptr = nullptr;
     
     //Mob who the event belongs to.
-    mob* mob_ptr = nullptr;
+    Mob* mob_ptr = nullptr;
     
     
     //--- Function definitions ---
     
-    pending_intermob_event(
-        const dist &d, mob_event* event_ptr, mob* mob_ptr
+    PendingIntermobEvent(
+        const Distance &d, MobEvent* event_ptr, Mob* mob_ptr
     ):
         d(d),
         event_ptr(event_ptr),

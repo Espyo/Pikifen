@@ -13,35 +13,35 @@
 #include <cstdio>
 
 
-struct sector;
-class mob;
-struct particle;
+struct Sector;
+class Mob;
+struct Particle;
 
 
 /**
  * @brief Something that makes up the interactable game world and can be drawn.
  * This contains information about how it should be drawn.
  */
-class world_component {
+class WorldComponent {
 
 public:
 
     //--- Members ---
     
     //If it's a sector, this points to it.
-    sector* sector_ptr = nullptr;
+    Sector* sector_ptr = nullptr;
     
     //If it's a mob shadow, this points to its mob.
-    mob* mob_shadow_ptr = nullptr;
+    Mob* mob_shadow_ptr = nullptr;
     
     //If it's a mob limb, this points to its mob.
-    mob* mob_limb_ptr = nullptr;
+    Mob* mob_limb_ptr = nullptr;
     
     //If it's a mob, this points to it.
-    mob* mob_ptr = nullptr;
+    Mob* mob_ptr = nullptr;
     
     //If it's a particle, this points to it.
-    particle* particle_ptr = nullptr;
+    Particle* particle_ptr = nullptr;
     
     //Its Z coordinate.
     float z = 0.0f;

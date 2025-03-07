@@ -87,7 +87,7 @@ enum STATUS_REAPPLY_RULE {
  * can even slowly kill the mob unless they're cleared out, like
  * Pikmin on fire or drowning.
  */
-class status_type : public content {
+class StatusType : public Content {
 
 public:
 
@@ -163,10 +163,10 @@ public:
     bool generates_particles = false;
     
     //Particle generator, if any.
-    particle_generator* particle_gen = nullptr;
+    ParticleGenerator* particle_gen = nullptr;
     
     //Horizontal offset of the particle generator.
-    point particle_offset_pos;
+    Point particle_offset_pos;
     
     //Vertical offset of the particle generator.
     float particle_offset_z = 0.0f;
@@ -181,10 +181,10 @@ public:
     float overlay_anim_mob_scale = 1.0f;
     
     //Animation instance for the overlay animation.
-    animation_instance overlay_anim;
+    AnimationInstance overlay_anim;
     
     //Replace with this other status effect, when its time is over.
-    status_type* replacement_on_timeout = nullptr;
+    StatusType* replacement_on_timeout = nullptr;
     
     //Replacement name. Used during loading.
     string replacement_on_timeout_str;
@@ -192,7 +192,7 @@ public:
     
     //--- Function declarations ---
     
-    void load_from_data_node(data_node* node, CONTENT_LOAD_LEVEL level);
+    void load_from_data_node(DataNode* node, CONTENT_LOAD_LEVEL level);
     
 };
 
@@ -200,12 +200,12 @@ public:
 /**
  * @brief Instance of an active status effect on a mob.
  */
-struct status {
+struct Status {
 
     //--- Members ---
     
     //Status type.
-    status_type* type = nullptr;
+    StatusType* type = nullptr;
     
     //Time left, if this status effect auto-removes itself.
     float time_left = 0.0f;
@@ -219,7 +219,7 @@ struct status {
     
     //--- Function declarations ---
     
-    explicit status(status_type* type);
+    explicit Status(StatusType* type);
     void tick(float delta_t);
     
 };

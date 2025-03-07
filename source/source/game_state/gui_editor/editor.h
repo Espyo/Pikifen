@@ -26,7 +26,7 @@ extern const float ZOOM_MIN_LEVEL;
 /**
  * @brief Info about the GUI editor.
  */
-class gui_editor : public editor {
+class GuiEditor : public Editor {
 
 public:
 
@@ -38,7 +38,7 @@ public:
     
     //--- Function declarations ---
     
-    gui_editor();
+    GuiEditor();
     void do_logic() override;
     void do_drawing() override;
     void load() override;
@@ -55,7 +55,7 @@ private:
     /**
      * @brief Represents a GUI item.
      */
-    struct item {
+    struct Item {
     
         //--- Members ---
         
@@ -63,10 +63,10 @@ private:
         string name;
         
         //Center coordinates.
-        point center;
+        Point center;
         
         //Width and height.
-        point size;
+        Point size;
         
     };
     
@@ -77,16 +77,16 @@ private:
     size_t cur_item = INVALID;
     
     //Data node for the contents of the current GUI definition.
-    data_node file_node;
+    DataNode file_node;
     
     //List of items for the current GUI definition.
-    vector<item> items;
+    vector<Item> items;
     
     //Picker info for the picker in the "load" dialog.
-    picker_info load_dialog_picker;
+    Picker load_dialog_picker;
     
     //Position of the load widget.
-    point load_widget_pos;
+    Point load_widget_pos;
     
     //The list of items must focus on the currently selected item.
     bool must_focus_on_cur_item = false;
@@ -95,13 +95,13 @@ private:
     bool must_recenter_cam = false;
     
     //Position of the reload widget.
-    point reload_widget_pos;
+    Point reload_widget_pos;
     
     //Position of the quit widget.
-    point quit_widget_pos;
+    Point quit_widget_pos;
     
     //The current transformation widget.
-    transformation_widget cur_transformation_widget;
+    TransformationWidget cur_transformation_widget;
     
     struct {
     
@@ -138,7 +138,7 @@ private:
     );
     bool save_gui_def();
     void setup_for_new_gui_def();
-    point snap_point(const point &p);
+    Point snap_point(const Point &p);
     static void draw_canvas_imgui_callback(
         const ImDrawList* parent_list, const ImDrawCmd* cmd
     );

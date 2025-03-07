@@ -19,18 +19,18 @@
 /**
  * @brief An object that moves others around as if on a track.
  */
-class track : public mob {
+class Track : public Mob {
 
 public:
 
     //--- Members ---
     
     //What type of track it is.
-    track_type* tra_type = nullptr;
+    TrackType* tra_type = nullptr;
     
     
     //--- Function declarations ---
     
-    track(const point &pos, track_type* type, float angle);
+    Track(const Point &pos, TrackType* type, float angle);
     
 };

@@ -31,20 +31,20 @@
  * @param e_idx Index of the edge whose effects to draw.
  */
 void draw_edge_offset_on_buffer(
-    const vector<edge_offset_cache> &caches, size_t e_idx
+    const vector<EdgeOffsetCache> &caches, size_t e_idx
 ) {
     //Keep the end opacity as a constant. Changing it helps with debugging.
     const float END_OPACITY = 0.0f;
-    edge* e_ptr = game.cur_area_data->edges[e_idx];
+    Edge* e_ptr = game.cur_area_data->edges[e_idx];
     
     //End vertexes. Like in update_offset_effect_caches, order is important.
-    vertex* end_vertexes[2];
+    Vertex* end_vertexes[2];
     //Relative coordinates of the tip of the rectangle, for each end vertex.
-    point end_rel_coords[2];
+    Point end_rel_coords[2];
     //Number of elbow triangles to use, for each end vertex.
     unsigned char n_elbow_tris[2] = {0, 0};
     //Relative coords of the elbow points, for each end vertex, each tri.
-    point elbow_rel_coords[2][2];
+    Point elbow_rel_coords[2][2];
     //Color of the effect, for each end vertex.
     ALLEGRO_COLOR end_colors[2];
     
@@ -69,7 +69,7 @@ void draw_edge_offset_on_buffer(
         
         //This end of the effect starts at the vertex,
         //and spreads to this point.
-        end_rel_coords[end] = rotate_point(point(length, 0), angle);
+        end_rel_coords[end] = rotate_point(Point(length, 0), angle);
         
         if(elbow_length > 0.0f) {
             //We need to also draw an elbow connecting this end of the
@@ -96,13 +96,13 @@ void draw_edge_offset_on_buffer(
                     angle - rect_to_elbow_diff / 2.0f :
                     angle + rect_to_elbow_diff / 2.0f;
                 elbow_rel_coords[end][0] =
-                    rotate_point(point(elbow_length, 0), mid_elbow_angle);
+                    rotate_point(Point(elbow_length, 0), mid_elbow_angle);
             } else {
                 n_elbow_tris[end] = 1;
             }
             
             elbow_rel_coords[end][n_elbow_tris[end] - 1] =
-                rotate_point(point(elbow_length, 0), elbow_angle);
+                rotate_point(Point(elbow_length, 0), elbow_angle);
         }
         
     }
@@ -191,7 +191,7 @@ void draw_edge_offset_on_buffer(
  * @param opacity Draw at this opacity, 0 - 1.
  */
 void draw_sector_edge_offsets(
-    sector* s_ptr, ALLEGRO_BITMAP* buffer, float opacity
+    Sector* s_ptr, ALLEGRO_BITMAP* buffer, float opacity
 ) {
     if(s_ptr->is_bottomless_pit) return;
     
@@ -199,8 +199,8 @@ void draw_sector_edge_offsets(
     ALLEGRO_VERTEX* av = new ALLEGRO_VERTEX[n_vertexes];
     
     for(size_t v = 0; v < n_vertexes; v++) {
-        const triangle* t_ptr = &s_ptr->triangles[floor(v / 3.0)];
-        vertex* v_ptr = t_ptr->points[v % 3];
+        const Triangle* t_ptr = &s_ptr->triangles[floor(v / 3.0)];
+        Vertex* v_ptr = t_ptr->points[v % 3];
         float vx = v_ptr->x;
         float vy = v_ptr->y;
         
@@ -254,7 +254,7 @@ void draw_sector_edge_offsets(
  * is returned here. 0 if no elbow is needed.
  */
 void get_edge_offset_edge_info(
-    edge* e_ptr, vertex* end_vertex, unsigned char end_idx,
+    Edge* e_ptr, Vertex* end_vertex, unsigned char end_idx,
     float edge_process_angle,
     offset_effect_checker_t checker,
     offset_effect_length_getter_t length_getter,
@@ -274,10 +274,10 @@ void get_edge_offset_edge_info(
     base_effect_angle = normalize_angle(base_effect_angle);
     bool edge_effect_cw = end_idx == 1;
     
-    edge* next_edge = nullptr;
+    Edge* next_edge = nullptr;
     float next_edge_angle = 0.0f;
     float next_edge_diff = 0.0f;
-    edge* next_eff_edge = nullptr;
+    Edge* next_eff_edge = nullptr;
     float next_eff_edge_angle = 0.0f;
     float next_eff_edge_diff = 0.0f;
     bool next_eff_edge_effect_cw = false;
@@ -433,31 +433,31 @@ void get_edge_offset_edge_info(
  * intersection point is returned here.
  */
 void get_edge_offset_intersection(
-    const edge* e1, const edge* e2, const vertex* common_vertex,
+    const Edge* e1, const Edge* e2, const Vertex* common_vertex,
     float base_effect_angle1, float base_effect_angle2,
     float effect_length,
     float* out_angle, float* out_length
 ) {
-    vertex* other_vertex1 = e1->get_other_vertex(common_vertex);
+    Vertex* other_vertex1 = e1->get_other_vertex(common_vertex);
     float base_cos1 = cos(base_effect_angle1);
     float base_sin1 = sin(base_effect_angle1);
-    point effect1_p0(
+    Point effect1_p0(
         common_vertex->x + base_cos1 * effect_length,
         common_vertex->y + base_sin1 * effect_length
     );
-    point effect1_p1(
+    Point effect1_p1(
         other_vertex1->x + base_cos1 * effect_length,
         other_vertex1->y + base_sin1 * effect_length
     );
     
-    vertex* other_vertex2 = e2->get_other_vertex(common_vertex);
+    Vertex* other_vertex2 = e2->get_other_vertex(common_vertex);
     float base_cos2 = cos(base_effect_angle2);
     float base_sin2 = sin(base_effect_angle2);
-    point effect2_p0(
+    Point effect2_p0(
         common_vertex->x + base_cos2 * effect_length,
         common_vertex->y + base_sin2 * effect_length
     );
-    point effect2_p1(
+    Point effect2_p1(
         other_vertex2->x + base_cos2 * effect_length,
         other_vertex2->y + base_sin2 * effect_length
     );
@@ -479,7 +479,7 @@ void get_edge_offset_intersection(
         //Clamp r to prevent long, close edges from
         //creating jagged effects outside the edge.
         r = clamp(r, 0.0f, 1.0f);
-        point p(
+        Point p(
             effect1_p0.x + (effect1_p1.x - effect1_p0.x) * r,
             effect1_p0.y + (effect1_p1.y - effect1_p0.y) * r
         );
@@ -510,20 +510,20 @@ void get_edge_offset_intersection(
  * @param out_diff The difference in angle between the two is returned here.
  */
 void get_next_edge(
-    vertex* v_ptr, float pivot_angle, bool clockwise,
-    const edge* ignore, edge** out_edge, float* out_angle, float* out_diff
+    Vertex* v_ptr, float pivot_angle, bool clockwise,
+    const Edge* ignore, Edge** out_edge, float* out_angle, float* out_diff
 ) {
-    edge* best_edge = nullptr;
+    Edge* best_edge = nullptr;
     float best_edge_diff = 0.0f;
     float best_edge_angle = 0.0f;
     
     for(size_t e = 0; e < v_ptr->edges.size(); e++) {
-        edge* e_ptr = v_ptr->edges[e];
+        Edge* e_ptr = v_ptr->edges[e];
         
         if(e_ptr == ignore) continue;
         
         unsigned char other_vertex_idx = e_ptr->vertexes[0] == v_ptr ? 1 : 0;
-        vertex* other_vertex = e_ptr->vertexes[other_vertex_idx];
+        Vertex* other_vertex = e_ptr->vertexes[other_vertex_idx];
         
         float angle = get_angle(v2p(v_ptr), v2p(other_vertex));
         
@@ -565,24 +565,24 @@ void get_next_edge(
  * @param out_effect_cw Whether the effect is cast clockwise is returned here.
  */
 void get_next_offset_effect_edge(
-    vertex* v_ptr, float pivot_angle, bool clockwise,
-    const edge* ignore, offset_effect_checker_t edge_checker,
-    edge** out_edge, float* out_angle, float* out_diff,
+    Vertex* v_ptr, float pivot_angle, bool clockwise,
+    const Edge* ignore, offset_effect_checker_t edge_checker,
+    Edge** out_edge, float* out_angle, float* out_diff,
     float* out_base_effect_angle,
     bool* out_effect_cw
 ) {
-    edge* best_edge = nullptr;
+    Edge* best_edge = nullptr;
     float best_edge_diff = 0;
     float best_edge_angle = 0;
     bool best_edge_effect_cw = false;
     
     for(size_t e = 0; e < v_ptr->edges.size(); e++) {
-        edge* e_ptr = v_ptr->edges[e];
+        Edge* e_ptr = v_ptr->edges[e];
         
         if(e_ptr == ignore) continue;
         
-        sector* affected_sector;
-        sector* unaffected_sector;
+        Sector* affected_sector;
+        Sector* unaffected_sector;
         if(!edge_checker(e_ptr, &affected_sector, &unaffected_sector)) {
             //This edge does not use the effect.
             continue;
@@ -591,7 +591,7 @@ void get_next_offset_effect_edge(
             e_ptr->sectors[0] == unaffected_sector ? 0 : 1;
             
         unsigned char other_vertex_idx = e_ptr->vertexes[0] == v_ptr ? 1 : 0;
-        vertex* other_vertex = e_ptr->vertexes[other_vertex_idx];
+        Vertex* other_vertex = e_ptr->vertexes[other_vertex_idx];
         
         //Standing on the common vertex, facing the edge,
         //to what side does the effect go?
@@ -638,14 +638,14 @@ void get_next_offset_effect_edge(
  * @param clear_first If true, the bitmap is cleared before any drawing is done.
  */
 void update_offset_effect_buffer(
-    const point &cam_tl, const point &cam_br,
-    const vector<edge_offset_cache> &caches, ALLEGRO_BITMAP* buffer,
+    const Point &cam_tl, const Point &cam_br,
+    const vector<EdgeOffsetCache> &caches, ALLEGRO_BITMAP* buffer,
     bool clear_first
 ) {
     unordered_set<size_t> edges;
     
     for(size_t s = 0; s < game.cur_area_data->sectors.size(); s++) {
-        sector* s_ptr = game.cur_area_data->sectors[s];
+        Sector* s_ptr = game.cur_area_data->sectors[s];
         
         if(
             !rectangles_intersect(
@@ -671,8 +671,8 @@ void update_offset_effect_buffer(
             if(!fully_on_camera) {
                 //If the sector's fully on-camera, it's faster to not bother
                 //with the edge-by-edge check.
-                point edge_tl = v2p(s_ptr->edges[e]->vertexes[0]);
-                point edge_br = edge_tl;
+                Point edge_tl = v2p(s_ptr->edges[e]->vertexes[0]);
+                Point edge_br = edge_tl;
                 update_min_max_coords(
                     edge_tl, edge_br,
                     v2p(s_ptr->edges[e]->vertexes[1])
@@ -733,22 +733,22 @@ void update_offset_effect_buffer(
  * @param color_getter Function that returns the color of the effect.
  */
 void update_offset_effect_caches (
-    vector<edge_offset_cache> &caches,
-    const unordered_set<vertex*> &vertexes_to_update,
+    vector<EdgeOffsetCache> &caches,
+    const unordered_set<Vertex*> &vertexes_to_update,
     offset_effect_checker_t checker,
     offset_effect_length_getter_t length_getter,
     offset_effect_color_getter_t color_getter
 ) {
     unordered_set<size_t> edges_to_update;
-    for(vertex* v : vertexes_to_update) {
+    for(Vertex* v : vertexes_to_update) {
         edges_to_update.insert(v->edge_idxs.begin(), v->edge_idxs.end());
     }
     
     for(size_t e : edges_to_update) {
-        edge* e_ptr = game.cur_area_data->edges[e];
+        Edge* e_ptr = game.cur_area_data->edges[e];
         
-        sector* unaffected_sector = nullptr;
-        sector* affected_sector = nullptr;
+        Sector* unaffected_sector = nullptr;
+        Sector* affected_sector = nullptr;
         
         if(!checker(e_ptr, &affected_sector, &unaffected_sector)) {
             //This edge doesn't get the effect.
@@ -761,7 +761,7 @@ void update_offset_effect_caches (
         //order, such that if you stand on the first one being processed,
         //and you face the second one, the affected sector is to the left.
         
-        vertex* ends_to_process[2];
+        Vertex* ends_to_process[2];
         if(e_ptr->sectors[0] == affected_sector) {
             ends_to_process[0] = e_ptr->vertexes[0];
             ends_to_process[1] = e_ptr->vertexes[1];
@@ -773,8 +773,8 @@ void update_offset_effect_caches (
         }
         float edge_process_angle =
             get_angle(
-                point(ends_to_process[0]->x, ends_to_process[0]->y),
-                point(ends_to_process[1]->x, ends_to_process[1]->y)
+                Point(ends_to_process[0]->x, ends_to_process[0]->y),
+                Point(ends_to_process[1]->x, ends_to_process[1]->y)
             );
             
         for(unsigned char end = 0; end < 2; end++) {

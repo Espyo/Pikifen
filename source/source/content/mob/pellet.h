@@ -21,19 +21,19 @@
  * Delivering a pellet to the matching Onion
  * results in more Pikmin being created.
  */
-class pellet : public mob {
+class Pellet : public Mob {
 
 public:
 
     //--- Members ---
     
     //What type of pellet it is.
-    pellet_type* pel_type = nullptr;
+    PelletType* pel_type = nullptr;
     
     
     //--- Function declarations ---
     
-    pellet(const point &pos, pellet_type* type, float angle);
+    Pellet(const Point &pos, PelletType* type, float angle);
     void draw_mob() override;
     
 };

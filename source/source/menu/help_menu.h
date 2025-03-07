@@ -54,13 +54,13 @@ enum HELP_CATEGORY {
  * @brief Info about the help menu currently being presented to
  * the player.
  */
-class help_menu_t : public menu_t {
+class HelpMenu : public Menu {
 public:
 
     //--- Members ---
     
     //GUI manager.
-    gui_manager gui;
+    GuiManager gui;
     
     
     //--- Function declarations ---
@@ -75,7 +75,7 @@ private:
     /**
      * @brief One of the help menu's tidbits.
      */
-    struct tidbit {
+    struct Tidbit {
     
         //--- Members ---
         
@@ -94,25 +94,25 @@ private:
     //--- Members ---
     
     //All tidbits.
-    map<HELP_CATEGORY, vector<tidbit> > tidbits;
+    map<HELP_CATEGORY, vector<Tidbit> > tidbits;
     
     //Currently shown tidbit, if any.
-    tidbit* cur_tidbit = nullptr;
+    Tidbit* cur_tidbit = nullptr;
     
     //Category text GUI item.
-    text_gui_item* category_text = nullptr;
+    TextGuiItem* category_text = nullptr;
     
     //Tidbit list.
-    list_gui_item* tidbit_list = nullptr;
+    ListGuiItem* tidbit_list = nullptr;
     
     
     //--- Function declarations ---
     
     void draw_tidbit(
-        const ALLEGRO_FONT* const font, const point &where,
-        const point &max_size, const string &text
+        const ALLEGRO_FONT* const font, const Point &where,
+        const Point &max_size, const string &text
     );
-    void init_gui_main(data_node* gui_file);
+    void init_gui_main(DataNode* gui_file);
     void populate_tidbits(const HELP_CATEGORY category);
     
 };

@@ -69,7 +69,7 @@ enum BOUNCER_STATE {
  * @brief A type of bouncer. Something that grabs another mob and bounces it
  * away to a specific location, making that mob do a specific animation.
  */
-class bouncer_type : public mob_type {
+class BouncerType : public MobType {
 
 public:
 
@@ -84,8 +84,8 @@ public:
     
     //--- Function declarations ---
     
-    bouncer_type();
-    void load_cat_properties(data_node* file) override;
+    BouncerType();
+    void load_cat_properties(DataNode* file) override;
     anim_conversion_vector get_anim_conversions() const override;
     
 };

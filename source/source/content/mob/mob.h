@@ -34,8 +34,8 @@ using std::string;
 using std::vector;
 
 
-class mob_type;
-class pikmin_type;
+class MobType;
+class PikminType;
 
 extern size_t next_mob_id;
 
@@ -89,7 +89,7 @@ extern const float STATUS_SHAKING_TIME_MULT;
  * has health, and can be a variety of different sub-types,
  * like leader, Pikmin, enemy, Onion, etc.
  */
-class mob {
+class Mob {
 
 public:
 
@@ -98,7 +98,7 @@ public:
     //-Basic information-
     
     //What type of (generic) mob it is. (e.g. Olimar, Red Bulborb, etc.)
-    mob_type* type = nullptr;
+    MobType* type = nullptr;
     
     //Schedule this mob to be deleted from memory at the end of the frame.
     bool to_delete = false;
@@ -106,7 +106,7 @@ public:
     //-Position-
     
     //Coordinates.
-    point pos;
+    Point pos;
     
     //Z coordinate. This is height; the higher the value, the higher in the sky.
     float z = 0.0f;
@@ -115,18 +115,18 @@ public:
     float angle = 0.0f;
     
     //The highest ground below the entire mob.
-    sector* ground_sector = nullptr;
+    Sector* ground_sector = nullptr;
     
     //Sector that the mob's center is on.
-    sector* center_sector = nullptr;
+    Sector* center_sector = nullptr;
     
     //Mob this mob is standing on top of, if any.
-    mob* standing_on_mob = nullptr;
+    Mob* standing_on_mob = nullptr;
     
     //-Basic movement-
     
     //X/Y speed at which external movement is applied (i.e. not walking).
-    point speed;
+    Point speed;
     
     //Same as speed, but for the Z coordinate.
     float speed_z = 0.0f;
@@ -145,8 +145,8 @@ public:
     float push_angle = 0.0f;
     
     //How much the mob moved this frame, if it's walkable.
-    point walkable_moved;
-
+    Point walkable_moved;
+    
     //Highest value of the Z coordinate since the last time it was grounded.
     //FLT_MAX = not midair.
     float highest_midair_z = 0.0f;
@@ -154,22 +154,22 @@ public:
     //-Complex states-
     
     //Information about what it is chasing after.
-    chase_t chase_info;
+    ChaseInfo chase_info;
     
     //Information about the path it is following, if any.
-    path_t* path_info = nullptr;
+    Path* path_info = nullptr;
     
     //Information about the mob/point it's circling, if any.
-    circling_t* circling_info = nullptr;
+    CirclingInfo* circling_info = nullptr;
     
     //Riding a track. If nullptr, the mob is not riding on any track.
-    track_t* track_info = nullptr;
+    TrackRideInfo* track_info = nullptr;
     
     //Info on how this mob should be carried. Uncarriable if nullptr.
-    carry_t* carry_info = nullptr;
+    CarryInfo* carry_info = nullptr;
     
     //Onion delivery info. If nullptr, the mob is not being delivered.
-    delivery_t* delivery_info = nullptr;
+    DeliveryInfo* delivery_info = nullptr;
     
     //-Physical space-
     
@@ -180,15 +180,15 @@ public:
     float height = 0.0f;
     
     //Current rectangular dimensions.
-    point rectangular_dim;
+    Point rectangular_dim;
     
     //-Scripting-
     
     //Finite-state machine.
-    mob_fsm fsm;
+    MobFsm fsm;
     
     //The script-controlled timer.
-    timer script_timer;
+    Timer script_timer;
     
     //Variables.
     map<string, string> vars;
@@ -196,19 +196,19 @@ public:
     //-Brain and behavior-
     
     //The mob it has focus on.
-    mob* focused_mob = nullptr;
+    Mob* focused_mob = nullptr;
     
     //Further memory of focused mobs.
-    map<size_t, mob*> focused_mob_memory;
+    map<size_t, Mob*> focused_mob_memory;
     
     //Angle the mob wants to be facing.
     float intended_turn_angle;
     
     //Variable that holds the position the mob wants to be facing.
-    point* intended_turn_pos = nullptr;
+    Point* intended_turn_pos = nullptr;
     
     //Starting coordinates; what the mob calls "home".
-    point home;
+    Point home;
     
     //Index of the reach to use for "X in reach" events.
     size_t far_reach = INVALID;
@@ -231,10 +231,10 @@ public:
     float max_health = 0.0f;
     
     //During this period, the mob cannot be attacked.
-    timer invuln_period;
+    Timer invuln_period;
     
     //Mobs that it just hit. Used to stop hitboxes from hitting every frame.
-    vector<std::pair<float, mob*> > hit_opponents;
+    vector<std::pair<float, Mob*> > hit_opponents;
     
     //How much damage did it take since the last time the itch event triggered?
     float itch_damage = 0.0f;
@@ -243,13 +243,13 @@ public:
     float itch_time = 0.0f;
     
     //Status effects currently inflicted on the mob.
-    vector<status> statuses;
+    vector<Status> statuses;
     
     //Hazard of the sector the mob is currently on.
-    hazard* on_hazard = nullptr;
+    Hazard* on_hazard = nullptr;
     
     //If this mob is a sub-mob, this points to the parent mob.
-    parent_t* parent = nullptr;
+    Parent* parent = nullptr;
     
     //Miscellanous flags. Use MOB_FLAG_*.
     bitmask_16_t flags = 0;
@@ -257,22 +257,22 @@ public:
     //-Interactions with other mobs-
     
     //Mobs it is linked to.
-    vector<mob*> links;
+    vector<Mob*> links;
     
     //If it's being held by another mob, the information is kept here.
-    hold_t holder;
+    HoldInfo holder;
     
     //List of mobs it is holding.
-    vector<mob*> holding;
+    vector<Mob*> holding;
     
     //If it's stored inside another mob, this indicates which mob it is.
-    mob* stored_inside_another = nullptr;
+    Mob* stored_inside_another = nullptr;
     
     //List of body parts that will chomp Pikmin.
     vector<int> chomp_body_parts;
     
     //List of mobs currently in its mouth, i.e., chomped.
-    vector<mob*> chomping_mobs;
+    vector<Mob*> chomping_mobs;
     
     //Max number of mobs it can chomp in the current attack.
     size_t chomp_max = 0;
@@ -283,24 +283,24 @@ public:
     //-Group-
     
     //The current mob is following this mob's group.
-    mob* following_group = nullptr;
+    Mob* following_group = nullptr;
     
     //Index of this mob's spot in the leader's group spots.
     size_t group_spot_idx = INVALID;
     
     //The current subgroup type.
-    subgroup_type* subgroup_type_ptr = nullptr;
+    SubgroupType* subgroup_type_ptr = nullptr;
     
     //Info on the group this mob is a leader of, if any.
-    group_t* group = nullptr;
+    Group* group = nullptr;
     
     //-Animation-
     
     //Current animation instance.
-    animation_instance anim;
+    AnimationInstance anim;
     
     //Force the usage of this specific sprite.
-    sprite* forced_sprite = nullptr;
+    Sprite* forced_sprite = nullptr;
     
     //If not 0, speed up or slow down the current animation based on the
     //mob's speed, using this value as a baseline (1.0x speed).
@@ -315,13 +315,13 @@ public:
     float damage_squash_time = 0.0f;
     
     //Particle generators attached to it.
-    vector<particle_generator> particle_generators;
+    vector<ParticleGenerator> particle_generators;
     
     //Data about its on-screen health wheel, if any.
-    in_world_health_wheel* health_wheel = nullptr;
+    InWorldHealthWheel* health_wheel = nullptr;
     
     //Data about its on-screen fraction numbers, if any.
-    in_world_fraction* fraction = nullptr;
+    InWorldFraction* fraction = nullptr;
     
     //-Caches-
     
@@ -349,8 +349,8 @@ public:
     
     //--- Function declarations ---
     
-    mob(const point &pos, mob_type* type, float angle);
-    virtual ~mob();
+    Mob(const Point &pos, MobType* type, float angle);
+    virtual ~Mob();
     
     void tick(float delta_t);
     void draw_limb();
@@ -371,94 +371,94 @@ public:
     void set_timer(float time);
     void set_var(const string &name, const string &value);
     void set_radius(float radius);
-    void set_rectangular_dim(const point &rectangular_dim);
+    void set_rectangular_dim(const Point &rectangular_dim);
     void set_can_block_paths(bool blocks);
     
     void become_carriable(const CARRY_DESTINATION destination);
     void become_uncarriable();
     
     void apply_attack_damage(
-        mob* attacker, hitbox* attack_h, hitbox* victim_h, float damage
+        Mob* attacker, Hitbox* attack_h, Hitbox* victim_h, float damage
     );
-    void add_to_group(mob* new_member);
+    void add_to_group(Mob* new_member);
     void apply_knockback(float knockback, float knockback_angle);
     bool calculate_carrying_destination(
-        mob* added, mob* removed,
-        pikmin_type** target_type, mob** target_mob, point* target_point
+        Mob* added, Mob* removed,
+        PikminType** target_type, Mob** target_mob, Point* target_point
     ) const;
     bool calculate_damage(
-        mob* victim, hitbox* attack_h, const hitbox* victim_h, float* damage
+        Mob* victim, Hitbox* attack_h, const Hitbox* victim_h, float* damage
     ) const;
     void calculate_knockback(
-        const mob* victim, const hitbox* attack_h,
-        hitbox* victim_h, float* knockback, float* angle
+        const Mob* victim, const Hitbox* attack_h,
+        Hitbox* victim_h, float* knockback, float* angle
     ) const;
-    void cause_spike_damage(mob* victim, bool is_ingestion);
-    void chomp(mob* m, const hitbox* hitbox_info);
+    void cause_spike_damage(Mob* victim, bool is_ingestion);
+    void chomp(Mob* m, const Hitbox* hitbox_info);
     void get_sprite_data(
-        sprite** out_cur_sprite_ptr, sprite** out_next_sprite_ptr,
+        Sprite** out_cur_sprite_ptr, Sprite** out_next_sprite_ptr,
         float* out_interpolation_factor
     ) const;
     void get_hitbox_hold_point(
-        const mob* mob_to_hold, const hitbox* h_ptr,
+        const Mob* mob_to_hold, const Hitbox* h_ptr,
         float* offset_dist, float* offset_angle, float* vertical_dist
     ) const;
     size_t get_latched_pikmin_amount() const;
     float get_latched_pikmin_weight() const;
     void do_attack_effects(
-        const mob* attacker, const hitbox* attack_h, const hitbox* victim_h,
+        const Mob* attacker, const Hitbox* attack_h, const Hitbox* victim_h,
         float damage, float knockback
     );
     bool is_stored_inside_mob() const;
     bool is_off_camera() const;
-    bool is_point_on(const point &p) const;
-    void focus_on_mob(mob* m);
+    bool is_point_on(const Point &p) const;
+    void focus_on_mob(Mob* m);
     void unfocus_from_mob();
     void leave_group();
     void hold(
-        mob* m, size_t hitbox_idx,
+        Mob* m, size_t hitbox_idx,
         float offset_dist, float offset_angle,
         float vertical_dist,
         bool force_above_holder, const HOLD_ROTATION_METHOD rotation_method
     );
-    void release(mob* m);
-    bool can_hurt(mob* m) const;
-    bool can_hunt(mob* m) const;
-    mob_type::vulnerability_t get_hazard_vulnerability(
-        hazard* h_ptr
+    void release(Mob* m);
+    bool can_hurt(Mob* m) const;
+    bool can_hunt(Mob* m) const;
+    MobType::Vulnerability get_hazard_vulnerability(
+        Hazard* h_ptr
     ) const;
-    bool is_resistant_to_hazards(const vector<hazard*> &hazards) const;
+    bool is_resistant_to_hazards(const vector<Hazard*> &hazards) const;
     size_t play_sound(size_t sound_data_idx);
     void swallow_chomped_pikmin(size_t nr);
     float get_drawing_height() const;
     void start_height_effect();
     void stop_height_effect();
-    void store_mob_inside(mob* m);
+    void store_mob_inside(Mob* m);
     void release_chomped_pikmin();
     void release_stored_mobs();
-    void send_message(mob* receiver, string &msg) const;
-    mob* spawn(const mob_type::spawn_t* info, mob_type* type_ptr = nullptr);
+    void send_message(Mob* receiver, string &msg) const;
+    Mob* spawn(const MobType::SpawnInfo* info, MobType* type_ptr = nullptr);
     void start_dying();
     void finish_dying();
     void respawn();
-    dist get_distance_between(
-        const mob* m2_ptr, const dist* regular_distance_cache = nullptr
+    Distance get_distance_between(
+        const Mob* m2_ptr, const Distance* regular_distance_cache = nullptr
     ) const;
-    hitbox* get_hitbox(size_t idx) const;
-    hitbox* get_closest_hitbox(
-        const point &p, size_t h_type = INVALID, dist* d = nullptr
+    Hitbox* get_hitbox(size_t idx) const;
+    Hitbox* get_closest_hitbox(
+        const Point &p, size_t h_type = INVALID, Distance* d = nullptr
     ) const;
-    bool has_clear_line(const mob* target_mob) const;
+    bool has_clear_line(const Mob* target_mob) const;
     
     void chase(
-        point* orig_coords, float* orig_z,
-        const point &offset = point(), float offset_z = 0.0f,
+        Point* orig_coords, float* orig_z,
+        const Point &offset = Point(), float offset_z = 0.0f,
         unsigned char flags = 0,
         float target_distance = PATHS::DEF_CHASE_TARGET_DISTANCE,
         float speed = LARGE_FLOAT, float acceleration = LARGE_FLOAT
     );
     void chase(
-        const point &coords, float coords_z,
+        const Point &coords, float coords_z,
         bitmask_8_t flags = 0,
         float target_distance = PATHS::DEF_CHASE_TARGET_DISTANCE,
         float speed = LARGE_FLOAT, float acceleration = LARGE_FLOAT
@@ -466,19 +466,19 @@ public:
     void stop_chasing();
     void stop_turning();
     bool follow_path(
-        const path_follow_settings &settings,
+        const PathFollowSettings &settings,
         float speed, float acceleration
     );
     void stop_following_path();
     void circle_around(
-        mob* m, const point &p, float radius, bool clockwise,
+        Mob* m, const Point &p, float radius, bool clockwise,
         float speed, bool can_free_move
     );
     void stop_circling();
     void face(
-        float new_angle, point* new_pos, bool instantly = false
+        float new_angle, Point* new_pos, bool instantly = false
     );
-    point get_chase_target(float* out_z = nullptr) const;
+    Point get_chase_target(float* out_z = nullptr) const;
     virtual float get_base_speed() const;
     float get_speed_multiplier() const;
     
@@ -487,22 +487,22 @@ public:
     void arachnorb_foot_move_logic();
     
     void apply_status_effect(
-        status_type* s, bool given_by_parent, bool from_hazard
+        StatusType* s, bool given_by_parent, bool from_hazard
     );
     void delete_old_status_effects();
     void remove_particle_generator(const MOB_PARTICLE_GENERATOR_ID id);
     ALLEGRO_BITMAP* get_status_bitmap(float* bmp_scale) const;
-    virtual bool can_receive_status(status_type* s) const;
+    virtual bool can_receive_status(StatusType* s) const;
     virtual void get_group_spot_info(
-        point* out_spot, float* out_dist
+        Point* out_spot, float* out_dist
     ) const;
     virtual bool get_fraction_numbers_info(
         float* fraction_value_nr, float* fraction_req_nr,
         ALLEGRO_COLOR* fraction_color
     ) const;
-    virtual void handle_status_effect_gain(status_type* sta_type);
-    virtual void handle_status_effect_loss(status_type* sta_type);
-    virtual void read_script_vars(const script_var_reader &svr);
+    virtual void handle_status_effect_gain(StatusType* sta_type);
+    virtual void handle_status_effect_loss(StatusType* sta_type);
+    virtual void read_script_vars(const ScriptVarReader &svr);
     virtual void start_dying_class_specifics();
     virtual void finish_dying_class_specifics();
     bool tick_track_ride();
@@ -511,8 +511,8 @@ public:
     
     //Drawing tools.
     void get_sprite_bitmap_effects(
-        sprite* s_ptr, sprite* next_s_ptr, float interpolation_factor,
-        bitmap_effect_t* info, bitmask_16_t effects
+        Sprite* s_ptr, Sprite* next_s_ptr, float interpolation_factor,
+        BitmapEffect* info, bitmask_16_t effects
     ) const;
     
     string print_state_history() const;
@@ -527,26 +527,26 @@ protected:
     
     //--- Function declarations ---
     
-    pikmin_type* decide_carry_pikmin_type(
-        const unordered_set<pikmin_type*> &available_types,
-        mob* added, mob* removed
+    PikminType* decide_carry_pikmin_type(
+        const unordered_set<PikminType*> &available_types,
+        Mob* added, Mob* removed
     ) const;
-    mob* get_mob_to_walk_on() const;
+    Mob* get_mob_to_walk_on() const;
     H_MOVE_RESULT get_movement_edge_intersections(
-        const point &new_pos, vector<edge*>* intersecting_edges
+        const Point &new_pos, vector<Edge*>* intersecting_edges
     ) const;
     H_MOVE_RESULT get_physics_horizontal_movement(
-        float delta_t, float move_speed_mult, point* move_speed
+        float delta_t, float move_speed_mult, Point* move_speed
     );
     H_MOVE_RESULT get_wall_slide_angle(
-        const edge* e_ptr, unsigned char wall_sector, float move_angle,
+        const Edge* e_ptr, unsigned char wall_sector, float move_angle,
         float* slide_angle
     ) const;
     void move_to_path_end(float speed, float acceleration);
     void tick_animation(float delta_t);
     void tick_brain(float delta_t);
     void tick_horizontal_movement_physics(
-        float delta_t, const point &attempted_move_speed,
+        float delta_t, const Point &attempted_move_speed,
         bool* touched_wall
     );
     void tick_misc_logic(float delta_t);
@@ -566,9 +566,9 @@ protected:
 
 
 /**
- * @brief See mob_type_with_anim_groups.
+ * @brief See MobTypeWithAnimGroups.
  */
-class mob_with_anim_groups {
+class MobWithAnimGroups {
 
 public:
 

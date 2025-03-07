@@ -33,24 +33,24 @@ enum HOLDABILITY_FLAG {
  * @brief A tool for Pikmin.
  * This is anything that a Pikmin can carry to use at a later date.
  */
-class tool : public mob {
+class Tool : public Mob {
 
 public:
 
     //--- Members ---
     
     //What type of tool it is.
-    tool_type* too_type = nullptr;
+    ToolType* too_type = nullptr;
     
     //Flags indicating if and how the mob can be held by other mobs.
     unsigned char holdability_flags = 0;
     
     //If a Pikmin is already reserved to get this tool, this points to it.
-    pikmin* reserved = nullptr;
+    Pikmin* reserved = nullptr;
     
     
     //--- Function declarations ---
     
-    tool(const point &pos, tool_type* type, float angle);
+    Tool(const Point &pos, ToolType* type, float angle);
     
 };

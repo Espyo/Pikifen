@@ -21,8 +21,8 @@
  *
  * @param typ Mob type to create the finite state machine for.
  */
-void track_fsm::create_fsm(mob_type* typ) {
-    easy_fsm_creator efc;
+void track_fsm::create_fsm(MobType* typ) {
+    EasyFsmCreator efc;
     efc.new_state("idling", TRACK_STATE_IDLING); {
         efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(track_fsm::spawn);
@@ -52,11 +52,11 @@ void track_fsm::create_fsm(mob_type* typ) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void track_fsm::on_touched(mob* m, void* info1, void* info2) {
-    track* tra_ptr = (track*) m;
-    mob* toucher = (mob*) info1;
+void track_fsm::on_touched(Mob* m, void* info1, void* info2) {
+    Track* tra_ptr = (Track*) m;
+    Mob* toucher = (Mob*) info1;
     
-    mob_event* ev = nullptr;
+    MobEvent* ev = nullptr;
     
     //Check if a compatible mob touched it.
     if(
@@ -90,7 +90,7 @@ void track_fsm::on_touched(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void track_fsm::spawn(mob* m, void* info1, void* info2) {
+void track_fsm::spawn(Mob* m, void* info1, void* info2) {
     m->set_animation(
         TRACK_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
     );

@@ -52,14 +52,14 @@ enum BUBBLE_RELATION {
 /**
  * @brief Holds information about the in-game HUD.
  */
-struct hud_t {
+struct Hud {
 
     //--- Misc. declarations ---
     
     /**
      * @brief Bitmap and color of a leader's icon.
      */
-    struct leader_icon_bubble {
+    struct LeaderIconBubble {
     
         //--- Members ---
         
@@ -74,7 +74,7 @@ struct hud_t {
     /**
      * @brief Health ratio and caution animation timer of a leader's health.
      */
-    struct leader_health_bubble {
+    struct LeaderHealthBubble {
     
         //--- Members ---
         
@@ -90,7 +90,7 @@ struct hud_t {
     //--- Members ---
     
     //GUI manager.
-    gui_manager gui;
+    GuiManager gui;
     
     //Bubble graphic, used for the HUD.
     ALLEGRO_BITMAP* bmp_bubble = nullptr;
@@ -123,16 +123,16 @@ struct hud_t {
     ALLEGRO_BITMAP* bmp_sun = nullptr;
     
     //Bubble manager for leader icon items.
-    hud_bubble_manager<leader_icon_bubble> leader_icon_mgr;
+    HudBubbleManager<LeaderIconBubble> leader_icon_mgr;
     
     //Bubble manager for leader health items.
-    hud_bubble_manager<leader_health_bubble> leader_health_mgr;
+    HudBubbleManager<LeaderHealthBubble> leader_health_mgr;
     
     //Bubble manager for the standby type.
-    hud_bubble_manager<ALLEGRO_BITMAP*> standby_icon_mgr;
+    HudBubbleManager<ALLEGRO_BITMAP*> standby_icon_mgr;
     
     //Bubble manager for the spray icons.
-    hud_bubble_manager<ALLEGRO_BITMAP*> spray_icon_mgr;
+    HudBubbleManager<ALLEGRO_BITMAP*> spray_icon_mgr;
     
     //Opacity of the standby HUD items.
     float standby_items_opacity = 0.0f;
@@ -147,46 +147,46 @@ struct hud_t {
     float spray_items_fade_timer = 0.0f;
     
     //Standby type in the previous frame.
-    subgroup_type* prev_standby_type = nullptr;
+    SubgroupType* prev_standby_type = nullptr;
     
     //Maturity icon in the previous frame.
     ALLEGRO_BITMAP* prev_maturity_icon = nullptr;
     
     //Spray 1 amount text. Cache for convenience.
-    gui_item* spray_1_amount = nullptr;
+    GuiItem* spray_1_amount = nullptr;
     
     //Spray 2 amount text. Cache for convenience.
-    gui_item* spray_2_amount = nullptr;
+    GuiItem* spray_2_amount = nullptr;
     
     //Current standby count.
     size_t standby_count_nr = 0;
     
     //Standby count text. Cache for convenience.
-    gui_item* standby_amount = nullptr;
+    GuiItem* standby_amount = nullptr;
     
     //Current group count.
     size_t group_count_nr = 0;
     
     //Group count text. Cache for convenience.
-    gui_item* group_amount = nullptr;
+    GuiItem* group_amount = nullptr;
     
     //Current field count.
     size_t field_count_nr = 0;
     
     //Field count text. Cache for convenience.
-    gui_item* field_amount = nullptr;
+    GuiItem* field_amount = nullptr;
     
     //Current total count.
     size_t total_count_nr = 0;
     
     //Total count text. Cache for convenience.
-    gui_item* total_amount = nullptr;
+    GuiItem* total_amount = nullptr;
     
     
     //--- Function declarations ---
     
-    hud_t();
-    ~hud_t();
+    Hud();
+    ~Hud();
     void tick(float delta_t);
     
 private:

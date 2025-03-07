@@ -56,7 +56,7 @@ const float JUICY_GROW_TEXT_LOW_MULT = 0.02f;
 const float JUICY_GROW_TEXT_MEDIUM_MULT = 0.05f;
 
 //Standard size of the content inside of a GUI item, in ratio.
-const point STANDARD_CONTENT_SIZE = point(0.95f, 0.80f);
+const Point STANDARD_CONTENT_SIZE = Point(0.95f, 0.80f);
 
 }
 
@@ -68,16 +68,16 @@ const point STANDARD_CONTENT_SIZE = point(0.95f, 0.80f);
  * @param font Font for the button's text.
  * @param color Color of the button's text.
  */
-bullet_gui_item::bullet_gui_item(
+BulletGuiItem::BulletGuiItem(
     const string &text, ALLEGRO_FONT* font, const ALLEGRO_COLOR &color
 ) :
-    gui_item(true),
+    GuiItem(true),
     text(text),
     font(font),
     color(color) {
     
     on_draw =
-    [this] (const point & center, const point & size) {
+    [this] (const Point & center, const Point & size) {
         this->def_draw_code(center, size);
     };
 }
@@ -86,35 +86,35 @@ bullet_gui_item::bullet_gui_item(
 /**
  * @brief Default bullet GUI item draw code.
  */
-void bullet_gui_item::def_draw_code(
-    const point &center, const point &size
+void BulletGuiItem::def_draw_code(
+    const Point &center, const Point &size
 ) {
     float item_x_start = center.x - size.x * 0.5;
     float text_x_offset =
         GUI::BULLET_RADIUS * 2 +
         GUI::BULLET_PADDING * 2;
-    point text_space(
+    Point text_space(
         std::max(1.0f, size.x - text_x_offset),
         size.y
     );
     
     draw_bitmap(
         game.sys_content.bmp_hard_bubble,
-        point(
+        Point(
             item_x_start + GUI::BULLET_RADIUS + GUI::BULLET_PADDING,
             center.y
         ),
-        point(GUI::BULLET_RADIUS * 2),
+        Point(GUI::BULLET_RADIUS * 2),
         0.0f, this->color
     );
     float juicy_grow_amount = get_juice_value();
     draw_text(
         this->text, this->font,
-        point(item_x_start + text_x_offset, center.y),
+        Point(item_x_start + text_x_offset, center.y),
         text_space * GUI::STANDARD_CONTENT_SIZE,
         this->color, ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER,
         TEXT_SETTING_FLAG_CANT_GROW,
-        point(1.0 + juicy_grow_amount)
+        Point(1.0 + juicy_grow_amount)
     );
     if(selected) {
         draw_textured_box(
@@ -133,16 +133,16 @@ void bullet_gui_item::def_draw_code(
  * @param font Font for the button's text.
  * @param color Color of the button's text.
  */
-button_gui_item::button_gui_item(
+ButtonGuiItem::ButtonGuiItem(
     const string &text, ALLEGRO_FONT* font, const ALLEGRO_COLOR &color
 ) :
-    gui_item(true),
+    GuiItem(true),
     text(text),
     font(font),
     color(color) {
     
     on_draw =
-    [this] (const point & center, const point & size) {
+    [this] (const Point & center, const Point & size) {
         this->def_draw_code(center, size);
     };
 }
@@ -151,8 +151,8 @@ button_gui_item::button_gui_item(
 /**
  * @brief Default button GUI item draw code.
  */
-void button_gui_item::def_draw_code(
-    const point &center, const point &size
+void ButtonGuiItem::def_draw_code(
+    const Point &center, const Point &size
 ) {
     draw_button(
         center, size, this->text, this->font, this->color, selected,
@@ -169,23 +169,23 @@ void button_gui_item::def_draw_code(
  * @param font Font for the checkbox's text.
  * @param color Color of the checkbox's text.
  */
-check_gui_item::check_gui_item(
+CheckGuiItem::CheckGuiItem(
     bool value, const string &text, ALLEGRO_FONT* font,
     const ALLEGRO_COLOR &color
 ) :
-    gui_item(true),
+    GuiItem(true),
     value(value),
     text(text),
     font(font),
     color(color) {
     
     on_draw =
-    [this] (const point & center, const point & size) {
+    [this] (const Point & center, const Point & size) {
         this->def_draw_code(center, size);
     };
     
     on_activate =
-    [this] (const point &) {
+    [this] (const Point &) {
         this->def_activate_code();
     };
 }
@@ -199,11 +199,11 @@ check_gui_item::check_gui_item(
  * @param font Font for the checkbox's text.
  * @param color Color of the checkbox's text.
  */
-check_gui_item::check_gui_item(
+CheckGuiItem::CheckGuiItem(
     bool* value_ptr, const string &text, ALLEGRO_FONT* font,
     const ALLEGRO_COLOR &color
 ) :
-    check_gui_item(*value_ptr, text, font, color) {
+    CheckGuiItem(*value_ptr, text, font, color) {
     
     this->value_ptr = value_ptr;
 }
@@ -212,7 +212,7 @@ check_gui_item::check_gui_item(
 /**
  * @brief Default check GUI item activation code.
  */
-void check_gui_item::def_activate_code() {
+void CheckGuiItem::def_activate_code() {
     value = !value;
     if(value_ptr) (*value_ptr) = !(*value_ptr);
     start_juice_animation(JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM);
@@ -222,15 +222,15 @@ void check_gui_item::def_activate_code() {
 /**
  * @brief Default check GUI item draw code.
  */
-void check_gui_item::def_draw_code(const point &center, const point &size) {
+void CheckGuiItem::def_draw_code(const Point &center, const Point &size) {
     float juicy_grow_amount = get_juice_value();
     draw_text(
         this->text, this->font,
-        point(center.x - size.x * 0.45, center.y),
-        point(size.x * 0.95, size.y) * GUI::STANDARD_CONTENT_SIZE,
+        Point(center.x - size.x * 0.45, center.y),
+        Point(size.x * 0.95, size.y) * GUI::STANDARD_CONTENT_SIZE,
         this->color, ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER,
         TEXT_SETTING_FLAG_CANT_GROW,
-        point(1.0f + juicy_grow_amount)
+        Point(1.0f + juicy_grow_amount)
     );
     
     draw_bitmap(
@@ -239,8 +239,8 @@ void check_gui_item::def_draw_code(const point &center, const point &size) {
         game.sys_content.bmp_checkbox_no_check,
         this->text.empty() ?
         center :
-        point((center.x + size.x * 0.5) - 40, center.y),
-        point(32, -1)
+        Point((center.x + size.x * 0.5) - 40, center.y),
+        Point(32, -1)
     );
     
     ALLEGRO_COLOR box_tint =
@@ -265,7 +265,7 @@ void check_gui_item::def_draw_code(const point &center, const point &size) {
  *
  * @param selectable Can the item be selected by the player?
  */
-gui_item::gui_item(bool selectable) :
+GuiItem::GuiItem(bool selectable) :
     selectable(selectable) {
     
 }
@@ -277,7 +277,7 @@ gui_item::gui_item(bool selectable) :
  * @param cursor_pos Cursor coordinates, if applicable.
  * @return Whether it could activate it.
  */
-bool gui_item::activate(const point &cursor_pos) {
+bool GuiItem::activate(const Point &cursor_pos) {
     if(!on_activate) return false;
     on_activate(cursor_pos);
     
@@ -285,7 +285,7 @@ bool gui_item::activate(const point &cursor_pos) {
         this == manager->back_item ?
         game.sys_content.sound_menu_back :
         game.sys_content.sound_menu_activate;
-    sound_source_config_t activate_sound_config;
+    SoundSourceConfig activate_sound_config;
     activate_sound_config.gain = 0.75f;
     game.audio.create_ui_sound_source(sample, activate_sound_config);
     
@@ -298,7 +298,7 @@ bool gui_item::activate(const point &cursor_pos) {
  *
  * @param item Item to add as a child item.
  */
-void gui_item::add_child(gui_item* item) {
+void GuiItem::add_child(GuiItem* item) {
     children.push_back(item);
     item->parent = this;
 }
@@ -307,9 +307,9 @@ void gui_item::add_child(gui_item* item) {
 /**
  * @brief Removes and deletes all children items.
  */
-void gui_item::delete_all_children() {
+void GuiItem::delete_all_children() {
     while(!children.empty()) {
-        gui_item* i_ptr = children[0];
+        GuiItem* i_ptr = children[0];
         remove_child(i_ptr);
         manager->remove_item(i_ptr);
         delete i_ptr;
@@ -323,10 +323,10 @@ void gui_item::delete_all_children() {
  *
  * @return The Y coordinate.
  */
-float gui_item::get_child_bottom() {
+float GuiItem::get_child_bottom() {
     float bottommost = 0.0f;
     for(size_t c = 0; c < children.size(); c++) {
-        gui_item* c_ptr = children[c];
+        GuiItem* c_ptr = children[c];
         bottommost =
             std::max(
                 bottommost,
@@ -342,7 +342,7 @@ float gui_item::get_child_bottom() {
  *
  * @return The juice value, or 0 if there's no animation.
  */
-float gui_item::get_juice_value() {
+float GuiItem::get_juice_value() {
     switch(juice_type) {
     case JUICE_TYPE_GROW_TEXT_LOW: {
         float anim_ratio =
@@ -406,19 +406,19 @@ float gui_item::get_juice_value() {
  *
  * @return The center.
  */
-point gui_item::get_reference_center() {
+Point GuiItem::get_reference_center() {
     if(parent) {
-        point parent_s =
+        Point parent_s =
             parent->get_reference_size() - (parent->padding * 2.0f);
-        point parent_c =
+        Point parent_c =
             parent->get_reference_center();
-        point result = center * parent_s;
+        Point result = center * parent_s;
         result.x += parent_c.x - parent_s.x / 2.0f;
         result.y += parent_c.y - parent_s.y / 2.0f;
         result.y -= parent_s.y * parent->offset;
         return result;
     } else {
-        return point(center.x * game.win_w, center.y * game.win_h);
+        return Point(center.x * game.win_w, center.y * game.win_h);
     }
 }
 
@@ -428,8 +428,8 @@ point gui_item::get_reference_center() {
  *
  * @return The size.
  */
-point gui_item::get_reference_size() {
-    point mult;
+Point GuiItem::get_reference_size() {
+    Point mult;
     if(parent) {
         mult = parent->get_reference_size() - (parent->padding * 2.0f);
     } else {
@@ -446,13 +446,13 @@ point gui_item::get_reference_size() {
  * @param cursor_pos Position of the mouse cursor, in screen coordinates.
  * @return Whether the cursor is on top.
  */
-bool gui_item::is_mouse_on(const point &cursor_pos) {
+bool GuiItem::is_mouse_on(const Point &cursor_pos) {
     if(parent && !parent->is_mouse_on(cursor_pos)) {
         return false;
     }
     
-    point c = get_reference_center();
-    point s = get_reference_size();
+    Point c = get_reference_center();
+    Point s = get_reference_size();
     return
         (
             cursor_pos.x >= c.x - s.x * 0.5 &&
@@ -468,7 +468,7 @@ bool gui_item::is_mouse_on(const point &cursor_pos) {
  *
  * @return Whether it is responsive.
  */
-bool gui_item::is_responsive() {
+bool GuiItem::is_responsive() {
     if(parent) return parent->is_responsive();
     return responsive;
 }
@@ -479,7 +479,7 @@ bool gui_item::is_responsive() {
  *
  * @return Whether it is visible.
  */
-bool gui_item::is_visible() {
+bool GuiItem::is_visible() {
     if(parent) return parent->is_visible();
     return visible;
 }
@@ -490,7 +490,7 @@ bool gui_item::is_visible() {
  *
  * @param item Child item to remove.
  */
-void gui_item::remove_child(gui_item* item) {
+void GuiItem::remove_child(GuiItem* item) {
     for(size_t c = 0; c < children.size(); c++) {
         if(children[c] == item) {
             children.erase(children.begin() + c);
@@ -506,7 +506,7 @@ void gui_item::remove_child(gui_item* item) {
  *
  * @param type Type of juice animation.
  */
-void gui_item::start_juice_animation(JUICE_TYPE type) {
+void GuiItem::start_juice_animation(JUICE_TYPE type) {
     juice_type = type;
     switch(type) {
     case JUICE_TYPE_GROW_TEXT_LOW:
@@ -532,10 +532,10 @@ void gui_item::start_juice_animation(JUICE_TYPE type) {
 /**
  * @brief Constructs a new gui manager object.
  */
-gui_manager::gui_manager() {
+GuiManager::GuiManager() {
 
     anim_timer =
-        timer(
+        Timer(
     0.0f, [this] () {
         switch(anim_type) {
         case GUI_MANAGER_ANIM_IN_TO_OUT:
@@ -563,7 +563,7 @@ gui_manager::gui_manager() {
  * @param id If this item has an associated ID, specify it here.
  * Empty string if none.
  */
-void gui_manager::add_item(gui_item* item, const string &id) {
+void GuiManager::add_item(GuiItem* item, const string &id) {
     auto c = registered_centers.find(id);
     if(c != registered_centers.end()) {
         item->center = c->second;
@@ -581,7 +581,7 @@ void gui_manager::add_item(gui_item* item, const string &id) {
 /**
  * @brief Destroys and deletes all items and information.
  */
-void gui_manager::destroy() {
+void GuiManager::destroy() {
     set_selected_item(nullptr);
     back_item = nullptr;
     for(size_t i = 0; i < items.size(); i++) {
@@ -596,7 +596,7 @@ void gui_manager::destroy() {
 /**
  * @brief Draws all items on-screen.
  */
-void gui_manager::draw() {
+void GuiManager::draw() {
     if(!visible) return;
     
     int ocr_x = 0;
@@ -606,18 +606,18 @@ void gui_manager::draw() {
     
     for(size_t i = 0; i < items.size(); i++) {
     
-        gui_item* i_ptr = items[i];
+        GuiItem* i_ptr = items[i];
         
         if(!i_ptr->on_draw) continue;
         
-        point draw_center = i_ptr->get_reference_center();
-        point draw_size = i_ptr->get_reference_size();
+        Point draw_center = i_ptr->get_reference_center();
+        Point draw_size = i_ptr->get_reference_size();
         
         if(!get_item_draw_info(i_ptr, &draw_center, &draw_size)) continue;
         
         if(i_ptr->parent) {
-            point parent_c;
-            point parent_s;
+            Point parent_c;
+            Point parent_s;
             if(!get_item_draw_info(i_ptr->parent, &parent_c, &parent_s)) {
                 continue;
             }
@@ -644,7 +644,7 @@ void gui_manager::draw() {
  *
  * @return The tooltip.
  */
-string gui_manager::get_current_tooltip() {
+string GuiManager::get_current_tooltip() {
     if(!selected_item) return string();
     if(!selected_item->on_get_tooltip) return string();
     return selected_item->on_get_tooltip();
@@ -659,22 +659,22 @@ string gui_manager::get_current_tooltip() {
  * @param draw_size The drawing width and height to use.
  * @return True if the item exists and is meant to be drawn, false otherwise.
  */
-bool gui_manager::get_item_draw_info(
-    gui_item* item, point* draw_center, point* draw_size
+bool GuiManager::get_item_draw_info(
+    GuiItem* item, Point* draw_center, Point* draw_size
 ) {
     if(!item->is_visible()) return false;
     if(item->size.x == 0.0f) return false;
     
-    point final_center = item->get_reference_center();
-    point final_size = item->get_reference_size();
+    Point final_center = item->get_reference_center();
+    Point final_size = item->get_reference_size();
     
     if(anim_timer.time_left > 0.0f) {
         switch(anim_type) {
         case GUI_MANAGER_ANIM_OUT_TO_IN: {
-            point start_center;
+            Point start_center;
             float angle =
                 get_angle(
-                    point(game.win_w, game.win_h) / 2.0f,
+                    Point(game.win_w, game.win_h) / 2.0f,
                     final_center
                 );
             start_center.x = final_center.x + cos(angle) * game.win_w;
@@ -693,10 +693,10 @@ bool gui_manager::get_item_draw_info(
             break;
             
         } case GUI_MANAGER_ANIM_IN_TO_OUT: {
-            point end_center;
+            Point end_center;
             float angle =
                 get_angle(
-                    point(game.win_w, game.win_h) / 2.0f,
+                    Point(game.win_w, game.win_h) / 2.0f,
                     final_center
                 );
             end_center.x = final_center.x + cos(angle) * game.win_w;
@@ -797,7 +797,7 @@ bool gui_manager::get_item_draw_info(
  *
  * @param ev Event.
  */
-void gui_manager::handle_allegro_event(const ALLEGRO_EVENT &ev) {
+void GuiManager::handle_allegro_event(const ALLEGRO_EVENT &ev) {
     if(!responsive) return;
     if(anim_timer.get_ratio_left() > 0.0f && ignore_input_on_animation) return;
     
@@ -808,17 +808,17 @@ void gui_manager::handle_allegro_event(const ALLEGRO_EVENT &ev) {
         ev.type == ALLEGRO_EVENT_MOUSE_AXES ||
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN
     ) {
-        gui_item* selection_result = nullptr;
+        GuiItem* selection_result = nullptr;
         for(size_t i = 0; i < items.size(); i++) {
-            gui_item* i_ptr = items[i];
+            GuiItem* i_ptr = items[i];
             if(
-                i_ptr->is_mouse_on(point(ev.mouse.x, ev.mouse.y)) &&
+                i_ptr->is_mouse_on(Point(ev.mouse.x, ev.mouse.y)) &&
                 i_ptr->is_responsive() &&
                 i_ptr->selectable
             ) {
                 selection_result = i_ptr;
                 if(i_ptr->on_mouse_over) {
-                    i_ptr->on_mouse_over(point(ev.mouse.x, ev.mouse.y));
+                    i_ptr->on_mouse_over(Point(ev.mouse.x, ev.mouse.y));
                 }
                 break;
             }
@@ -833,7 +833,7 @@ void gui_manager::handle_allegro_event(const ALLEGRO_EVENT &ev) {
             selected_item->is_responsive() &&
             selected_item->on_activate
         ) {
-            selected_item->activate(point(ev.mouse.x, ev.mouse.y));
+            selected_item->activate(Point(ev.mouse.x, ev.mouse.y));
             auto_repeat_on = true;
             auto_repeat_duration = 0.0f;
             auto_repeat_next_activation = GUI::AUTO_REPEAT_MAX_INTERVAL;
@@ -862,7 +862,7 @@ void gui_manager::handle_allegro_event(const ALLEGRO_EVENT &ev) {
  * @param action Data about the player action.
  * @return Whether the input was used.
  */
-bool gui_manager::handle_player_action(const player_action &action) {
+bool GuiManager::handle_player_action(const PlayerAction &action) {
     if(!responsive) {
         return false;
     }
@@ -933,8 +933,8 @@ bool gui_manager::handle_player_action(const player_action &action) {
             break;
         }
         
-        vector<point> selectables;
-        vector<gui_item*> selectable_ptrs;
+        vector<Point> selectables;
+        vector<GuiItem*> selectable_ptrs;
         size_t selectable_idx = INVALID;
         float direction = 0.0f;
         
@@ -969,9 +969,9 @@ bool gui_manager::handle_player_action(const player_action &action) {
         float max_y = game.win_h;
         
         for(size_t i = 0; i < items.size(); i++) {
-            gui_item* i_ptr = items[i];
+            GuiItem* i_ptr = items[i];
             if(i_ptr->is_responsive() && i_ptr->selectable) {
-                point i_center = i_ptr->get_reference_center();
+                Point i_center = i_ptr->get_reference_center();
                 if(i_ptr == selected_item) {
                     selectable_idx = selectables.size();
                 }
@@ -989,7 +989,7 @@ bool gui_manager::handle_player_action(const player_action &action) {
                 selectables,
                 selectable_idx,
                 direction,
-                point(game.win_w, max_y - min_y)
+                Point(game.win_w, max_y - min_y)
             );
             
         if(new_selectable_idx != selectable_idx) {
@@ -1013,7 +1013,7 @@ bool gui_manager::handle_player_action(const player_action &action) {
             selected_item->on_activate &&
             selected_item->is_responsive()
         ) {
-            selected_item->activate(point(LARGE_FLOAT));
+            selected_item->activate(Point(LARGE_FLOAT));
             auto_repeat_on = true;
             auto_repeat_duration = 0.0f;
             auto_repeat_next_activation = GUI::AUTO_REPEAT_MAX_INTERVAL;
@@ -1024,7 +1024,7 @@ bool gui_manager::handle_player_action(const player_action &action) {
         
     } case PLAYER_ACTION_TYPE_MENU_BACK: {
         if(is_down && back_item && back_item->is_responsive()) {
-            back_item->activate(point(LARGE_FLOAT));
+            back_item->activate(Point(LARGE_FLOAT));
         }
         break;
         
@@ -1045,7 +1045,7 @@ bool gui_manager::handle_player_action(const player_action &action) {
 /**
  * @brief Hides all items until an animation shows them again.
  */
-void gui_manager::hide_items() {
+void GuiManager::hide_items() {
     visible = false;
 }
 
@@ -1055,10 +1055,10 @@ void gui_manager::hide_items() {
  *
  * @param node Data node to read from.
  */
-void gui_manager::read_coords(data_node* node) {
+void GuiManager::read_coords(DataNode* node) {
     size_t n_items = node->get_nr_of_children();
     for(size_t i = 0; i < n_items; i++) {
-        data_node* item_node = node->get_child(i);
+        DataNode* item_node = node->get_child(i);
         vector<string> words = split(item_node->value);
         if(words.size() < 4) {
             continue;
@@ -1080,14 +1080,14 @@ void gui_manager::read_coords(data_node* node) {
  * @param w Width, in screen percentage.
  * @param h Height, in screen percentage.
  */
-void gui_manager::register_coords(
+void GuiManager::register_coords(
     const string &id,
     float cx, float cy, float w, float h
 ) {
     registered_centers[id] =
-        point(cx / 100.0f, cy / 100.0f);
+        Point(cx / 100.0f, cy / 100.0f);
     registered_sizes[id] =
-        point(w / 100.0f, h / 100.0f);
+        Point(w / 100.0f, h / 100.0f);
 }
 
 
@@ -1096,7 +1096,7 @@ void gui_manager::register_coords(
  *
  * @param item Item to remove.
  */
-void gui_manager::remove_item(gui_item* item) {
+void GuiManager::remove_item(GuiItem* item) {
     if(selected_item == item) {
         set_selected_item(nullptr);
     }
@@ -1121,7 +1121,7 @@ void gui_manager::remove_item(gui_item* item) {
  * Useful if you want the item to be selected not because of user input,
  * but because it's the default selected item when the GUI loads.
  */
-void gui_manager::set_selected_item(gui_item* item, bool silent) {
+void GuiManager::set_selected_item(GuiItem* item, bool silent) {
     if(selected_item == item) {
         return;
     }
@@ -1144,7 +1144,7 @@ void gui_manager::set_selected_item(gui_item* item, bool silent) {
     }
     
     if(selected_item && !silent) {
-        sound_source_config_t select_sound_config;
+        SoundSourceConfig select_sound_config;
         select_sound_config.gain = 0.5f;
         select_sound_config.speed_deviation = 0.1f;
         select_sound_config.stack_min_pos = 0.01f;
@@ -1159,7 +1159,7 @@ void gui_manager::set_selected_item(gui_item* item, bool silent) {
 /**
  * @brief Shows all items, if they were hidden.
  */
-void gui_manager::show_items() {
+void GuiManager::show_items() {
     visible = true;
 }
 
@@ -1170,7 +1170,7 @@ void gui_manager::show_items() {
  * @param type Type of aniimation to start.
  * @param duration Total duration of the animation.
  */
-void gui_manager::start_animation(
+void GuiManager::start_animation(
     const GUI_MANAGER_ANIM type, float duration
 ) {
     anim_type = type;
@@ -1184,13 +1184,13 @@ void gui_manager::start_animation(
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void gui_manager::tick(float delta_t) {
+void GuiManager::tick(float delta_t) {
     //Tick the animation.
     anim_timer.tick(delta_t);
     
     //Tick all items.
     for(size_t i = 0; i < items.size(); i++) {
-        gui_item* i_ptr = items[i];
+        GuiItem* i_ptr = items[i];
         if(i_ptr->on_tick) {
             i_ptr->on_tick(delta_t);
         }
@@ -1198,7 +1198,7 @@ void gui_manager::tick(float delta_t) {
             i_ptr->juice_timer =
                 std::max(0.0f, i_ptr->juice_timer - delta_t);
         } else {
-            i_ptr->juice_type = gui_item::JUICE_TYPE_NONE;
+            i_ptr->juice_type = GuiItem::JUICE_TYPE_NONE;
         }
     }
     
@@ -1213,7 +1213,7 @@ void gui_manager::tick(float delta_t) {
         auto_repeat_next_activation -= delta_t;
         
         while(auto_repeat_next_activation <= 0.0f) {
-            selected_item->activate(point(LARGE_FLOAT));
+            selected_item->activate(Point(LARGE_FLOAT));
             auto_repeat_next_activation +=
                 clamp(
                     interpolate_number(
@@ -1236,7 +1236,7 @@ void gui_manager::tick(float delta_t) {
  *
  * @return Whether it was a mouse input.
  */
-bool gui_manager::was_last_input_mouse() {
+bool GuiManager::was_last_input_mouse() {
     return last_input_was_mouse;
 }
 
@@ -1244,12 +1244,12 @@ bool gui_manager::was_last_input_mouse() {
 /**
  * @brief Constructs a new list gui item object.
  */
-list_gui_item::list_gui_item() :
-    gui_item() {
+ListGuiItem::ListGuiItem() :
+    GuiItem() {
     
     padding = 8.0f;
     on_draw =
-    [this] (const point & center, const point & size) {
+    [this] (const Point & center, const Point & size) {
         this->def_draw_code(center, size);
     };
     on_tick =
@@ -1261,7 +1261,7 @@ list_gui_item::list_gui_item() :
         this->def_event_code(ev);
     };
     on_child_selected =
-    [this] (const gui_item * child) {
+    [this] (const GuiItem * child) {
         this->def_child_selected_code(child);
     };
 }
@@ -1270,7 +1270,7 @@ list_gui_item::list_gui_item() :
 /**
  * @brief Default list GUI item child selected code.
  */
-void list_gui_item::def_child_selected_code(const gui_item* child) {
+void ListGuiItem::def_child_selected_code(const GuiItem* child) {
     //Try to center the child.
     float child_bottom = get_child_bottom();
     if(child_bottom <= 1.0f && offset == 0.0f) {
@@ -1288,7 +1288,7 @@ void list_gui_item::def_child_selected_code(const gui_item* child) {
 /**
  * @brief Default list GUI item draw code.
  */
-void list_gui_item::def_draw_code(const point &center, const point &size) {
+void ListGuiItem::def_draw_code(const Point &center, const Point &size) {
     draw_textured_box(
         center, size, game.sys_content.bmp_frame_box,
         COLOR_TRANSPARENT_WHITE
@@ -1376,10 +1376,10 @@ void list_gui_item::def_draw_code(const point &center, const point &size) {
 /**
  * @brief Default list GUI item event code.
  */
-void list_gui_item::def_event_code(const ALLEGRO_EVENT  &ev) {
+void ListGuiItem::def_event_code(const ALLEGRO_EVENT  &ev) {
     if(
         ev.type == ALLEGRO_EVENT_MOUSE_AXES &&
-        is_mouse_on(point(ev.mouse.x, ev.mouse.y)) &&
+        is_mouse_on(Point(ev.mouse.x, ev.mouse.y)) &&
         ev.mouse.dz != 0.0f
     ) {
         float child_bottom = get_child_bottom();
@@ -1399,7 +1399,7 @@ void list_gui_item::def_event_code(const ALLEGRO_EVENT  &ev) {
 /**
  * @brief Default list GUI item tick code.
  */
-void list_gui_item::def_tick_code(float delta_t) {
+void ListGuiItem::def_tick_code(float delta_t) {
     float child_bottom = get_child_bottom();
     if(child_bottom < 1.0f) {
         target_offset = 0.0f;
@@ -1426,23 +1426,23 @@ void list_gui_item::def_tick_code(float delta_t) {
  * @param nr_options Total amount of options.
  * @param cur_option_idx Index of the currently selected option.
  */
-picker_gui_item::picker_gui_item(
+PickerGuiItem::PickerGuiItem(
     const string &base_text, const string &option,
     size_t nr_options, size_t cur_option_idx
 ) :
-    gui_item(true),
+    GuiItem(true),
     base_text(base_text),
     option(option),
     nr_options(nr_options),
     cur_option_idx(cur_option_idx) {
     
     on_draw =
-    [this] (const point & center, const point & size) {
+    [this] (const Point & center, const Point & size) {
         this->def_draw_code(center, size);
     };
     
     on_activate =
-    [this] (const point & cursor_pos) {
+    [this] (const Point & cursor_pos) {
         this->def_activate_code(cursor_pos);
     };
     
@@ -1452,7 +1452,7 @@ picker_gui_item::picker_gui_item(
     };
     
     on_mouse_over =
-    [this] (const point & cursor_pos) {
+    [this] (const Point & cursor_pos) {
         this->def_mouse_over_code(cursor_pos);
     };
 }
@@ -1461,7 +1461,7 @@ picker_gui_item::picker_gui_item(
 /**
  * @brief Default picker GUI item activate code.
  */
-void picker_gui_item::def_activate_code(const point &cursor_pos) {
+void PickerGuiItem::def_activate_code(const Point &cursor_pos) {
     if(cursor_pos.x >= get_reference_center().x) {
         on_next();
     } else {
@@ -1473,9 +1473,9 @@ void picker_gui_item::def_activate_code(const point &cursor_pos) {
 /**
  * @brief Default picker GUI item draw code.
  */
-void picker_gui_item::def_draw_code(const point &center, const point &size) {
+void PickerGuiItem::def_draw_code(const Point &center, const Point &size) {
     if(this->nr_options != 0 && selected) {
-        point option_boxes_start(
+        Point option_boxes_start(
             center.x - size.x / 2.0f + 20.0f,
             center.y + size.y / 2.0f - 12.0f
         );
@@ -1504,17 +1504,17 @@ void picker_gui_item::def_draw_code(const point &center, const point &size) {
     }
     ALLEGRO_COLOR arrow_highlight_color = al_map_rgb(87, 200, 208);
     ALLEGRO_COLOR arrow_regular_color = COLOR_WHITE;
-    point arrow_highlight_scale = point(1.4f);
-    point arrow_regular_scale = point(1.0f);
+    Point arrow_highlight_scale = Point(1.4f);
+    Point arrow_regular_scale = Point(1.0f);
     
-    point arrow_box(
+    Point arrow_box(
         size.x * 0.10 * GUI::STANDARD_CONTENT_SIZE.x,
         size.y * GUI::STANDARD_CONTENT_SIZE.y
     );
     draw_text(
         "<",
         game.sys_content.fnt_standard,
-        point(center.x - size.x * 0.45, center.y),
+        Point(center.x - size.x * 0.45, center.y),
         arrow_box,
         real_arrow_highlight == 0 ?
         arrow_highlight_color :
@@ -1528,7 +1528,7 @@ void picker_gui_item::def_draw_code(const point &center, const point &size) {
     draw_text(
         ">",
         game.sys_content.fnt_standard,
-        point(center.x + size.x * 0.45, center.y),
+        Point(center.x + size.x * 0.45, center.y),
         arrow_box,
         real_arrow_highlight == 1 ?
         arrow_highlight_color :
@@ -1542,16 +1542,16 @@ void picker_gui_item::def_draw_code(const point &center, const point &size) {
     
     float juicy_grow_amount = this->get_juice_value();
     
-    point text_box(size.x * 0.80, size.y * GUI::STANDARD_CONTENT_SIZE.y);
+    Point text_box(size.x * 0.80, size.y * GUI::STANDARD_CONTENT_SIZE.y);
     draw_text(
         this->base_text + this->option,
         game.sys_content.fnt_standard,
-        point(center.x - size.x * 0.40, center.y),
+        Point(center.x - size.x * 0.40, center.y),
         text_box,
         COLOR_WHITE,
         ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER,
         TEXT_SETTING_FLAG_CANT_GROW,
-        point(1.0f + juicy_grow_amount)
+        Point(1.0f + juicy_grow_amount)
     );
     
     ALLEGRO_COLOR box_tint =
@@ -1574,7 +1574,7 @@ void picker_gui_item::def_draw_code(const point &center, const point &size) {
 /**
  * @brief Default picker GUI item menu dir code.
  */
-bool picker_gui_item::def_menu_dir_code(size_t button_id) {
+bool PickerGuiItem::def_menu_dir_code(size_t button_id) {
     if(button_id == PLAYER_ACTION_TYPE_MENU_RIGHT) {
         on_next();
         return true;
@@ -1589,7 +1589,7 @@ bool picker_gui_item::def_menu_dir_code(size_t button_id) {
 /**
  * @brief Default picker GUI item mouse over code.
  */
-void picker_gui_item::def_mouse_over_code(const point  &cursor_pos) {
+void PickerGuiItem::def_mouse_over_code(const Point  &cursor_pos) {
     arrow_highlight =
         cursor_pos.x >= get_reference_center().x ? 1 : 0;
 }
@@ -1598,11 +1598,11 @@ void picker_gui_item::def_mouse_over_code(const point  &cursor_pos) {
 /**
  * @brief Constructs a new scroll gui item object.
  */
-scroll_gui_item::scroll_gui_item() :
-    gui_item() {
+ScrollGuiItem::ScrollGuiItem() :
+    GuiItem() {
     
     on_draw =
-    [this] (const point & center, const point & size) {
+    [this] (const Point & center, const Point & size) {
         this->def_draw_code(center, size);
     };
     on_event =
@@ -1615,7 +1615,7 @@ scroll_gui_item::scroll_gui_item() :
 /**
  * @brief Default scroll GUI item draw code.
  */
-void scroll_gui_item::def_draw_code(const point &center, const point &size) {
+void ScrollGuiItem::def_draw_code(const Point &center, const Point &size) {
     float bar_y = 0.0f; //Top, in height ratio.
     float bar_h = 0.0f; //In height ratio.
     float list_bottom = list_item->get_child_bottom();
@@ -1634,13 +1634,13 @@ void scroll_gui_item::def_draw_code(const point &center, const point &size) {
     
     if(bar_h != 0.0f) {
         draw_textured_box(
-            point(
+            Point(
                 center.x,
                 (center.y - size.y * 0.5) +
                 (size.y * bar_y) +
                 (size.y * bar_h * 0.5f)
             ),
-            point(size.x, (size.y * bar_h)),
+            Point(size.x, (size.y * bar_h)),
             game.sys_content.bmp_bubble_box
         );
     }
@@ -1650,19 +1650,19 @@ void scroll_gui_item::def_draw_code(const point &center, const point &size) {
 /**
  * @brief Default scroll GUI item event code.
  */
-void scroll_gui_item::def_event_code(const ALLEGRO_EVENT  &ev) {
+void ScrollGuiItem::def_event_code(const ALLEGRO_EVENT  &ev) {
     if(
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN &&
         ev.mouse.button == 1 &&
-        is_mouse_on(point(ev.mouse.x, ev.mouse.y))
+        is_mouse_on(Point(ev.mouse.x, ev.mouse.y))
     ) {
         float list_bottom = list_item->get_child_bottom();
         if(list_bottom <= 1.0f) {
             return;
         }
         
-        point c = get_reference_center();
-        point s = get_reference_size();
+        Point c = get_reference_center();
+        Point s = get_reference_size();
         float bar_h = (1.0f / list_bottom) * s.y;
         float y1 = (c.y - s.y / 2.0f) + bar_h / 2.0f;
         float y2 = (c.y + s.y / 2.0f) - bar_h / 2.0f;
@@ -1682,18 +1682,18 @@ void scroll_gui_item::def_event_code(const ALLEGRO_EVENT  &ev) {
  * @param color Color to use for the text.
  * @param flags Allegro text flags to use.
  */
-text_gui_item::text_gui_item(
+TextGuiItem::TextGuiItem(
     const string &text, ALLEGRO_FONT* font, const ALLEGRO_COLOR &color,
     int flags
 ) :
-    gui_item(),
+    GuiItem(),
     text(text),
     font(font),
     color(color),
     flags(flags) {
     
     on_draw =
-    [this] (const point & center, const point & size) {
+    [this] (const Point & center, const Point & size) {
         this->def_draw_code(center, size);
     };
 }
@@ -1702,7 +1702,7 @@ text_gui_item::text_gui_item(
 /**
  * @brief Default text GUI item draw code.
  */
-void text_gui_item::def_draw_code(const point &center, const point &size) {
+void TextGuiItem::def_draw_code(const Point &center, const Point &size) {
     int text_x = center.x;
     switch(this->flags) {
     case ALLEGRO_ALIGN_LEFT: {
@@ -1721,35 +1721,35 @@ void text_gui_item::def_draw_code(const point &center, const point &size) {
     
         text_y = center.y - size.y / 2.0f;
         int line_height = al_get_font_line_height(this->font);
-        vector<string_token> tokens =
+        vector<StringToken> tokens =
             tokenize_string(this->text);
         set_string_token_widths(
             tokens, this->font, game.sys_content.fnt_slim, line_height, false
         );
-        vector<vector<string_token> > tokens_per_line =
+        vector<vector<StringToken> > tokens_per_line =
             split_long_string_with_tokens(tokens, size.x);
             
         for(size_t l = 0; l < tokens_per_line.size(); l++) {
             draw_string_tokens(
                 tokens_per_line[l], this->font, game.sys_content.fnt_slim,
                 false,
-                point(
+                Point(
                     text_x,
                     text_y + l * line_height
                 ),
                 this->flags,
-                point(size.x, line_height),
-                point(1.0f + juicy_grow_amount)
+                Point(size.x, line_height),
+                Point(1.0f + juicy_grow_amount)
             );
         }
         
     } else {
     
         draw_text(
-            this->text, this->font, point(text_x, text_y), size,
+            this->text, this->font, Point(text_x, text_y), size,
             this->color, this->flags, V_ALIGN_MODE_CENTER,
             TEXT_SETTING_FLAG_CANT_GROW,
-            point(1.0 + juicy_grow_amount)
+            Point(1.0 + juicy_grow_amount)
         );
         
     }
@@ -1769,12 +1769,12 @@ void text_gui_item::def_draw_code(const point &center, const point &size) {
  *
  * @param gui Pointer to the GUI it belongs to.
  */
-tooltip_gui_item::tooltip_gui_item(gui_manager* gui) :
-    gui_item(),
+TooltipGuiItem::TooltipGuiItem(GuiManager* gui) :
+    GuiItem(),
     gui(gui) {
     
     on_draw =
-    [this] (const point & center, const point & size) {
+    [this] (const Point & center, const Point & size) {
         this->def_draw_code(center, size);
     };
 }
@@ -1783,7 +1783,7 @@ tooltip_gui_item::tooltip_gui_item(gui_manager* gui) :
 /**
  * @brief Default tooltip GUI item draw code.
  */
-void tooltip_gui_item::def_draw_code(const point &center, const point &size) {
+void TooltipGuiItem::def_draw_code(const Point &center, const Point &size) {
     string cur_text = this->gui->get_current_tooltip();
     if(cur_text != this->prev_text) {
         this->start_juice_animation(JUICE_TYPE_GROW_TEXT_LOW);
@@ -1798,6 +1798,6 @@ void tooltip_gui_item::def_draw_code(const point &center, const point &size) {
         COLOR_WHITE,
         ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
         TEXT_SETTING_FLAG_CANT_GROW,
-        point(0.7f + juicy_grow_amount)
+        Point(0.7f + juicy_grow_amount)
     );
 }

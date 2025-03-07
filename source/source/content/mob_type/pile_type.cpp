@@ -20,12 +20,12 @@
 /**
  * @brief Constructs a new pile type object.
  */
-pile_type::pile_type() :
-    mob_type(MOB_CATEGORY_PILES) {
+PileType::PileType() :
+    MobType(MOB_CATEGORY_PILES) {
     
     target_type = MOB_TARGET_FLAG_PIKMIN_OBSTACLE;
     
-    area_editor_prop_t aep_amount;
+    AreaEditorProp aep_amount;
     aep_amount.name = "Amount";
     aep_amount.var = "amount";
     aep_amount.type = AEMP_TYPE_TEXT;
@@ -43,7 +43,7 @@ pile_type::pile_type() :
  *
  * @return The vector.
  */
-anim_conversion_vector pile_type::get_anim_conversions() const {
+anim_conversion_vector PileType::get_anim_conversions() const {
     anim_conversion_vector v;
     
     v.push_back(std::make_pair(PILE_ANIM_IDLING, "idling"));
@@ -57,12 +57,12 @@ anim_conversion_vector pile_type::get_anim_conversions() const {
  *
  * @param file File to read from.
  */
-void pile_type::load_cat_properties(data_node* file) {
-    reader_setter rs(file);
+void PileType::load_cat_properties(DataNode* file) {
+    ReaderSetter rs(file);
     
     string contents_str;
     string size_animation_suffixes_str;
-    data_node* contents_node = nullptr;
+    DataNode* contents_node = nullptr;
     
     rs.set("auto_shrink_smallest_radius", auto_shrink_smallest_radius);
     rs.set("can_drop_multiple", can_drop_multiple);

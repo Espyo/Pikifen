@@ -28,7 +28,7 @@ const string GUI_FILE_NAME = "statistics_menu";
  * @brief Adds a new header to the stats list GUI item.
  * @param label Name of the header.
  */
-void stats_menu_t::add_header(const string &label) {
+void StatsMenu::add_header(const string &label) {
     float list_bottom_y = stats_list->get_child_bottom();
     const float HEADER_HEIGHT = 0.09f;
     const float STAT_PADDING = 0.02f;
@@ -37,12 +37,12 @@ void stats_menu_t::add_header(const string &label) {
         list_bottom_y + (HEADER_HEIGHT / 2.0f) +
         (list_bottom_y == 0.0f ? STATS_OFFSET : STAT_PADDING);
         
-    text_gui_item* label_text =
-        new text_gui_item(label, game.sys_content.fnt_area_name);
+    TextGuiItem* label_text =
+        new TextGuiItem(label, game.sys_content.fnt_area_name);
     label_text->center =
-        point(0.50f, stat_center_y);
+        Point(0.50f, stat_center_y);
     label_text->size =
-        point(0.96f, HEADER_HEIGHT);
+        Point(0.96f, HEADER_HEIGHT);
     stats_list->add_child(label_text);
     gui.add_item(label_text);
 }
@@ -56,7 +56,7 @@ void stats_menu_t::add_header(const string &label) {
  * @param description Tooltip description.
  * @return The text GUI item for the value.
  */
-text_gui_item* stats_menu_t::add_stat(
+TextGuiItem* StatsMenu::add_stat(
     const string &label, const string &value, const string &description
 ) {
     float list_bottom_y = stats_list->get_child_bottom();
@@ -67,26 +67,26 @@ text_gui_item* stats_menu_t::add_stat(
         list_bottom_y + (STAT_HEIGHT / 2.0f) +
         (list_bottom_y == 0.0f ? STATS_OFFSET : STAT_PADDING);
         
-    bullet_gui_item* label_bullet =
-        new bullet_gui_item(
+    BulletGuiItem* label_bullet =
+        new BulletGuiItem(
         label, game.sys_content.fnt_standard
     );
     label_bullet->center =
-        point(0.50f, stat_center_y);
+        Point(0.50f, stat_center_y);
     label_bullet->size =
-        point(0.96f, STAT_HEIGHT);
+        Point(0.96f, STAT_HEIGHT);
     label_bullet->on_get_tooltip = [description] () { return description; };
     stats_list->add_child(label_bullet);
     gui.add_item(label_bullet);
     
-    text_gui_item* value_text =
-        new text_gui_item(
+    TextGuiItem* value_text =
+        new TextGuiItem(
         value, game.sys_content.fnt_counter, COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
     );
     value_text->center =
-        point(0.75f, stat_center_y);
+        Point(0.75f, stat_center_y);
     value_text->size =
-        point(0.44f, STAT_HEIGHT);
+        Point(0.44f, STAT_HEIGHT);
     stats_list->add_child(value_text);
     gui.add_item(value_text);
     
@@ -97,7 +97,7 @@ text_gui_item* stats_menu_t::add_stat(
 /**
  * @brief Initializes the main GUI.
  */
-void stats_menu_t::init_gui_main() {
+void StatsMenu::init_gui_main() {
     //Menu items.
     gui.register_coords("back",        12,  5, 20,  6);
     gui.register_coords("back_input",   3,  7,  4,  4);
@@ -111,9 +111,9 @@ void stats_menu_t::init_gui_main() {
     
     //Back button.
     gui.back_item =
-        new button_gui_item("Back", game.sys_content.fnt_standard);
+        new ButtonGuiItem("Back", game.sys_content.fnt_standard);
     gui.back_item->on_activate =
-    [this] (const point &) {
+    [this] (const Point &) {
         save_statistics();
         leave();
     };
@@ -125,25 +125,25 @@ void stats_menu_t::init_gui_main() {
     gui_add_back_input_icon(&gui);
     
     //Header text.
-    text_gui_item* header_text =
-        new text_gui_item(
+    TextGuiItem* header_text =
+        new TextGuiItem(
         "STATISTICS",
         game.sys_content.fnt_area_name, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
     );
     gui.add_item(header_text, "header");
     
     //Statistics list.
-    stats_list = new list_gui_item();
+    stats_list = new ListGuiItem();
     gui.add_item(stats_list, "list");
     
     //Statistics list scrollbar.
-    scroll_gui_item* list_scroll = new scroll_gui_item();
+    ScrollGuiItem* list_scroll = new ScrollGuiItem();
     list_scroll->list_item = stats_list;
     gui.add_item(list_scroll, "list_scroll");
     
     //Tooltip text.
-    tooltip_gui_item* tooltip_text =
-        new tooltip_gui_item(&gui);
+    TooltipGuiItem* tooltip_text =
+        new TooltipGuiItem(&gui);
     gui.add_item(tooltip_text, "tooltip");
     
     populate_stats_list();
@@ -156,20 +156,20 @@ void stats_menu_t::init_gui_main() {
 /**
  * @brief Loads the menu.
  */
-void stats_menu_t::load() {
+void StatsMenu::load() {
     //Initialize the GUIs.
     init_gui_main();
     
     //Finish the class menu setup.
     guis.push_back(&gui);
-    menu_t::load();
+    Menu::load();
 }
 
 
 /**
  * @brief Populates the stats menu with bullet points.
  */
-void stats_menu_t::populate_stats_list() {
+void StatsMenu::populate_stats_list() {
     add_header(
         (game.config.name.empty() ? "Pikifen" : game.config.name) +
         " use"
@@ -263,7 +263,7 @@ void stats_menu_t::populate_stats_list() {
         "Total amount of times a spray was used."
     );
     
-    data_node mission_records_file;
+    DataNode mission_records_file;
     mission_records_file.load_file(
         FILE_PATHS_FROM_ROOT::MISSION_RECORDS, true, false, true
     );
@@ -273,8 +273,8 @@ void stats_menu_t::populate_stats_list() {
     long mission_scores = 0;
     
     for(size_t a = 0; a < game.content.areas.list[AREA_TYPE_MISSION].size(); a++) {
-        area_data* area_ptr = game.content.areas.list[AREA_TYPE_MISSION][a];
-        mission_record record;
+        Area* area_ptr = game.content.areas.list[AREA_TYPE_MISSION][a];
+        MissionRecord record;
         load_area_mission_record(&mission_records_file, area_ptr, record);
         if(record.clear) {
             mission_clears++;
@@ -310,16 +310,16 @@ void stats_menu_t::populate_stats_list() {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void stats_menu_t::tick(float delta_t) {
+void StatsMenu::tick(float delta_t) {
     update_runtime_value_text();
-    menu_t::tick(delta_t);
+    Menu::tick(delta_t);
 }
 
 
 /**
  * @brief Updates the GUI text item for the runtime stat value.
  */
-void stats_menu_t::update_runtime_value_text() {
+void StatsMenu::update_runtime_value_text() {
     runtime_value_text->text =
         time_to_str3(game.statistics.runtime, ":", ":", "");
 }

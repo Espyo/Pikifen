@@ -17,7 +17,7 @@
 /**
  * @brief A type of tool. A type of hand-held explosive, for instance.
  */
-class tool_type : public mob_type {
+class ToolType : public MobType {
 
 public:
 
@@ -47,8 +47,8 @@ public:
     
     //--- Function declarations ---
     
-    tool_type();
-    void load_cat_properties(data_node* file) override;
-    void load_cat_resources(data_node* file) override;
+    ToolType();
+    void load_cat_properties(DataNode* file) override;
+    void load_cat_resources(DataNode* file) override;
     
 };

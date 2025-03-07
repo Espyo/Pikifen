@@ -18,10 +18,10 @@
  * @param type Bouncer type this mob belongs to.
  * @param angle Starting angle.
  */
-bouncer::bouncer(
-    const point &pos, bouncer_type* type, float angle
+Bouncer::Bouncer(
+    const Point &pos, BouncerType* type, float angle
 ):
-    mob(pos, type, angle),
+    Mob(pos, type, angle),
     bou_type(type) {
     
     team = MOB_TEAM_NONE;

@@ -24,7 +24,7 @@ extern const string GUI_FILE_PATH;
 /**
  * @brief Info about the area results menu.
  */
-class results_state : public game_state {
+class Results : public GameState {
 
 public:
 
@@ -42,16 +42,16 @@ private:
     //--- Members ---
     
     //GUI manager.
-    gui_manager gui;
+    GuiManager gui;
     
     //Time spent on this state.
     float gui_time_spent = 0.0f;
     
     //GUI items that need to grow during the periodic text animation.
-    vector<gui_item*> text_to_animate;
+    vector<GuiItem*> text_to_animate;
     
     //Stats box GUI item.
-    list_gui_item* stats_list = nullptr;
+    ListGuiItem* stats_list = nullptr;
     
     //Final mission score. Cache for convenience.
     int final_mission_score = 0;

@@ -29,8 +29,8 @@ using std::size_t;
  *
  * @param typ Mob type to create the finite state machine for.
  */
-void pile_fsm::create_fsm(mob_type* typ) {
-    easy_fsm_creator efc;
+void pile_fsm::create_fsm(MobType* typ) {
+    EasyFsmCreator efc;
     
     efc.new_state("idling", PILE_STATE_IDLING); {
         efc.new_event(MOB_EV_ON_ENTER); {
@@ -62,11 +62,11 @@ void pile_fsm::create_fsm(mob_type* typ) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void pile_fsm::be_attacked(mob* m, void* info1, void* info2) {
+void pile_fsm::be_attacked(Mob* m, void* info1, void* info2) {
     gen_mob_fsm::be_attacked(m, info1, info2);
     
-    hitbox_interaction* info = (hitbox_interaction*) info1;
-    pile* pil_ptr = (pile*) m;
+    HitboxInteraction* info = (HitboxInteraction*) info1;
+    Pile* pil_ptr = (Pile*) m;
     
     size_t amount_before = pil_ptr->amount;
     int intended_amount =
@@ -84,18 +84,18 @@ void pile_fsm::be_attacked(mob* m, void* info1, void* info2) {
             pil_ptr->pil_type->health_per_resource * intended_amount;
     }
     
-    resource* resource_to_pick_up = nullptr;
-    pikmin* pikmin_to_start_carrying = nullptr;
+    Resource* resource_to_pick_up = nullptr;
+    Pikmin* pikmin_to_start_carrying = nullptr;
     
     for(size_t r = 0; r < (size_t) amount_to_spawn; r++) {
-        point spawn_pos;
+        Point spawn_pos;
         float spawn_z = 0;
         float spawn_angle = 0;
         float spawn_h_speed = 0;
         float spawn_v_speed = 0;
         
         if(r == 0 && info->mob2->type->category->id == MOB_CATEGORY_PIKMIN) {
-            pikmin_to_start_carrying = (pikmin*) (info->mob2);
+            pikmin_to_start_carrying = (Pikmin*) (info->mob2);
             //If this was a Pikmin's attack, spawn the first resource nearby
             //so it can pick it up.
             spawn_angle =
@@ -113,14 +113,14 @@ void pile_fsm::be_attacked(mob* m, void* info1, void* info2) {
             spawn_v_speed = 600.0f;
         }
         
-        resource* new_resource =
+        Resource* new_resource =
             (
-                (resource*)
+                (Resource*)
                 create_mob(
                     game.mob_categories.get(MOB_CATEGORY_RESOURCES),
                     spawn_pos, pil_ptr->pil_type->contents,
                     spawn_angle, "",
-        [pil_ptr] (mob * m) { ((resource*) m)->origin_pile = pil_ptr; }
+        [pil_ptr] (Mob * m) { ((Resource*) m)->origin_pile = pil_ptr; }
                 )
             );
             
@@ -155,7 +155,7 @@ void pile_fsm::be_attacked(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void pile_fsm::become_idle(mob* m, void* info1, void* info2) {
-    pile* pil_ptr = (pile*) m;
+void pile_fsm::become_idle(Mob* m, void* info1, void* info2) {
+    Pile* pil_ptr = (Pile*) m;
     pil_ptr->update();
 }

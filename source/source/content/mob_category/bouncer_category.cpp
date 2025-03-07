@@ -19,8 +19,8 @@
 /**
  * @brief Constructs a new bouncer category object.
  */
-bouncer_category::bouncer_category() :
-    mob_category(
+BouncerCategory::BouncerCategory() :
+    MobCategory(
         MOB_CATEGORY_BOUNCERS, "bouncer",
         "Bouncer", "Bouncers",
         "bouncers", al_map_rgb(192, 139, 204)
@@ -32,7 +32,7 @@ bouncer_category::bouncer_category() :
 /**
  * @brief Clears the list of registered types of bouncers.
  */
-void bouncer_category::clear_types() {
+void BouncerCategory::clear_types() {
     for(auto &t : game.content.mob_types.list.bouncer) {
         delete t.second;
     }
@@ -48,10 +48,10 @@ void bouncer_category::clear_types() {
  * @param angle Starting angle.
  * @return The created mob.
  */
-mob* bouncer_category::create_mob(
-    const point &pos, mob_type* type, float angle
+Mob* BouncerCategory::create_mob(
+    const Point &pos, MobType* type, float angle
 ) {
-    bouncer* m = new bouncer(pos, (bouncer_type*) type, angle);
+    Bouncer* m = new Bouncer(pos, (BouncerType*) type, angle);
     game.states.gameplay->mobs.bouncers.push_back(m);
     return m;
 }
@@ -62,8 +62,8 @@ mob* bouncer_category::create_mob(
  *
  * @return The type.
  */
-mob_type* bouncer_category::create_type() {
-    return new bouncer_type();
+MobType* BouncerCategory::create_type() {
+    return new BouncerType();
 }
 
 
@@ -72,12 +72,12 @@ mob_type* bouncer_category::create_type() {
  *
  * @param m The mob to erase.
  */
-void bouncer_category::erase_mob(mob* m) {
+void BouncerCategory::erase_mob(Mob* m) {
     game.states.gameplay->mobs.bouncers.erase(
         find(
             game.states.gameplay->mobs.bouncers.begin(),
             game.states.gameplay->mobs.bouncers.end(),
-            (bouncer*) m
+            (Bouncer*) m
         )
     );
 }
@@ -90,7 +90,7 @@ void bouncer_category::erase_mob(mob* m) {
  * @param internal_name Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-mob_type* bouncer_category::get_type(const string &internal_name) const {
+MobType* BouncerCategory::get_type(const string &internal_name) const {
     auto it = game.content.mob_types.list.bouncer.find(internal_name);
     if(it == game.content.mob_types.list.bouncer.end()) return nullptr;
     return it->second;
@@ -102,7 +102,7 @@ mob_type* bouncer_category::get_type(const string &internal_name) const {
  *
  * @param list This list gets filled with the mob type internal names.
  */
-void bouncer_category::get_type_names(vector<string> &list) const {
+void BouncerCategory::get_type_names(vector<string> &list) const {
     for(auto &t : game.content.mob_types.list.bouncer) {
         list.push_back(t.first);
     }
@@ -115,6 +115,6 @@ void bouncer_category::get_type_names(vector<string> &list) const {
  * @param internal_name Internal name of the mob type.
  * @param type Mob type to register.
  */
-void bouncer_category::register_type(const string &internal_name, mob_type* type) {
-    game.content.mob_types.list.bouncer[internal_name] = (bouncer_type*) type;
+void BouncerCategory::register_type(const string &internal_name, MobType* type) {
+    game.content.mob_types.list.bouncer[internal_name] = (BouncerType*) type;
 }

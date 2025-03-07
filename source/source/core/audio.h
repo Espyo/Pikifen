@@ -46,8 +46,8 @@ using std::map;
 using std::string;
 
 
-class audio_manager;
-class mob;
+class AudioManager;
+class Mob;
 
 
 namespace AUDIO {
@@ -185,7 +185,7 @@ enum MIX_TRACK_TYPE {
 /**
  * @brief Configuration about a given sound effect source.
  */
-struct sound_source_config_t {
+struct SoundSourceConfig {
 
     //--- Members ---
     
@@ -225,7 +225,7 @@ struct sound_source_config_t {
  * Typically this is tied to a mob, but it could also just be an
  * abstract source. All sound playback needs to come from a source.
  */
-struct sound_source_t {
+struct SoundSource {
 
     //--- Members ---
     
@@ -236,10 +236,10 @@ struct sound_source_t {
     SOUND_TYPE type = SOUND_TYPE_GAMEPLAY_GLOBAL;
     
     //Configuration.
-    sound_source_config_t config;
+    SoundSourceConfig config;
     
     //Position in the game world, if applicable.
-    point pos;
+    Point pos;
     
     //Time left until the next emission.
     float emit_time_left = 0.0f;
@@ -254,7 +254,7 @@ struct sound_source_t {
  * @brief An instance of a sound effect's playback.
  * This needs to be emitted from a sound source.
  */
-struct sound_playback_t {
+struct SoundPlayback {
 
     //--- Members ---
     
@@ -300,7 +300,7 @@ struct sound_playback_t {
  * responsible for setting the right statuses to true. Then the audio manager
  * is responsible for fading them in and out as necessary.
  */
-struct song : public content {
+struct Song : public Content {
 
     //--- Members ---
     
@@ -328,7 +328,7 @@ struct song : public content {
     
     //--- Function declarations ---
     
-    void load_from_data_node(data_node* node);
+    void load_from_data_node(DataNode* node);
     void unload();
     
 };
@@ -337,7 +337,7 @@ struct song : public content {
 /**
  * @brief Manages everything about the game's audio.
  */
-class audio_manager {
+class AudioManager {
 
 public:
 
@@ -350,25 +350,25 @@ public:
     //--- Function declarations ---
     
     size_t create_mob_sound_source(
-        ALLEGRO_SAMPLE* sample, mob* m_ptr, bool ambiance = false,
-        const sound_source_config_t &config = sound_source_config_t()
+        ALLEGRO_SAMPLE* sample, Mob* m_ptr, bool ambiance = false,
+        const SoundSourceConfig &config = SoundSourceConfig()
     );
     size_t create_global_sound_source(
         ALLEGRO_SAMPLE* sample, bool ambiance = false,
-        const sound_source_config_t &config = sound_source_config_t()
+        const SoundSourceConfig &config = SoundSourceConfig()
     );
     size_t create_pos_sound_source(
-        ALLEGRO_SAMPLE* sample, const point &pos, bool ambiance = false,
-        const sound_source_config_t &config = sound_source_config_t()
+        ALLEGRO_SAMPLE* sample, const Point &pos, bool ambiance = false,
+        const SoundSourceConfig &config = SoundSourceConfig()
     );
     size_t create_ui_sound_source(
         ALLEGRO_SAMPLE* sample,
-        const sound_source_config_t &config = sound_source_config_t()
+        const SoundSourceConfig &config = SoundSourceConfig()
     );
     bool destroy_sound_source(size_t source_id);
     void destroy();
     bool emit(size_t source_id);
-    void handle_mob_deletion(const mob* m_ptr);
+    void handle_mob_deletion(const Mob* m_ptr);
     void handle_stream_finished(ALLEGRO_AUDIO_STREAM* stream);
     void handle_world_pause();
     void handle_world_unpause();
@@ -379,13 +379,13 @@ public:
     void mark_mix_track_status(MIX_TRACK_TYPE track_type);
     bool rewind_song(const string &name);
     bool schedule_emission(size_t source_id, bool first);
-    void set_camera_pos(const point &cam_tl, const point &cam_br);
+    void set_camera_pos(const Point &cam_tl, const Point &cam_br);
     bool set_current_song(
         const string &name, bool from_start = true, bool fade_in = true,
         bool loop = true
     );
     void set_song_pos_near_loop();
-    bool set_sound_source_pos(size_t source_id, const point &pos);
+    bool set_sound_source_pos(size_t source_id, const Point &pos);
     void stop_all_playbacks(const ALLEGRO_SAMPLE* filter = nullptr);
     void tick(float delta_t);
     void update_volumes(
@@ -419,13 +419,13 @@ private:
     size_t next_sound_source_id = 1;
     
     //Mob-specific sound effect sources.
-    map<size_t, mob*> mob_sources;
+    map<size_t, Mob*> mob_sources;
     
     //All sound effect sources.
-    map<size_t, sound_source_t> sources;
+    map<size_t, SoundSource> sources;
     
     //All sound effects being played right now.
-    vector<sound_playback_t> playbacks;
+    vector<SoundPlayback> playbacks;
     
     //Status for things that affect mix tracks this frame.
     vector<bool> mix_statuses;
@@ -434,10 +434,10 @@ private:
     vector<float> mix_volumes;
     
     //Top-left camera coordinates.
-    point cam_tl;
+    Point cam_tl;
     
     //Bottom-right camera coordinates.
-    point cam_br;
+    Point cam_br;
     
     
     //--- Function declarations ---
@@ -445,13 +445,13 @@ private:
     size_t create_sound_source(
         ALLEGRO_SAMPLE* sample,
         SOUND_TYPE type,
-        const sound_source_config_t &config,
-        const point &pos
+        const SoundSourceConfig &config,
+        const Point &pos
     );
     bool destroy_sound_playback(size_t playback_idx);
-    sound_source_t* get_source(size_t source_id);
+    SoundSource* get_source(size_t source_id);
     void start_song_track(
-        song* song_ptr, ALLEGRO_AUDIO_STREAM* stream,
+        Song* song_ptr, ALLEGRO_AUDIO_STREAM* stream,
         bool from_start, bool fade_in, bool loop
     );
     bool stop_sound_playback(size_t playback_idx);

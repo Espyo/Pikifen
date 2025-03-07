@@ -19,25 +19,25 @@
  * Pikmin attack it in some form, and it ends up yeilding a resource, bit by
  * bit, until it is exhausted.
  */
-class pile : public mob, public mob_with_anim_groups {
+class Pile : public Mob, public MobWithAnimGroups {
 
 public:
 
     //--- Members ---
     
     //What type of pile it is.
-    pile_type* pil_type = nullptr;
+    PileType* pil_type = nullptr;
     
     //Current amount of resources.
     size_t amount = 0;
     
     //Time left until it recharges.
-    timer recharge_timer;
+    Timer recharge_timer;
     
     
     //--- Function declarations ---
     
-    pile(const point &pos, pile_type* type, float angle);
+    Pile(const Point &pos, PileType* type, float angle);
     void change_amount(int change);
     void recharge();
     void update();
@@ -45,7 +45,7 @@ public:
         float* fraction_value_nr, float* fraction_req_nr,
         ALLEGRO_COLOR* fraction_color
     ) const override;
-    void read_script_vars(const script_var_reader &svr) override;
+    void read_script_vars(const ScriptVarReader &svr) override;
     
 protected:
 

@@ -19,8 +19,8 @@
 /**
  * @brief Constructs a new drop category object.
  */
-drop_category::drop_category() :
-    mob_category(
+DropCategory::DropCategory() :
+    MobCategory(
         MOB_CATEGORY_DROPS, "drop",
         "Drop", "Drops",
         "drops", al_map_rgb(204, 145, 145)
@@ -32,7 +32,7 @@ drop_category::drop_category() :
 /**
  * @brief Clears the list of registered types of drops.
  */
-void drop_category::clear_types() {
+void DropCategory::clear_types() {
     for(auto &t : game.content.mob_types.list.drop) {
         delete t.second;
     }
@@ -48,10 +48,10 @@ void drop_category::clear_types() {
  * @param angle Starting angle.
  * @return The mob.
  */
-mob* drop_category::create_mob(
-    const point &pos, mob_type* type, float angle
+Mob* DropCategory::create_mob(
+    const Point &pos, MobType* type, float angle
 ) {
-    drop* m = new drop(pos, (drop_type*) type, angle);
+    Drop* m = new Drop(pos, (DropType*) type, angle);
     game.states.gameplay->mobs.drops.push_back(m);
     return m;
 }
@@ -62,8 +62,8 @@ mob* drop_category::create_mob(
  *
  * @return The type.
  */
-mob_type* drop_category::create_type() {
-    return new drop_type();
+MobType* DropCategory::create_type() {
+    return new DropType();
 }
 
 
@@ -72,12 +72,12 @@ mob_type* drop_category::create_type() {
  *
  * @param m The mob to erase.
  */
-void drop_category::erase_mob(mob* m) {
+void DropCategory::erase_mob(Mob* m) {
     game.states.gameplay->mobs.drops.erase(
         find(
             game.states.gameplay->mobs.drops.begin(),
             game.states.gameplay->mobs.drops.end(),
-            (drop*) m
+            (Drop*) m
         )
     );
 }
@@ -90,7 +90,7 @@ void drop_category::erase_mob(mob* m) {
  * @param internal_name Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-mob_type* drop_category::get_type(const string &internal_name) const {
+MobType* DropCategory::get_type(const string &internal_name) const {
     auto it = game.content.mob_types.list.drop.find(internal_name);
     if(it == game.content.mob_types.list.drop.end()) return nullptr;
     return it->second;
@@ -102,7 +102,7 @@ mob_type* drop_category::get_type(const string &internal_name) const {
  *
  * @param list This list gets filled with the mob type internal names.
  */
-void drop_category::get_type_names(vector<string> &list) const {
+void DropCategory::get_type_names(vector<string> &list) const {
     for(auto &t : game.content.mob_types.list.drop) {
         list.push_back(t.first);
     }
@@ -115,6 +115,6 @@ void drop_category::get_type_names(vector<string> &list) const {
  * @param internal_name Internal name of the mob type.
  * @param type Mob type to register.
  */
-void drop_category::register_type(const string &internal_name, mob_type* type) {
-    game.content.mob_types.list.drop[internal_name] = (drop_type*) type;
+void DropCategory::register_type(const string &internal_name, MobType* type) {
+    game.content.mob_types.list.drop[internal_name] = (DropType*) type;
 }

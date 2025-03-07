@@ -42,10 +42,10 @@ const float SPEW_V_SPEED = 1200.0f;
  * @param type Convert type this mob belongs to.
  * @param angle Starting angle.
  */
-converter::converter(
-    const point &pos, converter_type* type, float angle
+Converter::Converter(
+    const Point &pos, ConverterType* type, float angle
 ) :
-    mob(pos, type, angle),
+    Mob(pos, type, angle),
     con_type(type),
     input_pikmin_left(con_type->total_input_pikmin),
     current_type(con_type->available_pikmin_types[0]),
@@ -63,7 +63,7 @@ converter::converter(
 /**
  * @brief Changes to the next type in the list, if applicable.
  */
-void converter::change_type() {
+void Converter::change_type() {
     current_type_idx =
         sum_and_wrap(
             (int) current_type_idx, 1,
@@ -85,7 +85,7 @@ void converter::change_type() {
 /**
  * @brief Closes up and gets ready for a conversion.
  */
-void converter::close() {
+void Converter::close() {
     fsm.set_state(CONVERTER_STATE_CLOSING);
     set_animation(
         get_animation_idx_from_base_and_group(
@@ -100,7 +100,7 @@ void converter::close() {
 /**
  * @brief Spews out the converted seeds.
  */
-void converter::spew() {
+void Converter::spew() {
     size_t total_to_spit = amount_in_buffer * con_type->pikmin_per_conversion;
     
     for(size_t s = 0; s < total_to_spit; s++) {
@@ -136,7 +136,7 @@ void converter::spew() {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void converter::tick_class_specifics(float delta_t) {
+void Converter::tick_class_specifics(float delta_t) {
     type_change_timer.tick(delta_t);
     auto_conversion_timer.tick(delta_t);
 }

@@ -45,8 +45,8 @@ const float TRACTOR_BEAM_RING_ANIM_DUR = 0.8f;
  * @param type Ship type this mob belongs to.
  * @param angle Starting angle.
  */
-ship::ship(const point &pos, ship_type* type, float angle) :
-    mob(pos, type, angle),
+Ship::Ship(const Point &pos, ShipType* type, float angle) :
+    Mob(pos, type, angle),
     shi_type(type),
     control_point_final_pos(
         rotate_point(type->control_point_offset, angle)
@@ -55,7 +55,7 @@ ship::ship(const point &pos, ship_type* type, float angle) :
         rotate_point(type->receptacle_offset, angle)
     ),
     control_point_to_receptacle_dist(
-        dist(control_point_final_pos, receptacle_final_pos).to_float()
+        Distance(control_point_final_pos, receptacle_final_pos).to_float()
     ) {
     
     next_tractor_beam_ring_timer.on_end = [this] () {
@@ -70,7 +70,7 @@ ship::ship(const point &pos, ship_type* type, float angle) :
     };
     next_tractor_beam_ring_timer.start();
     
-    nest = new pikmin_nest_t(this, shi_type->nest);
+    nest = new PikminNest(this, shi_type->nest);
     
     control_point_final_pos += pos;
     receptacle_final_pos += pos;
@@ -80,7 +80,7 @@ ship::ship(const point &pos, ship_type* type, float angle) :
 /**
  * @brief Destroys the ship object.
  */
-ship::~ship() {
+Ship::~Ship() {
     delete nest;
 }
 
@@ -88,7 +88,7 @@ ship::~ship() {
 /**
  * @brief Draws a ship.
  */
-void ship::draw_mob() {
+void Ship::draw_mob() {
 
     //Draw the rings on the control point.
     for(unsigned char b = 0; b < SHIP::CONTROL_POINT_RING_AMOUNT; b++) {
@@ -136,7 +136,7 @@ void ship::draw_mob() {
             
         draw_bitmap(
             game.sys_content.bmp_bright_ring,
-            control_point_final_pos, point(ring_diameter),
+            control_point_final_pos, Point(ring_diameter),
             0.0f,
             change_alpha(ring_color, ring_alpha)
         );
@@ -188,7 +188,7 @@ void ship::draw_mob() {
             
         float distance = control_point_to_receptacle_dist * ring_anim_ratio;
         float angle = get_angle(control_point_final_pos, receptacle_final_pos);
-        point ring_pos(
+        Point ring_pos(
             control_point_final_pos.x + cos(angle) * distance,
             control_point_final_pos.y + sin(angle) * distance
         );
@@ -196,13 +196,13 @@ void ship::draw_mob() {
         draw_bitmap(
             game.sys_content.bmp_bright_ring,
             ring_pos,
-            point(ring_scale),
+            Point(ring_scale),
             0.0f,
             ring_color
         );
     }
     
-    mob::draw_mob();
+    Mob::draw_mob();
 }
 
 
@@ -211,10 +211,10 @@ void ship::draw_mob() {
 *
 * @param l Leader to heal.
 */
-void ship::heal_leader(leader* l) const {
+void Ship::heal_leader(Leader* l) const {
     l->set_health(false, true, 1.0);
     
-    particle_generator pg =
+    ParticleGenerator pg =
         standard_particle_gen_setup(
             game.sys_content_names.part_leader_heal, l
         );
@@ -229,9 +229,9 @@ void ship::heal_leader(leader* l) const {
  * @param l Leader to check.
  * @return Whether the leader is on the control point.
  */
-bool ship::is_leader_on_cp(const leader* l) const {
+bool Ship::is_leader_on_cp(const Leader* l) const {
     return
-        dist(l->pos, control_point_final_pos) <=
+        Distance(l->pos, control_point_final_pos) <=
         shi_type->control_point_radius;
 }
 
@@ -241,8 +241,8 @@ bool ship::is_leader_on_cp(const leader* l) const {
  *
  * @param svr Script var reader to use.
  */
-void ship::read_script_vars(const script_var_reader &svr) {
-    mob::read_script_vars(svr);
+void Ship::read_script_vars(const ScriptVarReader &svr) {
+    Mob::read_script_vars(svr);
     
     nest->read_script_vars(svr);
 }
@@ -253,7 +253,7 @@ void ship::read_script_vars(const script_var_reader &svr) {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void ship::tick_class_specifics(float delta_t) {
+void Ship::tick_class_specifics(float delta_t) {
     nest->tick(delta_t);
     
     if(mobs_being_beamed > 0) {

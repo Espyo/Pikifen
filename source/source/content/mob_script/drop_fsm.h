@@ -17,11 +17,11 @@
  * @brief Functions about the drop's finite state machine and behavior.
  */
 namespace drop_fsm {
-void create_fsm(mob_type* typ);
+void create_fsm(MobType* typ);
 
-void land(mob* m, void* info1, void* info2);
-void on_touched(mob* m, void* info1, void* info2);
-void set_bumped_anim(mob* m, void* info1, void* info2);
-void set_falling_anim(mob* m, void* info1, void* info2);
-void set_idling_anim(mob* m, void* info1, void* info2);
+void land(Mob* m, void* info1, void* info2);
+void on_touched(Mob* m, void* info1, void* info2);
+void set_bumped_anim(Mob* m, void* info1, void* info2);
+void set_falling_anim(Mob* m, void* info1, void* info2);
+void set_idling_anim(Mob* m, void* info1, void* info2);
 }

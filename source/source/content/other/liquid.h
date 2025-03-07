@@ -33,7 +33,7 @@ using std::string;
  * A hazard can be associated with a liquid. It's the way the
  * engine has to know if a sector is to be shown as a liquid or not.
  */
-struct liquid : public content {
+struct Liquid : public Content {
 
     //--- Members ---
     
@@ -47,11 +47,11 @@ struct liquid : public content {
     ALLEGRO_COLOR radar_color = COLOR_EMPTY;
     
     //Maximum displacement amount.
-    point distortion_amount = point(14.0f, 4.0f);
+    Point distortion_amount = Point(14.0f, 4.0f);
     
     //Noise threshold for how much of the liquid will have no shines.
     float shine_min_threshold = 0.5f;
-
+    
     //Noise threshold for how much of the liquid fully covered in shines.
     float shine_max_threshold = 1.0f;
     
@@ -60,6 +60,6 @@ struct liquid : public content {
     
     //--- Function declarations ---
     
-    void load_from_data_node(data_node* node, CONTENT_LOAD_LEVEL level);
+    void load_from_data_node(DataNode* node, CONTENT_LOAD_LEVEL level);
     
 };

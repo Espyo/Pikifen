@@ -88,7 +88,7 @@ enum DROP_STATE {
 /**
  * @brief A type of drop, like a nectar drop, spray drop, etc.
  */
-class drop_type : public mob_type {
+class DropType : public MobType {
 
 public:
 
@@ -110,7 +110,7 @@ public:
     size_t spray_type_to_increase = INVALID;
     
     //If it gives a status effect, this points to the status type.
-    status_type* status_to_give = nullptr;
+    StatusType* status_to_give = nullptr;
     
     //How quickly it shrinks. Aesthetic only.
     float shrink_speed = 40.0f;
@@ -118,8 +118,8 @@ public:
     
     //--- Function declarations ---
     
-    drop_type();
-    void load_cat_properties(data_node* file) override;
+    DropType();
+    void load_cat_properties(DataNode* file) override;
     anim_conversion_vector get_anim_conversions() const override;
     
 };

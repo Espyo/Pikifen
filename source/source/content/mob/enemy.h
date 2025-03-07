@@ -24,20 +24,20 @@ extern const float SPIRIT_MIN_SIZE;
 /**
  * @brief I don't need to explain what an enemy is.
  */
-class enemy : public mob {
+class Enemy : public Mob {
 
 public:
 
     //--- Members ---
     
     //What type of enemy it is.
-    enemy_type* ene_type = nullptr;
+    EnemyType* ene_type = nullptr;
     
     
     //--- Function declarations ---
     
-    enemy(const point &pos, enemy_type* type, float angle);
-    bool can_receive_status(status_type* s) const override;
+    Enemy(const Point &pos, EnemyType* type, float angle);
+    bool can_receive_status(StatusType* s) const override;
     void draw_mob() override;
     void finish_dying_class_specifics() override;
     void start_dying_class_specifics() override;

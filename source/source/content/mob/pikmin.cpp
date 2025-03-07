@@ -80,11 +80,11 @@ const float THROW_VER_SPEED = 900.0f;
  * @param type Pikmin type this mob belongs to.
  * @param angle Starting angle.
  */
-pikmin::pikmin(const point &pos, pikmin_type* type, float angle) :
-    mob(pos, type, angle),
+Pikmin::Pikmin(const Point &pos, PikminType* type, float angle) :
+    Mob(pos, type, angle),
     pik_type(type) {
     
-    invuln_period = timer(PIKMIN::INVULN_PERIOD);
+    invuln_period = Timer(PIKMIN::INVULN_PERIOD);
     team = MOB_TEAM_PLAYER_1;
     subgroup_type_ptr =
         game.states.gameplay->subgroup_types.get_type(
@@ -94,7 +94,7 @@ pikmin::pikmin(const point &pos, pikmin_type* type, float angle) :
     far_reach = 2;
     update_interaction_span();
     missed_attack_timer =
-        timer(
+        Timer(
             PIKMIN::MISSED_ATTACK_DURATION,
     [this] () { this->missed_attack_ptr = nullptr; }
         );
@@ -111,7 +111,7 @@ pikmin::pikmin(const point &pos, pikmin_type* type, float angle) :
  * @param s Status type to check.
  * @return Whether it can receive it.
  */
-bool pikmin::can_receive_status(status_type* s) const {
+bool Pikmin::can_receive_status(StatusType* s) const {
     return has_flag(s->affects, STATUS_AFFECTS_FLAG_PIKMIN);
 }
 
@@ -119,15 +119,15 @@ bool pikmin::can_receive_status(status_type* s) const {
 /**
  * @brief Draws a Pikmin, including its leaf/bud/flower, idle glow, etc.
  */
-void pikmin::draw_mob() {
-    sprite* cur_s_ptr;
-    sprite* next_s_ptr;
+void Pikmin::draw_mob() {
+    Sprite* cur_s_ptr;
+    Sprite* next_s_ptr;
     float interpolation_factor;
     get_sprite_data(&cur_s_ptr, &next_s_ptr, &interpolation_factor);
     if(!cur_s_ptr) return;
     
     //The Pikmin itself.
-    bitmap_effect_t mob_eff;
+    BitmapEffect mob_eff;
     get_sprite_bitmap_effects(
         cur_s_ptr, next_s_ptr, interpolation_factor,
         &mob_eff,
@@ -136,7 +136,7 @@ void pikmin::draw_mob() {
         SPRITE_BMP_EFFECT_FLAG_HEIGHT |
         SPRITE_BMP_EFFECT_DELIVERY
     );
-    bitmap_effect_t pik_sprite_eff = mob_eff;
+    BitmapEffect pik_sprite_eff = mob_eff;
     get_sprite_bitmap_effects(
         cur_s_ptr, next_s_ptr, interpolation_factor,
         &pik_sprite_eff,
@@ -156,10 +156,10 @@ void pikmin::draw_mob() {
     
     //Top.
     if(cur_s_ptr->top_visible) {
-        point top_coords;
+        Point top_coords;
         float top_angle;
-        point top_size;
-        bitmap_effect_t top_eff = mob_eff;
+        Point top_size;
+        BitmapEffect top_eff = mob_eff;
         ALLEGRO_BITMAP* top_bmp = pik_type->bmp_top[maturity];
         get_sprite_basic_top_effects(
             cur_s_ptr, next_s_ptr, interpolation_factor,
@@ -172,7 +172,7 @@ void pikmin::draw_mob() {
         //will work. In the off-chance they are different, using an average
         //will be more than enough.
         float avg_scale = (top_eff.scale.x + top_eff.scale.y) / 2.0f;
-        point top_bmp_size = get_bitmap_dimensions(top_bmp);
+        Point top_bmp_size = get_bitmap_dimensions(top_bmp);
         top_eff.translation +=
             pos + rotate_point(top_coords, angle) * avg_scale;
         top_eff.scale *= top_size / top_bmp_size;
@@ -186,8 +186,8 @@ void pikmin::draw_mob() {
     
     //Idle glow.
     if(is_idle) {
-        bitmap_effect_t idle_eff = pik_sprite_eff;
-        point glow_bmp_size =
+        BitmapEffect idle_eff = pik_sprite_eff;
+        Point glow_bmp_size =
             get_bitmap_dimensions(game.sys_content.bmp_idle_glow);
         idle_eff.translation = pos;
         idle_eff.scale =
@@ -208,20 +208,20 @@ void pikmin::draw_mob() {
 /**
  * @brief Logic specific to Pikmin for when they finish dying.
  */
-void pikmin::finish_dying_class_specifics() {
+void Pikmin::finish_dying_class_specifics() {
     //Essentials.
     to_delete = true;
     
     //Soul.
-    particle par(
+    Particle par(
         pos, LARGE_FLOAT,
         radius * 2, 2.0f
     );
     par.bitmap = game.sys_content.bmp_pikmin_spirit;
     par.friction = 0.8;
-    point base_speed = point(game.rng.f(-20, 20), game.rng.f(-70, -30));
-    par.linear_speed = keyframe_interpolator<point>(base_speed);
-    par.linear_speed.add(1, point(point(base_speed.x, base_speed.y - 20)));
+    Point base_speed = Point(game.rng.f(-20, 20), game.rng.f(-70, -30));
+    par.linear_speed = KeyframeInterpolator<Point>(base_speed);
+    par.linear_speed.add(1, Point(Point(base_speed.x, base_speed.y - 20)));
     par.color.set_keyframe_value(0, change_alpha(pik_type->main_color, 0));
     par.color.add(0.1f, pik_type->main_color);
     par.color.add(1, change_alpha(pik_type->main_color, 0));
@@ -232,7 +232,7 @@ void pikmin::finish_dying_class_specifics() {
     size_t dying_sound_idx =
         pik_type->sound_data_idxs[PIKMIN_SOUND_DYING];
     if(dying_sound_idx != INVALID) {
-        mob_type::sound_t* dying_sound =
+        MobType::Sound* dying_sound =
             &type->sounds[dying_sound_idx];
         game.audio.create_pos_sound_source(
             dying_sound->sample,
@@ -250,7 +250,7 @@ void pikmin::finish_dying_class_specifics() {
  *
  * @param m The mob to carry.
  */
-void pikmin::force_carry(mob* m) {
+void Pikmin::force_carry(Mob* m) {
     fsm.set_state(PIKMIN_STATE_GOING_TO_CARRIABLE_OBJECT, (void*) m, nullptr);
     fsm.run_event(MOB_EV_REACHED_DESTINATION);
 }
@@ -262,8 +262,8 @@ void pikmin::force_carry(mob* m) {
  *
  * @return The base speed.
  */
-float pikmin::get_base_speed() const {
-    float base = mob::get_base_speed();
+float Pikmin::get_base_speed() const {
+    float base = Mob::get_base_speed();
     return base + (base * this->maturity * game.config.maturity_speed_mult);
 }
 
@@ -276,8 +276,8 @@ float pikmin::get_base_speed() const {
  * @param out_spot The final coordinates are returned here.
  * @param out_dist The final distance to those coordinates is returned here.
  */
-void pikmin::get_group_spot_info(
-    point* out_spot, float* out_dist
+void Pikmin::get_group_spot_info(
+    Point* out_spot, float* out_dist
 ) const {
     out_spot->x = 0.0f;
     out_spot->y = 0.0f;
@@ -299,8 +299,8 @@ void pikmin::get_group_spot_info(
  *
  * @param sta_type Status effect to handle.
  */
-void pikmin::handle_status_effect_gain(status_type* sta_type) {
-    mob::handle_status_effect_gain(sta_type);
+void Pikmin::handle_status_effect_gain(StatusType* sta_type) {
+    Mob::handle_status_effect_gain(sta_type);
     
     switch(sta_type->state_change_type) {
     case STATUS_STATE_CHANGE_FLAILING: {
@@ -334,7 +334,7 @@ void pikmin::handle_status_effect_gain(status_type* sta_type) {
  *
  * @param sta_type Status effect to handle.
  */
-void pikmin::handle_status_effect_loss(status_type* sta_type) {
+void Pikmin::handle_status_effect_loss(StatusType* sta_type) {
     bool still_has_flailing = false;
     bool still_has_helplessness = false;
     bool still_has_panic = false;
@@ -407,7 +407,7 @@ void pikmin::handle_status_effect_loss(status_type* sta_type) {
  * @param amount Amount to increase by.
  * @return Whether it changed the maturity.
  */
-bool pikmin::increase_maturity(int amount) {
+bool Pikmin::increase_maturity(int amount) {
     int old_maturity = maturity;
     int new_maturity = maturity + amount;
     maturity = clamp(new_maturity, 0, N_MATURITIES - 1);
@@ -425,7 +425,7 @@ bool pikmin::increase_maturity(int amount) {
  * @param m Mob to latch on to.
  * @param h Hitbox to latch on to.
  */
-void pikmin::latch(mob* m, const hitbox* h) {
+void Pikmin::latch(Mob* m, const Hitbox* h) {
     speed.x = speed.y = speed_z = 0;
     
     float h_offset_dist;
@@ -455,7 +455,7 @@ void pikmin::latch(mob* m, const hitbox* h) {
  * @param info Info about the hitboxes involved.
  * @return Whether it hit.
  */
-bool pikmin::process_attack_miss(hitbox_interaction* info) {
+bool Pikmin::process_attack_miss(HitboxInteraction* info) {
     if(info->mob2->anim.cur_anim == missed_attack_ptr) {
         //In a previous frame, we had already considered this animation a miss.
         return false;
@@ -482,8 +482,8 @@ bool pikmin::process_attack_miss(hitbox_interaction* info) {
  *
  * @param svr Script var reader to use.
  */
-void pikmin::read_script_vars(const script_var_reader &svr) {
-    mob::read_script_vars(svr);
+void Pikmin::read_script_vars(const ScriptVarReader &svr) {
+    Mob::read_script_vars(svr);
     
     int maturity_var;
     bool sprout_var;
@@ -508,7 +508,7 @@ void pikmin::read_script_vars(const script_var_reader &svr) {
 /**
  * @brief Sets up stuff for the beginning of the Pikmin's death process.
  */
-void pikmin::start_dying_class_specifics() {
+void Pikmin::start_dying_class_specifics() {
     game.states.gameplay->pikmin_deaths++;
     game.states.gameplay->pikmin_deaths_per_type[pik_type]++;
     game.states.gameplay->last_pikmin_death_pos = pos;
@@ -522,8 +522,8 @@ void pikmin::start_dying_class_specifics() {
  * @brief Starts the particle generator that leaves a trail behind
  * a thrown Pikmin.
  */
-void pikmin::start_throw_trail() {
-    particle_generator pg =
+void Pikmin::start_throw_trail() {
+    ParticleGenerator pg =
         standard_particle_gen_setup(
             game.sys_content_names.part_throw_trail, this
         );
@@ -553,7 +553,7 @@ void pikmin::start_throw_trail() {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void pikmin::tick_class_specifics(float delta_t) {
+void Pikmin::tick_class_specifics(float delta_t) {
     //Carrying object.
     if(carrying_mob) {
         if(!carrying_mob->carry_info) {
@@ -592,11 +592,11 @@ void pikmin::tick_class_specifics(float delta_t) {
  * (i.e. already chosen to be plucked by another leader).
  * @return The sprout.
  */
-pikmin* get_closest_sprout(
-    const point &pos, dist* d, bool ignore_reserved
+Pikmin* get_closest_sprout(
+    const Point &pos, Distance* d, bool ignore_reserved
 ) {
-    dist closest_distance;
-    pikmin* closest_pikmin = nullptr;
+    Distance closest_distance;
+    Pikmin* closest_pikmin = nullptr;
     
     size_t n_pikmin = game.states.gameplay->mobs.pikmin_list.size();
     for(size_t p = 0; p < n_pikmin; p++) {
@@ -607,7 +607,7 @@ pikmin* get_closest_sprout(
             continue;
         }
         
-        dist dis(pos, game.states.gameplay->mobs.pikmin_list[p]->pos);
+        Distance dis(pos, game.states.gameplay->mobs.pikmin_list[p]->pos);
         if(closest_pikmin == nullptr || dis < closest_distance) {
         
             if(

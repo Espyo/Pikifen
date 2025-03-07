@@ -31,7 +31,7 @@ extern const float STEP_HEIGHT;
  * been added, which may either generate new components, or stretch the
  * existing ones.
  */
-class bridge : public mob {
+class Bridge : public Mob {
 
 private:
 
@@ -47,7 +47,7 @@ private:
     float delta_z = 0.0f;
     
     //Starting position of the bridge.
-    point start_pos;
+    Point start_pos;
     
     //Starting vertical position of the bridge.
     float start_z = 0.0f;
@@ -59,7 +59,7 @@ private:
     float prev_chunk_z_offset = LARGE_FLOAT;
     
     //Components of the previous chunk. Cache for convenience.
-    vector<mob*> prev_chunk_components;
+    vector<Mob*> prev_chunk_components;
     
     //How many times did we combine chunks? Cache for convenience.
     size_t prev_chunk_combo = 0;
@@ -69,16 +69,16 @@ public:
     //--- Members ---
     
     //What type of bridge it is.
-    bridge_type* bri_type = nullptr;
+    BridgeType* bri_type = nullptr;
     
     
     //--- Function declarations ---
     
-    bridge(const point &pos, bridge_type* bri_type, float angle);
-    static void draw_component(mob* m);
+    Bridge(const Point &pos, BridgeType* bri_type, float angle);
+    static void draw_component(Mob* m);
     bool check_health();
-    point get_start_point();
-    void read_script_vars(const script_var_reader &svr) override;
+    Point get_start_point();
+    void read_script_vars(const ScriptVarReader &svr) override;
     void setup();
     
 };

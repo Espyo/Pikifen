@@ -20,7 +20,7 @@ using std::map;
 
 //Methods for a HUD bubble to move.
 enum HUD_BUBBLE_MOVE_METHOD {
-    
+
     //In a straight line.
     HUD_BUBBLE_MOVE_METHOD_STRAIGHT,
     
@@ -47,69 +47,69 @@ enum HUD_BUBBLE_MOVE_METHOD {
  * @tparam t Type of content the bubble holds.
  */
 template<typename t>
-struct hud_bubble_manager {
+struct HudBubbleManager {
 
-public:
-
+    public:
+    
     //--- Misc. declarations ---
-
+    
     /**
      * @brief Represents a bubble GUI item.
      */
-    struct bubble_t {
-
+    struct Bubble {
+    
         //--- Members ---
-
+        
         //GUI item.
-        gui_item* bubble = nullptr;
-
+        GuiItem* bubble = nullptr;
+        
         //Reference to base its existence off of.
         void* ref = nullptr;
-
+        
         //Content that it holds.
         t content = t();
-
+        
         //Reference pre-transition.
         void* pre_transition_ref = nullptr;
-
+        
         //Content that it held, pre-transition.
         t pre_transition_content = t();
         
-
+        
         //--- Function definitions ---
-
+        
         /**
          * @brief Constructs a new bubble info object.
-         * 
+         *
          * @param bubble The bubble GUI item.
          */
-        explicit bubble_t(gui_item* bubble = nullptr) :
+        explicit Bubble(GuiItem* bubble = nullptr) :
             bubble(bubble) {
         }
         
     };
     
-
+    
     //--- Members ---
-
+    
     //GUI manager the HUD belongs to.
-    gui_manager* hud = nullptr;
-
+    GuiManager* hud = nullptr;
+    
     //How long a transition lasts for.
     float transition_duration = 0.0f;
-
+    
     //How to move the bubbles around during a transition.
     HUD_BUBBLE_MOVE_METHOD move_method = HUD_BUBBLE_MOVE_METHOD_STRAIGHT;
     
-
+    
     //--- Function definitions ---
-
+    
     /**
      * @brief Constructs a new HUD bubble manager object.
-     * 
+     *
      * @param hud The HUD manager it belongs to.
      */
-    explicit hud_bubble_manager(gui_manager* hud) :
+    explicit HudBubbleManager(GuiManager* hud) :
         hud(hud) {
         
     }
@@ -117,7 +117,7 @@ public:
     /**
     * @brief Returns the necessary information for the bubble to know how
     * to draw itself.
-    * 
+    *
     * @param id ID of the registered bubble.
     * @param content The content the bubble should use is returned here.
     * A default-constructed object is returned on error.
@@ -126,7 +126,7 @@ public:
     */
     void get_drawing_info(
         size_t id,
-        t* content, point* pos, point* size
+        t* content, Point* pos, Point* size
     ) {
         float transition_anim_ratio = transition_timer / transition_duration;
         
@@ -146,10 +146,10 @@ public:
             return;
         }
         
-        typename map<size_t, bubble_t>::iterator match_it;
-        gui_item* match_ptr = nullptr;
-        point match_pos;
-        point match_size;
+        typename map<size_t, Bubble>::iterator match_it;
+        GuiItem* match_ptr = nullptr;
+        Point match_pos;
+        Point match_size;
         
         //First, check if there's any matching bubble that
         //we can move to/from.
@@ -196,14 +196,14 @@ public:
         if(match_ptr) {
             //This bubble is heading to a new spot.
             
-            point match_pivot(
+            Point match_pivot(
                 (pos->x + match_pos.x) / 2.0f,
                 (pos->y + match_pos.y) / 2.0f
             );
             float mov_ratio =
                 ease(EASE_METHOD_IN_OUT_BACK, 1.0f - transition_anim_ratio);
             float pivot_dist =
-                dist(*pos, match_pivot).to_float();
+                Distance(*pos, match_pivot).to_float();
                 
             if(transition_anim_ratio > 0.5f) {
                 //First half of the animation. Move to the first half.
@@ -221,7 +221,7 @@ public:
                     *pos =
                         match_pivot +
                         rotate_point(
-                            point(pivot_dist, 0.0f),
+                            Point(pivot_dist, 0.0f),
                             match_start_angle + mov_ratio * TAU / 2.0f
                         );
                     break;
@@ -250,7 +250,7 @@ public:
                     *pos =
                         match_pivot +
                         rotate_point(
-                            point(pivot_dist, 0.0f),
+                            Point(pivot_dist, 0.0f),
                             match_start_angle + mov_ratio * TAU / 2.0f
                         );
                     break;
@@ -290,18 +290,18 @@ public:
     
     /**
     * @brief Registers a bubble.
-    * 
+    *
     * @param id ID of this item in its "family". For instance, if
     * this is the icon for the second leader, this value is 1 (0-indexed).
     * @param bubble GUI item that represents this bubble.
     */
-    void register_bubble(size_t id, gui_item* bubble) {
-        bubbles[id] = bubble_t(bubble);
+    void register_bubble(size_t id, GuiItem* bubble) {
+        bubbles[id] = Bubble(bubble);
     }
     
     /**
     * @brief Ticks time by one frame of logic.
-    * 
+    *
     * @param delta_t How long the frame's tick is, in seconds.
     */
     void tick(float delta_t) {
@@ -314,7 +314,7 @@ public:
     
     /**
     * @brief Updates the reference and content of a given bubble.
-    * 
+    *
     * @param id ID of the registered bubble.
     * @param new_ref New reference.
     * @param new_content New content.
@@ -335,15 +335,15 @@ public:
     }
     
 private:
-    
+
     //--- Members ---
-
+    
     //List of all registered bubble GUI items.
-    map<size_t, bubble_t> bubbles;
-
+    map<size_t, Bubble> bubbles;
+    
     //Time left in the current transition, or 0 if none.
     float transition_timer = 0.0f;
-
+    
     //Have we set each bubble's "pre-transition" class members yet?
     bool transition_is_setup = false;
     

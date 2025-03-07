@@ -121,7 +121,7 @@ const float TREE_SHADOW_SWAY_SPEED = TAU / 8;
  * @param type_idx Index number of the spray type.
  * @param amount Amount to change by.
  */
-void gameplay_state::change_spray_count(
+void GameplayState::change_spray_count(
     size_t type_idx, signed int amount
 ) {
     spray_stats[type_idx].nr_sprays =
@@ -130,7 +130,7 @@ void gameplay_state::change_spray_count(
             (signed int) 0
         );
         
-    gui_item* spray_hud_item = nullptr;
+    GuiItem* spray_hud_item = nullptr;
     if(game.content.spray_types.list.size() > 2) {
         if(selected_spray == type_idx) {
             spray_hud_item = hud->spray_1_amount;
@@ -144,7 +144,7 @@ void gameplay_state::change_spray_count(
     }
     if(spray_hud_item) {
         spray_hud_item->start_juice_animation(
-            gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
+            GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
         );
     }
 }
@@ -153,7 +153,7 @@ void gameplay_state::change_spray_count(
 /**
  * @brief Draws the gameplay.
  */
-void gameplay_state::do_drawing() {
+void GameplayState::do_drawing() {
     do_game_drawing();
     
     if(game.perf_mon) {
@@ -165,7 +165,7 @@ void gameplay_state::do_drawing() {
 /**
  * @brief Tick the gameplay logic by one frame.
  */
-void gameplay_state::do_logic() {
+void GameplayState::do_logic() {
     if(game.perf_mon) {
         if(is_input_allowed) {
             //The first frame will have its speed all broken,
@@ -184,7 +184,7 @@ void gameplay_state::do_logic() {
     }
     
     //Controls.
-    vector<player_action> player_actions = game.controls.new_frame();
+    vector<PlayerAction> player_actions = game.controls.new_frame();
     for(size_t a = 0; a < player_actions.size(); a++) {
         handle_player_action(player_actions[a]);
         if(onion_menu) onion_menu->handle_player_action(player_actions[a]);
@@ -206,7 +206,7 @@ void gameplay_state::do_logic() {
  *
  * @param cleared Did the player reach the goal?
  */
-void gameplay_state::end_mission(bool cleared) {
+void GameplayState::end_mission(bool cleared) {
     if(cur_interlude != INTERLUDE_NONE) {
         return;
     }
@@ -216,10 +216,10 @@ void gameplay_state::end_mission(bool cleared) {
     leader_movement.reset(); //TODO replace with a better solution.
     
     //Zoom in on the reason, if possible.
-    point new_cam_pos = game.cam.target_pos;
+    Point new_cam_pos = game.cam.target_pos;
     float new_cam_zoom = game.cam.target_zoom;
     if(cleared) {
-        mission_goal* goal =
+        MissionGoal* goal =
             game.mission_goals[game.cur_area_data->mission.goal];
         if(goal->get_end_zoom_data(this, &new_cam_pos, &new_cam_zoom)) {
             game.cam.target_pos = new_cam_pos;
@@ -227,7 +227,7 @@ void gameplay_state::end_mission(bool cleared) {
         }
         
     } else {
-        mission_fail* cond =
+        MissionFail* cond =
             game.mission_fail_conds[mission_fail_reason];
         if(cond->get_end_zoom_data(this, &new_cam_pos, &new_cam_zoom)) {
             game.cam.target_pos = new_cam_pos;
@@ -252,14 +252,14 @@ void gameplay_state::end_mission(bool cleared) {
  * @brief Code to run when the state is entered, be it from the area menu, be it
  * from the result menu's "keep playing" option.
  */
-void gameplay_state::enter() {
+void GameplayState::enter() {
     update_transformations();
     
-    last_enemy_killed_pos = point(LARGE_FLOAT);
-    last_hurt_leader_pos = point(LARGE_FLOAT);
-    last_pikmin_born_pos = point(LARGE_FLOAT);
-    last_pikmin_death_pos = point(LARGE_FLOAT);
-    last_ship_that_got_treasure_pos = point(LARGE_FLOAT);
+    last_enemy_killed_pos = Point(LARGE_FLOAT);
+    last_hurt_leader_pos = Point(LARGE_FLOAT);
+    last_pikmin_born_pos = Point(LARGE_FLOAT);
+    last_pikmin_death_pos = Point(LARGE_FLOAT);
+    last_ship_that_got_treasure_pos = Point(LARGE_FLOAT);
     
     mission_fail_reason = (MISSION_FAIL_COND) INVALID;
     goal_indicator_ratio = 0.0f;
@@ -311,7 +311,7 @@ void gameplay_state::enter() {
  * @param far_radius From this radius on, the fog is fully dense.
  * @return The bitmap.
  */
-ALLEGRO_BITMAP* gameplay_state::generate_fog_bitmap(
+ALLEGRO_BITMAP* GameplayState::generate_fog_bitmap(
     float near_radius, float far_radius
 ) {
     if(far_radius == 0) return nullptr;
@@ -346,9 +346,9 @@ ALLEGRO_BITMAP* gameplay_state::generate_fog_bitmap(
             //First, get how far this pixel is from the center.
             //Center = 0, radius or beyond = 1.
             float cur_ratio =
-                dist(
-                    point(x, y),
-                    point(
+                Distance(
+                    Point(x, y),
+                    Point(
                         GAMEPLAY::FOG_BITMAP_SIZE / 2.0,
                         GAMEPLAY::FOG_BITMAP_SIZE / 2.0
                     )
@@ -388,19 +388,19 @@ ALLEGRO_BITMAP* gameplay_state::generate_fog_bitmap(
  * @param filter If not nullptr, only return Pikmin matching this type.
  * @return The amount.
  */
-size_t gameplay_state::get_amount_of_field_pikmin(const pikmin_type* filter) {
+size_t GameplayState::get_amount_of_field_pikmin(const PikminType* filter) {
     size_t total = 0;
     
     //Check the Pikmin mobs.
     for(size_t p = 0; p < mobs.pikmin_list.size(); p++) {
-        pikmin* p_ptr = mobs.pikmin_list[p];
+        Pikmin* p_ptr = mobs.pikmin_list[p];
         if(filter && p_ptr->pik_type != filter) continue;
         total++;
     }
     
     //Check Pikmin inside converters.
     for(size_t c = 0; c < mobs.converters.size(); c++) {
-        converter* c_ptr = mobs.converters[c];
+        Converter* c_ptr = mobs.converters[c];
         if(filter && c_ptr->current_type != filter) continue;
         total += c_ptr->amount_in_buffer;
     }
@@ -415,13 +415,13 @@ size_t gameplay_state::get_amount_of_field_pikmin(const pikmin_type* filter) {
  * @param filter If not nullptr, only return Pikmin matching this type.
  * @return The amount.
  */
-size_t gameplay_state::get_amount_of_group_pikmin(const pikmin_type* filter) {
+size_t GameplayState::get_amount_of_group_pikmin(const PikminType* filter) {
     size_t total = 0;
     
     if(!cur_leader_ptr) return 0;
     
     for(size_t m = 0; m < cur_leader_ptr->group->members.size(); m++) {
-        mob* m_ptr = cur_leader_ptr->group->members[m];
+        Mob* m_ptr = cur_leader_ptr->group->members[m];
         if(m_ptr->type->category->id != MOB_CATEGORY_PIKMIN) continue;
         if(filter && m_ptr->type != filter) continue;
         total++;
@@ -437,11 +437,11 @@ size_t gameplay_state::get_amount_of_group_pikmin(const pikmin_type* filter) {
  * @param filter If not nullptr, only return Pikmin matching this type.
  * @return The amount.
  */
-size_t gameplay_state::get_amount_of_idle_pikmin(const pikmin_type* filter) {
+size_t GameplayState::get_amount_of_idle_pikmin(const PikminType* filter) {
     size_t total = 0;
     
     for(size_t p = 0; p < mobs.pikmin_list.size(); p++) {
-        pikmin* p_ptr = mobs.pikmin_list[p];
+        Pikmin* p_ptr = mobs.pikmin_list[p];
         if(filter && p_ptr->type != filter) continue;
         if(
             p_ptr->fsm.cur_state->id == PIKMIN_STATE_IDLING ||
@@ -462,12 +462,12 @@ size_t gameplay_state::get_amount_of_idle_pikmin(const pikmin_type* filter) {
  * @param filter If not nullptr, only return Pikmin matching this type.
  * @return The amount.
  */
-long gameplay_state::get_amount_of_onion_pikmin(const pikmin_type* filter) {
+long GameplayState::get_amount_of_onion_pikmin(const PikminType* filter) {
     long total = 0;
     
     //Check Onions proper.
     for(size_t o = 0; o < mobs.onions.size(); o++) {
-        onion* o_ptr = mobs.onions[o];
+        Onion* o_ptr = mobs.onions[o];
         for(
             size_t t = 0;
             t < o_ptr->oni_type->nest->pik_types.size();
@@ -484,7 +484,7 @@ long gameplay_state::get_amount_of_onion_pikmin(const pikmin_type* filter) {
     
     //Check ships.
     for(size_t s = 0; s < mobs.ships.size(); s++) {
-        ship* s_ptr = mobs.ships[s];
+        Ship* s_ptr = mobs.ships[s];
         if(!s_ptr->nest) continue;
         for(
             size_t t = 0;
@@ -511,7 +511,7 @@ long gameplay_state::get_amount_of_onion_pikmin(const pikmin_type* filter) {
  * @param filter If not nullptr, only return Pikmin matching this type.
  * @return The amount.
  */
-long gameplay_state::get_amount_of_total_pikmin(const pikmin_type* filter) {
+long GameplayState::get_amount_of_total_pikmin(const PikminType* filter) {
     long total = 0;
     
     //Check Pikmin in the field and inside converters.
@@ -537,16 +537,16 @@ long gameplay_state::get_amount_of_total_pikmin(const pikmin_type* filter) {
  * @return The closest member, or nullptr if there is no member
  * of that subgroup available to grab.
  */
-mob* gameplay_state::get_closest_group_member(
-    const subgroup_type* type, bool* distant
+Mob* GameplayState::get_closest_group_member(
+    const SubgroupType* type, bool* distant
 ) {
     if(!cur_leader_ptr) return nullptr;
     
-    mob* result = nullptr;
+    Mob* result = nullptr;
     
     //Closest members so far for each maturity.
-    dist closest_dists[N_MATURITIES];
-    mob* closest_ptrs[N_MATURITIES];
+    Distance closest_dists[N_MATURITIES];
+    Mob* closest_ptrs[N_MATURITIES];
     bool can_grab_closest[N_MATURITIES];
     for(unsigned char m = 0; m < N_MATURITIES; m++) {
         closest_ptrs[m] = nullptr;
@@ -557,14 +557,14 @@ mob* gameplay_state::get_closest_group_member(
     size_t n_members = cur_leader_ptr->group->members.size();
     for(size_t m = 0; m < n_members; m++) {
     
-        mob* member_ptr = cur_leader_ptr->group->members[m];
+        Mob* member_ptr = cur_leader_ptr->group->members[m];
         if(member_ptr->subgroup_type_ptr != type) {
             continue;
         }
         
         unsigned char maturity = 0;
         if(member_ptr->type->category->id == MOB_CATEGORY_PIKMIN) {
-            maturity = ((pikmin*) member_ptr)->maturity;
+            maturity = ((Pikmin*) member_ptr)->maturity;
         }
         bool can_grab = cur_leader_ptr->can_grab_group_member(member_ptr);
         
@@ -573,7 +573,7 @@ mob* gameplay_state::get_closest_group_member(
             continue;
         }
         
-        dist d(cur_leader_ptr->pos, member_ptr->pos);
+        Distance d(cur_leader_ptr->pos, member_ptr->pos);
         
         if(
             (can_grab && !can_grab_closest[maturity]) ||
@@ -588,7 +588,7 @@ mob* gameplay_state::get_closest_group_member(
     }
     
     //Now, try to get the one with the highest maturity within reach.
-    dist closest_dist;
+    Distance closest_dist;
     for(unsigned char m = 0; m < N_MATURITIES; m++) {
         if(!closest_ptrs[2 - m]) continue;
         if(!can_grab_closest[2 - m]) continue;
@@ -621,7 +621,7 @@ mob* gameplay_state::get_closest_group_member(
  *
  * @return The name.
  */
-string gameplay_state::get_name() const {
+string GameplayState::get_name() const {
     return "gameplay";
 }
 
@@ -631,7 +631,7 @@ string gameplay_state::get_name() const {
  *
  * @param ev Event to handle.
  */
-void gameplay_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
+void GameplayState::handle_allegro_event(ALLEGRO_EVENT &ev) {
     //Handle the Onion menu first so events don't bleed from gameplay to it.
     if(onion_menu) {
         onion_menu->handle_allegro_event(ev);
@@ -657,8 +657,8 @@ void gameplay_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
 /**
  * @brief Initializes the HUD.
  */
-void gameplay_state::init_hud() {
-    hud = new hud_t();
+void GameplayState::init_hud() {
+    hud = new Hud();
 }
 
 
@@ -668,7 +668,7 @@ void gameplay_state::init_hud() {
  *
  * @param target Where to leave to.
  */
-void gameplay_state::leave(const GAMEPLAY_LEAVE_TARGET target) {
+void GameplayState::leave(const GAMEPLAY_LEAVE_TARGET target) {
     if(unloading) return;
     
     if(game.perf_mon) {
@@ -710,7 +710,7 @@ void gameplay_state::leave(const GAMEPLAY_LEAVE_TARGET target) {
 /**
  * @brief Loads the "gameplay" state into memory.
  */
-void gameplay_state::load() {
+void GameplayState::load() {
     if(game.perf_mon) {
         game.perf_mon->reset();
         game.perf_mon->enter_state(PERF_MON_STATE_LOADING);
@@ -731,7 +731,7 @@ void gameplay_state::load() {
     
     //Initialize some important things.
     for(size_t s = 0; s < game.content.spray_types.list.size(); s++) {
-        spray_stats.push_back(spray_stats_t());
+        spray_stats.push_back(SprayStats());
     }
     
     area_time_passed = 0.0f;
@@ -823,10 +823,10 @@ void gameplay_state::load() {
         game.perf_mon->start_measurement("Object generation");
     }
     
-    vector<mob*> mobs_per_gen;
+    vector<Mob*> mobs_per_gen;
     
     for(size_t m = 0; m < game.cur_area_data->mob_generators.size(); m++) {
-        mob_gen* m_ptr = game.cur_area_data->mob_generators[m];
+        MobGen* m_ptr = game.cur_area_data->mob_generators[m];
         bool valid = true;
         
         if(!m_ptr->type) {
@@ -840,7 +840,7 @@ void gameplay_state::load() {
         }
         
         if(valid) {
-            mob* new_mob =
+            Mob* new_mob =
                 create_mob(
                     m_ptr->type->category, m_ptr->pos, m_ptr->type,
                     m_ptr->angle, m_ptr->vars
@@ -857,23 +857,23 @@ void gameplay_state::load() {
     //to keep the pointers to the created mobs in a vector, and use this
     //to link the mobs by (generator) index.
     for(size_t m = 0; m < game.cur_area_data->mob_generators.size(); m++) {
-        mob_gen* gen_ptr = game.cur_area_data->mob_generators[m];
-        mob* mob_ptr = mobs_per_gen[m];
+        MobGen* gen_ptr = game.cur_area_data->mob_generators[m];
+        Mob* mob_ptr = mobs_per_gen[m];
         if(!mob_ptr) continue;
         
         for(size_t l = 0; l < gen_ptr->link_idxs.size(); l++) {
             size_t link_target_gen_idx = gen_ptr->link_idxs[l];
-            mob* link_target_mob_ptr = mobs_per_gen[link_target_gen_idx];
+            Mob* link_target_mob_ptr = mobs_per_gen[link_target_gen_idx];
             mob_ptr->links.push_back(link_target_mob_ptr);
         }
     }
     
     //Mobs stored inside other. Same logic as mob links.
     for(size_t m = 0; m < game.cur_area_data->mob_generators.size(); m++) {
-        mob_gen* holdee_gen_ptr = game.cur_area_data->mob_generators[m];
+        MobGen* holdee_gen_ptr = game.cur_area_data->mob_generators[m];
         if(holdee_gen_ptr->stored_inside == INVALID) continue;
-        mob* holdee_ptr = mobs_per_gen[m];
-        mob* holder_mob_ptr = mobs_per_gen[holdee_gen_ptr->stored_inside];
+        Mob* holdee_ptr = mobs_per_gen[m];
+        Mob* holder_mob_ptr = mobs_per_gen[holdee_gen_ptr->stored_inside];
         holder_mob_ptr->store_mob_inside(holdee_ptr);
     }
     
@@ -886,7 +886,7 @@ void gameplay_state::load() {
     //Sort leaders.
     sort(
         mobs.leaders.begin(), mobs.leaders.end(),
-    [] (leader * l1, leader * l2) -> bool {
+    [] (Leader * l1, Leader * l2) -> bool {
         size_t priority_l1 =
         find(
             game.config.leader_order.begin(),
@@ -922,7 +922,7 @@ void gameplay_state::load() {
     if(cur_leader_ptr) {
         game.cam.set_pos(cur_leader_ptr->pos);
     } else {
-        game.cam.set_pos(point());
+        game.cam.set_pos(Point());
     }
     game.cam.set_zoom(game.options.zoom_mid_level);
     
@@ -959,7 +959,7 @@ void gameplay_state::load() {
                     mobs_per_gen[i]->type->category->id ==
                     MOB_CATEGORY_PILES
                 ) {
-                    pile* pil_ptr = (pile*) mobs_per_gen[i];
+                    Pile* pil_ptr = (Pile*) mobs_per_gen[i];
                     goal_treasures_total += pil_ptr->amount;
                 } else {
                     goal_treasures_total++;
@@ -975,8 +975,8 @@ void gameplay_state::load() {
             mobs.treasures[t]->tre_type->points;
     }
     for(size_t p = 0; p < mobs.piles.size(); p++) {
-        pile* p_ptr = mobs.piles[p];
-        resource_type* res_type = p_ptr->pil_type->contents;
+        Pile* p_ptr = mobs.piles[p];
+        ResourceType* res_type = p_ptr->pil_type->contents;
         if(
             res_type->delivery_result !=
             RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS
@@ -988,7 +988,7 @@ void gameplay_state::load() {
             p_ptr->amount * res_type->point_amount;
     }
     for(size_t r = 0; r < mobs.resources.size(); r++) {
-        resource* r_ptr = mobs.resources[r];
+        Resource* r_ptr = mobs.resources[r];
         if(
             r_ptr->res_type->delivery_result !=
             RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS
@@ -1054,11 +1054,11 @@ void gameplay_state::load() {
     game.liquid_limit_effect_caches.insert(
         game.liquid_limit_effect_caches.begin(),
         game.cur_area_data->edges.size(),
-        edge_offset_cache()
+        EdgeOffsetCache()
     );
     update_offset_effect_caches(
         game.liquid_limit_effect_caches,
-        unordered_set<vertex*>(
+        unordered_set<Vertex*>(
             game.cur_area_data->vertexes.begin(),
             game.cur_area_data->vertexes.end()
         ),
@@ -1070,11 +1070,11 @@ void gameplay_state::load() {
     game.wall_smoothing_effect_caches.insert(
         game.wall_smoothing_effect_caches.begin(),
         game.cur_area_data->edges.size(),
-        edge_offset_cache()
+        EdgeOffsetCache()
     );
     update_offset_effect_caches(
         game.wall_smoothing_effect_caches,
-        unordered_set<vertex*>(
+        unordered_set<Vertex*>(
             game.cur_area_data->vertexes.begin(),
             game.cur_area_data->vertexes.end()
         ),
@@ -1086,11 +1086,11 @@ void gameplay_state::load() {
     game.wall_shadow_effect_caches.insert(
         game.wall_shadow_effect_caches.begin(),
         game.cur_area_data->edges.size(),
-        edge_offset_cache()
+        EdgeOffsetCache()
     );
     update_offset_effect_caches(
         game.wall_shadow_effect_caches,
-        unordered_set<vertex*>(
+        unordered_set<Vertex*>(
             game.cur_area_data->vertexes.begin(),
             game.cur_area_data->vertexes.end()
         ),
@@ -1132,7 +1132,7 @@ void gameplay_state::load() {
 /**
  * @brief Loads all of the game's content.
  */
-void gameplay_state::load_game_content() {
+void GameplayState::load_game_content() {
     game.content.reload_packs();
     game.content.load_all(
     vector<CONTENT_TYPE> {
@@ -1180,7 +1180,7 @@ void gameplay_state::load_game_content() {
     }
     sort(tool_types_vector.begin(), tool_types_vector.end());
     for(size_t t = 0; t < tool_types_vector.size(); t++) {
-        tool_type* tt_ptr = game.content.mob_types.list.tool[tool_types_vector[t]];
+        ToolType* tt_ptr = game.content.mob_types.list.tool[tool_types_vector[t]];
         subgroup_types.register_type(
             SUBGROUP_TYPE_CATEGORY_TOOL, tt_ptr, tt_ptr->bmp_icon
         );
@@ -1195,7 +1195,7 @@ void gameplay_state::load_game_content() {
  *
  * @param target Where to leave to.
  */
-void gameplay_state::start_leaving(const GAMEPLAY_LEAVE_TARGET target) {
+void GameplayState::start_leaving(const GAMEPLAY_LEAVE_TARGET target) {
     game.fade_mgr.start_fade( false, [this, target] () { leave(target); });
 }
 
@@ -1203,7 +1203,7 @@ void gameplay_state::start_leaving(const GAMEPLAY_LEAVE_TARGET target) {
 /**
  * @brief Unloads the "gameplay" state from memory.
  */
-void gameplay_state::unload() {
+void GameplayState::unload() {
     unloading = true;
     
     if(hud) {
@@ -1220,7 +1220,7 @@ void gameplay_state::unload() {
     close_to_pikmin_to_pluck = nullptr;
     close_to_ship_to_heal = nullptr;
     
-    game.cam.set_pos(point());
+    game.cam.set_pos(Point());
     game.cam.set_zoom(1.0f);
     
     while(!mobs.all.empty()) {
@@ -1269,7 +1269,7 @@ void gameplay_state::unload() {
 /**
  * @brief Unloads loaded game content.
  */
-void gameplay_state::unload_game_content() {
+void GameplayState::unload_game_content() {
     subgroup_types.clear();
     
     game.content.unload_all(
@@ -1294,7 +1294,7 @@ void gameplay_state::unload_game_content() {
 /**
  * @brief Updates the list of leaders available to be controlled.
  */
-void gameplay_state::update_available_leaders() {
+void GameplayState::update_available_leaders() {
     //Build the list.
     available_leaders.clear();
     for(size_t l = 0; l < mobs.leaders.size(); l++) {
@@ -1313,7 +1313,7 @@ void gameplay_state::update_available_leaders() {
     //mob index number come first.
     std::sort(
         available_leaders.begin(), available_leaders.end(),
-    [] (const leader * l1, const leader * l2) -> bool {
+    [] (const Leader * l1, const Leader * l2) -> bool {
         size_t l1_order_idx = INVALID;
         size_t l2_order_idx = INVALID;
         for(size_t t = 0; t < game.config.leader_order.size(); t++) {
@@ -1347,7 +1347,7 @@ void gameplay_state::update_available_leaders() {
  * and more mature one.
  * Sets to nullptr if there is no member of that subgroup available.
  */
-void gameplay_state::update_closest_group_members() {
+void GameplayState::update_closest_group_members() {
     closest_group_member[BUBBLE_RELATION_PREVIOUS] = nullptr;
     closest_group_member[BUBBLE_RELATION_CURRENT] = nullptr;
     closest_group_member[BUBBLE_RELATION_NEXT] = nullptr;
@@ -1360,7 +1360,7 @@ void gameplay_state::update_closest_group_members() {
     }
     
     //Get the closest group members for the three relevant subgroup types.
-    subgroup_type* prev_type;
+    SubgroupType* prev_type;
     cur_leader_ptr->group->get_next_standby_type(true, &prev_type);
     
     if(prev_type) {
@@ -1376,7 +1376,7 @@ void gameplay_state::update_closest_group_members() {
             );
     }
     
-    subgroup_type* next_type;
+    SubgroupType* next_type;
     cur_leader_ptr->group->get_next_standby_type(false, &next_type);
     
     if(next_type) {
@@ -1394,7 +1394,7 @@ void gameplay_state::update_closest_group_members() {
  * @brief Updates the transformations, with the current camera coordinates,
  * zoom, etc.
  */
-void gameplay_state::update_transformations() {
+void GameplayState::update_transformations() {
     //World coordinates to screen coordinates.
     game.world_to_screen_transform = game.identity_transform;
     al_translate_transform(
@@ -1419,20 +1419,20 @@ void gameplay_state::update_transformations() {
  * @param speaker_icon If not nullptr, use this bitmap to represent who
  * is talking.
  */
-msg_box_t::msg_box_t(const string &text, ALLEGRO_BITMAP* speaker_icon):
+MessageBox::MessageBox(const string &text, ALLEGRO_BITMAP* speaker_icon):
     speaker_icon(speaker_icon) {
     
     string message = unescape_string(text);
     if(message.size() && message.back() == '\n') {
         message.pop_back();
     }
-    vector<string_token> tokens = tokenize_string(message);
+    vector<StringToken> tokens = tokenize_string(message);
     set_string_token_widths(
         tokens, game.sys_content.fnt_standard, game.sys_content.fnt_slim,
         al_get_font_line_height(game.sys_content.fnt_standard), true
     );
     
-    vector<string_token> line;
+    vector<StringToken> line;
     for(size_t t = 0; t < tokens.size(); t++) {
         if(tokens[t].type == STRING_TOKEN_LINE_BREAK) {
             tokens_per_line.push_back(line);
@@ -1451,7 +1451,7 @@ msg_box_t::msg_box_t(const string &text, ALLEGRO_BITMAP* speaker_icon):
  * @brief Handles the user having pressed the button to continue the message,
  * or to skip to showing everything in the current section.
  */
-void msg_box_t::advance() {
+void MessageBox::advance() {
     if(
         transition_timer > 0.0f ||
         misinput_protection_timer > 0.0f ||
@@ -1484,7 +1484,7 @@ void msg_box_t::advance() {
 /**
  * @brief Closes the message box, even if it is still writing something.
  */
-void msg_box_t::close() {
+void MessageBox::close() {
     if(!transition_in && transition_timer > 0.0f) return;
     transition_in = false;
     transition_timer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
@@ -1496,7 +1496,7 @@ void msg_box_t::close() {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void msg_box_t::tick(float delta_t) {
+void MessageBox::tick(float delta_t) {
     size_t tokens_in_section = 0;
     for(size_t l = 0; l < 3; l++) {
         size_t line_idx = cur_section * 3 + l;

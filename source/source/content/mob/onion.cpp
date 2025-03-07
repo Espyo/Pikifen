@@ -63,11 +63,11 @@ const float SPEW_V_SPEED = 600.0f;
  * @param type Onion type this mob belongs to.
  * @param angle Starting angle.
  */
-onion::onion(const point &pos, onion_type* type, float angle) :
-    mob(pos, type, angle),
+Onion::Onion(const Point &pos, OnionType* type, float angle) :
+    Mob(pos, type, angle),
     oni_type(type) {
     
-    nest = new pikmin_nest_t(this, oni_type->nest);
+    nest = new PikminNest(this, oni_type->nest);
     
     //Increase its Z by one so that mobs that walk at
     //ground level next to it will appear under it.
@@ -97,7 +97,7 @@ onion::onion(const point &pos, onion_type* type, float angle) :
 /**
  * @brief Destroys the Onion object.
  */
-onion::~onion() {
+Onion::~Onion() {
     delete nest;
 }
 
@@ -105,14 +105,14 @@ onion::~onion() {
 /**
  * @brief Draws an Onion.
  */
-void onion::draw_mob() {
-    sprite* cur_s_ptr;
-    sprite* next_s_ptr;
+void Onion::draw_mob() {
+    Sprite* cur_s_ptr;
+    Sprite* next_s_ptr;
     float interpolation_factor;
     get_sprite_data(&cur_s_ptr, &next_s_ptr, &interpolation_factor);
     if(!cur_s_ptr) return;
     
-    bitmap_effect_t eff;
+    BitmapEffect eff;
     get_sprite_bitmap_effects(
         cur_s_ptr, next_s_ptr, interpolation_factor,
         &eff,
@@ -134,8 +134,8 @@ void onion::draw_mob() {
  *
  * @param svr Script var reader to use.
  */
-void onion::read_script_vars(const script_var_reader &svr) {
-    mob::read_script_vars(svr);
+void Onion::read_script_vars(const ScriptVarReader &svr) {
+    Mob::read_script_vars(svr);
     
     nest->read_script_vars(svr);
 }
@@ -144,7 +144,7 @@ void onion::read_script_vars(const script_var_reader &svr) {
 /**
  * @brief Spew a Pikmin seed in the queue or add it to the Onion's storage.
  */
-void onion::generate() {
+void Onion::generate() {
     for(size_t t = 0; t < generation_queue.size(); t++) {
         if(generation_queue[t] == 0) continue;
         
@@ -163,7 +163,7 @@ void onion::generate() {
         if(total_after > game.config.max_pikmin_in_field) {
             nest->pikmin_inside[t][0]++;
             
-            particle_generator pg =
+            ParticleGenerator pg =
                 standard_particle_gen_setup(
                     game.sys_content_names.part_onion_gen_inside, this
                 );
@@ -197,7 +197,7 @@ void onion::generate() {
 /**
  * @brief Starts generating Pikmin.
  */
-void onion::start_generating() {
+void Onion::start_generating() {
     generation_delay_timer.stop();
     next_generation_timer.start();
     string msg = "started_generation";
@@ -208,7 +208,7 @@ void onion::start_generating() {
 /**
  * @brief Stops generating Pikmin.
  */
-void onion::stop_generating() {
+void Onion::stop_generating() {
     generation_delay_timer.stop();
     next_generation_timer.stop();
     string msg = "stopped_generation";
@@ -221,7 +221,7 @@ void onion::stop_generating() {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void onion::tick_class_specifics(float delta_t) {
+void Onion::tick_class_specifics(float delta_t) {
     generation_delay_timer.tick(delta_t);
     next_generation_timer.tick(delta_t);
     

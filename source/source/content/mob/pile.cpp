@@ -25,15 +25,15 @@
  * @param type Pile type this mob belongs to.
  * @param angle Starting angle.
  */
-pile::pile(const point &pos, pile_type* type, float angle) :
-    mob(pos, type, angle),
+Pile::Pile(const Point &pos, PileType* type, float angle) :
+    Mob(pos, type, angle),
     pil_type(type),
     amount(type->max_amount) {
     
     team = MOB_TEAM_OBSTACLE;
     
     recharge_timer =
-    timer(pil_type->recharge_interval, [this] () { this->recharge(); });
+    Timer(pil_type->recharge_interval, [this] () { this->recharge(); });
 }
 
 
@@ -42,7 +42,7 @@ pile::pile(const point &pos, pile_type* type, float angle) :
  *
  * @param change Amount to increase by.
  */
-void pile::change_amount(int change) {
+void Pile::change_amount(int change) {
     if(change < 0 && amount == 0) return;
     if(change > 0 && amount == pil_type->max_amount) return;
     
@@ -63,7 +63,7 @@ void pile::change_amount(int change) {
  * @param fraction_color The fraction's color gets set here.
  * @return Whether the numbers should be shown.
  */
-bool pile::get_fraction_numbers_info(
+bool Pile::get_fraction_numbers_info(
     float* fraction_value_nr, float* fraction_req_nr,
     ALLEGRO_COLOR* fraction_color
 ) const {
@@ -80,8 +80,8 @@ bool pile::get_fraction_numbers_info(
  *
  * @param svr Script var reader to use.
  */
-void pile::read_script_vars(const script_var_reader &svr) {
-    mob::read_script_vars(svr);
+void Pile::read_script_vars(const ScriptVarReader &svr) {
+    Mob::read_script_vars(svr);
     
     size_t amount_var;
     
@@ -99,7 +99,7 @@ void pile::read_script_vars(const script_var_reader &svr) {
 /**
  * @brief Adds some more to the pile from a periodic recharge.
  */
-void pile::recharge() {
+void Pile::recharge() {
     recharge_timer.start();
     change_amount(pil_type->recharge_amount);
 }
@@ -110,7 +110,7 @@ void pile::recharge() {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void pile::tick_class_specifics(float delta_t) {
+void Pile::tick_class_specifics(float delta_t) {
     recharge_timer.tick(delta_t);
     
     if(amount == 0 && pil_type->delete_when_finished) {
@@ -120,7 +120,7 @@ void pile::tick_class_specifics(float delta_t) {
             size_t r = 0;
             r < game.states.gameplay->mobs.resources.size(); r++
         ) {
-            resource* r_ptr = game.states.gameplay->mobs.resources[r];
+            Resource* r_ptr = game.states.gameplay->mobs.resources[r];
             if(r_ptr->origin_pile == this) {
                 return;
             }
@@ -135,7 +135,7 @@ void pile::tick_class_specifics(float delta_t) {
  * @brief Updates the animation to the right one, the recharge timer, and
  * some other things.
  */
-void pile::update() {
+void Pile::update() {
     amount = clamp(amount, 0, pil_type->max_amount);
     
     if(amount == pil_type->max_amount) {

@@ -25,7 +25,7 @@
 using std::vector;
 
 
-class mob;
+class Mob;
 
 
 //Particle priorities.
@@ -108,7 +108,7 @@ enum PARTICLE_BLEND_TYPE {
  * @brief A description of how a particle
  * generator should emit particles.
  */
-struct particle_emission_struct {
+struct ParticleEmission {
 
     public:
     
@@ -128,10 +128,10 @@ struct particle_emission_struct {
     float interval_deviation = 0.0f;
     
     //Maximum random deviation of position, for square shapes.
-    point rect_outer_dist = point(0.0f);
+    Point rect_outer_dist = Point(0.0f);
     
     //Minimum random deviation of position, for square shapes.
-    point rect_inner_dist = point(0.0f);
+    Point rect_inner_dist = Point(0.0f);
     
     //Maximum radius for circular emission.
     float circle_outer_dist = 0;
@@ -151,10 +151,10 @@ struct particle_emission_struct {
     
     //--- Function declarations ---
     
-    explicit particle_emission_struct(
+    explicit ParticleEmission(
         const float emission_interval = 0.0f, const size_t number = 1
     );
-    point get_emission_offset(float number_ratio);
+    Point get_emission_offset(float number_ratio);
     
 };
 
@@ -165,7 +165,7 @@ struct particle_emission_struct {
  * There are several different types, which
  * change the way they look, how they behave over time, etc.
  */
-struct particle {
+struct Particle {
 
     //--- Members ---
     
@@ -192,34 +192,34 @@ struct particle {
     float time = 0.0f;
     
     //Current coordinates.
-    point pos;
+    Point pos;
     
     //Current Z.
     float z = 0.0f;
     
     //Where the particle generator was when this was emitted.
-    point origin;
+    Point origin;
     
     //Current size, in diameter.
-    keyframe_interpolator<float> size;
+    KeyframeInterpolator<float> size;
     
     //Linear velocity over time.
-    keyframe_interpolator<point> linear_speed;
+    KeyframeInterpolator<Point> linear_speed;
     
     //Outwards velocity over time.
-    keyframe_interpolator<float> outwards_speed;
+    KeyframeInterpolator<float> outwards_speed;
     
     //Orbital velocity over time.
-    keyframe_interpolator<float> orbital_speed;
+    KeyframeInterpolator<float> orbital_speed;
     
     //Current color.
-    keyframe_interpolator<ALLEGRO_COLOR> color;
+    KeyframeInterpolator<ALLEGRO_COLOR> color;
     
     //Friction.
     float friction = 0.0f;
     
     //How much the particle has been slowed since being created.
-    point total_friction_applied = point(0.0f);
+    Point total_friction_applied = Point(0.0f);
     
     //Blend type.
     PARTICLE_BLEND_TYPE blend_type = PARTICLE_BLEND_TYPE_NORMAL;
@@ -233,8 +233,8 @@ struct particle {
     
     //--- Function declarations ---
     
-    explicit particle(
-        const point &pos = point(), const float z = 0.0f,
+    explicit Particle(
+        const Point &pos = Point(), const float z = 0.0f,
         const float initial_size = 0.0f,
         const float duration = 0.0f, const PARTICLE_PRIORITY priority =
             PARTICLE_PRIORITY_MEDIUM,
@@ -243,7 +243,7 @@ struct particle {
     void draw();
     void set_bitmap(
         const string &new_bmp_name,
-        data_node* node = nullptr
+        DataNode* node = nullptr
     );
     void tick(float delta_t);
     
@@ -253,21 +253,21 @@ struct particle {
 /**
  * @brief Manages a list of particles, allows the addition of new ones, etc.
  */
-struct particle_manager {
+struct ParticleManager {
 
     public:
     
     //--- Function declarations ---
     
-    explicit particle_manager(size_t max_nr = 0);
-    particle_manager(const particle_manager &pm2);
-    particle_manager &operator=(const particle_manager &pm2);
-    ~particle_manager();
-    void add(const particle &p);
+    explicit ParticleManager(size_t max_nr = 0);
+    ParticleManager(const ParticleManager &pm2);
+    ParticleManager &operator=(const ParticleManager &pm2);
+    ~ParticleManager();
+    void add(const Particle &p);
     void clear();
     void fill_component_list(
-        vector<world_component> &list,
-        const point &cam_tl = point(), const point &cam_br = point()
+        vector<WorldComponent> &list,
+        const Point &cam_tl = Point(), const Point &cam_br = Point()
     );
     size_t get_count() const;
     void tick_all(float delta_t);
@@ -283,7 +283,7 @@ struct particle_manager {
     //"dead" particle, to preserve the list's logic.
     //When a particle is added, if the entire list is filled with live ones,
     //delete the one on position 0 (presumably the oldest).
-    particle* particles = nullptr;
+    Particle* particles = nullptr;
     
     //How many particles are alive.
     size_t count = 0;
@@ -303,7 +303,7 @@ struct particle_manager {
  * @brief Base class for the particle generator.
  * A particle generator creates particles in a steady flow and/or in a pattern.
  */
-struct particle_generator : public content {
+struct ParticleGenerator : public Content {
 
     public:
     
@@ -313,16 +313,16 @@ struct particle_generator : public content {
     MOB_PARTICLE_GENERATOR_ID id = MOB_PARTICLE_GENERATOR_ID_NONE;
     
     //All particles created are based on this one.
-    particle base_particle;
+    Particle base_particle;
     
     //How the generator should emit particles.
-    particle_emission_struct emission;
+    ParticleEmission emission;
     
     //Follow the given mob's coordinates.
-    mob* follow_mob = nullptr;
+    Mob* follow_mob = nullptr;
     
     //Offset the follow mob coordinates by this, relative to the mob angle.
-    point follow_pos_offset;
+    Point follow_pos_offset;
     
     //Offset the follow mob Z by this.
     float follow_z_offset = 0.0f;
@@ -349,7 +349,7 @@ struct particle_generator : public content {
     float orbital_speed_deviation = 0.0f;
     
     //Maximum random deviation of speed.
-    point linear_speed_deviation = point(0.0f);
+    Point linear_speed_deviation = Point(0.0f);
     
     //How many degress linear speed can be rotated by.
     float linear_speed_angle_deviation = 0.0f;
@@ -360,15 +360,15 @@ struct particle_generator : public content {
     
     //--- Function declarations ---
     
-    explicit particle_generator(
+    explicit ParticleGenerator(
         float emission_interval = 0.0f,
-        const particle &base_particle = particle(), size_t number = 1
+        const Particle &base_particle = Particle(), size_t number = 1
     );
-    void tick(float delta_t, particle_manager &manager);
-    void emit(particle_manager &manager);
+    void tick(float delta_t, ParticleManager &manager);
+    void emit(ParticleManager &manager);
     void restart_timer();
-    void load_from_data_node(data_node* node, CONTENT_LOAD_LEVEL level);
-    void save_to_data_node(data_node* node);
+    void load_from_data_node(DataNode* node, CONTENT_LOAD_LEVEL level);
+    void save_to_data_node(DataNode* node);
     
     
     private:

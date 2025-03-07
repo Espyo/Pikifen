@@ -19,14 +19,14 @@
 /**
  * @brief Constructs a new Onion type object.
  */
-onion_type::onion_type() :
-    mob_type(MOB_CATEGORY_ONIONS) {
+OnionType::OnionType() :
+    MobType(MOB_CATEGORY_ONIONS) {
     
-    nest = new pikmin_nest_type_t();
+    nest = new PikminNestType();
     
     target_type = MOB_TARGET_FLAG_NONE;
     
-    area_editor_prop_t aep_pik_inside;
+    AreaEditorProp aep_pik_inside;
     aep_pik_inside.name = "Pikmin inside";
     aep_pik_inside.var = "pikmin_inside";
     aep_pik_inside.type = AEMP_TYPE_TEXT;
@@ -45,7 +45,7 @@ onion_type::onion_type() :
 /**
  * @brief Destroys the Onion type object.
  */
-onion_type::~onion_type() {
+OnionType::~OnionType() {
     delete nest;
 }
 
@@ -55,7 +55,7 @@ onion_type::~onion_type() {
  *
  * @return The vector.
  */
-anim_conversion_vector onion_type::get_anim_conversions() const {
+anim_conversion_vector OnionType::get_anim_conversions() const {
     anim_conversion_vector v;
     v.push_back(std::make_pair(ONION_ANIM_IDLING, "idling"));
     v.push_back(std::make_pair(ONION_ANIM_GENERATING, "generating"));
@@ -71,7 +71,7 @@ anim_conversion_vector onion_type::get_anim_conversions() const {
  *
  * @param file File to read from.
  */
-void onion_type::load_cat_properties(data_node* file) {
+void OnionType::load_cat_properties(DataNode* file) {
     nest->load_properties(file);
     
     for(size_t s = 0; s < sounds.size(); s++) {
@@ -87,7 +87,7 @@ void onion_type::load_cat_properties(data_node* file) {
  *
  * @param file File to read from.
  */
-void onion_type::load_cat_resources(data_node* file) {
+void OnionType::load_cat_resources(DataNode* file) {
     //We don't actually need to load any, but we know that if this function
     //is run, then the animations are definitely loaded.
     //Now's a good time to check the leg body parts.

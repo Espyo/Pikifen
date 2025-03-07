@@ -97,8 +97,8 @@ const float NOTIFICATION_PADDING = 8.0f;
  */
 void draw_background_logos(
     float time_spent, size_t rows, size_t cols,
-    const point &logo_size, const ALLEGRO_COLOR &tint,
-    const point &speed, float rotation_speed
+    const Point &logo_size, const ALLEGRO_COLOR &tint,
+    const Point &speed, float rotation_speed
 ) {
     al_hold_bitmap_drawing(true);
     
@@ -125,8 +125,8 @@ void draw_background_logos(
                 );
             draw_bitmap(
                 game.sys_content.bmp_icon,
-                point(x, y),
-                point(logo_size.x, logo_size.y),
+                Point(x, y),
+                Point(logo_size.x, logo_size.y),
                 time_spent * rotation_speed,
                 tint
             );
@@ -144,10 +144,10 @@ void draw_background_logos(
  * @param effects Effects to use.
  */
 void draw_bitmap_with_effects(
-    ALLEGRO_BITMAP* bmp, const bitmap_effect_t &effects
+    ALLEGRO_BITMAP* bmp, const BitmapEffect &effects
 ) {
 
-    point bmp_size = get_bitmap_dimensions(bmp);
+    Point bmp_size = get_bitmap_dimensions(bmp);
     float scale_x =
         (effects.scale.x == LARGE_FLOAT) ? effects.scale.y : effects.scale.x;
     float scale_y =
@@ -197,7 +197,7 @@ void draw_bitmap_with_effects(
  * specify the amount here.
  */
 void draw_button(
-    const point &center, const point &size, const string &text,
+    const Point &center, const Point &size, const string &text,
     const ALLEGRO_FONT* font, const ALLEGRO_COLOR &color,
     bool selected, float juicy_grow_amount
 ) {
@@ -205,7 +205,7 @@ void draw_button(
         text, font, center, size * GUI::STANDARD_CONTENT_SIZE, color,
         ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
         TEXT_SETTING_FLAG_CANT_GROW,
-        point(1.0 + juicy_grow_amount)
+        Point(1.0 + juicy_grow_amount)
     );
     
     ALLEGRO_COLOR box_tint =
@@ -237,22 +237,22 @@ void draw_button(
  * @param scale Scale the text by this much.
  */
 void draw_fraction(
-    const point &bottom, size_t value_nr,
+    const Point &bottom, size_t value_nr,
     size_t requirement_nr, const ALLEGRO_COLOR &color, float scale
 ) {
     const float value_nr_y = bottom.y - IN_WORLD_FRACTION::ROW_HEIGHT * 3;
     const float value_nr_scale = value_nr >= requirement_nr ? 1.2f : 1.0f;
     draw_text(
-        i2s(value_nr), game.sys_content.fnt_value, point(bottom.x, value_nr_y),
-        point(LARGE_FLOAT, IN_WORLD_FRACTION::ROW_HEIGHT * scale),
+        i2s(value_nr), game.sys_content.fnt_value, Point(bottom.x, value_nr_y),
+        Point(LARGE_FLOAT, IN_WORLD_FRACTION::ROW_HEIGHT * scale),
         color, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_TOP, 0,
-        point(value_nr_scale)
+        Point(value_nr_scale)
     );
     
     const float bar_y = bottom.y - IN_WORLD_FRACTION::ROW_HEIGHT * 2;
     draw_text(
-        "-", game.sys_content.fnt_value, point(bottom.x, bar_y),
-        point(LARGE_FLOAT, IN_WORLD_FRACTION::ROW_HEIGHT * scale),
+        "-", game.sys_content.fnt_value, Point(bottom.x, bar_y),
+        Point(LARGE_FLOAT, IN_WORLD_FRACTION::ROW_HEIGHT * scale),
         color, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_TOP, 0
     );
     
@@ -260,10 +260,10 @@ void draw_fraction(
     float req_nr_scale = requirement_nr > value_nr ? 1.2f : 1.0f;
     draw_text(
         i2s(requirement_nr), game.sys_content.fnt_value,
-        point(bottom.x, req_nr_y),
-        point(LARGE_FLOAT, IN_WORLD_FRACTION::ROW_HEIGHT * scale),
+        Point(bottom.x, req_nr_y),
+        Point(LARGE_FLOAT, IN_WORLD_FRACTION::ROW_HEIGHT * scale),
         color, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_TOP, 0,
-        point(req_nr_scale)
+        Point(req_nr_scale)
     );
 }
 
@@ -280,7 +280,7 @@ void draw_fraction(
  * Used for leader HP on the HUD.
  */
 void draw_health(
-    const point &center,
+    const Point &center,
     float ratio, float alpha,
     float radius, bool just_chart
 ) {
@@ -317,7 +317,7 @@ void draw_health(
  * @param time How much time has passed. Used to animate.
  */
 void draw_liquid(
-    sector* s_ptr, liquid* l_ptr, const point &where, float scale,
+    Sector* s_ptr, Liquid* l_ptr, const Point &where, float scale,
     float time
 ) {
     //Setup.
@@ -429,7 +429,7 @@ void draw_liquid(
     
     //Draw the sector liquid now!
     unsigned char n_textures = 1;
-    sector* texture_sector[2] = {nullptr, nullptr};
+    Sector* texture_sector[2] = {nullptr, nullptr};
     if(s_ptr->fade) {
         s_ptr->get_texture_merge_sectors(
             &texture_sector[0], &texture_sector[1]
@@ -464,7 +464,7 @@ void draw_liquid(
         size_t n_vertexes = s_ptr->triangles.size() * 3;
         ALLEGRO_VERTEX* av = new ALLEGRO_VERTEX[n_vertexes];
         
-        sector_texture_t* texture_info_to_use =
+        SectorTexture* texture_info_to_use =
             &texture_sector[t]->texture_info;
             
         //Texture transformations.
@@ -489,8 +489,8 @@ void draw_liquid(
         
         for(size_t v = 0; v < n_vertexes; v++) {
         
-            const triangle* t_ptr = &s_ptr->triangles[floor(v / 3.0)];
-            vertex* v_ptr = t_ptr->points[v % 3];
+            const Triangle* t_ptr = &s_ptr->triangles[floor(v / 3.0)];
+            Vertex* v_ptr = t_ptr->points[v % 3];
             float vx = v_ptr->x;
             float vy = v_ptr->y;
             
@@ -607,8 +607,8 @@ void draw_loading_screen(
             al_clear_to_color(COLOR_EMPTY);
             draw_text(
                 text, game.sys_content.fnt_area_name,
-                point(text_w * 0.5f, text_h * 0.5f),
-                point(text_w, text_h),
+                Point(text_w * 0.5f, text_h * 0.5f),
+                Point(text_w, text_h),
                 COLOR_GOLD, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0
             );
         } al_set_target_backbuffer(game.display);
@@ -623,8 +623,8 @@ void draw_loading_screen(
             al_clear_to_color(COLOR_EMPTY);
             draw_text(
                 subtext, game.sys_content.fnt_area_name,
-                point(subtext_w * 0.5f, subtext_h * 0.5f),
-                point(subtext_w, subtext_h),
+                Point(subtext_w * 0.5f, subtext_h * 0.5f),
+                Point(subtext_w, subtext_h),
                 al_map_rgb(224, 224, 224),
                 ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0
             );
@@ -754,26 +754,26 @@ void draw_loading_screen(
     //Draw the game's logo to the left of the "Loading..." text,
     //if we're not fading.
     if(opacity == 1.0f) {
-        const point text_box(game.win_w * 0.11f, game.win_h * 0.03f);
+        const Point text_box(game.win_w * 0.11f, game.win_h * 0.03f);
         
         if(
             game.sys_content.bmp_icon &&
             game.sys_content.bmp_icon != game.bmp_error
         ) {
-            point icon_pos(
+            Point icon_pos(
                 game.win_w - 8 - text_box.x - 8 - text_box.y / 2.0f,
                 game.win_h - 8 - text_box.y / 2.0f
             );
             draw_bitmap(
                 game.sys_content.bmp_icon, icon_pos,
-                point(-1, text_box.y),
+                Point(-1, text_box.y),
                 0, al_map_rgba(255, 255, 255, opacity * 255.0)
             );
         }
         
         draw_text(
             "Loading...", game.sys_content.fnt_standard,
-            point(game.win_w - 8, game.win_h - 8), text_box,
+            Point(game.win_w - 8, game.win_h - 8), text_box,
             al_map_rgb(192, 192, 192), ALLEGRO_ALIGN_RIGHT, V_ALIGN_MODE_BOTTOM
         );
     }
@@ -791,7 +791,7 @@ void draw_loading_screen(
  * If false, place it to the right.
  */
 void draw_menu_button_icon(
-    MENU_ICON icon, const point &button_center, const point &button_size,
+    MENU_ICON icon, const Point &button_center, const Point &button_size,
     bool left_side
 ) {
     //All icons are square, and in a row, so the spritesheet height works.
@@ -803,7 +803,7 @@ void draw_menu_button_icon(
             (icon_size + 1) * (int) icon, 0,
             icon_size, icon_size
         );
-    point icon_center(
+    Point icon_center(
         left_side ?
         button_center.x - button_size.x * 0.5 + button_size.y * 0.5 :
         button_center.x + button_size.x * 0.5 - button_size.y * 0.5,
@@ -811,7 +811,7 @@ void draw_menu_button_icon(
     );
     draw_bitmap_in_box(
         bmp, icon_center,
-        point(button_size.y),
+        Point(button_size.y),
         true
     );
     al_destroy_bitmap(bmp);
@@ -827,11 +827,11 @@ void draw_menu_button_icon(
  * (used to simulate sun shadow direction casting).
  */
 void draw_mob_shadow(
-    const mob* m,
+    const Mob* m,
     float delta_z, float shadow_stretch
 ) {
 
-    point shadow_size = point(m->radius * 2.2f);
+    Point shadow_size = Point(m->radius * 2.2f);
     if(m->rectangular_dim.x != 0) {
         shadow_size = m->rectangular_dim * 1.1f;
     }
@@ -856,7 +856,7 @@ void draw_mob_shadow(
     if(m->rectangular_dim.x != 0) {
         draw_bitmap(
             game.sys_content.bmp_shadow_square,
-            point(m->pos.x + shadow_x + shadow_w / 2, m->pos.y),
+            Point(m->pos.x + shadow_x + shadow_w / 2, m->pos.y),
             shadow_size,
             m->angle,
             map_alpha(255 * (1 - shadow_stretch))
@@ -864,8 +864,8 @@ void draw_mob_shadow(
     } else {
         draw_bitmap(
             game.sys_content.bmp_shadow,
-            point(m->pos.x + shadow_x + shadow_w / 2, m->pos.y),
-            point(shadow_w, diameter),
+            Point(m->pos.x + shadow_x + shadow_w / 2, m->pos.y),
+            Point(shadow_w, diameter),
             0,
             map_alpha(255 * (1 - shadow_stretch))
         );
@@ -886,7 +886,7 @@ void draw_mouse_cursor(const ALLEGRO_COLOR &color) {
         size_t anchor = 0;
         
         for(size_t s = 1; s < game.mouse_cursor.history.size(); s++) {
-            point anchor_diff =
+            Point anchor_diff =
                 game.mouse_cursor.history[anchor] -
                 game.mouse_cursor.history[s];
             if(
@@ -904,8 +904,8 @@ void draw_mouse_cursor(const ALLEGRO_COLOR &color) {
                 GAME::CURSOR_TRAIL_MAX_ALPHA * start_ratio;
             ALLEGRO_COLOR start_color =
                 change_alpha(color, start_alpha);
-            point start_p1;
-            point start_p2;
+            Point start_p1;
+            Point start_p2;
             
             float end_ratio =
                 s / (float) GAME::CURSOR_TRAIL_SAVE_N_SPOTS;
@@ -915,16 +915,16 @@ void draw_mouse_cursor(const ALLEGRO_COLOR &color) {
                 GAME::CURSOR_TRAIL_MAX_ALPHA * end_ratio;
             ALLEGRO_COLOR end_color =
                 change_alpha(color, end_alpha);
-            point end_p1;
-            point end_p2;
+            Point end_p1;
+            Point end_p2;
             
             if(anchor == 0) {
-                point cur_to_next =
+                Point cur_to_next =
                     game.mouse_cursor.history[s] -
                     game.mouse_cursor.history[anchor];
-                point cur_to_next_normal(-cur_to_next.y, cur_to_next.x);
+                Point cur_to_next_normal(-cur_to_next.y, cur_to_next.x);
                 cur_to_next_normal = normalize_vector(cur_to_next_normal);
-                point spot_offset = cur_to_next_normal * start_thickness / 2.0f;
+                Point spot_offset = cur_to_next_normal * start_thickness / 2.0f;
                 start_p1 = game.mouse_cursor.history[anchor] - spot_offset;
                 start_p2 = game.mouse_cursor.history[anchor] + spot_offset;
             } else {
@@ -940,12 +940,12 @@ void draw_mouse_cursor(const ALLEGRO_COLOR &color) {
             }
             
             if(s == game.mouse_cursor.history.size() - 1) {
-                point prev_to_cur =
+                Point prev_to_cur =
                     game.mouse_cursor.history[s] -
                     game.mouse_cursor.history[anchor];
-                point prev_to_cur_normal(-prev_to_cur.y, prev_to_cur.x);
+                Point prev_to_cur_normal(-prev_to_cur.y, prev_to_cur.x);
                 prev_to_cur_normal = normalize_vector(prev_to_cur_normal);
-                point spot_offset = prev_to_cur_normal * start_thickness / 2.0f;
+                Point spot_offset = prev_to_cur_normal * start_thickness / 2.0f;
                 end_p1 = game.mouse_cursor.history[s] - spot_offset;
                 end_p2 = game.mouse_cursor.history[s] + spot_offset;
             } else {
@@ -1013,8 +1013,8 @@ void draw_mouse_cursor(const ALLEGRO_COLOR &color) {
  * @param alpha Opacity.
  */
 void draw_player_input_icon(
-    const ALLEGRO_FONT* const font, const player_input &i,
-    bool condensed, const point &where, const point &max_size,
+    const ALLEGRO_FONT* const font, const PlayerInput &i,
+    bool condensed, const Point &where, const Point &max_size,
     unsigned char alpha
 ) {
     if(alpha == 0) return;
@@ -1074,14 +1074,14 @@ void draw_player_input_icon(
     switch(shape) {
     case PLAYER_INPUT_ICON_SHAPE_RECTANGLE: {
         draw_textured_box(
-            where, point(total_width, total_height),
+            where, Point(total_width, total_height),
             game.sys_content.bmp_key_box
         );
         break;
     }
     case PLAYER_INPUT_ICON_SHAPE_ROUNDED: {
         draw_textured_box(
-            where, point(total_width, total_height),
+            where, Point(total_width, total_height),
             game.sys_content.bmp_button_box
         );
         break;
@@ -1094,7 +1094,7 @@ void draw_player_input_icon(
     //And finally, the text inside.
     draw_text(
         text, font, where,
-        point(
+        Point(
             (max_size.x == 0 ? 0 : max_size.x - CONTROL_BIND_ICON::PADDING),
             (max_size.y == 0 ? 0 : max_size.y - CONTROL_BIND_ICON::PADDING)
         ),
@@ -1113,13 +1113,13 @@ void draw_player_input_icon(
  * @param opacity Draw the textures at this opacity, 0 - 1.
  */
 void draw_sector_texture(
-    sector* s_ptr, const point &where, float scale, float opacity
+    Sector* s_ptr, const Point &where, float scale, float opacity
 ) {
     if(!s_ptr) return;
     if(s_ptr->is_bottomless_pit) return;
     
     unsigned char n_textures = 1;
-    sector* texture_sector[2] = {nullptr, nullptr};
+    Sector* texture_sector[2] = {nullptr, nullptr};
     
     if(s_ptr->fade) {
         s_ptr->get_texture_merge_sectors(
@@ -1156,7 +1156,7 @@ void draw_sector_texture(
         size_t n_vertexes = s_ptr->triangles.size() * 3;
         ALLEGRO_VERTEX* av = new ALLEGRO_VERTEX[n_vertexes];
         
-        sector_texture_t* texture_info_to_use =
+        SectorTexture* texture_info_to_use =
             &texture_sector[t]->texture_info;
             
         //Texture transformations.
@@ -1172,8 +1172,8 @@ void draw_sector_texture(
         
         for(size_t v = 0; v < n_vertexes; v++) {
         
-            const triangle* t_ptr = &s_ptr->triangles[floor(v / 3.0)];
-            vertex* v_ptr = t_ptr->points[v % 3];
+            const Triangle* t_ptr = &s_ptr->triangles[floor(v / 3.0)];
+            Vertex* v_ptr = t_ptr->points[v % 3];
             float vx = v_ptr->x;
             float vy = v_ptr->y;
             
@@ -1249,7 +1249,7 @@ void draw_sector_texture(
  * @param m Mob that has this status effect.
  * @param effects List of bitmap effects to use.
  */
-void draw_status_effect_bmp(const mob* m, bitmap_effect_t &effects) {
+void draw_status_effect_bmp(const Mob* m, BitmapEffect &effects) {
     float status_bmp_scale;
     ALLEGRO_BITMAP* status_bmp = m->get_status_bitmap(&status_bmp_scale);
     
@@ -1258,7 +1258,7 @@ void draw_status_effect_bmp(const mob* m, bitmap_effect_t &effects) {
     draw_bitmap(
         status_bmp,
         m->pos,
-        point(m->radius * 2 * status_bmp_scale, -1)
+        Point(m->radius * 2 * status_bmp_scale, -1)
     );
 }
 
@@ -1276,10 +1276,10 @@ void draw_status_effect_bmp(const mob* m, bitmap_effect_t &effects) {
  * @param scale Scale each token by this amount.
  */
 void draw_string_tokens(
-    const vector<string_token> &tokens, const ALLEGRO_FONT* const text_font,
+    const vector<StringToken> &tokens, const ALLEGRO_FONT* const text_font,
     const ALLEGRO_FONT* const control_font, bool controls_condensed,
-    const point &where, int flags, const point &max_size,
-    const point &scale
+    const Point &where, int flags, const Point &max_size,
+    const Point &scale
 ) {
     unsigned int total_width = 0;
     float x_scale = 1.0f;
@@ -1308,11 +1308,11 @@ void draw_string_tokens(
         switch(tokens[t].type) {
         case STRING_TOKEN_CHAR: {
             draw_text(
-                tokens[t].content, text_font, point(caret, where.y),
-                point(LARGE_FLOAT), COLOR_WHITE,
+                tokens[t].content, text_font, Point(caret, where.y),
+                Point(LARGE_FLOAT), COLOR_WHITE,
                 ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP,
                 TEXT_SETTING_FLAG_CANT_GROW,
-                point(x_scale * scale.x, y_scale * scale.y)
+                Point(x_scale * scale.x, y_scale * scale.y)
             );
             break;
         }
@@ -1321,11 +1321,11 @@ void draw_string_tokens(
                 control_font,
                 game.controls.find_bind(tokens[t].content).input,
                 controls_condensed,
-                point(
+                Point(
                     caret + token_final_width / 2.0f,
                     where.y + max_size.y / 2.0f
                 ),
-                point(token_final_width * scale.x, max_size.y * scale.y)
+                Point(token_final_width * scale.x, max_size.y * scale.y)
             );
             break;
         }
@@ -1354,7 +1354,7 @@ void draw_string_tokens(
  * empty string is returned if there's nothing to write.
  */
 void get_player_input_icon_info(
-    const player_input &i, bool condensed,
+    const PlayerInput &i, bool condensed,
     PLAYER_INPUT_ICON_SHAPE* shape,
     PLAYER_INPUT_ICON_SPRITE* bitmap_sprite,
     string* text
@@ -1562,7 +1562,7 @@ void get_player_input_icon_info(
  * @return The width.
  */
 float get_player_input_icon_width(
-    const ALLEGRO_FONT* font, const player_input &i, bool condensed,
+    const ALLEGRO_FONT* font, const PlayerInput &i, bool condensed,
     float max_bitmap_height
 ) {
     PLAYER_INPUT_ICON_SHAPE shape;

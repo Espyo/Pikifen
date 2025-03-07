@@ -20,8 +20,8 @@
 /**
  * @brief Constructs a new pellet type object.
  */
-pellet_type::pellet_type() :
-    mob_type(MOB_CATEGORY_PELLETS) {
+PelletType::PelletType() :
+    MobType(MOB_CATEGORY_PELLETS) {
     
     target_type = MOB_TARGET_FLAG_NONE;
     
@@ -34,7 +34,7 @@ pellet_type::pellet_type() :
  *
  * @return The vector.
  */
-anim_conversion_vector pellet_type::get_anim_conversions() const {
+anim_conversion_vector PelletType::get_anim_conversions() const {
     anim_conversion_vector v;
     v.push_back(std::make_pair(MOB_TYPE::ANIM_IDLING, "idling"));
     return v;
@@ -46,11 +46,11 @@ anim_conversion_vector pellet_type::get_anim_conversions() const {
  *
  * @param file File to read from.
  */
-void pellet_type::load_cat_properties(data_node* file) {
-    reader_setter rs(file);
+void PelletType::load_cat_properties(DataNode* file) {
+    ReaderSetter rs(file);
     
     string pik_type_str;
-    data_node* pik_type_node = nullptr;
+    DataNode* pik_type_node = nullptr;
     
     rs.set("match_seeds", match_seeds);
     rs.set("non_match_seeds", non_match_seeds);
@@ -78,11 +78,11 @@ void pellet_type::load_cat_properties(data_node* file) {
  *
  * @param file File to read from.
  */
-void pellet_type::load_cat_resources(data_node* file) {
-    reader_setter rs(file);
+void PelletType::load_cat_resources(DataNode* file) {
+    ReaderSetter rs(file);
     
     string number_image_str;
-    data_node* number_image_node = nullptr;
+    DataNode* number_image_node = nullptr;
     
     rs.set("number_image", number_image_str, &number_image_node);
     
@@ -93,6 +93,6 @@ void pellet_type::load_cat_resources(data_node* file) {
 /**
  * @brief Unloads resources from memory.
  */
-void pellet_type::unload_resources() {
+void PelletType::unload_resources() {
     game.content.bitmaps.list.free(bmp_number);
 }

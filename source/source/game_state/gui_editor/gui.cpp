@@ -20,14 +20,14 @@
 /**
  * @brief Opens the "load" dialog.
  */
-void gui_editor::open_load_dialog() {
+void GuiEditor::open_load_dialog() {
     reload_gui_defs();
     
     //Set up the picker's behavior and data.
-    vector<picker_item> file_items;
+    vector<PickerItem> file_items;
     for(const auto &f : game.content.gui_defs.manifests) {
         file_items.push_back(
-            picker_item(
+            PickerItem(
                 f.first,
                 "Pack: " + game.content.packs.list[f.second.pack].name, "",
                 (void*) &f.second,
@@ -36,11 +36,11 @@ void gui_editor::open_load_dialog() {
         );
     }
     
-    load_dialog_picker = picker_info(this);
+    load_dialog_picker = Picker(this);
     load_dialog_picker.items = file_items;
     load_dialog_picker.pick_callback =
         std::bind(
-            &gui_editor::pick_gui_def_file, this,
+            &GuiEditor::pick_gui_def_file, this,
             std::placeholders::_1,
             std::placeholders::_2,
             std::placeholders::_3,
@@ -51,23 +51,23 @@ void gui_editor::open_load_dialog() {
     //Open the dialog that will contain the picker and history.
     open_dialog(
         "Load a GUI definition file",
-        std::bind(&gui_editor::process_gui_load_dialog, this)
+        std::bind(&GuiEditor::process_gui_load_dialog, this)
     );
     dialogs.back()->close_callback =
-        std::bind(&gui_editor::close_load_dialog, this);
+        std::bind(&GuiEditor::close_load_dialog, this);
 }
 
 
 /**
  * @brief Opens the "new" dialog.
  */
-void gui_editor::open_new_dialog() {
+void GuiEditor::open_new_dialog() {
     new_dialog.must_update = true;
     open_dialog(
         "Create a new GUI definition",
-        std::bind(&gui_editor::process_gui_new_dialog, this)
+        std::bind(&GuiEditor::process_gui_new_dialog, this)
     );
-    dialogs.back()->custom_size = point(400, 0);
+    dialogs.back()->custom_size = Point(400, 0);
     dialogs.back()->close_callback = [this] () {
         new_dialog.pack.clear();
         new_dialog.internal_name.clear();
@@ -81,20 +81,20 @@ void gui_editor::open_new_dialog() {
 /**
  * @brief Opens the options dialog.
  */
-void gui_editor::open_options_dialog() {
+void GuiEditor::open_options_dialog() {
     open_dialog(
         "Options",
-        std::bind(&gui_editor::process_gui_options_dialog, this)
+        std::bind(&GuiEditor::process_gui_options_dialog, this)
     );
     dialogs.back()->close_callback =
-        std::bind(&gui_editor::close_options_dialog, this);
+        std::bind(&GuiEditor::close_options_dialog, this);
 }
 
 
 /**
  * @brief Processes Dear ImGui for this frame.
  */
-void gui_editor::process_gui() {
+void GuiEditor::process_gui() {
     //Set up the entire editor window.
     ImGui::SetNextWindowPos(ImVec2(0, 0));
     ImGui::SetNextWindowSize(ImVec2(game.win_w, game.win_h));
@@ -163,7 +163,7 @@ void gui_editor::process_gui() {
 /**
  * @brief Processes the Dear ImGui control panel for this frame.
  */
-void gui_editor::process_gui_control_panel() {
+void GuiEditor::process_gui_control_panel() {
     if(manifest.internal_name.empty()) return;
     
     ImGui::BeginChild("panel");
@@ -204,7 +204,7 @@ void gui_editor::process_gui_control_panel() {
  * @brief Processes the Dear ImGui GUI definition deletion dialog
  * for this frame.
  */
-void gui_editor::process_gui_delete_gui_def_dialog() {
+void GuiEditor::process_gui_delete_gui_def_dialog() {
     //Explanation text.
     string explanation_str;
     if(!changes_mgr.exists_on_disk()) {
@@ -257,7 +257,7 @@ void gui_editor::process_gui_delete_gui_def_dialog() {
 /**
  * @brief Processes the "load" dialog for this frame.
  */
-void gui_editor::process_gui_load_dialog() {
+void GuiEditor::process_gui_load_dialog() {
     //History node.
     process_gui_history(
     [this](const string &path) -> string {
@@ -299,7 +299,7 @@ void gui_editor::process_gui_load_dialog() {
 /**
  * @brief Processes the Dear ImGui menu bar for this frame.
  */
-void gui_editor::process_gui_menu_bar() {
+void GuiEditor::process_gui_menu_bar() {
     if(ImGui::BeginMenuBar()) {
     
         //Editor menu.
@@ -456,7 +456,7 @@ void gui_editor::process_gui_menu_bar() {
 /**
  * @brief Processes the Dear ImGui "new" dialog for this frame.
  */
-void gui_editor::process_gui_new_dialog() {
+void GuiEditor::process_gui_new_dialog() {
     //Pack widgets.
     new_dialog.must_update |=
         process_gui_new_dialog_pack_widgets(&new_dialog.pack);
@@ -486,7 +486,7 @@ void gui_editor::process_gui_new_dialog() {
                 "base pack! The idea is you pick one of those so it'll\n"
                 "be copied onto a different pack for you to edit.";
         } else {
-            content_manifest temp_man;
+            ContentManifest temp_man;
             temp_man.internal_name = new_dialog.internal_name;
             temp_man.pack = new_dialog.pack;
             new_dialog.def_path =
@@ -536,7 +536,7 @@ void gui_editor::process_gui_new_dialog() {
 /**
  * @brief Processes the options dialog for this frame.
  */
-void gui_editor::process_gui_options_dialog() {
+void GuiEditor::process_gui_options_dialog() {
     //Controls node.
     if(saveable_tree_node("options", "Controls")) {
     
@@ -601,10 +601,10 @@ void gui_editor::process_gui_options_dialog() {
 /**
  * @brief Processes the GUI item info panel for this frame.
  */
-void gui_editor::process_gui_panel_item() {
+void GuiEditor::process_gui_panel_item() {
     if(cur_item == INVALID) return;
     
-    item* cur_item_ptr = &items[cur_item];
+    Item* cur_item_ptr = &items[cur_item];
     
     if(cur_item_ptr->size.x == 0.0f) return;
     
@@ -639,11 +639,11 @@ void gui_editor::process_gui_panel_item() {
         WIDGET_EXPLANATION_DRAG
     );
     
-    point top_left(
+    Point top_left(
         cur_item_ptr->center.x - cur_item_ptr->size.x / 2.0f,
         cur_item_ptr->center.y - cur_item_ptr->size.y / 2.0f
     );
-    point bottom_right(
+    Point bottom_right(
         cur_item_ptr->center.x + cur_item_ptr->size.x / 2.0f,
         cur_item_ptr->center.y + cur_item_ptr->size.y / 2.0f
     );
@@ -661,12 +661,12 @@ void gui_editor::process_gui_panel_item() {
     }
     
     if(update_from_corners) {
-        point new_size(
+        Point new_size(
             bottom_right.x - top_left.x,
             bottom_right.y - top_left.y
         );
         if(new_size.x > 0.0f && new_size.y > 0.0f) {
-            point new_center(
+            Point new_center(
                 (top_left.x + bottom_right.x) / 2.0f,
                 (top_left.y + bottom_right.y) / 2.0f
             );
@@ -681,7 +681,7 @@ void gui_editor::process_gui_panel_item() {
 /**
  * @brief Processes the GUI item list panel for this frame.
  */
-void gui_editor::process_gui_panel_items() {
+void GuiEditor::process_gui_panel_items() {
     //Items text.
     ImGui::Text("Items:");
     
@@ -742,7 +742,7 @@ void gui_editor::process_gui_panel_items() {
 /**
  * @brief Processes the Dear ImGui status bar for this frame.
  */
-void gui_editor::process_gui_status_bar() {
+void GuiEditor::process_gui_status_bar() {
     //Status bar text.
     process_gui_status_bar_text();
     
@@ -768,14 +768,14 @@ void gui_editor::process_gui_status_bar() {
 /**
  * @brief Processes the Dear ImGui toolbar for this frame.
  */
-void gui_editor::process_gui_toolbar() {
+void GuiEditor::process_gui_toolbar() {
     if(manifest.internal_name.empty()) return;
     
     //Quit button.
     if(
         ImGui::ImageButton(
             "quitButton", editor_icons[EDITOR_ICON_QUIT],
-            point(EDITOR::ICON_BMP_SIZE)
+            Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         quit_widget_pos = get_last_widget_pos();
@@ -791,7 +791,7 @@ void gui_editor::process_gui_toolbar() {
     if(
         ImGui::ImageButton(
             "loadButton", editor_icons[EDITOR_ICON_LOAD],
-            point(EDITOR::ICON_BMP_SIZE)
+            Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         load_widget_pos = get_last_widget_pos();
@@ -810,7 +810,7 @@ void gui_editor::process_gui_toolbar() {
             changes_mgr.has_unsaved_changes() ?
             editor_icons[EDITOR_ICON_SAVE_UNSAVED] :
             editor_icons[EDITOR_ICON_SAVE],
-            point(EDITOR::ICON_BMP_SIZE)
+            Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         save_cmd(1.0f);
@@ -835,7 +835,7 @@ void gui_editor::process_gui_toolbar() {
     if(
         ImGui::ImageButton(
             "snapButton", snap_mode_bmp,
-            point(EDITOR::ICON_BMP_SIZE)
+            Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         snap_mode_cmd(1.0f);

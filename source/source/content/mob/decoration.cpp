@@ -23,10 +23,10 @@
  * @param type Decoration type this mob belongs to.
  * @param angle Starting angle.
  */
-decoration::decoration(
-    const point &pos, decoration_type* type, float angle
+Decoration::Decoration(
+    const Point &pos, DecorationType* type, float angle
 ) :
-    mob(pos, type, angle),
+    Mob(pos, type, angle),
     dec_type(type) {
     
     float tint_interpol_ratio = game.rng.f(0.0f, 1.0f);
@@ -64,14 +64,14 @@ decoration::decoration(
  * @brief Draws a decorative object. This is responsible for randomly
  * tinting it, rotating it, etc.
  */
-void decoration::draw_mob() {
-    sprite* cur_s_ptr;
-    sprite* next_s_ptr;
+void Decoration::draw_mob() {
+    Sprite* cur_s_ptr;
+    Sprite* next_s_ptr;
     float interpolation_factor;
     get_sprite_data(&cur_s_ptr, &next_s_ptr, &interpolation_factor);
     if(!cur_s_ptr) return;
     
-    bitmap_effect_t eff;
+    BitmapEffect eff;
     get_sprite_bitmap_effects(
         cur_s_ptr, next_s_ptr, interpolation_factor,
         &eff,
@@ -99,8 +99,8 @@ void decoration::draw_mob() {
  *
  * @param svr Script var reader to use.
  */
-void decoration::read_script_vars(const script_var_reader &svr) {
-    mob::read_script_vars(svr);
+void Decoration::read_script_vars(const ScriptVarReader &svr) {
+    Mob::read_script_vars(svr);
     
     bool random_animation_delay_var;
     bool random_tint_var;

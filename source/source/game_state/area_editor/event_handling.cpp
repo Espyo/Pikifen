@@ -26,7 +26,7 @@ using std::set;
  *
  * @param ev Event to handle.
  */
-void area_editor::handle_key_char_anywhere(const ALLEGRO_EVENT &ev) {
+void AreaEditor::handle_key_char_anywhere(const ALLEGRO_EVENT &ev) {
     if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_F1)) {
         debug_edge_idxs = !debug_edge_idxs;
         if(debug_edge_idxs) {
@@ -82,7 +82,7 @@ void area_editor::handle_key_char_anywhere(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void area_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
+void AreaEditor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
     if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_LEFT)) {
         game.cam.target_pos.x -=
             AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
@@ -140,7 +140,7 @@ void area_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void area_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
+void AreaEditor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
     if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_L, true)) {
         load_cmd(1.0f);
         
@@ -222,7 +222,7 @@ void area_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
+void AreaEditor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
     if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_1)) {
         if(state == EDITOR_STATE_PATHS) {
             path_drawing_normals = false;
@@ -375,7 +375,7 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void area_editor::handle_key_up_anywhere(const ALLEGRO_EVENT &ev) {
+void AreaEditor::handle_key_up_anywhere(const ALLEGRO_EVENT &ev) {
     if(ev.keyboard.keycode == ALLEGRO_KEY_H) {
         if(
             state == EDITOR_STATE_LAYOUT &&
@@ -395,7 +395,7 @@ void area_editor::handle_key_up_anywhere(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void area_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
+void AreaEditor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
     if(is_ctrl_pressed) {
         handle_lmb_down(ev);
         return;
@@ -404,14 +404,14 @@ void area_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
     switch(state) {
     case EDITOR_STATE_LAYOUT: {
         if(sub_state == EDITOR_SUB_STATE_NONE) {
-            vertex* clicked_vertex =
+            Vertex* clicked_vertex =
                 get_vertex_under_point(game.mouse_cursor.w_pos);
             if(!clicked_vertex) {
-                edge* clicked_edge =
+                Edge* clicked_edge =
                     get_edge_under_point(game.mouse_cursor.w_pos);
                 if(clicked_edge) {
                     register_change("edge split");
-                    vertex* new_vertex =
+                    Vertex* new_vertex =
                         split_edge(clicked_edge, game.mouse_cursor.w_pos);
                     clear_selection();
                     selected_vertexes.insert(new_vertex);
@@ -424,7 +424,7 @@ void area_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
     }
     case EDITOR_STATE_MOBS: {
         if(sub_state == EDITOR_SUB_STATE_NONE) {
-            mob_gen* clicked_mob =
+            MobGen* clicked_mob =
                 get_mob_under_point(game.mouse_cursor.w_pos);
             if(!clicked_mob) {
                 create_mob_under_cursor();
@@ -442,8 +442,8 @@ void area_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
             bool clicked_stop =
                 get_path_stop_under_point(game.mouse_cursor.w_pos);
             if(!clicked_stop) {
-                path_link* clicked_link_1;
-                path_link* clicked_link_2;
+                PathLink* clicked_link_1;
+                PathLink* clicked_link_2;
                 bool clicked_link =
                     get_path_link_under_point(
                         game.mouse_cursor.w_pos,
@@ -451,7 +451,7 @@ void area_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
                     );
                 if(clicked_link) {
                     register_change("path link split");
-                    path_stop* new_stop =
+                    PathStop* new_stop =
                         split_path_link(
                             clicked_link_1, clicked_link_2,
                             game.mouse_cursor.w_pos
@@ -480,7 +480,7 @@ void area_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
+void AreaEditor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
     switch(state) {
     case EDITOR_STATE_GAMEPLAY: {
 
@@ -502,14 +502,14 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         case EDITOR_SUB_STATE_DRAWING: {
     
             //Drawing the layout.
-            point hotspot = snap_point(game.mouse_cursor.w_pos);
+            Point hotspot = snap_point(game.mouse_cursor.w_pos);
             
             //First, check if the user is trying to undo the previous node.
             if(
                 !drawing_nodes.empty() &&
-                dist(
+                Distance(
                     hotspot,
-                    point(
+                    Point(
                         drawing_nodes.back().snapped_spot.x,
                         drawing_nodes.back().snapped_spot.y
                     )
@@ -521,7 +521,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             
             if(drawing_nodes.empty()) {
                 //First node.
-                drawing_nodes.push_back(layout_drawing_node(this, hotspot));
+                drawing_nodes.push_back(LayoutDrawingNode(this, hotspot));
                 
             } else {
             
@@ -538,7 +538,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                     handle_line_error();
                     
                 } else if(
-                    dist(hotspot, drawing_nodes.begin()->snapped_spot) <=
+                    Distance(hotspot, drawing_nodes.begin()->snapped_spot) <=
                     AREA_EDITOR::VERTEX_MERGE_RADIUS / game.cam.zoom
                 ) {
                     //Back to the first vertex. Finish the drawing.
@@ -546,7 +546,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                     
                 } else {
                     //Add a new node.
-                    drawing_nodes.push_back(layout_drawing_node(this, hotspot));
+                    drawing_nodes.push_back(LayoutDrawingNode(this, hotspot));
                     
                     if(needs_reverse) {
                         //This is now a sector split drawing.
@@ -607,7 +607,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         } case EDITOR_SUB_STATE_CIRCLE_SECTOR: {
     
             //Create a new circular sector.
-            point hotspot = snap_point(game.mouse_cursor.w_pos);
+            Point hotspot = snap_point(game.mouse_cursor.w_pos);
             
             if(new_circle_sector_step == 0) {
                 new_circle_sector_center = hotspot;
@@ -645,7 +645,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
     
             moving = true;
             octee_drag_start = game.mouse_cursor.w_pos;
-            sector* s_ptr = *selected_sectors.begin();
+            Sector* s_ptr = *selected_sectors.begin();
             octee_orig_angle = s_ptr->texture_info.rot;
             octee_orig_offset = s_ptr->texture_info.translation;
             octee_orig_scale = s_ptr->texture_info.scale;
@@ -674,9 +674,9 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                 //Start a new layout selection or select something.
                 bool start_new_selection = true;
                 
-                vertex* clicked_vertex = nullptr;
-                edge* clicked_edge = nullptr;
-                sector* clicked_sector = nullptr;
+                Vertex* clicked_vertex = nullptr;
+                Edge* clicked_edge = nullptr;
+                Sector* clicked_sector = nullptr;
                 get_hovered_layout_element(
                     &clicked_vertex, &clicked_edge, &clicked_sector
                 );
@@ -757,10 +757,10 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             //Duplicate the current mobs to where the cursor is.
             register_change("object duplication");
             sub_state = EDITOR_SUB_STATE_NONE;
-            point hotspot = snap_point(game.mouse_cursor.w_pos);
+            Point hotspot = snap_point(game.mouse_cursor.w_pos);
             
-            point selection_tl = (*selected_mobs.begin())->pos;
-            point selection_br = selection_tl;
+            Point selection_tl = (*selected_mobs.begin())->pos;
+            Point selection_br = selection_tl;
             for(auto m = selected_mobs.begin(); m != selected_mobs.end(); ++m) {
                 if(m == selected_mobs.begin()) continue;
                 if((*m)->pos.x < selection_tl.x) {
@@ -776,12 +776,12 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                     selection_br.y = (*m)->pos.y;
                 }
             }
-            point new_selection_center = (selection_br + selection_tl) / 2.0;
-            set<mob_gen*> mobs_to_select;
+            Point new_selection_center = (selection_br + selection_tl) / 2.0;
+            set<MobGen*> mobs_to_select;
             
             for(auto const &m : selected_mobs) {
-                mob_gen* new_mg = new mob_gen(*m);
-                new_mg->pos = point(hotspot + (m->pos) - new_selection_center);
+                MobGen* new_mg = new MobGen(*m);
+                new_mg->pos = Point(hotspot + (m->pos) - new_selection_center);
                 game.cur_area_data->mob_generators.push_back(new_mg);
                 mobs_to_select.insert(new_mg);
             }
@@ -800,7 +800,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
     
             //Store the mob inside another.
             size_t target_idx;
-            mob_gen* target =
+            MobGen* target =
                 get_mob_under_point(game.mouse_cursor.w_pos, &target_idx);
             if(!target) return;
             
@@ -813,7 +813,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                     return;
                 }
             }
-            mob_gen* m_ptr = *(selected_mobs.begin());
+            MobGen* m_ptr = *(selected_mobs.begin());
             if(m_ptr->stored_inside == target_idx) {
                 set_status(
                     "The object is already stored inside that object!",
@@ -836,7 +836,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         } case EDITOR_SUB_STATE_ADD_MOB_LINK: {
     
             //Link two mobs.
-            mob_gen* target = get_mob_under_point(game.mouse_cursor.w_pos);
+            MobGen* target = get_mob_under_point(game.mouse_cursor.w_pos);
             if(!target) return;
             
             for(auto const &m : selected_mobs) {
@@ -848,7 +848,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                     return;
                 }
             }
-            mob_gen* m_ptr = *(selected_mobs.begin());
+            MobGen* m_ptr = *(selected_mobs.begin());
             for(size_t l = 0; l < m_ptr->links.size(); l++) {
                 if(m_ptr->links[l] == target) {
                     set_status(
@@ -876,12 +876,12 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         } case EDITOR_SUB_STATE_DEL_MOB_LINK: {
     
             //Delete a mob link.
-            mob_gen* target = get_mob_under_point(game.mouse_cursor.w_pos);
-            mob_gen* m_ptr = *(selected_mobs.begin());
+            MobGen* target = get_mob_under_point(game.mouse_cursor.w_pos);
+            MobGen* m_ptr = *(selected_mobs.begin());
             
             if(!target) {
-                std::pair<mob_gen*, mob_gen*> data1;
-                std::pair<mob_gen*, mob_gen*> data2;
+                std::pair<MobGen*, MobGen*> data1;
+                std::pair<MobGen*, MobGen*> data2;
                 if(
                     !get_mob_link_under_point(
                         game.mouse_cursor.w_pos, &data1, &data2
@@ -939,7 +939,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         } case EDITOR_SUB_STATE_MISSION_MOBS: {
     
             size_t clicked_mob_idx;
-            mob_gen* clicked_mob =
+            MobGen* clicked_mob =
                 get_mob_under_point(game.mouse_cursor.w_pos, &clicked_mob_idx);
                 
             if(
@@ -967,7 +967,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
     
             //Start a new mob selection or select something.
             bool start_new_selection = true;
-            mob_gen* clicked_mob = get_mob_under_point(game.mouse_cursor.w_pos);
+            MobGen* clicked_mob = get_mob_under_point(game.mouse_cursor.w_pos);
             
             if(!is_shift_pressed) {
                 if(clicked_mob) {
@@ -1007,15 +1007,15 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         case EDITOR_SUB_STATE_PATH_DRAWING: {
     
             //Drawing a path.
-            point hotspot =
+            Point hotspot =
                 snap_point(game.mouse_cursor.w_pos);
-            path_stop* clicked_stop =
+            PathStop* clicked_stop =
                 get_path_stop_under_point(game.mouse_cursor.w_pos);
                 
             //Split a link, if one was clicked.
             if(!clicked_stop) {
-                path_link* clicked_link_1;
-                path_link* clicked_link_2;
+                PathLink* clicked_link_1;
+                PathLink* clicked_link_2;
                 bool clicked_link =
                     get_path_link_under_point(
                         game.mouse_cursor.w_pos,
@@ -1035,7 +1035,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             
             if(path_drawing_stop_1) {
                 //A starting stop already exists, so now we create a link.
-                path_stop* next_stop = nullptr;
+                PathStop* next_stop = nullptr;
                 if(clicked_stop) {
                     if(clicked_stop == path_drawing_stop_1) {
                         path_drawing_stop_1 = nullptr;
@@ -1044,7 +1044,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                     }
                 } else {
                     register_change("path stop creation");
-                    next_stop = new path_stop(hotspot);
+                    next_stop = new PathStop(hotspot);
                     next_stop->flags = path_drawing_flags;
                     next_stop->label = path_drawing_label;
                     game.cur_area_data->path_stops.push_back(next_stop);
@@ -1056,8 +1056,8 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                     path_drawing_stop_1->add_link(
                         next_stop, path_drawing_normals
                     );
-                    path_link* l1 = path_drawing_stop_1->get_link(next_stop);
-                    path_link* l2 = next_stop->get_link(path_drawing_stop_1);
+                    PathLink* l1 = path_drawing_stop_1->get_link(next_stop);
+                    PathLink* l2 = next_stop->get_link(path_drawing_stop_1);
                     l1->type = path_drawing_type;
                     if(l2) {
                         l2->type = path_drawing_type;
@@ -1080,7 +1080,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                     path_drawing_stop_1 = clicked_stop;
                 } else {
                     register_change("path stop creation");
-                    path_drawing_stop_1 = new path_stop(hotspot);
+                    path_drawing_stop_1 = new PathStop(hotspot);
                     path_drawing_stop_1->flags = path_drawing_flags;
                     path_drawing_stop_1->label = path_drawing_label;
                     game.cur_area_data->path_stops.push_back(
@@ -1119,10 +1119,10 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             //Start a new path selection or select something.
             bool start_new_selection = true;
             
-            path_stop* clicked_stop =
+            PathStop* clicked_stop =
                 get_path_stop_under_point(game.mouse_cursor.w_pos);
-            path_link* clicked_link_1;
-            path_link* clicked_link_2;
+            PathLink* clicked_link_1;
+            PathLink* clicked_link_2;
             bool clicked_link =
                 get_path_link_under_point(
                     game.mouse_cursor.w_pos,
@@ -1187,9 +1187,9 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             //Create a new shadow where the cursor is.
             register_change("tree shadow creation");
             sub_state = EDITOR_SUB_STATE_NONE;
-            point hotspot = snap_point(game.mouse_cursor.w_pos);
+            Point hotspot = snap_point(game.mouse_cursor.w_pos);
             
-            tree_shadow* new_shadow = new tree_shadow(hotspot);
+            TreeShadow* new_shadow = new TreeShadow(hotspot);
             new_shadow->bitmap = game.bmp_error;
             
             game.cur_area_data->tree_shadows.push_back(new_shadow);
@@ -1220,8 +1220,8 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                     s < game.cur_area_data->tree_shadows.size(); s++
                 ) {
                 
-                    tree_shadow* s_ptr = game.cur_area_data->tree_shadows[s];
-                    point min_coords, max_coords;
+                    TreeShadow* s_ptr = game.cur_area_data->tree_shadows[s];
+                    Point min_coords, max_coords;
                     get_transformed_rectangle_bounding_box(
                         s_ptr->center, s_ptr->size, s_ptr->angle,
                         &min_coords, &max_coords
@@ -1291,11 +1291,11 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
+void AreaEditor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
     if(selecting) {
     
-        point selection_tl = selection_start;
-        point selection_br = selection_start;
+        Point selection_tl = selection_start;
+        Point selection_br = selection_start;
         update_min_max_coords(selection_tl, selection_br, selection_end);
         selection_end = game.mouse_cursor.w_pos;
         
@@ -1306,7 +1306,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             if(!is_ctrl_pressed) clear_selection();
             
             for(size_t v = 0; v < game.cur_area_data->vertexes.size(); v++) {
-                vertex* v_ptr = game.cur_area_data->vertexes[v];
+                Vertex* v_ptr = game.cur_area_data->vertexes[v];
                 
                 if(
                     v_ptr->x >= selection_tl.x &&
@@ -1321,7 +1321,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             
             if(selection_filter != SELECTION_FILTER_VERTEXES) {
                 for(size_t e = 0; e < game.cur_area_data->edges.size(); e++) {
-                    edge* e_ptr = game.cur_area_data->edges[e];
+                    Edge* e_ptr = game.cur_area_data->edges[e];
                     
                     if(
                         e_ptr->vertexes[0]->x >= selection_tl.x &&
@@ -1340,11 +1340,11 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             
             if(selection_filter == SELECTION_FILTER_SECTORS) {
                 for(size_t s = 0; s < game.cur_area_data->sectors.size(); s++) {
-                    sector* s_ptr = game.cur_area_data->sectors[s];
+                    Sector* s_ptr = game.cur_area_data->sectors[s];
                     bool valid_sector = true;
                     
                     for(size_t e = 0; e < s_ptr->edges.size(); e++) {
-                        edge* e_ptr = s_ptr->edges[e];
+                        Edge* e_ptr = s_ptr->edges[e];
                         
                         if(
                             e_ptr->vertexes[0]->x < selection_tl.x ||
@@ -1381,7 +1381,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                 size_t m = 0;
                 m < game.cur_area_data->mob_generators.size(); m++
             ) {
-                mob_gen* m_ptr = game.cur_area_data->mob_generators[m];
+                MobGen* m_ptr = game.cur_area_data->mob_generators[m];
                 float radius = get_mob_gen_radius(m_ptr);
                 
                 if(
@@ -1405,7 +1405,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             if(!is_ctrl_pressed) clear_selection();
             
             for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
-                path_stop* s_ptr = game.cur_area_data->path_stops[s];
+                PathStop* s_ptr = game.cur_area_data->path_stops[s];
                 
                 if(
                     s_ptr->pos.x -
@@ -1422,9 +1422,9 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             }
             
             for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
-                path_stop* s_ptr = game.cur_area_data->path_stops[s];
+                PathStop* s_ptr = game.cur_area_data->path_stops[s];
                 for(size_t l = 0; l < s_ptr->links.size(); l++) {
-                    path_stop* s2_ptr = s_ptr->links[l]->end_ptr;
+                    PathStop* s2_ptr = s_ptr->links[l]->end_ptr;
                     
                     if(
                         s_ptr->pos.x >= selection_tl.x &&
@@ -1454,9 +1454,9 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
         case EDITOR_STATE_GAMEPLAY: {
     
             if(sub_state == EDITOR_SUB_STATE_MISSION_EXIT) {
-                point exit_center =
+                Point exit_center =
                     game.cur_area_data->mission.goal_exit_center;
-                point exit_size =
+                Point exit_size =
                     game.cur_area_data->mission.goal_exit_size;
                 if(
                     cur_transformation_widget.handle_mouse_move(
@@ -1519,8 +1519,8 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                         selection_angle - selection_orig_angle
                     );
                     
-                    for(vertex* v : selected_vertexes) {
-                        point p = pre_move_vertex_coords[v];
+                    for(Vertex* v : selected_vertexes) {
+                        Point p = pre_move_vertex_coords[v];
                         p -= selection_orig_center;
                         al_transform_coordinates(&t, &p.x, &p.y);
                         p += selection_orig_center;
@@ -1540,16 +1540,16 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                     start_vertex_move();
                 }
                 
-                point mouse_offset =
+                Point mouse_offset =
                     game.mouse_cursor.w_pos - move_mouse_start_pos;
-                point closest_vertex_new_p =
+                Point closest_vertex_new_p =
                     snap_point(
                         move_start_pos + mouse_offset, true
                     );
-                point offset =
+                Point offset =
                     closest_vertex_new_p - move_start_pos;
-                for(vertex* v : selected_vertexes) {
-                    point orig = pre_move_vertex_coords[v];
+                for(Vertex* v : selected_vertexes) {
+                    Point orig = pre_move_vertex_coords[v];
                     v->x = orig.x + offset.x;
                     v->y = orig.y + offset.y;
                 }
@@ -1558,21 +1558,21 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                 sub_state == EDITOR_SUB_STATE_OCTEE && moving
             ) {
                 //Move sector texture transformation property.
-                sector* s_ptr = *selected_sectors.begin();
+                Sector* s_ptr = *selected_sectors.begin();
                 
                 switch(octee_mode) {
                 case OCTEE_MODE_OFFSET: {
                     register_change("sector texture offset change");
-                    point diff = (game.mouse_cursor.w_pos - octee_drag_start);
+                    Point diff = (game.mouse_cursor.w_pos - octee_drag_start);
                     diff = rotate_point(diff, -s_ptr->texture_info.rot);
                     diff = diff / s_ptr->texture_info.scale;
                     s_ptr->texture_info.translation = octee_orig_offset + diff;
                     break;
                 } case OCTEE_MODE_SCALE: {
                     register_change("sector texture scale change");
-                    point diff = (game.mouse_cursor.w_pos - octee_drag_start);
+                    Point diff = (game.mouse_cursor.w_pos - octee_drag_start);
                     diff = rotate_point(diff, -s_ptr->texture_info.rot);
-                    point drag_start_rot =
+                    Point drag_start_rot =
                         rotate_point(
                             octee_drag_start, -s_ptr->texture_info.rot
                         );
@@ -1605,16 +1605,16 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                     start_mob_move();
                 }
                 
-                point mouse_offset =
+                Point mouse_offset =
                     game.mouse_cursor.w_pos - move_mouse_start_pos;
-                point closest_mob_new_p =
+                Point closest_mob_new_p =
                     snap_point(move_start_pos + mouse_offset);
-                point offset = closest_mob_new_p - move_start_pos;
+                Point offset = closest_mob_new_p - move_start_pos;
                 for(
                     auto m = selected_mobs.begin();
                     m != selected_mobs.end(); ++m
                 ) {
-                    point orig = pre_move_mob_coords[*m];
+                    Point orig = pre_move_mob_coords[*m];
                     (*m)->pos = orig + offset;
                 }
             }
@@ -1632,16 +1632,16 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                     start_path_stop_move();
                 }
                 
-                point mouse_offset =
+                Point mouse_offset =
                     game.mouse_cursor.w_pos - move_mouse_start_pos;
-                point closest_stop_new_p =
+                Point closest_stop_new_p =
                     snap_point(move_start_pos + mouse_offset);
-                point offset = closest_stop_new_p - move_start_pos;
+                Point offset = closest_stop_new_p - move_start_pos;
                 for(
                     auto s = selected_path_stops.begin();
                     s != selected_path_stops.end(); ++s
                 ) {
-                    point orig = pre_move_stop_coords[*s];
+                    Point orig = pre_move_stop_coords[*s];
                     (*s)->pos.x = orig.x + offset.x;
                     (*s)->pos.y = orig.y + offset.y;
                 }
@@ -1674,8 +1674,8 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                 sub_state == EDITOR_SUB_STATE_NONE
             ) {
                 //Move tree shadow.
-                point shadow_center = selected_shadow->center;
-                point shadow_size = selected_shadow->size;
+                Point shadow_center = selected_shadow->center;
+                Point shadow_size = selected_shadow->size;
                 float shadow_angle = selected_shadow->angle;
                 if(
                     cur_transformation_widget.handle_mouse_move(
@@ -1738,7 +1738,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void area_editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
+void AreaEditor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
     selecting = false;
     
     if(moving) {
@@ -1763,7 +1763,7 @@ void area_editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void area_editor::handle_mmb_double_click(const ALLEGRO_EVENT &ev) {
+void AreaEditor::handle_mmb_double_click(const ALLEGRO_EVENT &ev) {
     if(!game.options.editor_mmb_pan) {
         reset_cam_xy();
     }
@@ -1776,7 +1776,7 @@ void area_editor::handle_mmb_double_click(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void area_editor::handle_mmb_down(const ALLEGRO_EVENT &ev) {
+void AreaEditor::handle_mmb_down(const ALLEGRO_EVENT &ev) {
     if(!game.options.editor_mmb_pan) {
         reset_cam_zoom();
     }
@@ -1789,7 +1789,7 @@ void area_editor::handle_mmb_down(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void area_editor::handle_mmb_drag(const ALLEGRO_EVENT &ev) {
+void AreaEditor::handle_mmb_drag(const ALLEGRO_EVENT &ev) {
     if(game.options.editor_mmb_pan) {
         pan_cam(ev);
     }
@@ -1801,7 +1801,7 @@ void area_editor::handle_mmb_drag(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void area_editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
+void AreaEditor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
     game.mouse_cursor.s_pos.x = ev.mouse.x;
     game.mouse_cursor.s_pos.y = ev.mouse.y;
     game.mouse_cursor.w_pos = game.mouse_cursor.s_pos;
@@ -1829,7 +1829,7 @@ void area_editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
                 get_mob_under_point(game.mouse_cursor.w_pos);
             break;
         } case EDITOR_STATE_PATHS: {
-            path_link* hovered_link_1;
+            PathLink* hovered_link_1;
             
             highlighted_path_stop =
                 get_path_stop_under_point(game.mouse_cursor.w_pos);
@@ -1851,7 +1851,7 @@ void area_editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
     }
     
     if(sub_state == EDITOR_SUB_STATE_CIRCLE_SECTOR) {
-        point hotspot = snap_point(game.mouse_cursor.w_pos, true);
+        Point hotspot = snap_point(game.mouse_cursor.w_pos, true);
         if(new_circle_sector_step == 1) {
             new_circle_sector_anchor = hotspot;
         } else {
@@ -1875,7 +1875,7 @@ void area_editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void area_editor::handle_mouse_wheel(const ALLEGRO_EVENT &ev) {
+void AreaEditor::handle_mouse_wheel(const ALLEGRO_EVENT &ev) {
     zoom_with_cursor(game.cam.zoom + (game.cam.zoom * ev.mouse.dz * 0.1));
 }
 
@@ -1886,7 +1886,7 @@ void area_editor::handle_mouse_wheel(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void area_editor::handle_rmb_double_click(const ALLEGRO_EVENT &ev) {
+void AreaEditor::handle_rmb_double_click(const ALLEGRO_EVENT &ev) {
     if(game.options.editor_mmb_pan) {
         reset_cam_xy();
     }
@@ -1899,7 +1899,7 @@ void area_editor::handle_rmb_double_click(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void area_editor::handle_rmb_down(const ALLEGRO_EVENT &ev) {
+void AreaEditor::handle_rmb_down(const ALLEGRO_EVENT &ev) {
     if(game.options.editor_mmb_pan) {
         reset_cam_zoom();
     }
@@ -1912,7 +1912,7 @@ void area_editor::handle_rmb_down(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void area_editor::handle_rmb_drag(const ALLEGRO_EVENT &ev) {
+void AreaEditor::handle_rmb_drag(const ALLEGRO_EVENT &ev) {
     if(!game.options.editor_mmb_pan) {
         pan_cam(ev);
     }

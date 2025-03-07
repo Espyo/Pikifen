@@ -44,9 +44,9 @@ const unsigned char DEF_DIFFICULTY = 0;
  * This is merely a debugging tool. Aborts execution if any of the pointers
  * don't match.
  */
-void area_data::check_stability() {
+void Area::check_stability() {
     for(size_t v = 0; v < vertexes.size(); v++) {
-        vertex* v_ptr = vertexes[v];
+        Vertex* v_ptr = vertexes[v];
         engine_assert(
             v_ptr->edges.size() == v_ptr->edge_idxs.size(),
             i2s(v_ptr->edges.size()) + " " + i2s(v_ptr->edge_idxs.size())
@@ -57,7 +57,7 @@ void area_data::check_stability() {
     }
     
     for(size_t e = 0; e < edges.size(); e++) {
-        edge* e_ptr = edges[e];
+        Edge* e_ptr = edges[e];
         for(size_t v = 0; v < 2; v++) {
             engine_assert(
                 e_ptr->vertexes[v] == vertexes[e_ptr->vertex_idxs[v]], ""
@@ -65,7 +65,7 @@ void area_data::check_stability() {
         }
         
         for(size_t s = 0; s < 2; s++) {
-            sector* s_ptr = e_ptr->sectors[s];
+            Sector* s_ptr = e_ptr->sectors[s];
             if(
                 s_ptr == nullptr &&
                 e_ptr->sector_idxs[s] == INVALID
@@ -77,7 +77,7 @@ void area_data::check_stability() {
     }
     
     for(size_t s = 0; s < sectors.size(); s++) {
-        sector* s_ptr = sectors[s];
+        Sector* s_ptr = sectors[s];
         engine_assert(
             s_ptr->edges.size() == s_ptr->edge_idxs.size(),
             i2s(s_ptr->edges.size()) + " " + i2s(s_ptr->edge_idxs.size())
@@ -92,7 +92,7 @@ void area_data::check_stability() {
 /**
  * @brief Clears the info of an area map.
  */
-void area_data::clear() {
+void Area::clear() {
     for(size_t v = 0; v < vertexes.size(); v++) {
         delete vertexes[v];
     }
@@ -143,7 +143,7 @@ void area_data::clear() {
     bg_color = COLOR_BLACK;
     bg_dist = 2.0f;
     bg_bmp_zoom = 1.0f;
-    mission = mission_data();
+    mission = MissionData();
     
     problems.non_simples.clear();
     problems.lone_edges.clear();
@@ -156,7 +156,7 @@ void area_data::clear() {
  * @param out_deleted_sectors If not nullptr, whether any sectors got deleted
  * is returned here.
  */
-void area_data::cleanup(bool* out_deleted_sectors) {
+void Area::cleanup(bool* out_deleted_sectors) {
     //Get rid of unused sectors.
     bool deleted_sectors = false;
     for(size_t s = 0; s < sectors.size(); ) {
@@ -181,11 +181,11 @@ void area_data::cleanup(bool* out_deleted_sectors) {
 
 
 /**
- * @brief Clones this area data into another area_data object.
+ * @brief Clones this area data into another Area object.
  *
  * @param other The area data object to clone to.
  */
-void area_data::clone(area_data &other) {
+void Area::clone(Area &other) {
     other.clear();
     
     if(!other.bg_bmp_name.empty() && other.bg_bmp) {
@@ -204,32 +204,32 @@ void area_data::clone(area_data &other) {
     
     other.vertexes.reserve(vertexes.size());
     for(size_t v = 0; v < vertexes.size(); v++) {
-        other.vertexes.push_back(new vertex());
+        other.vertexes.push_back(new Vertex());
     }
     other.edges.reserve(edges.size());
     for(size_t e = 0; e < edges.size(); e++) {
-        other.edges.push_back(new edge());
+        other.edges.push_back(new Edge());
     }
     other.sectors.reserve(sectors.size());
     for(size_t s = 0; s < sectors.size(); s++) {
-        other.sectors.push_back(new sector());
+        other.sectors.push_back(new Sector());
     }
     other.mob_generators.reserve(mob_generators.size());
     for(size_t m = 0; m < mob_generators.size(); m++) {
-        other.mob_generators.push_back(new mob_gen());
+        other.mob_generators.push_back(new MobGen());
     }
     other.path_stops.reserve(path_stops.size());
     for(size_t s = 0; s < path_stops.size(); s++) {
-        other.path_stops.push_back(new path_stop());
+        other.path_stops.push_back(new PathStop());
     }
     other.tree_shadows.reserve(tree_shadows.size());
     for(size_t t = 0; t < tree_shadows.size(); t++) {
-        other.tree_shadows.push_back(new tree_shadow());
+        other.tree_shadows.push_back(new TreeShadow());
     }
     
     for(size_t v = 0; v < vertexes.size(); v++) {
-        vertex* v_ptr = vertexes[v];
-        vertex* ov_ptr = other.vertexes[v];
+        Vertex* v_ptr = vertexes[v];
+        Vertex* ov_ptr = other.vertexes[v];
         ov_ptr->x = v_ptr->x;
         ov_ptr->y = v_ptr->y;
         ov_ptr->edges.reserve(v_ptr->edges.size());
@@ -242,8 +242,8 @@ void area_data::clone(area_data &other) {
     }
     
     for(size_t e = 0; e < edges.size(); e++) {
-        edge* e_ptr = edges[e];
-        edge* oe_ptr = other.edges[e];
+        Edge* e_ptr = edges[e];
+        Edge* oe_ptr = other.edges[e];
         oe_ptr->vertexes[0] = other.vertexes[e_ptr->vertex_idxs[0]];
         oe_ptr->vertexes[1] = other.vertexes[e_ptr->vertex_idxs[1]];
         oe_ptr->vertex_idxs[0] = e_ptr->vertex_idxs[0];
@@ -264,8 +264,8 @@ void area_data::clone(area_data &other) {
     }
     
     for(size_t s = 0; s < sectors.size(); s++) {
-        sector* s_ptr = sectors[s];
-        sector* os_ptr = other.sectors[s];
+        Sector* s_ptr = sectors[s];
+        Sector* os_ptr = other.sectors[s];
         s_ptr->clone(os_ptr);
         os_ptr->texture_info.bmp_name = s_ptr->texture_info.bmp_name;
         os_ptr->texture_info.bitmap =
@@ -279,9 +279,9 @@ void area_data::clone(area_data &other) {
         }
         os_ptr->triangles.reserve(s_ptr->triangles.size());
         for(size_t t = 0; t < s_ptr->triangles.size(); t++) {
-            triangle* t_ptr = &s_ptr->triangles[t];
+            Triangle* t_ptr = &s_ptr->triangles[t];
             os_ptr->triangles.push_back(
-                triangle(
+                Triangle(
                     other.vertexes[find_vertex_idx(t_ptr->points[0])],
                     other.vertexes[find_vertex_idx(t_ptr->points[1])],
                     other.vertexes[find_vertex_idx(t_ptr->points[2])]
@@ -293,12 +293,12 @@ void area_data::clone(area_data &other) {
     }
     
     for(size_t m = 0; m < mob_generators.size(); m++) {
-        mob_gen* m_ptr = mob_generators[m];
-        mob_gen* om_ptr = other.mob_generators[m];
+        MobGen* m_ptr = mob_generators[m];
+        MobGen* om_ptr = other.mob_generators[m];
         m_ptr->clone(om_ptr);
     }
     for(size_t m = 0; m < mob_generators.size(); m++) {
-        mob_gen* om_ptr = other.mob_generators[m];
+        MobGen* om_ptr = other.mob_generators[m];
         for(size_t l = 0; l < om_ptr->link_idxs.size(); l++) {
             om_ptr->links.push_back(
                 other.mob_generators[om_ptr->link_idxs[l]]
@@ -307,14 +307,14 @@ void area_data::clone(area_data &other) {
     }
     
     for(size_t s = 0; s < path_stops.size(); s++) {
-        path_stop* s_ptr = path_stops[s];
-        path_stop* os_ptr = other.path_stops[s];
+        PathStop* s_ptr = path_stops[s];
+        PathStop* os_ptr = other.path_stops[s];
         os_ptr->pos = s_ptr->pos;
         s_ptr->clone(os_ptr);
         os_ptr->links.reserve(s_ptr->links.size());
         for(size_t l = 0; l < s_ptr->links.size(); l++) {
-            path_link* new_link =
-                new path_link(
+            PathLink* new_link =
+                new PathLink(
                 os_ptr,
                 other.path_stops[s_ptr->links[l]->end_idx],
                 s_ptr->links[l]->end_idx
@@ -326,8 +326,8 @@ void area_data::clone(area_data &other) {
     }
     
     for(size_t t = 0; t < tree_shadows.size(); t++) {
-        tree_shadow* t_ptr = tree_shadows[t];
-        tree_shadow* ot_ptr = other.tree_shadows[t];
+        TreeShadow* t_ptr = tree_shadows[t];
+        TreeShadow* ot_ptr = other.tree_shadows[t];
         ot_ptr->alpha = t_ptr->alpha;
         ot_ptr->angle = t_ptr->angle;
         ot_ptr->center = t_ptr->center;
@@ -393,7 +393,7 @@ void area_data::clone(area_data &other) {
         size_t nr = find_sector_idx(s.first);
         other.problems.non_simples[other.sectors[nr]] = s.second;
     }
-    for(const edge* e : problems.lone_edges) {
+    for(const Edge* e : problems.lone_edges) {
         size_t nr = find_edge_idx(e);
         other.problems.lone_edges.insert(other.edges[nr]);
     }
@@ -410,8 +410,8 @@ void area_data::clone(area_data &other) {
  * @param s_ptr Sector to connect.
  * @param side Which of the sides of the edge the sector goes to.
  */
-void area_data::connect_edge_to_sector(
-    edge* e_ptr, sector* s_ptr, size_t side
+void Area::connect_edge_to_sector(
+    Edge* e_ptr, Sector* s_ptr, size_t side
 ) {
     if(e_ptr->sectors[side]) {
         e_ptr->sectors[side]->remove_edge(e_ptr);
@@ -434,8 +434,8 @@ void area_data::connect_edge_to_sector(
  * @param v_ptr Vertex to connect.
  * @param endpoint Which of the edge endpoints the vertex goes to.
  */
-void area_data::connect_edge_to_vertex(
-    edge* e_ptr, vertex* v_ptr, size_t endpoint
+void Area::connect_edge_to_vertex(
+    Edge* e_ptr, Vertex* v_ptr, size_t endpoint
 ) {
     if(e_ptr->vertexes[endpoint]) {
         e_ptr->vertexes[endpoint]->remove_edge(e_ptr);
@@ -453,10 +453,10 @@ void area_data::connect_edge_to_vertex(
  *
  * @param s_ptr The sector.
  */
-void area_data::connect_sector_edges(sector* s_ptr) {
+void Area::connect_sector_edges(Sector* s_ptr) {
     s_ptr->edge_idxs.clear();
     for(size_t e = 0; e < edges.size(); e++) {
-        edge* e_ptr = edges[e];
+        Edge* e_ptr = edges[e];
         if(e_ptr->sectors[0] == s_ptr || e_ptr->sectors[1] == s_ptr) {
             s_ptr->edge_idxs.push_back(e);
         }
@@ -470,10 +470,10 @@ void area_data::connect_sector_edges(sector* s_ptr) {
  *
  * @param v_ptr The vertex.
  */
-void area_data::connect_vertex_edges(vertex* v_ptr) {
+void Area::connect_vertex_edges(Vertex* v_ptr) {
     v_ptr->edge_idxs.clear();
     for(size_t e = 0; e < edges.size(); e++) {
-        edge* e_ptr = edges[e];
+        Edge* e_ptr = edges[e];
         if(e_ptr->vertexes[0] == v_ptr || e_ptr->vertexes[1] == v_ptr) {
             v_ptr->edge_idxs.push_back(e);
         }
@@ -489,7 +489,7 @@ void area_data::connect_vertex_edges(vertex* v_ptr) {
  * @param e_ptr Edge to find.
  * @return The index, or INVALID if not found.
  */
-size_t area_data::find_edge_idx(const edge* e_ptr) const {
+size_t Area::find_edge_idx(const Edge* e_ptr) const {
     for(size_t e = 0; e < edges.size(); e++) {
         if(edges[e] == e_ptr) return e;
     }
@@ -504,7 +504,7 @@ size_t area_data::find_edge_idx(const edge* e_ptr) const {
  * @param m_ptr Mob to find.
  * @return The index, or INVALID if not found.
  */
-size_t area_data::find_mob_gen_idx(const mob_gen* m_ptr) const {
+size_t Area::find_mob_gen_idx(const MobGen* m_ptr) const {
     for(size_t m = 0; m < mob_generators.size(); m++) {
         if(mob_generators[m] == m_ptr) return m;
     }
@@ -519,7 +519,7 @@ size_t area_data::find_mob_gen_idx(const mob_gen* m_ptr) const {
  * @param s_ptr Sector to find.
  * @return The index, or INVALID if not found.
  */
-size_t area_data::find_sector_idx(const sector* s_ptr) const {
+size_t Area::find_sector_idx(const Sector* s_ptr) const {
     for(size_t s = 0; s < sectors.size(); s++) {
         if(sectors[s] == s_ptr) return s;
     }
@@ -534,7 +534,7 @@ size_t area_data::find_sector_idx(const sector* s_ptr) const {
  * @param v_ptr Vertex to find.
  * @return The index, or INVALID if not found.
  */
-size_t area_data::find_vertex_idx(const vertex* v_ptr) const {
+size_t Area::find_vertex_idx(const Vertex* v_ptr) const {
     for(size_t v = 0; v < vertexes.size(); v++) {
         if(vertexes[v] == v_ptr) return v;
     }
@@ -549,7 +549,7 @@ size_t area_data::find_vertex_idx(const vertex* v_ptr) const {
  *
  * @param e_ptr Edge to fix the indexes of.
  */
-void area_data::fix_edge_idxs(edge* e_ptr) {
+void Area::fix_edge_idxs(Edge* e_ptr) {
     for(size_t s = 0; s < 2; s++) {
         if(!e_ptr->sectors[s]) {
             e_ptr->sector_idxs[s] = INVALID;
@@ -575,7 +575,7 @@ void area_data::fix_edge_idxs(edge* e_ptr) {
  *
  * @param e_ptr Edge to fix the pointers of.
  */
-void area_data::fix_edge_pointers(edge* e_ptr) {
+void Area::fix_edge_pointers(Edge* e_ptr) {
     e_ptr->sectors[0] = nullptr;
     e_ptr->sectors[1] = nullptr;
     for(size_t s = 0; s < 2; s++) {
@@ -599,9 +599,9 @@ void area_data::fix_edge_pointers(edge* e_ptr) {
  *
  * @param s_ptr Path stop to fix the indexes of.
  */
-void area_data::fix_path_stop_idxs(path_stop* s_ptr) {
+void Area::fix_path_stop_idxs(PathStop* s_ptr) {
     for(size_t l = 0; l < s_ptr->links.size(); l++) {
-        path_link* l_ptr = s_ptr->links[l];
+        PathLink* l_ptr = s_ptr->links[l];
         l_ptr->end_idx = INVALID;
         
         if(!l_ptr->end_ptr) continue;
@@ -623,9 +623,9 @@ void area_data::fix_path_stop_idxs(path_stop* s_ptr) {
  *
  * @param s_ptr Path stop to fix the pointers of.
  */
-void area_data::fix_path_stop_pointers(path_stop* s_ptr) {
+void Area::fix_path_stop_pointers(PathStop* s_ptr) {
     for(size_t l = 0; l < s_ptr->links.size(); l++) {
-        path_link* l_ptr = s_ptr->links[l];
+        PathLink* l_ptr = s_ptr->links[l];
         l_ptr->end_ptr = nullptr;
         
         if(l_ptr->end_idx == INVALID) continue;
@@ -643,7 +643,7 @@ void area_data::fix_path_stop_pointers(path_stop* s_ptr) {
  *
  * @param s_ptr Sector to fix the indexes of.
  */
-void area_data::fix_sector_idxs(sector* s_ptr) {
+void Area::fix_sector_idxs(Sector* s_ptr) {
     s_ptr->edge_idxs.clear();
     for(size_t e = 0; e < s_ptr->edges.size(); e++) {
         s_ptr->edge_idxs.push_back(find_edge_idx(s_ptr->edges[e]));
@@ -658,7 +658,7 @@ void area_data::fix_sector_idxs(sector* s_ptr) {
  *
  * @param s_ptr Sector to fix the pointers of.
  */
-void area_data::fix_sector_pointers(sector* s_ptr) {
+void Area::fix_sector_pointers(Sector* s_ptr) {
     s_ptr->edges.clear();
     for(size_t e = 0; e < s_ptr->edge_idxs.size(); e++) {
         size_t e_idx = s_ptr->edge_idxs[e];
@@ -674,7 +674,7 @@ void area_data::fix_sector_pointers(sector* s_ptr) {
  *
  * @param v_ptr Vertex to fix the indexes of.
  */
-void area_data::fix_vertex_idxs(vertex* v_ptr) {
+void Area::fix_vertex_idxs(Vertex* v_ptr) {
     v_ptr->edge_idxs.clear();
     for(size_t e = 0; e < v_ptr->edges.size(); e++) {
         v_ptr->edge_idxs.push_back(find_edge_idx(v_ptr->edges[e]));
@@ -689,7 +689,7 @@ void area_data::fix_vertex_idxs(vertex* v_ptr) {
  *
  * @param v_ptr Vertex to fix the pointers of.
  */
-void area_data::fix_vertex_pointers(vertex* v_ptr) {
+void Area::fix_vertex_pointers(Vertex* v_ptr) {
     v_ptr->edges.clear();
     for(size_t e = 0; e < v_ptr->edge_idxs.size(); e++) {
         size_t e_idx = v_ptr->edge_idxs[e];
@@ -701,17 +701,17 @@ void area_data::fix_vertex_pointers(vertex* v_ptr) {
 /**
  * @brief Generates the blockmap for the area, given the current info.
  */
-void area_data::generate_blockmap() {
+void Area::generate_blockmap() {
     bmap.clear();
     
     if(vertexes.empty()) return;
     
     //First, get the starting point and size of the blockmap.
-    point min_coords = v2p(vertexes[0]);
-    point max_coords = min_coords;
+    Point min_coords = v2p(vertexes[0]);
+    Point max_coords = min_coords;
     
     for(size_t v = 0; v < vertexes.size(); v++) {
-        vertex* v_ptr = vertexes[v];
+        Vertex* v_ptr = vertexes[v];
         update_min_max_coords(min_coords, max_coords, v2p(v_ptr));
     }
     
@@ -724,11 +724,11 @@ void area_data::generate_blockmap() {
         ceil((max_coords.y - min_coords.y) / GEOMETRY::BLOCKMAP_BLOCK_SIZE) + 1;
         
     bmap.edges.assign(
-        bmap.n_cols, vector<vector<edge*> >(bmap.n_rows, vector<edge*>())
+        bmap.n_cols, vector<vector<Edge*> >(bmap.n_rows, vector<Edge*>())
     );
     bmap.sectors.assign(
-        bmap.n_cols, vector<unordered_set<sector*> >(
-            bmap.n_rows, unordered_set<sector*>()
+        bmap.n_cols, vector<unordered_set<Sector*> >(
+            bmap.n_rows, unordered_set<Sector*>()
         )
     );
     
@@ -780,7 +780,7 @@ void area_data::generate_blockmap() {
                 continue;
             }
             
-            point corner = bmap.get_top_left_corner(bx, by);
+            Point corner = bmap.get_top_left_corner(bx, by);
             corner += GEOMETRY::BLOCKMAP_BLOCK_SIZE * 0.5;
             bmap.sectors[bx][by].insert(
                 get_sector(corner, nullptr, false)
@@ -795,15 +795,15 @@ void area_data::generate_blockmap() {
  *
  * @param edge_list Edges to generate the blockmap around.
  */
-void area_data::generate_edges_blockmap(const vector<edge*> &edge_list) {
+void Area::generate_edges_blockmap(const vector<Edge*> &edge_list) {
     for(size_t e = 0; e < edge_list.size(); e++) {
     
         //Get which blocks this edge belongs to, via bounding-box,
         //and only then thoroughly test which it is inside of.
         
-        edge* e_ptr = edge_list[e];
-        point min_coords = v2p(e_ptr->vertexes[0]);
-        point max_coords = min_coords;
+        Edge* e_ptr = edge_list[e];
+        Point min_coords = v2p(e_ptr->vertexes[0]);
+        Point max_coords = min_coords;
         update_min_max_coords(min_coords, max_coords, v2p(e_ptr->vertexes[1]));
         
         size_t b_min_x = bmap.get_col(min_coords.x);
@@ -815,7 +815,7 @@ void area_data::generate_edges_blockmap(const vector<edge*> &edge_list) {
             for(size_t by = b_min_y; by <= b_max_y; by++) {
             
                 //Get the block's coordinates.
-                point corner = bmap.get_top_left_corner(bx, by);
+                Point corner = bmap.get_top_left_corner(bx, by);
                 
                 //Check if the edge is inside this blockmap.
                 if(
@@ -857,13 +857,13 @@ void area_data::generate_edges_blockmap(const vector<edge*> &edge_list) {
  *
  * @return The number of path links.
  */
-size_t area_data::get_nr_path_links() {
+size_t Area::get_nr_path_links() {
     size_t one_ways_found = 0;
     size_t normals_found = 0;
     for(size_t s = 0; s < path_stops.size(); s++) {
-        path_stop* s_ptr = path_stops[s];
+        PathStop* s_ptr = path_stops[s];
         for(size_t l = 0; l < s_ptr->links.size(); l++) {
-            path_link* l_ptr = s_ptr->links[l];
+            PathLink* l_ptr = s_ptr->links[l];
             if(l_ptr->end_ptr->get_link(s_ptr)) {
                 //The other stop links to this one. So it's a two-way.
                 normals_found++;
@@ -882,16 +882,16 @@ size_t area_data::get_nr_path_links() {
  * @param node Data node to load from.
  * @param level Level to load at.
  */
-void area_data::load_main_data_from_data_node(
-    data_node* node, CONTENT_LOAD_LEVEL level
+void Area::load_main_data_from_data_node(
+    DataNode* node, CONTENT_LOAD_LEVEL level
 ) {
     //Content metadata.
     load_metadata_from_data_node(node);
     
     //Area configuration data.
-    reader_setter rs(node);
-    data_node* weather_node = nullptr;
-    data_node* song_node = nullptr;
+    ReaderSetter rs(node);
+    DataNode* weather_node = nullptr;
+    DataNode* song_node = nullptr;
     
     rs.set("subtitle", subtitle);
     rs.set("difficulty", difficulty);
@@ -908,7 +908,7 @@ void area_data::load_main_data_from_data_node(
     //Weather.
     if(level > CONTENT_LOAD_LEVEL_BASIC) {
         if(weather_name.empty()) {
-            weather_condition = weather();
+            weather_condition = Weather();
             
         } else if(
             game.content.weather_conditions.list.find(weather_name) ==
@@ -918,7 +918,7 @@ void area_data::load_main_data_from_data_node(
                 "Unknown weather condition \"" + weather_name + "\"!",
                 weather_node
             );
-            weather_condition = weather();
+            weather_condition = Weather();
             
         } else {
             weather_condition =
@@ -950,11 +950,11 @@ void area_data::load_main_data_from_data_node(
  *
  * @param node Data node to load from.
  */
-void area_data::load_mission_data_from_data_node(data_node* node) {
+void Area::load_mission_data_from_data_node(DataNode* node) {
     mission.fail_hud_primary_cond = INVALID;
     mission.fail_hud_secondary_cond = INVALID;
     
-    reader_setter rs(node);
+    ReaderSetter rs(node);
     string goal_str;
     string required_mobs_str;
     int mission_grading_mode_int = MISSION_GRADING_MODE_GOAL;
@@ -1049,8 +1049,8 @@ void area_data::load_mission_data_from_data_node(data_node* node) {
  * @param node Data node to load from.
  * @param level Level to load at.
  */
-void area_data::load_geometry_from_data_node(
-    data_node* node, CONTENT_LOAD_LEVEL level
+void Area::load_geometry_from_data_node(
+    DataNode* node, CONTENT_LOAD_LEVEL level
 ) {
     //Vertexes.
     if(game.perf_mon) {
@@ -1062,14 +1062,14 @@ void area_data::load_geometry_from_data_node(
             "vertexes"
         )->get_nr_of_children_by_name("v");
     for(size_t v = 0; v < n_vertexes; v++) {
-        data_node* vertex_data =
+        DataNode* vertex_data =
             node->get_child_by_name(
                 "vertexes"
             )->get_child_by_name("v", v);
         vector<string> words = split(vertex_data->value);
         if(words.size() == 2) {
             vertexes.push_back(
-                new vertex(s2f(words[0]), s2f(words[1]))
+                new Vertex(s2f(words[0]), s2f(words[1]))
             );
         }
     }
@@ -1088,11 +1088,11 @@ void area_data::load_geometry_from_data_node(
             "edges"
         )->get_nr_of_children_by_name("e");
     for(size_t e = 0; e < n_edges; e++) {
-        data_node* edge_data =
+        DataNode* edge_data =
             node->get_child_by_name(
                 "edges"
             )->get_child_by_name("e", e);
-        edge* new_edge = new edge();
+        Edge* new_edge = new Edge();
         
         vector<string> s_idxs = split(edge_data->get_child_by_name("s")->value);
         if(s_idxs.size() < 2) s_idxs.insert(s_idxs.end(), 2, "-1");
@@ -1107,27 +1107,27 @@ void area_data::load_geometry_from_data_node(
         new_edge->vertex_idxs[0] = s2i(v_idxs[0]);
         new_edge->vertex_idxs[1] = s2i(v_idxs[1]);
         
-        data_node* shadow_length =
+        DataNode* shadow_length =
             edge_data->get_child_by_name("shadow_length");
         if(!shadow_length->value.empty()) {
             new_edge->wall_shadow_length =
                 s2f(shadow_length->value);
         }
         
-        data_node* shadow_color =
+        DataNode* shadow_color =
             edge_data->get_child_by_name("shadow_color");
         if(!shadow_color->value.empty()) {
             new_edge->wall_shadow_color = s2c(shadow_color->value);
         }
         
-        data_node* smoothing_length =
+        DataNode* smoothing_length =
             edge_data->get_child_by_name("smoothing_length");
         if(!smoothing_length->value.empty()) {
             new_edge->ledge_smoothing_length =
                 s2f(smoothing_length->value);
         }
         
-        data_node* smoothing_color =
+        DataNode* smoothing_color =
             edge_data->get_child_by_name("smoothing_color");
         if(!smoothing_color->value.empty()) {
             new_edge->ledge_smoothing_color =
@@ -1151,11 +1151,11 @@ void area_data::load_geometry_from_data_node(
             "sectors"
         )->get_nr_of_children_by_name("s");
     for(size_t s = 0; s < n_sectors; s++) {
-        data_node* sector_data =
+        DataNode* sector_data =
             node->get_child_by_name(
                 "sectors"
             )->get_child_by_name("s", s);
-        sector* new_sector = new sector();
+        Sector* new_sector = new Sector();
         
         size_t new_type =
             game.sector_types.get_idx(
@@ -1209,7 +1209,7 @@ void area_data::load_geometry_from_data_node(
                 game.content.bitmaps.list.get(new_sector->texture_info.bmp_name, nullptr);
         }
         
-        data_node* hazards_node = sector_data->get_child_by_name("hazards");
+        DataNode* hazards_node = sector_data->get_child_by_name("hazards");
         vector<string> hazards_strs =
             semicolon_list_to_vector(hazards_node->value);
         for(size_t h = 0; h < hazards_strs.size(); h++) {
@@ -1249,10 +1249,10 @@ void area_data::load_geometry_from_data_node(
         
     for(size_t m = 0; m < n_mobs; m++) {
     
-        data_node* mob_node =
+        DataNode* mob_node =
             node->get_child_by_name("mobs")->get_child(m);
             
-        mob_gen* mob_ptr = new mob_gen();
+        MobGen* mob_ptr = new MobGen();
         
         mob_ptr->pos = s2p(mob_node->get_child_by_name("p")->value);
         mob_ptr->angle =
@@ -1263,7 +1263,7 @@ void area_data::load_geometry_from_data_node(
         
         string category_name = mob_node->name;
         string type_name;
-        mob_category* category =
+        MobCategory* category =
             game.mob_categories.get_from_internal_name(category_name);
         if(category) {
             type_name = mob_node->get_child_by_name("type")->value;
@@ -1279,7 +1279,7 @@ void area_data::load_geometry_from_data_node(
             mob_links_buffer.push_back(std::make_pair(m, s2i(link_strs[l])));
         }
         
-        data_node* stored_inside_node =
+        DataNode* stored_inside_node =
             mob_node->get_child_by_name("stored_inside");
         if(!stored_inside_node->value.empty()) {
             mob_ptr->stored_inside = s2i(stored_inside_node->value);
@@ -1326,16 +1326,16 @@ void area_data::load_geometry_from_data_node(
         node->get_child_by_name("path_stops")->get_nr_of_children();
     for(size_t s = 0; s < n_stops; s++) {
     
-        data_node* path_stop_node =
+        DataNode* path_stop_node =
             node->get_child_by_name("path_stops")->get_child(s);
             
-        path_stop* s_ptr = new path_stop();
+        PathStop* s_ptr = new PathStop();
         
         s_ptr->pos = s2p(path_stop_node->get_child_by_name("pos")->value);
         s_ptr->radius = s2f(path_stop_node->get_child_by_name("radius")->value);
         s_ptr->flags = s2i(path_stop_node->get_child_by_name("flags")->value);
         s_ptr->label = path_stop_node->get_child_by_name("label")->value;
-        data_node* links_node = path_stop_node->get_child_by_name("links");
+        DataNode* links_node = path_stop_node->get_child_by_name("links");
         size_t n_links = links_node->get_nr_of_children();
         
         for(size_t l = 0; l < n_links; l++) {
@@ -1343,8 +1343,8 @@ void area_data::load_geometry_from_data_node(
             string link_data = links_node->get_child(l)->value;
             vector<string> link_data_parts = split(link_data);
             
-            path_link* l_struct =
-                new path_link(
+            PathLink* l_struct =
+                new PathLink(
                 s_ptr, nullptr, s2i(link_data_parts[0])
             );
             if(link_data_parts.size() >= 2) {
@@ -1373,10 +1373,10 @@ void area_data::load_geometry_from_data_node(
         node->get_child_by_name("tree_shadows")->get_nr_of_children();
     for(size_t s = 0; s < n_shadows; s++) {
     
-        data_node* shadow_node =
+        DataNode* shadow_node =
             node->get_child_by_name("tree_shadows")->get_child(s);
             
-        tree_shadow* s_ptr = new tree_shadow();
+        TreeShadow* s_ptr = new TreeShadow();
         
         vector<string> words =
             split(shadow_node->get_child_by_name("pos")->value);
@@ -1453,10 +1453,10 @@ void area_data::load_geometry_from_data_node(
         //Fade sectors that also fade brightness should be
         //at midway between the two neighbors.
         for(size_t s = 0; s < sectors.size(); s++) {
-            sector* s_ptr = sectors[s];
+            Sector* s_ptr = sectors[s];
             if(s_ptr->fade) {
-                sector* n1 = nullptr;
-                sector* n2 = nullptr;
+                Sector* n1 = nullptr;
+                Sector* n2 = nullptr;
                 s_ptr->get_texture_merge_sectors(&n1, &n2);
                 if(n1 && n2) {
                     s_ptr->brightness = (n1->brightness + n2->brightness) / 2;
@@ -1467,9 +1467,9 @@ void area_data::load_geometry_from_data_node(
     
     
     //Triangulate everything and save bounding boxes.
-    set<edge*> lone_edges;
+    set<Edge*> lone_edges;
     for(size_t s = 0; s < sectors.size(); s++) {
-        sector* s_ptr = sectors[s];
+        Sector* s_ptr = sectors[s];
         s_ptr->triangles.clear();
         TRIANGULATION_ERROR res =
             triangulate_sector(s_ptr, &lone_edges, false);
@@ -1498,7 +1498,7 @@ void area_data::load_geometry_from_data_node(
  *
  * @param thumbnail_path Path to the bitmap.
  */
-void area_data::load_thumbnail(const string &thumbnail_path) {
+void Area::load_thumbnail(const string &thumbnail_path) {
     if(thumbnail) {
         thumbnail = nullptr;
     }
@@ -1520,8 +1520,8 @@ void area_data::load_thumbnail(const string &thumbnail_path) {
  *
  * @return The new edge's pointer.
  */
-edge* area_data::new_edge() {
-    edge* e_ptr = new edge();
+Edge* Area::new_edge() {
+    Edge* e_ptr = new Edge();
     edges.push_back(e_ptr);
     return e_ptr;
 }
@@ -1532,8 +1532,8 @@ edge* area_data::new_edge() {
  *
  * @return The new sector's pointer.
  */
-sector* area_data::new_sector() {
-    sector* s_ptr = new sector();
+Sector* Area::new_sector() {
+    Sector* s_ptr = new Sector();
     sectors.push_back(s_ptr);
     return s_ptr;
 }
@@ -1544,8 +1544,8 @@ sector* area_data::new_sector() {
  *
  * @return The new vertex's pointer.
  */
-vertex* area_data::new_vertex() {
-    vertex* v_ptr = new vertex();
+Vertex* Area::new_vertex() {
+    Vertex* v_ptr = new Vertex();
     vertexes.push_back(v_ptr);
     return v_ptr;
 }
@@ -1556,10 +1556,10 @@ vertex* area_data::new_vertex() {
  *
  * @param e_idx Index number of the edge to remove.
  */
-void area_data::remove_edge(size_t e_idx) {
+void Area::remove_edge(size_t e_idx) {
     edges.erase(edges.begin() + e_idx);
     for(size_t v = 0; v < vertexes.size(); v++) {
-        vertex* v_ptr = vertexes[v];
+        Vertex* v_ptr = vertexes[v];
         for(size_t e = 0; e < v_ptr->edges.size(); e++) {
             if(
                 v_ptr->edge_idxs[e] != INVALID &&
@@ -1576,7 +1576,7 @@ void area_data::remove_edge(size_t e_idx) {
         }
     }
     for(size_t s = 0; s < sectors.size(); s++) {
-        sector* s_ptr = sectors[s];
+        Sector* s_ptr = sectors[s];
         for(size_t e = 0; e < s_ptr->edges.size(); e++) {
             if(
                 s_ptr->edge_idxs[e] != INVALID &&
@@ -1600,7 +1600,7 @@ void area_data::remove_edge(size_t e_idx) {
  *
  * @param e_ptr Pointer of the edge to remove.
  */
-void area_data::remove_edge(const edge* e_ptr) {
+void Area::remove_edge(const Edge* e_ptr) {
     for(size_t e = 0; e < edges.size(); e++) {
         if(edges[e] == e_ptr) {
             remove_edge(e);
@@ -1615,10 +1615,10 @@ void area_data::remove_edge(const edge* e_ptr) {
  *
  * @param s_idx Index number of the sector to remove.
  */
-void area_data::remove_sector(size_t s_idx) {
+void Area::remove_sector(size_t s_idx) {
     sectors.erase(sectors.begin() + s_idx);
     for(size_t e = 0; e < edges.size(); e++) {
-        edge* e_ptr = edges[e];
+        Edge* e_ptr = edges[e];
         for(size_t s = 0; s < 2; s++) {
             if(
                 e_ptr->sector_idxs[s] != INVALID &&
@@ -1642,7 +1642,7 @@ void area_data::remove_sector(size_t s_idx) {
  *
  * @param s_ptr Pointer of the sector to remove.
  */
-void area_data::remove_sector(const sector* s_ptr) {
+void Area::remove_sector(const Sector* s_ptr) {
     for(size_t s = 0; s < sectors.size(); s++) {
         if(sectors[s] == s_ptr) {
             remove_sector(s);
@@ -1657,10 +1657,10 @@ void area_data::remove_sector(const sector* s_ptr) {
  *
  * @param v_idx Index number of the vertex to remove.
  */
-void area_data::remove_vertex(size_t v_idx) {
+void Area::remove_vertex(size_t v_idx) {
     vertexes.erase(vertexes.begin() + v_idx);
     for(size_t e = 0; e < edges.size(); e++) {
-        edge* e_ptr = edges[e];
+        Edge* e_ptr = edges[e];
         for(size_t v = 0; v < 2; v++) {
             if(
                 e_ptr->vertex_idxs[v] != INVALID &&
@@ -1684,7 +1684,7 @@ void area_data::remove_vertex(size_t v_idx) {
  *
  * @param v_ptr Pointer of the vertex to remove.
  */
-void area_data::remove_vertex(const vertex* v_ptr) {
+void Area::remove_vertex(const Vertex* v_ptr) {
     for(size_t v = 0; v < vertexes.size(); v++) {
         if(vertexes[v] == v_ptr) {
             remove_vertex(v);
@@ -1699,25 +1699,25 @@ void area_data::remove_vertex(const vertex* v_ptr) {
  *
  * @param node Data node to save to.
  */
-void area_data::save_geometry_to_data_node(data_node* node) {
+void Area::save_geometry_to_data_node(DataNode* node) {
     //Vertexes.
-    data_node* vertexes_node = new data_node("vertexes", "");
+    DataNode* vertexes_node = new DataNode("vertexes", "");
     node->add(vertexes_node);
     
     for(size_t v = 0; v < vertexes.size(); v++) {
-        vertex* v_ptr = vertexes[v];
-        data_node* vertex_node =
-            new data_node("v", f2s(v_ptr->x) + " " + f2s(v_ptr->y));
+        Vertex* v_ptr = vertexes[v];
+        DataNode* vertex_node =
+            new DataNode("v", f2s(v_ptr->x) + " " + f2s(v_ptr->y));
         vertexes_node->add(vertex_node);
     }
     
     //Edges.
-    data_node* edges_node = new data_node("edges", "");
+    DataNode* edges_node = new DataNode("edges", "");
     node->add(edges_node);
     
     for(size_t e = 0; e < edges.size(); e++) {
-        edge* e_ptr = edges[e];
-        data_node* edge_node = new data_node("e", "");
+        Edge* e_ptr = edges[e];
+        DataNode* edge_node = new DataNode("e", "");
         edges_node->add(edge_node);
         string s_str;
         for(size_t s = 0; s < 2; s++) {
@@ -1726,9 +1726,9 @@ void area_data::save_geometry_to_data_node(data_node* node) {
             s_str += " ";
         }
         s_str.erase(s_str.size() - 1);
-        edge_node->add(new data_node("s", s_str));
+        edge_node->add(new DataNode("s", s_str));
         edge_node->add(
-            new data_node(
+            new DataNode(
                 "v",
                 i2s(e_ptr->vertex_idxs[0]) + " " + i2s(e_ptr->vertex_idxs[1])
             )
@@ -1736,19 +1736,19 @@ void area_data::save_geometry_to_data_node(data_node* node) {
         
         if(e_ptr->wall_shadow_length != LARGE_FLOAT) {
             edge_node->add(
-                new data_node("shadow_length", f2s(e_ptr->wall_shadow_length))
+                new DataNode("shadow_length", f2s(e_ptr->wall_shadow_length))
             );
         }
         
         if(e_ptr->wall_shadow_color != GEOMETRY::SHADOW_DEF_COLOR) {
             edge_node->add(
-                new data_node("shadow_color", c2s(e_ptr->wall_shadow_color))
+                new DataNode("shadow_color", c2s(e_ptr->wall_shadow_color))
             );
         }
         
         if(e_ptr->ledge_smoothing_length != 0.0f) {
             edge_node->add(
-                new data_node(
+                new DataNode(
                     "smoothing_length",
                     f2s(e_ptr->ledge_smoothing_length)
                 )
@@ -1757,7 +1757,7 @@ void area_data::save_geometry_to_data_node(data_node* node) {
         
         if(e_ptr->ledge_smoothing_color != GEOMETRY::SMOOTHING_DEF_COLOR) {
             edge_node->add(
-                new data_node(
+                new DataNode(
                     "smoothing_color",
                     c2s(e_ptr->ledge_smoothing_color)
                 )
@@ -1766,40 +1766,40 @@ void area_data::save_geometry_to_data_node(data_node* node) {
     }
     
     //Sectors.
-    data_node* sectors_node = new data_node("sectors", "");
+    DataNode* sectors_node = new DataNode("sectors", "");
     node->add(sectors_node);
     
     for(size_t s = 0; s < sectors.size(); s++) {
-        sector* s_ptr = sectors[s];
-        data_node* sector_node = new data_node("s", "");
+        Sector* s_ptr = sectors[s];
+        DataNode* sector_node = new DataNode("s", "");
         sectors_node->add(sector_node);
         
         if(s_ptr->type != SECTOR_TYPE_NORMAL) {
             sector_node->add(
-                new data_node("type", game.sector_types.get_name(s_ptr->type))
+                new DataNode("type", game.sector_types.get_name(s_ptr->type))
             );
         }
         if(s_ptr->is_bottomless_pit) {
             sector_node->add(
-                new data_node("is_bottomless_pit", "true")
+                new DataNode("is_bottomless_pit", "true")
             );
         }
-        sector_node->add(new data_node("z", f2s(s_ptr->z)));
+        sector_node->add(new DataNode("z", f2s(s_ptr->z)));
         if(s_ptr->brightness != GEOMETRY::DEF_SECTOR_BRIGHTNESS) {
             sector_node->add(
-                new data_node("brightness", i2s(s_ptr->brightness))
+                new DataNode("brightness", i2s(s_ptr->brightness))
             );
         }
         if(!s_ptr->tag.empty()) {
-            sector_node->add(new data_node("tag", s_ptr->tag));
+            sector_node->add(new DataNode("tag", s_ptr->tag));
         }
         if(s_ptr->fade) {
-            sector_node->add(new data_node("fade", b2s(s_ptr->fade)));
+            sector_node->add(new DataNode("fade", b2s(s_ptr->fade)));
         }
         if(!s_ptr->hazards_str.empty()) {
-            sector_node->add(new data_node("hazards", s_ptr->hazards_str));
+            sector_node->add(new DataNode("hazards", s_ptr->hazards_str));
             sector_node->add(
-                new data_node(
+                new DataNode(
                     "hazards_floor",
                     b2s(s_ptr->hazard_floor)
                 )
@@ -1808,7 +1808,7 @@ void area_data::save_geometry_to_data_node(data_node* node) {
         
         if(!s_ptr->texture_info.bmp_name.empty()) {
             sector_node->add(
-                new data_node(
+                new DataNode(
                     "texture",
                     s_ptr->texture_info.bmp_name
                 )
@@ -1817,7 +1817,7 @@ void area_data::save_geometry_to_data_node(data_node* node) {
         
         if(s_ptr->texture_info.rot != 0) {
             sector_node->add(
-                new data_node(
+                new DataNode(
                     "texture_rotate",
                     f2s(s_ptr->texture_info.rot)
                 )
@@ -1828,7 +1828,7 @@ void area_data::save_geometry_to_data_node(data_node* node) {
             s_ptr->texture_info.scale.y != 1
         ) {
             sector_node->add(
-                new data_node(
+                new DataNode(
                     "texture_scale",
                     f2s(s_ptr->texture_info.scale.x) + " " +
                     f2s(s_ptr->texture_info.scale.y)
@@ -1840,7 +1840,7 @@ void area_data::save_geometry_to_data_node(data_node* node) {
             s_ptr->texture_info.translation.y != 0
         ) {
             sector_node->add(
-                new data_node(
+                new DataNode(
                     "texture_trans",
                     f2s(s_ptr->texture_info.translation.x) + " " +
                     f2s(s_ptr->texture_info.translation.y)
@@ -1854,44 +1854,44 @@ void area_data::save_geometry_to_data_node(data_node* node) {
             s_ptr->texture_info.tint.a != 1.0
         ) {
             sector_node->add(
-                new data_node("texture_tint", c2s(s_ptr->texture_info.tint))
+                new DataNode("texture_tint", c2s(s_ptr->texture_info.tint))
             );
         }
         
     }
     
     //Mobs.
-    data_node* mobs_node = new data_node("mobs", "");
+    DataNode* mobs_node = new DataNode("mobs", "");
     node->add(mobs_node);
     
     for(size_t m = 0; m < mob_generators.size(); m++) {
-        mob_gen* m_ptr = mob_generators[m];
+        MobGen* m_ptr = mob_generators[m];
         string cat_name = "unknown";
         if(m_ptr->type && m_ptr->type->category) {
             cat_name = m_ptr->type->category->internal_name;
         }
-        data_node* mob_node = new data_node(cat_name, "");
+        DataNode* mob_node = new DataNode(cat_name, "");
         mobs_node->add(mob_node);
         
         if(m_ptr->type) {
             mob_node->add(
-                new data_node("type", m_ptr->type->manifest->internal_name)
+                new DataNode("type", m_ptr->type->manifest->internal_name)
             );
         }
         mob_node->add(
-            new data_node(
+            new DataNode(
                 "p",
                 f2s(m_ptr->pos.x) + " " + f2s(m_ptr->pos.y)
             )
         );
         if(m_ptr->angle != 0) {
             mob_node->add(
-                new data_node("angle", f2s(m_ptr->angle))
+                new DataNode("angle", f2s(m_ptr->angle))
             );
         }
         if(m_ptr->vars.size()) {
             mob_node->add(
-                new data_node("vars", m_ptr->vars)
+                new DataNode("vars", m_ptr->vars)
             );
         }
         
@@ -1903,88 +1903,88 @@ void area_data::save_geometry_to_data_node(data_node* node) {
         
         if(!links_str.empty()) {
             mob_node->add(
-                new data_node("links", links_str)
+                new DataNode("links", links_str)
             );
         }
         
         if(m_ptr->stored_inside != INVALID) {
             mob_node->add(
-                new data_node("stored_inside", i2s(m_ptr->stored_inside))
+                new DataNode("stored_inside", i2s(m_ptr->stored_inside))
             );
         }
     }
     
     //Paths.
-    data_node* path_stops_node = new data_node("path_stops", "");
+    DataNode* path_stops_node = new DataNode("path_stops", "");
     node->add(path_stops_node);
     
     for(size_t s = 0; s < path_stops.size(); s++) {
-        path_stop* s_ptr = path_stops[s];
-        data_node* path_stop_node = new data_node("s", "");
+        PathStop* s_ptr = path_stops[s];
+        DataNode* path_stop_node = new DataNode("s", "");
         path_stops_node->add(path_stop_node);
         
         path_stop_node->add(
-            new data_node("pos", f2s(s_ptr->pos.x) + " " + f2s(s_ptr->pos.y))
+            new DataNode("pos", f2s(s_ptr->pos.x) + " " + f2s(s_ptr->pos.y))
         );
         if(s_ptr->radius != PATHS::MIN_STOP_RADIUS) {
             path_stop_node->add(
-                new data_node("radius", f2s(s_ptr->radius))
+                new DataNode("radius", f2s(s_ptr->radius))
             );
         }
         if(s_ptr->flags != 0) {
             path_stop_node->add(
-                new data_node("flags", i2s(s_ptr->flags))
+                new DataNode("flags", i2s(s_ptr->flags))
             );
         }
         if(!s_ptr->label.empty()) {
             path_stop_node->add(
-                new data_node("label", s_ptr->label)
+                new DataNode("label", s_ptr->label)
             );
         }
         
-        data_node* links_node = new data_node("links", "");
+        DataNode* links_node = new DataNode("links", "");
         path_stop_node->add(links_node);
         
         for(size_t l = 0; l < s_ptr->links.size(); l++) {
-            path_link* l_ptr = s_ptr->links[l];
+            PathLink* l_ptr = s_ptr->links[l];
             string link_data = i2s(l_ptr->end_idx);
             if(l_ptr->type != PATH_LINK_TYPE_NORMAL) {
                 link_data += " " + i2s(l_ptr->type);
             }
-            data_node* link_node = new data_node("nr", link_data);
+            DataNode* link_node = new DataNode("nr", link_data);
             links_node->add(link_node);
         }
         
     }
     
     //Tree shadows.
-    data_node* shadows_node = new data_node("tree_shadows", "");
+    DataNode* shadows_node = new DataNode("tree_shadows", "");
     node->add(shadows_node);
     
     for(size_t s = 0; s < tree_shadows.size(); s++) {
-        tree_shadow* s_ptr = tree_shadows[s];
-        data_node* shadow_node = new data_node("shadow", "");
+        TreeShadow* s_ptr = tree_shadows[s];
+        DataNode* shadow_node = new DataNode("shadow", "");
         shadows_node->add(shadow_node);
         
         shadow_node->add(
-            new data_node(
+            new DataNode(
                 "pos", f2s(s_ptr->center.x) + " " + f2s(s_ptr->center.y)
             )
         );
         shadow_node->add(
-            new data_node(
+            new DataNode(
                 "size", f2s(s_ptr->size.x) + " " + f2s(s_ptr->size.y)
             )
         );
         if(s_ptr->angle != 0) {
-            shadow_node->add(new data_node("angle", f2s(s_ptr->angle)));
+            shadow_node->add(new DataNode("angle", f2s(s_ptr->angle)));
         }
         if(s_ptr->alpha != 255) {
-            shadow_node->add(new data_node("alpha", i2s(s_ptr->alpha)));
+            shadow_node->add(new DataNode("alpha", i2s(s_ptr->alpha)));
         }
-        shadow_node->add(new data_node("file", s_ptr->bmp_name));
+        shadow_node->add(new DataNode("file", s_ptr->bmp_name));
         shadow_node->add(
-            new data_node("sway", f2s(s_ptr->sway.x) + " " + f2s(s_ptr->sway.y))
+            new DataNode("sway", f2s(s_ptr->sway.x) + " " + f2s(s_ptr->sway.y))
         );
         
     }
@@ -1996,46 +1996,46 @@ void area_data::save_geometry_to_data_node(data_node* node) {
  *
  * @param node Data node to save to.
  */
-void area_data::save_main_data_to_data_node(data_node* node) {
+void Area::save_main_data_to_data_node(DataNode* node) {
     //Content metadata.
     save_metadata_to_data_node(node);
     
     //Main data.
     node->add(
-        new data_node("subtitle", subtitle)
+        new DataNode("subtitle", subtitle)
     );
     node->add(
-        new data_node(
+        new DataNode(
             "difficulty",
             i2s(difficulty)
         )
     );
     node->add(
-        new data_node("bg_bmp", bg_bmp_name)
+        new DataNode("bg_bmp", bg_bmp_name)
     );
     node->add(
-        new data_node("bg_color", c2s(bg_color))
+        new DataNode("bg_color", c2s(bg_color))
     );
     node->add(
-        new data_node("bg_dist", f2s(bg_dist))
+        new DataNode("bg_dist", f2s(bg_dist))
     );
     node->add(
-        new data_node("bg_zoom", f2s(bg_bmp_zoom))
+        new DataNode("bg_zoom", f2s(bg_bmp_zoom))
     );
     node->add(
-        new data_node("song", song_name)
+        new DataNode("song", song_name)
     );
     node->add(
-        new data_node("weather", weather_name)
+        new DataNode("weather", weather_name)
     );
     node->add(
-        new data_node("day_time_start", i2s(day_time_start))
+        new DataNode("day_time_start", i2s(day_time_start))
     );
     node->add(
-        new data_node("day_time_speed", i2s(day_time_speed))
+        new DataNode("day_time_speed", i2s(day_time_speed))
     );
     node->add(
-        new data_node("spray_amounts", spray_amounts)
+        new DataNode("spray_amounts", spray_amounts)
     );
 }
 
@@ -2045,10 +2045,10 @@ void area_data::save_main_data_to_data_node(data_node* node) {
  *
  * @param node Data node to save to.
  */
-void area_data::save_mission_data_to_data_node(data_node* node) {
+void Area::save_mission_data_to_data_node(DataNode* node) {
     if(mission.goal != MISSION_GOAL_END_MANUALLY) {
         node->add(
-            new data_node(
+            new DataNode(
                 "mission_goal",
                 game.mission_goals[mission.goal]->
                 get_name()
@@ -2060,7 +2060,7 @@ void area_data::save_mission_data_to_data_node(data_node* node) {
         mission.goal == MISSION_GOAL_GROW_PIKMIN
     ) {
         node->add(
-            new data_node(
+            new DataNode(
                 "mission_goal_amount",
                 i2s(mission.goal_amount)
             )
@@ -2072,7 +2072,7 @@ void area_data::save_mission_data_to_data_node(data_node* node) {
         mission.goal == MISSION_GOAL_GET_TO_EXIT
     ) {
         node->add(
-            new data_node(
+            new DataNode(
                 "mission_goal_all_mobs",
                 b2s(mission.goal_all_mobs)
             )
@@ -2084,7 +2084,7 @@ void area_data::save_mission_data_to_data_node(data_node* node) {
         string mission_mob_idx_str = join(mission_mob_idx_strs, ";");
         if(!mission_mob_idx_str.empty()) {
             node->add(
-                new data_node(
+                new DataNode(
                     "mission_required_mobs",
                     mission_mob_idx_str
                 )
@@ -2093,13 +2093,13 @@ void area_data::save_mission_data_to_data_node(data_node* node) {
     }
     if(mission.goal == MISSION_GOAL_GET_TO_EXIT) {
         node->add(
-            new data_node(
+            new DataNode(
                 "mission_goal_exit_center",
                 p2s(mission.goal_exit_center)
             )
         );
         node->add(
-            new data_node(
+            new DataNode(
                 "mission_goal_exit_size",
                 p2s(mission.goal_exit_size)
             )
@@ -2107,7 +2107,7 @@ void area_data::save_mission_data_to_data_node(data_node* node) {
     }
     if(mission.fail_conditions > 0) {
         node->add(
-            new data_node(
+            new DataNode(
                 "mission_fail_conditions",
                 i2s(mission.fail_conditions)
             )
@@ -2120,7 +2120,7 @@ void area_data::save_mission_data_to_data_node(data_node* node) {
         )
     ) {
         node->add(
-            new data_node(
+            new DataNode(
                 "mission_fail_too_few_pik_amount",
                 i2s(mission.fail_too_few_pik_amount)
             )
@@ -2133,7 +2133,7 @@ void area_data::save_mission_data_to_data_node(data_node* node) {
         )
     ) {
         node->add(
-            new data_node(
+            new DataNode(
                 "mission_fail_too_many_pik_amount",
                 i2s(mission.fail_too_many_pik_amount)
             )
@@ -2146,7 +2146,7 @@ void area_data::save_mission_data_to_data_node(data_node* node) {
         )
     ) {
         node->add(
-            new data_node(
+            new DataNode(
                 "mission_fail_pik_killed",
                 i2s(mission.fail_pik_killed)
             )
@@ -2159,7 +2159,7 @@ void area_data::save_mission_data_to_data_node(data_node* node) {
         )
     ) {
         node->add(
-            new data_node(
+            new DataNode(
                 "mission_fail_leaders_kod",
                 i2s(mission.fail_leaders_kod)
             )
@@ -2172,7 +2172,7 @@ void area_data::save_mission_data_to_data_node(data_node* node) {
         )
     ) {
         node->add(
-            new data_node(
+            new DataNode(
                 "mission_fail_enemies_killed",
                 i2s(mission.fail_enemies_killed)
             )
@@ -2185,7 +2185,7 @@ void area_data::save_mission_data_to_data_node(data_node* node) {
         )
     ) {
         node->add(
-            new data_node(
+            new DataNode(
                 "mission_fail_time_limit",
                 i2s(mission.fail_time_limit)
             )
@@ -2193,7 +2193,7 @@ void area_data::save_mission_data_to_data_node(data_node* node) {
     }
     if(mission.fail_hud_primary_cond != INVALID) {
         node->add(
-            new data_node(
+            new DataNode(
                 "mission_fail_hud_primary_cond",
                 i2s(mission.fail_hud_primary_cond)
             )
@@ -2201,14 +2201,14 @@ void area_data::save_mission_data_to_data_node(data_node* node) {
     }
     if(mission.fail_hud_secondary_cond != INVALID) {
         node->add(
-            new data_node(
+            new DataNode(
                 "mission_fail_hud_secondary_cond",
                 i2s(mission.fail_hud_secondary_cond)
             )
         );
     }
     node->add(
-        new data_node(
+        new DataNode(
             "mission_grading_mode",
             i2s(mission.grading_mode)
         )
@@ -2216,7 +2216,7 @@ void area_data::save_mission_data_to_data_node(data_node* node) {
     if(mission.grading_mode == MISSION_GRADING_MODE_POINTS) {
         if(mission.points_per_pikmin_born != 0) {
             node->add(
-                new data_node(
+                new DataNode(
                     "mission_points_per_pikmin_born",
                     i2s(mission.points_per_pikmin_born)
                 )
@@ -2224,7 +2224,7 @@ void area_data::save_mission_data_to_data_node(data_node* node) {
         }
         if(mission.points_per_pikmin_death != 0) {
             node->add(
-                new data_node(
+                new DataNode(
                     "mission_points_per_pikmin_death",
                     i2s(mission.points_per_pikmin_death)
                 )
@@ -2232,7 +2232,7 @@ void area_data::save_mission_data_to_data_node(data_node* node) {
         }
         if(mission.points_per_sec_left != 0) {
             node->add(
-                new data_node(
+                new DataNode(
                     "mission_points_per_sec_left",
                     i2s(mission.points_per_sec_left)
                 )
@@ -2240,7 +2240,7 @@ void area_data::save_mission_data_to_data_node(data_node* node) {
         }
         if(mission.points_per_sec_passed != 0) {
             node->add(
-                new data_node(
+                new DataNode(
                     "mission_points_per_sec_passed",
                     i2s(mission.points_per_sec_passed)
                 )
@@ -2248,7 +2248,7 @@ void area_data::save_mission_data_to_data_node(data_node* node) {
         }
         if(mission.points_per_treasure_point != 0) {
             node->add(
-                new data_node(
+                new DataNode(
                     "mission_points_per_treasure_point",
                     i2s(
                         mission.points_per_treasure_point
@@ -2258,7 +2258,7 @@ void area_data::save_mission_data_to_data_node(data_node* node) {
         }
         if(mission.points_per_enemy_point != 0) {
             node->add(
-                new data_node(
+                new DataNode(
                     "mission_points_per_enemy_point",
                     i2s(mission.points_per_enemy_point)
                 )
@@ -2266,7 +2266,7 @@ void area_data::save_mission_data_to_data_node(data_node* node) {
         }
         if(mission.point_loss_data > 0) {
             node->add(
-                new data_node(
+                new DataNode(
                     "mission_point_loss_data",
                     i2s(mission.point_loss_data)
                 )
@@ -2274,7 +2274,7 @@ void area_data::save_mission_data_to_data_node(data_node* node) {
         }
         if(mission.point_hud_data != 255) {
             node->add(
-                new data_node(
+                new DataNode(
                     "mission_point_hud_data",
                     i2s(mission.point_hud_data)
                 )
@@ -2282,45 +2282,45 @@ void area_data::save_mission_data_to_data_node(data_node* node) {
         }
         if(mission.starting_points != 0) {
             node->add(
-                new data_node(
+                new DataNode(
                     "mission_starting_points",
                     i2s(mission.starting_points)
                 )
             );
         }
         node->add(
-            new data_node(
+            new DataNode(
                 "mission_bronze_req",
                 i2s(mission.bronze_req)
             )
         );
         node->add(
-            new data_node(
+            new DataNode(
                 "mission_silver_req",
                 i2s(mission.silver_req)
             )
         );
         node->add(
-            new data_node(
+            new DataNode(
                 "mission_gold_req",
                 i2s(mission.gold_req)
             )
         );
         node->add(
-            new data_node(
+            new DataNode(
                 "mission_platinum_req",
                 i2s(mission.platinum_req)
             )
         );
         if(!mission.maker_record_date.empty()) {
             node->add(
-                new data_node(
+                new DataNode(
                     "mission_maker_record",
                     i2s(mission.maker_record)
                 )
             );
             node->add(
-                new data_node(
+                new DataNode(
                     "mission_maker_record_date",
                     mission.maker_record_date
                 )
@@ -2336,7 +2336,7 @@ void area_data::save_mission_data_to_data_node(data_node* node) {
  *
  * @param to_backup Whether it's to save to the area backup.
  */
-void area_data::save_thumbnail(bool to_backup) {
+void Area::save_thumbnail(bool to_backup) {
     string thumb_path =
         (to_backup ? user_data_path : manifest->path) +
         "/" + FILE_NAMES::AREA_THUMBNAIL;
@@ -2351,8 +2351,8 @@ void area_data::save_thumbnail(bool to_backup) {
 /**
  * @brief Clears the info of the blockmap.
  */
-void blockmap::clear() {
-    top_left_corner = point();
+void Blockmap::clear() {
+    top_left_corner = Point();
     edges.clear();
     sectors.clear();
     n_cols = 0;
@@ -2366,7 +2366,7 @@ void blockmap::clear() {
  * @param x X coordinate.
  * @return The column, or INVALID on error.
  */
-size_t blockmap::get_col(float x) const {
+size_t Blockmap::get_col(float x) const {
     if(x < top_left_corner.x) return INVALID;
     float final_x = (x - top_left_corner.x) / GEOMETRY::BLOCKMAP_BLOCK_SIZE;
     if(final_x >= n_cols) return INVALID;
@@ -2383,8 +2383,8 @@ size_t blockmap::get_col(float x) const {
  * @param out_edges Set to fill the edges into.
  * @return Whether it succeeded.
  */
-bool blockmap::get_edges_in_region(
-    const point &tl, const point &br, set<edge*> &out_edges
+bool Blockmap::get_edges_in_region(
+    const Point &tl, const Point &br, set<Edge*> &out_edges
 ) const {
 
     size_t bx1 = get_col(tl.x);
@@ -2403,7 +2403,7 @@ bool blockmap::get_edges_in_region(
     for(size_t bx = bx1; bx <= bx2; bx++) {
         for(size_t by = by1; by <= by2; by++) {
         
-            const vector<edge*> &block_edges = edges[bx][by];
+            const vector<Edge*> &block_edges = edges[bx][by];
             
             for(size_t e = 0; e < block_edges.size(); e++) {
                 out_edges.insert(block_edges[e]);
@@ -2421,7 +2421,7 @@ bool blockmap::get_edges_in_region(
  * @param y Y coordinate.
  * @return The row, or INVALID on error.
  */
-size_t blockmap::get_row(float y) const {
+size_t Blockmap::get_row(float y) const {
     if(y < top_left_corner.y) return INVALID;
     float final_y = (y - top_left_corner.y) / GEOMETRY::BLOCKMAP_BLOCK_SIZE;
     if(final_y >= n_rows) return INVALID;
@@ -2436,9 +2436,9 @@ size_t blockmap::get_row(float y) const {
  * @param row Row to check.
  * @return The top-left coordinates.
  */
-point blockmap::get_top_left_corner(size_t col, size_t row) const {
+Point Blockmap::get_top_left_corner(size_t col, size_t row) const {
     return
-        point(
+        Point(
             col * GEOMETRY::BLOCKMAP_BLOCK_SIZE + top_left_corner.x,
             row * GEOMETRY::BLOCKMAP_BLOCK_SIZE + top_left_corner.y
         );
@@ -2453,8 +2453,8 @@ point blockmap::get_top_left_corner(size_t col, size_t row) const {
  * @param angle Angle it is facing.
  * @param vars String representation of the script vars.
  */
-mob_gen::mob_gen(
-    const point &pos, mob_type* type, float angle, const string &vars
+MobGen::MobGen(
+    const Point &pos, MobType* type, float angle, const string &vars
 ) :
     type(type),
     pos(pos),
@@ -2471,7 +2471,7 @@ mob_gen::mob_gen(
  * @param destination Mob generator to clone the data into.
  * @param include_position If true, the position is included too.
  */
-void mob_gen::clone(mob_gen* destination, bool include_position) const {
+void MobGen::clone(MobGen* destination, bool include_position) const {
     destination->angle = angle;
     if(include_position) destination->pos = pos;
     destination->type = type;
@@ -2492,9 +2492,9 @@ void mob_gen::clone(mob_gen* destination, bool include_position) const {
  * @param sway Multiply the sway distance by this much, horizontally and
  * vertically.
  */
-tree_shadow::tree_shadow(
-    const point &center, const point &size, float angle,
-    unsigned char alpha, const string &bmp_name, const point &sway
+TreeShadow::TreeShadow(
+    const Point &center, const Point &size, float angle,
+    unsigned char alpha, const string &bmp_name, const Point &sway
 ) :
     bmp_name(bmp_name),
     bitmap(nullptr),
@@ -2511,6 +2511,6 @@ tree_shadow::tree_shadow(
  * @brief Destroys the tree shadow object.
  *
  */
-tree_shadow::~tree_shadow() {
+TreeShadow::~TreeShadow() {
     game.content.bitmaps.list.free(bmp_name);
 }

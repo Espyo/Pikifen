@@ -32,9 +32,9 @@ const string GUI_FILE_NAME = "packs_menu";
  *
  * @param idx Index of the pack. -1 for the base pack, -2 for nothing.
  */
-void packs_menu_t::change_info(int idx) {
+void PacksMenu::change_info(int idx) {
     //Figure out what pack this is.
-    pack* pack_ptr = nullptr;
+    Pack* pack_ptr = nullptr;
     string new_pack_name;
     if(idx == -1) {
         new_pack_name = FOLDER_NAMES::BASE_PACK;
@@ -62,31 +62,31 @@ void packs_menu_t::change_info(int idx) {
     pack_name_text->text =
         pack_ptr->name;
     pack_name_text->start_juice_animation(
-        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
+        GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
     );
     
     pack_description_text->text =
         pack_ptr->description;
     pack_description_text->start_juice_animation(
-        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
+        GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
     );
     
     pack_tags_text->text =
         (pack_ptr->tags.empty() ? "" : "Tags: " + pack_ptr->tags);
     pack_tags_text->start_juice_animation(
-        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
+        GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
     );
     
     pack_maker_text->text =
         (pack_ptr->maker.empty() ? "" : "Maker: " + pack_ptr->maker);
     pack_maker_text->start_juice_animation(
-        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
+        GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
     );
     
     pack_version_text->text =
         (pack_ptr->version.empty() ? "" : "Version: " + pack_ptr->version);
     pack_version_text->start_juice_animation(
-        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
+        GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
     );
 }
 
@@ -94,7 +94,7 @@ void packs_menu_t::change_info(int idx) {
 /**
  * @brief Initializes the main GUI.
  */
-void packs_menu_t::init_gui_main() {
+void PacksMenu::init_gui_main() {
     //Menu items.
     gui.register_coords("back",               12,    5, 20,  6);
     gui.register_coords("back_input",          3,    7,  4,  4);
@@ -118,9 +118,9 @@ void packs_menu_t::init_gui_main() {
     
     //Back button.
     gui.back_item =
-        new button_gui_item("Back", game.sys_content.fnt_standard);
+        new ButtonGuiItem("Back", game.sys_content.fnt_standard);
     gui.back_item->on_activate =
-    [this] (const point &) {
+    [this] (const Point &) {
         game.options.pack_order = pack_order;
         game.options.packs_disabled = packs_disabled;
         save_options();
@@ -134,8 +134,8 @@ void packs_menu_t::init_gui_main() {
     gui_add_back_input_icon(&gui);
     
     //Header text.
-    text_gui_item* header_text =
-        new text_gui_item(
+    TextGuiItem* header_text =
+        new TextGuiItem(
         "PACKS",
         game.sys_content.fnt_area_name,
         COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
@@ -143,7 +143,7 @@ void packs_menu_t::init_gui_main() {
     gui.add_item(header_text, "header");
     
     //Packs list.
-    packs_list = new list_gui_item();
+    packs_list = new ListGuiItem();
     gui.add_item(packs_list, "list");
     
     const float ITEM_HEIGHT = 0.08f;
@@ -151,14 +151,14 @@ void packs_menu_t::init_gui_main() {
     const float ITEMS_OFFSET = 0.01f;
     
     //Base pack's bullet.
-    bullet_gui_item* base_bullet =
-        new bullet_gui_item(
+    BulletGuiItem* base_bullet =
+        new BulletGuiItem(
         "Base", game.sys_content.fnt_standard, COLOR_GOLD
     );
     base_bullet->center =
-        point(0.37f, ITEMS_OFFSET + ITEM_HEIGHT / 2.0f);
+        Point(0.37f, ITEMS_OFFSET + ITEM_HEIGHT / 2.0f);
     base_bullet->size =
-        point(0.70f, ITEM_HEIGHT);
+        Point(0.70f, ITEM_HEIGHT);
     base_bullet->on_selected =
     [this] () { change_info(-1); };
     packs_list->add_child(base_bullet);
@@ -169,27 +169,27 @@ void packs_menu_t::init_gui_main() {
         float row_center_y = list_bottom_y + ITEM_PADDING + ITEM_HEIGHT / 2.0f;
         
         //Pack bullet.
-        bullet_gui_item* bullet =
-            new bullet_gui_item(
+        BulletGuiItem* bullet =
+            new BulletGuiItem(
             "",
             game.sys_content.fnt_standard
         );
-        bullet->center = point(0.37f, row_center_y);
-        bullet->size = point(0.70f, ITEM_HEIGHT);
+        bullet->center = Point(0.37f, row_center_y);
+        bullet->size = Point(0.70f, ITEM_HEIGHT);
         bullet->on_selected = [p, this] () { change_info((int) p); };
         packs_list->add_child(bullet);
         gui.add_item(bullet);
         pack_bullets.push_back(bullet);
         
         //Enable/disable checkbox.
-        check_gui_item* check =
-            new check_gui_item(
+        CheckGuiItem* check =
+            new CheckGuiItem(
             false, "", game.sys_content.fnt_standard
         );
-        check->center = point(0.78f, row_center_y);
-        check->size = point(0.08f, ITEM_HEIGHT);
+        check->center = Point(0.78f, row_center_y);
+        check->size = Point(0.08f, ITEM_HEIGHT);
         check->on_activate =
-        [p, check, this] (const point & pos) {
+        [p, check, this] (const Point & pos) {
             check->def_activate_code();
             if(check->value) {
                 packs_disabled.erase(
@@ -214,22 +214,22 @@ void packs_menu_t::init_gui_main() {
         
         //Move up button.
         if(p > 0) {
-            button_gui_item* up_button =
-                new button_gui_item(
+            ButtonGuiItem* up_button =
+                new ButtonGuiItem(
                 "U", game.sys_content.fnt_standard
             );
-            up_button->center = point(0.87f, row_center_y);
-            up_button->size = point(0.08f, ITEM_HEIGHT);
+            up_button->center = Point(0.87f, row_center_y);
+            up_button->size = Point(0.08f, ITEM_HEIGHT);
             up_button->on_activate =
-            [p, this] (const point &) {
+            [p, this] (const Point &) {
                 std::iter_swap(
                     pack_order.begin() + p, pack_order.begin() + (p - 1)
                 );
                 pack_bullets[p]->start_juice_animation(
-                    gui_item::JUICE_TYPE_GROW_TEXT_MEDIUM
+                    GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
                 );
                 pack_bullets[p - 1]->start_juice_animation(
-                    gui_item::JUICE_TYPE_GROW_TEXT_MEDIUM
+                    GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
                 );
                 trigger_restart_warning();
                 populate_packs_list();
@@ -245,22 +245,22 @@ void packs_menu_t::init_gui_main() {
         
         //Move down button.
         if(p < pack_order.size() - 1) {
-            button_gui_item* down_button =
-                new button_gui_item(
+            ButtonGuiItem* down_button =
+                new ButtonGuiItem(
                 "D", game.sys_content.fnt_standard
             );
-            down_button->center = point(0.95f, row_center_y);
-            down_button->size = point(0.08f, ITEM_HEIGHT);
+            down_button->center = Point(0.95f, row_center_y);
+            down_button->size = Point(0.08f, ITEM_HEIGHT);
             down_button->on_activate =
-            [p, this] (const point &) {
+            [p, this] (const Point &) {
                 std::iter_swap(
                     pack_order.begin() + p, pack_order.begin() + (p + 1)
                 );
                 pack_bullets[p]->start_juice_animation(
-                    gui_item::JUICE_TYPE_GROW_TEXT_MEDIUM
+                    GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
                 );
                 pack_bullets[p + 1]->start_juice_animation(
-                    gui_item::JUICE_TYPE_GROW_TEXT_MEDIUM
+                    GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
                 );
                 trigger_restart_warning();
                 populate_packs_list();
@@ -276,14 +276,14 @@ void packs_menu_t::init_gui_main() {
     }
     
     //Packs list scrollbar.
-    scroll_gui_item* list_scroll = new scroll_gui_item();
+    ScrollGuiItem* list_scroll = new ScrollGuiItem();
     list_scroll->list_item = packs_list;
     gui.add_item(list_scroll, "list_scroll");
     
     //Info box item.
-    gui_item* info_box = new gui_item();
+    GuiItem* info_box = new GuiItem();
     info_box->on_draw =
-    [] (const point & center, const point & size) {
+    [] (const Point & center, const Point & size) {
         draw_textured_box(
             center, size, game.sys_content.bmp_frame_box,
             COLOR_TRANSPARENT_WHITE
@@ -293,22 +293,22 @@ void packs_menu_t::init_gui_main() {
     
     //Pack name text.
     pack_name_text =
-        new text_gui_item(
+        new TextGuiItem(
         "", game.sys_content.fnt_area_name, COLOR_GOLD, ALLEGRO_ALIGN_LEFT
     );
     gui.add_item(pack_name_text, "pack_name");
     
     //Pack thumbnail.
-    gui_item* pack_thumb_item = new gui_item();
+    GuiItem* pack_thumb_item = new GuiItem();
     pack_thumb_item->on_draw =
-    [this] (const point & center, const point & size) {
+    [this] (const Point & center, const Point & size) {
         //Make it a square.
-        point final_size(
+        Point final_size(
             std::min(size.x, size.y),
             std::min(size.x, size.y)
         );
         //Align it to the top-right corner.
-        point final_center(
+        Point final_center(
             (center.x + size.x / 2.0f) - final_size.x / 2.0f,
             (center.y - size.y / 2.0f) + final_size.y / 2.0f
         );
@@ -327,7 +327,7 @@ void packs_menu_t::init_gui_main() {
     
     //Pack description text.
     pack_description_text =
-        new text_gui_item(
+        new TextGuiItem(
         "", game.sys_content.fnt_standard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
     );
     pack_description_text->line_wrap = true;
@@ -335,28 +335,28 @@ void packs_menu_t::init_gui_main() {
     
     //Pack tags text.
     pack_tags_text =
-        new text_gui_item(
+        new TextGuiItem(
         "", game.sys_content.fnt_standard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
     );
     gui.add_item(pack_tags_text, "pack_tags");
     
     //Pack maker text.
     pack_maker_text =
-        new text_gui_item(
+        new TextGuiItem(
         "", game.sys_content.fnt_standard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
     );
     gui.add_item(pack_maker_text, "pack_maker");
     
     //Pack version text.
     pack_version_text =
-        new text_gui_item(
+        new TextGuiItem(
         "", game.sys_content.fnt_standard, COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
     );
     gui.add_item(pack_version_text, "pack_version");
     
     //Restart warning text.
     warning_text =
-        new text_gui_item(
+        new TextGuiItem(
         "You may need to restart for some of the changes to take effect.",
         game.sys_content.fnt_standard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
     );
@@ -364,10 +364,10 @@ void packs_menu_t::init_gui_main() {
     gui.add_item(warning_text, "restart_warning");
     
     //Open folder button.
-    button_gui_item* open_folder_button =
-        new button_gui_item("Open folder", game.sys_content.fnt_standard);
+    ButtonGuiItem* open_folder_button =
+        new ButtonGuiItem("Open folder", game.sys_content.fnt_standard);
     open_folder_button->on_activate =
-    [this] (const point &) {
+    [this] (const Point &) {
         open_file_explorer(FOLDER_PATHS_FROM_ROOT::GAME_DATA);
     };
     open_folder_button->on_get_tooltip =
@@ -379,8 +379,8 @@ void packs_menu_t::init_gui_main() {
     gui.add_item(open_folder_button, "open_folder");
     
     //Tooltip text.
-    tooltip_gui_item* tooltip_text =
-        new tooltip_gui_item(&gui);
+    TooltipGuiItem* tooltip_text =
+        new TooltipGuiItem(&gui);
     gui.add_item(tooltip_text, "tooltip");
     
     populate_packs_list();
@@ -394,7 +394,7 @@ void packs_menu_t::init_gui_main() {
 /**
  * @brief Loads the menu.
  */
-void packs_menu_t::load() {
+void PacksMenu::load() {
     //Fill the menu's lists of packs.
     pack_order =
         sort_vector_with_preference_list(
@@ -420,14 +420,14 @@ void packs_menu_t::load() {
     
     //Finish the menu class setup.
     guis.push_back(&gui);
-    menu_t::load();
+    Menu::load();
 }
 
 
 /**
  * @brief Populates the packs list with rows for each pack.
  */
-void packs_menu_t::populate_packs_list() {
+void PacksMenu::populate_packs_list() {
     for(size_t p = 0; p < pack_order.size(); p++) {
         pack_bullets[p]->text =
             game.content.packs.list[pack_order[p]].name;
@@ -442,11 +442,11 @@ void packs_menu_t::populate_packs_list() {
 /**
  * @brief Triggers the restart warning at the bottom of the screen.
  */
-void packs_menu_t::trigger_restart_warning() {
+void PacksMenu::trigger_restart_warning() {
     if(!warning_text->visible) {
         warning_text->visible = true;
         warning_text->start_juice_animation(
-            gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
+            GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
         );
     }
 }
@@ -455,11 +455,11 @@ void packs_menu_t::trigger_restart_warning() {
 /**
  * @brief Unloads the menu.
  */
-void packs_menu_t::unload() {
+void PacksMenu::unload() {
     for(auto &t : pack_thumbs) {
         al_destroy_bitmap(t.second);
     }
     pack_thumbs.clear();
     
-    menu_t::unload();
+    Menu::unload();
 }

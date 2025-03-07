@@ -22,8 +22,8 @@
  *
  * @param typ Mob type to create the finite state machine for.
  */
-void pellet_fsm::create_fsm(mob_type* typ) {
-    easy_fsm_creator efc;
+void pellet_fsm::create_fsm(MobType* typ) {
+    EasyFsmCreator efc;
     
     efc.new_state("idle_waiting", PELLET_STATE_IDLE_WAITING); {
         efc.new_event(MOB_EV_ON_ENTER); {
@@ -142,7 +142,7 @@ void pellet_fsm::create_fsm(mob_type* typ) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void pellet_fsm::stand_still(mob* m, void* info1, void* info2) {
+void pellet_fsm::stand_still(Mob* m, void* info1, void* info2) {
     m->stop_chasing();
     m->stop_turning();
 }

@@ -24,8 +24,8 @@
  * @param type Treasure type this mob belongs to.
  * @param angle Starting angle.
  */
-treasure::treasure(const point &pos, treasure_type* type, float angle) :
-    mob(pos, type, angle),
+Treasure::Treasure(const Point &pos, TreasureType* type, float angle) :
+    Mob(pos, type, angle),
     tre_type(type) {
     
     become_carriable(CARRY_DESTINATION_SHIP);
@@ -34,7 +34,7 @@ treasure::treasure(const point &pos, treasure_type* type, float angle) :
         MOB_TYPE::ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
     );
     
-    particle_generator pg =
+    ParticleGenerator pg =
         standard_particle_gen_setup(
             game.sys_content_names.part_treasure, this
         );

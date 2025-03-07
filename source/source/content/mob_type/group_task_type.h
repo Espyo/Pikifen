@@ -53,7 +53,7 @@ enum GROUP_TASK_CONTRIBUTION {
  * @brief A type of group task mob. This can be a pushable box,
  * liftable gate, etc.
  */
-class group_task_type : public mob_type {
+class GroupTaskType : public MobType {
 
 public:
 
@@ -66,10 +66,10 @@ public:
     size_t max_pikmin = 20;
     
     //First point of the first row of workers.
-    point first_row_p1;
+    Point first_row_p1;
     
     //Second point of the first row of workers.
-    point first_row_p2;
+    Point first_row_p2;
     
     //Z coordinate of the contributor spots.
     float spots_z = 0.0f;
@@ -98,7 +98,7 @@ public:
     
     //--- Function declarations ---
     
-    group_task_type();
-    void load_cat_properties(data_node* file) override;
+    GroupTaskType();
+    void load_cat_properties(DataNode* file) override;
     
 };

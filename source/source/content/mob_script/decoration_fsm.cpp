@@ -21,8 +21,8 @@
  *
  * @param typ Mob type to create the finite state machine for.
  */
-void decoration_fsm::create_fsm(mob_type* typ) {
-    easy_fsm_creator efc;
+void decoration_fsm::create_fsm(MobType* typ) {
+    EasyFsmCreator efc;
     efc.new_state("idling", DECORATION_STATE_IDLING); {
         efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(decoration_fsm::become_idle);
@@ -60,7 +60,7 @@ void decoration_fsm::create_fsm(mob_type* typ) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void decoration_fsm::be_bumped(mob* m, void* info1, void* info2) {
+void decoration_fsm::be_bumped(Mob* m, void* info1, void* info2) {
     m->set_animation(DECORATION_ANIM_BUMPED);
 }
 
@@ -72,8 +72,8 @@ void decoration_fsm::be_bumped(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void decoration_fsm::become_idle(mob* m, void* info1, void* info2) {
-    decoration* dec_ptr = (decoration*) m;
+void decoration_fsm::become_idle(Mob* m, void* info1, void* info2) {
+    Decoration* dec_ptr = (Decoration*) m;
     if(
         dec_ptr->dec_type->random_animation_delay &&
         dec_ptr->individual_random_anim_delay
@@ -95,8 +95,8 @@ void decoration_fsm::become_idle(mob* m, void* info1, void* info2) {
  * @param info1 Pointer to the mob that touched it.
  * @param info2 Unused.
  */
-void decoration_fsm::check_bump(mob* m, void* info1, void* info2) {
-    mob* toucher = (mob*) info1;
+void decoration_fsm::check_bump(Mob* m, void* info1, void* info2) {
+    Mob* toucher = (Mob*) info1;
     if(
         toucher->speed.x == 0 && toucher->speed.y == 0 &&
         toucher->chase_info.state != CHASE_STATE_CHASING

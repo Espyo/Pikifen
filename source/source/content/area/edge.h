@@ -19,25 +19,25 @@
 #include "geometry.h"
 
 
-struct sector;
+struct Sector;
 
 
 /**
  * @brief A line segment that delimits a sector -- an edge of a polygon.
  * In DOOM, these are what's known as linedefs.
  */
-struct edge {
+struct Edge {
 
     //--- Members ---
     
     //Vertexes that make up the edge.
-    vertex* vertexes[2] = { nullptr, nullptr };
+    Vertex* vertexes[2] = { nullptr, nullptr };
     
     //Index of the vertexes that make up the edge.
     size_t vertex_idxs[2] = { INVALID, INVALID };
     
     //Sectors on each side of the edge.
-    sector* sectors[2] = { nullptr, nullptr };
+    Sector* sectors[2] = { nullptr, nullptr };
     
     //Index of the sectors on each side of the edge.
     size_t sector_idxs[2] = { INVALID, INVALID };
@@ -57,18 +57,18 @@ struct edge {
     
     //--- Function declarations ---
     
-    explicit edge(size_t v1_idx = INVALID, size_t v2_idx = INVALID);
-    void clone(edge* destination) const;
-    sector* get_other_sector(const sector* v_ptr) const;
-    vertex* get_other_vertex(const vertex* v_ptr) const;
-    size_t get_side_with_sector(const sector* s_ptr) const;
-    vertex* has_neighbor(const edge* other) const;
+    explicit Edge(size_t v1_idx = INVALID, size_t v2_idx = INVALID);
+    void clone(Edge* destination) const;
+    Sector* get_other_sector(const Sector* v_ptr) const;
+    Vertex* get_other_vertex(const Vertex* v_ptr) const;
+    size_t get_side_with_sector(const Sector* s_ptr) const;
+    Vertex* has_neighbor(const Edge* other) const;
     bool is_valid() const;
     size_t remove_from_sectors();
     size_t remove_from_vertexes();
     void swap_vertexes();
     void transfer_sector(
-        sector* from, sector* to, size_t to_idx, size_t edge_idx
+        Sector* from, Sector* to, size_t to_idx, size_t edge_idx
     );
     
 };
@@ -78,20 +78,20 @@ struct edge {
  * @brief Intersection between two edges.
  * Used to mark edges as red on the editor.
  */
-struct edge_intersection {
+struct EdgeIntersection {
 
     //--- Members ---
     
     //First edge in the intersection.
-    edge* e1 = nullptr;
+    Edge* e1 = nullptr;
     
     //Second edge in the intersection.
-    edge* e2 = nullptr;
+    Edge* e2 = nullptr;
     
     
     //--- Function declarations ---
     
-    edge_intersection(edge* e1, edge* e2);
-    bool contains(const edge* e);
+    EdgeIntersection(Edge* e1, Edge* e2);
+    bool contains(const Edge* e);
     
 };

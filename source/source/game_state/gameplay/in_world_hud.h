@@ -53,7 +53,7 @@ enum IN_WORLD_HUD_TRANSITION {
 };
 
 
-class mob;
+class Mob;
 
 
 /**
@@ -61,14 +61,14 @@ class mob;
  * Sort of. Instead of being in a fixed position on-screen, these follow
  * mobs around.
  */
-class in_world_hud_item {
+class InWorldHudItem {
 
 public:
 
     //--- Members ---
     
     //Associated mob, if any.
-    mob* m = nullptr;
+    Mob* m = nullptr;
     
     //Current transition.
     IN_WORLD_HUD_TRANSITION transition = IN_WORLD_HUD_TRANSITION_IN;
@@ -82,8 +82,8 @@ public:
     
     //--- Function declarations ---
     
-    in_world_hud_item(mob* m);
-    virtual ~in_world_hud_item() = default;
+    InWorldHudItem(Mob* m);
+    virtual ~InWorldHudItem() = default;
     virtual void draw() = 0;
     virtual void start_fading() = 0;
     virtual void tick(float delta_t);
@@ -94,13 +94,13 @@ public:
 /**
  * @brief Info about a fraction in the game world, placed atop an enemy.
  */
-class in_world_fraction : public in_world_hud_item {
+class InWorldFraction : public InWorldHudItem {
 
 public:
 
     //--- Function declarations ---
     
-    explicit in_world_fraction(mob* m);
+    explicit InWorldFraction(Mob* m);
     void draw() override;
     void set_color(const ALLEGRO_COLOR &new_color);
     void set_requirement_number(float new_req_nr);
@@ -134,7 +134,7 @@ private:
  * @brief Info about a health wheel in the game world, placed
  * atop an enemy.
  */
-class in_world_health_wheel : public in_world_hud_item {
+class InWorldHealthWheel : public InWorldHudItem {
 
 public:
 
@@ -146,7 +146,7 @@ public:
     
     //--- Function declarations ---
     
-    explicit in_world_health_wheel(mob* m);
+    explicit InWorldHealthWheel(Mob* m);
     void draw() override;
     void start_fading() override;
     void tick(float delta_t) override;

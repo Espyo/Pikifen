@@ -19,8 +19,8 @@
 /**
  * @brief Constructs a new bridge type object.
  */
-bridge_type::bridge_type() :
-    mob_type(MOB_CATEGORY_BRIDGES) {
+BridgeType::BridgeType() :
+    MobType(MOB_CATEGORY_BRIDGES) {
     
     radius = 32;
     max_health = 2000;
@@ -38,7 +38,7 @@ bridge_type::bridge_type() :
         "Changing its max health changes how long Pikmin "
         "work on it for, or how many fragments are needed.";
         
-    area_editor_prop_t aep_chunks;
+    AreaEditorProp aep_chunks;
     aep_chunks.name = "Chunks";
     aep_chunks.var = "chunks";
     aep_chunks.type = AEMP_TYPE_INT;
@@ -58,7 +58,7 @@ bridge_type::bridge_type() :
 /**
  * @brief Returns the vector of animation conversions.
  */
-anim_conversion_vector bridge_type::get_anim_conversions() const {
+anim_conversion_vector BridgeType::get_anim_conversions() const {
     anim_conversion_vector v;
     v.push_back(std::make_pair(BRIDGE_ANIM_IDLING, "idling"));
     v.push_back(std::make_pair(BRIDGE_ANIM_DESTROYED, "destroyed"));
@@ -71,8 +71,8 @@ anim_conversion_vector bridge_type::get_anim_conversions() const {
  *
  * @param file File to read from.
  */
-void bridge_type::load_cat_properties(data_node* file) {
-    reader_setter rs(file);
+void BridgeType::load_cat_properties(DataNode* file) {
+    ReaderSetter rs(file);
     
     rs.set("rail_width", rail_width);
 }
@@ -83,8 +83,8 @@ void bridge_type::load_cat_properties(data_node* file) {
  *
  * @param file File to read from.
  */
-void bridge_type::load_cat_resources(data_node* file) {
-    reader_setter rs(file);
+void BridgeType::load_cat_resources(DataNode* file) {
+    ReaderSetter rs(file);
     
     rs.set("main_texture", main_texture_bmp_name);
     rs.set("left_rail_texture", left_rail_texture_bmp_name);
@@ -107,7 +107,7 @@ void bridge_type::load_cat_resources(data_node* file) {
 /**
  * @brief Unloads resources from memory.
  */
-void bridge_type::unload_resources() {
+void BridgeType::unload_resources() {
     game.content.bitmaps.list.free(main_texture_bmp_name);
     game.content.bitmaps.list.free(left_rail_texture_bmp_name);
     game.content.bitmaps.list.free(right_rail_texture_bmp_name);

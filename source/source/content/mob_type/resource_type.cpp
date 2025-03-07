@@ -20,8 +20,8 @@
 /**
  * @brief Constructs a new resource type object.
  */
-resource_type::resource_type() :
-    mob_type(MOB_CATEGORY_RESOURCES) {
+ResourceType::ResourceType() :
+    MobType(MOB_CATEGORY_RESOURCES) {
     
     target_type = MOB_TARGET_FLAG_NONE;
     
@@ -34,7 +34,7 @@ resource_type::resource_type() :
  *
  * @return The vector.
  */
-anim_conversion_vector resource_type::get_anim_conversions() const {
+anim_conversion_vector ResourceType::get_anim_conversions() const {
     anim_conversion_vector v;
     v.push_back(std::make_pair(RESOURCE_ANIM_IDLING, "idling"));
     return v;
@@ -46,15 +46,15 @@ anim_conversion_vector resource_type::get_anim_conversions() const {
  *
  * @param file File to read from.
  */
-void resource_type::load_cat_properties(data_node* file) {
-    reader_setter rs(file);
+void ResourceType::load_cat_properties(DataNode* file) {
+    ReaderSetter rs(file);
     
     string carrying_destination_str;
     string delivery_result_str;
     string spray_to_concoct_str;
-    data_node* carrying_destination_node = nullptr;
-    data_node* delivery_result_node = nullptr;
-    data_node* spray_to_concoct_node = nullptr;
+    DataNode* carrying_destination_node = nullptr;
+    DataNode* delivery_result_node = nullptr;
+    DataNode* spray_to_concoct_node = nullptr;
     
     rs.set(
         "carrying_destination", carrying_destination_str,

@@ -35,8 +35,8 @@ using std::vector;
  * @param hit_rate If this has an attack, this is the chance of hitting.
  * 0 - 100.
  */
-animation::animation(
-    const string &name, const vector<frame> &frames,
+Animation::Animation(
+    const string &name, const vector<Frame> &frames,
     size_t loop_frame, unsigned char hit_rate
 ) :
     name(name),
@@ -52,7 +52,7 @@ animation::animation(
  *
  * @param a2 The other animation.
  */
-animation::animation(const animation &a2) :
+Animation::Animation(const Animation &a2) :
     name(a2.name),
     frames(a2.frames),
     loop_frame(a2.loop_frame),
@@ -66,7 +66,7 @@ animation::animation(const animation &a2) :
  * @param a2 The other animation.
  * @return The current object.
  */
-animation &animation::operator=(const animation &a2) {
+Animation &Animation::operator=(const Animation &a2) {
     if(this != &a2) {
         name = a2.name;
         frames = a2.frames;
@@ -83,7 +83,7 @@ animation &animation::operator=(const animation &a2) {
  *
  * @param idx Frame index.
  */
-void animation::delete_frame(size_t idx) {
+void Animation::delete_frame(size_t idx) {
     if(idx == INVALID) return;
     
     if(idx < loop_frame) {
@@ -106,7 +106,7 @@ void animation::delete_frame(size_t idx) {
  *
  * @return The duration.
  */
-float animation::get_duration() {
+float Animation::get_duration() {
     float duration = 0.0f;
     for(size_t f = 0; f < frames.size(); f++) {
         duration += frames[f].duration;
@@ -123,7 +123,7 @@ float animation::get_duration() {
  * @param frame_idx The frame index is returned here.
  * @param frame_time The time within the frame is returned here.
  */
-void animation::get_frame_and_time(
+void Animation::get_frame_and_time(
     float t, size_t* frame_idx, float* frame_time
 ) {
     *frame_idx = 0;
@@ -155,7 +155,7 @@ void animation::get_frame_and_time(
  *
  * @return The duration.
  */
-float animation::get_loop_duration() {
+float Animation::get_loop_duration() {
     float duration = 0.0f;
     for(size_t f = loop_frame; f < frames.size(); f++) {
         duration += frames[f].duration;
@@ -172,7 +172,7 @@ float animation::get_loop_duration() {
  * @param frame_time Time in the current frame.
  * @return The time.
  */
-float animation::get_time(size_t frame_idx, float frame_time) {
+float Animation::get_time(size_t frame_idx, float frame_time) {
     if(frame_idx == INVALID) {
         return 0.0f;
     }
@@ -196,9 +196,9 @@ float animation::get_time(size_t frame_idx, float frame_time) {
  * @param s List of sprites.
  * @param b List of body parts.
  */
-animation_database::animation_database(
-    const vector<animation*> &a, const vector<sprite*> &s,
-    const vector<body_part*> &b
+AnimationDatabase::AnimationDatabase(
+    const vector<Animation*> &a, const vector<Sprite*> &s,
+    const vector<BodyPart*> &b
 ) :
     animations(a),
     sprites(s),
@@ -211,14 +211,14 @@ animation_database::animation_database(
  * @brief Calculates the maximum distance that any of its hitbox can reach,
  * and stores it in the hitbox_span variable.
  */
-void animation_database::calculate_hitbox_span() {
+void AnimationDatabase::calculate_hitbox_span() {
     hitbox_span = 0.0f;
     for(size_t s = 0; s < sprites.size(); s++) {
-        sprite* s_ptr = sprites[s];
+        Sprite* s_ptr = sprites[s];
         for(size_t h = 0; h < s_ptr->hitboxes.size(); h++) {
-            hitbox* h_ptr = &s_ptr->hitboxes[h];
+            Hitbox* h_ptr = &s_ptr->hitboxes[h];
             
-            float d = dist(point(0.0f), h_ptr->pos).to_float();
+            float d = Distance(Point(0.0f), h_ptr->pos).to_float();
             d += h_ptr->radius;
             hitbox_span = std::max(hitbox_span, d);
         }
@@ -245,9 +245,9 @@ void animation_database::calculate_hitbox_span() {
  * @param file File from where these animations were loaded. Used to
  * report errors.
  */
-void animation_database::create_conversions(
+void AnimationDatabase::create_conversions(
     const vector<std::pair<size_t, string> > &conversions,
-    const data_node* file
+    const DataNode* file
 ) {
     pre_named_conversions.clear();
     
@@ -277,7 +277,7 @@ void animation_database::create_conversions(
 /**
  * @brief Destroys an animation database and all of its content.
  */
-void animation_database::destroy() {
+void AnimationDatabase::destroy() {
     reset_metadata();
     for(size_t a = 0; a < animations.size(); a++) {
         delete animations[a];
@@ -299,9 +299,9 @@ void animation_database::destroy() {
  *
  * @param idx Sprite index.
  */
-void animation_database::delete_sprite(size_t idx) {
+void AnimationDatabase::delete_sprite(size_t idx) {
     for(size_t a = 0; a < animations.size(); a++) {
-        animation* a_ptr = animations[a];
+        Animation* a_ptr = animations[a];
         
         for(size_t f = 0; f < a_ptr->frames.size();) {
             if(a_ptr->frames[f].sprite_idx == idx) {
@@ -315,9 +315,9 @@ void animation_database::delete_sprite(size_t idx) {
     sprites.erase(sprites.begin() + idx);
     
     for(size_t a = 0; a < animations.size(); a++) {
-        animation* a_ptr = animations[a];
+        Animation* a_ptr = animations[a];
         for(size_t f = 0; f < a_ptr->frames.size(); f++) {
-            frame* f_ptr = &(a_ptr->frames[f]);
+            Frame* f_ptr = &(a_ptr->frames[f]);
             f_ptr->sprite_idx = find_sprite(f_ptr->sprite_name);
         }
     }
@@ -329,11 +329,11 @@ void animation_database::delete_sprite(size_t idx) {
  *
  * @param mt_ptr Mob type with the sound data.
  */
-void animation_database::fill_sound_idx_caches(mob_type* mt_ptr) {
+void AnimationDatabase::fill_sound_idx_caches(MobType* mt_ptr) {
     for(size_t a = 0; a < animations.size(); a++) {
-        animation* a_ptr = animations[a];
+        Animation* a_ptr = animations[a];
         for(size_t f = 0; f < a_ptr->frames.size(); f++) {
-            frame* f_ptr = &a_ptr->frames[f];
+            Frame* f_ptr = &a_ptr->frames[f];
             f_ptr->sound_idx = INVALID;
             if(f_ptr->sound.empty()) continue;
             
@@ -353,7 +353,7 @@ void animation_database::fill_sound_idx_caches(mob_type* mt_ptr) {
  * @param name Name of the animation to search for.
  * @return The index, or INVALID if not found.
  */
-size_t animation_database::find_animation(const string &name) const {
+size_t AnimationDatabase::find_animation(const string &name) const {
     for(size_t a = 0; a < animations.size(); a++) {
         if(animations[a]->name == name) return a;
     }
@@ -367,7 +367,7 @@ size_t animation_database::find_animation(const string &name) const {
  * @param name Name of the body part to search for.
  * @return The index, or INVALID if not found.
  */
-size_t animation_database::find_body_part(const string &name) const {
+size_t AnimationDatabase::find_body_part(const string &name) const {
     for(size_t b = 0; b < body_parts.size(); b++) {
         if(body_parts[b]->name == name) return b;
     }
@@ -381,7 +381,7 @@ size_t animation_database::find_body_part(const string &name) const {
  * @param name Name of the sprite to search for.
  * @return The index, or INVALID if not found.
  */
-size_t animation_database::find_sprite(const string &name) const {
+size_t AnimationDatabase::find_sprite(const string &name) const {
     for(size_t s = 0; s < sprites.size(); s++) {
         if(sprites[s]->name == name) return s;
     }
@@ -392,14 +392,14 @@ size_t animation_database::find_sprite(const string &name) const {
 /**
  * @brief Fixes the pointers for body parts.
  */
-void animation_database::fix_body_part_pointers() {
+void AnimationDatabase::fix_body_part_pointers() {
     for(size_t s = 0; s < sprites.size(); s++) {
-        sprite* s_ptr = sprites[s];
+        Sprite* s_ptr = sprites[s];
         for(size_t h = 0; h < s_ptr->hitboxes.size(); h++) {
-            hitbox* h_ptr = &s_ptr->hitboxes[h];
+            Hitbox* h_ptr = &s_ptr->hitboxes[h];
             
             for(size_t b = 0; b < body_parts.size(); b++) {
-                body_part* b_ptr = body_parts[b];
+                BodyPart* b_ptr = body_parts[b];
                 if(b_ptr->name == h_ptr->body_part_name) {
                     h_ptr->body_part_idx = b;
                     h_ptr->body_part_ptr = b_ptr;
@@ -416,38 +416,38 @@ void animation_database::fix_body_part_pointers() {
  *
  * @param node Data node to load from.
  */
-void animation_database::load_from_data_node(data_node* node) {
+void AnimationDatabase::load_from_data_node(DataNode* node) {
     //Content metadata.
     load_metadata_from_data_node(node);
     
     //Body parts.
-    data_node* body_parts_node = node->get_child_by_name("body_parts");
+    DataNode* body_parts_node = node->get_child_by_name("body_parts");
     size_t n_body_parts = body_parts_node->get_nr_of_children();
     for(size_t b = 0; b < n_body_parts; b++) {
     
-        data_node* body_part_node = body_parts_node->get_child(b);
+        DataNode* body_part_node = body_parts_node->get_child(b);
         
-        body_part* cur_body_part = new body_part(body_part_node->name);
+        BodyPart* cur_body_part = new BodyPart(body_part_node->name);
         body_parts.push_back(cur_body_part);
     }
     
     //Sprites.
-    data_node* sprites_node = node->get_child_by_name("sprites");
+    DataNode* sprites_node = node->get_child_by_name("sprites");
     size_t n_sprites = sprites_node->get_nr_of_children();
     for(size_t s = 0; s < n_sprites; s++) {
     
-        data_node* sprite_node = sprites_node->get_child(s);
-        vector<hitbox> hitboxes;
+        DataNode* sprite_node = sprites_node->get_child(s);
+        vector<Hitbox> hitboxes;
         
-        data_node* hitboxes_node =
+        DataNode* hitboxes_node =
             sprite_node->get_child_by_name("hitboxes");
         size_t n_hitboxes = hitboxes_node->get_nr_of_children();
         
         for(size_t h = 0; h < n_hitboxes; h++) {
         
-            data_node* hitbox_node =
+            DataNode* hitbox_node =
                 hitboxes_node->get_child(h);
-            hitbox cur_hitbox = hitbox();
+            Hitbox cur_hitbox = Hitbox();
             
             cur_hitbox.pos =
                 s2p(
@@ -492,7 +492,7 @@ void animation_database::load_from_data_node(data_node* node) {
                     hitbox_node->get_child_by_name("wither_chance")->value
                 );
                 
-            data_node* hazards_node =
+            DataNode* hazards_node =
                 hitbox_node->get_child_by_name("hazards");
             cur_hitbox.hazards_str = hazards_node->value;
             vector<string> hazards_strs =
@@ -516,8 +516,8 @@ void animation_database::load_from_data_node(data_node* node) {
             
         }
         
-        sprite* new_s =
-            new sprite(
+        Sprite* new_s =
+            new Sprite(
             sprite_node->name,
             nullptr,
             s2p(sprite_node->get_child_by_name("file_pos")->value),
@@ -560,25 +560,25 @@ void animation_database::load_from_data_node(data_node* node) {
     }
     
     //Animations.
-    data_node* anims_node = node->get_child_by_name("animations");
+    DataNode* anims_node = node->get_child_by_name("animations");
     size_t n_anims = anims_node->get_nr_of_children();
     for(size_t a = 0; a < n_anims; a++) {
     
-        data_node* anim_node = anims_node->get_child(a);
-        vector<frame> frames;
+        DataNode* anim_node = anims_node->get_child(a);
+        vector<Frame> frames;
         
-        data_node* frames_node =
+        DataNode* frames_node =
             anim_node->get_child_by_name("frames");
         size_t n_frames =
             frames_node->get_nr_of_children();
             
         for(size_t f = 0; f < n_frames; f++) {
-            data_node* frame_node = frames_node->get_child(f);
+            DataNode* frame_node = frames_node->get_child(f);
             size_t s_pos = find_sprite(frame_node->name);
             string signal_str =
                 frame_node->get_child_by_name("signal")->value;
             frames.push_back(
-                frame(
+                Frame(
                     frame_node->name,
                     s_pos,
                     (s_pos == INVALID) ? nullptr : sprites[s_pos],
@@ -591,7 +591,7 @@ void animation_database::load_from_data_node(data_node* node) {
         }
         
         animations.push_back(
-            new animation(
+            new Animation(
                 anim_node->name,
                 frames,
                 s2i(anim_node->get_child_by_name("loop_frame")->value),
@@ -616,143 +616,143 @@ void animation_database::load_from_data_node(data_node* node) {
  * @param node Data node to save to.
  * @param save_top_data Whether to save the Pikmin top's data.
  */
-void animation_database::save_to_data_node(
-    data_node* node, bool save_top_data
+void AnimationDatabase::save_to_data_node(
+    DataNode* node, bool save_top_data
 ) {
     //Content metadata.
     save_metadata_to_data_node(node);
     
     //Animations.
-    data_node* animations_node = new data_node("animations", "");
+    DataNode* animations_node = new DataNode("animations", "");
     node->add(animations_node);
     
     for(size_t a = 0; a < animations.size(); a++) {
-        data_node* anim_node = new data_node(animations[a]->name, "");
+        DataNode* anim_node = new DataNode(animations[a]->name, "");
         animations_node->add(anim_node);
         
         if(animations[a]->loop_frame > 0) {
             anim_node->add(
-                new data_node(
+                new DataNode(
                     "loop_frame", i2s(animations[a]->loop_frame)
                 )
             );
         }
         if(animations[a]->hit_rate != 100) {
             anim_node->add(
-                new data_node("hit_rate", i2s(animations[a]->hit_rate))
+                new DataNode("hit_rate", i2s(animations[a]->hit_rate))
             );
         }
-        data_node* frames_node = new data_node("frames", "");
+        DataNode* frames_node = new DataNode("frames", "");
         anim_node->add(frames_node);
         
         for(size_t f = 0; f < animations[a]->frames.size(); f++) {
-            frame* f_ptr = &animations[a]->frames[f];
+            Frame* f_ptr = &animations[a]->frames[f];
             
-            data_node* frame_node =
-                new data_node(f_ptr->sprite_name, "");
+            DataNode* frame_node =
+                new DataNode(f_ptr->sprite_name, "");
             frames_node->add(frame_node);
             
             frame_node->add(
-                new data_node("duration", f2s(f_ptr->duration))
+                new DataNode("duration", f2s(f_ptr->duration))
             );
             if(f_ptr->interpolate) {
                 frame_node->add(
-                    new data_node("interpolate", b2s(f_ptr->interpolate))
+                    new DataNode("interpolate", b2s(f_ptr->interpolate))
                 );
             }
             if(f_ptr->signal != INVALID) {
                 frame_node->add(
-                    new data_node("signal", i2s(f_ptr->signal))
+                    new DataNode("signal", i2s(f_ptr->signal))
                 );
             }
             if(!f_ptr->sound.empty() && f_ptr->sound != NONE_OPTION) {
                 frame_node->add(
-                    new data_node("sound", f_ptr->sound)
+                    new DataNode("sound", f_ptr->sound)
                 );
             }
         }
     }
     
     //Sprites.
-    data_node* sprites_node = new data_node("sprites", "");
+    DataNode* sprites_node = new DataNode("sprites", "");
     node->add(sprites_node);
     
     for(size_t s = 0; s < sprites.size(); s++) {
-        sprite* s_ptr = sprites[s];
-        data_node* sprite_node = new data_node(sprites[s]->name, "");
+        Sprite* s_ptr = sprites[s];
+        DataNode* sprite_node = new DataNode(sprites[s]->name, "");
         sprites_node->add(sprite_node);
         
-        sprite_node->add(new data_node("file",      s_ptr->bmp_name));
-        sprite_node->add(new data_node("file_pos",  p2s(s_ptr->bmp_pos)));
-        sprite_node->add(new data_node("file_size", p2s(s_ptr->bmp_size)));
+        sprite_node->add(new DataNode("file",      s_ptr->bmp_name));
+        sprite_node->add(new DataNode("file_pos",  p2s(s_ptr->bmp_pos)));
+        sprite_node->add(new DataNode("file_size", p2s(s_ptr->bmp_size)));
         if(s_ptr->offset.x != 0.0 || s_ptr->offset.y != 0.0) {
-            sprite_node->add(new data_node("offset", p2s(s_ptr->offset)));
+            sprite_node->add(new DataNode("offset", p2s(s_ptr->offset)));
         }
         if(s_ptr->scale.x != 1.0 || s_ptr->scale.y != 1.0) {
-            sprite_node->add(new data_node("scale", p2s(s_ptr->scale)));
+            sprite_node->add(new DataNode("scale", p2s(s_ptr->scale)));
         }
         if(s_ptr->angle != 0.0) {
-            sprite_node->add(new data_node("angle", f2s(s_ptr->angle)));
+            sprite_node->add(new DataNode("angle", f2s(s_ptr->angle)));
         }
         if(s_ptr->tint != COLOR_WHITE) {
-            sprite_node->add(new data_node("tint", c2s(s_ptr->tint)));
+            sprite_node->add(new DataNode("tint", c2s(s_ptr->tint)));
         }
         
         if(save_top_data) {
             sprite_node->add(
-                new data_node("top_visible", b2s(s_ptr->top_visible))
+                new DataNode("top_visible", b2s(s_ptr->top_visible))
             );
             sprite_node->add(
-                new data_node("top_pos", p2s(s_ptr->top_pos))
+                new DataNode("top_pos", p2s(s_ptr->top_pos))
             );
             sprite_node->add(
-                new data_node("top_size", p2s(s_ptr->top_size))
+                new DataNode("top_size", p2s(s_ptr->top_size))
             );
             sprite_node->add(
-                new data_node("top_angle", f2s(s_ptr->top_angle))
+                new DataNode("top_angle", f2s(s_ptr->top_angle))
             );
         }
         
         if(!s_ptr->hitboxes.empty()) {
-            data_node* hitboxes_node =
-                new data_node("hitboxes", "");
+            DataNode* hitboxes_node =
+                new DataNode("hitboxes", "");
             sprite_node->add(hitboxes_node);
             
             for(size_t h = 0; h < s_ptr->hitboxes.size(); h++) {
-                hitbox* h_ptr = &s_ptr->hitboxes[h];
+                Hitbox* h_ptr = &s_ptr->hitboxes[h];
                 
-                data_node* hitbox_node =
-                    new data_node(h_ptr->body_part_name, "");
+                DataNode* hitbox_node =
+                    new DataNode(h_ptr->body_part_name, "");
                 hitboxes_node->add(hitbox_node);
                 
                 hitbox_node->add(
-                    new data_node("coords", p2s(h_ptr->pos, &h_ptr->z))
+                    new DataNode("coords", p2s(h_ptr->pos, &h_ptr->z))
                 );
                 hitbox_node->add(
-                    new data_node("height", f2s(h_ptr->height))
+                    new DataNode("height", f2s(h_ptr->height))
                 );
                 hitbox_node->add(
-                    new data_node("radius", f2s(h_ptr->radius))
+                    new DataNode("radius", f2s(h_ptr->radius))
                 );
                 hitbox_node->add(
-                    new data_node("type", i2s(h_ptr->type))
+                    new DataNode("type", i2s(h_ptr->type))
                 );
                 hitbox_node->add(
-                    new data_node("value", f2s(h_ptr->value))
+                    new DataNode("value", f2s(h_ptr->value))
                 );
                 if(
                     h_ptr->type == HITBOX_TYPE_NORMAL &&
                     h_ptr->can_pikmin_latch
                 ) {
                     hitbox_node->add(
-                        new data_node(
+                        new DataNode(
                             "can_pikmin_latch", b2s(h_ptr->can_pikmin_latch)
                         )
                     );
                 }
                 if(!h_ptr->hazards_str.empty()) {
                     hitbox_node->add(
-                        new data_node("hazards", h_ptr->hazards_str)
+                        new DataNode("hazards", h_ptr->hazards_str)
                     );
                 }
                 if(
@@ -760,7 +760,7 @@ void animation_database::save_to_data_node(
                     h_ptr->knockback_outward
                 ) {
                     hitbox_node->add(
-                        new data_node(
+                        new DataNode(
                             "knockback_outward",
                             b2s(h_ptr->knockback_outward)
                         )
@@ -771,7 +771,7 @@ void animation_database::save_to_data_node(
                     h_ptr->knockback_angle != 0
                 ) {
                     hitbox_node->add(
-                        new data_node(
+                        new DataNode(
                             "knockback_angle", f2s(h_ptr->knockback_angle)
                         )
                     );
@@ -781,7 +781,7 @@ void animation_database::save_to_data_node(
                     h_ptr->knockback != 0
                 ) {
                     hitbox_node->add(
-                        new data_node("knockback", f2s(h_ptr->knockback))
+                        new DataNode("knockback", f2s(h_ptr->knockback))
                     );
                 }
                 if(
@@ -789,7 +789,7 @@ void animation_database::save_to_data_node(
                     h_ptr->wither_chance > 0
                 ) {
                     hitbox_node->add(
-                        new data_node(
+                        new DataNode(
                             "wither_chance", i2s(h_ptr->wither_chance)
                         )
                     );
@@ -799,12 +799,12 @@ void animation_database::save_to_data_node(
     }
     
     //Body parts.
-    data_node* body_parts_node = new data_node("body_parts", "");
+    DataNode* body_parts_node = new DataNode("body_parts", "");
     node->add(body_parts_node);
     
     for(size_t b = 0; b < body_parts.size(); b++) {
-        data_node* body_part_node =
-            new data_node(body_parts[b]->name, "");
+        DataNode* body_part_node =
+            new DataNode(body_parts[b]->name, "");
         body_parts_node->add(body_part_node);
         
     }
@@ -815,24 +815,24 @@ void animation_database::save_to_data_node(
  * @brief Sorts all animations and sprites alphabetically,
  * making them more organized.
  */
-void animation_database::sort_alphabetically() {
+void AnimationDatabase::sort_alphabetically() {
     sort(
         animations.begin(), animations.end(),
-    [] (const animation * a1, const animation * a2) {
+    [] (const Animation * a1, const Animation * a2) {
         return a1->name < a2->name;
     }
     );
     sort(
         sprites.begin(), sprites.end(),
-    [] (const sprite * s1, const sprite * s2) {
+    [] (const Sprite * s1, const Sprite * s2) {
         return s1->name < s2->name;
     }
     );
     
     for(size_t a = 0; a < animations.size(); a++) {
-        animation* a_ptr = animations[a];
+        Animation* a_ptr = animations[a];
         for(size_t f = 0; f < a_ptr->frames.size(); f++) {
-            frame* f_ptr = &(a_ptr->frames[f]);
+            Frame* f_ptr = &(a_ptr->frames[f]);
             
             f_ptr->sprite_idx = find_sprite(f_ptr->sprite_name);
         }
@@ -845,7 +845,7 @@ void animation_database::sort_alphabetically() {
  *
  * @param anim_db The animation database. Used when changing animations.
  */
-animation_instance::animation_instance(animation_database* anim_db) :
+AnimationInstance::AnimationInstance(AnimationDatabase* anim_db) :
     cur_anim(nullptr),
     anim_db(anim_db) {
     
@@ -857,7 +857,7 @@ animation_instance::animation_instance(animation_database* anim_db) :
  *
  * @param ai2 The other animation instance.
  */
-animation_instance::animation_instance(const animation_instance &ai2) :
+AnimationInstance::AnimationInstance(const AnimationInstance &ai2) :
     cur_anim(ai2.cur_anim),
     anim_db(ai2.anim_db) {
     
@@ -871,8 +871,8 @@ animation_instance::animation_instance(const animation_instance &ai2) :
  * @param ai2 The other animation instance.
  * @return The current object.
  */
-animation_instance &animation_instance::operator=(
-    const animation_instance &ai2
+AnimationInstance &AnimationInstance::operator=(
+    const AnimationInstance &ai2
 ) {
     if(this != &ai2) {
         cur_anim = ai2.cur_anim;
@@ -895,8 +895,8 @@ animation_instance &animation_instance::operator=(
  * @param out_interpolation_factor If not nullptr, the interpolation factor
  * (0 to 1) between the current sprite and the next one is returned here.
  */
-void animation_instance::get_sprite_data(
-    sprite** out_cur_sprite_ptr, sprite** out_next_sprite_ptr,
+void AnimationInstance::get_sprite_data(
+    Sprite** out_cur_sprite_ptr, Sprite** out_next_sprite_ptr,
     float* out_interpolation_factor
 ) const {
     if(!valid_frame()) {
@@ -906,7 +906,7 @@ void animation_instance::get_sprite_data(
         return;
     }
     
-    frame* cur_frame_ptr = &cur_anim->frames[cur_frame_idx];
+    Frame* cur_frame_ptr = &cur_anim->frames[cur_frame_idx];
     //First, the basics -- the current sprite.
     if(out_cur_sprite_ptr) {
         *out_cur_sprite_ptr = cur_frame_ptr->sprite_ptr;
@@ -924,7 +924,7 @@ void animation_instance::get_sprite_data(
     
     //Get the next sprite.
     size_t next_frame_idx = get_next_frame_idx();
-    frame* next_frame_ptr = &cur_anim->frames[next_frame_idx];
+    Frame* next_frame_ptr = &cur_anim->frames[next_frame_idx];
     
     if(out_next_sprite_ptr) *out_next_sprite_ptr = next_frame_ptr->sprite_ptr;
     
@@ -949,7 +949,7 @@ void animation_instance::get_sprite_data(
  * the end and the next frame loops back to the beginning.
  * @return The index, or INVALID on error.
  */
-size_t animation_instance::get_next_frame_idx(bool* out_reached_end) const {
+size_t AnimationInstance::get_next_frame_idx(bool* out_reached_end) const {
     if(out_reached_end) *out_reached_end = false;
     if(!cur_anim) return INVALID;
     
@@ -973,7 +973,7 @@ size_t animation_instance::get_next_frame_idx(bool* out_reached_end) const {
  *
  * @param db Pointer to the animation database.
  */
-void animation_instance::init_to_first_anim(animation_database* db) {
+void AnimationInstance::init_to_first_anim(AnimationDatabase* db) {
     anim_db = db;
     if(db && !anim_db->animations.empty()) {
         cur_anim = anim_db->animations[0];
@@ -989,7 +989,7 @@ void animation_instance::init_to_first_anim(animation_database* db) {
  * The time is anywhere between 0 and the total duration of the
  * animation. Frame signals will be ignored.
  */
-void animation_instance::skip_ahead_randomly() {
+void AnimationInstance::skip_ahead_randomly() {
     if(!cur_anim) return;
     //First, find how long the animation lasts for.
     
@@ -1005,7 +1005,7 @@ void animation_instance::skip_ahead_randomly() {
 /**
  * @brief Clears everything.
  */
-void animation_instance::clear() {
+void AnimationInstance::clear() {
     cur_anim = nullptr;
     anim_db = nullptr;
     cur_frame_time = 0;
@@ -1021,14 +1021,14 @@ void animation_instance::clear() {
  * @param sounds Any frame that should play a sound adds it here.
  * @return Whether or not the animation ended its final frame.
  */
-bool animation_instance::tick(
+bool AnimationInstance::tick(
     float delta_t, vector<size_t>* signals,
     vector<size_t>* sounds
 ) {
     if(!cur_anim) return false;
     size_t n_frames = cur_anim->frames.size();
     if(n_frames == 0) return false;
-    frame* cur_frame = &cur_anim->frames[cur_frame_idx];
+    Frame* cur_frame = &cur_anim->frames[cur_frame_idx];
     if(cur_frame->duration == 0) {
         return true;
     }
@@ -1062,7 +1062,7 @@ bool animation_instance::tick(
  * @brief Sets the animation state to the beginning.
  * It's called automatically when the animation is first set.
  */
-void animation_instance::to_start() {
+void AnimationInstance::to_start() {
     cur_frame_time = 0;
     cur_frame_idx = 0;
 }
@@ -1074,7 +1074,7 @@ void animation_instance::to_start() {
  *
  * @return Whether it's in a valid state.
  */
-bool animation_instance::valid_frame() const {
+bool AnimationInstance::valid_frame() const {
     if(!cur_anim) return false;
     if(cur_frame_idx >= cur_anim->frames.size()) return false;
     return true;
@@ -1093,8 +1093,8 @@ bool animation_instance::valid_frame() const {
  * @param snd Sound name.
  * @param s Signal.
  */
-frame::frame(
-    const string &sn, size_t si, sprite* sp, float d,
+Frame::Frame(
+    const string &sn, size_t si, Sprite* sp, float d,
     bool in, const string &snd, size_t s
 ) :
     sprite_name(sn),
@@ -1115,8 +1115,8 @@ frame::frame(
  * @param b Bitmap.
  * @param h List of hitboxes.
  */
-sprite::sprite(
-    const string &name, ALLEGRO_BITMAP* const b, const vector<hitbox> &h
+Sprite::Sprite(
+    const string &name, ALLEGRO_BITMAP* const b, const vector<Hitbox> &h
 ) :
     name(name),
     bitmap(b),
@@ -1135,9 +1135,9 @@ sprite::sprite(
  * @param b_size Width and height of the sprite, in the parent's bitmap.
  * @param h List of hitboxes.
  */
-sprite::sprite(
-    const string &name, ALLEGRO_BITMAP* const b, const point &b_pos,
-    const point &b_size, const vector<hitbox> &h
+Sprite::Sprite(
+    const string &name, ALLEGRO_BITMAP* const b, const Point &b_pos,
+    const Point &b_size, const vector<Hitbox> &h
 ) :
     name(name),
     parent_bmp(b),
@@ -1158,7 +1158,7 @@ sprite::sprite(
  *
  * @param s2 The other sprite.
  */
-sprite::sprite(const sprite &s2) :
+Sprite::Sprite(const Sprite &s2) :
     name(s2.name),
     parent_bmp(nullptr),
     bmp_name(s2.bmp_name),
@@ -1182,8 +1182,8 @@ sprite::sprite(const sprite &s2) :
 /**
  * @brief Destroys the sprite object.
  */
-sprite::~sprite() {
-    set_bitmap("", point(), point());
+Sprite::~Sprite() {
+    set_bitmap("", Point(), Point());
 }
 
 
@@ -1194,17 +1194,17 @@ sprite::~sprite() {
  * @param height The hitboxes's starting height.
  * @param radius The hitboxes's starting radius.
  */
-void sprite::create_hitboxes(
-    animation_database* const adb, float height, float radius
+void Sprite::create_hitboxes(
+    AnimationDatabase* const adb, float height, float radius
 ) {
     hitboxes.clear();
     for(size_t b = 0; b < adb->body_parts.size(); b++) {
         hitboxes.push_back(
-            hitbox(
+            Hitbox(
                 adb->body_parts[b]->name,
                 b,
                 adb->body_parts[b],
-                point(), 0, height, radius
+                Point(), 0, height, radius
             )
         );
     }
@@ -1217,7 +1217,7 @@ void sprite::create_hitboxes(
  * @param s2 The other sprite.
  * @return The current object.
  */
-sprite &sprite::operator=(const sprite &s2) {
+Sprite &Sprite::operator=(const Sprite &s2) {
     if(this != &s2) {
         name = s2.name;
         parent_bmp = nullptr;
@@ -1252,10 +1252,10 @@ sprite &sprite::operator=(const sprite &s2) {
  * @param node If not nullptr, this will be used to report an error with,
  * in case something happens.
  */
-void sprite::set_bitmap(
+void Sprite::set_bitmap(
     const string &new_bmp_name,
-    const point &new_bmp_pos, const point &new_bmp_size,
-    data_node* node
+    const Point &new_bmp_pos, const Point &new_bmp_size,
+    DataNode* node
 ) {
     if(bitmap) {
         al_destroy_bitmap(bitmap);
@@ -1268,8 +1268,8 @@ void sprite::set_bitmap(
     
     if(new_bmp_name.empty()) {
         bmp_name.clear();
-        bmp_size = point();
-        bmp_pos = point();
+        bmp_size = Point();
+        bmp_pos = Point();
         return;
     }
     
@@ -1277,7 +1277,7 @@ void sprite::set_bitmap(
         parent_bmp = game.content.bitmaps.list.get(new_bmp_name, node, node != nullptr);
     }
     
-    point parent_size = get_bitmap_dimensions(parent_bmp);
+    Point parent_size = get_bitmap_dimensions(parent_bmp);
     
     bmp_name = new_bmp_name;
     bmp_pos = new_bmp_pos;
@@ -1322,11 +1322,11 @@ void sprite::set_bitmap(
  * returned here.
  */
 void get_sprite_basic_effects(
-    const point &base_pos, float base_angle,
+    const Point &base_pos, float base_angle,
     float base_angle_cos_cache, float base_angle_sin_cache,
-    sprite* cur_s_ptr, sprite* next_s_ptr, float interpolation_factor,
-    point* out_eff_trans, float* out_eff_angle,
-    point* out_eff_scale, ALLEGRO_COLOR* out_eff_tint
+    Sprite* cur_s_ptr, Sprite* next_s_ptr, float interpolation_factor,
+    Point* out_eff_trans, float* out_eff_angle,
+    Point* out_eff_scale, ALLEGRO_COLOR* out_eff_tint
 ) {
     if(base_angle_cos_cache == LARGE_FLOAT) {
         base_angle_cos_cache = cos(base_angle);
@@ -1356,7 +1356,7 @@ void get_sprite_basic_effects(
     }
     
     if(next_s_ptr && interpolation_factor > 0.0f) {
-        point next_trans(
+        Point next_trans(
             base_pos.x +
             base_angle_cos_cache * next_s_ptr->offset.x -
             base_angle_sin_cache * next_s_ptr->offset.y,
@@ -1365,7 +1365,7 @@ void get_sprite_basic_effects(
             base_angle_cos_cache * next_s_ptr->offset.y
         );
         float next_angle = base_angle + next_s_ptr->angle;
-        point next_scale = next_s_ptr->scale;
+        Point next_scale = next_s_ptr->scale;
         ALLEGRO_COLOR next_tint = next_s_ptr->tint;
         
         if(out_eff_trans) {
@@ -1417,9 +1417,9 @@ void get_sprite_basic_effects(
  * returned here.
  */
 void get_sprite_basic_top_effects(
-    sprite* cur_s_ptr, sprite* next_s_ptr, float interpolation_factor,
-    point* out_eff_trans, float* out_eff_angle,
-    point* out_eff_size
+    Sprite* cur_s_ptr, Sprite* next_s_ptr, float interpolation_factor,
+    Point* out_eff_trans, float* out_eff_angle,
+    Point* out_eff_size
 ) {
     if(out_eff_trans) {
         *out_eff_trans = cur_s_ptr->top_pos;
@@ -1432,9 +1432,9 @@ void get_sprite_basic_top_effects(
     }
     
     if(next_s_ptr && interpolation_factor > 0.0f) {
-        point next_trans = next_s_ptr->top_pos;
+        Point next_trans = next_s_ptr->top_pos;
         float next_angle = next_s_ptr->top_angle;
-        point next_size = next_s_ptr->top_size;
+        Point next_size = next_s_ptr->top_size;
         
         if(out_eff_trans) {
             *out_eff_trans =

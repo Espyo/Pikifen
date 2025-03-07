@@ -20,8 +20,8 @@
  * @param type Scale type this mob belongs to.
  * @param angle Starting angle.
  */
-scale::scale(const point &pos, scale_type* type, float angle) :
-    mob(pos, type, angle),
+Scale::Scale(const Point &pos, ScaleType* type, float angle) :
+    Mob(pos, type, angle),
     sca_type(type),
     goal_number(type->goal_number) {
     
@@ -34,13 +34,13 @@ scale::scale(const point &pos, scale_type* type, float angle) :
  *
  * @return The weight.
  */
-float scale::calculate_cur_weight() const {
+float Scale::calculate_cur_weight() const {
 
     //Start by figuring out which mobs are applying weight.
-    set<mob*> weighing_mobs;
+    set<Mob*> weighing_mobs;
     
     for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
-        mob* m_ptr = game.states.gameplay->mobs.all[m];
+        Mob* m_ptr = game.states.gameplay->mobs.all[m];
         
         if(m_ptr->standing_on_mob == this) {
             weighing_mobs.insert(m_ptr);
@@ -70,7 +70,7 @@ float scale::calculate_cur_weight() const {
  * @param fraction_color The fraction's color gets set here.
  * @return Whether the numbers should be shown.
  */
-bool scale::get_fraction_numbers_info(
+bool Scale::get_fraction_numbers_info(
     float* fraction_value_nr, float* fraction_req_nr,
     ALLEGRO_COLOR* fraction_color
 ) const {
@@ -88,8 +88,8 @@ bool scale::get_fraction_numbers_info(
  *
  * @param svr Script var reader to use.
  */
-void scale::read_script_vars(const script_var_reader &svr) {
-    mob::read_script_vars(svr);
+void Scale::read_script_vars(const ScriptVarReader &svr) {
+    Mob::read_script_vars(svr);
     
     svr.get("goal_number", goal_number);
 }

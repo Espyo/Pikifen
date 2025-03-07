@@ -27,7 +27,7 @@
  * you would do something like:
  *   data_node file("levels.txt");
  *   for(size_t l = 0; l < file.get_nr_of_children_by_name("level"); l++) {
- *       data_node* level_objects =
+ *       DataNode* level_objects =
  *           file.get_child_by_name("level", l)->get_child_by_name("objects");
  *       for(size_t o = 0; o < level_objects->get_nr_of_children(); o++){
  *           string type = level_objects->get_child(o)->name;
@@ -60,7 +60,7 @@ extern const string UTF8_MAGIC_NUMBER;
  * @brief A node of data. Nodes may contain a value,
  * and/or a list of children nodes.
  */
-class data_node {
+class DataNode {
 
 public:
 
@@ -85,22 +85,22 @@ public:
     
     //--- Function declarations ---
     
-    data_node();
-    explicit data_node(const string &file_path);
-    data_node(const string &name, const string &value);
-    data_node(const data_node &dn2);
-    data_node &operator=(const data_node &dn2);
-    ~data_node();
+    DataNode();
+    explicit DataNode(const string &file_path);
+    DataNode(const string &name, const string &value);
+    DataNode(const DataNode &dn2);
+    DataNode &operator=(const DataNode &dn2);
+    ~DataNode();
     void clear();
     string get_value_or_default(const string &def) const;
     size_t get_nr_of_children() const;
-    data_node* get_child(size_t number);
+    DataNode* get_child(size_t number);
     size_t get_nr_of_children_by_name(const string &name) const;
-    data_node* get_child_by_name(
+    DataNode* get_child_by_name(
         const string &name, size_t occurrence_number = 0
     );
-    size_t add(data_node* new_node);
-    bool remove(data_node* node_to_remove);
+    size_t add(DataNode* new_node);
+    bool remove(DataNode* node_to_remove);
     void load_file(
         const string &file_path,
         bool trim_values = true,
@@ -128,15 +128,15 @@ private:
     //--- Members ---
     
     //List of children nodes.
-    vector<data_node*> children;
+    vector<DataNode*> children;
     
     //Dummy children, returned upon error.
-    vector<data_node*> dummy_children;
+    vector<DataNode*> dummy_children;
     
     
     //--- Function declarations ---
     
-    data_node* create_dummy();
+    DataNode* create_dummy();
     static unsigned char decrypt_char(unsigned char c);
     static unsigned char encrypt_char(unsigned char c);
     static void encrypt_string(string &s);

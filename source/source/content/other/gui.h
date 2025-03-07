@@ -43,7 +43,7 @@ extern const float JUICY_GROW_ICON_MULT;
 extern const float JUICY_GROW_TEXT_HIGH_MULT;
 extern const float JUICY_GROW_TEXT_LOW_MULT;
 extern const float JUICY_GROW_TEXT_MEDIUM_MULT;
-extern const point STANDARD_CONTENT_SIZE;
+extern const Point STANDARD_CONTENT_SIZE;
 }
 
 
@@ -86,14 +86,14 @@ enum GUI_MANAGER_ANIM {
 };
 
 
-class gui_manager;
+class GuiManager;
 
 
 /**
  * @brief An item in the GUI. This can be a HUD element, a button,
  * some text, etc.
  */
-class gui_item {
+class GuiItem {
 
 public:
 
@@ -132,13 +132,13 @@ public:
     //--- Members ---
     
     //What GUI manager it belongs to, if any.
-    gui_manager* manager = nullptr;
+    GuiManager* manager = nullptr;
     
     //Its raw on-screen position, in screen ratio (or parent ratio).
-    point center;
+    Point center;
     
     //Its raw width and height, in screen ratio (or parent ratio).
-    point size;
+    Point size;
     
     //Is it currently visible?
     bool visible = true;
@@ -153,10 +153,10 @@ public:
     bool selected = false;
     
     //If it is placed inside of another item, specify it here.
-    gui_item* parent = nullptr;
+    GuiItem* parent = nullptr;
     
     //List of children items, that are placed inside this one.
-    vector<gui_item*> children;
+    vector<GuiItem*> children;
     
     //Vertical offset (height percentage) of the items inside of it, if any.
     float offset = 0.0f;
@@ -174,7 +174,7 @@ public:
     float juice_timer = 0.0f;
     
     //What to do when it's time to draw it.
-    std::function<void(const point &center, const point &size)> on_draw = nullptr;
+    std::function<void(const Point &center, const Point &size)> on_draw = nullptr;
     
     //What to do when it's time to tick one frame.
     std::function<void(float time)> on_tick = nullptr;
@@ -183,10 +183,10 @@ public:
     std::function<void(const ALLEGRO_EVENT &ev)> on_event = nullptr;
     
     //What to do when the item is activated.
-    std::function<void(const point &cursor_pos)> on_activate = nullptr;
+    std::function<void(const Point &cursor_pos)> on_activate = nullptr;
     
     //What to do when the mouse cursor is on top of it this frame.
-    std::function<void(const point &cursor_pos)> on_mouse_over = nullptr;
+    std::function<void(const Point &cursor_pos)> on_mouse_over = nullptr;
     
     //What to do when a directional button's pressed with the item selected.
     std::function<bool(size_t button_id)> on_menu_dir_button = nullptr;
@@ -195,7 +195,7 @@ public:
     std::function<void()> on_selected = nullptr;
     
     //What to do when one of its children became the selected item.
-    std::function<void(const gui_item* child)> on_child_selected = nullptr;
+    std::function<void(const GuiItem* child)> on_child_selected = nullptr;
     
     //What to do when its tooltip needs to be retrieved.
     std::function<string()> on_get_tooltip = nullptr;
@@ -203,19 +203,19 @@ public:
     
     //--- Function declarations ---
     
-    explicit gui_item(bool selectable = false);
-    virtual ~gui_item() = default;
-    bool activate(const point &cursor_pos);
-    void add_child(gui_item* item);
+    explicit GuiItem(bool selectable = false);
+    virtual ~GuiItem() = default;
+    bool activate(const Point &cursor_pos);
+    void add_child(GuiItem* item);
     void delete_all_children();
     float get_child_bottom();
     float get_juice_value();
-    point get_reference_center();
-    point get_reference_size();
-    bool is_mouse_on(const point &cursor_pos);
+    Point get_reference_center();
+    Point get_reference_size();
+    bool is_mouse_on(const Point &cursor_pos);
     bool is_responsive();
     bool is_visible();
-    void remove_child(gui_item* item);
+    void remove_child(GuiItem* item);
     void start_juice_animation(JUICE_TYPE type);
     
 };
@@ -225,7 +225,7 @@ public:
  * @brief A GUI item with fields ready to make it behave like a bullet
  * point in a list.
  */
-class bullet_gui_item : public gui_item {
+class BulletGuiItem : public GuiItem {
 
 public:
 
@@ -243,12 +243,12 @@ public:
     
     //--- Function declarations ---
     
-    bullet_gui_item(
+    BulletGuiItem(
         const string &text, ALLEGRO_FONT* font,
         const ALLEGRO_COLOR &color = COLOR_WHITE
     );
     
-    void def_draw_code(const point &center, const point &size);
+    void def_draw_code(const Point &center, const Point &size);
     
 };
 
@@ -256,7 +256,7 @@ public:
 /**
  * @brief A GUI item with fields ready to make it behave like a button.
  */
-class button_gui_item : public gui_item {
+class ButtonGuiItem : public GuiItem {
 
 public:
 
@@ -274,12 +274,12 @@ public:
     
     //--- Function declarations ---
     
-    button_gui_item(
+    ButtonGuiItem(
         const string &text, ALLEGRO_FONT* font,
         const ALLEGRO_COLOR &color = COLOR_WHITE
     );
     
-    void def_draw_code(const point &center, const point &size);
+    void def_draw_code(const Point &center, const Point &size);
     
 };
 
@@ -287,7 +287,7 @@ public:
 /**
  * @brief A GUI item with fields ready to make it behave like a checkbox.
  */
-class check_gui_item : public gui_item {
+class CheckGuiItem : public GuiItem {
 
 public:
 
@@ -312,27 +312,27 @@ public:
     
     //--- Function declarations ---
     
-    explicit check_gui_item(
+    explicit CheckGuiItem(
         bool value, const string &text, ALLEGRO_FONT* font,
         const ALLEGRO_COLOR &color = COLOR_WHITE
     );
-    explicit check_gui_item(
+    explicit CheckGuiItem(
         bool* value_ptr, const string &text, ALLEGRO_FONT* font,
         const ALLEGRO_COLOR &color = COLOR_WHITE
     );
     
     void def_activate_code();
-    void def_draw_code(const point &center, const point &size);
+    void def_draw_code(const Point &center, const Point &size);
     
 };
 
 
-class scroll_gui_item;
+class ScrollGuiItem;
 
 /**
  * @brief A GUI item with fields ready to make it behave like a list.
  */
-class list_gui_item : public gui_item {
+class ListGuiItem : public GuiItem {
 
 public:
 
@@ -344,10 +344,10 @@ public:
     
     //--- Function declarations ---
     
-    list_gui_item();
+    ListGuiItem();
     
-    void def_child_selected_code(const gui_item* child);
-    void def_draw_code(const point &center, const point &size);
+    void def_child_selected_code(const GuiItem* child);
+    void def_draw_code(const Point &center, const Point &size);
     void def_event_code(const ALLEGRO_EVENT  &ev);
     void def_tick_code(float delta_t);
     
@@ -358,7 +358,7 @@ public:
  * @brief A GUI item with fields ready to make it behave like a previous/next
  * option picker.
  */
-class picker_gui_item : public gui_item {
+class PickerGuiItem : public GuiItem {
 
 public:
 
@@ -385,15 +385,15 @@ public:
     
     //--- Function declarations ---
     
-    picker_gui_item(
+    PickerGuiItem(
         const string &base_text, const string &option,
         size_t nr_options = 0, size_t cur_option_idx = INVALID
     );
     
-    void def_activate_code(const point &cursor_pos);
-    void def_draw_code(const point &center, const point &size);
+    void def_activate_code(const Point &cursor_pos);
+    void def_draw_code(const Point &center, const Point &size);
     bool def_menu_dir_code(size_t button_id);
-    void def_mouse_over_code(const point  &cursor_pos);
+    void def_mouse_over_code(const Point  &cursor_pos);
     
     
 private:
@@ -409,21 +409,21 @@ private:
 /**
  * @brief A GUI item with fields ready to make it behave like a scrollbar.
  */
-class scroll_gui_item : public gui_item {
+class ScrollGuiItem : public GuiItem {
 
 public:
 
     //--- Members ---
     
     //What item this scrollbar is in charge of controlling.
-    list_gui_item* list_item = nullptr;
+    ListGuiItem* list_item = nullptr;
     
     
     //--- Function declarations ---
     
-    scroll_gui_item();
+    ScrollGuiItem();
     
-    void def_draw_code(const point &center, const point &size);
+    void def_draw_code(const Point &center, const Point &size);
     void def_event_code(const ALLEGRO_EVENT  &ev);
     
 };
@@ -433,7 +433,7 @@ public:
  * @brief A GUI item with fields ready to make it behave like a simple
  * text display.
  */
-class text_gui_item : public gui_item {
+class TextGuiItem : public GuiItem {
 
 public:
 
@@ -460,13 +460,13 @@ public:
     
     //--- Function declarations ---
     
-    text_gui_item(
+    TextGuiItem(
         const string &text, ALLEGRO_FONT* font,
         const ALLEGRO_COLOR &color = COLOR_WHITE,
         int flags = ALLEGRO_ALIGN_CENTER
     );
     
-    void def_draw_code(const point &center, const point &size);
+    void def_draw_code(const Point &center, const Point &size);
     
 };
 
@@ -475,21 +475,21 @@ public:
  * @brief A GUI item with fields ready to make it specialize in showing another
  * item's tooltip.
  */
-class tooltip_gui_item : public gui_item {
+class TooltipGuiItem : public GuiItem {
 
 public:
 
     //--- Members ---
     
     //The GUI it belongs to.
-    gui_manager* gui = nullptr;
+    GuiManager* gui = nullptr;
     
     
     //--- Function declarations ---
     
-    explicit tooltip_gui_item(gui_manager* gui);
+    explicit TooltipGuiItem(GuiManager* gui);
     
-    void def_draw_code(const point &center, const point &size);
+    void def_draw_code(const Point &center, const Point &size);
     
     
 private:
@@ -513,20 +513,20 @@ private:
  * heads-up display (HUD) during gameplay, as well as the interactable elements
  * of menus.
  */
-class gui_manager {
+class GuiManager {
 
 public:
 
     //--- Members ---
     
     //List of items.
-    vector<gui_item*> items;
+    vector<GuiItem*> items;
     
     //Which item is currently selected.
-    gui_item* selected_item = nullptr;
+    GuiItem* selected_item = nullptr;
     
     //Item to activate when the user chooses to go back.
-    gui_item* back_item = nullptr;
+    GuiItem* back_item = nullptr;
     
     //Is it currently responding to input?
     bool responsive = true;
@@ -540,24 +540,24 @@ public:
     
     //--- Function declarations ---
     
-    gui_manager();
-    void add_item(gui_item* item, const string &id = "");
+    GuiManager();
+    void add_item(GuiItem* item, const string &id = "");
     void draw();
     void tick(float delta_t);
     string get_current_tooltip();
     bool get_item_draw_info(
-        gui_item* item, point* draw_center, point* draw_size
+        GuiItem* item, Point* draw_center, Point* draw_size
     );
     void handle_allegro_event(const ALLEGRO_EVENT &ev);
-    bool handle_player_action(const player_action &action);
+    bool handle_player_action(const PlayerAction &action);
     void hide_items();
-    void read_coords(data_node* node);
+    void read_coords(DataNode* node);
     void register_coords(
         const string &id,
         float cx, float cy, float w, float h
     );
-    void remove_item(gui_item* item);
-    void set_selected_item(gui_item* item, bool silent = false);
+    void remove_item(GuiItem* item);
+    void set_selected_item(GuiItem* item, bool silent = false);
     void show_items();
     void start_animation(
         const GUI_MANAGER_ANIM type, float duration
@@ -570,10 +570,10 @@ private:
     //--- Members ---
     
     //Registered default centers.
-    map<string, point> registered_centers;
+    map<string, Point> registered_centers;
     
     //Registered default sizes.
-    map<string, point> registered_sizes;
+    map<string, Point> registered_sizes;
     
     //Is the right button pressed?
     bool right_pressed = false;
@@ -609,7 +609,7 @@ private:
     GUI_MANAGER_ANIM anim_type = GUI_MANAGER_ANIM_NONE;
     
     //Timer for the current animation.
-    timer anim_timer;
+    Timer anim_timer;
     
     //Are the items currently visible?
     bool visible = true;

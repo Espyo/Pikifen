@@ -19,8 +19,8 @@
 /**
  * @brief Constructs a new pile category object.
  */
-pile_category::pile_category() :
-    mob_category(
+PileCategory::PileCategory() :
+    MobCategory(
         MOB_CATEGORY_PILES, "pile",
         "Pile", "Piles",
         "piles", al_map_rgb(139, 204, 165)
@@ -32,7 +32,7 @@ pile_category::pile_category() :
 /**
  * @brief Clears the list of registered types of pile.
  */
-void pile_category::clear_types() {
+void PileCategory::clear_types() {
     for(auto &t : game.content.mob_types.list.pile) {
         delete t.second;
     }
@@ -48,10 +48,10 @@ void pile_category::clear_types() {
  * @param angle Starting angle.
  * @return The mob.
  */
-mob* pile_category::create_mob(
-    const point &pos, mob_type* type, float angle
+Mob* PileCategory::create_mob(
+    const Point &pos, MobType* type, float angle
 ) {
-    pile* m = new pile(pos, (pile_type*) type, angle);
+    Pile* m = new Pile(pos, (PileType*) type, angle);
     game.states.gameplay->mobs.piles.push_back(m);
     return m;
 }
@@ -62,8 +62,8 @@ mob* pile_category::create_mob(
  *
  * @return The type.
  */
-mob_type* pile_category::create_type() {
-    return new pile_type();
+MobType* PileCategory::create_type() {
+    return new PileType();
 }
 
 
@@ -72,12 +72,12 @@ mob_type* pile_category::create_type() {
  *
  * @param m The mob to erase.
  */
-void pile_category::erase_mob(mob* m) {
+void PileCategory::erase_mob(Mob* m) {
     game.states.gameplay->mobs.piles.erase(
         find(
             game.states.gameplay->mobs.piles.begin(),
             game.states.gameplay->mobs.piles.end(),
-            (pile*) m
+            (Pile*) m
         )
     );
 }
@@ -90,7 +90,7 @@ void pile_category::erase_mob(mob* m) {
  * @param internal_name Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-mob_type* pile_category::get_type(const string &internal_name) const {
+MobType* PileCategory::get_type(const string &internal_name) const {
     auto it = game.content.mob_types.list.pile.find(internal_name);
     if(it == game.content.mob_types.list.pile.end()) return nullptr;
     return it->second;
@@ -102,7 +102,7 @@ mob_type* pile_category::get_type(const string &internal_name) const {
  *
  * @param list This list gets filled with the mob type internal names.
  */
-void pile_category::get_type_names(vector<string> &list) const {
+void PileCategory::get_type_names(vector<string> &list) const {
     for(auto &t : game.content.mob_types.list.pile) {
         list.push_back(t.first);
     }
@@ -115,6 +115,6 @@ void pile_category::get_type_names(vector<string> &list) const {
  * @param internal_name Internal name of the mob type.
  * @param type Mob type to register.
  */
-void pile_category::register_type(const string &internal_name, mob_type* type) {
-    game.content.mob_types.list.pile[internal_name] = (pile_type*) type;
+void PileCategory::register_type(const string &internal_name, MobType* type) {
+    game.content.mob_types.list.pile[internal_name] = (PileType*) type;
 }

@@ -36,13 +36,13 @@ enum HITBOX_TYPE {
 };
 
 
-struct hazard;
+struct Hazard;
 
 
 /**
  * @brief A body part.
  */
-class body_part {
+class BodyPart {
 
 public:
 
@@ -54,7 +54,7 @@ public:
     
     //--- Function declarations ---
     
-    explicit body_part(const string &name = "");
+    explicit BodyPart(const string &name = "");
     
 };
 
@@ -62,7 +62,7 @@ public:
 /**
  * @brief A hitbox in a sprite. Despite the name, it is a cilinder.
  */
-class hitbox {
+class Hitbox {
 
 public:
 
@@ -75,10 +75,10 @@ public:
     size_t body_part_idx;
     
     //Pointer to the body part. Cache for performance.
-    body_part* body_part_ptr = nullptr;
+    BodyPart* body_part_ptr = nullptr;
     
     //Center of the hitbox (relative coordinates).
-    point pos;
+    Point pos;
     
     //Bottom of the hitbox (relative coordinates).
     float z = 0.0f;
@@ -96,7 +96,7 @@ public:
     string hazards_str;
     
     //List of hazards.
-    vector<hazard*> hazards;
+    vector<Hazard*> hazards;
     
     //If it's a normal hitbox, this is the defense multiplier.
     //If it's an attack one, the attack power.
@@ -121,16 +121,16 @@ public:
     
     //--- Function declarations ---
     
-    explicit hitbox(
-        const string &bpn = "", size_t bpi = INVALID, body_part* bpp = nullptr,
-        const point &pos = point(), float z = 0,
+    explicit Hitbox(
+        const string &bpn = "", size_t bpi = INVALID, BodyPart* bpp = nullptr,
+        const Point &pos = Point(), float z = 0,
         float height = 128, float radius = 32
     );
-    point get_cur_pos(
-        const point &mob_pos, float mob_angle
+    Point get_cur_pos(
+        const Point &mob_pos, float mob_angle
     ) const;
-    point get_cur_pos(
-        const point &mob_pos,
+    Point get_cur_pos(
+        const Point &mob_pos,
         float mob_angle_cos, float mob_angle_sin
     ) const;
     

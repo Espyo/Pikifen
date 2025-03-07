@@ -80,14 +80,14 @@ enum CONVERTER_STATE {
  * @brief A type of converter, which is a mob that can convert Pikmin from
  * one type to another.
  */
-class converter_type : public mob_type, public mob_type_with_anim_groups {
+class ConverterType : public MobType, public MobTypeWithAnimGroups {
 
 public:
 
     //--- Members ---
     
     //List of Pikmin types it can convert to.
-    vector<pikmin_type*> available_pikmin_types;
+    vector<PikminType*> available_pikmin_types;
     
     //How often it changes the current conversion type.
     float type_change_interval = 3.0f;
@@ -111,8 +111,8 @@ public:
     
     //--- Function declarations ---
     
-    converter_type();
-    void load_cat_properties(data_node* file) override;
+    ConverterType();
+    void load_cat_properties(DataNode* file) override;
     anim_conversion_vector get_anim_conversions() const override;
     
 };

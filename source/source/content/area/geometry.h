@@ -26,9 +26,9 @@ using std::unordered_set;
 using std::vector;
 
 
-struct edge;
-struct sector;
-struct vertex;
+struct Edge;
+struct Sector;
+struct Vertex;
 
 
 namespace GEOMETRY {
@@ -76,17 +76,17 @@ enum TRIANGULATION_ERROR {
  * These are used to detect whether a point is inside a sector,
  * and to draw, seeing as OpenGL cannot draw concave polygons.
  */
-struct triangle {
+struct Triangle {
 
     //--- Members ---
     
     //Points that make up this triangle.
-    vertex* points[3] = { nullptr, nullptr, nullptr };
+    Vertex* points[3] = { nullptr, nullptr, nullptr };
     
     
     //--- Function declarations ---
     
-    triangle(vertex* v1, vertex* v2, vertex* v3);
+    Triangle(Vertex* v1, Vertex* v2, Vertex* v3);
     
 };
 
@@ -100,28 +100,28 @@ struct triangle {
  * in a polygon tree. If it has no vertexes, then instead it represents the
  * root of said tree.
  */
-struct polygon {
+struct Polygon {
 
     //--- Members ---
     
     //Ordered list of vertexes that represent the polygon.
-    vector<vertex*> vertexes;
+    vector<Vertex*> vertexes;
     
     //Children, if any.
-    vector<polygon*> children;
+    vector<Polygon*> children;
     
     
     //--- Function declarations ---
     
-    polygon();
-    explicit polygon(const vector<vertex*> &vertexes);
+    Polygon();
+    explicit Polygon(const vector<Vertex*> &vertexes);
     void clean(bool recursive);
     void cut();
     void cut_all_as_root();
     void destroy();
-    vertex* get_rightmost_vertex() const;
-    bool insert_child(polygon* p);
-    bool is_point_inside(const point &p) const;
+    Vertex* get_rightmost_vertex() const;
+    bool insert_child(Polygon* p);
+    bool is_point_inside(const Point &p) const;
     
 };
 
@@ -129,56 +129,56 @@ struct polygon {
 /**
  * @brief Info about the geometry problems the area currently has.
  */
-struct geometry_problems {
+struct GeometryProblems {
 
     //--- Members ---
     
     //Non-simple sectors found, and their reason for being broken.
-    map<sector*, TRIANGULATION_ERROR> non_simples;
+    map<Sector*, TRIANGULATION_ERROR> non_simples;
     
     //List of lone edges found.
-    unordered_set<edge*> lone_edges;
+    unordered_set<Edge*> lone_edges;
     
 };
 
 
 void find_trace_edge(
-    vertex* v_ptr, const vertex* prev_v_ptr, const sector* s_ptr,
+    Vertex* v_ptr, const Vertex* prev_v_ptr, const Sector* s_ptr,
     float prev_e_angle, bool best_is_closest_cw,
-    edge** next_e_ptr, float* next_e_angle, vertex** next_v_ptr,
-    unordered_set<edge*>* excluded_edges
+    Edge** next_e_ptr, float* next_e_angle, Vertex** next_v_ptr,
+    unordered_set<Edge*>* excluded_edges
 );
 void get_cce(
-    const vector<vertex> &vertexes_left, vector<size_t> &ears,
+    const vector<Vertex> &vertexes_left, vector<size_t> &ears,
     vector<size_t> &convex_vertexes, vector<size_t> &concave_vertexes
 );
-vector<std::pair<dist, vertex*> > get_merge_vertexes(
-    const point &p, const vector<vertex*> &all_vertexes,
+vector<std::pair<Distance, Vertex*> > get_merge_vertexes(
+    const Point &p, const vector<Vertex*> &all_vertexes,
     float merge_radius
 );
 TRIANGULATION_ERROR get_polys(
-    sector* s_ptr, vector<polygon>* outers, vector<vector<polygon>>* inners
+    Sector* s_ptr, vector<Polygon>* outers, vector<vector<Polygon>>* inners
 );
 bool get_polys_is_outer(
-    vertex* v_ptr, const sector* s_ptr, const unordered_set<edge*> &edges_left,
+    Vertex* v_ptr, const Sector* s_ptr, const unordered_set<Edge*> &edges_left,
     bool doing_first_polygon
 );
-vertex* get_rightmost_vertex(const unordered_set<edge*> &edges);
-vertex* get_rightmost_vertex(vertex* v1, vertex* v2);
-bool is_polygon_clockwise(vector<vertex*> &vertexes);
-bool is_vertex_convex(const vector<vertex*> &vec, size_t idx);
+Vertex* get_rightmost_vertex(const unordered_set<Edge*> &edges);
+Vertex* get_rightmost_vertex(Vertex* v1, Vertex* v2);
+bool is_polygon_clockwise(vector<Vertex*> &vertexes);
+bool is_vertex_convex(const vector<Vertex*> &vec, size_t idx);
 bool is_vertex_ear(
-    const vector<vertex*> &vec, const vector<size_t> &concaves, size_t idx
+    const vector<Vertex*> &vec, const vector<size_t> &concaves, size_t idx
 );
 TRIANGULATION_ERROR trace_edges(
-    vertex* start_v_ptr, const sector* s_ptr, bool going_cw,
-    vector<vertex*>* vertexes,
-    unordered_set<edge*>* unvisited_edges,
-    unordered_set<edge*>* polygon_edges_so_far
+    Vertex* start_v_ptr, const Sector* s_ptr, bool going_cw,
+    vector<Vertex*>* vertexes,
+    unordered_set<Edge*>* unvisited_edges,
+    unordered_set<Edge*>* polygon_edges_so_far
 );
 TRIANGULATION_ERROR triangulate_polygon(
-    polygon* poly, vector<triangle>* triangles
+    Polygon* poly, vector<Triangle>* triangles
 );
 TRIANGULATION_ERROR triangulate_sector(
-    sector* s_ptr, set<edge*>* lone_edges, bool clear_lone_edges
+    Sector* s_ptr, set<Edge*>* lone_edges, bool clear_lone_edges
 );

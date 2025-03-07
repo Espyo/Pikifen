@@ -24,7 +24,7 @@
 /**
  * @brief Handles the drawing part of the main loop of the area editor.
  */
-void area_editor::do_drawing() {
+void AreaEditor::do_drawing() {
     if(hack_skip_drawing) {
         //Skip drawing for one frame.
         //This hack fixes a weird glitch where if you quick-play an area
@@ -53,8 +53,8 @@ void area_editor::do_drawing() {
  * @param thickness Thickness of the arrow's line.
  * @param color Arrow color.
  */
-void area_editor::draw_arrow(
-    const point &start, const point &end,
+void AreaEditor::draw_arrow(
+    const Point &start, const Point &end,
     float start_offset, float end_offset,
     float thickness, const ALLEGRO_COLOR &color
 ) {
@@ -66,14 +66,14 @@ void area_editor::draw_arrow(
     if(game.cam.zoom >= 0.25) {
         float angle =
             get_angle(start, end);
-        point final_start = point(start_offset, 0);
+        Point final_start = Point(start_offset, 0);
         final_start = rotate_point(final_start, angle);
         final_start += start;
-        point final_end = point(end_offset, 0);
+        Point final_end = Point(end_offset, 0);
         final_end = rotate_point(final_end, angle + TAU / 2.0);
         final_end += end;
         
-        point pivot(
+        Point pivot(
             final_start.x + (final_end.x - final_start.x) * 0.55,
             final_start.y + (final_end.y - final_start.y) * 0.55
         );
@@ -98,7 +98,7 @@ void area_editor::draw_arrow(
  *
  * This is called as a callback inside the Dear ImGui rendering process.
  */
-void area_editor::draw_canvas() {
+void AreaEditor::draw_canvas() {
     al_use_transform(&game.world_to_screen_transform);
     al_set_clipping_rectangle(
         canvas_tl.x, canvas_tl.y,
@@ -243,7 +243,7 @@ void area_editor::draw_canvas() {
     }
     size_t n_sectors = game.cur_area_data->sectors.size();
     for(size_t s = 0; s < n_sectors; s++) {
-        sector* s_ptr;
+        Sector* s_ptr;
         if(
             pre_move_area_data &&
             moving &&
@@ -266,17 +266,17 @@ void area_editor::draw_canvas() {
             if(preview_mode) {
                 bool has_liquid = false;
                 for(size_t h = 0; h < s_ptr->hazards.size(); h++) {
-                    liquid* l_ptr = s_ptr->hazards[h]->associated_liquid;
+                    Liquid* l_ptr = s_ptr->hazards[h]->associated_liquid;
                     if(!l_ptr) continue;
-                    draw_liquid(s_ptr, l_ptr, point(), 1.0f, game.time_passed);
+                    draw_liquid(s_ptr, l_ptr, Point(), 1.0f, game.time_passed);
                     has_liquid = true;
                     break;
                 }
                 if(!has_liquid) {
-                    draw_sector_texture(s_ptr, point(), 1.0, textures_opacity);
+                    draw_sector_texture(s_ptr, Point(), 1.0, textures_opacity);
                 }
             } else {
-                draw_sector_texture(s_ptr, point(), 1.0, textures_opacity);
+                draw_sector_texture(s_ptr, Point(), 1.0, textures_opacity);
             }
             
             if(wall_shadows_opacity > 0.0f) {
@@ -403,7 +403,7 @@ void area_editor::draw_canvas() {
     //Edges.
     size_t n_edges = game.cur_area_data->edges.size();
     for(size_t e = 0; e < n_edges; e++) {
-        edge* e_ptr = game.cur_area_data->edges[e];
+        Edge* e_ptr = game.cur_area_data->edges[e];
         
         if(!e_ptr->is_valid()) continue;
         
@@ -502,7 +502,7 @@ void area_editor::draw_canvas() {
             game.options.area_editor_show_edge_length
         ) {
             bool draw_dist = false;
-            point other_point;
+            Point other_point;
             if(
                 e_ptr->vertexes[0] == move_closest_vertex &&
                 selected_vertexes.find(e_ptr->vertexes[1]) ==
@@ -523,16 +523,16 @@ void area_editor::draw_canvas() {
             
             if(draw_dist) {
                 draw_line_dist(
-                    point(move_closest_vertex->x, move_closest_vertex->y),
+                    Point(move_closest_vertex->x, move_closest_vertex->y),
                     other_point
                 );
             }
         }
         
         if(debug_triangulation && !selected_sectors.empty()) {
-            sector* s_ptr = *selected_sectors.begin();
+            Sector* s_ptr = *selected_sectors.begin();
             for(size_t t = 0; t < s_ptr->triangles.size(); t++) {
-                triangle* t_ptr = &s_ptr->triangles[t];
+                Triangle* t_ptr = &s_ptr->triangles[t];
                 al_draw_triangle(
                     t_ptr->points[0]->x,
                     t_ptr->points[0]->y,
@@ -547,18 +547,18 @@ void area_editor::draw_canvas() {
         }
         
         if(debug_sector_idxs) {
-            point middle(
+            Point middle(
                 (e_ptr->vertexes[0]->x + e_ptr->vertexes[1]->x) / 2.0f,
                 (e_ptr->vertexes[0]->y + e_ptr->vertexes[1]->y) / 2.0f
             );
             float angle =
                 get_angle(
-                    point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y),
-                    point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y)
+                    Point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y),
+                    Point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y)
                 );
             draw_debug_text(
                 al_map_rgb(192, 255, 192),
-                point(
+                Point(
                     middle.x + cos(angle + TAU / 4) * 4,
                     middle.y + sin(angle + TAU / 4) * 4
                 ),
@@ -572,7 +572,7 @@ void area_editor::draw_canvas() {
             
             draw_debug_text(
                 al_map_rgb(192, 255, 192),
-                point(
+                Point(
                     middle.x + cos(angle - TAU / 4) * 4,
                     middle.y + sin(angle - TAU / 4) * 4
                 ),
@@ -586,7 +586,7 @@ void area_editor::draw_canvas() {
         }
         
         if(debug_edge_idxs) {
-            point middle(
+            Point middle(
                 (e_ptr->vertexes[0]->x + e_ptr->vertexes[1]->x) / 2.0f,
                 (e_ptr->vertexes[0]->y + e_ptr->vertexes[1]->y) / 2.0f
             );
@@ -598,7 +598,7 @@ void area_editor::draw_canvas() {
     if(state == EDITOR_STATE_LAYOUT) {
         size_t n_vertexes = game.cur_area_data->vertexes.size();
         for(size_t v = 0; v < n_vertexes; v++) {
-            vertex* v_ptr = game.cur_area_data->vertexes[v];
+            Vertex* v_ptr = game.cur_area_data->vertexes[v];
             bool selected =
                 (selected_vertexes.find(v_ptr) != selected_vertexes.end());
             bool valid =
@@ -611,7 +611,7 @@ void area_editor::draw_canvas() {
                     selection_filter == SELECTION_FILTER_VERTEXES
                 );
             draw_filled_diamond(
-                point(v_ptr->x, v_ptr->y),
+                Point(v_ptr->x, v_ptr->y),
                 3.0 / game.cam.zoom,
                 selected ?
                 al_map_rgba(
@@ -635,7 +635,7 @@ void area_editor::draw_canvas() {
             if(debug_vertex_idxs) {
                 draw_debug_text(
                     al_map_rgb(192, 192, 255),
-                    point(v_ptr->x, v_ptr->y), i2s(v)
+                    Point(v_ptr->x, v_ptr->y), i2s(v)
                 );
             }
         }
@@ -658,8 +658,8 @@ void area_editor::draw_canvas() {
     //Mobs.
     if(state == EDITOR_STATE_MOBS && mob_opacity > 0.0f) {
         for(size_t m = 0; m < game.cur_area_data->mob_generators.size(); m++) {
-            mob_gen* m_ptr = game.cur_area_data->mob_generators[m];
-            mob_gen* m2_ptr = nullptr;
+            MobGen* m_ptr = game.cur_area_data->mob_generators[m];
+            MobGen* m2_ptr = nullptr;
             
             if(!m_ptr->type) continue;
             
@@ -706,7 +706,7 @@ void area_editor::draw_canvas() {
     }
     
     for(size_t m = 0; m < game.cur_area_data->mob_generators.size(); m++) {
-        mob_gen* m_ptr = game.cur_area_data->mob_generators[m];
+        MobGen* m_ptr = game.cur_area_data->mob_generators[m];
         
         float radius = get_mob_gen_radius(m_ptr);
         ALLEGRO_COLOR color = al_map_rgb(255, 0, 0);
@@ -727,16 +727,16 @@ void area_editor::draw_canvas() {
         //Draw children of this mob.
         if(m_ptr->type) {
             for(size_t c = 0; c < m_ptr->type->children.size(); c++) {
-                mob_type::child_t* child_info =
+                MobType::Child* child_info =
                     &m_ptr->type->children[c];
-                mob_type::spawn_t* spawn_info =
+                MobType::SpawnInfo* spawn_info =
                     get_spawn_info_from_child_info(m_ptr->type, child_info);
                 if(!spawn_info) continue;
                 
-                point c_pos =
+                Point c_pos =
                     m_ptr->pos +
                     rotate_point(spawn_info->coords_xy, m_ptr->angle);
-                mob_type* c_type =
+                MobType* c_type =
                     game.mob_categories.find_mob_type(
                         spawn_info->mob_type_name
                     );
@@ -853,7 +853,7 @@ void area_editor::draw_canvas() {
     
         //Stops.
         for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
-            path_stop* s_ptr = game.cur_area_data->path_stops[s];
+            PathStop* s_ptr = game.cur_area_data->path_stops[s];
             bool highlighted = highlighted_path_stop == s_ptr;
             ALLEGRO_COLOR color;
             if(has_flag(s_ptr->flags, PATH_STOP_FLAG_SCRIPT_ONLY)) {
@@ -905,10 +905,10 @@ void area_editor::draw_canvas() {
         
         //Links.
         for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
-            path_stop* s_ptr = game.cur_area_data->path_stops[s];
+            PathStop* s_ptr = game.cur_area_data->path_stops[s];
             for(size_t l = 0; l < s_ptr->links.size(); l++) {
-                path_link* l_ptr = s_ptr->links[l];
-                path_stop* s2_ptr = l_ptr->end_ptr;
+                PathLink* l_ptr = s_ptr->links[l];
+                PathStop* s2_ptr = l_ptr->end_ptr;
                 bool one_way =
                     !l_ptr->end_ptr->get_link(s_ptr);
                 bool selected =
@@ -949,9 +949,9 @@ void area_editor::draw_canvas() {
                 
                 float angle =
                     get_angle(s_ptr->pos, s2_ptr->pos);
-                point offset1 =
+                Point offset1 =
                     angle_to_coordinates(angle, s_ptr->radius);
-                point offset2 =
+                Point offset2 =
                     angle_to_coordinates(angle, s2_ptr->radius);
                 al_draw_line(
                     s_ptr->pos.x + offset1.x,
@@ -968,7 +968,7 @@ void area_editor::draw_canvas() {
                     game.options.area_editor_show_path_link_length
                 ) {
                     bool draw_dist = false;
-                    point other_point;
+                    Point other_point;
                     if(
                         l_ptr->start_ptr == move_closest_stop &&
                         selected_path_stops.find(l_ptr->end_ptr) ==
@@ -993,10 +993,10 @@ void area_editor::draw_canvas() {
                 }
                 
                 if(debug_path_idxs && (one_way || s < s_ptr->links[l]->end_idx)) {
-                    point middle = (s_ptr->pos + s2_ptr->pos) / 2.0f;
+                    Point middle = (s_ptr->pos + s2_ptr->pos) / 2.0f;
                     draw_debug_text(
                         al_map_rgb(96, 104, 224),
-                        point(
+                        Point(
                             middle.x + cos(angle + TAU / 4) * 4,
                             middle.y + sin(angle + TAU / 4) * 4
                         ),
@@ -1028,12 +1028,12 @@ void area_editor::draw_canvas() {
         
         //Closest stop line.
         if(show_closest_stop) {
-            path_stop* closest = nullptr;
+            PathStop* closest = nullptr;
             float closest_dist = FLT_MAX;
             for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
-                path_stop* s_ptr = game.cur_area_data->path_stops[s];
+                PathStop* s_ptr = game.cur_area_data->path_stops[s];
                 float d =
-                    dist(game.mouse_cursor.w_pos, s_ptr->pos).to_float() -
+                    Distance(game.mouse_cursor.w_pos, s_ptr->pos).to_float() -
                     s_ptr->radius;
                     
                 if(!closest || d < closest_dist) {
@@ -1123,7 +1123,7 @@ void area_editor::draw_canvas() {
                 draw_text(
                     letter, game.sys_content.fnt_builtin,
                     path_preview_checkpoints[c],
-                    point(
+                    Point(
                         AREA_EDITOR::PATH_PREVIEW_CHECKPOINT_RADIUS * 1.8f /
                         game.cam.zoom,
                         AREA_EDITOR::PATH_PREVIEW_CHECKPOINT_RADIUS * 1.8f /
@@ -1142,7 +1142,7 @@ void area_editor::draw_canvas() {
     ) {
         for(size_t s = 0; s < game.cur_area_data->tree_shadows.size(); s++) {
         
-            tree_shadow* s_ptr = game.cur_area_data->tree_shadows[s];
+            TreeShadow* s_ptr = game.cur_area_data->tree_shadows[s];
             if(
                 !preview_mode &&
                 s_ptr == selected_shadow
@@ -1175,7 +1175,7 @@ void area_editor::draw_canvas() {
             );
             
             if(state == EDITOR_STATE_DETAILS) {
-                point min_coords, max_coords;
+                Point min_coords, max_coords;
                 get_transformed_rectangle_bounding_box(
                     s_ptr->center, s_ptr->size, s_ptr->angle,
                     &min_coords, &max_coords
@@ -1228,7 +1228,7 @@ void area_editor::draw_canvas() {
             draw_text(
                 letter, game.sys_content.fnt_builtin,
                 cross_section_checkpoints[p],
-                point(
+                Point(
                     AREA_EDITOR::CROSS_SECTION_POINT_RADIUS * 1.8f /
                     game.cam.zoom,
                     AREA_EDITOR::CROSS_SECTION_POINT_RADIUS * 1.8f /
@@ -1290,7 +1290,7 @@ void area_editor::draw_canvas() {
                     al_map_rgb(255, 0, 0),
                     al_map_rgb(64, 255, 64)
                 );
-            point hotspot = snap_point(game.mouse_cursor.w_pos);
+            Point hotspot = snap_point(game.mouse_cursor.w_pos);
             
             al_draw_line(
                 drawing_nodes.back().snapped_spot.x,
@@ -1312,7 +1312,7 @@ void area_editor::draw_canvas() {
         switch(new_circle_sector_step) {
         case 1: {
             float circle_radius =
-                dist(
+                Distance(
                     new_circle_sector_center, new_circle_sector_anchor
                 ).to_float();
             al_draw_circle(
@@ -1332,8 +1332,8 @@ void area_editor::draw_canvas() {
             
         } case 2: {
             for(size_t p = 0; p < new_circle_sector_points.size(); p++) {
-                point cur_point = new_circle_sector_points[p];
-                point next_point =
+                Point cur_point = new_circle_sector_points[p];
+                Point next_point =
                     get_next_in_vector(new_circle_sector_points, p);
                 ALLEGRO_COLOR color =
                     new_circle_sector_valid_edges[p] ?
@@ -1369,7 +1369,7 @@ void area_editor::draw_canvas() {
     
     //Quick sector height set.
     if(sub_state == EDITOR_SUB_STATE_QUICK_HEIGHT_SET) {
-        point nr_coords = quick_height_set_start_pos;
+        Point nr_coords = quick_height_set_start_pos;
         nr_coords.x += 100.0f;
         al_transform_coordinates(
             &game.screen_to_world_transform, &nr_coords.x, &nr_coords.y
@@ -1391,7 +1391,7 @@ void area_editor::draw_canvas() {
     //Path drawing.
     if(sub_state == EDITOR_SUB_STATE_PATH_DRAWING) {
         if(path_drawing_stop_1) {
-            point hotspot = snap_point(game.mouse_cursor.w_pos);
+            Point hotspot = snap_point(game.mouse_cursor.w_pos);
             al_draw_line(
                 path_drawing_stop_1->pos.x,
                 path_drawing_stop_1->pos.y,
@@ -1435,7 +1435,7 @@ void area_editor::draw_canvas() {
         sub_state == EDITOR_SUB_STATE_PATH_DRAWING ||
         sub_state == EDITOR_SUB_STATE_NEW_SHADOW
     ) {
-        point marker = game.mouse_cursor.w_pos;
+        Point marker = game.mouse_cursor.w_pos;
         
         if(sub_state != EDITOR_SUB_STATE_ADD_MOB_LINK) {
             marker = snap_point(marker);
@@ -1461,7 +1461,7 @@ void area_editor::draw_canvas() {
     if(
         sub_state == EDITOR_SUB_STATE_DEL_MOB_LINK
     ) {
-        point marker = game.mouse_cursor.w_pos;
+        Point marker = game.mouse_cursor.w_pos;
         
         al_draw_line(
             marker.x - 10 / game.cam.zoom,
@@ -1484,7 +1484,7 @@ void area_editor::draw_canvas() {
     //Cross-section graph.
     if(state == EDITOR_STATE_REVIEW && show_cross_section) {
     
-        dist cross_section_world_length(
+        Distance cross_section_world_length(
             cross_section_checkpoints[0], cross_section_checkpoints[1]
         );
         float proportion =
@@ -1510,20 +1510,20 @@ void area_editor::draw_canvas() {
             );
         }
         
-        sector* cs_left_sector =
+        Sector* cs_left_sector =
             get_sector(cross_section_checkpoints[0], nullptr, false);
-        sector* cs_right_sector =
+        Sector* cs_right_sector =
             get_sector(cross_section_checkpoints[1], nullptr, false);
             
         /**
          * @brief Info about a split.
          */
-        struct split_t {
+        struct Split {
         
             //--- Members ---
             
             //Sector pointers.
-            sector* sector_ptrs[2] = { nullptr, nullptr };
+            Sector* sector_ptrs[2] = { nullptr, nullptr };
             
             //Line 1 intersection point.
             float l1r = 0.0f;
@@ -1541,8 +1541,8 @@ void area_editor::draw_canvas() {
              * @param l1r Line 1 intersection point.
              * @param l2r Line 2 intersection point.
              */
-            split_t(
-                sector* s1, sector* s2, float l1r, float l2r
+            Split(
+                Sector* s1, Sector* s2, float l1r, float l2r
             ) {
                 sector_ptrs[0] = s1;
                 sector_ptrs[1] = s2;
@@ -1551,24 +1551,24 @@ void area_editor::draw_canvas() {
             }
             
         };
-        vector<split_t> splits;
+        vector<Split> splits;
         for(size_t e = 0; e < game.cur_area_data->edges.size(); e++) {
-            edge* e_ptr = game.cur_area_data->edges[e];
+            Edge* e_ptr = game.cur_area_data->edges[e];
             float l1r = 0;
             float l2r = 0;
             if(
                 line_segs_intersect(
-                    point(
+                    Point(
                         e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y
                     ),
-                    point(
+                    Point(
                         e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y
                     ),
-                    point(
+                    Point(
                         cross_section_checkpoints[0].x,
                         cross_section_checkpoints[0].y
                     ),
-                    point(
+                    Point(
                         cross_section_checkpoints[1].x,
                         cross_section_checkpoints[1].y
                     ),
@@ -1576,7 +1576,7 @@ void area_editor::draw_canvas() {
                 )
             ) {
                 splits.push_back(
-                    split_t(e_ptr->sectors[0], e_ptr->sectors[1], l1r, l2r)
+                    Split(e_ptr->sectors[0], e_ptr->sectors[1], l1r, l2r)
                 );
             }
         }
@@ -1584,17 +1584,17 @@ void area_editor::draw_canvas() {
         if(!splits.empty()) {
             sort(
                 splits.begin(), splits.end(),
-            [] (const split_t  &i1, const split_t  &i2) -> bool {
+            [] (const Split  & i1, const Split  & i2) -> bool {
                 return i1.l2r < i2.l2r;
             }
             );
             
             splits.insert(
                 splits.begin(),
-                split_t(cs_left_sector, cs_left_sector, 0, 0)
+                Split(cs_left_sector, cs_left_sector, 0, 0)
             );
             splits.push_back(
-                split_t(cs_right_sector, cs_right_sector, 1, 1)
+                Split(cs_right_sector, cs_right_sector, 1, 1)
             );
             
             for(size_t s = 1; s < splits.size(); s++) {
@@ -1638,7 +1638,7 @@ void area_editor::draw_canvas() {
                 );
             }
             
-            sector* central_sector = nullptr;
+            Sector* central_sector = nullptr;
             for(size_t s = 1; s < splits.size(); s++) {
                 if(splits[s].l2r > 0.5) {
                     central_sector = splits[s].sector_ptrs[0];
@@ -1694,11 +1694,11 @@ void area_editor::draw_canvas() {
                     
                     draw_text(
                         i2s(z), game.sys_content.fnt_builtin,
-                        point(
+                        Point(
                             (cross_section_z_window_start.x + 8),
                             line_y
                         ),
-                        point(LARGE_FLOAT, 8.0f), COLOR_WHITE,
+                        Point(LARGE_FLOAT, 8.0f), COLOR_WHITE,
                         ALLEGRO_ALIGN_LEFT
                     );
                 }
@@ -1709,7 +1709,7 @@ void area_editor::draw_canvas() {
             draw_text(
                 "Please cross some edges.",
                 game.sys_content.fnt_builtin,
-                point(
+                Point(
                     (
                         cross_section_window_start.x +
                         cross_section_window_end.x
@@ -1719,7 +1719,7 @@ void area_editor::draw_canvas() {
                         cross_section_window_end.y
                     ) * 0.5
                 ),
-                point(LARGE_FLOAT, 8.0f), COLOR_WHITE
+                Point(LARGE_FLOAT, 8.0f), COLOR_WHITE
             );
             
         }
@@ -1727,7 +1727,7 @@ void area_editor::draw_canvas() {
         float cursor_segment_ratio = 0;
         get_closest_point_in_line_seg(
             cross_section_checkpoints[0], cross_section_checkpoints[1],
-            point(game.mouse_cursor.w_pos.x, game.mouse_cursor.w_pos.y),
+            Point(game.mouse_cursor.w_pos.x, game.mouse_cursor.w_pos.y),
             &cursor_segment_ratio
         );
         if(cursor_segment_ratio >= 0 && cursor_segment_ratio <= 1) {
@@ -1774,9 +1774,9 @@ void area_editor::draw_canvas() {
  * @param lowest_z What z coordinate represents the bottom of the graph.
  * @param sector_ptr Pointer to the sector to draw.
  */
-void area_editor::draw_cross_section_sector(
+void AreaEditor::draw_cross_section_sector(
     float start_ratio, float end_ratio, float proportion,
-    float lowest_z, const sector* sector_ptr
+    float lowest_z, const Sector* sector_ptr
 ) {
     float rectangle_x1 =
         cross_section_window_start.x +
@@ -1827,8 +1827,8 @@ void area_editor::draw_cross_section_sector(
  * @param text Text to show.
  * @param dots How many dots to draw above the text. 0, 1, or 2.
  */
-void area_editor::draw_debug_text(
-    const ALLEGRO_COLOR color, const point &where, const string &text,
+void AreaEditor::draw_debug_text(
+    const ALLEGRO_COLOR color, const Point &where, const string &text,
     unsigned char dots
 ) {
     int dox = 0;
@@ -1851,7 +1851,7 @@ void area_editor::draw_debug_text(
     
     draw_text(
         text, game.sys_content.fnt_builtin, where,
-        point(bbox_w, bbox_h) * 0.80f, color
+        Point(bbox_w, bbox_h) * 0.80f, color
     );
     
     if(dots > 0) {
@@ -1899,14 +1899,14 @@ void area_editor::draw_debug_text(
  * @param other The point to measure against.
  * @param prefix Text to show before the measurement, if any.
  */
-void area_editor::draw_line_dist(
-    const point &focus, const point &other, const string &prefix
+void AreaEditor::draw_line_dist(
+    const Point &focus, const Point &other, const string &prefix
 ) {
-    float d = dist(other, focus).to_float();
+    float d = Distance(other, focus).to_float();
     if(d < 64) return;
     
     float angle = get_angle(focus, other);
-    point length_nr_pos;
+    Point length_nr_pos;
     length_nr_pos.x = focus.x + cos(angle) * 64.0;
     length_nr_pos.y = focus.y + sin(angle) * 64.0;
     length_nr_pos.y -= 12;

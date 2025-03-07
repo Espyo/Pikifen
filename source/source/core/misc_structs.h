@@ -33,7 +33,7 @@
 #include "controls.h"
 
 
-class pikmin_type;
+class PikminType;
 
 using std::map;
 using std::size_t;
@@ -147,19 +147,19 @@ enum STRING_TOKEN {
  * @brief Info about the game camera. Where it is, where it wants
  * to go, etc.
  */
-struct camera_t {
+struct Camera {
 
     //--- Members ---
     
     //Top-left and bottom-right world coordinates that this camera can see.
     //These also include a margin of GAMEPLAY::CAMERA_BOX_MARGIN.
-    point box[2];
+    Point box[2];
     
     //Current position.
-    point pos;
+    Point pos;
     
     //Position it wants to be at.
-    point target_pos;
+    Point target_pos;
     
     //Zoom it wants to be at.
     float target_zoom = 1.0f;
@@ -170,7 +170,7 @@ struct camera_t {
     
     //--- Function declarations ---
     
-    void set_pos(const point &new_pos);
+    void set_pos(const Point &new_pos);
     void set_zoom(float new_zoom);
     void tick(float delta_t);
     void update_box();
@@ -181,11 +181,11 @@ struct camera_t {
 /**
  * @brief Manages any errors that occur with the engine's content or logic.
  */
-struct error_manager {
+struct ErrorManager {
 
     //--- Function declarations ---
     
-    void report(const string &s, const data_node* d = nullptr);
+    void report(const string &s, const DataNode* d = nullptr);
     void report_area_load_errors();
     void prepare_area_load();
     bool session_has_errors();
@@ -216,7 +216,7 @@ struct error_manager {
 /**
  * @brief Info about a token in a string.
  */
-struct string_token {
+struct StringToken {
 
     //--- Members ---
     
@@ -235,7 +235,7 @@ struct string_token {
 /**
  * @brief Info about all of the maker tools.
  */
-struct maker_tools_t {
+struct MakerTools {
 
     //--- Members ---
     
@@ -279,7 +279,7 @@ struct maker_tools_t {
     bool hud = true;
     
     //Mob currently locked-on to for the mob information tool. nullptr if off.
-    mob* info_lock = nullptr;
+    Mob* info_lock = nullptr;
     
     //If any maker info is being printed, this is how long it lasts on-screen.
     float info_print_duration = 5.0f;
@@ -291,13 +291,13 @@ struct maker_tools_t {
     string info_print_text;
     
     //If any maker info is being printed, this represents its time to live.
-    timer info_print_timer;
+    Timer info_print_timer;
     
     //For each key (F2 - F11, 0 - 9), what tool is bound to it?
     MAKER_TOOL_TYPE keys[20];
     
     //When we last spawned a Pikmin, what was its type?
-    pikmin_type* last_pikmin_type = nullptr;
+    PikminType* last_pikmin_type = nullptr;
     
     //When hurting mobs with the hurting tool, dock this much of its max HP off.
     float mob_hurting_ratio = 0.75f;
@@ -314,7 +314,7 @@ struct maker_tools_t {
     
     //--- Function declarations ---
     
-    maker_tools_t();
+    MakerTools();
     void reset_for_gameplay();
     
 };
@@ -323,21 +323,21 @@ struct maker_tools_t {
 /**
  * @brief Info about the operative system's mouse cursor.
  */
-struct mouse_cursor_t {
+struct MouseCursor {
 
     //--- Members ---
     
     //Position, in screen coordinates.
-    point s_pos;
+    Point s_pos;
     
     //Position, in world coordinates, if applicable.
-    point w_pos;
+    Point w_pos;
     
     //Spots the cursor has been through. Used for the faint trail left behind.
-    vector<point> history;
+    vector<Point> history;
     
     //Time left until the position of the cursor is saved on the vector.
-    timer save_timer;
+    Timer save_timer;
     
     
     //--- Function declarations ---
@@ -358,7 +358,7 @@ struct mouse_cursor_t {
 /**
  * @brief Manages random number generation.
  */
-struct rng_manager {
+struct RngManager {
     //--- Members ---
     
     //The current randomness seed.
@@ -381,46 +381,46 @@ struct rng_manager {
  * On the set functions, specify the name of the child and the variable.
  * If the child is empty, the variable will not be set.
  */
-struct reader_setter {
+struct ReaderSetter {
 
     //--- Members ---
     
     //Node that this reader-setter pertains to.
-    data_node* node = nullptr;
+    DataNode* node = nullptr;
     
     
     //--- Function declarations ---
     
-    explicit reader_setter(data_node* dn = nullptr);
+    explicit ReaderSetter(DataNode* dn = nullptr);
     void set(
-        const string &child, string &var, data_node** child_node = nullptr
+        const string &child, string &var, DataNode** child_node = nullptr
     );
     void set(
-        const string &child, size_t &var, data_node** child_node = nullptr
+        const string &child, size_t &var, DataNode** child_node = nullptr
     );
     void set(
-        const string &child, int &var, data_node** child_node = nullptr
+        const string &child, int &var, DataNode** child_node = nullptr
     );
     void set(
-        const string &child, unsigned int &var, data_node** child_node = nullptr
+        const string &child, unsigned int &var, DataNode** child_node = nullptr
     );
     void set(
-        const string &child, unsigned char &var, data_node** child_node = nullptr
+        const string &child, unsigned char &var, DataNode** child_node = nullptr
     );
     void set(
-        const string &child, bool &var, data_node** child_node = nullptr
+        const string &child, bool &var, DataNode** child_node = nullptr
     );
     void set(
-        const string &child, float &var, data_node** child_node = nullptr
+        const string &child, float &var, DataNode** child_node = nullptr
     );
     void set(
-        const string &child, double &var, data_node** child_node = nullptr
+        const string &child, double &var, DataNode** child_node = nullptr
     );
     void set(
-        const string &child, ALLEGRO_COLOR &var, data_node** child_node = nullptr
+        const string &child, ALLEGRO_COLOR &var, DataNode** child_node = nullptr
     );
     void set(
-        const string &child, point &var, data_node** child_node = nullptr
+        const string &child, Point &var, DataNode** child_node = nullptr
     );
     
 };
@@ -432,7 +432,7 @@ struct reader_setter {
  * based on which
  * ones exist, and what values they have.
  */
-struct script_var_reader {
+struct ScriptVarReader {
 
     //--- Members ---
     
@@ -442,7 +442,7 @@ struct script_var_reader {
     
     //--- Function declarations ---
     
-    explicit script_var_reader(map<string, string> &vars);
+    explicit ScriptVarReader(map<string, string> &vars);
     bool get(const string &name, string &dest) const;
     bool get(const string &name, size_t &dest) const;
     bool get(const string &name, int &dest) const;
@@ -450,7 +450,7 @@ struct script_var_reader {
     bool get(const string &name, bool &dest) const;
     bool get(const string &name, float &dest) const;
     bool get(const string &name, ALLEGRO_COLOR &dest) const;
-    bool get(const string &name, point &dest) const;
+    bool get(const string &name, Point &dest) const;
     
 };
 
@@ -459,7 +459,7 @@ struct script_var_reader {
 /**
  * @brief List of content that is needed system-wide.
  */
-struct sys_content_list_t {
+struct SystemContentList {
 
     //--- Members ---
     
@@ -654,7 +654,7 @@ struct sys_content_list_t {
     //Global animations.
     
     //Leader damage spark.
-    animation_instance anim_sparks;
+    AnimationInstance anim_sparks;
     
 };
 
@@ -662,7 +662,7 @@ struct sys_content_list_t {
 /**
  * @brief List of internal names of content that is needed by the system.
  */
-struct sys_content_names_t {
+struct SystemContentNames {
 
     //--- Members ---
     
@@ -927,7 +927,7 @@ struct sys_content_names_t {
     
     //--- Function declarations ---
     
-    void load(data_node* file);
+    void load(DataNode* file);
     
 };
 
@@ -935,7 +935,7 @@ struct sys_content_names_t {
 /**
  * @brief Manages fade ins/outs for transitions.
  */
-struct fade_manager {
+struct FadeManager {
 
     public:
     
@@ -970,7 +970,7 @@ struct fade_manager {
  * This is stuff like a note above the leader telling the player
  * what button to press to do something, like plucking.
  */
-struct notification_t {
+struct Notification {
 
     public:
     
@@ -980,7 +980,7 @@ struct notification_t {
     float get_visibility() const;
     void reset();
     void set_contents(
-        const player_input &input, const string &text, const point &pos
+        const PlayerInput &input, const string &text, const Point &pos
     );
     void set_enabled(bool enabled);
     void tick(float delta_t);
@@ -993,13 +993,13 @@ struct notification_t {
     bool enabled = true;
     
     //What player input icon to show.
-    player_input input;
+    PlayerInput input;
     
     //What text to write.
     string text;
     
     //Coordinates of the focal point.
-    point pos;
+    Point pos;
     
     //Visibility. 0 is hidden, 1 is fully visible. Mid values for transitioning.
     float visibility = 0.0f;
@@ -1012,18 +1012,18 @@ struct notification_t {
  * @brief Info on how a bitmap should be drawn, in regards to
  * translation, rotation, coloring, etc.
  */
-struct bitmap_effect_t {
+struct BitmapEffect {
 
     //--- Members ---
     
     //Offset horizontally and vertically by this much.
-    point translation;
+    Point translation;
     
     //Rotate the bitmap by this angle, in radians.
     float rotation = 0.0f;
     
     //Scale horizontally and vertically. LARGE_FLOAT = use the other's scale.
-    point scale = point(1.0f);
+    Point scale = Point(1.0f);
     
     //Tint the bitmap by this color. Also makes it transparent.
     ALLEGRO_COLOR tint_color = COLOR_WHITE;
@@ -1050,13 +1050,13 @@ enum PERF_MON_STATE {
  * @brief Info about how long certain things took. Useful for makers
  * to monitor performance with.
  */
-struct performance_monitor_t {
+struct PerformanceMonitor {
 
     public:
     
     //--- Function declarations ---
     
-    performance_monitor_t();
+    PerformanceMonitor();
     void set_area_name(const string &name);
     void set_paused(bool paused);
     void enter_state(const PERF_MON_STATE mode);
@@ -1073,7 +1073,7 @@ struct performance_monitor_t {
     /**
      * @brief A page in the report.
      */
-    struct page {
+    struct Page {
     
         public:
         
@@ -1122,34 +1122,34 @@ struct performance_monitor_t {
     string cur_measurement_name;
     
     //Page of information about the current working info.
-    performance_monitor_t::page cur_page;
+    PerformanceMonitor::Page cur_page;
     
     //How many frames of gameplay have been sampled.
     size_t frame_samples = 0;
     
     //Page of information about the loading process.
-    performance_monitor_t::page loading_page;
+    PerformanceMonitor::Page loading_page;
     
     //Page of information about the average frame.
-    performance_monitor_t::page frame_avg_page;
+    PerformanceMonitor::Page frame_avg_page;
     
     //Page of information about the fastest frame.
-    performance_monitor_t::page frame_fastest_page;
+    PerformanceMonitor::Page frame_fastest_page;
     
     //Page of information about the slowest frame.
-    performance_monitor_t::page frame_slowest_page;
+    PerformanceMonitor::Page frame_slowest_page;
     
 };
 
 
-struct subgroup_type_manager;
+struct SubgroupTypeManager;
 
 
 /**
  * @brief Represents a leader subgroup type;
  * a Red Pikmin, a Yellow Pikmin, a leader, etc.
  */
-struct subgroup_type {
+struct SubgroupType {
 
     public:
     
@@ -1160,7 +1160,7 @@ struct subgroup_type {
     
 private:
 
-    friend subgroup_type_manager;
+    friend SubgroupTypeManager;
     
     //--- Members ---
     
@@ -1168,7 +1168,7 @@ private:
     SUBGROUP_TYPE_CATEGORY category = SUBGROUP_TYPE_CATEGORY_LEADER;
     
     //Specific mob type it refers to.
-    mob_type* specific_type = nullptr;
+    MobType* specific_type = nullptr;
     
     //Icon used to represent this subgroup type.
     ALLEGRO_BITMAP* icon = nullptr;
@@ -1179,7 +1179,7 @@ private:
 /**
  * @brief Manages what types of subgroups exist.
  */
-struct subgroup_type_manager {
+struct SubgroupTypeManager {
 
     public:
     
@@ -1187,16 +1187,16 @@ struct subgroup_type_manager {
     
     void register_type(
         const SUBGROUP_TYPE_CATEGORY category,
-        mob_type* specific_type = nullptr,
+        MobType* specific_type = nullptr,
         ALLEGRO_BITMAP* icon = nullptr
     );
-    subgroup_type* get_type(
+    SubgroupType* get_type(
         const SUBGROUP_TYPE_CATEGORY category,
-        const mob_type* specific_type = nullptr
+        const MobType* specific_type = nullptr
     ) const;
-    subgroup_type* get_first_type() const;
-    subgroup_type* get_prev_type(const subgroup_type* sgt) const;
-    subgroup_type* get_next_type(const subgroup_type* sgt) const;
+    SubgroupType* get_first_type() const;
+    SubgroupType* get_prev_type(const SubgroupType* sgt) const;
+    SubgroupType* get_next_type(const SubgroupType* sgt) const;
     void clear();
     
     private:
@@ -1204,7 +1204,7 @@ struct subgroup_type_manager {
     //--- Members ---
     
     //Known types.
-    vector<subgroup_type*> types;
+    vector<SubgroupType*> types;
     
 };
 
@@ -1213,7 +1213,7 @@ struct subgroup_type_manager {
  * @brief Info about the current amount of sprays and ingredients
  * for the available spray types.
  */
-struct spray_stats_t {
+struct SprayStats {
 
     //--- Members ---
     
@@ -1229,7 +1229,7 @@ struct spray_stats_t {
 /**
  * @brief Info about the engine's lifetime statistics.
  */
-struct statistics_t {
+struct Statistics {
 
     //--- Members ---
     
@@ -1293,7 +1293,7 @@ struct statistics_t {
 /**
  * @brief Cached information about how an edge should draw its offset effects.
  */
-struct edge_offset_cache {
+struct EdgeOffsetCache {
 
     //--- Members ---
     
@@ -1321,12 +1321,12 @@ struct edge_offset_cache {
 /**
  * @brief Info about the current whistle usage.
  */
-struct whistle_t {
+struct Whistle {
 
     //--- Members ---
     
     //Current center.
-    point center;
+    Point center;
     
     //Current radius of the whistle.
     float radius = 0.0f;
@@ -1338,13 +1338,13 @@ struct whistle_t {
     float fade_radius = 0.0f;
     
     //Time left for the whistle's fading animations.
-    timer fade_timer = timer(WHISTLE::FADE_TIME);
+    Timer fade_timer = Timer(WHISTLE::FADE_TIME);
     
     //Time left until the next series of dots begins.
-    timer next_dot_timer = timer(WHISTLE::DOT_INTERVAL);
+    Timer next_dot_timer = Timer(WHISTLE::DOT_INTERVAL);
     
     //Time left until the next ring is spat out.
-    timer next_ring_timer = timer(WHISTLE::RINGS_INTERVAL);
+    Timer next_ring_timer = Timer(WHISTLE::RINGS_INTERVAL);
     
     //Color index of each ring.
     vector<unsigned char> ring_colors;
@@ -1361,11 +1361,11 @@ struct whistle_t {
     
     //--- Function declarations ---
     
-    whistle_t();
+    Whistle();
     void start_whistling();
     void stop_whistling();
     void tick(
-        float delta_t, const point &center,
+        float delta_t, const Point &center,
         float whistle_range, float leader_to_cursor_dist
     );
     
@@ -1406,13 +1406,13 @@ struct whistle_t {
  * @tparam asset_t Asset type.
  */
 template<typename asset_t>
-class asset_manager {
+class AssetManager {
 
 public:
 
     //--- Function definitions ---
     
-    virtual ~asset_manager() = default;
+    virtual ~AssetManager() = default;
     
     /**
      * @brief Returns the specified asset, by name.
@@ -1424,7 +1424,7 @@ public:
      * @return The asset
      */
     asset_t get(
-        const string &name, data_node* node = nullptr,
+        const string &name, DataNode* node = nullptr,
         bool report_errors = true
     ) {
         if(name.empty()) return do_load("", node, report_errors);
@@ -1432,7 +1432,7 @@ public:
         if(list.find(name) == list.end()) {
             asset_t asset_ptr =
                 do_load(name, node, report_errors);
-            list[name] = asset_use_t(asset_ptr);
+            list[name] = AssetUse(asset_ptr);
             total_uses++;
             return asset_ptr;
         } else {
@@ -1502,14 +1502,14 @@ protected:
     //--- Misc. declarations ---
     
     virtual asset_t do_load(
-        const string &path, data_node* node, bool report_errors
+        const string &path, DataNode* node, bool report_errors
     ) = 0;
     virtual void do_unload(asset_t asset) = 0;
     
     /**
      * @brief Info about an asset.
      */
-    struct asset_use_t {
+    struct AssetUse {
     
         //--- Members ---
         
@@ -1522,14 +1522,14 @@ protected:
         
         //--- Function declarations ---
         
-        explicit asset_use_t(asset_t ptr = nullptr) : ptr(ptr) {}
+        explicit AssetUse(asset_t ptr = nullptr) : ptr(ptr) {}
     };
     
     
     //--- Members ---
     
     //List of loaded assets.
-    map<string, asset_use_t> list;
+    map<string, AssetUse> list;
     
     //Total sum of uses. Useful for debugging.
     long total_uses = 0;
@@ -1543,7 +1543,7 @@ protected:
      *
      * @param it Iterator of the asset from the list.
      */
-    void free(typename map<string, asset_use_t>::iterator it) {
+    void free(typename map<string, AssetUse>::iterator it) {
         if(it == list.end()) return;
         it->second.uses--;
         total_uses--;
@@ -1557,16 +1557,16 @@ protected:
 
 
 /**
- * @brief Audio stream manager. See asset_manager.
+ * @brief Audio stream manager. See AssetManager.
  */
-class audio_stream_manager : public asset_manager<ALLEGRO_AUDIO_STREAM*> {
+class AudioStreamManager : public AssetManager<ALLEGRO_AUDIO_STREAM*> {
 
 protected:
 
     //--- Function declarations ---
     
     ALLEGRO_AUDIO_STREAM* do_load(
-        const string &name, data_node* node, bool report_errors
+        const string &name, DataNode* node, bool report_errors
     ) override;
     void do_unload(ALLEGRO_AUDIO_STREAM* asset) override;
     
@@ -1574,16 +1574,16 @@ protected:
 
 
 /**
- * @brief Bitmap manager. See asset_manager.
+ * @brief Bitmap manager. See AssetManager.
  */
-class bitmap_manager : public asset_manager<ALLEGRO_BITMAP*> {
+class BitmapManager : public AssetManager<ALLEGRO_BITMAP*> {
 
 protected:
 
     //--- Function declarations ---
     
     ALLEGRO_BITMAP* do_load(
-        const string &name, data_node* node, bool report_errors
+        const string &name, DataNode* node, bool report_errors
     ) override;
     void do_unload(ALLEGRO_BITMAP* asset) override;
     
@@ -1591,16 +1591,16 @@ protected:
 
 
 /**
- * @brief Sound effect sample manager. See asset_manager.
+ * @brief Sound effect sample manager. See AssetManager.
  */
-class sample_manager : public asset_manager<ALLEGRO_SAMPLE*> {
+class SampleManager : public AssetManager<ALLEGRO_SAMPLE*> {
 
 protected:
 
     //--- Function declarations ---
     
     ALLEGRO_SAMPLE* do_load(
-        const string &name, data_node* node, bool report_errors
+        const string &name, DataNode* node, bool report_errors
     ) override;
     void do_unload(ALLEGRO_SAMPLE* asset) override;
     

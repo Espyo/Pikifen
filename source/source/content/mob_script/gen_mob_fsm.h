@@ -17,20 +17,20 @@
  * @brief Functions about the generic mob's finite state machine and behavior.
  */
 namespace gen_mob_fsm {
-void be_attacked(mob* m, void* info1, void* info2);
-void carry_become_stuck(mob* m, void* info1, void* info2);
-void carry_begin_move(mob* m, void* info1, void* info2);
-void carry_get_path(mob* m, void* info1, void* info2);
-void carry_reach_destination(mob* m, void* info1, void* info2);
-void carry_stop_being_stuck(mob* m, void* info1, void* info2);
-void carry_stop_move(mob* m, void* info1, void* info2);
-void fall_down_pit(mob* m, void* info1, void* info2);
-void go_to_dying_state(mob* m, void* info1, void* info2);
-void handle_carrier_added(mob* m, void* info1, void* info2);
-void handle_carrier_removed(mob* m, void* info1, void* info2);
-void handle_delivery(mob* m, void* info1, void* info2);
-void lose_momentum(mob* m, void* info1, void* info2);
-void start_being_delivered(mob* m, void* info1, void* info2);
-void touch_hazard(mob* m, void* info1, void* info2);
-void touch_spray(mob* m, void* info1, void* info2);
+void be_attacked(Mob* m, void* info1, void* info2);
+void carry_become_stuck(Mob* m, void* info1, void* info2);
+void carry_begin_move(Mob* m, void* info1, void* info2);
+void carry_get_path(Mob* m, void* info1, void* info2);
+void carry_reach_destination(Mob* m, void* info1, void* info2);
+void carry_stop_being_stuck(Mob* m, void* info1, void* info2);
+void carry_stop_move(Mob* m, void* info1, void* info2);
+void fall_down_pit(Mob* m, void* info1, void* info2);
+void go_to_dying_state(Mob* m, void* info1, void* info2);
+void handle_carrier_added(Mob* m, void* info1, void* info2);
+void handle_carrier_removed(Mob* m, void* info1, void* info2);
+void handle_delivery(Mob* m, void* info1, void* info2);
+void lose_momentum(Mob* m, void* info1, void* info2);
+void start_being_delivered(Mob* m, void* info1, void* info2);
+void touch_hazard(Mob* m, void* info1, void* info2);
+void touch_spray(Mob* m, void* info1, void* info2);
 }

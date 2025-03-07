@@ -23,7 +23,7 @@ using std::string;
 /**
  * @brief Manages everything regarding the installed game content packs.
  */
-struct pack_manager {
+struct PackManager {
 
     //--- Members ---
     
@@ -32,7 +32,7 @@ struct pack_manager {
     
     //Manifests, with the base pack, organized via the player's options.
     vector<string> manifests_with_base;
-
+    
     //Manifests, sans the base pack, not organized via the player's options.
     vector<string> manifests_sans_base_raw;
     
@@ -40,7 +40,7 @@ struct pack_manager {
     vector<string> manifests_with_base_raw;
     
     //List of loaded packs, with the base pack.
-    map<string, pack> list;
+    map<string, Pack> list;
     
     //--- Function declarations ---
     
@@ -56,74 +56,74 @@ struct pack_manager {
  * @brief Manages everything regarding game content, be it assets, types of
  * mobs, etc.
  */
-struct content_manager {
+struct ContentManager {
 
     //--- Members ---
     
     //Areas.
-    area_content_manager areas;
+    AreaContentManager areas;
     
     //Bitmaps.
-    bitmap_content_manager bitmaps;
+    BitmapContentManager bitmaps;
     
     //Global animation databases.
-    global_anim_content_manager global_anim_dbs;
+    GlobalAnimContentManager global_anim_dbs;
     
     //GUI definitions.
-    gui_content_manager gui_defs;
+    GuiContentManager gui_defs;
     
     //Hazards.
-    hazard_content_manager hazards;
+    HazardContentManager hazards;
     
     //Liquids.
-    liquid_content_manager liquids;
+    LiquidContentManager liquids;
     
     //Misc. configurations.
-    misc_config_content_manager misc_configs;
+    MiscConfigContentManager misc_configs;
     
     //Mob animation databases.
-    mob_anim_content_manager mob_anim_dbs;
+    MobAnimContentManager mob_anim_dbs;
     
     //Mob types.
-    mob_type_content_manager mob_types;
+    MobTypeContentManager mob_types;
     
     //Particle generators.
-    particle_gen_content_manager particle_gen;
+    ParticleGenContentManager particle_gen;
     
     //Songs.
-    song_content_manager songs;
+    SongContentManager songs;
     
     //Song tracks.
-    song_track_content_manager song_tracks;
+    SongTrackContentManager song_tracks;
     
     //Sounds.
-    sound_content_manager sounds;
+    SoundContentManager sounds;
     
     //Spike damage types.
-    spike_damage_type_content_manager spike_damage_types;
+    SpikeDamageTypeContentManager spike_damage_types;
     
     //Spray types.
-    spray_type_content_manager spray_types;
+    SprayTypeContentManager spray_types;
     
     //Status types.
-    status_type_content_manager status_types;
+    StatusTypeContentManager status_types;
     
     //Weather conditions.
-    weather_condition_content_manager weather_conditions;
+    WeatherConditionContentManager weather_conditions;
     
     //Packs.
-    pack_manager packs;
+    PackManager packs;
     
     
     //--- Function declarations ---
     
-    content_manager();
+    ContentManager();
     bool create_pack(
         const string &internal_name, const string &name,
         const string &description = "", const string &maker = ""
     );
     bool load_area_as_current(
-        const string &requested_area_path, content_manifest* manif_ptr,
+        const string &requested_area_path, ContentManifest* manif_ptr,
         CONTENT_LOAD_LEVEL level, bool from_backup
     );
     void load_all(const vector<CONTENT_TYPE> &types, CONTENT_LOAD_LEVEL level);
@@ -140,6 +140,6 @@ struct content_manager {
     
     //--- Function declarations ---
     
-    content_type_manager* get_mgr_ptr(CONTENT_TYPE type);
+    ContentTypeManager* get_mgr_ptr(CONTENT_TYPE type);
     
 };

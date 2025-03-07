@@ -17,12 +17,12 @@
  * @brief Functions about the Onion's finite state machine and behavior.
  */
 namespace onion_fsm {
-void create_fsm(mob_type* typ);
+void create_fsm(MobType* typ);
 
-void check_start_generating(mob* m, void* info1, void* info2);
-void check_stop_generating(mob* m, void* info1, void* info2);
-void receive_mob(mob* m, void* info1, void* info2);
-void start_generating(mob* m, void* info1, void* info2);
-void start_idling(mob* m, void* info1, void* info2);
-void stop_generating(mob* m, void* info1, void* info2);
+void check_start_generating(Mob* m, void* info1, void* info2);
+void check_stop_generating(Mob* m, void* info1, void* info2);
+void receive_mob(Mob* m, void* info1, void* info2);
+void start_generating(Mob* m, void* info1, void* info2);
+void start_idling(Mob* m, void* info1, void* info2);
+void stop_generating(Mob* m, void* info1, void* info2);
 }

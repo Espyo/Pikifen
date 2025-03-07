@@ -16,7 +16,7 @@
  *
  * @param name Its name.
  */
-body_part::body_part(const string &name) :
+BodyPart::BodyPart(const string &name) :
     name(name) {
     
 }
@@ -34,8 +34,8 @@ body_part::body_part(const string &name) :
  * 0 means it spans indefinitely across the Z axis.
  * @param radius Hitbox radius.
  */
-hitbox::hitbox(
-    const string &bpn, size_t bpi, body_part* bpp, const point &pos,
+Hitbox::Hitbox(
+    const string &bpn, size_t bpi, BodyPart* bpp, const Point &pos,
     float z, float height, float radius
 ) :
     body_part_name(bpn),
@@ -57,11 +57,11 @@ hitbox::hitbox(
  * @param mob_angle The angle the mob is facing.
  * @return The position.
  */
-point hitbox::get_cur_pos(const point &mob_pos, float mob_angle) const {
+Point Hitbox::get_cur_pos(const Point &mob_pos, float mob_angle) const {
     float mob_angle_cos = cos(mob_angle);
     float mob_angle_sin = sin(mob_angle);
     return
-        point(
+        Point(
             mob_pos.x + (pos.x * mob_angle_cos - pos.y * mob_angle_sin),
             mob_pos.y + (pos.x * mob_angle_sin + pos.y * mob_angle_cos)
         );
@@ -79,11 +79,11 @@ point hitbox::get_cur_pos(const point &mob_pos, float mob_angle) const {
  * @param mob_angle_sin Sine of the angle the mob is facing.
  * @return The position.
  */
-point hitbox::get_cur_pos(
-    const point &mob_pos, float mob_angle_cos, float mob_angle_sin
+Point Hitbox::get_cur_pos(
+    const Point &mob_pos, float mob_angle_cos, float mob_angle_sin
 ) const {
     return
-        point(
+        Point(
             mob_pos.x + (pos.x * mob_angle_cos - pos.y * mob_angle_sin),
             mob_pos.y + (pos.x * mob_angle_sin + pos.y * mob_angle_cos)
         );

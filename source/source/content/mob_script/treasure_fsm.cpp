@@ -22,8 +22,8 @@
  *
  * @param typ Mob type to create the finite state machine for.
  */
-void treasure_fsm::create_fsm(mob_type* typ) {
-    easy_fsm_creator efc;
+void treasure_fsm::create_fsm(MobType* typ) {
+    EasyFsmCreator efc;
     
     efc.new_state("idle_waiting", TREASURE_STATE_IDLE_WAITING); {
         efc.new_event(MOB_EV_ON_ENTER); {
@@ -148,7 +148,7 @@ void treasure_fsm::create_fsm(mob_type* typ) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void treasure_fsm::respawn(mob* m, void* info1, void* info2) {
+void treasure_fsm::respawn(Mob* m, void* info1, void* info2) {
     m->become_uncarriable(); //Force all Pikmin to let go.
     m->become_carriable(CARRY_DESTINATION_SHIP);
     m->respawn();
@@ -162,7 +162,7 @@ void treasure_fsm::respawn(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void treasure_fsm::stand_still(mob* m, void* info1, void* info2) {
+void treasure_fsm::stand_still(Mob* m, void* info1, void* info2) {
     m->stop_chasing();
     m->stop_turning();
 }

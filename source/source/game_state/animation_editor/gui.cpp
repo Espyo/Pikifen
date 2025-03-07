@@ -25,14 +25,14 @@
 /**
  * @brief Opens the "load" dialog.
  */
-void animation_editor::open_load_dialog() {
+void AnimationEditor::open_load_dialog() {
     reload_anim_dbs();
     
     //Set up the picker's behavior and data.
-    vector<picker_item> file_items;
+    vector<PickerItem> file_items;
     for(const auto &a : game.content.global_anim_dbs.list) {
         file_items.push_back(
-            picker_item(
+            PickerItem(
                 a.second.name,
                 "Pack: " + game.content.packs.list[a.second.manifest->pack].name,
                 "Global animations",
@@ -43,7 +43,7 @@ void animation_editor::open_load_dialog() {
     }
     for(size_t c = 0; c < custom_cat_types.size(); c++) {
         for(size_t a = 0; a < custom_cat_types[c].size(); a++) {
-            mob_type* mt_ptr = custom_cat_types[c][a];
+            MobType* mt_ptr = custom_cat_types[c][a];
             if(!mt_ptr) continue;
             if(!mt_ptr->manifest) continue;
             auto &cat_anim_dbs =
@@ -52,10 +52,10 @@ void animation_editor::open_load_dialog() {
                 cat_anim_dbs.find(mt_ptr->manifest->internal_name);
             if(mt_cat_anim_it == cat_anim_dbs.end()) continue;
             
-            content_manifest* man_ptr =
+            ContentManifest* man_ptr =
                 mt_cat_anim_it->second.manifest;
             file_items.push_back(
-                picker_item(
+                PickerItem(
                     mt_ptr->name,
                     "Pack: " + game.content.packs.list[man_ptr->pack].name,
                     mt_ptr->custom_category_name + " objects",
@@ -65,11 +65,11 @@ void animation_editor::open_load_dialog() {
             );
         }
     }
-    load_dialog_picker = picker_info(this);
+    load_dialog_picker = Picker(this);
     load_dialog_picker.items = file_items;
     load_dialog_picker.pick_callback =
         std::bind(
-            &animation_editor::pick_anim_db_file, this,
+            &AnimationEditor::pick_anim_db_file, this,
             std::placeholders::_1,
             std::placeholders::_2,
             std::placeholders::_3,
@@ -80,22 +80,22 @@ void animation_editor::open_load_dialog() {
     //Open the dialog that will contain the picker and history.
     open_dialog(
         "Load an animation database or create a new one",
-        std::bind(&animation_editor::process_gui_load_dialog, this)
+        std::bind(&AnimationEditor::process_gui_load_dialog, this)
     );
     dialogs.back()->close_callback =
-        std::bind(&animation_editor::close_load_dialog, this);
+        std::bind(&AnimationEditor::close_load_dialog, this);
 }
 
 
 /**
  * @brief Opens the "new" dialog.
  */
-void animation_editor::open_new_dialog() {
+void AnimationEditor::open_new_dialog() {
     open_dialog(
         "Create a new animation database",
-        std::bind(&animation_editor::process_gui_new_dialog, this)
+        std::bind(&AnimationEditor::process_gui_new_dialog, this)
     );
-    dialogs.back()->custom_size = point(400, 0);
+    dialogs.back()->custom_size = Point(400, 0);
     dialogs.back()->close_callback = [this] () {
         new_dialog.pack.clear();
         new_dialog.type = 0;
@@ -113,20 +113,20 @@ void animation_editor::open_new_dialog() {
  * @brief Opens the options dialog.
  *
  */
-void animation_editor::open_options_dialog() {
+void AnimationEditor::open_options_dialog() {
     open_dialog(
         "Options",
-        std::bind(&animation_editor::process_gui_options_dialog, this)
+        std::bind(&AnimationEditor::process_gui_options_dialog, this)
     );
     dialogs.back()->close_callback =
-        std::bind(&animation_editor::close_options_dialog, this);
+        std::bind(&AnimationEditor::close_options_dialog, this);
 }
 
 
 /**
  * @brief Processes Dear ImGui for this frame.
  */
-void animation_editor::process_gui() {
+void AnimationEditor::process_gui() {
     //Set up the entire editor window.
     ImGui::SetNextWindowPos(ImVec2(0, 0));
     ImGui::SetNextWindowSize(ImVec2(game.win_w, game.win_h));
@@ -189,7 +189,7 @@ void animation_editor::process_gui() {
 /**
  * @brief Processes the Dear ImGui control panel for this frame.
  */
-void animation_editor::process_gui_control_panel() {
+void AnimationEditor::process_gui_control_panel() {
     ImGui::BeginChild("panel");
     
     //Basically, just show the correct panel for the current state.
@@ -235,7 +235,7 @@ void animation_editor::process_gui_control_panel() {
  * @brief Processes the Dear ImGui animation database deletion dialog
  * for this frame.
  */
-void animation_editor::process_gui_delete_anim_db_dialog() {
+void AnimationEditor::process_gui_delete_anim_db_dialog() {
     //Explanation text.
     string explanation_str;
     if(!changes_mgr.exists_on_disk()) {
@@ -289,7 +289,7 @@ void animation_editor::process_gui_delete_anim_db_dialog() {
  * @brief Processes the list of the current hitbox's hazards,
  * as well as the widgets necessary to control it, for this frame.
  */
-void animation_editor::process_gui_hitbox_hazards() {
+void AnimationEditor::process_gui_hitbox_hazards() {
     //Hitbox hazards node.
     if(saveable_tree_node("hitbox", "Hazards")) {
     
@@ -314,7 +314,7 @@ void animation_editor::process_gui_hitbox_hazards() {
 /**
  * @brief Processes the "load" dialog for this frame.
  */
-void animation_editor::process_gui_load_dialog() {
+void AnimationEditor::process_gui_load_dialog() {
     //History node.
     process_gui_history(
     [this](const string &path) -> string {
@@ -353,7 +353,7 @@ void animation_editor::process_gui_load_dialog() {
 /**
  * @brief Processes the Dear ImGui menu bar for this frame.
  */
-void animation_editor::process_gui_menu_bar() {
+void AnimationEditor::process_gui_menu_bar() {
     if(ImGui::BeginMenuBar()) {
     
         //Editor menu.
@@ -516,7 +516,7 @@ void animation_editor::process_gui_menu_bar() {
 /**
  * @brief Processes the Dear ImGui "new" dialog for this frame.
  */
-void animation_editor::process_gui_new_dialog() {
+void AnimationEditor::process_gui_new_dialog() {
     string problem;
     bool hit_create_button = false;
     
@@ -564,13 +564,13 @@ void animation_editor::process_gui_new_dialog() {
     
     //Check if everything's ok.
     if(new_dialog.type == 0) {
-        content_manifest temp_man;
+        ContentManifest temp_man;
         temp_man.internal_name = new_dialog.internal_name;
         temp_man.pack = new_dialog.pack;
         new_dialog.anim_path =
             game.content.global_anim_dbs.manifest_to_path(temp_man);
     } else {
-        content_manifest temp_man;
+        ContentManifest temp_man;
         temp_man.internal_name = FILE_NAMES::MOB_TYPE_ANIMATION;
         temp_man.pack = new_dialog.pack;
         if(new_dialog.mob_type_ptr) {
@@ -651,7 +651,7 @@ void animation_editor::process_gui_new_dialog() {
 /**
  * @brief Processes the options dialog for this frame.
  */
-void animation_editor::process_gui_options_dialog() {
+void AnimationEditor::process_gui_options_dialog() {
     //Controls node.
     if(saveable_tree_node("options", "Controls")) {
     
@@ -756,7 +756,7 @@ void animation_editor::process_gui_options_dialog() {
 /**
  * @brief Processes the Dear ImGui animation control panel for this frame.
  */
-void animation_editor::process_gui_panel_animation() {
+void AnimationEditor::process_gui_panel_animation() {
     ImGui::BeginChild("animation");
     
     //Back button.
@@ -780,7 +780,7 @@ void animation_editor::process_gui_panel_animation() {
         //Frames node.
         ImGui::Spacer();
         if(saveable_tree_node("animation", "Frames")) {
-            frame* frame_ptr = nullptr;
+            Frame* frame_ptr = nullptr;
             if(
                 cur_anim_i.cur_frame_idx == INVALID &&
                 !cur_anim_i.cur_anim->frames.empty()
@@ -810,7 +810,7 @@ void animation_editor::process_gui_panel_animation() {
  * @brief Processes the Dear ImGui animation control panel's animation
  * data for this frame.
  */
-void animation_editor::process_gui_panel_animation_data() {
+void AnimationEditor::process_gui_panel_animation_data() {
     //Loop frame value.
     int loop_frame = (int) cur_anim_i.cur_anim->loop_frame + 1;
     if(
@@ -868,7 +868,7 @@ void animation_editor::process_gui_panel_animation_data() {
  * @brief Processes the Dear ImGui animation control panel's animation
  * header for this frame.
  */
-void animation_editor::process_gui_panel_animation_header() {
+void AnimationEditor::process_gui_panel_animation_header() {
     //Current animation text.
     size_t cur_anim_idx = INVALID;
     if(cur_anim_i.cur_anim) {
@@ -884,7 +884,7 @@ void animation_editor::process_gui_panel_animation_header() {
     if(
         ImGui::ImageButton(
             "prevAnimButton", editor_icons[EDITOR_ICON_PREVIOUS],
-            point(EDITOR::ICON_BMP_SIZE)
+            Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         if(!db.animations.empty()) {
@@ -917,7 +917,7 @@ void animation_editor::process_gui_panel_animation_header() {
     );
     ImGui::SameLine();
     if(mono_button(anim_button_name.c_str(), anim_button_size)) {
-        vector<picker_item> anim_names;
+        vector<PickerItem> anim_names;
         for(size_t a = 0; a < db.animations.size(); a++) {
             ALLEGRO_BITMAP* anim_frame_1 = nullptr;
             if(!db.animations[a]->frames.empty()) {
@@ -930,14 +930,14 @@ void animation_editor::process_gui_panel_animation_header() {
                 }
             }
             anim_names.push_back(
-                picker_item(db.animations[a]->name, "", "", nullptr, "", anim_frame_1)
+                PickerItem(db.animations[a]->name, "", "", nullptr, "", anim_frame_1)
             );
         }
         open_picker_dialog(
             "Pick an animation, or create a new one",
             anim_names,
             std::bind(
-                &animation_editor::pick_animation, this,
+                &AnimationEditor::pick_animation, this,
                 std::placeholders::_1,
                 std::placeholders::_2,
                 std::placeholders::_3,
@@ -956,7 +956,7 @@ void animation_editor::process_gui_panel_animation_header() {
     if(
         ImGui::ImageButton(
             "nextAnimButton", editor_icons[EDITOR_ICON_NEXT],
-            point(EDITOR::ICON_BMP_SIZE)
+            Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         if(!db.animations.empty()) {
@@ -985,7 +985,7 @@ void animation_editor::process_gui_panel_animation_header() {
         if(
             ImGui::ImageButton(
                 "delAnimButton", editor_icons[EDITOR_ICON_REMOVE],
-                point(EDITOR::ICON_BMP_SIZE)
+                Point(EDITOR::ICON_BMP_SIZE)
             )
         ) {
             string cur_anim_name = cur_anim_i.cur_anim->name;
@@ -1016,7 +1016,7 @@ void animation_editor::process_gui_panel_animation_header() {
             if(
                 ImGui::ImageButton(
                     "importAnimButton", editor_icons[EDITOR_ICON_DUPLICATE],
-                    point(EDITOR::ICON_BMP_SIZE)
+                    Point(EDITOR::ICON_BMP_SIZE)
                 )
             ) {
                 ImGui::OpenPopup("importAnim");
@@ -1049,7 +1049,7 @@ void animation_editor::process_gui_panel_animation_header() {
         if(
             ImGui::ImageButton(
                 "renameAnimButton", editor_icons[EDITOR_ICON_INFO],
-                point(EDITOR::ICON_BMP_SIZE)
+                Point(EDITOR::ICON_BMP_SIZE)
             )
         ) {
             duplicate_string(cur_anim_i.cur_anim->name, rename_anim_name);
@@ -1070,7 +1070,7 @@ void animation_editor::process_gui_panel_animation_header() {
 /**
  * @brief Processes the Dear ImGui body part control panel for this frame.
  */
-void animation_editor::process_gui_panel_body_part() {
+void AnimationEditor::process_gui_panel_body_part() {
     ImGui::BeginChild("bodyPart");
     
     //Back button.
@@ -1088,7 +1088,7 @@ void animation_editor::process_gui_panel_body_part() {
     if(
         ImGui::ImageButton(
             "addPartButton", editor_icons[EDITOR_ICON_ADD],
-            point(EDITOR::ICON_BMP_SIZE)
+            Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         new_part_name.clear();
@@ -1118,7 +1118,7 @@ void animation_editor::process_gui_panel_body_part() {
                 db.body_parts.insert(
                     db.body_parts.begin() + selected_part +
                     (db.body_parts.empty() ? 0 : 1),
-                    new body_part(new_part_name)
+                    new BodyPart(new_part_name)
                 );
                 if(db.body_parts.size() == 1) {
                     selected_part = 0;
@@ -1146,7 +1146,7 @@ void animation_editor::process_gui_panel_body_part() {
         if(
             ImGui::ImageButton(
                 "delPartButton", editor_icons[EDITOR_ICON_REMOVE],
-                point(EDITOR::ICON_BMP_SIZE)
+                Point(EDITOR::ICON_BMP_SIZE)
             )
         ) {
             if(selected_part >= 0 && !db.body_parts.empty()) {
@@ -1178,7 +1178,7 @@ void animation_editor::process_gui_panel_body_part() {
         if(
             ImGui::ImageButton(
                 "renamePartButton", editor_icons[EDITOR_ICON_INFO],
-                point(EDITOR::ICON_BMP_SIZE)
+                Point(EDITOR::ICON_BMP_SIZE)
             )
         ) {
             duplicate_string(
@@ -1219,7 +1219,7 @@ void animation_editor::process_gui_panel_body_part() {
                             (int) p +
                             (ImGui::GetMouseDragDelta(0).y < 0.0f ? -1 : 1);
                         if(p2 >= 0 && p2 < (int) db.body_parts.size()) {
-                            body_part* p_ptr = db.body_parts[p];
+                            BodyPart* p_ptr = db.body_parts[p];
                             db.body_parts[p] = db.body_parts[p2];
                             db.body_parts[p2] = p_ptr;
                             ImGui::ResetMouseDragDelta();
@@ -1259,7 +1259,7 @@ void animation_editor::process_gui_panel_body_part() {
  *
  * @param frame_ptr Pointer to the currently selected frame.
  */
-void animation_editor::process_gui_panel_frame(frame* &frame_ptr) {
+void AnimationEditor::process_gui_panel_frame(Frame* &frame_ptr) {
     //Sprite combobox.
     vector<string> sprite_names;
     for(size_t s = 0; s < db.sprites.size(); s++) {
@@ -1413,8 +1413,8 @@ void animation_editor::process_gui_panel_frame(frame* &frame_ptr) {
  * @brief Processes the Dear ImGui animation control panel's frame
  * header for this frame.
  */
-void animation_editor::process_gui_panel_frame_header(
-    frame* &frame_ptr
+void AnimationEditor::process_gui_panel_frame_header(
+    Frame* &frame_ptr
 ) {
     //Current frame text.
     ImGui::Text(
@@ -1428,7 +1428,7 @@ void animation_editor::process_gui_panel_frame_header(
         if(
             ImGui::ImageButton(
                 "playButton", editor_icons[EDITOR_ICON_PLAY_PAUSE],
-                point(EDITOR::ICON_BMP_SIZE)
+                Point(EDITOR::ICON_BMP_SIZE)
             )
         ) {
             if(is_shift_pressed) {
@@ -1458,7 +1458,7 @@ void animation_editor::process_gui_panel_frame_header(
         if(
             ImGui::ImageButton(
                 "prevFrameButton", editor_icons[EDITOR_ICON_PREVIOUS],
-                point(EDITOR::ICON_BMP_SIZE)
+                Point(EDITOR::ICON_BMP_SIZE)
             )
         ) {
             anim_playing = false;
@@ -1483,7 +1483,7 @@ void animation_editor::process_gui_panel_frame_header(
         if(
             ImGui::ImageButton(
                 "nextFrameButton", editor_icons[EDITOR_ICON_NEXT],
-                point(EDITOR::ICON_BMP_SIZE)
+                Point(EDITOR::ICON_BMP_SIZE)
             )
         ) {
             anim_playing = false;
@@ -1511,7 +1511,7 @@ void animation_editor::process_gui_panel_frame_header(
     if(
         ImGui::ImageButton(
             "addFrameButton", editor_icons[EDITOR_ICON_ADD],
-            point(EDITOR::ICON_BMP_SIZE)
+            Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         if(
@@ -1528,14 +1528,14 @@ void animation_editor::process_gui_panel_frame_header(
             cur_anim_i.cur_anim->frames.insert(
                 cur_anim_i.cur_anim->frames.begin() +
                 cur_anim_i.cur_frame_idx,
-                frame(
+                Frame(
                     cur_anim_i.cur_anim->frames[
                         cur_anim_i.cur_frame_idx - 1
                     ]
                 )
             );
         } else {
-            cur_anim_i.cur_anim->frames.push_back(frame());
+            cur_anim_i.cur_anim->frames.push_back(Frame());
             cur_anim_i.cur_frame_idx = 0;
             cur_anim_i.cur_frame_time = 0.0f;
             set_best_frame_sprite();
@@ -1559,7 +1559,7 @@ void animation_editor::process_gui_panel_frame_header(
         if(
             ImGui::ImageButton(
                 "delFrameButton", editor_icons[EDITOR_ICON_REMOVE],
-                point(EDITOR::ICON_BMP_SIZE)
+                Point(EDITOR::ICON_BMP_SIZE)
             )
         ) {
             size_t deleted_frame_idx = cur_anim_i.cur_frame_idx;
@@ -1603,7 +1603,7 @@ void animation_editor::process_gui_panel_frame_header(
  * @brief Processes the Dear ImGui animation database info control panel
  * for this frame.
  */
-void animation_editor::process_gui_panel_info() {
+void AnimationEditor::process_gui_panel_info() {
     ImGui::BeginChild("info");
     
     //Back button.
@@ -1673,7 +1673,7 @@ void animation_editor::process_gui_panel_info() {
 /**
  * @brief Processes the Dear ImGui main control panel for this frame.
  */
-void animation_editor::process_gui_panel_main() {
+void AnimationEditor::process_gui_panel_main() {
     if(manifest.internal_name.empty()) return;
     
     ImGui::BeginChild("main");
@@ -1706,7 +1706,7 @@ void animation_editor::process_gui_panel_main() {
     if(
         ImGui::ImageButtonAndText(
             "animsButton", editor_icons[EDITOR_ICON_ANIMATIONS],
-            point(EDITOR::ICON_BMP_SIZE),
+            Point(EDITOR::ICON_BMP_SIZE),
             24.0f, "Animations"
         )
     ) {
@@ -1723,7 +1723,7 @@ void animation_editor::process_gui_panel_main() {
     if(
         ImGui::ImageButtonAndText(
             "spritesButton", editor_icons[EDITOR_ICON_SPRITES],
-            point(EDITOR::ICON_BMP_SIZE),
+            Point(EDITOR::ICON_BMP_SIZE),
             24.0f, "Sprites"
         )
     ) {
@@ -1740,7 +1740,7 @@ void animation_editor::process_gui_panel_main() {
     if(
         ImGui::ImageButtonAndText(
             "partsButton", editor_icons[EDITOR_ICON_BODY_PARTS],
-            point(EDITOR::ICON_BMP_SIZE),
+            Point(EDITOR::ICON_BMP_SIZE),
             24.0f, "Body parts"
         )
     ) {
@@ -1755,7 +1755,7 @@ void animation_editor::process_gui_panel_main() {
     if(
         ImGui::ImageButtonAndText(
             "infoButton", editor_icons[EDITOR_ICON_INFO],
-            point(EDITOR::ICON_BMP_SIZE),
+            Point(EDITOR::ICON_BMP_SIZE),
             8.0f, "Info"
         )
     ) {
@@ -1769,7 +1769,7 @@ void animation_editor::process_gui_panel_main() {
     if(
         ImGui::ImageButtonAndText(
             "toolsButton", editor_icons[EDITOR_ICON_TOOLS],
-            point(EDITOR::ICON_BMP_SIZE),
+            Point(EDITOR::ICON_BMP_SIZE),
             8.0f, "Tools"
         )
     ) {
@@ -1808,7 +1808,7 @@ void animation_editor::process_gui_panel_main() {
 /**
  * @brief Processes the Dear ImGui sprite control panel for this frame.
  */
-void animation_editor::process_gui_panel_sprite() {
+void AnimationEditor::process_gui_panel_sprite() {
     ImGui::BeginChild("sprite");
     
     //Back button.
@@ -1834,7 +1834,7 @@ void animation_editor::process_gui_panel_sprite() {
     if(
         ImGui::ImageButton(
             "prevSpriteButton", editor_icons[EDITOR_ICON_PREVIOUS],
-            point(EDITOR::ICON_BMP_SIZE)
+            Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         if(!db.sprites.empty()) {
@@ -1863,10 +1863,10 @@ void animation_editor::process_gui_panel_sprite() {
     );
     ImGui::SameLine();
     if(mono_button(sprite_button_name.c_str(), sprite_button_size)) {
-        vector<picker_item> sprite_names;
+        vector<PickerItem> sprite_names;
         for(size_t s = 0; s < db.sprites.size(); s++) {
             sprite_names.push_back(
-                picker_item(
+                PickerItem(
                     db.sprites[s]->name,
                     "", "", nullptr, "",
                     db.sprites[s]->bitmap
@@ -1877,7 +1877,7 @@ void animation_editor::process_gui_panel_sprite() {
             "Pick a sprite, or create a new one",
             sprite_names,
             std::bind(
-                &animation_editor::pick_sprite, this,
+                &AnimationEditor::pick_sprite, this,
                 std::placeholders::_1,
                 std::placeholders::_2,
                 std::placeholders::_3,
@@ -1896,7 +1896,7 @@ void animation_editor::process_gui_panel_sprite() {
     if(
         ImGui::ImageButton(
             "nextSpriteButton", editor_icons[EDITOR_ICON_NEXT],
-            point(EDITOR::ICON_BMP_SIZE)
+            Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         if(!db.sprites.empty()) {
@@ -1924,7 +1924,7 @@ void animation_editor::process_gui_panel_sprite() {
         if(
             ImGui::ImageButton(
                 "delSpriteButton", editor_icons[EDITOR_ICON_REMOVE],
-                point(EDITOR::ICON_BMP_SIZE)
+                Point(EDITOR::ICON_BMP_SIZE)
             )
         ) {
             string deleted_sprite_name = cur_sprite->name;
@@ -1958,7 +1958,7 @@ void animation_editor::process_gui_panel_sprite() {
             if(
                 ImGui::ImageButton(
                     "importSpriteButton", editor_icons[EDITOR_ICON_DUPLICATE],
-                    point(EDITOR::ICON_BMP_SIZE)
+                    Point(EDITOR::ICON_BMP_SIZE)
                 )
             ) {
                 ImGui::OpenPopup("importSprite");
@@ -1996,7 +1996,7 @@ void animation_editor::process_gui_panel_sprite() {
         if(
             ImGui::ImageButton(
                 "renameSpriteButton", editor_icons[EDITOR_ICON_INFO],
-                point(EDITOR::ICON_BMP_SIZE)
+                Point(EDITOR::ICON_BMP_SIZE)
             )
         ) {
             duplicate_string(cur_sprite->name, rename_sprite_name);
@@ -2017,7 +2017,7 @@ void animation_editor::process_gui_panel_sprite() {
         if(
             ImGui::ImageButton(
                 "resizeSpriteButton", editor_icons[EDITOR_ICON_RESIZE],
-                point(EDITOR::ICON_BMP_SIZE)
+                Point(EDITOR::ICON_BMP_SIZE)
             )
         ) {
             resize_sprite_mult = "1.0";
@@ -2092,7 +2092,7 @@ void animation_editor::process_gui_panel_sprite() {
 /**
  * @brief Processes the Dear ImGui sprite bitmap control panel for this frame.
  */
-void animation_editor::process_gui_panel_sprite_bitmap() {
+void AnimationEditor::process_gui_panel_sprite_bitmap() {
     ImGui::BeginChild("spriteBitmap");
     
     //Back button.
@@ -2111,7 +2111,7 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
         if(
             ImGui::ImageButton(
                 "importDataButton", editor_icons[EDITOR_ICON_DUPLICATE],
-                point(EDITOR::ICON_BMP_SIZE)
+                Point(EDITOR::ICON_BMP_SIZE)
             )
         ) {
             ImGui::OpenPopup("importSpriteBitmap");
@@ -2174,7 +2174,7 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
     ) {
         cur_sprite->set_bitmap(
             cur_sprite->bmp_name,
-            point(top_left[0], top_left[1]), cur_sprite->bmp_size
+            Point(top_left[0], top_left[1]), cur_sprite->bmp_size
         );
         changes_mgr.mark_as_changed();
     }
@@ -2193,7 +2193,7 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
     ) {
         cur_sprite->set_bitmap(
             cur_sprite->bmp_name,
-            cur_sprite->bmp_pos, point(size[0], size[1])
+            cur_sprite->bmp_pos, Point(size[0], size[1])
         );
         changes_mgr.mark_as_changed();
     }
@@ -2226,8 +2226,8 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
         if(
             ImGui::Button("Clear selection")
         ) {
-            cur_sprite->bmp_pos = point();
-            cur_sprite->bmp_size = point();
+            cur_sprite->bmp_pos = Point();
+            cur_sprite->bmp_size = Point();
             cur_sprite->set_bitmap(
                 cur_sprite->bmp_name, cur_sprite->bmp_pos, cur_sprite->bmp_size
             );
@@ -2243,7 +2243,7 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
 /**
  * @brief Processes the Dear ImGui sprite hitboxes control panel for this frame.
  */
-void animation_editor::process_gui_panel_sprite_hitboxes() {
+void AnimationEditor::process_gui_panel_sprite_hitboxes() {
     ImGui::BeginChild("spriteHitboxes");
     
     //Back button.
@@ -2268,7 +2268,7 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
     if(
         ImGui::ImageButton(
             "prevHitboxButton", editor_icons[EDITOR_ICON_PREVIOUS],
-            point(EDITOR::ICON_BMP_SIZE)
+            Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         if(cur_sprite->hitboxes.size()) {
@@ -2294,7 +2294,7 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
     if(
         ImGui::ImageButton(
             "nextHitboxButton", editor_icons[EDITOR_ICON_NEXT],
-            point(EDITOR::ICON_BMP_SIZE)
+            Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         if(cur_sprite->hitboxes.size()) {
@@ -2322,7 +2322,7 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
         if(
             ImGui::ImageButton(
                 "importDataButton", editor_icons[EDITOR_ICON_DUPLICATE],
-                point(EDITOR::ICON_BMP_SIZE)
+                Point(EDITOR::ICON_BMP_SIZE)
             )
         ) {
             ImGui::OpenPopup("importSpriteHitboxes");
@@ -2566,7 +2566,7 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
 /**
  * @brief Processes the Dear ImGui sprite top control panel for this frame.
  */
-void animation_editor::process_gui_panel_sprite_top() {
+void AnimationEditor::process_gui_panel_sprite_top() {
     ImGui::BeginChild("spriteTop");
     
     //Back button.
@@ -2583,7 +2583,7 @@ void animation_editor::process_gui_panel_sprite_top() {
         if(
             ImGui::ImageButton(
                 "importDataButton", editor_icons[EDITOR_ICON_DUPLICATE],
-                point(EDITOR::ICON_BMP_SIZE)
+                Point(EDITOR::ICON_BMP_SIZE)
             )
         ) {
             ImGui::OpenPopup("importSpriteTop");
@@ -2688,7 +2688,7 @@ void animation_editor::process_gui_panel_sprite_top() {
  * @brief Processes the Dear ImGui sprite transform control panel for
  * this frame.
  */
-void animation_editor::process_gui_panel_sprite_transform() {
+void AnimationEditor::process_gui_panel_sprite_transform() {
     ImGui::BeginChild("spriteTransform");
     
     //Back button.
@@ -2705,7 +2705,7 @@ void animation_editor::process_gui_panel_sprite_transform() {
         if(
             ImGui::ImageButton(
                 "importDataButton", editor_icons[EDITOR_ICON_DUPLICATE],
-                point(EDITOR::ICON_BMP_SIZE)
+                Point(EDITOR::ICON_BMP_SIZE)
             )
         ) {
             ImGui::OpenPopup("importSpriteTransform");
@@ -2891,7 +2891,7 @@ void animation_editor::process_gui_panel_sprite_transform() {
 /**
  * @brief Processes the Dear ImGui tools control panel for this frame.
  */
-void animation_editor::process_gui_panel_tools() {
+void AnimationEditor::process_gui_panel_tools() {
     ImGui::BeginChild("tools");
     
     //Back button.
@@ -2947,7 +2947,7 @@ void animation_editor::process_gui_panel_tools() {
 /**
  * @brief Processes the Dear ImGui status bar for this frame.
  */
-void animation_editor::process_gui_status_bar() {
+void AnimationEditor::process_gui_status_bar() {
     //Status bar text.
     process_gui_status_bar_text();
     
@@ -3011,14 +3011,14 @@ void animation_editor::process_gui_status_bar() {
 /**
  * @brief Processes the Dear ImGui toolbar for this frame.
  */
-void animation_editor::process_gui_toolbar() {
+void AnimationEditor::process_gui_toolbar() {
     if(manifest.internal_name.empty()) return;
     
     //Quit button.
     if(
         ImGui::ImageButton(
             "quitButton", editor_icons[EDITOR_ICON_QUIT],
-            point(EDITOR::ICON_BMP_SIZE)
+            Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         quit_widget_pos = get_last_widget_pos();
@@ -3034,7 +3034,7 @@ void animation_editor::process_gui_toolbar() {
     if(
         ImGui::ImageButton(
             "loadButton", editor_icons[EDITOR_ICON_LOAD],
-            point(EDITOR::ICON_BMP_SIZE)
+            Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         load_widget_pos = get_last_widget_pos();
@@ -3053,7 +3053,7 @@ void animation_editor::process_gui_toolbar() {
             changes_mgr.has_unsaved_changes() ?
             editor_icons[EDITOR_ICON_SAVE_UNSAVED] :
             editor_icons[EDITOR_ICON_SAVE],
-            point(EDITOR::ICON_BMP_SIZE)
+            Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         save_cmd(1.0f);
@@ -3068,7 +3068,7 @@ void animation_editor::process_gui_toolbar() {
     if(
         ImGui::ImageButton(
             "gridButton", editor_icons[EDITOR_ICON_GRID],
-            point(EDITOR::ICON_BMP_SIZE)
+            Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         grid_toggle_cmd(1.0f);
@@ -3083,7 +3083,7 @@ void animation_editor::process_gui_toolbar() {
     if(
         ImGui::ImageButton(
             "hitboxesButton", editor_icons[EDITOR_ICON_HITBOXES],
-            point(EDITOR::ICON_BMP_SIZE)
+            Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         hitboxes_toggle_cmd(1.0f);
@@ -3098,7 +3098,7 @@ void animation_editor::process_gui_toolbar() {
     if(
         ImGui::ImageButton(
             "mobRadiusButton", editor_icons[EDITOR_ICON_MOB_RADIUS],
-            point(EDITOR::ICON_BMP_SIZE)
+            Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         mob_radius_toggle_cmd(1.0f);
@@ -3113,7 +3113,7 @@ void animation_editor::process_gui_toolbar() {
     if(
         ImGui::ImageButton(
             "silhouetteButton", editor_icons[EDITOR_ICON_LEADER_SILHOUETTE],
-            point(EDITOR::ICON_BMP_SIZE)
+            Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         leader_silhouette_toggle_cmd(1.0f);

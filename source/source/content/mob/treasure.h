@@ -35,18 +35,18 @@
  * a monetary amount in and of themselves),
  * and without the fruits, Koppai would starve.
  */
-class treasure : public mob {
+class Treasure : public Mob {
 
 public:
 
     //--- Members ---
     
     //What type of treasure it is.
-    treasure_type* tre_type = nullptr;
+    TreasureType* tre_type = nullptr;
     
     
     //--- Function declarations ---
     
-    treasure(const point &pos, treasure_type* type, float angle);
+    Treasure(const Point &pos, TreasureType* type, float angle);
     
 };

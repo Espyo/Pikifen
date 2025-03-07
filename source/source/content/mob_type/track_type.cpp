@@ -20,8 +20,8 @@
 /**
  * @brief Constructs a new track type object.
  */
-track_type::track_type() :
-    mob_type(MOB_CATEGORY_TRACKS) {
+TrackType::TrackType() :
+    MobType(MOB_CATEGORY_TRACKS) {
     
     target_type = MOB_TARGET_FLAG_NONE;
     
@@ -34,7 +34,7 @@ track_type::track_type() :
  *
  * @return The vector.
  */
-anim_conversion_vector track_type::get_anim_conversions() const {
+anim_conversion_vector TrackType::get_anim_conversions() const {
     anim_conversion_vector v;
     v.push_back(std::make_pair(DROP_ANIM_IDLING, "idling"));
     return v;
@@ -46,13 +46,13 @@ anim_conversion_vector track_type::get_anim_conversions() const {
  *
  * @param file File to read from.
  */
-void track_type::load_cat_properties(data_node* file) {
-    reader_setter rs(file);
+void TrackType::load_cat_properties(DataNode* file) {
+    ReaderSetter rs(file);
     
     string riders_str;
     string riding_pose_str;
-    data_node* riders_node = nullptr;
-    data_node* riding_pose_node = nullptr;
+    DataNode* riders_node = nullptr;
+    DataNode* riding_pose_node = nullptr;
     
     rs.set("cancellable_with_whistle", cancellable_with_whistle);
     rs.set("ride_speed", ride_speed);
@@ -99,7 +99,7 @@ void track_type::load_cat_properties(data_node* file) {
  *
  * @param file File to read from.
  */
-void track_type::load_cat_resources(data_node* file) {
+void TrackType::load_cat_resources(DataNode* file) {
     //We don't actually need to load any, but we know that if this function
     //is run, then the animations are definitely loaded.
     //Now's a good time to check if the track has 2+ checkpoints.

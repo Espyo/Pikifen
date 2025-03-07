@@ -23,7 +23,7 @@
  *
  * @param type Its type.
  */
-status::status(status_type* type) :
+Status::Status(StatusType* type) :
     type(type) {
     
     time_left = type->auto_remove_time;
@@ -36,7 +36,7 @@ status::status(status_type* type) :
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void status::tick(float delta_t) {
+void Status::tick(float delta_t) {
     if(type->auto_remove_time > 0.0f) {
         time_left -= delta_t;
         if(time_left <= 0.0f) {
@@ -52,22 +52,22 @@ void status::tick(float delta_t) {
  * @param node Data node to load from.
  * @param level Level to load at.
  */
-void status_type::load_from_data_node(data_node* node, CONTENT_LOAD_LEVEL level) {
+void StatusType::load_from_data_node(DataNode* node, CONTENT_LOAD_LEVEL level) {
     //Content metadata.
     load_metadata_from_data_node(node);
     
     //Standard data.
-    reader_setter rs(node);
+    ReaderSetter rs(node);
     
     string affects_str;
     string reapply_rule_str;
     string sc_type_str;
     string particle_offset_str;
     string particle_gen_str;
-    data_node* affects_node = nullptr;
-    data_node* reapply_rule_node = nullptr;
-    data_node* sc_type_node = nullptr;
-    data_node* particle_gen_node = nullptr;
+    DataNode* affects_node = nullptr;
+    DataNode* reapply_rule_node = nullptr;
+    DataNode* sc_type_node = nullptr;
+    DataNode* particle_gen_node = nullptr;
     
     rs.set("color",                   color);
     rs.set("tint",                    tint);

@@ -40,7 +40,7 @@ enum ANNEX_SCREEN_MENU {
 /**
  * @brief Info about the annex screen used for misc. menus.
  */
-class annex_screen_state : public game_state {
+class AnnexScreen : public GameState {
 
 public:
 
@@ -50,7 +50,7 @@ public:
     ANNEX_SCREEN_MENU menu_to_load = ANNEX_SCREEN_MENU_HELP;
     
     //Information about the current menu, if any.
-    menu_t* cur_menu = nullptr;
+    Menu* cur_menu = nullptr;
     
     //Type of area that the area menu is dealing with.
     AREA_TYPE area_menu_area_type = AREA_TYPE_SIMPLE;

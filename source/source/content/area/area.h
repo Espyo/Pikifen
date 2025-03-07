@@ -54,18 +54,18 @@ extern const unsigned char DEF_DIFFICULTY;
  * a wall on the landing site part of TIS.
  * It's also used when checking sectors in a certain spot.
  */
-struct blockmap {
+struct Blockmap {
 
     //--- Members ---
     
     //Top-left corner of the blockmap.
-    point top_left_corner;
+    Point top_left_corner;
     
     //Specifies a list of edges in each block.
-    vector<vector<vector<edge*> > > edges;
+    vector<vector<vector<Edge*> > > edges;
     
     //Specifies a list of sectors in each block.
-    vector<vector<unordered_set<sector*> > >  sectors;
+    vector<vector<unordered_set<Sector*> > >  sectors;
     
     //Number of columns.
     size_t n_cols = 0;
@@ -79,9 +79,9 @@ struct blockmap {
     size_t get_col(float x) const;
     size_t get_row(float y) const;
     bool get_edges_in_region(
-        const point &tl, const point &br, set<edge*> &edges
+        const Point &tl, const Point &br, set<Edge*> &edges
     ) const;
-    point get_top_left_corner(size_t col, size_t row) const;
+    Point get_top_left_corner(size_t col, size_t row) const;
     void clear();
     
 };
@@ -94,15 +94,15 @@ struct blockmap {
  * but it doesn't have the data of a LIVING mob. This only holds its
  * position and type data, plus some other tiny things.
  */
-struct mob_gen {
+struct MobGen {
 
     //--- Members ---
     
     //Mob type.
-    mob_type* type = nullptr;
+    MobType* type = nullptr;
     
     //Position.
-    point pos;
+    Point pos;
     
     //Angle.
     float angle = 0.0f;
@@ -117,16 +117,16 @@ struct mob_gen {
     size_t stored_inside = INVALID;
     
     //Linked objects. Cache for performance.
-    vector<mob_gen*> links;
+    vector<MobGen*> links;
     
     
     //--- Function declarations ---
     
-    explicit mob_gen(
-        const point &pos = point(),
-        mob_type* type = nullptr, float angle = 0, const string &vars = ""
+    explicit MobGen(
+        const Point &pos = Point(),
+        MobType* type = nullptr, float angle = 0, const string &vars = ""
     );
-    void clone(mob_gen* destination, bool include_position = true) const;
+    void clone(MobGen* destination, bool include_position = true) const;
     
 };
 
@@ -135,7 +135,7 @@ struct mob_gen {
  * @brief Info about the shadows cast onto the area by a tree
  * (or whatever the game maker desires).
  */
-struct tree_shadow {
+struct TreeShadow {
 
     //--- Members ---
     
@@ -146,10 +146,10 @@ struct tree_shadow {
     ALLEGRO_BITMAP* bitmap = nullptr;
     
     //Center coordinates.
-    point center;
+    Point center;
     
     //Width and height.
-    point size;
+    Point size;
     
     //Angle.
     float angle = 0.0f;
@@ -158,17 +158,17 @@ struct tree_shadow {
     unsigned char alpha = 255;
     
     //Swaying is multiplied by this.
-    point sway;
+    Point sway;
     
     
     //--- Function declarations ---
     
-    explicit tree_shadow(
-        const point &center = point(), const point &size = point(100.0f),
+    explicit TreeShadow(
+        const Point &center = Point(), const Point &size = Point(100.0f),
         float angle = 0, unsigned char alpha = 255,
-        const string &bmp_name = "", const point &sway = point(1.0f)
+        const string &bmp_name = "", const Point &sway = Point(1.0f)
     );
-    ~tree_shadow();
+    ~TreeShadow();
     
 };
 
@@ -179,7 +179,7 @@ struct tree_shadow {
  * This structure is so that the sectors know how to communicate with
  * the edges, the edges with the vertexes, etc.
  */
-struct area_data : public content {
+struct Area : public Content {
 
     //--- Members ---
     
@@ -187,25 +187,25 @@ struct area_data : public content {
     AREA_TYPE type = AREA_TYPE_SIMPLE;
     
     //Blockmap.
-    blockmap bmap;
+    Blockmap bmap;
     
     //List of vertexes.
-    vector<vertex*> vertexes;
+    vector<Vertex*> vertexes;
     
     //List of edges.
-    vector<edge*> edges;
+    vector<Edge*> edges;
     
     //List of sectors.
-    vector<sector*> sectors;
+    vector<Sector*> sectors;
     
     //List of mob generators.
-    vector<mob_gen*> mob_generators;
+    vector<MobGen*> mob_generators;
     
     //List of path stops.
-    vector<path_stop*> path_stops;
+    vector<PathStop*> path_stops;
     
     //List of tree shadows.
-    vector<tree_shadow*> tree_shadows;
+    vector<TreeShadow*> tree_shadows;
     
     //Bitmap of the background.
     ALLEGRO_BITMAP* bg_bmp = nullptr;
@@ -238,7 +238,7 @@ struct area_data : public content {
     string song_name;
     
     //Weather condition to use.
-    weather weather_condition;
+    Weather weather_condition;
     
     //Name of the weather condition to use.
     string weather_name;
@@ -250,10 +250,10 @@ struct area_data : public content {
     float day_time_speed = AREA::DEF_DAY_TIME_SPEED;
     
     //Known geometry problems.
-    geometry_problems problems;
+    GeometryProblems problems;
     
     //Mission data.
-    mission_data mission;
+    MissionData mission;
     
     //Path to the user data folder for this area.
     string user_data_path;
@@ -263,46 +263,46 @@ struct area_data : public content {
     
     void check_stability();
     void cleanup(bool* out_deleted_sectors = nullptr);
-    void clone(area_data &other);
-    void connect_edge_to_sector(edge* e_ptr, sector* s_ptr, size_t side);
-    void connect_edge_to_vertex(edge* e_ptr, vertex* v_ptr, size_t endpoint);
-    void connect_sector_edges(sector* s_ptr);
-    void connect_vertex_edges(vertex* v_ptr);
-    size_t find_edge_idx(const edge* e_ptr) const;
-    size_t find_mob_gen_idx(const mob_gen* m_ptr) const;
-    size_t find_sector_idx(const sector* s_ptr) const;
-    size_t find_vertex_idx(const vertex* v_ptr) const;
-    void fix_edge_idxs(edge* e_ptr);
-    void fix_edge_pointers(edge* e_ptr);
-    void fix_path_stop_idxs(path_stop* s_ptr);
-    void fix_path_stop_pointers(path_stop* s_ptr);
-    void fix_sector_idxs(sector* s_ptr);
-    void fix_sector_pointers(sector* s_ptr);
-    void fix_vertex_idxs(vertex* v_ptr);
-    void fix_vertex_pointers(vertex* v_ptr);
+    void clone(Area &other);
+    void connect_edge_to_sector(Edge* e_ptr, Sector* s_ptr, size_t side);
+    void connect_edge_to_vertex(Edge* e_ptr, Vertex* v_ptr, size_t endpoint);
+    void connect_sector_edges(Sector* s_ptr);
+    void connect_vertex_edges(Vertex* v_ptr);
+    size_t find_edge_idx(const Edge* e_ptr) const;
+    size_t find_mob_gen_idx(const MobGen* m_ptr) const;
+    size_t find_sector_idx(const Sector* s_ptr) const;
+    size_t find_vertex_idx(const Vertex* v_ptr) const;
+    void fix_edge_idxs(Edge* e_ptr);
+    void fix_edge_pointers(Edge* e_ptr);
+    void fix_path_stop_idxs(PathStop* s_ptr);
+    void fix_path_stop_pointers(PathStop* s_ptr);
+    void fix_sector_idxs(Sector* s_ptr);
+    void fix_sector_pointers(Sector* s_ptr);
+    void fix_vertex_idxs(Vertex* v_ptr);
+    void fix_vertex_pointers(Vertex* v_ptr);
     void generate_blockmap();
-    void generate_edges_blockmap(const vector<edge*> &edges);
+    void generate_edges_blockmap(const vector<Edge*> &edges);
     size_t get_nr_path_links();
     void load_main_data_from_data_node(
-        data_node* node, CONTENT_LOAD_LEVEL level
+        DataNode* node, CONTENT_LOAD_LEVEL level
     );
-    void load_mission_data_from_data_node(data_node* node);
+    void load_mission_data_from_data_node(DataNode* node);
     void load_geometry_from_data_node(
-        data_node* node, CONTENT_LOAD_LEVEL level
+        DataNode* node, CONTENT_LOAD_LEVEL level
     );
     void load_thumbnail(const string &thumbnail_path);
-    edge* new_edge();
-    sector* new_sector();
-    vertex* new_vertex();
+    Edge* new_edge();
+    Sector* new_sector();
+    Vertex* new_vertex();
     void remove_vertex(size_t v_idx);
-    void remove_vertex(const vertex* v_ptr);
+    void remove_vertex(const Vertex* v_ptr);
     void remove_edge(size_t e_idx);
-    void remove_edge(const edge* e_ptr);
+    void remove_edge(const Edge* e_ptr);
     void remove_sector(size_t s_idx);
-    void remove_sector(const sector* s_ptr);
-    void save_geometry_to_data_node(data_node* node);
-    void save_main_data_to_data_node(data_node* node);
-    void save_mission_data_to_data_node(data_node* node);
+    void remove_sector(const Sector* s_ptr);
+    void save_geometry_to_data_node(DataNode* node);
+    void save_main_data_to_data_node(DataNode* node);
+    void save_mission_data_to_data_node(DataNode* node);
     void save_thumbnail(bool to_backup);
     void clear();
     

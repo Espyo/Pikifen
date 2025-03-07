@@ -19,12 +19,12 @@
 /**
  * @brief Constructs a new group task type object.
  */
-group_task_type::group_task_type() :
-    mob_type(MOB_CATEGORY_GROUP_TASKS) {
+GroupTaskType::GroupTaskType() :
+    MobType(MOB_CATEGORY_GROUP_TASKS) {
     
     target_type = MOB_TARGET_FLAG_NONE;
     
-    area_editor_prop_t aep_power_goal;
+    AreaEditorProp aep_power_goal;
     aep_power_goal.name = "Power goal";
     aep_power_goal.var = "power_goal";
     aep_power_goal.type = AEMP_TYPE_INT;
@@ -39,13 +39,13 @@ group_task_type::group_task_type() :
  *
  * @param file File to read from.
  */
-void group_task_type::load_cat_properties(data_node* file) {
-    reader_setter rs(file);
+void GroupTaskType::load_cat_properties(DataNode* file) {
+    ReaderSetter rs(file);
     
     string contribution_method_str;
     string worker_pikmin_pose_str;
-    data_node* contribution_method_node = nullptr;
-    data_node* worker_pikmin_pose_node = nullptr;
+    DataNode* contribution_method_node = nullptr;
+    DataNode* worker_pikmin_pose_node = nullptr;
     
     rs.set(
         "contribution_method", contribution_method_str,

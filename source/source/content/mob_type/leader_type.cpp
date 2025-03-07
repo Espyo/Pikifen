@@ -36,8 +36,8 @@ const float DEF_WHISTLE_RANGE = 80.0f;
 /**
  * @brief Constructs a new leader type object.
  */
-leader_type::leader_type() :
-    mob_type(MOB_CATEGORY_LEADERS) {
+LeaderType::LeaderType() :
+    MobType(MOB_CATEGORY_LEADERS) {
     
     inactive_logic =
         INACTIVE_LOGIC_FLAG_TICKS | INACTIVE_LOGIC_FLAG_INTERACTIONS;
@@ -65,7 +65,7 @@ leader_type::leader_type() :
 /**
  * @brief Returns the vector of animation conversions.
  */
-anim_conversion_vector leader_type::get_anim_conversions() const {
+anim_conversion_vector LeaderType::get_anim_conversions() const {
     anim_conversion_vector v;
     v.push_back(std::make_pair(LEADER_ANIM_IDLING,       "idling"));
     v.push_back(std::make_pair(LEADER_ANIM_CALLED,       "called"));
@@ -91,8 +91,8 @@ anim_conversion_vector leader_type::get_anim_conversions() const {
  *
  * @param file File to read from.
  */
-void leader_type::load_cat_properties(data_node* file) {
-    reader_setter rs(file);
+void LeaderType::load_cat_properties(DataNode* file) {
+    ReaderSetter rs(file);
     
     rs.set("knocked_down_duration", knocked_down_duration);
     rs.set("knocked_down_whistle_bonus", knocked_down_whistle_bonus);
@@ -116,14 +116,14 @@ void leader_type::load_cat_properties(data_node* file) {
  *
  * @param file File to read from.
  */
-void leader_type::load_cat_resources(data_node* file) {
-    reader_setter rs(file);
+void LeaderType::load_cat_resources(DataNode* file) {
+    ReaderSetter rs(file);
     
     string dismiss_sound_str;
     string icon_str;
     string name_call_sound_str;
     string whistle_sound_str;
-    data_node* icon_node = nullptr;
+    DataNode* icon_node = nullptr;
     
     rs.set("dismiss_sound", dismiss_sound_str);
     rs.set("icon", icon_str, &icon_node);
@@ -137,6 +137,6 @@ void leader_type::load_cat_resources(data_node* file) {
 /**
  * @brief Unloads resources from memory.
  */
-void leader_type::unload_resources() {
+void LeaderType::unload_resources() {
     game.content.bitmaps.list.free(bmp_icon);
 }

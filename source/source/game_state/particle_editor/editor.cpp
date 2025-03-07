@@ -35,7 +35,7 @@ const float ZOOM_MIN_LEVEL = 0.5f;
 /**
  * @brief Constructs a new particle editor object.
  */
-particle_editor::particle_editor() :
+ParticleEditor::ParticleEditor() :
     load_dialog_picker(this) {
     
     zoom_max_level = PARTICLE_EDITOR::ZOOM_MAX_LEVEL;
@@ -43,37 +43,37 @@ particle_editor::particle_editor() :
     
 #define register_cmd(ptr, name) \
     commands.push_back( \
-                        command(std::bind((ptr), this, std::placeholders::_1), \
+                        Command(std::bind((ptr), this, std::placeholders::_1), \
                                 (name)) \
                       );
     
     register_cmd(
-        &particle_editor::grid_interval_decrease_cmd, "grid_interval_decrease"
+        &ParticleEditor::grid_interval_decrease_cmd, "grid_interval_decrease"
     );
     register_cmd(
-        &particle_editor::grid_interval_increase_cmd, "grid_interval_increase"
+        &ParticleEditor::grid_interval_increase_cmd, "grid_interval_increase"
     );
-    register_cmd(&particle_editor::grid_toggle_cmd, "grid_toggle");
-    register_cmd(&particle_editor::delete_part_gen_cmd, "delete_part_gen");
-    register_cmd(&particle_editor::load_cmd, "load");
-    register_cmd(&particle_editor::quit_cmd, "quit");
+    register_cmd(&ParticleEditor::grid_toggle_cmd, "grid_toggle");
+    register_cmd(&ParticleEditor::delete_part_gen_cmd, "delete_part_gen");
+    register_cmd(&ParticleEditor::load_cmd, "load");
+    register_cmd(&ParticleEditor::quit_cmd, "quit");
     register_cmd(
-        &particle_editor::part_mgr_playback_toggle_cmd, "part_mgr_toggle"
-    );
-    register_cmd(
-        &particle_editor::part_gen_playback_toggle_cmd, "part_gen_toggle"
+        &ParticleEditor::part_mgr_playback_toggle_cmd, "part_mgr_toggle"
     );
     register_cmd(
-        &particle_editor::leader_silhouette_toggle_cmd,
+        &ParticleEditor::part_gen_playback_toggle_cmd, "part_gen_toggle"
+    );
+    register_cmd(
+        &ParticleEditor::leader_silhouette_toggle_cmd,
         "leader_silhouette_toggle"
     );
-    register_cmd(&particle_editor::reload_cmd, "reload");
-    register_cmd(&particle_editor::save_cmd, "save");
+    register_cmd(&ParticleEditor::reload_cmd, "reload");
+    register_cmd(&ParticleEditor::save_cmd, "save");
     register_cmd(
-        &particle_editor::zoom_and_pos_reset_cmd, "zoom_and_pos_reset"
+        &ParticleEditor::zoom_and_pos_reset_cmd, "zoom_and_pos_reset"
     );
-    register_cmd(&particle_editor::zoom_in_cmd, "zoom_in");
-    register_cmd(&particle_editor::zoom_out_cmd, "zoom_out");
+    register_cmd(&ParticleEditor::zoom_in_cmd, "zoom_in");
+    register_cmd(&ParticleEditor::zoom_out_cmd, "zoom_out");
     
 #undef register_cmd
 }
@@ -82,7 +82,7 @@ particle_editor::particle_editor() :
 /**
  * @brief Code to run when the load dialog is closed.
  */
-void particle_editor::close_load_dialog() {
+void ParticleEditor::close_load_dialog() {
     if(manifest.internal_name.empty() && dialogs.size() == 1) {
         //If nothing got loaded, we can't return to the editor proper.
         //Quit out, since most of the time that's the user's intent. (e.g.
@@ -97,7 +97,7 @@ void particle_editor::close_load_dialog() {
 /**
  * @brief Code to run when the options dialog is closed.
  */
-void particle_editor::close_options_dialog() {
+void ParticleEditor::close_options_dialog() {
     save_options();
 }
 
@@ -107,7 +107,7 @@ void particle_editor::close_options_dialog() {
  *
  * @param part_gen_path Path to the new particle generator.
  */
-void particle_editor::create_part_gen(
+void ParticleEditor::create_part_gen(
     const string &part_gen_path
 ) {
     //Setup.
@@ -115,7 +115,7 @@ void particle_editor::create_part_gen(
     changes_mgr.mark_as_non_existent();
     
     //Create a particle generator with some defaults.
-    loaded_gen = particle_generator();
+    loaded_gen = ParticleGenerator();
     game.content.particle_gen.path_to_manifest(
         part_gen_path, &manifest
     );
@@ -123,15 +123,15 @@ void particle_editor::create_part_gen(
     loaded_gen.base_particle.duration = 1.0f;
     loaded_gen.base_particle.set_bitmap("");
     loaded_gen.base_particle.size =
-        keyframe_interpolator<float>(32);
+        KeyframeInterpolator<float>(32);
     loaded_gen.base_particle.color =
-        keyframe_interpolator<ALLEGRO_COLOR>(map_alpha(255));
+        KeyframeInterpolator<ALLEGRO_COLOR>(map_alpha(255));
     loaded_gen.base_particle.color.add(1, map_alpha(0));
     
     loaded_gen.emission.interval = 0.5f;
     loaded_gen.emission.number = 1;
     loaded_gen.base_particle.outwards_speed =
-        keyframe_interpolator<float>(32);
+        KeyframeInterpolator<float>(32);
         
     //Finish up.
     setup_for_new_part_gen_post();
@@ -146,7 +146,7 @@ void particle_editor::create_part_gen(
 /**
  * @brief Deletes the current particle generator.
  */
-void particle_editor::delete_current_part_gen() {
+void ParticleEditor::delete_current_part_gen() {
     string orig_internal_name = manifest.internal_name;
     bool go_to_load_dialog = true;
     bool success = false;
@@ -229,22 +229,22 @@ void particle_editor::delete_current_part_gen() {
  *
  * @param input_value Value of the player input for the command.
  */
-void particle_editor::delete_part_gen_cmd(float input_value) {
+void ParticleEditor::delete_part_gen_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
     open_dialog(
         "Delete particle generator?",
-        std::bind(&particle_editor::process_gui_delete_part_gen_dialog, this)
+        std::bind(&ParticleEditor::process_gui_delete_part_gen_dialog, this)
     );
-    dialogs.back()->custom_size = point(600, 0);
+    dialogs.back()->custom_size = Point(600, 0);
 }
 
 
 /**
  * @brief Handles the logic part of the main loop of the GUI editor.
  */
-void particle_editor::do_logic() {
-    editor::do_logic_pre();
+void ParticleEditor::do_logic() {
+    Editor::do_logic_pre();
     
     process_gui();
     
@@ -261,7 +261,7 @@ void particle_editor::do_logic() {
         part_mgr.tick_all(game.delta_t);
     }
     
-    editor::do_logic_post();
+    Editor::do_logic_post();
 }
 
 
@@ -271,7 +271,7 @@ void particle_editor::do_logic() {
  * @param parent_list Unused.
  * @param cmd Unused.
  */
-void particle_editor::draw_canvas_imgui_callback(
+void ParticleEditor::draw_canvas_imgui_callback(
     const ImDrawList* parent_list, const ImDrawCmd* cmd
 ) {
     game.states.particle_ed->draw_canvas();
@@ -285,8 +285,8 @@ void particle_editor::draw_canvas_imgui_callback(
  * @param path Path to the file.
  * @return The tooltip text.
  */
-string particle_editor::get_file_tooltip(const string &path) const {
-    content_manifest temp_manif;
+string ParticleEditor::get_file_tooltip(const string &path) const {
+    ContentManifest temp_manif;
     game.content.particle_gen.path_to_manifest(
         path, &temp_manif
     );
@@ -303,7 +303,7 @@ string particle_editor::get_file_tooltip(const string &path) const {
  *
  * @return The prefix.
  */
-string particle_editor::get_history_option_prefix() const {
+string ParticleEditor::get_history_option_prefix() const {
     return "particle_editor_history";
 }
 
@@ -313,7 +313,7 @@ string particle_editor::get_history_option_prefix() const {
  *
  * @return The name.
  */
-string particle_editor::get_name() const {
+string ParticleEditor::get_name() const {
     return "Particle editor";
 }
 
@@ -324,7 +324,7 @@ string particle_editor::get_name() const {
  *
  * @return The path.
  */
-string particle_editor::get_opened_content_path() const {
+string ParticleEditor::get_opened_content_path() const {
     return manifest.path;
 }
 
@@ -332,8 +332,8 @@ string particle_editor::get_opened_content_path() const {
 /**
  * @brief Loads the GUI editor.
  */
-void particle_editor::load() {
-    editor::load();
+void ParticleEditor::load() {
+    Editor::load();
     
     //Load necessary game content.
     game.content.reload_packs();
@@ -347,7 +347,7 @@ void particle_editor::load() {
     //Misc. setup.
     game.audio.set_current_song(game.sys_content_names.sng_editors, false);
     
-    part_mgr = particle_manager(game.options.max_particles);
+    part_mgr = ParticleManager(game.options.max_particles);
     
     //Set the background.
     if(!game.options.particle_editor_bg_path.empty()) {
@@ -377,7 +377,7 @@ void particle_editor::load() {
  * @param should_update_history If true, this loading process should update
  * the user's file open history.
  */
-void particle_editor::load_part_gen_file(
+void ParticleEditor::load_part_gen_file(
     const string &path, const bool should_update_history
 ) {
     //Setup.
@@ -386,7 +386,7 @@ void particle_editor::load_part_gen_file(
     
     //Load.
     manifest.fill_from_path(path);
-    data_node file = data_node(manifest.path);
+    DataNode file = DataNode(manifest.path);
     
     if(!file.file_was_opened) {
         open_message_dialog(
@@ -419,9 +419,9 @@ void particle_editor::load_part_gen_file(
  *
  * @param ev Event to handle.
  */
-void particle_editor::pan_cam(const ALLEGRO_EVENT &ev) {
+void ParticleEditor::pan_cam(const ALLEGRO_EVENT &ev) {
     game.cam.set_pos(
-        point(
+        Point(
             game.cam.pos.x - ev.mouse.dx / game.cam.zoom,
             game.cam.pos.y - ev.mouse.dy / game.cam.zoom
         )
@@ -438,11 +438,11 @@ void particle_editor::pan_cam(const ALLEGRO_EVENT &ev) {
  * @param info Pointer to the file's content manifest.
  * @param is_new Unused.
  */
-void particle_editor::pick_part_gen_file(
+void ParticleEditor::pick_part_gen_file(
     const string &name, const string &top_cat, const string &sec_cat,
     void* info, bool is_new
 ) {
-    content_manifest* temp_manif = (content_manifest*) info;
+    ContentManifest* temp_manif = (ContentManifest*) info;
     
     auto really_load = [ = ] () {
         close_top_dialog();
@@ -463,7 +463,7 @@ void particle_editor::pick_part_gen_file(
 /**
  * @brief Reloads all loaded particle generators.
  */
-void particle_editor::reload_part_gens() {
+void ParticleEditor::reload_part_gens() {
     game.content.unload_all(
     vector<CONTENT_TYPE> {
         CONTENT_TYPE_PARTICLE_GEN,
@@ -483,7 +483,7 @@ void particle_editor::reload_part_gens() {
  *
  * @param input_value Value of the player input for the command.
  */
-void particle_editor::grid_interval_decrease_cmd(float input_value) {
+void ParticleEditor::grid_interval_decrease_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
     float new_grid_interval = PARTICLE_EDITOR::GRID_INTERVALS[0];
@@ -509,7 +509,7 @@ void particle_editor::grid_interval_decrease_cmd(float input_value) {
  *
  * @param input_value Value of the player input for the command.
  */
-void particle_editor::grid_interval_increase_cmd(float input_value) {
+void ParticleEditor::grid_interval_increase_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
     float new_grid_interval = PARTICLE_EDITOR::GRID_INTERVALS.back();
@@ -535,7 +535,7 @@ void particle_editor::grid_interval_increase_cmd(float input_value) {
  *
  * @param input_value Value of the player input for the command.
  */
-void particle_editor::grid_toggle_cmd(float input_value) {
+void ParticleEditor::grid_toggle_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
     grid_visible = !grid_visible;
@@ -549,14 +549,14 @@ void particle_editor::grid_toggle_cmd(float input_value) {
  *
  * @param input_value Value of the player input for the command.
  */
-void particle_editor::load_cmd(float input_value) {
+void ParticleEditor::load_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
     changes_mgr.ask_if_unsaved(
         load_widget_pos,
         "loading a file", "load",
-        std::bind(&particle_editor::open_load_dialog, this),
-        std::bind(&particle_editor::save_part_gen, this)
+        std::bind(&ParticleEditor::open_load_dialog, this),
+        std::bind(&ParticleEditor::save_part_gen, this)
     );
 }
 
@@ -566,14 +566,14 @@ void particle_editor::load_cmd(float input_value) {
  *
  * @param input_value Value of the player input for the command.
  */
-void particle_editor::quit_cmd(float input_value) {
+void ParticleEditor::quit_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
     changes_mgr.ask_if_unsaved(
         quit_widget_pos,
         "quitting", "quit",
-        std::bind(&particle_editor::leave, this),
-        std::bind(&particle_editor::save_part_gen, this)
+        std::bind(&ParticleEditor::leave, this),
+        std::bind(&ParticleEditor::save_part_gen, this)
     );
 }
 
@@ -583,14 +583,14 @@ void particle_editor::quit_cmd(float input_value) {
  *
  * @param input_value Value of the player input for the command.
  */
-void particle_editor::reload_cmd(float input_value) {
+void ParticleEditor::reload_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
     changes_mgr.ask_if_unsaved(
         reload_widget_pos,
         "reloading the current file", "reload",
     [this] () { load_part_gen_file(string(manifest.path), false); },
-    std::bind(&particle_editor::save_part_gen, this)
+    std::bind(&ParticleEditor::save_part_gen, this)
     );
 }
 
@@ -600,7 +600,7 @@ void particle_editor::reload_cmd(float input_value) {
  *
  * @param input_value Value of the player input for the command.
  */
-void particle_editor::save_cmd(float input_value) {
+void ParticleEditor::save_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
     save_part_gen();
@@ -612,7 +612,7 @@ void particle_editor::save_cmd(float input_value) {
  * be it from an existing file or from scratch, after the actual creation/load
  * takes place.
  */
-void particle_editor::setup_for_new_part_gen_post() {
+void ParticleEditor::setup_for_new_part_gen_post() {
     loaded_gen.follow_angle = &generator_angle_offset;
 }
 
@@ -622,7 +622,7 @@ void particle_editor::setup_for_new_part_gen_post() {
  * be it from an existing file or from scratch, before the actual creation/load
  * takes place.
  */
-void particle_editor::setup_for_new_part_gen_pre() {
+void ParticleEditor::setup_for_new_part_gen_pre() {
     part_mgr.clear();
     changes_mgr.reset();
     manifest.clear();
@@ -635,9 +635,9 @@ void particle_editor::setup_for_new_part_gen_pre() {
     selected_linear_speed_keyframe = 0;
     selected_oribital_velocity_keyframe = 0;
     selected_outward_velocity_keyframe = 0;
-    loaded_gen = particle_generator();
+    loaded_gen = ParticleGenerator();
     
-    game.cam.set_pos(point());
+    game.cam.set_pos(Point());
     game.cam.set_zoom(1.0f);
 }
 
@@ -647,11 +647,11 @@ void particle_editor::setup_for_new_part_gen_pre() {
  *
  * @param input_value Value of the player input for the command.
  */
-void particle_editor::zoom_and_pos_reset_cmd(float input_value) {
+void ParticleEditor::zoom_and_pos_reset_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
     if(game.cam.target_zoom == 1.0f) {
-        game.cam.target_pos = point();
+        game.cam.target_pos = Point();
     } else {
         game.cam.target_zoom = 1.0f;
     }
@@ -663,7 +663,7 @@ void particle_editor::zoom_and_pos_reset_cmd(float input_value) {
  *
  * @param input_value Value of the player input for the command.
  */
-void particle_editor::zoom_in_cmd(float input_value) {
+void ParticleEditor::zoom_in_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
     game.cam.target_zoom =
@@ -680,7 +680,7 @@ void particle_editor::zoom_in_cmd(float input_value) {
  *
  * @param input_value Value of the player input for the command.
  */
-void particle_editor::zoom_out_cmd(float input_value) {
+void ParticleEditor::zoom_out_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
     game.cam.target_zoom =
@@ -697,7 +697,7 @@ void particle_editor::zoom_out_cmd(float input_value) {
  *
  * @param input_value Value of the player input for the command.
  */
-void particle_editor::leader_silhouette_toggle_cmd(float input_value) {
+void ParticleEditor::leader_silhouette_toggle_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
     leader_silhouette_visible = !leader_silhouette_visible;
@@ -711,7 +711,7 @@ void particle_editor::leader_silhouette_toggle_cmd(float input_value) {
  *
  * @param input_value Value of the player input for the command.
  */
-void particle_editor::clear_particles_cmd(float input_value) {
+void ParticleEditor::clear_particles_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
     part_mgr.clear();
@@ -724,7 +724,7 @@ void particle_editor::clear_particles_cmd(float input_value) {
  *
  * @param input_value Value of the player input for the command.
  */
-void particle_editor::emission_shape_toggle_cmd(float input_value) {
+void ParticleEditor::emission_shape_toggle_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
     emission_shape_visible = !emission_shape_visible;
@@ -738,7 +738,7 @@ void particle_editor::emission_shape_toggle_cmd(float input_value) {
  *
  * @param input_value Value of the player input for the command.
  */
-void particle_editor::part_gen_playback_toggle_cmd(float input_value) {
+void ParticleEditor::part_gen_playback_toggle_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
     gen_running = !gen_running;
@@ -752,7 +752,7 @@ void particle_editor::part_gen_playback_toggle_cmd(float input_value) {
  *
  * @param input_value Value of the player input for the command.
  */
-void particle_editor::part_mgr_playback_toggle_cmd(float input_value) {
+void ParticleEditor::part_mgr_playback_toggle_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
     mgr_running = !mgr_running;
@@ -764,15 +764,15 @@ void particle_editor::part_mgr_playback_toggle_cmd(float input_value) {
 /**
  * @brief Resets the camera's X and Y coordinates.
  */
-void particle_editor::reset_cam_xy() {
-    game.cam.target_pos = point();
+void ParticleEditor::reset_cam_xy() {
+    game.cam.target_pos = Point();
 }
 
 
 /**
  * @brief Resets the camera's zoom.
  */
-void particle_editor::reset_cam_zoom() {
+void ParticleEditor::reset_cam_zoom() {
     zoom_with_cursor(1.0f);
 }
 
@@ -782,10 +782,10 @@ void particle_editor::reset_cam_zoom() {
  *
  * @return Whether it succeded.
  */
-bool particle_editor::save_part_gen() {
+bool ParticleEditor::save_part_gen() {
     loaded_gen.engine_version = get_engine_version_string();
     
-    data_node file_node = data_node("", "");
+    DataNode file_node = DataNode("", "");
     loaded_gen.save_to_data_node(&file_node);
     
     if(!file_node.save_file(manifest.path)) {
@@ -816,8 +816,8 @@ bool particle_editor::save_part_gen() {
 /**
  * @brief Unloads the editor from memory.
  */
-void particle_editor::unload() {
-    editor::unload();
+void ParticleEditor::unload() {
+    Editor::unload();
     
     part_mgr.clear();
     

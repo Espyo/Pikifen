@@ -17,10 +17,10 @@
 /**
  * @brief Constructs a new game state object.
  */
-game_state::game_state() { }
+GameState::GameState() { }
 
 
 /**
  * @brief Updates any transformations. Unused.
  */
-void game_state::update_transformations() { }
+void GameState::update_transformations() { }

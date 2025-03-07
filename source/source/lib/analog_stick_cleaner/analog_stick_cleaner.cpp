@@ -23,7 +23,7 @@
  * the cleaned up coordinates.
  * @param settings Settings to use.
  */
-void analog_stick_cleaner::clean(float coords[2], const settings_t &settings) {
+void AnalogStickCleaner::clean(float coords[2], const Settings &settings) {
     //First, sanitize the function arguments.
     coords[0] = clamp(coords[0], -1.0f, 1.0f);
     coords[1] = clamp(coords[1], -1.0f, 1.0f);
@@ -44,7 +44,7 @@ void analog_stick_cleaner::clean(float coords[2], const settings_t &settings) {
  * @param higher_limit Maximum value it can have, inclusive.
  * @return The clamped number.
  */
-float analog_stick_cleaner::clamp(
+float AnalogStickCleaner::clamp(
     float value, float lower_limit, float higher_limit
 ) {
     value = std::max(value, lower_limit);
@@ -63,8 +63,8 @@ float analog_stick_cleaner::clamp(
  * @param settings Settings to use.
  * @return The deadzone size.
  */
-float analog_stick_cleaner::get_snap_dir_deadzone(
-    int snap_dir_idx, const settings_t &settings
+float AnalogStickCleaner::get_snap_dir_deadzone(
+    int snap_dir_idx, const Settings &settings
 ) {
     switch(snap_dir_idx % 8) {
     case 0:
@@ -95,7 +95,7 @@ float analog_stick_cleaner::get_snap_dir_deadzone(
  * @param output_end Number on the ending tip of the interpolation.
  * @return The interpolated number.
  */
-float analog_stick_cleaner::interpolate_and_clamp(
+float AnalogStickCleaner::interpolate_and_clamp(
     float input, float input_start, float input_end,
     float output_start, float output_end
 ) {
@@ -115,8 +115,8 @@ float analog_stick_cleaner::interpolate_and_clamp(
  * @param coords Coordinates to clean.
  * @param settings Settings to use.
  */
-void analog_stick_cleaner::process_angular_deadzones(
-    float coords[2], const settings_t &settings
+void AnalogStickCleaner::process_angular_deadzones(
+    float coords[2], const Settings &settings
 ) {
     //Get the basics.
     float radius, angle;
@@ -178,8 +178,8 @@ void analog_stick_cleaner::process_angular_deadzones(
  * @param coords Coordinates to clean.
  * @param settings Settings to use.
  */
-void analog_stick_cleaner::process_radial_deadzones(
-    float coords[2], const settings_t &settings
+void AnalogStickCleaner::process_radial_deadzones(
+    float coords[2], const Settings &settings
 ) {
     //Get the basics.
     float radius, angle;
@@ -227,7 +227,7 @@ void analog_stick_cleaner::process_radial_deadzones(
  * @param angle Angle to use.
  * @param radius Radius to use.
  */
-void analog_stick_cleaner::to_cartesian(
+void AnalogStickCleaner::to_cartesian(
     float coords[2], float angle, float radius
 ) {
     coords[0] = (float) cos(angle) * radius;
@@ -242,7 +242,7 @@ void analog_stick_cleaner::to_cartesian(
  * @param angle Angle to save to.
  * @param radius Radius to save to.
  */
-void analog_stick_cleaner::to_polar(
+void AnalogStickCleaner::to_polar(
     float coords[2], float &angle, float &radius
 ) {
     angle = (float) atan2(coords[1], coords[0]);

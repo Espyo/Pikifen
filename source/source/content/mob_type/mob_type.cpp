@@ -52,7 +52,7 @@ const float DEF_ROTATION_SPEED = 630.0f;
  *
  * @param category_id The ID of the category it belongs to.
  */
-mob_type::mob_type(MOB_CATEGORY category_id) :
+MobType::MobType(MOB_CATEGORY category_id) :
     category(game.mob_categories.get(category_id)),
     custom_category_name(category->name) {
     
@@ -62,7 +62,7 @@ mob_type::mob_type(MOB_CATEGORY category_id) :
 /**
  * @brief Destroys the mob type object.
  */
-mob_type::~mob_type() {
+MobType::~MobType() {
     states.clear();
     for(size_t a = 0; a < init_actions.size(); a++) {
         delete init_actions[a];
@@ -74,9 +74,9 @@ mob_type::~mob_type() {
 /**
  * @brief Adds carrying-related states to the FSM.
  */
-void mob_type::add_carrying_states() {
+void MobType::add_carrying_states() {
 
-    easy_fsm_creator efc;
+    EasyFsmCreator efc;
     
     efc.new_state("carriable_waiting", ENEMY_EXTRA_STATE_CARRIABLE_WAITING); {
         efc.new_event(MOB_EV_ON_ENTER); {
@@ -173,7 +173,7 @@ void mob_type::add_carrying_states() {
     }
     
     
-    vector<mob_state*> new_states = efc.finish();
+    vector<MobState*> new_states = efc.finish();
     
     states.insert(states.end(), new_states.begin(), new_states.end());
     
@@ -185,7 +185,7 @@ void mob_type::add_carrying_states() {
  *
  * @return The animation conversions.
  */
-anim_conversion_vector mob_type::get_anim_conversions() const {
+anim_conversion_vector MobType::get_anim_conversions() const {
     return anim_conversion_vector();
 }
 
@@ -193,13 +193,13 @@ anim_conversion_vector mob_type::get_anim_conversions() const {
 /**
  * @brief Loads properties from a data file, if any.
  */
-void mob_type::load_cat_properties(data_node*) { }
+void MobType::load_cat_properties(DataNode*) { }
 
 
 /**
  * @brief Loads any resources into memory, if any.
  */
-void mob_type::load_cat_resources(data_node*) { }
+void MobType::load_cat_resources(DataNode*) { }
 
 
 /**
@@ -209,14 +209,14 @@ void mob_type::load_cat_resources(data_node*) { }
  * @param level Level to load at.
  * @param folder_path Path to the folder this mob type is in.
  */
-void mob_type::load_from_data_node(
-    data_node* node, CONTENT_LOAD_LEVEL level, const string &folder_path
+void MobType::load_from_data_node(
+    DataNode* node, CONTENT_LOAD_LEVEL level, const string &folder_path
 ) {
     //Content metadata.
     load_metadata_from_data_node(node);
     
     //Standard data.
-    reader_setter rs(node);
+    ReaderSetter rs(node);
     
     string custom_carry_spots_str;
     string spike_damage_str;
@@ -225,14 +225,14 @@ void mob_type::load_from_data_node(
     string hurtable_targets_str;
     string team_str;
     string inactive_logic_str;
-    data_node* area_editor_tips_node = nullptr;
-    data_node* custom_carry_spots_node = nullptr;
-    data_node* spike_damage_node = nullptr;
-    data_node* target_type_node = nullptr;
-    data_node* huntable_targets_node = nullptr;
-    data_node* hurtable_targets_node = nullptr;
-    data_node* team_node = nullptr;
-    data_node* inactive_logic_node = nullptr;
+    DataNode* area_editor_tips_node = nullptr;
+    DataNode* custom_carry_spots_node = nullptr;
+    DataNode* spike_damage_node = nullptr;
+    DataNode* target_type_node = nullptr;
+    DataNode* huntable_targets_node = nullptr;
+    DataNode* hurtable_targets_node = nullptr;
+    DataNode* team_node = nullptr;
+    DataNode* inactive_logic_node = nullptr;
     
     rs.set("acceleration", acceleration);
     rs.set("appears_in_area_editor", appears_in_area_editor);
@@ -312,11 +312,11 @@ void mob_type::load_from_data_node(
     rotation_speed = deg_to_rad(rotation_speed);
     
     //Vulnerabilities.
-    data_node* vulnerabilities_node =
+    DataNode* vulnerabilities_node =
         node->get_child_by_name("vulnerabilities");
     for(size_t h = 0; h < vulnerabilities_node->get_nr_of_children(); h++) {
     
-        data_node* vuln_node = vulnerabilities_node->get_child(h);
+        DataNode* vuln_node = vulnerabilities_node->get_child(h);
         auto hazard_it = game.content.hazards.list.find(vuln_node->name);
         vector<string> words = split(vuln_node->value);
         float percentage = default_vulnerability;
@@ -348,7 +348,7 @@ void mob_type::load_from_data_node(
             );
             
         } else {
-            mob_type::vulnerability_t &vuln =
+            MobType::Vulnerability &vuln =
                 hazard_vulnerabilities[&(hazard_it->second)];
             vuln.effect_mult = percentage / 100.0f;
             if(!status_name.empty()) {
@@ -407,13 +407,13 @@ void mob_type::load_from_data_node(
     }
     
     //Spike damage vulnerabilities.
-    data_node* spike_damage_vuln_node =
+    DataNode* spike_damage_vuln_node =
         node->get_child_by_name("spike_damage_vulnerabilities");
     size_t n_sd_vuln =
         spike_damage_vuln_node->get_nr_of_children();
     for(size_t v = 0; v < n_sd_vuln; v++) {
     
-        data_node* vul_node = spike_damage_vuln_node->get_child(v);
+        DataNode* vul_node = spike_damage_vuln_node->get_child(v);
         auto sdv_it = game.content.spike_damage_types.list.find(vul_node->name);
         vector<string> words = split(vul_node->value);
         float percentage = 1.0f;
@@ -449,13 +449,13 @@ void mob_type::load_from_data_node(
     }
     
     //Status vulnerabilities.
-    data_node* status_vuln_node =
+    DataNode* status_vuln_node =
         node->get_child_by_name("status_vulnerabilities");
     size_t n_s_vuln =
         status_vuln_node->get_nr_of_children();
     for(size_t v = 0; v < n_s_vuln; v++) {
     
-        data_node* vul_node = status_vuln_node->get_child(v);
+        DataNode* vul_node = status_vuln_node->get_child(v);
         auto sv_it = game.content.status_types.list.find(vul_node->name);
         vector<string> words = split(vul_node->value);
         float percentage = 1.0f;
@@ -495,11 +495,11 @@ void mob_type::load_from_data_node(
     }
     
     //Reaches.
-    data_node* reaches_node = node->get_child_by_name("reaches");
+    DataNode* reaches_node = node->get_child_by_name("reaches");
     size_t n_reaches = reaches_node->get_nr_of_children();
     for(size_t r = 0; r < n_reaches; r++) {
     
-        mob_type::reach_t new_reach;
+        MobType::Reach new_reach;
         new_reach.name = reaches_node->get_child(r)->name;
         vector<string> r_strings = split(reaches_node->get_child(r)->value);
         
@@ -522,13 +522,13 @@ void mob_type::load_from_data_node(
     }
     
     //Spawns.
-    data_node* spawns_node = node->get_child_by_name("spawns");
+    DataNode* spawns_node = node->get_child_by_name("spawns");
     size_t n_spawns = spawns_node->get_nr_of_children();
     for(size_t s = 0; s < n_spawns; s++) {
     
-        data_node* spawn_node = spawns_node->get_child(s);
-        reader_setter spawn_rs(spawn_node);
-        mob_type::spawn_t new_spawn;
+        DataNode* spawn_node = spawns_node->get_child(s);
+        ReaderSetter spawn_rs(spawn_node);
+        MobType::SpawnInfo new_spawn;
         string coords_str;
         
         new_spawn.name = spawn_node->name;
@@ -550,18 +550,18 @@ void mob_type::load_from_data_node(
     }
     
     //Children.
-    data_node* children_node = node->get_child_by_name("children");
+    DataNode* children_node = node->get_child_by_name("children");
     size_t n_children = children_node->get_nr_of_children();
     for(size_t c = 0; c < n_children; c++) {
     
-        data_node* child_node = children_node->get_child(c);
-        reader_setter child_rs(child_node);
-        mob_type::child_t new_child;
+        DataNode* child_node = children_node->get_child(c);
+        ReaderSetter child_rs(child_node);
+        MobType::Child new_child;
         
         string limb_draw_method;
         string hold_rotation_method;
-        data_node* limb_draw_node;
-        data_node* hold_rotation_node;
+        DataNode* limb_draw_node;
+        DataNode* hold_rotation_node;
         
         new_child.name = child_node->name;
         child_rs.set("spawn", new_child.spawn_name);
@@ -634,20 +634,20 @@ void mob_type::load_from_data_node(
     }
     
     //Sounds.
-    data_node* sounds_node = node->get_child_by_name("sounds");
+    DataNode* sounds_node = node->get_child_by_name("sounds");
     size_t n_sounds = sounds_node->get_nr_of_children();
     for(size_t s = 0; s < n_sounds; s++) {
     
-        data_node* sound_node = sounds_node->get_child(s);
-        reader_setter sound_rs(sound_node);
-        mob_type::sound_t new_sound;
+        DataNode* sound_node = sounds_node->get_child(s);
+        ReaderSetter sound_rs(sound_node);
+        MobType::Sound new_sound;
         
         string file_str;
-        data_node* file_node;
+        DataNode* file_node;
         string type_str;
-        data_node* type_node;
+        DataNode* type_node;
         string stack_mode_str;
-        data_node* stack_mode_node;
+        DataNode* stack_mode_node;
         float volume_float = 100.0f;
         float speed_float = 100.0f;
         bool loop_bool = false;
@@ -718,18 +718,18 @@ void mob_type::load_from_data_node(
     }
     
     //Area editor properties.
-    data_node* ae_props_node =
+    DataNode* ae_props_node =
         node->get_child_by_name("area_editor_properties");
     size_t n_ae_props = ae_props_node->get_nr_of_children();
     for(size_t p = 0; p < n_ae_props; p++) {
     
-        data_node* prop_node = ae_props_node->get_child(p);
-        reader_setter prop_rs(prop_node);
+        DataNode* prop_node = ae_props_node->get_child(p);
+        ReaderSetter prop_rs(prop_node);
         string type_str;
         string list_str;
-        data_node* type_node = nullptr;
+        DataNode* type_node = nullptr;
         
-        mob_type::area_editor_prop_t new_prop;
+        MobType::AreaEditorProp new_prop;
         new_prop.name = prop_node->name;
         
         prop_rs.set("var", new_prop.var);
@@ -838,11 +838,11 @@ void mob_type::load_from_data_node(
         anim_db = &game.content.mob_anim_dbs.list[category->id][manifest->internal_name];
         anim_db->fill_sound_idx_caches(this);
         
-        data_node script_file;
+        DataNode script_file;
         script_file.load_file(folder_path + "/script.txt", true, true);
         size_t old_n_states = states.size();
         
-        data_node* death_state_name_node =
+        DataNode* death_state_name_node =
             script_file.get_child_by_name("death_state");
         dying_state_name = death_state_name_node->value;
         
@@ -876,7 +876,7 @@ void mob_type::load_from_data_node(
         
         if(states.size() > old_n_states) {
         
-            data_node* first_state_name_node =
+            DataNode* first_state_name_node =
                 script_file.get_child_by_name("first_state");
             string first_state_name = first_state_name_node->value;
             
@@ -937,7 +937,7 @@ void mob_type::load_from_data_node(
 /**
  * @brief Unloads loaded resources from memory.
  */
-void mob_type::unload_resources() {
+void MobType::unload_resources() {
     for(size_t s = 0; s < sounds.size(); s++) {
         game.content.sounds.list.free(sounds[s].name);
     }
@@ -953,7 +953,7 @@ void mob_type::unload_resources() {
  * @return The vector.
  */
 anim_conversion_vector
-mob_type_with_anim_groups::get_anim_conversions_with_groups(
+MobTypeWithAnimGroups::get_anim_conversions_with_groups(
     const anim_conversion_vector &v, size_t base_anim_total
 ) const {
     anim_conversion_vector new_v;
@@ -978,10 +978,10 @@ mob_type_with_anim_groups::get_anim_conversions_with_groups(
  * that are beyond the ones loaded from the game data folder.
  */
 void create_special_mob_types() {
-    mob_category* custom_category =
+    MobCategory* custom_category =
         game.mob_categories.get(MOB_CATEGORY_CUSTOM);
         
-    mob_type* bridge_component_type = custom_category->create_type();
+    MobType* bridge_component_type = custom_category->create_type();
     bridge_component_type->name = "Bridge component";
     bridge_component_type->blackout_radius = 0;
     bridge_component_type->appears_in_area_editor = false;
@@ -991,7 +991,7 @@ void create_special_mob_types() {
     bridge_component_type->physical_span = 8.0f;
     bridge_component_type->radius = 8.0f;
     bridge_component_type->walkable = true;
-    bridge_component_type->draw_mob_callback = bridge::draw_component;
+    bridge_component_type->draw_mob_callback = Bridge::draw_component;
     bridge_component_type->pushes = true;
     bridge_component_type->pushes_softly = false;
     custom_category->register_type("bridge_component", bridge_component_type);

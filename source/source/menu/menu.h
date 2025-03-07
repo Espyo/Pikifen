@@ -23,14 +23,14 @@ using std::vector;
  * @brief Data about a menu, which can be used in any game state, and can
  * link to other menus or even contain a network of menus itself.
  */
-class menu_t {
+class Menu {
 
 public:
 
     //--- Members ---
     
     //List of GUI managers it has.
-    vector<gui_manager*> guis;
+    vector<GuiManager*> guis;
     
     //Callback for when the player enters this menu.
     std::function<void()> enter_callback;
@@ -56,13 +56,13 @@ public:
     
     //--- Function declarations ---
     
-    virtual ~menu_t() = default;
+    virtual ~Menu() = default;
     virtual void load();
     virtual void unload();
     virtual void draw();
     virtual void enter();
     virtual void handle_allegro_event(const ALLEGRO_EVENT &ev);
-    virtual void handle_player_action(const player_action &action);
+    virtual void handle_player_action(const PlayerAction &action);
     virtual void leave();
     virtual void tick(float delta_t);
     

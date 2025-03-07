@@ -24,8 +24,8 @@
  *
  * @param typ Mob type to create the finite state machine for.
  */
-void bouncer_fsm::create_fsm(mob_type* typ) {
-    easy_fsm_creator efc;
+void bouncer_fsm::create_fsm(MobType* typ) {
+    EasyFsmCreator efc;
     efc.new_state("idling", BOUNCER_STATE_IDLING); {
         efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(bouncer_fsm::set_idling_animation);
@@ -66,10 +66,10 @@ void bouncer_fsm::create_fsm(mob_type* typ) {
  * @param info1 Points to the mob that is on top of it.
  * @param info2 Unused.
  */
-void bouncer_fsm::handle_mob(mob* m, void* info1, void* info2) {
-    bouncer* bou_ptr = (bouncer*) m;
-    mob* toucher = (mob*) info1;
-    mob* target_mob = nullptr;
+void bouncer_fsm::handle_mob(Mob* m, void* info1, void* info2) {
+    Bouncer* bou_ptr = (Bouncer*) m;
+    Mob* toucher = (Mob*) info1;
+    Mob* target_mob = nullptr;
     
     if(!bou_ptr->links.empty()) {
         target_mob = bou_ptr->links[0];
@@ -83,7 +83,7 @@ void bouncer_fsm::handle_mob(mob* m, void* info1, void* info2) {
         return;
     }
     
-    mob_event* ev = nullptr;
+    MobEvent* ev = nullptr;
     
     //Check if a compatible mob touched it.
     if(
@@ -153,7 +153,7 @@ void bouncer_fsm::handle_mob(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void bouncer_fsm::set_bouncing_animation(mob* m, void* info1, void* info2) {
+void bouncer_fsm::set_bouncing_animation(Mob* m, void* info1, void* info2) {
     m->set_animation(BOUNCER_ANIM_BOUNCING);
 }
 
@@ -165,7 +165,7 @@ void bouncer_fsm::set_bouncing_animation(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void bouncer_fsm::set_idling_animation(mob* m, void* info1, void* info2) {
+void bouncer_fsm::set_idling_animation(Mob* m, void* info1, void* info2) {
     m->set_animation(
         BOUNCER_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
     );

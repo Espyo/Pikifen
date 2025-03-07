@@ -531,13 +531,13 @@ void init_controls() {
     
     //Populate the control binds with some default control binds for player 1.
     //If the options are loaded successfully, these binds are overwritten.
-    const vector<player_action_type> &action_types =
+    const vector<PlayerActionType> &action_types =
         game.controls.get_all_player_action_types();
     for(size_t a = 0; a < action_types.size(); a++) {
         const string &def = action_types[a].default_bind_str;
         if(def.empty()) continue;
         
-        control_bind bind;
+        ControlBind bind;
         bind.action_type_id = action_types[a].id;
         bind.player_nr = 0;
         bind.input = game.controls.str_to_input(def);
@@ -562,13 +562,13 @@ void init_dear_imgui() {
     ImFontConfig editor_font_cfg;
     editor_font_cfg.OversampleH = editor_font_cfg.OversampleV = 1;
     editor_font_cfg.PixelSnapH = true;
-
+    
     const auto add_font =
-    [=] (ImFont** target_var, const string& asset_internal_name, int height) {
-        const string& path =
+    [ = ] (ImFont** target_var, const string &asset_internal_name, int height) {
+        const string &path =
             game.content.bitmaps.manifests
             [asset_internal_name].path;
-        
+            
         if(!str_ends_with(str_to_lower(path), ".ttf")) {
             game.errors.report(
                 "Could not load the editor font \"" + path + "\"! Only "
@@ -582,7 +582,7 @@ void init_dear_imgui() {
                 path.c_str(), height, &editor_font_cfg
             );
     };
-
+    
     add_font(
         &game.sys_content.fnt_imgui_header,
         game.sys_content_names.fnt_editor_header, 22
@@ -595,7 +595,7 @@ void init_dear_imgui() {
         &game.sys_content.fnt_imgui_standard,
         game.sys_content_names.fnt_editor_standard, 18
     );
-        
+    
     io.FontDefault = game.sys_content.fnt_imgui_standard;
     
     //Other stuff.
@@ -817,7 +817,7 @@ void init_misc() {
     game.states.gameplay->whistle.next_ring_timer.start();
     
     game.states.gameplay->particles =
-        particle_manager(game.options.max_particles);
+        ParticleManager(game.options.max_particles);
         
     game.options.zoom_mid_level =
         clamp(
@@ -858,70 +858,70 @@ void init_misc_databases() {
     //Mission goals.
     //Order matters, and should match MISSION_GOAL.
     game.mission_goals.push_back(
-        new mission_goal_end_manually()
+        new MissionGoalEndManually()
     );
     game.mission_goals.push_back(
-        new mission_goal_collect_treasures()
+        new MissionGoalCollectTreasures()
     );
     game.mission_goals.push_back(
-        new mission_goal_battle_enemies()
+        new MissionGoalBattleEnemies()
     );
     game.mission_goals.push_back(
-        new mission_goal_timed_survival()
+        new MissionGoalTimedSurvival()
     );
     game.mission_goals.push_back(
-        new mission_goal_get_to_exit()
+        new MissionGoalGetToExit()
     );
     game.mission_goals.push_back(
-        new mission_goal_grow_pikmin()
+        new MissionGoalGrowPikmin()
     );
     
     //Mission fail conditions.
     //Order matters, and should match MISSION_FAIL_COND.
     game.mission_fail_conds.push_back(
-        new mission_fail_time_limit()
+        new MissionFailTimeLimit()
     );
     game.mission_fail_conds.push_back(
-        new mission_fail_too_few_pikmin()
+        new MissionFailTooFewPikmin()
     );
     game.mission_fail_conds.push_back(
-        new mission_fail_too_many_pikmin()
+        new MissionFailTooManyPikmin()
     );
     game.mission_fail_conds.push_back(
-        new mission_fail_lose_pikmin()
+        new MissionFailLosePikmin()
     );
     game.mission_fail_conds.push_back(
-        new mission_fail_take_damage()
+        new MissionFailTakeDamage()
     );
     game.mission_fail_conds.push_back(
-        new mission_fail_lose_leaders()
+        new MissionFailLoseLeaders()
     );
     game.mission_fail_conds.push_back(
-        new mission_fail_kill_enemies()
+        new MissionFailKillEnemies()
     );
     game.mission_fail_conds.push_back(
-        new mission_fail_pause_menu()
+        new MissionFailPauseMenu()
     );
     
     //Mission score criteria.
     //Order matters, and should match MISSION_SCORE_CRITERIA.
     game.mission_score_criteria.push_back(
-        new mission_score_criterion_pikmin_born()
+        new MissionScoreCriterionPikminBorn()
     );
     game.mission_score_criteria.push_back(
-        new mission_score_criterion_pikmin_death()
+        new MissionScoreCriterionPikminDeath()
     );
     game.mission_score_criteria.push_back(
-        new mission_score_criterion_sec_left()
+        new MissionScoreCriterionSecLeft()
     );
     game.mission_score_criteria.push_back(
-        new mission_score_criterion_sec_passed()
+        new MissionScoreCriterionSecPassed()
     );
     game.mission_score_criteria.push_back(
-        new mission_score_criterion_treasure_points()
+        new MissionScoreCriterionTreasurePoints()
     );
     game.mission_score_criteria.push_back(
-        new mission_score_criterion_enemy_points()
+        new MissionScoreCriterionEnemyPoints()
     );
 }
 
@@ -932,7 +932,7 @@ void init_misc_databases() {
 void init_mob_actions() {
 
 #define reg_param(p_name, p_type, constant, extras) \
-    params.push_back(mob_action_param(p_name, p_type, constant, extras));
+    params.push_back(MobActionParam(p_name, p_type, constant, extras));
 #define reg_action(a_type, a_name, run_code, load_code) \
     a = &(game.mob_actions[a_type]); \
     a->type = a_type; \
@@ -943,9 +943,9 @@ void init_mob_actions() {
     params.clear();
 
 
-    game.mob_actions.assign(N_MOB_ACTIONS, mob_action());
-    vector<mob_action_param> params;
-    mob_action* a;
+    game.mob_actions.assign(N_MOB_ACTIONS, MobAction());
+    vector<MobActionParam> params;
+    MobAction* a;
     
     reg_action(
         MOB_ACTION_UNKNOWN,
@@ -1673,66 +1673,66 @@ void init_mob_actions() {
 void init_mob_categories() {
 
     game.mob_categories.register_category(
-        MOB_CATEGORY_NONE, new none_category()
+        MOB_CATEGORY_NONE, new NoneCategory()
     );
     game.mob_categories.register_category(
-        MOB_CATEGORY_PIKMIN, new pikmin_category()
+        MOB_CATEGORY_PIKMIN, new PikminCategory()
     );
     game.mob_categories.register_category(
-        MOB_CATEGORY_ONIONS, new onion_category()
+        MOB_CATEGORY_ONIONS, new OnionCategory()
     );
     game.mob_categories.register_category(
-        MOB_CATEGORY_LEADERS, new leader_category()
+        MOB_CATEGORY_LEADERS, new LeaderCategory()
     );
     game.mob_categories.register_category(
-        MOB_CATEGORY_ENEMIES, new enemy_category()
+        MOB_CATEGORY_ENEMIES, new EnemyCategory()
     );
     game.mob_categories.register_category(
-        MOB_CATEGORY_TREASURES, new treasure_category()
+        MOB_CATEGORY_TREASURES, new TreasureCategory()
     );
     game.mob_categories.register_category(
-        MOB_CATEGORY_PELLETS, new pellet_category()
+        MOB_CATEGORY_PELLETS, new PelletCategory()
     );
     game.mob_categories.register_category(
-        MOB_CATEGORY_CONVERTERS, new converter_category()
+        MOB_CATEGORY_CONVERTERS, new ConverterCategory()
     );
     game.mob_categories.register_category(
-        MOB_CATEGORY_DROPS, new drop_category()
+        MOB_CATEGORY_DROPS, new DropCategory()
     );
     game.mob_categories.register_category(
-        MOB_CATEGORY_RESOURCES, new resource_category()
+        MOB_CATEGORY_RESOURCES, new ResourceCategory()
     );
     game.mob_categories.register_category(
-        MOB_CATEGORY_PILES, new pile_category()
+        MOB_CATEGORY_PILES, new PileCategory()
     );
     game.mob_categories.register_category(
-        MOB_CATEGORY_TOOLS, new tool_category()
+        MOB_CATEGORY_TOOLS, new ToolCategory()
     );
     game.mob_categories.register_category(
-        MOB_CATEGORY_SHIPS, new ship_category()
+        MOB_CATEGORY_SHIPS, new ShipCategory()
     );
     game.mob_categories.register_category(
-        MOB_CATEGORY_BRIDGES, new bridge_category()
+        MOB_CATEGORY_BRIDGES, new BridgeCategory()
     );
     game.mob_categories.register_category(
-        MOB_CATEGORY_GROUP_TASKS, new group_task_category()
+        MOB_CATEGORY_GROUP_TASKS, new GroupTaskCategory()
     );
     game.mob_categories.register_category(
-        MOB_CATEGORY_SCALES, new scale_category()
+        MOB_CATEGORY_SCALES, new ScaleCategory()
     );
     game.mob_categories.register_category(
-        MOB_CATEGORY_TRACKS, new track_category()
+        MOB_CATEGORY_TRACKS, new TrackCategory()
     );
     game.mob_categories.register_category(
-        MOB_CATEGORY_BOUNCERS, new bouncer_category()
+        MOB_CATEGORY_BOUNCERS, new BouncerCategory()
     );
     game.mob_categories.register_category(
-        MOB_CATEGORY_DECORATIONS, new decoration_category()
+        MOB_CATEGORY_DECORATIONS, new DecorationCategory()
     );
     game.mob_categories.register_category(
-        MOB_CATEGORY_INTERACTABLES, new interactable_category()
+        MOB_CATEGORY_INTERACTABLES, new InteractableCategory()
     );
     game.mob_categories.register_category(
-        MOB_CATEGORY_CUSTOM, new custom_category()
+        MOB_CATEGORY_CUSTOM, new CustomCategory()
     );
 }

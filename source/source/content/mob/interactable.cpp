@@ -18,10 +18,10 @@
  * @param type Interactable type this mob belongs to.
  * @param angle Starting angle.
  */
-interactable::interactable(
-    const point &pos, interactable_type* type, float angle
+Interactable::Interactable(
+    const Point &pos, InteractableType* type, float angle
 ):
-    mob(pos, type, angle),
+    Mob(pos, type, angle),
     int_type(type) {
     
 }

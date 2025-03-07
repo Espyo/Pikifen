@@ -38,8 +38,8 @@ const float DEFAULT_SPROUT_EVOLUTION_TIME[N_MATURITIES] =
  * @brief Constructs a new Pikmin type object.
  *
  */
-pikmin_type::pikmin_type() :
-    mob_type(MOB_CATEGORY_PIKMIN) {
+PikminType::PikminType() :
+    MobType(MOB_CATEGORY_PIKMIN) {
     
     for(size_t m = 0; m < N_MATURITIES; m++) {
         sprout_evolution_time[m] = DEFAULT_SPROUT_EVOLUTION_TIME[m];
@@ -55,15 +55,15 @@ pikmin_type::pikmin_type() :
     weight = 1;
     show_health = false;
     
-    mob_type::reach_t idle_attack_reach;
+    MobType::Reach idle_attack_reach;
     idle_attack_reach.angle_1 = TAU;
     idle_attack_reach.radius_1 = game.config.idle_task_range;
     reaches.push_back(idle_attack_reach);
-    mob_type::reach_t swarm_attack_reach;
+    MobType::Reach swarm_attack_reach;
     swarm_attack_reach.angle_1 = TAU;
     swarm_attack_reach.radius_1 = game.config.swarm_task_range;
     reaches.push_back(swarm_attack_reach);
-    mob_type::reach_t chase_reach;
+    MobType::Reach chase_reach;
     chase_reach.angle_1 = TAU;
     chase_reach.radius_1 = game.config.pikmin_chase_range;
     reaches.push_back(chase_reach);
@@ -84,7 +84,7 @@ pikmin_type::pikmin_type() :
         MOB_TARGET_FLAG_EXPLODABLE_PIKMIN_OBSTACLE |
         MOB_TARGET_FLAG_FRAGILE;
         
-    area_editor_prop_t aep_maturity;
+    AreaEditorProp aep_maturity;
     aep_maturity.name = "Maturity";
     aep_maturity.var = "maturity";
     aep_maturity.type = AEMP_TYPE_NR_LIST;
@@ -95,7 +95,7 @@ pikmin_type::pikmin_type() :
     aep_maturity.tooltip = "The Pikmin's starting maturity.";
     area_editor_props.push_back(aep_maturity);
     
-    area_editor_prop_t aep_sprout;
+    AreaEditorProp aep_sprout;
     aep_sprout.name = "Sprout";
     aep_sprout.var = "sprout";
     aep_sprout.type = AEMP_TYPE_BOOL;
@@ -105,7 +105,7 @@ pikmin_type::pikmin_type() :
         "false if it spawns as an idle Pikmin.";
     area_editor_props.push_back(aep_sprout);
     
-    area_editor_prop_t aep_follow_link;
+    AreaEditorProp aep_follow_link;
     aep_sprout.name = "Follow link as leader";
     aep_sprout.var = "follow_link_as_leader";
     aep_sprout.type = AEMP_TYPE_BOOL;
@@ -124,7 +124,7 @@ pikmin_type::pikmin_type() :
  *
  * @return The vector.
  */
-anim_conversion_vector pikmin_type::get_anim_conversions() const {
+anim_conversion_vector PikminType::get_anim_conversions() const {
     anim_conversion_vector v;
     
 #define a(idx, name) \
@@ -170,16 +170,16 @@ anim_conversion_vector pikmin_type::get_anim_conversions() const {
  *
  * @param file File to read from.
  */
-void pikmin_type::load_cat_properties(data_node* file) {
-    reader_setter rs(file);
+void PikminType::load_cat_properties(DataNode* file) {
+    ReaderSetter rs(file);
     string attack_method_str;
     string top_leaf_str;
     string top_bud_str;
     string top_flower_str;
-    data_node* attack_method_node = nullptr;
-    data_node* top_leaf_node = nullptr;
-    data_node* top_bud_node = nullptr;
-    data_node* top_flower_node = nullptr;
+    DataNode* attack_method_node = nullptr;
+    DataNode* top_leaf_node = nullptr;
+    DataNode* top_bud_node = nullptr;
+    DataNode* top_flower_node = nullptr;
     
     rs.set("attack_method", attack_method_str, &attack_method_node);
     rs.set("knocked_down_duration", knocked_down_duration);
@@ -241,19 +241,19 @@ void pikmin_type::load_cat_properties(data_node* file) {
  *
  * @param file File to read from.
  */
-void pikmin_type::load_cat_resources(data_node* file) {
-    reader_setter rs(file);
+void PikminType::load_cat_resources(DataNode* file) {
+    ReaderSetter rs(file);
     
     string icon_str;
     string icon_leaf_str;
     string icon_bud_str;
     string icon_flower_str;
     string icon_onion_str;
-    data_node* icon_node = nullptr;
-    data_node* icon_leaf_node = nullptr;
-    data_node* icon_bud_node = nullptr;
-    data_node* icon_flower_node = nullptr;
-    data_node* icon_onion_node = nullptr;
+    DataNode* icon_node = nullptr;
+    DataNode* icon_leaf_node = nullptr;
+    DataNode* icon_bud_node = nullptr;
+    DataNode* icon_flower_node = nullptr;
+    DataNode* icon_onion_node = nullptr;
     
     rs.set("icon", icon_str, &icon_node);
     rs.set("icon_bud", icon_bud_str, &icon_bud_node);
@@ -275,7 +275,7 @@ void pikmin_type::load_cat_resources(data_node* file) {
 /**
  * @brief Unloads resources from memory.
  */
-void pikmin_type::unload_resources() {
+void PikminType::unload_resources() {
     game.content.bitmaps.list.free(bmp_icon);
     game.content.bitmaps.list.free(bmp_maturity_icon[0]);
     game.content.bitmaps.list.free(bmp_maturity_icon[1]);

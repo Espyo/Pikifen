@@ -28,7 +28,7 @@
 /**
  * @brief Static utility class that holds analog stick cleaning logic.
  */
-class analog_stick_cleaner {
+class AnalogStickCleaner {
 
 public:
 
@@ -37,20 +37,20 @@ public:
     /**
      * @brief Settings for the cleaner.
      */
-    struct settings_t {
+    struct Settings {
     
         /**
          * @brief Values inside of a deadzone will all be considered the same
          * value. Useful to prevent situations where an analog stick wiggling
          * by itself being interpreted as purposeful player inputs.
          */
-        struct deadzones_t {
+        struct Deadzones {
         
             /**
              * @brief Deadzones related to the radius of the analog stick, i.e.
              * how far away from the center it is.
              */
-            struct radial_t {
+            struct Radial {
             
                 //Inner radial deadzone size, in radius (0 to 1).
                 //This is your typical analog stick deadzone value.
@@ -79,7 +79,7 @@ public:
             /**
              * @brief Deadzones related to the angle of the analog stick.
              */
-            struct angular_t {
+            struct Angular {
             
                 //Deadzone size, in radians (0 to PI/4), for the left and right
                 //inputs' angular deadzone.
@@ -115,13 +115,13 @@ public:
             
         } deadzones;
         
-        settings_t() {}
+        Settings() {}
     };
     
     //--- Function declarations ---
     
     static void clean(
-        float coords[2], const settings_t &settings = settings_t()
+        float coords[2], const Settings &settings = Settings()
     );
     
     
@@ -131,17 +131,17 @@ private:
     
     static float clamp(float value, float lower_limit, float higher_limit);
     static float get_snap_dir_deadzone(
-        int snap_dir_idx, const settings_t &settings
+        int snap_dir_idx, const Settings &settings
     );
     static float interpolate_and_clamp(
         float input, float input_start, float input_end,
         float output_start, float output_end
     );
     static void process_angular_deadzones(
-        float coords[2], const settings_t &settings
+        float coords[2], const Settings &settings
     );
     static void process_radial_deadzones(
-        float coords[2], const settings_t &settings
+        float coords[2], const Settings &settings
     );
     static void to_cartesian(float coords[2], float angle, float radius);
     static void to_polar(float coords[2], float &angle, float &radius);

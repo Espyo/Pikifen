@@ -40,15 +40,15 @@ enum SECTOR_TYPE {
 /**
  * @brief Info about a sector's texture.
  */
-struct sector_texture_t {
+struct SectorTexture {
 
     //--- Members ---
     
     //Texture scale.
-    point scale = point(1.0f);
+    Point scale = Point(1.0f);
     
     //Texture translation.
-    point translation;
+    Point translation;
     
     //Texture rotation.
     float rot = 0.0f;
@@ -72,7 +72,7 @@ struct sector_texture_t {
  * a polygon (or multiple). It has a certain height, and its appearance
  * is determined by its floors.
  */
-struct sector {
+struct Sector {
 
     //--- Members ---
     
@@ -92,7 +92,7 @@ struct sector {
     unsigned char brightness = GEOMETRY::DEF_SECTOR_BRIGHTNESS;
     
     //Information about its texture.
-    sector_texture_t texture_info;
+    SectorTexture texture_info;
     
     //Is this sector meant to fade textures from neighboring sectors?
     bool fade = false;
@@ -101,7 +101,7 @@ struct sector {
     string hazards_str;
     
     //List of hazards.
-    vector<hazard*> hazards;
+    vector<Hazard*> hazards;
     
     //Is only floor hazardous, or the air as well?
     bool hazard_floor = true;
@@ -113,40 +113,40 @@ struct sector {
     bool draining_liquid = false;
     
     //Scrolling speed, if any.
-    point scroll;
+    Point scroll;
     
     //Index number of the edges that make up this sector.
     vector<size_t> edge_idxs;
     
     //Edges that make up this sector.
-    vector<edge*> edges;
+    vector<Edge*> edges;
     
     //Triangles it is composed of.
-    vector<triangle> triangles;
+    vector<Triangle> triangles;
     
     //Bounding box.
-    point bbox[2];
+    Point bbox[2];
     
     
     //--- Function declarations ---
     
-    ~sector();
-    void add_edge(edge* e_ptr, size_t e_idx);
+    ~Sector();
+    void add_edge(Edge* e_ptr, size_t e_idx);
     void calculate_bounding_box();
-    void clone(sector* destination) const;
-    vertex* get_rightmost_vertex() const;
-    void get_texture_merge_sectors(sector** s1, sector** s2) const;
+    void clone(Sector* destination) const;
+    Vertex* get_rightmost_vertex() const;
+    void get_texture_merge_sectors(Sector** s1, Sector** s2) const;
     bool is_clockwise() const;
-    bool is_point_in_sector(const point &p) const;
-    void remove_edge(const edge* e_ptr);
+    bool is_point_in_sector(const Point &p) const;
+    void remove_edge(const Edge* e_ptr);
     void get_neighbor_sectors_conditionally(
-        const std::function<bool(sector* s_ptr)> &condition,
-        vector<sector*> &sector_list
+        const std::function<bool(Sector* s_ptr)> &condition,
+        vector<Sector*> &sector_list
     );
     
 };
 
 
-sector* get_sector(
-    const point &p, size_t* out_sector_idx, bool use_blockmap
+Sector* get_sector(
+    const Point &p, size_t* out_sector_idx, bool use_blockmap
 );

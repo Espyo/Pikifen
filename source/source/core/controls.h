@@ -212,7 +212,7 @@ enum PLAYER_ACTION_CAT {
 /**
  * @brief Data about a type of action that can be performed in the game.
  */
-struct player_action_type {
+struct PlayerActionType {
 
     //--- Members ---
     
@@ -240,7 +240,7 @@ struct player_action_type {
 /**
  * @brief Mediates everything control-related in Pikifen.
  */
-struct controls_mediator {
+struct ControlsMediator {
 
     public:
     
@@ -254,35 +254,35 @@ struct controls_mediator {
         const string &internal_name,
         const string &default_bind_str
     );
-    const vector<player_action_type> &get_all_player_action_types() const;
-    vector<control_bind> &binds();
-    string input_to_str(const player_input &b) const;
-    control_bind find_bind(
+    const vector<PlayerActionType> &get_all_player_action_types() const;
+    vector<ControlBind> &binds();
+    string input_to_str(const PlayerInput &b) const;
+    ControlBind find_bind(
         const PLAYER_ACTION_TYPE action_type_id
     ) const;
-    control_bind find_bind(
+    ControlBind find_bind(
         const string &action_type_name
     ) const;
-    player_action_type get_player_action_type(int action_id) const;
+    PlayerActionType get_player_action_type(int action_id) const;
     string get_player_action_type_internal_name(int action_id);
     float get_player_action_type_value(
         PLAYER_ACTION_TYPE player_action_type_id
     );
-    player_input str_to_input(const string &s) const;
-    player_input allegro_event_to_input(const ALLEGRO_EVENT &ev) const;
+    PlayerInput str_to_input(const string &s) const;
+    PlayerInput allegro_event_to_input(const ALLEGRO_EVENT &ev) const;
     bool handle_allegro_event(const ALLEGRO_EVENT &ev);
-    vector<player_action> new_frame();
+    vector<PlayerAction> new_frame();
     void release_all();
-    void set_options(const controls_manager_options &options);
+    void set_options(const ControlsManagerOptions &options);
     
     private:
     
     //--- Members ---
     
     //List of known player action types.
-    vector<player_action_type> player_action_types;
+    vector<PlayerActionType> player_action_types;
     
     //Controls manager.
-    controls_manager mgr;
+    ControlsManager mgr;
     
 };

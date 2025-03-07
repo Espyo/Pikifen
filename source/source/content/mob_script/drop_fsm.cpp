@@ -20,8 +20,8 @@
  *
  * @param typ Mob type to create the finite state machine for.
  */
-void drop_fsm::create_fsm(mob_type* typ) {
-    easy_fsm_creator efc;
+void drop_fsm::create_fsm(MobType* typ) {
+    EasyFsmCreator efc;
     efc.new_state("falling", DROP_STATE_FALLING); {
         efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(drop_fsm::set_falling_anim);
@@ -78,7 +78,7 @@ void drop_fsm::create_fsm(mob_type* typ) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void drop_fsm::land(mob* m, void* info1, void* info2) {
+void drop_fsm::land(Mob* m, void* info1, void* info2) {
     m->stop_chasing();
     m->set_animation(DROP_ANIM_LANDING);
 }
@@ -91,9 +91,9 @@ void drop_fsm::land(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void drop_fsm::on_touched(mob* m, void* info1, void* info2) {
-    drop* dro_ptr = (drop*) m;
-    mob* toucher = (mob*) info1;
+void drop_fsm::on_touched(Mob* m, void* info1, void* info2) {
+    Drop* dro_ptr = (Drop*) m;
+    Mob* toucher = (Mob*) info1;
     bool will_drink = false;
     
     if(dro_ptr->doses_left == 0) return;
@@ -105,7 +105,7 @@ void drop_fsm::on_touched(mob* m, void* info1, void* info2) {
     ) {
     
         //Pikmin is about to drink it.
-        pikmin* pik_ptr = (pikmin*) toucher;
+        Pikmin* pik_ptr = (Pikmin*) toucher;
         
         switch(dro_ptr->dro_type->effect) {
         case DROP_EFFECT_MATURATE: {
@@ -139,7 +139,7 @@ void drop_fsm::on_touched(mob* m, void* info1, void* info2) {
         
     }
     
-    mob_event* ev = nullptr;
+    MobEvent* ev = nullptr;
     
     if(will_drink) {
         ev = toucher->fsm.get_event(MOB_EV_TOUCHED_DROP);
@@ -175,7 +175,7 @@ void drop_fsm::on_touched(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void drop_fsm::set_bumped_anim(mob* m, void* info1, void* info2) {
+void drop_fsm::set_bumped_anim(Mob* m, void* info1, void* info2) {
     m->set_animation(DROP_ANIM_BUMPED);
 }
 
@@ -187,7 +187,7 @@ void drop_fsm::set_bumped_anim(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void drop_fsm::set_falling_anim(mob* m, void* info1, void* info2) {
+void drop_fsm::set_falling_anim(Mob* m, void* info1, void* info2) {
     m->set_animation(
         DROP_ANIM_FALLING,
         START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
@@ -202,6 +202,6 @@ void drop_fsm::set_falling_anim(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void drop_fsm::set_idling_anim(mob* m, void* info1, void* info2) {
+void drop_fsm::set_idling_anim(Mob* m, void* info1, void* info2) {
     m->set_animation(DROP_ANIM_IDLING);
 }

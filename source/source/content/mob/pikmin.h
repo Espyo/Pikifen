@@ -10,7 +10,7 @@
 
 #pragma once
 
-class leader;
+class Leader;
 
 #include "../mob_type/pikmin_type.h"
 #include "enemy.h"
@@ -39,23 +39,23 @@ extern const float THROW_VER_SPEED;
 /**
  * @brief The eponymous Pikmin.
  */
-class pikmin : public mob {
+class Pikmin : public Mob {
 
 public:
 
     //--- Members ---
     
     //What type of Pikmin it is.
-    pikmin_type* pik_type = nullptr;
+    PikminType* pik_type = nullptr;
     
     //Mob that it is carrying.
-    mob* carrying_mob = nullptr;
+    Mob* carrying_mob = nullptr;
     
     //The Pikmin is considering this attack animation as having "missed".
-    animation* missed_attack_ptr = nullptr;
+    Animation* missed_attack_ptr = nullptr;
     
     //The Pikmin will consider the miss for this long.
-    timer missed_attack_timer;
+    Timer missed_attack_timer;
     
     //Did the Pikmin's last attack cause zero damage?
     bool was_last_hit_dud = false;
@@ -77,7 +77,7 @@ public:
     bool pluck_reserved = false;
     
     //Leader it is meant to return to after what it is doing, if any.
-    mob* leader_to_return_to = nullptr;
+    Mob* leader_to_return_to = nullptr;
     
     //Is this Pikmin latched on to a mob?
     bool latched = false;
@@ -106,21 +106,21 @@ public:
     
     //--- Function declarations ---
     
-    pikmin(const point &pos, pikmin_type* type, float angle);
-    void force_carry(mob* m);
-    bool process_attack_miss(hitbox_interaction* info);
+    Pikmin(const Point &pos, PikminType* type, float angle);
+    void force_carry(Mob* m);
+    bool process_attack_miss(HitboxInteraction* info);
     bool increase_maturity(int amount);
-    void latch(mob* m, const hitbox* h);
+    void latch(Mob* m, const Hitbox* h);
     void start_throw_trail();
-    bool can_receive_status(status_type* s) const override;
+    bool can_receive_status(StatusType* s) const override;
     void draw_mob() override;
     float get_base_speed() const override;
     void get_group_spot_info(
-        point* out_spot, float* out_dist
+        Point* out_spot, float* out_dist
     ) const override;
-    void handle_status_effect_gain(status_type* s) override;
-    void handle_status_effect_loss(status_type* s) override;
-    void read_script_vars(const script_var_reader &svr) override;
+    void handle_status_effect_gain(StatusType* s) override;
+    void handle_status_effect_loss(StatusType* s) override;
+    void read_script_vars(const ScriptVarReader &svr) override;
     void finish_dying_class_specifics() override;
     void start_dying_class_specifics() override;
     
@@ -132,7 +132,7 @@ protected:
 };
 
 
-pikmin* get_closest_sprout(
-    const point &pos, dist* d, bool ignore_reserved
+Pikmin* get_closest_sprout(
+    const Point &pos, Distance* d, bool ignore_reserved
     
 );

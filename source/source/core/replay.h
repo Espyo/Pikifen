@@ -72,7 +72,7 @@ enum REPLAY_EVENT {
  * @brief Represents a Pikmin, a leader, or any other object we want to keep in
  * the replay.
  */
-struct replay_element {
+struct ReplayElement {
 
     //--- Members ---
     
@@ -80,12 +80,12 @@ struct replay_element {
     REPLAY_ELEMENT type = REPLAY_ELEMENT_LEADER;
     
     //Its current position.
-    point pos;
+    Point pos;
     
     
     //--- Function declarations ---
     
-    replay_element(const REPLAY_ELEMENT type, const point &pos);
+    ReplayElement(const REPLAY_ELEMENT type, const Point &pos);
     
 };
 
@@ -95,7 +95,7 @@ struct replay_element {
  * the replay, like a new element getting added, one getting removed,
  * the player switching leaders, etc.
  */
-struct replay_event {
+struct ReplayEvent {
 
     //--- Members ---
     
@@ -108,7 +108,7 @@ struct replay_event {
     
     //--- Function declarations ---
     
-    replay_event(
+    ReplayEvent(
         const REPLAY_EVENT type, size_t data
     );
     
@@ -119,15 +119,15 @@ struct replay_event {
  * @brief Represents a point in time of the replay. This has a collection of
  * elements, as well as their state at this point in time.
  */
-struct replay_state {
+struct ReplayState {
 
     //--- Members ---
     
     //List of elements.
-    vector<replay_element> elements;
+    vector<ReplayElement> elements;
     
     //List of events that happened here.
-    vector<replay_event> events;
+    vector<ReplayEvent> events;
     
 };
 
@@ -143,26 +143,26 @@ struct replay_state {
  * the changes that have happened every moment, but rather saves the entire
  * relevant data of every moment.
  */
-class replay {
+class Replay {
 
 public:
 
     //--- Members ---
     
     //States.
-    vector<replay_state> states;
+    vector<ReplayState> states;
     
     
     //--- Function declarations ---
     
-    replay();
+    Replay();
     void add_state(
-        const vector<leader*> &leader_list,
-        const vector<pikmin*> &pikmin_list,
-        const vector<enemy*> &enemy_list,
-        const vector<treasure*> &treasure_list,
-        const vector<onion*> &onion_list,
-        const vector<mob*> &obstacle_list,
+        const vector<Leader*> &leader_list,
+        const vector<Pikmin*> &pikmin_list,
+        const vector<Enemy*> &enemy_list,
+        const vector<Treasure*> &treasure_list,
+        const vector<Onion*> &onion_list,
+        const vector<Mob*> &obstacle_list,
         size_t cur_leader_idx
     );
     void clear();
@@ -175,7 +175,7 @@ private:
     //--- Members ---
     
     //List of mobs in the previous state.
-    vector<mob*> prev_state_mobs;
+    vector<Mob*> prev_state_mobs;
     
     //Index of the previous leader.
     size_t prev_leader_idx = INVALID;

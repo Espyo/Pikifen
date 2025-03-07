@@ -22,15 +22,15 @@
 /**
  * @brief Opens the "load" dialog.
  */
-void particle_editor::open_load_dialog() {
+void ParticleEditor::open_load_dialog() {
     reload_part_gens();
     
     //Set up the picker's behavior and data.
-    vector<picker_item> file_items;
+    vector<PickerItem> file_items;
     for(const auto &g : game.content.particle_gen.list) {
-        content_manifest* man = g.second.manifest;
+        ContentManifest* man = g.second.manifest;
         file_items.push_back(
-            picker_item(
+            PickerItem(
                 g.second.name,
                 "Pack: " + game.content.packs.list[man->pack].name, "",
                 (void*) man,
@@ -39,11 +39,11 @@ void particle_editor::open_load_dialog() {
         );
     }
     
-    load_dialog_picker = picker_info(this);
+    load_dialog_picker = Picker(this);
     load_dialog_picker.items = file_items;
     load_dialog_picker.pick_callback =
         std::bind(
-            &particle_editor::pick_part_gen_file, this,
+            &ParticleEditor::pick_part_gen_file, this,
             std::placeholders::_1,
             std::placeholders::_2,
             std::placeholders::_3,
@@ -54,22 +54,22 @@ void particle_editor::open_load_dialog() {
     //Open the dialog that will contain the picker and history.
     open_dialog(
         "Load a particle generator file",
-        std::bind(&particle_editor::process_gui_load_dialog, this)
+        std::bind(&ParticleEditor::process_gui_load_dialog, this)
     );
     dialogs.back()->close_callback =
-        std::bind(&particle_editor::close_load_dialog, this);
+        std::bind(&ParticleEditor::close_load_dialog, this);
 }
 
 
 /**
  * @brief Opens the "new" dialog.
  */
-void particle_editor::open_new_dialog() {
+void ParticleEditor::open_new_dialog() {
     open_dialog(
         "Create a new particle generator",
-        std::bind(&particle_editor::process_gui_new_dialog, this)
+        std::bind(&ParticleEditor::process_gui_new_dialog, this)
     );
-    dialogs.back()->custom_size = point(400, 0);
+    dialogs.back()->custom_size = Point(400, 0);
     dialogs.back()->close_callback = [this] () {
         new_dialog.pack.clear();
         new_dialog.internal_name = "my_particle_generator";
@@ -84,20 +84,20 @@ void particle_editor::open_new_dialog() {
 /**
  * @brief Opens the options dialog.
  */
-void particle_editor::open_options_dialog() {
+void ParticleEditor::open_options_dialog() {
     open_dialog(
         "Options",
-        std::bind(&particle_editor::process_gui_options_dialog, this)
+        std::bind(&ParticleEditor::process_gui_options_dialog, this)
     );
     dialogs.back()->close_callback =
-        std::bind(&particle_editor::close_options_dialog, this);
+        std::bind(&ParticleEditor::close_options_dialog, this);
 }
 
 
 /**
  * @brief Processes Dear ImGui for this frame.
  */
-void particle_editor::process_gui() {
+void ParticleEditor::process_gui() {
     //Set up the entire editor window.
     ImGui::SetNextWindowPos(ImVec2(0, 0));
     ImGui::SetNextWindowSize(ImVec2(game.win_w, game.win_h));
@@ -160,7 +160,7 @@ void particle_editor::process_gui() {
 /**
  * @brief Processes the Dear ImGui control panel for this frame.
  */
-void particle_editor::process_gui_control_panel() {
+void ParticleEditor::process_gui_control_panel() {
     if(manifest.internal_name.empty()) return;
     
     ImGui::BeginChild("panel");
@@ -196,7 +196,7 @@ void particle_editor::process_gui_control_panel() {
  * @brief Processes the Dear ImGui particle generator deletion dialog
  * for this frame.
  */
-void particle_editor::process_gui_delete_part_gen_dialog() {
+void ParticleEditor::process_gui_delete_part_gen_dialog() {
     //Explanation text.
     string explanation_str;
     if(!changes_mgr.exists_on_disk()) {
@@ -249,7 +249,7 @@ void particle_editor::process_gui_delete_part_gen_dialog() {
 /**
  * @brief Processes the "load" dialog for this frame.
  */
-void particle_editor::process_gui_load_dialog() {
+void ParticleEditor::process_gui_load_dialog() {
     //History node.
     process_gui_history(
     [this](const string &path) -> string {
@@ -290,7 +290,7 @@ void particle_editor::process_gui_load_dialog() {
 /**
  * @brief Processes the Dear ImGui menu bar for this frame.
  */
-void particle_editor::process_gui_menu_bar() {
+void ParticleEditor::process_gui_menu_bar() {
     if(ImGui::BeginMenuBar()) {
     
         //Editor menu.
@@ -442,7 +442,7 @@ void particle_editor::process_gui_menu_bar() {
 /**
  * @brief Processes the Dear ImGui "new" dialog for this frame.
  */
-void particle_editor::process_gui_new_dialog() {
+void ParticleEditor::process_gui_new_dialog() {
     string problem;
     bool hit_create_button = false;
     
@@ -466,7 +466,7 @@ void particle_editor::process_gui_new_dialog() {
     );
     
     //Check if everything's ok.
-    content_manifest temp_man;
+    ContentManifest temp_man;
     temp_man.pack = new_dialog.pack;
     temp_man.internal_name = new_dialog.internal_name;
     new_dialog.part_gen_path =
@@ -529,7 +529,7 @@ void particle_editor::process_gui_new_dialog() {
 /**
  * @brief Processes the options dialog for this frame.
  */
-void particle_editor::process_gui_options_dialog() {
+void ParticleEditor::process_gui_options_dialog() {
     //Controls node.
     if(saveable_tree_node("options", "Controls")) {
     
@@ -658,7 +658,7 @@ void particle_editor::process_gui_options_dialog() {
 /**
  * @brief Processes the particle generator panel for this frame.
  */
-void particle_editor::process_gui_panel_generator() {
+void ParticleEditor::process_gui_panel_generator() {
     //Particle system text.
     ImGui::Text("Particle system:");
     
@@ -676,7 +676,7 @@ void particle_editor::process_gui_panel_generator() {
             mgr_running ?
             editor_icons[EDITOR_ICON_STOP] :
             editor_icons[EDITOR_ICON_PLAY],
-            point(EDITOR::ICON_BMP_SIZE)
+            Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         part_mgr_playback_toggle_cmd(1.0f);
@@ -692,7 +692,7 @@ void particle_editor::process_gui_panel_generator() {
     if(
         ImGui::ImageButton(
             "clearParticlesButton", editor_icons[EDITOR_ICON_REMOVE],
-            point(EDITOR::ICON_BMP_SIZE)
+            Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         clear_particles_cmd(1.0f);
@@ -713,7 +713,7 @@ void particle_editor::process_gui_panel_generator() {
             gen_running ?
             editor_icons[EDITOR_ICON_STOP] :
             editor_icons[EDITOR_ICON_PLAY],
-            point(EDITOR::ICON_BMP_SIZE)
+            Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         part_gen_playback_toggle_cmd(1.0f);
@@ -1093,7 +1093,7 @@ void particle_editor::process_gui_panel_generator() {
             if(
                 ImGui::ImageButton(
                     "removeBitmap", editor_icons[EDITOR_ICON_REMOVE],
-                    point(EDITOR::ICON_BMP_SIZE)
+                    Point(EDITOR::ICON_BMP_SIZE)
                 )
             ) {
                 //We can't have living particles with destroyed bitmaps,
@@ -1680,7 +1680,7 @@ void particle_editor::process_gui_panel_generator() {
 /**
  * @brief Processes the Dear ImGui status bar for this frame.
  */
-void particle_editor::process_gui_status_bar() {
+void ParticleEditor::process_gui_status_bar() {
     //Status bar text.
     process_gui_status_bar_text();
     
@@ -1706,12 +1706,12 @@ void particle_editor::process_gui_status_bar() {
 /**
  * @brief Processes the Dear ImGui toolbar for this frame.
  */
-void particle_editor::process_gui_toolbar() {
+void ParticleEditor::process_gui_toolbar() {
     //Quit button.
     if(
         ImGui::ImageButton(
             "quitButton", editor_icons[EDITOR_ICON_QUIT],
-            point(EDITOR::ICON_BMP_SIZE)
+            Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         quit_widget_pos = get_last_widget_pos();
@@ -1727,7 +1727,7 @@ void particle_editor::process_gui_toolbar() {
     if(
         ImGui::ImageButton(
             "loadButton", editor_icons[EDITOR_ICON_LOAD],
-            point(EDITOR::ICON_BMP_SIZE)
+            Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         load_widget_pos = get_last_widget_pos();
@@ -1746,7 +1746,7 @@ void particle_editor::process_gui_toolbar() {
             changes_mgr.has_unsaved_changes() ?
             editor_icons[EDITOR_ICON_SAVE_UNSAVED] :
             editor_icons[EDITOR_ICON_SAVE],
-            point(EDITOR::ICON_BMP_SIZE)
+            Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         save_cmd(1.0f);
@@ -1761,7 +1761,7 @@ void particle_editor::process_gui_toolbar() {
     if(
         ImGui::ImageButton(
             "gridButton", editor_icons[EDITOR_ICON_GRID],
-            point(EDITOR::ICON_BMP_SIZE)
+            Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         grid_toggle_cmd(1.0f);
@@ -1776,7 +1776,7 @@ void particle_editor::process_gui_toolbar() {
     if(
         ImGui::ImageButton(
             "silhouetteButton", editor_icons[EDITOR_ICON_LEADER_SILHOUETTE],
-            point(EDITOR::ICON_BMP_SIZE)
+            Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         leader_silhouette_toggle_cmd(1.0f);
@@ -1791,7 +1791,7 @@ void particle_editor::process_gui_toolbar() {
     if(
         ImGui::ImageButton(
             "emissionShapeButton", editor_icons[EDITOR_ICON_MOB_RADIUS],
-            point(EDITOR::ICON_BMP_SIZE)
+            Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         emission_shape_toggle_cmd(1.0f);

@@ -24,7 +24,7 @@ using std::size_t;
  * @brief A type of enemy. A species, if you will.
  * Red Bulborb, Orange Bulborb, Cloaking Burrow-nit, etc.
  */
-class enemy_type : public mob_type {
+class EnemyType : public MobType {
 
 public:
 
@@ -48,7 +48,7 @@ public:
     
     //--- Function declarations ---
     
-    enemy_type();
-    void load_cat_properties(data_node* file) override;
+    EnemyType();
+    void load_cat_properties(DataNode* file) override;
     
 };

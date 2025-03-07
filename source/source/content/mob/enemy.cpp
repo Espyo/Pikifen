@@ -43,8 +43,8 @@ const float SPIRIT_SIZE_MULT = 0.7;
  * @param type Enemy type this mob belongs to.
  * @param angle Starting angle.
  */
-enemy::enemy(const point &pos, enemy_type* type, float angle) :
-    mob(pos, type, angle),
+Enemy::Enemy(const Point &pos, EnemyType* type, float angle) :
+    Mob(pos, type, angle),
     ene_type(type) {
     
 }
@@ -56,7 +56,7 @@ enemy::enemy(const point &pos, enemy_type* type, float angle) :
  * @param s Status type to check.
  * @return Whether it can receive the status.
  */
-bool enemy::can_receive_status(status_type* s) const {
+bool Enemy::can_receive_status(StatusType* s) const {
     return has_flag(s->affects, STATUS_AFFECTS_FLAG_ENEMIES);
 }
 
@@ -64,14 +64,14 @@ bool enemy::can_receive_status(status_type* s) const {
 /**
  * @brief Draws an enemy.
  */
-void enemy::draw_mob() {
-    sprite* cur_s_ptr;
-    sprite* next_s_ptr;
+void Enemy::draw_mob() {
+    Sprite* cur_s_ptr;
+    Sprite* next_s_ptr;
     float interpolation_factor;
     get_sprite_data(&cur_s_ptr, &next_s_ptr, &interpolation_factor);
     if(!cur_s_ptr) return;
     
-    bitmap_effect_t eff;
+    BitmapEffect eff;
     get_sprite_bitmap_effects(
         cur_s_ptr, next_s_ptr, interpolation_factor,
         &eff,
@@ -91,7 +91,7 @@ void enemy::draw_mob() {
 /**
  * @brief Logic specific to enemies for when they finish dying.
  */
-void enemy::finish_dying_class_specifics() {
+void Enemy::finish_dying_class_specifics() {
     //Corpse.
     if(ene_type->drops_corpse) {
         become_carriable(CARRY_DESTINATION_ONION);
@@ -99,7 +99,7 @@ void enemy::finish_dying_class_specifics() {
     }
     
     //Soul.
-    particle par(
+    Particle par(
         pos, LARGE_FLOAT,
         clamp(
             radius * 2 * ENEMY::SPIRIT_SIZE_MULT,
@@ -109,11 +109,11 @@ void enemy::finish_dying_class_specifics() {
     );
     par.bitmap = game.sys_content.bmp_enemy_spirit;
     par.friction = 0.5f;
-    par.linear_speed = keyframe_interpolator<point>(point(-50, -50));
-    par.linear_speed.add(0.5f, point(50, -50));
-    par.linear_speed.add(1, point(-50, -50));
+    par.linear_speed = KeyframeInterpolator<Point>(Point(-50, -50));
+    par.linear_speed.add(0.5f, Point(50, -50));
+    par.linear_speed.add(1, Point(-50, -50));
     
-    par.color = keyframe_interpolator<ALLEGRO_COLOR>(al_map_rgba(255, 192, 255, 0));
+    par.color = KeyframeInterpolator<ALLEGRO_COLOR>(al_map_rgba(255, 192, 255, 0));
     par.color.add(0.1f, al_map_rgb(255, 192, 255));
     par.color.add(0.6f, al_map_rgb(255, 192, 255));
     par.color.add(1, al_map_rgba(255, 192, 255, 0));
@@ -124,7 +124,7 @@ void enemy::finish_dying_class_specifics() {
 /**
  * @brief Sets up stuff for the beginning of the enemy's death process.
  */
-void enemy::start_dying_class_specifics() {
+void Enemy::start_dying_class_specifics() {
     //Numbers.
     game.states.gameplay->enemy_deaths++;
     game.states.gameplay->enemy_points_collected += ene_type->points;
@@ -156,7 +156,7 @@ void enemy::start_dying_class_specifics() {
     }
     
     //Particles.
-    particle_generator pg =
+    ParticleGenerator pg =
         standard_particle_gen_setup(
             game.sys_content_names.part_enemy_death, this
         );

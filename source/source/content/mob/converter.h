@@ -28,14 +28,14 @@ extern const float SPEW_V_SPEED;
  * This is like the Candypop Buds in the canon games, in the sense that it
  * converts a thrown Pikmin from one type into a Pikmin from a different type.
  */
-class converter : public mob, public mob_with_anim_groups {
+class Converter : public Mob, public MobWithAnimGroups {
 
 public:
 
     //--- Members ---
     
     //What type of converter it is.
-    converter_type* con_type = nullptr;
+    ConverterType* con_type = nullptr;
     
     //Amount of Pikmin currently inside the converter, in its "buffer".
     size_t amount_in_buffer = 0;
@@ -44,16 +44,16 @@ public:
     size_t input_pikmin_left = 0;
     
     //Type of Pikmin it will convert to right now.
-    pikmin_type* current_type = nullptr;
+    PikminType* current_type = nullptr;
     
     //If it cycles between types, this is the index of the current type.
     size_t current_type_idx = 0;
     
     //Time left before it cycles to the next type.
-    timer type_change_timer;
+    Timer type_change_timer;
     
     //Time left before it auto-closes and converts the Pikmin in the buffer.
-    timer auto_conversion_timer;
+    Timer auto_conversion_timer;
     
     //Angle it will spit the next seed towards.
     float next_spew_angle = 0.0f;
@@ -61,7 +61,7 @@ public:
     
     //--- Function declarations ---
     
-    converter(const point &pos, converter_type* con_type, float angle);
+    Converter(const Point &pos, ConverterType* con_type, float angle);
     void change_type();
     void close();
     void spew();

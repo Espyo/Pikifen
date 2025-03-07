@@ -44,12 +44,12 @@
 using std::size_t;
 using std::vector;
 
-class mob;
+class Mob;
 
 /**
  * @brief Info on a carrying spot around a mob's perimeter.
  */
-struct carrier_spot_t {
+struct CarrierSpot {
 
     //--- Members ---
     
@@ -57,15 +57,15 @@ struct carrier_spot_t {
     CARRY_SPOT_STATE state = CARRY_SPOT_STATE_FREE;
     
     //Relative coordinates of each spot. Cache for performance.
-    point pos;
+    Point pos;
     
     //Pikmin that is in this spot.
-    mob* pik_ptr = nullptr;
+    Mob* pik_ptr = nullptr;
     
     
     //--- Function declarations ---
     
-    explicit carrier_spot_t(const point &pos);
+    explicit CarrierSpot(const Point &pos);
     
 };
 
@@ -73,18 +73,18 @@ struct carrier_spot_t {
 /**
  * @brief Info on how the mob should be carried.
  */
-struct carry_t {
+struct CarryInfo {
 
     //--- Members ---
     
     //Mob that this struct belongs to.
-    mob* m = nullptr;
+    Mob* m = nullptr;
     
     //Generic type of delivery destination.
     CARRY_DESTINATION destination = CARRY_DESTINATION_SHIP;
     
     //Information about each carrier spot.
-    vector<carrier_spot_t> spot_info;
+    vector<CarrierSpot> spot_info;
     
     //Current carrying strength. Cache for performance.
     float cur_carrying_strength = 0.0f;
@@ -96,13 +96,13 @@ struct carry_t {
     bool is_moving = false;
     
     //When the object begins moving, the idea is to carry it to this mob.
-    mob* intended_mob = nullptr;
+    Mob* intended_mob = nullptr;
     
     //When the object begins moving, the idea is to carry it to this point.
-    point intended_point;
+    Point intended_point;
     
     //When delivering to an Onion, this is the Pikmin type that will benefit.
-    pikmin_type* intended_pik_type = nullptr;
+    PikminType* intended_pik_type = nullptr;
     
     //True if a destination does exist, false otherwise.
     bool destination_exists = false;
@@ -111,7 +111,7 @@ struct carry_t {
     bool must_return = false;
     
     //Location to return to once they finish carrying.
-    point return_point;
+    Point return_point;
     
     //Distance from the return point to stop at.
     float return_dist = 0.0f;
@@ -119,10 +119,10 @@ struct carry_t {
     
     //--- Function declarations ---
     
-    carry_t(mob* m, const CARRY_DESTINATION destination);
+    CarryInfo(Mob* m, const CARRY_DESTINATION destination);
     bool is_empty() const;
     bool is_full() const;
-    vector<hazard*> get_carrier_invulnerabilities() const;
+    vector<Hazard*> get_carrier_invulnerabilities() const;
     bool can_fly() const;
     float get_speed() const;
     void rotate_points(float angle);
@@ -133,7 +133,7 @@ struct carry_t {
 /**
  * @brief Info on what point the mob is chasing after.
  */
-struct chase_t {
+struct ChaseInfo {
 
     //--- Members ---
     
@@ -144,13 +144,13 @@ struct chase_t {
     bitmask_8_t flags = 0;
     
     //Chase after these coordinates, relative to the "origin" coordinates.
-    point offset;
+    Point offset;
     
     //Same as above, but for the Z coordinate.
     float offset_z = 0.0f;
     
     //Pointer to the origin of the coordinates, or nullptr for the world origin.
-    point* orig_coords = nullptr;
+    Point* orig_coords = nullptr;
     
     //Same as above, but for the Z coordinate.
     float* orig_z = nullptr;
@@ -174,18 +174,18 @@ struct chase_t {
  * @brief Info about what mob or point that this mob is circling around,
  * if any.
  */
-struct circling_t {
+struct CirclingInfo {
 
     //--- Members ---
     
     //Mob that this struct belongs to.
-    mob* m = nullptr;
+    Mob* m = nullptr;
     
     //Mob that it is circling.
-    mob* circling_mob = nullptr;
+    Mob* circling_mob = nullptr;
     
     //Point that it is circling, if it's not circling a mob.
-    point circling_point;
+    Point circling_point;
     
     //Radius at which to circle around.
     float radius = 0.0f;
@@ -205,7 +205,7 @@ struct circling_t {
     
     //--- Function declarations ---
     
-    explicit circling_t(mob* m);
+    explicit CirclingInfo(Mob* m);
     
 };
 
@@ -213,7 +213,7 @@ struct circling_t {
 /**
  * @brief Info on a mob that's being delivered to an Onion, ship, etc.
  */
-struct delivery_t {
+struct DeliveryInfo {
 
     //--- Members ---
     
@@ -227,12 +227,12 @@ struct delivery_t {
     ALLEGRO_COLOR color;
     
     //Intended delivery Pikmin type, in the case of Onions.
-    pikmin_type* intended_pik_type = nullptr;
+    PikminType* intended_pik_type = nullptr;
     
     
     //--- Function declarations ---
     
-    delivery_t();
+    DeliveryInfo();
     
 };
 
@@ -244,7 +244,7 @@ struct delivery_t {
  * and the location and info of the spots in the
  * circle, when the members are following the mob.
  */
-struct group_t {
+struct Group {
 
     //--- Misc. declarations ---
     
@@ -265,20 +265,20 @@ struct group_t {
     /**
      * @brief A spot in the group.
      */
-    struct group_spot {
+    struct GroupSpot {
     
         //--- Members ---
         
         //Position relative to the anchor.
-        point pos;
+        Point pos;
         
         //Mob in this spot.
-        mob* mob_ptr = nullptr;
+        Mob* mob_ptr = nullptr;
         
         
         //--- Function declarations ---
         
-        explicit group_spot(const point &p = point(), mob* m = nullptr) :
+        explicit GroupSpot(const Point &p = Point(), Mob* m = nullptr) :
             pos(p), mob_ptr(m) {}
             
     };
@@ -287,16 +287,16 @@ struct group_t {
     //--- Members ---
     
     //All group members.
-    vector<mob*> members;
+    vector<Mob*> members;
     
     //Information about each spot.
-    vector<group_spot> spots;
+    vector<GroupSpot> spots;
     
     //Radius of the group.
     float radius = 0.0f;
     
     //Absolute position of element 0 of the group (frontmost member).
-    point anchor;
+    Point anchor;
     
     //Angle from the leader to the anchor.
     float anchor_angle = TAU / 2.0f;
@@ -305,7 +305,7 @@ struct group_t {
     ALLEGRO_TRANSFORM transform;
     
     //Currently selected standby type.
-    subgroup_type* cur_standby_type = nullptr;
+    SubgroupType* cur_standby_type = nullptr;
     
     //Mode of operation.
     MODE mode = MODE_SHUFFLE;
@@ -313,19 +313,19 @@ struct group_t {
     
     //--- Function declarations ---
     
-    explicit group_t(mob* leader_ptr);
-    void init_spots(mob* affected_mob_ptr = nullptr);
-    void sort(subgroup_type* leading_type);
+    explicit Group(Mob* leader_ptr);
+    void init_spots(Mob* affected_mob_ptr = nullptr);
+    void sort(SubgroupType* leading_type);
     void change_standby_type_if_needed();
-    size_t get_amount_by_type(const mob_type* type) const;
-    point get_average_member_pos() const;
-    vector<hazard*> get_group_invulnerabilities(
-        mob* include_leader = nullptr
+    size_t get_amount_by_type(const MobType* type) const;
+    Point get_average_member_pos() const;
+    vector<Hazard*> get_group_invulnerabilities(
+        Mob* include_leader = nullptr
     ) const;
     bool get_next_standby_type(
-        bool move_backwards, subgroup_type** new_type
+        bool move_backwards, SubgroupType** new_type
     );
-    point get_spot_offset(size_t spot_idx) const;
+    Point get_spot_offset(size_t spot_idx) const;
     void reassign_spots();
     bool change_standby_type(bool move_backwards);
 };
@@ -335,12 +335,12 @@ struct group_t {
  * @brief Info about how this mob is currently being held by
  * another, if it is.
  */
-struct hold_t {
+struct HoldInfo {
 
     //--- Members ---
     
     //Points to the mob holding the current one, if any.
-    mob* m = nullptr;
+    Mob* m = nullptr;
     
     //Index of the hitbox the mob is attached to.
     //If INVALID, it's attached to the mob center.
@@ -365,103 +365,103 @@ struct hold_t {
     //--- Function declarations ---
     
     void clear();
-    point get_final_pos(float* out_z) const;
+    Point get_final_pos(float* out_z) const;
     
 };
 
 
-class bouncer;
-class bridge;
-class converter;
-class decoration;
-class drop;
-class enemy;
-class group_task;
-class interactable;
-class leader;
-class onion;
-class pellet;
-class pikmin;
-class pile;
-class resource;
-class scale;
-class ship;
-class tool;
-class track;
-class treasure;
+class Bouncer;
+class Bridge;
+class Converter;
+class Decoration;
+class Drop;
+class Enemy;
+class GroupTask;
+class Interactable;
+class Leader;
+class Onion;
+class Pellet;
+class Pikmin;
+class Pile;
+class Resource;
+class Scale;
+class Ship;
+class Tool;
+class Track;
+class Treasure;
 
-class onion_type;
-class ship_type;
+class OnionType;
+class ShipType;
 
 /**
  * @brief Lists of all mobs in the area.
  */
-struct mob_lists {
+struct MobLists {
 
     //--- Members ---
     
     //All mobs in the area.
-    vector<mob*> all;
+    vector<Mob*> all;
     
     //Bouncers.
-    vector<bouncer*> bouncers;
+    vector<Bouncer*> bouncers;
     
     //Bridges.
-    vector<bridge*> bridges;
+    vector<Bridge*> bridges;
     
     //Converters.
-    vector<converter*> converters;
+    vector<Converter*> converters;
     
     //Decorations.
-    vector<decoration*> decorations;
+    vector<Decoration*> decorations;
     
     //Drops.
-    vector<drop*> drops;
+    vector<Drop*> drops;
     
     //Enemies.
-    vector<enemy*> enemies;
+    vector<Enemy*> enemies;
     
     //Group tasks.
-    vector<group_task*> group_tasks;
+    vector<GroupTask*> group_tasks;
     
     //Interactables.
-    vector<interactable*> interactables;
+    vector<Interactable*> interactables;
     
     //Leaders.
-    vector<leader*> leaders;
+    vector<Leader*> leaders;
     
     //Onions.
-    vector<onion*> onions;
+    vector<Onion*> onions;
     
     //Pellets.
-    vector<pellet*> pellets;
+    vector<Pellet*> pellets;
     
     //Pikmin.
-    vector<pikmin*> pikmin_list;
+    vector<Pikmin*> pikmin_list;
     
     //Piles.
-    vector<pile*> piles;
+    vector<Pile*> piles;
     
     //Resources.
-    vector<resource*> resources;
+    vector<Resource*> resources;
     
     //Mobs that can be walked on top of. Cache for performance.
-    vector<mob*> walkables;
+    vector<Mob*> walkables;
     
     //Scales.
-    vector<scale*> scales;
+    vector<Scale*> scales;
     
     //Ships.
-    vector<ship*> ships;
+    vector<Ship*> ships;
     
     //Tools.
-    vector<tool*> tools;
+    vector<Tool*> tools;
     
     //Tracks.
-    vector<track*> tracks;
+    vector<Track*> tracks;
     
     //Treasures.
-    vector<treasure*> treasures;
+    vector<Treasure*> treasures;
     
 };
 
@@ -469,69 +469,69 @@ struct mob_lists {
 /**
  * @brief Lists of all mob types.
  */
-struct mob_type_lists {
+struct MobTypeLists {
 
     //--- Members ---
     
     //Bouncer types.
-    map<string, bouncer_type*> bouncer;
+    map<string, BouncerType*> bouncer;
     
     //Bridge types.
-    map<string, bridge_type*> bridge;
+    map<string, BridgeType*> bridge;
     
     //Converter types.
-    map<string, converter_type*> converter;
+    map<string, ConverterType*> converter;
     
     //Custom mob types.
-    map<string, mob_type*> custom;
+    map<string, MobType*> custom;
     
     //Decoration types.
-    map<string, decoration_type*> decoration;
+    map<string, DecorationType*> decoration;
     
     //Drop types.
-    map<string, drop_type*> drop;
+    map<string, DropType*> drop;
     
     //Enemy types.
-    map<string, enemy_type*> enemy;
+    map<string, EnemyType*> enemy;
     
     //Group task types.
-    map<string, group_task_type*> group_task;
+    map<string, GroupTaskType*> group_task;
     
     //Interactable types.
-    map<string, interactable_type*> interactable;
+    map<string, InteractableType*> interactable;
     
     //Leader types.
-    map<string, leader_type*> leader;
+    map<string, LeaderType*> leader;
     
     //Onion types.
-    map<string, onion_type*> onion;
+    map<string, OnionType*> onion;
     
     //Pellet types.
-    map<string, pellet_type*> pellet;
+    map<string, PelletType*> pellet;
     
     //Pikmin types.
-    map<string, pikmin_type*> pikmin;
+    map<string, PikminType*> pikmin;
     
     //Pile types.
-    map<string, pile_type*> pile;
+    map<string, PileType*> pile;
     
     //Resource types.
-    map<string, resource_type*> resource;
+    map<string, ResourceType*> resource;
     
     //Scale types.
-    map<string, scale_type*> scale;
+    map<string, ScaleType*> scale;
     
     //Ship types.
-    map<string, ship_type*> ship;
+    map<string, ShipType*> ship;
     
     //Tool types.
-    map<string, tool_type*> tool;
+    map<string, ToolType*> tool;
     
     //Track types.
-    map<string, track_type*> track;
+    map<string, TrackType*> track;
     
     //Treasure types.
-    map<string, treasure_type*> treasure;
+    map<string, TreasureType*> treasure;
     
 };
 
@@ -539,12 +539,12 @@ struct mob_type_lists {
 /**
  * @brief Info about this mob's parent, if any.
  */
-struct parent_t {
+struct Parent {
 
     //--- Members ---
     
     //Mob serving as the parent.
-    mob* m = nullptr;
+    Mob* m = nullptr;
     
     //Should the child handle damage?
     bool handle_damage = false;
@@ -565,7 +565,7 @@ struct parent_t {
     bool relay_events = false;
     
     //Animation used for the limb connecting child and parent.
-    animation_instance limb_anim;
+    AnimationInstance limb_anim;
     
     //Thickness of the limb.
     float limb_thickness = 32.0f;
@@ -588,7 +588,7 @@ struct parent_t {
     
     //--- Function declarations ---
     
-    explicit parent_t(mob* m);
+    explicit Parent(Mob* m);
     
 };
 
@@ -597,15 +597,15 @@ struct parent_t {
  * @brief Info on how to travel through the path graph that
  * the mob currently intends to travel.
  */
-struct path_t {
+struct Path {
 
     //--- Members ---
     
     //Mob that this struct belongs to.
-    mob* m = nullptr;
+    Mob* m = nullptr;
     
     //Path to take the mob to while being carried.
-    vector<path_stop*> path;
+    vector<PathStop*> path;
     
     //Index of the current stop in the projected carrying path.
     size_t cur_path_stop_idx = 0;
@@ -617,14 +617,14 @@ struct path_t {
     PATH_BLOCK_REASON block_reason = PATH_BLOCK_REASON_NONE;
     
     //Settings about how the path should be followed.
-    path_follow_settings settings;
+    PathFollowSettings settings;
     
     
     //--- Function declarations ---
     
-    path_t(
-        mob* m,
-        const path_follow_settings &settings
+    Path(
+        Mob* m,
+        const PathFollowSettings &settings
     );
     bool check_blockage(PATH_BLOCK_REASON* out_reason = nullptr);
     
@@ -635,12 +635,12 @@ struct path_t {
  * @brief Info that a mob type may have about how to nest Pikmin inside,
  * like an Onion or a ship.
  */
-struct pikmin_nest_type_t {
+struct PikminNestType {
 
     //--- Members ---
     
     //Pikmin types it can manage.
-    vector<pikmin_type*> pik_types;
+    vector<PikminType*> pik_types;
     
     //Body parts that represent legs -- pairs of hole + foot.
     vector<string> leg_body_parts;
@@ -654,7 +654,7 @@ struct pikmin_nest_type_t {
     
     //--- Function declarations ---
     
-    void load_properties(data_node* file);
+    void load_properties(DataNode* file);
     
 };
 
@@ -663,17 +663,17 @@ struct pikmin_nest_type_t {
  * @brief Info that a mob may have about how to nest Pikmin inside,
  * like an Onion or a ship.
  */
-struct pikmin_nest_t {
+struct PikminNest {
 
     public:
     
     //--- Members ---
     
     //Pointer to the nest mob responsible.
-    mob* m_ptr = nullptr;
+    Mob* m_ptr = nullptr;
     
     //Pointer to the type of nest.
-    pikmin_nest_type_t* nest_type = nullptr;
+    PikminNestType* nest_type = nullptr;
     
     //How many Pikmin are inside, per type, per maturity.
     vector<vector<size_t> > pikmin_inside;
@@ -682,7 +682,7 @@ struct pikmin_nest_t {
     vector<size_t> call_queue;
     
     //Which leader is calling the Pikmin over?
-    leader* calling_leader = nullptr;
+    Leader* calling_leader = nullptr;
     
     //Time left until it can eject the next Pikmin in the call queue.
     float next_call_time = 0.0f;
@@ -690,14 +690,14 @@ struct pikmin_nest_t {
     
     //--- Function declarations ---
     
-    pikmin_nest_t(mob* m_ptr, pikmin_nest_type_t* type);
-    bool call_pikmin(mob* m_ptr, size_t type_idx);
-    size_t get_amount_by_type(const pikmin_type* type);
-    void read_script_vars(const script_var_reader &svr);
+    PikminNest(Mob* m_ptr, PikminNestType* type);
+    bool call_pikmin(Mob* m_ptr, size_t type_idx);
+    size_t get_amount_by_type(const PikminType* type);
+    void read_script_vars(const ScriptVarReader &svr);
     void request_pikmin(
-        size_t type_idx, size_t amount, leader* l_ptr
+        size_t type_idx, size_t amount, Leader* l_ptr
     );
-    void store_pikmin(pikmin* p_ptr);
+    void store_pikmin(Pikmin* p_ptr);
     void tick(float delta_t);
     
 };
@@ -707,12 +707,12 @@ struct pikmin_nest_t {
  * @brief Info about the track mob that a mob is currently
  * riding. Includes things like current progress.
  */
-struct track_t {
+struct TrackRideInfo {
 
     //--- Members ---
     
     //Pointer to the track mob.
-    mob* m = nullptr;
+    Mob* m = nullptr;
     
     //List of checkpoints (body part indexes) to cross.
     vector<size_t> checkpoints;
@@ -730,8 +730,8 @@ struct track_t {
     
     //--- Function declarations ---
     
-    track_t(
-        mob* m, const vector<size_t> &checkpoints, float speed
+    TrackRideInfo(
+        Mob* m, const vector<size_t> &checkpoints, float speed
     );
     
 };
@@ -739,24 +739,24 @@ struct track_t {
 
 float calculate_mob_physical_span(
     float radius, float anim_hitbox_span,
-    const point &rectangular_dim
+    const Point &rectangular_dim
 );
-mob* create_mob(
-    mob_category* category, const point &pos, mob_type* type,
+Mob* create_mob(
+    MobCategory* category, const Point &pos, MobType* type,
     float angle, const string &vars,
-    std::function<void(mob*)> code_after_creation = nullptr,
+    std::function<void(Mob*)> code_after_creation = nullptr,
     size_t first_state_override = INVALID
 );
-void delete_mob(mob* m, bool complete_destruction = false);
-string get_error_message_mob_info(mob* m);
-vector<hazard*> get_mob_type_list_invulnerabilities(
-    const unordered_set<mob_type*> &types
+void delete_mob(Mob* m, bool complete_destruction = false);
+string get_error_message_mob_info(Mob* m);
+vector<Hazard*> get_mob_type_list_invulnerabilities(
+    const unordered_set<MobType*> &types
 );
-mob_type::spawn_t* get_spawn_info_from_child_info(
-    mob_type* type, const mob_type::child_t* child_info
+MobType::SpawnInfo* get_spawn_info_from_child_info(
+    MobType* type, const MobType::Child* child_info
 );
 bool is_mob_in_reach(
-    mob_type::reach_t* reach_t_ptr, const dist &dist_between, float angle_diff
+    MobType::Reach* reach_t_ptr, const Distance &dist_between, float angle_diff
 );
 MOB_TARGET_FLAG string_to_mob_target_type(const string &type_str);
 MOB_TEAM string_to_team_nr(const string &team_str);

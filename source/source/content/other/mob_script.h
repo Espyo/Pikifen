@@ -24,11 +24,11 @@ using std::string;
 using std::vector;
 
 
-class mob;
-struct mob_action_call;
-class mob_type;
-class mob_state;
-class hitbox;
+class Mob;
+struct MobActionCall;
+class MobType;
+class MobState;
+class Hitbox;
 
 /**
  * @brief Function to run custom mob actions with.
@@ -37,7 +37,7 @@ class hitbox;
  * The second parameter depends on the function.
  * The third parameter depends on the function.
  */
-typedef void (*custom_action_code_t)(mob* m, void* info1, void* info2);
+typedef void (*custom_action_code_t)(Mob* m, void* info1, void* info2);
 
 const unsigned char STATE_HISTORY_SIZE = 3;
 
@@ -317,7 +317,7 @@ enum MOB_EV {
 /**
  * @brief Actions to run on an event, inside a FSM.
  */
-class mob_event {
+class MobEvent {
 
 public:
 
@@ -327,19 +327,19 @@ public:
     MOB_EV type = MOB_EV_UNKNOWN;
     
     //Actions to run.
-    vector<mob_action_call*> actions;
+    vector<MobActionCall*> actions;
     
     
     //--- Function declarations ---
     
-    mob_event(
-        const data_node* node, const vector<mob_action_call*> &actions
+    MobEvent(
+        const DataNode* node, const vector<MobActionCall*> &actions
     );
-    explicit mob_event(
+    explicit MobEvent(
         const MOB_EV t,
-        const vector<mob_action_call*> &a = vector<mob_action_call*>()
+        const vector<MobActionCall*> &a = vector<MobActionCall*>()
     );
-    void run(mob* m, void* custom_data_1 = nullptr, void* custom_data_2 = nullptr);
+    void run(Mob* m, void* custom_data_1 = nullptr, void* custom_data_2 = nullptr);
     
 };
 
@@ -348,7 +348,7 @@ public:
  * @brief A mob's state in its FSM. A mob can only be in one state at any given
  * time. Multiple mobs can share these states.
  */
-class mob_state {
+class MobState {
 
 public:
 
@@ -361,15 +361,15 @@ public:
     size_t id = INVALID;
     
     //List of events to handle in this state.
-    mob_event* events[N_MOB_EVENTS];
+    MobEvent* events[N_MOB_EVENTS];
     
     
     //--- Function declarations ---
     
-    explicit mob_state(const string &name);
-    mob_state(const string &name, mob_event* evs[N_MOB_EVENTS]);
-    mob_state(const string &name, size_t id);
-    mob_event* get_event(const MOB_EV type) const;
+    explicit MobState(const string &name);
+    MobState(const string &name, MobEvent* evs[N_MOB_EVENTS]);
+    MobState(const string &name, size_t id);
+    MobEvent* get_event(const MOB_EV type) const;
     
 };
 
@@ -379,17 +379,17 @@ public:
  * about what state it is in, and so on, but does not contain the list
  * of states, events, and actions.
  */
-class mob_fsm {
+class MobFsm {
 
 public:
 
     //--- Members ---
     
     //Mob that this FSM belongs to.
-    mob* m = nullptr;
+    Mob* m = nullptr;
     
     //Current state the mob is in.
-    mob_state* cur_state = nullptr;
+    MobState* cur_state = nullptr;
     
     //Conversion between pre-named states and in-file states.
     vector<size_t> pre_named_conversions;
@@ -403,8 +403,8 @@ public:
     
     //--- Function declarations ---
     
-    explicit mob_fsm(mob* m = nullptr);
-    mob_event* get_event(const MOB_EV type) const;
+    explicit MobFsm(Mob* m = nullptr);
+    MobEvent* get_event(const MOB_EV type) const;
     size_t get_state_idx(const string &name) const;
     void run_event(
         const MOB_EV type,
@@ -431,7 +431,7 @@ public:
  * Creating a state, event, or action, are now all a single line, much like
  * they would be in a plain text file!
  */
-class easy_fsm_creator {
+class EasyFsmCreator {
 
 public:
 
@@ -441,20 +441,20 @@ public:
     void new_event(const MOB_EV type);
     void change_state(const string &new_state);
     void run(custom_action_code_t code);
-    vector<mob_state*> finish();
+    vector<MobState*> finish();
     
 private:
 
     //--- Members ---
     
     //List of registered states.
-    vector<mob_state*> states;
+    vector<MobState*> states;
     
     //State currently being staged.
-    mob_state* cur_state = nullptr;
+    MobState* cur_state = nullptr;
     
     //Event currently being staged.
-    mob_event* cur_event = nullptr;
+    MobEvent* cur_event = nullptr;
     
     
     //--- Function declarations ---
@@ -468,39 +468,39 @@ private:
 /**
  * @brief Info about how two hitboxes interacted.
  */
-struct hitbox_interaction {
+struct HitboxInteraction {
 
     //--- Members ---
     
     //Mob that touched our mob.
-    mob* mob2 = nullptr;
+    Mob* mob2 = nullptr;
     
     //Hitbox of our mob that got touched.
-    hitbox* h1 = nullptr;
+    Hitbox* h1 = nullptr;
     
     //Hitbox of the other mob.
-    hitbox* h2 = nullptr;
+    Hitbox* h2 = nullptr;
     
     
     //--- Function declarations ---
     
-    explicit hitbox_interaction(
-        mob* mob2 = nullptr,
-        hitbox* h1 = nullptr, hitbox* h2 = nullptr
+    explicit HitboxInteraction(
+        Mob* mob2 = nullptr,
+        Hitbox* h1 = nullptr, Hitbox* h2 = nullptr
     );
     
 };
 
 
 size_t fix_states(
-    vector<mob_state*> &states, const string &starting_state, const mob_type* mt
+    vector<MobState*> &states, const string &starting_state, const MobType* mt
 );
 void load_script(
-    mob_type* mt, data_node* script_node, data_node* global_node,
-    vector<mob_state*>* out_states
+    MobType* mt, DataNode* script_node, DataNode* global_node,
+    vector<MobState*>* out_states
 );
 void load_state(
-    mob_type* mt, data_node* state_node, data_node* global_node,
-    mob_state* state_ptr
+    MobType* mt, DataNode* state_node, DataNode* global_node,
+    MobState* state_ptr
 );
-void unload_script(mob_type* mt);
+void unload_script(MobType* mt);

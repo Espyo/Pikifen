@@ -24,7 +24,7 @@
  *
  * @param input Input to clean.
  */
-void controls_manager::clean_stick(const player_input &input) {
+void ControlsManager::clean_stick(const PlayerInput &input) {
     raw_sticks[input.device_nr][input.stick_nr][input.axis_nr] =
         input.type == INPUT_TYPE_CONTROLLER_AXIS_POS ?
         input.value :
@@ -34,10 +34,10 @@ void controls_manager::clean_stick(const player_input &input) {
     coords[0] = raw_sticks[input.device_nr][input.stick_nr][0];
     coords[1] = raw_sticks[input.device_nr][input.stick_nr][1];
     
-    analog_stick_cleaner::settings_t cleanup_settings;
+    AnalogStickCleaner::Settings cleanup_settings;
     cleanup_settings.deadzones.radial.inner = options.stick_min_deadzone;
     cleanup_settings.deadzones.radial.outer = options.stick_max_deadzone;
-    analog_stick_cleaner::clean(coords, cleanup_settings);
+    AnalogStickCleaner::clean(coords, cleanup_settings);
     
     clean_sticks[input.device_nr][input.stick_nr][0] = coords[0];
     clean_sticks[input.device_nr][input.stick_nr][1] = coords[1];
@@ -50,14 +50,14 @@ void controls_manager::clean_stick(const player_input &input) {
  * @param input The input.
  * @return The action types.
  */
-vector<int> controls_manager::get_action_types_from_input(
-    const player_input &input
+vector<int> ControlsManager::get_action_types_from_input(
+    const PlayerInput &input
 ) {
     vector<int> action_types;
     
     for(size_t b = 0; b < binds.size(); b++) {
     
-        const control_bind &bind = binds[b];
+        const ControlBind &bind = binds[b];
         
         if(bind.input.type != input.type) continue;
         
@@ -121,8 +121,8 @@ vector<int> controls_manager::get_action_types_from_input(
  * only add the actions at the end of the frame, if their state is different
  * from the last frame's state.
  */
-void controls_manager::handle_clean_input(
-    const player_input &input, bool add_directly
+void ControlsManager::handle_clean_input(
+    const PlayerInput &input, bool add_directly
 ) {
     //Find what game action types are bound to this input.
     vector<int> action_types = get_action_types_from_input(input);
@@ -130,7 +130,7 @@ void controls_manager::handle_clean_input(
     for(size_t a = 0; a < action_types.size(); a++) {
         if(add_directly) {
             //Add it to the action queue directly.
-            player_action new_action;
+            PlayerAction new_action;
             new_action.action_type_id = action_types[a];
             new_action.value = input.value;
             action_queue.push_back(new_action);
@@ -148,8 +148,8 @@ void controls_manager::handle_clean_input(
  *
  * @param input The input.
  */
-void controls_manager::handle_input(
-    const player_input &input
+void ControlsManager::handle_input(
+    const PlayerInput &input
 ) {
     if(
         input.type == INPUT_TYPE_CONTROLLER_AXIS_POS ||
@@ -164,28 +164,28 @@ void controls_manager::handle_input(
         //If a player goes from walking left to walking right very quickly
         //in one frame, the "walking left" action may never receive a zero
         //value. So we should inject the zero manually with two more inputs.
-        player_input x_pos_input = input;
+        PlayerInput x_pos_input = input;
         x_pos_input.type = INPUT_TYPE_CONTROLLER_AXIS_POS;
         x_pos_input.axis_nr = 0;
         x_pos_input.value =
             std::max(0.0f, clean_sticks[input.device_nr][input.stick_nr][0]);
         handle_clean_input(x_pos_input, false);
         
-        player_input x_neg_input = input;
+        PlayerInput x_neg_input = input;
         x_neg_input.type = INPUT_TYPE_CONTROLLER_AXIS_NEG;
         x_neg_input.axis_nr = 0;
         x_neg_input.value =
             std::max(0.0f, -clean_sticks[input.device_nr][input.stick_nr][0]);
         handle_clean_input(x_neg_input, false);
         
-        player_input y_pos_input = input;
+        PlayerInput y_pos_input = input;
         y_pos_input.type = INPUT_TYPE_CONTROLLER_AXIS_POS;
         y_pos_input.axis_nr = 1;
         y_pos_input.value =
             std::max(0.0f, clean_sticks[input.device_nr][input.stick_nr][1]);
         handle_clean_input(y_pos_input, false);
         
-        player_input y_neg_input = input;
+        PlayerInput y_neg_input = input;
         y_neg_input.type = INPUT_TYPE_CONTROLLER_AXIS_NEG;
         y_neg_input.axis_nr = 1;
         y_neg_input.value =
@@ -203,7 +203,7 @@ void controls_manager::handle_input(
         //using the mouse wheel. So whatever player actions we decide here
         //have to be added to this frame's action queue directly.
         for(unsigned int i = 0; i < input.value; i++) {
-            player_input single_input = input;
+            PlayerInput single_input = input;
             single_input.value = 1.0f;
             handle_clean_input(single_input, true);
         }
@@ -222,17 +222,17 @@ void controls_manager::handle_input(
  *
  * @return The actions.
  */
-vector<player_action> controls_manager::new_frame() {
+vector<PlayerAction> ControlsManager::new_frame() {
     for(auto &a : action_type_values) {
         if(old_action_type_values[a.first] != a.second) {
-            player_action new_action;
+            PlayerAction new_action;
             new_action.action_type_id = a.first;
             new_action.value = a.second;
             action_queue.push_back(new_action);
         }
     }
     
-    vector<player_action> result = action_queue;
+    vector<PlayerAction> result = action_queue;
     
     old_action_type_values = action_type_values;
     action_queue.clear();

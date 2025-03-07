@@ -21,7 +21,7 @@
 #include "../../util/general_utils.h"
 #include "../../util/geometry_utils.h"
 
-class pikmin_type;
+class PikminType;
 
 
 namespace PAUSE_MENU {
@@ -80,7 +80,7 @@ enum PAUSE_MENU_PAGE {
  * the player.
  *
  */
-struct pause_menu_t {
+struct PauseMenu {
 
     public:
     
@@ -104,19 +104,19 @@ struct pause_menu_t {
     //--- Members ---
     
     //GUI manager for the main pause menu.
-    gui_manager gui;
+    GuiManager gui;
     
     //GUI manager for the radar page.
-    gui_manager radar_gui;
+    GuiManager radar_gui;
     
     //GUI manager for the status page.
-    gui_manager status_gui;
+    GuiManager status_gui;
     
     //GUI manager for the mission page.
-    gui_manager mission_gui;
+    GuiManager mission_gui;
     
     //GUI manager for the leaving confirmation page.
-    gui_manager confirmation_gui;
+    GuiManager confirmation_gui;
     
     //Multiply the background alpha by this much.
     float bg_alpha_mult = 0.0f;
@@ -133,11 +133,11 @@ struct pause_menu_t {
     
     //--- Function declarations ---
     
-    explicit pause_menu_t(bool start_on_radar);
-    ~pause_menu_t();
+    explicit PauseMenu(bool start_on_radar);
+    ~PauseMenu();
     void draw();
     void handle_allegro_event(const ALLEGRO_EVENT &ev);
-    void handle_player_action(const player_action &action);
+    void handle_player_action(const PlayerAction &action);
     void tick(float delta_t);
     
 private:
@@ -148,13 +148,13 @@ private:
     bool closing = false;
     
     //Confirmation page explanation text.
-    text_gui_item* confirmation_explanation_text = nullptr;
+    TextGuiItem* confirmation_explanation_text = nullptr;
     
     //Radar GUI item.
-    gui_item* radar_item = nullptr;
+    GuiItem* radar_item = nullptr;
     
     //Pikmin status list.
-    list_gui_item* pikmin_list = nullptr;
+    ListGuiItem* pikmin_list = nullptr;
     
     //Where the player intends to go by leaving.
     GAMEPLAY_LEAVE_TARGET leave_target = GAMEPLAY_LEAVE_TARGET_AREA_SELECT;
@@ -163,7 +163,7 @@ private:
     vector<PAUSE_MENU_PAGE> pages;
     
     //Information about the current secondary menu, if any.
-    menu_t* secondary_menu = nullptr;
+    Menu* secondary_menu = nullptr;
     
     //Z of the lowest sector.
     float lowest_sector_z = 0.0f;
@@ -178,25 +178,25 @@ private:
     ALLEGRO_TRANSFORM radar_screen_to_world_transform;
     
     //Radar camera information.
-    camera_t radar_cam;
+    Camera radar_cam;
     
     //Location of the radar cursor, in world coordinates.
-    point radar_cursor;
+    Point radar_cursor;
     
     //Whether a mouse button is being held in the radar.
     bool radar_mouse_down = false;
     
     //Point where the mouse button was first held in the radar (screen coords).
-    point radar_mouse_down_point;
+    Point radar_mouse_down_point;
     
     //Whether the player is dragging the mouse. False for just a (fuzzy) click.
     bool radar_mouse_dragging = false;
     
     //Minimum coordinates the radar can pan to.
-    point radar_min_coords;
+    Point radar_min_coords;
     
     //Maximum coordinates the radar can pan to.
-    point radar_max_coords;
+    Point radar_max_coords;
     
     //Icon for the radar cursor.
     ALLEGRO_BITMAP* bmp_radar_cursor = nullptr;
@@ -235,22 +235,22 @@ private:
     ALLEGRO_BITMAP* bmp_radar_path = nullptr;
     
     //Selected leader in the radar.
-    mob* radar_selected_leader = nullptr;
+    Mob* radar_selected_leader = nullptr;
     
     //Leader under the cursor in the radar.
-    mob* radar_cursor_leader = nullptr;
+    Mob* radar_cursor_leader = nullptr;
     
     //Time left before another Go Here calculation.
     float go_here_calc_time = 0.0f;
     
     //Go Here path.
-    vector<path_stop*> go_here_path;
+    vector<PathStop*> go_here_path;
     
     //Go Here path result.
     PATH_RESULT go_here_path_result = PATH_RESULT_NOT_CALCULATED;
     
     //Pan speed and amount.
-    movement_t radar_pan;
+    MovementInfo radar_pan;
     
     //Whether the radar zoom-in input is pressed.
     bool radar_zoom_in = false;
@@ -262,12 +262,12 @@ private:
     //--- Function declarations ---
     
     void add_bullet(
-        list_gui_item* list, const string &text,
+        ListGuiItem* list, const string &text,
         const ALLEGRO_COLOR &color = COLOR_WHITE
     );
     void add_pikmin_status_line(
-        list_gui_item* list,
-        pikmin_type* pik_type,
+        ListGuiItem* list,
+        PikminType* pik_type,
         const string &group_text,
         const string &idle_text,
         const string &field_text,
@@ -279,36 +279,36 @@ private:
     );
     void calculate_go_here_path();
     void confirm_or_leave();
-    button_gui_item* create_page_button(
-        PAUSE_MENU_PAGE target_page, bool left, gui_manager* cur_gui
+    ButtonGuiItem* create_page_button(
+        PAUSE_MENU_PAGE target_page, bool left, GuiManager* cur_gui
     );
-    void create_page_buttons(PAUSE_MENU_PAGE cur_page, gui_manager* cur_gui);
+    void create_page_buttons(PAUSE_MENU_PAGE cur_page, GuiManager* cur_gui);
     void draw_go_here_segment(
-        const point &start, const point &end,
+        const Point &start, const Point &end,
         const ALLEGRO_COLOR &color, float* texture_point
     );
-    void draw_radar(const point &center, const point &size);
-    void fill_mission_fail_list(list_gui_item* list);
-    void fill_mission_grading_list(list_gui_item* list);
+    void draw_radar(const Point &center, const Point &size);
+    void fill_mission_fail_list(ListGuiItem* list);
+    void fill_mission_grading_list(ListGuiItem* list);
     string get_mission_goal_status();
     void init_confirmation_page();
     void init_radar_page();
     void init_main_pause_menu();
     void init_mission_page();
     void init_status_page();
-    void pan_radar(point amount);
+    void pan_radar(Point amount);
     void radar_confirm();
-    void start_closing(gui_manager* cur_gui);
+    void start_closing(GuiManager* cur_gui);
     void start_leaving_gameplay();
     void switch_page(
-        gui_manager* cur_gui, PAUSE_MENU_PAGE new_page, bool left
+        GuiManager* cur_gui, PAUSE_MENU_PAGE new_page, bool left
     );
     void update_radar_transformations(
-        const point &radar_center, const point &radar_size
+        const Point &radar_center, const Point &radar_size
     );
     void zoom_radar(float amount);
     void zoom_radar_with_mouse(
-        float amount, const point &radar_center, const point &radar_size
+        float amount, const Point &radar_center, const Point &radar_size
     );
     
 };

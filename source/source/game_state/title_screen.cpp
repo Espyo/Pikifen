@@ -44,23 +44,23 @@ const string TUTORIAL_GUI_FILE_NAME = "main_menu_tutorial";
 /**
  * @brief Draws the title screen.
  */
-void title_screen_state::do_drawing() {
+void TitleScreen::do_drawing() {
     al_clear_to_color(COLOR_BLACK);
     
     if(game.debug.show_dear_imgui_demo) return;
     
     draw_bitmap(
-        bmp_menu_bg, point(game.win_w * 0.5, game.win_h * 0.5),
-        point(game.win_w, game.win_h)
+        bmp_menu_bg, Point(game.win_w * 0.5, game.win_h * 0.5),
+        Point(game.win_w, game.win_h)
     );
     
     //Draw the logo Pikmin.
-    point pik_size = logo_pikmin_size;
+    Point pik_size = logo_pikmin_size;
     pik_size.x *= game.win_w / 100.0f;
     pik_size.y *= game.win_h / 100.0f;
     
     for(size_t p = 0; p < logo_pikmin.size(); p++) {
-        logo_pik* pik = &logo_pikmin[p];
+        LogoPikmin* pik = &logo_pikmin[p];
         
         draw_bitmap_in_box(
             pik->top, pik->pos, pik_size, true, pik->angle
@@ -70,8 +70,8 @@ void title_screen_state::do_drawing() {
     draw_text(
         "Pikifen and contents are fan works. Pikmin is (c) Nintendo.",
         game.sys_content.fnt_slim,
-        point(8.0f),
-        point(game.win_w * 0.45f, game.win_h * 0.02f), map_alpha(192),
+        Point(8.0f),
+        Point(game.win_w * 0.45f, game.win_h * 0.02f), map_alpha(192),
         ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP
     );
     string version_text;
@@ -86,8 +86,8 @@ void title_screen_state::do_drawing() {
         "Pikifen " + get_engine_version_string();
     draw_text(
         version_text, game.sys_content.fnt_slim,
-        point(game.win_w - 8, 8),
-        point(game.win_w * 0.45f, game.win_h * 0.02f), map_alpha(192),
+        Point(game.win_w - 8, 8),
+        Point(game.win_w * 0.45f, game.win_h * 0.02f), map_alpha(192),
         ALLEGRO_ALIGN_RIGHT, V_ALIGN_MODE_TOP
     );
     
@@ -103,19 +103,19 @@ void title_screen_state::do_drawing() {
 /**
  * @brief Ticks a frame's worth of logic.
  */
-void title_screen_state::do_logic() {
+void TitleScreen::do_logic() {
     if(game.debug.show_dear_imgui_demo) return;
     
     //Animate the logo Pikmin.
     for(size_t p = 0; p < logo_pikmin.size(); p++) {
-        logo_pik* pik = &logo_pikmin[p];
+        LogoPikmin* pik = &logo_pikmin[p];
         
         if(!pik->reached_destination) {
             float a = get_angle(pik->pos, pik->destination);
             float speed =
                 std::min(
                     (float) (pik->speed * game.delta_t),
-                    dist(pik->pos, pik->destination).to_float() *
+                    Distance(pik->pos, pik->destination).to_float() *
                     logo_pikmin_speed_smoothness
                 );
             pik->pos.x += cos(a) * speed;
@@ -136,7 +136,7 @@ void title_screen_state::do_logic() {
         }
     }
     
-    vector<player_action> player_actions = game.controls.new_frame();
+    vector<PlayerAction> player_actions = game.controls.new_frame();
     if(!game.fade_mgr.is_fading()) {
         for(size_t a = 0; a < player_actions.size(); a++) {
             main_gui.handle_player_action(player_actions[a]);
@@ -165,7 +165,7 @@ void title_screen_state::do_logic() {
  *
  * @return The name.
  */
-string title_screen_state::get_name() const {
+string TitleScreen::get_name() const {
     return "title screen";
 }
 
@@ -175,7 +175,7 @@ string title_screen_state::get_name() const {
  *
  * @param ev Event to handle.
  */
-void title_screen_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
+void TitleScreen::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;
     
     main_gui.handle_allegro_event(ev);
@@ -188,11 +188,11 @@ void title_screen_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
 /**
  * @brief Loads the GUI elements for the main menu's main page.
  */
-void title_screen_state::init_gui_main_page() {
-    data_node* gui_file = &game.content.gui_defs.list[TITLE_SCREEN::GUI_FILE_NAME];
+void TitleScreen::init_gui_main_page() {
+    DataNode* gui_file = &game.content.gui_defs.list[TITLE_SCREEN::GUI_FILE_NAME];
     
     //Button icon positions.
-    data_node* icons_node = gui_file->get_child_by_name("icons_to_the_left");
+    DataNode* icons_node = gui_file->get_child_by_name("icons_to_the_left");
     
 #define icon_left(name, def) s2b(icons_node->get_child_by_name(name)-> \
                                  get_value_or_default(def))
@@ -220,10 +220,10 @@ void title_screen_state::init_gui_main_page() {
     main_gui.read_coords(gui_file->get_child_by_name("positions"));
     
     //Play button.
-    button_gui_item* play_button =
-        new button_gui_item("Play", game.sys_content.fnt_area_name);
+    ButtonGuiItem* play_button =
+        new ButtonGuiItem("Play", game.sys_content.fnt_area_name);
     play_button->on_draw =
-    [ = ] (const point & center, const point & size) {
+    [ = ] (const Point & center, const Point & size) {
         draw_menu_button_icon(
             MENU_ICON_PLAY, center, size, play_icon_left
         );
@@ -235,7 +235,7 @@ void title_screen_state::init_gui_main_page() {
         );
     };
     play_button->on_activate =
-    [this] (const point &) {
+    [this] (const Point &) {
         main_gui.responsive = false;
         main_gui.start_animation(
             GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
@@ -260,10 +260,10 @@ void title_screen_state::init_gui_main_page() {
     main_gui.add_item(play_button, "play");
     
     //Make button.
-    button_gui_item* make_button =
-        new button_gui_item("Make", game.sys_content.fnt_area_name);
+    ButtonGuiItem* make_button =
+        new ButtonGuiItem("Make", game.sys_content.fnt_area_name);
     make_button->on_draw =
-    [ = ] (const point & center, const point & size) {
+    [ = ] (const Point & center, const Point & size) {
         draw_menu_button_icon(
             MENU_ICON_MAKE, center, size, make_icon_left
         );
@@ -275,7 +275,7 @@ void title_screen_state::init_gui_main_page() {
         );
     };
     make_button->on_activate =
-    [this] (const point &) {
+    [this] (const Point &) {
         main_gui.responsive = false;
         main_gui.start_animation(
             GUI_MANAGER_ANIM_CENTER_TO_LEFT,
@@ -292,10 +292,10 @@ void title_screen_state::init_gui_main_page() {
     main_gui.add_item(make_button, "make");
     
     //Help button.
-    button_gui_item* help_button =
-        new button_gui_item("Help", game.sys_content.fnt_area_name);
+    ButtonGuiItem* help_button =
+        new ButtonGuiItem("Help", game.sys_content.fnt_area_name);
     help_button->on_draw =
-    [ = ] (const point & center, const point & size) {
+    [ = ] (const Point & center, const Point & size) {
         draw_menu_button_icon(
             MENU_ICON_HELP, center, size, help_icon_left
         );
@@ -307,7 +307,7 @@ void title_screen_state::init_gui_main_page() {
         );
     };
     help_button->on_activate =
-    [this] (const point &) {
+    [this] (const Point &) {
         game.fade_mgr.start_fade(false, [] () {
             game.change_state(game.states.annex_screen);
         });
@@ -321,10 +321,10 @@ void title_screen_state::init_gui_main_page() {
     main_gui.add_item(help_button, "help");
     
     //Options button.
-    button_gui_item* options_button =
-        new button_gui_item("Options", game.sys_content.fnt_area_name);
+    ButtonGuiItem* options_button =
+        new ButtonGuiItem("Options", game.sys_content.fnt_area_name);
     options_button->on_draw =
-    [ = ] (const point & center, const point & size) {
+    [ = ] (const Point & center, const Point & size) {
         draw_menu_button_icon(
             MENU_ICON_OPTIONS, center, size, options_icon_left
         );
@@ -336,7 +336,7 @@ void title_screen_state::init_gui_main_page() {
         );
     };
     options_button->on_activate =
-    [] (const point &) {
+    [] (const Point &) {
         game.fade_mgr.start_fade(false, [] () {
             game.states.annex_screen->menu_to_load =
                 ANNEX_SCREEN_MENU_OPTIONS;
@@ -352,10 +352,10 @@ void title_screen_state::init_gui_main_page() {
     main_gui.add_item(options_button, "options");
     
     //Statistics button.
-    button_gui_item* stats_button =
-        new button_gui_item("Statistics", game.sys_content.fnt_area_name);
+    ButtonGuiItem* stats_button =
+        new ButtonGuiItem("Statistics", game.sys_content.fnt_area_name);
     stats_button->on_draw =
-    [ = ] (const point & center, const point & size) {
+    [ = ] (const Point & center, const Point & size) {
         draw_menu_button_icon(
             MENU_ICON_STATISTICS, center, size, stats_icon_left
         );
@@ -367,7 +367,7 @@ void title_screen_state::init_gui_main_page() {
         );
     };
     stats_button->on_activate =
-    [] (const point &) {
+    [] (const Point &) {
         game.fade_mgr.start_fade(false, [] () {
             game.states.annex_screen->menu_to_load =
                 ANNEX_SCREEN_MENU_STATS;
@@ -383,10 +383,10 @@ void title_screen_state::init_gui_main_page() {
     main_gui.add_item(stats_button, "stats");
     
     //Discord server button.
-    button_gui_item* discord_button =
-        new button_gui_item("", game.sys_content.fnt_area_name);
+    ButtonGuiItem* discord_button =
+        new ButtonGuiItem("", game.sys_content.fnt_area_name);
     discord_button->on_draw =
-    [ = ] (const point & center, const point & size) {
+    [ = ] (const Point & center, const Point & size) {
         draw_bitmap_in_box(
             game.sys_content.bmp_discord_icon, center, size * 0.8f, true
         );
@@ -398,7 +398,7 @@ void title_screen_state::init_gui_main_page() {
         );
     };
     discord_button->on_activate =
-    [] (const point &) {
+    [] (const Point &) {
         open_web_browser(DISCORD_SERVER_URL);
     };
     discord_button->on_get_tooltip =
@@ -410,10 +410,10 @@ void title_screen_state::init_gui_main_page() {
     main_gui.add_item(discord_button, "discord");
     
     //GitHub page button.
-    button_gui_item* github_button =
-        new button_gui_item("", game.sys_content.fnt_area_name);
+    ButtonGuiItem* github_button =
+        new ButtonGuiItem("", game.sys_content.fnt_area_name);
     github_button->on_draw =
-    [ = ] (const point & center, const point & size) {
+    [ = ] (const Point & center, const Point & size) {
         draw_bitmap_in_box(
             game.sys_content.bmp_github_icon, center, size * 0.8f, true
         );
@@ -425,7 +425,7 @@ void title_screen_state::init_gui_main_page() {
         );
     };
     github_button->on_activate =
-    [] (const point &) {
+    [] (const Point &) {
         open_web_browser(GITHUB_PAGE_URL);
     };
     github_button->on_get_tooltip =
@@ -434,23 +434,23 @@ void title_screen_state::init_gui_main_page() {
     
     //Exit button.
     main_gui.back_item =
-        new button_gui_item("Exit", game.sys_content.fnt_area_name);
+        new ButtonGuiItem("Exit", game.sys_content.fnt_area_name);
     main_gui.back_item->on_draw =
-    [ = ] (const point & center, const point & size) {
+    [ = ] (const Point & center, const Point & size) {
         draw_menu_button_icon(
             MENU_ICON_QUIT, center, size, quit_icon_left
         );
         draw_button(
             center, size,
-            ((button_gui_item*) main_gui.back_item)->text,
-            ((button_gui_item*) main_gui.back_item)->font,
-            ((button_gui_item*) main_gui.back_item)->color,
+            ((ButtonGuiItem*) main_gui.back_item)->text,
+            ((ButtonGuiItem*) main_gui.back_item)->font,
+            ((ButtonGuiItem*) main_gui.back_item)->color,
             main_gui.back_item->selected,
             main_gui.back_item->get_juice_value()
         );
     };
     main_gui.back_item->on_activate =
-    [] (const point &) {
+    [] (const Point &) {
         save_statistics();
         game.is_game_running = false;
     };
@@ -467,8 +467,8 @@ void title_screen_state::init_gui_main_page() {
     gui_add_back_input_icon(&main_gui, "exit_input");
     
     //Tooltip text.
-    tooltip_gui_item* tooltip_text =
-        new tooltip_gui_item(&main_gui);
+    TooltipGuiItem* tooltip_text =
+        new TooltipGuiItem(&main_gui);
     main_gui.add_item(tooltip_text, "tooltip");
     
     //Finishing touches.
@@ -481,11 +481,11 @@ void title_screen_state::init_gui_main_page() {
 /**
  * @brief Loads the GUI elements for the main menu's make page.
  */
-void title_screen_state::init_gui_make_page() {
-    data_node* gui_file = &game.content.gui_defs.list[TITLE_SCREEN::MAKE_GUI_FILE_NAME];
+void TitleScreen::init_gui_make_page() {
+    DataNode* gui_file = &game.content.gui_defs.list[TITLE_SCREEN::MAKE_GUI_FILE_NAME];
     
     //Button icon positions.
-    data_node* icons_node = gui_file->get_child_by_name("icons_to_the_left");
+    DataNode* icons_node = gui_file->get_child_by_name("icons_to_the_left");
     
 #define icon_left(name, def) s2b(icons_node->get_child_by_name(name)-> \
                                  get_value_or_default(def))
@@ -509,10 +509,10 @@ void title_screen_state::init_gui_make_page() {
     make_gui.read_coords(gui_file->get_child_by_name("positions"));
     
     //Animation editor button.
-    button_gui_item* anim_ed_button =
-        new button_gui_item("Animations", game.sys_content.fnt_area_name);
+    ButtonGuiItem* anim_ed_button =
+        new ButtonGuiItem("Animations", game.sys_content.fnt_area_name);
     anim_ed_button->on_draw =
-    [ = ] (const point & center, const point & size) {
+    [ = ] (const Point & center, const Point & size) {
         draw_menu_button_icon(
             MENU_ICON_ANIM_EDITOR, center, size, anim_editor_icon_left
         );
@@ -524,7 +524,7 @@ void title_screen_state::init_gui_make_page() {
         );
     };
     anim_ed_button->on_activate =
-    [] (const point &) {
+    [] (const Point &) {
         game.fade_mgr.start_fade(false, [] () {
             game.change_state(game.states.animation_ed);
         });
@@ -534,10 +534,10 @@ void title_screen_state::init_gui_make_page() {
     make_gui.add_item(anim_ed_button, "animation_editor");
     
     //Area editor button.
-    button_gui_item* area_ed_button =
-        new button_gui_item("Areas", game.sys_content.fnt_area_name);
+    ButtonGuiItem* area_ed_button =
+        new ButtonGuiItem("Areas", game.sys_content.fnt_area_name);
     area_ed_button->on_draw =
-    [ = ] (const point & center, const point & size) {
+    [ = ] (const Point & center, const Point & size) {
         draw_menu_button_icon(
             MENU_ICON_AREA_EDITOR, center, size, area_editor_icon_left
         );
@@ -549,7 +549,7 @@ void title_screen_state::init_gui_make_page() {
         );
     };
     area_ed_button->on_activate =
-    [] (const point &) {
+    [] (const Point &) {
         game.fade_mgr.start_fade(false, [] () {
             game.change_state(game.states.area_ed);
         });
@@ -559,10 +559,10 @@ void title_screen_state::init_gui_make_page() {
     make_gui.add_item(area_ed_button, "area_editor");
     
     //Particle editor button.
-    button_gui_item* part_ed_button =
-        new button_gui_item("Particles", game.sys_content.fnt_area_name);
+    ButtonGuiItem* part_ed_button =
+        new ButtonGuiItem("Particles", game.sys_content.fnt_area_name);
     part_ed_button->on_draw =
-    [ = ](const point & center, const point & size) {
+    [ = ](const Point & center, const Point & size) {
         draw_menu_button_icon(
             MENU_ICON_PARTICLE_EDITOR, center, size, particle_editor_icon_left
         );
@@ -574,7 +574,7 @@ void title_screen_state::init_gui_make_page() {
         );
     };
     part_ed_button->on_activate =
-    [](const point &) {
+    [](const Point &) {
         game.fade_mgr.start_fade(false, []() {
             game.change_state(game.states.particle_ed);
         });
@@ -584,10 +584,10 @@ void title_screen_state::init_gui_make_page() {
     make_gui.add_item(part_ed_button, "particle_editor");
     
     //GUI editor button.
-    button_gui_item* gui_ed_button =
-        new button_gui_item("GUI", game.sys_content.fnt_area_name);
+    ButtonGuiItem* gui_ed_button =
+        new ButtonGuiItem("GUI", game.sys_content.fnt_area_name);
     gui_ed_button->on_draw =
-    [ = ] (const point & center, const point & size) {
+    [ = ] (const Point & center, const Point & size) {
         draw_menu_button_icon(
             MENU_ICON_GUI_EDITOR, center, size, gui_editor_icon_left
         );
@@ -599,7 +599,7 @@ void title_screen_state::init_gui_make_page() {
         );
     };
     gui_ed_button->on_activate =
-    [] (const point &) {
+    [] (const Point &) {
         game.fade_mgr.start_fade(false, [] () {
             game.change_state(game.states.gui_ed);
         });
@@ -610,9 +610,9 @@ void title_screen_state::init_gui_make_page() {
     
     //Back button.
     make_gui.back_item =
-        new button_gui_item("Back", game.sys_content.fnt_area_name);
+        new ButtonGuiItem("Back", game.sys_content.fnt_area_name);
     make_gui.back_item->on_activate =
-    [this] (const point &) {
+    [this] (const Point &) {
         make_gui.responsive = false;
         make_gui.start_animation(
             GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
@@ -634,10 +634,10 @@ void title_screen_state::init_gui_make_page() {
     gui_add_back_input_icon(&make_gui);
     
     //More bullet point.
-    bullet_gui_item* more_bullet =
-        new bullet_gui_item("More...", game.sys_content.fnt_standard);
+    BulletGuiItem* more_bullet =
+        new BulletGuiItem("More...", game.sys_content.fnt_standard);
     more_bullet->on_activate =
-    [] (const point &) {
+    [] (const Point &) {
         open_manual("making.html");
     };
     more_bullet->on_get_tooltip =
@@ -649,8 +649,8 @@ void title_screen_state::init_gui_make_page() {
     make_gui.add_item(more_bullet, "more");
     
     //Tooltip text.
-    tooltip_gui_item* tooltip_text =
-        new tooltip_gui_item(&make_gui);
+    TooltipGuiItem* tooltip_text =
+        new TooltipGuiItem(&make_gui);
     make_gui.add_item(tooltip_text, "tooltip");
     
     //Finishing touches.
@@ -663,11 +663,11 @@ void title_screen_state::init_gui_make_page() {
 /**
  * @brief Loads the GUI elements for the main menu's play page.
  */
-void title_screen_state::init_gui_play_page() {
-    data_node* gui_file = &game.content.gui_defs.list[TITLE_SCREEN::PLAY_GUI_FILE_NAME];
+void TitleScreen::init_gui_play_page() {
+    DataNode* gui_file = &game.content.gui_defs.list[TITLE_SCREEN::PLAY_GUI_FILE_NAME];
     
     //Button icon positions.
-    data_node* icons_node = gui_file->get_child_by_name("icons_to_the_left");
+    DataNode* icons_node = gui_file->get_child_by_name("icons_to_the_left");
     
 #define icon_left(name, def) s2b(icons_node->get_child_by_name(name)-> \
                                  get_value_or_default(def))
@@ -686,10 +686,10 @@ void title_screen_state::init_gui_play_page() {
     play_gui.read_coords(gui_file->get_child_by_name("positions"));
     
     //Play a simple area button.
-    button_gui_item* simple_button =
-        new button_gui_item("Simple areas", game.sys_content.fnt_area_name);
+    ButtonGuiItem* simple_button =
+        new ButtonGuiItem("Simple areas", game.sys_content.fnt_area_name);
     simple_button->on_draw =
-    [ = ] (const point & center, const point & size) {
+    [ = ] (const Point & center, const Point & size) {
         draw_menu_button_icon(
             MENU_ICON_SIMPLE_AREAS, center, size, simple_areas_icon_left
         );
@@ -701,7 +701,7 @@ void title_screen_state::init_gui_play_page() {
         );
     };
     simple_button->on_activate =
-    [] (const point &) {
+    [] (const Point &) {
         game.fade_mgr.start_fade(false, [] () {
             game.states.annex_screen->area_menu_area_type =
                 AREA_TYPE_SIMPLE;
@@ -715,10 +715,10 @@ void title_screen_state::init_gui_play_page() {
     play_gui.add_item(simple_button, "simple");
     
     //Play a mission area button.
-    button_gui_item* mission_button =
-        new button_gui_item("Missions", game.sys_content.fnt_area_name);
+    ButtonGuiItem* mission_button =
+        new ButtonGuiItem("Missions", game.sys_content.fnt_area_name);
     mission_button->on_draw =
-    [ = ] (const point & center, const point & size) {
+    [ = ] (const Point & center, const Point & size) {
         draw_menu_button_icon(
             MENU_ICON_MISSIONS, center, size, missions_icon_left
         );
@@ -730,7 +730,7 @@ void title_screen_state::init_gui_play_page() {
         );
     };
     mission_button->on_activate =
-    [] (const point &) {
+    [] (const Point &) {
         game.fade_mgr.start_fade(false, [] () {
             game.states.annex_screen->area_menu_area_type =
                 AREA_TYPE_MISSION;
@@ -749,9 +749,9 @@ void title_screen_state::init_gui_play_page() {
     
     //Back button.
     play_gui.back_item =
-        new button_gui_item("Back", game.sys_content.fnt_area_name);
+        new ButtonGuiItem("Back", game.sys_content.fnt_area_name);
     play_gui.back_item->on_activate =
-    [this] (const point &) {
+    [this] (const Point &) {
         play_gui.responsive = false;
         play_gui.start_animation(
             GUI_MANAGER_ANIM_CENTER_TO_LEFT,
@@ -773,8 +773,8 @@ void title_screen_state::init_gui_play_page() {
     gui_add_back_input_icon(&play_gui);
     
     //Tooltip text.
-    tooltip_gui_item* tooltip_text =
-        new tooltip_gui_item(&play_gui);
+    TooltipGuiItem* tooltip_text =
+        new TooltipGuiItem(&play_gui);
     play_gui.add_item(tooltip_text, "tooltip");
     
     //Finishing touches.
@@ -787,8 +787,8 @@ void title_screen_state::init_gui_play_page() {
 /**
  * @brief Loads the GUI elements for the main menu's tutorial question page.
  */
-void title_screen_state::init_gui_tutorial_page() {
-    data_node* gui_file = &game.content.gui_defs.list[TITLE_SCREEN::TUTORIAL_GUI_FILE_NAME];
+void TitleScreen::init_gui_tutorial_page() {
+    DataNode* gui_file = &game.content.gui_defs.list[TITLE_SCREEN::TUTORIAL_GUI_FILE_NAME];
     
     //Menu items.
     tutorial_gui.register_coords("question", 50,     60, 60,  12.5);
@@ -799,8 +799,8 @@ void title_screen_state::init_gui_tutorial_page() {
     tutorial_gui.read_coords(gui_file->get_child_by_name("positions"));
     
     //Question text.
-    text_gui_item* question_text =
-        new text_gui_item(
+    TextGuiItem* question_text =
+        new TextGuiItem(
         "If you're new to Pikifen, it is recommended to play the "
         "\"Tutorial Meadow\" mission first.\n\n"
         "Do you want to play there now?",
@@ -811,9 +811,9 @@ void title_screen_state::init_gui_tutorial_page() {
     
     //No button.
     tutorial_gui.back_item =
-        new button_gui_item("No", game.sys_content.fnt_standard);
+        new ButtonGuiItem("No", game.sys_content.fnt_standard);
     tutorial_gui.back_item->on_activate =
-    [this] (const point &) {
+    [this] (const Point &) {
         tutorial_gui.responsive = false;
         tutorial_gui.start_animation(
             GUI_MANAGER_ANIM_CENTER_TO_LEFT,
@@ -836,13 +836,13 @@ void title_screen_state::init_gui_tutorial_page() {
     gui_add_back_input_icon(&tutorial_gui, "no_input");
     
     //Yes button.
-    button_gui_item* yes_button =
-        new button_gui_item("Yes", game.sys_content.fnt_standard);
+    ButtonGuiItem* yes_button =
+        new ButtonGuiItem("Yes", game.sys_content.fnt_standard);
     yes_button->on_activate =
-    [] (const point &) {
+    [] (const Point &) {
         game.states.gameplay->path_of_area_to_load =
             game.content.areas.manifest_to_path(
-                content_manifest(
+                ContentManifest(
                     FOLDER_NAMES::TUTORIAL_AREA, "", FOLDER_NAMES::BASE_PACK
                 ), AREA_TYPE_MISSION
             );
@@ -858,8 +858,8 @@ void title_screen_state::init_gui_tutorial_page() {
     tutorial_gui.add_item(yes_button, "yes");
     
     //Tooltip text.
-    tooltip_gui_item* tooltip_text =
-        new tooltip_gui_item(&tutorial_gui);
+    TooltipGuiItem* tooltip_text =
+        new TooltipGuiItem(&tutorial_gui);
     tutorial_gui.add_item(tooltip_text, "tooltip");
     
     //Finishing touches.
@@ -872,7 +872,7 @@ void title_screen_state::init_gui_tutorial_page() {
 /**
  * @brief Loads the title screen into memory.
  */
-void title_screen_state::load() {
+void TitleScreen::load() {
     draw_loading_screen("", "", 1.0);
     al_flip_display();
     
@@ -908,25 +908,25 @@ void title_screen_state::load() {
     }
     page_to_load = MAIN_MENU_PAGE_MAIN;
     
-    data_node* settings_file = &game.content.gui_defs.list[TITLE_SCREEN::GUI_FILE_NAME];
+    DataNode* settings_file = &game.content.gui_defs.list[TITLE_SCREEN::GUI_FILE_NAME];
     
     //Resources.
     bmp_menu_bg = game.content.bitmaps.list.get(game.sys_content_names.bmp_title_screen_bg);
     
     //Logo pikmin.
-    data_node* logo_node = settings_file->get_child_by_name("logo");
-    reader_setter logo_rs(logo_node);
+    DataNode* logo_node = settings_file->get_child_by_name("logo");
+    ReaderSetter logo_rs(logo_node);
     
-    data_node* pik_types_node =
+    DataNode* pik_types_node =
         logo_node->get_child_by_name("pikmin_types");
     for(size_t t = 0; t < pik_types_node->get_nr_of_children(); t++) {
-        data_node* type_node = pik_types_node->get_child(t);
+        DataNode* type_node = pik_types_node->get_child(t);
         if(type_node->name.empty()) continue;
         logo_type_bitmaps[type_node->name[0]] =
             game.content.bitmaps.list.get(type_node->value, type_node);
     }
     
-    data_node* map_node =
+    DataNode* map_node =
         logo_node->get_child_by_name("map");
     size_t map_total_rows = map_node->get_nr_of_children();
     size_t map_total_cols = 0;
@@ -962,18 +962,18 @@ void title_screen_state::load() {
                 break;
             }
             
-            logo_pik pik;
+            LogoPikmin pik;
             
-            point min_pos = logo_min_screen_limit;
+            Point min_pos = logo_min_screen_limit;
             min_pos.x *= game.win_w / 100.0f;
             min_pos.y *= game.win_h / 100.0f;
-            point max_pos = logo_max_screen_limit;
+            Point max_pos = logo_max_screen_limit;
             max_pos.x *= game.win_w / 100.0f;
             max_pos.y *= game.win_h / 100.0f;
             
             pik.top = logo_type_bitmaps[row[c]];
             pik.destination =
-                point(
+                Point(
                     min_pos.x +
                     (max_pos.x - min_pos.x) *
                     (c / (float) map_total_cols),
@@ -986,7 +986,7 @@ void title_screen_state::load() {
             unsigned char v_side = game.rng.i(0, 1);
             
             pik.pos =
-                point(
+                Point(
                     game.rng.f(0, game.win_w * 0.5),
                     game.rng.f(0, game.win_h * 0.5)
                 );
@@ -1024,7 +1024,7 @@ void title_screen_state::load() {
 /**
  * @brief Unloads the title screen from memory.
  */
-void title_screen_state::unload() {
+void TitleScreen::unload() {
     //Resources.
     game.content.bitmaps.list.free(bmp_menu_bg);
     bmp_menu_bg = nullptr;

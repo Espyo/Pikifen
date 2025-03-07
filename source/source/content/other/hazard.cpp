@@ -23,17 +23,17 @@ using std::vector;
  *
  * @param node Data node to load from.
  */
-void hazard::load_from_data_node(data_node* node) {
+void Hazard::load_from_data_node(DataNode* node) {
     //Content metadata.
     load_metadata_from_data_node(node);
     
     //Standard data.
-    reader_setter rs(node);
+    ReaderSetter rs(node);
     
     string effects_str;
     string liquid_str;
-    data_node* effects_node = nullptr;
-    data_node* liquid_node = nullptr;
+    DataNode* effects_node = nullptr;
+    DataNode* liquid_node = nullptr;
     
     rs.set("blocks_paths", blocks_paths);
     rs.set("color", main_color);

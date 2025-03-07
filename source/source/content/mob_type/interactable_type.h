@@ -18,7 +18,7 @@
  * @brief A type of "interactable" mob. This can be a readable sign,
  * a switch, etc.
  */
-class interactable_type : public mob_type {
+class InteractableType : public MobType {
 
 public:
 
@@ -33,7 +33,7 @@ public:
     
     //--- Function declarations ---
     
-    interactable_type();
-    void load_cat_properties(data_node* file) override;
+    InteractableType();
+    void load_cat_properties(DataNode* file) override;
     
 };

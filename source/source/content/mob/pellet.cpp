@@ -21,8 +21,8 @@
  * @param type Pellet type this mob belongs to.
  * @param angle Starting angle.
  */
-pellet::pellet(const point &pos, pellet_type* type, float angle) :
-    mob(pos, type, angle),
+Pellet::Pellet(const Point &pos, PelletType* type, float angle) :
+    Mob(pos, type, angle),
     pel_type(type) {
     
     become_carriable(CARRY_DESTINATION_ONION);
@@ -36,14 +36,14 @@ pellet::pellet(const point &pos, pellet_type* type, float angle) :
 /**
  * @brief Draws a pellet, with the number and all.
  */
-void pellet::draw_mob() {
-    sprite* cur_s_ptr;
-    sprite* next_s_ptr;
+void Pellet::draw_mob() {
+    Sprite* cur_s_ptr;
+    Sprite* next_s_ptr;
     float interpolation_factor;
     get_sprite_data(&cur_s_ptr, &next_s_ptr, &interpolation_factor);
     if(!cur_s_ptr) return;
     
-    bitmap_effect_t eff;
+    BitmapEffect eff;
     get_sprite_bitmap_effects(
         cur_s_ptr, next_s_ptr, interpolation_factor,
         &eff,
@@ -55,7 +55,7 @@ void pellet::draw_mob() {
         SPRITE_BMP_EFFECT_CARRY
     );
     
-    point bmp_size = get_bitmap_dimensions(cur_s_ptr->bitmap);
+    Point bmp_size = get_bitmap_dimensions(cur_s_ptr->bitmap);
     eff.scale *= radius * 2.0f / bmp_size;
     
     draw_bitmap_with_effects(cur_s_ptr->bitmap, eff);

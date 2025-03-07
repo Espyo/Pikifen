@@ -64,11 +64,11 @@ const float ZOOM_MIN_LEVEL = 0.05f;
 /**
  * @brief Constructs a new animation editor object.
  */
-animation_editor::animation_editor() :
+AnimationEditor::AnimationEditor() :
     load_dialog_picker(this) {
     
     comparison_blink_timer =
-        timer(
+        Timer(
             0.6,
     [this] () {
         this->comparison_blink_show = !this->comparison_blink_show;
@@ -82,30 +82,30 @@ animation_editor::animation_editor() :
     
 #define register_cmd(ptr, name) \
     commands.push_back( \
-                        command(std::bind((ptr), this, std::placeholders::_1), \
+                        Command(std::bind((ptr), this, std::placeholders::_1), \
                                 (name)) \
                       );
     
-    register_cmd(&animation_editor::grid_toggle_cmd, "grid_toggle");
-    register_cmd(&animation_editor::hitboxes_toggle_cmd, "hitboxes_toggle");
+    register_cmd(&AnimationEditor::grid_toggle_cmd, "grid_toggle");
+    register_cmd(&AnimationEditor::hitboxes_toggle_cmd, "hitboxes_toggle");
     register_cmd(
-        &animation_editor::leader_silhouette_toggle_cmd,
+        &AnimationEditor::leader_silhouette_toggle_cmd,
         "leader_silhouette_toggle"
     );
-    register_cmd(&animation_editor::delete_anim_db_cmd, "delete_anim_db");
-    register_cmd(&animation_editor::load_cmd, "load");
-    register_cmd(&animation_editor::mob_radius_toggle_cmd, "mob_radius_toggle");
-    register_cmd(&animation_editor::play_pause_anim_cmd, "play_pause_anim");
-    register_cmd(&animation_editor::restart_anim_cmd, "restart_anim");
-    register_cmd(&animation_editor::quit_cmd, "quit");
-    register_cmd(&animation_editor::reload_cmd, "reload");
-    register_cmd(&animation_editor::save_cmd, "save");
+    register_cmd(&AnimationEditor::delete_anim_db_cmd, "delete_anim_db");
+    register_cmd(&AnimationEditor::load_cmd, "load");
+    register_cmd(&AnimationEditor::mob_radius_toggle_cmd, "mob_radius_toggle");
+    register_cmd(&AnimationEditor::play_pause_anim_cmd, "play_pause_anim");
+    register_cmd(&AnimationEditor::restart_anim_cmd, "restart_anim");
+    register_cmd(&AnimationEditor::quit_cmd, "quit");
+    register_cmd(&AnimationEditor::reload_cmd, "reload");
+    register_cmd(&AnimationEditor::save_cmd, "save");
     register_cmd(
-        &animation_editor::zoom_and_pos_reset_cmd, "zoom_and_pos_reset"
+        &AnimationEditor::zoom_and_pos_reset_cmd, "zoom_and_pos_reset"
     );
-    register_cmd(&animation_editor::zoom_everything_cmd, "zoom_everything");
-    register_cmd(&animation_editor::zoom_in_cmd, "zoom_in");
-    register_cmd(&animation_editor::zoom_out_cmd, "zoom_out");
+    register_cmd(&AnimationEditor::zoom_everything_cmd, "zoom_everything");
+    register_cmd(&AnimationEditor::zoom_in_cmd, "zoom_in");
+    register_cmd(&AnimationEditor::zoom_out_cmd, "zoom_out");
     
 #undef register_cmd
     
@@ -118,15 +118,15 @@ animation_editor::animation_editor() :
  *
  * @param instant If true, change the camera instantly.
  */
-void animation_editor::center_camera_on_sprite_bitmap(bool instant) {
+void AnimationEditor::center_camera_on_sprite_bitmap(bool instant) {
     if(cur_sprite && cur_sprite->parent_bmp) {
-        point bmp_size = get_bitmap_dimensions(cur_sprite->parent_bmp);
-        point bmp_pos = 0.0f - bmp_size / 2.0f;
+        Point bmp_size = get_bitmap_dimensions(cur_sprite->parent_bmp);
+        Point bmp_pos = 0.0f - bmp_size / 2.0f;
         
         center_camera(bmp_pos, bmp_pos + bmp_size);
     } else {
         game.cam.target_zoom = 1.0f;
-        game.cam.target_pos = point();
+        game.cam.target_pos = Point();
     }
     
     if(instant) {
@@ -142,7 +142,7 @@ void animation_editor::center_camera_on_sprite_bitmap(bool instant) {
  *
  * @param new_state The new state.
  */
-void animation_editor::change_state(const EDITOR_STATE new_state) {
+void AnimationEditor::change_state(const EDITOR_STATE new_state) {
     comparison = false;
     comparison_sprite = nullptr;
     state = new_state;
@@ -153,7 +153,7 @@ void animation_editor::change_state(const EDITOR_STATE new_state) {
 /**
  * @brief Code to run when the load dialog is closed.
  */
-void animation_editor::close_load_dialog() {
+void AnimationEditor::close_load_dialog() {
     if(manifest.internal_name.empty() && dialogs.size() == 1) {
         //If nothing got loaded, we can't return to the editor proper.
         //Quit out, since most of the time that's the user's intent. (e.g.
@@ -168,7 +168,7 @@ void animation_editor::close_load_dialog() {
 /**
  * @brief Code to run when the options dialog is closed.
  */
-void animation_editor::close_options_dialog() {
+void AnimationEditor::close_options_dialog() {
     save_options();
 }
 
@@ -178,7 +178,7 @@ void animation_editor::close_options_dialog() {
  *
  * @param path Path to the requested animation database's file.
  */
-void animation_editor::create_anim_db(const string &path) {
+void AnimationEditor::create_anim_db(const string &path) {
     setup_for_new_anim_db_pre();
     changes_mgr.mark_as_non_existent();
     
@@ -198,21 +198,21 @@ void animation_editor::create_anim_db(const string &path) {
  *
  * @param input_value Value of the player input for the command.
  */
-void animation_editor::delete_anim_db_cmd(float input_value) {
+void AnimationEditor::delete_anim_db_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
     open_dialog(
         "Delete animation database?",
-        std::bind(&animation_editor::process_gui_delete_anim_db_dialog, this)
+        std::bind(&AnimationEditor::process_gui_delete_anim_db_dialog, this)
     );
-    dialogs.back()->custom_size = point(600, 0);
+    dialogs.back()->custom_size = Point(600, 0);
 }
 
 
 /**
  * @brief Deletes the current animation database.
  */
-void animation_editor::delete_current_anim_db() {
+void AnimationEditor::delete_current_anim_db() {
     string orig_internal_name = manifest.internal_name;
     bool go_to_load_dialog = true;
     bool success = false;
@@ -293,8 +293,8 @@ void animation_editor::delete_current_anim_db() {
 /**
  * @brief Handles the logic part of the main loop of the animation editor.
  */
-void animation_editor::do_logic() {
-    editor::do_logic_pre();
+void AnimationEditor::do_logic() {
+    Editor::do_logic_pre();
     
     process_gui();
     
@@ -302,7 +302,7 @@ void animation_editor::do_logic() {
         anim_playing && state == EDITOR_STATE_ANIMATION &&
         cur_anim_i.valid_frame()
     ) {
-        frame* f = &cur_anim_i.cur_anim->frames[cur_anim_i.cur_frame_idx];
+        Frame* f = &cur_anim_i.cur_anim->frames[cur_anim_i.cur_frame_idx];
         if(f->duration != 0) {
             vector<size_t> frame_sounds;
             cur_anim_i.tick(game.delta_t, nullptr, &frame_sounds);
@@ -323,7 +323,7 @@ void animation_editor::do_logic() {
         comparison_blink_show = true;
     }
     
-    editor::do_logic_post();
+    Editor::do_logic_post();
 }
 
 
@@ -333,7 +333,7 @@ void animation_editor::do_logic() {
  * @param parent_list Unused.
  * @param cmd Unused.
  */
-void animation_editor::draw_canvas_imgui_callback(
+void AnimationEditor::draw_canvas_imgui_callback(
     const ImDrawList* parent_list, const ImDrawCmd* cmd
 ) {
     game.states.animation_ed->draw_canvas();
@@ -346,7 +346,7 @@ void animation_editor::draw_canvas_imgui_callback(
  *
  * @return The time.
  */
-float animation_editor::get_cursor_timeline_time() {
+float AnimationEditor::get_cursor_timeline_time() {
     if(!cur_anim_i.valid_frame()) {
         return 0.0f;
     }
@@ -365,9 +365,9 @@ float animation_editor::get_cursor_timeline_time() {
  * @param path Path to the file.
  * @return The tooltip text.
  */
-string animation_editor::get_file_tooltip(const string &path) const {
+string AnimationEditor::get_file_tooltip(const string &path) const {
     if(path.find(FOLDER_PATHS_FROM_PACK::MOB_TYPES + "/") != string::npos) {
-        content_manifest temp_manif;
+        ContentManifest temp_manif;
         string cat;
         string type;
         game.content.mob_anim_dbs.path_to_manifest(
@@ -378,7 +378,7 @@ string animation_editor::get_file_tooltip(const string &path) const {
             "Pack: " + game.content.packs.list[temp_manif.pack].name + "\n"
             "Mob's internal name: " + type + " (category " + cat + ")";
     } else {
-        content_manifest temp_manif;
+        ContentManifest temp_manif;
         game.content.global_anim_dbs.path_to_manifest(
             path, &temp_manif
         );
@@ -396,7 +396,7 @@ string animation_editor::get_file_tooltip(const string &path) const {
  *
  * @return The prefix.
  */
-string animation_editor::get_history_option_prefix() const {
+string AnimationEditor::get_history_option_prefix() const {
     return "animation_editor_history_";
 }
 
@@ -406,7 +406,7 @@ string animation_editor::get_history_option_prefix() const {
  *
  * @return The name.
  */
-string animation_editor::get_name() const {
+string AnimationEditor::get_name() const {
     return "animation editor";
 }
 
@@ -416,7 +416,7 @@ string animation_editor::get_name() const {
  *
  * @return The name.
  */
-string animation_editor::get_name_for_history() const {
+string AnimationEditor::get_name_for_history() const {
     if(loaded_mob_type) {
         return
             loaded_mob_type->name.empty() ?
@@ -437,7 +437,7 @@ string animation_editor::get_name_for_history() const {
  *
  * @return The path.
  */
-string animation_editor::get_opened_content_path() const {
+string AnimationEditor::get_opened_content_path() const {
     return manifest.path;
 }
 
@@ -447,8 +447,8 @@ string animation_editor::get_opened_content_path() const {
  *
  * @param name Name of the animation to import.
  */
-void animation_editor::import_animation_data(const string &name) {
-    animation* a = db.animations[db.find_animation(name)];
+void AnimationEditor::import_animation_data(const string &name) {
+    Animation* a = db.animations[db.find_animation(name)];
     
     cur_anim_i.cur_anim->frames = a->frames;
     cur_anim_i.cur_anim->hit_rate = a->hit_rate;
@@ -463,8 +463,8 @@ void animation_editor::import_animation_data(const string &name) {
  *
  * @param name Name of the sprite to import from.
  */
-void animation_editor::import_sprite_bmp_data(const string &name) {
-    sprite* s = db.sprites[db.find_sprite(name)];
+void AnimationEditor::import_sprite_bmp_data(const string &name) {
+    Sprite* s = db.sprites[db.find_sprite(name)];
     
     cur_sprite->set_bitmap(s->bmp_name, s->bmp_pos, s->bmp_size);
     
@@ -477,7 +477,7 @@ void animation_editor::import_sprite_bmp_data(const string &name) {
  *
  * @param name Name of the animation to import.
  */
-void animation_editor::import_sprite_hitbox_data(const string &name) {
+void AnimationEditor::import_sprite_hitbox_data(const string &name) {
     for(size_t s = 0; s < db.sprites.size(); s++) {
         if(db.sprites[s]->name == name) {
             cur_sprite->hitboxes = db.sprites[s]->hitboxes;
@@ -495,8 +495,8 @@ void animation_editor::import_sprite_hitbox_data(const string &name) {
  *
  * @param name Name of the animation to import.
  */
-void animation_editor::import_sprite_top_data(const string &name) {
-    sprite* s = db.sprites[db.find_sprite(name)];
+void AnimationEditor::import_sprite_top_data(const string &name) {
+    Sprite* s = db.sprites[db.find_sprite(name)];
     cur_sprite->top_visible = s->top_visible;
     cur_sprite->top_pos = s->top_pos;
     cur_sprite->top_size = s->top_size;
@@ -512,8 +512,8 @@ void animation_editor::import_sprite_top_data(const string &name) {
  *
  * @param name Name of the animation to import.
  */
-void animation_editor::import_sprite_transformation_data(const string &name) {
-    sprite* s = db.sprites[db.find_sprite(name)];
+void AnimationEditor::import_sprite_transformation_data(const string &name) {
+    Sprite* s = db.sprites[db.find_sprite(name)];
     cur_sprite->offset = s->offset;
     cur_sprite->scale = s->scale;
     cur_sprite->angle = s->angle;
@@ -529,7 +529,7 @@ void animation_editor::import_sprite_transformation_data(const string &name) {
  *
  * @return Whether the cursor is inside.
  */
-bool animation_editor::is_cursor_in_timeline() {
+bool AnimationEditor::is_cursor_in_timeline() {
     return
         state == EDITOR_STATE_ANIMATION &&
         game.mouse_cursor.s_pos.x >= canvas_tl.x &&
@@ -543,8 +543,8 @@ bool animation_editor::is_cursor_in_timeline() {
 /**
  * @brief Loads the animation editor.
  */
-void animation_editor::load() {
-    editor::load();
+void AnimationEditor::load() {
+    Editor::load();
     
     //Load necessary game content.
     game.content.reload_packs();
@@ -599,7 +599,7 @@ void animation_editor::load() {
  * @param should_update_history If true, this loading process should update
  * the user's file open history.
  */
-void animation_editor::load_anim_db_file(
+void AnimationEditor::load_anim_db_file(
     const string &path, bool should_update_history
 ) {
     //Setup.
@@ -608,7 +608,7 @@ void animation_editor::load_anim_db_file(
     
     //Load.
     manifest.fill_from_path(path);
-    data_node file = data_node(manifest.path);
+    DataNode file = DataNode(manifest.path);
     
     if(!file.file_was_opened) {
         open_message_dialog(
@@ -664,9 +664,9 @@ void animation_editor::load_anim_db_file(
  *
  * @param ev Event to handle.
  */
-void animation_editor::pan_cam(const ALLEGRO_EVENT &ev) {
+void AnimationEditor::pan_cam(const ALLEGRO_EVENT &ev) {
     game.cam.set_pos(
-        point(
+        Point(
             game.cam.pos.x - ev.mouse.dx / game.cam.zoom,
             game.cam.pos.y - ev.mouse.dy / game.cam.zoom
         )
@@ -683,12 +683,12 @@ void animation_editor::pan_cam(const ALLEGRO_EVENT &ev) {
  * @param info Unused.
  * @param is_new Is this a new animation or an existing one?
  */
-void animation_editor::pick_animation(
+void AnimationEditor::pick_animation(
     const string &name, const string &top_cat, const string &sec_cat,
     void* info, bool is_new
 ) {
     if(is_new) {
-        db.animations.push_back(new animation(name));
+        db.animations.push_back(new Animation(name));
         db.sort_alphabetically();
         changes_mgr.mark_as_changed();
         set_status("Created animation \"" + name + "\".");
@@ -708,13 +708,13 @@ void animation_editor::pick_animation(
  * @param info Unused.
  * @param is_new Is this a new sprite or an existing one?
  */
-void animation_editor::pick_sprite(
+void AnimationEditor::pick_sprite(
     const string &name, const string &top_cat, const string &sec_cat,
     void* info, bool is_new
 ) {
     if(is_new) {
         if(db.find_sprite(name) == INVALID) {
-            db.sprites.push_back(new sprite(name));
+            db.sprites.push_back(new Sprite(name));
             db.sprites.back()->create_hitboxes(
                 &db,
                 loaded_mob_type ? loaded_mob_type->height : 128,
@@ -730,7 +730,7 @@ void animation_editor::pick_sprite(
     
     if(is_new) {
         //New sprite. Suggest file name.
-        cur_sprite->set_bitmap(last_spritesheet_used, point(), point());
+        cur_sprite->set_bitmap(last_spritesheet_used, Point(), Point());
     }
 }
 
@@ -740,9 +740,9 @@ void animation_editor::pick_sprite(
  *
  * @param sound_idx Index of the sound data in the mob type's sound list.
  */
-void animation_editor::play_sound(size_t sound_idx) {
+void AnimationEditor::play_sound(size_t sound_idx) {
     if(!loaded_mob_type) return;
-    mob_type::sound_t* sound_data = &loaded_mob_type->sounds[sound_idx];
+    MobType::Sound* sound_data = &loaded_mob_type->sounds[sound_idx];
     if(!sound_data->sample) return;
     game.audio.create_ui_sound_source(
         sound_data->sample,
@@ -756,7 +756,7 @@ void animation_editor::play_sound(size_t sound_idx) {
  *
  * @param input_value Value of the player input for the command.
  */
-void animation_editor::grid_toggle_cmd(float input_value) {
+void AnimationEditor::grid_toggle_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
     grid_visible = !grid_visible;
@@ -770,7 +770,7 @@ void animation_editor::grid_toggle_cmd(float input_value) {
  *
  * @param input_value Value of the player input for the command.
  */
-void animation_editor::hitboxes_toggle_cmd(float input_value) {
+void AnimationEditor::hitboxes_toggle_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
     hitboxes_visible = !hitboxes_visible;
@@ -784,7 +784,7 @@ void animation_editor::hitboxes_toggle_cmd(float input_value) {
  *
  * @param input_value Value of the player input for the command.
  */
-void animation_editor::leader_silhouette_toggle_cmd(float input_value) {
+void AnimationEditor::leader_silhouette_toggle_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
     leader_silhouette_visible = !leader_silhouette_visible;
@@ -798,14 +798,14 @@ void animation_editor::leader_silhouette_toggle_cmd(float input_value) {
  *
  * @param input_value Value of the player input for the command.
  */
-void animation_editor::load_cmd(float input_value) {
+void AnimationEditor::load_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
     changes_mgr.ask_if_unsaved(
         load_widget_pos,
         "loading a file", "load",
-        std::bind(&animation_editor::open_load_dialog, this),
-        std::bind(&animation_editor::save_anim_db, this)
+        std::bind(&AnimationEditor::open_load_dialog, this),
+        std::bind(&AnimationEditor::save_anim_db, this)
     );
 }
 
@@ -815,7 +815,7 @@ void animation_editor::load_cmd(float input_value) {
  *
  * @param input_value Value of the player input for the command.
  */
-void animation_editor::mob_radius_toggle_cmd(float input_value) {
+void AnimationEditor::mob_radius_toggle_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
     mob_radius_visible = !mob_radius_visible;
@@ -833,11 +833,11 @@ void animation_editor::mob_radius_toggle_cmd(float input_value) {
  * @param info Pointer to the file's content manifest.
  * @param is_new Unused.
  */
-void animation_editor::pick_anim_db_file(
+void AnimationEditor::pick_anim_db_file(
     const string &name, const string &top_cat, const string &sec_cat,
     void* info, bool is_new
 ) {
-    content_manifest* temp_manif = (content_manifest*) info;
+    ContentManifest* temp_manif = (ContentManifest*) info;
     string path = temp_manif->path;
     auto really_load = [ = ] () {
         close_top_dialog();
@@ -860,7 +860,7 @@ void animation_editor::pick_anim_db_file(
  *
  * @param input_value Value of the player input for the command.
  */
-void animation_editor::play_pause_anim_cmd(float input_value) {
+void AnimationEditor::play_pause_anim_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
     if(!cur_anim_i.valid_frame()) {
@@ -882,14 +882,14 @@ void animation_editor::play_pause_anim_cmd(float input_value) {
  *
  * @param input_value Value of the player input for the command.
  */
-void animation_editor::quit_cmd(float input_value) {
+void AnimationEditor::quit_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
     changes_mgr.ask_if_unsaved(
         quit_widget_pos,
         "quitting", "quit",
-        std::bind(&animation_editor::leave, this),
-        std::bind(&animation_editor::save_anim_db, this)
+        std::bind(&AnimationEditor::leave, this),
+        std::bind(&AnimationEditor::save_anim_db, this)
     );
 }
 
@@ -899,7 +899,7 @@ void animation_editor::quit_cmd(float input_value) {
  *
  * @param input_value Value of the player input for the command.
  */
-void animation_editor::reload_cmd(float input_value) {
+void AnimationEditor::reload_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
     if(!changes_mgr.exists_on_disk()) return;
@@ -908,7 +908,7 @@ void animation_editor::reload_cmd(float input_value) {
         reload_widget_pos,
         "reloading the current file", "reload",
     [this] () { load_anim_db_file(string(manifest.path), false); },
-    std::bind(&animation_editor::save_anim_db, this)
+    std::bind(&AnimationEditor::save_anim_db, this)
     );
 }
 
@@ -918,7 +918,7 @@ void animation_editor::reload_cmd(float input_value) {
  *
  * @param input_value Value of the player input for the command.
  */
-void animation_editor::restart_anim_cmd(float input_value) {
+void AnimationEditor::restart_anim_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
     if(!cur_anim_i.valid_frame()) {
@@ -937,7 +937,7 @@ void animation_editor::restart_anim_cmd(float input_value) {
  *
  * @param input_value Value of the player input for the command.
  */
-void animation_editor::save_cmd(float input_value) {
+void AnimationEditor::save_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
     save_anim_db();
@@ -949,11 +949,11 @@ void animation_editor::save_cmd(float input_value) {
  *
  * @param input_value Value of the player input for the command.
  */
-void animation_editor::zoom_and_pos_reset_cmd(float input_value) {
+void AnimationEditor::zoom_and_pos_reset_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
     if(game.cam.target_zoom == 1.0f) {
-        game.cam.target_pos = point();
+        game.cam.target_pos = Point();
     } else {
         game.cam.target_zoom = 1.0f;
     }
@@ -965,10 +965,10 @@ void animation_editor::zoom_and_pos_reset_cmd(float input_value) {
  *
  * @param input_value Value of the player input for the command.
  */
-void animation_editor::zoom_everything_cmd(float input_value) {
+void AnimationEditor::zoom_everything_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
-    sprite* s_ptr = cur_sprite;
+    Sprite* s_ptr = cur_sprite;
     if(!s_ptr && cur_anim_i.valid_frame()) {
         const string &name =
             cur_anim_i.cur_anim->frames[cur_anim_i.cur_frame_idx].sprite_name;
@@ -977,14 +977,14 @@ void animation_editor::zoom_everything_cmd(float input_value) {
     }
     if(!s_ptr || !s_ptr->bitmap) return;
     
-    point cmin, cmax;
+    Point cmin, cmax;
     get_transformed_rectangle_bounding_box(
         s_ptr->offset, s_ptr->bmp_size * s_ptr->scale,
         s_ptr->angle, &cmin, &cmax
     );
     
     if(s_ptr->top_visible) {
-        point top_min, top_max;
+        Point top_min, top_max;
         get_transformed_rectangle_bounding_box(
             s_ptr->top_pos, s_ptr->top_size,
             s_ptr->top_angle,
@@ -995,7 +995,7 @@ void animation_editor::zoom_everything_cmd(float input_value) {
     }
     
     for(size_t h = 0; h < s_ptr->hitboxes.size(); h++) {
-        hitbox* h_ptr = &s_ptr->hitboxes[h];
+        Hitbox* h_ptr = &s_ptr->hitboxes[h];
         update_min_coords(cmin, h_ptr->pos - h_ptr->radius);
         update_max_coords(cmax, h_ptr->pos + h_ptr->radius);
     }
@@ -1009,7 +1009,7 @@ void animation_editor::zoom_everything_cmd(float input_value) {
  *
  * @param input_value Value of the player input for the command.
  */
-void animation_editor::zoom_in_cmd(float input_value) {
+void AnimationEditor::zoom_in_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
     game.cam.target_zoom =
@@ -1026,7 +1026,7 @@ void animation_editor::zoom_in_cmd(float input_value) {
  *
  * @param input_value Value of the player input for the command.
  */
-void animation_editor::zoom_out_cmd(float input_value) {
+void AnimationEditor::zoom_out_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
     game.cam.target_zoom =
@@ -1041,7 +1041,7 @@ void animation_editor::zoom_out_cmd(float input_value) {
 /**
  * @brief Reloads all loaded animation databases.
  */
-void animation_editor::reload_anim_dbs() {
+void AnimationEditor::reload_anim_dbs() {
     game.content.unload_all(
     vector<CONTENT_TYPE> {
         CONTENT_TYPE_GLOBAL_ANIMATION,
@@ -1064,8 +1064,8 @@ void animation_editor::reload_anim_dbs() {
  * @param anim Animation to rename.
  * @param new_name Its new name.
  */
-void animation_editor::rename_animation(
-    animation* anim, const string &new_name
+void AnimationEditor::rename_animation(
+    Animation* anim, const string &new_name
 ) {
     //Check if it's valid.
     if(!anim) {
@@ -1113,8 +1113,8 @@ void animation_editor::rename_animation(
  * @param part Body part to rename.
  * @param new_name Its new name.
  */
-void animation_editor::rename_body_part(
-    body_part* part, const string &new_name
+void AnimationEditor::rename_body_part(
+    BodyPart* part, const string &new_name
 ) {
     //Check if it's valid.
     if(!part) {
@@ -1170,8 +1170,8 @@ void animation_editor::rename_body_part(
  * @param spr Sprite to rename.
  * @param new_name Its new name.
  */
-void animation_editor::rename_sprite(
-    sprite* spr, const string &new_name
+void AnimationEditor::rename_sprite(
+    Sprite* spr, const string &new_name
 ) {
     //Check if it's valid.
     if(!spr) {
@@ -1206,7 +1206,7 @@ void animation_editor::rename_sprite(
     //Rename!
     spr->name = new_name;
     for(size_t a = 0; a < db.animations.size(); a++) {
-        animation* a_ptr = db.animations[a];
+        Animation* a_ptr = db.animations[a];
         for(size_t f = 0; f < a_ptr->frames.size(); f++) {
             if(a_ptr->frames[f].sprite_name == old_name) {
                 a_ptr->frames[f].sprite_name = new_name;
@@ -1224,15 +1224,15 @@ void animation_editor::rename_sprite(
 /**
  * @brief Resets the camera's X and Y coordinates.
  */
-void animation_editor::reset_cam_xy() {
-    game.cam.target_pos = point();
+void AnimationEditor::reset_cam_xy() {
+    game.cam.target_pos = Point();
 }
 
 
 /**
  * @brief Resets the camera's zoom.
  */
-void animation_editor::reset_cam_zoom() {
+void AnimationEditor::reset_cam_zoom() {
     zoom_with_cursor(1.0f);
 }
 
@@ -1242,7 +1242,7 @@ void animation_editor::reset_cam_zoom() {
  *
  * @param mult Multiplier to resize by.
  */
-void animation_editor::resize_everything(float mult) {
+void AnimationEditor::resize_everything(float mult) {
     if(mult == 0.0f) {
         set_status("Can't resize everything to size 0!", true);
         return;
@@ -1269,7 +1269,7 @@ void animation_editor::resize_everything(float mult) {
  * @param s Sprite to resize.
  * @param mult Multiplier to resize by.
  */
-void animation_editor::resize_sprite(sprite* s, float mult) {
+void AnimationEditor::resize_sprite(Sprite* s, float mult) {
     if(mult == 0.0f) {
         set_status("Can't resize a sprite to size 0!", true);
         return;
@@ -1285,7 +1285,7 @@ void animation_editor::resize_sprite(sprite* s, float mult) {
     s->top_size *= mult;
     
     for(size_t h = 0; h < s->hitboxes.size(); h++) {
-        hitbox* h_ptr = &s->hitboxes[h];
+        Hitbox* h_ptr = &s->hitboxes[h];
         
         h_ptr->radius = fabs(h_ptr->radius * mult);
         h_ptr->pos    *= mult;
@@ -1301,11 +1301,11 @@ void animation_editor::resize_sprite(sprite* s, float mult) {
  *
  * @return Whether it succeded.
  */
-bool animation_editor::save_anim_db() {
+bool AnimationEditor::save_anim_db() {
     db.engine_version = get_engine_version_string();
     db.sort_alphabetically();
     
-    data_node file_node = data_node("", "");
+    DataNode file_node = DataNode("", "");
     
     db.save_to_data_node(
         &file_node,
@@ -1343,7 +1343,7 @@ bool animation_editor::save_anim_db() {
  * be it from an existing file or from scratch, after the actual creation/load
  * takes place.
  */
-void animation_editor::setup_for_new_anim_db_post() {
+void AnimationEditor::setup_for_new_anim_db_post() {
     vector<string> file_path_parts = split(manifest.path, "/");
     
     if(manifest.path.find(FOLDER_PATHS_FROM_PACK::MOB_TYPES + "/") != string::npos) {
@@ -1352,7 +1352,7 @@ void animation_editor::setup_for_new_anim_db_post() {
             path_parts.size() > 3 &&
             path_parts[path_parts.size() - 1] == FILE_NAMES::MOB_TYPE_ANIMATION
         ) {
-            mob_category* cat =
+            MobCategory* cat =
                 game.mob_categories.get_from_folder_name(
                     path_parts[path_parts.size() - 3]
                 );
@@ -1373,7 +1373,7 @@ void animation_editor::setup_for_new_anim_db_post() {
         loaded_mob_type->category->id == MOB_CATEGORY_PIKMIN
     ) {
         for(size_t m = 0; m < N_MATURITIES; m++) {
-            top_bmp[m] = ((pikmin_type*) loaded_mob_type)->bmp_top[m];
+            top_bmp[m] = ((PikminType*) loaded_mob_type)->bmp_top[m];
         }
     }
     
@@ -1392,7 +1392,7 @@ void animation_editor::setup_for_new_anim_db_post() {
  * be it from an existing file or from scratch, before the actual creation/load
  * takes place.
  */
-void animation_editor::setup_for_new_anim_db_pre() {
+void AnimationEditor::setup_for_new_anim_db_pre() {
     if(state == EDITOR_STATE_SPRITE_BITMAP) {
         //Ideally, states would be handled by a state machine, and this
         //logic would be placed in the sprite bitmap state's "on exit" code...
@@ -1409,7 +1409,7 @@ void animation_editor::setup_for_new_anim_db_pre() {
     cur_hitbox_idx = 0;
     loaded_mob_type = nullptr;
     
-    game.cam.set_pos(point());
+    game.cam.set_pos(Point());
     game.cam.set_zoom(1.0f);
     change_state(EDITOR_STATE_MAIN);
     
@@ -1425,14 +1425,14 @@ void animation_editor::setup_for_new_anim_db_pre() {
  *
  * @param scale Value to set the scales to.
  */
-void animation_editor::set_all_sprite_scales(float scale) {
+void AnimationEditor::set_all_sprite_scales(float scale) {
     if(scale == 0) {
         set_status("The scales can't be 0!", true);
         return;
     }
     
     for(size_t s = 0; s < db.sprites.size(); s++) {
-        sprite* s_ptr = db.sprites[s];
+        Sprite* s_ptr = db.sprites[s];
         s_ptr->scale.x = scale;
         s_ptr->scale.y = scale;
     }
@@ -1449,7 +1449,7 @@ void animation_editor::set_all_sprite_scales(float scale) {
  * Basically, it picks a sprite that's called something similar to
  * the current animation.
  */
-void animation_editor::set_best_frame_sprite() {
+void AnimationEditor::set_best_frame_sprite() {
     if(db.sprites.empty()) return;
     
     //Find the sprites that match the most characters with the animation name.
@@ -1509,7 +1509,7 @@ void animation_editor::set_best_frame_sprite() {
     }
     
     //Finally, set the frame info then.
-    frame* cur_frame_ptr =
+    Frame* cur_frame_ptr =
         &cur_anim_i.cur_anim->frames[cur_anim_i.cur_frame_idx];
     cur_frame_ptr->sprite_idx = final_sprite_idx;
     cur_frame_ptr->sprite_ptr = db.sprites[final_sprite_idx];
@@ -1526,7 +1526,7 @@ void animation_editor::set_best_frame_sprite() {
  * @param x X coordinate to start on.
  * @param y Y coordinate to start on.
  */
-void animation_editor::sprite_bmp_flood_fill(
+void AnimationEditor::sprite_bmp_flood_fill(
     ALLEGRO_BITMAP* bmp, bool* selection_pixels, int x, int y
 ) {
     //https://en.wikipedia.org/wiki/Flood_fill#The_algorithm
@@ -1543,7 +1543,7 @@ void animation_editor::sprite_bmp_flood_fill(
     /**
      * @brief A point, but with integer coordinates.
      */
-    struct int_point {
+    struct IntPoint {
     
         //--- Members ---
         
@@ -1561,7 +1561,7 @@ void animation_editor::sprite_bmp_flood_fill(
          *
          * @param p The float point coordinates.
          */
-        explicit int_point(const point &p) :
+        explicit IntPoint(const Point &p) :
             x(p.x),
             y(p.y) { }
             
@@ -1571,17 +1571,17 @@ void animation_editor::sprite_bmp_flood_fill(
          * @param x X coordinate.
          * @param y Y coordinate.
          */
-        int_point(int x, int y) :
+        IntPoint(int x, int y) :
             x(x),
             y(y) { }
             
     };
     
-    queue<int_point> pixels_left;
-    pixels_left.push(int_point(x, y));
+    queue<IntPoint> pixels_left;
+    pixels_left.push(IntPoint(x, y));
     
     while(!pixels_left.empty()) {
-        int_point p = pixels_left.front();
+        IntPoint p = pixels_left.front();
         pixels_left.pop();
         
         if(
@@ -1592,8 +1592,8 @@ void animation_editor::sprite_bmp_flood_fill(
             continue;
         }
         
-        int_point offset = p;
-        vector<int_point> columns;
+        IntPoint offset = p;
+        vector<IntPoint> columns;
         columns.push_back(p);
         
         bool add = true;
@@ -1640,7 +1640,7 @@ void animation_editor::sprite_bmp_flood_fill(
             //For each column obtained, mark the pixel there,
             //and check the pixels above and below, to see if they should be
             //processed next.
-            int_point col = columns[c];
+            IntPoint col = columns[c];
             selection_pixels[col.y * bmp_w + col.x] = true;
             if(
                 col.y > 0 &&
@@ -1648,7 +1648,7 @@ void animation_editor::sprite_bmp_flood_fill(
                 al_get_pixel(bmp, col.x, col.y - 1).a >=
                 ANIM_EDITOR::FLOOD_FILL_ALPHA_THRESHOLD
             ) {
-                pixels_left.push(int_point(col.x, col.y - 1));
+                pixels_left.push(IntPoint(col.x, col.y - 1));
             }
             if(
                 col.y < bmp_h - 1 &&
@@ -1656,7 +1656,7 @@ void animation_editor::sprite_bmp_flood_fill(
                 al_get_pixel(bmp, col.x, col.y + 1).a >=
                 ANIM_EDITOR::FLOOD_FILL_ALPHA_THRESHOLD
             ) {
-                pixels_left.push(int_point(col.x, col.y + 1));
+                pixels_left.push(IntPoint(col.x, col.y + 1));
             }
         }
     }
@@ -1666,8 +1666,8 @@ void animation_editor::sprite_bmp_flood_fill(
 /**
  * @brief Unloads the editor from memory.
  */
-void animation_editor::unload() {
-    editor::unload();
+void AnimationEditor::unload() {
+    Editor::unload();
     
     db.destroy();
     
@@ -1698,7 +1698,7 @@ void animation_editor::unload() {
  * it chooses a valid hitbox.
  *
  */
-void animation_editor::update_cur_hitbox() {
+void AnimationEditor::update_cur_hitbox() {
     if(cur_sprite->hitboxes.empty()) {
         cur_hitbox = nullptr;
         cur_hitbox_idx = INVALID;
@@ -1713,10 +1713,10 @@ void animation_editor::update_cur_hitbox() {
 /**
  * @brief Update every frame's hitbox instances in light of new hitbox info.
  */
-void animation_editor::update_hitboxes() {
+void AnimationEditor::update_hitboxes() {
     for(size_t s = 0; s < db.sprites.size(); s++) {
     
-        sprite* s_ptr = db.sprites[s];
+        Sprite* s_ptr = db.sprites[s];
         
         //Start by deleting non-existent hitboxes.
         for(size_t h = 0; h < s_ptr->hitboxes.size();) {
@@ -1753,8 +1753,8 @@ void animation_editor::update_hitboxes() {
             
             if(!hitbox_found) {
                 s_ptr->hitboxes.push_back(
-                    hitbox(
-                        name, INVALID, nullptr, point(), 0,
+                    Hitbox(
+                        name, INVALID, nullptr, Point(), 0,
                         loaded_mob_type ? loaded_mob_type->height : 128,
                         loaded_mob_type ? loaded_mob_type->radius : 32
                     )
@@ -1766,7 +1766,7 @@ void animation_editor::update_hitboxes() {
         std::sort(
             s_ptr->hitboxes.begin(),
             s_ptr->hitboxes.end(),
-        [this] (const hitbox & h1, const hitbox & h2) -> bool {
+        [this] (const Hitbox & h1, const Hitbox & h2) -> bool {
             size_t pos1 = 0, pos2 = 1;
             for(size_t b = 0; b < db.body_parts.size(); b++) {
                 if(db.body_parts[b]->name == h1.body_part_name) pos1 = b;

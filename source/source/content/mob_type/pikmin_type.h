@@ -334,7 +334,7 @@ enum PIKMIN_ATTACK {
  * Red, Yellow, Blue, White, Purple, Bulbmin, Winged, and Rock,
  * but with the engine, loads of fan-made ones can be made.
  */
-class pikmin_type : public mob_type {
+class PikminType : public MobType {
 
 public:
 
@@ -385,9 +385,9 @@ public:
     
     //--- Function declarations ---
     
-    pikmin_type();
-    void load_cat_properties(data_node* file) override;
-    void load_cat_resources(data_node* file) override;
+    PikminType();
+    void load_cat_properties(DataNode* file) override;
+    void load_cat_resources(DataNode* file) override;
     anim_conversion_vector get_anim_conversions() const override;
     void unload_resources() override;
     

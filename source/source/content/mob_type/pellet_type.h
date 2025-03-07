@@ -45,14 +45,14 @@ enum PELLET_STATE {
  * Contains info on how many seeds the Onion should receive,
  * depending on whether it matches the Pikmin type or not.
  */
-class pellet_type : public mob_type {
+class PelletType : public MobType {
 
 public:
 
     //--- Members ---
     
     //Type of Pikmin this pellet relates to.
-    pikmin_type* pik_type = nullptr;
+    PikminType* pik_type = nullptr;
     
     //Number on the pellet, and hence, its weight.
     size_t number = 0;
@@ -69,9 +69,9 @@ public:
     
     //--- Function declarations ---
     
-    pellet_type();
-    void load_cat_properties(data_node* file) override;
-    void load_cat_resources(data_node* file) override;
+    PelletType();
+    void load_cat_properties(DataNode* file) override;
+    void load_cat_resources(DataNode* file) override;
     anim_conversion_vector get_anim_conversions() const override;
     void unload_resources() override;
     

@@ -97,15 +97,15 @@ enum MOB_CATEGORY {
 };
 
 
-class mob;
-class mob_type;
+class Mob;
+class MobType;
 
 
 /**
  * @brief A mob category. Pikmin, leader, enemy, etc.
  * Each category helps organize the types of mob and the mobs themselves.
  */
-class mob_category {
+class MobCategory {
 
 public:
 
@@ -132,20 +132,20 @@ public:
     
     //--- Function declarations ---
     
-    mob_category(
+    MobCategory(
         const MOB_CATEGORY id, const string &internal_name,
         const string &name, const string &plural_name,
         const string &folder_name, const ALLEGRO_COLOR editor_color
     );
-    virtual ~mob_category() = default;
+    virtual ~MobCategory() = default;
     virtual void get_type_names(vector<string> &list) const = 0;
-    virtual mob_type* get_type(const string &internal_name) const = 0;
-    virtual mob_type* create_type() = 0;
-    virtual void register_type(const string &internal_name, mob_type* type) = 0;
-    virtual mob* create_mob(
-        const point &pos, mob_type* type, float angle
+    virtual MobType* get_type(const string &internal_name) const = 0;
+    virtual MobType* create_type() = 0;
+    virtual void register_type(const string &internal_name, MobType* type) = 0;
+    virtual Mob* create_mob(
+        const Point &pos, MobType* type, float angle
     ) = 0;
-    virtual void erase_mob(mob* m) = 0;
+    virtual void erase_mob(Mob* m) = 0;
     virtual void clear_types() = 0;
     
 };
@@ -157,19 +157,19 @@ public:
  *
  * Read the sector type manager's comments for more info.
  */
-struct mob_category_manager {
+struct CategoryManager {
 
     public:
     
     //--- Function declarations ---
     
-    void register_category(MOB_CATEGORY id, mob_category* category);
-    mob_type* find_mob_type(const string &name) const;
-    mob_category* get(const MOB_CATEGORY id) const;
-    mob_category* get_from_folder_name(const string &internal_name) const;
-    mob_category* get_from_internal_name(const string &name) const;
-    mob_category* get_from_name(const string &name) const;
-    mob_category* get_from_pname(const string &pname) const;
+    void register_category(MOB_CATEGORY id, MobCategory* category);
+    MobType* find_mob_type(const string &name) const;
+    MobCategory* get(const MOB_CATEGORY id) const;
+    MobCategory* get_from_folder_name(const string &internal_name) const;
+    MobCategory* get_from_internal_name(const string &name) const;
+    MobCategory* get_from_name(const string &name) const;
+    MobCategory* get_from_pname(const string &pname) const;
     void clear();
     
     private:
@@ -177,7 +177,7 @@ struct mob_category_manager {
     //--- Members ---
     
     //List of known mob categories.
-    vector<mob_category*> categories;
+    vector<MobCategory*> categories;
     
 };
 
@@ -185,21 +185,21 @@ struct mob_category_manager {
 /**
  * @brief "None" mob category. Used as a placeholder.
  */
-class none_category : public mob_category {
+class NoneCategory : public MobCategory {
 
 public:
 
     //--- Function declarations ---
     
-    none_category();
+    NoneCategory();
     void get_type_names(vector<string> &list) const override;
-    mob_type* get_type(const string &internal_name) const override;
-    mob_type* create_type() override;
-    void register_type(const string &internal_name, mob_type* type) override;
-    mob* create_mob(
-        const point &pos, mob_type* type, float angle
+    MobType* get_type(const string &internal_name) const override;
+    MobType* create_type() override;
+    void register_type(const string &internal_name, MobType* type) override;
+    Mob* create_mob(
+        const Point &pos, MobType* type, float angle
     ) override;
-    void erase_mob(mob* m) override;
+    void erase_mob(Mob* m) override;
     void clear_types() override;
     
 };

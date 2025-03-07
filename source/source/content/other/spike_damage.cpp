@@ -16,21 +16,21 @@
 
 /**
  * @brief Loads spike damage type data from a data node.
- * 
+ *
  * @param node Data node to load from.
  */
-void spike_damage_type::load_from_data_node(data_node* node) {
+void SpikeDamageType::load_from_data_node(DataNode* node) {
     //Content metadata.
     load_metadata_from_data_node(node);
-
+    
     //Standard data.
-    reader_setter rs(node);
-        
+    ReaderSetter rs(node);
+    
     string particle_generator_name;
     string status_name;
-    data_node* damage_node = nullptr;
-    data_node* particle_generator_node = nullptr;
-    data_node* status_name_node = nullptr;
+    DataNode* damage_node = nullptr;
+    DataNode* particle_generator_node = nullptr;
+    DataNode* status_name_node = nullptr;
     
     rs.set("damage", damage, &damage_node);
     rs.set("ingestion_only", ingestion_only);

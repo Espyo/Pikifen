@@ -21,8 +21,8 @@
  *
  * @param typ Mob type to create the finite state machine for.
  */
-void converter_fsm::create_fsm(mob_type* typ) {
-    easy_fsm_creator efc;
+void converter_fsm::create_fsm(MobType* typ) {
+    EasyFsmCreator efc;
     efc.new_state("idling", CONVERTER_STATE_IDLING); {
         efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(converter_fsm::become_idle);
@@ -98,8 +98,8 @@ void converter_fsm::create_fsm(mob_type* typ) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void converter_fsm::become_idle(mob* m, void* info1, void* info2) {
-    converter* con_ptr = (converter*) m;
+void converter_fsm::become_idle(Mob* m, void* info1, void* info2) {
+    Converter* con_ptr = (Converter*) m;
     
     con_ptr->set_animation(
         con_ptr->get_animation_idx_from_base_and_group(
@@ -119,8 +119,8 @@ void converter_fsm::become_idle(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void converter_fsm::bumped(mob* m, void* info1, void* info2) {
-    converter* con_ptr = (converter*) m;
+void converter_fsm::bumped(Mob* m, void* info1, void* info2) {
+    Converter* con_ptr = (Converter*) m;
     
     con_ptr->set_animation(
         con_ptr->get_animation_idx_from_base_and_group(
@@ -140,8 +140,8 @@ void converter_fsm::bumped(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void converter_fsm::finish_being_bumped(mob* m, void* info1, void* info2) {
-    ((converter*) m)->close();
+void converter_fsm::finish_being_bumped(Mob* m, void* info1, void* info2) {
+    ((Converter*) m)->close();
 }
 
 
@@ -152,7 +152,7 @@ void converter_fsm::finish_being_bumped(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void converter_fsm::finish_dying(mob* m, void* info1, void* info2) {
+void converter_fsm::finish_dying(Mob* m, void* info1, void* info2) {
     m->to_delete = true;
 }
 
@@ -164,8 +164,8 @@ void converter_fsm::finish_dying(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void converter_fsm::handle_object_touch(mob* m, void* info1, void* info2) {
-    mob* bumper = (mob*) info1;
+void converter_fsm::handle_object_touch(Mob* m, void* info1, void* info2) {
+    Mob* bumper = (Mob*) info1;
     if(bumper->type->category->id == MOB_CATEGORY_LEADERS) {
         m->fsm.set_state(CONVERTER_STATE_BUMPED);
     }
@@ -179,9 +179,9 @@ void converter_fsm::handle_object_touch(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void converter_fsm::handle_pikmin(mob* m, void* info1, void* info2) {
-    converter* con_ptr = (converter*) m;
-    pikmin* pik_ptr = (pikmin*) info1;
+void converter_fsm::handle_pikmin(Mob* m, void* info1, void* info2) {
+    Converter* con_ptr = (Converter*) m;
+    Pikmin* pik_ptr = (Pikmin*) info1;
     
     if(con_ptr->amount_in_buffer == con_ptr->con_type->buffer_size) {
         //A Pikmin tried to sneak in in the middle of a conversion! Denied.
@@ -207,7 +207,7 @@ void converter_fsm::handle_pikmin(mob* m, void* info1, void* info2) {
         con_ptr->close();
     }
     
-    particle_generator pg =
+    ParticleGenerator pg =
         standard_particle_gen_setup(
             game.sys_content_names.part_converter_insertion, m
         );
@@ -222,8 +222,8 @@ void converter_fsm::handle_pikmin(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void converter_fsm::open(mob* m, void* info1, void* info2) {
-    converter* con_ptr = (converter*) m;
+void converter_fsm::open(Mob* m, void* info1, void* info2) {
+    Converter* con_ptr = (Converter*) m;
     con_ptr->set_animation(
         con_ptr->get_animation_idx_from_base_and_group(
             CONVERTER_ANIM_OPENING, N_CONVERTER_ANIMS, con_ptr->current_type_idx
@@ -241,8 +241,8 @@ void converter_fsm::open(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void converter_fsm::open_or_die(mob* m, void* info1, void* info2) {
-    converter* con_ptr = (converter*) m;
+void converter_fsm::open_or_die(Mob* m, void* info1, void* info2) {
+    Converter* con_ptr = (Converter*) m;
     
     if(con_ptr->input_pikmin_left == 0) {
         con_ptr->fsm.set_state(CONVERTER_STATE_DYING);
@@ -260,8 +260,8 @@ void converter_fsm::open_or_die(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void converter_fsm::open_or_spit(mob* m, void* info1, void* info2) {
-    converter* con_ptr = (converter*) m;
+void converter_fsm::open_or_spit(Mob* m, void* info1, void* info2) {
+    Converter* con_ptr = (Converter*) m;
     
     if(con_ptr->amount_in_buffer == 0) {
         con_ptr->fsm.set_state(CONVERTER_STATE_OPENING);
@@ -278,8 +278,8 @@ void converter_fsm::open_or_spit(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void converter_fsm::spew(mob* m, void* info1, void* info2) {
-    converter* con_ptr = (converter*) m;
+void converter_fsm::spew(Mob* m, void* info1, void* info2) {
+    Converter* con_ptr = (Converter*) m;
     
     con_ptr->set_animation(
         con_ptr->get_animation_idx_from_base_and_group(
@@ -298,8 +298,8 @@ void converter_fsm::spew(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void converter_fsm::start_dying(mob* m, void* info1, void* info2) {
-    converter* con_ptr = (converter*) m;
+void converter_fsm::start_dying(Mob* m, void* info1, void* info2) {
+    Converter* con_ptr = (Converter*) m;
     
     con_ptr->set_animation(
         con_ptr->get_animation_idx_from_base_and_group(

@@ -83,57 +83,57 @@ enum TEXT_SETTING_FLAG {
 
 
 void draw_bitmap(
-    ALLEGRO_BITMAP* bmp, const point &center,
-    const point &size, float angle = 0,
+    ALLEGRO_BITMAP* bmp, const Point &center,
+    const Point &size, float angle = 0,
     const ALLEGRO_COLOR &tint = COLOR_WHITE
 );
 void draw_bitmap_in_box(
-    ALLEGRO_BITMAP* bmp, const point &center,
-    const point &box_size, bool scale_up,
+    ALLEGRO_BITMAP* bmp, const Point &center,
+    const Point &box_size, bool scale_up,
     float angle = 0,
     const ALLEGRO_COLOR &tint = COLOR_WHITE
 );
 void draw_equilateral_triangle(
-    const point &center, float radius, float angle,
+    const Point &center, float radius, float angle,
     const ALLEGRO_COLOR &color, float thickness
 );
 void draw_filled_diamond(
-    const point &center, float radius, const ALLEGRO_COLOR &color
+    const Point &center, float radius, const ALLEGRO_COLOR &color
 );
 void draw_filled_equilateral_triangle(
-    const point &center, float radius, float angle,
+    const Point &center, float radius, float angle,
     const ALLEGRO_COLOR &color
 );
 void draw_filled_rounded_rectangle(
-    const point &center, const point &size, float radii,
+    const Point &center, const Point &size, float radii,
     const ALLEGRO_COLOR &color
 );
 void draw_rotated_rectangle(
-    const point &center, const point &dimensions,
+    const Point &center, const Point &dimensions,
     float angle, const ALLEGRO_COLOR &color, float thickness
 );
 void draw_rounded_rectangle(
-    const point &center, const point &size, float radii,
+    const Point &center, const Point &size, float radii,
     const ALLEGRO_COLOR &color, float thickness
 );
 void draw_text(
     const string &text, const ALLEGRO_FONT* const font,
-    const point &where, const point &box_size,
+    const Point &where, const Point &box_size,
     const ALLEGRO_COLOR &color = COLOR_WHITE,
     int text_flags = ALLEGRO_ALIGN_CENTER,
     V_ALIGN_MODE v_align = V_ALIGN_MODE_CENTER, bitmask_8_t settings = 0,
-    const point &further_scale = point(1.0f)
+    const Point &further_scale = Point(1.0f)
 );
 void draw_text_lines(
     const string &text, const ALLEGRO_FONT* const font,
-    const point &where, const point &box_size,
+    const Point &where, const Point &box_size,
     const ALLEGRO_COLOR &color = COLOR_WHITE,
     int text_flags = ALLEGRO_ALIGN_CENTER,
     V_ALIGN_MODE v_align = V_ALIGN_MODE_CENTER, bitmask_8_t settings = 0,
-    const point &further_scale = point(1.0f)
+    const Point &further_scale = Point(1.0f)
 );
 void draw_textured_box(
-    const point &center, const point &size, ALLEGRO_BITMAP* texture,
+    const Point &center, const Point &size, ALLEGRO_BITMAP* texture,
     const ALLEGRO_COLOR &tint = COLOR_WHITE
 );
 void get_multiline_text_dimensions(
@@ -141,7 +141,7 @@ void get_multiline_text_dimensions(
     int* out_width, int* out_height, int* out_line_height
 );
 void get_text_drawing_transforms(
-    const point &where, const point &scale,
+    const Point &where, const Point &scale,
     float text_orig_oy, float v_align_offset,
     ALLEGRO_TRANSFORM* out_text_transform, ALLEGRO_TRANSFORM* out_old_transform
 );

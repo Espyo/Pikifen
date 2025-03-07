@@ -20,21 +20,21 @@
  * somewhere else. It can optionally return to where the origin of the
  * resource came from.
  */
-class resource : public mob {
+class Resource : public Mob {
 
 public:
 
     //--- Members ---
     
     //What type of resource it is.
-    resource_type* res_type = nullptr;
+    ResourceType* res_type = nullptr;
     
     //Pile it belongs to, if any.
-    pile* origin_pile = nullptr;
+    Pile* origin_pile = nullptr;
     
     
     //--- Function declarations ---
     
-    resource(const point &pos, resource_type* type, float angle);
+    Resource(const Point &pos, ResourceType* type, float angle);
     
 };

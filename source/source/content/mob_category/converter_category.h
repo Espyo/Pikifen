@@ -25,21 +25,21 @@ using std::vector;
  * @brief Mob category for mobs that can convert Pikmin from one type
  * to another.
  */
-class converter_category : public mob_category {
+class ConverterCategory : public MobCategory {
 
 public:
 
     //--- Function declarations ---
     
-    converter_category();
+    ConverterCategory();
     void get_type_names(vector<string> &list) const override;
-    mob_type* get_type(const string &internal_name) const override;
-    mob_type* create_type() override;
-    void register_type(const string &internal_name, mob_type* type) override;
-    mob* create_mob(
-        const point &pos, mob_type* type, float angle
+    MobType* get_type(const string &internal_name) const override;
+    MobType* create_type() override;
+    void register_type(const string &internal_name, MobType* type) override;
+    Mob* create_mob(
+        const Point &pos, MobType* type, float angle
     ) override;
-    void erase_mob(mob* m) override;
+    void erase_mob(Mob* m) override;
     void clear_types() override;
     
 };

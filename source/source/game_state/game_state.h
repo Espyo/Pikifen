@@ -26,14 +26,14 @@ using std::vector;
  * @brief A game macro-state. It might be easier to think of this as a "screen".
  * You've got the title screen, the options screen, the gameplay screen, etc.
  */
-class game_state {
+class GameState {
 
 public:
 
     //--- Function declarations ---
     
-    game_state();
-    virtual ~game_state() = default;
+    GameState();
+    virtual ~GameState() = default;
     virtual void load() = 0;
     virtual void unload() = 0;
     virtual void handle_allegro_event(ALLEGRO_EVENT &ev) = 0;

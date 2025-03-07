@@ -70,14 +70,14 @@ float from_string<float>(const string &s);
 template<>
 ALLEGRO_COLOR from_string<ALLEGRO_COLOR>(const string &s);
 template<>
-point from_string<point>(const string &s);
+Point from_string<Point>(const string &s);
 
 
 
 /**
  * @brief Just a list of different elements in an enum and what their names are.
  */
-struct enum_name_database {
+struct EnumNameDatabase {
 
     public:
     
@@ -104,14 +104,14 @@ struct enum_name_database {
  * for a given simple keyframe animation based on interpolation.
  * Keyframe times go from 0 (beginning) to 1 (end).
  */
-template<typename inter_t>
-struct keyframe_interpolator {
+template<typename InterT>
+struct KeyframeInterpolator {
 
     public:
     
     //--- Function definitions ---
     
-    explicit keyframe_interpolator(const inter_t &initial_value = inter_t()) {
+    explicit KeyframeInterpolator(const InterT &initial_value = InterT()) {
         keyframe_times.push_back(0.0f);
         keyframe_values.push_back(initial_value);
         keyframe_eases.push_back(EASE_METHOD_NONE);
@@ -124,7 +124,7 @@ struct keyframe_interpolator {
      * @param t The time.
      * @return The value.
      */
-    inter_t get(float t) {
+    InterT get(float t) {
         if(t < 0.0f) return keyframe_values[0];
         
         if(t < keyframe_times[0]) {
@@ -161,7 +161,7 @@ struct keyframe_interpolator {
      * is returned here.
      */
     void add(
-        float t, const inter_t &value,
+        float t, const InterT &value,
         EASING_METHOD ease = EASE_METHOD_NONE, size_t* out_idx = nullptr
     ) {
         size_t new_idx = get_insertion_idx(t);
@@ -185,7 +185,7 @@ struct keyframe_interpolator {
      * is returned here.
      */
     void add_or_set(
-        float t, const inter_t &value,
+        float t, const InterT &value,
         EASING_METHOD ease = EASE_METHOD_NONE, size_t* out_idx = nullptr
     ) {
         for(size_t k = 0; k < keyframe_times.size(); ++k) {
@@ -228,7 +228,7 @@ struct keyframe_interpolator {
      * @param idx The keyframe's index.
      * @return A pair with the keyframe's time and value.
      */
-    std::pair<float, inter_t> get_keyframe(size_t idx) {
+    std::pair<float, InterT> get_keyframe(size_t idx) {
         return std::make_pair(keyframe_times[idx], keyframe_values[idx]);
     }
     
@@ -239,7 +239,7 @@ struct keyframe_interpolator {
      * @param idx They keyframe's index.
      * @param value The new value.
      */
-    void set_keyframe_value(size_t idx, const inter_t &value) {
+    void set_keyframe_value(size_t idx, const InterT &value) {
         keyframe_values[idx] = value;
     }
     
@@ -287,7 +287,7 @@ struct keyframe_interpolator {
      *
      * @param node The data node to load from.
      */
-    void load_from_data_node(data_node* node) {
+    void load_from_data_node(DataNode* node) {
         if(node->get_nr_of_children() == 0) {
             //There are no values to load, let's not even try.
             return;
@@ -298,8 +298,8 @@ struct keyframe_interpolator {
         keyframe_eases.clear();
         
         for(size_t c = 0; c < node->get_nr_of_children(); c++) {
-            data_node* c_node = node->get_child(c);
-            inter_t value = from_string<inter_t>(c_node->value);
+            DataNode* c_node = node->get_child(c);
+            InterT value = from_string<InterT>(c_node->value);
             add(s2f(c_node->name), value, EASE_METHOD_NONE);
         }
     }
@@ -313,7 +313,7 @@ private:
     vector<float> keyframe_times;
     
     //Keyframe values.
-    vector<inter_t> keyframe_values;
+    vector<InterT> keyframe_values;
     
     //Keyframe easing methods.
     vector<EASING_METHOD> keyframe_eases;
@@ -376,8 +376,8 @@ private:
      * @param time Time (0 to 1).
      * @return The point.
      */
-    point interpolate(
-        const point &p1, const point &p2, float time
+    Point interpolate(
+        const Point &p1, const Point &p2, float time
     ) {
         return interpolate_point(time, 0.0f, 1.0f, p1, p2);
     }
@@ -390,7 +390,7 @@ private:
  * @brief Info about where the player wants a leader
  * (or something else) to go, based on the player's inputs.
  */
-struct movement_t {
+struct MovementInfo {
 
     //--- Members ---
     
@@ -409,7 +409,7 @@ struct movement_t {
     
     //--- Function declarations ---
     
-    void get_info(point* coords, float* angle, float* magnitude) const;
+    void get_info(Point* coords, float* angle, float* magnitude) const;
     void reset();
     
 };
@@ -419,7 +419,7 @@ struct movement_t {
  * @brief A timer. You can set it to start at a pre-determined time,
  * to tick, etc.
  */
-struct timer {
+struct Timer {
 
     //--- Members ---
     
@@ -435,11 +435,11 @@ struct timer {
     
     //--- Function declarations ---
     
-    explicit timer(
+    explicit Timer(
         float duration = 0,
         const std::function<void()> &on_end = nullptr
     );
-    ~timer();
+    ~Timer();
     void start(bool can_restart = true);
     void start(float new_duration);
     void stop();

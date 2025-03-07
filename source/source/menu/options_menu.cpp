@@ -62,13 +62,13 @@ const string TOP_GUI_FILE_NAME = "options_menu_top";
  * @param action_type Action type.
  * @param bind_idx Index of that action type's bind.
  */
-void options_menu_t::choose_input(
+void OptionsMenu::choose_input(
     const PLAYER_ACTION_TYPE action_type, size_t bind_idx
 ) {
     capturing_input = 1;
     capturing_input_timeout = OPTIONS_MENU::INPUT_CAPTURE_TIMEOUT_DURATION;
     
-    const vector<control_bind> &all_binds = game.controls.binds();
+    const vector<ControlBind> &all_binds = game.controls.binds();
     size_t binds_counted = 0;
     cur_action_type = action_type;
     cur_bind_idx = all_binds.size();
@@ -91,10 +91,10 @@ void options_menu_t::choose_input(
  * @param action_type Action type it belongs to.
  * @param bind_idx Index number of the control.
  */
-void options_menu_t::delete_bind(
+void OptionsMenu::delete_bind(
     const PLAYER_ACTION_TYPE action_type, size_t bind_idx
 ) {
-    vector<control_bind> &all_binds = game.controls.binds();
+    vector<ControlBind> &all_binds = game.controls.binds();
     size_t binds_counted = 0;
     
     for(size_t b = 0; b < all_binds.size(); b++) {
@@ -114,8 +114,8 @@ void options_menu_t::delete_bind(
 /**
  * @brief Draws the options menu.
  */
-void options_menu_t::draw() {
-    menu_t::draw();
+void OptionsMenu::draw() {
+    Menu::draw();
     if(packs_menu) packs_menu->draw();
     
     if(capturing_input == 1) {
@@ -130,8 +130,8 @@ void options_menu_t::draw() {
             "\n"
             "(Or wait " + i2s(capturing_input_timeout + 1) + "s to cancel...)",
             game.sys_content.fnt_standard,
-            point(game.win_w / 2.0f, game.win_h / 2.0f),
-            point(LARGE_FLOAT),
+            Point(game.win_w / 2.0f, game.win_h / 2.0f),
+            Point(LARGE_FLOAT),
             COLOR_WHITE, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
             TEXT_SETTING_FLAG_CANT_GROW
         );
@@ -144,7 +144,7 @@ void options_menu_t::draw() {
  *
  * @param ev The event.
  */
-void options_menu_t::handle_allegro_event(const ALLEGRO_EVENT &ev) {
+void OptionsMenu::handle_allegro_event(const ALLEGRO_EVENT &ev) {
     if(!active) return;
     
     switch(capturing_input) {
@@ -153,11 +153,11 @@ void options_menu_t::handle_allegro_event(const ALLEGRO_EVENT &ev) {
         break;
     } case 1: {
         //Actively capturing.
-        player_input input = game.controls.allegro_event_to_input(ev);
+        PlayerInput input = game.controls.allegro_event_to_input(ev);
         if(input.value >= 0.5f) {
-            vector<control_bind> &all_binds = game.controls.binds();
+            vector<ControlBind> &all_binds = game.controls.binds();
             if(cur_bind_idx >= all_binds.size()) {
-                control_bind new_bind;
+                ControlBind new_bind;
                 new_bind.action_type_id = cur_action_type;
                 new_bind.player_nr = 0;
                 new_bind.input = input;
@@ -178,7 +178,7 @@ void options_menu_t::handle_allegro_event(const ALLEGRO_EVENT &ev) {
     }
     }
     
-    menu_t::handle_allegro_event(ev);
+    Menu::handle_allegro_event(ev);
     if(packs_menu) packs_menu->handle_allegro_event(ev);
 }
 
@@ -188,9 +188,9 @@ void options_menu_t::handle_allegro_event(const ALLEGRO_EVENT &ev) {
  *
  * @param action Data about the player action.
  */
-void options_menu_t::handle_player_action(const player_action &action) {
+void OptionsMenu::handle_player_action(const PlayerAction &action) {
     if(capturing_input != 0) return;
-    menu_t::handle_player_action(action);
+    Menu::handle_player_action(action);
     if(packs_menu) packs_menu->handle_player_action(action);
 }
 
@@ -198,7 +198,7 @@ void options_menu_t::handle_player_action(const player_action &action) {
 /**
  * @brief Initializes the audio options menu GUI.
  */
-void options_menu_t::init_gui_audio_page() {
+void OptionsMenu::init_gui_audio_page() {
     //Menu items.
     audio_gui.register_coords("back",                  12,  5,   20,  6);
     audio_gui.register_coords("back_input",             3,  7,    4,  4);
@@ -216,9 +216,9 @@ void options_menu_t::init_gui_audio_page() {
     
     //Back button.
     audio_gui.back_item =
-        new button_gui_item("Back", game.sys_content.fnt_standard);
+        new ButtonGuiItem("Back", game.sys_content.fnt_standard);
     audio_gui.back_item->on_activate =
-    [this] (const point &) {
+    [this] (const Point &) {
         audio_gui.responsive = false;
         audio_gui.start_animation(
             GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
@@ -238,8 +238,8 @@ void options_menu_t::init_gui_audio_page() {
     gui_add_back_input_icon(&audio_gui);
     
     //Header text.
-    text_gui_item* header_text =
-        new text_gui_item(
+    TextGuiItem* header_text =
+        new TextGuiItem(
         "AUDIO OPTIONS",
         game.sys_content.fnt_area_name, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
     );
@@ -267,7 +267,7 @@ void options_menu_t::init_gui_audio_page() {
     
     //Master volume picker.
     master_vol_picker =
-        new options_menu_picker_gui_item<float>(
+        new OptionsMenuPickerGuiItem<float>(
         "Master volume: ",
         &game.options.master_volume,
         OPTIONS::DEF_MASTER_VOLUME,
@@ -281,7 +281,7 @@ void options_menu_t::init_gui_audio_page() {
     
     //Gameplay sound effects volume picker.
     gameplay_sound_vol_picker =
-        new options_menu_picker_gui_item<float>(
+        new OptionsMenuPickerGuiItem<float>(
         "Gameplay sound effects volume: ",
         &game.options.gameplay_sound_volume,
         OPTIONS::DEF_GAMEPLAY_SOUND_VOLUME,
@@ -295,7 +295,7 @@ void options_menu_t::init_gui_audio_page() {
     
     //Music volume picker.
     music_vol_picker =
-        new options_menu_picker_gui_item<float>(
+        new OptionsMenuPickerGuiItem<float>(
         "Music volume: ",
         &game.options.music_volume,
         OPTIONS::DEF_MUSIC_VOLUME,
@@ -309,7 +309,7 @@ void options_menu_t::init_gui_audio_page() {
     
     //Ambiance sound volume picker.
     ambiance_sound_vol_picker =
-        new options_menu_picker_gui_item<float>(
+        new OptionsMenuPickerGuiItem<float>(
         "Ambiance sound effects volume: ",
         &game.options.ambiance_sound_volume,
         OPTIONS::DEF_AMBIANCE_SOUND_VOLUME,
@@ -323,7 +323,7 @@ void options_menu_t::init_gui_audio_page() {
     
     //UI sound effects volume picker.
     ui_sound_vol_picker =
-        new options_menu_picker_gui_item<float>(
+        new OptionsMenuPickerGuiItem<float>(
         "UI sound effects volume: ",
         &game.options.ui_sound_volume,
         OPTIONS::DEF_UI_SOUND_VOLUME,
@@ -336,8 +336,8 @@ void options_menu_t::init_gui_audio_page() {
     audio_gui.add_item(ui_sound_vol_picker, "ui_sound_volume");
     
     //Tooltip text.
-    tooltip_gui_item* tooltip_text =
-        new tooltip_gui_item(&audio_gui);
+    TooltipGuiItem* tooltip_text =
+        new TooltipGuiItem(&audio_gui);
     audio_gui.add_item(tooltip_text, "tooltip");
     
     //Finishing touches.
@@ -350,7 +350,7 @@ void options_menu_t::init_gui_audio_page() {
 /**
  * @brief Initializes the control binds options menu GUI.
  */
-void options_menu_t::init_gui_control_binds_page() {
+void OptionsMenu::init_gui_control_binds_page() {
     //Menu items.
     binds_gui.register_coords("back",        12,  5, 20,  6);
     binds_gui.register_coords("back_input",   3,  7,  4,  4);
@@ -365,9 +365,9 @@ void options_menu_t::init_gui_control_binds_page() {
     
     //Back button.
     binds_gui.back_item =
-        new button_gui_item("Back", game.sys_content.fnt_standard);
+        new ButtonGuiItem("Back", game.sys_content.fnt_standard);
     binds_gui.back_item->on_activate =
-    [this] (const point &) {
+    [this] (const Point &) {
         binds_gui.responsive = false;
         binds_gui.start_animation(
             GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
@@ -388,25 +388,25 @@ void options_menu_t::init_gui_control_binds_page() {
     gui_add_back_input_icon(&binds_gui);
     
     //Header text.
-    text_gui_item* header_text =
-        new text_gui_item(
+    TextGuiItem* header_text =
+        new TextGuiItem(
         "CONTROL BINDS",
         game.sys_content.fnt_area_name, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
     );
     binds_gui.add_item(header_text, "header");
     
     //Controls list box.
-    binds_list_box = new list_gui_item();
+    binds_list_box = new ListGuiItem();
     binds_gui.add_item(binds_list_box, "list");
     
     //Controls list scrollbar.
-    scroll_gui_item* list_scroll = new scroll_gui_item();
+    ScrollGuiItem* list_scroll = new ScrollGuiItem();
     list_scroll->list_item = binds_list_box;
     binds_gui.add_item(list_scroll, "list_scroll");
     
     //Tooltip text.
-    tooltip_gui_item* tooltip_text =
-        new tooltip_gui_item(&binds_gui);
+    TooltipGuiItem* tooltip_text =
+        new TooltipGuiItem(&binds_gui);
     binds_gui.add_item(tooltip_text, "tooltip");
     
     //Populate the list of binds.
@@ -423,7 +423,7 @@ void options_menu_t::init_gui_control_binds_page() {
 /**
  * @brief Initializes the controls options menu GUI.
  */
-void options_menu_t::init_gui_controls_page() {
+void OptionsMenu::init_gui_controls_page() {
     //Menu items.
     controls_gui.register_coords("back",          12,  5,   20,  6);
     controls_gui.register_coords("back_input",     3,  7,    4,  4);
@@ -439,9 +439,9 @@ void options_menu_t::init_gui_controls_page() {
     
     //Back button.
     controls_gui.back_item =
-        new button_gui_item("Back", game.sys_content.fnt_standard);
+        new ButtonGuiItem("Back", game.sys_content.fnt_standard);
     controls_gui.back_item->on_activate =
-    [this] (const point &) {
+    [this] (const Point &) {
         controls_gui.responsive = false;
         controls_gui.start_animation(
             GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
@@ -461,18 +461,18 @@ void options_menu_t::init_gui_controls_page() {
     gui_add_back_input_icon(&controls_gui);
     
     //Header text.
-    text_gui_item* header_text =
-        new text_gui_item(
+    TextGuiItem* header_text =
+        new TextGuiItem(
         "CONTROLS OPTIONS",
         game.sys_content.fnt_area_name, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
     );
     controls_gui.add_item(header_text, "header");
     
     //Control binds button.
-    button_gui_item* control_binds_button =
-        new button_gui_item("Edit control binds...", game.sys_content.fnt_standard);
+    ButtonGuiItem* control_binds_button =
+        new ButtonGuiItem("Edit control binds...", game.sys_content.fnt_standard);
     control_binds_button->on_activate =
-    [this] (const point &) {
+    [this] (const Point &) {
         controls_gui.responsive = false;
         controls_gui.start_animation(
             GUI_MANAGER_ANIM_CENTER_TO_LEFT,
@@ -490,7 +490,7 @@ void options_menu_t::init_gui_controls_page() {
     
     //Cursor speed.
     cursor_speed_picker =
-        new options_menu_picker_gui_item<float>(
+        new OptionsMenuPickerGuiItem<float>(
         "Cursor speed: ",
         &game.options.cursor_speed,
         OPTIONS::DEF_CURSOR_SPEED,
@@ -506,7 +506,7 @@ void options_menu_t::init_gui_controls_page() {
     
     //Auto-throw mode.
     auto_throw_picker =
-        new options_menu_picker_gui_item<AUTO_THROW_MODE>(
+        new OptionsMenuPickerGuiItem<AUTO_THROW_MODE>(
         "Auto-throw: ",
         &game.options.auto_throw_mode,
         OPTIONS::DEF_AUTO_THROW_MODE,
@@ -522,8 +522,8 @@ void options_menu_t::init_gui_controls_page() {
     controls_gui.add_item(auto_throw_picker, "auto_throw");
     
     //Tooltip text.
-    tooltip_gui_item* tooltip_text =
-        new tooltip_gui_item(&controls_gui);
+    TooltipGuiItem* tooltip_text =
+        new TooltipGuiItem(&controls_gui);
     controls_gui.add_item(tooltip_text, "tooltip");
     
     //Finishing touches.
@@ -536,7 +536,7 @@ void options_menu_t::init_gui_controls_page() {
 /**
  * @brief Initializes the graphics options menu GUI.
  */
-void options_menu_t::init_gui_graphics_page() {
+void OptionsMenu::init_gui_graphics_page() {
     //Menu items.
     graphics_gui.register_coords("back",            12,  5,   20,  6);
     graphics_gui.register_coords("back_input",       3,  7,    4,  4);
@@ -552,9 +552,9 @@ void options_menu_t::init_gui_graphics_page() {
     
     //Back button.
     graphics_gui.back_item =
-        new button_gui_item("Back", game.sys_content.fnt_standard);
+        new ButtonGuiItem("Back", game.sys_content.fnt_standard);
     graphics_gui.back_item->on_activate =
-    [this] (const point &) {
+    [this] (const Point &) {
         graphics_gui.responsive = false;
         graphics_gui.start_animation(
             GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
@@ -574,21 +574,21 @@ void options_menu_t::init_gui_graphics_page() {
     gui_add_back_input_icon(&graphics_gui);
     
     //Header text.
-    text_gui_item* header_text =
-        new text_gui_item(
+    TextGuiItem* header_text =
+        new TextGuiItem(
         "GRAPHICS OPTIONS",
         game.sys_content.fnt_area_name, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
     );
     graphics_gui.add_item(header_text, "header");
     
     //Fullscreen checkbox.
-    check_gui_item* fullscreen_check =
-        new check_gui_item(
+    CheckGuiItem* fullscreen_check =
+        new CheckGuiItem(
         &game.options.intended_win_fullscreen,
         "Fullscreen", game.sys_content.fnt_standard
     );
     fullscreen_check->on_activate =
-    [this, fullscreen_check] (const point &) {
+    [this, fullscreen_check] (const Point &) {
         fullscreen_check->def_activate_code();
         trigger_restart_warning();
     };
@@ -611,7 +611,7 @@ void options_menu_t::init_gui_graphics_page() {
     cur_resolution_option.first = game.options.intended_win_w;
     cur_resolution_option.second = game.options.intended_win_h;
     resolution_picker =
-        new options_menu_picker_gui_item<std::pair<int, int> >(
+        new OptionsMenuPickerGuiItem<std::pair<int, int> >(
         "Resolution: ",
         &cur_resolution_option,
         std::make_pair(OPTIONS::DEF_WIN_W, OPTIONS::DEF_WIN_H),
@@ -632,7 +632,7 @@ void options_menu_t::init_gui_graphics_page() {
     
     //Warning text.
     warning_text =
-        new text_gui_item(
+        new TextGuiItem(
         "Please restart for the changes to take effect.",
         game.sys_content.fnt_standard, COLOR_WHITE, ALLEGRO_ALIGN_CENTER
     );
@@ -640,8 +640,8 @@ void options_menu_t::init_gui_graphics_page() {
     graphics_gui.add_item(warning_text, "restart_warning");
     
     //Tooltip text.
-    tooltip_gui_item* tooltip_text =
-        new tooltip_gui_item(&graphics_gui);
+    TooltipGuiItem* tooltip_text =
+        new TooltipGuiItem(&graphics_gui);
     graphics_gui.add_item(tooltip_text, "tooltip");
     
     //Finishing touches.
@@ -654,7 +654,7 @@ void options_menu_t::init_gui_graphics_page() {
 /**
  * @brief Initializes the misc. options menu GUI.
  */
-void options_menu_t::init_gui_misc_page() {
+void OptionsMenu::init_gui_misc_page() {
     //Menu items.
     misc_gui.register_coords("back",                 12,  5,   20,  6);
     misc_gui.register_coords("back_input",            3,  7,    4,  4);
@@ -670,9 +670,9 @@ void options_menu_t::init_gui_misc_page() {
     
     //Back button.
     misc_gui.back_item =
-        new button_gui_item("Back", game.sys_content.fnt_standard);
+        new ButtonGuiItem("Back", game.sys_content.fnt_standard);
     misc_gui.back_item->on_activate =
-    [this] (const point &) {
+    [this] (const Point &) {
         misc_gui.responsive = false;
         misc_gui.start_animation(
             GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
@@ -692,8 +692,8 @@ void options_menu_t::init_gui_misc_page() {
     gui_add_back_input_icon(&misc_gui);
     
     //Header text.
-    text_gui_item* header_text =
-        new text_gui_item(
+    TextGuiItem* header_text =
+        new TextGuiItem(
         "MISC. OPTIONS",
         game.sys_content.fnt_area_name, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
     );
@@ -701,7 +701,7 @@ void options_menu_t::init_gui_misc_page() {
     
     //Cursor camera weight.
     cursor_cam_weight_picker =
-        new options_menu_picker_gui_item<float>(
+        new OptionsMenuPickerGuiItem<float>(
         "Cursor cam weight: ",
         &game.options.cursor_cam_weight,
         OPTIONS::DEF_CURSOR_CAM_WEIGHT,
@@ -716,8 +716,8 @@ void options_menu_t::init_gui_misc_page() {
     misc_gui.add_item(cursor_cam_weight_picker, "cursor_cam_weight");
     
     //Show HUD player input icons checkbox.
-    check_gui_item* show_hud_input_icons_check =
-        new check_gui_item(
+    CheckGuiItem* show_hud_input_icons_check =
+        new CheckGuiItem(
         &game.options.show_hud_input_icons,
         "Show input icons on HUD", game.sys_content.fnt_standard
     );
@@ -731,7 +731,7 @@ void options_menu_t::init_gui_misc_page() {
     
     //Leaving confirmation mode.
     leaving_confirmation_picker =
-        new options_menu_picker_gui_item<LEAVING_CONFIRMATION_MODE>(
+        new OptionsMenuPickerGuiItem<LEAVING_CONFIRMATION_MODE>(
         "Leave confirm: ",
         &game.options.leaving_confirmation_mode,
     OPTIONS::DEF_LEAVING_CONFIRMATION_MODE, {
@@ -751,8 +751,8 @@ void options_menu_t::init_gui_misc_page() {
     misc_gui.add_item(leaving_confirmation_picker, "leaving_confirmation");
     
     //Tooltip text.
-    tooltip_gui_item* tooltip_text =
-        new tooltip_gui_item(&misc_gui);
+    TooltipGuiItem* tooltip_text =
+        new TooltipGuiItem(&misc_gui);
     misc_gui.add_item(tooltip_text, "tooltip");
     
     //Finishing touches.
@@ -765,11 +765,11 @@ void options_menu_t::init_gui_misc_page() {
 /**
  * @brief Initializes the top-level menu GUI.
  */
-void options_menu_t::init_gui_top_page() {
-    data_node* gui_file = &game.content.gui_defs.list[OPTIONS_MENU::TOP_GUI_FILE_NAME];
+void OptionsMenu::init_gui_top_page() {
+    DataNode* gui_file = &game.content.gui_defs.list[OPTIONS_MENU::TOP_GUI_FILE_NAME];
     
     //Button icon positions.
-    data_node* icons_node = gui_file->get_child_by_name("icons_to_the_left");
+    DataNode* icons_node = gui_file->get_child_by_name("icons_to_the_left");
     
 #define icon_left(name, def) s2b(icons_node->get_child_by_name(name)-> \
                                  get_value_or_default(def))
@@ -797,9 +797,9 @@ void options_menu_t::init_gui_top_page() {
     
     //Back button.
     top_gui.back_item =
-        new button_gui_item("Back", game.sys_content.fnt_standard);
+        new ButtonGuiItem("Back", game.sys_content.fnt_standard);
     top_gui.back_item->on_activate =
-    [this] (const point &) {
+    [this] (const Point &) {
         save_options();
         leave();
     };
@@ -811,18 +811,18 @@ void options_menu_t::init_gui_top_page() {
     gui_add_back_input_icon(&top_gui);
     
     //Header text.
-    text_gui_item* header_text =
-        new text_gui_item(
+    TextGuiItem* header_text =
+        new TextGuiItem(
         "OPTIONS",
         game.sys_content.fnt_area_name, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
     );
     top_gui.add_item(header_text, "header");
     
     //Controls options button.
-    button_gui_item* controls_button =
-        new button_gui_item("Controls", game.sys_content.fnt_standard);
+    ButtonGuiItem* controls_button =
+        new ButtonGuiItem("Controls", game.sys_content.fnt_standard);
     controls_button->on_draw =
-    [ = ] (const point & center, const point & size) {
+    [ = ] (const Point & center, const Point & size) {
         draw_menu_button_icon(
             MENU_ICON_CONTROLS, center, size, controls_icon_left
         );
@@ -834,7 +834,7 @@ void options_menu_t::init_gui_top_page() {
         );
     };
     controls_button->on_activate =
-    [this] (const point &) {
+    [this] (const Point &) {
         top_gui.responsive = false;
         top_gui.start_animation(
             GUI_MANAGER_ANIM_CENTER_TO_LEFT,
@@ -851,10 +851,10 @@ void options_menu_t::init_gui_top_page() {
     top_gui.add_item(controls_button, "controls");
     
     //Graphics options button.
-    button_gui_item* graphics_button =
-        new button_gui_item("Graphics", game.sys_content.fnt_standard);
+    ButtonGuiItem* graphics_button =
+        new ButtonGuiItem("Graphics", game.sys_content.fnt_standard);
     graphics_button->on_draw =
-    [ = ] (const point & center, const point & size) {
+    [ = ] (const Point & center, const Point & size) {
         draw_menu_button_icon(
             MENU_ICON_GRAPHICS, center, size, graphics_icon_left
         );
@@ -866,7 +866,7 @@ void options_menu_t::init_gui_top_page() {
         );
     };
     graphics_button->on_activate =
-    [this] (const point &) {
+    [this] (const Point &) {
         top_gui.responsive = false;
         top_gui.start_animation(
             GUI_MANAGER_ANIM_CENTER_TO_LEFT,
@@ -883,10 +883,10 @@ void options_menu_t::init_gui_top_page() {
     top_gui.add_item(graphics_button, "graphics");
     
     //Audio options button.
-    button_gui_item* audio_button =
-        new button_gui_item("Audio", game.sys_content.fnt_standard);
+    ButtonGuiItem* audio_button =
+        new ButtonGuiItem("Audio", game.sys_content.fnt_standard);
     audio_button->on_draw =
-    [ = ] (const point & center, const point & size) {
+    [ = ] (const Point & center, const Point & size) {
         draw_menu_button_icon(
             MENU_ICON_AUDIO, center, size, audio_icon_left
         );
@@ -898,7 +898,7 @@ void options_menu_t::init_gui_top_page() {
         );
     };
     audio_button->on_activate =
-    [this] (const point &) {
+    [this] (const Point &) {
         top_gui.responsive = false;
         top_gui.start_animation(
             GUI_MANAGER_ANIM_CENTER_TO_LEFT,
@@ -915,10 +915,10 @@ void options_menu_t::init_gui_top_page() {
     top_gui.add_item(audio_button, "audio");
     
     //Packs options button.
-    button_gui_item* packs_button =
-        new button_gui_item("Packs", game.sys_content.fnt_standard);
+    ButtonGuiItem* packs_button =
+        new ButtonGuiItem("Packs", game.sys_content.fnt_standard);
     packs_button->on_draw =
-    [ = ] (const point & center, const point & size) {
+    [ = ] (const Point & center, const Point & size) {
         draw_menu_button_icon(
             MENU_ICON_PACKS, center, size, packs_icon_left
         );
@@ -930,13 +930,13 @@ void options_menu_t::init_gui_top_page() {
         );
     };
     packs_button->on_activate =
-    [this] (const point &) {
+    [this] (const Point &) {
         top_gui.responsive = false;
         top_gui.start_animation(
             GUI_MANAGER_ANIM_CENTER_TO_LEFT,
             OPTIONS_MENU::HUD_MOVE_TIME
         );
-        packs_menu = new packs_menu_t();
+        packs_menu = new PacksMenu();
         packs_menu->gui.responsive = true;
         packs_menu->gui.start_animation(
             GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
@@ -963,10 +963,10 @@ void options_menu_t::init_gui_top_page() {
     top_gui.add_item(packs_button, "packs");
     
     //Misc. options button.
-    button_gui_item* misc_button =
-        new button_gui_item("Misc.", game.sys_content.fnt_standard);
+    ButtonGuiItem* misc_button =
+        new ButtonGuiItem("Misc.", game.sys_content.fnt_standard);
     misc_button->on_draw =
-    [ = ] (const point & center, const point & size) {
+    [ = ] (const Point & center, const Point & size) {
         draw_menu_button_icon(
             MENU_ICON_OPTIONS_MISC, center, size, misc_icon_left
         );
@@ -978,7 +978,7 @@ void options_menu_t::init_gui_top_page() {
         );
     };
     misc_button->on_activate =
-    [this] (const point &) {
+    [this] (const Point &) {
         top_gui.responsive = false;
         top_gui.start_animation(
             GUI_MANAGER_ANIM_CENTER_TO_LEFT,
@@ -995,10 +995,10 @@ void options_menu_t::init_gui_top_page() {
     top_gui.add_item(misc_button, "misc");
     
     //Advanced bullet point.
-    bullet_gui_item* advanced_bullet =
-        new bullet_gui_item("Advanced...", game.sys_content.fnt_standard);
+    BulletGuiItem* advanced_bullet =
+        new BulletGuiItem("Advanced...", game.sys_content.fnt_standard);
     advanced_bullet->on_activate =
-    [] (const point &) {
+    [] (const Point &) {
         open_manual("options.html");
     };
     advanced_bullet->on_get_tooltip =
@@ -1010,8 +1010,8 @@ void options_menu_t::init_gui_top_page() {
     top_gui.add_item(advanced_bullet, "advanced");
     
     //Tooltip text.
-    tooltip_gui_item* tooltip_text =
-        new tooltip_gui_item(&top_gui);
+    TooltipGuiItem* tooltip_text =
+        new TooltipGuiItem(&top_gui);
     top_gui.add_item(tooltip_text, "tooltip");
     
     //Finishing touches.
@@ -1022,7 +1022,7 @@ void options_menu_t::init_gui_top_page() {
 /**
  * @brief Loads the menu.
  */
-void options_menu_t::load() {
+void OptionsMenu::load() {
     //Let's fill in the list of preset resolutions. For that, we'll get
     //the display modes fetched by Allegro. These are usually nice round
     //resolutions, and they work on fullscreen mode.
@@ -1080,26 +1080,26 @@ void options_menu_t::load() {
     guis.push_back(&graphics_gui);
     guis.push_back(&audio_gui);
     guis.push_back(&misc_gui);
-    menu_t::load();
+    Menu::load();
 }
 
 
 /**
  * @brief Populates the list of binds.
  */
-void options_menu_t::populate_binds() {
+void OptionsMenu::populate_binds() {
     binds_list_box->delete_all_children();
     
-    const vector<player_action_type> &all_player_action_types =
+    const vector<PlayerActionType> &all_player_action_types =
         game.controls.get_all_player_action_types();
-    vector<control_bind> &all_binds = game.controls.binds();
+    vector<ControlBind> &all_binds = game.controls.binds();
     
     binds_per_action_type.clear();
-    binds_per_action_type.assign(all_player_action_types.size(), vector<control_bind>());
+    binds_per_action_type.assign(all_player_action_types.size(), vector<ControlBind>());
     
     //Read all binds and sort them by player action type.
     for(size_t b = 0; b < all_binds.size(); b++) {
-        const control_bind &bind = all_binds[b];
+        const ControlBind &bind = all_binds[b];
         if(bind.player_nr != 0) continue;
         binds_per_action_type[bind.action_type_id].push_back(bind);
     }
@@ -1107,7 +1107,7 @@ void options_menu_t::populate_binds() {
     PLAYER_ACTION_CAT last_cat = PLAYER_ACTION_CAT_NONE;
     
     for(size_t a = 0; a < all_player_action_types.size(); a++) {
-        const player_action_type &action_type = all_player_action_types[a];
+        const PlayerActionType &action_type = all_player_action_types[a];
         
         if(action_type.internal_name.empty()) continue;
         
@@ -1133,15 +1133,15 @@ void options_menu_t::populate_binds() {
                 break;
             }
             }
-            text_gui_item* section_text =
-                new text_gui_item(section_name, game.sys_content.fnt_area_name);
+            TextGuiItem* section_text =
+                new TextGuiItem(section_name, game.sys_content.fnt_area_name);
             section_text->center =
-                point(
+                Point(
                     0.50f,
                     action_y + OPTIONS_MENU::BIND_BUTTON_HEIGHT / 2.0f
                 );
             section_text->size =
-                point(0.50f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
+                Point(0.50f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
             binds_list_box->add_child(section_text);
             binds_gui.add_item(section_text);
             
@@ -1156,22 +1156,22 @@ void options_menu_t::populate_binds() {
         float cur_y = action_y + OPTIONS_MENU::BIND_BUTTON_HEIGHT / 2.0f;
         
         //Action type name bullet.
-        bullet_gui_item* name_bullet =
-            new bullet_gui_item(action_type.name, game.sys_content.fnt_standard);
+        BulletGuiItem* name_bullet =
+            new BulletGuiItem(action_type.name, game.sys_content.fnt_standard);
         name_bullet->center =
-            point(0.22f, cur_y);
+            Point(0.22f, cur_y);
         name_bullet->size =
-            point(0.34f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
+            Point(0.34f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
         name_bullet->on_get_tooltip =
         [action_type] () { return action_type.description; };
         binds_list_box->add_child(name_bullet);
         binds_gui.add_item(name_bullet);
         
         //More button.
-        button_gui_item* more_button =
-            new button_gui_item("...", game.sys_content.fnt_standard);
+        ButtonGuiItem* more_button =
+            new ButtonGuiItem("...", game.sys_content.fnt_standard);
         more_button->on_activate =
-        [this, action_type] (const point &) {
+        [this, action_type] (const Point &) {
             if(showing_binds_more && action_type.id == cur_action_type) {
                 showing_binds_more = false;
             } else {
@@ -1181,9 +1181,9 @@ void options_menu_t::populate_binds() {
             populate_binds();
         };
         more_button->center =
-            point(0.92f, cur_y);
+            Point(0.92f, cur_y);
         more_button->size =
-            point(0.05f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
+            Point(0.05f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
         string tooltip =
             (showing_binds_more && action_type.id == cur_action_type) ?
             "Hide options." :
@@ -1196,19 +1196,19 @@ void options_menu_t::populate_binds() {
             binds_gui.set_selected_item(more_button, true);
         }
         
-        vector<control_bind> a_binds = binds_per_action_type[action_type.id];
+        vector<ControlBind> a_binds = binds_per_action_type[action_type.id];
         for(size_t b = 0; b < a_binds.size(); b++) {
         
             //Change bind button.
-            button_gui_item* bind_button =
-                new button_gui_item("", game.sys_content.fnt_standard);
+            ButtonGuiItem* bind_button =
+                new ButtonGuiItem("", game.sys_content.fnt_standard);
             bind_button->on_activate =
-            [this, action_type, b] (const point &) {
+            [this, action_type, b] (const Point &) {
                 choose_input(action_type.id, b);
             };
             bind_button->on_draw =
                 [this, b, a_binds, bind_button]
-            (const point & center, const point & size) {
+            (const Point & center, const Point & size) {
                 draw_player_input_icon(
                     game.sys_content.fnt_slim, a_binds[b].input, false,
                     center, size * 0.8f
@@ -1222,9 +1222,9 @@ void options_menu_t::populate_binds() {
                 );
             };
             bind_button->center =
-                point(0.63f, cur_y);
+                Point(0.63f, cur_y);
             bind_button->size =
-                point(0.34f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
+                Point(0.34f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
             bind_button->on_get_tooltip =
             [] () { return "Change the input for this action."; };
             binds_list_box->add_child(bind_button);
@@ -1232,15 +1232,15 @@ void options_menu_t::populate_binds() {
             
             if(showing_binds_more && action_type.id == cur_action_type) {
                 //Remove bind button.
-                button_gui_item* remove_bind_button =
-                    new button_gui_item("", game.sys_content.fnt_standard);
+                ButtonGuiItem* remove_bind_button =
+                    new ButtonGuiItem("", game.sys_content.fnt_standard);
                 remove_bind_button->on_activate =
-                [this, action_type, b] (const point &) {
+                [this, action_type, b] (const Point &) {
                     delete_bind(action_type.id, b);
                 };
                 remove_bind_button->on_draw =
                     [this, remove_bind_button]
-                (const point & center, const point & size) {
+                (const Point & center, const Point & size) {
                     draw_button(
                         center, size, "X", game.sys_content.fnt_standard, COLOR_WHITE,
                         remove_bind_button->selected,
@@ -1248,21 +1248,21 @@ void options_menu_t::populate_binds() {
                     );
                 };
                 remove_bind_button->center =
-                    point(0.85f, cur_y);
+                    Point(0.85f, cur_y);
                 remove_bind_button->size =
-                    point(0.05f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
+                    Point(0.05f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
                 remove_bind_button->on_get_tooltip =
                 [] () { return "Remove this input from this action."; };
                 binds_list_box->add_child(remove_bind_button);
                 binds_gui.add_item(remove_bind_button);
                 remove_bind_button->start_juice_animation(
-                    gui_item::JUICE_TYPE_GROW_TEXT_HIGH
+                    GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
                 );
             }
             
             if(action_type.id == cur_action_type) {
                 bind_button->start_juice_animation(
-                    gui_item::JUICE_TYPE_GROW_TEXT_MEDIUM
+                    GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
                 );
             }
             
@@ -1275,15 +1275,15 @@ void options_menu_t::populate_binds() {
         if(a_binds.empty()) {
         
             //Add first bind button.
-            button_gui_item* bind_button =
-                new button_gui_item("", game.sys_content.fnt_standard);
+            ButtonGuiItem* bind_button =
+                new ButtonGuiItem("", game.sys_content.fnt_standard);
             bind_button->on_activate =
-            [this, action_type] (const point &) {
+            [this, action_type] (const Point &) {
                 choose_input(action_type.id, 0);
             };
             bind_button->on_draw =
                 [this, bind_button]
-            (const point & center, const point & size) {
+            (const Point & center, const Point & size) {
                 draw_button(
                     center, size, "", game.sys_content.fnt_standard, COLOR_WHITE,
                     bind_button->selected,
@@ -1291,15 +1291,15 @@ void options_menu_t::populate_binds() {
                 );
             };
             bind_button->center =
-                point(0.63f, cur_y);
+                Point(0.63f, cur_y);
             bind_button->size =
-                point(0.34f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
+                Point(0.34f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
             bind_button->on_get_tooltip =
             [] () { return "Choose an input for this action."; };
             binds_list_box->add_child(bind_button);
             binds_gui.add_item(bind_button);
             bind_button->start_juice_animation(
-                gui_item::JUICE_TYPE_GROW_TEXT_MEDIUM
+                GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
             );
             
             cur_y +=
@@ -1309,14 +1309,14 @@ void options_menu_t::populate_binds() {
         } else if(showing_binds_more && action_type.id == cur_action_type) {
         
             //Add button.
-            button_gui_item* add_button =
-                new button_gui_item("Add...", game.sys_content.fnt_standard);
+            ButtonGuiItem* add_button =
+                new ButtonGuiItem("Add...", game.sys_content.fnt_standard);
             add_button->center =
-                point(0.63f, cur_y);
+                Point(0.63f, cur_y);
             add_button->size =
-                point(0.34f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
+                Point(0.34f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
             add_button->on_activate =
-            [this, action_type, a_binds] (const point &) {
+            [this, action_type, a_binds] (const Point &) {
                 choose_input(action_type.id, a_binds.size());
             };
             add_button->on_get_tooltip =
@@ -1324,7 +1324,7 @@ void options_menu_t::populate_binds() {
             binds_list_box->add_child(add_button);
             binds_gui.add_item(add_button);
             add_button->start_juice_animation(
-                gui_item::JUICE_TYPE_GROW_TEXT_HIGH
+                GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
             );
             
             cur_y +=
@@ -1336,14 +1336,14 @@ void options_menu_t::populate_binds() {
         if(showing_binds_more && action_type.id == cur_action_type) {
         
             //Restore default button.
-            button_gui_item* restore_button =
-                new button_gui_item("Restore defaults", game.sys_content.fnt_standard);
+            ButtonGuiItem* restore_button =
+                new ButtonGuiItem("Restore defaults", game.sys_content.fnt_standard);
             restore_button->center =
-                point(0.63f, cur_y);
+                Point(0.63f, cur_y);
             restore_button->size =
-                point(0.34f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
+                Point(0.34f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
             restore_button->on_activate =
-            [this, action_type] (const point &) {
+            [this, action_type] (const Point &) {
                 restore_default_binds(action_type.id);
             };
             restore_button->on_get_tooltip =
@@ -1351,7 +1351,7 @@ void options_menu_t::populate_binds() {
             binds_list_box->add_child(restore_button);
             binds_gui.add_item(restore_button);
             restore_button->start_juice_animation(
-                gui_item::JUICE_TYPE_GROW_TEXT_MEDIUM
+                GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
             );
             
             cur_y +=
@@ -1359,30 +1359,30 @@ void options_menu_t::populate_binds() {
                 OPTIONS_MENU::BIND_BUTTON_PADDING;
                 
             //Default label.
-            text_gui_item* default_label_text =
-                new text_gui_item(
+            TextGuiItem* default_label_text =
+                new TextGuiItem(
                 "Default:", game.sys_content.fnt_standard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
             );
             default_label_text->center =
-                point(0.63f, cur_y);
+                Point(0.63f, cur_y);
             default_label_text->size =
-                point(0.30f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
+                Point(0.30f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
             binds_list_box->add_child(default_label_text);
             binds_gui.add_item(default_label_text);
             default_label_text->start_juice_animation(
-                gui_item::JUICE_TYPE_GROW_TEXT_MEDIUM
+                GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
             );
             
             //Default icon.
-            player_input def_input =
+            PlayerInput def_input =
                 game.controls.str_to_input(action_type.default_bind_str);
-            gui_item* default_icon = new gui_item();
+            GuiItem* default_icon = new GuiItem();
             default_icon->center =
-                point(0.68f, cur_y);
+                Point(0.68f, cur_y);
             default_icon->size =
-                point(0.17f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
+                Point(0.17f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
             default_icon->on_draw =
-            [def_input] (const point & center, const point & size) {
+            [def_input] (const Point & center, const Point & size) {
                 draw_player_input_icon(
                     game.sys_content.fnt_slim, def_input, false, center, size
                 );
@@ -1394,14 +1394,14 @@ void options_menu_t::populate_binds() {
         
         if(a < all_player_action_types.size() - 1) {
             //Spacer line.
-            gui_item* line = new gui_item();
+            GuiItem* line = new GuiItem();
             line->center =
-                point(
+                Point(
                     0.50f, binds_list_box->get_child_bottom() + 0.02f
                 );
-            line->size = point(0.90f, 0.02f);
+            line->size = Point(0.90f, 0.02f);
             line->on_draw =
-            [] (const point & center, const point & size) {
+            [] (const Point & center, const Point & size) {
                 al_draw_line(
                     center.x - size.x / 2.0f,
                     center.y,
@@ -1423,12 +1423,12 @@ void options_menu_t::populate_binds() {
  *
  * @param action_type_id Action type ID of the action to restore.
  */
-void options_menu_t::restore_default_binds(
+void OptionsMenu::restore_default_binds(
     const PLAYER_ACTION_TYPE action_type_id
 ) {
-    const player_action_type &action_type =
+    const PlayerActionType &action_type =
         game.controls.get_player_action_type(action_type_id);
-    vector<control_bind> &all_binds =
+    vector<ControlBind> &all_binds =
         game.controls.binds();
         
     for(size_t b = 0; b < all_binds.size();) {
@@ -1442,9 +1442,9 @@ void options_menu_t::restore_default_binds(
         }
     }
     
-    player_input def_input =
+    PlayerInput def_input =
         game.controls.str_to_input(action_type.default_bind_str);
-    control_bind new_bind;
+    ControlBind new_bind;
     
     if(def_input.type != INPUT_TYPE_NONE) {
         new_bind.action_type_id = action_type_id;
@@ -1463,8 +1463,8 @@ void options_menu_t::restore_default_binds(
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void options_menu_t::tick(float delta_t) {
-    menu_t::tick(delta_t);
+void OptionsMenu::tick(float delta_t) {
+    Menu::tick(delta_t);
     
     //Tick the GUIs.
     if(packs_menu) {
@@ -1494,11 +1494,11 @@ void options_menu_t::tick(float delta_t) {
 /**
  * @brief Triggers the restart warning at the bottom of the screen.
  */
-void options_menu_t::trigger_restart_warning() {
+void OptionsMenu::trigger_restart_warning() {
     if(!warning_text->visible) {
         warning_text->visible = true;
         warning_text->start_juice_animation(
-            gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
+            GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
         );
     }
 }
@@ -1507,12 +1507,12 @@ void options_menu_t::trigger_restart_warning() {
 /**
  * @brief Unloads the menu.
  */
-void options_menu_t::unload() {
+void OptionsMenu::unload() {
     if(packs_menu) {
         packs_menu->unload();
         delete packs_menu;
         packs_menu = nullptr;
     }
     
-    menu_t::unload();
+    Menu::unload();
 }

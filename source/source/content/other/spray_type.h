@@ -27,14 +27,14 @@ using std::vector;
  * @brief A spray type. It decides how the spray behaves,
  * what status effect it causes, and some other values.
  */
-class spray_type : public content {
+class SprayType : public Content {
 
 public:
 
     //--- Members ---
     
     //What the spray does.
-    vector<status_type*> effects;
+    vector<StatusType*> effects;
     
     //True: applied to the entire group. False: applied in a specified range.
     bool group = true;
@@ -69,6 +69,6 @@ public:
     
     //--- Function declarations ---
     
-    void load_from_data_node(data_node* node, CONTENT_LOAD_LEVEL level);
+    void load_from_data_node(DataNode* node, CONTENT_LOAD_LEVEL level);
     
 };

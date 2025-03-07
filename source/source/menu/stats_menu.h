@@ -30,13 +30,13 @@ extern const string GUI_FILE_PATH;
  * @brief Info about the statistics menu currently being presented to
  * the player.
  */
-class stats_menu_t : public menu_t {
+class StatsMenu : public Menu {
 public:
 
     //--- Members ---
     
     //GUI manager.
-    gui_manager gui;
+    GuiManager gui;
     
     
     //--- Function declarations ---
@@ -49,16 +49,16 @@ private:
     //--- Members ---
     
     //Statistics list item.
-    list_gui_item* stats_list = nullptr;
+    ListGuiItem* stats_list = nullptr;
     
     //Runtime stat text item.
-    text_gui_item* runtime_value_text = nullptr;
+    TextGuiItem* runtime_value_text = nullptr;
     
     
     //--- Function declarations ---
     
     void add_header(const string &label);
-    text_gui_item* add_stat(
+    TextGuiItem* add_stat(
         const string &label, const string &value, const string &description
     );
     void init_gui_main();

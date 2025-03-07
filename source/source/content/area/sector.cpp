@@ -22,7 +22,7 @@
  * @brief Destroys the sector object.
  *
  */
-sector::~sector() {
+Sector::~Sector() {
     for(size_t t = 0; t < 2; t++) {
         if(texture_info.bitmap && texture_info.bitmap != game.bmp_error) {
             game.content.bitmaps.list.free(texture_info.bmp_name);
@@ -37,7 +37,7 @@ sector::~sector() {
  * @param e_ptr Edge to add.
  * @param e_idx Index of the edge to add.
  */
-void sector::add_edge(edge* e_ptr, size_t e_idx) {
+void Sector::add_edge(Edge* e_ptr, size_t e_idx) {
     for(size_t i = 0; i < edges.size(); i++) {
         if(edges[i] == e_ptr) {
             return;
@@ -52,11 +52,11 @@ void sector::add_edge(edge* e_ptr, size_t e_idx) {
  * @brief Calculates the bounding box coordinates and saves them
  * in the object's bbox variables.
  */
-void sector::calculate_bounding_box() {
+void Sector::calculate_bounding_box() {
     if(edges.empty()) {
         //Unused sector... This shouldn't exist.
-        bbox[0] = point();
-        bbox[1] = point();
+        bbox[0] = Point();
+        bbox[1] = Point();
         return;
     }
     
@@ -65,7 +65,7 @@ void sector::calculate_bounding_box() {
     
     for(size_t e = 0; e < edges.size(); e++) {
         for(unsigned char v = 0; v < 2; v++) {
-            point p = v2p(edges[e]->vertexes[v]);
+            Point p = v2p(edges[e]->vertexes[v]);
             update_min_max_coords(bbox[0], bbox[1], p);
         }
     }
@@ -79,7 +79,7 @@ void sector::calculate_bounding_box() {
  *
  * @param destination Sector to clone the data into.
  */
-void sector::clone(sector* destination) const {
+void Sector::clone(Sector* destination) const {
     destination->type = type;
     destination->is_bottomless_pit = is_bottomless_pit;
     destination->z = z;
@@ -105,9 +105,9 @@ void sector::clone(sector* destination) const {
  * @param sector_list List of sectors to be filled.
  * Also doubles as the list of visited sectors.
  */
-void sector::get_neighbor_sectors_conditionally(
-    const std::function<bool(sector* s_ptr)> &condition,
-    vector<sector*> &sector_list
+void Sector::get_neighbor_sectors_conditionally(
+    const std::function<bool(Sector* s_ptr)> &condition,
+    vector<Sector*> &sector_list
 ) {
 
     //If this sector is already on the list, skip.
@@ -122,8 +122,8 @@ void sector::get_neighbor_sectors_conditionally(
     sector_list.push_back(this);
     
     //Now check its neighbors.
-    edge* e_ptr = nullptr;
-    sector* other_s = nullptr;
+    Edge* e_ptr = nullptr;
+    Sector* other_s = nullptr;
     for(size_t e = 0; e < edges.size(); e++) {
         e_ptr = edges[e];
         other_s = e_ptr->get_other_sector(this);
@@ -139,11 +139,11 @@ void sector::get_neighbor_sectors_conditionally(
  *
  * @return The vertex.
  */
-vertex* sector::get_rightmost_vertex() const {
-    vertex* rightmost = nullptr;
+Vertex* Sector::get_rightmost_vertex() const {
+    Vertex* rightmost = nullptr;
     
     for(size_t e = 0; e < edges.size(); e++) {
-        edge* e_ptr = edges[e];
+        Edge* e_ptr = edges[e];
         if(!rightmost) rightmost = e_ptr->vertexes[0];
         else {
             rightmost = ::get_rightmost_vertex(e_ptr->vertexes[0], rightmost);
@@ -162,12 +162,12 @@ vertex* sector::get_rightmost_vertex() const {
  * @param s1 Receives the first sector.
  * @param s2 Receives the second sector.
  */
-void sector::get_texture_merge_sectors(sector** s1, sector** s2) const {
+void Sector::get_texture_merge_sectors(Sector** s1, Sector** s2) const {
     //Check all edges to find which two textures need merging.
-    edge* e_ptr = nullptr;
-    sector* neighbor = nullptr;
-    map<sector*, dist> neighbors;
-    sector* texture_sector[2] = {nullptr, nullptr};
+    Edge* e_ptr = nullptr;
+    Sector* neighbor = nullptr;
+    map<Sector*, Distance> neighbors;
+    Sector* texture_sector[2] = {nullptr, nullptr};
     
     //The two neighboring sectors with the lenghtiest edges are picked.
     //So save all sector/length pairs.
@@ -185,26 +185,26 @@ void sector::get_texture_merge_sectors(sector** s1, sector** s2) const {
         
         if(valid) {
             neighbors[neighbor] +=
-                dist(
-                    point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y),
-                    point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y)
+                Distance(
+                    Point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y),
+                    Point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y)
                 );
         }
     }
     
     //Find the two lengthiest ones.
-    vector<std::pair<dist, sector*> > neighbors_vec;
+    vector<std::pair<Distance, Sector*> > neighbors_vec;
     for(auto &n : neighbors) {
         neighbors_vec.push_back(
             std::make_pair(
                 //Yes, we do need these casts, for g++.
-                (dist) (n.second), (sector*) (n.first)
+                (Distance) (n.second), (Sector*) (n.first)
             )
         );
     }
     sort(
         neighbors_vec.begin(), neighbors_vec.end(),
-    [this] (std::pair<dist, sector*> p1, std::pair<dist, sector*> p2) -> bool {
+    [this] (std::pair<Distance, Sector*> p1, std::pair<Distance, Sector*> p2) -> bool {
         return p1.first < p2.first;
     }
     );
@@ -236,8 +236,8 @@ void sector::get_texture_merge_sectors(sector** s1, sector** s2) const {
  *
  * @return Whether it is clockwise.
  */
-bool sector::is_clockwise() const {
-    vector<vertex*> vertexes;
+bool Sector::is_clockwise() const {
+    vector<Vertex*> vertexes;
     for(size_t e = 0; e < edges.size(); e++) {
         vertexes.push_back(edges[e]->vertexes[0]);
     }
@@ -251,15 +251,15 @@ bool sector::is_clockwise() const {
  * @param p Point to check.
  * @return Whether it is in the sector.
  */
-bool sector::is_point_in_sector(const point &p) const {
+bool Sector::is_point_in_sector(const Point &p) const {
     for(size_t t = 0; t < triangles.size(); t++) {
-        const triangle* t_ptr = &triangles[t];
+        const Triangle* t_ptr = &triangles[t];
         if(
             is_point_in_triangle(
                 p,
-                point(t_ptr->points[0]->x, t_ptr->points[0]->y),
-                point(t_ptr->points[1]->x, t_ptr->points[1]->y),
-                point(t_ptr->points[2]->x, t_ptr->points[2]->y),
+                Point(t_ptr->points[0]->x, t_ptr->points[0]->y),
+                Point(t_ptr->points[1]->x, t_ptr->points[1]->y),
+                Point(t_ptr->points[2]->x, t_ptr->points[2]->y),
                 false
             )
         ) {
@@ -276,7 +276,7 @@ bool sector::is_point_in_sector(const point &p) const {
  *
  * @param e_ptr Edge to remove.
  */
-void sector::remove_edge(const edge* e_ptr) {
+void Sector::remove_edge(const Edge* e_ptr) {
     size_t i = 0;
     for(; i < edges.size(); i++) {
         if(edges[i] == e_ptr) {
@@ -299,8 +299,8 @@ void sector::remove_edge(const edge* e_ptr) {
  * This provides faster results, but the blockmap must be built.
  * @return The sector.
  */
-sector* get_sector(
-    const point &p, size_t* out_sector_idx, bool use_blockmap
+Sector* get_sector(
+    const Point &p, size_t* out_sector_idx, bool use_blockmap
 ) {
 
     if(use_blockmap) {
@@ -309,7 +309,7 @@ sector* get_sector(
         size_t row = game.cur_area_data->bmap.get_row(p.y);
         if(col == INVALID || row == INVALID) return nullptr;
         
-        unordered_set<sector*>* sectors =
+        unordered_set<Sector*>* sectors =
             &game.cur_area_data->bmap.sectors[col][row];
             
         if(sectors->size() == 1) return *sectors->begin();
@@ -329,7 +329,7 @@ sector* get_sector(
     } else {
     
         for(size_t s = 0; s < game.cur_area_data->sectors.size(); s++) {
-            sector* s_ptr = game.cur_area_data->sectors[s];
+            Sector* s_ptr = game.cur_area_data->sectors[s];
             
             if(
                 p.x < s_ptr->bbox[0].x ||

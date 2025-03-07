@@ -28,8 +28,8 @@ using std::size_t;
 using std::string;
 using std::vector;
 
-class animation_database;
-class mob_type;
+class AnimationDatabase;
+class MobType;
 
 
 /*
@@ -65,7 +65,7 @@ class mob_type;
 /**
  * @brief A sprite in a spritesheet.
  */
-class sprite {
+class Sprite {
 
 public:
 
@@ -81,17 +81,17 @@ public:
     string bmp_name;
     
     //Top-left corner of the sprite inside the parent bitmap.
-    point bmp_pos;
+    Point bmp_pos;
     
     //Size of the sprite inside the parent bitmap.
-    point bmp_size;
+    Point bmp_size;
     
     //Offset. Move the sprite left/right/up/down to align with
     //the previous frames and such.
-    point offset;
+    Point offset;
     
     //Scale multiplier.
-    point scale = point(1.0f);
+    Point scale = Point(1.0f);
     
     //Angle to rotate the image by.
     float angle = 0.0f;
@@ -100,10 +100,10 @@ public:
     ALLEGRO_COLOR tint = COLOR_WHITE;
     
     //X&Y of the Pikmin's top (left/bud/flower).
-    point top_pos;
+    Point top_pos;
     
     //W&H of the Pikmin's top.
-    point top_size = point(5.5, 10);
+    Point top_size = Point(5.5, 10);
     
     //Angle of the Pikmin's top.
     float top_angle = 0.0f;
@@ -115,30 +115,30 @@ public:
     ALLEGRO_BITMAP* bitmap = nullptr;
     
     //List of hitboxes on this frame.
-    vector<hitbox> hitboxes;
+    vector<Hitbox> hitboxes;
     
     
     //--- Function declarations ---
     
-    explicit sprite(
+    explicit Sprite(
         const string &name = "", ALLEGRO_BITMAP* const b = nullptr,
-        const vector<hitbox> &h = vector<hitbox>()
+        const vector<Hitbox> &h = vector<Hitbox>()
     );
-    sprite(
-        const string &name, ALLEGRO_BITMAP* const b, const point &b_pos,
-        const point &b_size, const vector<hitbox> &h
+    Sprite(
+        const string &name, ALLEGRO_BITMAP* const b, const Point &b_pos,
+        const Point &b_size, const vector<Hitbox> &h
     );
-    sprite(const sprite &s2);
-    ~sprite();
-    sprite &operator=(const sprite &s2);
+    Sprite(const Sprite &s2);
+    ~Sprite();
+    Sprite &operator=(const Sprite &s2);
     void create_hitboxes(
-        animation_database* const adb,
+        AnimationDatabase* const adb,
         float height = 0, float radius = 0
     );
     void set_bitmap(
         const string &new_bmp_name,
-        const point &new_bmp_pos, const point &new_bmp_size,
-        data_node* node = nullptr
+        const Point &new_bmp_pos, const Point &new_bmp_size,
+        DataNode* node = nullptr
     );
     
 };
@@ -149,7 +149,7 @@ public:
  * A single sprite can appear multiple times in the same animation
  * (imagine an enemy shaking back and forth).
  */
-class frame {
+class Frame {
 
 public:
 
@@ -162,7 +162,7 @@ public:
     size_t sprite_idx = INVALID;
     
     //Pointer to the sprite. Cache for performance.
-    sprite* sprite_ptr = nullptr;
+    Sprite* sprite_ptr = nullptr;
     
     //How long this frame lasts for, in seconds.
     float duration = 0.0f;
@@ -182,9 +182,9 @@ public:
     
     //--- Function declarations ---
     
-    explicit frame(
+    explicit Frame(
         const string &sn = "", size_t si = INVALID,
-        sprite* sp = nullptr, float d = 0.1,
+        Sprite* sp = nullptr, float d = 0.1,
         bool in = false, const string &snd = "", size_t s = INVALID
     );
     
@@ -194,7 +194,7 @@ public:
 /**
  * @brief An animation. A list of frames, basically.
  */
-class animation {
+class Animation {
 
 public:
 
@@ -204,7 +204,7 @@ public:
     string name;
     
     //List of frames.
-    vector<frame> frames;
+    vector<Frame> frames;
     
     //The animation loops back to this frame index when it reaches the end.
     size_t loop_frame = 0;
@@ -217,13 +217,13 @@ public:
     
     //--- Function declarations ---
     
-    explicit animation(
+    explicit Animation(
         const string &name = "",
-        const vector<frame> &frames = vector<frame>(),
+        const vector<Frame> &frames = vector<Frame>(),
         size_t loop_frame = 0, unsigned char hit_rate = 100
     );
-    animation(const animation &a2);
-    animation &operator=(const animation &a2);
+    Animation(const Animation &a2);
+    Animation &operator=(const Animation &a2);
     void delete_frame(size_t idx);
     float get_duration();
     float get_loop_duration();
@@ -240,20 +240,20 @@ public:
  *
  * Basically, an animation file.
  */
-class animation_database : public content {
+class AnimationDatabase : public Content {
 
 public:
 
     //--- Members ---
     
     //List of known animations.
-    vector<animation*> animations;
+    vector<Animation*> animations;
     
     //List of known sprites.
-    vector<sprite*> sprites;
+    vector<Sprite*> sprites;
     
     //List of known body parts.
-    vector<body_part*> body_parts;
+    vector<BodyPart*> body_parts;
     
     //Conversion between pre-named animations and in-file animations.
     vector<size_t> pre_named_conversions;
@@ -264,10 +264,10 @@ public:
     
     //--- Function declarations ---
     
-    explicit animation_database(
-        const vector<animation*> &a = vector<animation*>(),
-        const vector<sprite*>    &s = vector<sprite*>(),
-        const vector<body_part*> &b = vector<body_part*>()
+    explicit AnimationDatabase(
+        const vector<Animation*> &a = vector<Animation*>(),
+        const vector<Sprite*>    &s = vector<Sprite*>(),
+        const vector<BodyPart*> &b = vector<BodyPart*>()
     );
     size_t find_animation(const string &name) const;
     size_t find_sprite(const string &name) const;
@@ -275,13 +275,13 @@ public:
     void calculate_hitbox_span();
     void create_conversions(
         const vector<std::pair<size_t, string> > &conversions,
-        const data_node* file
+        const DataNode* file
     );
     void delete_sprite(size_t idx);
-    void fill_sound_idx_caches(mob_type* mt_ptr);
+    void fill_sound_idx_caches(MobType* mt_ptr);
     void fix_body_part_pointers();
-    void load_from_data_node(data_node* node);
-    void save_to_data_node(data_node* node, bool save_top_data);
+    void load_from_data_node(DataNode* node);
+    void save_to_data_node(DataNode* node, bool save_top_data);
     void sort_alphabetically();
     void destroy();
     
@@ -291,17 +291,17 @@ public:
 /**
  * @brief Instance of a running animation. This can be played, rewinded, etc.
  */
-class animation_instance {
+class AnimationInstance {
 
 public:
 
     //--- Members ---
     
     //The animation currently running.
-    animation* cur_anim = nullptr;
+    Animation* cur_anim = nullptr;
     
     //The database this belongs to.
-    animation_database* anim_db = nullptr;
+    AnimationDatabase* anim_db = nullptr;
     
     //Time passed on the current frame.
     float cur_frame_time = 0.0f;
@@ -312,9 +312,9 @@ public:
     
     //--- Function declarations ---
     
-    explicit animation_instance(animation_database* anim_db = nullptr);
-    animation_instance(const animation_instance &ai2);
-    animation_instance &operator=(const animation_instance &ai2);
+    explicit AnimationInstance(AnimationDatabase* anim_db = nullptr);
+    AnimationInstance(const AnimationInstance &ai2);
+    AnimationInstance &operator=(const AnimationInstance &ai2);
     void clear();
     void to_start();
     void skip_ahead_randomly();
@@ -325,24 +325,24 @@ public:
     );
     bool valid_frame() const;
     void get_sprite_data(
-        sprite** out_cur_sprite_ptr, sprite** out_next_sprite_ptr,
+        Sprite** out_cur_sprite_ptr, Sprite** out_next_sprite_ptr,
         float* out_interpolation_factor
     ) const;
     size_t get_next_frame_idx(bool* out_reached_end = nullptr) const;
-    void init_to_first_anim(animation_database* db);
+    void init_to_first_anim(AnimationDatabase* db);
     
 };
 
 
 void get_sprite_basic_effects(
-    const point &base_pos, float base_angle,
+    const Point &base_pos, float base_angle,
     float base_angle_cos_cache, float base_angle_sin_cache,
-    sprite* cur_s_ptr, sprite* next_s_ptr, float interpolation_factor,
-    point* out_eff_trans, float* out_eff_angle,
-    point* out_eff_scale, ALLEGRO_COLOR* out_eff_tint
+    Sprite* cur_s_ptr, Sprite* next_s_ptr, float interpolation_factor,
+    Point* out_eff_trans, float* out_eff_angle,
+    Point* out_eff_scale, ALLEGRO_COLOR* out_eff_tint
 );
 void get_sprite_basic_top_effects(
-    sprite* cur_s_ptr, sprite* next_s_ptr, float interpolation_factor,
-    point* out_eff_trans, float* out_eff_angle,
-    point* out_eff_size
+    Sprite* cur_s_ptr, Sprite* next_s_ptr, float interpolation_factor,
+    Point* out_eff_trans, float* out_eff_angle,
+    Point* out_eff_size
 );

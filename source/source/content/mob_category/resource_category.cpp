@@ -19,8 +19,8 @@
 /**
  * @brief Constructs a new resource category object.
  */
-resource_category::resource_category() :
-    mob_category(
+ResourceCategory::ResourceCategory() :
+    MobCategory(
         MOB_CATEGORY_RESOURCES, "resource",
         "Resource", "Resources",
         "resources", al_map_rgb(139, 204, 204)
@@ -32,7 +32,7 @@ resource_category::resource_category() :
 /**
  * @brief Clears the list of registered types of resource.
  */
-void resource_category::clear_types() {
+void ResourceCategory::clear_types() {
     for(auto &t : game.content.mob_types.list.resource) {
         delete t.second;
     }
@@ -48,10 +48,10 @@ void resource_category::clear_types() {
  * @param angle Starting angle.
  * @return The mob.
  */
-mob* resource_category::create_mob(
-    const point &pos, mob_type* type, float angle
+Mob* ResourceCategory::create_mob(
+    const Point &pos, MobType* type, float angle
 ) {
-    resource* m = new resource(pos, (resource_type*) type, angle);
+    Resource* m = new Resource(pos, (ResourceType*) type, angle);
     game.states.gameplay->mobs.resources.push_back(m);
     return m;
 }
@@ -62,8 +62,8 @@ mob* resource_category::create_mob(
  *
  * @return The type.
  */
-mob_type* resource_category::create_type() {
-    return new resource_type();
+MobType* ResourceCategory::create_type() {
+    return new ResourceType();
 }
 
 
@@ -72,12 +72,12 @@ mob_type* resource_category::create_type() {
  *
  * @param m The mob to erase.
  */
-void resource_category::erase_mob(mob* m) {
+void ResourceCategory::erase_mob(Mob* m) {
     game.states.gameplay->mobs.resources.erase(
         find(
             game.states.gameplay->mobs.resources.begin(),
             game.states.gameplay->mobs.resources.end(),
-            (resource*) m
+            (Resource*) m
         )
     );
 }
@@ -90,7 +90,7 @@ void resource_category::erase_mob(mob* m) {
  * @param internal_name Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-mob_type* resource_category::get_type(const string &internal_name) const {
+MobType* ResourceCategory::get_type(const string &internal_name) const {
     auto it = game.content.mob_types.list.resource.find(internal_name);
     if(it == game.content.mob_types.list.resource.end()) return nullptr;
     return it->second;
@@ -102,7 +102,7 @@ mob_type* resource_category::get_type(const string &internal_name) const {
  *
  * @param list This list gets filled with the mob type internal names.
  */
-void resource_category::get_type_names(vector<string> &list) const {
+void ResourceCategory::get_type_names(vector<string> &list) const {
     for(auto &t : game.content.mob_types.list.resource) {
         list.push_back(t.first);
     }
@@ -115,6 +115,6 @@ void resource_category::get_type_names(vector<string> &list) const {
  * @param internal_name Internal name of the mob type.
  * @param type Mob type to register.
  */
-void resource_category::register_type(const string &internal_name, mob_type* type) {
-    game.content.mob_types.list.resource[internal_name] = (resource_type*) type;
+void ResourceCategory::register_type(const string &internal_name, MobType* type) {
+    game.content.mob_types.list.resource[internal_name] = (ResourceType*) type;
 }

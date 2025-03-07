@@ -38,8 +38,8 @@ const float STEP_HEIGHT = 10;
  * @param type Bridge type this mob belongs to.
  * @param angle Starting angle.
  */
-bridge::bridge(const point &pos, bridge_type* type, float angle) :
-    mob(pos, type, angle),
+Bridge::Bridge(const Point &pos, BridgeType* type, float angle) :
+    Mob(pos, type, angle),
     start_pos(pos),
     bri_type(type) {
     
@@ -54,7 +54,7 @@ bridge::bridge(const point &pos, bridge_type* type, float angle) :
  *
  * @return Whether new chunks were created.
  */
-bool bridge::check_health() {
+bool Bridge::check_health() {
     //Figure out how many chunks should exist based on the bridge's completion.
     float completion = 1.0f - clamp(health / max_health, 0.0f, 1.0f);
     size_t expected_chunks = floor(total_chunks_needed * completion);
@@ -64,12 +64,12 @@ bool bridge::check_health() {
         return false;
     }
     
-    mob_category* custom_category =
+    MobCategory* custom_category =
         game.mob_categories.get(MOB_CATEGORY_CUSTOM);
-    mob_type* bridge_component_type =
+    MobType* bridge_component_type =
         custom_category->get_type("bridge_component");
     float chunk_width = total_length / total_chunks_needed;
-    vector<mob*> new_mobs;
+    vector<Mob*> new_mobs;
     
     //Start creating all the necessary chunks.
     while(chunks < expected_chunks) {
@@ -96,9 +96,9 @@ bool bridge::check_health() {
             float old_component_width = chunk_width * prev_chunk_combo;
             prev_chunk_combo++;
             float new_component_width = chunk_width * prev_chunk_combo;
-            point offset =
+            Point offset =
                 rotate_point(
-                    point(
+                    Point(
                         (new_component_width - old_component_width) / 2.0f,
                         0.0f
                     ),
@@ -109,7 +109,7 @@ bool bridge::check_health() {
                 prev_chunk_components[m]->pos +=
                     offset;
                 prev_chunk_components[m]->set_rectangular_dim(
-                    point(
+                    Point(
                         new_component_width,
                         prev_chunk_components[m]->rectangular_dim.y
                     )
@@ -119,9 +119,9 @@ bool bridge::check_health() {
         } else {
         
             //Create new components. First, the floor component.
-            point offset(x_offset, 0.0f);
+            Point offset(x_offset, 0.0f);
             offset = rotate_point(offset, angle);
-            mob* floor_component =
+            Mob* floor_component =
                 create_mob(
                     custom_category,
                     start_pos + offset,
@@ -136,7 +136,7 @@ bool bridge::check_health() {
             }
             floor_component->z = start_z + z_offset;
             floor_component->set_rectangular_dim(
-                point(chunk_width, BRIDGE::FLOOR_WIDTH)
+                Point(chunk_width, BRIDGE::FLOOR_WIDTH)
             );
             new_mobs.push_back(floor_component);
             
@@ -145,7 +145,7 @@ bool bridge::check_health() {
             offset.y =
                 -BRIDGE::FLOOR_WIDTH / 2.0f - bri_type->rail_width / 2.0f;
             offset = rotate_point(offset, angle);
-            mob* left_rail_component =
+            Mob* left_rail_component =
                 create_mob(
                     custom_category,
                     start_pos + offset,
@@ -160,7 +160,7 @@ bool bridge::check_health() {
             }
             left_rail_component->z = start_z + z_offset;
             left_rail_component->set_rectangular_dim(
-                point(
+                Point(
                     floor_component->rectangular_dim.x,
                     bri_type->rail_width
                 )
@@ -172,7 +172,7 @@ bool bridge::check_health() {
             offset.x = x_offset;
             offset.y = BRIDGE::FLOOR_WIDTH / 2.0f + bri_type->rail_width / 2.0f;
             offset = rotate_point(offset, angle);
-            mob* right_rail_component =
+            Mob* right_rail_component =
                 create_mob(
                     custom_category,
                     start_pos + offset,
@@ -207,7 +207,7 @@ bool bridge::check_health() {
     
     //Finish setting up the new component mobs.
     for(size_t m = 0; m < new_mobs.size(); m++) {
-        mob* m_ptr = new_mobs[m];
+        Mob* m_ptr = new_mobs[m];
         enable_flag(m_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
         m_ptr->links.push_back(this);
     }
@@ -217,7 +217,7 @@ bool bridge::check_health() {
         rectangular_dim.x != 0.0f ?
         rectangular_dim.x / 2.0f :
         radius;
-    point offset(chunk_width * chunks - mob_radius, 0);
+    Point offset(chunk_width * chunks - mob_radius, 0);
     offset = rotate_point(offset, angle);
     pos = start_pos + offset;
     z = start_z + prev_chunk_components[0]->z;
@@ -232,16 +232,16 @@ bool bridge::check_health() {
  *
  * @param m Bridge component mob.
  */
-void bridge::draw_component(mob* m) {
+void Bridge::draw_component(Mob* m) {
     if(m->links.empty() || !m->links[0]) return;
     
-    bitmap_effect_t eff;
+    BitmapEffect eff;
     m->get_sprite_bitmap_effects(
         nullptr, nullptr, 0.0f, &eff,
         SPRITE_BMP_EFFECT_FLAG_SECTOR_BRIGHTNESS
     );
     
-    bridge* bri_ptr = (bridge*) m->links[0];
+    Bridge* bri_ptr = (Bridge*) m->links[0];
     string side = m->vars["side"];
     ALLEGRO_BITMAP* texture =
         side == "left" ?
@@ -324,7 +324,7 @@ void bridge::draw_component(mob* m) {
  *
  * @return The point.
  */
-point bridge::get_start_point() {
+Point Bridge::get_start_point() {
     return start_pos;
 }
 
@@ -334,8 +334,8 @@ point bridge::get_start_point() {
  *
  * @param svr Script var reader to use.
  */
-void bridge::read_script_vars(const script_var_reader &svr) {
-    mob::read_script_vars(svr);
+void Bridge::read_script_vars(const ScriptVarReader &svr) {
+    Mob::read_script_vars(svr);
     
     svr.get("chunks", total_chunks_needed);
 }
@@ -345,9 +345,9 @@ void bridge::read_script_vars(const script_var_reader &svr) {
  * @brief Sets up the bridge with the data surrounding it,
  * like its linked destination object.
  */
-void bridge::setup() {
+void Bridge::setup() {
     if(!links.empty() && links[0]) {
-        total_length = dist(pos, links[0]->pos).to_float();
+        total_length = Distance(pos, links[0]->pos).to_float();
         face(get_angle(pos, links[0]->pos), nullptr, true);
         delta_z = links[0]->z - z;
         total_chunks_needed =

@@ -23,8 +23,8 @@
  *
  * @param typ Mob type to create the finite state machine for.
  */
-void onion_fsm::create_fsm(mob_type* typ) {
-    easy_fsm_creator efc;
+void onion_fsm::create_fsm(MobType* typ) {
+    EasyFsmCreator efc;
     
     efc.new_state("idling", ONION_STATE_IDLING); {
         efc.new_event(MOB_EV_ON_ENTER); {
@@ -84,7 +84,7 @@ void onion_fsm::create_fsm(mob_type* typ) {
  * @param info1 Pointer to the message received.
  * @param info2 Unused.
  */
-void onion_fsm::check_start_generating(mob* m, void* info1, void* info2) {
+void onion_fsm::check_start_generating(Mob* m, void* info1, void* info2) {
     if(!info1) return;
     string* msg = (string*) info1;
     if(*msg == "started_generation") {
@@ -100,7 +100,7 @@ void onion_fsm::check_start_generating(mob* m, void* info1, void* info2) {
  * @param info1 Pointer to the message received.
  * @param info2 Unused.
  */
-void onion_fsm::check_stop_generating(mob* m, void* info1, void* info2) {
+void onion_fsm::check_stop_generating(Mob* m, void* info1, void* info2) {
     if(!info1) return;
     string* msg = (string*) info1;
     if(*msg == "stopped_generation") {
@@ -116,19 +116,19 @@ void onion_fsm::check_stop_generating(mob* m, void* info1, void* info2) {
  * @param info1 Pointer to the mob being received.
  * @param info2 Unused.
  */
-void onion_fsm::receive_mob(mob* m, void* info1, void* info2) {
+void onion_fsm::receive_mob(Mob* m, void* info1, void* info2) {
     engine_assert(info1 != nullptr, m->print_state_history());
     
-    mob* delivery = (mob*) info1;
-    onion* oni_ptr = (onion*) m;
+    Mob* delivery = (Mob*) info1;
+    Onion* oni_ptr = (Onion*) m;
     size_t seeds = 0;
     
     switch(delivery->type->category->id) {
     case MOB_CATEGORY_ENEMIES: {
-        seeds = ((enemy*) delivery)->ene_type->pikmin_seeds;
+        seeds = ((Enemy*) delivery)->ene_type->pikmin_seeds;
         break;
     } case MOB_CATEGORY_PELLETS: {
-        pellet* pel_ptr = (pellet*) delivery;
+        Pellet* pel_ptr = (Pellet*) delivery;
         if(
             pel_ptr->pel_type->pik_type ==
             delivery->delivery_info->intended_pik_type
@@ -157,7 +157,7 @@ void onion_fsm::receive_mob(mob* m, void* info1, void* info2) {
     oni_ptr->generation_delay_timer.start();
     oni_ptr->generation_queue[type_idx] += seeds;
     
-    particle_generator pg =
+    ParticleGenerator pg =
         standard_particle_gen_setup(
             game.sys_content_names.part_onion_insertion, oni_ptr
         );
@@ -174,7 +174,7 @@ void onion_fsm::receive_mob(mob* m, void* info1, void* info2) {
  * @param info1 Pointer to the mob being received.
  * @param info2 Unused.
  */
-void onion_fsm::start_generating(mob* m, void* info1, void* info2) {
+void onion_fsm::start_generating(Mob* m, void* info1, void* info2) {
     m->set_animation(ONION_ANIM_GENERATING);
 }
 
@@ -186,7 +186,7 @@ void onion_fsm::start_generating(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void onion_fsm::start_idling(mob* m, void* info1, void* info2) {
+void onion_fsm::start_idling(Mob* m, void* info1, void* info2) {
     m->set_animation(
         MOB_TYPE::ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
     );
@@ -200,6 +200,6 @@ void onion_fsm::start_idling(mob* m, void* info1, void* info2) {
  * @param info1 Pointer to the mob being received.
  * @param info2 Unused.
  */
-void onion_fsm::stop_generating(mob* m, void* info1, void* info2) {
+void onion_fsm::stop_generating(Mob* m, void* info1, void* info2) {
     m->set_animation(ONION_ANIM_STOPPING_GENERATION);
 }

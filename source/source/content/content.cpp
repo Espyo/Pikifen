@@ -19,8 +19,8 @@
  *
  * @param node Data node to load from.
  */
-void content::load_metadata_from_data_node(data_node* node) {
-    reader_setter rs(node);
+void Content::load_metadata_from_data_node(DataNode* node) {
+    ReaderSetter rs(node);
     
     if(manifest) name = manifest->internal_name;
     rs.set("name", name);
@@ -37,7 +37,7 @@ void content::load_metadata_from_data_node(data_node* node) {
 /**
  * @brief Resets the metadata.
  */
-void content::reset_metadata() {
+void Content::reset_metadata() {
     name.clear();
     description.clear();
     tags.clear();
@@ -54,9 +54,9 @@ void content::reset_metadata() {
  *
  * @param node Data node to save to.
  */
-void content::save_metadata_to_data_node(data_node* node) const {
-#define saver(n, v) node->add(new data_node((n), (v)))
-#define saver_o(n, v) if(!v.empty()) node->add(new data_node((n), (v)))
+void Content::save_metadata_to_data_node(DataNode* node) const {
+#define saver(n, v) node->add(new DataNode((n), (v)))
+#define saver_o(n, v) if(!v.empty()) node->add(new DataNode((n), (v)))
 
     saver("name", name);
     saver_o("description", description);
@@ -75,7 +75,7 @@ void content::save_metadata_to_data_node(data_node* node) const {
 /**
  * @brief Constructs a new content manifest object.
  */
-content_manifest::content_manifest() {}
+ContentManifest::ContentManifest() {}
 
 
 /**
@@ -85,7 +85,7 @@ content_manifest::content_manifest() {}
  * @param path Path to the content, relative to the packs folder.
  * @param pack Pack it belongs to.
  */
-content_manifest::content_manifest(const string &name, const string &path, const string &pack) :
+ContentManifest::ContentManifest(const string &name, const string &path, const string &pack) :
     internal_name(name),
     path(path),
     pack(pack) {
@@ -96,7 +96,7 @@ content_manifest::content_manifest(const string &name, const string &path, const
 /**
  * @brief Clears all the information in a manifest.
  */
-void content_manifest::clear() {
+void ContentManifest::clear() {
     internal_name.clear();
     path.clear();
     pack.clear();
@@ -107,7 +107,7 @@ void content_manifest::clear() {
  * @brief Fills in the information using the provided path. It'll all be empty
  * if the path is not valid.
  */
-void content_manifest::fill_from_path(const string &path) {
+void ContentManifest::fill_from_path(const string &path) {
     clear();
     
     vector<string> parts = split(path, "/");

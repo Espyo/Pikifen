@@ -19,8 +19,8 @@
 /**
  * @brief Constructs a new bridge category object.
  */
-bridge_category::bridge_category() :
-    mob_category(
+BridgeCategory::BridgeCategory() :
+    MobCategory(
         MOB_CATEGORY_BRIDGES, "bridge",
         "Bridge", "Bridges",
         "bridges", al_map_rgb(204, 73, 152)
@@ -32,7 +32,7 @@ bridge_category::bridge_category() :
 /**
  * @brief Clears the list of registered types of bridges.
  */
-void bridge_category::clear_types() {
+void BridgeCategory::clear_types() {
     for(auto &t : game.content.mob_types.list.bridge) {
         delete t.second;
     }
@@ -48,10 +48,10 @@ void bridge_category::clear_types() {
  * @param angle Starting angle.
  * @return The mob.
  */
-mob* bridge_category::create_mob(
-    const point &pos, mob_type* type, float angle
+Mob* BridgeCategory::create_mob(
+    const Point &pos, MobType* type, float angle
 ) {
-    bridge* m = new bridge(pos, (bridge_type*) type, angle);
+    Bridge* m = new Bridge(pos, (BridgeType*) type, angle);
     game.states.gameplay->mobs.bridges.push_back(m);
     return m;
 }
@@ -62,8 +62,8 @@ mob* bridge_category::create_mob(
  *
  * @return The type.
  */
-mob_type* bridge_category::create_type() {
-    return new bridge_type();
+MobType* BridgeCategory::create_type() {
+    return new BridgeType();
 }
 
 
@@ -72,12 +72,12 @@ mob_type* bridge_category::create_type() {
  *
  * @param m The mob to erase.
  */
-void bridge_category::erase_mob(mob* m) {
+void BridgeCategory::erase_mob(Mob* m) {
     game.states.gameplay->mobs.bridges.erase(
         find(
             game.states.gameplay->mobs.bridges.begin(),
             game.states.gameplay->mobs.bridges.end(),
-            (bridge*) m
+            (Bridge*) m
         )
     );
 }
@@ -90,7 +90,7 @@ void bridge_category::erase_mob(mob* m) {
  * @param internal_name Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-mob_type* bridge_category::get_type(const string &internal_name) const {
+MobType* BridgeCategory::get_type(const string &internal_name) const {
     auto it = game.content.mob_types.list.bridge.find(internal_name);
     if(it == game.content.mob_types.list.bridge.end()) return nullptr;
     return it->second;
@@ -102,7 +102,7 @@ mob_type* bridge_category::get_type(const string &internal_name) const {
  *
  * @param list This list gets filled with the mob type internal names.
  */
-void bridge_category::get_type_names(vector<string> &list) const {
+void BridgeCategory::get_type_names(vector<string> &list) const {
     for(auto &t : game.content.mob_types.list.bridge) {
         list.push_back(t.first);
     }
@@ -115,6 +115,6 @@ void bridge_category::get_type_names(vector<string> &list) const {
  * @param internal_name Internal name of the mob type.
  * @param type Mob type to register.
  */
-void bridge_category::register_type(const string &internal_name, mob_type* type) {
-    game.content.mob_types.list.bridge[internal_name] = (bridge_type*) type;
+void BridgeCategory::register_type(const string &internal_name, MobType* type) {
+    game.content.mob_types.list.bridge[internal_name] = (BridgeType*) type;
 }

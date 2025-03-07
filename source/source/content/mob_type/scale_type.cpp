@@ -17,13 +17,13 @@
 /**
  * @brief Constructs a new scale type object.
  */
-scale_type::scale_type() :
-    mob_type(MOB_CATEGORY_SCALES) {
+ScaleType::ScaleType() :
+    MobType(MOB_CATEGORY_SCALES) {
     
     target_type = MOB_TARGET_FLAG_NONE;
     walkable = true;
     
-    area_editor_prop_t aep_goal;
+    AreaEditorProp aep_goal;
     aep_goal.name = "Goal weight";
     aep_goal.var = "goal_number";
     aep_goal.type = AEMP_TYPE_INT;
@@ -38,8 +38,8 @@ scale_type::scale_type() :
  *
  * @param file File to read from.
  */
-void scale_type::load_cat_properties(data_node* file) {
-    reader_setter rs(file);
+void ScaleType::load_cat_properties(DataNode* file) {
+    ReaderSetter rs(file);
     
     rs.set("goal_number", goal_number);
     

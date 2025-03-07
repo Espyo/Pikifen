@@ -44,7 +44,7 @@ enum TREASURE_STATE {
  * Like the "small red marble" treasure type in Pikmin 2; you can see multiple
  * treasures of that type in some Challenge Mode levels.
  */
-class treasure_type : public mob_type {
+class TreasureType : public MobType {
 
 public:
 
@@ -56,8 +56,8 @@ public:
     
     //--- Function declarations ---
     
-    treasure_type();
-    void load_cat_properties(data_node* file) override;
+    TreasureType();
+    void load_cat_properties(DataNode* file) override;
     anim_conversion_vector get_anim_conversions() const override;
     
 };

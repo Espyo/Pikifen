@@ -36,17 +36,17 @@ extern const float SPEW_V_SPEED;
 /**
  * @brief An Onion is where Pikmin are stored.
  */
-class onion : public mob {
+class Onion : public Mob {
 
 public:
 
     //--- Members ---
     
     //What type of Onion it is.
-    onion_type* oni_type = nullptr;
+    OnionType* oni_type = nullptr;
     
     //Nest data.
-    pikmin_nest_t* nest = nullptr;
+    PikminNest* nest = nullptr;
     
     //Is this Onion currently activated?
     bool activated = true;
@@ -55,10 +55,10 @@ public:
     vector<size_t> generation_queue;
     
     //Time left until it starts the Pikmin generation process.
-    timer generation_delay_timer = timer(ONION::GENERATION_DELAY);
+    Timer generation_delay_timer = Timer(ONION::GENERATION_DELAY);
     
     //Time left until it generates the next Pikmin in the queue.
-    timer next_generation_timer = timer(ONION::NEXT_GENERATION_INTERVAL);
+    Timer next_generation_timer = Timer(ONION::NEXT_GENERATION_INTERVAL);
     
     //Angle at which the next seed will be spit.
     float next_spew_angle = 0.0f;
@@ -72,10 +72,10 @@ public:
     
     //--- Function declarations ---
     
-    onion(const point &pos, onion_type* type, float angle);
-    ~onion();
+    Onion(const Point &pos, OnionType* type, float angle);
+    ~Onion();
     void draw_mob() override;
-    void read_script_vars(const script_var_reader &svr) override;
+    void read_script_vars(const ScriptVarReader &svr) override;
     void start_generating();
     void stop_generating();
     

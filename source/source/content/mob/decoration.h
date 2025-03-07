@@ -18,14 +18,14 @@
  * @brief A decoration mob, like a plant.
  * They don't do much other than be pretty and get bumped occasionally.
  */
-class decoration : public mob {
+class Decoration : public Mob {
 
 public:
 
     //--- Members ---
     
     //What type of decoration it is.
-    decoration_type* dec_type = nullptr;
+    DecorationType* dec_type = nullptr;
     
     //Whether this decoration is allowed to use the random anim delay or not.
     bool individual_random_anim_delay = true;
@@ -42,8 +42,8 @@ public:
     
     //--- Function declarations ---
     
-    decoration(const point &pos, decoration_type* dec_type, float angle);
+    Decoration(const Point &pos, DecorationType* dec_type, float angle);
     void draw_mob() override;
-    void read_script_vars(const script_var_reader &svr) override;
+    void read_script_vars(const ScriptVarReader &svr) override;
     
 };

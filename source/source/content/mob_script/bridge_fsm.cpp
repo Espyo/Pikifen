@@ -23,8 +23,8 @@
  *
  * @param typ Mob type to create the finite state machine for.
  */
-void bridge_fsm::create_fsm(mob_type* typ) {
-    easy_fsm_creator efc;
+void bridge_fsm::create_fsm(MobType* typ) {
+    EasyFsmCreator efc;
     efc.new_state("idling", BRIDGE_STATE_IDLING); {
         efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(bridge_fsm::set_anim);
@@ -75,8 +75,8 @@ void bridge_fsm::create_fsm(mob_type* typ) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void bridge_fsm::check_health(mob* m, void* info1, void* info2) {
-    bridge* bri_ptr = (bridge*) m;
+void bridge_fsm::check_health(Mob* m, void* info1, void* info2) {
+    Bridge* bri_ptr = (Bridge*) m;
     if(bri_ptr->check_health()) {
         m->fsm.set_state(BRIDGE_STATE_CREATING_CHUNK);
     }
@@ -90,8 +90,8 @@ void bridge_fsm::check_health(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void bridge_fsm::open(mob* m, void* info1, void* info2) {
-    bridge* bri_ptr = (bridge*) m;
+void bridge_fsm::open(Mob* m, void* info1, void* info2) {
+    Bridge* bri_ptr = (Bridge*) m;
     bri_ptr->set_animation(BRIDGE_ANIM_DESTROYED);
     bri_ptr->start_dying();
     bri_ptr->finish_dying();
@@ -106,7 +106,7 @@ void bridge_fsm::open(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void bridge_fsm::set_anim(mob* m, void* info1, void* info2) {
+void bridge_fsm::set_anim(Mob* m, void* info1, void* info2) {
     m->set_animation(
         BRIDGE_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
     );
@@ -121,7 +121,7 @@ void bridge_fsm::set_anim(mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void bridge_fsm::setup(mob* m, void* info1, void* info2) {
-    bridge* bri_ptr = (bridge*) m;
+void bridge_fsm::setup(Mob* m, void* info1, void* info2) {
+    Bridge* bri_ptr = (Bridge*) m;
     bri_ptr->setup();
 }

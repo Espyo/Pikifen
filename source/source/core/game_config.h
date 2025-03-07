@@ -69,7 +69,7 @@ extern const float DEF_ZOOM_MIN_LEVEL;
 /**
  * @brief The game's configuration. It controls some rules about the game.
  */
-struct game_config {
+struct GameConfig {
 
     //--- Members ---
     
@@ -116,7 +116,7 @@ struct game_config {
     float idle_task_range = GAME_CONFIG::DEF_IDLE_TASK_RANGE;
     
     //List of leader types, ordered by the game configuration.
-    vector<leader_type*> leader_order;
+    vector<LeaderType*> leader_order;
     
     //Loaded strings representing the standard leader order. Used for later.
     vector<string> leader_order_strings;
@@ -149,7 +149,7 @@ struct game_config {
     float pikmin_chase_range = GAME_CONFIG::DEF_PIKMIN_CHASE_RANGE;
     
     //List of Pikmin types, ordered by the game configuration.
-    vector<pikmin_type*> pikmin_order;
+    vector<PikminType*> pikmin_order;
     
     //Loaded strings representing the standard Pikmin order. Used for later.
     vector<string> pikmin_order_strings;
@@ -170,7 +170,7 @@ struct game_config {
     ALLEGRO_COLOR radar_lowest_color = GAME_CONFIG::DEF_RADAR_LOWEST_COLOR;
     
     //List of spray types, ordered by the game configuration.
-    vector<spray_type*> spray_order;
+    vector<SprayType*> spray_order;
     
     //Loaded strings representing the standard spray order. Used for later.
     vector<string> spray_order_strings;
@@ -211,6 +211,6 @@ struct game_config {
     
     //--- Function declarations ---
     
-    void load(data_node* file);
+    void load(DataNode* file);
     
 };

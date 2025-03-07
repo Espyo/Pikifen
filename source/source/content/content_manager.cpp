@@ -19,7 +19,7 @@
 /**
  * @brief Constructs a new content manager object.
  */
-content_manager::content_manager() {
+ContentManager::ContentManager() {
     for(size_t c = 0; c < N_CONTENT_TYPES; c++) {
         load_levels[c] = CONTENT_LOAD_LEVEL_UNLOADED;
     }
@@ -32,7 +32,7 @@ content_manager::content_manager() {
  * @param type The content type.
  * @return Pointer to the manager.
  */
-content_type_manager* content_manager::get_mgr_ptr(CONTENT_TYPE type) {
+ContentTypeManager* ContentManager::get_mgr_ptr(CONTENT_TYPE type) {
     switch(type) {
     case CONTENT_TYPE_AREA: {
         return &areas;
@@ -101,11 +101,11 @@ content_type_manager* content_manager::get_mgr_ptr(CONTENT_TYPE type) {
  * @param types Types of game content to load.
  * @param level Level to load at.
  */
-void content_manager::load_all(const vector<CONTENT_TYPE> &types, CONTENT_LOAD_LEVEL level) {
+void ContentManager::load_all(const vector<CONTENT_TYPE> &types, CONTENT_LOAD_LEVEL level) {
     //Fill in all manifests first. This is because some content may rely on
     //another's manifest.
     for(size_t t = 0; t < types.size(); t++) {
-        content_type_manager* mgr_ptr = get_mgr_ptr(types[t]);
+        ContentTypeManager* mgr_ptr = get_mgr_ptr(types[t]);
         engine_assert(
             load_levels[types[t]] == CONTENT_LOAD_LEVEL_UNLOADED,
             "Tried to load all content of type " + mgr_ptr->get_name() +
@@ -116,7 +116,7 @@ void content_manager::load_all(const vector<CONTENT_TYPE> &types, CONTENT_LOAD_L
     
     //Now load the content.
     for(size_t t = 0; t < types.size(); t++) {
-        content_type_manager* mgr_ptr = get_mgr_ptr(types[t]);
+        ContentTypeManager* mgr_ptr = get_mgr_ptr(types[t]);
         const string &perf_mon_name = mgr_ptr->get_perf_mon_measurement_name();
         if(!perf_mon_name.empty() && game.perf_mon) {
             game.perf_mon->start_measurement(perf_mon_name);
@@ -140,7 +140,7 @@ void content_manager::load_all(const vector<CONTENT_TYPE> &types, CONTENT_LOAD_L
  * @param maker Maker(s).
  * @return Whether it succeeded.
  */
-bool content_manager::create_pack(
+bool ContentManager::create_pack(
     const string &internal_name, const string &name,
     const string &description, const string &maker
 ) {
@@ -151,16 +151,16 @@ bool content_manager::create_pack(
     if(!could_make_folder) return false;
     
     //Create the data file.
-    data_node data;
-    data.add(new data_node("name", name));
-    data.add(new data_node("description", description));
-    data.add(new data_node("maker", maker));
-    data.add(new data_node("version", "1.0.0"));
-    data.add(new data_node("engine_version", get_engine_version_string()));
-    data.add(new data_node("tags", ""));
-    data.add(new data_node("dependencies", ""));
-    data.add(new data_node("conflicts", ""));
-    data.add(new data_node("notes", ""));
+    DataNode data;
+    data.add(new DataNode("name", name));
+    data.add(new DataNode("description", description));
+    data.add(new DataNode("maker", maker));
+    data.add(new DataNode("version", "1.0.0"));
+    data.add(new DataNode("engine_version", get_engine_version_string()));
+    data.add(new DataNode("tags", ""));
+    data.add(new DataNode("dependencies", ""));
+    data.add(new DataNode("conflicts", ""));
+    data.add(new DataNode("notes", ""));
     data.save_file(pack_path + "/" + FILE_NAMES::PACK_DATA, true, true);
     
     //Update the list and manifest.
@@ -185,8 +185,8 @@ bool content_manager::create_pack(
  * @param from_backup If true, load from a backup, if any.
  * @return Whether it succeeded.
  */
-bool content_manager::load_area_as_current(
-    const string &requested_area_path, content_manifest* manif_ptr,
+bool ContentManager::load_area_as_current(
+    const string &requested_area_path, ContentManifest* manif_ptr,
     CONTENT_LOAD_LEVEL level, bool from_backup
 ) {
     engine_assert(
@@ -200,7 +200,7 @@ bool content_manager::load_area_as_current(
         ) + "\"!"
     );
     
-    game.cur_area_data = new area_data();
+    game.cur_area_data = new Area();
     bool success =
         areas.load_area(
             game.cur_area_data, requested_area_path, manif_ptr,
@@ -218,7 +218,7 @@ bool content_manager::load_area_as_current(
  * @brief Reloads all packs.
  * This only loads their manifests and metadata, not their content!
  */
-void content_manager::reload_packs() {
+void ContentManager::reload_packs() {
     packs.unload_all();
     packs.clear_manifests();
     
@@ -232,7 +232,7 @@ void content_manager::reload_packs() {
  *
  * @param level Should match the level at which the content got loaded.
  */
-void content_manager::unload_current_area(CONTENT_LOAD_LEVEL level) {
+void ContentManager::unload_current_area(CONTENT_LOAD_LEVEL level) {
     if(!game.cur_area_data) return;
     game.cur_area_data->clear();
     delete game.cur_area_data;
@@ -245,9 +245,9 @@ void content_manager::unload_current_area(CONTENT_LOAD_LEVEL level) {
  *
  * @param types Types of content to unload.
  */
-void content_manager::unload_all(const vector<CONTENT_TYPE> &types) {
+void ContentManager::unload_all(const vector<CONTENT_TYPE> &types) {
     for(size_t t = 0; t < types.size(); t++) {
-        content_type_manager* mgr_ptr = get_mgr_ptr(types[t]);
+        ContentTypeManager* mgr_ptr = get_mgr_ptr(types[t]);
         
         engine_assert(
             load_levels[types[t]] != CONTENT_LOAD_LEVEL_UNLOADED,
@@ -266,7 +266,7 @@ void content_manager::unload_all(const vector<CONTENT_TYPE> &types) {
 /**
  * @brief Clears all loaded manifests.
  */
-void pack_manager::clear_manifests() {
+void PackManager::clear_manifests() {
     manifests_sans_base_raw.clear();
     manifests_with_base_raw.clear();
     manifests_sans_base.clear();
@@ -277,7 +277,7 @@ void pack_manager::clear_manifests() {
 /**
  * @brief Fills in the manifests.
  */
-void pack_manager::fill_manifests() {
+void PackManager::fill_manifests() {
     //Raw manifests.
     vector<string> raw_folders =
         folder_to_vector(FOLDER_PATHS_FROM_ROOT::GAME_DATA, true);
@@ -324,18 +324,18 @@ void pack_manager::fill_manifests() {
  * This also loads all packs, not just the ones organized via the
  * player options.
  */
-void pack_manager::load_all() {
+void PackManager::load_all() {
     for(size_t p = 0; p < manifests_with_base_raw.size(); p++) {
-        data_node pack_file =
+        DataNode pack_file =
             load_data_file(
                 FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
                 manifests_with_base_raw[p] + "/" +
                 FILE_NAMES::PACK_DATA
             );
             
-        pack pack_data;
+        Pack pack_data;
         pack_data.name = manifests_with_base_raw[p];
-        reader_setter rs(&pack_file);
+        ReaderSetter rs(&pack_file);
         rs.set("name", pack_data.name);
         rs.set("description", pack_data.description);
         rs.set("tags", pack_data.tags);
@@ -355,6 +355,6 @@ void pack_manager::load_all() {
  * @brief Unloads all loaded packs.
  * This only unloads their metadata, not their content!
  */
-void pack_manager::unload_all() {
+void PackManager::unload_all() {
     list.clear();
 }

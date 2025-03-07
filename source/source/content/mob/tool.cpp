@@ -18,10 +18,10 @@
  * @param type Tool type this mob belongs to.
  * @param angle Starting angle.
  */
-tool::tool(
-    const point &pos, tool_type* type, float angle
+Tool::Tool(
+    const Point &pos, ToolType* type, float angle
 ):
-    mob(pos, type, angle),
+    Mob(pos, type, angle),
     too_type(type) {
     
     team = MOB_TEAM_NONE;

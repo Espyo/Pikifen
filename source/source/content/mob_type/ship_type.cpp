@@ -20,14 +20,14 @@
 /**
  * @brief Constructs a new ship type object.
  */
-ship_type::ship_type() :
-    mob_type(MOB_CATEGORY_SHIPS) {
+ShipType::ShipType() :
+    MobType(MOB_CATEGORY_SHIPS) {
     
-    nest = new pikmin_nest_type_t();
+    nest = new PikminNestType();
     
     target_type = MOB_TARGET_FLAG_NONE;
     
-    area_editor_prop_t aep_pik_inside;
+    AreaEditorProp aep_pik_inside;
     aep_pik_inside.name = "Pikmin inside";
     aep_pik_inside.var = "pikmin_inside";
     aep_pik_inside.type = AEMP_TYPE_TEXT;
@@ -46,7 +46,7 @@ ship_type::ship_type() :
 /**
  * @brief Destroys the ship type object.
  */
-ship_type::~ship_type() {
+ShipType::~ShipType() {
     delete nest;
 }
 
@@ -56,7 +56,7 @@ ship_type::~ship_type() {
  *
  * @return The vector.
  */
-anim_conversion_vector ship_type::get_anim_conversions() const {
+anim_conversion_vector ShipType::get_anim_conversions() const {
     anim_conversion_vector v;
     v.push_back(std::make_pair(SHIP_ANIM_IDLING, "idling"));
     return v;
@@ -68,8 +68,8 @@ anim_conversion_vector ship_type::get_anim_conversions() const {
  *
  * @param file File to read from.
  */
-void ship_type::load_cat_properties(data_node* file) {
-    reader_setter rs(file);
+void ShipType::load_cat_properties(DataNode* file) {
+    ReaderSetter rs(file);
     
     rs.set("can_heal", can_heal);
     rs.set("control_point_radius", control_point_radius);
@@ -85,7 +85,7 @@ void ship_type::load_cat_properties(data_node* file) {
  *
  * @param file File to read from.
  */
-void ship_type::load_cat_resources(data_node* file) {
+void ShipType::load_cat_resources(DataNode* file) {
     //We don't actually need to load any, but we know that if this function
     //is run, then the animations are definitely loaded.
     //Now's a good time to check the leg body parts.

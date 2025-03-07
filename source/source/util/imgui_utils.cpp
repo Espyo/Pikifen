@@ -208,7 +208,7 @@ bool ImGui::DragTime2(
 
 /**
  * @brief Makes it so Dear ImGui focuses on the next input text widget.
- * 
+ *
  * @param condition Only focus if this boolean is true. After setting the focus,
  * this boolean is set to false. This is done so that Dear ImGui only focuses
  * when you want, like when the dialog is first shown, instead of doing it
@@ -235,8 +235,8 @@ void ImGui::FocusOnInputText(bool &condition) {
  * @return Whether the button was pressed.
  */
 void ImGui::Image(
-    ALLEGRO_BITMAP* bitmap, const point &bitmap_size,
-    const point &uv0, const point &uv1,
+    ALLEGRO_BITMAP* bitmap, const Point &bitmap_size,
+    const Point &uv0, const Point &uv1,
     const ALLEGRO_COLOR &tint_col, const ALLEGRO_COLOR &border_col
 ) {
     ImGui::Image(
@@ -264,8 +264,8 @@ void ImGui::Image(
  * @return Whether the button was pressed.
  */
 bool ImGui::ImageButton(
-    const string &str_id, ALLEGRO_BITMAP* bitmap, const point &bitmap_size,
-    const point &uv0, const point &uv1,
+    const string &str_id, ALLEGRO_BITMAP* bitmap, const Point &bitmap_size,
+    const Point &uv0, const Point &uv1,
     const ALLEGRO_COLOR &bg_col,
     const ALLEGRO_COLOR &tint_col
 ) {
@@ -296,15 +296,15 @@ bool ImGui::ImageButton(
  */
 bool ImGui::ImageButtonOrganized(
     const string &str_id, ALLEGRO_BITMAP* bitmap,
-    const point &max_bitmap_size, const point &button_size,
+    const Point &max_bitmap_size, const Point &button_size,
     const ALLEGRO_COLOR &bg_col, const ALLEGRO_COLOR &tint_col
 ) {
-    point final_bmp_size =
+    Point final_bmp_size =
         resize_to_box_keeping_aspect_ratio(
             get_bitmap_dimensions(bitmap), max_bitmap_size
         );
         
-    point padding = (button_size - final_bmp_size) / 2.0f;
+    Point padding = (button_size - final_bmp_size) / 2.0f;
     
     PushStyleVar(
         ImGuiStyleVar_FramePadding, ImVec2(padding.x, padding.y)
@@ -328,7 +328,7 @@ bool ImGui::ImageButtonOrganized(
  * @return Whether the button was pressed.
  */
 bool ImGui::ImageButtonAndText(
-    const string &id, ALLEGRO_BITMAP* icon, const point &icon_size,
+    const string &id, ALLEGRO_BITMAP* icon, const Point &icon_size,
     float button_padding, const string &text
 ) {
     ImGui::BeginGroup();

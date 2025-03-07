@@ -37,7 +37,7 @@ using std::set;
  * @param record Record object to fill.
  */
 void load_area_mission_record(
-    data_node* file, area_data* area_ptr, mission_record &record
+    DataNode* file, Area* area_ptr, MissionRecord &record
 ) {
     string mission_record_entry_name =
         get_mission_record_entry_name(area_ptr);
@@ -68,7 +68,7 @@ void load_area_mission_record(
  * @return The stream.
  */
 ALLEGRO_AUDIO_STREAM* load_audio_stream(
-    const string &file_path, data_node* node, bool report_errors
+    const string &file_path, DataNode* node, bool report_errors
 ) {
     ALLEGRO_AUDIO_STREAM* stream =
         al_load_audio_stream((file_path).c_str(), 4, 2048);
@@ -99,7 +99,7 @@ ALLEGRO_AUDIO_STREAM* load_audio_stream(
  * @return The bitmap.
  */
 ALLEGRO_BITMAP* load_bmp(
-    const string &path, data_node* node,
+    const string &path, DataNode* node,
     bool report_error, bool error_bmp_on_error,
     bool error_bmp_on_empty
 ) {
@@ -135,8 +135,8 @@ ALLEGRO_BITMAP* load_bmp(
  *
  * @param file_path Path to the file, relative to the program root folder.
  */
-data_node load_data_file(const string &file_path) {
-    data_node n = data_node(file_path);
+DataNode load_data_file(const string &file_path) {
+    DataNode n = DataNode(file_path);
     if(!n.file_was_opened) {
         game.errors.report(
             "Could not open data file \"" + file_path + "\"!"
@@ -153,7 +153,7 @@ data_node load_data_file(const string &file_path) {
  * @param ed_ptr Pointer to the editor.
  * @param rs The file's reader setter.
  */
-void load_editor_history(editor* ed_ptr, reader_setter &rs) {
+void load_editor_history(Editor* ed_ptr, ReaderSetter &rs) {
     ed_ptr->history.clear();
     for(size_t h = 0; h < ed_ptr->get_history_size(); h++) {
         ed_ptr->history.push_back(
@@ -297,7 +297,7 @@ void load_fonts() {
  * @brief Loads the maker tools from the tool config file.
  */
 void load_maker_tools() {
-    data_node file(FILE_PATHS_FROM_ROOT::MAKER_TOOLS);
+    DataNode file(FILE_PATHS_FROM_ROOT::MAKER_TOOLS);
     
     if(!file.file_was_opened) return;
     
@@ -320,9 +320,9 @@ void load_maker_tools() {
         }
     }
     
-    reader_setter rs(&file);
+    ReaderSetter rs(&file);
     
-    data_node* mob_hurting_percentage_node = nullptr;
+    DataNode* mob_hurting_percentage_node = nullptr;
     
     rs.set("area_image_mobs", game.maker_tools.area_image_mobs);
     rs.set("area_image_padding", game.maker_tools.area_image_padding);
@@ -475,7 +475,7 @@ void load_misc_sounds() {
  * @brief Loads the player's options.
  */
 void load_options() {
-    data_node file = data_node(FILE_PATHS_FROM_ROOT::OPTIONS);
+    DataNode file = DataNode(FILE_PATHS_FROM_ROOT::OPTIONS);
     if(!file.file_was_opened) return;
     
     //Init game controllers.
@@ -493,14 +493,14 @@ void load_options() {
     game.win_h = game.options.intended_win_h;
     
     //Set up the editor histories.
-    reader_setter rs(&file);
+    ReaderSetter rs(&file);
     load_editor_history(game.states.animation_ed, rs);
     load_editor_history(game.states.area_ed, rs);
     load_editor_history(game.states.gui_ed, rs);
     load_editor_history(game.states.particle_ed, rs);
     
     //Final setup.
-    controls_manager_options controls_mgr_options;
+    ControlsManagerOptions controls_mgr_options;
     controls_mgr_options.stick_min_deadzone =
         game.options.joystick_min_deadzone;
     controls_mgr_options.stick_max_deadzone =
@@ -519,7 +519,7 @@ void load_options() {
  * @return The sample.
  */
 ALLEGRO_SAMPLE* load_sample(
-    const string &path, data_node* node, bool report_errors
+    const string &path, DataNode* node, bool report_errors
 ) {
     ALLEGRO_SAMPLE* sample = al_load_sample((path).c_str());
     
@@ -538,13 +538,13 @@ ALLEGRO_SAMPLE* load_sample(
  * @brief Loads the engine's lifetime statistics.
  */
 void load_statistics() {
-    data_node stats_file;
+    DataNode stats_file;
     stats_file.load_file(FILE_PATHS_FROM_ROOT::STATISTICS, true, false, true);
     if(!stats_file.file_was_opened) return;
     
-    statistics_t &s = game.statistics;
+    Statistics &s = game.statistics;
     
-    reader_setter rs(&stats_file);
+    ReaderSetter rs(&stats_file);
     rs.set("startups",               s.startups);
     rs.set("runtime",                s.runtime);
     rs.set("gameplay_time",          s.gameplay_time);

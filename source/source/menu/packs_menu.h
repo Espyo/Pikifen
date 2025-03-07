@@ -32,13 +32,13 @@ extern const string GUI_FILE_PATH;
  * @brief Info about the pack management menu currently being presented to
  * the player.
  */
-class packs_menu_t : public menu_t {
+class PacksMenu : public Menu {
 public:
 
     //--- Members ---
     
     //GUI manager.
-    gui_manager gui;
+    GuiManager gui;
     
     
     //--- Function declarations ---
@@ -59,31 +59,31 @@ private:
     vector<string> packs_disabled;
     
     //Pack list item.
-    list_gui_item* packs_list = nullptr;
+    ListGuiItem* packs_list = nullptr;
     
     //Pack bullet items, in order.
-    vector<bullet_gui_item*> pack_bullets;
+    vector<BulletGuiItem*> pack_bullets;
     
     //Pack check items, in order.
-    vector<check_gui_item*> pack_checks;
+    vector<CheckGuiItem*> pack_checks;
     
     //Pack name text item.
-    text_gui_item* pack_name_text = nullptr;
+    TextGuiItem* pack_name_text = nullptr;
     
     //Pack description text item.
-    text_gui_item* pack_description_text = nullptr;
+    TextGuiItem* pack_description_text = nullptr;
     
     //Pack tags text item.
-    text_gui_item* pack_tags_text = nullptr;
+    TextGuiItem* pack_tags_text = nullptr;
     
     //Pack maker text item.
-    text_gui_item* pack_maker_text = nullptr;
+    TextGuiItem* pack_maker_text = nullptr;
     
     //Pack version text item.
-    text_gui_item* pack_version_text = nullptr;
+    TextGuiItem* pack_version_text = nullptr;
     
     //Restart warning text item.
-    text_gui_item* warning_text = nullptr;
+    TextGuiItem* warning_text = nullptr;
     
     //Internal name of the currently-selected pack, if any.
     string cur_pack_name;

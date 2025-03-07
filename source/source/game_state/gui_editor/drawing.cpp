@@ -17,7 +17,7 @@
 /**
  * @brief Handles the drawing part of the main loop of the GUI editor.
  */
-void gui_editor::do_drawing() {
+void GuiEditor::do_drawing() {
     //The canvas drawing is handled by Dear ImGui elsewhere.
     
     al_clear_to_color(COLOR_BLACK);
@@ -29,7 +29,7 @@ void gui_editor::do_drawing() {
  * @brief Draw the canvas. This is called as a callback inside the
  * Dear ImGui rendering process.
  */
-void gui_editor::draw_canvas() {
+void GuiEditor::draw_canvas() {
     al_use_transform(&game.world_to_screen_transform);
     al_set_clipping_rectangle(
         canvas_tl.x, canvas_tl.y,
@@ -94,13 +94,13 @@ void gui_editor::draw_canvas() {
         );
         draw_text(
             items[i].name, game.sys_content.fnt_builtin,
-            point(
+            Point(
                 (items[i].center.x - items[i].size.x / 2.0f) +
                 (4.0f / game.cam.zoom),
                 (items[i].center.y - items[i].size.y / 2.0f) +
                 (4.0f / game.cam.zoom)
             ),
-            point(LARGE_FLOAT, 8.0 / game.cam.zoom),
+            Point(LARGE_FLOAT, 8.0 / game.cam.zoom),
             al_map_rgb(40, 40, 96), ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP
         );
         al_set_clipping_rectangle(

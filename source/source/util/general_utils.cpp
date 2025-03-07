@@ -20,7 +20,7 @@
 /**
  * @brief Clears all items.
  */
-void enum_name_database::clear() {
+void EnumNameDatabase::clear() {
     names.clear();
 }
 
@@ -31,7 +31,7 @@ void enum_name_database::clear() {
  * @param name Name of the item.
  * @return The index, or INVALID on error.
  */
-size_t enum_name_database::get_idx(const string &name) const {
+size_t EnumNameDatabase::get_idx(const string &name) const {
     for(size_t n = 0; n < names.size(); n++) {
         if(names[n] == name) return n;
     }
@@ -45,7 +45,7 @@ size_t enum_name_database::get_idx(const string &name) const {
  * @param idx Index number of the item.
  * @return The name, or an empty string on error.
  */
-string enum_name_database::get_name(size_t idx) const {
+string EnumNameDatabase::get_name(size_t idx) const {
     if(idx < names.size()) return names[idx];
     return "";
 }
@@ -56,7 +56,7 @@ string enum_name_database::get_name(size_t idx) const {
  *
  * @return The amount.
  */
-size_t enum_name_database::get_nr_of_items() const {
+size_t EnumNameDatabase::get_nr_of_items() const {
     return names.size();
 }
 
@@ -67,7 +67,7 @@ size_t enum_name_database::get_nr_of_items() const {
  * @param idx Its index number.
  * @param name Its name.
  */
-void enum_name_database::register_item(
+void EnumNameDatabase::register_item(
     size_t idx, const string &name
 ) {
     if(idx >= names.size()) {
@@ -121,7 +121,7 @@ ALLEGRO_COLOR from_string<ALLEGRO_COLOR>(const string &s) {
  * @return The value.
  */
 template<>
-point from_string<point>(const string &s) {
+Point from_string<Point>(const string &s) {
     return s2p(s);
 }
 
@@ -135,10 +135,10 @@ point from_string<point>(const string &s) {
  * @param angle Angle compared to the center.
  * @param magnitude Magnitude from the center.
  */
-void movement_t::get_info(
-    point* coords, float* angle, float* magnitude
+void MovementInfo::get_info(
+    Point* coords, float* angle, float* magnitude
 ) const {
-    *coords = point(right - left, down - up);
+    *coords = Point(right - left, down - up);
     coordinates_to_angle(*coords, angle, magnitude);
     
     //While analog sticks are already correctly clamped between 0 and 1 for
@@ -152,7 +152,7 @@ void movement_t::get_info(
 /**
  * @brief Resets the information.
  */
-void movement_t::reset() {
+void MovementInfo::reset() {
     right = 0.0f;
     up = 0.0f;
     left = 0.0f;
@@ -167,7 +167,7 @@ void movement_t::reset() {
  * @param duration How long before it reaches the end, in seconds.
  * @param on_end Code to run when time ends.
  */
-timer::timer(float duration, const std::function<void()> &on_end) :
+Timer::Timer(float duration, const std::function<void()> &on_end) :
     time_left(0),
     duration(duration),
     on_end(on_end) {
@@ -179,7 +179,7 @@ timer::timer(float duration, const std::function<void()> &on_end) :
 /**
  * @brief Destroys the timer object.
  */
-timer::~timer() {
+Timer::~Timer() {
     //TODO Valgrind detects a leak with on_end...
 }
 
@@ -190,7 +190,7 @@ timer::~timer() {
  *
  * @return The ratio left.
  */
-float timer::get_ratio_left() const {
+float Timer::get_ratio_left() const {
     return time_left / duration;
 }
 
@@ -202,7 +202,7 @@ float timer::get_ratio_left() const {
  * @param can_restart If false, calling this while the timer is still
  * ticking down will not do anything.
  */
-void timer::start(bool can_restart) {
+void Timer::start(bool can_restart) {
     if(!can_restart && time_left > 0) return;
     time_left = duration;
 }
@@ -213,7 +213,7 @@ void timer::start(bool can_restart) {
  *
  * @param new_duration Its new duration.
  */
-void timer::start(float new_duration) {
+void Timer::start(float new_duration) {
     duration = new_duration;
     start();
 }
@@ -222,7 +222,7 @@ void timer::start(float new_duration) {
 /**
  * @brief Stops a timer, without executing the on_end callback.
  */
-void timer::stop() {
+void Timer::stop() {
     time_left = 0.0f;
 }
 
@@ -232,7 +232,7 @@ void timer::stop() {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void timer::tick(float delta_t) {
+void Timer::tick(float delta_t) {
     if(time_left == 0.0f) return;
     time_left = std::max(time_left - delta_t, 0.0f);
     if(time_left == 0.0f && on_end) {

@@ -21,8 +21,8 @@
 /**
  * @brief Constructs a new treasure type object.
  */
-treasure_type::treasure_type() :
-    mob_type(MOB_CATEGORY_TREASURES) {
+TreasureType::TreasureType() :
+    MobType(MOB_CATEGORY_TREASURES) {
     
     target_type = MOB_TARGET_FLAG_NONE;
     
@@ -35,7 +35,7 @@ treasure_type::treasure_type() :
  *
  * @return The vector.
  */
-anim_conversion_vector treasure_type::get_anim_conversions() const {
+anim_conversion_vector TreasureType::get_anim_conversions() const {
     anim_conversion_vector v;
     v.push_back(std::make_pair(MOB_TYPE::ANIM_IDLING, "idling"));
     return v;
@@ -47,8 +47,8 @@ anim_conversion_vector treasure_type::get_anim_conversions() const {
  *
  * @param file File to read from.
  */
-void treasure_type::load_cat_properties(data_node* file) {
-    reader_setter rs(file);
+void TreasureType::load_cat_properties(DataNode* file) {
+    ReaderSetter rs(file);
     
     rs.set("points", points);
 }

@@ -21,7 +21,7 @@
  * @brief A mob that requires multiple Pikmin to work together
  * in order to clear.
  */
-class group_task : public mob {
+class GroupTask : public Mob {
 
 public:
 
@@ -30,26 +30,26 @@ public:
     /**
      * @brief Info about a spot.
      */
-    struct group_task_spot {
+    struct GroupTaskSpot {
     
         //--- Members ---
         
         //Is position relative to the mob's position and angle.
-        point relative_pos;
+        Point relative_pos;
         
         //Its absolute coordinates.
-        point absolute_pos;
+        Point absolute_pos;
         
         //Current state. 0 = free. 1 = reserved. 2 = occupied.
         unsigned char state = 0;
         
         //What Pikmin is reserving/occupying. nullptr if free.
-        pikmin* pikmin_here = nullptr;
+        Pikmin* pikmin_here = nullptr;
         
         
         //--- Function declarations ---
         
-        explicit group_task_spot(const point &pos);
+        explicit GroupTaskSpot(const Point &pos);
         
     };
     
@@ -57,30 +57,30 @@ public:
     //--- Members ---
     
     //What type of group task it is.
-    group_task_type* tas_type = nullptr;
+    GroupTaskType* tas_type = nullptr;
     
     //Power requirement in order to reach the goal. Group task type override.
     size_t power_goal = 0;
     
     //List of spots for Pikmin to use.
-    vector<group_task_spot> spots;
+    vector<GroupTaskSpot> spots;
     
     
     //--- Function declarations ---
     
-    group_task(const point &pos, group_task_type* type, float angle);
-    void add_worker(pikmin* who);
+    GroupTask(const Point &pos, GroupTaskType* type, float angle);
+    void add_worker(Pikmin* who);
     void finish_task();
-    void free_up_spot(pikmin* whose);
+    void free_up_spot(Pikmin* whose);
     bool get_fraction_numbers_info(
         float* fraction_value_nr, float* fraction_req_nr,
         ALLEGRO_COLOR* fraction_color
     ) const override;
-    group_task_spot* get_free_spot();
+    GroupTaskSpot* get_free_spot();
     float get_power() const;
-    point get_spot_pos(const pikmin* whose) const;
-    void reserve_spot(group_task_spot* spot, pikmin* who);
-    void read_script_vars(const script_var_reader &svr) override;
+    Point get_spot_pos(const Pikmin* whose) const;
+    void reserve_spot(GroupTaskSpot* spot, Pikmin* who);
+    void read_script_vars(const ScriptVarReader &svr) override;
     
 protected:
 

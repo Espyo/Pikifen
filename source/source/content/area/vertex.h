@@ -17,14 +17,14 @@ using std::size_t;
 using std::vector;
 
 
-struct edge;
+struct Edge;
 
 
 /**
  * @brief A 2D point, used to determine the end-points of an edge.
  *
  */
-struct vertex {
+struct Vertex {
 
     //--- Members ---
     
@@ -38,22 +38,22 @@ struct vertex {
     vector<size_t> edge_idxs;
     
     //Edges around it.
-    vector<edge*> edges;
+    vector<Edge*> edges;
     
     
     //--- Function declarations ---
     
-    explicit vertex(float x = 0.0f, float y = 0.0f);
-    void add_edge(edge* e_ptr, size_t e_idx);
-    edge* get_edge_by_neighbor(const vertex* neighbor) const;
-    bool has_edge(const edge* e_ptr) const;
+    explicit Vertex(float x = 0.0f, float y = 0.0f);
+    void add_edge(Edge* e_ptr, size_t e_idx);
+    Edge* get_edge_by_neighbor(const Vertex* neighbor) const;
+    bool has_edge(const Edge* e_ptr) const;
     bool is_2nd_degree_neighbor(
-        const vertex* other_v, vertex** first_neighbor
+        const Vertex* other_v, Vertex** first_neighbor
     ) const;
     bool is_2nd_degree_neighbor(
-        const edge* other_e, vertex** first_neighbor
+        const Edge* other_e, Vertex** first_neighbor
     ) const;
-    bool is_neighbor(const vertex* v_ptr) const;
-    void remove_edge(const edge* e_ptr);
+    bool is_neighbor(const Vertex* v_ptr) const;
+    void remove_edge(const Edge* e_ptr);
     
 };

@@ -20,7 +20,7 @@
  *
  * @param action Data about the action.
  */
-void gameplay_state::handle_player_action(const player_action &action) {
+void GameplayState::handle_player_action(const PlayerAction &action) {
 
     if(should_ignore_player_action(action)) return;
     
@@ -89,7 +89,7 @@ void gameplay_state::handle_player_action(const player_action &action) {
                     cur_leader_ptr &&
                     close_to_nest_to_open
                 ) {
-                    onion_menu = new onion_menu_t(
+                    onion_menu = new OnionMenu(
                         close_to_nest_to_open,
                         cur_leader_ptr
                     );
@@ -186,7 +186,7 @@ void gameplay_state::handle_player_action(const player_action &action) {
                 //Button pressed.
                 
                 if(cur_leader_ptr) {
-                    mob_event* cancel_ev =
+                    MobEvent* cancel_ev =
                         cur_leader_ptr->fsm.get_event(LEADER_EV_CANCEL);
                         
                     if(cancel_ev) {
@@ -255,7 +255,7 @@ void gameplay_state::handle_player_action(const player_action &action) {
             if(!is_down) return;
             
             pause_menu =
-                new pause_menu_t(
+                new PauseMenu(
                 action.action_type_id == PLAYER_ACTION_TYPE_RADAR
             );
             paused = true;
@@ -327,7 +327,7 @@ void gameplay_state::handle_player_action(const player_action &action) {
                         );
                     game.states.gameplay->hud->
                     spray_1_amount->start_juice_animation(
-                        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
+                        GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
                     );
                 }
             }
@@ -407,7 +407,7 @@ void gameplay_state::handle_player_action(const player_action &action) {
                 game.cam.target_zoom = game.config.zoom_min_level;
             }
             
-            sound_source_config_t cam_sound_config;
+            SoundSourceConfig cam_sound_config;
             cam_sound_config.stack_mode = SOUND_STACK_MODE_NEVER;
             game.audio.create_ui_sound_source(
                 game.sys_content.sound_camera,
@@ -446,7 +446,7 @@ void gameplay_state::handle_player_action(const player_action &action) {
             if(cur_leader_ptr) {
                 if(cur_leader_ptr->group->members.empty()) return;
                 
-                subgroup_type* starting_subgroup_type =
+                SubgroupType* starting_subgroup_type =
                     cur_leader_ptr->group->cur_standby_type;
                     
                 bool switch_successful;
@@ -527,22 +527,22 @@ void gameplay_state::handle_player_action(const player_action &action) {
                 return;
             }
             
-            pikmin* held_p_ptr = (pikmin*) cur_leader_ptr->holding[0];
+            Pikmin* held_p_ptr = (Pikmin*) cur_leader_ptr->holding[0];
             
-            pikmin* closest_members[N_MATURITIES];
-            dist closest_dists[N_MATURITIES];
+            Pikmin* closest_members[N_MATURITIES];
+            Distance closest_dists[N_MATURITIES];
             for(size_t m = 0; m < N_MATURITIES; m++) {
                 closest_members[m] = nullptr;
             }
             
             for(size_t m = 0; m < cur_leader_ptr->group->members.size(); m++) {
-                mob* m_ptr = cur_leader_ptr->group->members[m];
+                Mob* m_ptr = cur_leader_ptr->group->members[m];
                 if(m_ptr->type != held_p_ptr->type) continue;
                 
-                pikmin* p_ptr = (pikmin*) m_ptr;
+                Pikmin* p_ptr = (Pikmin*) m_ptr;
                 if(p_ptr->maturity == held_p_ptr->maturity) continue;
                 
-                dist d(cur_leader_ptr->pos, p_ptr->pos);
+                Distance d(cur_leader_ptr->pos, p_ptr->pos);
                 if(
                     !closest_members[p_ptr->maturity] ||
                     d < closest_dists[p_ptr->maturity]
@@ -554,7 +554,7 @@ void gameplay_state::handle_player_action(const player_action &action) {
             }
             
             size_t next_maturity = held_p_ptr->maturity;
-            mob* new_pikmin = nullptr;
+            Mob* new_pikmin = nullptr;
             bool finished = false;
             do {
                 next_maturity =
@@ -713,7 +713,7 @@ void gameplay_state::handle_player_action(const player_action &action) {
  * @param action Action to check.
  * @return Whether it should be ignored.
  */
-bool gameplay_state::should_ignore_player_action(const player_action &action) {
+bool GameplayState::should_ignore_player_action(const PlayerAction &action) {
     const vector<int> actions_allowed_during_interludes {
         PLAYER_ACTION_TYPE_CHANGE_ZOOM,
         PLAYER_ACTION_TYPE_CURSOR_DOWN,

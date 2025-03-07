@@ -19,8 +19,8 @@
 /**
  * @brief Constructs a new enemy category object.
  */
-enemy_category::enemy_category() :
-    mob_category(
+EnemyCategory::EnemyCategory() :
+    MobCategory(
         MOB_CATEGORY_ENEMIES, "enemy",
         "Enemy", "Enemies",
         "enemies", al_map_rgb(204, 71, 71)
@@ -32,7 +32,7 @@ enemy_category::enemy_category() :
 /**
  * @brief Clears the list of registered types of enemy.
  */
-void enemy_category::clear_types() {
+void EnemyCategory::clear_types() {
     for(auto &t : game.content.mob_types.list.enemy) {
         delete t.second;
     }
@@ -48,10 +48,10 @@ void enemy_category::clear_types() {
  * @param angle Starting angle.
  * @return The mob.
  */
-mob* enemy_category::create_mob(
-    const point &pos, mob_type* type, float angle
+Mob* EnemyCategory::create_mob(
+    const Point &pos, MobType* type, float angle
 ) {
-    enemy* m = new enemy(pos, (enemy_type*) type, angle);
+    Enemy* m = new Enemy(pos, (EnemyType*) type, angle);
     game.states.gameplay->mobs.enemies.push_back(m);
     return m;
 }
@@ -62,8 +62,8 @@ mob* enemy_category::create_mob(
  *
  * @return The type.
  */
-mob_type* enemy_category::create_type() {
-    return new enemy_type();
+MobType* EnemyCategory::create_type() {
+    return new EnemyType();
 }
 
 
@@ -72,12 +72,12 @@ mob_type* enemy_category::create_type() {
  *
  * @param m The mob to erase.
  */
-void enemy_category::erase_mob(mob* m) {
+void EnemyCategory::erase_mob(Mob* m) {
     game.states.gameplay->mobs.enemies.erase(
         find(
             game.states.gameplay->mobs.enemies.begin(),
             game.states.gameplay->mobs.enemies.end(),
-            (enemy*) m
+            (Enemy*) m
         )
     );
 }
@@ -90,7 +90,7 @@ void enemy_category::erase_mob(mob* m) {
  * @param internal_name Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-mob_type* enemy_category::get_type(const string &internal_name) const {
+MobType* EnemyCategory::get_type(const string &internal_name) const {
     auto it = game.content.mob_types.list.enemy.find(internal_name);
     if(it == game.content.mob_types.list.enemy.end()) return nullptr;
     return it->second;
@@ -102,7 +102,7 @@ mob_type* enemy_category::get_type(const string &internal_name) const {
  *
  * @param list This list gets filled with the mob type internal names.
  */
-void enemy_category::get_type_names(vector<string> &list) const {
+void EnemyCategory::get_type_names(vector<string> &list) const {
     for(auto &t : game.content.mob_types.list.enemy) {
         list.push_back(t.first);
     }
@@ -115,6 +115,6 @@ void enemy_category::get_type_names(vector<string> &list) const {
  * @param internal_name Internal name of the mob type.
  * @param type Mob type to register.
  */
-void enemy_category::register_type(const string &internal_name, mob_type* type) {
-    game.content.mob_types.list.enemy[internal_name] = (enemy_type*) type;
+void EnemyCategory::register_type(const string &internal_name, MobType* type) {
+    game.content.mob_types.list.enemy[internal_name] = (EnemyType*) type;
 }

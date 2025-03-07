@@ -17,8 +17,8 @@
 /**
  * @brief Constructs a new enemy type object.
  */
-enemy_type::enemy_type() :
-    mob_type(MOB_CATEGORY_ENEMIES) {
+EnemyType::EnemyType() :
+    MobType(MOB_CATEGORY_ENEMIES) {
     
     target_type = MOB_TARGET_FLAG_ENEMY;
     huntable_targets =
@@ -40,8 +40,8 @@ enemy_type::enemy_type() :
  *
  * @param file File to read from.
  */
-void enemy_type::load_cat_properties(data_node* file) {
-    reader_setter rs(file);
+void EnemyType::load_cat_properties(DataNode* file) {
+    ReaderSetter rs(file);
     
     rs.set("allow_ground_attacks", allow_ground_attacks);
     rs.set("drops_corpse", drops_corpse);

@@ -25,7 +25,7 @@ extern const float ZOOM_MIN_LEVEL;
 /**
  * @brief Info about the particle editor.
  */
-class particle_editor : public editor {
+class ParticleEditor : public Editor {
 
 public:
 
@@ -37,7 +37,7 @@ public:
     
     //--- Function declarations ---
     
-    particle_editor();
+    ParticleEditor();
     void do_logic() override;
     void do_drawing() override;
     void load() override;
@@ -52,10 +52,10 @@ private:
     //--- Members ---
     
     //Currently loaded particle generator.
-    particle_generator loaded_gen;
+    ParticleGenerator loaded_gen;
     
     //Particle manager.
-    particle_manager part_mgr;
+    ParticleManager part_mgr;
     
     //Whether to use a background texture, if any.
     ALLEGRO_BITMAP* bg = nullptr;
@@ -64,10 +64,10 @@ private:
     bool grid_visible = true;
     
     //Picker info for the picker in the "load" dialog.
-    picker_info load_dialog_picker;
+    Picker load_dialog_picker;
     
     //Position of the load widget.
-    point load_widget_pos;
+    Point load_widget_pos;
     
     //Is the particle manager currently generating?
     bool mgr_running = false;
@@ -79,7 +79,7 @@ private:
     float generator_angle_offset = 0.0f;
     
     //Offset the generator's position in the editor by this much.
-    point generator_pos_offset;
+    Point generator_pos_offset;
     
     //Is the leader silhouette visible?
     bool leader_silhouette_visible = false;
@@ -103,10 +103,10 @@ private:
     size_t selected_outward_velocity_keyframe = 0;
     
     //Position of the reload widget.
-    point reload_widget_pos;
+    Point reload_widget_pos;
     
     //Position of the quit widget.
-    point quit_widget_pos;
+    Point quit_widget_pos;
     
     //Whether to use a background texture.
     bool use_bg = false;

@@ -49,7 +49,7 @@ enum BRIDGE_STATE {
 /**
  * @brief A type of bridge.
  */
-class bridge_type : public mob_type {
+class BridgeType : public MobType {
 
 public:
 
@@ -79,9 +79,9 @@ public:
     
     //--- Function declarations ---
     
-    bridge_type();
-    void load_cat_properties(data_node* file) override;
-    void load_cat_resources(data_node* file) override;
+    BridgeType();
+    void load_cat_properties(DataNode* file) override;
+    void load_cat_resources(DataNode* file) override;
     anim_conversion_vector get_anim_conversions() const override;
     void unload_resources() override;
     
