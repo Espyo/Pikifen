@@ -201,7 +201,7 @@ void Onion::start_generating() {
     generation_delay_timer.stop();
     next_generation_timer.start();
     string msg = "started_generation";
-    send_message(this, msg);
+    send_script_message(this, msg);
 }
 
 
@@ -212,7 +212,7 @@ void Onion::stop_generating() {
     generation_delay_timer.stop();
     next_generation_timer.stop();
     string msg = "stopped_generation";
-    send_message(this, msg);
+    send_script_message(this, msg);
 }
 
 

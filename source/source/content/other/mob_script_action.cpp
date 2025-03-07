@@ -1671,7 +1671,7 @@ void mob_action_runners::save_focus_memory(MobActionRunData &data) {
  */
 void mob_action_runners::send_message_to_focus(MobActionRunData &data) {
     if(!data.m->focused_mob) return;
-    data.m->send_message(data.m->focused_mob, data.args[0]);
+    data.m->send_script_message(data.m->focused_mob, data.args[0]);
 }
 
 
@@ -1684,7 +1684,7 @@ void mob_action_runners::send_message_to_links(MobActionRunData &data) {
     for(size_t l = 0; l < data.m->links.size(); l++) {
         if(data.m->links[l] == data.m) continue;
         if(!data.m->links[l]) continue;
-        data.m->send_message(data.m->links[l], data.args[0]);
+        data.m->send_script_message(data.m->links[l], data.args[0]);
     }
 }
 
@@ -1705,7 +1705,7 @@ void mob_action_runners::send_message_to_nearby(MobActionRunData &data) {
             continue;
         }
         
-        data.m->send_message(
+        data.m->send_script_message(
             game.states.gameplay->mobs.all[m2], data.args[1]
         );
     }
@@ -1992,7 +1992,7 @@ void mob_action_runners::set_var(MobActionRunData &data) {
  * @param data Data about the action call.
  */
 void mob_action_runners::show_message_from_var(MobActionRunData &data) {
-    start_message(data.m->vars[data.args[0]], nullptr);
+    start_gameplay_message(data.m->vars[data.args[0]], nullptr);
 }
 
 

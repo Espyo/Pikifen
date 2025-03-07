@@ -436,7 +436,7 @@ public:
     void store_mob_inside(Mob* m);
     void release_chomped_pikmin();
     void release_stored_mobs();
-    void send_message(Mob* receiver, string &msg) const;
+    void send_script_message(Mob* receiver, string &msg) const;
     Mob* spawn(const MobType::SpawnInfo* info, MobType* type_ptr = nullptr);
     void start_dying();
     void finish_dying();

@@ -24,7 +24,7 @@
 
     <p>An interactable type object will cause a prompt to appear above it when the player's current leader approaches, informing the player what input to perform to interact with the object. The most common case for this is to allow the player to read the contents of a sign, but it can be used for things like user-activated switches, too. Because the interactable only needs to be on the lookout for the player's input, and because the outcome can be anything, the player is tasked with giving each interactable type object its behavior using the script.</p>
 
-    <p>Interactable type objects are hardcoded in the engine to do whatever the script tells them, plus show the user prompt above them when the current leader is within a certain radius. They also have logic to receive the <code>interact</code> message from the leader object when they're interacted with.</p>
+    <p>Interactable type objects are hardcoded in the engine to do whatever the script tells them, plus show the user prompt above them when the current leader is within a certain radius. They also have logic to receive the <code>interact</code> script message from the leader object when they're interacted with.</p>
 
     <h2 id="props">Properties</h2>
 
@@ -61,7 +61,7 @@
 
     <h2 id="script">Script</h2>
 
-    <p>All of the interactable type object's behavior is defined by the user-made <a href="script.html">script</a>. It is recommended that, in all relevant states, you handle the <code><a href="events_and_actions.html#on-receive-message">on_receive_message</a></code> event, since when the player interacts with the object, a message is sent from the leader object with the text <code>interact</code>.</p>
+    <p>All of the interactable type object's behavior is defined by the user-made <a href="script.html">script</a>. It is recommended that, in all relevant states, you handle the <code><a href="events_and_actions.html#on-receive-message">on_receive_message</a></code> event, since when the player interacts with the object, a script message is sent from the leader object with the text <code>interact</code>.</p>
 
     <p>Some <a href="script.html#vars">script variables</a> control special behavior, like the interactable's starting team. To know which ones exist, you can go to the area editor, select an interactable, and read the tooltip of each variable.</p>
 

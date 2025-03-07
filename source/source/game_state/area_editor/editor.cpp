@@ -3140,7 +3140,7 @@ bool AreaEditor::save_area(bool to_backup) {
     bool main_data_save_ok = main_data_file.save_file(main_data_file_path);
     
     if(!geo_save_ok || !main_data_save_ok) {
-        show_message_box(
+        show_system_message_box(
             nullptr, "Save failed!",
             "Could not save the area!",
             (

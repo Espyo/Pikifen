@@ -387,7 +387,7 @@ int Game::start() {
     
     //Panic check: is there a game_data folder?
     if(folder_to_vector(FOLDER_PATHS_FROM_ROOT::GAME_DATA, true).empty()) {
-        show_message_box(
+        show_system_message_box(
             nullptr, "game_data folder not found!",
             "game_data folder not found!",
             "Could not find the \"game_data\" folder! "

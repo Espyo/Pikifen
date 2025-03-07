@@ -162,7 +162,7 @@
       </tr>
       <tr id="on-receive-message">
         <th style="text-align: left;"><code>on_receive_message</code></th>
-        <td>Triggered when another object sent it a message. The contents of the message can be obtained with the <code><a href="#get-event-info">get_event_info</a></code> action.</td>
+        <td>Triggered when another object sent it a script message. The contents of the message can be obtained with the <code><a href="#get-event-info">get_event_info</a></code> action.</td>
       </tr>
       <tr id="on-released">
         <th style="text-align: left;"><code>on_released</code></th>
@@ -592,7 +592,7 @@
               <li><code><b>hazard</b></code>: Name of the hazard that the object has touched or left.</li>
               <li><code><b>input_name</b></code>: The name of the input that triggered an <code><a href="#on-input-received">on_input_received</a></code> event.</li>
               <li><code><b>input_value</b></code>: The value of the input that triggered an <code><a href="#on-input-received">on_input_received</a></code> event. 1 when fully pressed, 0 when fully released.</li>
-              <li><code><b>message</b></code>: What the message was that got sent when the <code><a href="#on-receive-message">on_receive_message</a></code> event got triggered.</li>
+              <li><code><b>message</b></code>: What the script message was that got sent when the <code><a href="#on-receive-message">on_receive_message</a></code> event got triggered.</li>
               <li><code><b>other_body_part</b></code>: For events that deal with hitboxes, this is the name of the other mob's body part that's responsible.</li>
             </ul>
           </dd>
@@ -683,7 +683,7 @@
         <th><code>send_message_to_focus</code></th>
         <td><dl>
           <dt><code><b>send_message_to_focus</b> &lt;message&gt;</code></dt>
-          <dd>Send a text message to the currently focused mob. Objects that receive a message will be thrown the <code><a href="#on-receive-message">on_receive_message</a></code> event.</dd>
+          <dd>Send a script message to the currently focused mob. Objects that receive a message will be thrown the <code><a href="#on-receive-message">on_receive_message</a></code> event.</dd>
         </dl></td>
       </tr>
       <tr id="send-message-to-links">
@@ -868,7 +868,7 @@
         <th><code>show_message_from_var</code></th>
         <td><dl>
           <dt><code><b>show_message_from_var</b> &lt;variable_name&gt;</code></dt>
-          <dd>Shows a message on-screen using the text inside the specific variable. You can make use of <a href="misc_features.html#markup">markup</a> for this.</dd>
+          <dd>Shows a gameplay message on-screen using the text inside the specific variable. You can make use of <a href="misc_features.html#markup">markup</a> for this.</dd>
         </dl></td>
       </tr>
       <tr id="spawn">

@@ -214,7 +214,7 @@ vector<vector<StringToken> > split_long_string_with_tokens(
 ParticleGenerator standard_particle_gen_setup(
     const string &internal_name, Mob* target_mob
 );
-void start_message(const string &text, ALLEGRO_BITMAP* speaker_bmp);
+void start_gameplay_message(const string &text, ALLEGRO_BITMAP* speaker_bmp);
 vector<StringToken> tokenize_string(const string &s);
 string unescape_string(const string &s);
 void update_offset_effect_buffer(

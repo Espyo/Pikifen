@@ -789,7 +789,7 @@ bool ParticleEditor::save_part_gen() {
     loaded_gen.save_to_data_node(&file_node);
     
     if(!file_node.save_file(manifest.path)) {
-        show_message_box(
+        show_system_message_box(
             nullptr, "Save failed!",
             "Could not save the particle file!",
             (

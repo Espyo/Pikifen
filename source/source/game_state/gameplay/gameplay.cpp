@@ -1419,7 +1419,7 @@ void GameplayState::update_transformations() {
  * @param speaker_icon If not nullptr, use this bitmap to represent who
  * is talking.
  */
-MessageBox::MessageBox(const string &text, ALLEGRO_BITMAP* speaker_icon):
+GameplayMessageBox::GameplayMessageBox(const string &text, ALLEGRO_BITMAP* speaker_icon):
     speaker_icon(speaker_icon) {
     
     string message = unescape_string(text);
@@ -1451,7 +1451,7 @@ MessageBox::MessageBox(const string &text, ALLEGRO_BITMAP* speaker_icon):
  * @brief Handles the user having pressed the button to continue the message,
  * or to skip to showing everything in the current section.
  */
-void MessageBox::advance() {
+void GameplayMessageBox::advance() {
     if(
         transition_timer > 0.0f ||
         misinput_protection_timer > 0.0f ||
@@ -1471,7 +1471,7 @@ void MessageBox::advance() {
             close();
         } else {
             //Start swiping to go to the next section.
-            swipe_timer = MSG_BOX::TOKEN_SWIPE_DURATION;
+            swipe_timer = GAMEPLAY_MSG_BOX::TOKEN_SWIPE_DURATION;
         }
     } else {
         //Skip the text typing and show everything in this section.
@@ -1484,7 +1484,7 @@ void MessageBox::advance() {
 /**
  * @brief Closes the message box, even if it is still writing something.
  */
-void MessageBox::close() {
+void GameplayMessageBox::close() {
     if(!transition_in && transition_timer > 0.0f) return;
     transition_in = false;
     transition_timer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
@@ -1496,7 +1496,7 @@ void MessageBox::close() {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void MessageBox::tick(float delta_t) {
+void GameplayMessageBox::tick(float delta_t) {
     size_t tokens_in_section = 0;
     for(size_t l = 0; l < 3; l++) {
         size_t line_idx = cur_section * 3 + l;
@@ -1520,7 +1520,7 @@ void MessageBox::tick(float delta_t) {
     if(!transition_in || transition_timer == 0.0f) {
     
         //Animate the text.
-        if(game.config.message_char_interval == 0.0f) {
+        if(game.config.gameplay_msg_char_interval == 0.0f) {
             skipped_at_token = 0;
             cur_token = tokens_in_section + 1;
         } else {
@@ -1528,7 +1528,8 @@ void MessageBox::tick(float delta_t) {
             if(skipped_at_token == INVALID) {
                 size_t prev_token = cur_token;
                 cur_token =
-                    total_token_anim_time / game.config.message_char_interval;
+                    total_token_anim_time /
+                    game.config.gameplay_msg_char_interval;
                 cur_token =
                     std::min(cur_token, tokens_in_section + 1);
                 if(
@@ -1540,7 +1541,7 @@ void MessageBox::tick(float delta_t) {
                     //doesn't accidentally go to the next section when they
                     //were just trying to skip the text.
                     misinput_protection_timer =
-                        MSG_BOX::MISINPUT_PROTECTION_DURATION;
+                        GAMEPLAY_MSG_BOX::MISINPUT_PROTECTION_DURATION;
                 }
             } else {
                 total_skip_anim_time += delta_t;
@@ -1570,7 +1571,7 @@ void MessageBox::tick(float delta_t) {
         advance_button_alpha =
             std::min(
                 advance_button_alpha +
-                MSG_BOX::ADVANCE_BUTTON_FADE_SPEED * delta_t,
+                GAMEPLAY_MSG_BOX::ADVANCE_BUTTON_FADE_SPEED * delta_t,
                 1.0f
             );
     } else {
@@ -1578,7 +1579,7 @@ void MessageBox::tick(float delta_t) {
             std::max(
                 0.0f,
                 advance_button_alpha -
-                MSG_BOX::ADVANCE_BUTTON_FADE_SPEED * delta_t
+                GAMEPLAY_MSG_BOX::ADVANCE_BUTTON_FADE_SPEED * delta_t
             );
     }
 }

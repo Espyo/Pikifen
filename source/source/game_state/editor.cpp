@@ -1632,8 +1632,8 @@ void Editor::open_dialog(
 
 
 /**
- * @brief Opens a dialog with a simple message and an "open manual" button,
- * designed for each editor's standard "help" information.
+ * @brief Opens a Dear ImGui dialog with a simple message and an "open manual"
+ * button, designed for each editor's standard "help" information.
  *
  * @param message Text message.
  * @param page Manual page explaining the editor and content type in
@@ -1662,7 +1662,7 @@ void Editor::open_input_popup(const char* label) {
 
 
 /**
- * @brief Opens a dialog with a simple message and an ok button.
+ * @brief Opens a Dear ImGui dialog with a simple message and an ok button.
  *
  * @param title Message box title.
  * @param message Text message.
@@ -2265,7 +2265,7 @@ bool Editor::process_gui_input_popup(
 
 
 /**
- * @brief Processes the message dialog widgets.
+ * @brief Processes the Dear ImGui message dialog widgets.
  */
 void Editor::process_gui_message_dialog() {
     //Text.

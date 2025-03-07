@@ -113,7 +113,7 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
                     close_to_interactable_to_use
                 ) {
                     string msg = "interact";
-                    cur_leader_ptr->send_message(
+                    cur_leader_ptr->send_script_message(
                         close_to_interactable_to_use, msg
                     );
                     done = true;

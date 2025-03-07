@@ -27,7 +27,7 @@
 #include "misc_functions.h"
 
 
-namespace MSG_BOX {
+namespace GAMEPLAY_MSG_BOX {
 
 //How quickly the advance button icon fades, in alpha (0-1) per second.
 const float ADVANCE_BUTTON_FADE_SPEED = 4.0f;

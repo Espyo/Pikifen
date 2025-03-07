@@ -100,7 +100,7 @@ void set_combined_clipping_rectangles(
     float x1, float y1, float w1, float h1,
     float x2, float y2, float w2, float h2
 );
-int show_message_box(
+int show_system_message_box(
     ALLEGRO_DISPLAY* display, char const* title, char const* heading,
     char const* text, char const* buttons, int flags
 );

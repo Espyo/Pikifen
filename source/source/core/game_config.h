@@ -43,7 +43,7 @@ extern const float DEF_IDLE_TASK_RANGE;
 extern const float DEF_MATURITY_POWER_MULT;
 extern const float DEF_MATURITY_SPEED_MULT;
 extern const size_t DEF_MAX_PIKMIN_IN_FIELD;
-extern const float DEF_MESSAGE_CHAR_INTERVAL;
+extern const float DEF_GAMEPLAY_MSG_CHAR_INTERVAL;
 extern const float DEF_NEXT_PLUCK_RANGE;
 extern const ALLEGRO_COLOR DEF_NO_PIKMIN_COLOR;
 extern const float DEF_ONION_OPEN_RANGE;
@@ -130,9 +130,10 @@ struct GameConfig {
     //Maximum number of Pikmin that can be out in the field at once.
     size_t max_pikmin_in_field = GAME_CONFIG::DEF_MAX_PIKMIN_IN_FIELD;
     
-    //These many seconds until a new character of the message is drawn.
-    float message_char_interval = GAME_CONFIG::DEF_MESSAGE_CHAR_INTERVAL;
-    
+    //These many seconds until a new character of the gameplay message is drawn.
+    float gameplay_msg_char_interval =
+        GAME_CONFIG::DEF_GAMEPLAY_MSG_CHAR_INTERVAL;
+        
     //Name of the game.
     string name;
     

@@ -580,14 +580,14 @@ reaches {
       <dt><b>The hardcoded scripts are written in the engine's code in C++, and have access to things the <a href="making.html#data-file">data file</a> scripts do not.</b></dt>
       <dd>To know what states and events an object in a category uses, your best bet is to open the engine's source code, check the <code>.cpp</code> code files inside the <code>source/mob_fsms</code> folder, and try to make sense of them. Keep in mind some states handle events that cannot be recognized in a <code>script.txt</code> file, so you will be unable to extend those.</dd>
       <dt><b>The logic behind the hardcoded scripts is really complex, so try not to get too creative!</b></dt>
-      <dd>Because the engine expects objects to follow their hardcoded script, which usually involves a lot of complex tasks, tampering with the script is risky. For instance, if an object was meant to change to a specific state, and you make it change to another one instead, the engine could later on try to do something with the state it <i>thinks</i> the object should be at, and crash. As such, if you want to enhance a hardcoded script, try sticking to things like adding particles, setting some script variables, sending messages, etc.</dd>
+      <dd>Because the engine expects objects to follow their hardcoded script, which usually involves a lot of complex tasks, tampering with the script is risky. For instance, if an object was meant to change to a specific state, and you make it change to another one instead, the engine could later on try to do something with the state it <i>thinks</i> the object should be at, and crash. As such, if you want to enhance a hardcoded script, try sticking to things like adding particles, setting some script variables, sending script messages, etc.</dd>
     </dl>
     
     <h2 id="global-events">Global events</h2>
     
     <dl>
       <dt><b>Events inside the <code>global</code> block will always be run.</b></dt>
-      <dd>If you have some actions that you want to be run on a given event for <i>all</i> states, you can create a <code>global</code>  block in the script file much like the <code>init</code> block, and add events there as if it were a state. Useful, for instance, to make it so that every time the mob receives a message (<code><a href="events_and_actions.html#on-receive-message">on_receive_message</a></code> event), the contents of the message are always stored in a variable regardless of state.</dd>
+      <dd>If you have some actions that you want to be run on a given event for <i>all</i> states, you can create a <code>global</code>  block in the script file much like the <code>init</code> block, and add events there as if it were a state. Useful, for instance, to make it so that every time the mob receives a script message (<code><a href="events_and_actions.html#on-receive-message">on_receive_message</a></code> event), the contents of the message are always stored in a variable regardless of state.</dd>
       <dt><b>Global event actions will be run first by default.</b></dt>
       <dd>When the current state's event and the global event both have actions, the engine will run the global event's first and the state's second. To reverse this, write <code>global_actions_after</code> as the first line in your list of actions (either the global event's list or the state's list).</dd>
     </dl>

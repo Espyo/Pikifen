@@ -1313,7 +1313,7 @@ bool AnimationEditor::save_anim_db() {
     );
     
     if(!file_node.save_file(manifest.path)) {
-        show_message_box(
+        show_system_message_box(
             nullptr, "Save failed!",
             "Could not save the animation database!",
             (

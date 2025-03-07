@@ -232,7 +232,7 @@ void crash(const string &reason, const string &info, int exit_status) {
     
     game.errors.report(error_str);
     
-    show_message_box(
+    show_system_message_box(
         nullptr, "Program crash!",
         "Pikifen has crashed!",
         "Sorry about that! To help fix this problem, please read the "
@@ -1116,7 +1116,7 @@ void print_info(
 void report_fatal_error(const string &s, const DataNode* dn) {
     game.errors.report(s, dn);
     
-    show_message_box(
+    show_system_message_box(
         nullptr, "Fatal error!",
         "Pikifen has encountered a fatal error!",
         s.c_str(),
@@ -1559,11 +1559,11 @@ ParticleGenerator standard_particle_gen_setup(
  * @param text Text to display.
  * @param speaker_bmp Bitmap representing the speaker.
  */
-void start_message(const string &text, ALLEGRO_BITMAP* speaker_bmp) {
+void start_gameplay_message(const string &text, ALLEGRO_BITMAP* speaker_bmp) {
     if(!text.empty()) {
         string final_text = unescape_string(text);
         game.states.gameplay->msg_box =
-            new MessageBox(final_text, speaker_bmp);
+            new GameplayMessageBox(final_text, speaker_bmp);
         game.states.gameplay->hud->gui.start_animation(
             GUI_MANAGER_ANIM_IN_TO_OUT,
             GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME

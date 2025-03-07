@@ -70,8 +70,8 @@ const float DEF_MATURITY_SPEED_MULT = 0.1f;
 //Default value for the maximum number of Pikmin in the field.
 const size_t DEF_MAX_PIKMIN_IN_FIELD = 100;
 
-//Default value for the message character interval.
-const float DEF_MESSAGE_CHAR_INTERVAL = 0.03f;
+//Default value for the gameplay message character interval.
+const float DEF_GAMEPLAY_MSG_CHAR_INTERVAL = 0.03f;
 
 //Default value for the next Pikmin auto-pluck range.
 const float DEF_NEXT_PLUCK_RANGE = 160.0f;
@@ -191,7 +191,7 @@ void GameConfig::load(DataNode* file) {
     rs.set("radar_highest_color", radar_highest_color);
     rs.set("radar_lowest_color", radar_lowest_color);
     
-    rs.set("message_char_interval", message_char_interval);
+    rs.set("gameplay_msg_char_interval", gameplay_msg_char_interval);
     rs.set("zoom_max_level", zoom_max_level);
     rs.set("zoom_min_level", zoom_min_level);
     

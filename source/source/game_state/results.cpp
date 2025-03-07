@@ -318,7 +318,7 @@ void Results::load() {
     }
     
     if(!saved_successfully) {
-        show_message_box(
+        show_system_message_box(
             nullptr, "Save failed!",
             "Could not save this result!",
             (

@@ -40,7 +40,7 @@ using std::size_t;
 using std::string;
 using std::vector;
 
-namespace MSG_BOX {
+namespace GAMEPLAY_MSG_BOX {
 extern const float ADVANCE_BUTTON_FADE_SPEED;
 extern const float MARGIN;
 extern const float PADDING;

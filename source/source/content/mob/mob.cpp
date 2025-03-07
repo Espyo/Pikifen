@@ -2950,13 +2950,13 @@ void Mob::respawn() {
 
 
 /**
- * @brief Sends a message to another mob. This calls the mob's
+ * @brief Sends a script message to another mob. This calls the mob's
  * "message received" event, with the message as data.
  *
  * @param receiver Mob that will receive the message.
  * @param msg The message.
  */
-void Mob::send_message(Mob* receiver, string &msg) const {
+void Mob::send_script_message(Mob* receiver, string &msg) const {
     MobEvent* ev = receiver->fsm.get_event(MOB_EV_RECEIVE_MESSAGE);
     if(!ev) return;
     ev->run(receiver, (void*) &msg, (void*) this);

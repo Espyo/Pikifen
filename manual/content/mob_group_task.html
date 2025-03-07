@@ -26,7 +26,7 @@
 
     <p>Each object has a series of spots for Pikmin to stand on when they're working on it. These spots are organized into rows, and as Pikmin are tasked to work, they move to the closest free spot in the frontmost row. After all spots in that row are taken, new Pikmin go to the row behind, if any, and so on.</p>
 
-    <p>Group task objects are hardcoded in the engine to do whatever the script tells them, but when the required power quota is reached, the <code>goal_reached</code> message is sent; this should be handled by the script in order to do something. Likewise, the message <code>goal_lost</code> is sent if enough Pikmin leave the task such that the power goes below the required quota.</p>
+    <p>Group task objects are hardcoded in the engine to do whatever the script tells them, but when the required power quota is reached, the <code>goal_reached</code> script message is sent; this should be handled by the script in order to do something. Likewise, the message <code>goal_lost</code> is sent if enough Pikmin leave the task such that the power goes below the required quota.</p>
 
     <h2 id="props">Properties</h2>
 

@@ -1034,11 +1034,11 @@ void GameplayState::do_gameplay_logic(float delta_t) {
             
         }
         
-    } else { //Displaying a message.
+    } else { //Displaying a gameplay message.
     
         msg_box->tick(delta_t);
         if(msg_box->to_delete) {
-            start_message("", nullptr);
+            start_gameplay_message("", nullptr);
         }
         
     }

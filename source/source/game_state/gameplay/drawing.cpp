@@ -161,7 +161,7 @@ void GameplayState::do_game_drawing(
         draw_big_msg();
         
         if(msg_box) {
-            draw_message_box();
+            draw_gameplay_message_box();
         } else if(onion_menu) {
             draw_onion_menu();
         } else if(pause_menu) {
@@ -1172,9 +1172,9 @@ void GameplayState::draw_lighting_filter() {
 
 
 /**
- * @brief Draws a message box.
+ * @brief Draws a gameplay message box.
  */
-void GameplayState::draw_message_box() {
+void GameplayState::draw_gameplay_message_box() {
     //Mouse cursor.
     draw_mouse_cursor(GAME::CURSOR_STANDARD_COLOR);
     
@@ -1233,8 +1233,8 @@ void GameplayState::draw_message_box() {
         game.controls.find_bind(PLAYER_ACTION_TYPE_THROW).input,
         true,
         Point(
-            game.win_w - (MSG_BOX::MARGIN + MSG_BOX::PADDING + 8.0f),
-            game.win_h - (MSG_BOX::MARGIN + MSG_BOX::PADDING + 8.0f) +
+            game.win_w - (GAMEPLAY_MSG_BOX::MARGIN + GAMEPLAY_MSG_BOX::PADDING + 8.0f),
+            game.win_h - (GAMEPLAY_MSG_BOX::MARGIN + GAMEPLAY_MSG_BOX::PADDING + 8.0f) +
             offset
         ),
         Point(32.0f),
@@ -1255,15 +1255,15 @@ void GameplayState::draw_message_box() {
         for(size_t t = 0; t < msg_box->tokens_per_line[line_idx].size(); t++) {
             total_width += msg_box->tokens_per_line[line_idx][t].width;
         }
-        const float max_text_width = (MSG_BOX::MARGIN + MSG_BOX::PADDING) * 2;
+        const float max_text_width = (GAMEPLAY_MSG_BOX::MARGIN + GAMEPLAY_MSG_BOX::PADDING) * 2;
         if(total_width > game.win_w - max_text_width) {
             x_scale = (game.win_w - max_text_width) / total_width;
         }
         
         float caret =
-            MSG_BOX::MARGIN + MSG_BOX::PADDING;
+            GAMEPLAY_MSG_BOX::MARGIN + GAMEPLAY_MSG_BOX::PADDING;
         float start_y =
-            game.win_h - line_height * 4 + MSG_BOX::PADDING + offset;
+            game.win_h - line_height * 4 + GAMEPLAY_MSG_BOX::PADDING + offset;
             
         for(size_t t = 0; t < msg_box->tokens_per_line[line_idx].size(); t++) {
             token_idx++;
@@ -1282,19 +1282,19 @@ void GameplayState::draw_message_box() {
             } else {
                 this_token_anim_time =
                     msg_box->total_token_anim_time -
-                    ((token_idx + 1) * game.config.message_char_interval);
+                    ((token_idx + 1) * game.config.gameplay_msg_char_interval);
             }
             if(
                 this_token_anim_time > 0 &&
-                this_token_anim_time < MSG_BOX::TOKEN_ANIM_DURATION
+                this_token_anim_time < GAMEPLAY_MSG_BOX::TOKEN_ANIM_DURATION
             ) {
                 float ratio =
-                    this_token_anim_time / MSG_BOX::TOKEN_ANIM_DURATION;
+                    this_token_anim_time / GAMEPLAY_MSG_BOX::TOKEN_ANIM_DURATION;
                 x +=
-                    MSG_BOX::TOKEN_ANIM_X_AMOUNT *
+                    GAMEPLAY_MSG_BOX::TOKEN_ANIM_X_AMOUNT *
                     ease(EASE_METHOD_UP_AND_DOWN_ELASTIC, ratio);
                 y +=
-                    MSG_BOX::TOKEN_ANIM_Y_AMOUNT *
+                    GAMEPLAY_MSG_BOX::TOKEN_ANIM_Y_AMOUNT *
                     ease(EASE_METHOD_UP_AND_DOWN_ELASTIC, ratio);
                 alpha = ratio * 255;
             }
@@ -1302,9 +1302,9 @@ void GameplayState::draw_message_box() {
             //Now, for the swiping animation.
             if(msg_box->swipe_timer > 0.0f) {
                 float ratio =
-                    1 - (msg_box->swipe_timer / MSG_BOX::TOKEN_SWIPE_DURATION);
-                x += MSG_BOX::TOKEN_SWIPE_X_AMOUNT * ratio;
-                y += MSG_BOX::TOKEN_SWIPE_Y_AMOUNT * ratio;
+                    1 - (msg_box->swipe_timer / GAMEPLAY_MSG_BOX::TOKEN_SWIPE_DURATION);
+                x += GAMEPLAY_MSG_BOX::TOKEN_SWIPE_X_AMOUNT * ratio;
+                y += GAMEPLAY_MSG_BOX::TOKEN_SWIPE_Y_AMOUNT * ratio;
                 alpha = std::max(0, (signed int) (alpha - ratio * 255));
             }
             

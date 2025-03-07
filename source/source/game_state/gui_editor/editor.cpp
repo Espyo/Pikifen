@@ -658,7 +658,7 @@ bool GuiEditor::save_gui_def() {
     }
     
     if(!file_node.save_file(manifest.path)) {
-        show_message_box(
+        show_system_message_box(
             nullptr, "Save failed!",
             "Could not save the GUI file!",
             (

@@ -707,7 +707,7 @@ void set_combined_clipping_rectangles(
  * 1 if the OK or Yes button was pressed.
  * 2 if the Cancel or No button was pressed.
  */
-int show_message_box(
+int show_system_message_box(
     ALLEGRO_DISPLAY* display, char const* title, char const* heading,
     char const* text, char const* buttons, int flags
 ) {

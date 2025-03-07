@@ -111,7 +111,7 @@ enum BOSS_MUSIC_STATE {
 };
 
 
-struct MessageBox;
+struct GameplayMessageBox;
 
 
 /**
@@ -200,7 +200,7 @@ public:
     MobLists mobs;
     
     //Information about the message box currently active on player 1, if any.
-    MessageBox* msg_box = nullptr;
+    GameplayMessageBox* msg_box = nullptr;
     
     //ID of the next mob to be created.
     size_t next_mob_id = 0;
@@ -474,7 +474,7 @@ private:
     void draw_ingame_text();
     void draw_big_msg();
     void draw_lighting_filter();
-    void draw_message_box();
+    void draw_gameplay_message_box();
     void draw_onion_menu();
     void draw_pause_menu();
     void draw_precipitation();
@@ -522,9 +522,9 @@ private:
 
 
 /**
- * @brief Info about the current on-screen message box, if any.
+ * @brief Info about the current gameplay message box, if any.
  */
-struct MessageBox {
+struct GameplayMessageBox {
 
     //--- Members ---
     
@@ -570,7 +570,7 @@ struct MessageBox {
     
     //--- Function declarations ---
     
-    MessageBox(const string &text, ALLEGRO_BITMAP* speaker_icon);
+    GameplayMessageBox(const string &text, ALLEGRO_BITMAP* speaker_icon);
     void advance();
     void close();
     void tick(float delta_t);

@@ -633,13 +633,13 @@ protected:
     //Manifest for the current content.
     ContentManifest manifest;
     
-    //Message text in the help dialog.
+    //Message text in the Dear ImGui help dialog.
     string help_dialog_message;
     
     //Page to open in the help dialog.
     string help_dialog_page;
     
-    //Message text in the message dialog.
+    //Message text in the Dear ImGui message dialog.
     string message_dialog_message;
     
     //Is this a real mouse drag, or just a shaky click?
