@@ -344,7 +344,11 @@ void title_screen_state::init_gui_main_page() {
         });
     };
     options_button->on_get_tooltip =
-    [] () { return "Customize your playing experience."; };
+    [] () {
+        return
+            "Customize your playing experience. "
+            "You can also find this in the pause menu.";
+    };
     main_gui.add_item(options_button, "options");
     
     //Statistics button.
@@ -371,7 +375,11 @@ void title_screen_state::init_gui_main_page() {
         });
     };
     stats_button->on_get_tooltip =
-    [] () { return "Check out some fun lifetime statistics."; };
+    [] () {
+        return
+            "Check out some fun lifetime statistics. "
+            "You can also find this in the pause menu.";
+    };
     main_gui.add_item(stats_button, "stats");
     
     //Discord server button.

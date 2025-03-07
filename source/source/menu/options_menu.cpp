@@ -589,11 +589,7 @@ void options_menu_t::init_gui_graphics_page() {
     );
     fullscreen_check->on_activate =
     [this, fullscreen_check] (const point &) {
-        game.options.intended_win_fullscreen =
-            !game.options.intended_win_fullscreen;
-        fullscreen_check->start_juice_animation(
-            gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
-        );
+        fullscreen_check->def_activate_code();
         trigger_restart_warning();
     };
     fullscreen_check->on_get_tooltip =
@@ -1019,7 +1015,6 @@ void options_menu_t::init_gui_top_page() {
     top_gui.add_item(tooltip_text, "tooltip");
     
     //Finishing touches.
-    game.fade_mgr.start_fade(true, nullptr);
     top_gui.set_selected_item(controls_button, true);
 }
 
@@ -1475,7 +1470,8 @@ void options_menu_t::tick(float delta_t) {
     if(packs_menu) {
         if(packs_menu->loaded) {
             packs_menu->tick(game.delta_t);
-        } else {
+        }
+        if(!packs_menu->loaded) {
             delete packs_menu;
             packs_menu = nullptr;
         }

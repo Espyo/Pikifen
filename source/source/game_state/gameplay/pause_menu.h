@@ -162,8 +162,8 @@ private:
     //Pages available, in order.
     vector<PAUSE_MENU_PAGE> pages;
     
-    //Information about the current help menu, if any.
-    help_menu_t* help_menu = nullptr;
+    //Information about the current secondary menu, if any.
+    menu_t* secondary_menu = nullptr;
     
     //Z of the lowest sector.
     float lowest_sector_z = 0.0f;

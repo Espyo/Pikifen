@@ -311,8 +311,8 @@ void stats_menu_t::populate_stats_list() {
  * @param delta_t How long the frame's tick is, in seconds.
  */
 void stats_menu_t::tick(float delta_t) {
-    menu_t::tick(delta_t);
     update_runtime_value_text();
+    menu_t::tick(delta_t);
 }
 
 

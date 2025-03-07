@@ -165,10 +165,10 @@ pause_menu_t::~pause_menu_t() {
     mission_gui.destroy();
     confirmation_gui.destroy();
     
-    if(help_menu) {
-        help_menu->unload();
-        delete help_menu;
-        help_menu = nullptr;
+    if(secondary_menu) {
+        secondary_menu->unload();
+        delete secondary_menu;
+        secondary_menu = nullptr;
     }
     
     game.content.bitmaps.list.free(bmp_radar_cursor);
@@ -756,7 +756,7 @@ void pause_menu_t::draw() {
     status_gui.draw();
     mission_gui.draw();
     confirmation_gui.draw();
-    if(help_menu) help_menu->draw();
+    if(secondary_menu) secondary_menu->draw();
 }
 
 
@@ -1504,7 +1504,7 @@ void pause_menu_t::handle_allegro_event(const ALLEGRO_EVENT &ev) {
     status_gui.handle_allegro_event(ev);
     mission_gui.handle_allegro_event(ev);
     confirmation_gui.handle_allegro_event(ev);
-    if(help_menu) help_menu->handle_allegro_event(ev);
+    if(secondary_menu) secondary_menu->handle_allegro_event(ev);
     
     //Handle some radar logic.
     point radar_center;
@@ -1629,7 +1629,7 @@ void pause_menu_t::handle_player_action(const player_action &action) {
         status_gui.handle_player_action(action);
         mission_gui.handle_player_action(action);
         confirmation_gui.handle_player_action(action);
-        if(help_menu) help_menu->handle_player_action(action);
+        if(secondary_menu) secondary_menu->handle_player_action(action);
         
         switch(action.action_type_id) {
         case PLAYER_ACTION_TYPE_MENU_PAGE_LEFT:
@@ -1764,21 +1764,23 @@ void pause_menu_t::init_confirmation_page() {
  */
 void pause_menu_t::init_main_pause_menu() {
     //Menu items.
-    gui.register_coords("header",           50,  5, 52,  6);
-    gui.register_coords("left_page",        12,  5, 20,  6);
-    gui.register_coords("left_page_input",   3,  7,  4,  4);
-    gui.register_coords("right_page",       88,  5, 20,  6);
-    gui.register_coords("right_page_input", 97,  7,  4,  4);
-    gui.register_coords("line",             50, 11, 96,  2);
-    gui.register_coords("area_name",        50, 20, 96,  8);
-    gui.register_coords("area_subtitle",    50, 27, 88,  6);
-    gui.register_coords("continue",         13, 88, 22,  8);
-    gui.register_coords("continue_input",    3, 91,  4,  4);
-    gui.register_coords("retry",            50, 41, 52, 10);
-    gui.register_coords("end",              50, 53, 52, 10);
-    gui.register_coords("help",             50, 65, 52, 10);
-    gui.register_coords("quit",             87, 88, 22,  8);
-    gui.register_coords("tooltip",          50, 96, 96,  4);
+    gui.register_coords("header",           50,    5, 52,  6);
+    gui.register_coords("left_page",        12,    5, 20,  6);
+    gui.register_coords("left_page_input",   3,    7,  4,  4);
+    gui.register_coords("right_page",       88,    5, 20,  6);
+    gui.register_coords("right_page_input", 97,    7,  4,  4);
+    gui.register_coords("line",             50,   11, 96,  2);
+    gui.register_coords("area_name",        50,   20, 96,  8);
+    gui.register_coords("area_subtitle",    50, 28.5, 88,  9);
+    gui.register_coords("continue",         13,   88, 22,  8);
+    gui.register_coords("continue_input",    3,   91,  4,  4);
+    gui.register_coords("retry",            28,   44, 38, 12);
+    gui.register_coords("end",              72,   44, 38, 12);
+    gui.register_coords("help",             19,   65, 26, 10);
+    gui.register_coords("options",          50,   65, 26, 10);
+    gui.register_coords("stats",            81,   65, 26, 10);
+    gui.register_coords("quit",             87,   88, 22,  8);
+    gui.register_coords("tooltip",          50,   96, 96,  4);
     gui.read_coords(
         game.content.gui_defs.list[PAUSE_MENU::GUI_FILE_NAME].get_child_by_name("positions")
     );
@@ -1902,13 +1904,13 @@ void pause_menu_t::init_main_pause_menu() {
             GUI_MANAGER_ANIM_CENTER_TO_UP,
             GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
         );
-        help_menu = new help_menu_t();
+        help_menu_t* help_menu = new help_menu_t();
         help_menu->gui.responsive = true;
         help_menu->gui.start_animation(
             GUI_MANAGER_ANIM_DOWN_TO_CENTER,
             GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
         );
-        help_menu->leave_callback = [this] () {
+        help_menu->leave_callback = [this, help_menu] () {
             help_menu->unload_timer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
             help_menu->gui.responsive = false;
             help_menu->gui.start_animation(
@@ -1923,10 +1925,97 @@ void pause_menu_t::init_main_pause_menu() {
         };
         help_menu->load();
         help_menu->enter();
+        secondary_menu = help_menu;
     };
     help_button->on_get_tooltip =
-    [] () { return "Some quick help and tips about how to play."; };
+    [] () {
+        return
+            "Quick help and tips about how to play. "
+            "You can also find this in the title screen.";
+    };
     gui.add_item(help_button, "help");
+    
+    //Options button.
+    button_gui_item* options_button =
+        new button_gui_item("Options", game.sys_content.fnt_standard);
+    options_button->on_activate =
+    [this] (const point &) {
+        gui.responsive = false;
+        gui.start_animation(
+            GUI_MANAGER_ANIM_CENTER_TO_UP,
+            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+        );
+        options_menu_t* options_menu = new options_menu_t();
+        options_menu->top_gui.responsive = true;
+        options_menu->top_gui.start_animation(
+            GUI_MANAGER_ANIM_DOWN_TO_CENTER,
+            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+        );
+        options_menu->leave_callback = [this, options_menu] () {
+            options_menu->unload_timer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
+            options_menu->top_gui.responsive = false;
+            options_menu->top_gui.start_animation(
+                GUI_MANAGER_ANIM_CENTER_TO_DOWN,
+                GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+            );
+            gui.responsive = true;
+            gui.start_animation(
+                GUI_MANAGER_ANIM_UP_TO_CENTER,
+                GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+            );
+        };
+        options_menu->load();
+        options_menu->enter();
+        secondary_menu = options_menu;
+    };
+    options_button->on_get_tooltip =
+    [] () {
+        return
+            "Customize your playing experience. "
+            "You can also find this in the title screen.";
+    };
+    gui.add_item(options_button, "options");
+    
+    //Statistics button.
+    button_gui_item* stats_button =
+        new button_gui_item("Statistics", game.sys_content.fnt_standard);
+    stats_button->on_activate =
+    [this] (const point &) {
+        gui.responsive = false;
+        gui.start_animation(
+            GUI_MANAGER_ANIM_CENTER_TO_UP,
+            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+        );
+        stats_menu_t* stats_menu = new stats_menu_t();
+        stats_menu->gui.responsive = true;
+        stats_menu->gui.start_animation(
+            GUI_MANAGER_ANIM_DOWN_TO_CENTER,
+            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+        );
+        stats_menu->leave_callback = [this, stats_menu] () {
+            stats_menu->unload_timer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
+            stats_menu->gui.responsive = false;
+            stats_menu->gui.start_animation(
+                GUI_MANAGER_ANIM_CENTER_TO_DOWN,
+                GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+            );
+            gui.responsive = true;
+            gui.start_animation(
+                GUI_MANAGER_ANIM_UP_TO_CENTER,
+                GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+            );
+        };
+        stats_menu->load();
+        stats_menu->enter();
+        secondary_menu = stats_menu;
+    };
+    stats_button->on_get_tooltip =
+    [] () {
+        return
+            "Check out some fun lifetime statistics. "
+            "You can also find this in the title screen.";
+    };
+    gui.add_item(stats_button, "stats");
     
     //Quit button.
     button_gui_item* quit_button =
@@ -2722,12 +2811,13 @@ void pause_menu_t::tick(float delta_t) {
     mission_gui.tick(delta_t);
     confirmation_gui.tick(delta_t);
     
-    if(help_menu) {
-        if(help_menu->loaded) {
-            help_menu->tick(game.delta_t);
-        } else {
-            delete help_menu;
-            help_menu = nullptr;
+    if(secondary_menu) {
+        if(secondary_menu->loaded) {
+            secondary_menu->tick(game.delta_t);
+        }
+        if(!secondary_menu->loaded) {
+            delete secondary_menu;
+            secondary_menu = nullptr;
         }
     }
     

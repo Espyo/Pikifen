@@ -83,6 +83,8 @@ void menu_t::leave() {
  * @brief Loads the menu.
  */
 void menu_t::load() {
+    if(loaded) return;
+    
     loaded = true;
     if(load_callback) load_callback();
 }
@@ -118,6 +120,8 @@ void menu_t::tick(float delta_t) {
  * @brief Unloads the menu.
  */
 void menu_t::unload() {
+    if(!loaded) return;
+    
     for(size_t g = 0; g < guis.size(); g++) {
         if(guis[g]) {
             guis[g]->destroy();

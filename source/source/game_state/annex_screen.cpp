@@ -48,7 +48,8 @@ void annex_screen_state::do_logic() {
     if(cur_menu) {
         if(cur_menu->loaded) {
             cur_menu->tick(game.delta_t);
-        } else {
+        }
+        if(!cur_menu->loaded) {
             delete cur_menu;
             cur_menu = nullptr;
         }

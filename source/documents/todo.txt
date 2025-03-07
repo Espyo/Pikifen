@@ -1,11 +1,8 @@
-Point I left on (so I can continue the next day without losing my train of thought)
-    dev lab music
-        adjust the drums on the next section to better match the flute
-    refactor the height effect using the new max z variable, maybe?
-    create an RC
+﻿Point I left on (so I can continue the next day without losing my train of thought)
+    
 
 Current tasks (tasks being worked on, but not yet committed)
-    Pikmin getting up animation could have the same juice as the leader one
+    
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
@@ -49,7 +46,6 @@ Next tasks (roughly sorted most important first)
                 Score ruler ticking after the player got (or lost?) some points
                 Reaching a new medal in the score ruler
                 Message character being typed out
-                Task complete jingle
             Results screen
                 Item run-up ticking
                 Item run-up finished
@@ -151,43 +147,9 @@ Next tasks (roughly sorted most important first)
         Options menu and such
         Editors
         A couple of gameplay songs
-            Something for DEV Lab
-                Experience: steadfastness
-                Theme: industrial, gentle
-                Structure: just normal I guess? Iunno
-                Tempo: 130?, 4/4, straight
         Results screen
         Helodity's tropical song
         Other people's songs
-    Use a screenshot for the title screen
-        The left side should be all organic, and the right side should have some DEV Lab stuff. The bottom should probably be something special but not attention-grabbing, the top should give space for the Pikmin to form the letters, and the topmost pixels should probably help the disclaimer text and version number readable, but not call attention
-    Leader animations
-        New animations
-            Thrown (add to the logic of bouncers too, including Pikmin)
-            Climbing (add the track logic too)
-            Sliding (add the track logic too)
-            Turning (maybe just the walking animation)
-            Dead (make it different from sleeping, like belly down and with the antenna off) (thanks Helodity, Arcadius)
-    Misc. graphical improvements
-        Onions should be shaded with hue shifting
-        Red Bulborb, Fiery Blowhog, Whiptongue need a depth gradient
-        Bulborbs need a few more frames for fluidity
-        Yellow Wollyhop should close its eyes when shaking
-        Ceramic bridges should be reworked for the new bridge format
-        Animate the Hocotate ship (use Helodity's zip) and the S.S. Drake
-        Add a glow to the smack effect particle?
-        Spectralids shouldn't have their body dead center and only have the wings flap, their body should bob up and down aggressively like real butterflies
-        Pikmin movement and other actions should have random offsets and delays of tiny amounts, just so that the army feels like a group of individuals, instead of several robots
-    New mobs
-        Burrowing Snagret
-        Bulbears
-        A tall grass mob
-        Nuggets
-        Add Helodity's Plasm Wraith
-        Mobs for decorative pebbles, stones, sticks, cobwebs
-    More particles
-        More across the board -- check all mobs too
-    Let players dismiss with no Pikmin for fun, but make it not as impactful
     Other base content changes
         Rebalance enemies. Some are too weak, some are too strong, some are too tricky, etc.
             In general, they could all stand to be slightly easier, and to take longer to react to things
@@ -211,19 +173,42 @@ Next tasks (roughly sorted most important first)
         Make Rock Pikmin colors darker (thanks Nataly171)
         Style Tutorial Meadow to be more DEV Lab-like
         Add Pro Controller controls to the default controls
+    Create a release candidate for people to playtest
+    Use a screenshot for the title screen
+        The left side should be all organic, and the right side should have some DEV Lab stuff. The bottom should probably be something special but not attention-grabbing, the top should give space for the Pikmin to form the letters, and the topmost pixels should probably help the disclaimer text and version number readable, but not call attention
+    Leader animations
+        New animations
+            Thrown (add to the logic of bouncers too, including Pikmin)
+            Climbing (add the track logic too)
+            Sliding (add the track logic too)
+            Dead (make it different from sleeping, like belly down and with the antenna off) (thanks Helodity, Arcadius)
+    Misc. graphical improvements
+        Onions should be shaded with hue shifting
+        Red Bulborb, Fiery Blowhog, Whiptongue need a depth gradient
+        Bulborbs need a few more frames for fluidity
+        Yellow Wollyhop should close its eyes when shaking
+        Ceramic bridges should be reworked for the new bridge format
+        Animate the Hocotate ship (use Helodity's zip) and the S.S. Drake
+        Add a glow to the smack effect particle?
+        Spectralids shouldn't have their body dead center and only have the wings flap, their body should bob up and down aggressively like real butterflies
+        Pikmin movement and other actions should have random offsets and delays of tiny amounts, just so that the army feels like a group of individuals, instead of several robots
+    New mobs
+        Burrowing Snagret
+        Bulbears
+        A tall grass mob
+        Nuggets
+        Add Helodity's Plasm Wraith
+        Mobs for decorative pebbles, stones, sticks, cobwebs
+    More particles
+        More across the board -- check all mobs too
+    Let players dismiss with no Pikmin for fun, but make it not as impactful
     Barely important format changes
         In area geometry files, path stops use the term "nr" to refer to links, even though they contain more than the end stop number
         Organize all graphics and sound files into neat sub-folders
-    Missions should have a property where the maker can specify their best score (and date)
     Add a screenshot, or better yet, a gif to the readme
     Manual updates
         Update screenshots that still show off the Play area
         Have an infobox with quick info about content, like its folder
-    Add the options and stats menu to the pause menu
-        The layout could maybe be like:
-                    [Restart] [Finish]
-                [Options] [Help] [Stats]
-            [Continue]             [Quit]
     Cook up a better logo?
     Set the version of all pieces of content to 1.0
     Test everything in the regression tests
@@ -1093,7 +1078,7 @@ Tasks for later on (I might never implement these)
         Enemies should have a cloud of breath in cold areas (GitHub issue #10)
         Different "switched to Pikmin" sound for when you switch to a held leader instead of a Pikmin
         HUD elements that aren't needed right now should be super-transparent. For example, in Metroid Prime, when there is no hazard danger, the meter on the right is barely visible, but is still there
-        Make the main menu's highlighter move from one place to another gradually, based on how far it is (like the camera moves in-game)
+        Make the menu highlighters move from one place to another gradually, based on how far it is (like the camera moves in-game)
         The music should change to swing for Louie
         In message boxes, the "menu ok" input that makes it say the next message should oscillate in size
         Particles
