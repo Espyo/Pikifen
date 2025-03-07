@@ -1923,17 +1923,17 @@ void AreaEditor::load_backup() {
 void AreaEditor::load_reference() {
     DataNode file(game.cur_area_data->user_data_path + "/" + FILE_NAMES::AREA_REFERENCE_CONFIG);
     
-    if(file.file_was_opened) {
-        reference_file_path = file.get_child_by_name("file")->value;
-        reference_center = s2p(file.get_child_by_name("center")->value);
-        reference_size = s2p(file.get_child_by_name("size")->value);
+    if(file.fileWasOpened) {
+        reference_file_path = file.getChildByName("file")->value;
+        reference_center = s2p(file.getChildByName("center")->value);
+        reference_size = s2p(file.getChildByName("size")->value);
         reference_alpha =
             s2i(
-                file.get_child_by_name(
+                file.getChildByName(
                     "alpha"
-                )->get_value_or_default(i2s(AREA_EDITOR::DEF_REFERENCE_ALPHA))
+                )->getValueOrDefault(i2s(AREA_EDITOR::DEF_REFERENCE_ALPHA))
             );
-        show_reference = s2b(file.get_child_by_name("visible")->value);
+        show_reference = s2b(file.getChildByName("visible")->value);
         
     } else {
         reference_file_path.clear();
@@ -3136,8 +3136,8 @@ bool AreaEditor::save_area(bool to_backup) {
     string geometry_file_path =
         base_folder_path + "/" + FILE_NAMES::AREA_GEOMETRY;
         
-    bool geo_save_ok = geometry_file.save_file(geometry_file_path);
-    bool main_data_save_ok = main_data_file.save_file(main_data_file_path);
+    bool geo_save_ok = geometry_file.saveFile(geometry_file_path);
+    bool main_data_save_ok = main_data_file.saveFile(main_data_file_path);
     
     if(!geo_save_ok || !main_data_save_ok) {
         show_system_message_box(
@@ -3233,7 +3233,7 @@ void AreaEditor::save_reference() {
         )
     );
     
-    reference_file.save_file(file_path);
+    reference_file.saveFile(file_path);
 }
 
 

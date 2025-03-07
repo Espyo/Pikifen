@@ -106,7 +106,7 @@ void StatsMenu::init_gui_main() {
     gui.register_coords("list_scroll", 91, 51,  2, 82);
     gui.register_coords("tooltip",     50, 96, 96,  4);
     gui.read_coords(
-        game.content.gui_defs.list[STATS_MENU::GUI_FILE_NAME].get_child_by_name("positions")
+        game.content.gui_defs.list[STATS_MENU::GUI_FILE_NAME].getChildByName("positions")
     );
     
     //Back button.
@@ -264,7 +264,7 @@ void StatsMenu::populate_stats_list() {
     );
     
     DataNode mission_records_file;
-    mission_records_file.load_file(
+    mission_records_file.loadFile(
         FILE_PATHS_FROM_ROOT::MISSION_RECORDS, true, false, true
     );
     

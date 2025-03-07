@@ -37,7 +37,7 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
     
     if(!msg_box && !onion_menu && !pause_menu) {
     
-        switch(action.action_type_id) {
+        switch(action.actionTypeId) {
         case PLAYER_ACTION_TYPE_THROW: {
     
             /*******************
@@ -221,7 +221,7 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
             if(!is_down) return;
             
             change_to_next_leader(
-                action.action_type_id == PLAYER_ACTION_TYPE_NEXT_LEADER,
+                action.actionTypeId == PLAYER_ACTION_TYPE_NEXT_LEADER,
                 false, false
             );
             
@@ -256,7 +256,7 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
             
             pause_menu =
                 new PauseMenu(
-                action.action_type_id == PLAYER_ACTION_TYPE_RADAR
+                action.actionTypeId == PLAYER_ACTION_TYPE_RADAR
             );
             paused = true;
             game.audio.handle_world_pause();
@@ -321,7 +321,7 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
                     selected_spray =
                         sum_and_wrap(
                             (int) selected_spray,
-                            action.action_type_id ==
+                            action.actionTypeId ==
                             PLAYER_ACTION_TYPE_NEXT_SPRAY ? +1 : -1,
                             (int) game.content.spray_types.list.size()
                         );
@@ -380,21 +380,21 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
     
             if(
                 game.cam.target_zoom >= game.config.zoom_max_level &&
-                action.action_type_id == PLAYER_ACTION_TYPE_ZOOM_IN
+                action.actionTypeId == PLAYER_ACTION_TYPE_ZOOM_IN
             ) {
                 return;
             }
             
             if(
                 game.cam.target_zoom <= game.config.zoom_min_level &&
-                action.action_type_id == PLAYER_ACTION_TYPE_ZOOM_OUT
+                action.actionTypeId == PLAYER_ACTION_TYPE_ZOOM_OUT
             ) {
                 return;
             }
             
             float floored_pos = floor(action.value);
             
-            if(action.action_type_id == PLAYER_ACTION_TYPE_ZOOM_IN) {
+            if(action.actionTypeId == PLAYER_ACTION_TYPE_ZOOM_IN) {
                 game.cam.target_zoom = game.cam.target_zoom + 0.1 * floored_pos;
             } else {
                 game.cam.target_zoom = game.cam.target_zoom - 0.1 * floored_pos;
@@ -455,7 +455,7 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
                     //If the leader isn't holding anybody.
                     switch_successful =
                         cur_leader_ptr->group->change_standby_type(
-                            action.action_type_id == PLAYER_ACTION_TYPE_PREV_TYPE
+                            action.actionTypeId == PLAYER_ACTION_TYPE_PREV_TYPE
                         );
                         
                 } else {
@@ -469,7 +469,7 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
                     do {
                         switch_successful =
                             cur_leader_ptr->group->change_standby_type(
-                                action.action_type_id == PLAYER_ACTION_TYPE_PREV_TYPE
+                                action.actionTypeId == PLAYER_ACTION_TYPE_PREV_TYPE
                             );
                             
                         if(
@@ -561,7 +561,7 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
                     (size_t) sum_and_wrap(
                         (int) next_maturity,
                         (
-                            action.action_type_id ==
+                            action.actionTypeId ==
                             PLAYER_ACTION_TYPE_NEXT_MATURITY ? 1 : -1
                         ),
                         N_MATURITIES
@@ -592,16 +592,16 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
     } else if(msg_box) {
     
         //Displaying a message.
-        if(action.action_type_id == PLAYER_ACTION_TYPE_THROW && is_down) {
+        if(action.actionTypeId == PLAYER_ACTION_TYPE_THROW && is_down) {
             msg_box->advance();
-        } else if(action.action_type_id == PLAYER_ACTION_TYPE_PAUSE && is_down) {
+        } else if(action.actionTypeId == PLAYER_ACTION_TYPE_PAUSE && is_down) {
             msg_box->close();
         }
         
     }
     //Some inputs we don't want to ignore even if we're in a menu.
     //Those go here.
-    switch (action.action_type_id) {
+    switch (action.actionTypeId) {
     case PLAYER_ACTION_TYPE_RIGHT:
     case PLAYER_ACTION_TYPE_UP:
     case PLAYER_ACTION_TYPE_LEFT:
@@ -612,7 +612,7 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
         *              V > *
         *******************/
         
-        switch(action.action_type_id) {
+        switch(action.actionTypeId) {
         case PLAYER_ACTION_TYPE_RIGHT: {
             leader_movement.right = action.value;
             break;
@@ -642,7 +642,7 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
         *             '-'   *
         ********************/
         
-        switch(action.action_type_id) {
+        switch(action.actionTypeId) {
         case PLAYER_ACTION_TYPE_CURSOR_RIGHT: {
             cursor_movement.right = action.value;
             break;
@@ -672,7 +672,7 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
         *            ***  *
         ******************/
         
-        switch(action.action_type_id) {
+        switch(action.actionTypeId) {
         case PLAYER_ACTION_TYPE_GROUP_RIGHT: {
             swarm_movement.right = action.value;
             break;
@@ -730,7 +730,7 @@ bool GameplayState::should_ignore_player_action(const PlayerAction &action) {
             std::find(
                 actions_allowed_during_interludes.begin(),
                 actions_allowed_during_interludes.end(),
-                action.action_type_id
+                action.actionTypeId
             ) == actions_allowed_during_interludes.end()
         ) {
             return true;

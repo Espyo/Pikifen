@@ -195,10 +195,10 @@ void TitleScreen::init_gui_main_page() {
     DataNode* gui_file = &game.content.gui_defs.list[TITLE_SCREEN::GUI_FILE_NAME];
     
     //Button icon positions.
-    DataNode* icons_node = gui_file->get_child_by_name("icons_to_the_left");
+    DataNode* icons_node = gui_file->getChildByName("icons_to_the_left");
     
-#define icon_left(name, def) s2b(icons_node->get_child_by_name(name)-> \
-                                 get_value_or_default(def))
+#define icon_left(name, def) s2b(icons_node->getChildByName(name)-> \
+                                 getValueOrDefault(def))
     
     bool play_icon_left = icon_left("play", "true");
     bool make_icon_left = icon_left("make", "false");
@@ -220,7 +220,7 @@ void TitleScreen::init_gui_main_page() {
     main_gui.register_coords("exit",       91, 91, 14,  6);
     main_gui.register_coords("exit_input", 97, 93,  4,  4);
     main_gui.register_coords("tooltip",    50, 96, 96,  4);
-    main_gui.read_coords(gui_file->get_child_by_name("positions"));
+    main_gui.read_coords(gui_file->getChildByName("positions"));
     
     //Play button.
     ButtonGuiItem* play_button =
@@ -488,10 +488,10 @@ void TitleScreen::init_gui_make_page() {
     DataNode* gui_file = &game.content.gui_defs.list[TITLE_SCREEN::MAKE_GUI_FILE_NAME];
     
     //Button icon positions.
-    DataNode* icons_node = gui_file->get_child_by_name("icons_to_the_left");
+    DataNode* icons_node = gui_file->getChildByName("icons_to_the_left");
     
-#define icon_left(name, def) s2b(icons_node->get_child_by_name(name)-> \
-                                 get_value_or_default(def))
+#define icon_left(name, def) s2b(icons_node->getChildByName(name)-> \
+                                 getValueOrDefault(def))
     
     bool anim_editor_icon_left = icon_left("animation_editor", "true");
     bool area_editor_icon_left = icon_left("area_editor", "false");
@@ -509,7 +509,7 @@ void TitleScreen::init_gui_make_page() {
     make_gui.register_coords("back_input",          3, 93,  4,  4);
     make_gui.register_coords("more",               91, 91, 14,  6);
     make_gui.register_coords("tooltip",            50, 96, 96,  4);
-    make_gui.read_coords(gui_file->get_child_by_name("positions"));
+    make_gui.read_coords(gui_file->getChildByName("positions"));
     
     //Animation editor button.
     ButtonGuiItem* anim_ed_button =
@@ -670,10 +670,10 @@ void TitleScreen::init_gui_play_page() {
     DataNode* gui_file = &game.content.gui_defs.list[TITLE_SCREEN::PLAY_GUI_FILE_NAME];
     
     //Button icon positions.
-    DataNode* icons_node = gui_file->get_child_by_name("icons_to_the_left");
+    DataNode* icons_node = gui_file->getChildByName("icons_to_the_left");
     
-#define icon_left(name, def) s2b(icons_node->get_child_by_name(name)-> \
-                                 get_value_or_default(def))
+#define icon_left(name, def) s2b(icons_node->getChildByName(name)-> \
+                                 getValueOrDefault(def))
     
     bool simple_areas_icon_left = icon_left("simple_areas", "true");
     bool missions_icon_left = icon_left("missions", "true");
@@ -686,7 +686,7 @@ void TitleScreen::init_gui_play_page() {
     play_gui.register_coords("back",        9, 91, 14,    6);
     play_gui.register_coords("back_input",  3, 93,  4,    4);
     play_gui.register_coords("tooltip",    50, 96, 96,    4);
-    play_gui.read_coords(gui_file->get_child_by_name("positions"));
+    play_gui.read_coords(gui_file->getChildByName("positions"));
     
     //Play a simple area button.
     ButtonGuiItem* simple_button =
@@ -799,7 +799,7 @@ void TitleScreen::init_gui_tutorial_page() {
     tutorial_gui.register_coords("no_input",  7,     85,  4,     4);
     tutorial_gui.register_coords("yes",      74,     81, 40,    10);
     tutorial_gui.register_coords("tooltip",  50,     96, 96,     4);
-    tutorial_gui.read_coords(gui_file->get_child_by_name("positions"));
+    tutorial_gui.read_coords(gui_file->getChildByName("positions"));
     
     //Question text.
     TextGuiItem* question_text =
@@ -917,25 +917,25 @@ void TitleScreen::load() {
     bmp_menu_bg = game.content.bitmaps.list.get(game.sys_content_names.bmp_title_screen_bg);
     
     //Logo pikmin.
-    DataNode* logo_node = settings_file->get_child_by_name("logo");
+    DataNode* logo_node = settings_file->getChildByName("logo");
     ReaderSetter logo_rs(logo_node);
     
     DataNode* pik_types_node =
-        logo_node->get_child_by_name("pikmin_types");
-    for(size_t t = 0; t < pik_types_node->get_nr_of_children(); t++) {
-        DataNode* type_node = pik_types_node->get_child(t);
+        logo_node->getChildByName("pikmin_types");
+    for(size_t t = 0; t < pik_types_node->getNrOfChildren(); t++) {
+        DataNode* type_node = pik_types_node->getChild(t);
         if(type_node->name.empty()) continue;
         logo_type_bitmaps[type_node->name[0]] =
             game.content.bitmaps.list.get(type_node->value, type_node);
     }
     
     DataNode* map_node =
-        logo_node->get_child_by_name("map");
-    size_t map_total_rows = map_node->get_nr_of_children();
+        logo_node->getChildByName("map");
+    size_t map_total_rows = map_node->getNrOfChildren();
     size_t map_total_cols = 0;
     for(size_t r = 0; r < map_total_rows; r++) {
         map_total_cols =
-            std::max(map_total_cols, map_node->get_child(r)->name.size());
+            std::max(map_total_cols, map_node->getChild(r)->name.size());
     }
     
     logo_rs.set("min_screen_limit", logo_min_screen_limit);
@@ -951,7 +951,7 @@ void TitleScreen::load() {
     bool map_ok = true;
     
     for(size_t r = 0; r < map_total_rows; r++) {
-        string row = map_node->get_child(r)->name;
+        string row = map_node->getChild(r)->name;
         
         for(size_t c = 0; c < row.size(); c++) {
             if(row[c] == '.') continue;

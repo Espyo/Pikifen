@@ -314,9 +314,9 @@ void ParticleGenerator::load_from_data_node(
     
     //Standard data.
     ReaderSetter grs(node);
-    DataNode* base_particle_node = node->get_child_by_name("base");
+    DataNode* base_particle_node = node->getChildByName("base");
     ReaderSetter prs(base_particle_node);
-    DataNode* emission_node = node->get_child_by_name("emission");
+    DataNode* emission_node = node->getChildByName("emission");
     ReaderSetter ers(emission_node);
     
     float emission_interval_float = 0.0f;
@@ -364,19 +364,19 @@ void ParticleGenerator::load_from_data_node(
     base_particle.bmp_angle = deg_to_rad(base_particle.bmp_angle);
     
     base_particle.color.load_from_data_node(
-        base_particle_node->get_child_by_name("color")
+        base_particle_node->getChildByName("color")
     );
     base_particle.size.load_from_data_node(
-        base_particle_node->get_child_by_name("size")
+        base_particle_node->getChildByName("size")
     );
     base_particle.linear_speed.load_from_data_node(
-        base_particle_node->get_child_by_name("linear_speed")
+        base_particle_node->getChildByName("linear_speed")
     );
     base_particle.outwards_speed.load_from_data_node(
-        base_particle_node->get_child_by_name("outwards_speed")
+        base_particle_node->getChildByName("outwards_speed")
     );
     base_particle.orbital_speed.load_from_data_node(
-        base_particle_node->get_child_by_name("orbital_speed")
+        base_particle_node->getChildByName("orbital_speed")
     );
     
     if(bitmap_node) {

@@ -880,7 +880,7 @@ bool GuiManager::handle_player_action(const PlayerAction &action) {
     bool is_down = (action.value >= 0.5);
     bool button_recognized = true;
     
-    switch(action.action_type_id) {
+    switch(action.actionTypeId) {
     case PLAYER_ACTION_TYPE_MENU_RIGHT:
     case PLAYER_ACTION_TYPE_MENU_UP:
     case PLAYER_ACTION_TYPE_MENU_LEFT:
@@ -889,7 +889,7 @@ bool GuiManager::handle_player_action(const PlayerAction &action) {
         //Selecting a different item with the arrow keys.
         size_t pressed = PLAYER_ACTION_TYPE_NONE;
         
-        switch(action.action_type_id) {
+        switch(action.actionTypeId) {
         case PLAYER_ACTION_TYPE_MENU_RIGHT: {
             if(!right_pressed && is_down) {
                 pressed = PLAYER_ACTION_TYPE_MENU_RIGHT;
@@ -1060,9 +1060,9 @@ void GuiManager::hide_items() {
  * @param node Data node to read from.
  */
 void GuiManager::read_coords(DataNode* node) {
-    size_t n_items = node->get_nr_of_children();
+    size_t n_items = node->getNrOfChildren();
     for(size_t i = 0; i < n_items; i++) {
-        DataNode* item_node = node->get_child(i);
+        DataNode* item_node = node->getChild(i);
         vector<string> words = split(item_node->value);
         if(words.size() < 4) {
             continue;

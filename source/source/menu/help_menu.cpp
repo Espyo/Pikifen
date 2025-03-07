@@ -91,18 +91,18 @@ void HelpMenu::load() {
     DataNode* gui_file = &game.content.gui_defs.list[HELP_MENU::GUI_FILE_NAME];
     
     //Load the tidbits.
-    DataNode* tidbits_node = gui_file->get_child_by_name("tidbits");
+    DataNode* tidbits_node = gui_file->getChildByName("tidbits");
     
     for(size_t c = 0; c < N_HELP_CATEGORIES; c++) {
         if(category_node_names[c].empty()) continue;
         DataNode* category_node =
-            tidbits_node->get_child_by_name(category_node_names[c]);
-        size_t n_tidbits = category_node->get_nr_of_children();
+            tidbits_node->getChildByName(category_node_names[c]);
+        size_t n_tidbits = category_node->getNrOfChildren();
         vector<Tidbit> &category_tidbits = tidbits[(HELP_CATEGORY) c];
         category_tidbits.reserve(n_tidbits);
         for(size_t t = 0; t < n_tidbits; t++) {
             vector<string> parts =
-                semicolon_list_to_vector(category_node->get_child(t)->name);
+                semicolon_list_to_vector(category_node->getChild(t)->name);
             Tidbit new_t;
             new_t.name = parts.size() > 0 ? parts[0] : "";
             new_t.description = parts.size() > 1 ? parts[1] : "";
@@ -145,7 +145,7 @@ void HelpMenu::init_gui_main(DataNode* gui_file) {
     gui.register_coords("list_scroll", 96, 39,  2, 54);
     gui.register_coords("image",       16, 83, 28, 30);
     gui.register_coords("tooltip",     65, 83, 66, 30);
-    gui.read_coords(gui_file->get_child_by_name("positions"));
+    gui.read_coords(gui_file->getChildByName("positions"));
     
     //Back button.
     gui.back_item =

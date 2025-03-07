@@ -288,7 +288,7 @@ struct KeyframeInterpolator {
      * @param node The data node to load from.
      */
     void load_from_data_node(DataNode* node) {
-        if(node->get_nr_of_children() == 0) {
+        if(node->getNrOfChildren() == 0) {
             //There are no values to load, let's not even try.
             return;
         }
@@ -297,8 +297,8 @@ struct KeyframeInterpolator {
         keyframe_values.clear();
         keyframe_eases.clear();
         
-        for(size_t c = 0; c < node->get_nr_of_children(); c++) {
-            DataNode* c_node = node->get_child(c);
+        for(size_t c = 0; c < node->getNrOfChildren(); c++) {
+            DataNode* c_node = node->getChild(c);
             InterT value = from_string<InterT>(c_node->value);
             add(s2f(c_node->name), value, EASE_METHOD_NONE);
         }

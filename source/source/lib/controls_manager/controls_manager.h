@@ -1,11 +1,10 @@
 /*
  * Copyright (c) Andre 'Espyo' Silva 2013.
- * The following source file belongs to the open-source project Pikifen.
- * Please read the included README and LICENSE files for more information.
- * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Header for the control manager class and control manager related functions.
+ * Header for the controls manager class and related functions.
+ *
+ * This library manages the connections between inputs and player actions.
  */
 
 #pragma once
@@ -71,16 +70,16 @@ struct PlayerInput {
     INPUT_TYPE type = INPUT_TYPE_NONE;
     
     //Device number. i.e. the game controller number.
-    int device_nr = 0;
+    int deviceNr = 0;
     
     //Button. Game controller button, keyboard key, mouse button, etc.
-    int button_nr = 0;
+    int buttonNr = 0;
     
     //Game controller stick, if any.
-    int stick_nr = 0;
+    int stickNr = 0;
     
     //Game controller axis, if any.
-    int axis_nr = 0;
+    int axisNr = 0;
     
     //Value associated, if applicable.
     float value = 0.0f;
@@ -97,10 +96,10 @@ struct ControlBind {
     //--- Members ---
     
     //Action type ID.
-    int action_type_id = 0;
+    int actionTypeId = 0;
     
     //Player number, starting at 0.
-    int player_nr = 0;
+    int playerNr = 0;
     
     //Player input bound.
     PlayerInput input;
@@ -116,7 +115,7 @@ struct PlayerAction {
     //--- Members ---
     
     //Action type ID.
-    int action_type_id = 0;
+    int actionTypeId = 0;
     
     //Value associated. 0 to 1.
     float value = 0.0f;
@@ -132,10 +131,10 @@ struct ControlsManagerOptions {
     //--- Members ---
     
     //Minimum deadzone for sticks. 0 for none.
-    float stick_min_deadzone = 0.0f;
+    float stickMinDeadzone = 0.0f;
     
     //Maximum deadzone for sticks. 1 for none.
-    float stick_max_deadzone = 1.0f;
+    float stickMaxDeadzone = 1.0f;
     
 };
 
@@ -164,7 +163,7 @@ struct ControlsManager {
     vector<ControlBind> binds;
     
     //Each game action type's current input value.
-    map<int, float> action_type_values;
+    map<int, float> actionTypeValues;
     
     //Options.
     ControlsManagerOptions options;
@@ -172,32 +171,32 @@ struct ControlsManager {
     
     //--- Function declarations ---
     
-    void handle_input(const PlayerInput &input);
-    vector<PlayerAction> new_frame();
+    void handleInput(const PlayerInput &input);
+    vector<PlayerAction> newFrame();
     
     private:
     
     //--- Members ---
     
     //Queue of actions the game needs to handle this frame.
-    vector<PlayerAction> action_queue;
+    vector<PlayerAction> actionQueue;
     
     //Each game action type's input values in the previous frame.
-    map<int, float> old_action_type_values;
+    map<int, float> oldActionTypeValues;
     
     //Raw state of each game controller stick.
-    map<int, map<int, map<int, float> > > raw_sticks;
+    map<int, map<int, map<int, float> > > rawSticks;
     
     //Clean state of each game controller stick.
-    map<int, map<int, map<int, float> > > clean_sticks;
+    map<int, map<int, map<int, float> > > cleanSticks;
     
     
     //--- Function declarations ---
     
-    void clean_stick(const PlayerInput &input);
-    vector<int> get_action_types_from_input(
+    void cleanStick(const PlayerInput &input);
+    vector<int> getActionTypesFromInput(
         const PlayerInput &input
     );
-    void handle_clean_input(const PlayerInput &input, bool add_directly);
+    void handleCleanInput(const PlayerInput &input, bool addDirectly);
     
 };

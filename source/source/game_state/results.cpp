@@ -270,13 +270,13 @@ void Results::load() {
     MissionRecord old_record;
     
     DataNode mission_records;
-    mission_records.load_file(FILE_PATHS_FROM_ROOT::MISSION_RECORDS, true, false, true);
+    mission_records.loadFile(FILE_PATHS_FROM_ROOT::MISSION_RECORDS, true, false, true);
     string record_entry_name =
         get_mission_record_entry_name(game.cur_area_data);
     DataNode* entry_node;
-    if(mission_records.get_nr_of_children_by_name(record_entry_name) > 0) {
+    if(mission_records.getNrOfChildrenByName(record_entry_name) > 0) {
         entry_node =
-            mission_records.get_child_by_name(record_entry_name);
+            mission_records.getChildByName(record_entry_name);
     } else {
         entry_node = new DataNode(record_entry_name, "");
         mission_records.add(entry_node);
@@ -315,7 +315,7 @@ void Results::load() {
         
         entry_node->value = clear_str + ";" + score_str + ";" + date_str;
         saved_successfully =
-            mission_records.save_file(
+            mission_records.saveFile(
                 FILE_PATHS_FROM_ROOT::MISSION_RECORDS, true, false, true
             );
     }
@@ -355,7 +355,7 @@ void Results::load() {
     gui.register_coords("pick_area_input",  91, 91,  4,  4);
     gui.register_coords("tooltip",          50, 96, 96,  4);
     gui.read_coords(
-        game.content.gui_defs.list[RESULTS::GUI_FILE_NAME].get_child_by_name("positions")
+        game.content.gui_defs.list[RESULTS::GUI_FILE_NAME].getChildByName("positions")
     );
     
     //Area name text.

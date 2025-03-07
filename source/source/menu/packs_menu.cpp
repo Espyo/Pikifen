@@ -116,7 +116,7 @@ void PacksMenu::init_gui_main() {
     gui.register_coords("tooltip",            50,   96, 96,  4);
     gui.read_coords(
         game.content.gui_defs.list[PACKS_MENU::GUI_FILE_NAME].
-        get_child_by_name("positions")
+        getChildByName("positions")
     );
     
     //Back button.

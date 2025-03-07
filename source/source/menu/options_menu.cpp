@@ -77,7 +77,7 @@ void OptionsMenu::choose_input(
     cur_bind_idx = all_binds.size();
     
     for(size_t b = 0; b < all_binds.size(); b++) {
-        if(all_binds[b].action_type_id != action_type) continue;
+        if(all_binds[b].actionTypeId != action_type) continue;
         if(binds_counted == bind_idx) {
             cur_bind_idx = b;
             break;
@@ -101,7 +101,7 @@ void OptionsMenu::delete_bind(
     size_t binds_counted = 0;
     
     for(size_t b = 0; b < all_binds.size(); b++) {
-        if(all_binds[b].action_type_id != action_type) continue;
+        if(all_binds[b].actionTypeId != action_type) continue;
         if(binds_counted == bind_idx) {
             all_binds.erase(all_binds.begin() + b);
             break;
@@ -161,8 +161,8 @@ void OptionsMenu::handle_allegro_event(const ALLEGRO_EVENT &ev) {
             vector<ControlBind> &all_binds = game.controls.binds();
             if(cur_bind_idx >= all_binds.size()) {
                 ControlBind new_bind;
-                new_bind.action_type_id = cur_action_type;
-                new_bind.player_nr = 0;
+                new_bind.actionTypeId = cur_action_type;
+                new_bind.playerNr = 0;
                 new_bind.input = input;
                 all_binds.push_back(new_bind);
             } else {
@@ -214,7 +214,7 @@ void OptionsMenu::init_gui_audio_page() {
     audio_gui.register_coords("tooltip",               50, 96,   96,  4);
     audio_gui.read_coords(
         game.content.gui_defs.list[OPTIONS_MENU::AUDIO_GUI_FILE_NAME].
-        get_child_by_name("positions")
+        getChildByName("positions")
     );
     
     //Back button.
@@ -363,7 +363,7 @@ void OptionsMenu::init_gui_control_binds_page() {
     binds_gui.register_coords("tooltip",     50, 96, 96,  4);
     binds_gui.read_coords(
         game.content.gui_defs.list[OPTIONS_MENU::CONTROL_BINDS_GUI_FILE_NAME].
-        get_child_by_name("positions")
+        getChildByName("positions")
     );
     
     //Back button.
@@ -437,7 +437,7 @@ void OptionsMenu::init_gui_controls_page() {
     controls_gui.register_coords("tooltip",       50, 96,   96,  4);
     controls_gui.read_coords(
         game.content.gui_defs.list[OPTIONS_MENU::CONTROLS_GUI_FILE_NAME].
-        get_child_by_name("positions")
+        getChildByName("positions")
     );
     
     //Back button.
@@ -550,7 +550,7 @@ void OptionsMenu::init_gui_graphics_page() {
     graphics_gui.register_coords("restart_warning", 50, 85,   70,  6);
     graphics_gui.read_coords(
         game.content.gui_defs.list[OPTIONS_MENU::GRAPHICS_GUI_FILE_NAME].
-        get_child_by_name("positions")
+        getChildByName("positions")
     );
     
     //Back button.
@@ -668,7 +668,7 @@ void OptionsMenu::init_gui_misc_page() {
     misc_gui.register_coords("tooltip",              50, 96,   96,  4);
     misc_gui.read_coords(
         game.content.gui_defs.list[OPTIONS_MENU::MISC_GUI_FILE_NAME].
-        get_child_by_name("positions")
+        getChildByName("positions")
     );
     
     //Back button.
@@ -772,10 +772,10 @@ void OptionsMenu::init_gui_top_page() {
     DataNode* gui_file = &game.content.gui_defs.list[OPTIONS_MENU::TOP_GUI_FILE_NAME];
     
     //Button icon positions.
-    DataNode* icons_node = gui_file->get_child_by_name("icons_to_the_left");
+    DataNode* icons_node = gui_file->getChildByName("icons_to_the_left");
     
-#define icon_left(name, def) s2b(icons_node->get_child_by_name(name)-> \
-                                 get_value_or_default(def))
+#define icon_left(name, def) s2b(icons_node->getChildByName(name)-> \
+                                 getValueOrDefault(def))
     
     bool controls_icon_left = icon_left("controls", "true");
     bool graphics_icon_left = icon_left("graphics", "true");
@@ -796,7 +796,7 @@ void OptionsMenu::init_gui_top_page() {
     top_gui.register_coords("misc",       50, 73, 60, 10);
     top_gui.register_coords("advanced",   87, 86, 22,  8);
     top_gui.register_coords("tooltip",    50, 96, 96,  4);
-    top_gui.read_coords(gui_file->get_child_by_name("positions"));
+    top_gui.read_coords(gui_file->getChildByName("positions"));
     
     //Back button.
     top_gui.back_item =
@@ -1103,8 +1103,8 @@ void OptionsMenu::populate_binds() {
     //Read all binds and sort them by player action type.
     for(size_t b = 0; b < all_binds.size(); b++) {
         const ControlBind &bind = all_binds[b];
-        if(bind.player_nr != 0) continue;
-        binds_per_action_type[bind.action_type_id].push_back(bind);
+        if(bind.playerNr != 0) continue;
+        binds_per_action_type[bind.actionTypeId].push_back(bind);
     }
     
     PLAYER_ACTION_CAT last_cat = PLAYER_ACTION_CAT_NONE;
@@ -1436,8 +1436,8 @@ void OptionsMenu::restore_default_binds(
         
     for(size_t b = 0; b < all_binds.size();) {
         if(
-            all_binds[b].player_nr == 0 &&
-            all_binds[b].action_type_id == action_type_id
+            all_binds[b].playerNr == 0 &&
+            all_binds[b].actionTypeId == action_type_id
         ) {
             all_binds.erase(all_binds.begin() + b);
         } else {
@@ -1450,8 +1450,8 @@ void OptionsMenu::restore_default_binds(
     ControlBind new_bind;
     
     if(def_input.type != INPUT_TYPE_NONE) {
-        new_bind.action_type_id = action_type_id;
-        new_bind.player_nr = 0;
+        new_bind.actionTypeId = action_type_id;
+        new_bind.playerNr = 0;
         new_bind.input = def_input;
         all_binds.push_back(new_bind);
     }

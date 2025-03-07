@@ -537,12 +537,12 @@ void load_script(
     MobType* mt, DataNode* script_node, DataNode* global_node,
     vector<MobState*>* out_states
 ) {
-    size_t n_new_states = script_node->get_nr_of_children();
+    size_t n_new_states = script_node->getNrOfChildren();
     
     //Let's save the states now, so that the state switching events
     //can know what numbers the events they need correspond to.
     for(size_t s = 0; s < n_new_states; s++) {
-        DataNode* state_node = script_node->get_child(s);
+        DataNode* state_node = script_node->getChild(s);
         bool skip = false;
         for(size_t s2 = 0; s2 < out_states->size(); s2++) {
             if((*out_states)[s2]->name == state_node->name) {
@@ -558,7 +558,7 @@ void load_script(
     
     for(size_t s = 0; s < out_states->size(); s++) {
         MobState* state_ptr = (*out_states)[s];
-        DataNode* state_node = script_node->get_child_by_name(state_ptr->name);
+        DataNode* state_node = script_node->getChildByName(state_ptr->name);
         load_state(mt, state_node, global_node, state_ptr);
         state_ptr->id = s;
     }
@@ -579,8 +579,8 @@ void load_state(
     MobType* mt, DataNode* state_node, DataNode* global_node,
     MobState* state_ptr
 ) {
-    size_t n_events = state_node->get_nr_of_children();
-    size_t n_global_events = global_node->get_nr_of_children();
+    size_t n_events = state_node->getNrOfChildren();
+    size_t n_global_events = global_node->getNrOfChildren();
     if(n_events + n_global_events == 0) return;
     
     //Read the events.
@@ -588,7 +588,7 @@ void load_state(
     vector<bitmask_8_t> new_event_settings;
     
     for(size_t e = 0; e < n_events; e++) {
-        DataNode* event_node = state_node->get_child(e);
+        DataNode* event_node = state_node->getChild(e);
         vector<MobActionCall*> actions;
         bitmask_8_t settings;
         
@@ -605,7 +605,7 @@ void load_state(
     vector<bitmask_8_t> global_event_settings;
     
     for(size_t e = 0; e < n_global_events; e++) {
-        DataNode* event_node = global_node->get_child(e);
+        DataNode* event_node = global_node->getChild(e);
         vector<MobActionCall*> actions;
         bitmask_8_t settings;
         

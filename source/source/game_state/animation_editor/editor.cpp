@@ -610,7 +610,7 @@ void AnimationEditor::load_anim_db_file(
     manifest.fill_from_path(path);
     DataNode file = DataNode(manifest.path);
     
-    if(!file.file_was_opened) {
+    if(!file.fileWasOpened) {
         open_message_dialog(
             "Load failed!",
             "Failed to load the animation database file \"" +
@@ -1312,7 +1312,7 @@ bool AnimationEditor::save_anim_db() {
         loaded_mob_type && loaded_mob_type->category->id == MOB_CATEGORY_PIKMIN
     );
     
-    if(!file_node.save_file(manifest.path)) {
+    if(!file_node.saveFile(manifest.path)) {
         show_system_message_box(
             nullptr, "Save failed!",
             "Could not save the animation database!",

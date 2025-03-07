@@ -161,7 +161,7 @@ bool ContentManager::create_pack(
     data.add(new DataNode("dependencies", ""));
     data.add(new DataNode("conflicts", ""));
     data.add(new DataNode("notes", ""));
-    data.save_file(pack_path + "/" + FILE_NAMES::PACK_DATA, true, true);
+    data.saveFile(pack_path + "/" + FILE_NAMES::PACK_DATA, true, true);
     
     //Update the list and manifest.
     packs.unload_all();

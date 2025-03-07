@@ -44,7 +44,7 @@ void load_area_mission_record(
         
     vector<string> record_parts =
         split(
-            file->get_child_by_name(
+            file->getChildByName(
                 mission_record_entry_name
             )->value,
             ";", true
@@ -137,7 +137,7 @@ ALLEGRO_BITMAP* load_bmp(
  */
 DataNode load_data_file(const string &file_path) {
     DataNode n = DataNode(file_path);
-    if(!n.file_was_opened) {
+    if(!n.fileWasOpened) {
         game.errors.report(
             "Could not open data file \"" + file_path + "\"!"
         );
@@ -299,18 +299,18 @@ void load_fonts() {
 void load_maker_tools() {
     DataNode file(FILE_PATHS_FROM_ROOT::MAKER_TOOLS);
     
-    if(!file.file_was_opened) return;
+    if(!file.fileWasOpened) return;
     
-    game.maker_tools.enabled = s2b(file.get_child_by_name("enabled")->value);
+    game.maker_tools.enabled = s2b(file.getChildByName("enabled")->value);
     
     for(unsigned char k = 0; k < 20; k++) {
         string tool_name;
         if(k < 10) {
             //The first ten indexes are the F2 - F11 keys.
-            tool_name = file.get_child_by_name("f" + i2s(k + 2))->value;
+            tool_name = file.getChildByName("f" + i2s(k + 2))->value;
         } else {
             //The second ten indexes are the 0 - 9 keys.
-            tool_name = file.get_child_by_name(i2s(k - 10))->value;
+            tool_name = file.getChildByName(i2s(k - 10))->value;
         }
         
         for(size_t t = 0; t < N_MAKER_TOOLS; t++) {
@@ -476,7 +476,7 @@ void load_misc_sounds() {
  */
 void load_options() {
     DataNode file = DataNode(FILE_PATHS_FROM_ROOT::OPTIONS);
-    if(!file.file_was_opened) return;
+    if(!file.fileWasOpened) return;
     
     //Init game controllers.
     game.controller_numbers.clear();
@@ -501,9 +501,9 @@ void load_options() {
     
     //Final setup.
     ControlsManagerOptions controls_mgr_options;
-    controls_mgr_options.stick_min_deadzone =
+    controls_mgr_options.stickMinDeadzone =
         game.options.joystick_min_deadzone;
-    controls_mgr_options.stick_max_deadzone =
+    controls_mgr_options.stickMaxDeadzone =
         game.options.joystick_max_deadzone;
     game.controls.set_options(controls_mgr_options);
 }
@@ -539,8 +539,8 @@ ALLEGRO_SAMPLE* load_sample(
  */
 void load_statistics() {
     DataNode stats_file;
-    stats_file.load_file(FILE_PATHS_FROM_ROOT::STATISTICS, true, false, true);
-    if(!stats_file.file_was_opened) return;
+    stats_file.loadFile(FILE_PATHS_FROM_ROOT::STATISTICS, true, false, true);
+    if(!stats_file.fileWasOpened) return;
     
     Statistics &s = game.statistics;
     

@@ -206,7 +206,7 @@ void Options::load(DataNode* file) {
             string internal_name = player_action_types[a].internal_name;
             if(internal_name.empty()) continue;
             DataNode* control_node =
-                file->get_child_by_name("p" + i2s(p + 1) + "_" + internal_name);
+                file->getChildByName("p" + i2s(p + 1) + "_" + internal_name);
             vector<string> possible_controls =
                 semicolon_list_to_vector(control_node->value);
                 
@@ -215,8 +215,8 @@ void Options::load(DataNode* file) {
                     game.controls.str_to_input(possible_controls[c]);
                 if(input.type == INPUT_TYPE_NONE) continue;
                 ControlBind new_bind;
-                new_bind.action_type_id = player_action_types[a].id;
-                new_bind.player_nr = p;
+                new_bind.actionTypeId = player_action_types[a].id;
+                new_bind.playerNr = p;
                 new_bind.input = input;
                 game.controls.binds().push_back(new_bind);
             }
@@ -234,7 +234,7 @@ void Options::load(DataNode* file) {
     editor_open_nodes.clear();
     vector<string> open_nodes_vector =
         semicolon_list_to_vector(
-            file->get_child_by_name("editor_open_nodes")->value
+            file->getChildByName("editor_open_nodes")->value
         );
     for(size_t n = 0; n < open_nodes_vector.size(); n++) {
         editor_open_nodes[open_nodes_vector[n]] = true;
@@ -386,13 +386,13 @@ void Options::save(DataNode* file) const {
     const vector<ControlBind> &all_binds = game.controls.binds();
     for(unsigned char p = 0; p < MAX_PLAYERS; p++) {
         for(size_t b = 0; b < all_binds.size(); b++) {
-            if(all_binds[b].player_nr != p) continue;
+            if(all_binds[b].playerNr != p) continue;
             string name = "p" + i2s(p + 1) + "_";
             
             for(size_t a = 0; a < player_action_types.size(); a++) {
                 if(player_action_types[a].internal_name.empty()) continue;
                 
-                if(all_binds[b].action_type_id == player_action_types[a].id) {
+                if(all_binds[b].actionTypeId == player_action_types[a].id) {
                     name += player_action_types[a].internal_name;
                     break;
                 }

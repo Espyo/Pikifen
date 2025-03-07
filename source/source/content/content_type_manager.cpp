@@ -133,11 +133,11 @@ bool AreaContentManager::load_area(
     
     string data_file_path = base_folder_path + "/" + FILE_NAMES::AREA_MAIN_DATA;
     DataNode data_file = load_data_file(data_file_path);
-    if(!data_file.file_was_opened) return false;
+    if(!data_file.fileWasOpened) return false;
     
     string geometry_file_path = base_folder_path + "/" + FILE_NAMES::AREA_GEOMETRY;
     DataNode geometry_file = load_data_file(geometry_file_path);
-    if(!geometry_file.file_was_opened) return false;
+    if(!geometry_file.fileWasOpened) return false;
     
     area_ptr->type = requested_area_type;
     area_ptr->user_data_path = user_data_path;
@@ -672,7 +672,7 @@ void HazardContentManager::load_hazard(
     ContentManifest* manifest, CONTENT_LOAD_LEVEL level
 ) {
     DataNode file = load_data_file(manifest->path);
-    if(!file.file_was_opened) return;
+    if(!file.fileWasOpened) return;
     
     Hazard new_h;
     new_h.manifest = manifest;
@@ -782,7 +782,7 @@ void LiquidContentManager::load_liquid(
     ContentManifest* manifest, CONTENT_LOAD_LEVEL level
 ) {
     DataNode file = load_data_file(manifest->path);
-    if(!file.file_was_opened) return;
+    if(!file.fileWasOpened) return;
     
     Liquid* new_l = new Liquid();
     new_l->manifest = manifest;
@@ -1280,7 +1280,7 @@ void MobTypeContentManager::load_mob_types_of_category(MobCategory* category, CO
     map<string, ContentManifest> &man = manifests[category->id];
     for(auto &t : man) {
         DataNode file(t.second.path + "/data.txt");
-        if(!file.file_was_opened) continue;
+        if(!file.fileWasOpened) continue;
         
         MobType* mt;
         mt = category->create_type();
@@ -1450,7 +1450,7 @@ void ParticleGenContentManager::load_generator(
     ContentManifest* manifest, CONTENT_LOAD_LEVEL level
 ) {
     DataNode file = load_data_file(manifest->path);
-    if(!file.file_was_opened) return;
+    if(!file.fileWasOpened) return;
     
     ParticleGenerator new_pg;
     new_pg.manifest = manifest;
@@ -1660,7 +1660,7 @@ void SongContentManager::load_all(CONTENT_LOAD_LEVEL level) {
  */
 void SongContentManager::load_song(ContentManifest* manifest, CONTENT_LOAD_LEVEL level) {
     DataNode file = load_data_file(manifest->path);
-    if(!file.file_was_opened) return;
+    if(!file.fileWasOpened) return;
     
     Song new_song;
     new_song.manifest = manifest;
@@ -1871,7 +1871,7 @@ void SpikeDamageTypeContentManager::load_all(CONTENT_LOAD_LEVEL level) {
  */
 void SpikeDamageTypeContentManager::load_spike_damage_type(ContentManifest* manifest, CONTENT_LOAD_LEVEL level) {
     DataNode file = load_data_file(manifest->path);
-    if(!file.file_was_opened) return;
+    if(!file.fileWasOpened) return;
     
     SpikeDamageType new_t;
     new_t.manifest = manifest;
@@ -2016,7 +2016,7 @@ void SprayTypeContentManager::load_all(CONTENT_LOAD_LEVEL level) {
  */
 void SprayTypeContentManager::load_spray_type(ContentManifest* manifest, CONTENT_LOAD_LEVEL level) {
     DataNode file = load_data_file(manifest->path);
-    if(!file.file_was_opened) return;
+    if(!file.fileWasOpened) return;
     
     SprayType new_t;
     new_t.manifest = manifest;
@@ -2161,7 +2161,7 @@ void StatusTypeContentManager::load_all(CONTENT_LOAD_LEVEL level) {
  */
 void StatusTypeContentManager::load_status_type(ContentManifest* manifest, CONTENT_LOAD_LEVEL level) {
     DataNode file = load_data_file(manifest->path);
-    if(!file.file_was_opened) return;
+    if(!file.fileWasOpened) return;
     
     StatusType* new_t = new StatusType();
     new_t->manifest = manifest;
@@ -2272,7 +2272,7 @@ void WeatherConditionContentManager::load_all(CONTENT_LOAD_LEVEL level) {
  */
 void WeatherConditionContentManager::load_weather_condition(ContentManifest* manifest, CONTENT_LOAD_LEVEL level) {
     DataNode file = load_data_file(manifest->path);
-    if(!file.file_was_opened) return;
+    if(!file.fileWasOpened) return;
     
     Weather new_w;
     new_w.manifest = manifest;

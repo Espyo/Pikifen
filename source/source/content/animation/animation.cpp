@@ -421,79 +421,79 @@ void AnimationDatabase::load_from_data_node(DataNode* node) {
     load_metadata_from_data_node(node);
     
     //Body parts.
-    DataNode* body_parts_node = node->get_child_by_name("body_parts");
-    size_t n_body_parts = body_parts_node->get_nr_of_children();
+    DataNode* body_parts_node = node->getChildByName("body_parts");
+    size_t n_body_parts = body_parts_node->getNrOfChildren();
     for(size_t b = 0; b < n_body_parts; b++) {
     
-        DataNode* body_part_node = body_parts_node->get_child(b);
+        DataNode* body_part_node = body_parts_node->getChild(b);
         
         BodyPart* cur_body_part = new BodyPart(body_part_node->name);
         body_parts.push_back(cur_body_part);
     }
     
     //Sprites.
-    DataNode* sprites_node = node->get_child_by_name("sprites");
-    size_t n_sprites = sprites_node->get_nr_of_children();
+    DataNode* sprites_node = node->getChildByName("sprites");
+    size_t n_sprites = sprites_node->getNrOfChildren();
     for(size_t s = 0; s < n_sprites; s++) {
     
-        DataNode* sprite_node = sprites_node->get_child(s);
+        DataNode* sprite_node = sprites_node->getChild(s);
         vector<Hitbox> hitboxes;
         
         DataNode* hitboxes_node =
-            sprite_node->get_child_by_name("hitboxes");
-        size_t n_hitboxes = hitboxes_node->get_nr_of_children();
+            sprite_node->getChildByName("hitboxes");
+        size_t n_hitboxes = hitboxes_node->getNrOfChildren();
         
         for(size_t h = 0; h < n_hitboxes; h++) {
         
             DataNode* hitbox_node =
-                hitboxes_node->get_child(h);
+                hitboxes_node->getChild(h);
             Hitbox cur_hitbox = Hitbox();
             
             cur_hitbox.pos =
                 s2p(
-                    hitbox_node->get_child_by_name("coords")->value,
+                    hitbox_node->getChildByName("coords")->value,
                     &cur_hitbox.z
                 );
             cur_hitbox.height =
-                s2f(hitbox_node->get_child_by_name("height")->value);
+                s2f(hitbox_node->getChildByName("height")->value);
             cur_hitbox.radius =
-                s2f(hitbox_node->get_child_by_name("radius")->value);
+                s2f(hitbox_node->getChildByName("radius")->value);
             cur_hitbox.body_part_name =
                 hitbox_node->name;
             cur_hitbox.type =
                 (HITBOX_TYPE)
-                s2i(hitbox_node->get_child_by_name("type")->value);
+                s2i(hitbox_node->getChildByName("type")->value);
             cur_hitbox.value =
                 s2f(
-                    hitbox_node->get_child_by_name("value")->value
+                    hitbox_node->getChildByName("value")->value
                 );
             cur_hitbox.can_pikmin_latch =
                 s2b(
-                    hitbox_node->get_child_by_name(
+                    hitbox_node->getChildByName(
                         "can_pikmin_latch"
-                    )->get_value_or_default("false")
+                    )->getValueOrDefault("false")
                 );
             cur_hitbox.knockback_outward =
                 s2b(
-                    hitbox_node->get_child_by_name(
+                    hitbox_node->getChildByName(
                         "knockback_outward"
-                    )->get_value_or_default("false")
+                    )->getValueOrDefault("false")
                 );
             cur_hitbox.knockback_angle =
-                s2f(hitbox_node->get_child_by_name("knockback_angle")->value);
+                s2f(hitbox_node->getChildByName("knockback_angle")->value);
             cur_hitbox.knockback =
                 s2f(
-                    hitbox_node->get_child_by_name(
+                    hitbox_node->getChildByName(
                         "knockback"
-                    )->get_value_or_default("0")
+                    )->getValueOrDefault("0")
                 );
             cur_hitbox.wither_chance =
                 s2i(
-                    hitbox_node->get_child_by_name("wither_chance")->value
+                    hitbox_node->getChildByName("wither_chance")->value
                 );
                 
             DataNode* hazards_node =
-                hitbox_node->get_child_by_name("hazards");
+                hitbox_node->getChildByName("hazards");
             cur_hitbox.hazards_str = hazards_node->value;
             vector<string> hazards_strs =
                 semicolon_list_to_vector(cur_hitbox.hazards_str);
@@ -520,71 +520,71 @@ void AnimationDatabase::load_from_data_node(DataNode* node) {
             new Sprite(
             sprite_node->name,
             nullptr,
-            s2p(sprite_node->get_child_by_name("file_pos")->value),
-            s2p(sprite_node->get_child_by_name("file_size")->value),
+            s2p(sprite_node->getChildByName("file_pos")->value),
+            s2p(sprite_node->getChildByName("file_size")->value),
             hitboxes
         );
         sprites.push_back(new_s);
         
-        new_s->offset = s2p(sprite_node->get_child_by_name("offset")->value);
+        new_s->offset = s2p(sprite_node->getChildByName("offset")->value);
         new_s->scale =
             s2p(
-                sprite_node->get_child_by_name(
+                sprite_node->getChildByName(
                     "scale"
-                )->get_value_or_default("1 1")
+                )->getValueOrDefault("1 1")
             );
-        new_s->angle = s2f(sprite_node->get_child_by_name("angle")->value);
+        new_s->angle = s2f(sprite_node->getChildByName("angle")->value);
         new_s->tint =
             s2c(
-                sprite_node->get_child_by_name("tint")->get_value_or_default(
+                sprite_node->getChildByName("tint")->getValueOrDefault(
                     "255 255 255 255"
                 )
             );
-        new_s->bmp_name = sprite_node->get_child_by_name("file")->value;
+        new_s->bmp_name = sprite_node->getChildByName("file")->value;
         new_s->set_bitmap(
             new_s->bmp_name, new_s->bmp_pos, new_s->bmp_size,
-            sprite_node->get_child_by_name("file")
+            sprite_node->getChildByName("file")
         );
         new_s->top_visible =
             s2b(
-                sprite_node->get_child_by_name("top_visible")->value
+                sprite_node->getChildByName("top_visible")->value
             );
         new_s->top_pos =
-            s2p(sprite_node->get_child_by_name("top_pos")->value);
+            s2p(sprite_node->getChildByName("top_pos")->value);
         new_s->top_size =
-            s2p(sprite_node->get_child_by_name("top_size")->value);
+            s2p(sprite_node->getChildByName("top_size")->value);
         new_s->top_angle =
             s2f(
-                sprite_node->get_child_by_name("top_angle")->value
+                sprite_node->getChildByName("top_angle")->value
             );
     }
     
     //Animations.
-    DataNode* anims_node = node->get_child_by_name("animations");
-    size_t n_anims = anims_node->get_nr_of_children();
+    DataNode* anims_node = node->getChildByName("animations");
+    size_t n_anims = anims_node->getNrOfChildren();
     for(size_t a = 0; a < n_anims; a++) {
     
-        DataNode* anim_node = anims_node->get_child(a);
+        DataNode* anim_node = anims_node->getChild(a);
         vector<Frame> frames;
         
         DataNode* frames_node =
-            anim_node->get_child_by_name("frames");
+            anim_node->getChildByName("frames");
         size_t n_frames =
-            frames_node->get_nr_of_children();
+            frames_node->getNrOfChildren();
             
         for(size_t f = 0; f < n_frames; f++) {
-            DataNode* frame_node = frames_node->get_child(f);
+            DataNode* frame_node = frames_node->getChild(f);
             size_t s_pos = find_sprite(frame_node->name);
             string signal_str =
-                frame_node->get_child_by_name("signal")->value;
+                frame_node->getChildByName("signal")->value;
             frames.push_back(
                 Frame(
                     frame_node->name,
                     s_pos,
                     (s_pos == INVALID) ? nullptr : sprites[s_pos],
-                    s2f(frame_node->get_child_by_name("duration")->value),
-                    s2b(frame_node->get_child_by_name("interpolate")->value),
-                    frame_node->get_child_by_name("sound")->value,
+                    s2f(frame_node->getChildByName("duration")->value),
+                    s2b(frame_node->getChildByName("interpolate")->value),
+                    frame_node->getChildByName("sound")->value,
                     (signal_str.empty() ? INVALID : s2i(signal_str))
                 )
             );
@@ -594,11 +594,11 @@ void AnimationDatabase::load_from_data_node(DataNode* node) {
             new Animation(
                 anim_node->name,
                 frames,
-                s2i(anim_node->get_child_by_name("loop_frame")->value),
+                s2i(anim_node->getChildByName("loop_frame")->value),
                 s2i(
-                    anim_node->get_child_by_name(
+                    anim_node->getChildByName(
                         "hit_rate"
-                    )->get_value_or_default("100")
+                    )->getValueOrDefault("100")
                 )
             )
         );

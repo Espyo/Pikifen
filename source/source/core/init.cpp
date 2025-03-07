@@ -538,8 +538,8 @@ void init_controls() {
         if(def.empty()) continue;
         
         ControlBind bind;
-        bind.action_type_id = action_types[a].id;
-        bind.player_nr = 0;
+        bind.actionTypeId = action_types[a].id;
+        bind.playerNr = 0;
         bind.input = game.controls.str_to_input(def);
         game.controls.binds().push_back(bind);
     }

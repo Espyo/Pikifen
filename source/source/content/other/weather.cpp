@@ -164,7 +164,7 @@ void Weather::load_from_data_node(DataNode* node) {
     
     //Lighting.
     vector<std::pair<int, string> > lighting_table =
-        get_weather_table(node->get_child_by_name("lighting"));
+        get_weather_table(node->getChildByName("lighting"));
         
     for(size_t p = 0; p < lighting_table.size(); p++) {
         daylight.push_back(
@@ -177,7 +177,7 @@ void Weather::load_from_data_node(DataNode* node) {
     
     //Sun's strength.
     vector<std::pair<int, string> > sun_strength_table =
-        get_weather_table(node->get_child_by_name("sun_strength"));
+        get_weather_table(node->getChildByName("sun_strength"));
         
     for(size_t p = 0; p < sun_strength_table.size(); p++) {
         sun_strength.push_back(
@@ -191,7 +191,7 @@ void Weather::load_from_data_node(DataNode* node) {
     //Blackout effect's strength.
     vector<std::pair<int, string> > blackout_strength_table =
         get_weather_table(
-            node->get_child_by_name("blackout_strength")
+            node->getChildByName("blackout_strength")
         );
         
     for(size_t p = 0; p < blackout_strength_table.size(); p++) {
@@ -206,7 +206,7 @@ void Weather::load_from_data_node(DataNode* node) {
     //Fog.
     vector<std::pair<int, string> > fog_color_table =
         get_weather_table(
-            node->get_child_by_name("fog_color")
+            node->getChildByName("fog_color")
         );
     for(size_t p = 0; p < fog_color_table.size(); p++) {
         fog_color.push_back(

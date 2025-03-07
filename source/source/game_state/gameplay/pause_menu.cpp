@@ -1583,7 +1583,7 @@ void PauseMenu::handle_player_action(const PlayerAction &action) {
     bool handled_by_radar = false;
     
     if(radar_gui.responsive) {
-        switch(action.action_type_id) {
+        switch(action.actionTypeId) {
         case PLAYER_ACTION_TYPE_RADAR: {
             if(action.value >= 0.5f) {
                 start_closing(&radar_gui);
@@ -1633,7 +1633,7 @@ void PauseMenu::handle_player_action(const PlayerAction &action) {
         confirmation_gui.handle_player_action(action);
         if(secondary_menu) secondary_menu->handle_player_action(action);
         
-        switch(action.action_type_id) {
+        switch(action.actionTypeId) {
         case PLAYER_ACTION_TYPE_MENU_PAGE_LEFT:
         case PLAYER_ACTION_TYPE_MENU_PAGE_RIGHT: {
             if(action.value >= 0.5f) {
@@ -1657,7 +1657,7 @@ void PauseMenu::handle_player_action(const PlayerAction &action) {
                 size_t new_page_idx =
                     sum_and_wrap(
                         (int) cur_page_idx,
-                        action.action_type_id == PLAYER_ACTION_TYPE_MENU_PAGE_LEFT ?
+                        action.actionTypeId == PLAYER_ACTION_TYPE_MENU_PAGE_LEFT ?
                         -1 :
                         1,
                         (int) pages.size()
@@ -1665,7 +1665,7 @@ void PauseMenu::handle_player_action(const PlayerAction &action) {
                 switch_page(
                     cur_gui,
                     pages[new_page_idx],
-                    action.action_type_id == PLAYER_ACTION_TYPE_MENU_PAGE_LEFT
+                    action.actionTypeId == PLAYER_ACTION_TYPE_MENU_PAGE_LEFT
                 );
             }
             
@@ -1690,7 +1690,7 @@ void PauseMenu::init_confirmation_page() {
     confirmation_gui.register_coords("explanation",      50, 40, 84, 20);
     confirmation_gui.register_coords("options_reminder", 50, 69, 92, 10);
     confirmation_gui.register_coords("tooltip",          50, 96, 96,  4);
-    confirmation_gui.read_coords(gui_file->get_child_by_name("positions"));
+    confirmation_gui.read_coords(gui_file->getChildByName("positions"));
     
     //Cancel button.
     confirmation_gui.back_item =
@@ -1784,7 +1784,7 @@ void PauseMenu::init_main_pause_menu() {
     gui.register_coords("quit",             87,   88, 22,  8);
     gui.register_coords("tooltip",          50,   96, 96,  4);
     gui.read_coords(
-        game.content.gui_defs.list[PAUSE_MENU::GUI_FILE_NAME].get_child_by_name("positions")
+        game.content.gui_defs.list[PAUSE_MENU::GUI_FILE_NAME].getChildByName("positions")
     );
     
     //Header.
@@ -2081,7 +2081,7 @@ void PauseMenu::init_mission_page() {
     mission_gui.register_coords("grading_list",     48, 80, 92, 24);
     mission_gui.register_coords("grading_scroll",   97, 80,  2, 24);
     mission_gui.register_coords("tooltip",          50, 96, 96,  4);
-    mission_gui.read_coords(gui_file->get_child_by_name("positions"));
+    mission_gui.read_coords(gui_file->getChildByName("positions"));
     
     //Header.
     TextGuiItem* header_text =
@@ -2202,13 +2202,13 @@ void PauseMenu::init_radar_page() {
     DataNode* gui_file = &game.content.gui_defs.list[PAUSE_MENU::RADAR_GUI_FILE_NAME];
     
     //Assets.
-    DataNode* bitmaps_node = gui_file->get_child_by_name("files");
+    DataNode* bitmaps_node = gui_file->getChildByName("files");
     
 #define loader(var, name) \
     var = \
           game.content.bitmaps.list.get( \
-                                         bitmaps_node->get_child_by_name(name)->value, \
-                                         bitmaps_node->get_child_by_name(name) \
+                                         bitmaps_node->getChildByName(name)->value, \
+                                         bitmaps_node->getChildByName(name) \
                                        );
     
     loader(bmp_radar_cursor,         "cursor");
@@ -2245,7 +2245,7 @@ void PauseMenu::init_radar_page() {
     radar_gui.register_coords("cursor_info",         86.25, 33.75, 22.5, 17.5);
     radar_gui.register_coords("instructions",        58.75, 16,    77.5,  4);
     radar_gui.register_coords("tooltip",             50,    96,    96,    4);
-    radar_gui.read_coords(gui_file->get_child_by_name("positions"));
+    radar_gui.read_coords(gui_file->getChildByName("positions"));
     
     //Header.
     TextGuiItem* header_text =
@@ -2506,7 +2506,7 @@ void PauseMenu::init_status_page() {
     status_gui.register_coords("totals",           50,    89,   88,    8);
     status_gui.register_coords("instructions",     58.75, 16,   77.5,  4);
     status_gui.register_coords("tooltip",          50,    96,   96,    4);
-    status_gui.read_coords(gui_file->get_child_by_name("positions"));
+    status_gui.read_coords(gui_file->getChildByName("positions"));
     
     //Header.
     TextGuiItem* header_text =

@@ -350,7 +350,7 @@ void GuiEditor::load_gui_def_file(
     manifest.fill_from_path(path);
     file_node = DataNode(manifest.path);
     
-    if(!file_node.file_was_opened) {
+    if(!file_node.fileWasOpened) {
         open_message_dialog(
             "Load failed!",
             "Failed to load the GUI definition file \"" + manifest.path + "\"!",
@@ -360,12 +360,12 @@ void GuiEditor::load_gui_def_file(
         return;
     }
     
-    DataNode* positions_node = file_node.get_child_by_name("positions");
-    size_t n_items = positions_node->get_nr_of_children();
+    DataNode* positions_node = file_node.getChildByName("positions");
+    size_t n_items = positions_node->getNrOfChildren();
     
     for(size_t i = 0; i < n_items; i++) {
         Item new_item;
-        DataNode* item_node = positions_node->get_child(i);
+        DataNode* item_node = positions_node->getChild(i);
         new_item.name = item_node->name;
         vector<string> words = split(item_node->value);
         if(words.size() != 4) continue;
@@ -651,13 +651,13 @@ void GuiEditor::reset_cam(bool instantaneous) {
  * @return Whether it succeded.
  */
 bool GuiEditor::save_gui_def() {
-    DataNode* positions_node = file_node.get_child_by_name("positions");
+    DataNode* positions_node = file_node.getChildByName("positions");
     for(size_t i = 0; i < items.size(); i++) {
-        DataNode* item_node = positions_node->get_child(i);
+        DataNode* item_node = positions_node->getChild(i);
         item_node->value = p2s(items[i].center) + " " + p2s(items[i].size);
     }
     
-    if(!file_node.save_file(manifest.path)) {
+    if(!file_node.saveFile(manifest.path)) {
         show_system_message_box(
             nullptr, "Save failed!",
             "Could not save the GUI file!",

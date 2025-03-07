@@ -140,7 +140,7 @@ const string NAMES[N_MAKER_TOOLS] = {
  * @param file File to load from.
  */
 void SystemContentNames::load(DataNode* file) {
-    ReaderSetter gra_rs(file->get_child_by_name("graphics"));
+    ReaderSetter gra_rs(file->getChildByName("graphics"));
     
     gra_rs.set("bright_circle", bmp_bright_circle);
     gra_rs.set("bright_ring", bmp_bright_ring);
@@ -189,7 +189,7 @@ void SystemContentNames::load(DataNode* file) {
     gra_rs.set("title_screen_bg", bmp_title_screen_bg);
     gra_rs.set("wave_ring", bmp_wave_ring);
     
-    ReaderSetter fnt_rs(file->get_child_by_name("fonts"));
+    ReaderSetter fnt_rs(file->getChildByName("fonts"));
     
     fnt_rs.set("area_name", fnt_area_name);
     fnt_rs.set("counter", fnt_counter);
@@ -201,7 +201,7 @@ void SystemContentNames::load(DataNode* file) {
     fnt_rs.set("standard", fnt_standard);
     fnt_rs.set("value", fnt_value);
     
-    ReaderSetter snd_rs(file->get_child_by_name("sounds"));
+    ReaderSetter snd_rs(file->getChildByName("sounds"));
     
     snd_rs.set("attack", sound_attack);
     snd_rs.set("camera", sound_camera);
@@ -210,18 +210,18 @@ void SystemContentNames::load(DataNode* file) {
     snd_rs.set("menu_select", sound_menu_select);
     snd_rs.set("switch_pikmin", sound_switch_pikmin);
     
-    ReaderSetter sng_rs(file->get_child_by_name("songs"));
+    ReaderSetter sng_rs(file->getChildByName("songs"));
     
     sng_rs.set("boss", sng_boss);
     sng_rs.set("boss_victory", sng_boss_victory);
     sng_rs.set("editors", sng_editors);
     sng_rs.set("menus", sng_menus);
     
-    ReaderSetter ani_rs(file->get_child_by_name("animations"));
+    ReaderSetter ani_rs(file->getChildByName("animations"));
     
     ani_rs.set("sparks", anim_sparks);
     
-    ReaderSetter par_rs(file->get_child_by_name("particle_generators"));
+    ReaderSetter par_rs(file->getChildByName("particle_generators"));
     
     par_rs.set("converter_insertion", part_converter_insertion);
     par_rs.set("ding", part_ding);
@@ -469,8 +469,8 @@ void ErrorManager::prepare_area_load() {
 void ErrorManager::report(const string &s, const DataNode* d) {
     string full_error = s;
     if(d) {
-        full_error += " (" + d->file_path;
-        if(d->line_nr != 0) full_error += " line " + i2s(d->line_nr);
+        full_error += " (" + d->filePath;
+        if(d->lineNr != 0) full_error += " line " + i2s(d->lineNr);
         full_error += ")";
     }
     
@@ -1188,7 +1188,7 @@ ReaderSetter::ReaderSetter(DataNode* dn) :
 void ReaderSetter::set(
     const string &child, ALLEGRO_COLOR &var, DataNode** child_node
 ) {
-    DataNode* n = node->get_child_by_name(child);
+    DataNode* n = node->getChildByName(child);
     if(!n->value.empty()) {
         if(child_node) *child_node = n;
         var = s2c(n->value);
@@ -1211,7 +1211,7 @@ void ReaderSetter::set(
 void ReaderSetter::set(
     const string &child, string &var, DataNode** child_node
 ) {
-    DataNode* n = node->get_child_by_name(child);
+    DataNode* n = node->getChildByName(child);
     if(!n->value.empty()) {
         if(child_node) *child_node = n;
         var = n->value;
@@ -1234,7 +1234,7 @@ void ReaderSetter::set(
 void ReaderSetter::set(
     const string &child, size_t &var, DataNode** child_node
 ) {
-    DataNode* n = node->get_child_by_name(child);
+    DataNode* n = node->getChildByName(child);
     if(!n->value.empty()) {
         if(child_node) *child_node = n;
         var = s2i(n->value);
@@ -1257,7 +1257,7 @@ void ReaderSetter::set(
 void ReaderSetter::set(
     const string &child, int &var, DataNode** child_node
 ) {
-    DataNode* n = node->get_child_by_name(child);
+    DataNode* n = node->getChildByName(child);
     if(!n->value.empty()) {
         if(child_node) *child_node = n;
         var = s2i(n->value);
@@ -1280,7 +1280,7 @@ void ReaderSetter::set(
 void ReaderSetter::set(
     const string &child, unsigned int &var, DataNode** child_node
 ) {
-    DataNode* n = node->get_child_by_name(child);
+    DataNode* n = node->getChildByName(child);
     if(!n->value.empty()) {
         if(child_node) *child_node = n;
         var = s2i(n->value);
@@ -1303,7 +1303,7 @@ void ReaderSetter::set(
 void ReaderSetter::set(
     const string &child, unsigned char &var, DataNode** child_node
 ) {
-    DataNode* n = node->get_child_by_name(child);
+    DataNode* n = node->getChildByName(child);
     if(!n->value.empty()) {
         if(child_node) *child_node = n;
         var = s2i(n->value);
@@ -1326,7 +1326,7 @@ void ReaderSetter::set(
 void ReaderSetter::set(
     const string &child, bool &var, DataNode** child_node
 ) {
-    DataNode* n = node->get_child_by_name(child);
+    DataNode* n = node->getChildByName(child);
     if(!n->value.empty()) {
         if(child_node) *child_node = n;
         var = s2b(n->value);
@@ -1349,7 +1349,7 @@ void ReaderSetter::set(
 void ReaderSetter::set(
     const string &child, float &var, DataNode** child_node
 ) {
-    DataNode* n = node->get_child_by_name(child);
+    DataNode* n = node->getChildByName(child);
     if(!n->value.empty()) {
         if(child_node) *child_node = n;
         var = s2f(n->value);
@@ -1372,7 +1372,7 @@ void ReaderSetter::set(
 void ReaderSetter::set(
     const string &child, double &var, DataNode** child_node
 ) {
-    DataNode* n = node->get_child_by_name(child);
+    DataNode* n = node->getChildByName(child);
     if(!n->value.empty()) {
         if(child_node) *child_node = n;
         var = s2f(n->value);
@@ -1395,7 +1395,7 @@ void ReaderSetter::set(
 void ReaderSetter::set(
     const string &child, Point &var, DataNode** child_node
 ) {
-    DataNode* n = node->get_child_by_name(child);
+    DataNode* n = node->getChildByName(child);
     if(!n->value.empty()) {
         if(child_node) *child_node = n;
         var = s2p(n->value);

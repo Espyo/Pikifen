@@ -1,4 +1,11 @@
-//Read data_file/data_file.h for more info.
+/*
+ * Copyright (c) Andre 'Espyo' Silva 2013.
+ *
+ * === FILE DESCRIPTION ===
+ * Data file class and related functions.
+ *
+ * Please read the header file for more information.
+ */
 
 #undef _CMATH_
 #include <fstream>
@@ -44,15 +51,15 @@ DataNode::DataNode() {
 DataNode::DataNode(const DataNode &dn2) :
     name(dn2.name),
     value(dn2.value),
-    file_was_opened(dn2.file_was_opened),
-    file_path(dn2.file_path),
-    line_nr(dn2.line_nr) {
+    fileWasOpened(dn2.fileWasOpened),
+    filePath(dn2.filePath),
+    lineNr(dn2.lineNr) {
     
     for(size_t c = 0; c < dn2.children.size(); c++) {
         children.push_back(new DataNode(*(dn2.children[c])));
     }
-    for(size_t dc = 0; dc < dn2.dummy_children.size(); dc++) {
-        dummy_children.push_back(new DataNode(*(dn2.dummy_children[dc])));
+    for(size_t dc = 0; dc < dn2.dummyChildren.size(); dc++) {
+        dummyChildren.push_back(new DataNode(*(dn2.dummyChildren[dc])));
     }
 }
 
@@ -60,12 +67,12 @@ DataNode::DataNode(const DataNode &dn2) :
 /**
  * @brief Constructs a new data node object from a file, given the file name.
  *
- * @param file_path Name of the file to load.
+ * @param filePath Name of the file to load.
  */
-DataNode::DataNode(const string &file_path) :
-    file_path(file_path) {
+DataNode::DataNode(const string &filePath) :
+    filePath(filePath) {
     
-    load_file(file_path);
+    loadFile(filePath);
 }
 
 
@@ -94,11 +101,11 @@ DataNode::~DataNode() {
 /**
  * @brief Adds a new child to the list.
  *
- * @param new_node The node to add.
+ * @param newNode The node to add.
  * @return The new child's index.
  */
-size_t DataNode::add(DataNode* new_node) {
-    children.push_back(new_node);
+size_t DataNode::add(DataNode* newNode) {
+    children.push_back(newNode);
     return children.size() - 1;
 }
 
@@ -109,19 +116,19 @@ size_t DataNode::add(DataNode* new_node) {
 void DataNode::clear() {
     name.clear();
     value.clear();
-    file_was_opened = false;
-    file_path.clear();
-    line_nr = 0;
+    fileWasOpened = false;
+    filePath.clear();
+    lineNr = 0;
     
     for(size_t c = 0; c < children.size(); c++) {
         delete children[c];
     }
     children.clear();
     
-    for(size_t dc = 0; dc < dummy_children.size(); dc++) {
-        delete dummy_children[dc];
+    for(size_t dc = 0; dc < dummyChildren.size(); dc++) {
+        delete dummyChildren[dc];
     }
-    dummy_children.clear();
+    dummyChildren.clear();
 }
 
 
@@ -131,25 +138,25 @@ void DataNode::clear() {
  *
  * @return The dummy node.
  */
-DataNode* DataNode::create_dummy() {
-    DataNode* new_dummy_child = new DataNode();
-    new_dummy_child->line_nr = line_nr;
-    new_dummy_child->file_path = file_path;
-    new_dummy_child->file_was_opened = file_was_opened;
-    dummy_children.push_back(new_dummy_child);
-    return new_dummy_child;
+DataNode* DataNode::createDummy() {
+    DataNode* newDummyChild = new DataNode();
+    newDummyChild->lineNr = lineNr;
+    newDummyChild->filePath = filePath;
+    newDummyChild->fileWasOpened = fileWasOpened;
+    dummyChildren.push_back(newDummyChild);
+    return newDummyChild;
 }
 
 
 /**
  * @brief "Decrypts" a character for loading an encrypted data file.
  *
- * See encrypt_char for more info.
+ * See encryptChar() for more info.
  *
  * @param c Character to decrypt.
  * @return The decrypted character.
  */
-unsigned char DataNode::decrypt_char(unsigned char c) {
+unsigned char DataNode::decryptChar(unsigned char c) {
     if(c < DATA_FILE::ENCRYPTION_MIN_VALUE) {
         return c;
     }
@@ -174,7 +181,7 @@ unsigned char DataNode::decrypt_char(unsigned char c) {
  * @param c Character to encrypt.
  * @return The encrypted character.
  */
-unsigned char DataNode::encrypt_char(unsigned char c) {
+unsigned char DataNode::encryptChar(unsigned char c) {
     if(c < DATA_FILE::ENCRYPTION_MIN_VALUE) {
         return c;
     }
@@ -191,13 +198,13 @@ unsigned char DataNode::encrypt_char(unsigned char c) {
 /**
  * @brief "Encrypts" an entire string for saving in an encrypted data file.
  *
- * See encrypt_char for more info.
+ * See encryptChar() for more info.
  *
  * @param s String to encrypt.
  */
-void DataNode::encrypt_string(string &s) {
+void DataNode::encryptString(string &s) {
     for(size_t c = 0; c < s.size(); c++) {
-        s[c] = encrypt_char(s[c]);
+        s[c] = encryptChar(s[c]);
     }
 }
 
@@ -217,27 +224,27 @@ void DataNode::getline(
         return;
     }
     
-    size_t bytes_read;
-    char* c_ptr = new char;
+    size_t bytesRead;
+    char* cPtr = new char;
     
-    bytes_read = al_fread(file, c_ptr, 1);
-    while(bytes_read > 0) {
-        unsigned char c = *((unsigned char*) c_ptr);
+    bytesRead = al_fread(file, cPtr, 1);
+    while(bytesRead > 0) {
+        unsigned char c = *((unsigned char*) cPtr);
         
         if(encrypted) {
-            c = decrypt_char(c);
+            c = decryptChar(c);
         }
         
         if(c == '\r') {
             //Let's check if the next character is a \n. If so, they should
             //both be consumed by al_fread().
-            bytes_read = al_fread(file, c_ptr, 1);
-            unsigned char peek_c = *((unsigned char*) c_ptr);
+            bytesRead = al_fread(file, cPtr, 1);
+            unsigned char peekC = *((unsigned char*) cPtr);
             if(encrypted) {
-                peek_c = decrypt_char(peek_c);
+                peekC = decryptChar(peekC);
             }
-            if(bytes_read > 0) {
-                if(peek_c == '\n') {
+            if(bytesRead > 0) {
+                if(peekC == '\n') {
                     //Yep. Done.
                     break;
                 } else {
@@ -257,10 +264,10 @@ void DataNode::getline(
             
         }
         
-        bytes_read = al_fread(file, c_ptr, 1);
+        bytesRead = al_fread(file, cPtr, 1);
     }
     
-    delete c_ptr;
+    delete cPtr;
 }
 
 
@@ -271,8 +278,8 @@ void DataNode::getline(
  * @param number The index number of the child.
  * @return The node.
  */
-DataNode* DataNode::get_child(size_t number) {
-    if(number >= children.size()) return create_dummy();
+DataNode* DataNode::getChild(size_t number) {
+    if(number >= children.size()) return createDummy();
     return children[number];
 }
 
@@ -282,27 +289,27 @@ DataNode* DataNode::get_child(size_t number) {
  * (direct children only).
  *
  * @param name The name the child must have.
- * @param occurrence_number This function will return the nth child with
+ * @param occurrenceNr This function will return the nth child with
  * the specified name.
  * @return The node.
  */
-DataNode* DataNode::get_child_by_name(
-    const string &name, size_t occurrence_number
+DataNode* DataNode::getChildByName(
+    const string &name, size_t occurrenceNr
 ) {
-    size_t cur_occurrence_number = 0;
+    size_t curOccurrenceNr = 0;
     
     for(size_t c = 0; c < children.size(); c++) {
         if(name == children[c]->name) {
-            if(cur_occurrence_number == occurrence_number) {
+            if(curOccurrenceNr == occurrenceNr) {
                 //We found it.
                 return children[c];
             } else {
-                cur_occurrence_number++;
+                curOccurrenceNr++;
             }
         }
     }
     
-    return create_dummy();
+    return createDummy();
 }
 
 
@@ -311,7 +318,7 @@ DataNode* DataNode::get_child_by_name(
  *
  * @return The number.
  */
-size_t DataNode::get_nr_of_children() const {
+size_t DataNode::getNrOfChildren() const {
     return children.size();
 }
 
@@ -323,7 +330,7 @@ size_t DataNode::get_nr_of_children() const {
  * @param name Name the children must have.
  * @return The number.
  */
-size_t DataNode::get_nr_of_children_by_name(const string &name) const {
+size_t DataNode::getNrOfChildrenByName(const string &name) const {
     size_t number = 0;
     
     for(size_t c = 0; c < children.size(); c++) {
@@ -340,7 +347,7 @@ size_t DataNode::get_nr_of_children_by_name(const string &name) const {
  * @param def Default value.
  * @return The value.
  */
-string DataNode::get_value_or_default(const string &def) const {
+string DataNode::getValueOrDefault(const string &def) const {
     return (value.empty() ? def : value);
 }
 
@@ -348,33 +355,33 @@ string DataNode::get_value_or_default(const string &def) const {
 /**
  * @brief Loads data from a file.
  *
- * @param file_path Path to the file to load.
- * @param trim_values If true, spaces before and after the value will
+ * @param filePath Path to the file to load.
+ * @param trimValues If true, spaces before and after the value will
  * be trimmed off.
- * @param names_only_after_root If true, any nodes that are not in the
+ * @param namesOnlyAfterRoot If true, any nodes that are not in the
  * root node (i.e. they are children of some node inside the file)
  * will only have a name and no value; the entire contents of their
  * line will be their name.
  * @param encrypted If true, the file is encrypted, and needs decrypting.
  */
-void DataNode::load_file(
-    const string &file_path, bool trim_values,
-    bool names_only_after_root, bool encrypted
+void DataNode::loadFile(
+    const string &filePath, bool trimValues,
+    bool namesOnlyAfterRoot, bool encrypted
 ) {
     vector<string> lines;
     
-    file_was_opened = false;
-    this->file_path = file_path;
+    fileWasOpened = false;
+    this->filePath = filePath;
     
-    ALLEGRO_FILE* file = al_fopen(file_path.c_str(), "r");
+    ALLEGRO_FILE* file = al_fopen(filePath.c_str(), "r");
     if(file) {
-        bool is_first_line = true;
-        file_was_opened = true;
+        bool isFirstLine = true;
+        fileWasOpened = true;
         string line;
         while(!al_feof(file)) {
             getline(file, line, encrypted);
             
-            if(is_first_line && !encrypted) {
+            if(isFirstLine && !encrypted) {
                 //Let's just check if it starts with the UTF-8 Magic Number.
                 if(
                     line.size() >= 3 &&
@@ -384,12 +391,12 @@ void DataNode::load_file(
                 }
             }
             lines.push_back(line);
-            is_first_line = false;
+            isFirstLine = false;
         }
         al_fclose(file);
     }
     
-    load_node(lines, trim_values, 0, 0, names_only_after_root);
+    loadNode(lines, trimValues, 0, 0, namesOnlyAfterRoot);
 }
 
 
@@ -397,32 +404,32 @@ void DataNode::load_file(
  * @brief Loads data from a list of text lines.
  *
  * @param lines Text lines that make up the node.
- * @param trim_values If true, spaces before and after the value will
+ * @param trimValues If true, spaces before and after the value will
  * be trimmed off.
- * @param start_line This node starts at this line of the document.
+ * @param startLine This node starts at this line of the document.
  * @param depth Depth of this node. 0 means root.
- * @param names_only_after_root If true, any nodes that are not in the
+ * @param namesOnlyAfterRoot If true, any nodes that are not in the
  * root node (i.e. they are children of some node inside the file)
  * will only have a name and no value; the entire contents of their
  * line will be their name.
  * @return Returns the number of the line this node ended on,
- * judging by start_line. This is used for the recursion.
+ * judging by startLine. This is used for the recursion.
  */
-size_t DataNode::load_node(
-    const vector<string> &lines, bool trim_values,
-    size_t start_line, size_t depth,
-    bool names_only_after_root
+size_t DataNode::loadNode(
+    const vector<string> &lines, bool trimValues,
+    size_t startLine, size_t depth,
+    bool namesOnlyAfterRoot
 ) {
     children.clear();
     
-    if(start_line >= lines.size()) return start_line;
+    if(startLine >= lines.size()) return startLine;
     
-    bool returning_from_sub_node = false;
+    bool returningFromSubNode = false;
     
-    for(size_t l = start_line; l < lines.size(); l++) {
+    for(size_t l = startLine; l < lines.size(); l++) {
         string line = lines[l];
         
-        line = trim_spaces(line, true); //Removes the leftmost spaces.
+        line = trimSpaces(line, true); //Removes the leftmost spaces.
         
         if(line.empty()) continue;
         
@@ -436,13 +443,13 @@ size_t DataNode::load_node(
         //Sub-node end.
         size_t pos = line.find('}');
         if(pos != string::npos) {
-            if(returning_from_sub_node) {
+            if(returningFromSubNode) {
                 //The sub-node just ended.
                 //Let's leave what's after the bracket, and let the rest
                 //of the code make use of it.
-                returning_from_sub_node = false;
+                returningFromSubNode = false;
                 line = line.substr(pos + 1, line.size() - (pos + 1));
-                line = trim_spaces(line, true);
+                line = trimSpaces(line, true);
                 if(line.empty()) continue;
             } else {
                 return l;
@@ -453,20 +460,20 @@ size_t DataNode::load_node(
         pos = line.find('{');
         if(pos != string::npos) {
         
-            DataNode* new_child = new DataNode();
-            new_child->name = trim_spaces(line.substr(0, pos));
-            new_child->value.clear();
-            new_child->file_was_opened = file_was_opened;
-            new_child->file_path = file_path;
-            new_child->line_nr = l + 1;
+            DataNode* newChild = new DataNode();
+            newChild->name = trimSpaces(line.substr(0, pos));
+            newChild->value.clear();
+            newChild->fileWasOpened = fileWasOpened;
+            newChild->filePath = filePath;
+            newChild->lineNr = l + 1;
             l =
-                new_child->load_node(
-                    lines, trim_values, l + 1, depth + 1, names_only_after_root
+                newChild->loadNode(
+                    lines, trimValues, l + 1, depth + 1, namesOnlyAfterRoot
                 );
             l--; //So the block-ending line gets re-examined.
-            children.push_back(new_child);
+            children.push_back(newChild);
             
-            returning_from_sub_node = true;
+            returningFromSubNode = true;
             continue;
         }
         
@@ -474,7 +481,7 @@ size_t DataNode::load_node(
         pos = line.find('=');
         string n, v;
         if(
-            (!names_only_after_root || depth == 0) &&
+            (!namesOnlyAfterRoot || depth == 0) &&
             pos != string::npos && pos > 0 && line.size() > 2
         ) {
             n = line.substr(0, pos);
@@ -482,15 +489,15 @@ size_t DataNode::load_node(
         } else {
             n = line;
         }
-        if(trim_values) v = trim_spaces(v);
+        if(trimValues) v = trimSpaces(v);
         
-        DataNode* new_child = new DataNode();
-        new_child->name = trim_spaces(n);
-        new_child->value = v;
-        new_child->file_was_opened = file_was_opened;
-        new_child->file_path = file_path;
-        new_child->line_nr = l + 1;
-        children.push_back(new_child);
+        DataNode* newChild = new DataNode();
+        newChild->name = trimSpaces(n);
+        newChild->value = v;
+        newChild->fileWasOpened = fileWasOpened;
+        newChild->filePath = filePath;
+        newChild->lineNr = l + 1;
+        children.push_back(newChild);
         
     }
     
@@ -510,15 +517,15 @@ DataNode &DataNode::operator=(const DataNode &dn2) {
         
         name = dn2.name;
         value = dn2.value;
-        file_was_opened = dn2.file_was_opened;
-        file_path = dn2.file_path;
-        line_nr = dn2.line_nr;
+        fileWasOpened = dn2.fileWasOpened;
+        filePath = dn2.filePath;
+        lineNr = dn2.lineNr;
         
         for(size_t c = 0; c < dn2.children.size(); c++) {
             children.push_back(new DataNode(*(dn2.children[c])));
         }
-        for(size_t dc = 0; dc < dn2.dummy_children.size(); dc++) {
-            dummy_children.push_back(new DataNode(*(dn2.dummy_children[dc])));
+        for(size_t dc = 0; dc < dn2.dummyChildren.size(); dc++) {
+            dummyChildren.push_back(new DataNode(*(dn2.dummyChildren[dc])));
         }
     }
     
@@ -529,13 +536,13 @@ DataNode &DataNode::operator=(const DataNode &dn2) {
 /**
  * @brief Removes and destroys a child from the list.
  *
- * @param node_to_remove The node to be removed.
+ * @param nodeToRemove The node to be removed.
  * @return Whether the node existed.
  */
-bool DataNode::remove(DataNode* node_to_remove) {
+bool DataNode::remove(DataNode* nodeToRemove) {
     for(size_t c = 0; c < children.size(); c++) {
-        if(children[c] == node_to_remove) {
-            delete node_to_remove;
+        if(children[c] == nodeToRemove) {
+            delete nodeToRemove;
             children.erase(children.begin() + c);
             return true;
         }
@@ -548,41 +555,41 @@ bool DataNode::remove(DataNode* node_to_remove) {
  * @brief Saves a node into a new text file. Line numbers are ignored.
  * If you don't provide a file name, it'll use the node's file name.
  *
- * @param destination_file_path Path to the file to save to.
- * @param children_only If true, only save the nodes inside this node.
- * @param include_empty_values If true, even nodes with an empty value
+ * @param destinationFilePath Path to the file to save to.
+ * @param childrenOnly If true, only save the nodes inside this node.
+ * @param includeEmptyValues If true, even nodes with an empty value
  * will be saved.
  * @param encrypted If true, the file must be encrypted.
  * @return Whether it succeded.
  */
-bool DataNode::save_file(
-    string destination_file_path, bool children_only,
-    bool include_empty_values, bool encrypted
+bool DataNode::saveFile(
+    string destinationFilePath, bool childrenOnly,
+    bool includeEmptyValues, bool encrypted
 ) const {
 
-    if(destination_file_path == "") destination_file_path = this->file_path;
+    if(destinationFilePath == "") destinationFilePath = this->filePath;
     
     //Create any missing folders.
-    size_t next_slash_pos = destination_file_path.find('/', 0);
-    while(next_slash_pos != string::npos) {
-        string path_so_far = destination_file_path.substr(0, next_slash_pos);
-        if(!al_make_directory(path_so_far.c_str())) {
+    size_t nextSlashPos = destinationFilePath.find('/', 0);
+    while(nextSlashPos != string::npos) {
+        string pathSoFar = destinationFilePath.substr(0, nextSlashPos);
+        if(!al_make_directory(pathSoFar.c_str())) {
             return false;
         }
-        next_slash_pos = destination_file_path.find('/', next_slash_pos + 1);
+        nextSlashPos = destinationFilePath.find('/', nextSlashPos + 1);
     }
     
     //Save the file.
-    ALLEGRO_FILE* file = al_fopen(destination_file_path.c_str(), "w");
+    ALLEGRO_FILE* file = al_fopen(destinationFilePath.c_str(), "w");
     if(file) {
-        if(children_only) {
+        if(childrenOnly) {
             for(size_t c = 0; c < children.size(); c++) {
-                children[c]->save_node(
-                    file, 0, include_empty_values, encrypted
+                children[c]->saveNode(
+                    file, 0, includeEmptyValues, encrypted
                 );
             }
         } else {
-            save_node(file, 0, include_empty_values, encrypted);
+            saveNode(file, 0, includeEmptyValues, encrypted);
         }
         al_fclose(file);
         return true;
@@ -597,45 +604,45 @@ bool DataNode::save_file(
  *
  * @param file Allegro file handle.
  * @param level Current level of depth.
- * @param include_empty_values If true, even nodes with an empty value
+ * @param includeEmptyValues If true, even nodes with an empty value
  * will be saved.
  * @param encrypted If true, the file must be encrypted.
  */
-void DataNode::save_node(
+void DataNode::saveNode(
     ALLEGRO_FILE* file, size_t level,
-    bool include_empty_values, bool encrypted
+    bool includeEmptyValues, bool encrypted
 ) const {
 
-    string tabs_str(level, '\t');
-    if(encrypted) tabs_str.clear();
-    string name_str = name;
-    if(encrypted) DataNode::encrypt_string(name_str);
-    string block_start_str = "{\n";
-    if(encrypted) DataNode::encrypt_string(block_start_str);
-    string block_end_str = "}";
-    if(encrypted) DataNode::encrypt_string(block_end_str);
-    string value_str = "=" + value;
-    if(encrypted) DataNode::encrypt_string(value_str);
-    string newline_str = "\n";
-    if(encrypted) DataNode::encrypt_string(newline_str);
+    string tabsStr(level, '\t');
+    if(encrypted) tabsStr.clear();
+    string nameStr = name;
+    if(encrypted) DataNode::encryptString(nameStr);
+    string blockStartStr = "{\n";
+    if(encrypted) DataNode::encryptString(blockStartStr);
+    string blockEndStr = "}";
+    if(encrypted) DataNode::encryptString(blockEndStr);
+    string valueStr = "=" + value;
+    if(encrypted) DataNode::encryptString(valueStr);
+    string newlineStr = "\n";
+    if(encrypted) DataNode::encryptString(newlineStr);
     
-    al_fwrite(file, tabs_str.c_str(), tabs_str.size());
-    al_fwrite(file, name_str.c_str(), name_str.size());
+    al_fwrite(file, tabsStr.c_str(), tabsStr.size());
+    al_fwrite(file, nameStr.c_str(), nameStr.size());
     
     if(!children.empty()) {
-        al_fwrite(file, block_start_str.c_str(), block_start_str.size());
+        al_fwrite(file, blockStartStr.c_str(), blockStartStr.size());
         for(size_t c = 0; c < children.size(); c++) {
-            children[c]->save_node(
-                file, level + 1, include_empty_values, encrypted
+            children[c]->saveNode(
+                file, level + 1, includeEmptyValues, encrypted
             );
         }
-        al_fwrite(file, tabs_str.c_str(), tabs_str.size());
-        al_fwrite(file, block_end_str.c_str(), block_end_str.size());
+        al_fwrite(file, tabsStr.c_str(), tabsStr.size());
+        al_fwrite(file, blockEndStr.c_str(), blockEndStr.size());
         
-    } else if(!value.empty() || include_empty_values) {
-        al_fwrite(file, value_str.c_str(), value_str.size());
+    } else if(!value.empty() || includeEmptyValues) {
+        al_fwrite(file, valueStr.c_str(), valueStr.size());
     }
-    al_fwrite(file, newline_str.c_str(), newline_str.size());
+    al_fwrite(file, newlineStr.c_str(), newlineStr.size());
     
 }
 
@@ -645,10 +652,10 @@ void DataNode::save_node(
  * This means space and tab characters before and after the 'middle' characters.
  *
  * @param s The original string.
- * @param left_only If true, only trim the spaces at the left.
+ * @param leftOnly If true, only trim the spaces at the left.
  * @return The trimmed string.
  */
-string DataNode::trim_spaces(const string &s, bool left_only) {
+string DataNode::trimSpaces(const string &s, bool leftOnly) {
     string orig = s;
     //Spaces before.
     if(orig.size()) {
@@ -658,7 +665,7 @@ string DataNode::trim_spaces(const string &s, bool left_only) {
         }
     }
     
-    if(!left_only) {
+    if(!leftOnly) {
         //Spaces after.
         if(orig.size()) {
             while(

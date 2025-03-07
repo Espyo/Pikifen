@@ -393,8 +393,8 @@ void GameplayState::draw_debug_tools() {
     const float RAW_STICK_VIEWER_SIZE = 100;
     
     point raw_stick_coords;
-    raw_stick_coords.x = game.controls.mgr.raw_sticks[0][0][0];
-    raw_stick_coords.y = game.controls.mgr.raw_sticks[0][0][1];
+    raw_stick_coords.x = game.controls.mgr.rawSticks[0][0][0];
+    raw_stick_coords.y = game.controls.mgr.rawSticks[0][0][1];
     float raw_stick_angle;
     float raw_stick_mag;
     coordinates_to_angle(

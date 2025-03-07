@@ -1058,14 +1058,14 @@ void Area::load_geometry_from_data_node(
     }
     
     size_t n_vertexes =
-        node->get_child_by_name(
+        node->getChildByName(
             "vertexes"
-        )->get_nr_of_children_by_name("v");
+        )->getNrOfChildrenByName("v");
     for(size_t v = 0; v < n_vertexes; v++) {
         DataNode* vertex_data =
-            node->get_child_by_name(
+            node->getChildByName(
                 "vertexes"
-            )->get_child_by_name("v", v);
+            )->getChildByName("v", v);
         vector<string> words = split(vertex_data->value);
         if(words.size() == 2) {
             vertexes.push_back(
@@ -1084,51 +1084,51 @@ void Area::load_geometry_from_data_node(
     }
     
     size_t n_edges =
-        node->get_child_by_name(
+        node->getChildByName(
             "edges"
-        )->get_nr_of_children_by_name("e");
+        )->getNrOfChildrenByName("e");
     for(size_t e = 0; e < n_edges; e++) {
         DataNode* edge_data =
-            node->get_child_by_name(
+            node->getChildByName(
                 "edges"
-            )->get_child_by_name("e", e);
+            )->getChildByName("e", e);
         Edge* new_edge = new Edge();
         
-        vector<string> s_idxs = split(edge_data->get_child_by_name("s")->value);
+        vector<string> s_idxs = split(edge_data->getChildByName("s")->value);
         if(s_idxs.size() < 2) s_idxs.insert(s_idxs.end(), 2, "-1");
         for(size_t s = 0; s < 2; s++) {
             if(s_idxs[s] == "-1") new_edge->sector_idxs[s] = INVALID;
             else new_edge->sector_idxs[s] = s2i(s_idxs[s]);
         }
         
-        vector<string> v_idxs = split(edge_data->get_child_by_name("v")->value);
+        vector<string> v_idxs = split(edge_data->getChildByName("v")->value);
         if(v_idxs.size() < 2) v_idxs.insert(v_idxs.end(), 2, "0");
         
         new_edge->vertex_idxs[0] = s2i(v_idxs[0]);
         new_edge->vertex_idxs[1] = s2i(v_idxs[1]);
         
         DataNode* shadow_length =
-            edge_data->get_child_by_name("shadow_length");
+            edge_data->getChildByName("shadow_length");
         if(!shadow_length->value.empty()) {
             new_edge->wall_shadow_length =
                 s2f(shadow_length->value);
         }
         
         DataNode* shadow_color =
-            edge_data->get_child_by_name("shadow_color");
+            edge_data->getChildByName("shadow_color");
         if(!shadow_color->value.empty()) {
             new_edge->wall_shadow_color = s2c(shadow_color->value);
         }
         
         DataNode* smoothing_length =
-            edge_data->get_child_by_name("smoothing_length");
+            edge_data->getChildByName("smoothing_length");
         if(!smoothing_length->value.empty()) {
             new_edge->ledge_smoothing_length =
                 s2f(smoothing_length->value);
         }
         
         DataNode* smoothing_color =
-            edge_data->get_child_by_name("smoothing_color");
+            edge_data->getChildByName("smoothing_color");
         if(!smoothing_color->value.empty()) {
             new_edge->ledge_smoothing_color =
                 s2c(smoothing_color->value);
@@ -1147,19 +1147,19 @@ void Area::load_geometry_from_data_node(
     }
     
     size_t n_sectors =
-        node->get_child_by_name(
+        node->getChildByName(
             "sectors"
-        )->get_nr_of_children_by_name("s");
+        )->getNrOfChildrenByName("s");
     for(size_t s = 0; s < n_sectors; s++) {
         DataNode* sector_data =
-            node->get_child_by_name(
+            node->getChildByName(
                 "sectors"
-            )->get_child_by_name("s", s);
+            )->getChildByName("s", s);
         Sector* new_sector = new Sector();
         
         size_t new_type =
             game.sector_types.get_idx(
-                sector_data->get_child_by_name("type")->value
+                sector_data->getChildByName("type")->value
             );
         if(new_type == INVALID) {
             new_type = SECTOR_TYPE_NORMAL;
@@ -1167,41 +1167,41 @@ void Area::load_geometry_from_data_node(
         new_sector->type = (SECTOR_TYPE) new_type;
         new_sector->is_bottomless_pit =
             s2b(
-                sector_data->get_child_by_name(
+                sector_data->getChildByName(
                     "is_bottomless_pit"
-                )->get_value_or_default("false")
+                )->getValueOrDefault("false")
             );
         new_sector->brightness =
             s2f(
-                sector_data->get_child_by_name(
+                sector_data->getChildByName(
                     "brightness"
-                )->get_value_or_default(i2s(GEOMETRY::DEF_SECTOR_BRIGHTNESS))
+                )->getValueOrDefault(i2s(GEOMETRY::DEF_SECTOR_BRIGHTNESS))
             );
-        new_sector->tag = sector_data->get_child_by_name("tag")->value;
-        new_sector->z = s2f(sector_data->get_child_by_name("z")->value);
-        new_sector->fade = s2b(sector_data->get_child_by_name("fade")->value);
+        new_sector->tag = sector_data->getChildByName("tag")->value;
+        new_sector->z = s2f(sector_data->getChildByName("z")->value);
+        new_sector->fade = s2b(sector_data->getChildByName("fade")->value);
         
         new_sector->texture_info.bmp_name =
-            sector_data->get_child_by_name("texture")->value;
+            sector_data->getChildByName("texture")->value;
         new_sector->texture_info.rot =
-            s2f(sector_data->get_child_by_name("texture_rotate")->value);
+            s2f(sector_data->getChildByName("texture_rotate")->value);
             
         vector<string> scales =
-            split(sector_data->get_child_by_name("texture_scale")->value);
+            split(sector_data->getChildByName("texture_scale")->value);
         if(scales.size() >= 2) {
             new_sector->texture_info.scale.x = s2f(scales[0]);
             new_sector->texture_info.scale.y = s2f(scales[1]);
         }
         vector<string> translations =
-            split(sector_data->get_child_by_name("texture_trans")->value);
+            split(sector_data->getChildByName("texture_trans")->value);
         if(translations.size() >= 2) {
             new_sector->texture_info.translation.x = s2f(translations[0]);
             new_sector->texture_info.translation.y = s2f(translations[1]);
         }
         new_sector->texture_info.tint =
             s2c(
-                sector_data->get_child_by_name("texture_tint")->
-                get_value_or_default("255 255 255")
+                sector_data->getChildByName("texture_tint")->
+                getValueOrDefault("255 255 255")
             );
             
         if(!new_sector->fade && !new_sector->is_bottomless_pit) {
@@ -1209,7 +1209,7 @@ void Area::load_geometry_from_data_node(
                 game.content.bitmaps.list.get(new_sector->texture_info.bmp_name, nullptr);
         }
         
-        DataNode* hazards_node = sector_data->get_child_by_name("hazards");
+        DataNode* hazards_node = sector_data->getChildByName("hazards");
         vector<string> hazards_strs =
             semicolon_list_to_vector(hazards_node->value);
         for(size_t h = 0; h < hazards_strs.size(); h++) {
@@ -1226,9 +1226,9 @@ void Area::load_geometry_from_data_node(
         new_sector->hazards_str = hazards_node->value;
         new_sector->hazard_floor =
             s2b(
-                sector_data->get_child_by_name(
+                sector_data->getChildByName(
                     "hazards_floor"
-                )->get_value_or_default("true")
+                )->getValueOrDefault("true")
             );
             
         sectors.push_back(new_sector);
@@ -1245,28 +1245,28 @@ void Area::load_geometry_from_data_node(
     
     vector<std::pair<size_t, size_t> > mob_links_buffer;
     size_t n_mobs =
-        node->get_child_by_name("mobs")->get_nr_of_children();
+        node->getChildByName("mobs")->getNrOfChildren();
         
     for(size_t m = 0; m < n_mobs; m++) {
     
         DataNode* mob_node =
-            node->get_child_by_name("mobs")->get_child(m);
+            node->getChildByName("mobs")->getChild(m);
             
         MobGen* mob_ptr = new MobGen();
         
-        mob_ptr->pos = s2p(mob_node->get_child_by_name("p")->value);
+        mob_ptr->pos = s2p(mob_node->getChildByName("p")->value);
         mob_ptr->angle =
             s2f(
-                mob_node->get_child_by_name("angle")->get_value_or_default("0")
+                mob_node->getChildByName("angle")->getValueOrDefault("0")
             );
-        mob_ptr->vars = mob_node->get_child_by_name("vars")->value;
+        mob_ptr->vars = mob_node->getChildByName("vars")->value;
         
         string category_name = mob_node->name;
         string type_name;
         MobCategory* category =
             game.mob_categories.get_from_internal_name(category_name);
         if(category) {
-            type_name = mob_node->get_child_by_name("type")->value;
+            type_name = mob_node->getChildByName("type")->value;
             mob_ptr->type = category->get_type(type_name);
         } else {
             category = game.mob_categories.get(MOB_CATEGORY_NONE);
@@ -1274,13 +1274,13 @@ void Area::load_geometry_from_data_node(
         }
         
         vector<string> link_strs =
-            split(mob_node->get_child_by_name("links")->value);
+            split(mob_node->getChildByName("links")->value);
         for(size_t l = 0; l < link_strs.size(); l++) {
             mob_links_buffer.push_back(std::make_pair(m, s2i(link_strs[l])));
         }
         
         DataNode* stored_inside_node =
-            mob_node->get_child_by_name("stored_inside");
+            mob_node->getChildByName("stored_inside");
         if(!stored_inside_node->value.empty()) {
             mob_ptr->stored_inside = s2i(stored_inside_node->value);
         }
@@ -1323,24 +1323,24 @@ void Area::load_geometry_from_data_node(
     }
     
     size_t n_stops =
-        node->get_child_by_name("path_stops")->get_nr_of_children();
+        node->getChildByName("path_stops")->getNrOfChildren();
     for(size_t s = 0; s < n_stops; s++) {
     
         DataNode* path_stop_node =
-            node->get_child_by_name("path_stops")->get_child(s);
+            node->getChildByName("path_stops")->getChild(s);
             
         PathStop* s_ptr = new PathStop();
         
-        s_ptr->pos = s2p(path_stop_node->get_child_by_name("pos")->value);
-        s_ptr->radius = s2f(path_stop_node->get_child_by_name("radius")->value);
-        s_ptr->flags = s2i(path_stop_node->get_child_by_name("flags")->value);
-        s_ptr->label = path_stop_node->get_child_by_name("label")->value;
-        DataNode* links_node = path_stop_node->get_child_by_name("links");
-        size_t n_links = links_node->get_nr_of_children();
+        s_ptr->pos = s2p(path_stop_node->getChildByName("pos")->value);
+        s_ptr->radius = s2f(path_stop_node->getChildByName("radius")->value);
+        s_ptr->flags = s2i(path_stop_node->getChildByName("flags")->value);
+        s_ptr->label = path_stop_node->getChildByName("label")->value;
+        DataNode* links_node = path_stop_node->getChildByName("links");
+        size_t n_links = links_node->getNrOfChildren();
         
         for(size_t l = 0; l < n_links; l++) {
         
-            string link_data = links_node->get_child(l)->value;
+            string link_data = links_node->getChild(l)->value;
             vector<string> link_data_parts = split(link_data);
             
             PathLink* l_struct =
@@ -1370,39 +1370,39 @@ void Area::load_geometry_from_data_node(
     }
     
     size_t n_shadows =
-        node->get_child_by_name("tree_shadows")->get_nr_of_children();
+        node->getChildByName("tree_shadows")->getNrOfChildren();
     for(size_t s = 0; s < n_shadows; s++) {
     
         DataNode* shadow_node =
-            node->get_child_by_name("tree_shadows")->get_child(s);
+            node->getChildByName("tree_shadows")->getChild(s);
             
         TreeShadow* s_ptr = new TreeShadow();
         
         vector<string> words =
-            split(shadow_node->get_child_by_name("pos")->value);
+            split(shadow_node->getChildByName("pos")->value);
         s_ptr->center.x = (words.size() >= 1 ? s2f(words[0]) : 0);
         s_ptr->center.y = (words.size() >= 2 ? s2f(words[1]) : 0);
         
-        words = split(shadow_node->get_child_by_name("size")->value);
+        words = split(shadow_node->getChildByName("size")->value);
         s_ptr->size.x = (words.size() >= 1 ? s2f(words[0]) : 0);
         s_ptr->size.y = (words.size() >= 2 ? s2f(words[1]) : 0);
         
         s_ptr->angle =
             s2f(
-                shadow_node->get_child_by_name(
+                shadow_node->getChildByName(
                     "angle"
-                )->get_value_or_default("0")
+                )->getValueOrDefault("0")
             );
         s_ptr->alpha =
             s2i(
-                shadow_node->get_child_by_name(
+                shadow_node->getChildByName(
                     "alpha"
-                )->get_value_or_default("255")
+                )->getValueOrDefault("255")
             );
-        s_ptr->bmp_name = shadow_node->get_child_by_name("file")->value;
+        s_ptr->bmp_name = shadow_node->getChildByName("file")->value;
         s_ptr->bitmap = game.content.bitmaps.list.get(s_ptr->bmp_name, nullptr);
         
-        words = split(shadow_node->get_child_by_name("sway")->value);
+        words = split(shadow_node->getChildByName("sway")->value);
         s_ptr->sway.x = (words.size() >= 1 ? s2f(words[0]) : 0);
         s_ptr->sway.y = (words.size() >= 2 ? s2f(words[1]) : 0);
         

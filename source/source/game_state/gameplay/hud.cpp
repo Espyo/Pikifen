@@ -143,7 +143,7 @@ Hud::Hud() :
     gui.register_coords("mission_fail_2_req",         90.5, 18.5, 13,  5);
     gui.register_coords("mission_fail_2_slash",         82, 18.5,  4,  5);
     gui.register_coords("mission_fail_2_name",          82,   20, 30,  8);
-    gui.read_coords(hud_file_node->get_child_by_name("positions"));
+    gui.read_coords(hud_file_node->getChildByName("positions"));
     
     //Leader health and icons.
     for(size_t l = 0; l < 3; l++) {
@@ -1377,13 +1377,13 @@ Hud::Hud() :
     }
     
     
-    DataNode* bitmaps_node = hud_file_node->get_child_by_name("files");
+    DataNode* bitmaps_node = hud_file_node->getChildByName("files");
     
 #define loader(var, name) \
     var = \
           game.content.bitmaps.list.get( \
-                                         bitmaps_node->get_child_by_name(name)->value, \
-                                         bitmaps_node->get_child_by_name(name) \
+                                         bitmaps_node->getChildByName(name)->value, \
+                                         bitmaps_node->getChildByName(name) \
                                        );
     
     loader(bmp_bubble,                 "bubble");

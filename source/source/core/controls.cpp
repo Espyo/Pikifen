@@ -71,14 +71,14 @@ PlayerInput ControlsMediator::allegro_event_to_input(
     case ALLEGRO_EVENT_KEY_DOWN:
     case ALLEGRO_EVENT_KEY_UP: {
         input.type = INPUT_TYPE_KEYBOARD_KEY;
-        input.button_nr = ev.keyboard.keycode;
+        input.buttonNr = ev.keyboard.keycode;
         input.value = (ev.type == ALLEGRO_EVENT_KEY_DOWN) ? 1 : 0;
         break;
         
     } case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
     case ALLEGRO_EVENT_MOUSE_BUTTON_UP: {
         input.type = INPUT_TYPE_MOUSE_BUTTON;
-        input.button_nr = ev.mouse.button;
+        input.buttonNr = ev.mouse.button;
         input.value = (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) ? 1 : 0;
         break;
         
@@ -101,8 +101,8 @@ PlayerInput ControlsMediator::allegro_event_to_input(
     } case ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN:
     case ALLEGRO_EVENT_JOYSTICK_BUTTON_UP: {
         input.type = INPUT_TYPE_CONTROLLER_BUTTON;
-        input.device_nr = game.controller_numbers[ev.joystick.id];
-        input.button_nr = ev.joystick.button;
+        input.deviceNr = game.controller_numbers[ev.joystick.id];
+        input.buttonNr = ev.joystick.button;
         input.value = (ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN) ? 1 : 0;
         break;
         
@@ -114,9 +114,9 @@ PlayerInput ControlsMediator::allegro_event_to_input(
             input.type = INPUT_TYPE_CONTROLLER_AXIS_NEG;
             input.value = -ev.joystick.pos;
         }
-        input.device_nr = game.controller_numbers[ev.joystick.id];
-        input.stick_nr = ev.joystick.stick;
-        input.axis_nr = ev.joystick.axis;
+        input.deviceNr = game.controller_numbers[ev.joystick.id];
+        input.stickNr = ev.joystick.stick;
+        input.axisNr = ev.joystick.axis;
         break;
     }
     }
@@ -146,7 +146,7 @@ ControlBind ControlsMediator::find_bind(
     const PLAYER_ACTION_TYPE action_type_id
 ) const {
     for(size_t b = 0; b < mgr.binds.size(); b++) {
-        if(mgr.binds[b].action_type_id == action_type_id) {
+        if(mgr.binds[b].actionTypeId == action_type_id) {
             return mgr.binds[b];
         }
     }
@@ -230,7 +230,7 @@ string ControlsMediator::get_player_action_type_internal_name(
 float ControlsMediator::get_player_action_type_value(
     PLAYER_ACTION_TYPE player_action_type_id
 ) {
-    return mgr.action_type_values[(int) player_action_type_id];
+    return mgr.actionTypeValues[(int) player_action_type_id];
 }
 
 
@@ -244,7 +244,7 @@ bool ControlsMediator::handle_allegro_event(const ALLEGRO_EVENT &ev) {
     PlayerInput input = allegro_event_to_input(ev);
     
     if(input.type != INPUT_TYPE_NONE) {
-        mgr.handle_input(input);
+        mgr.handleInput(input);
         return true;
     } else {
         return false;
@@ -264,9 +264,9 @@ string ControlsMediator::input_to_str(
 ) const {
     switch(i.type) {
     case INPUT_TYPE_KEYBOARD_KEY: {
-        return "k_" + i2s(i.button_nr);
+        return "k_" + i2s(i.buttonNr);
     } case INPUT_TYPE_MOUSE_BUTTON: {
-        return "mb_" + i2s(i.button_nr);
+        return "mb_" + i2s(i.buttonNr);
     } case INPUT_TYPE_MOUSE_WHEEL_UP: {
         return "mwu";
     } case INPUT_TYPE_MOUSE_WHEEL_DOWN: {
@@ -276,15 +276,15 @@ string ControlsMediator::input_to_str(
     } case INPUT_TYPE_MOUSE_WHEEL_RIGHT: {
         return "mwr";
     } case INPUT_TYPE_CONTROLLER_BUTTON: {
-        return "jb_" + i2s(i.device_nr) + "_" + i2s(i.button_nr);
+        return "jb_" + i2s(i.deviceNr) + "_" + i2s(i.buttonNr);
     } case INPUT_TYPE_CONTROLLER_AXIS_POS: {
         return
-            "jap_" + i2s(i.device_nr) +
-            "_" + i2s(i.stick_nr) + "_" + i2s(i.axis_nr);
+            "jap_" + i2s(i.deviceNr) +
+            "_" + i2s(i.stickNr) + "_" + i2s(i.axisNr);
     } case INPUT_TYPE_CONTROLLER_AXIS_NEG: {
         return
-            "jan_" + i2s(i.device_nr) +
-            "_" + i2s(i.stick_nr) + "_" + i2s(i.axis_nr);
+            "jan_" + i2s(i.deviceNr) +
+            "_" + i2s(i.stickNr) + "_" + i2s(i.axisNr);
     } default: {
         return "";
     }
@@ -299,7 +299,7 @@ string ControlsMediator::input_to_str(
  * @return The player actions.
  */
 vector<PlayerAction> ControlsMediator::new_frame() {
-    return mgr.new_frame();
+    return mgr.newFrame();
 }
 
 
@@ -308,7 +308,7 @@ vector<PlayerAction> ControlsMediator::new_frame() {
  * Useful for when the game state is changed, or the window is out of focus.
  */
 void ControlsMediator::release_all() {
-    for(auto &a : mgr.action_type_values) {
+    for(auto &a : mgr.actionTypeValues) {
         a.second = 0.0f;
     }
 }
@@ -344,12 +344,12 @@ PlayerInput ControlsMediator::str_to_input(
     if(parts[0] == "k" && n_parts >= 2) {
         //Keyboard.
         input.type = INPUT_TYPE_KEYBOARD_KEY;
-        input.button_nr = s2i(parts[1]);
+        input.buttonNr = s2i(parts[1]);
         
     } else if(parts[0] == "mb" && n_parts >= 2) {
         //Mouse button.
         input.type = INPUT_TYPE_MOUSE_BUTTON;
-        input.button_nr = s2i(parts[1]);
+        input.buttonNr = s2i(parts[1]);
         
     } else if(parts[0] == "mwu") {
         //Mouse wheel up.
@@ -370,22 +370,22 @@ PlayerInput ControlsMediator::str_to_input(
     } else if(parts[0] == "jb" && n_parts >= 3) {
         //Controller button.
         input.type = INPUT_TYPE_CONTROLLER_BUTTON;
-        input.device_nr = s2i(parts[1]);
-        input.button_nr = s2i(parts[2]);
+        input.deviceNr = s2i(parts[1]);
+        input.buttonNr = s2i(parts[2]);
         
     } else if(parts[0] == "jap" && n_parts >= 4) {
         //Controller stick axis, positive.
         input.type = INPUT_TYPE_CONTROLLER_AXIS_POS;
-        input.device_nr = s2i(parts[1]);
-        input.stick_nr = s2i(parts[2]);
-        input.axis_nr = s2i(parts[3]);
+        input.deviceNr = s2i(parts[1]);
+        input.stickNr = s2i(parts[2]);
+        input.axisNr = s2i(parts[3]);
         
     } else if(parts[0] == "jan" && n_parts >= 4) {
         //Controller stick axis, negative.
         input.type = INPUT_TYPE_CONTROLLER_AXIS_NEG;
-        input.device_nr = s2i(parts[1]);
-        input.stick_nr = s2i(parts[2]);
-        input.axis_nr = s2i(parts[3]);
+        input.deviceNr = s2i(parts[1]);
+        input.stickNr = s2i(parts[2]);
+        input.axisNr = s2i(parts[3]);
         
     } else {
         game.errors.report(

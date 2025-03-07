@@ -1150,7 +1150,7 @@ void mob_action_runners::get_event_info(MobActionRunData &data) {
         if(data.call->parent_event == MOB_EV_INPUT_RECEIVED) {
             *var =
                 game.controls.get_player_action_type_internal_name(
-                    ((PlayerAction*) (data.custom_data_1))->action_type_id
+                    ((PlayerAction*) (data.custom_data_1))->actionTypeId
                 );
         }
         break;
@@ -2515,8 +2515,8 @@ void load_actions(
     vector<MobActionCall*>* out_actions, bitmask_8_t* out_settings
 ) {
     if(out_settings) *out_settings = 0;
-    for(size_t a = 0; a < node->get_nr_of_children(); a++) {
-        DataNode* action_node = node->get_child(a);
+    for(size_t a = 0; a < node->getNrOfChildren(); a++) {
+        DataNode* action_node = node->getChild(a);
         if(
             out_settings && action_node->name == "custom_actions_after"
         ) {

@@ -55,7 +55,7 @@ void SpikeDamageType::load_from_data_node(DataNode* node) {
                 &game.content.particle_gen.list[particle_generator_name];
             particle_offset_pos =
                 s2p(
-                    node->get_child_by_name("particle_offset")->value,
+                    node->getChildByName("particle_offset")->value,
                     &particle_offset_z
                 );
         }

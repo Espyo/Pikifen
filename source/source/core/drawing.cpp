@@ -1368,15 +1368,15 @@ void get_player_input_icon_info(
     //Figure out if it's one of those that has a bitmap icon.
     //If so, just return that.
     if(i.type == INPUT_TYPE_MOUSE_BUTTON) {
-        if(i.button_nr == 1) {
+        if(i.buttonNr == 1) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
             *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_LMB;
             return;
-        } else if(i.button_nr == 2) {
+        } else if(i.buttonNr == 2) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
             *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_RMB;
             return;
-        } else if(i.button_nr == 3) {
+        } else if(i.buttonNr == 3) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
             *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_MMB;
             return;
@@ -1390,61 +1390,61 @@ void get_player_input_icon_info(
         *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_MWD;
         return;
     } else if(i.type == INPUT_TYPE_KEYBOARD_KEY) {
-        if(i.button_nr == ALLEGRO_KEY_UP) {
+        if(i.buttonNr == ALLEGRO_KEY_UP) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
             *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_UP;
             return;
-        } else if(i.button_nr == ALLEGRO_KEY_LEFT) {
+        } else if(i.buttonNr == ALLEGRO_KEY_LEFT) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
             *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_LEFT;
             return;
-        } else if(i.button_nr == ALLEGRO_KEY_DOWN) {
+        } else if(i.buttonNr == ALLEGRO_KEY_DOWN) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
             *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_DOWN;
             return;
-        } else if(i.button_nr == ALLEGRO_KEY_RIGHT) {
+        } else if(i.buttonNr == ALLEGRO_KEY_RIGHT) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
             *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_RIGHT;
             return;
-        } else if(i.button_nr == ALLEGRO_KEY_BACKSPACE) {
+        } else if(i.buttonNr == ALLEGRO_KEY_BACKSPACE) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
             *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_BACKSPACE;
             return;
         } else if(
             condensed &&
             (
-                i.button_nr == ALLEGRO_KEY_LSHIFT ||
-                i.button_nr == ALLEGRO_KEY_RSHIFT
+                i.buttonNr == ALLEGRO_KEY_LSHIFT ||
+                i.buttonNr == ALLEGRO_KEY_RSHIFT
             )
         ) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
             *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_SHIFT;
             return;
-        } else if(i.button_nr == ALLEGRO_KEY_TAB) {
+        } else if(i.buttonNr == ALLEGRO_KEY_TAB) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
             *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_TAB;
             return;
-        } else if(i.button_nr == ALLEGRO_KEY_ENTER) {
+        } else if(i.buttonNr == ALLEGRO_KEY_ENTER) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
             *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_ENTER;
             return;
         }
     } else if(i.type == INPUT_TYPE_CONTROLLER_AXIS_NEG && condensed) {
-        if(i.axis_nr == 0) {
+        if(i.axisNr == 0) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
             *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_STICK_LEFT;
             return;
-        } else if(i.axis_nr == 1) {
+        } else if(i.axisNr == 1) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
             *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_STICK_UP;
             return;
         }
     } else if(i.type == INPUT_TYPE_CONTROLLER_AXIS_POS && condensed) {
-        if(i.axis_nr == 0) {
+        if(i.axisNr == 0) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
             *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_STICK_RIGHT;
             return;
-        } else if(i.axis_nr == 1) {
+        } else if(i.axisNr == 1) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
             *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_STICK_DOWN;
             return;
@@ -1455,7 +1455,7 @@ void get_player_input_icon_info(
     switch(i.type) {
     case INPUT_TYPE_KEYBOARD_KEY: {
         *shape = PLAYER_INPUT_ICON_SHAPE_RECTANGLE;
-        *text = get_key_name(i.button_nr, condensed);
+        *text = get_key_name(i.buttonNr, condensed);
         break;
         
     } case INPUT_TYPE_CONTROLLER_AXIS_NEG:
@@ -1463,31 +1463,31 @@ void get_player_input_icon_info(
         *shape = PLAYER_INPUT_ICON_SHAPE_ROUNDED;
         if(!condensed) {
             *text =
-                "Pad " + i2s(i.device_nr + 1) +
-                " stick " + i2s(i.stick_nr + 1);
+                "Pad " + i2s(i.deviceNr + 1) +
+                " stick " + i2s(i.stickNr + 1);
             if(
-                i.axis_nr == 0 &&
+                i.axisNr == 0 &&
                 i.type == INPUT_TYPE_CONTROLLER_AXIS_NEG
             ) {
                 *text += " left";
             } else if(
-                i.axis_nr == 0 &&
+                i.axisNr == 0 &&
                 i.type == INPUT_TYPE_CONTROLLER_AXIS_POS
             ) {
                 *text += " right";
             } else if(
-                i.axis_nr == 1 &&
+                i.axisNr == 1 &&
                 i.type == INPUT_TYPE_CONTROLLER_AXIS_NEG
             ) {
                 *text += " up";
             } else if(
-                i.axis_nr == 1 &&
+                i.axisNr == 1 &&
                 i.type == INPUT_TYPE_CONTROLLER_AXIS_POS
             ) {
                 *text += " down";
             } else {
                 *text +=
-                    " axis " + i2s(i.axis_nr) +
+                    " axis " + i2s(i.axisNr) +
                     (
                         i.type == INPUT_TYPE_CONTROLLER_AXIS_NEG ?
                         "-" :
@@ -1496,7 +1496,7 @@ void get_player_input_icon_info(
             }
             
         } else {
-            *text = "Stick " + i2s(i.stick_nr);
+            *text = "Stick " + i2s(i.stickNr);
         }
         break;
         
@@ -1504,19 +1504,19 @@ void get_player_input_icon_info(
         *shape = PLAYER_INPUT_ICON_SHAPE_ROUNDED;
         if(!condensed) {
             *text =
-                "Pad " + i2s(i.device_nr + 1) +
-                " button " + i2s(i.button_nr + 1);
+                "Pad " + i2s(i.deviceNr + 1) +
+                " button " + i2s(i.buttonNr + 1);
         } else {
-            *text = i2s(i.button_nr + 1);
+            *text = i2s(i.buttonNr + 1);
         }
         break;
         
     } case INPUT_TYPE_MOUSE_BUTTON: {
         *shape = PLAYER_INPUT_ICON_SHAPE_ROUNDED;
         if(!condensed) {
-            *text = "Mouse button " + i2s(i.button_nr);
+            *text = "Mouse button " + i2s(i.buttonNr);
         } else {
-            *text = "M" + i2s(i.button_nr);
+            *text = "M" + i2s(i.buttonNr);
         }
         break;
         

@@ -313,10 +313,10 @@ void MobType::load_from_data_node(
     
     //Vulnerabilities.
     DataNode* vulnerabilities_node =
-        node->get_child_by_name("vulnerabilities");
-    for(size_t h = 0; h < vulnerabilities_node->get_nr_of_children(); h++) {
+        node->getChildByName("vulnerabilities");
+    for(size_t h = 0; h < vulnerabilities_node->getNrOfChildren(); h++) {
     
-        DataNode* vuln_node = vulnerabilities_node->get_child(h);
+        DataNode* vuln_node = vulnerabilities_node->getChild(h);
         auto hazard_it = game.content.hazards.list.find(vuln_node->name);
         vector<string> words = split(vuln_node->value);
         float percentage = default_vulnerability;
@@ -408,12 +408,12 @@ void MobType::load_from_data_node(
     
     //Spike damage vulnerabilities.
     DataNode* spike_damage_vuln_node =
-        node->get_child_by_name("spike_damage_vulnerabilities");
+        node->getChildByName("spike_damage_vulnerabilities");
     size_t n_sd_vuln =
-        spike_damage_vuln_node->get_nr_of_children();
+        spike_damage_vuln_node->getNrOfChildren();
     for(size_t v = 0; v < n_sd_vuln; v++) {
     
-        DataNode* vul_node = spike_damage_vuln_node->get_child(v);
+        DataNode* vul_node = spike_damage_vuln_node->getChild(v);
         auto sdv_it = game.content.spike_damage_types.list.find(vul_node->name);
         vector<string> words = split(vul_node->value);
         float percentage = 1.0f;
@@ -450,12 +450,12 @@ void MobType::load_from_data_node(
     
     //Status vulnerabilities.
     DataNode* status_vuln_node =
-        node->get_child_by_name("status_vulnerabilities");
+        node->getChildByName("status_vulnerabilities");
     size_t n_s_vuln =
-        status_vuln_node->get_nr_of_children();
+        status_vuln_node->getNrOfChildren();
     for(size_t v = 0; v < n_s_vuln; v++) {
     
-        DataNode* vul_node = status_vuln_node->get_child(v);
+        DataNode* vul_node = status_vuln_node->getChild(v);
         auto sv_it = game.content.status_types.list.find(vul_node->name);
         vector<string> words = split(vul_node->value);
         float percentage = 1.0f;
@@ -495,19 +495,19 @@ void MobType::load_from_data_node(
     }
     
     //Reaches.
-    DataNode* reaches_node = node->get_child_by_name("reaches");
-    size_t n_reaches = reaches_node->get_nr_of_children();
+    DataNode* reaches_node = node->getChildByName("reaches");
+    size_t n_reaches = reaches_node->getNrOfChildren();
     for(size_t r = 0; r < n_reaches; r++) {
     
         MobType::Reach new_reach;
-        new_reach.name = reaches_node->get_child(r)->name;
-        vector<string> r_strings = split(reaches_node->get_child(r)->value);
+        new_reach.name = reaches_node->getChild(r)->name;
+        vector<string> r_strings = split(reaches_node->getChild(r)->value);
         
         if(r_strings.size() != 2 && r_strings.size() != 4) {
             game.errors.report(
                 "Reach \"" + new_reach.name +
                 "\" isn't made up of 2 or 4 words!",
-                reaches_node->get_child(r)
+                reaches_node->getChild(r)
             );
             continue;
         }
@@ -522,11 +522,11 @@ void MobType::load_from_data_node(
     }
     
     //Spawns.
-    DataNode* spawns_node = node->get_child_by_name("spawns");
-    size_t n_spawns = spawns_node->get_nr_of_children();
+    DataNode* spawns_node = node->getChildByName("spawns");
+    size_t n_spawns = spawns_node->getNrOfChildren();
     for(size_t s = 0; s < n_spawns; s++) {
     
-        DataNode* spawn_node = spawns_node->get_child(s);
+        DataNode* spawn_node = spawns_node->getChild(s);
         ReaderSetter spawn_rs(spawn_node);
         MobType::SpawnInfo new_spawn;
         string coords_str;
@@ -550,11 +550,11 @@ void MobType::load_from_data_node(
     }
     
     //Children.
-    DataNode* children_node = node->get_child_by_name("children");
-    size_t n_children = children_node->get_nr_of_children();
+    DataNode* children_node = node->getChildByName("children");
+    size_t n_children = children_node->getNrOfChildren();
     for(size_t c = 0; c < n_children; c++) {
     
-        DataNode* child_node = children_node->get_child(c);
+        DataNode* child_node = children_node->getChild(c);
         ReaderSetter child_rs(child_node);
         MobType::Child new_child;
         
@@ -634,11 +634,11 @@ void MobType::load_from_data_node(
     }
     
     //Sounds.
-    DataNode* sounds_node = node->get_child_by_name("sounds");
-    size_t n_sounds = sounds_node->get_nr_of_children();
+    DataNode* sounds_node = node->getChildByName("sounds");
+    size_t n_sounds = sounds_node->getNrOfChildren();
     for(size_t s = 0; s < n_sounds; s++) {
     
-        DataNode* sound_node = sounds_node->get_child(s);
+        DataNode* sound_node = sounds_node->getChild(s);
         ReaderSetter sound_rs(sound_node);
         MobType::Sound new_sound;
         
@@ -719,11 +719,11 @@ void MobType::load_from_data_node(
     
     //Area editor properties.
     DataNode* ae_props_node =
-        node->get_child_by_name("area_editor_properties");
-    size_t n_ae_props = ae_props_node->get_nr_of_children();
+        node->getChildByName("area_editor_properties");
+    size_t n_ae_props = ae_props_node->getNrOfChildren();
     for(size_t p = 0; p < n_ae_props; p++) {
     
-        DataNode* prop_node = ae_props_node->get_child(p);
+        DataNode* prop_node = ae_props_node->getChild(p);
         ReaderSetter prop_rs(prop_node);
         string type_str;
         string list_str;
@@ -839,45 +839,45 @@ void MobType::load_from_data_node(
         anim_db->fill_sound_idx_caches(this);
         
         DataNode script_file;
-        script_file.load_file(folder_path + "/script.txt", true, true);
+        script_file.loadFile(folder_path + "/script.txt", true, true);
         size_t old_n_states = states.size();
         
         DataNode* death_state_name_node =
-            script_file.get_child_by_name("death_state");
+            script_file.getChildByName("death_state");
         dying_state_name = death_state_name_node->value;
         
         states_ignoring_death =
             semicolon_list_to_vector(
-                script_file.get_child_by_name("states_ignoring_death")->value
+                script_file.getChildByName("states_ignoring_death")->value
             );
             
         states_ignoring_spray =
             semicolon_list_to_vector(
-                script_file.get_child_by_name("states_ignoring_spray")->value
+                script_file.getChildByName("states_ignoring_spray")->value
             );
             
         states_ignoring_hazard =
             semicolon_list_to_vector(
-                script_file.get_child_by_name("states_ignoring_hazard")->value
+                script_file.getChildByName("states_ignoring_hazard")->value
             );
             
         //Load init actions.
         load_actions(
             this,
-            script_file.get_child_by_name("init"), &init_actions, nullptr
+            script_file.getChildByName("init"), &init_actions, nullptr
         );
         //Load the rest of the script.
         load_script(
             this,
-            script_file.get_child_by_name("script"),
-            script_file.get_child_by_name("global"),
+            script_file.getChildByName("script"),
+            script_file.getChildByName("global"),
             &states
         );
         
         if(states.size() > old_n_states) {
         
             DataNode* first_state_name_node =
-                script_file.get_child_by_name("first_state");
+                script_file.getChildByName("first_state");
             string first_state_name = first_state_name_node->value;
             
             for(size_t s = 0; s < states.size(); s++) {

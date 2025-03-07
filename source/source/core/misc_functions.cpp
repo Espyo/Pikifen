@@ -713,10 +713,10 @@ float get_wall_shadow_length(Edge* e_ptr) {
  */
 vector<std::pair<int, string> > get_weather_table(DataNode* node) {
     vector<std::pair<int, string> > table;
-    size_t n_points = node->get_nr_of_children();
+    size_t n_points = node->getNrOfChildren();
     
     for(size_t p = 0; p < n_points; p++) {
-        DataNode* point_node = node->get_child(p);
+        DataNode* point_node = node->getChild(p);
         table.push_back(make_pair(s2i(point_node->name), point_node->value));
     }
     
@@ -1219,7 +1219,7 @@ void save_maker_tools() {
         )
     );
     
-    file.save_file(FILE_PATHS_FROM_ROOT::MAKER_TOOLS, true, true);
+    file.saveFile(FILE_PATHS_FROM_ROOT::MAKER_TOOLS, true, true);
 }
 
 
@@ -1239,7 +1239,7 @@ void save_options() {
     save_editor_history(game.states.particle_ed, &file);
     
     //Finally, save.
-    file.save_file(FILE_PATHS_FROM_ROOT::OPTIONS, true, true);
+    file.saveFile(FILE_PATHS_FROM_ROOT::OPTIONS, true, true);
 }
 
 
@@ -1336,7 +1336,7 @@ void save_statistics() {
     
 #undef save
     
-    stats_file.save_file(FILE_PATHS_FROM_ROOT::STATISTICS, true, true, true);
+    stats_file.saveFile(FILE_PATHS_FROM_ROOT::STATISTICS, true, true, true);
 }
 
 

@@ -1237,11 +1237,11 @@ void Song::load_from_data_node(DataNode* node) {
     main_track =
         game.content.song_tracks.list.get(main_track_str, main_track_node);
         
-    DataNode* mix_tracks_node = node->get_child_by_name("mix_tracks");
-    size_t n_mix_tracks = mix_tracks_node->get_nr_of_children();
+    DataNode* mix_tracks_node = node->getChildByName("mix_tracks");
+    size_t n_mix_tracks = mix_tracks_node->getNrOfChildren();
     
     for(size_t m = 0; m < n_mix_tracks; m++) {
-        DataNode* mix_track_node = mix_tracks_node->get_child(m);
+        DataNode* mix_track_node = mix_tracks_node->getChild(m);
         MIX_TRACK_TYPE trigger = N_MIX_TRACK_TYPES;
         
         if(mix_track_node->name == "enemy") {

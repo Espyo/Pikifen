@@ -388,7 +388,7 @@ void ParticleEditor::load_part_gen_file(
     manifest.fill_from_path(path);
     DataNode file = DataNode(manifest.path);
     
-    if(!file.file_was_opened) {
+    if(!file.fileWasOpened) {
         open_message_dialog(
             "Load failed!",
             "Failed to load the particle generator file \"" +
@@ -788,7 +788,7 @@ bool ParticleEditor::save_part_gen() {
     DataNode file_node = DataNode("", "");
     loaded_gen.save_to_data_node(&file_node);
     
-    if(!file_node.save_file(manifest.path)) {
+    if(!file_node.saveFile(manifest.path)) {
         show_system_message_box(
             nullptr, "Save failed!",
             "Could not save the particle file!",
