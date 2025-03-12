@@ -45,7 +45,7 @@ Next tasks (roughly sorted most important first)
                 Mission failure item going down
                 Score ruler ticking after the player got (or lost?) some points
                 Reaching a new medal in the score ruler
-                Message character being typed out
+                Gameplay message character being typed out
             Results screen
                 Item run-up ticking
                 Item run-up finished
@@ -922,7 +922,7 @@ Misc things (so I don't forget)
         The ability to tint the background image
         Move it to the details section
         Foreground
-    Message pop-ups
+    Small gameplay messages
         Useful for making characters talk mid-mission, via scripting
         Also useful for stating that an obstacle was destroyed and stuff like that [PIKMIN 4]
     Areas should be able to include "decals", in the same vein as tree shadows. These are a lightweight way to add leaves, rocks, pebbles, sticks, etc. to the area's terrain without using sectors or objects
@@ -1080,7 +1080,7 @@ Tasks for later on (I might never implement these)
         HUD elements that aren't needed right now should be super-transparent. For example, in Metroid Prime, when there is no hazard danger, the meter on the right is barely visible, but is still there
         Make the menu highlighters move from one place to another gradually, based on how far it is (like the camera moves in-game)
         The music should change to swing for Louie
-        In message boxes, the "menu ok" input that makes it say the next message should oscillate in size
+        In gameplay message boxes, the "menu ok" input that makes it say the next message should oscillate in size
         Particles
             Splash particles for going in water
             [NEEDS BRAINSTORMING] Particles should have a "emits light?" property, right?
@@ -1141,7 +1141,7 @@ Tasks for later on (I might never implement these)
         Action groups for mob scripts (like functions)
             Not really necessary since you can just create an aux state to do those
     Possible solutions to known issues
-        Regarding true fullscreen crashing when a message box appears -- remove all native message boxes, and implement my own, or come up with alternative ways to supply the information
+        Regarding true fullscreen crashing when a system message box appears -- remove all native message boxes, and implement my own, or come up with alternative ways to supply the information
     Specific requested features
         An enemy that can heal, for instance, 20HP for each Pikmin eaten
         An attribute for Pikmin types that makes it possible to throw them farther/closer than standard

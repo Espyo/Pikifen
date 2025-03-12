@@ -2119,16 +2119,7 @@ void PauseMenu::init_mission_page() {
     mission_gui.add_item(mission_gui.back_item, "continue");
     
     //Continue input icon.
-    GuiItem* continue_input = new GuiItem();
-    continue_input->on_draw =
-    [this] (const DrawInfo & draw) {
-        if(!game.options.show_hud_input_icons) return;
-        PlayerInput i =
-            game.controls.find_bind(PLAYER_ACTION_TYPE_MENU_BACK).input;
-        if(i.type == INPUT_TYPE_NONE) return;
-        draw_player_input_icon(game.sys_content.fnt_slim, i, true, draw.center, draw.size);
-    };
-    mission_gui.add_item(continue_input, "continue_input");
+    gui_add_back_input_icon(&mission_gui, "continue_input");
     
     //Goal header text.
     TextGuiItem* goal_header_text =
@@ -2283,16 +2274,7 @@ void PauseMenu::init_radar_page() {
     radar_gui.add_item(radar_gui.back_item, "continue");
     
     //Continue input icon.
-    GuiItem* continue_input = new GuiItem();
-    continue_input->on_draw =
-    [this] (const DrawInfo & draw) {
-        if(!game.options.show_hud_input_icons) return;
-        PlayerInput i =
-            game.controls.find_bind(PLAYER_ACTION_TYPE_MENU_BACK).input;
-        if(i.type == INPUT_TYPE_NONE) return;
-        draw_player_input_icon(game.sys_content.fnt_slim, i, true, draw.center, draw.size);
-    };
-    radar_gui.add_item(continue_input, "continue_input");
+    gui_add_back_input_icon(&radar_gui, "continue_input");
     
     //Radar item.
     radar_item = new GuiItem();
@@ -2544,16 +2526,7 @@ void PauseMenu::init_status_page() {
     status_gui.add_item(status_gui.back_item, "continue");
     
     //Continue input icon.
-    GuiItem* continue_input = new GuiItem();
-    continue_input->on_draw =
-    [this] (const DrawInfo & draw) {
-        if(!game.options.show_hud_input_icons) return;
-        PlayerInput i =
-            game.controls.find_bind(PLAYER_ACTION_TYPE_MENU_BACK).input;
-        if(i.type == INPUT_TYPE_NONE) return;
-        draw_player_input_icon(game.sys_content.fnt_slim, i, true, draw.center, draw.size);
-    };
-    status_gui.add_item(continue_input, "continue_input");
+    gui_add_back_input_icon(&status_gui, "continue_input");
     
     //Pikmin list header box.
     ListGuiItem* list_header = new ListGuiItem();
