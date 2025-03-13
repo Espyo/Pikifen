@@ -32,7 +32,7 @@ reaches {
 
 sounds{
     thud {
-        file = thump
+        file = misc/thump
         speed = 160
         volume = 15
     }

@@ -11,7 +11,7 @@ emission{
 	circle_arc=6.2832
 }
 base{
-	bitmap=explosion_crater
+	bitmap=effects/explosion_crater
 	bitmap_angle=0.0000
 	duration=30.0000
 	friction=0.0000

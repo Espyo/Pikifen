@@ -17,17 +17,17 @@ show_health = false
 
 sounds {
     wood_hit {
-        file = wood_hit
+        file = misc/wood_hit
         volume = 20
         speed_deviation = 30
     }
     sticks {
-        file = sticks
+        file = misc/sticks
         speed_deviation = 10
         volume = 35
     }
     obstacle_cleared {
-        file = obstacle_cleared
+        file = gui/obstacle_cleared
         type = gameplay_global
     }
 }

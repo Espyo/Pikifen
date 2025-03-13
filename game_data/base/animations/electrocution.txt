@@ -14,13 +14,13 @@ animations{
 }
 sprites{
 	main_01{
-		file=electrocution
+		file=pikmin/electrocution
 		file_pos=0.0000 0.0000
 		file_size=60.0000 60.0000
 		scale=0.5000 0.5000
 	}
 	main_02{
-		file=electrocution
+		file=pikmin/electrocution
 		file_pos=61.0000 0.0000
 		file_size=60.0000 60.0000
 		scale=0.5000 0.5000

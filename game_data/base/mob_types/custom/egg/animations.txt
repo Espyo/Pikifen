@@ -30,7 +30,7 @@ animations{
 }
 sprites{
 	destroyed{
-		file=egg
+		file=other_mobs/egg
 		file_pos=50.0000 0.0000
 		file_size=24.0000 32.0000
 		scale=1.2000 1.2000
@@ -45,7 +45,7 @@ sprites{
 		}
 	}
 	stage_1_idling{
-		file=egg
+		file=other_mobs/egg
 		file_pos=0.0000 0.0000
 		file_size=24.0000 32.0000
 		hitboxes{
@@ -59,7 +59,7 @@ sprites{
 		}
 	}
 	stage_2_idling{
-		file=egg
+		file=other_mobs/egg
 		file_pos=25.0000 0.0000
 		file_size=24.0000 32.0000
 		hitboxes{
@@ -73,7 +73,7 @@ sprites{
 		}
 	}
 	stage_3_idling{
-		file=egg
+		file=other_mobs/egg
 		file_pos=50.0000 0.0000
 		file_size=24.0000 32.0000
 		hitboxes{

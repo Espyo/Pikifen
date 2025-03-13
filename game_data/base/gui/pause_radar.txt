@@ -26,7 +26,7 @@ files{
 	treasure=radar/treasure
 	enemy_alive=radar/enemy_alive
 	enemy_dead=radar/enemy_dead
-	leader_bubble=bubble
+	leader_bubble=effects/bubble
 	leader_x=radar/leader_x
 	obstacle=radar/obstacle
 	onion_skeleton=radar/onion_skeleton

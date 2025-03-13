@@ -34,13 +34,13 @@ reaches {
 
 sounds {
     step {
-        file = stomp_quick
+        file = misc/stomp_quick
         volume = 15
         speed = 160
         speed_deviation = 5
     }
     thump {
-        file = thump
+        file = misc/thump
         speed_deviation = 10
     }
 }

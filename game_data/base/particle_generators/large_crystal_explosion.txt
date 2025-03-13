@@ -13,7 +13,7 @@ emission{
 	circle_arc_rot=0.0000
 }
 base{
-	bitmap=crystal_nodule
+	bitmap=other_mobs/crystal_nodule
 	bitmap_angle=0.0000
 	duration=1.0000
 	friction=1.5000

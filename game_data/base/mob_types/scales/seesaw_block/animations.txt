@@ -168,7 +168,7 @@ animations{
 }
 sprites{
 	down_01{
-		file=seesaw_block
+		file=other_mobs/seesaw_block
 		file_pos=221.0000 0.0000
 		file_size=220.0000 180.0000
 		scale=0.9800 0.9800
@@ -183,7 +183,7 @@ sprites{
 		}
 	}
 	down_02{
-		file=seesaw_block
+		file=other_mobs/seesaw_block
 		file_pos=221.0000 0.0000
 		file_size=220.0000 180.0000
 		offset=1.0000 0.0000
@@ -199,7 +199,7 @@ sprites{
 		}
 	}
 	down_03{
-		file=seesaw_block
+		file=other_mobs/seesaw_block
 		file_pos=221.0000 0.0000
 		file_size=220.0000 180.0000
 		offset=-1.0000 1.0000
@@ -215,7 +215,7 @@ sprites{
 		}
 	}
 	down_04{
-		file=seesaw_block
+		file=other_mobs/seesaw_block
 		file_pos=221.0000 0.0000
 		file_size=220.0000 180.0000
 		offset=-1.0000 -1.0000
@@ -231,7 +231,7 @@ sprites{
 		}
 	}
 	up_01{
-		file=seesaw_block
+		file=other_mobs/seesaw_block
 		file_pos=0.0000 0.0000
 		file_size=220.0000 180.0000
 		scale=1.0100 1.0100
@@ -246,7 +246,7 @@ sprites{
 		}
 	}
 	up_02{
-		file=seesaw_block
+		file=other_mobs/seesaw_block
 		file_pos=0.0000 0.0000
 		file_size=220.0000 180.0000
 		offset=1.0000 0.0000
@@ -262,7 +262,7 @@ sprites{
 		}
 	}
 	up_03{
-		file=seesaw_block
+		file=other_mobs/seesaw_block
 		file_pos=0.0000 0.0000
 		file_size=220.0000 180.0000
 		offset=-1.0000 1.0000
@@ -278,7 +278,7 @@ sprites{
 		}
 	}
 	up_04{
-		file=seesaw_block
+		file=other_mobs/seesaw_block
 		file_pos=0.0000 0.0000
 		file_size=220.0000 180.0000
 		offset=-1.0000 -1.0000

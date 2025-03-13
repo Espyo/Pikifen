@@ -669,205 +669,205 @@ struct SystemContentNames {
     //Graphics.
     
     //Bright circle.
-    string bmp_bright_circle = "bright_circle";
+    string bmp_bright_circle = "effects/bright_circle";
     
     //Bright ring.
-    string bmp_bright_ring = "bright_ring";
+    string bmp_bright_ring = "effects/bright_ring";
     
     //Bubble box.
-    string bmp_bubble_box = "bubble_box";
+    string bmp_bubble_box = "gui/bubble_box";
     
     //9-slice texture for player input buttons.
-    string bmp_button_box = "button_box";
+    string bmp_button_box = "gui/button_box";
     
     //Checkbox with a checkmark.
-    string bmp_checkbox_check = "checkbox_check";
+    string bmp_checkbox_check = "gui/checkbox_check";
     
     //Checkbox without a checkmark.
-    string bmp_checkbox_no_check = "checkbox_no_check";
+    string bmp_checkbox_no_check = "gui/checkbox_no_check";
     
     //Leader cursor.
-    string bmp_cursor = "cursor";
+    string bmp_cursor = "gui/cursor";
     
     //Discord icon.
-    string bmp_discord_icon = "discord_icon";
+    string bmp_discord_icon = "gui/discord_icon";
     
     //Editor icons.
-    string bmp_editor_icons = "editor_icons";
+    string bmp_editor_icons = "gui/editor_icons";
     
     //Enemy spirit.
-    string bmp_enemy_spirit = "enemy_spirit";
+    string bmp_enemy_spirit = "effects/enemy_spirit";
     
     //GUI focus box.
-    string bmp_focus_box = "focus_box";
+    string bmp_focus_box = "gui/focus_box";
     
     //9-slice texture for GUI frames.
-    string bmp_frame_box = "frame_box";
+    string bmp_frame_box = "gui/frame_box";
     
     //GitHub icon.
-    string bmp_github_icon = "github_icon";
+    string bmp_github_icon = "gui/github_icon";
     
     //A hard bubble.
-    string bmp_hard_bubble = "hud/hard_bubble";
+    string bmp_hard_bubble = "gui/hard_bubble";
     
     //Pikifen icon.
-    string bmp_icon = "icon";
+    string bmp_icon = "gui/icon";
     
     //Idle glow.
-    string bmp_idle_glow = "idle_glow";
+    string bmp_idle_glow = "effects/idle_glow";
     
     //9-slice texture for player input keys.
-    string bmp_key_box = "key_box";
+    string bmp_key_box = "gui/key_box";
     
     //Leader silhouette from the side.
-    string bmp_leader_silhouette_side = "leader_silhouette_side";
+    string bmp_leader_silhouette_side = "gui/leader_silhouette_side";
     
     //Leader silhouette from the top.
-    string bmp_leader_silhouette_top = "leader_silhouette_top";
+    string bmp_leader_silhouette_top = "gui/leader_silhouette_top";
     
     //Bronze medal.
-    string bmp_medal_bronze = "medal_bronze";
+    string bmp_medal_bronze = "gui/medal_bronze";
     
     //Gold medal.
-    string bmp_medal_gold = "medal_gold";
+    string bmp_medal_gold = "gui/medal_gold";
     
     //No medal.
-    string bmp_medal_none = "medal_none";
+    string bmp_medal_none = "gui/medal_none";
     
     //Platinum medal.
-    string bmp_medal_platinum = "medal_platinum";
+    string bmp_medal_platinum = "gui/medal_platinum";
     
     //Silver medal.
-    string bmp_medal_silver = "medal_silver";
+    string bmp_medal_silver = "gui/medal_silver";
     
     //Icons for menu buttons.
-    string bmp_menu_icons = "menu_icons";
+    string bmp_menu_icons = "gui/menu_icons";
     
     //Mission clear stamp.
-    string bmp_mission_clear = "mission_clear";
+    string bmp_mission_clear = "gui/mission_clear";
     
     //Mission fail stamp.
-    string bmp_mission_fail = "mission_fail";
+    string bmp_mission_fail = "gui/mission_fail";
     
     //"More..." icon.
-    string bmp_more = "more";
+    string bmp_more = "gui/more";
     
     //Mouse cursor.
-    string bmp_mouse_cursor = "mouse_cursor";
+    string bmp_mouse_cursor = "gui/mouse_cursor";
     
     //Notification.
-    string bmp_notification = "notification";
+    string bmp_notification = "gui/notification";
     
     //Pikmin spirit.
-    string bmp_pikmin_spirit = "pikmin_spirit";
+    string bmp_pikmin_spirit = "effects/pikmin_spirit";
     
     //Misc. specific player input icons.
-    string bmp_player_input_icons = "player_input_icons";
+    string bmp_player_input_icons = "gui/player_input_icons";
     
     //Randomness symbol.
-    string bmp_random = "random";
+    string bmp_random = "gui/random";
     
     //A rock.
-    string bmp_rock = "rock";
+    string bmp_rock = "effects/rock";
     
     //Mob shadow.
-    string bmp_shadow = "shadow";
+    string bmp_shadow = "effects/shadow";
     
     //Rectangular mob shadow.
-    string bmp_shadow_square = "shadow_square";
+    string bmp_shadow_square = "effects/shadow_square";
     
     //Smack effect.
-    string bmp_smack = "smack";
+    string bmp_smack = "effects/smack";
     
     //Smoke.
-    string bmp_smoke = "smoke";
+    string bmp_smoke = "effects/smoke";
     
     //Sparkle effect.
-    string bmp_sparkle = "sparkle";
+    string bmp_sparkle = "effects/sparkle";
     
     //Spotlight for blackout.
-    string bmp_spotlight = "spotlight";
+    string bmp_spotlight = "effects/spotlight";
     
     //Swarm arrow.
-    string bmp_swarm_arrow = "swarm_arrow";
+    string bmp_swarm_arrow = "gui/swarm_arrow";
     
     //Invalid throw marker.
-    string bmp_throw_invalid = "throw_invalid";
+    string bmp_throw_invalid = "gui/throw_invalid";
     
     //Throw preview texture.
-    string bmp_throw_preview = "throw_preview";
+    string bmp_throw_preview = "gui/throw_preview";
     
     //Dashed throw preview texture.
-    string bmp_throw_preview_dashed = "throw_preview_dashed";
+    string bmp_throw_preview_dashed = "gui/throw_preview_dashed";
     
     //Title screen background.
-    string bmp_title_screen_bg = "title_screen_bg";
+    string bmp_title_screen_bg = "gui/title_screen_bg";
     
     //Wave ring.
-    string bmp_wave_ring = "wave_ring";
+    string bmp_wave_ring = "effects/wave_ring";
     
     //Fonts.
     
     //Font for area names.
-    string fnt_area_name = "area_name_font";
+    string fnt_area_name = "fonts/area_name";
     
     //Font for HUD counters.
-    string fnt_counter = "counter_font";
+    string fnt_counter = "fonts/counter";
     
     //Font displayed next to the cursor.
-    string fnt_cursor_counter = "cursor_counter_font";
+    string fnt_cursor_counter = "fonts/cursor_counter";
     
     //TTF Dear ImGui header font for editors.
-    string fnt_editor_header = "editor_header_font";
+    string fnt_editor_header = "fonts/editor_header";
     
     //TTF Dear ImGui monospace font for editors.
-    string fnt_editor_monospace = "editor_monospace_font";
+    string fnt_editor_monospace = "fonts/editor_monospace";
     
     //TTF Dear Imgui standard font for editors.
-    string fnt_editor_standard = "editor_standard_font";
+    string fnt_editor_standard = "fonts/editor_standard";
     
     //Font for slim text.
-    string fnt_slim = "slim_font";
+    string fnt_slim = "fonts/slim";
     
     //Font for standard text.
-    string fnt_standard = "font";
+    string fnt_standard = "fonts/standard";
     
     //Font for the carrying / money values.
-    string fnt_value = "value_font";
+    string fnt_value = "fonts/value";
     
     //Sound effects.
     
     //Attack.
-    string sound_attack = "attack";
+    string sound_attack = "effects/attack";
     
     //Camera zoom level.
-    string sound_camera = "camera";
+    string sound_camera = "gui/camera";
     
     //Menu item activation.
-    string sound_menu_activate = "menu_activate";
+    string sound_menu_activate = "gui/menu_activate";
     
     //Menu item back.
-    string sound_menu_back = "menu_back";
+    string sound_menu_back = "gui/menu_back";
     
     //Menu item selection.
-    string sound_menu_select = "menu_select";
+    string sound_menu_select = "gui/menu_select";
     
     //Switching standby Pikmin type.
-    string sound_switch_pikmin = "switch_pikmin";
+    string sound_switch_pikmin = "gui/switch_pikmin";
     
     //Songs.
     
     //Boss theme.
-    string sng_boss = "boss";
+    string sng_boss = "others/boss";
     
     //Boss victory theme.
-    string sng_boss_victory = "boss_victory";
+    string sng_boss_victory = "others/boss_victory";
     
     //Editors.
-    string sng_editors = "editors";
+    string sng_editors = "others/editors";
     
     //Menus.
-    string sng_menus = "menus";
+    string sng_menus = "others/menus";
     
     //Global animations.
     

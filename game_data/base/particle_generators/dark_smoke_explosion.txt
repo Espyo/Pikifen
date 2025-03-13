@@ -10,7 +10,7 @@ emission{
 	rect_inner_dist=0.0000 0.0000
 }
 base{
-	bitmap=smoke
+	bitmap=effects/smoke
 	bitmap_angle=0.0000
 	duration=1.0000
 	friction=1.2000

@@ -22,7 +22,7 @@ target_type = pikmin_obstacle
 
 sounds {
     ceramic_hit {
-        file = ceramic_hit
+        file = misc/ceramic_hit
         volume = 50
         speed = 80
         speed_deviation = 10

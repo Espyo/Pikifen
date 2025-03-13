@@ -31,7 +31,7 @@ reaches {
 
 sounds {
     shaking {
-        file = shaking
+        file = misc/shaking
         volume = 40
         speed = 140
     }

@@ -29,19 +29,19 @@ animations{
 }
 sprites{
 	bouncing_01{
-		file=bouncy_mushroom
+		file=other_mobs/bouncy_mushroom
 		file_pos=0.0000 0.0000
 		file_size=128.0000 128.0000
 		scale=0.9500 1.0500
 	}
 	bouncing_02{
-		file=bouncy_mushroom
+		file=other_mobs/bouncy_mushroom
 		file_pos=0.0000 0.0000
 		file_size=128.0000 128.0000
 		scale=1.0500 0.9500
 	}
 	idling{
-		file=bouncy_mushroom
+		file=other_mobs/bouncy_mushroom
 		file_pos=0.0000 0.0000
 		file_size=128.0000 128.0000
 	}

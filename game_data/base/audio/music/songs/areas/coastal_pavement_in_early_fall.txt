@@ -7,7 +7,7 @@ version = 1.0.0
 engine_version = 1.0.0
 notes = This song is an original creation for Pikifen.
 
-main_track = coastal_pavement_in_early_fall
+main_track = areas/coastal_pavement_in_early_fall
 mix_tracks {
-    enemy = coastal_pavement_in_early_fall_enemy
+    enemy = areas/coastal_pavement_in_early_fall_enemy
 }

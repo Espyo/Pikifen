@@ -9,7 +9,7 @@ animations{
 }
 sprites{
 	idling{
-		file=billiards_ball
+		file=treasures/billiards_ball
 		file_pos=0.0000 0.0000
 		file_size=100.0000 100.0000
 	}

@@ -4,7 +4,7 @@ description = A quiet freight worker from Hocotate. Acts in mysterious and somet
 acceleration = 500
 can_walk_on_others = true
 height = 46
-icon = louie_icon
+icon = leaders/louie_icon
 main_color = 34 17 238
 max_carriers = 5
 max_health = 2000
@@ -18,37 +18,37 @@ weight = 1
 
 sounds {
     dismissing {
-        file = louie_dismiss
+        file = leaders/louie_dismiss
     }
     name_call {
-        file = louie_name_call
+        file = leaders/louie_name_call
     }
     whistling {
-        file = louie_whistle
+        file = leaders/louie_whistle
     }
     footstep_1 {
-        file = footstep_1
+        file = leaders/footstep_1
         volume = 5
         volume_deviation = 3
         speed_deviation = 30
     }
     footstep_2 {
-        file = footstep_2
+        file = leaders/footstep_2
         volume = 5
         volume_deviation = 3
         speed_deviation = 30
     }
     spray {
-        file = spray
+        file = misc/spray
         speed_deviation = 5
         speed = 130
     }
     thump {
-        file = thump
+        file = misc/thump
         volume = 40
     }
     throw {
-        file = throw
+        file = effects/throw
         volume = 30
         speed_deviation = 5
         stack_mode = override

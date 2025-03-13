@@ -847,7 +847,7 @@ animations{
 }
 sprites{
 	attacking_01{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=206.0000 37.0000
 		file_size=26.0000 36.0000
 		offset=3.0000 -0.0153
@@ -874,7 +874,7 @@ sprites{
 		}
 	}
 	attacking_02{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=206.0000 37.0000
 		file_size=26.0000 36.0000
 		offset=3.5000 0.0000
@@ -901,7 +901,7 @@ sprites{
 		}
 	}
 	backflip_01{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=83.0000 111.0000
 		file_size=29.0000 36.0000
 		scale=0.5000 0.5000
@@ -927,7 +927,7 @@ sprites{
 		}
 	}
 	backflip_02{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=113.0000 111.0000
 		file_size=29.0000 36.0000
 		scale=0.5000 0.5000
@@ -953,7 +953,7 @@ sprites{
 		}
 	}
 	backflip_03{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=143.0000 111.0000
 		file_size=29.0000 36.0000
 		scale=0.5000 0.5000
@@ -979,7 +979,7 @@ sprites{
 		}
 	}
 	backflip_04{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=173.0000 111.0000
 		file_size=29.0000 36.0000
 		scale=0.5000 0.5000
@@ -1005,7 +1005,7 @@ sprites{
 		}
 	}
 	climbing_01{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=0.0000 148.0000
 		file_size=63.0000 30.0000
 		offset=8.5000 -5.0000
@@ -1032,7 +1032,7 @@ sprites{
 		}
 	}
 	climbing_02{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=64.0000 148.0000
 		file_size=63.0000 30.0000
 		offset=8.5000 -5.0000
@@ -1059,7 +1059,7 @@ sprites{
 		}
 	}
 	climbing_03{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=128.0000 148.0000
 		file_size=63.0000 30.0000
 		offset=8.5000 -5.0000
@@ -1086,7 +1086,7 @@ sprites{
 		}
 	}
 	crouching{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=0.0000 37.0000
 		file_size=28.0000 36.0000
 		offset=3.5000 0.0000
@@ -1113,7 +1113,7 @@ sprites{
 		}
 	}
 	crushed_01{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=0.0000 111.0000
 		file_size=82.0000 36.0000
 		offset=-8.0000 0.0000
@@ -1140,7 +1140,7 @@ sprites{
 		}
 	}
 	crushed_02{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=0.0000 111.0000
 		file_size=82.0000 36.0000
 		offset=-8.0000 0.0000
@@ -1167,7 +1167,7 @@ sprites{
 		}
 	}
 	crushed_03{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=0.0000 111.0000
 		file_size=82.0000 36.0000
 		offset=-0.5000 0.0000
@@ -1194,7 +1194,7 @@ sprites{
 		}
 	}
 	drinking_01{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=0.0000 37.0000
 		file_size=28.0000 36.0000
 		offset=4.0000 0.0000
@@ -1221,7 +1221,7 @@ sprites{
 		}
 	}
 	drinking_02{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=0.0000 37.0000
 		file_size=28.0000 36.0000
 		offset=3.0000 0.0000
@@ -1248,7 +1248,7 @@ sprites{
 		}
 	}
 	dying_01{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=54.0000 0.0000
 		file_size=48.0000 36.0000
 		offset=-6.3972 2.1816
@@ -1276,7 +1276,7 @@ sprites{
 		}
 	}
 	dying_02{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=199.0000 0.0000
 		file_size=24.0000 36.0000
 		offset=3.1913 1.9559
@@ -1304,7 +1304,7 @@ sprites{
 		}
 	}
 	dying_03{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=103.0000 0.0000
 		file_size=82.0000 36.0000
 		offset=-0.5000 0.0000
@@ -1331,7 +1331,7 @@ sprites{
 		}
 	}
 	flailing_01{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=105.0000 74.0000
 		file_size=27.0000 36.0000
 		offset=-0.5000 0.0000
@@ -1358,7 +1358,7 @@ sprites{
 		}
 	}
 	flailing_02{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=133.0000 74.0000
 		file_size=29.0000 36.0000
 		scale=0.5000 0.5000
@@ -1385,7 +1385,7 @@ sprites{
 		}
 	}
 	flailing_03{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=105.0000 74.0000
 		file_size=27.0000 36.0000
 		offset=-0.5000 0.0000
@@ -1412,7 +1412,7 @@ sprites{
 		}
 	}
 	flailing_04{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=133.0000 74.0000
 		file_size=29.0000 36.0000
 		scale=0.5000 -0.5000
@@ -1439,7 +1439,7 @@ sprites{
 		}
 	}
 	grabbing{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=134.0000 37.0000
 		file_size=28.0000 36.0000
 		scale=0.5000 0.5000
@@ -1465,7 +1465,7 @@ sprites{
 		}
 	}
 	grabbing_far{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=163.0000 37.0000
 		file_size=42.0000 36.0000
 		offset=-3.5000 0.0000
@@ -1492,7 +1492,7 @@ sprites{
 		}
 	}
 	grabbing_far_shake{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=163.0000 37.0000
 		file_size=42.0000 36.0000
 		offset=-4.5000 0.0000
@@ -1519,7 +1519,7 @@ sprites{
 		}
 	}
 	grabbing_walk_01{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=163.0000 74.0000
 		file_size=34.0000 36.0000
 		offset=-1.5000 0.0000
@@ -1546,7 +1546,7 @@ sprites{
 		}
 	}
 	grabbing_walk_02{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=163.0000 74.0000
 		file_size=34.0000 36.0000
 		offset=-1.5000 0.0000
@@ -1573,7 +1573,7 @@ sprites{
 		}
 	}
 	half_lying{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=54.0000 0.0000
 		file_size=48.0000 36.0000
 		offset=-5.0000 0.0000
@@ -1600,7 +1600,7 @@ sprites{
 		}
 	}
 	idling_01{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=0.0000 0.0000
 		file_size=20.0000 36.0000
 		scale=0.5000 0.5000
@@ -1626,7 +1626,7 @@ sprites{
 		}
 	}
 	idling_02{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=0.0000 0.0000
 		file_size=20.0000 36.0000
 		offset=0.5000 0.0000
@@ -1653,7 +1653,7 @@ sprites{
 		}
 	}
 	idling_03{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=0.0000 0.0000
 		file_size=20.0000 36.0000
 		offset=-0.5000 0.0000
@@ -1680,7 +1680,7 @@ sprites{
 		}
 	}
 	idling_big{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=0.0000 0.0000
 		file_size=20.0000 36.0000
 		scale=0.6500 0.6500
@@ -1706,7 +1706,7 @@ sprites{
 		}
 	}
 	idling_rev{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=0.0000 0.0000
 		file_size=20.0000 36.0000
 		scale=0.5000 -0.5000
@@ -1732,7 +1732,7 @@ sprites{
 		}
 	}
 	looking_around_01{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=0.0000 0.0000
 		file_size=20.0000 36.0000
 		scale=0.5000 0.5000
@@ -1759,7 +1759,7 @@ sprites{
 		}
 	}
 	looking_around_02{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=84.0000 74.0000
 		file_size=20.0000 36.0000
 		scale=0.5000 0.5000
@@ -1786,7 +1786,7 @@ sprites{
 		}
 	}
 	looking_around_03{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=84.0000 74.0000
 		file_size=20.0000 36.0000
 		scale=0.5000 0.5000
@@ -1813,7 +1813,7 @@ sprites{
 		}
 	}
 	looking_around_04{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=84.0000 74.0000
 		file_size=20.0000 36.0000
 		scale=0.5000 0.5000
@@ -1840,7 +1840,7 @@ sprites{
 		}
 	}
 	looking_around_05{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=84.0000 74.0000
 		file_size=20.0000 36.0000
 		scale=0.5000 0.5000
@@ -1867,7 +1867,7 @@ sprites{
 		}
 	}
 	looking_around_06{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=0.0000 0.0000
 		file_size=20.0000 36.0000
 		scale=0.5000 0.5000
@@ -1894,7 +1894,7 @@ sprites{
 		}
 	}
 	looking_around_07{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=0.0000 0.0000
 		file_size=20.0000 36.0000
 		scale=0.5000 -0.5000
@@ -1921,7 +1921,7 @@ sprites{
 		}
 	}
 	looking_around_08{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=0.0000 0.0000
 		file_size=20.0000 36.0000
 		scale=0.5000 -0.5000
@@ -1948,7 +1948,7 @@ sprites{
 		}
 	}
 	looking_around_09{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=84.0000 74.0000
 		file_size=20.0000 36.0000
 		scale=0.5000 -0.5000
@@ -1975,7 +1975,7 @@ sprites{
 		}
 	}
 	looking_around_10{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=84.0000 74.0000
 		file_size=20.0000 36.0000
 		scale=0.5000 -0.5000
@@ -2002,7 +2002,7 @@ sprites{
 		}
 	}
 	looking_around_11{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=84.0000 74.0000
 		file_size=20.0000 36.0000
 		scale=0.5000 -0.5000
@@ -2029,7 +2029,7 @@ sprites{
 		}
 	}
 	looking_around_12{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=0.0000 0.0000
 		file_size=20.0000 36.0000
 		scale=0.5000 -0.5000
@@ -2056,7 +2056,7 @@ sprites{
 		}
 	}
 	lounging_01{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=37.0000 74.0000
 		file_size=46.0000 28.0000
 		offset=2.0000 0.0000
@@ -2083,7 +2083,7 @@ sprites{
 		}
 	}
 	lounging_02{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=37.0000 74.0000
 		file_size=46.0000 28.0000
 		offset=2.0000 0.0000
@@ -2110,7 +2110,7 @@ sprites{
 		}
 	}
 	lounging_03{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=37.0000 74.0000
 		file_size=46.0000 28.0000
 		offset=2.0000 0.0000
@@ -2137,7 +2137,7 @@ sprites{
 		}
 	}
 	lying_01{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=103.0000 0.0000
 		file_size=82.0000 36.0000
 		offset=-8.0000 0.0000
@@ -2164,7 +2164,7 @@ sprites{
 		}
 	}
 	lying_02{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=103.0000 0.0000
 		file_size=82.0000 36.0000
 		offset=-8.0000 0.0000
@@ -2191,7 +2191,7 @@ sprites{
 		}
 	}
 	lying_squashed_01{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=103.0000 0.0000
 		file_size=82.0000 36.0000
 		offset=-8.0000 0.0000
@@ -2218,7 +2218,7 @@ sprites{
 		}
 	}
 	lying_squashed_02{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=103.0000 0.0000
 		file_size=82.0000 36.0000
 		offset=-8.0000 0.0000
@@ -2245,7 +2245,7 @@ sprites{
 		}
 	}
 	mid_bend{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=199.0000 0.0000
 		file_size=24.0000 36.0000
 		offset=2.5000 0.0000
@@ -2272,7 +2272,7 @@ sprites{
 		}
 	}
 	mob_landing{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=134.0000 37.0000
 		file_size=28.0000 36.0000
 		offset=2.0000 0.0000
@@ -2299,7 +2299,7 @@ sprites{
 		}
 	}
 	picking_up{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=0.0000 37.0000
 		file_size=28.0000 36.0000
 		offset=5.0000 0.0000
@@ -2326,7 +2326,7 @@ sprites{
 		}
 	}
 	shaking_01{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=0.0000 37.0000
 		file_size=28.0000 36.0000
 		offset=3.5000 2.5000
@@ -2354,7 +2354,7 @@ sprites{
 		}
 	}
 	shaking_02{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=0.0000 37.0000
 		file_size=28.0000 36.0000
 		offset=3.5000 -2.5000
@@ -2382,7 +2382,7 @@ sprites{
 		}
 	}
 	shaking_03{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=199.0000 0.0000
 		file_size=24.0000 36.0000
 		offset=3.0000 -2.0000
@@ -2410,7 +2410,7 @@ sprites{
 		}
 	}
 	shaking_04{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=199.0000 0.0000
 		file_size=24.0000 36.0000
 		offset=3.0000 2.0000
@@ -2438,7 +2438,7 @@ sprites{
 		}
 	}
 	shaking_05{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=0.0000 0.0000
 		file_size=20.0000 36.0000
 		offset=2.0000 -1.0000
@@ -2466,7 +2466,7 @@ sprites{
 		}
 	}
 	shaking_06{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=0.0000 0.0000
 		file_size=20.0000 36.0000
 		offset=2.0000 0.5000
@@ -2494,7 +2494,7 @@ sprites{
 		}
 	}
 	sighing_01{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=0.0000 37.0000
 		file_size=28.0000 36.0000
 		offset=3.0000 1.8504
@@ -2522,7 +2522,7 @@ sprites{
 		}
 	}
 	sighing_02{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=0.0000 37.0000
 		file_size=28.0000 36.0000
 		offset=3.0000 -1.8500
@@ -2550,7 +2550,7 @@ sprites{
 		}
 	}
 	sighing_03{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=0.0000 0.0000
 		file_size=20.0000 36.0000
 		offset=2.6583 0.0000
@@ -2577,7 +2577,7 @@ sprites{
 		}
 	}
 	sitting_01{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=0.0000 74.0000
 		file_size=36.0000 36.0000
 		offset=-3.0000 0.0000
@@ -2604,7 +2604,7 @@ sprites{
 		}
 	}
 	sitting_02{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=0.0000 74.0000
 		file_size=36.0000 36.0000
 		offset=-3.0000 0.0000
@@ -2631,7 +2631,7 @@ sprites{
 		}
 	}
 	sitting_03{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=0.0000 74.0000
 		file_size=36.0000 36.0000
 		offset=-3.0000 0.0000
@@ -2658,7 +2658,7 @@ sprites{
 		}
 	}
 	sliding_01{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=54.0000 0.0000
 		file_size=48.0000 36.0000
 		offset=-8.0000 0.0000
@@ -2685,7 +2685,7 @@ sprites{
 		}
 	}
 	sliding_02{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=54.0000 0.0000
 		file_size=48.0000 36.0000
 		offset=-9.0000 0.0000
@@ -2712,7 +2712,7 @@ sprites{
 		}
 	}
 	sprout_01{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=186.0000 0.0000
 		file_size=12.0000 12.0000
 		scale=0.5000 0.5000
@@ -2738,7 +2738,7 @@ sprites{
 		}
 	}
 	sprout_02{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=186.0000 0.0000
 		file_size=12.0000 12.0000
 		scale=0.5000 0.5000
@@ -2764,7 +2764,7 @@ sprites{
 		}
 	}
 	sprout_03{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=186.0000 0.0000
 		file_size=12.0000 12.0000
 		scale=0.5000 0.5000
@@ -2790,7 +2790,7 @@ sprites{
 		}
 	}
 	thrown_01{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=0.0000 37.0000
 		file_size=28.0000 36.0000
 		scale=0.5000 0.5000
@@ -2816,7 +2816,7 @@ sprites{
 		}
 	}
 	thrown_02{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=29.0000 37.0000
 		file_size=34.0000 36.0000
 		scale=0.5000 0.5000
@@ -2842,7 +2842,7 @@ sprites{
 		}
 	}
 	thrown_03{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=64.0000 37.0000
 		file_size=32.0000 36.0000
 		scale=0.5000 0.5000
@@ -2868,7 +2868,7 @@ sprites{
 		}
 	}
 	thrown_04{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=97.0000 37.0000
 		file_size=36.0000 36.0000
 		scale=0.5000 0.5000
@@ -2894,7 +2894,7 @@ sprites{
 		}
 	}
 	twirling_01{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=0.0000 0.0000
 		file_size=20.0000 36.0000
 		scale=0.5000 0.5000
@@ -2921,7 +2921,7 @@ sprites{
 		}
 	}
 	twirling_02{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=0.0000 0.0000
 		file_size=20.0000 36.0000
 		scale=0.5000 0.5000
@@ -2948,7 +2948,7 @@ sprites{
 		}
 	}
 	twirling_03{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=0.0000 0.0000
 		file_size=20.0000 36.0000
 		scale=0.5000 0.5000
@@ -2975,7 +2975,7 @@ sprites{
 		}
 	}
 	twirling_04{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=0.0000 0.0000
 		file_size=20.0000 36.0000
 		scale=0.5000 0.5000
@@ -3002,7 +3002,7 @@ sprites{
 		}
 	}
 	twirling_05{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=0.0000 0.0000
 		file_size=20.0000 36.0000
 		scale=0.5000 0.5000
@@ -3029,7 +3029,7 @@ sprites{
 		}
 	}
 	twirling_06{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=0.0000 0.0000
 		file_size=20.0000 36.0000
 		scale=0.5000 0.5000
@@ -3056,7 +3056,7 @@ sprites{
 		}
 	}
 	twirling_07{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=0.0000 0.0000
 		file_size=20.0000 36.0000
 		scale=0.5000 0.5000
@@ -3082,7 +3082,7 @@ sprites{
 		}
 	}
 	walking_01{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=21.0000 0.0000
 		file_size=32.0000 36.0000
 		scale=0.5000 0.5000
@@ -3108,7 +3108,7 @@ sprites{
 		}
 	}
 	walking_02{
-		file=yellow_pikmin
+		file=pikmin/yellow
 		file_pos=21.0000 0.0000
 		file_size=32.0000 36.0000
 		offset=-0.5000 0.0000

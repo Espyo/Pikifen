@@ -13,7 +13,7 @@ emission{
 	circle_arc_rot=0.0000
 }
 base{
-	bitmap=line_blurred
+	bitmap=effects/line_blurred
 	bitmap_angle=0.0000
 	bitmap_angle_type=1
 	duration=2.0000

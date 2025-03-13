@@ -6,7 +6,7 @@ version = 1.0.0
 engine_version = 1.0.0
 notes = This song is an original creation for Pikifen.
 
-main_track = frosty_breath
+main_track = areas/frosty_breath
 mix_tracks {
-    enemy = frosty_breath_enemy
+    enemy = areas/frosty_breath_enemy
 }

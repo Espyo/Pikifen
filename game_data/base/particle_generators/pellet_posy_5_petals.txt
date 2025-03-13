@@ -14,7 +14,7 @@ emission{
 	evenly_spread=1.0000
 }
 base{
-	bitmap=pellet_posy_petal
+	bitmap=other_mobs/pellet_posy_petal
 	bitmap_angle=0.0000
 	bitmap_angle_type=1
 	duration=2.0000

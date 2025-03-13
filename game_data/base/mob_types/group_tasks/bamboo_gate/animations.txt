@@ -65,47 +65,47 @@ animations{
 }
 sprites{
 	closed{
-		file=bamboo_gate
+		file=other_mobs/bamboo_gate
 		file_pos=0.0000 58.0000
 		file_size=32.0000 192.0000
 	}
 	open_01{
-		file=bamboo_gate
+		file=other_mobs/bamboo_gate
 		file_pos=33.0000 58.0000
 		file_size=32.0000 192.0000
 	}
 	open_02{
-		file=bamboo_gate
+		file=other_mobs/bamboo_gate
 		file_pos=33.0000 58.0000
 		file_size=32.0000 192.0000
 		offset=1.0000 0.0000
 	}
 	open_03{
-		file=bamboo_gate
+		file=other_mobs/bamboo_gate
 		file_pos=33.0000 58.0000
 		file_size=32.0000 192.0000
 		offset=2.0000 0.0000
 	}
 	open_04{
-		file=bamboo_gate
+		file=other_mobs/bamboo_gate
 		file_pos=33.0000 58.0000
 		file_size=32.0000 192.0000
 		offset=-1.0000 0.0000
 	}
 	open_05{
-		file=bamboo_gate
+		file=other_mobs/bamboo_gate
 		file_pos=33.0000 58.0000
 		file_size=32.0000 192.0000
 		offset=-2.0000 0.0000
 	}
 	rattling_01{
-		file=bamboo_gate
+		file=other_mobs/bamboo_gate
 		file_pos=0.0000 58.0000
 		file_size=32.0000 192.0000
 		offset=0.0000 1.0000
 	}
 	rattling_02{
-		file=bamboo_gate
+		file=other_mobs/bamboo_gate
 		file_pos=0.0000 58.0000
 		file_size=32.0000 192.0000
 		offset=0.0000 -1.0000

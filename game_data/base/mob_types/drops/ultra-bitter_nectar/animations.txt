@@ -69,34 +69,34 @@ animations{
 }
 sprites{
 	bumped_01{
-		file=ultra-bitter_nectar
+		file=other_mobs/ultra-bitter_nectar
 		file_pos=0.0000 0.0000
 		file_size=40.0000 40.0000
 		scale=0.9700 1.0300
 	}
 	bumped_02{
-		file=ultra-bitter_nectar
+		file=other_mobs/ultra-bitter_nectar
 		file_pos=0.0000 0.0000
 		file_size=40.0000 40.0000
 		scale=1.0300 0.9700
 	}
 	idling{
-		file=ultra-bitter_nectar
+		file=other_mobs/ultra-bitter_nectar
 		file_pos=0.0000 0.0000
 		file_size=40.0000 40.0000
 	}
 	landing_01{
-		file=ultra-bitter_nectar
+		file=other_mobs/ultra-bitter_nectar
 		file_pos=41.0000 0.0000
 		file_size=44.0000 40.0000
 	}
 	landing_02{
-		file=ultra-bitter_nectar
+		file=other_mobs/ultra-bitter_nectar
 		file_pos=86.0000 0.0000
 		file_size=48.0000 40.0000
 	}
 	landing_03{
-		file=ultra-bitter_nectar
+		file=other_mobs/ultra-bitter_nectar
 		file_pos=135.0000 0.0000
 		file_size=44.0000 40.0000
 	}

@@ -14,7 +14,7 @@ emission{
 	evenly_spread=0.0000
 }
 base{
-	bitmap=smoke
+	bitmap=effects/smoke
 	bitmap_angle=0.0000
 	bitmap_angle_type=0
 	duration=0.6000

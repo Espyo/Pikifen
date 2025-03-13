@@ -53,7 +53,7 @@ spawns {
 
 sounds {
     thud {
-        file = stomp_quick
+        file = misc/stomp_quick
         volume = 70
         speed = 80
         speed_deviation = 5

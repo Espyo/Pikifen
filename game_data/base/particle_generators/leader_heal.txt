@@ -14,7 +14,7 @@ emission{
 	evenly_spread=0.0000
 }
 base{
-	bitmap=sparkle
+	bitmap=effects/sparkle
 	bitmap_angle=0.0000
 	bitmap_angle_type=0
 	duration=3.0000

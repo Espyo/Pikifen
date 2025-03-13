@@ -46,7 +46,7 @@ animations{
 }
 sprites{
 	destroyed{
-		file=boulder
+		file=other_mobs/boulder
 		file_pos=0.0000 0.0000
 		file_size=0.0000 0.0000
 		hitboxes{
@@ -62,7 +62,7 @@ sprites{
 		}
 	}
 	growing_01{
-		file=boulder
+		file=other_mobs/boulder
 		file_pos=0.0000 0.0000
 		file_size=64.0000 64.0000
 		scale=0.3500 0.3500
@@ -79,7 +79,7 @@ sprites{
 		}
 	}
 	growing_02{
-		file=boulder
+		file=other_mobs/boulder
 		file_pos=65.0000 0.0000
 		file_size=64.0000 64.0000
 		scale=0.6300 0.6300
@@ -96,7 +96,7 @@ sprites{
 		}
 	}
 	growing_03{
-		file=boulder
+		file=other_mobs/boulder
 		file_pos=130.0000 0.0000
 		file_size=64.0000 64.0000
 		scale=0.8800 0.8800
@@ -113,7 +113,7 @@ sprites{
 		}
 	}
 	rolling_01{
-		file=boulder
+		file=other_mobs/boulder
 		file_pos=0.0000 0.0000
 		file_size=64.0000 64.0000
 		hitboxes{
@@ -129,7 +129,7 @@ sprites{
 		}
 	}
 	rolling_02{
-		file=boulder
+		file=other_mobs/boulder
 		file_pos=65.0000 0.0000
 		file_size=64.0000 64.0000
 		hitboxes{
@@ -145,7 +145,7 @@ sprites{
 		}
 	}
 	rolling_03{
-		file=boulder
+		file=other_mobs/boulder
 		file_pos=130.0000 0.0000
 		file_size=64.0000 64.0000
 		hitboxes{
@@ -161,7 +161,7 @@ sprites{
 		}
 	}
 	rolling_04{
-		file=boulder
+		file=other_mobs/boulder
 		file_pos=195.0000 0.0000
 		file_size=64.0000 64.0000
 		hitboxes{
@@ -177,7 +177,7 @@ sprites{
 		}
 	}
 	rolling_05{
-		file=boulder
+		file=other_mobs/boulder
 		file_pos=260.0000 0.0000
 		file_size=64.0000 64.0000
 		hitboxes{
@@ -193,7 +193,7 @@ sprites{
 		}
 	}
 	rolling_06{
-		file=boulder
+		file=other_mobs/boulder
 		file_pos=325.0000 0.0000
 		file_size=64.0000 64.0000
 		hitboxes{

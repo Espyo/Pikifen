@@ -843,7 +843,7 @@ animations{
 }
 sprites{
 	arms_out_01{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=0.0000 144.0000
 		file_size=28.0000 48.0000
 		scale=0.5000 0.5000
@@ -869,7 +869,7 @@ sprites{
 		}
 	}
 	arms_out_02{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=0.0000 144.0000
 		file_size=28.0000 48.0000
 		offset=0.5000 0.0000
@@ -896,7 +896,7 @@ sprites{
 		}
 	}
 	arms_out_03{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=0.0000 144.0000
 		file_size=28.0000 48.0000
 		offset=-0.5000 0.0000
@@ -923,7 +923,7 @@ sprites{
 		}
 	}
 	climbing_01{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=29.0000 159.0000
 		file_size=60.0000 29.0000
 		offset=6.0000 -5.0000
@@ -950,7 +950,7 @@ sprites{
 		}
 	}
 	climbing_02{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=90.0000 159.0000
 		file_size=60.0000 29.0000
 		offset=6.0000 -5.0000
@@ -977,7 +977,7 @@ sprites{
 		}
 	}
 	climbing_03{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=151.0000 159.0000
 		file_size=60.0000 29.0000
 		offset=6.0000 -5.0000
@@ -1004,7 +1004,7 @@ sprites{
 		}
 	}
 	crouching{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=13.0000 60.0000
 		file_size=35.0000 26.0000
 		offset=4.0000 0.0000
@@ -1031,7 +1031,7 @@ sprites{
 		}
 	}
 	crushed_01{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=154.0000 0.0000
 		file_size=82.0000 52.0000
 		offset=-8.0000 0.0000
@@ -1058,7 +1058,7 @@ sprites{
 		}
 	}
 	crushed_02{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=154.0000 0.0000
 		file_size=82.0000 52.0000
 		offset=-8.0000 0.0000
@@ -1085,7 +1085,7 @@ sprites{
 		}
 	}
 	crushed_03{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=154.0000 0.0000
 		file_size=82.0000 52.0000
 		offset=-0.5000 0.0000
@@ -1112,7 +1112,7 @@ sprites{
 		}
 	}
 	drinking_01{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=13.0000 60.0000
 		file_size=35.0000 26.0000
 		offset=4.5000 0.0000
@@ -1139,7 +1139,7 @@ sprites{
 		}
 	}
 	drinking_02{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=13.0000 60.0000
 		file_size=35.0000 26.0000
 		offset=3.5000 0.0000
@@ -1166,7 +1166,7 @@ sprites{
 		}
 	}
 	dying_01{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=103.0000 0.0000
 		file_size=50.0000 52.0000
 		offset=-6.3972 2.1816
@@ -1194,7 +1194,7 @@ sprites{
 		}
 	}
 	dying_02{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=0.0000 91.0000
 		file_size=27.0000 26.0000
 		offset=3.1913 1.9559
@@ -1222,7 +1222,7 @@ sprites{
 		}
 	}
 	dying_03{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=154.0000 0.0000
 		file_size=82.0000 52.0000
 		offset=-0.5000 0.0000
@@ -1249,7 +1249,7 @@ sprites{
 		}
 	}
 	flailing_01{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=71.0000 120.0000
 		file_size=28.0000 38.0000
 		offset=-0.5000 0.0000
@@ -1276,7 +1276,7 @@ sprites{
 		}
 	}
 	flailing_02{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=100.0000 120.0000
 		file_size=33.0000 38.0000
 		scale=0.5000 0.5000
@@ -1303,7 +1303,7 @@ sprites{
 		}
 	}
 	flailing_03{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=134.0000 120.0000
 		file_size=33.0000 38.0000
 		scale=0.5000 0.5000
@@ -1330,7 +1330,7 @@ sprites{
 		}
 	}
 	grabbing{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=146.0000 53.0000
 		file_size=32.0000 28.0000
 		offset=1.0000 0.0000
@@ -1357,7 +1357,7 @@ sprites{
 		}
 	}
 	grabbing_far{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=0.0000 193.0000
 		file_size=46.0000 28.0000
 		offset=-2.5000 0.0000
@@ -1384,7 +1384,7 @@ sprites{
 		}
 	}
 	grabbing_shake{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=0.0000 193.0000
 		file_size=46.0000 28.0000
 		offset=-3.5000 0.0000
@@ -1411,7 +1411,7 @@ sprites{
 		}
 	}
 	grabbing_walk_01{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=183.0000 91.0000
 		file_size=36.0000 28.0000
 		scale=0.5000 0.5000
@@ -1437,7 +1437,7 @@ sprites{
 		}
 	}
 	grabbing_walk_02{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=183.0000 120.0000
 		file_size=36.0000 28.0000
 		scale=0.5000 0.5000
@@ -1463,7 +1463,7 @@ sprites{
 		}
 	}
 	half_lying{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=103.0000 0.0000
 		file_size=50.0000 52.0000
 		offset=-3.0000 0.1594
@@ -1490,7 +1490,7 @@ sprites{
 		}
 	}
 	idling_01{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=0.0000 0.0000
 		file_size=28.0000 28.0000
 		scale=0.5000 0.5000
@@ -1516,7 +1516,7 @@ sprites{
 		}
 	}
 	idling_02{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=0.0000 0.0000
 		file_size=28.0000 28.0000
 		offset=0.5000 0.0000
@@ -1543,7 +1543,7 @@ sprites{
 		}
 	}
 	idling_03{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=0.0000 0.0000
 		file_size=28.0000 28.0000
 		offset=-0.5000 0.0000
@@ -1570,7 +1570,7 @@ sprites{
 		}
 	}
 	idling_big{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=0.0000 0.0000
 		file_size=28.0000 28.0000
 		scale=0.6500 0.6500
@@ -1596,7 +1596,7 @@ sprites{
 		}
 	}
 	looking_around_01{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=0.0000 0.0000
 		file_size=28.0000 28.0000
 		scale=0.5000 0.5000
@@ -1623,7 +1623,7 @@ sprites{
 		}
 	}
 	looking_around_02{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=125.0000 91.0000
 		file_size=28.0000 28.0000
 		scale=0.5000 0.5000
@@ -1650,7 +1650,7 @@ sprites{
 		}
 	}
 	looking_around_03{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=125.0000 91.0000
 		file_size=28.0000 28.0000
 		scale=0.5000 0.5000
@@ -1677,7 +1677,7 @@ sprites{
 		}
 	}
 	looking_around_04{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=125.0000 91.0000
 		file_size=28.0000 28.0000
 		scale=0.5000 0.5000
@@ -1704,7 +1704,7 @@ sprites{
 		}
 	}
 	looking_around_05{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=125.0000 91.0000
 		file_size=28.0000 28.0000
 		scale=0.5000 0.5000
@@ -1731,7 +1731,7 @@ sprites{
 		}
 	}
 	looking_around_06{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=0.0000 0.0000
 		file_size=28.0000 28.0000
 		scale=0.5000 0.5000
@@ -1758,7 +1758,7 @@ sprites{
 		}
 	}
 	looking_around_07{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=0.0000 0.0000
 		file_size=28.0000 28.0000
 		scale=0.5000 0.5000
@@ -1785,7 +1785,7 @@ sprites{
 		}
 	}
 	looking_around_08{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=0.0000 0.0000
 		file_size=28.0000 28.0000
 		scale=0.5000 0.5000
@@ -1812,7 +1812,7 @@ sprites{
 		}
 	}
 	looking_around_09{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=154.0000 91.0000
 		file_size=28.0000 28.0000
 		scale=0.5000 0.5000
@@ -1839,7 +1839,7 @@ sprites{
 		}
 	}
 	looking_around_10{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=154.0000 91.0000
 		file_size=28.0000 28.0000
 		scale=0.5000 0.5000
@@ -1866,7 +1866,7 @@ sprites{
 		}
 	}
 	looking_around_11{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=154.0000 91.0000
 		file_size=28.0000 28.0000
 		scale=0.5000 0.5000
@@ -1893,7 +1893,7 @@ sprites{
 		}
 	}
 	looking_around_12{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=0.0000 0.0000
 		file_size=28.0000 28.0000
 		scale=0.5000 0.5000
@@ -1920,7 +1920,7 @@ sprites{
 		}
 	}
 	lounging_01{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=71.0000 91.0000
 		file_size=53.0000 27.0000
 		offset=2.0000 0.0000
@@ -1947,7 +1947,7 @@ sprites{
 		}
 	}
 	lounging_02{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=71.0000 91.0000
 		file_size=53.0000 27.0000
 		offset=2.0000 0.0000
@@ -1974,7 +1974,7 @@ sprites{
 		}
 	}
 	lounging_03{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=71.0000 91.0000
 		file_size=53.0000 27.0000
 		offset=2.0000 0.0000
@@ -2001,7 +2001,7 @@ sprites{
 		}
 	}
 	lunging{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=179.0000 53.0000
 		file_size=51.0000 30.0000
 		offset=4.0000 0.0000
@@ -2028,7 +2028,7 @@ sprites{
 		}
 	}
 	lunging_hit{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=179.0000 53.0000
 		file_size=51.0000 30.0000
 		offset=4.0000 0.0000
@@ -2058,7 +2058,7 @@ sprites{
 		}
 	}
 	lying_01{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=154.0000 0.0000
 		file_size=82.0000 52.0000
 		offset=-6.0000 0.0477
@@ -2085,7 +2085,7 @@ sprites{
 		}
 	}
 	lying_02{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=154.0000 0.0000
 		file_size=82.0000 52.0000
 		offset=-6.0000 0.0000
@@ -2112,7 +2112,7 @@ sprites{
 		}
 	}
 	lying_squashed_01{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=154.0000 0.0000
 		file_size=82.0000 52.0000
 		offset=-6.0000 0.0477
@@ -2139,7 +2139,7 @@ sprites{
 		}
 	}
 	lying_squashed_02{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=154.0000 0.0000
 		file_size=82.0000 52.0000
 		offset=-6.0000 0.0477
@@ -2166,7 +2166,7 @@ sprites{
 		}
 	}
 	mid_bend{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=0.0000 91.0000
 		file_size=27.0000 26.0000
 		offset=3.0000 0.0000
@@ -2193,7 +2193,7 @@ sprites{
 		}
 	}
 	picking_up{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=13.0000 60.0000
 		file_size=35.0000 26.0000
 		offset=5.5000 0.0000
@@ -2220,7 +2220,7 @@ sprites{
 		}
 	}
 	pressed{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=49.0000 60.0000
 		file_size=35.0000 30.0000
 		scale=0.5000 0.5000
@@ -2246,7 +2246,7 @@ sprites{
 		}
 	}
 	shaking_01{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=13.0000 60.0000
 		file_size=35.0000 26.0000
 		offset=3.5000 2.5000
@@ -2274,7 +2274,7 @@ sprites{
 		}
 	}
 	shaking_02{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=13.0000 60.0000
 		file_size=35.0000 26.0000
 		offset=3.5000 -2.5000
@@ -2302,7 +2302,7 @@ sprites{
 		}
 	}
 	shaking_03{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=0.0000 91.0000
 		file_size=27.0000 26.0000
 		offset=3.0000 -2.0000
@@ -2330,7 +2330,7 @@ sprites{
 		}
 	}
 	shaking_04{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=0.0000 91.0000
 		file_size=27.0000 26.0000
 		offset=3.0000 2.0000
@@ -2358,7 +2358,7 @@ sprites{
 		}
 	}
 	shaking_05{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=0.0000 0.0000
 		file_size=28.0000 28.0000
 		offset=2.0000 -1.0000
@@ -2386,7 +2386,7 @@ sprites{
 		}
 	}
 	shaking_06{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=0.0000 0.0000
 		file_size=28.0000 28.0000
 		offset=2.0000 0.5000
@@ -2414,7 +2414,7 @@ sprites{
 		}
 	}
 	sighing_01{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=13.0000 60.0000
 		file_size=35.0000 26.0000
 		offset=3.5000 2.0000
@@ -2442,7 +2442,7 @@ sprites{
 		}
 	}
 	sighing_02{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=13.0000 60.0000
 		file_size=35.0000 26.0000
 		offset=3.5000 -2.0000
@@ -2470,7 +2470,7 @@ sprites{
 		}
 	}
 	sighing_03{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=0.0000 0.0000
 		file_size=28.0000 28.0000
 		offset=2.6583 0.0000
@@ -2497,7 +2497,7 @@ sprites{
 		}
 	}
 	sitting_01{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=28.0000 91.0000
 		file_size=42.0000 52.0000
 		offset=-3.0000 0.0000
@@ -2524,7 +2524,7 @@ sprites{
 		}
 	}
 	sitting_02{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=28.0000 91.0000
 		file_size=42.0000 52.0000
 		offset=-3.0000 0.0000
@@ -2551,7 +2551,7 @@ sprites{
 		}
 	}
 	sitting_03{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=28.0000 91.0000
 		file_size=42.0000 52.0000
 		offset=-3.0000 0.0000
@@ -2578,7 +2578,7 @@ sprites{
 		}
 	}
 	sliding_01{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=103.0000 0.0000
 		file_size=50.0000 52.0000
 		offset=-6.0000 0.0000
@@ -2605,7 +2605,7 @@ sprites{
 		}
 	}
 	sliding_02{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=103.0000 0.0000
 		file_size=50.0000 52.0000
 		offset=-7.0000 0.0000
@@ -2632,7 +2632,7 @@ sprites{
 		}
 	}
 	sprout_01{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=0.0000 58.0000
 		file_size=12.0000 12.0000
 		scale=0.5000 0.5000
@@ -2658,7 +2658,7 @@ sprites{
 		}
 	}
 	sprout_02{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=0.0000 58.0000
 		file_size=12.0000 12.0000
 		scale=0.5000 0.5000
@@ -2684,7 +2684,7 @@ sprites{
 		}
 	}
 	sprout_03{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=0.0000 58.0000
 		file_size=12.0000 12.0000
 		scale=0.5000 0.5000
@@ -2710,7 +2710,7 @@ sprites{
 		}
 	}
 	thrown_01{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=0.0000 29.0000
 		file_size=28.0000 28.0000
 		scale=0.5000 0.5000
@@ -2736,7 +2736,7 @@ sprites{
 		}
 	}
 	thrown_02{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=29.0000 29.0000
 		file_size=42.0000 30.0000
 		scale=0.5000 0.5000
@@ -2762,7 +2762,7 @@ sprites{
 		}
 	}
 	thrown_03{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=72.0000 29.0000
 		file_size=28.0000 28.0000
 		scale=0.5000 0.5000
@@ -2788,7 +2788,7 @@ sprites{
 		}
 	}
 	thrown_04{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=101.0000 53.0000
 		file_size=44.0000 34.0000
 		scale=0.5000 0.5000
@@ -2814,7 +2814,7 @@ sprites{
 		}
 	}
 	twirling_01{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=0.0000 144.0000
 		file_size=28.0000 48.0000
 		scale=0.5000 0.5000
@@ -2841,7 +2841,7 @@ sprites{
 		}
 	}
 	twirling_02{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=0.0000 144.0000
 		file_size=28.0000 48.0000
 		scale=0.5000 0.5000
@@ -2868,7 +2868,7 @@ sprites{
 		}
 	}
 	twirling_03{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=0.0000 144.0000
 		file_size=28.0000 48.0000
 		scale=0.5000 0.5000
@@ -2895,7 +2895,7 @@ sprites{
 		}
 	}
 	twirling_04{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=0.0000 144.0000
 		file_size=28.0000 48.0000
 		scale=0.5000 0.5000
@@ -2922,7 +2922,7 @@ sprites{
 		}
 	}
 	twirling_05{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=0.0000 144.0000
 		file_size=28.0000 48.0000
 		scale=0.5000 0.5000
@@ -2949,7 +2949,7 @@ sprites{
 		}
 	}
 	twirling_06{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=0.0000 144.0000
 		file_size=28.0000 48.0000
 		scale=0.5000 0.5000
@@ -2976,7 +2976,7 @@ sprites{
 		}
 	}
 	twirling_07{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=0.0000 144.0000
 		file_size=28.0000 48.0000
 		scale=0.5000 0.5000
@@ -3002,7 +3002,7 @@ sprites{
 		}
 	}
 	walking_01{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=29.0000 0.0000
 		file_size=36.0000 28.0000
 		scale=0.5000 0.5000
@@ -3028,7 +3028,7 @@ sprites{
 		}
 	}
 	walking_02{
-		file=rock_pikmin
+		file=pikmin/rock
 		file_pos=66.0000 0.0000
 		file_size=36.0000 28.0000
 		scale=0.5000 0.5000

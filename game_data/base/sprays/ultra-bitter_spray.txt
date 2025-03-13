@@ -7,5 +7,5 @@ color = 128 0 255
 distance_range = 128
 effects = petrified
 group = false
-icon = ultra-bitter_spray
+icon = other_mobs/ultra-bitter_spray
 ingredients = 10

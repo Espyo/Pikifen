@@ -92,7 +92,7 @@ spawns {
 
 sounds{
     dying {
-        file = plant_dying
+        file = misc/plant_dying
         volume = 10
         speed = 135
     }

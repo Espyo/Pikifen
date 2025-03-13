@@ -4,7 +4,7 @@ description = President of Hocotate Freight from Hocotate. Treats his employees 
 acceleration = 500
 can_walk_on_others = true
 height = 46
-icon = president_icon
+icon = leaders/president_icon
 main_color = 238 238 34
 max_carriers = 5
 max_health = 2000
@@ -18,37 +18,37 @@ weight = 1
 
 sounds {
     dismissing {
-        file = president_dismiss
+        file = leaders/president_dismiss
     }
     name_call {
-        file = president_name_call
+        file = leaders/president_name_call
     }
     whistling {
-        file = president_whistle
+        file = leaders/president_whistle
     }
     footstep_1 {
-        file = footstep_1
+        file = leaders/footstep_1
         volume = 5
         volume_deviation = 3
         speed_deviation = 30
     }
     footstep_2 {
-        file = footstep_2
+        file = leaders/footstep_2
         volume = 5
         volume_deviation = 3
         speed_deviation = 30
     }
     spray {
-        file = spray
+        file = misc/spray
         speed_deviation = 5
         speed = 130
     }
     thump {
-        file = thump
+        file = misc/thump
         volume = 45
     }
     throw {
-        file = throw
+        file = effects/throw
         volume = 30
         speed_deviation = 5
         stack_mode = override

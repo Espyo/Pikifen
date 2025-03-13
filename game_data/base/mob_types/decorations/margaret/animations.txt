@@ -47,37 +47,37 @@ animations{
 }
 sprites{
 	bumped_01{
-		file=margaret
+		file=decorations/margaret
 		file_pos=0.0000 300.0000
 		file_size=116.0000 99.0000
 	}
 	bumped_02{
-		file=margaret
+		file=decorations/margaret
 		file_pos=0.0000 400.0000
 		file_size=116.0000 99.0000
 	}
 	bumped_03{
-		file=margaret
+		file=decorations/margaret
 		file_pos=0.0000 500.0000
 		file_size=116.0000 99.0000
 	}
 	bumped_04{
-		file=margaret
+		file=decorations/margaret
 		file_pos=0.0000 600.0000
 		file_size=116.0000 99.0000
 	}
 	idling_01{
-		file=margaret
+		file=decorations/margaret
 		file_pos=0.0000 0.0000
 		file_size=116.0000 99.0000
 	}
 	idling_02{
-		file=margaret
+		file=decorations/margaret
 		file_pos=0.0000 100.0000
 		file_size=116.0000 99.0000
 	}
 	idling_03{
-		file=margaret
+		file=decorations/margaret
 		file_pos=0.0000 200.0000
 		file_size=116.0000 99.0000
 	}

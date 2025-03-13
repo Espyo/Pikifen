@@ -23,31 +23,31 @@ animations{
 }
 sprites{
 	main_01{
-		file=fire
+		file=effects/fire
 		file_pos=0.0000 0.0000
 		file_size=24.0000 50.0000
 		offset=0.0000 -9.0000
 	}
 	main_02{
-		file=fire
+		file=effects/fire
 		file_pos=26.0000 0.0000
 		file_size=24.0000 50.0000
 		offset=0.0000 -9.0000
 	}
 	main_03{
-		file=fire
+		file=effects/fire
 		file_pos=52.0000 0.0000
 		file_size=24.0000 50.0000
 		offset=0.0000 -9.0000
 	}
 	main_04{
-		file=fire
+		file=effects/fire
 		file_pos=78.0000 0.0000
 		file_size=24.0000 50.0000
 		offset=0.0000 -9.0000
 	}
 	main_05{
-		file=fire
+		file=effects/fire
 		file_pos=104.0000 0.0000
 		file_size=24.0000 50.0000
 		offset=0.0000 -9.0000

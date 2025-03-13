@@ -12,12 +12,12 @@ riders = leaders
 
 sounds {
     steam {
-        file = steam
+        file = misc/steam
         loop = true
         volume = 35
     }
     fountain {
-        file = fountain
+        file = misc/fountain
         type = ambiance_pos
         loop = true
         volume = 5

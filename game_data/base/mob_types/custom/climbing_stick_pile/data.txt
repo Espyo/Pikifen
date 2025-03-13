@@ -13,13 +13,13 @@ team = obstacle
 
 sounds {
     sticks {
-        file = sticks
+        file = misc/sticks
         speed_deviation = 10
         volume = 30
         stack_min_pos = 0.25
     }
     obstacle_cleared {
-        file = obstacle_cleared
+        file = gui/obstacle_cleared
         type = gameplay_global
     }
 }

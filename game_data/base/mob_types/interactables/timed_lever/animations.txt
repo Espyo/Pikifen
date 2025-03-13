@@ -39,7 +39,7 @@ animations{
 }
 sprites{
 	flipping_off{
-		file=timed_lever
+		file=other_mobs/timed_lever
 		file_pos=65.0000 33.0000
 		file_size=64.0000 32.0000
 		hitboxes{
@@ -53,7 +53,7 @@ sprites{
 		}
 	}
 	flipping_on{
-		file=timed_lever
+		file=other_mobs/timed_lever
 		file_pos=65.0000 0.0000
 		file_size=64.0000 32.0000
 		hitboxes{
@@ -67,7 +67,7 @@ sprites{
 		}
 	}
 	off{
-		file=timed_lever
+		file=other_mobs/timed_lever
 		file_pos=0.0000 0.0000
 		file_size=64.0000 32.0000
 		hitboxes{
@@ -81,7 +81,7 @@ sprites{
 		}
 	}
 	on_01{
-		file=timed_lever
+		file=other_mobs/timed_lever
 		file_pos=0.0000 33.0000
 		file_size=64.0000 32.0000
 		hitboxes{
@@ -95,7 +95,7 @@ sprites{
 		}
 	}
 	on_02{
-		file=timed_lever
+		file=other_mobs/timed_lever
 		file_pos=0.0000 66.0000
 		file_size=64.0000 32.0000
 		hitboxes{
@@ -109,7 +109,7 @@ sprites{
 		}
 	}
 	on_03{
-		file=timed_lever
+		file=other_mobs/timed_lever
 		file_pos=65.0000 66.0000
 		file_size=64.0000 32.0000
 		hitboxes{

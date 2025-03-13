@@ -9,7 +9,7 @@ animations{
 }
 sprites{
 	idling{
-		file=seesaw_block
+		file=other_mobs/seesaw_block
 		file_pos=442.0000 0.0000
 		file_size=220.0000 180.0000
 		angle=3.1416

@@ -33,33 +33,33 @@ reaches {
 
 sounds {
     step {
-        file = stomp_quick
+        file = misc/stomp_quick
         volume = 15
         speed = 160
         speed_deviation = 5
     }
     bite {
-        file = bite
+        file = misc/bite
         volume = 40
         speed = 120
     }
     chew {
-        file = bite
+        file = misc/bite
         volume = 20
         speed = 110
     }
     shaking {
-        file = shaking
+        file = misc/shaking
         volume = 40
     }
     swallow {
-        file = swallow
+        file = misc/swallow
         volume = 20
         speed = 110
         speed_deviation = 20
     }
     thud {
-        file = thump
+        file = misc/thump
         speed = 160
         volume = 15
     }

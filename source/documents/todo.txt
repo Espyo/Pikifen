@@ -6,7 +6,9 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    
+    "Winged pikmin sometimes retain the mud effect even after leaving it, can be reset after tossing them into it and whistling. Might have to do with picking something up while in a hazard" -- Helodity
+    "Bulborbs can not be carried under automatic gates" -- Helodity
+    Spraying with Louie is playing the throw sound, and the particles just poof out of existence
 
     --- 0.26 ---
     Revamp sounds

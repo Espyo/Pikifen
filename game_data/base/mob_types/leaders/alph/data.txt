@@ -4,7 +4,7 @@ description = A young engineer from Koppai. Has a lot of passion for his job.
 acceleration = 800
 can_walk_on_others = true
 height = 46
-icon = alph_icon
+icon = leaders/alph_icon
 main_color = 17 238 238
 max_carriers = 5
 max_health = 2000
@@ -18,34 +18,34 @@ weight = 1
 
 sounds {
     dismissing {
-        file = olimar_dismiss
+        file = leaders/olimar_dismiss
     }
     whistling {
-        file = olimar_whistle
+        file = leaders/olimar_whistle
     }
     footstep_1 {
-        file = footstep_1
+        file = leaders/footstep_1
         volume = 5
         volume_deviation = 3
         speed_deviation = 30
     }
     footstep_2 {
-        file = footstep_2
+        file = leaders/footstep_2
         volume = 5
         volume_deviation = 3
         speed_deviation = 30
     }
     spray {
-        file = spray
+        file = misc/spray
         speed_deviation = 5
         speed = 130
     }
     thump {
-        file = thump
+        file = misc/thump
         volume = 40
     }
     throw {
-        file = throw
+        file = effects/throw
         volume = 30
         speed_deviation = 5
         stack_mode = override

@@ -294,7 +294,7 @@ animations{
 }
 sprites{
 	crumbling_01{
-		file=beady_long_legs
+		file=enemies/beady_long_legs
 		file_pos=0.0000 143.0000
 		file_size=278.0000 142.0000
 		hitboxes{
@@ -336,7 +336,7 @@ sprites{
 		}
 	}
 	crumbling_02{
-		file=beady_long_legs
+		file=enemies/beady_long_legs
 		file_pos=279.0000 143.0000
 		file_size=278.0000 142.0000
 		tint=255 255 255 207
@@ -379,7 +379,7 @@ sprites{
 		}
 	}
 	crumbling_03{
-		file=beady_long_legs
+		file=enemies/beady_long_legs
 		file_pos=558.0000 143.0000
 		file_size=210.0000 142.0000
 		tint=255 255 255 159
@@ -422,7 +422,7 @@ sprites{
 		}
 	}
 	crumbling_04{
-		file=beady_long_legs
+		file=enemies/beady_long_legs
 		file_pos=0.0000 286.0000
 		file_size=210.0000 142.0000
 		tint=255 255 255 111
@@ -465,7 +465,7 @@ sprites{
 		}
 	}
 	crumbling_05{
-		file=beady_long_legs
+		file=enemies/beady_long_legs
 		file_pos=211.0000 286.0000
 		file_size=210.0000 142.0000
 		tint=255 255 255 63
@@ -508,7 +508,7 @@ sprites{
 		}
 	}
 	idling{
-		file=beady_long_legs
+		file=enemies/beady_long_legs
 		file_pos=0.0000 0.0000
 		file_size=142.0000 142.0000
 		hitboxes{
@@ -551,7 +551,7 @@ sprites{
 		}
 	}
 	invisible{
-		file=beady_long_legs
+		file=enemies/beady_long_legs
 		file_pos=0.0000 0.0000
 		file_size=142.0000 142.0000
 		tint=255 255 255 0
@@ -595,7 +595,7 @@ sprites{
 		}
 	}
 	limb{
-		file=beady_long_legs
+		file=enemies/beady_long_legs
 		file_pos=0.0000 429.0000
 		file_size=234.0000 24.0000
 		hitboxes{
@@ -637,7 +637,7 @@ sprites{
 		}
 	}
 	limb_crumbling_01{
-		file=beady_long_legs
+		file=enemies/beady_long_legs
 		file_pos=0.0000 454.0000
 		file_size=234.0000 24.0000
 		hitboxes{
@@ -679,7 +679,7 @@ sprites{
 		}
 	}
 	limb_crumbling_02{
-		file=beady_long_legs
+		file=enemies/beady_long_legs
 		file_pos=235.0000 454.0000
 		file_size=234.0000 24.0000
 		tint=255 255 255 207
@@ -722,7 +722,7 @@ sprites{
 		}
 	}
 	limb_crumbling_03{
-		file=beady_long_legs
+		file=enemies/beady_long_legs
 		file_pos=470.0000 454.0000
 		file_size=234.0000 24.0000
 		tint=255 255 255 159
@@ -765,7 +765,7 @@ sprites{
 		}
 	}
 	limb_crumbling_04{
-		file=beady_long_legs
+		file=enemies/beady_long_legs
 		file_pos=0.0000 479.0000
 		file_size=234.0000 24.0000
 		tint=255 255 255 111
@@ -808,7 +808,7 @@ sprites{
 		}
 	}
 	limb_crumbling_05{
-		file=beady_long_legs
+		file=enemies/beady_long_legs
 		file_pos=235.0000 479.0000
 		file_size=234.0000 24.0000
 		tint=255 255 255 63
@@ -851,7 +851,7 @@ sprites{
 		}
 	}
 	opening_01{
-		file=beady_long_legs
+		file=enemies/beady_long_legs
 		file_pos=143.0000 0.0000
 		file_size=210.0000 142.0000
 		hitboxes{
@@ -893,7 +893,7 @@ sprites{
 		}
 	}
 	opening_02{
-		file=beady_long_legs
+		file=enemies/beady_long_legs
 		file_pos=354.0000 0.0000
 		file_size=278.0000 142.0000
 		hitboxes{
@@ -935,7 +935,7 @@ sprites{
 		}
 	}
 	resting_01{
-		file=beady_long_legs
+		file=enemies/beady_long_legs
 		file_pos=0.0000 0.0000
 		file_size=142.0000 142.0000
 		scale=0.9700 0.9700
@@ -979,7 +979,7 @@ sprites{
 		}
 	}
 	resting_02{
-		file=beady_long_legs
+		file=enemies/beady_long_legs
 		file_pos=0.0000 0.0000
 		file_size=142.0000 142.0000
 		scale=0.9400 0.9400
@@ -1023,7 +1023,7 @@ sprites{
 		}
 	}
 	resting_03{
-		file=beady_long_legs
+		file=enemies/beady_long_legs
 		file_pos=0.0000 0.0000
 		file_size=142.0000 142.0000
 		scale=0.9100 0.9100
@@ -1067,7 +1067,7 @@ sprites{
 		}
 	}
 	shaking_01{
-		file=beady_long_legs
+		file=enemies/beady_long_legs
 		file_pos=0.0000 0.0000
 		file_size=142.0000 142.0000
 		hitboxes{
@@ -1109,7 +1109,7 @@ sprites{
 		}
 	}
 	shaking_02{
-		file=beady_long_legs
+		file=enemies/beady_long_legs
 		file_pos=0.0000 0.0000
 		file_size=142.0000 142.0000
 		angle=6.1800
@@ -1152,7 +1152,7 @@ sprites{
 		}
 	}
 	shaking_03{
-		file=beady_long_legs
+		file=enemies/beady_long_legs
 		file_pos=0.0000 0.0000
 		file_size=142.0000 142.0000
 		angle=5.9900
@@ -1195,7 +1195,7 @@ sprites{
 		}
 	}
 	shaking_04{
-		file=beady_long_legs
+		file=enemies/beady_long_legs
 		file_pos=0.0000 0.0000
 		file_size=142.0000 142.0000
 		angle=5.8899
@@ -1238,7 +1238,7 @@ sprites{
 		}
 	}
 	shaking_05{
-		file=beady_long_legs
+		file=enemies/beady_long_legs
 		file_pos=0.0000 0.0000
 		file_size=142.0000 142.0000
 		angle=0.3600
@@ -1284,7 +1284,7 @@ sprites{
 		}
 	}
 	shaking_06{
-		file=beady_long_legs
+		file=enemies/beady_long_legs
 		file_pos=0.0000 0.0000
 		file_size=142.0000 142.0000
 		angle=0.6600
@@ -1330,7 +1330,7 @@ sprites{
 		}
 	}
 	shaking_07{
-		file=beady_long_legs
+		file=enemies/beady_long_legs
 		file_pos=0.0000 0.0000
 		file_size=142.0000 142.0000
 		angle=0.9100
@@ -1376,7 +1376,7 @@ sprites{
 		}
 	}
 	shaking_08{
-		file=beady_long_legs
+		file=enemies/beady_long_legs
 		file_pos=0.0000 0.0000
 		file_size=142.0000 142.0000
 		hitboxes{
@@ -1421,7 +1421,7 @@ sprites{
 		}
 	}
 	shaking_09{
-		file=beady_long_legs
+		file=enemies/beady_long_legs
 		file_pos=0.0000 0.0000
 		file_size=142.0000 142.0000
 		angle=5.9600
@@ -1467,7 +1467,7 @@ sprites{
 		}
 	}
 	shaking_10{
-		file=beady_long_legs
+		file=enemies/beady_long_legs
 		file_pos=0.0000 0.0000
 		file_size=142.0000 142.0000
 		angle=5.7500
@@ -1513,7 +1513,7 @@ sprites{
 		}
 	}
 	shaking_11{
-		file=beady_long_legs
+		file=enemies/beady_long_legs
 		file_pos=0.0000 0.0000
 		file_size=142.0000 142.0000
 		angle=5.5500
@@ -1559,7 +1559,7 @@ sprites{
 		}
 	}
 	tense_01{
-		file=beady_long_legs
+		file=enemies/beady_long_legs
 		file_pos=0.0000 0.0000
 		file_size=142.0000 142.0000
 		scale=1.0500 1.0500
@@ -1602,7 +1602,7 @@ sprites{
 		}
 	}
 	tense_02{
-		file=beady_long_legs
+		file=enemies/beady_long_legs
 		file_pos=0.0000 0.0000
 		file_size=142.0000 142.0000
 		scale=1.1000 1.1000

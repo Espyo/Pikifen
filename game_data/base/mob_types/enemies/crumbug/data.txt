@@ -29,23 +29,23 @@ reaches {
 
 sounds {
     bite {
-        file = bite
+        file = misc/bite
         volume = 40
         speed = 150
     }
     chew {
-        file = bite
+        file = misc/bite
         volume = 20
         speed = 140
     }
     swallow {
-        file = swallow
+        file = misc/swallow
         volume = 20
         speed = 140
         speed_deviation = 20
     }
     thud {
-        file = thump
+        file = misc/thump
         speed = 200
         volume = 20
     }

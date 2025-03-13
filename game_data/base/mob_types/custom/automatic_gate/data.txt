@@ -13,7 +13,7 @@ rectangular_dimensions = 40 192
 
 sounds {
     thud {
-        file = stomp_long
+        file = misc/stomp_long
         volume = 70
         speed = 80
         speed_deviation = 5

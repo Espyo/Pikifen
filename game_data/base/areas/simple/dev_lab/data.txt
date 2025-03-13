@@ -10,7 +10,7 @@ bg_bmp=textures/space
 bg_color=0 0 0
 bg_dist=20.0000
 bg_zoom=19.0000
-song=we_do_science
+song=areas/we_do_science
 weather
 day_time_start=420
 day_time_speed=120

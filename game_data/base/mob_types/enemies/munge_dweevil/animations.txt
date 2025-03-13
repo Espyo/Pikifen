@@ -258,7 +258,7 @@ animations{
 }
 sprites{
 	attacking_01{
-		file=munge_dweevil
+		file=enemies/munge_dweevil
 		file_pos=490.0000 144.0000
 		file_size=113.0000 116.0000
 		offset=-1.0000 -1.0000
@@ -288,7 +288,7 @@ sprites{
 		}
 	}
 	attacking_02{
-		file=munge_dweevil
+		file=enemies/munge_dweevil
 		file_pos=604.0000 148.0000
 		file_size=113.0000 115.0000
 		offset=-1.0000 0.0000
@@ -318,7 +318,7 @@ sprites{
 		}
 	}
 	attacking_gas_01{
-		file=munge_dweevil
+		file=enemies/munge_dweevil
 		file_pos=0.0000 121.0000
 		file_size=94.0000 88.0000
 		hitboxes{
@@ -347,7 +347,7 @@ sprites{
 		}
 	}
 	attacking_gas_02{
-		file=munge_dweevil
+		file=enemies/munge_dweevil
 		file_pos=0.0000 121.0000
 		file_size=94.0000 88.0000
 		scale=1.1000 1.1000
@@ -377,7 +377,7 @@ sprites{
 		}
 	}
 	dying_01{
-		file=munge_dweevil
+		file=enemies/munge_dweevil
 		file_pos=0.0000 121.0000
 		file_size=94.0000 88.0000
 		offset=4.0000 0.0000
@@ -406,7 +406,7 @@ sprites{
 		}
 	}
 	dying_02{
-		file=munge_dweevil
+		file=enemies/munge_dweevil
 		file_pos=0.0000 121.0000
 		file_size=94.0000 88.0000
 		offset=4.0000 0.0000
@@ -436,7 +436,7 @@ sprites{
 		}
 	}
 	dying_03{
-		file=munge_dweevil
+		file=enemies/munge_dweevil
 		file_pos=95.0000 121.0000
 		file_size=76.0000 52.0000
 		offset=13.0000 0.0000
@@ -465,7 +465,7 @@ sprites{
 		}
 	}
 	dying_04{
-		file=munge_dweevil
+		file=enemies/munge_dweevil
 		file_pos=172.0000 121.0000
 		file_size=103.0000 90.0000
 		offset=-1.0000 28.0000
@@ -494,7 +494,7 @@ sprites{
 		}
 	}
 	dying_05{
-		file=munge_dweevil
+		file=enemies/munge_dweevil
 		file_pos=276.0000 136.0000
 		file_size=81.0000 74.0000
 		offset=7.0000 24.0000
@@ -523,7 +523,7 @@ sprites{
 		}
 	}
 	dying_06{
-		file=munge_dweevil
+		file=enemies/munge_dweevil
 		file_pos=358.0000 136.0000
 		file_size=70.0000 54.0000
 		offset=8.0000 12.0000
@@ -552,7 +552,7 @@ sprites{
 		}
 	}
 	dying_07{
-		file=munge_dweevil
+		file=enemies/munge_dweevil
 		file_pos=429.0000 144.0000
 		file_size=60.0000 52.0000
 		offset=6.0000 0.0000
@@ -581,7 +581,7 @@ sprites{
 		}
 	}
 	idling_01{
-		file=munge_dweevil
+		file=enemies/munge_dweevil
 		file_pos=0.0000 0.0000
 		file_size=118.0000 120.0000
 		hitboxes{
@@ -610,7 +610,7 @@ sprites{
 		}
 	}
 	idling_02{
-		file=munge_dweevil
+		file=enemies/munge_dweevil
 		file_pos=119.0000 0.0000
 		file_size=118.0000 120.0000
 		hitboxes{
@@ -639,7 +639,7 @@ sprites{
 		}
 	}
 	idling_03{
-		file=munge_dweevil
+		file=enemies/munge_dweevil
 		file_pos=238.0000 0.0000
 		file_size=118.0000 120.0000
 		hitboxes{
@@ -668,7 +668,7 @@ sprites{
 		}
 	}
 	moving_01{
-		file=munge_dweevil
+		file=enemies/munge_dweevil
 		file_pos=357.0000 0.0000
 		file_size=129.0000 135.0000
 		offset=0.0000 3.0000
@@ -698,7 +698,7 @@ sprites{
 		}
 	}
 	moving_02{
-		file=munge_dweevil
+		file=enemies/munge_dweevil
 		file_pos=487.0000 0.0000
 		file_size=137.0000 143.0000
 		offset=2.0000 5.0000
@@ -728,7 +728,7 @@ sprites{
 		}
 	}
 	moving_03{
-		file=munge_dweevil
+		file=enemies/munge_dweevil
 		file_pos=625.0000 0.0000
 		file_size=151.0000 147.0000
 		offset=-4.0000 8.0000
@@ -758,7 +758,7 @@ sprites{
 		}
 	}
 	moving_04{
-		file=munge_dweevil
+		file=enemies/munge_dweevil
 		file_pos=777.0000 0.0000
 		file_size=147.0000 138.0000
 		offset=-1.0000 11.0000
@@ -788,7 +788,7 @@ sprites{
 		}
 	}
 	moving_05{
-		file=munge_dweevil
+		file=enemies/munge_dweevil
 		file_pos=925.0000 0.0000
 		file_size=127.0000 128.0000
 		offset=1.0000 13.0000
@@ -818,7 +818,7 @@ sprites{
 		}
 	}
 	moving_06{
-		file=munge_dweevil
+		file=enemies/munge_dweevil
 		file_pos=1053.0000 0.0000
 		file_size=114.0000 121.0000
 		offset=3.0000 1.0000
@@ -848,7 +848,7 @@ sprites{
 		}
 	}
 	picking_up_01{
-		file=munge_dweevil
+		file=enemies/munge_dweevil
 		file_pos=487.0000 0.0000
 		file_size=137.0000 143.0000
 		offset=2.0000 5.0000
@@ -877,7 +877,7 @@ sprites{
 		}
 	}
 	picking_up_02{
-		file=munge_dweevil
+		file=enemies/munge_dweevil
 		file_pos=487.0000 0.0000
 		file_size=137.0000 143.0000
 		offset=2.0000 5.0000
@@ -907,7 +907,7 @@ sprites{
 		}
 	}
 	picking_up_03{
-		file=munge_dweevil
+		file=enemies/munge_dweevil
 		file_pos=0.0000 121.0000
 		file_size=94.0000 88.0000
 		offset=4.0000 0.0000
@@ -936,7 +936,7 @@ sprites{
 		}
 	}
 	shaking_kb{
-		file=munge_dweevil
+		file=enemies/munge_dweevil
 		file_pos=0.0000 0.0000
 		file_size=118.0000 120.0000
 		hitboxes{

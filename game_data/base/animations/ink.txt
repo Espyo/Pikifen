@@ -25,24 +25,24 @@ animations{
 }
 sprites{
 	main_01{
-		file=ink
+		file=effects/ink
 		file_pos=0.0000 0.0000
 		file_size=32.0000 32.0000
 	}
 	main_02{
-		file=ink
+		file=effects/ink
 		file_pos=0.0000 0.0000
 		file_size=32.0000 32.0000
 		angle=1.5708
 	}
 	main_03{
-		file=ink
+		file=effects/ink
 		file_pos=0.0000 0.0000
 		file_size=32.0000 32.0000
 		angle=3.1416
 	}
 	main_04{
-		file=ink
+		file=effects/ink
 		file_pos=0.0000 0.0000
 		file_size=32.0000 32.0000
 		angle=4.7124

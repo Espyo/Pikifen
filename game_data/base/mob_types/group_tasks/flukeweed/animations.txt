@@ -45,32 +45,32 @@ animations{
 }
 sprites{
 	dying{
-		file=flukeweed
+		file=other_mobs/flukeweed
 		file_pos=0.0000 0.0000
 		file_size=0.0000 0.0000
 	}
 	idling_01{
-		file=flukeweed
+		file=other_mobs/flukeweed
 		file_pos=0.0000 0.0000
 		file_size=32.0000 32.0000
 	}
 	idling_02{
-		file=flukeweed
+		file=other_mobs/flukeweed
 		file_pos=33.0000 0.0000
 		file_size=32.0000 32.0000
 	}
 	idling_03{
-		file=flukeweed
+		file=other_mobs/flukeweed
 		file_pos=66.0000 0.0000
 		file_size=32.0000 32.0000
 	}
 	pulled_01{
-		file=flukeweed
+		file=other_mobs/flukeweed
 		file_pos=99.0000 0.0000
 		file_size=32.0000 32.0000
 	}
 	pulled_02{
-		file=flukeweed
+		file=other_mobs/flukeweed
 		file_pos=132.0000 0.0000
 		file_size=32.0000 32.0000
 	}

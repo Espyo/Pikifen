@@ -16,7 +16,7 @@ animations{
 }
 sprites{
 	down{
-		file=button
+		file=other_mobs/button
 		file_pos=33.0000 0.0000
 		file_size=32.0000 32.0000
 		hitboxes{
@@ -30,7 +30,7 @@ sprites{
 		}
 	}
 	up{
-		file=button
+		file=other_mobs/button
 		file_pos=0.0000 0.0000
 		file_size=32.0000 32.0000
 		hitboxes{

@@ -33,26 +33,26 @@ reaches {
 
 sounds {
     bite {
-        file = bite
+        file = misc/bite
         volume = 70
         speed = 80
     }
     chew {
-        file = bite
+        file = misc/bite
         volume = 40
         speed = 70
     }
     shaking {
-        file = shaking
+        file = misc/shaking
         volume = 60
     }
     electricity {
-        file = electricity
+        file = misc/electricity
         loop = true
         volume = 80
     }
     swallow {
-        file = swallow
+        file = misc/swallow
         volume = 40
         speed = 70
         speed_deviation = 20

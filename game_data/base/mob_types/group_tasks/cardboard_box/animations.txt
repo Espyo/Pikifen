@@ -9,7 +9,7 @@ animations{
 }
 sprites{
 	idling{
-		file=cardboard_box
+		file=other_mobs/cardboard_box
 		file_pos=0.0000 0.0000
 		file_size=192.0000 192.0000
 	}

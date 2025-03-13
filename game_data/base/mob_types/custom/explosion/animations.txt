@@ -32,7 +32,7 @@ animations{
 }
 sprites{
 	exploding_01{
-		file=explosion
+		file=effects/explosion
 		file_pos=0.0000 0.0000
 		file_size=42.0000 42.0000
 		scale=2.0000 2.0000
@@ -51,7 +51,7 @@ sprites{
 		}
 	}
 	exploding_02{
-		file=explosion
+		file=effects/explosion
 		file_pos=0.0000 0.0000
 		file_size=42.0000 42.0000
 		scale=4.0000 4.0000
@@ -70,7 +70,7 @@ sprites{
 		}
 	}
 	exploding_03{
-		file=explosion
+		file=effects/explosion
 		file_pos=43.0000 0.0000
 		file_size=78.0000 78.0000
 		scale=1.9000 1.9000
@@ -89,7 +89,7 @@ sprites{
 		}
 	}
 	exploding_04{
-		file=explosion
+		file=effects/explosion
 		file_pos=43.0000 0.0000
 		file_size=78.0000 78.0000
 		scale=2.4000 2.4000
@@ -108,7 +108,7 @@ sprites{
 		}
 	}
 	exploding_05{
-		file=explosion
+		file=effects/explosion
 		file_pos=122.0000 0.0000
 		file_size=78.0000 78.0000
 		scale=2.4000 2.4000
@@ -127,7 +127,7 @@ sprites{
 		}
 	}
 	exploding_06{
-		file=explosion
+		file=effects/explosion
 		file_pos=122.0000 0.0000
 		file_size=78.0000 78.0000
 		scale=2.6000 2.6000
@@ -146,7 +146,7 @@ sprites{
 		}
 	}
 	flash{
-		file=smack
+		file=effects/smack
 		file_pos=0.0000 0.0000
 		file_size=64.0000 64.0000
 		scale=4.0000 4.0000
