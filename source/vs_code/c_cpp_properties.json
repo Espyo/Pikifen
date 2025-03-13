@@ -12,7 +12,7 @@
             "cppStandard": "c++11",
             "intelliSenseMode": "gcc-x64",
             "compilerArgs": [
-                "-std=c++0x",
+                "-std=c++17",
                 "-rdynamic",
                 "-D_GLIBCXX_USE_CXX11_ABI=0",
                 "-lm `pkg-config --libs allegro-5 allegro_main-5 allegro_audio-5 allegro_image-5 allegro_font-5 allegro_acodec-5 allegro_primitives-5 allegro_dialog-5`"

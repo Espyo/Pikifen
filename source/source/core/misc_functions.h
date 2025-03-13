@@ -144,7 +144,6 @@ string get_engine_version_string();
 ALLEGRO_COLOR get_wall_shadow_color(Edge* e_ptr);
 float get_wall_shadow_length(Edge* e_ptr);
 vector<std::pair<int, string> > get_weather_table(DataNode* node);
-string get_working_directory_path();
 void gui_add_back_input_icon(
     GuiManager* gui, const string &item_name = "back_input"
 );

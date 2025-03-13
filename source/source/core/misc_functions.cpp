@@ -12,6 +12,7 @@
 #undef _CMATH_
 
 #include <algorithm>
+#include <filesystem>
 #include <iostream>
 #include <stdlib.h>
 
@@ -759,20 +760,6 @@ vector<std::pair<int, string> > get_weather_table(DataNode* node) {
 
 
 /**
- * @brief Returns the path to the program's current working directory.
- *
- * @return The path, or an empty string on error.
- */
-string get_working_directory_path() {
-    char buffer[1024];
-    char* cwd = getcwd(buffer, sizeof(buffer));
-    string result;
-    if(cwd) result = cwd;
-    return result;
-}
-
-
-/**
  * @brief Adds a GUI item that shows the input icon for going back in a menu.
  *
  * @param gui GUI manager to add the item to.
@@ -1084,7 +1071,7 @@ bool open_manual(const string &page) {
     //"anchor" needs to be updated, a full-project text search will find
     //instances of it inside the code just as it will in the HTML of pages.
     string url =
-        "file://" + get_working_directory_path() +
+        "file://" + std::filesystem::current_path().string() +
         "/manual/content/" + page;
     return open_web_browser(url);
 }
