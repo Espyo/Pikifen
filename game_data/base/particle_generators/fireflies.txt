@@ -43,7 +43,7 @@ base{
 		0.0000=0.0000
 	}
 }
-bitmap_angle_deviation=0.0000
+bitmap_angle_deviation=180.0000
 duration_deviation=4.0000
 friction_deviation=0.0000
 size_deviation=8.0000

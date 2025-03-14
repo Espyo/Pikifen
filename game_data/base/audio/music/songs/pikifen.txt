@@ -1,4 +1,4 @@
-name =Menus
+name = Pikifen
 description = A warm but melancholic tune to welcome you to Pikifen.
 
 tags = Calm; Cinematic
