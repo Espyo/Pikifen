@@ -1,5 +1,5 @@
 name=Emerald Grove
-description=You figured when the Koppaite's mentioned growing food on the planet, they didn't have this nasty swamp in mind! It doesn't matter, they're paying you based on how much you clear out by morning.
+description=You figured when the Koppaites mentioned growing food on the planet, they didn't have this nasty swamp in mind! It doesn't matter; they're paying you based on how much you clear out by morning.
 tags=Swamp; Standard
 engine_version=0.25.0
 subtitle=Collect everything!
