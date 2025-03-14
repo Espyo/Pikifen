@@ -4,37 +4,34 @@ death_state = dying
 script {
     idling {
         on_enter {
-			set_timer 3
+            set_timer 3
             set_animation idling random_time_on_spawn
             stop
             set_near_reach search
         }
-		on_timer {
-			get_random_int jumps 2 5
-			get_random_float x -1000 1000
-			get_mob_info cur_x self x
-			calculate x $x + $cur_x
+        on_timer {
+            get_random_int jumps 2 5
+            get_random_float x -1000 1000
+            get_mob_info cur_x self x
+            calculate x $x + $cur_x
             get_random_float y -1000 1000
-			get_mob_info cur_y self y
-			calculate y $y + $cur_y
-			set_state exploring_jumping
-		}
+            get_mob_info cur_y self y
+            calculate y $y + $cur_y
+            set_state exploring_jumping
+        }
         on_opponent_in_reach {
             focus trigger
             set_state chasing_turning
         }
-		on_far_from_home {
+        on_far_from_home {
             set_state returning_resting
         }
         on_itch {
             set_state shaking
         }
-		on_itch {
-			set_state shaking
-		}
     }
-	
-	exploring_jumping {
+
+    exploring_jumping {
         on_enter {
             start_height_effect
             set_timer 0.3
@@ -47,7 +44,7 @@ script {
             set_state exploring_floating
         }
     }
-    
+
     exploring_floating {
         on_enter {
             set_flying false
@@ -59,7 +56,7 @@ script {
             set_state exploring_falling
         }
     }
-    
+
     exploring_falling {
         on_enter {
             set_gravity 1.5
@@ -68,10 +65,10 @@ script {
             set_state exploring_landing
         }
     }
-    
+
     exploring_landing {
         on_enter {
-			stop
+            stop
             stop_height_effect
             set_gravity 1
         }
@@ -80,50 +77,48 @@ script {
         }
     }
 
-	exploring_resting {
+    exploring_resting {
         on_enter {
             stop
             set_animation idling
-            
-			calculate jumps $jumps - 1
-			if $jumps <= 0
-				set_state idling
-			end_if
-			
-			set_timer 0.1
+            calculate jumps $jumps - 1
+            if $jumps <= 0
+                set_state idling
+            end_if
+            set_timer 0.1
         }
-		on_opponent_in_reach {
+        on_opponent_in_reach {
             focus trigger
             set_state chasing_turning
         }
         on_timer {
             set_state exploring_jumping
         }
-		on_far_from_home {
+        on_far_from_home {
             set_state returning_resting
         }
-		on_itch {
-			set_state shaking
-		}
+        on_itch {
+            set_state shaking
+        }
     }
-	
+
     chasing_turning {
         on_enter {
             set_animation idling
             stop
             turn_to_target focused_mob
-			set_near_reach attack
+            set_near_reach attack
             set_far_reach search
-			set_timer 0.1
+            set_timer 0.1
         }
         on_opponent_in_reach {
             stop
             focus trigger
             set_state attacking
         }
-		on_timer {
-			set_state chasing_jumping
-		}
+        on_timer {
+            set_state chasing_jumping
+        }
         on_focus_off_reach {
             set_state idling
         }
@@ -131,8 +126,8 @@ script {
             set_state shaking
         }
     }
-    
-	attacking {
+
+    attacking {
         on_enter {
             stop
             set_animation biting
@@ -148,14 +143,14 @@ script {
             end_if
         }
     }
-    
+
     eating {
         on_enter {
             set_animation chewing
         }
-		on_frame_signal {
-			swallow_all
-		}
+        on_frame_signal {
+            swallow_all
+        }
         on_animation_end {
             set_state idling
         }
@@ -163,31 +158,31 @@ script {
             set_state dying
         }
     }
-	
+
     chasing_jumping {
         on_enter {
             start_height_effect
             set_timer 0.3
             set_animation jumping
             set_flying true
-			
-			get_mob_info self_x self x
-			get_mob_info self_y self y
-			get_mob_info focus_x focus x
-			get_mob_info focus_y focus y
-			
-			get_angle angle $self_x $self_y $focus_x $focus_y		
-			get_distance dist $self_x $self_y $focus_x $focus_y	
-			calculate dist $dist - 64	
-			get_coordinates_from_angle x y $angle $dist	
-			
-			calculate x $x + $self_x
-			calculate y $y + $self_y
-			
-			get_mob_info z focus z
-			calculate z $z + 100
-			
-			move_to_absolute $x $y $z
+
+            get_mob_info self_x self x
+            get_mob_info self_y self y
+            get_mob_info focus_x focus x
+            get_mob_info focus_y focus y
+
+            get_angle angle $self_x $self_y $focus_x $focus_y
+            get_distance dist $self_x $self_y $focus_x $focus_y
+            calculate dist $dist - 64
+            get_coordinates_from_angle x y $angle $dist
+
+            calculate x $x + $self_x
+            calculate y $y + $self_y
+
+            get_mob_info z focus z
+            calculate z $z + 100
+
+            move_to_absolute $x $y $z
         }
         on_reach_destination {
             set_state chasing_floating
@@ -196,7 +191,7 @@ script {
             set_state chasing_floating
         }
     }
-    
+
     chasing_floating {
         on_enter {
             set_flying false
@@ -208,7 +203,7 @@ script {
             set_state chasing_falling
         }
     }
-    
+
     chasing_falling {
         on_enter {
             set_gravity 1.5
@@ -217,10 +212,10 @@ script {
             set_state chasing_landing
         }
     }
-    
+
     chasing_landing {
         on_enter {
-			stop
+            stop
             stop_height_effect
             set_gravity 1
         }
@@ -228,41 +223,41 @@ script {
             set_state chasing_resting
         }
     }
-    
-	chasing_resting {
+
+    chasing_resting {
         on_enter {
             stop
-			focus trigger
+            focus trigger
             set_animation idling
             set_timer 0.1
         }
         on_timer {
             set_state chasing_turning
         }
-		on_far_from_home {
+        on_far_from_home {
             set_state returning_resting
         }
-		on_itch {
-			set_state shaking
-		}
+        on_itch {
+            set_state shaking
+        }
     }
-	
-	returning_jumping {
+
+    returning_jumping {
         on_enter {
             start_height_effect
             set_timer 0.3
             set_animation jumping
             set_flying true
-			move_to_target home
+            move_to_target home
         }
-		on_reach_destination {
+        on_reach_destination {
             set_state returning_finishing
         }
         on_timer {
             set_state returning_floating
         }
     }
-    
+
     returning_floating {
         on_enter {
             set_flying false
@@ -270,33 +265,33 @@ script {
             set_timer 0.3
             set_animation landing
         }
-		on_reach_destination {
+        on_reach_destination {
             set_state returning_finishing
         }
         on_timer {
             set_state returning_falling
         }
     }
-    
+
     returning_falling {
         on_enter {
             set_gravity 1.5
         }
-		on_reach_destination {
+        on_reach_destination {
             set_state returning_finishing
         }
         on_land {
             set_state returning_landing
         }
     }
-    
+
     returning_landing {
         on_enter {
-			stop
+            stop
             stop_height_effect
             set_gravity 1
         }
-		on_reach_destination {
+        on_reach_destination {
             set_state returning_finishing
         }
         on_animation_end {
@@ -304,7 +299,7 @@ script {
         }
     }
 
-	returning_resting {
+    returning_resting {
         on_enter {
             stop
             set_animation idling
@@ -314,31 +309,31 @@ script {
             set_state returning_jumping
         }
     }
-	
-	returning_finishing {
+
+    returning_finishing {
         on_enter {
-			stop
+            stop
             stop_height_effect
             set_gravity 1
-			set_animation landing
+            set_animation landing
         }
         on_animation_end {
             set_state idling
         }
-		on_itch {
-			set_state shaking
-		}
+        on_itch {
+            set_state shaking
+        }
     }
-	
+
     shaking {
         on_enter {
             set_animation shaking
         }
-		on_animation_end {
+        on_animation_end {
             set_state idling
         }
     }
-	
+
     dying {
         on_enter {
             set_gravity 1
