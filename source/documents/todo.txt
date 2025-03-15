@@ -6,11 +6,12 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    "Winged pikmin sometimes retain the mud effect even after leaving it, can be reset after tossing them into it and whistling. Might have to do with picking something up while in a hazard" -- Helodity
-    "Bulborbs can not be carried under automatic gates" -- Helodity
-    Spraying with Louie is playing the throw sound, and the particles just poof out of existence
+    The compilation errors
 
     --- 0.26 ---
+    Helodity's new area and such
+    Update Dear ImGui to version 1.91.9
+        "Image: removed tint_col and border_col parameter from Image() function"
     Revamp sounds
         Candidate list of all needed sounds, for now
             Pikmin
@@ -271,12 +272,9 @@ Next tasks (roughly sorted most important first)
             Show a chart with the requirements for each medal, your current run's score, your personal record score, and the maker's personal record score
         The difficulty listing in the area menu should use fire icons instead of numbers
     GUI things
-        Menu refactor
+        Game state refactor
             Add a gui.start_transition function so that we don't have to do the responsive = true/false thing when we call gui.start_animation
             Some sort of sub-menus manager so we don't have to have half a dozen if(sub_gui) sub_gui.handle_player_action() and stuff like that
-            Organize the code folders, files, and structs
-                Move all menus to their own struct
-                Differentiate between menus as game states, and menus as GUIs
         Allow the player to drag their mouse on the scrollbar GUI item
         GUI items should draw with opacity (or a tint color), set by the GUI manager in the same way as position and size
         GUI items could be told they are currently being activated, so that buttons can appear pressed in
@@ -289,6 +287,8 @@ Next tasks (roughly sorted most important first)
             Move some non-essential hardcoded things, like the background images of existing menus, to this feature
         The code that determines what GUI item to go to via keyboard navigation isn't working so well for stuff inside box GUI items. In the results menu, with a mission with a lot of stuff in the stats, select "Retry" and press right. It'll select an unrelated item in the stats list
             Here's an idea: items that are inside of a scrollable box but are currently not visible should be considered as being outside the box, but with an ultra-tiny offset. For instance, a GUI item that spans from Y=10 to Y=50 on-screen and is a vertical list of buttons. The buttons currently visible on-screen inside this item are at Y=15, Y=25, Y=35, and Y=45. The next three buttons would technically be at Y=55, Y=65, and Y=75, but they're not applicable because they're beyond the bounds of the list GUI item. When calculating their position for the sake of keyboard navigation, just pretend their coordinates are at Y=50 (bottom of the list item) + 0.001 for the first item, 0.002 for the second item, 0.003 for the third. To keep relative dimensions intact, which may be a good idea, it's probably best to grab their offset from the bottom of the list item (so 55-50=5 for the first, 65-50=15 for the second, 75-50=25 for the third) and multiply them by 0.001.
+        Make it so the player can hold down a directional key and the menu selector moves on its own. When it gets to the end it should probably stop until the player presses that direction again so it can wrap around and continue.
+            Same for holding down Enter to continuously activate a button and such
     Controls improvements
         Controls manager
             Each action type should be able to specify if it allows button-downs without button-ups (for Pikmin, holding button 1 to whistle, and then pressing button 2 shouldn't restart the whistle, but in Rhythm Heaven, holding button 1 to do a hit, and then pressing button 2 should be another hit)
@@ -332,8 +332,6 @@ Next tasks (roughly sorted most important first)
         If the player is using a controller on any of their inputs, and the controller in question disconnects, the game should pause and let them know the controller's been disconnected. In order to avoid chaos, this should only happen during the gameplay state, and should simply enter the pause menu (if it's not already there)
         Current leader should move slower if the analog stick is not held all the way
         Make it so a player can control their leader via mouse cursor
-        Make it so the player can hold down a directional key and the menu selector moves on its own. When it gets to the end it should probably stop until the player presses that direction again so it can wrap around and continue.
-            Same for holding down Enter to continuously activate a button and such
     Ice Pikmin
     Glow Pikmin
     Mob rotation should have acceleration too
@@ -605,11 +603,50 @@ Next tasks (roughly sorted most important first)
             Cave units have spawn points, each with a different type. If all type X spawn points have been used up and the game wants to spawn more type X objects, then it should maybe use some free spots of any other type
             Allow the user to create areas that, instead of using typical free geometry, just use cave units slapped together manually like prefabs?
     Story mode stuff
-        Persistent progress saving
-            Write somewhere that the save was successful, and warn about save errors
-            At the start of a new day, open bridges, dead enemies, etc. should go to the final states instantly
+        Campaign
+            Pikifen can have multiple campaigns. This way players can install new stories via packs
+            Area listing
+                Which areas the player can land on in each day/night, along with rules on when or how they can visit them, like locked behind a number of collectibles, an amount of a given point system, or some flags
+            Story moments
+                An ordered list of moments that represent a point in the general story. Each one:
+                    Is given a number, and they can only advance forward
+                    Has rules for what makes it advance forward, like if the player got 1000 Sparklium, or if flag abc_def is true, etc.
+                    Specifies what happens when this moment is reached, like playing a cutscene, setting a flag, etc.
+            Catalogs (e.g. Piklopedia, Treasure Hoard)
+                A file, likely game_data/<pack>/misc/catalogs.txt is responsible for:
+                    Which catalogs exist, as well as their icons, unlock criteria, etc.
+                    What entries exist in each, in order
+                    What logs each entry contains (Olimar's notes, Louie's notes, Sales pitch, etc.)
+                    How each entry is unlocked (touching it, seeing it, killing it, recovering it to an Onion/ship, etc.)
+            Collectibles (e.g. ship parts, treasures, etc.)
+                How they impact the story
+                Key collectibles? (e.g. Exploration Kit or Pikmin 3's phones)
+            Point systems
+                Each system is a currency, power level, etc. the player can accumulate and lose them over the story (e.g. Pokos, Sparklium, juice)
+            Rules
+                Maximum amount of days before a game over
+                What to do at the start or end of each day, e.g. consume one juice, go to Game Over if there is 0 juice, etc.
+        Mid-gameplay features
+            Sunset
+                On-screen warning
+                Draw the safe radius around all Onions
+                Wild Pikmin and sprouts should be immune to the sunset
+                Blink Pikmin in danger on the radar
+            Upgrades (like the Exploration Kit)
+                The ability to turn them off in the pause menu
+            Extinction
+                Be careful with Candypop Buds
+                Cave extinction should probably be named something else, since the Pikmin species aren't necessarily extinct...
+        Persistence
+            When saving, write somewhere that the save was successful, and warn about save errors
             The save file should contain a checksum for the save file proper, and one for the game files/folder
-            Save file management
+            Save file
+            Object (re)spawning
+                Use the respawn rules of each specific mob instance in the area
+                Treasures that started moving after being carried should start recording their coordinates, so that when the player comes back a different day, the treasure spawns there instead of the original spot
+                Save sprouts between areas, days, etc.
+                    Don't forget that sprouts should turn into flowers overnight
+                At the start of a new day, open bridges, dead enemies, etc. should go to the final states instantly
         Cutscenes http://www.pikminwiki.com/Cutscenes
             Make all cutscenes skippable and pausable
             Either make everything freeze during cutscenes, except for the actors that are part of it, or make everything continue, but health values be frozen (this way, leaders and Pikmin won't get hurt while the player can't react)
@@ -618,41 +655,22 @@ Next tasks (roughly sorted most important first)
                 Among other things, a way to move the camera, both with teleport, and smoothly
                 Maybe it should use the exact same logic as regular mob scripting. Obviously mob actions won't work, but changing states, ticking events, and performing actions onto mobs works
                     Perhaps an action to start controlling a given mob from here on, so that actions apply to that mob only. To make sure there are no leaks, each "start_controlling_mob" action must have an equivalent closing "end_controlling_mob" within the same event.
-        Sprouts between areas, days, etc.
-            Don't forget that sprouts should turn into flowers overnight
-        Object spawning rules
+        Area changes
+            Areas should be able to specify whether they have a "types out in the field" limit like in Pikmin 4, and if so, they can also specify how many, and what are the recommended types [PIKMIN 4]
             Objects should be able to specify what days they do and don't appear in
             Objects should also be able to specify when they respawn
-                A way to specify if the mob should come back the next day if its collectible hasn't been reclaimed yet?
-        Area unlocking
-        Pause menu
+                A way to specify if the mob should come back the next day if its collectible hasn't been reclaimed yet? Used for bosses, for instance
+        Pause menu changes
             When "end day" is chosen, it should warn about idle Pikmin that will get left behind
             The "quit" option should take you to day selection
             A "story" page with a summary of how close you are to your goal, misc. story mode progress, and how long you've been playing for (useful for speedruns)
-        Radar menu stats page
-            Total Pokos (or whatever point systems exist) collected
-        The ability for dead flower Pikmin to leave a sprout for the next day. The game settings can specify the change of a dead flower leaving it behind (including 0% to disable the feature)
-        Sunset
-            On-screen warning
-            Draw down the safe radius around all Onions
-            Wild Pikmin and sprouts should be immune to the sunset
-        Catalogs
-            There can be multiple catalogs -- Piklopedia and Treasure Hoard are two different catalogs
-            A file, likely game_data/<pack>/misc/catalogs.txt is responsible for:
-                Which catalogs exist, as well as their icons, unlock criteria, etc.
-                What entries exist in each, in order
-                What logs each entry contains (Olimar's notes, Louie's notes, Sales pitch, etc.)
-                How each entry is unlocked (touching it, seeing it, killing it, recovering it to an Onion/ship, etc.)
-        Collectibles (ship parts, treasures, etc.) and how they impact the story
-            Allow multiple "point systems" -- ship power, juice, fruits, Pokos, Sparklium, etc.
-        Upgrades (like the Exploration Kit)
-            The ability to turn them off in the pause menu
-        Extinction
-            Be careful with Candypop Buds
-            Cave extinction should probably be named something else, since the Pikmin species aren't necessarily extinct...
-        Day number limit
-            A "casual mode" option where you can disable the day number limit, if the game allows that?
-        Areas should be able to specify whether they have a "types out in the field" limit like in Pikmin 4, and if so, they can also specify how many, and what are the recommended types [PIKMIN 4]
+            Total Pokos (or whatever point systems exist) collected in the status menu
+        Story Mode menu
+            When entering, the player can choose to load an existing save file, or create a new one
+                Every save should have a name, or "Save File #" by default
+            When the player creates a new save file, they can choose which campaign to play, if there are multiple
+        Area selection menu
+            Celebrate when an area was locked the previous day but is no longer locked today
         Today's Report
             One long page filled with everything, that the player can scroll up and down -- this way there aren't several pages the player has to mash through, and it's scalable with any number of Pikmin types, content, etc.
                 Population chart over the day, with icons for key events
@@ -661,13 +679,14 @@ Next tasks (roughly sorted most important first)
                 What objective items were collected today
                 Total of the objective collected, and total remaining
                 The player can press a button somewhere to watch a replay, or click to continue
-        Final stats
+        Final Results
             Completion time, in seconds
         Misc.
-            Treasures that started moving after being carried should start recording their coordinates, so that when the player comes back, the treasure spawns there instead of the original spot
+            The ability for the radar to only draw visited portions
+            The ability for dead flower Pikmin to leave a sprout for the next day. The game settings can specify the change of a dead flower leaving it behind (including 0% to disable the feature)
             Pellet Posies, Candypop Buds, etc. should only cycle between the colors available
             The ability for some Candypop Buds to not spawn if the player has over X Pikmin of that type in total
-            The radar should only draw visited portions (though this can be changed in config.txt)
+            A "casual mode" option where you can disable the day number limit, if the game allows that?
     More editors
         Script editor
             A way to un/fold the contents of states and events

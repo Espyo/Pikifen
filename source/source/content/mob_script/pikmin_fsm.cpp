@@ -984,6 +984,12 @@ void pikmin_fsm::create_fsm(MobType* typ) {
             efc.run(pikmin_fsm::finish_picking_up);
             efc.change_state("idling_h");
         }
+        efc.new_event(MOB_EV_TOUCHED_HAZARD); {
+            efc.run(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EV_LEFT_HAZARD); {
+            efc.run(pikmin_fsm::left_hazard);
+        }
     }
     
     efc.new_state("on_group_task", PIKMIN_STATE_ON_GROUP_TASK); {

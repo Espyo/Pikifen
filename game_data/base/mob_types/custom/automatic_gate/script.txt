@@ -22,6 +22,7 @@ script {
             set_animation closed
             play_sound thud
             set_can_block_paths true
+            set_tangible true
         }
         on_receive_message {
             if $msg > 0
@@ -34,6 +35,7 @@ script {
         on_enter {
             set_animation rattling
             set_can_block_paths true
+            set_tangible true
             move_to_absolute $x $y $z_open
             start_particles falling_dirt 0 0 0
         }
@@ -51,6 +53,7 @@ script {
         on_enter {
             set_animation open
             set_can_block_paths false
+            set_tangible false
             stop_particles
         }
         on_receive_message {
@@ -64,6 +67,7 @@ script {
         on_enter {
             set_animation rattling
             set_can_block_paths true
+            set_tangible true
             move_to_absolute $x $y $z_closed
             start_particles falling_dirt 0 0 0
         }

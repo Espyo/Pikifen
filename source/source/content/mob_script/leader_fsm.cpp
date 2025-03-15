@@ -2625,10 +2625,10 @@ void leader_fsm::spray(Mob* m, void* info1, void* info2) {
         pg.base_particle.color,
     [ = ] (const ALLEGRO_COLOR & c) {
         ALLEGRO_COLOR new_c = c;
-        new_c.r = spray_type_ref.main_color.r;
-        new_c.g = spray_type_ref.main_color.g;
-        new_c.b = spray_type_ref.main_color.b;
-        new_c.a = spray_type_ref.main_color.a;
+        new_c.r *= spray_type_ref.main_color.r;
+        new_c.g *= spray_type_ref.main_color.g;
+        new_c.b *= spray_type_ref.main_color.b;
+        new_c.a *= spray_type_ref.main_color.a;
         return new_c;
     }
     );
