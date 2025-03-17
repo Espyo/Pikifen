@@ -507,7 +507,7 @@ void GuiEditor::process_gui_new_dialog() {
         ImGui::BeginDisabled();
     }
     if(ImGui::Button("Create GUI definition", ImVec2(180, 40))) {
-        auto really_create = [ = ] () {
+        auto really_create = [this] () {
             create_gui_def(string(new_dialog.internal_name), new_dialog.pack);
             close_top_dialog();
             close_top_dialog(); //Close the load dialog.

@@ -439,7 +439,7 @@ void TitleScreen::init_gui_main_page() {
     main_gui.back_item =
         new ButtonGuiItem("Exit", game.sys_content.fnt_area_name);
     main_gui.back_item->on_draw =
-    [ = ] (const DrawInfo & draw) {
+    [this, quit_icon_left] (const DrawInfo & draw) {
         draw_menu_button_icon(
             MENU_ICON_QUIT, draw.center, draw.size, quit_icon_left
         );

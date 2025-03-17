@@ -14,6 +14,42 @@
 
 #include "os_utils.h"
 
+#include "string_utils.h"
+
+
+/**
+ * @brief Returns a string representing the current date and time,
+ * in ISO 8601 format (YYYY/MM/DD)).
+ *
+ * @param file_name_friendly If true, slashes become dashes,
+ * and semicolons become dots.
+ * @return The string.
+ */
+string get_current_time(bool file_name_friendly) {
+    time_t tt;
+    time(&tt);
+    struct tm t;
+    
+#ifdef _WIN32
+    localtime_s(&t, &tt);
+#else
+    localtime_r(&tt, &t);
+#endif
+    
+    return
+        i2s(t.tm_year + 1900) +
+        (file_name_friendly ? "-" : "/") +
+        leading_zero(t.tm_mon + 1) +
+        (file_name_friendly ? "-" : "/") +
+        leading_zero(t.tm_mday) +
+        (file_name_friendly ? "_" : " ") +
+        leading_zero(t.tm_hour) +
+        (file_name_friendly ? "." : ":") +
+        leading_zero(t.tm_min) +
+        (file_name_friendly ? "." : ":") +
+        leading_zero(t.tm_sec);
+}
+
 
 /**
  * @brief Opens the operative system's file explorer on the specified folder.

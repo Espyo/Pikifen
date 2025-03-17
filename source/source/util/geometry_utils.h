@@ -194,16 +194,19 @@ void get_miter_points(
 float get_point_sign(
     const Point &p, const Point &lp1, const Point &lp2
 );
-Point get_ratio_point_in_ring(
-    float inner_dist, float outer_dist,
-    float arc, float arc_rot, float ratio
-);
 Point get_random_point_in_rectangular_ring(
-    const Point &inner_dist, const Point &outer_dist, unsigned int* seed
+    const Point &inner_dist, const Point &outer_dist,
+    int axis_random_int, float axis_random_float, float px_random_float,
+    float py_random_float, int side_random_int
 );
 Point get_random_point_in_ring(
     float inner_dist, float outer_dist,
-    float arc, float arc_rot, unsigned int* seed
+    float arc, float arc_rot,
+    float radius_random_float, float angle_random_float
+);
+Point get_ratio_point_in_ring(
+    float inner_dist, float outer_dist,
+    float arc, float arc_rot, float ratio
 );
 void get_transformed_rectangle_bounding_box(
     const Point &center, const Point &dimensions, float angle,

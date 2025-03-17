@@ -61,12 +61,6 @@ enum EASING_METHOD {
 };
 
 
-//Returns a string with a number, adding a leading zero if it's less than 10.
-#define leading_zero(n) (((n) < 10 ? "0" : (string) "") + i2s((n)))
-
-//Rounds a number. Ugh, why do I even have to create this.
-#define round(n) (((n) > 0) ? floor((n) + 0.5) : ceil((n) - 0.5))
-
 //Returns the sign (1 or -1) of a number.
 #define sign(n) (((n) >= 0) ? 1 : -1)
 
@@ -79,8 +73,8 @@ float interpolate_number(
     float input, float input_start, float input_end,
     float output_start, float output_end
 );
-float randomf(float min, float max, unsigned int* seed);
-int randomi(int min, int max, unsigned int* seed);
-size_t randomw(const vector<float> &weights, unsigned int* seed);
+size_t get_random_idx_with_weights(
+    const vector<float> &weights, float point_random_float
+);
 int sum_and_wrap(int nr, int sum, int wrap_limit);
 float wrap_float(float nr, float minimum, float maximum);

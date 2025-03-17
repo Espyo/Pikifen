@@ -13,6 +13,7 @@
 
 #include <functional>
 #include <map>
+#include <random>
 #include <vector>
 
 #include <allegro5/allegro.h>
@@ -361,14 +362,14 @@ struct MouseCursor {
 struct RngManager {
     //--- Members ---
     
-    //The current randomness seed.
-    unsigned int seed = 0;
+    //The current randomness generator.
+    std::mt19937 main_rng;
     
     
     //--- Function declarations ---
     
     void init();
-    void init(unsigned int seed);
+    void init(unsigned int initial_seed);
     int i(int minimum, int maximum);
     float f(float minimum, float maximum);
 };

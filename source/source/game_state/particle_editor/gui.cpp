@@ -508,7 +508,7 @@ void ParticleEditor::process_gui_new_dialog() {
     //Creation logic.
     if(hit_create_button) {
         if(!problem.empty()) return;
-        auto really_create = [ = ] () {
+        auto really_create = [this] () {
             create_part_gen(new_dialog.part_gen_path);
             close_top_dialog();
             close_top_dialog(); //Close the load dialog.

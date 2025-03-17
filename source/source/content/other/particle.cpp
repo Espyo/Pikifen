@@ -881,7 +881,8 @@ Point ParticleEmission::get_emission_offset(float number_ratio) {
             return
                 get_random_point_in_ring(
                     circle_inner_dist, circle_outer_dist,
-                    circle_arc, circle_arc_rot, &game.rng.seed
+                    circle_arc, circle_arc_rot,
+                    game.rng.f(0.0, 1.0f), game.rng.f(0.0, 1.0f)
                 );
         }
         break;
@@ -889,7 +890,10 @@ Point ParticleEmission::get_emission_offset(float number_ratio) {
     } case PARTICLE_EMISSION_SHAPE_RECTANGLE: {
         return
             get_random_point_in_rectangular_ring(
-                rect_inner_dist, rect_outer_dist, &game.rng.seed
+                rect_inner_dist, rect_outer_dist,
+                game.rng.i(0.0, 1.0f), game.rng.f(0.0, 1.0f),
+                game.rng.f(0.0, 1.0f), game.rng.f(0.0, 1.0f),
+                game.rng.i(0.0, 1.0f)
             );
         break;
         

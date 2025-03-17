@@ -191,7 +191,7 @@ void ParticleEditor::delete_current_part_gen() {
     
     //This code will be run after everything is done, be it after the standard
     //procedure, or after the user hits OK on the message box.
-    const auto finish_up = [ = ] () {
+    const auto finish_up = [this, go_to_load_dialog] () {
         if(go_to_load_dialog) {
             setup_for_new_part_gen_pre();
             open_load_dialog();
@@ -444,7 +444,7 @@ void ParticleEditor::pick_part_gen_file(
 ) {
     ContentManifest* temp_manif = (ContentManifest*) info;
     
-    auto really_load = [ = ] () {
+    auto really_load = [this, temp_manif] () {
         close_top_dialog();
         load_part_gen_file(temp_manif->path, true);
     };

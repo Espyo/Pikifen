@@ -9,6 +9,7 @@
  */
 
 #include <algorithm>
+#include <cmath>
 
 #include "editor.h"
 
@@ -1436,7 +1437,7 @@ bool Editor::list_popup(
                 mono_selectable(name.c_str()) :
                 ImGui::Selectable(name.c_str());
             if(hit_button) {
-                *picked_item_idx = i;
+                *picked_item_idx = (int) i;
                 ret = true;
             }
         }
@@ -2117,7 +2118,7 @@ bool Editor::process_gui_hazard_management_widgets(
         }
         mono_list_box(
             "Hazards", &selected_hazard_idx, hazard_names,
-            std::min(hazard_names.size(), (size_t) 4)
+            std::min((int) hazard_names.size(), 4)
         );
     }
     
@@ -2952,8 +2953,8 @@ Point Editor::snap_point_to_axis(const Point &p, const Point &anchor) {
 Point Editor::snap_point_to_grid(const Point &p, float grid_interval) {
     return
         Point(
-            round(p.x / grid_interval) * grid_interval,
-            round(p.y / grid_interval) * grid_interval
+            std::round(p.x / grid_interval) * grid_interval,
+            std::round(p.y / grid_interval) * grid_interval
         );
 }
 

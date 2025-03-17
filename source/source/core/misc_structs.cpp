@@ -1414,7 +1414,13 @@ void ReaderSetter::set(
  * @return The random number.
  */
 float RngManager::f(float minimum, float maximum) {
-    return randomf(minimum, maximum, &seed);
+    if(minimum == maximum) return minimum;
+    if(minimum > maximum) std::swap(minimum, maximum);
+    
+    std::uniform_real_distribution<float> dist(
+        minimum, std::nextafter(maximum, FLT_MAX)
+    );
+    return dist(main_rng);
 }
 
 
@@ -1426,7 +1432,11 @@ float RngManager::f(float minimum, float maximum) {
  * @return The random number.
  */
 int RngManager::i(int minimum, int maximum) {
-    return randomi(minimum, maximum, &seed);
+    if(minimum == maximum) return minimum;
+    if(minimum > maximum) std::swap(minimum, maximum);
+    
+    std::uniform_int_distribution<int> dist(minimum, maximum);
+    return dist(main_rng);
 }
 
 
@@ -1435,15 +1445,15 @@ int RngManager::i(int minimum, int maximum) {
  * the seed.
  */
 void RngManager::init() {
-    seed = time(nullptr);
+    init(time(nullptr));
 }
 
 
 /**
  * @brief Initializes the random number generator with the given seed.
  */
-void RngManager::init(unsigned int seed) {
-    this->seed = seed;
+void RngManager::init(unsigned int initial_seed) {
+    main_rng = std::mt19937(initial_seed);
 }
 
 

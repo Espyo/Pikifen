@@ -511,7 +511,7 @@ void AreaEditor::process_gui_new_dialog() {
     //Creation logic.
     if(hit_create_button) {
         if(!problem.empty()) return;
-        auto really_create = [ = ] () {
+        auto really_create = [this] () {
             create_area(new_dialog.area_path);
             close_top_dialog();
             close_top_dialog(); //Close the load dialog.

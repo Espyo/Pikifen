@@ -1207,11 +1207,22 @@ Point get_ratio_point_in_ring(
  *
  * @param inner_dist Width and height of the inner rectangle of the ring.
  * @param outer_dist Width and height of the outer rectangle of the ring.
- * @param seed Pointer to the randomness seed to use.
+ * @param axis_random_int A previously-determined random int to
+ * calculate the axis with [0, 1].
+ * @param axis_random_float A previously-determined random float to
+ * calculate the axis with [0, 1].
+ * @param px_random_float A previously-determined random float to
+ * calculate the X coordinate with [0, 1].
+ * @param py_random_float A previously-determined random float to
+ * calculate the Y coordinate with [0, 1].
+ * @param side_random_int A previously-determined random int to
+ * calculate the side with [0, 1].
  * @return The point.
  */
 Point get_random_point_in_rectangular_ring(
-    const Point &inner_dist, const Point &outer_dist, unsigned int* seed
+    const Point &inner_dist, const Point &outer_dist,
+    int axis_random_int, float axis_random_float, float px_random_float,
+    float py_random_float, int side_random_int
 ) {
     float ring_thickness[2] {
         outer_dist.x - inner_dist.x,
@@ -1242,14 +1253,18 @@ Point get_random_point_in_rectangular_ring(
     //with weighted probability depending on the area.
     size_t chosen_axis;
     if(rect_areas[0] == 0.0f && rect_areas[1] == 0.0f) {
-        chosen_axis = randomi(0, 1, seed);
+        chosen_axis = axis_random_int;
     } else {
-        chosen_axis = randomw(vector<float>(rect_areas, rect_areas + 2), seed);
+        chosen_axis =
+            get_random_idx_with_weights(
+                vector<float>(rect_areas, rect_areas + 2),
+                axis_random_float
+            );
     }
     
     Point p_in_rectangle(
-        randomf(0.0f, rect_sizes[chosen_axis].x, seed),
-        randomf(0.0f, rect_sizes[chosen_axis].y, seed)
+        px_random_float * rect_sizes[chosen_axis].x,
+        py_random_float * rect_sizes[chosen_axis].y
     );
     Point final_p;
     
@@ -1263,7 +1278,7 @@ Point get_random_point_in_rectangular_ring(
         final_p.y = inner_dist.y + p_in_rectangle.y;
     }
     
-    if(randomi(0, 1, seed) == 0) {
+    if(side_random_int == 0) {
         //Return our point.
         return final_p;
     } else {
@@ -1281,24 +1296,28 @@ Point get_random_point_in_rectangular_ring(
  * @param outer_dist Radius of the outer circle of the ring.
  * @param arc Arc of the ring, or M_TAU for the whole ring.
  * @param arc_rot Rotation of the arc.
- * @param seed Pointer to the randomness seed to use.
+ * @param radius_random_float A previously-determined random float to
+ * calculate the radius with [0, 1].
+ * @param angle_random_float A previously-determined random float to
+ * calculate the angle with [0, 1].
  * @return The point.
  */
 Point get_random_point_in_ring(
     float inner_dist, float outer_dist,
-    float arc, float arc_rot, unsigned int* seed
+    float arc, float arc_rot,
+    float radius_random_float, float angle_random_float
 ) {
     //https://stackoverflow.com/q/30564015
     
     float r =
         inner_dist +
-        (outer_dist - inner_dist) * (float) sqrt(randomf(0.0f, 1.0f, seed));
+        (outer_dist - inner_dist) * (float) sqrt(radius_random_float);
         
     float theta =
-        randomf(
+        interpolate_number(
+            angle_random_float, 0.0f, 1.0f,
             -arc / 2.0f + arc_rot,
-            arc / 2.0f + arc_rot,
-            seed
+            arc / 2.0f + arc_rot
         );
         
     return Point(r * (float) cos(theta), r * (float) sin(theta));

@@ -8,6 +8,8 @@
  * General GUI editor-related functions.
  */
 
+#include <cmath>
+
 #include "editor.h"
 
 #include "../../core/misc_functions.h"
@@ -169,7 +171,7 @@ void GuiEditor::delete_current_gui_def() {
     
     //This code will be run after everything is done, be it after the standard
     //procedure, or after the user hits OK on the message box.
-    const auto finish_up = [ = ] () {
+    const auto finish_up = [this, go_to_load_dialog] () {
         if(go_to_load_dialog) {
             setup_for_new_gui_def();
             open_load_dialog();
@@ -415,7 +417,7 @@ void GuiEditor::pick_gui_def_file(
 ) {
     ContentManifest* temp_manif = (ContentManifest*) info;
     
-    auto really_load = [ = ] () {
+    auto really_load = [this, temp_manif] () {
         close_top_dialog();
         load_gui_def_file(temp_manif->path, true);
     };
@@ -729,9 +731,9 @@ Point GuiEditor::snap_point(const Point &p) {
     
     return
         Point(
-            round(final_point.x / game.options.gui_editor_grid_interval) *
+            std::round(final_point.x / game.options.gui_editor_grid_interval) *
             game.options.gui_editor_grid_interval,
-            round(final_point.y / game.options.gui_editor_grid_interval) *
+            std::round(final_point.y / game.options.gui_editor_grid_interval) *
             game.options.gui_editor_grid_interval
         );
 }

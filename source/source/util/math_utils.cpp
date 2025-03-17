@@ -202,51 +202,22 @@ float interpolate_number(
 
 
 /**
- * @brief Returns a random float between the provided range, inclusive.
- *
- * @param minimum Minimum value that can be generated, inclusive.
- * @param maximum Maximum value that can be generated, inclusive.
- * @param seed Pointer to the randomness seed to use.
- * @return The random number.
- */
-float randomf(float minimum, float maximum, unsigned int* seed) {
-    if(minimum == maximum) return minimum;
-    if(minimum > maximum) std::swap(minimum, maximum);
-    return
-        (float) rand_r(seed) /
-        ((float) RAND_MAX / (maximum - minimum)) + minimum;
-}
-
-
-/**
- * @brief Returns a random integer between the provided range, inclusive.
- *
- * @param minimum Minimum value that can be generated, inclusive.
- * @param maximum Maximum value that can be generated, inclusive.
- * @param seed Pointer to the randomness seed to use.
- * @return The random number.
- */
-int randomi(int minimum, int maximum, unsigned int* seed) {
-    if(minimum == maximum) return minimum;
-    if(minimum > maximum) std::swap(minimum, maximum);
-    return ((rand_r(seed)) % (maximum - minimum + 1)) + minimum;
-}
-
-
-/**
  * @brief Performs a weighted random pick, and returns the index of the chosen
  * item.
  *
  * @param weights A vector with the weight of each item.
- * @param seed Pointer to the randomness seed to use.
+ * @param point_random_float A previously-determined random float to
+ * calculate the weight sum point with [0, 1].
  * @return Index of the chosen item, or 0 on error.
  */
-size_t randomw(const vector<float> &weights, unsigned int* seed) {
+size_t get_random_idx_with_weights(
+    const vector<float> &weights, float point_random_float
+) {
     float weight_sum = 0.0f;
     for(size_t i = 0; i < weights.size(); i++) {
         weight_sum += weights[i];
     }
-    float r = randomf(0.0f, weight_sum, seed);
+    float r = point_random_float * weight_sum;
     for(size_t i = 0; i < weights.size(); i++) {
         if(r < weights[i]) return i;
         r -= weights[i];

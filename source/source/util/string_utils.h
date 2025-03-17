@@ -33,6 +33,9 @@ enum TIME_TO_STR_FLAG {
 };
 
 
+//Returns a string with a number, adding a leading zero if it's less than 10.
+#define leading_zero(n) (((n) < 10 ? "0" : (string) "") + i2s((n)))
+
 //Converts an integer (or long) to a string.
 #define i2s(n) std::to_string((long long) (n))
 
@@ -47,7 +50,7 @@ string b2s(bool b);
 void duplicate_string(const string &orig_str, string &new_str);
 string f2s(float f);
 string get_matching_string_starts(const string &s1, const string &s2);
-string get_path_last_component(const string& s);
+string get_path_last_component(const string &s);
 bool is_number(const string &s);
 string pad_string(const string &s, size_t size, char padding);
 string remove_extension(const string &s);
@@ -90,16 +93,16 @@ string word_wrap(const string &s, size_t n_chars_per_line);
 /**
  * @brief Joins a list of strings together into one final string,
  * using a delimiter between them.
- * 
+ *
  * @tparam t Type of the container of parts.
  * @param parts Parts to join.
  * @param delimiter The delimiter to place between each part.
  * @return The joined string.
  */
 template<typename t>
-string join(const t& parts, const string& delimiter = " ") {
+string join(const t &parts, const string &delimiter = " ") {
     string result;
-    for(const auto& p : parts) {
+    for(const auto &p : parts) {
         if(!result.empty()) result += ";";
         result += p;
     }

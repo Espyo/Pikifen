@@ -257,7 +257,7 @@ void AnimationEditor::delete_current_anim_db() {
     
     //This code will be run after everything is done, be it after the standard
     //procedure, or after the user hits OK on the message box.
-    const auto finish_up = [ = ] () {
+    const auto finish_up = [this, go_to_load_dialog] () {
         if(go_to_load_dialog) {
             setup_for_new_anim_db_pre();
             open_load_dialog();
@@ -839,7 +839,7 @@ void AnimationEditor::pick_anim_db_file(
 ) {
     ContentManifest* temp_manif = (ContentManifest*) info;
     string path = temp_manif->path;
-    auto really_load = [ = ] () {
+    auto really_load = [this, path] () {
         close_top_dialog();
         load_anim_db_file(path, true);
     };
