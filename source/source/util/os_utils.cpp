@@ -11,6 +11,7 @@
 
 #include <cstdlib>
 #include <signal.h>
+#include <time.h>
 
 #include "os_utils.h"
 
