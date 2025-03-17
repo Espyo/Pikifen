@@ -202,6 +202,20 @@ float interpolate_number(
 
 
 /**
+ * @brief Generates a random number using a linear congruential generator
+ * and advances that random number generator's state.
+ *
+ * @param state Pointer to the state to calculate from and advance.
+ * @return The generated number.
+ */
+int32_t linear_congruential_generator(int32_t* state) {
+    int32_t result = ((*state * 1103515245U) + 12345U) & 0x7fffffff;
+    *state = result;
+    return result;
+}
+
+
+/**
  * @brief Performs a weighted random pick, and returns the index of the chosen
  * item.
  *

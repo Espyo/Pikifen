@@ -11,10 +11,8 @@
 
 #pragma once
 
-#include <cmath>
 #include <functional>
 #include <map>
-#include <random>
 #include <vector>
 
 #include <allegro5/allegro.h>
@@ -363,15 +361,15 @@ struct MouseCursor {
 struct RngManager {
     //--- Members ---
     
-    //The current randomness generator.
-    std::mt19937 main_rng;
+    //The current randomness generator's state.
+    int32_t state = 0;
     
     
     //--- Function declarations ---
     
     void init();
-    void init(unsigned int initial_seed);
-    int i(int minimum, int maximum);
+    void init(int32_t initial_seed);
+    int32_t i(int32_t minimum, int32_t maximum);
     float f(float minimum, float maximum);
 };
 

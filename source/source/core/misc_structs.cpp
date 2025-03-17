@@ -1417,10 +1417,9 @@ float RngManager::f(float minimum, float maximum) {
     if(minimum == maximum) return minimum;
     if(minimum > maximum) std::swap(minimum, maximum);
     
-    std::uniform_real_distribution<float> dist(
-        minimum, std::nextafter(maximum, FLT_MAX)
-    );
-    return dist(main_rng);
+    return
+        (float) linear_congruential_generator(&state) /
+        ((float) INT32_MAX / (maximum - minimum)) + minimum;
 }
 
 
@@ -1431,12 +1430,17 @@ float RngManager::f(float minimum, float maximum) {
  * @param maximum Maximum value that can be generated, inclusive.
  * @return The random number.
  */
-int RngManager::i(int minimum, int maximum) {
+int32_t RngManager::i(int32_t minimum, int32_t maximum) {
     if(minimum == maximum) return minimum;
     if(minimum > maximum) std::swap(minimum, maximum);
     
-    std::uniform_int_distribution<int> dist(minimum, maximum);
-    return dist(main_rng);
+    if(minimum == maximum) return minimum;
+    if(minimum > maximum) std::swap(minimum, maximum);
+    return
+        (
+            (linear_congruential_generator(&state)) %
+            (maximum - minimum + 1)
+        ) + minimum;
 }
 
 
@@ -1452,8 +1456,8 @@ void RngManager::init() {
 /**
  * @brief Initializes the random number generator with the given seed.
  */
-void RngManager::init(unsigned int initial_seed) {
-    main_rng = std::mt19937(initial_seed);
+void RngManager::init(int32_t initial_seed) {
+    state = initial_seed;
 }
 
 

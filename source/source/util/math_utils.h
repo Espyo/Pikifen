@@ -73,6 +73,7 @@ float interpolate_number(
     float input, float input_start, float input_end,
     float output_start, float output_end
 );
+int32_t linear_congruential_generator(int32_t* state);
 size_t get_random_idx_with_weights(
     const vector<float> &weights, float point_random_float
 );
