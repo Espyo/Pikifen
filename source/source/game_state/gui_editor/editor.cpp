@@ -8,8 +8,6 @@
  * General GUI editor-related functions.
  */
 
-#include <cmath>
-
 #include "editor.h"
 
 #include "../../core/misc_functions.h"
@@ -731,9 +729,9 @@ Point GuiEditor::snap_point(const Point &p) {
     
     return
         Point(
-            std::round(final_point.x / game.options.gui_editor_grid_interval) *
+            round(final_point.x / game.options.gui_editor_grid_interval) *
             game.options.gui_editor_grid_interval,
-            std::round(final_point.y / game.options.gui_editor_grid_interval) *
+            round(final_point.y / game.options.gui_editor_grid_interval) *
             game.options.gui_editor_grid_interval
         );
 }

@@ -9,7 +9,6 @@
  */
 
 #include <algorithm>
-#include <cmath>
 
 #include "editor.h"
 
@@ -3325,7 +3324,7 @@ void AreaEditor::set_new_circle_sector_points() {
         
     size_t n_points = AREA_EDITOR::MAX_CIRCLE_SECTOR_POINTS;
     if(angle_dif > 0) {
-        n_points = std::round(TAU / angle_dif);
+        n_points = round(TAU / angle_dif);
     }
     n_points =
         clamp(

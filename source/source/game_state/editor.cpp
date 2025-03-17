@@ -9,7 +9,6 @@
  */
 
 #include <algorithm>
-#include <cmath>
 
 #include "editor.h"
 
@@ -2953,8 +2952,8 @@ Point Editor::snap_point_to_axis(const Point &p, const Point &anchor) {
 Point Editor::snap_point_to_grid(const Point &p, float grid_interval) {
     return
         Point(
-            std::round(p.x / grid_interval) * grid_interval,
-            std::round(p.y / grid_interval) * grid_interval
+            round(p.x / grid_interval) * grid_interval,
+            round(p.y / grid_interval) * grid_interval
         );
 }
 
