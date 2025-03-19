@@ -133,8 +133,29 @@ animations{
 	}
 	shaking{
 		frames{
+			shaking_windup_1{
+				duration=0.1000
+			}
 			idling{
 				duration=0.1000
+			}
+			shaking_windup_2{
+				duration=0.1000
+			}
+			idling{
+				duration=0.1000
+			}
+			shaking_windup_1{
+				duration=0.1000
+			}
+			idling{
+				duration=0.1000
+			}
+			shaking_windup_2{
+				duration=0.1000
+			}
+			idling{
+				duration=0.3000
 			}
 			shaking_1{
 				duration=0.1000
@@ -540,11 +561,11 @@ sprites{
 			body{
 				coords=1.7980 0.2566 0.0000
 				height=24.0000
-				radius=40.0000
+				radius=35.0000
 				type=1
 				value=1.0000
 				knockback_outward=true
-				knockback=3.0000
+				knockback=1.0000
 			}
 			mouth{
 				coords=33.8802 5.0173 0.0000
@@ -565,11 +586,11 @@ sprites{
 			body{
 				coords=1.7980 0.2566 0.0000
 				height=24.0000
-				radius=40.0000
+				radius=35.0000
 				type=1
 				value=1.0000
 				knockback_outward=true
-				knockback=3.0000
+				knockback=1.0000
 			}
 			mouth{
 				coords=33.8802 5.0173 0.0000
@@ -590,11 +611,11 @@ sprites{
 			body{
 				coords=1.7980 0.2566 0.0000
 				height=24.0000
-				radius=40.0000
+				radius=35.0000
 				type=1
 				value=1.0000
 				knockback_outward=true
-				knockback=3.0000
+				knockback=1.0000
 			}
 			mouth{
 				coords=33.8802 5.0173 0.0000
@@ -615,11 +636,57 @@ sprites{
 			body{
 				coords=1.7980 0.2566 0.0000
 				height=24.0000
-				radius=40.0000
+				radius=35.0000
 				type=1
 				value=1.0000
 				knockback_outward=true
-				knockback=3.0000
+				knockback=1.0000
+			}
+			mouth{
+				coords=33.8802 5.0173 0.0000
+				height=24.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	shaking_windup_1{
+		file=downy_snagret
+		file_pos=0.0000 48.0000
+		file_size=86.0000 47.0000
+		offset=3.1494 -0.1120
+		angle=6.1959
+		hitboxes{
+			body{
+				coords=1.7980 0.2566 0.0000
+				height=24.0000
+				radius=24.0000
+				type=0
+				value=1.0000
+			}
+			mouth{
+				coords=33.8802 5.0173 0.0000
+				height=24.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	shaking_windup_2{
+		file=downy_snagret
+		file_pos=0.0000 48.0000
+		file_size=86.0000 47.0000
+		offset=3.1494 -0.1120
+		angle=0.0873
+		hitboxes{
+			body{
+				coords=1.7980 0.2566 0.0000
+				height=24.0000
+				radius=24.0000
+				type=0
+				value=1.0000
 			}
 			mouth{
 				coords=33.8802 5.0173 0.0000
