@@ -208,7 +208,7 @@ vertexes{
 	v=3232.0000 256.0000
 	v=-476.4788 2865.4175
 	v=896.0000 640.0000
-	v=1001.0682 1152.5649
+	v=939.9019 1088.6495
 	v=463.2088 1163.2449
 	v=220.3501 568.6725
 	v=-196.6514 757.9659
@@ -691,6 +691,14 @@ vertexes{
 	v=1622.3364 2399.7107
 	v=3529.9573 -1828.3936
 	v=-1146.8325 -3376.3154
+	v=1054.4441 840.6973
+	v=1055.1274 908.1179
+	v=590.7010 626.7596
+	v=773.8019 564.5882
+	v=774.7332 570.4842
+	v=592.2534 632.2197
+	v=871.2067 561.9620
+	v=871.7955 568.1447
 }
 edges{
 	e{
@@ -1268,7 +1276,7 @@ edges{
 		smoothing_length=20.0000
 	}
 	e{
-		s=38 22
+		s=143 22
 		v=117 177
 		smoothing_length=20.0000
 	}
@@ -1304,7 +1312,7 @@ edges{
 		smoothing_length=20.0000
 	}
 	e{
-		s=38 35
+		s=143 35
 		v=128 183
 		smoothing_length=20.0000
 	}
@@ -1582,7 +1590,7 @@ edges{
 		v=176 4
 	}
 	e{
-		s=38 22
+		s=143 22
 		v=177 128
 		smoothing_length=20.0000
 	}
@@ -1592,7 +1600,7 @@ edges{
 		smoothing_length=20.0000
 	}
 	e{
-		s=36 44
+		s=142 44
 		v=181 218
 		smoothing_length=20.0000
 	}
@@ -1603,7 +1611,7 @@ edges{
 	}
 	e{
 		s=36 44
-		v=216 181
+		v=216 694
 		smoothing_length=20.0000
 	}
 	e{
@@ -1616,8 +1624,8 @@ edges{
 		smoothing_length=20.0000
 	}
 	e{
-		s=38 36
-		v=183 185
+		s=143 36
+		v=183 695
 		smoothing_length=20.0000
 	}
 	e{
@@ -1630,8 +1638,8 @@ edges{
 		smoothing_length=20.0000
 	}
 	e{
-		s=40 36
-		v=185 178
+		s=142 40
+		v=178 185
 	}
 	e{
 		s=105 110
@@ -1654,7 +1662,7 @@ edges{
 		v=189 190
 	}
 	e{
-		s=38 40
+		s=143 40
 		v=185 219
 		smoothing_length=20.0000
 	}
@@ -1691,8 +1699,8 @@ edges{
 		v=193 197
 	}
 	e{
-		s=46 110
-		v=200 191
+		s=46 100
+		v=200 693
 	}
 	e{
 		s=51 45
@@ -1753,10 +1761,6 @@ edges{
 	}
 	e{
 		s=100 43
-		v=200 209
-	}
-	e{
-		s=100 43
 		v=199 210
 	}
 	e{
@@ -1804,7 +1808,7 @@ edges{
 		smoothing_length=20.0000
 	}
 	e{
-		s=36 45
+		s=142 45
 		v=218 178
 		smoothing_length=20.0000
 	}
@@ -1813,8 +1817,8 @@ edges{
 		v=217 218
 	}
 	e{
-		s=46 38
-		v=208 219
+		s=143 46
+		v=219 208
 		smoothing_length=20.0000
 	}
 	e{
@@ -2258,31 +2262,31 @@ edges{
 	}
 	e{
 		s=100 110
-		v=310 200
+		v=310 693
 	}
 	e{
 		s=100 110
 		v=190 310
 	}
 	e{
-		s=46 38
-		v=314 208
+		s=143 46
+		v=208 314
 		smoothing_length=20.0000
 	}
 	e{
-		s=38 110
+		s=143 110
 		v=311 117
 	}
 	e{
-		s=38 110
+		s=143 110
 		v=312 311
 	}
 	e{
-		s=38 110
+		s=143 110
 		v=313 312
 	}
 	e{
-		s=38 110
+		s=143 110
 		v=314 313
 	}
 	e{
@@ -2784,8 +2788,8 @@ edges{
 		smoothing_length=20.0000
 	}
 	e{
-		s=89 99
-		v=408 406
+		s=139 89
+		v=406 408
 		smoothing_length=20.0000
 	}
 	e{
@@ -2794,13 +2798,13 @@ edges{
 		smoothing_length=20.0000
 	}
 	e{
-		s=90 99
-		v=409 408
+		s=139 90
+		v=408 409
 		smoothing_length=20.0000
 	}
 	e{
-		s=90 99
-		v=459 409
+		s=139 90
+		v=409 459
 		smoothing_length=20.0000
 	}
 	e{
@@ -3074,20 +3078,20 @@ edges{
 		smoothing_length=20.0000
 	}
 	e{
-		s=93 99
-		v=460 459
+		s=139 93
+		v=459 460
 	}
 	e{
-		s=99 93
+		s=139 93
 		v=460 461
 	}
 	e{
-		s=99 93
+		s=139 93
 		v=461 462
 	}
 	e{
-		s=99 93
-		v=462 496
+		s=93 140
+		v=496 462
 	}
 	e{
 		s=93 104
@@ -3201,19 +3205,19 @@ edges{
 		v=487 502
 	}
 	e{
-		s=100 99
-		v=488 489
+		s=139 100
+		v=489 488
 	}
 	e{
-		s=100 99
-		v=489 490
+		s=139 100
+		v=490 489
 	}
 	e{
-		s=100 99
+		s=100 140
 		v=490 491
 	}
 	e{
-		s=100 99
+		s=100 140
 		v=491 497
 	}
 	e{
@@ -3245,8 +3249,8 @@ edges{
 		v=497 495
 	}
 	e{
-		s=99 102
-		v=496 497
+		s=102 140
+		v=497 496
 	}
 	e{
 		s=93 101
@@ -4275,6 +4279,74 @@ edges{
 		s=-1 106
 		v=691 468
 	}
+	e{
+		s=139 99
+		v=488 406
+	}
+	e{
+		s=139 140
+		v=462 490
+	}
+	e{
+		s=46 110
+		v=692 191
+		smoothing_length=20.0000
+	}
+	e{
+		s=46 110
+		v=693 692
+		smoothing_length=20.0000
+	}
+	e{
+		s=100 43
+		v=200 209
+	}
+	e{
+		s=142 44
+		v=697 181
+		smoothing_length=20.0000
+	}
+	e{
+		s=38 141
+		v=695 696
+		shadow_length=2.0000
+		smoothing_length=20.0000
+	}
+	e{
+		s=36 141
+		v=694 695
+		shadow_length=2.0000
+		smoothing_length=20.0000
+	}
+	e{
+		s=143 142
+		v=696 185
+		smoothing_length=20.0000
+	}
+	e{
+		s=44 141
+		v=697 694
+		shadow_length=2.0000
+		smoothing_length=20.0000
+	}
+	e{
+		s=142 141
+		v=696 697
+		shadow_length=2.0000
+		smoothing_length=20.0000
+	}
+	e{
+		s=143 38
+		v=695 698
+	}
+	e{
+		s=143 38
+		v=698 699
+	}
+	e{
+		s=143 38
+		v=699 696
+	}
 }
 sectors{
 	s{
@@ -4486,9 +4558,7 @@ sectors{
 	}
 	s{
 		z=250.0000
-		hazards=mud
-		hazards_floor=true
-		texture=textures/grass_light
+		texture=textures/metal_rusted
 		texture_tint=120 155 122
 	}
 	s{
@@ -5079,6 +5149,39 @@ sectors{
 		fade=true
 		texture=textures/stone_2
 	}
+	s{
+		type=blocking
+		z=1000.0000
+		hazards=mud
+		hazards_floor=true
+		texture=textures/dirt_soft
+		texture_tint=101 109 84
+	}
+	s{
+		type=blocking
+		z=1000.0000
+		hazards=mud
+		hazards_floor=true
+		texture=textures/dirt_soft
+		texture_tint=101 109 84
+	}
+	s{
+		z=451.0000
+		texture=textures/metal_rusted
+		texture_rotate=1.1395
+	}
+	s{
+		z=450.0000
+		texture=textures/wood_bark
+		texture_rotate=1.1395
+	}
+	s{
+		z=250.0000
+		hazards=mud
+		hazards_floor=true
+		texture=textures/grass_light
+		texture_tint=120 155 122
+	}
 }
 mobs{
 	leader{
@@ -5370,15 +5473,15 @@ mobs{
 	}
 	enemy{
 		type=white_spectralid
-		p=-128.0000 -480.0000
+		p=-134.0064 -481.5016
 	}
 	enemy{
 		type=white_spectralid
-		p=384.0000 -752.0000
+		p=448.0000 -784.0000
 	}
 	enemy{
 		type=white_spectralid
-		p=432.0000 -160.0000
+		p=451.0522 -65.6495
 	}
 	group_task{
 		type=bamboo_gate
@@ -5482,8 +5585,8 @@ mobs{
 		angle=-1.4509
 	}
 	enemy{
-		type=whiptongue_bulborb
-		p=-336.0000 1072.0000
+		type=electric_water_dumple
+		p=-342.1680 1089.2521
 		angle=-0.1149
 	}
 	custom{
@@ -5537,14 +5640,6 @@ mobs{
 		p=-496.0000 992.0000
 		stored_inside=86
 	}
-	custom{
-		type=gas_pipe
-		p=128.0000 848.0000
-	}
-	custom{
-		type=gas_pipe
-		p=128.0000 992.0000
-	}
 	enemy{
 		type=downy_snagret
 		p=1312.4288 524.9142
@@ -5565,20 +5660,6 @@ mobs{
 		type=red_bulborb
 		p=544.0000 -624.0000
 		angle=2.2948
-	}
-	enemy{
-		type=crumbug
-		p=-560.0000 -1264.0000
-	}
-	enemy{
-		type=crumbug
-		p=-592.0000 -1152.0000
-		angle=-1.6058
-	}
-	enemy{
-		type=crumbug
-		p=-720.0000 -1200.0000
-		angle=2.4440
 	}
 	custom{
 		type=egg
@@ -5601,28 +5682,26 @@ mobs{
 	enemy{
 		type=dwarf_red_bulborb
 		p=16.0000 -176.0000
+		angle=2.7632
 	}
 	enemy{
 		type=dwarf_red_bulborb
-		p=-128.0000 -16.0000
+		p=144.0000 -128.0000
+		angle=-0.4174
 	}
 	enemy{
 		type=dwarf_red_bulborb
-		p=144.0000 64.0000
+		p=256.0000 0.0000
+		angle=2.2872
 	}
 	bouncer{
 		type=geyser
 		p=470.2898 -1501.6544
-		links=113
+		links=108
 	}
 	custom{
 		type=dummy
 		p=484.1676 -1604.8331
-	}
-	enemy{
-		type=cloaking_burrow-nit
-		p=-144.0000 -1632.0000
-		angle=2.3005
 	}
 	enemy{
 		type=downy_snagret
@@ -5740,7 +5819,7 @@ mobs{
 	}
 	decoration{
 		type=shoot
-		p=-944.0000 -608.0000
+		p=-936.2543 -673.4083
 	}
 	decoration{
 		type=shoot
@@ -5958,27 +6037,112 @@ mobs{
 	resource{
 		type=chocolate_square
 		p=96.0000 -592.0000
-		stored_inside=193
+		stored_inside=187
 	}
 	resource{
 		type=chocolate_square
 		p=288.0000 -464.0000
-		stored_inside=193
+		stored_inside=187
 	}
 	resource{
 		type=chocolate_square
 		p=192.0000 -624.0000
-		stored_inside=193
+		stored_inside=187
 	}
 	resource{
 		type=chocolate_square
 		p=288.0000 -592.0000
-		stored_inside=193
+		stored_inside=187
 	}
 	resource{
 		type=chocolate_square
 		p=144.0000 -432.0000
-		stored_inside=193
+		stored_inside=187
+	}
+	custom{
+		type=sector_scroller
+		p=-679.1483 -619.3319
+		angle=0.2107
+		vars=speed=10.0000
+	}
+	custom{
+		type=sector_scroller
+		p=-974.3465 -539.3319
+		angle=-0.2762
+		vars=speed=10.0000
+	}
+	custom{
+		type=sector_scroller
+		p=-1488.0000 -432.0000
+		angle=-0.1288
+		vars=speed=10.0000
+	}
+	custom{
+		type=sector_scroller
+		p=576.0000 -2272.0000
+		angle=1.5949
+		vars=speed=10.0000
+	}
+	custom{
+		type=sector_scroller
+		p=640.0000 -2016.0000
+		angle=0.1492
+		vars=speed=10.0000
+	}
+	custom{
+		type=sector_scroller
+		p=1040.0000 -1920.0000
+		angle=1.2946
+		vars=speed=10.0000
+	}
+	custom{
+		type=sector_scroller
+		p=1104.0000 -1744.0000
+		angle=1.5274
+		vars=speed=10.0000
+	}
+	custom{
+		type=sector_scroller
+		p=1120.0000 -1696.0000
+		angle=1.5224
+		vars=speed=10.0000
+	}
+	custom{
+		type=sector_scroller
+		p=1117.2241 -1661.2628
+		angle=1.5479
+		vars=speed=10.0000
+	}
+	custom{
+		type=sector_scroller
+		p=1120.0000 -1583.9999
+		angle=0.9433
+		vars=speed=10.0000
+	}
+	enemy{
+		type=downy_snagret
+		p=-501.5033 -1331.2349
+		angle=1.1925
+	}
+	enemy{
+		type=downy_snagret
+		p=-628.8859 -1124.1813
+		angle=-3.0226
+	}
+	enemy{
+		type=yellow_wollyhop
+		p=-144.0000 -1632.0000
+		angle=1.5667
+	}
+	enemy{
+		type=water_dumple
+		p=-448.0000 784.0000
+		angle=1.1746
+	}
+	enemy{
+		type=water_dumple
+		p=-390.1680 1436.9620
+		angle=1.1746
 	}
 }
 path_stops{
@@ -6038,15 +6202,16 @@ path_stops{
 		pos=19.8392 -16.8030
 		links{
 			nr=5
+			nr=83
 			nr=7
 		}
 	}
 	s{
 		pos=-331.6616 315.7068
 		links{
-			nr=6
 			nr=38
 			nr=42
+			nr=6
 		}
 	}
 	s{
@@ -6611,6 +6776,12 @@ path_stops{
 		links{
 			nr=81
 			nr=19
+		}
+	}
+	s{
+		pos=-192.1671 196.9976
+		links{
+			nr=6
 		}
 	}
 }
