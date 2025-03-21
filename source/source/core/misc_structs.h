@@ -376,6 +376,71 @@ struct RngManager {
 
 
 /**
+ * @brief This structure makes getting values in variables and
+ * writing them in data files much easier.
+ * On the get functions, specify the name of the child and the variable.
+ */
+struct GetterWriter {
+
+    //--- Members ---
+    
+    //Node that this getter-writer pertains to.
+    DataNode* node = nullptr;
+    
+    
+    //--- Function declarations ---
+    
+    explicit GetterWriter(DataNode* dn = nullptr);
+    void get(
+        const string &child_name, const string &var,
+        DataNode** out_child_node = nullptr
+    );
+    void get(
+        const string &child_name, const char* var,
+        DataNode** out_child_node = nullptr
+    );
+    void get(
+        const string &child_name, const size_t &var,
+        DataNode** out_child_node = nullptr
+    );
+    void get(
+        const string &child_name, const int &var,
+        DataNode** out_child_node = nullptr
+    );
+    void get(
+        const string &child_name, const unsigned int &var,
+        DataNode** out_child_node = nullptr
+    );
+    void get(
+        const string &child_name, const unsigned char &var,
+        DataNode** out_child_node = nullptr
+    );
+    void get(
+        const string &child_name, const bool &var,
+        DataNode** out_child_node = nullptr
+    );
+    void get(
+        const string &child_name, const float &var,
+        DataNode** out_child_node = nullptr
+    );
+    void get(
+        const string &child_name, const double &var,
+        DataNode** out_child_node = nullptr
+    );
+    void get(
+        const string &child_name, const ALLEGRO_COLOR &var,
+        DataNode** out_child_node = nullptr
+    );
+    void get(
+        const string &child_name, const Point &var,
+        DataNode** out_child_node = nullptr
+    );
+    
+};
+
+
+
+/**
  * @brief This structure makes reading values in data files
  * and setting them to variables much easier.
  * On the set functions, specify the name of the child and the variable.
@@ -393,34 +458,44 @@ struct ReaderSetter {
     
     explicit ReaderSetter(DataNode* dn = nullptr);
     void set(
-        const string &child, string &var, DataNode** child_node = nullptr
+        const string &child_name, string &var,
+        DataNode** out_child_node = nullptr
     );
     void set(
-        const string &child, size_t &var, DataNode** child_node = nullptr
+        const string &child_name, size_t &var,
+        DataNode** out_child_node = nullptr
     );
     void set(
-        const string &child, int &var, DataNode** child_node = nullptr
+        const string &child_name, int &var,
+        DataNode** out_child_node = nullptr
     );
     void set(
-        const string &child, unsigned int &var, DataNode** child_node = nullptr
+        const string &child_name, unsigned int &var,
+        DataNode** out_child_node = nullptr
     );
     void set(
-        const string &child, unsigned char &var, DataNode** child_node = nullptr
+        const string &child_name, unsigned char &var,
+        DataNode** out_child_node = nullptr
     );
     void set(
-        const string &child, bool &var, DataNode** child_node = nullptr
+        const string &child_name, bool &var,
+        DataNode** out_child_node = nullptr
     );
     void set(
-        const string &child, float &var, DataNode** child_node = nullptr
+        const string &child_name, float &var,
+        DataNode** out_child_node = nullptr
     );
     void set(
-        const string &child, double &var, DataNode** child_node = nullptr
+        const string &child_name, double &var,
+        DataNode** out_child_node = nullptr
     );
     void set(
-        const string &child, ALLEGRO_COLOR &var, DataNode** child_node = nullptr
+        const string &child_name, ALLEGRO_COLOR &var,
+        DataNode** out_child_node = nullptr
     );
     void set(
-        const string &child, Point &var, DataNode** child_node = nullptr
+        const string &child_name, Point &var,
+        DataNode** out_child_node = nullptr
     );
     
 };

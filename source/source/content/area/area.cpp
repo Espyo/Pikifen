@@ -1701,24 +1701,23 @@ void Area::remove_vertex(const Vertex* v_ptr) {
  */
 void Area::save_geometry_to_data_node(DataNode* node) {
     //Vertexes.
-    DataNode* vertexes_node = new DataNode("vertexes", "");
-    node->add(vertexes_node);
-    
+    DataNode* vertexes_node = node->addNew("vertexes");
     for(size_t v = 0; v < vertexes.size(); v++) {
+
+        //Vertex.
         Vertex* v_ptr = vertexes[v];
-        DataNode* vertex_node =
-            new DataNode("v", f2s(v_ptr->x) + " " + f2s(v_ptr->y));
-        vertexes_node->add(vertex_node);
+        vertexes_node->addNew("v", p2s(v2p(v_ptr)));
     }
     
     //Edges.
-    DataNode* edges_node = new DataNode("edges", "");
-    node->add(edges_node);
-    
+    DataNode* edges_node = node->addNew("edges");
     for(size_t e = 0; e < edges.size(); e++) {
+
+        //Edge.
         Edge* e_ptr = edges[e];
-        DataNode* edge_node = new DataNode("e", "");
-        edges_node->add(edge_node);
+        DataNode* edge_node = edges_node->addNew("e");
+        GetterWriter egw(edge_node);
+
         string s_str;
         for(size_t s = 0; s < 2; s++) {
             if(e_ptr->sector_idxs[s] == INVALID) s_str += "-1";
@@ -1726,126 +1725,77 @@ void Area::save_geometry_to_data_node(DataNode* node) {
             s_str += " ";
         }
         s_str.erase(s_str.size() - 1);
-        edge_node->add(new DataNode("s", s_str));
-        edge_node->add(
-            new DataNode(
-                "v",
-                i2s(e_ptr->vertex_idxs[0]) + " " + i2s(e_ptr->vertex_idxs[1])
-            )
-        );
+        string v_str =
+            i2s(e_ptr->vertex_idxs[0]) + " " + i2s(e_ptr->vertex_idxs[1]);
+
+        egw.get("s", s_str);
+        egw.get("v", v_str);
         
         if(e_ptr->wall_shadow_length != LARGE_FLOAT) {
-            edge_node->add(
-                new DataNode("shadow_length", f2s(e_ptr->wall_shadow_length))
-            );
+            egw.get("shadow_length", e_ptr->wall_shadow_length);
         }
         
         if(e_ptr->wall_shadow_color != GEOMETRY::SHADOW_DEF_COLOR) {
-            edge_node->add(
-                new DataNode("shadow_color", c2s(e_ptr->wall_shadow_color))
-            );
+            egw.get("shadow_color", e_ptr->wall_shadow_color);
         }
         
         if(e_ptr->ledge_smoothing_length != 0.0f) {
-            edge_node->add(
-                new DataNode(
-                    "smoothing_length",
-                    f2s(e_ptr->ledge_smoothing_length)
-                )
-            );
+            egw.get("smoothing_length", e_ptr->ledge_smoothing_length);
         }
         
         if(e_ptr->ledge_smoothing_color != GEOMETRY::SMOOTHING_DEF_COLOR) {
-            edge_node->add(
-                new DataNode(
-                    "smoothing_color",
-                    c2s(e_ptr->ledge_smoothing_color)
-                )
-            );
+            egw.get("smoothing_color", e_ptr->ledge_smoothing_color);
         }
     }
     
     //Sectors.
-    DataNode* sectors_node = new DataNode("sectors", "");
-    node->add(sectors_node);
-    
+    DataNode* sectors_node = node->addNew("sectors");
     for(size_t s = 0; s < sectors.size(); s++) {
+
+        //Sector.
         Sector* s_ptr = sectors[s];
-        DataNode* sector_node = new DataNode("s", "");
-        sectors_node->add(sector_node);
+        DataNode* sector_node = sectors_node->addNew("s");
+        GetterWriter sgw(sector_node);
         
         if(s_ptr->type != SECTOR_TYPE_NORMAL) {
-            sector_node->add(
-                new DataNode("type", game.sector_types.get_name(s_ptr->type))
-            );
+            sgw.get("type", game.sector_types.get_name(s_ptr->type));
         }
         if(s_ptr->is_bottomless_pit) {
-            sector_node->add(
-                new DataNode("is_bottomless_pit", "true")
-            );
+            sgw.get("is_bottomless_pit", true);
         }
-        sector_node->add(new DataNode("z", f2s(s_ptr->z)));
+        sgw.get("z", s_ptr->z);
         if(s_ptr->brightness != GEOMETRY::DEF_SECTOR_BRIGHTNESS) {
-            sector_node->add(
-                new DataNode("brightness", i2s(s_ptr->brightness))
-            );
+            sgw.get("brightness", s_ptr->brightness);
         }
         if(!s_ptr->tag.empty()) {
-            sector_node->add(new DataNode("tag", s_ptr->tag));
+            sgw.get("tag", s_ptr->tag);
         }
         if(s_ptr->fade) {
-            sector_node->add(new DataNode("fade", b2s(s_ptr->fade)));
+            sgw.get("fade", s_ptr->fade);
         }
         if(!s_ptr->hazards_str.empty()) {
-            sector_node->add(new DataNode("hazards", s_ptr->hazards_str));
-            sector_node->add(
-                new DataNode(
-                    "hazards_floor",
-                    b2s(s_ptr->hazard_floor)
-                )
-            );
+            sgw.get("hazards", s_ptr->hazards_str);
+            sgw.get("hazards_floor", s_ptr->hazard_floor);
         }
         
         if(!s_ptr->texture_info.bmp_name.empty()) {
-            sector_node->add(
-                new DataNode(
-                    "texture",
-                    s_ptr->texture_info.bmp_name
-                )
-            );
+            sgw.get("texture", s_ptr->texture_info.bmp_name);
         }
         
         if(s_ptr->texture_info.rot != 0) {
-            sector_node->add(
-                new DataNode(
-                    "texture_rotate",
-                    f2s(s_ptr->texture_info.rot)
-                )
-            );
+            sgw.get("texture_rotate", s_ptr->texture_info.rot);
         }
         if(
             s_ptr->texture_info.scale.x != 1 ||
             s_ptr->texture_info.scale.y != 1
         ) {
-            sector_node->add(
-                new DataNode(
-                    "texture_scale",
-                    f2s(s_ptr->texture_info.scale.x) + " " +
-                    f2s(s_ptr->texture_info.scale.y)
-                )
-            );
+            sgw.get("texture_scale", s_ptr->texture_info.scale);
         }
         if(
             s_ptr->texture_info.translation.x != 0 ||
             s_ptr->texture_info.translation.y != 0
         ) {
-            sector_node->add(
-                new DataNode(
-                    "texture_trans",
-                    f2s(s_ptr->texture_info.translation.x) + " " +
-                    f2s(s_ptr->texture_info.translation.y)
-                )
-            );
+            sgw.get("texture_trans", s_ptr->texture_info.translation);
         }
         if(
             s_ptr->texture_info.tint.r != 1.0 ||
@@ -1853,46 +1803,33 @@ void Area::save_geometry_to_data_node(DataNode* node) {
             s_ptr->texture_info.tint.b != 1.0 ||
             s_ptr->texture_info.tint.a != 1.0
         ) {
-            sector_node->add(
-                new DataNode("texture_tint", c2s(s_ptr->texture_info.tint))
-            );
+            sgw.get("texture_tint", s_ptr->texture_info.tint);
         }
         
     }
     
     //Mobs.
-    DataNode* mobs_node = new DataNode("mobs", "");
-    node->add(mobs_node);
-    
+    DataNode* mobs_node = node->addNew("mobs");
     for(size_t m = 0; m < mob_generators.size(); m++) {
+
+        //Mob.
         MobGen* m_ptr = mob_generators[m];
         string cat_name = "unknown";
         if(m_ptr->type && m_ptr->type->category) {
             cat_name = m_ptr->type->category->internal_name;
         }
-        DataNode* mob_node = new DataNode(cat_name, "");
-        mobs_node->add(mob_node);
+        DataNode* mob_node = mobs_node->addNew(cat_name);
+        GetterWriter mgw(mob_node);
         
         if(m_ptr->type) {
-            mob_node->add(
-                new DataNode("type", m_ptr->type->manifest->internal_name)
-            );
+            mgw.get("type", m_ptr->type->manifest->internal_name);
         }
-        mob_node->add(
-            new DataNode(
-                "p",
-                f2s(m_ptr->pos.x) + " " + f2s(m_ptr->pos.y)
-            )
-        );
+        mgw.get("p", m_ptr->pos);
         if(m_ptr->angle != 0) {
-            mob_node->add(
-                new DataNode("angle", f2s(m_ptr->angle))
-            );
+            mgw.get("angle", m_ptr->angle);
         }
-        if(m_ptr->vars.size()) {
-            mob_node->add(
-                new DataNode("vars", m_ptr->vars)
-            );
+        if(!m_ptr->vars.empty()) {
+            mgw.get("vars", m_ptr->vars);
         }
         
         string links_str;
@@ -1902,90 +1839,65 @@ void Area::save_geometry_to_data_node(DataNode* node) {
         }
         
         if(!links_str.empty()) {
-            mob_node->add(
-                new DataNode("links", links_str)
-            );
+            mgw.get("links", links_str);
         }
         
         if(m_ptr->stored_inside != INVALID) {
-            mob_node->add(
-                new DataNode("stored_inside", i2s(m_ptr->stored_inside))
-            );
+            mgw.get("stored_inside", m_ptr->stored_inside);
         }
     }
     
-    //Paths.
-    DataNode* path_stops_node = new DataNode("path_stops", "");
-    node->add(path_stops_node);
-    
+    //Path stops.
+    DataNode* path_stops_node = node->addNew("path_stops");
     for(size_t s = 0; s < path_stops.size(); s++) {
+
+        //Path stop.
         PathStop* s_ptr = path_stops[s];
-        DataNode* path_stop_node = new DataNode("s", "");
-        path_stops_node->add(path_stop_node);
+        DataNode* path_stop_node = path_stops_node->addNew("s");
+        GetterWriter sgw(path_stop_node);
         
-        path_stop_node->add(
-            new DataNode("pos", f2s(s_ptr->pos.x) + " " + f2s(s_ptr->pos.y))
-        );
+        sgw.get("pos", s_ptr->pos);
         if(s_ptr->radius != PATHS::MIN_STOP_RADIUS) {
-            path_stop_node->add(
-                new DataNode("radius", f2s(s_ptr->radius))
-            );
+            sgw.get("radius", s_ptr->radius);
         }
         if(s_ptr->flags != 0) {
-            path_stop_node->add(
-                new DataNode("flags", i2s(s_ptr->flags))
-            );
+            sgw.get("flags", s_ptr->flags);
         }
         if(!s_ptr->label.empty()) {
-            path_stop_node->add(
-                new DataNode("label", s_ptr->label)
-            );
+            sgw.get("label", s_ptr->label);
         }
         
-        DataNode* links_node = new DataNode("links", "");
-        path_stop_node->add(links_node);
-        
+        DataNode* links_node = path_stop_node->addNew("links");
         for(size_t l = 0; l < s_ptr->links.size(); l++) {
             PathLink* l_ptr = s_ptr->links[l];
             string link_data = i2s(l_ptr->end_idx);
             if(l_ptr->type != PATH_LINK_TYPE_NORMAL) {
                 link_data += " " + i2s(l_ptr->type);
             }
-            DataNode* link_node = new DataNode("nr", link_data);
-            links_node->add(link_node);
+            links_node->addNew("nr", link_data);
         }
         
     }
     
     //Tree shadows.
-    DataNode* shadows_node = new DataNode("tree_shadows", "");
-    node->add(shadows_node);
-    
+    DataNode* shadows_node = node->addNew("tree_shadows");
     for(size_t s = 0; s < tree_shadows.size(); s++) {
+
+        //Tree shadow.
         TreeShadow* s_ptr = tree_shadows[s];
-        DataNode* shadow_node = new DataNode("shadow", "");
-        shadows_node->add(shadow_node);
+        DataNode* shadow_node = shadows_node->addNew("shadow");
+        GetterWriter sgw(shadow_node);
         
-        shadow_node->add(
-            new DataNode(
-                "pos", f2s(s_ptr->center.x) + " " + f2s(s_ptr->center.y)
-            )
-        );
-        shadow_node->add(
-            new DataNode(
-                "size", f2s(s_ptr->size.x) + " " + f2s(s_ptr->size.y)
-            )
-        );
+        sgw.get("pos", s_ptr->center);
+        sgw.get("size", s_ptr->size);
+        sgw.get("file", s_ptr->bmp_name);
+        sgw.get("sway", s_ptr->sway);
         if(s_ptr->angle != 0) {
-            shadow_node->add(new DataNode("angle", f2s(s_ptr->angle)));
+            sgw.get("angle", s_ptr->angle);
         }
         if(s_ptr->alpha != 255) {
-            shadow_node->add(new DataNode("alpha", i2s(s_ptr->alpha)));
+            sgw.get("alpha", s_ptr->alpha);
         }
-        shadow_node->add(new DataNode("file", s_ptr->bmp_name));
-        shadow_node->add(
-            new DataNode("sway", f2s(s_ptr->sway.x) + " " + f2s(s_ptr->sway.y))
-        );
         
     }
 }
@@ -1999,44 +1911,21 @@ void Area::save_geometry_to_data_node(DataNode* node) {
 void Area::save_main_data_to_data_node(DataNode* node) {
     //Content metadata.
     save_metadata_to_data_node(node);
+
+    GetterWriter gw(node);
     
     //Main data.
-    node->add(
-        new DataNode("subtitle", subtitle)
-    );
-    node->add(
-        new DataNode(
-            "difficulty",
-            i2s(difficulty)
-        )
-    );
-    node->add(
-        new DataNode("bg_bmp", bg_bmp_name)
-    );
-    node->add(
-        new DataNode("bg_color", c2s(bg_color))
-    );
-    node->add(
-        new DataNode("bg_dist", f2s(bg_dist))
-    );
-    node->add(
-        new DataNode("bg_zoom", f2s(bg_bmp_zoom))
-    );
-    node->add(
-        new DataNode("song", song_name)
-    );
-    node->add(
-        new DataNode("weather", weather_name)
-    );
-    node->add(
-        new DataNode("day_time_start", i2s(day_time_start))
-    );
-    node->add(
-        new DataNode("day_time_speed", i2s(day_time_speed))
-    );
-    node->add(
-        new DataNode("spray_amounts", spray_amounts)
-    );
+    gw.get("subtitle", subtitle);
+    gw.get("difficulty", difficulty);
+    gw.get("bg_bmp", bg_bmp_name);
+    gw.get("bg_color", bg_color);
+    gw.get("bg_dist", bg_dist);
+    gw.get("bg_zoom", bg_bmp_zoom);
+    gw.get("song", song_name);
+    gw.get("weather", weather_name);
+    gw.get("day_time_start", day_time_start);
+    gw.get("day_time_speed", day_time_speed);
+    gw.get("spray_amounts", spray_amounts);
 }
 
 
@@ -2046,72 +1935,39 @@ void Area::save_main_data_to_data_node(DataNode* node) {
  * @param node Data node to save to.
  */
 void Area::save_mission_data_to_data_node(DataNode* node) {
+    GetterWriter gw(node);
+
     if(mission.goal != MISSION_GOAL_END_MANUALLY) {
-        node->add(
-            new DataNode(
-                "mission_goal",
-                game.mission_goals[mission.goal]->
-                get_name()
-            )
-        );
+        string goal_name = game.mission_goals[mission.goal]->get_name();
+        gw.get("mission_goal", goal_name);
     }
     if(
         mission.goal == MISSION_GOAL_TIMED_SURVIVAL ||
         mission.goal == MISSION_GOAL_GROW_PIKMIN
     ) {
-        node->add(
-            new DataNode(
-                "mission_goal_amount",
-                i2s(mission.goal_amount)
-            )
-        );
+        gw.get("mission_goal_amount", mission.goal_amount);
     }
     if(
         mission.goal == MISSION_GOAL_COLLECT_TREASURE ||
         mission.goal == MISSION_GOAL_BATTLE_ENEMIES ||
         mission.goal == MISSION_GOAL_GET_TO_EXIT
     ) {
-        node->add(
-            new DataNode(
-                "mission_goal_all_mobs",
-                b2s(mission.goal_all_mobs)
-            )
-        );
+        gw.get("mission_goal_all_mobs", mission.goal_all_mobs);
         vector<string> mission_mob_idx_strs;
         for(auto m : mission.goal_mob_idxs) {
             mission_mob_idx_strs.push_back(i2s(m));
         }
         string mission_mob_idx_str = join(mission_mob_idx_strs, ";");
         if(!mission_mob_idx_str.empty()) {
-            node->add(
-                new DataNode(
-                    "mission_required_mobs",
-                    mission_mob_idx_str
-                )
-            );
+            gw.get("mission_required_mobs", mission_mob_idx_str);
         }
     }
     if(mission.goal == MISSION_GOAL_GET_TO_EXIT) {
-        node->add(
-            new DataNode(
-                "mission_goal_exit_center",
-                p2s(mission.goal_exit_center)
-            )
-        );
-        node->add(
-            new DataNode(
-                "mission_goal_exit_size",
-                p2s(mission.goal_exit_size)
-            )
-        );
+        gw.get("mission_goal_exit_center", mission.goal_exit_center);
+        gw.get("mission_goal_exit_size", mission.goal_exit_size);
     }
     if(mission.fail_conditions > 0) {
-        node->add(
-            new DataNode(
-                "mission_fail_conditions",
-                i2s(mission.fail_conditions)
-            )
-        );
+        gw.get("mission_fail_conditions", mission.fail_conditions);
     }
     if(
         has_flag(
@@ -2119,12 +1975,7 @@ void Area::save_mission_data_to_data_node(DataNode* node) {
             get_idx_bitmask(MISSION_FAIL_COND_TOO_FEW_PIKMIN)
         )
     ) {
-        node->add(
-            new DataNode(
-                "mission_fail_too_few_pik_amount",
-                i2s(mission.fail_too_few_pik_amount)
-            )
-        );
+        gw.get("mission_fail_too_few_pik_amount", mission.fail_too_few_pik_amount);
     }
     if(
         has_flag(
@@ -2132,12 +1983,7 @@ void Area::save_mission_data_to_data_node(DataNode* node) {
             get_idx_bitmask(MISSION_FAIL_COND_TOO_MANY_PIKMIN)
         )
     ) {
-        node->add(
-            new DataNode(
-                "mission_fail_too_many_pik_amount",
-                i2s(mission.fail_too_many_pik_amount)
-            )
-        );
+        gw.get("mission_fail_too_many_pik_amount", mission.fail_too_many_pik_amount);
     }
     if(
         has_flag(
@@ -2145,12 +1991,7 @@ void Area::save_mission_data_to_data_node(DataNode* node) {
             get_idx_bitmask(MISSION_FAIL_COND_LOSE_PIKMIN)
         )
     ) {
-        node->add(
-            new DataNode(
-                "mission_fail_pik_killed",
-                i2s(mission.fail_pik_killed)
-            )
-        );
+        gw.get("mission_fail_pik_killed", mission.fail_pik_killed);
     }
     if(
         has_flag(
@@ -2158,12 +1999,7 @@ void Area::save_mission_data_to_data_node(DataNode* node) {
             get_idx_bitmask(MISSION_FAIL_COND_LOSE_LEADERS)
         )
     ) {
-        node->add(
-            new DataNode(
-                "mission_fail_leaders_kod",
-                i2s(mission.fail_leaders_kod)
-            )
-        );
+        gw.get("mission_fail_leaders_kod", mission.fail_leaders_kod);
     }
     if(
         has_flag(
@@ -2171,12 +2007,7 @@ void Area::save_mission_data_to_data_node(DataNode* node) {
             get_idx_bitmask(MISSION_FAIL_COND_KILL_ENEMIES)
         )
     ) {
-        node->add(
-            new DataNode(
-                "mission_fail_enemies_killed",
-                i2s(mission.fail_enemies_killed)
-            )
-        );
+        gw.get("mission_fail_enemies_killed", mission.fail_enemies_killed);
     }
     if(
         has_flag(
@@ -2184,147 +2015,50 @@ void Area::save_mission_data_to_data_node(DataNode* node) {
             get_idx_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
         )
     ) {
-        node->add(
-            new DataNode(
-                "mission_fail_time_limit",
-                i2s(mission.fail_time_limit)
-            )
-        );
+        gw.get("mission_fail_time_limit", mission.fail_time_limit);
     }
     if(mission.fail_hud_primary_cond != INVALID) {
-        node->add(
-            new DataNode(
-                "mission_fail_hud_primary_cond",
-                i2s(mission.fail_hud_primary_cond)
-            )
-        );
+        gw.get("mission_fail_hud_primary_cond", mission.fail_hud_primary_cond);
     }
     if(mission.fail_hud_secondary_cond != INVALID) {
-        node->add(
-            new DataNode(
-                "mission_fail_hud_secondary_cond",
-                i2s(mission.fail_hud_secondary_cond)
-            )
-        );
+        gw.get("mission_fail_hud_secondary_cond", mission.fail_hud_secondary_cond);
     }
-    node->add(
-        new DataNode(
-            "mission_grading_mode",
-            i2s(mission.grading_mode)
-        )
-    );
+    gw.get("mission_grading_mode", mission.grading_mode);
     if(mission.grading_mode == MISSION_GRADING_MODE_POINTS) {
         if(mission.points_per_pikmin_born != 0) {
-            node->add(
-                new DataNode(
-                    "mission_points_per_pikmin_born",
-                    i2s(mission.points_per_pikmin_born)
-                )
-            );
+            gw.get("mission_points_per_pikmin_born", mission.points_per_pikmin_born);
         }
         if(mission.points_per_pikmin_death != 0) {
-            node->add(
-                new DataNode(
-                    "mission_points_per_pikmin_death",
-                    i2s(mission.points_per_pikmin_death)
-                )
-            );
+            gw.get("mission_points_per_pikmin_death", mission.points_per_pikmin_death);
         }
         if(mission.points_per_sec_left != 0) {
-            node->add(
-                new DataNode(
-                    "mission_points_per_sec_left",
-                    i2s(mission.points_per_sec_left)
-                )
-            );
+            gw.get("mission_points_per_sec_left", mission.points_per_sec_left);
         }
         if(mission.points_per_sec_passed != 0) {
-            node->add(
-                new DataNode(
-                    "mission_points_per_sec_passed",
-                    i2s(mission.points_per_sec_passed)
-                )
-            );
+            gw.get("mission_points_per_sec_passed", mission.points_per_sec_passed);
         }
         if(mission.points_per_treasure_point != 0) {
-            node->add(
-                new DataNode(
-                    "mission_points_per_treasure_point",
-                    i2s(
-                        mission.points_per_treasure_point
-                    )
-                )
-            );
+            gw.get("mission_points_per_treasure_point", mission.points_per_treasure_point);
         }
         if(mission.points_per_enemy_point != 0) {
-            node->add(
-                new DataNode(
-                    "mission_points_per_enemy_point",
-                    i2s(mission.points_per_enemy_point)
-                )
-            );
+            gw.get("mission_points_per_enemy_point", mission.points_per_enemy_point);
         }
         if(mission.point_loss_data > 0) {
-            node->add(
-                new DataNode(
-                    "mission_point_loss_data",
-                    i2s(mission.point_loss_data)
-                )
-            );
+            gw.get("mission_point_loss_data", mission.point_loss_data);
         }
         if(mission.point_hud_data != 255) {
-            node->add(
-                new DataNode(
-                    "mission_point_hud_data",
-                    i2s(mission.point_hud_data)
-                )
-            );
+            gw.get("mission_point_hud_data", mission.point_hud_data);
         }
         if(mission.starting_points != 0) {
-            node->add(
-                new DataNode(
-                    "mission_starting_points",
-                    i2s(mission.starting_points)
-                )
-            );
+            gw.get("mission_starting_points", mission.starting_points);
         }
-        node->add(
-            new DataNode(
-                "mission_bronze_req",
-                i2s(mission.bronze_req)
-            )
-        );
-        node->add(
-            new DataNode(
-                "mission_silver_req",
-                i2s(mission.silver_req)
-            )
-        );
-        node->add(
-            new DataNode(
-                "mission_gold_req",
-                i2s(mission.gold_req)
-            )
-        );
-        node->add(
-            new DataNode(
-                "mission_platinum_req",
-                i2s(mission.platinum_req)
-            )
-        );
+        gw.get("mission_bronze_req", mission.bronze_req);
+        gw.get("mission_silver_req", mission.silver_req);
+        gw.get("mission_gold_req", mission.gold_req);
+        gw.get("mission_platinum_req", mission.platinum_req);
         if(!mission.maker_record_date.empty()) {
-            node->add(
-                new DataNode(
-                    "mission_maker_record",
-                    i2s(mission.maker_record)
-                )
-            );
-            node->add(
-                new DataNode(
-                    "mission_maker_record_date",
-                    mission.maker_record_date
-                )
-            );
+            gw.get("mission_maker_record", mission.maker_record);
+            gw.get("mission_maker_record_date", mission.maker_record_date);
         }
     }
 }

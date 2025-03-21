@@ -623,189 +623,135 @@ void AnimationDatabase::save_to_data_node(
     save_metadata_to_data_node(node);
     
     //Animations.
-    DataNode* animations_node = new DataNode("animations", "");
-    node->add(animations_node);
-    
+    DataNode* animations_node = node->addNew("animations");
     for(size_t a = 0; a < animations.size(); a++) {
-        DataNode* anim_node = new DataNode(animations[a]->name, "");
-        animations_node->add(anim_node);
+
+        //Animation.
+        Animation* a_ptr = animations[a];
+        DataNode* anim_node = animations_node->addNew(a_ptr->name);
+        GetterWriter agw(anim_node);
         
-        if(animations[a]->loop_frame > 0) {
-            anim_node->add(
-                new DataNode(
-                    "loop_frame", i2s(animations[a]->loop_frame)
-                )
-            );
+        if(a_ptr->loop_frame > 0) {
+            agw.get("loop_frame", a_ptr->loop_frame);
         }
-        if(animations[a]->hit_rate != 100) {
-            anim_node->add(
-                new DataNode("hit_rate", i2s(animations[a]->hit_rate))
-            );
+        if(a_ptr->hit_rate != 100) {
+            agw.get("hit_rate", a_ptr->hit_rate);
         }
-        DataNode* frames_node = new DataNode("frames", "");
-        anim_node->add(frames_node);
-        
-        for(size_t f = 0; f < animations[a]->frames.size(); f++) {
-            Frame* f_ptr = &animations[a]->frames[f];
+
+        //Frames.
+        DataNode* frames_node = anim_node->addNew("frames");
+        for(size_t f = 0; f < a_ptr->frames.size(); f++) {
+
+            //Frame.
+            Frame* f_ptr = &a_ptr->frames[f];
+            DataNode* frame_node = frames_node->addNew(f_ptr->sprite_name);
+            GetterWriter fgw(frame_node);
             
-            DataNode* frame_node =
-                new DataNode(f_ptr->sprite_name, "");
-            frames_node->add(frame_node);
-            
-            frame_node->add(
-                new DataNode("duration", f2s(f_ptr->duration))
-            );
+            fgw.get("duration", f_ptr->duration);
             if(f_ptr->interpolate) {
-                frame_node->add(
-                    new DataNode("interpolate", b2s(f_ptr->interpolate))
-                );
+                fgw.get("interpolate", f_ptr->interpolate);
             }
             if(f_ptr->signal != INVALID) {
-                frame_node->add(
-                    new DataNode("signal", i2s(f_ptr->signal))
-                );
+                fgw.get("signal", f_ptr->signal);
             }
             if(!f_ptr->sound.empty() && f_ptr->sound != NONE_OPTION) {
-                frame_node->add(
-                    new DataNode("sound", f_ptr->sound)
-                );
+                fgw.get("sound", f_ptr->sound);
             }
         }
     }
     
     //Sprites.
-    DataNode* sprites_node = new DataNode("sprites", "");
-    node->add(sprites_node);
-    
+    DataNode* sprites_node = node->addNew("sprites");
     for(size_t s = 0; s < sprites.size(); s++) {
+
+        //Sprite.
         Sprite* s_ptr = sprites[s];
-        DataNode* sprite_node = new DataNode(sprites[s]->name, "");
-        sprites_node->add(sprite_node);
+        DataNode* sprite_node = sprites_node->addNew(sprites[s]->name);
+        GetterWriter sgw(sprite_node);
         
-        sprite_node->add(new DataNode("file",      s_ptr->bmp_name));
-        sprite_node->add(new DataNode("file_pos",  p2s(s_ptr->bmp_pos)));
-        sprite_node->add(new DataNode("file_size", p2s(s_ptr->bmp_size)));
+        sgw.get("file", s_ptr->bmp_name);
+        sgw.get("file_pos", s_ptr->bmp_pos);
+        sgw.get("file_size", s_ptr->bmp_size);
         if(s_ptr->offset.x != 0.0 || s_ptr->offset.y != 0.0) {
-            sprite_node->add(new DataNode("offset", p2s(s_ptr->offset)));
+            sgw.get("offset", s_ptr->offset);
         }
         if(s_ptr->scale.x != 1.0 || s_ptr->scale.y != 1.0) {
-            sprite_node->add(new DataNode("scale", p2s(s_ptr->scale)));
+            sgw.get("scale", s_ptr->scale);
         }
         if(s_ptr->angle != 0.0) {
-            sprite_node->add(new DataNode("angle", f2s(s_ptr->angle)));
+            sgw.get("angle", s_ptr->angle);
         }
         if(s_ptr->tint != COLOR_WHITE) {
-            sprite_node->add(new DataNode("tint", c2s(s_ptr->tint)));
+            sgw.get("tint", s_ptr->tint);
         }
         
         if(save_top_data) {
-            sprite_node->add(
-                new DataNode("top_visible", b2s(s_ptr->top_visible))
-            );
-            sprite_node->add(
-                new DataNode("top_pos", p2s(s_ptr->top_pos))
-            );
-            sprite_node->add(
-                new DataNode("top_size", p2s(s_ptr->top_size))
-            );
-            sprite_node->add(
-                new DataNode("top_angle", f2s(s_ptr->top_angle))
-            );
+            sgw.get("top_visible", s_ptr->top_visible);
+            sgw.get("top_pos", s_ptr->top_pos);
+            sgw.get("top_size", s_ptr->top_size);
+            sgw.get("top_angle", s_ptr->top_angle);
         }
         
         if(!s_ptr->hitboxes.empty()) {
-            DataNode* hitboxes_node =
-                new DataNode("hitboxes", "");
-            sprite_node->add(hitboxes_node);
-            
+
+            //Hitboxes.
+            DataNode* hitboxes_node = sprite_node->addNew("hitboxes");
             for(size_t h = 0; h < s_ptr->hitboxes.size(); h++) {
+
+                //Hitbox.
                 Hitbox* h_ptr = &s_ptr->hitboxes[h];
+                DataNode* hitbox_node = hitboxes_node->addNew(h_ptr->body_part_name);
+                GetterWriter hgw(hitbox_node);
                 
-                DataNode* hitbox_node =
-                    new DataNode(h_ptr->body_part_name, "");
-                hitboxes_node->add(hitbox_node);
-                
-                hitbox_node->add(
-                    new DataNode("coords", p2s(h_ptr->pos, &h_ptr->z))
-                );
-                hitbox_node->add(
-                    new DataNode("height", f2s(h_ptr->height))
-                );
-                hitbox_node->add(
-                    new DataNode("radius", f2s(h_ptr->radius))
-                );
-                hitbox_node->add(
-                    new DataNode("type", i2s(h_ptr->type))
-                );
-                hitbox_node->add(
-                    new DataNode("value", f2s(h_ptr->value))
-                );
+                hgw.get("coords", p2s(h_ptr->pos, &h_ptr->z));
+                hgw.get("height", h_ptr->height);
+                hgw.get("radius", h_ptr->radius);
+                hgw.get("type", h_ptr->type);
+                hgw.get("value", h_ptr->value);
                 if(
                     h_ptr->type == HITBOX_TYPE_NORMAL &&
                     h_ptr->can_pikmin_latch
                 ) {
-                    hitbox_node->add(
-                        new DataNode(
-                            "can_pikmin_latch", b2s(h_ptr->can_pikmin_latch)
-                        )
-                    );
+                    hgw.get("can_pikmin_latch", h_ptr->can_pikmin_latch);
                 }
                 if(!h_ptr->hazards_str.empty()) {
-                    hitbox_node->add(
-                        new DataNode("hazards", h_ptr->hazards_str)
-                    );
+                    hgw.get("hazards", h_ptr->hazards_str);
                 }
                 if(
                     h_ptr->type == HITBOX_TYPE_ATTACK &&
                     h_ptr->knockback_outward
                 ) {
-                    hitbox_node->add(
-                        new DataNode(
-                            "knockback_outward",
-                            b2s(h_ptr->knockback_outward)
-                        )
-                    );
+                    hgw.get("knockback_outward", h_ptr->knockback_outward);
                 }
                 if(
                     h_ptr->type == HITBOX_TYPE_ATTACK &&
                     h_ptr->knockback_angle != 0
                 ) {
-                    hitbox_node->add(
-                        new DataNode(
-                            "knockback_angle", f2s(h_ptr->knockback_angle)
-                        )
-                    );
+                    hgw.get("knockback_angle", h_ptr->knockback_angle);
                 }
                 if(
                     h_ptr->type == HITBOX_TYPE_ATTACK &&
                     h_ptr->knockback != 0
                 ) {
-                    hitbox_node->add(
-                        new DataNode("knockback", f2s(h_ptr->knockback))
-                    );
+                    hgw.get("knockback", h_ptr->knockback);
                 }
                 if(
                     h_ptr->type == HITBOX_TYPE_ATTACK &&
                     h_ptr->wither_chance > 0
                 ) {
-                    hitbox_node->add(
-                        new DataNode(
-                            "wither_chance", i2s(h_ptr->wither_chance)
-                        )
-                    );
+                    hgw.get("wither_chance", h_ptr->wither_chance);
                 }
             }
         }
     }
     
     //Body parts.
-    DataNode* body_parts_node = new DataNode("body_parts", "");
-    node->add(body_parts_node);
-    
+    DataNode* body_parts_node = node->addNew("body_parts");
     for(size_t b = 0; b < body_parts.size(); b++) {
-        DataNode* body_part_node =
-            new DataNode(body_parts[b]->name, "");
-        body_parts_node->add(body_part_node);
+
+        //Body part.
+        BodyPart* b_ptr = body_parts[b];
+        body_parts_node->addNew(b_ptr->name);
         
     }
 }

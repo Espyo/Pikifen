@@ -278,8 +278,7 @@ void Results::load() {
         entry_node =
             mission_records.getChildByName(record_entry_name);
     } else {
-        entry_node = new DataNode(record_entry_name, "");
-        mission_records.add(entry_node);
+        entry_node = mission_records.addNew(record_entry_name, "");
     }
     
     vector<string> old_record_parts = split(entry_node->value, ";", true);

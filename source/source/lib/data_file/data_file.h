@@ -102,6 +102,7 @@ public:
         const string &name, size_t occurrence_number = 0
     );
     size_t add(DataNode* new_node);
+    DataNode* addNew(const string& name, const string& value = "");
     bool remove(DataNode* node_to_remove);
     void loadFile(
         const string &file_path,

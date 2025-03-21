@@ -1299,29 +1299,26 @@ void save_screenshot() {
 void save_statistics() {
     DataNode stats_file("", "");
     const Statistics &s = game.statistics;
+    GetterWriter gw(&stats_file);
     
-#define save(n, v) stats_file.add(new DataNode(n, v))
-    
-    save("startups", i2s(s.startups));
-    save("runtime", f2s(s.runtime));
-    save("gameplay_time", f2s(s.gameplay_time));
-    save("area_entries", i2s(s.area_entries));
-    save("pikmin_births", i2s(s.pikmin_births));
-    save("pikmin_deaths", i2s(s.pikmin_deaths));
-    save("pikmin_eaten", i2s(s.pikmin_eaten));
-    save("pikmin_hazard_deaths", i2s(s.pikmin_hazard_deaths));
-    save("pikmin_blooms", i2s(s.pikmin_blooms));
-    save("pikmin_saved", i2s(s.pikmin_saved));
-    save("enemy_deaths", i2s(s.enemy_deaths));
-    save("pikmin_thrown", i2s(s.pikmin_thrown));
-    save("whistle_uses", i2s(s.whistle_uses));
-    save("distance_walked", f2s(s.distance_walked));
-    save("leader_damage_suffered", f2s(s.leader_damage_suffered));
-    save("punch_damage_caused", f2s(s.punch_damage_caused));
-    save("leader_kos", i2s(s.leader_kos));
-    save("sprays_used", i2s(s.sprays_used));
-    
-#undef save
+    gw.get("startups", s.startups);
+    gw.get("runtime", s.runtime);
+    gw.get("gameplay_time", s.gameplay_time);
+    gw.get("area_entries", s.area_entries);
+    gw.get("pikmin_births", s.pikmin_births);
+    gw.get("pikmin_deaths", s.pikmin_deaths);
+    gw.get("pikmin_eaten", s.pikmin_eaten);
+    gw.get("pikmin_hazard_deaths", s.pikmin_hazard_deaths);
+    gw.get("pikmin_blooms", s.pikmin_blooms);
+    gw.get("pikmin_saved", s.pikmin_saved);
+    gw.get("enemy_deaths", s.enemy_deaths);
+    gw.get("pikmin_thrown", s.pikmin_thrown);
+    gw.get("whistle_uses", s.whistle_uses);
+    gw.get("distance_walked", s.distance_walked);
+    gw.get("leader_damage_suffered", s.leader_damage_suffered);
+    gw.get("punch_damage_caused", s.punch_damage_caused);
+    gw.get("leader_kos", s.leader_kos);
+    gw.get("sprays_used", s.sprays_used);
     
     stats_file.saveFile(FILE_PATHS_FROM_ROOT::STATISTICS, true, true, true);
 }

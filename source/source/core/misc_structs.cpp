@@ -596,51 +596,180 @@ void FadeManager::tick(float delta_t) {
 
 
 /**
- * @brief Constructs a new maker tools info object.
+ * @brief Constructs a new getter writer object.
+ *
+ * @param dn Pointer to the base data node.
  */
-MakerTools::MakerTools() :
-    enabled(true),
-    area_image_padding(32.0f),
-    area_image_shadows(true),
-    area_image_size(2048),
-    area_image_mobs(true),
-    change_speed(false),
-    change_speed_mult(2.0f),
-    collision(false),
-    geometry_info(false),
-    hitboxes(false),
-    hud(true),
-    info_lock(nullptr),
-    info_print_duration(5.0f),
-    info_print_fade_duration(3.0f),
-    last_pikmin_type(nullptr),
-    mob_hurting_ratio(0.75),
-    path_info(false),
-    use_perf_mon(false),
-    used_helping_tools(false) {
+GetterWriter::GetterWriter(DataNode* dn) :
+    node(dn) {
     
-    info_print_timer = Timer(1.0f, [this] () { info_print_text.clear(); });
-    for(size_t k = 0; k < 20; k++) {
-        keys[k] = MAKER_TOOL_TYPE_NONE;
-    }
 }
 
 
 /**
- * @brief Resets the states of the tools so that players can play without any
- * tool affecting the experience.
+ * @brief Gets a variable's value, and writes it to a child node's value.
+ *
+ * @param child_name Name of the child node.
+ * @param var The var to get. This is an Allegro color.
+ * @param out_child_node If not nullptr, the new node is returned here.
  */
-void MakerTools::reset_for_gameplay() {
-    change_speed = false;
-    collision = false;
-    geometry_info = false;
-    hitboxes = false;
-    hud = true;
-    info_lock = nullptr;
-    last_pikmin_type = nullptr;
-    path_info = false;
-    used_helping_tools = false;
+void GetterWriter::get(
+    const string &child_name, const ALLEGRO_COLOR &var, DataNode** out_child_node
+) {
+    DataNode* new_node = node->addNew(child_name, c2s(var));
+    if(out_child_node) *out_child_node = new_node;
 }
+
+
+/**
+ * @brief Gets a variable's value, and writes it to a child node's value.
+ *
+ * @param child_name Name of the child node.
+ * @param var The var to get. This is a string.
+ * @param out_child_node If not nullptr, the new node is returned here.
+ */
+void GetterWriter::get(
+    const string &child_name, const string &var, DataNode** out_child_node
+) {
+    DataNode* new_node = node->addNew(child_name, var);
+    if(out_child_node) *out_child_node = new_node;
+}
+
+
+/**
+ * @brief Gets a variable's value, and writes it to a child node's value.
+ *
+ * @param child_name Name of the child node.
+ * @param var The var to get. This is a string.
+ * @param out_child_node If not nullptr, the new node is returned here.
+ */
+void GetterWriter::get(
+    const string &child_name, const char* var, DataNode** out_child_node
+) {
+    DataNode* new_node = node->addNew(child_name, var);
+    if(out_child_node) *out_child_node = new_node;
+}
+
+
+/**
+ * @brief Gets a variable's value, and writes it to a child node's value.
+ *
+ * @param child_name Name of the child node.
+ * @param var The var to get. This is an integer.
+ * @param out_child_node If not nullptr, the new node is returned here.
+ */
+void GetterWriter::get(
+    const string &child_name, const size_t &var, DataNode** out_child_node
+) {
+    DataNode* new_node = node->addNew(child_name, i2s(var));
+    if(out_child_node) *out_child_node = new_node;
+}
+
+
+/**
+ * @brief Gets a variable's value, and writes it to a child node's value.
+ *
+ * @param child_name Name of the child node.
+ * @param var The var to get. This is an integer.
+ * @param out_child_node If not nullptr, the new node is returned here.
+ */
+void GetterWriter::get(
+    const string &child_name, const int &var, DataNode** out_child_node
+) {
+    DataNode* new_node = node->addNew(child_name, i2s(var));
+    if(out_child_node) *out_child_node = new_node;
+}
+
+
+/**
+ * @brief Gets a variable's value, and writes it to a child node's value.
+ *
+ * @param child_name Name of the child node.
+ * @param var The var to get. This is an unsigned integer.
+ * @param out_child_node If not nullptr, the new node is returned here.
+ */
+void GetterWriter::get(
+    const string &child_name, const unsigned int &var, DataNode** out_child_node
+) {
+    DataNode* new_node = node->addNew(child_name, i2s(var));
+    if(out_child_node) *out_child_node = new_node;
+}
+
+
+/**
+ * @brief Gets a variable's value, and writes it to a child node's value.
+ *
+ * @param child_name Name of the child node.
+ * @param var The var to get. This is an unsigned char.
+ * @param out_child_node If not nullptr, the new node is returned here.
+ */
+void GetterWriter::get(
+    const string &child_name, const unsigned char &var, DataNode** out_child_node
+) {
+    DataNode* new_node = node->addNew(child_name, i2s(var));
+    if(out_child_node) *out_child_node = new_node;
+}
+
+
+/**
+ * @brief Gets a variable's value, and writes it to a child node's value.
+ *
+ * @param child_name Name of the child node.
+ * @param var The var to get. This is a boolean.
+ * @param out_child_node If not nullptr, the new node is returned here.
+ */
+void GetterWriter::get(
+    const string &child_name, const bool &var, DataNode** out_child_node
+) {
+    DataNode* new_node = node->addNew(child_name, b2s(var));
+    if(out_child_node) *out_child_node = new_node;
+}
+
+
+/**
+ * @brief Gets a variable's value, and writes it to a child node's value.
+ *
+ * @param child_name Name of the child node.
+ * @param var The var to get. This is a float.
+ * @param out_child_node If not nullptr, the new node is returned here.
+ */
+void GetterWriter::get(
+    const string &child_name, const float &var, DataNode** out_child_node
+) {
+    DataNode* new_node = node->addNew(child_name, f2s(var));
+    if(out_child_node) *out_child_node = new_node;
+}
+
+
+/**
+ * @brief Gets a variable's value, and writes it to a child node's value.
+ *
+ * @param child_name Name of the child node.
+ * @param var The var to get. This is a double.
+ * @param out_child_node If not nullptr, the new node is returned here.
+ */
+void GetterWriter::get(
+    const string &child_name, const double &var, DataNode** out_child_node
+) {
+    DataNode* new_node = node->addNew(child_name, f2s(var));
+    if(out_child_node) *out_child_node = new_node;
+}
+
+
+/**
+ * @brief Gets a variable's value, and writes it to a child node's value.
+ *
+ * @param child_name Name of the child node.
+ * @param var The var to get. This is a point.
+ * @param out_child_node If not nullptr, the new node is returned here.
+ */
+void GetterWriter::get(
+    const string &child_name, const Point &var, DataNode** out_child_node
+) {
+    DataNode* new_node = node->addNew(child_name, p2s(var));
+    if(out_child_node) *out_child_node = new_node;
+}
+
 
 
 /**
@@ -1179,21 +1308,21 @@ ReaderSetter::ReaderSetter(DataNode* dn) :
  * @brief Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
  *
- * @param child Name of the child node.
+ * @param child_name Name of the child node.
  * @param var The var to set. This is an Allegro color.
- * @param child_node If not-nullptr, the node from whence the value came
+ * @param out_child_node If not nullptr, the node from whence the value came
  * is placed here. nullptr is placed if the property does not exist or has
  * no value.
  */
 void ReaderSetter::set(
-    const string &child, ALLEGRO_COLOR &var, DataNode** child_node
+    const string &child_name, ALLEGRO_COLOR &var, DataNode** out_child_node
 ) {
-    DataNode* n = node->getChildByName(child);
+    DataNode* n = node->getChildByName(child_name);
     if(!n->value.empty()) {
-        if(child_node) *child_node = n;
+        if(out_child_node) *out_child_node = n;
         var = s2c(n->value);
     } else {
-        if(child_node) *child_node = nullptr;
+        if(out_child_node) *out_child_node = nullptr;
     }
 }
 
@@ -1202,21 +1331,21 @@ void ReaderSetter::set(
  * @brief Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
  *
- * @param child Name of the child node.
+ * @param child_name Name of the child node.
  * @param var The var to set. This is a string.
- * @param child_node If not-nullptr, the node from whence the value came
+ * @param out_child_node If not nullptr, the node from whence the value came
  * is placed here. nullptr is placed if the property does not exist or has
  * no value.
  */
 void ReaderSetter::set(
-    const string &child, string &var, DataNode** child_node
+    const string &child_name, string &var, DataNode** out_child_node
 ) {
-    DataNode* n = node->getChildByName(child);
+    DataNode* n = node->getChildByName(child_name);
     if(!n->value.empty()) {
-        if(child_node) *child_node = n;
+        if(out_child_node) *out_child_node = n;
         var = n->value;
     } else {
-        if(child_node) *child_node = nullptr;
+        if(out_child_node) *out_child_node = nullptr;
     }
 }
 
@@ -1225,21 +1354,21 @@ void ReaderSetter::set(
  * @brief Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
  *
- * @param child Name of the child node.
+ * @param child_name Name of the child node.
  * @param var The var to set. This is an integer.
- * @param child_node If not-nullptr, the node from whence the value came
+ * @param out_child_node If not nullptr, the node from whence the value came
  * is placed here. nullptr is placed if the property does not exist or has
  * no value.
  */
 void ReaderSetter::set(
-    const string &child, size_t &var, DataNode** child_node
+    const string &child_name, size_t &var, DataNode** out_child_node
 ) {
-    DataNode* n = node->getChildByName(child);
+    DataNode* n = node->getChildByName(child_name);
     if(!n->value.empty()) {
-        if(child_node) *child_node = n;
+        if(out_child_node) *out_child_node = n;
         var = s2i(n->value);
     } else {
-        if(child_node) *child_node = nullptr;
+        if(out_child_node) *out_child_node = nullptr;
     }
 }
 
@@ -1248,21 +1377,21 @@ void ReaderSetter::set(
  * @brief Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
  *
- * @param child Name of the child node.
+ * @param child_name Name of the child node.
  * @param var The var to set. This is an integer.
- * @param child_node If not-nullptr, the node from whence the value came
+ * @param out_child_node If not nullptr, the node from whence the value came
  * is placed here. nullptr is placed if the property does not exist or has
  * no value.
  */
 void ReaderSetter::set(
-    const string &child, int &var, DataNode** child_node
+    const string &child_name, int &var, DataNode** out_child_node
 ) {
-    DataNode* n = node->getChildByName(child);
+    DataNode* n = node->getChildByName(child_name);
     if(!n->value.empty()) {
-        if(child_node) *child_node = n;
+        if(out_child_node) *out_child_node = n;
         var = s2i(n->value);
     } else {
-        if(child_node) *child_node = nullptr;
+        if(out_child_node) *out_child_node = nullptr;
     }
 }
 
@@ -1271,21 +1400,21 @@ void ReaderSetter::set(
  * @brief Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
  *
- * @param child Name of the child node.
+ * @param child_name Name of the child node.
  * @param var The var to set. This is an unsigned integer.
- * @param child_node If not-nullptr, the node from whence the value came
+ * @param out_child_node If not nullptr, the node from whence the value came
  * is placed here. nullptr is placed if the property does not exist or has
  * no value.
  */
 void ReaderSetter::set(
-    const string &child, unsigned int &var, DataNode** child_node
+    const string &child_name, unsigned int &var, DataNode** out_child_node
 ) {
-    DataNode* n = node->getChildByName(child);
+    DataNode* n = node->getChildByName(child_name);
     if(!n->value.empty()) {
-        if(child_node) *child_node = n;
+        if(out_child_node) *out_child_node = n;
         var = s2i(n->value);
     } else {
-        if(child_node) *child_node = nullptr;
+        if(out_child_node) *out_child_node = nullptr;
     }
 }
 
@@ -1294,21 +1423,21 @@ void ReaderSetter::set(
  * @brief Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
  *
- * @param child Name of the child node.
+ * @param child_name Name of the child node.
  * @param var The var to set. This is an unsigned char.
- * @param child_node If not-nullptr, the node from whence the value came
+ * @param out_child_node If not nullptr, the node from whence the value came
  * is placed here. nullptr is placed if the property does not exist or has
  * no value.
  */
 void ReaderSetter::set(
-    const string &child, unsigned char &var, DataNode** child_node
+    const string &child_name, unsigned char &var, DataNode** out_child_node
 ) {
-    DataNode* n = node->getChildByName(child);
+    DataNode* n = node->getChildByName(child_name);
     if(!n->value.empty()) {
-        if(child_node) *child_node = n;
+        if(out_child_node) *out_child_node = n;
         var = s2i(n->value);
     } else {
-        if(child_node) *child_node = nullptr;
+        if(out_child_node) *out_child_node = nullptr;
     }
 }
 
@@ -1317,21 +1446,21 @@ void ReaderSetter::set(
  * @brief Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
  *
- * @param child Name of the child node.
+ * @param child_name Name of the child node.
  * @param var The var to set. This is a boolean.
- * @param child_node If not-nullptr, the node from whence the value came
+ * @param out_child_node If not nullptr, the node from whence the value came
  * is placed here. nullptr is placed if the property does not exist or has
  * no value.
  */
 void ReaderSetter::set(
-    const string &child, bool &var, DataNode** child_node
+    const string &child_name, bool &var, DataNode** out_child_node
 ) {
-    DataNode* n = node->getChildByName(child);
+    DataNode* n = node->getChildByName(child_name);
     if(!n->value.empty()) {
-        if(child_node) *child_node = n;
+        if(out_child_node) *out_child_node = n;
         var = s2b(n->value);
     } else {
-        if(child_node) *child_node = nullptr;
+        if(out_child_node) *out_child_node = nullptr;
     }
 }
 
@@ -1340,21 +1469,21 @@ void ReaderSetter::set(
  * @brief Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
  *
- * @param child Name of the child node.
+ * @param child_name Name of the child node.
  * @param var The var to set. This is a float.
- * @param child_node If not-nullptr, the node from whence the value came
+ * @param out_child_node If not nullptr, the node from whence the value came
  * is placed here. nullptr is placed if the property does not exist or has
  * no value.
  */
 void ReaderSetter::set(
-    const string &child, float &var, DataNode** child_node
+    const string &child_name, float &var, DataNode** out_child_node
 ) {
-    DataNode* n = node->getChildByName(child);
+    DataNode* n = node->getChildByName(child_name);
     if(!n->value.empty()) {
-        if(child_node) *child_node = n;
+        if(out_child_node) *out_child_node = n;
         var = s2f(n->value);
     } else {
-        if(child_node) *child_node = nullptr;
+        if(out_child_node) *out_child_node = nullptr;
     }
 }
 
@@ -1363,21 +1492,21 @@ void ReaderSetter::set(
  * @brief Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
  *
- * @param child Name of the child node.
+ * @param child_name Name of the child node.
  * @param var The var to set. This is a double.
- * @param child_node If not-nullptr, the node from whence the value came
+ * @param out_child_node If not nullptr, the node from whence the value came
  * is placed here. nullptr is placed if the property does not exist or has
  * no value.
  */
 void ReaderSetter::set(
-    const string &child, double &var, DataNode** child_node
+    const string &child_name, double &var, DataNode** out_child_node
 ) {
-    DataNode* n = node->getChildByName(child);
+    DataNode* n = node->getChildByName(child_name);
     if(!n->value.empty()) {
-        if(child_node) *child_node = n;
+        if(out_child_node) *out_child_node = n;
         var = s2f(n->value);
     } else {
-        if(child_node) *child_node = nullptr;
+        if(out_child_node) *out_child_node = nullptr;
     }
 }
 
@@ -1386,21 +1515,21 @@ void ReaderSetter::set(
  * @brief Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
  *
- * @param child Name of the child node.
+ * @param child_name Name of the child node.
  * @param var The var to set. This is a point.
- * @param child_node If not-nullptr, the node from whence the value came
+ * @param out_child_node If not nullptr, the node from whence the value came
  * is placed here. nullptr is placed if the property does not exist or has
  * no value.
  */
 void ReaderSetter::set(
-    const string &child, Point &var, DataNode** child_node
+    const string &child_name, Point &var, DataNode** out_child_node
 ) {
-    DataNode* n = node->getChildByName(child);
+    DataNode* n = node->getChildByName(child_name);
     if(!n->value.empty()) {
-        if(child_node) *child_node = n;
+        if(out_child_node) *out_child_node = n;
         var = s2p(n->value);
     } else {
-        if(child_node) *child_node = nullptr;
+        if(out_child_node) *out_child_node = nullptr;
     }
 }
 

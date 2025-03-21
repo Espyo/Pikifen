@@ -3205,33 +3205,13 @@ void AreaEditor::save_reference() {
     }
     
     DataNode reference_file("", "");
-    reference_file.add(
-        new DataNode("file", reference_file_path)
-    );
-    reference_file.add(
-        new DataNode(
-            "center",
-            p2s(reference_center)
-        )
-    );
-    reference_file.add(
-        new DataNode(
-            "size",
-            p2s(reference_size)
-        )
-    );
-    reference_file.add(
-        new DataNode(
-            "alpha",
-            i2s(reference_alpha)
-        )
-    );
-    reference_file.add(
-        new DataNode(
-            "visible",
-            b2s(show_reference)
-        )
-    );
+    GetterWriter gw(&reference_file);
+
+    gw.get("file", reference_file_path);
+    gw.get("center", reference_center);
+    gw.get("size", reference_size);
+    gw.get("alpha", reference_alpha);
+    gw.get("visible", show_reference);
     
     reference_file.saveFile(file_path);
 }

@@ -55,20 +55,20 @@ void Content::reset_metadata() {
  * @param node Data node to save to.
  */
 void Content::save_metadata_to_data_node(DataNode* node) const {
-#define saver(n, v) node->add(new DataNode((n), (v)))
-#define saver_o(n, v) if(!v.empty()) node->add(new DataNode((n), (v)))
+    GetterWriter gw(node);
+    gw.get("name", name);
 
-    saver("name", name);
-    saver_o("description", description);
-    saver_o("tags", tags);
-    saver_o("maker", maker);
-    saver_o("version", version);
-    saver_o("engine_version", engine_version);
-    saver_o("maker_notes", maker_notes);
-    saver_o("notes", notes);
+#define save_opt(n, v) if(!v.empty()) gw.get((n), (v))
+
+    save_opt("description", description);
+    save_opt("tags", tags);
+    save_opt("maker", maker);
+    save_opt("version", version);
+    save_opt("engine_version", engine_version);
+    save_opt("maker_notes", maker_notes);
+    save_opt("notes", notes);
     
-#undef saver_o
-#undef saver
+#undef save_opt
 }
 
 

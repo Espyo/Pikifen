@@ -111,6 +111,20 @@ size_t DataNode::add(DataNode* newNode) {
 
 
 /**
+ * @brief Creates a new node and adds it as a child.
+ *
+ * @param name Name of the new node.
+ * @param value Value of the new node.
+ * @return The new node.
+ */
+DataNode* DataNode::addNew(const string& name, const string& value) {
+    DataNode* newNode = new DataNode(name, value);
+    add(newNode);
+    return newNode;
+}
+
+
+/**
  * @brief Clears the data inside a node.
  */
 void DataNode::clear() {
