@@ -100,12 +100,14 @@ void Game::change_state(
 
     if(cur_state && unload_current) {
         cur_state->unload();
+        cur_state->loaded = false;
     }
     
     cur_state = new_state;
     
     if(load_new) {
         cur_state->load();
+        cur_state->loaded = true;
     }
     
     //Because during the loading screens there is no activity, on the
@@ -128,27 +130,27 @@ void Game::check_system_key_press(const ALLEGRO_EVENT &ev) {
         if(has_flag(ev.keyboard.modifiers, ALLEGRO_KEYMOD_CTRL)) {
             string cur_state_name = get_cur_state_name();
             if(cur_state_name == states.animation_ed->get_name()) {
-                maker_tools.auto_start_mode = "animation_editor";
+                maker_tools.auto_start_state = "animation_editor";
                 maker_tools.auto_start_option =
                     states.animation_ed->get_opened_content_path();
             } else if(cur_state_name == states.area_ed->get_name()) {
-                maker_tools.auto_start_mode = "area_editor";
+                maker_tools.auto_start_state = "area_editor";
                 maker_tools.auto_start_option =
                     states.area_ed->get_opened_content_path();
             } else if(cur_state_name == states.gui_ed->get_name()) {
-                maker_tools.auto_start_mode = "gui_editor";
+                maker_tools.auto_start_state = "gui_editor";
                 maker_tools.auto_start_option =
                     states.gui_ed->get_opened_content_path();
             } else if(cur_state_name == states.particle_ed->get_name()) {
-                maker_tools.auto_start_mode = "particle_editor";
+                maker_tools.auto_start_state = "particle_editor";
                 maker_tools.auto_start_option =
                     states.particle_ed->get_opened_content_path();
             } else if(cur_state_name == states.gameplay->get_name()) {
-                maker_tools.auto_start_mode = "play";
+                maker_tools.auto_start_state = "play";
                 maker_tools.auto_start_option =
                     states.gameplay->path_of_area_to_load;
             } else {
-                maker_tools.auto_start_mode.clear();
+                maker_tools.auto_start_state.clear();
                 maker_tools.auto_start_option.clear();
             }
             save_maker_tools();
@@ -454,7 +456,7 @@ int Game::start() {
     
     if(
         maker_tools.enabled &&
-        maker_tools.auto_start_mode == "play" &&
+        maker_tools.auto_start_state == "play" &&
         !maker_tools.auto_start_option.empty()
     ) {
         states.gameplay->path_of_area_to_load =
@@ -463,7 +465,7 @@ int Game::start() {
         
     } else if(
         maker_tools.enabled &&
-        maker_tools.auto_start_mode == "animation_editor"
+        maker_tools.auto_start_state == "animation_editor"
     ) {
         states.animation_ed->auto_load_file =
             maker_tools.auto_start_option;
@@ -471,7 +473,7 @@ int Game::start() {
         
     } else if(
         maker_tools.enabled &&
-        maker_tools.auto_start_mode == "area_editor"
+        maker_tools.auto_start_state == "area_editor"
     ) {
         states.area_ed->auto_load_folder =
             maker_tools.auto_start_option;
@@ -479,14 +481,14 @@ int Game::start() {
         
     } else if(
         maker_tools.enabled &&
-        maker_tools.auto_start_mode == "gui_editor"
+        maker_tools.auto_start_state == "gui_editor"
     ) {
         states.gui_ed->auto_load_file =
             maker_tools.auto_start_option;
         change_state(states.gui_ed);
     } else if(
         maker_tools.enabled &&
-        maker_tools.auto_start_mode == "particle_editor"
+        maker_tools.auto_start_state == "particle_editor"
     ) {
         states.particle_ed->auto_load_file =
             maker_tools.auto_start_option;

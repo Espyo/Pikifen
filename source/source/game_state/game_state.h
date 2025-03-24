@@ -30,6 +30,12 @@ class GameState {
 
 public:
 
+    //--- Members ---
+    
+    //Is it currently loaded?
+    bool loaded = false;
+    
+    
     //--- Function declarations ---
     
     GameState();

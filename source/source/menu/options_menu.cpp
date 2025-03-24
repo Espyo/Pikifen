@@ -383,6 +383,7 @@ void OptionsMenu::init_gui_control_binds_page() {
             OPTIONS_MENU::HUD_MOVE_TIME
         );
         save_options();
+        save_maker_tools();
     };
     binds_gui.back_item->on_get_tooltip =
     [] () { return "Return to the previous menu."; };
@@ -1134,6 +1135,9 @@ void OptionsMenu::populate_binds() {
                 break;
             } case PLAYER_ACTION_CAT_ADVANCED: {
                 section_name = "Advanced";
+                break;
+            } case PLAYER_ACTION_CAT_MAKER_TOOLS: {
+                section_name = "Maker tools";
                 break;
             }
             }

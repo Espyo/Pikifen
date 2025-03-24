@@ -84,6 +84,11 @@ struct PlayerInput {
     //Value associated, if applicable.
     float value = 0.0f;
     
+    
+    //--- Function declarations ---
+    
+    bool isSameHardwareSourceAs(const PlayerInput &i2);
+    
 };
 
 
@@ -172,7 +177,9 @@ struct ControlsManager {
     //--- Function declarations ---
     
     void handleInput(const PlayerInput &input);
+    void startIgnoringInput(const PlayerInput &input);
     vector<PlayerAction> newFrame();
+    
     
     private:
     
@@ -190,6 +197,9 @@ struct ControlsManager {
     //Clean state of each game controller stick.
     map<int, map<int, map<int, float> > > cleanSticks;
     
+    //Inputs currently being ignored.
+    vector<PlayerInput> ignoredInputs;
+    
     
     //--- Function declarations ---
     
@@ -198,5 +208,6 @@ struct ControlsManager {
         const PlayerInput &input
     );
     void handleCleanInput(const PlayerInput &input, bool addDirectly);
+    bool processInputIgnoring(const PlayerInput &input);
     
 };

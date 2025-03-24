@@ -1085,7 +1085,10 @@ void GameplayState::do_menu_logic() {
         //Make sure that speed changes don't affect the FPS calculation.
         double real_delta_t = game.delta_t;
         if(game.maker_tools.change_speed) {
-            real_delta_t /= game.maker_tools.change_speed_mult;
+            real_delta_t /=
+            game.maker_tools.change_speed_settings[
+                game.maker_tools.change_speed_setting_idx
+            ];
         }
         
         game.framerate_history.push_back(game.cur_frame_process_time);

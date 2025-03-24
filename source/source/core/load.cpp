@@ -272,48 +272,8 @@ void load_fonts() {
  */
 void load_maker_tools() {
     DataNode file(FILE_PATHS_FROM_ROOT::MAKER_TOOLS);
-    
     if(!file.fileWasOpened) return;
-    
-    game.maker_tools.enabled = s2b(file.getChildByName("enabled")->value);
-    
-    for(unsigned char k = 0; k < 20; k++) {
-        string tool_name;
-        if(k < 10) {
-            //The first ten indexes are the F2 - F11 keys.
-            tool_name = file.getChildByName("f" + i2s(k + 2))->value;
-        } else {
-            //The second ten indexes are the 0 - 9 keys.
-            tool_name = file.getChildByName(i2s(k - 10))->value;
-        }
-        
-        for(size_t t = 0; t < N_MAKER_TOOLS; t++) {
-            if(tool_name == MAKER_TOOLS::NAMES[t]) {
-                game.maker_tools.keys[k] = (MAKER_TOOL_TYPE) t;
-            }
-        }
-    }
-    
-    ReaderSetter rs(&file);
-    
-    DataNode* mob_hurting_percentage_node = nullptr;
-    
-    rs.set("area_image_mobs", game.maker_tools.area_image_mobs);
-    rs.set("area_image_padding", game.maker_tools.area_image_padding);
-    rs.set("area_image_shadows", game.maker_tools.area_image_shadows);
-    rs.set("area_image_size", game.maker_tools.area_image_size);
-    rs.set("change_speed_multiplier", game.maker_tools.change_speed_mult);
-    rs.set(
-        "mob_hurting_percentage", game.maker_tools.mob_hurting_ratio,
-        &mob_hurting_percentage_node
-    );
-    rs.set("auto_start_option", game.maker_tools.auto_start_option);
-    rs.set("auto_start_mode", game.maker_tools.auto_start_mode);
-    rs.set("performance_monitor", game.maker_tools.use_perf_mon);
-    
-    if(mob_hurting_percentage_node) {
-        game.maker_tools.mob_hurting_ratio /= 100.0;
-    }
+    game.maker_tools.load_from_data_node(&file);
 }
 
 

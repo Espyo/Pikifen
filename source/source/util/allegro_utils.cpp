@@ -437,6 +437,41 @@ string get_key_name(int keycode, bool condensed) {
 
 
 /**
+ * @brief Returns whether any Shift key, any Ctrl key, and any Alt key
+ * is pressed.
+ * 
+ * @param out_shift_state If not nullptr,
+ * whether Shift is pressed is returned here.
+ * @param out_ctrl_state If not nullptr,
+ * whether Ctrl is pressed is returned here.
+ * @param out_alt_state If not nullptr,
+ * whether Alt is pressed is returned here.
+ */
+void get_shift_ctrl_alt_state(
+    bool* out_shift_state, bool* out_ctrl_state, bool* out_alt_state
+) {
+    ALLEGRO_KEYBOARD_STATE keyboard_state;
+    al_get_keyboard_state(&keyboard_state);
+    if(out_shift_state) {
+        *out_shift_state =
+            al_key_down(&keyboard_state, ALLEGRO_KEY_LSHIFT) ||
+            al_key_down(&keyboard_state, ALLEGRO_KEY_RSHIFT);
+    }
+    if(out_ctrl_state) {
+        *out_ctrl_state =
+            al_key_down(&keyboard_state, ALLEGRO_KEY_LCTRL) ||
+            al_key_down(&keyboard_state, ALLEGRO_KEY_RCTRL) ||
+            al_key_down(&keyboard_state, ALLEGRO_KEY_COMMAND);
+    }
+    if(out_alt_state) {
+        *out_alt_state =
+            al_key_down(&keyboard_state, ALLEGRO_KEY_ALT) ||
+            al_key_down(&keyboard_state, ALLEGRO_KEY_ALTGR);
+    }
+}
+
+
+/**
  * @brief Like an std::getline(), but for ALLEGRO_FILE*.
  *
  * @param file Allegro file handle.

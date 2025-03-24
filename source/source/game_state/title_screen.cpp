@@ -146,6 +146,7 @@ void TitleScreen::do_logic() {
             play_gui.handle_player_action(player_actions[a]);
             make_gui.handle_player_action(player_actions[a]);
             tutorial_gui.handle_player_action(player_actions[a]);
+            game.maker_tools.handle_player_action(player_actions[a]);
         }
     }
     

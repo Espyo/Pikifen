@@ -120,6 +120,9 @@ void get_next_edge(
     Vertex* v_ptr, float pivot_angle, bool clockwise,
     const Edge* ignore, Edge** out_edge, float* out_angle, float* out_diff
 );
+Mob* get_next_mob_near_cursor(
+    Mob* pivot, bool must_have_health = false
+);
 void get_next_offset_effect_edge(
     Vertex* v_ptr, float pivot_angle, bool clockwise,
     const Edge* ignore, offset_effect_checker_t edge_checker,

@@ -31,9 +31,11 @@
  *
  * @param bmp_output If not nullptr, draw the area onto this.
  * @param bmp_transform Transformation to use when drawing to a bitmap.
+ * @param bmp_settings Settings to use when drawing to a bitmap.
  */
 void GameplayState::do_game_drawing(
-    ALLEGRO_BITMAP* bmp_output, const ALLEGRO_TRANSFORM* bmp_transform
+    ALLEGRO_BITMAP* bmp_output, const ALLEGRO_TRANSFORM* bmp_transform,
+    const MakerTools::AreaImageSettings &bmp_settings
 ) {
 
     /*  ***************************************
@@ -1734,9 +1736,12 @@ void GameplayState::draw_throw_preview() {
 /**
  * @brief Draws the current area and mobs to a bitmap and returns it.
  *
+ * @param settings What settings to use.
  * @return The bitmap.
  */
-ALLEGRO_BITMAP* GameplayState::draw_to_bitmap() {
+ALLEGRO_BITMAP* GameplayState::draw_to_bitmap(
+    const MakerTools::AreaImageSettings &settings
+) {
     //First, get the full dimensions of the map.
     Point min_coords(FLT_MAX, FLT_MAX);
     Point max_coords(-FLT_MAX, -FLT_MAX);
@@ -1749,17 +1754,17 @@ ALLEGRO_BITMAP* GameplayState::draw_to_bitmap() {
     }
     
     //Figure out the scale that will fit on the image.
-    float area_w = max_coords.x - min_coords.x + game.maker_tools.area_image_padding;
-    float area_h = max_coords.y - min_coords.y + game.maker_tools.area_image_padding;
-    float final_bmp_w = game.maker_tools.area_image_size;
-    float final_bmp_h = final_bmp_w;
+    float area_w = max_coords.x - min_coords.x + settings.padding;
+    float area_h = max_coords.y - min_coords.y + settings.padding;
+    float final_bmp_w = settings.size;
+    float final_bmp_h = settings.size;
     float scale;
     
     if(area_w > area_h) {
-        scale = game.maker_tools.area_image_size / area_w;
+        scale = settings.size / area_w;
         final_bmp_h *= area_h / area_w;
     } else {
-        scale = game.maker_tools.area_image_size / area_h;
+        scale = settings.size / area_h;
         final_bmp_w *= area_w / area_h;
     }
     
@@ -1770,8 +1775,8 @@ ALLEGRO_BITMAP* GameplayState::draw_to_bitmap() {
     al_identity_transform(&t);
     al_translate_transform(
         &t,
-        -min_coords.x + game.maker_tools.area_image_padding / 2.0f,
-        -min_coords.y + game.maker_tools.area_image_padding / 2.0f
+        -min_coords.x + settings.padding / 2.0f,
+        -min_coords.y + settings.padding / 2.0f
     );
     al_scale_transform(&t, scale, scale);
     

@@ -505,6 +505,63 @@ string get_mission_record_entry_name(Area* area_ptr) {
 
 
 /**
+ * @brief Scans a circle of radius 8 around the cursor, and finds the mob
+ * that comes after this one. i.e. the one with the next
+ * highest ID number. If it's already the highest, it loops back around
+ * to the lowest.
+ *
+ * @param pivot Return the mob after this one, or if nullptr, return the lowest.
+ * @param must_have_health If true, only count enemies that have health
+ * (health and max health > 0).
+ * @return The mob, or nullptr if there is none nearby.
+ */
+Mob* get_next_mob_near_cursor(Mob* pivot, bool must_have_health) {
+    vector<Mob*> mobs_near_cursor;
+    
+    //First, get all mobs that are close to the cursor.
+    for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
+        Mob* m_ptr = game.states.gameplay->mobs.all[m];
+        
+        bool has_health = m_ptr->health > 0.0f && m_ptr->max_health > 0.0f;
+        if(must_have_health && !has_health) continue;
+        if(m_ptr->is_stored_inside_mob()) continue;
+        if(!m_ptr->fsm.cur_state) continue;
+        
+        Distance d = Distance(game.mouse_cursor.w_pos, m_ptr->pos);
+        if(d < 8.0f) {
+            mobs_near_cursor.push_back(m_ptr);
+        }
+    }
+    
+    if(mobs_near_cursor.empty()) return nullptr;
+    
+    //Sort them by ID.
+    std::sort(
+        mobs_near_cursor.begin(), mobs_near_cursor.end(),
+    [] (const Mob * m1, const Mob * m2) -> bool {
+        return m1->id < m2->id;
+    }
+    );
+    
+    //Find the pivot's index so we can go to the next one.
+    size_t pivot_idx = INVALID;
+    for(size_t m = 0; m < mobs_near_cursor.size(); m++) {
+        if(mobs_near_cursor[m] == pivot) {
+            pivot_idx = m;
+            break;
+        }
+    }
+    
+    //Return the next one, looping, or just returns the first if not available.
+    if(pivot_idx == INVALID) {
+        return mobs_near_cursor[0];
+    } else {
+        return get_next_in_vector(mobs_near_cursor, pivot_idx);
+    }
+}
+
+
+/**
  * @brief Returns an area's subtitle or, if none is specified,
  * the mission's goal.
  *
@@ -1121,73 +1178,7 @@ void report_fatal_error(const string &s, const DataNode* dn) {
  */
 void save_maker_tools() {
     DataNode file("", "");
-    
-    file.add(
-        new DataNode("enabled", b2s(game.maker_tools.enabled))
-    );
-    
-    for(unsigned char k = 0; k < 20; k++) {
-        string tool_key;
-        if(k < 10) {
-            //The first ten indexes are the F2 - F11 keys.
-            tool_key = "f" + i2s(k + 2);
-        } else {
-            //The second ten indexes are the 0 - 9 keys.
-            tool_key = i2s(k - 10);
-        }
-        string tool_name = MAKER_TOOLS::NAMES[game.maker_tools.keys[k]];
-        
-        file.add(new DataNode(tool_key, tool_name));
-    }
-    
-    file.add(
-        new DataNode(
-            "area_image_mobs", b2s(game.maker_tools.area_image_mobs)
-        )
-    );
-    file.add(
-        new DataNode(
-            "area_image_padding", f2s(game.maker_tools.area_image_padding)
-        )
-    );
-    file.add(
-        new DataNode(
-            "area_image_shadows", b2s(game.maker_tools.area_image_shadows)
-        )
-    );
-    file.add(
-        new DataNode(
-            "area_image_size", i2s(game.maker_tools.area_image_size)
-        )
-    );
-    file.add(
-        new DataNode(
-            "change_speed_multiplier", f2s(game.maker_tools.change_speed_mult)
-        )
-    );
-    file.add(
-        new DataNode(
-            "mob_hurting_percentage",
-            f2s(game.maker_tools.mob_hurting_ratio * 100)
-        )
-    );
-    
-    file.add(
-        new DataNode(
-            "auto_start_option", game.maker_tools.auto_start_option
-        )
-    );
-    file.add(
-        new DataNode(
-            "auto_start_mode", game.maker_tools.auto_start_mode
-        )
-    );
-    file.add(
-        new DataNode(
-            "performance_monitor", b2s(game.maker_tools.use_perf_mon)
-        )
-    );
-    
+    game.maker_tools.save_to_data_node(&file);
     file.saveFile(FILE_PATHS_FROM_ROOT::MAKER_TOOLS, true, true);
 }
 

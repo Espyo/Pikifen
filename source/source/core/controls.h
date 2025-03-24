@@ -191,6 +191,43 @@ enum PLAYER_ACTION_TYPE {
     //Menu navigation page to the right.
     PLAYER_ACTION_TYPE_MENU_PAGE_RIGHT,
     
+    //Maker tools.
+    
+    //Area image.
+    PLAYER_ACTION_TYPE_MT_AREA_IMAGE,
+    
+    //Change speed.
+    PLAYER_ACTION_TYPE_MT_CHANGE_SPEED,
+    
+    //Geometry info.
+    PLAYER_ACTION_TYPE_MT_GEOMETRY_INFO,
+    
+    //HUD.
+    PLAYER_ACTION_TYPE_MT_HUD,
+    
+    //Hurt mob.
+    PLAYER_ACTION_TYPE_MT_HURT_MOB,
+    
+    //Mob info.
+    PLAYER_ACTION_TYPE_MT_MOB_INFO,
+    
+    //New Pikmin.
+    PLAYER_ACTION_TYPE_MT_NEW_PIKMIN,
+    
+    //Path info.
+    PLAYER_ACTION_TYPE_MT_PATH_INFO,
+    
+    //Set song position near loop.
+    PLAYER_ACTION_TYPE_MT_SET_SONG_POS_NEAR_LOOP,
+    
+    //Show collision.
+    PLAYER_ACTION_TYPE_MT_SHOW_COLLISION,
+    
+    //Show hitboxes.
+    PLAYER_ACTION_TYPE_MT_SHOW_HITBOXES,
+    
+    //Teleport.
+    PLAYER_ACTION_TYPE_MT_TELEPORT,
 };
 
 
@@ -208,6 +245,9 @@ enum PLAYER_ACTION_CAT {
     
     //Advanced.
     PLAYER_ACTION_CAT_ADVANCED,
+    
+    //Maker tools.
+    PLAYER_ACTION_CAT_MAKER_TOOLS,
     
 };
 

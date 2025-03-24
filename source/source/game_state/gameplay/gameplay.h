@@ -18,6 +18,7 @@
 #include "../../content/mob/ship.h"
 #include "../../content/other/gui.h"
 #include "../../core/controls.h"
+#include "../../core/maker_tools.h"
 #include "../../core/replay.h"
 #include "../../util/general_utils.h"
 #include "../game_state.h"
@@ -382,6 +383,9 @@ public:
     
     //--- Function declarations ---
     
+    ALLEGRO_BITMAP* draw_to_bitmap(
+        const MakerTools::AreaImageSettings& settings
+    );
     void enter();
     void leave(const GAMEPLAY_LEAVE_TARGET target);
     void start_leaving(const GAMEPLAY_LEAVE_TARGET target);
@@ -463,7 +467,9 @@ private:
     void do_aesthetic_logic(float delta_t);
     void do_game_drawing(
         ALLEGRO_BITMAP* bmp_output = nullptr,
-        const ALLEGRO_TRANSFORM* bmp_transform = nullptr
+        const ALLEGRO_TRANSFORM* bmp_transform = nullptr,
+        const MakerTools::AreaImageSettings& bmp_settings =
+        MakerTools::AreaImageSettings()
     );
     void do_gameplay_leader_logic(float delta_t);
     void do_gameplay_logic(float delta_t);
@@ -482,7 +488,6 @@ private:
     void draw_throw_preview();
     void draw_tree_shadows();
     void draw_world_components(ALLEGRO_BITMAP* bmp_output);
-    ALLEGRO_BITMAP* draw_to_bitmap();
     void end_mission(bool cleared);
     ALLEGRO_BITMAP* generate_fog_bitmap(
         float near_radius, float far_radius

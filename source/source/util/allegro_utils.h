@@ -72,6 +72,9 @@ ALLEGRO_COLOR change_color_lighting(const ALLEGRO_COLOR &c, float l);
 FS_DELETE_RESULT delete_file(const string &file_path);
 Point get_bitmap_dimensions(ALLEGRO_BITMAP* bmp);
 string get_key_name(int keycode, bool condensed);
+void get_shift_ctrl_alt_state(
+    bool* out_shift_state, bool* out_ctrl_state, bool* out_alt_state
+);
 void getline(ALLEGRO_FILE* file, string &line);
 bool file_exists(const string &path);
 bool folder_exists(const string &path);

@@ -187,6 +187,7 @@ void Results::do_logic() {
     if(!game.fade_mgr.is_fading()) {
         for(size_t a = 0; a < player_actions.size(); a++) {
             gui.handle_player_action(player_actions[a]);
+            game.maker_tools.handle_player_action(player_actions[a]);
         }
     }
     

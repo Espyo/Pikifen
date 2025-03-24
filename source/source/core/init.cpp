@@ -528,6 +528,92 @@ void init_controls() {
         "menu_page_right", "k_5"
     );
     
+    //Maker tools.
+    game.controls.add_player_action_type(
+        PLAYER_ACTION_TYPE_MT_AREA_IMAGE,
+        PLAYER_ACTION_CAT_MAKER_TOOLS,
+        "Area image",
+        "Save an image of the current area.",
+        "mt_area_image", "k_27"
+    );
+    game.controls.add_player_action_type(
+        PLAYER_ACTION_TYPE_MT_CHANGE_SPEED,
+        PLAYER_ACTION_CAT_MAKER_TOOLS,
+        "Change speed",
+        "Changes the gameplay speed.",
+        "mt_change_speed", "k_28"
+    );
+    game.controls.add_player_action_type(
+        PLAYER_ACTION_TYPE_MT_GEOMETRY_INFO,
+        PLAYER_ACTION_CAT_MAKER_TOOLS,
+        "Geometry info",
+        "Toggles info about the geometry under the cursor.",
+        "mt_geometry_info", "k_33"
+    );
+    game.controls.add_player_action_type(
+        PLAYER_ACTION_TYPE_MT_HUD,
+        PLAYER_ACTION_CAT_MAKER_TOOLS,
+        "HUD",
+        "Toggles the HUD.",
+        "mt_hud", "k_36"
+    );
+    game.controls.add_player_action_type(
+        PLAYER_ACTION_TYPE_MT_HURT_MOB,
+        PLAYER_ACTION_CAT_MAKER_TOOLS,
+        "Hurt mob",
+        "Hurts the mob under the cursor.",
+        "mt_hurt_mob", "k_30"
+    );
+    game.controls.add_player_action_type(
+        PLAYER_ACTION_TYPE_MT_MOB_INFO,
+        PLAYER_ACTION_CAT_MAKER_TOOLS,
+        "Mob info",
+        "Toggles info about the mob under the cursor.",
+        "mt_mob_info", "k_32"
+    );
+    game.controls.add_player_action_type(
+        PLAYER_ACTION_TYPE_MT_NEW_PIKMIN,
+        PLAYER_ACTION_CAT_MAKER_TOOLS,
+        "New Pikmin",
+        "Creates a new Pikmin under the cursor.",
+        "mt_new_pikmin", "k_31"
+    );
+    game.controls.add_player_action_type(
+        PLAYER_ACTION_TYPE_MT_PATH_INFO,
+        PLAYER_ACTION_CAT_MAKER_TOOLS,
+        "Path info",
+        "Toggles info about paths the info'd mob is taking.",
+        "mt_path_info", "k_34"
+    );
+    game.controls.add_player_action_type(
+        PLAYER_ACTION_TYPE_MT_SET_SONG_POS_NEAR_LOOP,
+        PLAYER_ACTION_CAT_MAKER_TOOLS,
+        "Set song pos near loop",
+        "Sets the current song's position to be near the loop point.",
+        "mt_set_song_pos_near_loop", ""
+    );
+    game.controls.add_player_action_type(
+        PLAYER_ACTION_TYPE_MT_SHOW_COLLISION,
+        PLAYER_ACTION_CAT_MAKER_TOOLS,
+        "Show collision",
+        "Toggles drawing each mob's collision.",
+        "mt_show_collision", ""
+    );
+    game.controls.add_player_action_type(
+        PLAYER_ACTION_TYPE_MT_SHOW_HITBOXES,
+        PLAYER_ACTION_CAT_MAKER_TOOLS,
+        "Show hitboxes",
+        "Toggles drawing each mob's hitboxes.",
+        "mt_show_hitboxes", ""
+    );
+    game.controls.add_player_action_type(
+        PLAYER_ACTION_TYPE_MT_TELEPORT,
+        PLAYER_ACTION_CAT_MAKER_TOOLS,
+        "Teleport",
+        "Teleports the leader to the cursor.",
+        "mt_teleport", "k_29"
+    );
+    
     
     //Populate the control binds with some default control binds for player 1.
     //If the options are loaded successfully, these binds are overwritten.
@@ -826,18 +912,6 @@ void init_misc() {
             game.config.zoom_max_level
         );
         
-    //Some maker tool defaults that are convenient to have on.
-    game.maker_tools.keys[10] = MAKER_TOOL_TYPE_AREA_IMAGE;
-    game.maker_tools.keys[11] = MAKER_TOOL_TYPE_CHANGE_SPEED;
-    game.maker_tools.keys[12] = MAKER_TOOL_TYPE_TELEPORT;
-    game.maker_tools.keys[13] = MAKER_TOOL_TYPE_HURT_MOB;
-    game.maker_tools.keys[14] = MAKER_TOOL_TYPE_NEW_PIKMIN;
-    game.maker_tools.keys[15] = MAKER_TOOL_TYPE_MOB_INFO;
-    game.maker_tools.keys[16] = MAKER_TOOL_TYPE_GEOMETRY_INFO;
-    game.maker_tools.keys[17] = MAKER_TOOL_TYPE_HITBOXES;
-    game.maker_tools.keys[18] = MAKER_TOOL_TYPE_COLLISION;
-    game.maker_tools.keys[19] = MAKER_TOOL_TYPE_HUD;
-    
     game.liquid_limit_effect_buffer = al_create_bitmap(game.win_w, game.win_h);
     game.wall_offset_effect_buffer = al_create_bitmap(game.win_w, game.win_h);
 }

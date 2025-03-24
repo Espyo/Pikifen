@@ -180,7 +180,10 @@ void GameplayState::do_logic() {
     float regular_delta_t = game.delta_t;
     
     if(game.maker_tools.change_speed) {
-        game.delta_t *= game.maker_tools.change_speed_mult;
+        game.delta_t *=
+            game.maker_tools.change_speed_settings[
+                game.maker_tools.change_speed_setting_idx
+            ];
     }
     
     //Controls.
@@ -189,6 +192,7 @@ void GameplayState::do_logic() {
         handle_player_action(player_actions[a]);
         if(onion_menu) onion_menu->handle_player_action(player_actions[a]);
         if(pause_menu) pause_menu->handle_player_action(player_actions[a]);
+        game.maker_tools.handle_player_action(player_actions[a]);
     }
     
     //Game logic.
