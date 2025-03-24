@@ -646,6 +646,9 @@ protected:
     //Do we need to focus on the new pack's name text widget?
     bool needs_new_pack_text_focus = true;
     
+    //Index of the selected pack in the "new" content dialog.
+    int new_content_dialog_pack_idx = 0;
+    
     //Time left in the operation error red flash effect.
     Timer op_error_flash_timer = Timer(EDITOR::OP_ERROR_FLASH_DURATION);
     

@@ -1019,7 +1019,7 @@ void TitleScreen::load() {
     }
     
     //Finishing touches.
-    game.audio.set_current_song(game.sys_content_names.sng_menus);
+    game.audio.set_current_song(game.sys_content_names.sng_menus, false);
     game.fade_mgr.start_fade(true, nullptr);
     if(game.debug.show_dear_imgui_demo) game.mouse_cursor.show();
 }

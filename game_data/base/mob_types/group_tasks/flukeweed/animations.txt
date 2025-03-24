@@ -4,7 +4,7 @@ animations{
 	dying{
 		frames{
 			dying{
-				duration=0.0100
+				duration=0.1000
 			}
 			dying{
 				duration=0.0100

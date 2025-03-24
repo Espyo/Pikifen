@@ -198,7 +198,7 @@ void AnnexScreen::load() {
     menu_to_load = ANNEX_SCREEN_MENU_HELP;
     
     //Finishing touches.
-    game.audio.set_current_song(game.sys_content_names.sng_menus);
+    game.audio.set_current_song(game.sys_content_names.sng_menus, false);
     game.fade_mgr.start_fade(true, nullptr);
 }
 

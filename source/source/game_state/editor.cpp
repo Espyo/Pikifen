@@ -2460,7 +2460,6 @@ bool Editor::process_gui_mob_type_widgets(
  * @param pack Pointer to the internal name of the pack in the combobox.
  */
 bool Editor::process_gui_new_dialog_pack_widgets(string* pack) {
-    static int pack_idx = 0;
     bool changed = false;
     
     //Pack combo.
@@ -2472,7 +2471,9 @@ bool Editor::process_gui_new_dialog_pack_widgets(string* pack) {
         //Failsafe.
         packs.push_back(FOLDER_NAMES::BASE_PACK);
     }
-    changed = ImGui::Combo("Pack", &pack_idx, packs);
+    new_content_dialog_pack_idx =
+        std::min(new_content_dialog_pack_idx, (int) packs.size() - 1);
+    changed = ImGui::Combo("Pack", &new_content_dialog_pack_idx, packs);
     set_tooltip("What pack it will belong to.");
     
     //New pack button.
@@ -2482,7 +2483,7 @@ bool Editor::process_gui_new_dialog_pack_widgets(string* pack) {
     }
     set_tooltip("Create a new pack.");
     
-    *pack = game.content.packs.manifests_with_base[pack_idx];
+    *pack = game.content.packs.manifests_with_base[new_content_dialog_pack_idx];
     return changed;
 }
 
@@ -2611,6 +2612,12 @@ void Editor::process_gui_new_pack_dialog() {
         game.content.create_pack(
             internal_name, name, description, maker
         );
+        for(size_t p = 0; p < game.content.packs.manifests_with_base.size(); p++) {
+            if(game.content.packs.manifests_with_base[p] == internal_name) {
+                new_content_dialog_pack_idx = p;
+                break;
+            }
+        }
         internal_name.clear();
         name.clear();
         description.clear();

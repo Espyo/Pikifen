@@ -857,8 +857,8 @@ void PauseMenu::draw_radar(
         ALLEGRO_COLOR color =
             interpolate_color(
                 s_ptr->z, lowest_sector_z, highest_sector_z,
-                game.config.radar_highest_color,
-                game.config.radar_lowest_color
+                game.config.radar_lowest_color,
+                game.config.radar_highest_color
             );
             
         for(size_t h = 0; h < s_ptr->hazards.size(); h++) {
