@@ -260,6 +260,7 @@ void GuiEditor::process_gui_delete_gui_def_dialog() {
 void GuiEditor::process_gui_load_dialog() {
     //History node.
     process_gui_history(
+        game.options.gui_editor.history,
     [this](const string &path) -> string {
         return path;
     },
@@ -406,11 +407,11 @@ void GuiEditor::process_gui_menu_bar() {
             //Show tooltips item.
             if(
                 ImGui::MenuItem(
-                    "Show tooltips", "", &game.options.editor_show_tooltips
+                    "Show tooltips", "", &game.options.editors.show_tooltips
                 )
             ) {
                 string state_str =
-                    game.options.editor_show_tooltips ? "Enabled" : "Disabled";
+                    game.options.editors.show_tooltips ? "Enabled" : "Disabled";
                 set_status(state_str + " tooltips.");
                 save_options();
             }
@@ -515,7 +516,7 @@ void GuiEditor::process_gui_new_dialog() {
         
         if(
             new_dialog.pack == FOLDER_NAMES::BASE_PACK &&
-            !game.options.engine_developer
+            !game.options.advanced.engine_dev
         ) {
             open_base_content_warning_dialog(really_create);
         } else {
@@ -541,17 +542,17 @@ void GuiEditor::process_gui_options_dialog() {
     if(saveable_tree_node("options", "Controls")) {
     
         //Middle mouse button pans checkbox.
-        ImGui::Checkbox("Use MMB to pan", &game.options.editor_mmb_pan);
+        ImGui::Checkbox("Use MMB to pan", &game.options.editors.mmb_pan);
         set_tooltip(
             "Use the middle mouse button to pan the camera\n"
             "(and RMB to reset camera/zoom).\n"
             "Default: " +
-            b2s(OPTIONS::DEF_EDITOR_MMB_PAN) + "."
+            b2s(OPTIONS::EDITORS_D::MMB_PAN) + "."
         );
         
         //Grid interval text.
         ImGui::Text(
-            "Grid interval: %f", game.options.gui_editor_grid_interval
+            "Grid interval: %f", game.options.gui_editor.grid_interval
         );
         
         //Increase grid interval button.
@@ -566,7 +567,7 @@ void GuiEditor::process_gui_options_dialog() {
         }
         set_tooltip(
             "Increase the spacing on the grid.\n"
-            "Default: " + i2s(OPTIONS::DEF_GUI_EDITOR_GRID_INTERVAL) +
+            "Default: " + i2s(OPTIONS::GUI_ED_D::GRID_INTERVAL) +
             ".",
             "Shift + Plus"
         );
@@ -583,7 +584,7 @@ void GuiEditor::process_gui_options_dialog() {
         }
         set_tooltip(
             "Decrease the spacing on the grid.\n"
-            "Default: " + i2s(OPTIONS::DEF_GUI_EDITOR_GRID_INTERVAL) +
+            "Default: " + i2s(OPTIONS::GUI_ED_D::GRID_INTERVAL) +
             ".",
             "Shift + Minus"
         );
@@ -823,7 +824,7 @@ void GuiEditor::process_gui_toolbar() {
     //Snap mode button.
     ALLEGRO_BITMAP* snap_mode_bmp = nullptr;
     string snap_mode_description;
-    if(game.options.gui_editor_snap) {
+    if(game.options.gui_editor.snap) {
         snap_mode_bmp = editor_icons[EDITOR_ICON_SNAP_GRID];
         snap_mode_description = "grid. Holding Shift disables snapping.";
     } else {

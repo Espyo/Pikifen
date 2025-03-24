@@ -124,7 +124,7 @@ const float ZOOM_MIN_LEVEL = 0.01f;
  * @brief Constructs a new area editor object.
  */
 AreaEditor::AreaEditor() :
-    backup_timer(game.options.area_editor_backup_interval),
+    backup_timer(game.options.area_editor.backup_interval),
     load_dialog_picker(this) {
     
     enable_flag(path_preview_settings.flags, PATH_FOLLOW_FLAG_IGNORE_OBSTACLES);
@@ -139,10 +139,10 @@ AreaEditor::AreaEditor() :
     [this] () {undo_save_lock_operation.clear();}
         );
         
-    if(game.options.area_editor_backup_interval > 0) {
+    if(game.options.area_editor.backup_interval > 0) {
         backup_timer =
             Timer(
-                game.options.area_editor_backup_interval,
+                game.options.area_editor.backup_interval,
         [this] () {save_backup();}
             );
     }
@@ -309,7 +309,7 @@ void AreaEditor::clear_current_area() {
     game.content.unload_current_area(CONTENT_LOAD_LEVEL_EDITOR);
     
     changes_mgr.reset();
-    backup_timer.start(game.options.area_editor_backup_interval);
+    backup_timer.start(game.options.area_editor.backup_interval);
     
     thumbnail_needs_saving = false;
     thumbnail_backup_needs_saving = false;
@@ -494,7 +494,7 @@ void AreaEditor::create_area(const string &requested_area_path) {
     
     //Finish up.
     setup_for_new_area_post();
-    update_history(manifest, "");
+    update_history(game.options.area_editor.history, manifest, "");
     
     set_status(
         "Created area \"" + manifest.internal_name + "\" successfully."
@@ -683,7 +683,7 @@ void AreaEditor::do_logic() {
     if(
         game.cur_area_data &&
         !manifest.internal_name.empty() &&
-        game.options.area_editor_backup_interval > 0
+        game.options.area_editor.backup_interval > 0
     ) {
         backup_timer.tick(game.delta_t);
     }
@@ -1372,17 +1372,6 @@ string AreaEditor::get_folder_tooltip(
 
 
 /**
- * @brief In the options data file, options pertaining to an editor's history
- * have a prefix. This function returns that prefix.
- *
- * @return The prefix.
- */
-string AreaEditor::get_history_option_prefix() const {
-    return "area_editor_history_";
-}
-
-
-/**
  * @brief Returns which layout element the mouse is over, if any.
  * It will only return one of them.
  *
@@ -1888,7 +1877,7 @@ void AreaEditor::load_area_folder(
     changes_mgr.reset();
     setup_for_new_area_post();
     if(should_update_history) {
-        update_history(manifest, game.cur_area_data->name);
+        update_history(game.options.area_editor.history, manifest, game.cur_area_data->name);
     }
     set_status(
         "Loaded area \"" + manifest.internal_name + "\" " +
@@ -1906,7 +1895,7 @@ void AreaEditor::load_backup() {
         manifest.path,
         true, false
     );
-    backup_timer.start(game.options.area_editor_backup_interval);
+    backup_timer.start(game.options.area_editor.backup_interval);
     changes_mgr.mark_as_changed();
     
     //We don't know if the backup's thumbnail is different from the standard
@@ -1984,7 +1973,7 @@ void AreaEditor::pick_area_folder(
     
     if(
         temp_manif->pack == FOLDER_NAMES::BASE_PACK &&
-        !game.options.engine_developer
+        !game.options.advanced.engine_dev
     ) {
         open_base_content_warning_dialog(really_load);
     } else {
@@ -2189,14 +2178,14 @@ void AreaEditor::duplicate_mobs_cmd(float input_value) {
 void AreaEditor::grid_interval_decrease_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
-    game.options.area_editor_grid_interval =
+    game.options.area_editor.grid_interval =
         std::max(
-            game.options.area_editor_grid_interval * 0.5f,
+            game.options.area_editor.grid_interval * 0.5f,
             AREA_EDITOR::MIN_GRID_INTERVAL
         );
     set_status(
         "Decreased grid interval to " +
-        i2s(game.options.area_editor_grid_interval) + "."
+        i2s(game.options.area_editor.grid_interval) + "."
     );
 }
 
@@ -2209,14 +2198,14 @@ void AreaEditor::grid_interval_decrease_cmd(float input_value) {
 void AreaEditor::grid_interval_increase_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
-    game.options.area_editor_grid_interval =
+    game.options.area_editor.grid_interval =
         std::min(
-            game.options.area_editor_grid_interval * 2.0f,
+            game.options.area_editor.grid_interval * 2.0f,
             AREA_EDITOR::MAX_GRID_INTERVAL
         );
     set_status(
         "Increased grid interval to " +
-        i2s(game.options.area_editor_grid_interval) + "."
+        i2s(game.options.area_editor.grid_interval) + "."
     );
 }
 
@@ -2777,17 +2766,17 @@ void AreaEditor::snap_mode_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
     if(!is_shift_pressed) {
-        game.options.area_editor_snap_mode =
+        game.options.area_editor.snap_mode =
             (AreaEditor::SNAP_MODE)
-            sum_and_wrap(game.options.area_editor_snap_mode, 1, N_SNAP_MODES);
+            sum_and_wrap(game.options.area_editor.snap_mode, 1, N_SNAP_MODES);
     } else {
-        game.options.area_editor_snap_mode =
+        game.options.area_editor.snap_mode =
             (AreaEditor::SNAP_MODE)
-            sum_and_wrap(game.options.area_editor_snap_mode, -1, N_SNAP_MODES);
+            sum_and_wrap(game.options.area_editor.snap_mode, -1, N_SNAP_MODES);
     }
     
     string final_status_text = "Set snap mode to ";
-    switch(game.options.area_editor_snap_mode) {
+    switch(game.options.area_editor.snap_mode) {
     case SNAP_MODE_GRID: {
         final_status_text += "grid";
         break;
@@ -3006,7 +2995,7 @@ void AreaEditor::register_change(
 ) {
     changes_mgr.mark_as_changed();
     
-    if(game.options.area_editor_undo_limit == 0) {
+    if(game.options.area_editor.undo_limit == 0) {
         if(pre_prepared_state) {
             forget_prepared_state(pre_prepared_state);
         }
@@ -3158,7 +3147,7 @@ bool AreaEditor::save_area(bool to_backup) {
     }
     
     //Set up some things post-save.
-    backup_timer.start(game.options.area_editor_backup_interval);
+    backup_timer.start(game.options.area_editor.backup_interval);
     
     save_reference();
     
@@ -3171,7 +3160,7 @@ bool AreaEditor::save_area(bool to_backup) {
         changes_mgr.mark_as_saved();
         set_status("Saved area successfully.");
         
-        update_history(manifest, game.cur_area_data->name);
+        update_history(game.options.area_editor.history, manifest, game.cur_area_data->name);
     }
     
     return save_successful;
@@ -3184,7 +3173,7 @@ bool AreaEditor::save_area(bool to_backup) {
 void AreaEditor::save_backup() {
 
     //Restart the timer.
-    backup_timer.start(game.options.area_editor_backup_interval);
+    backup_timer.start(game.options.area_editor.backup_interval);
     
     save_area(true);
 }
@@ -3206,7 +3195,7 @@ void AreaEditor::save_reference() {
     
     DataNode reference_file("", "");
     GetterWriter gw(&reference_file);
-
+    
     gw.get("file", reference_file_path);
     gw.get("center", reference_center);
     gw.get("size", reference_size);
@@ -3984,7 +3973,7 @@ void AreaEditor::update_texture_suggestions(const string &n) {
  * the undo history.
  */
 void AreaEditor::update_undo_history() {
-    while(undo_history.size() > game.options.area_editor_undo_limit) {
+    while(undo_history.size() > game.options.area_editor.undo_limit) {
         undo_history.pop_back();
     };
 }

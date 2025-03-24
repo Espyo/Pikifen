@@ -507,7 +507,7 @@ void AnimationEditor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void AnimationEditor::handle_mmb_double_click(const ALLEGRO_EVENT &ev) {
-    if(!game.options.editor_mmb_pan) {
+    if(!game.options.editors.mmb_pan) {
         reset_cam_xy();
     }
 }
@@ -520,7 +520,7 @@ void AnimationEditor::handle_mmb_double_click(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void AnimationEditor::handle_mmb_down(const ALLEGRO_EVENT &ev) {
-    if(!game.options.editor_mmb_pan) {
+    if(!game.options.editors.mmb_pan) {
         reset_cam_zoom();
     }
 }
@@ -533,7 +533,7 @@ void AnimationEditor::handle_mmb_down(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void AnimationEditor::handle_mmb_drag(const ALLEGRO_EVENT &ev) {
-    if(game.options.editor_mmb_pan) {
+    if(game.options.editors.mmb_pan) {
         pan_cam(ev);
     }
 }
@@ -565,7 +565,7 @@ void AnimationEditor::handle_mouse_wheel(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void AnimationEditor::handle_rmb_double_click(const ALLEGRO_EVENT &ev) {
-    if(game.options.editor_mmb_pan) {
+    if(game.options.editors.mmb_pan) {
         reset_cam_xy();
     }
 }
@@ -578,7 +578,7 @@ void AnimationEditor::handle_rmb_double_click(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void AnimationEditor::handle_rmb_down(const ALLEGRO_EVENT &ev) {
-    if(game.options.editor_mmb_pan) {
+    if(game.options.editors.mmb_pan) {
         reset_cam_zoom();
     }
 }
@@ -591,7 +591,7 @@ void AnimationEditor::handle_rmb_down(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void AnimationEditor::handle_rmb_drag(const ALLEGRO_EVENT &ev) {
-    if(!game.options.editor_mmb_pan) {
+    if(!game.options.editors.mmb_pan) {
         pan_cam(ev);
     }
 }

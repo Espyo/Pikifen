@@ -298,10 +298,10 @@ void PackManager::fill_manifests() {
     
     //Organized manifests.
     vector<string> organized_folders =
-        filter_vector_with_ban_list(raw_folders, game.options.packs_disabled);
+        filter_vector_with_ban_list(raw_folders, game.options.packs.disabled);
     organized_folders =
         sort_vector_with_preference_list(
-            organized_folders, game.options.pack_order
+            organized_folders, game.options.packs.order
         );
         
     for(size_t f = 0; f < organized_folders.size(); f++) {

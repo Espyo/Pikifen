@@ -203,7 +203,7 @@ void GameplayState::do_gameplay_leader_logic(float delta_t) {
     if(cur_interlude == INTERLUDE_NONE) {
         //Adjust the camera position.
         float leader_weight = 1.0f;
-        float cursor_weight = game.options.cursor_cam_weight;
+        float cursor_weight = game.options.misc.cursor_cam_weight;
         float group_weight = 0.0f;
         
         Point group_center = cur_leader_ptr->pos;
@@ -273,7 +273,7 @@ void GameplayState::do_gameplay_leader_logic(float delta_t) {
     if(
         !notification_done &&
         cur_leader_ptr->auto_throwing &&
-        game.options.auto_throw_mode == AUTO_THROW_MODE_TOGGLE
+        game.options.controls.auto_throw_mode == AUTO_THROW_MODE_TOGGLE
     ) {
         notification.set_enabled(true);
         notification.set_contents(
@@ -471,7 +471,7 @@ void GameplayState::do_gameplay_leader_logic(float delta_t) {
         &mouse_cursor_speed, &dummy_angle, &dummy_magnitude
     );
     mouse_cursor_speed =
-        mouse_cursor_speed * delta_t* game.options.cursor_speed;
+        mouse_cursor_speed * delta_t* game.options.controls.cursor_speed;
         
     leader_cursor_w = game.mouse_cursor.w_pos;
     
@@ -635,7 +635,7 @@ void GameplayState::do_gameplay_logic(float delta_t) {
             &mouse_cursor_speed, &dummy_angle, &dummy_magnitude
         );
         mouse_cursor_speed =
-            mouse_cursor_speed * delta_t* game.options.cursor_speed;
+            mouse_cursor_speed * delta_t* game.options.controls.cursor_speed;
             
         game.mouse_cursor.s_pos += mouse_cursor_speed;
         
@@ -1129,7 +1129,7 @@ void GameplayState::do_menu_logic() {
                 sample_avg_capped_sum +=
                     std::max(
                         game.framerate_history[idx],
-                        (double) (1.0f / game.options.target_fps)
+                        (double) (1.0f / game.options.advanced.target_fps)
                     );
                 sample_avg_point_count++;
             }
@@ -1149,7 +1149,7 @@ void GameplayState::do_menu_logic() {
             sample_avg_capped =
                 std::max(
                     game.framerate_history[0],
-                    (double) (1.0f / game.options.target_fps)
+                    (double) (1.0f / game.options.advanced.target_fps)
                 );
                 
         }
@@ -1163,7 +1163,7 @@ void GameplayState::do_menu_logic() {
             box_string("FPS:", 12) +
             box_string(std::to_string(1.0f / real_delta_t), 12) +
             box_string(std::to_string(1.0f / sample_avg_capped), 12) +
-            box_string(i2s(game.options.target_fps), 12);
+            box_string(i2s(game.options.advanced.target_fps), 12);
         string fps_uncapped_str =
             box_string("FPS uncap.:", 12) +
             box_string(std::to_string(1.0f / game.cur_frame_process_time), 12) +
@@ -1173,7 +1173,7 @@ void GameplayState::do_menu_logic() {
             box_string("Frame time:", 12) +
             box_string(std::to_string(game.cur_frame_process_time), 12) +
             box_string(std::to_string(sample_avg), 12) +
-            box_string(std::to_string(1.0f / game.options.target_fps), 12);
+            box_string(std::to_string(1.0f / game.options.advanced.target_fps), 12);
         string n_mobs_str =
             box_string(i2s(mobs.all.size()), 7);
         string n_particles_str =

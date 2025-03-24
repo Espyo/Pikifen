@@ -293,6 +293,51 @@ string ControlsMediator::input_to_str(
 
 
 /**
+ * @brief Loads a list of binds from a data node. Binds are formatted like so:
+ * "<action type>=<input 1>;<input 2>;<...>"
+ *
+ * @param node The node.
+ * @param player_nr Player number.
+ */
+void ControlsMediator::load_binds_from_data_node(
+    DataNode* node, unsigned char player_nr
+) {
+    const vector<PlayerActionType> &player_action_types =
+        get_all_player_action_types();
+        
+    for(size_t a = 0; a < player_action_types.size(); a++) {
+        string action_type_name = player_action_types[a].internal_name;
+        if(action_type_name.empty()) continue;
+        
+        DataNode* bind_node = node->getChildByName(action_type_name);
+        vector<string> inputs = semicolon_list_to_vector(bind_node->value);
+        
+        for(size_t c = 0; c < inputs.size(); c++) {
+            PlayerInput input = str_to_input(inputs[c]);
+            if(input.type == INPUT_TYPE_NONE) continue;
+            
+            ControlBind new_bind;
+            new_bind.actionTypeId = player_action_types[a].id;
+            new_bind.playerNr = player_nr;
+            new_bind.input = input;
+            binds().push_back(new_bind);
+        }
+    }
+}
+
+
+/**
+ * @brief Ignores an input from now on until its value is 0, at which point
+ * it becomes unignored.
+ *
+ * @param input Input to ignore.
+ */
+void ControlsMediator::start_ignoring_input(const PlayerInput &input) {
+    mgr.startIgnoringInput(input);
+}
+
+
+/**
  * @brief Returns the player actions that occurred during the last frame
  * of gameplay, and begins a new frame.
  *
@@ -315,6 +360,46 @@ void ControlsMediator::release_all() {
 
 
 /**
+ * @brief Loads the list of binds to a data node.
+ *
+ * @param node The node.
+ * @param player_nr Player number.
+ */
+void ControlsMediator::save_binds_to_data_node(
+    DataNode* node, unsigned char player_nr
+) {
+    map<string, string> bind_strs;
+    const vector<PlayerActionType> &player_action_types =
+        get_all_player_action_types();
+    const vector<ControlBind> &all_binds = binds();
+    
+    //Fill the defaults, which are all empty strings.
+    for(size_t b = 0; b < player_action_types.size(); b++) {
+        string action_type_name = player_action_types[b].internal_name;
+        if(action_type_name.empty()) continue;
+        bind_strs[action_type_name].clear();
+    }
+    
+    //Fill their input strings.
+    for(size_t b = 0; b < all_binds.size(); b++) {
+        if(all_binds[b].playerNr != player_nr) continue;
+        PlayerActionType action_type =
+            get_player_action_type(all_binds[b].actionTypeId);
+        bind_strs[action_type.internal_name] +=
+            input_to_str(all_binds[b].input) + ";";
+    }
+    
+    //Save them all.
+    for(auto &c : bind_strs) {
+        //Remove the final character, which is always an extra semicolon.
+        if(c.second.size()) c.second.erase(c.second.size() - 1);
+        
+        node->addNew(c.first, c.second);
+    }
+}
+
+
+/**
  * @brief Sets the options for the controls manager.
  *
  * @param options Options.
@@ -326,8 +411,15 @@ void ControlsMediator::set_options(const ControlsManagerOptions &options) {
 
 /**
  * @brief Creates an input from a string representation.
- * Ignores the player number.
- *
+ * Ignores the player number. Input strings are formatted like so:
+ * "<input type>_<parameters, underscore separated>"
+ * Input types are:
+ * "k" (keyboard key), "mb" (mouse button),
+ * "mwu" (mouse wheel up), "mwd" (down),
+ * "mwl" (left), "mwr" (right), "jb" (joystick button),
+ * "jap" (joystick axis, positive), "jan" (joystick axis, negative).
+ * The parameters are the key/button number, controller number,
+ * controller stick and axis, etc.
  * @param s String to read from.
  * @return The input, or a default input instance on error.
  */

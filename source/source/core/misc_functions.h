@@ -192,7 +192,6 @@ void print_info(
     float fade_duration = 3.0f
 );
 void report_fatal_error(const string &s, const DataNode* dn = nullptr);
-void save_editor_history(Editor* ed_ptr, DataNode* file);
 void save_maker_tools();
 void save_options();
 void save_screenshot();

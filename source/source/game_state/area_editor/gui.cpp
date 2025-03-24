@@ -398,6 +398,7 @@ void AreaEditor::process_gui_grading_mode_widgets(
 void AreaEditor::process_gui_load_dialog() {
     //History node.
     process_gui_history(
+        game.options.area_editor.history,
     [this](const string &name) -> string {
         return name;
     },
@@ -519,7 +520,7 @@ void AreaEditor::process_gui_new_dialog() {
         
         if(
             new_dialog.pack == FOLDER_NAMES::BASE_PACK &&
-            !game.options.engine_developer
+            !game.options.advanced.engine_dev
         ) {
             open_base_content_warning_dialog(really_create);
         } else {
@@ -849,11 +850,11 @@ void AreaEditor::process_gui_menu_bar() {
             //Show tooltips item.
             if(
                 ImGui::MenuItem(
-                    "Show tooltips", "", &game.options.editor_show_tooltips
+                    "Show tooltips", "", &game.options.editors.show_tooltips
                 )
             ) {
                 string state_str =
-                    game.options.editor_show_tooltips ? "Enabled" : "Disabled";
+                    game.options.editors.show_tooltips ? "Enabled" : "Disabled";
                 set_status(state_str + " tooltips.");
                 save_options();
             }
@@ -1140,7 +1141,7 @@ void AreaEditor::process_gui_options_dialog() {
     if(saveable_tree_node("options", "Controls")) {
     
         //Snap threshold value.
-        int snap_threshold = (int) game.options.area_editor_snap_threshold;
+        int snap_threshold = (int) game.options.area_editor.snap_threshold;
         ImGui::SetNextItemWidth(64.0f);
         ImGui::DragInt(
             "Snap threshold", &snap_threshold,
@@ -1150,22 +1151,22 @@ void AreaEditor::process_gui_options_dialog() {
             "Cursor must be these many pixels close\n"
             "to a vertex/edge in order to snap there.\n"
             "Default: " +
-            i2s(OPTIONS::DEF_AREA_EDITOR_SNAP_THRESHOLD) + ".",
+            i2s(OPTIONS::AREA_ED_D::SNAP_THRESHOLD) + ".",
             "", WIDGET_EXPLANATION_DRAG
         );
-        game.options.area_editor_snap_threshold = snap_threshold;
+        game.options.area_editor.snap_threshold = snap_threshold;
         
         //Middle mouse button pans checkbox.
-        ImGui::Checkbox("Use MMB to pan", &game.options.editor_mmb_pan);
+        ImGui::Checkbox("Use MMB to pan", &game.options.editors.mmb_pan);
         set_tooltip(
             "Use the middle mouse button to pan the camera\n"
             "(and RMB to reset camera/zoom).\n"
             "Default: " +
-            b2s(OPTIONS::DEF_EDITOR_MMB_PAN) + "."
+            b2s(OPTIONS::EDITORS_D::MMB_PAN) + "."
         );
         
         //Drag threshold value.
-        int drag_threshold = (int) game.options.editor_mouse_drag_threshold;
+        int drag_threshold = (int) game.options.editors.mouse_drag_threshold;
         ImGui::SetNextItemWidth(64.0f);
         ImGui::DragInt(
             "Drag threshold", &drag_threshold,
@@ -1173,11 +1174,11 @@ void AreaEditor::process_gui_options_dialog() {
         );
         set_tooltip(
             "Cursor must move these many pixels to be considered a drag.\n"
-            "Default: " + i2s(OPTIONS::DEF_EDITOR_MOUSE_DRAG_THRESHOLD) +
+            "Default: " + i2s(OPTIONS::EDITORS_D::MOUSE_DRAG_THRESHOLD) +
             ".",
             "", WIDGET_EXPLANATION_DRAG
         );
-        game.options.editor_mouse_drag_threshold = drag_threshold;
+        game.options.editors.mouse_drag_threshold = drag_threshold;
         
         ImGui::TreePop();
         
@@ -1189,52 +1190,52 @@ void AreaEditor::process_gui_options_dialog() {
     
         //Show edge length checkbox.
         ImGui::Checkbox(
-            "Show edge length", &game.options.area_editor_show_edge_length
+            "Show edge length", &game.options.area_editor.show_edge_length
         );
         set_tooltip(
             "Show the length of nearby edges when drawing or moving vertexes.\n"
             "Default: " +
-            b2s(OPTIONS::DEF_AREA_EDITOR_SHOW_EDGE_LENGTH) + "."
+            b2s(OPTIONS::AREA_ED_D::SHOW_EDGE_LENGTH) + "."
         );
         
         //Show circular sector info checkbox.
         ImGui::Checkbox(
             "Show circular sector info",
-            &game.options.area_editor_show_circular_info
+            &game.options.area_editor.show_circular_info
         );
         set_tooltip(
             "Show the radius and number of vertexes of a circular sector\n"
             "when drawing one.\n"
             "Default: " +
-            b2s(OPTIONS::DEF_AREA_EDITOR_SHOW_CIRCULAR_INFO) + "."
+            b2s(OPTIONS::AREA_ED_D::SHOW_CIRCULAR_INFO) + "."
         );
         
         //Show path link length checkbox.
         ImGui::Checkbox(
             "Show path link length",
-            &game.options.area_editor_show_path_link_length
+            &game.options.area_editor.show_path_link_length
         );
         set_tooltip(
             "Show the length of nearby path links when drawing or\n"
             "moving path stops.\n"
             "Default: " +
-            b2s(OPTIONS::DEF_AREA_EDITOR_SHOW_PATH_LINK_LENGTH) + "."
+            b2s(OPTIONS::AREA_ED_D::SHOW_PATH_LINK_LENGTH) + "."
         );
         
         //Show territory checkbox.
         ImGui::Checkbox(
             "Show territory/terrain radius",
-            &game.options.area_editor_show_territory
+            &game.options.area_editor.show_territory
         );
         set_tooltip(
             "Show the territory radius and terrain radius\n"
             "of the selected objects, when applicable.\n"
-            "Default: " + b2s(OPTIONS::DEF_AREA_EDITOR_SHOW_TERRITORY) +
+            "Default: " + b2s(OPTIONS::AREA_ED_D::SHOW_TERRITORY) +
             "."
         );
         
         //View mode text.
-        int view_mode = game.options.area_editor_view_mode;
+        int view_mode = game.options.area_editor.view_mode;
         ImGui::Text("View mode:");
         
         ImGui::Indent();
@@ -1245,7 +1246,7 @@ void AreaEditor::process_gui_options_dialog() {
             "Draw textures on the sectors." +
             (string) (
                 (
-                    OPTIONS::DEF_AREA_EDITOR_VIEW_MODE ==
+                    OPTIONS::AREA_ED_D::VIEW_MODE ==
                     VIEW_MODE_TEXTURES
                 ) ?
                 "\nThis is the default." :
@@ -1260,7 +1261,7 @@ void AreaEditor::process_gui_options_dialog() {
             "Best for performance." +
             (string) (
                 (
-                    OPTIONS::DEF_AREA_EDITOR_VIEW_MODE ==
+                    OPTIONS::AREA_ED_D::VIEW_MODE ==
                     VIEW_MODE_WIREFRAME
                 ) ?
                 "This is the default." :
@@ -1274,7 +1275,7 @@ void AreaEditor::process_gui_options_dialog() {
             "Draw sectors as heightmaps. Lighter means taller." +
             (string) (
                 (
-                    OPTIONS::DEF_AREA_EDITOR_VIEW_MODE ==
+                    OPTIONS::AREA_ED_D::VIEW_MODE ==
                     VIEW_MODE_HEIGHTMAP
                 ) ?
                 "This is the default." :
@@ -1288,14 +1289,14 @@ void AreaEditor::process_gui_options_dialog() {
             "Draw sectors as solid grays based on their brightness." +
             (string) (
                 (
-                    OPTIONS::DEF_AREA_EDITOR_VIEW_MODE ==
+                    OPTIONS::AREA_ED_D::VIEW_MODE ==
                     VIEW_MODE_BRIGHTNESS
                 ) ?
                 "This is the default." :
                 ""
             )
         );
-        game.options.area_editor_view_mode = (VIEW_MODE) view_mode;
+        game.options.area_editor.view_mode = (VIEW_MODE) view_mode;
         
         ImGui::Unindent();
         
@@ -1316,7 +1317,7 @@ void AreaEditor::process_gui_options_dialog() {
         ImGui::Text("Interface mode:");
         
         //Basic interface button.
-        int interface_mode_i = (int) game.options.area_editor_advanced_mode;
+        int interface_mode_i = (int) game.options.area_editor.advanced_mode;
         ImGui::Indent();
         ImGui::RadioButton("Basic", &interface_mode_i, 0);
         set_tooltip(
@@ -1334,21 +1335,21 @@ void AreaEditor::process_gui_options_dialog() {
             "- Toolbar button to toggle preview mode with."
         );
         ImGui::Unindent();
-        game.options.area_editor_advanced_mode = (bool) interface_mode_i;
+        game.options.area_editor.advanced_mode = (bool) interface_mode_i;
         
         //Selection transformation checkbox.
         ImGui::Checkbox(
-            "Selection transformation", &game.options.area_editor_sel_trans
+            "Selection transformation", &game.options.area_editor.sel_trans
         );
         set_tooltip(
             "If true, when you select two or more vertexes, some handles\n"
             "will appear, allowing you to scale or rotate them together.\n"
-            "Default: " + b2s(OPTIONS::DEF_AREA_EDITOR_SEL_TRANS) + "."
+            "Default: " + b2s(OPTIONS::AREA_ED_D::SEL_TRANS) + "."
         );
         
         //Grid interval text.
         ImGui::Text(
-            "Grid interval: %i", (int) game.options.area_editor_grid_interval
+            "Grid interval: %i", (int) game.options.area_editor.grid_interval
         );
         
         //Increase grid interval button.
@@ -1363,7 +1364,7 @@ void AreaEditor::process_gui_options_dialog() {
         }
         set_tooltip(
             "Increase the spacing on the grid.\n"
-            "Default: " + i2s(OPTIONS::DEF_AREA_EDITOR_GRID_INTERVAL) +
+            "Default: " + i2s(OPTIONS::AREA_ED_D::GRID_INTERVAL) +
             ".",
             "Shift + Plus"
         );
@@ -1380,40 +1381,40 @@ void AreaEditor::process_gui_options_dialog() {
         }
         set_tooltip(
             "Decrease the spacing on the grid.\n"
-            "Default: " + i2s(OPTIONS::DEF_AREA_EDITOR_GRID_INTERVAL) +
+            "Default: " + i2s(OPTIONS::AREA_ED_D::GRID_INTERVAL) +
             ".",
             "Shift + Minus"
         );
         
         //Auto-backup interval value.
-        int backup_interval = game.options.area_editor_backup_interval;
+        int backup_interval = game.options.area_editor.backup_interval;
         ImGui::SetNextItemWidth(64.0f);
         ImGui::DragInt(
             "Auto-backup interval", &backup_interval, 1, 0, INT_MAX
         );
         set_tooltip(
             "Interval between auto-backup saves, in seconds. 0 = off.\n"
-            "Default: " + i2s(OPTIONS::DEF_AREA_EDITOR_BACKUP_INTERVAL) +
+            "Default: " + i2s(OPTIONS::AREA_ED_D::BACKUP_INTERVAL) +
             ".",
             "", WIDGET_EXPLANATION_DRAG
         );
-        game.options.area_editor_backup_interval = backup_interval;
+        game.options.area_editor.backup_interval = backup_interval;
         
         //Undo limit value.
-        size_t old_undo_limit = game.options.area_editor_undo_limit;
-        int undo_limit = (int) game.options.area_editor_undo_limit;
+        size_t old_undo_limit = game.options.area_editor.undo_limit;
+        int undo_limit = (int) game.options.area_editor.undo_limit;
         ImGui::SetNextItemWidth(64.0f);
         ImGui::DragInt(
             "Undo limit", &undo_limit, 0.1, 0, INT_MAX
         );
         set_tooltip(
             "Maximum number of operations that can be undone. 0 = off.\n"
-            "Default: " + i2s(OPTIONS::DEF_AREA_EDITOR_UNDO_LIMIT) + ".",
+            "Default: " + i2s(OPTIONS::AREA_ED_D::UNDO_LIMIT) + ".",
             "", WIDGET_EXPLANATION_DRAG
         );
-        game.options.area_editor_undo_limit = undo_limit;
+        game.options.area_editor.undo_limit = undo_limit;
         
-        if(game.options.area_editor_undo_limit != old_undo_limit) {
+        if(game.options.area_editor.undo_limit != old_undo_limit) {
             update_undo_history();
         }
         
@@ -5718,7 +5719,7 @@ void AreaEditor::process_gui_toolbar() {
     //Snap mode button.
     ALLEGRO_BITMAP* snap_mode_bmp = nullptr;
     string snap_mode_description;
-    switch(game.options.area_editor_snap_mode) {
+    switch(game.options.area_editor.snap_mode) {
     case SNAP_MODE_GRID: {
         snap_mode_bmp = editor_icons[EDITOR_ICON_SNAP_GRID];
         snap_mode_description = "grid. Holding Shift disables snapping.";
@@ -5754,7 +5755,7 @@ void AreaEditor::process_gui_toolbar() {
         "X or Shift + X"
     );
     
-    if(game.options.area_editor_advanced_mode) {
+    if(game.options.area_editor.advanced_mode) {
     
         //Layout mode button.
         ImGui::SameLine(0, 16);

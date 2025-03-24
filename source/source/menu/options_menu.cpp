@@ -169,6 +169,7 @@ void OptionsMenu::handle_allegro_event(const ALLEGRO_EVENT &ev) {
                 game.controls.binds()[cur_bind_idx].input = input;
             }
             capturing_input = 2;
+            game.controls.start_ignoring_input(input);
             populate_binds();
         }
         return;
@@ -260,11 +261,11 @@ void OptionsMenu::init_gui_audio_page() {
     };
     auto update_volumes = [this] () {
         game.audio.update_volumes(
-            game.options.master_volume,
-            game.options.gameplay_sound_volume,
-            game.options.music_volume,
-            game.options.ambiance_sound_volume,
-            game.options.ui_sound_volume
+            game.options.audio.master_vol,
+            game.options.audio.gameplay_sound_vol,
+            game.options.audio.music_vol,
+            game.options.audio.ambiance_sound_vol,
+            game.options.audio.ui_sound_vol
         );
     };
     
@@ -272,8 +273,8 @@ void OptionsMenu::init_gui_audio_page() {
     master_vol_picker =
         new OptionsMenuPickerGuiItem<float>(
         "Master volume: ",
-        &game.options.master_volume,
-        OPTIONS::DEF_MASTER_VOLUME,
+        &game.options.audio.master_vol,
+        OPTIONS::AUDIO_D::MASTER_VOL,
         preset_volume_values,
         preset_volume_names,
         "Volume of the final mix of all audio."
@@ -286,8 +287,8 @@ void OptionsMenu::init_gui_audio_page() {
     gameplay_sound_vol_picker =
         new OptionsMenuPickerGuiItem<float>(
         "Gameplay sound effects volume: ",
-        &game.options.gameplay_sound_volume,
-        OPTIONS::DEF_GAMEPLAY_SOUND_VOLUME,
+        &game.options.audio.gameplay_sound_vol,
+        OPTIONS::AUDIO_D::GAMEPLAY_SOUND_VOL,
         preset_volume_values,
         preset_volume_names,
         "Volume for in-world gameplay sound effects specifically."
@@ -300,8 +301,8 @@ void OptionsMenu::init_gui_audio_page() {
     music_vol_picker =
         new OptionsMenuPickerGuiItem<float>(
         "Music volume: ",
-        &game.options.music_volume,
-        OPTIONS::DEF_MUSIC_VOLUME,
+        &game.options.audio.music_vol,
+        OPTIONS::AUDIO_D::MUSIC_VOL,
         preset_volume_values,
         preset_volume_names,
         "Volume for music specifically."
@@ -314,8 +315,8 @@ void OptionsMenu::init_gui_audio_page() {
     ambiance_sound_vol_picker =
         new OptionsMenuPickerGuiItem<float>(
         "Ambiance sound effects volume: ",
-        &game.options.ambiance_sound_volume,
-        OPTIONS::DEF_AMBIANCE_SOUND_VOLUME,
+        &game.options.audio.ambiance_sound_vol,
+        OPTIONS::AUDIO_D::AMBIANCE_SOUND_VOl,
         preset_volume_values,
         preset_volume_names,
         "Volume for in-world ambiance sound effects specifically."
@@ -328,8 +329,8 @@ void OptionsMenu::init_gui_audio_page() {
     ui_sound_vol_picker =
         new OptionsMenuPickerGuiItem<float>(
         "UI sound effects volume: ",
-        &game.options.ui_sound_volume,
-        OPTIONS::DEF_UI_SOUND_VOLUME,
+        &game.options.audio.ui_sound_vol,
+        OPTIONS::AUDIO_D::UI_SOUND_VOL,
         preset_volume_values,
         preset_volume_names,
         "Volume for interface sound effects specifically."
@@ -495,8 +496,8 @@ void OptionsMenu::init_gui_controls_page() {
     cursor_speed_picker =
         new OptionsMenuPickerGuiItem<float>(
         "Cursor speed: ",
-        &game.options.cursor_speed,
-        OPTIONS::DEF_CURSOR_SPEED,
+        &game.options.controls.cursor_speed,
+        OPTIONS::CONTROLS_D::CURSOR_SPEED,
     {250.0f, 350.0f, 500.0f, 700.0f, 1000.0f},
     {"Very slow", "Slow", "Medium", "Fast", "Very fast"},
     "Cursor speed, when controlling without a mouse."
@@ -511,8 +512,8 @@ void OptionsMenu::init_gui_controls_page() {
     auto_throw_picker =
         new OptionsMenuPickerGuiItem<AUTO_THROW_MODE>(
         "Auto-throw: ",
-        &game.options.auto_throw_mode,
-        OPTIONS::DEF_AUTO_THROW_MODE,
+        &game.options.controls.auto_throw_mode,
+        OPTIONS::CONTROLS_D::AUTO_THROW,
     {AUTO_THROW_MODE_OFF, AUTO_THROW_MODE_HOLD, AUTO_THROW_MODE_TOGGLE},
     {"Off", "Hold input", "Input toggles"}
     );
@@ -587,7 +588,7 @@ void OptionsMenu::init_gui_graphics_page() {
     //Fullscreen checkbox.
     CheckGuiItem* fullscreen_check =
         new CheckGuiItem(
-        &game.options.intended_win_fullscreen,
+        &game.options.graphics.intended_win_fullscreen,
         "Fullscreen", game.sys_content.fnt_standard
     );
     fullscreen_check->on_activate =
@@ -599,7 +600,7 @@ void OptionsMenu::init_gui_graphics_page() {
     [] () {
         return
             "Show the game in fullscreen, or in a window? Default: " +
-            b2s(OPTIONS::DEF_WIN_FULLSCREEN) + ".";
+            b2s(OPTIONS::GRAPHICS_D::WIN_FULLSCREEN) + ".";
     };
     graphics_gui.add_item(fullscreen_check, "fullscreen");
     
@@ -611,20 +612,20 @@ void OptionsMenu::init_gui_graphics_page() {
             i2s(resolution_presets[p].second)
         );
     }
-    cur_resolution_option.first = game.options.intended_win_w;
-    cur_resolution_option.second = game.options.intended_win_h;
+    cur_resolution_option.first = game.options.graphics.intended_win_w;
+    cur_resolution_option.second = game.options.graphics.intended_win_h;
     resolution_picker =
         new OptionsMenuPickerGuiItem<std::pair<int, int> >(
         "Resolution: ",
         &cur_resolution_option,
-        std::make_pair(OPTIONS::DEF_WIN_W, OPTIONS::DEF_WIN_H),
+        std::make_pair(OPTIONS::GRAPHICS_D::WIN_W, OPTIONS::GRAPHICS_D::WIN_H),
         resolution_presets,
         resolution_preset_names,
         "The game's width and height."
     );
     resolution_picker->after_change = [this] () {
-        game.options.intended_win_w = cur_resolution_option.first;
-        game.options.intended_win_h = cur_resolution_option.second;
+        game.options.graphics.intended_win_w = cur_resolution_option.first;
+        game.options.graphics.intended_win_h = cur_resolution_option.second;
         trigger_restart_warning();
     };
     resolution_picker->value_to_string = [] (const std::pair<int, int> &v) {
@@ -706,8 +707,8 @@ void OptionsMenu::init_gui_misc_page() {
     cursor_cam_weight_picker =
         new OptionsMenuPickerGuiItem<float>(
         "Cursor cam weight: ",
-        &game.options.cursor_cam_weight,
-        OPTIONS::DEF_CURSOR_CAM_WEIGHT,
+        &game.options.misc.cursor_cam_weight,
+        OPTIONS::MISC_D::CURSOR_CAM_WEIGHT,
     {0.0f, 0.1f, 0.3f, 0.6f},
     {"None", "Small", "Medium", "Large"},
     "When you move the cursor, how much does it affect the camera?"
@@ -721,26 +722,26 @@ void OptionsMenu::init_gui_misc_page() {
     //Show HUD player input icons checkbox.
     CheckGuiItem* show_hud_input_icons_check =
         new CheckGuiItem(
-        &game.options.show_hud_input_icons,
+        &game.options.misc.show_hud_input_icons,
         "Show input icons on HUD", game.sys_content.fnt_standard
     );
     show_hud_input_icons_check->on_get_tooltip =
     [] () {
         return
             "Show icons of the player inputs near relevant HUD items? "
-            "Default: " + b2s(OPTIONS::DEF_SHOW_HUD_INPUT_ICONS) + ".";
+            "Default: " + b2s(OPTIONS::MISC_D::SHOW_HUD_INPUT_ICONS) + ".";
     };
     misc_gui.add_item(show_hud_input_icons_check, "show_hud_input_icons");
     
     //Leaving confirmation mode.
     leaving_confirmation_picker =
-        new OptionsMenuPickerGuiItem<LEAVING_CONFIRMATION_MODE>(
+        new OptionsMenuPickerGuiItem<LEAVING_CONF_MODE>(
         "Leave confirm: ",
-        &game.options.leaving_confirmation_mode,
-    OPTIONS::DEF_LEAVING_CONFIRMATION_MODE, {
-        LEAVING_CONFIRMATION_MODE_ALWAYS,
-        LEAVING_CONFIRMATION_MODE_1_MIN,
-        LEAVING_CONFIRMATION_MODE_NEVER
+        &game.options.misc.leaving_conf_mode,
+    OPTIONS::MISC_D::LEAVING_CONF, {
+        LEAVING_CONF_MODE_ALWAYS,
+        LEAVING_CONF_MODE_1_MIN,
+        LEAVING_CONF_MODE_NEVER
     },
     {"Always", "After 1min", "Never"}
     );
@@ -1042,7 +1043,7 @@ void OptionsMenu::load() {
     
     //In case things go wrong, at least add these presets.
     resolution_presets.push_back(
-        std::make_pair(OPTIONS::DEF_WIN_W, OPTIONS::DEF_WIN_H)
+        std::make_pair(OPTIONS::GRAPHICS_D::WIN_W, OPTIONS::GRAPHICS_D::WIN_H)
     );
     resolution_presets.push_back(
         std::make_pair(SMALLEST_WIN_WIDTH, SMALLEST_WIN_HEIGHT)

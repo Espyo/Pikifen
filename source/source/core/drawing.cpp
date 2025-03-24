@@ -882,7 +882,7 @@ void draw_mouse_cursor(const ALLEGRO_COLOR &color) {
     al_use_transform(&game.identity_transform);
     
     //Cursor trail.
-    if(game.options.draw_cursor_trail) {
+    if(game.options.advanced.draw_cursor_trail) {
         size_t anchor = 0;
         
         for(size_t s = 1; s < game.mouse_cursor.history.size(); s++) {

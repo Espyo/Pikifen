@@ -124,8 +124,8 @@ void PacksMenu::init_gui_main() {
         new ButtonGuiItem("Back", game.sys_content.fnt_standard);
     gui.back_item->on_activate =
     [this] (const Point &) {
-        game.options.pack_order = pack_order;
-        game.options.packs_disabled = packs_disabled;
+        game.options.packs.order = pack_order;
+        game.options.packs.disabled = packs_disabled;
         save_options();
         leave();
     };
@@ -402,9 +402,9 @@ void PacksMenu::load() {
     pack_order =
         sort_vector_with_preference_list(
             game.content.packs.manifests_sans_base_raw,
-            game.options.pack_order
+            game.options.packs.order
         );
-    packs_disabled = game.options.packs_disabled;
+    packs_disabled = game.options.packs.disabled;
     
     //Get the thumbnails.
     for(

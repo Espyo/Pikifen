@@ -116,7 +116,7 @@ void AreaEditor::draw_canvas() {
     float lowest_sector_z = 0.0f;
     float highest_sector_z = 0.0f;
     if(
-        game.options.area_editor_view_mode == VIEW_MODE_HEIGHTMAP &&
+        game.options.area_editor.view_mode == VIEW_MODE_HEIGHTMAP &&
         !game.cur_area_data->sectors.empty()
     ) {
         lowest_sector_z = game.cur_area_data->sectors[0]->z;
@@ -138,8 +138,8 @@ void AreaEditor::draw_canvas() {
     float grid_opacity = 1.0f;
     float mob_opacity = 0.15f;
     ALLEGRO_COLOR highlight_color = COLOR_WHITE;
-    if(game.options.editor_use_custom_style) {
-        highlight_color = game.options.editor_highlight_color;
+    if(game.options.editors.use_custom_style) {
+        highlight_color = game.options.editors.highlight_color;
     }
     switch(state) {
     case EDITOR_STATE_LAYOUT: {
@@ -260,7 +260,7 @@ void AreaEditor::draw_canvas() {
         bool view_brightness = false;
         
         if(
-            game.options.area_editor_view_mode == VIEW_MODE_TEXTURES ||
+            game.options.area_editor.view_mode == VIEW_MODE_TEXTURES ||
             preview_mode
         ) {
             if(preview_mode) {
@@ -288,10 +288,10 @@ void AreaEditor::draw_canvas() {
                 );
             }
             
-        } else if(game.options.area_editor_view_mode == VIEW_MODE_HEIGHTMAP) {
+        } else if(game.options.area_editor.view_mode == VIEW_MODE_HEIGHTMAP) {
             view_heightmap = true;
             
-        } else if(game.options.area_editor_view_mode == VIEW_MODE_BRIGHTNESS) {
+        } else if(game.options.area_editor.view_mode == VIEW_MODE_BRIGHTNESS) {
             view_brightness = true;
             
         }
@@ -381,7 +381,7 @@ void AreaEditor::draw_canvas() {
     
     //Grid.
     draw_grid(
-        game.options.area_editor_grid_interval,
+        game.options.area_editor.grid_interval,
         al_map_rgba(64, 64, 64, grid_opacity * 255),
         al_map_rgba(48, 48, 48, grid_opacity * 255)
     );
@@ -499,7 +499,7 @@ void AreaEditor::draw_canvas() {
         if(
             state == EDITOR_STATE_LAYOUT &&
             moving &&
-            game.options.area_editor_show_edge_length
+            game.options.area_editor.show_edge_length
         ) {
             bool draw_dist = false;
             Point other_point;
@@ -643,7 +643,7 @@ void AreaEditor::draw_canvas() {
     
     //Selection transformation widget.
     if(
-        game.options.area_editor_sel_trans &&
+        game.options.area_editor.sel_trans &&
         selected_vertexes.size() >= 2 &&
         (!moving || cur_transformation_widget.is_moving_handle())
     ) {
@@ -813,7 +813,7 @@ void AreaEditor::draw_canvas() {
             );
             
             if(
-                game.options.area_editor_show_territory &&
+                game.options.area_editor.show_territory &&
                 m_ptr->type &&
                 m_ptr->type->territory_radius > 0 &&
                 is_selected
@@ -824,7 +824,7 @@ void AreaEditor::draw_canvas() {
                 );
             }
             if(
-                game.options.area_editor_show_territory &&
+                game.options.area_editor.show_territory &&
                 m_ptr->type &&
                 m_ptr->type->terrain_radius > 0 &&
                 is_selected
@@ -965,7 +965,7 @@ void AreaEditor::draw_canvas() {
                 if(
                     state == EDITOR_STATE_PATHS &&
                     moving &&
-                    game.options.area_editor_show_path_link_length
+                    game.options.area_editor.show_path_link_length
                 ) {
                     bool draw_dist = false;
                     Point other_point;
@@ -1301,7 +1301,7 @@ void AreaEditor::draw_canvas() {
                 3.0 / game.cam.zoom
             );
             
-            if(game.options.area_editor_show_edge_length) {
+            if(game.options.area_editor.show_edge_length) {
                 draw_line_dist(hotspot, drawing_nodes.back().snapped_spot);
             }
         }
@@ -1322,7 +1322,7 @@ void AreaEditor::draw_canvas() {
                 al_map_rgb(64, 255, 64),
                 3.0 / game.cam.zoom
             );
-            if(game.options.area_editor_show_circular_info) {
+            if(game.options.area_editor.show_circular_info) {
                 draw_line_dist(
                     new_circle_sector_anchor, new_circle_sector_center,
                     "Radius: "
@@ -1355,7 +1355,7 @@ void AreaEditor::draw_canvas() {
                 );
             }
             
-            if(game.options.area_editor_show_circular_info) {
+            if(game.options.area_editor.show_circular_info) {
                 draw_debug_text(
                     AREA_EDITOR::MEASUREMENT_COLOR,
                     new_circle_sector_points[0],
@@ -1401,7 +1401,7 @@ void AreaEditor::draw_canvas() {
                 3.0 / game.cam.zoom
             );
             
-            if(game.options.area_editor_show_path_link_length) {
+            if(game.options.area_editor.show_path_link_length) {
                 draw_line_dist(hotspot, path_drawing_stop_1->pos);
             }
         }
@@ -1492,8 +1492,8 @@ void AreaEditor::draw_canvas() {
             cross_section_world_length.to_float();
             
         ALLEGRO_COLOR bg_color =
-            game.options.editor_use_custom_style ?
-            change_color_lighting(game.options.editor_primary_color, -0.3f) :
+            game.options.editors.use_custom_style ?
+            change_color_lighting(game.options.editors.primary_color, -0.3f) :
             al_map_rgb(0, 0, 64);
             
         al_draw_filled_rectangle(
@@ -1791,8 +1791,8 @@ void AreaEditor::draw_cross_section_sector(
         ((sector_ptr->z - lowest_z) * proportion);
         
     ALLEGRO_COLOR color =
-        game.options.editor_use_custom_style ?
-        change_color_lighting(game.options.editor_secondary_color, -0.2f) :
+        game.options.editors.use_custom_style ?
+        change_color_lighting(game.options.editors.secondary_color, -0.2f) :
         al_map_rgb(0, 64, 0);
         
     al_draw_filled_rectangle(

@@ -150,6 +150,11 @@ void ControlsManager::handleCleanInput(
 void ControlsManager::handleInput(
     const PlayerInput &input
 ) {
+    if(processInputIgnoring(input)) {
+        //We have to ignore this one.
+        return;
+    }
+    
     if(
         input.type == INPUT_TYPE_CONTROLLER_AXIS_POS ||
         input.type == INPUT_TYPE_CONTROLLER_AXIS_NEG
@@ -237,4 +242,64 @@ vector<PlayerAction> ControlsManager::newFrame() {
     actionQueue.clear();
     
     return result;
+}
+
+
+/**
+ * @brief Processes a received input, updates the list of ignored inputs if
+ * necessary, and returns whether or not this one should be ignored.
+ *
+ * @param input Input to check.
+ * @return Whether it should be ignored.
+ */
+bool ControlsManager::processInputIgnoring(const PlayerInput &input) {
+    for(size_t i = 0; i < ignoredInputs.size(); ) {
+        if(ignoredInputs[i].isSameHardwareSourceAs(input)) {
+            if(input.value != 0.0f) {
+                //We just ignore it and keep it on the list.
+                return true;
+            } else {
+                //Remove it from the list since it finally reached 0,
+                //but still ignore it for now.
+                ignoredInputs.erase(ignoredInputs.begin() + i);
+                return true;
+            }
+        }
+    }
+    
+    return false;
+}
+
+
+/**
+ * @brief Ignores an input from now on until its value is 0, at which point
+ * it becomes unignored.
+ *
+ * @param input Input to ignore.
+ */
+void ControlsManager::startIgnoringInput(const PlayerInput &input) {
+    for(size_t i = 0; i < ignoredInputs.size(); i++) {
+        if(ignoredInputs[i].isSameHardwareSourceAs(input)) {
+            //Already ignored.
+            return;
+        }
+    }
+    ignoredInputs.push_back(input);
+}
+
+
+/**
+ * @brief Returns whether a given input shares the same hardware button, key,
+ * etc. as the current input.
+ *
+ * @param i2 The other input.
+ * @return Whether they are from the same hardware source.
+ */
+bool PlayerInput::isSameHardwareSourceAs(const PlayerInput &i2) {
+    return
+        axisNr == i2.axisNr &&
+        buttonNr == i2.buttonNr &&
+        deviceNr == i2.deviceNr &&
+        stickNr == i2.stickNr &&
+        type == i2.type;
 }

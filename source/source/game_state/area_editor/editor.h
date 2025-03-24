@@ -136,7 +136,6 @@ public:
     string get_name() const override;
     void draw_canvas();
     string get_opened_content_path() const;
-    string get_history_option_prefix() const override;
     
 private:
 

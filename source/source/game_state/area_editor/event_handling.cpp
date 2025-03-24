@@ -260,7 +260,7 @@ void AreaEditor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_D)) {
         if(
             !moving && !selecting &&
-            game.options.area_editor_advanced_mode
+            game.options.area_editor.advanced_mode
         ) {
             change_state(EDITOR_STATE_DETAILS);
         }
@@ -299,7 +299,7 @@ void AreaEditor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_L)) {
         if(
             !moving && !selecting &&
-            game.options.area_editor_advanced_mode
+            game.options.area_editor.advanced_mode
         ) {
             change_state(EDITOR_STATE_LAYOUT);
         }
@@ -338,7 +338,7 @@ void AreaEditor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_O)) {
         if(
             !moving && !selecting &&
-            game.options.area_editor_advanced_mode
+            game.options.area_editor.advanced_mode
         ) {
             change_state(EDITOR_STATE_MOBS);
         }
@@ -346,7 +346,7 @@ void AreaEditor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_P)) {
         if(
             !moving && !selecting &&
-            game.options.area_editor_advanced_mode
+            game.options.area_editor.advanced_mode
         ) {
             change_state(EDITOR_STATE_PATHS);
         }
@@ -656,7 +656,7 @@ void AreaEditor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
     
             bool tw_handled = false;
             if(
-                game.options.area_editor_sel_trans &&
+                game.options.area_editor.sel_trans &&
                 selected_vertexes.size() >= 2
             ) {
                 tw_handled =
@@ -1482,7 +1482,7 @@ void AreaEditor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
     
             bool tw_handled = false;
             if(
-                game.options.area_editor_sel_trans &&
+                game.options.area_editor.sel_trans &&
                 selected_vertexes.size() >= 2
             ) {
                 tw_handled =
@@ -1764,7 +1764,7 @@ void AreaEditor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void AreaEditor::handle_mmb_double_click(const ALLEGRO_EVENT &ev) {
-    if(!game.options.editor_mmb_pan) {
+    if(!game.options.editors.mmb_pan) {
         reset_cam_xy();
     }
 }
@@ -1777,7 +1777,7 @@ void AreaEditor::handle_mmb_double_click(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void AreaEditor::handle_mmb_down(const ALLEGRO_EVENT &ev) {
-    if(!game.options.editor_mmb_pan) {
+    if(!game.options.editors.mmb_pan) {
         reset_cam_zoom();
     }
 }
@@ -1790,7 +1790,7 @@ void AreaEditor::handle_mmb_down(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void AreaEditor::handle_mmb_drag(const ALLEGRO_EVENT &ev) {
-    if(game.options.editor_mmb_pan) {
+    if(game.options.editors.mmb_pan) {
         pan_cam(ev);
     }
 }
@@ -1887,7 +1887,7 @@ void AreaEditor::handle_mouse_wheel(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void AreaEditor::handle_rmb_double_click(const ALLEGRO_EVENT &ev) {
-    if(game.options.editor_mmb_pan) {
+    if(game.options.editors.mmb_pan) {
         reset_cam_xy();
     }
 }
@@ -1900,7 +1900,7 @@ void AreaEditor::handle_rmb_double_click(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void AreaEditor::handle_rmb_down(const ALLEGRO_EVENT &ev) {
-    if(game.options.editor_mmb_pan) {
+    if(game.options.editors.mmb_pan) {
         reset_cam_zoom();
     }
 }
@@ -1913,7 +1913,7 @@ void AreaEditor::handle_rmb_down(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void AreaEditor::handle_rmb_drag(const ALLEGRO_EVENT &ev) {
-    if(!game.options.editor_mmb_pan) {
+    if(!game.options.editors.mmb_pan) {
         pan_cam(ev);
     }
 }

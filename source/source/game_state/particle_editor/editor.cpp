@@ -135,7 +135,7 @@ void ParticleEditor::create_part_gen(
         
     //Finish up.
     setup_for_new_part_gen_post();
-    update_history(manifest, "");
+    update_history(game.options.particle_editor.history, manifest, "");
     set_status(
         "Created particle generator \"" + manifest.internal_name +
         "\" successfully."
@@ -298,17 +298,6 @@ string ParticleEditor::get_file_tooltip(const string &path) const {
 
 
 /**
- * @brief In the options data file, options pertaining to an editor's history
- * have a prefix. This function returns that prefix.
- *
- * @return The prefix.
- */
-string ParticleEditor::get_history_option_prefix() const {
-    return "particle_editor_history";
-}
-
-
-/**
  * @brief Returns the name of this state.
  *
  * @return The name.
@@ -347,13 +336,13 @@ void ParticleEditor::load() {
     //Misc. setup.
     game.audio.set_current_song(game.sys_content_names.sng_editors, false);
     
-    part_mgr = ParticleManager(game.options.max_particles);
+    part_mgr = ParticleManager(game.options.advanced.max_particles);
     
     //Set the background.
-    if(!game.options.particle_editor_bg_path.empty()) {
+    if(!game.options.particle_editor.bg_path.empty()) {
         bg =
             load_bmp(
-                game.options.particle_editor_bg_path,
+                game.options.particle_editor.bg_path,
                 nullptr, false, false, false
             );
         use_bg = true;
@@ -407,7 +396,7 @@ void ParticleEditor::load_part_gen_file(
     changes_mgr.reset();
     
     if(should_update_history) {
-        update_history(manifest, loaded_gen.name);
+        update_history(game.options.particle_editor.history, manifest, loaded_gen.name);
     }
     
     set_status("Loaded file \"" + manifest.internal_name + "\" successfully.");
@@ -451,7 +440,7 @@ void ParticleEditor::pick_part_gen_file(
     
     if(
         temp_manif->pack == FOLDER_NAMES::BASE_PACK &&
-        !game.options.engine_developer
+        !game.options.advanced.engine_dev
     ) {
         open_base_content_warning_dialog(really_load);
     } else {
@@ -490,16 +479,16 @@ void ParticleEditor::grid_interval_decrease_cmd(float input_value) {
     for(size_t i = 0; i < PARTICLE_EDITOR::GRID_INTERVALS.size(); ++i) {
         if(
             PARTICLE_EDITOR::GRID_INTERVALS[i] >=
-            game.options.particle_editor_grid_interval
+            game.options.particle_editor.grid_interval
         ) {
             break;
         }
         new_grid_interval = PARTICLE_EDITOR::GRID_INTERVALS[i];
     }
-    game.options.particle_editor_grid_interval = new_grid_interval;
+    game.options.particle_editor.grid_interval = new_grid_interval;
     set_status(
         "Decreased grid interval to " +
-        f2s(game.options.particle_editor_grid_interval) + "."
+        f2s(game.options.particle_editor.grid_interval) + "."
     );
 }
 
@@ -516,16 +505,16 @@ void ParticleEditor::grid_interval_increase_cmd(float input_value) {
     for(int i = (int) (PARTICLE_EDITOR::GRID_INTERVALS.size() - 1); i >= 0; --i) {
         if(
             PARTICLE_EDITOR::GRID_INTERVALS[i] <=
-            game.options.particle_editor_grid_interval
+            game.options.particle_editor.grid_interval
         ) {
             break;
         }
         new_grid_interval = PARTICLE_EDITOR::GRID_INTERVALS[i];
     }
-    game.options.particle_editor_grid_interval = new_grid_interval;
+    game.options.particle_editor.grid_interval = new_grid_interval;
     set_status(
         "Increased grid interval to " +
-        f2s(game.options.particle_editor_grid_interval) + "."
+        f2s(game.options.particle_editor.grid_interval) + "."
     );
 }
 
@@ -805,7 +794,7 @@ bool ParticleEditor::save_part_gen() {
     } else {
         set_status("Saved file successfully.");
         changes_mgr.mark_as_saved();
-        update_history(manifest, loaded_gen.name);
+        update_history(game.options.particle_editor.history, manifest, loaded_gen.name);
         return true;
     }
     

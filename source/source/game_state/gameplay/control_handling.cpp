@@ -53,7 +53,7 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
                 //Check if the player wants to cancel auto-throw.
                 if(
                     cur_leader_ptr &&
-                    game.options.auto_throw_mode == AUTO_THROW_MODE_TOGGLE &&
+                    game.options.controls.auto_throw_mode == AUTO_THROW_MODE_TOGGLE &&
                     cur_leader_ptr->auto_throwing
                 ) {
                     cur_leader_ptr->stop_auto_throwing();
@@ -127,7 +127,7 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
                     cur_leader_ptr->group->cur_standby_type &&
                     !closest_group_member_distant
                 ) {
-                    switch (game.options.auto_throw_mode) {
+                    switch (game.options.controls.auto_throw_mode) {
                     case AUTO_THROW_MODE_OFF: {
                         done = grab_closest_group_member();
                         break;
@@ -155,7 +155,7 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
             } else { //Button release.
             
                 if(cur_leader_ptr) {
-                    switch (game.options.auto_throw_mode) {
+                    switch (game.options.controls.auto_throw_mode) {
                     case AUTO_THROW_MODE_OFF: {
                         cur_leader_ptr->queue_throw();
                         break;
@@ -359,12 +359,12 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
             
             if(!is_down) return;
             
-            if(game.cam.target_zoom < game.options.zoom_mid_level) {
+            if(game.cam.target_zoom < game.options.advanced.zoom_mid_level) {
                 game.cam.target_zoom = game.config.zoom_max_level;
-            } else if(game.cam.target_zoom > game.options.zoom_mid_level) {
-                game.cam.target_zoom = game.options.zoom_mid_level;
+            } else if(game.cam.target_zoom > game.options.advanced.zoom_mid_level) {
+                game.cam.target_zoom = game.options.advanced.zoom_mid_level;
             } else {
-                if(game.options.zoom_mid_level == game.config.zoom_min_level) {
+                if(game.options.advanced.zoom_mid_level == game.config.zoom_min_level) {
                     game.cam.target_zoom = game.config.zoom_max_level;
                 } else {
                     game.cam.target_zoom = game.config.zoom_min_level;

@@ -769,7 +769,7 @@ void gui_add_back_input_icon(GuiManager* gui, const string &item_name) {
     GuiItem* back_input = new GuiItem();
     back_input->on_draw =
     [] (const GuiItem::DrawInfo & draw) {
-        if(!game.options.show_hud_input_icons) return;
+        if(!game.options.misc.show_hud_input_icons) return;
         PlayerInput i =
             game.controls.find_bind(PLAYER_ACTION_TYPE_MENU_BACK).input;
         if(i.type == INPUT_TYPE_NONE) return;
@@ -1117,24 +1117,6 @@ void report_fatal_error(const string &s, const DataNode* dn) {
 
 
 /**
- * @brief Saves an editor's history to the options file.
- *
- * @param ed_ptr Pointer to the editor.
- * @param file Data file to save to.
- */
-void save_editor_history(Editor* ed_ptr, DataNode* file) {
-    for(size_t h = 0; h < ed_ptr->history.size(); h++) {
-        file->add(
-            new DataNode(
-                ed_ptr->get_history_option_prefix() + i2s(h + 1),
-                ed_ptr->history[h].first + ";" + ed_ptr->history[h].second
-            )
-        );
-    }
-}
-
-
-/**
  * @brief Saves the maker tools settings.
  */
 void save_maker_tools() {
@@ -1215,17 +1197,7 @@ void save_maker_tools() {
  */
 void save_options() {
     DataNode file("", "");
-    
-    //Save the standard options.
-    game.options.save(&file);
-    
-    //Also add the editor histories.
-    save_editor_history(game.states.animation_ed, &file);
-    save_editor_history(game.states.area_ed, &file);
-    save_editor_history(game.states.gui_ed, &file);
-    save_editor_history(game.states.particle_ed, &file);
-    
-    //Finally, save.
+    game.options.save_to_data_node(&file);
     file.saveFile(FILE_PATHS_FROM_ROOT::OPTIONS, true, true);
 }
 

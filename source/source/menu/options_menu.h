@@ -252,7 +252,7 @@ private:
     OptionsMenuPickerGuiItem<float>* cursor_cam_weight_picker = nullptr;
     
     //Leaving confirmation picker widget.
-    OptionsMenuPickerGuiItem<LEAVING_CONFIRMATION_MODE>*
+    OptionsMenuPickerGuiItem<LEAVING_CONF_MODE>*
     leaving_confirmation_picker = nullptr;
     
     //Master volume picker widget.

@@ -272,17 +272,6 @@ string GuiEditor::get_file_tooltip(const string &path) const {
 
 
 /**
- * @brief In the options data file, options pertaining to an editor's history
- * have a prefix. This function returns that prefix.
- *
- * @return The prefix.
- */
-string GuiEditor::get_history_option_prefix() const {
-    return "gui_editor_history";
-}
-
-
-/**
  * @brief Returns the name of this state.
  *
  * @return The name.
@@ -379,7 +368,7 @@ void GuiEditor::load_gui_def_file(
     //Finish up.
     changes_mgr.reset();
     if(should_update_history) {
-        update_history(manifest, "");
+        update_history(game.options.gui_editor.history, manifest, "");
     }
     set_status("Loaded file \"" + manifest.internal_name + "\" successfully.");
 }
@@ -422,7 +411,7 @@ void GuiEditor::pick_gui_def_file(
     
     if(
         temp_manif->pack == FOLDER_NAMES::BASE_PACK &&
-        !game.options.engine_developer
+        !game.options.advanced.engine_dev
     ) {
         open_base_content_warning_dialog(really_load);
     } else {
@@ -443,16 +432,16 @@ void GuiEditor::grid_interval_decrease_cmd(float input_value) {
     for(size_t i = 0; i < GUI_EDITOR::GRID_INTERVALS.size(); i++) {
         if(
             GUI_EDITOR::GRID_INTERVALS[i] >=
-            game.options.gui_editor_grid_interval
+            game.options.gui_editor.grid_interval
         ) {
             break;
         }
         new_grid_interval = GUI_EDITOR::GRID_INTERVALS[i];
     }
-    game.options.gui_editor_grid_interval = new_grid_interval;
+    game.options.gui_editor.grid_interval = new_grid_interval;
     set_status(
         "Decreased grid interval to " +
-        f2s(game.options.gui_editor_grid_interval) + "."
+        f2s(game.options.gui_editor.grid_interval) + "."
     );
 }
 
@@ -469,16 +458,16 @@ void GuiEditor::grid_interval_increase_cmd(float input_value) {
     for(int i = (int) (GUI_EDITOR::GRID_INTERVALS.size() - 1); i >= 0; --i) {
         if(
             GUI_EDITOR::GRID_INTERVALS[i] <=
-            game.options.gui_editor_grid_interval
+            game.options.gui_editor.grid_interval
         ) {
             break;
         }
         new_grid_interval = GUI_EDITOR::GRID_INTERVALS[i];
     }
-    game.options.gui_editor_grid_interval = new_grid_interval;
+    game.options.gui_editor.grid_interval = new_grid_interval;
     set_status(
         "Increased grid interval to " +
-        f2s(game.options.gui_editor_grid_interval) + "."
+        f2s(game.options.gui_editor.grid_interval) + "."
     );
 }
 
@@ -576,9 +565,9 @@ void GuiEditor::save_cmd(float input_value) {
 void GuiEditor::snap_mode_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
-    game.options.gui_editor_snap = !game.options.gui_editor_snap;
+    game.options.gui_editor.snap = !game.options.gui_editor.snap;
     string final_status_text = "Set snap mode to ";
-    if(game.options.gui_editor_snap) {
+    if(game.options.gui_editor.snap) {
         final_status_text += "nothing";
     } else {
         final_status_text += "grid";
@@ -677,7 +666,7 @@ bool GuiEditor::save_gui_def() {
         return true;
     }
     
-    update_history(manifest, "");
+    update_history(game.options.gui_editor.history, manifest, "");
 }
 
 
@@ -708,7 +697,7 @@ void GuiEditor::setup_for_new_gui_def() {
  */
 Point GuiEditor::snap_point(const Point &p) {
     Point final_point = p;
-    bool do_snap = game.options.gui_editor_snap;
+    bool do_snap = game.options.gui_editor.snap;
     
     if(is_ctrl_pressed) {
         if(cur_transformation_widget.is_moving_center_handle()) {
@@ -729,10 +718,10 @@ Point GuiEditor::snap_point(const Point &p) {
     
     return
         Point(
-            round(final_point.x / game.options.gui_editor_grid_interval) *
-            game.options.gui_editor_grid_interval,
-            round(final_point.y / game.options.gui_editor_grid_interval) *
-            game.options.gui_editor_grid_interval
+            round(final_point.x / game.options.gui_editor.grid_interval) *
+            game.options.gui_editor.grid_interval,
+            round(final_point.y / game.options.gui_editor.grid_interval) *
+            game.options.gui_editor.grid_interval
         );
 }
 

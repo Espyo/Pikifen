@@ -15,14 +15,17 @@
 #include <functional>
 #include <string>
 #include <vector>
+#include <unordered_set>
 
 #include <allegro5/allegro.h>
 
+#include "../lib/data_file/data_file.h"
 #include "../lib/controls_manager/controls_manager.h"
 
 
 using std::size_t;
 using std::string;
+using std::unordered_set;
 using std::vector;
 
 
@@ -268,12 +271,15 @@ struct ControlsMediator {
     float get_player_action_type_value(
         PLAYER_ACTION_TYPE player_action_type_id
     );
+    void load_binds_from_data_node(DataNode* node, unsigned char player_nr);
     PlayerInput str_to_input(const string &s) const;
     PlayerInput allegro_event_to_input(const ALLEGRO_EVENT &ev) const;
     bool handle_allegro_event(const ALLEGRO_EVENT &ev);
     vector<PlayerAction> new_frame();
     void release_all();
+    void save_binds_to_data_node(DataNode* node, unsigned char player_nr);
     void set_options(const ControlsManagerOptions &options);
+    void start_ignoring_input(const PlayerInput &input);
     
     private:
     

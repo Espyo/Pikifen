@@ -55,7 +55,6 @@ public:
     string get_name() const override;
     string get_name_for_history() const;
     void draw_canvas();
-    string get_history_option_prefix() const override;
     string get_opened_content_path() const;
     
 private:

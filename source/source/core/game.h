@@ -241,13 +241,13 @@ public:
     vector<EdgeOffsetCache> wall_smoothing_effect_caches;
     
     //Current fullscreen state.
-    bool win_fullscreen = OPTIONS::DEF_WIN_FULLSCREEN;
+    bool win_fullscreen = OPTIONS::GRAPHICS_D::WIN_FULLSCREEN;
     
     //Current window height.
-    unsigned int win_h = OPTIONS::DEF_WIN_H;
+    unsigned int win_h = OPTIONS::GRAPHICS_D::WIN_H;
     
     //Current window width.
-    unsigned int win_w = OPTIONS::DEF_WIN_W;
+    unsigned int win_w = OPTIONS::GRAPHICS_D::WIN_W;
     
     //World to screen coordinate matrix. Cache for convenience.
     ALLEGRO_TRANSFORM world_to_screen_transform;

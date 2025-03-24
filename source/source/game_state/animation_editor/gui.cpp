@@ -317,6 +317,7 @@ void AnimationEditor::process_gui_hitbox_hazards() {
 void AnimationEditor::process_gui_load_dialog() {
     //History node.
     process_gui_history(
+        game.options.anim_editor.history,
     [this](const string &path) -> string {
         return path;
     },
@@ -471,11 +472,11 @@ void AnimationEditor::process_gui_menu_bar() {
             //Show tooltips item.
             if(
                 ImGui::MenuItem(
-                    "Show tooltips", "", &game.options.editor_show_tooltips
+                    "Show tooltips", "", &game.options.editors.show_tooltips
                 )
             ) {
                 string state_str =
-                    game.options.editor_show_tooltips ? "Enabled" : "Disabled";
+                    game.options.editors.show_tooltips ? "Enabled" : "Disabled";
                 set_status(state_str + " tooltips.");
                 save_options();
             }
@@ -638,7 +639,7 @@ void AnimationEditor::process_gui_new_dialog() {
         
         if(
             new_dialog.pack == FOLDER_NAMES::BASE_PACK &&
-            !game.options.engine_developer
+            !game.options.advanced.engine_dev
         ) {
             open_base_content_warning_dialog(really_create);
         } else {
@@ -656,16 +657,16 @@ void AnimationEditor::process_gui_options_dialog() {
     if(saveable_tree_node("options", "Controls")) {
     
         //Middle mouse button pans checkbox.
-        ImGui::Checkbox("Use MMB to pan", &game.options.editor_mmb_pan);
+        ImGui::Checkbox("Use MMB to pan", &game.options.editors.mmb_pan);
         set_tooltip(
             "Use the middle mouse button to pan the camera\n"
             "(and RMB to reset camera/zoom).\n"
             "Default: " +
-            b2s(OPTIONS::DEF_EDITOR_MMB_PAN) + "."
+            b2s(OPTIONS::EDITORS_D::MMB_PAN) + "."
         );
         
         //Drag threshold value.
-        int drag_threshold = (int) game.options.editor_mouse_drag_threshold;
+        int drag_threshold = (int) game.options.editors.mouse_drag_threshold;
         ImGui::SetNextItemWidth(64.0f);
         ImGui::DragInt(
             "Drag threshold", &drag_threshold,
@@ -673,11 +674,11 @@ void AnimationEditor::process_gui_options_dialog() {
         );
         set_tooltip(
             "Cursor must move these many pixels to be considered a drag.\n"
-            "Default: " + i2s(OPTIONS::DEF_EDITOR_MOUSE_DRAG_THRESHOLD) +
+            "Default: " + i2s(OPTIONS::EDITORS_D::MOUSE_DRAG_THRESHOLD) +
             ".",
             "", WIDGET_EXPLANATION_DRAG
         );
-        game.options.editor_mouse_drag_threshold = drag_threshold;
+        game.options.editors.mouse_drag_threshold = drag_threshold;
         
         ImGui::TreePop();
         
@@ -699,7 +700,7 @@ void AnimationEditor::process_gui_options_dialog() {
                     al_destroy_bitmap(bg);
                     bg = nullptr;
                 }
-                game.options.anim_editor_bg_path.clear();
+                game.options.anim_editor.bg_path.clear();
             }
         }
         set_tooltip(
@@ -721,14 +722,14 @@ void AnimationEditor::process_gui_options_dialog() {
                     );
                     
                 if(!f.empty() && !f[0].empty()) {
-                    game.options.anim_editor_bg_path = f[0];
+                    game.options.anim_editor.bg_path = f[0];
                     if(bg) {
                         al_destroy_bitmap(bg);
                         bg = nullptr;
                     }
                     bg =
                         load_bmp(
-                            game.options.anim_editor_bg_path,
+                            game.options.anim_editor.bg_path,
                             nullptr, false, false, false
                         );
                 }
@@ -739,10 +740,10 @@ void AnimationEditor::process_gui_options_dialog() {
             
             //Background texture name text.
             string file_name =
-                get_path_last_component(game.options.anim_editor_bg_path);
+                get_path_last_component(game.options.anim_editor.bg_path);
             ImGui::SameLine();
             mono_text("%s", file_name.c_str());
-            set_tooltip("Full path:\n" + game.options.anim_editor_bg_path);
+            set_tooltip("Full path:\n" + game.options.anim_editor.bg_path);
             
             ImGui::Unindent();
         }

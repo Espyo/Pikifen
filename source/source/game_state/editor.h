@@ -54,13 +54,6 @@ class Editor : public GameState {
 
 public:
 
-    //--- Members ---
-    
-    //History for the last content entries that were opened.
-    //Saves pairs of path-name.
-    vector<pair<string, string> > history;
-    
-    
     //--- Function declarations ---
     
     Editor();
@@ -73,7 +66,6 @@ public:
     virtual void update_style();
     void update_transformations() override;
     string get_name() const override = 0;
-    virtual string get_history_option_prefix() const = 0;
     virtual size_t get_history_size() const;
     
 protected:
@@ -748,6 +740,7 @@ protected:
     );
     void process_gui_help_dialog();
     void process_gui_history(
+        const vector<pair<string, string> > &history,
         const std::function<string(const string &)> &name_display_callback,
         const std::function<void(const string &)> &pick_callback,
         const std::function<string(const string &)> &tooltip_callback
@@ -814,6 +807,7 @@ protected:
     Point snap_point_to_axis(const Point &p, const Point &anchor);
     Point snap_point_to_grid(const Point &p, float grid_interval);
     void update_history(
+        vector<pair<string, string> > &history,
         const ContentManifest &manifest, const string &name
     );
     void zoom_with_cursor(float new_zoom);

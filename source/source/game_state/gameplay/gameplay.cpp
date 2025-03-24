@@ -924,7 +924,7 @@ void GameplayState::load() {
     } else {
         game.cam.set_pos(Point());
     }
-    game.cam.set_zoom(game.options.zoom_mid_level);
+    game.cam.set_zoom(game.options.advanced.zoom_mid_level);
     
     //Memorize mobs required by the mission.
     if(game.cur_area_data->type == AREA_TYPE_MISSION) {

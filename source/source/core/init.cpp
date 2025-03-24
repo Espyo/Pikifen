@@ -728,12 +728,12 @@ void init_event_things(
         al_get_new_display_flags() |
         ALLEGRO_OPENGL | ALLEGRO_PROGRAMMABLE_PIPELINE
     );
-    if(game.options.window_position_hack) al_set_new_window_position(64, 64);
+    if(game.options.advanced.window_pos_hack) al_set_new_window_position(64, 64);
     if(game.win_fullscreen) {
         al_set_new_display_flags(
             al_get_new_display_flags() |
             (
-                game.options.true_fullscreen ?
+                game.options.graphics.true_fullscreen ?
                 ALLEGRO_FULLSCREEN :
                 ALLEGRO_FULLSCREEN_WINDOW
             )
@@ -752,7 +752,7 @@ void init_event_things(
             "preferably one from the options menu."
         );
         game.win_fullscreen = false;
-        game.options.intended_win_fullscreen = false;
+        game.options.graphics.intended_win_fullscreen = false;
         save_options();
         al_set_new_display_flags(
             al_get_new_display_flags() & ~ALLEGRO_FULLSCREEN
@@ -768,7 +768,7 @@ void init_event_things(
     //This hack fixes it.
     al_resize_display(game.display, game.win_w, game.win_h);
     
-    main_timer = al_create_timer(1.0f / game.options.target_fps);
+    main_timer = al_create_timer(1.0f / game.options.advanced.target_fps);
     if(!main_timer) {
         report_fatal_error("Could not create the main game timer!");
     }
@@ -799,11 +799,11 @@ void init_misc() {
     al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
     al_set_window_title(game.display, "Pikifen");
     int new_bitmap_flags = ALLEGRO_NO_PREMULTIPLIED_ALPHA;
-    if(game.options.smooth_scaling) {
+    if(game.options.advanced.smooth_scaling) {
         enable_flag(new_bitmap_flags, ALLEGRO_MAG_LINEAR);
         enable_flag(new_bitmap_flags, ALLEGRO_MIN_LINEAR);
     }
-    if(game.options.mipmaps_enabled) {
+    if(game.options.advanced.mipmaps_enabled) {
         enable_flag(new_bitmap_flags, ALLEGRO_MIPMAP);
     }
     al_set_new_bitmap_flags(new_bitmap_flags);
@@ -817,11 +817,11 @@ void init_misc() {
     game.states.gameplay->whistle.next_ring_timer.start();
     
     game.states.gameplay->particles =
-        ParticleManager(game.options.max_particles);
+        ParticleManager(game.options.advanced.max_particles);
         
-    game.options.zoom_mid_level =
+    game.options.advanced.zoom_mid_level =
         clamp(
-            game.options.zoom_mid_level,
+            game.options.advanced.zoom_mid_level,
             game.config.zoom_min_level,
             game.config.zoom_max_level
         );

@@ -491,9 +491,9 @@ void Editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
         
         if(
             fabs(ev.mouse.x - mouse_drag_start.x) >=
-            game.options.editor_mouse_drag_threshold ||
+            game.options.editors.mouse_drag_threshold ||
             fabs(ev.mouse.y - mouse_drag_start.y) >=
-            game.options.editor_mouse_drag_threshold
+            game.options.editors.mouse_drag_threshold
         ) {
             mouse_drag_confirmed = true;
         }
@@ -1557,7 +1557,7 @@ void Editor::load_custom_mob_cat_types(bool is_area_editor) {
 void Editor::open_base_content_warning_dialog(
     const std::function<void()> &do_pick_callback
 ) {
-    if(game.options.engine_developer) {
+    if(game.options.advanced.engine_dev) {
         do_pick_callback();
         return;
     }
@@ -1959,7 +1959,7 @@ void Editor::process_gui_editor_style() {
         //Use custom style checkbox.
         if(
             ImGui::Checkbox(
-                "Use custom style", &game.options.editor_use_custom_style
+                "Use custom style", &game.options.editors.use_custom_style
             )
         ) {
             update_style();
@@ -1967,14 +1967,14 @@ void Editor::process_gui_editor_style() {
         set_tooltip(
             "Use a custom color scheme for the editor,\n"
             "instead of the default.\n"
-            "Default: " + b2s(OPTIONS::DEF_EDITOR_USE_CUSTOM_STYLE) + "."
+            "Default: " + b2s(OPTIONS::EDITORS_D::USE_CUSTOM_STYLE) + "."
         );
         
         //Primary color.
         if(
             ImGui::ColorEdit3(
                 "Custom primary color",
-                (float*) &game.options.editor_primary_color
+                (float*) &game.options.editors.primary_color
             )
         ) {
             update_style();
@@ -1987,7 +1987,7 @@ void Editor::process_gui_editor_style() {
         if(
             ImGui::ColorEdit3(
                 "Custom secondary color",
-                (float*) &game.options.editor_secondary_color
+                (float*) &game.options.editors.secondary_color
             )
         ) {
             update_style();
@@ -2000,7 +2000,7 @@ void Editor::process_gui_editor_style() {
         if(
             ImGui::ColorEdit3(
                 "Text color",
-                (float*) &game.options.editor_text_color
+                (float*) &game.options.editors.text_color
             )
         ) {
             update_style();
@@ -2013,7 +2013,7 @@ void Editor::process_gui_editor_style() {
         if(
             ImGui::ColorEdit3(
                 "Highlight color",
-                (float*) &game.options.editor_highlight_color
+                (float*) &game.options.editors.highlight_color
             )
         ) {
             update_style();
@@ -2162,6 +2162,7 @@ void Editor::process_gui_help_dialog() {
  * @param tooltip_callback Code to obtain an entry's tooltip with, if any.
  */
 void Editor::process_gui_history(
+    const vector<pair<string, string> > &history,
     const std::function<string(const string &)> &name_display_callback,
     const std::function<void(const string &)> &pick_callback,
     const std::function<string(const string &)> &tooltip_callback
@@ -2826,11 +2827,11 @@ void Editor::process_gui_unsaved_changes_dialog() {
  */
 bool Editor::saveable_tree_node(const string &category, const string &label) {
     string node_name = get_name() + "/" + category + "/" + label;
-    ImGui::SetNextItemOpen(game.options.editor_open_nodes[node_name]);
+    ImGui::SetNextItemOpen(game.options.editors.open_nodes[node_name]);
     ImGui::PushFont(game.sys_content.fnt_imgui_header);
     bool is_open = ImGui::TreeNode(label.c_str());
     ImGui::PopFont();
-    game.options.editor_open_nodes[node_name] = is_open;
+    game.options.editors.open_nodes[node_name] = is_open;
     return is_open;
 }
 
@@ -2863,7 +2864,7 @@ void Editor::set_tooltip(
     const string &explanation, const string &shortcut,
     const WIDGET_EXPLANATION widget_explanation
 ) {
-    if(!game.options.editor_show_tooltips) {
+    if(!game.options.editors.show_tooltips) {
         return;
     }
     
@@ -2983,6 +2984,7 @@ void Editor::unload() {
  * @param name Proper name of the entry.
  */
 void Editor::update_history(
+    vector<pair<string, string> > &history,
     const ContentManifest &manifest, const string &name
 ) {
     string final_name = name.empty() ? manifest.internal_name : name;
@@ -3039,7 +3041,7 @@ void Editor::update_style() {
     style->GrabRounding = 4;
     style->ScrollbarRounding = 12;
     
-    if(!game.options.editor_use_custom_style) {
+    if(!game.options.editors.use_custom_style) {
         //Use the default style.
         memcpy(
             &(ImGui::GetStyle().Colors),
@@ -3050,9 +3052,9 @@ void Editor::update_style() {
     } else {
         //Use the custom style.
         
-        ALLEGRO_COLOR pri = game.options.editor_primary_color;
-        ALLEGRO_COLOR sec = game.options.editor_secondary_color;
-        ALLEGRO_COLOR txt = game.options.editor_text_color;
+        ALLEGRO_COLOR pri = game.options.editors.primary_color;
+        ALLEGRO_COLOR sec = game.options.editors.secondary_color;
+        ALLEGRO_COLOR txt = game.options.editors.text_color;
         
         ImVec4* colors = style->Colors;
         

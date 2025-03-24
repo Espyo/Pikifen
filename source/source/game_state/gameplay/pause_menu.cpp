@@ -562,18 +562,18 @@ void PauseMenu::calculate_go_here_path() {
  */
 void PauseMenu::confirm_or_leave() {
     bool do_confirmation = false;
-    switch(game.options.leaving_confirmation_mode) {
-    case LEAVING_CONFIRMATION_MODE_NEVER: {
+    switch(game.options.misc.leaving_conf_mode) {
+    case LEAVING_CONF_MODE_NEVER: {
         do_confirmation = false;
         break;
-    } case LEAVING_CONFIRMATION_MODE_1_MIN: {
+    } case LEAVING_CONF_MODE_1_MIN: {
         do_confirmation =
             game.states.gameplay->gameplay_time_passed >= 60.0f;
         break;
-    } case LEAVING_CONFIRMATION_MODE_ALWAYS: {
+    } case LEAVING_CONF_MODE_ALWAYS: {
         do_confirmation = true;
         break;
-    } case N_LEAVING_CONFIRMATION_MODES: {
+    } case N_LEAVING_CONF_MODES: {
         break;
     }
     }
@@ -723,7 +723,7 @@ void PauseMenu::create_page_buttons(
     GuiItem* left_page_input = new GuiItem();
     left_page_input->on_draw =
     [this] (const DrawInfo & draw) {
-        if(!game.options.show_hud_input_icons) return;
+        if(!game.options.misc.show_hud_input_icons) return;
         PlayerInput i =
             game.controls.find_bind(PLAYER_ACTION_TYPE_MENU_PAGE_LEFT).input;
         if(i.type == INPUT_TYPE_NONE) return;
@@ -740,7 +740,7 @@ void PauseMenu::create_page_buttons(
     GuiItem* right_page_input = new GuiItem();
     right_page_input->on_draw =
     [this] (const DrawInfo & draw) {
-        if(!game.options.show_hud_input_icons) return;
+        if(!game.options.misc.show_hud_input_icons) return;
         PlayerInput i =
             game.controls.find_bind(PLAYER_ACTION_TYPE_MENU_PAGE_RIGHT).input;
         if(i.type == INPUT_TYPE_NONE) return;

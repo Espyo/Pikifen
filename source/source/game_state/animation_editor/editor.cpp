@@ -391,17 +391,6 @@ string AnimationEditor::get_file_tooltip(const string &path) const {
 
 
 /**
- * @brief In the options data file, options pertaining to an editor's history
- * have a prefix. This function returns that prefix.
- *
- * @return The prefix.
- */
-string AnimationEditor::get_history_option_prefix() const {
-    return "animation_editor_history_";
-}
-
-
-/**
  * @brief Returns the name of this state.
  *
  * @return The name.
@@ -572,10 +561,10 @@ void AnimationEditor::load() {
     game.audio.set_current_song(game.sys_content_names.sng_editors, false);
     
     //Set the background.
-    if(!game.options.anim_editor_bg_path.empty()) {
+    if(!game.options.anim_editor.bg_path.empty()) {
         bg =
             load_bmp(
-                game.options.anim_editor_bg_path,
+                game.options.anim_editor.bg_path,
                 nullptr, false, false, false
             );
         use_bg = true;
@@ -652,7 +641,7 @@ void AnimationEditor::load_anim_db_file(
     changes_mgr.reset();
     setup_for_new_anim_db_post();
     if(should_update_history) {
-        update_history(manifest, get_name_for_history());
+        update_history(game.options.anim_editor.history, manifest, get_name_for_history());
     }
     
     set_status("Loaded file \"" + manifest.internal_name + "\" successfully.");
@@ -846,7 +835,7 @@ void AnimationEditor::pick_anim_db_file(
     
     if(
         temp_manif->pack == FOLDER_NAMES::BASE_PACK &&
-        !game.options.engine_developer
+        !game.options.advanced.engine_dev
     ) {
         open_base_content_warning_dialog(really_load);
     } else {
@@ -1331,7 +1320,7 @@ bool AnimationEditor::save_anim_db() {
     } else {
         set_status("Saved file successfully.");
         changes_mgr.mark_as_saved();
-        update_history(manifest, get_name_for_history());
+        update_history(game.options.anim_editor.history, manifest, get_name_for_history());
         return true;
         
     }

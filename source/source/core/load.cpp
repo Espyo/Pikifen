@@ -148,32 +148,6 @@ DataNode load_data_file(const string &file_path) {
 
 
 /**
- * @brief Loads an editor's history from the options file.
- *
- * @param ed_ptr Pointer to the editor.
- * @param rs The file's reader setter.
- */
-void load_editor_history(Editor* ed_ptr, ReaderSetter &rs) {
-    ed_ptr->history.clear();
-    for(size_t h = 0; h < ed_ptr->get_history_size(); h++) {
-        ed_ptr->history.push_back(
-            make_pair("", "")
-        );
-        string option_name = ed_ptr->get_history_option_prefix() + i2s(h + 1);
-        string option_value;
-        rs.set(option_name, option_value);
-        vector<string> parts = semicolon_list_to_vector(option_value);
-        if(parts.size() >= 1) {
-            ed_ptr->history[h].first = parts[0];
-        }
-        if(parts.size() >= 2) {
-            ed_ptr->history[h].second = parts[1];
-        }
-    }
-}
-
-
-/**
  * @brief Loads a font from the disk. If it's a bitmap it'll load it from
  * the bitmap and map the characters according to the ranges provided.
  * If it's a font file, it'll just load it directly.
@@ -448,11 +422,11 @@ void load_misc_graphics() {
  */
 void load_misc_sounds() {
     game.audio.init(
-        game.options.master_volume,
-        game.options.gameplay_sound_volume,
-        game.options.music_volume,
-        game.options.ambiance_sound_volume,
-        game.options.ui_sound_volume
+        game.options.audio.master_vol,
+        game.options.audio.gameplay_sound_vol,
+        game.options.audio.music_vol,
+        game.options.audio.ambiance_sound_vol,
+        game.options.audio.ui_sound_vol
     );
     
     //Sound effects.
@@ -486,25 +460,18 @@ void load_options() {
     }
     
     //Read the main options.
-    game.options.load(&file);
-    
-    game.win_fullscreen = game.options.intended_win_fullscreen;
-    game.win_w = game.options.intended_win_w;
-    game.win_h = game.options.intended_win_h;
-    
-    //Set up the editor histories.
-    ReaderSetter rs(&file);
-    load_editor_history(game.states.animation_ed, rs);
-    load_editor_history(game.states.area_ed, rs);
-    load_editor_history(game.states.gui_ed, rs);
-    load_editor_history(game.states.particle_ed, rs);
+    game.options.load_from_data_node(&file);
     
     //Final setup.
+    game.win_fullscreen = game.options.graphics.intended_win_fullscreen;
+    game.win_w = game.options.graphics.intended_win_w;
+    game.win_h = game.options.graphics.intended_win_h;
+    
     ControlsManagerOptions controls_mgr_options;
     controls_mgr_options.stickMinDeadzone =
-        game.options.joystick_min_deadzone;
+        game.options.advanced.joystick_min_deadzone;
     controls_mgr_options.stickMaxDeadzone =
-        game.options.joystick_max_deadzone;
+        game.options.advanced.joystick_max_deadzone;
     game.controls.set_options(controls_mgr_options);
 }
 

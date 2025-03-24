@@ -252,6 +252,7 @@ void ParticleEditor::process_gui_delete_part_gen_dialog() {
 void ParticleEditor::process_gui_load_dialog() {
     //History node.
     process_gui_history(
+        game.options.particle_editor.history,
     [this](const string &path) -> string {
         return path;
     },
@@ -397,11 +398,11 @@ void ParticleEditor::process_gui_menu_bar() {
             //Show tooltips item.
             if(
                 ImGui::MenuItem(
-                    "Show tooltips", "", &game.options.editor_show_tooltips
+                    "Show tooltips", "", &game.options.editors.show_tooltips
                 )
             ) {
                 string state_str =
-                    game.options.editor_show_tooltips ? "Enabled" : "Disabled";
+                    game.options.editors.show_tooltips ? "Enabled" : "Disabled";
                 set_status(state_str + " tooltips.");
                 save_options();
             }
@@ -516,7 +517,7 @@ void ParticleEditor::process_gui_new_dialog() {
         
         if(
             new_dialog.pack == FOLDER_NAMES::BASE_PACK &&
-            !game.options.engine_developer
+            !game.options.advanced.engine_dev
         ) {
             open_base_content_warning_dialog(really_create);
         } else {
@@ -534,17 +535,17 @@ void ParticleEditor::process_gui_options_dialog() {
     if(saveable_tree_node("options", "Controls")) {
     
         //Middle mouse button pans checkbox.
-        ImGui::Checkbox("Use MMB to pan", &game.options.editor_mmb_pan);
+        ImGui::Checkbox("Use MMB to pan", &game.options.editors.mmb_pan);
         set_tooltip(
             "Use the middle mouse button to pan the camera\n"
             "(and RMB to reset camera/zoom).\n"
             "Default: " +
-            b2s(OPTIONS::DEF_EDITOR_MMB_PAN) + "."
+            b2s(OPTIONS::EDITORS_D::MMB_PAN) + "."
         );
         
         //Grid interval text.
         ImGui::Text(
-            "Grid interval: %f", game.options.particle_editor_grid_interval
+            "Grid interval: %f", game.options.particle_editor.grid_interval
         );
         
         //Increase grid interval button.
@@ -559,7 +560,7 @@ void ParticleEditor::process_gui_options_dialog() {
         }
         set_tooltip(
             "Increase the spacing on the grid.\n"
-            "Default: " + i2s(OPTIONS::DEF_PARTICLE_EDITOR_GRID_INTERVAL) +
+            "Default: " + i2s(OPTIONS::PART_ED_D::GRID_INTERVAL) +
             ".",
             "Shift + Plus"
         );
@@ -576,7 +577,7 @@ void ParticleEditor::process_gui_options_dialog() {
         }
         set_tooltip(
             "Decrease the spacing on the grid.\n"
-            "Default: " + i2s(OPTIONS::DEF_PARTICLE_EDITOR_GRID_INTERVAL) +
+            "Default: " + i2s(OPTIONS::PART_ED_D::GRID_INTERVAL) +
             ".",
             "Shift + Minus"
         );
@@ -601,7 +602,7 @@ void ParticleEditor::process_gui_options_dialog() {
                     al_destroy_bitmap(bg);
                     bg = nullptr;
                 }
-                game.options.particle_editor_bg_path.clear();
+                game.options.particle_editor.bg_path.clear();
             }
         }
         set_tooltip(
@@ -623,14 +624,14 @@ void ParticleEditor::process_gui_options_dialog() {
                     );
                     
                 if(!f.empty() && !f[0].empty()) {
-                    game.options.particle_editor_bg_path = f[0];
+                    game.options.particle_editor.bg_path = f[0];
                     if(bg) {
                         al_destroy_bitmap(bg);
                         bg = nullptr;
                     }
                     bg =
                         load_bmp(
-                            game.options.particle_editor_bg_path,
+                            game.options.particle_editor.bg_path,
                             nullptr, false, false, false
                         );
                 }
@@ -641,10 +642,10 @@ void ParticleEditor::process_gui_options_dialog() {
             
             //Background texture name text.
             string bg_file_name =
-                get_path_last_component(game.options.particle_editor_bg_path);
+                get_path_last_component(game.options.particle_editor.bg_path);
             ImGui::SameLine();
             mono_text("%s", bg_file_name.c_str());
-            set_tooltip("Full path:\n" + game.options.particle_editor_bg_path);
+            set_tooltip("Full path:\n" + game.options.particle_editor.bg_path);
             
             ImGui::Unindent();
         }
@@ -666,7 +667,7 @@ void ParticleEditor::process_gui_panel_generator() {
     ImGui::Indent();
     ImGui::Text(
         "Particles: %lu / %lu",
-        part_mgr.get_count(), game.options.max_particles
+        part_mgr.get_count(), game.options.advanced.max_particles
     );
     
     //Play/pause particle system button.
@@ -833,7 +834,7 @@ void ParticleEditor::process_gui_panel_generator() {
             ImGui::SetNextItemWidth(85);
             if(
                 ImGui::DragInt(
-                    "##number", &number_int, 1, 1, (int) game.options.max_particles
+                    "##number", &number_int, 1, 1, (int) game.options.advanced.max_particles
                 )
             ) {
                 changes_mgr.mark_as_changed();
@@ -855,7 +856,7 @@ void ParticleEditor::process_gui_panel_generator() {
             if(
                 ImGui::DragInt(
                     "##numberDeviation",
-                    &number_dev_int, 1, 0, (int) game.options.max_particles
+                    &number_dev_int, 1, 0, (int) game.options.advanced.max_particles
                 )
             ) {
                 changes_mgr.mark_as_changed();

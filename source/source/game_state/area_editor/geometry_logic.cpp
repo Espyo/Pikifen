@@ -2492,11 +2492,11 @@ void AreaEditor::rotate_mob_gens_to_point(const Point &pos) {
  * @return The snapped point.
  */
 Point AreaEditor::snap_point(const Point &p, bool ignore_selected) {
-    SNAP_MODE mode_to_use = game.options.area_editor_snap_mode;
+    SNAP_MODE mode_to_use = game.options.area_editor.snap_mode;
     Point final_point = p;
     
     if(is_shift_pressed) {
-        if(game.options.area_editor_snap_mode == SNAP_MODE_NOTHING) {
+        if(game.options.area_editor.snap_mode == SNAP_MODE_NOTHING) {
             mode_to_use = SNAP_MODE_GRID;
         } else {
             mode_to_use = SNAP_MODE_NOTHING;
@@ -2520,7 +2520,7 @@ Point AreaEditor::snap_point(const Point &p, bool ignore_selected) {
         return
             snap_point_to_grid(
                 final_point,
-                game.options.area_editor_grid_interval
+                game.options.area_editor.grid_interval
             );
         break;
         
@@ -2544,7 +2544,7 @@ Point AreaEditor::snap_point(const Point &p, bool ignore_selected) {
         vector<std::pair<Distance, Vertex*> > snappable_vertexes =
             get_merge_vertexes(
                 final_point, vertexes_to_check,
-                game.options.area_editor_snap_threshold / game.cam.zoom
+                game.options.area_editor.snap_threshold / game.cam.zoom
             );
         if(snappable_vertexes.empty()) {
             cursor_snap_cache = final_point;
@@ -2610,7 +2610,7 @@ Point AreaEditor::snap_point(const Point &p, bool ignore_selected) {
             }
             
             Distance d(final_point, edge_p);
-            if(d > game.options.area_editor_snap_threshold / game.cam.zoom) {
+            if(d > game.options.area_editor.snap_threshold / game.cam.zoom) {
                 continue;
             }
             

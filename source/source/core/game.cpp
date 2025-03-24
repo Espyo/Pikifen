@@ -188,7 +188,7 @@ void Game::do_global_drawing() {
  */
 void Game::do_global_logic() {
     //Cursor trail.
-    if(options.draw_cursor_trail) {
+    if(options.advanced.draw_cursor_trail) {
         mouse_cursor.save_timer.tick(delta_t);
     }
     
@@ -273,7 +273,7 @@ void Game::main_loop() {
                 if(reset_delta_t) {
                     //Failsafe.
                     prev_frame_start_time =
-                        cur_frame_start_time - 1.0f / options.target_fps;
+                        cur_frame_start_time - 1.0f / options.advanced.target_fps;
                     reset_delta_t = false;
                 }
                 

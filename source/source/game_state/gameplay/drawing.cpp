@@ -108,7 +108,7 @@ void GameplayState::do_game_drawing(
     if(game.perf_mon) {
         game.perf_mon->start_measurement("Drawing -- Tree shadows");
     }
-    if(!(bmp_output && !game.maker_tools.area_image_shadows)) {
+    if(!(bmp_output && !bmp_settings.shadows)) {
         draw_tree_shadows();
     }
     if(game.perf_mon) {
@@ -1438,12 +1438,12 @@ void GameplayState::draw_system_stuff() {
         );
         double chart_min = 1.0f; //1 FPS.
         double chart_max =
-            game.options.target_fps + game.options.target_fps * 0.05f;
+            game.options.advanced.target_fps + game.options.advanced.target_fps * 0.05f;
         for(size_t f = 0; f < game.framerate_history.size(); f++) {
             float fps =
                 std::min(
                     (float) (1.0f / game.framerate_history[f]),
-                    (float) game.options.target_fps
+                    (float) game.options.advanced.target_fps
                 );
             float fps_y =
                 interpolate_number(
@@ -1459,7 +1459,7 @@ void GameplayState::draw_system_stuff() {
         }
         float target_fps_y =
             interpolate_number(
-                game.options.target_fps,
+                game.options.advanced.target_fps,
                 chart_min, chart_max,
                 0, 100
             );

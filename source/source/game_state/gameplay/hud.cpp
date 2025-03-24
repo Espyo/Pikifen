@@ -250,7 +250,7 @@ Hud::Hud() :
     GuiItem* leader_next_input = new GuiItem();
     leader_next_input->on_draw =
     [this] (const DrawInfo & draw) {
-        if(!game.options.show_hud_input_icons) return;
+        if(!game.options.misc.show_hud_input_icons) return;
         if(game.states.gameplay->available_leaders.size() < 2) return;
         PlayerInput i =
             game.controls.find_bind(PLAYER_ACTION_TYPE_NEXT_LEADER).input;
@@ -413,7 +413,7 @@ Hud::Hud() :
     GuiItem* standby_next_input = new GuiItem();
     standby_next_input->on_draw =
     [this] (const DrawInfo & draw) {
-        if(!game.options.show_hud_input_icons) return;
+        if(!game.options.misc.show_hud_input_icons) return;
         if(!game.states.gameplay->cur_leader_ptr) return;
         SubgroupType* next_type;
         game.states.gameplay->cur_leader_ptr->group->get_next_standby_type(
@@ -450,7 +450,7 @@ Hud::Hud() :
     GuiItem* standby_prev_input = new GuiItem();
     standby_prev_input->on_draw =
     [this] (const DrawInfo & draw) {
-        if(!game.options.show_hud_input_icons) return;
+        if(!game.options.misc.show_hud_input_icons) return;
         if(!game.states.gameplay->cur_leader_ptr) return;
         SubgroupType* prev_type;
         game.states.gameplay->cur_leader_ptr->group->get_next_standby_type(
@@ -762,7 +762,7 @@ Hud::Hud() :
     GuiItem* spray_1_input = new GuiItem();
     spray_1_input->on_draw =
     [this] (const DrawInfo & draw) {
-        if(!game.options.show_hud_input_icons) return;
+        if(!game.options.misc.show_hud_input_icons) return;
         if(!game.states.gameplay->cur_leader_ptr) return;
         
         size_t top_spray_idx = INVALID;
@@ -843,7 +843,7 @@ Hud::Hud() :
     GuiItem* spray_2_input = new GuiItem();
     spray_2_input->on_draw =
     [this] (const DrawInfo & draw) {
-        if(!game.options.show_hud_input_icons) return;
+        if(!game.options.misc.show_hud_input_icons) return;
         if(!game.states.gameplay->cur_leader_ptr) return;
         
         size_t bottom_spray_idx = INVALID;
@@ -883,7 +883,7 @@ Hud::Hud() :
     GuiItem* prev_spray_input = new GuiItem();
     prev_spray_input->on_draw =
     [this] (const DrawInfo & draw) {
-        if(!game.options.show_hud_input_icons) return;
+        if(!game.options.misc.show_hud_input_icons) return;
         if(!game.states.gameplay->cur_leader_ptr) return;
         
         size_t prev_spray_idx = INVALID;
@@ -925,7 +925,7 @@ Hud::Hud() :
     GuiItem* next_spray_input = new GuiItem();
     next_spray_input->on_draw =
     [this] (const DrawInfo & draw) {
-        if(!game.options.show_hud_input_icons) return;
+        if(!game.options.misc.show_hud_input_icons) return;
         if(!game.states.gameplay->cur_leader_ptr) return;
         
         size_t next_spray_idx = INVALID;
