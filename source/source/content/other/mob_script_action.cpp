@@ -2183,7 +2183,7 @@ void mob_action_runners::store_focus_inside(MobActionRunData &data) {
  * @param data Data about the action call.
  */
 void mob_action_runners::swallow(MobActionRunData &data) {
-    data.m->swallow_chomped_pikmin(s2i(data.args[1]));
+    data.m->swallow_chomped_pikmin(s2i(data.args[0]));
 }
 
 

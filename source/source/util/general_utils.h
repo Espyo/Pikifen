@@ -451,6 +451,35 @@ struct Timer {
 
 string get_current_time(bool file_name_friendly);
 string sanitize_file_name(const string &s);
+
+
+/**
+ * @brief Deterministically randomly shuffles the contents of a vector.
+ *
+ * @tparam t Type of contents of the vector.
+ * @param v The vector to shuffle.
+ * @param pick_random_floats Vector of previously-determined random floats to
+ * calculate the picks with [0, 1]. This vector must be of the same size
+ * as the input vector.
+ * @return The shuffled vector.
+ */
+template<typename t>
+vector<t> shuffle_vector(
+    const vector<t> &v, const vector<float> pick_random_floats
+) {
+    vector<t> result;
+    vector<t> items_available = v;
+    for(size_t i = 0; i < v.size(); i++) {
+        size_t pick = pick_random_floats[i] * (items_available.size());
+        //Add a safeguard for if the float is exactly 1.0.
+        pick = std::min(pick, items_available.size() - 1);
+        result.push_back(items_available[pick]);
+        items_available.erase(items_available.begin() + pick);
+    }
+    return result;
+}
+
+
 string standardize_path(const string &path);
 string vector_tail_to_string(const vector<string> &v, size_t pos);
 

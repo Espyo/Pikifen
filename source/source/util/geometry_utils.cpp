@@ -1202,8 +1202,8 @@ Point get_ratio_point_in_ring(
 
 
 /**
- * @brief Returns a random point inside of a rectangular ring, with uniform
- * distribution.
+ * @brief Returns a deterministically random point inside of a rectangular
+ * ring, with uniform distribution.
  *
  * @param inner_dist Width and height of the inner rectangle of the ring.
  * @param outer_dist Width and height of the outer rectangle of the ring.
@@ -1289,8 +1289,8 @@ Point get_random_point_in_rectangular_ring(
 
 
 /**
- * @brief Returns a random point inside of a circular ring, with uniform
- * distribution.
+ * @brief Returns a deterministically random point inside of a circular
+ * ring, with uniform distribution.
  *
  * @param inner_dist Radius of the inner circle of the ring.
  * @param outer_dist Radius of the outer circle of the ring.

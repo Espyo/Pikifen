@@ -216,8 +216,8 @@ int32_t linear_congruential_generator(int32_t* state) {
 
 
 /**
- * @brief Performs a weighted random pick, and returns the index of the chosen
- * item.
+ * @brief Performs a deterministic weighted random pick,
+ * and returns the index of the chosen item.
  *
  * @param weights A vector with the weight of each item.
  * @param point_random_float A previously-determined random float to

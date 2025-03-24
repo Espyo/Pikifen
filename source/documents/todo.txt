@@ -8,7 +8,6 @@ Next tasks (roughly sorted most important first)
     --- To fix ---
     There's no way to remove a reference image once you have it set
     Putting a Pikmin on mud then throwing it out makes them keep the mud status
-    Crash: Water dumple finished getting delivered, got deleted, and the game crashed while trying to release the mobs it was holding (at least 2), since the next one was a dangling pointer (the other one was not)
     
     --- 0.26 ---
     Helodity's new area and such

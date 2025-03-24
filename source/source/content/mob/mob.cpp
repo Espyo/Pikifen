@@ -1118,6 +1118,13 @@ void Mob::chomp(Mob* m, const Hitbox* hitbox_info) {
         }
     }
     
+    for(size_t c = 0; c < chomping_mobs.size(); c++) {
+        if(chomping_mobs[c] == m) {
+            //It's already chomping the mob.
+            return;
+        }
+    }
+    
     float h_offset_dist;
     float h_offset_angle;
     float v_offset_dist;
@@ -2587,6 +2594,17 @@ void Mob::hold(
     float vertical_dist,
     bool force_above_holder, const HOLD_ROTATION_METHOD rotation_method
 ) {
+    if(m->holder.m != nullptr && m->holder.m != this) {
+        //A different mob is already holding it.
+        return;
+    }
+    for(size_t h = 0; h < holding.size(); h++) {
+        if(holding[h] == m) {
+            //It's already holding the mob.
+            return;
+        }
+    }
+    
     holding.push_back(m);
     m->holder.m = this;
     m->holder.hitbox_idx = hitbox_idx;
@@ -2871,14 +2889,21 @@ void Mob::read_script_vars(const ScriptVarReader &svr) {
  * @param m Mob to release.
  */
 void Mob::release(Mob* m) {
+    size_t idx = INVALID;
     for(size_t h = 0; h < holding.size(); h++) {
         if(holding[h] == m) {
-            m->fsm.run_event(MOB_EV_RELEASED, (void*) this);
-            holding.erase(holding.begin() + h);
+            idx = h;
             break;
         }
     }
     
+    if(idx == INVALID) {
+        //It's not holding the mob.
+        return;
+    }
+    
+    m->fsm.run_event(MOB_EV_RELEASED, (void*) this);
+    holding.erase(holding.begin() + idx);
     m->holder.clear();
     
     if(standing_on_mob) {
@@ -3414,24 +3439,55 @@ void Mob::store_mob_inside(Mob* m) {
 /**
  * @brief Makes the mob swallow some of the opponents it has chomped on.
  *
- * @param nr Number of captured opponents to swallow.
+ * @param amount Number of captured opponents to swallow.
  */
-void Mob::swallow_chomped_pikmin(size_t nr) {
-
-    size_t total = std::min(nr, chomping_mobs.size());
+void Mob::swallow_chomped_pikmin(size_t amount) {
+    amount = std::min(amount, chomping_mobs.size());
     
-    for(size_t p = 0; p < total; p++) {
-        Mob* victim = chomping_mobs[p];
-        if(!victim) continue;
-        victim->fsm.run_event(MOB_EV_SWALLOWED);
-        victim->cause_spike_damage(this, true);
-        victim->set_health(false, false, 0.0f);
-        release(victim);
-        if(victim->type->category->id == MOB_CATEGORY_PIKMIN) {
-            game.statistics.pikmin_eaten++;
+    vector<float> pick_random_floats;
+    for(size_t f = 0; f < chomping_mobs.size(); f++) {
+        pick_random_floats.push_back(game.rng.f(0.0f, 1.0f));
+    }
+    vector<Mob*> shuffled_list =
+        shuffle_vector(chomping_mobs, pick_random_floats);
+        
+    for(size_t p = 0; p < amount; p++) {
+        swallow_chomped_pikmin(shuffled_list[p]);
+    }
+}
+
+
+/**
+ * @brief Makes the mob swallow a specific opponent it has chomped on.
+ *
+ * @param m_ptr Pointer to the chomped mob.
+ */
+void Mob::swallow_chomped_pikmin(Mob* m_ptr) {
+    if(!m_ptr) return;
+    
+    size_t idx = INVALID;
+    for(size_t m = 0; m < chomping_mobs.size(); m++) {
+        if(chomping_mobs[m] == m_ptr) {
+            idx = m;
+            break;
         }
     }
-    chomping_mobs.clear();
+    
+    if(idx == INVALID) {
+        //It's not chomping the mob.
+        return;
+    }
+    
+    m_ptr->fsm.run_event(MOB_EV_SWALLOWED);
+    m_ptr->cause_spike_damage(this, true);
+    m_ptr->set_health(false, false, 0.0f);
+    release(m_ptr);
+    if(m_ptr->type->category->id == MOB_CATEGORY_PIKMIN) {
+        game.statistics.pikmin_eaten++;
+    }
+    
+    chomping_mobs.erase(chomping_mobs.begin() + idx);
+    
 }
 
 
