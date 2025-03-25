@@ -243,7 +243,7 @@ void GameplayState::do_gameplay_leader_logic(float delta_t) {
     ) {
         notification.set_enabled(true);
         notification.set_contents(
-            game.controls.find_bind(PLAYER_ACTION_TYPE_WHISTLE).input,
+            game.controls.find_bind(PLAYER_ACTION_TYPE_WHISTLE).inputSource,
             "Get up",
             Point(
                 cur_leader_ptr->pos.x,
@@ -260,7 +260,7 @@ void GameplayState::do_gameplay_leader_logic(float delta_t) {
     ) {
         notification.set_enabled(true);
         notification.set_contents(
-            game.controls.find_bind(PLAYER_ACTION_TYPE_WHISTLE).input,
+            game.controls.find_bind(PLAYER_ACTION_TYPE_WHISTLE).inputSource,
             "Get up",
             Point(
                 cur_leader_ptr->pos.x,
@@ -277,7 +277,7 @@ void GameplayState::do_gameplay_leader_logic(float delta_t) {
     ) {
         notification.set_enabled(true);
         notification.set_contents(
-            game.controls.find_bind(PLAYER_ACTION_TYPE_THROW).input,
+            game.controls.find_bind(PLAYER_ACTION_TYPE_THROW).inputSource,
             "Stop throwing",
             Point(
                 cur_leader_ptr->pos.x,
@@ -294,7 +294,7 @@ void GameplayState::do_gameplay_leader_logic(float delta_t) {
     ) {
         notification.set_enabled(true);
         notification.set_contents(
-            game.controls.find_bind(PLAYER_ACTION_TYPE_WHISTLE).input,
+            game.controls.find_bind(PLAYER_ACTION_TYPE_WHISTLE).inputSource,
             "Stop",
             Point(
                 cur_leader_ptr->pos.x,
@@ -311,7 +311,7 @@ void GameplayState::do_gameplay_leader_logic(float delta_t) {
     ) {
         notification.set_enabled(true);
         notification.set_contents(
-            game.controls.find_bind(PLAYER_ACTION_TYPE_WHISTLE).input,
+            game.controls.find_bind(PLAYER_ACTION_TYPE_WHISTLE).inputSource,
             "Stop",
             Point(
                 cur_leader_ptr->pos.x,
@@ -344,7 +344,7 @@ void GameplayState::do_gameplay_leader_logic(float delta_t) {
                 closest_d = d;
                 notification.set_enabled(true);
                 notification.set_contents(
-                    game.controls.find_bind(PLAYER_ACTION_TYPE_THROW).input,
+                    game.controls.find_bind(PLAYER_ACTION_TYPE_THROW).inputSource,
                     "Repair suit",
                     Point(
                         close_to_ship_to_heal->pos.x,
@@ -371,7 +371,8 @@ void GameplayState::do_gameplay_leader_logic(float delta_t) {
                     closest_d = d;
                     notification.set_enabled(true);
                     notification.set_contents(
-                        game.controls.find_bind(PLAYER_ACTION_TYPE_THROW).input,
+                        game.controls.find_bind(PLAYER_ACTION_TYPE_THROW).
+                        inputSource,
                         close_to_interactable_to_use->int_type->prompt_text,
                         Point(
                             close_to_interactable_to_use->pos.x,
@@ -394,7 +395,8 @@ void GameplayState::do_gameplay_leader_logic(float delta_t) {
                 close_to_pikmin_to_pluck = p;
                 notification.set_enabled(true);
                 notification.set_contents(
-                    game.controls.find_bind(PLAYER_ACTION_TYPE_THROW).input,
+                    game.controls.find_bind(PLAYER_ACTION_TYPE_THROW).
+                    inputSource,
                     "Pluck",
                     Point(
                         p->pos.x,
@@ -419,7 +421,8 @@ void GameplayState::do_gameplay_leader_logic(float delta_t) {
                     closest_d = d;
                     notification.set_enabled(true);
                     notification.set_contents(
-                        game.controls.find_bind(PLAYER_ACTION_TYPE_THROW).input,
+                        game.controls.find_bind(PLAYER_ACTION_TYPE_THROW).
+                        inputSource,
                         "Check",
                         Point(
                             close_to_nest_to_open->m_ptr->pos.x,
@@ -443,7 +446,8 @@ void GameplayState::do_gameplay_leader_logic(float delta_t) {
                     closest_d = d;
                     notification.set_enabled(true);
                     notification.set_contents(
-                        game.controls.find_bind(PLAYER_ACTION_TYPE_THROW).input,
+                        game.controls.find_bind(PLAYER_ACTION_TYPE_THROW).
+                        inputSource,
                         "Check",
                         Point(
                             close_to_nest_to_open->m_ptr->pos.x,
@@ -1086,9 +1090,9 @@ void GameplayState::do_menu_logic() {
         double real_delta_t = game.delta_t;
         if(game.maker_tools.change_speed) {
             real_delta_t /=
-            game.maker_tools.change_speed_settings[
-                game.maker_tools.change_speed_setting_idx
-            ];
+                game.maker_tools.change_speed_settings[
+                    game.maker_tools.change_speed_setting_idx
+                ];
         }
         
         game.framerate_history.push_back(game.cur_frame_process_time);

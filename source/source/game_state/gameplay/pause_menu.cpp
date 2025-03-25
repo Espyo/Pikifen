@@ -724,10 +724,13 @@ void PauseMenu::create_page_buttons(
     left_page_input->on_draw =
     [this] (const DrawInfo & draw) {
         if(!game.options.misc.show_hud_input_icons) return;
-        PlayerInput i =
-            game.controls.find_bind(PLAYER_ACTION_TYPE_MENU_PAGE_LEFT).input;
-        if(i.type == INPUT_TYPE_NONE) return;
-        draw_player_input_icon(game.sys_content.fnt_slim, i, true, draw.center, draw.size);
+        const PlayerInputSource &s =
+            game.controls.find_bind(PLAYER_ACTION_TYPE_MENU_PAGE_LEFT).
+            inputSource;
+        if(s.type == INPUT_SOURCE_TYPE_NONE) return;
+        draw_player_input_source_icon(
+            game.sys_content.fnt_slim, s, true, draw.center, draw.size
+        );
     };
     cur_gui->add_item(left_page_input, "left_page_input");
     
@@ -741,10 +744,13 @@ void PauseMenu::create_page_buttons(
     right_page_input->on_draw =
     [this] (const DrawInfo & draw) {
         if(!game.options.misc.show_hud_input_icons) return;
-        PlayerInput i =
-            game.controls.find_bind(PLAYER_ACTION_TYPE_MENU_PAGE_RIGHT).input;
-        if(i.type == INPUT_TYPE_NONE) return;
-        draw_player_input_icon(game.sys_content.fnt_slim, i, true, draw.center, draw.size);
+        const PlayerInputSource &s =
+            game.controls.find_bind(PLAYER_ACTION_TYPE_MENU_PAGE_RIGHT).
+            inputSource;
+        if(s.type == INPUT_SOURCE_TYPE_NONE) return;
+        draw_player_input_source_icon(
+            game.sys_content.fnt_slim, s, true, draw.center, draw.size
+        );
     };
     cur_gui->add_item(right_page_input, "right_page_input");
 }

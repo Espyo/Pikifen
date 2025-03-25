@@ -14,7 +14,7 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_audio.h>
 
-#include "controls.h"
+#include "controls_mediator.h"
 
 #include "../game_state/gameplay/gameplay.h"
 #include "../util/general_utils.h"
@@ -60,7 +60,7 @@ void ControlsMediator::add_player_action_type(
  * @param ev The Allegro event.
  * @return The input.
  * If this event does not pertain to any valid input, an input of type
- * INPUT_TYPE_NONE is returned.
+ * INPUT_SOURCE_TYPE_NONE is returned.
  */
 PlayerInput ControlsMediator::allegro_event_to_input(
     const ALLEGRO_EVENT &ev
@@ -70,53 +70,53 @@ PlayerInput ControlsMediator::allegro_event_to_input(
     switch(ev.type) {
     case ALLEGRO_EVENT_KEY_DOWN:
     case ALLEGRO_EVENT_KEY_UP: {
-        input.type = INPUT_TYPE_KEYBOARD_KEY;
-        input.buttonNr = ev.keyboard.keycode;
+        input.source.type = INPUT_SOURCE_TYPE_KEYBOARD_KEY;
+        input.source.buttonNr = ev.keyboard.keycode;
         input.value = (ev.type == ALLEGRO_EVENT_KEY_DOWN) ? 1 : 0;
         break;
         
     } case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
     case ALLEGRO_EVENT_MOUSE_BUTTON_UP: {
-        input.type = INPUT_TYPE_MOUSE_BUTTON;
-        input.buttonNr = ev.mouse.button;
+        input.source.type = INPUT_SOURCE_TYPE_MOUSE_BUTTON;
+        input.source.buttonNr = ev.mouse.button;
         input.value = (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) ? 1 : 0;
         break;
         
     } case ALLEGRO_EVENT_MOUSE_AXES: {
         if(ev.mouse.dz > 0) {
-            input.type = INPUT_TYPE_MOUSE_WHEEL_UP;
+            input.source.type = INPUT_SOURCE_TYPE_MOUSE_WHEEL_UP;
             input.value = ev.mouse.dz;
         } else if(ev.mouse.dz < 0) {
-            input.type = INPUT_TYPE_MOUSE_WHEEL_DOWN;
+            input.source.type = INPUT_SOURCE_TYPE_MOUSE_WHEEL_DOWN;
             input.value = -ev.mouse.dz;
         } else if(ev.mouse.dw > 0) {
-            input.type = INPUT_TYPE_MOUSE_WHEEL_RIGHT;
+            input.source.type = INPUT_SOURCE_TYPE_MOUSE_WHEEL_RIGHT;
             input.value = ev.mouse.dw;
         } else if(ev.mouse.dw < 0) {
-            input.type = INPUT_TYPE_MOUSE_WHEEL_LEFT;
+            input.source.type = INPUT_SOURCE_TYPE_MOUSE_WHEEL_LEFT;
             input.value = -ev.mouse.dw;
         }
         break;
         
     } case ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN:
     case ALLEGRO_EVENT_JOYSTICK_BUTTON_UP: {
-        input.type = INPUT_TYPE_CONTROLLER_BUTTON;
-        input.deviceNr = game.controller_numbers[ev.joystick.id];
-        input.buttonNr = ev.joystick.button;
+        input.source.type = INPUT_SOURCE_TYPE_CONTROLLER_BUTTON;
+        input.source.deviceNr = game.controller_numbers[ev.joystick.id];
+        input.source.buttonNr = ev.joystick.button;
         input.value = (ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN) ? 1 : 0;
         break;
         
     } case ALLEGRO_EVENT_JOYSTICK_AXIS: {
         if(ev.joystick.pos >= 0.0f) {
-            input.type = INPUT_TYPE_CONTROLLER_AXIS_POS;
+            input.source.type = INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS;
             input.value = ev.joystick.pos;
         } else {
-            input.type = INPUT_TYPE_CONTROLLER_AXIS_NEG;
+            input.source.type = INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG;
             input.value = -ev.joystick.pos;
         }
-        input.deviceNr = game.controller_numbers[ev.joystick.id];
-        input.stickNr = ev.joystick.stick;
-        input.axisNr = ev.joystick.axis;
+        input.source.deviceNr = game.controller_numbers[ev.joystick.id];
+        input.source.stickNr = ev.joystick.stick;
+        input.source.axisNr = ev.joystick.axis;
         break;
     }
     }
@@ -243,7 +243,7 @@ float ControlsMediator::get_player_action_type_value(
 bool ControlsMediator::handle_allegro_event(const ALLEGRO_EVENT &ev) {
     PlayerInput input = allegro_event_to_input(ev);
     
-    if(input.type != INPUT_TYPE_NONE) {
+    if(input.source.type != INPUT_SOURCE_TYPE_NONE) {
         mgr.handleInput(input);
         return true;
     } else {
@@ -256,35 +256,35 @@ bool ControlsMediator::handle_allegro_event(const ALLEGRO_EVENT &ev) {
  * @brief Creates a string that represents an input.
  * Ignores the player number.
  *
- * @param i Input to read from.
+ * @param s Input source to read from.
  * @return The string, or an empty string on error.
  */
-string ControlsMediator::input_to_str(
-    const PlayerInput &i
+string ControlsMediator::input_source_to_str(
+    const PlayerInputSource &s
 ) const {
-    switch(i.type) {
-    case INPUT_TYPE_KEYBOARD_KEY: {
-        return "k_" + i2s(i.buttonNr);
-    } case INPUT_TYPE_MOUSE_BUTTON: {
-        return "mb_" + i2s(i.buttonNr);
-    } case INPUT_TYPE_MOUSE_WHEEL_UP: {
+    switch(s.type) {
+    case INPUT_SOURCE_TYPE_KEYBOARD_KEY: {
+        return "k_" + i2s(s.buttonNr);
+    } case INPUT_SOURCE_TYPE_MOUSE_BUTTON: {
+        return "mb_" + i2s(s.buttonNr);
+    } case INPUT_SOURCE_TYPE_MOUSE_WHEEL_UP: {
         return "mwu";
-    } case INPUT_TYPE_MOUSE_WHEEL_DOWN: {
+    } case INPUT_SOURCE_TYPE_MOUSE_WHEEL_DOWN: {
         return "mwd";
-    } case INPUT_TYPE_MOUSE_WHEEL_LEFT: {
+    } case INPUT_SOURCE_TYPE_MOUSE_WHEEL_LEFT: {
         return "mwl";
-    } case INPUT_TYPE_MOUSE_WHEEL_RIGHT: {
+    } case INPUT_SOURCE_TYPE_MOUSE_WHEEL_RIGHT: {
         return "mwr";
-    } case INPUT_TYPE_CONTROLLER_BUTTON: {
-        return "jb_" + i2s(i.deviceNr) + "_" + i2s(i.buttonNr);
-    } case INPUT_TYPE_CONTROLLER_AXIS_POS: {
+    } case INPUT_SOURCE_TYPE_CONTROLLER_BUTTON: {
+        return "jb_" + i2s(s.deviceNr) + "_" + i2s(s.buttonNr);
+    } case INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS: {
         return
-            "jap_" + i2s(i.deviceNr) +
-            "_" + i2s(i.stickNr) + "_" + i2s(i.axisNr);
-    } case INPUT_TYPE_CONTROLLER_AXIS_NEG: {
+            "jap_" + i2s(s.deviceNr) +
+            "_" + i2s(s.stickNr) + "_" + i2s(s.axisNr);
+    } case INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG: {
         return
-            "jan_" + i2s(i.deviceNr) +
-            "_" + i2s(i.stickNr) + "_" + i2s(i.axisNr);
+            "jan_" + i2s(s.deviceNr) +
+            "_" + i2s(s.stickNr) + "_" + i2s(s.axisNr);
     } default: {
         return "";
     }
@@ -313,13 +313,13 @@ void ControlsMediator::load_binds_from_data_node(
         vector<string> inputs = semicolon_list_to_vector(bind_node->value);
         
         for(size_t c = 0; c < inputs.size(); c++) {
-            PlayerInput input = str_to_input(inputs[c]);
-            if(input.type == INPUT_TYPE_NONE) continue;
+            PlayerInputSource input_source = str_to_input_source(inputs[c]);
+            if(input_source.type == INPUT_SOURCE_TYPE_NONE) continue;
             
             ControlBind new_bind;
             new_bind.actionTypeId = player_action_types[a].id;
             new_bind.playerNr = player_nr;
-            new_bind.input = input;
+            new_bind.inputSource = input_source;
             binds().push_back(new_bind);
         }
     }
@@ -327,13 +327,15 @@ void ControlsMediator::load_binds_from_data_node(
 
 
 /**
- * @brief Ignores an input from now on until its value is 0, at which point
- * it becomes unignored.
+ * @brief Ignores an input source from now on until the player performs the
+ * input with value 0, at which point it becomes unignored.
  *
- * @param input Input to ignore.
+ * @param input_source Input source to ignore.
  */
-void ControlsMediator::start_ignoring_input(const PlayerInput &input) {
-    mgr.startIgnoringInput(input);
+void ControlsMediator::start_ignoring_input_source(
+    const PlayerInputSource &input_source
+) {
+    mgr.startIgnoringInputSource(input_source);
 }
 
 
@@ -386,7 +388,7 @@ void ControlsMediator::save_binds_to_data_node(
         PlayerActionType action_type =
             get_player_action_type(all_binds[b].actionTypeId);
         bind_strs[action_type.internal_name] +=
-            input_to_str(all_binds[b].input) + ";";
+            input_source_to_str(all_binds[b].inputSource) + ";";
     }
     
     //Save them all.
@@ -423,61 +425,61 @@ void ControlsMediator::set_options(const ControlsManagerOptions &options) {
  * @param s String to read from.
  * @return The input, or a default input instance on error.
  */
-PlayerInput ControlsMediator::str_to_input(
+PlayerInputSource ControlsMediator::str_to_input_source(
     const string &s
 ) const {
-    PlayerInput input;
+    PlayerInputSource input_source;
     
     vector<string> parts = split(s, "_");
     size_t n_parts = parts.size();
     
-    if(n_parts == 0) return input;
+    if(n_parts == 0) return input_source;
     
     if(parts[0] == "k" && n_parts >= 2) {
         //Keyboard.
-        input.type = INPUT_TYPE_KEYBOARD_KEY;
-        input.buttonNr = s2i(parts[1]);
+        input_source.type = INPUT_SOURCE_TYPE_KEYBOARD_KEY;
+        input_source.buttonNr = s2i(parts[1]);
         
     } else if(parts[0] == "mb" && n_parts >= 2) {
         //Mouse button.
-        input.type = INPUT_TYPE_MOUSE_BUTTON;
-        input.buttonNr = s2i(parts[1]);
+        input_source.type = INPUT_SOURCE_TYPE_MOUSE_BUTTON;
+        input_source.buttonNr = s2i(parts[1]);
         
     } else if(parts[0] == "mwu") {
         //Mouse wheel up.
-        input.type = INPUT_TYPE_MOUSE_WHEEL_UP;
+        input_source.type = INPUT_SOURCE_TYPE_MOUSE_WHEEL_UP;
         
     } else if(parts[0] == "mwd") {
         //Mouse wheel down.
-        input.type = INPUT_TYPE_MOUSE_WHEEL_DOWN;
+        input_source.type = INPUT_SOURCE_TYPE_MOUSE_WHEEL_DOWN;
         
     } else if(parts[0] == "mwl") {
         //Mouse wheel left.
-        input.type = INPUT_TYPE_MOUSE_WHEEL_LEFT;
+        input_source.type = INPUT_SOURCE_TYPE_MOUSE_WHEEL_LEFT;
         
     } else if(parts[0] == "mwr") {
         //Mouse wheel right.
-        input.type = INPUT_TYPE_MOUSE_WHEEL_RIGHT;
+        input_source.type = INPUT_SOURCE_TYPE_MOUSE_WHEEL_RIGHT;
         
     } else if(parts[0] == "jb" && n_parts >= 3) {
         //Controller button.
-        input.type = INPUT_TYPE_CONTROLLER_BUTTON;
-        input.deviceNr = s2i(parts[1]);
-        input.buttonNr = s2i(parts[2]);
+        input_source.type = INPUT_SOURCE_TYPE_CONTROLLER_BUTTON;
+        input_source.deviceNr = s2i(parts[1]);
+        input_source.buttonNr = s2i(parts[2]);
         
     } else if(parts[0] == "jap" && n_parts >= 4) {
         //Controller stick axis, positive.
-        input.type = INPUT_TYPE_CONTROLLER_AXIS_POS;
-        input.deviceNr = s2i(parts[1]);
-        input.stickNr = s2i(parts[2]);
-        input.axisNr = s2i(parts[3]);
+        input_source.type = INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS;
+        input_source.deviceNr = s2i(parts[1]);
+        input_source.stickNr = s2i(parts[2]);
+        input_source.axisNr = s2i(parts[3]);
         
     } else if(parts[0] == "jan" && n_parts >= 4) {
         //Controller stick axis, negative.
-        input.type = INPUT_TYPE_CONTROLLER_AXIS_NEG;
-        input.deviceNr = s2i(parts[1]);
-        input.stickNr = s2i(parts[2]);
-        input.axisNr = s2i(parts[3]);
+        input_source.type = INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG;
+        input_source.deviceNr = s2i(parts[1]);
+        input_source.stickNr = s2i(parts[2]);
+        input_source.axisNr = s2i(parts[3]);
         
     } else {
         game.errors.report(
@@ -485,7 +487,7 @@ PlayerInput ControlsMediator::str_to_input(
         );
     }
     
-    return input;
+    return input_source;
 }
 
 

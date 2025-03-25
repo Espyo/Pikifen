@@ -15,7 +15,7 @@
 #include <allegro5/allegro_primitives.h>
 
 #include "../content/other/liquid.h"
-#include "controls.h"
+#include "controls_mediator.h"
 #include "misc_structs.h"
 
 
@@ -206,8 +206,8 @@ void draw_menu_button_icon(
     bool left_side
 );
 void draw_mouse_cursor(const ALLEGRO_COLOR &color);
-void draw_player_input_icon(
-    const ALLEGRO_FONT* const font, const PlayerInput &i,
+void draw_player_input_source_icon(
+    const ALLEGRO_FONT* const font, const PlayerInputSource &s,
     bool condensed, const Point &where, const Point &max_size,
     unsigned char alpha = 228
 );
@@ -229,12 +229,12 @@ void draw_string_tokens(
     const Point &scale = Point(1.0f)
 );
 void get_player_input_icon_info(
-    const PlayerInput &i, bool condensed,
+    const PlayerInputSource &s, bool condensed,
     PLAYER_INPUT_ICON_SHAPE* shape,
     PLAYER_INPUT_ICON_SPRITE* bitmap_sprite,
     string* text
 );
 float get_player_input_icon_width(
-    const ALLEGRO_FONT* font, const PlayerInput &i, bool condensed,
+    const ALLEGRO_FONT* font, const PlayerInputSource &s, bool condensed,
     float max_bitmap_height = 0
 );

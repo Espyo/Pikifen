@@ -163,13 +163,13 @@ void OptionsMenu::handle_allegro_event(const ALLEGRO_EVENT &ev) {
                 ControlBind new_bind;
                 new_bind.actionTypeId = cur_action_type;
                 new_bind.playerNr = 0;
-                new_bind.input = input;
+                new_bind.inputSource = input.source;
                 all_binds.push_back(new_bind);
             } else {
-                game.controls.binds()[cur_bind_idx].input = input;
+                game.controls.binds()[cur_bind_idx].inputSource = input.source;
             }
             capturing_input = 2;
-            game.controls.start_ignoring_input(input);
+            game.controls.start_ignoring_input_source(input.source);
             populate_binds();
         }
         return;
@@ -1217,8 +1217,8 @@ void OptionsMenu::populate_binds() {
             bind_button->on_draw =
                 [this, b, a_binds, bind_button]
             (const DrawInfo & draw) {
-                draw_player_input_icon(
-                    game.sys_content.fnt_slim, a_binds[b].input, false,
+                draw_player_input_source_icon(
+                    game.sys_content.fnt_slim, a_binds[b].inputSource, false,
                     draw.center, draw.size * 0.8f
                 );
                 
@@ -1382,17 +1382,17 @@ void OptionsMenu::populate_binds() {
             );
             
             //Default icon.
-            PlayerInput def_input =
-                game.controls.str_to_input(action_type.default_bind_str);
+            PlayerInputSource def_input_source =
+                game.controls.str_to_input_source(action_type.default_bind_str);
             GuiItem* default_icon = new GuiItem();
             default_icon->ratio_center =
                 Point(0.68f, cur_y);
             default_icon->ratio_size =
                 Point(0.17f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
             default_icon->on_draw =
-            [def_input] (const DrawInfo & draw) {
-                draw_player_input_icon(
-                    game.sys_content.fnt_slim, def_input, false, draw.center, draw.size
+            [def_input_source] (const DrawInfo & draw) {
+                draw_player_input_source_icon(
+                    game.sys_content.fnt_slim, def_input_source, false, draw.center, draw.size
                 );
             };
             binds_list_box->add_child(default_icon);
@@ -1450,14 +1450,14 @@ void OptionsMenu::restore_default_binds(
         }
     }
     
-    PlayerInput def_input =
-        game.controls.str_to_input(action_type.default_bind_str);
+    PlayerInputSource def_input_source =
+        game.controls.str_to_input_source(action_type.default_bind_str);
     ControlBind new_bind;
     
-    if(def_input.type != INPUT_TYPE_NONE) {
+    if(def_input_source.type != INPUT_SOURCE_TYPE_NONE) {
         new_bind.actionTypeId = action_type_id;
         new_bind.playerNr = 0;
-        new_bind.input = def_input;
+        new_bind.inputSource = def_input_source;
         all_binds.push_back(new_bind);
     }
     

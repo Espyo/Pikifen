@@ -1230,9 +1230,9 @@ void GameplayState::draw_gameplay_message_box() {
     }
     
     //Draw the button to advance, if it's time.
-    draw_player_input_icon(
+    draw_player_input_source_icon(
         game.sys_content.fnt_slim,
-        game.controls.find_bind(PLAYER_ACTION_TYPE_THROW).input,
+        game.controls.find_bind(PLAYER_ACTION_TYPE_THROW).inputSource,
         true,
         Point(
             game.win_w - (GAMEPLAY_MSG_BOX::MARGIN + GAMEPLAY_MSG_BOX::PADDING + 8.0f),
@@ -1325,9 +1325,9 @@ void GameplayState::draw_gameplay_message_box() {
                 break;
             }
             case STRING_TOKEN_CONTROL_BIND: {
-                draw_player_input_icon(
+                draw_player_input_source_icon(
                     game.sys_content.fnt_slim,
-                    game.controls.find_bind(cur_token.content).input,
+                    game.controls.find_bind(cur_token.content).inputSource,
                     true,
                     Point(
                         x + token_final_width / 2.0f,

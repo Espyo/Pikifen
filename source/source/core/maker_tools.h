@@ -18,7 +18,7 @@
 
 #include "../content/mob/mob.h"
 #include "../lib/data_file/data_file.h"
-#include "controls.h"
+#include "controls_mediator.h"
 
 
 using std::vector;
@@ -83,9 +83,9 @@ extern const string NAMES[N_MAKER_TOOLS];
 struct MakerTools {
 
     //--- Misc. definitions ---
-
+    
     struct AreaImageSettings {
-
+    
         //Padding around the area in the area image tool.
         float padding = 32.0f;
         
@@ -97,15 +97,15 @@ struct MakerTools {
         
         //Show mobs in the area image?
         bool mobs = true;
-
+        
     };
-
-
+    
+    
     //--- Members ---
     
     //Are the tools enabled?
     bool enabled = true;
-
+    
     //Different area image settings.
     AreaImageSettings area_image_settings[3];
     
@@ -120,10 +120,10 @@ struct MakerTools {
     
     //Which game speed change setting to use.
     unsigned char change_speed_setting_idx = 0;
-
+    
     //Different game speed change settings. These are multipliers to change by.
     float change_speed_settings[3] = { 2.0f, 0.5f, 1.0f };
-
+    
     //Are collision boxes visible in-game?
     bool collision = false;
     
@@ -150,7 +150,7 @@ struct MakerTools {
     
     //If any maker info is being printed, this represents its time to live.
     Timer info_print_timer;
-
+    
     //For each key (F2 - F11, 0 - 9), what tool is bound to it?
     MAKER_TOOL_TYPE keys[20];
     
@@ -173,16 +173,16 @@ struct MakerTools {
     //--- Function declarations ---
     
     MakerTools();
-    void handle_player_action(const PlayerAction& action);
+    void handle_player_action(const PlayerAction &action);
     void load_from_data_node(DataNode* node);
     void reset_for_gameplay();
     void save_to_data_node(DataNode* node);
-
-
+    
+    
 private:
 
     //--- Function declarations ---
-
+    
     unsigned char get_maker_tool_setting_idx() const;
     
 };

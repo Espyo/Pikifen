@@ -30,7 +30,7 @@
 #include "../util/general_utils.h"
 #include "../util/geometry_utils.h"
 #include "../util/math_utils.h"
-#include "controls.h"
+#include "controls_mediator.h"
 
 
 class PikminType;
@@ -914,7 +914,7 @@ struct Notification {
     float get_visibility() const;
     void reset();
     void set_contents(
-        const PlayerInput &input, const string &text, const Point &pos
+        const PlayerInputSource &input_source, const string &text, const Point &pos
     );
     void set_enabled(bool enabled);
     void tick(float delta_t);
@@ -926,8 +926,8 @@ struct Notification {
     //Is it meant to exist?
     bool enabled = true;
     
-    //What player input icon to show.
-    PlayerInput input;
+    //What player input source icon to show.
+    PlayerInputSource input_source;
     
     //What text to write.
     string text;

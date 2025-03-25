@@ -827,10 +827,13 @@ void gui_add_back_input_icon(GuiManager* gui, const string &item_name) {
     back_input->on_draw =
     [] (const GuiItem::DrawInfo & draw) {
         if(!game.options.misc.show_hud_input_icons) return;
-        PlayerInput i =
-            game.controls.find_bind(PLAYER_ACTION_TYPE_MENU_BACK).input;
-        if(i.type == INPUT_TYPE_NONE) return;
-        draw_player_input_icon(game.sys_content.fnt_slim, i, true, draw.center, draw.size);
+        const PlayerInputSource& s =
+            game.controls.find_bind(PLAYER_ACTION_TYPE_MENU_BACK).
+            inputSource;
+        if(s.type == INPUT_SOURCE_TYPE_NONE) return;
+        draw_player_input_source_icon(
+            game.sys_content.fnt_slim, s, true, draw.center, draw.size
+        );
     };
     gui->add_item(back_input, item_name);
 }
@@ -1314,7 +1317,7 @@ void set_string_token_widths(
             tokens[t].width =
                 get_player_input_icon_width(
                     control_font,
-                    game.controls.find_bind(tokens[t].content).input,
+                    game.controls.find_bind(tokens[t].content).inputSource,
                     control_condensed,
                     max_control_bitmap_height
                 );

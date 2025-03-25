@@ -885,11 +885,11 @@ void Notification::draw() const {
         map_alpha(DRAWING::NOTIFICATION_ALPHA * visibility)
     );
     
-    if(input.type != INPUT_TYPE_NONE) {
+    if(input_source.type != INPUT_SOURCE_TYPE_NONE) {
         text_box_x1 +=
             DRAWING::NOTIFICATION_CONTROL_SIZE + DRAWING::NOTIFICATION_PADDING;
-        draw_player_input_icon(
-            game.sys_content.fnt_slim, input,
+        draw_player_input_source_icon(
+            game.sys_content.fnt_slim, input_source,
             true,
             Point(
                 -bmp_w * 0.5 + DRAWING::NOTIFICATION_PADDING +
@@ -938,7 +938,7 @@ float Notification::get_visibility() const {
  */
 void Notification::reset() {
     enabled = true;
-    input.type = INPUT_TYPE_NONE;
+    input_source.type = INPUT_SOURCE_TYPE_NONE;
     text.clear();
     pos = Point();
     visibility = 0.0f;
@@ -948,14 +948,14 @@ void Notification::reset() {
 /**
  * @brief Sets the contents to show.
  *
- * @param input Player input icon to show.
+ * @param input_source Player input source icon to show.
  * @param text Text to show.
  * @param pos Where to show it in the game world.
  */
 void Notification::set_contents(
-    const PlayerInput &input, const string &text, const Point &pos
+    const PlayerInputSource &input_source, const string &text, const Point &pos
 ) {
-    this->input = input;
+    this->input_source = input_source;
     this->text = text;
     this->pos = pos;
 }

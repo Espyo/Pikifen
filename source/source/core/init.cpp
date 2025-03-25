@@ -49,7 +49,7 @@
 #include "../util/general_utils.h"
 #include "../util/imgui_utils.h"
 #include "../util/string_utils.h"
-#include "controls.h"
+#include "controls_mediator.h"
 #include "game.h"
 #include "misc_functions.h"
 
@@ -626,7 +626,7 @@ void init_controls() {
         ControlBind bind;
         bind.actionTypeId = action_types[a].id;
         bind.playerNr = 0;
-        bind.input = game.controls.str_to_input(def);
+        bind.inputSource = game.controls.str_to_input_source(def);
         game.controls.binds().push_back(bind);
     }
 }

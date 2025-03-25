@@ -24,22 +24,22 @@
  * @param input Input to clean.
  */
 void ControlsManager::cleanStick(const PlayerInput &input) {
-    rawSticks[input.deviceNr][input.stickNr][input.axisNr] =
-        input.type == INPUT_TYPE_CONTROLLER_AXIS_POS ?
+    rawSticks[input.source.deviceNr][input.source.stickNr][input.source.axisNr] =
+        input.source.type == INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS ?
         input.value :
         -input.value;
         
     float coords[2];
-    coords[0] = rawSticks[input.deviceNr][input.stickNr][0];
-    coords[1] = rawSticks[input.deviceNr][input.stickNr][1];
+    coords[0] = rawSticks[input.source.deviceNr][input.source.stickNr][0];
+    coords[1] = rawSticks[input.source.deviceNr][input.source.stickNr][1];
     
     AnalogStickCleaner::Settings cleanupSettings;
     cleanupSettings.deadzones.radial.inner = options.stickMinDeadzone;
     cleanupSettings.deadzones.radial.outer = options.stickMaxDeadzone;
     AnalogStickCleaner::clean(coords, cleanupSettings);
     
-    cleanSticks[input.deviceNr][input.stickNr][0] = coords[0];
-    cleanSticks[input.deviceNr][input.stickNr][1] = coords[1];
+    cleanSticks[input.source.deviceNr][input.source.stickNr][0] = coords[0];
+    cleanSticks[input.source.deviceNr][input.source.stickNr][1] = coords[1];
 }
 
 
@@ -55,55 +55,10 @@ vector<int> ControlsManager::getActionTypesFromInput(
     vector<int> actionTypes;
     
     for(size_t b = 0; b < binds.size(); b++) {
-    
         const ControlBind &bind = binds[b];
-        
-        if(bind.input.type != input.type) continue;
-        
-        switch(input.type) {
-        case INPUT_TYPE_NONE:
-        case INPUT_TYPE_UNKNOWN: {
-            continue;
-            break;
-        } case INPUT_TYPE_KEYBOARD_KEY:
-        case INPUT_TYPE_MOUSE_BUTTON: {
-            if(
-                bind.input.buttonNr != input.buttonNr
-            ) {
-                continue;
-            }
-            break;
+        if(bind.inputSource == input.source) {
+            actionTypes.push_back(bind.actionTypeId);
         }
-        case INPUT_TYPE_MOUSE_WHEEL_UP:
-        case INPUT_TYPE_MOUSE_WHEEL_DOWN:
-        case INPUT_TYPE_MOUSE_WHEEL_LEFT:
-        case INPUT_TYPE_MOUSE_WHEEL_RIGHT: {
-            break;
-        }
-        case INPUT_TYPE_CONTROLLER_BUTTON: {
-            if(
-                bind.input.deviceNr != input.deviceNr ||
-                bind.input.buttonNr != input.buttonNr
-            ) {
-                continue;
-            }
-            break;
-        }
-        case INPUT_TYPE_CONTROLLER_AXIS_POS:
-        case INPUT_TYPE_CONTROLLER_AXIS_NEG: {
-            if(
-                bind.input.deviceNr != input.deviceNr ||
-                bind.input.stickNr != input.stickNr ||
-                bind.input.axisNr != input.axisNr
-            ) {
-                continue;
-            }
-            break;
-        }
-        }
-        
-        actionTypes.push_back(bind.actionTypeId);
-        
     }
     
     return actionTypes;
@@ -143,7 +98,7 @@ void ControlsManager::handleCleanInput(
 
 
 /**
- * @brief Handles an input from hardware.
+ * @brief Handles an input from the player.
  *
  * @param input The input.
  */
@@ -156,8 +111,8 @@ void ControlsManager::handleInput(
     }
     
     if(
-        input.type == INPUT_TYPE_CONTROLLER_AXIS_POS ||
-        input.type == INPUT_TYPE_CONTROLLER_AXIS_NEG
+        input.source.type == INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS ||
+        input.source.type == INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG
     ) {
         //Game controller stick inputs need to be cleaned up first,
         //by implementing deadzone logic.
@@ -169,36 +124,36 @@ void ControlsManager::handleInput(
         //in one frame, the "walking left" action may never receive a zero
         //value. So we should inject the zero manually with two more inputs.
         PlayerInput xPosInput = input;
-        xPosInput.type = INPUT_TYPE_CONTROLLER_AXIS_POS;
-        xPosInput.axisNr = 0;
+        xPosInput.source.type = INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS;
+        xPosInput.source.axisNr = 0;
         xPosInput.value =
-            std::max(0.0f, cleanSticks[input.deviceNr][input.stickNr][0]);
+            std::max(0.0f, cleanSticks[input.source.deviceNr][input.source.stickNr][0]);
         handleCleanInput(xPosInput, false);
         
         PlayerInput xNegInput = input;
-        xNegInput.type = INPUT_TYPE_CONTROLLER_AXIS_NEG;
-        xNegInput.axisNr = 0;
+        xNegInput.source.type = INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG;
+        xNegInput.source.axisNr = 0;
         xNegInput.value =
-            std::max(0.0f, -cleanSticks[input.deviceNr][input.stickNr][0]);
+            std::max(0.0f, -cleanSticks[input.source.deviceNr][input.source.stickNr][0]);
         handleCleanInput(xNegInput, false);
         
         PlayerInput yPosInput = input;
-        yPosInput.type = INPUT_TYPE_CONTROLLER_AXIS_POS;
-        yPosInput.axisNr = 1;
+        yPosInput.source.type = INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS;
+        yPosInput.source.axisNr = 1;
         yPosInput.value =
-            std::max(0.0f, cleanSticks[input.deviceNr][input.stickNr][1]);
+            std::max(0.0f, cleanSticks[input.source.deviceNr][input.source.stickNr][1]);
         handleCleanInput(yPosInput, false);
         
         PlayerInput yNegInput = input;
-        yNegInput.type = INPUT_TYPE_CONTROLLER_AXIS_NEG;
-        yNegInput.axisNr = 1;
+        yNegInput.source.type = INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG;
+        yNegInput.source.axisNr = 1;
         yNegInput.value =
-            std::max(0.0f, -cleanSticks[input.deviceNr][input.stickNr][1]);
+            std::max(0.0f, -cleanSticks[input.source.deviceNr][input.source.stickNr][1]);
         handleCleanInput(yNegInput, false);
         
     } else if(
-        input.type == INPUT_TYPE_MOUSE_WHEEL_UP ||
-        input.type == INPUT_TYPE_MOUSE_WHEEL_DOWN
+        input.source.type == INPUT_SOURCE_TYPE_MOUSE_WHEEL_UP ||
+        input.source.type == INPUT_SOURCE_TYPE_MOUSE_WHEEL_DOWN
     ) {
         //Mouse wheel inputs can have values over 1 to indicate the wheel
         //spun a lot. We should process each one as an individual input.
@@ -252,16 +207,18 @@ vector<PlayerAction> ControlsManager::newFrame() {
  * @param input Input to check.
  * @return Whether it should be ignored.
  */
-bool ControlsManager::processInputIgnoring(const PlayerInput &input) {
-    for(size_t i = 0; i < ignoredInputs.size(); ) {
-        if(ignoredInputs[i].isSameHardwareSourceAs(input)) {
+bool ControlsManager::processInputIgnoring(
+    const PlayerInput &input
+) {
+    for(size_t i = 0; i < ignoredInputSources.size(); ) {
+        if(ignoredInputSources[i] == input.source) {
             if(input.value != 0.0f) {
                 //We just ignore it and keep it on the list.
                 return true;
             } else {
-                //Remove it from the list since it finally reached 0,
-                //but still ignore it for now.
-                ignoredInputs.erase(ignoredInputs.begin() + i);
+                //Remove it from the list since it's finally at 0,
+                //but still ignore it this time.
+                ignoredInputSources.erase(ignoredInputSources.begin() + i);
                 return true;
             }
         }
@@ -272,34 +229,35 @@ bool ControlsManager::processInputIgnoring(const PlayerInput &input) {
 
 
 /**
- * @brief Ignores an input from now on until its value is 0, at which point
- * it becomes unignored.
+ * @brief Ignores an input source from now on until the player performs the
+ * input with value 0, at which point it becomes unignored.
  *
- * @param input Input to ignore.
+ * @param inputSource Input source to ignore.
  */
-void ControlsManager::startIgnoringInput(const PlayerInput &input) {
-    for(size_t i = 0; i < ignoredInputs.size(); i++) {
-        if(ignoredInputs[i].isSameHardwareSourceAs(input)) {
+void ControlsManager::startIgnoringInputSource(
+    const PlayerInputSource &inputSource
+) {
+    for(size_t i = 0; i < ignoredInputSources.size(); i++) {
+        if(ignoredInputSources[i] == inputSource) {
             //Already ignored.
             return;
         }
     }
-    ignoredInputs.push_back(input);
+    ignoredInputSources.push_back(inputSource);
 }
 
 
 /**
- * @brief Returns whether a given input shares the same hardware button, key,
- * etc. as the current input.
+ * @brief Returns whether two input sources are the same.
  *
- * @param i2 The other input.
- * @return Whether they are from the same hardware source.
+ * @param s2 The other input source.
+ * @return Whether they are the same.
  */
-bool PlayerInput::isSameHardwareSourceAs(const PlayerInput &i2) {
+bool PlayerInputSource::operator==(const PlayerInputSource &s2) const {
     return
-        axisNr == i2.axisNr &&
-        buttonNr == i2.buttonNr &&
-        deviceNr == i2.deviceNr &&
-        stickNr == i2.stickNr &&
-        type == i2.type;
+        type == s2.type &&
+        deviceNr == s2.deviceNr &&
+        buttonNr == s2.buttonNr &&
+        stickNr == s2.stickNr &&
+        axisNr == s2.axisNr;
 }

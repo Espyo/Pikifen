@@ -26,7 +26,7 @@
 #include "../content/other/mob_script.h"
 #include "../game_state/editor.h"
 #include "../lib/data_file/data_file.h"
-#include "controls.h"
+#include "controls_mediator.h"
 
 
 //A custom-made assertion.

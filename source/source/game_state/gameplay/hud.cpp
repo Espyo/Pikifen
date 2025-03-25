@@ -252,10 +252,13 @@ Hud::Hud() :
     [this] (const DrawInfo & draw) {
         if(!game.options.misc.show_hud_input_icons) return;
         if(game.states.gameplay->available_leaders.size() < 2) return;
-        PlayerInput i =
-            game.controls.find_bind(PLAYER_ACTION_TYPE_NEXT_LEADER).input;
-        if(i.type == INPUT_TYPE_NONE) return;
-        draw_player_input_icon(game.sys_content.fnt_slim, i, true, draw.center, draw.size);
+        const PlayerInputSource &s =
+            game.controls.find_bind(PLAYER_ACTION_TYPE_NEXT_LEADER).
+            inputSource;
+        if(s.type == INPUT_SOURCE_TYPE_NONE) return;
+        draw_player_input_source_icon(
+            game.sys_content.fnt_slim, s, true, draw.center, draw.size
+        );
     };
     gui.add_item(leader_next_input, "leader_next_input");
     
@@ -425,11 +428,12 @@ Hud::Hud() :
         ) {
             return;
         }
-        PlayerInput i =
-            game.controls.find_bind(PLAYER_ACTION_TYPE_NEXT_TYPE).input;
-        if(i.type == INPUT_TYPE_NONE) return;
-        draw_player_input_icon(
-            game.sys_content.fnt_slim, i, true, draw.center, draw.size,
+        const PlayerInputSource &s =
+            game.controls.find_bind(PLAYER_ACTION_TYPE_NEXT_TYPE).
+            inputSource;
+        if(s.type == INPUT_SOURCE_TYPE_NONE) return;
+        draw_player_input_source_icon(
+            game.sys_content.fnt_slim, s, true, draw.center, draw.size,
             game.states.gameplay->hud->standby_items_opacity * 255
         );
     };
@@ -467,11 +471,12 @@ Hud::Hud() :
         ) {
             return;
         }
-        PlayerInput i =
-            game.controls.find_bind(PLAYER_ACTION_TYPE_PREV_TYPE).input;
-        if(i.type == INPUT_TYPE_NONE) return;
-        draw_player_input_icon(
-            game.sys_content.fnt_slim, i, true, draw.center, draw.size,
+        const PlayerInputSource s =
+            game.controls.find_bind(PLAYER_ACTION_TYPE_PREV_TYPE).
+            inputSource;
+        if(s.type == INPUT_SOURCE_TYPE_NONE) return;
+        draw_player_input_source_icon(
+            game.sys_content.fnt_slim, s, true, draw.center, draw.size,
             game.states.gameplay->hud->standby_items_opacity * 255
         );
     };
@@ -776,16 +781,25 @@ Hud::Hud() :
             return;
         }
         
-        PlayerInput i;
-        if(game.content.spray_types.list.size() > 2) {
-            i = game.controls.find_bind(PLAYER_ACTION_TYPE_USE_SPRAY).input;
-        } else if(!game.content.spray_types.list.empty() && game.content.spray_types.list.size() <= 2) {
-            i = game.controls.find_bind(PLAYER_ACTION_TYPE_USE_SPRAY_1).input;
+        PlayerInputSource s;
+        if(
+            game.content.spray_types.list.size() > 2
+        ) {
+            s =
+                game.controls.find_bind(PLAYER_ACTION_TYPE_USE_SPRAY).
+                inputSource;
+        } else if(
+            !game.content.spray_types.list.empty() &&
+            game.content.spray_types.list.size() <= 2
+        ) {
+            s =
+                game.controls.find_bind(PLAYER_ACTION_TYPE_USE_SPRAY_1).
+                inputSource;
         }
-        if(i.type == INPUT_TYPE_NONE) return;
+        if(s.type == INPUT_SOURCE_TYPE_NONE) return;
         
-        draw_player_input_icon(
-            game.sys_content.fnt_slim, i, true, draw.center, draw.size,
+        draw_player_input_source_icon(
+            game.sys_content.fnt_slim, s, true, draw.center, draw.size,
             game.states.gameplay->hud->spray_items_opacity * 255
         );
     };
@@ -855,14 +869,16 @@ Hud::Hud() :
             return;
         }
         
-        PlayerInput i;
+        PlayerInputSource s;
         if(game.content.spray_types.list.size() == 2) {
-            i = game.controls.find_bind(PLAYER_ACTION_TYPE_USE_SPRAY_2).input;
+            s =
+                game.controls.find_bind(PLAYER_ACTION_TYPE_USE_SPRAY_2).
+                inputSource;
         }
-        if(i.type == INPUT_TYPE_NONE) return;
+        if(s.type == INPUT_SOURCE_TYPE_NONE) return;
         
-        draw_player_input_icon(
-            game.sys_content.fnt_slim, i, true, draw.center, draw.size,
+        draw_player_input_source_icon(
+            game.sys_content.fnt_slim, s, true, draw.center, draw.size,
             game.states.gameplay->hud->spray_items_opacity * 255
         );
     };
@@ -897,14 +913,16 @@ Hud::Hud() :
         }
         if(prev_spray_idx == INVALID) return;
         
-        PlayerInput i;
+        PlayerInputSource s;
         if(game.content.spray_types.list.size() >= 3) {
-            i = game.controls.find_bind(PLAYER_ACTION_TYPE_PREV_SPRAY).input;
+            s =
+                game.controls.find_bind(PLAYER_ACTION_TYPE_PREV_SPRAY).
+                inputSource;
         }
-        if(i.type == INPUT_TYPE_NONE) return;
+        if(s.type == INPUT_SOURCE_TYPE_NONE) return;
         
-        draw_player_input_icon(
-            game.sys_content.fnt_slim, i, true, draw.center, draw.size,
+        draw_player_input_source_icon(
+            game.sys_content.fnt_slim, s, true, draw.center, draw.size,
             game.states.gameplay->hud->spray_items_opacity * 255
         );
     };
@@ -939,14 +957,16 @@ Hud::Hud() :
         }
         if(next_spray_idx == INVALID) return;
         
-        PlayerInput i;
+        PlayerInputSource s;
         if(game.content.spray_types.list.size() >= 3) {
-            i = game.controls.find_bind(PLAYER_ACTION_TYPE_NEXT_SPRAY).input;
+            s =
+                game.controls.find_bind(PLAYER_ACTION_TYPE_NEXT_SPRAY).
+                inputSource;
         }
-        if(i.type == INPUT_TYPE_NONE) return;
+        if(s.type == INPUT_SOURCE_TYPE_NONE) return;
         
-        draw_player_input_icon(
-            game.sys_content.fnt_slim, i, true, draw.center, draw.size,
+        draw_player_input_source_icon(
+            game.sys_content.fnt_slim, s, true, draw.center, draw.size,
             game.states.gameplay->hud->spray_items_opacity * 255
         );
     };

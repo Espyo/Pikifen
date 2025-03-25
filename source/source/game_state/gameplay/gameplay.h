@@ -17,7 +17,7 @@
 #include "../../content/mob/pikmin.h"
 #include "../../content/mob/ship.h"
 #include "../../content/other/gui.h"
-#include "../../core/controls.h"
+#include "../../core/controls_mediator.h"
 #include "../../core/maker_tools.h"
 #include "../../core/replay.h"
 #include "../../util/general_utils.h"
@@ -384,7 +384,7 @@ public:
     //--- Function declarations ---
     
     ALLEGRO_BITMAP* draw_to_bitmap(
-        const MakerTools::AreaImageSettings& settings
+        const MakerTools::AreaImageSettings &settings
     );
     void enter();
     void leave(const GAMEPLAY_LEAVE_TARGET target);
@@ -468,8 +468,8 @@ private:
     void do_game_drawing(
         ALLEGRO_BITMAP* bmp_output = nullptr,
         const ALLEGRO_TRANSFORM* bmp_transform = nullptr,
-        const MakerTools::AreaImageSettings& bmp_settings =
-        MakerTools::AreaImageSettings()
+        const MakerTools::AreaImageSettings &bmp_settings =
+            MakerTools::AreaImageSettings()
     );
     void do_gameplay_leader_logic(float delta_t);
     void do_gameplay_logic(float delta_t);

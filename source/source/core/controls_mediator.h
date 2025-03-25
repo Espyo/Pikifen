@@ -299,7 +299,7 @@ struct ControlsMediator {
     );
     const vector<PlayerActionType> &get_all_player_action_types() const;
     vector<ControlBind> &binds();
-    string input_to_str(const PlayerInput &b) const;
+    string input_source_to_str(const PlayerInputSource &s) const;
     ControlBind find_bind(
         const PLAYER_ACTION_TYPE action_type_id
     ) const;
@@ -312,14 +312,14 @@ struct ControlsMediator {
         PLAYER_ACTION_TYPE player_action_type_id
     );
     void load_binds_from_data_node(DataNode* node, unsigned char player_nr);
-    PlayerInput str_to_input(const string &s) const;
+    PlayerInputSource str_to_input_source(const string &s) const;
     PlayerInput allegro_event_to_input(const ALLEGRO_EVENT &ev) const;
     bool handle_allegro_event(const ALLEGRO_EVENT &ev);
     vector<PlayerAction> new_frame();
     void release_all();
     void save_binds_to_data_node(DataNode* node, unsigned char player_nr);
     void set_options(const ControlsManagerOptions &options);
-    void start_ignoring_input(const PlayerInput &input);
+    void start_ignoring_input_source(const PlayerInputSource &input_source);
     
     private:
     

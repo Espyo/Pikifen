@@ -19,7 +19,7 @@
 #include <allegro5/allegro_font.h>
 
 #include "../../core/const.h"
-#include "../../core/controls.h"
+#include "../../core/controls_mediator.h"
 #include "../../core/misc_structs.h"
 #include "../../lib/data_file/data_file.h"
 #include "../../util/drawing_utils.h"

@@ -20,81 +20,98 @@ using std::tuple;
 using std::vector;
 
 
-//Possible types of inputs.
-enum INPUT_TYPE {
+//Possible types of hardware sources for inputs.
+enum INPUT_SOURCE_TYPE {
 
     //None.
-    INPUT_TYPE_NONE,
+    INPUT_SOURCE_TYPE_NONE,
     
     //Keyboard key.
-    INPUT_TYPE_KEYBOARD_KEY,
+    INPUT_SOURCE_TYPE_KEYBOARD_KEY,
     
     //Mouse button.
-    INPUT_TYPE_MOUSE_BUTTON,
+    INPUT_SOURCE_TYPE_MOUSE_BUTTON,
     
     //Mouse wheel scrolled up.
-    INPUT_TYPE_MOUSE_WHEEL_UP,
+    INPUT_SOURCE_TYPE_MOUSE_WHEEL_UP,
     
     //Mouse wheel scrolled down.
-    INPUT_TYPE_MOUSE_WHEEL_DOWN,
+    INPUT_SOURCE_TYPE_MOUSE_WHEEL_DOWN,
     
     //Mouse wheel scrolled left.
-    INPUT_TYPE_MOUSE_WHEEL_LEFT,
+    INPUT_SOURCE_TYPE_MOUSE_WHEEL_LEFT,
     
     //Mouse wheel scrolled right.
-    INPUT_TYPE_MOUSE_WHEEL_RIGHT,
+    INPUT_SOURCE_TYPE_MOUSE_WHEEL_RIGHT,
     
     //Game controller button.
-    INPUT_TYPE_CONTROLLER_BUTTON,
+    INPUT_SOURCE_TYPE_CONTROLLER_BUTTON,
     
     //Game controller stick/D-pad axis tilted in a positive position.
-    INPUT_TYPE_CONTROLLER_AXIS_POS,
+    INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS,
     
     //Game controller stick/D-pad axis tilted in a negative position.
-    INPUT_TYPE_CONTROLLER_AXIS_NEG,
+    INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG,
     
     //Some unknown type.
-    INPUT_TYPE_UNKNOWN,
+    INPUT_SOURCE_TYPE_UNKNOWN,
+    
+};
+
+
+
+/**
+ * @brief Defines a specific interactable thing in the player's hardware,
+ * like a specific button on a specific game controller, a specific key on
+ * the keyboard, etc.
+ */
+struct PlayerInputSource {
+
+    //--- Members ---
+    
+    //Type of input source.
+    INPUT_SOURCE_TYPE type = INPUT_SOURCE_TYPE_NONE;
+    
+    //Device number. i.e. the game controller number. 0 if N/A.
+    int deviceNr = 0;
+    
+    //Game controller button, keyboard key, mouse button, etc. 0 if N/A.
+    int buttonNr = 0;
+    
+    //Game controller stick. 0 if N/A.
+    int stickNr = 0;
+    
+    //Game controller stick axis. 0 if N/A.
+    int axisNr = 0;
+    
+    
+    //--- Function declarations ---
+    
+    bool operator==(const PlayerInputSource &s2) const;
     
 };
 
 
 /**
- * @brief Defines an instance of a specific input.
+ * @brief Defines an instance of a specific input: a specific gesture made
+ * by the human on a specific source of a specific piece of hardware.
  */
 struct PlayerInput {
 
     //--- Members ---
     
-    //Type of input.
-    INPUT_TYPE type = INPUT_TYPE_NONE;
-    
-    //Device number. i.e. the game controller number.
-    int deviceNr = 0;
-    
-    //Button. Game controller button, keyboard key, mouse button, etc.
-    int buttonNr = 0;
-    
-    //Game controller stick, if any.
-    int stickNr = 0;
-    
-    //Game controller axis, if any.
-    int axisNr = 0;
+    //Hardware source.
+    PlayerInputSource source;
     
     //Value associated, if applicable.
     float value = 0.0f;
-    
-    
-    //--- Function declarations ---
-    
-    bool isSameHardwareSourceAs(const PlayerInput &i2);
     
 };
 
 
 /**
- * @brief Contains information about the bind between a specific input,
- * and a player action type.
+ * @brief Defines a bind between a specific input source and
+ * a player action type. This is what's typically set in the game's options.
  */
 struct ControlBind {
 
@@ -106,14 +123,16 @@ struct ControlBind {
     //Player number, starting at 0.
     int playerNr = 0;
     
-    //Player input bound.
-    PlayerInput input;
+    //Player input source bound.
+    PlayerInputSource inputSource;
     
 };
 
 
 /**
- * @brief Defines an instance of a specific player action.
+ * @brief Defines an instance of a specific player action. This is an abstract
+ * gameplay activity, without any notion of hardware input. It's a pure
+ * representation of what the player wants to do regardless of how they did it.
  */
 struct PlayerAction {
 
@@ -177,7 +196,7 @@ struct ControlsManager {
     //--- Function declarations ---
     
     void handleInput(const PlayerInput &input);
-    void startIgnoringInput(const PlayerInput &input);
+    void startIgnoringInputSource(const PlayerInputSource &inputSource);
     vector<PlayerAction> newFrame();
     
     
@@ -197,8 +216,8 @@ struct ControlsManager {
     //Clean state of each game controller stick.
     map<int, map<int, map<int, float> > > cleanSticks;
     
-    //Inputs currently being ignored.
-    vector<PlayerInput> ignoredInputs;
+    //Input sources currently being ignored.
+    vector<PlayerInputSource> ignoredInputSources;
     
     
     //--- Function declarations ---

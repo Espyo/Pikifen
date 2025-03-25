@@ -1001,7 +1001,8 @@ void draw_mouse_cursor(const ALLEGRO_COLOR &color) {
  * @brief Draws an icon representing some control bind.
  *
  * @param font Font to use for the name, if necessary.
- * @param i Info on the player input. If invalid, a "NONE" icon will be used.
+ * @param s Info on the player input source.
+ * If invalid, a "NONE" icon will be used.
  * @param condensed If true, only the icon's fundamental information is
  * presented. If false, disambiguation information is included too.
  * For instance, keyboard keys that come in pairs specify whether they are
@@ -1012,8 +1013,8 @@ void draw_mouse_cursor(const ALLEGRO_COLOR &color) {
  * 0 = unlimited.
  * @param alpha Opacity.
  */
-void draw_player_input_icon(
-    const ALLEGRO_FONT* const font, const PlayerInput &i,
+void draw_player_input_source_icon(
+    const ALLEGRO_FONT* const font, const PlayerInputSource &s,
     bool condensed, const Point &where, const Point &max_size,
     unsigned char alpha
 ) {
@@ -1028,7 +1029,7 @@ void draw_player_input_icon(
     PLAYER_INPUT_ICON_SPRITE bitmap_sprite;
     string text;
     get_player_input_icon_info(
-        i, condensed,
+        s, condensed,
         &shape, &bitmap_sprite, &text
     );
     
@@ -1317,9 +1318,9 @@ void draw_string_tokens(
             break;
         }
         case STRING_TOKEN_CONTROL_BIND: {
-            draw_player_input_icon(
+            draw_player_input_source_icon(
                 control_font,
-                game.controls.find_bind(tokens[t].content).input,
+                game.controls.find_bind(tokens[t].content).inputSource,
                 controls_condensed,
                 Point(
                     caret + token_final_width / 2.0f,
@@ -1341,7 +1342,8 @@ void draw_string_tokens(
 /**
  * @brief Returns information about how a control bind icon should be drawn.
  *
- * @param i Info on the player input. If invalid, a "NONE" icon will be used.
+ * @param s Info on the player input source.
+ * If invalid, a "NONE" icon will be used.
  * @param condensed If true, only the icon's fundamental information is
  * presented. If false, disambiguation information is included too.
  * For instance, keyboard keys that come in pairs specify whether they are
@@ -1354,7 +1356,7 @@ void draw_string_tokens(
  * empty string is returned if there's nothing to write.
  */
 void get_player_input_icon_info(
-    const PlayerInput &i, bool condensed,
+    const PlayerInputSource &s, bool condensed,
     PLAYER_INPUT_ICON_SHAPE* shape,
     PLAYER_INPUT_ICON_SPRITE* bitmap_sprite,
     string* text
@@ -1363,88 +1365,88 @@ void get_player_input_icon_info(
     *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_LMB;
     *text = "(NONE)";
     
-    if(i.type == INPUT_TYPE_NONE) return;
+    if(s.type == INPUT_SOURCE_TYPE_NONE) return;
     
     //Figure out if it's one of those that has a bitmap icon.
     //If so, just return that.
-    if(i.type == INPUT_TYPE_MOUSE_BUTTON) {
-        if(i.buttonNr == 1) {
+    if(s.type == INPUT_SOURCE_TYPE_MOUSE_BUTTON) {
+        if(s.buttonNr == 1) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
             *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_LMB;
             return;
-        } else if(i.buttonNr == 2) {
+        } else if(s.buttonNr == 2) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
             *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_RMB;
             return;
-        } else if(i.buttonNr == 3) {
+        } else if(s.buttonNr == 3) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
             *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_MMB;
             return;
         }
-    } else if(i.type == INPUT_TYPE_MOUSE_WHEEL_UP) {
+    } else if(s.type == INPUT_SOURCE_TYPE_MOUSE_WHEEL_UP) {
         *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
         *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_MWU;
         return;
-    } else if(i.type == INPUT_TYPE_MOUSE_WHEEL_DOWN) {
+    } else if(s.type == INPUT_SOURCE_TYPE_MOUSE_WHEEL_DOWN) {
         *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
         *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_MWD;
         return;
-    } else if(i.type == INPUT_TYPE_KEYBOARD_KEY) {
-        if(i.buttonNr == ALLEGRO_KEY_UP) {
+    } else if(s.type == INPUT_SOURCE_TYPE_KEYBOARD_KEY) {
+        if(s.buttonNr == ALLEGRO_KEY_UP) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
             *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_UP;
             return;
-        } else if(i.buttonNr == ALLEGRO_KEY_LEFT) {
+        } else if(s.buttonNr == ALLEGRO_KEY_LEFT) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
             *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_LEFT;
             return;
-        } else if(i.buttonNr == ALLEGRO_KEY_DOWN) {
+        } else if(s.buttonNr == ALLEGRO_KEY_DOWN) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
             *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_DOWN;
             return;
-        } else if(i.buttonNr == ALLEGRO_KEY_RIGHT) {
+        } else if(s.buttonNr == ALLEGRO_KEY_RIGHT) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
             *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_RIGHT;
             return;
-        } else if(i.buttonNr == ALLEGRO_KEY_BACKSPACE) {
+        } else if(s.buttonNr == ALLEGRO_KEY_BACKSPACE) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
             *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_BACKSPACE;
             return;
         } else if(
             condensed &&
             (
-                i.buttonNr == ALLEGRO_KEY_LSHIFT ||
-                i.buttonNr == ALLEGRO_KEY_RSHIFT
+                s.buttonNr == ALLEGRO_KEY_LSHIFT ||
+                s.buttonNr == ALLEGRO_KEY_RSHIFT
             )
         ) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
             *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_SHIFT;
             return;
-        } else if(i.buttonNr == ALLEGRO_KEY_TAB) {
+        } else if(s.buttonNr == ALLEGRO_KEY_TAB) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
             *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_TAB;
             return;
-        } else if(i.buttonNr == ALLEGRO_KEY_ENTER) {
+        } else if(s.buttonNr == ALLEGRO_KEY_ENTER) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
             *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_ENTER;
             return;
         }
-    } else if(i.type == INPUT_TYPE_CONTROLLER_AXIS_NEG && condensed) {
-        if(i.axisNr == 0) {
+    } else if(s.type == INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG && condensed) {
+        if(s.axisNr == 0) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
             *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_STICK_LEFT;
             return;
-        } else if(i.axisNr == 1) {
+        } else if(s.axisNr == 1) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
             *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_STICK_UP;
             return;
         }
-    } else if(i.type == INPUT_TYPE_CONTROLLER_AXIS_POS && condensed) {
-        if(i.axisNr == 0) {
+    } else if(s.type == INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS && condensed) {
+        if(s.axisNr == 0) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
             *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_STICK_RIGHT;
             return;
-        } else if(i.axisNr == 1) {
+        } else if(s.axisNr == 1) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
             *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_STICK_DOWN;
             return;
@@ -1452,75 +1454,75 @@ void get_player_input_icon_info(
     }
     
     //Otherwise, use an actual shape and some text inside.
-    switch(i.type) {
-    case INPUT_TYPE_KEYBOARD_KEY: {
+    switch(s.type) {
+    case INPUT_SOURCE_TYPE_KEYBOARD_KEY: {
         *shape = PLAYER_INPUT_ICON_SHAPE_RECTANGLE;
-        *text = get_key_name(i.buttonNr, condensed);
+        *text = get_key_name(s.buttonNr, condensed);
         break;
         
-    } case INPUT_TYPE_CONTROLLER_AXIS_NEG:
-    case INPUT_TYPE_CONTROLLER_AXIS_POS: {
+    } case INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG:
+    case INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS: {
         *shape = PLAYER_INPUT_ICON_SHAPE_ROUNDED;
         if(!condensed) {
             *text =
-                "Pad " + i2s(i.deviceNr + 1) +
-                " stick " + i2s(i.stickNr + 1);
+                "Pad " + i2s(s.deviceNr + 1) +
+                " stick " + i2s(s.stickNr + 1);
             if(
-                i.axisNr == 0 &&
-                i.type == INPUT_TYPE_CONTROLLER_AXIS_NEG
+                s.axisNr == 0 &&
+                s.type == INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG
             ) {
                 *text += " left";
             } else if(
-                i.axisNr == 0 &&
-                i.type == INPUT_TYPE_CONTROLLER_AXIS_POS
+                s.axisNr == 0 &&
+                s.type == INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS
             ) {
                 *text += " right";
             } else if(
-                i.axisNr == 1 &&
-                i.type == INPUT_TYPE_CONTROLLER_AXIS_NEG
+                s.axisNr == 1 &&
+                s.type == INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG
             ) {
                 *text += " up";
             } else if(
-                i.axisNr == 1 &&
-                i.type == INPUT_TYPE_CONTROLLER_AXIS_POS
+                s.axisNr == 1 &&
+                s.type == INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS
             ) {
                 *text += " down";
             } else {
                 *text +=
-                    " axis " + i2s(i.axisNr) +
+                    " axis " + i2s(s.axisNr) +
                     (
-                        i.type == INPUT_TYPE_CONTROLLER_AXIS_NEG ?
+                        s.type == INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG ?
                         "-" :
                         "+"
                     );
             }
             
         } else {
-            *text = "Stick " + i2s(i.stickNr);
+            *text = "Stick " + i2s(s.stickNr);
         }
         break;
         
-    } case INPUT_TYPE_CONTROLLER_BUTTON: {
+    } case INPUT_SOURCE_TYPE_CONTROLLER_BUTTON: {
         *shape = PLAYER_INPUT_ICON_SHAPE_ROUNDED;
         if(!condensed) {
             *text =
-                "Pad " + i2s(i.deviceNr + 1) +
-                " button " + i2s(i.buttonNr + 1);
+                "Pad " + i2s(s.deviceNr + 1) +
+                " button " + i2s(s.buttonNr + 1);
         } else {
-            *text = i2s(i.buttonNr + 1);
+            *text = i2s(s.buttonNr + 1);
         }
         break;
         
-    } case INPUT_TYPE_MOUSE_BUTTON: {
+    } case INPUT_SOURCE_TYPE_MOUSE_BUTTON: {
         *shape = PLAYER_INPUT_ICON_SHAPE_ROUNDED;
         if(!condensed) {
-            *text = "Mouse button " + i2s(i.buttonNr);
+            *text = "Mouse button " + i2s(s.buttonNr);
         } else {
-            *text = "M" + i2s(i.buttonNr);
+            *text = "M" + i2s(s.buttonNr);
         }
         break;
         
-    } case INPUT_TYPE_MOUSE_WHEEL_LEFT: {
+    } case INPUT_SOURCE_TYPE_MOUSE_WHEEL_LEFT: {
         *shape = PLAYER_INPUT_ICON_SHAPE_ROUNDED;
         if(!condensed) {
             *text = "Mouse wheel left";
@@ -1529,7 +1531,7 @@ void get_player_input_icon_info(
         }
         break;
         
-    } case INPUT_TYPE_MOUSE_WHEEL_RIGHT: {
+    } case INPUT_SOURCE_TYPE_MOUSE_WHEEL_RIGHT: {
         *shape = PLAYER_INPUT_ICON_SHAPE_ROUNDED;
         if(!condensed) {
             *text = "Mouse wheel right";
@@ -1562,14 +1564,14 @@ void get_player_input_icon_info(
  * @return The width.
  */
 float get_player_input_icon_width(
-    const ALLEGRO_FONT* font, const PlayerInput &i, bool condensed,
+    const ALLEGRO_FONT* font, const PlayerInputSource &s, bool condensed,
     float max_bitmap_height
 ) {
     PLAYER_INPUT_ICON_SHAPE shape;
     PLAYER_INPUT_ICON_SPRITE bitmap_sprite;
     string text;
     get_player_input_icon_info(
-        i, condensed,
+        s, condensed,
         &shape, &bitmap_sprite, &text
     );
     

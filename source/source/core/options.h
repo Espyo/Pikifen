@@ -17,7 +17,7 @@
 #include "../game_state/area_editor/editor.h"
 #include "../lib/data_file/data_file.h"
 #include "const.h"
-#include "controls.h"
+#include "controls_mediator.h"
 
 
 using std::map;
