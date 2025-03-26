@@ -130,6 +130,19 @@ struct ControlBind {
 
 
 /**
+ * @brief Represents one of the game's possible actions.
+ */
+struct PlayerActionType {
+
+    //--- Members ---
+    
+    //Action type ID.
+    int id = 0;
+    
+};
+
+
+/**
  * @brief Defines an instance of a specific player action. This is an abstract
  * gameplay activity, without any notion of hardware input. It's a pure
  * representation of what the player wants to do regardless of how they did it.
@@ -179,15 +192,41 @@ struct ControlsManagerOptions {
  */
 struct ControlsManager {
 
-    public:
+    private:
     
+    //--- Structs ---
+    
+    /**
+     * @brief Information about a player action type's current status.
+     */
+    struct ActionTypeStatus {
+    
+        //--- Members ---
+        
+        //Current value (0 - 1).
+        float value = 0.0f;
+        
+        //Value in the previous frame.
+        float oldValue = 0.0f;
+        
+        //How long it's been been active (!= 0) or inactive (== 0) for.
+        float stateDuration = 0.0f;
+        
+        //How long until the next auto-repeat activation.
+        float nextAutoRepeatActivation = 0.0f;
+        
+    };
+    
+    
+public:
+
     //--- Members ---
+    
+    //Map of all registered player action types.
+    map<int, PlayerActionType> actionTypes;
     
     //Control binds.
     vector<ControlBind> binds;
-    
-    //Each game action type's current input value.
-    map<int, float> actionTypeValues;
     
     //Options.
     ControlsManagerOptions options;
@@ -195,20 +234,22 @@ struct ControlsManager {
     
     //--- Function declarations ---
     
+    float getValue(int playerActionTypeId) const;
     void handleInput(const PlayerInput &input);
     void startIgnoringInputSource(const PlayerInputSource &inputSource);
-    vector<PlayerAction> newFrame();
+    vector<PlayerAction> newFrame(float delta_t);
+    void setValue(int playerActionTypeId, float value);
     
     
-    private:
-    
+private:
+
     //--- Members ---
+    
+    //Status of each player action type.
+    map<int, ActionTypeStatus> actionTypeStatuses;
     
     //Queue of actions the game needs to handle this frame.
     vector<PlayerAction> actionQueue;
-    
-    //Each game action type's input values in the previous frame.
-    map<int, float> oldActionTypeValues;
     
     //Raw state of each game controller stick.
     map<int, map<int, map<int, float> > > rawSticks;

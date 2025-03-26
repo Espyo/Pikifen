@@ -315,7 +315,7 @@ struct ControlsMediator {
     PlayerInputSource str_to_input_source(const string &s) const;
     PlayerInput allegro_event_to_input(const ALLEGRO_EVENT &ev) const;
     bool handle_allegro_event(const ALLEGRO_EVENT &ev);
-    vector<PlayerAction> new_frame();
+    vector<PlayerAction> new_frame(float delta_t);
     void release_all();
     void save_binds_to_data_node(DataNode* node, unsigned char player_nr);
     void set_options(const ControlsManagerOptions &options);

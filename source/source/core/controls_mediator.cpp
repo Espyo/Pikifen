@@ -230,7 +230,7 @@ string ControlsMediator::get_player_action_type_internal_name(
 float ControlsMediator::get_player_action_type_value(
     PLAYER_ACTION_TYPE player_action_type_id
 ) {
-    return mgr.actionTypeValues[(int) player_action_type_id];
+    return mgr.getValue((int) player_action_type_id);
 }
 
 
@@ -343,10 +343,11 @@ void ControlsMediator::start_ignoring_input_source(
  * @brief Returns the player actions that occurred during the last frame
  * of gameplay, and begins a new frame.
  *
+ * @param delta_t How much time has passed since the last frame.
  * @return The player actions.
  */
-vector<PlayerAction> ControlsMediator::new_frame() {
-    return mgr.newFrame();
+vector<PlayerAction> ControlsMediator::new_frame(float delta_t) {
+    return mgr.newFrame(delta_t);
 }
 
 
@@ -355,8 +356,8 @@ vector<PlayerAction> ControlsMediator::new_frame() {
  * Useful for when the game state is changed, or the window is out of focus.
  */
 void ControlsMediator::release_all() {
-    for(auto &a : mgr.actionTypeValues) {
-        a.second = 0.0f;
+    for(auto &a : mgr.actionTypes) {
+        mgr.setValue(a.first, 0.0f);
     }
 }
 

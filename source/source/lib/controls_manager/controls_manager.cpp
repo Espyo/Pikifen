@@ -91,9 +91,22 @@ void ControlsManager::handleCleanInput(
         } else {
             //Update each game action type's current input state,
             //so we can report them later.
-            actionTypeValues[actionTypes[a]] = input.value;
+            actionTypeStatuses[actionTypes[a]].value = input.value;
         }
     }
+}
+
+
+/**
+ * @brief Returns the current value of a given player action type.
+ *
+ * @param playerActionTypeId ID of the player action type.
+ * @return The value, or 0 on failure.
+ */
+float ControlsManager::getValue(int playerActionTypeId) const {
+    auto it = actionTypeStatuses.find(playerActionTypeId);
+    if(it == actionTypeStatuses.end()) return 0.0f;
+    return it->second.value;
 }
 
 
@@ -179,21 +192,27 @@ void ControlsManager::handleInput(
  * @brief Returns the player actions that occurred during the last frame of
  * gameplay, and begins a new frame.
  *
+ * @param delta_t How much time has passed since the last frame.
  * @return The actions.
  */
-vector<PlayerAction> ControlsManager::newFrame() {
-    for(auto &a : actionTypeValues) {
-        if(oldActionTypeValues[a.first] != a.second) {
+vector<PlayerAction> ControlsManager::newFrame(float delta_t) {
+    //Get actions for what's been happening this frame.
+    for(auto &a : actionTypeStatuses) {
+        if(a.second.oldValue != a.second.value) {
             PlayerAction newAction;
             newAction.actionTypeId = a.first;
-            newAction.value = a.second;
+            newAction.value = a.second.value;
             actionQueue.push_back(newAction);
         }
     }
     
+    //Finish the list of actions.
     vector<PlayerAction> result = actionQueue;
     
-    oldActionTypeValues = actionTypeValues;
+    //Prepare things for the next frame.
+    for(auto &a : actionTypeStatuses) {
+        a.second.oldValue = a.second.value;
+    }
     actionQueue.clear();
     
     return result;
@@ -225,6 +244,19 @@ bool ControlsManager::processInputIgnoring(
     }
     
     return false;
+}
+
+
+/**
+ * @brief Sets the current value of a given player action type.
+ *
+ * @param playerActionTypeId ID of the player action type.
+ * @param The value.
+ */
+void ControlsManager::setValue(int playerActionTypeId, float value) {
+    value = std::min(value, 1.0f);
+    value = std::max(0.0f, value);
+    actionTypeStatuses[playerActionTypeId].value = value;
 }
 
 
