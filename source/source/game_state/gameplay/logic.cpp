@@ -868,12 +868,9 @@ void GameplayState::do_gameplay_logic(float delta_t) {
             for(size_t l = 0; l < mobs.leaders.size(); l++) {
                 Mob* l_ptr = mobs.leaders[l];
                 if(
-                    std::find(
-                        mission_remaining_mob_ids.begin(),
-                        mission_remaining_mob_ids.end(),
-                        mobs.leaders[l]->id
-                    ) ==
-                    mission_remaining_mob_ids.end()
+                    !is_in_container(
+                        mission_remaining_mob_ids, mobs.leaders[l]->id
+                    )
                 ) {
                     //Not a required leader.
                     continue;

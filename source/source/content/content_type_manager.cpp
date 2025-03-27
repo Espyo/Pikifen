@@ -1192,13 +1192,7 @@ void MobTypeContentManager::load_all(CONTENT_LOAD_LEVEL level) {
     //Pikmin type order.
     vector<string> missing_pikmin_order_types;
     for(auto &p : list.pikmin) {
-        if(
-            std::find(
-                game.config.pikmin_order_strings.begin(),
-                game.config.pikmin_order_strings.end(),
-                p.first
-            ) == game.config.pikmin_order_strings.end()
-        ) {
+        if(!is_in_container(game.config.pikmin_order_strings, p.first)) {
             //Missing from the list? Add it to the "missing" pile.
             missing_pikmin_order_types.push_back(p.first);
         }

@@ -727,11 +727,9 @@ bool GameplayState::should_ignore_player_action(const PlayerAction &action) {
     if(!ready_for_input || !is_input_allowed) return true;
     if(cur_interlude != INTERLUDE_NONE) {
         if(
-            std::find(
-                actions_allowed_during_interludes.begin(),
-                actions_allowed_during_interludes.end(),
-                action.actionTypeId
-            ) == actions_allowed_during_interludes.end()
+            !is_in_container(
+                actions_allowed_during_interludes, action.actionTypeId
+            )
         ) {
             return true;
         }

@@ -2072,10 +2072,7 @@ bool Editor::process_gui_hazard_management_widgets(
     ) {
         string hazard_iname = all_hazard_inames[added_hazard_idx];
         string hazard_name = all_hazard_names[added_hazard_idx];
-        if(
-            std::find(hazard_inames.begin(), hazard_inames.end(), hazard_iname) ==
-            hazard_inames.end()
-        ) {
+        if(!is_in_container(hazard_inames, hazard_iname)) {
             hazard_inames.push_back(hazard_iname);
             selected_hazard_idx = (int) hazard_inames.size() - 1;
             result = true;

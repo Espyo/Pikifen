@@ -434,10 +434,7 @@ void PacksMenu::populate_packs_list() {
     for(size_t p = 0; p < pack_order.size(); p++) {
         pack_bullets[p]->text =
             game.content.packs.list[pack_order[p]].name;
-        pack_checks[p]->value =
-            std::find(
-                packs_disabled.begin(), packs_disabled.end(), pack_order[p]
-            ) == packs_disabled.end();
+        pack_checks[p]->value = !is_in_container(packs_disabled, pack_order[p]);
     }
 }
 

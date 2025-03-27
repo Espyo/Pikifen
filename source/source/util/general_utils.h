@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <functional>
 #include <string>
+#include <unordered_set>
 #include <vector>
 
 #include "../lib/data_file/data_file.h"
@@ -23,6 +24,7 @@
 
 using std::string;
 using std::vector;
+using std::unordered_set;
 
 
 //Bitmask with 8 bits.
@@ -484,6 +486,20 @@ string standardize_path(const string &path);
 string vector_tail_to_string(const vector<string> &v, size_t pos);
 
 
+/**
+ * @brief Shorthand for figuring out if a given item is in a container.
+ *
+ * @tparam t Type of container.
+ * @tparam i Type of contents of the container.
+ * @param cont The container.
+ * @param item Item to check.
+ * @return Whether it contains the item.
+ */
+template<typename t, typename i>
+bool is_in_container(const t &cont, const i& item) {
+    return std::find(cont.begin(), cont.end(), item) != cont.end();
+}
+
 
 /**
  * @brief Removes elements from a vector if they show up in the ban list.
@@ -499,10 +515,7 @@ vector<t> filter_vector_with_ban_list(
 ) {
     vector<t> result = v;
     for(size_t i = 0; i < result.size();) {
-        if(
-            std::find(ban_list.begin(), ban_list.end(), result[i]) !=
-            ban_list.end()
-        ) {
+        if(is_in_container(ban_list, result[i])) {
             result.erase(result.begin() + i);
         } else {
             i++;

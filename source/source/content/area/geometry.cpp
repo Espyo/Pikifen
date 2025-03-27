@@ -553,12 +553,7 @@ void find_trace_edge(
             //This edge is not related to our sector.
             continue;
         }
-        if(
-            excluded_edges &&
-            std::find(
-                excluded_edges->begin(), excluded_edges->end(), e_ptr
-            ) != excluded_edges->end()
-        ) {
+        if(excluded_edges && is_in_container(*excluded_edges, e_ptr)) {
             //This edge is not meant to be checked.
             continue;
         }
@@ -768,10 +763,7 @@ bool get_polys_is_outer(
             //This edge is irrelevant to our sector.
             continue;
         }
-        if(
-            std::find(edges_left.begin(), edges_left.end(), e_ptr) ==
-            edges_left.end()
-        ) {
+        if(!is_in_container(edges_left, e_ptr)) {
             //This edge was already processed.
             continue;
         }
