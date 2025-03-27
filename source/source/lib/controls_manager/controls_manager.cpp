@@ -196,7 +196,6 @@ void ControlsManager::handleInput(
  * @return The actions.
  */
 vector<PlayerAction> ControlsManager::newFrame(float delta_t) {
-    //Get actions for what's been happening this frame.
     for(auto &a : actionTypeStatuses) {
         if(a.second.oldValue != a.second.value) {
             PlayerAction newAction;
@@ -206,7 +205,11 @@ vector<PlayerAction> ControlsManager::newFrame(float delta_t) {
         }
     }
     
-    //Finish the list of actions.
+    for(auto &a : actionTypeStatuses) {
+        processStateTimers(a, delta_t);
+        processAutoRepeats(a, delta_t);
+    }
+    
     vector<PlayerAction> result = actionQueue;
     
     //Prepare things for the next frame.
@@ -216,6 +219,46 @@ vector<PlayerAction> ControlsManager::newFrame(float delta_t) {
     actionQueue.clear();
     
     return result;
+}
+
+
+/**
+ * @brief Processes logic for auto-repeating player actions.
+ *
+ * @param it Iterator of the map of action type statuses.
+ * @param delta_t How much time has passed since the last frame.
+ */
+void ControlsManager::processAutoRepeats(
+    std::pair<const int, ActionTypeStatus> &it, float delta_t
+) {
+    float autoRepeatFactor =
+        (it.second.value - actionTypes[it.first].autoRepeat) /
+        (1.0f - actionTypes[it.first].autoRepeat);
+    if(autoRepeatFactor <= 0.0f) return;
+    if(it.second.value == 0.0f) return;
+    if(it.second.stateDuration == 0.0f) return;
+    float oldDuration = it.second.stateDuration - delta_t;
+    if(oldDuration >= it.second.nextAutoRepeatActivation) return;
+    
+    while(it.second.stateDuration >= it.second.nextAutoRepeatActivation) {
+        //Auto-repeat!
+        PlayerAction newAction;
+        newAction.actionTypeId = it.first;
+        newAction.value = it.second.value;
+        newAction.flags |= PLAYER_ACTION_FLAG_REPEAT;
+        actionQueue.push_back(newAction);
+        
+        //Set the next activation.
+        float currentFrequency =
+            options.autoRepeatMaxInterval +
+            (it.second.stateDuration / options.autoRepeatRampTime) *
+            (options.autoRepeatMinInterval - options.autoRepeatMaxInterval);
+        currentFrequency =
+            std::max(options.autoRepeatMinInterval, currentFrequency);
+        currentFrequency =
+            std::min(currentFrequency, options.autoRepeatMaxInterval);
+        it.second.nextAutoRepeatActivation += currentFrequency;
+    }
 }
 
 
@@ -244,6 +287,28 @@ bool ControlsManager::processInputIgnoring(
     }
     
     return false;
+}
+
+
+/**
+ * @brief Processes the timers for action type states in a frame.
+ *
+ * @param it Iterator of the map of action type statuses.
+ * @param delta_t How much time has passed since the last frame.
+ */
+void ControlsManager::processStateTimers(
+    std::pair<const int, ActionTypeStatus> &it, float delta_t
+) {
+    bool is_active = it.second.value != 0.0f;
+    bool was_active = it.second.oldValue != 0.0f;
+    if(is_active != was_active) {
+        //State changed. Reset the timer.
+        it.second.stateDuration = 0.0f;
+        it.second.nextAutoRepeatActivation = options.autoRepeatMaxInterval;
+    } else {
+        //Same state, increase the timer.
+        it.second.stateDuration += delta_t;
+    }
 }
 
 

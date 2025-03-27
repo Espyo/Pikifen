@@ -1095,7 +1095,7 @@ void OptionsMenu::load() {
 void OptionsMenu::populate_binds() {
     binds_list_box->delete_all_children();
     
-    const vector<PlayerActionType> &all_player_action_types =
+    const vector<PfePlayerActionType> &all_player_action_types =
         game.controls.get_all_player_action_types();
     vector<ControlBind> &all_binds = game.controls.binds();
     
@@ -1112,7 +1112,7 @@ void OptionsMenu::populate_binds() {
     PLAYER_ACTION_CAT last_cat = PLAYER_ACTION_CAT_NONE;
     
     for(size_t a = 0; a < all_player_action_types.size(); a++) {
-        const PlayerActionType &action_type = all_player_action_types[a];
+        const PfePlayerActionType &action_type = all_player_action_types[a];
         
         if(action_type.internal_name.empty()) continue;
         
@@ -1434,7 +1434,7 @@ void OptionsMenu::populate_binds() {
 void OptionsMenu::restore_default_binds(
     const PLAYER_ACTION_TYPE action_type_id
 ) {
-    const PlayerActionType &action_type =
+    const PfePlayerActionType &action_type =
         game.controls.get_player_action_type(action_type_id);
     vector<ControlBind> &all_binds =
         game.controls.binds();

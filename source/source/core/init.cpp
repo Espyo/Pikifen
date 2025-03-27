@@ -617,7 +617,7 @@ void init_controls() {
     
     //Populate the control binds with some default control binds for player 1.
     //If the options are loaded successfully, these binds are overwritten.
-    const vector<PlayerActionType> &action_types =
+    const vector<PfePlayerActionType> &action_types =
         game.controls.get_all_player_action_types();
     for(size_t a = 0; a < action_types.size(); a++) {
         const string &def = action_types[a].default_bind_str;

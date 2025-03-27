@@ -59,6 +59,15 @@ enum INPUT_SOURCE_TYPE {
 };
 
 
+//Possible flags for emitted player actions.
+enum PLAYER_ACTION_FLAG {
+
+    //This action was issued as an auto-repeat.
+    PLAYER_ACTION_FLAG_REPEAT = 1 << 0,
+    
+};
+
+
 
 /**
  * @brief Defines a specific interactable thing in the player's hardware,
@@ -139,6 +148,11 @@ struct PlayerActionType {
     //Action type ID.
     int id = 0;
     
+    //Auto-repeat. 0 if disabled, otherwise this indicates the threshold (0 - 1)
+    //after which the input will start auto-repeating. The manager's
+    //auto-repeating settings have to be configured.
+    float autoRepeat = 0.0f;
+    
 };
 
 
@@ -157,6 +171,9 @@ struct PlayerAction {
     //Value associated. 0 to 1.
     float value = 0.0f;
     
+    //Flags. Use PLAYER_ACTION_FLAG.
+    uint8_t flags = 0;
+    
 };
 
 
@@ -172,6 +189,15 @@ struct ControlsManagerOptions {
     
     //Maximum deadzone for sticks. 1 for none.
     float stickMaxDeadzone = 1.0f;
+    
+    //Interval between auto-repeat activations, at the slowest speed.
+    float autoRepeatMaxInterval = 0.3f;
+    
+    //Interval between auto-repeat activations, at the fastest speed.
+    float autoRepeatMinInterval = 0.05f;
+    
+    //How long it takes for the auto-repeat activations to reach max speed.
+    float autoRepeatRampTime = 0.9f;
     
 };
 
@@ -268,6 +294,11 @@ private:
         const PlayerInput &input
     );
     void handleCleanInput(const PlayerInput &input, bool addDirectly);
+    void processAutoRepeats(
+        std::pair<const int, ActionTypeStatus> &it, float delta_t
+    );
     bool processInputIgnoring(const PlayerInput &input);
-    
+    void processStateTimers(
+        std::pair<const int, ActionTypeStatus> &it, float delta_t
+    );
 };

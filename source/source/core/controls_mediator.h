@@ -254,8 +254,9 @@ enum PLAYER_ACTION_CAT {
 
 /**
  * @brief Data about a type of action that can be performed in the game.
+ * This data is pertinent only to Pikifen, not the library.
  */
-struct PlayerActionType {
+struct PfePlayerActionType : public PlayerActionType {
 
     //--- Members ---
     
@@ -290,14 +291,15 @@ struct ControlsMediator {
     //--- Function declarations ---
     
     void add_player_action_type(
-        const PLAYER_ACTION_TYPE id,
-        const PLAYER_ACTION_CAT category,
+        PLAYER_ACTION_TYPE id,
+        PLAYER_ACTION_CAT category,
         const string &name,
         const string &description,
         const string &internal_name,
-        const string &default_bind_str
+        const string &default_bind_str,
+        float auto_repeat = 0.0f
     );
-    const vector<PlayerActionType> &get_all_player_action_types() const;
+    const vector<PfePlayerActionType> &get_all_player_action_types() const;
     vector<ControlBind> &binds();
     string input_source_to_str(const PlayerInputSource &s) const;
     ControlBind find_bind(
@@ -306,7 +308,7 @@ struct ControlsMediator {
     ControlBind find_bind(
         const string &action_type_name
     ) const;
-    PlayerActionType get_player_action_type(int action_id) const;
+    PfePlayerActionType get_player_action_type(int action_id) const;
     string get_player_action_type_internal_name(int action_id);
     float get_player_action_type_value(
         PLAYER_ACTION_TYPE player_action_type_id
@@ -325,8 +327,8 @@ struct ControlsMediator {
     
     //--- Members ---
     
-    //List of known player action types.
-    vector<PlayerActionType> player_action_types;
+    //List of registered player action types.
+    vector<PfePlayerActionType> player_action_types;
     
     //Controls manager.
     ControlsManager mgr;

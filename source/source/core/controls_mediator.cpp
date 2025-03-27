@@ -35,22 +35,24 @@
  * @param internal_name The name of its property in the options file.
  * @param default_bind_str String representing of this action's default
  * control bind.
+ * @param auto_repeat Auto-repeat threshold.
  */
 void ControlsMediator::add_player_action_type(
-    const PLAYER_ACTION_TYPE id,
-    const PLAYER_ACTION_CAT category,
+    PLAYER_ACTION_TYPE id, PLAYER_ACTION_CAT category,
     const string &name, const string &description, const string &internal_name,
-    const string &default_bind_str
+    const string &default_bind_str, float auto_repeat
 ) {
-    PlayerActionType a;
+    PfePlayerActionType a;
     a.id = id;
     a.category = category;
     a.name = name;
     a.description = description;
     a.internal_name = internal_name;
     a.default_bind_str = default_bind_str;
+    a.autoRepeat = auto_repeat;
     
     player_action_types.push_back(a);
+    mgr.actionTypes[id] = a;
 }
 
 
@@ -178,7 +180,7 @@ ControlBind ControlsMediator::find_bind(
  *
  * @return The types.
  */
-const vector<PlayerActionType>
+const vector<PfePlayerActionType>
 &ControlsMediator::get_all_player_action_types() const {
     return player_action_types;
 }
@@ -190,7 +192,7 @@ const vector<PlayerActionType>
  * @param action_id ID of the player action.
  * @return The type, or an empty type on failure.
  */
-PlayerActionType ControlsMediator::get_player_action_type(
+PfePlayerActionType ControlsMediator::get_player_action_type(
     int action_id
 ) const {
     for(size_t b = 0; b < player_action_types.size(); b++) {
@@ -198,7 +200,7 @@ PlayerActionType ControlsMediator::get_player_action_type(
             return player_action_types[b];
         }
     }
-    return PlayerActionType();
+    return PfePlayerActionType();
 }
 
 
@@ -302,7 +304,7 @@ string ControlsMediator::input_source_to_str(
 void ControlsMediator::load_binds_from_data_node(
     DataNode* node, unsigned char player_nr
 ) {
-    const vector<PlayerActionType> &player_action_types =
+    const vector<PfePlayerActionType> &player_action_types =
         get_all_player_action_types();
         
     for(size_t a = 0; a < player_action_types.size(); a++) {
@@ -372,7 +374,7 @@ void ControlsMediator::save_binds_to_data_node(
     DataNode* node, unsigned char player_nr
 ) {
     map<string, string> bind_strs;
-    const vector<PlayerActionType> &player_action_types =
+    const vector<PfePlayerActionType> &player_action_types =
         get_all_player_action_types();
     const vector<ControlBind> &all_binds = binds();
     
@@ -386,7 +388,7 @@ void ControlsMediator::save_binds_to_data_node(
     //Fill their input strings.
     for(size_t b = 0; b < all_binds.size(); b++) {
         if(all_binds[b].playerNr != player_nr) continue;
-        PlayerActionType action_type =
+        PfePlayerActionType action_type =
             get_player_action_type(all_binds[b].actionTypeId);
         bind_strs[action_type.internal_name] +=
             input_source_to_str(all_binds[b].inputSource) + ";";
