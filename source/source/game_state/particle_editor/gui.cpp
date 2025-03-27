@@ -613,8 +613,30 @@ void ParticleEditor::process_gui_options_dialog() {
         if(use_bg) {
             ImGui::Indent();
             
+            //Remove background texture button.
+            unsigned char rem_bg_opacity =
+                game.options.particle_editor.bg_path.empty() ? 50 : 255;
+            if(
+                ImGui::ImageButton(
+                    "remBgButton", editor_icons[EDITOR_ICON_REMOVE],
+                    Point(ImGui::GetTextLineHeight()), Point(), Point(1.0f),
+                    COLOR_EMPTY, map_alpha(rem_bg_opacity)
+                )
+            ) {
+                game.options.particle_editor.bg_path.clear();
+                if(bg) {
+                    al_destroy_bitmap(bg);
+                    bg = nullptr;
+                }
+            }
+            set_tooltip(
+                "Remove the background image.\n"
+                "This does not delete the file on your disk."
+            );
+            
             //Background texture browse button.
-            if(ImGui::Button("Browse...", ImVec2(96.0f, 32.0f))) {
+            ImGui::SameLine();
+            if(ImGui::Button("Browse...")) {
                 vector<string> f =
                     prompt_file_dialog(
                         FOLDER_PATHS_FROM_ROOT::BASE_PACK + "/" +
@@ -1091,10 +1113,13 @@ void ParticleEditor::process_gui_panel_generator() {
         if(open_image_node) {
         
             //Remove bitmap button.
+            unsigned char rem_bmp_opacity =
+                loaded_gen.base_particle.bmp_name.empty() ? 50 : 255;
             if(
                 ImGui::ImageButton(
-                    "removeBitmap", editor_icons[EDITOR_ICON_REMOVE],
-                    Point(EDITOR::ICON_BMP_SIZE)
+                    "remBmpButton", editor_icons[EDITOR_ICON_REMOVE],
+                    Point(ImGui::GetTextLineHeight()), Point(), Point(1.0f),
+                    COLOR_EMPTY, map_alpha(rem_bmp_opacity)
                 )
             ) {
                 //We can't have living particles with destroyed bitmaps,
@@ -1104,15 +1129,13 @@ void ParticleEditor::process_gui_panel_generator() {
                 changes_mgr.mark_as_changed();
             }
             set_tooltip(
-                "Removes the particles' image.\n"
+                "Remove the particles' image.\n"
                 "This makes the particles be circles."
             );
             
             //Choose image button.
             ImGui::SameLine();
-            if(
-                ImGui::Button("Choose image...", ImVec2(0, 30))
-            ) {
+            if(ImGui::Button("Choose image...")) {
                 open_bitmap_dialog(
                 [this] (const string &bmp) {
                     //We can't have living particles with destroyed bitmaps,

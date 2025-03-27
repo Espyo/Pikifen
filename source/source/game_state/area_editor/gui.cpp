@@ -2247,7 +2247,28 @@ void AreaEditor::process_gui_panel_info() {
     ImGui::Spacer();
     if(saveable_tree_node("info", "Thumbnail")) {
     
+        //Remove thumbnail button.
+        unsigned char rem_thumb_opacity =
+            !game.cur_area_data->thumbnail ? 50 : 255;
+        if(
+            ImGui::ImageButton(
+                "remThumbButton", editor_icons[EDITOR_ICON_REMOVE],
+                Point(ImGui::GetTextLineHeight()), Point(), Point(1.0f),
+                COLOR_EMPTY, map_alpha(rem_thumb_opacity)
+            ) &&
+            game.cur_area_data->thumbnail
+        ) {
+            register_change("area thumbnail removal");
+            remove_thumbnail();
+            thumbnail_needs_saving = true;
+            thumbnail_backup_needs_saving = true;
+        }
+        set_tooltip(
+            "Remove the current thumbnail, if any."
+        );
+        
         //Thumbnail browse button.
+        ImGui::SameLine();
         if(ImGui::Button("Browse...")) {
             vector<string> f =
                 prompt_file_dialog(
@@ -2274,18 +2295,7 @@ void AreaEditor::process_gui_panel_info() {
             "a file on your disk. When you save the area, the thumbnail\n"
             "gets saved into thumbnail.png in the area's folder, \n"
             "but the original file you selected with the\n"
-            "Browse... button will be left untouched."
-        );
-        
-        //Thumbnail remove button.
-        ImGui::SameLine();
-        if(ImGui::Button("Remove thumbnail")) {
-            remove_thumbnail();
-            thumbnail_needs_saving = true;
-            thumbnail_backup_needs_saving = true;
-        }
-        set_tooltip(
-            "Removes the current thumbnail, if any."
+            "'Browse...' button will be left untouched."
         );
         
         //Current thumbnail text.
@@ -2314,7 +2324,27 @@ void AreaEditor::process_gui_panel_info() {
     ImGui::Spacer();
     if(saveable_tree_node("info", "Background")) {
     
-        //Choose background image button.
+        //Remove background texture button.
+        unsigned char rem_bg_opacity =
+            game.cur_area_data->bg_bmp_name.empty() ? 50 : 255;
+        if(
+            ImGui::ImageButton(
+                "remBgButton", editor_icons[EDITOR_ICON_REMOVE],
+                Point(ImGui::GetTextLineHeight()), Point(), Point(1.0f),
+                COLOR_EMPTY, map_alpha(rem_bg_opacity)
+            ) &&
+            !game.cur_area_data->bg_bmp_name.empty()
+        ) {
+            register_change("area background removal");
+            game.cur_area_data->bg_bmp_name.clear();
+            set_status("Removed the background image successfully.");
+        }
+        set_tooltip(
+            "Remove the background image for the area."
+        );
+        
+        //Choose background texture button.
+        ImGui::SameLine();
         if(ImGui::Button("Choose image...")) {
             open_bitmap_dialog(
             [this] (const string &bmp) {
@@ -5386,9 +5416,25 @@ void AreaEditor::process_gui_panel_tools() {
     //Reference image node.
     if(saveable_tree_node("tools", "Reference image")) {
     
-        string old_ref_file_name = reference_file_path;
+        //Remove reference image button.
+        unsigned char rem_ref_opacity = reference_file_path.empty() ? 50 : 255;
+        if(
+            ImGui::ImageButton(
+                "remRefButton", editor_icons[EDITOR_ICON_REMOVE],
+                Point(ImGui::GetTextLineHeight()), Point(), Point(1.0f),
+                COLOR_EMPTY, map_alpha(rem_ref_opacity)
+            )
+        ) {
+            reference_file_path.clear();
+            update_reference();
+        }
+        set_tooltip(
+            "Remove the reference image.\n"
+            "This does not delete the file on your disk."
+        );
         
         //Browse for a reference image button.
+        ImGui::SameLine();
         if(ImGui::Button("Browse...")) {
             vector<string> f =
                 prompt_file_dialog(

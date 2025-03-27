@@ -711,8 +711,30 @@ void AnimationEditor::process_gui_options_dialog() {
         if(use_bg) {
             ImGui::Indent();
             
+            //Remove background texture button.
+            unsigned char rem_bg_opacity =
+                game.options.anim_editor.bg_path.empty() ? 50 : 255;
+            if(
+                ImGui::ImageButton(
+                    "remBgButton", editor_icons[EDITOR_ICON_REMOVE],
+                    Point(ImGui::GetTextLineHeight()), Point(), Point(1.0f),
+                    COLOR_EMPTY, map_alpha(rem_bg_opacity)
+                )
+            ) {
+                game.options.anim_editor.bg_path.clear();
+                if(bg) {
+                    al_destroy_bitmap(bg);
+                    bg = nullptr;
+                }
+            }
+            set_tooltip(
+                "Remove the background image.\n"
+                "This does not delete the file on your disk."
+            );
+            
             //Background texture browse button.
-            if(ImGui::Button("Browse...", ImVec2(96.0f, 32.0f))) {
+            ImGui::SameLine();
+            if(ImGui::Button("Browse...")) {
                 vector<string> f =
                     prompt_file_dialog(
                         FOLDER_PATHS_FROM_ROOT::BASE_PACK + "/" +
