@@ -97,7 +97,6 @@ Game::Game() {
 void Game::change_state(
     GameState* new_state, bool unload_current, bool load_new
 ) {
-
     if(cur_state && unload_current) {
         cur_state->unload();
         cur_state->loaded = false;
@@ -119,54 +118,20 @@ void Game::change_state(
 
 
 /**
- * @brief Checks whether the player has pressed some system-related
- * key combination, and acts accordingly.
+ * @brief Returns the name of the current state.
  *
- * @param ev The Allegro event behind the key press.
+ * @return The name.
  */
-void Game::check_system_key_press(const ALLEGRO_EVENT &ev) {
-    switch(ev.keyboard.keycode) {
-    case ALLEGRO_KEY_F12: {
-        if(has_flag(ev.keyboard.modifiers, ALLEGRO_KEYMOD_CTRL)) {
-            string cur_state_name = get_cur_state_name();
-            if(cur_state_name == states.animation_ed->get_name()) {
-                maker_tools.auto_start_state = "animation_editor";
-                maker_tools.auto_start_option =
-                    states.animation_ed->get_opened_content_path();
-            } else if(cur_state_name == states.area_ed->get_name()) {
-                maker_tools.auto_start_state = "area_editor";
-                maker_tools.auto_start_option =
-                    states.area_ed->get_opened_content_path();
-            } else if(cur_state_name == states.gui_ed->get_name()) {
-                maker_tools.auto_start_state = "gui_editor";
-                maker_tools.auto_start_option =
-                    states.gui_ed->get_opened_content_path();
-            } else if(cur_state_name == states.particle_ed->get_name()) {
-                maker_tools.auto_start_state = "particle_editor";
-                maker_tools.auto_start_option =
-                    states.particle_ed->get_opened_content_path();
-            } else if(cur_state_name == states.gameplay->get_name()) {
-                maker_tools.auto_start_state = "play";
-                maker_tools.auto_start_option =
-                    states.gameplay->path_of_area_to_load;
-            } else {
-                maker_tools.auto_start_state.clear();
-                maker_tools.auto_start_option.clear();
-            }
-            save_maker_tools();
-        } else {
-            save_screenshot();
-        }
-        break;
-    }
-    }
+string Game::get_cur_state_name() const {
+    if(!cur_state) return "none";
+    return cur_state->get_name();
 }
 
 
 /**
  * @brief Performs some global drawings to run every frame.
  */
-void Game::do_global_drawing() {
+void Game::global_drawing() {
     //Dear ImGui.
     if(debug.show_dear_imgui_demo) {
         ImGui::ShowDemoWindow();
@@ -178,8 +143,8 @@ void Game::do_global_drawing() {
         skip_dear_imgui_frame = false;
     }
     
+    //Fade manager.
     if(!debug.show_dear_imgui_demo) {
-        //Fade manager.
         game.fade_mgr.draw();
     }
 }
@@ -188,7 +153,18 @@ void Game::do_global_drawing() {
 /**
  * @brief Performs some global logic to run every frame.
  */
-void Game::do_global_logic() {
+void Game::global_logic() {
+    //Player action handling.
+    for(size_t a = 0; a < player_actions.size();) {
+        if(maker_tools.handle_global_player_action(player_actions[a])) {
+            player_actions.erase(player_actions.begin() + a);
+        } else if(global_handle_system_player_action(player_actions[a])) {
+            player_actions.erase(player_actions.begin() + a);
+        } else {
+            a++;
+        }
+    }
+    
     //Cursor trail.
     if(options.advanced.draw_cursor_trail) {
         mouse_cursor.save_timer.tick(delta_t);
@@ -204,41 +180,67 @@ void Game::do_global_logic() {
 
 
 /**
- * @brief Returns the name of the current state.
- *
- * @return The name.
- */
-string Game::get_cur_state_name() const {
-    if(cur_state) {
-        return cur_state->get_name();
-    }
-    return "none";
-}
-
-
-/**
  * @brief Handles an Allegro event.
  *
  * @param ev Event to handle.
  */
 void Game::global_handle_allegro_event(const ALLEGRO_EVENT &ev) {
-    //Mouse cursor.
     if(
         ev.type == ALLEGRO_EVENT_MOUSE_AXES ||
         ev.type == ALLEGRO_EVENT_MOUSE_WARPED ||
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN ||
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP
     ) {
+        //Mouse cursor.
         mouse_cursor.update_pos(ev, screen_to_world_transform);
-    }
-    
-    //Audio stream finished.
-    if(ev.type == ALLEGRO_EVENT_AUDIO_STREAM_FINISHED) {
-        game.audio.handle_stream_finished((ALLEGRO_AUDIO_STREAM*) (ev.any.source));
+        
+    } else if(ev.type == ALLEGRO_EVENT_AUDIO_STREAM_FINISHED) {
+        //Audio stream finished.
+        game.audio.handle_stream_finished(
+            (ALLEGRO_AUDIO_STREAM*) (ev.any.source)
+        );
+        
+    } else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
+        //Hitting the X on the game window.
+        is_game_running = false;
+        
+    } else if(ev.type == ALLEGRO_EVENT_DISPLAY_SWITCH_IN) {
+        //On Windows, when you tab out then back in, sometimes you'd see
+        //weird artifacts. This workaround fixes it.
+        al_resize_display(display, win_w, win_h);
+        
     }
     
     //Dear ImGui.
     ImGui_ImplAllegro5_ProcessEvent((ALLEGRO_EVENT*) &ev);
+}
+
+
+/**
+ * @brief Handles a system player action, if possible.
+ *
+ * @param action The action.
+ * @return Whether it got handled.
+ */
+bool Game::global_handle_system_player_action(const PlayerAction &action) {
+    bool is_system_action =
+        controls.get_player_action_type(action.actionTypeId).category ==
+        PLAYER_ACTION_CAT_SYSTEM;
+    if(!is_system_action) return false;
+    if(action.value < 0.5f) return false;
+    
+    switch(action.actionTypeId) {
+    case PLAYER_ACTION_TYPE_SYSTEM_INFO: {
+        show_system_info = !show_system_info;
+        break;
+        
+    } case PLAYER_ACTION_TYPE_SCREENSHOT: {
+        save_screenshot();
+        break;
+    }
+    }
+    
+    return true;
 }
 
 
@@ -275,7 +277,8 @@ void Game::main_loop() {
                 if(reset_delta_t) {
                     //Failsafe.
                     prev_frame_start_time =
-                        cur_frame_start_time - 1.0f / options.advanced.target_fps;
+                        cur_frame_start_time -
+                        1.0f / options.advanced.target_fps;
                     reset_delta_t = false;
                 }
                 
@@ -289,13 +292,14 @@ void Game::main_loop() {
                 time_passed += delta_t;
                 GameState* prev_state = cur_state;
                 
-                do_global_logic();
+                player_actions = controls.new_frame(delta_t);
+                global_logic();
                 cur_state->do_logic();
                 
                 if(cur_state == prev_state) {
                     //Only draw if we didn't change states in the meantime.
                     cur_state->do_drawing();
-                    do_global_drawing();
+                    global_drawing();
                     al_flip_display();
                 } else {
                     ImGui::EndFrame();
@@ -308,20 +312,6 @@ void Game::main_loop() {
                 prev_frame_start_time = cur_frame_start_time;
                 
             }
-            break;
-            
-        } case ALLEGRO_EVENT_DISPLAY_CLOSE: {
-            is_game_running = false;
-            break;
-            
-        } case ALLEGRO_EVENT_KEY_DOWN: {
-            check_system_key_press(ev);
-            break;
-            
-        }  case ALLEGRO_EVENT_DISPLAY_SWITCH_IN: {
-            //On Windows, when you tab out then back in, sometimes you'd see
-            //weird artifacts. This workaround fixes it.
-            al_resize_display(display, win_w, win_h);
             break;
             
         }
@@ -454,6 +444,7 @@ int Game::start() {
         perf_mon = new PerformanceMonitor();
     }
     
+    //Auto-start in some state.
     if(
         maker_tools.enabled &&
         maker_tools.auto_start_state == "play" &&

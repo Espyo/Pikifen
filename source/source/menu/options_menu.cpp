@@ -70,6 +70,7 @@ void OptionsMenu::choose_input(
 ) {
     capturing_input = 1;
     capturing_input_timeout = OPTIONS_MENU::INPUT_CAPTURE_TIMEOUT_DURATION;
+    game.controls.start_ignoring_actions();
     
     const vector<ControlBind> &all_binds = game.controls.binds();
     size_t binds_counted = 0;
@@ -110,7 +111,7 @@ void OptionsMenu::delete_bind(
         }
     }
     
-    populate_binds();
+    must_populate_binds = true;
 }
 
 
@@ -169,8 +170,9 @@ void OptionsMenu::handle_allegro_event(const ALLEGRO_EVENT &ev) {
                 game.controls.binds()[cur_bind_idx].inputSource = input.source;
             }
             capturing_input = 2;
+            game.controls.stop_ignoring_actions();
             game.controls.start_ignoring_input_source(input.source);
-            populate_binds();
+            must_populate_binds = true;
         }
         return;
         break;
@@ -414,9 +416,6 @@ void OptionsMenu::init_gui_control_binds_page() {
         new TooltipGuiItem(&binds_gui);
     binds_gui.add_item(tooltip_text, "tooltip");
     
-    //Populate the list of binds.
-    populate_binds();
-    
     //Finishing touches.
     binds_gui.set_selected_item(binds_gui.back_item, true);
     binds_gui.responsive = false;
@@ -430,13 +429,14 @@ void OptionsMenu::init_gui_control_binds_page() {
  */
 void OptionsMenu::init_gui_controls_page() {
     //Menu items.
-    controls_gui.register_coords("back",          12,  5,   20,  6);
-    controls_gui.register_coords("back_input",     3,  7,    4,  4);
-    controls_gui.register_coords("header",        50, 10,   50,  6);
-    controls_gui.register_coords("control_binds", 50, 25,   70, 10);
-    controls_gui.register_coords("cursor_speed",  50, 47.5, 70, 10);
-    controls_gui.register_coords("auto_throw",    50, 65,   70, 10);
-    controls_gui.register_coords("tooltip",       50, 96,   96,  4);
+    controls_gui.register_coords("back",          12,    5, 20,  6);
+    controls_gui.register_coords("back_input",     3,    7,  4,  4);
+    controls_gui.register_coords("header",        50,   10, 50,  6);
+    controls_gui.register_coords("normal_binds",  50,   25, 70, 10);
+    controls_gui.register_coords("special_binds", 50, 36.5, 58,  9);
+    controls_gui.register_coords("cursor_speed",  50,   54, 70, 10);
+    controls_gui.register_coords("auto_throw",    50,   70, 70, 10);
+    controls_gui.register_coords("tooltip",       50,   96, 96,  4);
     controls_gui.read_coords(
         game.content.gui_defs.list[OPTIONS_MENU::CONTROLS_GUI_FILE_NAME].
         getChildByName("positions")
@@ -473,11 +473,12 @@ void OptionsMenu::init_gui_controls_page() {
     );
     controls_gui.add_item(header_text, "header");
     
-    //Control binds button.
-    ButtonGuiItem* control_binds_button =
-        new ButtonGuiItem("Edit control binds...", game.sys_content.fnt_standard);
-    control_binds_button->on_activate =
+    //Normal control binds button.
+    ButtonGuiItem* normal_binds_button =
+        new ButtonGuiItem("Normal control binds...", game.sys_content.fnt_standard);
+    normal_binds_button->on_activate =
     [this] (const Point &) {
+        binds_menu_type = CONTROL_BINDS_MENU_NORMAL;
         controls_gui.responsive = false;
         controls_gui.start_animation(
             GUI_MANAGER_ANIM_CENTER_TO_LEFT,
@@ -488,10 +489,33 @@ void OptionsMenu::init_gui_controls_page() {
             GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
             OPTIONS_MENU::HUD_MOVE_TIME
         );
+        must_populate_binds = true;
     };
-    control_binds_button->on_get_tooltip =
-    [] () { return "Choose what buttons do what."; };
-    controls_gui.add_item(control_binds_button, "control_binds");
+    normal_binds_button->on_get_tooltip =
+    [] () { return "Choose what buttons do what regular actions."; };
+    controls_gui.add_item(normal_binds_button, "normal_binds");
+    
+    //Special control binds button.
+    ButtonGuiItem* special_binds_button =
+        new ButtonGuiItem("Special control binds...", game.sys_content.fnt_standard);
+    special_binds_button->on_activate =
+    [this] (const Point &) {
+        binds_menu_type = CONTROL_BINDS_MENU_SPECIAL;
+        controls_gui.responsive = false;
+        controls_gui.start_animation(
+            GUI_MANAGER_ANIM_CENTER_TO_LEFT,
+            OPTIONS_MENU::HUD_MOVE_TIME
+        );
+        binds_gui.responsive = true;
+        binds_gui.start_animation(
+            GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
+            OPTIONS_MENU::HUD_MOVE_TIME
+        );
+        must_populate_binds = true;
+    };
+    special_binds_button->on_get_tooltip =
+    [] () { return "Choose what buttons do what special features."; };
+    controls_gui.add_item(special_binds_button, "special_binds");
     
     //Cursor speed.
     cursor_speed_picker =
@@ -532,7 +556,7 @@ void OptionsMenu::init_gui_controls_page() {
     controls_gui.add_item(tooltip_text, "tooltip");
     
     //Finishing touches.
-    controls_gui.set_selected_item(control_binds_button, true);
+    controls_gui.set_selected_item(normal_binds_button, true);
     controls_gui.responsive = false;
     controls_gui.hide_items();
 }
@@ -1093,6 +1117,25 @@ void OptionsMenu::load() {
  * @brief Populates the list of binds.
  */
 void OptionsMenu::populate_binds() {
+    unordered_set<PLAYER_ACTION_CAT> allowed_categories;
+    switch(binds_menu_type) {
+    case CONTROL_BINDS_MENU_NORMAL: {
+        allowed_categories = {
+            PLAYER_ACTION_CAT_MAIN,
+            PLAYER_ACTION_CAT_MENUS,
+            PLAYER_ACTION_CAT_ADVANCED,
+        };
+        break;
+    } case CONTROL_BINDS_MENU_SPECIAL: {
+        allowed_categories = {
+            PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
+            PLAYER_ACTION_CAT_GLOBAL_MAKER_TOOLS,
+            PLAYER_ACTION_CAT_SYSTEM,
+        };
+        break;
+    }
+    }
+    
     binds_list_box->delete_all_children();
     
     const vector<PfePlayerActionType> &all_player_action_types =
@@ -1115,6 +1158,7 @@ void OptionsMenu::populate_binds() {
         const PfePlayerActionType &action_type = all_player_action_types[a];
         
         if(action_type.internal_name.empty()) continue;
+        if(!is_in_container(allowed_categories, action_type.category)) continue;
         
         float action_y =
             binds_list_box->get_child_bottom() +
@@ -1136,8 +1180,14 @@ void OptionsMenu::populate_binds() {
             } case PLAYER_ACTION_CAT_ADVANCED: {
                 section_name = "Advanced";
                 break;
-            } case PLAYER_ACTION_CAT_MAKER_TOOLS: {
-                section_name = "Maker tools";
+            } case PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS: {
+                section_name = "Gameplay maker tools";
+                break;
+            } case PLAYER_ACTION_CAT_GLOBAL_MAKER_TOOLS: {
+                section_name = "Global maker tools";
+                break;
+            } case PLAYER_ACTION_CAT_SYSTEM: {
+                section_name = "System";
                 break;
             }
             }
@@ -1186,7 +1236,7 @@ void OptionsMenu::populate_binds() {
                 cur_action_type = action_type.id;
                 showing_binds_more = true;
             }
-            populate_binds();
+            must_populate_binds = true;
         };
         more_button->ratio_center =
             Point(0.92f, cur_y);
@@ -1400,28 +1450,26 @@ void OptionsMenu::populate_binds() {
             
         }
         
-        if(a < all_player_action_types.size() - 1) {
-            //Spacer line.
-            GuiItem* line = new GuiItem();
-            line->ratio_center =
-                Point(
-                    0.50f, binds_list_box->get_child_bottom() + 0.02f
-                );
-            line->ratio_size = Point(0.90f, 0.02f);
-            line->on_draw =
-            [] (const DrawInfo & draw) {
-                al_draw_line(
-                    draw.center.x - draw.size.x / 2.0f,
-                    draw.center.y,
-                    draw.center.x + draw.size.x / 2.0f,
-                    draw.center.y,
-                    COLOR_TRANSPARENT_WHITE,
-                    1.0f
-                );
-            };
-            binds_list_box->add_child(line);
-            binds_gui.add_item(line);
-        }
+        //Spacer line.
+        GuiItem* line = new GuiItem();
+        line->ratio_center =
+            Point(
+                0.50f, binds_list_box->get_child_bottom() + 0.02f
+            );
+        line->ratio_size = Point(0.90f, 0.02f);
+        line->on_draw =
+        [] (const DrawInfo & draw) {
+            al_draw_line(
+                draw.center.x - draw.size.x / 2.0f,
+                draw.center.y,
+                draw.center.x + draw.size.x / 2.0f,
+                draw.center.y,
+                COLOR_TRANSPARENT_WHITE,
+                1.0f
+            );
+        };
+        binds_list_box->add_child(line);
+        binds_gui.add_item(line);
     }
 }
 
@@ -1462,7 +1510,7 @@ void OptionsMenu::restore_default_binds(
     }
     
     showing_binds_more = false;
-    populate_binds();
+    must_populate_binds = true;
 }
 
 
@@ -1473,6 +1521,11 @@ void OptionsMenu::restore_default_binds(
  */
 void OptionsMenu::tick(float delta_t) {
     Menu::tick(delta_t);
+    
+    if(must_populate_binds) {
+        populate_binds();
+        must_populate_binds = false;
+    }
     
     //Tick the GUIs.
     if(packs_menu) {

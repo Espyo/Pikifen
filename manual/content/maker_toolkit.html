@@ -20,7 +20,7 @@
     
     <p>Most of these tools are used while playing the engine, and are called by pressing the key or button bound to them in the options. Their effects vary, but their purpose is to help content makers by making mundane tasks easier and providing helpful information that can be useful in debugging any problems. It is possible to set which tools run on which player input, and it's also possible to change some of the tools' settings. There are also some other tools that are not run on demand and instead affect the behavior of some part of the game.</p>
 
-    <p>You can hold down the input to repeat the effect over and over. This is useful, for instance, for spawning several Pikmin quickly. Some also change their behavior if you were holding Shift or Ctrl before pressing the input. A handful of the tools print out information on the top of the screen, on top of a see-through black box. This info disappears after some seconds, unless you call it again. F1 and F12 cannot be set as tool keys since they toggle the <a href="misc_features.html#system-info">system info</a> and take a screenshot, respectively.</p>
+    <p>You can hold down the input to repeat the effect over and over. This is useful, for instance, for spawning several Pikmin quickly. Some also change their behavior if you were holding Shift or Ctrl before pressing the input. A handful of the tools print out information on the top of the screen, on top of a see-through black box. This info disappears after some seconds, unless you call it again.</p>
 
     <h2 id="config">Configuration file</h2>
     
@@ -68,6 +68,29 @@
         <td>Whether you want to see tree leaf shadows.</td>
         <td>Boolean</td>
         <td>true</td>
+      </tr>
+    </table>
+    
+    <h3 id="auto-start">Auto start</h3>
+    
+    <p>If you find yourself opening the engine, going to the same game mode, menu, or area every time, closing down, and repeating the process over and over, you can use this tool to avoid going through the long way. It makes the engine start on something other than the title screen automatically, and also optionally automatically open a specific area, animation, etc. Press its input to set the current game state and the current content as the new auto-start point. To make it start at the title screen like normal, well, just press the input on the title screen!</p>
+
+    <p><b>Tool internal name</b>: <code>auto_start</code>.</p>
+
+    <p><b>Properties</b>:</p>
+
+    <table class="props-t props-t-o">
+      <tr>
+        <td>state</td>
+        <td>What mode to automatically start on. If left empty, the engine boots to the title screen as usual. Valid values are <code>play</code>, <code>animation_editor</code>, <code>area_editor</code>, <code>gui_editor</code>, or <code>particle_editor</code>.</td>
+        <td>Text</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>option</td>
+        <td>What file or folder to load automatically. This should be a path starting from the engine's folder.</td>
+        <td>Text</td>
+        <td></td>
       </tr>
     </table>
 
@@ -217,34 +240,9 @@
 
     <h2 id="others">Other tools</h2>
     
-    <h3 id="auto-start">Auto start</h3>
-    
-    <p>If you find yourself opening the engine, going to the same game mode, menu, or area every time, closing down, and repeating the process over and over, you can use this tool to avoid going through the long way. It makes the engine start on something other than the title screen automatically, and also optionally automatically open a specific area, animation, etc.</p>
-
-    <p>You can also press Ctrl+F12 in the engine to set the auto-start mode and option to the current mode and currently opened content. Pressing that outside of any of the recognized modes will set both values to empty.</p>
-
-    <p><b>Tool internal name</b>: <code>auto_start</code>.</p>
-
-    <p><b>Properties</b>:</p>
-
-    <table class="props-t props-t-o">
-      <tr>
-        <td>state</td>
-        <td>What mode to automatically start on. If left empty, the engine boots to the title screen as usual. Valid values are <code>play</code>, <code>animation_editor</code>, <code>area_editor</code>, <code>gui_editor</code>, or <code>particle_editor</code>.</td>
-        <td>Text</td>
-        <td></td>
-      </tr>
-      <tr>
-        <td>option</td>
-        <td>What file or folder to load automatically. This should be a path starting from the engine's folder.</td>
-        <td>Text</td>
-        <td></td>
-      </tr>
-    </table>
-    
     <h3 id="perf-mon">Performance monitor</h3>
     
-    <p>When you enter an area, the engine loads a lot of content, and does a lot processing to get the gameplay state ready. This procedure takes a few seconds. If you suspect some of your content is causing the load times to be too high, you can use the performance monitor to find out how long the engine takes on each part of the area loading procedure. Likewise, while playing, the engine needs to process and draw several different things. If the framerate (press <a href="misc_features.html#system-info">F1</a>) is low or unstable, and you suspect some of your content is to blame, the performance monitor can help you here too.</p>
+    <p>When you enter an area, the engine loads a lot of content, and does a lot processing to get the gameplay state ready. This procedure takes a few seconds. If you suspect some of your content is causing the load times to be too high, you can use the performance monitor to find out how long the engine takes on each part of the area loading procedure. Likewise, while playing, the engine needs to process and draw several different things. If the framerate (press <a href="misc_features.html#system-info">F1</a> by default) is low or unstable, and you suspect some of your content is to blame, the performance monitor can help you here too.</p>
     
     <p>The monitor can be either on or off. If you don't need it, keep it off, since it can slow the game down! When you turn it on, any area you enter will be monitored. When you quit, the engine will generate a performance report about the area's loading procedure and the frames of gameplay. The report can be found in <code>user_data/performance_log.txt</code>.</p>
     

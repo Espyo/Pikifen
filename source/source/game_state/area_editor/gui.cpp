@@ -602,7 +602,7 @@ void AreaEditor::process_gui_menu_bar() {
                 //Show edge indexes item.
                 if(
                     ImGui::MenuItem(
-                        "Show edge indexes", "F1", &debug_edge_idxs
+                        "Show edge indexes", "F2", &debug_edge_idxs
                     )
                 ) {
                     if(debug_edge_idxs) {
@@ -619,7 +619,7 @@ void AreaEditor::process_gui_menu_bar() {
                 //Show sector indexes item.
                 if(
                     ImGui::MenuItem(
-                        "Show sector indexes", "F2", &debug_sector_idxs
+                        "Show sector indexes", "F3", &debug_sector_idxs
                     )
                 ) {
                     if(debug_sector_idxs) {
@@ -636,7 +636,7 @@ void AreaEditor::process_gui_menu_bar() {
                 //Show vertex indexes item.
                 if(
                     ImGui::MenuItem(
-                        "Show vertex indexes", "F3", &debug_vertex_idxs
+                        "Show vertex indexes", "F4", &debug_vertex_idxs
                     )
                 ) {
                     if(debug_vertex_idxs) {
@@ -653,7 +653,7 @@ void AreaEditor::process_gui_menu_bar() {
                 //Show sector triangulation item.
                 if(
                     ImGui::MenuItem(
-                        "Show sector triangulation", "F4", &debug_triangulation
+                        "Show sector triangulation", "F5", &debug_triangulation
                     )
                 ) {
                     if(debug_triangulation) {
@@ -670,7 +670,7 @@ void AreaEditor::process_gui_menu_bar() {
                 //Show path indexes item.
                 if(
                     ImGui::MenuItem(
-                        "Show path indexes", "F5", &debug_path_idxs
+                        "Show path indexes", "F6", &debug_path_idxs
                     )
                 ) {
                     if(debug_path_idxs) {

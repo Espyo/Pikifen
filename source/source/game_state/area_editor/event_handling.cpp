@@ -27,7 +27,7 @@ using std::set;
  * @param ev Event to handle.
  */
 void AreaEditor::handle_key_char_anywhere(const ALLEGRO_EVENT &ev) {
-    if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_F1)) {
+    if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_F2)) {
         debug_edge_idxs = !debug_edge_idxs;
         if(debug_edge_idxs) {
             set_status("Enabled debug edge index display.");
@@ -35,7 +35,7 @@ void AreaEditor::handle_key_char_anywhere(const ALLEGRO_EVENT &ev) {
             set_status("Disabled debug edge index display.");
         }
         
-    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_F2)) {
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_F3)) {
         debug_sector_idxs = !debug_sector_idxs;
         if(debug_sector_idxs) {
             set_status("Enabled debug sector index display.");
@@ -43,7 +43,7 @@ void AreaEditor::handle_key_char_anywhere(const ALLEGRO_EVENT &ev) {
             set_status("Disabled debug sector index display.");
         }
         
-    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_F3)) {
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_F4)) {
         debug_vertex_idxs = !debug_vertex_idxs;
         if(debug_vertex_idxs) {
             set_status("Enabled debug vertex index display.");
@@ -51,7 +51,7 @@ void AreaEditor::handle_key_char_anywhere(const ALLEGRO_EVENT &ev) {
             set_status("Disabled debug vertex index display.");
         }
         
-    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_F4)) {
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_F5)) {
         debug_triangulation = !debug_triangulation;
         if(debug_triangulation) {
             set_status("Enabled debug triangulation display.");
@@ -59,7 +59,7 @@ void AreaEditor::handle_key_char_anywhere(const ALLEGRO_EVENT &ev) {
             set_status("Disabled debug triangulation display.");
         }
         
-    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_F5)) {
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_F6)) {
         debug_path_idxs = !debug_path_idxs;
         if(debug_path_idxs) {
             set_status("Enabled debug path index display.");

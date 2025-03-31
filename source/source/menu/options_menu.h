@@ -36,6 +36,18 @@ extern const string TOP_GUI_FILE_NAME;
 }
 
 
+//Possible control binds menu types.
+enum CONTROL_BINDS_MENU_TYPE {
+
+    //Normal controls.
+    CONTROL_BINDS_MENU_NORMAL,
+    
+    //Special controls.
+    CONTROL_BINDS_MENU_SPECIAL,
+    
+};
+
+
 /**
  * @brief Info on how a picker GUI item in the options menu should work.
  *
@@ -273,10 +285,13 @@ private:
     //Restart warning text widget.
     TextGuiItem* warning_text = nullptr;
     
+    //Type of control binds to show.
+    CONTROL_BINDS_MENU_TYPE binds_menu_type = CONTROL_BINDS_MENU_NORMAL;
+    
     //GUI for the "more..." options of an action type in the binds menu.
     GuiManager binds_more_gui;
     
-    //Control list GUI item.
+    //Control binds list GUI item.
     ListGuiItem* binds_list_box = nullptr;
     
     //Is it currently capturing bind input? 0: No. 1: Capturing. 2: Finishing.
@@ -296,6 +311,9 @@ private:
     
     //Current global bind index we're working with.
     size_t cur_bind_idx = 0;
+    
+    //Whether we need to populate the binds.
+    bool must_populate_binds = true;
     
     
     //--- Function declarations ---

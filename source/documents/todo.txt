@@ -6,10 +6,10 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    There's no way to remove a reference image once you have it set
     Putting a Pikmin on mud then throwing it out makes them keep the mud status
     
     --- 0.26 ---
+    Remove parameter names in function declarations
     Helodity's new area and such
     Divide more long data files into blocks
     Ease up on the darkness of weather conditions at night
@@ -305,6 +305,7 @@ Next tasks (roughly sorted most important first)
             Implement the ability for a player actions to go back in the queue if the game code doesn't handle that action in that frame. Doing this should count that action's TTL down by delta_t
             If you have the same action bound to two inputs, where one of them is an analog stick, it may be nearly impossible to get the other input to register because analog stick jitter will keep convincing the manager that for that frame, that player action's input is always changing by minute amounts
                 It should probably use the largest value of all inputs. Like if you bind move cursor right to both analog sticks, if one is held 50% of the way, the other can be wiggled between 0% and 49% of the way but the action will always be recognized as 50%
+                Add an option to allow event coalescing? Basically, if before a frame we received an event for analog stick right 0.3 and also a 0.4, just coalesce into a single event of 0.4
             Allow for button combinations
                 Basically, the bind struct has a chord variable, of the input type, and if this is not-none-typed, then this input is required before the main input is performed
             Implement a screen stack system, with push&pop
@@ -312,7 +313,6 @@ Next tasks (roughly sorted most important first)
                 If you're holding a direction as you read a sign, you'll continue to go in that direction, even if you let go. Pressing again fixes this. Make sure this is fixed.
                 If you're whistling, pause the game, release the whistle, and unpause, the game will probably not detect the release -- do something about it
                 Watch out for the input that causes a push/pop in the first place. e.g. the key down for when you hit Esc to pause, and then key up for when you get out of the pause menu while not holding it
-            Add an option to allow event coalescing. Basically, if before a frame we received an event for analog stick right 0.3 and also a 0.4, just coalesce into a single event of 0.4
             Some sort of priority system, or maybe just some logic for button combination overlap? If I bind M+A to take be the area image creator tool, I don't want my leader to walk to the left
         Menus
             Options menu
@@ -330,8 +330,6 @@ Next tasks (roughly sorted most important first)
                 For each player, it shows their name (which can be changed by the player), what control scheme they're using, and what controllers, if any, they are using
                 If the selected control scheme uses controllers, the player can choose which controllers fill in the controller placeholders of that scheme
                     Write the controller's names, given by Allegro
-        Maker tools should be like controls, in that they should be able to be bound to any input, and use the same general system
-        Screenshot and framerate should also be like controls instead of being fixed keys
         Add controls for menu shortcut page left, menu shortcut page right, and menu shortcut special
             Try making it so the mouse wheel can be used to move Pikmin to the Onion and group, in the Onion menu. Also, the "menu special" action should toggle select-all (thanks Nataly171)
         Spray management should really be inventory management -- See the multiplayer section in this file for more info
@@ -341,7 +339,17 @@ Next tasks (roughly sorted most important first)
         Current leader should move slower if the analog stick is not held all the way
         Make it so a player can control their leader via mouse cursor
     Ice Pikmin
+        Status buildup
+        Water freezing
+            How does the area maker specify the amount for each body of water? Should they, or should it be determined by the area?
+            The indicator for the amount of Ice Pikmin on it should be where the first Ice Pikmin was placed
+            Logic to turn the sector solid and navigable by non-Blues
+            Logic to freeze all enemies in the water
+            Logic to call the Pikmin out and thawing
     Glow Pikmin
+        The ability for Pikmin to teleport to the current leader if they've been idling for a bit
+        Onions should be able to specify they can't be interacted with, so Lumiknolls can be Onions under the hood
+        Glow Pellets should be internally pellets, but only able to be received by Luminkolls
     Mob rotation should have acceleration too
     Enemy revival
         drops_corpse could probably be revamped or removed entirely

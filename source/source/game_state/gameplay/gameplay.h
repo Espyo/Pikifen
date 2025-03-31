@@ -517,7 +517,6 @@ private:
     void process_mob_touches(
         Mob* m_ptr, Mob* m2_ptr, size_t m, size_t m2, Distance &d
     );
-    void process_system_key_press(int keycode);
     bool should_ignore_player_action(const PlayerAction &action);
     void unload_game_content();
     void update_area_active_cells();

@@ -191,7 +191,7 @@ enum PLAYER_ACTION_TYPE {
     //Menu navigation page to the right.
     PLAYER_ACTION_TYPE_MENU_PAGE_RIGHT,
     
-    //Maker tools.
+    //Gameplay maker tools.
     
     //Area image.
     PLAYER_ACTION_TYPE_MT_AREA_IMAGE,
@@ -217,9 +217,6 @@ enum PLAYER_ACTION_TYPE {
     //Path info.
     PLAYER_ACTION_TYPE_MT_PATH_INFO,
     
-    //Set song position near loop.
-    PLAYER_ACTION_TYPE_MT_SET_SONG_POS_NEAR_LOOP,
-    
     //Show collision.
     PLAYER_ACTION_TYPE_MT_SHOW_COLLISION,
     
@@ -228,6 +225,23 @@ enum PLAYER_ACTION_TYPE {
     
     //Teleport.
     PLAYER_ACTION_TYPE_MT_TELEPORT,
+    
+    //Global maker tools.
+    
+    //Auto-start.
+    PLAYER_ACTION_TYPE_MT_AUTO_START,
+    
+    //Set song position near loop.
+    PLAYER_ACTION_TYPE_MT_SET_SONG_POS_NEAR_LOOP,
+    
+    //System.
+    
+    //System info.
+    PLAYER_ACTION_TYPE_SYSTEM_INFO,
+    
+    //Screenshot.
+    PLAYER_ACTION_TYPE_SCREENSHOT,
+    
 };
 
 
@@ -246,8 +260,14 @@ enum PLAYER_ACTION_CAT {
     //Advanced.
     PLAYER_ACTION_CAT_ADVANCED,
     
-    //Maker tools.
-    PLAYER_ACTION_CAT_MAKER_TOOLS,
+    //Gameplay maker tools.
+    PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
+    
+    //Global maker tools.
+    PLAYER_ACTION_CAT_GLOBAL_MAKER_TOOLS,
+    
+    //System.
+    PLAYER_ACTION_CAT_SYSTEM,
     
 };
 
@@ -321,7 +341,9 @@ struct ControlsMediator {
     void release_all();
     void save_binds_to_data_node(DataNode* node, unsigned char player_nr);
     void set_options(const ControlsManagerOptions &options);
+    void start_ignoring_actions();
     void start_ignoring_input_source(const PlayerInputSource &input_source);
+    void stop_ignoring_actions();
     
     private:
     

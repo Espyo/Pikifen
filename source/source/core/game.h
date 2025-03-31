@@ -194,6 +194,9 @@ public:
     //Performance monitor.
     PerformanceMonitor* perf_mon = nullptr;
     
+    //Player actions in this frame.
+    vector<PlayerAction> player_actions;
+    
     //Randomness manager.
     RngManager rng;
     
@@ -298,10 +301,10 @@ private:
     
     //--- Function declarations ---
     
-    void check_system_key_press(const ALLEGRO_EVENT &ev);
-    void do_global_drawing();
-    void do_global_logic();
+    void global_drawing();
+    void global_logic();
     void global_handle_allegro_event(const ALLEGRO_EVENT &ev);
+    bool global_handle_system_player_action(const PlayerAction &action);
     
 };
 

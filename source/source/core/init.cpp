@@ -299,35 +299,35 @@ void init_controls() {
         PLAYER_ACTION_CAT_MENUS,
         "Menu right",
         "Navigate right in a menu.",
-        "menu_right", "k_83"
+        "menu_right", "k_83", 0.5f
     );
     game.controls.add_player_action_type(
         PLAYER_ACTION_TYPE_MENU_UP,
         PLAYER_ACTION_CAT_MENUS,
         "Menu up",
         "Navigate up in a menu.",
-        "menu_up", "k_84"
+        "menu_up", "k_84", 0.5f
     );
     game.controls.add_player_action_type(
         PLAYER_ACTION_TYPE_MENU_LEFT,
         PLAYER_ACTION_CAT_MENUS,
         "Menu left",
         "Navigate left in a menu.",
-        "menu_left", "k_82"
+        "menu_left", "k_82", 0.5f
     );
     game.controls.add_player_action_type(
         PLAYER_ACTION_TYPE_MENU_DOWN,
         PLAYER_ACTION_CAT_MENUS,
         "Menu down",
         "Navigate down in a menu.",
-        "menu_down", "k_85"
+        "menu_down", "k_85", 0.5f
     );
     game.controls.add_player_action_type(
         PLAYER_ACTION_TYPE_MENU_OK,
         PLAYER_ACTION_CAT_MENUS,
         "Menu OK",
         "Confirm the selected item in a menu.",
-        "menu_ok", "k_67"
+        "menu_ok", "k_67", 0.5f
     );
     game.controls.add_player_action_type(
         PLAYER_ACTION_TYPE_RADAR_RIGHT,
@@ -511,107 +511,132 @@ void init_controls() {
         PLAYER_ACTION_CAT_ADVANCED,
         "Menu shortcut - back",
         "Go back or cancel in a menu.",
-        "menu_back", "k_59"
+        "menu_back", "k_59", 0.5f
     );
     game.controls.add_player_action_type(
         PLAYER_ACTION_TYPE_MENU_PAGE_LEFT,
         PLAYER_ACTION_CAT_ADVANCED,
         "Menu shortcut - left page",
         "Go to the page to the left in a menu.",
-        "menu_page_left", "k_17"
+        "menu_page_left", "k_17", 0.5f
     );
     game.controls.add_player_action_type(
         PLAYER_ACTION_TYPE_MENU_PAGE_RIGHT,
         PLAYER_ACTION_CAT_ADVANCED,
         "Menu shortcut - right page",
         "Go to the page to the right in a menu.",
-        "menu_page_right", "k_5"
+        "menu_page_right", "k_5", 0.5f
     );
     
-    //Maker tools.
+    //Gameplay maker tools.
     game.controls.add_player_action_type(
         PLAYER_ACTION_TYPE_MT_AREA_IMAGE,
-        PLAYER_ACTION_CAT_MAKER_TOOLS,
+        PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "Area image",
         "Save an image of the current area.",
-        "mt_area_image", "k_27"
+        "mt_area_image", "k_36"
     );
     game.controls.add_player_action_type(
         PLAYER_ACTION_TYPE_MT_CHANGE_SPEED,
-        PLAYER_ACTION_CAT_MAKER_TOOLS,
+        PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "Change speed",
         "Changes the gameplay speed.",
         "mt_change_speed", "k_28"
     );
     game.controls.add_player_action_type(
         PLAYER_ACTION_TYPE_MT_GEOMETRY_INFO,
-        PLAYER_ACTION_CAT_MAKER_TOOLS,
+        PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "Geometry info",
         "Toggles info about the geometry under the cursor.",
         "mt_geometry_info", "k_33"
     );
     game.controls.add_player_action_type(
         PLAYER_ACTION_TYPE_MT_HUD,
-        PLAYER_ACTION_CAT_MAKER_TOOLS,
+        PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "HUD",
         "Toggles the HUD.",
-        "mt_hud", "k_36"
+        "mt_hud", "k_35"
     );
     game.controls.add_player_action_type(
         PLAYER_ACTION_TYPE_MT_HURT_MOB,
-        PLAYER_ACTION_CAT_MAKER_TOOLS,
+        PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "Hurt mob",
         "Hurts the mob under the cursor.",
-        "mt_hurt_mob", "k_30"
+        "mt_hurt_mob", "k_30", 0.5f
     );
     game.controls.add_player_action_type(
         PLAYER_ACTION_TYPE_MT_MOB_INFO,
-        PLAYER_ACTION_CAT_MAKER_TOOLS,
+        PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "Mob info",
         "Toggles info about the mob under the cursor.",
-        "mt_mob_info", "k_32"
+        "mt_mob_info", "k_32", 0.5f
     );
     game.controls.add_player_action_type(
         PLAYER_ACTION_TYPE_MT_NEW_PIKMIN,
-        PLAYER_ACTION_CAT_MAKER_TOOLS,
+        PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "New Pikmin",
         "Creates a new Pikmin under the cursor.",
-        "mt_new_pikmin", "k_31"
+        "mt_new_pikmin", "k_31", 0.5f
     );
     game.controls.add_player_action_type(
         PLAYER_ACTION_TYPE_MT_PATH_INFO,
-        PLAYER_ACTION_CAT_MAKER_TOOLS,
+        PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "Path info",
         "Toggles info about paths the info'd mob is taking.",
         "mt_path_info", "k_34"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_TYPE_MT_SET_SONG_POS_NEAR_LOOP,
-        PLAYER_ACTION_CAT_MAKER_TOOLS,
-        "Set song pos near loop",
-        "Sets the current song's position to be near the loop point.",
-        "mt_set_song_pos_near_loop", ""
-    );
-    game.controls.add_player_action_type(
         PLAYER_ACTION_TYPE_MT_SHOW_COLLISION,
-        PLAYER_ACTION_CAT_MAKER_TOOLS,
+        PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "Show collision",
         "Toggles drawing each mob's collision.",
         "mt_show_collision", ""
     );
     game.controls.add_player_action_type(
         PLAYER_ACTION_TYPE_MT_SHOW_HITBOXES,
-        PLAYER_ACTION_CAT_MAKER_TOOLS,
+        PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "Show hitboxes",
         "Toggles drawing each mob's hitboxes.",
         "mt_show_hitboxes", ""
     );
     game.controls.add_player_action_type(
         PLAYER_ACTION_TYPE_MT_TELEPORT,
-        PLAYER_ACTION_CAT_MAKER_TOOLS,
+        PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "Teleport",
         "Teleports the leader to the cursor.",
-        "mt_teleport", "k_29"
+        "mt_teleport", "k_29", 0.5f
+    );
+    
+    //Global maker tools.
+    game.controls.add_player_action_type(
+        PLAYER_ACTION_TYPE_MT_AUTO_START,
+        PLAYER_ACTION_CAT_GLOBAL_MAKER_TOOLS,
+        "Auto-start",
+        "Makes the game auto-start on the current state (and content).",
+        "mt_auto_start", "k_56"
+    );
+    game.controls.add_player_action_type(
+        PLAYER_ACTION_TYPE_MT_SET_SONG_POS_NEAR_LOOP,
+        PLAYER_ACTION_CAT_GLOBAL_MAKER_TOOLS,
+        "Set song pos near loop",
+        "Sets the current song's position to be near the loop point.",
+        "mt_set_song_pos_near_loop", ""
+    );
+    
+    //System.
+    game.controls.add_player_action_type(
+        PLAYER_ACTION_TYPE_SYSTEM_INFO,
+        PLAYER_ACTION_CAT_SYSTEM,
+        "System info",
+        "Toggles showing system and performance information.",
+        "system_info", "k_47"
+    );
+    game.controls.add_player_action_type(
+        PLAYER_ACTION_TYPE_SCREENSHOT,
+        PLAYER_ACTION_CAT_SYSTEM,
+        "Take a screenshot",
+        "Takes a screenshot and saves it in the user data folder.",
+        "screenshot", "k_58"
     );
     
     

@@ -139,14 +139,12 @@ void TitleScreen::do_logic() {
         }
     }
     
-    vector<PlayerAction> player_actions = game.controls.new_frame();
     if(!game.fade_mgr.is_fading()) {
-        for(size_t a = 0; a < player_actions.size(); a++) {
-            main_gui.handle_player_action(player_actions[a]);
-            play_gui.handle_player_action(player_actions[a]);
-            make_gui.handle_player_action(player_actions[a]);
-            tutorial_gui.handle_player_action(player_actions[a]);
-            game.maker_tools.handle_player_action(player_actions[a]);
+        for(size_t a = 0; a < game.player_actions.size(); a++) {
+            main_gui.handle_player_action(game.player_actions[a]);
+            play_gui.handle_player_action(game.player_actions[a]);
+            make_gui.handle_player_action(game.player_actions[a]);
+            tutorial_gui.handle_player_action(game.player_actions[a]);
         }
     }
     

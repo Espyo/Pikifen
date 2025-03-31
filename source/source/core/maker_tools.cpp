@@ -20,21 +20,6 @@
  */
 MakerTools::MakerTools() {
     info_print_timer = Timer(1.0f, [this] () { info_print_text.clear(); });
-    for(size_t k = 0; k < 20; k++) {
-        keys[k] = MAKER_TOOL_TYPE_NONE;
-    }
-    
-    //Some defaults that are convenient to have on.
-    keys[10] = MAKER_TOOL_TYPE_AREA_IMAGE;
-    keys[11] = MAKER_TOOL_TYPE_CHANGE_SPEED;
-    keys[12] = MAKER_TOOL_TYPE_TELEPORT;
-    keys[13] = MAKER_TOOL_TYPE_HURT_MOB;
-    keys[14] = MAKER_TOOL_TYPE_NEW_PIKMIN;
-    keys[15] = MAKER_TOOL_TYPE_MOB_INFO;
-    keys[16] = MAKER_TOOL_TYPE_GEOMETRY_INFO;
-    keys[17] = MAKER_TOOL_TYPE_HITBOXES;
-    keys[18] = MAKER_TOOL_TYPE_COLLISION;
-    keys[19] = MAKER_TOOL_TYPE_HUD;
 }
 
 
@@ -58,41 +43,44 @@ unsigned char MakerTools::get_maker_tool_setting_idx() const {
 
 
 /**
- * @brief Handles a player action and performs an input tool if possible.
+ * @brief Handles a player action and performs an input tool if possible,
+ * for the tools that take place during gameplay only.
  *
  * @param action The action.
+ * @return Whether it got handled.
  */
-void MakerTools::handle_player_action(const PlayerAction &action) {
-    if(!enabled) return;
-    if(action.value < 0.5f) return;
+bool MakerTools::handle_gameplay_player_action(const PlayerAction &action) {
+    bool is_gameplay_tool_action =
+        game.controls.get_player_action_type(action.actionTypeId).category ==
+        PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS;
+    if(!is_gameplay_tool_action) return false;
+    if(!enabled) return true;
+    if(action.value < 0.5f) return false;
     
     switch(action.actionTypeId) {
     case PLAYER_ACTION_TYPE_MT_AREA_IMAGE: {
 
-        if(game.states.gameplay->loaded) {
-            unsigned char setting_idx = get_maker_tool_setting_idx();
-            ALLEGRO_BITMAP* bmp =
-                game.states.gameplay->draw_to_bitmap(
-                    game.maker_tools.area_image_settings[setting_idx]
-                );
-            string file_name =
-                FOLDER_PATHS_FROM_ROOT::USER_DATA + "/area_" +
-                sanitize_file_name(game.cur_area_data->name) +
-                "_" + get_current_time(true) + ".png";
-                
-            if(!al_save_bitmap(file_name.c_str(), bmp)) {
-                game.errors.report(
-                    "Could not save the area onto an image,"
-                    " with the name \"" + file_name + "\"!"
-                );
-            }
+        unsigned char setting_idx = get_maker_tool_setting_idx();
+        ALLEGRO_BITMAP* bmp =
+            game.states.gameplay->draw_to_bitmap(
+                game.maker_tools.area_image_settings[setting_idx]
+            );
+        string file_name =
+            FOLDER_PATHS_FROM_ROOT::USER_DATA + "/area_" +
+            sanitize_file_name(game.cur_area_data->name) +
+            "_" + get_current_time(true) + ".png";
             
-            game.maker_tools.used_helping_tools = true;
+        if(!al_save_bitmap(file_name.c_str(), bmp)) {
+            game.errors.report(
+                "Could not save the area onto an image,"
+                " with the name \"" + file_name + "\"!"
+            );
         }
+        
+        game.maker_tools.used_helping_tools = true;
         break;
         
-    }
-    case PLAYER_ACTION_TYPE_MT_CHANGE_SPEED: {
+    } case PLAYER_ACTION_TYPE_MT_CHANGE_SPEED: {
 
         unsigned char setting_idx =
             get_maker_tool_setting_idx();
@@ -113,22 +101,19 @@ void MakerTools::handle_player_action(const PlayerAction &action) {
         game.maker_tools.used_helping_tools = true;
         break;
         
-    }
-    case PLAYER_ACTION_TYPE_MT_GEOMETRY_INFO: {
+    } case PLAYER_ACTION_TYPE_MT_GEOMETRY_INFO: {
 
         game.maker_tools.geometry_info =
             !game.maker_tools.geometry_info;
         game.maker_tools.used_helping_tools = true;
         break;
         
-    }
-    case PLAYER_ACTION_TYPE_MT_HUD: {
+    } case PLAYER_ACTION_TYPE_MT_HUD: {
 
         game.maker_tools.hud = !game.maker_tools.hud;
         break;
         
-    }
-    case PLAYER_ACTION_TYPE_MT_HURT_MOB: {
+    } case PLAYER_ACTION_TYPE_MT_HURT_MOB: {
 
         unsigned char setting_idx = get_maker_tool_setting_idx();
         Mob* m = get_closest_mob_to_cursor(true);
@@ -141,42 +126,37 @@ void MakerTools::handle_player_action(const PlayerAction &action) {
         game.maker_tools.used_helping_tools = true;
         break;
         
-    }
-    case PLAYER_ACTION_TYPE_MT_MOB_INFO: {
+    } case PLAYER_ACTION_TYPE_MT_MOB_INFO: {
 
-        if(game.states.gameplay->loaded) {
-            bool is_shift_pressed;
-            bool is_ctrl_pressed;
-            get_shift_ctrl_alt_state(
-                &is_shift_pressed, &is_ctrl_pressed, nullptr
-            );
-            
-            Mob* prev_lock_mob = game.maker_tools.info_lock;
-            Mob* m;
-            if(is_shift_pressed) {
-                m = get_next_mob_near_cursor(prev_lock_mob, false);
-            } else if(is_ctrl_pressed) {
-                m = nullptr;
-            } else {
-                m = get_closest_mob_to_cursor(false);
-            }
-            
-            game.maker_tools.info_lock = prev_lock_mob == m ? nullptr : m;
-            if(
-                prev_lock_mob != nullptr &&
-                game.maker_tools.info_lock == nullptr
-            ) {
-                print_info("Mob: None.", 2.0f, 2.0f);
-            }
-            game.maker_tools.used_helping_tools = true;
+        bool is_shift_pressed;
+        bool is_ctrl_pressed;
+        get_shift_ctrl_alt_state(
+            &is_shift_pressed, &is_ctrl_pressed, nullptr
+        );
+        
+        Mob* prev_lock_mob = game.maker_tools.info_lock;
+        Mob* m;
+        if(is_shift_pressed) {
+            m = get_next_mob_near_cursor(prev_lock_mob, false);
+        } else if(is_ctrl_pressed) {
+            m = nullptr;
+        } else {
+            m = get_closest_mob_to_cursor(false);
         }
+        
+        game.maker_tools.info_lock = prev_lock_mob == m ? nullptr : m;
+        if(
+            prev_lock_mob != nullptr &&
+            game.maker_tools.info_lock == nullptr
+        ) {
+            print_info("Mob: None.", 2.0f, 2.0f);
+        }
+        game.maker_tools.used_helping_tools = true;
         break;
         
-    }
-    case PLAYER_ACTION_TYPE_MT_NEW_PIKMIN: {
+    } case PLAYER_ACTION_TYPE_MT_NEW_PIKMIN: {
 
         if(
-            game.states.gameplay->loaded &&
             game.states.gameplay->mobs.pikmin_list.size() <
             game.config.max_pikmin_in_field
         ) {
@@ -218,61 +198,111 @@ void MakerTools::handle_player_action(const PlayerAction &action) {
         }
         break;
         
-    }
-    case PLAYER_ACTION_TYPE_MT_PATH_INFO: {
+    } case PLAYER_ACTION_TYPE_MT_PATH_INFO: {
 
         game.maker_tools.path_info = !game.maker_tools.path_info;
         game.maker_tools.used_helping_tools = true;
         break;
         
-    }
-    case PLAYER_ACTION_TYPE_MT_SET_SONG_POS_NEAR_LOOP: {
-
-        game.audio.set_song_pos_near_loop();
-        break;
-        
-    }
-    case PLAYER_ACTION_TYPE_MT_SHOW_COLLISION: {
+    } case PLAYER_ACTION_TYPE_MT_SHOW_COLLISION: {
 
         game.maker_tools.collision =
             !game.maker_tools.collision;
         game.maker_tools.used_helping_tools = true;
         break;
         
-    }
-    case PLAYER_ACTION_TYPE_MT_SHOW_HITBOXES: {
+    } case PLAYER_ACTION_TYPE_MT_SHOW_HITBOXES: {
 
         game.maker_tools.hitboxes =
             !game.maker_tools.hitboxes;
         game.maker_tools.used_helping_tools = true;
         break;
         
-    }
-    case PLAYER_ACTION_TYPE_MT_TELEPORT: {
+    } case PLAYER_ACTION_TYPE_MT_TELEPORT: {
 
-        if(game.states.gameplay->loaded) {
-            bool is_shift_pressed;
-            get_shift_ctrl_alt_state(&is_shift_pressed, nullptr, nullptr);
+        bool is_shift_pressed;
+        get_shift_ctrl_alt_state(&is_shift_pressed, nullptr, nullptr);
+        
+        Mob* mob_to_teleport =
+            (is_shift_pressed && game.maker_tools.info_lock) ?
+            game.maker_tools.info_lock :
+            game.states.gameplay->cur_leader_ptr;
             
-            Mob* mob_to_teleport =
-                (is_shift_pressed && game.maker_tools.info_lock) ?
-                game.maker_tools.info_lock :
-                game.states.gameplay->cur_leader_ptr;
-                
-            Sector* mouse_sector =
-                get_sector(game.mouse_cursor.w_pos, nullptr, true);
-            if(mouse_sector && mob_to_teleport) {
-                mob_to_teleport->chase(
-                    game.mouse_cursor.w_pos, mouse_sector->z,
-                    CHASE_FLAG_TELEPORT
-                );
-                game.cam.set_pos(game.mouse_cursor.w_pos);
-            }
-            game.maker_tools.used_helping_tools = true;
+        Sector* mouse_sector =
+            get_sector(game.mouse_cursor.w_pos, nullptr, true);
+        if(mouse_sector && mob_to_teleport) {
+            mob_to_teleport->chase(
+                game.mouse_cursor.w_pos, mouse_sector->z,
+                CHASE_FLAG_TELEPORT
+            );
+            game.cam.set_pos(game.mouse_cursor.w_pos);
         }
+        game.maker_tools.used_helping_tools = true;
         break;
     }
     }
+    
+    return true;
+}
+
+
+/**
+ * @brief Handles a player action and performs an input tool if possible,
+ * for the tools that take place globally.
+ *
+ * @param action The action.
+ * @return Whether it got handled.
+ */
+bool MakerTools::handle_global_player_action(const PlayerAction &action) {
+    bool is_global_tool_action =
+        game.controls.get_player_action_type(action.actionTypeId).category ==
+        PLAYER_ACTION_CAT_GLOBAL_MAKER_TOOLS;
+    if(!is_global_tool_action) return false;
+    if(!enabled) return true;
+    if(action.value < 0.5f) return false;
+    
+    switch(action.actionTypeId) {
+    case PLAYER_ACTION_TYPE_MT_AUTO_START: {
+
+        string cur_state_name = game.get_cur_state_name();
+        if(cur_state_name == game.states.animation_ed->get_name()) {
+            auto_start_state = "animation_editor";
+            auto_start_option =
+                game.states.animation_ed->get_opened_content_path();
+        } else if(cur_state_name == game.states.area_ed->get_name()) {
+            auto_start_state = "area_editor";
+            auto_start_option =
+                game.states.area_ed->get_opened_content_path();
+        } else if(cur_state_name == game.states.gui_ed->get_name()) {
+            auto_start_state = "gui_editor";
+            auto_start_option =
+                game.states.gui_ed->get_opened_content_path();
+        } else if(cur_state_name == game.states.particle_ed->get_name()) {
+            auto_start_state = "particle_editor";
+            auto_start_option =
+                game.states.particle_ed->get_opened_content_path();
+        } else if(cur_state_name == game.states.gameplay->get_name()) {
+            auto_start_state = "play";
+            auto_start_option =
+                game.states.gameplay->path_of_area_to_load;
+        } else {
+            auto_start_state.clear();
+            auto_start_option.clear();
+        }
+        save_maker_tools();
+        
+        game.maker_tools.used_helping_tools = true;
+        break;
+        
+    } case PLAYER_ACTION_TYPE_MT_SET_SONG_POS_NEAR_LOOP: {
+
+        game.audio.set_song_pos_near_loop();
+        break;
+        
+    }
+    }
+    
+    return true;
 }
 
 

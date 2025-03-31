@@ -210,7 +210,10 @@ vector<PlayerAction> ControlsManager::newFrame(float delta_t) {
         processAutoRepeats(a, delta_t);
     }
     
-    vector<PlayerAction> result = actionQueue;
+    vector<PlayerAction> result;
+    if(!ignoringActions) {
+        result = actionQueue;
+    }
     
     //Prepare things for the next frame.
     for(auto &a : actionTypeStatuses) {

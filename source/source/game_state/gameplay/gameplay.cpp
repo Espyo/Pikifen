@@ -187,12 +187,11 @@ void GameplayState::do_logic() {
     }
     
     //Controls.
-    vector<PlayerAction> player_actions = game.controls.new_frame();
-    for(size_t a = 0; a < player_actions.size(); a++) {
-        handle_player_action(player_actions[a]);
-        if(onion_menu) onion_menu->handle_player_action(player_actions[a]);
-        if(pause_menu) pause_menu->handle_player_action(player_actions[a]);
-        game.maker_tools.handle_player_action(player_actions[a]);
+    for(size_t a = 0; a < game.player_actions.size(); a++) {
+        handle_player_action(game.player_actions[a]);
+        if(onion_menu) onion_menu->handle_player_action(game.player_actions[a]);
+        if(pause_menu) pause_menu->handle_player_action(game.player_actions[a]);
+        game.maker_tools.handle_gameplay_player_action(game.player_actions[a]);
     }
     
     //Game logic.
@@ -641,11 +640,6 @@ void GameplayState::handle_allegro_event(ALLEGRO_EVENT &ev) {
         onion_menu->handle_allegro_event(ev);
     } else if(pause_menu) {
         pause_menu->handle_allegro_event(ev);
-    }
-    
-    //Check if there are system key presses.
-    if(ev.type == ALLEGRO_EVENT_KEY_CHAR) {
-        process_system_key_press(ev.keyboard.keycode);
     }
     
     if(ev.type == ALLEGRO_EVENT_DISPLAY_SWITCH_OUT) {

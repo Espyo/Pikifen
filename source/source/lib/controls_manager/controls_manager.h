@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include <cstdint>
 #include <map>
 #include <string>
 #include <tuple>
@@ -253,6 +254,9 @@ public:
     
     //Control binds.
     vector<ControlBind> binds;
+    
+    //Are we ignoring player actions right now?
+    bool ignoringActions = false;
     
     //Options.
     ControlsManagerOptions options;

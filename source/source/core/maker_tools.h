@@ -151,9 +151,6 @@ struct MakerTools {
     //If any maker info is being printed, this represents its time to live.
     Timer info_print_timer;
     
-    //For each key (F2 - F11, 0 - 9), what tool is bound to it?
-    MAKER_TOOL_TYPE keys[20];
-    
     //When we last spawned a Pikmin, what was its type?
     PikminType* last_pikmin_type = nullptr;
     
@@ -173,7 +170,8 @@ struct MakerTools {
     //--- Function declarations ---
     
     MakerTools();
-    void handle_player_action(const PlayerAction &action);
+    bool handle_gameplay_player_action(const PlayerAction &action);
+    bool handle_global_player_action(const PlayerAction &action);
     void load_from_data_node(DataNode* node);
     void reset_for_gameplay();
     void save_to_data_node(DataNode* node);

@@ -329,6 +329,14 @@ void ControlsMediator::load_binds_from_data_node(
 
 
 /**
+ * @brief Ignore player actions from here on.
+ */
+void ControlsMediator::start_ignoring_actions() {
+    mgr.ignoringActions = true;
+}
+
+
+/**
  * @brief Ignores an input source from now on until the player performs the
  * input with value 0, at which point it becomes unignored.
  *
@@ -338,6 +346,14 @@ void ControlsMediator::start_ignoring_input_source(
     const PlayerInputSource &input_source
 ) {
     mgr.startIgnoringInputSource(input_source);
+}
+
+
+/**
+ * @brief No longer ignore player actions from here on.
+ */
+void ControlsMediator::stop_ignoring_actions() {
+    mgr.ignoringActions = false;
 }
 
 
@@ -491,17 +507,4 @@ PlayerInputSource ControlsMediator::str_to_input_source(
     }
     
     return input_source;
-}
-
-
-/**
- * @brief Processes a key press to check if it should do some "system" action,
- * like toggle the framerate, or activate a maker tool.
- *
- * @param keycode Allegro keycode of the pressed key.
- */
-void GameplayState::process_system_key_press(int keycode) {
-    if(keycode == ALLEGRO_KEY_F1) {
-        game.show_system_info = !game.show_system_info;
-    }
 }

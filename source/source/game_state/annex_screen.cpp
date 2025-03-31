@@ -37,12 +37,9 @@ void AnnexScreen::do_drawing() {
  * @brief Ticks one frame's worth of logic.
  */
 void AnnexScreen::do_logic() {
-    vector<PlayerAction> player_actions = game.controls.new_frame();
-    
     if(!game.fade_mgr.is_fading()) {
-        for(size_t a = 0; a < player_actions.size(); a++) {
-            if(cur_menu) cur_menu->handle_player_action(player_actions[a]);
-            game.maker_tools.handle_player_action(player_actions[a]);
+        for(size_t a = 0; a < game.player_actions.size(); a++) {
+            if(cur_menu) cur_menu->handle_player_action(game.player_actions[a]);
         }
     }
     
