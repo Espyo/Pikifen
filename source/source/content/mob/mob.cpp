@@ -2167,8 +2167,8 @@ void Mob::get_sprite_bitmap_effects(
             Distance closest_dist[2] = {Distance(FLT_MAX), Distance(FLT_MAX)};
             for(size_t n = 0; n < 2; n++) {
                 for(size_t e = 0; e < fade_edges[n].size(); e++) {
-                    Point v1 = Point(fade_edges[n][e]->vertexes[0]->x, fade_edges[n][e]->vertexes[0]->y);
-                    Point v2 = Point(fade_edges[n][e]->vertexes[1]->x, fade_edges[n][e]->vertexes[1]->y);
+                    Point v1 = v2p(fade_edges[n][e]->vertexes[0]);
+                    Point v2 = v2p(fade_edges[n][e]->vertexes[1]);
                     float segment_ratio;
                     Point closest_pos = get_closest_point_in_line_seg(v1, v2, pos, &segment_ratio);
                     if(segment_ratio < 0) {

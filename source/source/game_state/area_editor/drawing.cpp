@@ -522,10 +522,7 @@ void AreaEditor::draw_canvas() {
             }
             
             if(draw_dist) {
-                draw_line_dist(
-                    Point(move_closest_vertex->x, move_closest_vertex->y),
-                    other_point
-                );
+                draw_line_dist(v2p(move_closest_vertex), other_point);
             }
         }
         
@@ -552,10 +549,7 @@ void AreaEditor::draw_canvas() {
                 (e_ptr->vertexes[0]->y + e_ptr->vertexes[1]->y) / 2.0f
             );
             float angle =
-                get_angle(
-                    Point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y),
-                    Point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y)
-                );
+                get_angle(v2p(e_ptr->vertexes[1]), v2p(e_ptr->vertexes[0]));
             draw_debug_text(
                 al_map_rgb(192, 255, 192),
                 Point(
@@ -611,8 +605,7 @@ void AreaEditor::draw_canvas() {
                     selection_filter == SELECTION_FILTER_VERTEXES
                 );
             draw_filled_diamond(
-                Point(v_ptr->x, v_ptr->y),
-                3.0 / game.cam.zoom,
+                v2p(v_ptr), 3.0 / game.cam.zoom,
                 selected ?
                 al_map_rgba(
                     AREA_EDITOR::SELECTION_COLOR[0],
@@ -635,7 +628,7 @@ void AreaEditor::draw_canvas() {
             if(debug_vertex_idxs) {
                 draw_debug_text(
                     al_map_rgb(192, 192, 255),
-                    Point(v_ptr->x, v_ptr->y), i2s(v)
+                    v2p(v_ptr), i2s(v)
                 );
             }
         }
@@ -1558,20 +1551,10 @@ void AreaEditor::draw_canvas() {
             float l2r = 0;
             if(
                 line_segs_intersect(
-                    Point(
-                        e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y
-                    ),
-                    Point(
-                        e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y
-                    ),
-                    Point(
-                        cross_section_checkpoints[0].x,
-                        cross_section_checkpoints[0].y
-                    ),
-                    Point(
-                        cross_section_checkpoints[1].x,
-                        cross_section_checkpoints[1].y
-                    ),
+                    v2p(e_ptr->vertexes[0]),
+                    v2p(e_ptr->vertexes[1]),
+                    cross_section_checkpoints[0],
+                    cross_section_checkpoints[1],
                     &l1r, &l2r
                 )
             ) {

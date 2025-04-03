@@ -1552,10 +1552,8 @@ void GameplayState::draw_throw_preview() {
         float r = 0.0f;
         if(
             !line_segs_intersect(
-                cur_leader_ptr->pos,
-                throw_dest,
-                Point(e->vertexes[0]->x, e->vertexes[0]->y),
-                Point(e->vertexes[1]->x, e->vertexes[1]->y),
+                cur_leader_ptr->pos, throw_dest,
+                v2p(e->vertexes[0]), v2p(e->vertexes[1]),
                 &r, nullptr
             )
         ) {

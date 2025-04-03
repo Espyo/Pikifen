@@ -137,8 +137,7 @@ H_MOVE_RESULT Mob::get_movement_edge_intersections(
         if(
             !circle_intersects_line_seg(
                 new_pos, radius_to_use,
-                Point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y),
-                Point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y),
+                v2p(e_ptr->vertexes[0]), v2p(e_ptr->vertexes[1]),
                 nullptr, nullptr
             )
         ) {
@@ -345,10 +344,7 @@ H_MOVE_RESULT Mob::get_wall_slide_angle(
     
     float wall_normal;
     float wall_angle =
-        get_angle(
-            Point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y),
-            Point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y)
-        );
+        get_angle(v2p(e_ptr->vertexes[0]), v2p(e_ptr->vertexes[1]));
         
     if(wall_sector == 0) {
         wall_normal = normalize_angle(wall_angle + TAU / 4);

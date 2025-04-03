@@ -185,10 +185,7 @@ void Sector::get_texture_merge_sectors(Sector** s1, Sector** s2) const {
         
         if(valid) {
             neighbors[neighbor] +=
-                Distance(
-                    Point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y),
-                    Point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y)
-                );
+                Distance(v2p(e_ptr->vertexes[0]), v2p(e_ptr->vertexes[1]));
         }
     }
     
@@ -257,9 +254,9 @@ bool Sector::is_point_in_sector(const Point &p) const {
         if(
             is_point_in_triangle(
                 p,
-                Point(t_ptr->points[0]->x, t_ptr->points[0]->y),
-                Point(t_ptr->points[1]->x, t_ptr->points[1]->y),
-                Point(t_ptr->points[2]->x, t_ptr->points[2]->y),
+                v2p(t_ptr->points[0]),
+                v2p(t_ptr->points[1]),
+                v2p(t_ptr->points[2]),
                 false
             )
         ) {

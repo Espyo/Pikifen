@@ -992,7 +992,7 @@ void AreaEditor::finish_layout_moving() {
     
     //Find merge vertexes and edges to split, if any.
     for(auto &v : selected_vertexes) {
-        Point p(v->x, v->y);
+        Point p = v2p(v);
         
         vector<std::pair<Distance, Vertex*> > merge_vertexes =
             get_merge_vertexes(
@@ -1078,7 +1078,7 @@ void AreaEditor::finish_layout_moving() {
     //Let's find such edges.
     for(size_t v = 0; v < game.cur_area_data->vertexes.size(); v++) {
         Vertex* v_ptr = game.cur_area_data->vertexes[v];
-        Point p(v_ptr->x, v_ptr->y);
+        Point p = v2p(v_ptr);
         
         if(selected_vertexes.find(v_ptr) != selected_vertexes.end()) {
             continue;
@@ -1182,8 +1182,7 @@ void AreaEditor::finish_layout_moving() {
     
     //Merge vertexes and split edges now.
     for(auto v = edges_to_split.begin(); v != edges_to_split.end(); ++v) {
-        merges[v->first] =
-            split_edge(v->second, Point(v->first->x, v->first->y));
+        merges[v->first] = split_edge(v->second, v2p(v->first));
         //This split could've thrown off the edge pointer of a different
         //vertex to merge. Let's re-calculate.
         Edge* new_edge = game.cur_area_data->edges.back();
@@ -3325,12 +3324,7 @@ void AreaEditor::set_new_circle_sector_points() {
             
             if(
                 line_segs_intersect(
-                    Point(
-                        e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y
-                    ),
-                    Point(
-                        e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y
-                    ),
+                    v2p(e_ptr->vertexes[0]), v2p(e_ptr->vertexes[1]),
                     new_circle_sector_points[p], next,
                     nullptr, nullptr
                 )
@@ -3595,7 +3589,7 @@ void AreaEditor::start_vertex_move() {
     move_closest_vertex = nullptr;
     Distance move_closest_vertex_dist;
     for(auto const &v : selected_vertexes) {
-        Point p(v->x, v->y);
+        Point p = v2p(v);
         pre_move_vertex_coords[v] = p;
         
         Distance d(game.mouse_cursor.w_pos, p);
@@ -4041,8 +4035,7 @@ AreaEditor::LayoutDrawingNode::LayoutDrawingNode(
             on_edge_idx = game.cur_area_data->find_edge_idx(on_edge);
             snapped_spot =
                 get_closest_point_in_line_seg(
-                    Point(on_edge->vertexes[0]->x, on_edge->vertexes[0]->y),
-                    Point(on_edge->vertexes[1]->x, on_edge->vertexes[1]->y),
+                    v2p(on_edge->vertexes[0]), v2p(on_edge->vertexes[1]),
                     mouse_click
                 );
                 

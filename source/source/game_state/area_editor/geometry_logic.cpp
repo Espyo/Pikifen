@@ -157,8 +157,8 @@ void AreaEditor::check_drawing_line(const Point &pos) {
         //or the previous one, since this collinearity check doesn't
         //return true for line segments that touch in only one point.
         Edge* e_ptr = game.cur_area_data->edges[e];
-        Point ep1(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y);
-        Point ep2(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y);
+        Point ep1 = v2p(e_ptr->vertexes[0]);
+        Point ep2 = v2p(e_ptr->vertexes[1]);
         
         if(
             line_segs_are_collinear(prev_node->snapped_spot, pos, ep1, ep2)
@@ -205,8 +205,7 @@ void AreaEditor::check_drawing_line(const Point &pos) {
         if(
             line_segs_intersect(
                 prev_node->snapped_spot, pos,
-                Point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y),
-                Point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y),
+                v2p(e_ptr->vertexes[0]), v2p(e_ptr->vertexes[1]),
                 nullptr, nullptr
             )
         ) {
@@ -814,21 +813,17 @@ void AreaEditor::find_problems_intersecting_edge() {
         float r;
         EdgeIntersection* ei_ptr = &(*intersections.begin());
         line_segs_intersect(
-            Point(ei_ptr->e1->vertexes[0]->x, ei_ptr->e1->vertexes[0]->y),
-            Point(ei_ptr->e1->vertexes[1]->x, ei_ptr->e1->vertexes[1]->y),
-            Point(ei_ptr->e2->vertexes[0]->x, ei_ptr->e2->vertexes[0]->y),
-            Point(ei_ptr->e2->vertexes[1]->x, ei_ptr->e2->vertexes[1]->y),
+            v2p(ei_ptr->e1->vertexes[0]), v2p(ei_ptr->e1->vertexes[1]),
+            v2p(ei_ptr->e2->vertexes[0]), v2p(ei_ptr->e2->vertexes[1]),
             &r, nullptr
         );
         
         float a =
             get_angle(
-                Point(ei_ptr->e1->vertexes[0]->x, ei_ptr->e1->vertexes[0]->y),
-                Point(ei_ptr->e1->vertexes[1]->x, ei_ptr->e1->vertexes[1]->y)
+                v2p(ei_ptr->e1->vertexes[0]), v2p(ei_ptr->e1->vertexes[1])
             );
         Distance d(
-            Point(ei_ptr->e1->vertexes[0]->x, ei_ptr->e1->vertexes[0]->y),
-            Point(ei_ptr->e1->vertexes[1]->x, ei_ptr->e1->vertexes[1]->y)
+            v2p(ei_ptr->e1->vertexes[0]), v2p(ei_ptr->e1->vertexes[1])
         );
         
         problem_edge_intersection = *intersections.begin();
@@ -970,12 +965,7 @@ void AreaEditor::find_problems_mob_inside_walls() {
                 circle_intersects_line_seg(
                     m_ptr->pos,
                     m_ptr->type->radius,
-                    Point(
-                        e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y
-                    ),
-                    Point(
-                        e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y
-                    ),
+                    v2p(e_ptr->vertexes[0]), v2p(e_ptr->vertexes[1]),
                     nullptr, nullptr
                 )
             ) {
@@ -1481,11 +1471,7 @@ Edge* AreaEditor::get_closest_edge_to_angle(
         Edge* e_ptr = v_ptr->edges[e];
         Vertex* other_v_ptr = e_ptr->get_other_vertex(v_ptr);
         
-        float a =
-            get_angle(
-                Point(v_ptr->x, v_ptr->y),
-                Point(other_v_ptr->x, other_v_ptr->y)
-            );
+        float a = get_angle(v2p(v_ptr), v2p(other_v_ptr));
         float diff = get_angle_cw_diff(angle, a);
         
         if(
@@ -1621,16 +1607,12 @@ Edge* AreaEditor::get_correct_post_split_edge(
     float score1 = 0;
     float score2 = 0;
     get_closest_point_in_line_seg(
-        Point(e1_ptr->vertexes[0]->x, e1_ptr->vertexes[0]->y),
-        Point(e1_ptr->vertexes[1]->x, e1_ptr->vertexes[1]->y),
-        Point(v_ptr->x, v_ptr->y),
-        &score1
+        v2p(e1_ptr->vertexes[0]),v2p(e1_ptr->vertexes[1]),
+        v2p(v_ptr), &score1
     );
     get_closest_point_in_line_seg(
-        Point(e2_ptr->vertexes[0]->x, e2_ptr->vertexes[0]->y),
-        Point(e2_ptr->vertexes[1]->x, e2_ptr->vertexes[1]->y),
-        Point(v_ptr->x, v_ptr->y),
-        &score2
+        v2p(e2_ptr->vertexes[0]), v2p(e2_ptr->vertexes[1]),
+        v2p(v_ptr), &score2
     );
     if(fabs(score1 - 0.5) < fabs(score2 - 0.5)) {
         return e1_ptr;
@@ -1714,12 +1696,7 @@ Edge* AreaEditor::get_edge_under_point(
         if(
             circle_intersects_line_seg(
                 p, 8 / game.cam.zoom,
-                Point(
-                    e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y
-                ),
-                Point(
-                    e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y
-                )
+                v2p(e_ptr->vertexes[0]), v2p(e_ptr->vertexes[1])
             )
         ) {
             return e_ptr;
@@ -1745,10 +1722,8 @@ vector<EdgeIntersection> AreaEditor::get_intersecting_edges() const {
             if(e1_ptr->has_neighbor(e2_ptr)) continue;
             if(
                 line_segs_intersect(
-                    Point(e1_ptr->vertexes[0]->x, e1_ptr->vertexes[0]->y),
-                    Point(e1_ptr->vertexes[1]->x, e1_ptr->vertexes[1]->y),
-                    Point(e2_ptr->vertexes[0]->x, e2_ptr->vertexes[0]->y),
-                    Point(e2_ptr->vertexes[1]->x, e2_ptr->vertexes[1]->y),
+                    v2p(e1_ptr->vertexes[0]), v2p(e1_ptr->vertexes[1]),
+                    v2p(e2_ptr->vertexes[0]), v2p(e2_ptr->vertexes[1]),
                     nullptr, nullptr
                 )
             ) {
@@ -2598,15 +2573,14 @@ Point AreaEditor::snap_point(const Point &p, bool ignore_selected) {
             
             Point edge_p =
                 get_closest_point_in_line_seg(
-                    Point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y),
-                    Point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y),
+                    v2p(e_ptr->vertexes[0]), v2p(e_ptr->vertexes[1]),
                     final_point, &r
                 );
                 
             if(r < 0.0f) {
-                edge_p = Point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y);
+                edge_p = v2p(e_ptr->vertexes[0]);
             } else if(r > 1.0f) {
-                edge_p = Point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y);
+                edge_p = v2p(e_ptr->vertexes[1]);
             }
             
             Distance d(final_point, edge_p);
@@ -2648,8 +2622,7 @@ Point AreaEditor::snap_point(const Point &p, bool ignore_selected) {
 Vertex* AreaEditor::split_edge(Edge* e_ptr, const Point &where) {
     Point new_v_pos =
         get_closest_point_in_line_seg(
-            Point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y),
-            Point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y),
+            v2p(e_ptr->vertexes[0]), v2p(e_ptr->vertexes[1]),
             where
         );
         
@@ -2804,8 +2777,8 @@ void AreaEditor::update_inner_sectors_outer_sector(
         Vertex* v1_ptr = e_ptr->vertexes[0];
         Vertex* v2_ptr = e_ptr->vertexes[1];
         if(
-            new_outer->is_point_in_sector(Point(v1_ptr->x, v1_ptr->y)) &&
-            new_outer->is_point_in_sector(Point(v2_ptr->x, v2_ptr->y)) &&
+            new_outer->is_point_in_sector(v2p(v1_ptr)) &&
+            new_outer->is_point_in_sector(v2p(v2_ptr)) &&
             new_outer->is_point_in_sector(
                 Point(
                     (v1_ptr->x + v2_ptr->x) / 2.0f,

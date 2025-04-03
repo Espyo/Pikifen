@@ -772,10 +772,7 @@ void update_offset_effect_caches (
             caches[e].first_end_vertex_idx = 1;
         }
         float edge_process_angle =
-            get_angle(
-                Point(ends_to_process[0]->x, ends_to_process[0]->y),
-                Point(ends_to_process[1]->x, ends_to_process[1]->y)
-            );
+            get_angle(v2p(ends_to_process[0]), v2p(ends_to_process[1]));
             
         for(unsigned char end = 0; end < 2; end++) {
             //For each end of the effect...

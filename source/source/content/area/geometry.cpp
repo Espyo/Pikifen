@@ -188,9 +188,8 @@ void Polygon::cut() {
                 float r;
                 if(
                     line_segs_intersect(
-                        Point(v1->x, v1->y), Point(v2->x, v2->y),
-                        Point(start->x, start->y),
-                        Point(rightmost->x, start->y),
+                        v2p(v1), v2p(v2),
+                        v2p(start), Point(rightmost->x, start->y),
                         nullptr, &r
                     )
                 ) {
@@ -240,10 +239,9 @@ void Polygon::cut() {
                 Vertex* v_ptr = vertexes[v];
                 if(
                     is_point_in_triangle(
-                        Point(v_ptr->x, v_ptr->y),
-                        Point(start->x, start->y),
+                        v2p(v_ptr), v2p(start),
                         Point(start->x + closest_edge_r * ray_width, start->y),
-                        Point(vertex_to_compare->x, vertex_to_compare->y),
+                        v2p(vertex_to_compare),
                         true) &&
                     v_ptr != vertex_to_compare
                 ) {
@@ -257,11 +255,7 @@ void Polygon::cut() {
             
             for(size_t v = 0; v < inside_triangle.size(); v++) {
                 Vertex* v_ptr = inside_triangle[v];
-                float angle =
-                    get_angle(
-                        Point(start->x, start->y),
-                        Point(v_ptr->x, v_ptr->y)
-                    );
+                float angle = get_angle(v2p(start), v2p(v_ptr));
                 if(fabs(angle) < closest_angle) {
                     closest_angle = fabs(angle);
                     best_vertex = v_ptr;
@@ -294,10 +288,7 @@ void Polygon::cut() {
             insertion_vertex_idx = bridges.back();
             float new_bridge_angle =
                 get_angle_cw_diff(
-                    get_angle(
-                        Point(best_vertex->x, best_vertex->y),
-                        Point(start->x, start->y)
-                    ),
+                    get_angle(v2p(best_vertex), v2p(start)),
                     0.0f
                 );
                 
@@ -306,10 +297,7 @@ void Polygon::cut() {
                 Vertex* nv_ptr = get_next_in_vector(vertexes, bridges[v]);
                 float a =
                     get_angle_cw_diff(
-                        get_angle(
-                            Point(v_ptr->x, v_ptr->y),
-                            Point(nv_ptr->x, nv_ptr->y)
-                        ),
+                        get_angle(v2p(v_ptr), v2p(nv_ptr)),
                         0.0f
                     );
                 if(a < new_bridge_angle) {
@@ -437,7 +425,7 @@ bool Polygon::insert_child(Polygon* p) {
     
     //Check if it can be inserted in the polygon proper.
     if(!vertexes.empty()) {
-        if(is_point_inside(Point(p->vertexes[0]->x, p->vertexes[0]->y))) {
+        if(is_point_inside(v2p(p->vertexes[0]))) {
             children.push_back(p);
             return true;
         }
@@ -463,7 +451,7 @@ bool Polygon::insert_child(Polygon* p) {
 bool Polygon::is_point_inside(const Point &p) const {
     //http://paulbourke.net/geometry/polygonmesh/index.html#insidepoly
     
-    Point p1 = Point(vertexes[0]->x, vertexes[0]->y);
+    Point p1 = v2p(vertexes[0]);
     Point p2;
     size_t nr_crossings = 0;
     
@@ -568,10 +556,7 @@ void find_trace_edge(
         //Find this edge's angle,
         //between our vertex and this edge's other vertex.
         float e_angle =
-            get_angle(
-                Point(v_ptr->x, v_ptr->y),
-                Point(other_v_ptr->x, other_v_ptr->y)
-            );
+            get_angle(v2p(v_ptr), v2p(other_v_ptr));
             
         float angle_cw_dif =
             get_angle_cw_diff(prev_e_angle + TAU / 2.0f, e_angle);
@@ -648,9 +633,8 @@ vector<std::pair<Distance, Vertex*> > get_merge_vertexes(
     for(size_t v = 0; v < all_vertexes.size(); v++) {
         Vertex* v_ptr = all_vertexes[v];
         
-        Distance d(pos, Point(v_ptr->x, v_ptr->y));
+        Distance d(pos, v2p(v_ptr));
         if(d <= merge_radius) {
-        
             result.push_back(std::make_pair(d, v_ptr));
         }
     }
@@ -769,11 +753,7 @@ bool get_polys_is_outer(
         }
         
         Vertex* e_other_v_ptr = e_ptr->get_other_vertex(v_ptr);
-        float edge_angle =
-            get_angle(
-                Point(v_ptr->x, v_ptr->y),
-                Point(e_other_v_ptr->x, e_other_v_ptr->y)
-            );
+        float edge_angle = get_angle(v2p(v_ptr), v2p(e_other_v_ptr));
         float edge_cw_angle = get_angle_cw_diff(0.0f, edge_angle);
         if(!closest_edge_cw || edge_cw_angle < closest_edge_cw_angle) {
             closest_edge_cw = e_ptr;
@@ -877,17 +857,8 @@ bool is_vertex_convex(const vector<Vertex*> &vec, size_t idx) {
     const Vertex* cur_v = vec[idx];
     const Vertex* prev_v = get_prev_in_vector(vec, idx);
     const Vertex* next_v = get_next_in_vector(vec, idx);
-    float angle_prev =
-        get_angle(
-            Point(cur_v->x, cur_v->y),
-            Point(prev_v->x, prev_v->y)
-        );
-    float angle_next =
-        get_angle(
-            Point(cur_v->x, cur_v->y),
-            Point(next_v->x, next_v->y)
-        );
-        
+    float angle_prev = get_angle(v2p(cur_v), v2p(prev_v));
+    float angle_next = get_angle(v2p(cur_v), v2p(next_v));
     return get_angle_cw_diff(angle_prev, angle_next) < TAU / 2;
 }
 
@@ -915,11 +886,7 @@ bool is_vertex_ear(
         if(v_to_check == v || v_to_check == pv || v_to_check == nv) continue;
         if(
             is_point_in_triangle(
-                Point(v_to_check->x, v_to_check->y),
-                Point(pv->x, pv->y),
-                Point(v->x, v->y),
-                Point(nv->x, nv->y),
-                true
+                v2p(v_to_check), v2p(pv), v2p(v), v2p(nv), true
             )
         ) return false;
     }
