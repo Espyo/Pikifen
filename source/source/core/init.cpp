@@ -931,7 +931,7 @@ void init_misc() {
         ParticleManager(game.options.advanced.max_particles);
         
     game.options.advanced.zoom_mid_level =
-        clamp(
+        std::clamp(
             game.options.advanced.zoom_mid_level,
             game.config.zoom_min_level,
             game.config.zoom_max_level

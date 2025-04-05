@@ -2663,9 +2663,9 @@ void PauseMenu::pan_radar(Point amount) {
     Point delta = amount / radar_cam.zoom;
     radar_cam.pos += delta;
     radar_cam.pos.x =
-        clamp(radar_cam.pos.x, radar_min_coords.x, radar_max_coords.x);
+        std::clamp(radar_cam.pos.x, radar_min_coords.x, radar_max_coords.x);
     radar_cam.pos.y =
-        clamp(radar_cam.pos.y, radar_min_coords.y, radar_max_coords.y);
+        std::clamp(radar_cam.pos.y, radar_min_coords.y, radar_max_coords.y);
 }
 
 
@@ -2807,7 +2807,7 @@ void PauseMenu::tick(float delta_t) {
         1.0f / GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME;
     const float diff =
         closing ? -bg_alpha_mult_speed : bg_alpha_mult_speed;
-    bg_alpha_mult = clamp(bg_alpha_mult + diff * delta_t, 0.0f, 1.0f);
+    bg_alpha_mult = std::clamp(bg_alpha_mult + diff * delta_t, 0.0f, 1.0f);
     
     //Tick the menu opening and closing.
     if(opening_lockout_timer > 0.0f) {
@@ -2903,7 +2903,7 @@ void PauseMenu::zoom_radar(float amount) {
     float delta = amount * radar_cam.zoom;
     radar_cam.zoom += delta;
     radar_cam.zoom =
-        clamp(
+        std::clamp(
             radar_cam.zoom,
             PAUSE_MENU::RADAR_MIN_ZOOM, PAUSE_MENU::RADAR_MAX_ZOOM
         );

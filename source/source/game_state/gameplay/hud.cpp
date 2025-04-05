@@ -1880,7 +1880,7 @@ void Hud::tick(float delta_t) {
         standby_items_opacity +=
             HUD::UNNECESSARY_ITEMS_FADE_IN_SPEED * delta_t;
     }
-    standby_items_opacity = clamp(0.0f, standby_items_opacity, 1.0f);
+    standby_items_opacity = std::clamp(standby_items_opacity, 0.0f, 1.0f);
     
     //Update the spray items opacity.
     size_t total_sprays = 0;
@@ -1901,7 +1901,7 @@ void Hud::tick(float delta_t) {
         spray_items_opacity +=
             HUD::UNNECESSARY_ITEMS_FADE_IN_SPEED * delta_t;
     }
-    spray_items_opacity = clamp(0.0f, spray_items_opacity, 1.0f);
+    spray_items_opacity = std::clamp(spray_items_opacity, 0.0f, 1.0f);
     
     //Tick the GUI items proper.
     gui.tick(game.delta_t);

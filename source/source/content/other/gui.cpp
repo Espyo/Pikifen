@@ -1281,7 +1281,7 @@ void ListGuiItem::def_child_selected_code(const GuiItem* child) {
         return;
     }
     target_offset =
-        clamp(
+        std::clamp(
             child->ratio_center.y - 0.5f,
             0.0f,
             child_bottom - 1.0f
@@ -1391,7 +1391,7 @@ void ListGuiItem::def_event_code(const ALLEGRO_EVENT  &ev) {
             return;
         }
         target_offset =
-            clamp(
+            std::clamp(
                 target_offset + (-ev.mouse.dz) * 0.2f,
                 0.0f,
                 child_bottom - 1.0f
@@ -1409,9 +1409,9 @@ void ListGuiItem::def_tick_code(float delta_t) {
         target_offset = 0.0f;
         offset = 0.0f;
     } else {
-        target_offset = clamp(target_offset, 0.0f, child_bottom - 1.0f);
+        target_offset = std::clamp(target_offset, 0.0f, child_bottom - 1.0f);
         offset += (target_offset - offset) * (10.0f * delta_t);
-        offset = clamp(offset, 0.0f, child_bottom - 1.0f);
+        offset = std::clamp(offset, 0.0f, child_bottom - 1.0f);
         if(offset <= 0.01f) offset = 0.0f;
         if(child_bottom > 1.0f) {
             if(child_bottom - offset - 1.0f <= 0.01f) {
@@ -1671,7 +1671,7 @@ void ScrollGuiItem::def_event_code(const ALLEGRO_EVENT  &ev) {
         float y1 = (c.y - s.y / 2.0f) + bar_h / 2.0f;
         float y2 = (c.y + s.y / 2.0f) - bar_h / 2.0f;
         float click = (ev.mouse.y - y1) / (y2 - y1);
-        click = clamp(click, 0.0f, 1.0f);
+        click = std::clamp(click, 0.0f, 1.0f);
         
         list_item->target_offset = click * (list_bottom - 1.0f);
     }

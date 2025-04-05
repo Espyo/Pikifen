@@ -24,31 +24,14 @@
  */
 void AnalogStickCleaner::clean(float coords[2], const Settings &settings) {
     //First, sanitize the function arguments.
-    coords[0] = clamp(coords[0], -1.0f, 1.0f);
-    coords[1] = clamp(coords[1], -1.0f, 1.0f);
+    coords[0] = std::clamp(coords[0], -1.0f, 1.0f);
+    coords[1] = std::clamp(coords[1], -1.0f, 1.0f);
     
     //Step 1: Process radial deadzones.
     processRadialDeadzones(coords, settings);
     
     //Step 2: Process angular deadzones.
     processAngularDeadzones(coords, settings);
-}
-
-
-/**
- * @brief Limits the given number to the given range, inclusive.
- *
- * @param number Number to clamp.
- * @param lowerLimit Minimum value it can have, inclusive.
- * @param higherLimit Maximum value it can have, inclusive.
- * @return The clamped number.
- */
-float AnalogStickCleaner::clamp(
-    float value, float lowerLimit, float higherLimit
-) {
-    value = std::max(value, lowerLimit);
-    value = std::min(value, higherLimit);
-    return value;
 }
 
 
@@ -103,7 +86,7 @@ float AnalogStickCleaner::interpolateAndClamp(
         outputStart +
         ((input - inputStart) / inputDiff) *
         (outputEnd - outputStart);
-    result = clamp(result, outputStart, outputEnd);
+    result = std::clamp(result, outputStart, outputEnd);
     return result;
 }
 

@@ -755,7 +755,7 @@ float get_wall_shadow_length(Edge* e_ptr) {
     float height_difference =
         fabs(e_ptr->sectors[0]->z - e_ptr->sectors[1]->z);
     return
-        clamp(
+        std::clamp(
             height_difference * GEOMETRY::SHADOW_AUTO_LENGTH_MULT,
             GEOMETRY::SHADOW_MIN_AUTO_LENGTH,
             GEOMETRY::SHADOW_MAX_AUTO_LENGTH

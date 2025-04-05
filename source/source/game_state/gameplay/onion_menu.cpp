@@ -817,7 +817,7 @@ void OnionMenu::tick(float delta_t) {
         1.0f / GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME;
     const float diff =
         closing ? -bg_alpha_mult_speed : bg_alpha_mult_speed;
-    bg_alpha_mult = clamp(bg_alpha_mult + diff * delta_t, 0.0f, 1.0f);
+    bg_alpha_mult = std::clamp(bg_alpha_mult + diff * delta_t, 0.0f, 1.0f);
     
     //Tick the menu closing.
     if(closing) {

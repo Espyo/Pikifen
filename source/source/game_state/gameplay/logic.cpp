@@ -130,7 +130,7 @@ void GameplayState::do_aesthetic_leader_logic(float delta_t) {
         cursor_height_diff_light =
             (leader_cursor_sector->z - cur_leader_ptr->z) * 0.001;
         cursor_height_diff_light =
-            clamp(cursor_height_diff_light, -0.1f, 0.1f);
+            std::clamp(cursor_height_diff_light, -0.1f, 0.1f);
     }
     
 }

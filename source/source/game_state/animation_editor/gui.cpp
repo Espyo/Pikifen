@@ -852,11 +852,11 @@ void AnimationEditor::process_gui_panel_animation_data() {
         "", WIDGET_EXPLANATION_DRAG
     );
     loop_frame =
-        clamp(
+        std::clamp(
             loop_frame, 1,
             cur_anim_i.cur_anim->frames.empty() ?
             1 :
-            cur_anim_i.cur_anim->frames.size()
+            (int) cur_anim_i.cur_anim->frames.size()
         );
     cur_anim_i.cur_anim->loop_frame = loop_frame - 1;
     

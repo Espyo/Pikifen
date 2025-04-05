@@ -145,7 +145,7 @@ void Animation::get_frame_and_time(
         }
     }
     
-    *frame_idx = clamp(f, 0, frames.size() - 1);
+    *frame_idx = std::clamp(f, (size_t) 0, frames.size() - 1);
     *frame_time = t - prev_duration_so_far;
 }
 
@@ -1228,10 +1228,10 @@ void Sprite::set_bitmap(
     bmp_name = new_bmp_name;
     bmp_pos = new_bmp_pos;
     bmp_size = new_bmp_size;
-    bmp_pos.x = clamp(new_bmp_pos.x, 0, parent_size.x - 1);
-    bmp_pos.y = clamp(new_bmp_pos.y, 0, parent_size.y - 1);
-    bmp_size.x = clamp(new_bmp_size.x, 0, parent_size.x - bmp_pos.x);
-    bmp_size.y = clamp(new_bmp_size.y, 0, parent_size.y - bmp_pos.y);
+    bmp_pos.x = std::clamp(new_bmp_pos.x, 0.0f, parent_size.x - 1);
+    bmp_pos.y = std::clamp(new_bmp_pos.y, 0.0f, parent_size.y - 1);
+    bmp_size.x = std::clamp(new_bmp_size.x, 0.0f, parent_size.x - bmp_pos.x);
+    bmp_size.y = std::clamp(new_bmp_size.y, 0.0f, parent_size.y - bmp_pos.y);
     
     if(parent_bmp) {
         bitmap =

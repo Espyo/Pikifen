@@ -101,7 +101,7 @@ void Enemy::finish_dying_class_specifics() {
     //Soul.
     Particle par(
         pos, LARGE_FLOAT,
-        clamp(
+        std::clamp(
             radius * 2 * ENEMY::SPIRIT_SIZE_MULT,
             ENEMY::SPIRIT_MIN_SIZE, ENEMY::SPIRIT_MAX_SIZE
         ),

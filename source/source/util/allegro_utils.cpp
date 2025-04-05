@@ -100,9 +100,9 @@ ALLEGRO_COLOR change_alpha(const ALLEGRO_COLOR &c, unsigned char a) {
  */
 ALLEGRO_COLOR change_color_lighting(const ALLEGRO_COLOR &c, float l) {
     ALLEGRO_COLOR c2;
-    c2.r = clamp(c.r + l, 0.0f, 1.0f);
-    c2.g = clamp(c.g + l, 0.0f, 1.0f);
-    c2.b = clamp(c.b + l, 0.0f, 1.0f);
+    c2.r = std::clamp(c.r + l, 0.0f, 1.0f);
+    c2.g = std::clamp(c.g + l, 0.0f, 1.0f);
+    c2.b = std::clamp(c.b + l, 0.0f, 1.0f);
     c2.a = c.a;
     return c2;
 }

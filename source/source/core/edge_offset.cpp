@@ -478,7 +478,7 @@ void get_edge_offset_intersection(
     ) {
         //Clamp r to prevent long, close edges from
         //creating jagged effects outside the edge.
-        r = clamp(r, 0.0f, 1.0f);
+        r = std::clamp(r, 0.0f, 1.0f);
         Point p(
             effect1_p0.x + (effect1_p1.x - effect1_p0.x) * r,
             effect1_p0.y + (effect1_p1.y - effect1_p0.y) * r

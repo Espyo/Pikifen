@@ -126,7 +126,6 @@ private:
 
     //--- Function declarations ---
     
-    static float clamp(float value, float lowerLimit, float higherLimit);
     static float getSnapDirDeadzone(
         int snapDirIdx, const Settings &settings
     );

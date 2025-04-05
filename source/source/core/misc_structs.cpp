@@ -982,7 +982,7 @@ void Notification::tick(float delta_t) {
     } else {
         visibility -= NOTIFICATION::FADE_SPEED * delta_t;
     }
-    visibility = clamp(visibility, 0.0f, 1.0f);
+    visibility = std::clamp(visibility, 0.0f, 1.0f);
 }
 
 

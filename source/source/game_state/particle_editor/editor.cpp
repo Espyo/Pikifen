@@ -656,7 +656,7 @@ void ParticleEditor::zoom_in_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
     game.cam.target_zoom =
-        clamp(
+        std::clamp(
             game.cam.target_zoom +
             game.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
             zoom_min_level, zoom_max_level
@@ -673,7 +673,7 @@ void ParticleEditor::zoom_out_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
     game.cam.target_zoom =
-        clamp(
+        std::clamp(
             game.cam.target_zoom -
             game.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
             zoom_min_level, zoom_max_level

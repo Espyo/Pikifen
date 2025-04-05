@@ -67,7 +67,6 @@ enum EASING_METHOD {
 //Returns the sign (1 or -1) of a number.
 #define sign(n) (((n) >= 0) ? 1 : -1)
 
-float clamp(float number, float minimum, float maximum);
 float ease(const EASING_METHOD method, float n);
 uint32_t hash_nr(unsigned int input);
 uint32_t hash_nr2(unsigned int input1, unsigned int input2);

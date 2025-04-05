@@ -706,7 +706,7 @@ void MobType::load_from_data_node(
         }
         
         new_sound.config.gain = volume_float / 100.0f;
-        new_sound.config.gain = clamp(new_sound.config.gain, 0.0f, 1.0f);
+        new_sound.config.gain = std::clamp(new_sound.config.gain, 0.0f, 1.0f);
         
         new_sound.config.speed = speed_float / 100.0f;
         new_sound.config.speed = std::max(0.0f, new_sound.config.speed);

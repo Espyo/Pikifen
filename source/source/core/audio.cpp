@@ -354,7 +354,7 @@ bool AudioManager::emit(size_t source_id) {
                 source_ptr->config.gain_deviation
             );
         playback_ptr->base_gain =
-            clamp(playback_ptr->base_gain, 0.0f, 1.0f);
+            std::clamp(playback_ptr->base_gain, 0.0f, 1.0f);
     }
     
     //Play.
@@ -1112,16 +1112,16 @@ void AudioManager::update_playback_gain_and_pan(size_t playback_idx) {
     SoundPlayback* playback_ptr = &playbacks[playback_idx];
     if(playback_ptr->state == SOUND_PLAYBACK_STATE_DESTROYED) return;
     
-    playback_ptr->gain = clamp(playback_ptr->gain, 0.0f, 1.0f);
+    playback_ptr->gain = std::clamp(playback_ptr->gain, 0.0f, 1.0f);
     float final_gain = playback_ptr->gain * playback_ptr->state_gain_mult;
     final_gain *= playback_ptr->base_gain;
-    final_gain = clamp(final_gain, 0.0f, 1.0f);
+    final_gain = std::clamp(final_gain, 0.0f, 1.0f);
     al_set_sample_instance_gain(
         playback_ptr->allegro_sample_instance,
         final_gain
     );
     
-    playback_ptr->pan = clamp(playback_ptr->pan, -1.0f, 1.0f);
+    playback_ptr->pan = std::clamp(playback_ptr->pan, -1.0f, 1.0f);
     
     al_set_sample_instance_pan(
         playback_ptr->allegro_sample_instance,
@@ -1168,7 +1168,7 @@ void AudioManager::update_playback_target_gain_and_pan(size_t playback_idx) {
             AUDIO::PLAYBACK_RANGE_CLOSE, AUDIO::PLAYBACK_RANGE_FAR_GAIN,
             1.0f, 0.0f
         );
-    gain = clamp(gain, 0.0f, 1.0f);
+    gain = std::clamp(gain, 0.0f, 1.0f);
     playback_ptr->target_gain = gain;
     
     //Set the pan.
@@ -1178,7 +1178,7 @@ void AudioManager::update_playback_target_gain_and_pan(size_t playback_idx) {
             AUDIO::PLAYBACK_RANGE_CLOSE, AUDIO::PLAYBACK_RANGE_FAR_PAN,
             0.0f, 1.0f
         );
-    pan_abs = clamp(pan_abs, 0.0f, 1.0f);
+    pan_abs = std::clamp(pan_abs, 0.0f, 1.0f);
     float pan = delta.x > 0.0f ? pan_abs : -pan_abs;
     playback_ptr->target_pan = pan;
 }
@@ -1197,19 +1197,19 @@ void AudioManager::update_volumes(
     float master_volume, float gameplay_sound_volume, float music_volume,
     float ambiance_sound_volume, float ui_sound_volume
 ) {
-    master_volume = clamp(master_volume, 0.0f, 1.0f);
+    master_volume = std::clamp(master_volume, 0.0f, 1.0f);
     al_set_mixer_gain(master_mixer, master_volume);
     
-    gameplay_sound_volume = clamp(gameplay_sound_volume, 0.0f, 1.0f);
+    gameplay_sound_volume = std::clamp(gameplay_sound_volume, 0.0f, 1.0f);
     al_set_mixer_gain(gameplay_sound_mixer, gameplay_sound_volume);
     
-    music_volume = clamp(music_volume, 0.0f, 1.0f);
+    music_volume = std::clamp(music_volume, 0.0f, 1.0f);
     al_set_mixer_gain(music_mixer, music_volume);
     
-    ambiance_sound_volume = clamp(ambiance_sound_volume, 0.0f, 1.0f);
+    ambiance_sound_volume = std::clamp(ambiance_sound_volume, 0.0f, 1.0f);
     al_set_mixer_gain(ambiance_sound_mixer, ambiance_sound_volume);
     
-    ui_sound_volume = clamp(ui_sound_volume, 0.0f, 1.0f);
+    ui_sound_volume = std::clamp(ui_sound_volume, 0.0f, 1.0f);
     al_set_mixer_gain(ui_sound_mixer, ui_sound_volume);
 }
 

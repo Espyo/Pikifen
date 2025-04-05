@@ -362,7 +362,7 @@ ALLEGRO_BITMAP* GameplayState::generate_fog_bitmap(
             cur_ratio =
                 interpolate_number(cur_ratio, near_ratio, 1.0f, 0.0f, 1.0f);
             //Finally, clamp the value and get the alpha.
-            cur_ratio = clamp(cur_ratio, 0.0f, 1.0f);
+            cur_ratio = std::clamp(cur_ratio, 0.0f, 1.0f);
             unsigned char cur_a = 255 * cur_ratio;
             
             //Save the memory location of the opposite row's pixels.

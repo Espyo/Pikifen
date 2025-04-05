@@ -16,19 +16,6 @@
 
 
 /**
- * @brief Limits the given number to the given range, inclusive.
- *
- * @param number Number to clamp.
- * @param minimum Minimum value it can have, inclusive.
- * @param maximum Maximum value it can have, inclusive.
- * @return The clamped number.
- */
-float clamp(float number, float minimum, float maximum) {
-    return std::min(maximum, std::max(minimum, number));
-}
-
-
-/**
  * @brief Eases a number [0, 1] in accordance to a non-linear
  * interpolation method.
  *

@@ -353,7 +353,7 @@ float AnimationEditor::get_cursor_timeline_time() {
     float anim_x1 = canvas_tl.x + ANIM_EDITOR::TIMELINE_PADDING;
     float anim_w = (canvas_br.x - ANIM_EDITOR::TIMELINE_PADDING) - anim_x1;
     float mouse_x = game.mouse_cursor.s_pos.x - anim_x1;
-    mouse_x = clamp(mouse_x, 0.0f, anim_w);
+    mouse_x = std::clamp(mouse_x, 0.0f, anim_w);
     return cur_anim_i.cur_anim->get_duration() * (mouse_x / anim_w);
 }
 
@@ -1002,7 +1002,7 @@ void AnimationEditor::zoom_in_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
     game.cam.target_zoom =
-        clamp(
+        std::clamp(
             game.cam.target_zoom +
             game.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
             zoom_min_level, zoom_max_level
@@ -1019,7 +1019,7 @@ void AnimationEditor::zoom_out_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
     game.cam.target_zoom =
-        clamp(
+        std::clamp(
             game.cam.target_zoom -
             game.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
             zoom_min_level, zoom_max_level

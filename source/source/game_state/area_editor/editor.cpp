@@ -2910,7 +2910,7 @@ void AreaEditor::zoom_in_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
     game.cam.target_zoom =
-        clamp(
+        std::clamp(
             game.cam.target_zoom +
             game.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
             zoom_min_level, zoom_max_level
@@ -2927,7 +2927,7 @@ void AreaEditor::zoom_out_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
     game.cam.target_zoom =
-        clamp(
+        std::clamp(
             game.cam.target_zoom -
             game.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
             zoom_min_level, zoom_max_level
@@ -3295,8 +3295,8 @@ void AreaEditor::set_new_circle_sector_points() {
         n_points = round(TAU / angle_dif);
     }
     n_points =
-        clamp(
-            n_points,
+        std::clamp(
+            (unsigned char) n_points,
             AREA_EDITOR::MIN_CIRCLE_SECTOR_POINTS,
             AREA_EDITOR::MAX_CIRCLE_SECTOR_POINTS
         );

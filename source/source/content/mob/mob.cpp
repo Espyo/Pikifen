@@ -2310,13 +2310,13 @@ void Mob::get_sprite_bitmap_effects(
             }
             
             info->glow_color.r =
-                clamp(info->glow_color.r + new_glow.r, 0.0f, 1.0f);
+                std::clamp(info->glow_color.r + new_glow.r, 0.0f, 1.0f);
             info->glow_color.g =
-                clamp(info->glow_color.g + new_glow.g, 0.0f, 1.0f);
+                std::clamp(info->glow_color.g + new_glow.g, 0.0f, 1.0f);
             info->glow_color.b =
-                clamp(info->glow_color.b + new_glow.b, 0.0f, 1.0f);
+                std::clamp(info->glow_color.b + new_glow.b, 0.0f, 1.0f);
             info->glow_color.a =
-                clamp(info->glow_color.a + new_glow.a, 0.0f, 1.0f);
+                std::clamp(info->glow_color.a + new_glow.a, 0.0f, 1.0f);
                 
             info->scale *= new_scale;
             info->translation += new_offset;
@@ -3107,7 +3107,7 @@ void Mob::set_health(bool add, bool ratio, float amount) {
     float base_nr = 0;
     if(add) base_nr = health;
     
-    health = clamp(base_nr + change, 0.0f, max_health);
+    health = std::clamp(base_nr + change, 0.0f, max_health);
 }
 
 
@@ -3592,7 +3592,7 @@ void Mob::tick_animation(float delta_t) {
     if(mob_speed_anim_baseline != 0.0f) {
         float mob_speed_mult = chase_info.cur_speed / mob_speed_anim_baseline;
         mob_speed_mult =
-            clamp(
+            std::clamp(
                 mob_speed_mult,
                 MOB::MOB_SPEED_ANIM_MIN_MULT, MOB::MOB_SPEED_ANIM_MAX_MULT
             );

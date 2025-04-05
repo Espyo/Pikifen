@@ -410,7 +410,7 @@ void Pikmin::handle_status_effect_loss(StatusType* sta_type) {
 bool Pikmin::increase_maturity(int amount) {
     int old_maturity = maturity;
     int new_maturity = maturity + amount;
-    maturity = clamp(new_maturity, 0, N_MATURITIES - 1);
+    maturity = std::clamp(new_maturity, 0, (int) (N_MATURITIES - 1));
     
     if(maturity > old_maturity) {
         game.statistics.pikmin_blooms++;
@@ -490,7 +490,7 @@ void Pikmin::read_script_vars(const ScriptVarReader &svr) {
     bool follow_link_var;
     
     if(svr.get("maturity", maturity_var)) {
-        maturity = clamp(maturity_var, 0, N_MATURITIES - 1);
+        maturity = std::clamp(maturity_var, 0, (int) (N_MATURITIES - 1));
     }
     if(svr.get("sprout", sprout_var)) {
         if(sprout_var) {

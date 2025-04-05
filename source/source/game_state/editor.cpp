@@ -3215,7 +3215,7 @@ void Editor::zoom_with_cursor(float new_zoom) {
     Point old_mouse_pos = game.mouse_cursor.w_pos;
     
     //Do the zoom.
-    game.cam.set_zoom(clamp(new_zoom, zoom_min_level, zoom_max_level));
+    game.cam.set_zoom(std::clamp(new_zoom, zoom_min_level, zoom_max_level));
     update_transformations();
     
     //Figure out where the mouse will be after the zoom.

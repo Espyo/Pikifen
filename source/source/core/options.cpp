@@ -261,8 +261,8 @@ void Options::load_from_data_node(DataNode* file) {
             advanced.joystick_min_deadzone -= 0.1;
             advanced.joystick_max_deadzone += 0.1;
         }
-        advanced.joystick_min_deadzone = clamp(advanced.joystick_min_deadzone, 0.0f, 1.0f);
-        advanced.joystick_max_deadzone = clamp(advanced.joystick_max_deadzone, 0.0f, 1.0f);
+        advanced.joystick_min_deadzone = std::clamp(advanced.joystick_min_deadzone, 0.0f, 1.0f);
+        advanced.joystick_max_deadzone = std::clamp(advanced.joystick_max_deadzone, 0.0f, 1.0f);
     }
     
     //Animation editor.
@@ -322,11 +322,11 @@ void Options::load_from_data_node(DataNode* file) {
         ars.set("music_volume", audio.music_vol);
         ars.set("ui_sound_volume", audio.ui_sound_vol);
         
-        audio.ambiance_sound_vol = clamp(audio.ambiance_sound_vol, 0.0f, 1.0f);
-        audio.gameplay_sound_vol = clamp(audio.gameplay_sound_vol, 0.0f, 1.0f);
-        audio.master_vol = clamp(audio.master_vol, 0.0f, 1.0f);
-        audio.music_vol = clamp(audio.music_vol, 0.0f, 1.0f);
-        audio.ui_sound_vol = clamp(audio.ui_sound_vol, 0.0f, 1.0f);
+        audio.ambiance_sound_vol = std::clamp(audio.ambiance_sound_vol, 0.0f, 1.0f);
+        audio.gameplay_sound_vol = std::clamp(audio.gameplay_sound_vol, 0.0f, 1.0f);
+        audio.master_vol = std::clamp(audio.master_vol, 0.0f, 1.0f);
+        audio.music_vol = std::clamp(audio.music_vol, 0.0f, 1.0f);
+        audio.ui_sound_vol = std::clamp(audio.ui_sound_vol, 0.0f, 1.0f);
     }
     
     //Control binds.

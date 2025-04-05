@@ -87,7 +87,7 @@ void Pile::read_script_vars(const ScriptVarReader &svr) {
     
     if(svr.get("amount", amount_var)) {
         amount = amount_var;
-        amount = clamp(amount, 0, pil_type->max_amount);
+        amount = std::clamp(amount, (size_t) 0, pil_type->max_amount);
     }
     
     health = pil_type->health_per_resource * amount;
@@ -136,7 +136,7 @@ void Pile::tick_class_specifics(float delta_t) {
  * some other things.
  */
 void Pile::update() {
-    amount = clamp(amount, 0, pil_type->max_amount);
+    amount = std::clamp(amount, (size_t) 0, pil_type->max_amount);
     
     if(amount == pil_type->max_amount) {
         recharge_timer.stop();
@@ -150,7 +150,7 @@ void Pile::update() {
                 (n_groups - 1) *
                 ((float) amount / (float) pil_type->max_amount)
             );
-        anim_amount_nr = clamp(anim_amount_nr, 0, n_groups - 1);
+        anim_amount_nr = std::clamp(anim_amount_nr, (size_t) 0, n_groups - 1);
     }
     set_animation(
         get_animation_idx_from_base_and_group(

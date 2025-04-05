@@ -56,7 +56,7 @@ Bridge::Bridge(const Point &pos, BridgeType* type, float angle) :
  */
 bool Bridge::check_health() {
     //Figure out how many chunks should exist based on the bridge's completion.
-    float completion = 1.0f - clamp(health / max_health, 0.0f, 1.0f);
+    float completion = 1.0f - std::clamp(health / max_health, 0.0f, 1.0f);
     size_t expected_chunks = floor(total_chunks_needed * completion);
     
     if(chunks >= expected_chunks) {
