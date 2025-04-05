@@ -157,6 +157,13 @@ public:
     
     //What Allegro joystick maps to what number.
     map<ALLEGRO_JOYSTICK*, int> controller_numbers;
+
+    //Auto-repeater settings for leader auto-throws.
+    AutoRepeaterSettings auto_throw_settings{
+        LEADER::AUTO_THROW_SLOWEST_INTERVAL,
+        LEADER::AUTO_THROW_FASTEST_INTERVAL,
+        LEADER::AUTO_THROW_RAMP_TIME
+    };
     
     //Buffer with the liquid limit effect.
     ALLEGRO_BITMAP* liquid_limit_effect_buffer = nullptr;

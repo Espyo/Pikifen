@@ -536,8 +536,9 @@ void GuiItem::start_juice_animation(JUICE_TYPE type) {
 /**
  * @brief Constructs a new gui manager object.
  */
-GuiManager::GuiManager() {
-
+GuiManager::GuiManager() :
+    auto_repeater(&auto_repeater_settings) {
+    
     anim_timer =
         Timer(
     0.0f, [this] () {
@@ -838,15 +839,13 @@ void GuiManager::handle_allegro_event(const ALLEGRO_EVENT &ev) {
             selected_item->on_activate
         ) {
             selected_item->activate(Point(ev.mouse.x, ev.mouse.y));
-            auto_repeat_on = true;
-            auto_repeat_duration = 0.0f;
-            auto_repeat_next_activation = GUI::AUTO_REPEAT_MAX_INTERVAL;
+            auto_repeater.start();
         }
         mouse_moved = true;
     }
     
     if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP && ev.mouse.button == 1) {
-        auto_repeat_on = false;
+        auto_repeater.stop();
         mouse_moved = true;
     }
     
@@ -1018,11 +1017,9 @@ bool GuiManager::handle_player_action(const PlayerAction &action) {
             selected_item->is_responsive()
         ) {
             selected_item->activate(Point(LARGE_FLOAT));
-            auto_repeat_on = true;
-            auto_repeat_duration = 0.0f;
-            auto_repeat_next_activation = GUI::AUTO_REPEAT_MAX_INTERVAL;
+            auto_repeater.start();
         } else if(!is_down) {
-            auto_repeat_on = false;
+            auto_repeater.stop();
         }
         break;
         
@@ -1130,7 +1127,7 @@ void GuiManager::set_selected_item(GuiItem* item, bool silent) {
         return;
     }
     
-    auto_repeat_on = false;
+    auto_repeater.stop();
     
     if(selected_item) {
         selected_item->selected = false;
@@ -1207,29 +1204,13 @@ void GuiManager::tick(float delta_t) {
     }
     
     //Auto-repeat activations of the selected item, if applicable.
+    size_t auto_repeat_triggers = auto_repeater.tick(delta_t);
     if(
-        auto_repeat_on &&
         selected_item &&
-        selected_item->can_auto_repeat &&
-        selected_item->on_activate
+        selected_item->can_auto_repeat && selected_item->on_activate
     ) {
-        auto_repeat_duration += delta_t;
-        auto_repeat_next_activation -= delta_t;
-        
-        while(auto_repeat_next_activation <= 0.0f) {
+        for(size_t r = 0; r < auto_repeat_triggers; r++) {
             selected_item->activate(Point(LARGE_FLOAT));
-            auto_repeat_next_activation +=
-                clamp(
-                    interpolate_number(
-                        auto_repeat_duration,
-                        0,
-                        GUI::AUTO_REPEAT_RAMP_TIME,
-                        GUI::AUTO_REPEAT_MAX_INTERVAL,
-                        GUI::AUTO_REPEAT_MIN_INTERVAL
-                    ),
-                    GUI::AUTO_REPEAT_MIN_INTERVAL,
-                    GUI::AUTO_REPEAT_MAX_INTERVAL
-                );
         }
     }
 }

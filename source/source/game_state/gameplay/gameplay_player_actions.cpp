@@ -54,7 +54,7 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
                 if(
                     cur_leader_ptr &&
                     game.options.controls.auto_throw_mode == AUTO_THROW_MODE_TOGGLE &&
-                    cur_leader_ptr->auto_throwing
+                    cur_leader_ptr->auto_throw_repeater.time != LARGE_FLOAT
                 ) {
                     cur_leader_ptr->stop_auto_throwing();
                     done = true;

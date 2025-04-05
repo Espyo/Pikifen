@@ -604,14 +604,11 @@ private:
     //Was the last input given a mouse movement?
     bool last_input_was_mouse = false;
     
-    //Is the current item's activation auto-repeat mode on?
-    bool auto_repeat_on = false;
+    //Auto-repeater settings.
+    AutoRepeaterSettings auto_repeater_settings;
     
-    //How long the activation button has been held for.
-    float auto_repeat_duration = 0.0f;
-    
-    //How long until the item's next activation, from the button being held.
-    float auto_repeat_next_activation = 0.0f;
+    //Auto-repeat data for the current item's activation.
+    AutoRepeater auto_repeater;
     
     //Type of the current animation, if any.
     GUI_MANAGER_ANIM anim_type = GUI_MANAGER_ANIM_NONE;

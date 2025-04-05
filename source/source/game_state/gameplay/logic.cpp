@@ -272,7 +272,7 @@ void GameplayState::do_gameplay_leader_logic(float delta_t) {
     //Auto-throw stop notification.
     if(
         !notification_done &&
-        cur_leader_ptr->auto_throwing &&
+        cur_leader_ptr->auto_throw_repeater.time != LARGE_FLOAT &&
         game.options.controls.auto_throw_mode == AUTO_THROW_MODE_TOGGLE
     ) {
         notification.set_enabled(true);

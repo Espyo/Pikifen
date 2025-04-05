@@ -21,14 +21,14 @@
 
 namespace LEADER {
 
-//Auto-throw starts at this cooldown.
-const float AUTO_THROW_COOLDOWN_MAX_DURATION = 0.7f;
+//Auto-throw ends at this interval.
+const float AUTO_THROW_FASTEST_INTERVAL = THROW_COOLDOWN_DURATION * 1.2f;
 
-//Auto-throw ends at this cooldown.
-const float AUTO_THROW_COOLDOWN_MIN_DURATION = THROW_COOLDOWN_DURATION * 1.2f;
+//Auto-throw takes this long to go from slow to fast.
+const float AUTO_THROW_RAMP_TIME = 1.0f;
 
-//Auto-throw cooldown lowers at this speed.
-const float AUTO_THROW_COOLDOWN_SPEED = 0.3f;
+//Auto-throw starts at this interval.
+const float AUTO_THROW_SLOWEST_INTERVAL = 0.5f;
 
 //Maximum amount of time for the random boredom animation delay.
 const float BORED_ANIM_MAX_DELAY = 5.0f;
@@ -141,7 +141,8 @@ const float THROW_PREVIEW_MIN_THICKNESS = 2.0f;
  */
 Leader::Leader(const Point &pos, LeaderType* type, float angle) :
     Mob(pos, type, angle),
-    lea_type(type) {
+    lea_type(type),
+    auto_throw_repeater(&game.auto_throw_settings) {
     
     team = MOB_TEAM_PLAYER_1;
     invuln_period = Timer(LEADER::INVULN_PERIOD);
@@ -858,9 +859,10 @@ void Leader::signal_swarm_start() const {
  * @brief Starts the auto-throw mode.
  */
 void Leader::start_auto_throwing() {
-    auto_throwing = true;
-    auto_throw_cooldown = 0.0f;
-    auto_throw_cooldown_duration = LEADER::AUTO_THROW_COOLDOWN_MAX_DURATION;
+    auto_throw_repeater.start();
+    //Already do the first throw, but two frames from now. This is because
+    //manual press players can only throw as quickly as two frames.
+    auto_throw_repeater.next_trigger = game.delta_t * 2.0f;
 }
 
 
@@ -922,7 +924,7 @@ void Leader::start_whistling() {
  * @brief Stops the auto-throw mode.
  */
 void Leader::stop_auto_throwing() {
-    auto_throwing = false;
+    auto_throw_repeater.stop();
 }
 
 
@@ -973,19 +975,16 @@ void Leader::swap_held_pikmin(Mob* new_pik) {
  */
 void Leader::tick_class_specifics(float delta_t) {
     //Throw-related things.
-    if(auto_throw_cooldown > 0.0f) {
-        auto_throw_cooldown -= delta_t;
-    }
     if(throw_cooldown > 0.0f) {
         throw_cooldown -= delta_t;
     }
     
-    if(auto_throwing && auto_throw_cooldown <= 0.0f) {
+    size_t n_auto_throws = auto_throw_repeater.tick(delta_t);
+    if(n_auto_throws > 0) {
         bool grabbed = grab_closest_group_member();
         if(grabbed) {
             queue_throw();
         }
-        auto_throw_cooldown = auto_throw_cooldown_duration;
     }
     
     if(
@@ -1003,13 +1002,6 @@ void Leader::tick_class_specifics(float delta_t) {
         throw_queued = false;
     }
     
-    auto_throw_cooldown_duration =
-        std::max(
-            auto_throw_cooldown_duration -
-            LEADER::AUTO_THROW_COOLDOWN_SPEED * delta_t,
-            LEADER::AUTO_THROW_COOLDOWN_MIN_DURATION
-        );
-        
     if(group && group->members.empty()) {
         stop_auto_throwing();
     }

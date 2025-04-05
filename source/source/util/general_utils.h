@@ -75,6 +75,53 @@ template<>
 Point from_string<Point>(const string &s);
 
 
+/**
+ * @brief Customizes how an auto-repeater's triggers change in frequency
+ * over time.
+ */
+struct AutoRepeaterSettings {
+
+    //--- Members ---
+    
+    //Interval between triggers, at the slowest speed.
+    float slowest_interval = 0.3f;
+    
+    //Interval between triggers, at the fastest speed.
+    float fastest_interval = 0.05f;
+    
+    //How long it takes for the trigger intervals to reach the fastest speed.
+    float ramp_time = 0.9f;
+    
+};
+
+
+/**
+ * @brief Allows something to be automatically repeated over time, with logic
+ * to repeat more quickly the longer it's active for.
+ */
+struct AutoRepeater {
+
+    //--- Members ---
+    
+    //How long this auto-repeater has been active for. LARGE_FLOAT if inactive.
+    float time = LARGE_FLOAT;
+    
+    //When the next trigger will happen. LARGE_FLOAT if inactive.
+    float next_trigger = LARGE_FLOAT;
+    
+    //Settings to use.
+    AutoRepeaterSettings* settings = nullptr;
+    
+    
+    //--- Function declarations ---
+    
+    AutoRepeater(AutoRepeaterSettings* settings);
+    void start();
+    void stop();
+    size_t tick(float delta_t);
+    
+};
+
 
 /**
  * @brief Just a list of different elements in an enum and what their names are.
@@ -496,7 +543,7 @@ string vector_tail_to_string(const vector<string> &v, size_t pos);
  * @return Whether it contains the item.
  */
 template<typename t, typename i>
-bool is_in_container(const t &cont, const i& item) {
+bool is_in_container(const t &cont, const i &item) {
     return std::find(cont.begin(), cont.end(), item) != cont.end();
 }
 

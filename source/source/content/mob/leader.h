@@ -23,9 +23,9 @@ using std::size_t;
 
 
 namespace LEADER {
-extern const float AUTO_THROW_COOLDOWN_MAX_DURATION;
-extern const float AUTO_THROW_COOLDOWN_MIN_DURATION;
-extern const float AUTO_THROW_COOLDOWN_SPEED;
+extern const float AUTO_THROW_FASTEST_INTERVAL;
+extern const float AUTO_THROW_RAMP_TIME;
+extern const float AUTO_THROW_SLOWEST_INTERVAL;
 extern const float BORED_ANIM_MAX_DELAY;
 extern const float BORED_ANIM_MIN_DELAY;
 extern const float DISMISS_ANGLE_RANGE;
@@ -111,14 +111,8 @@ public:
     //Whether or not a throw has been queued to be pulled off.
     bool throw_queued = false;
     
-    //Is auto-throw mode on?
-    bool auto_throwing = false;
-    
-    //Time left before the next auto-throw.
-    float auto_throw_cooldown = 0.0f;
-    
-    //When the auto-throw cooldown restarts, set it to this value.
-    float auto_throw_cooldown_duration = 0.0f;
+    //Auto-repeater for auto-throwing.
+    AutoRepeater auto_throw_repeater;
     
     //Provided there's a throw, this is the mob to throw.
     Mob* throwee = nullptr;

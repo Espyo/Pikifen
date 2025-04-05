@@ -234,9 +234,11 @@ vector<PlayerAction> ControlsManager::newFrame(float delta_t) {
 void ControlsManager::processAutoRepeats(
     std::pair<const int, ActionTypeStatus> &it, float delta_t
 ) {
+    float actionTypeAutoRepeat = actionTypes[it.first].autoRepeat;
+    if(actionTypeAutoRepeat == 0.0f) return;
     float autoRepeatFactor =
-        (it.second.value - actionTypes[it.first].autoRepeat) /
-        (1.0f - actionTypes[it.first].autoRepeat);
+        (it.second.value - actionTypeAutoRepeat) /
+        (1.0f - actionTypeAutoRepeat);
     if(autoRepeatFactor <= 0.0f) return;
     if(it.second.value == 0.0f) return;
     if(it.second.stateDuration == 0.0f) return;

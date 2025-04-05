@@ -8,12 +8,81 @@
  * General-purpose utilities used throughout the project.
  */
 
+#include <algorithm>
 #include <csignal>
 
 #include "general_utils.h"
 
 #include "math_utils.h"
 #include "string_utils.h"
+
+
+/**
+ * @brief Constructs a new auto-repeater object.
+ *
+ * @param settings Settings to use.
+ */
+AutoRepeater::AutoRepeater(AutoRepeaterSettings* settings) :
+    settings(settings) {
+}
+
+
+/**
+ * @brief Signals the system to start auto-repeating.
+ */
+void AutoRepeater::start() {
+    if(!settings) {
+        stop();
+        return;
+    }
+    time = 0.0f;
+    next_trigger = settings->slowest_interval;
+}
+
+
+/**
+ * @brief Signals the system to stop auto-repeating.
+ */
+void AutoRepeater::stop() {
+    time = LARGE_FLOAT;
+    next_trigger = LARGE_FLOAT;
+}
+
+
+/**
+ * @brief Ticks one frame of gameplay, and returns how many times auto-repeats
+ * got triggered this frame.
+ *
+ * @param delta_t How long the frame's tick is, in seconds.
+ * @return How many triggers happened.
+ */
+size_t AutoRepeater::tick(float delta_t) {
+    if(!settings) {
+        stop();
+        return 0;
+    }
+    
+    if(time == LARGE_FLOAT) return 0;
+    if(time > next_trigger) return 0;
+    
+    time += delta_t;
+    size_t triggers = 0;
+    while(time >= next_trigger) {
+        triggers++;
+        float cur_interval =
+            settings->slowest_interval +
+            (time / settings->ramp_time) *
+            (settings->fastest_interval - settings->slowest_interval);
+        cur_interval =
+            std::clamp(
+                cur_interval,
+                settings->fastest_interval, settings->slowest_interval
+            );
+        next_trigger += cur_interval;
+    }
+    
+    return triggers;
+}
 
 
 /**
