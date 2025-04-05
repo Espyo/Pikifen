@@ -572,7 +572,7 @@ void OnionMenu::add_to_group(size_t type_idx) {
     }
     if(
         game.states.gameplay->mobs.pikmin_list.size() + total_delta >=
-        game.config.max_pikmin_in_field
+        game.config.rules.max_pikmin_in_field
     ) {
         make_gui_item_red(field_amount_text);
         return;
@@ -767,7 +767,7 @@ void OnionMenu::tick(float delta_t) {
     int delta_over_limit =
         (int) game.states.gameplay->mobs.pikmin_list.size() +
         total_delta -
-        (int) game.config.max_pikmin_in_field;
+        (int) game.config.rules.max_pikmin_in_field;
         
     while(delta_over_limit > 0) {
         vector<size_t> candidate_types;

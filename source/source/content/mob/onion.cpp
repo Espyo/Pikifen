@@ -160,7 +160,7 @@ void Onion::generate() {
         size_t total_after =
             game.states.gameplay->mobs.pikmin_list.size() + 1;
             
-        if(total_after > game.config.max_pikmin_in_field) {
+        if(total_after > game.config.rules.max_pikmin_in_field) {
             nest->pikmin_inside[t][0]++;
             
             ParticleGenerator pg =

@@ -2431,7 +2431,7 @@ void pikmin_fsm::check_incoming_attack(Mob* m, void* info1, void* info2) {
 void pikmin_fsm::check_leader_bump(Mob* m, void* info1, void* info2) {
     Pikmin* pik_ptr = (Pikmin*) m;
     if(pik_ptr->bump_lock > 0.0f) {
-        pik_ptr->bump_lock = game.config.idle_bump_delay;
+        pik_ptr->bump_lock = game.config.pikmin.idle_bump_delay;
         return;
     }
     if(
@@ -3845,7 +3845,7 @@ void pikmin_fsm::seed_landed(Mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::set_bump_lock(Mob* m, void* info1, void* info2) {
     Pikmin* pik_ptr = (Pikmin*) m;
-    pik_ptr->bump_lock = game.config.idle_bump_delay;
+    pik_ptr->bump_lock = game.config.pikmin.idle_bump_delay;
 }
 
 

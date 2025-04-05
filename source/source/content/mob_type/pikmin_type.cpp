@@ -57,15 +57,15 @@ PikminType::PikminType() :
     
     MobType::Reach idle_attack_reach;
     idle_attack_reach.angle_1 = TAU;
-    idle_attack_reach.radius_1 = game.config.idle_task_range;
+    idle_attack_reach.radius_1 = game.config.pikmin.idle_task_range;
     reaches.push_back(idle_attack_reach);
     MobType::Reach swarm_attack_reach;
     swarm_attack_reach.angle_1 = TAU;
-    swarm_attack_reach.radius_1 = game.config.swarm_task_range;
+    swarm_attack_reach.radius_1 = game.config.pikmin.swarm_task_range;
     reaches.push_back(swarm_attack_reach);
     MobType::Reach chase_reach;
     chase_reach.angle_1 = TAU;
-    chase_reach.radius_1 = game.config.pikmin_chase_range;
+    chase_reach.radius_1 = game.config.pikmin.chase_range;
     reaches.push_back(chase_reach);
     target_type = MOB_TARGET_FLAG_PLAYER;
     huntable_targets =

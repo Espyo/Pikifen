@@ -193,7 +193,7 @@ bool GroupTask::get_fraction_numbers_info(
     if(get_power() <= 0) return false;
     *fraction_value_nr = get_power();
     *fraction_req_nr = power_goal;
-    *fraction_color = game.config.carrying_color_stop;
+    *fraction_color = game.config.aesthetic_gen.carrying_color_stop;
     return true;
 }
 

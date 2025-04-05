@@ -139,7 +139,7 @@ void GameplayState::do_game_drawing(
     
     //Layer 7 -- Leader cursor.
     al_use_transform(&game.world_to_screen_transform);
-    ALLEGRO_COLOR cursor_color = game.config.no_pikmin_color;
+    ALLEGRO_COLOR cursor_color = game.config.aesthetic_gen.no_pikmin_color;
     if(closest_group_member[BUBBLE_RELATION_CURRENT]) {
         cursor_color =
             closest_group_member[BUBBLE_RELATION_CURRENT]->type->main_color;
@@ -877,7 +877,7 @@ void GameplayState::draw_leader_cursor(const ALLEGRO_COLOR &color) {
                 (int) (
                     191 *
                     (cur_leader_ptr->swarm_arrows[a] /
-                     (game.config.cursor_max_dist * 0.4))
+                     (game.config.rules.cursor_max_dist * 0.4))
                 )
             );
         draw_bitmap(
@@ -885,7 +885,7 @@ void GameplayState::draw_leader_cursor(const ALLEGRO_COLOR &color) {
             cur_leader_ptr->pos + pos,
             Point(
                 16 * (1 + cur_leader_ptr->swarm_arrows[a] /
-                      game.config.cursor_max_dist),
+                      game.config.rules.cursor_max_dist),
                 -1
             ),
             swarm_angle,
@@ -1284,7 +1284,7 @@ void GameplayState::draw_gameplay_message_box() {
             } else {
                 this_token_anim_time =
                     msg_box->total_token_anim_time -
-                    ((token_idx + 1) * game.config.gameplay_msg_char_interval);
+                    ((token_idx + 1) * game.config.aesthetic_gen.g_msg_ch_interval);
             }
             if(
                 this_token_anim_time > 0 &&
@@ -1489,7 +1489,7 @@ void GameplayState::draw_throw_preview() {
                 vertexes, 0.0f, 1.0f,
                 cur_leader_ptr->pos, throw_dest,
                 change_alpha(
-                    game.config.no_pikmin_color,
+                    game.config.aesthetic_gen.no_pikmin_color,
                     GAMEPLAY::PREVIEW_OPACITY / 2.0f
                 ),
                 0.0f, 1.0f, false

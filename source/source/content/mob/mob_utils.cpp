@@ -55,9 +55,9 @@ CarryInfo::CarryInfo(
             p =
                 Point(
                     cos(angle) *
-                    (m->radius + game.config.standard_pikmin_radius),
+                    (m->radius + game.config.pikmin.standard_radius),
                     sin(angle) *
-                    (m->radius + game.config.standard_pikmin_radius)
+                    (m->radius + game.config.pikmin.standard_radius)
                 );
         } else {
             p = m->type->custom_carry_spots[c];
@@ -131,9 +131,9 @@ float CarryInfo::get_speed() const {
     //If the object has all carriers, the Pikmin move as fast
     //as possible, which looks bad, since they're not jogging,
     //they're carrying. Let's add a penalty for the weight...
-    max_speed *= (1 - game.config.carrying_speed_weight_mult * m->type->weight);
+    max_speed *= (1 - game.config.carrying.speed_weight_mult * m->type->weight);
     //...and a global carrying speed penalty.
-    max_speed *= game.config.carrying_speed_max_mult;
+    max_speed *= game.config.carrying.speed_max_mult;
     
     //The closer the mob is to having full carriers,
     //the closer to the max speed we get.
@@ -141,9 +141,9 @@ float CarryInfo::get_speed() const {
     //to max_speed (all carriers).
     return
         max_speed * (
-            game.config.carrying_speed_base_mult +
+            game.config.carrying.speed_base_mult +
             (cur_n_carriers / (float) spot_info.size()) *
-            (1 - game.config.carrying_speed_base_mult)
+            (1 - game.config.carrying.speed_base_mult)
         );
 }
 
@@ -187,9 +187,9 @@ void CarryInfo::rotate_points(float angle) {
         float s_angle = angle + (TAU / m->type->max_carriers * s);
         Point p(
             cos(s_angle) *
-            (m->radius + game.config.standard_pikmin_radius),
+            (m->radius + game.config.pikmin.standard_radius),
             sin(s_angle) *
-            (m->radius + game.config.standard_pikmin_radius)
+            (m->radius + game.config.pikmin.standard_radius)
         );
         spot_info[s].pos = p;
     }
@@ -211,7 +211,7 @@ CirclingInfo::CirclingInfo(Mob* m) :
  * @brief Constructs a new delivery info struct object.
  */
 DeliveryInfo::DeliveryInfo() :
-    color(game.config.carrying_color_move) {
+    color(game.config.aesthetic_gen.carrying_color_move) {
 }
 
 
@@ -353,7 +353,7 @@ bool Group::get_next_standby_type(
         //For each type, let's check if there's any group member that matches.
         if(
             scanning_type == leader_subgroup_type &&
-            !game.config.can_throw_leaders
+            !game.config.rules.can_throw_leaders
         ) {
             //If this is a leader, and leaders cannot be thrown, skip.
         } else {
@@ -450,7 +450,7 @@ void Group::init_spots(Mob* affected_mob_ptr) {
     
     vector<AlphaSpot> alpha_spots;
     size_t current_wheel = 1;
-    radius = game.config.standard_pikmin_radius;
+    radius = game.config.pikmin.standard_radius;
     
     //Center spot first.
     alpha_spots.push_back(AlphaSpot(Point()));
@@ -460,7 +460,7 @@ void Group::init_spots(Mob* affected_mob_ptr) {
         //First, calculate how far the center
         //of these spots are from the central spot.
         float dist_from_center =
-            game.config.standard_pikmin_radius * current_wheel + //Spots.
+            game.config.pikmin.standard_radius * current_wheel + //Spots.
             MOB::GROUP_SPOT_INTERVAL * current_wheel; //Interval between spots.
             
         /* Now we need to figure out what's the angular distance
@@ -474,7 +474,7 @@ void Group::init_spots(Mob* affected_mob_ptr) {
          * and we know the distance from one spot to the center.
          */
         float actual_diameter =
-            game.config.standard_pikmin_radius * 2.0 + MOB::GROUP_SPOT_INTERVAL;
+            game.config.pikmin.standard_radius * 2.0 + MOB::GROUP_SPOT_INTERVAL;
             
         //Just calculate the remaining side of the triangle, now that we know
         //the hypotenuse and the actual diameter (one side of the triangle).
@@ -806,7 +806,7 @@ PikminNest::PikminNest(
 bool PikminNest::call_pikmin(Mob* m_ptr, size_t type_idx) {
     if(
         game.states.gameplay->mobs.pikmin_list.size() >=
-        game.config.max_pikmin_in_field
+        game.config.rules.max_pikmin_in_field
     ) {
         return false;
     }

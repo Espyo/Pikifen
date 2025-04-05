@@ -196,7 +196,7 @@ void ParticleEditor::draw_canvas() {
         
         draw_bitmap(
             game.sys_content.bmp_leader_silhouette_top, Point(x_offset, 0),
-            Point(-1, game.config.standard_leader_radius * 2.0f),
+            Point(-1, game.config.leaders.standard_radius * 2.0f),
             0, al_map_rgba(240, 240, 240, 160)
         );
     }

@@ -1,51 +1,65 @@
-game_name = 
-game_version = 
+aesthetic_general {
+    carrying_color_move = 255 255 255
+    carrying_color_stop = 96 192 192
+    cursor_spin_speed = 180
+    gameplay_msg_char_interval = 0.03
+    no_pikmin_color = 168 190 230
+}
 
-carrying_color_move = 255 255 255
-carrying_color_stop = 96 192 192
-carrying_speed_base_mult = 0.3
-carrying_speed_max_mult = 0.8
-carrying_speed_weight_mult = 0.0004
+aesthetic_radar {
+    background_color = 32 24 0
+    edge_color = 32 24 0
+    highest_color = 200 200 180
+    lowest_color = 80 64 0
+}
 
-day_minutes_start = 420
-day_minutes_end = 1140
-day_minutes_per_irl_sec = 0.8
+carrying {
+    speed_base_mult = 0.3
+    speed_max_mult = 0.8
+    speed_weight_mult = 0.0004
+}
 
-pikmin_order = red_pikmin; yellow_pikmin; blue_pikmin; purple_pikmin; white_pikmin; rock_pikmin; winged_pikmin; bulbmin
-standard_pikmin_height = 24
-standard_pikmin_radius = 5
+general {
+    game_name = 
+    game_version = 
+}
 
-leader_order = olimar; louie; president; alph; brittany; charlie
-standard_leader_height = 46
-standard_leader_radius = 16
-spray_order = ultra-bitter_spray; ultra-spicy_spray
+leaders {
+    group_member_grab_range = 128
+    next_pluck_range = 200
+    onion_open_range = 24
+    order = olimar; louie; president; alph; brittany; charlie
+    pluck_range = 32
+    standard_height = 46
+    standard_radius = 16
+}
 
-idle_bump_delay = 5
-idle_bump_range = 90
-idle_task_range = 50
-swarm_task_range = 3
-pikmin_chase_range = 200
-max_pikmin_in_field = 100
-maturity_power_mult = 0.1
-maturity_speed_mult = 0.1
+misc {
+    day_minutes_end = 1140
+    day_minutes_start = 420
+    spray_order = ultra-bitter_spray; ultra-spicy_spray
+}
 
-can_throw_leaders = true
-cursor_max_dist = 200
-cursor_spin_speed = 180
-next_pluck_range = 200
-no_pikmin_color = 168 190 230
-onion_open_range = 24
-group_member_grab_range = 128
-pluck_range = 32
-throw_max_dist = 200
-whistle_growth_speed = 180
-whistle_max_dist = 200
+pikmin {
+    chase_range = 200
+    idle_bump_delay = 5
+    idle_bump_range = 50
+    idle_task_range = 50
+    maturity_power_mult = 0.1
+    maturity_speed_mult = 0.1
+    order = red_pikmin; yellow_pikmin; blue_pikmin; purple_pikmin; white_pikmin; rock_pikmin; winged_pikmin; bulbmin
+    standard_height = 24
+    standard_radius = 5
+    swarm_task_range = 3
+}
 
-radar_background_color = 32 24 0
-radar_edge_color = 32 24 0
-radar_highest_color = 200 200 180
-radar_lowest_color = 80 64 0
-
-message_char_interval = 0.03
-zoom_max_level = 3.0
-zoom_min_level = 0.66
+rules {
+    can_throw_leaders = true
+    cursor_max_dist = 200
+    max_pikmin_in_field = 100
+    throw_max_dist = 200
+    whistle_growth_speed = 180
+    whistle_max_dist = 200
+    zoom_max_level = 3.0
+    zoom_min_level = 0.66
+}

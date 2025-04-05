@@ -191,7 +191,7 @@ void Pikmin::draw_mob() {
             get_bitmap_dimensions(game.sys_content.bmp_idle_glow);
         idle_eff.translation = pos;
         idle_eff.scale =
-            (game.config.standard_pikmin_radius * 8) / glow_bmp_size;
+            (game.config.pikmin.standard_radius * 8) / glow_bmp_size;
         idle_eff.rotation =
             game.states.gameplay->area_time_passed *
             PIKMIN::IDLE_GLOW_SPIN_SPEED;
@@ -264,7 +264,7 @@ void Pikmin::force_carry(Mob* m) {
  */
 float Pikmin::get_base_speed() const {
     float base = Mob::get_base_speed();
-    return base + (base * this->maturity * game.config.maturity_speed_mult);
+    return base + (base * this->maturity * game.config.pikmin.maturity_speed_mult);
 }
 
 

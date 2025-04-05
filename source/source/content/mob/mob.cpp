@@ -238,7 +238,7 @@ void Mob::add_to_group(Mob* new_member) {
     if(!group->cur_standby_type) {
         if(
             new_member->type->category->id != MOB_CATEGORY_LEADERS ||
-            game.config.can_throw_leaders
+            game.config.rules.can_throw_leaders
         ) {
             group->cur_standby_type =
                 new_member->subgroup_type_ptr;
@@ -873,7 +873,7 @@ bool Mob::calculate_damage(
         //It's easier to calculate the maturity attack boost here.
         Pikmin* pik_ptr = (Pikmin*) this;
         attacker_offense *=
-            1 + (game.config.maturity_power_mult * pik_ptr->maturity);
+            1 + (game.config.pikmin.maturity_power_mult * pik_ptr->maturity);
     }
     
     *damage = attacker_offense * (1.0f / defense_multiplier);
@@ -1857,16 +1857,16 @@ bool Mob::get_fraction_numbers_info(
             carry_info->destination ==
             CARRY_DESTINATION_SHIP
         ) {
-            *fraction_color = game.config.carrying_color_move;
+            *fraction_color = game.config.aesthetic_gen.carrying_color_move;
             
         } else if(destination_has_pikmin_type) {
             *fraction_color =
                 carry_info->intended_pik_type->main_color;
         } else {
-            *fraction_color = game.config.carrying_color_move;
+            *fraction_color = game.config.aesthetic_gen.carrying_color_move;
         }
     } else {
-        *fraction_color = game.config.carrying_color_stop;
+        *fraction_color = game.config.aesthetic_gen.carrying_color_stop;
     }
     return true;
 }
@@ -3194,7 +3194,7 @@ Mob* Mob::spawn(const MobType::SpawnInfo* info, MobType* type_ptr) {
     if(
         type_ptr->category->id == MOB_CATEGORY_PIKMIN &&
         game.states.gameplay->mobs.pikmin_list.size() >=
-        game.config.max_pikmin_in_field
+        game.config.rules.max_pikmin_in_field
     ) {
         return nullptr;
     }
@@ -3983,7 +3983,7 @@ void Mob::tick_misc_logic(float delta_t) {
             group->anchor = pos + new_anchor_rel_pos;
             
             float intensity_dist =
-                game.config.cursor_max_dist *
+                game.config.rules.cursor_max_dist *
                 game.states.gameplay->swarm_magnitude;
             al_identity_transform(&group->transform);
             al_translate_transform(

@@ -103,7 +103,7 @@ void pile_fsm::be_attacked(Mob* m, void* info1, void* info2) {
             spawn_pos =
                 pikmin_to_start_carrying->pos +
                 angle_to_coordinates(
-                    spawn_angle, game.config.standard_pikmin_radius * 1.5
+                    spawn_angle, game.config.pikmin.standard_radius * 1.5
                 );
         } else {
             spawn_pos = pil_ptr->pos;

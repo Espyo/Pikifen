@@ -1631,9 +1631,9 @@ void AreaEditor::draw_canvas() {
             
             if(central_sector) {
                 float leader_silhouette_w =
-                    game.config.standard_leader_radius * 2.0 * proportion;
+                    game.config.leaders.standard_radius * 2.0 * proportion;
                 float leader_silhouette_h =
-                    game.config.standard_leader_height * proportion;
+                    game.config.leaders.standard_height * proportion;
                 float leader_silhouette_pivot_x =
                     (
                         cross_section_window_start.x +

@@ -269,15 +269,15 @@ Hud::Hud() :
     [this, sun_meter] (const DrawInfo & draw) {
         unsigned char n_hours =
             (
-                game.config.day_minutes_end -
-                game.config.day_minutes_start
+                game.config.misc.day_minutes_end -
+                game.config.misc.day_minutes_start
             ) / 60.0f;
         float day_length =
-            game.config.day_minutes_end - game.config.day_minutes_start;
+            game.config.misc.day_minutes_end - game.config.misc.day_minutes_start;
         float day_passed_ratio =
             (
                 game.states.gameplay->day_minutes -
-                game.config.day_minutes_start
+                game.config.misc.day_minutes_start
             ) /
             (float) (day_length);
         float sun_radius = draw.size.y / 2.0;
@@ -346,7 +346,7 @@ Hud::Hud() :
     sun_meter->on_tick =
     [this, sun_meter] (float delta_t) {
         float day_length =
-            game.config.day_minutes_end - game.config.day_minutes_start;
+            game.config.misc.day_minutes_end - game.config.misc.day_minutes_start;
         float pre_tick_day_minutes =
             game.states.gameplay->day_minutes -
             game.cur_area_data->day_time_speed * delta_t / 60.0f;
@@ -355,7 +355,7 @@ Hud::Hud() :
         const float checkpoints[3] = {0.25f, 0.50f, 0.75f};
         for(unsigned char c = 0; c < 3; c++) {
             float checkpoint =
-                game.config.day_minutes_start + day_length * checkpoints[c];
+                game.config.misc.day_minutes_start + day_length * checkpoints[c];
             if(
                 pre_tick_day_minutes < checkpoint &&
                 post_tick_day_minutes >= checkpoint
@@ -819,7 +819,7 @@ Hud::Hud() :
         if(bottom_spray_idx == INVALID) return;
         
         draw_bitmap_in_box(
-            game.config.spray_order[bottom_spray_idx]->bmp_spray,
+            game.config.misc.spray_order[bottom_spray_idx]->bmp_spray,
             draw.center, draw.size, true,
             0.0f,
             map_alpha(game.states.gameplay->hud->spray_items_opacity * 255)
@@ -1824,7 +1824,7 @@ void Hud::tick(float delta_t) {
         top_spray_idx == INVALID ? nullptr :
         &game.states.gameplay->spray_stats[top_spray_idx],
         top_spray_idx == INVALID ? nullptr :
-        game.config.spray_order[top_spray_idx]->bmp_spray
+        game.config.misc.spray_order[top_spray_idx]->bmp_spray
     );
     
     size_t prev_spray_idx = INVALID;
@@ -1841,7 +1841,7 @@ void Hud::tick(float delta_t) {
         prev_spray_idx == INVALID ? nullptr :
         &game.states.gameplay->spray_stats[prev_spray_idx],
         prev_spray_idx == INVALID ? nullptr :
-        game.config.spray_order[prev_spray_idx]->bmp_spray
+        game.config.misc.spray_order[prev_spray_idx]->bmp_spray
     );
     
     size_t next_spray_idx = INVALID;
@@ -1858,7 +1858,7 @@ void Hud::tick(float delta_t) {
         next_spray_idx == INVALID ? nullptr :
         &game.states.gameplay->spray_stats[next_spray_idx],
         next_spray_idx == INVALID ? nullptr :
-        game.config.spray_order[next_spray_idx]->bmp_spray
+        game.config.misc.spray_order[next_spray_idx]->bmp_spray
     );
     
     spray_icon_mgr.tick(delta_t);

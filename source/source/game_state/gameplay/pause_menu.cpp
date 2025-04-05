@@ -853,7 +853,7 @@ void PauseMenu::draw_radar(
     );
     
     //Background fill.
-    al_clear_to_color(game.config.radar_background_color);
+    al_clear_to_color(game.config.aesthetic_radar.background_color);
     
     //Draw each sector.
     for(size_t s = 0; s < game.cur_area_data->sectors.size(); s++) {
@@ -863,8 +863,8 @@ void PauseMenu::draw_radar(
         ALLEGRO_COLOR color =
             interpolate_color(
                 s_ptr->z, lowest_sector_z, highest_sector_z,
-                game.config.radar_lowest_color,
-                game.config.radar_highest_color
+                game.config.aesthetic_radar.lowest_color,
+                game.config.aesthetic_radar.highest_color
             );
             
         for(size_t h = 0; h < s_ptr->hazards.size(); h++) {
@@ -916,7 +916,7 @@ void PauseMenu::draw_radar(
             e_ptr->vertexes[0]->y,
             e_ptr->vertexes[1]->x,
             e_ptr->vertexes[1]->y,
-            game.config.radar_edge_color,
+            game.config.aesthetic_radar.edge_color,
             1.5f / radar_cam.zoom
         );
     }
@@ -1257,7 +1257,7 @@ void PauseMenu::draw_radar(
     );
     al_draw_filled_circle(
         north_ind_center.x, north_ind_center.y,
-        12.0f, game.config.radar_background_color
+        12.0f, game.config.aesthetic_radar.background_color
     );
     draw_text(
         "N", game.sys_content.fnt_slim,
@@ -1266,7 +1266,7 @@ void PauseMenu::draw_radar(
             north_ind_center.y + 1.0f
         ),
         Point(12.0f),
-        game.config.radar_highest_color
+        game.config.aesthetic_radar.highest_color
     );
     al_draw_filled_triangle(
         north_ind_center.x,
@@ -1275,7 +1275,7 @@ void PauseMenu::draw_radar(
         north_ind_center.y - 6.0f,
         north_ind_center.x + 6.0f,
         north_ind_center.y - 6.0f,
-        game.config.radar_highest_color
+        game.config.aesthetic_radar.highest_color
     );
     
     //Area name.
@@ -1289,11 +1289,11 @@ void PauseMenu::draw_radar(
     );
     draw_filled_rounded_rectangle(
         area_name_center, area_name_size,
-        12.0f, game.config.radar_background_color
+        12.0f, game.config.aesthetic_radar.background_color
     );
     draw_text(
         game.cur_area_data->name, game.sys_content.fnt_standard,
-        area_name_center, area_name_size, game.config.radar_highest_color
+        area_name_center, area_name_size, game.config.aesthetic_radar.highest_color
     );
     
     //Draw some scan lines.
@@ -2583,8 +2583,8 @@ void PauseMenu::init_status_page() {
     long total_lost = 0;
     
     //Setup the list rows.
-    for(size_t p = 0; p < game.config.pikmin_order.size(); p++) {
-        PikminType* pt_ptr = game.config.pikmin_order[p];
+    for(size_t p = 0; p < game.config.pikmin.order.size(); p++) {
+        PikminType* pt_ptr = game.config.pikmin.order[p];
         
         size_t in_group =
             game.states.gameplay->get_amount_of_group_pikmin(pt_ptr);

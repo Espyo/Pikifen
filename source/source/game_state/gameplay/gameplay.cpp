@@ -832,7 +832,7 @@ void GameplayState::load() {
         } else if(
             m_ptr->type->category->id == MOB_CATEGORY_PIKMIN &&
             game.states.gameplay->mobs.pikmin_list.size() >=
-            game.config.max_pikmin_in_field
+            game.config.rules.max_pikmin_in_field
         ) {
             valid = false;
         }
@@ -887,16 +887,16 @@ void GameplayState::load() {
     [] (Leader * l1, Leader * l2) -> bool {
         size_t priority_l1 =
         find(
-            game.config.leader_order.begin(),
-            game.config.leader_order.end(), l1->lea_type
+            game.config.leaders.order.begin(),
+            game.config.leaders.order.end(), l1->lea_type
         ) -
-        game.config.leader_order.begin();
+        game.config.leaders.order.begin();
         size_t priority_l2 =
         find(
-            game.config.leader_order.begin(),
-            game.config.leader_order.end(), l2->lea_type
+            game.config.leaders.order.begin(),
+            game.config.leaders.order.end(), l2->lea_type
         ) -
-        game.config.leader_order.begin();
+        game.config.leaders.order.begin();
         return priority_l1 < priority_l2;
     }
     );
@@ -1030,8 +1030,8 @@ void GameplayState::load() {
         
     for(auto &s : spray_strs) {
         size_t spray_idx = 0;
-        for(; spray_idx < game.config.spray_order.size(); spray_idx++) {
-            if(game.config.spray_order[spray_idx]->manifest->internal_name == s.first) {
+        for(; spray_idx < game.config.misc.spray_order.size(); spray_idx++) {
+            if(game.config.misc.spray_order[spray_idx]->manifest->internal_name == s.first) {
                 break;
             }
         }
@@ -1165,10 +1165,10 @@ void GameplayState::load_game_content() {
     );
     
     //Register leader sub-group types.
-    for(size_t p = 0; p < game.config.pikmin_order.size(); p++) {
+    for(size_t p = 0; p < game.config.pikmin.order.size(); p++) {
         subgroup_types.register_type(
-            SUBGROUP_TYPE_CATEGORY_PIKMIN, game.config.pikmin_order[p],
-            game.config.pikmin_order[p]->bmp_icon
+            SUBGROUP_TYPE_CATEGORY_PIKMIN, game.config.pikmin.order[p],
+            game.config.pikmin.order[p]->bmp_icon
         );
     }
     
@@ -1314,9 +1314,9 @@ void GameplayState::update_available_leaders() {
     [] (const Leader * l1, const Leader * l2) -> bool {
         size_t l1_order_idx = INVALID;
         size_t l2_order_idx = INVALID;
-        for(size_t t = 0; t < game.config.leader_order.size(); t++) {
-            if(game.config.leader_order[t] == l1->type) l1_order_idx = t;
-            if(game.config.leader_order[t] == l2->type) l2_order_idx = t;
+        for(size_t t = 0; t < game.config.leaders.order.size(); t++) {
+            if(game.config.leaders.order[t] == l1->type) l1_order_idx = t;
+            if(game.config.leaders.order[t] == l2->type) l2_order_idx = t;
         }
         if(l1_order_idx == l2_order_idx) {
             return l1->id < l2->id;
@@ -1518,7 +1518,7 @@ void GameplayMessageBox::tick(float delta_t) {
     if(!transition_in || transition_timer == 0.0f) {
     
         //Animate the text.
-        if(game.config.gameplay_msg_char_interval == 0.0f) {
+        if(game.config.aesthetic_gen.g_msg_ch_interval == 0.0f) {
             skipped_at_token = 0;
             cur_token = tokens_in_section + 1;
         } else {
@@ -1527,7 +1527,7 @@ void GameplayMessageBox::tick(float delta_t) {
                 size_t prev_token = cur_token;
                 cur_token =
                     total_token_anim_time /
-                    game.config.gameplay_msg_char_interval;
+                    game.config.aesthetic_gen.g_msg_ch_interval;
                 cur_token =
                     std::min(cur_token, tokens_in_section + 1);
                 if(

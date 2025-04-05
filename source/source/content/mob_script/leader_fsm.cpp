@@ -1811,7 +1811,7 @@ void leader_fsm::decide_pluck_action(Mob* m, void* info1, void* info2) {
     
     lea_ptr->queued_pluck_cancel = false;
     
-    if(new_pikmin && d <= game.config.next_pluck_range) {
+    if(new_pikmin && d <= game.config.leaders.next_pluck_range) {
         lea_ptr->fsm.run_event(LEADER_EV_GO_PLUCK, (void*) new_pikmin);
     } else {
         lea_ptr->fsm.run_event(LEADER_EV_CANCEL);
@@ -2408,7 +2408,7 @@ void leader_fsm::search_seed(Mob* m, void* info1, void* info2) {
             get_closest_sprout(lea_ptr->pos, &d, false);
     }
     
-    if(new_pikmin && d <= game.config.next_pluck_range) {
+    if(new_pikmin && d <= game.config.leaders.next_pluck_range) {
         lea_ptr->fsm.run_event(LEADER_EV_GO_PLUCK, (void*) new_pikmin);
     }
 }
@@ -2540,7 +2540,7 @@ void leader_fsm::signal_stop_auto_pluck(Mob* m, void* info1, void* info2) {
  */
 void leader_fsm::spray(Mob* m, void* info1, void* info2) {
     size_t spray_idx = *((size_t*) info1);
-    SprayType &spray_type_ref = *game.config.spray_order[spray_idx];
+    SprayType &spray_type_ref = *game.config.misc.spray_order[spray_idx];
     
     if(game.states.gameplay->spray_stats[spray_idx].nr_sprays == 0) {
         m->fsm.set_state(LEADER_STATE_ACTIVE);
@@ -2604,7 +2604,7 @@ void leader_fsm::spray(Mob* m, void* info1, void* info2) {
     
     for(auto &am : affected_mobs) {
         am->fsm.run_event(
-            MOB_EV_TOUCHED_SPRAY, (void*) game.config.spray_order[spray_idx]
+            MOB_EV_TOUCHED_SPRAY, (void*) game.config.misc.spray_order[spray_idx]
         );
     }
     

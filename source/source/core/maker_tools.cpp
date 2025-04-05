@@ -158,7 +158,7 @@ bool MakerTools::handle_gameplay_player_action(const PlayerAction &action) {
 
         if(
             game.states.gameplay->mobs.pikmin_list.size() <
-            game.config.max_pikmin_in_field
+            game.config.rules.max_pikmin_in_field
         ) {
             bool is_shift_pressed;
             bool is_ctrl_pressed;

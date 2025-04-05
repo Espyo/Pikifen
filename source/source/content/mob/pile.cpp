@@ -70,7 +70,7 @@ bool Pile::get_fraction_numbers_info(
     if(amount == 0 || !pil_type->show_amount) return false;
     *fraction_value_nr = amount;
     *fraction_req_nr = 0;
-    *fraction_color = game.config.carrying_color_stop;
+    *fraction_color = game.config.aesthetic_gen.carrying_color_stop;
     return true;
 }
 

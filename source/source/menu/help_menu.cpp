@@ -110,11 +110,11 @@ void HelpMenu::load() {
             category_tidbits.push_back(new_t);
         }
     }
-    for(size_t p = 0; p < game.config.pikmin_order.size(); p++) {
+    for(size_t p = 0; p < game.config.pikmin.order.size(); p++) {
         Tidbit new_t;
-        new_t.name = game.config.pikmin_order[p]->name;
-        new_t.description = game.config.pikmin_order[p]->description;
-        new_t.image = game.config.pikmin_order[p]->bmp_icon;
+        new_t.name = game.config.pikmin.order[p]->name;
+        new_t.description = game.config.pikmin.order[p]->description;
+        new_t.image = game.config.pikmin.order[p]->bmp_icon;
         tidbits[HELP_CATEGORY_PIKMIN].push_back(new_t);
     }
     

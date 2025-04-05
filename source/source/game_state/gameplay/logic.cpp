@@ -46,7 +46,7 @@ void GameplayState::do_aesthetic_leader_logic(float delta_t) {
             
         Distance max_dist =
             (swarm_magnitude > 0) ?
-            Distance(game.config.cursor_max_dist * swarm_magnitude) :
+            Distance(game.config.rules.cursor_max_dist * swarm_magnitude) :
             leader_to_cursor_dist;
             
         if(max_dist < cur_leader_ptr->swarm_arrows[a]) {
@@ -62,8 +62,8 @@ void GameplayState::do_aesthetic_leader_logic(float delta_t) {
     float whistle_dist;
     Point whistle_pos;
     
-    if(leader_to_cursor_dist > game.config.whistle_max_dist) {
-        whistle_dist = game.config.whistle_max_dist;
+    if(leader_to_cursor_dist > game.config.rules.whistle_max_dist) {
+        whistle_dist = game.config.rules.whistle_max_dist;
         float whistle_angle =
             get_angle(cur_leader_ptr->pos, leader_cursor_w);
         whistle_pos = angle_to_coordinates(whistle_angle, whistle_dist);
@@ -81,11 +81,11 @@ void GameplayState::do_aesthetic_leader_logic(float delta_t) {
     //Where the cursor is.
     cursor_height_diff_light = 0;
     
-    if(leader_to_cursor_dist > game.config.throw_max_dist) {
+    if(leader_to_cursor_dist > game.config.rules.throw_max_dist) {
         float throw_angle =
             get_angle(cur_leader_ptr->pos, leader_cursor_w);
         throw_dest =
-            angle_to_coordinates(throw_angle, game.config.throw_max_dist);
+            angle_to_coordinates(throw_angle, game.config.rules.throw_max_dist);
         throw_dest += cur_leader_ptr->pos;
     } else {
         throw_dest = leader_cursor_w;
@@ -177,7 +177,7 @@ void GameplayState::do_gameplay_leader_logic(float delta_t) {
         whistle.whistling &&
         whistle.radius < cur_leader_ptr->lea_type->whistle_range
     ) {
-        whistle.radius += game.config.whistle_growth_speed * delta_t;
+        whistle.radius += game.config.rules.whistle_growth_speed * delta_t;
         if(whistle.radius > cur_leader_ptr->lea_type->whistle_range) {
             whistle.radius = cur_leader_ptr->lea_type->whistle_range;
         }
@@ -391,7 +391,7 @@ void GameplayState::do_gameplay_leader_logic(float delta_t) {
         close_to_pikmin_to_pluck = nullptr;
         if(!notification_done) {
             Pikmin* p = get_closest_sprout(cur_leader_ptr->pos, &d, false);
-            if(p && d <= game.config.pluck_range) {
+            if(p && d <= game.config.leaders.pluck_range) {
                 close_to_pikmin_to_pluck = p;
                 notification.set_enabled(true);
                 notification.set_contents(
@@ -415,7 +415,7 @@ void GameplayState::do_gameplay_leader_logic(float delta_t) {
         if(!notification_done) {
             for(size_t o = 0; o < mobs.onions.size(); o++) {
                 d = Distance(cur_leader_ptr->pos, mobs.onions[o]->pos);
-                if(d > game.config.onion_open_range) continue;
+                if(d > game.config.leaders.onion_open_range) continue;
                 if(d < closest_d || !close_to_nest_to_open) {
                     close_to_nest_to_open = mobs.onions[o]->nest;
                     closest_d = d;
@@ -482,14 +482,14 @@ void GameplayState::do_gameplay_leader_logic(float delta_t) {
     float cursor_angle = get_angle(cur_leader_ptr->pos, leader_cursor_w);
     
     Distance leader_to_cursor_dist(cur_leader_ptr->pos, leader_cursor_w);
-    if(leader_to_cursor_dist > game.config.cursor_max_dist) {
+    if(leader_to_cursor_dist > game.config.rules.cursor_max_dist) {
         //Cursor goes beyond the range limit.
         leader_cursor_w.x =
             cur_leader_ptr->pos.x +
-            (cos(cursor_angle) * game.config.cursor_max_dist);
+            (cos(cursor_angle) * game.config.rules.cursor_max_dist);
         leader_cursor_w.y =
             cur_leader_ptr->pos.y +
-            (sin(cursor_angle) * game.config.cursor_max_dist);
+            (sin(cursor_angle) * game.config.rules.cursor_max_dist);
             
         if(mouse_cursor_speed.x != 0 || mouse_cursor_speed.y != 0) {
             //If we're speeding the mouse cursor (via analog stick),
@@ -537,7 +537,7 @@ void GameplayState::do_gameplay_leader_logic(float delta_t) {
         swarm_angle = cursor_angle;
         leader_to_cursor_dist = Distance(cur_leader_ptr->pos, leader_cursor_w);
         swarm_magnitude =
-            leader_to_cursor_dist.to_float() / game.config.cursor_max_dist;
+            leader_to_cursor_dist.to_float() / game.config.rules.cursor_max_dist;
     }
     
     if(old_swarm_magnitude != swarm_magnitude) {
@@ -1193,7 +1193,7 @@ void GameplayState::do_menu_logic() {
             "-" :
             game.cur_area_data->maker;
         string game_v_str =
-            game.config.version.empty() ? "-" : game.config.version;
+            game.config.general.version.empty() ? "-" : game.config.general.version;
             
         print_info(
             header_str +
@@ -1786,7 +1786,7 @@ void GameplayState::process_mob_misc_interactions(
         //Pikmin don't get bumped by leaders that are,
         //for instance, lying down.
         m2_ptr->fsm.cur_state->id == LEADER_STATE_ACTIVE &&
-        d <= game.config.idle_bump_range
+        d <= game.config.pikmin.idle_bump_range
     ) {
         pending_intermob_events.push_back(
             PendingIntermobEvent(d_between, touch_le_ev, m2_ptr)

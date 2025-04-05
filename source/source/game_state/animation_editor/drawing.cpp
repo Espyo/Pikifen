@@ -449,8 +449,8 @@ void AnimationEditor::draw_side_view_hitbox(
 void AnimationEditor::draw_side_view_leader_silhouette(float x_offset) {
     draw_bitmap(
         game.sys_content.bmp_leader_silhouette_side,
-        Point(x_offset, -game.config.standard_leader_height / 2.0),
-        Point(-1, game.config.standard_leader_height),
+        Point(x_offset, -game.config.leaders.standard_height / 2.0),
+        Point(-1, game.config.leaders.standard_height),
         0, al_map_rgba(240, 240, 240, 160)
     );
 }
@@ -674,7 +674,7 @@ void AnimationEditor::draw_top_down_view_leader_silhouette(
 ) {
     draw_bitmap(
         game.sys_content.bmp_leader_silhouette_top, Point(x_offset, 0),
-        Point(-1, game.config.standard_leader_radius * 2.0f),
+        Point(-1, game.config.leaders.standard_radius * 2.0f),
         0, al_map_rgba(240, 240, 240, 160)
     );
 }

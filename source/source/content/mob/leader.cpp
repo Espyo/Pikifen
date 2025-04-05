@@ -227,7 +227,7 @@ bool Leader::can_grab_group_member(Mob* m) const {
     //Check if the mob is within range.
     if(
         Distance(m->pos, pos) >
-        game.config.group_member_grab_range
+        game.config.leaders.group_member_grab_range
     ) {
         return false;
     }
@@ -392,8 +392,8 @@ void Leader::dismiss() {
         //it appears to the left and right of the center.
         //So count each one twice. Except for the central one.
         subgroups_info[s].radius =
-            game.config.standard_pikmin_radius +
-            game.config.standard_pikmin_radius * 2 *
+            game.config.pikmin.standard_radius +
+            game.config.pikmin.standard_radius * 2 *
             LEADER::DISMISS_MEMBER_SIZE_MULTIPLIER * (n_rows - 1);
     }
     
@@ -566,7 +566,7 @@ void Leader::dismiss() {
                     subgroups_info[s].center +
                     angle_to_coordinates(
                         member_angle,
-                        cur_row_idx * game.config.standard_pikmin_radius * 2 *
+                        cur_row_idx * game.config.pikmin.standard_radius * 2 *
                         LEADER::DISMISS_MEMBER_SIZE_MULTIPLIER
                     );
             }
@@ -729,7 +729,7 @@ void Leader::get_group_spot_info(
     
     float distance =
         following_group->radius +
-        radius + game.config.standard_pikmin_radius;
+        radius + game.config.pikmin.standard_radius;
         
     for(size_t me = 0; me < leader_group_ptr->members.size(); me++) {
         Mob* member_ptr = leader_group_ptr->members[me];

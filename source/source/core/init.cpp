@@ -933,8 +933,8 @@ void init_misc() {
     game.options.advanced.zoom_mid_level =
         std::clamp(
             game.options.advanced.zoom_mid_level,
-            game.config.zoom_min_level,
-            game.config.zoom_max_level
+            game.config.rules.zoom_min_level,
+            game.config.rules.zoom_max_level
         );
         
     game.liquid_limit_effect_buffer = al_create_bitmap(game.win_w, game.win_h);

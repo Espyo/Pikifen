@@ -83,7 +83,7 @@ bool MissionFailKillEnemies::get_end_zoom_data(
 ) const {
     if(gameplay->last_enemy_killed_pos.x != LARGE_FLOAT) {
         *out_cam_pos = gameplay->last_enemy_killed_pos;
-        *out_cam_zoom = game.config.zoom_max_level;
+        *out_cam_zoom = game.config.rules.zoom_max_level;
         return true;
     }
     return false;
@@ -228,7 +228,7 @@ bool MissionFailLoseLeaders::get_end_zoom_data(
 ) const {
     if(gameplay->last_hurt_leader_pos.x != LARGE_FLOAT) {
         *out_cam_pos = gameplay->last_hurt_leader_pos;
-        *out_cam_zoom = game.config.zoom_max_level;
+        *out_cam_zoom = game.config.rules.zoom_max_level;
         return true;
     }
     return false;
@@ -371,7 +371,7 @@ bool MissionFailLosePikmin::get_end_zoom_data(
 ) const {
     if(gameplay->last_pikmin_death_pos.x != LARGE_FLOAT) {
         *out_cam_pos = gameplay->last_pikmin_death_pos;
-        *out_cam_zoom = game.config.zoom_max_level;
+        *out_cam_zoom = game.config.rules.zoom_max_level;
         return true;
     }
     return false;
@@ -639,7 +639,7 @@ bool MissionFailTakeDamage::get_end_zoom_data(
 ) const {
     if(gameplay->last_hurt_leader_pos.x != LARGE_FLOAT) {
         *out_cam_pos = gameplay->last_hurt_leader_pos;
-        *out_cam_zoom = game.config.zoom_max_level;
+        *out_cam_zoom = game.config.rules.zoom_max_level;
         return true;
     }
     return false;
@@ -933,7 +933,7 @@ bool MissionFailTooFewPikmin::get_end_zoom_data(
 ) const {
     if(gameplay->last_pikmin_death_pos.x != LARGE_FLOAT) {
         *out_cam_pos = gameplay->last_pikmin_death_pos;
-        *out_cam_zoom = game.config.zoom_max_level;
+        *out_cam_zoom = game.config.rules.zoom_max_level;
         return true;
     }
     return false;
@@ -1076,7 +1076,7 @@ bool MissionFailTooManyPikmin::get_end_zoom_data(
 ) const {
     if(gameplay->last_pikmin_born_pos.x != LARGE_FLOAT) {
         *out_cam_pos = gameplay->last_pikmin_born_pos;
-        *out_cam_zoom = game.config.zoom_max_level;
+        *out_cam_zoom = game.config.rules.zoom_max_level;
         return true;
     }
     return false;
@@ -1231,7 +1231,7 @@ bool MissionGoalBattleEnemies::get_end_zoom_data(
 ) const {
     if(gameplay->last_enemy_killed_pos.x != LARGE_FLOAT) {
         *out_cam_pos = gameplay->last_enemy_killed_pos;
-        *out_cam_zoom = game.config.zoom_max_level;
+        *out_cam_zoom = game.config.rules.zoom_max_level;
         return true;
     }
     return false;
@@ -1383,7 +1383,7 @@ bool MissionGoalCollectTreasures::get_end_zoom_data(
 ) const {
     if(gameplay->last_ship_that_got_treasure_pos.x != LARGE_FLOAT) {
         *out_cam_pos = gameplay->last_ship_that_got_treasure_pos;
-        *out_cam_zoom = game.config.zoom_max_level;
+        *out_cam_zoom = game.config.rules.zoom_max_level;
         return true;
     }
     return false;
@@ -1850,7 +1850,7 @@ bool MissionGoalGrowPikmin::get_end_zoom_data(
 ) const {
     if(gameplay->last_pikmin_born_pos.x != LARGE_FLOAT) {
         *out_cam_pos = gameplay->last_pikmin_born_pos;
-        *out_cam_zoom = game.config.zoom_max_level;
+        *out_cam_zoom = game.config.rules.zoom_max_level;
         return true;
     }
     return false;

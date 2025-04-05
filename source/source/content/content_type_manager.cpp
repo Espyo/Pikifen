@@ -888,7 +888,9 @@ void MiscConfigContentManager::load_all(CONTENT_LOAD_LEVEL level) {
     
     al_set_window_title(
         game.display,
-        game.config.name.empty() ? "Pikifen" : game.config.name.c_str()
+        game.config.general.name.empty() ?
+        "Pikifen" :
+        game.config.general.name.c_str()
     );
     
     //System content names.
@@ -1192,7 +1194,7 @@ void MobTypeContentManager::load_all(CONTENT_LOAD_LEVEL level) {
     //Pikmin type order.
     vector<string> missing_pikmin_order_types;
     for(auto &p : list.pikmin) {
-        if(!is_in_container(game.config.pikmin_order_strings, p.first)) {
+        if(!is_in_container(game.config.pikmin.order_strings, p.first)) {
             //Missing from the list? Add it to the "missing" pile.
             missing_pikmin_order_types.push_back(p.first);
         }
@@ -1202,16 +1204,16 @@ void MobTypeContentManager::load_all(CONTENT_LOAD_LEVEL level) {
             missing_pikmin_order_types.begin(),
             missing_pikmin_order_types.end()
         );
-        game.config.pikmin_order_strings.insert(
-            game.config.pikmin_order_strings.end(),
+        game.config.pikmin.order_strings.insert(
+            game.config.pikmin.order_strings.end(),
             missing_pikmin_order_types.begin(),
             missing_pikmin_order_types.end()
         );
     }
-    for(size_t o = 0; o < game.config.pikmin_order_strings.size(); o++) {
-        string s = game.config.pikmin_order_strings[o];
+    for(size_t o = 0; o < game.config.pikmin.order_strings.size(); o++) {
+        string s = game.config.pikmin.order_strings[o];
         if(list.pikmin.find(s) != list.pikmin.end()) {
-            game.config.pikmin_order.push_back(list.pikmin[s]);
+            game.config.pikmin.order.push_back(list.pikmin[s]);
         } else {
             game.errors.report(
                 "Unknown Pikmin type \"" + s + "\" found "
@@ -1225,10 +1227,10 @@ void MobTypeContentManager::load_all(CONTENT_LOAD_LEVEL level) {
     for(auto &l : list.leader) {
         if(
             find(
-                game.config.leader_order_strings.begin(),
-                game.config.leader_order_strings.end(),
+                game.config.leaders.order_strings.begin(),
+                game.config.leaders.order_strings.end(),
                 l.first
-            ) == game.config.leader_order_strings.end()
+            ) == game.config.leaders.order_strings.end()
         ) {
             //Missing from the list? Add it to the "missing" pile.
             missing_leader_order_types.push_back(l.first);
@@ -1239,16 +1241,16 @@ void MobTypeContentManager::load_all(CONTENT_LOAD_LEVEL level) {
             missing_leader_order_types.begin(),
             missing_leader_order_types.end()
         );
-        game.config.leader_order_strings.insert(
-            game.config.leader_order_strings.end(),
+        game.config.leaders.order_strings.insert(
+            game.config.leaders.order_strings.end(),
             missing_leader_order_types.begin(),
             missing_leader_order_types.end()
         );
     }
-    for(size_t o = 0; o < game.config.leader_order_strings.size(); o++) {
-        string s = game.config.leader_order_strings[o];
+    for(size_t o = 0; o < game.config.leaders.order_strings.size(); o++) {
+        string s = game.config.leaders.order_strings[o];
         if(list.leader.find(s) != list.leader.end()) {
-            game.config.leader_order.push_back(list.leader[s]);
+            game.config.leaders.order.push_back(list.leader[s]);
         } else {
             game.errors.report(
                 "Unknown leader type \"" + s + "\" found "
@@ -1337,8 +1339,8 @@ void MobTypeContentManager::path_to_manifest(
  * @param level Load level. Should match the level used to load the content.
  */
 void MobTypeContentManager::unload_all(CONTENT_LOAD_LEVEL level) {
-    game.config.leader_order.clear();
-    game.config.pikmin_order.clear();
+    game.config.leaders.order.clear();
+    game.config.pikmin.order.clear();
     
     for(size_t c = 0; c < N_MOB_CATEGORIES; c++) {
         MobCategory* category = game.mob_categories.get((MOB_CATEGORY) c);
@@ -1968,10 +1970,10 @@ void SprayTypeContentManager::load_all(CONTENT_LOAD_LEVEL level) {
     for(auto &s : list) {
         if(
             find(
-                game.config.spray_order_strings.begin(),
-                game.config.spray_order_strings.end(),
+                game.config.misc.spray_order_strings.begin(),
+                game.config.misc.spray_order_strings.end(),
                 s.first
-            ) == game.config.spray_order_strings.end()
+            ) == game.config.misc.spray_order_strings.end()
         ) {
             //Missing from the list? Add it to the "missing" pile.
             missing_spray_order_types.push_back(s.first);
@@ -1982,16 +1984,16 @@ void SprayTypeContentManager::load_all(CONTENT_LOAD_LEVEL level) {
             missing_spray_order_types.begin(),
             missing_spray_order_types.end()
         );
-        game.config.spray_order_strings.insert(
-            game.config.spray_order_strings.end(),
+        game.config.misc.spray_order_strings.insert(
+            game.config.misc.spray_order_strings.end(),
             missing_spray_order_types.begin(),
             missing_spray_order_types.end()
         );
     }
-    for(size_t o = 0; o < game.config.spray_order_strings.size(); o++) {
-        string s = game.config.spray_order_strings[o];
+    for(size_t o = 0; o < game.config.misc.spray_order_strings.size(); o++) {
+        string s = game.config.misc.spray_order_strings[o];
         if(list.find(s) != list.end()) {
-            game.config.spray_order.push_back(&list[s]);
+            game.config.misc.spray_order.push_back(&list[s]);
         } else {
             game.errors.report(
                 "Unknown spray type \"" + s + "\" found "
@@ -2061,7 +2063,7 @@ void SprayTypeContentManager::unload_all(CONTENT_LOAD_LEVEL level) {
     for(const auto &s : list) {
         game.content.bitmaps.list.free(s.second.bmp_spray);
     }
-    game.config.spray_order.clear();
+    game.config.misc.spray_order.clear();
     list.clear();
 }
 

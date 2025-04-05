@@ -1827,14 +1827,14 @@ void AreaEditor::process_gui_panel_gameplay() {
         
             map<string, string> spray_strs =
                 get_var_map(game.cur_area_data->spray_amounts);
-            for(size_t s = 0; s < game.config.spray_order.size(); s++) {
+            for(size_t s = 0; s < game.config.misc.spray_order.size(); s++) {
                 string spray_internal_name =
-                    game.config.spray_order[s]->manifest->internal_name;
+                    game.config.misc.spray_order[s]->manifest->internal_name;
                 int amount = s2i(spray_strs[spray_internal_name]);
                 ImGui::SetNextItemWidth(50);
                 if(
                     ImGui::DragInt(
-                        game.config.spray_order[s]->name.c_str(), &amount,
+                        game.config.misc.spray_order[s]->name.c_str(), &amount,
                         0.1, 0, INT_MAX
                     )
                 ) {

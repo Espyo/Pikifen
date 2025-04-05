@@ -90,8 +90,11 @@ void DropType::load_cat_properties(DataNode* file) {
     }
     
     if(effect == DROP_EFFECT_INCREASE_SPRAYS) {
-        for(size_t s = 0; s < game.config.spray_order.size(); s++) {
-            if(game.config.spray_order[s]->manifest->internal_name == spray_name_str) {
+        for(size_t s = 0; s < game.config.misc.spray_order.size(); s++) {
+            if(
+                game.config.misc.spray_order[s]->manifest->internal_name ==
+                spray_name_str
+            ) {
                 spray_type_to_increase = s;
                 break;
             }

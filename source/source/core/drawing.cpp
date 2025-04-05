@@ -991,7 +991,7 @@ void draw_mouse_cursor(const ALLEGRO_COLOR &color) {
         game.sys_content.bmp_mouse_cursor,
         game.mouse_cursor.s_pos,
         get_bitmap_dimensions(game.sys_content.bmp_mouse_cursor),
-        -(game.time_passed * game.config.cursor_spin_speed),
+        -(game.time_passed * game.config.aesthetic_gen.cursor_spin_speed),
         color
     );
 }

@@ -78,7 +78,7 @@ bool Scale::get_fraction_numbers_info(
     if(weight <= 0 || health <= 0) return false;
     *fraction_value_nr = weight;
     *fraction_req_nr = goal_number;
-    *fraction_color = game.config.carrying_color_stop;
+    *fraction_color = game.config.aesthetic_gen.carrying_color_stop;
     return true;
 }
 

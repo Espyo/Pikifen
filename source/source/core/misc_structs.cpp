@@ -425,9 +425,9 @@ void ErrorManager::log_to_file(const string &s) {
             header += "\n\n";
         }
         header += "Pikifen version " + get_engine_version_string();
-        if(!game.config.version.empty()) {
+        if(!game.config.general.version.empty()) {
             header +=
-                ", " + game.config.name + " version " + game.config.version;
+                ", " + game.config.general.name + " version " + game.config.general.version;
         }
         header += ":\n";
         output += header;
@@ -1153,8 +1153,8 @@ void PerformanceMonitor::save_log() {
         "\n" +
         get_current_time(false) +
         "; Pikifen version " + get_engine_version_string();
-    if(!game.config.version.empty()) {
-        s += ", game version " + game.config.version;
+    if(!game.config.general.version.empty()) {
+        s += ", game version " + game.config.general.version;
     }
     
     s +=
@@ -1966,7 +1966,7 @@ void Whistle::tick(
         for(unsigned char d = 0; d < 6; d++) {
             if(dot_radius[d] == -1) continue;
             
-            dot_radius[d] += game.config.whistle_growth_speed * delta_t;
+            dot_radius[d] += game.config.rules.whistle_growth_speed * delta_t;
             if(radius > 0 && dot_radius[d] > whistle_range) {
                 dot_radius[d] = whistle_range;
                 

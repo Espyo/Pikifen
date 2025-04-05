@@ -97,8 +97,11 @@ void ResourceType::load_cat_properties(DataNode* file) {
     }
     
     if(delivery_result == RESOURCE_DELIVERY_RESULT_INCREASE_INGREDIENTS) {
-        for(size_t s = 0; s < game.config.spray_order.size(); s++) {
-            if(game.config.spray_order[s]->manifest->internal_name == spray_to_concoct_str) {
+        for(size_t s = 0; s < game.config.misc.spray_order.size(); s++) {
+            if(
+                game.config.misc.spray_order[s]->manifest->internal_name ==
+                spray_to_concoct_str
+            ) {
                 spray_to_concoct = s;
                 break;
             }

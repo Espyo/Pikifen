@@ -46,7 +46,7 @@
 //Returns the task range for whether the Pikmin is idling or being C-sticked.
 #define task_range(p) \
     (((p)->following_group == cur_leader_ptr && swarm_magnitude) ? \
-     game.config.swarm_task_range : game.config.idle_task_range)
+     game.config.pikmin.swarm_task_range : game.config.pikmin.idle_task_range)
 
 
 /**

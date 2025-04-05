@@ -78,10 +78,10 @@ void TitleScreen::do_drawing() {
         ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP
     );
     string version_text;
-    if(!game.config.name.empty()) {
-        version_text = game.config.name;
-        if(!game.config.version.empty()) {
-            version_text += " " + game.config.version;
+    if(!game.config.general.name.empty()) {
+        version_text = game.config.general.name;
+        if(!game.config.general.version.empty()) {
+            version_text += " " + game.config.general.version;
         }
         version_text += ", powered by ";
     }
@@ -459,9 +459,9 @@ void TitleScreen::init_gui_main_page() {
     main_gui.back_item->on_get_tooltip =
     [] () {
         return
-            game.config.name.empty() ?
+            game.config.general.name.empty() ?
             "Quit Pikifen." :
-            "Quit " + game.config.name + ".";
+            "Quit " + game.config.general.name + ".";
     };
     main_gui.add_item(main_gui.back_item, "exit");
     

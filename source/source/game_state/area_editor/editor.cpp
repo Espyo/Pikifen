@@ -489,7 +489,7 @@ void AreaEditor::create_area(const string &requested_area_path) {
     
     //Now add a leader. The first available.
     game.cur_area_data->mob_generators.push_back(
-        new MobGen(Point(), game.config.leader_order[0], 0, "")
+        new MobGen(Point(), game.config.leaders.order[0], 0, "")
     );
     
     //Finish up.
@@ -547,9 +547,9 @@ void AreaEditor::create_mob_under_cursor() {
     
     if(last_mob_custom_cat_name.empty()) {
         last_mob_custom_cat_name =
-            game.config.pikmin_order[0]->custom_category_name;
+            game.config.pikmin.order[0]->custom_category_name;
         last_mob_type =
-            game.config.pikmin_order[0];
+            game.config.pikmin.order[0];
     }
     
     game.cur_area_data->mob_generators.push_back(

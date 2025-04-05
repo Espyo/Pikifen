@@ -114,10 +114,10 @@ void ship_fsm::receive_mob(Mob* m, void* info1, void* info2) {
             game.states.gameplay->spray_stats[type_idx].nr_ingredients++;
             if(
                 game.states.gameplay->spray_stats[type_idx].nr_ingredients >=
-                game.config.spray_order[type_idx]->ingredients_needed
+                game.config.misc.spray_order[type_idx]->ingredients_needed
             ) {
                 game.states.gameplay->spray_stats[type_idx].nr_ingredients -=
-                    game.config.spray_order[type_idx]->ingredients_needed;
+                    game.config.misc.spray_order[type_idx]->ingredients_needed;
                 game.states.gameplay->change_spray_count(type_idx, 1);
             }
             break;

@@ -360,14 +360,14 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
             if(!is_down) return;
             
             if(game.cam.target_zoom < game.options.advanced.zoom_mid_level) {
-                game.cam.target_zoom = game.config.zoom_max_level;
+                game.cam.target_zoom = game.config.rules.zoom_max_level;
             } else if(game.cam.target_zoom > game.options.advanced.zoom_mid_level) {
                 game.cam.target_zoom = game.options.advanced.zoom_mid_level;
             } else {
-                if(game.options.advanced.zoom_mid_level == game.config.zoom_min_level) {
-                    game.cam.target_zoom = game.config.zoom_max_level;
+                if(game.options.advanced.zoom_mid_level == game.config.rules.zoom_min_level) {
+                    game.cam.target_zoom = game.config.rules.zoom_max_level;
                 } else {
-                    game.cam.target_zoom = game.config.zoom_min_level;
+                    game.cam.target_zoom = game.config.rules.zoom_min_level;
                 }
             }
             
@@ -379,14 +379,14 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
         case PLAYER_ACTION_TYPE_ZOOM_OUT: {
     
             if(
-                game.cam.target_zoom >= game.config.zoom_max_level &&
+                game.cam.target_zoom >= game.config.rules.zoom_max_level &&
                 action.actionTypeId == PLAYER_ACTION_TYPE_ZOOM_IN
             ) {
                 return;
             }
             
             if(
-                game.cam.target_zoom <= game.config.zoom_min_level &&
+                game.cam.target_zoom <= game.config.rules.zoom_min_level &&
                 action.actionTypeId == PLAYER_ACTION_TYPE_ZOOM_OUT
             ) {
                 return;
@@ -400,11 +400,11 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
                 game.cam.target_zoom = game.cam.target_zoom - 0.1 * floored_pos;
             }
             
-            if(game.cam.target_zoom > game.config.zoom_max_level) {
-                game.cam.target_zoom = game.config.zoom_max_level;
+            if(game.cam.target_zoom > game.config.rules.zoom_max_level) {
+                game.cam.target_zoom = game.config.rules.zoom_max_level;
             }
-            if(game.cam.target_zoom < game.config.zoom_min_level) {
-                game.cam.target_zoom = game.config.zoom_min_level;
+            if(game.cam.target_zoom < game.config.rules.zoom_min_level) {
+                game.cam.target_zoom = game.config.rules.zoom_min_level;
             }
             
             SoundSourceConfig cam_sound_config;

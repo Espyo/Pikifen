@@ -171,20 +171,20 @@ void StatsMenu::load() {
  */
 void StatsMenu::populate_stats_list() {
     add_header(
-        (game.config.name.empty() ? "Pikifen" : game.config.name) +
+        (game.config.general.name.empty() ? "Pikifen" : game.config.general.name) +
         " use"
     );
     add_stat(
         "Startups", i2s(game.statistics.startups),
         "Total number of times " +
-        (game.config.name.empty() ? "Pikifen" : game.config.name) +
+        (game.config.general.name.empty() ? "Pikifen" : game.config.general.name) +
         " was started."
     );
     runtime_value_text =
         add_stat(
             "Runtime", "",
             "Total amount of time " +
-            (game.config.name.empty() ? "Pikifen" : game.config.name) +
+            (game.config.general.name.empty() ? "Pikifen" : game.config.general.name) +
             " was running for, in seconds."
         );
     update_runtime_value_text();
