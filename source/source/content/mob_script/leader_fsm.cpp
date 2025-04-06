@@ -355,9 +355,6 @@ void leader_fsm::create_fsm(MobType* typ) {
         efc.new_event(MOB_EV_ANIMATION_END); {
             efc.change_state("active");
         }
-        efc.new_event(MOB_EV_ON_TICK); {
-            efc.run(leader_fsm::tick_active_state);
-        }
         efc.new_event(LEADER_EV_MOVE_START); {
             efc.run(leader_fsm::move);
         }
