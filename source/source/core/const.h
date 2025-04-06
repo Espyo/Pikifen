@@ -250,17 +250,13 @@ namespace FOLDER_PATHS_FROM_PACK {
 const string AUDIO =
     FOLDER_NAMES::AUDIO;
     
-//Music folder.
-const string MUSIC =
-    AUDIO + "/" + FOLDER_NAMES::MUSIC;
-    
 //Songs folder.
 const string SONGS =
-    MUSIC + "/" + FOLDER_NAMES::SONGS;
+    AUDIO + "/" + FOLDER_NAMES::SONGS;
     
 //Song tracks folder.
 const string SONG_TRACKS =
-    MUSIC + "/" + FOLDER_NAMES::SONG_TRACKS;
+    AUDIO + "/" + FOLDER_NAMES::SONG_TRACKS;
     
 //Sound effects folder.
 const string SOUNDS =
