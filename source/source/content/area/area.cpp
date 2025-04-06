@@ -1343,15 +1343,13 @@ void Area::load_geometry_from_data_node(
             string link_data = links_node->getChild(l)->value;
             vector<string> link_data_parts = split(link_data);
             
-            PathLink* l_struct =
-                new PathLink(
-                s_ptr, nullptr, s2i(link_data_parts[0])
-            );
+            PathLink* l_ptr =
+                new PathLink(s_ptr, nullptr, s2i(link_data_parts[0]));
             if(link_data_parts.size() >= 2) {
-                l_struct->type = (PATH_LINK_TYPE) s2i(link_data_parts[1]);
+                l_ptr->type = (PATH_LINK_TYPE) s2i(link_data_parts[1]);
             }
             
-            s_ptr->links.push_back(l_struct);
+            s_ptr->links.push_back(l_ptr);
             
         }
         
@@ -1874,7 +1872,7 @@ void Area::save_geometry_to_data_node(DataNode* node) {
             if(l_ptr->type != PATH_LINK_TYPE_NORMAL) {
                 link_data += " " + i2s(l_ptr->type);
             }
-            links_node->addNew("nr", link_data);
+            links_node->addNew("l", link_data);
         }
         
     }

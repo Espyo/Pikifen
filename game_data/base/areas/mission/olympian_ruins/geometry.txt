@@ -3371,325 +3371,325 @@ path_stops{
 		pos=-320.0000 -368.0000
 		radius=67.5000
 		links{
-			nr=1
-			nr=15
-			nr=19
+			l=1
+			l=15
+			l=19
 		}
 	}
 	s{
 		pos=-96.0000 -400.0000
 		links{
-			nr=0
-			nr=2
+			l=0
+			l=2
 		}
 	}
 	s{
 		pos=128.0000 -368.0000
 		links{
-			nr=1
-			nr=3
+			l=1
+			l=3
 		}
 	}
 	s{
 		pos=240.0000 -240.0000
 		links{
-			nr=2
-			nr=4
-			nr=16
+			l=2
+			l=4
+			l=16
 		}
 	}
 	s{
 		pos=320.0000 -256.0000
 		links{
-			nr=3
-			nr=5
+			l=3
+			l=5
 		}
 	}
 	s{
 		pos=368.0000 -304.0000
 		links{
-			nr=4
-			nr=6
-			nr=17
+			l=4
+			l=6
+			l=17
 		}
 	}
 	s{
 		pos=512.0000 -240.0000
 		radius=58.5000
 		links{
-			nr=5
-			nr=7
+			l=5
+			l=7
 		}
 	}
 	s{
 		pos=496.0000 -112.0000
 		radius=61.0000
 		links{
-			nr=6
-			nr=8
+			l=6
+			l=8
 		}
 	}
 	s{
 		pos=320.0000 0.0000
 		links{
-			nr=7
-			nr=9
-			nr=14
-			nr=16
-			nr=25
+			l=7
+			l=9
+			l=14
+			l=16
+			l=25
 		}
 	}
 	s{
 		pos=208.0000 32.0000
 		links{
-			nr=8
-			nr=10
-			nr=14
-			nr=25
-			nr=16
+			l=8
+			l=10
+			l=14
+			l=25
+			l=16
 		}
 	}
 	s{
 		pos=64.0000 64.0000
 		links{
-			nr=9
-			nr=14
-			nr=12
-			nr=11
-			nr=13
+			l=9
+			l=14
+			l=12
+			l=11
+			l=13
 		}
 	}
 	s{
 		pos=-80.0000 -144.0000
 		radius=53.0000
 		links{
-			nr=12
-			nr=10
-			nr=15
-			nr=16
+			l=12
+			l=10
+			l=15
+			l=16
 		}
 	}
 	s{
 		pos=-144.0000 0.0000
 		radius=41.0000
 		links{
-			nr=11
-			nr=13
-			nr=10
-			nr=14
-			nr=38
+			l=11
+			l=13
+			l=10
+			l=14
+			l=38
 		}
 	}
 	s{
 		pos=-64.0000 176.0000
 		radius=41.0000
 		links{
-			nr=12
-			nr=14
-			nr=10
-			nr=30
+			l=12
+			l=14
+			l=10
+			l=30
 		}
 	}
 	s{
 		pos=96.0000 192.0000
 		links{
-			nr=13
-			nr=10
-			nr=12
-			nr=9
-			nr=8
-			nr=25
+			l=13
+			l=10
+			l=12
+			l=9
+			l=8
+			l=25
 		}
 	}
 	s{
 		pos=-240.0000 -304.0000
 		links{
-			nr=11
-			nr=0
+			l=11
+			l=0
 		}
 	}
 	s{
 		pos=192.0000 -128.0000
 		links{
-			nr=3
-			nr=8
-			nr=9
-			nr=11
+			l=3
+			l=8
+			l=9
+			l=11
 		}
 	}
 	s{
 		pos=384.0000 -400.0000
 		links{
-			nr=5
-			nr=18
+			l=5
+			l=18
 		}
 	}
 	s{
 		pos=480.0000 -512.0000
 		radius=73.0000
 		links{
-			nr=17
+			l=17
 		}
 	}
 	s{
 		pos=-352.0000 -192.0000
 		links{
-			nr=0
+			l=0
 		}
 	}
 	s{
 		pos=320.0000 288.0000
 		links{
-			nr=21
-			nr=25
+			l=21
+			l=25
 		}
 	}
 	s{
 		pos=400.0000 448.0000
 		radius=84.5000
 		links{
-			nr=20
-			nr=22
-			nr=24
+			l=20
+			l=22
+			l=24
 		}
 	}
 	s{
 		pos=416.0000 704.0000
 		radius=50.0000
 		links{
-			nr=21
-			nr=23
+			l=21
+			l=23
 		}
 	}
 	s{
 		pos=208.0000 720.0000
 		radius=30.0000
 		links{
-			nr=22
-			nr=24
-			nr=26
+			l=22
+			l=24
+			l=26
 		}
 	}
 	s{
 		pos=160.0000 480.0000
 		radius=34.0000
 		links{
-			nr=23
-			nr=21
+			l=23
+			l=21
 		}
 	}
 	s{
 		pos=224.0000 144.0000
 		radius=25.5000
 		links{
-			nr=9
-			nr=20
-			nr=8
-			nr=14
+			l=9
+			l=20
+			l=8
+			l=14
 		}
 	}
 	s{
 		pos=192.0000 864.0000
 		radius=38.0000
 		links{
-			nr=23
-			nr=27
+			l=23
+			l=27
 		}
 	}
 	s{
 		pos=0.0000 800.0000
 		radius=59.5000
 		links{
-			nr=26
-			nr=28
-			nr=33
+			l=26
+			l=28
+			l=33
 		}
 	}
 	s{
 		pos=-80.0000 640.0000
 		radius=57.5000
 		links{
-			nr=27
-			nr=29
-			nr=33
+			l=27
+			l=29
+			l=33
 		}
 	}
 	s{
 		pos=-48.0000 464.0000
 		radius=36.5000
 		links{
-			nr=28
-			nr=30
+			l=28
+			l=30
 		}
 	}
 	s{
 		pos=-112.0000 368.0000
 		radius=38.5000
 		links{
-			nr=29
-			nr=13
-			nr=31
+			l=29
+			l=13
+			l=31
 		}
 	}
 	s{
 		pos=-384.0000 384.0000
 		radius=77.5000
 		links{
-			nr=30
-			nr=32
-			nr=34
+			l=30
+			l=32
+			l=34
 		}
 	}
 	s{
 		pos=-352.0000 480.0000
 		links{
-			nr=31
-			nr=33
+			l=31
+			l=33
 		}
 	}
 	s{
 		pos=-192.0000 656.0000
 		links{
-			nr=32
-			nr=28
-			nr=27
+			l=32
+			l=28
+			l=27
 		}
 	}
 	s{
 		pos=-368.0000 176.0000
 		radius=48.0000
 		links{
-			nr=31
-			nr=35
+			l=31
+			l=35
 		}
 	}
 	s{
 		pos=-480.0000 16.0000
 		radius=62.5000
 		links{
-			nr=34
-			nr=36
+			l=34
+			l=36
 		}
 	}
 	s{
 		pos=-336.0000 32.0000
 		links{
-			nr=35
-			nr=37
+			l=35
+			l=37
 		}
 	}
 	s{
 		pos=-272.0000 64.0000
 		links{
-			nr=36
-			nr=38
+			l=36
+			l=38
 		}
 	}
 	s{
 		pos=-192.0000 64.0000
 		links{
-			nr=37
-			nr=12
+			l=37
+			l=12
 		}
 	}
 }
@@ -3697,8 +3697,8 @@ tree_shadows{
 	shadow{
 		pos=389.9516 -278.6553
 		size=4447.8667 5373.8838
-		angle=0.6300
 		file=textures/tree_shadow
 		sway=1.0000 1.0000
+		angle=0.6300
 	}
 }

@@ -13,7 +13,7 @@ bg_zoom=0.9000
 song=areas/frosty_breath
 weather=snowstorm
 day_time_start=480
-day_time_speed=72
+day_time_speed=72.0000
 spray_amounts
 mission_goal=Survive
 mission_goal_amount=600

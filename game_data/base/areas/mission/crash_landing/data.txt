@@ -13,7 +13,7 @@ bg_zoom=3.0000
 song=areas/red_alert
 weather=red_alert
 day_time_start=0
-day_time_speed=600
+day_time_speed=600.0000
 spray_amounts
 mission_goal=Get to the exit
 mission_goal_all_mobs=true

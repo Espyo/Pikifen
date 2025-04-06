@@ -13,7 +13,7 @@ bg_zoom=1.0000
 song
 weather=cave_normal
 day_time_start=420
-day_time_speed=120
+day_time_speed=120.0000
 spray_amounts
 mission_goal=Get to the exit
 mission_goal_all_mobs=true
