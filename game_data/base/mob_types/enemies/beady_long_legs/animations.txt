@@ -1,4 +1,4 @@
-name
+name=Beady Long Legs animations
 engine_version=0.25.0
 animations{
 	dying_01{
@@ -164,27 +164,27 @@ animations{
 				interpolate=true
 			}
 			resting_01{
-				duration=0.1000
+				duration=0.4000
 				interpolate=true
 			}
 			resting_02{
-				duration=0.1000
-				interpolate=true
-			}
-			resting_03{
-				duration=1.0000
-				interpolate=true
-			}
-			resting_02{
-				duration=0.1000
+				duration=0.4000
 				interpolate=true
 			}
 			resting_01{
-				duration=0.1000
+				duration=0.4000
+				interpolate=true
+			}
+			resting_02{
+				duration=0.4000
+				interpolate=true
+			}
+			resting_01{
+				duration=0.3000
 				interpolate=true
 			}
 			idling{
-				duration=0.2000
+				duration=0.1000
 				interpolate=true
 			}
 		}
@@ -938,39 +938,39 @@ sprites{
 		file=enemies/beady_long_legs
 		file_pos=0.0000 0.0000
 		file_size=142.0000 142.0000
-		scale=0.9700 0.9700
+		scale=0.8900 0.8900
 		hitboxes{
 			body{
-				coords=0.0000 0.0000 -25.0000
+				coords=0.0000 0.0000 -75.0000
 				height=140.0000
-				radius=69.0000
+				radius=64.0000
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
 			}
 			front_right{
-				coords=3.5000 3.5000 132.0000
+				coords=2.5000 2.5000 132.0000
 				height=8.0000
 				radius=8.0000
 				type=2
 				value=1.0000
 			}
 			front_left{
-				coords=3.5000 -3.5000 132.0000
+				coords=2.5000 -2.5000 132.0000
 				height=8.0000
 				radius=8.0000
 				type=2
 				value=1.0000
 			}
 			back_right{
-				coords=-3.5000 3.5000 132.0000
+				coords=-2.5000 2.5000 132.0000
 				height=8.0000
 				radius=8.0000
 				type=2
 				value=1.0000
 			}
 			back_left{
-				coords=-3.5000 -3.5000 132.0000
+				coords=-2.5000 -2.5000 132.0000
 				height=8.0000
 				radius=8.0000
 				type=2
@@ -982,56 +982,12 @@ sprites{
 		file=enemies/beady_long_legs
 		file_pos=0.0000 0.0000
 		file_size=142.0000 142.0000
-		scale=0.9400 0.9400
-		hitboxes{
-			body{
-				coords=0.0000 0.0000 -50.0000
-				height=140.0000
-				radius=67.0000
-				type=0
-				value=1.0000
-				can_pikmin_latch=true
-			}
-			front_right{
-				coords=3.0000 3.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-			front_left{
-				coords=3.0000 -3.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-			back_right{
-				coords=-3.0000 3.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-			back_left{
-				coords=-3.0000 -3.0000 132.0000
-				height=8.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	resting_03{
-		file=enemies/beady_long_legs
-		file_pos=0.0000 0.0000
-		file_size=142.0000 142.0000
-		scale=0.9100 0.9100
+		scale=0.8700 0.8700
 		hitboxes{
 			body{
 				coords=0.0000 0.0000 -75.0000
 				height=140.0000
-				radius=65.0000
+				radius=64.0000
 				type=0
 				value=1.0000
 				can_pikmin_latch=true

@@ -15,7 +15,8 @@ pushes = true
 pushes_softly = true
 radius = 37.5
 rotation_speed = 200
-target_type = enemy
+target_type = none
+team = enemy_2
 
 sounds {
     stomp {
