@@ -599,6 +599,18 @@ When testing, test with the specified sectors in the void, and inside a big sect
 * Implemented in 4875e616cbdafb191b46243728931ee2d95f6c66.
 
 
++-------+    +-------+
+|       |     \      |
+|       |      |     |
+@       | ->    \    |
+|       |        |   |
+|       |         \  |
++---+---+    +---+-@-+
+* Have a rectangular sector in which two adjacent edges have a vertex in the middle each. Then drag one such middle vertex into the edge between the other middle vertex and the farthest corner.
+* There will be three rouge edges, one of them overlapping the other two.
+* It should reject the move, but I have no good way of checking this! So it's a known issue for now.
+
+
 ###################################
 ###################################
 PHYSICS

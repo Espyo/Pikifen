@@ -428,6 +428,11 @@ bool Pikmin::increase_maturity(int amount) {
 void Pikmin::latch(Mob* m, const Hitbox* h) {
     speed.x = speed.y = speed_z = 0;
     
+    //Shuffle it slightly, randomly, so that multiple Pikmin thrown
+    //at the exact same spot aren't perfectly overlapping each other.
+    pos.x += game.rng.f(-2.0f, 2.0f);
+    pos.y += game.rng.f(-2.0f, 2.0f);
+    
     float h_offset_dist;
     float h_offset_angle;
     float v_offset_dist;

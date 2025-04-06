@@ -5227,12 +5227,7 @@ void AreaEditor::process_gui_panel_sector() {
                     "Suggestions:", false, true
                 );
             }
-            set_tooltip(
-                "Pick a texture to use.\n"
-                "You can also press T in the canvas to copy\n"
-                "the texture of the currently selected sector,\n"
-                "and paste it into whatever sector is under the cursor."
-            );
+            set_tooltip("Pick a texture to use.");
             
             //Sector texture name text.
             ImGui::SameLine();

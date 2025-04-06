@@ -2459,7 +2459,12 @@ void AreaEditor::reference_toggle_cmd(float input_value) {
 void AreaEditor::reload_cmd(float input_value) {
     if(input_value < 0.5f) return;
     
-    if(!changes_mgr.exists_on_disk()) return;
+    if(!changes_mgr.exists_on_disk()) {
+        set_status(
+            "You can't reload this area since it's never been saved!", true
+        );
+        return;
+    }
     
     changes_mgr.ask_if_unsaved(
         reload_widget_pos,
