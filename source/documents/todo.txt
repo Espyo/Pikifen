@@ -6,17 +6,12 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    Starting an area right next to a boss makes the theme start playing, then stop
     Putting a Pikmin on mud then throwing it out makes them keep the mud status
     
     --- 0.26 ---
-    Remove parameter names in function declarations
     Helodity's new area and such
-    Divide more long data files into blocks
     Ease up on the darkness of weather conditions at night
-    Beady Long Legs improvements
-        Try to figure out how to make Winged Pikmin attack it
-        It should probably crush enemies
-        Its itch time needs to increase, otherwise it's shaking, stepping, then shaking again
     Update Dear ImGui to version 1.91.9b
         "Image: removed tint_col and border_col parameter from Image() function"
     Revamp sounds
@@ -166,20 +161,11 @@ Next tasks (roughly sorted most important first)
             Shake hitboxes last way too long across the board
             Red Bulborb could be a smidge tougher
             For the dumples, longer startup lag and endlag
-            Dweevil should be slower
             Skutterchuck should wait a bit before throwing, and should throw bomb rocks
             Do _something_ to the Yellow Wollyhop
-            Puffy Blowhog should have a lower territory radius
-            Beady Long Legs should rest for longer so the player has more time to throw other Pikmin at it
-            Dwarf Red Bulborbs should scream to wake up nearby Red Bulborbs
-        Leaders that get knocked backwards need more invulnerability time
-        Leaders should be a bit faster
         Leader damage from enemies should be standardized
         Leaf Pikmin should be able to follow leaders in walking
-        Water Dumples should wander around a small bit
         Maybe decrease the territory radius of the base enemies? (thanks Nataly171)
-        When a Pikmin latches, offset its position randomly slightly. This way, if the player throws many Pikmin at the same spot, there's at least some variety
-        Bitter sprays should last for a short time
         Make Rock Pikmin colors darker (thanks Nataly171)
         Style Tutorial Meadow to be more DEV Lab-like
         Add Pro Controller controls to the default controls
@@ -213,9 +199,6 @@ Next tasks (roughly sorted most important first)
     More particles
         More across the board -- check all mobs too
     Let players dismiss with no Pikmin for fun, but make it not as impactful
-    Barely important format changes
-        In area geometry files, path stops use the term "nr" to refer to links, even though they contain more than the end stop number
-        Organize all graphics and sound files into neat sub-folders
     Add a screenshot, or better yet, a gif to the readme
     Manual updates
         Update screenshots that still show off the Play area
@@ -716,6 +699,7 @@ Small tasks (for when I'm feeling lazy)
     Style
         Document the code with comments
         Use #pragma region in header files?
+        Remove parameter names in function declarations
     Cleanup
         Remove magic numbers and magic strings (make numbers and strings into constants)
         Try to refactor the mission strategy patterns to also work for the area editor logic
@@ -984,6 +968,9 @@ Misc things (so I don't forget)
             A moving platform, useful to traverse a hazardous floor. Maybe Stemples?
         Pellet Posies could have properties that make them regrow
         A turnstyle mob
+    Base game content to tweak
+        Dwarf Red Bulborbs should scream to wake up nearby Red Bulborbs
+        Water Dumples should wander around a small bit, right?
     Fix bridges and dummies emitting light during blackout (Darthvato)
     I'm getting tired of the way Onions and Candypops eject seeds. Instead, each one should store how many seeds they've spat so far, and when it's time to spit another, they hash that number to get the random angle and distance of the next spew. That way it's still consistent, but it looks random and interesting
     Should the numbers in Pikmin counters (and perhaps elsewhere?) have animated run-ups?

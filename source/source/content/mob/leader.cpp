@@ -84,8 +84,11 @@ const float HELD_GROUP_MEMBER_H_DIST = 1.2f;
 //How far away from the leader is a held group member placed, vertically.
 const float HELD_GROUP_MEMBER_V_DIST = 0.5f;
 
+//Invulnerability period after getting knocked back.
+const float INVULN_PERIOD_KB = 2.5f;
+
 //Invulnerability period after getting hit.
-const float INVULN_PERIOD = 1.5f;
+const float INVULN_PERIOD_NORMAL = 1.5f;
 
 //Seconds that need to pass before another swarm arrow appears.
 const float SWARM_ARROW_INTERVAL = 0.1f;
@@ -145,7 +148,7 @@ Leader::Leader(const Point &pos, LeaderType* type, float angle) :
     auto_throw_repeater(&game.auto_throw_settings) {
     
     team = MOB_TEAM_PLAYER_1;
-    invuln_period = Timer(LEADER::INVULN_PERIOD);
+    invuln_period = Timer(LEADER::INVULN_PERIOD_NORMAL);
     
     subgroup_type_ptr =
         game.states.gameplay->subgroup_types.get_type(

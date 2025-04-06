@@ -23,12 +23,12 @@ radius = 75
 rotation_speed = 70
 target_type = enemy
 terrain_radius = 150
-territory_radius = 500
+territory_radius = 300
 weight = 2
 
 reaches {
-    search = 400 90 30 360
-    chase = 500 360
+    search = 300 90 30 360
+    chase = 300 360
 }
 
 sounds {

@@ -1489,7 +1489,6 @@ void leader_fsm::be_attacked(Mob* m, void* info1, void* info2) {
     Leader* lea_ptr = (Leader*) m;
     
     if(m->invuln_period.time_left > 0.0f) return;
-    m->invuln_period.start();
     
     HitboxInteraction* info = (HitboxInteraction*) info1;
     
@@ -1515,9 +1514,11 @@ void leader_fsm::be_attacked(Mob* m, void* info1, void* info2) {
     m->do_attack_effects(info->mob2, info->h2, info->h1, damage, knockback);
     
     if(knockback > 0) {
+        m->invuln_period.start(LEADER::INVULN_PERIOD_KB);
         if(lea_ptr->active) m->fsm.set_state(LEADER_STATE_KNOCKED_BACK);
         else m->fsm.set_state(LEADER_STATE_INACTIVE_KNOCKED_BACK);
     } else {
+        m->invuln_period.start(LEADER::INVULN_PERIOD_NORMAL);
         if(lea_ptr->active) m->fsm.set_state(LEADER_STATE_PAIN);
         else m->fsm.set_state(LEADER_STATE_INACTIVE_PAIN);
     }
@@ -1959,7 +1960,7 @@ void leader_fsm::fall_asleep(Mob* m, void* info1, void* info2) {
 void leader_fsm::fall_down_pit(Mob* m, void* info1, void* info2) {
     m->leave_group();
     m->set_health(true, true, -0.2);
-    m->invuln_period.start();
+    m->invuln_period.start(LEADER::INVULN_PERIOD_NORMAL);
     m->respawn();
 }
 

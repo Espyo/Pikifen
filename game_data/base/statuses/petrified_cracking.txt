@@ -3,7 +3,7 @@ description = Makes the affected object start shaking, since its petrification i
 
 affects = enemies
 anim_speed_multiplier = 0
-auto_remove_time = 2
+auto_remove_time = 1.5
 color = 128 0 255
 defense_multiplier = 1.2
 disables_attack = true
