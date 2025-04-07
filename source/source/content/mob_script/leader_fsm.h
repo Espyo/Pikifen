@@ -50,7 +50,6 @@ void get_knocked_down(         Mob* m, void* info1, void* info2);
 void get_up_faster(            Mob* m, void* info1, void* info2);
 void go_pluck(                 Mob* m, void* info1, void* info2);
 void grab_mob(                 Mob* m, void* info1, void* info2);
-void hazard_pikmin_share(      Mob* m, void* info1, void* info2);
 void idle_or_rejoin(           Mob* m, void* info1, void* info2);
 void join_group(               Mob* m, void* info1, void* info2);
 void land(                     Mob* m, void* info1, void* info2);

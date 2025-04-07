@@ -1,4 +1,4 @@
-Point I left on (so I can continue the next day without losing my train of thought)
+﻿Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -7,7 +7,6 @@ Current tasks (tasks being worked on, but not yet committed)
 Next tasks (roughly sorted most important first)
     --- To fix ---
     Starting an area right next to a boss makes the theme start playing, then stop
-    Putting a Pikmin on mud then throwing it out makes them keep the mud status
     
     --- 0.26 ---
     Helodity's new area and such

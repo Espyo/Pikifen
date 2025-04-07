@@ -799,6 +799,24 @@ void Mob::tick_vertical_movement_physics(
         else highest_midair_z = std::max(z, highest_midair_z);
     }
     
+    //Held Pikmin are also touching the same hazards as the leader.
+    if(holder.m == game.states.gameplay->cur_leader_ptr) {
+        Sector* leader_ground =
+            game.states.gameplay->cur_leader_ptr->ground_sector;
+        if(
+            leader_ground &&
+            game.states.gameplay->cur_leader_ptr->z <= leader_ground->z
+        ) {
+            for(size_t h = 0; h < leader_ground->hazards.size(); h++) {
+                fsm.run_event(
+                    MOB_EV_TOUCHED_HAZARD,
+                    (void*) leader_ground->hazards[h]
+                );
+                new_on_hazard = leader_ground->hazards[h];
+            }
+        }
+    }
+    
     //Due to framerate imperfections, thrown Pikmin/leaders can reach higher
     //than intended. z_cap forces a cap. FLT_MAX = no cap.
     if(speed_z <= 0) {

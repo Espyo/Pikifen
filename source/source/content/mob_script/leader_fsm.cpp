@@ -321,7 +321,6 @@ void leader_fsm::create_fsm(MobType* typ) {
             efc.change_state("dying");
         }
         efc.new_event(MOB_EV_TOUCHED_HAZARD); {
-            efc.run(leader_fsm::hazard_pikmin_share);
             efc.run(leader_fsm::touched_hazard);
         }
         efc.new_event(MOB_EV_LEFT_HAZARD); {
@@ -2172,38 +2171,6 @@ void leader_fsm::grab_mob(Mob* m, void* info1, void* info2) {
         false, HOLD_ROTATION_METHOD_FACE_HOLDER
     );
     lea_ptr->group->sort(grabbed_mob->subgroup_type_ptr);
-}
-
-
-/**
- * @brief When a leader must share the hazard they have entered with the Pikmin
- * they are holding.
- *
- * @param m The mob.
- * @param info1 Unused.
- * @param info2 Unused.
- */
-void leader_fsm::hazard_pikmin_share(Mob* m, void* info1, void* info2) {
-    if(m->holding.empty() || !m->holding[0]) return;
-    
-    Hazard* h_ptr = (Hazard*) info1;
-    if(m->holding[0]->on_hazard == h_ptr) {
-        //The mob is already really on the hazard.
-        return;
-    } else {
-        //The mob isn't really on the hazard.
-        //This is the case with floors with hazards on them, like water, since
-        //the held mob hovers above the ground in the leader's hand.
-        //Now, the idea isn't to put the mob in the hazard, but just to let it
-        //know that it touched it, so it can be released by the leader
-        //if need be. Since it's not really inside, we should launch a touch
-        //and a leave event. Otherwise this could result in something like
-        //a Blue Pikmin that gets notified of water, starts emiting wave
-        //particles, and never stops emitting them because it never
-        //really "leaves" the water.
-        m->holding[0]->fsm.run_event(MOB_EV_TOUCHED_HAZARD, info1, info2);
-        m->holding[0]->fsm.run_event(MOB_EV_LEFT_HAZARD, info1, info2);
-    }
 }
 
 
