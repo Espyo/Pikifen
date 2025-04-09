@@ -16,12 +16,30 @@ points = 25
 pushable = true
 pushes = true
 radius = 28
+rotation_speed = 200
+target_type = enemy
+territory_radius = 300
+weight = 3
+
 reaches {
     search = 100 360 300 180
     attack = 50 40
     chase = 150 360 400 180
 }
-rotation_speed = 200
-target_type = enemy
-territory_radius = 300
-weight = 3
+
+sounds {
+    swish {
+        file = misc/swish
+        volume = 50
+    }
+    thud {
+        file = misc/thump
+        volume = 50
+        speed = 200
+    }
+    shaking {
+        file = misc/shaking
+        volume = 50
+        speed = 160
+    }
+}

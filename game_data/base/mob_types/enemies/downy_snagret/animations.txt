@@ -2,6 +2,7 @@ name=Downy Snagret animations
 engine_version=0.25.0
 animations{
 	biting{
+		hit_rate=50
 		frames{
 			idling{
 				duration=0.1000
@@ -12,6 +13,7 @@ animations{
 			biting_1{
 				duration=0.1000
 				interpolate=true
+				sound=swish
 			}
 			biting_2{
 				duration=0.1000
@@ -54,7 +56,7 @@ animations{
 		}
 	}
 	dying{
-		loop_frame=5
+		loop_frame=6
 		frames{
 			dying_1{
 				duration=0.2000
@@ -70,6 +72,10 @@ animations{
 			}
 			dying_4{
 				duration=0.2000
+			}
+			dying_5{
+				duration=0.1000
+				sound=thud
 			}
 			dying_5{
 				duration=0.1000
@@ -132,51 +138,67 @@ animations{
 		}
 	}
 	shaking{
+		hit_rate=30
 		frames{
 			shaking_windup_1{
 				duration=0.1000
+				interpolate=true
 			}
 			idling{
 				duration=0.1000
+				interpolate=true
 			}
 			shaking_windup_2{
 				duration=0.1000
+				interpolate=true
 			}
 			idling{
 				duration=0.1000
+				interpolate=true
 			}
 			shaking_windup_1{
 				duration=0.1000
+				interpolate=true
 			}
 			idling{
 				duration=0.1000
+				interpolate=true
 			}
 			shaking_windup_2{
 				duration=0.1000
+				interpolate=true
 			}
 			idling{
 				duration=0.3000
 			}
 			shaking_1{
 				duration=0.1000
+				interpolate=true
+				sound=shaking
 			}
 			shaking_2{
 				duration=0.1000
+				interpolate=true
 			}
 			shaking_1{
 				duration=0.1000
+				interpolate=true
 			}
 			idling{
 				duration=0.1000
+				interpolate=true
 			}
 			shaking_3{
 				duration=0.1000
+				interpolate=true
 			}
 			shaking_4{
 				duration=0.1000
+				interpolate=true
 			}
 			shaking_3{
 				duration=0.1000
+				interpolate=true
 			}
 			idling{
 				duration=0.1000
