@@ -8,10 +8,10 @@ bg_bmp=textures/grass_dark
 bg_color=0 0 0
 bg_dist=1.0000
 bg_zoom=1.0000
-song=garden_wall
+song=areas/garden_wall
 weather=normal
 day_time_start=1080
-day_time_speed=65
+day_time_speed=65.0000
 spray_amounts
 mission_goal=Survive
 mission_goal_amount=660

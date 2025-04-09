@@ -8,4 +8,4 @@ engine_version = 1.0.0
 notes = This song is an original creation for Pikifen.
 loop_start = 21.6
 
-main_track = pikifen
+main_track = others/pikifen

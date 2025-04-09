@@ -5191,196 +5191,235 @@ mobs{
 	pikmin{
 		type=winged_pikmin
 		p=-1024.0000 -32.0000
+		angle=-0.4055
 		vars=maturity=0
 	}
 	pikmin{
 		type=winged_pikmin
 		p=-992.0000 -32.0000
+		angle=-3.1299
 		vars=maturity=0
 	}
 	pikmin{
 		type=winged_pikmin
 		p=-1008.0000 -16.0000
+		angle=-2.3176
 		vars=maturity=0
 	}
 	pikmin{
 		type=winged_pikmin
 		p=-1056.0000 -32.0000
+		angle=-0.0111
 		vars=maturity=0
 	}
 	pikmin{
 		type=winged_pikmin
 		p=-1040.0000 -48.0000
+		angle=0.7480
 		vars=maturity=0
 	}
 	pikmin{
 		type=winged_pikmin
 		p=-1008.0000 -48.0000
+		angle=2.3404
 		vars=maturity=0
 	}
 	pikmin{
 		type=winged_pikmin
 		p=-1056.0000 0.0000
+		angle=-0.7780
 		vars=maturity=0
 	}
 	pikmin{
 		type=winged_pikmin
 		p=-992.0000 -64.0000
+		angle=2.3485
 		vars=maturity=0
 	}
 	pikmin{
 		type=winged_pikmin
 		p=-1040.0000 -16.0000
+		angle=-0.7708
 		vars=maturity=0
 	}
 	pikmin{
 		type=winged_pikmin
 		p=-1024.0000 -64.0000
+		angle=1.5439
 		vars=maturity=0
 	}
 	pikmin{
 		type=winged_pikmin
 		p=-1056.0000 -64.0000
+		angle=0.7665
 		vars=maturity=0
 	}
 	pikmin{
 		type=winged_pikmin
 		p=-992.0000 0.0000
+		angle=-2.3371
 		vars=maturity=0
 	}
 	pikmin{
 		type=winged_pikmin
 		p=-1024.0000 0.0000
+		angle=-1.5445
 		vars=maturity=0
 	}
 	pikmin{
 		type=red_pikmin
 		p=-1024.0000 -32.0000
+		angle=-0.4055
 		vars=maturity=0
 	}
 	pikmin{
 		type=red_pikmin
 		p=-992.0000 -32.0000
+		angle=-3.1299
 		vars=maturity=0
 	}
 	pikmin{
 		type=red_pikmin
 		p=-1056.0000 0.0000
+		angle=-0.7780
 		vars=maturity=0
 	}
 	pikmin{
 		type=red_pikmin
 		p=-992.0000 -64.0000
+		angle=2.3485
 		vars=maturity=0
 	}
 	pikmin{
 		type=red_pikmin
 		p=-1040.0000 -16.0000
+		angle=-0.7708
 		vars=maturity=0
 	}
 	pikmin{
 		type=red_pikmin
 		p=-1024.0000 -64.0000
+		angle=1.5439
 		vars=maturity=0
 	}
 	pikmin{
 		type=red_pikmin
 		p=-1056.0000 -64.0000
+		angle=0.7665
 		vars=maturity=0
 	}
 	pikmin{
 		type=red_pikmin
 		p=-1040.0000 -48.0000
+		angle=0.7480
 		vars=maturity=0
 	}
 	pikmin{
 		type=red_pikmin
 		p=-1008.0000 -48.0000
+		angle=2.3404
 		vars=maturity=0
 	}
 	pikmin{
 		type=red_pikmin
 		p=-992.0000 0.0000
+		angle=-2.3371
 		vars=maturity=0
 	}
 	pikmin{
 		type=red_pikmin
 		p=-1024.0000 0.0000
+		angle=-1.5445
 		vars=maturity=0
 	}
 	pikmin{
 		type=red_pikmin
 		p=-1056.0000 -32.0000
+		angle=-0.0111
 		vars=maturity=0
 	}
 	pikmin{
 		type=red_pikmin
 		p=-1008.0000 -16.0000
+		angle=-2.3176
 		vars=maturity=0
 	}
 	pikmin{
 		type=white_pikmin
 		p=-1024.0000 -32.0000
+		angle=-0.4055
 		vars=maturity=0
 	}
 	pikmin{
 		type=white_pikmin
 		p=-992.0000 -32.0000
+		angle=-3.1299
 		vars=maturity=0
 	}
 	pikmin{
 		type=white_pikmin
 		p=-1056.0000 0.0000
+		angle=-0.7780
 		vars=maturity=0
 	}
 	pikmin{
 		type=white_pikmin
 		p=-992.0000 -64.0000
+		angle=2.3485
 		vars=maturity=0
 	}
 	pikmin{
 		type=white_pikmin
 		p=-1040.0000 -16.0000
+		angle=-0.7708
 		vars=maturity=0
 	}
 	pikmin{
 		type=white_pikmin
 		p=-1024.0000 -64.0000
+		angle=1.5439
 		vars=maturity=0
 	}
 	pikmin{
 		type=white_pikmin
 		p=-1056.0000 -64.0000
+		angle=0.7665
 		vars=maturity=0
 	}
 	pikmin{
 		type=white_pikmin
 		p=-1040.0000 -48.0000
+		angle=0.7480
 		vars=maturity=0
 	}
 	pikmin{
 		type=white_pikmin
 		p=-1008.0000 -48.0000
+		angle=2.3404
 		vars=maturity=0
 	}
 	pikmin{
 		type=white_pikmin
 		p=-992.0000 0.0000
+		angle=-2.3371
 		vars=maturity=0
 	}
 	pikmin{
 		type=white_pikmin
 		p=-1024.0000 0.0000
+		angle=-1.5445
 		vars=maturity=0
 	}
 	pikmin{
 		type=white_pikmin
 		p=-1056.0000 -32.0000
+		angle=-0.0111
 		vars=maturity=0
 	}
 	pikmin{
 		type=white_pikmin
 		p=-1008.0000 -16.0000
+		angle=-2.3176
 		vars=maturity=0
 	}
 	pile{
@@ -5472,15 +5511,15 @@ mobs{
 		p=848.0000 -192.0000
 	}
 	enemy{
-		type=white_spectralid
+		type=white_spectralids
 		p=-134.0064 -481.5016
 	}
 	enemy{
-		type=white_spectralid
+		type=white_spectralids
 		p=448.0000 -784.0000
 	}
 	enemy{
-		type=white_spectralid
+		type=white_spectralids
 		p=451.0522 -65.6495
 	}
 	group_task{
@@ -5720,61 +5759,73 @@ mobs{
 	pikmin{
 		type=white_pikmin
 		p=-1024.0000 -80.0000
+		angle=1.5529
 		vars=maturity=0
 	}
 	pikmin{
 		type=winged_pikmin
 		p=-1024.0000 -80.0000
+		angle=1.5529
 		vars=maturity=0
 	}
 	pikmin{
 		type=red_pikmin
 		p=-1024.0000 -80.0000
+		angle=1.5529
 		vars=maturity=0
 	}
 	pikmin{
 		type=winged_pikmin
 		p=-976.0000 -32.0000
+		angle=-3.1338
 		vars=maturity=0
 	}
 	pikmin{
 		type=red_pikmin
 		p=-976.0000 -32.0000
+		angle=-3.1338
 		vars=maturity=0
 	}
 	pikmin{
 		type=white_pikmin
 		p=-976.0000 -32.0000
+		angle=-3.1338
 		vars=maturity=0
 	}
 	pikmin{
 		type=winged_pikmin
 		p=-1024.0000 16.0000
+		angle=-1.5532
 		vars=maturity=0
 	}
 	pikmin{
 		type=red_pikmin
 		p=-1024.0000 16.0000
+		angle=-1.5532
 		vars=maturity=0
 	}
 	pikmin{
 		type=white_pikmin
 		p=-1024.0000 16.0000
+		angle=-1.5532
 		vars=maturity=0
 	}
 	pikmin{
 		type=winged_pikmin
 		p=-1072.0000 -32.0000
+		angle=-0.0075
 		vars=maturity=0
 	}
 	pikmin{
 		type=red_pikmin
 		p=-1072.0000 -32.0000
+		angle=-0.0075
 		vars=maturity=0
 	}
 	pikmin{
 		type=white_pikmin
 		p=-1072.0000 -32.0000
+		angle=-0.0075
 		vars=maturity=0
 	}
 	converter{
@@ -6149,639 +6200,639 @@ path_stops{
 	s{
 		pos=515.2312 -543.9277
 		links{
-			nr=1
-			nr=3
-			nr=4
-			nr=39
+			l=1
+			l=3
+			l=4
+			l=39
 		}
 	}
 	s{
 		pos=233.5078 -742.4926
 		links{
-			nr=0
-			nr=2
-			nr=30 1
+			l=0
+			l=2
+			l=30 1
 		}
 	}
 	s{
 		pos=-89.0932 -721.8461
 		links{
-			nr=1
-			nr=3
-			nr=19 1
-			nr=20 1
+			l=1
+			l=3
+			l=19 1
+			l=20 1
 		}
 	}
 	s{
 		pos=193.5053 -448.2805
 		links{
-			nr=2
-			nr=0
-			nr=5
-			nr=21
+			l=2
+			l=0
+			l=5
+			l=21
 		}
 	}
 	s{
 		pos=499.3310 -253.4294
 		links{
-			nr=0
-			nr=5
-			nr=40
+			l=0
+			l=5
+			l=40
 		}
 	}
 	s{
 		pos=101.8866 -70.1921
 		links{
-			nr=4
-			nr=3
-			nr=6
-			nr=8
+			l=4
+			l=3
+			l=6
+			l=8
 		}
 	}
 	s{
 		pos=19.8392 -16.8030
 		links{
-			nr=5
-			nr=83
-			nr=7
+			l=5
+			l=83
+			l=7
 		}
 	}
 	s{
 		pos=-331.6616 315.7068
 		links{
-			nr=38
-			nr=42
-			nr=6
+			l=38
+			l=42
+			l=6
 		}
 	}
 	s{
 		pos=205.1187 129.8207
 		links{
-			nr=5
-			nr=9
-			nr=18 1
+			l=5
+			l=9
+			l=18 1
 		}
 	}
 	s{
 		pos=406.4217 120.7879
 		links{
-			nr=8
-			nr=10
-			nr=17 1
+			l=8
+			l=10
+			l=17 1
 		}
 	}
 	s{
 		pos=687.7300 -49.5455
 		links{
-			nr=9
-			nr=11
-			nr=40 1
-			nr=16 1
+			l=9
+			l=11
+			l=40 1
+			l=16 1
 		}
 	}
 	s{
 		pos=797.4144 -176.0051
 		links{
-			nr=10
-			nr=12
+			l=10
+			l=12
 		}
 	}
 	s{
 		pos=868.3866 -315.3687
 		links{
-			nr=11
-			nr=13
-			nr=22
-			nr=39 1
+			l=11
+			l=13
+			l=22
+			l=39 1
 		}
 	}
 	s{
 		pos=1007.7502 -262.4622
 		links{
-			nr=12
-			nr=14
+			l=12
+			l=14
 		}
 	}
 	s{
 		pos=1095.4977 -155.3586
 		links{
-			nr=13
-			nr=15
+			l=13
+			l=15
 		}
 	}
 	s{
 		pos=960.0052 -36.6414
 		links{
-			nr=14
-			nr=16
+			l=14
+			l=16
 		}
 	}
 	s{
 		pos=779.3487 101.4318
 		links{
-			nr=15
-			nr=17
-			nr=10 1
+			l=15
+			l=17
+			l=10 1
 		}
 	}
 	s{
 		pos=575.4648 221.4393
 		links{
-			nr=16
-			nr=18
-			nr=9 1
+			l=16
+			l=18
+			l=9 1
 		}
 	}
 	s{
 		pos=360.8411 387.2315
 		links{
-			nr=17
-			nr=8 1
-			nr=41
-			nr=43
+			l=17
+			l=8 1
+			l=41
+			l=43
 		}
 	}
 	s{
 		pos=-119.3549 -910.0061
 		links{
-			nr=2 1
-			nr=79
-			nr=82
+			l=2 1
+			l=79
+			l=82
 		}
 	}
 	s{
 		pos=-153.6407 -524.9016
 		links{
-			nr=2 1
-			nr=21 1
+			l=2 1
+			l=21 1
 		}
 	}
 	s{
 		pos=-29.1134 -523.6926
 		links{
-			nr=20 1
-			nr=3
+			l=20 1
+			l=3
 		}
 	}
 	s{
 		pos=938.7802 -488.5647
 		links{
-			nr=12
-			nr=23
+			l=12
+			l=23
 		}
 	}
 	s{
 		pos=1028.6200 -549.9187
 		links{
-			nr=22
-			nr=24
-			nr=26
-			nr=66 1
+			l=22
+			l=24
+			l=26
+			l=66 1
 		}
 	}
 	s{
 		pos=1209.3951 -423.9239
 		links{
-			nr=23
-			nr=25
-			nr=66 1
+			l=23
+			l=25
+			l=66 1
 		}
 	}
 	s{
 		pos=1281.4811 -302.1674
 		links{
-			nr=24
+			l=24
 		}
 	}
 	s{
 		pos=922.3464 -695.6349
 		links{
-			nr=23
-			nr=27
+			l=23
+			l=27
 		}
 	}
 	s{
 		pos=820.4550 -844.6375
 		links{
-			nr=26
-			nr=28
+			l=26
+			l=28
 		}
 	}
 	s{
 		pos=784.2991 -1025.4128
 		links{
-			nr=27
-			nr=29
-			nr=65
+			l=27
+			l=29
+			l=65
 		}
 	}
 	s{
 		pos=583.8031 -1042.9425
 		links{
-			nr=28
-			nr=30
+			l=28
+			l=30
 		}
 	}
 	s{
 		pos=254.0254 -1011.1699
 		links{
-			nr=29
-			nr=1 1
-			nr=31
-			nr=78 1
+			l=29
+			l=1 1
+			l=31
+			l=78 1
 		}
 	}
 	s{
 		pos=115.9789 -1085.6714
 		links{
-			nr=30
-			nr=32
-			nr=77 1
+			l=30
+			l=32
+			l=77 1
 		}
 	}
 	s{
 		pos=-126.1502 -1131.6869
 		links{
-			nr=31
-			nr=33
-			nr=76 1
-			nr=80
-			nr=81
+			l=31
+			l=33
+			l=76 1
+			l=80
+			l=81
 		}
 	}
 	s{
 		pos=-406.6257 -1103.2009
 		links{
-			nr=32
-			nr=34
-			nr=73
+			l=32
+			l=34
+			l=73
 		}
 	}
 	s{
 		pos=-517.2820 -892.8444
 		links{
-			nr=33
-			nr=35
-			nr=70 1
+			l=33
+			l=35
+			l=70 1
 		}
 	}
 	s{
 		pos=-542.7500 -707.2916
 		links{
-			nr=34
-			nr=36
-			nr=69 1
+			l=34
+			l=36
+			l=69 1
 		}
 	}
 	s{
 		pos=-538.2413 -322.5517
 		links{
-			nr=35
-			nr=37
-			nr=68 1
+			l=35
+			l=37
+			l=68 1
 		}
 	}
 	s{
 		pos=-499.1662 -89.6038
 		links{
-			nr=36
-			nr=51
+			l=36
+			l=51
 		}
 	}
 	s{
 		pos=-421.0159 141.8413
 		links{
-			nr=7
-			nr=51
+			l=7
+			l=51
 		}
 	}
 	s{
 		pos=680.7573 -441.5213
 		links{
-			nr=0
-			nr=12 1
+			l=0
+			l=12 1
 		}
 	}
 	s{
 		pos=576.8413 -158.4329
 		links{
-			nr=4
-			nr=10 1
+			l=4
+			l=10 1
 		}
 	}
 	s{
 		pos=49.1267 457.4369
 		links{
-			nr=18
-			nr=42
+			l=18
+			l=42
 		}
 	}
 	s{
 		pos=-128.5785 437.6918
 		links{
-			nr=41
-			nr=7
+			l=41
+			l=7
 		}
 	}
 	s{
 		pos=452.2543 536.4168
 		links{
-			nr=18
-			nr=44
+			l=18
+			l=44
 		}
 	}
 	s{
 		pos=555.9156 788.1659
 		links{
-			nr=43
-			nr=45
-			nr=46
+			l=43
+			l=45
+			l=46
 		}
 	}
 	s{
 		pos=753.3660 974.0983
 		links{
-			nr=44
-			nr=46
-			nr=55
+			l=44
+			l=46
+			l=55
 		}
 	}
 	s{
 		pos=526.2981 951.0624
 		links{
-			nr=45
-			nr=47
-			nr=44
+			l=45
+			l=47
+			l=44
 		}
 	}
 	s{
 		pos=271.2581 916.5086
 		links{
-			nr=46
-			nr=48
+			l=46
+			l=48
 		}
 	}
 	s{
 		pos=78.7440 908.2816
 		links{
-			nr=47
-			nr=49
+			l=47
+			l=49
 		}
 	}
 	s{
 		pos=-202.6226 926.3812
 		links{
-			nr=48
-			nr=50
+			l=48
+			l=50
 		}
 	}
 	s{
 		pos=-414.8817 1067.8872
 		links{
-			nr=49
+			l=49
 		}
 	}
 	s{
 		pos=-456.6462 36.3207
 		links{
-			nr=37
-			nr=38
-			nr=52
+			l=37
+			l=38
+			l=52
 		}
 	}
 	s{
 		pos=-605.2372 75.0143
 		links{
-			nr=51
-			nr=53
+			l=51
+			l=53
 		}
 	}
 	s{
 		pos=-782.0287 68.5146
 		links{
-			nr=52
-			nr=54
+			l=52
+			l=54
 		}
 	}
 	s{
 		pos=-965.4474 -1.7345
 		links{
-			nr=53
-			nr=67
+			l=53
+			l=67
 		}
 	}
 	s{
 		pos=891.7745 705.9474
 		links{
-			nr=45
-			nr=56 1
+			l=45
+			l=56 1
 		}
 	}
 	s{
 		pos=954.4789 576.5363
 		links{
-			nr=55 1
-			nr=57
+			l=55 1
+			l=57
 		}
 	}
 	s{
 		pos=1086.5577 373.7475
 		links{
-			nr=56
-			nr=58
+			l=56
+			l=58
 		}
 	}
 	s{
 		pos=1243.9856 208.3148
 		links{
-			nr=57
-			nr=59
+			l=57
+			l=59
 		}
 	}
 	s{
 		pos=1401.4135 46.8845
 		links{
-			nr=58
-			nr=60
+			l=58
+			l=60
 		}
 	}
 	s{
 		pos=1546.0598 -116.0501
 		links{
-			nr=59
-			nr=72
+			l=59
+			l=72
 		}
 	}
 	s{
 		pos=1708.6428 -436.1016
 		links{
-			nr=62
-			nr=72
+			l=62
+			l=72
 		}
 	}
 	s{
 		pos=1691.5737 -612.6468
 		links{
-			nr=61
-			nr=63
+			l=61
+			l=63
 		}
 	}
 	s{
 		pos=1616.2070 -769.6060
 		links{
-			nr=62
-			nr=64
+			l=62
+			l=64
 		}
 	}
 	s{
 		pos=1458.7792 -923.0315
 		links{
-			nr=63
-			nr=65
-			nr=66
+			l=63
+			l=65
+			l=66
 		}
 	}
 	s{
 		pos=1099.8970 -1013.7527
 		links{
-			nr=64
-			nr=28
-			nr=66
+			l=64
+			l=28
+			l=66
 		}
 	}
 	s{
 		pos=1284.0076 -714.9066
 		links{
-			nr=64
-			nr=65
-			nr=23 1
-			nr=24 1
+			l=64
+			l=65
+			l=23 1
+			l=24 1
 		}
 	}
 	s{
 		pos=-1016.0712 -222.2673
 		links{
-			nr=54
-			nr=68
+			l=54
+			l=68
 		}
 	}
 	s{
 		pos=-863.5615 -418.3511
 		links{
-			nr=67
-			nr=69
-			nr=36 1
+			l=67
+			l=69
+			l=36 1
 		}
 	}
 	s{
 		pos=-810.0841 -671.8737
 		links{
-			nr=68
-			nr=70
-			nr=35 1
+			l=68
+			l=70
+			l=35 1
 		}
 	}
 	s{
 		pos=-764.5286 -891.7268
 		links{
-			nr=69
-			nr=71
-			nr=34 1
+			l=69
+			l=71
+			l=34 1
 		}
 	}
 	s{
 		pos=-671.4382 -1129.4043
 		links{
-			nr=70
-			nr=73
+			l=70
+			l=73
 		}
 	}
 	s{
 		pos=1635.6936 -226.6499
 		links{
-			nr=60
-			nr=61
+			l=60
+			l=61
 		}
 	}
 	s{
 		pos=-499.4176 -1236.3728
 		links{
-			nr=33
-			nr=71
-			nr=74
-			nr=75 1
+			l=33
+			l=71
+			l=74
+			l=75 1
 		}
 	}
 	s{
 		pos=-466.5902 -1469.2876
 		links{
-			nr=73
-			nr=75
+			l=73
+			l=75
 		}
 	}
 	s{
 		pos=-282.1324 -1456.7820
 		links{
-			nr=74
-			nr=76
-			nr=73 1
+			l=74
+			l=76
+			l=73 1
 		}
 	}
 	s{
 		pos=-113.3066 -1413.0122
 		links{
-			nr=75
-			nr=77
-			nr=32 1
+			l=75
+			l=77
+			l=32 1
 		}
 	}
 	s{
 		pos=118.0472 -1372.3708
 		links{
-			nr=76
-			nr=78
-			nr=31 1
+			l=76
+			l=78
+			l=31 1
 		}
 	}
 	s{
 		pos=388.4811 -1358.3020
 		links{
-			nr=77
-			nr=30 1
+			l=77
+			l=30 1
 		}
 	}
 	s{
 		pos=-56.1211 -955.4259
 		links{
-			nr=19
-			nr=80
+			l=19
+			l=80
 		}
 	}
 	s{
 		pos=-54.1308 -1047.9753
 		links{
-			nr=79
-			nr=32
+			l=79
+			l=32
 		}
 	}
 	s{
 		pos=-198.4282 -1043.9948
 		links{
-			nr=32
-			nr=82
+			l=32
+			l=82
 		}
 	}
 	s{
 		pos=-200.4186 -944.4792
 		links{
-			nr=81
-			nr=19
+			l=81
+			l=19
 		}
 	}
 	s{
 		pos=-192.1671 196.9976
 		links{
-			nr=6
+			l=6
 		}
 	}
 }
@@ -6789,8 +6840,8 @@ tree_shadows{
 	shadow{
 		pos=-320.0000 -432.0000
 		size=7336.5454 7486.4971
-		angle=12.8117
 		file=textures/tree_shadow
 		sway=1.0000 1.0000
+		angle=12.8117
 	}
 }

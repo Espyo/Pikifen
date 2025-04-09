@@ -225,8 +225,8 @@ struct MissionData {
     
     //Mission point multiplier for each enemy point obtained.
     int points_per_enemy_point = 0;
-
-    //If true, award points when on enemy collection rather than on death.
+    
+    //If true, award points on enemy collection rather than on death.
     bool enemy_points_on_collection = false;
     
     //Bitmask for mission fail point loss criteria. Use MISSION_SCORE_CRITERIA.

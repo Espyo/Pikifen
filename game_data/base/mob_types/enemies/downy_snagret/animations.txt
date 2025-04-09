@@ -186,10 +186,10 @@ animations{
 }
 sprites{
 	biting_1{
-		file=downy_snagret
-		file_pos=92.0000 0.0000
+		file=enemies/downy_snagret
+		file_pos=91.0000 0.0000
 		file_size=102.0000 47.0000
-		offset=15.8210 0.2108
+		offset=16.0000 0.0000
 		scale=1.1000 1.0000
 		hitboxes{
 			body{
@@ -211,10 +211,10 @@ sprites{
 		}
 	}
 	biting_2{
-		file=downy_snagret
-		file_pos=94.0000 48.0000
-		file_size=96.0000 48.0000
-		offset=6.2213 0.0000
+		file=enemies/downy_snagret
+		file_pos=89.0000 48.0000
+		file_size=96.0000 47.0000
+		offset=6.0000 0.0000
 		hitboxes{
 			body{
 				coords=3.7986 0.8050 0.0000
@@ -235,10 +235,10 @@ sprites{
 		}
 	}
 	chewing_1{
-		file=downy_snagret
-		file_pos=83.0000 193.0000
-		file_size=70.0000 48.0000
-		offset=-7.5866 0.2564
+		file=enemies/downy_snagret
+		file_pos=82.0000 192.0000
+		file_size=70.0000 47.0000
+		offset=-8.0000 0.0000
 		hitboxes{
 			body{
 				coords=1.7980 0.2566 0.0000
@@ -258,10 +258,10 @@ sprites{
 		}
 	}
 	chewing_2{
-		file=downy_snagret
-		file_pos=84.0000 145.0000
-		file_size=66.0000 47.0000
-		offset=-9.8757 -0.3977
+		file=enemies/downy_snagret
+		file_pos=84.0000 144.0000
+		file_size=69.0000 47.0000
+		offset=-10.0000 0.0000
 		hitboxes{
 			body{
 				coords=1.7980 0.2566 0.0000
@@ -281,10 +281,10 @@ sprites{
 		}
 	}
 	chewing_3{
-		file=downy_snagret
-		file_pos=83.0000 96.0000
-		file_size=59.0000 48.0000
-		offset=-15.2715 -0.7247
+		file=enemies/downy_snagret
+		file_pos=82.0000 96.0000
+		file_size=69.0000 47.0000
+		offset=-15.0000 0.0000
 		hitboxes{
 			body{
 				coords=-10.1572 0.5558 0.0000
@@ -304,10 +304,10 @@ sprites{
 		}
 	}
 	dying_1{
-		file=downy_snagret
-		file_pos=83.0000 193.0000
-		file_size=70.0000 48.0000
-		offset=-7.5866 0.2564
+		file=enemies/downy_snagret
+		file_pos=82.0000 192.0000
+		file_size=70.0000 47.0000
+		offset=-8.0000 0.0000
 		hitboxes{
 			body{
 				coords=1.7980 0.2566 0.0000
@@ -326,10 +326,10 @@ sprites{
 		}
 	}
 	dying_2{
-		file=downy_snagret
-		file_pos=84.0000 145.0000
-		file_size=66.0000 47.0000
-		offset=-9.8757 -0.3977
+		file=enemies/downy_snagret
+		file_pos=84.0000 144.0000
+		file_size=69.0000 47.0000
+		offset=-10.0000 0.0000
 		hitboxes{
 			body{
 				coords=1.7980 0.2566 0.0000
@@ -348,10 +348,10 @@ sprites{
 		}
 	}
 	dying_3{
-		file=downy_snagret
+		file=enemies/downy_snagret
 		file_pos=0.0000 0.0000
-		file_size=91.0000 47.0000
-		offset=3.1494 -0.1120
+		file_size=90.0000 47.0000
+		offset=3.0000 0.0000
 		hitboxes{
 			body{
 				coords=1.7980 0.2566 0.0000
@@ -370,10 +370,10 @@ sprites{
 		}
 	}
 	dying_4{
-		file=downy_snagret
-		file_pos=155.0000 198.0000
-		file_size=79.0000 77.0000
-		offset=3.2558 0.4429
+		file=enemies/downy_snagret
+		file_pos=154.0000 197.0000
+		file_size=78.0000 77.0000
+		offset=3.0000 0.0000
 		hitboxes{
 			body{
 				coords=1.7980 0.2566 0.0000
@@ -392,10 +392,10 @@ sprites{
 		}
 	}
 	dying_5{
-		file=downy_snagret
-		file_pos=155.0000 96.0000
+		file=enemies/downy_snagret
+		file_pos=154.0000 96.0000
 		file_size=78.0000 100.0000
-		offset=10.6300 7.6372
+		offset=10.0000 8.0000
 		hitboxes{
 			body{
 				coords=1.7980 0.2566 0.0000
@@ -414,10 +414,10 @@ sprites{
 		}
 	}
 	idling{
-		file=downy_snagret
+		file=enemies/downy_snagret
 		file_pos=0.0000 0.0000
-		file_size=91.0000 47.0000
-		offset=4.2046 0.0794
+		file_size=90.0000 47.0000
+		offset=4.0000 0.0000
 		hitboxes{
 			body{
 				coords=1.7980 0.2566 0.0000
@@ -437,10 +437,10 @@ sprites{
 		}
 	}
 	idling_2{
-		file=downy_snagret
+		file=enemies/downy_snagret
 		file_pos=0.0000 48.0000
-		file_size=86.0000 47.0000
-		offset=1.4295 -0.2348
+		file_size=88.0000 47.0000
+		offset=2.0000 0.0000
 		hitboxes{
 			body{
 				coords=-0.3902 0.4012 0.0000
@@ -460,10 +460,10 @@ sprites{
 		}
 	}
 	jumping_1{
-		file=downy_snagret
+		file=enemies/downy_snagret
 		file_pos=0.0000 96.0000
-		file_size=81.0000 48.0000
-		offset=1.3067 0.1337
+		file_size=81.0000 47.0000
+		offset=1.0000 0.0000
 		hitboxes{
 			body{
 				coords=1.7980 0.2566 0.0000
@@ -483,10 +483,10 @@ sprites{
 		}
 	}
 	jumping_2{
-		file=downy_snagret
-		file_pos=0.0000 145.0000
-		file_size=83.0000 48.0000
-		offset=1.3067 0.1337
+		file=enemies/downy_snagret
+		file_pos=0.0000 144.0000
+		file_size=83.0000 47.0000
+		offset=1.0000 0.0000
 		hitboxes{
 			body{
 				coords=1.7980 0.2566 0.0000
@@ -506,10 +506,10 @@ sprites{
 		}
 	}
 	jumping_3{
-		file=downy_snagret
-		file_pos=0.0000 193.0000
-		file_size=82.0000 48.0000
-		offset=1.3067 0.1337
+		file=enemies/downy_snagret
+		file_pos=0.0000 192.0000
+		file_size=81.0000 47.0000
+		offset=1.0000 0.0000
 		hitboxes{
 			body{
 				coords=1.7980 0.2566 0.0000
@@ -529,10 +529,10 @@ sprites{
 		}
 	}
 	jumping_4{
-		file=downy_snagret
-		file_pos=0.0000 241.0000
-		file_size=85.0000 48.0000
-		offset=1.3067 0.1337
+		file=enemies/downy_snagret
+		file_pos=0.0000 240.0000
+		file_size=86.0000 47.0000
+		offset=1.0000 0.0000
 		hitboxes{
 			body{
 				coords=1.7980 0.2566 0.0000
@@ -552,10 +552,10 @@ sprites{
 		}
 	}
 	shaking_1{
-		file=downy_snagret
+		file=enemies/downy_snagret
 		file_pos=0.0000 48.0000
-		file_size=86.0000 47.0000
-		offset=3.1494 -0.1120
+		file_size=88.0000 47.0000
+		offset=3.0000 0.0000
 		angle=6.1959
 		hitboxes{
 			body{
@@ -577,9 +577,9 @@ sprites{
 		}
 	}
 	shaking_2{
-		file=downy_snagret
+		file=enemies/downy_snagret
 		file_pos=0.0000 0.0000
-		file_size=91.0000 47.0000
+		file_size=90.0000 47.0000
 		offset=3.0000 -5.0000
 		angle=6.0214
 		hitboxes{
@@ -602,10 +602,10 @@ sprites{
 		}
 	}
 	shaking_3{
-		file=downy_snagret
+		file=enemies/downy_snagret
 		file_pos=0.0000 48.0000
-		file_size=86.0000 47.0000
-		offset=3.1494 -0.1120
+		file_size=88.0000 47.0000
+		offset=3.0000 0.0000
 		angle=0.0873
 		hitboxes{
 			body{
@@ -627,9 +627,9 @@ sprites{
 		}
 	}
 	shaking_4{
-		file=downy_snagret
+		file=enemies/downy_snagret
 		file_pos=0.0000 0.0000
-		file_size=91.0000 47.0000
+		file_size=90.0000 47.0000
 		offset=3.0000 5.0000
 		angle=0.2618
 		hitboxes{
@@ -652,10 +652,10 @@ sprites{
 		}
 	}
 	shaking_windup_1{
-		file=downy_snagret
+		file=enemies/downy_snagret
 		file_pos=0.0000 48.0000
-		file_size=86.0000 47.0000
-		offset=3.1494 -0.1120
+		file_size=88.0000 47.0000
+		offset=3.0000 0.0000
 		angle=6.1959
 		hitboxes{
 			body{
@@ -675,10 +675,10 @@ sprites{
 		}
 	}
 	shaking_windup_2{
-		file=downy_snagret
+		file=enemies/downy_snagret
 		file_pos=0.0000 48.0000
-		file_size=86.0000 47.0000
-		offset=3.1494 -0.1120
+		file_size=88.0000 47.0000
+		offset=3.0000 0.0000
 		angle=0.0873
 		hitboxes{
 			body{

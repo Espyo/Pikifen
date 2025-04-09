@@ -6,7 +6,7 @@ version = 1.0.0
 engine_version = 1.0.0
 notes = This song is an original creation for Pikifen.
 
-main_track = garden_wall
+main_track = areas/garden_wall
 mix_tracks {
-    enemy = garden_wall_enemy
+    enemy = areas/garden_wall_enemy
 }

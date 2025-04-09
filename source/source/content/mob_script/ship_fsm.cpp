@@ -66,7 +66,7 @@ void ship_fsm::receive_mob(Mob* m, void* info1, void* info2) {
     switch(delivery->type->category->id) {
     case MOB_CATEGORY_ENEMIES: {
         if(game.cur_area_data->mission.enemy_points_on_collection) {
-            game.states.gameplay->enemy_points_collected += ((enemy*) delivery)->ene_type->points;
+            game.states.gameplay->enemy_points_collected += ((Enemy*) delivery)->ene_type->points;
         }
         break;
 

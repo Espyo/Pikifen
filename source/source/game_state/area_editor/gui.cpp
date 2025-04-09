@@ -3784,18 +3784,20 @@ void AreaEditor::process_gui_panel_mission_grading() {
             "enemy point. Different enemies are worth different\n"
             "points."
         );
-
-        //Add the enemy point collection type
+        
+        //Award points on collection checkbox.
         if(game.cur_area_data->mission.points_per_enemy_point != 0) {
+            bool enemy_points_on_collection =
+                game.cur_area_data->mission.enemy_points_on_collection;
             ImGui::Indent();
-            //Award points on collection checkbox
             if(
                 ImGui::Checkbox(
-                    "Award points on collection",
-                    &game.cur_area_data->mission.enemy_points_on_collection
+                    "Award points on collection", &enemy_points_on_collection
                 )
             ) {
                 register_change("mission grading change");
+                game.cur_area_data->mission.enemy_points_on_collection =
+                    enemy_points_on_collection;
             }
             set_tooltip(
                 "If checked, enemy points will be awarded on enemy\n"

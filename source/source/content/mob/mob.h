@@ -386,10 +386,10 @@ public:
         Mob* added, Mob* removed,
         PikminType** target_type, Mob** target_mob, Point* target_point
     ) const;
-    onion* calculate_carrying_onion(
-        mob* added, mob* removed, pikmin_type** target_type
+    Onion* calculate_carrying_onion(
+        Mob* added, Mob* removed, PikminType** target_type
     ) const;
-    ship* calculate_carrying_ship() const;
+    Ship* calculate_carrying_ship() const;
     bool calculate_damage(
         Mob* victim, Hitbox* attack_h, const Hitbox* victim_h, float* damage
     ) const;

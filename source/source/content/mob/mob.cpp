@@ -747,14 +747,23 @@ bool Mob::calculate_carrying_destination(
     return false;
 }
 
-onion* mob::calculate_carrying_onion(
-    mob* added, mob* removed, pikmin_type** target_type
+
+/**
+ * @brief Calculates to which Onion Pikmin should carry something.
+ *
+ * @param added Newly added Pikmin, if any.
+ * @param removed Newly removed Pikmin, if any.
+ * @param target_type If not nullptr, the target Pikmin type is returned here.
+ * @return The Onion.
+ */
+Onion* Mob::calculate_carrying_onion(
+    Mob* added, Mob* removed, PikminType** target_type
 ) const {
     //If it's meant for an Onion, we need to decide which Onion, based on
     //the Pikmin. First, check which Onion Pikmin types are even available.
-    unordered_set<pikmin_type*> available_types;
+    unordered_set<PikminType*> available_types;
     for(size_t o = 0; o < game.states.gameplay->mobs.onions.size(); o++) {
-        onion* o_ptr = game.states.gameplay->mobs.onions[o];
+        Onion* o_ptr = game.states.gameplay->mobs.onions[o];
         if(o_ptr->activated) {
             for(
                 size_t t = 0;
@@ -773,14 +782,14 @@ onion* mob::calculate_carrying_onion(
         return nullptr;
     }
     
-    pikmin_type* decided_type =
+    PikminType* decided_type =
         decide_carry_pikmin_type(available_types, added, removed);
         
     //Figure out where that type's Onion is.
     size_t closest_onion_idx = INVALID;
-    dist closest_onion_dist;
+    Distance closest_onion_dist;
     for(size_t o = 0; o < game.states.gameplay->mobs.onions.size(); o++) {
-        onion* o_ptr = game.states.gameplay->mobs.onions[o];
+        Onion* o_ptr = game.states.gameplay->mobs.onions[o];
         if(!o_ptr->activated) continue;
         bool has_type = false;
         for(
@@ -795,7 +804,7 @@ onion* mob::calculate_carrying_onion(
         }
         if(!has_type) continue;
         
-        dist d(pos, o_ptr->pos);
+        Distance d(pos, o_ptr->pos);
         if(closest_onion_idx == INVALID || d < closest_onion_dist) {
             closest_onion_dist = d;
             closest_onion_idx = o;
@@ -806,14 +815,20 @@ onion* mob::calculate_carrying_onion(
     return game.states.gameplay->mobs.onions[closest_onion_idx];
 }
 
-ship* mob::calculate_carrying_ship() const {
+
+/**
+ * @brief Calculates to which ship Pikmin should carry something.
+ *
+ * @return The ship.
+ */
+Ship* Mob::calculate_carrying_ship() const {
     //Go to the nearest ship.
-    ship* closest_ship = nullptr;
-    dist closest_ship_dist;
+    Ship* closest_ship = nullptr;
+    Distance closest_ship_dist;
     
     for(size_t s = 0; s < game.states.gameplay->mobs.ships.size(); s++) {
-        ship* s_ptr = game.states.gameplay->mobs.ships[s];
-        dist d(pos, s_ptr->control_point_final_pos);
+        Ship* s_ptr = game.states.gameplay->mobs.ships[s];
+        Distance d(pos, s_ptr->control_point_final_pos);
         
         if(!closest_ship || d < closest_ship_dist) {
             closest_ship = s_ptr;
