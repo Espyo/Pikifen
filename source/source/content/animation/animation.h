@@ -131,11 +131,11 @@ public:
     Sprite(const Sprite &s2);
     ~Sprite();
     Sprite &operator=(const Sprite &s2);
-    void create_hitboxes(
+    void createHitboxes(
         AnimationDatabase* const adb,
         float height = 0, float radius = 0
     );
-    void set_bitmap(
+    void setBitmap(
         const string &new_bmp_name,
         const Point &new_bmp_pos, const Point &new_bmp_size,
         DataNode* node = nullptr
@@ -224,13 +224,13 @@ public:
     );
     Animation(const Animation &a2);
     Animation &operator=(const Animation &a2);
-    void delete_frame(size_t idx);
-    float get_duration();
-    float get_loop_duration();
-    void get_frame_and_time(
+    void deleteFrame(size_t idx);
+    float getDuration();
+    float getLoopDuration();
+    void getFrameAndTime(
         float t, size_t* frame_idx, float* frame_time
     );
-    float get_time(size_t frame_idx, float frame_time);
+    float getTime(size_t frame_idx, float frame_time);
     
 };
 
@@ -269,20 +269,20 @@ public:
         const vector<Sprite*>    &s = vector<Sprite*>(),
         const vector<BodyPart*> &b = vector<BodyPart*>()
     );
-    size_t find_animation(const string &name) const;
-    size_t find_sprite(const string &name) const;
-    size_t find_body_part(const string &name) const;
-    void calculate_hitbox_span();
-    void create_conversions(
+    size_t findAnimation(const string &name) const;
+    size_t findSprite(const string &name) const;
+    size_t findBodyPart(const string &name) const;
+    void calculateHitboxSpan();
+    void createConversions(
         const vector<std::pair<size_t, string> > &conversions,
         const DataNode* file
     );
-    void delete_sprite(size_t idx);
-    void fill_sound_idx_caches(MobType* mt_ptr);
-    void fix_body_part_pointers();
-    void load_from_data_node(DataNode* node);
-    void save_to_data_node(DataNode* node, bool save_top_data);
-    void sort_alphabetically();
+    void deleteSprite(size_t idx);
+    void fillSoundIdxCaches(MobType* mt_ptr);
+    void fixBodyPartPointers();
+    void loadFromDataNode(DataNode* node);
+    void saveToDataNode(DataNode* node, bool save_top_data);
+    void sortAlphabetically();
     void destroy();
     
 };
@@ -316,32 +316,32 @@ public:
     AnimationInstance(const AnimationInstance &ai2);
     AnimationInstance &operator=(const AnimationInstance &ai2);
     void clear();
-    void to_start();
-    void skip_ahead_randomly();
+    void toStart();
+    void skipAheadRandomly();
     bool tick(
         float delta_t,
         vector<size_t>* signals = nullptr,
         vector<size_t>* sounds = nullptr
     );
-    bool valid_frame() const;
-    void get_sprite_data(
+    bool validFrame() const;
+    void getSpriteData(
         Sprite** out_cur_sprite_ptr, Sprite** out_next_sprite_ptr,
         float* out_interpolation_factor
     ) const;
-    size_t get_next_frame_idx(bool* out_reached_end = nullptr) const;
-    void init_to_first_anim(AnimationDatabase* db);
+    size_t getNextFrameIdx(bool* out_reached_end = nullptr) const;
+    void initToFirstAnim(AnimationDatabase* db);
     
 };
 
 
-void get_sprite_basic_effects(
+void getSpriteBasicEffects(
     const Point &base_pos, float base_angle,
     float base_angle_cos_cache, float base_angle_sin_cache,
     Sprite* cur_s_ptr, Sprite* next_s_ptr, float interpolation_factor,
     Point* out_eff_trans, float* out_eff_angle,
     Point* out_eff_scale, ALLEGRO_COLOR* out_eff_tint
 );
-void get_sprite_basic_top_effects(
+void getSpriteBasicTopEffects(
     Sprite* cur_s_ptr, Sprite* next_s_ptr, float interpolation_factor,
     Point* out_eff_trans, float* out_eff_angle,
     Point* out_eff_size

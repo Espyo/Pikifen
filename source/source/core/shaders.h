@@ -51,15 +51,15 @@ struct ShaderManager {
     
     //--- Function declarations ---
     
-    ALLEGRO_SHADER* get_shader(SHADER_TYPE shader_type);
-    void compile_shaders();
+    ALLEGRO_SHADER* getShader(SHADER_TYPE shader_type);
+    void compileShaders();
     
     
     private:
     
     //--- Function declarations ---
     
-    void try_attach_shader(
+    void tryAttachShader(
         ALLEGRO_SHADER* shader, ALLEGRO_SHADER_TYPE type, const char* source
     );
     

@@ -57,12 +57,12 @@ private:
     
     //--- Function declarations ---
     
-    void add_header(const string &label);
-    TextGuiItem* add_stat(
+    void addHeader(const string &label);
+    TextGuiItem* addStat(
         const string &label, const string &value, const string &description
     );
-    void init_gui_main();
-    void populate_stats_list();
-    void update_runtime_value_text();
+    void initGuiMain();
+    void populateStatsList();
+    void updateRuntimeValueText();
     
 };

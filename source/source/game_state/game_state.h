@@ -42,10 +42,10 @@ public:
     virtual ~GameState() = default;
     virtual void load() = 0;
     virtual void unload() = 0;
-    virtual void handle_allegro_event(ALLEGRO_EVENT &ev) = 0;
-    virtual void do_logic() = 0;
-    virtual void do_drawing() = 0;
-    virtual void update_transformations();
-    virtual string get_name() const = 0;
+    virtual void handleAllegroEvent(ALLEGRO_EVENT &ev) = 0;
+    virtual void doLogic() = 0;
+    virtual void doDrawing() = 0;
+    virtual void updateTransformations();
+    virtual string getName() const = 0;
     
 };

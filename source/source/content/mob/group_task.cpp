@@ -28,11 +28,11 @@ GroupTask::GroupTask(
     power_goal(type->power_goal) {
     
     //Initialize spots.
-    float row_angle = get_angle(tas_type->first_row_p1, tas_type->first_row_p2);
+    float row_angle = getAngle(tas_type->first_row_p1, tas_type->first_row_p2);
     size_t needed_rows =
         ceil(tas_type->max_pikmin / (float) tas_type->pikmin_per_row);
     float point_dist =
-        Distance(tas_type->first_row_p1, tas_type->first_row_p2).to_float();
+        Distance(tas_type->first_row_p1, tas_type->first_row_p2).toFloat();
     float space_between_neighbors =
         point_dist / (float) (tas_type->pikmin_per_row - 1);
         
@@ -71,7 +71,7 @@ GroupTask::GroupTask(
         }
     }
     
-    update_spot_absolute_positions();
+    updateSpotAbsolutePositions();
 }
 
 
@@ -80,7 +80,7 @@ GroupTask::GroupTask(
  *
  * @param who Pikmin to add.
  */
-void GroupTask::add_worker(Pikmin* who) {
+void GroupTask::addWorker(Pikmin* who) {
     for(size_t s = 0; s < spots.size(); s++) {
         if(spots[s].pikmin_here == who) {
             spots[s].state = 2;
@@ -108,7 +108,7 @@ void GroupTask::add_worker(Pikmin* who) {
     
     if(!had_goal && power >= power_goal) {
         string msg = "goal_reached";
-        who->send_script_message(this, msg);
+        who->sendScriptMessage(this, msg);
     }
 }
 
@@ -116,14 +116,14 @@ void GroupTask::add_worker(Pikmin* who) {
 /**
  * @brief Code to run when the task is finished.
  */
-void GroupTask::finish_task() {
+void GroupTask::finishTask() {
     for(
         size_t p = 0;
         p < game.states.gameplay->mobs.pikmin_list.size(); p++
     ) {
         Pikmin* p_ptr = game.states.gameplay->mobs.pikmin_list[p];
         if(p_ptr->focused_mob && p_ptr->focused_mob == this) {
-            p_ptr->fsm.run_event(MOB_EV_FOCUSED_MOB_UNAVAILABLE);
+            p_ptr->fsm.runEvent(MOB_EV_FOCUSED_MOB_UNAVAILABLE);
         }
     }
 }
@@ -134,7 +134,7 @@ void GroupTask::finish_task() {
  *
  * @param whose Who had the reservation?
  */
-void GroupTask::free_up_spot(Pikmin* whose) {
+void GroupTask::freeUpSpot(Pikmin* whose) {
     bool was_contributing = false;
     
     for(size_t s = 0; s < spots.size(); s++) {
@@ -169,7 +169,7 @@ void GroupTask::free_up_spot(Pikmin* whose) {
         
         if(had_goal && power < power_goal) {
             string msg = "goal_lost";
-            whose->send_script_message(this, msg);
+            whose->sendScriptMessage(this, msg);
         }
     }
 }
@@ -186,12 +186,12 @@ void GroupTask::free_up_spot(Pikmin* whose) {
  * @param fraction_color The fraction's color gets set here.
  * @return Whether the fraction numbers should be shown.
  */
-bool GroupTask::get_fraction_numbers_info(
+bool GroupTask::getFractionNumbersInfo(
     float* fraction_value_nr, float* fraction_req_nr,
     ALLEGRO_COLOR* fraction_color
 ) const {
-    if(get_power() <= 0) return false;
-    *fraction_value_nr = get_power();
+    if(getPower() <= 0) return false;
+    *fraction_value_nr = getPower();
     *fraction_req_nr = power_goal;
     *fraction_color = game.config.aesthetic_gen.carrying_color_stop;
     return true;
@@ -204,7 +204,7 @@ bool GroupTask::get_fraction_numbers_info(
  *
  * @return The spot, or nullptr if there is none.
  */
-GroupTask::GroupTaskSpot* GroupTask::get_free_spot() {
+GroupTask::GroupTaskSpot* GroupTask::getFreeSpot() {
     size_t spots_taken = 0;
     
     for(size_t s = 0; s < spots.size(); s++) {
@@ -228,7 +228,7 @@ GroupTask::GroupTaskSpot* GroupTask::get_free_spot() {
  *
  * @return The power.
  */
-float GroupTask::get_power() const {
+float GroupTask::getPower() const {
     return power;
 }
 
@@ -239,7 +239,7 @@ float GroupTask::get_power() const {
  * @param whose Pikmin whose spot to check.
  * @return The coordinates, or (0,0) if that Pikmin doesn't have a spot.
  */
-Point GroupTask::get_spot_pos(const Pikmin* whose) const {
+Point GroupTask::getSpotPos(const Pikmin* whose) const {
     for(size_t s = 0; s < spots.size(); s++) {
         if(spots[s].pikmin_here == whose) {
             return spots[s].absolute_pos;
@@ -254,8 +254,8 @@ Point GroupTask::get_spot_pos(const Pikmin* whose) const {
  *
  * @param svr Script var reader to use.
  */
-void GroupTask::read_script_vars(const ScriptVarReader &svr) {
-    Mob::read_script_vars(svr);
+void GroupTask::readScriptVars(const ScriptVarReader &svr) {
+    Mob::readScriptVars(svr);
     
     svr.get("power_goal", power_goal);
 }
@@ -267,7 +267,7 @@ void GroupTask::read_script_vars(const ScriptVarReader &svr) {
  * @param spot Pointer to the spot to reserve.
  * @param who Who will be reserving this spot?
  */
-void GroupTask::reserve_spot(GroupTask::GroupTaskSpot* spot, Pikmin* who) {
+void GroupTask::reserveSpot(GroupTask::GroupTaskSpot* spot, Pikmin* who) {
     spot->state = 1;
     spot->pikmin_here = who;
 }
@@ -278,10 +278,10 @@ void GroupTask::reserve_spot(GroupTask::GroupTaskSpot* spot, Pikmin* who) {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void GroupTask::tick_class_specifics(float delta_t) {
+void GroupTask::tickClassSpecifics(float delta_t) {
     if(health <= 0 && !ran_task_finished_code) {
         ran_task_finished_code = true;
-        finish_task();
+        finishTask();
     }
     
     if(health > 0) {
@@ -301,7 +301,7 @@ void GroupTask::tick_class_specifics(float delta_t) {
         chase_info.acceleration = MOB::CARRIED_MOB_ACCELERATION;
     }
     
-    update_spot_absolute_positions();
+    updateSpotAbsolutePositions();
 }
 
 
@@ -310,7 +310,7 @@ void GroupTask::tick_class_specifics(float delta_t) {
  * based on where the group task mob currently is and where it is
  * currently facing.
  */
-void GroupTask::update_spot_absolute_positions() {
+void GroupTask::updateSpotAbsolutePositions() {
     ALLEGRO_TRANSFORM t;
     al_identity_transform(&t);
     al_rotate_transform(&t, angle);

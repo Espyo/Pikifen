@@ -328,7 +328,7 @@ struct Song : public Content {
     
     //--- Function declarations ---
     
-    void load_from_data_node(DataNode* node);
+    void loadFromDataNode(DataNode* node);
     void unload();
     
 };
@@ -349,46 +349,46 @@ public:
     
     //--- Function declarations ---
     
-    size_t create_mob_sound_source(
+    size_t createMobSoundSource(
         ALLEGRO_SAMPLE* sample, Mob* m_ptr, bool ambiance = false,
         const SoundSourceConfig &config = SoundSourceConfig()
     );
-    size_t create_global_sound_source(
+    size_t createGlobalSoundSource(
         ALLEGRO_SAMPLE* sample, bool ambiance = false,
         const SoundSourceConfig &config = SoundSourceConfig()
     );
-    size_t create_pos_sound_source(
+    size_t createPosSoundSource(
         ALLEGRO_SAMPLE* sample, const Point &pos, bool ambiance = false,
         const SoundSourceConfig &config = SoundSourceConfig()
     );
-    size_t create_ui_sound_source(
+    size_t createUiSoundsource(
         ALLEGRO_SAMPLE* sample,
         const SoundSourceConfig &config = SoundSourceConfig()
     );
-    bool destroy_sound_source(size_t source_id);
+    bool destroySoundSource(size_t source_id);
     void destroy();
     bool emit(size_t source_id);
-    void handle_mob_deletion(const Mob* m_ptr);
-    void handle_stream_finished(ALLEGRO_AUDIO_STREAM* stream);
-    void handle_world_pause();
-    void handle_world_unpause();
+    void handleMobDeletion(const Mob* m_ptr);
+    void handleStreamFinished(ALLEGRO_AUDIO_STREAM* stream);
+    void handleWorldPause();
+    void handleWorldUnpause();
     void init(
         float master_volume, float gameplay_sound_volume, float music_volume,
         float ambiance_sound_volume, float ui_sound_volume
     );
-    void mark_mix_track_status(MIX_TRACK_TYPE track_type);
-    bool rewind_song(const string &name);
-    bool schedule_emission(size_t source_id, bool first);
-    void set_camera_pos(const Point &cam_tl, const Point &cam_br);
-    bool set_current_song(
+    void markMixTrackStatus(MIX_TRACK_TYPE track_type);
+    bool rewindSong(const string &name);
+    bool scheduleEmission(size_t source_id, bool first);
+    void setCameraPos(const Point &cam_tl, const Point &cam_br);
+    bool setCurrentSong(
         const string &name, bool from_start = true, bool fade_in = true,
         bool loop = true
     );
-    void set_song_pos_near_loop();
-    bool set_sound_source_pos(size_t source_id, const Point &pos);
-    void stop_all_playbacks(const ALLEGRO_SAMPLE* filter = nullptr);
+    void setSongPosNearLoop();
+    bool setSoundSourcePos(size_t source_id, const Point &pos);
+    void stopAllPlaybacks(const ALLEGRO_SAMPLE* filter = nullptr);
     void tick(float delta_t);
-    void update_volumes(
+    void updateVolumes(
         float master_volume, float gameplay_sound_volume, float music_volume,
         float ambiance_sound_volume, float ui_sound_volume
     );
@@ -442,20 +442,20 @@ private:
     
     //--- Function declarations ---
     
-    size_t create_sound_source(
+    size_t createSoundSource(
         ALLEGRO_SAMPLE* sample,
         SOUND_TYPE type,
         const SoundSourceConfig &config,
         const Point &pos
     );
-    bool destroy_sound_playback(size_t playback_idx);
-    SoundSource* get_source(size_t source_id);
-    void start_song_track(
+    bool destroySoundPlayback(size_t playback_idx);
+    SoundSource* getSource(size_t source_id);
+    void startSongTrack(
         Song* song_ptr, ALLEGRO_AUDIO_STREAM* stream,
         bool from_start, bool fade_in, bool loop
     );
-    bool stop_sound_playback(size_t playback_idx);
-    void update_playback_gain_and_pan(size_t playback_idx);
-    void update_playback_target_gain_and_pan(size_t playback_idx);
+    bool stopSoundPlayback(size_t playback_idx);
+    void updatePlaybackGainAndPan(size_t playback_idx);
+    void updatePlaybackTargetGainAndPan(size_t playback_idx);
     
 };

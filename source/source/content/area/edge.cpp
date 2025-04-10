@@ -49,7 +49,7 @@ void Edge::clone(Edge* destination) const {
  * @param s_ptr The sector that ISN'T the one to return.
  * @return The other sector.
  */
-Sector* Edge::get_other_sector(const Sector* s_ptr) const {
+Sector* Edge::getOtherSector(const Sector* s_ptr) const {
     if(sectors[0] == s_ptr) return sectors[1];
     return sectors[0];
 }
@@ -61,7 +61,7 @@ Sector* Edge::get_other_sector(const Sector* s_ptr) const {
  * @param v_ptr The vertex that ISN'T the one to return.
  * @return The other vertex.
  */
-Vertex* Edge::get_other_vertex(const Vertex* v_ptr) const {
+Vertex* Edge::getOtherVertex(const Vertex* v_ptr) const {
     if(vertexes[0] == v_ptr) return vertexes[1];
     return vertexes[0];
 }
@@ -73,7 +73,7 @@ Vertex* Edge::get_other_vertex(const Vertex* v_ptr) const {
  * @param s_ptr Sector to check.
  * @return The side index, or INVALID if neither.
  */
-size_t Edge::get_side_with_sector(const Sector* s_ptr) const {
+size_t Edge::getSideWithSector(const Sector* s_ptr) const {
     for(unsigned char s = 0; s < 2; s++) {
         if(sectors[s] == s_ptr) return s;
     }
@@ -88,7 +88,7 @@ size_t Edge::get_side_with_sector(const Sector* s_ptr) const {
  * @param other Edge to check as a neighbor.
  * @return The binding vertex, or nullptr if they are not neighbors.
  */
-Vertex* Edge::has_neighbor(const Edge* other) const {
+Vertex* Edge::hasNeighbor(const Edge* other) const {
     for(size_t v1 = 0; v1 < 2; v1++) {
         for(size_t v2 = 0; v2 < 2; v2++) {
             if(vertexes[v1] == other->vertexes[v2]) {
@@ -106,7 +106,7 @@ Vertex* Edge::has_neighbor(const Edge* other) const {
  *
  * @return Whether it is valid.
  */
-bool Edge::is_valid() const {
+bool Edge::isValid() const {
     if(!vertexes[0]) return false;
     if(!vertexes[1]) return false;
     return true;
@@ -119,7 +119,7 @@ bool Edge::is_valid() const {
  *
  * @return The edge index.
  */
-size_t Edge::remove_from_sectors() {
+size_t Edge::removeFromSectors() {
     size_t e_idx = INVALID;
     for(unsigned char s = 0; s < 2; s++) {
         Sector* s_ptr = sectors[s];
@@ -147,7 +147,7 @@ size_t Edge::remove_from_sectors() {
  *
  * @return The edge index.
  */
-size_t Edge::remove_from_vertexes() {
+size_t Edge::removeFromVertexes() {
     size_t e_idx = INVALID;
     for(unsigned char v = 0; v < 2; v++) {
         Vertex* v_ptr = vertexes[v];
@@ -173,7 +173,7 @@ size_t Edge::remove_from_vertexes() {
  * @brief Swaps the two vertexes of the edge around. It also swaps the sectors,
  * so that they still point in the right direction.
  */
-void Edge::swap_vertexes() {
+void Edge::swapVertexes() {
     std::swap(vertexes[0], vertexes[1]);
     std::swap(vertex_idxs[0], vertex_idxs[1]);
     std::swap(sectors[0], sectors[1]);
@@ -189,11 +189,11 @@ void Edge::swap_vertexes() {
  * @param to_idx Index of the sector to transfer to.
  * @param edge_idx Index of the current edge.
  */
-void Edge::transfer_sector(
+void Edge::transferSector(
     Sector* from, Sector* to, size_t to_idx, size_t edge_idx
 ) {
-    size_t idx = get_side_with_sector(from);
-    engine_assert(
+    size_t idx = getSideWithSector(from);
+    engineAssert(
         idx != INVALID,
         i2s(to_idx)
     );
@@ -201,8 +201,8 @@ void Edge::transfer_sector(
     sectors[idx] = to;
     sector_idxs[idx] = to_idx;
     
-    if(from) from->remove_edge(this);
-    if(to) to->add_edge(this, edge_idx);
+    if(from) from->removeEdge(this);
+    if(to) to->addEdge(this, edge_idx);
 }
 
 

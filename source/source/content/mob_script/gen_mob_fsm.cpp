@@ -31,18 +31,18 @@
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void gen_mob_fsm::be_attacked(Mob* m, void* info1, void* info2) {
-    engine_assert(info1 != nullptr, m->print_state_history());
+void gen_mob_fsm::beAttacked(Mob* m, void* info1, void* info2) {
+    engineAssert(info1 != nullptr, m->printStateHistory());
     
     HitboxInteraction* info = (HitboxInteraction*) info1;
     
     float damage = 0;
-    if(!info->mob2->calculate_damage(m, info->h2, info->h1, &damage)) {
+    if(!info->mob2->calculateDamage(m, info->h2, info->h1, &damage)) {
         return;
     }
     
-    m->apply_attack_damage(info->mob2, info->h2, info->h1, damage);
-    m->do_attack_effects(info->mob2, info->h2, info->h1, damage, 0.0f);
+    m->applyAttackDamage(info->mob2, info->h2, info->h1, damage);
+    m->doAttackEffects(info->mob2, info->h2, info->h1, damage, 0.0f);
 }
 
 
@@ -53,12 +53,12 @@ void gen_mob_fsm::be_attacked(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void gen_mob_fsm::carry_become_stuck(Mob* m, void* info1, void* info2) {
-    engine_assert(m->carry_info != nullptr, m->print_state_history());
+void gen_mob_fsm::carryBecomeStuck(Mob* m, void* info1, void* info2) {
+    engineAssert(m->carry_info != nullptr, m->printStateHistory());
     
-    m->circle_around(
+    m->circleAround(
         nullptr, m->pos, MOB::CARRY_STUCK_CIRCLING_RADIUS, true,
-        m->carry_info->get_speed() * MOB::CARRY_STUCK_SPEED_MULTIPLIER,
+        m->carry_info->getSpeed() * MOB::CARRY_STUCK_SPEED_MULTIPLIER,
         true
     );
 }
@@ -72,19 +72,19 @@ void gen_mob_fsm::carry_become_stuck(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void gen_mob_fsm::carry_begin_move(Mob* m, void* info1, void* info2) {
+void gen_mob_fsm::carryBeginMove(Mob* m, void* info1, void* info2) {
     m->carry_info->is_moving = true;
     
-    has_flag(m->path_info->settings.flags, PATH_FOLLOW_FLAG_AIRBORNE) ?
-    enable_flag(m->flags, MOB_FLAG_CAN_MOVE_MIDAIR) :
-    disable_flag(m->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
+    hasFlag(m->path_info->settings.flags, PATH_FOLLOW_FLAG_AIRBORNE) ?
+    enableFlag(m->flags, MOB_FLAG_CAN_MOVE_MIDAIR) :
+    disableFlag(m->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     
     if(!m->carry_info->destination_exists) {
         m->path_info->result = PATH_RESULT_NO_DESTINATION;
     }
     
     if(m->path_info->result < 0) {
-        m->fsm.run_event(MOB_EV_PATH_BLOCKED);
+        m->fsm.runEvent(MOB_EV_PATH_BLOCKED);
         return;
     }
 }
@@ -97,9 +97,9 @@ void gen_mob_fsm::carry_begin_move(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void gen_mob_fsm::carry_get_path(Mob* m, void* info1, void* info2) {
+void gen_mob_fsm::carryGetPath(Mob* m, void* info1, void* info2) {
     PathFollowSettings settings;
-    enable_flag(settings.flags, PATH_FOLLOW_FLAG_CAN_CONTINUE);
+    enableFlag(settings.flags, PATH_FOLLOW_FLAG_CAN_CONTINUE);
     
     if(m->carry_info->destination == CARRY_DESTINATION_SHIP) {
         //Special case: ships.
@@ -132,17 +132,17 @@ void gen_mob_fsm::carry_get_path(Mob* m, void* info1, void* info2) {
             MOB_CATEGORY_BRIDGES
         ) {
             Bridge* bri_ptr = (Bridge*) m->carry_info->intended_mob;
-            enable_flag(settings.flags, PATH_FOLLOW_FLAG_FAKED_END);
-            enable_flag(settings.flags, PATH_FOLLOW_FLAG_FOLLOW_MOB);
-            settings.faked_end = bri_ptr->get_start_point();
+            enableFlag(settings.flags, PATH_FOLLOW_FLAG_FAKED_END);
+            enableFlag(settings.flags, PATH_FOLLOW_FLAG_FOLLOW_MOB);
+            settings.faked_end = bri_ptr->getStartPoint();
         }
     }
     
     settings.target_point = m->carry_info->intended_point;
     settings.target_mob = m->carry_info->intended_mob;
     
-    m->follow_path(
-        settings, m->carry_info->get_speed(), m->chase_info.acceleration
+    m->followPath(
+        settings, m->carry_info->getSpeed(), m->chase_info.acceleration
     );
     
     if(!m->carry_info->destination_exists) {
@@ -150,7 +150,7 @@ void gen_mob_fsm::carry_get_path(Mob* m, void* info1, void* info2) {
     }
     if(m->path_info->result < 0) {
         m->path_info->block_reason = PATH_BLOCK_REASON_NO_PATH;
-        m->fsm.run_event(MOB_EV_PATH_BLOCKED);
+        m->fsm.runEvent(MOB_EV_PATH_BLOCKED);
     }
 }
 
@@ -162,8 +162,8 @@ void gen_mob_fsm::carry_get_path(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void gen_mob_fsm::carry_reach_destination(Mob* m, void* info1, void* info2) {
-    m->stop_following_path();
+void gen_mob_fsm::carryReachDestination(Mob* m, void* info1, void* info2) {
+    m->stopFollowingPath();
     
     if(m->delivery_info) {
         delete m->delivery_info;
@@ -174,7 +174,7 @@ void gen_mob_fsm::carry_reach_destination(Mob* m, void* info1, void* info2) {
         m->delivery_info->intended_pik_type = m->carry_info->intended_pik_type;
     }
     
-    m->fsm.run_event(MOB_EV_CARRY_DELIVERED);
+    m->fsm.runEvent(MOB_EV_CARRY_DELIVERED);
 }
 
 
@@ -185,8 +185,8 @@ void gen_mob_fsm::carry_reach_destination(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void gen_mob_fsm::carry_stop_being_stuck(Mob* m, void* info1, void* info2) {
-    m->stop_circling();
+void gen_mob_fsm::carryStopBeingStuck(Mob* m, void* info1, void* info2) {
+    m->stopCircling();
 }
 
 
@@ -197,12 +197,12 @@ void gen_mob_fsm::carry_stop_being_stuck(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void gen_mob_fsm::carry_stop_move(Mob* m, void* info1, void* info2) {
+void gen_mob_fsm::carryStopMove(Mob* m, void* info1, void* info2) {
     if(!m->carry_info) return;
     m->carry_info->is_moving = false;
-    disable_flag(m->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
-    m->stop_following_path();
-    m->stop_chasing();
+    disableFlag(m->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
+    m->stopFollowingPath();
+    m->stopChasing();
 }
 
 
@@ -213,10 +213,10 @@ void gen_mob_fsm::carry_stop_move(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void gen_mob_fsm::fall_down_pit(Mob* m, void* info1, void* info2) {
-    m->set_health(false, false, 0);
-    m->start_dying();
-    m->finish_dying();
+void gen_mob_fsm::fallDownPit(Mob* m, void* info1, void* info2) {
+    m->setHealth(false, false, 0);
+    m->startDying();
+    m->finishDying();
     m->to_delete = true;
 }
 
@@ -228,9 +228,9 @@ void gen_mob_fsm::fall_down_pit(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void gen_mob_fsm::go_to_dying_state(Mob* m, void* info1, void* info2) {
+void gen_mob_fsm::goToDyingState(Mob* m, void* info1, void* info2) {
     if(m->type->dying_state_idx == INVALID) return;
-    m->fsm.set_state(m->type->dying_state_idx, info1, info2);
+    m->fsm.setState(m->type->dying_state_idx, info1, info2);
 }
 
 
@@ -241,7 +241,7 @@ void gen_mob_fsm::go_to_dying_state(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void gen_mob_fsm::handle_carrier_added(Mob* m, void* info1, void* info2) {
+void gen_mob_fsm::handleCarrierAdded(Mob* m, void* info1, void* info2) {
     Pikmin* pik_ptr = (Pikmin*) info1;
     
     //Save some data before changing anything.
@@ -254,11 +254,11 @@ void gen_mob_fsm::handle_carrier_added(Mob* m, void* info1, void* info2) {
     m->carry_info->cur_carrying_strength += pik_ptr->pik_type->carry_strength;
     m->carry_info->cur_n_carriers++;
     
-    m->chase_info.max_speed = m->carry_info->get_speed();
+    m->chase_info.max_speed = m->carry_info->getSpeed();
     m->chase_info.acceleration = MOB::CARRIED_MOB_ACCELERATION;
     
     m->carry_info->destination_exists =
-        m->calculate_carrying_destination(
+        m->calculateCarryingDestination(
             pik_ptr, nullptr,
             &m->carry_info->intended_pik_type,
             &m->carry_info->intended_mob, &m->carry_info->intended_point
@@ -282,18 +282,18 @@ void gen_mob_fsm::handle_carrier_added(Mob* m, void* info1, void* info2) {
     //Now, check if the fact that it can fly or not changed.
     if(!must_update && m->path_info) {
         bool old_is_airborne =
-            has_flag(m->path_info->settings.flags, PATH_FOLLOW_FLAG_AIRBORNE);
-        bool new_is_airborne = m->carry_info->can_fly();
+            hasFlag(m->path_info->settings.flags, PATH_FOLLOW_FLAG_AIRBORNE);
+        bool new_is_airborne = m->carry_info->canFly();
         must_update = old_is_airborne != new_is_airborne;
     }
     
     //Check if the list of invulnerabilities changed.
     if(!must_update && m->path_info) {
         vector<Hazard*> new_invulnerabilities =
-            m->carry_info->get_carrier_invulnerabilities();
+            m->carry_info->getCarrierInvulnerabilities();
             
         if(
-            !vectors_contain_same(
+            !vectorsContainSame(
                 new_invulnerabilities,
                 m->path_info->settings.invulnerabilities
             )
@@ -305,7 +305,7 @@ void gen_mob_fsm::handle_carrier_added(Mob* m, void* info1, void* info2) {
     if(must_update) {
         //Send a move begin event, so that the mob can calculate
         //a (new) path and start taking it.
-        m->fsm.run_event(MOB_EV_CARRY_BEGIN_MOVE);
+        m->fsm.runEvent(MOB_EV_CARRY_BEGIN_MOVE);
     }
 }
 
@@ -317,7 +317,7 @@ void gen_mob_fsm::handle_carrier_added(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void gen_mob_fsm::handle_carrier_removed(Mob* m, void* info1, void* info2) {
+void gen_mob_fsm::handleCarrierRemoved(Mob* m, void* info1, void* info2) {
     Pikmin* pik_ptr = (Pikmin*) info1;
     
     //Save some data before changing anything.
@@ -330,10 +330,10 @@ void gen_mob_fsm::handle_carrier_removed(Mob* m, void* info1, void* info2) {
     m->carry_info->cur_carrying_strength -= pik_ptr->pik_type->carry_strength;
     m->carry_info->cur_n_carriers--;
     
-    m->chase_info.max_speed = m->carry_info->get_speed();
+    m->chase_info.max_speed = m->carry_info->getSpeed();
     m->chase_info.acceleration = MOB::CARRIED_MOB_ACCELERATION;
     
-    m->calculate_carrying_destination(
+    m->calculateCarryingDestination(
         nullptr, pik_ptr,
         &m->carry_info->intended_pik_type,
         &m->carry_info->intended_mob, &m->carry_info->intended_point
@@ -344,7 +344,7 @@ void gen_mob_fsm::handle_carrier_removed(Mob* m, void* info1, void* info2) {
     //If the mob can no longer move, send a move stop event,
     //so the mob, well, stops.
     if(could_move && !can_move) {
-        m->fsm.run_event(MOB_EV_CARRY_STOP_MOVE);
+        m->fsm.runEvent(MOB_EV_CARRY_STOP_MOVE);
         return;
     }
     
@@ -359,18 +359,18 @@ void gen_mob_fsm::handle_carrier_removed(Mob* m, void* info1, void* info2) {
     //Now, check if the fact that it can fly or not changed.
     if(!must_update && m->path_info) {
         bool old_is_airborne =
-            has_flag(m->path_info->settings.flags, PATH_FOLLOW_FLAG_AIRBORNE);
-        bool new_is_airborne = m->carry_info->can_fly();
+            hasFlag(m->path_info->settings.flags, PATH_FOLLOW_FLAG_AIRBORNE);
+        bool new_is_airborne = m->carry_info->canFly();
         must_update = old_is_airborne != new_is_airborne;
     }
     
     //Check if the list of invulnerabilities changed.
     if(!must_update && m->path_info) {
         vector<Hazard*> new_invulnerabilities =
-            m->carry_info->get_carrier_invulnerabilities();
+            m->carry_info->getCarrierInvulnerabilities();
             
         if(
-            !vectors_contain_same(
+            !vectorsContainSame(
                 new_invulnerabilities,
                 m->path_info->settings.invulnerabilities
             )
@@ -382,7 +382,7 @@ void gen_mob_fsm::handle_carrier_removed(Mob* m, void* info1, void* info2) {
     if(must_update) {
         //Send a move begin event, so that the mob can calculate
         //a (new) path and start taking it.
-        m->fsm.run_event(MOB_EV_CARRY_BEGIN_MOVE);
+        m->fsm.runEvent(MOB_EV_CARRY_BEGIN_MOVE);
     }
 }
 
@@ -394,10 +394,10 @@ void gen_mob_fsm::handle_carrier_removed(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void gen_mob_fsm::handle_delivery(Mob* m, void* info1, void* info2) {
-    engine_assert(m->focused_mob != nullptr, m->print_state_history());
+void gen_mob_fsm::handleDelivery(Mob* m, void* info1, void* info2) {
+    engineAssert(m->focused_mob != nullptr, m->printStateHistory());
     
-    m->focused_mob->fsm.run_event(
+    m->focused_mob->fsm.runEvent(
         MOB_EV_FINISHED_RECEIVING_DELIVERY, (void*) m
     );
     
@@ -412,7 +412,7 @@ void gen_mob_fsm::handle_delivery(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void gen_mob_fsm::lose_momentum(Mob* m, void* info1, void* info2) {
+void gen_mob_fsm::loseMomentum(Mob* m, void* info1, void* info2) {
     m->speed.x = m->speed.y = 0.0f;
 }
 
@@ -424,27 +424,27 @@ void gen_mob_fsm::lose_momentum(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void gen_mob_fsm::start_being_delivered(Mob* m, void* info1, void* info2) {
+void gen_mob_fsm::startBeingDelivered(Mob* m, void* info1, void* info2) {
     for(size_t p = 0; p < m->carry_info->spot_info.size(); p++) {
         Mob* pik_ptr = m->carry_info->spot_info[p].pik_ptr;
         if(pik_ptr) {
-            pik_ptr->fsm.run_event(MOB_EV_FINISHED_CARRYING);
+            pik_ptr->fsm.runEvent(MOB_EV_FINISHED_CARRYING);
         }
     }
     
-    m->focus_on_mob(m->carry_info->intended_mob);
-    enable_flag(m->flags, MOB_FLAG_INTANGIBLE);
-    m->become_uncarriable();
+    m->focusOnMob(m->carry_info->intended_mob);
+    enableFlag(m->flags, MOB_FLAG_INTANGIBLE);
+    m->becomeUncarriable();
     
-    m->focused_mob->fsm.run_event(MOB_EV_STARTED_RECEIVING_DELIVERY, m);
+    m->focused_mob->fsm.runEvent(MOB_EV_STARTED_RECEIVING_DELIVERY, m);
     
     switch(m->delivery_info->anim_type) {
     case DELIVERY_ANIM_SUCK: {
-        m->set_timer(MOB::DELIVERY_SUCK_TIME);
+        m->setTimer(MOB::DELIVERY_SUCK_TIME);
         break;
     }
     case DELIVERY_ANIM_TOSS: {
-        m->set_timer(MOB::DELIVERY_TOSS_TIME);
+        m->setTimer(MOB::DELIVERY_TOSS_TIME);
         break;
     }
     }
@@ -458,13 +458,13 @@ void gen_mob_fsm::start_being_delivered(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void gen_mob_fsm::touch_hazard(Mob* m, void* info1, void* info2) {
-    engine_assert(info1 != nullptr, m->print_state_history());
+void gen_mob_fsm::touchHazard(Mob* m, void* info1, void* info2) {
+    engineAssert(info1 != nullptr, m->printStateHistory());
     
     Hazard* h = (Hazard*) info1;
     
     for(size_t e = 0; e < h->effects.size(); e++) {
-        m->apply_status_effect(h->effects[e], false, true);
+        m->applyStatusEffect(h->effects[e], false, true);
     }
 }
 
@@ -476,12 +476,12 @@ void gen_mob_fsm::touch_hazard(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void gen_mob_fsm::touch_spray(Mob* m, void* info1, void* info2) {
-    engine_assert(info1 != nullptr, m->print_state_history());
+void gen_mob_fsm::touchSpray(Mob* m, void* info1, void* info2) {
+    engineAssert(info1 != nullptr, m->printStateHistory());
     
     SprayType* s = (SprayType*) info1;
     
     for(size_t e = 0; e < s->effects.size(); e++) {
-        m->apply_status_effect(s->effects[e], false, false);
+        m->applyStatusEffect(s->effects[e], false, false);
     }
 }

@@ -24,14 +24,14 @@ DropType::DropType() :
     target_type = MOB_TARGET_FLAG_NONE;
     height = 8.0f;
     
-    drop_fsm::create_fsm(this);
+    drop_fsm::createFsm(this);
 }
 
 
 /**
  * @brief Returns the vector of animation conversions.
  */
-anim_conversion_vector DropType::get_anim_conversions() const {
+anim_conversion_vector DropType::getAnimConversions() const {
     anim_conversion_vector v;
     v.push_back(std::make_pair(DROP_ANIM_IDLING, "idling"));
     v.push_back(std::make_pair(DROP_ANIM_FALLING, "falling"));
@@ -46,7 +46,7 @@ anim_conversion_vector DropType::get_anim_conversions() const {
  *
  * @param file File to read from.
  */
-void DropType::load_cat_properties(DataNode* file) {
+void DropType::loadCatProperties(DataNode* file) {
     ReaderSetter rs(file);
     
     string consumer_str;

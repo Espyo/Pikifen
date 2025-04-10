@@ -32,7 +32,7 @@ DecorationCategory::DecorationCategory() :
 /**
  * @brief Clears the list of registered types of decorations.
  */
-void DecorationCategory::clear_types() {
+void DecorationCategory::clearTypes() {
     for(auto &t : game.content.mob_types.list.decoration) {
         delete t.second;
     }
@@ -48,7 +48,7 @@ void DecorationCategory::clear_types() {
  * @param angle Starting angle.
  * @return The mob.
  */
-Mob* DecorationCategory::create_mob(
+Mob* DecorationCategory::createMob(
     const Point &pos, MobType* type, float angle
 ) {
     Decoration* m = new Decoration(pos, (DecorationType*) type, angle);
@@ -62,7 +62,7 @@ Mob* DecorationCategory::create_mob(
  *
  * @return The type.
  */
-MobType* DecorationCategory::create_type() {
+MobType* DecorationCategory::createType() {
     return new DecorationType();
 }
 
@@ -72,7 +72,7 @@ MobType* DecorationCategory::create_type() {
  *
  * @param m The mob to erase.
  */
-void DecorationCategory::erase_mob(Mob* m) {
+void DecorationCategory::eraseMob(Mob* m) {
     game.states.gameplay->mobs.decorations.erase(
         find(
             game.states.gameplay->mobs.decorations.begin(),
@@ -90,7 +90,7 @@ void DecorationCategory::erase_mob(Mob* m) {
  * @param internal_name Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-MobType* DecorationCategory::get_type(const string &internal_name) const {
+MobType* DecorationCategory::getType(const string &internal_name) const {
     auto it = game.content.mob_types.list.decoration.find(internal_name);
     if(it == game.content.mob_types.list.decoration.end()) return nullptr;
     return it->second;
@@ -102,7 +102,7 @@ MobType* DecorationCategory::get_type(const string &internal_name) const {
  *
  * @param list This list gets filled with the mob type internal names.
  */
-void DecorationCategory::get_type_names(vector<string> &list) const {
+void DecorationCategory::getTypeNames(vector<string> &list) const {
     for(auto &t : game.content.mob_types.list.decoration) {
         list.push_back(t.first);
     }
@@ -115,6 +115,6 @@ void DecorationCategory::get_type_names(vector<string> &list) const {
  * @param internal_name Internal name of the mob type.
  * @param type Mob type to register.
  */
-void DecorationCategory::register_type(const string &internal_name, MobType* type) {
+void DecorationCategory::registerType(const string &internal_name, MobType* type) {
     game.content.mob_types.list.decoration[internal_name] = (DecorationType*) type;
 }

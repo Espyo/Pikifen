@@ -44,10 +44,10 @@ struct PackManager {
     
     //--- Function declarations ---
     
-    void clear_manifests();
-    void fill_manifests();
-    void load_all();
-    void unload_all();
+    void clearManifests();
+    void fillManifests();
+    void loadAll();
+    void unloadAll();
     
 };
 
@@ -118,18 +118,18 @@ struct ContentManager {
     //--- Function declarations ---
     
     ContentManager();
-    bool create_pack(
+    bool createPack(
         const string &internal_name, const string &name,
         const string &description = "", const string &maker = ""
     );
-    bool load_area_as_current(
+    bool loadAreaAsCurrent(
         const string &requested_area_path, ContentManifest* manif_ptr,
         CONTENT_LOAD_LEVEL level, bool from_backup
     );
-    void load_all(const vector<CONTENT_TYPE> &types, CONTENT_LOAD_LEVEL level);
-    void reload_packs();
-    void unload_all(const vector<CONTENT_TYPE> &types);
-    void unload_current_area(CONTENT_LOAD_LEVEL level);
+    void loadAll(const vector<CONTENT_TYPE> &types, CONTENT_LOAD_LEVEL level);
+    void reloadPacks();
+    void unloadAll(const vector<CONTENT_TYPE> &types);
+    void unloadCurrentArea(CONTENT_LOAD_LEVEL level);
     
     private:
     
@@ -140,6 +140,6 @@ struct ContentManager {
     
     //--- Function declarations ---
     
-    ContentTypeManager* get_mgr_ptr(CONTENT_TYPE type);
+    ContentTypeManager* getMgrPtr(CONTENT_TYPE type);
     
 };

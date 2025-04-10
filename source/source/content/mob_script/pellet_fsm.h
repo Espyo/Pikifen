@@ -17,7 +17,7 @@
  * @brief Functions about the Onion's finite state machine and behavior.
  */
 namespace pellet_fsm {
-void create_fsm(MobType* typ);
+void createFsm(MobType* typ);
 
-void stand_still(Mob* m, void* info1, void* info2);
+void standStill(Mob* m, void* info1, void* info2);
 }

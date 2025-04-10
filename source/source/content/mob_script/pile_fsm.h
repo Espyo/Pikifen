@@ -17,8 +17,8 @@
  * @brief Functions about the pile's finite state machine and behavior.
  */
 namespace pile_fsm {
-void create_fsm(MobType* typ);
+void createFsm(MobType* typ);
 
-void be_attacked(Mob* m, void* info1, void* info2);
-void become_idle(Mob* m, void* info1, void* info2);
+void beAttacked(Mob* m, void* info1, void* info2);
+void becomeIdle(Mob* m, void* info1, void* info2);
 }

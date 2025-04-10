@@ -34,7 +34,7 @@ Scale::Scale(const Point &pos, ScaleType* type, float angle) :
  *
  * @return The weight.
  */
-float Scale::calculate_cur_weight() const {
+float Scale::calculateCurWeight() const {
 
     //Start by figuring out which mobs are applying weight.
     set<Mob*> weighing_mobs;
@@ -70,11 +70,11 @@ float Scale::calculate_cur_weight() const {
  * @param fraction_color The fraction's color gets set here.
  * @return Whether the numbers should be shown.
  */
-bool Scale::get_fraction_numbers_info(
+bool Scale::getFractionNumbersInfo(
     float* fraction_value_nr, float* fraction_req_nr,
     ALLEGRO_COLOR* fraction_color
 ) const {
-    float weight = calculate_cur_weight();
+    float weight = calculateCurWeight();
     if(weight <= 0 || health <= 0) return false;
     *fraction_value_nr = weight;
     *fraction_req_nr = goal_number;
@@ -88,8 +88,8 @@ bool Scale::get_fraction_numbers_info(
  *
  * @param svr Script var reader to use.
  */
-void Scale::read_script_vars(const ScriptVarReader &svr) {
-    Mob::read_script_vars(svr);
+void Scale::readScriptVars(const ScriptVarReader &svr) {
+    Mob::readScriptVars(svr);
     
     svr.get("goal_number", goal_number);
 }

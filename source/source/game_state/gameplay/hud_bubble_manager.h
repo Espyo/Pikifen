@@ -126,7 +126,7 @@ struct HudBubbleManager {
     * A default-constructed object is returned on error.
     * @param draw The final drawing information it should use is returned here.
     */
-    void get_drawing_info(
+    void getDrawingInfo(
         size_t id,
         t* content, DrawInfo* draw
     ) {
@@ -138,7 +138,7 @@ struct HudBubbleManager {
             return;
         }
         
-        bool visible = hud->get_item_draw_info(it->second.bubble, draw);
+        bool visible = hud->getItemDrawInfo(it->second.bubble, draw);
         
         if(!visible) {
             *content = t();
@@ -184,7 +184,7 @@ struct HudBubbleManager {
             match_ptr = match_it->second.bubble;
             DrawInfo match_draw;
             if(
-                hud->get_item_draw_info(match_ptr, &match_draw)
+                hud->getItemDrawInfo(match_ptr, &match_draw)
             ) {
                 match_pos = match_draw.center;
                 match_size = match_draw.size;
@@ -204,24 +204,24 @@ struct HudBubbleManager {
             float mov_ratio =
                 ease(EASE_METHOD_IN_OUT_BACK, 1.0f - transition_anim_ratio);
             float pivot_dist =
-                Distance(draw->center, match_pivot).to_float();
+                Distance(draw->center, match_pivot).toFloat();
                 
             if(transition_anim_ratio > 0.5f) {
                 //First half of the animation. Move to the first half.
                 switch(move_method) {
                 case HUD_BUBBLE_MOVE_METHOD_STRAIGHT: {
                     draw->center =
-                        interpolate_point(
+                        interpolatePoint(
                             ease(EASE_METHOD_OUT, 1.0f - transition_anim_ratio),
                             0.0f, 1.0f,
                             draw->center, match_pos
                         );
                     break;
                 } case HUD_BUBBLE_MOVE_METHOD_CIRCLE: {
-                    float match_start_angle = get_angle(match_pivot, draw->center);
+                    float match_start_angle = getAngle(match_pivot, draw->center);
                     draw->center =
                         match_pivot +
-                        rotate_point(
+                        rotatePoint(
                             Point(pivot_dist, 0.0f),
                             match_start_angle + mov_ratio * TAU / 2.0f
                         );
@@ -229,7 +229,7 @@ struct HudBubbleManager {
                 }
                 }
                 draw->size =
-                    interpolate_point(
+                    interpolatePoint(
                         ease(EASE_METHOD_OUT, 1.0f - transition_anim_ratio),
                         0.0f, 1.0f,
                         draw->size, match_size
@@ -240,17 +240,17 @@ struct HudBubbleManager {
                 switch(move_method) {
                 case HUD_BUBBLE_MOVE_METHOD_STRAIGHT: {
                     draw->center =
-                        interpolate_point(
+                        interpolatePoint(
                             ease(EASE_METHOD_OUT, 1.0f - transition_anim_ratio),
                             0.0f, 1.0f,
                             match_pos, draw->center
                         );
                     break;
                 } case HUD_BUBBLE_MOVE_METHOD_CIRCLE: {
-                    float match_start_angle = get_angle(match_pivot, match_pos);
+                    float match_start_angle = getAngle(match_pivot, match_pos);
                     draw->center =
                         match_pivot +
-                        rotate_point(
+                        rotatePoint(
                             Point(pivot_dist, 0.0f),
                             match_start_angle + mov_ratio * TAU / 2.0f
                         );
@@ -258,7 +258,7 @@ struct HudBubbleManager {
                 }
                 }
                 draw->size =
-                    interpolate_point(
+                    interpolatePoint(
                         ease(EASE_METHOD_OUT, 1.0f - transition_anim_ratio),
                         0.0f, 1.0f,
                         match_size, draw->size
@@ -296,7 +296,7 @@ struct HudBubbleManager {
     * this is the icon for the second leader, this value is 1 (0-indexed).
     * @param bubble GUI item that represents this bubble.
     */
-    void register_bubble(size_t id, GuiItem* bubble) {
+    void registerBubble(size_t id, GuiItem* bubble) {
         bubbles[id] = Bubble(bubble);
     }
     

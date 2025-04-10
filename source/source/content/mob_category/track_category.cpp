@@ -32,7 +32,7 @@ TrackCategory::TrackCategory() :
 /**
  * @brief Clears the list of registered types of tracks.
  */
-void TrackCategory::clear_types() {
+void TrackCategory::clearTypes() {
     for(auto &t : game.content.mob_types.list.track) {
         delete t.second;
     }
@@ -48,7 +48,7 @@ void TrackCategory::clear_types() {
  * @param angle Starting angle.
  * @return The mob.
  */
-Mob* TrackCategory::create_mob(
+Mob* TrackCategory::createMob(
     const Point &pos, MobType* type, float angle
 ) {
     Track* m = new Track(pos, (TrackType*) type, angle);
@@ -62,7 +62,7 @@ Mob* TrackCategory::create_mob(
  *
  * @return The type.
  */
-MobType* TrackCategory::create_type() {
+MobType* TrackCategory::createType() {
     return new TrackType();
 }
 
@@ -72,7 +72,7 @@ MobType* TrackCategory::create_type() {
  *
  * @param m The mob to erase.
  */
-void TrackCategory::erase_mob(Mob* m) {
+void TrackCategory::eraseMob(Mob* m) {
     game.states.gameplay->mobs.tracks.erase(
         find(
             game.states.gameplay->mobs.tracks.begin(),
@@ -90,7 +90,7 @@ void TrackCategory::erase_mob(Mob* m) {
  * @param internal_name Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-MobType* TrackCategory::get_type(const string &internal_name) const {
+MobType* TrackCategory::getType(const string &internal_name) const {
     auto it = game.content.mob_types.list.track.find(internal_name);
     if(it == game.content.mob_types.list.track.end()) return nullptr;
     return it->second;
@@ -102,7 +102,7 @@ MobType* TrackCategory::get_type(const string &internal_name) const {
  *
  * @param list This list gets filled with the mob type internal names.
  */
-void TrackCategory::get_type_names(vector<string> &list) const {
+void TrackCategory::getTypeNames(vector<string> &list) const {
     for(auto &t : game.content.mob_types.list.track) {
         list.push_back(t.first);
     }
@@ -115,6 +115,6 @@ void TrackCategory::get_type_names(vector<string> &list) const {
  * @param internal_name Internal name of the mob type.
  * @param type Mob type to register.
  */
-void TrackCategory::register_type(const string &internal_name, MobType* type) {
+void TrackCategory::registerType(const string &internal_name, MobType* type) {
     game.content.mob_types.list.track[internal_name] = (TrackType*) type;
 }

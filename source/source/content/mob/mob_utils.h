@@ -120,12 +120,12 @@ struct CarryInfo {
     //--- Function declarations ---
     
     CarryInfo(Mob* m, const CARRY_DESTINATION destination);
-    bool is_empty() const;
-    bool is_full() const;
-    vector<Hazard*> get_carrier_invulnerabilities() const;
-    bool can_fly() const;
-    float get_speed() const;
-    void rotate_points(float angle);
+    bool isEmpty() const;
+    bool isFull() const;
+    vector<Hazard*> getCarrierInvulnerabilities() const;
+    bool canFly() const;
+    float getSpeed() const;
+    void rotatePoints(float angle);
     
 };
 
@@ -314,20 +314,20 @@ struct Group {
     //--- Function declarations ---
     
     explicit Group(Mob* leader_ptr);
-    void init_spots(Mob* affected_mob_ptr = nullptr);
+    void initSpots(Mob* affected_mob_ptr = nullptr);
     void sort(SubgroupType* leading_type);
-    void change_standby_type_if_needed();
-    size_t get_amount_by_type(const MobType* type) const;
-    Point get_average_member_pos() const;
-    vector<Hazard*> get_group_invulnerabilities(
+    void changeStandbyTypeIfNeeded();
+    size_t getAmountByType(const MobType* type) const;
+    Point getAverageMemberPos() const;
+    vector<Hazard*> getGroupInvulnerabilities(
         Mob* include_leader = nullptr
     ) const;
-    bool get_next_standby_type(
+    bool getNextStandbyType(
         bool move_backwards, SubgroupType** new_type
     );
-    Point get_spot_offset(size_t spot_idx) const;
-    void reassign_spots();
-    bool change_standby_type(bool move_backwards);
+    Point getSpotOffset(size_t spot_idx) const;
+    void reassignSpots();
+    bool changeStandbyType(bool move_backwards);
 };
 
 
@@ -365,7 +365,7 @@ struct HoldInfo {
     //--- Function declarations ---
     
     void clear();
-    Point get_final_pos(float* out_z) const;
+    Point getFinalPos(float* out_z) const;
     
 };
 
@@ -626,7 +626,7 @@ struct Path {
         Mob* m,
         const PathFollowSettings &settings
     );
-    bool check_blockage(PATH_BLOCK_REASON* out_reason = nullptr);
+    bool checkBlockage(PATH_BLOCK_REASON* out_reason = nullptr);
     
 };
 
@@ -654,7 +654,7 @@ struct PikminNestType {
     
     //--- Function declarations ---
     
-    void load_properties(DataNode* file);
+    void loadProperties(DataNode* file);
     
 };
 
@@ -691,13 +691,13 @@ struct PikminNest {
     //--- Function declarations ---
     
     PikminNest(Mob* m_ptr, PikminNestType* type);
-    bool call_pikmin(Mob* m_ptr, size_t type_idx);
-    size_t get_amount_by_type(const PikminType* type);
-    void read_script_vars(const ScriptVarReader &svr);
-    void request_pikmin(
+    bool callPikmin(Mob* m_ptr, size_t type_idx);
+    size_t getAmountByType(const PikminType* type);
+    void readScriptVars(const ScriptVarReader &svr);
+    void requestPikmin(
         size_t type_idx, size_t amount, Leader* l_ptr
     );
-    void store_pikmin(Pikmin* p_ptr);
+    void storePikmin(Pikmin* p_ptr);
     void tick(float delta_t);
     
 };
@@ -737,26 +737,26 @@ struct TrackRideInfo {
 };
 
 
-float calculate_mob_physical_span(
+float calculateMobPhysicalSpan(
     float radius, float anim_hitbox_span,
     const Point &rectangular_dim
 );
-Mob* create_mob(
+Mob* createMob(
     MobCategory* category, const Point &pos, MobType* type,
     float angle, const string &vars,
     std::function<void(Mob*)> code_after_creation = nullptr,
     size_t first_state_override = INVALID
 );
-void delete_mob(Mob* m, bool complete_destruction = false);
-string get_error_message_mob_info(Mob* m);
-vector<Hazard*> get_mob_type_list_invulnerabilities(
+void deleteMob(Mob* m, bool complete_destruction = false);
+string getErrorMessageMobInfo(Mob* m);
+vector<Hazard*> getMobTypeListInvulnerabilities(
     const unordered_set<MobType*> &types
 );
-MobType::SpawnInfo* get_spawn_info_from_child_info(
+MobType::SpawnInfo* getSpawnInfoFromChildInfo(
     MobType* type, const MobType::Child* child_info
 );
-bool is_mob_in_reach(
+bool isMobInReach(
     MobType::Reach* reach_t_ptr, const Distance &dist_between, float angle_diff
 );
-MOB_TARGET_FLAG string_to_mob_target_type(const string &type_str);
-MOB_TEAM string_to_team_nr(const string &team_str);
+MOB_TARGET_FLAG stringToMobTargetType(const string &type_str);
+MOB_TEAM stringToTeamNr(const string &team_str);

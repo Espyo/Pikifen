@@ -65,14 +65,14 @@ DecorationType::DecorationType() :
     
     blackout_radius = 0.0f;
     
-    decoration_fsm::create_fsm(this);
+    decoration_fsm::createFsm(this);
 }
 
 
 /**
  * @brief Returns the vector of animation conversions.
  */
-anim_conversion_vector DecorationType::get_anim_conversions() const {
+anim_conversion_vector DecorationType::getAnimConversions() const {
     anim_conversion_vector v;
     v.push_back(std::make_pair(DECORATION_ANIM_IDLING, "idling"));
     v.push_back(std::make_pair(DECORATION_ANIM_BUMPED, "bumped"));
@@ -85,7 +85,7 @@ anim_conversion_vector DecorationType::get_anim_conversions() const {
  *
  * @param file File to read from.
  */
-void DecorationType::load_cat_properties(DataNode* file) {
+void DecorationType::loadCatProperties(DataNode* file) {
     ReaderSetter rs(file);
     
     rs.set("random_animation_delay", random_animation_delay);
@@ -93,5 +93,5 @@ void DecorationType::load_cat_properties(DataNode* file) {
     rs.set("scale_random_variation", scale_random_variation);
     rs.set("tint_random_maximum", tint_random_maximum);
     
-    rotation_random_variation = deg_to_rad(rotation_random_variation);
+    rotation_random_variation = degToRad(rotation_random_variation);
 }

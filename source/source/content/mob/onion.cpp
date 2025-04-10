@@ -75,7 +75,7 @@ Onion::Onion(const Point &pos, OnionType* type, float angle) :
     z++;
     
     generation_delay_timer.on_end =
-    [this] () { start_generating(); };
+    [this] () { startGenerating(); };
     next_generation_timer.on_end =
     [this] () {
         for(size_t t = 0; t < oni_type->nest->pik_types.size(); t++) {
@@ -85,7 +85,7 @@ Onion::Onion(const Point &pos, OnionType* type, float angle) :
                 return;
             }
         }
-        stop_generating();
+        stopGenerating();
     };
     
     for(size_t t = 0; t < oni_type->nest->pik_types.size(); t++) {
@@ -105,15 +105,15 @@ Onion::~Onion() {
 /**
  * @brief Draws an Onion.
  */
-void Onion::draw_mob() {
+void Onion::drawMob() {
     Sprite* cur_s_ptr;
     Sprite* next_s_ptr;
     float interpolation_factor;
-    get_sprite_data(&cur_s_ptr, &next_s_ptr, &interpolation_factor);
+    getSpriteData(&cur_s_ptr, &next_s_ptr, &interpolation_factor);
     if(!cur_s_ptr) return;
     
     BitmapEffect eff;
-    get_sprite_bitmap_effects(
+    getSpriteBitmapEffects(
         cur_s_ptr, next_s_ptr, interpolation_factor,
         &eff,
         SPRITE_BMP_EFFECT_FLAG_STANDARD |
@@ -125,7 +125,7 @@ void Onion::draw_mob() {
     
     eff.tint_color.a *= (seethrough / 255.0f);
     
-    draw_bitmap_with_effects(cur_s_ptr->bitmap, eff);
+    drawBitmapWithEffects(cur_s_ptr->bitmap, eff);
 }
 
 
@@ -134,10 +134,10 @@ void Onion::draw_mob() {
  *
  * @param svr Script var reader to use.
  */
-void Onion::read_script_vars(const ScriptVarReader &svr) {
-    Mob::read_script_vars(svr);
+void Onion::readScriptVars(const ScriptVarReader &svr) {
+    Mob::readScriptVars(svr);
     
-    nest->read_script_vars(svr);
+    nest->readScriptVars(svr);
 }
 
 
@@ -164,7 +164,7 @@ void Onion::generate() {
             nest->pikmin_inside[t][0]++;
             
             ParticleGenerator pg =
-                standard_particle_gen_setup(
+                standardParticleGenSetup(
                     game.sys_content_names.part_onion_gen_inside, this
                 );
             pg.base_particle.priority = PARTICLE_PRIORITY_LOW;
@@ -179,15 +179,15 @@ void Onion::generate() {
                 -ONION::SPEW_H_SPEED_DEVIATION,
                 ONION::SPEW_H_SPEED_DEVIATION
             );
-        spew_pikmin_seed(
+        spewPikminSeed(
             pos, z + ONION::NEW_SEED_Z_OFFSET, oni_type->nest->pik_types[t],
             next_spew_angle, horizontal_strength, ONION::SPEW_V_SPEED
         );
         
         next_spew_angle += ONION::SPEW_ANGLE_SHIFT;
-        next_spew_angle = normalize_angle(next_spew_angle);
+        next_spew_angle = normalizeAngle(next_spew_angle);
         
-        play_sound(oni_type->sound_pop_idx);
+        playSound(oni_type->sound_pop_idx);
         
         return;
     }
@@ -197,22 +197,22 @@ void Onion::generate() {
 /**
  * @brief Starts generating Pikmin.
  */
-void Onion::start_generating() {
+void Onion::startGenerating() {
     generation_delay_timer.stop();
     next_generation_timer.start();
     string msg = "started_generation";
-    send_script_message(this, msg);
+    sendScriptMessage(this, msg);
 }
 
 
 /**
  * @brief Stops generating Pikmin.
  */
-void Onion::stop_generating() {
+void Onion::stopGenerating() {
     generation_delay_timer.stop();
     next_generation_timer.stop();
     string msg = "stopped_generation";
-    send_script_message(this, msg);
+    sendScriptMessage(this, msg);
 }
 
 
@@ -221,7 +221,7 @@ void Onion::stop_generating() {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void Onion::tick_class_specifics(float delta_t) {
+void Onion::tickClassSpecifics(float delta_t) {
     generation_delay_timer.tick(delta_t);
     next_generation_timer.tick(delta_t);
     
@@ -229,7 +229,7 @@ void Onion::tick_class_specifics(float delta_t) {
     
     if(
         game.states.gameplay->cur_leader_ptr &&
-        bbox_check(
+        BBoxCheck(
             game.states.gameplay->cur_leader_ptr->pos, pos,
             game.states.gameplay->cur_leader_ptr->radius +
             radius * 3
@@ -240,7 +240,7 @@ void Onion::tick_class_specifics(float delta_t) {
     
     if(
         game.states.gameplay->cur_leader_ptr &&
-        bbox_check(
+        BBoxCheck(
             game.states.gameplay->leader_cursor_w, pos,
             game.states.gameplay->cur_leader_ptr->radius +
             radius * 3

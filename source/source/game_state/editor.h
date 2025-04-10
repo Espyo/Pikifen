@@ -58,15 +58,15 @@ public:
     
     Editor();
     virtual ~Editor() = default;
-    void do_drawing() override = 0;
-    void do_logic() override = 0;
-    void handle_allegro_event(ALLEGRO_EVENT &ev) override;
+    void doDrawing() override = 0;
+    void doLogic() override = 0;
+    void handleAllegroEvent(ALLEGRO_EVENT &ev) override;
     void load() override;
     void unload() override;
-    virtual void update_style();
-    void update_transformations() override;
-    string get_name() const override = 0;
-    virtual size_t get_history_size() const;
+    virtual void updateStyle();
+    void updateTransformations() override;
+    string getName() const override = 0;
+    virtual size_t getHistorySize() const;
     
 protected:
 
@@ -251,12 +251,12 @@ protected:
             const Point* const center, const Point* const size,
             const float* const angle, float zoom = 1.0f
         ) const;
-        bool handle_mouse_down(
+        bool handleMouseDown(
             const Point &mouse_coords, const Point* const center,
             const Point* const size, const float* const angle,
             float zoom = 1.0f
         );
-        bool handle_mouse_move(
+        bool handleMouseMove(
             const Point &mouse_coords, Point* center, Point* size, float* angle,
             float zoom = 1.0f,
             bool keep_aspect_ratio = false,
@@ -264,10 +264,10 @@ protected:
             float min_size = -FLT_MAX,
             bool lock_center = true
         );
-        bool handle_mouse_up();
-        bool is_moving_center_handle();
-        bool is_moving_handle();
-        Point get_old_center() const;
+        bool handleMouseUp();
+        bool isMovingCenterHandle();
+        bool isMovingHandle();
+        Point getOldCenter() const;
         
         private:
         
@@ -291,7 +291,7 @@ protected:
         
         //--- Function declarations ---
         
-        void get_locations(
+        void getLocations(
             const Point* const center, const Point* const size,
             const float* const angle, Point* points, float* radius,
             ALLEGRO_TRANSFORM* out_transform
@@ -442,25 +442,25 @@ protected:
         //--- Function declarations ---
         
         explicit ChangesManager(Editor* ed);
-        bool ask_if_unsaved(
+        bool askIfUnsaved(
             const Point &pos,
             const string &action_long, const string &action_short,
             const std::function<void()> &action_callback,
             const std::function<bool()> &save_callback
         );
-        bool exists_on_disk() const;
-        size_t get_unsaved_changes() const;
-        float get_unsaved_time_delta() const;
-        const string &get_unsaved_warning_action_long() const;
-        const string &get_unsaved_warning_action_short() const;
+        bool existsOnDisk() const;
+        size_t getUnsavedChanges() const;
+        float getUnsavedTimeDelta() const;
+        const string &getUnsavedWarningActionLong() const;
+        const string &getUnsavedWarningActionShort() const;
         const std::function<void()> &
-        get_unsaved_warning_action_callback() const;
+        getUnsavedWarningActionCallback() const;
         const std::function<bool()> &
-        get_unsaved_warning_save_callback() const;
-        bool has_unsaved_changes();
-        void mark_as_changed();
-        void mark_as_non_existent();
-        void mark_as_saved();
+        getUnsavedWarningSaveCallback() const;
+        bool hasUnsavedChanges();
+        void markAsChanged();
+        void markAsNonExistent();
+        void markAsSaved();
         void reset();
         
         
@@ -673,56 +673,56 @@ protected:
     
     //--- Function declarations ---
     
-    void center_camera(
+    void centerCamera(
         const Point &min_coords, const Point &max_coords,
         bool instantaneous = false
     );
-    void close_top_dialog();
-    void do_logic_post();
-    void do_logic_pre();
-    void draw_grid(
+    void closeTopDialog();
+    void doLogicPost();
+    void doLogicPre();
+    void drawGrid(
         float interval,
         const ALLEGRO_COLOR &major_color, const ALLEGRO_COLOR &minor_color
     );
-    void draw_op_error_cursor();
-    Point get_last_widget_pos();
-    bool gui_needs_keyboard();
-    bool key_check(
+    void drawOpErrorCursor();
+    Point getLastWidgetPost();
+    bool guiNeedsKeyboard();
+    bool keyCheck(
         int pressed_key, int match_key,
         bool needs_ctrl = false, bool needs_shift = false
     );
-    bool is_internal_name_good(const string &name) const;
-    bool list_popup(
+    bool isInternalNameGood(const string &name) const;
+    bool listPopup(
         const char* label, const vector<string> &items, string* picked_item,
         bool use_monospace = false
     );
-    bool list_popup(
+    bool listPopup(
         const char* label, const vector<string> &items, int* picked_item_idx,
         bool use_monospace = false
     );
     void leave();
-    void load_custom_mob_cat_types(bool is_area_editor);
-    void open_base_content_warning_dialog(
+    void loadCustomMobCatTypes(bool is_area_editor);
+    void openBaseContentWarningDialog(
         const std::function<void()> &do_pick_callback
     );
-    void open_bitmap_dialog(
+    void openBitmapDialog(
         std::function<void(const string &)> ok_callback,
         const string &recommended_folder
     );
-    void open_dialog(
+    void openDialog(
         const string &title,
         const std::function<void()> &process_callback
     );
-    void open_help_dialog(
+    void openHelpDialog(
         const string &message, const string &page
     );
-    void open_input_popup(const char* label);
-    void open_message_dialog(
+    void openInputPopup(const char* label);
+    void openMessageDialog(
         const string &title, const string &message,
         const std::function<void()> &ok_callback = nullptr
     );
-    void open_new_pack_dialog();
-    void open_picker_dialog(
+    void openNewPackDialog();
+    void openPickerDialog(
         const string &title,
         const vector<PickerItem> &items,
         const std::function<void(
@@ -734,104 +734,104 @@ protected:
         const string &filter = ""
     );
     bool popup(const char* label, ImGuiWindowFlags flags = 0);
-    void process_dialogs();
-    void process_gui_base_content_warning_dialog();
-    void process_gui_bitmap_dialog();
-    void process_gui_editor_style();
-    bool process_gui_hazard_management_widgets(
+    void processDialogs();
+    void processGuiBaseContentWarningDialog();
+    void processGuiBitmapDialog();
+    void processGuiEditorStyle();
+    bool processGuiHazardManagementWidgets(
         vector<string> &hazard_inames, int &selected_hazard_idx
     );
-    void process_gui_help_dialog();
-    void process_gui_history(
+    void processGuiHelpDialog();
+    void processGuiHistory(
         const vector<pair<string, string> > &history,
         const std::function<string(const string &)> &name_display_callback,
         const std::function<void(const string &)> &pick_callback,
         const std::function<string(const string &)> &tooltip_callback
     );
-    bool process_gui_input_popup(
+    bool processGuiInputPopup(
         const char* label, const char* prompt, string* text,
         bool use_monospace = false
     );
-    void process_gui_message_dialog();
-    bool process_gui_mob_type_widgets(
+    void processGuiMessageDialog();
+    bool processGuiMobTypeWidgets(
         string* custom_cat_name, MobType** type, const string &pack_filter = ""
     );
-    bool process_gui_new_dialog_pack_widgets(string* pack);
-    void process_gui_new_pack_dialog();
-    bool process_gui_size_widgets(
+    bool processGuiNewDialogPackWidgets(string* pack);
+    void processGuiNewPackDialog();
+    bool processGuiSizeWidgets(
         const char* label, Point &size, float v_speed,
         bool keep_aspect_ratio, bool keep_area,
         float min_size
     );
-    void process_gui_status_bar_text();
-    void process_gui_unsaved_changes_dialog();
-    void panel_title(const char* title);
+    void processGuiStatusBarText();
+    void processGuiUnsavedChangesDialog();
+    void panelTitle(const char* title);
     
-    void keyframe_visualizer(
+    void keyframeVisualizer(
         KeyframeInterpolator<ALLEGRO_COLOR> &interpolator,
         size_t sel_keyframe_idx
     );
-    void keyframe_visualizer(
+    void keyframeVisualizer(
         KeyframeInterpolator<float> &interpolator,
         size_t sel_keyframe_idx
     );
-    void keyframe_visualizer(
+    void keyframeVisualizer(
         KeyframeInterpolator<Point> &interpolator,
         size_t sel_keyframe_idx
     );
     template <class InterT>
-    bool keyframe_organizer(
+    bool keyframeOrganizer(
         const string &button_id,
         KeyframeInterpolator<InterT> &interpolator,
         size_t &sel_keyframe_idx
     );
-    bool keyframe_editor(
+    bool keyframeEditor(
         const string &label,
         KeyframeInterpolator<float> &interpolator,
         size_t &sel_keyframe_idx
     );
-    bool keyframe_editor(
+    bool keyframeEditor(
         const string &label,
         KeyframeInterpolator<ALLEGRO_COLOR> &interpolator,
         size_t &sel_keyframe_idx
     );
-    bool keyframe_editor(
+    bool keyframeEditor(
         const string &label,
         KeyframeInterpolator<Point> &interpolator,
         size_t &sel_keyframe_idx
     );
     
-    bool saveable_tree_node(const string &category, const string &label);
-    void set_status(const string &text = "", bool error = false);
-    void set_tooltip(
+    bool saveableTreeNode(const string &category, const string &label);
+    void setStatus(const string &text = "", bool error = false);
+    void setTooltip(
         const string &explanation, const string &shortcut = "",
         const WIDGET_EXPLANATION widget_explanation = WIDGET_EXPLANATION_NONE
     );
-    Point snap_point_to_axis(const Point &p, const Point &anchor);
-    Point snap_point_to_grid(const Point &p, float grid_interval);
-    void update_history(
+    Point snapPointToAxis(const Point &p, const Point &anchor);
+    Point snapPointToGrid(const Point &p, float grid_interval);
+    void updateHistory(
         vector<pair<string, string> > &history,
         const ContentManifest &manifest, const string &name
     );
-    void zoom_with_cursor(float new_zoom);
-    virtual void handle_key_char_anywhere(const ALLEGRO_EVENT &ev);
-    virtual void handle_key_char_canvas(const ALLEGRO_EVENT &ev);
-    virtual void handle_key_down_anywhere(const ALLEGRO_EVENT &ev);
-    virtual void handle_key_down_canvas(const ALLEGRO_EVENT &ev);
-    virtual void handle_key_up_anywhere(const ALLEGRO_EVENT &ev);
-    virtual void handle_key_up_canvas(const ALLEGRO_EVENT &ev);
-    virtual void handle_lmb_double_click(const ALLEGRO_EVENT &ev);
-    virtual void handle_lmb_down(const ALLEGRO_EVENT &ev);
-    virtual void handle_lmb_drag(const ALLEGRO_EVENT &ev);
-    virtual void handle_lmb_up(const ALLEGRO_EVENT &ev);
-    virtual void handle_mmb_double_click(const ALLEGRO_EVENT &ev);
-    virtual void handle_mmb_down(const ALLEGRO_EVENT &ev);
-    virtual void handle_mmb_drag(const ALLEGRO_EVENT &ev);
-    virtual void handle_mmb_up(const ALLEGRO_EVENT &ev);
-    virtual void handle_mouse_update(const ALLEGRO_EVENT &ev);
-    virtual void handle_mouse_wheel(const ALLEGRO_EVENT &ev);
-    virtual void handle_rmb_double_click(const ALLEGRO_EVENT &ev);
-    virtual void handle_rmb_down(const ALLEGRO_EVENT &ev);
-    virtual void handle_rmb_drag(const ALLEGRO_EVENT &ev);
-    virtual void handle_rmb_up(const ALLEGRO_EVENT &ev);
+    void zoomWithCursor(float new_zoom);
+    virtual void handleKeyCharAnywhere(const ALLEGRO_EVENT &ev);
+    virtual void handleKeyCharCanvas(const ALLEGRO_EVENT &ev);
+    virtual void handleKeyDownAnywhere(const ALLEGRO_EVENT &ev);
+    virtual void handleKeyDownCanvas(const ALLEGRO_EVENT &ev);
+    virtual void handleKeyUpAnywhere(const ALLEGRO_EVENT &ev);
+    virtual void handleKeyUpCanvas(const ALLEGRO_EVENT &ev);
+    virtual void handleLmbDoubleClick(const ALLEGRO_EVENT &ev);
+    virtual void handleLmbDown(const ALLEGRO_EVENT &ev);
+    virtual void handleLmbDrag(const ALLEGRO_EVENT &ev);
+    virtual void handleLmbUp(const ALLEGRO_EVENT &ev);
+    virtual void handleMmbDoubleClick(const ALLEGRO_EVENT &ev);
+    virtual void handleMmbDown(const ALLEGRO_EVENT &ev);
+    virtual void handleMmbDrag(const ALLEGRO_EVENT &ev);
+    virtual void handleMmbUp(const ALLEGRO_EVENT &ev);
+    virtual void handleMouseUpdate(const ALLEGRO_EVENT &ev);
+    virtual void handleMouseWheel(const ALLEGRO_EVENT &ev);
+    virtual void handleRmbDoubleClick(const ALLEGRO_EVENT &ev);
+    virtual void handleRmbDown(const ALLEGRO_EVENT &ev);
+    virtual void handleRmbDrag(const ALLEGRO_EVENT &ev);
+    virtual void handleRmbUp(const ALLEGRO_EVENT &ev);
 };

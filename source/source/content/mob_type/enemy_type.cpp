@@ -31,7 +31,7 @@ EnemyType::EnemyType() :
         
     starting_team = MOB_TEAM_ENEMY_1;
     
-    add_carrying_states();
+    addCarryingStates();
 }
 
 
@@ -40,7 +40,7 @@ EnemyType::EnemyType() :
  *
  * @param file File to read from.
  */
-void EnemyType::load_cat_properties(DataNode* file) {
+void EnemyType::loadCatProperties(DataNode* file) {
     ReaderSetter rs(file);
     
     rs.set("allow_ground_attacks", allow_ground_attacks);

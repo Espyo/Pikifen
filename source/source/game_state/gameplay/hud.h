@@ -193,8 +193,8 @@ private:
 
     //--- Function declarations ---
     
-    void create_mission_fail_cond_items(bool primary);
-    void draw_standby_icon(BUBBLE_RELATION which);
-    void draw_spray_icon(BUBBLE_RELATION which);
+    void createMissionFailCondItems(bool primary);
+    void drawStandbyIcon(BUBBLE_RELATION which);
+    void drawSprayIcon(BUBBLE_RELATION which);
     
 };

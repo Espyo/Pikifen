@@ -32,7 +32,7 @@ OnionCategory::OnionCategory() :
 /**
  * @brief Clears the list of registered types of Onion.
  */
-void OnionCategory::clear_types() {
+void OnionCategory::clearTypes() {
     for(auto &t : game.content.mob_types.list.onion) {
         delete t.second;
     }
@@ -48,7 +48,7 @@ void OnionCategory::clear_types() {
  * @param angle Starting angle.
  * @return The mob.
  */
-Mob* OnionCategory::create_mob(
+Mob* OnionCategory::createMob(
     const Point &pos, MobType* type, float angle
 ) {
     Onion* m = new Onion(pos, (OnionType*) type, angle);
@@ -62,7 +62,7 @@ Mob* OnionCategory::create_mob(
  *
  * @return The type.
  */
-MobType* OnionCategory::create_type() {
+MobType* OnionCategory::createType() {
     return new OnionType();
 }
 
@@ -72,7 +72,7 @@ MobType* OnionCategory::create_type() {
  *
  * @param m The mob to erase.
  */
-void OnionCategory::erase_mob(Mob* m) {
+void OnionCategory::eraseMob(Mob* m) {
     game.states.gameplay->mobs.onions.erase(
         find(
             game.states.gameplay->mobs.onions.begin(),
@@ -90,7 +90,7 @@ void OnionCategory::erase_mob(Mob* m) {
  * @param internal_name Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-MobType* OnionCategory::get_type(const string &internal_name) const {
+MobType* OnionCategory::getType(const string &internal_name) const {
     auto it = game.content.mob_types.list.onion.find(internal_name);
     if(it == game.content.mob_types.list.onion.end()) return nullptr;
     return it->second;
@@ -102,7 +102,7 @@ MobType* OnionCategory::get_type(const string &internal_name) const {
  *
  * @param list This list gets filled with the mob type internal names.
  */
-void OnionCategory::get_type_names(vector<string> &list) const {
+void OnionCategory::getTypeNames(vector<string> &list) const {
     for(auto &t : game.content.mob_types.list.onion) {
         list.push_back(t.first);
     }
@@ -115,6 +115,6 @@ void OnionCategory::get_type_names(vector<string> &list) const {
  * @param internal_name Internal name of the mob type.
  * @param type Mob type to register.
  */
-void OnionCategory::register_type(const string &internal_name, MobType* type) {
+void OnionCategory::registerType(const string &internal_name, MobType* type) {
     game.content.mob_types.list.onion[internal_name] = (OnionType*) type;
 }

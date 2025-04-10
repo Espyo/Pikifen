@@ -21,11 +21,11 @@
  * @param node Data node to load from.
  * @param level Level to load at.
  */
-void SprayType::load_from_data_node(
+void SprayType::loadFromDataNode(
     DataNode* node, CONTENT_LOAD_LEVEL level
 ) {
     //Content metadata.
-    load_metadata_from_data_node(node);
+    loadMetadataFromDataNode(node);
     
     //Standard data.
     ReaderSetter rs(node);
@@ -49,7 +49,7 @@ void SprayType::load_from_data_node(
     
     if(effects_node) {
         vector<string> effects_strs =
-            semicolon_list_to_vector(effects_node->value);
+            semicolonListToVector(effects_node->value);
         for(size_t e = 0; e < effects_strs.size(); e++) {
             string effect_name = effects_strs[e];
             if(
@@ -66,8 +66,8 @@ void SprayType::load_from_data_node(
         }
     }
     
-    angle = deg_to_rad(angle);
-    angle_range = deg_to_rad(angle_range);
+    angle = degToRad(angle);
+    angle_range = degToRad(angle_range);
     
     if(level >= CONTENT_LOAD_LEVEL_FULL) {
         bmp_spray = game.content.bitmaps.list.get(icon_str, icon_node);

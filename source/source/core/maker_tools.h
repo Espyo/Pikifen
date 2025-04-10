@@ -170,17 +170,17 @@ struct MakerTools {
     //--- Function declarations ---
     
     MakerTools();
-    bool handle_gameplay_player_action(const PlayerAction &action);
-    bool handle_global_player_action(const PlayerAction &action);
-    void load_from_data_node(DataNode* node);
-    void reset_for_gameplay();
-    void save_to_data_node(DataNode* node);
+    bool handleGameplayPlayerAction(const PlayerAction &action);
+    bool handleGlobalPlayerAction(const PlayerAction &action);
+    void loadFromDataNode(DataNode* node);
+    void resetForGameplay();
+    void saveToDataNode(DataNode* node);
     
     
 private:
 
     //--- Function declarations ---
     
-    unsigned char get_maker_tool_setting_idx() const;
+    unsigned char getMakerToolSettingIdx() const;
     
 };

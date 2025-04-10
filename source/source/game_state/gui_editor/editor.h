@@ -39,13 +39,13 @@ public:
     //--- Function declarations ---
     
     GuiEditor();
-    void do_logic() override;
-    void do_drawing() override;
+    void doLogic() override;
+    void doDrawing() override;
     void load() override;
     void unload() override;
-    string get_name() const override;
-    void draw_canvas();
-    string get_opened_content_path() const;
+    string getName() const override;
+    void drawCanvas();
+    string getOpenedContentPath() const;
     
 private:
 
@@ -90,7 +90,7 @@ private:
     //The list of items must focus on the currently selected item.
     bool must_focus_on_cur_item = false;
     
-    //Small hack -- does the camera need recentering in process_gui()?
+    //Small hack -- does the camera need recentering in processGui()?
     bool must_recenter_cam = false;
     
     //Position of the reload widget.
@@ -124,61 +124,61 @@ private:
     
     //--- Function declarations ---
     
-    void close_load_dialog();
-    void close_options_dialog();
-    void create_gui_def(const string &internal_name, const string &pack);
-    void delete_current_gui_def();
-    void load_gui_def_file(const string &path, bool should_update_history);
-    void open_load_dialog();
-    void open_new_dialog();
-    void open_options_dialog();
-    void pick_gui_def_file(
+    void closeLoadDialog();
+    void closeOptionsDialog();
+    void createGuiDef(const string &internal_name, const string &pack);
+    void deleteCurrentGuiDef();
+    void loadGuiDefFile(const string &path, bool should_update_history);
+    void openLoadDialog();
+    void openNewDialog();
+    void openOptionsDialog();
+    void pickGuiDefFile(
         const string &name, const string &top_cat, const string &sec_cat, void* info, bool is_new
     );
-    bool save_gui_def();
-    void setup_for_new_gui_def();
-    Point snap_point(const Point &p);
-    static void draw_canvas_imgui_callback(
+    bool saveGuiDef();
+    void setupForNewGuiDef();
+    Point snapPoint(const Point &p);
+    static void drawCanvasDearImGuiCallback(
         const ImDrawList* parent_list, const ImDrawCmd* cmd
     );
-    string get_file_tooltip(const string &path) const;
-    void grid_interval_decrease_cmd(float input_value);
-    void grid_interval_increase_cmd(float input_value);
-    void delete_gui_def_cmd(float input_value);
-    void load_cmd(float input_value);
-    void quit_cmd(float input_value);
-    void reload_cmd(float input_value);
-    void reload_gui_defs();
-    void save_cmd(float input_value);
-    void snap_mode_cmd(float input_value);
-    void zoom_and_pos_reset_cmd(float input_value);
-    void zoom_in_cmd(float input_value);
-    void zoom_out_cmd(float input_value);
-    void process_gui();
-    void process_gui_control_panel();
-    void process_gui_delete_gui_def_dialog();
-    void process_gui_load_dialog();
-    void process_gui_menu_bar();
-    void process_gui_new_dialog();
-    void process_gui_options_dialog();
-    void process_gui_panel_item();
-    void process_gui_panel_items();
-    void process_gui_status_bar();
-    void process_gui_toolbar();
-    void handle_key_char_canvas(const ALLEGRO_EVENT &ev) override;
-    void handle_key_down_anywhere(const ALLEGRO_EVENT &ev) override;
-    void handle_key_down_canvas(const ALLEGRO_EVENT &ev) override;
-    void handle_lmb_double_click(const ALLEGRO_EVENT &ev) override;
-    void handle_lmb_down(const ALLEGRO_EVENT &ev) override;
-    void handle_lmb_drag(const ALLEGRO_EVENT &ev) override;
-    void handle_lmb_up(const ALLEGRO_EVENT &ev) override;
-    void handle_mmb_down(const ALLEGRO_EVENT &ev) override;
-    void handle_mmb_drag(const ALLEGRO_EVENT &ev) override;
-    void handle_mouse_update(const ALLEGRO_EVENT &ev) override;
-    void handle_mouse_wheel(const ALLEGRO_EVENT &ev) override;
-    void handle_rmb_down(const ALLEGRO_EVENT &ev) override;
-    void handle_rmb_drag(const ALLEGRO_EVENT &ev) override;
-    void pan_cam(const ALLEGRO_EVENT &ev);
-    void reset_cam(bool instantaneous);
+    string getFileTooltip(const string &path) const;
+    void gridIntervalDecreaseCmd(float input_value);
+    void gridIntervalIncreaseCmd(float input_value);
+    void deleteGuiDefCmd(float input_value);
+    void loadCmd(float input_value);
+    void quitCmd(float input_value);
+    void reloadCmd(float input_value);
+    void reloadGuiDefs();
+    void saveCmd(float input_value);
+    void snapModeCmd(float input_value);
+    void zoomAndPosResetCmd(float input_value);
+    void zoomInCmd(float input_value);
+    void zoomOutCmd(float input_value);
+    void processGui();
+    void processGuiControlPanel();
+    void processGuiDeleteGuiDefDialog();
+    void processGuiLoadDialog();
+    void processGuiMenuBar();
+    void processGuiNewDialog();
+    void processGuiOptionsDialog();
+    void processGuiPanelItem();
+    void processGuiPanelItems();
+    void processGuiStatusBar();
+    void processGuiToolbar();
+    void handleKeyCharCanvas(const ALLEGRO_EVENT &ev) override;
+    void handleKeyDownAnywhere(const ALLEGRO_EVENT &ev) override;
+    void handleKeyDownCanvas(const ALLEGRO_EVENT &ev) override;
+    void handleLmbDoubleClick(const ALLEGRO_EVENT &ev) override;
+    void handleLmbDown(const ALLEGRO_EVENT &ev) override;
+    void handleLmbDrag(const ALLEGRO_EVENT &ev) override;
+    void handleLmbUp(const ALLEGRO_EVENT &ev) override;
+    void handleMmbDown(const ALLEGRO_EVENT &ev) override;
+    void handleMmbDrag(const ALLEGRO_EVENT &ev) override;
+    void handleMouseUpdate(const ALLEGRO_EVENT &ev) override;
+    void handleMouseWheel(const ALLEGRO_EVENT &ev) override;
+    void handleRmbDown(const ALLEGRO_EVENT &ev) override;
+    void handleRmbDrag(const ALLEGRO_EVENT &ev) override;
+    void panCam(const ALLEGRO_EVENT &ev);
+    void resetCam(bool instantaneous);
     
 };

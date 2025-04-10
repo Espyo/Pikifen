@@ -369,7 +369,7 @@ public:
     explicit MobState(const string &name);
     MobState(const string &name, MobEvent* evs[N_MOB_EVENTS]);
     MobState(const string &name, size_t id);
-    MobEvent* get_event(const MOB_EV type) const;
+    MobEvent* getEvent(const MOB_EV type) const;
     
 };
 
@@ -404,13 +404,13 @@ public:
     //--- Function declarations ---
     
     explicit MobFsm(Mob* m = nullptr);
-    MobEvent* get_event(const MOB_EV type) const;
-    size_t get_state_idx(const string &name) const;
-    void run_event(
+    MobEvent* getEvent(const MOB_EV type) const;
+    size_t getStateIdx(const string &name) const;
+    void runEvent(
         const MOB_EV type,
         void* custom_data_1 = nullptr, void* custom_data_2 = nullptr
     );
-    bool set_state(
+    bool setState(
         size_t new_state, void* info1 = nullptr, void* info2 = nullptr
     );
     
@@ -437,9 +437,9 @@ public:
 
     //--- Function declarations ---
     
-    void new_state(const string &name, size_t id);
-    void new_event(const MOB_EV type);
-    void change_state(const string &new_state);
+    void newState(const string &name, size_t id);
+    void newEvent(const MOB_EV type);
+    void changeState(const string &new_state);
     void run(custom_action_code_t code);
     vector<MobState*> finish();
     
@@ -459,8 +459,8 @@ private:
     
     //--- Function declarations ---
     
-    void commit_state();
-    void commit_event();
+    void commitState();
+    void commitEvent();
     
 };
 
@@ -492,15 +492,15 @@ struct HitboxInteraction {
 };
 
 
-size_t fix_states(
+size_t fixStates(
     vector<MobState*> &states, const string &starting_state, const MobType* mt
 );
-void load_script(
+void loadScript(
     MobType* mt, DataNode* script_node, DataNode* global_node,
     vector<MobState*>* out_states
 );
-void load_state(
+void loadState(
     MobType* mt, DataNode* state_node, DataNode* global_node,
     MobState* state_ptr
 );
-void unload_script(MobType* mt);
+void unloadScript(MobType* mt);

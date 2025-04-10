@@ -20,50 +20,50 @@
  *
  * @param typ Mob type to create the finite state machine for.
  */
-void drop_fsm::create_fsm(MobType* typ) {
+void drop_fsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;
-    efc.new_state("falling", DROP_STATE_FALLING); {
-        efc.new_event(MOB_EV_ON_ENTER); {
-            efc.run(drop_fsm::set_falling_anim);
+    efc.newState("falling", DROP_STATE_FALLING); {
+        efc.newEvent(MOB_EV_ON_ENTER); {
+            efc.run(drop_fsm::setFallingAnim);
         }
-        efc.new_event(MOB_EV_LANDED); {
-            efc.change_state("landing");
+        efc.newEvent(MOB_EV_LANDED); {
+            efc.changeState("landing");
         }
     }
-    efc.new_state("landing", DROP_STATE_LANDING); {
-        efc.new_event(MOB_EV_ON_ENTER); {
+    efc.newState("landing", DROP_STATE_LANDING); {
+        efc.newEvent(MOB_EV_ON_ENTER); {
             efc.run(drop_fsm::land);
         }
-        efc.new_event(MOB_EV_ANIMATION_END); {
-            efc.change_state("idling");
+        efc.newEvent(MOB_EV_ANIMATION_END); {
+            efc.changeState("idling");
         }
     }
-    efc.new_state("idling", DROP_STATE_IDLING); {
-        efc.new_event(MOB_EV_ON_ENTER); {
-            efc.run(drop_fsm::set_idling_anim);
+    efc.newState("idling", DROP_STATE_IDLING); {
+        efc.newEvent(MOB_EV_ON_ENTER); {
+            efc.run(drop_fsm::setIdlingAnim);
         }
-        efc.new_event(MOB_EV_TOUCHED_OBJECT); {
-            efc.run(drop_fsm::on_touched);
+        efc.newEvent(MOB_EV_TOUCHED_OBJECT); {
+            efc.run(drop_fsm::onTouched);
         }
     }
-    efc.new_state("bumped", DROP_STATE_BUMPED); {
-        efc.new_event(MOB_EV_ON_ENTER); {
-            efc.run(drop_fsm::set_bumped_anim);
+    efc.newState("bumped", DROP_STATE_BUMPED); {
+        efc.newEvent(MOB_EV_ON_ENTER); {
+            efc.run(drop_fsm::setBumpedAnim);
         }
-        efc.new_event(MOB_EV_TOUCHED_OBJECT); {
-            efc.run(drop_fsm::on_touched);
+        efc.newEvent(MOB_EV_TOUCHED_OBJECT); {
+            efc.run(drop_fsm::onTouched);
         }
-        efc.new_event(MOB_EV_ANIMATION_END); {
-            efc.change_state("idling");
+        efc.newEvent(MOB_EV_ANIMATION_END); {
+            efc.changeState("idling");
         }
     }
     
     
     typ->states = efc.finish();
-    typ->first_state_idx = fix_states(typ->states, "falling", typ);
+    typ->first_state_idx = fixStates(typ->states, "falling", typ);
     
     //Check if the number in the enum and the total match up.
-    engine_assert(
+    engineAssert(
         typ->states.size() == N_DROP_STATES,
         i2s(typ->states.size()) + " registered, " +
         i2s(N_DROP_STATES) + " in enum."
@@ -79,8 +79,8 @@ void drop_fsm::create_fsm(MobType* typ) {
  * @param info2 Unused.
  */
 void drop_fsm::land(Mob* m, void* info1, void* info2) {
-    m->stop_chasing();
-    m->set_animation(DROP_ANIM_LANDING);
+    m->stopChasing();
+    m->setAnimation(DROP_ANIM_LANDING);
 }
 
 
@@ -91,7 +91,7 @@ void drop_fsm::land(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void drop_fsm::on_touched(Mob* m, void* info1, void* info2) {
+void drop_fsm::onTouched(Mob* m, void* info1, void* info2) {
     Drop* dro_ptr = (Drop*) m;
     Mob* toucher = (Mob*) info1;
     bool will_drink = false;
@@ -142,7 +142,7 @@ void drop_fsm::on_touched(Mob* m, void* info1, void* info2) {
     MobEvent* ev = nullptr;
     
     if(will_drink) {
-        ev = toucher->fsm.get_event(MOB_EV_TOUCHED_DROP);
+        ev = toucher->fsm.getEvent(MOB_EV_TOUCHED_DROP);
     }
     
     if(!ev) {
@@ -162,7 +162,7 @@ void drop_fsm::on_touched(Mob* m, void* info1, void* info2) {
             m->fsm.cur_state->id != DROP_STATE_BUMPED &&
             toucher_is_moving
         ) {
-            m->fsm.set_state(DROP_STATE_BUMPED, info1, info2);
+            m->fsm.setState(DROP_STATE_BUMPED, info1, info2);
         }
     }
 }
@@ -175,8 +175,8 @@ void drop_fsm::on_touched(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void drop_fsm::set_bumped_anim(Mob* m, void* info1, void* info2) {
-    m->set_animation(DROP_ANIM_BUMPED);
+void drop_fsm::setBumpedAnim(Mob* m, void* info1, void* info2) {
+    m->setAnimation(DROP_ANIM_BUMPED);
 }
 
 
@@ -187,8 +187,8 @@ void drop_fsm::set_bumped_anim(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void drop_fsm::set_falling_anim(Mob* m, void* info1, void* info2) {
-    m->set_animation(
+void drop_fsm::setFallingAnim(Mob* m, void* info1, void* info2) {
+    m->setAnimation(
         DROP_ANIM_FALLING,
         START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
     );
@@ -202,6 +202,6 @@ void drop_fsm::set_falling_anim(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void drop_fsm::set_idling_anim(Mob* m, void* info1, void* info2) {
-    m->set_animation(DROP_ANIM_IDLING);
+void drop_fsm::setIdlingAnim(Mob* m, void* info1, void* info2) {
+    m->setAnimation(DROP_ANIM_IDLING);
 }

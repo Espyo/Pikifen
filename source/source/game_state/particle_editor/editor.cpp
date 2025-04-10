@@ -48,32 +48,32 @@ ParticleEditor::ParticleEditor() :
                       );
     
     register_cmd(
-        &ParticleEditor::grid_interval_decrease_cmd, "grid_interval_decrease"
+        &ParticleEditor::gridIntervalDecreaseCmd, "grid_interval_decrease"
     );
     register_cmd(
-        &ParticleEditor::grid_interval_increase_cmd, "grid_interval_increase"
+        &ParticleEditor::gridIntervalIncreaseCmd, "grid_interval_increase"
     );
-    register_cmd(&ParticleEditor::grid_toggle_cmd, "grid_toggle");
-    register_cmd(&ParticleEditor::delete_part_gen_cmd, "delete_part_gen");
-    register_cmd(&ParticleEditor::load_cmd, "load");
-    register_cmd(&ParticleEditor::quit_cmd, "quit");
+    register_cmd(&ParticleEditor::gridToggleCmd, "grid_toggle");
+    register_cmd(&ParticleEditor::deletePartGenCmd, "delete_part_gen");
+    register_cmd(&ParticleEditor::loadCmd, "load");
+    register_cmd(&ParticleEditor::quitCmd, "quit");
     register_cmd(
-        &ParticleEditor::part_mgr_playback_toggle_cmd, "part_mgr_toggle"
-    );
-    register_cmd(
-        &ParticleEditor::part_gen_playback_toggle_cmd, "part_gen_toggle"
+        &ParticleEditor::partMgrPlaybackToggleCmd, "part_mgr_toggle"
     );
     register_cmd(
-        &ParticleEditor::leader_silhouette_toggle_cmd,
+        &ParticleEditor::partGenPlaybackToggleCmd, "part_gen_toggle"
+    );
+    register_cmd(
+        &ParticleEditor::leaderSilhouetteToggleCmd,
         "leader_silhouette_toggle"
     );
-    register_cmd(&ParticleEditor::reload_cmd, "reload");
-    register_cmd(&ParticleEditor::save_cmd, "save");
+    register_cmd(&ParticleEditor::reloadCmd, "reload");
+    register_cmd(&ParticleEditor::saveCmd, "save");
     register_cmd(
-        &ParticleEditor::zoom_and_pos_reset_cmd, "zoom_and_pos_reset"
+        &ParticleEditor::zoomAndPosResetCmd, "zoom_and_pos_reset"
     );
-    register_cmd(&ParticleEditor::zoom_in_cmd, "zoom_in");
-    register_cmd(&ParticleEditor::zoom_out_cmd, "zoom_out");
+    register_cmd(&ParticleEditor::zoomInCmd, "zoom_in");
+    register_cmd(&ParticleEditor::zoomOutCmd, "zoom_out");
     
 #undef register_cmd
 }
@@ -82,7 +82,7 @@ ParticleEditor::ParticleEditor() :
 /**
  * @brief Code to run when the load dialog is closed.
  */
-void ParticleEditor::close_load_dialog() {
+void ParticleEditor::closeLoadDialog() {
     if(manifest.internal_name.empty() && dialogs.size() == 1) {
         //If nothing got loaded, we can't return to the editor proper.
         //Quit out, since most of the time that's the user's intent. (e.g.
@@ -97,8 +97,8 @@ void ParticleEditor::close_load_dialog() {
 /**
  * @brief Code to run when the options dialog is closed.
  */
-void ParticleEditor::close_options_dialog() {
-    save_options();
+void ParticleEditor::closeOptionsDialog() {
+    saveOptions();
 }
 
 
@@ -107,26 +107,26 @@ void ParticleEditor::close_options_dialog() {
  *
  * @param part_gen_path Path to the new particle generator.
  */
-void ParticleEditor::create_part_gen(
+void ParticleEditor::createPartGen(
     const string &part_gen_path
 ) {
     //Setup.
-    setup_for_new_part_gen_pre();
-    changes_mgr.mark_as_non_existent();
+    setupForNewPartGenPre();
+    changes_mgr.markAsNonExistent();
     
     //Create a particle generator with some defaults.
     loaded_gen = ParticleGenerator();
-    game.content.particle_gen.path_to_manifest(
+    game.content.particle_gen.pathToManifest(
         part_gen_path, &manifest
     );
     loaded_gen.manifest = &manifest;
     loaded_gen.base_particle.duration = 1.0f;
-    loaded_gen.base_particle.set_bitmap("");
+    loaded_gen.base_particle.setBitmap("");
     loaded_gen.base_particle.size =
         KeyframeInterpolator<float>(32);
     loaded_gen.base_particle.color =
-        KeyframeInterpolator<ALLEGRO_COLOR>(map_alpha(255));
-    loaded_gen.base_particle.color.add(1, map_alpha(0));
+        KeyframeInterpolator<ALLEGRO_COLOR>(mapAlpha(255));
+    loaded_gen.base_particle.color.add(1, mapAlpha(0));
     
     loaded_gen.emission.interval = 0.5f;
     loaded_gen.emission.number = 1;
@@ -134,9 +134,9 @@ void ParticleEditor::create_part_gen(
         KeyframeInterpolator<float>(32);
         
     //Finish up.
-    setup_for_new_part_gen_post();
-    update_history(game.options.particle_editor.history, manifest, "");
-    set_status(
+    setupForNewPartGenPost();
+    updateHistory(game.options.particle_editor.history, manifest, "");
+    setStatus(
         "Created particle generator \"" + manifest.internal_name +
         "\" successfully."
     );
@@ -146,13 +146,13 @@ void ParticleEditor::create_part_gen(
 /**
  * @brief Deletes the current particle generator.
  */
-void ParticleEditor::delete_current_part_gen() {
+void ParticleEditor::deleteCurrentPartGen() {
     string orig_internal_name = manifest.internal_name;
     bool go_to_load_dialog = true;
     bool success = false;
     string message_box_text;
     
-    if(!changes_mgr.exists_on_disk()) {
+    if(!changes_mgr.existsOnDisk()) {
         //If the generator doesn't exist on disk, since it was never
         //saved, then there's nothing to delete.
         success = true;
@@ -160,7 +160,7 @@ void ParticleEditor::delete_current_part_gen() {
         
     } else {
         //Delete the file.
-        FS_DELETE_RESULT result = delete_file(manifest.path);
+        FS_DELETE_RESULT result = deleteFile(manifest.path);
         
         switch(result) {
         case FS_DELETE_RESULT_OK:
@@ -193,19 +193,19 @@ void ParticleEditor::delete_current_part_gen() {
     //procedure, or after the user hits OK on the message box.
     const auto finish_up = [this, go_to_load_dialog] () {
         if(go_to_load_dialog) {
-            setup_for_new_part_gen_pre();
-            open_load_dialog();
+            setupForNewPartGenPre();
+            openLoadDialog();
         }
     };
     
     //Update the status bar.
     if(success) {
-        set_status(
+        setStatus(
             "Deleted particle generator \"" + orig_internal_name +
             "\" successfully."
         );
     } else {
-        set_status(
+        setStatus(
             "Particle generator \"" + orig_internal_name +
             "\" deletion failed!", true
         );
@@ -215,7 +215,7 @@ void ParticleEditor::delete_current_part_gen() {
     if(message_box_text.empty()) {
         finish_up();
     } else {
-        open_message_dialog(
+        openMessageDialog(
             "Particle generator deletion failed!",
             message_box_text,
             finish_up
@@ -229,12 +229,12 @@ void ParticleEditor::delete_current_part_gen() {
  *
  * @param input_value Value of the player input for the command.
  */
-void ParticleEditor::delete_part_gen_cmd(float input_value) {
+void ParticleEditor::deletePartGenCmd(float input_value) {
     if(input_value < 0.5f) return;
     
-    open_dialog(
+    openDialog(
         "Delete particle generator?",
-        std::bind(&ParticleEditor::process_gui_delete_part_gen_dialog, this)
+        std::bind(&ParticleEditor::processGuiDeletePartGenDialog, this)
     );
     dialogs.back()->custom_size = Point(600, 0);
 }
@@ -243,25 +243,25 @@ void ParticleEditor::delete_part_gen_cmd(float input_value) {
 /**
  * @brief Handles the logic part of the main loop of the GUI editor.
  */
-void ParticleEditor::do_logic() {
-    Editor::do_logic_pre();
+void ParticleEditor::doLogic() {
+    Editor::doLogicPre();
     
-    process_gui();
+    processGui();
     
     if(mgr_running) {
         if(gen_running) {
             loaded_gen.follow_pos_offset =
-                rotate_point(generator_pos_offset, -generator_angle_offset);
+                rotatePoint(generator_pos_offset, -generator_angle_offset);
             loaded_gen.tick(game.delta_t, part_mgr);
             //If the particles are meant to emit once, turn them off.
             if(loaded_gen.emission.interval == 0) {
                 gen_running = false;
             }
         }
-        part_mgr.tick_all(game.delta_t);
+        part_mgr.tickAll(game.delta_t);
     }
     
-    Editor::do_logic_post();
+    Editor::doLogicPost();
 }
 
 
@@ -271,10 +271,10 @@ void ParticleEditor::do_logic() {
  * @param parent_list Unused.
  * @param cmd Unused.
  */
-void ParticleEditor::draw_canvas_imgui_callback(
+void ParticleEditor::drawCanvasDearImGuiCallback(
     const ImDrawList* parent_list, const ImDrawCmd* cmd
 ) {
-    game.states.particle_ed->draw_canvas();
+    game.states.particle_ed->drawCanvas();
 }
 
 
@@ -285,9 +285,9 @@ void ParticleEditor::draw_canvas_imgui_callback(
  * @param path Path to the file.
  * @return The tooltip text.
  */
-string ParticleEditor::get_file_tooltip(const string &path) const {
+string ParticleEditor::getFileTooltip(const string &path) const {
     ContentManifest temp_manif;
-    game.content.particle_gen.path_to_manifest(
+    game.content.particle_gen.pathToManifest(
         path, &temp_manif
     );
     return
@@ -302,7 +302,7 @@ string ParticleEditor::get_file_tooltip(const string &path) const {
  *
  * @return The name.
  */
-string ParticleEditor::get_name() const {
+string ParticleEditor::getName() const {
     return "Particle editor";
 }
 
@@ -313,7 +313,7 @@ string ParticleEditor::get_name() const {
  *
  * @return The path.
  */
-string ParticleEditor::get_opened_content_path() const {
+string ParticleEditor::getOpenedContentPath() const {
     return manifest.path;
 }
 
@@ -325,8 +325,8 @@ void ParticleEditor::load() {
     Editor::load();
     
     //Load necessary game content.
-    game.content.reload_packs();
-    game.content.load_all(
+    game.content.reloadPacks();
+    game.content.loadAll(
     vector<CONTENT_TYPE> {
         CONTENT_TYPE_PARTICLE_GEN,
     },
@@ -334,14 +334,14 @@ void ParticleEditor::load() {
     );
     
     //Misc. setup.
-    game.audio.set_current_song(game.sys_content_names.sng_editors, false);
+    game.audio.setCurrentSong(game.sys_content_names.sng_editors, false);
     
     part_mgr = ParticleManager(game.options.advanced.max_particles);
     
     //Set the background.
     if(!game.options.particle_editor.bg_path.empty()) {
         bg =
-            load_bmp(
+            loadBmp(
                 game.options.particle_editor.bg_path,
                 nullptr, false, false, false
             );
@@ -352,9 +352,9 @@ void ParticleEditor::load() {
     
     //Automatically load a file if needed, or show the load dialog.
     if(!auto_load_file.empty()) {
-        load_part_gen_file(auto_load_file, true);
+        loadPartGenFile(auto_load_file, true);
     } else {
-        open_load_dialog();
+        openLoadDialog();
     }
 }
 
@@ -366,40 +366,40 @@ void ParticleEditor::load() {
  * @param should_update_history If true, this loading process should update
  * the user's file open history.
  */
-void ParticleEditor::load_part_gen_file(
+void ParticleEditor::loadPartGenFile(
     const string &path, const bool should_update_history
 ) {
     //Setup.
-    setup_for_new_part_gen_pre();
-    changes_mgr.mark_as_non_existent();
+    setupForNewPartGenPre();
+    changes_mgr.markAsNonExistent();
     
     //Load.
-    manifest.fill_from_path(path);
+    manifest.fillFromPath(path);
     DataNode file = DataNode(manifest.path);
     
     if(!file.fileWasOpened) {
-        open_message_dialog(
+        openMessageDialog(
             "Load failed!",
             "Failed to load the particle generator file \"" +
             manifest.path + "\"!",
-        [this] () { open_load_dialog(); }
+        [this] () { openLoadDialog(); }
         );
         manifest.clear();
         return;
     }
     
     loaded_gen.manifest = &manifest;
-    loaded_gen.load_from_data_node(&file, CONTENT_LOAD_LEVEL_FULL);
+    loaded_gen.loadFromDataNode(&file, CONTENT_LOAD_LEVEL_FULL);
     
     //Finish up.
-    setup_for_new_part_gen_post();
+    setupForNewPartGenPost();
     changes_mgr.reset();
     
     if(should_update_history) {
-        update_history(game.options.particle_editor.history, manifest, loaded_gen.name);
+        updateHistory(game.options.particle_editor.history, manifest, loaded_gen.name);
     }
     
-    set_status("Loaded file \"" + manifest.internal_name + "\" successfully.");
+    setStatus("Loaded file \"" + manifest.internal_name + "\" successfully.");
 }
 
 
@@ -408,8 +408,8 @@ void ParticleEditor::load_part_gen_file(
  *
  * @param ev Event to handle.
  */
-void ParticleEditor::pan_cam(const ALLEGRO_EVENT &ev) {
-    game.cam.set_pos(
+void ParticleEditor::panCam(const ALLEGRO_EVENT &ev) {
+    game.cam.setPos(
         Point(
             game.cam.pos.x - ev.mouse.dx / game.cam.zoom,
             game.cam.pos.y - ev.mouse.dy / game.cam.zoom
@@ -427,22 +427,22 @@ void ParticleEditor::pan_cam(const ALLEGRO_EVENT &ev) {
  * @param info Pointer to the file's content manifest.
  * @param is_new Unused.
  */
-void ParticleEditor::pick_part_gen_file(
+void ParticleEditor::pickPartGenFile(
     const string &name, const string &top_cat, const string &sec_cat,
     void* info, bool is_new
 ) {
     ContentManifest* temp_manif = (ContentManifest*) info;
     
     auto really_load = [this, temp_manif] () {
-        close_top_dialog();
-        load_part_gen_file(temp_manif->path, true);
+        closeTopDialog();
+        loadPartGenFile(temp_manif->path, true);
     };
     
     if(
         temp_manif->pack == FOLDER_NAMES::BASE_PACK &&
         !game.options.advanced.engine_dev
     ) {
-        open_base_content_warning_dialog(really_load);
+        openBaseContentWarningDialog(really_load);
     } else {
         really_load();
     }
@@ -452,13 +452,13 @@ void ParticleEditor::pick_part_gen_file(
 /**
  * @brief Reloads all loaded particle generators.
  */
-void ParticleEditor::reload_part_gens() {
-    game.content.unload_all(
+void ParticleEditor::reloadPartGens() {
+    game.content.unloadAll(
     vector<CONTENT_TYPE> {
         CONTENT_TYPE_PARTICLE_GEN,
     }
     );
-    game.content.load_all(
+    game.content.loadAll(
     vector<CONTENT_TYPE> {
         CONTENT_TYPE_PARTICLE_GEN,
     },
@@ -472,7 +472,7 @@ void ParticleEditor::reload_part_gens() {
  *
  * @param input_value Value of the player input for the command.
  */
-void ParticleEditor::grid_interval_decrease_cmd(float input_value) {
+void ParticleEditor::gridIntervalDecreaseCmd(float input_value) {
     if(input_value < 0.5f) return;
     
     float new_grid_interval = PARTICLE_EDITOR::GRID_INTERVALS[0];
@@ -486,7 +486,7 @@ void ParticleEditor::grid_interval_decrease_cmd(float input_value) {
         new_grid_interval = PARTICLE_EDITOR::GRID_INTERVALS[i];
     }
     game.options.particle_editor.grid_interval = new_grid_interval;
-    set_status(
+    setStatus(
         "Decreased grid interval to " +
         f2s(game.options.particle_editor.grid_interval) + "."
     );
@@ -498,7 +498,7 @@ void ParticleEditor::grid_interval_decrease_cmd(float input_value) {
  *
  * @param input_value Value of the player input for the command.
  */
-void ParticleEditor::grid_interval_increase_cmd(float input_value) {
+void ParticleEditor::gridIntervalIncreaseCmd(float input_value) {
     if(input_value < 0.5f) return;
     
     float new_grid_interval = PARTICLE_EDITOR::GRID_INTERVALS.back();
@@ -512,7 +512,7 @@ void ParticleEditor::grid_interval_increase_cmd(float input_value) {
         new_grid_interval = PARTICLE_EDITOR::GRID_INTERVALS[i];
     }
     game.options.particle_editor.grid_interval = new_grid_interval;
-    set_status(
+    setStatus(
         "Increased grid interval to " +
         f2s(game.options.particle_editor.grid_interval) + "."
     );
@@ -524,12 +524,12 @@ void ParticleEditor::grid_interval_increase_cmd(float input_value) {
  *
  * @param input_value Value of the player input for the command.
  */
-void ParticleEditor::grid_toggle_cmd(float input_value) {
+void ParticleEditor::gridToggleCmd(float input_value) {
     if(input_value < 0.5f) return;
     
     grid_visible = !grid_visible;
     string state_str = (grid_visible ? "Enabled" : "Disabled");
-    set_status(state_str + " grid visibility.");
+    setStatus(state_str + " grid visibility.");
 }
 
 
@@ -538,14 +538,14 @@ void ParticleEditor::grid_toggle_cmd(float input_value) {
  *
  * @param input_value Value of the player input for the command.
  */
-void ParticleEditor::load_cmd(float input_value) {
+void ParticleEditor::loadCmd(float input_value) {
     if(input_value < 0.5f) return;
     
-    changes_mgr.ask_if_unsaved(
+    changes_mgr.askIfUnsaved(
         load_widget_pos,
         "loading a file", "load",
-        std::bind(&ParticleEditor::open_load_dialog, this),
-        std::bind(&ParticleEditor::save_part_gen, this)
+        std::bind(&ParticleEditor::openLoadDialog, this),
+        std::bind(&ParticleEditor::savePartGen, this)
     );
 }
 
@@ -555,14 +555,14 @@ void ParticleEditor::load_cmd(float input_value) {
  *
  * @param input_value Value of the player input for the command.
  */
-void ParticleEditor::quit_cmd(float input_value) {
+void ParticleEditor::quitCmd(float input_value) {
     if(input_value < 0.5f) return;
     
-    changes_mgr.ask_if_unsaved(
+    changes_mgr.askIfUnsaved(
         quit_widget_pos,
         "quitting", "quit",
         std::bind(&ParticleEditor::leave, this),
-        std::bind(&ParticleEditor::save_part_gen, this)
+        std::bind(&ParticleEditor::savePartGen, this)
     );
 }
 
@@ -572,14 +572,14 @@ void ParticleEditor::quit_cmd(float input_value) {
  *
  * @param input_value Value of the player input for the command.
  */
-void ParticleEditor::reload_cmd(float input_value) {
+void ParticleEditor::reloadCmd(float input_value) {
     if(input_value < 0.5f) return;
     
-    changes_mgr.ask_if_unsaved(
+    changes_mgr.askIfUnsaved(
         reload_widget_pos,
         "reloading the current file", "reload",
-    [this] () { load_part_gen_file(string(manifest.path), false); },
-    std::bind(&ParticleEditor::save_part_gen, this)
+    [this] () { loadPartGenFile(string(manifest.path), false); },
+    std::bind(&ParticleEditor::savePartGen, this)
     );
 }
 
@@ -589,10 +589,10 @@ void ParticleEditor::reload_cmd(float input_value) {
  *
  * @param input_value Value of the player input for the command.
  */
-void ParticleEditor::save_cmd(float input_value) {
+void ParticleEditor::saveCmd(float input_value) {
     if(input_value < 0.5f) return;
     
-    save_part_gen();
+    savePartGen();
 }
 
 
@@ -601,7 +601,7 @@ void ParticleEditor::save_cmd(float input_value) {
  * be it from an existing file or from scratch, after the actual creation/load
  * takes place.
  */
-void ParticleEditor::setup_for_new_part_gen_post() {
+void ParticleEditor::setupForNewPartGenPost() {
     loaded_gen.follow_angle = &generator_angle_offset;
 }
 
@@ -611,7 +611,7 @@ void ParticleEditor::setup_for_new_part_gen_post() {
  * be it from an existing file or from scratch, before the actual creation/load
  * takes place.
  */
-void ParticleEditor::setup_for_new_part_gen_pre() {
+void ParticleEditor::setupForNewPartGenPre() {
     part_mgr.clear();
     changes_mgr.reset();
     manifest.clear();
@@ -626,7 +626,7 @@ void ParticleEditor::setup_for_new_part_gen_pre() {
     selected_outward_velocity_keyframe = 0;
     loaded_gen = ParticleGenerator();
     
-    game.cam.set_pos(Point());
+    game.cam.setPos(Point());
     game.cam.set_zoom(1.0f);
 }
 
@@ -636,7 +636,7 @@ void ParticleEditor::setup_for_new_part_gen_pre() {
  *
  * @param input_value Value of the player input for the command.
  */
-void ParticleEditor::zoom_and_pos_reset_cmd(float input_value) {
+void ParticleEditor::zoomAndPosResetCmd(float input_value) {
     if(input_value < 0.5f) return;
     
     if(game.cam.target_zoom == 1.0f) {
@@ -652,7 +652,7 @@ void ParticleEditor::zoom_and_pos_reset_cmd(float input_value) {
  *
  * @param input_value Value of the player input for the command.
  */
-void ParticleEditor::zoom_in_cmd(float input_value) {
+void ParticleEditor::zoomInCmd(float input_value) {
     if(input_value < 0.5f) return;
     
     game.cam.target_zoom =
@@ -669,7 +669,7 @@ void ParticleEditor::zoom_in_cmd(float input_value) {
  *
  * @param input_value Value of the player input for the command.
  */
-void ParticleEditor::zoom_out_cmd(float input_value) {
+void ParticleEditor::zoomOutCmd(float input_value) {
     if(input_value < 0.5f) return;
     
     game.cam.target_zoom =
@@ -686,12 +686,12 @@ void ParticleEditor::zoom_out_cmd(float input_value) {
  *
  * @param input_value Value of the player input for the command.
  */
-void ParticleEditor::leader_silhouette_toggle_cmd(float input_value) {
+void ParticleEditor::leaderSilhouetteToggleCmd(float input_value) {
     if(input_value < 0.5f) return;
     
     leader_silhouette_visible = !leader_silhouette_visible;
     string state_str = (leader_silhouette_visible ? "Enabled" : "Disabled");
-    set_status(state_str + " leader silhouette visibility.");
+    setStatus(state_str + " leader silhouette visibility.");
 }
 
 
@@ -700,11 +700,11 @@ void ParticleEditor::leader_silhouette_toggle_cmd(float input_value) {
  *
  * @param input_value Value of the player input for the command.
  */
-void ParticleEditor::clear_particles_cmd(float input_value) {
+void ParticleEditor::clearParticlesCmd(float input_value) {
     if(input_value < 0.5f) return;
     
     part_mgr.clear();
-    set_status("Cleared particles.");
+    setStatus("Cleared particles.");
 }
 
 
@@ -713,12 +713,12 @@ void ParticleEditor::clear_particles_cmd(float input_value) {
  *
  * @param input_value Value of the player input for the command.
  */
-void ParticleEditor::emission_shape_toggle_cmd(float input_value) {
+void ParticleEditor::emissionShapeToggleCmd(float input_value) {
     if(input_value < 0.5f) return;
     
     emission_shape_visible = !emission_shape_visible;
     string state_str = (emission_shape_visible ? "Enabled" : "Disabled");
-    set_status(state_str + " emission shape visibility.");
+    setStatus(state_str + " emission shape visibility.");
 }
 
 
@@ -727,12 +727,12 @@ void ParticleEditor::emission_shape_toggle_cmd(float input_value) {
  *
  * @param input_value Value of the player input for the command.
  */
-void ParticleEditor::part_gen_playback_toggle_cmd(float input_value) {
+void ParticleEditor::partGenPlaybackToggleCmd(float input_value) {
     if(input_value < 0.5f) return;
     
     gen_running = !gen_running;
     string state_str = (gen_running ? "Enabled" : "Disabled");
-    set_status(state_str + " particle generator playback.");
+    setStatus(state_str + " particle generator playback.");
 }
 
 
@@ -741,19 +741,19 @@ void ParticleEditor::part_gen_playback_toggle_cmd(float input_value) {
  *
  * @param input_value Value of the player input for the command.
  */
-void ParticleEditor::part_mgr_playback_toggle_cmd(float input_value) {
+void ParticleEditor::partMgrPlaybackToggleCmd(float input_value) {
     if(input_value < 0.5f) return;
     
     mgr_running = !mgr_running;
     string state_str = (mgr_running ? "Enabled" : "Disabled");
-    set_status(state_str + " particle system playback.");
+    setStatus(state_str + " particle system playback.");
 }
 
 
 /**
  * @brief Resets the camera's X and Y coordinates.
  */
-void ParticleEditor::reset_cam_xy() {
+void ParticleEditor::resetCamXY() {
     game.cam.target_pos = Point();
 }
 
@@ -761,8 +761,8 @@ void ParticleEditor::reset_cam_xy() {
 /**
  * @brief Resets the camera's zoom.
  */
-void ParticleEditor::reset_cam_zoom() {
-    zoom_with_cursor(1.0f);
+void ParticleEditor::resetCamZoom() {
+    zoomWithCursor(1.0f);
 }
 
 
@@ -771,14 +771,14 @@ void ParticleEditor::reset_cam_zoom() {
  *
  * @return Whether it succeded.
  */
-bool ParticleEditor::save_part_gen() {
-    loaded_gen.engine_version = get_engine_version_string();
+bool ParticleEditor::savePartGen() {
+    loaded_gen.engine_version = getEngineVersionString();
     
     DataNode file_node = DataNode("", "");
-    loaded_gen.save_to_data_node(&file_node);
+    loaded_gen.saveToDataNode(&file_node);
     
     if(!file_node.saveFile(manifest.path)) {
-        show_system_message_box(
+        showSystemMessageBox(
             nullptr, "Save failed!",
             "Could not save the particle file!",
             (
@@ -789,12 +789,12 @@ bool ParticleEditor::save_part_gen() {
             nullptr,
             ALLEGRO_MESSAGEBOX_WARN
         );
-        set_status("Could not save the particle generator file!", true);
+        setStatus("Could not save the particle generator file!", true);
         return false;
     } else {
-        set_status("Saved file successfully.");
-        changes_mgr.mark_as_saved();
-        update_history(game.options.particle_editor.history, manifest, loaded_gen.name);
+        setStatus("Saved file successfully.");
+        changes_mgr.markAsSaved();
+        updateHistory(game.options.particle_editor.history, manifest, loaded_gen.name);
         return true;
     }
     
@@ -810,7 +810,7 @@ void ParticleEditor::unload() {
     
     part_mgr.clear();
     
-    game.content.unload_all(
+    game.content.unloadAll(
     vector<CONTENT_TYPE> {
         CONTENT_TYPE_PARTICLE_GEN,
     }

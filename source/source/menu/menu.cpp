@@ -42,12 +42,12 @@ void Menu::enter() {
  *
  * @param ev The event.
  */
-void Menu::handle_allegro_event(const ALLEGRO_EVENT &ev) {
+void Menu::handleAllegroEvent(const ALLEGRO_EVENT &ev) {
     if(!loaded || !active) return;
     
     for(size_t g = 0; g < guis.size(); g++) {
         if(guis[g]) {
-            guis[g]->handle_allegro_event(ev);
+            guis[g]->handleAllegroEvent(ev);
         }
     }
 }
@@ -58,12 +58,12 @@ void Menu::handle_allegro_event(const ALLEGRO_EVENT &ev) {
  *
  * @param action Data about the player action.
  */
-void Menu::handle_player_action(const PlayerAction &action) {
+void Menu::handlePlayerAction(const PlayerAction &action) {
     if(!loaded || !active) return;
     
     for(size_t g = 0; g < guis.size(); g++) {
         if(guis[g]) {
-            guis[g]->handle_player_action(action);
+            guis[g]->handlePlayerAction(action);
         }
     }
 }

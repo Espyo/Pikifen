@@ -20,8 +20,8 @@
 /**
  * @brief Opens the "load" dialog.
  */
-void GuiEditor::open_load_dialog() {
-    reload_gui_defs();
+void GuiEditor::openLoadDialog() {
+    reloadGuiDefs();
     
     //Set up the picker's behavior and data.
     vector<PickerItem> file_items;
@@ -31,7 +31,7 @@ void GuiEditor::open_load_dialog() {
                 f.first,
                 "Pack: " + game.content.packs.list[f.second.pack].name, "",
                 (void*) &f.second,
-                get_file_tooltip(f.second.path)
+                getFileTooltip(f.second.path)
             )
         );
     }
@@ -40,7 +40,7 @@ void GuiEditor::open_load_dialog() {
     load_dialog_picker.items = file_items;
     load_dialog_picker.pick_callback =
         std::bind(
-            &GuiEditor::pick_gui_def_file, this,
+            &GuiEditor::pickGuiDefFile, this,
             std::placeholders::_1,
             std::placeholders::_2,
             std::placeholders::_3,
@@ -49,23 +49,23 @@ void GuiEditor::open_load_dialog() {
         );
         
     //Open the dialog that will contain the picker and history.
-    open_dialog(
+    openDialog(
         "Load a GUI definition file",
-        std::bind(&GuiEditor::process_gui_load_dialog, this)
+        std::bind(&GuiEditor::processGuiLoadDialog, this)
     );
     dialogs.back()->close_callback =
-        std::bind(&GuiEditor::close_load_dialog, this);
+        std::bind(&GuiEditor::closeLoadDialog, this);
 }
 
 
 /**
  * @brief Opens the "new" dialog.
  */
-void GuiEditor::open_new_dialog() {
+void GuiEditor::openNewDialog() {
     new_dialog.must_update = true;
-    open_dialog(
+    openDialog(
         "Create a new GUI definition",
-        std::bind(&GuiEditor::process_gui_new_dialog, this)
+        std::bind(&GuiEditor::processGuiNewDialog, this)
     );
     dialogs.back()->custom_size = Point(400, 0);
     dialogs.back()->close_callback = [this] () {
@@ -81,20 +81,20 @@ void GuiEditor::open_new_dialog() {
 /**
  * @brief Opens the options dialog.
  */
-void GuiEditor::open_options_dialog() {
-    open_dialog(
+void GuiEditor::openOptionsDialog() {
+    openDialog(
         "Options",
-        std::bind(&GuiEditor::process_gui_options_dialog, this)
+        std::bind(&GuiEditor::processGuiOptionsDialog, this)
     );
     dialogs.back()->close_callback =
-        std::bind(&GuiEditor::close_options_dialog, this);
+        std::bind(&GuiEditor::closeOptionsDialog, this);
 }
 
 
 /**
  * @brief Processes Dear ImGui for this frame.
  */
-void GuiEditor::process_gui() {
+void GuiEditor::processGui() {
     //Set up the entire editor window.
     ImGui::SetNextWindowPos(ImVec2(0, 0));
     ImGui::SetNextWindowSize(ImVec2(game.win_w, game.win_h));
@@ -106,14 +106,14 @@ void GuiEditor::process_gui() {
     );
     
     //The menu bar.
-    process_gui_menu_bar();
+    processGuiMenuBar();
     
     //The two main columns that split the canvas (+ toolbar + status bar)
     //and control panel.
     ImGui::Columns(2, "colMain");
     
     //Do the toolbar.
-    process_gui_toolbar();
+    processGuiToolbar();
     
     //Draw the canvas now.
     ImGui::BeginChild("canvas", ImVec2(0, -EDITOR::STATUS_BAR_HEIGHT));
@@ -126,16 +126,16 @@ void GuiEditor::process_gui() {
     ImVec2 br = ImGui::GetItemRectMax();
     canvas_br.x = br.x;
     canvas_br.y = br.y;
-    ImGui::GetWindowDrawList()->AddCallback(draw_canvas_imgui_callback, nullptr);
+    ImGui::GetWindowDrawList()->AddCallback(drawCanvasDearImGuiCallback, nullptr);
     
     //Small hack. Recenter the camera, if necessary.
     if(must_recenter_cam) {
-        reset_cam(true);
+        resetCam(true);
         must_recenter_cam = false;
     }
     
     //Status bar.
-    process_gui_status_bar();
+    processGuiStatusBar();
     
     //Set up the separator for the control panel.
     ImGui::NextColumn();
@@ -148,7 +148,7 @@ void GuiEditor::process_gui() {
     }
     
     //Do the control panel now.
-    process_gui_control_panel();
+    processGuiControlPanel();
     ImGui::NextColumn();
     
     //Finish the main window.
@@ -156,14 +156,14 @@ void GuiEditor::process_gui() {
     ImGui::End();
     
     //Process any dialogs.
-    process_dialogs();
+    processDialogs();
 }
 
 
 /**
  * @brief Processes the Dear ImGui control panel for this frame.
  */
-void GuiEditor::process_gui_control_panel() {
+void GuiEditor::processGuiControlPanel() {
     if(manifest.internal_name.empty()) return;
     
     ImGui::BeginChild("panel");
@@ -173,28 +173,28 @@ void GuiEditor::process_gui_control_panel() {
     
     //Current file text.
     ImGui::SameLine();
-    mono_text("%s", manifest.internal_name.c_str());
+    monoText("%s", manifest.internal_name.c_str());
     string file_tooltip =
-        get_file_tooltip(manifest.path) + "\n\n"
+        getFileTooltip(manifest.path) + "\n\n"
         "File state: ";
-    if(!changes_mgr.exists_on_disk()) {
+    if(!changes_mgr.existsOnDisk()) {
         file_tooltip += "Not saved to disk yet!";
-    } else if(changes_mgr.has_unsaved_changes()) {
+    } else if(changes_mgr.hasUnsavedChanges()) {
         file_tooltip += "You have unsaved changes.";
     } else {
         file_tooltip += "Everything ok.";
     }
-    set_tooltip(file_tooltip);
+    setTooltip(file_tooltip);
     
     ImGui::Spacer();
     
     //Process the list of items.
-    process_gui_panel_items();
+    processGuiPanelItems();
     
     ImGui::Spacer();
     
     //Process the currently selected item.
-    process_gui_panel_item();
+    processGuiPanelItem();
     
     ImGui::EndChild();
 }
@@ -204,10 +204,10 @@ void GuiEditor::process_gui_control_panel() {
  * @brief Processes the Dear ImGui GUI definition deletion dialog
  * for this frame.
  */
-void GuiEditor::process_gui_delete_gui_def_dialog() {
+void GuiEditor::processGuiDeleteGuiDefDialog() {
     //Explanation text.
     string explanation_str;
-    if(!changes_mgr.exists_on_disk()) {
+    if(!changes_mgr.existsOnDisk()) {
         explanation_str =
             "You have never saved this GUI definition to disk, so if you\n"
             "delete, you will only lose your unsaved progress.";
@@ -232,7 +232,7 @@ void GuiEditor::process_gui_delete_gui_def_dialog() {
     ImGui::Spacer();
     ImGui::SetupCentering(100 + 100 + 30);
     if(ImGui::Button("Cancel", ImVec2(100, 40))) {
-        close_top_dialog();
+        closeTopDialog();
     }
     
     //Delete button.
@@ -247,8 +247,8 @@ void GuiEditor::process_gui_delete_gui_def_dialog() {
         ImGuiCol_ButtonActive, ImVec4(0.4, 0.1, 0.1, 1.0)
     );
     if(ImGui::Button("Delete", ImVec2(100, 40))) {
-        close_top_dialog();
-        delete_current_gui_def();
+        closeTopDialog();
+        deleteCurrentGuiDef();
     }
     ImGui::PopStyleColor(3);
 }
@@ -257,39 +257,39 @@ void GuiEditor::process_gui_delete_gui_def_dialog() {
 /**
  * @brief Processes the "load" dialog for this frame.
  */
-void GuiEditor::process_gui_load_dialog() {
+void GuiEditor::processGuiLoadDialog() {
     //History node.
-    process_gui_history(
+    processGuiHistory(
         game.options.gui_editor.history,
     [this](const string &path) -> string {
         return path;
     },
     [this](const string &path) {
-        close_top_dialog();
-        load_gui_def_file(path, true);
+        closeTopDialog();
+        loadGuiDefFile(path, true);
     },
     [this](const string &path) {
-        return get_file_tooltip(path);
+        return getFileTooltip(path);
     }
     );
     
     //New node.
     ImGui::Spacer();
-    if(saveable_tree_node("load", "New")) {
+    if(saveableTreeNode("load", "New")) {
         if(ImGui::Button("Create new...", ImVec2(168.0f, 32.0f))) {
-            open_new_dialog();
+            openNewDialog();
         }
         
         ImGui::TreePop();
     }
-    set_tooltip(
+    setTooltip(
         "Creates a new GUI definition.\n"
         "This works by copying an existing one to a new pack."
     );
     
     //Load node.
     ImGui::Spacer();
-    if(saveable_tree_node("load", "Load")) {
+    if(saveableTreeNode("load", "Load")) {
         load_dialog_picker.process();
         
         ImGui::TreePop();
@@ -300,7 +300,7 @@ void GuiEditor::process_gui_load_dialog() {
 /**
  * @brief Processes the Dear ImGui menu bar for this frame.
  */
-void GuiEditor::process_gui_menu_bar() {
+void GuiEditor::processGuiMenuBar() {
     if(ImGui::BeginMenuBar()) {
     
         //Editor menu.
@@ -308,37 +308,37 @@ void GuiEditor::process_gui_menu_bar() {
         
             //Load file item.
             if(ImGui::MenuItem("Load or create...", "Ctrl+L")) {
-                load_widget_pos = get_last_widget_pos();
-                load_cmd(1.0f);
+                load_widget_pos = getLastWidgetPost();
+                loadCmd(1.0f);
             }
-            set_tooltip(
+            setTooltip(
                 "Pick a GUI definition file to load.",
                 "Ctrl + L"
             );
             
             //Reload current file item.
             if(ImGui::MenuItem("Reload current GUI definition")) {
-                reload_widget_pos = get_last_widget_pos();
-                reload_cmd(1.0f);
+                reload_widget_pos = getLastWidgetPost();
+                reloadCmd(1.0f);
             }
-            set_tooltip(
+            setTooltip(
                 "Lose all changes and reload the current file from the disk."
             );
             
             //Save file item.
             if(ImGui::MenuItem("Save current GUI definition", "Ctrl+S")) {
-                save_cmd(1.0f);
+                saveCmd(1.0f);
             }
-            set_tooltip(
+            setTooltip(
                 "Save the GUI definition into the file on disk.",
                 "Ctrl + S"
             );
             
             //Delete current GUI definition item.
             if(ImGui::MenuItem("Delete current GUI definition")) {
-                delete_gui_def_cmd(1.0f);
+                deleteGuiDefCmd(1.0f);
             }
-            set_tooltip(
+            setTooltip(
                 "Delete the current GUI definition from the disk."
             );
             
@@ -347,18 +347,18 @@ void GuiEditor::process_gui_menu_bar() {
             
             //Options menu item.
             if(ImGui::MenuItem("Options...")) {
-                open_options_dialog();
+                openOptionsDialog();
             }
-            set_tooltip(
+            setTooltip(
                 "Open the options menu, so you can tweak your preferences."
             );
             
             //Quit editor item.
             if(ImGui::MenuItem("Quit", "Ctrl+Q")) {
-                quit_widget_pos = get_last_widget_pos();
-                quit_cmd(1.0f);
+                quit_widget_pos = getLastWidgetPost();
+                quitCmd(1.0f);
             }
-            set_tooltip(
+            setTooltip(
                 "Quit the GUI editor.",
                 "Ctrl + Q"
             );
@@ -372,27 +372,27 @@ void GuiEditor::process_gui_menu_bar() {
         
             //Zoom in item.
             if(ImGui::MenuItem("Zoom in", "Plus")) {
-                zoom_in_cmd(1.0f);
+                zoomInCmd(1.0f);
             }
-            set_tooltip(
+            setTooltip(
                 "Zooms the camera in a bit.",
                 "Plus"
             );
             
             //Zoom out item.
             if(ImGui::MenuItem("Zoom out", "Minus")) {
-                zoom_out_cmd(1.0f);
+                zoomOutCmd(1.0f);
             }
-            set_tooltip(
+            setTooltip(
                 "Zooms the camera out a bit.",
                 "Minus"
             );
             
             //Zoom and position reset item.
             if(ImGui::MenuItem("Reset", "0")) {
-                zoom_and_pos_reset_cmd(1.0f);
+                zoomAndPosResetCmd(1.0f);
             }
-            set_tooltip(
+            setTooltip(
                 "Reset the zoom level and camera position.",
                 "0"
             );
@@ -412,10 +412,10 @@ void GuiEditor::process_gui_menu_bar() {
             ) {
                 string state_str =
                     game.options.editors.show_tooltips ? "Enabled" : "Disabled";
-                set_status(state_str + " tooltips.");
-                save_options();
+                setStatus(state_str + " tooltips.");
+                saveOptions();
             }
-            set_tooltip(
+            setTooltip(
                 "Whether tooltips should appear when you place your mouse on\n"
                 "top of something in the GUI. Like the tooltip you are\n"
                 "reading right now."
@@ -439,9 +439,9 @@ void GuiEditor::process_gui_menu_bar() {
                     "If you need more help on how to use the GUI editor, "
                     "check out the tutorial in the manual, located "
                     "in the engine's folder.";
-                open_help_dialog(help_str, "gui.html");
+                openHelpDialog(help_str, "gui.html");
             }
-            set_tooltip(
+            setTooltip(
                 "Opens a general help message for this editor."
             );
             
@@ -457,10 +457,10 @@ void GuiEditor::process_gui_menu_bar() {
 /**
  * @brief Processes the Dear ImGui "new" dialog for this frame.
  */
-void GuiEditor::process_gui_new_dialog() {
+void GuiEditor::processGuiNewDialog() {
     //Pack widgets.
     new_dialog.must_update |=
-        process_gui_new_dialog_pack_widgets(&new_dialog.pack);
+        processGuiNewDialogPackWidgets(&new_dialog.pack);
         
     //GUI definition combo.
     vector<string> gui_files;
@@ -469,7 +469,7 @@ void GuiEditor::process_gui_new_dialog() {
     }
     ImGui::Spacer();
     new_dialog.must_update |=
-        mono_combo("File", &new_dialog.internal_name, gui_files);
+        monoCombo("File", &new_dialog.internal_name, gui_files);
         
     //Check if everything's ok.
     if(new_dialog.must_update) {
@@ -477,7 +477,7 @@ void GuiEditor::process_gui_new_dialog() {
         if(new_dialog.internal_name.empty()) {
             new_dialog.problem =
                 "You have to select a file!";
-        } else if(!is_internal_name_good(new_dialog.internal_name)) {
+        } else if(!isInternalNameGood(new_dialog.internal_name)) {
             new_dialog.problem =
                 "The internal name should only have lowercase letters,\n"
                 "numbers, and underscores!";
@@ -491,8 +491,8 @@ void GuiEditor::process_gui_new_dialog() {
             temp_man.internal_name = new_dialog.internal_name;
             temp_man.pack = new_dialog.pack;
             new_dialog.def_path =
-                game.content.gui_defs.manifest_to_path(temp_man);
-            if(file_exists(new_dialog.def_path)) {
+                game.content.gui_defs.manifestToPath(temp_man);
+            if(fileExists(new_dialog.def_path)) {
                 new_dialog.problem =
                     "There is already a GUI definition\n"
                     "file for that GUI in that pack!";
@@ -509,16 +509,16 @@ void GuiEditor::process_gui_new_dialog() {
     }
     if(ImGui::Button("Create GUI definition", ImVec2(180, 40))) {
         auto really_create = [this] () {
-            create_gui_def(string(new_dialog.internal_name), new_dialog.pack);
-            close_top_dialog();
-            close_top_dialog(); //Close the load dialog.
+            createGuiDef(string(new_dialog.internal_name), new_dialog.pack);
+            closeTopDialog();
+            closeTopDialog(); //Close the load dialog.
         };
         
         if(
             new_dialog.pack == FOLDER_NAMES::BASE_PACK &&
             !game.options.advanced.engine_dev
         ) {
-            open_base_content_warning_dialog(really_create);
+            openBaseContentWarningDialog(really_create);
         } else {
             really_create();
         }
@@ -526,7 +526,7 @@ void GuiEditor::process_gui_new_dialog() {
     if(!new_dialog.problem.empty()) {
         ImGui::EndDisabled();
     }
-    set_tooltip(
+    setTooltip(
         new_dialog.problem.empty() ?
         "Create the GUI definition!" :
         new_dialog.problem
@@ -537,13 +537,13 @@ void GuiEditor::process_gui_new_dialog() {
 /**
  * @brief Processes the options dialog for this frame.
  */
-void GuiEditor::process_gui_options_dialog() {
+void GuiEditor::processGuiOptionsDialog() {
     //Controls node.
-    if(saveable_tree_node("options", "Controls")) {
+    if(saveableTreeNode("options", "Controls")) {
     
         //Middle mouse button pans checkbox.
         ImGui::Checkbox("Use MMB to pan", &game.options.editors.mmb_pan);
-        set_tooltip(
+        setTooltip(
             "Use the middle mouse button to pan the camera\n"
             "(and RMB to reset camera/zoom).\n"
             "Default: " +
@@ -563,9 +563,9 @@ void GuiEditor::process_gui_options_dialog() {
                 ImVec2(ImGui::GetFrameHeight(), ImGui::GetFrameHeight())
             )
         ) {
-            grid_interval_increase_cmd(1.0f);
+            gridIntervalIncreaseCmd(1.0f);
         }
-        set_tooltip(
+        setTooltip(
             "Increase the spacing on the grid.\n"
             "Default: " + i2s(OPTIONS::GUI_ED_D::GRID_INTERVAL) +
             ".",
@@ -580,9 +580,9 @@ void GuiEditor::process_gui_options_dialog() {
                 ImVec2(ImGui::GetFrameHeight(), ImGui::GetFrameHeight())
             )
         ) {
-            grid_interval_decrease_cmd(1.0f);
+            gridIntervalDecreaseCmd(1.0f);
         }
-        set_tooltip(
+        setTooltip(
             "Decrease the spacing on the grid.\n"
             "Default: " + i2s(OPTIONS::GUI_ED_D::GRID_INTERVAL) +
             ".",
@@ -595,14 +595,14 @@ void GuiEditor::process_gui_options_dialog() {
     
     ImGui::Spacer();
     
-    process_gui_editor_style();
+    processGuiEditorStyle();
 }
 
 
 /**
  * @brief Processes the GUI item info panel for this frame.
  */
-void GuiEditor::process_gui_panel_item() {
+void GuiEditor::processGuiPanelItem() {
     if(cur_item == INVALID) return;
     
     Item* cur_item_ptr = &items[cur_item];
@@ -616,9 +616,9 @@ void GuiEditor::process_gui_panel_item() {
     if(
         ImGui::DragFloat2("Center", (float*) &cur_item_ptr->center, 0.10f)
     ) {
-        changes_mgr.mark_as_changed();
+        changes_mgr.markAsChanged();
     }
-    set_tooltip(
+    setTooltip(
         "Center coordinates of the item. e.g. 32,100 is 32% of the\n"
         "width horizontally and very bottom vertically.",
         "",
@@ -627,13 +627,13 @@ void GuiEditor::process_gui_panel_item() {
     
     //Size values.
     if(
-        process_gui_size_widgets(
+        processGuiSizeWidgets(
             "Size", cur_item_ptr->size, 0.10f, false, false, 0.10f
         )
     ) {
-        changes_mgr.mark_as_changed();
+        changes_mgr.markAsChanged();
     }
-    set_tooltip(
+    setTooltip(
         "Width and height of the item. e.g. 40,90 is 40% of the screen width,\n"
         "and 90% of the screen height.",
         "",
@@ -674,7 +674,7 @@ void GuiEditor::process_gui_panel_item() {
             cur_item_ptr->center = new_center;
             cur_item_ptr->size = new_size;
         }
-        changes_mgr.mark_as_changed();
+        changes_mgr.markAsChanged();
     }
 }
 
@@ -682,7 +682,7 @@ void GuiEditor::process_gui_panel_item() {
 /**
  * @brief Processes the GUI item list panel for this frame.
  */
-void GuiEditor::process_gui_panel_items() {
+void GuiEditor::processGuiPanelItems() {
     //Items text.
     ImGui::Text("Items:");
     
@@ -710,9 +710,9 @@ void GuiEditor::process_gui_panel_items() {
                     items[i].size.x = 0.0f;
                     items[i].size.y = 0.0f;
                 }
-                changes_mgr.mark_as_changed();
+                changes_mgr.markAsChanged();
             }
-            set_tooltip(
+            setTooltip(
                 "Whether this item is visible in-game or not."
             );
             
@@ -724,7 +724,7 @@ void GuiEditor::process_gui_panel_items() {
             bool selected = cur_item == i;
             ImGui::SameLine();
             if(
-                mono_selectable(items[i].name.c_str(), &selected)
+                monoSelectable(items[i].name.c_str(), &selected)
             ) {
                 cur_item = i;
             }
@@ -743,9 +743,9 @@ void GuiEditor::process_gui_panel_items() {
 /**
  * @brief Processes the Dear ImGui status bar for this frame.
  */
-void GuiEditor::process_gui_status_bar() {
+void GuiEditor::processGuiStatusBar() {
     //Status bar text.
-    process_gui_status_bar_text();
+    processGuiStatusBarText();
     
     //Spacer dummy widget.
     ImGui::SameLine();
@@ -757,10 +757,10 @@ void GuiEditor::process_gui_status_bar() {
     //Mouse coordinates text.
     if(!is_mouse_in_gui || is_m1_pressed) {
         ImGui::SameLine();
-        mono_text(
+        monoText(
             "%s, %s",
-            box_string(f2s(game.mouse_cursor.w_pos.x), 7, "%").c_str(),
-            box_string(f2s(game.mouse_cursor.w_pos.y), 7, "%").c_str()
+            boxString(f2s(game.mouse_cursor.w_pos.x), 7, "%").c_str(),
+            boxString(f2s(game.mouse_cursor.w_pos.y), 7, "%").c_str()
         );
     }
 }
@@ -769,7 +769,7 @@ void GuiEditor::process_gui_status_bar() {
 /**
  * @brief Processes the Dear ImGui toolbar for this frame.
  */
-void GuiEditor::process_gui_toolbar() {
+void GuiEditor::processGuiToolbar() {
     if(manifest.internal_name.empty()) return;
     
     //Quit button.
@@ -779,10 +779,10 @@ void GuiEditor::process_gui_toolbar() {
             Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
-        quit_widget_pos = get_last_widget_pos();
-        quit_cmd(1.0f);
+        quit_widget_pos = getLastWidgetPost();
+        quitCmd(1.0f);
     }
-    set_tooltip(
+    setTooltip(
         "Quit the GUI editor.",
         "Ctrl + Q"
     );
@@ -795,10 +795,10 @@ void GuiEditor::process_gui_toolbar() {
             Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
-        load_widget_pos = get_last_widget_pos();
-        load_cmd(1.0f);
+        load_widget_pos = getLastWidgetPost();
+        loadCmd(1.0f);
     }
-    set_tooltip(
+    setTooltip(
         "Pick a GUI definition file to load.",
         "Ctrl + L"
     );
@@ -808,15 +808,15 @@ void GuiEditor::process_gui_toolbar() {
     if(
         ImGui::ImageButton(
             "saveButton",
-            changes_mgr.has_unsaved_changes() ?
+            changes_mgr.hasUnsavedChanges() ?
             editor_icons[EDITOR_ICON_SAVE_UNSAVED] :
             editor_icons[EDITOR_ICON_SAVE],
             Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
-        save_cmd(1.0f);
+        saveCmd(1.0f);
     }
-    set_tooltip(
+    setTooltip(
         "Save the GUI definition into the file on disk.",
         "Ctrl + S"
     );
@@ -839,9 +839,9 @@ void GuiEditor::process_gui_toolbar() {
             Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
-        snap_mode_cmd(1.0f);
+        snapModeCmd(1.0f);
     }
-    set_tooltip(
+    setTooltip(
         "Current snap mode: " + snap_mode_description,
         "X"
     );

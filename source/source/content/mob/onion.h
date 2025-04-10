@@ -74,16 +74,16 @@ public:
     
     Onion(const Point &pos, OnionType* type, float angle);
     ~Onion();
-    void draw_mob() override;
-    void read_script_vars(const ScriptVarReader &svr) override;
-    void start_generating();
-    void stop_generating();
+    void drawMob() override;
+    void readScriptVars(const ScriptVarReader &svr) override;
+    void startGenerating();
+    void stopGenerating();
     
     
 protected:
 
     //--- Function declarations ---
     
-    void tick_class_specifics(float delta_t) override;
+    void tickClassSpecifics(float delta_t) override;
     
 };

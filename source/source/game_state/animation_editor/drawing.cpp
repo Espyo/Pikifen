@@ -23,11 +23,11 @@
 /**
  * @brief Handles the drawing part of the main loop of the animation editor.
  */
-void AnimationEditor::do_drawing() {
+void AnimationEditor::doDrawing() {
     //The canvas drawing is handled by Dear ImGui elsewhere.
     
     al_clear_to_color(COLOR_BLACK);
-    draw_op_error_cursor();
+    drawOpErrorCursor();
 }
 
 
@@ -36,7 +36,7 @@ void AnimationEditor::do_drawing() {
  *
  * This is called as a callback inside the Dear ImGui rendering process.
  */
-void AnimationEditor::draw_canvas() {
+void AnimationEditor::drawCanvas() {
     al_set_clipping_rectangle(
         canvas_tl.x, canvas_tl.y,
         canvas_br.x - canvas_tl.x, canvas_br.y - canvas_tl.y
@@ -89,7 +89,7 @@ void AnimationEditor::draw_canvas() {
     
     Sprite* s = nullptr;
     
-    if(state == EDITOR_STATE_ANIMATION && cur_anim_i.valid_frame()) {
+    if(state == EDITOR_STATE_ANIMATION && cur_anim_i.validFrame()) {
         s = cur_anim_i.cur_anim->frames[cur_anim_i.cur_frame_idx].sprite_ptr;
         
     } else if(
@@ -194,9 +194,9 @@ void AnimationEditor::draw_canvas() {
     } else if(s) {
     
         if(side_view && state == EDITOR_STATE_HITBOXES) {
-            draw_side_view_sprite(s);
+            drawSideViewSprite(s);
         } else {
-            draw_top_down_view_sprite(s);
+            drawTopDownViewSprite(s);
         }
         
         if(draw_hitboxes) {
@@ -236,16 +236,16 @@ void AnimationEditor::draw_canvas() {
                     hitbox_outline_thickness =
                         3.0f / game.cam.zoom;
                     hitbox_outline_color =
-                        change_alpha(hitbox_color, hitbox_outline_alpha);
+                        changeAlpha(hitbox_color, hitbox_outline_alpha);
                 }
                 
                 if(side_view && state == EDITOR_STATE_HITBOXES) {
-                    draw_side_view_hitbox(
+                    drawSideViewHitbox(
                         h_ptr, hitbox_color,
                         hitbox_outline_color, hitbox_outline_thickness
                     );
                 } else {
-                    draw_top_down_view_hitbox(
+                    drawTopDownViewHitbox(
                         h_ptr, hitbox_color,
                         hitbox_outline_color, hitbox_outline_thickness
                     );
@@ -303,7 +303,7 @@ void AnimationEditor::draw_canvas() {
     //Grid.
     if(grid_opacity != 0.0f) {
     
-        draw_grid(
+        drawGrid(
             ANIM_EDITOR::GRID_INTERVAL,
             al_map_rgba(64, 64, 64, grid_opacity * 255),
             al_map_rgba(48, 48, 48, grid_opacity * 255)
@@ -334,7 +334,7 @@ void AnimationEditor::draw_canvas() {
         if(side_view && state == EDITOR_STATE_HITBOXES) {
             //The radius isn't meant to be shown in side view.
         } else {
-            draw_top_down_view_mob_radius(loaded_mob_type);
+            drawTopDownViewMobRadius(loaded_mob_type);
         }
     }
     
@@ -345,15 +345,15 @@ void AnimationEditor::draw_canvas() {
         }
         
         if(side_view && state == EDITOR_STATE_HITBOXES) {
-            draw_side_view_leader_silhouette(x_offset);
+            drawSideViewLeaderSilhouette(x_offset);
         } else {
-            draw_top_down_view_leader_silhouette(x_offset);
+            drawTopDownViewLeaderSilhouette(x_offset);
         }
     }
     
     if(state == EDITOR_STATE_ANIMATION) {
         al_use_transform(&game.identity_transform);
-        draw_timeline();
+        drawTimeline();
     }
     
     //Finish up.
@@ -365,7 +365,7 @@ void AnimationEditor::draw_canvas() {
 /**
  * @brief Draws the comparison sprite on the canvas, all tinted and everything.
  */
-void AnimationEditor::draw_comparison() {
+void AnimationEditor::drawComparison() {
     if(
         comparison && comparison_blink_show &&
         comparison_sprite && comparison_sprite->bitmap
@@ -376,7 +376,7 @@ void AnimationEditor::draw_comparison() {
         } else {
             tint = comparison_sprite->tint;
         }
-        draw_bitmap(
+        drawBitmap(
             comparison_sprite->bitmap,
             comparison_sprite->offset,
             Point(
@@ -397,7 +397,7 @@ void AnimationEditor::draw_comparison() {
  * @param outline_color Color to use for the hitbox's outline.
  * @param outline_thickness Thickness of the hitbox's outline.
  */
-void AnimationEditor::draw_side_view_hitbox(
+void AnimationEditor::drawSideViewHitbox(
     Hitbox* h_ptr, const ALLEGRO_COLOR &color,
     const ALLEGRO_COLOR &outline_color, float outline_thickness
 ) {
@@ -446,8 +446,8 @@ void AnimationEditor::draw_side_view_hitbox(
  * @param x_offset From the center, offset the silhouette this much
  * to the right.
  */
-void AnimationEditor::draw_side_view_leader_silhouette(float x_offset) {
-    draw_bitmap(
+void AnimationEditor::drawSideViewLeaderSilhouette(float x_offset) {
+    drawBitmap(
         game.sys_content.bmp_leader_silhouette_side,
         Point(x_offset, -game.config.leaders.standard_height / 2.0),
         Point(-1, game.config.leaders.standard_height),
@@ -461,11 +461,11 @@ void AnimationEditor::draw_side_view_leader_silhouette(float x_offset) {
  *
  * @param s Sprite to draw.
  */
-void AnimationEditor::draw_side_view_sprite(const Sprite* s) {
+void AnimationEditor::drawSideViewSprite(const Sprite* s) {
     Point min, max;
     ALLEGRO_COLOR color = COLOR_EMPTY;
     
-    get_transformed_rectangle_bounding_box(
+    getTransformedRectangleBBox(
         s->offset, s->bmp_size * s->scale, s->angle,
         &min, &max
     );
@@ -488,8 +488,8 @@ void AnimationEditor::draw_side_view_sprite(const Sprite* s) {
 /**
  * @brief Draws a timeline for the current animation.
  */
-void AnimationEditor::draw_timeline() {
-    if(!cur_anim_i.valid_frame()) return;
+void AnimationEditor::drawTimeline() {
+    if(!cur_anim_i.validFrame()) return;
     
     //Some initial calculations.
     float anim_total_duration = 0;
@@ -591,7 +591,7 @@ void AnimationEditor::draw_timeline() {
             if(text.size() >= 4) {
                 text = text.substr(1, 3);
             }
-            draw_text(
+            drawText(
                 text, game.sys_content.fnt_builtin,
                 Point(
                     floor(x_to_use) + 2,
@@ -633,7 +633,7 @@ void AnimationEditor::draw_timeline() {
         }
         
         next_marker_x += scale * milestone_interval;
-        next_marker_type = sum_and_wrap(next_marker_type, 1, 4);
+        next_marker_type = sumAndWrap(next_marker_type, 1, 4);
     }
 }
 
@@ -646,7 +646,7 @@ void AnimationEditor::draw_timeline() {
  * @param outline_color Color of the hitbox's outline.
  * @param outline_thickness Thickness of the hitbox's outline.
  */
-void AnimationEditor::draw_top_down_view_hitbox(
+void AnimationEditor::drawTopDownViewHitbox(
     Hitbox* h_ptr, const ALLEGRO_COLOR &color,
     const ALLEGRO_COLOR &outline_color, float outline_thickness
 ) {
@@ -669,10 +669,10 @@ void AnimationEditor::draw_top_down_view_hitbox(
  * @param x_offset From the center, offset the leader silhouette this much
  * to the right.
  */
-void AnimationEditor::draw_top_down_view_leader_silhouette(
+void AnimationEditor::drawTopDownViewLeaderSilhouette(
     float x_offset
 ) {
-    draw_bitmap(
+    drawBitmap(
         game.sys_content.bmp_leader_silhouette_top, Point(x_offset, 0),
         Point(-1, game.config.leaders.standard_radius * 2.0f),
         0, al_map_rgba(240, 240, 240, 160)
@@ -685,7 +685,7 @@ void AnimationEditor::draw_top_down_view_leader_silhouette(
  *
  * @param mt Type of the mob to draw.
  */
-void AnimationEditor::draw_top_down_view_mob_radius(MobType* mt) {
+void AnimationEditor::drawTopDownViewMobRadius(MobType* mt) {
     al_draw_circle(
         0, 0, mt->radius,
         al_map_rgb(240, 240, 240), 1.0f / game.cam.zoom
@@ -705,15 +705,15 @@ void AnimationEditor::draw_top_down_view_mob_radius(MobType* mt) {
  *
  * @param s Sprite to draw.
  */
-void AnimationEditor::draw_top_down_view_sprite(Sprite* s) {
+void AnimationEditor::drawTopDownViewSprite(Sprite* s) {
     if(!comparison_above) {
-        draw_comparison();
+        drawComparison();
     }
     
     Sprite* next_s = nullptr;
     float interpolation_factor = 0.0f;
-    if(state == EDITOR_STATE_ANIMATION && cur_anim_i.valid_frame()) {
-        cur_anim_i.get_sprite_data(
+    if(state == EDITOR_STATE_ANIMATION && cur_anim_i.validFrame()) {
+        cur_anim_i.getSpriteData(
             nullptr, &next_s, &interpolation_factor
         );
     }
@@ -724,7 +724,7 @@ void AnimationEditor::draw_top_down_view_sprite(Sprite* s) {
         Point scale;
         ALLEGRO_COLOR tint;
         
-        get_sprite_basic_effects(
+        getSpriteBasicEffects(
             Point(), 0, LARGE_FLOAT, LARGE_FLOAT,
             s, next_s, interpolation_factor,
             &coords, &angle, &scale, &tint
@@ -737,7 +737,7 @@ void AnimationEditor::draw_top_down_view_sprite(Sprite* s) {
         ) {
             tint = al_map_rgb(0, 128, 255);
         }
-        draw_bitmap(
+        drawBitmap(
             s->bitmap, coords,
             Point(
                 s->bmp_size.x * scale.x,
@@ -754,14 +754,14 @@ void AnimationEditor::draw_top_down_view_sprite(Sprite* s) {
         Point coords;
         float angle;
         Point size;
-        get_sprite_basic_top_effects(
+        getSpriteBasicTopEffects(
             s, next_s, interpolation_factor,
             &coords, &angle, &size
         );
-        draw_bitmap(top_bmp[cur_maturity], coords, size, angle);
+        drawBitmap(top_bmp[cur_maturity], coords, size, angle);
     }
     
     if(comparison_above) {
-        draw_comparison();
+        drawComparison();
     }
 }

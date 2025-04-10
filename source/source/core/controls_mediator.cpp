@@ -37,7 +37,7 @@
  * control bind.
  * @param auto_repeat Auto-repeat threshold.
  */
-void ControlsMediator::add_player_action_type(
+void ControlsMediator::addPlayerActionType(
     PLAYER_ACTION_TYPE id, PLAYER_ACTION_CAT category,
     const string &name, const string &description, const string &internal_name,
     const string &default_bind_str, float auto_repeat
@@ -64,7 +64,7 @@ void ControlsMediator::add_player_action_type(
  * If this event does not pertain to any valid input, an input of type
  * INPUT_SOURCE_TYPE_NONE is returned.
  */
-PlayerInput ControlsMediator::allegro_event_to_input(
+PlayerInput ControlsMediator::allegroEventToInput(
     const ALLEGRO_EVENT &ev
 ) const {
     PlayerInput input;
@@ -144,7 +144,7 @@ vector<ControlBind> &ControlsMediator::binds() {
  * @param action_type_id ID of the action type.
  * @return The bind.
  */
-ControlBind ControlsMediator::find_bind(
+ControlBind ControlsMediator::findBind(
     const PLAYER_ACTION_TYPE action_type_id
 ) const {
     for(size_t b = 0; b < mgr.binds.size(); b++) {
@@ -163,12 +163,12 @@ ControlBind ControlsMediator::find_bind(
  * @param action_name Name of the action.
  * @return The bind.
  */
-ControlBind ControlsMediator::find_bind(
+ControlBind ControlsMediator::findBind(
     const string &action_name
 ) const {
     for(size_t b = 0; b < player_action_types.size(); b++) {
         if(player_action_types[b].internal_name == action_name) {
-            return find_bind(player_action_types[b].id);
+            return findBind(player_action_types[b].id);
         }
     }
     return ControlBind();
@@ -181,7 +181,7 @@ ControlBind ControlsMediator::find_bind(
  * @return The types.
  */
 const vector<PfePlayerActionType>
-&ControlsMediator::get_all_player_action_types() const {
+&ControlsMediator::getAllPlayerActionTypes() const {
     return player_action_types;
 }
 
@@ -192,7 +192,7 @@ const vector<PfePlayerActionType>
  * @param action_id ID of the player action.
  * @return The type, or an empty type on failure.
  */
-PfePlayerActionType ControlsMediator::get_player_action_type(
+PfePlayerActionType ControlsMediator::getPlayerActionType(
     int action_id
 ) const {
     for(size_t b = 0; b < player_action_types.size(); b++) {
@@ -211,7 +211,7 @@ PfePlayerActionType ControlsMediator::get_player_action_type(
  * @param action_id ID of the player action.
  * @return The name, or an empty string on failure.
  */
-string ControlsMediator::get_player_action_type_internal_name(
+string ControlsMediator::getPlayerActionTypeInternalName(
     int action_id
 ) {
     for(size_t b = 0; b < player_action_types.size(); b++) {
@@ -229,7 +229,7 @@ string ControlsMediator::get_player_action_type_internal_name(
  * @param player_action_type_id Action type to use.
  * @return The value.
  */
-float ControlsMediator::get_player_action_type_value(
+float ControlsMediator::getPlayerActionTypeValue(
     PLAYER_ACTION_TYPE player_action_type_id
 ) {
     return mgr.getValue((int) player_action_type_id);
@@ -242,8 +242,8 @@ float ControlsMediator::get_player_action_type_value(
  * @param ev The Allegro event.
  * @return Whether the event was handled.
  */
-bool ControlsMediator::handle_allegro_event(const ALLEGRO_EVENT &ev) {
-    PlayerInput input = allegro_event_to_input(ev);
+bool ControlsMediator::handleAllegroEvent(const ALLEGRO_EVENT &ev) {
+    PlayerInput input = allegroEventToInput(ev);
     
     if(input.source.type != INPUT_SOURCE_TYPE_NONE) {
         mgr.handleInput(input);
@@ -261,7 +261,7 @@ bool ControlsMediator::handle_allegro_event(const ALLEGRO_EVENT &ev) {
  * @param s Input source to read from.
  * @return The string, or an empty string on error.
  */
-string ControlsMediator::input_source_to_str(
+string ControlsMediator::inputSourceToStr(
     const PlayerInputSource &s
 ) const {
     switch(s.type) {
@@ -301,21 +301,21 @@ string ControlsMediator::input_source_to_str(
  * @param node The node.
  * @param player_nr Player number.
  */
-void ControlsMediator::load_binds_from_data_node(
+void ControlsMediator::loadBindsFromDataNode(
     DataNode* node, unsigned char player_nr
 ) {
     const vector<PfePlayerActionType> &player_action_types =
-        get_all_player_action_types();
+        getAllPlayerActionTypes();
         
     for(size_t a = 0; a < player_action_types.size(); a++) {
         string action_type_name = player_action_types[a].internal_name;
         if(action_type_name.empty()) continue;
         
         DataNode* bind_node = node->getChildByName(action_type_name);
-        vector<string> inputs = semicolon_list_to_vector(bind_node->value);
+        vector<string> inputs = semicolonListToVector(bind_node->value);
         
         for(size_t c = 0; c < inputs.size(); c++) {
-            PlayerInputSource input_source = str_to_input_source(inputs[c]);
+            PlayerInputSource input_source = strToInputSource(inputs[c]);
             if(input_source.type == INPUT_SOURCE_TYPE_NONE) continue;
             
             ControlBind new_bind;
@@ -331,7 +331,7 @@ void ControlsMediator::load_binds_from_data_node(
 /**
  * @brief Ignore player actions from here on.
  */
-void ControlsMediator::start_ignoring_actions() {
+void ControlsMediator::startIgnoringActions() {
     mgr.ignoringActions = true;
 }
 
@@ -342,7 +342,7 @@ void ControlsMediator::start_ignoring_actions() {
  *
  * @param input_source Input source to ignore.
  */
-void ControlsMediator::start_ignoring_input_source(
+void ControlsMediator::startIgnoringInputSource(
     const PlayerInputSource &input_source
 ) {
     mgr.startIgnoringInputSource(input_source);
@@ -352,7 +352,7 @@ void ControlsMediator::start_ignoring_input_source(
 /**
  * @brief No longer ignore player actions from here on.
  */
-void ControlsMediator::stop_ignoring_actions() {
+void ControlsMediator::stopIgnoringActions() {
     mgr.ignoringActions = false;
 }
 
@@ -364,7 +364,7 @@ void ControlsMediator::stop_ignoring_actions() {
  * @param delta_t How much time has passed since the last frame.
  * @return The player actions.
  */
-vector<PlayerAction> ControlsMediator::new_frame(float delta_t) {
+vector<PlayerAction> ControlsMediator::newFrame(float delta_t) {
     return mgr.newFrame(delta_t);
 }
 
@@ -373,7 +373,7 @@ vector<PlayerAction> ControlsMediator::new_frame(float delta_t) {
  * @brief Releases all player inputs. Basically, set all of their values to 0.
  * Useful for when the game state is changed, or the window is out of focus.
  */
-void ControlsMediator::release_all() {
+void ControlsMediator::releaseAll() {
     for(auto &a : mgr.actionTypes) {
         mgr.setValue(a.first, 0.0f);
     }
@@ -386,12 +386,12 @@ void ControlsMediator::release_all() {
  * @param node The node.
  * @param player_nr Player number.
  */
-void ControlsMediator::save_binds_to_data_node(
+void ControlsMediator::saveBindsToDataNode(
     DataNode* node, unsigned char player_nr
 ) {
     map<string, string> bind_strs;
     const vector<PfePlayerActionType> &player_action_types =
-        get_all_player_action_types();
+        getAllPlayerActionTypes();
     const vector<ControlBind> &all_binds = binds();
     
     //Fill the defaults, which are all empty strings.
@@ -405,9 +405,9 @@ void ControlsMediator::save_binds_to_data_node(
     for(size_t b = 0; b < all_binds.size(); b++) {
         if(all_binds[b].playerNr != player_nr) continue;
         PfePlayerActionType action_type =
-            get_player_action_type(all_binds[b].actionTypeId);
+            getPlayerActionType(all_binds[b].actionTypeId);
         bind_strs[action_type.internal_name] +=
-            input_source_to_str(all_binds[b].inputSource) + ";";
+            inputSourceToStr(all_binds[b].inputSource) + ";";
     }
     
     //Save them all.
@@ -425,7 +425,7 @@ void ControlsMediator::save_binds_to_data_node(
  *
  * @param options Options.
  */
-void ControlsMediator::set_options(const ControlsManagerOptions &options) {
+void ControlsMediator::setOptions(const ControlsManagerOptions &options) {
     mgr.options = options;
 }
 
@@ -444,7 +444,7 @@ void ControlsMediator::set_options(const ControlsManagerOptions &options) {
  * @param s String to read from.
  * @return The input, or a default input instance on error.
  */
-PlayerInputSource ControlsMediator::str_to_input_source(
+PlayerInputSource ControlsMediator::strToInputSource(
     const string &s
 ) const {
     PlayerInputSource input_source;

@@ -383,28 +383,28 @@ public:
     
     //--- Function declarations ---
     
-    ALLEGRO_BITMAP* draw_to_bitmap(
+    ALLEGRO_BITMAP* drawToBitmap(
         const MakerTools::AreaImageSettings &settings
     );
     void enter();
     void leave(const GAMEPLAY_LEAVE_TARGET target);
-    void start_leaving(const GAMEPLAY_LEAVE_TARGET target);
-    void change_spray_count(size_t type_idx, signed int amount);
-    size_t get_amount_of_field_pikmin(const PikminType* filter = nullptr);
-    size_t get_amount_of_group_pikmin(const PikminType* filter = nullptr);
-    size_t get_amount_of_idle_pikmin(const PikminType* filter = nullptr);
-    long get_amount_of_onion_pikmin(const PikminType* filter = nullptr);
-    long get_amount_of_total_pikmin(const PikminType* filter = nullptr);
-    void is_near_enemy_and_boss(bool* near_enemy, bool* near_boss);
-    void update_available_leaders();
-    void update_closest_group_members();
+    void startLeaving(const GAMEPLAY_LEAVE_TARGET target);
+    void changeSprayCount(size_t type_idx, signed int amount);
+    size_t getAmountOfFieldPikmin(const PikminType* filter = nullptr);
+    size_t getAmountOfGroupPikmin(const PikminType* filter = nullptr);
+    size_t getAmountOfIdlePikmin(const PikminType* filter = nullptr);
+    long getAmountOfOnionPikmin(const PikminType* filter = nullptr);
+    long getAmountOfTotalPikmin(const PikminType* filter = nullptr);
+    void isNearEnemyAndBoss(bool* near_enemy, bool* near_boss);
+    void updateAvailableLeaders();
+    void updateClosestGroupMembers();
     void load() override;
     void unload() override;
-    void handle_allegro_event(ALLEGRO_EVENT &ev) override;
-    void do_logic() override;
-    void do_drawing() override;
-    void update_transformations() override;
-    string get_name() const override;
+    void handleAllegroEvent(ALLEGRO_EVENT &ev) override;
+    void doLogic() override;
+    void doDrawing() override;
+    void updateTransformations() override;
+    string getName() const override;
     
 private:
 
@@ -463,64 +463,64 @@ private:
     
     //--- Function declarations ---
     
-    void do_aesthetic_leader_logic(float delta_t);
-    void do_aesthetic_logic(float delta_t);
-    void do_game_drawing(
+    void doAestheticLeaderLogic(float delta_t);
+    void doAestheticLogic(float delta_t);
+    void doGameDrawing(
         ALLEGRO_BITMAP* bmp_output = nullptr,
         const ALLEGRO_TRANSFORM* bmp_transform = nullptr,
         const MakerTools::AreaImageSettings &bmp_settings =
             MakerTools::AreaImageSettings()
     );
-    void do_gameplay_leader_logic(float delta_t);
-    void do_gameplay_logic(float delta_t);
-    void do_menu_logic();
-    void draw_background(ALLEGRO_BITMAP* bmp_output);
-    void draw_debug_tools();
-    void draw_leader_cursor(const ALLEGRO_COLOR &color);
-    void draw_ingame_text();
-    void draw_big_msg();
-    void draw_lighting_filter();
-    void draw_gameplay_message_box();
-    void draw_onion_menu();
-    void draw_pause_menu();
-    void draw_precipitation();
-    void draw_system_stuff();
-    void draw_throw_preview();
-    void draw_tree_shadows();
-    void draw_world_components(ALLEGRO_BITMAP* bmp_output);
-    void end_mission(bool cleared);
-    ALLEGRO_BITMAP* generate_fog_bitmap(
+    void doGameplayLeaderLogic(float delta_t);
+    void doGameplayLogic(float delta_t);
+    void doMenuLogic();
+    void drawBackground(ALLEGRO_BITMAP* bmp_output);
+    void drawDebugTools();
+    void drawLeaderCursor(const ALLEGRO_COLOR &color);
+    void drawIngameText();
+    void drawBigMsg();
+    void drawLightingFilter();
+    void drawGameplayMessageBox();
+    void drawOnionMenu();
+    void drawPauseMenu();
+    void drawPrecipitation();
+    void drawSystemStuff();
+    void drawThrowPreview();
+    void drawTreeShadows();
+    void drawWorldComponents(ALLEGRO_BITMAP* bmp_output);
+    void endMission(bool cleared);
+    ALLEGRO_BITMAP* generateFogBitmap(
         float near_radius, float far_radius
     );
-    Mob* get_closest_group_member(const SubgroupType* type, bool* distant = nullptr);
-    void handle_player_action(const PlayerAction &action);
-    void init_hud();
-    bool is_mission_clear_met();
-    bool is_mission_fail_met(MISSION_FAIL_COND* reason);
-    void load_game_content();
-    void mark_area_cells_active(
+    Mob* getClosestGroupMember(const SubgroupType* type, bool* distant = nullptr);
+    void handlePlayerAction(const PlayerAction &action);
+    void initHud();
+    bool isMissionClearMet();
+    bool isMissionFailMet(MISSION_FAIL_COND* reason);
+    void loadGameContent();
+    void markAreaCellsActive(
         const Point &top_left, const Point &bottom_right
     );
-    void mark_area_cells_active(
+    void markAreaCellsActive(
         int from_x, int to_x, int from_y, int to_y
     );
-    void process_mob_interactions(Mob* m_ptr, size_t m);
-    void process_mob_misc_interactions(
+    void processMobInteractions(Mob* m_ptr, size_t m);
+    void processMobMiscInteractions(
         Mob* m_ptr, Mob* m2_ptr, size_t m, size_t m2,
         const Distance &d, const Distance &d_between,
         vector<PendingIntermobEvent> &pending_intermob_events
     );
-    void process_mob_reaches(
+    void processMobReaches(
         Mob* m_ptr, Mob* m2_ptr, size_t m, size_t m2, const Distance &d_between,
         vector<PendingIntermobEvent> &pending_intermob_events
     );
-    void process_mob_touches(
+    void processMobTouches(
         Mob* m_ptr, Mob* m2_ptr, size_t m, size_t m2, Distance &d
     );
-    bool should_ignore_player_action(const PlayerAction &action);
-    void unload_game_content();
-    void update_area_active_cells();
-    void update_mob_is_active_flag();
+    bool shouldIngorePlayerAction(const PlayerAction &action);
+    void unloadGameContent();
+    void updateAreaActiveCells();
+    void updateMobIsActiveFlag();
     
 };
 

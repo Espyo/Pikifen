@@ -39,7 +39,7 @@ GroupTaskType::GroupTaskType() :
  *
  * @param file File to read from.
  */
-void GroupTaskType::load_cat_properties(DataNode* file) {
+void GroupTaskType::loadCatProperties(DataNode* file) {
     ReaderSetter rs(file);
     
     string contribution_method_str;
@@ -82,7 +82,7 @@ void GroupTaskType::load_cat_properties(DataNode* file) {
         }
     }
     
-    worker_pikmin_angle = deg_to_rad(worker_pikmin_angle);
+    worker_pikmin_angle = degToRad(worker_pikmin_angle);
     
     if(worker_pikmin_pose_node) {
         if(worker_pikmin_pose_str == "stopped") {

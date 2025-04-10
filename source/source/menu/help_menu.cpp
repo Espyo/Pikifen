@@ -36,21 +36,21 @@ const string GUI_FILE_NAME = "help";
  * limit in that dimension.
  * @param text Text to draw.
  */
-void HelpMenu::draw_tidbit(
+void HelpMenu::drawTidbit(
     const ALLEGRO_FONT* const font, const Point &where,
     const Point &max_size, const string &text
 ) {
     //Get the tokens that make up the tidbit.
-    vector<StringToken> tokens = tokenize_string(text);
+    vector<StringToken> tokens = tokenizeString(text);
     if(tokens.empty()) return;
     
     int line_height = al_get_font_line_height(font);
     
-    set_string_token_widths(tokens, font, game.sys_content.fnt_slim, line_height, true);
+    setStringTokenWidths(tokens, font, game.sys_content.fnt_slim, line_height, true);
     
     //Split long lines.
     vector<vector<StringToken> > tokens_per_line =
-        split_long_string_with_tokens(tokens, max_size.x);
+        splitLongStringWithTokens(tokens, max_size.x);
         
     if(tokens_per_line.empty()) return;
     
@@ -66,7 +66,7 @@ void HelpMenu::draw_tidbit(
     
     //Draw!
     for(size_t l = 0; l < tokens_per_line.size(); l++) {
-        draw_string_tokens(
+        drawStringTokens(
             tokens_per_line[l], game.sys_content.fnt_standard, game.sys_content.fnt_slim,
             true,
             Point(
@@ -102,7 +102,7 @@ void HelpMenu::load() {
         category_tidbits.reserve(n_tidbits);
         for(size_t t = 0; t < n_tidbits; t++) {
             vector<string> parts =
-                semicolon_list_to_vector(category_node->getChild(t)->name);
+                semicolonListToVector(category_node->getChild(t)->name);
             Tidbit new_t;
             new_t.name = parts.size() > 0 ? parts[0] : "";
             new_t.description = parts.size() > 1 ? parts[1] : "";
@@ -119,7 +119,7 @@ void HelpMenu::load() {
     }
     
     //Initialize the GUIs.
-    init_gui_main(gui_file);
+    initGuiMain(gui_file);
     
     //Finish the menu class setup.
     guis.push_back(&gui);
@@ -130,22 +130,22 @@ void HelpMenu::load() {
 /**
  * @brief Initializes the main GUI.
  */
-void HelpMenu::init_gui_main(DataNode* gui_file) {
+void HelpMenu::initGuiMain(DataNode* gui_file) {
     //Menu items.
-    gui.register_coords("back",        12,  5, 20,  6);
-    gui.register_coords("back_input",   3,  7,  4,  4);
-    gui.register_coords("gameplay1",   22, 15, 36,  6);
-    gui.register_coords("gameplay2",   22, 23, 36,  6);
-    gui.register_coords("controls",    22, 31, 36,  6);
-    gui.register_coords("pikmin",      22, 39, 36,  6);
-    gui.register_coords("objects",     22, 47, 36,  6);
-    gui.register_coords("manual",      22, 54, 36,  4);
-    gui.register_coords("category",    71,  5, 54,  6);
-    gui.register_coords("list",        69, 39, 50, 54);
-    gui.register_coords("list_scroll", 96, 39,  2, 54);
-    gui.register_coords("image",       16, 83, 28, 30);
-    gui.register_coords("tooltip",     65, 83, 66, 30);
-    gui.read_coords(gui_file->getChildByName("positions"));
+    gui.registerCoords("back",        12,  5, 20,  6);
+    gui.registerCoords("back_input",   3,  7,  4,  4);
+    gui.registerCoords("gameplay1",   22, 15, 36,  6);
+    gui.registerCoords("gameplay2",   22, 23, 36,  6);
+    gui.registerCoords("controls",    22, 31, 36,  6);
+    gui.registerCoords("pikmin",      22, 39, 36,  6);
+    gui.registerCoords("objects",     22, 47, 36,  6);
+    gui.registerCoords("manual",      22, 54, 36,  4);
+    gui.registerCoords("category",    71,  5, 54,  6);
+    gui.registerCoords("list",        69, 39, 50, 54);
+    gui.registerCoords("list_scroll", 96, 39,  2, 54);
+    gui.registerCoords("image",       16, 83, 28, 30);
+    gui.registerCoords("tooltip",     65, 83, 66, 30);
+    gui.readCoords(gui_file->getChildByName("positions"));
     
     //Back button.
     gui.back_item =
@@ -158,101 +158,101 @@ void HelpMenu::init_gui_main(DataNode* gui_file) {
     };
     gui.back_item->on_get_tooltip =
     [] () { return "Return to the previous menu."; };
-    gui.add_item(gui.back_item, "back");
+    gui.addItem(gui.back_item, "back");
     
     //Back input icon.
-    gui_add_back_input_icon(&gui);
+    guiAddBackInputIcon(&gui);
     
     //Gameplay basics button.
     ButtonGuiItem* gameplay1_button =
         new ButtonGuiItem("Gameplay basics", game.sys_content.fnt_standard);
     gameplay1_button->on_activate =
     [this] (const Point &) {
-        populate_tidbits(HELP_CATEGORY_GAMEPLAY1);
+        populateTidbits(HELP_CATEGORY_GAMEPLAY1);
     };
     gameplay1_button->on_get_tooltip =
     [] () {
         return "Show help about basic gameplay features.";
     };
-    gui.add_item(gameplay1_button, "gameplay1");
+    gui.addItem(gameplay1_button, "gameplay1");
     
     //Gameplay advanced button.
     ButtonGuiItem* gameplay2_button =
         new ButtonGuiItem("Advanced gameplay", game.sys_content.fnt_standard);
     gameplay2_button->on_activate =
     [this] (const Point &) {
-        populate_tidbits(HELP_CATEGORY_GAMEPLAY2);
+        populateTidbits(HELP_CATEGORY_GAMEPLAY2);
     };
     gameplay2_button->on_get_tooltip =
     [] () {
         return "Show advanced gameplay tips.";
     };
-    gui.add_item(gameplay2_button, "gameplay2");
+    gui.addItem(gameplay2_button, "gameplay2");
     
     //Controls button.
     ButtonGuiItem* controls_button =
         new ButtonGuiItem("Controls", game.sys_content.fnt_standard);
     controls_button->on_activate =
     [this] (const Point &) {
-        populate_tidbits(HELP_CATEGORY_CONTROLS);
+        populateTidbits(HELP_CATEGORY_CONTROLS);
     };
     controls_button->on_get_tooltip =
     [] () {
         return "Show game controls and certain actions you can perform.";
     };
-    gui.add_item(controls_button, "controls");
+    gui.addItem(controls_button, "controls");
     
     //Pikmin button.
     ButtonGuiItem* pikmin_button =
         new ButtonGuiItem("Pikmin types", game.sys_content.fnt_standard);
     pikmin_button->on_activate =
     [this] (const Point &) {
-        populate_tidbits(HELP_CATEGORY_PIKMIN);
+        populateTidbits(HELP_CATEGORY_PIKMIN);
     };
     pikmin_button->on_get_tooltip =
     [] () {
         return "Show a description of each Pikmin type.";
     };
-    gui.add_item(pikmin_button, "pikmin");
+    gui.addItem(pikmin_button, "pikmin");
     
     //Objects button.
     ButtonGuiItem* objects_button =
         new ButtonGuiItem("Objects", game.sys_content.fnt_standard);
     objects_button->on_activate =
     [this] (const Point &) {
-        populate_tidbits(HELP_CATEGORY_OBJECTS);
+        populateTidbits(HELP_CATEGORY_OBJECTS);
     };
     objects_button->on_get_tooltip =
     [] () {
         return "Show help about some noteworthy objects you'll find.";
     };
-    gui.add_item(objects_button, "objects");
+    gui.addItem(objects_button, "objects");
     
     //Manual text.
     BulletGuiItem* manual_bullet =
         new BulletGuiItem("More help...", game.sys_content.fnt_standard);
     manual_bullet->on_activate =
     [] (const Point &) {
-        open_manual("home.html");
+        openManual("home.html");
     };
     manual_bullet->on_get_tooltip = [] () {
         return
             "Click to open the manual (in the game's folder) for more help.";
     };
-    gui.add_item(manual_bullet, "manual");
+    gui.addItem(manual_bullet, "manual");
     
     //Category text.
     category_text = new TextGuiItem("Help", game.sys_content.fnt_standard);
-    gui.add_item(category_text, "category");
+    gui.addItem(category_text, "category");
     
     //Tidbit list box.
     tidbit_list = new ListGuiItem();
-    gui.add_item(tidbit_list, "list");
+    gui.addItem(tidbit_list, "list");
     
     //Tidbit list scrollbar.
     ScrollGuiItem* list_scroll = new ScrollGuiItem();
     list_scroll->list_item = tidbit_list;
-    gui.add_item(list_scroll, "list_scroll");
+    gui.addItem(list_scroll, "list_scroll");
     
     //Image item.
     GuiItem* image_item = new GuiItem();
@@ -260,12 +260,12 @@ void HelpMenu::init_gui_main(DataNode* gui_file) {
     [this] (const DrawInfo & draw) {
         if(cur_tidbit == nullptr) return;
         if(cur_tidbit->image == nullptr) return;
-        draw_bitmap_in_box(
+        drawBitmapInBox(
             cur_tidbit->image,
             draw.center, draw.size, false
         );
     };
-    gui.add_item(image_item, "image");
+    gui.addItem(image_item, "image");
     
     //Tooltip text.
     TextGuiItem* tooltip_text =
@@ -273,15 +273,15 @@ void HelpMenu::init_gui_main(DataNode* gui_file) {
     tooltip_text->on_draw =
         [this]
     (const DrawInfo & draw) {
-        draw_tidbit(
+        drawTidbit(
             game.sys_content.fnt_standard, draw.center, draw.size,
-            gui.get_current_tooltip()
+            gui.getCurrentTooltip()
         );
     };
-    gui.add_item(tooltip_text, "tooltip");
+    gui.addItem(tooltip_text, "tooltip");
     
     //Finishing touches.
-    gui.set_selected_item(gui.back_item, true);
+    gui.setSelectedItem(gui.back_item, true);
     gui.on_selection_changed =
     [this] () {
         cur_tidbit = nullptr;
@@ -294,7 +294,7 @@ void HelpMenu::init_gui_main(DataNode* gui_file) {
  *
  * @param category Category of tidbits to use.
  */
-void HelpMenu::populate_tidbits(const HELP_CATEGORY category) {
+void HelpMenu::populateTidbits(const HELP_CATEGORY category) {
     vector<Tidbit> &category_tidbits = tidbits[category];
     
     switch(category) {
@@ -319,7 +319,7 @@ void HelpMenu::populate_tidbits(const HELP_CATEGORY category) {
     }
     }
     
-    tidbit_list->delete_all_children();
+    tidbit_list->deleteAllChildren();
     
     for(size_t t = 0; t < category_tidbits.size(); t++) {
         Tidbit* t_ptr = &category_tidbits[t];
@@ -336,14 +336,14 @@ void HelpMenu::populate_tidbits(const HELP_CATEGORY category) {
         tidbit_bullet->on_selected = [this, t_ptr] () {
             cur_tidbit = t_ptr;
         };
-        tidbit_bullet->start_juice_animation(
+        tidbit_bullet->startJuiceAnimation(
             GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
         );
-        tidbit_list->add_child(tidbit_bullet);
-        gui.add_item(tidbit_bullet);
+        tidbit_list->addChild(tidbit_bullet);
+        gui.addItem(tidbit_bullet);
     }
     
-    category_text->start_juice_animation(
+    category_text->startJuiceAnimation(
         GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
     );
 }

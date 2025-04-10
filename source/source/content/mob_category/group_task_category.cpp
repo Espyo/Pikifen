@@ -32,7 +32,7 @@ GroupTaskCategory::GroupTaskCategory() :
 /**
  * @brief Clears the list of registered types of group tasks.
  */
-void GroupTaskCategory::clear_types() {
+void GroupTaskCategory::clearTypes() {
     for(auto &t : game.content.mob_types.list.group_task) {
         delete t.second;
     }
@@ -48,7 +48,7 @@ void GroupTaskCategory::clear_types() {
  * @param angle Starting angle.
  * @return The mob.
  */
-Mob* GroupTaskCategory::create_mob(
+Mob* GroupTaskCategory::createMob(
     const Point &pos, MobType* type, float angle
 ) {
     GroupTask* m = new GroupTask(pos, (GroupTaskType*) type, angle);
@@ -62,7 +62,7 @@ Mob* GroupTaskCategory::create_mob(
  *
  * @return The type.
  */
-MobType* GroupTaskCategory::create_type() {
+MobType* GroupTaskCategory::createType() {
     return new GroupTaskType();
 }
 
@@ -72,7 +72,7 @@ MobType* GroupTaskCategory::create_type() {
  *
  * @param m The mob to erase.
  */
-void GroupTaskCategory::erase_mob(Mob* m) {
+void GroupTaskCategory::eraseMob(Mob* m) {
     game.states.gameplay->mobs.group_tasks.erase(
         find(
             game.states.gameplay->mobs.group_tasks.begin(),
@@ -90,7 +90,7 @@ void GroupTaskCategory::erase_mob(Mob* m) {
  * @param internal_name Internal name of the mob type to get.
  * @return The type.
  */
-MobType* GroupTaskCategory::get_type(const string &internal_name) const {
+MobType* GroupTaskCategory::getType(const string &internal_name) const {
     auto it = game.content.mob_types.list.group_task.find(internal_name);
     if(it == game.content.mob_types.list.group_task.end()) return nullptr;
     return it->second;
@@ -102,7 +102,7 @@ MobType* GroupTaskCategory::get_type(const string &internal_name) const {
  *
  * @param list This list gets filled with the mob type internal names.
  */
-void GroupTaskCategory::get_type_names(vector<string> &list) const {
+void GroupTaskCategory::getTypeNames(vector<string> &list) const {
     for(auto &t : game.content.mob_types.list.group_task) {
         list.push_back(t.first);
     }
@@ -115,6 +115,6 @@ void GroupTaskCategory::get_type_names(vector<string> &list) const {
  * @param internal_name Internal name of the mob type.
  * @param type The mob type to register.
  */
-void GroupTaskCategory::register_type(const string &internal_name, MobType* type) {
+void GroupTaskCategory::registerType(const string &internal_name, MobType* type) {
     game.content.mob_types.list.group_task[internal_name] = (GroupTaskType*) type;
 }

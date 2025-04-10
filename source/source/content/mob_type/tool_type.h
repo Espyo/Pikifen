@@ -48,7 +48,7 @@ public:
     //--- Function declarations ---
     
     ToolType();
-    void load_cat_properties(DataNode* file) override;
-    void load_cat_resources(DataNode* file) override;
+    void loadCatProperties(DataNode* file) override;
+    void loadCatResources(DataNode* file) override;
     
 };

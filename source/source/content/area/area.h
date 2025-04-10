@@ -76,12 +76,12 @@ struct Blockmap {
     
     //--- Function declarations ---
     
-    size_t get_col(float x) const;
-    size_t get_row(float y) const;
-    bool get_edges_in_region(
+    size_t getCol(float x) const;
+    size_t getRow(float y) const;
+    bool getEdgesInRegion(
         const Point &tl, const Point &br, set<Edge*> &edges
     ) const;
-    Point get_top_left_corner(size_t col, size_t row) const;
+    Point getTopLeftCorner(size_t col, size_t row) const;
     void clear();
     
 };
@@ -261,49 +261,49 @@ struct Area : public Content {
     
     //--- Function declarations ---
     
-    void check_stability();
+    void checkStability();
     void cleanup(bool* out_deleted_sectors = nullptr);
     void clone(Area &other);
-    void connect_edge_to_sector(Edge* e_ptr, Sector* s_ptr, size_t side);
-    void connect_edge_to_vertex(Edge* e_ptr, Vertex* v_ptr, size_t endpoint);
-    void connect_sector_edges(Sector* s_ptr);
-    void connect_vertex_edges(Vertex* v_ptr);
-    size_t find_edge_idx(const Edge* e_ptr) const;
-    size_t find_mob_gen_idx(const MobGen* m_ptr) const;
-    size_t find_sector_idx(const Sector* s_ptr) const;
-    size_t find_vertex_idx(const Vertex* v_ptr) const;
-    void fix_edge_idxs(Edge* e_ptr);
-    void fix_edge_pointers(Edge* e_ptr);
-    void fix_path_stop_idxs(PathStop* s_ptr);
-    void fix_path_stop_pointers(PathStop* s_ptr);
-    void fix_sector_idxs(Sector* s_ptr);
-    void fix_sector_pointers(Sector* s_ptr);
-    void fix_vertex_idxs(Vertex* v_ptr);
-    void fix_vertex_pointers(Vertex* v_ptr);
-    void generate_blockmap();
-    void generate_edges_blockmap(const vector<Edge*> &edges);
-    size_t get_nr_path_links();
-    void load_main_data_from_data_node(
+    void connectEdgeToSector(Edge* e_ptr, Sector* s_ptr, size_t side);
+    void connectEdgeToVertex(Edge* e_ptr, Vertex* v_ptr, size_t endpoint);
+    void connectSectorEdges(Sector* s_ptr);
+    void connectVertexEdges(Vertex* v_ptr);
+    size_t findEdgeIdx(const Edge* e_ptr) const;
+    size_t findMobGenIdx(const MobGen* m_ptr) const;
+    size_t findSectorIdx(const Sector* s_ptr) const;
+    size_t findVertexIdx(const Vertex* v_ptr) const;
+    void fixEdgeIdxs(Edge* e_ptr);
+    void fixEdgePointers(Edge* e_ptr);
+    void fixPathStopIdxs(PathStop* s_ptr);
+    void fixPathStopPointers(PathStop* s_ptr);
+    void fixSectorIdxs(Sector* s_ptr);
+    void fixSectorPointers(Sector* s_ptr);
+    void fixVertexIdxs(Vertex* v_ptr);
+    void fixVertexPointers(Vertex* v_ptr);
+    void generateBlockmap();
+    void generateEdgesBlockmap(const vector<Edge*> &edges);
+    size_t getNrPathLinks();
+    void loadMainDataFromDataNode(
         DataNode* node, CONTENT_LOAD_LEVEL level
     );
-    void load_mission_data_from_data_node(DataNode* node);
-    void load_geometry_from_data_node(
+    void loadMissionDataFromDataNode(DataNode* node);
+    void loadGeometryFromDataNode(
         DataNode* node, CONTENT_LOAD_LEVEL level
     );
-    void load_thumbnail(const string &thumbnail_path);
-    Edge* new_edge();
-    Sector* new_sector();
-    Vertex* new_vertex();
-    void remove_vertex(size_t v_idx);
-    void remove_vertex(const Vertex* v_ptr);
-    void remove_edge(size_t e_idx);
-    void remove_edge(const Edge* e_ptr);
-    void remove_sector(size_t s_idx);
-    void remove_sector(const Sector* s_ptr);
-    void save_geometry_to_data_node(DataNode* node);
-    void save_main_data_to_data_node(DataNode* node);
-    void save_mission_data_to_data_node(DataNode* node);
-    void save_thumbnail(bool to_backup);
+    void loadThumbnail(const string &thumbnail_path);
+    Edge* newEdge();
+    Sector* newSector();
+    Vertex* newVertex();
+    void removeVertex(size_t v_idx);
+    void removeVertex(const Vertex* v_ptr);
+    void removeEdge(size_t e_idx);
+    void removeEdge(const Edge* e_ptr);
+    void removeSector(size_t s_idx);
+    void removeSector(const Sector* s_ptr);
+    void saveGeometryToDataNode(DataNode* node);
+    void saveMainDataToDataNode(DataNode* node);
+    void saveMissionDataToDataNode(DataNode* node);
+    void saveThumbnail(bool to_backup);
     void clear();
     
 };

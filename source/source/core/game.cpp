@@ -94,7 +94,7 @@ Game::Game() {
  * If you try to change to that state when it is not loaded,
  * things will go wrong.
  */
-void Game::change_state(
+void Game::changeState(
     GameState* new_state, bool unload_current, bool load_new
 ) {
     if(cur_state && unload_current) {
@@ -122,16 +122,16 @@ void Game::change_state(
  *
  * @return The name.
  */
-string Game::get_cur_state_name() const {
+string Game::getCurStateName() const {
     if(!cur_state) return "none";
-    return cur_state->get_name();
+    return cur_state->getName();
 }
 
 
 /**
  * @brief Performs some global drawings to run every frame.
  */
-void Game::global_drawing() {
+void Game::globalDrawing() {
     //Dear ImGui.
     if(debug.show_dear_imgui_demo) {
         ImGui::ShowDemoWindow();
@@ -153,12 +153,12 @@ void Game::global_drawing() {
 /**
  * @brief Performs some global logic to run every frame.
  */
-void Game::global_logic() {
+void Game::globalLogic() {
     //Player action handling.
     for(size_t a = 0; a < player_actions.size();) {
-        if(maker_tools.handle_global_player_action(player_actions[a])) {
+        if(maker_tools.handleGlobalPlayerAction(player_actions[a])) {
             player_actions.erase(player_actions.begin() + a);
-        } else if(global_handle_system_player_action(player_actions[a])) {
+        } else if(globalHandleSystemPlayerAction(player_actions[a])) {
             player_actions.erase(player_actions.begin() + a);
         } else {
             a++;
@@ -184,7 +184,7 @@ void Game::global_logic() {
  *
  * @param ev Event to handle.
  */
-void Game::global_handle_allegro_event(const ALLEGRO_EVENT &ev) {
+void Game::globalHandleAllegroEvent(const ALLEGRO_EVENT &ev) {
     if(
         ev.type == ALLEGRO_EVENT_MOUSE_AXES ||
         ev.type == ALLEGRO_EVENT_MOUSE_WARPED ||
@@ -192,11 +192,11 @@ void Game::global_handle_allegro_event(const ALLEGRO_EVENT &ev) {
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP
     ) {
         //Mouse cursor.
-        mouse_cursor.update_pos(ev, screen_to_world_transform);
+        mouse_cursor.updatePos(ev, screen_to_world_transform);
         
     } else if(ev.type == ALLEGRO_EVENT_AUDIO_STREAM_FINISHED) {
         //Audio stream finished.
-        game.audio.handle_stream_finished(
+        game.audio.handleStreamFinished(
             (ALLEGRO_AUDIO_STREAM*) (ev.any.source)
         );
         
@@ -222,9 +222,9 @@ void Game::global_handle_allegro_event(const ALLEGRO_EVENT &ev) {
  * @param action The action.
  * @return Whether it got handled.
  */
-bool Game::global_handle_system_player_action(const PlayerAction &action) {
+bool Game::globalHandleSystemPlayerAction(const PlayerAction &action) {
     bool is_system_action =
-        controls.get_player_action_type(action.actionTypeId).category ==
+        controls.getPlayerActionType(action.actionTypeId).category ==
         PLAYER_ACTION_CAT_SYSTEM;
     if(!is_system_action) return false;
     if(action.value < 0.5f) return false;
@@ -235,7 +235,7 @@ bool Game::global_handle_system_player_action(const PlayerAction &action) {
         break;
         
     } case PLAYER_ACTION_TYPE_SCREENSHOT: {
-        save_screenshot();
+        saveScreenshot();
         break;
     }
     }
@@ -248,7 +248,7 @@ bool Game::global_handle_system_player_action(const PlayerAction &action) {
  * @brief The main loop of the program. Processes events,
  * ticks frames of gameplay, etc.
  */
-void Game::main_loop() {
+void Game::mainLoop() {
     //Used to calculate the time difference between the current and last frames.
     double prev_frame_start_time = 0.0;
     ALLEGRO_EVENT ev;
@@ -265,9 +265,9 @@ void Game::main_loop() {
         
         al_wait_for_event(event_queue, &ev);
         
-        global_handle_allegro_event(ev);
-        cur_state->handle_allegro_event(ev);
-        controls.handle_allegro_event(ev);
+        globalHandleAllegroEvent(ev);
+        cur_state->handleAllegroEvent(ev);
+        controls.handleAllegroEvent(ev);
         
         switch(ev.type) {
         case ALLEGRO_EVENT_TIMER: {
@@ -292,14 +292,14 @@ void Game::main_loop() {
                 time_passed += delta_t;
                 GameState* prev_state = cur_state;
                 
-                player_actions = controls.new_frame(delta_t);
-                global_logic();
-                cur_state->do_logic();
+                player_actions = controls.newFrame(delta_t);
+                globalLogic();
+                cur_state->doLogic();
                 
                 if(cur_state == prev_state) {
                     //Only draw if we didn't change states in the meantime.
-                    cur_state->do_drawing();
-                    global_drawing();
+                    cur_state->doDrawing();
+                    globalDrawing();
                     al_flip_display();
                 } else {
                     ImGui::EndFrame();
@@ -325,14 +325,14 @@ void Game::main_loop() {
  */
 void Game::shutdown() {
     if(perf_mon) {
-        perf_mon->save_log();
+        perf_mon->saveLog();
     }
     
     if(cur_state) {
         cur_state->unload();
     }
     
-    content.unload_all(
+    content.unloadAll(
     vector<CONTENT_TYPE> {
         CONTENT_TYPE_MISC,
         CONTENT_TYPE_BITMAP,
@@ -344,12 +344,12 @@ void Game::shutdown() {
     
     delete dummy_mob_state;
     
-    unload_misc_resources();
-    destroy_mob_categories();
+    unloadMiscResources();
+    destroyMobCategories();
     states.destroy();
-    destroy_misc();
-    destroy_event_things(main_timer, event_queue);
-    destroy_allegro();
+    destroyMisc();
+    destroyEventThings(main_timer, event_queue);
+    destroyAllegro();
 }
 
 
@@ -359,7 +359,7 @@ void Game::shutdown() {
  *
  * @param stream The audio stream.
  */
-void Game::register_audio_stream_source(ALLEGRO_AUDIO_STREAM* stream) {
+void Game::registerAudioStreamSource(ALLEGRO_AUDIO_STREAM* stream) {
     al_register_event_source(
         event_queue,
         al_get_audio_stream_event_source(stream)
@@ -375,11 +375,11 @@ void Game::register_audio_stream_source(ALLEGRO_AUDIO_STREAM* stream) {
  */
 int Game::start() {
     //Allegro initializations.
-    init_allegro();
+    initAllegro();
     
     //Panic check: is there a game_data folder?
-    if(folder_to_vector(FOLDER_PATHS_FROM_ROOT::GAME_DATA, true).empty()) {
-        show_system_message_box(
+    if(folderToVector(FOLDER_PATHS_FROM_ROOT::GAME_DATA, true).empty()) {
+        showSystemMessageBox(
             nullptr, "game_data folder not found!",
             "game_data folder not found!",
             "Could not find the \"game_data\" folder! "
@@ -392,25 +392,25 @@ int Game::start() {
     }
     
     //Essentials.
-    init_essentials();
+    initEssentials();
     states.init();
     
     //Controls and options.
-    init_controls();
-    load_options();
-    save_options();
-    load_statistics();
+    initControls();
+    loadOptions();
+    saveOptions();
+    loadStatistics();
     statistics.startups++;
-    save_statistics();
+    saveStatistics();
     
     //Event stuff.
-    init_event_things(main_timer, event_queue);
+    initEventThings(main_timer, event_queue);
     
     //Other fundamental initializations and loadings.
-    init_misc();
-    init_error_bitmap();
-    content.reload_packs();
-    content.load_all(
+    initMisc();
+    initErrorBitmap();
+    content.reloadPacks();
+    content.loadAll(
     vector<CONTENT_TYPE> {
         CONTENT_TYPE_MISC,
         CONTENT_TYPE_BITMAP,
@@ -420,23 +420,23 @@ int Game::start() {
     },
     CONTENT_LOAD_LEVEL_FULL
     );
-    load_fonts();
-    load_misc_graphics();
-    load_misc_sounds();
+    loadFonts();
+    loadMiscGraphics();
+    loadMiscSounds();
     
     //Draw the basic loading screen.
-    draw_loading_screen("", "", 1.0);
+    drawLoadingScreen("", "", 1.0);
     al_flip_display();
     
     //Init Dear ImGui.
-    init_dear_imgui();
+    initDearImGui();
     
     //Init and load some engine things.
-    init_mob_actions();
-    init_mob_categories();
-    init_misc_databases();
-    load_maker_tools();
-    save_maker_tools();
+    initMobActions();
+    initMobCategories();
+    initMiscDatabases();
+    loadMakerTools();
+    saveMakerTools();
     
     dummy_mob_state = new MobState("dummy");
     
@@ -452,7 +452,7 @@ int Game::start() {
     ) {
         states.gameplay->path_of_area_to_load =
             maker_tools.auto_start_option;
-        change_state(states.gameplay);
+        changeState(states.gameplay);
         
     } else if(
         maker_tools.enabled &&
@@ -460,7 +460,7 @@ int Game::start() {
     ) {
         states.animation_ed->auto_load_file =
             maker_tools.auto_start_option;
-        change_state(states.animation_ed);
+        changeState(states.animation_ed);
         
     } else if(
         maker_tools.enabled &&
@@ -468,7 +468,7 @@ int Game::start() {
     ) {
         states.area_ed->auto_load_folder =
             maker_tools.auto_start_option;
-        change_state(states.area_ed);
+        changeState(states.area_ed);
         
     } else if(
         maker_tools.enabled &&
@@ -476,16 +476,16 @@ int Game::start() {
     ) {
         states.gui_ed->auto_load_file =
             maker_tools.auto_start_option;
-        change_state(states.gui_ed);
+        changeState(states.gui_ed);
     } else if(
         maker_tools.enabled &&
         maker_tools.auto_start_state == "particle_editor"
     ) {
         states.particle_ed->auto_load_file =
             maker_tools.auto_start_option;
-        change_state(states.particle_ed);
+        changeState(states.particle_ed);
     } else {
-        change_state(states.title_screen);
+        changeState(states.title_screen);
     }
     
     return 0;
@@ -494,12 +494,12 @@ int Game::start() {
 
 /**
  * @brief Unloads a loaded state that never got to be unloaded. This should only
- * be the case if change_state was called with instructions to not
+ * be the case if changeState was called with instructions to not
  * unload the previous one.
  *
  * @param loaded_state Loaded state to unload.
  */
-void Game::unload_loaded_state(GameState* loaded_state) {
+void Game::unloadLoadedState(GameState* loaded_state) {
     loaded_state->unload();
 }
 
@@ -510,7 +510,7 @@ void Game::unload_loaded_state(GameState* loaded_state) {
  *
  * @param stream The audio stream.
  */
-void Game::unregister_audio_stream_source(ALLEGRO_AUDIO_STREAM* stream) {
+void Game::unregisterAudioStreamSource(ALLEGRO_AUDIO_STREAM* stream) {
     al_unregister_event_source(
         event_queue,
         al_get_audio_stream_event_source(stream)

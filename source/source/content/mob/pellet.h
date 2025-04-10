@@ -34,6 +34,6 @@ public:
     //--- Function declarations ---
     
     Pellet(const Point &pos, PelletType* type, float angle);
-    void draw_mob() override;
+    void drawMob() override;
     
 };

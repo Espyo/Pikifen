@@ -99,6 +99,6 @@ public:
     //--- Function declarations ---
     
     GroupTaskType();
-    void load_cat_properties(DataNode* file) override;
+    void loadCatProperties(DataNode* file) override;
     
 };

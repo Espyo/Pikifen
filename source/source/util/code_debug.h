@@ -74,6 +74,6 @@ extern double code_debug_benchmark_sum;
 //Number of code benchmarking iterations so far.
 extern unsigned int code_debug_benchmark_iterations;
 
-void code_debug_benchmark_start_measuring();
-double code_debug_benchmark_end_measuring();
-double code_debug_benchmark_get_avg_duration();
+void codeDebugBenchmarkStartMeasuring();
+double codeDebugBenchmarkEndMeasuring();
+double codeDebugBenchmarkGetAvgDuration();

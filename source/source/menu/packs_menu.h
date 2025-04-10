@@ -93,9 +93,9 @@ private:
     
     //--- Function declarations ---
     
-    void change_info(int idx);
-    void init_gui_main();
-    void populate_packs_list();
-    void trigger_restart_warning();
+    void changeInfo(int idx);
+    void initGuiMain();
+    void populatePacksList();
+    void triggerRestartWarning();
     
 };

@@ -230,7 +230,7 @@ const float GRID_INTERVAL = 32.0f;
  *
  * @param file File to read from.
  */
-void Options::load_from_data_node(DataNode* file) {
+void Options::loadFromDataNode(DataNode* file) {
     //Advanced.
     {
         ReaderSetter ars(file->getChildByName("advanced"));
@@ -273,7 +273,7 @@ void Options::load_from_data_node(DataNode* file) {
         ars.set("bg_path", anim_editor.bg_path);
         ars.set("history", history_str);
         
-        anim_editor.history = load_editor_history(history_str);
+        anim_editor.history = loadEditorHistory(history_str);
     }
     
     //Area editor.
@@ -297,7 +297,7 @@ void Options::load_from_data_node(DataNode* file) {
         ars.set("undo_limit", area_editor.undo_limit);
         ars.set("view_mode", view_mode_c);
         
-        area_editor.history = load_editor_history(history_str);
+        area_editor.history = loadEditorHistory(history_str);
         
         snap_mode_c =
             std::min(
@@ -335,7 +335,7 @@ void Options::load_from_data_node(DataNode* file) {
         for(unsigned char p = 0; p < MAX_PLAYERS; p++) {
             DataNode* binds_node =
                 file->getChildByName("control_binds_p" + i2s(p + 1));
-            game.controls.load_binds_from_data_node(binds_node, p);
+            game.controls.loadBindsFromDataNode(binds_node, p);
         }
     }
     
@@ -371,7 +371,7 @@ void Options::load_from_data_node(DataNode* file) {
         
         editors.open_nodes.clear();
         vector<string> open_nodes_vector =
-            semicolon_list_to_vector(open_nodes_str);
+            semicolonListToVector(open_nodes_str);
         for(size_t n = 0; n < open_nodes_vector.size(); n++) {
             editors.open_nodes[open_nodes_vector[n]] = true;
         }
@@ -409,7 +409,7 @@ void Options::load_from_data_node(DataNode* file) {
         grs.set("history", history_str);
         grs.set("snap", gui_editor.snap);
         
-        gui_editor.history = load_editor_history(history_str);
+        gui_editor.history = loadEditorHistory(history_str);
     }
     
     //Misc.
@@ -439,8 +439,8 @@ void Options::load_from_data_node(DataNode* file) {
         prs.set("disabled", packs_disabled_str);
         prs.set("order", packs_load_order_str);
         
-        packs.disabled = semicolon_list_to_vector(packs_disabled_str);
-        packs.order = semicolon_list_to_vector(packs_load_order_str);
+        packs.disabled = semicolonListToVector(packs_disabled_str);
+        packs.order = semicolonListToVector(packs_load_order_str);
     }
     
     //Particle editor.
@@ -452,7 +452,7 @@ void Options::load_from_data_node(DataNode* file) {
         prs.set("grid_interval", particle_editor.grid_interval);
         prs.set("history", history_str);
         
-        particle_editor.history = load_editor_history(history_str);
+        particle_editor.history = loadEditorHistory(history_str);
     }
 }
 
@@ -463,11 +463,11 @@ void Options::load_from_data_node(DataNode* file) {
  * @param str The string.
  * @return Vector with the history.
  */
-vector<pair<string, string> > Options::load_editor_history(
+vector<pair<string, string> > Options::loadEditorHistory(
     const string &str
 ) const {
     vector<pair<string, string> > result;
-    vector<string> parts = semicolon_list_to_vector(str);
+    vector<string> parts = semicolonListToVector(str);
     for(size_t e = 0; e < parts.size(); e += 2) {
         result.push_back(make_pair(parts[e], parts[e + 1]));
     }
@@ -481,7 +481,7 @@ vector<pair<string, string> > Options::load_editor_history(
  * @param vec Vector with the history.
  * @return The string.
  */
-string Options::save_editor_history(
+string Options::saveEditorHistory(
     const vector<pair<string, string> > &vec
 ) const {
     vector<string> parts;
@@ -498,7 +498,7 @@ string Options::save_editor_history(
  *
  * @param file File to write to.
  */
-void Options::save_to_data_node(DataNode* file) const {
+void Options::saveToDataNode(DataNode* file) const {
     //Advanced.
     {
         GetterWriter agw(file->addNew("advanced"));
@@ -523,7 +523,7 @@ void Options::save_to_data_node(DataNode* file) const {
     
     //Animation editor.
     {
-        string history_str = save_editor_history(anim_editor.history);
+        string history_str = saveEditorHistory(anim_editor.history);
         GetterWriter agw(file->addNew("animation_editor"));
         
         agw.get("bg_path", anim_editor.bg_path);
@@ -532,7 +532,7 @@ void Options::save_to_data_node(DataNode* file) const {
     
     //Area editor.
     {
-        string history_str = save_editor_history(area_editor.history);
+        string history_str = saveEditorHistory(area_editor.history);
         GetterWriter agw(file->addNew("area_editor"));
         
         agw.get("advanced_mode", area_editor.advanced_mode);
@@ -566,7 +566,7 @@ void Options::save_to_data_node(DataNode* file) const {
         for(unsigned char p = 0; p < MAX_PLAYERS; p++) {
             DataNode* binds_node =
                 file->addNew("control_binds_p" + i2s(p + 1));
-            game.controls.save_binds_to_data_node(binds_node, p);
+            game.controls.saveBindsToDataNode(binds_node, p);
         }
     }
     
@@ -611,7 +611,7 @@ void Options::save_to_data_node(DataNode* file) const {
     
     //Gui editor.
     {
-        string history_str = save_editor_history(gui_editor.history);
+        string history_str = saveEditorHistory(gui_editor.history);
         GetterWriter ggw(file->addNew("gui_editor"));
         
         ggw.get("grid_interval", gui_editor.grid_interval);
@@ -640,7 +640,7 @@ void Options::save_to_data_node(DataNode* file) const {
     
     //Particle editor.
     {
-        string history_str = save_editor_history(particle_editor.history);
+        string history_str = saveEditorHistory(particle_editor.history);
         GetterWriter pgw(file->addNew("particle_editor"));
         
         pgw.get("bg_path", particle_editor.bg_path);

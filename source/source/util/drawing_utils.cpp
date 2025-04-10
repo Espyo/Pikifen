@@ -27,14 +27,14 @@
  * @param angle Angle to rotate the bitmap by.
  * @param tint Tint the bitmap with this color.
  */
-void draw_bitmap(
+void drawBitmap(
     ALLEGRO_BITMAP* bmp, const Point &center,
     const Point &size, float angle, const ALLEGRO_COLOR &tint
 ) {
 
     if(size.x == 0 && size.y == 0) return;
     
-    Point bmp_size = get_bitmap_dimensions(bmp);
+    Point bmp_size = getBitmapDimensions(bmp);
     Point scale = size / bmp_size;
     al_draw_tinted_scaled_rotated_bitmap(
         bmp,
@@ -62,7 +62,7 @@ void draw_bitmap(
  * The box does not take angling into account.
  * @param tint Tint the bitmap with this color.
  */
-void draw_bitmap_in_box(
+void drawBitmapInBox(
     ALLEGRO_BITMAP* bmp, const Point &center, const Point &box_size,
     bool scale_up, float angle, const ALLEGRO_COLOR &tint
 ) {
@@ -75,9 +75,9 @@ void draw_bitmap_in_box(
     float max_h = scale_up ? box_size.y : std::min((int) box_size.y, bmp_h);
     
     if(w_diff > h_diff) {
-        draw_bitmap(bmp, center, Point(max_w, -1), angle, tint);
+        drawBitmap(bmp, center, Point(max_w, -1), angle, tint);
     } else {
-        draw_bitmap(bmp, center, Point(-1, max_h), angle, tint);
+        drawBitmap(bmp, center, Point(-1, max_h), angle, tint);
     }
 }
 
@@ -91,13 +91,13 @@ void draw_bitmap_in_box(
  * @param color Its color.
  * @param thickness Thickness of the lines.
  */
-void draw_equilateral_triangle(
+void drawEquilateralTriangle(
     const Point &center, float radius, float angle,
     const ALLEGRO_COLOR &color, float thickness
 ) {
-    Point v1 = center + rotate_point(Point(radius, 0.0f), angle);
-    Point v2 = center + rotate_point(Point(radius, 0.0f), angle + TAU / 3.0f);
-    Point v3 = center + rotate_point(Point(radius, 0.0f), angle - TAU / 3.0f);
+    Point v1 = center + rotatePoint(Point(radius, 0.0f), angle);
+    Point v2 = center + rotatePoint(Point(radius, 0.0f), angle + TAU / 3.0f);
+    Point v3 = center + rotatePoint(Point(radius, 0.0f), angle - TAU / 3.0f);
     al_draw_triangle(v1.x, v1.y, v2.x, v2.y, v3.x, v3.y, color, thickness);
 }
 
@@ -109,7 +109,7 @@ void draw_equilateral_triangle(
  * @param radius How far each point of the diamond reaches from the center.
  * @param color Color the diamond with this color.
  */
-void draw_filled_diamond(
+void drawFilledDiamond(
     const Point &center, float radius, const ALLEGRO_COLOR &color
 ) {
     ALLEGRO_VERTEX vert[4];
@@ -139,13 +139,13 @@ void draw_filled_diamond(
  * @param angle Angle at which its first vertex points.
  * @param color Its color.
  */
-void draw_filled_equilateral_triangle(
+void drawFilledEquilateralTriangle(
     const Point &center, float radius, float angle,
     const ALLEGRO_COLOR &color
 ) {
-    Point v1 = center + rotate_point(Point(radius, 0.0f), angle);
-    Point v2 = center + rotate_point(Point(radius, 0.0f), angle + TAU / 3.0f);
-    Point v3 = center + rotate_point(Point(radius, 0.0f), angle - TAU / 3.0f);
+    Point v1 = center + rotatePoint(Point(radius, 0.0f), angle);
+    Point v2 = center + rotatePoint(Point(radius, 0.0f), angle + TAU / 3.0f);
+    Point v3 = center + rotatePoint(Point(radius, 0.0f), angle - TAU / 3.0f);
     al_draw_filled_triangle(v1.x, v1.y, v2.x, v2.y, v3.x, v3.y, color);
 }
 
@@ -160,7 +160,7 @@ void draw_filled_equilateral_triangle(
  * too small.
  * @param color Color the rectangle with this color.
  */
-void draw_filled_rounded_rectangle(
+void drawFilledRoundedRectangle(
     const Point &center, const Point &size, float radii,
     const ALLEGRO_COLOR &color
 ) {
@@ -185,7 +185,7 @@ void draw_filled_rounded_rectangle(
  * @param color Color to use.
  * @param thickness Thickness to use.
  */
-void draw_rotated_rectangle(
+void drawRotatedRectangle(
     const Point &center, const Point &dimensions,
     float angle, const ALLEGRO_COLOR &color, float thickness
 ) {
@@ -217,7 +217,7 @@ void draw_rotated_rectangle(
  * @param color Color the diamond with this color.
  * @param thickness Line thickness.
  */
-void draw_rounded_rectangle(
+void drawRoundedRectangle(
     const Point &center, const Point &size, float radii,
     const ALLEGRO_COLOR &color, float thickness
 ) {
@@ -248,7 +248,7 @@ void draw_rounded_rectangle(
  * @param further_scale After calculating everything, further scale the
  * text by this much before drawing.
  */
-void draw_text(
+void drawText(
     const string &text, const ALLEGRO_FONT* const font,
     const Point &where, const Point &box_size, const ALLEGRO_COLOR &color,
     int text_flags, V_ALIGN_MODE v_align, bitmask_8_t settings,
@@ -271,27 +271,27 @@ void draw_text(
     //Figure out the scales.
     Point text_orig_size(text_orig_w, text_orig_h);
     Point text_final_scale =
-        scale_rectangle_to_box(
+        scaleRectangleToBox(
             text_orig_size,
             box_size,
-            !has_flag(settings, TEXT_SETTING_FLAG_CANT_GROW_X),
-            !has_flag(settings, TEXT_SETTING_FLAG_CANT_GROW_Y),
-            !has_flag(settings, TEXT_SETTING_FLAG_CANT_SHRINK_X),
-            !has_flag(settings, TEXT_SETTING_FLAG_CANT_SHRINK_Y),
-            has_flag(settings, TEXT_SETTING_FLAG_CAN_CHANGE_RATIO)
+            !hasFlag(settings, TEXT_SETTING_FLAG_CANT_GROW_X),
+            !hasFlag(settings, TEXT_SETTING_FLAG_CANT_GROW_Y),
+            !hasFlag(settings, TEXT_SETTING_FLAG_CANT_SHRINK_X),
+            !hasFlag(settings, TEXT_SETTING_FLAG_CANT_SHRINK_Y),
+            hasFlag(settings, TEXT_SETTING_FLAG_CAN_CHANGE_RATIO)
         );
     Point text_final_size = text_orig_size * text_final_scale;
     
     //Figure out offsets.
     float v_align_offset =
-        get_vertical_align_offset(v_align, text_final_size.y);
+        getVerticalAlignOffset(v_align, text_final_size.y);
         
     //Create the transformation.
     ALLEGRO_TRANSFORM text_transform, old_transform;
-    get_text_drawing_transforms(
+    getTextDrawingTransforms(
         where,
         text_final_scale * further_scale,
-        has_flag(settings, TEXT_SETTING_COMPENSATE_Y_OFFSET) ?
+        hasFlag(settings, TEXT_SETTING_COMPENSATE_Y_OFFSET) ?
         text_orig_oy :
         0.0f,
         v_align_offset * further_scale.y,
@@ -321,7 +321,7 @@ void draw_text(
  * @param further_scale After calculating everything, further scale the
  * text by this much before drawing.
  */
-void draw_text_lines(
+void drawTextLines(
     const string &text, const ALLEGRO_FONT* const font,
     const Point &where, const Point &box_size, const ALLEGRO_COLOR &color,
     int text_flags, V_ALIGN_MODE v_align, bitmask_8_t settings,
@@ -337,30 +337,30 @@ void draw_text_lines(
     int total_orig_width = 0;
     int total_orig_height = 0;
     int line_orig_height = 0;
-    get_multiline_text_dimensions(
+    getMultilineTextDimensions(
         lines, font, &total_orig_width, &total_orig_height, &line_orig_height
     );
     Point total_orig_size(total_orig_width, total_orig_height);
     
     //Figure out the scales.
     Point total_final_scale =
-        scale_rectangle_to_box(
+        scaleRectangleToBox(
             total_orig_size, box_size,
-            !has_flag(settings, TEXT_SETTING_FLAG_CANT_GROW_X),
-            !has_flag(settings, TEXT_SETTING_FLAG_CANT_GROW_Y),
-            !has_flag(settings, TEXT_SETTING_FLAG_CANT_SHRINK_X),
-            !has_flag(settings, TEXT_SETTING_FLAG_CANT_SHRINK_Y),
-            has_flag(settings, TEXT_SETTING_FLAG_CAN_CHANGE_RATIO)
+            !hasFlag(settings, TEXT_SETTING_FLAG_CANT_GROW_X),
+            !hasFlag(settings, TEXT_SETTING_FLAG_CANT_GROW_Y),
+            !hasFlag(settings, TEXT_SETTING_FLAG_CANT_SHRINK_X),
+            !hasFlag(settings, TEXT_SETTING_FLAG_CANT_SHRINK_Y),
+            hasFlag(settings, TEXT_SETTING_FLAG_CAN_CHANGE_RATIO)
         );
     Point total_final_size = total_orig_size * total_final_scale;
     
     //Figure out offsets.
     float v_align_offset =
-        get_vertical_align_offset(v_align, total_final_size.y);
+        getVerticalAlignOffset(v_align, total_final_size.y);
         
     //Create the transformation.
     ALLEGRO_TRANSFORM text_transform, old_transform;
-    get_text_drawing_transforms(
+    getTextDrawingTransforms(
         where,
         total_final_scale * further_scale,
         0.0f, v_align_offset * further_scale.y,
@@ -392,7 +392,7 @@ void draw_text_lines(
  * @param texture Texture to use.
  * @param tint Tint the texture with this color.
  */
-void draw_textured_box(
+void drawTexturedBox(
     const Point &center, const Point &size, ALLEGRO_BITMAP* texture,
     const ALLEGRO_COLOR &tint
 ) {
@@ -531,7 +531,7 @@ void draw_textured_box(
  *
  * Lines are split by a single "\n" character.
  * These are the dimensions of a bitmap
- * that would hold a drawing by draw_text_lines().
+ * that would hold a drawing by drawTextLines().
  *
  * @param lines The text lines.
  * @param font The text's font.
@@ -539,7 +539,7 @@ void draw_textured_box(
  * @param out_height If not nullptr, the height is returned here.
  * @param out_line_height If not nullptr, the line height is returned here.
  */
-void get_multiline_text_dimensions(
+void getMultilineTextDimensions(
     const vector<string> &lines, const ALLEGRO_FONT* const font,
     int* out_width, int* out_height, int* out_line_height
 ) {
@@ -577,7 +577,7 @@ void get_multiline_text_dimensions(
  * @param out_text_transform The text transform is returned here.
  * @param out_old_transform The old (current) transform is returned here.
  */
-void get_text_drawing_transforms(
+void getTextDrawingTransforms(
     const Point &where, const Point &scale,
     float text_orig_oy, float v_align_offset,
     ALLEGRO_TRANSFORM* out_text_transform, ALLEGRO_TRANSFORM* out_old_transform

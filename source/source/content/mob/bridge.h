@@ -75,10 +75,10 @@ public:
     //--- Function declarations ---
     
     Bridge(const Point &pos, BridgeType* bri_type, float angle);
-    static void draw_component(Mob* m);
-    bool check_health();
-    Point get_start_point();
-    void read_script_vars(const ScriptVarReader &svr) override;
+    static void drawComponent(Mob* m);
+    bool checkHealth();
+    Point getStartPoint();
+    void readScriptVars(const ScriptVarReader &svr) override;
     void setup();
     
 };

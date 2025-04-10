@@ -54,7 +54,7 @@ Bridge::Bridge(const Point &pos, BridgeType* type, float angle) :
  *
  * @return Whether new chunks were created.
  */
-bool Bridge::check_health() {
+bool Bridge::checkHealth() {
     //Figure out how many chunks should exist based on the bridge's completion.
     float completion = 1.0f - std::clamp(health / max_health, 0.0f, 1.0f);
     size_t expected_chunks = floor(total_chunks_needed * completion);
@@ -67,7 +67,7 @@ bool Bridge::check_health() {
     MobCategory* custom_category =
         game.mob_categories.get(MOB_CATEGORY_CUSTOM);
     MobType* bridge_component_type =
-        custom_category->get_type("bridge_component");
+        custom_category->getType("bridge_component");
     float chunk_width = total_length / total_chunks_needed;
     vector<Mob*> new_mobs;
     
@@ -97,7 +97,7 @@ bool Bridge::check_health() {
             prev_chunk_combo++;
             float new_component_width = chunk_width * prev_chunk_combo;
             Point offset =
-                rotate_point(
+                rotatePoint(
                     Point(
                         (new_component_width - old_component_width) / 2.0f,
                         0.0f
@@ -108,7 +108,7 @@ bool Bridge::check_health() {
             for(size_t m = 0; m < prev_chunk_components.size(); m++) {
                 prev_chunk_components[m]->pos +=
                     offset;
-                prev_chunk_components[m]->set_rectangular_dim(
+                prev_chunk_components[m]->setRectangularDim(
                     Point(
                         new_component_width,
                         prev_chunk_components[m]->rectangular_dim.y
@@ -120,9 +120,9 @@ bool Bridge::check_health() {
         
             //Create new components. First, the floor component.
             Point offset(x_offset, 0.0f);
-            offset = rotate_point(offset, angle);
+            offset = rotatePoint(offset, angle);
             Mob* floor_component =
-                create_mob(
+                createMob(
                     custom_category,
                     start_pos + offset,
                     bridge_component_type,
@@ -135,7 +135,7 @@ bool Bridge::check_health() {
                 break;
             }
             floor_component->z = start_z + z_offset;
-            floor_component->set_rectangular_dim(
+            floor_component->setRectangularDim(
                 Point(chunk_width, BRIDGE::FLOOR_WIDTH)
             );
             new_mobs.push_back(floor_component);
@@ -144,9 +144,9 @@ bool Bridge::check_health() {
             offset.x = x_offset;
             offset.y =
                 -BRIDGE::FLOOR_WIDTH / 2.0f - bri_type->rail_width / 2.0f;
-            offset = rotate_point(offset, angle);
+            offset = rotatePoint(offset, angle);
             Mob* left_rail_component =
-                create_mob(
+                createMob(
                     custom_category,
                     start_pos + offset,
                     bridge_component_type,
@@ -159,7 +159,7 @@ bool Bridge::check_health() {
                 break;
             }
             left_rail_component->z = start_z + z_offset;
-            left_rail_component->set_rectangular_dim(
+            left_rail_component->setRectangularDim(
                 Point(
                     floor_component->rectangular_dim.x,
                     bri_type->rail_width
@@ -171,9 +171,9 @@ bool Bridge::check_health() {
             //Finally, the right rail component.
             offset.x = x_offset;
             offset.y = BRIDGE::FLOOR_WIDTH / 2.0f + bri_type->rail_width / 2.0f;
-            offset = rotate_point(offset, angle);
+            offset = rotatePoint(offset, angle);
             Mob* right_rail_component =
-                create_mob(
+                createMob(
                     custom_category,
                     start_pos + offset,
                     bridge_component_type,
@@ -186,7 +186,7 @@ bool Bridge::check_health() {
                 break;
             }
             right_rail_component->z = start_z + z_offset;
-            right_rail_component->set_rectangular_dim(
+            right_rail_component->setRectangularDim(
                 left_rail_component->rectangular_dim
             );
             right_rail_component->height = left_rail_component->height;
@@ -208,7 +208,7 @@ bool Bridge::check_health() {
     //Finish setting up the new component mobs.
     for(size_t m = 0; m < new_mobs.size(); m++) {
         Mob* m_ptr = new_mobs[m];
-        enable_flag(m_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
+        enableFlag(m_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
         m_ptr->links.push_back(this);
     }
     
@@ -218,7 +218,7 @@ bool Bridge::check_health() {
         rectangular_dim.x / 2.0f :
         radius;
     Point offset(chunk_width * chunks - mob_radius, 0);
-    offset = rotate_point(offset, angle);
+    offset = rotatePoint(offset, angle);
     pos = start_pos + offset;
     z = start_z + prev_chunk_components[0]->z;
     ground_sector = prev_chunk_components[0]->ground_sector;
@@ -232,11 +232,11 @@ bool Bridge::check_health() {
  *
  * @param m Bridge component mob.
  */
-void Bridge::draw_component(Mob* m) {
+void Bridge::drawComponent(Mob* m) {
     if(m->links.empty() || !m->links[0]) return;
     
     BitmapEffect eff;
-    m->get_sprite_bitmap_effects(
+    m->getSpriteBitmapEffects(
         nullptr, nullptr, 0.0f, &eff,
         SPRITE_BMP_EFFECT_FLAG_SECTOR_BRIGHTNESS
     );
@@ -263,13 +263,13 @@ void Bridge::draw_component(Mob* m) {
         vertexes[v].z = 0.0f;
     }
     
-    vertexes[0].color = map_gray(100);
+    vertexes[0].color = mapGray(100);
     vertexes[0].x = m->rectangular_dim.x / 2.0f;
     vertexes[0].y = -m->rectangular_dim.y / 2.0f;
     vertexes[0].u = texture_offset + m->rectangular_dim.x;
     vertexes[0].v = texture_v0;
     
-    vertexes[1].color = map_gray(100);
+    vertexes[1].color = mapGray(100);
     vertexes[1].x = -m->rectangular_dim.x / 2.0f;
     vertexes[1].y = -m->rectangular_dim.y / 2.0f;
     vertexes[1].u = texture_offset;
@@ -295,13 +295,13 @@ void Bridge::draw_component(Mob* m) {
     vertexes[5].u = texture_offset;
     vertexes[5].v = texture_v0 + 0.75f * m->rectangular_dim.y;
     
-    vertexes[6].color = map_gray(100);
+    vertexes[6].color = mapGray(100);
     vertexes[6].x = vertexes[0].x;
     vertexes[6].y = m->rectangular_dim.y / 2.0f;
     vertexes[6].u = texture_offset + m->rectangular_dim.x;
     vertexes[6].v = texture_v0 + m->rectangular_dim.y;
     
-    vertexes[7].color = map_gray(100);
+    vertexes[7].color = mapGray(100);
     vertexes[7].x = vertexes[1].x;
     vertexes[7].y = m->rectangular_dim.y / 2.0f;
     vertexes[7].u = texture_offset;
@@ -324,7 +324,7 @@ void Bridge::draw_component(Mob* m) {
  *
  * @return The point.
  */
-Point Bridge::get_start_point() {
+Point Bridge::getStartPoint() {
     return start_pos;
 }
 
@@ -334,8 +334,8 @@ Point Bridge::get_start_point() {
  *
  * @param svr Script var reader to use.
  */
-void Bridge::read_script_vars(const ScriptVarReader &svr) {
-    Mob::read_script_vars(svr);
+void Bridge::readScriptVars(const ScriptVarReader &svr) {
+    Mob::readScriptVars(svr);
     
     svr.get("chunks", total_chunks_needed);
 }
@@ -347,8 +347,8 @@ void Bridge::read_script_vars(const ScriptVarReader &svr) {
  */
 void Bridge::setup() {
     if(!links.empty() && links[0]) {
-        total_length = Distance(pos, links[0]->pos).to_float();
-        face(get_angle(pos, links[0]->pos), nullptr, true);
+        total_length = Distance(pos, links[0]->pos).toFloat();
+        face(getAngle(pos, links[0]->pos), nullptr, true);
         delta_z = links[0]->z - z;
         total_chunks_needed =
             std::max(
@@ -357,5 +357,5 @@ void Bridge::setup() {
             );
     }
     
-    check_health();
+    checkHealth();
 }

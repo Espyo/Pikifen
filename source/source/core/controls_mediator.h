@@ -310,7 +310,7 @@ struct ControlsMediator {
     
     //--- Function declarations ---
     
-    void add_player_action_type(
+    void addPlayerActionType(
         PLAYER_ACTION_TYPE id,
         PLAYER_ACTION_CAT category,
         const string &name,
@@ -319,31 +319,31 @@ struct ControlsMediator {
         const string &default_bind_str,
         float auto_repeat = 0.0f
     );
-    const vector<PfePlayerActionType> &get_all_player_action_types() const;
+    const vector<PfePlayerActionType> &getAllPlayerActionTypes() const;
     vector<ControlBind> &binds();
-    string input_source_to_str(const PlayerInputSource &s) const;
-    ControlBind find_bind(
+    string inputSourceToStr(const PlayerInputSource &s) const;
+    ControlBind findBind(
         const PLAYER_ACTION_TYPE action_type_id
     ) const;
-    ControlBind find_bind(
+    ControlBind findBind(
         const string &action_type_name
     ) const;
-    PfePlayerActionType get_player_action_type(int action_id) const;
-    string get_player_action_type_internal_name(int action_id);
-    float get_player_action_type_value(
+    PfePlayerActionType getPlayerActionType(int action_id) const;
+    string getPlayerActionTypeInternalName(int action_id);
+    float getPlayerActionTypeValue(
         PLAYER_ACTION_TYPE player_action_type_id
     );
-    void load_binds_from_data_node(DataNode* node, unsigned char player_nr);
-    PlayerInputSource str_to_input_source(const string &s) const;
-    PlayerInput allegro_event_to_input(const ALLEGRO_EVENT &ev) const;
-    bool handle_allegro_event(const ALLEGRO_EVENT &ev);
-    vector<PlayerAction> new_frame(float delta_t);
-    void release_all();
-    void save_binds_to_data_node(DataNode* node, unsigned char player_nr);
-    void set_options(const ControlsManagerOptions &options);
-    void start_ignoring_actions();
-    void start_ignoring_input_source(const PlayerInputSource &input_source);
-    void stop_ignoring_actions();
+    void loadBindsFromDataNode(DataNode* node, unsigned char player_nr);
+    PlayerInputSource strToInputSource(const string &s) const;
+    PlayerInput allegroEventToInput(const ALLEGRO_EVENT &ev) const;
+    bool handleAllegroEvent(const ALLEGRO_EVENT &ev);
+    vector<PlayerAction> newFrame(float delta_t);
+    void releaseAll();
+    void saveBindsToDataNode(DataNode* node, unsigned char player_nr);
+    void setOptions(const ControlsManagerOptions &options);
+    void startIgnoringActions();
+    void startIgnoringInputSource(const PlayerInputSource &input_source);
+    void stopIgnoringActions();
     
     private:
     

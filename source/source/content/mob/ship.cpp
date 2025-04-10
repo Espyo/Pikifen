@@ -49,13 +49,13 @@ Ship::Ship(const Point &pos, ShipType* type, float angle) :
     Mob(pos, type, angle),
     shi_type(type),
     control_point_final_pos(
-        rotate_point(type->control_point_offset, angle)
+        rotatePoint(type->control_point_offset, angle)
     ),
     receptacle_final_pos(
-        rotate_point(type->receptacle_offset, angle)
+        rotatePoint(type->receptacle_offset, angle)
     ),
     control_point_to_receptacle_dist(
-        Distance(control_point_final_pos, receptacle_final_pos).to_float()
+        Distance(control_point_final_pos, receptacle_final_pos).toFloat()
     ) {
     
     next_tractor_beam_ring_timer.on_end = [this] () {
@@ -88,7 +88,7 @@ Ship::~Ship() {
 /**
  * @brief Draws a ship.
  */
-void Ship::draw_mob() {
+void Ship::drawMob() {
 
     //Draw the rings on the control point.
     for(unsigned char b = 0; b < SHIP::CONTROL_POINT_RING_AMOUNT; b++) {
@@ -110,7 +110,7 @@ void Ship::draw_mob() {
         if(ring_anim_ratio <= 0.3f) {
             //Fading into existence.
             ring_alpha =
-                interpolate_number(
+                interpolateNumber(
                     ring_anim_ratio,
                     0.0f, 0.3f,
                     0, ring_alpha
@@ -118,7 +118,7 @@ void Ship::draw_mob() {
         } else if(ring_anim_ratio >= 0.7f) {
             //Shrinking down.
             ring_alpha =
-                interpolate_number(
+                interpolateNumber(
                     ring_anim_ratio,
                     0.7f, 1.0f,
                     ring_alpha, 0
@@ -126,7 +126,7 @@ void Ship::draw_mob() {
         }
         
         float ring_scale =
-            interpolate_number(
+            interpolateNumber(
                 ease(EASE_METHOD_IN, ring_anim_ratio),
                 0.0f, 1.0f,
                 1.0f, 0.3f
@@ -134,11 +134,11 @@ void Ship::draw_mob() {
         float ring_diameter =
             shi_type->control_point_radius * 2.0f * ring_scale;
             
-        draw_bitmap(
+        drawBitmap(
             game.sys_content.bmp_bright_ring,
             control_point_final_pos, Point(ring_diameter),
             0.0f,
-            change_alpha(ring_color, ring_alpha)
+            changeAlpha(ring_color, ring_alpha)
         );
     }
     
@@ -153,7 +153,7 @@ void Ship::draw_mob() {
         if(ring_anim_ratio <= 0.3f) {
             //Fading into existence.
             ring_alpha =
-                interpolate_number(
+                interpolateNumber(
                     ring_anim_ratio,
                     0.0f, 0.3f,
                     0, ring_alpha
@@ -161,7 +161,7 @@ void Ship::draw_mob() {
         } else if(ring_anim_ratio >= 0.5f) {
             //Shrinking down.
             ring_alpha =
-                interpolate_number(
+                interpolateNumber(
                     ring_anim_ratio,
                     0.5f, 1.0f,
                     ring_alpha, 0
@@ -169,7 +169,7 @@ void Ship::draw_mob() {
         }
         
         float ring_brightness =
-            interpolate_number(
+            interpolateNumber(
                 ring_anim_ratio,
                 0.0f, 1.0f,
                 0.4f, 0.6f
@@ -177,23 +177,23 @@ void Ship::draw_mob() {
             
         ALLEGRO_COLOR ring_color =
             al_color_hsl(tractor_beam_ring_colors[r], 1.0f, ring_brightness);
-        ring_color = change_alpha(ring_color, ring_alpha);
+        ring_color = changeAlpha(ring_color, ring_alpha);
         
         float ring_scale =
-            interpolate_number(
+            interpolateNumber(
                 ring_anim_ratio,
                 0.0f, 1.0f,
                 shi_type->control_point_radius * 2.5f, 1.0f
             );
             
         float distance = control_point_to_receptacle_dist * ring_anim_ratio;
-        float angle = get_angle(control_point_final_pos, receptacle_final_pos);
+        float angle = getAngle(control_point_final_pos, receptacle_final_pos);
         Point ring_pos(
             control_point_final_pos.x + cos(angle) * distance,
             control_point_final_pos.y + sin(angle) * distance
         );
         
-        draw_bitmap(
+        drawBitmap(
             game.sys_content.bmp_bright_ring,
             ring_pos,
             Point(ring_scale),
@@ -202,7 +202,7 @@ void Ship::draw_mob() {
         );
     }
     
-    Mob::draw_mob();
+    Mob::drawMob();
 }
 
 
@@ -211,11 +211,11 @@ void Ship::draw_mob() {
 *
 * @param l Leader to heal.
 */
-void Ship::heal_leader(Leader* l) const {
-    l->set_health(false, true, 1.0);
+void Ship::healLeader(Leader* l) const {
+    l->setHealth(false, true, 1.0);
     
     ParticleGenerator pg =
-        standard_particle_gen_setup(
+        standardParticleGenSetup(
             game.sys_content_names.part_leader_heal, l
         );
     l->particle_generators.push_back(pg);
@@ -229,7 +229,7 @@ void Ship::heal_leader(Leader* l) const {
  * @param l Leader to check.
  * @return Whether the leader is on the control point.
  */
-bool Ship::is_leader_on_cp(const Leader* l) const {
+bool Ship::isLeaderOnCp(const Leader* l) const {
     return
         Distance(l->pos, control_point_final_pos) <=
         shi_type->control_point_radius;
@@ -241,10 +241,10 @@ bool Ship::is_leader_on_cp(const Leader* l) const {
  *
  * @param svr Script var reader to use.
  */
-void Ship::read_script_vars(const ScriptVarReader &svr) {
-    Mob::read_script_vars(svr);
+void Ship::readScriptVars(const ScriptVarReader &svr) {
+    Mob::readScriptVars(svr);
     
-    nest->read_script_vars(svr);
+    nest->readScriptVars(svr);
 }
 
 
@@ -253,7 +253,7 @@ void Ship::read_script_vars(const ScriptVarReader &svr) {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void Ship::tick_class_specifics(float delta_t) {
+void Ship::tickClassSpecifics(float delta_t) {
     nest->tick(delta_t);
     
     if(mobs_being_beamed > 0) {

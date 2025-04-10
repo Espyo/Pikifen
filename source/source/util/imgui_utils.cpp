@@ -300,8 +300,8 @@ bool ImGui::ImageButtonOrganized(
     const ALLEGRO_COLOR &bg_col, const ALLEGRO_COLOR &tint_col
 ) {
     Point final_bmp_size =
-        resize_to_box_keeping_aspect_ratio(
-            get_bitmap_dimensions(bitmap), max_bitmap_size
+        resizeToBoxKeepingAspectRatio(
+            getBitmapDimensions(bitmap), max_bitmap_size
         );
         
     Point padding = (button_size - final_bmp_size) / 2.0f;

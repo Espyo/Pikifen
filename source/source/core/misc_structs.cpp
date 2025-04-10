@@ -250,7 +250,7 @@ void SystemContentNames::load(DataNode* file) {
  * @param report_errors Only issues errors if this is true.
  * @return The audio stream.
  */
-ALLEGRO_AUDIO_STREAM* AudioStreamManager::do_load(
+ALLEGRO_AUDIO_STREAM* AudioStreamManager::doLoad(
     const string &name, DataNode* node, bool report_errors
 ) {
     const auto &it = game.content.song_tracks.manifests.find(name);
@@ -258,9 +258,9 @@ ALLEGRO_AUDIO_STREAM* AudioStreamManager::do_load(
         it != game.content.song_tracks.manifests.end() ?
         it->second.path :
         name;
-    ALLEGRO_AUDIO_STREAM* stream = load_audio_stream(path, node, report_errors);
+    ALLEGRO_AUDIO_STREAM* stream = loadAudioStream(path, node, report_errors);
     if(stream) {
-        game.register_audio_stream_source(stream);
+        game.registerAudioStreamSource(stream);
     }
     return stream;
 }
@@ -271,9 +271,9 @@ ALLEGRO_AUDIO_STREAM* AudioStreamManager::do_load(
  *
  * @param asset Audio stream to unload.
  */
-void AudioStreamManager::do_unload(ALLEGRO_AUDIO_STREAM* asset) {
+void AudioStreamManager::doUnload(ALLEGRO_AUDIO_STREAM* asset) {
     al_drain_audio_stream(asset);
-    game.unregister_audio_stream_source(asset);
+    game.unregisterAudioStreamSource(asset);
     al_destroy_audio_stream(asset);
 }
 
@@ -286,7 +286,7 @@ void AudioStreamManager::do_unload(ALLEGRO_AUDIO_STREAM* asset) {
  * @param report_errors Only issues errors if this is true.
  * @return The bitmap.
  */
-ALLEGRO_BITMAP* BitmapManager::do_load(
+ALLEGRO_BITMAP* BitmapManager::doLoad(
     const string &name, DataNode* node, bool report_errors
 ) {
     const auto &it = game.content.bitmaps.manifests.find(name);
@@ -294,7 +294,7 @@ ALLEGRO_BITMAP* BitmapManager::do_load(
         it != game.content.bitmaps.manifests.end() ?
         it->second.path :
         name;
-    return load_bmp(path, node, report_errors);
+    return loadBmp(path, node, report_errors);
 }
 
 
@@ -303,7 +303,7 @@ ALLEGRO_BITMAP* BitmapManager::do_load(
  *
  * @param asset Bitmap to unload.
  */
-void BitmapManager::do_unload(ALLEGRO_BITMAP* asset) {
+void BitmapManager::doUnload(ALLEGRO_BITMAP* asset) {
     if(asset != game.bmp_error) {
         al_destroy_bitmap(asset);
     }
@@ -315,7 +315,7 @@ void BitmapManager::do_unload(ALLEGRO_BITMAP* asset) {
  *
  * @param new_pos Coordinates to place the camera at.
  */
-void Camera::set_pos(const Point &new_pos) {
+void Camera::setPos(const Point &new_pos) {
     pos = new_pos;
     target_pos = new_pos;
 }
@@ -351,7 +351,7 @@ void Camera::tick(float delta_t) {
  * @brief Updates the camera's visibility box,
  * based on the screen_to_world_transform transformation.
  */
-void Camera::update_box() {
+void Camera::updateBox() {
     box[0] = Point(0.0f);
     box[1] = Point(game.win_w, game.win_h);
     al_transform_coordinates(
@@ -363,7 +363,7 @@ void Camera::update_box() {
         &box[1].x, &box[1].y
     );
     
-    game.audio.set_camera_pos(box[0], box[1]);
+    game.audio.setCameraPos(box[0], box[1]);
     
     box[0].x -= GAMEPLAY::CAMERA_BOX_MARGIN;
     box[0].y -= GAMEPLAY::CAMERA_BOX_MARGIN;
@@ -377,12 +377,12 @@ void Camera::update_box() {
  *
  * @param s Full error description.
  */
-void ErrorManager::emit_in_gameplay(const string &s) {
+void ErrorManager::emitInGameplay(const string &s) {
     string info_str =
         "\n\n\n"
         "ERROR: " + s + "\n\n"
         "(Saved to \"" + FILE_PATHS_FROM_ROOT::ERROR_LOG + "\".)\n\n";
-    print_info(info_str, 30.0f, 3.0f);
+    printInfo(info_str, 30.0f, 3.0f);
 }
 
 
@@ -391,7 +391,7 @@ void ErrorManager::emit_in_gameplay(const string &s) {
  *
  * @param s Full error description.
  */
-void ErrorManager::log_to_console(const string &s) {
+void ErrorManager::logToConsole(const string &s) {
     std::cout << s << std::endl;
 }
 
@@ -401,7 +401,7 @@ void ErrorManager::log_to_console(const string &s) {
  *
  * @param s Full error description.
  */
-void ErrorManager::log_to_file(const string &s) {
+void ErrorManager::logToFile(const string &s) {
     string prev_error_log;
     string output = "";
     
@@ -424,7 +424,7 @@ void ErrorManager::log_to_file(const string &s) {
         if(!prev_error_log.empty()) {
             header += "\n\n";
         }
-        header += "Pikifen version " + get_engine_version_string();
+        header += "Pikifen version " + getEngineVersionString();
         if(!game.config.general.version.empty()) {
             header +=
                 ", " + game.config.general.name + " version " + game.config.general.version;
@@ -435,7 +435,7 @@ void ErrorManager::log_to_file(const string &s) {
     
     //Log this error.
     vector<string> lines = split(s, "\n");
-    output += "  " + get_current_time(false) + ": " + lines[0] + "\n";
+    output += "  " + getCurrentTime(false) + ": " + lines[0] + "\n";
     for(size_t l = 1; l < lines.size(); l++) {
         output += "  " + lines[l] + "\n";
     }
@@ -453,7 +453,7 @@ void ErrorManager::log_to_file(const string &s) {
 /**
  * @brief Prepares everything for an area load.
  */
-void ErrorManager::prepare_area_load() {
+void ErrorManager::prepareAreaLoad() {
     nr_errors_on_area_load = nr_session_errors;
     first_area_load_error.clear();
 }
@@ -476,9 +476,9 @@ void ErrorManager::report(const string &s, const DataNode* d) {
     
     if(first_area_load_error.empty()) first_area_load_error = full_error;
     
-    log_to_console(full_error);
-    log_to_file(full_error);
-    emit_in_gameplay(full_error);
+    logToConsole(full_error);
+    logToFile(full_error);
+    emitInGameplay(full_error);
     
     nr_session_errors++;
 }
@@ -490,7 +490,7 @@ void ErrorManager::report(const string &s, const DataNode* d) {
  * This will override whatever is in the "info" window, which is likely
  * the latest error, but that's okay since this information is more important.
  */
-void ErrorManager::report_area_load_errors() {
+void ErrorManager::reportAreaLoadErrors() {
     if(nr_session_errors <= nr_errors_on_area_load) return;
     
     size_t nr_errors_found =
@@ -505,7 +505,7 @@ void ErrorManager::report_area_load_errors() {
     info_str +=
         "(Saved to \"" + FILE_PATHS_FROM_ROOT::ERROR_LOG + "\".)\n\n";
         
-    print_info(info_str, 30.0f, 3.0f);
+    printInfo(info_str, 30.0f, 3.0f);
 }
 
 
@@ -514,7 +514,7 @@ void ErrorManager::report_area_load_errors() {
  *
  * @return Whether it had errors.
  */
-bool ErrorManager::session_has_errors() {
+bool ErrorManager::sessionHasErrors() {
     return nr_session_errors > 0;
 }
 
@@ -523,12 +523,12 @@ bool ErrorManager::session_has_errors() {
  * @brief Draws the fade overlay, if there is a fade in progress.
  */
 void FadeManager::draw() {
-    if(is_fading()) {
-        unsigned char alpha = (game.fade_mgr.get_perc_left()) * 255;
+    if(isFading()) {
+        unsigned char alpha = (game.fade_mgr.getPercLeft()) * 255;
         al_draw_filled_rectangle(
             0, 0, game.win_w, game.win_h,
             al_map_rgba(
-                0, 0, 0, (game.fade_mgr.is_fade_in() ? alpha : 255 - alpha)
+                0, 0, 0, (game.fade_mgr.isFadeIn() ? alpha : 255 - alpha)
             )
         );
     }
@@ -540,7 +540,7 @@ void FadeManager::draw() {
  *
  * @return The percentage.
  */
-float FadeManager::get_perc_left() const {
+float FadeManager::getPercLeft() const {
     return time_left / GAME::FADE_DURATION;
 }
 
@@ -550,7 +550,7 @@ float FadeManager::get_perc_left() const {
  *
  * @return Whether it is a fade in.
  */
-bool FadeManager::is_fade_in() const {
+bool FadeManager::isFadeIn() const {
     return fade_in;
 }
 
@@ -560,7 +560,7 @@ bool FadeManager::is_fade_in() const {
  *
  * @return Whether it is in progress.
  */
-bool FadeManager::is_fading() const {
+bool FadeManager::isFading() const {
     return time_left > 0;
 }
 
@@ -571,7 +571,7 @@ bool FadeManager::is_fading() const {
  * @param is_fade_in If true, this fades in. If false, fades out.
  * @param on_end Code to run when the fade finishes.
  */
-void FadeManager::start_fade(
+void FadeManager::startFade(
     bool is_fade_in, const std::function<void()> &on_end
 ) {
     time_left = GAME::FADE_DURATION;
@@ -830,7 +830,7 @@ void MouseCursor::show() const {
  * @param screen_to_world_transform Transformation to use to get the
  * screen coordinates.
  */
-void MouseCursor::update_pos(
+void MouseCursor::updatePos(
     const ALLEGRO_EVENT &ev,
     ALLEGRO_TRANSFORM &screen_to_world_transform
 ) {
@@ -877,18 +877,18 @@ void Notification::draw() const {
     float text_box_y1 = -bmp_h - DRAWING::NOTIFICATION_PADDING;
     float text_box_y2 = DRAWING::NOTIFICATION_PADDING;
     
-    draw_bitmap(
+    drawBitmap(
         game.sys_content.bmp_notification,
         Point(0, -bmp_h * 0.5),
         Point(bmp_w, bmp_h),
         0,
-        map_alpha(DRAWING::NOTIFICATION_ALPHA * visibility)
+        mapAlpha(DRAWING::NOTIFICATION_ALPHA * visibility)
     );
     
     if(input_source.type != INPUT_SOURCE_TYPE_NONE) {
         text_box_x1 +=
             DRAWING::NOTIFICATION_CONTROL_SIZE + DRAWING::NOTIFICATION_PADDING;
-        draw_player_input_source_icon(
+        drawPlayerInputSourceIcon(
             game.sys_content.fnt_slim, input_source,
             true,
             Point(
@@ -904,7 +904,7 @@ void Notification::draw() const {
         );
     }
     
-    draw_text(
+    drawText(
         text, game.sys_content.fnt_standard,
         Point(
             (text_box_x1 + text_box_x2) * 0.5,
@@ -914,7 +914,7 @@ void Notification::draw() const {
             text_box_x2 - text_box_x1,
             text_box_y2 - text_box_y1
         ),
-        map_alpha(DRAWING::NOTIFICATION_ALPHA * visibility),
+        mapAlpha(DRAWING::NOTIFICATION_ALPHA * visibility),
         ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, TEXT_SETTING_FLAG_CANT_GROW
     );
     
@@ -928,7 +928,7 @@ void Notification::draw() const {
  *
  * @return The visibility.
  */
-float Notification::get_visibility() const {
+float Notification::getVisibility() const {
     return visibility;
 }
 
@@ -952,7 +952,7 @@ void Notification::reset() {
  * @param text Text to show.
  * @param pos Where to show it in the game world.
  */
-void Notification::set_contents(
+void Notification::setContents(
     const PlayerInputSource &input_source, const string &text, const Point &pos
 ) {
     this->input_source = input_source;
@@ -966,7 +966,7 @@ void Notification::set_contents(
  *
  * @param enabled Whether it's enabled or not.
  */
-void Notification::set_enabled(bool enabled) {
+void Notification::setEnabled(bool enabled) {
     this->enabled = enabled;
 }
 
@@ -1005,7 +1005,7 @@ PerformanceMonitor::PerformanceMonitor() :
  *
  * @param state New state.
  */
-void PerformanceMonitor::enter_state(const PERF_MON_STATE state) {
+void PerformanceMonitor::enterState(const PERF_MON_STATE state) {
     if(paused) return;
     
     cur_state = state;
@@ -1021,11 +1021,11 @@ void PerformanceMonitor::enter_state(const PERF_MON_STATE state) {
 /**
  * @brief Finishes the latest measurement.
  */
-void PerformanceMonitor::finish_measurement() {
+void PerformanceMonitor::finishMeasurement() {
     if(paused) return;
     
     //Check if we were measuring something.
-    engine_assert(
+    engineAssert(
         cur_measurement_start_time != 0.0,
         cur_page.measurements.empty() ?
         "(No measurements)" :
@@ -1055,7 +1055,7 @@ void PerformanceMonitor::finish_measurement() {
 /**
  * @brief Leaves the current state of the monitoring process.
  */
-void PerformanceMonitor::leave_state() {
+void PerformanceMonitor::leaveState() {
     if(paused) return;
     
     cur_page.duration = al_get_time() - cur_state_start_time;
@@ -1136,7 +1136,7 @@ void PerformanceMonitor::reset() {
 /**
  * @brief Saves a log file with all known stats, if there is anything to save.
  */
-void PerformanceMonitor::save_log() {
+void PerformanceMonitor::saveLog() {
     if(loading_page.measurements.empty()) {
         //Nothing to save.
         return;
@@ -1151,8 +1151,8 @@ void PerformanceMonitor::save_log() {
     //Fill out the string.
     string s =
         "\n" +
-        get_current_time(false) +
-        "; Pikifen version " + get_engine_version_string();
+        getCurrentTime(false) +
+        "; Pikifen version " + getEngineVersionString();
     if(!game.config.general.version.empty()) {
         s += ", game version " + game.config.general.version;
     }
@@ -1201,7 +1201,7 @@ void PerformanceMonitor::save_log() {
  *
  * @param name Name of the area.
  */
-void PerformanceMonitor::set_area_name(const string &name) {
+void PerformanceMonitor::setAreaName(const string &name) {
     area_name = name;
 }
 
@@ -1211,7 +1211,7 @@ void PerformanceMonitor::set_area_name(const string &name) {
  *
  * @param paused Pause value.
  */
-void PerformanceMonitor::set_paused(bool paused) {
+void PerformanceMonitor::setPaused(bool paused) {
     this->paused = paused;
 }
 
@@ -1221,11 +1221,11 @@ void PerformanceMonitor::set_paused(bool paused) {
  *
  * @param name Name of the measurement.
  */
-void PerformanceMonitor::start_measurement(const string &name) {
+void PerformanceMonitor::startMeasurement(const string &name) {
     if(paused) return;
     
     //Check if we were already measuring something.
-    engine_assert(
+    engineAssert(
         cur_measurement_start_time == 0.0,
         cur_page.measurements.empty() ?
         "(No measurements)" :
@@ -1251,7 +1251,7 @@ void PerformanceMonitor::Page::write(string &s) {
     
     //Write each measurement into the string.
     for(size_t m = 0; m < measurements.size(); m++) {
-        write_measurement(
+        writeMeasurement(
             s, measurements[m].first,
             measurements[m].second,
             total_measured_time
@@ -1274,13 +1274,13 @@ void PerformanceMonitor::Page::write(string &s) {
  * @param dur How long it lasted for, in seconds.
  * @param total How long the entire procedure lasted for.
  */
-void PerformanceMonitor::Page::write_measurement(
+void PerformanceMonitor::Page::writeMeasurement(
     string &str, const string &name, double dur, float total
 ) {
     float perc = dur / total * 100.0;
     str +=
         "  " + name + "\n" +
-        "    " + box_string(std::to_string(dur), 8, "s") +
+        "    " + boxString(std::to_string(dur), 8, "s") +
         " (" + f2s(perc) + "%)\n    ";
     for(unsigned char p = 0; p < 100; p++) {
         if(p < perc) {
@@ -1547,7 +1547,7 @@ float RngManager::f(float minimum, float maximum) {
     if(minimum > maximum) std::swap(minimum, maximum);
     
     return
-        (float) linear_congruential_generator(&state) /
+        (float) linearCongruentialGenerator(&state) /
         ((float) INT32_MAX / (maximum - minimum)) + minimum;
 }
 
@@ -1567,7 +1567,7 @@ int32_t RngManager::i(int32_t minimum, int32_t maximum) {
     if(minimum > maximum) std::swap(minimum, maximum);
     return
         (
-            (linear_congruential_generator(&state)) %
+            (linearCongruentialGenerator(&state)) %
             (maximum - minimum + 1)
         ) + minimum;
 }
@@ -1748,7 +1748,7 @@ bool ScriptVarReader::get(const string &name, Point &dest) const {
  * @param report_errors Only issues errors if this is true.
  * @return The audio sample.
  */
-ALLEGRO_SAMPLE* SampleManager::do_load(
+ALLEGRO_SAMPLE* SampleManager::doLoad(
     const string &name, DataNode* node, bool report_errors
 ) {
     const auto &it = game.content.sounds.manifests.find(name);
@@ -1756,7 +1756,7 @@ ALLEGRO_SAMPLE* SampleManager::do_load(
         it != game.content.sounds.manifests.end() ?
         it->second.path :
         name;
-    return load_sample(path, node, report_errors);
+    return loadSample(path, node, report_errors);
 }
 
 
@@ -1765,7 +1765,7 @@ ALLEGRO_SAMPLE* SampleManager::do_load(
  *
  * @param asset Audio sample to unload.
  */
-void SampleManager::do_unload(ALLEGRO_SAMPLE* asset) {
+void SampleManager::doUnload(ALLEGRO_SAMPLE* asset) {
     al_destroy_sample(asset);
 }
 
@@ -1786,7 +1786,7 @@ void SubgroupTypeManager::clear() {
  *
  * @return The first type.
  */
-SubgroupType* SubgroupTypeManager::get_first_type() const {
+SubgroupType* SubgroupTypeManager::getFirstType() const {
     return types.front();
 }
 
@@ -1797,12 +1797,12 @@ SubgroupType* SubgroupTypeManager::get_first_type() const {
  * @param sgt Subgroup type to iterate from.
  * @return The next type.
  */
-SubgroupType* SubgroupTypeManager::get_next_type(
+SubgroupType* SubgroupTypeManager::getNextType(
     const SubgroupType* sgt
 ) const {
     for(size_t t = 0; t < types.size(); t++) {
         if(types[t] == sgt) {
-            return get_next_in_vector(types, t);
+            return getNextInVector(types, t);
         }
     }
     return nullptr;
@@ -1815,12 +1815,12 @@ SubgroupType* SubgroupTypeManager::get_next_type(
  * @param sgt Subgroup type to iterate from.
  * @return The previous type.
  */
-SubgroupType* SubgroupTypeManager::get_prev_type(
+SubgroupType* SubgroupTypeManager::getPrevType(
     const SubgroupType* sgt
 ) const {
     for(size_t t = 0; t < types.size(); t++) {
         if(types[t] == sgt) {
-            return get_prev_in_vector(types, t);
+            return getPrevInVector(types, t);
         }
     }
     return nullptr;
@@ -1835,7 +1835,7 @@ SubgroupType* SubgroupTypeManager::get_prev_type(
  * @param specific_type Specific type of mob, if you want to specify further.
  * @return The type, or nullptr if not found.
  */
-SubgroupType* SubgroupTypeManager::get_type(
+SubgroupType* SubgroupTypeManager::getType(
     const SUBGROUP_TYPE_CATEGORY category,
     const MobType* specific_type
 ) const {
@@ -1860,7 +1860,7 @@ SubgroupType* SubgroupTypeManager::get_type(
  * @param specific_type Specific type of mob, if you want to specify further.
  * @param icon If not nullptr, use this icon to represent this subgroup.
  */
-void SubgroupTypeManager::register_type(
+void SubgroupTypeManager::registerType(
     const SUBGROUP_TYPE_CATEGORY category,
     MobType* specific_type,
     ALLEGRO_BITMAP* icon
@@ -1912,7 +1912,7 @@ Whistle::Whistle() :
         rings.push_back(0);
         ring_colors.push_back(ring_prev_color);
         ring_prev_color =
-            sum_and_wrap(ring_prev_color, 1, WHISTLE::N_RING_COLORS);
+            sumAndWrap(ring_prev_color, 1, WHISTLE::N_RING_COLORS);
     };
     
 }
@@ -1921,7 +1921,7 @@ Whistle::Whistle() :
 /**
  * @brief Stuff to do when a leader starts whistling.
  */
-void Whistle::start_whistling() {
+void Whistle::startWhistling() {
     for(unsigned char d = 0; d < 6; d++) {
         dot_radius[d] = -1;
     }
@@ -1934,7 +1934,7 @@ void Whistle::start_whistling() {
 /**
  * @brief Stuff to do when a leader stops whistling.
  */
-void Whistle::stop_whistling() {
+void Whistle::stopWhistling() {
     whistling = false;
     fade_timer.start();
     fade_radius = radius;

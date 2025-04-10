@@ -38,19 +38,19 @@ public:
     //--- Function declarations ---
     
     Pile(const Point &pos, PileType* type, float angle);
-    void change_amount(int change);
+    void changeAmount(int change);
     void recharge();
     void update();
-    bool get_fraction_numbers_info(
+    bool getFractionNumbersInfo(
         float* fraction_value_nr, float* fraction_req_nr,
         ALLEGRO_COLOR* fraction_color
     ) const override;
-    void read_script_vars(const ScriptVarReader &svr) override;
+    void readScriptVars(const ScriptVarReader &svr) override;
     
 protected:
 
     //--- Function declarations ---
     
-    void tick_class_specifics(float delta_t) override;
+    void tickClassSpecifics(float delta_t) override;
     
 };

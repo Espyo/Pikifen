@@ -38,24 +38,24 @@ typedef uint32_t bitmask_32_t;
 
 
 //Turns a bit in a bitmask off.
-#define disable_flag(flags, flag) (flags &= ~flag)
+#define disableFlag(flags, flag) (flags &= ~flag)
 
 //Turns a bit in a bitmask on.
-#define enable_flag(flags, flag) (flags |= flag)
+#define enableFlag(flags, flag) (flags |= flag)
 
 //Returns the bitmask corresponding to a certain index. Useful for flags.
-#define get_idx_bitmask(i) (1 << i)
+#define getIdxBitmask(i) (1 << i)
 
 //Returns the previous element in a vector,
 //but if it's the first, it retrieves the last.
-#define get_prev_in_vector(v, nr) (v)[((nr) == 0 ? (v).size() - 1 : ((nr) - 1))]
+#define getPrevInVector(v, nr) (v)[((nr) == 0 ? (v).size() - 1 : ((nr) - 1))]
 
 //Returns the next element in a vector,
 //but if it's the last, it retrieves the first.
-#define get_next_in_vector(v, nr) (v)[((nr) == (v).size() - 1 ? 0 : ((nr) + 1))]
+#define getNextInVector(v, nr) (v)[((nr) == (v).size() - 1 ? 0 : ((nr) + 1))]
 
 //Returns whether a bit is on or not in a bitmask.
-#define has_flag(flags, flag) (((flags) & (flag)) > 0)
+#define hasFlag(flags, flag) (((flags) & (flag)) > 0)
 
 
 //Cross-platform way of representing an invalid index.
@@ -66,13 +66,13 @@ constexpr float LARGE_FLOAT = 999999.0f;
 
 
 template<typename t>
-t from_string(const string &s);
+t fromString(const string &s);
 template<>
-float from_string<float>(const string &s);
+float fromString<float>(const string &s);
 template<>
-ALLEGRO_COLOR from_string<ALLEGRO_COLOR>(const string &s);
+ALLEGRO_COLOR fromString<ALLEGRO_COLOR>(const string &s);
 template<>
-Point from_string<Point>(const string &s);
+Point fromString<Point>(const string &s);
 
 
 /**
@@ -132,10 +132,10 @@ struct EnumNameDatabase {
     
     //--- Function declarations ---
     
-    void register_item(size_t enum_idx, const string &name);
-    size_t get_idx(const string &name) const;
-    string get_name(size_t idx) const;
-    size_t get_nr_of_items() const;
+    void registerItem(size_t enum_idx, const string &name);
+    size_t getIdx(const string &name) const;
+    string getName(size_t idx) const;
+    size_t getNrOfItems() const;
     void clear();
     
     private:
@@ -213,7 +213,7 @@ struct KeyframeInterpolator {
         float t, const InterT &value,
         EASING_METHOD ease = EASE_METHOD_NONE, size_t* out_idx = nullptr
     ) {
-        size_t new_idx = get_insertion_idx(t);
+        size_t new_idx = getInsertionIdx(t);
         
         if(out_idx) *out_idx = new_idx;
         
@@ -233,14 +233,14 @@ struct KeyframeInterpolator {
      * @param out_idx If not nullptr, the index of the newly added keyframe
      * is returned here.
      */
-    void add_or_set(
+    void addOrSet(
         float t, const InterT &value,
         EASING_METHOD ease = EASE_METHOD_NONE, size_t* out_idx = nullptr
     ) {
         for(size_t k = 0; k < keyframe_times.size(); ++k) {
             if(keyframe_times[k] == t) {
                 if(out_idx) *out_idx = k;
-                set_keyframe_value(k, value);
+                setKeyframeValue(k, value);
                 return;
             }
         }
@@ -266,7 +266,7 @@ struct KeyframeInterpolator {
      *
      * @return The total.
      */
-    size_t get_keyframe_count() {
+    size_t getKeyframeCount() {
         return keyframe_times.size();
     }
     
@@ -277,7 +277,7 @@ struct KeyframeInterpolator {
      * @param idx The keyframe's index.
      * @return A pair with the keyframe's time and value.
      */
-    std::pair<float, InterT> get_keyframe(size_t idx) {
+    std::pair<float, InterT> getKeyframe(size_t idx) {
         return std::make_pair(keyframe_times[idx], keyframe_values[idx]);
     }
     
@@ -288,7 +288,7 @@ struct KeyframeInterpolator {
      * @param idx They keyframe's index.
      * @param value The new value.
      */
-    void set_keyframe_value(size_t idx, const InterT &value) {
+    void setKeyframeValue(size_t idx, const InterT &value) {
         keyframe_values[idx] = value;
     }
     
@@ -301,7 +301,7 @@ struct KeyframeInterpolator {
      * @param out_new_idx If not nullptr, the new index of the keyframe is
      * returned here.
      */
-    void set_keyframe_time(
+    void setKeyframeTime(
         size_t idx, float time, size_t* out_new_idx = nullptr
     ) {
         size_t cur_idx = idx;
@@ -316,7 +316,7 @@ struct KeyframeInterpolator {
             cur_idx--;
         }
         while(
-            cur_idx < (get_keyframe_count() - 1) &&
+            cur_idx < (getKeyframeCount() - 1) &&
             time > keyframe_times[cur_idx + 1]
         ) {
             std::swap(keyframe_times[cur_idx], keyframe_times[cur_idx + 1]);
@@ -336,7 +336,7 @@ struct KeyframeInterpolator {
      *
      * @param node The data node to load from.
      */
-    void load_from_data_node(DataNode* node) {
+    void loadFromDataNode(DataNode* node) {
         if(node->getNrOfChildren() == 0) {
             //There are no values to load, let's not even try.
             return;
@@ -348,7 +348,7 @@ struct KeyframeInterpolator {
         
         for(size_t c = 0; c < node->getNrOfChildren(); c++) {
             DataNode* c_node = node->getChild(c);
-            InterT value = from_string<InterT>(c_node->value);
+            InterT value = fromString<InterT>(c_node->value);
             add(s2f(c_node->name), value, EASE_METHOD_NONE);
         }
     }
@@ -377,7 +377,7 @@ private:
      * @param t The time.
      * @return The index.
      */
-    size_t get_insertion_idx(float t) {
+    size_t getInsertionIdx(float t) {
         size_t idx = 0;
         for(; idx < keyframe_times.size(); idx++) {
             if(keyframe_times[idx] >= t) break;
@@ -412,7 +412,7 @@ private:
     ALLEGRO_COLOR interpolate(
         const ALLEGRO_COLOR &c1, const ALLEGRO_COLOR &c2, float time
     ) {
-        return interpolate_color(time, 0.0f, 1.0f, c1, c2);
+        return interpolateColor(time, 0.0f, 1.0f, c1, c2);
     }
     
     
@@ -428,7 +428,7 @@ private:
     Point interpolate(
         const Point &p1, const Point &p2, float time
     ) {
-        return interpolate_point(time, 0.0f, 1.0f, p1, p2);
+        return interpolatePoint(time, 0.0f, 1.0f, p1, p2);
     }
     
 };
@@ -458,7 +458,7 @@ struct MovementInfo {
     
     //--- Function declarations ---
     
-    void get_info(Point* coords, float* angle, float* magnitude) const;
+    void getInfo(Point* coords, float* angle, float* magnitude) const;
     void reset();
     
 };
@@ -493,13 +493,13 @@ struct Timer {
     void start(float new_duration);
     void stop();
     void tick(float delta_t);
-    float get_ratio_left() const;
+    float getRatioLeft() const;
     
 };
 
 
-string get_current_time(bool file_name_friendly);
-string sanitize_file_name(const string &s);
+string getCurrentTime(bool file_name_friendly);
+string sanitizeFileName(const string &s);
 
 
 /**
@@ -513,7 +513,7 @@ string sanitize_file_name(const string &s);
  * @return The shuffled vector.
  */
 template<typename t>
-vector<t> shuffle_vector(
+vector<t> shuffleVector(
     const vector<t> &v, const vector<float> pick_random_floats
 ) {
     vector<t> result;
@@ -529,8 +529,8 @@ vector<t> shuffle_vector(
 }
 
 
-string standardize_path(const string &path);
-string vector_tail_to_string(const vector<string> &v, size_t pos);
+string standardizePath(const string &path);
+string vectorTailToString(const vector<string> &v, size_t pos);
 
 
 /**
@@ -543,7 +543,7 @@ string vector_tail_to_string(const vector<string> &v, size_t pos);
  * @return Whether it contains the item.
  */
 template<typename t, typename i>
-bool is_in_container(const t &cont, const i &item) {
+bool isInContainer(const t &cont, const i &item) {
     return std::find(cont.begin(), cont.end(), item) != cont.end();
 }
 
@@ -557,12 +557,12 @@ bool is_in_container(const t &cont, const i &item) {
  * @return The filtered vector.
  */
 template<typename t>
-vector<t> filter_vector_with_ban_list(
+vector<t> filterVectorWithBanList(
     const vector<t> &v, const vector<t> &ban_list
 ) {
     vector<t> result = v;
     for(size_t i = 0; i < result.size();) {
-        if(is_in_container(ban_list, result[i])) {
+        if(isInContainer(ban_list, result[i])) {
             result.erase(result.begin() + i);
         } else {
             i++;
@@ -581,7 +581,7 @@ vector<t> filter_vector_with_ban_list(
  * @return The finished vector.
  */
 template<typename t>
-vector<t> remove_all_in_vector(
+vector<t> removeAllInVector(
     const t &item, const vector<t> &vec
 ) {
     vector<t> result = vec;
@@ -613,7 +613,7 @@ vector<t> remove_all_in_vector(
  * @return The sorted vector.
  */
 template<typename t>
-vector<t> sort_vector_with_preference_list(
+vector<t> sortVectorWithPreferenceList(
     const vector<t> &v, const vector<t> preference_list,
     vector<t>* unknowns = nullptr
 ) {
@@ -678,7 +678,7 @@ vector<t> sort_vector_with_preference_list(
  * @return Whether they contain the same items.
  */
 template<typename t>
-bool vectors_contain_same(const vector<t> &v1, const vector<t> &v2) {
+bool vectorsContainSame(const vector<t> &v1, const vector<t> &v2) {
     if(v1.size() != v2.size()) {
         return false;
     }

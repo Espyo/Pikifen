@@ -95,7 +95,7 @@ const float NOTIFICATION_PADDING = 8.0f;
  * @param speed Horizontal and vertical movement speed of each logo.
  * @param rotation_speed Rotation speed of each logo.
  */
-void draw_background_logos(
+void drawBackgroundLogos(
     float time_spent, size_t rows, size_t cols,
     const Point &logo_size, const ALLEGRO_COLOR &tint,
     const Point &speed, float rotation_speed
@@ -112,18 +112,18 @@ void draw_background_logos(
                 x += spacing_x / 2.0f;
             }
             x =
-                wrap_float(
+                wrapFloat(
                     x,
                     0 - logo_size.x * 0.5f,
                     game.win_w + logo_size.x * 0.5f
                 );
             float y =
-                wrap_float(
+                wrapFloat(
                     (r * spacing_y) + time_spent * speed.y,
                     0 - logo_size.y * 0.5f,
                     game.win_h + logo_size.y * 0.5f
                 );
-            draw_bitmap(
+            drawBitmap(
                 game.sys_content.bmp_icon,
                 Point(x, y),
                 Point(logo_size.x, logo_size.y),
@@ -143,11 +143,11 @@ void draw_background_logos(
  * @param bmp The bitmap.
  * @param effects Effects to use.
  */
-void draw_bitmap_with_effects(
+void drawBitmapWithEffects(
     ALLEGRO_BITMAP* bmp, const BitmapEffect &effects
 ) {
 
-    Point bmp_size = get_bitmap_dimensions(bmp);
+    Point bmp_size = getBitmapDimensions(bmp);
     float scale_x =
         (effects.scale.x == LARGE_FLOAT) ? effects.scale.y : effects.scale.x;
     float scale_y =
@@ -196,12 +196,12 @@ void draw_bitmap_with_effects(
  * @param juicy_grow_amount If it's in the middle of a juicy grow animation,
  * specify the amount here.
  */
-void draw_button(
+void drawButton(
     const Point &center, const Point &size, const string &text,
     const ALLEGRO_FONT* font, const ALLEGRO_COLOR &color,
     bool selected, float juicy_grow_amount
 ) {
-    draw_text(
+    drawText(
         text, font, center, size * GUI::STANDARD_CONTENT_SIZE, color,
         ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
         TEXT_SETTING_FLAG_CANT_GROW,
@@ -211,12 +211,12 @@ void draw_button(
     ALLEGRO_COLOR box_tint =
         selected ? al_map_rgb(87, 200, 208) : COLOR_WHITE;
         
-    draw_textured_box(
+    drawTexturedBox(
         center, size, game.sys_content.bmp_bubble_box, box_tint
     );
     
     if(selected) {
-        draw_textured_box(
+        drawTexturedBox(
             center,
             size + 10.0 + sin(game.time_passed * TAU) * 2.0f,
             game.sys_content.bmp_focus_box
@@ -236,13 +236,13 @@ void draw_button(
  * @param color Color of the fraction's text.
  * @param scale Scale the text by this much.
  */
-void draw_fraction(
+void drawFraction(
     const Point &bottom, size_t value_nr,
     size_t requirement_nr, const ALLEGRO_COLOR &color, float scale
 ) {
     const float value_nr_y = bottom.y - IN_WORLD_FRACTION::ROW_HEIGHT * 3;
     const float value_nr_scale = value_nr >= requirement_nr ? 1.2f : 1.0f;
-    draw_text(
+    drawText(
         i2s(value_nr), game.sys_content.fnt_value, Point(bottom.x, value_nr_y),
         Point(LARGE_FLOAT, IN_WORLD_FRACTION::ROW_HEIGHT * scale),
         color, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_TOP, 0,
@@ -250,7 +250,7 @@ void draw_fraction(
     );
     
     const float bar_y = bottom.y - IN_WORLD_FRACTION::ROW_HEIGHT * 2;
-    draw_text(
+    drawText(
         "-", game.sys_content.fnt_value, Point(bottom.x, bar_y),
         Point(LARGE_FLOAT, IN_WORLD_FRACTION::ROW_HEIGHT * scale),
         color, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_TOP, 0
@@ -258,7 +258,7 @@ void draw_fraction(
     
     float req_nr_y = bottom.y - IN_WORLD_FRACTION::ROW_HEIGHT;
     float req_nr_scale = requirement_nr > value_nr ? 1.2f : 1.0f;
-    draw_text(
+    drawText(
         i2s(requirement_nr), game.sys_content.fnt_value,
         Point(bottom.x, req_nr_y),
         Point(LARGE_FLOAT, IN_WORLD_FRACTION::ROW_HEIGHT * scale),
@@ -279,7 +279,7 @@ void draw_fraction(
  * @param just_chart If true, only draw the actual pieslice (pie-chart).
  * Used for leader HP on the HUD.
  */
-void draw_health(
+void drawHealth(
     const Point &center,
     float ratio, float alpha,
     float radius, bool just_chart
@@ -316,7 +316,7 @@ void draw_health(
  * @param scale Scale the sector by this much.
  * @param time How much time has passed. Used to animate.
  */
-void draw_liquid(
+void drawLiquid(
     Sector* s_ptr, Liquid* l_ptr, const Point &where, float scale,
     float time
 ) {
@@ -368,11 +368,11 @@ void draw_liquid(
             edge* e_ptr = s2_ptr->edges[e];
             sector* u_s = nullptr;
             sector* a_s = nullptr;
-            if(does_edge_have_liquid_limit(e_ptr, &u_s, &a_s)) {
+            if(doesEdgeHaveLiquidLimit(e_ptr, &u_s, &a_s)) {
                 border_edges.push_back(e_ptr);
             }
     
-            sector* other_ptr = e_ptr->get_other_sector(s2_ptr);
+            sector* other_ptr = e_ptr->getOtherSector(s2_ptr);
             if(other_ptr) {
                 for(size_t h = 0; h < other_ptr->hazards.size(); h++) {
                     if(other_ptr->hazards[h]->associated_liquid) {
@@ -415,7 +415,7 @@ void draw_liquid(
     */
     
     //Set up the shader.
-    ALLEGRO_SHADER* liq_shader = game.shaders.get_shader(SHADER_TYPE_LIQUID);
+    ALLEGRO_SHADER* liq_shader = game.shaders.getShader(SHADER_TYPE_LIQUID);
     al_use_shader(liq_shader);
     al_set_shader_float("area_time", time * l_ptr->anim_speed);
     al_set_shader_float("opacity", liquid_opacity_mult);
@@ -431,7 +431,7 @@ void draw_liquid(
     unsigned char n_textures = 1;
     Sector* texture_sector[2] = {nullptr, nullptr};
     if(s_ptr->fade) {
-        s_ptr->get_texture_merge_sectors(
+        s_ptr->getTextureMergeSectors(
             &texture_sector[0], &texture_sector[1]
         );
         if(!texture_sector[0] && !texture_sector[1]) {
@@ -580,7 +580,7 @@ void draw_liquid(
  * @param opacity 0 to 1. The background blackness lowers in opacity
  * much faster.
  */
-void draw_loading_screen(
+void drawLoadingScreen(
     const string &text, const string &subtext, float opacity
 ) {
     const float text_w = game.win_w * DRAWING::LOADING_SCREEN_TEXT_WIDTH;
@@ -605,7 +605,7 @@ void draw_loading_screen(
         
         al_set_target_bitmap(game.loading_text_bmp); {
             al_clear_to_color(COLOR_EMPTY);
-            draw_text(
+            drawText(
                 text, game.sys_content.fnt_area_name,
                 Point(text_w * 0.5f, text_h * 0.5f),
                 Point(text_w, text_h),
@@ -621,7 +621,7 @@ void draw_loading_screen(
         
         al_set_target_bitmap(game.loading_subtext_bmp); {
             al_clear_to_color(COLOR_EMPTY);
-            draw_text(
+            drawText(
                 subtext, game.sys_content.fnt_area_name,
                 Point(subtext_w * 0.5f, subtext_h * 0.5f),
                 Point(subtext_w, subtext_h),
@@ -764,14 +764,14 @@ void draw_loading_screen(
                 game.win_w - 8 - text_box.x - 8 - text_box.y / 2.0f,
                 game.win_h - 8 - text_box.y / 2.0f
             );
-            draw_bitmap(
+            drawBitmap(
                 game.sys_content.bmp_icon, icon_pos,
                 Point(-1, text_box.y),
                 0, al_map_rgba(255, 255, 255, opacity * 255.0)
             );
         }
         
-        draw_text(
+        drawText(
             "Loading...", game.sys_content.fnt_standard,
             Point(game.win_w - 8, game.win_h - 8), text_box,
             al_map_rgb(192, 192, 192), ALLEGRO_ALIGN_RIGHT, V_ALIGN_MODE_BOTTOM
@@ -790,7 +790,7 @@ void draw_loading_screen(
  * @param left_side If true, place the icon to the left side of the button.
  * If false, place it to the right.
  */
-void draw_menu_button_icon(
+void drawMenuButtonIcon(
     MENU_ICON icon, const Point &button_center, const Point &button_size,
     bool left_side
 ) {
@@ -809,7 +809,7 @@ void draw_menu_button_icon(
         button_center.x + button_size.x * 0.5 - button_size.y * 0.5,
         button_center.y
     );
-    draw_bitmap_in_box(
+    drawBitmapInBox(
         bmp, icon_center,
         Point(button_size.y),
         true
@@ -826,7 +826,7 @@ void draw_menu_button_icon(
  * @param shadow_stretch How much to stretch the shadow by
  * (used to simulate sun shadow direction casting).
  */
-void draw_mob_shadow(
+void drawMobShadow(
     const Mob* m,
     float delta_z, float shadow_stretch
 ) {
@@ -854,20 +854,20 @@ void draw_mob_shadow(
     }
     
     if(m->rectangular_dim.x != 0) {
-        draw_bitmap(
+        drawBitmap(
             game.sys_content.bmp_shadow_square,
             Point(m->pos.x + shadow_x + shadow_w / 2, m->pos.y),
             shadow_size,
             m->angle,
-            map_alpha(255 * (1 - shadow_stretch))
+            mapAlpha(255 * (1 - shadow_stretch))
         );
     } else {
-        draw_bitmap(
+        drawBitmap(
             game.sys_content.bmp_shadow,
             Point(m->pos.x + shadow_x + shadow_w / 2, m->pos.y),
             Point(shadow_w, diameter),
             0,
-            map_alpha(255 * (1 - shadow_stretch))
+            mapAlpha(255 * (1 - shadow_stretch))
         );
     }
 }
@@ -878,7 +878,7 @@ void draw_mob_shadow(
  *
  * @param color Color to tint it with.
  */
-void draw_mouse_cursor(const ALLEGRO_COLOR &color) {
+void drawMouseCursor(const ALLEGRO_COLOR &color) {
     al_use_transform(&game.identity_transform);
     
     //Cursor trail.
@@ -903,7 +903,7 @@ void draw_mouse_cursor(const ALLEGRO_COLOR &color) {
             unsigned char start_alpha =
                 GAME::CURSOR_TRAIL_MAX_ALPHA * start_ratio;
             ALLEGRO_COLOR start_color =
-                change_alpha(color, start_alpha);
+                changeAlpha(color, start_alpha);
             Point start_p1;
             Point start_p2;
             
@@ -914,7 +914,7 @@ void draw_mouse_cursor(const ALLEGRO_COLOR &color) {
             unsigned char end_alpha =
                 GAME::CURSOR_TRAIL_MAX_ALPHA * end_ratio;
             ALLEGRO_COLOR end_color =
-                change_alpha(color, end_alpha);
+                changeAlpha(color, end_alpha);
             Point end_p1;
             Point end_p2;
             
@@ -923,12 +923,12 @@ void draw_mouse_cursor(const ALLEGRO_COLOR &color) {
                     game.mouse_cursor.history[s] -
                     game.mouse_cursor.history[anchor];
                 Point cur_to_next_normal(-cur_to_next.y, cur_to_next.x);
-                cur_to_next_normal = normalize_vector(cur_to_next_normal);
+                cur_to_next_normal = normalizeVector(cur_to_next_normal);
                 Point spot_offset = cur_to_next_normal * start_thickness / 2.0f;
                 start_p1 = game.mouse_cursor.history[anchor] - spot_offset;
                 start_p2 = game.mouse_cursor.history[anchor] + spot_offset;
             } else {
-                get_miter_points(
+                getMiterPoints(
                     game.mouse_cursor.history[anchor - 1],
                     game.mouse_cursor.history[anchor],
                     game.mouse_cursor.history[anchor + 1],
@@ -944,12 +944,12 @@ void draw_mouse_cursor(const ALLEGRO_COLOR &color) {
                     game.mouse_cursor.history[s] -
                     game.mouse_cursor.history[anchor];
                 Point prev_to_cur_normal(-prev_to_cur.y, prev_to_cur.x);
-                prev_to_cur_normal = normalize_vector(prev_to_cur_normal);
+                prev_to_cur_normal = normalizeVector(prev_to_cur_normal);
                 Point spot_offset = prev_to_cur_normal * start_thickness / 2.0f;
                 end_p1 = game.mouse_cursor.history[s] - spot_offset;
                 end_p2 = game.mouse_cursor.history[s] + spot_offset;
             } else {
-                get_miter_points(
+                getMiterPoints(
                     game.mouse_cursor.history[s - 1],
                     game.mouse_cursor.history[s],
                     game.mouse_cursor.history[s + 1],
@@ -987,10 +987,10 @@ void draw_mouse_cursor(const ALLEGRO_COLOR &color) {
     }
     
     //Mouse cursor graphic.
-    draw_bitmap(
+    drawBitmap(
         game.sys_content.bmp_mouse_cursor,
         game.mouse_cursor.s_pos,
-        get_bitmap_dimensions(game.sys_content.bmp_mouse_cursor),
+        getBitmapDimensions(game.sys_content.bmp_mouse_cursor),
         -(game.time_passed * game.config.aesthetic_gen.cursor_spin_speed),
         color
     );
@@ -1013,7 +1013,7 @@ void draw_mouse_cursor(const ALLEGRO_COLOR &color) {
  * 0 = unlimited.
  * @param alpha Opacity.
  */
-void draw_player_input_source_icon(
+void drawPlayerInputSourceIcon(
     const ALLEGRO_FONT* const font, const PlayerInputSource &s,
     bool condensed, const Point &where, const Point &max_size,
     unsigned char alpha
@@ -1022,13 +1022,13 @@ void draw_player_input_source_icon(
     
     //Final text color.
     const ALLEGRO_COLOR final_text_color =
-        change_alpha(CONTROL_BIND_ICON::BASE_TEXT_COLOR, alpha);
+        changeAlpha(CONTROL_BIND_ICON::BASE_TEXT_COLOR, alpha);
         
     //Start by getting the icon's info for drawing.
     PLAYER_INPUT_ICON_SHAPE shape;
     PLAYER_INPUT_ICON_SPRITE bitmap_sprite;
     string text;
-    get_player_input_icon_info(
+    getPlayerInputIconInfo(
         s, condensed,
         &shape, &bitmap_sprite, &text
     );
@@ -1044,7 +1044,7 @@ void draw_player_input_source_icon(
                 (icon_size + 1) * (int) bitmap_sprite, 0,
                 icon_size, icon_size
             );
-        draw_bitmap_in_box(bmp, where, max_size, true, 0.0f, map_alpha(alpha));
+        drawBitmapInBox(bmp, where, max_size, true, 0.0f, mapAlpha(alpha));
         al_destroy_bitmap(bmp);
         return;
     }
@@ -1074,14 +1074,14 @@ void draw_player_input_source_icon(
     //Now, draw the rectangle, either sharp or rounded.
     switch(shape) {
     case PLAYER_INPUT_ICON_SHAPE_RECTANGLE: {
-        draw_textured_box(
+        drawTexturedBox(
             where, Point(total_width, total_height),
             game.sys_content.bmp_key_box
         );
         break;
     }
     case PLAYER_INPUT_ICON_SHAPE_ROUNDED: {
-        draw_textured_box(
+        drawTexturedBox(
             where, Point(total_width, total_height),
             game.sys_content.bmp_button_box
         );
@@ -1093,7 +1093,7 @@ void draw_player_input_source_icon(
     }
     
     //And finally, the text inside.
-    draw_text(
+    drawText(
         text, font, where,
         Point(
             (max_size.x == 0 ? 0 : max_size.x - CONTROL_BIND_ICON::PADDING),
@@ -1113,7 +1113,7 @@ void draw_player_input_source_icon(
  * @param scale Scale the sector by this much.
  * @param opacity Draw the textures at this opacity, 0 - 1.
  */
-void draw_sector_texture(
+void drawSectorTexture(
     Sector* s_ptr, const Point &where, float scale, float opacity
 ) {
     if(!s_ptr) return;
@@ -1123,7 +1123,7 @@ void draw_sector_texture(
     Sector* texture_sector[2] = {nullptr, nullptr};
     
     if(s_ptr->fade) {
-        s_ptr->get_texture_merge_sectors(
+        s_ptr->getTextureMergeSectors(
             &texture_sector[0], &texture_sector[1]
         );
         if(!texture_sector[0] && !texture_sector[1]) {
@@ -1250,13 +1250,13 @@ void draw_sector_texture(
  * @param m Mob that has this status effect.
  * @param effects List of bitmap effects to use.
  */
-void draw_status_effect_bmp(const Mob* m, BitmapEffect &effects) {
+void drawStatusEffectBmp(const Mob* m, BitmapEffect &effects) {
     float status_bmp_scale;
-    ALLEGRO_BITMAP* status_bmp = m->get_status_bitmap(&status_bmp_scale);
+    ALLEGRO_BITMAP* status_bmp = m->getStatusBitmap(&status_bmp_scale);
     
     if(!status_bmp) return;
     
-    draw_bitmap(
+    drawBitmap(
         status_bmp,
         m->pos,
         Point(m->radius * 2 * status_bmp_scale, -1)
@@ -1276,7 +1276,7 @@ void draw_status_effect_bmp(const Mob* m, BitmapEffect &effects) {
  * @param max_size Maximum width and height of the whole thing.
  * @param scale Scale each token by this amount.
  */
-void draw_string_tokens(
+void drawStringTokens(
     const vector<StringToken> &tokens, const ALLEGRO_FONT* const text_font,
     const ALLEGRO_FONT* const control_font, bool controls_condensed,
     const Point &where, int flags, const Point &max_size,
@@ -1297,9 +1297,9 @@ void draw_string_tokens(
     }
     
     float start_x = where.x;
-    if(has_flag(flags, ALLEGRO_ALIGN_CENTER)) {
+    if(hasFlag(flags, ALLEGRO_ALIGN_CENTER)) {
         start_x -= (total_width * x_scale) / 2.0f;
-    } else if(has_flag(flags, ALLEGRO_ALIGN_RIGHT)) {
+    } else if(hasFlag(flags, ALLEGRO_ALIGN_RIGHT)) {
         start_x -= total_width * x_scale;
     }
     
@@ -1308,7 +1308,7 @@ void draw_string_tokens(
         float token_final_width = tokens[t].width * x_scale;
         switch(tokens[t].type) {
         case STRING_TOKEN_CHAR: {
-            draw_text(
+            drawText(
                 tokens[t].content, text_font, Point(caret, where.y),
                 Point(LARGE_FLOAT), COLOR_WHITE,
                 ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP,
@@ -1318,9 +1318,9 @@ void draw_string_tokens(
             break;
         }
         case STRING_TOKEN_CONTROL_BIND: {
-            draw_player_input_source_icon(
+            drawPlayerInputSourceIcon(
                 control_font,
-                game.controls.find_bind(tokens[t].content).inputSource,
+                game.controls.findBind(tokens[t].content).inputSource,
                 controls_condensed,
                 Point(
                     caret + token_final_width / 2.0f,
@@ -1355,7 +1355,7 @@ void draw_string_tokens(
  * @param text The text to be written inside is returned here, or an
  * empty string is returned if there's nothing to write.
  */
-void get_player_input_icon_info(
+void getPlayerInputIconInfo(
     const PlayerInputSource &s, bool condensed,
     PLAYER_INPUT_ICON_SHAPE* shape,
     PLAYER_INPUT_ICON_SPRITE* bitmap_sprite,
@@ -1457,7 +1457,7 @@ void get_player_input_icon_info(
     switch(s.type) {
     case INPUT_SOURCE_TYPE_KEYBOARD_KEY: {
         *shape = PLAYER_INPUT_ICON_SHAPE_RECTANGLE;
-        *text = get_key_name(s.buttonNr, condensed);
+        *text = getKeyName(s.buttonNr, condensed);
         break;
         
     } case INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG:
@@ -1563,14 +1563,14 @@ void get_player_input_icon_info(
  * Specify the maximum height here. Use 0 to indicate no maximum height.
  * @return The width.
  */
-float get_player_input_icon_width(
+float getPlayerInputIconWidth(
     const ALLEGRO_FONT* font, const PlayerInputSource &s, bool condensed,
     float max_bitmap_height
 ) {
     PLAYER_INPUT_ICON_SHAPE shape;
     PLAYER_INPUT_ICON_SPRITE bitmap_sprite;
     string text;
-    get_player_input_icon_info(
+    getPlayerInputIconInfo(
         s, condensed,
         &shape, &bitmap_sprite, &text
     );

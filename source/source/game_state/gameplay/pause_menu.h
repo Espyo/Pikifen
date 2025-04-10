@@ -136,8 +136,8 @@ struct PauseMenu {
     explicit PauseMenu(bool start_on_radar);
     ~PauseMenu();
     void draw();
-    void handle_allegro_event(const ALLEGRO_EVENT &ev);
-    void handle_player_action(const PlayerAction &action);
+    void handleAllegroEvent(const ALLEGRO_EVENT &ev);
+    void handlePlayerAction(const PlayerAction &action);
     void tick(float delta_t);
     
 private:
@@ -261,11 +261,11 @@ private:
     
     //--- Function declarations ---
     
-    void add_bullet(
+    void addBullet(
         ListGuiItem* list, const string &text,
         const ALLEGRO_COLOR &color = COLOR_WHITE
     );
-    void add_pikmin_status_line(
+    void addPikminStatusLine(
         ListGuiItem* list,
         PikminType* pik_type,
         const string &group_text,
@@ -277,37 +277,37 @@ private:
         const string &lost_text,
         bool is_single, bool is_totals
     );
-    void calculate_go_here_path();
-    void confirm_or_leave();
-    ButtonGuiItem* create_page_button(
+    void calculateGoHerePath();
+    void confirmOrLeave();
+    ButtonGuiItem* createPageButton(
         PAUSE_MENU_PAGE target_page, bool left, GuiManager* cur_gui
     );
-    void create_page_buttons(PAUSE_MENU_PAGE cur_page, GuiManager* cur_gui);
-    void draw_go_here_segment(
+    void createPageButtons(PAUSE_MENU_PAGE cur_page, GuiManager* cur_gui);
+    void drawGoHereSegment(
         const Point &start, const Point &end,
         const ALLEGRO_COLOR &color, float* texture_point
     );
-    void draw_radar(const Point &center, const Point &size);
-    void fill_mission_fail_list(ListGuiItem* list);
-    void fill_mission_grading_list(ListGuiItem* list);
-    string get_mission_goal_status();
-    void init_confirmation_page();
-    void init_radar_page();
-    void init_main_pause_menu();
-    void init_mission_page();
-    void init_status_page();
-    void pan_radar(Point amount);
-    void radar_confirm();
-    void start_closing(GuiManager* cur_gui);
-    void start_leaving_gameplay();
-    void switch_page(
+    void drawRadar(const Point &center, const Point &size);
+    void fillMissionFailList(ListGuiItem* list);
+    void fillMissionGradingList(ListGuiItem* list);
+    string getMissionGoalStatus();
+    void initConfirmationPage();
+    void initRadarPage();
+    void initMainPauseMenu();
+    void initMissionPage();
+    void initStatusPage();
+    void panRadar(Point amount);
+    void radarConfirm();
+    void startClosing(GuiManager* cur_gui);
+    void startLeavingGameplay();
+    void switchPage(
         GuiManager* cur_gui, PAUSE_MENU_PAGE new_page, bool left
     );
-    void update_radar_transformations(
+    void updateRadarTransformations(
         const Point &radar_center, const Point &radar_size
     );
-    void zoom_radar(float amount);
-    void zoom_radar_with_mouse(
+    void zoomRadar(float amount);
+    void zoomRadarWithMouse(
         float amount, const Point &radar_center, const Point &radar_size
     );
     

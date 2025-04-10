@@ -23,53 +23,53 @@
  *
  * @param typ Mob type to create the finite state machine for.
  */
-void onion_fsm::create_fsm(MobType* typ) {
+void onion_fsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;
     
-    efc.new_state("idling", ONION_STATE_IDLING); {
-        efc.new_event(MOB_EV_ON_ENTER); {
-            efc.run(onion_fsm::start_idling);
+    efc.newState("idling", ONION_STATE_IDLING); {
+        efc.newEvent(MOB_EV_ON_ENTER); {
+            efc.run(onion_fsm::startIdling);
         }
-        efc.new_event(MOB_EV_FINISHED_RECEIVING_DELIVERY); {
-            efc.run(onion_fsm::receive_mob);
+        efc.newEvent(MOB_EV_FINISHED_RECEIVING_DELIVERY); {
+            efc.run(onion_fsm::receiveMob);
         }
-        efc.new_event(MOB_EV_RECEIVE_MESSAGE); {
-            efc.run(onion_fsm::check_start_generating);
-        }
-    }
-    
-    efc.new_state("generating", ONION_STATE_GENERATING); {
-        efc.new_event(MOB_EV_ON_ENTER); {
-            efc.run(onion_fsm::start_generating);
-        }
-        efc.new_event(MOB_EV_FINISHED_RECEIVING_DELIVERY); {
-            efc.run(onion_fsm::receive_mob);
-        }
-        efc.new_event(MOB_EV_RECEIVE_MESSAGE); {
-            efc.run(onion_fsm::check_stop_generating);
+        efc.newEvent(MOB_EV_RECEIVE_MESSAGE); {
+            efc.run(onion_fsm::checkStartGenerating);
         }
     }
     
-    efc.new_state("stopping_generation", ONION_STATE_STOPPING_GENERATION); {
-        efc.new_event(MOB_EV_ON_ENTER); {
-            efc.run(onion_fsm::stop_generating);
+    efc.newState("generating", ONION_STATE_GENERATING); {
+        efc.newEvent(MOB_EV_ON_ENTER); {
+            efc.run(onion_fsm::startGenerating);
         }
-        efc.new_event(MOB_EV_FINISHED_RECEIVING_DELIVERY); {
-            efc.run(onion_fsm::receive_mob);
+        efc.newEvent(MOB_EV_FINISHED_RECEIVING_DELIVERY); {
+            efc.run(onion_fsm::receiveMob);
         }
-        efc.new_event(MOB_EV_ANIMATION_END); {
-            efc.change_state("idling");
+        efc.newEvent(MOB_EV_RECEIVE_MESSAGE); {
+            efc.run(onion_fsm::checkStopGenerating);
         }
-        efc.new_event(MOB_EV_RECEIVE_MESSAGE); {
-            efc.run(onion_fsm::check_start_generating);
+    }
+    
+    efc.newState("stopping_generation", ONION_STATE_STOPPING_GENERATION); {
+        efc.newEvent(MOB_EV_ON_ENTER); {
+            efc.run(onion_fsm::stopGenerating);
+        }
+        efc.newEvent(MOB_EV_FINISHED_RECEIVING_DELIVERY); {
+            efc.run(onion_fsm::receiveMob);
+        }
+        efc.newEvent(MOB_EV_ANIMATION_END); {
+            efc.changeState("idling");
+        }
+        efc.newEvent(MOB_EV_RECEIVE_MESSAGE); {
+            efc.run(onion_fsm::checkStartGenerating);
         }
     }
     
     typ->states = efc.finish();
-    typ->first_state_idx = fix_states(typ->states, "idling", typ);
+    typ->first_state_idx = fixStates(typ->states, "idling", typ);
     
     //Check if the number in the enum and the total match up.
-    engine_assert(
+    engineAssert(
         typ->states.size() == N_ONION_STATES,
         i2s(typ->states.size()) + " registered, " +
         i2s(N_ONION_STATES) + " in enum."
@@ -84,11 +84,11 @@ void onion_fsm::create_fsm(MobType* typ) {
  * @param info1 Pointer to the message received.
  * @param info2 Unused.
  */
-void onion_fsm::check_start_generating(Mob* m, void* info1, void* info2) {
+void onion_fsm::checkStartGenerating(Mob* m, void* info1, void* info2) {
     if(!info1) return;
     string* msg = (string*) info1;
     if(*msg == "started_generation") {
-        m->fsm.set_state(ONION_STATE_GENERATING);
+        m->fsm.setState(ONION_STATE_GENERATING);
     }
 }
 
@@ -100,11 +100,11 @@ void onion_fsm::check_start_generating(Mob* m, void* info1, void* info2) {
  * @param info1 Pointer to the message received.
  * @param info2 Unused.
  */
-void onion_fsm::check_stop_generating(Mob* m, void* info1, void* info2) {
+void onion_fsm::checkStopGenerating(Mob* m, void* info1, void* info2) {
     if(!info1) return;
     string* msg = (string*) info1;
     if(*msg == "stopped_generation") {
-        m->fsm.set_state(ONION_STATE_STOPPING_GENERATION);
+        m->fsm.setState(ONION_STATE_STOPPING_GENERATION);
     }
 }
 
@@ -116,8 +116,8 @@ void onion_fsm::check_stop_generating(Mob* m, void* info1, void* info2) {
  * @param info1 Pointer to the mob being received.
  * @param info2 Unused.
  */
-void onion_fsm::receive_mob(Mob* m, void* info1, void* info2) {
-    engine_assert(info1 != nullptr, m->print_state_history());
+void onion_fsm::receiveMob(Mob* m, void* info1, void* info2) {
+    engineAssert(info1 != nullptr, m->printStateHistory());
     
     Mob* delivery = (Mob*) info1;
     Onion* oni_ptr = (Onion*) m;
@@ -158,12 +158,12 @@ void onion_fsm::receive_mob(Mob* m, void* info1, void* info2) {
         }
     }
     
-    oni_ptr->stop_generating();
+    oni_ptr->stopGenerating();
     oni_ptr->generation_delay_timer.start();
     oni_ptr->generation_queue[type_idx] += seeds;
     
     ParticleGenerator pg =
-        standard_particle_gen_setup(
+        standardParticleGenSetup(
             game.sys_content_names.part_onion_insertion, oni_ptr
         );
     pg.follow_z_offset -= 2.0f; //Must appear below the Onion's bulb.
@@ -179,8 +179,8 @@ void onion_fsm::receive_mob(Mob* m, void* info1, void* info2) {
  * @param info1 Pointer to the mob being received.
  * @param info2 Unused.
  */
-void onion_fsm::start_generating(Mob* m, void* info1, void* info2) {
-    m->set_animation(ONION_ANIM_GENERATING);
+void onion_fsm::startGenerating(Mob* m, void* info1, void* info2) {
+    m->setAnimation(ONION_ANIM_GENERATING);
 }
 
 
@@ -191,8 +191,8 @@ void onion_fsm::start_generating(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void onion_fsm::start_idling(Mob* m, void* info1, void* info2) {
-    m->set_animation(
+void onion_fsm::startIdling(Mob* m, void* info1, void* info2) {
+    m->setAnimation(
         MOB_TYPE::ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
     );
 }
@@ -205,6 +205,6 @@ void onion_fsm::start_idling(Mob* m, void* info1, void* info2) {
  * @param info1 Pointer to the mob being received.
  * @param info2 Unused.
  */
-void onion_fsm::stop_generating(Mob* m, void* info1, void* info2) {
-    m->set_animation(ONION_ANIM_STOPPING_GENERATION);
+void onion_fsm::stopGenerating(Mob* m, void* info1, void* info2) {
+    m->setAnimation(ONION_ANIM_STOPPING_GENERATION);
 }

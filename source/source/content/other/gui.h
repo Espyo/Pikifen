@@ -216,17 +216,17 @@ public:
     explicit GuiItem(bool selectable = false);
     virtual ~GuiItem() = default;
     bool activate(const Point &cursor_pos);
-    void add_child(GuiItem* item);
-    void delete_all_children();
-    float get_child_bottom();
-    float get_juice_value();
-    Point get_reference_center();
-    Point get_reference_size();
-    bool is_mouse_on(const Point &cursor_pos);
-    bool is_responsive();
-    bool is_visible();
-    void remove_child(GuiItem* item);
-    void start_juice_animation(JUICE_TYPE type);
+    void addChild(GuiItem* item);
+    void deleteAllChildren();
+    float getChildBottom();
+    float getJuiceValue();
+    Point getReferenceCenter();
+    Point getReferenceSize();
+    bool isMouseOn(const Point &cursor_pos);
+    bool isResponsive();
+    bool isVisible();
+    void removeChild(GuiItem* item);
+    void startJuiceAnimation(JUICE_TYPE type);
     
 };
 
@@ -258,7 +258,7 @@ public:
         const ALLEGRO_COLOR &color = COLOR_WHITE
     );
     
-    void def_draw_code(const DrawInfo &draw);
+    void defDrawCode(const DrawInfo &draw);
     
 };
 
@@ -289,7 +289,7 @@ public:
         const ALLEGRO_COLOR &color = COLOR_WHITE
     );
     
-    void def_draw_code(const DrawInfo &draw);
+    void defDrawCode(const DrawInfo &draw);
     
 };
 
@@ -331,8 +331,8 @@ public:
         const ALLEGRO_COLOR &color = COLOR_WHITE
     );
     
-    void def_activate_code();
-    void def_draw_code(const DrawInfo &draw);
+    void defActivateCode();
+    void defDrawCode(const DrawInfo &draw);
     
 };
 
@@ -356,10 +356,10 @@ public:
     
     ListGuiItem();
     
-    void def_child_selected_code(const GuiItem* child);
-    void def_draw_code(const DrawInfo &draw);
-    void def_event_code(const ALLEGRO_EVENT  &ev);
-    void def_tick_code(float delta_t);
+    void defChildSelectedCode(const GuiItem* child);
+    void defDrawCode(const DrawInfo &draw);
+    void defEventCode(const ALLEGRO_EVENT  &ev);
+    void defTickCode(float delta_t);
     
 };
 
@@ -400,10 +400,10 @@ public:
         size_t nr_options = 0, size_t cur_option_idx = INVALID
     );
     
-    void def_activate_code(const Point &cursor_pos);
-    void def_draw_code(const DrawInfo &draw);
-    bool def_menu_dir_code(size_t button_id);
-    void def_mouse_over_code(const Point  &cursor_pos);
+    void defActivateCode(const Point &cursor_pos);
+    void defDrawCode(const DrawInfo &draw);
+    bool defMenuDirCode(size_t button_id);
+    void defMouseOverCode(const Point &cursor_pos);
     
     
 private:
@@ -433,8 +433,8 @@ public:
     
     ScrollGuiItem();
     
-    void def_draw_code(const DrawInfo &draw);
-    void def_event_code(const ALLEGRO_EVENT  &ev);
+    void defDrawCode(const DrawInfo &draw);
+    void defEventCode(const ALLEGRO_EVENT  &ev);
     
 };
 
@@ -476,7 +476,7 @@ public:
         int flags = ALLEGRO_ALIGN_CENTER
     );
     
-    void def_draw_code(const DrawInfo &draw);
+    void defDrawCode(const DrawInfo &draw);
     
 };
 
@@ -499,7 +499,7 @@ public:
     
     explicit TooltipGuiItem(GuiManager* gui);
     
-    void def_draw_code(const DrawInfo &draw);
+    void defDrawCode(const DrawInfo &draw);
     
     
 private:
@@ -551,26 +551,26 @@ public:
     //--- Function declarations ---
     
     GuiManager();
-    void add_item(GuiItem* item, const string &id = "");
+    void addItem(GuiItem* item, const string &id = "");
     void draw();
     void tick(float delta_t);
-    string get_current_tooltip();
-    bool get_item_draw_info(GuiItem* item, GuiItem::DrawInfo* draw);
-    void handle_allegro_event(const ALLEGRO_EVENT &ev);
-    bool handle_player_action(const PlayerAction &action);
-    void hide_items();
-    void read_coords(DataNode* node);
-    void register_coords(
+    string getCurrentTooltip();
+    bool getItemDrawInfo(GuiItem* item, GuiItem::DrawInfo* draw);
+    void handleAllegroEvent(const ALLEGRO_EVENT &ev);
+    bool handlePlayerAction(const PlayerAction &action);
+    void hideItems();
+    void readCoords(DataNode* node);
+    void registerCoords(
         const string &id,
         float cx, float cy, float w, float h
     );
-    void remove_item(GuiItem* item);
-    void set_selected_item(GuiItem* item, bool silent = false);
-    void show_items();
-    void start_animation(
+    void removeItem(GuiItem* item);
+    void setSelectedItem(GuiItem* item, bool silent = false);
+    void showItems();
+    void startAnimation(
         const GUI_MANAGER_ANIM type, float duration
     );
-    bool was_last_input_mouse();
+    bool wasLastInputMouse();
     void destroy();
     
 private:

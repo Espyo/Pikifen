@@ -60,10 +60,10 @@ public:
     
     void load() override;
     void unload() override;
-    void handle_allegro_event(ALLEGRO_EVENT &ev) override;
-    void do_logic() override;
-    void do_drawing() override;
-    string get_name() const override;
+    void handleAllegroEvent(ALLEGRO_EVENT &ev) override;
+    void doLogic() override;
+    void doDrawing() override;
+    string getName() const override;
     
     
 private:

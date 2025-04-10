@@ -59,15 +59,15 @@ struct Edge {
     
     explicit Edge(size_t v1_idx = INVALID, size_t v2_idx = INVALID);
     void clone(Edge* destination) const;
-    Sector* get_other_sector(const Sector* v_ptr) const;
-    Vertex* get_other_vertex(const Vertex* v_ptr) const;
-    size_t get_side_with_sector(const Sector* s_ptr) const;
-    Vertex* has_neighbor(const Edge* other) const;
-    bool is_valid() const;
-    size_t remove_from_sectors();
-    size_t remove_from_vertexes();
-    void swap_vertexes();
-    void transfer_sector(
+    Sector* getOtherSector(const Sector* v_ptr) const;
+    Vertex* getOtherVertex(const Vertex* v_ptr) const;
+    size_t getSideWithSector(const Sector* s_ptr) const;
+    Vertex* hasNeighbor(const Edge* other) const;
+    bool isValid() const;
+    size_t removeFromSectors();
+    size_t removeFromVertexes();
+    void swapVertexes();
+    void transferSector(
         Sector* from, Sector* to, size_t to_idx, size_t edge_idx
     );
     

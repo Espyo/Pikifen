@@ -23,4 +23,4 @@ GameState::GameState() { }
 /**
  * @brief Updates any transformations. Unused.
  */
-void GameState::update_transformations() { }
+void GameState::updateTransformations() { }

@@ -353,72 +353,72 @@ public:
     virtual ~Mob();
     
     void tick(float delta_t);
-    void draw_limb();
-    virtual void draw_mob();
+    void drawLimb();
+    virtual void drawMob();
     
-    void set_animation(
+    void setAnimation(
         size_t idx,
         const START_ANIM_OPTION options = START_ANIM_OPTION_NORMAL,
         bool pre_named = true,
         float mob_speed_baseline = 0.0f
     );
-    void set_animation(
+    void setAnimation(
         const string &name,
         const START_ANIM_OPTION options = START_ANIM_OPTION_NORMAL,
         float mob_speed_baseline = 0.0f
     );
-    void set_health(bool add, bool ratio, float amount);
-    void set_timer(float time);
-    void set_var(const string &name, const string &value);
-    void set_radius(float radius);
-    void set_rectangular_dim(const Point &rectangular_dim);
-    void set_can_block_paths(bool blocks);
+    void setHealth(bool add, bool ratio, float amount);
+    void setTimer(float time);
+    void setVar(const string &name, const string &value);
+    void setRadius(float radius);
+    void setRectangularDim(const Point &rectangular_dim);
+    void setCanBlockPaths(bool blocks);
     
-    void become_carriable(const CARRY_DESTINATION destination);
-    void become_uncarriable();
+    void becomeCarriable(const CARRY_DESTINATION destination);
+    void becomeUncarriable();
     
-    void apply_attack_damage(
+    void applyAttackDamage(
         Mob* attacker, Hitbox* attack_h, Hitbox* victim_h, float damage
     );
-    void add_to_group(Mob* new_member);
-    void apply_knockback(float knockback, float knockback_angle);
-    bool calculate_carrying_destination(
+    void addToGroup(Mob* new_member);
+    void applyKnockback(float knockback, float knockback_angle);
+    bool calculateCarryingDestination(
         Mob* added, Mob* removed,
         PikminType** target_type, Mob** target_mob, Point* target_point
     ) const;
-    Onion* calculate_carrying_onion(
+    Onion* calculateCarryingOnion(
         Mob* added, Mob* removed, PikminType** target_type
     ) const;
-    Ship* calculate_carrying_ship() const;
-    bool calculate_damage(
+    Ship* calculateCarryingShip() const;
+    bool calculateDamage(
         Mob* victim, Hitbox* attack_h, const Hitbox* victim_h, float* damage
     ) const;
-    void calculate_knockback(
+    void calculateKnockback(
         const Mob* victim, const Hitbox* attack_h,
         Hitbox* victim_h, float* knockback, float* angle
     ) const;
-    void cause_spike_damage(Mob* victim, bool is_ingestion);
+    void causeSpikeDamage(Mob* victim, bool is_ingestion);
     void chomp(Mob* m, const Hitbox* hitbox_info);
-    void get_sprite_data(
+    void getSpriteData(
         Sprite** out_cur_sprite_ptr, Sprite** out_next_sprite_ptr,
         float* out_interpolation_factor
     ) const;
-    void get_hitbox_hold_point(
+    void getHitboxHoldPoint(
         const Mob* mob_to_hold, const Hitbox* h_ptr,
         float* offset_dist, float* offset_angle, float* vertical_dist
     ) const;
-    size_t get_latched_pikmin_amount() const;
-    float get_latched_pikmin_weight() const;
-    void do_attack_effects(
+    size_t getLatchedPikminAmount() const;
+    float getLatchedPikminWeight() const;
+    void doAttackEffects(
         const Mob* attacker, const Hitbox* attack_h, const Hitbox* victim_h,
         float damage, float knockback
     );
-    bool is_stored_inside_mob() const;
-    bool is_off_camera() const;
-    bool is_point_on(const Point &p) const;
-    void focus_on_mob(Mob* m);
-    void unfocus_from_mob();
-    void leave_group();
+    bool isStoredInsideMob() const;
+    bool isOffCamera() const;
+    bool isPointOn(const Point &p) const;
+    void focusOnMob(Mob* m);
+    void unfocusFromMob();
+    void leaveGroup();
     void hold(
         Mob* m, size_t hitbox_idx,
         float offset_dist, float offset_angle,
@@ -426,34 +426,34 @@ public:
         bool force_above_holder, const HOLD_ROTATION_METHOD rotation_method
     );
     void release(Mob* m);
-    bool can_hurt(Mob* m) const;
-    bool can_hunt(Mob* m) const;
-    MobType::Vulnerability get_hazard_vulnerability(
+    bool canHurt(Mob* m) const;
+    bool canHunt(Mob* m) const;
+    MobType::Vulnerability getHazardVulnerability(
         Hazard* h_ptr
     ) const;
-    bool is_resistant_to_hazards(const vector<Hazard*> &hazards) const;
-    size_t play_sound(size_t sound_data_idx);
-    void swallow_chomped_pikmin(size_t amount);
-    void swallow_chomped_pikmin(Mob* m_ptr);
-    float get_drawing_height() const;
-    void start_height_effect();
-    void stop_height_effect();
-    void store_mob_inside(Mob* m);
-    void release_chomped_pikmin();
-    void release_stored_mobs();
-    void send_script_message(Mob* receiver, string &msg) const;
+    bool isResistantToHazards(const vector<Hazard*> &hazards) const;
+    size_t playSound(size_t sound_data_idx);
+    void swallowChompedPikmin(size_t amount);
+    void swallowChompedPikmin(Mob* m_ptr);
+    float getDrawingHeight() const;
+    void startHeightEffect();
+    void stopHeightEffect();
+    void storeMobInside(Mob* m);
+    void releaseChompedPikmin();
+    void releaseStoredMobs();
+    void sendScriptMessage(Mob* receiver, string &msg) const;
     Mob* spawn(const MobType::SpawnInfo* info, MobType* type_ptr = nullptr);
-    void start_dying();
-    void finish_dying();
+    void startDying();
+    void finishDying();
     void respawn();
-    Distance get_distance_between(
+    Distance getDistanceBetween(
         const Mob* m2_ptr, const Distance* regular_distance_cache = nullptr
     ) const;
-    Hitbox* get_hitbox(size_t idx) const;
-    Hitbox* get_closest_hitbox(
+    Hitbox* getHitbox(size_t idx) const;
+    Hitbox* getClosestHitbox(
         const Point &p, size_t h_type = INVALID, Distance* d = nullptr
     ) const;
-    bool has_clear_line(const Mob* target_mob) const;
+    bool hasClearLine(const Mob* target_mob) const;
     
     void chase(
         Point* orig_coords, float* orig_z,
@@ -468,59 +468,59 @@ public:
         float target_distance = PATHS::DEF_CHASE_TARGET_DISTANCE,
         float speed = LARGE_FLOAT, float acceleration = LARGE_FLOAT
     );
-    void stop_chasing();
-    void stop_turning();
-    bool follow_path(
+    void stopChasing();
+    void stopTurning();
+    bool followPath(
         const PathFollowSettings &settings,
         float speed, float acceleration
     );
-    void stop_following_path();
-    void circle_around(
+    void stopFollowingPath();
+    void circleAround(
         Mob* m, const Point &p, float radius, bool clockwise,
         float speed, bool can_free_move
     );
-    void stop_circling();
+    void stopCircling();
     void face(
         float new_angle, Point* new_pos, bool instantly = false
     );
-    Point get_chase_target(float* out_z = nullptr) const;
-    virtual float get_base_speed() const;
-    float get_speed_multiplier() const;
+    Point getChaseTarget(float* out_z = nullptr) const;
+    virtual float getBaseSpeed() const;
+    float getSpeedMultiplier() const;
     
-    void arachnorb_head_turn_logic();
-    void arachnorb_plan_logic(MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE goal);
-    void arachnorb_foot_move_logic();
+    void arachnorbHeadTurnLogic();
+    void arachnorbPlanLogic(MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE goal);
+    void arachnorbFootMoveLogic();
     
-    void apply_status_effect(
+    void applyStatusEffect(
         StatusType* s, bool given_by_parent, bool from_hazard
     );
-    void delete_old_status_effects();
-    void remove_particle_generator(const MOB_PARTICLE_GENERATOR_ID id);
-    ALLEGRO_BITMAP* get_status_bitmap(float* bmp_scale) const;
-    virtual bool can_receive_status(StatusType* s) const;
-    virtual void get_group_spot_info(
+    void deleteOldStatusEffects();
+    void removeParticleGenerator(const MOB_PARTICLE_GENERATOR_ID id);
+    ALLEGRO_BITMAP* getStatusBitmap(float* bmp_scale) const;
+    virtual bool canReceiveStatus(StatusType* s) const;
+    virtual void getGroupSpotInfo(
         Point* out_spot, float* out_dist
     ) const;
-    virtual bool get_fraction_numbers_info(
+    virtual bool getFractionNumbersInfo(
         float* fraction_value_nr, float* fraction_req_nr,
         ALLEGRO_COLOR* fraction_color
     ) const;
-    virtual void handle_status_effect_gain(StatusType* sta_type);
-    virtual void handle_status_effect_loss(StatusType* sta_type);
-    virtual void read_script_vars(const ScriptVarReader &svr);
-    virtual void start_dying_class_specifics();
-    virtual void finish_dying_class_specifics();
-    bool tick_track_ride();
-    void stop_track_ride();
-    void update_interaction_span();
+    virtual void handleStatusEffectGain(StatusType* sta_type);
+    virtual void handleStatusEffectLoss(StatusType* sta_type);
+    virtual void readScriptVars(const ScriptVarReader &svr);
+    virtual void startDyingClassSpecifics();
+    virtual void finishDyingClassSpecifics();
+    bool tickTrackRide();
+    void stopTrackRide();
+    void updateInteractionSpan();
     
     //Drawing tools.
-    void get_sprite_bitmap_effects(
+    void getSpriteBitmapEffects(
         Sprite* s_ptr, Sprite* next_s_ptr, float interpolation_factor,
         BitmapEffect* info, bitmask_16_t effects
     ) const;
     
-    string print_state_history() const;
+    string printStateHistory() const;
     
 protected:
 
@@ -532,40 +532,40 @@ protected:
     
     //--- Function declarations ---
     
-    PikminType* decide_carry_pikmin_type(
+    PikminType* decideCarryPikminType(
         const unordered_set<PikminType*> &available_types,
         Mob* added, Mob* removed
     ) const;
-    Mob* get_mob_to_walk_on() const;
-    H_MOVE_RESULT get_movement_edge_intersections(
+    Mob* getMobToWalkOn() const;
+    H_MOVE_RESULT getMovementEdgeIntersections(
         const Point &new_pos, vector<Edge*>* intersecting_edges
     ) const;
-    H_MOVE_RESULT get_physics_horizontal_movement(
+    H_MOVE_RESULT getPhysicsHorizontalMovement(
         float delta_t, float move_speed_mult, Point* move_speed
     );
-    H_MOVE_RESULT get_wall_slide_angle(
+    H_MOVE_RESULT getWallSlideAngle(
         const Edge* e_ptr, unsigned char wall_sector, float move_angle,
         float* slide_angle
     ) const;
-    void move_to_path_end(float speed, float acceleration);
-    void tick_animation(float delta_t);
-    void tick_brain(float delta_t);
-    void tick_horizontal_movement_physics(
+    void moveToPathEnd(float speed, float acceleration);
+    void tickAnimation(float delta_t);
+    void tickBrain(float delta_t);
+    void tickHorizontalMovementPhysics(
         float delta_t, const Point &attempted_move_speed,
         bool* touched_wall
     );
-    void tick_misc_logic(float delta_t);
-    void tick_physics(float delta_t);
-    void tick_rotation_physics(
+    void tickMiscLogic(float delta_t);
+    void tickPhysics(float delta_t);
+    void tickRotationPhysics(
         float delta_t, float move_speed_mult
     );
-    void tick_script(float delta_t);
-    void tick_vertical_movement_physics(
+    void tickScript(float delta_t);
+    void tickVerticalMovementPhysics(
         float delta_t, float pre_move_ground_z,
         bool was_teleport = false
     );
-    void tick_walkable_riding_physics(float delta_t);
-    virtual void tick_class_specifics(float delta_t);
+    void tickWalkableRidingPhysics(float delta_t);
+    virtual void tickClassSpecifics(float delta_t);
     
 };
 
@@ -585,7 +585,7 @@ public:
     
     //--- Function declarations ---
     
-    size_t get_animation_idx_from_base_and_group(
+    size_t getAnimationIdxFromBaseAndGroup(
         size_t base_anim_idx, size_t group_idx,
         size_t base_anim_total
     ) const;

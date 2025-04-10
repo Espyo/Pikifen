@@ -39,7 +39,7 @@ ShipType::ShipType() :
         "e.g.: \"8 0 1\" means it has 8 leaf Pikmin inside, and 1 flower.";
     area_editor_props.push_back(aep_pik_inside);
     
-    ship_fsm::create_fsm(this);
+    ship_fsm::createFsm(this);
 }
 
 
@@ -56,7 +56,7 @@ ShipType::~ShipType() {
  *
  * @return The vector.
  */
-anim_conversion_vector ShipType::get_anim_conversions() const {
+anim_conversion_vector ShipType::getAnimConversions() const {
     anim_conversion_vector v;
     v.push_back(std::make_pair(SHIP_ANIM_IDLING, "idling"));
     return v;
@@ -68,7 +68,7 @@ anim_conversion_vector ShipType::get_anim_conversions() const {
  *
  * @param file File to read from.
  */
-void ShipType::load_cat_properties(DataNode* file) {
+void ShipType::loadCatProperties(DataNode* file) {
     ReaderSetter rs(file);
     
     rs.set("can_heal", can_heal);
@@ -76,7 +76,7 @@ void ShipType::load_cat_properties(DataNode* file) {
     rs.set("control_point_offset", control_point_offset);
     rs.set("receptacle_offset", receptacle_offset);
     
-    nest->load_properties(file);
+    nest->loadProperties(file);
 }
 
 
@@ -85,12 +85,12 @@ void ShipType::load_cat_properties(DataNode* file) {
  *
  * @param file File to read from.
  */
-void ShipType::load_cat_resources(DataNode* file) {
+void ShipType::loadCatResources(DataNode* file) {
     //We don't actually need to load any, but we know that if this function
     //is run, then the animations are definitely loaded.
     //Now's a good time to check the leg body parts.
     for(size_t b = 0; b < nest->leg_body_parts.size(); b++) {
-        if(anim_db->find_body_part(nest->leg_body_parts[b]) == INVALID) {
+        if(anim_db->findBodyPart(nest->leg_body_parts[b]) == INVALID) {
             game.errors.report(
                 "The ship type \"" + name + "\" specifies a leg body part "
                 "called \"" + nest->leg_body_parts[b] + "\", "

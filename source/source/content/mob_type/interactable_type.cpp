@@ -30,7 +30,7 @@ InteractableType::InteractableType() :
  *
  * @param file File to read from.
  */
-void InteractableType::load_cat_properties(DataNode* file) {
+void InteractableType::loadCatProperties(DataNode* file) {
     ReaderSetter rs(file);
     
     rs.set("prompt_text", prompt_text);

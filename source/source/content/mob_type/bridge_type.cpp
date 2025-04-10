@@ -51,14 +51,14 @@ BridgeType::BridgeType() :
         "more chunks in order to allow enough steps.";
     area_editor_props.push_back(aep_chunks);
     
-    bridge_fsm::create_fsm(this);
+    bridge_fsm::createFsm(this);
 }
 
 
 /**
  * @brief Returns the vector of animation conversions.
  */
-anim_conversion_vector BridgeType::get_anim_conversions() const {
+anim_conversion_vector BridgeType::getAnimConversions() const {
     anim_conversion_vector v;
     v.push_back(std::make_pair(BRIDGE_ANIM_IDLING, "idling"));
     v.push_back(std::make_pair(BRIDGE_ANIM_DESTROYED, "destroyed"));
@@ -71,7 +71,7 @@ anim_conversion_vector BridgeType::get_anim_conversions() const {
  *
  * @param file File to read from.
  */
-void BridgeType::load_cat_properties(DataNode* file) {
+void BridgeType::loadCatProperties(DataNode* file) {
     ReaderSetter rs(file);
     
     rs.set("rail_width", rail_width);
@@ -83,7 +83,7 @@ void BridgeType::load_cat_properties(DataNode* file) {
  *
  * @param file File to read from.
  */
-void BridgeType::load_cat_resources(DataNode* file) {
+void BridgeType::loadCatResources(DataNode* file) {
     ReaderSetter rs(file);
     
     rs.set("main_texture", main_texture_bmp_name);
@@ -107,7 +107,7 @@ void BridgeType::load_cat_resources(DataNode* file) {
 /**
  * @brief Unloads resources from memory.
  */
-void BridgeType::unload_resources() {
+void BridgeType::unloadResources() {
     game.content.bitmaps.list.free(main_texture_bmp_name);
     game.content.bitmaps.list.free(left_rail_texture_bmp_name);
     game.content.bitmaps.list.free(right_rail_texture_bmp_name);

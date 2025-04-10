@@ -23,31 +23,31 @@
 using std::string;
 
 
-void load_area_mission_record(
+void loadAreaMissionRecord(
     DataNode* file, Area* area_ptr, MissionRecord &record
 );
-ALLEGRO_AUDIO_STREAM* load_audio_stream(
+ALLEGRO_AUDIO_STREAM* loadAudioStream(
     const string &file_name, DataNode* node = nullptr,
     bool report_errors = true
 );
-ALLEGRO_BITMAP* load_bmp(
+ALLEGRO_BITMAP* loadBmp(
     const string &path, DataNode* node = nullptr,
     bool report_error = true, bool error_bmp_on_error = true,
     bool error_bmp_on_empty = true
 );
-DataNode load_data_file(const string &file_path);
-void load_maker_tools();
-ALLEGRO_FONT* load_font(
+DataNode loadDataFile(const string &file_path);
+void loadMakerTools();
+ALLEGRO_FONT* loadFont(
     const string &file_name, int n, const int ranges[], int size
 );
-void load_fonts();
-void load_misc_graphics();
-void load_misc_sounds();
-void load_options();
-ALLEGRO_SAMPLE* load_sample(
+void loadFonts();
+void loadMiscGraphics();
+void loadMiscSounds();
+void loadOptions();
+ALLEGRO_SAMPLE* loadSample(
     const string &file_name, DataNode* node = nullptr,
     bool report_errors = true
 );
-void load_statistics();
+void loadStatistics();
 
-void unload_misc_resources();
+void unloadMiscResources();

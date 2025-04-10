@@ -121,7 +121,7 @@ const float TREE_SHADOW_SWAY_SPEED = TAU / 8;
  * @param type_idx Index number of the spray type.
  * @param amount Amount to change by.
  */
-void GameplayState::change_spray_count(
+void GameplayState::changeSprayCount(
     size_t type_idx, signed int amount
 ) {
     spray_stats[type_idx].nr_sprays =
@@ -143,7 +143,7 @@ void GameplayState::change_spray_count(
         }
     }
     if(spray_hud_item) {
-        spray_hud_item->start_juice_animation(
+        spray_hud_item->startJuiceAnimation(
             GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
         );
     }
@@ -153,11 +153,11 @@ void GameplayState::change_spray_count(
 /**
  * @brief Draws the gameplay.
  */
-void GameplayState::do_drawing() {
-    do_game_drawing();
+void GameplayState::doDrawing() {
+    doGameDrawing();
     
     if(game.perf_mon) {
-        game.perf_mon->leave_state();
+        game.perf_mon->leaveState();
     }
 }
 
@@ -165,15 +165,15 @@ void GameplayState::do_drawing() {
 /**
  * @brief Tick the gameplay logic by one frame.
  */
-void GameplayState::do_logic() {
+void GameplayState::doLogic() {
     if(game.perf_mon) {
         if(is_input_allowed) {
             //The first frame will have its speed all broken,
             //because of the long loading time that came before it.
-            game.perf_mon->set_paused(false);
-            game.perf_mon->enter_state(PERF_MON_STATE_FRAME);
+            game.perf_mon->setPaused(false);
+            game.perf_mon->enterState(PERF_MON_STATE_FRAME);
         } else {
-            game.perf_mon->set_paused(true);
+            game.perf_mon->setPaused(true);
         }
     }
     
@@ -188,19 +188,19 @@ void GameplayState::do_logic() {
     
     //Controls.
     for(size_t a = 0; a < game.player_actions.size(); a++) {
-        handle_player_action(game.player_actions[a]);
-        if(onion_menu) onion_menu->handle_player_action(game.player_actions[a]);
-        if(pause_menu) pause_menu->handle_player_action(game.player_actions[a]);
-        game.maker_tools.handle_gameplay_player_action(game.player_actions[a]);
+        handlePlayerAction(game.player_actions[a]);
+        if(onion_menu) onion_menu->handlePlayerAction(game.player_actions[a]);
+        if(pause_menu) pause_menu->handlePlayerAction(game.player_actions[a]);
+        game.maker_tools.handleGameplayPlayerAction(game.player_actions[a]);
     }
     
     //Game logic.
     if(!paused) {
         game.statistics.gameplay_time += regular_delta_t;
-        do_gameplay_logic(game.delta_t* delta_t_mult);
-        do_aesthetic_logic(game.delta_t* delta_t_mult);
+        doGameplayLogic(game.delta_t* delta_t_mult);
+        doAestheticLogic(game.delta_t* delta_t_mult);
     }
-    do_menu_logic();
+    doMenuLogic();
 }
 
 
@@ -209,7 +209,7 @@ void GameplayState::do_logic() {
  *
  * @param cleared Did the player reach the goal?
  */
-void GameplayState::end_mission(bool cleared) {
+void GameplayState::endMission(bool cleared) {
     if(cur_interlude != INTERLUDE_NONE) {
         return;
     }
@@ -224,7 +224,7 @@ void GameplayState::end_mission(bool cleared) {
     if(cleared) {
         MissionGoal* goal =
             game.mission_goals[game.cur_area_data->mission.goal];
-        if(goal->get_end_zoom_data(this, &new_cam_pos, &new_cam_zoom)) {
+        if(goal->getEndZoomData(this, &new_cam_pos, &new_cam_zoom)) {
             game.cam.target_pos = new_cam_pos;
             game.cam.target_zoom = new_cam_zoom;
         }
@@ -232,7 +232,7 @@ void GameplayState::end_mission(bool cleared) {
     } else {
         MissionFail* cond =
             game.mission_fail_conds[mission_fail_reason];
-        if(cond->get_end_zoom_data(this, &new_cam_pos, &new_cam_zoom)) {
+        if(cond->getEndZoomData(this, &new_cam_pos, &new_cam_zoom)) {
             game.cam.target_pos = new_cam_pos;
             game.cam.target_zoom = new_cam_zoom;
         }
@@ -244,7 +244,7 @@ void GameplayState::end_mission(bool cleared) {
         cur_big_msg = BIG_MESSAGE_MISSION_FAILED;
     }
     big_msg_time = 0.0f;
-    hud->gui.start_animation(
+    hud->gui.startAnimation(
         GUI_MANAGER_ANIM_IN_TO_OUT,
         GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
     );
@@ -256,7 +256,7 @@ void GameplayState::end_mission(bool cleared) {
  * from the result menu's "keep playing" option.
  */
 void GameplayState::enter() {
-    update_transformations();
+    updateTransformations();
     
     last_enemy_killed_pos = Point(LARGE_FLOAT);
     last_hurt_leader_pos = Point(LARGE_FLOAT);
@@ -284,9 +284,9 @@ void GameplayState::enter() {
         big_msg_time = GAMEPLAY::BIG_MSG_READY_DUR;
     }
     
-    hud->gui.hide_items();
+    hud->gui.hideItems();
     if(went_to_results) {
-        game.fade_mgr.start_fade(true, nullptr);
+        game.fade_mgr.startFade(true, nullptr);
         if(pause_menu) {
             pause_menu->to_delete = true;
         }
@@ -301,9 +301,9 @@ void GameplayState::enter() {
     notification.reset();
     
     if(cur_leader_ptr) {
-        cur_leader_ptr->stop_whistling();
+        cur_leader_ptr->stopWhistling();
     }
-    update_closest_group_members();
+    updateClosestGroupMembers();
 }
 
 
@@ -314,7 +314,7 @@ void GameplayState::enter() {
  * @param far_radius From this radius on, the fog is fully dense.
  * @return The bitmap.
  */
-ALLEGRO_BITMAP* GameplayState::generate_fog_bitmap(
+ALLEGRO_BITMAP* GameplayState::generateFogBitmap(
     float near_radius, float far_radius
 ) {
     if(far_radius == 0) return nullptr;
@@ -355,12 +355,12 @@ ALLEGRO_BITMAP* GameplayState::generate_fog_bitmap(
                         GAMEPLAY::FOG_BITMAP_SIZE / 2.0,
                         GAMEPLAY::FOG_BITMAP_SIZE / 2.0
                     )
-                ).to_float() / (GAMEPLAY::FOG_BITMAP_SIZE / 2.0);
+                ).toFloat() / (GAMEPLAY::FOG_BITMAP_SIZE / 2.0);
             cur_ratio = std::min(cur_ratio, 1.0f);
             //Then, map that ratio to a different ratio that considers
             //the start of the "near" section as 0.
             cur_ratio =
-                interpolate_number(cur_ratio, near_ratio, 1.0f, 0.0f, 1.0f);
+                interpolateNumber(cur_ratio, near_ratio, 1.0f, 0.0f, 1.0f);
             //Finally, clamp the value and get the alpha.
             cur_ratio = std::clamp(cur_ratio, 0.0f, 1.0f);
             unsigned char cur_a = 255 * cur_ratio;
@@ -379,7 +379,7 @@ ALLEGRO_BITMAP* GameplayState::generate_fog_bitmap(
 #undef fill_pixel
     
     al_unlock_bitmap(bmp);
-    bmp = recreate_bitmap(bmp); //Refresh mipmaps.
+    bmp = recreateBitmap(bmp); //Refresh mipmaps.
     return bmp;
 }
 
@@ -391,7 +391,7 @@ ALLEGRO_BITMAP* GameplayState::generate_fog_bitmap(
  * @param filter If not nullptr, only return Pikmin matching this type.
  * @return The amount.
  */
-size_t GameplayState::get_amount_of_field_pikmin(const PikminType* filter) {
+size_t GameplayState::getAmountOfFieldPikmin(const PikminType* filter) {
     size_t total = 0;
     
     //Check the Pikmin mobs.
@@ -418,7 +418,7 @@ size_t GameplayState::get_amount_of_field_pikmin(const PikminType* filter) {
  * @param filter If not nullptr, only return Pikmin matching this type.
  * @return The amount.
  */
-size_t GameplayState::get_amount_of_group_pikmin(const PikminType* filter) {
+size_t GameplayState::getAmountOfGroupPikmin(const PikminType* filter) {
     size_t total = 0;
     
     if(!cur_leader_ptr) return 0;
@@ -440,7 +440,7 @@ size_t GameplayState::get_amount_of_group_pikmin(const PikminType* filter) {
  * @param filter If not nullptr, only return Pikmin matching this type.
  * @return The amount.
  */
-size_t GameplayState::get_amount_of_idle_pikmin(const PikminType* filter) {
+size_t GameplayState::getAmountOfIdlePikmin(const PikminType* filter) {
     size_t total = 0;
     
     for(size_t p = 0; p < mobs.pikmin_list.size(); p++) {
@@ -465,7 +465,7 @@ size_t GameplayState::get_amount_of_idle_pikmin(const PikminType* filter) {
  * @param filter If not nullptr, only return Pikmin matching this type.
  * @return The amount.
  */
-long GameplayState::get_amount_of_onion_pikmin(const PikminType* filter) {
+long GameplayState::getAmountOfOnionPikmin(const PikminType* filter) {
     long total = 0;
     
     //Check Onions proper.
@@ -514,14 +514,14 @@ long GameplayState::get_amount_of_onion_pikmin(const PikminType* filter) {
  * @param filter If not nullptr, only return Pikmin matching this type.
  * @return The amount.
  */
-long GameplayState::get_amount_of_total_pikmin(const PikminType* filter) {
+long GameplayState::getAmountOfTotalPikmin(const PikminType* filter) {
     long total = 0;
     
     //Check Pikmin in the field and inside converters.
-    total += (long) get_amount_of_field_pikmin(filter);
+    total += (long) getAmountOfFieldPikmin(filter);
     
     //Check Pikmin inside Onions and ships.
-    total += get_amount_of_onion_pikmin(filter);
+    total += getAmountOfOnionPikmin(filter);
     
     //Return the final sum.
     return total;
@@ -540,7 +540,7 @@ long GameplayState::get_amount_of_total_pikmin(const PikminType* filter) {
  * @return The closest member, or nullptr if there is no member
  * of that subgroup available to grab.
  */
-Mob* GameplayState::get_closest_group_member(
+Mob* GameplayState::getClosestGroupMember(
     const SubgroupType* type, bool* distant
 ) {
     if(!cur_leader_ptr) return nullptr;
@@ -569,7 +569,7 @@ Mob* GameplayState::get_closest_group_member(
         if(member_ptr->type->category->id == MOB_CATEGORY_PIKMIN) {
             maturity = ((Pikmin*) member_ptr)->maturity;
         }
-        bool can_grab = cur_leader_ptr->can_grab_group_member(member_ptr);
+        bool can_grab = cur_leader_ptr->canGrabGroupMember(member_ptr);
         
         if(!can_grab && can_grab_closest[maturity]) {
             //Skip if we'd replace a grabbable Pikmin with a non-grabbable one.
@@ -624,7 +624,7 @@ Mob* GameplayState::get_closest_group_member(
  *
  * @return The name.
  */
-string GameplayState::get_name() const {
+string GameplayState::getName() const {
     return "gameplay";
 }
 
@@ -634,20 +634,20 @@ string GameplayState::get_name() const {
  *
  * @param ev Event to handle.
  */
-void GameplayState::handle_allegro_event(ALLEGRO_EVENT &ev) {
+void GameplayState::handleAllegroEvent(ALLEGRO_EVENT &ev) {
     //Handle the Onion menu first so events don't bleed from gameplay to it.
     if(onion_menu) {
-        onion_menu->handle_allegro_event(ev);
+        onion_menu->handleAllegroEvent(ev);
     } else if(pause_menu) {
-        pause_menu->handle_allegro_event(ev);
+        pause_menu->handleAllegroEvent(ev);
     }
     
     if(ev.type == ALLEGRO_EVENT_DISPLAY_SWITCH_OUT) {
-        game.controls.release_all();
+        game.controls.releaseAll();
     }
     
     //Finally, let the HUD handle events.
-    hud->gui.handle_allegro_event(ev);
+    hud->gui.handleAllegroEvent(ev);
     
 }
 
@@ -655,7 +655,7 @@ void GameplayState::handle_allegro_event(ALLEGRO_EVENT &ev) {
 /**
  * @brief Initializes the HUD.
  */
-void GameplayState::init_hud() {
+void GameplayState::initHud() {
     hud = new Hud();
 }
 
@@ -671,23 +671,23 @@ void GameplayState::leave(const GAMEPLAY_LEAVE_TARGET target) {
     
     if(game.perf_mon) {
         //Don't register the final frame, since it won't draw anything.
-        game.perf_mon->set_paused(true);
+        game.perf_mon->setPaused(true);
     }
     
-    game.audio.stop_all_playbacks();
-    game.audio.set_current_song("");
+    game.audio.stopAllPlaybacks();
+    game.audio.setCurrentSong("");
     boss_music_state = BOSS_MUSIC_STATE_NEVER_PLAYED;
-    save_statistics();
+    saveStatistics();
     
     switch(target) {
     case GAMEPLAY_LEAVE_TARGET_RETRY: {
-        game.change_state(game.states.gameplay);
+        game.changeState(game.states.gameplay);
         break;
     } case GAMEPLAY_LEAVE_TARGET_END: {
         went_to_results = true;
         //Change state, but don't unload this one, since the player
         //may pick the "keep playing" option in the results screen.
-        game.change_state(game.states.results, false);
+        game.changeState(game.states.results, false);
         break;
     } case GAMEPLAY_LEAVE_TARGET_AREA_SELECT: {
         if(game.states.area_ed->quick_play_area_path.empty()) {
@@ -695,9 +695,9 @@ void GameplayState::leave(const GAMEPLAY_LEAVE_TARGET target) {
                 game.cur_area_data->type;
             game.states.annex_screen->menu_to_load =
                 ANNEX_SCREEN_MENU_AREA_SELECTION;
-            game.change_state(game.states.annex_screen);
+            game.changeState(game.states.annex_screen);
         } else {
-            game.change_state(game.states.area_ed);
+            game.changeState(game.states.area_ed);
         }
         break;
     }
@@ -711,21 +711,21 @@ void GameplayState::leave(const GAMEPLAY_LEAVE_TARGET target) {
 void GameplayState::load() {
     if(game.perf_mon) {
         game.perf_mon->reset();
-        game.perf_mon->enter_state(PERF_MON_STATE_LOADING);
-        game.perf_mon->set_paused(false);
+        game.perf_mon->enterState(PERF_MON_STATE_LOADING);
+        game.perf_mon->setPaused(false);
     }
     
     loading = true;
-    game.errors.prepare_area_load();
+    game.errors.prepareAreaLoad();
     went_to_results = false;
     
-    draw_loading_screen("", "", 1.0f);
+    drawLoadingScreen("", "", 1.0f);
     al_flip_display();
     
     game.statistics.area_entries++;
     
     //Game content.
-    load_game_content();
+    loadGameContent();
     
     //Initialize some important things.
     for(size_t s = 0; s < game.content.spray_types.list.size(); s++) {
@@ -734,7 +734,7 @@ void GameplayState::load() {
     
     area_time_passed = 0.0f;
     gameplay_time_passed = 0.0f;
-    game.maker_tools.reset_for_gameplay();
+    game.maker_tools.resetForGameplay();
     area_title_fade_timer.start();
     
     after_hours = false;
@@ -764,12 +764,12 @@ void GameplayState::load() {
     game.framerate_history.clear();
     
     boss_music_state = BOSS_MUSIC_STATE_NEVER_PLAYED;
-    game.audio.set_current_song("");
+    game.audio.setCurrentSong("");
     game.audio.on_song_finished = [this] (const string &name) {
         if(name == game.sys_content_names.sng_boss_victory) {
             switch(boss_music_state) {
             case BOSS_MUSIC_STATE_VICTORY: {
-                game.audio.set_current_song(game.cur_area_data->song_name, false);
+                game.audio.setCurrentSong(game.cur_area_data->song_name, false);
                 boss_music_state = BOSS_MUSIC_STATE_PAUSED;
             } default: {
                 break;
@@ -788,19 +788,19 @@ void GameplayState::load() {
             "\" when trying to load the leader damage sparks!"
         );
     } else {
-        game.sys_content.anim_sparks.init_to_first_anim(
+        game.sys_content.anim_sparks.initToFirstAnim(
             &spark_anim_db_it->second
         );
     }
     
     //Load the area.
     if(
-        !game.content.load_area_as_current(
+        !game.content.loadAreaAsCurrent(
             path_of_area_to_load, nullptr,
             CONTENT_LOAD_LEVEL_FULL, false
         )
     ) {
-        game.change_state(game.states.title_screen, true);
+        game.changeState(game.states.title_screen, true);
         return;
     }
     
@@ -809,7 +809,7 @@ void GameplayState::load() {
     }
     if(!game.cur_area_data->weather_condition.fog_color.empty()) {
         bmp_fog =
-            generate_fog_bitmap(
+            generateFogBitmap(
                 game.cur_area_data->weather_condition.fog_near,
                 game.cur_area_data->weather_condition.fog_far
             );
@@ -818,7 +818,7 @@ void GameplayState::load() {
     //Generate mobs.
     next_mob_id = 0;
     if(game.perf_mon) {
-        game.perf_mon->start_measurement("Object generation");
+        game.perf_mon->startMeasurement("Object generation");
     }
     
     vector<Mob*> mobs_per_gen;
@@ -839,7 +839,7 @@ void GameplayState::load() {
         
         if(valid) {
             Mob* new_mob =
-                create_mob(
+                createMob(
                     m_ptr->type->category, m_ptr->pos, m_ptr->type,
                     m_ptr->angle, m_ptr->vars
                 );
@@ -872,13 +872,13 @@ void GameplayState::load() {
         if(holdee_gen_ptr->stored_inside == INVALID) continue;
         Mob* holdee_ptr = mobs_per_gen[m];
         Mob* holder_mob_ptr = mobs_per_gen[holdee_gen_ptr->stored_inside];
-        holder_mob_ptr->store_mob_inside(holdee_ptr);
+        holder_mob_ptr->storeMobInside(holdee_ptr);
     }
     
     //Save each path stop's sector.
     for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
         game.cur_area_data->path_stops[s]->sector_ptr =
-            get_sector(game.cur_area_data->path_stops[s]->pos, nullptr, true);
+            getSector(game.cur_area_data->path_stops[s]->pos, nullptr, true);
     }
     
     //Sort leaders.
@@ -902,25 +902,25 @@ void GameplayState::load() {
     );
     
     if(game.perf_mon) {
-        game.perf_mon->finish_measurement();
+        game.perf_mon->finishMeasurement();
     }
     
     //In case a leader is stored in another mob,
     //update the available list.
-    update_available_leaders();
+    updateAvailableLeaders();
     
     cur_leader_idx = INVALID;
     cur_leader_ptr = nullptr;
     starting_nr_of_leaders = mobs.leaders.size();
     
     if(!mobs.leaders.empty()) {
-        change_to_next_leader(true, false, false);
+        changeToNextLeader(true, false, false);
     }
     
     if(cur_leader_ptr) {
-        game.cam.set_pos(cur_leader_ptr->pos);
+        game.cam.setPos(cur_leader_ptr->pos);
     } else {
-        game.cam.set_pos(Point());
+        game.cam.setPos(Point());
     }
     game.cam.set_zoom(game.options.advanced.zoom_mid_level);
     
@@ -933,7 +933,7 @@ void GameplayState::load() {
                 if(
                     mobs_per_gen[m] &&
                     game.mission_goals[game.cur_area_data->mission.goal]->
-                    is_mob_applicable(mobs_per_gen[m]->type)
+                    isMobApplicable(mobs_per_gen[m]->type)
                 ) {
                     mission_required_mob_gen_idxs.insert(m);
                 }
@@ -1019,14 +1019,14 @@ void GameplayState::load() {
     );
     
     //Initialize some other things.
-    path_mgr.handle_area_load();
+    path_mgr.handleAreaLoad();
     
-    init_hud();
+    initHud();
     
     day_minutes = game.cur_area_data->day_time_start;
     
     map<string, string> spray_strs =
-        get_var_map(game.cur_area_data->spray_amounts);
+        getVarMap(game.cur_area_data->spray_amounts);
         
     for(auto &s : spray_strs) {
         size_t spray_idx = 0;
@@ -1054,15 +1054,15 @@ void GameplayState::load() {
         game.cur_area_data->edges.size(),
         EdgeOffsetCache()
     );
-    update_offset_effect_caches(
+    updateOffsetEffectCaches(
         game.liquid_limit_effect_caches,
         unordered_set<Vertex*>(
             game.cur_area_data->vertexes.begin(),
             game.cur_area_data->vertexes.end()
         ),
-        does_edge_have_liquid_limit,
-        get_liquid_limit_length,
-        get_liquid_limit_color
+        doesEdgeHaveLiquidLimit,
+        getLiquidLimitLength,
+        getLiquidLimitColor
     );
     game.wall_smoothing_effect_caches.clear();
     game.wall_smoothing_effect_caches.insert(
@@ -1070,15 +1070,15 @@ void GameplayState::load() {
         game.cur_area_data->edges.size(),
         EdgeOffsetCache()
     );
-    update_offset_effect_caches(
+    updateOffsetEffectCaches(
         game.wall_smoothing_effect_caches,
         unordered_set<Vertex*>(
             game.cur_area_data->vertexes.begin(),
             game.cur_area_data->vertexes.end()
         ),
-        does_edge_have_ledge_smoothing,
-        get_ledge_smoothing_length,
-        get_ledge_smoothing_color
+        doesEdgeHaveLedgeSmoothing,
+        getLedgeSmoothingLength,
+        getLedgeSmoothingColor
     );
     game.wall_shadow_effect_caches.clear();
     game.wall_shadow_effect_caches.insert(
@@ -1086,15 +1086,15 @@ void GameplayState::load() {
         game.cur_area_data->edges.size(),
         EdgeOffsetCache()
     );
-    update_offset_effect_caches(
+    updateOffsetEffectCaches(
         game.wall_shadow_effect_caches,
         unordered_set<Vertex*>(
             game.cur_area_data->vertexes.begin(),
             game.cur_area_data->vertexes.end()
         ),
-        does_edge_have_wall_shadow,
-        get_wall_shadow_length,
-        get_wall_shadow_color
+        doesEdgeHaveWallShadow,
+        getWallShadowLength,
+        getWallShadowColor
     );
     
     //TODO Uncomment this when replays are implemented.
@@ -1104,7 +1104,7 @@ void GameplayState::load() {
     [this] () {
         this->replay_timer.start();
         vector<mob*> obstacles; //TODO
-        gameplay_replay.add_state(
+        gameplay_replay.addState(
             leaders, pikmin_list, enemies, treasures, onions, obstacles,
             cur_leader_idx
         );
@@ -1114,11 +1114,11 @@ void GameplayState::load() {
     gameplay_replay.clear();*/
     
     //Report any errors with the loading process.
-    game.errors.report_area_load_errors();
+    game.errors.reportAreaLoadErrors();
     
     if(game.perf_mon) {
-        game.perf_mon->set_area_name(game.cur_area_data->name);
-        game.perf_mon->leave_state();
+        game.perf_mon->setAreaName(game.cur_area_data->name);
+        game.perf_mon->leaveState();
     }
     
     enter();
@@ -1130,9 +1130,9 @@ void GameplayState::load() {
 /**
  * @brief Loads all of the game's content.
  */
-void GameplayState::load_game_content() {
-    game.content.reload_packs();
-    game.content.load_all(
+void GameplayState::loadGameContent() {
+    game.content.reloadPacks();
+    game.content.loadAll(
     vector<CONTENT_TYPE> {
         CONTENT_TYPE_GUI,
         CONTENT_TYPE_PARTICLE_GEN,
@@ -1148,7 +1148,7 @@ void GameplayState::load_game_content() {
     );
     
     //Area manifests.
-    game.content.load_all(
+    game.content.loadAll(
     vector<CONTENT_TYPE> {
         CONTENT_TYPE_AREA,
     },
@@ -1156,7 +1156,7 @@ void GameplayState::load_game_content() {
     );
     
     //Mob types.
-    game.content.load_all(
+    game.content.loadAll(
     vector<CONTENT_TYPE> {
         CONTENT_TYPE_MOB_ANIMATION,
         CONTENT_TYPE_MOB_TYPE,
@@ -1166,7 +1166,7 @@ void GameplayState::load_game_content() {
     
     //Register leader sub-group types.
     for(size_t p = 0; p < game.config.pikmin.order.size(); p++) {
-        subgroup_types.register_type(
+        subgroup_types.registerType(
             SUBGROUP_TYPE_CATEGORY_PIKMIN, game.config.pikmin.order[p],
             game.config.pikmin.order[p]->bmp_icon
         );
@@ -1179,12 +1179,12 @@ void GameplayState::load_game_content() {
     sort(tool_types_vector.begin(), tool_types_vector.end());
     for(size_t t = 0; t < tool_types_vector.size(); t++) {
         ToolType* tt_ptr = game.content.mob_types.list.tool[tool_types_vector[t]];
-        subgroup_types.register_type(
+        subgroup_types.registerType(
             SUBGROUP_TYPE_CATEGORY_TOOL, tt_ptr, tt_ptr->bmp_icon
         );
     }
     
-    subgroup_types.register_type(SUBGROUP_TYPE_CATEGORY_LEADER);
+    subgroup_types.registerType(SUBGROUP_TYPE_CATEGORY_LEADER);
 }
 
 
@@ -1193,8 +1193,8 @@ void GameplayState::load_game_content() {
  *
  * @param target Where to leave to.
  */
-void GameplayState::start_leaving(const GAMEPLAY_LEAVE_TARGET target) {
-    game.fade_mgr.start_fade( false, [this, target] () { leave(target); });
+void GameplayState::startLeaving(const GAMEPLAY_LEAVE_TARGET target) {
+    game.fade_mgr.startFade( false, [this, target] () { leave(target); });
 }
 
 
@@ -1218,11 +1218,11 @@ void GameplayState::unload() {
     close_to_pikmin_to_pluck = nullptr;
     close_to_ship_to_heal = nullptr;
     
-    game.cam.set_pos(Point());
+    game.cam.setPos(Point());
     game.cam.set_zoom(1.0f);
     
     while(!mobs.all.empty()) {
-        delete_mob(*mobs.all.begin(), true);
+        deleteMob(*mobs.all.begin(), true);
     }
     
     if(lightmap_bmp) {
@@ -1238,8 +1238,8 @@ void GameplayState::unload() {
     leader_movement.reset(); //TODO replace with a better solution.
     
     game.sys_content.anim_sparks.clear();
-    unload_game_content();
-    game.content.unload_current_area(CONTENT_LOAD_LEVEL_FULL);
+    unloadGameContent();
+    game.content.unloadCurrentArea(CONTENT_LOAD_LEVEL_FULL);
     
     if(bmp_fog) {
         al_destroy_bitmap(bmp_fog);
@@ -1267,10 +1267,10 @@ void GameplayState::unload() {
 /**
  * @brief Unloads loaded game content.
  */
-void GameplayState::unload_game_content() {
+void GameplayState::unloadGameContent() {
     subgroup_types.clear();
     
-    game.content.unload_all(
+    game.content.unloadAll(
     vector<CONTENT_TYPE> {
         CONTENT_TYPE_AREA,
         CONTENT_TYPE_WEATHER_CONDITION,
@@ -1292,13 +1292,13 @@ void GameplayState::unload_game_content() {
 /**
  * @brief Updates the list of leaders available to be controlled.
  */
-void GameplayState::update_available_leaders() {
+void GameplayState::updateAvailableLeaders() {
     //Build the list.
     available_leaders.clear();
     for(size_t l = 0; l < mobs.leaders.size(); l++) {
         if(mobs.leaders[l]->health <= 0.0f) continue;
         if(mobs.leaders[l]->to_delete) continue;
-        if(mobs.leaders[l]->is_stored_inside_mob()) continue;
+        if(mobs.leaders[l]->isStoredInsideMob()) continue;
         available_leaders.push_back(mobs.leaders[l]);
     }
     
@@ -1345,7 +1345,7 @@ void GameplayState::update_available_leaders() {
  * and more mature one.
  * Sets to nullptr if there is no member of that subgroup available.
  */
-void GameplayState::update_closest_group_members() {
+void GameplayState::updateClosestGroupMembers() {
     closest_group_member[BUBBLE_RELATION_PREVIOUS] = nullptr;
     closest_group_member[BUBBLE_RELATION_CURRENT] = nullptr;
     closest_group_member[BUBBLE_RELATION_NEXT] = nullptr;
@@ -1353,37 +1353,37 @@ void GameplayState::update_closest_group_members() {
     
     if(!cur_leader_ptr) return;
     if(cur_leader_ptr->group->members.empty()) {
-        cur_leader_ptr->update_throw_variables();
+        cur_leader_ptr->updateThrowVariables();
         return;
     }
     
     //Get the closest group members for the three relevant subgroup types.
     SubgroupType* prev_type;
-    cur_leader_ptr->group->get_next_standby_type(true, &prev_type);
+    cur_leader_ptr->group->getNextStandbyType(true, &prev_type);
     
     if(prev_type) {
         closest_group_member[BUBBLE_RELATION_PREVIOUS] =
-            get_closest_group_member(prev_type);
+            getClosestGroupMember(prev_type);
     }
     
     if(cur_leader_ptr->group->cur_standby_type) {
         closest_group_member[BUBBLE_RELATION_CURRENT] =
-            get_closest_group_member(
+            getClosestGroupMember(
                 cur_leader_ptr->group->cur_standby_type,
                 &closest_group_member_distant
             );
     }
     
     SubgroupType* next_type;
-    cur_leader_ptr->group->get_next_standby_type(false, &next_type);
+    cur_leader_ptr->group->getNextStandbyType(false, &next_type);
     
     if(next_type) {
         closest_group_member[BUBBLE_RELATION_NEXT] =
-            get_closest_group_member(next_type);
+            getClosestGroupMember(next_type);
     }
     
     if(closest_group_member[BUBBLE_RELATION_CURRENT]) {
-        cur_leader_ptr->update_throw_variables();
+        cur_leader_ptr->updateThrowVariables();
     }
 }
 
@@ -1392,7 +1392,7 @@ void GameplayState::update_closest_group_members() {
  * @brief Updates the transformations, with the current camera coordinates,
  * zoom, etc.
  */
-void GameplayState::update_transformations() {
+void GameplayState::updateTransformations() {
     //World coordinates to screen coordinates.
     game.world_to_screen_transform = game.identity_transform;
     al_translate_transform(
@@ -1420,12 +1420,12 @@ void GameplayState::update_transformations() {
 GameplayMessageBox::GameplayMessageBox(const string &text, ALLEGRO_BITMAP* speaker_icon):
     speaker_icon(speaker_icon) {
     
-    string message = unescape_string(text);
+    string message = unescapeString(text);
     if(message.size() && message.back() == '\n') {
         message.pop_back();
     }
-    vector<StringToken> tokens = tokenize_string(message);
-    set_string_token_widths(
+    vector<StringToken> tokens = tokenizeString(message);
+    setStringTokenWidths(
         tokens, game.sys_content.fnt_standard, game.sys_content.fnt_slim,
         al_get_font_line_height(game.sys_content.fnt_standard), true
     );

@@ -17,10 +17,10 @@
  * @brief Functions about the bridge's finite state machine and behavior.
  */
 namespace bridge_fsm {
-void create_fsm(MobType* typ);
+void createFsm(MobType* typ);
 
-void check_health(Mob* m, void* info1, void* info2);
+void checkHealth(Mob* m, void* info1, void* info2);
 void open(Mob* m, void* info1, void* info2);
-void set_anim(Mob* m, void* info1, void* info2);
+void setAnim(Mob* m, void* info1, void* info2);
 void setup(Mob* m, void* info1, void* info2);
 }

@@ -46,7 +46,7 @@ const float EXIT_MIN_SIZE = 32.0f;
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The amount.
  */
-int MissionFailKillEnemies::get_cur_amount(
+int MissionFailKillEnemies::getCurAmount(
     GameplayState* gameplay
 ) const {
     return (int) gameplay->enemy_deaths;
@@ -59,12 +59,12 @@ int MissionFailKillEnemies::get_cur_amount(
  * @param mission Mission data object to get info from.
  * @return The reason.
  */
-string MissionFailKillEnemies::get_end_reason(
+string MissionFailKillEnemies::getEndReason(
     MissionData* mission
 ) const {
     return
         "Killed " +
-        amount_str((int) mission->fail_enemies_killed, "enemy", "enemies") +
+        amountStr((int) mission->fail_enemies_killed, "enemy", "enemies") +
         "...";
 }
 
@@ -78,7 +78,7 @@ string MissionFailKillEnemies::get_end_reason(
  * @param out_cam_zoom The final camera zoom is returned here.
  * @return Whether the camera should zoom somewhere.
  */
-bool MissionFailKillEnemies::get_end_zoom_data(
+bool MissionFailKillEnemies::getEndZoomData(
     GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
 ) const {
     if(gameplay->last_enemy_killed_pos.x != LARGE_FLOAT) {
@@ -96,7 +96,7 @@ bool MissionFailKillEnemies::get_end_zoom_data(
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The label.
  */
-string MissionFailKillEnemies::get_hud_label(
+string MissionFailKillEnemies::getHudLabel(
     GameplayState* gameplay
 ) const {
     return "Enemies";
@@ -108,7 +108,7 @@ string MissionFailKillEnemies::get_hud_label(
  *
  * @return The name.
  */
-string MissionFailKillEnemies::get_name() const {
+string MissionFailKillEnemies::getName() const {
     return "Kill enemies";
 }
 
@@ -119,12 +119,12 @@ string MissionFailKillEnemies::get_name() const {
  * @param mission Mission data object to get info from.
  * @return The description.
  */
-string MissionFailKillEnemies::get_player_description(
+string MissionFailKillEnemies::getPlayerDescription(
     MissionData* mission
 ) const {
     return
         "Kill " +
-        amount_str(
+        amountStr(
             (int) mission->fail_enemies_killed, "enemy", "enemies"
         ) +
         " or more.";
@@ -137,7 +137,7 @@ string MissionFailKillEnemies::get_player_description(
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The amount.
  */
-int MissionFailKillEnemies::get_req_amount(
+int MissionFailKillEnemies::getReqAmount(
     GameplayState* gameplay
 ) const {
     return (int) game.cur_area_data->mission.fail_enemies_killed;
@@ -152,7 +152,7 @@ int MissionFailKillEnemies::get_req_amount(
  * @param percentage Percentage cleared.
  * @return The status.
  */
-string MissionFailKillEnemies::get_status(
+string MissionFailKillEnemies::getStatus(
     int cur, int req, float percentage
 ) const {
     return
@@ -167,7 +167,7 @@ string MissionFailKillEnemies::get_status(
  *
  * @return Whether it has content.
  */
-bool MissionFailKillEnemies::has_hud_content() const {
+bool MissionFailKillEnemies::hasHudContent() const {
     return true;
 }
 
@@ -178,10 +178,10 @@ bool MissionFailKillEnemies::has_hud_content() const {
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return Whether it is met.
  */
-bool MissionFailKillEnemies::is_met(
+bool MissionFailKillEnemies::isMet(
     GameplayState* gameplay
 ) const {
-    return get_cur_amount(gameplay) >= get_req_amount(gameplay);
+    return getCurAmount(gameplay) >= getReqAmount(gameplay);
 }
 
 
@@ -191,7 +191,7 @@ bool MissionFailKillEnemies::is_met(
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The amount.
  */
-int MissionFailLoseLeaders::get_cur_amount(
+int MissionFailLoseLeaders::getCurAmount(
     GameplayState* gameplay
 ) const {
     return (int) gameplay->leaders_kod;
@@ -204,12 +204,12 @@ int MissionFailLoseLeaders::get_cur_amount(
  * @param mission Mission data object to get info from.
  * @return The reason.
  */
-string MissionFailLoseLeaders::get_end_reason(
+string MissionFailLoseLeaders::getEndReason(
     MissionData* mission
 ) const {
     return
         "Lost " +
-        amount_str((int) mission->fail_leaders_kod, "leader") +
+        amountStr((int) mission->fail_leaders_kod, "leader") +
         "...";
 }
 
@@ -223,7 +223,7 @@ string MissionFailLoseLeaders::get_end_reason(
  * @param out_cam_zoom The final camera zoom is returned here.
  * @return Whether the camera should zoom somewhere.
  */
-bool MissionFailLoseLeaders::get_end_zoom_data(
+bool MissionFailLoseLeaders::getEndZoomData(
     GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
 ) const {
     if(gameplay->last_hurt_leader_pos.x != LARGE_FLOAT) {
@@ -241,7 +241,7 @@ bool MissionFailLoseLeaders::get_end_zoom_data(
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The label.
  */
-string MissionFailLoseLeaders::get_hud_label(
+string MissionFailLoseLeaders::getHudLabel(
     GameplayState* gameplay
 ) const {
     return "Leaders lost";
@@ -253,7 +253,7 @@ string MissionFailLoseLeaders::get_hud_label(
  *
  * @return The name.
  */
-string MissionFailLoseLeaders::get_name() const {
+string MissionFailLoseLeaders::getName() const {
     return "Lose leaders";
 }
 
@@ -264,12 +264,12 @@ string MissionFailLoseLeaders::get_name() const {
  * @param mission Mission data object to get info from.
  * @return The description.
  */
-string MissionFailLoseLeaders::get_player_description(
+string MissionFailLoseLeaders::getPlayerDescription(
     MissionData* mission
 ) const {
     return
         "Lose " +
-        amount_str((int) mission->fail_leaders_kod, "leader") +
+        amountStr((int) mission->fail_leaders_kod, "leader") +
         " or more.";
 }
 
@@ -280,7 +280,7 @@ string MissionFailLoseLeaders::get_player_description(
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The amount.
  */
-int MissionFailLoseLeaders::get_req_amount(
+int MissionFailLoseLeaders::getReqAmount(
     GameplayState* gameplay
 ) const {
     return (int) game.cur_area_data->mission.fail_leaders_kod;
@@ -295,7 +295,7 @@ int MissionFailLoseLeaders::get_req_amount(
  * @param percentage Percentage cleared.
  * @return The status.
  */
-string MissionFailLoseLeaders::get_status(
+string MissionFailLoseLeaders::getStatus(
     int cur, int req, float percentage
 ) const {
     return
@@ -310,7 +310,7 @@ string MissionFailLoseLeaders::get_status(
  *
  * @return Whether it has content.
  */
-bool MissionFailLoseLeaders::has_hud_content() const {
+bool MissionFailLoseLeaders::hasHudContent() const {
     return true;
 }
 
@@ -321,10 +321,10 @@ bool MissionFailLoseLeaders::has_hud_content() const {
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return Whether it is met.
  */
-bool MissionFailLoseLeaders::is_met(
+bool MissionFailLoseLeaders::isMet(
     GameplayState* gameplay
 ) const {
-    return get_cur_amount(gameplay) >= get_req_amount(gameplay);
+    return getCurAmount(gameplay) >= getReqAmount(gameplay);
 }
 
 
@@ -334,7 +334,7 @@ bool MissionFailLoseLeaders::is_met(
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The amount.
  */
-int MissionFailLosePikmin::get_cur_amount(
+int MissionFailLosePikmin::getCurAmount(
     GameplayState* gameplay
 ) const {
     return (int) gameplay->pikmin_deaths;
@@ -347,7 +347,7 @@ int MissionFailLosePikmin::get_cur_amount(
  * @param mission Mission data object to get info from.
  * @return The reason.
  */
-string MissionFailLosePikmin::get_end_reason(
+string MissionFailLosePikmin::getEndReason(
     MissionData* mission
 ) const {
     return
@@ -366,7 +366,7 @@ string MissionFailLosePikmin::get_end_reason(
  * @param out_cam_zoom The final camera zoom is returned here.
  * @return Whether the camera should zoom somewhere.
  */
-bool MissionFailLosePikmin::get_end_zoom_data(
+bool MissionFailLosePikmin::getEndZoomData(
     GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
 ) const {
     if(gameplay->last_pikmin_death_pos.x != LARGE_FLOAT) {
@@ -384,7 +384,7 @@ bool MissionFailLosePikmin::get_end_zoom_data(
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The label.
  */
-string MissionFailLosePikmin::get_hud_label(
+string MissionFailLosePikmin::getHudLabel(
     GameplayState* gameplay
 ) const {
     return "Pikmin lost";
@@ -396,7 +396,7 @@ string MissionFailLosePikmin::get_hud_label(
  *
  * @return The name.
  */
-string MissionFailLosePikmin::get_name() const {
+string MissionFailLosePikmin::getName() const {
     return "Lose Pikmin";
 }
 
@@ -407,7 +407,7 @@ string MissionFailLosePikmin::get_name() const {
  * @param mission Mission data object to get info from.
  * @return The description.
  */
-string MissionFailLosePikmin::get_player_description(
+string MissionFailLosePikmin::getPlayerDescription(
     MissionData* mission
 ) const {
     return
@@ -421,7 +421,7 @@ string MissionFailLosePikmin::get_player_description(
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The amount.
  */
-int MissionFailLosePikmin::get_req_amount(
+int MissionFailLosePikmin::getReqAmount(
     GameplayState* gameplay
 ) const {
     return (int) game.cur_area_data->mission.fail_pik_killed;
@@ -436,7 +436,7 @@ int MissionFailLosePikmin::get_req_amount(
  * @param percentage Percentage cleared.
  * @return The status.
  */
-string MissionFailLosePikmin::get_status(
+string MissionFailLosePikmin::getStatus(
     int cur, int req, float percentage
 ) const {
     return
@@ -451,7 +451,7 @@ string MissionFailLosePikmin::get_status(
  *
  * @return Whether it has content.
  */
-bool MissionFailLosePikmin::has_hud_content() const {
+bool MissionFailLosePikmin::hasHudContent() const {
     return true;
 }
 
@@ -462,10 +462,10 @@ bool MissionFailLosePikmin::has_hud_content() const {
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return Whether it is met.
  */
-bool MissionFailLosePikmin::is_met(
+bool MissionFailLosePikmin::isMet(
     GameplayState* gameplay
 ) const {
-    return get_cur_amount(gameplay) >= get_req_amount(gameplay);
+    return getCurAmount(gameplay) >= getReqAmount(gameplay);
 }
 
 
@@ -475,7 +475,7 @@ bool MissionFailLosePikmin::is_met(
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The amount.
  */
-int MissionFailPauseMenu::get_cur_amount(
+int MissionFailPauseMenu::getCurAmount(
     GameplayState* gameplay
 ) const {
     return 0;
@@ -488,7 +488,7 @@ int MissionFailPauseMenu::get_cur_amount(
  * @param mission Mission data object to get info from.
  * @return The reason.
  */
-string MissionFailPauseMenu::get_end_reason(
+string MissionFailPauseMenu::getEndReason(
     MissionData* mission
 ) const {
     return "Ended from pause menu...";
@@ -504,7 +504,7 @@ string MissionFailPauseMenu::get_end_reason(
  * @param out_cam_zoom The final camera zoom is returned here.
  * @return Whether the camera should zoom somewhere.
  */
-bool MissionFailPauseMenu::get_end_zoom_data(
+bool MissionFailPauseMenu::getEndZoomData(
     GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
 ) const {
     return false;
@@ -517,7 +517,7 @@ bool MissionFailPauseMenu::get_end_zoom_data(
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The label.
  */
-string MissionFailPauseMenu::get_hud_label(
+string MissionFailPauseMenu::getHudLabel(
     GameplayState* gameplay
 ) const {
     return "";
@@ -529,7 +529,7 @@ string MissionFailPauseMenu::get_hud_label(
  *
  * @return The name.
  */
-string MissionFailPauseMenu::get_name() const {
+string MissionFailPauseMenu::getName() const {
     return "End from pause menu";
 }
 
@@ -540,7 +540,7 @@ string MissionFailPauseMenu::get_name() const {
  * @param mission Mission data object to get info from.
  * @return The description.
  */
-string MissionFailPauseMenu::get_player_description(
+string MissionFailPauseMenu::getPlayerDescription(
     MissionData* mission
 ) const {
     return "End from the pause menu.";
@@ -553,7 +553,7 @@ string MissionFailPauseMenu::get_player_description(
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The amount.
  */
-int MissionFailPauseMenu::get_req_amount(
+int MissionFailPauseMenu::getReqAmount(
     GameplayState* gameplay
 ) const {
     return 0;
@@ -568,7 +568,7 @@ int MissionFailPauseMenu::get_req_amount(
  * @param percentage Percentage cleared.
  * @return The status.
  */
-string MissionFailPauseMenu::get_status(
+string MissionFailPauseMenu::getStatus(
     int cur, int req, float percentage
 ) const {
     return "";
@@ -580,7 +580,7 @@ string MissionFailPauseMenu::get_status(
  *
  * @return Whether it has content.
  */
-bool MissionFailPauseMenu::has_hud_content() const {
+bool MissionFailPauseMenu::hasHudContent() const {
     return false;
 }
 
@@ -591,7 +591,7 @@ bool MissionFailPauseMenu::has_hud_content() const {
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return Whether it is met.
  */
-bool MissionFailPauseMenu::is_met(
+bool MissionFailPauseMenu::isMet(
     GameplayState* gameplay
 ) const {
     //The pause menu "end mission" logic is responsible for this one.
@@ -605,7 +605,7 @@ bool MissionFailPauseMenu::is_met(
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The amount.
  */
-int MissionFailTakeDamage::get_cur_amount(
+int MissionFailTakeDamage::getCurAmount(
     GameplayState* gameplay
 ) const {
     return 0;
@@ -618,7 +618,7 @@ int MissionFailTakeDamage::get_cur_amount(
  * @param mission Mission data object to get info from.
  * @return The reason.
  */
-string MissionFailTakeDamage::get_end_reason(
+string MissionFailTakeDamage::getEndReason(
     MissionData* mission
 ) const {
     return "A leader took damage...";
@@ -634,7 +634,7 @@ string MissionFailTakeDamage::get_end_reason(
  * @param out_cam_zoom The final camera zoom is returned here.
  * @return Whether the camera should zoom somewhere.
  */
-bool MissionFailTakeDamage::get_end_zoom_data(
+bool MissionFailTakeDamage::getEndZoomData(
     GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
 ) const {
     if(gameplay->last_hurt_leader_pos.x != LARGE_FLOAT) {
@@ -652,7 +652,7 @@ bool MissionFailTakeDamage::get_end_zoom_data(
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The label.
  */
-string MissionFailTakeDamage::get_hud_label(
+string MissionFailTakeDamage::getHudLabel(
     GameplayState* gameplay
 ) const {
     return "";
@@ -664,7 +664,7 @@ string MissionFailTakeDamage::get_hud_label(
  *
  * @return The name.
  */
-string MissionFailTakeDamage::get_name() const {
+string MissionFailTakeDamage::getName() const {
     return "Take damage";
 }
 
@@ -675,7 +675,7 @@ string MissionFailTakeDamage::get_name() const {
  * @param mission Mission data object to get info from.
  * @return The description.
  */
-string MissionFailTakeDamage::get_player_description(
+string MissionFailTakeDamage::getPlayerDescription(
     MissionData* mission
 ) const {
     return "A leader takes damage.";
@@ -688,7 +688,7 @@ string MissionFailTakeDamage::get_player_description(
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The amount.
  */
-int MissionFailTakeDamage::get_req_amount(
+int MissionFailTakeDamage::getReqAmount(
     GameplayState* gameplay
 ) const {
     return 0;
@@ -703,7 +703,7 @@ int MissionFailTakeDamage::get_req_amount(
  * @param percentage Percentage cleared.
  * @return The status.
  */
-string MissionFailTakeDamage::get_status(
+string MissionFailTakeDamage::getStatus(
     int cur, int req, float percentage
 ) const {
     return "";
@@ -715,7 +715,7 @@ string MissionFailTakeDamage::get_status(
  *
  * @return Whether it has content.
  */
-bool MissionFailTakeDamage::has_hud_content() const {
+bool MissionFailTakeDamage::hasHudContent() const {
     return false;
 }
 
@@ -726,7 +726,7 @@ bool MissionFailTakeDamage::has_hud_content() const {
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return Whether it is met.
  */
-bool MissionFailTakeDamage::is_met(
+bool MissionFailTakeDamage::isMet(
     GameplayState* gameplay
 ) const {
     for(size_t l = 0; l < gameplay->mobs.leaders.size(); l++) {
@@ -752,7 +752,7 @@ bool MissionFailTakeDamage::is_met(
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The amount.
  */
-int MissionFailTimeLimit::get_cur_amount(
+int MissionFailTimeLimit::getCurAmount(
     GameplayState* gameplay
 ) const {
     return gameplay->gameplay_time_passed;
@@ -765,12 +765,12 @@ int MissionFailTimeLimit::get_cur_amount(
  * @param mission Mission data object to get info from.
  * @return The reason.
  */
-string MissionFailTimeLimit::get_end_reason(
+string MissionFailTimeLimit::getEndReason(
     MissionData* mission
 ) const {
     return
         "Took " +
-        time_to_str2(
+        timeToStr2(
             mission->fail_time_limit, "m", "s"
         ) +
         "...";
@@ -786,7 +786,7 @@ string MissionFailTimeLimit::get_end_reason(
  * @param out_cam_zoom The final camera zoom is returned here.
  * @return Whether the camera should zoom somewhere.
  */
-bool MissionFailTimeLimit::get_end_zoom_data(
+bool MissionFailTimeLimit::getEndZoomData(
     GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
 ) const {
     return false;
@@ -799,7 +799,7 @@ bool MissionFailTimeLimit::get_end_zoom_data(
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The label.
  */
-string MissionFailTimeLimit::get_hud_label(
+string MissionFailTimeLimit::getHudLabel(
     GameplayState* gameplay
 ) const {
     return
@@ -814,7 +814,7 @@ string MissionFailTimeLimit::get_hud_label(
  *
  * @return The name.
  */
-string MissionFailTimeLimit::get_name() const {
+string MissionFailTimeLimit::getName() const {
     return "Reach the time limit";
 }
 
@@ -825,12 +825,12 @@ string MissionFailTimeLimit::get_name() const {
  * @param mission Mission data object to get info from.
  * @return The description.
  */
-string MissionFailTimeLimit::get_player_description(
+string MissionFailTimeLimit::getPlayerDescription(
     MissionData* mission
 ) const {
     return
         "Run out of time. Time limit: " +
-        time_to_str2(
+        timeToStr2(
             mission->fail_time_limit, "m", "s"
         ) + ".";
 }
@@ -842,7 +842,7 @@ string MissionFailTimeLimit::get_player_description(
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The amount.
  */
-int MissionFailTimeLimit::get_req_amount(
+int MissionFailTimeLimit::getReqAmount(
     GameplayState* gameplay
 ) const {
     return (int) game.cur_area_data->mission.fail_time_limit;
@@ -857,11 +857,11 @@ int MissionFailTimeLimit::get_req_amount(
  * @param percentage Percentage cleared.
  * @return The status.
  */
-string MissionFailTimeLimit::get_status(
+string MissionFailTimeLimit::getStatus(
     int cur, int req, float percentage
 ) const {
     return
-        time_to_str2(cur, "m", "s") +
+        timeToStr2(cur, "m", "s") +
         " have passed so far. (" + i2s(percentage) + "%)";
 }
 
@@ -871,7 +871,7 @@ string MissionFailTimeLimit::get_status(
  *
  * @return Whether it has content.
  */
-bool MissionFailTimeLimit::has_hud_content() const {
+bool MissionFailTimeLimit::hasHudContent() const {
     return true;
 }
 
@@ -882,11 +882,11 @@ bool MissionFailTimeLimit::has_hud_content() const {
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return Whether it is met.
  */
-bool MissionFailTimeLimit::is_met(
+bool MissionFailTimeLimit::isMet(
     GameplayState* gameplay
 ) const {
     if(gameplay->after_hours) return false;
-    return get_cur_amount(gameplay) >= get_req_amount(gameplay);
+    return getCurAmount(gameplay) >= getReqAmount(gameplay);
 }
 
 
@@ -896,10 +896,10 @@ bool MissionFailTimeLimit::is_met(
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The amount.
  */
-int MissionFailTooFewPikmin::get_cur_amount(
+int MissionFailTooFewPikmin::getCurAmount(
     GameplayState* gameplay
 ) const {
-    return (int) gameplay->get_amount_of_total_pikmin();
+    return (int) gameplay->getAmountOfTotalPikmin();
 }
 
 
@@ -909,7 +909,7 @@ int MissionFailTooFewPikmin::get_cur_amount(
  * @param mission Mission data object to get info from.
  * @return The reason.
  */
-string MissionFailTooFewPikmin::get_end_reason(
+string MissionFailTooFewPikmin::getEndReason(
     MissionData* mission
 ) const {
     return
@@ -928,7 +928,7 @@ string MissionFailTooFewPikmin::get_end_reason(
  * @param out_cam_zoom The final camera zoom is returned here.
  * @return Whether the camera should zoom somewhere.
  */
-bool MissionFailTooFewPikmin::get_end_zoom_data(
+bool MissionFailTooFewPikmin::getEndZoomData(
     GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
 ) const {
     if(gameplay->last_pikmin_death_pos.x != LARGE_FLOAT) {
@@ -946,7 +946,7 @@ bool MissionFailTooFewPikmin::get_end_zoom_data(
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The label.
  */
-string MissionFailTooFewPikmin::get_hud_label(
+string MissionFailTooFewPikmin::getHudLabel(
     GameplayState* gameplay
 ) const {
     return "Pikmin";
@@ -958,7 +958,7 @@ string MissionFailTooFewPikmin::get_hud_label(
  *
  * @return The name.
  */
-string MissionFailTooFewPikmin::get_name() const {
+string MissionFailTooFewPikmin::getName() const {
     return "Reach too few Pikmin";
 }
 
@@ -969,7 +969,7 @@ string MissionFailTooFewPikmin::get_name() const {
  * @param mission Mission data object to get info from.
  * @return The description.
  */
-string MissionFailTooFewPikmin::get_player_description(
+string MissionFailTooFewPikmin::getPlayerDescription(
     MissionData* mission
 ) const {
     return
@@ -983,7 +983,7 @@ string MissionFailTooFewPikmin::get_player_description(
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The amount.
  */
-int MissionFailTooFewPikmin::get_req_amount(
+int MissionFailTooFewPikmin::getReqAmount(
     GameplayState* gameplay
 ) const {
     return (int) game.cur_area_data->mission.fail_too_few_pik_amount;
@@ -998,7 +998,7 @@ int MissionFailTooFewPikmin::get_req_amount(
  * @param percentage Percentage cleared.
  * @return The status.
  */
-string MissionFailTooFewPikmin::get_status(
+string MissionFailTooFewPikmin::getStatus(
     int cur, int req, float percentage
 ) const {
     return
@@ -1013,7 +1013,7 @@ string MissionFailTooFewPikmin::get_status(
  *
  * @return Whether it has content.
  */
-bool MissionFailTooFewPikmin::has_hud_content() const {
+bool MissionFailTooFewPikmin::hasHudContent() const {
     return true;
 }
 
@@ -1024,12 +1024,12 @@ bool MissionFailTooFewPikmin::has_hud_content() const {
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return Whether it is met.
  */
-bool MissionFailTooFewPikmin::is_met(
+bool MissionFailTooFewPikmin::isMet(
     GameplayState* gameplay
 ) const {
     return
-        get_cur_amount(gameplay) <=
-        get_req_amount(gameplay);
+        getCurAmount(gameplay) <=
+        getReqAmount(gameplay);
 }
 
 
@@ -1039,10 +1039,10 @@ bool MissionFailTooFewPikmin::is_met(
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The amount.
  */
-int MissionFailTooManyPikmin::get_cur_amount(
+int MissionFailTooManyPikmin::getCurAmount(
     GameplayState* gameplay
 ) const {
-    return (int) gameplay->get_amount_of_total_pikmin();
+    return (int) gameplay->getAmountOfTotalPikmin();
 }
 
 
@@ -1052,7 +1052,7 @@ int MissionFailTooManyPikmin::get_cur_amount(
  * @param mission Mission data object to get info from.
  * @return The reason.
  */
-string MissionFailTooManyPikmin::get_end_reason(
+string MissionFailTooManyPikmin::getEndReason(
     MissionData* mission
 ) const {
     return
@@ -1071,7 +1071,7 @@ string MissionFailTooManyPikmin::get_end_reason(
  * @param out_cam_zoom The final camera zoom is returned here.
  * @return Whether the camera should zoom somewhere.
  */
-bool MissionFailTooManyPikmin::get_end_zoom_data(
+bool MissionFailTooManyPikmin::getEndZoomData(
     GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
 ) const {
     if(gameplay->last_pikmin_born_pos.x != LARGE_FLOAT) {
@@ -1089,7 +1089,7 @@ bool MissionFailTooManyPikmin::get_end_zoom_data(
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The label.
  */
-string MissionFailTooManyPikmin::get_hud_label(
+string MissionFailTooManyPikmin::getHudLabel(
     GameplayState* gameplay
 ) const {
     return "Pikmin";
@@ -1101,7 +1101,7 @@ string MissionFailTooManyPikmin::get_hud_label(
  *
  * @return The name.
  */
-string MissionFailTooManyPikmin::get_name() const {
+string MissionFailTooManyPikmin::getName() const {
     return "Reach too many Pikmin";
 }
 
@@ -1112,7 +1112,7 @@ string MissionFailTooManyPikmin::get_name() const {
  * @param mission Mission data object to get info from.
  * @return The description.
  */
-string MissionFailTooManyPikmin::get_player_description(
+string MissionFailTooManyPikmin::getPlayerDescription(
     MissionData* mission
 ) const {
     return
@@ -1126,7 +1126,7 @@ string MissionFailTooManyPikmin::get_player_description(
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The amount.
  */
-int MissionFailTooManyPikmin::get_req_amount(
+int MissionFailTooManyPikmin::getReqAmount(
     GameplayState* gameplay
 ) const {
     return (int) game.cur_area_data->mission.fail_too_many_pik_amount;
@@ -1141,7 +1141,7 @@ int MissionFailTooManyPikmin::get_req_amount(
  * @param percentage Percentage cleared.
  * @return The status.
  */
-string MissionFailTooManyPikmin::get_status(
+string MissionFailTooManyPikmin::getStatus(
     int cur, int req, float percentage
 ) const {
     return
@@ -1156,7 +1156,7 @@ string MissionFailTooManyPikmin::get_status(
  *
  * @return Whether it has content.
  */
-bool MissionFailTooManyPikmin::has_hud_content() const {
+bool MissionFailTooManyPikmin::hasHudContent() const {
     return true;
 }
 
@@ -1167,12 +1167,12 @@ bool MissionFailTooManyPikmin::has_hud_content() const {
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return Whether it is met.
  */
-bool MissionFailTooManyPikmin::is_met(
+bool MissionFailTooManyPikmin::isMet(
     GameplayState* gameplay
 ) const {
     return
-        get_cur_amount(gameplay) >=
-        get_req_amount(gameplay);
+        getCurAmount(gameplay) >=
+        getReqAmount(gameplay);
 }
 
 
@@ -1182,7 +1182,7 @@ bool MissionFailTooManyPikmin::is_met(
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The amount.
  */
-int MissionGoalBattleEnemies::get_cur_amount(
+int MissionGoalBattleEnemies::getCurAmount(
     GameplayState* gameplay
 ) const {
     return
@@ -1198,7 +1198,7 @@ int MissionGoalBattleEnemies::get_cur_amount(
  * @param mission Mission data object to get info from.
  * @return The reason.
  */
-string MissionGoalBattleEnemies::get_end_reason(
+string MissionGoalBattleEnemies::getEndReason(
     MissionData* mission
 ) const {
     if(mission->goal_all_mobs) {
@@ -1207,7 +1207,7 @@ string MissionGoalBattleEnemies::get_end_reason(
     } else {
         return
             "Defeated the " +
-            amount_str(
+            amountStr(
                 (int) mission->goal_mob_idxs.size(),
                 "enemy",
                 "enemies"
@@ -1226,7 +1226,7 @@ string MissionGoalBattleEnemies::get_end_reason(
  * @param out_cam_zoom The final camera zoom is returned here.
  * @return Whether the camera should zoom somewhere.
  */
-bool MissionGoalBattleEnemies::get_end_zoom_data(
+bool MissionGoalBattleEnemies::getEndZoomData(
     GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
 ) const {
     if(gameplay->last_enemy_killed_pos.x != LARGE_FLOAT) {
@@ -1243,7 +1243,7 @@ bool MissionGoalBattleEnemies::get_end_zoom_data(
  *
  * @return The label.
  */
-string MissionGoalBattleEnemies::get_hud_label() const {
+string MissionGoalBattleEnemies::getHudLabel() const {
     return "Enemies";
 }
 
@@ -1253,7 +1253,7 @@ string MissionGoalBattleEnemies::get_hud_label() const {
  *
  * @return The name.
  */
-string MissionGoalBattleEnemies::get_name() const {
+string MissionGoalBattleEnemies::getName() const {
     return "Battle enemies";
 }
 
@@ -1264,7 +1264,7 @@ string MissionGoalBattleEnemies::get_name() const {
  * @param mission Mission data object to get info from.
  * @return The description.
  */
-string MissionGoalBattleEnemies::get_player_description(
+string MissionGoalBattleEnemies::getPlayerDescription(
     MissionData* mission
 ) const {
     if(mission->goal_all_mobs) {
@@ -1285,7 +1285,7 @@ string MissionGoalBattleEnemies::get_player_description(
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The amount.
  */
-int MissionGoalBattleEnemies::get_req_amount(
+int MissionGoalBattleEnemies::getReqAmount(
     GameplayState* gameplay
 ) const {
     return (int) gameplay->mission_required_mob_amount;
@@ -1300,7 +1300,7 @@ int MissionGoalBattleEnemies::get_req_amount(
  * @param percentage Percentage cleared.
  * @return The status.
  */
-string MissionGoalBattleEnemies::get_status(
+string MissionGoalBattleEnemies::getStatus(
     int cur, int req, float percentage
 ) const {
     return
@@ -1315,7 +1315,7 @@ string MissionGoalBattleEnemies::get_status(
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return Whether it is met.
  */
-bool MissionGoalBattleEnemies::is_met(
+bool MissionGoalBattleEnemies::isMet(
     GameplayState* gameplay
 ) const {
     return gameplay->mission_remaining_mob_ids.empty();
@@ -1329,7 +1329,7 @@ bool MissionGoalBattleEnemies::is_met(
  * @param type Type of the mob.
  * @return Whether it is applicable.
  */
-bool MissionGoalBattleEnemies::is_mob_applicable(
+bool MissionGoalBattleEnemies::isMobApplicable(
     MobType* type
 ) const {
     return type->category->id == MOB_CATEGORY_ENEMIES;
@@ -1342,7 +1342,7 @@ bool MissionGoalBattleEnemies::is_mob_applicable(
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The amount.
  */
-int MissionGoalCollectTreasures::get_cur_amount(
+int MissionGoalCollectTreasures::getCurAmount(
     GameplayState* gameplay
 ) const {
     return (int) gameplay->goal_treasures_collected;
@@ -1356,7 +1356,7 @@ int MissionGoalCollectTreasures::get_cur_amount(
  * @param mission Mission data object to get info from.
  * @return The reason.
  */
-string MissionGoalCollectTreasures::get_end_reason(
+string MissionGoalCollectTreasures::getEndReason(
     MissionData* mission
 ) const {
     if(mission->goal_all_mobs) {
@@ -1378,7 +1378,7 @@ string MissionGoalCollectTreasures::get_end_reason(
  * @param out_cam_zoom The final camera zoom is returned here.
  * @return Whether the camera should zoom somewhere.
  */
-bool MissionGoalCollectTreasures::get_end_zoom_data(
+bool MissionGoalCollectTreasures::getEndZoomData(
     GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
 ) const {
     if(gameplay->last_ship_that_got_treasure_pos.x != LARGE_FLOAT) {
@@ -1395,7 +1395,7 @@ bool MissionGoalCollectTreasures::get_end_zoom_data(
  *
  * @return The label.
  */
-string MissionGoalCollectTreasures::get_hud_label() const {
+string MissionGoalCollectTreasures::getHudLabel() const {
     return "Treasures";
 }
 
@@ -1405,7 +1405,7 @@ string MissionGoalCollectTreasures::get_hud_label() const {
  *
  * @return The name.
  */
-string MissionGoalCollectTreasures::get_name() const {
+string MissionGoalCollectTreasures::getName() const {
     return "Collect treasures";
 }
 
@@ -1416,7 +1416,7 @@ string MissionGoalCollectTreasures::get_name() const {
  * @param mission Mission data object to get info from.
  * @return The description.
  */
-string MissionGoalCollectTreasures::get_player_description(
+string MissionGoalCollectTreasures::getPlayerDescription(
     MissionData* mission
 ) const {
     if(mission->goal_all_mobs) {
@@ -1437,7 +1437,7 @@ string MissionGoalCollectTreasures::get_player_description(
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The amount.
  */
-int MissionGoalCollectTreasures::get_req_amount(
+int MissionGoalCollectTreasures::getReqAmount(
     GameplayState* gameplay
 ) const {
     return (int) gameplay->goal_treasures_total;
@@ -1452,7 +1452,7 @@ int MissionGoalCollectTreasures::get_req_amount(
  * @param percentage Percentage cleared.
  * @return The status.
  */
-string MissionGoalCollectTreasures::get_status(
+string MissionGoalCollectTreasures::getStatus(
     int cur, int req, float percentage
 ) const {
     return
@@ -1467,7 +1467,7 @@ string MissionGoalCollectTreasures::get_status(
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return Whether it is met.
  */
-bool MissionGoalCollectTreasures::is_met(
+bool MissionGoalCollectTreasures::isMet(
     GameplayState* gameplay
 ) const {
     return
@@ -1483,7 +1483,7 @@ bool MissionGoalCollectTreasures::is_met(
  * @param type Type of the mob.
  * @return Whether it is applicable.
  */
-bool MissionGoalCollectTreasures::is_mob_applicable(
+bool MissionGoalCollectTreasures::isMobApplicable(
     MobType* type
 ) const {
     switch(type->category->id) {
@@ -1519,7 +1519,7 @@ bool MissionGoalCollectTreasures::is_mob_applicable(
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The amount.
  */
-int MissionGoalEndManually::get_cur_amount(
+int MissionGoalEndManually::getCurAmount(
     GameplayState* gameplay
 ) const {
     return 0;
@@ -1533,7 +1533,7 @@ int MissionGoalEndManually::get_cur_amount(
  * @param mission Mission data object to get info from.
  * @return The reason.
  */
-string MissionGoalEndManually::get_end_reason(
+string MissionGoalEndManually::getEndReason(
     MissionData* mission
 ) const {
     return "Ended successfully!";
@@ -1549,7 +1549,7 @@ string MissionGoalEndManually::get_end_reason(
  * @param out_cam_zoom The final camera zoom is returned here.
  * @return Whether the camera should zoom somewhere.
  */
-bool MissionGoalEndManually::get_end_zoom_data(
+bool MissionGoalEndManually::getEndZoomData(
     GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
 ) const {
     return false;
@@ -1561,7 +1561,7 @@ bool MissionGoalEndManually::get_end_zoom_data(
  *
  * @return The label.
  */
-string MissionGoalEndManually::get_hud_label() const {
+string MissionGoalEndManually::getHudLabel() const {
     return "";
 }
 
@@ -1571,7 +1571,7 @@ string MissionGoalEndManually::get_hud_label() const {
  *
  * @return The name.
  */
-string MissionGoalEndManually::get_name() const {
+string MissionGoalEndManually::getName() const {
     return "End whenever you want";
 }
 
@@ -1582,7 +1582,7 @@ string MissionGoalEndManually::get_name() const {
  * @param mission Mission data object to get info from.
  * @return The description.
  */
-string MissionGoalEndManually::get_player_description(
+string MissionGoalEndManually::getPlayerDescription(
     MissionData* mission
 ) const {
     return "End from the pause menu whenever you want.";
@@ -1595,7 +1595,7 @@ string MissionGoalEndManually::get_player_description(
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The amount.
  */
-int MissionGoalEndManually::get_req_amount(
+int MissionGoalEndManually::getReqAmount(
     GameplayState* gameplay
 ) const {
     return 0;
@@ -1610,7 +1610,7 @@ int MissionGoalEndManually::get_req_amount(
  * @param percentage Percentage cleared.
  * @return The status.
  */
-string MissionGoalEndManually::get_status(
+string MissionGoalEndManually::getStatus(
     int cur, int req, float percentage
 ) const {
     return "";
@@ -1623,7 +1623,7 @@ string MissionGoalEndManually::get_status(
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return Whether it is met.
  */
-bool MissionGoalEndManually::is_met(
+bool MissionGoalEndManually::isMet(
     GameplayState* gameplay
 ) const {
     //The pause menu "end mission" logic is responsible for this one.
@@ -1638,7 +1638,7 @@ bool MissionGoalEndManually::is_met(
  * @param type Type of the mob.
  * @return Whether it is applicable.
  */
-bool MissionGoalEndManually::is_mob_applicable(
+bool MissionGoalEndManually::isMobApplicable(
     MobType* type
 ) const {
     return false;
@@ -1651,7 +1651,7 @@ bool MissionGoalEndManually::is_mob_applicable(
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The amount.
  */
-int MissionGoalGetToExit::get_cur_amount(
+int MissionGoalGetToExit::getCurAmount(
     GameplayState* gameplay
 ) const {
     return (int) gameplay->cur_leaders_in_mission_exit;
@@ -1665,7 +1665,7 @@ int MissionGoalGetToExit::get_cur_amount(
  * @param mission Mission data object to get info from.
  * @return The reason.
  */
-string MissionGoalGetToExit::get_end_reason(
+string MissionGoalGetToExit::getEndReason(
     MissionData* mission
 ) const {
     return "Got to the exit!";
@@ -1681,7 +1681,7 @@ string MissionGoalGetToExit::get_end_reason(
  * @param out_cam_zoom The final camera zoom is returned here.
  * @return Whether the camera should zoom somewhere.
  */
-bool MissionGoalGetToExit::get_end_zoom_data(
+bool MissionGoalGetToExit::getEndZoomData(
     GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
 ) const {
     if(gameplay->mission_remaining_mob_ids.empty()) {
@@ -1711,7 +1711,7 @@ bool MissionGoalGetToExit::get_end_zoom_data(
  *
  * @return The label.
  */
-string MissionGoalGetToExit::get_hud_label() const {
+string MissionGoalGetToExit::getHudLabel() const {
     return "In exit";
 }
 
@@ -1721,7 +1721,7 @@ string MissionGoalGetToExit::get_hud_label() const {
  *
  * @return The name.
  */
-string MissionGoalGetToExit::get_name() const {
+string MissionGoalGetToExit::getName() const {
     return "Get to the exit";
 }
 
@@ -1732,7 +1732,7 @@ string MissionGoalGetToExit::get_name() const {
  * @param mission Mission data object to get info from.
  * @return The description.
  */
-string MissionGoalGetToExit::get_player_description(
+string MissionGoalGetToExit::getPlayerDescription(
     MissionData* mission
 ) const {
     if(mission->goal_all_mobs) {
@@ -1753,7 +1753,7 @@ string MissionGoalGetToExit::get_player_description(
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The amount.
  */
-int MissionGoalGetToExit::get_req_amount(
+int MissionGoalGetToExit::getReqAmount(
     GameplayState* gameplay
 ) const {
     return (int) gameplay->mission_required_mob_amount;
@@ -1768,7 +1768,7 @@ int MissionGoalGetToExit::get_req_amount(
  * @param percentage Percentage cleared.
  * @return The status.
  */
-string MissionGoalGetToExit::get_status(
+string MissionGoalGetToExit::getStatus(
     int cur, int req, float percentage
 ) const {
     return
@@ -1783,12 +1783,12 @@ string MissionGoalGetToExit::get_status(
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return Whether it is met.
  */
-bool MissionGoalGetToExit::is_met(
+bool MissionGoalGetToExit::isMet(
     GameplayState* gameplay
 ) const {
     return
-        get_cur_amount(gameplay) >=
-        get_req_amount(gameplay);
+        getCurAmount(gameplay) >=
+        getReqAmount(gameplay);
 }
 
 
@@ -1799,7 +1799,7 @@ bool MissionGoalGetToExit::is_met(
  * @param type Type of the mob.
  * @return Whether it is applicable.
  */
-bool MissionGoalGetToExit::is_mob_applicable(
+bool MissionGoalGetToExit::isMobApplicable(
     MobType* type
 ) const {
     return type->category->id == MOB_CATEGORY_LEADERS;
@@ -1812,10 +1812,10 @@ bool MissionGoalGetToExit::is_mob_applicable(
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The amount.
  */
-int MissionGoalGrowPikmin::get_cur_amount(
+int MissionGoalGrowPikmin::getCurAmount(
     GameplayState* gameplay
 ) const {
-    return (int) gameplay->get_amount_of_total_pikmin();
+    return (int) gameplay->getAmountOfTotalPikmin();
 }
 
 
@@ -1826,7 +1826,7 @@ int MissionGoalGrowPikmin::get_cur_amount(
  * @param mission Mission data object to get info from.
  * @return The reason.
  */
-string MissionGoalGrowPikmin::get_end_reason(
+string MissionGoalGrowPikmin::getEndReason(
     MissionData* mission
 ) const {
     return
@@ -1845,7 +1845,7 @@ string MissionGoalGrowPikmin::get_end_reason(
  * @param out_cam_zoom The final camera zoom is returned here.
  * @return Whether the camera should zoom somewhere.
  */
-bool MissionGoalGrowPikmin::get_end_zoom_data(
+bool MissionGoalGrowPikmin::getEndZoomData(
     GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
 ) const {
     if(gameplay->last_pikmin_born_pos.x != LARGE_FLOAT) {
@@ -1862,7 +1862,7 @@ bool MissionGoalGrowPikmin::get_end_zoom_data(
  *
  * @return The label.
  */
-string MissionGoalGrowPikmin::get_hud_label() const {
+string MissionGoalGrowPikmin::getHudLabel() const {
     return "Pikmin";
 }
 
@@ -1872,7 +1872,7 @@ string MissionGoalGrowPikmin::get_hud_label() const {
  *
  * @return The name.
  */
-string MissionGoalGrowPikmin::get_name() const {
+string MissionGoalGrowPikmin::getName() const {
     return "Grow Pikmin";
 }
 
@@ -1883,7 +1883,7 @@ string MissionGoalGrowPikmin::get_name() const {
  * @param mission Mission data object to get info from.
  * @return The description.
  */
-string MissionGoalGrowPikmin::get_player_description(
+string MissionGoalGrowPikmin::getPlayerDescription(
     MissionData* mission
 ) const {
     return "Reach a total of " + i2s(mission->goal_amount) + " Pikmin.";
@@ -1896,7 +1896,7 @@ string MissionGoalGrowPikmin::get_player_description(
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The amount.
  */
-int MissionGoalGrowPikmin::get_req_amount(
+int MissionGoalGrowPikmin::getReqAmount(
     GameplayState* gameplay
 ) const {
     return (int) game.cur_area_data->mission.goal_amount;
@@ -1911,7 +1911,7 @@ int MissionGoalGrowPikmin::get_req_amount(
  * @param percentage Percentage cleared.
  * @return The status.
  */
-string MissionGoalGrowPikmin::get_status(
+string MissionGoalGrowPikmin::getStatus(
     int cur, int req, float percentage
 ) const {
     return
@@ -1926,10 +1926,10 @@ string MissionGoalGrowPikmin::get_status(
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return Whether it is met.
  */
-bool MissionGoalGrowPikmin::is_met(
+bool MissionGoalGrowPikmin::isMet(
     GameplayState* gameplay
 ) const {
-    return get_cur_amount(gameplay) >= get_req_amount(gameplay);
+    return getCurAmount(gameplay) >= getReqAmount(gameplay);
 }
 
 
@@ -1940,7 +1940,7 @@ bool MissionGoalGrowPikmin::is_met(
  * @param type Type of the mob.
  * @return Whether it is applicable.
  */
-bool MissionGoalGrowPikmin::is_mob_applicable(
+bool MissionGoalGrowPikmin::isMobApplicable(
     MobType* type
 ) const {
     return false;
@@ -1953,7 +1953,7 @@ bool MissionGoalGrowPikmin::is_mob_applicable(
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The amount.
  */
-int MissionGoalTimedSurvival::get_cur_amount(
+int MissionGoalTimedSurvival::getCurAmount(
     GameplayState* gameplay
 ) const {
     return gameplay->gameplay_time_passed;
@@ -1967,12 +1967,12 @@ int MissionGoalTimedSurvival::get_cur_amount(
  * @param mission Mission data object to get info from.
  * @return The reason.
  */
-string MissionGoalTimedSurvival::get_end_reason(
+string MissionGoalTimedSurvival::getEndReason(
     MissionData* mission
 ) const {
     return
         "Survived for " +
-        time_to_str2(
+        timeToStr2(
             mission->goal_amount, "m", "s"
         ) +
         "!";
@@ -1988,7 +1988,7 @@ string MissionGoalTimedSurvival::get_end_reason(
  * @param out_cam_zoom The final camera zoom is returned here.
  * @return Whether the camera should zoom somewhere.
  */
-bool MissionGoalTimedSurvival::get_end_zoom_data(
+bool MissionGoalTimedSurvival::getEndZoomData(
     GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
 ) const {
     return false;
@@ -2000,7 +2000,7 @@ bool MissionGoalTimedSurvival::get_end_zoom_data(
  *
  * @return The label.
  */
-string MissionGoalTimedSurvival::get_hud_label() const {
+string MissionGoalTimedSurvival::getHudLabel() const {
     return "Time";
 }
 
@@ -2010,7 +2010,7 @@ string MissionGoalTimedSurvival::get_hud_label() const {
  *
  * @return The name.
  */
-string MissionGoalTimedSurvival::get_name() const {
+string MissionGoalTimedSurvival::getName() const {
     return "Survive";
 }
 
@@ -2021,12 +2021,12 @@ string MissionGoalTimedSurvival::get_name() const {
  * @param mission Mission data object to get info from.
  * @return The description.
  */
-string MissionGoalTimedSurvival::get_player_description(
+string MissionGoalTimedSurvival::getPlayerDescription(
     MissionData* mission
 ) const {
     return
         "Survive for " +
-        time_to_str2(
+        timeToStr2(
             mission->goal_amount, "m", "s"
         ) + ".";
 }
@@ -2038,7 +2038,7 @@ string MissionGoalTimedSurvival::get_player_description(
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The amount.
  */
-int MissionGoalTimedSurvival::get_req_amount(
+int MissionGoalTimedSurvival::getReqAmount(
     GameplayState* gameplay
 ) const {
     return (int) game.cur_area_data->mission.goal_amount;
@@ -2053,12 +2053,12 @@ int MissionGoalTimedSurvival::get_req_amount(
  * @param percentage Percentage cleared.
  * @return The status.
  */
-string MissionGoalTimedSurvival::get_status(
+string MissionGoalTimedSurvival::getStatus(
     int cur, int req, float percentage
 ) const {
     return
         "You have survived for " +
-        time_to_str2(cur, "m", "s") +
+        timeToStr2(cur, "m", "s") +
         " so far. (" + i2s(percentage) + "%)";
 }
 
@@ -2069,10 +2069,10 @@ string MissionGoalTimedSurvival::get_status(
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return Whether it is met.
  */
-bool MissionGoalTimedSurvival::is_met(
+bool MissionGoalTimedSurvival::isMet(
     GameplayState* gameplay
 ) const {
-    return get_cur_amount(gameplay) >= get_req_amount(gameplay);
+    return getCurAmount(gameplay) >= getReqAmount(gameplay);
 }
 
 
@@ -2083,7 +2083,7 @@ bool MissionGoalTimedSurvival::is_met(
  * @param type Type of the mob.
  * @return Whether it is applicable.
  */
-bool MissionGoalTimedSurvival::is_mob_applicable(
+bool MissionGoalTimedSurvival::isMobApplicable(
     MobType* type
 ) const {
     return false;
@@ -2096,7 +2096,7 @@ bool MissionGoalTimedSurvival::is_mob_applicable(
  * @param mission Mission data to get info from.
  * @return Whether it is platinum.
  */
-bool MissionRecord::is_platinum(const MissionData &mission) {
+bool MissionRecord::isPlatinum(const MissionData &mission) {
     switch(mission.grading_mode) {
     case MISSION_GRADING_MODE_POINTS: {
         return score >= mission.platinum_req;
@@ -2116,7 +2116,7 @@ bool MissionRecord::is_platinum(const MissionData &mission) {
  * @param mission Mission data to get info from.
  * @return The multiplier.
  */
-int MissionScoreCriterionEnemyPoints::get_multiplier(
+int MissionScoreCriterionEnemyPoints::getMultiplier(
     MissionData* mission
 ) const {
     return mission->points_per_enemy_point;
@@ -2128,7 +2128,7 @@ int MissionScoreCriterionEnemyPoints::get_multiplier(
  *
  * @return The name.
  */
-string MissionScoreCriterionEnemyPoints::get_name() const {
+string MissionScoreCriterionEnemyPoints::getName() const {
     return "Enemy points";
 }
 
@@ -2140,13 +2140,13 @@ string MissionScoreCriterionEnemyPoints::get_name() const {
  * @param mission Mission data to get info from.
  * @return The score.
  */
-int MissionScoreCriterionEnemyPoints::get_score(
+int MissionScoreCriterionEnemyPoints::getScore(
     GameplayState* gameplay, MissionData* mission
 ) const {
     return
         (int)
         gameplay->enemy_points_collected *
-        get_multiplier(mission);
+        getMultiplier(mission);
 }
 
 
@@ -2156,7 +2156,7 @@ int MissionScoreCriterionEnemyPoints::get_score(
  * @param mission Mission data to get info from.
  * @return The multiplier.
  */
-int MissionScoreCriterionPikminBorn::get_multiplier(
+int MissionScoreCriterionPikminBorn::getMultiplier(
     MissionData* mission
 ) const {
     return mission->points_per_pikmin_born;
@@ -2168,7 +2168,7 @@ int MissionScoreCriterionPikminBorn::get_multiplier(
  *
  * @return The name.
  */
-string MissionScoreCriterionPikminBorn::get_name() const {
+string MissionScoreCriterionPikminBorn::getName() const {
     return "Pikmin born";
 }
 
@@ -2180,13 +2180,13 @@ string MissionScoreCriterionPikminBorn::get_name() const {
  * @param mission Mission data to get info from.
  * @return The score.
  */
-int MissionScoreCriterionPikminBorn::get_score(
+int MissionScoreCriterionPikminBorn::getScore(
     GameplayState* gameplay, MissionData* mission
 ) const {
     return
         (int)
         gameplay->pikmin_born *
-        get_multiplier(mission);
+        getMultiplier(mission);
 }
 
 
@@ -2196,7 +2196,7 @@ int MissionScoreCriterionPikminBorn::get_score(
  * @param mission Mission data to get info from.
  * @return The multiplier.
  */
-int MissionScoreCriterionPikminDeath::get_multiplier(
+int MissionScoreCriterionPikminDeath::getMultiplier(
     MissionData* mission
 ) const {
     return mission->points_per_pikmin_death;
@@ -2208,7 +2208,7 @@ int MissionScoreCriterionPikminDeath::get_multiplier(
  *
  * @return The name.
  */
-string MissionScoreCriterionPikminDeath::get_name() const {
+string MissionScoreCriterionPikminDeath::getName() const {
     return "Pikmin deaths";
 }
 
@@ -2220,13 +2220,13 @@ string MissionScoreCriterionPikminDeath::get_name() const {
  * @param mission Mission data to get info from.
  * @return The score.
  */
-int MissionScoreCriterionPikminDeath::get_score(
+int MissionScoreCriterionPikminDeath::getScore(
     GameplayState* gameplay, MissionData* mission
 ) const {
     return
         (int)
         gameplay->pikmin_deaths *
-        get_multiplier(mission);
+        getMultiplier(mission);
 }
 
 
@@ -2236,13 +2236,13 @@ int MissionScoreCriterionPikminDeath::get_score(
  * @param mission Mission data to get info from.
  * @return The multiplier.
  */
-int MissionScoreCriterionSecLeft::get_multiplier(
+int MissionScoreCriterionSecLeft::getMultiplier(
     MissionData* mission
 ) const {
     if(
-        has_flag(
+        hasFlag(
             mission->fail_conditions,
-            get_idx_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
+            getIdxBitmask(MISSION_FAIL_COND_TIME_LIMIT)
         )
     ) {
         return mission->points_per_sec_left;
@@ -2257,7 +2257,7 @@ int MissionScoreCriterionSecLeft::get_multiplier(
  *
  * @return The name.
  */
-string MissionScoreCriterionSecLeft::get_name() const {
+string MissionScoreCriterionSecLeft::getName() const {
     return "Seconds left";
 }
 
@@ -2269,12 +2269,12 @@ string MissionScoreCriterionSecLeft::get_name() const {
  * @param mission Mission data to get info from.
  * @return The score.
  */
-int MissionScoreCriterionSecLeft::get_score(
+int MissionScoreCriterionSecLeft::getScore(
     GameplayState* gameplay, MissionData* mission
 ) const {
     return
         (mission->fail_time_limit - floor(gameplay->gameplay_time_passed)) *
-        get_multiplier(mission);
+        getMultiplier(mission);
 }
 
 
@@ -2284,7 +2284,7 @@ int MissionScoreCriterionSecLeft::get_score(
  * @param mission Mission data to get info from.
  * @return The multiplier.
  */
-int MissionScoreCriterionSecPassed::get_multiplier(
+int MissionScoreCriterionSecPassed::getMultiplier(
     MissionData* mission
 ) const {
     return mission->points_per_sec_passed;
@@ -2296,7 +2296,7 @@ int MissionScoreCriterionSecPassed::get_multiplier(
  *
  * @return The name.
  */
-string MissionScoreCriterionSecPassed::get_name() const {
+string MissionScoreCriterionSecPassed::getName() const {
     return "Seconds passed";
 }
 
@@ -2308,12 +2308,12 @@ string MissionScoreCriterionSecPassed::get_name() const {
  * @param mission Mission data to get info from.
  * @return The score.
  */
-int MissionScoreCriterionSecPassed::get_score(
+int MissionScoreCriterionSecPassed::getScore(
     GameplayState* gameplay, MissionData* mission
 ) const {
     return
         floor(gameplay->gameplay_time_passed) *
-        get_multiplier(mission);
+        getMultiplier(mission);
 }
 
 
@@ -2323,7 +2323,7 @@ int MissionScoreCriterionSecPassed::get_score(
  * @param mission Mission data to get info from.
  * @return The multiplier.
  */
-int MissionScoreCriterionTreasurePoints::get_multiplier(
+int MissionScoreCriterionTreasurePoints::getMultiplier(
     MissionData* mission
 ) const {
     return mission->points_per_treasure_point;
@@ -2335,7 +2335,7 @@ int MissionScoreCriterionTreasurePoints::get_multiplier(
  *
  * @return The name.
  */
-string MissionScoreCriterionTreasurePoints::get_name() const {
+string MissionScoreCriterionTreasurePoints::getName() const {
     return "Treasure points";
 }
 
@@ -2347,11 +2347,11 @@ string MissionScoreCriterionTreasurePoints::get_name() const {
  * @param mission Mission data to get info from.
  * @return The score.
  */
-int MissionScoreCriterionTreasurePoints::get_score(
+int MissionScoreCriterionTreasurePoints::getScore(
     GameplayState* gameplay, MissionData* mission
 ) const {
     return
         (int)
         gameplay->treasure_points_collected *
-        get_multiplier(mission);
+        getMultiplier(mission);
 }

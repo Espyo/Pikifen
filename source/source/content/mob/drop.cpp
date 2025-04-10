@@ -36,15 +36,15 @@ Drop::Drop(const Point &pos, DropType* type, float angle) :
  * @brief Draws a drop, but with its size reflecting the doses left or
  * the process of vanishing.
  */
-void Drop::draw_mob() {
+void Drop::drawMob() {
     Sprite* cur_s_ptr;
     Sprite* next_s_ptr;
     float interpolation_factor;
-    get_sprite_data(&cur_s_ptr, &next_s_ptr, &interpolation_factor);
+    getSpriteData(&cur_s_ptr, &next_s_ptr, &interpolation_factor);
     if(!cur_s_ptr) return;
     
     BitmapEffect eff;
-    get_sprite_bitmap_effects(
+    getSpriteBitmapEffects(
         cur_s_ptr, next_s_ptr, interpolation_factor,
         &eff,
         SPRITE_BMP_EFFECT_FLAG_STANDARD |
@@ -56,7 +56,7 @@ void Drop::draw_mob() {
     
     eff.scale *= cur_scale;
     
-    draw_bitmap_with_effects(cur_s_ptr->bitmap, eff);
+    drawBitmapWithEffects(cur_s_ptr->bitmap, eff);
 }
 
 
@@ -65,7 +65,7 @@ void Drop::draw_mob() {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void Drop::tick_class_specifics(float delta_t) {
+void Drop::tickClassSpecifics(float delta_t) {
     float intended_scale;
     
     if(doses_left == dro_type->total_doses) {
@@ -74,7 +74,7 @@ void Drop::tick_class_specifics(float delta_t) {
         intended_scale = 0.0f;
     } else {
         intended_scale =
-            interpolate_number(doses_left, 1, dro_type->total_doses, 0.5, 1.0);
+            interpolateNumber(doses_left, 1, dro_type->total_doses, 0.5, 1.0);
     }
     
     if(cur_scale > intended_scale) {

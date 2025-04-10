@@ -114,7 +114,7 @@ void InWorldFraction::draw() {
     ALLEGRO_COLOR final_color;
     if(req_met_juice_timer > 0.0f) {
         final_color =
-            interpolate_color(
+            interpolateColor(
                 req_met_juice_timer, 0.0f,
                 IN_WORLD_FRACTION::REQ_MET_JUICE_DURATION,
                 color, COLOR_WHITE
@@ -132,7 +132,7 @@ void InWorldFraction::draw() {
     
     if(requirement_number > 0) {
         Point pos(m->pos.x, m->pos.y - m->radius - IN_WORLD_FRACTION::PADDING);
-        draw_fraction(
+        drawFraction(
             pos,
             value_number, requirement_number, final_color, size_mult
         );
@@ -143,7 +143,7 @@ void InWorldFraction::draw() {
             al_get_font_line_height(game.sys_content.fnt_standard) -
             IN_WORLD_FRACTION::PADDING
         );
-        draw_text(
+        drawText(
             i2s(value_number), game.sys_content.fnt_standard, pos,
             Point(LARGE_FLOAT, IN_WORLD_FRACTION::ROW_HEIGHT * size_mult),
             final_color
@@ -157,7 +157,7 @@ void InWorldFraction::draw() {
  *
  * @param new_color Color to set to.
  */
-void InWorldFraction::set_color(const ALLEGRO_COLOR &new_color) {
+void InWorldFraction::setColor(const ALLEGRO_COLOR &new_color) {
     if(color == new_color) return;
     
     color = new_color;
@@ -170,7 +170,7 @@ void InWorldFraction::set_color(const ALLEGRO_COLOR &new_color) {
  *
  * @param new_req_nr Requirement number to set to.
  */
-void InWorldFraction::set_requirement_number(float new_req_nr) {
+void InWorldFraction::setRequirementNumber(float new_req_nr) {
     if(requirement_number == new_req_nr) return;
     
     bool req_was_met = value_number >= requirement_number;
@@ -193,7 +193,7 @@ void InWorldFraction::set_requirement_number(float new_req_nr) {
  *
  * @param new_value_nr Value number to set to.
  */
-void InWorldFraction::set_value_number(float new_value_nr) {
+void InWorldFraction::setValueNumber(float new_value_nr) {
     if(value_number == new_value_nr) return;
     
     bool req_was_met = value_number >= requirement_number;
@@ -215,7 +215,7 @@ void InWorldFraction::set_value_number(float new_value_nr) {
 /**
  * @brief Starts fading away.
  */
-void InWorldFraction::start_fading() {
+void InWorldFraction::startFading() {
     if(transition == IN_WORLD_HUD_TRANSITION_OUT) {
         return;
     }
@@ -281,7 +281,7 @@ void InWorldHealthWheel::draw() {
     }
     
     float radius = DRAWING::DEF_HEALTH_WHEEL_RADIUS * size_mult;
-    draw_health(
+    drawHealth(
         Point(
             m->pos.x,
             m->pos.y - m->radius -
@@ -297,7 +297,7 @@ void InWorldHealthWheel::draw() {
 /**
  * @brief Starts fading away.
  */
-void InWorldHealthWheel::start_fading() {
+void InWorldHealthWheel::startFading() {
     if(transition == IN_WORLD_HUD_TRANSITION_OUT) {
         return;
     }

@@ -192,7 +192,7 @@ public:
     
     //--- Function declarations ---
     
-    void load_from_data_node(DataNode* node, CONTENT_LOAD_LEVEL level);
+    void loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level);
     
 };
 

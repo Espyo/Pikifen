@@ -37,7 +37,7 @@ ToolType::ToolType() :
  *
  * @param file File to read from.
  */
-void ToolType::load_cat_properties(DataNode* file) {
+void ToolType::loadCatProperties(DataNode* file) {
     ReaderSetter rs(file);
     
     rs.set("dropped_when_pikmin_is_whistled", dropped_when_pikmin_is_whistled);
@@ -59,7 +59,7 @@ void ToolType::load_cat_properties(DataNode* file) {
  *
  * @param file File to read from.
  */
-void ToolType::load_cat_resources(DataNode* file) {
+void ToolType::loadCatResources(DataNode* file) {
     ReaderSetter rs(file);
     
     string icon_str;

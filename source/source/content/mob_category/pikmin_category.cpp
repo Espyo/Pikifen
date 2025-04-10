@@ -32,7 +32,7 @@ PikminCategory::PikminCategory() :
 /**
  * @brief Clears the list of registered types of Pikmin.
  */
-void PikminCategory::clear_types() {
+void PikminCategory::clearTypes() {
     for(auto &t : game.content.mob_types.list.pikmin) {
         delete t.second;
     }
@@ -48,7 +48,7 @@ void PikminCategory::clear_types() {
  * @param angle Starting angle.
  * @return The mob.
  */
-Mob* PikminCategory::create_mob(
+Mob* PikminCategory::createMob(
     const Point &pos, MobType* type, float angle
 ) {
     Pikmin* m = new Pikmin(pos, (PikminType*) type, angle);
@@ -62,7 +62,7 @@ Mob* PikminCategory::create_mob(
  *
  * @return The type.
  */
-MobType* PikminCategory::create_type() {
+MobType* PikminCategory::createType() {
     return new PikminType();
 }
 
@@ -72,7 +72,7 @@ MobType* PikminCategory::create_type() {
  *
  * @param m The mob to erase.
  */
-void PikminCategory::erase_mob(Mob* m) {
+void PikminCategory::eraseMob(Mob* m) {
     game.states.gameplay->mobs.pikmin_list.erase(
         find(
             game.states.gameplay->mobs.pikmin_list.begin(),
@@ -90,7 +90,7 @@ void PikminCategory::erase_mob(Mob* m) {
  * @param internal_name Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-MobType* PikminCategory::get_type(const string &internal_name) const {
+MobType* PikminCategory::getType(const string &internal_name) const {
     auto it = game.content.mob_types.list.pikmin.find(internal_name);
     if(it == game.content.mob_types.list.pikmin.end()) return nullptr;
     return it->second;
@@ -102,7 +102,7 @@ MobType* PikminCategory::get_type(const string &internal_name) const {
  *
  * @param list This list gets filled with the mob type internal names.
  */
-void PikminCategory::get_type_names(vector<string> &list) const {
+void PikminCategory::getTypeNames(vector<string> &list) const {
     for(auto &t : game.content.mob_types.list.pikmin) {
         list.push_back(t.first);
     }
@@ -115,6 +115,6 @@ void PikminCategory::get_type_names(vector<string> &list) const {
  * @param internal_name Internal name of the mob type.
  * @param type Mob type to register.
  */
-void PikminCategory::register_type(const string &internal_name, MobType* type) {
+void PikminCategory::registerType(const string &internal_name, MobType* type) {
     game.content.mob_types.list.pikmin[internal_name] = (PikminType*) type;
 }

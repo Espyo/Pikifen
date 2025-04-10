@@ -99,7 +99,7 @@ void EnumNameDatabase::clear() {
  * @param name Name of the item.
  * @return The index, or INVALID on error.
  */
-size_t EnumNameDatabase::get_idx(const string &name) const {
+size_t EnumNameDatabase::getIdx(const string &name) const {
     for(size_t n = 0; n < names.size(); n++) {
         if(names[n] == name) return n;
     }
@@ -113,7 +113,7 @@ size_t EnumNameDatabase::get_idx(const string &name) const {
  * @param idx Index number of the item.
  * @return The name, or an empty string on error.
  */
-string EnumNameDatabase::get_name(size_t idx) const {
+string EnumNameDatabase::getName(size_t idx) const {
     if(idx < names.size()) return names[idx];
     return "";
 }
@@ -124,7 +124,7 @@ string EnumNameDatabase::get_name(size_t idx) const {
  *
  * @return The amount.
  */
-size_t EnumNameDatabase::get_nr_of_items() const {
+size_t EnumNameDatabase::getNrOfItems() const {
     return names.size();
 }
 
@@ -135,7 +135,7 @@ size_t EnumNameDatabase::get_nr_of_items() const {
  * @param idx Its index number.
  * @param name Its name.
  */
-void EnumNameDatabase::register_item(
+void EnumNameDatabase::registerItem(
     size_t idx, const string &name
 ) {
     if(idx >= names.size()) {
@@ -153,7 +153,7 @@ void EnumNameDatabase::register_item(
  * @return The value.
  */
 template<typename t>
-t from_string(const string &s) {
+t fromString(const string &s) {
     return t{};
 }
 
@@ -165,7 +165,7 @@ t from_string(const string &s) {
  * @return The value.
  */
 template<>
-float from_string<float>(const string &s) {
+float fromString<float>(const string &s) {
     return s2f(s);
 }
 
@@ -177,7 +177,7 @@ float from_string<float>(const string &s) {
  * @return The value.
  */
 template<>
-ALLEGRO_COLOR from_string<ALLEGRO_COLOR>(const string &s) {
+ALLEGRO_COLOR fromString<ALLEGRO_COLOR>(const string &s) {
     return s2c(s);
 }
 
@@ -189,7 +189,7 @@ ALLEGRO_COLOR from_string<ALLEGRO_COLOR>(const string &s) {
  * @return The value.
  */
 template<>
-Point from_string<Point>(const string &s) {
+Point fromString<Point>(const string &s) {
     return s2p(s);
 }
 
@@ -203,11 +203,11 @@ Point from_string<Point>(const string &s) {
  * @param angle Angle compared to the center.
  * @param magnitude Magnitude from the center.
  */
-void MovementInfo::get_info(
+void MovementInfo::getInfo(
     Point* coords, float* angle, float* magnitude
 ) const {
     *coords = Point(right - left, down - up);
-    coordinates_to_angle(*coords, angle, magnitude);
+    coordinatesToAngle(*coords, angle, magnitude);
     
     //While analog sticks are already correctly clamped between 0 and 1 for
     //magnitude, via the controls manager, digital inputs aren't, e.g. pressing
@@ -258,7 +258,7 @@ Timer::~Timer() {
  *
  * @return The ratio left.
  */
-float Timer::get_ratio_left() const {
+float Timer::getRatioLeft() const {
     return time_left / duration;
 }
 
@@ -317,7 +317,7 @@ void Timer::tick(float delta_t) {
  * @param s File name to sanitize.
  * @return The sanitized file name.
  */
-string sanitize_file_name(const string &s) {
+string sanitizeFileName(const string &s) {
     string ret;
     ret.reserve(s.size());
     for(size_t c = 0; c < s.size(); c++) {
@@ -344,8 +344,8 @@ string sanitize_file_name(const string &s) {
  * @param path Path to standardize.
  * @return The standardized path.
  */
-string standardize_path(const string &path) {
-    string res = replace_all(path, "\\", "/");
+string standardizePath(const string &path) {
+    string res = replaceAll(path, "\\", "/");
     if(res.back() == '/') res.pop_back();
     return res;
 }
@@ -360,7 +360,7 @@ string standardize_path(const string &path) {
  * @param pos Use the string at this position and onward.
  * @return The joined string.
  */
-string vector_tail_to_string(const vector<string> &v, size_t pos) {
+string vectorTailToString(const vector<string> &v, size_t pos) {
     string result = v[pos];
     for(size_t p = pos + 1; p < v.size(); p++) {
         result += " " + v[p];

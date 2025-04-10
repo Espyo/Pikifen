@@ -48,14 +48,14 @@ public:
     //--- Function declarations ---
     
     AnimationEditor();
-    void do_logic() override;
-    void do_drawing() override;
+    void doLogic() override;
+    void doDrawing() override;
     void load() override;
     void unload() override;
-    string get_name() const override;
-    string get_name_for_history() const;
-    void draw_canvas();
-    string get_opened_content_path() const;
+    string getName() const override;
+    string getNameForHistory() const;
+    void drawCanvas();
+    string getOpenedContentPath() const;
     
 private:
 
@@ -242,131 +242,130 @@ private:
     
     //--- Function declarations ---
     
-    void center_camera_on_sprite_bitmap(bool instant);
-    void change_state(const EDITOR_STATE new_state);
-    void close_load_dialog();
-    void close_options_dialog();
-    void create_anim_db(const string &path);
-    void delete_current_anim_db();
-    float get_cursor_timeline_time();
-    string get_file_tooltip(const string &path) const;
-    void handle_lmb_drag_in_timeline();
-    void import_animation_data(const string &name);
-    void import_sprite_bmp_data(const string &name);
-    void import_sprite_hitbox_data(const string &name);
-    void import_sprite_top_data(const string &name);
-    void import_sprite_transformation_data(const string &name);
-    bool is_cursor_in_timeline();
-    void load_anim_db_file(
+    void centerCameraOnSpriteBitmap(bool instant);
+    void changeState(const EDITOR_STATE new_state);
+    void closeLoadDialog();
+    void closeOptionsDialog();
+    void createAnimDb(const string &path);
+    void deleteCurrentAnimDb();
+    float getCursorTimelineTime();
+    string getFileTooltip(const string &path) const;
+    void handleLmbDragInTimeline();
+    void importAnimationData(const string &name);
+    void importSpriteBmpData(const string &name);
+    void importSpriteHitboxData(const string &name);
+    void importSpriteTopData(const string &name);
+    void importSpriteTransformationData(const string &name);
+    bool isCursorInTimeline();
+    void loadAnimDbFile(
         const string &path, bool should_update_history
     );
-    void pick_anim_db_file(
+    void pickAnimDbFile(
         const string &name, const string &top_cat, const string &sec_cat,
         void* info, bool is_new
     );
-    void play_sound(size_t sound_idx);
-    void reload_anim_dbs();
-    void rename_animation(Animation* anim, const string &new_name);
-    void rename_body_part(BodyPart* part, const string &new_name);
-    void rename_sprite(Sprite* spr, const string &new_name);
-    void resize_everything(float mult);
-    void resize_sprite(Sprite* s, float mult);
-    bool save_anim_db();
-    void setup_for_new_anim_db_post();
-    void setup_for_new_anim_db_pre();
-    void set_all_sprite_scales(float scale);
-    void set_best_frame_sprite();
-    void sprite_bmp_flood_fill(
+    void playSound(size_t sound_idx);
+    void reloadAnimDbs();
+    void renameAnimation(Animation* anim, const string &new_name);
+    void renameBodyPart(BodyPart* part, const string &new_name);
+    void renameSprite(Sprite* spr, const string &new_name);
+    void resizeEverything(float mult);
+    void resizeSprite(Sprite* s, float mult);
+    bool saveAnimDb();
+    void setupForNewAnimDbPost();
+    void setupForNewAnimDbPre();
+    void setAllSpriteScales(float scale);
+    void setBestFrameSprite();
+    void spriteBmpFloodFill(
         ALLEGRO_BITMAP* bmp, bool* selection_pixels, int x, int y
     );
-    void update_cur_hitbox();
-    void update_hitboxes();
-    static void draw_canvas_imgui_callback(
+    void updateCurHitbox();
+    void updateHitboxes();
+    static void drawCanvasDearImGuiCallback(
         const ImDrawList* parent_list, const ImDrawCmd* cmd
     );
-    void draw_comparison();
-    void draw_side_view_hitbox(
+    void drawComparison();
+    void drawSideViewHitbox(
         Hitbox* h_ptr, const ALLEGRO_COLOR &color,
         const ALLEGRO_COLOR &outline_color, float outline_thickness
     );
-    void draw_side_view_leader_silhouette(float x_offset);
-    void draw_side_view_sprite(const Sprite* s);
-    void draw_timeline();
-    void draw_top_down_view_hitbox(
+    void drawSideViewLeaderSilhouette(float x_offset);
+    void drawSideViewSprite(const Sprite* s);
+    void drawTimeline();
+    void drawTopDownViewHitbox(
         Hitbox* h_ptr, const ALLEGRO_COLOR &color,
         const ALLEGRO_COLOR &outline_color, float outline_thickness
     );
-    void draw_top_down_view_leader_silhouette(float x_offset);
-    void draw_top_down_view_mob_radius(MobType* mt);
-    void draw_top_down_view_sprite(Sprite* s);
-    void open_load_dialog();
-    void open_new_dialog();
-    void open_options_dialog();
-    void pick_animation(
+    void drawTopDownViewLeaderSilhouette(float x_offset);
+    void drawTopDownViewMobRadius(MobType* mt);
+    void drawTopDownViewSprite(Sprite* s);
+    void openLoadDialog();
+    void openNewDialog();
+    void openOptionsDialog();
+    void pickAnimation(
         const string &name, const string &top_cat, const string &sec_cat,
         void* info, bool is_new
     );
-    void pick_sprite(
+    void pickSprite(
         const string &name, const string &top_cat, const string &sec_cat,
         void* info, bool is_new
     );
-    void delete_anim_db_cmd(float input_value);
-    void grid_toggle_cmd(float input_value);
-    void hitboxes_toggle_cmd(float input_value);
-    void leader_silhouette_toggle_cmd(float input_value);
-    void load_cmd(float input_value);
-    void mob_radius_toggle_cmd(float input_value);
-    void play_pause_anim_cmd(float input_value);
-    void quit_cmd(float input_value);
-    void reload_cmd(float input_value);
-    void restart_anim_cmd(float input_value);
-    void save_cmd(float input_value);
-    void zoom_and_pos_reset_cmd(float input_value);
-    void zoom_everything_cmd(float input_value);
-    void zoom_in_cmd(float input_value);
-    void zoom_out_cmd(float input_value);
-    void process_gui();
-    void process_gui_control_panel();
-    void process_gui_delete_anim_db_dialog();
-    void process_gui_hitbox_hazards();
-    void process_gui_load_dialog();
-    void process_gui_new_dialog();
-    void process_gui_options_dialog();
-    void process_gui_panel_animation();
-    void process_gui_panel_animation_data();
-    void process_gui_panel_animation_header();
-    void process_gui_panel_body_part();
-    void process_gui_panel_frame(Frame* &frame_ptr);
-    void process_gui_panel_frame_header(Frame* &frame_ptr);
-    void process_gui_panel_info();
-    void process_gui_panel_main();
-    void process_gui_panel_options();
-    void process_gui_panel_sprite();
-    void process_gui_panel_sprite_bitmap();
-    void process_gui_panel_sprite_hitboxes();
-    void process_gui_panel_sprite_top();
-    void process_gui_panel_sprite_transform();
-    void process_gui_panel_tools();
-    void process_gui_menu_bar();
-    void process_gui_status_bar();
-    void process_gui_toolbar();
-    void handle_key_char_canvas(const ALLEGRO_EVENT &ev) override;
-    void handle_key_down_anywhere(const ALLEGRO_EVENT &ev) override;
-    void handle_key_down_canvas(const ALLEGRO_EVENT &ev) override;
-    void handle_lmb_double_click(const ALLEGRO_EVENT &ev) override;
-    void handle_lmb_down(const ALLEGRO_EVENT &ev) override;
-    void handle_lmb_drag(const ALLEGRO_EVENT &ev) override;
-    void handle_lmb_up(const ALLEGRO_EVENT &ev) override;
-    void handle_mmb_double_click(const ALLEGRO_EVENT &ev) override;
-    void handle_mmb_down(const ALLEGRO_EVENT &ev) override;
-    void handle_mmb_drag(const ALLEGRO_EVENT &ev) override;
-    void handle_mouse_update(const ALLEGRO_EVENT &ev) override;
-    void handle_mouse_wheel(const ALLEGRO_EVENT &ev) override;
-    void handle_rmb_double_click(const ALLEGRO_EVENT &ev) override;
-    void handle_rmb_down(const ALLEGRO_EVENT &ev) override;
-    void handle_rmb_drag(const ALLEGRO_EVENT &ev) override;
-    void pan_cam(const ALLEGRO_EVENT &ev);
-    void reset_cam_xy();
-    void reset_cam_zoom();
+    void deleteAnimDbCmd(float input_value);
+    void gridToggleCmd(float input_value);
+    void hitboxesToggleCmd(float input_value);
+    void leaderSilhouetteToggleCmd(float input_value);
+    void loadCmd(float input_value);
+    void mobRadiusToggleCmd(float input_value);
+    void playPauseAnimCmd(float input_value);
+    void quitCmd(float input_value);
+    void reloadCmd(float input_value);
+    void restartAnimCmd(float input_value);
+    void saveCmd(float input_value);
+    void zoomAndPosResetCmd(float input_value);
+    void zoomEverythingCmd(float input_value);
+    void zoomInCmd(float input_value);
+    void zoomOutCmd(float input_value);
+    void processGui();
+    void processGuiControlPanel();
+    void processGuiDeleteAnimDbDialog();
+    void processGuiHitboxHazards();
+    void processGuiLoadDialog();
+    void processGuiNewDialog();
+    void processGuiOptionsDialog();
+    void processGuiPanelAnimation();
+    void processGuiPanelAnimationData();
+    void processGuiPanelAnimationHeader();
+    void processGuiPanelBodyPart();
+    void processGuiPanelFrame(Frame* &frame_ptr);
+    void processGuiPanelFrameHeader(Frame* &frame_ptr);
+    void processGuiPanelInfo();
+    void processGuiPanelMain();
+    void processGuiPanelSprite();
+    void processGuiPanelSpriteBitmap();
+    void processGuiPanelSpriteHitboxes();
+    void processGuiPanelSpriteTop();
+    void processGuiPanelSpriteTransform();
+    void processGuiPanelTools();
+    void processGuiMenuBar();
+    void processGuiStatusBar();
+    void processGuiToolbar();
+    void handleKeyCharCanvas(const ALLEGRO_EVENT &ev) override;
+    void handleKeyDownAnywhere(const ALLEGRO_EVENT &ev) override;
+    void handleKeyDownCanvas(const ALLEGRO_EVENT &ev) override;
+    void handleLmbDoubleClick(const ALLEGRO_EVENT &ev) override;
+    void handleLmbDown(const ALLEGRO_EVENT &ev) override;
+    void handleLmbDrag(const ALLEGRO_EVENT &ev) override;
+    void handleLmbUp(const ALLEGRO_EVENT &ev) override;
+    void handleMmbDoubleClick(const ALLEGRO_EVENT &ev) override;
+    void handleMmbDown(const ALLEGRO_EVENT &ev) override;
+    void handleMmbDrag(const ALLEGRO_EVENT &ev) override;
+    void handleMouseUpdate(const ALLEGRO_EVENT &ev) override;
+    void handleMouseWheel(const ALLEGRO_EVENT &ev) override;
+    void handleRmbDoubleClick(const ALLEGRO_EVENT &ev) override;
+    void handleRmbDown(const ALLEGRO_EVENT &ev) override;
+    void handleRmbDrag(const ALLEGRO_EVENT &ev) override;
+    void panCam(const ALLEGRO_EVENT &ev);
+    void resetCamXY();
+    void resetCamZoom();
     
 };

@@ -36,11 +36,11 @@ using std::set;
  * @param area_ptr The area's data.
  * @param record Record object to fill.
  */
-void load_area_mission_record(
+void loadAreaMissionRecord(
     DataNode* file, Area* area_ptr, MissionRecord &record
 ) {
     string mission_record_entry_name =
-        get_mission_record_entry_name(area_ptr);
+        getMissionRecordEntryName(area_ptr);
         
     vector<string> record_parts =
         split(
@@ -67,7 +67,7 @@ void load_area_mission_record(
  * @param report_errors Only issues errors if this is true.
  * @return The stream.
  */
-ALLEGRO_AUDIO_STREAM* load_audio_stream(
+ALLEGRO_AUDIO_STREAM* loadAudioStream(
     const string &file_path, DataNode* node, bool report_errors
 ) {
     ALLEGRO_AUDIO_STREAM* stream =
@@ -98,7 +98,7 @@ ALLEGRO_AUDIO_STREAM* load_audio_stream(
  * If this parameter is true, the path starts from the game's root.
  * @return The bitmap.
  */
-ALLEGRO_BITMAP* load_bmp(
+ALLEGRO_BITMAP* loadBmp(
     const string &path, DataNode* node,
     bool report_error, bool error_bmp_on_error,
     bool error_bmp_on_empty
@@ -135,7 +135,7 @@ ALLEGRO_BITMAP* load_bmp(
  *
  * @param file_path Path to the file, relative to the program root folder.
  */
-DataNode load_data_file(const string &file_path) {
+DataNode loadDataFile(const string &file_path) {
     DataNode n = DataNode(file_path);
     if(!n.fileWasOpened) {
         game.errors.report(
@@ -158,7 +158,7 @@ DataNode load_data_file(const string &file_path) {
  * for each range, if it's a bitmap.
  * @param size Font size, if it's a font file.
  */
-ALLEGRO_FONT* load_font(
+ALLEGRO_FONT* loadFont(
     const string &path, int n, const int ranges[], int size
 ) {
     const string &final_path =
@@ -173,7 +173,7 @@ ALLEGRO_FONT* load_font(
     if(result) return result;
     
     //Now try as a bitmap.
-    ALLEGRO_BITMAP* bmp = load_bmp(final_path);
+    ALLEGRO_BITMAP* bmp = loadBmp(final_path);
     result = al_grab_font_from_bitmap(bmp, n, ranges);
     al_destroy_bitmap(bmp);
     
@@ -184,7 +184,7 @@ ALLEGRO_FONT* load_font(
 /**
  * @brief Loads the game's fonts.
  */
-void load_fonts() {
+void loadFonts() {
     const int STANDARD_FONT_RANGES_SIZE = 2;
     const int STANDARD_FONT_RANGES[STANDARD_FONT_RANGES_SIZE] = {
         0x0020, 0x007E, //ASCII
@@ -216,7 +216,7 @@ void load_fonts() {
     
     //Area name font.
     game.sys_content.fnt_area_name =
-        load_font(
+        loadFont(
             game.sys_content_names.fnt_area_name,
             STANDARD_FONT_RANGES_SIZE / 2, STANDARD_FONT_RANGES,
             34
@@ -227,7 +227,7 @@ void load_fonts() {
     
     //Counter font.
     game.sys_content.fnt_counter =
-        load_font(
+        loadFont(
             game.sys_content_names.fnt_counter,
             COUNTER_FONT_RANGES_SIZE / 2, COUNTER_FONT_RANGES,
             32
@@ -235,7 +235,7 @@ void load_fonts() {
         
     //Cursor counter font.
     game.sys_content.fnt_cursor_counter =
-        load_font(
+        loadFont(
             game.sys_content_names.fnt_cursor_counter,
             JUST_NUMBERS_FONT_RANGES_SIZE / 2, JUST_NUMBERS_FONT_RANGES,
             16
@@ -243,7 +243,7 @@ void load_fonts() {
         
     //Slim font.
     game.sys_content.fnt_slim =
-        load_font(
+        loadFont(
             game.sys_content_names.fnt_slim,
             STANDARD_FONT_RANGES_SIZE / 2, STANDARD_FONT_RANGES,
             22
@@ -251,7 +251,7 @@ void load_fonts() {
         
     //Standard font.
     game.sys_content.fnt_standard =
-        load_font(
+        loadFont(
             game.sys_content_names.fnt_standard,
             STANDARD_FONT_RANGES_SIZE / 2, STANDARD_FONT_RANGES,
             22
@@ -259,7 +259,7 @@ void load_fonts() {
         
     //Value font.
     game.sys_content.fnt_value =
-        load_font(
+        loadFont(
             game.sys_content_names.fnt_value,
             VALUE_FONT_RANGES_SIZE / 2, VALUE_FONT_RANGES,
             16
@@ -270,17 +270,17 @@ void load_fonts() {
 /**
  * @brief Loads the maker tools from the tool config file.
  */
-void load_maker_tools() {
+void loadMakerTools() {
     DataNode file(FILE_PATHS_FROM_ROOT::MAKER_TOOLS);
     if(!file.fileWasOpened) return;
-    game.maker_tools.load_from_data_node(&file);
+    game.maker_tools.loadFromDataNode(&file);
 }
 
 
 /**
  * @brief Loads miscellaneous fixed graphics.
  */
-void load_misc_graphics() {
+void loadMiscGraphics() {
     //Icon.
     game.sys_content.bmp_icon = game.content.bitmaps.list.get(game.sys_content_names.bmp_icon);
     al_set_display_icon(game.display, game.sys_content.bmp_icon);
@@ -380,7 +380,7 @@ void load_misc_graphics() {
 /**
  * @brief Loads miscellaneous fixed sound effects.
  */
-void load_misc_sounds() {
+void loadMiscSounds() {
     game.audio.init(
         game.options.audio.master_vol,
         game.options.audio.gameplay_sound_vol,
@@ -408,7 +408,7 @@ void load_misc_sounds() {
 /**
  * @brief Loads the player's options.
  */
-void load_options() {
+void loadOptions() {
     DataNode file = DataNode(FILE_PATHS_FROM_ROOT::OPTIONS);
     if(!file.fileWasOpened) return;
     
@@ -420,7 +420,7 @@ void load_options() {
     }
     
     //Read the main options.
-    game.options.load_from_data_node(&file);
+    game.options.loadFromDataNode(&file);
     
     //Final setup.
     game.win_fullscreen = game.options.graphics.intended_win_fullscreen;
@@ -432,7 +432,7 @@ void load_options() {
         game.options.advanced.joystick_min_deadzone;
     controls_mgr_options.stickMaxDeadzone =
         game.options.advanced.joystick_max_deadzone;
-    game.controls.set_options(controls_mgr_options);
+    game.controls.setOptions(controls_mgr_options);
 }
 
 
@@ -445,7 +445,7 @@ void load_options() {
  * @param report_errors Only issues errors if this is true.
  * @return The sample.
  */
-ALLEGRO_SAMPLE* load_sample(
+ALLEGRO_SAMPLE* loadSample(
     const string &path, DataNode* node, bool report_errors
 ) {
     ALLEGRO_SAMPLE* sample = al_load_sample((path).c_str());
@@ -464,7 +464,7 @@ ALLEGRO_SAMPLE* load_sample(
 /**
  * @brief Loads the engine's lifetime statistics.
  */
-void load_statistics() {
+void loadStatistics() {
     DataNode stats_file;
     stats_file.loadFile(FILE_PATHS_FROM_ROOT::STATISTICS, true, false, true);
     if(!stats_file.fileWasOpened) return;
@@ -496,7 +496,7 @@ void load_statistics() {
 /**
  * @brief Unloads miscellaneous graphics, sounds, and other resources.
  */
-void unload_misc_resources() {
+void unloadMiscResources() {
     //Graphics.
     game.content.bitmaps.list.free(game.sys_content.bmp_bright_circle);
     game.content.bitmaps.list.free(game.sys_content.bmp_bright_ring);

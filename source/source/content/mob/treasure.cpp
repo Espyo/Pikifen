@@ -28,14 +28,14 @@ Treasure::Treasure(const Point &pos, TreasureType* type, float angle) :
     Mob(pos, type, angle),
     tre_type(type) {
     
-    become_carriable(CARRY_DESTINATION_SHIP);
+    becomeCarriable(CARRY_DESTINATION_SHIP);
     
-    set_animation(
+    setAnimation(
         MOB_TYPE::ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
     );
     
     ParticleGenerator pg =
-        standard_particle_gen_setup(
+        standardParticleGenSetup(
             game.sys_content_names.part_treasure, this
         );
     pg.emission.circle_outer_dist *= radius;

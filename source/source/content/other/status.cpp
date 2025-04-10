@@ -52,9 +52,9 @@ void Status::tick(float delta_t) {
  * @param node Data node to load from.
  * @param level Level to load at.
  */
-void StatusType::load_from_data_node(DataNode* node, CONTENT_LOAD_LEVEL level) {
+void StatusType::loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level) {
     //Content metadata.
-    load_metadata_from_data_node(node);
+    loadMetadataFromDataNode(node);
     
     //Standard data.
     ReaderSetter rs(node);
@@ -99,16 +99,16 @@ void StatusType::load_from_data_node(DataNode* node, CONTENT_LOAD_LEVEL level) {
     rs.set("replacement_on_timeout",  replacement_on_timeout_str);
     
     affects = 0;
-    vector<string> affects_str_parts = semicolon_list_to_vector(affects_str);
+    vector<string> affects_str_parts = semicolonListToVector(affects_str);
     for(size_t a = 0; a < affects_str_parts.size(); a++) {
         if(affects_str_parts[a] == "pikmin") {
-            enable_flag(affects, STATUS_AFFECTS_FLAG_PIKMIN);
+            enableFlag(affects, STATUS_AFFECTS_FLAG_PIKMIN);
         } else if(affects_str_parts[a] == "leaders") {
-            enable_flag(affects, STATUS_AFFECTS_FLAG_LEADERS);
+            enableFlag(affects, STATUS_AFFECTS_FLAG_LEADERS);
         } else if(affects_str_parts[a] == "enemies") {
-            enable_flag(affects, STATUS_AFFECTS_FLAG_ENEMIES);
+            enableFlag(affects, STATUS_AFFECTS_FLAG_ENEMIES);
         } else if(affects_str_parts[a] == "others") {
-            enable_flag(affects, STATUS_AFFECTS_FLAG_OTHERS);
+            enableFlag(affects, STATUS_AFFECTS_FLAG_OTHERS);
         } else {
             game.errors.report(
                 "Unknown affect target \"" + affects_str_parts[a] + "\"!",
@@ -170,7 +170,7 @@ void StatusType::load_from_data_node(DataNode* node, CONTENT_LOAD_LEVEL level) {
     
     if(level >= CONTENT_LOAD_LEVEL_FULL) {
         if(!overlay_animation.empty()) {
-            overlay_anim.init_to_first_anim(&game.content.global_anim_dbs.list[overlay_animation]);
+            overlay_anim.initToFirstAnim(&game.content.global_anim_dbs.list[overlay_animation]);
         }
     }
 }

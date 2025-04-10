@@ -32,7 +32,7 @@ BouncerCategory::BouncerCategory() :
 /**
  * @brief Clears the list of registered types of bouncers.
  */
-void BouncerCategory::clear_types() {
+void BouncerCategory::clearTypes() {
     for(auto &t : game.content.mob_types.list.bouncer) {
         delete t.second;
     }
@@ -48,7 +48,7 @@ void BouncerCategory::clear_types() {
  * @param angle Starting angle.
  * @return The created mob.
  */
-Mob* BouncerCategory::create_mob(
+Mob* BouncerCategory::createMob(
     const Point &pos, MobType* type, float angle
 ) {
     Bouncer* m = new Bouncer(pos, (BouncerType*) type, angle);
@@ -62,7 +62,7 @@ Mob* BouncerCategory::create_mob(
  *
  * @return The type.
  */
-MobType* BouncerCategory::create_type() {
+MobType* BouncerCategory::createType() {
     return new BouncerType();
 }
 
@@ -72,7 +72,7 @@ MobType* BouncerCategory::create_type() {
  *
  * @param m The mob to erase.
  */
-void BouncerCategory::erase_mob(Mob* m) {
+void BouncerCategory::eraseMob(Mob* m) {
     game.states.gameplay->mobs.bouncers.erase(
         find(
             game.states.gameplay->mobs.bouncers.begin(),
@@ -90,7 +90,7 @@ void BouncerCategory::erase_mob(Mob* m) {
  * @param internal_name Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-MobType* BouncerCategory::get_type(const string &internal_name) const {
+MobType* BouncerCategory::getType(const string &internal_name) const {
     auto it = game.content.mob_types.list.bouncer.find(internal_name);
     if(it == game.content.mob_types.list.bouncer.end()) return nullptr;
     return it->second;
@@ -102,7 +102,7 @@ MobType* BouncerCategory::get_type(const string &internal_name) const {
  *
  * @param list This list gets filled with the mob type internal names.
  */
-void BouncerCategory::get_type_names(vector<string> &list) const {
+void BouncerCategory::getTypeNames(vector<string> &list) const {
     for(auto &t : game.content.mob_types.list.bouncer) {
         list.push_back(t.first);
     }
@@ -115,6 +115,6 @@ void BouncerCategory::get_type_names(vector<string> &list) const {
  * @param internal_name Internal name of the mob type.
  * @param type Mob type to register.
  */
-void BouncerCategory::register_type(const string &internal_name, MobType* type) {
+void BouncerCategory::registerType(const string &internal_name, MobType* type) {
     game.content.mob_types.list.bouncer[internal_name] = (BouncerType*) type;
 }

@@ -29,10 +29,10 @@ MakerTools::MakerTools() {
  *
  * @return The index.
  */
-unsigned char MakerTools::get_maker_tool_setting_idx() const {
+unsigned char MakerTools::getMakerToolSettingIdx() const {
     bool is_shift_pressed = false;
     bool is_ctrl_pressed = false;
-    get_shift_ctrl_alt_state(
+    getShiftCtrlAltState(
         &is_shift_pressed, &is_ctrl_pressed, nullptr
     );
     return
@@ -49,9 +49,9 @@ unsigned char MakerTools::get_maker_tool_setting_idx() const {
  * @param action The action.
  * @return Whether it got handled.
  */
-bool MakerTools::handle_gameplay_player_action(const PlayerAction &action) {
+bool MakerTools::handleGameplayPlayerAction(const PlayerAction &action) {
     bool is_gameplay_tool_action =
-        game.controls.get_player_action_type(action.actionTypeId).category ==
+        game.controls.getPlayerActionType(action.actionTypeId).category ==
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS;
     if(!is_gameplay_tool_action) return false;
     if(!enabled) return true;
@@ -60,15 +60,15 @@ bool MakerTools::handle_gameplay_player_action(const PlayerAction &action) {
     switch(action.actionTypeId) {
     case PLAYER_ACTION_TYPE_MT_AREA_IMAGE: {
 
-        unsigned char setting_idx = get_maker_tool_setting_idx();
+        unsigned char setting_idx = getMakerToolSettingIdx();
         ALLEGRO_BITMAP* bmp =
-            game.states.gameplay->draw_to_bitmap(
+            game.states.gameplay->drawToBitmap(
                 game.maker_tools.area_image_settings[setting_idx]
             );
         string file_name =
             FOLDER_PATHS_FROM_ROOT::USER_DATA + "/area_" +
-            sanitize_file_name(game.cur_area_data->name) +
-            "_" + get_current_time(true) + ".png";
+            sanitizeFileName(game.cur_area_data->name) +
+            "_" + getCurrentTime(true) + ".png";
             
         if(!al_save_bitmap(file_name.c_str(), bmp)) {
             game.errors.report(
@@ -83,7 +83,7 @@ bool MakerTools::handle_gameplay_player_action(const PlayerAction &action) {
     } case PLAYER_ACTION_TYPE_MT_CHANGE_SPEED: {
 
         unsigned char setting_idx =
-            get_maker_tool_setting_idx();
+            getMakerToolSettingIdx();
         bool final_state = false;
         if(!game.maker_tools.change_speed) {
             final_state = true;
@@ -115,10 +115,10 @@ bool MakerTools::handle_gameplay_player_action(const PlayerAction &action) {
         
     } case PLAYER_ACTION_TYPE_MT_HURT_MOB: {
 
-        unsigned char setting_idx = get_maker_tool_setting_idx();
-        Mob* m = get_closest_mob_to_cursor(true);
+        unsigned char setting_idx = getMakerToolSettingIdx();
+        Mob* m = getClosestMobToCursor(true);
         if(m) {
-            m->set_health(
+            m->setHealth(
                 true, true,
                 -game.maker_tools.mob_hurting_settings[setting_idx]
             );
@@ -130,18 +130,18 @@ bool MakerTools::handle_gameplay_player_action(const PlayerAction &action) {
 
         bool is_shift_pressed;
         bool is_ctrl_pressed;
-        get_shift_ctrl_alt_state(
+        getShiftCtrlAltState(
             &is_shift_pressed, &is_ctrl_pressed, nullptr
         );
         
         Mob* prev_lock_mob = game.maker_tools.info_lock;
         Mob* m;
         if(is_shift_pressed) {
-            m = get_next_mob_near_cursor(prev_lock_mob, false);
+            m = getNextMobNearCursor(prev_lock_mob, false);
         } else if(is_ctrl_pressed) {
             m = nullptr;
         } else {
-            m = get_closest_mob_to_cursor(false);
+            m = getClosestMobToCursor(false);
         }
         
         game.maker_tools.info_lock = prev_lock_mob == m ? nullptr : m;
@@ -149,7 +149,7 @@ bool MakerTools::handle_gameplay_player_action(const PlayerAction &action) {
             prev_lock_mob != nullptr &&
             game.maker_tools.info_lock == nullptr
         ) {
-            print_info("Mob: None.", 2.0f, 2.0f);
+            printInfo("Mob: None.", 2.0f, 2.0f);
         }
         game.maker_tools.used_helping_tools = true;
         break;
@@ -162,7 +162,7 @@ bool MakerTools::handle_gameplay_player_action(const PlayerAction &action) {
         ) {
             bool is_shift_pressed;
             bool is_ctrl_pressed;
-            get_shift_ctrl_alt_state(
+            getShiftCtrlAltState(
                 &is_shift_pressed, &is_ctrl_pressed, nullptr
             );
             
@@ -189,7 +189,7 @@ bool MakerTools::handle_gameplay_player_action(const PlayerAction &action) {
                 game.maker_tools.last_pikmin_type = new_pikmin_type;
             }
             
-            create_mob(
+            createMob(
                 game.mob_categories.get(MOB_CATEGORY_PIKMIN),
                 game.mouse_cursor.w_pos, new_pikmin_type, 0,
                 is_ctrl_pressed ? "maturity=0" : "maturity=2"
@@ -221,7 +221,7 @@ bool MakerTools::handle_gameplay_player_action(const PlayerAction &action) {
     } case PLAYER_ACTION_TYPE_MT_TELEPORT: {
 
         bool is_shift_pressed;
-        get_shift_ctrl_alt_state(&is_shift_pressed, nullptr, nullptr);
+        getShiftCtrlAltState(&is_shift_pressed, nullptr, nullptr);
         
         Mob* mob_to_teleport =
             (is_shift_pressed && game.maker_tools.info_lock) ?
@@ -229,13 +229,13 @@ bool MakerTools::handle_gameplay_player_action(const PlayerAction &action) {
             game.states.gameplay->cur_leader_ptr;
             
         Sector* mouse_sector =
-            get_sector(game.mouse_cursor.w_pos, nullptr, true);
+            getSector(game.mouse_cursor.w_pos, nullptr, true);
         if(mouse_sector && mob_to_teleport) {
             mob_to_teleport->chase(
                 game.mouse_cursor.w_pos, mouse_sector->z,
                 CHASE_FLAG_TELEPORT
             );
-            game.cam.set_pos(game.mouse_cursor.w_pos);
+            game.cam.setPos(game.mouse_cursor.w_pos);
         }
         game.maker_tools.used_helping_tools = true;
         break;
@@ -253,9 +253,9 @@ bool MakerTools::handle_gameplay_player_action(const PlayerAction &action) {
  * @param action The action.
  * @return Whether it got handled.
  */
-bool MakerTools::handle_global_player_action(const PlayerAction &action) {
+bool MakerTools::handleGlobalPlayerAction(const PlayerAction &action) {
     bool is_global_tool_action =
-        game.controls.get_player_action_type(action.actionTypeId).category ==
+        game.controls.getPlayerActionType(action.actionTypeId).category ==
         PLAYER_ACTION_CAT_GLOBAL_MAKER_TOOLS;
     if(!is_global_tool_action) return false;
     if(!enabled) return true;
@@ -264,24 +264,24 @@ bool MakerTools::handle_global_player_action(const PlayerAction &action) {
     switch(action.actionTypeId) {
     case PLAYER_ACTION_TYPE_MT_AUTO_START: {
 
-        string cur_state_name = game.get_cur_state_name();
-        if(cur_state_name == game.states.animation_ed->get_name()) {
+        string cur_state_name = game.getCurStateName();
+        if(cur_state_name == game.states.animation_ed->getName()) {
             auto_start_state = "animation_editor";
             auto_start_option =
-                game.states.animation_ed->get_opened_content_path();
-        } else if(cur_state_name == game.states.area_ed->get_name()) {
+                game.states.animation_ed->getOpenedContentPath();
+        } else if(cur_state_name == game.states.area_ed->getName()) {
             auto_start_state = "area_editor";
             auto_start_option =
-                game.states.area_ed->get_opened_content_path();
-        } else if(cur_state_name == game.states.gui_ed->get_name()) {
+                game.states.area_ed->getOpenedContentPath();
+        } else if(cur_state_name == game.states.gui_ed->getName()) {
             auto_start_state = "gui_editor";
             auto_start_option =
-                game.states.gui_ed->get_opened_content_path();
-        } else if(cur_state_name == game.states.particle_ed->get_name()) {
+                game.states.gui_ed->getOpenedContentPath();
+        } else if(cur_state_name == game.states.particle_ed->getName()) {
             auto_start_state = "particle_editor";
             auto_start_option =
-                game.states.particle_ed->get_opened_content_path();
-        } else if(cur_state_name == game.states.gameplay->get_name()) {
+                game.states.particle_ed->getOpenedContentPath();
+        } else if(cur_state_name == game.states.gameplay->getName()) {
             auto_start_state = "play";
             auto_start_option =
                 game.states.gameplay->path_of_area_to_load;
@@ -289,14 +289,14 @@ bool MakerTools::handle_global_player_action(const PlayerAction &action) {
             auto_start_state.clear();
             auto_start_option.clear();
         }
-        save_maker_tools();
+        saveMakerTools();
         
         game.maker_tools.used_helping_tools = true;
         break;
         
     } case PLAYER_ACTION_TYPE_MT_SET_SONG_POS_NEAR_LOOP: {
 
-        game.audio.set_song_pos_near_loop();
+        game.audio.setSongPosNearLoop();
         break;
         
     }
@@ -311,14 +311,14 @@ bool MakerTools::handle_global_player_action(const PlayerAction &action) {
  *
  * @param node The node.
  */
-void MakerTools::load_from_data_node(DataNode* node) {
+void MakerTools::loadFromDataNode(DataNode* node) {
     //Whether maker tools are enabled.
     enabled = s2b(node->getChildByName("enabled")->value);
     
     //Controls.
     {
         DataNode* controls_node = node->getChildByName("controls");
-        game.controls.load_binds_from_data_node(controls_node, 0);
+        game.controls.loadBindsFromDataNode(controls_node, 0);
     }
     
     //Area image.
@@ -391,7 +391,7 @@ void MakerTools::load_from_data_node(DataNode* node) {
  * @brief Resets the states of the tools so that players can play without any
  * tool affecting the experience.
  */
-void MakerTools::reset_for_gameplay() {
+void MakerTools::resetForGameplay() {
     change_speed = false;
     collision = false;
     geometry_info = false;
@@ -409,7 +409,7 @@ void MakerTools::reset_for_gameplay() {
  *
  * @param node The node.
  */
-void MakerTools::save_to_data_node(DataNode* node) {
+void MakerTools::saveToDataNode(DataNode* node) {
     GetterWriter gw(node);
     
     //General.

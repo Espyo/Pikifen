@@ -149,34 +149,34 @@ public:
     //--- Function declarations ---
     
     Leader(const Point &pos, LeaderType* type, float angle);
-    bool check_throw_ok() const;
-    bool can_grab_group_member(Mob* m) const;
+    bool checkThrowOk() const;
+    bool canGrabGroupMember(Mob* m) const;
     void dismiss();
-    bool order_pikmin_to_onion(
+    bool orderPikminToOnion(
         const PikminType* type, PikminNest* n_ptr, size_t amount
     );
-    void queue_throw();
-    void signal_swarm_start() const;
-    void signal_swarm_end() const;
-    void start_auto_throwing();
-    void start_throw_trail();
-    void start_whistling();
-    void stop_auto_throwing();
-    void stop_whistling();
-    void swap_held_pikmin(Mob* new_pik);
-    void update_throw_variables();
-    bool can_receive_status(StatusType* s) const override;
-    void get_group_spot_info(
+    void queueThrow();
+    void signalSwarmStart() const;
+    void signalSwarmEnd() const;
+    void startAutoThrowing();
+    void startThrowTrail();
+    void startWhistling();
+    void stopAutoThrowing();
+    void stopWhistling();
+    void swapHeldPikmin(Mob* new_pik);
+    void updateThrowVariables();
+    bool canReceiveStatus(StatusType* s) const override;
+    void getGroupSpotInfo(
         Point* out_spot, float* out_dist
     ) const override;
-    void draw_mob() override;
+    void drawMob() override;
     
     
 protected:
 
     //--- Function declarations ---
     
-    void tick_class_specifics(float delta_t) override;
+    void tickClassSpecifics(float delta_t) override;
     
 private:
 
@@ -186,12 +186,12 @@ private:
     size_t whistle_sound_source_id = 0;
     
     //Returns how many rows are needed for all members' dismissal.
-    size_t get_dismiss_rows(size_t n_members) const;
+    size_t getDismissRows(size_t n_members) const;
     
 };
 
 
-void change_to_next_leader(
+void changeToNextLeader(
     bool forward, bool force_success, bool keep_idx
 );
-bool grab_closest_group_member();
+bool grabClosestGroupMember();

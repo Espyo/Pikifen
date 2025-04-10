@@ -68,16 +68,16 @@ enum EASING_METHOD {
 #define sign(n) (((n) >= 0) ? 1 : -1)
 
 float ease(const EASING_METHOD method, float n);
-uint32_t hash_nr(unsigned int input);
-uint32_t hash_nr2(unsigned int input1, unsigned int input2);
-float inch_towards(float start, float target, float max_step);
-float interpolate_number(
+uint32_t hashNr(unsigned int input);
+uint32_t hashNr2(unsigned int input1, unsigned int input2);
+float inchTowards(float start, float target, float max_step);
+float interpolateNumber(
     float input, float input_start, float input_end,
     float output_start, float output_end
 );
-int32_t linear_congruential_generator(int32_t* state);
-size_t get_random_idx_with_weights(
+int32_t linearCongruentialGenerator(int32_t* state);
+size_t getRandomIdxWithWeights(
     const vector<float> &weights, float point_random_float
 );
-int sum_and_wrap(int nr, int sum, int wrap_limit);
-float wrap_float(float nr, float minimum, float maximum);
+int sumAndWrap(int nr, int sum, int wrap_limit);
+float wrapFloat(float nr, float minimum, float maximum);

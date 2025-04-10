@@ -34,59 +34,59 @@ enum TIME_TO_STR_FLAG {
 
 
 //Returns a string with a number, adding a leading zero if it's less than 10.
-#define leading_zero(n) (((n) < 10 ? "0" : (string) "") + i2s((n)))
+#define leadingZero(n) (((n) < 10 ? "0" : (string) "") + i2s((n)))
 
 //Converts an integer (or long) to a string.
 #define i2s(n) std::to_string((long long) (n))
 
-string amount_str(
+string amountStr(
     int amount, const string &singular_text,
     const string &plural_text = ""
 );
-string box_string(
+string boxString(
     const string &s, size_t size, const string &finisher = ""
 );
 string b2s(bool b);
-void duplicate_string(const string &orig_str, string &new_str);
+void duplicateString(const string &orig_str, string &new_str);
 string f2s(float f);
-string get_matching_string_starts(const string &s1, const string &s2);
-string get_path_last_component(const string &s);
-bool is_number(const string &s);
-string pad_string(const string &s, size_t size, char padding);
-string remove_extension(const string &s);
-string replace_all(
+string getMatchingStringStarts(const string &s1, const string &s2);
+string getPathLastComponent(const string &s);
+bool isNumber(const string &s);
+string padString(const string &s, size_t size, char padding);
+string removeExtension(const string &s);
+string replaceAll(
     string s, const string &search, const string &replacement
 );
 bool s2b(const string &s);
 double s2f(const string &s);
 int s2i(const string &s);
-vector<string> semicolon_list_to_vector(
+vector<string> semicolonListToVector(
     const string &s, const string &sep = ";"
 );
 vector<string> split(
     string text, const string &del = " ", bool inc_empty = false,
     bool inc_del = false
 );
-bool str_ends_with(const string &s, const string &end);
-bool str_peek(const string &s, size_t where, const string &match);
-bool str_starts_with(const string &s, const string &start);
-string str_to_lower(string s);
-string str_to_sentence(string s);
-string str_to_title(string s);
-string str_to_upper(string s);
-string time_to_str2(
+bool strEndsWith(const string &s, const string &end);
+bool strPeek(const string &s, size_t where, const string &match);
+bool strStartsWith(const string &s, const string &start);
+string strToLower(string s);
+string strToSentence(string s);
+string strToTitle(string s);
+string strToUpper(string s);
+string timeToStr2(
     size_t units,
     const string &suffix1, const string &suffix2,
     uint8_t flags = 0
 );
-string time_to_str3(
+string timeToStr3(
     size_t units,
     const string &suffix1, const string &suffix2, const string &suffix3,
     uint8_t flags = 0
 );
-string trim_spaces(const string &s, bool left_only = false);
-string trim_with_ellipsis(const string &s, size_t size);
-string word_wrap(const string &s, size_t n_chars_per_line);
+string trimSpaces(const string &s, bool left_only = false);
+string trimWithEllipsis(const string &s, size_t size);
+string wordWrap(const string &s, size_t n_chars_per_line);
 
 
 

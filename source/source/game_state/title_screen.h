@@ -60,10 +60,10 @@ public:
     
     void load() override;
     void unload() override;
-    void handle_allegro_event(ALLEGRO_EVENT &ev) override;
-    void do_logic() override;
-    void do_drawing() override;
-    string get_name() const override;
+    void handleAllegroEvent(ALLEGRO_EVENT &ev) override;
+    void doLogic() override;
+    void doDrawing() override;
+    string getName() const override;
     
 private:
 
@@ -156,9 +156,9 @@ private:
     
     //--- Function declarations ---
     
-    void init_gui_main_page();
-    void init_gui_make_page();
-    void init_gui_play_page();
-    void init_gui_tutorial_page();
+    void initGuiMainPage();
+    void initGuiMakePage();
+    void initGuiPlayPage();
+    void initGuiTutorialPage();
     
 };

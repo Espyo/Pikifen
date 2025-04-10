@@ -33,7 +33,7 @@ ConverterCategory::ConverterCategory() :
 /**
  * @brief Clears the list of registered types of converters.
  */
-void ConverterCategory::clear_types() {
+void ConverterCategory::clearTypes() {
     for(auto &t : game.content.mob_types.list.converter) {
         delete t.second;
     }
@@ -49,7 +49,7 @@ void ConverterCategory::clear_types() {
  * @param angle Starting angle.
  * @return The mob.
  */
-Mob* ConverterCategory::create_mob(
+Mob* ConverterCategory::createMob(
     const Point &pos, MobType* type, float angle
 ) {
     Converter* m = new Converter(pos, (ConverterType*) type, angle);
@@ -63,7 +63,7 @@ Mob* ConverterCategory::create_mob(
  *
  * @return The type.
  */
-MobType* ConverterCategory::create_type() {
+MobType* ConverterCategory::createType() {
     return new ConverterType();
 }
 
@@ -73,7 +73,7 @@ MobType* ConverterCategory::create_type() {
  *
  * @param m The mob to erase.
  */
-void ConverterCategory::erase_mob(Mob* m) {
+void ConverterCategory::eraseMob(Mob* m) {
     game.states.gameplay->mobs.converters.erase(
         find(
             game.states.gameplay->mobs.converters.begin(),
@@ -91,7 +91,7 @@ void ConverterCategory::erase_mob(Mob* m) {
  * @param internal_name Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-MobType* ConverterCategory::get_type(const string &internal_name) const {
+MobType* ConverterCategory::getType(const string &internal_name) const {
     auto it = game.content.mob_types.list.converter.find(internal_name);
     if(it == game.content.mob_types.list.converter.end()) return nullptr;
     return it->second;
@@ -103,7 +103,7 @@ MobType* ConverterCategory::get_type(const string &internal_name) const {
  *
  * @param list This list gets filled with the mob type internal names.
  */
-void ConverterCategory::get_type_names(vector<string> &list) const {
+void ConverterCategory::getTypeNames(vector<string> &list) const {
     for(auto &t : game.content.mob_types.list.converter) {
         list.push_back(t.first);
     }
@@ -116,6 +116,6 @@ void ConverterCategory::get_type_names(vector<string> &list) const {
  * @param internal_name Internal name of the mob type.
  * @param type Mob type to register.
  */
-void ConverterCategory::register_type(const string &internal_name, MobType* type) {
+void ConverterCategory::registerType(const string &internal_name, MobType* type) {
     game.content.mob_types.list.converter[internal_name] = (ConverterType*) type;
 }

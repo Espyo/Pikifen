@@ -83,7 +83,7 @@ string c2s(const ALLEGRO_COLOR &c) {
  * @param a The new alpha, [0-255].
  * @return The new color.
  */
-ALLEGRO_COLOR change_alpha(const ALLEGRO_COLOR &c, unsigned char a) {
+ALLEGRO_COLOR changeAlpha(const ALLEGRO_COLOR &c, unsigned char a) {
     ALLEGRO_COLOR c2;
     c2.r = c.r; c2.g = c.g; c2.b = c.b;
     c2.a = a / 255.0;
@@ -98,7 +98,7 @@ ALLEGRO_COLOR change_alpha(const ALLEGRO_COLOR &c, unsigned char a) {
  * @param l Lighting amount, positive or negative, from 0 to 1.
  * @return The new color.
  */
-ALLEGRO_COLOR change_color_lighting(const ALLEGRO_COLOR &c, float l) {
+ALLEGRO_COLOR changeColorLighting(const ALLEGRO_COLOR &c, float l) {
     ALLEGRO_COLOR c2;
     c2.r = std::clamp(c.r + l, 0.0f, 1.0f);
     c2.g = std::clamp(c.g + l, 0.0f, 1.0f);
@@ -114,10 +114,10 @@ ALLEGRO_COLOR change_color_lighting(const ALLEGRO_COLOR &c, float l) {
  * @param path Path to the file.
  * @return A status code.
  */
-FS_DELETE_RESULT delete_file(const string &file_path) {
+FS_DELETE_RESULT deleteFile(const string &file_path) {
     //Panic check to make sure nothing went wrong and it's an important file.
     //"", "C:", "C:/, "/", etc. are all 3 characters or fewer, so this works.
-    engine_assert(
+    engineAssert(
         file_path.size() >= 4,
         "Tried to delete the file \"" + file_path + "\"!"
     );
@@ -127,7 +127,7 @@ FS_DELETE_RESULT delete_file(const string &file_path) {
         return FS_DELETE_RESULT_NOT_FOUND;
     }
     
-    if(has_flag(al_get_fs_entry_mode(file), ALLEGRO_FILEMODE_ISDIR)) {
+    if(hasFlag(al_get_fs_entry_mode(file), ALLEGRO_FILEMODE_ISDIR)) {
         al_destroy_fs_entry(file);
         return FS_DELETE_RESULT_NOT_FOUND;
     }
@@ -149,7 +149,7 @@ FS_DELETE_RESULT delete_file(const string &file_path) {
  * @param path Path to the file.
  * @return Whether it exists.
  */
-bool file_exists(const string &path) {
+bool fileExists(const string &path) {
     return al_filename_exists(path.c_str());
 }
 
@@ -160,7 +160,7 @@ bool file_exists(const string &path) {
  * @param path Path to the folder.
  * @return Whether it exists.
  */
-bool folder_exists(const string &path) {
+bool folderExists(const string &path) {
     bool result = true;
     ALLEGRO_FS_ENTRY* fs_entry = al_create_fs_entry(path.c_str());
     if(!fs_entry || !al_open_directory(fs_entry)) {
@@ -181,7 +181,7 @@ bool folder_exists(const string &path) {
  * found or not is returned here.
  * @return The vector.
  */
-vector<string> folder_to_vector(
+vector<string> folderToVector(
     string folder_path, bool folders, bool* out_folder_found
 ) {
     vector<string> v;
@@ -192,7 +192,7 @@ vector<string> folder_to_vector(
     }
     
     //Normalize the folder's path.
-    folder_path = standardize_path(folder_path);
+    folder_path = standardizePath(folder_path);
     
     ALLEGRO_FS_ENTRY* folder =
         al_create_fs_entry(folder_path.c_str());
@@ -206,11 +206,11 @@ vector<string> folder_to_vector(
     while((entry = al_read_directory(folder)) != nullptr) {
         if(
             folders ==
-            (has_flag(al_get_fs_entry_mode(entry), ALLEGRO_FILEMODE_ISDIR))
+            (hasFlag(al_get_fs_entry_mode(entry), ALLEGRO_FILEMODE_ISDIR))
         ) {
         
             string entry_name =
-                standardize_path(al_get_fs_entry_name(entry));
+                standardizePath(al_get_fs_entry_name(entry));
                 
             //Only save what's after the final slash.
             size_t pos = entry_name.find_last_of("/");
@@ -228,7 +228,7 @@ vector<string> folder_to_vector(
     
     
     sort(v.begin(), v.end(), [] (const string  &s1, const string  &s2) -> bool {
-        return str_to_lower(s1) < str_to_lower(s2);
+        return strToLower(s1) < strToLower(s2);
     });
     
     if(out_folder_found) *out_folder_found = true;
@@ -246,14 +246,14 @@ vector<string> folder_to_vector(
  * found or not is returned here.
  * @return The vector.
  */
-vector<string> folder_to_vector_recursively(
+vector<string> folderToVectorRecursively(
     string folder_path, bool folders, bool* out_folder_found
 ) {
     //Figure out what subfolders exist, both to add to the list if needed, as
     //well as to navigate recursively.
     vector<string> v;
     bool found;
-    vector<string> subfolders = folder_to_vector(folder_path, true, &found);
+    vector<string> subfolders = folderToVector(folder_path, true, &found);
     
     if(!found) {
         if(out_folder_found) *out_folder_found = false;
@@ -262,7 +262,7 @@ vector<string> folder_to_vector_recursively(
     
     //Add the current folder's things.
     if(!folders) {
-        vector<string> files = folder_to_vector(folder_path, false);
+        vector<string> files = folderToVector(folder_path, false);
         v.insert(v.end(), files.begin(), files.end());
     } else {
         v.insert(v.end(), subfolders.begin(), subfolders.end());
@@ -271,7 +271,7 @@ vector<string> folder_to_vector_recursively(
     //Go recursively.
     for(size_t s = 0; s < subfolders.size(); s++) {
         vector<string> recursive_result =
-            folder_to_vector_recursively(folder_path + "/" + subfolders[s], folders);
+            folderToVectorRecursively(folder_path + "/" + subfolders[s], folders);
         for(size_t r = 0; r < recursive_result.size(); r++) {
             v.push_back(subfolders[s] + "/" + recursive_result[r]);
         }
@@ -290,7 +290,7 @@ vector<string> folder_to_vector_recursively(
  * @param bmp Bitmap to check.
  * @return The dimensions.
  */
-Point get_bitmap_dimensions(ALLEGRO_BITMAP* bmp) {
+Point getBitmapDimensions(ALLEGRO_BITMAP* bmp) {
     return
         Point(
             al_get_bitmap_width(bmp),
@@ -311,7 +311,7 @@ Point get_bitmap_dimensions(ALLEGRO_BITMAP* bmp) {
  * the left or right Ctrl.
  * @return The name, or an empty string on error.
  */
-string get_key_name(int keycode, bool condensed) {
+string getKeyName(int keycode, bool condensed) {
     switch(keycode) {
     case ALLEGRO_KEY_ESCAPE: {
         return "Esc";
@@ -428,7 +428,7 @@ string get_key_name(int keycode, bool condensed) {
         return "Enter";
     }
     }
-    string name = str_to_title(al_keycode_to_name(keycode));
+    string name = strToTitle(al_keycode_to_name(keycode));
     for(size_t c = 0; c < name.size(); c++) {
         if(name[c] == '_') name[c] = ' ';
     }
@@ -447,7 +447,7 @@ string get_key_name(int keycode, bool condensed) {
  * @param out_alt_state If not nullptr,
  * whether Alt is pressed is returned here.
  */
-void get_shift_ctrl_alt_state(
+void getShiftCtrlAltState(
     bool* out_shift_state, bool* out_ctrl_state, bool* out_alt_state
 ) {
     ALLEGRO_KEYBOARD_STATE keyboard_state;
@@ -536,7 +536,7 @@ void getline(ALLEGRO_FILE* file, string &line) {
  * @param output_end Color on the ending tip of the interpolation.
  * @return The interpolated color.
  */
-ALLEGRO_COLOR interpolate_color(
+ALLEGRO_COLOR interpolateColor(
     float input, float input_start, float input_end,
     const ALLEGRO_COLOR &output_start, const ALLEGRO_COLOR &output_end
 ) {
@@ -562,7 +562,7 @@ ALLEGRO_COLOR interpolate_color(
  * @param display Allegro display the box belongs to.
  * @return The user's choice(s).
  */
-vector<string> prompt_file_dialog(
+vector<string> promptFileDialog(
     const string &initial_path, const string &title,
     const string &patterns, int mode, ALLEGRO_DISPLAY* display
 ) {
@@ -581,7 +581,7 @@ vector<string> prompt_file_dialog(
     size_t n_choices = al_get_native_file_dialog_count(dialog);
     for(size_t c = 0; c < n_choices; c++) {
         result.push_back(
-            standardize_path(
+            standardizePath(
                 al_get_native_file_dialog_path(dialog, c)
             )
         );
@@ -611,13 +611,13 @@ vector<string> prompt_file_dialog(
  * @param display Allegro display the box belongs to.
  * @return The user's choice(s).
  */
-vector<string> prompt_file_dialog_locked_to_folder(
+vector<string> promptFileDialogLockedToFolder(
     const string &folder_path, const string &title,
     const string &patterns, int mode, FILE_DIALOG_RESULT* result,
     ALLEGRO_DISPLAY* display
 ) {
     vector<string> f =
-        prompt_file_dialog(folder_path + "/", title, patterns, mode, display);
+        promptFileDialog(folder_path + "/", title, patterns, mode, display);
         
     if(f.empty() || f[0].empty()) {
         *result = FILE_DIALOG_RESULT_CANCELED;
@@ -648,7 +648,7 @@ vector<string> prompt_file_dialog_locked_to_folder(
  * @param b The bitmap.
  * @return The recreated bitmap.
  */
-ALLEGRO_BITMAP* recreate_bitmap(ALLEGRO_BITMAP* b) {
+ALLEGRO_BITMAP* recreateBitmap(ALLEGRO_BITMAP* b) {
     ALLEGRO_BITMAP* fixed_mipmap = al_clone_bitmap(b);
     al_destroy_bitmap(b);
     return fixed_mipmap;
@@ -664,7 +664,7 @@ ALLEGRO_BITMAP* recreate_bitmap(ALLEGRO_BITMAP* b) {
  */
 ALLEGRO_COLOR s2c(const string &s) {
     string s2 = s;
-    s2 = trim_spaces(s2);
+    s2 = trimSpaces(s2);
     
     unsigned char alpha = 255;
     vector<string> components = split(s2);
@@ -675,7 +675,7 @@ ALLEGRO_COLOR s2c(const string &s) {
     if(s2 == "black")   return al_map_rgba(0,   0,   0,   alpha);
     if(s2 == "gray")    return al_map_rgba(128, 128, 128, alpha);
     if(s2 == "grey")    return al_map_rgba(128, 128, 128, alpha);
-    if(s2 == "white")   return map_alpha(alpha);
+    if(s2 == "white")   return mapAlpha(alpha);
     if(s2 == "yellow")  return al_map_rgba(255, 255, 0,   alpha);
     if(s2 == "orange")  return al_map_rgba(255, 128, 0,   alpha);
     if(s2 == "brown")   return al_map_rgba(128, 64,  0,   alpha);
@@ -712,7 +712,7 @@ ALLEGRO_COLOR s2c(const string &s) {
  * @param w2 Second rectangle's width.
  * @param h2 Second rectangle's width.
  */
-void set_combined_clipping_rectangles(
+void setCombinedClippingRectangles(
     float x1, float y1, float w1, float h1,
     float x2, float y2, float w2, float h2
 ) {
@@ -742,7 +742,7 @@ void set_combined_clipping_rectangles(
  * 1 if the OK or Yes button was pressed.
  * 2 if the Cancel or No button was pressed.
  */
-int show_system_message_box(
+int showSystemMessageBox(
     ALLEGRO_DISPLAY* display, char const* title, char const* heading,
     char const* text, char const* buttons, int flags
 ) {
@@ -766,12 +766,12 @@ int show_system_message_box(
  * @param non_important_files List of files that can be deleted.
  * @return An error code.
  */
-FS_DELETE_RESULT wipe_folder(
+FS_DELETE_RESULT wipeFolder(
     const string &folder_path, const vector<string> &non_important_files
 ) {
     //Panic check to make sure nothing went wrong and it's an important folder.
     //"", "C:", "C:/, "/", etc. are all 3 characters or fewer, so this works.
-    engine_assert(
+    engineAssert(
         folder_path.size() >= 4,
         "Tried to wipe the folder \"" + folder_path + "\"!"
     );
@@ -789,12 +789,12 @@ FS_DELETE_RESULT wipe_folder(
     
     ALLEGRO_FS_ENTRY* entry = al_read_directory(folder);
     while(entry) {
-        if(has_flag(al_get_fs_entry_mode(entry), ALLEGRO_FILEMODE_ISDIR)) {
+        if(hasFlag(al_get_fs_entry_mode(entry), ALLEGRO_FILEMODE_ISDIR)) {
             has_folders = true;
             
         } else {
             string entry_name =
-                standardize_path(al_get_fs_entry_name(entry));
+                standardizePath(al_get_fs_entry_name(entry));
                 
             //Only save what's after the final slash.
             size_t pos = entry_name.find_last_of("/");

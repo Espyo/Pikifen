@@ -19,7 +19,7 @@
  *
  * @param node Data node to load from.
  */
-void Content::load_metadata_from_data_node(DataNode* node) {
+void Content::loadMetadataFromDataNode(DataNode* node) {
     ReaderSetter rs(node);
     
     if(manifest) name = manifest->internal_name;
@@ -37,7 +37,7 @@ void Content::load_metadata_from_data_node(DataNode* node) {
 /**
  * @brief Resets the metadata.
  */
-void Content::reset_metadata() {
+void Content::resetMetadata() {
     name.clear();
     description.clear();
     tags.clear();
@@ -54,7 +54,7 @@ void Content::reset_metadata() {
  *
  * @param node Data node to save to.
  */
-void Content::save_metadata_to_data_node(DataNode* node) const {
+void Content::saveMetadataToDataNode(DataNode* node) const {
     GetterWriter gw(node);
     gw.get("name", name);
 
@@ -107,7 +107,7 @@ void ContentManifest::clear() {
  * @brief Fills in the information using the provided path. It'll all be empty
  * if the path is not valid.
  */
-void ContentManifest::fill_from_path(const string &path) {
+void ContentManifest::fillFromPath(const string &path) {
     clear();
     
     vector<string> parts = split(path, "/");
@@ -123,5 +123,5 @@ void ContentManifest::fill_from_path(const string &path) {
     
     this->path = path;
     this->pack = parts[game_data_idx + 1];
-    this->internal_name = remove_extension(parts.back());
+    this->internal_name = removeExtension(parts.back());
 }

@@ -110,7 +110,7 @@ float ease(const EASING_METHOD method, float n) {
  * @param input The input number.
  * @return The hash.
  */
-uint32_t hash_nr(unsigned int input) {
+uint32_t hashNr(unsigned int input) {
     //Robert Jenkins' 32 bit integer hash function.
     //From https://gist.github.com/badboy/6267743
     //This algorithm is the simplest, lightest, fairest one I could find.
@@ -132,10 +132,10 @@ uint32_t hash_nr(unsigned int input) {
  * @param input2 Second input number.
  * @return The hash.
  */
-uint32_t hash_nr2(unsigned int input1, unsigned int input2) {
-    uint32_t n1 = hash_nr(input1);
+uint32_t hashNr2(unsigned int input1, unsigned int input2) {
+    uint32_t n1 = hashNr(input1);
     
-    //Same algorithm as in hash_nr() with one argument,
+    //Same algorithm as in hashNr() with one argument,
     //but I changed the magic numbers to other random stuff.
     uint32_t n2 = (input2 + 0x5D795E0E) + (input2 << 12);
     n2 = (n2 ^ 0xC07C34BD) ^ (n2 >> 19);
@@ -157,7 +157,7 @@ uint32_t hash_nr2(unsigned int input1, unsigned int input2) {
  * @param max_step Maximum change in value allowed.
  * @return The inched number.
  */
-float inch_towards(float start, float target, float max_step) {
+float inchTowards(float start, float target, float max_step) {
     if(fabs(target - start) <= max_step) return target;
     if(start < target) return start + max_step;
     return start - max_step;
@@ -177,7 +177,7 @@ float inch_towards(float start, float target, float max_step) {
  * @param output_end Number on the ending tip of the interpolation.
  * @return The interpolated number.
  */
-float interpolate_number(
+float interpolateNumber(
     float input, float input_start, float input_end,
     float output_start, float output_end
 ) {
@@ -195,7 +195,7 @@ float interpolate_number(
  * @param state Pointer to the state to calculate from and advance.
  * @return The generated number.
  */
-int32_t linear_congruential_generator(int32_t* state) {
+int32_t linearCongruentialGenerator(int32_t* state) {
     int32_t result = ((*state * 1103515245U) + 12345U) & 0x7fffffff;
     *state = result;
     return result;
@@ -211,7 +211,7 @@ int32_t linear_congruential_generator(int32_t* state) {
  * calculate the weight sum point with [0, 1].
  * @return Index of the chosen item, or 0 on error.
  */
-size_t get_random_idx_with_weights(
+size_t getRandomIdxWithWeights(
     const vector<float> &weights, float point_random_float
 ) {
     float weight_sum = 0.0f;
@@ -236,7 +236,7 @@ size_t get_random_idx_with_weights(
  * @param wrap_limit Wrap between [0 - wrap_limit[.
  * @return The wrapped number.
  */
-int sum_and_wrap(int nr, int sum, int wrap_limit) {
+int sumAndWrap(int nr, int sum, int wrap_limit) {
     int final_nr = nr + sum;
     while(final_nr < 0) {
         final_nr += wrap_limit;
@@ -253,7 +253,7 @@ int sum_and_wrap(int nr, int sum, int wrap_limit) {
  * @param maximum Maximum of the interval.
  * @return The wrapped number.
  */
-float wrap_float(float nr, float minimum, float maximum) {
+float wrapFloat(float nr, float minimum, float maximum) {
     const float diff = maximum - minimum;
     return
         minimum + (float) fmod(diff + (float) fmod(nr - minimum, diff), diff);

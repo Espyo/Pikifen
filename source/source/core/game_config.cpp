@@ -25,7 +25,7 @@ const ALLEGRO_COLOR CARRYING_COLOR_STOP =
 { 0.38f, 0.75f, 0.75f, 1.00f };
 
 //Default value for the cursor spin speed.
-const float CURSOR_SPIN_SPEED = deg_to_rad(180.0f);
+const float CURSOR_SPIN_SPEED = degToRad(180.0f);
 
 //Default value for the gameplay message character interval.
 const float GAMEPLAY_MSG_CHAR_INTERVAL = 0.03f;
@@ -176,7 +176,7 @@ void GameConfig::load(DataNode* file) {
         ars.set("no_pikmin_color", aesthetic_gen.no_pikmin_color);
 
         aesthetic_gen.cursor_spin_speed =
-            deg_to_rad(aesthetic_gen.cursor_spin_speed);
+            degToRad(aesthetic_gen.cursor_spin_speed);
     }
 
     //Aesthetic radar.
@@ -219,7 +219,7 @@ void GameConfig::load(DataNode* file) {
         lrs.set("standard_height", leaders.standard_height);
         lrs.set("standard_radius", leaders.standard_radius);        
 
-        leaders.order_strings = semicolon_list_to_vector(leader_order_str);
+        leaders.order_strings = semicolonListToVector(leader_order_str);
     }
 
     //Misc.
@@ -231,7 +231,7 @@ void GameConfig::load(DataNode* file) {
         mrs.set("day_minutes_start", misc.day_minutes_start);
         mrs.set("spray_order", spray_order_str);
      
-        misc.spray_order_strings = semicolon_list_to_vector(spray_order_str);
+        misc.spray_order_strings = semicolonListToVector(spray_order_str);
     }
 
     //Pikmin.
@@ -250,7 +250,7 @@ void GameConfig::load(DataNode* file) {
         prs.set("standard_radius", pikmin.standard_radius);
         prs.set("swarm_task_range", pikmin.swarm_task_range);
 
-        pikmin.order_strings = semicolon_list_to_vector(pikmin_order_str);
+        pikmin.order_strings = semicolonListToVector(pikmin_order_str);
     }
 
     //Rules.

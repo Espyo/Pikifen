@@ -115,7 +115,7 @@ PikminType::PikminType() :
         "as if it were its leader.";
     area_editor_props.push_back(aep_sprout);
     
-    pikmin_fsm::create_fsm(this);
+    pikmin_fsm::createFsm(this);
 }
 
 
@@ -124,7 +124,7 @@ PikminType::PikminType() :
  *
  * @return The vector.
  */
-anim_conversion_vector PikminType::get_anim_conversions() const {
+anim_conversion_vector PikminType::getAnimConversions() const {
     anim_conversion_vector v;
     
 #define a(idx, name) \
@@ -170,7 +170,7 @@ anim_conversion_vector PikminType::get_anim_conversions() const {
  *
  * @param file File to read from.
  */
-void PikminType::load_cat_properties(DataNode* file) {
+void PikminType::loadCatProperties(DataNode* file) {
     ReaderSetter rs(file);
     string attack_method_str;
     string top_leaf_str;
@@ -241,7 +241,7 @@ void PikminType::load_cat_properties(DataNode* file) {
  *
  * @param file File to read from.
  */
-void PikminType::load_cat_resources(DataNode* file) {
+void PikminType::loadCatResources(DataNode* file) {
     ReaderSetter rs(file);
     
     string icon_str;
@@ -275,7 +275,7 @@ void PikminType::load_cat_resources(DataNode* file) {
 /**
  * @brief Unloads resources from memory.
  */
-void PikminType::unload_resources() {
+void PikminType::unloadResources() {
     game.content.bitmaps.list.free(bmp_icon);
     game.content.bitmaps.list.free(bmp_maturity_icon[0]);
     game.content.bitmaps.list.free(bmp_maturity_icon[1]);

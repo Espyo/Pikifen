@@ -112,7 +112,7 @@ Editor::Editor() :
  * @param instantaneous If true, the camera moves there instantaneously.
  * If false, it smoothly gets there over time.
  */
-void Editor::center_camera(
+void Editor::centerCamera(
     const Point &min_coords, const Point &max_coords,
     bool instantaneous
 ) {
@@ -141,14 +141,14 @@ void Editor::center_camera(
         game.cam.zoom = game.cam.target_zoom;
     }
     
-    update_transformations();
+    updateTransformations();
 }
 
 
 /**
  * @brief Closes the topmost dialog that is still open.
  */
-void Editor::close_top_dialog() {
+void Editor::closeTopDialog() {
     for(size_t d = 0; d < dialogs.size(); d++) {
         Dialog* d_ptr = dialogs[dialogs.size() - (d + 1)];
         if(d_ptr->is_open) {
@@ -163,7 +163,7 @@ void Editor::close_top_dialog() {
  * @brief Handles the logic part of the main loop of the editor.
  * This is meant to be run after the editor's own logic code.
  */
-void Editor::do_logic_post() {
+void Editor::doLogicPost() {
     escape_was_pressed = false;
     game.fade_mgr.tick(game.delta_t);
 }
@@ -173,18 +173,18 @@ void Editor::do_logic_post() {
  * @brief Handles the logic part of the main loop of the editor.
  * This is meant to be run before the editor's own logic code.
  */
-void Editor::do_logic_pre() {
+void Editor::doLogicPre() {
     if(double_click_time > 0) {
         double_click_time -= game.delta_t;
         if(double_click_time < 0) double_click_time = 0;
     }
     
     game.cam.tick(game.delta_t);
-    game.cam.update_box();
+    game.cam.updateBox();
     
     op_error_flash_timer.tick(game.delta_t);
     
-    update_transformations();
+    updateTransformations();
 }
 
 
@@ -197,7 +197,7 @@ void Editor::do_logic_pre() {
  * @param minor_color Color to use for minor lines.
  * These are lines that aren't major.
  */
-void Editor::draw_grid(
+void Editor::drawGrid(
     float interval,
     const ALLEGRO_COLOR &major_color, const ALLEGRO_COLOR &minor_color
 ) {
@@ -269,11 +269,11 @@ void Editor::draw_grid(
 /**
  * @brief Draws a small red X on the cursor, signifying an operation has failed.
  */
-void Editor::draw_op_error_cursor() {
-    float error_flash_time_ratio = op_error_flash_timer.get_ratio_left();
+void Editor::drawOpErrorCursor() {
+    float error_flash_time_ratio = op_error_flash_timer.getRatioLeft();
     if(error_flash_time_ratio <= 0.0f) return;
     Point pos = op_error_pos;
-    draw_bitmap(
+    drawBitmap(
         game.sys_content.bmp_notification,
         Point(
             pos.x,
@@ -284,7 +284,7 @@ void Editor::draw_op_error_cursor() {
             EDITOR::OP_ERROR_CURSOR_SIZE * 2.0f
         ),
         0.0f,
-        map_alpha(error_flash_time_ratio * 192)
+        mapAlpha(error_flash_time_ratio * 192)
     );
     pos.x +=
         EDITOR::OP_ERROR_CURSOR_SHAKE_WIDTH *
@@ -315,7 +315,7 @@ void Editor::draw_op_error_cursor() {
  *
  * @return The size.
  */
-size_t Editor::get_history_size() const {
+size_t Editor::getHistorySize() const {
     return EDITOR::DEF_MAX_HISTORY_SIZE;
 }
 
@@ -325,7 +325,7 @@ size_t Editor::get_history_size() const {
  *
  * @return The position.
  */
-Point Editor::get_last_widget_pos() {
+Point Editor::getLastWidgetPost() {
     return
         Point(
             ImGui::GetItemRectMin().x + ImGui::GetItemRectSize().x / 2.0,
@@ -340,7 +340,7 @@ Point Editor::get_last_widget_pos() {
  *
  * @return Whether it needs the keyboard.
  */
-bool Editor::gui_needs_keyboard() {
+bool Editor::guiNeedsKeyboard() {
     //WantCaptureKeyboard returns true if LMB is held, and I'm not quite sure
     //why. If we know LMB is held because of the canvas, then we can
     //safely assume it's none of Dear ImGui's business, so we can ignore
@@ -354,8 +354,8 @@ bool Editor::gui_needs_keyboard() {
  *
  * @param ev Event to handle.
  */
-void Editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
-    if(game.fade_mgr.is_fading()) return;
+void Editor::handleAllegroEvent(ALLEGRO_EVENT &ev) {
+    if(game.fade_mgr.isFading()) return;
     
     bool is_mouse_in_canvas =
         dialogs.empty() && !is_mouse_in_gui;
@@ -369,7 +369,7 @@ void Editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
         //General mouse handling.
         
         last_input_was_keyboard = false;
-        handle_mouse_update(ev);
+        handleMouseUpdate(ev);
     }
     
     if(
@@ -403,7 +403,7 @@ void Editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
         ) {
             //Double-click.
             
-            if(gui_needs_keyboard()) {
+            if(guiNeedsKeyboard()) {
                 //If Dear ImGui needs the keyboard, then a textbox is likely
                 //in use. Clicking could change the state of the editor's data,
                 //so ignore it now, and let Dear ImGui close the box.
@@ -413,13 +413,13 @@ void Editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
             
                 switch(ev.mouse.button) {
                 case 1: {
-                    handle_lmb_double_click(ev);
+                    handleLmbDoubleClick(ev);
                     break;
                 } case 2: {
-                    handle_rmb_double_click(ev);
+                    handleRmbDoubleClick(ev);
                     break;
                 } case 3: {
-                    handle_mmb_double_click(ev);
+                    handleMmbDoubleClick(ev);
                     break;
                 }
                 }
@@ -430,7 +430,7 @@ void Editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
         } else {
             //Single-click.
             
-            if(gui_needs_keyboard()) {
+            if(guiNeedsKeyboard()) {
                 //If Dear ImGui needs the keyboard, then a textbox is likely
                 //in use. Clicking could change the state of the editor's data,
                 //so ignore it now, and let Dear ImGui close the box.
@@ -442,13 +442,13 @@ void Editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
                 
                 switch(ev.mouse.button) {
                 case 1: {
-                    handle_lmb_down(ev);
+                    handleLmbDown(ev);
                     break;
                 } case 2: {
-                    handle_rmb_down(ev);
+                    handleRmbDown(ev);
                     break;
                 } case 3: {
-                    handle_mmb_down(ev);
+                    handleMmbDown(ev);
                     break;
                 }
                 }
@@ -470,15 +470,15 @@ void Editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
         switch(ev.mouse.button) {
         case 1: {
             is_m1_pressed = false;
-            handle_lmb_up(ev);
+            handleLmbUp(ev);
             break;
         } case 2: {
             is_m2_pressed = false;
-            handle_rmb_up(ev);
+            handleRmbUp(ev);
             break;
         } case 3: {
             is_m3_pressed = false;
-            handle_mmb_up(ev);
+            handleMmbUp(ev);
             break;
         }
         }
@@ -500,20 +500,20 @@ void Editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
         
         if(mouse_drag_confirmed) {
             if(is_m1_pressed) {
-                handle_lmb_drag(ev);
+                handleLmbDrag(ev);
             }
             if(is_m2_pressed) {
-                handle_rmb_drag(ev);
+                handleRmbDrag(ev);
             }
             if(is_m3_pressed) {
-                handle_mmb_drag(ev);
+                handleMmbDrag(ev);
             }
         }
         if(
             (ev.mouse.dz != 0 || ev.mouse.dw != 0) &&
             is_mouse_in_canvas
         ) {
-            handle_mouse_wheel(ev);
+            handleMouseWheel(ev);
         }
         
     } else if(ev.type == ALLEGRO_EVENT_KEY_DOWN) {
@@ -543,9 +543,9 @@ void Editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
         }
         
         if(dialogs.empty()) {
-            handle_key_down_anywhere(ev);
-            if(!gui_needs_keyboard()) {
-                handle_key_down_canvas(ev);
+            handleKeyDownAnywhere(ev);
+            if(!guiNeedsKeyboard()) {
+                handleKeyDownCanvas(ev);
             }
         }
         
@@ -553,7 +553,7 @@ void Editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
             ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE &&
             !dialogs.empty()
         ) {
-            close_top_dialog();
+            closeTopDialog();
         }
         
     } else if(ev.type == ALLEGRO_EVENT_KEY_UP) {
@@ -581,9 +581,9 @@ void Editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
         }
         
         if(dialogs.empty()) {
-            handle_key_up_anywhere(ev);
-            if(!gui_needs_keyboard()) {
-                handle_key_up_canvas(ev);
+            handleKeyUpAnywhere(ev);
+            if(!guiNeedsKeyboard()) {
+                handleKeyUpCanvas(ev);
             }
         }
         
@@ -591,9 +591,9 @@ void Editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
         //Key char.
         
         if(dialogs.empty()) {
-            handle_key_char_anywhere(ev);
-            if(!gui_needs_keyboard()) {
-                handle_key_char_canvas(ev);
+            handleKeyCharAnywhere(ev);
+            if(!guiNeedsKeyboard()) {
+                handleKeyCharCanvas(ev);
             }
         }
         
@@ -612,7 +612,7 @@ void Editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to process.
  */
-void Editor::handle_key_char_anywhere(const ALLEGRO_EVENT &ev) {}
+void Editor::handleKeyCharAnywhere(const ALLEGRO_EVENT &ev) {}
 
 
 /**
@@ -620,7 +620,7 @@ void Editor::handle_key_char_anywhere(const ALLEGRO_EVENT &ev) {}
  *
  * @param ev Event to process.
  */
-void Editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {}
+void Editor::handleKeyCharCanvas(const ALLEGRO_EVENT &ev) {}
 
 
 /**
@@ -628,7 +628,7 @@ void Editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {}
  *
  * @param ev Event to process.
  */
-void Editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {}
+void Editor::handleKeyDownAnywhere(const ALLEGRO_EVENT &ev) {}
 
 
 /**
@@ -636,7 +636,7 @@ void Editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {}
  *
  * @param ev Event to process.
  */
-void Editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {}
+void Editor::handleKeyDownCanvas(const ALLEGRO_EVENT &ev) {}
 
 
 /**
@@ -644,7 +644,7 @@ void Editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {}
  *
  * @param ev Event to process.
  */
-void Editor::handle_key_up_anywhere(const ALLEGRO_EVENT &ev) {}
+void Editor::handleKeyUpAnywhere(const ALLEGRO_EVENT &ev) {}
 
 
 /**
@@ -652,7 +652,7 @@ void Editor::handle_key_up_anywhere(const ALLEGRO_EVENT &ev) {}
  *
  * @param ev Event to process.
  */
-void Editor::handle_key_up_canvas(const ALLEGRO_EVENT &ev) {}
+void Editor::handleKeyUpCanvas(const ALLEGRO_EVENT &ev) {}
 
 
 /**
@@ -661,7 +661,7 @@ void Editor::handle_key_up_canvas(const ALLEGRO_EVENT &ev) {}
  *
  * @param ev Event to process.
  */
-void Editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {}
+void Editor::handleLmbDoubleClick(const ALLEGRO_EVENT &ev) {}
 
 
 /**
@@ -670,7 +670,7 @@ void Editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {}
  *
  * @param ev Event to process.
  */
-void Editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {}
+void Editor::handleLmbDown(const ALLEGRO_EVENT &ev) {}
 
 
 /**
@@ -679,7 +679,7 @@ void Editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {}
  *
  * @param ev Event to process.
  */
-void Editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {}
+void Editor::handleLmbDrag(const ALLEGRO_EVENT &ev) {}
 
 
 /**
@@ -688,7 +688,7 @@ void Editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {}
  *
  * @param ev Event to process.
  */
-void Editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {}
+void Editor::handleLmbUp(const ALLEGRO_EVENT &ev) {}
 
 
 /**
@@ -697,7 +697,7 @@ void Editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {}
  *
  * @param ev Event to process.
  */
-void Editor::handle_mmb_double_click(const ALLEGRO_EVENT &ev) {}
+void Editor::handleMmbDoubleClick(const ALLEGRO_EVENT &ev) {}
 
 
 /**
@@ -706,7 +706,7 @@ void Editor::handle_mmb_double_click(const ALLEGRO_EVENT &ev) {}
  *
  * @param ev Event to process.
  */
-void Editor::handle_mmb_down(const ALLEGRO_EVENT &ev) {}
+void Editor::handleMmbDown(const ALLEGRO_EVENT &ev) {}
 
 
 /**
@@ -715,7 +715,7 @@ void Editor::handle_mmb_down(const ALLEGRO_EVENT &ev) {}
  *
  * @param ev Event to process.
  */
-void Editor::handle_mmb_drag(const ALLEGRO_EVENT &ev) {}
+void Editor::handleMmbDrag(const ALLEGRO_EVENT &ev) {}
 
 
 /**
@@ -724,7 +724,7 @@ void Editor::handle_mmb_drag(const ALLEGRO_EVENT &ev) {}
  *
  * @param ev Event to process.
  */
-void Editor::handle_mmb_up(const ALLEGRO_EVENT &ev) {}
+void Editor::handleMmbUp(const ALLEGRO_EVENT &ev) {}
 
 
 /**
@@ -732,7 +732,7 @@ void Editor::handle_mmb_up(const ALLEGRO_EVENT &ev) {}
  *
  * @param ev Event to process.
  */
-void Editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {}
+void Editor::handleMouseUpdate(const ALLEGRO_EVENT &ev) {}
 
 
 /**
@@ -740,7 +740,7 @@ void Editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {}
  *
  * @param ev Event to process.
  */
-void Editor::handle_mouse_wheel(const ALLEGRO_EVENT &ev) {}
+void Editor::handleMouseWheel(const ALLEGRO_EVENT &ev) {}
 
 
 /**
@@ -749,7 +749,7 @@ void Editor::handle_mouse_wheel(const ALLEGRO_EVENT &ev) {}
  *
  * @param ev Event to process.
  */
-void Editor::handle_rmb_double_click(const ALLEGRO_EVENT &ev) {}
+void Editor::handleRmbDoubleClick(const ALLEGRO_EVENT &ev) {}
 
 
 /**
@@ -758,7 +758,7 @@ void Editor::handle_rmb_double_click(const ALLEGRO_EVENT &ev) {}
  *
  * @param ev Event to process.
  */
-void Editor::handle_rmb_down(const ALLEGRO_EVENT &ev) {}
+void Editor::handleRmbDown(const ALLEGRO_EVENT &ev) {}
 
 
 /**
@@ -767,7 +767,7 @@ void Editor::handle_rmb_down(const ALLEGRO_EVENT &ev) {}
  *
  * @param ev Event to process.
  */
-void Editor::handle_rmb_drag(const ALLEGRO_EVENT &ev) {}
+void Editor::handleRmbDrag(const ALLEGRO_EVENT &ev) {}
 
 
 /**
@@ -776,7 +776,7 @@ void Editor::handle_rmb_drag(const ALLEGRO_EVENT &ev) {}
  *
  * @param ev Event to process.
  */
-void Editor::handle_rmb_up(const ALLEGRO_EVENT &ev) {}
+void Editor::handleRmbUp(const ALLEGRO_EVENT &ev) {}
 
 
 /**
@@ -785,7 +785,7 @@ void Editor::handle_rmb_up(const ALLEGRO_EVENT &ev) {}
  * @param name The internal name to check.
  * @return Whether it's good.
  */
-bool Editor::is_internal_name_good(const string &name) const {
+bool Editor::isInternalNameGood(const string &name) const {
     for(size_t c = 0; c < name.size(); c++) {
         char ch = name[c];
         const bool is_lowercase = ch >= 'a' && ch <= 'z';
@@ -807,7 +807,7 @@ bool Editor::is_internal_name_good(const string &name) const {
  * @param needs_shift If true, only returns true if Shift was also pressed.
  * @return Whether the pressed key corresponds.
  */
-bool Editor::key_check(
+bool Editor::keyCheck(
     int pressed_key, int match_key,
     bool needs_ctrl, bool needs_shift
 ) {
@@ -831,11 +831,11 @@ bool Editor::key_check(
  * @param interpolator Interpolator to get the information from.
  * @param sel_keyframe_idx Index of the currently selected keyframe.
  */
-void Editor::keyframe_visualizer(
+void Editor::keyframeVisualizer(
     KeyframeInterpolator<ALLEGRO_COLOR> &interpolator,
     size_t sel_keyframe_idx
 ) {
-    if(interpolator.get_keyframe_count() <= 1) return;
+    if(interpolator.getKeyframeCount() <= 1) return;
     
     //Setup.
     ImDrawList* draw_list = ImGui::GetWindowDrawList();
@@ -849,7 +849,7 @@ void Editor::keyframe_visualizer(
     );
     
     //Draw the rectangle of the color from the start to the first keyframe.
-    auto first_kf = interpolator.get_keyframe(0);
+    auto first_kf = interpolator.getKeyframe(0);
     ALLEGRO_COLOR c_start = first_kf.second;
     draw_list->AddRectFilled(
         pos,
@@ -861,9 +861,9 @@ void Editor::keyframe_visualizer(
     );
     
     //Draw the rectangles of the colors between the keyframes.
-    for(size_t t = 0; t < interpolator.get_keyframe_count() - 1; t++) {
-        auto kf_1 = interpolator.get_keyframe(t);
-        auto kf_2 = interpolator.get_keyframe(t + 1);
+    for(size_t t = 0; t < interpolator.getKeyframeCount() - 1; t++) {
+        auto kf_1 = interpolator.getKeyframe(t);
+        auto kf_2 = interpolator.getKeyframe(t + 1);
         ALLEGRO_COLOR c1 = kf_1.second;
         ALLEGRO_COLOR c2 = kf_2.second;
         
@@ -882,7 +882,7 @@ void Editor::keyframe_visualizer(
     }
     
     //Draw the rectangle of the color from the final keyframe to the end.
-    auto last_kf = interpolator.get_keyframe(interpolator.get_keyframe_count() - 1);
+    auto last_kf = interpolator.getKeyframe(interpolator.getKeyframeCount() - 1);
     ALLEGRO_COLOR c_end = last_kf.second;
     draw_list->AddRectFilled(
         ImVec2(
@@ -894,8 +894,8 @@ void Editor::keyframe_visualizer(
     );
     
     //Draw the bars indicating the position of each keyframe.
-    for(size_t c = 0; c < interpolator.get_keyframe_count(); c++) {
-        float time = interpolator.get_keyframe(c).first;
+    for(size_t c = 0; c < interpolator.getKeyframeCount(); c++) {
+        float time = interpolator.getKeyframe(c).first;
         float line_x = time * (ImGui::GetColumnWidth() - 1);
         ImColor col =
             c == sel_keyframe_idx ?
@@ -910,7 +910,7 @@ void Editor::keyframe_visualizer(
     
     //Add a dummy to symbolize the space the visualizer took up.
     ImGui::Dummy(ImVec2(ImGui::GetColumnWidth(), 43));
-    set_tooltip(
+    setTooltip(
         "This shows what the color looks like at any given point in the\n"
         "timeline. The vertical bars are keyframes, and the colors blend\n"
         "smoothly from one keyframe to the next.\n"
@@ -925,11 +925,11 @@ void Editor::keyframe_visualizer(
  * @param interpolator Interpolator to get the information from.
  * @param sel_keyframe_idx Index of the currently selected keyframe.
  */
-void Editor::keyframe_visualizer(
+void Editor::keyframeVisualizer(
     KeyframeInterpolator<float> &interpolator,
     size_t sel_keyframe_idx
 ) {
-    if(interpolator.get_keyframe_count() <= 1) return;
+    if(interpolator.getKeyframeCount() <= 1) return;
     
     //The built in plot widget doesn't allow for dynamic spacing,
     //so we need to make our own.
@@ -942,9 +942,9 @@ void Editor::keyframe_visualizer(
     float min_value = FLT_MAX;
     float max_value = -FLT_MAX;
     
-    for(size_t t = 0; t < interpolator.get_keyframe_count(); t++) {
-        min_value = std::min(interpolator.get_keyframe(t).second, min_value);
-        max_value = std::max(interpolator.get_keyframe(t).second, max_value);
+    for(size_t t = 0; t < interpolator.getKeyframeCount(); t++) {
+        min_value = std::min(interpolator.getKeyframe(t).second, min_value);
+        max_value = std::max(interpolator.getKeyframe(t).second, max_value);
     }
     
     if(min_value == max_value) {
@@ -961,17 +961,17 @@ void Editor::keyframe_visualizer(
     );
     
     //Draw the chart line from the start to the first keyframe.
-    auto first_kf = interpolator.get_keyframe(0);
+    auto first_kf = interpolator.getKeyframe(0);
     draw_list->AddLine(
         ImVec2(
             pos.x,
-            pos.y + interpolate_number(
+            pos.y + interpolateNumber(
                 first_kf.second, min_value, max_value, size.y, 1
             )
         ),
         ImVec2(
             pos.x + size.x * first_kf.first,
-            pos.y + interpolate_number(
+            pos.y + interpolateNumber(
                 first_kf.second, min_value, max_value, size.y, 1
             )
         ),
@@ -979,22 +979,22 @@ void Editor::keyframe_visualizer(
     );
     
     //Draw the chart lines between the keyframes.
-    for(size_t t = 0; t < interpolator.get_keyframe_count() - 1; t++) {
-        auto kf_1 = interpolator.get_keyframe(t);
-        auto kf_2 = interpolator.get_keyframe(t + 1);
+    for(size_t t = 0; t < interpolator.getKeyframeCount() - 1; t++) {
+        auto kf_1 = interpolator.getKeyframe(t);
+        auto kf_2 = interpolator.getKeyframe(t + 1);
         float f1 = kf_1.second;
         float f2 = kf_2.second;
         
         draw_list->AddLine(
             ImVec2(
                 pos.x + size.x * kf_1.first,
-                pos.y + interpolate_number(
+                pos.y + interpolateNumber(
                     f1, min_value, max_value, size.y, 1
                 )
             ),
             ImVec2(
                 pos.x + size.x * kf_2.first,
-                pos.y + interpolate_number(
+                pos.y + interpolateNumber(
                     f2, min_value, max_value, size.y, 1
                 )
             ),
@@ -1003,17 +1003,17 @@ void Editor::keyframe_visualizer(
     }
     
     //Draw the chart line from the final keyframe to the end.
-    auto last_kf = interpolator.get_keyframe(interpolator.get_keyframe_count() - 1);
+    auto last_kf = interpolator.getKeyframe(interpolator.getKeyframeCount() - 1);
     draw_list->AddLine(
         ImVec2(
             pos.x + size.x * last_kf.first,
-            pos.y + interpolate_number(
+            pos.y + interpolateNumber(
                 last_kf.second, min_value, max_value, size.y, 1
             )
         ),
         ImVec2(
             pos.x + size.x,
-            pos.y + interpolate_number(
+            pos.y + interpolateNumber(
                 last_kf.second, min_value, max_value, size.y, 1
             )
         ),
@@ -1021,8 +1021,8 @@ void Editor::keyframe_visualizer(
     );
     
     //Draw the bars indicating the position of each keyframe.
-    for(size_t c = 0; c < interpolator.get_keyframe_count(); c++) {
-        float time = interpolator.get_keyframe(c).first;
+    for(size_t c = 0; c < interpolator.getKeyframeCount(); c++) {
+        float time = interpolator.getKeyframe(c).first;
         float line_x = time * (ImGui::GetColumnWidth() - 1);
         ImColor col =
             c == sel_keyframe_idx ?
@@ -1037,7 +1037,7 @@ void Editor::keyframe_visualizer(
     
     //Add a dummy to symbolize the space the visualizer took up.
     ImGui::Dummy(ImVec2(ImGui::GetColumnWidth(), 43));
-    set_tooltip(
+    setTooltip(
         "This shows what the value looks like at any given point in the\n"
         "timeline. The vertical bars are keyframes, and the values blend\n"
         "smoothly from one keyframe to the next.\n"
@@ -1053,28 +1053,28 @@ void Editor::keyframe_visualizer(
  * @param interpolator Interpolator to get the information from.
  * @param sel_keyframe_idx Index of the currently selected keyframe.
  */
-void Editor::keyframe_visualizer(
+void Editor::keyframeVisualizer(
     KeyframeInterpolator<Point> &interpolator,
     size_t sel_keyframe_idx
 ) {
-    if(interpolator.get_keyframe_count() <= 1) return;
+    if(interpolator.getKeyframeCount() <= 1) return;
     
     //Split the interpolator into two, one for each axis.
-    KeyframeInterpolator<float> x_inter(interpolator.get_keyframe(0).second.x);
-    KeyframeInterpolator<float> y_inter(interpolator.get_keyframe(0).second.y);
+    KeyframeInterpolator<float> x_inter(interpolator.getKeyframe(0).second.x);
+    KeyframeInterpolator<float> y_inter(interpolator.getKeyframe(0).second.y);
     
-    x_inter.set_keyframe_time(0, interpolator.get_keyframe(0).first);
-    y_inter.set_keyframe_time(0, interpolator.get_keyframe(0).first);
+    x_inter.setKeyframeTime(0, interpolator.getKeyframe(0).first);
+    y_inter.setKeyframeTime(0, interpolator.getKeyframe(0).first);
     
-    for(size_t s = 1; s < interpolator.get_keyframe_count(); s++) {
-        auto kf = interpolator.get_keyframe(s);
+    for(size_t s = 1; s < interpolator.getKeyframeCount(); s++) {
+        auto kf = interpolator.getKeyframe(s);
         x_inter.add(kf.first, kf.second.x);
         y_inter.add(kf.first, kf.second.y);
     }
     
     //Draw the two visualizers.
-    keyframe_visualizer(x_inter, sel_keyframe_idx);
-    keyframe_visualizer(y_inter, sel_keyframe_idx);
+    keyframeVisualizer(x_inter, sel_keyframe_idx);
+    keyframeVisualizer(y_inter, sel_keyframe_idx);
 }
 
 
@@ -1089,7 +1089,7 @@ void Editor::keyframe_visualizer(
  * @return Whether anything in the interpolator was changed.
  */
 template <class InterT>
-bool Editor::keyframe_organizer(
+bool Editor::keyframeOrganizer(
     const string &button_id,
     KeyframeInterpolator<InterT> &interpolator,
     size_t &sel_keyframe_idx
@@ -1097,18 +1097,18 @@ bool Editor::keyframe_organizer(
     bool result = false;
     
     //First, some utility setup.
-    if(interpolator.get_keyframe_count() == 1) {
-        interpolator.set_keyframe_time(0, 0.0f);
+    if(interpolator.getKeyframeCount() == 1) {
+        interpolator.setKeyframeTime(0, 0.0f);
     }
     
     //Current keyframe text.
     ImGui::Text(
         "Keyframe: %lu/%lu",
         sel_keyframe_idx + 1,
-        interpolator.get_keyframe_count()
+        interpolator.getKeyframeCount()
     );
     
-    if(interpolator.get_keyframe_count() > 1) {
+    if(interpolator.getKeyframeCount() > 1) {
         //Previous keyframe button.
         ImGui::SameLine();
         string prevLabel = button_id + "prevButton";
@@ -1119,12 +1119,12 @@ bool Editor::keyframe_organizer(
             )
         ) {
             if(sel_keyframe_idx == 0) {
-                sel_keyframe_idx = interpolator.get_keyframe_count() - 1;
+                sel_keyframe_idx = interpolator.getKeyframeCount() - 1;
             } else {
                 sel_keyframe_idx--;
             }
         }
-        set_tooltip(
+        setTooltip(
             "Select the previous keyframe."
         );
         
@@ -1137,13 +1137,13 @@ bool Editor::keyframe_organizer(
                 Point(EDITOR::ICON_BMP_SIZE / 2.0f)
             )
         ) {
-            if(sel_keyframe_idx == interpolator.get_keyframe_count() - 1) {
+            if(sel_keyframe_idx == interpolator.getKeyframeCount() - 1) {
                 sel_keyframe_idx = 0;
             } else {
                 sel_keyframe_idx++;
             }
         }
-        set_tooltip(
+        setTooltip(
             "Select the next keyframe."
         );
     }
@@ -1157,26 +1157,26 @@ bool Editor::keyframe_organizer(
             Point(EDITOR::ICON_BMP_SIZE / 2.0f)
         )
     ) {
-        float prev_t = interpolator.get_keyframe(sel_keyframe_idx).first;
+        float prev_t = interpolator.getKeyframe(sel_keyframe_idx).first;
         float next_t =
-            sel_keyframe_idx == interpolator.get_keyframe_count() - 1 ?
+            sel_keyframe_idx == interpolator.getKeyframeCount() - 1 ?
             1.0f :
-            interpolator.get_keyframe(sel_keyframe_idx + 1).first;
+            interpolator.getKeyframe(sel_keyframe_idx + 1).first;
         float new_t = (prev_t + next_t) / 2.0f;
         
         interpolator.add(new_t, interpolator.get(new_t));
         sel_keyframe_idx++;
-        set_status(
+        setStatus(
             "Added keyframe #" + i2s(sel_keyframe_idx + 1) + "."
         );
         result = true;
     }
-    set_tooltip(
+    setTooltip(
         "Add a new keyframe after the currently selected one.\n"
         "It will go between the current one and the one after."
     );
     
-    if(interpolator.get_keyframe_count() > 1) {
+    if(interpolator.getKeyframeCount() > 1) {
         //Delete frame button.
         ImGui::SameLine();
         string removeButton = button_id + "removeButton";
@@ -1188,15 +1188,15 @@ bool Editor::keyframe_organizer(
         ) {
             size_t deleted_frame_idx = sel_keyframe_idx;
             interpolator.remove(deleted_frame_idx);
-            if(sel_keyframe_idx == interpolator.get_keyframe_count()) {
+            if(sel_keyframe_idx == interpolator.getKeyframeCount()) {
                 sel_keyframe_idx--;
             }
-            set_status(
+            setStatus(
                 "Deleted keyframe #" + i2s(deleted_frame_idx + 1) + "."
             );
             result = true;
         }
-        set_tooltip(
+        setTooltip(
             "Delete the currently selected keyframe."
         );
     }
@@ -1214,27 +1214,27 @@ bool Editor::keyframe_organizer(
  * @param sel_keyframe_idx Index of the currently selected keyframe.
  * @return Whether anything in the interpolator was changed.
  */
-bool Editor::keyframe_editor(
+bool Editor::keyframeEditor(
     const string &label,
     KeyframeInterpolator<ALLEGRO_COLOR> &interpolator,
     size_t &sel_keyframe_idx
 ) {
     //Visualizer.
-    keyframe_visualizer(interpolator, sel_keyframe_idx);
+    keyframeVisualizer(interpolator, sel_keyframe_idx);
     
     //Organizer.
-    bool result = keyframe_organizer(label, interpolator, sel_keyframe_idx);
+    bool result = keyframeOrganizer(label, interpolator, sel_keyframe_idx);
     
-    if(interpolator.get_keyframe_count() > 1) {
+    if(interpolator.getKeyframeCount() > 1) {
         //Time value.
-        float time = interpolator.get_keyframe(sel_keyframe_idx).first;
+        float time = interpolator.getKeyframe(sel_keyframe_idx).first;
         if(ImGui::SliderFloat("Time", &time, 0.0f, 1.0f)) {
-            interpolator.set_keyframe_time(
+            interpolator.setKeyframeTime(
                 sel_keyframe_idx, time, &sel_keyframe_idx
             );
             result = true;
         }
-        set_tooltip(
+        setTooltip(
             "Time at which this keyframe occurs.\n"
             "0 means the beginning, 1 means the end.",
             "", WIDGET_EXPLANATION_SLIDER
@@ -1242,12 +1242,12 @@ bool Editor::keyframe_editor(
     }
     
     //Color editor.
-    ALLEGRO_COLOR value = interpolator.get_keyframe(sel_keyframe_idx).second;
+    ALLEGRO_COLOR value = interpolator.getKeyframe(sel_keyframe_idx).second;
     if(ImGui::ColorEdit4(label.c_str(), (float*) &value)) {
-        interpolator.set_keyframe_value(sel_keyframe_idx, value);
+        interpolator.setKeyframeValue(sel_keyframe_idx, value);
         result = true;
     }
-    set_tooltip("What color to use at this keyframe.");
+    setTooltip("What color to use at this keyframe.");
     
     return result;
 }
@@ -1262,27 +1262,27 @@ bool Editor::keyframe_editor(
  * @param sel_keyframe_idx Index of the currently selected keyframe.
  * @return Whether anything in the interpolator was changed.
  */
-bool Editor::keyframe_editor(
+bool Editor::keyframeEditor(
     const string &label,
     KeyframeInterpolator<float> &interpolator,
     size_t &sel_keyframe_idx
 ) {
     //Visualizer.
-    keyframe_visualizer(interpolator, sel_keyframe_idx);
+    keyframeVisualizer(interpolator, sel_keyframe_idx);
     
     //Organizer.
-    bool result = keyframe_organizer(label, interpolator, sel_keyframe_idx);
+    bool result = keyframeOrganizer(label, interpolator, sel_keyframe_idx);
     
-    if(interpolator.get_keyframe_count() > 1) {
+    if(interpolator.getKeyframeCount() > 1) {
         //Time value.
-        float time = interpolator.get_keyframe(sel_keyframe_idx).first;
+        float time = interpolator.getKeyframe(sel_keyframe_idx).first;
         if(ImGui::SliderFloat("Time", &time, 0.0f, 1.0f)) {
-            interpolator.set_keyframe_time(
+            interpolator.setKeyframeTime(
                 sel_keyframe_idx, time, &sel_keyframe_idx
             );
             result = true;
         }
-        set_tooltip(
+        setTooltip(
             "Time at which this keyframe occurs.\n"
             "0 means the beginning, 1 means the end.",
             "", WIDGET_EXPLANATION_SLIDER
@@ -1290,12 +1290,12 @@ bool Editor::keyframe_editor(
     }
     
     //Float value.
-    float value = interpolator.get_keyframe(sel_keyframe_idx).second;
+    float value = interpolator.getKeyframe(sel_keyframe_idx).second;
     if(ImGui::DragFloat(label.c_str(), &value)) {
-        interpolator.set_keyframe_value(sel_keyframe_idx, value);
+        interpolator.setKeyframeValue(sel_keyframe_idx, value);
         result = true;
     }
-    set_tooltip("What value to use at this keyframe.");
+    setTooltip("What value to use at this keyframe.");
     
     return result;
 }
@@ -1310,27 +1310,27 @@ bool Editor::keyframe_editor(
  * @param sel_keyframe_idx Index of the currently selected keyframe.
  * @return Whether anything in the interpolator was changed.
  */
-bool Editor::keyframe_editor(
+bool Editor::keyframeEditor(
     const string &label,
     KeyframeInterpolator<Point> &interpolator,
     size_t &sel_keyframe_idx
 ) {
     //Visualizer.
-    keyframe_visualizer(interpolator, sel_keyframe_idx);
+    keyframeVisualizer(interpolator, sel_keyframe_idx);
     
     //Organizer.
-    bool result = keyframe_organizer(label, interpolator, sel_keyframe_idx);
+    bool result = keyframeOrganizer(label, interpolator, sel_keyframe_idx);
     
-    if(interpolator.get_keyframe_count() > 1) {
+    if(interpolator.getKeyframeCount() > 1) {
         //Time value.
-        float time = interpolator.get_keyframe(sel_keyframe_idx).first;
+        float time = interpolator.getKeyframe(sel_keyframe_idx).first;
         if(ImGui::SliderFloat("Time", &time, 0.0f, 1.0f)) {
-            interpolator.set_keyframe_time(
+            interpolator.setKeyframeTime(
                 sel_keyframe_idx, time, &sel_keyframe_idx
             );
             result = true;
         }
-        set_tooltip(
+        setTooltip(
             "Time at which this keyframe occurs.\n"
             "0 means the beginning, 1 means the end.",
             "", WIDGET_EXPLANATION_SLIDER
@@ -1338,12 +1338,12 @@ bool Editor::keyframe_editor(
     }
     
     //Float values.
-    Point value = interpolator.get_keyframe(sel_keyframe_idx).second;
+    Point value = interpolator.getKeyframe(sel_keyframe_idx).second;
     if(ImGui::DragFloat2(label.c_str(), (float*) &value)) {
-        interpolator.set_keyframe_value(sel_keyframe_idx, value);
+        interpolator.setKeyframeValue(sel_keyframe_idx, value);
         result = true;
     }
-    set_tooltip("What coordinates to use at this keyframe.");
+    setTooltip("What coordinates to use at this keyframe.");
     
     return result;
 }
@@ -1354,20 +1354,20 @@ bool Editor::keyframe_editor(
  */
 void Editor::leave() {
     //Save the user's preferred tree node open states.
-    save_options();
+    saveOptions();
     
-    game.fade_mgr.start_fade(false, [] () {
+    game.fade_mgr.startFade(false, [] () {
         if(game.states.area_ed->quick_play_area_path.empty()) {
             game.states.title_screen->page_to_load = MAIN_MENU_PAGE_MAKE;
-            game.change_state(game.states.title_screen);
+            game.changeState(game.states.title_screen);
         } else {
             game.states.gameplay->path_of_area_to_load =
                 game.states.area_ed->quick_play_area_path;
-            game.change_state(game.states.gameplay);
+            game.changeState(game.states.gameplay);
         }
     });
     
-    set_status("Bye!");
+    setStatus("Bye!");
 }
 
 
@@ -1381,7 +1381,7 @@ void Editor::leave() {
  * @param use_monospace Whether to use a monospace font for the items.
  * @return Whether an item was clicked on.
  */
-bool Editor::list_popup(
+bool Editor::listPopup(
     const char* label, const vector<string> &items, string* picked_item,
     bool use_monospace
 ) {
@@ -1395,7 +1395,7 @@ bool Editor::list_popup(
             string name = items[i];
             bool hit_button =
                 use_monospace ?
-                mono_selectable(name.c_str()) :
+                monoSelectable(name.c_str()) :
                 ImGui::Selectable(name.c_str());
             if(hit_button) {
                 *picked_item = name;
@@ -1419,7 +1419,7 @@ bool Editor::list_popup(
  * @param use_monospace Whether to use a monospace font for the items.
  * @return Whether an item was clicked on.
  */
-bool Editor::list_popup(
+bool Editor::listPopup(
     const char* label, const vector<string> &items, int* picked_item_idx,
     bool use_monospace
 ) {
@@ -1433,7 +1433,7 @@ bool Editor::list_popup(
             string name = items[i];
             bool hit_button =
                 use_monospace ?
-                mono_selectable(name.c_str()) :
+                monoSelectable(name.c_str()) :
                 ImGui::Selectable(name.c_str());
             if(hit_button) {
                 *picked_item_idx = (int) i;
@@ -1474,14 +1474,14 @@ void Editor::load() {
     is_shift_pressed = false;
     last_input_was_keyboard = false;
     manifest.clear();
-    set_status();
+    setStatus();
     changes_mgr.reset();
     game.mouse_cursor.show();
-    game.cam.set_pos(Point());
+    game.cam.setPos(Point());
     game.cam.set_zoom(1.0f);
-    update_style();
+    updateStyle();
     
-    game.fade_mgr.start_fade(true, nullptr);
+    game.fade_mgr.startFade(true, nullptr);
     ImGui::Reset();
 }
 
@@ -1492,15 +1492,15 @@ void Editor::load() {
  * @param is_area_editor If true, mob types that do not appear in the
  * area editor will not be counted for here.
  */
-void Editor::load_custom_mob_cat_types(bool is_area_editor) {
+void Editor::loadCustomMobCatTypes(bool is_area_editor) {
     //Load.
     for(size_t c = 0; c < N_MOB_CATEGORIES; c++) {
         MobCategory* c_ptr = game.mob_categories.get((MOB_CATEGORY) c);
         vector<string> type_names;
-        c_ptr->get_type_names(type_names);
+        c_ptr->getTypeNames(type_names);
         
         for(size_t tn = 0; tn < type_names.size(); tn++) {
-            MobType* mt_ptr = c_ptr->get_type(type_names[tn]);
+            MobType* mt_ptr = c_ptr->getType(type_names[tn]);
             
             if(is_area_editor && !mt_ptr->appears_in_area_editor) {
                 continue;
@@ -1554,7 +1554,7 @@ void Editor::load_custom_mob_cat_types(bool is_area_editor) {
  *
  * @param do_pick_callback Callback for if we actually have to do the pick.
  */
-void Editor::open_base_content_warning_dialog(
+void Editor::openBaseContentWarningDialog(
     const std::function<void()> &do_pick_callback
 ) {
     if(game.options.advanced.engine_dev) {
@@ -1562,9 +1562,9 @@ void Editor::open_base_content_warning_dialog(
         return;
     }
     
-    open_dialog(
+    openDialog(
         "Base pack warning",
-        std::bind(&Editor::process_gui_base_content_warning_dialog, this)
+        std::bind(&Editor::processGuiBaseContentWarningDialog, this)
     );
     dialogs.back()->custom_size = Point(320, 0);
     base_content_warning_do_pick_callback = do_pick_callback;
@@ -1579,7 +1579,7 @@ void Editor::open_base_content_warning_dialog(
  * @param recommended_folder If not empty, recommend that the user picks bitmaps
  * with this folder name. Use "." for the graphics root folder.
  */
-void Editor::open_bitmap_dialog(
+void Editor::openBitmapDialog(
     std::function<void(const string &)> ok_callback,
     const string &recommended_folder
 ) {
@@ -1593,9 +1593,9 @@ void Editor::open_bitmap_dialog(
     };
     bitmap_dialog_picker.needs_filter_box_focus = true;
     
-    open_dialog(
+    openDialog(
         "Choose a bitmap",
-        std::bind(&Editor::process_gui_bitmap_dialog, this)
+        std::bind(&Editor::processGuiBitmapDialog, this)
     );
     dialogs.back()->close_callback = [this] () {
         if(!bitmap_dialog_cur_bmp_name.empty()) {
@@ -1618,7 +1618,7 @@ void Editor::open_bitmap_dialog(
  * @param process_callback A function to call when it's time to process
  * the contents inside the dialog.
  */
-void Editor::open_dialog(
+void Editor::openDialog(
     const string &title,
     const std::function<void()> &process_callback
 ) {
@@ -1639,23 +1639,23 @@ void Editor::open_dialog(
  * @param page Manual page explaining the editor and content type in
  * more detail.
  */
-void Editor::open_help_dialog(
+void Editor::openHelpDialog(
     const string &message, const string &page
 ) {
     help_dialog_message = message;
     help_dialog_page = page;
-    open_dialog("Help", std::bind(&Editor::process_gui_help_dialog, this));
+    openDialog("Help", std::bind(&Editor::processGuiHelpDialog, this));
     dialogs.back()->custom_size = Point(400, 0);
 }
 
 
 /**
  * @brief Opens an input popup with a given name. Its logic must be run with
- * a call to process_gui_input_popup().
+ * a call to processGuiInputPopup().
  *
  * @param label Name of the popup.
  */
-void Editor::open_input_popup(const char* label) {
+void Editor::openInputPopup(const char* label) {
     needs_input_popup_text_focus = true;
     ImGui::OpenPopup(label);
 }
@@ -1668,12 +1668,12 @@ void Editor::open_input_popup(const char* label) {
  * @param message Text message.
  * @param close_callback Code to run when the dialog is closed, if any.
  */
-void Editor::open_message_dialog(
+void Editor::openMessageDialog(
     const string &title, const string &message,
     const std::function<void()> &close_callback
 ) {
     message_dialog_message = message;
-    open_dialog(title, std::bind(&Editor::process_gui_message_dialog, this));
+    openDialog(title, std::bind(&Editor::processGuiMessageDialog, this));
     dialogs.back()->custom_size = Point(400, 0);
     dialogs.back()->close_callback = close_callback;
 }
@@ -1682,11 +1682,11 @@ void Editor::open_message_dialog(
 /**
  * @brief Opens a dialog where the user can create a new pack.
  */
-void Editor::open_new_pack_dialog() {
+void Editor::openNewPackDialog() {
     needs_new_pack_text_focus = true;
-    open_dialog(
+    openDialog(
         "Create a new pack",
-        std::bind(&Editor::process_gui_new_pack_dialog, this)
+        std::bind(&Editor::processGuiNewPackDialog, this)
     );
     dialogs.back()->custom_size = Point(520, 0);
 }
@@ -1711,7 +1711,7 @@ void Editor::open_new_pack_dialog() {
  * @param use_monospace Whether the items should use a monospace font.
  * @param filter Filter of names. Only items that match this will appear.
  */
-void Editor::open_picker_dialog(
+void Editor::openPickerDialog(
     const string &title,
     const vector<PickerItem> &items,
     const std::function <void(
@@ -1750,7 +1750,7 @@ void Editor::open_picker_dialog(
  *
  * @param title Title to write.
  */
-void Editor::panel_title(const char* title) {
+void Editor::panelTitle(const char* title) {
     ImGui::SameLine(
         ImGui::GetContentRegionAvail().x -
         (ImGui::CalcTextSize(title).x + 1)
@@ -1781,7 +1781,7 @@ bool Editor::popup(const char* label, ImGuiWindowFlags flags) {
 /**
  * @brief Processes all currently open dialogs for this frame.
  */
-void Editor::process_dialogs() {
+void Editor::processDialogs() {
     //Delete closed ones.
     for(size_t d = 0; d < dialogs.size();) {
         Dialog* d_ptr = dialogs[d];
@@ -1807,7 +1807,7 @@ void Editor::process_dialogs() {
 /**
  * @brief Processes the base content editing warning dialog for this frame.
  */
-void Editor::process_gui_base_content_warning_dialog() {
+void Editor::processGuiBaseContentWarningDialog() {
     //Explanation text.
     ImGui::TextWrapped(
         "You're editing content in the base pack! The base pack is meant to "
@@ -1824,7 +1824,7 @@ void Editor::process_gui_base_content_warning_dialog() {
     ImGui::Spacer();
     ImGui::SetupCentering(148);
     if(ImGui::Button("Go back", ImVec2(70, 30))) {
-        close_top_dialog();
+        closeTopDialog();
     }
     
     //Continue button.
@@ -1832,13 +1832,13 @@ void Editor::process_gui_base_content_warning_dialog() {
     if(ImGui::Button("Continue", ImVec2(70, 30))) {
         base_content_warning_do_pick_callback();
         base_content_warning_do_pick_callback = nullptr;
-        close_top_dialog();
+        closeTopDialog();
     }
     
     //Open manual button.
     ImGui::SetupCentering(100);
     if(ImGui::Button("Open manual", ImVec2(100, 25))) {
-        open_manual("making.html#packs");
+        openManual("making.html#packs");
     }
 }
 
@@ -1846,7 +1846,7 @@ void Editor::process_gui_base_content_warning_dialog() {
 /**
  * @brief Processes the bitmap picker dialog for this frame.
  */
-void Editor::process_gui_bitmap_dialog() {
+void Editor::processGuiBitmapDialog() {
     static bool filter_with_recommended_folder = true;
     
     //Fill the picker's items.
@@ -1897,7 +1897,7 @@ void Editor::process_gui_bitmap_dialog() {
         if(bitmap_dialog_ok_callback) {
             bitmap_dialog_ok_callback(bitmap_dialog_cur_bmp_name);
         }
-        close_top_dialog();
+        closeTopDialog();
     }
     if(!bitmap_dialog_cur_bmp_ptr) {
         ImGui::EndDisabled();
@@ -1915,7 +1915,7 @@ void Editor::process_gui_bitmap_dialog() {
         ImGui::Checkbox(
             "That folder only", &filter_with_recommended_folder
         );
-        set_tooltip(
+        setTooltip(
             "If checked, only images that belong to the\n"
             "recommended folder will be shown in the list."
         );
@@ -1929,8 +1929,8 @@ void Editor::process_gui_bitmap_dialog() {
     if(bitmap_dialog_cur_bmp_ptr) {
         const int thumb_max_size = 300;
         Point size =
-            resize_to_box_keeping_aspect_ratio(
-                get_bitmap_dimensions(bitmap_dialog_cur_bmp_ptr),
+            resizeToBoxKeepingAspectRatio(
+                getBitmapDimensions(bitmap_dialog_cur_bmp_ptr),
                 Point(thumb_max_size)
             );
         ImGui::Image(bitmap_dialog_cur_bmp_ptr, size);
@@ -1952,9 +1952,9 @@ void Editor::process_gui_bitmap_dialog() {
  * @brief Processes the widgets that allow the player to set a custom
  * editor style.
  */
-void Editor::process_gui_editor_style() {
+void Editor::processGuiEditorStyle() {
     //Style node.
-    if(saveable_tree_node("options", "Style")) {
+    if(saveableTreeNode("options", "Style")) {
     
         //Use custom style checkbox.
         if(
@@ -1962,9 +1962,9 @@ void Editor::process_gui_editor_style() {
                 "Use custom style", &game.options.editors.use_custom_style
             )
         ) {
-            update_style();
+            updateStyle();
         }
-        set_tooltip(
+        setTooltip(
             "Use a custom color scheme for the editor,\n"
             "instead of the default.\n"
             "Default: " + b2s(OPTIONS::EDITORS_D::USE_CUSTOM_STYLE) + "."
@@ -1977,9 +1977,9 @@ void Editor::process_gui_editor_style() {
                 (float*) &game.options.editors.primary_color
             )
         ) {
-            update_style();
+            updateStyle();
         }
-        set_tooltip(
+        setTooltip(
             "Primary color for the custom style."
         );
         
@@ -1990,9 +1990,9 @@ void Editor::process_gui_editor_style() {
                 (float*) &game.options.editors.secondary_color
             )
         ) {
-            update_style();
+            updateStyle();
         }
-        set_tooltip(
+        setTooltip(
             "Secondary color for the custom style."
         );
         
@@ -2003,9 +2003,9 @@ void Editor::process_gui_editor_style() {
                 (float*) &game.options.editors.text_color
             )
         ) {
-            update_style();
+            updateStyle();
         }
-        set_tooltip(
+        setTooltip(
             "Color of text in the custom style."
         );
         
@@ -2016,9 +2016,9 @@ void Editor::process_gui_editor_style() {
                 (float*) &game.options.editors.highlight_color
             )
         ) {
-            update_style();
+            updateStyle();
         }
-        set_tooltip(
+        setTooltip(
             "Color of highlights in the custom style."
         );
         ImGui::TreePop();
@@ -2035,7 +2035,7 @@ void Editor::process_gui_editor_style() {
  * the list.
  * @return Whether the list was modified.
  */
-bool Editor::process_gui_hazard_management_widgets(
+bool Editor::processGuiHazardManagementWidgets(
     vector<string> &hazard_inames, int &selected_hazard_idx
 ) {
     bool result = false;
@@ -2049,7 +2049,7 @@ bool Editor::process_gui_hazard_management_widgets(
     ) {
         ImGui::OpenPopup("addHazard");
     }
-    set_tooltip(
+    setTooltip(
         "Add a new hazard to the list.\n"
         "Click to open a pop-up for you to choose from."
     );
@@ -2066,13 +2066,13 @@ bool Editor::process_gui_hazard_management_widgets(
     
     int added_hazard_idx = -1;
     if(
-        list_popup(
+        listPopup(
             "addHazard", all_hazard_labels, &added_hazard_idx, true
         )
     ) {
         string hazard_iname = all_hazard_inames[added_hazard_idx];
         string hazard_name = all_hazard_names[added_hazard_idx];
-        if(!is_in_container(hazard_inames, hazard_iname)) {
+        if(!isInContainer(hazard_inames, hazard_iname)) {
             hazard_inames.push_back(hazard_iname);
             selected_hazard_idx = (int) hazard_inames.size() - 1;
             result = true;
@@ -2092,14 +2092,14 @@ bool Editor::process_gui_hazard_management_widgets(
             )
         ) {
             string hazard_iname = hazard_inames[selected_hazard_idx];
-            hazard_inames = remove_all_in_vector(hazard_iname, hazard_inames);
+            hazard_inames = removeAllInVector(hazard_iname, hazard_inames);
             selected_hazard_idx =
                 std::min(
                     selected_hazard_idx, (int) hazard_inames.size() - 1
                 );
             result = true;
         }
-        set_tooltip(
+        setTooltip(
             "Remove the selected hazard from the list."
         );
     }
@@ -2112,7 +2112,7 @@ bool Editor::process_gui_hazard_management_widgets(
                 game.content.hazards.list[hazard_inames[h]].name
             );
         }
-        mono_list_box(
+        monoListBox(
             "Hazards", &selected_hazard_idx, hazard_names,
             std::min((int) hazard_names.size(), 4)
         );
@@ -2125,7 +2125,7 @@ bool Editor::process_gui_hazard_management_widgets(
 /**
  * @brief Processes the help dialog widgets.
  */
-void Editor::process_gui_help_dialog() {
+void Editor::processGuiHelpDialog() {
     //Text.
     static int text_width = 0;
     if(text_width != 0) {
@@ -2138,13 +2138,13 @@ void Editor::process_gui_help_dialog() {
     ImGui::Spacer();
     ImGui::SetupCentering(200);
     if(ImGui::Button("Open manual", ImVec2(100, 40))) {
-        open_manual(help_dialog_page);
+        openManual(help_dialog_page);
     }
     
     //Ok button.
     ImGui::SameLine();
     if(ImGui::Button("Ok", ImVec2(100, 40))) {
-        close_top_dialog();
+        closeTopDialog();
     }
 }
 
@@ -2158,13 +2158,13 @@ void Editor::process_gui_help_dialog() {
  * @param pick_callback Code to run when an entry is picked.
  * @param tooltip_callback Code to obtain an entry's tooltip with, if any.
  */
-void Editor::process_gui_history(
+void Editor::processGuiHistory(
     const vector<pair<string, string> > &history,
     const std::function<string(const string &)> &name_display_callback,
     const std::function<void(const string &)> &pick_callback,
     const std::function<string(const string &)> &tooltip_callback
 ) {
-    if(saveable_tree_node("load", "History")) {
+    if(saveableTreeNode("load", "History")) {
     
         if(!history.empty() && !history[0].first.empty()) {
         
@@ -2180,7 +2180,7 @@ void Editor::process_gui_history(
                 string name = history[h].second;
                 if(name.empty()) name = history[h].first;
                 name = name_display_callback(name);
-                name = trim_with_ellipsis(name, 16);
+                name = trimWithEllipsis(name, 16);
                 
                 //History entry button.
                 const ImVec2 button_size(120, 24);
@@ -2188,7 +2188,7 @@ void Editor::process_gui_history(
                     pick_callback(path);
                 }
                 if(tooltip_callback) {
-                    set_tooltip(tooltip_callback(path));
+                    setTooltip(tooltip_callback(path));
                 }
                 ImGui::SetupButtonWrapping(
                     button_size.x, (int) (h + 1), (int) n_filled_entries
@@ -2209,7 +2209,7 @@ void Editor::process_gui_history(
 
 
 /**
- * @brief Processes a popup, if applicable, opened via open_input_popup(),
+ * @brief Processes a popup, if applicable, opened via openInputPopup(),
  * filling it with a text input for the user to type something in.
  *
  * @param label Name of the popup.
@@ -2218,7 +2218,7 @@ void Editor::process_gui_history(
  * @param use_monospace Whether to use a monospace font.
  * @return Whether the user pressed Return or the Ok button.
  */
-bool Editor::process_gui_input_popup(
+bool Editor::processGuiInputPopup(
     const char* label, const char* prompt, string* text, bool use_monospace
 ) {
     bool ret = false;
@@ -2231,7 +2231,7 @@ bool Editor::process_gui_input_popup(
         bool hit_enter = false;
         if(use_monospace) {
             hit_enter =
-                mono_input_text(
+                monoInputText(
                     "##inputPopupText", text,
                     ImGuiInputTextFlags_EnterReturnsTrue |
                     ImGuiInputTextFlags_AutoSelectAll
@@ -2265,7 +2265,7 @@ bool Editor::process_gui_input_popup(
 /**
  * @brief Processes the Dear ImGui message dialog widgets.
  */
-void Editor::process_gui_message_dialog() {
+void Editor::processGuiMessageDialog() {
     //Text.
     static int text_width = 0;
     if(text_width != 0) {
@@ -2278,7 +2278,7 @@ void Editor::process_gui_message_dialog() {
     ImGui::Spacer();
     ImGui::SetupCentering(100);
     if(ImGui::Button("Ok", ImVec2(100, 40))) {
-        close_top_dialog();
+        closeTopDialog();
     }
 }
 
@@ -2293,7 +2293,7 @@ void Editor::process_gui_message_dialog() {
  * @param pack_filter If not empty, only show mob types from this pack.
  * @return Whether the user changed the category/type.
  */
-bool Editor::process_gui_mob_type_widgets(
+bool Editor::processGuiMobTypeWidgets(
     string* custom_cat_name, MobType** type, const string &pack_filter
 ) {
     bool result = false;
@@ -2357,13 +2357,13 @@ bool Editor::process_gui_mob_type_widgets(
                 );
             }
         }
-        open_picker_dialog(
+        openPickerDialog(
             "Pick an object type", items,
             [this, final_list] (
                 const string &n, const string &tc, const string &sc, void*, bool
         ) {
             //For clarity, this code will NOT be run within the context
-            //of editor::process_gui_mob_type_widgets, but will instead
+            //of editor::processGuiMobTypeWidgets, but will instead
             //be run wherever dialogs are processed.
             internal_changed_by_dialog = true;
             internal_custom_cat_name = tc;
@@ -2381,7 +2381,7 @@ bool Editor::process_gui_mob_type_widgets(
         "", false
         );
     }
-    set_tooltip(
+    setTooltip(
         "Search for an object type from the entire list."
     );
     
@@ -2407,7 +2407,7 @@ bool Editor::process_gui_mob_type_widgets(
             nullptr :
             final_list[selected_category_idx][0];
     }
-    set_tooltip(
+    setTooltip(
         "What category this object belongs to: a Pikmin, a leader, etc."
     );
     
@@ -2435,7 +2435,7 @@ bool Editor::process_gui_mob_type_widgets(
                 }
             }
         }
-        set_tooltip(
+        setTooltip(
             "The specific type of object this is, from the chosen category."
         );
     }
@@ -2456,7 +2456,7 @@ bool Editor::process_gui_mob_type_widgets(
  *
  * @param pack Pointer to the internal name of the pack in the combobox.
  */
-bool Editor::process_gui_new_dialog_pack_widgets(string* pack) {
+bool Editor::processGuiNewDialogPackWidgets(string* pack) {
     bool changed = false;
     
     //Pack combo.
@@ -2471,14 +2471,14 @@ bool Editor::process_gui_new_dialog_pack_widgets(string* pack) {
     new_content_dialog_pack_idx =
         std::min(new_content_dialog_pack_idx, (int) packs.size() - 1);
     changed = ImGui::Combo("Pack", &new_content_dialog_pack_idx, packs);
-    set_tooltip("What pack it will belong to.");
+    setTooltip("What pack it will belong to.");
     
     //New pack button.
     ImGui::SameLine();
     if(ImGui::Button("New pack...")) {
-        open_new_pack_dialog();
+        openNewPackDialog();
     }
-    set_tooltip("Create a new pack.");
+    setTooltip("Create a new pack.");
     
     *pack = game.content.packs.manifests_with_base[new_content_dialog_pack_idx];
     return changed;
@@ -2488,7 +2488,7 @@ bool Editor::process_gui_new_dialog_pack_widgets(string* pack) {
 /**
  * @brief Processes the dialog for creating a new pack.
  */
-void Editor::process_gui_new_pack_dialog() {
+void Editor::processGuiNewPackDialog() {
     static string internal_name = "my_pack";
     static string name = "My pack!";
     static string description;
@@ -2499,14 +2499,14 @@ void Editor::process_gui_new_pack_dialog() {
     //Internal name input.
     ImGui::FocusOnInputText(needs_new_pack_text_focus);
     if(
-        mono_input_text(
+        monoInputText(
             "Internal name", &internal_name,
             ImGuiInputTextFlags_EnterReturnsTrue
         )
     ) {
         hit_create_button = true;
     }
-    set_tooltip(
+    setTooltip(
         "Internal name of the new pack.\n"
         "Remember to keep it simple, type in lowercase, and use underscores!"
     );
@@ -2521,7 +2521,7 @@ void Editor::process_gui_new_pack_dialog() {
     ) {
         hit_create_button = true;
     }
-    set_tooltip("Proper name of the new pack.");
+    setTooltip("Proper name of the new pack.");
     
     //Description input.
     if(
@@ -2532,7 +2532,7 @@ void Editor::process_gui_new_pack_dialog() {
     ) {
         hit_create_button = true;
     }
-    set_tooltip("A description of the pack.");
+    setTooltip("A description of the pack.");
     
     //Maker input.
     if(
@@ -2543,7 +2543,7 @@ void Editor::process_gui_new_pack_dialog() {
     ) {
         hit_create_button = true;
     }
-    set_tooltip("Who made the pack. So really, type your name or nickname.");
+    setTooltip("Who made the pack. So really, type your name or nickname.");
     
     //File explanation text.
     string explanation =
@@ -2561,17 +2561,17 @@ void Editor::process_gui_new_pack_dialog() {
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
         internal_name + "/" +
         FILE_NAMES::PACK_DATA;
-    mono_text("%s", path_to_show.c_str());
+    monoText("%s", path_to_show.c_str());
     
     //Open manual button.
     if(ImGui::Button("Open manual")) {
-        open_manual("making.html#packs");
+        openManual("making.html#packs");
     }
     
     //Check if everything's ok.
     if(internal_name.empty()) {
         problem = "You have to type an internal name first!";
-    } else if(!is_internal_name_good(internal_name)) {
+    } else if(!isInternalNameGood(internal_name)) {
         problem =
             "The internal name should only have lowercase letters,\n"
             "numbers, and underscores!";
@@ -2599,14 +2599,14 @@ void Editor::process_gui_new_pack_dialog() {
     if(!problem.empty()) {
         ImGui::EndDisabled();
     }
-    set_tooltip(
+    setTooltip(
         problem.empty() ? "Create the pack!" : problem
     );
     
     //Creation logic.
     if(hit_create_button) {
         if(!problem.empty()) return;
-        game.content.create_pack(
+        game.content.createPack(
             internal_name, name, description, maker
         );
         for(size_t p = 0; p < game.content.packs.manifests_with_base.size(); p++) {
@@ -2619,7 +2619,7 @@ void Editor::process_gui_new_pack_dialog() {
         name.clear();
         description.clear();
         maker.clear();
-        close_top_dialog();
+        closeTopDialog();
     }
 }
 
@@ -2640,7 +2640,7 @@ void Editor::process_gui_new_pack_dialog() {
  * to have. Use -FLT_MAX for none.
  * @return Whether the user changed one of the values.
  */
-bool Editor::process_gui_size_widgets(
+bool Editor::processGuiSizeWidgets(
     const char* label, Point &size, float v_speed,
     bool keep_aspect_ratio,
     bool keep_area,
@@ -2717,8 +2717,8 @@ bool Editor::process_gui_size_widgets(
  * showing "Ready." if there's nothing to say,
  * and coloring the text in case it's an error that needs to be flashed red.
  */
-void Editor::process_gui_status_bar_text() {
-    float error_flash_time_ratio = op_error_flash_timer.get_ratio_left();
+void Editor::processGuiStatusBarText() {
+    float error_flash_time_ratio = op_error_flash_timer.getRatioLeft();
     if(error_flash_time_ratio > 0.0f) {
         ImVec4 normal_color_v = ImGui::GetStyle().Colors[ImGuiCol_Text];
         ALLEGRO_COLOR normal_color;
@@ -2727,7 +2727,7 @@ void Editor::process_gui_status_bar_text() {
         normal_color.b = normal_color_v.z;
         normal_color.a = normal_color_v.w;
         ALLEGRO_COLOR error_flash_color =
-            interpolate_color(
+            interpolateColor(
                 error_flash_time_ratio,
                 0.0f, 1.0f,
                 normal_color, al_map_rgb(255, 0, 0)
@@ -2750,15 +2750,15 @@ void Editor::process_gui_status_bar_text() {
  * @brief Processes the Dear ImGui unsaved changes confirmation dialog
  * for this frame.
  */
-void Editor::process_gui_unsaved_changes_dialog() {
+void Editor::processGuiUnsavedChangesDialog() {
     //Explanation 1 text.
-    size_t nr_unsaved_changes = changes_mgr.get_unsaved_changes();
+    size_t nr_unsaved_changes = changes_mgr.getUnsavedChanges();
     string explanation1_str =
         "You have " +
-        amount_str((int) nr_unsaved_changes, "unsaved change") +
+        amountStr((int) nr_unsaved_changes, "unsaved change") +
         ", made in the last " +
-        time_to_str3(
-            changes_mgr.get_unsaved_time_delta(),
+        timeToStr3(
+            changes_mgr.getUnsavedTimeDelta(),
             "h", "m", "s",
             TIME_TO_STR_FLAG_NO_LEADING_ZEROS |
             TIME_TO_STR_FLAG_NO_LEADING_ZERO_PORTIONS
@@ -2770,48 +2770,48 @@ void Editor::process_gui_unsaved_changes_dialog() {
     //Explanation 3 text.
     string explanation2_str =
         "Do you want to save before " +
-        changes_mgr.get_unsaved_warning_action_long() + "?";
+        changes_mgr.getUnsavedWarningActionLong() + "?";
     ImGui::SetupCentering(ImGui::CalcTextSize(explanation2_str.c_str()).x);
     ImGui::Text("%s", explanation2_str.c_str());
     
     //Cancel button.
     ImGui::SetupCentering(180 + 180 + 180 + 20);
     if(ImGui::Button("Cancel", ImVec2(180, 30))) {
-        close_top_dialog();
+        closeTopDialog();
     }
-    set_tooltip("Never mind and go back.", "Esc");
+    setTooltip("Never mind and go back.", "Esc");
     
     //Save and then perform the action.
     ImGui::SameLine(0.0f, 10);
     if(ImGui::Button("Save", ImVec2(180, 30))) {
-        close_top_dialog();
+        closeTopDialog();
         const std::function<bool()> &save_callback =
-            changes_mgr.get_unsaved_warning_save_callback();
+            changes_mgr.getUnsavedWarningSaveCallback();
         const std::function<void()> &action_callback =
-            changes_mgr.get_unsaved_warning_action_callback();
+            changes_mgr.getUnsavedWarningActionCallback();
         if(save_callback()) {
             action_callback();
         }
     }
-    set_tooltip(
+    setTooltip(
         "Save first, then " +
-        changes_mgr.get_unsaved_warning_action_short() + ".",
+        changes_mgr.getUnsavedWarningActionShort() + ".",
         "Ctrl + S"
     );
     
     //Perform the action without saving button.
     ImGui::SameLine(0.0f, 10);
     if(ImGui::Button("Don't save", ImVec2(180, 30))) {
-        close_top_dialog();
+        closeTopDialog();
         const std::function<void()> action_callback =
-            changes_mgr.get_unsaved_warning_action_callback();
+            changes_mgr.getUnsavedWarningActionCallback();
         action_callback();
     }
     string dont_save_tooltip =
-        changes_mgr.get_unsaved_warning_action_short() +
+        changes_mgr.getUnsavedWarningActionShort() +
         " without saving.";
     dont_save_tooltip[0] = toupper(dont_save_tooltip[0]);
-    set_tooltip(dont_save_tooltip, "Ctrl + D");
+    setTooltip(dont_save_tooltip, "Ctrl + D");
 }
 
 
@@ -2829,8 +2829,8 @@ void Editor::process_gui_unsaved_changes_dialog() {
  * @param label Label to give to Dear ImGui.
  * @return Whether the node is open.
  */
-bool Editor::saveable_tree_node(const string &category, const string &label) {
-    string node_name = get_name() + "/" + category + "/" + label;
+bool Editor::saveableTreeNode(const string &category, const string &label) {
+    string node_name = getName() + "/" + category + "/" + label;
     ImGui::SetNextItemOpen(game.options.editors.open_nodes[node_name]);
     ImGui::PushFont(game.sys_content.fnt_imgui_header);
     bool is_open = ImGui::TreeNode(label.c_str());
@@ -2847,7 +2847,7 @@ bool Editor::saveable_tree_node(const string &category, const string &label) {
  * @param text Text to put in the status bar.
  * @param error Whether there was an error or not.
  */
-void Editor::set_status(const string &text, bool error) {
+void Editor::setStatus(const string &text, bool error) {
     status_text = text;
     if(error) {
         op_error_flash_timer.start();
@@ -2864,7 +2864,7 @@ void Editor::set_status(const string &text, bool error) {
  * @param widget_explanation If the way the widget works needs to be explained,
  * specify the explanation type here.
  */
-void Editor::set_tooltip(
+void Editor::setTooltip(
     const string &explanation, const string &shortcut,
     const WIDGET_EXPLANATION widget_explanation
 ) {
@@ -2936,7 +2936,7 @@ void Editor::set_tooltip(
  * @param anchor Anchor point.
  * @return The snapped point.
  */
-Point Editor::snap_point_to_axis(const Point &p, const Point &anchor) {
+Point Editor::snapPointToAxis(const Point &p, const Point &anchor) {
     float h_diff = fabs(p.x - anchor.x);
     float v_diff = fabs(p.y - anchor.y);
     if(h_diff > v_diff) {
@@ -2954,7 +2954,7 @@ Point Editor::snap_point_to_axis(const Point &p, const Point &anchor) {
  * @param grid_interval Current grid interval.
  * @return The snapped point.
  */
-Point Editor::snap_point_to_grid(const Point &p, float grid_interval) {
+Point Editor::snapPointToGrid(const Point &p, float grid_interval) {
     return
         Point(
             round(p.x / grid_interval) * grid_interval,
@@ -2987,7 +2987,7 @@ void Editor::unload() {
  * @param manifest Manifest of the entry's content.
  * @param name Proper name of the entry.
  */
-void Editor::update_history(
+void Editor::updateHistory(
     vector<pair<string, string> > &history,
     const ContentManifest &manifest, const string &name
 ) {
@@ -3021,19 +3021,19 @@ void Editor::update_history(
         );
     }
     
-    if(history.size() > get_history_size()) {
+    if(history.size() > getHistorySize()) {
         history.erase(history.begin() + history.size() - 1);
     }
     
     //Save the history in the options.
-    save_options();
+    saveOptions();
 }
 
 
 /**
  * @brief Updates the Dear ImGui style based on the player's options.
  */
-void Editor::update_style() {
+void Editor::updateStyle() {
 
     ImGuiStyle* style = &ImGui::GetStyle();
     style->FrameRounding = 3;
@@ -3182,7 +3182,7 @@ void Editor::update_style() {
  * @brief Updates the transformations, with the current camera coordinates,
  * zoom, etc.
  */
-void Editor::update_transformations() {
+void Editor::updateTransformations() {
     //World coordinates to screen coordinates.
     Point canvas_center(
         (canvas_tl.x + canvas_br.x) / 2.0,
@@ -3210,13 +3210,13 @@ void Editor::update_transformations() {
  *
  * @param new_zoom New zoom level.
  */
-void Editor::zoom_with_cursor(float new_zoom) {
+void Editor::zoomWithCursor(float new_zoom) {
     //Keep a backup of the old mouse coordinates.
     Point old_mouse_pos = game.mouse_cursor.w_pos;
     
     //Do the zoom.
     game.cam.set_zoom(std::clamp(new_zoom, zoom_min_level, zoom_max_level));
-    update_transformations();
+    updateTransformations();
     
     //Figure out where the mouse will be after the zoom.
     game.mouse_cursor.w_pos = game.mouse_cursor.s_pos;
@@ -3227,7 +3227,7 @@ void Editor::zoom_with_cursor(float new_zoom) {
     
     //Readjust the transformation by shifting the camera
     //so that the cursor ends up where it was before.
-    game.cam.set_pos(
+    game.cam.setPos(
         Point(
             game.cam.pos.x += (old_mouse_pos.x - game.mouse_cursor.w_pos.x),
             game.cam.pos.y += (old_mouse_pos.y - game.mouse_cursor.w_pos.y)
@@ -3235,7 +3235,7 @@ void Editor::zoom_with_cursor(float new_zoom) {
     );
     
     //Update the mouse coordinates again.
-    update_transformations();
+    updateTransformations();
     game.mouse_cursor.w_pos = game.mouse_cursor.s_pos;
     al_transform_coordinates(
         &game.screen_to_world_transform,
@@ -3272,7 +3272,7 @@ Editor::ChangesManager::ChangesManager(Editor* ed) :
  * @param save_callback Code to run when the unsaved changes must be saved.
  * @return Whether there were unsaved changes.
  */
-bool Editor::ChangesManager::ask_if_unsaved(
+bool Editor::ChangesManager::askIfUnsaved(
     const Point &pos,
     const string &action_long, const string &action_short,
     const std::function<void()> &action_callback,
@@ -3284,9 +3284,9 @@ bool Editor::ChangesManager::ask_if_unsaved(
         unsaved_warning_action_callback = action_callback;
         unsaved_warning_save_callback = save_callback;
         
-        ed->open_dialog(
+        ed->openDialog(
             "Unsaved changes!",
-            std::bind(&Editor::process_gui_unsaved_changes_dialog, ed)
+            std::bind(&Editor::processGuiUnsavedChangesDialog, ed)
         );
         ed->dialogs.back()->custom_pos = game.mouse_cursor.s_pos;
         ed->dialogs.back()->custom_size = Point(580, 0);
@@ -3294,22 +3294,22 @@ bool Editor::ChangesManager::ask_if_unsaved(
         [this] (const ALLEGRO_EVENT * ev) {
             if(ev->type == ALLEGRO_EVENT_KEY_DOWN) {
                 if(
-                    ed->key_check(ev->keyboard.keycode, ALLEGRO_KEY_S, true)
+                    ed->keyCheck(ev->keyboard.keycode, ALLEGRO_KEY_S, true)
                 ) {
-                    ed->close_top_dialog();
+                    ed->closeTopDialog();
                     const std::function<bool()> &save_callback =
-                        this->get_unsaved_warning_save_callback();
+                        this->getUnsavedWarningSaveCallback();
                     const std::function<void()> &action_callback =
-                        this->get_unsaved_warning_action_callback();
+                        this->getUnsavedWarningActionCallback();
                     if(save_callback()) {
                         action_callback();
                     }
                 } else if(
-                    ed->key_check(ev->keyboard.keycode, ALLEGRO_KEY_D, true)
+                    ed->keyCheck(ev->keyboard.keycode, ALLEGRO_KEY_D, true)
                 ) {
-                    ed->close_top_dialog();
+                    ed->closeTopDialog();
                     const std::function<void()> &action_callback =
-                        this->get_unsaved_warning_action_callback();
+                        this->getUnsavedWarningActionCallback();
                     action_callback();
                 }
             }
@@ -3331,7 +3331,7 @@ bool Editor::ChangesManager::ask_if_unsaved(
  *
  * @return Whether it exists.
  */
-bool Editor::ChangesManager::exists_on_disk() const {
+bool Editor::ChangesManager::existsOnDisk() const {
     return on_disk;
 }
 
@@ -3342,7 +3342,7 @@ bool Editor::ChangesManager::exists_on_disk() const {
  *
  * @return The amount.
  */
-size_t Editor::ChangesManager::get_unsaved_changes() const {
+size_t Editor::ChangesManager::getUnsavedChanges() const {
     return unsaved_changes;
 }
 
@@ -3353,7 +3353,7 @@ size_t Editor::ChangesManager::get_unsaved_changes() const {
  *
  * @return The time, or 0 if there are no unsaved changes.
  */
-float Editor::ChangesManager::get_unsaved_time_delta() const {
+float Editor::ChangesManager::getUnsavedTimeDelta() const {
     if(unsaved_changes == 0) return 0.0f;
     return game.time_passed - unsaved_time;
 }
@@ -3364,7 +3364,7 @@ float Editor::ChangesManager::get_unsaved_time_delta() const {
  *
  * @return The text.
  */
-const string &Editor::ChangesManager::get_unsaved_warning_action_long()
+const string &Editor::ChangesManager::getUnsavedWarningActionLong()
 const {
     return unsaved_warning_action_long;
 }
@@ -3375,7 +3375,7 @@ const {
  *
  * @return The text.
  */
-const string &Editor::ChangesManager::get_unsaved_warning_action_short()
+const string &Editor::ChangesManager::getUnsavedWarningActionShort()
 const {
     return unsaved_warning_action_short;
 }
@@ -3387,7 +3387,7 @@ const {
  * @return The callback.
  */
 const std::function<void()> &
-Editor::ChangesManager::get_unsaved_warning_action_callback() const {
+Editor::ChangesManager::getUnsavedWarningActionCallback() const {
     return unsaved_warning_action_callback;
 }
 
@@ -3398,7 +3398,7 @@ Editor::ChangesManager::get_unsaved_warning_action_callback() const {
  * @return The callback.
  */
 const std::function<bool()> &
-Editor::ChangesManager::get_unsaved_warning_save_callback() const {
+Editor::ChangesManager::getUnsavedWarningSaveCallback() const {
     return unsaved_warning_save_callback;
 }
 
@@ -3408,7 +3408,7 @@ Editor::ChangesManager::get_unsaved_warning_save_callback() const {
  *
  * @return Whether there are unsaved changes.
  */
-bool Editor::ChangesManager::has_unsaved_changes() {
+bool Editor::ChangesManager::hasUnsavedChanges() {
     return unsaved_changes != 0;
 }
 
@@ -3417,7 +3417,7 @@ bool Editor::ChangesManager::has_unsaved_changes() {
  * @brief Marks that the user has made new changes, which have obviously not yet
  * been saved.
  */
-void Editor::ChangesManager::mark_as_changed() {
+void Editor::ChangesManager::markAsChanged() {
     if(unsaved_changes == 0) {
         unsaved_changes++;
         unsaved_time = game.time_passed;
@@ -3431,9 +3431,9 @@ void Editor::ChangesManager::mark_as_changed() {
  * @brief Marks the state of the editor's file as not existing on disk yet.
  * This also marks it as having unsaved changes.
  */
-void Editor::ChangesManager::mark_as_non_existent() {
+void Editor::ChangesManager::markAsNonExistent() {
     on_disk = false;
-    mark_as_changed();
+    markAsChanged();
 }
 
 
@@ -3442,7 +3442,7 @@ void Editor::ChangesManager::mark_as_non_existent() {
  * The unsaved changes warning dialog does not set this, so this should be
  * called manually in those cases.
  */
-void Editor::ChangesManager::mark_as_saved() {
+void Editor::ChangesManager::markAsSaved() {
     unsaved_changes = 0;
     unsaved_time = 0.0f;
     on_disk = true;
@@ -3548,12 +3548,12 @@ void Editor::Picker::process() {
     vector<string> top_cat_names;
     vector<vector<string> > sec_cat_names;
     vector<vector<vector<PickerItem> > > final_items;
-    string filter_lower = str_to_lower(filter);
+    string filter_lower = strToLower(filter);
     
     //Figure out the items.
     for(size_t i = 0; i < items.size(); i++) {
         if(!filter.empty()) {
-            string name_lower = str_to_lower(items[i].name);
+            string name_lower = strToLower(items[i].name);
             if(name_lower.find(filter_lower) == string::npos) {
                 continue;
             }
@@ -3634,7 +3634,7 @@ void Editor::Picker::process() {
             ImGuiCol_ButtonActive, (ImVec4) ImColor(208, 32, 32)
         );
         bool hit_create_button = ImGui::Button("+", ImVec2(64.0f, 0.0f));
-        editor_ptr->set_tooltip("Create a new item with the given name!");
+        editor_ptr->setTooltip("Create a new item with the given name!");
         if(hit_create_button) try_make_new();
         ImGui::PopStyleColor(3);
         ImGui::SameLine();
@@ -3656,7 +3656,7 @@ void Editor::Picker::process() {
             );
     } else {
         hit_filter_widget =
-            mono_input_text_with_hint(
+            monoInputTextWithHint(
                 "##filter", filter_widget_hint.c_str(), &filter,
                 ImGuiInputTextFlags_EnterReturnsTrue
             );
@@ -3779,8 +3779,8 @@ void Editor::Picker::process() {
                     
                     //Item name text.
                     string display_name =
-                        trim_with_ellipsis(
-                            get_path_last_component(i_ptr->name), 18
+                        trimWithEllipsis(
+                            getPathLastComponent(i_ptr->name), 18
                         );
                     ImGui::TextWrapped("%s", display_name.c_str());
                     
@@ -3804,7 +3804,7 @@ void Editor::Picker::process() {
                 }
                 
                 if(!i_ptr->tooltip.empty()) {
-                    editor_ptr->set_tooltip(i_ptr->tooltip);
+                    editor_ptr->setTooltip(i_ptr->tooltip);
                 }
                 
                 ImGui::SetupButtonWrapping(
@@ -3871,7 +3871,7 @@ void Editor::TransformationWidget::draw(
     
     Point handles[9];
     float radius;
-    get_locations(center, size, angle, handles, &radius, nullptr);
+    getLocations(center, size, angle, handles, &radius, nullptr);
     
     //Draw the rotation handle.
     if(angle && radius >= 0.0f) {
@@ -3889,7 +3889,7 @@ void Editor::TransformationWidget::draw(
         handles[6],
     };
     for(unsigned char c = 0; c < 4; c++) {
-        size_t c2 = sum_and_wrap(c, 1, 4);
+        size_t c2 = sumAndWrap(c, 1, 4);
         al_draw_line(
             corners[c].x, corners[c].y,
             corners[c2].x, corners[c2].y,
@@ -3922,7 +3922,7 @@ void Editor::TransformationWidget::draw(
  * returned here.
  * The transformation will only rotate and translate, not scale.
  */
-void Editor::TransformationWidget::get_locations(
+void Editor::TransformationWidget::getLocations(
     const Point* const center, const Point* const size,
     const float* const angle, Point* handles, float* radius,
     ALLEGRO_TRANSFORM* out_transform
@@ -3955,7 +3955,7 @@ void Editor::TransformationWidget::get_locations(
         );
     }
     
-    float diameter = Distance(Point(), size_to_use).to_float();
+    float diameter = Distance(Point(), size_to_use).toFloat();
     if(diameter == 0.0f) {
         *radius = 0.0f;
     } else {
@@ -3971,7 +3971,7 @@ void Editor::TransformationWidget::get_locations(
  *
  * @return The old center.
  */
-Point Editor::TransformationWidget::get_old_center() const {
+Point Editor::TransformationWidget::getOldCenter() const {
     return old_center;
 }
 
@@ -3986,7 +3986,7 @@ Point Editor::TransformationWidget::get_old_center() const {
  * @param zoom Zoom the widget's components by this much.
  * @return Whether the user clicked on a handle.
  */
-bool Editor::TransformationWidget::handle_mouse_down(
+bool Editor::TransformationWidget::handleMouseDown(
     const Point &mouse_coords, const Point* const center,
     const Point* const size, const float* const angle, float zoom
 ) {
@@ -3994,7 +3994,7 @@ bool Editor::TransformationWidget::handle_mouse_down(
     
     Point handles[9];
     float radius;
-    get_locations(center, size, angle, handles, &radius, nullptr);
+    getLocations(center, size, angle, handles, &radius, nullptr);
     
     //Check if the user clicked on a translation or scale handle.
     for(unsigned char h = 0; h < 9; h++) {
@@ -4020,7 +4020,7 @@ bool Editor::TransformationWidget::handle_mouse_down(
         ) {
             moving_handle = 9;
             old_angle = *angle;
-            old_mouse_angle = get_angle(*center, mouse_coords);
+            old_mouse_angle = getAngle(*center, mouse_coords);
             return true;
         }
     }
@@ -4046,7 +4046,7 @@ bool Editor::TransformationWidget::handle_mouse_down(
  * If false, the opposite edge or corner is locked instead.
  * @return Whether the user is dragging a handle.
  */
-bool Editor::TransformationWidget::handle_mouse_move(
+bool Editor::TransformationWidget::handleMouseMove(
     const Point &mouse_coords, Point* center, Point* size, float* angle,
     float zoom, bool keep_aspect_ratio, bool keep_area,
     float min_size, bool lock_center
@@ -4067,7 +4067,7 @@ bool Editor::TransformationWidget::handle_mouse_move(
     if(moving_handle == 9 && angle) {
         *angle =
             old_angle +
-            get_angle(*center, mouse_coords) - old_mouse_angle;
+            getAngle(*center, mouse_coords) - old_mouse_angle;
         return true;
     }
     
@@ -4079,7 +4079,7 @@ bool Editor::TransformationWidget::handle_mouse_move(
     ALLEGRO_TRANSFORM t;
     Point handles[9];
     float radius;
-    get_locations(center, size, angle, handles, &radius, &t);
+    getLocations(center, size, angle, handles, &radius, &t);
     al_invert_transform(&t);
     
     Point transformed_mouse = mouse_coords;
@@ -4225,7 +4225,7 @@ bool Editor::TransformationWidget::handle_mouse_move(
  *
  * @return Whether the user stopped dragging a handle.
  */
-bool Editor::TransformationWidget::handle_mouse_up() {
+bool Editor::TransformationWidget::handleMouseUp() {
     if(moving_handle == -1) {
         return false;
     }
@@ -4240,7 +4240,7 @@ bool Editor::TransformationWidget::handle_mouse_up() {
  *
  * @return Whether the user is moving the handle.
  */
-bool Editor::TransformationWidget::is_moving_center_handle() {
+bool Editor::TransformationWidget::isMovingCenterHandle() {
     return (moving_handle == 4);
 }
 
@@ -4250,6 +4250,6 @@ bool Editor::TransformationWidget::is_moving_center_handle() {
  *
  * @return Whether the user is moving a handle.
  */
-bool Editor::TransformationWidget::is_moving_handle() {
+bool Editor::TransformationWidget::isMovingHandle() {
     return (moving_handle != -1);
 }

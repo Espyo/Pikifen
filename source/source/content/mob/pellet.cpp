@@ -25,9 +25,9 @@ Pellet::Pellet(const Point &pos, PelletType* type, float angle) :
     Mob(pos, type, angle),
     pel_type(type) {
     
-    become_carriable(CARRY_DESTINATION_ONION);
+    becomeCarriable(CARRY_DESTINATION_ONION);
     
-    set_animation(
+    setAnimation(
         MOB_TYPE::ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
     );
 }
@@ -36,15 +36,15 @@ Pellet::Pellet(const Point &pos, PelletType* type, float angle) :
 /**
  * @brief Draws a pellet, with the number and all.
  */
-void Pellet::draw_mob() {
+void Pellet::drawMob() {
     Sprite* cur_s_ptr;
     Sprite* next_s_ptr;
     float interpolation_factor;
-    get_sprite_data(&cur_s_ptr, &next_s_ptr, &interpolation_factor);
+    getSpriteData(&cur_s_ptr, &next_s_ptr, &interpolation_factor);
     if(!cur_s_ptr) return;
     
     BitmapEffect eff;
-    get_sprite_bitmap_effects(
+    getSpriteBitmapEffects(
         cur_s_ptr, next_s_ptr, interpolation_factor,
         &eff,
         SPRITE_BMP_EFFECT_FLAG_STANDARD |
@@ -55,9 +55,9 @@ void Pellet::draw_mob() {
         SPRITE_BMP_EFFECT_CARRY
     );
     
-    Point bmp_size = get_bitmap_dimensions(cur_s_ptr->bitmap);
+    Point bmp_size = getBitmapDimensions(cur_s_ptr->bitmap);
     eff.scale *= radius * 2.0f / bmp_size;
     
-    draw_bitmap_with_effects(cur_s_ptr->bitmap, eff);
-    draw_bitmap_with_effects(pel_type->bmp_number, eff);
+    drawBitmapWithEffects(cur_s_ptr->bitmap, eff);
+    drawBitmapWithEffects(pel_type->bmp_number, eff);
 }

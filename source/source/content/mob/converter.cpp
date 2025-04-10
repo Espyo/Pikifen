@@ -53,7 +53,7 @@ Converter::Converter(
     auto_conversion_timer(con_type->auto_conversion_timeout) {
     
     type_change_timer.on_end =
-    [this] () { this->change_type(); };
+    [this] () { this->changeType(); };
     
     auto_conversion_timer.on_end =
     [this] () { this->close(); };
@@ -63,16 +63,16 @@ Converter::Converter(
 /**
  * @brief Changes to the next type in the list, if applicable.
  */
-void Converter::change_type() {
+void Converter::changeType() {
     current_type_idx =
-        sum_and_wrap(
+        sumAndWrap(
             (int) current_type_idx, 1,
             (int) con_type->available_pikmin_types.size()
         );
     current_type = con_type->available_pikmin_types[current_type_idx];
     
-    set_animation(
-        get_animation_idx_from_base_and_group(
+    setAnimation(
+        getAnimationIdxFromBaseAndGroup(
             cur_base_anim_idx, N_CONVERTER_ANIMS, current_type_idx
         ),
         START_ANIM_OPTION_NO_RESTART, true
@@ -86,9 +86,9 @@ void Converter::change_type() {
  * @brief Closes up and gets ready for a conversion.
  */
 void Converter::close() {
-    fsm.set_state(CONVERTER_STATE_CLOSING);
-    set_animation(
-        get_animation_idx_from_base_and_group(
+    fsm.setState(CONVERTER_STATE_CLOSING);
+    setAnimation(
+        getAnimationIdxFromBaseAndGroup(
             CONVERTER_ANIM_CLOSING, N_CONVERTER_ANIMS, current_type_idx
         )
     );
@@ -117,13 +117,13 @@ void Converter::spew() {
                 -CONVERTER::SPEW_H_SPEED_DEVIATION,
                 CONVERTER::SPEW_H_SPEED_DEVIATION
             );
-        spew_pikmin_seed(
+        spewPikminSeed(
             pos, z + CONVERTER::NEW_SEED_Z_OFFSET, current_type,
             next_spew_angle, horizontal_strength, CONVERTER::SPEW_V_SPEED
         );
         
         next_spew_angle += CONVERTER::SPEW_ANGLE_SHIFT;
-        next_spew_angle = normalize_angle(next_spew_angle);
+        next_spew_angle = normalizeAngle(next_spew_angle);
     }
     
     amount_in_buffer = 0;
@@ -136,7 +136,7 @@ void Converter::spew() {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void Converter::tick_class_specifics(float delta_t) {
+void Converter::tickClassSpecifics(float delta_t) {
     type_change_timer.tick(delta_t);
     auto_conversion_timer.tick(delta_t);
 }

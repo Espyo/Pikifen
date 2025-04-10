@@ -31,14 +31,14 @@ BouncerType::BouncerType() :
         "bounced Pikmin land in that location. "
         "A \"Dummy\" object works perfectly for this.";
         
-    bouncer_fsm::create_fsm(this);
+    bouncer_fsm::createFsm(this);
 }
 
 
 /**
  * @brief Returns the vector of animation conversions.
  */
-anim_conversion_vector BouncerType::get_anim_conversions() const {
+anim_conversion_vector BouncerType::getAnimConversions() const {
     anim_conversion_vector v;
     v.push_back(std::make_pair(BOUNCER_ANIM_IDLING, "idling"));
     v.push_back(std::make_pair(BOUNCER_ANIM_BOUNCING, "bouncing"));
@@ -51,7 +51,7 @@ anim_conversion_vector BouncerType::get_anim_conversions() const {
  *
  * @param file File to read from.
  */
-void BouncerType::load_cat_properties(DataNode* file) {
+void BouncerType::loadCatProperties(DataNode* file) {
     ReaderSetter rs(file);
     
     string riders_str;
@@ -67,9 +67,9 @@ void BouncerType::load_cat_properties(DataNode* file) {
         vector<string> riders_str_words = split(riders_str);
         for(size_t r = 0; r < riders_str_words.size(); r++) {
             if(riders_str_words[r] == "pikmin") {
-                enable_flag(riders, BOUNCER_RIDER_FLAG_PIKMIN);
+                enableFlag(riders, BOUNCER_RIDER_FLAG_PIKMIN);
             } else if(riders_str_words[r] == "leaders") {
-                enable_flag(riders, BOUNCER_RIDER_FLAG_LEADERS);
+                enableFlag(riders, BOUNCER_RIDER_FLAG_LEADERS);
             } else {
                 game.errors.report(
                     "Unknown type of rider \"" + riders_str_words[r] + "\"!",

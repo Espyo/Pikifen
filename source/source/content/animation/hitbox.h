@@ -126,10 +126,10 @@ public:
         const Point &pos = Point(), float z = 0,
         float height = 128, float radius = 32
     );
-    Point get_cur_pos(
+    Point getCurPos(
         const Point &mob_pos, float mob_angle
     ) const;
-    Point get_cur_pos(
+    Point getCurPos(
         const Point &mob_pos,
         float mob_angle_cos, float mob_angle_sin
     ) const;

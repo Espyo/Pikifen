@@ -25,7 +25,7 @@ ResourceType::ResourceType() :
     
     target_type = MOB_TARGET_FLAG_NONE;
     
-    resource_fsm::create_fsm(this);
+    resource_fsm::createFsm(this);
 }
 
 
@@ -34,7 +34,7 @@ ResourceType::ResourceType() :
  *
  * @return The vector.
  */
-anim_conversion_vector ResourceType::get_anim_conversions() const {
+anim_conversion_vector ResourceType::getAnimConversions() const {
     anim_conversion_vector v;
     v.push_back(std::make_pair(RESOURCE_ANIM_IDLING, "idling"));
     return v;
@@ -46,7 +46,7 @@ anim_conversion_vector ResourceType::get_anim_conversions() const {
  *
  * @param file File to read from.
  */
-void ResourceType::load_cat_properties(DataNode* file) {
+void ResourceType::loadCatProperties(DataNode* file) {
     ReaderSetter rs(file);
     
     string carrying_destination_str;

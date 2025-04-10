@@ -38,7 +38,7 @@ ScaleType::ScaleType() :
  *
  * @param file File to read from.
  */
-void ScaleType::load_cat_properties(DataNode* file) {
+void ScaleType::loadCatProperties(DataNode* file) {
     ReaderSetter rs(file);
     
     rs.set("goal_number", goal_number);

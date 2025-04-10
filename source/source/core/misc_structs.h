@@ -117,10 +117,10 @@ struct Camera {
     
     //--- Function declarations ---
     
-    void set_pos(const Point &new_pos);
+    void setPos(const Point &new_pos);
     void set_zoom(float new_zoom);
     void tick(float delta_t);
-    void update_box();
+    void updateBox();
     
 };
 
@@ -133,9 +133,9 @@ struct ErrorManager {
     //--- Function declarations ---
     
     void report(const string &s, const DataNode* d = nullptr);
-    void report_area_load_errors();
-    void prepare_area_load();
-    bool session_has_errors();
+    void reportAreaLoadErrors();
+    void prepareAreaLoad();
+    bool sessionHasErrors();
     
     private:
     
@@ -153,9 +153,9 @@ struct ErrorManager {
     
     //--- Function declarations ---
     
-    void emit_in_gameplay(const string &s);
-    void log_to_console(const string &s);
-    void log_to_file(const string &s);
+    void emitInGameplay(const string &s);
+    void logToConsole(const string &s);
+    void logToFile(const string &s);
     
 };
 
@@ -205,7 +205,7 @@ struct MouseCursor {
     void init();
     void reset();
     void show() const;
-    void update_pos(
+    void updatePos(
         const ALLEGRO_EVENT &ev,
         ALLEGRO_TRANSFORM &screen_to_world_transform
     );
@@ -875,10 +875,10 @@ struct FadeManager {
     
     //--- Function declarations ---
     
-    void start_fade(bool fade_in, const std::function<void()> &on_end);
-    bool is_fade_in() const;
-    bool is_fading() const;
-    float get_perc_left() const;
+    void startFade(bool fade_in, const std::function<void()> &on_end);
+    bool isFadeIn() const;
+    bool isFading() const;
+    float getPercLeft() const;
     void tick(float delta_t);
     void draw();
     
@@ -911,12 +911,12 @@ struct Notification {
     //--- Function declarations ---
     
     void draw() const;
-    float get_visibility() const;
+    float getVisibility() const;
     void reset();
-    void set_contents(
+    void setContents(
         const PlayerInputSource &input_source, const string &text, const Point &pos
     );
-    void set_enabled(bool enabled);
+    void setEnabled(bool enabled);
     void tick(float delta_t);
     
     private:
@@ -991,13 +991,13 @@ struct PerformanceMonitor {
     //--- Function declarations ---
     
     PerformanceMonitor();
-    void set_area_name(const string &name);
-    void set_paused(bool paused);
-    void enter_state(const PERF_MON_STATE mode);
-    void leave_state();
-    void start_measurement(const string &name);
-    void finish_measurement();
-    void save_log();
+    void setAreaName(const string &name);
+    void setPaused(bool paused);
+    void enterState(const PERF_MON_STATE mode);
+    void leaveState();
+    void startMeasurement(const string &name);
+    void finishMeasurement();
+    void saveLog();
     void reset();
     
     private:
@@ -1028,7 +1028,7 @@ struct PerformanceMonitor {
         
         //--- Function declarations ---
         
-        void write_measurement(
+        void writeMeasurement(
             string &str, const string &name,
             double time, float total
         );
@@ -1089,8 +1089,8 @@ struct SubgroupType {
     
     //--- Function declarations ---
     
-    SUBGROUP_TYPE_CATEGORY get_category() const { return category; }
-    ALLEGRO_BITMAP* get_icon() const { return icon; }
+    SUBGROUP_TYPE_CATEGORY getCategory() const { return category; }
+    ALLEGRO_BITMAP* getIcon() const { return icon; }
     
 private:
 
@@ -1119,18 +1119,18 @@ struct SubgroupTypeManager {
     
     //--- Function declarations ---
     
-    void register_type(
+    void registerType(
         const SUBGROUP_TYPE_CATEGORY category,
         MobType* specific_type = nullptr,
         ALLEGRO_BITMAP* icon = nullptr
     );
-    SubgroupType* get_type(
+    SubgroupType* getType(
         const SUBGROUP_TYPE_CATEGORY category,
         const MobType* specific_type = nullptr
     ) const;
-    SubgroupType* get_first_type() const;
-    SubgroupType* get_prev_type(const SubgroupType* sgt) const;
-    SubgroupType* get_next_type(const SubgroupType* sgt) const;
+    SubgroupType* getFirstType() const;
+    SubgroupType* getPrevType(const SubgroupType* sgt) const;
+    SubgroupType* getNextType(const SubgroupType* sgt) const;
     void clear();
     
     private:
@@ -1296,8 +1296,8 @@ struct Whistle {
     //--- Function declarations ---
     
     Whistle();
-    void start_whistling();
-    void stop_whistling();
+    void startWhistling();
+    void stopWhistling();
     void tick(
         float delta_t, const Point &center,
         float whistle_range, float leader_to_cursor_dist
@@ -1361,11 +1361,11 @@ public:
         const string &name, DataNode* node = nullptr,
         bool report_errors = true
     ) {
-        if(name.empty()) return do_load("", node, report_errors);
+        if(name.empty()) return doLoad("", node, report_errors);
         
         if(list.find(name) == list.end()) {
             asset_t asset_ptr =
-                do_load(name, node, report_errors);
+                doLoad(name, node, report_errors);
             list[name] = AssetUse(asset_ptr);
             total_uses++;
             return asset_ptr;
@@ -1407,7 +1407,7 @@ public:
      */
     void clear() {
         for(auto &asset : list) {
-            do_unload(asset.second.ptr);
+            doUnload(asset.second.ptr);
         }
         list.clear();
         total_uses = 0;
@@ -1418,7 +1418,7 @@ public:
      *
      * @return The amount.
      */
-    long get_total_uses() const {
+    long getTotalUses() const {
         return total_uses;
     }
     
@@ -1427,7 +1427,7 @@ public:
      *
      * @return The size.
      */
-    size_t get_list_size() const {
+    size_t getListSize() const {
         return list.size();
     }
     
@@ -1435,10 +1435,10 @@ protected:
 
     //--- Misc. declarations ---
     
-    virtual asset_t do_load(
+    virtual asset_t doLoad(
         const string &path, DataNode* node, bool report_errors
     ) = 0;
-    virtual void do_unload(asset_t asset) = 0;
+    virtual void doUnload(asset_t asset) = 0;
     
     /**
      * @brief Info about an asset.
@@ -1482,7 +1482,7 @@ protected:
         it->second.uses--;
         total_uses--;
         if(it->second.uses == 0) {
-            do_unload(it->second.ptr);
+            doUnload(it->second.ptr);
             list.erase(it);
         }
     }
@@ -1499,10 +1499,10 @@ protected:
 
     //--- Function declarations ---
     
-    ALLEGRO_AUDIO_STREAM* do_load(
+    ALLEGRO_AUDIO_STREAM* doLoad(
         const string &name, DataNode* node, bool report_errors
     ) override;
-    void do_unload(ALLEGRO_AUDIO_STREAM* asset) override;
+    void doUnload(ALLEGRO_AUDIO_STREAM* asset) override;
     
 };
 
@@ -1516,10 +1516,10 @@ protected:
 
     //--- Function declarations ---
     
-    ALLEGRO_BITMAP* do_load(
+    ALLEGRO_BITMAP* doLoad(
         const string &name, DataNode* node, bool report_errors
     ) override;
-    void do_unload(ALLEGRO_BITMAP* asset) override;
+    void doUnload(ALLEGRO_BITMAP* asset) override;
     
 };
 
@@ -1533,9 +1533,9 @@ protected:
 
     //--- Function declarations ---
     
-    ALLEGRO_SAMPLE* do_load(
+    ALLEGRO_SAMPLE* doLoad(
         const string &name, DataNode* node, bool report_errors
     ) override;
-    void do_unload(ALLEGRO_SAMPLE* asset) override;
+    void doUnload(ALLEGRO_SAMPLE* asset) override;
     
 };

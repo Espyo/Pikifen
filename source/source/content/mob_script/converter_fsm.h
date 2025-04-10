@@ -17,17 +17,17 @@
  * @brief Functions about the converter's finite state machine and behavior.
  */
 namespace converter_fsm {
-void create_fsm(MobType* typ);
+void createFsm(MobType* typ);
 
-void become_idle(Mob* m, void* info1, void* info2);
+void becomeIdle(Mob* m, void* info1, void* info2);
 void bumped(Mob* m, void* info1, void* info2);
-void finish_being_bumped(Mob* m, void* info1, void* info2);
-void finish_dying(Mob* m, void* info1, void* info2);
-void handle_object_touch(Mob* m, void* info1, void* info2);
-void handle_pikmin(Mob* m, void* info1, void* info2);
+void finishBeingBumped(Mob* m, void* info1, void* info2);
+void finishDying(Mob* m, void* info1, void* info2);
+void handleObjectTouch(Mob* m, void* info1, void* info2);
+void handlePikmin(Mob* m, void* info1, void* info2);
 void open(Mob* m, void* info1, void* info2);
-void open_or_die(Mob* m, void* info1, void* info2);
-void open_or_spit(Mob* m, void* info1, void* info2);
+void openOrDie(Mob* m, void* info1, void* info2);
+void openOrSpit(Mob* m, void* info1, void* info2);
 void spew(Mob* m, void* info1, void* info2);
-void start_dying(Mob* m, void* info1, void* info2);
+void startDying(Mob* m, void* info1, void* info2);
 }

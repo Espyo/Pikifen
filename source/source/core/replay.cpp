@@ -39,7 +39,7 @@ Replay::Replay() {
  * @param obstacle_list List of mobs that represent obstacles.
  * @param cur_leader_idx Index number of the current leader.
  */
-void Replay::add_state(
+void Replay::addState(
     const vector<Leader*> &leader_list,
     const vector<Pikmin*> &pikmin_list,
     const vector<Enemy*> &enemy_list,
@@ -163,7 +163,7 @@ void Replay::clear() {
 /**
  * @brief Finishes the recording of a new replay.
  */
-void Replay::finish_recording() {
+void Replay::finishRecording() {
     clear();
 }
 
@@ -173,7 +173,7 @@ void Replay::finish_recording() {
  *
  * @param file_path Path to the file to load from.
  */
-void Replay::load_from_file(const string &file_path) {
+void Replay::loadFromFile(const string &file_path) {
     clear();
     ALLEGRO_FILE* file = al_fopen(file_path.c_str(), "rb");
     
@@ -218,7 +218,7 @@ void Replay::load_from_file(const string &file_path) {
  *
  * @param file_path Path to the file to save to.
  */
-void Replay::save_to_file(const string &file_path) const {
+void Replay::saveToFile(const string &file_path) const {
     ALLEGRO_FILE* file = al_fopen(file_path.c_str(), "wb");
     
     al_fwrite32be(file, (int32_t) states.size());

@@ -18,39 +18,39 @@
  *
  * @param ev Event to handle.
  */
-void ParticleEditor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
-    if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_LEFT)) {
+void ParticleEditor::handleKeyCharCanvas(const ALLEGRO_EVENT &ev) {
+    if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_LEFT)) {
         game.cam.target_pos.x -=
             AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
             
-    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_RIGHT)) {
+    } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_RIGHT)) {
         game.cam.target_pos.x +=
             AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
             
-    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_UP)) {
+    } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_UP)) {
         game.cam.target_pos.y -=
             AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
             
-    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_DOWN)) {
+    } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_DOWN)) {
         game.cam.target_pos.y +=
             AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
             
-    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_MINUS)) {
-        zoom_out_cmd(1.0f);
+    } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_MINUS)) {
+        zoomOutCmd(1.0f);
         
-    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_EQUALS)) {
+    } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_EQUALS)) {
         //Nope, that's not a typo. The plus key is ALLEGRO_KEY_EQUALS.
-        zoom_in_cmd(1.0f);
+        zoomInCmd(1.0f);
         
-    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_MINUS, false, true)) {
-        grid_interval_decrease_cmd(1.0f);
+    } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_MINUS, false, true)) {
+        gridIntervalDecreaseCmd(1.0f);
         
-    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_EQUALS, false, true)) {
+    } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_EQUALS, false, true)) {
         //Again, not a typo. The plus key is ALLEGRO_KEY_EQUALS.
-        grid_interval_increase_cmd(1.0f);
+        gridIntervalIncreaseCmd(1.0f);
         
-    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_0)) {
-        zoom_and_pos_reset_cmd(1.0f);
+    } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_0)) {
+        zoomAndPosResetCmd(1.0f);
         
     }
 }
@@ -61,43 +61,43 @@ void ParticleEditor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void ParticleEditor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
-    if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_G, true)) {
-        grid_toggle_cmd(1.0f);
+void ParticleEditor::handleKeyDownAnywhere(const ALLEGRO_EVENT &ev) {
+    if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_G, true)) {
+        gridToggleCmd(1.0f);
         
-    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_L, true)) {
-        load_cmd(1.0f);
+    } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_L, true)) {
+        loadCmd(1.0f);
         
-    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_Q, true)) {
-        quit_cmd(1.0f);
+    } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_Q, true)) {
+        quitCmd(1.0f);
         
-    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_S, true)) {
-        save_cmd(1.0f);
+    } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_S, true)) {
+        saveCmd(1.0f);
         
-    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_SPACE, false, true)) {
-        part_mgr_playback_toggle_cmd(1.0f);
+    } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_SPACE, false, true)) {
+        partMgrPlaybackToggleCmd(1.0f);
         
-    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_SPACE)) {
-        if(!gui_needs_keyboard()) {
-            part_gen_playback_toggle_cmd(1.0f);
+    } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_SPACE)) {
+        if(!guiNeedsKeyboard()) {
+            partGenPlaybackToggleCmd(1.0f);
         }
         
-    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_D)) {
-        if(!gui_needs_keyboard()) {
-            clear_particles_cmd(1.0f);
+    } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_D)) {
+        if(!guiNeedsKeyboard()) {
+            clearParticlesCmd(1.0f);
         }
         
-    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_P, true)) {
-        leader_silhouette_toggle_cmd(1.0f);
+    } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_P, true)) {
+        leaderSilhouetteToggleCmd(1.0f);
         
-    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_R, true)) {
-        emission_shape_toggle_cmd(1.0f);
+    } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_R, true)) {
+        emissionShapeToggleCmd(1.0f);
         
-    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_ESCAPE)) {
+    } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_ESCAPE)) {
         escape_was_pressed = true;
         
         if(!dialogs.empty()) {
-            close_top_dialog();
+            closeTopDialog();
         }
         
     }
@@ -109,7 +109,7 @@ void ParticleEditor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void ParticleEditor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
+void ParticleEditor::handleKeyDownCanvas(const ALLEGRO_EVENT &ev) {
 
 }
 
@@ -120,8 +120,8 @@ void ParticleEditor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void ParticleEditor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
-    handle_lmb_down(ev);
+void ParticleEditor::handleLmbDoubleClick(const ALLEGRO_EVENT &ev) {
+    handleLmbDown(ev);
 }
 
 
@@ -131,7 +131,7 @@ void ParticleEditor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void ParticleEditor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
+void ParticleEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
     generator_pos_offset = game.mouse_cursor.w_pos;
 }
 
@@ -141,7 +141,7 @@ void ParticleEditor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void ParticleEditor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
+void ParticleEditor::handleLmbDrag(const ALLEGRO_EVENT &ev) {
     generator_pos_offset = game.mouse_cursor.w_pos;
 }
 
@@ -151,7 +151,7 @@ void ParticleEditor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void ParticleEditor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
+void ParticleEditor::handleLmbUp(const ALLEGRO_EVENT &ev) {
     generator_pos_offset = Point();
 }
 
@@ -162,9 +162,9 @@ void ParticleEditor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void ParticleEditor::handle_mmb_down(const ALLEGRO_EVENT &ev) {
+void ParticleEditor::handleMmbDown(const ALLEGRO_EVENT &ev) {
     if(!game.options.editors.mmb_pan) {
-        zoom_and_pos_reset_cmd(1.0f);
+        zoomAndPosResetCmd(1.0f);
     }
 }
 
@@ -175,9 +175,9 @@ void ParticleEditor::handle_mmb_down(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void ParticleEditor::handle_mmb_drag(const ALLEGRO_EVENT &ev) {
+void ParticleEditor::handleMmbDrag(const ALLEGRO_EVENT &ev) {
     if(game.options.editors.mmb_pan) {
-        pan_cam(ev);
+        panCam(ev);
     }
 }
 
@@ -187,7 +187,7 @@ void ParticleEditor::handle_mmb_drag(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void ParticleEditor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
+void ParticleEditor::handleMouseUpdate(const ALLEGRO_EVENT &ev) {
 
 }
 
@@ -197,8 +197,8 @@ void ParticleEditor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void ParticleEditor::handle_mouse_wheel(const ALLEGRO_EVENT &ev) {
-    zoom_with_cursor(game.cam.zoom + (game.cam.zoom * ev.mouse.dz * 0.1));
+void ParticleEditor::handleMouseWheel(const ALLEGRO_EVENT &ev) {
+    zoomWithCursor(game.cam.zoom + (game.cam.zoom * ev.mouse.dz * 0.1));
 }
 
 
@@ -208,9 +208,9 @@ void ParticleEditor::handle_mouse_wheel(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void ParticleEditor::handle_rmb_down(const ALLEGRO_EVENT &ev) {
+void ParticleEditor::handleRmbDown(const ALLEGRO_EVENT &ev) {
     if(game.options.editors.mmb_pan) {
-        zoom_and_pos_reset_cmd(1.0f);
+        zoomAndPosResetCmd(1.0f);
     }
 }
 
@@ -221,8 +221,8 @@ void ParticleEditor::handle_rmb_down(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void ParticleEditor::handle_rmb_drag(const ALLEGRO_EVENT &ev) {
+void ParticleEditor::handleRmbDrag(const ALLEGRO_EVENT &ev) {
     if(!game.options.editors.mmb_pan) {
-        pan_cam(ev);
+        panCam(ev);
     }
 }

@@ -25,9 +25,9 @@ using std::vector;
  * @param node Data node to load from.
  * @param level Level to load at.
  */
-void Liquid::load_from_data_node(DataNode* node, CONTENT_LOAD_LEVEL level) {
+void Liquid::loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level) {
     //Content metadata.
-    load_metadata_from_data_node(node);
+    loadMetadataFromDataNode(node);
     
     //Standard data.
     ReaderSetter rs(node);

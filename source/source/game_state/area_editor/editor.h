@@ -129,13 +129,13 @@ public:
     //--- Function declarations ---
     
     AreaEditor();
-    void do_logic() override;
-    void do_drawing() override;
+    void doLogic() override;
+    void doDrawing() override;
     void load() override;
     void unload() override;
-    string get_name() const override;
-    void draw_canvas();
-    string get_opened_content_path() const;
+    string getName() const override;
+    void drawCanvas();
+    string getOpenedContentPath() const;
     
 private:
 
@@ -869,324 +869,324 @@ private:
     
     //--- Function declarations ---
     
-    bool are_nodes_traversable(
+    bool areNodesTraversable(
         const LayoutDrawingNode &n1,
         const LayoutDrawingNode &n2
     ) const;
-    float calculate_day_speed(
+    float calculateDaySpeed(
         float day_start_min, float day_end_min,
         float mission_min
     );
-    void cancel_circle_sector();
-    void cancel_layout_drawing();
-    void cancel_layout_moving();
-    float calculate_preview_path();
-    void change_state(const EDITOR_STATE new_state);
-    void check_drawing_line(const Point &pos);
-    void clear_circle_sector();
-    void clear_current_area();
-    void clear_layout_drawing();
-    void clear_layout_moving();
-    void clear_problems();
-    void clear_selection();
-    void clear_texture_suggestions();
-    void clear_undo_history();
-    void close_load_dialog();
-    void close_options_dialog();
-    void copy_edge_properties();
-    void copy_mob_properties();
-    void copy_path_link_properties();
-    void copy_sector_properties();
-    void create_area(const string &requested_area_path);
-    void create_drawing_vertexes();
-    void create_mob_under_cursor();
-    Sector* create_sector_for_layout_drawing(const Sector* copy_from);
-    void delete_current_area();
-    void delete_edge(Edge* e_ptr);
-    bool delete_edges(const set<Edge*> &which);
-    void delete_mobs(const set<MobGen*> &which);
-    void delete_path_links(const set<PathLink*> &which);
-    void delete_path_stops(const set<PathStop*> &which);
-    void do_sector_split();
-    void emit_triangulation_error_status_bar_message(
+    void cancelCircleSector();
+    void cancelLayoutDrawing();
+    void cancelLayoutMoving();
+    float calculatePreviewPath();
+    void changeState(const EDITOR_STATE new_state);
+    void checkDrawingLine(const Point &pos);
+    void clearCircleSector();
+    void clearCurrentArea();
+    void clearLayoutDrawing();
+    void clearLayoutMoving();
+    void clearProblems();
+    void clearSelection();
+    void clearTextureSuggestions();
+    void clearUndoHistory();
+    void closeLoadDialog();
+    void closeOptionsDialog();
+    void copyEdgeProperties();
+    void copyMobProperties();
+    void copyPathLinkProperties();
+    void copySectorProperties();
+    void createArea(const string &requested_area_path);
+    void createDrawingVertexes();
+    void createMobUnderCursor();
+    Sector* createSectorForLayoutDrawing(const Sector* copy_from);
+    void deleteCurrentArea();
+    void deleteEdge(Edge* e_ptr);
+    bool deleteEdges(const set<Edge*> &which);
+    void deleteMobs(const set<MobGen*> &which);
+    void deletePathLinks(const set<PathLink*> &which);
+    void deletePathStops(const set<PathStop*> &which);
+    void doSectorSplit();
+    void emitTriangulationErrorStatusBarMessage(
         const TRIANGULATION_ERROR error
     );
-    string find_good_first_texture();
-    void find_problems();
-    void find_problems_bridge_path();
-    void find_problems_intersecting_edge();
-    void find_problems_lone_edge();
-    void find_problems_lone_path_stop();
-    void find_problems_missing_leader();
-    void find_problems_missing_texture();
-    void find_problems_mob_inside_walls();
-    void find_problems_mob_links_to_self();
-    void find_problems_mob_stored_in_loop();
-    void find_problems_no_goal_mob();
-    void find_problems_no_score_criteria();
-    void find_problems_non_simple_sector();
-    void find_problems_oob_mob();
-    void find_problems_oob_path_stop();
-    void find_problems_overlapping_vertex();
-    void find_problems_path_stop_on_link();
-    void find_problems_path_stops_intersecting();
-    void find_problems_pikmin_over_limit();
-    void find_problems_typeless_mob();
-    void find_problems_unknown_texture();
-    void find_problems_unknown_tree_shadow();
-    void finish_circle_sector();
-    void finish_layout_moving();
-    void finish_new_sector_drawing();
-    void forget_prepared_state(Area* prepared_change);
-    void get_affected_sectors(
+    string findGoodFirstTexture();
+    void findProblems();
+    void findProblemsBridgePath();
+    void findProblemsIntersectingEdge();
+    void findProblemsLoneEdge();
+    void findProblemsLonePathStop();
+    void findProblemsMissingLeader();
+    void findProblemsMissingTexture();
+    void findProblemsMobInsideWalls();
+    void findProblemsMobLinksToSelf();
+    void findProblemsMobStoredInLoop();
+    void findProblemsNoGoalMob();
+    void findProblemsNoScoreCriteria();
+    void findProblemsNonSimpleSector();
+    void findProblemsOobMob();
+    void findProblemsOobPathStop();
+    void findProblemsOverlappingVertex();
+    void findProblemsPathStopOnLink();
+    void findProblemsPathStopsIntersecting();
+    void findProblemsPikminOverLimit();
+    void findProblemsTypelessMob();
+    void findProblemsUnknownTexture();
+    void findProblemsUnknownTreeShadow();
+    void finishCircleSector();
+    void finishLayoutMoving();
+    void finishNewSectorDrawing();
+    void forgetPreparedState(Area* prepared_change);
+    void getAffectedSectors(
         Sector* s_ptr, unordered_set<Sector*> &list
     ) const;
-    void get_affected_sectors(
+    void getAffectedSectors(
         const set<Sector*> &sectors, unordered_set<Sector*> &list
     ) const;
-    void get_affected_sectors(
+    void getAffectedSectors(
         const set<Vertex*> &vertexes, unordered_set<Sector*> &list
     ) const;
-    void get_hovered_layout_element(
+    void getHoveredLayoutElement(
         Vertex** clicked_vertex, Edge** clicked_edge, Sector** clicked_sector
     ) const;
-    Edge* get_closest_edge_to_angle(
+    Edge* getClosestEdgeToAngle(
         Vertex* v_ptr, float angle, bool clockwise,
         float* out_closest_edge_angle
     ) const;
-    bool get_common_sector(
+    bool getCommonSector(
         vector<Vertex*> &vertexes, vector<Edge*> &edges, Sector** result
     ) const;
-    Edge* get_correct_post_split_edge(
+    Edge* getCorrectPostSplitEdge(
         const Vertex* v_ptr, Edge* e1_ptr, Edge* e2_ptr
     ) const;
-    bool get_drawing_outer_sector(Sector** result) const;
-    Edge* get_edge_under_point(
+    bool getDrawingOuterSector(Sector** result) const;
+    Edge* getEdgeUnderPoint(
         const Point &p, const Edge* after = nullptr
     ) const;
-    string get_folder_tooltip(
+    string getFolderTooltip(
         const string &path, const string &user_data_path
     ) const;
-    vector<EdgeIntersection> get_intersecting_edges() const;
-    size_t get_mission_required_mob_count() const;
-    float get_mob_gen_radius(MobGen* m) const;
-    bool get_mob_link_under_point(
+    vector<EdgeIntersection> getIntersectingEdges() const;
+    size_t getMissionRequiredMobCount() const;
+    float getMobGenRadius(MobGen* m) const;
+    bool getMobLinkUnderPoint(
         const Point &p,
         std::pair<MobGen*, MobGen*>* data1,
         std::pair<MobGen*, MobGen*>* data2
     ) const;
-    MobGen* get_mob_under_point(
+    MobGen* getMobUnderPoint(
         const Point &p, size_t* out_idx = nullptr
     ) const;
-    bool get_path_link_under_point(
+    bool getPathLinkUnderPoint(
         const Point &p, PathLink** link1, PathLink** link2
     ) const;
-    PathStop* get_path_stop_under_point(const Point &p) const;
-    float get_quick_height_set_offset() const;
-    SECTOR_SPLIT_RESULT get_sector_split_evaluation();
-    Sector* get_sector_under_point(const Point &p) const;
-    Vertex* get_vertex_under_point(const Point &p) const;
-    void go_to_undo_history_point(size_t p);
-    void goto_problem();
-    void handle_line_error();
-    void homogenize_selected_edges();
-    void homogenize_selected_mobs();
-    void homogenize_selected_path_links();
-    void homogenize_selected_path_stops();
-    void homogenize_selected_sectors();
-    void load_area_folder(
+    PathStop* getPathStopUnderPoint(const Point &p) const;
+    float getQuickHeightSetOffset() const;
+    SECTOR_SPLIT_RESULT getSectorSplitEvaluation();
+    Sector* getSectorUnderPoint(const Point &p) const;
+    Vertex* getVertexUnderPoint(const Point &p) const;
+    void goToUndoHistoryPoint(size_t p);
+    void goToProblem();
+    void handleLineError();
+    void homogenizeSelectedEdges();
+    void homogenizeSelectedMobs();
+    void homogenizeSelectedPathLinks();
+    void homogenizeSelectedPathStops();
+    void homogenizeSelectedSectors();
+    void loadAreaFolder(
         const string &requested_area_path,
         bool from_backup, bool should_update_history
     );
-    void load_backup();
-    void load_reference();
-    bool merge_sectors(Sector* s1, Sector* s2);
-    void merge_vertex(
+    void loadBackup();
+    void loadReference();
+    bool mergeSectors(Sector* s1, Sector* s2);
+    void mergeVertex(
         const Vertex* v1, Vertex* v2, unordered_set<Sector*>* affected_sectors
     );
-    void paste_edge_properties();
-    void paste_mob_properties();
-    void paste_path_link_properties();
-    void paste_sector_properties();
-    void paste_sector_texture();
-    Area* prepare_state();
-    void recreate_drawing_nodes();
+    void pasteEdgeProperties();
+    void pasteMobProperties();
+    void pastePathLinkProperties();
+    void pasteSectorProperties();
+    void pasteSectorTexture();
+    Area* prepareState();
+    void recreateDrawingNodes();
     void redo();
-    void register_change(
+    void registerChange(
         const string &operation_name, Area* pre_prepared_change = nullptr
     );
-    void reload_areas();
-    void remove_thumbnail();
-    void resize_everything(float mults[2]);
-    void rollback_to_prepared_state(Area* prepared_state);
-    void rotate_mob_gens_to_point(const Point &pos);
-    bool save_area(bool to_backup);
-    void save_backup();
-    void save_reference();
-    void select_edge(Edge* e_ptr);
-    void select_path_stops_with_label(const string &label);
-    void select_sector(Sector* s_ptr);
-    void select_tree_shadow(TreeShadow* s_ptr);
-    void select_vertex(Vertex* v_ptr);
-    void set_new_circle_sector_points();
-    void set_selection_status_text();
-    void set_state_from_undo_or_redo_history(Area* state);
-    void setup_for_new_area_post();
-    void setup_for_new_area_pre();
-    void setup_sector_split();
-    Point snap_point(const Point &p, bool ignore_selected = false);
-    Vertex* split_edge(Edge* e_ptr, const Point &where);
-    PathStop* split_path_link(
+    void reloadAreas();
+    void removeThumbnail();
+    void resizeEverything(float mults[2]);
+    void rollbackToPreparedState(Area* prepared_state);
+    void rotateMobGensToPoint(const Point &pos);
+    bool saveArea(bool to_backup);
+    void saveBackup();
+    void saveReference();
+    void selectEdge(Edge* e_ptr);
+    void selectPathStopsWithLabel(const string &label);
+    void selectSector(Sector* s_ptr);
+    void selectTreeShadow(TreeShadow* s_ptr);
+    void selectVertex(Vertex* v_ptr);
+    void setNewCircleSectorPoints();
+    void setSelectionStatusText();
+    void setStateFromUndoOrRedoHistory(Area* state);
+    void setupForNewAreaPost();
+    void setupForNewAreaPre();
+    void setupSectorSplit();
+    Point snapPoint(const Point &p, bool ignore_selected = false);
+    Vertex* splitEdge(Edge* e_ptr, const Point &where);
+    PathStop* splitPathLink(
         PathLink* l1, PathLink* l2,
         const Point &where
     );
-    void start_mob_move();
-    void start_path_stop_move();
-    void start_vertex_move();
-    void traverse_sector_for_split(
+    void startMobMove();
+    void startPathStopMove();
+    void startVertexMove();
+    void traverseSectorForSplit(
         const Sector* s_ptr, Vertex* begin, const Vertex* checkpoint,
         vector<Edge*>* edges, vector<Vertex*>* vertexes,
         bool* working_sector_left
     );
     void undo();
-    void undo_layout_drawing_node();
-    void update_affected_sectors(
+    void undoLayoutDrawingNode();
+    void updateAffectedSectors(
         const unordered_set<Sector*> &affected_sectors
     );
-    void update_all_edge_offset_caches();
-    void update_inner_sectors_outer_sector(
+    void updateAllEdgeOffsetCaches();
+    void updateInnerSectorsOuterSector(
         const vector<Edge*> &edges_to_check,
         const Sector* old_outer, Sector* new_outer
     );
-    void update_reference();
-    void update_layout_drawing_status_text();
-    void update_sector_texture(Sector* s_ptr, const string &internal_name);
-    void update_texture_suggestions(const string &n);
-    void update_undo_history();
-    void update_vertex_selection();
-    void draw_arrow(
+    void updateReference();
+    void updateLayoutDrawingStatusText();
+    void updateSectorTexture(Sector* s_ptr, const string &internal_name);
+    void updateTextureSuggestions(const string &n);
+    void updateUndoHistory();
+    void updateVertexSelection();
+    void drawArrow(
         const Point &start, const Point &end,
         float start_offset, float end_offset,
         float thickness, const ALLEGRO_COLOR &color
     );
-    static void draw_canvas_imgui_callback(
+    static void drawCanvasDearImGuiCallback(
         const ImDrawList* parent_list, const ImDrawCmd* cmd
     );
-    void draw_cross_section_sector(
+    void drawCrossSectionSector(
         float start_ratio, float end_ratio, float proportion,
         float lowest_z, const Sector* sector_ptr
     );
-    void draw_debug_text(
+    void drawDebugText(
         const ALLEGRO_COLOR color, const Point &where, const string &text,
         unsigned char dots = 0
     );
-    void draw_line_dist(
+    void drawLineDist(
         const Point &focus, const Point &other, const string &prefix = ""
     );
-    void open_load_dialog();
-    void open_new_dialog();
-    void open_options_dialog();
-    void pick_area_folder(
+    void openLoadDialog();
+    void openNewDialog();
+    void openOptionsDialog();
+    void pickAreaFolder(
         const string &name, const string &top_cat, const string &sec_cat,
         void* info, bool is_new
     );
-    void pick_texture(
+    void pickTexture(
         const string &name, const string &top_cat, const string &sec_cat,
         void* info, bool is_new
     );
-    void circle_sector_cmd(float input_value);
-    void copy_properties_cmd(float input_value);
-    void delete_area_cmd(float input_value);
-    void delete_cmd(float input_value);
-    void delete_edge_cmd(float input_value);
-    void delete_mob_cmd(float input_value);
-    void delete_path_cmd(float input_value);
-    void delete_tree_shadow_cmd(float input_value);
-    void duplicate_mobs_cmd(float input_value);
-    void grid_interval_decrease_cmd(float input_value);
-    void grid_interval_increase_cmd(float input_value);
-    void layout_drawing_cmd(float input_value);
-    void load_cmd(float input_value);
-    void new_mob_cmd(float input_value);
-    void new_path_cmd(float input_value);
-    void new_tree_shadow_cmd(float input_value);
-    void paste_properties_cmd(float input_value);
-    void paste_texture_cmd(float input_value);
-    void quick_play_cmd(float input_value);
-    void quit_cmd(float input_value);
-    void redo_cmd(float input_value);
-    void reference_toggle_cmd(float input_value);
-    void reload_cmd(float input_value);
-    void save_cmd(float input_value);
-    void select_all_cmd(float input_value);
-    void selection_filter_cmd(float input_value);
-    void snap_mode_cmd(float input_value);
-    void undo_cmd(float input_value);
-    void zoom_and_pos_reset_cmd(float input_value);
-    void zoom_everything_cmd(float input_value);
-    void zoom_in_cmd(float input_value);
-    void zoom_out_cmd(float input_value);
-    void process_gui();
-    void process_gui_control_panel();
-    void process_gui_delete_area_dialog();
-    void process_gui_grading_criterion_widgets(
+    void circleSectorCmd(float input_value);
+    void copyPropertiesCmd(float input_value);
+    void deleteAreaCmd(float input_value);
+    void deleteCmd(float input_value);
+    void deleteEdgeCmd(float input_value);
+    void deleteMobCmd(float input_value);
+    void deletePathCmd(float input_value);
+    void deleteTreeShadowCmd(float input_value);
+    void duplicateMobsCmd(float input_value);
+    void gridIntervalDecreaseCmd(float input_value);
+    void gridIntervalIncreaseCmd(float input_value);
+    void layoutDrawingCmd(float input_value);
+    void loadCmd(float input_value);
+    void newMobCmd(float input_value);
+    void newPathCmd(float input_value);
+    void newTreeShadowCmd(float input_value);
+    void pastePropertiesCmd(float input_value);
+    void pasteTextureCmd(float input_value);
+    void quickPlayCmd(float input_value);
+    void quitCmd(float input_value);
+    void redoCmd(float input_value);
+    void referenceToggleCmd(float input_value);
+    void reloadCmd(float input_value);
+    void saveCmd(float input_value);
+    void selectAllCmd(float input_value);
+    void selectionFilterCmd(float input_value);
+    void snapModeCmd(float input_value);
+    void undoCmd(float input_value);
+    void zoomAndPosResetCmd(float input_value);
+    void zoomEverythingCmd(float input_value);
+    void zoomInCmd(float input_value);
+    void zoomOutCmd(float input_value);
+    void processGui();
+    void processGuiControlPanel();
+    void processGuiDeleteAreaDialog();
+    void processGuiGradingCriterionWidgets(
         int* value_ptr, MISSION_SCORE_CRITERIA criterion_idx,
         const string &widget_label, const string &tooltip
     );
-    void process_gui_grading_medal_widgets(
+    void processGuiGradingMedalWidgets(
         int* requirement_ptr, const string &widget_label,
         int widget_min_value, int widget_max_value,
         const string &tooltip
     );
-    void process_gui_grading_mode_widgets(
+    void processGuiGradingModeWidgets(
         int value, const string &widget_label, const string &tooltip
     );
-    void process_gui_load_dialog();
-    void process_gui_new_dialog();
-    void process_gui_menu_bar();
-    void process_gui_mob_script_vars(MobGen* gen);
-    void process_gui_panel_details();
-    void process_gui_panel_edge();
-    void process_gui_panel_gameplay();
-    void process_gui_panel_info();
-    void process_gui_panel_layout();
-    void process_gui_panel_main();
-    void process_gui_panel_mission();
-    void process_gui_panel_mission_fail(bool* day_duration_needs_update);
-    void process_gui_panel_mission_goal_be();
-    void process_gui_panel_mission_goal_ct();
-    void process_gui_panel_mission_goal_gte();
-    void process_gui_panel_mission_grading();
-    void process_gui_panel_mob();
-    void process_gui_panel_mobs();
-    void process_gui_panel_path_link();
-    void process_gui_panel_path_stop();
-    void process_gui_panel_paths();
-    void process_gui_panel_review();
-    void process_gui_panel_sector();
-    void process_gui_panel_tools();
-    void process_gui_options_dialog();
-    void process_gui_status_bar();
-    void process_gui_toolbar();
-    void handle_key_char_anywhere(const ALLEGRO_EVENT &ev) override;
-    void handle_key_char_canvas(const ALLEGRO_EVENT &ev) override;
-    void handle_key_down_anywhere(const ALLEGRO_EVENT &ev) override;
-    void handle_key_down_canvas(const ALLEGRO_EVENT &ev) override;
-    void handle_key_up_anywhere(const ALLEGRO_EVENT &ev) override;
-    void handle_lmb_double_click(const ALLEGRO_EVENT &ev) override;
-    void handle_lmb_down(const ALLEGRO_EVENT &ev) override;
-    void handle_lmb_drag(const ALLEGRO_EVENT &ev) override;
-    void handle_lmb_up(const ALLEGRO_EVENT &ev) override;
-    void handle_mmb_double_click(const ALLEGRO_EVENT &ev) override;
-    void handle_mmb_down(const ALLEGRO_EVENT &ev) override;
-    void handle_mmb_drag(const ALLEGRO_EVENT &ev) override;
-    void handle_mouse_update(const ALLEGRO_EVENT &ev) override;
-    void handle_mouse_wheel(const ALLEGRO_EVENT &ev) override;
-    void handle_rmb_double_click(const ALLEGRO_EVENT &ev) override;
-    void handle_rmb_down(const ALLEGRO_EVENT &ev) override;
-    void handle_rmb_drag(const ALLEGRO_EVENT &ev) override;
-    void pan_cam(const ALLEGRO_EVENT &ev);
-    void reset_cam_xy();
-    void reset_cam_zoom();
+    void processGuiLoadDialog();
+    void processGuiNewDialog();
+    void processGuiMenuBar();
+    void processGuiMobScriptVars(MobGen* gen);
+    void processGuiPanelDetails();
+    void processGuiPanelEdge();
+    void processGuiPanelGameplay();
+    void processGuiPanelInfo();
+    void processGuiPanelLayout();
+    void processGuiPanelMain();
+    void processGuiPanelMission();
+    void processGuiPanelMissionFail(bool* day_duration_needs_update);
+    void processGuiPanelMissionGoalBe();
+    void processGuiPanelMissionGoalCt();
+    void processGuiPanelMissionGoalGte();
+    void processGuiPanelMissionGrading();
+    void processGuiPanelMob();
+    void processGuiPanelMobs();
+    void processGuiPanelPathLink();
+    void processGuiPanelPathStop();
+    void processGuiPanelPaths();
+    void processGuiPanelReview();
+    void processGuiPanelSector();
+    void processGuiPanelTools();
+    void processGuiOptionsDialog();
+    void processGuiStatusBar();
+    void processGuiToolbar();
+    void handleKeyCharAnywhere(const ALLEGRO_EVENT &ev) override;
+    void handleKeyCharCanvas(const ALLEGRO_EVENT &ev) override;
+    void handleKeyDownAnywhere(const ALLEGRO_EVENT &ev) override;
+    void handleKeyDownCanvas(const ALLEGRO_EVENT &ev) override;
+    void handleKeyUpAnywhere(const ALLEGRO_EVENT &ev) override;
+    void handleLmbDoubleClick(const ALLEGRO_EVENT &ev) override;
+    void handleLmbDown(const ALLEGRO_EVENT &ev) override;
+    void handleLmbDrag(const ALLEGRO_EVENT &ev) override;
+    void handleLmbUp(const ALLEGRO_EVENT &ev) override;
+    void handleMmbDoubleClick(const ALLEGRO_EVENT &ev) override;
+    void handleMmbDown(const ALLEGRO_EVENT &ev) override;
+    void handleMmbDrag(const ALLEGRO_EVENT &ev) override;
+    void handleMouseUpdate(const ALLEGRO_EVENT &ev) override;
+    void handleMouseWheel(const ALLEGRO_EVENT &ev) override;
+    void handleRmbDoubleClick(const ALLEGRO_EVENT &ev) override;
+    void handleRmbDown(const ALLEGRO_EVENT &ev) override;
+    void handleRmbDrag(const ALLEGRO_EVENT &ev) override;
+    void panCam(const ALLEGRO_EVENT &ev);
+    void resetCamXY();
+    void resetCamZoom();
     
 };

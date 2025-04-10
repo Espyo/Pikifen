@@ -107,32 +107,32 @@ public:
     //--- Function declarations ---
     
     Pikmin(const Point &pos, PikminType* type, float angle);
-    void force_carry(Mob* m);
-    bool process_attack_miss(HitboxInteraction* info);
-    bool increase_maturity(int amount);
+    void forceCarry(Mob* m);
+    bool processAttackMiss(HitboxInteraction* info);
+    bool increaseMaturity(int amount);
     void latch(Mob* m, const Hitbox* h);
-    void start_throw_trail();
-    bool can_receive_status(StatusType* s) const override;
-    void draw_mob() override;
-    float get_base_speed() const override;
-    void get_group_spot_info(
+    void startThrowTrail();
+    bool canReceiveStatus(StatusType* s) const override;
+    void drawMob() override;
+    float getBaseSpeed() const override;
+    void getGroupSpotInfo(
         Point* out_spot, float* out_dist
     ) const override;
-    void handle_status_effect_gain(StatusType* s) override;
-    void handle_status_effect_loss(StatusType* s) override;
-    void read_script_vars(const ScriptVarReader &svr) override;
-    void finish_dying_class_specifics() override;
-    void start_dying_class_specifics() override;
+    void handleStatusEffectGain(StatusType* s) override;
+    void handleStatusEffectLoss(StatusType* s) override;
+    void readScriptVars(const ScriptVarReader &svr) override;
+    void finishDyingClassSpecifics() override;
+    void startDyingClassSpecifics() override;
     
 protected:
 
     //--- Function declarations ---
     
-    void tick_class_specifics(float delta_t) override;
+    void tickClassSpecifics(float delta_t) override;
 };
 
 
-Pikmin* get_closest_sprout(
+Pikmin* getClosestSprout(
     const Point &pos, Distance* d, bool ignore_reserved
     
 );

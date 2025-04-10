@@ -32,7 +32,7 @@ BridgeCategory::BridgeCategory() :
 /**
  * @brief Clears the list of registered types of bridges.
  */
-void BridgeCategory::clear_types() {
+void BridgeCategory::clearTypes() {
     for(auto &t : game.content.mob_types.list.bridge) {
         delete t.second;
     }
@@ -48,7 +48,7 @@ void BridgeCategory::clear_types() {
  * @param angle Starting angle.
  * @return The mob.
  */
-Mob* BridgeCategory::create_mob(
+Mob* BridgeCategory::createMob(
     const Point &pos, MobType* type, float angle
 ) {
     Bridge* m = new Bridge(pos, (BridgeType*) type, angle);
@@ -62,7 +62,7 @@ Mob* BridgeCategory::create_mob(
  *
  * @return The type.
  */
-MobType* BridgeCategory::create_type() {
+MobType* BridgeCategory::createType() {
     return new BridgeType();
 }
 
@@ -72,7 +72,7 @@ MobType* BridgeCategory::create_type() {
  *
  * @param m The mob to erase.
  */
-void BridgeCategory::erase_mob(Mob* m) {
+void BridgeCategory::eraseMob(Mob* m) {
     game.states.gameplay->mobs.bridges.erase(
         find(
             game.states.gameplay->mobs.bridges.begin(),
@@ -90,7 +90,7 @@ void BridgeCategory::erase_mob(Mob* m) {
  * @param internal_name Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-MobType* BridgeCategory::get_type(const string &internal_name) const {
+MobType* BridgeCategory::getType(const string &internal_name) const {
     auto it = game.content.mob_types.list.bridge.find(internal_name);
     if(it == game.content.mob_types.list.bridge.end()) return nullptr;
     return it->second;
@@ -102,7 +102,7 @@ MobType* BridgeCategory::get_type(const string &internal_name) const {
  *
  * @param list This list gets filled with the mob type internal names.
  */
-void BridgeCategory::get_type_names(vector<string> &list) const {
+void BridgeCategory::getTypeNames(vector<string> &list) const {
     for(auto &t : game.content.mob_types.list.bridge) {
         list.push_back(t.first);
     }
@@ -115,6 +115,6 @@ void BridgeCategory::get_type_names(vector<string> &list) const {
  * @param internal_name Internal name of the mob type.
  * @param type Mob type to register.
  */
-void BridgeCategory::register_type(const string &internal_name, MobType* type) {
+void BridgeCategory::registerType(const string &internal_name, MobType* type) {
     game.content.mob_types.list.bridge[internal_name] = (BridgeType*) type;
 }

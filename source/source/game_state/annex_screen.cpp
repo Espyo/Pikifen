@@ -19,27 +19,27 @@
 /**
  * @brief Draws the annex screen state.
  */
-void AnnexScreen::do_drawing() {
+void AnnexScreen::doDrawing() {
     al_clear_to_color(COLOR_BLACK);
     
-    draw_bitmap(
+    drawBitmap(
         bmp_bg, Point(game.win_w * 0.5, game.win_h * 0.5),
-        Point(game.win_w, game.win_h), 0, map_gray(64)
+        Point(game.win_w, game.win_h), 0, mapGray(64)
     );
     
     if(cur_menu) cur_menu->draw();
     
-    draw_mouse_cursor(GAME::CURSOR_STANDARD_COLOR);
+    drawMouseCursor(GAME::CURSOR_STANDARD_COLOR);
 }
 
 
 /**
  * @brief Ticks one frame's worth of logic.
  */
-void AnnexScreen::do_logic() {
-    if(!game.fade_mgr.is_fading()) {
+void AnnexScreen::doLogic() {
+    if(!game.fade_mgr.isFading()) {
         for(size_t a = 0; a < game.player_actions.size(); a++) {
-            if(cur_menu) cur_menu->handle_player_action(game.player_actions[a]);
+            if(cur_menu) cur_menu->handlePlayerAction(game.player_actions[a]);
         }
     }
     
@@ -62,7 +62,7 @@ void AnnexScreen::do_logic() {
  *
  * @return The name.
  */
-string AnnexScreen::get_name() const {
+string AnnexScreen::getName() const {
     return "annex screen";
 }
 
@@ -72,10 +72,10 @@ string AnnexScreen::get_name() const {
  *
  * @param ev Event to handle.
  */
-void AnnexScreen::handle_allegro_event(ALLEGRO_EVENT &ev) {
-    if(game.fade_mgr.is_fading()) return;
+void AnnexScreen::handleAllegroEvent(ALLEGRO_EVENT &ev) {
+    if(game.fade_mgr.isFading()) return;
     
-    if(cur_menu) cur_menu->handle_allegro_event(ev);
+    if(cur_menu) cur_menu->handleAllegroEvent(ev);
 }
 
 
@@ -83,8 +83,8 @@ void AnnexScreen::handle_allegro_event(ALLEGRO_EVENT &ev) {
  * @brief Leaves the annex screen state and goes to the title screen.
  */
 void AnnexScreen::leave() {
-    game.fade_mgr.start_fade(false, [] () {
-        game.change_state(game.states.title_screen);
+    game.fade_mgr.startFade(false, [] () {
+        game.changeState(game.states.title_screen);
     });
 }
 
@@ -100,8 +100,8 @@ void AnnexScreen::load() {
         );
         
     //Game content.
-    game.content.reload_packs();
-    game.content.load_all(
+    game.content.reloadPacks();
+    game.content.loadAll(
     vector<CONTENT_TYPE> {
         CONTENT_TYPE_GUI,
         CONTENT_TYPE_AREA,
@@ -123,7 +123,7 @@ void AnnexScreen::load() {
         break;
         
     } case ANNEX_SCREEN_MENU_HELP: {
-        game.content.load_all(
+        game.content.loadAll(
         vector<CONTENT_TYPE> {
             CONTENT_TYPE_PARTICLE_GEN,
             CONTENT_TYPE_GLOBAL_ANIMATION,
@@ -136,7 +136,7 @@ void AnnexScreen::load() {
         },
         CONTENT_LOAD_LEVEL_BASIC
         );
-        game.content.load_all(
+        game.content.loadAll(
         vector<CONTENT_TYPE> {
             CONTENT_TYPE_MOB_ANIMATION,
             CONTENT_TYPE_MOB_TYPE,
@@ -146,7 +146,7 @@ void AnnexScreen::load() {
         HelpMenu* help_menu = new HelpMenu();
         help_menu->unload_callback =
         [this] () {
-            game.content.unload_all(
+            game.content.unloadAll(
             vector<CONTENT_TYPE> {
                 CONTENT_TYPE_MOB_ANIMATION,
                 CONTENT_TYPE_MOB_TYPE,
@@ -195,8 +195,8 @@ void AnnexScreen::load() {
     menu_to_load = ANNEX_SCREEN_MENU_HELP;
     
     //Finishing touches.
-    game.audio.set_current_song(game.sys_content_names.sng_menus, false);
-    game.fade_mgr.start_fade(true, nullptr);
+    game.audio.setCurrentSong(game.sys_content_names.sng_menus, false);
+    game.fade_mgr.startFade(true, nullptr);
 }
 
 
@@ -215,7 +215,7 @@ void AnnexScreen::unload() {
     }
     
     //Game content.
-    game.content.unload_all(
+    game.content.unloadAll(
     vector<CONTENT_TYPE> {
         CONTENT_TYPE_AREA,
         CONTENT_TYPE_GUI,

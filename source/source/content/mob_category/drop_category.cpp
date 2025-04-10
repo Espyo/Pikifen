@@ -32,7 +32,7 @@ DropCategory::DropCategory() :
 /**
  * @brief Clears the list of registered types of drops.
  */
-void DropCategory::clear_types() {
+void DropCategory::clearTypes() {
     for(auto &t : game.content.mob_types.list.drop) {
         delete t.second;
     }
@@ -48,7 +48,7 @@ void DropCategory::clear_types() {
  * @param angle Starting angle.
  * @return The mob.
  */
-Mob* DropCategory::create_mob(
+Mob* DropCategory::createMob(
     const Point &pos, MobType* type, float angle
 ) {
     Drop* m = new Drop(pos, (DropType*) type, angle);
@@ -62,7 +62,7 @@ Mob* DropCategory::create_mob(
  *
  * @return The type.
  */
-MobType* DropCategory::create_type() {
+MobType* DropCategory::createType() {
     return new DropType();
 }
 
@@ -72,7 +72,7 @@ MobType* DropCategory::create_type() {
  *
  * @param m The mob to erase.
  */
-void DropCategory::erase_mob(Mob* m) {
+void DropCategory::eraseMob(Mob* m) {
     game.states.gameplay->mobs.drops.erase(
         find(
             game.states.gameplay->mobs.drops.begin(),
@@ -90,7 +90,7 @@ void DropCategory::erase_mob(Mob* m) {
  * @param internal_name Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-MobType* DropCategory::get_type(const string &internal_name) const {
+MobType* DropCategory::getType(const string &internal_name) const {
     auto it = game.content.mob_types.list.drop.find(internal_name);
     if(it == game.content.mob_types.list.drop.end()) return nullptr;
     return it->second;
@@ -102,7 +102,7 @@ MobType* DropCategory::get_type(const string &internal_name) const {
  *
  * @param list This list gets filled with the mob type internal names.
  */
-void DropCategory::get_type_names(vector<string> &list) const {
+void DropCategory::getTypeNames(vector<string> &list) const {
     for(auto &t : game.content.mob_types.list.drop) {
         list.push_back(t.first);
     }
@@ -115,6 +115,6 @@ void DropCategory::get_type_names(vector<string> &list) const {
  * @param internal_name Internal name of the mob type.
  * @param type Mob type to register.
  */
-void DropCategory::register_type(const string &internal_name, MobType* type) {
+void DropCategory::registerType(const string &internal_name, MobType* type) {
     game.content.mob_types.list.drop[internal_name] = (DropType*) type;
 }

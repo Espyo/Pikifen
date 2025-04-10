@@ -156,7 +156,7 @@ public:
     //--- Function declarations ---
     
     Replay();
-    void add_state(
+    void addState(
         const vector<Leader*> &leader_list,
         const vector<Pikmin*> &pikmin_list,
         const vector<Enemy*> &enemy_list,
@@ -166,9 +166,9 @@ public:
         size_t cur_leader_idx
     );
     void clear();
-    void finish_recording();
-    void load_from_file(const string &file_path);
-    void save_to_file(const string &file_path) const;
+    void finishRecording();
+    void loadFromFile(const string &file_path);
+    void saveToFile(const string &file_path) const;
     
 private:
 

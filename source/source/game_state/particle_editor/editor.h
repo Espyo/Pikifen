@@ -38,13 +38,13 @@ public:
     //--- Function declarations ---
     
     ParticleEditor();
-    void do_logic() override;
-    void do_drawing() override;
+    void doLogic() override;
+    void doDrawing() override;
     void load() override;
     void unload() override;
-    string get_name() const override;
-    void draw_canvas();
-    string get_opened_content_path() const;
+    string getName() const override;
+    void drawCanvas();
+    string getOpenedContentPath() const;
     
 private:
 
@@ -135,69 +135,69 @@ private:
     
     //--- Function declarations ---
     
-    void close_load_dialog();
-    void close_options_dialog();
-    void create_part_gen(const string &part_gen_path);
-    void delete_current_part_gen();
-    string get_file_tooltip(const string &path) const;
-    void load_part_gen_file(
+    void closeLoadDialog();
+    void closeOptionsDialog();
+    void createPartGen(const string &part_gen_path);
+    void deleteCurrentPartGen();
+    string getFileTooltip(const string &path) const;
+    void loadPartGenFile(
         const string &path, const bool should_update_history
     );
-    void open_load_dialog();
-    void open_new_dialog();
-    void open_options_dialog();
-    void pick_part_gen_file(
+    void openLoadDialog();
+    void openNewDialog();
+    void openOptionsDialog();
+    void pickPartGenFile(
         const string &name, const string &top_cat, const string &sec_cat,
         void* info, bool is_new
     );
-    void reload_part_gens();
-    void setup_for_new_part_gen_post();
-    void setup_for_new_part_gen_pre();
-    bool save_part_gen();
-    static void draw_canvas_imgui_callback(
+    void reloadPartGens();
+    void setupForNewPartGenPost();
+    void setupForNewPartGenPre();
+    bool savePartGen();
+    static void drawCanvasDearImGuiCallback(
         const ImDrawList* parent_list, const ImDrawCmd* cmd
     );
-    void grid_interval_decrease_cmd(float input_value);
-    void grid_interval_increase_cmd(float input_value);
-    void grid_toggle_cmd(float input_value);
-    void delete_part_gen_cmd(float input_value);
-    void load_cmd(float input_value);
-    void quit_cmd(float input_value);
-    void reload_cmd(float input_value);
-    void save_cmd(float input_value);
-    void zoom_and_pos_reset_cmd(float input_value);
-    void zoom_in_cmd(float input_value);
-    void zoom_out_cmd(float input_value);
-    void clear_particles_cmd(float input_value);
-    void emission_shape_toggle_cmd(float input_value);
-    void leader_silhouette_toggle_cmd(float input_value);
-    void part_gen_playback_toggle_cmd(float input_value);
-    void part_mgr_playback_toggle_cmd(float input_value);
-    void process_gui();
-    void process_gui_control_panel();
-    void process_gui_delete_part_gen_dialog();
-    void process_gui_load_dialog();
-    void process_gui_menu_bar();
-    void process_gui_new_dialog();
-    void process_gui_options_dialog();
-    void process_gui_panel_generator();
-    void process_gui_status_bar();
-    void process_gui_toolbar();
-    void handle_key_char_canvas(const ALLEGRO_EVENT &ev) override;
-    void handle_key_down_anywhere(const ALLEGRO_EVENT &ev) override;
-    void handle_key_down_canvas(const ALLEGRO_EVENT &ev) override;
-    void handle_lmb_double_click(const ALLEGRO_EVENT &ev) override;
-    void handle_lmb_down(const ALLEGRO_EVENT &ev) override;
-    void handle_lmb_drag(const ALLEGRO_EVENT &ev) override;
-    void handle_lmb_up(const ALLEGRO_EVENT &ev) override;
-    void handle_mmb_down(const ALLEGRO_EVENT &ev) override;
-    void handle_mmb_drag(const ALLEGRO_EVENT &ev) override;
-    void handle_mouse_update(const ALLEGRO_EVENT &ev) override;
-    void handle_mouse_wheel(const ALLEGRO_EVENT &ev) override;
-    void handle_rmb_down(const ALLEGRO_EVENT &ev) override;
-    void handle_rmb_drag(const ALLEGRO_EVENT &ev) override;
-    void pan_cam(const ALLEGRO_EVENT &ev);
-    void reset_cam_xy();
-    void reset_cam_zoom();
+    void gridIntervalDecreaseCmd(float input_value);
+    void gridIntervalIncreaseCmd(float input_value);
+    void gridToggleCmd(float input_value);
+    void deletePartGenCmd(float input_value);
+    void loadCmd(float input_value);
+    void quitCmd(float input_value);
+    void reloadCmd(float input_value);
+    void saveCmd(float input_value);
+    void zoomAndPosResetCmd(float input_value);
+    void zoomInCmd(float input_value);
+    void zoomOutCmd(float input_value);
+    void clearParticlesCmd(float input_value);
+    void emissionShapeToggleCmd(float input_value);
+    void leaderSilhouetteToggleCmd(float input_value);
+    void partGenPlaybackToggleCmd(float input_value);
+    void partMgrPlaybackToggleCmd(float input_value);
+    void processGui();
+    void processGuiControlPanel();
+    void processGuiDeletePartGenDialog();
+    void processGuiLoadDialog();
+    void processGuiMenuBar();
+    void processGuiNewDialog();
+    void processGuiOptionsDialog();
+    void processGuiPanelGenerator();
+    void processGuiStatusBar();
+    void processGuiToolbar();
+    void handleKeyCharCanvas(const ALLEGRO_EVENT &ev) override;
+    void handleKeyDownAnywhere(const ALLEGRO_EVENT &ev) override;
+    void handleKeyDownCanvas(const ALLEGRO_EVENT &ev) override;
+    void handleLmbDoubleClick(const ALLEGRO_EVENT &ev) override;
+    void handleLmbDown(const ALLEGRO_EVENT &ev) override;
+    void handleLmbDrag(const ALLEGRO_EVENT &ev) override;
+    void handleLmbUp(const ALLEGRO_EVENT &ev) override;
+    void handleMmbDown(const ALLEGRO_EVENT &ev) override;
+    void handleMmbDrag(const ALLEGRO_EVENT &ev) override;
+    void handleMouseUpdate(const ALLEGRO_EVENT &ev) override;
+    void handleMouseWheel(const ALLEGRO_EVENT &ev) override;
+    void handleRmbDown(const ALLEGRO_EVENT &ev) override;
+    void handleRmbDrag(const ALLEGRO_EVENT &ev) override;
+    void panCam(const ALLEGRO_EVENT &ev);
+    void resetCamXY();
+    void resetCamZoom();
     
 };

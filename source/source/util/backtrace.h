@@ -38,7 +38,7 @@ const size_t MAX_SYMBOL_LENGTH = 512;
  * @param symbol The symbol to demangle.
  * @return The demangled symbol.
  */
-string demangle_symbol(const string &symbol) {
+string demangeSymbol(const string &symbol) {
     //Special thanks: https://oroboro.com/stack-trace-on-crash/
     size_t module_size = 0;
     size_t name_size = 0;
@@ -106,7 +106,7 @@ string demangle_symbol(const string &symbol) {
  * 
  * @return The backtrace.
  */
-vector<string> get_backtrace() {
+vector<string> getBacktrace() {
     vector<string> result;
     void* stack[BACKTRACE::MAX_FRAMES];
     
@@ -114,7 +114,7 @@ vector<string> get_backtrace() {
     char** symbols = backtrace_symbols(stack, n_symbols);
     
     for(size_t s = 0; s < n_symbols; s++) {
-        result.push_back(demangle_symbol(symbols[s]));
+        result.push_back(demangeSymbol(symbols[s]));
     }
     
     free(symbols);
@@ -140,7 +140,7 @@ vector<string> get_backtrace() {
  * 
  * @return The backtrace.
  */
-vector<string> get_backtrace() {
+vector<string> getBacktrace() {
     vector<string> result;
     void* stack[BACKTRACE::MAX_FRAMES];
     
@@ -201,7 +201,7 @@ vector<string> get_backtrace() {
  * 
  * @return The backtrace.
  */
-vector<string> get_backtrace() {
+vector<string> getBacktrace() {
     vector<string> v;
     v.push_back("(Not supported)");
     return v;

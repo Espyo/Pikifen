@@ -29,24 +29,24 @@ using std::size_t;
  *
  * @param typ Mob type to create the finite state machine for.
  */
-void pile_fsm::create_fsm(MobType* typ) {
+void pile_fsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;
     
-    efc.new_state("idling", PILE_STATE_IDLING); {
-        efc.new_event(MOB_EV_ON_ENTER); {
-            efc.run(pile_fsm::become_idle);
+    efc.newState("idling", PILE_STATE_IDLING); {
+        efc.newEvent(MOB_EV_ON_ENTER); {
+            efc.run(pile_fsm::becomeIdle);
         }
-        efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
-            efc.run(pile_fsm::be_attacked);
+        efc.newEvent(MOB_EV_HITBOX_TOUCH_N_A); {
+            efc.run(pile_fsm::beAttacked);
         }
     }
     
     
     typ->states = efc.finish();
-    typ->first_state_idx = fix_states(typ->states, "idling", typ);
+    typ->first_state_idx = fixStates(typ->states, "idling", typ);
     
     //Check if the number in the enum and the total match up.
-    engine_assert(
+    engineAssert(
         typ->states.size() == N_PILE_STATES,
         i2s(typ->states.size()) + " registered, " +
         i2s(N_PILE_STATES) + " in enum."
@@ -62,8 +62,8 @@ void pile_fsm::create_fsm(MobType* typ) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void pile_fsm::be_attacked(Mob* m, void* info1, void* info2) {
-    gen_mob_fsm::be_attacked(m, info1, info2);
+void pile_fsm::beAttacked(Mob* m, void* info1, void* info2) {
+    gen_mob_fsm::beAttacked(m, info1, info2);
     
     HitboxInteraction* info = (HitboxInteraction*) info1;
     Pile* pil_ptr = (Pile*) m;
@@ -99,10 +99,10 @@ void pile_fsm::be_attacked(Mob* m, void* info1, void* info2) {
             //If this was a Pikmin's attack, spawn the first resource nearby
             //so it can pick it up.
             spawn_angle =
-                get_angle(pil_ptr->pos, pikmin_to_start_carrying->pos);
+                getAngle(pil_ptr->pos, pikmin_to_start_carrying->pos);
             spawn_pos =
                 pikmin_to_start_carrying->pos +
-                angle_to_coordinates(
+                angleToCoordinates(
                     spawn_angle, game.config.pikmin.standard_radius * 1.5
                 );
         } else {
@@ -116,7 +116,7 @@ void pile_fsm::be_attacked(Mob* m, void* info1, void* info2) {
         Resource* new_resource =
             (
                 (Resource*)
-                create_mob(
+                createMob(
                     game.mob_categories.get(MOB_CATEGORY_RESOURCES),
                     spawn_pos, pil_ptr->pil_type->contents,
                     spawn_angle, "",
@@ -136,7 +136,7 @@ void pile_fsm::be_attacked(Mob* m, void* info1, void* info2) {
     }
     
     if(pikmin_to_start_carrying) {
-        pikmin_to_start_carrying->force_carry(resource_to_pick_up);
+        pikmin_to_start_carrying->forceCarry(resource_to_pick_up);
     }
     
     pil_ptr->amount = intended_amount;
@@ -155,7 +155,7 @@ void pile_fsm::be_attacked(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void pile_fsm::become_idle(Mob* m, void* info1, void* info2) {
+void pile_fsm::becomeIdle(Mob* m, void* info1, void* info2) {
     Pile* pil_ptr = (Pile*) m;
     pil_ptr->update();
 }

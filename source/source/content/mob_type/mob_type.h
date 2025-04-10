@@ -479,14 +479,14 @@ public:
     
     explicit MobType(MOB_CATEGORY category_id);
     virtual ~MobType();
-    void load_from_data_node(
+    void loadFromDataNode(
         DataNode* node, CONTENT_LOAD_LEVEL level, const string &folder
     );
-    virtual void load_cat_properties(DataNode* file);
-    virtual void load_cat_resources(DataNode* file);
-    virtual anim_conversion_vector get_anim_conversions() const;
-    virtual void unload_resources();
-    void add_carrying_states();
+    virtual void loadCatProperties(DataNode* file);
+    virtual void loadCatResources(DataNode* file);
+    virtual anim_conversion_vector getAnimConversions() const;
+    virtual void unloadResources();
+    void addCarryingStates();
     
 };
 
@@ -516,11 +516,11 @@ public:
     //--- Function declarations ---
     
     virtual ~MobTypeWithAnimGroups() = default;
-    anim_conversion_vector get_anim_conversions_with_groups(
+    anim_conversion_vector getAnimConversionsWithGroups(
         const anim_conversion_vector &v, size_t base_anim_total
     ) const;
     
 };
 
 
-void create_special_mob_types();
+void createSpecialMobTypes();

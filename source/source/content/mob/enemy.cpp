@@ -56,23 +56,23 @@ Enemy::Enemy(const Point &pos, EnemyType* type, float angle) :
  * @param s Status type to check.
  * @return Whether it can receive the status.
  */
-bool Enemy::can_receive_status(StatusType* s) const {
-    return has_flag(s->affects, STATUS_AFFECTS_FLAG_ENEMIES);
+bool Enemy::canReceiveStatus(StatusType* s) const {
+    return hasFlag(s->affects, STATUS_AFFECTS_FLAG_ENEMIES);
 }
 
 
 /**
  * @brief Draws an enemy.
  */
-void Enemy::draw_mob() {
+void Enemy::drawMob() {
     Sprite* cur_s_ptr;
     Sprite* next_s_ptr;
     float interpolation_factor;
-    get_sprite_data(&cur_s_ptr, &next_s_ptr, &interpolation_factor);
+    getSpriteData(&cur_s_ptr, &next_s_ptr, &interpolation_factor);
     if(!cur_s_ptr) return;
     
     BitmapEffect eff;
-    get_sprite_bitmap_effects(
+    getSpriteBitmapEffects(
         cur_s_ptr, next_s_ptr, interpolation_factor,
         &eff,
         SPRITE_BMP_EFFECT_FLAG_STANDARD |
@@ -83,19 +83,19 @@ void Enemy::draw_mob() {
         SPRITE_BMP_EFFECT_DAMAGE |
         SPRITE_BMP_EFFECT_CARRY
     );
-    draw_bitmap_with_effects(cur_s_ptr->bitmap, eff);
-    draw_status_effect_bmp(this, eff);
+    drawBitmapWithEffects(cur_s_ptr->bitmap, eff);
+    drawStatusEffectBmp(this, eff);
 }
 
 
 /**
  * @brief Logic specific to enemies for when they finish dying.
  */
-void Enemy::finish_dying_class_specifics() {
+void Enemy::finishDyingClassSpecifics() {
     //Corpse.
     if(ene_type->drops_corpse) {
-        become_carriable(CARRY_DESTINATION_SHIP_NO_ONION);
-        fsm.set_state(ENEMY_EXTRA_STATE_CARRIABLE_WAITING);
+        becomeCarriable(CARRY_DESTINATION_SHIP_NO_ONION);
+        fsm.setState(ENEMY_EXTRA_STATE_CARRIABLE_WAITING);
     }
     
     //Soul.
@@ -124,7 +124,7 @@ void Enemy::finish_dying_class_specifics() {
 /**
  * @brief Sets up stuff for the beginning of the enemy's death process.
  */
-void Enemy::start_dying_class_specifics() {
+void Enemy::startDyingClassSpecifics() {
     //Numbers.
     game.states.gameplay->enemy_deaths++;
     if(!game.cur_area_data->mission.enemy_points_on_collection) {
@@ -142,10 +142,10 @@ void Enemy::start_dying_class_specifics() {
         switch(game.states.gameplay->boss_music_state) {
         case BOSS_MUSIC_STATE_PLAYING: {
             bool near_boss;
-            game.states.gameplay->is_near_enemy_and_boss(nullptr, &near_boss);
+            game.states.gameplay->isNearEnemyAndBoss(nullptr, &near_boss);
             if(!near_boss) {
                 //Only play the victory fanfare if they're not near another one.
-                game.audio.set_current_song(
+                game.audio.setCurrentSong(
                     game.sys_content_names.sng_boss_victory, true, false, false
                 );
                 game.states.gameplay->boss_music_state =
@@ -159,7 +159,7 @@ void Enemy::start_dying_class_specifics() {
     
     //Particles.
     ParticleGenerator pg =
-        standard_particle_gen_setup(
+        standardParticleGenSetup(
             game.sys_content_names.part_enemy_death, this
         );
     particle_generators.push_back(pg);

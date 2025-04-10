@@ -31,14 +31,14 @@ public:
     //--- Function declarations ---
     
     ShipCategory();
-    void get_type_names(vector<string> &list) const override;
-    MobType* get_type(const string &internal_name) const override;
-    MobType* create_type() override;
-    void register_type(const string &internal_name, MobType* type) override;
-    Mob* create_mob(
+    void getTypeNames(vector<string> &list) const override;
+    MobType* getType(const string &internal_name) const override;
+    MobType* createType() override;
+    void registerType(const string &internal_name, MobType* type) override;
+    Mob* createMob(
         const Point &pos, MobType* type, float angle
     ) override;
-    void erase_mob(Mob* m) override;
-    void clear_types() override;
+    void eraseMob(Mob* m) override;
+    void clearTypes() override;
     
 };

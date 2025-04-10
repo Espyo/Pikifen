@@ -32,7 +32,7 @@ PileCategory::PileCategory() :
 /**
  * @brief Clears the list of registered types of pile.
  */
-void PileCategory::clear_types() {
+void PileCategory::clearTypes() {
     for(auto &t : game.content.mob_types.list.pile) {
         delete t.second;
     }
@@ -48,7 +48,7 @@ void PileCategory::clear_types() {
  * @param angle Starting angle.
  * @return The mob.
  */
-Mob* PileCategory::create_mob(
+Mob* PileCategory::createMob(
     const Point &pos, MobType* type, float angle
 ) {
     Pile* m = new Pile(pos, (PileType*) type, angle);
@@ -62,7 +62,7 @@ Mob* PileCategory::create_mob(
  *
  * @return The type.
  */
-MobType* PileCategory::create_type() {
+MobType* PileCategory::createType() {
     return new PileType();
 }
 
@@ -72,7 +72,7 @@ MobType* PileCategory::create_type() {
  *
  * @param m The mob to erase.
  */
-void PileCategory::erase_mob(Mob* m) {
+void PileCategory::eraseMob(Mob* m) {
     game.states.gameplay->mobs.piles.erase(
         find(
             game.states.gameplay->mobs.piles.begin(),
@@ -90,7 +90,7 @@ void PileCategory::erase_mob(Mob* m) {
  * @param internal_name Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-MobType* PileCategory::get_type(const string &internal_name) const {
+MobType* PileCategory::getType(const string &internal_name) const {
     auto it = game.content.mob_types.list.pile.find(internal_name);
     if(it == game.content.mob_types.list.pile.end()) return nullptr;
     return it->second;
@@ -102,7 +102,7 @@ MobType* PileCategory::get_type(const string &internal_name) const {
  *
  * @param list This list gets filled with the mob type internal names.
  */
-void PileCategory::get_type_names(vector<string> &list) const {
+void PileCategory::getTypeNames(vector<string> &list) const {
     for(auto &t : game.content.mob_types.list.pile) {
         list.push_back(t.first);
     }
@@ -115,6 +115,6 @@ void PileCategory::get_type_names(vector<string> &list) const {
  * @param internal_name Internal name of the mob type.
  * @param type Mob type to register.
  */
-void PileCategory::register_type(const string &internal_name, MobType* type) {
+void PileCategory::registerType(const string &internal_name, MobType* type) {
     game.content.mob_types.list.pile[internal_name] = (PileType*) type;
 }

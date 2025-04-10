@@ -50,7 +50,7 @@ class Function:
     #  @param self Self.
     #  @param return Whether this is an exception case for the engine's style.
     def is_exception(self):
-        if self.name == 'create_fsm':
+        if self.name == 'createFsm':
             return True
         return False
 

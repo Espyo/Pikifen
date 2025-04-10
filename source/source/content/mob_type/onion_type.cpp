@@ -38,7 +38,7 @@ OnionType::OnionType() :
         "e.g.: \"8 0 1\" means it has 8 leaf Pikmin inside, and 1 flower.";
     area_editor_props.push_back(aep_pik_inside);
     
-    onion_fsm::create_fsm(this);
+    onion_fsm::createFsm(this);
 }
 
 
@@ -55,7 +55,7 @@ OnionType::~OnionType() {
  *
  * @return The vector.
  */
-anim_conversion_vector OnionType::get_anim_conversions() const {
+anim_conversion_vector OnionType::getAnimConversions() const {
     anim_conversion_vector v;
     v.push_back(std::make_pair(ONION_ANIM_IDLING, "idling"));
     v.push_back(std::make_pair(ONION_ANIM_GENERATING, "generating"));
@@ -71,8 +71,8 @@ anim_conversion_vector OnionType::get_anim_conversions() const {
  *
  * @param file File to read from.
  */
-void OnionType::load_cat_properties(DataNode* file) {
-    nest->load_properties(file);
+void OnionType::loadCatProperties(DataNode* file) {
+    nest->loadProperties(file);
     
     for(size_t s = 0; s < sounds.size(); s++) {
         if(sounds[s].name == "pop") {
@@ -87,12 +87,12 @@ void OnionType::load_cat_properties(DataNode* file) {
  *
  * @param file File to read from.
  */
-void OnionType::load_cat_resources(DataNode* file) {
+void OnionType::loadCatResources(DataNode* file) {
     //We don't actually need to load any, but we know that if this function
     //is run, then the animations are definitely loaded.
     //Now's a good time to check the leg body parts.
     for(size_t b = 0; b < nest->leg_body_parts.size(); b++) {
-        if(anim_db->find_body_part(nest->leg_body_parts[b]) == INVALID) {
+        if(anim_db->findBodyPart(nest->leg_body_parts[b]) == INVALID) {
             game.errors.report(
                 "The Onion type \"" + name + "\" specifies a leg body part "
                 "called \"" + nest->leg_body_parts[b] + "\", "

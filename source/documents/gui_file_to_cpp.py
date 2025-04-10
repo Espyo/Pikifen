@@ -39,7 +39,7 @@ for line in lines:
 
 print('===OUTPUT===')
 for i in items:
-    line = '    gui.register_coords('
+    line = '    gui.registerCoords('
     line += f'"{i["name"]}",'.ljust(largest_name_len + 3)
     line += f'{i["x"]},'.rjust(largest_x_len + 2)
     line += f'{i["y"]},'.rjust(largest_y_len + 2)

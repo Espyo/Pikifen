@@ -58,14 +58,14 @@ LeaderType::LeaderType() :
         sound_data_idxs[s] = INVALID;
     }
     
-    leader_fsm::create_fsm(this);
+    leader_fsm::createFsm(this);
 }
 
 
 /**
  * @brief Returns the vector of animation conversions.
  */
-anim_conversion_vector LeaderType::get_anim_conversions() const {
+anim_conversion_vector LeaderType::getAnimConversions() const {
     anim_conversion_vector v;
     v.push_back(std::make_pair(LEADER_ANIM_IDLING,       "idling"));
     v.push_back(std::make_pair(LEADER_ANIM_CALLED,       "called"));
@@ -91,7 +91,7 @@ anim_conversion_vector LeaderType::get_anim_conversions() const {
  *
  * @param file File to read from.
  */
-void LeaderType::load_cat_properties(DataNode* file) {
+void LeaderType::loadCatProperties(DataNode* file) {
     ReaderSetter rs(file);
     
     rs.set("knocked_down_duration", knocked_down_duration);
@@ -116,7 +116,7 @@ void LeaderType::load_cat_properties(DataNode* file) {
  *
  * @param file File to read from.
  */
-void LeaderType::load_cat_resources(DataNode* file) {
+void LeaderType::loadCatResources(DataNode* file) {
     ReaderSetter rs(file);
     
     string dismiss_sound_str;
@@ -137,6 +137,6 @@ void LeaderType::load_cat_resources(DataNode* file) {
 /**
  * @brief Unloads resources from memory.
  */
-void LeaderType::unload_resources() {
+void LeaderType::unloadResources() {
     game.content.bitmaps.list.free(bmp_icon);
 }

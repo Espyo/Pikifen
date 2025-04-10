@@ -278,7 +278,7 @@ struct MissionRecord {
     
     //--- Function declarations ---
     
-    bool is_platinum(const MissionData &mission);
+    bool isPlatinum(const MissionData &mission);
     
 };
 
@@ -293,20 +293,20 @@ public:
     //--- Function declarations ---
     
     virtual ~MissionFail() = default;
-    virtual string get_name() const = 0;
-    virtual int get_cur_amount(GameplayState* gameplay) const = 0;
-    virtual int get_req_amount(GameplayState* gameplay) const = 0;
-    virtual string get_player_description(MissionData* mission) const = 0;
-    virtual string get_status(
+    virtual string getName() const = 0;
+    virtual int getCurAmount(GameplayState* gameplay) const = 0;
+    virtual int getReqAmount(GameplayState* gameplay) const = 0;
+    virtual string getPlayerDescription(MissionData* mission) const = 0;
+    virtual string getStatus(
         int cur, int req, float percentage
     ) const = 0;
-    virtual string get_end_reason(MissionData* mission) const = 0;
-    virtual bool get_end_zoom_data(
+    virtual string getEndReason(MissionData* mission) const = 0;
+    virtual bool getEndZoomData(
         GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
     ) const = 0;
-    virtual string get_hud_label(GameplayState* gameplay) const = 0;
-    virtual bool has_hud_content() const = 0;
-    virtual bool is_met(GameplayState* gameplay) const = 0;
+    virtual string getHudLabel(GameplayState* gameplay) const = 0;
+    virtual bool hasHudContent() const = 0;
+    virtual bool isMet(GameplayState* gameplay) const = 0;
     
 };
 
@@ -320,20 +320,20 @@ public:
 
     //--- Function declarations ---
     
-    string get_name() const override;
-    int get_cur_amount(GameplayState* gameplay) const override;
-    int get_req_amount(GameplayState* gameplay) const override;
-    string get_player_description(MissionData* mission) const override;
-    string get_status(
+    string getName() const override;
+    int getCurAmount(GameplayState* gameplay) const override;
+    int getReqAmount(GameplayState* gameplay) const override;
+    string getPlayerDescription(MissionData* mission) const override;
+    string getStatus(
         int cur, int req, float percentage
     ) const override;
-    string get_end_reason(MissionData* mission) const override;
-    bool get_end_zoom_data(
+    string getEndReason(MissionData* mission) const override;
+    bool getEndZoomData(
         GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
     ) const override;
-    string get_hud_label(GameplayState* gameplay) const override;
-    bool has_hud_content() const override;
-    bool is_met(GameplayState* gameplay) const override;
+    string getHudLabel(GameplayState* gameplay) const override;
+    bool hasHudContent() const override;
+    bool isMet(GameplayState* gameplay) const override;
     
 };
 
@@ -347,20 +347,20 @@ public:
 
     //--- Function declarations ---
     
-    string get_name() const override;
-    int get_cur_amount(GameplayState* gameplay) const override;
-    int get_req_amount(GameplayState* gameplay) const override;
-    string get_player_description(MissionData* mission) const override;
-    string get_status(
+    string getName() const override;
+    int getCurAmount(GameplayState* gameplay) const override;
+    int getReqAmount(GameplayState* gameplay) const override;
+    string getPlayerDescription(MissionData* mission) const override;
+    string getStatus(
         int cur, int req, float percentage
     ) const override;
-    string get_end_reason(MissionData* mission) const override;
-    bool get_end_zoom_data(
+    string getEndReason(MissionData* mission) const override;
+    bool getEndZoomData(
         GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
     ) const override;
-    string get_hud_label(GameplayState* gameplay) const override;
-    bool has_hud_content() const override;
-    bool is_met(GameplayState* gameplay) const override;
+    string getHudLabel(GameplayState* gameplay) const override;
+    bool hasHudContent() const override;
+    bool isMet(GameplayState* gameplay) const override;
     
 };
 
@@ -374,20 +374,20 @@ public:
 
     //--- Function declarations ---
     
-    string get_name() const override;
-    int get_cur_amount(GameplayState* gameplay) const override;
-    int get_req_amount(GameplayState* gameplay) const override;
-    string get_player_description(MissionData* mission) const override;
-    string get_status(
+    string getName() const override;
+    int getCurAmount(GameplayState* gameplay) const override;
+    int getReqAmount(GameplayState* gameplay) const override;
+    string getPlayerDescription(MissionData* mission) const override;
+    string getStatus(
         int cur, int req, float percentage
     ) const override;
-    string get_end_reason(MissionData* mission) const override;
-    bool get_end_zoom_data(
+    string getEndReason(MissionData* mission) const override;
+    bool getEndZoomData(
         GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
     ) const override;
-    string get_hud_label(GameplayState* gameplay) const override;
-    bool has_hud_content() const override;
-    bool is_met(GameplayState* gameplay) const override;
+    string getHudLabel(GameplayState* gameplay) const override;
+    bool hasHudContent() const override;
+    bool isMet(GameplayState* gameplay) const override;
     
 };
 
@@ -401,20 +401,20 @@ public:
 
     //--- Function declarations ---
     
-    string get_name() const override;
-    int get_cur_amount(GameplayState* gameplay) const override;
-    int get_req_amount(GameplayState* gameplay) const override;
-    string get_player_description(MissionData* mission) const override;
-    string get_status(
+    string getName() const override;
+    int getCurAmount(GameplayState* gameplay) const override;
+    int getReqAmount(GameplayState* gameplay) const override;
+    string getPlayerDescription(MissionData* mission) const override;
+    string getStatus(
         int cur, int req, float percentage
     ) const override;
-    string get_end_reason(MissionData* mission) const override;
-    bool get_end_zoom_data(
+    string getEndReason(MissionData* mission) const override;
+    bool getEndZoomData(
         GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
     ) const override;
-    string get_hud_label(GameplayState* gameplay) const override;
-    bool has_hud_content() const override;
-    bool is_met(GameplayState* gameplay) const override;
+    string getHudLabel(GameplayState* gameplay) const override;
+    bool hasHudContent() const override;
+    bool isMet(GameplayState* gameplay) const override;
     
 };
 
@@ -428,20 +428,20 @@ public:
 
     //--- Function declarations ---
     
-    string get_name() const override;
-    int get_cur_amount(GameplayState* gameplay) const override;
-    int get_req_amount(GameplayState* gameplay) const override;
-    string get_player_description(MissionData* mission) const override;
-    string get_status(
+    string getName() const override;
+    int getCurAmount(GameplayState* gameplay) const override;
+    int getReqAmount(GameplayState* gameplay) const override;
+    string getPlayerDescription(MissionData* mission) const override;
+    string getStatus(
         int cur, int req, float percentage
     ) const override;
-    string get_end_reason(MissionData* mission) const override;
-    bool get_end_zoom_data(
+    string getEndReason(MissionData* mission) const override;
+    bool getEndZoomData(
         GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
     ) const override;
-    string get_hud_label(GameplayState* gameplay) const override;
-    bool has_hud_content() const override;
-    bool is_met(GameplayState* gameplay) const override;
+    string getHudLabel(GameplayState* gameplay) const override;
+    bool hasHudContent() const override;
+    bool isMet(GameplayState* gameplay) const override;
     
 };
 
@@ -455,20 +455,20 @@ public:
 
     //--- Function declarations ---
     
-    string get_name() const override;
-    int get_cur_amount(GameplayState* gameplay) const override;
-    int get_req_amount(GameplayState* gameplay) const override;
-    string get_player_description(MissionData* mission) const override;
-    string get_status(
+    string getName() const override;
+    int getCurAmount(GameplayState* gameplay) const override;
+    int getReqAmount(GameplayState* gameplay) const override;
+    string getPlayerDescription(MissionData* mission) const override;
+    string getStatus(
         int cur, int req, float percentage
     ) const override;
-    string get_end_reason(MissionData* mission) const override;
-    bool get_end_zoom_data(
+    string getEndReason(MissionData* mission) const override;
+    bool getEndZoomData(
         GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
     ) const override;
-    string get_hud_label(GameplayState* gameplay) const override;
-    bool has_hud_content() const override;
-    bool is_met(GameplayState* gameplay) const override;
+    string getHudLabel(GameplayState* gameplay) const override;
+    bool hasHudContent() const override;
+    bool isMet(GameplayState* gameplay) const override;
     
 };
 
@@ -482,20 +482,20 @@ public:
 
     //--- Function declarations ---
     
-    string get_name() const override;
-    int get_cur_amount(GameplayState* gameplay) const override;
-    int get_req_amount(GameplayState* gameplay) const override;
-    string get_player_description(MissionData* mission) const override;
-    string get_status(
+    string getName() const override;
+    int getCurAmount(GameplayState* gameplay) const override;
+    int getReqAmount(GameplayState* gameplay) const override;
+    string getPlayerDescription(MissionData* mission) const override;
+    string getStatus(
         int cur, int req, float percentage
     ) const override;
-    string get_end_reason(MissionData* mission) const override;
-    bool get_end_zoom_data(
+    string getEndReason(MissionData* mission) const override;
+    bool getEndZoomData(
         GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
     ) const override;
-    string get_hud_label(GameplayState* gameplay) const override;
-    bool has_hud_content() const override;
-    bool is_met(GameplayState* gameplay) const override;
+    string getHudLabel(GameplayState* gameplay) const override;
+    bool hasHudContent() const override;
+    bool isMet(GameplayState* gameplay) const override;
     
 };
 
@@ -509,20 +509,20 @@ public:
 
     //--- Function declarations ---
     
-    string get_name() const override;
-    int get_cur_amount(GameplayState* gameplay) const override;
-    int get_req_amount(GameplayState* gameplay) const override;
-    string get_player_description(MissionData* mission) const override;
-    string get_status(
+    string getName() const override;
+    int getCurAmount(GameplayState* gameplay) const override;
+    int getReqAmount(GameplayState* gameplay) const override;
+    string getPlayerDescription(MissionData* mission) const override;
+    string getStatus(
         int cur, int req, float percentage
     ) const override;
-    string get_end_reason(MissionData* mission) const override;
-    bool get_end_zoom_data(
+    string getEndReason(MissionData* mission) const override;
+    bool getEndZoomData(
         GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
     ) const override;
-    string get_hud_label(GameplayState* gameplay) const override;
-    bool has_hud_content() const override;
-    bool is_met(GameplayState* gameplay) const override;
+    string getHudLabel(GameplayState* gameplay) const override;
+    bool hasHudContent() const override;
+    bool isMet(GameplayState* gameplay) const override;
     
 };
 
@@ -537,20 +537,20 @@ public:
     //--- Function declarations ---
     
     virtual ~MissionGoal() = default;
-    virtual string get_name() const = 0;
-    virtual int get_cur_amount(GameplayState* gameplay) const = 0;
-    virtual int get_req_amount(GameplayState* gameplay) const = 0;
-    virtual string get_player_description(MissionData* mission) const = 0;
-    virtual string get_status(
+    virtual string getName() const = 0;
+    virtual int getCurAmount(GameplayState* gameplay) const = 0;
+    virtual int getReqAmount(GameplayState* gameplay) const = 0;
+    virtual string getPlayerDescription(MissionData* mission) const = 0;
+    virtual string getStatus(
         int cur, int req, float percentage
     ) const = 0;
-    virtual string get_end_reason(MissionData* mission) const = 0;
-    virtual bool get_end_zoom_data(
+    virtual string getEndReason(MissionData* mission) const = 0;
+    virtual bool getEndZoomData(
         GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
     ) const = 0;
-    virtual string get_hud_label() const = 0;
-    virtual bool is_met(GameplayState* gameplay) const = 0;
-    virtual bool is_mob_applicable(MobType* type) const = 0;
+    virtual string getHudLabel() const = 0;
+    virtual bool isMet(GameplayState* gameplay) const = 0;
+    virtual bool isMobApplicable(MobType* type) const = 0;
     
 };
 
@@ -564,20 +564,20 @@ public:
 
     //--- Function declarations ---
     
-    string get_name() const override;
-    int get_cur_amount(GameplayState* gameplay) const override;
-    int get_req_amount(GameplayState* gameplay) const override;
-    string get_player_description(MissionData* mission) const override;
-    string get_status(
+    string getName() const override;
+    int getCurAmount(GameplayState* gameplay) const override;
+    int getReqAmount(GameplayState* gameplay) const override;
+    string getPlayerDescription(MissionData* mission) const override;
+    string getStatus(
         int cur, int req, float percentage
     ) const override;
-    string get_end_reason(MissionData* mission) const override;
-    bool get_end_zoom_data(
+    string getEndReason(MissionData* mission) const override;
+    bool getEndZoomData(
         GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
     ) const override;
-    string get_hud_label() const override;
-    bool is_met(GameplayState* gameplay) const override;
-    bool is_mob_applicable(MobType* type) const override;
+    string getHudLabel() const override;
+    bool isMet(GameplayState* gameplay) const override;
+    bool isMobApplicable(MobType* type) const override;
     
 };
 
@@ -591,20 +591,20 @@ public:
 
     //--- Function declarations ---
     
-    string get_name() const override;
-    int get_cur_amount(GameplayState* gameplay) const override;
-    int get_req_amount(GameplayState* gameplay) const override;
-    string get_player_description(MissionData* mission) const override;
-    string get_status(
+    string getName() const override;
+    int getCurAmount(GameplayState* gameplay) const override;
+    int getReqAmount(GameplayState* gameplay) const override;
+    string getPlayerDescription(MissionData* mission) const override;
+    string getStatus(
         int cur, int req, float percentage
     ) const override;
-    string get_end_reason(MissionData* mission) const override;
-    bool get_end_zoom_data(
+    string getEndReason(MissionData* mission) const override;
+    bool getEndZoomData(
         GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
     ) const override;
-    string get_hud_label() const override;
-    bool is_met(GameplayState* gameplay) const override;
-    bool is_mob_applicable(MobType* type) const override;
+    string getHudLabel() const override;
+    bool isMet(GameplayState* gameplay) const override;
+    bool isMobApplicable(MobType* type) const override;
     
 };
 
@@ -618,20 +618,20 @@ public:
 
     //--- Function declarations ---
     
-    string get_name() const override;
-    int get_cur_amount(GameplayState* gameplay) const override;
-    int get_req_amount(GameplayState* gameplay) const override;
-    string get_player_description(MissionData* mission) const override;
-    string get_status(
+    string getName() const override;
+    int getCurAmount(GameplayState* gameplay) const override;
+    int getReqAmount(GameplayState* gameplay) const override;
+    string getPlayerDescription(MissionData* mission) const override;
+    string getStatus(
         int cur, int req, float percentage
     ) const override;
-    string get_end_reason(MissionData* mission) const override;
-    bool get_end_zoom_data(
+    string getEndReason(MissionData* mission) const override;
+    bool getEndZoomData(
         GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
     ) const override;
-    string get_hud_label() const override;
-    bool is_met(GameplayState* gameplay) const override;
-    bool is_mob_applicable(MobType* type) const override;
+    string getHudLabel() const override;
+    bool isMet(GameplayState* gameplay) const override;
+    bool isMobApplicable(MobType* type) const override;
     
 };
 
@@ -645,20 +645,20 @@ public:
 
     //--- Function declarations ---
     
-    string get_name() const override;
-    int get_cur_amount(GameplayState* gameplay) const override;
-    int get_req_amount(GameplayState* gameplay) const override;
-    string get_player_description(MissionData* mission) const override;
-    string get_status(
+    string getName() const override;
+    int getCurAmount(GameplayState* gameplay) const override;
+    int getReqAmount(GameplayState* gameplay) const override;
+    string getPlayerDescription(MissionData* mission) const override;
+    string getStatus(
         int cur, int req, float percentage
     ) const override;
-    string get_end_reason(MissionData* mission) const override;
-    bool get_end_zoom_data(
+    string getEndReason(MissionData* mission) const override;
+    bool getEndZoomData(
         GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
     ) const override;
-    string get_hud_label() const override;
-    bool is_met(GameplayState* gameplay) const override;
-    bool is_mob_applicable(MobType* type) const override;
+    string getHudLabel() const override;
+    bool isMet(GameplayState* gameplay) const override;
+    bool isMobApplicable(MobType* type) const override;
     
 };
 
@@ -672,20 +672,20 @@ public:
 
     //--- Function declarations ---
     
-    string get_name() const override;
-    int get_cur_amount(GameplayState* gameplay) const override;
-    int get_req_amount(GameplayState* gameplay) const override;
-    string get_player_description(MissionData* mission) const override;
-    string get_status(
+    string getName() const override;
+    int getCurAmount(GameplayState* gameplay) const override;
+    int getReqAmount(GameplayState* gameplay) const override;
+    string getPlayerDescription(MissionData* mission) const override;
+    string getStatus(
         int cur, int req, float percentage
     ) const override;
-    string get_end_reason(MissionData* mission) const override;
-    bool get_end_zoom_data(
+    string getEndReason(MissionData* mission) const override;
+    bool getEndZoomData(
         GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
     ) const override;
-    string get_hud_label() const override;
-    bool is_met(GameplayState* gameplay) const override;
-    bool is_mob_applicable(MobType* type) const override;
+    string getHudLabel() const override;
+    bool isMet(GameplayState* gameplay) const override;
+    bool isMobApplicable(MobType* type) const override;
     
 };
 
@@ -699,20 +699,20 @@ public:
 
     //--- Function declarations ---
     
-    string get_name() const override;
-    int get_cur_amount(GameplayState* gameplay) const override;
-    int get_req_amount(GameplayState* gameplay) const override;
-    string get_player_description(MissionData* mission) const override;
-    string get_status(
+    string getName() const override;
+    int getCurAmount(GameplayState* gameplay) const override;
+    int getReqAmount(GameplayState* gameplay) const override;
+    string getPlayerDescription(MissionData* mission) const override;
+    string getStatus(
         int cur, int req, float percentage
     ) const override;
-    string get_end_reason(MissionData* mission) const override;
-    bool get_end_zoom_data(
+    string getEndReason(MissionData* mission) const override;
+    bool getEndZoomData(
         GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
     ) const override;
-    string get_hud_label() const override;
-    bool is_met(GameplayState* gameplay) const override;
-    bool is_mob_applicable(MobType* type) const override;
+    string getHudLabel() const override;
+    bool isMet(GameplayState* gameplay) const override;
+    bool isMobApplicable(MobType* type) const override;
     
 };
 
@@ -727,9 +727,9 @@ public:
     //--- Function declarations ---
     
     virtual ~MissionScoreCriterion() = default;
-    virtual string get_name() const = 0;
-    virtual int get_multiplier(MissionData* mission) const = 0;
-    virtual int get_score(
+    virtual string getName() const = 0;
+    virtual int getMultiplier(MissionData* mission) const = 0;
+    virtual int getScore(
         GameplayState* gameplay, MissionData* mission
     ) const = 0;
     
@@ -745,9 +745,9 @@ public:
 
     //--- Function declarations ---
     
-    string get_name() const override;
-    int get_multiplier(MissionData* mission) const override;
-    int get_score(
+    string getName() const override;
+    int getMultiplier(MissionData* mission) const override;
+    int getScore(
         GameplayState* gameplay, MissionData* mission
     ) const override;
     
@@ -763,9 +763,9 @@ public:
 
     //--- Function declarations ---
     
-    string get_name() const override;
-    int get_multiplier(MissionData* mission) const override;
-    int get_score(
+    string getName() const override;
+    int getMultiplier(MissionData* mission) const override;
+    int getScore(
         GameplayState* gameplay, MissionData* mission
     ) const override;
     
@@ -781,9 +781,9 @@ public:
 
     //--- Function declarations ---
     
-    string get_name() const override;
-    int get_multiplier(MissionData* mission) const override;
-    int get_score(
+    string getName() const override;
+    int getMultiplier(MissionData* mission) const override;
+    int getScore(
         GameplayState* gameplay, MissionData* mission
     ) const override;
     
@@ -799,9 +799,9 @@ public:
 
     //--- Function declarations ---
     
-    string get_name() const override;
-    int get_multiplier(MissionData* mission) const override;
-    int get_score(
+    string getName() const override;
+    int getMultiplier(MissionData* mission) const override;
+    int getScore(
         GameplayState* gameplay, MissionData* mission
     ) const override;
     
@@ -817,9 +817,9 @@ public:
 
     //--- Function declarations ---
     
-    string get_name() const override;
-    int get_multiplier(MissionData* mission) const override;
-    int get_score(
+    string getName() const override;
+    int getMultiplier(MissionData* mission) const override;
+    int getScore(
         GameplayState* gameplay, MissionData* mission
     ) const override;
     
@@ -835,9 +835,9 @@ public:
 
     //--- Function declarations ---
     
-    string get_name() const override;
-    int get_multiplier(MissionData* mission) const override;
-    int get_score(
+    string getName() const override;
+    int getMultiplier(MissionData* mission) const override;
+    int getScore(
         GameplayState* gameplay, MissionData* mission
     ) const override;
     

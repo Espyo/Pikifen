@@ -58,6 +58,6 @@ public:
     
     //--- Function declarations ---
     
-    void load_from_data_node(DataNode* node);
+    void loadFromDataNode(DataNode* node);
     
 };

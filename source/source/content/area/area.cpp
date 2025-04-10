@@ -44,22 +44,22 @@ const unsigned char DEF_DIFFICULTY = 0;
  * This is merely a debugging tool. Aborts execution if any of the pointers
  * don't match.
  */
-void Area::check_stability() {
+void Area::checkStability() {
     for(size_t v = 0; v < vertexes.size(); v++) {
         Vertex* v_ptr = vertexes[v];
-        engine_assert(
+        engineAssert(
             v_ptr->edges.size() == v_ptr->edge_idxs.size(),
             i2s(v_ptr->edges.size()) + " " + i2s(v_ptr->edge_idxs.size())
         );
         for(size_t e = 0; e < v_ptr->edges.size(); e++) {
-            engine_assert(v_ptr->edges[e] == edges[v_ptr->edge_idxs[e]], "");
+            engineAssert(v_ptr->edges[e] == edges[v_ptr->edge_idxs[e]], "");
         }
     }
     
     for(size_t e = 0; e < edges.size(); e++) {
         Edge* e_ptr = edges[e];
         for(size_t v = 0; v < 2; v++) {
-            engine_assert(
+            engineAssert(
                 e_ptr->vertexes[v] == vertexes[e_ptr->vertex_idxs[v]], ""
             );
         }
@@ -72,18 +72,18 @@ void Area::check_stability() {
             ) {
                 continue;
             }
-            engine_assert(s_ptr == sectors[e_ptr->sector_idxs[s]], "");
+            engineAssert(s_ptr == sectors[e_ptr->sector_idxs[s]], "");
         }
     }
     
     for(size_t s = 0; s < sectors.size(); s++) {
         Sector* s_ptr = sectors[s];
-        engine_assert(
+        engineAssert(
             s_ptr->edges.size() == s_ptr->edge_idxs.size(),
             i2s(s_ptr->edges.size()) + " " + i2s(s_ptr->edge_idxs.size())
         );
         for(size_t e = 0; e < s_ptr->edges.size(); e++) {
-            engine_assert(s_ptr->edges[e] == edges[s_ptr->edge_idxs[e]], "");
+            engineAssert(s_ptr->edges[e] == edges[s_ptr->edge_idxs[e]], "");
         }
     }
 }
@@ -128,7 +128,7 @@ void Area::clear() {
         thumbnail = nullptr;
     }
     
-    reset_metadata();
+    resetMetadata();
     manifest = nullptr;
     name.clear();
     type = AREA_TYPE_SIMPLE;
@@ -161,7 +161,7 @@ void Area::cleanup(bool* out_deleted_sectors) {
     bool deleted_sectors = false;
     for(size_t s = 0; s < sectors.size(); ) {
         if(sectors[s]->edges.empty()) {
-            remove_sector(s);
+            removeSector(s);
             deleted_sectors = true;
         } else {
             s++;
@@ -176,7 +176,7 @@ void Area::cleanup(bool* out_deleted_sectors) {
     if(weather_name == NONE_OPTION) {
         weather_name.clear();
     }
-    engine_version = get_engine_version_string();
+    engine_version = getEngineVersionString();
 }
 
 
@@ -282,9 +282,9 @@ void Area::clone(Area &other) {
             Triangle* t_ptr = &s_ptr->triangles[t];
             os_ptr->triangles.push_back(
                 Triangle(
-                    other.vertexes[find_vertex_idx(t_ptr->points[0])],
-                    other.vertexes[find_vertex_idx(t_ptr->points[1])],
-                    other.vertexes[find_vertex_idx(t_ptr->points[2])]
+                    other.vertexes[findVertexIdx(t_ptr->points[0])],
+                    other.vertexes[findVertexIdx(t_ptr->points[1])],
+                    other.vertexes[findVertexIdx(t_ptr->points[2])]
                 )
             );
         }
@@ -391,11 +391,11 @@ void Area::clone(Area &other) {
     other.problems.lone_edges.clear();
     other.problems.lone_edges.reserve(problems.lone_edges.size());
     for(const auto &s : problems.non_simples) {
-        size_t nr = find_sector_idx(s.first);
+        size_t nr = findSectorIdx(s.first);
         other.problems.non_simples[other.sectors[nr]] = s.second;
     }
     for(const Edge* e : problems.lone_edges) {
-        size_t nr = find_edge_idx(e);
+        size_t nr = findEdgeIdx(e);
         other.problems.lone_edges.insert(other.edges[nr]);
     }
 }
@@ -411,16 +411,16 @@ void Area::clone(Area &other) {
  * @param s_ptr Sector to connect.
  * @param side Which of the sides of the edge the sector goes to.
  */
-void Area::connect_edge_to_sector(
+void Area::connectEdgeToSector(
     Edge* e_ptr, Sector* s_ptr, size_t side
 ) {
     if(e_ptr->sectors[side]) {
-        e_ptr->sectors[side]->remove_edge(e_ptr);
+        e_ptr->sectors[side]->removeEdge(e_ptr);
     }
     e_ptr->sectors[side] = s_ptr;
-    e_ptr->sector_idxs[side] = find_sector_idx(s_ptr);
+    e_ptr->sector_idxs[side] = findSectorIdx(s_ptr);
     if(s_ptr) {
-        s_ptr->add_edge(e_ptr, find_edge_idx(e_ptr));
+        s_ptr->addEdge(e_ptr, findEdgeIdx(e_ptr));
     }
 }
 
@@ -435,15 +435,15 @@ void Area::connect_edge_to_sector(
  * @param v_ptr Vertex to connect.
  * @param endpoint Which of the edge endpoints the vertex goes to.
  */
-void Area::connect_edge_to_vertex(
+void Area::connectEdgeToVertex(
     Edge* e_ptr, Vertex* v_ptr, size_t endpoint
 ) {
     if(e_ptr->vertexes[endpoint]) {
-        e_ptr->vertexes[endpoint]->remove_edge(e_ptr);
+        e_ptr->vertexes[endpoint]->removeEdge(e_ptr);
     }
     e_ptr->vertexes[endpoint] = v_ptr;
-    e_ptr->vertex_idxs[endpoint] = find_vertex_idx(v_ptr);
-    v_ptr->add_edge(e_ptr, find_edge_idx(e_ptr));
+    e_ptr->vertex_idxs[endpoint] = findVertexIdx(v_ptr);
+    v_ptr->addEdge(e_ptr, findEdgeIdx(e_ptr));
 }
 
 
@@ -454,7 +454,7 @@ void Area::connect_edge_to_vertex(
  *
  * @param s_ptr The sector.
  */
-void Area::connect_sector_edges(Sector* s_ptr) {
+void Area::connectSectorEdges(Sector* s_ptr) {
     s_ptr->edge_idxs.clear();
     for(size_t e = 0; e < edges.size(); e++) {
         Edge* e_ptr = edges[e];
@@ -462,7 +462,7 @@ void Area::connect_sector_edges(Sector* s_ptr) {
             s_ptr->edge_idxs.push_back(e);
         }
     }
-    fix_sector_pointers(s_ptr);
+    fixSectorPointers(s_ptr);
 }
 
 
@@ -471,7 +471,7 @@ void Area::connect_sector_edges(Sector* s_ptr) {
  *
  * @param v_ptr The vertex.
  */
-void Area::connect_vertex_edges(Vertex* v_ptr) {
+void Area::connectVertexEdges(Vertex* v_ptr) {
     v_ptr->edge_idxs.clear();
     for(size_t e = 0; e < edges.size(); e++) {
         Edge* e_ptr = edges[e];
@@ -479,7 +479,7 @@ void Area::connect_vertex_edges(Vertex* v_ptr) {
             v_ptr->edge_idxs.push_back(e);
         }
     }
-    fix_vertex_pointers(v_ptr);
+    fixVertexPointers(v_ptr);
 }
 
 
@@ -490,7 +490,7 @@ void Area::connect_vertex_edges(Vertex* v_ptr) {
  * @param e_ptr Edge to find.
  * @return The index, or INVALID if not found.
  */
-size_t Area::find_edge_idx(const Edge* e_ptr) const {
+size_t Area::findEdgeIdx(const Edge* e_ptr) const {
     for(size_t e = 0; e < edges.size(); e++) {
         if(edges[e] == e_ptr) return e;
     }
@@ -505,7 +505,7 @@ size_t Area::find_edge_idx(const Edge* e_ptr) const {
  * @param m_ptr Mob to find.
  * @return The index, or INVALID if not found.
  */
-size_t Area::find_mob_gen_idx(const MobGen* m_ptr) const {
+size_t Area::findMobGenIdx(const MobGen* m_ptr) const {
     for(size_t m = 0; m < mob_generators.size(); m++) {
         if(mob_generators[m] == m_ptr) return m;
     }
@@ -520,7 +520,7 @@ size_t Area::find_mob_gen_idx(const MobGen* m_ptr) const {
  * @param s_ptr Sector to find.
  * @return The index, or INVALID if not found.
  */
-size_t Area::find_sector_idx(const Sector* s_ptr) const {
+size_t Area::findSectorIdx(const Sector* s_ptr) const {
     for(size_t s = 0; s < sectors.size(); s++) {
         if(sectors[s] == s_ptr) return s;
     }
@@ -535,7 +535,7 @@ size_t Area::find_sector_idx(const Sector* s_ptr) const {
  * @param v_ptr Vertex to find.
  * @return The index, or INVALID if not found.
  */
-size_t Area::find_vertex_idx(const Vertex* v_ptr) const {
+size_t Area::findVertexIdx(const Vertex* v_ptr) const {
     for(size_t v = 0; v < vertexes.size(); v++) {
         if(vertexes[v] == v_ptr) return v;
     }
@@ -550,12 +550,12 @@ size_t Area::find_vertex_idx(const Vertex* v_ptr) const {
  *
  * @param e_ptr Edge to fix the indexes of.
  */
-void Area::fix_edge_idxs(Edge* e_ptr) {
+void Area::fixEdgeIdxs(Edge* e_ptr) {
     for(size_t s = 0; s < 2; s++) {
         if(!e_ptr->sectors[s]) {
             e_ptr->sector_idxs[s] = INVALID;
         } else {
-            e_ptr->sector_idxs[s] = find_sector_idx(e_ptr->sectors[s]);
+            e_ptr->sector_idxs[s] = findSectorIdx(e_ptr->sectors[s]);
         }
     }
     
@@ -563,7 +563,7 @@ void Area::fix_edge_idxs(Edge* e_ptr) {
         if(!e_ptr->vertexes[v]) {
             e_ptr->vertex_idxs[v] = INVALID;
         } else {
-            e_ptr->vertex_idxs[v] = find_vertex_idx(e_ptr->vertexes[v]);
+            e_ptr->vertex_idxs[v] = findVertexIdx(e_ptr->vertexes[v]);
         }
     }
 }
@@ -576,7 +576,7 @@ void Area::fix_edge_idxs(Edge* e_ptr) {
  *
  * @param e_ptr Edge to fix the pointers of.
  */
-void Area::fix_edge_pointers(Edge* e_ptr) {
+void Area::fixEdgePointers(Edge* e_ptr) {
     e_ptr->sectors[0] = nullptr;
     e_ptr->sectors[1] = nullptr;
     for(size_t s = 0; s < 2; s++) {
@@ -600,7 +600,7 @@ void Area::fix_edge_pointers(Edge* e_ptr) {
  *
  * @param s_ptr Path stop to fix the indexes of.
  */
-void Area::fix_path_stop_idxs(PathStop* s_ptr) {
+void Area::fixPathStopIdxs(PathStop* s_ptr) {
     for(size_t l = 0; l < s_ptr->links.size(); l++) {
         PathLink* l_ptr = s_ptr->links[l];
         l_ptr->end_idx = INVALID;
@@ -624,7 +624,7 @@ void Area::fix_path_stop_idxs(PathStop* s_ptr) {
  *
  * @param s_ptr Path stop to fix the pointers of.
  */
-void Area::fix_path_stop_pointers(PathStop* s_ptr) {
+void Area::fixPathStopPointers(PathStop* s_ptr) {
     for(size_t l = 0; l < s_ptr->links.size(); l++) {
         PathLink* l_ptr = s_ptr->links[l];
         l_ptr->end_ptr = nullptr;
@@ -644,10 +644,10 @@ void Area::fix_path_stop_pointers(PathStop* s_ptr) {
  *
  * @param s_ptr Sector to fix the indexes of.
  */
-void Area::fix_sector_idxs(Sector* s_ptr) {
+void Area::fixSectorIdxs(Sector* s_ptr) {
     s_ptr->edge_idxs.clear();
     for(size_t e = 0; e < s_ptr->edges.size(); e++) {
-        s_ptr->edge_idxs.push_back(find_edge_idx(s_ptr->edges[e]));
+        s_ptr->edge_idxs.push_back(findEdgeIdx(s_ptr->edges[e]));
     }
 }
 
@@ -659,7 +659,7 @@ void Area::fix_sector_idxs(Sector* s_ptr) {
  *
  * @param s_ptr Sector to fix the pointers of.
  */
-void Area::fix_sector_pointers(Sector* s_ptr) {
+void Area::fixSectorPointers(Sector* s_ptr) {
     s_ptr->edges.clear();
     for(size_t e = 0; e < s_ptr->edge_idxs.size(); e++) {
         size_t e_idx = s_ptr->edge_idxs[e];
@@ -675,10 +675,10 @@ void Area::fix_sector_pointers(Sector* s_ptr) {
  *
  * @param v_ptr Vertex to fix the indexes of.
  */
-void Area::fix_vertex_idxs(Vertex* v_ptr) {
+void Area::fixVertexIdxs(Vertex* v_ptr) {
     v_ptr->edge_idxs.clear();
     for(size_t e = 0; e < v_ptr->edges.size(); e++) {
-        v_ptr->edge_idxs.push_back(find_edge_idx(v_ptr->edges[e]));
+        v_ptr->edge_idxs.push_back(findEdgeIdx(v_ptr->edges[e]));
     }
 }
 
@@ -690,7 +690,7 @@ void Area::fix_vertex_idxs(Vertex* v_ptr) {
  *
  * @param v_ptr Vertex to fix the pointers of.
  */
-void Area::fix_vertex_pointers(Vertex* v_ptr) {
+void Area::fixVertexPointers(Vertex* v_ptr) {
     v_ptr->edges.clear();
     for(size_t e = 0; e < v_ptr->edge_idxs.size(); e++) {
         size_t e_idx = v_ptr->edge_idxs[e];
@@ -702,7 +702,7 @@ void Area::fix_vertex_pointers(Vertex* v_ptr) {
 /**
  * @brief Generates the blockmap for the area, given the current info.
  */
-void Area::generate_blockmap() {
+void Area::generateBlockmap() {
     bmap.clear();
     
     if(vertexes.empty()) return;
@@ -713,7 +713,7 @@ void Area::generate_blockmap() {
     
     for(size_t v = 0; v < vertexes.size(); v++) {
         Vertex* v_ptr = vertexes[v];
-        update_min_max_coords(min_coords, max_coords, v2p(v_ptr));
+        updateMinMaxCoords(min_coords, max_coords, v2p(v_ptr));
     }
     
     bmap.top_left_corner = min_coords;
@@ -735,7 +735,7 @@ void Area::generate_blockmap() {
     
     
     //Now, add a list of edges to each block.
-    generate_edges_blockmap(edges);
+    generateEdgesBlockmap(edges);
     
     
     /* If at this point, there's any block that's missing a sector,
@@ -781,10 +781,10 @@ void Area::generate_blockmap() {
                 continue;
             }
             
-            Point corner = bmap.get_top_left_corner(bx, by);
+            Point corner = bmap.getTopLeftCorner(bx, by);
             corner += GEOMETRY::BLOCKMAP_BLOCK_SIZE * 0.5;
             bmap.sectors[bx][by].insert(
-                get_sector(corner, nullptr, false)
+                getSector(corner, nullptr, false)
             );
         }
     }
@@ -796,7 +796,7 @@ void Area::generate_blockmap() {
  *
  * @param edge_list Edges to generate the blockmap around.
  */
-void Area::generate_edges_blockmap(const vector<Edge*> &edge_list) {
+void Area::generateEdgesBlockmap(const vector<Edge*> &edge_list) {
     for(size_t e = 0; e < edge_list.size(); e++) {
     
         //Get which blocks this edge belongs to, via bounding-box,
@@ -805,22 +805,22 @@ void Area::generate_edges_blockmap(const vector<Edge*> &edge_list) {
         Edge* e_ptr = edge_list[e];
         Point min_coords = v2p(e_ptr->vertexes[0]);
         Point max_coords = min_coords;
-        update_min_max_coords(min_coords, max_coords, v2p(e_ptr->vertexes[1]));
+        updateMinMaxCoords(min_coords, max_coords, v2p(e_ptr->vertexes[1]));
         
-        size_t b_min_x = bmap.get_col(min_coords.x);
-        size_t b_max_x = bmap.get_col(max_coords.x);
-        size_t b_min_y = bmap.get_row(min_coords.y);
-        size_t b_max_y = bmap.get_row(max_coords.y);
+        size_t b_min_x = bmap.getCol(min_coords.x);
+        size_t b_max_x = bmap.getCol(max_coords.x);
+        size_t b_min_y = bmap.getRow(min_coords.y);
+        size_t b_max_y = bmap.getRow(max_coords.y);
         
         for(size_t bx = b_min_x; bx <= b_max_x; bx++) {
             for(size_t by = b_min_y; by <= b_max_y; by++) {
             
                 //Get the block's coordinates.
-                Point corner = bmap.get_top_left_corner(bx, by);
+                Point corner = bmap.getTopLeftCorner(bx, by);
                 
                 //Check if the edge is inside this blockmap.
                 if(
-                    line_seg_intersects_rectangle(
+                    lineSegIntersectsRectangle(
                         corner,
                         corner + GEOMETRY::BLOCKMAP_BLOCK_SIZE,
                         v2p(e_ptr->vertexes[0]), v2p(e_ptr->vertexes[1])
@@ -858,7 +858,7 @@ void Area::generate_edges_blockmap(const vector<Edge*> &edge_list) {
  *
  * @return The number of path links.
  */
-size_t Area::get_nr_path_links() {
+size_t Area::getNrPathLinks() {
     size_t one_ways_found = 0;
     size_t normals_found = 0;
     for(size_t s = 0; s < path_stops.size(); s++) {
@@ -883,11 +883,11 @@ size_t Area::get_nr_path_links() {
  * @param node Data node to load from.
  * @param level Level to load at.
  */
-void Area::load_main_data_from_data_node(
+void Area::loadMainDataFromDataNode(
     DataNode* node, CONTENT_LOAD_LEVEL level
 ) {
     //Content metadata.
-    load_metadata_from_data_node(node);
+    loadMetadataFromDataNode(node);
     
     //Area configuration data.
     ReaderSetter rs(node);
@@ -951,7 +951,7 @@ void Area::load_main_data_from_data_node(
  *
  * @param node Data node to load from.
  */
-void Area::load_mission_data_from_data_node(DataNode* node) {
+void Area::loadMissionDataFromDataNode(DataNode* node) {
     mission.fail_hud_primary_cond = INVALID;
     mission.fail_hud_secondary_cond = INVALID;
     
@@ -995,13 +995,13 @@ void Area::load_mission_data_from_data_node(DataNode* node) {
     
     mission.goal = MISSION_GOAL_END_MANUALLY;
     for(size_t g = 0; g < game.mission_goals.size(); g++) {
-        if(game.mission_goals[g]->get_name() == goal_str) {
+        if(game.mission_goals[g]->getName() == goal_str) {
             mission.goal = (MISSION_GOAL) g;
             break;
         }
     }
     vector<string> mission_required_mobs_strs =
-        semicolon_list_to_vector(required_mobs_str);
+        semicolonListToVector(required_mobs_str);
     mission.goal_mob_idxs.reserve(
         mission_required_mobs_strs.size()
     );
@@ -1014,32 +1014,32 @@ void Area::load_mission_data_from_data_node(DataNode* node) {
     
     //Automatically turn the pause menu fail condition on/off for convenience.
     if(mission.goal == MISSION_GOAL_END_MANUALLY) {
-        disable_flag(
+        disableFlag(
             mission.fail_conditions,
-            get_idx_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
+            getIdxBitmask(MISSION_FAIL_COND_PAUSE_MENU)
         );
     } else {
-        enable_flag(
+        enableFlag(
             mission.fail_conditions,
-            get_idx_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
+            getIdxBitmask(MISSION_FAIL_COND_PAUSE_MENU)
         );
     }
     
     //Automatically turn off the seconds left score criterion for convenience.
     if(
-        !has_flag(
+        !hasFlag(
             mission.fail_conditions,
-            get_idx_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
+            getIdxBitmask(MISSION_FAIL_COND_TIME_LIMIT)
         )
     ) {
         mission.points_per_sec_left = 0;
-        disable_flag(
+        disableFlag(
             mission.point_hud_data,
-            get_idx_bitmask(MISSION_SCORE_CRITERIA_SEC_LEFT)
+            getIdxBitmask(MISSION_SCORE_CRITERIA_SEC_LEFT)
         );
-        disable_flag(
+        disableFlag(
             mission.point_loss_data,
-            get_idx_bitmask(MISSION_SCORE_CRITERIA_SEC_LEFT)
+            getIdxBitmask(MISSION_SCORE_CRITERIA_SEC_LEFT)
         );
     }
 }
@@ -1051,12 +1051,12 @@ void Area::load_mission_data_from_data_node(DataNode* node) {
  * @param node Data node to load from.
  * @param level Level to load at.
  */
-void Area::load_geometry_from_data_node(
+void Area::loadGeometryFromDataNode(
     DataNode* node, CONTENT_LOAD_LEVEL level
 ) {
     //Vertexes.
     if(game.perf_mon) {
-        game.perf_mon->start_measurement("Area -- Vertexes");
+        game.perf_mon->startMeasurement("Area -- Vertexes");
     }
     
     size_t n_vertexes =
@@ -1077,12 +1077,12 @@ void Area::load_geometry_from_data_node(
     }
     
     if(game.perf_mon) {
-        game.perf_mon->finish_measurement();
+        game.perf_mon->finishMeasurement();
     }
     
     //Edges.
     if(game.perf_mon) {
-        game.perf_mon->start_measurement("Area -- Edges");
+        game.perf_mon->startMeasurement("Area -- Edges");
     }
     
     size_t n_edges =
@@ -1140,12 +1140,12 @@ void Area::load_geometry_from_data_node(
     }
     
     if(game.perf_mon) {
-        game.perf_mon->finish_measurement();
+        game.perf_mon->finishMeasurement();
     }
     
     //Sectors.
     if(game.perf_mon) {
-        game.perf_mon->start_measurement("Area -- Sectors");
+        game.perf_mon->startMeasurement("Area -- Sectors");
     }
     
     size_t n_sectors =
@@ -1160,7 +1160,7 @@ void Area::load_geometry_from_data_node(
         Sector* new_sector = new Sector();
         
         size_t new_type =
-            game.sector_types.get_idx(
+            game.sector_types.getIdx(
                 sector_data->getChildByName("type")->value
             );
         if(new_type == INVALID) {
@@ -1213,7 +1213,7 @@ void Area::load_geometry_from_data_node(
         
         DataNode* hazards_node = sector_data->getChildByName("hazards");
         vector<string> hazards_strs =
-            semicolon_list_to_vector(hazards_node->value);
+            semicolonListToVector(hazards_node->value);
         for(size_t h = 0; h < hazards_strs.size(); h++) {
             string hazard_name = hazards_strs[h];
             if(game.content.hazards.list.find(hazard_name) == game.content.hazards.list.end()) {
@@ -1237,12 +1237,12 @@ void Area::load_geometry_from_data_node(
     }
     
     if(game.perf_mon) {
-        game.perf_mon->finish_measurement();
+        game.perf_mon->finishMeasurement();
     }
     
     //Mobs.
     if(game.perf_mon) {
-        game.perf_mon->start_measurement("Area -- Object generators");
+        game.perf_mon->startMeasurement("Area -- Object generators");
     }
     
     vector<std::pair<size_t, size_t> > mob_links_buffer;
@@ -1266,10 +1266,10 @@ void Area::load_geometry_from_data_node(
         string category_name = mob_node->name;
         string type_name;
         MobCategory* category =
-            game.mob_categories.get_from_internal_name(category_name);
+            game.mob_categories.getFromInternalName(category_name);
         if(category) {
             type_name = mob_node->getChildByName("type")->value;
-            mob_ptr->type = category->get_type(type_name);
+            mob_ptr->type = category->getType(type_name);
         } else {
             category = game.mob_categories.get(MOB_CATEGORY_NONE);
             mob_ptr->type = nullptr;
@@ -1316,12 +1316,12 @@ void Area::load_geometry_from_data_node(
     }
     
     if(game.perf_mon) {
-        game.perf_mon->finish_measurement();
+        game.perf_mon->finishMeasurement();
     }
     
     //Paths.
     if(game.perf_mon) {
-        game.perf_mon->start_measurement("Area -- Paths");
+        game.perf_mon->startMeasurement("Area -- Paths");
     }
     
     size_t n_stops =
@@ -1361,12 +1361,12 @@ void Area::load_geometry_from_data_node(
     }
     
     if(game.perf_mon) {
-        game.perf_mon->finish_measurement();
+        game.perf_mon->finishMeasurement();
     }
     
     //Tree shadows.
     if(game.perf_mon) {
-        game.perf_mon->start_measurement("Area -- Tree shadows");
+        game.perf_mon->startMeasurement("Area -- Tree shadows");
     }
     
     size_t n_shadows =
@@ -1418,36 +1418,36 @@ void Area::load_geometry_from_data_node(
     }
     
     if(game.perf_mon) {
-        game.perf_mon->finish_measurement();
+        game.perf_mon->finishMeasurement();
     }
     
     //Set up stuff.
     if(game.perf_mon) {
-        game.perf_mon->start_measurement("Area -- Geometry calculations");
+        game.perf_mon->startMeasurement("Area -- Geometry calculations");
     }
     
     for(size_t e = 0; e < edges.size(); e++) {
-        fix_edge_pointers(
+        fixEdgePointers(
             edges[e]
         );
     }
     for(size_t s = 0; s < sectors.size(); s++) {
-        connect_sector_edges(
+        connectSectorEdges(
             sectors[s]
         );
     }
     for(size_t v = 0; v < vertexes.size(); v++) {
-        connect_vertex_edges(
+        connectVertexEdges(
             vertexes[v]
         );
     }
     for(size_t s = 0; s < path_stops.size(); s++) {
-        fix_path_stop_pointers(
+        fixPathStopPointers(
             path_stops[s]
         );
     }
     for(size_t s = 0; s < path_stops.size(); s++) {
-        path_stops[s]->calculate_dists();
+        path_stops[s]->calculateDists();
     }
     if(level >= CONTENT_LOAD_LEVEL_FULL) {
         //Fade sectors that also fade brightness should be
@@ -1457,7 +1457,7 @@ void Area::load_geometry_from_data_node(
             if(s_ptr->fade) {
                 Sector* n1 = nullptr;
                 Sector* n2 = nullptr;
-                s_ptr->get_texture_merge_sectors(&n1, &n2);
+                s_ptr->getTextureMergeSectors(&n1, &n2);
                 if(n1 && n2) {
                     s_ptr->brightness = (n1->brightness + n2->brightness) / 2;
                 }
@@ -1472,7 +1472,7 @@ void Area::load_geometry_from_data_node(
         Sector* s_ptr = sectors[s];
         s_ptr->triangles.clear();
         TRIANGULATION_ERROR res =
-            triangulate_sector(s_ptr, &lone_edges, false);
+            triangulateSector(s_ptr, &lone_edges, false);
             
         if(res != TRIANGULATION_ERROR_NONE && level == CONTENT_LOAD_LEVEL_EDITOR) {
             problems.non_simples[s_ptr] = res;
@@ -1481,13 +1481,13 @@ void Area::load_geometry_from_data_node(
             );
         }
         
-        s_ptr->calculate_bounding_box();
+        s_ptr->calculateBoundingBox();
     }
     
-    if(level >= CONTENT_LOAD_LEVEL_EDITOR) generate_blockmap();
+    if(level >= CONTENT_LOAD_LEVEL_EDITOR) generateBlockmap();
     
     if(game.perf_mon) {
-        game.perf_mon->finish_measurement();
+        game.perf_mon->finishMeasurement();
     }
 }
 
@@ -1498,7 +1498,7 @@ void Area::load_geometry_from_data_node(
  *
  * @param thumbnail_path Path to the bitmap.
  */
-void Area::load_thumbnail(const string &thumbnail_path) {
+void Area::loadThumbnail(const string &thumbnail_path) {
     if(thumbnail) {
         thumbnail = nullptr;
     }
@@ -1520,7 +1520,7 @@ void Area::load_thumbnail(const string &thumbnail_path) {
  *
  * @return The new edge's pointer.
  */
-Edge* Area::new_edge() {
+Edge* Area::newEdge() {
     Edge* e_ptr = new Edge();
     edges.push_back(e_ptr);
     return e_ptr;
@@ -1532,7 +1532,7 @@ Edge* Area::new_edge() {
  *
  * @return The new sector's pointer.
  */
-Sector* Area::new_sector() {
+Sector* Area::newSector() {
     Sector* s_ptr = new Sector();
     sectors.push_back(s_ptr);
     return s_ptr;
@@ -1544,7 +1544,7 @@ Sector* Area::new_sector() {
  *
  * @return The new vertex's pointer.
  */
-Vertex* Area::new_vertex() {
+Vertex* Area::newVertex() {
     Vertex* v_ptr = new Vertex();
     vertexes.push_back(v_ptr);
     return v_ptr;
@@ -1556,7 +1556,7 @@ Vertex* Area::new_vertex() {
  *
  * @param e_idx Index number of the edge to remove.
  */
-void Area::remove_edge(size_t e_idx) {
+void Area::removeEdge(size_t e_idx) {
     edges.erase(edges.begin() + e_idx);
     for(size_t v = 0; v < vertexes.size(); v++) {
         Vertex* v_ptr = vertexes[v];
@@ -1568,7 +1568,7 @@ void Area::remove_edge(size_t e_idx) {
                 v_ptr->edge_idxs[e]--;
             } else {
                 //This should never happen.
-                engine_assert(
+                engineAssert(
                     v_ptr->edge_idxs[e] != e_idx,
                     i2s(v_ptr->edge_idxs[e]) + " " + i2s(e_idx)
                 );
@@ -1585,7 +1585,7 @@ void Area::remove_edge(size_t e_idx) {
                 s_ptr->edge_idxs[e]--;
             } else {
                 //This should never happen.
-                engine_assert(
+                engineAssert(
                     s_ptr->edge_idxs[e] != e_idx,
                     i2s(s_ptr->edge_idxs[e]) + " " + i2s(e_idx)
                 );
@@ -1600,10 +1600,10 @@ void Area::remove_edge(size_t e_idx) {
  *
  * @param e_ptr Pointer of the edge to remove.
  */
-void Area::remove_edge(const Edge* e_ptr) {
+void Area::removeEdge(const Edge* e_ptr) {
     for(size_t e = 0; e < edges.size(); e++) {
         if(edges[e] == e_ptr) {
-            remove_edge(e);
+            removeEdge(e);
             return;
         }
     }
@@ -1615,7 +1615,7 @@ void Area::remove_edge(const Edge* e_ptr) {
  *
  * @param s_idx Index number of the sector to remove.
  */
-void Area::remove_sector(size_t s_idx) {
+void Area::removeSector(size_t s_idx) {
     sectors.erase(sectors.begin() + s_idx);
     for(size_t e = 0; e < edges.size(); e++) {
         Edge* e_ptr = edges[e];
@@ -1627,7 +1627,7 @@ void Area::remove_sector(size_t s_idx) {
                 e_ptr->sector_idxs[s]--;
             } else {
                 //This should never happen.
-                engine_assert(
+                engineAssert(
                     e_ptr->sector_idxs[s] != s_idx,
                     i2s(e_ptr->sector_idxs[s]) + " " + i2s(s_idx)
                 );
@@ -1642,10 +1642,10 @@ void Area::remove_sector(size_t s_idx) {
  *
  * @param s_ptr Pointer of the sector to remove.
  */
-void Area::remove_sector(const Sector* s_ptr) {
+void Area::removeSector(const Sector* s_ptr) {
     for(size_t s = 0; s < sectors.size(); s++) {
         if(sectors[s] == s_ptr) {
-            remove_sector(s);
+            removeSector(s);
             return;
         }
     }
@@ -1657,7 +1657,7 @@ void Area::remove_sector(const Sector* s_ptr) {
  *
  * @param v_idx Index number of the vertex to remove.
  */
-void Area::remove_vertex(size_t v_idx) {
+void Area::removeVertex(size_t v_idx) {
     vertexes.erase(vertexes.begin() + v_idx);
     for(size_t e = 0; e < edges.size(); e++) {
         Edge* e_ptr = edges[e];
@@ -1669,7 +1669,7 @@ void Area::remove_vertex(size_t v_idx) {
                 e_ptr->vertex_idxs[v]--;
             } else {
                 //This should never happen.
-                engine_assert(
+                engineAssert(
                     e_ptr->vertex_idxs[v] != v_idx,
                     i2s(e_ptr->vertex_idxs[v]) + " " + i2s(v_idx)
                 );
@@ -1684,10 +1684,10 @@ void Area::remove_vertex(size_t v_idx) {
  *
  * @param v_ptr Pointer of the vertex to remove.
  */
-void Area::remove_vertex(const Vertex* v_ptr) {
+void Area::removeVertex(const Vertex* v_ptr) {
     for(size_t v = 0; v < vertexes.size(); v++) {
         if(vertexes[v] == v_ptr) {
-            remove_vertex(v);
+            removeVertex(v);
             return;
         }
     }
@@ -1699,7 +1699,7 @@ void Area::remove_vertex(const Vertex* v_ptr) {
  *
  * @param node Data node to save to.
  */
-void Area::save_geometry_to_data_node(DataNode* node) {
+void Area::saveGeometryToDataNode(DataNode* node) {
     //Vertexes.
     DataNode* vertexes_node = node->addNew("vertexes");
     for(size_t v = 0; v < vertexes.size(); v++) {
@@ -1758,7 +1758,7 @@ void Area::save_geometry_to_data_node(DataNode* node) {
         GetterWriter sgw(sector_node);
         
         if(s_ptr->type != SECTOR_TYPE_NORMAL) {
-            sgw.get("type", game.sector_types.get_name(s_ptr->type));
+            sgw.get("type", game.sector_types.getName(s_ptr->type));
         }
         if(s_ptr->is_bottomless_pit) {
             sgw.get("is_bottomless_pit", true);
@@ -1908,9 +1908,9 @@ void Area::save_geometry_to_data_node(DataNode* node) {
  *
  * @param node Data node to save to.
  */
-void Area::save_main_data_to_data_node(DataNode* node) {
+void Area::saveMainDataToDataNode(DataNode* node) {
     //Content metadata.
-    save_metadata_to_data_node(node);
+    saveMetadataToDataNode(node);
     
     GetterWriter gw(node);
     
@@ -1934,11 +1934,11 @@ void Area::save_main_data_to_data_node(DataNode* node) {
  *
  * @param node Data node to save to.
  */
-void Area::save_mission_data_to_data_node(DataNode* node) {
+void Area::saveMissionDataToDataNode(DataNode* node) {
     GetterWriter gw(node);
     
     if(mission.goal != MISSION_GOAL_END_MANUALLY) {
-        string goal_name = game.mission_goals[mission.goal]->get_name();
+        string goal_name = game.mission_goals[mission.goal]->getName();
         gw.get("mission_goal", goal_name);
     }
     if(
@@ -1970,49 +1970,49 @@ void Area::save_mission_data_to_data_node(DataNode* node) {
         gw.get("mission_fail_conditions", mission.fail_conditions);
     }
     if(
-        has_flag(
+        hasFlag(
             mission.fail_conditions,
-            get_idx_bitmask(MISSION_FAIL_COND_TOO_FEW_PIKMIN)
+            getIdxBitmask(MISSION_FAIL_COND_TOO_FEW_PIKMIN)
         )
     ) {
         gw.get("mission_fail_too_few_pik_amount", mission.fail_too_few_pik_amount);
     }
     if(
-        has_flag(
+        hasFlag(
             mission.fail_conditions,
-            get_idx_bitmask(MISSION_FAIL_COND_TOO_MANY_PIKMIN)
+            getIdxBitmask(MISSION_FAIL_COND_TOO_MANY_PIKMIN)
         )
     ) {
         gw.get("mission_fail_too_many_pik_amount", mission.fail_too_many_pik_amount);
     }
     if(
-        has_flag(
+        hasFlag(
             mission.fail_conditions,
-            get_idx_bitmask(MISSION_FAIL_COND_LOSE_PIKMIN)
+            getIdxBitmask(MISSION_FAIL_COND_LOSE_PIKMIN)
         )
     ) {
         gw.get("mission_fail_pik_killed", mission.fail_pik_killed);
     }
     if(
-        has_flag(
+        hasFlag(
             mission.fail_conditions,
-            get_idx_bitmask(MISSION_FAIL_COND_LOSE_LEADERS)
+            getIdxBitmask(MISSION_FAIL_COND_LOSE_LEADERS)
         )
     ) {
         gw.get("mission_fail_leaders_kod", mission.fail_leaders_kod);
     }
     if(
-        has_flag(
+        hasFlag(
             mission.fail_conditions,
-            get_idx_bitmask(MISSION_FAIL_COND_KILL_ENEMIES)
+            getIdxBitmask(MISSION_FAIL_COND_KILL_ENEMIES)
         )
     ) {
         gw.get("mission_fail_enemies_killed", mission.fail_enemies_killed);
     }
     if(
-        has_flag(
+        hasFlag(
             mission.fail_conditions,
-            get_idx_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
+            getIdxBitmask(MISSION_FAIL_COND_TIME_LIMIT)
         )
     ) {
         gw.get("mission_fail_time_limit", mission.fail_time_limit);
@@ -2073,7 +2073,7 @@ void Area::save_mission_data_to_data_node(DataNode* node) {
  *
  * @param to_backup Whether it's to save to the area backup.
  */
-void Area::save_thumbnail(bool to_backup) {
+void Area::saveThumbnail(bool to_backup) {
     string thumb_path =
         (to_backup ? user_data_path : manifest->path) +
         "/" + FILE_NAMES::AREA_THUMBNAIL;
@@ -2103,7 +2103,7 @@ void Blockmap::clear() {
  * @param x X coordinate.
  * @return The column, or INVALID on error.
  */
-size_t Blockmap::get_col(float x) const {
+size_t Blockmap::getCol(float x) const {
     if(x < top_left_corner.x) return INVALID;
     float final_x = (x - top_left_corner.x) / GEOMETRY::BLOCKMAP_BLOCK_SIZE;
     if(final_x >= n_cols) return INVALID;
@@ -2120,14 +2120,14 @@ size_t Blockmap::get_col(float x) const {
  * @param out_edges Set to fill the edges into.
  * @return Whether it succeeded.
  */
-bool Blockmap::get_edges_in_region(
+bool Blockmap::getEdgesInRegion(
     const Point &tl, const Point &br, set<Edge*> &out_edges
 ) const {
 
-    size_t bx1 = get_col(tl.x);
-    size_t bx2 = get_col(br.x);
-    size_t by1 = get_row(tl.y);
-    size_t by2 = get_row(br.y);
+    size_t bx1 = getCol(tl.x);
+    size_t bx2 = getCol(br.x);
+    size_t by1 = getRow(tl.y);
+    size_t by2 = getRow(br.y);
     
     if(
         bx1 == INVALID || bx2 == INVALID ||
@@ -2158,7 +2158,7 @@ bool Blockmap::get_edges_in_region(
  * @param y Y coordinate.
  * @return The row, or INVALID on error.
  */
-size_t Blockmap::get_row(float y) const {
+size_t Blockmap::getRow(float y) const {
     if(y < top_left_corner.y) return INVALID;
     float final_y = (y - top_left_corner.y) / GEOMETRY::BLOCKMAP_BLOCK_SIZE;
     if(final_y >= n_rows) return INVALID;
@@ -2173,7 +2173,7 @@ size_t Blockmap::get_row(float y) const {
  * @param row Row to check.
  * @return The top-left coordinates.
  */
-Point Blockmap::get_top_left_corner(size_t col, size_t row) const {
+Point Blockmap::getTopLeftCorner(size_t col, size_t row) const {
     return
         Point(
             col * GEOMETRY::BLOCKMAP_BLOCK_SIZE + top_left_corner.x,

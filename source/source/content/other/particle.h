@@ -154,7 +154,7 @@ struct ParticleEmission {
     explicit ParticleEmission(
         const float emission_interval = 0.0f, const size_t number = 1
     );
-    Point get_emission_offset(float number_ratio);
+    Point getEmissionOffset(float number_ratio);
     
 };
 
@@ -241,7 +241,7 @@ struct Particle {
         const ALLEGRO_COLOR initial_color = COLOR_WHITE
     );
     void draw();
-    void set_bitmap(
+    void setBitmap(
         const string &new_bmp_name,
         DataNode* node = nullptr
     );
@@ -265,12 +265,12 @@ struct ParticleManager {
     ~ParticleManager();
     void add(const Particle &p);
     void clear();
-    void fill_component_list(
+    void fillComponentList(
         vector<WorldComponent> &list,
         const Point &cam_tl = Point(), const Point &cam_br = Point()
     );
-    size_t get_count() const;
-    void tick_all(float delta_t);
+    size_t getCount() const;
+    void tickAll(float delta_t);
     
     private:
     
@@ -366,9 +366,9 @@ struct ParticleGenerator : public Content {
     );
     void tick(float delta_t, ParticleManager &manager);
     void emit(ParticleManager &manager);
-    void restart_timer();
-    void load_from_data_node(DataNode* node, CONTENT_LOAD_LEVEL level);
-    void save_to_data_node(DataNode* node);
+    void restartTimer();
+    void loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level);
+    void saveToDataNode(DataNode* node);
     
     
     private:

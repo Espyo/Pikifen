@@ -87,11 +87,11 @@ public:
         const vector<std::pair<int, unsigned char> > &bs,
         const PRECIPITATION_TYPE pt
     );
-    unsigned char get_blackout_strength();
-    ALLEGRO_COLOR get_daylight_color();
-    ALLEGRO_COLOR get_fog_color();
-    float get_sun_strength();
-    void load_from_data_node(DataNode* node);
+    unsigned char getBlackoutStrength();
+    ALLEGRO_COLOR getDaylightColor();
+    ALLEGRO_COLOR getFogColor();
+    float getSunStrength();
+    void loadFromDataNode(DataNode* node);
     
 private:
 
@@ -110,7 +110,7 @@ private:
      * @return Whether it succeeded.
      */
     template<typename T>
-    bool get_table_values(
+    bool getTableValues(
         const vector<std::pair<int, T> > &table, int cur_time,
         float* ratio, T* value1, T* value2
     ) {

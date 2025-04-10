@@ -238,12 +238,12 @@ struct PathStop {
     );
     ~PathStop();
     void clone(PathStop* destination) const;
-    void add_link(PathStop* other_stop, bool normal);
+    void addLink(PathStop* other_stop, bool normal);
     PathLink* get_link(const PathStop* other_stop) const;
-    void remove_link(const PathLink* link_ptr);
-    void remove_link(const PathStop* other_stop);
-    void calculate_dists();
-    void calculate_dists_plus_neighbors();
+    void removeLink(const PathLink* link_ptr);
+    void removeLink(const PathStop* other_stop);
+    void calculateDists();
+    void calculateDistsPlusNeighbors();
     
 };
 
@@ -278,9 +278,9 @@ struct PathLink {
     //--- Function declarations ---
     
     PathLink(PathStop* start_ptr, PathStop* end_ptr, size_t end_idx);
-    void calculate_dist(const PathStop* start_ptr);
+    void calculateDist(const PathStop* start_ptr);
     void clone(PathLink* destination) const;
-    bool is_one_way() const;
+    bool isOneWay() const;
     
 };
 
@@ -310,42 +310,42 @@ struct PathManager {
     
     //--- Function declarations ---
     
-    void handle_area_load();
-    void handle_obstacle_add(Mob* m);
-    void handle_obstacle_remove(Mob* m);
-    void handle_sector_hazard_change(Sector* sector_ptr);
+    void handleAreaLoad();
+    void handleObstacleAdd(Mob* m);
+    void handleObstacleRemove(Mob* m);
+    void handleSectorHazardChange(Sector* sector_ptr);
     void clear();
     
 };
 
 
-bool can_take_path_stop(
+bool canTakePathStop(
     PathStop* stop_ptr, const PathFollowSettings &settings,
     PATH_BLOCK_REASON* out_reason = nullptr
 );
-bool can_take_path_stop(
+bool canTakePathStop(
     const PathStop* stop_ptr, const PathFollowSettings &settings,
     Sector* sector_ptr, PATH_BLOCK_REASON* out_reason = nullptr
 );
-bool can_traverse_path_link(
+bool canTraversePathLink(
     PathLink* link_ptr, const PathFollowSettings &settings,
     PATH_BLOCK_REASON* out_reason = nullptr
 );
-void depth_first_search(
+void depthFirstSearch(
     vector<PathStop*> &nodes,
     unordered_set<PathStop*> &visited, PathStop* start
 );
-PATH_RESULT a_star(
+PATH_RESULT aStar(
     vector<PathStop*> &out_path,
     PathStop* start_node, PathStop* end_node,
     const PathFollowSettings &settings,
     float* out_total_dist
 );
-PATH_RESULT get_path(
+PATH_RESULT getPath(
     const Point &start, const Point &end,
     const PathFollowSettings &settings,
     vector<PathStop*> &full_path, float* out_total_dist,
     PathStop** out_start_stop, PathStop** out_end_stop
 );
-string path_block_reason_to_string(PATH_BLOCK_REASON reason);
-string path_result_to_string(PATH_RESULT result);
+string pathBlockReasonToString(PATH_BLOCK_REASON reason);
+string pathResultToString(PATH_RESULT result);

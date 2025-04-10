@@ -125,11 +125,11 @@ public:
                 break;
             }
         }
-        option = get_cur_option_name();
+        option = getCurOptionName();
         nr_options = preset_values.size();
         
-        on_previous = [this] () { change_option(-1); };
-        on_next = [this] () { change_option(1); };
+        on_previous = [this] () { changeOption(-1); };
+        on_next = [this] () { changeOption(1); };
         on_get_tooltip = [this] () {
             size_t def_idx = 0;
             string full_tooltip;
@@ -158,7 +158,7 @@ public:
      *
      * @return The name.
      */
-    string get_cur_option_name() {
+    string getCurOptionName() {
         if(cur_option_idx == INVALID) {
             if(value_to_string) {
                 return value_to_string(*cur_value) + " (custom)";
@@ -176,19 +176,19 @@ public:
      *
      * @param step What direction to change to. +1 is next, -1 is previous.
      */
-    void change_option(int step) {
+    void changeOption(int step) {
         if(cur_option_idx == INVALID) {
             cur_option_idx = 0;
         } else {
             cur_option_idx =
-                sum_and_wrap(
+                sumAndWrap(
                     (int) cur_option_idx, step, (int) preset_values.size()
                 );
         }
         
         *cur_value = preset_values[cur_option_idx];
-        option = get_cur_option_name();
-        start_juice_animation(
+        option = getCurOptionName();
+        startJuiceAnimation(
             GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
         );
         if(after_change) after_change();
@@ -229,8 +229,8 @@ public:
     
     void draw() override;
     void load() override;
-    void handle_allegro_event(const ALLEGRO_EVENT &ev) override;
-    void handle_player_action(const PlayerAction &action) override;
+    void handleAllegroEvent(const ALLEGRO_EVENT &ev) override;
+    void handlePlayerAction(const PlayerAction &action) override;
     void unload() override;
     void tick(float delta_t);
     
@@ -318,20 +318,20 @@ private:
     
     //--- Function declarations ---
     
-    void init_gui_audio_page();
-    void init_gui_controls_page();
-    void init_gui_control_binds_page();
-    void init_gui_graphics_page();
-    void init_gui_misc_page();
-    void init_gui_top_page();
-    void trigger_restart_warning();
-    void choose_input(
+    void initGuiAudioPage();
+    void initGuiControlsPage();
+    void initGuiControlBindsPage();
+    void initGuiGraphicsPage();
+    void initGuiMiscPage();
+    void initGuiTopPage();
+    void triggerRestartWarning();
+    void chooseInput(
         const PLAYER_ACTION_TYPE action_type, size_t bind_idx
     );
-    void delete_bind(
+    void deleteBind(
         const PLAYER_ACTION_TYPE action_type, size_t bind_idx
     );
-    void populate_binds();
-    void restore_default_binds(const PLAYER_ACTION_TYPE action_type);
+    void populateBinds();
+    void restoreDefaultBinds(const PLAYER_ACTION_TYPE action_type);
     
 };

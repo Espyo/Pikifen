@@ -66,10 +66,10 @@ public:
     
     Ship(const Point &pos, ShipType* type, float angle);
     ~Ship();
-    void heal_leader(Leader* l) const;
-    bool is_leader_on_cp(const Leader* l) const;
-    void draw_mob() override;
-    void read_script_vars(const ScriptVarReader &svr) override;
-    void tick_class_specifics(float delta_t) override;
+    void healLeader(Leader* l) const;
+    bool isLeaderOnCp(const Leader* l) const;
+    void drawMob() override;
+    void readScriptVars(const ScriptVarReader &svr) override;
+    void tickClassSpecifics(float delta_t) override;
     
 };

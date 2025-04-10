@@ -394,14 +394,14 @@ struct Options {
     
     //--- Function declarations ---
     
-    void load_from_data_node(DataNode* file);
-    void save_to_data_node(DataNode* file) const;
+    void loadFromDataNode(DataNode* file);
+    void saveToDataNode(DataNode* file) const;
     
     
 private:
 
     //--- Function declarations ---
     
-    vector<pair<string, string> > load_editor_history(const string &str) const;
-    string save_editor_history(const vector<pair<string, string> > &vec) const;
+    vector<pair<string, string> > loadEditorHistory(const string &str) const;
+    string saveEditorHistory(const vector<pair<string, string> > &vec) const;
 };

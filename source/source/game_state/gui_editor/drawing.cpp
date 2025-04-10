@@ -17,11 +17,11 @@
 /**
  * @brief Handles the drawing part of the main loop of the GUI editor.
  */
-void GuiEditor::do_drawing() {
+void GuiEditor::doDrawing() {
     //The canvas drawing is handled by Dear ImGui elsewhere.
     
     al_clear_to_color(COLOR_BLACK);
-    draw_op_error_cursor();
+    drawOpErrorCursor();
 }
 
 
@@ -29,7 +29,7 @@ void GuiEditor::do_drawing() {
  * @brief Draw the canvas. This is called as a callback inside the
  * Dear ImGui rendering process.
  */
-void GuiEditor::draw_canvas() {
+void GuiEditor::drawCanvas() {
     al_use_transform(&game.world_to_screen_transform);
     al_set_clipping_rectangle(
         canvas_tl.x, canvas_tl.y,
@@ -45,7 +45,7 @@ void GuiEditor::draw_canvas() {
     );
     
     //Grid.
-    draw_grid(
+    drawGrid(
         game.options.gui_editor.grid_interval,
         al_map_rgba(64, 64, 64, 84),
         al_map_rgba(64, 64, 64, 40)
@@ -74,7 +74,7 @@ void GuiEditor::draw_canvas() {
     for(size_t i = 0; i < items.size(); i++) {
         if(items[i].size.x == 0.0f) continue;
         
-        draw_filled_rounded_rectangle(
+        drawFilledRoundedRectangle(
             items[i].center,
             items[i].size,
             8.0f / game.cam.zoom,
@@ -88,11 +88,11 @@ void GuiEditor::draw_canvas() {
         );
         float clip_w = items[i].size.x * game.cam.zoom;
         float clip_h = items[i].size.y * game.cam.zoom;
-        set_combined_clipping_rectangles(
+        setCombinedClippingRectangles(
             orig_clip_x, orig_clip_y, orig_clip_w, orig_clip_h,
             clip_x, clip_y, clip_w, clip_h
         );
-        draw_text(
+        drawText(
             items[i].name, game.sys_content.fnt_builtin,
             Point(
                 (items[i].center.x - items[i].size.x / 2.0f) +
@@ -108,7 +108,7 @@ void GuiEditor::draw_canvas() {
         );
         
         if(cur_item != i) {
-            draw_rounded_rectangle(
+            drawRoundedRectangle(
                 items[i].center,
                 items[i].size,
                 8.0f / game.cam.zoom,

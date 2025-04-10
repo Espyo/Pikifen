@@ -19,9 +19,9 @@
  *
  * @param node Data node to load from.
  */
-void SpikeDamageType::load_from_data_node(DataNode* node) {
+void SpikeDamageType::loadFromDataNode(DataNode* node) {
     //Content metadata.
-    load_metadata_from_data_node(node);
+    loadMetadataFromDataNode(node);
     
     //Standard data.
     ReaderSetter rs(node);

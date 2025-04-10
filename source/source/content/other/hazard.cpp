@@ -23,9 +23,9 @@ using std::vector;
  *
  * @param node Data node to load from.
  */
-void Hazard::load_from_data_node(DataNode* node) {
+void Hazard::loadFromDataNode(DataNode* node) {
     //Content metadata.
-    load_metadata_from_data_node(node);
+    loadMetadataFromDataNode(node);
     
     //Standard data.
     ReaderSetter rs(node);
@@ -41,7 +41,7 @@ void Hazard::load_from_data_node(DataNode* node) {
     rs.set("liquid", liquid_str, &liquid_node);
     
     if(effects_node) {
-        vector<string> effects_strs = semicolon_list_to_vector(effects_str);
+        vector<string> effects_strs = semicolonListToVector(effects_str);
         for(size_t e = 0; e < effects_strs.size(); e++) {
             string effect_name = effects_strs[e];
             if(

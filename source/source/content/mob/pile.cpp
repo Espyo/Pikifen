@@ -42,12 +42,12 @@ Pile::Pile(const Point &pos, PileType* type, float angle) :
  *
  * @param change Amount to increase by.
  */
-void Pile::change_amount(int change) {
+void Pile::changeAmount(int change) {
     if(change < 0 && amount == 0) return;
     if(change > 0 && amount == pil_type->max_amount) return;
     
     amount += change;
-    set_health(true, false, change * pil_type->health_per_resource);
+    setHealth(true, false, change * pil_type->health_per_resource);
     
     update();
 }
@@ -63,7 +63,7 @@ void Pile::change_amount(int change) {
  * @param fraction_color The fraction's color gets set here.
  * @return Whether the numbers should be shown.
  */
-bool Pile::get_fraction_numbers_info(
+bool Pile::getFractionNumbersInfo(
     float* fraction_value_nr, float* fraction_req_nr,
     ALLEGRO_COLOR* fraction_color
 ) const {
@@ -80,8 +80,8 @@ bool Pile::get_fraction_numbers_info(
  *
  * @param svr Script var reader to use.
  */
-void Pile::read_script_vars(const ScriptVarReader &svr) {
-    Mob::read_script_vars(svr);
+void Pile::readScriptVars(const ScriptVarReader &svr) {
+    Mob::readScriptVars(svr);
     
     size_t amount_var;
     
@@ -101,7 +101,7 @@ void Pile::read_script_vars(const ScriptVarReader &svr) {
  */
 void Pile::recharge() {
     recharge_timer.start();
-    change_amount(pil_type->recharge_amount);
+    changeAmount(pil_type->recharge_amount);
 }
 
 
@@ -110,7 +110,7 @@ void Pile::recharge() {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void Pile::tick_class_specifics(float delta_t) {
+void Pile::tickClassSpecifics(float delta_t) {
     recharge_timer.tick(delta_t);
     
     if(amount == 0 && pil_type->delete_when_finished) {
@@ -152,16 +152,16 @@ void Pile::update() {
             );
         anim_amount_nr = std::clamp(anim_amount_nr, (size_t) 0, n_groups - 1);
     }
-    set_animation(
-        get_animation_idx_from_base_and_group(
+    setAnimation(
+        getAnimationIdxFromBaseAndGroup(
             PILE_ANIM_IDLING, N_PILE_ANIMS, anim_amount_nr
         ),
         START_ANIM_OPTION_NO_RESTART, true
     );
     
     if(pil_type->auto_shrink_smallest_radius != 0.0f) {
-        set_radius(
-            interpolate_number(
+        setRadius(
+            interpolateNumber(
                 amount, 1, pil_type->max_amount,
                 pil_type->auto_shrink_smallest_radius, pil_type->radius
             )
@@ -170,11 +170,11 @@ void Pile::update() {
     
     if(pil_type->hide_when_empty) {
         if(amount == 0) {
-            enable_flag(flags, MOB_FLAG_HIDDEN);
-            enable_flag(flags, MOB_FLAG_INTANGIBLE);
+            enableFlag(flags, MOB_FLAG_HIDDEN);
+            enableFlag(flags, MOB_FLAG_INTANGIBLE);
         } else {
-            disable_flag(flags, MOB_FLAG_HIDDEN);
-            disable_flag(flags, MOB_FLAG_INTANGIBLE);
+            disableFlag(flags, MOB_FLAG_HIDDEN);
+            disableFlag(flags, MOB_FLAG_INTANGIBLE);
         }
     }
 }

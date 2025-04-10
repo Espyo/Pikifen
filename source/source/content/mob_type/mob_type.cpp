@@ -74,101 +74,101 @@ MobType::~MobType() {
 /**
  * @brief Adds carrying-related states to the FSM.
  */
-void MobType::add_carrying_states() {
+void MobType::addCarryingStates() {
 
     EasyFsmCreator efc;
     
-    efc.new_state("carriable_waiting", ENEMY_EXTRA_STATE_CARRIABLE_WAITING); {
-        efc.new_event(MOB_EV_ON_ENTER); {
-            efc.run(gen_mob_fsm::carry_stop_move);
+    efc.newState("carriable_waiting", ENEMY_EXTRA_STATE_CARRIABLE_WAITING); {
+        efc.newEvent(MOB_EV_ON_ENTER); {
+            efc.run(gen_mob_fsm::carryStopMove);
         }
-        efc.new_event(MOB_EV_CARRIER_ADDED); {
-            efc.run(gen_mob_fsm::handle_carrier_added);
+        efc.newEvent(MOB_EV_CARRIER_ADDED); {
+            efc.run(gen_mob_fsm::handleCarrierAdded);
         }
-        efc.new_event(MOB_EV_CARRIER_REMOVED); {
-            efc.run(gen_mob_fsm::handle_carrier_removed);
+        efc.newEvent(MOB_EV_CARRIER_REMOVED); {
+            efc.run(gen_mob_fsm::handleCarrierRemoved);
         }
-        efc.new_event(MOB_EV_CARRY_BEGIN_MOVE); {
-            efc.run(gen_mob_fsm::carry_get_path);
-            efc.change_state("carriable_moving");
-        }
-    }
-    
-    efc.new_state("carriable_moving", ENEMY_EXTRA_STATE_CARRIABLE_MOVING); {
-        efc.new_event(MOB_EV_ON_ENTER); {
-            efc.run(gen_mob_fsm::carry_begin_move);
-        }
-        efc.new_event(MOB_EV_CARRIER_ADDED); {
-            efc.run(gen_mob_fsm::handle_carrier_added);
-        }
-        efc.new_event(MOB_EV_CARRIER_REMOVED); {
-            efc.run(gen_mob_fsm::handle_carrier_removed);
-        }
-        efc.new_event(MOB_EV_CARRY_STOP_MOVE); {
-            efc.change_state("carriable_waiting");
-        }
-        efc.new_event(MOB_EV_CARRY_BEGIN_MOVE); {
-            efc.run(gen_mob_fsm::carry_get_path);
-            efc.run(gen_mob_fsm::carry_begin_move);
-        }
-        efc.new_event(MOB_EV_REACHED_DESTINATION); {
-            efc.run(gen_mob_fsm::carry_reach_destination);
-        }
-        efc.new_event(MOB_EV_PATH_BLOCKED); {
-            efc.change_state("carriable_stuck");
-        }
-        efc.new_event(MOB_EV_PATHS_CHANGED); {
-            efc.run(gen_mob_fsm::carry_get_path);
-            efc.run(gen_mob_fsm::carry_begin_move);
-        }
-        efc.new_event(MOB_EV_CARRY_DELIVERED); {
-            efc.change_state("being_delivered");
-        }
-        efc.new_event(MOB_EV_TOUCHED_BOUNCER); {
-            efc.change_state("carriable_thrown");
+        efc.newEvent(MOB_EV_CARRY_BEGIN_MOVE); {
+            efc.run(gen_mob_fsm::carryGetPath);
+            efc.changeState("carriable_moving");
         }
     }
     
-    efc.new_state("carriable_stuck", ENEMY_EXTRA_STATE_CARRIABLE_STUCK); {
-        efc.new_event(MOB_EV_ON_ENTER); {
-            efc.run(gen_mob_fsm::carry_become_stuck);
+    efc.newState("carriable_moving", ENEMY_EXTRA_STATE_CARRIABLE_MOVING); {
+        efc.newEvent(MOB_EV_ON_ENTER); {
+            efc.run(gen_mob_fsm::carryBeginMove);
         }
-        efc.new_event(MOB_EV_CARRIER_ADDED); {
-            efc.run(gen_mob_fsm::handle_carrier_added);
+        efc.newEvent(MOB_EV_CARRIER_ADDED); {
+            efc.run(gen_mob_fsm::handleCarrierAdded);
         }
-        efc.new_event(MOB_EV_CARRIER_REMOVED); {
-            efc.run(gen_mob_fsm::handle_carrier_removed);
+        efc.newEvent(MOB_EV_CARRIER_REMOVED); {
+            efc.run(gen_mob_fsm::handleCarrierRemoved);
         }
-        efc.new_event(MOB_EV_CARRY_BEGIN_MOVE); {
-            efc.run(gen_mob_fsm::carry_stop_being_stuck);
-            efc.run(gen_mob_fsm::carry_get_path);
-            efc.change_state("carriable_moving");
+        efc.newEvent(MOB_EV_CARRY_STOP_MOVE); {
+            efc.changeState("carriable_waiting");
         }
-        efc.new_event(MOB_EV_CARRY_STOP_MOVE); {
-            efc.run(gen_mob_fsm::carry_stop_being_stuck);
-            efc.change_state("carriable_waiting");
+        efc.newEvent(MOB_EV_CARRY_BEGIN_MOVE); {
+            efc.run(gen_mob_fsm::carryGetPath);
+            efc.run(gen_mob_fsm::carryBeginMove);
         }
-        efc.new_event(MOB_EV_PATHS_CHANGED); {
-            efc.run(gen_mob_fsm::carry_stop_being_stuck);
-            efc.run(gen_mob_fsm::carry_get_path);
-            efc.change_state("carriable_moving");
+        efc.newEvent(MOB_EV_REACHED_DESTINATION); {
+            efc.run(gen_mob_fsm::carryReachDestination);
+        }
+        efc.newEvent(MOB_EV_PATH_BLOCKED); {
+            efc.changeState("carriable_stuck");
+        }
+        efc.newEvent(MOB_EV_PATHS_CHANGED); {
+            efc.run(gen_mob_fsm::carryGetPath);
+            efc.run(gen_mob_fsm::carryBeginMove);
+        }
+        efc.newEvent(MOB_EV_CARRY_DELIVERED); {
+            efc.changeState("being_delivered");
+        }
+        efc.newEvent(MOB_EV_TOUCHED_BOUNCER); {
+            efc.changeState("carriable_thrown");
         }
     }
     
-    efc.new_state("carriable_thrown", ENEMY_EXTRA_STATE_CARRIABLE_THROWN); {
-        efc.new_event(MOB_EV_LANDED); {
-            efc.run(gen_mob_fsm::lose_momentum);
-            efc.run(gen_mob_fsm::carry_get_path);
-            efc.change_state("carriable_moving");
+    efc.newState("carriable_stuck", ENEMY_EXTRA_STATE_CARRIABLE_STUCK); {
+        efc.newEvent(MOB_EV_ON_ENTER); {
+            efc.run(gen_mob_fsm::carryBecomeStuck);
+        }
+        efc.newEvent(MOB_EV_CARRIER_ADDED); {
+            efc.run(gen_mob_fsm::handleCarrierAdded);
+        }
+        efc.newEvent(MOB_EV_CARRIER_REMOVED); {
+            efc.run(gen_mob_fsm::handleCarrierRemoved);
+        }
+        efc.newEvent(MOB_EV_CARRY_BEGIN_MOVE); {
+            efc.run(gen_mob_fsm::carryStopBeingStuck);
+            efc.run(gen_mob_fsm::carryGetPath);
+            efc.changeState("carriable_moving");
+        }
+        efc.newEvent(MOB_EV_CARRY_STOP_MOVE); {
+            efc.run(gen_mob_fsm::carryStopBeingStuck);
+            efc.changeState("carriable_waiting");
+        }
+        efc.newEvent(MOB_EV_PATHS_CHANGED); {
+            efc.run(gen_mob_fsm::carryStopBeingStuck);
+            efc.run(gen_mob_fsm::carryGetPath);
+            efc.changeState("carriable_moving");
         }
     }
     
-    efc.new_state("being_delivered", ENEMY_EXTRA_STATE_BEING_DELIVERED); {
-        efc.new_event(MOB_EV_ON_ENTER); {
-            efc.run(gen_mob_fsm::start_being_delivered);
+    efc.newState("carriable_thrown", ENEMY_EXTRA_STATE_CARRIABLE_THROWN); {
+        efc.newEvent(MOB_EV_LANDED); {
+            efc.run(gen_mob_fsm::loseMomentum);
+            efc.run(gen_mob_fsm::carryGetPath);
+            efc.changeState("carriable_moving");
         }
-        efc.new_event(MOB_EV_TIMER); {
-            efc.run(gen_mob_fsm::handle_delivery);
+    }
+    
+    efc.newState("being_delivered", ENEMY_EXTRA_STATE_BEING_DELIVERED); {
+        efc.newEvent(MOB_EV_ON_ENTER); {
+            efc.run(gen_mob_fsm::startBeingDelivered);
+        }
+        efc.newEvent(MOB_EV_TIMER); {
+            efc.run(gen_mob_fsm::handleDelivery);
         }
     }
     
@@ -185,7 +185,7 @@ void MobType::add_carrying_states() {
  *
  * @return The animation conversions.
  */
-anim_conversion_vector MobType::get_anim_conversions() const {
+anim_conversion_vector MobType::getAnimConversions() const {
     return anim_conversion_vector();
 }
 
@@ -193,13 +193,13 @@ anim_conversion_vector MobType::get_anim_conversions() const {
 /**
  * @brief Loads properties from a data file, if any.
  */
-void MobType::load_cat_properties(DataNode*) { }
+void MobType::loadCatProperties(DataNode*) { }
 
 
 /**
  * @brief Loads any resources into memory, if any.
  */
-void MobType::load_cat_resources(DataNode*) { }
+void MobType::loadCatResources(DataNode*) { }
 
 
 /**
@@ -209,11 +209,11 @@ void MobType::load_cat_resources(DataNode*) { }
  * @param level Level to load at.
  * @param folder_path Path to the folder this mob type is in.
  */
-void MobType::load_from_data_node(
+void MobType::loadFromDataNode(
     DataNode* node, CONTENT_LOAD_LEVEL level, const string &folder_path
 ) {
     //Content metadata.
-    load_metadata_from_data_node(node);
+    loadMetadataFromDataNode(node);
     
     //Standard data.
     ReaderSetter rs(node);
@@ -289,12 +289,12 @@ void MobType::load_from_data_node(
     rs.set("weight", weight);
     
     if(area_editor_tips_node) {
-        area_editor_tips = unescape_string(area_editor_tips);
+        area_editor_tips = unescapeString(area_editor_tips);
     }
     
     if(!custom_carry_spots_str.empty()) {
         vector<string> points =
-            semicolon_list_to_vector(custom_carry_spots_str);
+            semicolonListToVector(custom_carry_spots_str);
         if(points.size() != max_carriers) {
             game.errors.report(
                 "The number of custom carry spots (" + i2s(points.size()) +
@@ -309,7 +309,7 @@ void MobType::load_from_data_node(
         }
     }
     
-    rotation_speed = deg_to_rad(rotation_speed);
+    rotation_speed = degToRad(rotation_speed);
     
     //Vulnerabilities.
     DataNode* vulnerabilities_node =
@@ -373,7 +373,7 @@ void MobType::load_from_data_node(
     
     //Team.
     if(team_node) {
-        MOB_TEAM t = string_to_team_nr(team_str);
+        MOB_TEAM t = stringToTeamNr(team_str);
         if(t != INVALID) {
             starting_team = t;
         } else {
@@ -513,10 +513,10 @@ void MobType::load_from_data_node(
         }
         
         new_reach.radius_1 = s2f(r_strings[0]);
-        new_reach.angle_1 = deg_to_rad(s2f(r_strings[1]));
+        new_reach.angle_1 = degToRad(s2f(r_strings[1]));
         if(r_strings.size() == 4) {
             new_reach.radius_2 = s2f(r_strings[2]);
-            new_reach.angle_2 = deg_to_rad(s2f(r_strings[3]));
+            new_reach.angle_2 = degToRad(s2f(r_strings[3]));
         }
         reaches.push_back(new_reach);
     }
@@ -544,7 +544,7 @@ void MobType::load_from_data_node(
         if(!coords_str.empty()) {
             new_spawn.coords_xy = s2p(coords_str, &new_spawn.coords_z);
         }
-        new_spawn.angle = deg_to_rad(new_spawn.angle);
+        new_spawn.angle = degToRad(new_spawn.angle);
         
         spawns.push_back(new_spawn);
     }
@@ -589,7 +589,7 @@ void MobType::load_from_data_node(
         child_rs.set("limb_child_offset", new_child.limb_child_offset);
         child_rs.set("limb_draw_method", limb_draw_method, &limb_draw_node);
         
-        new_child.hold_offset_angle = deg_to_rad(new_child.hold_offset_angle);
+        new_child.hold_offset_angle = degToRad(new_child.hold_offset_angle);
         
         if(limb_draw_node) {
             if(limb_draw_method == "below_both") {
@@ -702,7 +702,7 @@ void MobType::load_from_data_node(
         }
         
         if(loop_bool) {
-            enable_flag(new_sound.config.flags, SOUND_FLAG_LOOP);
+            enableFlag(new_sound.config.flags, SOUND_FLAG_LOOP);
         }
         
         new_sound.config.gain = volume_float / 100.0f;
@@ -777,18 +777,18 @@ void MobType::load_from_data_node(
                     "a list of values!", prop_node
                 );
             } else {
-                new_prop.value_list = semicolon_list_to_vector(list_str);
+                new_prop.value_list = semicolonListToVector(list_str);
             }
         }
         
-        new_prop.tooltip = unescape_string(new_prop.tooltip);
+        new_prop.tooltip = unescapeString(new_prop.tooltip);
         
         area_editor_props.push_back(new_prop);
     }
     
     if(target_type_node) {
         MOB_TARGET_FLAG target_type_value =
-            string_to_mob_target_type(target_type_str);
+            stringToMobTargetType(target_type_str);
         if(target_type_value == INVALID) {
             game.errors.report(
                 "Unknown target type \"" + target_type_str + "\"!",
@@ -800,12 +800,12 @@ void MobType::load_from_data_node(
     }
     
     vector<string> huntable_targets_strs =
-        semicolon_list_to_vector(huntable_targets_str);
+        semicolonListToVector(huntable_targets_str);
     if(huntable_targets_node) {
         huntable_targets = 0;
     }
     for(size_t h = 0; h < huntable_targets_strs.size(); h++) {
-        size_t v = string_to_mob_target_type(huntable_targets_strs[h]);
+        size_t v = stringToMobTargetType(huntable_targets_strs[h]);
         if(v == INVALID) {
             game.errors.report(
                 "Unknown target type \"" + huntable_targets_strs[h] + "\"!",
@@ -817,12 +817,12 @@ void MobType::load_from_data_node(
     }
     
     vector<string> hurtable_targets_strs =
-        semicolon_list_to_vector(hurtable_targets_str);
+        semicolonListToVector(hurtable_targets_str);
     if(hurtable_targets_node) {
         hurtable_targets = 0;
     }
     for(size_t h = 0; h < hurtable_targets_strs.size(); h++) {
-        size_t v = string_to_mob_target_type(hurtable_targets_strs[h]);
+        size_t v = stringToMobTargetType(hurtable_targets_strs[h]);
         if(v == INVALID) {
             game.errors.report(
                 "Unknown target type \"" + hurtable_targets_strs[h] + "\"!",
@@ -836,7 +836,7 @@ void MobType::load_from_data_node(
     //Resources.
     if(level >= CONTENT_LOAD_LEVEL_FULL) {
         anim_db = &game.content.mob_anim_dbs.list[category->id][manifest->internal_name];
-        anim_db->fill_sound_idx_caches(this);
+        anim_db->fillSoundIdxCaches(this);
         
         DataNode script_file;
         script_file.loadFile(folder_path + "/script.txt", true, true);
@@ -847,27 +847,27 @@ void MobType::load_from_data_node(
         dying_state_name = death_state_name_node->value;
         
         states_ignoring_death =
-            semicolon_list_to_vector(
+            semicolonListToVector(
                 script_file.getChildByName("states_ignoring_death")->value
             );
             
         states_ignoring_spray =
-            semicolon_list_to_vector(
+            semicolonListToVector(
                 script_file.getChildByName("states_ignoring_spray")->value
             );
             
         states_ignoring_hazard =
-            semicolon_list_to_vector(
+            semicolonListToVector(
                 script_file.getChildByName("states_ignoring_hazard")->value
             );
             
         //Load init actions.
-        load_actions(
+        loadActions(
             this,
             script_file.getChildByName("init"), &init_actions, nullptr
         );
         //Load the rest of the script.
-        load_script(
+        loadScript(
             this,
             script_file.getChildByName("script"),
             script_file.getChildByName("global"),
@@ -913,16 +913,16 @@ void MobType::load_from_data_node(
     }
     
     //Category-specific properties.
-    load_cat_properties(node);
+    loadCatProperties(node);
     
     //Category-specific resources.
     if(level >= CONTENT_LOAD_LEVEL_FULL) {
-        load_cat_resources(node);
-        anim_db->create_conversions(get_anim_conversions(), node);
+        loadCatResources(node);
+        anim_db->createConversions(getAnimConversions(), node);
     }
     
     physical_span =
-        calculate_mob_physical_span(
+        calculateMobPhysicalSpan(
             radius,
             (level >= CONTENT_LOAD_LEVEL_FULL ? anim_db->hitbox_span : 0),
             rectangular_dim
@@ -937,7 +937,7 @@ void MobType::load_from_data_node(
 /**
  * @brief Unloads loaded resources from memory.
  */
-void MobType::unload_resources() {
+void MobType::unloadResources() {
     for(size_t s = 0; s < sounds.size(); s++) {
         game.content.sounds.list.free(sounds[s].name);
     }
@@ -953,7 +953,7 @@ void MobType::unload_resources() {
  * @return The vector.
  */
 anim_conversion_vector
-MobTypeWithAnimGroups::get_anim_conversions_with_groups(
+MobTypeWithAnimGroups::getAnimConversionsWithGroups(
     const anim_conversion_vector &v, size_t base_anim_total
 ) const {
     anim_conversion_vector new_v;
@@ -977,11 +977,11 @@ MobTypeWithAnimGroups::get_anim_conversions_with_groups(
  * @brief Creates special mob types, needed by the engine,
  * that are beyond the ones loaded from the game data folder.
  */
-void create_special_mob_types() {
+void createSpecialMobTypes() {
     MobCategory* custom_category =
         game.mob_categories.get(MOB_CATEGORY_CUSTOM);
         
-    MobType* bridge_component_type = custom_category->create_type();
+    MobType* bridge_component_type = custom_category->createType();
     bridge_component_type->name = "Bridge component";
     bridge_component_type->blackout_radius = 0;
     bridge_component_type->appears_in_area_editor = false;
@@ -991,8 +991,8 @@ void create_special_mob_types() {
     bridge_component_type->physical_span = 8.0f;
     bridge_component_type->radius = 8.0f;
     bridge_component_type->walkable = true;
-    bridge_component_type->draw_mob_callback = Bridge::draw_component;
+    bridge_component_type->draw_mob_callback = Bridge::drawComponent;
     bridge_component_type->pushes = true;
     bridge_component_type->pushes_softly = false;
-    custom_category->register_type("bridge_component", bridge_component_type);
+    custom_category->registerType("bridge_component", bridge_component_type);
 }

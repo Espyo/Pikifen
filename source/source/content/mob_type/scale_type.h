@@ -29,6 +29,6 @@ public:
     //--- Function declarations ---
     
     ScaleType();
-    void load_cat_properties(DataNode* file) override;
+    void loadCatProperties(DataNode* file) override;
     
 };

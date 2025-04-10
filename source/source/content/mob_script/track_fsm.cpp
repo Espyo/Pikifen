@@ -21,23 +21,23 @@
  *
  * @param typ Mob type to create the finite state machine for.
  */
-void track_fsm::create_fsm(MobType* typ) {
+void track_fsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;
-    efc.new_state("idling", TRACK_STATE_IDLING); {
-        efc.new_event(MOB_EV_ON_ENTER); {
+    efc.newState("idling", TRACK_STATE_IDLING); {
+        efc.newEvent(MOB_EV_ON_ENTER); {
             efc.run(track_fsm::spawn);
         }
-        efc.new_event(MOB_EV_TOUCHED_OBJECT); {
-            efc.run(track_fsm::on_touched);
+        efc.newEvent(MOB_EV_TOUCHED_OBJECT); {
+            efc.run(track_fsm::onTouched);
         }
     }
     
     
     typ->states = efc.finish();
-    typ->first_state_idx = fix_states(typ->states, "idling", typ);
+    typ->first_state_idx = fixStates(typ->states, "idling", typ);
     
     //Check if the number in the enum and the total match up.
-    engine_assert(
+    engineAssert(
         typ->states.size() == N_TRACK_STATES,
         i2s(typ->states.size()) + " registered, " +
         i2s(N_TRACK_STATES) + " in enum."
@@ -52,7 +52,7 @@ void track_fsm::create_fsm(MobType* typ) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void track_fsm::on_touched(Mob* m, void* info1, void* info2) {
+void track_fsm::onTouched(Mob* m, void* info1, void* info2) {
     Track* tra_ptr = (Track*) m;
     Mob* toucher = (Mob*) info1;
     
@@ -60,20 +60,20 @@ void track_fsm::on_touched(Mob* m, void* info1, void* info2) {
     
     //Check if a compatible mob touched it.
     if(
-        has_flag(tra_ptr->tra_type->riders, TRACK_RIDER_FLAG_PIKMIN) &&
+        hasFlag(tra_ptr->tra_type->riders, TRACK_RIDER_FLAG_PIKMIN) &&
         toucher->type->category->id == MOB_CATEGORY_PIKMIN
     ) {
     
         //Pikmin is about to ride it.
-        ev = toucher->fsm.get_event(MOB_EV_TOUCHED_TRACK);
+        ev = toucher->fsm.getEvent(MOB_EV_TOUCHED_TRACK);
         
     } else if(
-        has_flag(tra_ptr->tra_type->riders, TRACK_RIDER_FLAG_LEADERS) &&
+        hasFlag(tra_ptr->tra_type->riders, TRACK_RIDER_FLAG_LEADERS) &&
         toucher->type->category->id == MOB_CATEGORY_LEADERS
     ) {
     
         //Leader is about to ride it.
-        ev = toucher->fsm.get_event(MOB_EV_TOUCHED_TRACK);
+        ev = toucher->fsm.getEvent(MOB_EV_TOUCHED_TRACK);
         
     }
     
@@ -91,7 +91,7 @@ void track_fsm::on_touched(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void track_fsm::spawn(Mob* m, void* info1, void* info2) {
-    m->set_animation(
+    m->setAnimation(
         TRACK_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
     );
 }

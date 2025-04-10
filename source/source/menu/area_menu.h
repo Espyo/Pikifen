@@ -129,11 +129,11 @@ private:
     
     //--- Function declarations ---
     
-    void add_bullet(ListGuiItem* list, const string &text);
-    void animate_info_and_specs();
-    void change_info(size_t area_idx);
-    void init_gui_main();
-    void init_gui_info_page();
-    void init_gui_specs_page();
+    void addBullet(ListGuiItem* list, const string &text);
+    void animateInfoAndSpecs();
+    void changeInfo(size_t area_idx);
+    void initGuiMain();
+    void initGuiInfoPage();
+    void initGuiSpecsPage();
     
 };

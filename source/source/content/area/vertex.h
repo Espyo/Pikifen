@@ -44,16 +44,16 @@ struct Vertex {
     //--- Function declarations ---
     
     explicit Vertex(float x = 0.0f, float y = 0.0f);
-    void add_edge(Edge* e_ptr, size_t e_idx);
-    Edge* get_edge_by_neighbor(const Vertex* neighbor) const;
-    bool has_edge(const Edge* e_ptr) const;
-    bool is_2nd_degree_neighbor(
+    void addEdge(Edge* e_ptr, size_t e_idx);
+    Edge* getEdgeByNeighbor(const Vertex* neighbor) const;
+    bool hasEdge(const Edge* e_ptr) const;
+    bool is2ndDegreeNeighbor(
         const Vertex* other_v, Vertex** first_neighbor
     ) const;
-    bool is_2nd_degree_neighbor(
+    bool is2ndDegreeNeighbor(
         const Edge* other_e, Vertex** first_neighbor
     ) const;
-    bool is_neighbor(const Vertex* v_ptr) const;
-    void remove_edge(const Edge* e_ptr);
+    bool isNeighbor(const Vertex* v_ptr) const;
+    void removeEdge(const Edge* e_ptr);
     
 };

@@ -34,7 +34,7 @@ PileType::PileType() :
         "How many resources this pile starts with, or leave empty for the max.";
     area_editor_props.push_back(aep_amount);
     
-    pile_fsm::create_fsm(this);
+    pile_fsm::createFsm(this);
 }
 
 
@@ -43,12 +43,12 @@ PileType::PileType() :
  *
  * @return The vector.
  */
-anim_conversion_vector PileType::get_anim_conversions() const {
+anim_conversion_vector PileType::getAnimConversions() const {
     anim_conversion_vector v;
     
     v.push_back(std::make_pair(PILE_ANIM_IDLING, "idling"));
     
-    return get_anim_conversions_with_groups(v, N_PILE_ANIMS);
+    return getAnimConversionsWithGroups(v, N_PILE_ANIMS);
 }
 
 
@@ -57,7 +57,7 @@ anim_conversion_vector PileType::get_anim_conversions() const {
  *
  * @param file File to read from.
  */
-void PileType::load_cat_properties(DataNode* file) {
+void PileType::loadCatProperties(DataNode* file) {
     ReaderSetter rs(file);
     
     string contents_str;
@@ -86,7 +86,7 @@ void PileType::load_cat_properties(DataNode* file) {
     }
     
     animation_group_suffixes =
-        semicolon_list_to_vector(size_animation_suffixes_str);
+        semicolonListToVector(size_animation_suffixes_str);
         
     if(animation_group_suffixes.empty()) {
         //Let's make life easier. If no suffixes were given, then create an

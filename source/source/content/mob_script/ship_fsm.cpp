@@ -23,26 +23,26 @@
  *
  * @param typ Mob type to create the finite state machine for.
  */
-void ship_fsm::create_fsm(MobType* typ) {
+void ship_fsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;
     
-    efc.new_state("idling", SHIP_STATE_IDLING); {
-        efc.new_event(MOB_EV_ON_ENTER); {
-            efc.run(ship_fsm::set_anim);
+    efc.newState("idling", SHIP_STATE_IDLING); {
+        efc.newEvent(MOB_EV_ON_ENTER); {
+            efc.run(ship_fsm::setAnim);
         }
-        efc.new_event(MOB_EV_STARTED_RECEIVING_DELIVERY); {
-            efc.run(ship_fsm::start_delivery);
+        efc.newEvent(MOB_EV_STARTED_RECEIVING_DELIVERY); {
+            efc.run(ship_fsm::startDelivery);
         }
-        efc.new_event(MOB_EV_FINISHED_RECEIVING_DELIVERY); {
-            efc.run(ship_fsm::receive_mob);
+        efc.newEvent(MOB_EV_FINISHED_RECEIVING_DELIVERY); {
+            efc.run(ship_fsm::receiveMob);
         }
     }
     
     typ->states = efc.finish();
-    typ->first_state_idx = fix_states(typ->states, "idling", typ);
+    typ->first_state_idx = fixStates(typ->states, "idling", typ);
     
     //Check if the number in the enum and the total match up.
-    engine_assert(
+    engineAssert(
         typ->states.size() == N_SHIP_STATES,
         i2s(typ->states.size()) + " registered, " +
         i2s(N_SHIP_STATES) + " in enum."
@@ -57,8 +57,8 @@ void ship_fsm::create_fsm(MobType* typ) {
  * @param info1 Pointer to the mob.
  * @param info2 Unused.
  */
-void ship_fsm::receive_mob(Mob* m, void* info1, void* info2) {
-    engine_assert(info1 != nullptr, m->print_state_history());
+void ship_fsm::receiveMob(Mob* m, void* info1, void* info2) {
+    engineAssert(info1 != nullptr, m->printStateHistory());
     
     Mob* delivery = (Mob*) info1;
     Ship* shi_ptr = (Ship*) m;
@@ -125,7 +125,7 @@ void ship_fsm::receive_mob(Mob* m, void* info1, void* info2) {
             ) {
                 game.states.gameplay->spray_stats[type_idx].nr_ingredients -=
                     game.config.misc.spray_order[type_idx]->ingredients_needed;
-                game.states.gameplay->change_spray_count(type_idx, 1);
+                game.states.gameplay->changeSprayCount(type_idx, 1);
             }
             break;
         } case RESOURCE_DELIVERY_RESULT_DAMAGE_MOB:
@@ -142,7 +142,7 @@ void ship_fsm::receive_mob(Mob* m, void* info1, void* info2) {
     
     shi_ptr->mobs_being_beamed--;
     ParticleGenerator pg =
-        standard_particle_gen_setup(
+        standardParticleGenSetup(
             game.sys_content_names.part_onion_insertion, shi_ptr
         );
     pg.follow_pos_offset = shi_ptr->shi_type->receptacle_offset;
@@ -159,8 +159,8 @@ void ship_fsm::receive_mob(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ship_fsm::set_anim(Mob* m, void* info1, void* info2) {
-    m->set_animation(
+void ship_fsm::setAnim(Mob* m, void* info1, void* info2) {
+    m->setAnimation(
         SHIP_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
     );
 }
@@ -173,7 +173,7 @@ void ship_fsm::set_anim(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void ship_fsm::start_delivery(Mob* m, void* info1, void* info2) {
+void ship_fsm::startDelivery(Mob* m, void* info1, void* info2) {
     Ship* shi_ptr = (Ship*) m;
     shi_ptr->mobs_being_beamed++;
 }

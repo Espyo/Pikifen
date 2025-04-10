@@ -26,7 +26,7 @@
  * and semicolons become dots.
  * @return The string.
  */
-string get_current_time(bool file_name_friendly) {
+string getCurrentTime(bool file_name_friendly) {
     time_t tt;
     time(&tt);
     struct tm t;
@@ -40,15 +40,15 @@ string get_current_time(bool file_name_friendly) {
     return
         i2s(t.tm_year + 1900) +
         (file_name_friendly ? "-" : "/") +
-        leading_zero(t.tm_mon + 1) +
+        leadingZero(t.tm_mon + 1) +
         (file_name_friendly ? "-" : "/") +
-        leading_zero(t.tm_mday) +
+        leadingZero(t.tm_mday) +
         (file_name_friendly ? "_" : " ") +
-        leading_zero(t.tm_hour) +
+        leadingZero(t.tm_hour) +
         (file_name_friendly ? "." : ":") +
-        leading_zero(t.tm_min) +
+        leadingZero(t.tm_min) +
         (file_name_friendly ? "." : ":") +
-        leading_zero(t.tm_sec);
+        leadingZero(t.tm_sec);
 }
 
 
@@ -58,7 +58,7 @@ string get_current_time(bool file_name_friendly) {
  * @param path Path of the folder to open.
  * @return Whether it succeeded.
  */
-bool open_file_explorer(const string &path) {
+bool openFileExplorer(const string &path) {
 #ifdef _WIN32
     string command = "explorer " + path;
 #elif __APPLE__
@@ -78,7 +78,7 @@ bool open_file_explorer(const string &path) {
  * @param url URL to open.
  * @return Whether it succeeded.
  */
-bool open_web_browser(const string &url) {
+bool openWebBrowser(const string &url) {
 #ifdef _WIN32
     string command = "start " + url;
 #elif __APPLE__

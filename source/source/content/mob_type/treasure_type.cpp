@@ -26,7 +26,7 @@ TreasureType::TreasureType() :
     
     target_type = MOB_TARGET_FLAG_NONE;
     
-    treasure_fsm::create_fsm(this);
+    treasure_fsm::createFsm(this);
 }
 
 
@@ -35,7 +35,7 @@ TreasureType::TreasureType() :
  *
  * @return The vector.
  */
-anim_conversion_vector TreasureType::get_anim_conversions() const {
+anim_conversion_vector TreasureType::getAnimConversions() const {
     anim_conversion_vector v;
     v.push_back(std::make_pair(MOB_TYPE::ANIM_IDLING, "idling"));
     return v;
@@ -47,7 +47,7 @@ anim_conversion_vector TreasureType::get_anim_conversions() const {
  *
  * @param file File to read from.
  */
-void TreasureType::load_cat_properties(DataNode* file) {
+void TreasureType::loadCatProperties(DataNode* file) {
     ReaderSetter rs(file);
     
     rs.set("points", points);

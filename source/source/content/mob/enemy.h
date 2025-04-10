@@ -37,9 +37,9 @@ public:
     //--- Function declarations ---
     
     Enemy(const Point &pos, EnemyType* type, float angle);
-    bool can_receive_status(StatusType* s) const override;
-    void draw_mob() override;
-    void finish_dying_class_specifics() override;
-    void start_dying_class_specifics() override;
+    bool canReceiveStatus(StatusType* s) const override;
+    void drawMob() override;
+    void finishDyingClassSpecifics() override;
+    void startDyingClassSpecifics() override;
     
 };

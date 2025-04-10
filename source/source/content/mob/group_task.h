@@ -69,24 +69,24 @@ public:
     //--- Function declarations ---
     
     GroupTask(const Point &pos, GroupTaskType* type, float angle);
-    void add_worker(Pikmin* who);
-    void finish_task();
-    void free_up_spot(Pikmin* whose);
-    bool get_fraction_numbers_info(
+    void addWorker(Pikmin* who);
+    void finishTask();
+    void freeUpSpot(Pikmin* whose);
+    bool getFractionNumbersInfo(
         float* fraction_value_nr, float* fraction_req_nr,
         ALLEGRO_COLOR* fraction_color
     ) const override;
-    GroupTaskSpot* get_free_spot();
-    float get_power() const;
-    Point get_spot_pos(const Pikmin* whose) const;
-    void reserve_spot(GroupTaskSpot* spot, Pikmin* who);
-    void read_script_vars(const ScriptVarReader &svr) override;
+    GroupTaskSpot* getFreeSpot();
+    float getPower() const;
+    Point getSpotPos(const Pikmin* whose) const;
+    void reserveSpot(GroupTaskSpot* spot, Pikmin* who);
+    void readScriptVars(const ScriptVarReader &svr) override;
     
 protected:
 
     //--- Function declarations ---
     
-    void tick_class_specifics(float delta_t) override;
+    void tickClassSpecifics(float delta_t) override;
     
 private:
 
@@ -101,6 +101,6 @@ private:
     
     //--- Function declarations ---
     
-    void update_spot_absolute_positions();
+    void updateSpotAbsolutePositions();
     
 };

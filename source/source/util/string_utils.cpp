@@ -30,7 +30,7 @@
  * If empty, it'll use the singular text plus an 's'.
  * @return The string.
  */
-string amount_str(
+string amountStr(
     int amount, const string &singular_text, const string &plural_text
 ) {
     string result = i2s(amount) + " ";
@@ -67,7 +67,7 @@ string b2s(bool b) {
  * get truncated.
  * @return The boxed string.
  */
-string box_string(const string &s, size_t size, const string &finisher) {
+string boxString(const string &s, size_t size, const string &finisher) {
     assert(size > finisher.size());
     size_t core_size = std::min(s.size(), size - finisher.size());
     return
@@ -89,7 +89,7 @@ string box_string(const string &s, size_t size, const string &finisher) {
  * @param orig_str Original string.
  * @param new_str Reference to the new string.
  */
-void duplicate_string(const string &orig_str, string &new_str) {
+void duplicateString(const string &orig_str, string &new_str) {
     new_str = string(orig_str.c_str());
 }
 
@@ -117,7 +117,7 @@ string f2s(float f) {
  * @param s2 Second string.
  * @return The match, or an empty string if there's no match.
  */
-string get_matching_string_starts(const string &s1, const string &s2) {
+string getMatchingStringStarts(const string &s1, const string &s2) {
     size_t chars_to_check = std::min(s1.size(), s2.size());
     size_t nr_matching_chars = 0;
     
@@ -142,7 +142,7 @@ string get_matching_string_starts(const string &s1, const string &s2) {
  * @param s The string to check.
  * @return The last component, or an empty string on error.
  */
-string get_path_last_component(const string& s) {
+string getPathLastComponent(const string& s) {
     vector<string> components = split(s, "/");
     if(!components.empty()) return components.back();
     return "";
@@ -155,7 +155,7 @@ string get_path_last_component(const string& s) {
  * @param s String to check.
  * @return Whether it is a number.
  */
-bool is_number(const string &s) {
+bool isNumber(const string &s) {
     for(size_t c = 0; c < s.size(); c++) {
         unsigned char ch = s[c];
         if((ch < '0' || ch > '9') && ch != '-' && ch != ',' && ch != '.') {
@@ -176,7 +176,7 @@ bool is_number(const string &s) {
  * @param padding What character to pad with.
  * @return The padded string.
  */
-string pad_string(const string &s, size_t size, char padding) {
+string padString(const string &s, size_t size, char padding) {
     string result = s;
     if(size > s.size()) {
         result.insert(0, size - s.size(), padding);
@@ -192,7 +192,7 @@ string pad_string(const string &s, size_t size, char padding) {
  * @return The file name without an extension, or the original string if there
  * was no extension.
  */
-string remove_extension(const string &s) {
+string removeExtension(const string &s) {
     size_t pos = s.find_last_of('.');
     if(pos == string::npos) {
         return s;
@@ -209,7 +209,7 @@ string remove_extension(const string &s) {
  * @param replacement What to replace found search terms with.
  * @return The string with the instances replaced.
  */
-string replace_all(string s, const string &search, const string &replacement) {
+string replaceAll(string s, const string &search, const string &replacement) {
     size_t pos = s.find(search);
     while(pos != string::npos) {
         s.replace(pos, search.size(), replacement);
@@ -229,8 +229,8 @@ string replace_all(string s, const string &search, const string &replacement) {
  */
 bool s2b(const string &s) {
     string s2 = s;
-    s2 = str_to_lower(s2);
-    s2 = trim_spaces(s2);
+    s2 = strToLower(s2);
+    s2 = trimSpaces(s2);
     if(s2 == "yes" || s2 == "true" || s2 == "y" || s2 == "t") return true;
     else return (s2i(s2) != 0);
 }
@@ -244,7 +244,7 @@ bool s2b(const string &s) {
  * @return The float.
  */
 double s2f(const string &s) {
-    string s2 = trim_spaces(s);
+    string s2 = trimSpaces(s);
     replace(s2.begin(), s2.end(), ',', '.');
     return atof(s2.c_str());
 }
@@ -269,10 +269,10 @@ int s2i(const string &s) {
  * Default is semicolon.
  * @return The vector.
  */
-vector<string> semicolon_list_to_vector(const string &s, const string &sep) {
+vector<string> semicolonListToVector(const string &s, const string &sep) {
     vector<string> parts = split(s, sep);
     for(size_t p = 0; p < parts.size(); p++) {
-        parts[p] = trim_spaces(parts[p]);
+        parts[p] = trimSpaces(parts[p]);
     }
     return parts;
 }
@@ -336,7 +336,7 @@ vector<string> split(
  * @param end End to match with.
  * @return Whether it matches.
  */
-bool str_ends_with(const string &s, const string &end) {
+bool strEndsWith(const string &s, const string &end) {
     if(end.size() > s.size()) return false;
     return s.compare(s.length() - end.length(), end.length(), end) == 0;
 }
@@ -351,7 +351,7 @@ bool str_ends_with(const string &s, const string &end) {
  * @param match What string to match with.
  * @return Whether it matches.
  */
-bool str_peek(const string &s, size_t where, const string &match) {
+bool strPeek(const string &s, size_t where, const string &match) {
     if(where + match.size() > s.size()) return false;
     return s.substr(where, match.size()) == match;
 }
@@ -364,7 +364,7 @@ bool str_peek(const string &s, size_t where, const string &match) {
  * @param start Start to match with.
  * @return Whether it matches.
  */
-bool str_starts_with(const string &s, const string &start) {
+bool strStartsWith(const string &s, const string &start) {
     if(start.size() > s.size()) return false;
     return s.compare(0, start.length(), start) == 0;
 }
@@ -376,7 +376,7 @@ bool str_starts_with(const string &s, const string &start) {
  * @param s String to convert.
  * @return The string in lowercase.
  */
-string str_to_lower(string s) {
+string strToLower(string s) {
     size_t n_characters = s.size();
     for(size_t c = 0; c < n_characters; c++) {
         s[c] = (char) tolower(s[c]);
@@ -391,9 +391,9 @@ string str_to_lower(string s) {
  * @param s String to convert.
  * @return The string in sentence case.
  */
-string str_to_sentence(string s) {
+string strToSentence(string s) {
     if(!s.empty()) {
-        s = str_to_lower(s);
+        s = strToLower(s);
         s[0] = (char) toupper(s[0]);
     }
     return s;
@@ -406,7 +406,7 @@ string str_to_sentence(string s) {
  * @param s String to convert.
  * @return The string in title case.
  */
-string str_to_title(string s) {
+string strToTitle(string s) {
     size_t letter_streak = 0;
     size_t n_characters = s.size();
     for(size_t c = 0; c < n_characters; c++) {
@@ -431,7 +431,7 @@ string str_to_title(string s) {
  * @param s String to convert.
  * @return The string in uppercase.
  */
-string str_to_upper(string s) {
+string strToUpper(string s) {
     size_t n_characters = s.size();
     for(size_t c = 0; c < n_characters; c++) {
         s[c] = (char) toupper(s[c]);
@@ -450,7 +450,7 @@ string str_to_upper(string s) {
  * @param flags Flags to change behavior with. Use TIME_TO_STR_FLAG.
  * @return The time string.
  */
-string time_to_str2(
+string timeToStr2(
     size_t units,
     const string &suffix1, const string &suffix2,
     uint8_t flags
@@ -492,7 +492,7 @@ string time_to_str2(
  * @param flags Flags to change behavior with. Use TIME_TO_STR_FLAG.
  * @return The time string.
  */
-string time_to_str3(
+string timeToStr3(
     size_t units,
     const string &suffix1, const string &suffix2, const string &suffix3,
     uint8_t flags
@@ -545,7 +545,7 @@ string time_to_str3(
  * @param left_only If true, only trim the spaces at the left.
  * @return The trimmed string.
  */
-string trim_spaces(const string &s, bool left_only) {
+string trimSpaces(const string &s, bool left_only) {
     string orig = s;
     //Spaces before.
     if(orig.size()) {
@@ -580,7 +580,7 @@ string trim_spaces(const string &s, bool left_only) {
  * @param size Maximum size allowed.
  * @return The trimmed string.
  */
-string trim_with_ellipsis(const string &str, size_t size) {
+string trimWithEllipsis(const string &str, size_t size) {
     if(str.size() <= size) return str;
     
     string result = str;
@@ -601,7 +601,7 @@ string trim_with_ellipsis(const string &str, size_t size) {
  * unless it's impossible to split.
  * @return The wrapped string.
  */
-string word_wrap(const string &s, size_t nr_chars_per_line) {
+string wordWrap(const string &s, size_t nr_chars_per_line) {
     string result;
     string word_in_queue;
     size_t cur_line_width = 0;

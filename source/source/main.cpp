@@ -27,7 +27,7 @@ int main(int argc, char** argv) {
         return game_start_result;
     }
     
-    game.main_loop();
+    game.mainLoop();
     
     game.shutdown();
     

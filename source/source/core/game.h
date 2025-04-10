@@ -277,16 +277,16 @@ public:
     //--- Function declarations ---
     
     Game();
-    void change_state(
+    void changeState(
         GameState* new_state,
         bool unload_current = true, bool load_new = true
     );
-    string get_cur_state_name() const;
-    void unload_loaded_state(GameState* loaded_state);
-    void register_audio_stream_source(ALLEGRO_AUDIO_STREAM* stream);
-    void unregister_audio_stream_source(ALLEGRO_AUDIO_STREAM* stream);
+    string getCurStateName() const;
+    void unloadLoadedState(GameState* loaded_state);
+    void registerAudioStreamSource(ALLEGRO_AUDIO_STREAM* stream);
+    void unregisterAudioStreamSource(ALLEGRO_AUDIO_STREAM* stream);
     int start();
-    void main_loop();
+    void mainLoop();
     void shutdown();
     
 private:
@@ -308,10 +308,10 @@ private:
     
     //--- Function declarations ---
     
-    void global_drawing();
-    void global_logic();
-    void global_handle_allegro_event(const ALLEGRO_EVENT &ev);
-    bool global_handle_system_player_action(const PlayerAction &action);
+    void globalDrawing();
+    void globalLogic();
+    void globalHandleAllegroEvent(const ALLEGRO_EVENT &ev);
+    bool globalHandleSystemPlayerAction(const PlayerAction &action);
     
 };
 

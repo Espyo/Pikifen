@@ -20,16 +20,16 @@
  *
  * @param action Data about the action.
  */
-void GameplayState::handle_player_action(const PlayerAction &action) {
+void GameplayState::handlePlayerAction(const PlayerAction &action) {
 
-    if(should_ignore_player_action(action)) return;
+    if(shouldIngorePlayerAction(action)) return;
     
     bool is_down = (action.value >= 0.5);
     
     //Before we do the actions, we'll tell the leader object
     //it's recieved an input, which will trigger an event.
     if(cur_leader_ptr) {
-        cur_leader_ptr->fsm.run_event(
+        cur_leader_ptr->fsm.runEvent(
             MOB_EV_INPUT_RECEIVED,
             (void*) &action
         );
@@ -56,7 +56,7 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
                     game.options.controls.auto_throw_mode == AUTO_THROW_MODE_TOGGLE &&
                     cur_leader_ptr->auto_throw_repeater.time != LARGE_FLOAT
                 ) {
-                    cur_leader_ptr->stop_auto_throwing();
+                    cur_leader_ptr->stopAutoThrowing();
                     done = true;
                 }
                 
@@ -66,7 +66,7 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
                     cur_leader_ptr &&
                     close_to_ship_to_heal
                 ) {
-                    close_to_ship_to_heal->heal_leader(cur_leader_ptr);
+                    close_to_ship_to_heal->healLeader(cur_leader_ptr);
                     done = true;
                 }
                 
@@ -76,7 +76,7 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
                     cur_leader_ptr &&
                     close_to_pikmin_to_pluck
                 ) {
-                    cur_leader_ptr->fsm.run_event(
+                    cur_leader_ptr->fsm.runEvent(
                         LEADER_EV_GO_PLUCK,
                         (void*)close_to_pikmin_to_pluck
                     );
@@ -93,15 +93,15 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
                         close_to_nest_to_open,
                         cur_leader_ptr
                     );
-                    hud->gui.start_animation(
+                    hud->gui.startAnimation(
                         GUI_MANAGER_ANIM_IN_TO_OUT,
                         GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
                     );
                     paused = true;
-                    game.audio.handle_world_pause();
+                    game.audio.handleWorldPause();
                     
                     //TODO replace with a better solution.
-                    cur_leader_ptr->fsm.run_event(LEADER_EV_STOP_WHISTLE);
+                    cur_leader_ptr->fsm.runEvent(LEADER_EV_STOP_WHISTLE);
                     
                     done = true;
                 }
@@ -113,7 +113,7 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
                     close_to_interactable_to_use
                 ) {
                     string msg = "interact";
-                    cur_leader_ptr->send_script_message(
+                    cur_leader_ptr->sendScriptMessage(
                         close_to_interactable_to_use, msg
                     );
                     done = true;
@@ -129,11 +129,11 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
                 ) {
                     switch (game.options.controls.auto_throw_mode) {
                     case AUTO_THROW_MODE_OFF: {
-                        done = grab_closest_group_member();
+                        done = grabClosestGroupMember();
                         break;
                     } case AUTO_THROW_MODE_HOLD:
                     case AUTO_THROW_MODE_TOGGLE: {
-                        cur_leader_ptr->start_auto_throwing();
+                        cur_leader_ptr->startAutoThrowing();
                         done = true;
                         break;
                     }
@@ -148,7 +148,7 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
                     !done &&
                     cur_leader_ptr
                 ) {
-                    cur_leader_ptr->fsm.run_event(LEADER_EV_PUNCH);
+                    cur_leader_ptr->fsm.runEvent(LEADER_EV_PUNCH);
                     done = true;
                 }
                 
@@ -157,10 +157,10 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
                 if(cur_leader_ptr) {
                     switch (game.options.controls.auto_throw_mode) {
                     case AUTO_THROW_MODE_OFF: {
-                        cur_leader_ptr->queue_throw();
+                        cur_leader_ptr->queueThrow();
                         break;
                     } case AUTO_THROW_MODE_HOLD: {
-                        cur_leader_ptr->stop_auto_throwing();
+                        cur_leader_ptr->stopAutoThrowing();
                         break;
                     } case AUTO_THROW_MODE_TOGGLE: {
                         break;
@@ -187,14 +187,14 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
                 
                 if(cur_leader_ptr) {
                     MobEvent* cancel_ev =
-                        cur_leader_ptr->fsm.get_event(LEADER_EV_CANCEL);
+                        cur_leader_ptr->fsm.getEvent(LEADER_EV_CANCEL);
                         
                     if(cancel_ev) {
                         //Cancel auto-pluck, lying down, etc.
                         cancel_ev->run(cur_leader_ptr);
                     } else {
                         //Start whistling.
-                        cur_leader_ptr->fsm.run_event(LEADER_EV_START_WHISTLE);
+                        cur_leader_ptr->fsm.runEvent(LEADER_EV_START_WHISTLE);
                     }
                 }
                 
@@ -202,7 +202,7 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
                 //Button released.
                 
                 if(cur_leader_ptr) {
-                    cur_leader_ptr->fsm.run_event(LEADER_EV_STOP_WHISTLE);
+                    cur_leader_ptr->fsm.runEvent(LEADER_EV_STOP_WHISTLE);
                 }
                 
             }
@@ -220,7 +220,7 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
             
             if(!is_down) return;
             
-            change_to_next_leader(
+            changeToNextLeader(
                 action.actionTypeId == PLAYER_ACTION_TYPE_NEXT_LEADER,
                 false, false
             );
@@ -238,7 +238,7 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
             if(!is_down) return;
             
             if(cur_leader_ptr && !cur_leader_ptr->group->members.empty()) {
-                cur_leader_ptr->fsm.run_event(LEADER_EV_DISMISS);
+                cur_leader_ptr->fsm.runEvent(LEADER_EV_DISMISS);
             }
             
             break;
@@ -259,15 +259,15 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
                 action.actionTypeId == PLAYER_ACTION_TYPE_RADAR
             );
             paused = true;
-            game.audio.handle_world_pause();
-            hud->gui.start_animation(
+            game.audio.handleWorldPause();
+            hud->gui.startAnimation(
                 GUI_MANAGER_ANIM_IN_TO_OUT,
                 GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
             );
             
             //TODO replace with a better solution.
             if(cur_leader_ptr) {
-                cur_leader_ptr->fsm.run_event(LEADER_EV_STOP_WHISTLE);
+                cur_leader_ptr->fsm.runEvent(LEADER_EV_STOP_WHISTLE);
             }
             
             break;
@@ -288,7 +288,7 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
                     game.content.spray_types.list.size() == 2
                 ) {
                     size_t spray_idx = 0;
-                    cur_leader_ptr->fsm.run_event(
+                    cur_leader_ptr->fsm.runEvent(
                         LEADER_EV_SPRAY, (void*) &spray_idx
                     );
                 }
@@ -303,7 +303,7 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
             if(cur_leader_ptr) {
                 if(game.content.spray_types.list.size() == 2) {
                     size_t spray_idx = 1;
-                    cur_leader_ptr->fsm.run_event(
+                    cur_leader_ptr->fsm.runEvent(
                         LEADER_EV_SPRAY, (void*) &spray_idx
                     );
                 }
@@ -319,14 +319,14 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
             if(cur_leader_ptr) {
                 if(game.content.spray_types.list.size() > 2) {
                     selected_spray =
-                        sum_and_wrap(
+                        sumAndWrap(
                             (int) selected_spray,
                             action.actionTypeId ==
                             PLAYER_ACTION_TYPE_NEXT_SPRAY ? +1 : -1,
                             (int) game.content.spray_types.list.size()
                         );
                     game.states.gameplay->hud->
-                    spray_1_amount->start_juice_animation(
+                    spray_1_amount->startJuiceAnimation(
                         GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
                     );
                 }
@@ -340,7 +340,7 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
             
             if(cur_leader_ptr) {
                 if(game.content.spray_types.list.size() > 2) {
-                    cur_leader_ptr->fsm.run_event(
+                    cur_leader_ptr->fsm.runEvent(
                         LEADER_EV_SPRAY,
                         (void*) &selected_spray
                     );
@@ -371,7 +371,7 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
                 }
             }
             
-            game.audio.create_ui_sound_source(game.sys_content.sound_camera);
+            game.audio.createUiSoundsource(game.sys_content.sound_camera);
             
             break;
             
@@ -409,7 +409,7 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
             
             SoundSourceConfig cam_sound_config;
             cam_sound_config.stack_mode = SOUND_STACK_MODE_NEVER;
-            game.audio.create_ui_sound_source(
+            game.audio.createUiSoundsource(
                 game.sys_content.sound_camera,
                 cam_sound_config
             );
@@ -427,7 +427,7 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
             if(!is_down) return;
             
             if(cur_leader_ptr) {
-                cur_leader_ptr->fsm.run_event(LEADER_EV_LIE_DOWN);
+                cur_leader_ptr->fsm.runEvent(LEADER_EV_LIE_DOWN);
             }
             
             break;
@@ -454,7 +454,7 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
                 if(cur_leader_ptr->holding.empty()) {
                     //If the leader isn't holding anybody.
                     switch_successful =
-                        cur_leader_ptr->group->change_standby_type(
+                        cur_leader_ptr->group->changeStandbyType(
                             action.actionTypeId == PLAYER_ACTION_TYPE_PREV_TYPE
                         );
                         
@@ -468,7 +468,7 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
                     bool finish = false;
                     do {
                         switch_successful =
-                            cur_leader_ptr->group->change_standby_type(
+                            cur_leader_ptr->group->changeStandbyType(
                                 action.actionTypeId == PLAYER_ACTION_TYPE_PREV_TYPE
                             );
                             
@@ -483,7 +483,7 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
                             
                         } else {
                             //Switched to a new subgroup.
-                            update_closest_group_members();
+                            updateClosestGroupMembers();
                             if(!closest_group_member_distant) {
                                 finish = true;
                             }
@@ -493,14 +493,14 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
                     } while(!finish);
                     
                     if(switch_successful) {
-                        cur_leader_ptr->swap_held_pikmin(
+                        cur_leader_ptr->swapHeldPikmin(
                             closest_group_member[BUBBLE_RELATION_CURRENT]
                         );
                     }
                 }
                 
                 if(switch_successful) {
-                    game.audio.create_ui_sound_source(
+                    game.audio.createUiSoundsource(
                         game.sys_content.sound_switch_pikmin
                     );
                 }
@@ -558,7 +558,7 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
             bool finished = false;
             do {
                 next_maturity =
-                    (size_t) sum_and_wrap(
+                    (size_t) sumAndWrap(
                         (int) next_maturity,
                         (
                             action.actionTypeId ==
@@ -578,7 +578,7 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
             } while(!finished);
             
             if(new_pikmin) {
-                cur_leader_ptr->swap_held_pikmin(new_pikmin);
+                cur_leader_ptr->swapHeldPikmin(new_pikmin);
             }
             
             break;
@@ -713,7 +713,7 @@ void GameplayState::handle_player_action(const PlayerAction &action) {
  * @param action Action to check.
  * @return Whether it should be ignored.
  */
-bool GameplayState::should_ignore_player_action(const PlayerAction &action) {
+bool GameplayState::shouldIngorePlayerAction(const PlayerAction &action) {
     const vector<int> actions_allowed_during_interludes {
         PLAYER_ACTION_TYPE_CHANGE_ZOOM,
         PLAYER_ACTION_TYPE_CURSOR_DOWN,
@@ -727,7 +727,7 @@ bool GameplayState::should_ignore_player_action(const PlayerAction &action) {
     if(!ready_for_input || !is_input_allowed) return true;
     if(cur_interlude != INTERLUDE_NONE) {
         if(
-            !is_in_container(
+            !isInContainer(
                 actions_allowed_during_interludes, action.actionTypeId
             )
         ) {

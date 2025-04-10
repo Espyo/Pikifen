@@ -25,7 +25,7 @@ TrackType::TrackType() :
     
     target_type = MOB_TARGET_FLAG_NONE;
     
-    track_fsm::create_fsm(this);
+    track_fsm::createFsm(this);
 }
 
 
@@ -34,7 +34,7 @@ TrackType::TrackType() :
  *
  * @return The vector.
  */
-anim_conversion_vector TrackType::get_anim_conversions() const {
+anim_conversion_vector TrackType::getAnimConversions() const {
     anim_conversion_vector v;
     v.push_back(std::make_pair(DROP_ANIM_IDLING, "idling"));
     return v;
@@ -46,7 +46,7 @@ anim_conversion_vector TrackType::get_anim_conversions() const {
  *
  * @param file File to read from.
  */
-void TrackType::load_cat_properties(DataNode* file) {
+void TrackType::loadCatProperties(DataNode* file) {
     ReaderSetter rs(file);
     
     string riders_str;
@@ -64,9 +64,9 @@ void TrackType::load_cat_properties(DataNode* file) {
         vector<string> riders_str_words = split(riders_str);
         for(size_t r = 0; r < riders_str_words.size(); r++) {
             if(riders_str_words[r] == "pikmin") {
-                enable_flag(riders, TRACK_RIDER_FLAG_PIKMIN);
+                enableFlag(riders, TRACK_RIDER_FLAG_PIKMIN);
             } else if(riders_str_words[r] == "leaders") {
-                enable_flag(riders, TRACK_RIDER_FLAG_LEADERS);
+                enableFlag(riders, TRACK_RIDER_FLAG_LEADERS);
             } else {
                 game.errors.report(
                     "Unknown type of rider \"" + riders_str_words[r] + "\"!",
@@ -99,7 +99,7 @@ void TrackType::load_cat_properties(DataNode* file) {
  *
  * @param file File to read from.
  */
-void TrackType::load_cat_resources(DataNode* file) {
+void TrackType::loadCatResources(DataNode* file) {
     //We don't actually need to load any, but we know that if this function
     //is run, then the animations are definitely loaded.
     //Now's a good time to check if the track has 2+ checkpoints.

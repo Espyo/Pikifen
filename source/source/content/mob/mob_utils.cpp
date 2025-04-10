@@ -73,11 +73,11 @@ CarryInfo::CarryInfo(
  *
  * @return Whether it can fly.
  */
-bool CarryInfo::can_fly() const {
+bool CarryInfo::canFly() const {
     for(size_t c = 0; c < spot_info.size(); c++) {
         Mob* carrier_ptr = spot_info[c].pik_ptr;
         if(!carrier_ptr) continue;
-        if(!has_flag(spot_info[c].pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR)) {
+        if(!hasFlag(spot_info[c].pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR)) {
             return false;
         }
     }
@@ -91,7 +91,7 @@ bool CarryInfo::can_fly() const {
  *
  * @return The invulnerabilities.
  */
-vector<Hazard*> CarryInfo::get_carrier_invulnerabilities() const {
+vector<Hazard*> CarryInfo::getCarrierInvulnerabilities() const {
     //Get all types to save on the amount of hazard checks.
     unordered_set<MobType*> carrier_types;
     for(size_t c = 0; c < spot_info.size(); c++) {
@@ -100,7 +100,7 @@ vector<Hazard*> CarryInfo::get_carrier_invulnerabilities() const {
         carrier_types.insert(carrier_ptr->type);
     }
     
-    return get_mob_type_list_invulnerabilities(carrier_types);
+    return getMobTypeListInvulnerabilities(carrier_types);
 }
 
 
@@ -110,7 +110,7 @@ vector<Hazard*> CarryInfo::get_carrier_invulnerabilities() const {
  *
  * @return The speed.
  */
-float CarryInfo::get_speed() const {
+float CarryInfo::getSpeed() const {
     if(cur_n_carriers == 0) {
         return 0;
     }
@@ -124,7 +124,7 @@ float CarryInfo::get_speed() const {
         if(s_ptr->state != CARRY_SPOT_STATE_USED) continue;
         
         Pikmin* p_ptr = (Pikmin*) s_ptr->pik_ptr;
-        max_speed += p_ptr->get_base_speed() * p_ptr->get_speed_multiplier();
+        max_speed += p_ptr->getBaseSpeed() * p_ptr->getSpeedMultiplier();
     }
     max_speed /= cur_n_carriers;
     
@@ -153,7 +153,7 @@ float CarryInfo::get_speed() const {
  *
  * @return Whether it is empty.
  */
-bool CarryInfo::is_empty() const {
+bool CarryInfo::isEmpty() const {
     for(size_t s = 0; s < spot_info.size(); s++) {
         if(spot_info[s].state != CARRY_SPOT_STATE_FREE) return false;
     }
@@ -166,7 +166,7 @@ bool CarryInfo::is_empty() const {
  *
  * @return Whether it is full.
  */
-bool CarryInfo::is_full() const {
+bool CarryInfo::isFull() const {
     for(size_t s = 0; s < spot_info.size(); s++) {
         if(spot_info[s].state == CARRY_SPOT_STATE_FREE) return false;
     }
@@ -182,7 +182,7 @@ bool CarryInfo::is_full() const {
  *
  * @param angle Angle to rotate to.
  */
-void CarryInfo::rotate_points(float angle) {
+void CarryInfo::rotatePoints(float angle) {
     for(size_t s = 0; s < spot_info.size(); s++) {
         float s_angle = angle + (TAU / m->type->max_carriers * s);
         Point p(
@@ -233,8 +233,8 @@ Group::Group(Mob* leader_ptr) :
  * @param move_backwards If true, go through the list backwards.
  * @return Whether it succeeded.
  */
-bool Group::change_standby_type(bool move_backwards) {
-    return get_next_standby_type(move_backwards, &cur_standby_type);
+bool Group::changeStandbyType(bool move_backwards) {
+    return getNextStandbyType(move_backwards, &cur_standby_type);
 }
 
 
@@ -242,7 +242,7 @@ bool Group::change_standby_type(bool move_backwards) {
  * @brief Changes to a different standby subgroup type in case there are no more
  * Pikmin of the current one. Or to no type.
  */
-void Group::change_standby_type_if_needed() {
+void Group::changeStandbyTypeIfNeeded() {
     for(size_t m = 0; m < members.size(); m++) {
         if(members[m]->subgroup_type_ptr == cur_standby_type) {
             //Never mind, there is a member of this subgroup type.
@@ -250,7 +250,7 @@ void Group::change_standby_type_if_needed() {
         }
     }
     //No members of the current type? Switch to the next.
-    change_standby_type(false);
+    changeStandbyType(false);
 }
 
 
@@ -260,7 +260,7 @@ void Group::change_standby_type_if_needed() {
  * @param type Type to check.
  * @return The amount.
  */
-size_t Group::get_amount_by_type(const MobType* type) const {
+size_t Group::getAmountByType(const MobType* type) const {
     size_t amount = 0;
     for(size_t m = 0; m < members.size(); m++) {
         if(members[m]->type == type) {
@@ -276,7 +276,7 @@ size_t Group::get_amount_by_type(const MobType* type) const {
  *
  * @return The average position.
  */
-Point Group::get_average_member_pos() const {
+Point Group::getAverageMemberPos() const {
     Point avg;
     for(size_t m = 0; m < members.size(); m++) {
         avg += members[m]->pos;
@@ -292,7 +292,7 @@ Point Group::get_average_member_pos() const {
  * @param include_leader If not nullptr, include the group leader mob.
  * @return The list of invulnerabilities.
  */
-vector<Hazard*> Group::get_group_invulnerabilities(
+vector<Hazard*> Group::getGroupInvulnerabilities(
     Mob* include_leader
 ) const {
     //Get all types to save on the amount of hazard checks.
@@ -305,7 +305,7 @@ vector<Hazard*> Group::get_group_invulnerabilities(
     
     if(include_leader) member_types.insert(include_leader->type);
     
-    return get_mob_type_list_invulnerabilities(member_types);
+    return getMobTypeListInvulnerabilities(member_types);
 }
 
 
@@ -316,7 +316,7 @@ vector<Hazard*> Group::get_group_invulnerabilities(
  * @param new_type The new type is returned here.
  * @return Whether it succeeded.
  */
-bool Group::get_next_standby_type(
+bool Group::getNextStandbyType(
     bool move_backwards, SubgroupType** new_type
 ) {
 
@@ -330,22 +330,22 @@ bool Group::get_next_standby_type(
     SubgroupType* final_type = cur_standby_type;
     if(!starting_type) {
         starting_type =
-            game.states.gameplay->subgroup_types.get_first_type();
+            game.states.gameplay->subgroup_types.getFirstType();
     }
     SubgroupType* scanning_type = starting_type;
     SubgroupType* leader_subgroup_type =
-        game.states.gameplay->subgroup_types.get_type(
+        game.states.gameplay->subgroup_types.getType(
             SUBGROUP_TYPE_CATEGORY_LEADER
         );
         
     if(move_backwards) {
         scanning_type =
-            game.states.gameplay->subgroup_types.get_prev_type(
+            game.states.gameplay->subgroup_types.getPrevType(
                 scanning_type
             );
     } else {
         scanning_type =
-            game.states.gameplay->subgroup_types.get_next_type(
+            game.states.gameplay->subgroup_types.getNextType(
                 scanning_type
             );
     }
@@ -368,12 +368,12 @@ bool Group::get_next_standby_type(
         
         if(move_backwards) {
             scanning_type =
-                game.states.gameplay->subgroup_types.get_prev_type(
+                game.states.gameplay->subgroup_types.getPrevType(
                     scanning_type
                 );
         } else {
             scanning_type =
-                game.states.gameplay->subgroup_types.get_next_type(
+                game.states.gameplay->subgroup_types.getNextType(
                     scanning_type
                 );
         }
@@ -391,7 +391,7 @@ bool Group::get_next_standby_type(
  * @param spot_idx Index of the spot to check.
  * @return The offset.
  */
-Point Group::get_spot_offset(size_t spot_idx) const {
+Point Group::getSpotOffset(size_t spot_idx) const {
     Point res = spots[spot_idx].pos;
     al_transform_coordinates(&transform, &res.x, &res.y);
     return res;
@@ -406,7 +406,7 @@ Point Group::get_spot_offset(size_t spot_idx) const {
  * @param affected_mob_ptr If this initialization is because a new mob entered
  * or left the group, this should point to said mob.
  */
-void Group::init_spots(Mob* affected_mob_ptr) {
+void Group::initSpots(Mob* affected_mob_ptr) {
     if(members.empty()) {
         spots.clear();
         radius = 0;
@@ -582,13 +582,13 @@ void Group::init_spots(Mob* affected_mob_ptr) {
  * @brief Assigns each mob a new spot, given how close each one of them is to
  * each spot.
  */
-void Group::reassign_spots() {
+void Group::reassignSpots() {
     for(size_t m = 0; m < members.size(); m++) {
         members[m]->group_spot_idx = INVALID;
     }
     
     for(size_t s = 0; s < spots.size(); s++) {
-        Point spot_pos = anchor + get_spot_offset(s);
+        Point spot_pos = anchor + getSpotOffset(s);
         Mob* closest_mob = nullptr;
         Distance closest_dist;
         
@@ -626,7 +626,7 @@ void Group::sort(SubgroupType* leading_type) {
     size_t cur_spot = 0;
     
     while(cur_spot != spots.size()) {
-        Point spot_pos = anchor + get_spot_offset(cur_spot);
+        Point spot_pos = anchor + getSpotOffset(cur_spot);
         
         //Find the member closest to this spot.
         Mob* closest_member = nullptr;
@@ -649,7 +649,7 @@ void Group::sort(SubgroupType* leading_type) {
             //There are no more members of the current type left!
             //Next type.
             cur_type =
-                game.states.gameplay->subgroup_types.get_next_type(cur_type);
+                game.states.gameplay->subgroup_types.getNextType(cur_type);
         } else {
             spots[cur_spot].mob_ptr = closest_member;
             closest_member->group_spot_idx = cur_spot;
@@ -679,23 +679,23 @@ void HoldInfo::clear() {
  * @param out_z The Z coordinate is returned here.
  * @return The (X and Y) coordinates.
  */
-Point HoldInfo::get_final_pos(float* out_z) const {
+Point HoldInfo::getFinalPos(float* out_z) const {
     if(!m) return Point();
     
     Hitbox* h_ptr = nullptr;
     if(hitbox_idx != INVALID) {
-        h_ptr = m->get_hitbox(hitbox_idx);
+        h_ptr = m->getHitbox(hitbox_idx);
     }
     
     Point final_pos;
     
     if(h_ptr) {
         //Hitbox.
-        final_pos = rotate_point(h_ptr->pos, m->angle);
+        final_pos = rotatePoint(h_ptr->pos, m->angle);
         final_pos += m->pos;
         
         final_pos +=
-            angle_to_coordinates(
+            angleToCoordinates(
                 offset_angle + m->angle,
                 offset_dist * h_ptr->radius
             );
@@ -705,7 +705,7 @@ Point HoldInfo::get_final_pos(float* out_z) const {
         final_pos = m->pos;
         
         final_pos +=
-            angle_to_coordinates(
+            angleToCoordinates(
                 offset_angle + m->angle,
                 offset_dist * m->radius
             );
@@ -741,7 +741,7 @@ Path::Path(
     settings(settings) {
     
     result =
-        get_path(
+        getPath(
             m->pos, settings.target_point, settings,
             path, nullptr, nullptr, nullptr
         );
@@ -754,7 +754,7 @@ Path::Path(
  * @param out_reason If not nullptr, the reason is returned here.
  * @return Whether there is a blockage.
  */
-bool Path::check_blockage(PATH_BLOCK_REASON* out_reason) {
+bool Path::checkBlockage(PATH_BLOCK_REASON* out_reason) {
     if(
         path.size() >= 2 &&
         cur_path_stop_idx > 0 &&
@@ -764,7 +764,7 @@ bool Path::check_blockage(PATH_BLOCK_REASON* out_reason) {
         PathStop* next_stop = path[cur_path_stop_idx];
         
         return
-            !can_traverse_path_link(
+            !canTraversePathLink(
                 cur_stop->get_link(next_stop),
                 settings,
                 out_reason
@@ -803,7 +803,7 @@ PikminNest::PikminNest(
  * @param type_idx Index of the Pikmin type, from the types this nest manages.
  * @return Whether a Pikmin spawned.
  */
-bool PikminNest::call_pikmin(Mob* m_ptr, size_t type_idx) {
+bool PikminNest::callPikmin(Mob* m_ptr, size_t type_idx) {
     if(
         game.states.gameplay->mobs.pikmin_list.size() >=
         game.config.rules.max_pikmin_in_field
@@ -825,31 +825,31 @@ bool PikminNest::call_pikmin(Mob* m_ptr, size_t type_idx) {
         size_t leg_idx =
             game.rng.i(0, (int) (nest_type->leg_body_parts.size() / 2) - 1);
         size_t leg_hole_bp_idx =
-            m_ptr->anim.anim_db->find_body_part(
+            m_ptr->anim.anim_db->findBodyPart(
                 nest_type->leg_body_parts[leg_idx * 2]
             );
         size_t leg_foot_bp_idx =
-            m_ptr->anim.anim_db->find_body_part(
+            m_ptr->anim.anim_db->findBodyPart(
                 nest_type->leg_body_parts[leg_idx * 2 + 1]
             );
         Point spawn_coords =
-            m_ptr->get_hitbox(leg_hole_bp_idx)->get_cur_pos(
+            m_ptr->getHitbox(leg_hole_bp_idx)->getCurPos(
                 m_ptr->pos, m_ptr->angle
             );
         float spawn_angle =
-            get_angle(m_ptr->pos, spawn_coords);
+            getAngle(m_ptr->pos, spawn_coords);
             
         //Create the Pikmin.
         Pikmin* new_pikmin =
             (Pikmin*)
-            create_mob(
+            createMob(
                 game.mob_categories.get(MOB_CATEGORY_PIKMIN),
                 spawn_coords, nest_type->pik_types[type_idx], spawn_angle,
                 "maturity=" + i2s(cur_m)
             );
             
         //Set its data to start sliding.
-        new_pikmin->fsm.set_state(PIKMIN_STATE_LEAVING_ONION, (void*) this);
+        new_pikmin->fsm.setState(PIKMIN_STATE_LEAVING_ONION, (void*) this);
         vector<size_t> checkpoints;
         checkpoints.push_back(leg_hole_bp_idx);
         checkpoints.push_back(leg_foot_bp_idx);
@@ -872,7 +872,7 @@ bool PikminNest::call_pikmin(Mob* m_ptr, size_t type_idx) {
  * @param type Type to check.
  * @return The amount.
  */
-size_t PikminNest::get_amount_by_type(const PikminType* type) {
+size_t PikminNest::getAmountByType(const PikminType* type) {
     size_t amount = 0;
     for(size_t t = 0; t < nest_type->pik_types.size(); t++) {
         if(nest_type->pik_types[t] == type) {
@@ -892,7 +892,7 @@ size_t PikminNest::get_amount_by_type(const PikminType* type) {
  *
  * @param svr Script var reader to use.
  */
-void PikminNest::read_script_vars(const ScriptVarReader &svr) {
+void PikminNest::readScriptVars(const ScriptVarReader &svr) {
     string pikmin_inside_var;
     
     if(svr.get("pikmin_inside", pikmin_inside_var)) {
@@ -919,7 +919,7 @@ void PikminNest::read_script_vars(const ScriptVarReader &svr) {
  * @param amount How many to call out.
  * @param l_ptr Leader responsible.
  */
-void PikminNest::request_pikmin(
+void PikminNest::requestPikmin(
     size_t type_idx, size_t amount, Leader* l_ptr
 ) {
     call_queue[type_idx] += amount;
@@ -934,7 +934,7 @@ void PikminNest::request_pikmin(
  *
  * @param p_ptr Pikmin to store.
  */
-void PikminNest::store_pikmin(Pikmin* p_ptr) {
+void PikminNest::storePikmin(Pikmin* p_ptr) {
     for(size_t t = 0; t < nest_type->pik_types.size(); t++) {
         if(p_ptr->type == nest_type->pik_types[t]) {
             pikmin_inside[t][p_ptr->maturity]++;
@@ -975,7 +975,7 @@ void PikminNest::tick(float delta_t) {
         
         if(best_type != INVALID) {
             //Try to call a Pikmin.
-            if(call_pikmin(m_ptr, best_type)) {
+            if(callPikmin(m_ptr, best_type)) {
                 //Call successful! Update the queue.
                 call_queue[best_type]--;
             } else {
@@ -994,7 +994,7 @@ void PikminNest::tick(float delta_t) {
  *
  * @param file File to read from.
  */
-void PikminNestType::load_properties(
+void PikminNestType::loadProperties(
     DataNode* file
 ) {
     ReaderSetter rs(file);
@@ -1009,7 +1009,7 @@ void PikminNestType::load_properties(
     rs.set("pikmin_enter_speed", pikmin_enter_speed);
     rs.set("pikmin_exit_speed", pikmin_exit_speed);
     
-    leg_body_parts = semicolon_list_to_vector(legs_str);
+    leg_body_parts = semicolonListToVector(legs_str);
     if(pik_types_node && leg_body_parts.empty()) {
         game.errors.report(
             "A nest-like object type needs a list of leg body parts!",
@@ -1022,7 +1022,7 @@ void PikminNestType::load_properties(
         );
     }
     
-    vector<string> pik_types_strs = semicolon_list_to_vector(pik_types_str);
+    vector<string> pik_types_strs = semicolonListToVector(pik_types_str);
     for(size_t t = 0; t < pik_types_strs.size(); t++) {
         string &str = pik_types_strs[t];
         if(
@@ -1066,7 +1066,7 @@ TrackRideInfo::TrackRideInfo(
  * @param rectangular_dim Rectangular dimensions of the mob, if any.
  * @return The span.
  */
-float calculate_mob_physical_span(
+float calculateMobPhysicalSpan(
     float radius, float anim_hitbox_span,
     const Point &rectangular_dim
 ) {
@@ -1075,7 +1075,7 @@ float calculate_mob_physical_span(
     if(rectangular_dim.x != 0) {
         final_span =
             std::max(
-                final_span, Distance(Point(0.0f), rectangular_dim / 2.0).to_float()
+                final_span, Distance(Point(0.0f), rectangular_dim / 2.0).toFloat()
             );
     }
     
@@ -1098,13 +1098,13 @@ float calculate_mob_physical_span(
  * Otherwise, use this.
  * @return The new mob.
  */
-Mob* create_mob(
+Mob* createMob(
     MobCategory* category, const Point &pos, MobType* type,
     float angle, const string &vars,
     std::function<void(Mob*)> code_after_creation,
     size_t first_state_override
 ) {
-    Mob* m_ptr = category->create_mob(pos, type, angle);
+    Mob* m_ptr = category->createMob(pos, type, angle);
     
     if(m_ptr->type->walkable) {
         game.states.gameplay->mobs.walkables.push_back(m_ptr);
@@ -1119,10 +1119,10 @@ Mob* create_mob(
     }
     
     if(!vars.empty()) {
-        map<string, string> vars_map = get_var_map(vars);
+        map<string, string> vars_map = getVarMap(vars);
         ScriptVarReader svr(vars_map);
         
-        m_ptr->read_script_vars(svr);
+        m_ptr->readScriptVars(svr);
         
         for(auto &v : vars_map) {
             m_ptr->vars[v.first] = v.second;
@@ -1130,7 +1130,7 @@ Mob* create_mob(
     }
     
     if(
-        !m_ptr->fsm.set_state(
+        !m_ptr->fsm.setState(
             first_state_override != INVALID ?
             first_state_override :
             m_ptr->fsm.first_state_override != INVALID ?
@@ -1146,7 +1146,7 @@ Mob* create_mob(
         MobType::Child* child_info =
             &type->children[c];
         MobType::SpawnInfo* spawn_info =
-            get_spawn_info_from_child_info(m_ptr->type, &type->children[c]);
+            getSpawnInfoFromChildInfo(m_ptr->type, &type->children[c]);
             
         if(!spawn_info) {
             game.errors.report(
@@ -1183,7 +1183,7 @@ Mob* create_mob(
             
             if(anim_to_use) {
                 p_info->limb_anim.cur_anim = anim_to_use;
-                p_info->limb_anim.to_start();
+                p_info->limb_anim.toStart();
             } else {
                 game.errors.report(
                     "Object \"" + new_mob->type->name + "\", child object of "
@@ -1195,10 +1195,10 @@ Mob* create_mob(
         }
         p_info->limb_thickness = child_info->limb_thickness;
         p_info->limb_parent_body_part =
-            type->anim_db->find_body_part(child_info->limb_parent_body_part);
+            type->anim_db->findBodyPart(child_info->limb_parent_body_part);
         p_info->limb_parent_offset = child_info->limb_parent_offset;
         p_info->limb_child_body_part =
-            new_mob->type->anim_db->find_body_part(
+            new_mob->type->anim_db->findBodyPart(
                 child_info->limb_child_body_part
             );
         p_info->limb_child_offset = child_info->limb_child_offset;
@@ -1207,7 +1207,7 @@ Mob* create_mob(
         if(child_info->parent_holds) {
             m_ptr->hold(
                 new_mob,
-                type->anim_db->find_body_part(child_info->hold_body_part),
+                type->anim_db->findBodyPart(child_info->hold_body_part),
                 child_info->hold_offset_dist,
                 child_info->hold_offset_angle,
                 child_info->hold_offset_vert_dist,
@@ -1233,18 +1233,18 @@ Mob* create_mob(
  * @param complete_destruction If true, don't bother removing it from groups
  * and such, since everything is going to be destroyed.
  */
-void delete_mob(Mob* m_ptr, bool complete_destruction) {
+void deleteMob(Mob* m_ptr, bool complete_destruction) {
     if(game.maker_tools.info_lock == m_ptr) game.maker_tools.info_lock = nullptr;
     
     if(!complete_destruction) {
-        m_ptr->leave_group();
+        m_ptr->leaveGroup();
         
         for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
             Mob* m2_ptr = game.states.gameplay->mobs.all[m];
             if(m2_ptr->focused_mob == m_ptr) {
-                m2_ptr->fsm.run_event(MOB_EV_FOCUSED_MOB_UNAVAILABLE);
-                m2_ptr->fsm.run_event(MOB_EV_FOCUS_OFF_REACH);
-                m2_ptr->fsm.run_event(MOB_EV_FOCUS_DIED);
+                m2_ptr->fsm.runEvent(MOB_EV_FOCUSED_MOB_UNAVAILABLE);
+                m2_ptr->fsm.runEvent(MOB_EV_FOCUS_OFF_REACH);
+                m2_ptr->fsm.runEvent(MOB_EV_FOCUS_DIED);
                 m2_ptr->focused_mob = nullptr;
             }
             if(m2_ptr->parent && m2_ptr->parent->m == m_ptr) {
@@ -1293,14 +1293,14 @@ void delete_mob(Mob* m_ptr, bool complete_destruction) {
             m_ptr->release(m_ptr->holding[0]);
         }
         
-        m_ptr->set_can_block_paths(false);
+        m_ptr->setCanBlockPaths(false);
         
-        m_ptr->fsm.set_state(INVALID);
+        m_ptr->fsm.setState(INVALID);
     }
     
-    game.audio.handle_mob_deletion(m_ptr);
+    game.audio.handleMobDeletion(m_ptr);
     
-    m_ptr->type->category->erase_mob(m_ptr);
+    m_ptr->type->category->eraseMob(m_ptr);
     game.states.gameplay->mobs.all.erase(
         find(
             game.states.gameplay->mobs.all.begin(),
@@ -1329,7 +1329,7 @@ void delete_mob(Mob* m_ptr, bool complete_destruction) {
  * @param m The mob.
  * @return The string.
  */
-string get_error_message_mob_info(Mob* m) {
+string getErrorMessageMobInfo(Mob* m) {
     return
         "type \"" + m->type->name + "\", coordinates " +
         p2s(m->pos) + ", area \"" + game.cur_area_data->name + "\"";
@@ -1343,7 +1343,7 @@ string get_error_message_mob_info(Mob* m) {
  * @param types Mob types to check.
  * @return The invulnerabilities.
  */
-vector<Hazard*> get_mob_type_list_invulnerabilities(
+vector<Hazard*> getMobTypeListInvulnerabilities(
     const unordered_set<MobType*> &types
 ) {
     //Count how many types are invulnerable to each detected hazard.
@@ -1375,7 +1375,7 @@ vector<Hazard*> get_mob_type_list_invulnerabilities(
  * @param child_info Child info to check.
  * @return The spawn info, or nullptr if not found.
  */
-MobType::SpawnInfo* get_spawn_info_from_child_info(
+MobType::SpawnInfo* getSpawnInfoFromChildInfo(
     MobType* type, const MobType::Child* child_info
 ) {
     for(size_t s = 0; s < type->spawns.size(); s++) {
@@ -1396,7 +1396,7 @@ MobType::SpawnInfo* get_spawn_info_from_child_info(
  * @param angle_diff Angle difference between the two mobs.
  * @return Whether it's in reach.
  */
-bool is_mob_in_reach(
+bool isMobInReach(
     MobType::Reach* reach_t_ptr, const Distance &dist_between, float angle_diff
 ) {
     bool in_reach =
@@ -1420,7 +1420,7 @@ bool is_mob_in_reach(
  * @param type_str Text representation of the target type.
  * @return The type, or INVALID if invalid.
  */
-MOB_TARGET_FLAG string_to_mob_target_type(const string &type_str) {
+MOB_TARGET_FLAG stringToMobTargetType(const string &type_str) {
     if(type_str == "none") {
         return MOB_TARGET_FLAG_NONE;
     } else if(type_str == "player") {
@@ -1450,7 +1450,7 @@ MOB_TARGET_FLAG string_to_mob_target_type(const string &type_str) {
  * @param team_str Text representation of the team.
  * @return The team, or INVALID if invalid.
  */
-MOB_TEAM string_to_team_nr(const string &team_str) {
+MOB_TEAM stringToTeamNr(const string &team_str) {
     for(size_t t = 0; t < N_MOB_TEAMS; t++) {
         if(team_str == game.team_internal_names[t]) {
             return (MOB_TEAM) t;

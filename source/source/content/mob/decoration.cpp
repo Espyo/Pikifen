@@ -34,14 +34,14 @@ Decoration::Decoration(
     tint_limit.a = 1.0f;
     
     individual_tint =
-        interpolate_color(
+        interpolateColor(
             tint_interpol_ratio, 0.0, 1.0,
             tint_limit, al_map_rgba(255, 255, 255, 255)
         );
         
     float alpha_interpol_ratio = game.rng.f(0.0f, 1.0f);
     individual_tint.a =
-        interpolate_number(
+        interpolateNumber(
             alpha_interpol_ratio, 0.0f, 1.0f,
             dec_type->tint_random_maximum.a, 1.0f
         );
@@ -64,15 +64,15 @@ Decoration::Decoration(
  * @brief Draws a decorative object. This is responsible for randomly
  * tinting it, rotating it, etc.
  */
-void Decoration::draw_mob() {
+void Decoration::drawMob() {
     Sprite* cur_s_ptr;
     Sprite* next_s_ptr;
     float interpolation_factor;
-    get_sprite_data(&cur_s_ptr, &next_s_ptr, &interpolation_factor);
+    getSpriteData(&cur_s_ptr, &next_s_ptr, &interpolation_factor);
     if(!cur_s_ptr) return;
     
     BitmapEffect eff;
-    get_sprite_bitmap_effects(
+    getSpriteBitmapEffects(
         cur_s_ptr, next_s_ptr, interpolation_factor,
         &eff,
         SPRITE_BMP_EFFECT_FLAG_STANDARD |
@@ -90,7 +90,7 @@ void Decoration::draw_mob() {
     eff.scale *= individual_scale;
     eff.rotation += individual_rotation;
     
-    draw_bitmap_with_effects(cur_s_ptr->bitmap, eff);
+    drawBitmapWithEffects(cur_s_ptr->bitmap, eff);
 }
 
 
@@ -99,8 +99,8 @@ void Decoration::draw_mob() {
  *
  * @param svr Script var reader to use.
  */
-void Decoration::read_script_vars(const ScriptVarReader &svr) {
-    Mob::read_script_vars(svr);
+void Decoration::readScriptVars(const ScriptVarReader &svr) {
+    Mob::readScriptVars(svr);
     
     bool random_animation_delay_var;
     bool random_tint_var;

@@ -80,9 +80,9 @@ public:
     //--- Function declarations ---
     
     BridgeType();
-    void load_cat_properties(DataNode* file) override;
-    void load_cat_resources(DataNode* file) override;
-    anim_conversion_vector get_anim_conversions() const override;
-    void unload_resources() override;
+    void loadCatProperties(DataNode* file) override;
+    void loadCatResources(DataNode* file) override;
+    anim_conversion_vector getAnimConversions() const override;
+    void unloadResources() override;
     
 };

@@ -85,7 +85,7 @@ public:
     InWorldHudItem(Mob* m);
     virtual ~InWorldHudItem() = default;
     virtual void draw() = 0;
-    virtual void start_fading() = 0;
+    virtual void startFading() = 0;
     virtual void tick(float delta_t);
     
 };
@@ -102,10 +102,10 @@ public:
     
     explicit InWorldFraction(Mob* m);
     void draw() override;
-    void set_color(const ALLEGRO_COLOR &new_color);
-    void set_requirement_number(float new_req_nr);
-    void set_value_number(float new_value_nr);
-    void start_fading() override;
+    void setColor(const ALLEGRO_COLOR &new_color);
+    void setRequirementNumber(float new_req_nr);
+    void setValueNumber(float new_value_nr);
+    void startFading() override;
     void tick(float delta_t) override;
     
 private:
@@ -148,7 +148,7 @@ public:
     
     explicit InWorldHealthWheel(Mob* m);
     void draw() override;
-    void start_fading() override;
+    void startFading() override;
     void tick(float delta_t) override;
     
 };

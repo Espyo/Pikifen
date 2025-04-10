@@ -138,15 +138,15 @@ public:
         const string &folder_name, const ALLEGRO_COLOR editor_color
     );
     virtual ~MobCategory() = default;
-    virtual void get_type_names(vector<string> &list) const = 0;
-    virtual MobType* get_type(const string &internal_name) const = 0;
-    virtual MobType* create_type() = 0;
-    virtual void register_type(const string &internal_name, MobType* type) = 0;
-    virtual Mob* create_mob(
+    virtual void getTypeNames(vector<string> &list) const = 0;
+    virtual MobType* getType(const string &internal_name) const = 0;
+    virtual MobType* createType() = 0;
+    virtual void registerType(const string &internal_name, MobType* type) = 0;
+    virtual Mob* createMob(
         const Point &pos, MobType* type, float angle
     ) = 0;
-    virtual void erase_mob(Mob* m) = 0;
-    virtual void clear_types() = 0;
+    virtual void eraseMob(Mob* m) = 0;
+    virtual void clearTypes() = 0;
     
 };
 
@@ -163,13 +163,13 @@ struct CategoryManager {
     
     //--- Function declarations ---
     
-    void register_category(MOB_CATEGORY id, MobCategory* category);
-    MobType* find_mob_type(const string &name) const;
+    void registerCategory(MOB_CATEGORY id, MobCategory* category);
+    MobType* findMobType(const string &name) const;
     MobCategory* get(const MOB_CATEGORY id) const;
-    MobCategory* get_from_folder_name(const string &internal_name) const;
-    MobCategory* get_from_internal_name(const string &name) const;
-    MobCategory* get_from_name(const string &name) const;
-    MobCategory* get_from_pname(const string &pname) const;
+    MobCategory* getFromFolderName(const string &internal_name) const;
+    MobCategory* getFromInternalName(const string &name) const;
+    MobCategory* getFromName(const string &name) const;
+    MobCategory* getFromPName(const string &pname) const;
     void clear();
     
     private:
@@ -192,14 +192,14 @@ public:
     //--- Function declarations ---
     
     NoneCategory();
-    void get_type_names(vector<string> &list) const override;
-    MobType* get_type(const string &internal_name) const override;
-    MobType* create_type() override;
-    void register_type(const string &internal_name, MobType* type) override;
-    Mob* create_mob(
+    void getTypeNames(vector<string> &list) const override;
+    MobType* getType(const string &internal_name) const override;
+    MobType* createType() override;
+    void registerType(const string &internal_name, MobType* type) override;
+    Mob* createMob(
         const Point &pos, MobType* type, float angle
     ) override;
-    void erase_mob(Mob* m) override;
-    void clear_types() override;
+    void eraseMob(Mob* m) override;
+    void clearTypes() override;
     
 };

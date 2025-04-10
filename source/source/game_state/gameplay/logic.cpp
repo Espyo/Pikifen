@@ -31,7 +31,7 @@
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void GameplayState::do_aesthetic_leader_logic(float delta_t) {
+void GameplayState::doAestheticLeaderLogic(float delta_t) {
     if(!cur_leader_ptr) return;
     
     //Swarming arrows.
@@ -65,11 +65,11 @@ void GameplayState::do_aesthetic_leader_logic(float delta_t) {
     if(leader_to_cursor_dist > game.config.rules.whistle_max_dist) {
         whistle_dist = game.config.rules.whistle_max_dist;
         float whistle_angle =
-            get_angle(cur_leader_ptr->pos, leader_cursor_w);
-        whistle_pos = angle_to_coordinates(whistle_angle, whistle_dist);
+            getAngle(cur_leader_ptr->pos, leader_cursor_w);
+        whistle_pos = angleToCoordinates(whistle_angle, whistle_dist);
         whistle_pos += cur_leader_ptr->pos;
     } else {
-        whistle_dist = leader_to_cursor_dist.to_float();
+        whistle_dist = leader_to_cursor_dist.toFloat();
         whistle_pos = leader_cursor_w;
     }
     
@@ -83,9 +83,9 @@ void GameplayState::do_aesthetic_leader_logic(float delta_t) {
     
     if(leader_to_cursor_dist > game.config.rules.throw_max_dist) {
         float throw_angle =
-            get_angle(cur_leader_ptr->pos, leader_cursor_w);
+            getAngle(cur_leader_ptr->pos, leader_cursor_w);
         throw_dest =
-            angle_to_coordinates(throw_angle, game.config.rules.throw_max_dist);
+            angleToCoordinates(throw_angle, game.config.rules.throw_max_dist);
         throw_dest += cur_leader_ptr->pos;
     } else {
         throw_dest = leader_cursor_w;
@@ -94,7 +94,7 @@ void GameplayState::do_aesthetic_leader_logic(float delta_t) {
     throw_dest_mob = nullptr;
     for(size_t m = 0; m < mobs.all.size(); m++) {
         Mob* m_ptr = mobs.all[m];
-        if(!bbox_check(throw_dest, m_ptr->pos, m_ptr->physical_span)) {
+        if(!BBoxCheck(throw_dest, m_ptr->pos, m_ptr->physical_span)) {
             //Too far away; of course the cursor isn't on it.
             continue;
         }
@@ -112,7 +112,7 @@ void GameplayState::do_aesthetic_leader_logic(float delta_t) {
             //then forget it.
             continue;
         }
-        if(!m_ptr->is_point_on(throw_dest)) {
+        if(!m_ptr->isPointOn(throw_dest)) {
             //The cursor is not really on top of this mob.
             continue;
         }
@@ -121,10 +121,10 @@ void GameplayState::do_aesthetic_leader_logic(float delta_t) {
     }
     
     leader_cursor_sector =
-        get_sector(leader_cursor_w, nullptr, true);
+        getSector(leader_cursor_w, nullptr, true);
         
     throw_dest_sector =
-        get_sector(throw_dest, nullptr, true);
+        getSector(throw_dest, nullptr, true);
         
     if(leader_cursor_sector) {
         cursor_height_diff_light =
@@ -141,9 +141,9 @@ void GameplayState::do_aesthetic_leader_logic(float delta_t) {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void GameplayState::do_aesthetic_logic(float delta_t) {
+void GameplayState::doAestheticLogic(float delta_t) {
     //Leader stuff.
-    do_aesthetic_leader_logic(delta_t);
+    doAestheticLeaderLogic(delta_t);
     
     //Specific animations.
     game.sys_content.anim_sparks.tick(delta_t);
@@ -155,16 +155,16 @@ void GameplayState::do_aesthetic_logic(float delta_t) {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void GameplayState::do_gameplay_leader_logic(float delta_t) {
+void GameplayState::doGameplayLeaderLogic(float delta_t) {
     if(!cur_leader_ptr) return;
     
     if(game.perf_mon) {
-        game.perf_mon->start_measurement("Logic -- Current leader");
+        game.perf_mon->startMeasurement("Logic -- Current leader");
     }
     
     if(cur_leader_ptr->to_delete) {
-        game.states.gameplay->update_available_leaders();
-        change_to_next_leader(true, true, true);
+        game.states.gameplay->updateAvailableLeaders();
+        changeToNextLeader(true, true, true);
     }
     
     /********************
@@ -187,15 +187,15 @@ void GameplayState::do_gameplay_leader_logic(float delta_t) {
     Point dummy_coords;
     float dummy_angle;
     float leader_move_magnitude;
-    leader_movement.get_info(
+    leader_movement.getInfo(
         &dummy_coords, &dummy_angle, &leader_move_magnitude
     );
     if(leader_move_magnitude < 0.75) {
-        cur_leader_ptr->fsm.run_event(
+        cur_leader_ptr->fsm.runEvent(
             LEADER_EV_MOVE_END, (void*) &leader_movement
         );
     } else {
-        cur_leader_ptr->fsm.run_event(
+        cur_leader_ptr->fsm.runEvent(
             LEADER_EV_MOVE_START, (void*) &leader_movement
         );
     }
@@ -212,7 +212,7 @@ void GameplayState::do_gameplay_leader_logic(float delta_t) {
             Point br = tl;
             for(size_t m = 1; m < cur_leader_ptr->group->members.size(); m++) {
                 Mob* member = cur_leader_ptr->group->members[m];
-                update_min_max_coords(tl, br, member->pos);
+                updateMinMaxCoords(tl, br, member->pos);
             }
             group_center.x = (tl.x + br.x) / 2.0f;
             group_center.y = (tl.y + br.y) / 2.0f;
@@ -232,7 +232,7 @@ void GameplayState::do_gameplay_leader_logic(float delta_t) {
     }
     
     //Check what to show on the notification, if anything.
-    notification.set_enabled(false);
+    notification.setEnabled(false);
     
     bool notification_done = false;
     
@@ -241,9 +241,9 @@ void GameplayState::do_gameplay_leader_logic(float delta_t) {
         !notification_done &&
         cur_leader_ptr->carry_info
     ) {
-        notification.set_enabled(true);
-        notification.set_contents(
-            game.controls.find_bind(PLAYER_ACTION_TYPE_WHISTLE).inputSource,
+        notification.setEnabled(true);
+        notification.setContents(
+            game.controls.findBind(PLAYER_ACTION_TYPE_WHISTLE).inputSource,
             "Get up",
             Point(
                 cur_leader_ptr->pos.x,
@@ -258,9 +258,9 @@ void GameplayState::do_gameplay_leader_logic(float delta_t) {
         !notification_done &&
         cur_leader_ptr->fsm.cur_state->id == LEADER_STATE_KNOCKED_DOWN
     ) {
-        notification.set_enabled(true);
-        notification.set_contents(
-            game.controls.find_bind(PLAYER_ACTION_TYPE_WHISTLE).inputSource,
+        notification.setEnabled(true);
+        notification.setContents(
+            game.controls.findBind(PLAYER_ACTION_TYPE_WHISTLE).inputSource,
             "Get up",
             Point(
                 cur_leader_ptr->pos.x,
@@ -275,9 +275,9 @@ void GameplayState::do_gameplay_leader_logic(float delta_t) {
         cur_leader_ptr->auto_throw_repeater.time != LARGE_FLOAT &&
         game.options.controls.auto_throw_mode == AUTO_THROW_MODE_TOGGLE
     ) {
-        notification.set_enabled(true);
-        notification.set_contents(
-            game.controls.find_bind(PLAYER_ACTION_TYPE_THROW).inputSource,
+        notification.setEnabled(true);
+        notification.setContents(
+            game.controls.findBind(PLAYER_ACTION_TYPE_THROW).inputSource,
             "Stop throwing",
             Point(
                 cur_leader_ptr->pos.x,
@@ -292,9 +292,9 @@ void GameplayState::do_gameplay_leader_logic(float delta_t) {
         !notification_done &&
         cur_leader_ptr->auto_plucking
     ) {
-        notification.set_enabled(true);
-        notification.set_contents(
-            game.controls.find_bind(PLAYER_ACTION_TYPE_WHISTLE).inputSource,
+        notification.setEnabled(true);
+        notification.setContents(
+            game.controls.findBind(PLAYER_ACTION_TYPE_WHISTLE).inputSource,
             "Stop",
             Point(
                 cur_leader_ptr->pos.x,
@@ -309,9 +309,9 @@ void GameplayState::do_gameplay_leader_logic(float delta_t) {
         !notification_done &&
         cur_leader_ptr->mid_go_here
     ) {
-        notification.set_enabled(true);
-        notification.set_contents(
-            game.controls.find_bind(PLAYER_ACTION_TYPE_WHISTLE).inputSource,
+        notification.setEnabled(true);
+        notification.setContents(
+            game.controls.findBind(PLAYER_ACTION_TYPE_WHISTLE).inputSource,
             "Stop",
             Point(
                 cur_leader_ptr->pos.x,
@@ -330,7 +330,7 @@ void GameplayState::do_gameplay_leader_logic(float delta_t) {
         for(size_t s = 0; s < mobs.ships.size(); s++) {
             Ship* s_ptr = mobs.ships[s];
             d = Distance(cur_leader_ptr->pos, s_ptr->pos);
-            if(!s_ptr->is_leader_on_cp(cur_leader_ptr)) {
+            if(!s_ptr->isLeaderOnCp(cur_leader_ptr)) {
                 continue;
             }
             if(cur_leader_ptr->health == cur_leader_ptr->max_health) {
@@ -342,9 +342,9 @@ void GameplayState::do_gameplay_leader_logic(float delta_t) {
             if(d < closest_d || !close_to_ship_to_heal) {
                 close_to_ship_to_heal = s_ptr;
                 closest_d = d;
-                notification.set_enabled(true);
-                notification.set_contents(
-                    game.controls.find_bind(PLAYER_ACTION_TYPE_THROW).inputSource,
+                notification.setEnabled(true);
+                notification.setContents(
+                    game.controls.findBind(PLAYER_ACTION_TYPE_THROW).inputSource,
                     "Repair suit",
                     Point(
                         close_to_ship_to_heal->pos.x,
@@ -369,9 +369,9 @@ void GameplayState::do_gameplay_leader_logic(float delta_t) {
                 if(d < closest_d || !close_to_interactable_to_use) {
                     close_to_interactable_to_use = mobs.interactables[i];
                     closest_d = d;
-                    notification.set_enabled(true);
-                    notification.set_contents(
-                        game.controls.find_bind(PLAYER_ACTION_TYPE_THROW).
+                    notification.setEnabled(true);
+                    notification.setContents(
+                        game.controls.findBind(PLAYER_ACTION_TYPE_THROW).
                         inputSource,
                         close_to_interactable_to_use->int_type->prompt_text,
                         Point(
@@ -390,12 +390,12 @@ void GameplayState::do_gameplay_leader_logic(float delta_t) {
         d = 0;
         close_to_pikmin_to_pluck = nullptr;
         if(!notification_done) {
-            Pikmin* p = get_closest_sprout(cur_leader_ptr->pos, &d, false);
+            Pikmin* p = getClosestSprout(cur_leader_ptr->pos, &d, false);
             if(p && d <= game.config.leaders.pluck_range) {
                 close_to_pikmin_to_pluck = p;
-                notification.set_enabled(true);
-                notification.set_contents(
-                    game.controls.find_bind(PLAYER_ACTION_TYPE_THROW).
+                notification.setEnabled(true);
+                notification.setContents(
+                    game.controls.findBind(PLAYER_ACTION_TYPE_THROW).
                     inputSource,
                     "Pluck",
                     Point(
@@ -419,9 +419,9 @@ void GameplayState::do_gameplay_leader_logic(float delta_t) {
                 if(d < closest_d || !close_to_nest_to_open) {
                     close_to_nest_to_open = mobs.onions[o]->nest;
                     closest_d = d;
-                    notification.set_enabled(true);
-                    notification.set_contents(
-                        game.controls.find_bind(PLAYER_ACTION_TYPE_THROW).
+                    notification.setEnabled(true);
+                    notification.setContents(
+                        game.controls.findBind(PLAYER_ACTION_TYPE_THROW).
                         inputSource,
                         "Check",
                         Point(
@@ -435,7 +435,7 @@ void GameplayState::do_gameplay_leader_logic(float delta_t) {
             }
             for(size_t s = 0; s < mobs.ships.size(); s++) {
                 d = Distance(cur_leader_ptr->pos, mobs.ships[s]->pos);
-                if(!mobs.ships[s]->is_leader_on_cp(cur_leader_ptr)) {
+                if(!mobs.ships[s]->isLeaderOnCp(cur_leader_ptr)) {
                     continue;
                 }
                 if(mobs.ships[s]->shi_type->nest->pik_types.empty()) {
@@ -444,9 +444,9 @@ void GameplayState::do_gameplay_leader_logic(float delta_t) {
                 if(d < closest_d || !close_to_nest_to_open) {
                     close_to_nest_to_open = mobs.ships[s]->nest;
                     closest_d = d;
-                    notification.set_enabled(true);
-                    notification.set_contents(
-                        game.controls.find_bind(PLAYER_ACTION_TYPE_THROW).
+                    notification.setEnabled(true);
+                    notification.setContents(
+                        game.controls.findBind(PLAYER_ACTION_TYPE_THROW).
                         inputSource,
                         "Check",
                         Point(
@@ -471,7 +471,7 @@ void GameplayState::do_gameplay_leader_logic(float delta_t) {
     
     Point mouse_cursor_speed;
     float dummy_magnitude;
-    cursor_movement.get_info(
+    cursor_movement.getInfo(
         &mouse_cursor_speed, &dummy_angle, &dummy_magnitude
     );
     mouse_cursor_speed =
@@ -479,7 +479,7 @@ void GameplayState::do_gameplay_leader_logic(float delta_t) {
         
     leader_cursor_w = game.mouse_cursor.w_pos;
     
-    float cursor_angle = get_angle(cur_leader_ptr->pos, leader_cursor_w);
+    float cursor_angle = getAngle(cur_leader_ptr->pos, leader_cursor_w);
     
     Distance leader_to_cursor_dist(cur_leader_ptr->pos, leader_cursor_w);
     if(leader_to_cursor_dist > game.config.rules.cursor_max_dist) {
@@ -516,7 +516,7 @@ void GameplayState::do_gameplay_leader_logic(float delta_t) {
     *                             ***  *
     ************************************/
     
-    update_closest_group_members();
+    updateClosestGroupMembers();
     if(!cur_leader_ptr->holding.empty()) {
         closest_group_member[BUBBLE_RELATION_CURRENT] = cur_leader_ptr->holding[0];
     }
@@ -524,7 +524,7 @@ void GameplayState::do_gameplay_leader_logic(float delta_t) {
     float old_swarm_magnitude = swarm_magnitude;
     Point swarm_coords;
     float new_swarm_angle;
-    swarm_movement.get_info(
+    swarm_movement.getInfo(
         &swarm_coords, &new_swarm_angle, &swarm_magnitude
     );
     if(swarm_magnitude > 0) {
@@ -537,14 +537,14 @@ void GameplayState::do_gameplay_leader_logic(float delta_t) {
         swarm_angle = cursor_angle;
         leader_to_cursor_dist = Distance(cur_leader_ptr->pos, leader_cursor_w);
         swarm_magnitude =
-            leader_to_cursor_dist.to_float() / game.config.rules.cursor_max_dist;
+            leader_to_cursor_dist.toFloat() / game.config.rules.cursor_max_dist;
     }
     
     if(old_swarm_magnitude != swarm_magnitude) {
         if(swarm_magnitude != 0) {
-            cur_leader_ptr->signal_swarm_start();
+            cur_leader_ptr->signalSwarmStart();
         } else {
-            cur_leader_ptr->signal_swarm_end();
+            cur_leader_ptr->signalSwarmEnd();
         }
     }
     
@@ -559,22 +559,22 @@ void GameplayState::do_gameplay_leader_logic(float delta_t) {
     if(game.states.gameplay->mobs.enemies.size() > 0) {
         bool near_enemy = false;
         bool near_boss = false;
-        is_near_enemy_and_boss(&near_enemy, &near_boss);
+        isNearEnemyAndBoss(&near_enemy, &near_boss);
         
         
         if(near_enemy) {
-            game.audio.mark_mix_track_status(MIX_TRACK_TYPE_ENEMY);
+            game.audio.markMixTrackStatus(MIX_TRACK_TYPE_ENEMY);
         }
         
         if(near_boss) {
             switch(boss_music_state) {
             case BOSS_MUSIC_STATE_NEVER_PLAYED: {
-                game.audio.set_current_song(game.sys_content_names.sng_boss, true, false);
+                game.audio.setCurrentSong(game.sys_content_names.sng_boss, true, false);
                 boss_music_state = BOSS_MUSIC_STATE_PLAYING;
                 break;
             } case BOSS_MUSIC_STATE_PAUSED: {
             } case BOSS_MUSIC_STATE_VICTORY: {
-                game.audio.set_current_song(game.sys_content_names.sng_boss, false);
+                game.audio.setCurrentSong(game.sys_content_names.sng_boss, false);
                 boss_music_state = BOSS_MUSIC_STATE_PLAYING;
             } default: {
                 break;
@@ -583,7 +583,7 @@ void GameplayState::do_gameplay_leader_logic(float delta_t) {
         } else {
             switch(boss_music_state) {
             case BOSS_MUSIC_STATE_PLAYING: {
-                game.audio.set_current_song(game.cur_area_data->song_name, false);
+                game.audio.setCurrentSong(game.cur_area_data->song_name, false);
                 boss_music_state = BOSS_MUSIC_STATE_PAUSED;
                 break;
             } default: {
@@ -594,7 +594,7 @@ void GameplayState::do_gameplay_leader_logic(float delta_t) {
     }
     
     if(game.perf_mon) {
-        game.perf_mon->finish_measurement();
+        game.perf_mon->finishMeasurement();
     }
     
 }
@@ -605,7 +605,7 @@ void GameplayState::do_gameplay_leader_logic(float delta_t) {
  *
  * @param delta_t How long the frame's tick is, in seconds.
  */
-void GameplayState::do_gameplay_logic(float delta_t) {
+void GameplayState::doGameplayLogic(float delta_t) {
 
     //Camera movement.
     if(!cur_leader_ptr) {
@@ -613,15 +613,15 @@ void GameplayState::do_gameplay_logic(float delta_t) {
         Point coords;
         float dummy_angle;
         float dummy_magnitude;
-        leader_movement.get_info(&coords, &dummy_angle, &dummy_magnitude);
+        leader_movement.getInfo(&coords, &dummy_angle, &dummy_magnitude);
         game.cam.target_pos = game.cam.pos + (coords * 120.0f / game.cam.zoom);
     }
     
     game.cam.tick(delta_t);
     
-    update_transformations();
+    updateTransformations();
     
-    game.cam.update_box();
+    game.cam.updateBox();
     
     if(!msg_box) {
     
@@ -635,7 +635,7 @@ void GameplayState::do_gameplay_logic(float delta_t) {
         Point mouse_cursor_speed;
         float dummy_angle;
         float dummy_magnitude;
-        cursor_movement.get_info(
+        cursor_movement.getInfo(
             &mouse_cursor_speed, &dummy_angle, &dummy_magnitude
         );
         mouse_cursor_speed =
@@ -661,13 +661,13 @@ void GameplayState::do_gameplay_logic(float delta_t) {
         
         //Tick all particles.
         if(game.perf_mon) {
-            game.perf_mon->start_measurement("Logic -- Particles");
+            game.perf_mon->startMeasurement("Logic -- Particles");
         }
         
-        particles.tick_all(delta_t);
+        particles.tickAll(delta_t);
         
         if(game.perf_mon) {
-            game.perf_mon->finish_measurement();
+            game.perf_mon->finishMeasurement();
         }
         
         //Tick all status effect animations.
@@ -681,7 +681,7 @@ void GameplayState::do_gameplay_logic(float delta_t) {
         *             +--+ *
         ********************/
         if(game.perf_mon) {
-            game.perf_mon->start_measurement("Logic -- Sector animation");
+            game.perf_mon->startMeasurement("Logic -- Sector animation");
         }
         
         for(size_t s = 0; s < game.cur_area_data->sectors.size(); s++) {
@@ -696,7 +696,7 @@ void GameplayState::do_gameplay_logic(float delta_t) {
                     for(size_t h = 0; h < s_ptr->hazards.size();) {
                         if(s_ptr->hazards[h]->associated_liquid) {
                             s_ptr->hazards.erase(s_ptr->hazards.begin() + h);
-                            path_mgr.handle_sector_hazard_change(s_ptr);
+                            path_mgr.handleSectorHazardChange(s_ptr);
                         } else {
                             h++;
                         }
@@ -710,12 +710,12 @@ void GameplayState::do_gameplay_logic(float delta_t) {
                         sector_vertexes.insert(s_ptr->edges[e]->vertexes[0]);
                         sector_vertexes.insert(s_ptr->edges[e]->vertexes[1]);
                     }
-                    update_offset_effect_caches(
+                    updateOffsetEffectCaches(
                         game.liquid_limit_effect_caches,
                         sector_vertexes,
-                        does_edge_have_liquid_limit,
-                        get_liquid_limit_length,
-                        get_liquid_limit_color
+                        doesEdgeHaveLiquidLimit,
+                        getLiquidLimitLength,
+                        getLiquidLimitColor
                     );
                 }
             }
@@ -726,7 +726,7 @@ void GameplayState::do_gameplay_logic(float delta_t) {
         }
         
         if(game.perf_mon) {
-            game.perf_mon->finish_measurement();
+            game.perf_mon->finishMeasurement();
         }
         
         
@@ -745,26 +745,26 @@ void GameplayState::do_gameplay_logic(float delta_t) {
             old_leader_pos = cur_leader_ptr->pos;
             old_leader_was_walking =
                 cur_leader_ptr->active &&
-                !has_flag(
+                !hasFlag(
                     cur_leader_ptr->chase_info.flags,
                     CHASE_FLAG_TELEPORT
                 ) &&
-                !has_flag(
+                !hasFlag(
                     cur_leader_ptr->chase_info.flags,
                     CHASE_FLAG_TELEPORTS_CONSTANTLY
                 ) &&
                 cur_leader_ptr->chase_info.state == CHASE_STATE_CHASING;
         }
         
-        update_area_active_cells();
-        update_mob_is_active_flag();
+        updateAreaActiveCells();
+        updateMobIsActiveFlag();
         
         size_t n_mobs = mobs.all.size();
         for(size_t m = 0; m < n_mobs; m++) {
             //Tick the mob.
             Mob* m_ptr = mobs.all[m];
             if(
-                !has_flag(
+                !hasFlag(
                     m_ptr->type->inactive_logic,
                     INACTIVE_LOGIC_FLAG_TICKS
                 ) && !m_ptr->is_active &&
@@ -774,8 +774,8 @@ void GameplayState::do_gameplay_logic(float delta_t) {
             }
             
             m_ptr->tick(delta_t);
-            if(!m_ptr->is_stored_inside_mob()) {
-                process_mob_interactions(m_ptr, m);
+            if(!m_ptr->isStoredInsideMob()) {
+                processMobInteractions(m_ptr, m);
             }
         }
         
@@ -783,14 +783,14 @@ void GameplayState::do_gameplay_logic(float delta_t) {
             //Mob deletion.
             Mob* m_ptr = mobs.all[m];
             if(m_ptr->to_delete) {
-                delete_mob(m_ptr);
+                deleteMob(m_ptr);
                 n_mobs--;
                 continue;
             }
             m++;
         }
         
-        do_gameplay_leader_logic(delta_t);
+        doGameplayLeaderLogic(delta_t);
         
         if(
             cur_leader_ptr && cur_leader_ptr == old_leader &&
@@ -804,7 +804,7 @@ void GameplayState::do_gameplay_logic(float delta_t) {
             //But those are rare cases that don't really affect much in the
             //grand scheme of things, and don't really matter for a fun stat.
             game.statistics.distance_walked +=
-                Distance(old_leader_pos, cur_leader_ptr->pos).to_float();
+                Distance(old_leader_pos, cur_leader_ptr->pos).toFloat();
         }
         
         nr_living_leaders = 0;
@@ -868,7 +868,7 @@ void GameplayState::do_gameplay_logic(float delta_t) {
             for(size_t l = 0; l < mobs.leaders.size(); l++) {
                 Mob* l_ptr = mobs.leaders[l];
                 if(
-                    !is_in_container(
+                    !isInContainer(
                         mission_remaining_mob_ids, mobs.leaders[l]->id
                     )
                 ) {
@@ -894,11 +894,11 @@ void GameplayState::do_gameplay_logic(float delta_t) {
         
         float real_goal_ratio = 0.0f;
         int goal_cur_amount =
-            game.mission_goals[game.cur_area_data->mission.goal]->get_cur_amount(
+            game.mission_goals[game.cur_area_data->mission.goal]->getCurAmount(
                 this
             );
         int goal_req_amount =
-            game.mission_goals[game.cur_area_data->mission.goal]->get_req_amount(
+            game.mission_goals[game.cur_area_data->mission.goal]->getReqAmount(
                 this
             );
         if(goal_req_amount != 0.0f) {
@@ -913,11 +913,11 @@ void GameplayState::do_gameplay_logic(float delta_t) {
             int fail_cur_amount =
                 game.mission_fail_conds[
                     game.cur_area_data->mission.fail_hud_primary_cond
-                ]->get_cur_amount(this);
+                ]->getCurAmount(this);
             int fail_req_amount =
                 game.mission_fail_conds[
                     game.cur_area_data->mission.fail_hud_primary_cond
-                ]->get_req_amount(this);
+                ]->getReqAmount(this);
             if(fail_req_amount != 0.0f) {
                 real_fail_ratio = fail_cur_amount / (float) fail_req_amount;
             }
@@ -931,11 +931,11 @@ void GameplayState::do_gameplay_logic(float delta_t) {
             int fail_cur_amount =
                 game.mission_fail_conds[
                     game.cur_area_data->mission.fail_hud_secondary_cond
-                ]->get_cur_amount(this);
+                ]->getCurAmount(this);
             int fail_req_amount =
                 game.mission_fail_conds[
                     game.cur_area_data->mission.fail_hud_secondary_cond
-                ]->get_req_amount(this);
+                ]->getReqAmount(this);
             if(fail_req_amount != 0.0f) {
                 real_fail_ratio = fail_cur_amount / (float) fail_req_amount;
             }
@@ -946,14 +946,14 @@ void GameplayState::do_gameplay_logic(float delta_t) {
         
         if(game.cur_area_data->type == AREA_TYPE_MISSION) {
             if(cur_interlude == INTERLUDE_NONE) {
-                if(is_mission_clear_met()) {
-                    end_mission(true);
-                } else if(is_mission_fail_met(&mission_fail_reason)) {
-                    end_mission(false);
+                if(isMissionClearMet()) {
+                    endMission(true);
+                } else if(isMissionFailMet(&mission_fail_reason)) {
+                    endMission(false);
                 }
             }
             //Reset the positions of the last mission-end-related things,
-            //since if they didn't get used in end_mission, then they
+            //since if they didn't get used in endMission, then they
             //may be stale from here on.
             last_enemy_killed_pos = Point(LARGE_FLOAT);
             last_hurt_leader_pos = Point(LARGE_FLOAT);
@@ -964,9 +964,9 @@ void GameplayState::do_gameplay_logic(float delta_t) {
             mission_score = game.cur_area_data->mission.starting_points;
             for(size_t c = 0; c < game.mission_score_criteria.size(); c++) {
                 if(
-                    !has_flag(
+                    !hasFlag(
                         game.cur_area_data->mission.point_hud_data,
-                        get_idx_bitmask(c)
+                        getIdxBitmask(c)
                     )
                 ) {
                     continue;
@@ -974,11 +974,11 @@ void GameplayState::do_gameplay_logic(float delta_t) {
                 MissionScoreCriterion* c_ptr =
                     game.mission_score_criteria[c];
                 int c_score =
-                    c_ptr->get_score(this, &game.cur_area_data->mission);
+                    c_ptr->getScore(this, &game.cur_area_data->mission);
                 mission_score += c_score;
             }
             if(mission_score != old_mission_score) {
-                mission_score_cur_text->start_juice_animation(
+                mission_score_cur_text->startJuiceAnimation(
                     GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
                 );
                 old_mission_score = mission_score;
@@ -990,9 +990,9 @@ void GameplayState::do_gameplay_logic(float delta_t) {
                 
             int goal_cur =
                 game.mission_goals[game.cur_area_data->mission.goal]->
-                get_cur_amount(game.states.gameplay);
+                getCurAmount(game.states.gameplay);
             if(goal_cur != old_mission_goal_cur) {
-                mission_goal_cur_text->start_juice_animation(
+                mission_goal_cur_text->startJuiceAnimation(
                     GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
                 );
                 old_mission_goal_cur = goal_cur;
@@ -1005,11 +1005,11 @@ void GameplayState::do_gameplay_logic(float delta_t) {
                 size_t cond =
                     game.cur_area_data->mission.fail_hud_primary_cond;
                 int fail_1_cur =
-                    game.mission_fail_conds[cond]->get_cur_amount(
+                    game.mission_fail_conds[cond]->getCurAmount(
                         game.states.gameplay
                     );
                 if(fail_1_cur != old_mission_fail_1_cur) {
-                    mission_fail_1_cur_text->start_juice_animation(
+                    mission_fail_1_cur_text->startJuiceAnimation(
                         GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
                     );
                     old_mission_fail_1_cur = fail_1_cur;
@@ -1022,11 +1022,11 @@ void GameplayState::do_gameplay_logic(float delta_t) {
                 size_t cond =
                     game.cur_area_data->mission.fail_hud_secondary_cond;
                 int fail_2_cur =
-                    game.mission_fail_conds[cond]->get_cur_amount(
+                    game.mission_fail_conds[cond]->getCurAmount(
                         game.states.gameplay
                     );
                 if(fail_2_cur != old_mission_fail_2_cur) {
-                    mission_fail_2_cur_text->start_juice_animation(
+                    mission_fail_2_cur_text->startJuiceAnimation(
                         GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
                     );
                     old_mission_fail_2_cur = fail_2_cur;
@@ -1039,7 +1039,7 @@ void GameplayState::do_gameplay_logic(float delta_t) {
     
         msg_box->tick(delta_t);
         if(msg_box->to_delete) {
-            start_gameplay_message("", nullptr);
+            startGameplayMessage("", nullptr);
         }
         
     }
@@ -1057,7 +1057,7 @@ void GameplayState::do_gameplay_logic(float delta_t) {
 /**
  * @brief Ticks the logic of in-game menu-related things.
  */
-void GameplayState::do_menu_logic() {
+void GameplayState::doMenuLogic() {
     if(onion_menu) {
         if(!onion_menu->to_delete) {
             onion_menu->tick(game.delta_t);
@@ -1065,7 +1065,7 @@ void GameplayState::do_menu_logic() {
             delete onion_menu;
             onion_menu = nullptr;
             paused = false;
-            game.audio.handle_world_unpause();
+            game.audio.handleWorldUnpause();
         }
     } else if(pause_menu) {
         if(!pause_menu->to_delete) {
@@ -1074,7 +1074,7 @@ void GameplayState::do_menu_logic() {
             delete pause_menu;
             pause_menu = nullptr;
             paused = false;
-            game.audio.handle_world_unpause();
+            game.audio.handleWorldUnpause();
         }
     }
     
@@ -1159,29 +1159,29 @@ void GameplayState::do_menu_logic() {
         }
         
         string header_str =
-            box_string("", 12) +
-            box_string("Now", 12) +
-            box_string("Average", 12) +
-            box_string("Target", 12);
+            boxString("", 12) +
+            boxString("Now", 12) +
+            boxString("Average", 12) +
+            boxString("Target", 12);
         string fps_str =
-            box_string("FPS:", 12) +
-            box_string(std::to_string(1.0f / real_delta_t), 12) +
-            box_string(std::to_string(1.0f / sample_avg_capped), 12) +
-            box_string(i2s(game.options.advanced.target_fps), 12);
+            boxString("FPS:", 12) +
+            boxString(std::to_string(1.0f / real_delta_t), 12) +
+            boxString(std::to_string(1.0f / sample_avg_capped), 12) +
+            boxString(i2s(game.options.advanced.target_fps), 12);
         string fps_uncapped_str =
-            box_string("FPS uncap.:", 12) +
-            box_string(std::to_string(1.0f / game.cur_frame_process_time), 12) +
-            box_string(std::to_string(1.0f / sample_avg), 12) +
-            box_string("-", 12);
+            boxString("FPS uncap.:", 12) +
+            boxString(std::to_string(1.0f / game.cur_frame_process_time), 12) +
+            boxString(std::to_string(1.0f / sample_avg), 12) +
+            boxString("-", 12);
         string frame_time_str =
-            box_string("Frame time:", 12) +
-            box_string(std::to_string(game.cur_frame_process_time), 12) +
-            box_string(std::to_string(sample_avg), 12) +
-            box_string(std::to_string(1.0f / game.options.advanced.target_fps), 12);
+            boxString("Frame time:", 12) +
+            boxString(std::to_string(game.cur_frame_process_time), 12) +
+            boxString(std::to_string(sample_avg), 12) +
+            boxString(std::to_string(1.0f / game.options.advanced.target_fps), 12);
         string n_mobs_str =
-            box_string(i2s(mobs.all.size()), 7);
+            boxString(i2s(mobs.all.size()), 7);
         string n_particles_str =
-            box_string(i2s(particles.get_count()), 7);
+            boxString(i2s(particles.getCount()), 7);
         string resolution_str =
             i2s(game.win_w) + "x" + i2s(game.win_h);
         string area_v_str =
@@ -1195,7 +1195,7 @@ void GameplayState::do_menu_logic() {
         string game_v_str =
             game.config.general.version.empty() ? "-" : game.config.general.version;
             
-        print_info(
+        printInfo(
             header_str +
             "\n" +
             fps_str +
@@ -1211,7 +1211,7 @@ void GameplayState::do_menu_logic() {
             "\n"
             "Area version " + area_v_str + ", by " + area_maker_str +
             "\n"
-            "Pikifen version " + get_engine_version_string() +
+            "Pikifen version " + getEngineVersionString() +
             ", game version " + game_v_str,
             1.0f, 1.0f
         );
@@ -1224,12 +1224,12 @@ void GameplayState::do_menu_logic() {
     //Print info on a mob.
     if(game.maker_tools.info_lock) {
         string name_str =
-            box_string(game.maker_tools.info_lock->type->name, 26);
+            boxString(game.maker_tools.info_lock->type->name, 26);
         string coords_str =
-            box_string(
-                box_string(f2s(game.maker_tools.info_lock->pos.x), 8, " ") +
-                box_string(f2s(game.maker_tools.info_lock->pos.y), 8, " ") +
-                box_string(f2s(game.maker_tools.info_lock->z), 7),
+            boxString(
+                boxString(f2s(game.maker_tools.info_lock->pos.x), 8, " ") +
+                boxString(f2s(game.maker_tools.info_lock->pos.y), 8, " ") +
+                boxString(f2s(game.maker_tools.info_lock->z), 7),
                 23
             );
         string state_h_str =
@@ -1247,10 +1247,10 @@ void GameplayState::do_menu_logic() {
             game.maker_tools.info_lock->anim.cur_anim->name :
             "(None!)";
         string health_str =
-            box_string(
-                box_string(f2s(game.maker_tools.info_lock->health), 6) +
+            boxString(
+                boxString(f2s(game.maker_tools.info_lock->health), 6) +
                 " / " +
-                box_string(
+                boxString(
                     f2s(game.maker_tools.info_lock->max_health), 6
                 ),
                 23
@@ -1270,7 +1270,7 @@ void GameplayState::do_menu_logic() {
             vars_str = "(None)";
         }
         
-        print_info(
+        printInfo(
             "Mob: " + name_str +
             "Coords: " + coords_str +
             "\n"
@@ -1290,37 +1290,37 @@ void GameplayState::do_menu_logic() {
         if(game.maker_tools.info_lock->path_info) {
         
             Path* path = game.maker_tools.info_lock->path_info;
-            string result_str = path_result_to_string(path->result);
+            string result_str = pathResultToString(path->result);
             
             string stops_str =
-                box_string(i2s(path->cur_path_stop_idx + 1), 3) +
+                boxString(i2s(path->cur_path_stop_idx + 1), 3) +
                 "/" +
-                box_string(i2s(path->path.size()), 3);
+                boxString(i2s(path->path.size()), 3);
                 
             string settings_str;
             auto flags = path->settings.flags;
-            if(has_flag(flags, PATH_FOLLOW_FLAG_CAN_CONTINUE)) {
+            if(hasFlag(flags, PATH_FOLLOW_FLAG_CAN_CONTINUE)) {
                 settings_str += "can continue, ";
             }
-            if(has_flag(flags, PATH_FOLLOW_FLAG_IGNORE_OBSTACLES)) {
+            if(hasFlag(flags, PATH_FOLLOW_FLAG_IGNORE_OBSTACLES)) {
                 settings_str += "ignore obstacles, ";
             }
-            if(has_flag(flags, PATH_FOLLOW_FLAG_FOLLOW_MOB)) {
+            if(hasFlag(flags, PATH_FOLLOW_FLAG_FOLLOW_MOB)) {
                 settings_str += "follow mob, ";
             }
-            if(has_flag(flags, PATH_FOLLOW_FLAG_FAKED_START)) {
+            if(hasFlag(flags, PATH_FOLLOW_FLAG_FAKED_START)) {
                 settings_str += "faked start, ";
             }
-            if(has_flag(flags, PATH_FOLLOW_FLAG_FAKED_END)) {
+            if(hasFlag(flags, PATH_FOLLOW_FLAG_FAKED_END)) {
                 settings_str += "faked end, ";
             }
-            if(has_flag(flags, PATH_FOLLOW_FLAG_SCRIPT_USE)) {
+            if(hasFlag(flags, PATH_FOLLOW_FLAG_SCRIPT_USE)) {
                 settings_str += "script, ";
             }
-            if(has_flag(flags, PATH_FOLLOW_FLAG_LIGHT_LOAD)) {
+            if(hasFlag(flags, PATH_FOLLOW_FLAG_LIGHT_LOAD)) {
                 settings_str += "light load, ";
             }
-            if(has_flag(flags, PATH_FOLLOW_FLAG_AIRBORNE)) {
+            if(hasFlag(flags, PATH_FOLLOW_FLAG_AIRBORNE)) {
                 settings_str += "airborne, ";
             }
             if(settings_str.size() > 2) {
@@ -1331,9 +1331,9 @@ void GameplayState::do_menu_logic() {
                 settings_str = "none";
             }
             
-            string block_str = path_block_reason_to_string(path->block_reason);
+            string block_str = pathBlockReasonToString(path->block_reason);
             
-            print_info(
+            printInfo(
                 "Path calculation result: " + result_str +
                 "\n" +
                 "Heading to stop " + stops_str +
@@ -1346,7 +1346,7 @@ void GameplayState::do_menu_logic() {
             
         } else {
         
-            print_info("Mob is not following any path.", 5.0f, 3.0f);
+            printInfo("Mob is not following any path.", 5.0f, 3.0f);
             
         }
     }
@@ -1354,23 +1354,23 @@ void GameplayState::do_menu_logic() {
     //Print mouse coordinates.
     if(game.maker_tools.geometry_info) {
         Sector* mouse_sector =
-            get_sector(game.mouse_cursor.w_pos, nullptr, true);
+            getSector(game.mouse_cursor.w_pos, nullptr, true);
             
         string coords_str =
-            box_string(f2s(game.mouse_cursor.w_pos.x), 6) + " " +
-            box_string(f2s(game.mouse_cursor.w_pos.y), 6);
+            boxString(f2s(game.mouse_cursor.w_pos.x), 6) + " " +
+            boxString(f2s(game.mouse_cursor.w_pos.y), 6);
         string blockmap_str =
-            box_string(
-                i2s(game.cur_area_data->bmap.get_col(game.mouse_cursor.w_pos.x)),
+            boxString(
+                i2s(game.cur_area_data->bmap.getCol(game.mouse_cursor.w_pos.x)),
                 5, " "
             ) +
-            i2s(game.cur_area_data->bmap.get_row(game.mouse_cursor.w_pos.y));
+            i2s(game.cur_area_data->bmap.getRow(game.mouse_cursor.w_pos.y));
         string sector_z_str, sector_light_str, sector_tex_str;
         if(mouse_sector) {
             sector_z_str =
-                box_string(f2s(mouse_sector->z), 6);
+                boxString(f2s(mouse_sector->z), 6);
             sector_light_str =
-                box_string(i2s(mouse_sector->brightness), 3);
+                boxString(i2s(mouse_sector->brightness), 3);
             sector_tex_str =
                 mouse_sector->texture_info.bmp_name;
         }
@@ -1392,7 +1392,7 @@ void GameplayState::do_menu_logic() {
             str += "None";
         }
         
-        print_info(str, 1.0f, 1.0f);
+        printInfo(str, 1.0f, 1.0f);
     }
     
     game.maker_tools.info_print_timer.tick(game.delta_t);
@@ -1441,11 +1441,11 @@ void GameplayState::do_menu_logic() {
         if(interlude_time >= GAMEPLAY::BIG_MSG_READY_DUR) {
             cur_interlude = INTERLUDE_NONE;
             delta_t_mult = 1.0f;
-            hud->gui.start_animation(
+            hud->gui.startAnimation(
                 GUI_MANAGER_ANIM_OUT_TO_IN,
                 GAMEPLAY::AREA_INTRO_HUD_MOVE_TIME
             );
-            game.audio.set_current_song(game.cur_area_data->song_name);
+            game.audio.setCurrentSong(game.cur_area_data->song_name);
         }
         break;
     } case INTERLUDE_MISSION_END: {
@@ -1475,14 +1475,14 @@ void GameplayState::do_menu_logic() {
  * @param near_boss If not nullptr, whether they are close to a boss is
  * returned here.
  */
-void GameplayState::is_near_enemy_and_boss(bool* near_enemy, bool* near_boss) {
+void GameplayState::isNearEnemyAndBoss(bool* near_enemy, bool* near_boss) {
     bool found_enemy = false;
     bool found_boss = false;
     for(size_t e = 0; e < game.states.gameplay->mobs.enemies.size(); e++) {
         Enemy* e_ptr = game.states.gameplay->mobs.enemies[e];
         if(e_ptr->health <= 0.0f) continue;
         
-        Distance d = cur_leader_ptr->get_distance_between(e_ptr);
+        Distance d = cur_leader_ptr->getDistanceBetween(e_ptr);
         
         if(!e_ptr->ene_type->is_boss) {
             if(d <= GAMEPLAY::ENEMY_MIX_DISTANCE) {
@@ -1507,8 +1507,8 @@ void GameplayState::is_near_enemy_and_boss(bool* near_enemy, bool* near_boss) {
  *
  * @return Whether the goal is met.
  */
-bool GameplayState::is_mission_clear_met() {
-    return game.mission_goals[game.cur_area_data->mission.goal]->is_met(this);
+bool GameplayState::isMissionClearMet() {
+    return game.mission_goals[game.cur_area_data->mission.goal]->isMet(this);
 }
 
 
@@ -1518,15 +1518,15 @@ bool GameplayState::is_mission_clear_met() {
  * @param reason The reason gets returned here, if any.
  * @return Whether a failure condition is met.
  */
-bool GameplayState::is_mission_fail_met(MISSION_FAIL_COND* reason) {
+bool GameplayState::isMissionFailMet(MISSION_FAIL_COND* reason) {
     for(size_t f = 0; f < game.mission_fail_conds.size(); f++) {
         if(
-            has_flag(
+            hasFlag(
                 game.cur_area_data->mission.fail_conditions,
-                get_idx_bitmask(f)
+                getIdxBitmask(f)
             )
         ) {
-            if(game.mission_fail_conds[f]->is_met(this)) {
+            if(game.mission_fail_conds[f]->isMet(this)) {
                 *reason = (MISSION_FAIL_COND) f;
                 return true;
             }
@@ -1544,7 +1544,7 @@ bool GameplayState::is_mission_fail_met(MISSION_FAIL_COND* reason) {
  * @param bottom_right Bottom-right coordinates (in world coordinates)
  * of the region.
  */
-void GameplayState::mark_area_cells_active(
+void GameplayState::markAreaCellsActive(
     const Point &top_left, const Point &bottom_right
 ) {
     int from_x =
@@ -1560,7 +1560,7 @@ void GameplayState::mark_area_cells_active(
         (bottom_right.y - game.cur_area_data->bmap.top_left_corner.y) /
         GEOMETRY::AREA_CELL_SIZE;
         
-    mark_area_cells_active(from_x, to_x, from_y, to_y);
+    markAreaCellsActive(from_x, to_x, from_y, to_y);
 }
 
 
@@ -1573,7 +1573,7 @@ void GameplayState::mark_area_cells_active(
  * @param from_y Starting row index of the cells, inclusive.
  * @param to_y Ending row index of the cells, inclusive.
  */
-void GameplayState::mark_area_cells_active(
+void GameplayState::markAreaCellsActive(
     int from_x, int to_x, int from_y, int to_y
 ) {
     from_x = std::max(0, from_x);
@@ -1596,7 +1596,7 @@ void GameplayState::mark_area_cells_active(
  * @param m_ptr Mob to process.
  * @param m Index of the mob.
  */
-void GameplayState::process_mob_interactions(Mob* m_ptr, size_t m) {
+void GameplayState::processMobInteractions(Mob* m_ptr, size_t m) {
     vector<PendingIntermobEvent> pending_intermob_events;
     MobState* state_before = m_ptr->fsm.cur_state;
     
@@ -1606,7 +1606,7 @@ void GameplayState::process_mob_interactions(Mob* m_ptr, size_t m) {
         
         Mob* m2_ptr = mobs.all[m2];
         if(
-            !has_flag(
+            !hasFlag(
                 m2_ptr->type->inactive_logic,
                 INACTIVE_LOGIC_FLAG_INTERACTIONS
             ) && !m2_ptr->is_active &&
@@ -1615,10 +1615,10 @@ void GameplayState::process_mob_interactions(Mob* m_ptr, size_t m) {
             continue;
         }
         if(m2_ptr->to_delete) continue;
-        if(m2_ptr->is_stored_inside_mob()) continue;
+        if(m2_ptr->isStoredInsideMob()) continue;
         
         Distance d(m_ptr->pos, m2_ptr->pos);
-        Distance d_between = m_ptr->get_distance_between(m2_ptr, &d);
+        Distance d_between = m_ptr->getDistanceBetween(m2_ptr, &d);
         
         if(d_between > m_ptr->interaction_span + m2_ptr->physical_span) {
             //The other mob is so far away that there is
@@ -1627,46 +1627,46 @@ void GameplayState::process_mob_interactions(Mob* m_ptr, size_t m) {
         }
         
         if(game.perf_mon) {
-            game.perf_mon->start_measurement("Objects -- Touching others");
+            game.perf_mon->startMeasurement("Objects -- Touching others");
         }
         
         if(d <= m_ptr->physical_span + m2_ptr->physical_span) {
             //Only check if their radii or hitboxes
             //can (theoretically) reach each other.
-            process_mob_touches(m_ptr, m2_ptr, m, m2, d);
+            processMobTouches(m_ptr, m2_ptr, m, m2, d);
             
         }
         
         if(game.perf_mon) {
-            game.perf_mon->finish_measurement();
-            game.perf_mon->start_measurement("Objects -- Reaches");
+            game.perf_mon->finishMeasurement();
+            game.perf_mon->startMeasurement("Objects -- Reaches");
         }
         
         if(
             m2_ptr->health != 0 && m_ptr->near_reach != INVALID &&
             !m2_ptr->has_invisibility_status
         ) {
-            process_mob_reaches(
+            processMobReaches(
                 m_ptr, m2_ptr, m, m2, d_between, pending_intermob_events
             );
         }
         
         if(game.perf_mon) {
-            game.perf_mon->finish_measurement();
-            game.perf_mon->start_measurement("Objects -- Misc. interactions");
+            game.perf_mon->finishMeasurement();
+            game.perf_mon->startMeasurement("Objects -- Misc. interactions");
         }
         
-        process_mob_misc_interactions(
+        processMobMiscInteractions(
             m_ptr, m2_ptr, m, m2, d, d_between, pending_intermob_events
         );
         
         if(game.perf_mon) {
-            game.perf_mon->finish_measurement();
+            game.perf_mon->finishMeasurement();
         }
     }
     
     if(game.perf_mon) {
-        game.perf_mon->start_measurement("Objects -- Interaction results");
+        game.perf_mon->startMeasurement("Objects -- Interaction results");
     }
     
     //Check the pending inter-mob events.
@@ -1675,10 +1675,10 @@ void GameplayState::process_mob_interactions(Mob* m_ptr, size_t m) {
     [m_ptr] (PendingIntermobEvent e1, PendingIntermobEvent e2) -> bool {
         return
         (
-            e1.d.to_float() -
+            e1.d.toFloat() -
             (m_ptr->radius + e1.mob_ptr->radius)
         ) < (
-            e2.d.to_float() -
+            e2.d.toFloat() -
             (m_ptr->radius + e2.mob_ptr->radius)
         );
     }
@@ -1698,7 +1698,7 @@ void GameplayState::process_mob_interactions(Mob* m_ptr, size_t m) {
     }
     
     if(game.perf_mon) {
-        game.perf_mon->finish_measurement();
+        game.perf_mon->finishMeasurement();
     }
 }
 
@@ -1715,20 +1715,20 @@ void GameplayState::process_mob_interactions(Mob* m_ptr, size_t m) {
  * @param d_between Distance between the two.
  * @param pending_intermob_events Vector of events to be processed.
  */
-void GameplayState::process_mob_misc_interactions(
+void GameplayState::processMobMiscInteractions(
     Mob* m_ptr, Mob* m2_ptr, size_t m, size_t m2,
     const Distance &d, const Distance &d_between,
     vector<PendingIntermobEvent> &pending_intermob_events
 ) {
     //Find a carriable mob to grab.
     MobEvent* nco_event =
-        m_ptr->fsm.get_event(MOB_EV_NEAR_CARRIABLE_OBJECT);
+        m_ptr->fsm.getEvent(MOB_EV_NEAR_CARRIABLE_OBJECT);
     if(
         nco_event &&
         m2_ptr->carry_info &&
-        !m2_ptr->carry_info->is_full()
+        !m2_ptr->carry_info->isFull()
     ) {
-        if(d_between <= task_range(m_ptr)) {
+        if(d_between <= taskRange(m_ptr)) {
             pending_intermob_events.push_back(
                 PendingIntermobEvent(d_between, nco_event, m2_ptr)
             );
@@ -1737,12 +1737,12 @@ void GameplayState::process_mob_misc_interactions(
     
     //Find a tool mob.
     MobEvent* nto_event =
-        m_ptr->fsm.get_event(MOB_EV_NEAR_TOOL);
+        m_ptr->fsm.getEvent(MOB_EV_NEAR_TOOL);
     if(
         nto_event &&
         typeid(*m2_ptr) == typeid(Tool)
     ) {
-        if(d_between <= task_range(m_ptr)) {
+        if(d_between <= taskRange(m_ptr)) {
             Tool* too_ptr = (Tool*) m2_ptr;
             if(too_ptr->reserved && too_ptr->reserved != m_ptr) {
                 //Another Pikmin is already going for it. Ignore it.
@@ -1756,15 +1756,15 @@ void GameplayState::process_mob_misc_interactions(
     
     //Find a group task mob.
     MobEvent* ngto_event =
-        m_ptr->fsm.get_event(MOB_EV_NEAR_GROUP_TASK);
+        m_ptr->fsm.getEvent(MOB_EV_NEAR_GROUP_TASK);
     if(
         ngto_event &&
         m2_ptr->health > 0 &&
         typeid(*m2_ptr) == typeid(GroupTask)
     ) {
-        if(d_between <= task_range(m_ptr)) {
+        if(d_between <= taskRange(m_ptr)) {
             GroupTask* tas_ptr = (GroupTask*) m2_ptr;
-            GroupTask::GroupTaskSpot* free_spot = tas_ptr->get_free_spot();
+            GroupTask::GroupTaskSpot* free_spot = tas_ptr->getFreeSpot();
             if(!free_spot) {
                 //There are no free spots here. Ignore it.
             } else {
@@ -1778,7 +1778,7 @@ void GameplayState::process_mob_misc_interactions(
     
     //"Bumped" by the active leader being nearby.
     MobEvent* touch_le_ev =
-        m_ptr->fsm.get_event(MOB_EV_TOUCHED_ACTIVE_LEADER);
+        m_ptr->fsm.getEvent(MOB_EV_TOUCHED_ACTIVE_LEADER);
     if(
         touch_le_ev &&
         m2_ptr == cur_leader_ptr &&
@@ -1806,26 +1806,26 @@ void GameplayState::process_mob_misc_interactions(
  * @param d_between Distance between the two.
  * @param pending_intermob_events Vector of events to be processed.
  */
-void GameplayState::process_mob_reaches(
+void GameplayState::processMobReaches(
     Mob* m_ptr, Mob* m2_ptr, size_t m, size_t m2, const Distance &d_between,
     vector<PendingIntermobEvent> &pending_intermob_events
 ) {
     //Check reaches.
     MobEvent* obir_ev =
-        m_ptr->fsm.get_event(MOB_EV_OBJECT_IN_REACH);
+        m_ptr->fsm.getEvent(MOB_EV_OBJECT_IN_REACH);
     MobEvent* opir_ev =
-        m_ptr->fsm.get_event(MOB_EV_OPPONENT_IN_REACH);
+        m_ptr->fsm.getEvent(MOB_EV_OPPONENT_IN_REACH);
         
     if(!obir_ev && !opir_ev) return;
     
     MobType::Reach* r_ptr = &m_ptr->type->reaches[m_ptr->near_reach];
     float angle_diff =
-        get_angle_smallest_dif(
+        getAngleSmallestDiff(
             m_ptr->angle,
-            get_angle(m_ptr->pos, m2_ptr->pos)
+            getAngle(m_ptr->pos, m2_ptr->pos)
         );
         
-    if(is_mob_in_reach(r_ptr, d_between, angle_diff)) {
+    if(isMobInReach(r_ptr, d_between, angle_diff)) {
         if(obir_ev) {
             pending_intermob_events.push_back(
                 PendingIntermobEvent(
@@ -1833,7 +1833,7 @@ void GameplayState::process_mob_reaches(
                 )
             );
         }
-        if(opir_ev && m_ptr->can_hunt(m2_ptr)) {
+        if(opir_ev && m_ptr->canHunt(m2_ptr)) {
             pending_intermob_events.push_back(
                 PendingIntermobEvent(
                     d_between, opir_ev, m2_ptr
@@ -1854,7 +1854,7 @@ void GameplayState::process_mob_reaches(
  * @param m2 Index of the mob to check against.
  * @param d Distance between the two.
  */
-void GameplayState::process_mob_touches(
+void GameplayState::processMobTouches(
     Mob* m_ptr, Mob* m2_ptr, size_t m, size_t m2, Distance &d
 ) {
     //Check if mob 1 should be pushed by mob 2.
@@ -1870,13 +1870,13 @@ void GameplayState::process_mob_touches(
         );
     bool ok_to_push = true;
     if(
-        has_flag(m_ptr->flags, MOB_FLAG_INTANGIBLE) ||
-        has_flag(m2_ptr->flags, MOB_FLAG_INTANGIBLE)
+        hasFlag(m_ptr->flags, MOB_FLAG_INTANGIBLE) ||
+        hasFlag(m2_ptr->flags, MOB_FLAG_INTANGIBLE)
     ) {
         ok_to_push = false;
     } else if(!m_ptr->type->pushable) {
         ok_to_push = false;
-    } else if(has_flag(m_ptr->flags, MOB_FLAG_UNPUSHABLE)) {
+    } else if(hasFlag(m_ptr->flags, MOB_FLAG_UNPUSHABLE)) {
         ok_to_push = false;
     } else if(m_ptr->standing_on_mob == m2_ptr) {
         ok_to_push = false;
@@ -1909,7 +1909,7 @@ void GameplayState::process_mob_touches(
             //Push with the hitboxes.
             
             Sprite* s2_ptr;
-            m2_ptr->get_sprite_data(&s2_ptr, nullptr, nullptr);
+            m2_ptr->getSpriteData(&s2_ptr, nullptr, nullptr);
             
             for(size_t h = 0; h < s2_ptr->hitboxes.size(); h++) {
                 Hitbox* h_ptr = &s2_ptr->hitboxes[h];
@@ -1925,7 +1925,7 @@ void GameplayState::process_mob_touches(
                     )
                 );
                 //It's more optimized to get the hitbox position here
-                //instead of calling hitbox::get_cur_pos because
+                //instead of calling hitbox::getCurPos because
                 //we already know the sine and cosine, so they don't
                 //need to be re-calculated.
                 
@@ -1933,12 +1933,12 @@ void GameplayState::process_mob_touches(
                 if(hd < m_ptr->radius + h_ptr->radius) {
                     float p =
                         fabs(
-                            hd.to_float() - m_ptr->radius -
+                            hd.toFloat() - m_ptr->radius -
                             h_ptr->radius
                         );
                     if(push_amount == 0 || p > push_amount) {
                         push_amount = p;
-                        push_angle = get_angle(h_pos, m_ptr->pos);
+                        push_angle = getAngle(h_pos, m_ptr->pos);
                     }
                 }
             }
@@ -1953,7 +1953,7 @@ void GameplayState::process_mob_touches(
             ) {
                 //Rectangle vs rectangle.
                 xy_collision =
-                    rectangles_intersect(
+                    rectanglesIntersect(
                         m_ptr->pos, m_ptr->rectangular_dim, m_ptr->angle,
                         m2_ptr->pos, m2_ptr->rectangular_dim, m2_ptr->angle,
                         &temp_push_amount, &temp_push_angle
@@ -1961,7 +1961,7 @@ void GameplayState::process_mob_touches(
             } else if(m_ptr->rectangular_dim.x != 0) {
                 //Rectangle vs circle.
                 xy_collision =
-                    circle_intersects_rectangle(
+                    circleIntersectsRectangle(
                         m2_ptr->pos, m2_ptr->radius,
                         m_ptr->pos, m_ptr->rectangular_dim,
                         m_ptr->angle, &temp_push_amount, &temp_push_angle
@@ -1970,7 +1970,7 @@ void GameplayState::process_mob_touches(
             } else if(m2_ptr->rectangular_dim.x != 0) {
                 //Circle vs rectangle.
                 xy_collision =
-                    circle_intersects_rectangle(
+                    circleIntersectsRectangle(
                         m_ptr->pos, m_ptr->radius,
                         m2_ptr->pos, m2_ptr->rectangular_dim,
                         m2_ptr->angle, &temp_push_amount, &temp_push_angle
@@ -1983,10 +1983,10 @@ void GameplayState::process_mob_touches(
                     //Only bother calculating if there's a collision.
                     temp_push_amount =
                         fabs(
-                            d.to_float() - m_ptr->radius -
+                            d.toFloat() - m_ptr->radius -
                             m2_ptr->radius
                         );
-                    temp_push_angle = get_angle(m2_ptr->pos, m_ptr->pos);
+                    temp_push_angle = getAngle(m2_ptr->pos, m_ptr->pos);
                 }
             }
             
@@ -2040,9 +2040,9 @@ void GameplayState::process_mob_touches(
     //Check touches. This does not use hitboxes,
     //only the object radii (or rectangular width/height).
     MobEvent* touch_op_ev =
-        m_ptr->fsm.get_event(MOB_EV_TOUCHED_OPPONENT);
+        m_ptr->fsm.getEvent(MOB_EV_TOUCHED_OPPONENT);
     MobEvent* touch_ob_ev =
-        m_ptr->fsm.get_event(MOB_EV_TOUCHED_OBJECT);
+        m_ptr->fsm.getEvent(MOB_EV_TOUCHED_OBJECT);
     if(touch_op_ev || touch_ob_ev) {
     
         bool z_touch;
@@ -2066,14 +2066,14 @@ void GameplayState::process_mob_touches(
         ) {
             //Rectangle vs rectangle.
             xy_collision =
-                rectangles_intersect(
+                rectanglesIntersect(
                     m_ptr->pos, m_ptr->rectangular_dim, m_ptr->angle,
                     m2_ptr->pos, m2_ptr->rectangular_dim, m2_ptr->angle
                 );
         } else if(m_ptr->rectangular_dim.x != 0) {
             //Rectangle vs circle.
             xy_collision =
-                circle_intersects_rectangle(
+                circleIntersectsRectangle(
                     m2_ptr->pos, m2_ptr->radius,
                     m_ptr->pos, m_ptr->rectangular_dim,
                     m_ptr->angle
@@ -2081,7 +2081,7 @@ void GameplayState::process_mob_touches(
         } else if(m2_ptr->rectangular_dim.x != 0) {
             //Circle vs rectangle.
             xy_collision =
-                circle_intersects_rectangle(
+                circleIntersectsRectangle(
                     m_ptr->pos, m_ptr->radius,
                     m2_ptr->pos, m2_ptr->rectangular_dim,
                     m2_ptr->angle
@@ -2093,13 +2093,13 @@ void GameplayState::process_mob_touches(
         }
         
         if(
-            z_touch && !has_flag(m2_ptr->flags, MOB_FLAG_INTANGIBLE) &&
+            z_touch && !hasFlag(m2_ptr->flags, MOB_FLAG_INTANGIBLE) &&
             xy_collision
         ) {
             if(touch_ob_ev) {
                 touch_ob_ev->run(m_ptr, (void*) m2_ptr);
             }
-            if(touch_op_ev && m_ptr->can_hunt(m2_ptr)) {
+            if(touch_op_ev && m_ptr->canHunt(m2_ptr)) {
                 touch_op_ev->run(m_ptr, (void*) m2_ptr);
             }
         }
@@ -2108,20 +2108,20 @@ void GameplayState::process_mob_touches(
     
     //Check hitbox touches.
     MobEvent* hitbox_touch_an_ev =
-        m_ptr->fsm.get_event(MOB_EV_HITBOX_TOUCH_A_N);
+        m_ptr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_A_N);
     MobEvent* hitbox_touch_na_ev =
-        m_ptr->fsm.get_event(MOB_EV_HITBOX_TOUCH_N_A);
+        m_ptr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_N_A);
     MobEvent* hitbox_touch_nn_ev =
-        m_ptr->fsm.get_event(MOB_EV_HITBOX_TOUCH_N_N);
+        m_ptr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_N_N);
     MobEvent* hitbox_touch_eat_ev =
-        m_ptr->fsm.get_event(MOB_EV_HITBOX_TOUCH_EAT);
+        m_ptr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_EAT);
     MobEvent* hitbox_touch_haz_ev =
-        m_ptr->fsm.get_event(MOB_EV_TOUCHED_HAZARD);
+        m_ptr->fsm.getEvent(MOB_EV_TOUCHED_HAZARD);
         
     Sprite* s1_ptr;
-    m_ptr->get_sprite_data(&s1_ptr, nullptr, nullptr);
+    m_ptr->getSpriteData(&s1_ptr, nullptr, nullptr);
     Sprite* s2_ptr;
-    m2_ptr->get_sprite_data(&s2_ptr, nullptr, nullptr);
+    m2_ptr->getSpriteData(&s2_ptr, nullptr, nullptr);
     
     if(
         (
@@ -2149,11 +2149,11 @@ void GameplayState::process_mob_touches(
                 
                 //Get the real hitbox locations.
                 Point m1_h_pos =
-                    h1_ptr->get_cur_pos(
+                    h1_ptr->getCurPos(
                         m_ptr->pos, m_ptr->angle_cos, m_ptr->angle_sin
                     );
                 Point m2_h_pos =
-                    h2_ptr->get_cur_pos(
+                    h2_ptr->getCurPos(
                         m2_ptr->pos, m2_ptr->angle_cos, m2_ptr->angle_sin
                     );
                 float m1_h_z = m_ptr->z + h1_ptr->z;
@@ -2217,13 +2217,13 @@ void GameplayState::process_mob_touches(
                     //Re-fetch the other events, since this event
                     //could have triggered a state change.
                     hitbox_touch_eat_ev =
-                        m_ptr->fsm.get_event(MOB_EV_HITBOX_TOUCH_EAT);
+                        m_ptr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_EAT);
                     hitbox_touch_haz_ev =
-                        m_ptr->fsm.get_event(MOB_EV_TOUCHED_HAZARD);
+                        m_ptr->fsm.getEvent(MOB_EV_TOUCHED_HAZARD);
                     hitbox_touch_na_ev =
-                        m_ptr->fsm.get_event(MOB_EV_HITBOX_TOUCH_N_A);
+                        m_ptr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_N_A);
                     hitbox_touch_nn_ev =
-                        m_ptr->fsm.get_event(MOB_EV_HITBOX_TOUCH_N_N);
+                        m_ptr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_N_N);
                 }
                 
                 if(
@@ -2244,13 +2244,13 @@ void GameplayState::process_mob_touches(
                     //Re-fetch the other events, since this event
                     //could have triggered a state change.
                     hitbox_touch_eat_ev =
-                        m_ptr->fsm.get_event(MOB_EV_HITBOX_TOUCH_EAT);
+                        m_ptr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_EAT);
                     hitbox_touch_haz_ev =
-                        m_ptr->fsm.get_event(MOB_EV_TOUCHED_HAZARD);
+                        m_ptr->fsm.getEvent(MOB_EV_TOUCHED_HAZARD);
                     hitbox_touch_na_ev =
-                        m_ptr->fsm.get_event(MOB_EV_HITBOX_TOUCH_N_A);
+                        m_ptr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_N_A);
                     hitbox_touch_an_ev =
-                        m_ptr->fsm.get_event(MOB_EV_HITBOX_TOUCH_A_N);
+                        m_ptr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_A_N);
                 }
                 
                 if(
@@ -2262,13 +2262,13 @@ void GameplayState::process_mob_touches(
                     //Hazard resistance check.
                     if(
                         !h2_ptr->hazards.empty() &&
-                        m_ptr->is_resistant_to_hazards(h2_ptr->hazards)
+                        m_ptr->isResistantToHazards(h2_ptr->hazards)
                     ) {
                         continue;
                     }
                     
                     //Should this mob even attack this other mob?
-                    if(!m2_ptr->can_hurt(m_ptr)) {
+                    if(!m2_ptr->canHurt(m_ptr)) {
                         continue;
                     }
                 }
@@ -2308,9 +2308,9 @@ void GameplayState::process_mob_touches(
                     //Re-fetch the other events, since this event
                     //could have triggered a state change.
                     hitbox_touch_haz_ev =
-                        m_ptr->fsm.get_event(MOB_EV_TOUCHED_HAZARD);
+                        m_ptr->fsm.getEvent(MOB_EV_TOUCHED_HAZARD);
                     hitbox_touch_na_ev =
-                        m_ptr->fsm.get_event(MOB_EV_HITBOX_TOUCH_N_A);
+                        m_ptr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_N_A);
                 }
                 
                 //"Touched hazard" event.
@@ -2341,7 +2341,7 @@ void GameplayState::process_mob_touches(
                     //Re-fetch the other events, since this event
                     //could have triggered a state change.
                     hitbox_touch_na_ev =
-                        m_ptr->fsm.get_event(MOB_EV_HITBOX_TOUCH_N_A);
+                        m_ptr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_N_A);
                 }
                 
                 //"Normal hitbox touched attack hitbox" event.
@@ -2372,7 +2372,7 @@ void GameplayState::process_mob_touches(
  * @brief Updates the grid that represents which area cells are active
  * for this frame.
  */
-void GameplayState::update_area_active_cells() {
+void GameplayState::updateAreaActiveCells() {
     //Initialize the grid to false.
     for(size_t x = 0; x < area_active_cells.size(); x++) {
         for(size_t y = 0; y < area_active_cells[x].size(); y++) {
@@ -2382,28 +2382,28 @@ void GameplayState::update_area_active_cells() {
     
     //Mark the 3x3 region around Pikmin and leaders as active.
     for(size_t p = 0; p < mobs.pikmin_list.size(); p++) {
-        mark_area_cells_active(
+        markAreaCellsActive(
             mobs.pikmin_list[p]->pos - GEOMETRY::AREA_CELL_SIZE,
             mobs.pikmin_list[p]->pos + GEOMETRY::AREA_CELL_SIZE
         );
     }
     
     for(size_t l = 0; l < mobs.leaders.size(); l++) {
-        mark_area_cells_active(
+        markAreaCellsActive(
             mobs.leaders[l]->pos - GEOMETRY::AREA_CELL_SIZE,
             mobs.leaders[l]->pos + GEOMETRY::AREA_CELL_SIZE
         );
     }
     
     //Mark the region in-camera (plus padding) as active.
-    mark_area_cells_active(game.cam.box[0], game.cam.box[1]);
+    markAreaCellsActive(game.cam.box[0], game.cam.box[1]);
 }
 
 
 /**
  * @brief Updates the "is_active" member variable of all mobs for this frame.
  */
-void GameplayState::update_mob_is_active_flag() {
+void GameplayState::updateMobIsActiveFlag() {
     unordered_set<Mob*> child_mobs;
     
     for(size_t m = 0; m < mobs.all.size(); m++) {

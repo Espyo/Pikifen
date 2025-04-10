@@ -18,42 +18,42 @@
  *
  * @param ev Event to handle.
  */
-void GuiEditor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
-    if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_LEFT)) {
+void GuiEditor::handleKeyCharCanvas(const ALLEGRO_EVENT &ev) {
+    if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_LEFT)) {
         game.cam.target_pos.x -=
             AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
             
-    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_RIGHT)) {
+    } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_RIGHT)) {
         game.cam.target_pos.x +=
             AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
             
-    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_UP)) {
+    } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_UP)) {
         game.cam.target_pos.y -=
             AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
             
-    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_DOWN)) {
+    } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_DOWN)) {
         game.cam.target_pos.y +=
             AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
             
-    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_MINUS)) {
-        zoom_out_cmd(1.0f);
+    } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_MINUS)) {
+        zoomOutCmd(1.0f);
         
-    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_EQUALS)) {
+    } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_EQUALS)) {
         //Nope, that's not a typo. The plus key is ALLEGRO_KEY_EQUALS.
-        zoom_in_cmd(1.0f);
+        zoomInCmd(1.0f);
         
-    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_MINUS, false, true)) {
-        grid_interval_decrease_cmd(1.0f);
+    } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_MINUS, false, true)) {
+        gridIntervalDecreaseCmd(1.0f);
         
-    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_EQUALS, false, true)) {
+    } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_EQUALS, false, true)) {
         //Again, not a typo. The plus key is ALLEGRO_KEY_EQUALS.
-        grid_interval_increase_cmd(1.0f);
+        gridIntervalIncreaseCmd(1.0f);
         
-    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_0)) {
-        reset_cam(false);
+    } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_0)) {
+        resetCam(false);
         
-    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_X)) {
-        snap_mode_cmd(1.0f);
+    } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_X)) {
+        snapModeCmd(1.0f);
         
     }
 }
@@ -64,21 +64,21 @@ void GuiEditor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void GuiEditor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
-    if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_L, true)) {
-        load_cmd(1.0f);
+void GuiEditor::handleKeyDownAnywhere(const ALLEGRO_EVENT &ev) {
+    if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_L, true)) {
+        loadCmd(1.0f);
         
-    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_Q, true)) {
-        quit_cmd(1.0f);
+    } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_Q, true)) {
+        quitCmd(1.0f);
         
-    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_S, true)) {
-        save_cmd(1.0f);
+    } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_S, true)) {
+        saveCmd(1.0f);
         
-    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_ESCAPE)) {
+    } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_ESCAPE)) {
         escape_was_pressed = true;
         
         if(!dialogs.empty()) {
-            close_top_dialog();
+            closeTopDialog();
         }
         
     }
@@ -90,9 +90,9 @@ void GuiEditor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void GuiEditor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
-    if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_HOME)) {
-        reset_cam(false);
+void GuiEditor::handleKeyDownCanvas(const ALLEGRO_EVENT &ev) {
+    if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_HOME)) {
+        resetCam(false);
         
     }
 }
@@ -104,8 +104,8 @@ void GuiEditor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void GuiEditor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
-    handle_lmb_down(ev);
+void GuiEditor::handleLmbDoubleClick(const ALLEGRO_EVENT &ev) {
+    handleLmbDown(ev);
 }
 
 
@@ -115,11 +115,11 @@ void GuiEditor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void GuiEditor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
+void GuiEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
     bool tw_handled = false;
     if(cur_item != INVALID && items[cur_item].size.x != 0.0f) {
         tw_handled =
-            cur_transformation_widget.handle_mouse_down(
+            cur_transformation_widget.handleMouseDown(
                 game.mouse_cursor.w_pos,
                 &items[cur_item].center,
                 &items[cur_item].size,
@@ -133,7 +133,7 @@ void GuiEditor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         for(size_t i = 0; i < items.size(); i++) {
             Item* item_ptr = &items[i];
             if(
-                is_point_in_rectangle(
+                isPointInRectangle(
                     game.mouse_cursor.w_pos,
                     item_ptr->center,
                     item_ptr->size
@@ -159,7 +159,7 @@ void GuiEditor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                 cur_item_idx = 0;
             } else {
                 cur_item_idx =
-                    sum_and_wrap(
+                    sumAndWrap(
                         (int) cur_item_idx, 1,
                         (int) clicked_items.size()
                     );
@@ -176,11 +176,11 @@ void GuiEditor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void GuiEditor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
+void GuiEditor::handleLmbDrag(const ALLEGRO_EVENT &ev) {
     if(cur_item != INVALID && items[cur_item].size.x != 0.0f) {
         bool tw_handled =
-            cur_transformation_widget.handle_mouse_move(
-                snap_point(game.mouse_cursor.w_pos),
+            cur_transformation_widget.handleMouseMove(
+                snapPoint(game.mouse_cursor.w_pos),
                 &items[cur_item].center,
                 &items[cur_item].size,
                 nullptr,
@@ -191,7 +191,7 @@ void GuiEditor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                 is_alt_pressed
             );
         if(tw_handled) {
-            changes_mgr.mark_as_changed();
+            changes_mgr.markAsChanged();
         }
     }
 }
@@ -202,8 +202,8 @@ void GuiEditor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void GuiEditor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
-    cur_transformation_widget.handle_mouse_up();
+void GuiEditor::handleLmbUp(const ALLEGRO_EVENT &ev) {
+    cur_transformation_widget.handleMouseUp();
 }
 
 
@@ -213,9 +213,9 @@ void GuiEditor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void GuiEditor::handle_mmb_down(const ALLEGRO_EVENT &ev) {
+void GuiEditor::handleMmbDown(const ALLEGRO_EVENT &ev) {
     if(!game.options.editors.mmb_pan) {
-        reset_cam(false);
+        resetCam(false);
     }
 }
 
@@ -226,9 +226,9 @@ void GuiEditor::handle_mmb_down(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void GuiEditor::handle_mmb_drag(const ALLEGRO_EVENT &ev) {
+void GuiEditor::handleMmbDrag(const ALLEGRO_EVENT &ev) {
     if(game.options.editors.mmb_pan) {
-        pan_cam(ev);
+        panCam(ev);
     }
 }
 
@@ -238,7 +238,7 @@ void GuiEditor::handle_mmb_drag(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void GuiEditor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
+void GuiEditor::handleMouseUpdate(const ALLEGRO_EVENT &ev) {
 
 }
 
@@ -248,8 +248,8 @@ void GuiEditor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void GuiEditor::handle_mouse_wheel(const ALLEGRO_EVENT &ev) {
-    zoom_with_cursor(game.cam.zoom + (game.cam.zoom * ev.mouse.dz * 0.1));
+void GuiEditor::handleMouseWheel(const ALLEGRO_EVENT &ev) {
+    zoomWithCursor(game.cam.zoom + (game.cam.zoom * ev.mouse.dz * 0.1));
 }
 
 
@@ -259,9 +259,9 @@ void GuiEditor::handle_mouse_wheel(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void GuiEditor::handle_rmb_down(const ALLEGRO_EVENT &ev) {
+void GuiEditor::handleRmbDown(const ALLEGRO_EVENT &ev) {
     if(game.options.editors.mmb_pan) {
-        reset_cam(false);
+        resetCam(false);
     }
 }
 
@@ -272,8 +272,8 @@ void GuiEditor::handle_rmb_down(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void GuiEditor::handle_rmb_drag(const ALLEGRO_EVENT &ev) {
+void GuiEditor::handleRmbDrag(const ALLEGRO_EVENT &ev) {
     if(!game.options.editors.mmb_pan) {
-        pan_cam(ev);
+        panCam(ev);
     }
 }

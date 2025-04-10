@@ -29,7 +29,7 @@
  *
  * @param new_state State to change to.
  */
-void EasyFsmCreator::change_state(const string &new_state) {
+void EasyFsmCreator::changeState(const string &new_state) {
     cur_event->actions.push_back(new MobActionCall(MOB_ACTION_SET_STATE));
     cur_event->actions.back()->args.push_back(new_state);
     cur_event->actions.back()->arg_is_var.push_back(false);
@@ -39,7 +39,7 @@ void EasyFsmCreator::change_state(const string &new_state) {
 /**
  * @brief Finishes the event that is currently under construction, if any.
  */
-void EasyFsmCreator::commit_event() {
+void EasyFsmCreator::commitEvent() {
     if(!cur_event) return;
     cur_event = nullptr;
 }
@@ -48,9 +48,9 @@ void EasyFsmCreator::commit_event() {
 /**
  * @brief Finishes the state that is currently under construction, if any.
  */
-void EasyFsmCreator::commit_state() {
+void EasyFsmCreator::commitState() {
     if(!cur_state) return;
-    commit_event();
+    commitEvent();
     cur_state = nullptr;
 }
 
@@ -62,8 +62,8 @@ void EasyFsmCreator::commit_state() {
  * @return The states.
  */
 vector<MobState*> EasyFsmCreator::finish() {
-    commit_event();
-    commit_state();
+    commitEvent();
+    commitState();
     sort(
         states.begin(), states.end(),
     [] (const MobState * ms1, const MobState * ms2) -> bool {
@@ -80,8 +80,8 @@ vector<MobState*> EasyFsmCreator::finish() {
  *
  * @param type Type of event.
  */
-void EasyFsmCreator::new_event(const MOB_EV type) {
-    commit_event();
+void EasyFsmCreator::newEvent(const MOB_EV type) {
+    commitEvent();
     cur_event = new MobEvent(type);
     cur_state->events[type] = cur_event;
 }
@@ -94,8 +94,8 @@ void EasyFsmCreator::new_event(const MOB_EV type) {
  * @param name Name of the state.
  * @param id Its ID.
  */
-void EasyFsmCreator::new_state(const string &name, size_t id) {
-    commit_state();
+void EasyFsmCreator::newState(const string &name, size_t id) {
+    commitState();
     cur_state = new MobState(name, id);
     states.push_back(cur_state);
 }
@@ -210,7 +210,7 @@ MobEvent::MobEvent(const MOB_EV t, const vector<MobActionCall*> &a) :
  */
 void MobEvent::run(Mob* m, void* custom_data_1, void* custom_data_2) {
     if(m->parent && m->parent->relay_events) {
-        m->parent->m->fsm.run_event(type, custom_data_1, custom_data_2);
+        m->parent->m->fsm.runEvent(type, custom_data_1, custom_data_2);
         if(!m->parent->handle_events) {
             return;
         }
@@ -317,7 +317,7 @@ MobFsm::MobFsm(Mob* m) {
  * @param type The event's type.
  * @return The event.
  */
-MobEvent* MobFsm::get_event(const MOB_EV type) const {
+MobEvent* MobFsm::getEvent(const MOB_EV type) const {
     return cur_state->events[type];
 }
 
@@ -328,7 +328,7 @@ MobEvent* MobFsm::get_event(const MOB_EV type) const {
  * @param name The state's name.
  * @return The index, or INVALID if it doesn't exist.
  */
-size_t MobFsm::get_state_idx(const string &name) const {
+size_t MobFsm::getStateIdx(const string &name) const {
     for(size_t s = 0; s < m->type->states.size(); s++) {
         if(m->type->states[s]->name == name) {
             return s;
@@ -345,10 +345,10 @@ size_t MobFsm::get_state_idx(const string &name) const {
  * @param custom_data_1 Custom argument #1 to pass to the code.
  * @param custom_data_2 Custom argument #2 to pass to the code.
  */
-void MobFsm::run_event(
+void MobFsm::runEvent(
     const MOB_EV type, void* custom_data_1, void* custom_data_2
 ) {
-    MobEvent* e = get_event(type);
+    MobEvent* e = getEvent(type);
     if(e) {
         e->run(m, custom_data_1, custom_data_2);
     } else {
@@ -375,7 +375,7 @@ void MobFsm::run_event(
  * @param info2 Same as info1, but a second variable.
  * @return Whether it succeeded.
  */
-bool MobFsm::set_state(size_t new_state, void* info1, void* info2) {
+bool MobFsm::setState(size_t new_state, void* info1, void* info2) {
 
     //Run the code to leave the current state.
     if(cur_state) {
@@ -383,7 +383,7 @@ bool MobFsm::set_state(size_t new_state, void* info1, void* info2) {
             prev_state_names[p] = prev_state_names[p - 1];
         }
         prev_state_names[0] = cur_state->name;
-        run_event(MOB_EV_ON_LEAVE, info1, info2);
+        runEvent(MOB_EV_ON_LEAVE, info1, info2);
     }
     
     //Uncomment this to be notified about state changes on stdout.
@@ -397,7 +397,7 @@ bool MobFsm::set_state(size_t new_state, void* info1, void* info2) {
         cur_state = m->type->states[new_state];
         
         //Run the code to enter the new state.
-        run_event(MOB_EV_ON_ENTER, info1, info2);
+        runEvent(MOB_EV_ON_ENTER, info1, info2);
         
         return true;
     }
@@ -459,7 +459,7 @@ MobState::MobState(const string &name, size_t id) :
  * @param type The event's type.
  * @return The event.
  */
-MobEvent* MobState::get_event(const MOB_EV type) const {
+MobEvent* MobState::getEvent(const MOB_EV type) const {
     return events[type];
 }
 
@@ -473,7 +473,7 @@ MobEvent* MobState::get_event(const MOB_EV type) const {
  * @param mt Mob type these states belong to.
  * @return The index of the starting state.
  */
-size_t fix_states(
+size_t fixStates(
     vector<MobState*> &states, const string &starting_state, const MobType* mt
 ) {
     size_t starting_state_idx = INVALID;
@@ -495,7 +495,7 @@ size_t fix_states(
                     size_t state_idx = 0;
                     bool found_state = false;
                     
-                    if(is_number(state_name)) continue;
+                    if(isNumber(state_name)) continue;
                     
                     for(; state_idx < states.size(); state_idx++) {
                         if(states[state_idx]->name == state_name) {
@@ -533,7 +533,7 @@ size_t fix_states(
  * @param global_node The data node containing global events.
  * @param out_states The loaded states are returned into this vector.
  */
-void load_script(
+void loadScript(
     MobType* mt, DataNode* script_node, DataNode* global_node,
     vector<MobState*>* out_states
 ) {
@@ -559,11 +559,11 @@ void load_script(
     for(size_t s = 0; s < out_states->size(); s++) {
         MobState* state_ptr = (*out_states)[s];
         DataNode* state_node = script_node->getChildByName(state_ptr->name);
-        load_state(mt, state_node, global_node, state_ptr);
+        loadState(mt, state_node, global_node, state_ptr);
         state_ptr->id = s;
     }
     
-    fix_states(*out_states, "", mt);
+    fixStates(*out_states, "", mt);
 }
 
 
@@ -575,7 +575,7 @@ void load_script(
  * @param global_node The data node containing global events.
  * @param state_ptr Pointer to the state to load.
  */
-void load_state(
+void loadState(
     MobType* mt, DataNode* state_node, DataNode* global_node,
     MobState* state_ptr
 ) {
@@ -592,12 +592,12 @@ void load_state(
         vector<MobActionCall*> actions;
         bitmask_8_t settings;
         
-        load_actions(mt, event_node, &actions, &settings);
+        loadActions(mt, event_node, &actions, &settings);
         
         new_events.push_back(new MobEvent(event_node, actions));
         new_event_settings.push_back(settings);
         
-        assert_actions(actions, event_node);
+        assertActions(actions, event_node);
     }
     
     //Load global events.
@@ -609,12 +609,12 @@ void load_state(
         vector<MobActionCall*> actions;
         bitmask_8_t settings;
         
-        load_actions(mt, event_node, &actions, &settings);
+        loadActions(mt, event_node, &actions, &settings);
         
         global_events.push_back(new MobEvent(event_node, actions));
         global_event_settings.push_back(settings);
         
-        assert_actions(actions, event_node);
+        assertActions(actions, event_node);
     }
     
     //Insert global events into the state.
@@ -629,10 +629,10 @@ void load_state(
             
             if(ev_ptr->type != global_event->type) continue;
             
-            insert_event_actions(
+            insertEventActions(
                 ev_ptr,
                 global_event->actions,
-                has_flag(
+                hasFlag(
                     global_settings | ev_settings,
                     EVENT_LOAD_FLAG_GLOBAL_ACTIONS_AFTER
                 )
@@ -652,7 +652,7 @@ void load_state(
     if(!state_ptr->events[MOB_EV_HITBOX_TOUCH_N_A]) {
         vector<MobActionCall*> da_actions;
         da_actions.push_back(
-            new MobActionCall(gen_mob_fsm::be_attacked)
+            new MobActionCall(gen_mob_fsm::beAttacked)
         );
         new_events.push_back(
             new MobEvent(MOB_EV_HITBOX_TOUCH_N_A, da_actions)
@@ -672,7 +672,7 @@ void load_state(
         !mt->dying_state_name.empty()
     ) {
         vector<MobActionCall*> de_actions;
-        de_actions.push_back(new MobActionCall(gen_mob_fsm::go_to_dying_state));
+        de_actions.push_back(new MobActionCall(gen_mob_fsm::goToDyingState));
         new_events.push_back(new MobEvent(MOB_EV_ZERO_HEALTH, de_actions));
         new_event_settings.push_back(0);
     }
@@ -681,7 +681,7 @@ void load_state(
     if(!state_ptr->events[MOB_EV_BOTTOMLESS_PIT]) {
         vector<MobActionCall*> bp_actions;
         bp_actions.push_back(
-            new MobActionCall(gen_mob_fsm::fall_down_pit)
+            new MobActionCall(gen_mob_fsm::fallDownPit)
         );
         new_events.push_back(
             new MobEvent(MOB_EV_BOTTOMLESS_PIT, bp_actions)
@@ -700,7 +700,7 @@ void load_state(
     ) {
         vector<MobActionCall*> s_actions;
         s_actions.push_back(
-            new MobActionCall(gen_mob_fsm::touch_spray)
+            new MobActionCall(gen_mob_fsm::touchSpray)
         );
         new_events.push_back(
             new MobEvent(MOB_EV_TOUCHED_SPRAY, s_actions)
@@ -719,7 +719,7 @@ void load_state(
     ) {
         vector<MobActionCall*> s_actions;
         s_actions.push_back(
-            new MobActionCall(gen_mob_fsm::touch_hazard)
+            new MobActionCall(gen_mob_fsm::touchHazard)
         );
         new_events.push_back(
             new MobEvent(MOB_EV_TOUCHED_HAZARD, s_actions)
@@ -732,10 +732,10 @@ void load_state(
         MOB_EV ev_type = new_events[e]->type;
         
         if(state_ptr->events[ev_type]) {
-            insert_event_actions(
+            insertEventActions(
                 state_ptr->events[ev_type],
                 new_events[e]->actions,
-                has_flag(
+                hasFlag(
                     new_event_settings[e],
                     EVENT_LOAD_FLAG_CUSTOM_ACTIONS_AFTER
                 )
@@ -754,7 +754,7 @@ void load_state(
  *
  * @param mt The type of mob.
  */
-void unload_script(MobType* mt) {
+void unloadScript(MobType* mt) {
     for(size_t s = 0; s < mt->states.size(); s++) {
         MobState* s_ptr = mt->states[s];
         

@@ -20,11 +20,11 @@
 /**
  * @brief Handles the drawing part of the main loop of the particle editor.
  */
-void ParticleEditor::do_drawing() {
+void ParticleEditor::doDrawing() {
     //The canvas drawing is handled by Dear ImGui elsewhere.
     
     al_clear_to_color(COLOR_BLACK);
-    draw_op_error_cursor();
+    drawOpErrorCursor();
 }
 
 
@@ -32,7 +32,7 @@ void ParticleEditor::do_drawing() {
  * @brief Draw the canvas. This is called as a callback inside the
  * Dear ImGui rendering process.
  */
-void ParticleEditor::draw_canvas() {
+void ParticleEditor::drawCanvas() {
     al_set_clipping_rectangle(
         canvas_tl.x, canvas_tl.y,
         canvas_br.x - canvas_tl.x, canvas_br.y - canvas_tl.y
@@ -86,8 +86,8 @@ void ParticleEditor::draw_canvas() {
     
     //Particles.
     vector<WorldComponent> components;
-    components.reserve(part_mgr.get_count());
-    part_mgr.fill_component_list(components, game.cam.box[0], game.cam.box[1]);
+    components.reserve(part_mgr.getCount());
+    part_mgr.fillComponentList(components, game.cam.box[0], game.cam.box[1]);
     
     for(size_t c = 0; c < components.size(); ++c) {
         components[c].idx = c;
@@ -172,13 +172,13 @@ void ParticleEditor::draw_canvas() {
             
         } case PARTICLE_EMISSION_SHAPE_RECTANGLE: {
     
-            draw_rotated_rectangle(
+            drawRotatedRectangle(
                 generator_pos_offset,
                 loaded_gen.emission.rect_outer_dist * 2.0f,
                 generator_angle_offset,
                 al_map_rgb(100, 240, 100), 3.0f / game.cam.zoom
             );
-            draw_rotated_rectangle(
+            drawRotatedRectangle(
                 generator_pos_offset,
                 loaded_gen.emission.rect_inner_dist * 2.0f,
                 generator_angle_offset,
@@ -194,7 +194,7 @@ void ParticleEditor::draw_canvas() {
     if(leader_silhouette_visible) {
         float x_offset = 32.0f;
         
-        draw_bitmap(
+        drawBitmap(
             game.sys_content.bmp_leader_silhouette_top, Point(x_offset, 0),
             Point(-1, game.config.leaders.standard_radius * 2.0f),
             0, al_map_rgba(240, 240, 240, 160)

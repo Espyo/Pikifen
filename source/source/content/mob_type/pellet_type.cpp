@@ -25,7 +25,7 @@ PelletType::PelletType() :
     
     target_type = MOB_TARGET_FLAG_NONE;
     
-    pellet_fsm::create_fsm(this);
+    pellet_fsm::createFsm(this);
 }
 
 
@@ -34,7 +34,7 @@ PelletType::PelletType() :
  *
  * @return The vector.
  */
-anim_conversion_vector PelletType::get_anim_conversions() const {
+anim_conversion_vector PelletType::getAnimConversions() const {
     anim_conversion_vector v;
     v.push_back(std::make_pair(MOB_TYPE::ANIM_IDLING, "idling"));
     return v;
@@ -46,7 +46,7 @@ anim_conversion_vector PelletType::get_anim_conversions() const {
  *
  * @param file File to read from.
  */
-void PelletType::load_cat_properties(DataNode* file) {
+void PelletType::loadCatProperties(DataNode* file) {
     ReaderSetter rs(file);
     
     string pik_type_str;
@@ -78,7 +78,7 @@ void PelletType::load_cat_properties(DataNode* file) {
  *
  * @param file File to read from.
  */
-void PelletType::load_cat_resources(DataNode* file) {
+void PelletType::loadCatResources(DataNode* file) {
     ReaderSetter rs(file);
     
     string number_image_str;
@@ -93,6 +93,6 @@ void PelletType::load_cat_resources(DataNode* file) {
 /**
  * @brief Unloads resources from memory.
  */
-void PelletType::unload_resources() {
+void PelletType::unloadResources() {
     game.content.bitmaps.list.free(bmp_number);
 }

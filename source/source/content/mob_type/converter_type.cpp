@@ -23,14 +23,14 @@ ConverterType::ConverterType() :
     
     target_type = MOB_TARGET_FLAG_NONE;
     
-    converter_fsm::create_fsm(this);
+    converter_fsm::createFsm(this);
 }
 
 
 /**
  * @brief Returns the vector of animation conversions.
  */
-anim_conversion_vector ConverterType::get_anim_conversions() const {
+anim_conversion_vector ConverterType::getAnimConversions() const {
     anim_conversion_vector v;
     
     v.push_back(std::make_pair(CONVERTER_ANIM_IDLING, "idling"));
@@ -40,7 +40,7 @@ anim_conversion_vector ConverterType::get_anim_conversions() const {
     v.push_back(std::make_pair(CONVERTER_ANIM_OPENING, "opening"));
     v.push_back(std::make_pair(CONVERTER_ANIM_DYING, "dying"));
     
-    return get_anim_conversions_with_groups(v, N_CONVERTER_ANIMS);
+    return getAnimConversionsWithGroups(v, N_CONVERTER_ANIMS);
 }
 
 
@@ -49,7 +49,7 @@ anim_conversion_vector ConverterType::get_anim_conversions() const {
  *
  * @param file File to read from.
  */
-void ConverterType::load_cat_properties(DataNode* file) {
+void ConverterType::loadCatProperties(DataNode* file) {
     ReaderSetter rs(file);
     
     string pikmin_types_str;
@@ -71,10 +71,10 @@ void ConverterType::load_cat_properties(DataNode* file) {
     
     MobCategory* pik_cat = game.mob_categories.get(MOB_CATEGORY_PIKMIN);
     vector<string> pikmin_types_strs =
-        semicolon_list_to_vector(pikmin_types_str);
+        semicolonListToVector(pikmin_types_str);
         
     for(size_t t = 0; t < pikmin_types_strs.size(); t++) {
-        MobType* type_ptr = pik_cat->get_type(pikmin_types_strs[t]);
+        MobType* type_ptr = pik_cat->getType(pikmin_types_strs[t]);
         
         if(type_ptr) {
             available_pikmin_types.push_back((PikminType*) type_ptr);
@@ -87,7 +87,7 @@ void ConverterType::load_cat_properties(DataNode* file) {
     }
     
     animation_group_suffixes =
-        semicolon_list_to_vector(type_animation_suffixes_str);
+        semicolonListToVector(type_animation_suffixes_str);
         
     if(available_pikmin_types.size() == 1 && animation_group_suffixes.empty()) {
         //Let's make life easier. This is a one-type converter,

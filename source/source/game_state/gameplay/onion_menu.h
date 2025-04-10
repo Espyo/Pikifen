@@ -152,18 +152,18 @@ struct OnionMenu {
     
     OnionMenu(PikminNest* n_ptr, Leader* l_ptr);
     ~OnionMenu();
-    void add_all_to_group();
-    void add_all_to_onion();
-    void add_to_group(size_t type_idx);
-    void add_to_onion(size_t type_idx);
+    void addAllToGroup();
+    void addAllToOnion();
+    void addToGroup(size_t type_idx);
+    void addToOnion(size_t type_idx);
     void confirm();
-    void go_to_page(size_t page);
-    void grow_buttons();
-    void handle_allegro_event(const ALLEGRO_EVENT &ev);
-    void handle_player_action(const PlayerAction &action);
+    void goToPage(size_t page);
+    void growButtons();
+    void handleAllegroEvent(const ALLEGRO_EVENT &ev);
+    void handlePlayerAction(const PlayerAction &action);
     void start_closing();
     void tick(float delta_t);
-    void toggle_select_all();
+    void toggleSelectAll();
     
     private:
     
@@ -175,7 +175,7 @@ struct OnionMenu {
     
     //--- Function declarations ---
     
-    void make_gui_item_red(GuiItem* item);
+    void makeGuiItemRed(GuiItem* item);
     void update();
     
 };

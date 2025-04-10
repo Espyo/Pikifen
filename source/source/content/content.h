@@ -118,7 +118,7 @@ struct ContentManifest {
     ContentManifest();
     ContentManifest(const string &name, const string &path, const string &pack);
     void clear();
-    void fill_from_path(const string &path);
+    void fillFromPath(const string &path);
     
 };
 
@@ -176,9 +176,9 @@ protected:
 
     //--- Function declarations ---
     
-    void load_metadata_from_data_node(DataNode* node);
-    void reset_metadata();
-    void save_metadata_to_data_node(DataNode* node) const;
+    void loadMetadataFromDataNode(DataNode* node);
+    void resetMetadata();
+    void saveMetadataToDataNode(DataNode* node) const;
     
 };
 

@@ -131,15 +131,15 @@ struct Sector {
     //--- Function declarations ---
     
     ~Sector();
-    void add_edge(Edge* e_ptr, size_t e_idx);
-    void calculate_bounding_box();
+    void addEdge(Edge* e_ptr, size_t e_idx);
+    void calculateBoundingBox();
     void clone(Sector* destination) const;
-    Vertex* get_rightmost_vertex() const;
-    void get_texture_merge_sectors(Sector** s1, Sector** s2) const;
-    bool is_clockwise() const;
-    bool is_point_in_sector(const Point &p) const;
-    void remove_edge(const Edge* e_ptr);
-    void get_neighbor_sectors_conditionally(
+    Vertex* getRightmostVertex() const;
+    void getTextureMergeSectors(Sector** s1, Sector** s2) const;
+    bool isClockwise() const;
+    bool isPointInSector(const Point &p) const;
+    void removeEdge(const Edge* e_ptr);
+    void getNeighborSectorsConditionally(
         const std::function<bool(Sector* s_ptr)> &condition,
         vector<Sector*> &sector_list
     );
@@ -147,6 +147,6 @@ struct Sector {
 };
 
 
-Sector* get_sector(
+Sector* getSector(
     const Point &p, size_t* out_sector_idx, bool use_blockmap
 );

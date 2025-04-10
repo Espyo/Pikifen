@@ -170,71 +170,71 @@ enum PLAYER_INPUT_ICON_SPRITE {
 };
 
 
-void draw_background_logos(
+void drawBackgroundLogos(
     float time_spent, size_t rows, size_t cols,
     const Point &logo_size, const ALLEGRO_COLOR &tint,
     const Point &speed, float rotation_speed
 );
-void draw_bitmap_with_effects(
+void drawBitmapWithEffects(
     ALLEGRO_BITMAP* bmp, const BitmapEffect &effects
 );
-void draw_button(
+void drawButton(
     const Point &center, const Point &size, const string &text,
     const ALLEGRO_FONT* font, const ALLEGRO_COLOR &color,
     bool selected,
     float juicy_grow_amount = 0.0f
 );
-void draw_fraction(
+void drawFraction(
     const Point &bottom, size_t value_nr,
     size_t requirement_nr, const ALLEGRO_COLOR &color, float scale
 );
-void draw_health(
+void drawHealth(
     const Point &center, float ratio,
     float alpha = 1.0f,
     float radius = DRAWING::DEF_HEALTH_WHEEL_RADIUS,
     bool just_chart = false
 );
-void draw_liquid(
+void drawLiquid(
     Sector* s_ptr, Liquid* l_ptr, const Point &where, float scale,
     float time
 );
-void draw_loading_screen(
+void drawLoadingScreen(
     const string &area_name, const string &subtitle, float opacity
 );
-void draw_menu_button_icon(
+void drawMenuButtonIcon(
     MENU_ICON icon, const Point &button_center, const Point &button_size,
     bool left_side
 );
-void draw_mouse_cursor(const ALLEGRO_COLOR &color);
-void draw_player_input_source_icon(
+void drawMouseCursor(const ALLEGRO_COLOR &color);
+void drawPlayerInputSourceIcon(
     const ALLEGRO_FONT* const font, const PlayerInputSource &s,
     bool condensed, const Point &where, const Point &max_size,
     unsigned char alpha = 228
 );
-void draw_sector_texture(
+void drawSectorTexture(
     Sector* s_ptr, const Point &where, float scale, float opacity
 );
-void draw_sector_edge_offsets(
+void drawSectorEdgeOffsets(
     Sector* s_ptr, ALLEGRO_BITMAP* buffer, float opacity
 );
-void draw_mob_shadow(
+void drawMobShadow(
     const Mob* m,
     float delta_z, float shadow_stretch
 );
-void draw_status_effect_bmp(const Mob* m, BitmapEffect &effects);
-void draw_string_tokens(
+void drawStatusEffectBmp(const Mob* m, BitmapEffect &effects);
+void drawStringTokens(
     const vector<StringToken> &tokens, const ALLEGRO_FONT* const text_font,
     const ALLEGRO_FONT* const control_font, bool controls_condensed,
     const Point &where, int flags, const Point &max_size,
     const Point &scale = Point(1.0f)
 );
-void get_player_input_icon_info(
+void getPlayerInputIconInfo(
     const PlayerInputSource &s, bool condensed,
     PLAYER_INPUT_ICON_SHAPE* shape,
     PLAYER_INPUT_ICON_SPRITE* bitmap_sprite,
     string* text
 );
-float get_player_input_icon_width(
+float getPlayerInputIconWidth(
     const ALLEGRO_FONT* font, const PlayerInputSource &s, bool condensed,
     float max_bitmap_height = 0
 );

@@ -17,14 +17,14 @@
  * @brief Functions about the resource's finite state machine and behavior.
  */
 namespace resource_fsm {
-void create_fsm(MobType* typ);
+void createFsm(MobType* typ);
 
-void handle_delivery(Mob* m, void* info1, void* info2);
-void handle_dropped(Mob* m, void* info1, void* info2);
-void handle_reach_destination(Mob* m, void* info1, void* info2);
-void handle_start_moving(Mob* m, void* info1, void* info2);
-void lose_momentum(Mob* m, void* info1, void* info2);
-void start_being_delivered(Mob* m, void* info1, void* info2);
-void start_waiting(Mob* m, void* info1, void* info2);
+void handleDelivery(Mob* m, void* info1, void* info2);
+void handleDropped(Mob* m, void* info1, void* info2);
+void handleReachDestination(Mob* m, void* info1, void* info2);
+void handleStartMoving(Mob* m, void* info1, void* info2);
+void loseMomentum(Mob* m, void* info1, void* info2);
+void startBeingDelivered(Mob* m, void* info1, void* info2);
+void startWaiting(Mob* m, void* info1, void* info2);
 void vanish(Mob* m, void* info1, void* info2);
 }
