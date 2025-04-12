@@ -53,16 +53,16 @@ public:
     PikminNestType* nest = nullptr;
     
     //Can a leader heal at this ship?
-    bool can_heal = false;
+    bool canHeal = false;
     
     //The ship's control point is offset this much from the mob's center.
-    Point control_point_offset;
+    Point controlPointOffset;
     
     //The ship's receptacle is offset this much from the mob's center.
-    Point receptacle_offset;
+    Point receptacleOffset;
     
     //Ship control point radius.
-    float control_point_radius = 45.0f;
+    float controlPointRadius = 45.0f;
     
     
     //--- Function declarations ---

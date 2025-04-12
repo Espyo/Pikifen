@@ -28,7 +28,7 @@ using std::set;
  */
 Mob* Mob::getMobToWalkOn() const {
     //Can't walk on anything if it's moving upwards.
-    if(speed_z > 0.0f) return nullptr;
+    if(speedZ > 0.0f) return nullptr;
     
     Mob* best_candidate = nullptr;
     for(size_t m = 0; m < game.states.gameplay->mobs.walkables.size(); m++) {
@@ -45,35 +45,35 @@ Mob* Mob::getMobToWalkOn() const {
         
         //Check if they collide on X+Y.
         if(
-            rectangular_dim.x != 0 &&
-            m_ptr->rectangular_dim.x != 0
+            rectangularDim.x != 0 &&
+            m_ptr->rectangularDim.x != 0
         ) {
             //Rectangle vs rectangle.
             if(
                 !rectanglesIntersect(
-                    pos, rectangular_dim, angle,
-                    m_ptr->pos, m_ptr->rectangular_dim, m_ptr->angle
+                    pos, rectangularDim, angle,
+                    m_ptr->pos, m_ptr->rectangularDim, m_ptr->angle
                 )
             ) {
                 continue;
             }
-        } else if(rectangular_dim.x != 0) {
+        } else if(rectangularDim.x != 0) {
             //Rectangle vs circle.
             if(
                 !circleIntersectsRectangle(
                     m_ptr->pos, m_ptr->radius,
-                    pos, rectangular_dim,
+                    pos, rectangularDim,
                     angle
                 )
             ) {
                 continue;
             }
-        } else if(m_ptr->rectangular_dim.x != 0) {
+        } else if(m_ptr->rectangularDim.x != 0) {
             //Circle vs rectangle.
             if(
                 !circleIntersectsRectangle(
                     pos, radius,
-                    m_ptr->pos, m_ptr->rectangular_dim,
+                    m_ptr->pos, m_ptr->rectangularDim,
                     m_ptr->angle
                 )
             ) {
@@ -114,12 +114,12 @@ H_MOVE_RESULT Mob::getMovementEdgeIntersections(
     //Use the terrain radius if the mob is moving about and alive.
     //Otherwise if it's a corpse, it can use the regular radius.
     float radius_to_use =
-        (type->terrain_radius < 0 || health <= 0) ?
+        (type->terrainRadius < 0 || health <= 0) ?
         radius :
-        type->terrain_radius;
+        type->terrainRadius;
         
     if(
-        !game.cur_area_data->bmap.getEdgesInRegion(
+        !game.curAreaData->bmap.getEdgesInRegion(
             new_pos - radius_to_use,
             new_pos + radius_to_use,
             candidate_edges
@@ -219,15 +219,15 @@ H_MOVE_RESULT Mob::getPhysicsHorizontalMovement(
     //Held by another mob.
     if(holder.m) {
         Point final_pos = holder.getFinalPos(&z);
-        speed_z = 0;
+        speedZ = 0;
         chase(final_pos, z, CHASE_FLAG_TELEPORT);
     }
     
     //Chasing.
-    if(chase_info.state == CHASE_STATE_CHASING) {
+    if(chaseInfo.state == CHASE_STATE_CHASING) {
         Point final_target_pos = getChaseTarget();
         
-        if(hasFlag(chase_info.flags, CHASE_FLAG_TELEPORT)) {
+        if(hasFlag(chaseInfo.flags, CHASE_FLAG_TELEPORT)) {
         
             Sector* sec =
                 getSector(final_target_pos, nullptr, true);
@@ -237,18 +237,18 @@ H_MOVE_RESULT Mob::getPhysicsHorizontalMovement(
                 return H_MOVE_RESULT_FAIL;
             }
             
-            z = chase_info.offset_z;
-            if(chase_info.orig_z) {
-                z += *chase_info.orig_z;
+            z = chaseInfo.offsetZ;
+            if(chaseInfo.origZ) {
+                z += *chaseInfo.origZ;
             }
             
-            ground_sector = sec;
-            center_sector = sec;
+            groundSector = sec;
+            centerSector = sec;
             speed.x = speed.y = 0;
             pos = final_target_pos;
             
-            if(!hasFlag(chase_info.flags, CHASE_FLAG_TELEPORTS_CONSTANTLY)) {
-                chase_info.state = CHASE_STATE_FINISHED;
+            if(!hasFlag(chaseInfo.flags, CHASE_FLAG_TELEPORTS_CONSTANTLY)) {
+                chaseInfo.state = CHASE_STATE_FINISHED;
             }
             return H_MOVE_RESULT_TELEPORTED;
             
@@ -257,19 +257,19 @@ H_MOVE_RESULT Mob::getPhysicsHorizontalMovement(
             //Make it go to the direction it wants.
             float d = Distance(pos, final_target_pos).toFloat();
             
-            chase_info.cur_speed +=
-                chase_info.acceleration * delta_t;
-            chase_info.cur_speed =
-                std::min(chase_info.cur_speed, chase_info.max_speed);
+            chaseInfo.curSpeed +=
+                chaseInfo.acceleration * delta_t;
+            chaseInfo.curSpeed =
+                std::min(chaseInfo.curSpeed, chaseInfo.maxSpeed);
                 
             float move_amount =
                 std::min(
                     (double) (d / delta_t),
-                    (double) chase_info.cur_speed * move_speed_mult
+                    (double) chaseInfo.curSpeed * move_speed_mult
                 );
                 
             bool can_free_move =
-                hasFlag(chase_info.flags, CHASE_FLAG_ANY_ANGLE) ||
+                hasFlag(chaseInfo.flags, CHASE_FLAG_ANY_ANGLE) ||
                 d <= MOB::FREE_MOVE_THRESHOLD;
                 
             float movement_angle =
@@ -282,36 +282,36 @@ H_MOVE_RESULT Mob::getPhysicsHorizontalMovement(
         }
         
     } else {
-        chase_info.acceleration = 0.0f;
-        chase_info.cur_speed = 0.0f;
-        chase_info.max_speed = 0.0f;
+        chaseInfo.acceleration = 0.0f;
+        chaseInfo.curSpeed = 0.0f;
+        chaseInfo.maxSpeed = 0.0f;
         
     }
     
     //If another mob is pushing it.
-    if(push_amount != 0.0f) {
+    if(pushAmount != 0.0f) {
         //Overly-aggressive pushing results in going through walls.
         //Let's place a cap.
-        push_amount =
-            std::min(push_amount, (float) (radius / delta_t) * 4);
+        pushAmount =
+            std::min(pushAmount, (float) (radius / delta_t) * 4);
             
         move_speed->x +=
-            cos(push_angle) * (push_amount + MOB::PUSH_EXTRA_AMOUNT);
+            cos(pushAngle) * (pushAmount + MOB::PUSH_EXTRA_AMOUNT);
         move_speed->y +=
-            sin(push_angle) * (push_amount + MOB::PUSH_EXTRA_AMOUNT);
+            sin(pushAngle) * (pushAmount + MOB::PUSH_EXTRA_AMOUNT);
     }
     
     //Scrolling floors.
     if(
-        (ground_sector->scroll.x != 0 || ground_sector->scroll.y != 0) &&
-        z <= ground_sector->z
+        (groundSector->scroll.x != 0 || groundSector->scroll.y != 0) &&
+        z <= groundSector->z
     ) {
-        (*move_speed) += ground_sector->scroll;
+        (*move_speed) += groundSector->scroll;
     }
     
     //On top of a mob.
-    if(standing_on_mob) {
-        (*move_speed) += standing_on_mob->walkable_moved;
+    if(standingOnMob) {
+        (*move_speed) += standingOnMob->walkableMoved;
     }
     
     return H_MOVE_RESULT_OK;
@@ -439,7 +439,7 @@ void Mob::tickHorizontalMovementPhysics(
         //the ground sector, and also a stepping sector, if possible.
         for(size_t e = 0; e < intersecting_edges.size(); e++) {
             Edge* e_ptr = intersecting_edges[e];
-            Sector* tallest_sector = ground_sector; //Tallest of the two.
+            Sector* tallest_sector = groundSector; //Tallest of the two.
             if(
                 e_ptr->sectors[0]->type != SECTOR_TYPE_BLOCKING &&
                 e_ptr->sectors[1]->type != SECTOR_TYPE_BLOCKING
@@ -562,8 +562,8 @@ void Mob::tickHorizontalMovementPhysics(
             //Good news, the mob can be placed in this new spot freely.
             pos = new_pos;
             z = new_z;
-            ground_sector = new_ground_sector;
-            center_sector = new_center_sector;
+            groundSector = new_ground_sector;
+            centerSector = new_center_sector;
             finished_moving = true;
             
         } else {
@@ -596,7 +596,7 @@ void Mob::tickHorizontalMovementPhysics(
  * @param delta_t How long the frame's tick is, in seconds.
  */
 void Mob::tickPhysics(float delta_t) {
-    if(!ground_sector) {
+    if(!groundSector) {
         //Object is placed out of bounds.
         return;
     }
@@ -607,7 +607,7 @@ void Mob::tickPhysics(float delta_t) {
     Point pre_move_pos = pos;
     Point move_speed = speed;
     bool touched_wall = false;
-    float pre_move_ground_z = ground_sector->z;
+    float pre_move_ground_z = groundSector->z;
     
     //Rotation logic.
     tickRotationPhysics(delta_t, move_speed_mult);
@@ -636,17 +636,17 @@ void Mob::tickPhysics(float delta_t) {
     );
     
     //Walk on top of another mob, if possible.
-    if(type->can_walk_on_others) tickWalkableRidingPhysics(delta_t);
+    if(type->canWalkOnOthers) tickWalkableRidingPhysics(delta_t);
     
     //Final setup.
-    push_amount = 0;
+    pushAmount = 0;
     
     if(touched_wall) {
         fsm.runEvent(MOB_EV_TOUCHED_WALL);
     }
     
     if(type->walkable) {
-        walkable_moved = (pos - pre_move_pos) / delta_t;
+        walkableMoved = (pos - pre_move_pos) / delta_t;
     }
 }
 
@@ -663,24 +663,24 @@ void Mob::tickRotationPhysics(
     //Change the facing angle to the angle the mob wants to face.
     if(angle > TAU / 2)  angle -= TAU;
     if(angle < -TAU / 2) angle += TAU;
-    if(intended_turn_pos) {
-        intended_turn_angle = getAngle(pos, *intended_turn_pos);
+    if(intendedTurnPos) {
+        intendedTurnAngle = getAngle(pos, *intendedTurnPos);
     }
-    if(intended_turn_angle > TAU / 2)  intended_turn_angle -= TAU;
-    if(intended_turn_angle < -TAU / 2) intended_turn_angle += TAU;
+    if(intendedTurnAngle > TAU / 2)  intendedTurnAngle -= TAU;
+    if(intendedTurnAngle < -TAU / 2) intendedTurnAngle += TAU;
     
-    float angle_dif = intended_turn_angle - angle;
+    float angle_dif = intendedTurnAngle - angle;
     if(angle_dif > TAU / 2)  angle_dif -= TAU;
     if(angle_dif < -TAU / 2) angle_dif += TAU;
     
     angle +=
         sign(angle_dif) * std::min(
-            (double) (type->rotation_speed * move_speed_mult * delta_t),
+            (double) (type->rotationSpeed * move_speed_mult * delta_t),
             (double) fabs(angle_dif)
         );
         
     if(holder.m) {
-        switch(holder.rotation_method) {
+        switch(holder.rotationMethod) {
         case HOLD_ROTATION_METHOD_FACE_HOLDER: {
             float dummy;
             Point final_pos = holder.getFinalPos(&dummy);
@@ -697,8 +697,8 @@ void Mob::tickRotationPhysics(
         }
     }
     
-    angle_cos = cos(angle);
-    angle_sin = sin(angle);
+    angleCos = cos(angle);
+    angleSin = sin(angle);
 }
 
 
@@ -716,36 +716,36 @@ void Mob::tickVerticalMovementPhysics(
 ) {
     bool apply_gravity = true;
     
-    if(!standing_on_mob) {
+    if(!standingOnMob) {
         //If the current ground is one step (or less) below
         //the previous ground, just instantly go down the step.
         if(
-            pre_move_ground_z - ground_sector->z <= GEOMETRY::STEP_HEIGHT &&
+            pre_move_ground_z - groundSector->z <= GEOMETRY::STEP_HEIGHT &&
             z == pre_move_ground_z
         ) {
-            z = ground_sector->z;
+            z = groundSector->z;
         }
     }
     
     //Vertical chasing.
     if(
-        chase_info.state == CHASE_STATE_CHASING &&
+        chaseInfo.state == CHASE_STATE_CHASING &&
         hasFlag(flags, MOB_FLAG_CAN_MOVE_MIDAIR) &&
-        !hasFlag(chase_info.flags, CHASE_FLAG_TELEPORT)
+        !hasFlag(chaseInfo.flags, CHASE_FLAG_TELEPORT)
     ) {
         apply_gravity = false;
         
-        float target_z = chase_info.offset_z;
-        if(chase_info.orig_z) target_z += *chase_info.orig_z;
+        float target_z = chaseInfo.offsetZ;
+        if(chaseInfo.origZ) target_z += *chaseInfo.origZ;
         float diff_z = fabs(target_z - z);
         
-        speed_z =
-            std::min((float) (diff_z / delta_t), chase_info.cur_speed);
+        speedZ =
+            std::min((float) (diff_z / delta_t), chaseInfo.curSpeed);
         if(target_z < z) {
-            speed_z = -speed_z;
+            speedZ = -speedZ;
         }
         
-        z += speed_z * delta_t;
+        z += speedZ * delta_t;
     }
     
     //Gravity.
@@ -756,56 +756,56 @@ void Mob::tickVerticalMovementPhysics(
         //Use Velocity Verlet for better results.
         //https://youtu.be/hG9SzQxaCm8
         z +=
-            (speed_z * delta_t) +
-            ((MOB::GRAVITY_ADDER * gravity_mult / 2.0f) * delta_t* delta_t);
-        speed_z += MOB::GRAVITY_ADDER * delta_t* gravity_mult;
+            (speedZ * delta_t) +
+            ((MOB::GRAVITY_ADDER * gravityMult / 2.0f) * delta_t* delta_t);
+        speedZ += MOB::GRAVITY_ADDER * delta_t* gravityMult;
     }
     
     //Landing.
     Hazard* new_on_hazard = nullptr;
-    if(speed_z <= 0) {
-        if(standing_on_mob) {
-            z = standing_on_mob->z + standing_on_mob->height;
-            speed_z = 0;
+    if(speedZ <= 0) {
+        if(standingOnMob) {
+            z = standingOnMob->z + standingOnMob->height;
+            speedZ = 0;
             disableFlag(flags, MOB_FLAG_WAS_THROWN);
             fsm.runEvent(MOB_EV_LANDED);
             stopHeightEffect();
-            highest_midair_z = FLT_MAX;
+            highestMidairZ = FLT_MAX;
             
-        } else if(z <= ground_sector->z) {
-            z = ground_sector->z;
-            speed_z = 0;
+        } else if(z <= groundSector->z) {
+            z = groundSector->z;
+            speedZ = 0;
             disableFlag(flags, MOB_FLAG_WAS_THROWN);
             fsm.runEvent(MOB_EV_LANDED);
             stopHeightEffect();
-            highest_midair_z = FLT_MAX;
+            highestMidairZ = FLT_MAX;
             
-            if(ground_sector->is_bottomless_pit) {
+            if(groundSector->isBottomlessPit) {
                 fsm.runEvent(MOB_EV_BOTTOMLESS_PIT);
             }
             
-            for(size_t h = 0; h < ground_sector->hazards.size(); h++) {
+            for(size_t h = 0; h < groundSector->hazards.size(); h++) {
                 fsm.runEvent(
                     MOB_EV_TOUCHED_HAZARD,
-                    (void*) ground_sector->hazards[h]
+                    (void*) groundSector->hazards[h]
                 );
-                new_on_hazard = ground_sector->hazards[h];
+                new_on_hazard = groundSector->hazards[h];
             }
         }
     }
     
-    if(z > ground_sector->z) {
-        if(highest_midair_z == FLT_MAX) highest_midair_z = z;
-        else highest_midair_z = std::max(z, highest_midair_z);
+    if(z > groundSector->z) {
+        if(highestMidairZ == FLT_MAX) highestMidairZ = z;
+        else highestMidairZ = std::max(z, highestMidairZ);
     }
     
     //Held Pikmin are also touching the same hazards as the leader.
-    if(holder.m == game.states.gameplay->cur_leader_ptr) {
+    if(holder.m == game.states.gameplay->curLeaderPtr) {
         Sector* leader_ground =
-            game.states.gameplay->cur_leader_ptr->ground_sector;
+            game.states.gameplay->curLeaderPtr->groundSector;
         if(
             leader_ground &&
-            game.states.gameplay->cur_leader_ptr->z <= leader_ground->z
+            game.states.gameplay->curLeaderPtr->z <= leader_ground->z
         ) {
             for(size_t h = 0; h < leader_ground->hazards.size(); h++) {
                 fsm.runEvent(
@@ -819,41 +819,41 @@ void Mob::tickVerticalMovementPhysics(
     
     //Due to framerate imperfections, thrown Pikmin/leaders can reach higher
     //than intended. z_cap forces a cap. FLT_MAX = no cap.
-    if(speed_z <= 0) {
-        z_cap = FLT_MAX;
-    } else if(z_cap < FLT_MAX) {
-        z = std::min(z, z_cap);
+    if(speedZ <= 0) {
+        zCap = FLT_MAX;
+    } else if(zCap < FLT_MAX) {
+        z = std::min(z, zCap);
     }
     
     //On a sector that has a hazard that is not on the floor.
-    if(z > ground_sector->z && !ground_sector->hazard_floor) {
-        for(size_t h = 0; h < ground_sector->hazards.size(); h++) {
+    if(z > groundSector->z && !groundSector->hazardFloor) {
+        for(size_t h = 0; h < groundSector->hazards.size(); h++) {
             fsm.runEvent(
                 MOB_EV_TOUCHED_HAZARD,
-                (void*) ground_sector->hazards[h]
+                (void*) groundSector->hazards[h]
             );
-            new_on_hazard = ground_sector->hazards[h];
+            new_on_hazard = groundSector->hazards[h];
         }
     }
     
     //Check if any hazards have been left.
-    if(new_on_hazard != on_hazard && on_hazard != nullptr) {
+    if(new_on_hazard != onHazard && onHazard != nullptr) {
         fsm.runEvent(
             MOB_EV_LEFT_HAZARD,
-            (void*) on_hazard
+            (void*) onHazard
         );
         
         for(size_t s = 0; s < statuses.size(); s++) {
-            if(statuses[s].type->remove_on_hazard_leave) {
-                statuses[s].to_delete = true;
+            if(statuses[s].type->removeOnHazardLeave) {
+                statuses[s].toDelete = true;
             }
         }
         deleteOldStatusEffects();
     }
-    on_hazard = new_on_hazard;
+    onHazard = new_on_hazard;
     
     //Quick panic check: if it's somehow inside the ground, pop it out.
-    z = std::max(z, ground_sector->z);
+    z = std::max(z, groundSector->z);
 }
 
 
@@ -872,16 +872,16 @@ void Mob::tickWalkableRidingPhysics(float delta_t) {
         z = new_standing_on_mob->z + new_standing_on_mob->height;
     }
     
-    if(new_standing_on_mob != standing_on_mob) {
-        if(standing_on_mob) {
-            rider_removed_ev_mob = standing_on_mob;
+    if(new_standing_on_mob != standingOnMob) {
+        if(standingOnMob) {
+            rider_removed_ev_mob = standingOnMob;
         }
         if(new_standing_on_mob) {
             rider_added_ev_mob = new_standing_on_mob;
         }
     }
     
-    standing_on_mob = new_standing_on_mob;
+    standingOnMob = new_standing_on_mob;
     
     if(rider_removed_ev_mob) {
         rider_removed_ev_mob->fsm.runEvent(

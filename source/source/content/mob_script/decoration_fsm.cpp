@@ -42,7 +42,7 @@ void decoration_fsm::createFsm(MobType* typ) {
     
     
     typ->states = efc.finish();
-    typ->first_state_idx = fixStates(typ->states, "idling", typ);
+    typ->firstStateIdx = fixStates(typ->states, "idling", typ);
     
     //Check if the number in the enum and the total match up.
     engineAssert(
@@ -75,8 +75,8 @@ void decoration_fsm::beBumped(Mob* m, void* info1, void* info2) {
 void decoration_fsm::becomeIdle(Mob* m, void* info1, void* info2) {
     Decoration* dec_ptr = (Decoration*) m;
     if(
-        dec_ptr->dec_type->random_animation_delay &&
-        dec_ptr->individual_random_anim_delay
+        dec_ptr->decType->randomAnimationDelay &&
+        dec_ptr->individualRandomAnimDelay
     ) {
         m->setAnimation(
             DECORATION_ANIM_IDLING,
@@ -99,7 +99,7 @@ void decoration_fsm::checkBump(Mob* m, void* info1, void* info2) {
     Mob* toucher = (Mob*) info1;
     if(
         toucher->speed.x == 0 && toucher->speed.y == 0 &&
-        toucher->chase_info.state != CHASE_STATE_CHASING
+        toucher->chaseInfo.state != CHASE_STATE_CHASING
     ) {
         //Is the other object not currently moving? Let's not get bumped.
         return;

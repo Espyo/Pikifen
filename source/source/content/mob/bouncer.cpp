@@ -22,7 +22,7 @@ Bouncer::Bouncer(
     const Point &pos, BouncerType* type, float angle
 ):
     Mob(pos, type, angle),
-    bou_type(type) {
+    bouType(type) {
     
     team = MOB_TEAM_NONE;
 }

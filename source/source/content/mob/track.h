@@ -26,7 +26,7 @@ public:
     //--- Members ---
     
     //What type of track it is.
-    TrackType* tra_type = nullptr;
+    TrackType* traType = nullptr;
     
     
     //--- Function declarations ---

@@ -39,7 +39,7 @@ void ship_fsm::createFsm(MobType* typ) {
     }
     
     typ->states = efc.finish();
-    typ->first_state_idx = fixStates(typ->states, "idling", typ);
+    typ->firstStateIdx = fixStates(typ->states, "idling", typ);
     
     //Check if the number in the enum and the total match up.
     engineAssert(
@@ -65,66 +65,66 @@ void ship_fsm::receiveMob(Mob* m, void* info1, void* info2) {
     
     switch(delivery->type->category->id) {
     case MOB_CATEGORY_ENEMIES: {
-        if(game.cur_area_data->mission.enemy_points_on_collection) {
-            game.states.gameplay->enemy_points_collected += ((Enemy*) delivery)->ene_type->points;
+        if(game.curAreaData->mission.enemyPointsOnCollection) {
+            game.states.gameplay->enemyPointsCollected += ((Enemy*) delivery)->eneType->points;
         }
         break;
-
+        
     }
     case MOB_CATEGORY_TREASURES: {
         Treasure* tre_ptr = (Treasure*) delivery;
-        game.states.gameplay->treasures_collected++;
-        game.states.gameplay->treasure_points_collected +=
-            tre_ptr->tre_type->points;
-        game.states.gameplay->last_ship_that_got_treasure_pos = m->pos;
+        game.states.gameplay->treasuresCollected++;
+        game.states.gameplay->treasurePointsCollected +=
+            tre_ptr->treType->points;
+        game.states.gameplay->lastShipThatGotTreasurePos = m->pos;
         
-        if(game.cur_area_data->mission.goal == MISSION_GOAL_COLLECT_TREASURE) {
+        if(game.curAreaData->mission.goal == MISSION_GOAL_COLLECT_TREASURE) {
             auto it =
-                game.states.gameplay->mission_remaining_mob_ids.find(
+                game.states.gameplay->missionRemainingMobIds.find(
                     delivery->id
                 );
-            if(it != game.states.gameplay->mission_remaining_mob_ids.end()) {
-                game.states.gameplay->mission_remaining_mob_ids.erase(it);
-                game.states.gameplay->goal_treasures_collected++;
+            if(it != game.states.gameplay->missionRemainingMobIds.end()) {
+                game.states.gameplay->missionRemainingMobIds.erase(it);
+                game.states.gameplay->goalTreasuresCollected++;
             }
         }
         break;
         
     } case MOB_CATEGORY_RESOURCES: {
         Resource* res_ptr = (Resource*) delivery;
-        switch(res_ptr->res_type->delivery_result) {
+        switch(res_ptr->resType->deliveryResult) {
         case RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS: {
-            game.states.gameplay->treasures_collected++;
-            game.states.gameplay->treasure_points_collected +=
-                res_ptr->res_type->point_amount;
-            game.states.gameplay->last_ship_that_got_treasure_pos = m->pos;
+            game.states.gameplay->treasuresCollected++;
+            game.states.gameplay->treasurePointsCollected +=
+                res_ptr->resType->pointAmount;
+            game.states.gameplay->lastShipThatGotTreasurePos = m->pos;
             if(
-                game.cur_area_data->mission.goal ==
+                game.curAreaData->mission.goal ==
                 MISSION_GOAL_COLLECT_TREASURE
             ) {
                 unordered_set<size_t> &goal_mobs =
-                    game.states.gameplay->mission_remaining_mob_ids;
+                    game.states.gameplay->missionRemainingMobIds;
                 auto it = goal_mobs.find(delivery->id);
                 if(it != goal_mobs.end()) {
                     goal_mobs.erase(it);
-                    game.states.gameplay->goal_treasures_collected++;
-                } else if(res_ptr->origin_pile) {
-                    it = goal_mobs.find(res_ptr->origin_pile->id);
+                    game.states.gameplay->goalTreasuresCollected++;
+                } else if(res_ptr->originPile) {
+                    it = goal_mobs.find(res_ptr->originPile->id);
                     if(it != goal_mobs.end()) {
-                        game.states.gameplay->goal_treasures_collected++;
+                        game.states.gameplay->goalTreasuresCollected++;
                     }
                 }
             }
             break;
         } case RESOURCE_DELIVERY_RESULT_INCREASE_INGREDIENTS: {
-            size_t type_idx = res_ptr->res_type->spray_to_concoct;
-            game.states.gameplay->spray_stats[type_idx].nr_ingredients++;
+            size_t type_idx = res_ptr->resType->sprayToConcoct;
+            game.states.gameplay->sprayStats[type_idx].nrIngredients++;
             if(
-                game.states.gameplay->spray_stats[type_idx].nr_ingredients >=
-                game.config.misc.spray_order[type_idx]->ingredients_needed
+                game.states.gameplay->sprayStats[type_idx].nrIngredients >=
+                game.config.misc.sprayOrder[type_idx]->ingredientsNeeded
             ) {
-                game.states.gameplay->spray_stats[type_idx].nr_ingredients -=
-                    game.config.misc.spray_order[type_idx]->ingredients_needed;
+                game.states.gameplay->sprayStats[type_idx].nrIngredients -=
+                    game.config.misc.sprayOrder[type_idx]->ingredientsNeeded;
                 game.states.gameplay->changeSprayCount(type_idx, 1);
             }
             break;
@@ -140,14 +140,14 @@ void ship_fsm::receiveMob(Mob* m, void* info1, void* info2) {
     }
     }
     
-    shi_ptr->mobs_being_beamed--;
+    shi_ptr->mobsBeingBeamed--;
     ParticleGenerator pg =
         standardParticleGenSetup(
-            game.sys_content_names.part_onion_insertion, shi_ptr
+            game.sysContentNames.parOnionInsertion, shi_ptr
         );
-    pg.follow_pos_offset = shi_ptr->shi_type->receptacle_offset;
-    pg.follow_z_offset -= 2.0f; //Must appear below the ship's receptacle.
-    shi_ptr->particle_generators.push_back(pg);
+    pg.followPosOffset = shi_ptr->shiType->receptacleOffset;
+    pg.followZOffset -= 2.0f; //Must appear below the ship's receptacle.
+    shi_ptr->particleGenerators.push_back(pg);
     
 }
 
@@ -175,5 +175,5 @@ void ship_fsm::setAnim(Mob* m, void* info1, void* info2) {
  */
 void ship_fsm::startDelivery(Mob* m, void* info1, void* info2) {
     Ship* shi_ptr = (Ship*) m;
-    shi_ptr->mobs_being_beamed++;
+    shi_ptr->mobsBeingBeamed++;
 }

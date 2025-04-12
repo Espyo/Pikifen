@@ -33,10 +33,10 @@ BouncerCategory::BouncerCategory() :
  * @brief Clears the list of registered types of bouncers.
  */
 void BouncerCategory::clearTypes() {
-    for(auto &t : game.content.mob_types.list.bouncer) {
+    for(auto &t : game.content.mobTypes.list.bouncer) {
         delete t.second;
     }
-    game.content.mob_types.list.bouncer.clear();
+    game.content.mobTypes.list.bouncer.clear();
 }
 
 
@@ -91,8 +91,8 @@ void BouncerCategory::eraseMob(Mob* m) {
  * @return The type, or nullptr on error.
  */
 MobType* BouncerCategory::getType(const string &internal_name) const {
-    auto it = game.content.mob_types.list.bouncer.find(internal_name);
-    if(it == game.content.mob_types.list.bouncer.end()) return nullptr;
+    auto it = game.content.mobTypes.list.bouncer.find(internal_name);
+    if(it == game.content.mobTypes.list.bouncer.end()) return nullptr;
     return it->second;
 }
 
@@ -103,7 +103,7 @@ MobType* BouncerCategory::getType(const string &internal_name) const {
  * @param list This list gets filled with the mob type internal names.
  */
 void BouncerCategory::getTypeNames(vector<string> &list) const {
-    for(auto &t : game.content.mob_types.list.bouncer) {
+    for(auto &t : game.content.mobTypes.list.bouncer) {
         list.push_back(t.first);
     }
 }
@@ -116,5 +116,5 @@ void BouncerCategory::getTypeNames(vector<string> &list) const {
  * @param type Mob type to register.
  */
 void BouncerCategory::registerType(const string &internal_name, MobType* type) {
-    game.content.mob_types.list.bouncer[internal_name] = (BouncerType*) type;
+    game.content.mobTypes.list.bouncer[internal_name] = (BouncerType*) type;
 }

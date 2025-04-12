@@ -33,7 +33,7 @@ public:
     //--- Members ---
     
     //Automatically load this file upon boot-up of the editor, if any.
-    string auto_load_file;
+    string autoLoadFile;
     
     
     //--- Function declarations ---
@@ -73,34 +73,34 @@ private:
     //--- Members ---
     
     //Currently selected item, or INVALID for none.
-    size_t cur_item = INVALID;
+    size_t curItem = INVALID;
     
     //Data node for the contents of the current GUI definition.
-    DataNode file_node;
+    DataNode fileNode;
     
     //List of items for the current GUI definition.
     vector<Item> items;
     
     //Picker info for the picker in the "load" dialog.
-    Picker load_dialog_picker;
+    Picker loadDialogPicker;
     
     //Position of the load widget.
-    Point load_widget_pos;
+    Point loadWidgetPos;
     
     //The list of items must focus on the currently selected item.
-    bool must_focus_on_cur_item = false;
+    bool mustFocusOnCurItem = false;
     
     //Small hack -- does the camera need recentering in processGui()?
-    bool must_recenter_cam = false;
+    bool mustRecenterCam = false;
     
     //Position of the reload widget.
-    Point reload_widget_pos;
+    Point reloadWidgetPos;
     
     //Position of the quit widget.
-    Point quit_widget_pos;
+    Point quitWidgetPos;
     
     //The current transformation widget.
-    TransformationWidget cur_transformation_widget;
+    TransformationWidget curTransformationWidget;
     
     struct {
     
@@ -108,18 +108,18 @@ private:
         string pack;
         
         //Internal name of the new GUI definition.
-        string internal_name;
+        string internalName;
         
         //Problem found, if any.
         string problem;
         
         //Path to the new GUI definition.
-        string def_path;
+        string defPath;
         
         //Whether the dialog needs updating.
-        bool must_update = true;
+        bool mustUpdate = true;
         
-    } new_dialog;
+    } newDialog;
     
     
     //--- Function declarations ---

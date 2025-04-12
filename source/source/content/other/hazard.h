@@ -42,16 +42,16 @@ struct Hazard : public Content {
     //--- Members ---
     
     //Color that best represents this hazard.
-    ALLEGRO_COLOR main_color = COLOR_EMPTY;
+    ALLEGRO_COLOR mainColor = COLOR_EMPTY;
     
     //Status effects for mobs that interact with this hazard.
     vector<StatusType*> effects;
     
     //Do sectors with this hazard block vulnerable Pikmin paths?
-    bool blocks_paths = true;
+    bool blocksPaths = true;
     
     //If it's got an associated liquid, this points to it.
-    Liquid* associated_liquid = nullptr;
+    Liquid* associatedLiquid = nullptr;
     
     
     //--- Function declarations ---

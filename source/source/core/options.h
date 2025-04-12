@@ -159,25 +159,25 @@ struct Options {
     struct {
     
         //Draw a trail behind the mouse cursor?
-        bool draw_cursor_trail = ADVANCED_D::DRAW_CURSOR_TRAIL;
+        bool drawCursorTrail = ADVANCED_D::DRAW_CURSOR_TRAIL;
         
         //Is the player a developer of the engine?
-        bool engine_dev = ADVANCED_D::ENGINE_DEV;
+        bool engineDev = ADVANCED_D::ENGINE_DEV;
         
         //Maximum deadzone for joysticks.
-        float joystick_max_deadzone = ADVANCED_D::JOYSTICK_MAX_DEADZONE;
+        float joystickMaxDeadzone = ADVANCED_D::JOYSTICK_MAX_DEADZONE;
         
         //Minimum deadzone for joysticks.
-        float joystick_min_deadzone = ADVANCED_D::JOYSTICK_MIN_DEADZONE;
+        float joystickMinDeadzone = ADVANCED_D::JOYSTICK_MIN_DEADZONE;
         
         //Maximum number of particles.
-        size_t max_particles = ADVANCED_D::MAX_PARTICLES;
+        size_t maxParticles = ADVANCED_D::MAX_PARTICLES;
         
         //Enables or disables mipmaps.
-        bool mipmaps_enabled = ADVANCED_D::MIPMAPS_ENABLED;
+        bool mipmapsEnabled = ADVANCED_D::MIPMAPS_ENABLED;
         
         //For each player, does the mouse move their leader's cursor?
-        bool mouse_moves_cursor[MAX_PLAYERS] = {
+        bool mouseMovesCursor[MAX_PLAYERS] = {
             ADVANCED_D::MOUSE_MOVES_CURSOR[0],
             ADVANCED_D::MOUSE_MOVES_CURSOR[1],
             ADVANCED_D::MOUSE_MOVES_CURSOR[2],
@@ -185,17 +185,17 @@ struct Options {
         };
         
         //True to use interpolation when graphics are scaled up/down.
-        bool smooth_scaling = ADVANCED_D::SMOOTH_SCALING;
+        bool smoothScaling = ADVANCED_D::SMOOTH_SCALING;
         
         //Target framerate.
-        int target_fps = ADVANCED_D::TARGET_FPS;
+        int targetFps = ADVANCED_D::TARGET_FPS;
         
         //Should we force the window's positioning?
         //(on some machines it appears out-of-bounds by default)
-        bool window_pos_hack = ADVANCED_D::WINDOW_POS_HACK;
+        bool windowPosHack = ADVANCED_D::WINDOW_POS_HACK;
         
         //Set the camera's middle zoom level to this amount.
-        float zoom_mid_level = ADVANCED_D::ZOOM_MID_LEVEL;
+        float zoomMidLevel = ADVANCED_D::ZOOM_MID_LEVEL;
         
     } advanced;
     
@@ -203,76 +203,76 @@ struct Options {
     struct {
     
         //Background texture for the animation editor, if any.
-        string bg_path = ANIM_ED_D::BG_PATH;
+        string bgPath = ANIM_ED_D::BG_PATH;
         
         //History for the last content entries that were opened.
         //Saves pairs of path-name.
         vector<pair<string, string> > history;
         
-    } anim_editor;
+    } animEd;
     
     //Area editor.
     struct {
     
         //Use the advanced interface mode in the area editor?
-        bool advanced_mode = AREA_ED_D::ADVANCED_MODE;
+        bool advancedMode = AREA_ED_D::ADVANCED_MODE;
         
         //Backup the area in the area editor every X seconds.
-        float backup_interval = AREA_ED_D::BACKUP_INTERVAL;
+        float backupInterval = AREA_ED_D::BACKUP_INTERVAL;
         
         //Grid interval in the area editor, in units.
-        float grid_interval = AREA_ED_D::GRID_INTERVAL;
+        float gridInterval = AREA_ED_D::GRID_INTERVAL;
         
         //History for the last content entries that were opened.
         //Saves pairs of path-name.
         vector<pair<string, string> > history;
         
         //Can the user transform the selected vertexes?
-        bool sel_trans = AREA_ED_D::SEL_TRANS;
+        bool selTrans = AREA_ED_D::SEL_TRANS;
         
         //Show info of a circular sector that's being drawn?
-        bool show_circular_info = AREA_ED_D::SHOW_CIRCULAR_INFO;
+        bool showCircularInfo = AREA_ED_D::SHOW_CIRCULAR_INFO;
         
         //Show the length of an edge that's being drawn/moved?
-        bool show_edge_length = AREA_ED_D::SHOW_EDGE_LENGTH;
+        bool showEdgeLength = AREA_ED_D::SHOW_EDGE_LENGTH;
         
         //Show the length of a path link that's being drawn/moved?
-        bool show_path_link_length = AREA_ED_D::SHOW_PATH_LINK_LENGTH;
+        bool showPathLinkLength = AREA_ED_D::SHOW_PATH_LINK_LENGTH;
         
         //Show the selected mob(s)'s territory?
-        bool show_territory = AREA_ED_D::SHOW_TERRITORY;
+        bool showTerritory = AREA_ED_D::SHOW_TERRITORY;
         
         //Snap mode to use.
-        AreaEditor::SNAP_MODE snap_mode = AREA_ED_D::SNAP_MODE;
+        AreaEditor::SNAP_MODE snapMode = AREA_ED_D::SNAP_MODE;
         
         //Snap when the cursor is this close to a vertex/edge.
-        size_t snap_threshold = AREA_ED_D::SNAP_THRESHOLD;
+        size_t snapThreshold = AREA_ED_D::SNAP_THRESHOLD;
         
         //Maximum number of undo operations.
-        size_t undo_limit = AREA_ED_D::UNDO_LIMIT;
+        size_t undoLimit = AREA_ED_D::UNDO_LIMIT;
         
         //View mode to use.
-        AreaEditor::VIEW_MODE view_mode = AREA_ED_D::VIEW_MODE;
+        AreaEditor::VIEW_MODE viewMode = AREA_ED_D::VIEW_MODE;
         
-    } area_editor;
+    } areaEd;
     
     //Audio.
     struct {
     
         //Ambiance sound volume (0 - 1).
-        float ambiance_sound_vol = AUDIO_D::AMBIANCE_SOUND_VOl;
+        float ambianceSoundVol = AUDIO_D::AMBIANCE_SOUND_VOl;
         
         //Gameplay sound effects volume (0 - 1).
-        float gameplay_sound_vol = AUDIO_D::GAMEPLAY_SOUND_VOL;
+        float gameplaySoundVol = AUDIO_D::GAMEPLAY_SOUND_VOL;
         
         //Master sound volume (0 - 1).
-        float master_vol = AUDIO_D::MASTER_VOL;
+        float masterVol = AUDIO_D::MASTER_VOL;
         
         //Music volume (0 - 1).
-        float music_vol = AUDIO_D::MUSIC_VOL;
+        float musicVol = AUDIO_D::MUSIC_VOL;
         
         //UI sound effects volume (0 - 1).
-        float ui_sound_vol = AUDIO_D::UI_SOUND_VOL;
+        float uiSoundVol = AUDIO_D::UI_SOUND_VOL;
         
     } audio;
     
@@ -280,10 +280,10 @@ struct Options {
     struct {
     
         //Auto-throw mode.
-        AUTO_THROW_MODE auto_throw_mode = CONTROLS_D::AUTO_THROW;
+        AUTO_THROW_MODE autoThrowMode = CONTROLS_D::AUTO_THROW;
         
         //Cursor speed, in pixels per second. N/A when using the mouse.
-        float cursor_speed = CONTROLS_D::CURSOR_SPEED;
+        float cursorSpeed = CONTROLS_D::CURSOR_SPEED;
         
     } controls;
     
@@ -291,31 +291,31 @@ struct Options {
     struct {
     
         //Editor's custom style highlight color.
-        ALLEGRO_COLOR highlight_color = EDITORS_D::HIGHLIGHT_COLOR;
+        ALLEGRO_COLOR highlightColor = EDITORS_D::HIGHLIGHT_COLOR;
         
         //If true, the middle mouse button pans in editors.
-        bool mmb_pan = EDITORS_D::MMB_PAN;
+        bool mmbPan = EDITORS_D::MMB_PAN;
         
         //In editors, only consider a mouse drag if it moves these many pixels.
-        float mouse_drag_threshold = EDITORS_D::MOUSE_DRAG_THRESHOLD;
+        float mouseDragThreshold = EDITORS_D::MOUSE_DRAG_THRESHOLD;
         
         //List of which editor node widgets the user wants open.
-        map<string, bool> open_nodes;
+        map<string, bool> openNodes;
         
         //Editor's custom style main reference color.
-        ALLEGRO_COLOR primary_color = EDITORS_D::PRIMARY_COLOR;
+        ALLEGRO_COLOR primaryColor = EDITORS_D::PRIMARY_COLOR;
         
         //Editor's custom style accent reference color.
-        ALLEGRO_COLOR secondary_color = EDITORS_D::SECONDARY_COLOR;
+        ALLEGRO_COLOR secondaryColor = EDITORS_D::SECONDARY_COLOR;
         
         //In editors, show widget tooltips when the mouse is over them.
-        bool show_tooltips = EDITORS_D::SHOW_TOOLTIPS;
+        bool showTooltips = EDITORS_D::SHOW_TOOLTIPS;
         
         //Editor's custom style text color.
-        ALLEGRO_COLOR text_color = EDITORS_D::TEXT_COLOR;
+        ALLEGRO_COLOR textColor = EDITORS_D::TEXT_COLOR;
         
         //Should the editors use a custom style, or the default?
-        bool use_custom_style = EDITORS_D::USE_CUSTOM_STYLE;
+        bool useCustomStyle = EDITORS_D::USE_CUSTOM_STYLE;
         
     } editors;
     
@@ -323,16 +323,16 @@ struct Options {
     struct {
     
         //Player's intended option for fullscreen, before restarting the game.
-        bool intended_win_fullscreen = GRAPHICS_D::WIN_FULLSCREEN;
+        bool intendedWinFullscreen = GRAPHICS_D::WIN_FULLSCREEN;
         
         //Player's intended option for window height, before restarting the game.
-        int intended_win_h = GRAPHICS_D::WIN_H;
+        int intendedWinH = GRAPHICS_D::WIN_H;
         
         //Player's intended option for window width, before restarting the game.
-        int intended_win_w = GRAPHICS_D::WIN_W;
+        int intendedWinW = GRAPHICS_D::WIN_W;
         
         //When using fullscreen, is this true fullscreen, or borderless window?
-        bool true_fullscreen = GRAPHICS_D::TRUE_FULLSCREEN;
+        bool trueFullscreen = GRAPHICS_D::TRUE_FULLSCREEN;
         
     } graphics;
     
@@ -340,7 +340,7 @@ struct Options {
     struct {
     
         //Grid interval in the GUI editor, in units.
-        float grid_interval = GUI_ED_D::GRID_INTERVAL;
+        float gridInterval = GUI_ED_D::GRID_INTERVAL;
         
         //History for the last content entries that were opened.
         //Saves pairs of path-name.
@@ -349,19 +349,19 @@ struct Options {
         //Snap to grid?
         bool snap = GUI_ED_D::SNAP;
         
-    } gui_editor;
+    } guiEd;
     
     //Misc.
     struct {
     
         //Cursor camera movement weight.
-        float cursor_cam_weight = MISC_D::CURSOR_CAM_WEIGHT;
+        float cursorCamWeight = OPTIONS::MISC_D::CURSOR_CAM_WEIGHT;
         
         //Pause menu leaving confirmation question mode.
-        LEAVING_CONF_MODE leaving_conf_mode = MISC_D::LEAVING_CONF;
+        LEAVING_CONF_MODE leavingConfMode = OPTIONS::MISC_D::LEAVING_CONF;
         
         //Show control bind icons on top of HUD elements?
-        bool show_hud_input_icons = MISC_D::SHOW_HUD_INPUT_ICONS;
+        bool showHudInputIcons = OPTIONS::MISC_D::SHOW_HUD_INPUT_ICONS;
         
     } misc;
     
@@ -380,16 +380,16 @@ struct Options {
     struct {
     
         //Background texture for the particle editor, if any.
-        string bg_path = PART_ED_D::BG_PATH;
+        string bgPath = PART_ED_D::BG_PATH;
         
         //Grid interval in the particle editor, in units.
-        float grid_interval = PART_ED_D::GRID_INTERVAL;
+        float gridInterval = PART_ED_D::GRID_INTERVAL;
         
         //History for the last content entries that were opened.
         //Saves pairs of path-name.
         vector<pair<string, string> > history;
         
-    } particle_editor;
+    } partEd;
     
     
     //--- Function declarations ---

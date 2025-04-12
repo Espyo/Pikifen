@@ -53,7 +53,7 @@ public:
     //--- Members ---
     
     //What page to load when it is created.
-    MAIN_MENU_PAGE page_to_load = MAIN_MENU_PAGE_MAIN;
+    MAIN_MENU_PAGE pageToLoad = MAIN_MENU_PAGE_MAIN;
     
     
     //--- Function declarations ---
@@ -89,16 +89,16 @@ private:
         Point destination;
         
         //Speed at which it sways.
-        float sway_speed = 0.0f;
+        float swaySpeed = 0.0f;
         
         //Variable that controls its swaying.
-        float sway_var = 0.0f;
+        float swayVar = 0.0f;
         
         //Image that represents this Pikmin's top.
         ALLEGRO_BITMAP* top = nullptr;
         
         //Has it reached its destination?
-        bool reached_destination = false;
+        bool reachedDestination = false;
         
     };
     
@@ -106,52 +106,52 @@ private:
     //--- Members ---
     
     //Bitmap of the menu background.
-    ALLEGRO_BITMAP* bmp_menu_bg = nullptr;
+    ALLEGRO_BITMAP* bmpMenuBg = nullptr;
     
     //List of Pikmin that make up the logo.
-    vector<LogoPikmin> logo_pikmin;
+    vector<LogoPikmin> logoPikmin;
     
     //GUI for the main page.
-    GuiManager main_gui;
+    GuiManager mainGui;
     
     //GUI for the play page.
-    GuiManager play_gui;
+    GuiManager playGui;
     
     //GUI for the make page.
-    GuiManager make_gui;
+    GuiManager makeGui;
     
     //GUI for the tutorial question page.
-    GuiManager tutorial_gui;
+    GuiManager tutorialGui;
     
     //Top-left coordinates of the logo, in screen percentage.
-    Point logo_min_screen_limit = Point(10.0f);
+    Point logoMinScreenLimit = Point(10.0f);
     
     //Bottom-right coordinates of the logo, in screen percentage.
-    Point logo_max_screen_limit = Point(90.0f, 50.0f);
+    Point logoMaxScreenLimit = Point(90.0f, 50.0f);
     
     //Maximum speed a logo Pikmin can move at.
-    float logo_pikmin_max_speed = 800.0f;
+    float logoPikminMaxSpeed = 800.0f;
     
     //Minimum speed a logo Pikmin can move at.
-    float logo_pikmin_min_speed = 600.0f;
+    float logoPikminMinSpeed = 600.0f;
     
     //How much to smooth a logo Pikmin's speed by.
-    float logo_pikmin_speed_smoothness = 0.08f;
+    float logoPikminSpeedSmoothness = 0.08f;
     
     //How much to sway a logo Pikmin by.
-    float logo_pikmin_sway_amount = 3.0f;
+    float logoPikminSwayAmount = 3.0f;
     
     //Maximum speed at which a logo Pikmin can sway.
-    float logo_pikmin_sway_max_speed = 5.5f;
+    float logoPikminSwayMaxSpeed = 5.5f;
     
     //Minimum speed at which a logo Pikmin can sway.
-    float logo_pikmin_sway_min_speed = 2.5f;
+    float logoPikminSwayMinSpeed = 2.5f;
     
     //Width and height of a logo Pikmin.
-    Point logo_pikmin_size = Point(3.5f);
+    Point logoPikminSize = Point(3.5f);
     
     //Map of what characters represent what Pikmin top bitmaps.
-    map<unsigned char, ALLEGRO_BITMAP*> logo_type_bitmaps;
+    map<unsigned char, ALLEGRO_BITMAP*> logoTypeBitmaps;
     
     
     //--- Function declarations ---

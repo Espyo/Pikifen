@@ -33,10 +33,10 @@ ScaleCategory::ScaleCategory() :
  * @brief Clears the list of registered types of scale.
  */
 void ScaleCategory::clearTypes() {
-    for(auto &t : game.content.mob_types.list.scale) {
+    for(auto &t : game.content.mobTypes.list.scale) {
         delete t.second;
     }
-    game.content.mob_types.list.scale.clear();
+    game.content.mobTypes.list.scale.clear();
 }
 
 
@@ -91,8 +91,8 @@ void ScaleCategory::eraseMob(Mob* m) {
  * @return The type, or nullptr on error.
  */
 MobType* ScaleCategory::getType(const string &internal_name) const {
-    auto it = game.content.mob_types.list.scale.find(internal_name);
-    if(it == game.content.mob_types.list.scale.end()) return nullptr;
+    auto it = game.content.mobTypes.list.scale.find(internal_name);
+    if(it == game.content.mobTypes.list.scale.end()) return nullptr;
     return it->second;
 }
 
@@ -103,7 +103,7 @@ MobType* ScaleCategory::getType(const string &internal_name) const {
  * @param list This list gets filled with the mob type internal names.
  */
 void ScaleCategory::getTypeNames(vector<string> &list) const {
-    for(auto &t : game.content.mob_types.list.scale) {
+    for(auto &t : game.content.mobTypes.list.scale) {
         list.push_back(t.first);
     }
 }
@@ -116,5 +116,5 @@ void ScaleCategory::getTypeNames(vector<string> &list) const {
  * @param type Mob type to register.
  */
 void ScaleCategory::registerType(const string &internal_name, MobType* type) {
-    game.content.mob_types.list.scale[internal_name] = (ScaleType*) type;
+    game.content.mobTypes.list.scale[internal_name] = (ScaleType*) type;
 }

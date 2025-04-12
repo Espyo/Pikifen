@@ -29,7 +29,7 @@ using std::vector;
  * @param p2 Second point.
  */
 Distance::Distance(const Point &p1, const Point &p2) :
-    distance_squared(
+    distanceSquared(
         (p2.x - p1.x) * (p2.x - p1.x) +
         (p2.y - p1.y) * (p2.y - p1.y)
     ) {
@@ -43,9 +43,9 @@ Distance::Distance(const Point &p1, const Point &p2) :
  * @param d Regular, non-squared distance.
  */
 Distance::Distance(float d) :
-    distance_squared(d * d),
-    normal_distance(d),
-    has_normal_distance(true) {
+    distanceSquared(d * d),
+    normalDistance(d),
+    hasNormalDistance(true) {
     
 }
 
@@ -57,9 +57,9 @@ Distance::Distance(float d) :
  * @return The current object.
  */
 Distance &Distance::operator =(float d) {
-    distance_squared = d * d;
-    normal_distance = d;
-    has_normal_distance = true;
+    distanceSquared = d * d;
+    normalDistance = d;
+    hasNormalDistance = true;
     return *this;
 }
 
@@ -71,7 +71,7 @@ Distance &Distance::operator =(float d) {
  * @return Whether it is smaller.
  */
 bool Distance::operator<(float d2) const {
-    return distance_squared < (d2 * d2);
+    return distanceSquared < (d2 * d2);
 }
 
 
@@ -82,7 +82,7 @@ bool Distance::operator<(float d2) const {
  * @return Whether it is larger.
  */
 bool Distance::operator>(float d2) const {
-    return distance_squared > (d2 * d2);
+    return distanceSquared > (d2 * d2);
 }
 
 
@@ -93,7 +93,7 @@ bool Distance::operator>(float d2) const {
  * @return Whether it is the same.
  */
 bool Distance::operator==(float d2) const {
-    return distance_squared == (d2 * d2);
+    return distanceSquared == (d2 * d2);
 }
 
 
@@ -137,7 +137,7 @@ bool Distance::operator!=(float d2) const {
  * @return Whether it is smaller.
  */
 bool Distance::operator<(const Distance &d2) const {
-    return distance_squared < d2.distance_squared;
+    return distanceSquared < d2.distanceSquared;
 }
 
 
@@ -148,7 +148,7 @@ bool Distance::operator<(const Distance &d2) const {
  * @return Whether it is larger.
  */
 bool Distance::operator>(const Distance &d2) const {
-    return distance_squared > d2.distance_squared;
+    return distanceSquared > d2.distanceSquared;
 }
 
 
@@ -159,7 +159,7 @@ bool Distance::operator>(const Distance &d2) const {
  * @return Whether it is the same.
  */
 bool Distance::operator==(const Distance &d2) const {
-    return distance_squared == d2.distance_squared;
+    return distanceSquared == d2.distanceSquared;
 }
 
 
@@ -202,12 +202,12 @@ bool Distance::operator!=(const Distance &d2) const {
  * @param d2 Amount of distance to add.
  */
 void Distance::operator+=(float d2) {
-    if(!has_normal_distance) {
-        normal_distance = (float) sqrt(distance_squared);
-        has_normal_distance = true;
+    if(!hasNormalDistance) {
+        normalDistance = (float) sqrt(distanceSquared);
+        hasNormalDistance = true;
     }
-    normal_distance += d2;
-    distance_squared = normal_distance * normal_distance;
+    normalDistance += d2;
+    distanceSquared = normalDistance * normalDistance;
 }
 
 
@@ -217,12 +217,12 @@ void Distance::operator+=(float d2) {
  * @param d2 Amount of distance to add.
  */
 void Distance::operator+=(const Distance &d2) {
-    distance_squared += d2.distance_squared;
-    if(has_normal_distance) {
-        if(d2.has_normal_distance) {
-            normal_distance += d2.normal_distance;
+    distanceSquared += d2.distanceSquared;
+    if(hasNormalDistance) {
+        if(d2.hasNormalDistance) {
+            normalDistance += d2.normalDistance;
         } else {
-            normal_distance = (float) sqrt(distance_squared);
+            normalDistance = (float) sqrt(distanceSquared);
         }
     }
 }
@@ -244,12 +244,12 @@ void Distance::operator-=(float d2) {
  * @param d2 Amount of distance to remove.
  */
 void Distance::operator-=(const Distance &d2) {
-    distance_squared -= d2.distance_squared;
-    if(has_normal_distance) {
-        if(d2.has_normal_distance) {
-            normal_distance -= d2.normal_distance;
+    distanceSquared -= d2.distanceSquared;
+    if(hasNormalDistance) {
+        if(d2.hasNormalDistance) {
+            normalDistance -= d2.normalDistance;
         } else {
-            normal_distance = (float) sqrt(distance_squared);
+            normalDistance = (float) sqrt(distanceSquared);
         }
     }
 }
@@ -261,11 +261,11 @@ void Distance::operator-=(const Distance &d2) {
  * @return The non-squared distance.
  */
 float Distance::toFloat() {
-    if(!has_normal_distance) {
-        normal_distance = (float) sqrt(distance_squared);
-        has_normal_distance = true;
+    if(!hasNormalDistance) {
+        normalDistance = (float) sqrt(distanceSquared);
+        hasNormalDistance = true;
     }
-    return normal_distance;
+    return normalDistance;
 }
 
 

@@ -46,16 +46,16 @@ Converter::Converter(
     const Point &pos, ConverterType* type, float angle
 ) :
     Mob(pos, type, angle),
-    con_type(type),
-    input_pikmin_left(con_type->total_input_pikmin),
-    current_type(con_type->available_pikmin_types[0]),
-    type_change_timer(con_type->type_change_interval),
-    auto_conversion_timer(con_type->auto_conversion_timeout) {
+    conType(type),
+    inputPikminLeft(conType->totalInputPikmin),
+    currentType(conType->availablePikminTypes[0]),
+    typeChangeTimer(conType->typeChangeInterval),
+    autoConversionTimer(conType->autoConversionTimeout) {
     
-    type_change_timer.on_end =
+    typeChangeTimer.onEnd =
     [this] () { this->changeType(); };
     
-    auto_conversion_timer.on_end =
+    autoConversionTimer.onEnd =
     [this] () { this->close(); };
 }
 
@@ -64,21 +64,21 @@ Converter::Converter(
  * @brief Changes to the next type in the list, if applicable.
  */
 void Converter::changeType() {
-    current_type_idx =
+    currentTypeIdx =
         sumAndWrap(
-            (int) current_type_idx, 1,
-            (int) con_type->available_pikmin_types.size()
+            (int) currentTypeIdx, 1,
+            (int) conType->availablePikminTypes.size()
         );
-    current_type = con_type->available_pikmin_types[current_type_idx];
+    currentType = conType->availablePikminTypes[currentTypeIdx];
     
     setAnimation(
         getAnimationIdxFromBaseAndGroup(
-            cur_base_anim_idx, N_CONVERTER_ANIMS, current_type_idx
+            curBaseAnimIdx, N_CONVERTER_ANIMS, currentTypeIdx
         ),
         START_ANIM_OPTION_NO_RESTART, true
     );
     
-    type_change_timer.start();
+    typeChangeTimer.start();
 }
 
 
@@ -89,11 +89,11 @@ void Converter::close() {
     fsm.setState(CONVERTER_STATE_CLOSING);
     setAnimation(
         getAnimationIdxFromBaseAndGroup(
-            CONVERTER_ANIM_CLOSING, N_CONVERTER_ANIMS, current_type_idx
+            CONVERTER_ANIM_CLOSING, N_CONVERTER_ANIMS, currentTypeIdx
         )
     );
-    cur_base_anim_idx = CONVERTER_ANIM_CLOSING;
-    auto_conversion_timer.stop();
+    curBaseAnimIdx = CONVERTER_ANIM_CLOSING;
+    autoConversionTimer.stop();
 }
 
 
@@ -101,12 +101,12 @@ void Converter::close() {
  * @brief Spews out the converted seeds.
  */
 void Converter::spew() {
-    size_t total_to_spit = amount_in_buffer * con_type->pikmin_per_conversion;
+    size_t total_to_spit = amountInBuffer * conType->pikminPerConversion;
     
     for(size_t s = 0; s < total_to_spit; s++) {
         if(
-            game.states.gameplay->mobs.pikmin_list.size() ==
-            game.config.rules.max_pikmin_in_field
+            game.states.gameplay->mobs.pikmin.size() ==
+            game.config.rules.maxPikminInField
         ) {
             break;
         }
@@ -118,15 +118,15 @@ void Converter::spew() {
                 CONVERTER::SPEW_H_SPEED_DEVIATION
             );
         spewPikminSeed(
-            pos, z + CONVERTER::NEW_SEED_Z_OFFSET, current_type,
-            next_spew_angle, horizontal_strength, CONVERTER::SPEW_V_SPEED
+            pos, z + CONVERTER::NEW_SEED_Z_OFFSET, currentType,
+            nextSpewAngle, horizontal_strength, CONVERTER::SPEW_V_SPEED
         );
         
-        next_spew_angle += CONVERTER::SPEW_ANGLE_SHIFT;
-        next_spew_angle = normalizeAngle(next_spew_angle);
+        nextSpewAngle += CONVERTER::SPEW_ANGLE_SHIFT;
+        nextSpewAngle = normalizeAngle(nextSpewAngle);
     }
     
-    amount_in_buffer = 0;
+    amountInBuffer = 0;
     
 }
 
@@ -137,6 +137,6 @@ void Converter::spew() {
  * @param delta_t How long the frame's tick is, in seconds.
  */
 void Converter::tickClassSpecifics(float delta_t) {
-    type_change_timer.tick(delta_t);
-    auto_conversion_timer.tick(delta_t);
+    typeChangeTimer.tick(delta_t);
+    autoConversionTimer.tick(delta_t);
 }

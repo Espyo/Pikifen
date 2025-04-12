@@ -274,19 +274,19 @@ protected:
         //--- Members ---
         
         //What handle is being moved. -1 for none. 9 for the rotation handle.
-        signed char moving_handle = -1;
+        signed char movingHandle = -1;
         
         //Old center, before the user started dragging handles.
-        Point old_center;
+        Point oldCenter;
         
         //Old size, before the user started dragging handles.
-        Point old_size;
+        Point oldSize;
         
         //Old angle, before the user started dragging handles.
-        float old_angle = 0.0f;
+        float oldAngle = 0.0f;
         
         //Before rotation began, the mouse made this angle with the center.
-        float old_mouse_angle = 0.0f;
+        float oldMouseAngle = 0.0f;
         
         
         //--- Function declarations ---
@@ -309,25 +309,25 @@ protected:
         //--- Members ---
         
         //Callback for when it's time to process the dialog's contents.
-        std::function<void()> process_callback = nullptr;
+        std::function<void()> processCallback = nullptr;
         
         //Callback for when an Allegro event happens.
-        std::function<void(ALLEGRO_EVENT*)> event_callback = nullptr;
+        std::function<void(ALLEGRO_EVENT*)> eventCallback = nullptr;
         
         //Callback for when the user closes the dialog, if any.
-        std::function<void()> close_callback = nullptr;
+        std::function<void()> closeCallback = nullptr;
         
         //Title to display on the dialog.
         string title;
         
         //Is it open?
-        bool is_open = true;
+        bool isOpen = true;
         
         //Custom dialog position (center point). -1,-1 for default.
-        Point custom_pos = Point(-1.0f);
+        Point customPos = Point(-1.0f);
         
         //Custom dialog size. -1,-1 for default.
-        Point custom_size = Point(-1.0f);
+        Point customSize = Point(-1.0f);
         
         
         //--- Function declarations ---
@@ -347,10 +347,10 @@ protected:
         string name;
         
         //What top-level category it belongs to, or empty string for none.
-        string top_category;
+        string topCategory;
         
         //What second-level category it belongs to, or empty string for none.
-        string sec_category;
+        string secCategory;
         
         //Information to pass to the code when the item is picked, if any.
         void* info;
@@ -388,29 +388,29 @@ protected:
         //Callback for when the user picks an item from the picker dialog.
         std::function<void(
             const string &, const string &, const string &, void*, bool
-        )> pick_callback = nullptr;
+        )> pickCallback = nullptr;
         
         //Text to display above the picker dialog list.
-        string list_header;
+        string listHeader;
         
         //Can the user make a new item in the picker dialog?
-        bool can_make_new = false;
+        bool canMakeNew = false;
         
         //Use the monospace font for items?
-        bool use_monospace = false;
+        bool useMonospace = false;
         
         //When making a new item, the user must pick between these
         //top-level category choices, if applicable.
-        vector<string> new_item_top_cat_choices;
+        vector<string> newItemTopCatChoices;
         
         //Only show picker dialog items matching this filter.
         string filter;
         
         //If there's an associated dialog meant to auto-close, specify it here.
-        Dialog* dialog_ptr = nullptr;
+        Dialog* dialogPtr = nullptr;
         
         //Do we need to focus on the filter text box?
-        bool needs_filter_box_focus = true;
+        bool needsFilterBoxFocus = true;
         
         //--- Function declarations ---
         
@@ -422,13 +422,13 @@ protected:
         //--- Members ---
         
         //Pointer to the editor that's using it.
-        Editor* editor_ptr = nullptr;
+        Editor* editorPtr = nullptr;
         
         //Top-level category the user picked for the new item, if applicable.
-        string new_item_top_cat;
+        string newItemTopCat;
         
         //Second-level category the user picked for the new item, if applicable.
-        string new_item_sec_cat;
+        string newItemSecCat;
         
     };
     
@@ -472,25 +472,25 @@ protected:
         Editor* ed = nullptr;
         
         //Whether the content exists on the disk.
-        bool on_disk = true;
+        bool onDisk = true;
         
         //Cummulative number of unsaved changes since the last save.
-        size_t unsaved_changes = 0;
+        size_t unsavedChanges = 0;
         
         //When did it last go from saved to unsaved? 0 = no unsaved changes.
-        float unsaved_time = 0.0f;
+        float unsavedTime = 0.0f;
         
         //Long name of the action for the open unsaved changes warning dialog.
-        string unsaved_warning_action_long;
+        string unsavedWarningActionLong;
         
         //Short name of the action for the open unsaved changes warning dialog.
-        string unsaved_warning_action_short;
+        string unsavedWarningActionShort;
         
         //Action code callback for the open unsaved changes warning dialog.
-        std::function<void()> unsaved_warning_action_callback = nullptr;
+        std::function<void()> unsavedWarningActionCallback = nullptr;
         
         //Save code callback for the open unsaved changes warning dialog.
-        std::function<bool()> unsaved_warning_save_callback = nullptr;
+        std::function<bool()> unsavedWarningSaveCallback = nullptr;
         
     };
     
@@ -533,142 +533,142 @@ protected:
     
     //Callback for when the item is really meant to be picked, in the base
     //content warning dialog.
-    std::function<void()> base_content_warning_do_pick_callback = nullptr;
+    std::function<void()> baseContentWarningDoPickCallback = nullptr;
     
     //Currently-chosen bitmap name in the bitmap dialog.
-    string bitmap_dialog_cur_bmp_name;
+    string bitmapDialogCurBmpName;
     
     //Currently-chosen bitmap pointer in the bitmap dialog.
-    ALLEGRO_BITMAP* bitmap_dialog_cur_bmp_ptr = nullptr;
+    ALLEGRO_BITMAP* bitmapDialogCurBmpPtr = nullptr;
     
     //Name of the newly-chosen bitmap in the bitmap dialog.
-    string bitmap_dialog_new_bmp_name;
+    string bitmapDialogNewBmpName;
     
     //Callback for when the user chooses a bitmap in the bitmap dialog.
-    std::function<void(const string &)> bitmap_dialog_ok_callback = nullptr;
+    std::function<void(const string &)> bitmapDialogOkCallback = nullptr;
     
     //Picker for the bitmap dialog.
-    Picker bitmap_dialog_picker = Picker(this);
+    Picker bitmapDialogPicker = Picker(this);
     
     //Recommended folder in the bitmap dialog, if any. "." for graphics root.
-    string bitmap_dialog_recommended_folder;
+    string bitmapDialogRecommendedFolder;
     
     //Bitmap with all of the editor icons.
-    ALLEGRO_BITMAP* bmp_editor_icons = nullptr;
+    ALLEGRO_BITMAP* bmpEditorIcons = nullptr;
     
     //Top-left corner of the canvas.
-    Point canvas_tl;
+    Point canvasTL;
     
     //Bottom right corner of the canvas.
-    Point canvas_br;
+    Point canvasBR;
     
     //X coordinate of the canvas GUI separator. -1 = undefined.
-    int canvas_separator_x = -1;
+    int canvasSeparatorX = -1;
     
     //Manager of (unsaved) changes.
-    ChangesManager changes_mgr;
+    ChangesManager changesMgr;
     
     //List of registered commands.
     vector<Command> commands;
     
     //Maps a custom mob category name to an index of the types' vector.
-    map<string, size_t> custom_cat_name_idxs;
+    map<string, size_t> customCatNameIdxs;
     
     //What mob types belong in what custom mob category names.
-    vector<vector<MobType*>> custom_cat_types;
+    vector<vector<MobType*>> customCatTypes;
     
     //Currently open dialogs, if any.
     vector<Dialog*> dialogs;
     
     //If the next click is within this time, it's a double-click.
-    float double_click_time = 0.0f;
+    float doubleClickTime = 0.0f;
     
     //List of every individual editor icon.
-    vector<ALLEGRO_BITMAP*> editor_icons;
+    vector<ALLEGRO_BITMAP*> editorIcons;
     
     //If Escape was pressed the previous frame.
-    bool escape_was_pressed = false;
+    bool escapeWasPressed = false;
     
     //Is the Alt key currently pressed down?
-    bool is_alt_pressed = false;
+    bool isAltPressed = false;
     
     //Is the Ctrl key currently pressed down?
-    bool is_ctrl_pressed = false;
+    bool isCtrlPressed = false;
     
     //Is the Shift key currently pressed down?
-    bool is_shift_pressed = false;
+    bool isShiftPressed = false;
     
     //Is the left mouse button currently pressed down?
-    bool is_m1_pressed = false;
+    bool isM1Pressed = false;
     
     //Is the right mouse button currently pressed down?
-    bool is_m2_pressed = false;
+    bool isM2Pressed = false;
     
     //Is the middle mouse button currently pressed down?
-    bool is_m3_pressed = false;
+    bool isM3Pressed = false;
     
     //Is the mouse currently hovering the gui? False if it's the canvas.
-    bool is_mouse_in_gui = false;
+    bool isMouseInGui = false;
     
     //Number of the mouse button pressed.
-    size_t last_mouse_click = INVALID;
+    size_t lastMouseClick = INVALID;
     
     //Screen location of the cursor on the last mouse button press.
-    Point last_mouse_click_pos;
+    Point lastMouseClickPos;
     
     //Editor sub-state during the last mouse click.
-    size_t last_mouse_click_sub_state = INVALID;
+    size_t lastMouseClickSubState = INVALID;
     
     //Was the last user input a keyboard press?
-    bool last_input_was_keyboard = false;
+    bool lastInputWasKeyboard = false;
     
     //Manifest for the current content.
     ContentManifest manifest;
     
     //Message text in the Dear ImGui help dialog.
-    string help_dialog_message;
+    string helpDialogMessage;
     
     //Page to open in the help dialog.
-    string help_dialog_page;
+    string helpDialogPage;
     
     //Message text in the Dear ImGui message dialog.
-    string message_dialog_message;
+    string messageDialogMessage;
     
     //Is this a real mouse drag, or just a shaky click?
-    bool mouse_drag_confirmed = false;
+    bool mouseDragConfirmed = false;
     
     //Starting coordinates of a raw mouse drag.
-    Point mouse_drag_start;
+    Point mouseDragStart;
     
     //Do we need to focus on the input popup's text widget?
-    bool needs_input_popup_text_focus = true;
+    bool needsInputPopupTextFocus = true;
     
     //Do we need to focus on the new pack's name text widget?
-    bool needs_new_pack_text_focus = true;
+    bool needsNewPackTextFocus = true;
     
     //Index of the selected pack in the "new" content dialog.
-    int new_content_dialog_pack_idx = 0;
+    int newContentDialogPackIdx = 0;
     
     //Time left in the operation error red flash effect.
-    Timer op_error_flash_timer = Timer(EDITOR::OP_ERROR_FLASH_DURATION);
+    Timer opErrorFlashTimer = Timer(EDITOR::OP_ERROR_FLASH_DURATION);
     
     //Position of the operation error red flash effect.
-    Point op_error_pos;
+    Point opErrorPos;
     
     //Current state.
     size_t state = 0;
     
     //Status bar text.
-    string status_text;
+    string statusText;
     
     //Current sub-state.
-    size_t sub_state = 0;
+    size_t subState = 0;
     
     //Maximum zoom level allowed.
-    float zoom_max_level = 0.0f;
+    float zoomMaxLevel = 0.0f;
     
     //Minimum zoom level allowed.
-    float zoom_min_level = 0.0f;
+    float zoomMinLevel = 0.0f;
     
     
     //--- Function declarations ---

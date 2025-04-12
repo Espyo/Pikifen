@@ -82,24 +82,24 @@ const float THROW_VER_SPEED = 900.0f;
  */
 Pikmin::Pikmin(const Point &pos, PikminType* type, float angle) :
     Mob(pos, type, angle),
-    pik_type(type) {
+    pikType(type) {
     
-    invuln_period = Timer(PIKMIN::INVULN_PERIOD);
+    invulnPeriod = Timer(PIKMIN::INVULN_PERIOD);
     team = MOB_TEAM_PLAYER_1;
-    subgroup_type_ptr =
-        game.states.gameplay->subgroup_types.getType(
-            SUBGROUP_TYPE_CATEGORY_PIKMIN, pik_type
+    subgroupTypePtr =
+        game.states.gameplay->subgroupTypes.getType(
+            SUBGROUP_TYPE_CATEGORY_PIKMIN, pikType
         );
-    near_reach = 0;
-    far_reach = 2;
+    nearReach = 0;
+    farReach = 2;
     updateInteractionSpan();
-    missed_attack_timer =
+    missedAttackTimer =
         Timer(
             PIKMIN::MISSED_ATTACK_DURATION,
-    [this] () { this->missed_attack_ptr = nullptr; }
+    [this] () { this->missedAttackPtr = nullptr; }
         );
         
-    if(pik_type->can_fly) {
+    if(pikType->canFly) {
         enableFlag(flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
 }
@@ -144,23 +144,23 @@ void Pikmin::drawMob() {
     );
     
     bool is_idle =
-        fsm.cur_state->id == PIKMIN_STATE_IDLING ||
-        fsm.cur_state->id == PIKMIN_STATE_IDLING_H ||
-        fsm.cur_state->id == PIKMIN_STATE_SPROUT;
+        fsm.curState->id == PIKMIN_STATE_IDLING ||
+        fsm.curState->id == PIKMIN_STATE_IDLING_H ||
+        fsm.curState->id == PIKMIN_STATE_SPROUT;
         
     if(is_idle) {
-        mob_eff.glow_color = COLOR_WHITE;
+        mob_eff.glowColor = COLOR_WHITE;
     }
     
     drawBitmapWithEffects(cur_s_ptr->bitmap, pik_sprite_eff);
     
     //Top.
-    if(cur_s_ptr->top_visible) {
+    if(cur_s_ptr->topVisible) {
         Point top_coords;
         float top_angle;
         Point top_size;
         BitmapEffect top_eff = mob_eff;
-        ALLEGRO_BITMAP* top_bmp = pik_type->bmp_top[maturity];
+        ALLEGRO_BITMAP* top_bmp = pikType->bmpTop[maturity];
         getSpriteBasicTopEffects(
             cur_s_ptr, next_s_ptr, interpolation_factor,
             &top_coords, &top_angle, &top_size
@@ -178,7 +178,7 @@ void Pikmin::drawMob() {
         top_eff.scale *= top_size / top_bmp_size;
         top_eff.rotation +=
             angle + top_angle;
-        top_eff.glow_color =
+        top_eff.glowColor =
             mapGray(0);
             
         drawBitmapWithEffects(top_bmp, top_eff);
@@ -188,17 +188,17 @@ void Pikmin::drawMob() {
     if(is_idle) {
         BitmapEffect idle_eff = pik_sprite_eff;
         Point glow_bmp_size =
-            getBitmapDimensions(game.sys_content.bmp_idle_glow);
+            getBitmapDimensions(game.sysContent.bmpIdleGlow);
         idle_eff.translation = pos;
         idle_eff.scale =
-            (game.config.pikmin.standard_radius * 8) / glow_bmp_size;
+            (game.config.pikmin.standardRadius * 8) / glow_bmp_size;
         idle_eff.rotation =
-            game.states.gameplay->area_time_passed *
+            game.states.gameplay->areaTimePassed *
             PIKMIN::IDLE_GLOW_SPIN_SPEED;
-        idle_eff.tint_color = type->main_color;
-        idle_eff.glow_color = mapGray(0);
+        idle_eff.tintColor = type->mainColor;
+        idle_eff.glowColor = mapGray(0);
         
-        drawBitmapWithEffects(game.sys_content.bmp_idle_glow, idle_eff);
+        drawBitmapWithEffects(game.sysContent.bmpIdleGlow, idle_eff);
     }
     
     drawStatusEffectBmp(this, pik_sprite_eff);
@@ -210,27 +210,27 @@ void Pikmin::drawMob() {
  */
 void Pikmin::finishDyingClassSpecifics() {
     //Essentials.
-    to_delete = true;
+    toDelete = true;
     
     //Soul.
     Particle par(
         pos, LARGE_FLOAT,
         radius * 2, 2.0f
     );
-    par.bitmap = game.sys_content.bmp_pikmin_spirit;
+    par.bitmap = game.sysContent.bmpPikminSpirit;
     par.friction = 0.8;
     Point base_speed = Point(game.rng.f(-20, 20), game.rng.f(-70, -30));
-    par.linear_speed = KeyframeInterpolator<Point>(base_speed);
-    par.linear_speed.add(1, Point(Point(base_speed.x, base_speed.y - 20)));
-    par.color.setKeyframeValue(0, changeAlpha(pik_type->main_color, 0));
-    par.color.add(0.1f, pik_type->main_color);
-    par.color.add(1, changeAlpha(pik_type->main_color, 0));
+    par.linearSpeed = KeyframeInterpolator<Point>(base_speed);
+    par.linearSpeed.add(1, Point(Point(base_speed.x, base_speed.y - 20)));
+    par.color.setKeyframeValue(0, changeAlpha(pikType->mainColor, 0));
+    par.color.add(0.1f, pikType->mainColor);
+    par.color.add(1, changeAlpha(pikType->mainColor, 0));
     game.states.gameplay->particles.add(par);
     
     //Sound. Create a positional sound source instead of a mob sound source,
     //since the Pikmin object is now practically deleted.
     size_t dying_sound_idx =
-        pik_type->sound_data_idxs[PIKMIN_SOUND_DYING];
+        pikType->soundDataIdxs[PIKMIN_SOUND_DYING];
     if(dying_sound_idx != INVALID) {
         MobType::Sound* dying_sound =
             &type->sounds[dying_sound_idx];
@@ -264,7 +264,7 @@ void Pikmin::forceCarry(Mob* m) {
  */
 float Pikmin::getBaseSpeed() const {
     float base = Mob::getBaseSpeed();
-    return base + (base * this->maturity * game.config.pikmin.maturity_speed_mult);
+    return base + (base * this->maturity * game.config.pikmin.maturitySpeedMult);
 }
 
 
@@ -283,13 +283,13 @@ void Pikmin::getGroupSpotInfo(
     out_spot->y = 0.0f;
     *out_dist = 0.0f;
     
-    if(!following_group || !following_group->group) {
+    if(!followingGroup || !followingGroup->group) {
         return;
     }
     
     *out_spot =
-        following_group->group->anchor +
-        following_group->group->getSpotOffset(group_spot_idx);
+        followingGroup->group->anchor +
+        followingGroup->group->getSpotOffset(groupSpotIdx);
     *out_dist = 5.0f;
 }
 
@@ -302,7 +302,7 @@ void Pikmin::getGroupSpotInfo(
 void Pikmin::handleStatusEffectGain(StatusType* sta_type) {
     Mob::handleStatusEffectGain(sta_type);
     
-    switch(sta_type->state_change_type) {
+    switch(sta_type->stateChangeType) {
     case STATUS_STATE_CHANGE_FLAILING: {
         fsm.setState(PIKMIN_STATE_FLAILING);
         break;
@@ -320,11 +320,11 @@ void Pikmin::handleStatusEffectGain(StatusType* sta_type) {
     }
     }
     
-    increaseMaturity(sta_type->maturity_change_amount);
+    increaseMaturity(sta_type->maturityChangeAmount);
     
-    if(carrying_mob) {
-        carrying_mob->chase_info.max_speed =
-            carrying_mob->carry_info->getSpeed();
+    if(carryingMob) {
+        carryingMob->chaseInfo.maxSpeed =
+            carryingMob->carryInfo->getSpeed();
     }
 }
 
@@ -341,7 +341,7 @@ void Pikmin::handleStatusEffectLoss(StatusType* sta_type) {
     for(size_t s = 0; s < statuses.size(); s++) {
         if(statuses[s].type == sta_type) continue;
         
-        switch(statuses[s].type->state_change_type) {
+        switch(statuses[s].type->stateChangeType) {
         case STATUS_STATE_CHANGE_FLAILING: {
             still_has_flailing = true;
             break;
@@ -361,41 +361,41 @@ void Pikmin::handleStatusEffectLoss(StatusType* sta_type) {
     }
     
     if(
-        sta_type->state_change_type == STATUS_STATE_CHANGE_FLAILING &&
+        sta_type->stateChangeType == STATUS_STATE_CHANGE_FLAILING &&
         !still_has_flailing &&
-        fsm.cur_state->id == PIKMIN_STATE_FLAILING
+        fsm.curState->id == PIKMIN_STATE_FLAILING
     ) {
         fsm.setState(PIKMIN_STATE_IDLING);
         setAnimation(PIKMIN_ANIM_SHAKING);
-        in_shaking_animation = true;
+        inShakingAnimation = true;
         setTimer(0); //The boredom animation timeout.
         pikmin_fsm::standStill(this, nullptr, nullptr);
-        invuln_period.start();
+        invulnPeriod.start();
     }
     
     if(
-        sta_type->state_change_type == STATUS_STATE_CHANGE_HELPLESS &&
+        sta_type->stateChangeType == STATUS_STATE_CHANGE_HELPLESS &&
         !still_has_helplessness &&
-        fsm.cur_state->id == PIKMIN_STATE_HELPLESS
+        fsm.curState->id == PIKMIN_STATE_HELPLESS
     ) {
         fsm.setState(PIKMIN_STATE_IDLING);
         pikmin_fsm::standStill(this, nullptr, nullptr);
-        invuln_period.start();
+        invulnPeriod.start();
         
     } else if(
-        sta_type->state_change_type == STATUS_STATE_CHANGE_PANIC &&
+        sta_type->stateChangeType == STATUS_STATE_CHANGE_PANIC &&
         !still_has_panic &&
-        fsm.cur_state->id == PIKMIN_STATE_PANICKING
+        fsm.curState->id == PIKMIN_STATE_PANICKING
     ) {
         fsm.setState(PIKMIN_STATE_IDLING);
         pikmin_fsm::standStill(this, nullptr, nullptr);
-        invuln_period.start();
+        invulnPeriod.start();
         
     }
     
-    if(carrying_mob) {
-        carrying_mob->chase_info.max_speed =
-            carrying_mob->carry_info->getSpeed();
+    if(carryingMob) {
+        carryingMob->chaseInfo.maxSpeed =
+            carryingMob->carryInfo->getSpeed();
     }
 }
 
@@ -413,7 +413,7 @@ bool Pikmin::increaseMaturity(int amount) {
     maturity = std::clamp(new_maturity, 0, (int) (N_MATURITIES - 1));
     
     if(maturity > old_maturity) {
-        game.statistics.pikmin_blooms++;
+        game.statistics.pikminBlooms++;
     }
     return maturity != old_maturity;
 }
@@ -426,7 +426,7 @@ bool Pikmin::increaseMaturity(int amount) {
  * @param h Hitbox to latch on to.
  */
 void Pikmin::latch(Mob* m, const Hitbox* h) {
-    speed.x = speed.y = speed_z = 0;
+    speed.x = speed.y = speedZ = 0;
     
     //Shuffle it slightly, randomly, so that multiple Pikmin thrown
     //at the exact same spot aren't perfectly overlapping each other.
@@ -440,7 +440,7 @@ void Pikmin::latch(Mob* m, const Hitbox* h) {
         this, h, &h_offset_dist, &h_offset_angle, &v_offset_dist
     );
     m->hold(
-        this, h->body_part_idx, h_offset_dist, h_offset_angle, v_offset_dist,
+        this, h->bodyPartIdx, h_offset_dist, h_offset_angle, v_offset_dist,
         true,
         HOLD_ROTATION_METHOD_NEVER //pikmin_fsm::prepareToAttack handles it.
     );
@@ -461,20 +461,20 @@ void Pikmin::latch(Mob* m, const Hitbox* h) {
  * @return Whether it hit.
  */
 bool Pikmin::processAttackMiss(HitboxInteraction* info) {
-    if(info->mob2->anim.cur_anim == missed_attack_ptr) {
+    if(info->mob2->anim.curAnim == missedAttackPtr) {
         //In a previous frame, we had already considered this animation a miss.
         return false;
     }
     
-    unsigned char hit_rate = info->mob2->anim.cur_anim->hit_rate;
+    unsigned char hit_rate = info->mob2->anim.curAnim->hitRate;
     if(hit_rate == 0) return false;
     
     unsigned char hit_roll = game.rng.i(0, 100);
     if(hit_roll > hit_rate) {
         //This attack was randomly decided to be a miss.
         //Record this animation so it won't be considered a hit next frame.
-        missed_attack_ptr = info->mob2->anim.cur_anim;
-        missed_attack_timer.start();
+        missedAttackPtr = info->mob2->anim.curAnim;
+        missedAttackTimer.start();
         return false;
     }
     
@@ -499,12 +499,12 @@ void Pikmin::readScriptVars(const ScriptVarReader &svr) {
     }
     if(svr.get("sprout", sprout_var)) {
         if(sprout_var) {
-            fsm.first_state_override = PIKMIN_STATE_SPROUT;
+            fsm.firstStateOverride = PIKMIN_STATE_SPROUT;
         }
     }
     if(svr.get("follow_link_as_leader", follow_link_var)) {
         if(follow_link_var) {
-            must_follow_link_as_leader = true;
+            mustFollowLinkAsLeader = true;
         }
     }
 }
@@ -514,10 +514,10 @@ void Pikmin::readScriptVars(const ScriptVarReader &svr) {
  * @brief Sets up stuff for the beginning of the Pikmin's death process.
  */
 void Pikmin::startDyingClassSpecifics() {
-    game.states.gameplay->pikmin_deaths++;
-    game.states.gameplay->pikmin_deaths_per_type[pik_type]++;
-    game.states.gameplay->last_pikmin_death_pos = pos;
-    game.statistics.pikmin_deaths++;
+    game.states.gameplay->pikminDeaths++;
+    game.states.gameplay->pikminDeathsPerType[pikType]++;
+    game.states.gameplay->lastPikminDeathPos = pos;
+    game.statistics.pikminDeaths++;
     
     enableFlag(flags, MOB_FLAG_INTANGIBLE);
 }
@@ -530,26 +530,26 @@ void Pikmin::startDyingClassSpecifics() {
 void Pikmin::startThrowTrail() {
     ParticleGenerator pg =
         standardParticleGenSetup(
-            game.sys_content_names.part_throw_trail, this
+            game.sysContentNames.parThrowTrail, this
         );
-    pg.follow_z_offset = 0.0f;
+    pg.followZOffset = 0.0f;
     adjustKeyframeInterpolatorValues<float>(
-        pg.base_particle.size,
+        pg.baseParticle.size,
     [ = ] (const float & f) { return f * radius; }
     );
     adjustKeyframeInterpolatorValues<ALLEGRO_COLOR>(
-        pg.base_particle.color,
+        pg.baseParticle.color,
     [ = ] (const ALLEGRO_COLOR & c) {
         ALLEGRO_COLOR new_c = c;
-        new_c.r *= type->main_color.r;
-        new_c.g *= type->main_color.g;
-        new_c.b *= type->main_color.b;
-        new_c.a *= type->main_color.a;
+        new_c.r *= type->mainColor.r;
+        new_c.g *= type->mainColor.g;
+        new_c.b *= type->mainColor.b;
+        new_c.a *= type->mainColor.a;
         return new_c;
     }
     );
     pg.id = MOB_PARTICLE_GENERATOR_ID_THROW;
-    particle_generators.push_back(pg);
+    particleGenerators.push_back(pg);
 }
 
 
@@ -560,18 +560,18 @@ void Pikmin::startThrowTrail() {
  */
 void Pikmin::tickClassSpecifics(float delta_t) {
     //Carrying object.
-    if(carrying_mob) {
-        if(!carrying_mob->carry_info) {
+    if(carryingMob) {
+        if(!carryingMob->carryInfo) {
             fsm.runEvent(MOB_EV_FOCUSED_MOB_UNAVAILABLE);
         }
     }
     
     //Tick some timers.
-    missed_attack_timer.tick(delta_t);
-    bump_lock = std::max(bump_lock - delta_t, 0.0f);
+    missedAttackTimer.tick(delta_t);
+    bumpLock = std::max(bumpLock - delta_t, 0.0f);
     
     //Forcefully follow another mob as a leader.
-    if(must_follow_link_as_leader) {
+    if(mustFollowLinkAsLeader) {
         if(!links.empty() && links[0]) {
             fsm.runEvent(
                 MOB_EV_TOUCHED_ACTIVE_LEADER,
@@ -582,7 +582,7 @@ void Pikmin::tickClassSpecifics(float delta_t) {
         //Since this leader is likely an enemy, let's keep these Pikmin safe.
         enableFlag(flags, MOB_FLAG_NON_HUNTABLE);
         enableFlag(flags, MOB_FLAG_NON_HURTABLE);
-        must_follow_link_as_leader = false;
+        mustFollowLinkAsLeader = false;
     }
     
 }
@@ -603,26 +603,26 @@ Pikmin* getClosestSprout(
     Distance closest_distance;
     Pikmin* closest_pikmin = nullptr;
     
-    size_t n_pikmin = game.states.gameplay->mobs.pikmin_list.size();
+    size_t n_pikmin = game.states.gameplay->mobs.pikmin.size();
     for(size_t p = 0; p < n_pikmin; p++) {
         if(
-            game.states.gameplay->mobs.pikmin_list[p]->fsm.cur_state->id !=
+            game.states.gameplay->mobs.pikmin[p]->fsm.curState->id !=
             PIKMIN_STATE_SPROUT
         ) {
             continue;
         }
         
-        Distance dis(pos, game.states.gameplay->mobs.pikmin_list[p]->pos);
+        Distance dis(pos, game.states.gameplay->mobs.pikmin[p]->pos);
         if(closest_pikmin == nullptr || dis < closest_distance) {
         
             if(
                 !(
                     ignore_reserved ||
-                    game.states.gameplay->mobs.pikmin_list[p]->pluck_reserved
+                    game.states.gameplay->mobs.pikmin[p]->pluckReserved
                 )
             ) {
                 closest_distance = dis;
-                closest_pikmin = game.states.gameplay->mobs.pikmin_list[p];
+                closest_pikmin = game.states.gameplay->mobs.pikmin[p];
             }
         }
     }

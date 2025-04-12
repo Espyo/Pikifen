@@ -20,16 +20,16 @@
 ScaleType::ScaleType() :
     MobType(MOB_CATEGORY_SCALES) {
     
-    target_type = MOB_TARGET_FLAG_NONE;
+    targetType = MOB_TARGET_FLAG_NONE;
     walkable = true;
     
     AreaEditorProp aep_goal;
     aep_goal.name = "Goal weight";
     aep_goal.var = "goal_number";
     aep_goal.type = AEMP_TYPE_INT;
-    aep_goal.def_value = i2s(goal_number);
+    aep_goal.defValue = i2s(goalNumber);
     aep_goal.tooltip = "Pikmin weight required for the goal, if any.";
-    area_editor_props.push_back(aep_goal);
+    areaEditorProps.push_back(aep_goal);
 }
 
 
@@ -41,7 +41,7 @@ ScaleType::ScaleType() :
 void ScaleType::loadCatProperties(DataNode* file) {
     ReaderSetter rs(file);
     
-    rs.set("goal_number", goal_number);
+    rs.set("goal_number", goalNumber);
     
-    area_editor_props.back().def_value = i2s(goal_number);
+    areaEditorProps.back().defValue = i2s(goalNumber);
 }

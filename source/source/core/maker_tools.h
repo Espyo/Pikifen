@@ -107,28 +107,28 @@ struct MakerTools {
     bool enabled = true;
     
     //Different area image settings.
-    AreaImageSettings area_image_settings[3];
+    AreaImageSettings areaImageSettings[3];
     
     //Automatically pick this from the list of the selected auto-entry mode.
-    string auto_start_option;
+    string autoStartOption;
     
     //Automatically enter this game mode when the game boots.
-    string auto_start_state;
+    string autoStartState;
     
     //Are we currently changing the game speed?
-    bool change_speed = false;
+    bool changeSpeed = false;
     
     //Which game speed change setting to use.
-    unsigned char change_speed_setting_idx = 0;
+    unsigned char changeSpeedSettingIdx = 0;
     
     //Different game speed change settings. These are multipliers to change by.
-    float change_speed_settings[3] = { 2.0f, 0.5f, 1.0f };
+    float changeSpeedSettings[3] = { 2.0f, 0.5f, 1.0f };
     
     //Are collision boxes visible in-game?
     bool collision = false;
     
     //Is the geometry information tool enabled?
-    bool geometry_info = false;
+    bool geometryInfo = false;
     
     //Are hitboxes visible in-game?
     bool hitboxes = false;
@@ -137,34 +137,34 @@ struct MakerTools {
     bool hud = true;
     
     //Mob currently locked-on to for the mob information tool. nullptr if off.
-    Mob* info_lock = nullptr;
+    Mob* infoLock = nullptr;
     
     //If any maker info is being printed, this is how long it lasts on-screen.
-    float info_print_duration = 5.0f;
+    float infoPrintDuration = 5.0f;
     
     //If any maker info is being printed, this is how long its fade lasts.
-    float info_print_fade_duration = 3.0f;
+    float infoPrintFadeDuration = 3.0f;
     
     //If any maker info is being printed, this is its text.
-    string info_print_text;
+    string infoPrintText;
     
     //If any maker info is being printed, this represents its time to live.
-    Timer info_print_timer;
+    Timer infoPrintTimer;
     
     //When we last spawned a Pikmin, what was its type?
-    PikminType* last_pikmin_type = nullptr;
+    PikminType* lastPikminType = nullptr;
     
     //Different mob hurting settings. When used, dock this much of its max HP.
-    float mob_hurting_settings[3] = { 0.75f, 1.0f, -1.0f };
+    float mobHurtingSettings[3] = { 0.75f, 1.0f, -1.0f };
     
     //Show path info?
-    bool path_info = false;
+    bool pathInfo = false;
     
     //Use the performance monitor?
-    bool use_perf_mon = false;
+    bool usePerfMon = false;
     
     //Has the player made use of any tools that could help them play?
-    bool used_helping_tools = false;
+    bool usedHelpingTools = false;
     
     
     //--- Function declarations ---

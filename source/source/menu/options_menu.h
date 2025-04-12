@@ -61,28 +61,28 @@ public:
     //--- Members ---
     
     //Points to the current value.
-    t* cur_value = nullptr;
+    t* curValue = nullptr;
     
     //Default value.
-    const t def_value = t();
+    const t defValue = t();
     
     //Tooltip, sans default. Used if the presets don't have their own tooltips.
     string tooltip;
     
     //Value of each preset.
-    vector<t> preset_values;
+    vector<t> presetValues;
     
     //Name of each preset.
-    vector<string> preset_names;
+    vector<string> presetNames;
     
     //Tooltip for each preset. If empty, "tooltip" is used instead.
-    vector<string> preset_descriptions;
+    vector<string> presetDescriptions;
     
     //Code to run after a value is changed, if any.
-    std::function<void()> after_change = nullptr;
+    std::function<void()> afterChange = nullptr;
     
     //Converts a value to a string. Used in the tooltip's default, if necessary.
-    std::function<string(t)> value_to_string = nullptr;
+    std::function<string(t)> valueToString = nullptr;
     
     
     //--- Function definitions ---
@@ -103,11 +103,11 @@ public:
         const string &tooltip = ""
     ) :
         PickerGuiItem(base_text, ""),
-        cur_value(cur_value),
-        def_value(def_value),
+        curValue(cur_value),
+        defValue(def_value),
         tooltip(tooltip),
-        preset_values(preset_values),
-        preset_names(preset_names) {
+        presetValues(preset_values),
+        presetNames(preset_names) {
     }
     
     
@@ -118,36 +118,36 @@ public:
      * expected.
      */
     void init() {
-        cur_option_idx = INVALID;
-        for(size_t p = 0; p < preset_values.size(); p++) {
-            if(*cur_value == preset_values[p]) {
-                cur_option_idx = p;
+        curOptionIdx = INVALID;
+        for(size_t p = 0; p < presetValues.size(); p++) {
+            if(*curValue == presetValues[p]) {
+                curOptionIdx = p;
                 break;
             }
         }
         option = getCurOptionName();
-        nr_options = preset_values.size();
+        nrOptions = presetValues.size();
         
-        on_previous = [this] () { changeOption(-1); };
-        on_next = [this] () { changeOption(1); };
-        on_get_tooltip = [this] () {
+        onPrevious = [this] () { changeOption(-1); };
+        onNext = [this] () { changeOption(1); };
+        onGetTooltip = [this] () {
             size_t def_idx = 0;
             string full_tooltip;
-            for(; def_idx < this->preset_values.size(); def_idx++) {
-                if(this->preset_values[def_idx] == this->def_value) {
+            for(; def_idx < this->presetValues.size(); def_idx++) {
+                if(this->presetValues[def_idx] == this->defValue) {
                     break;
                 }
             }
-            if(preset_descriptions.empty()) {
+            if(presetDescriptions.empty()) {
                 full_tooltip = this->tooltip;
             } else {
-                if(cur_option_idx == INVALID) {
+                if(curOptionIdx == INVALID) {
                     full_tooltip = "Using a custom value.";
                 } else {
-                    full_tooltip = preset_descriptions[cur_option_idx];
+                    full_tooltip = presetDescriptions[curOptionIdx];
                 }
             }
-            full_tooltip += " Default: " + this->preset_names[def_idx] + ".";
+            full_tooltip += " Default: " + this->presetNames[def_idx] + ".";
             return full_tooltip;
         };
     }
@@ -159,14 +159,14 @@ public:
      * @return The name.
      */
     string getCurOptionName() {
-        if(cur_option_idx == INVALID) {
-            if(value_to_string) {
-                return value_to_string(*cur_value) + " (custom)";
+        if(curOptionIdx == INVALID) {
+            if(valueToString) {
+                return valueToString(*curValue) + " (custom)";
             } else {
                 return "Custom";
             }
         } else {
-            return preset_names[cur_option_idx];
+            return presetNames[curOptionIdx];
         }
     }
     
@@ -177,21 +177,21 @@ public:
      * @param step What direction to change to. +1 is next, -1 is previous.
      */
     void changeOption(int step) {
-        if(cur_option_idx == INVALID) {
-            cur_option_idx = 0;
+        if(curOptionIdx == INVALID) {
+            curOptionIdx = 0;
         } else {
-            cur_option_idx =
+            curOptionIdx =
                 sumAndWrap(
-                    (int) cur_option_idx, step, (int) preset_values.size()
+                    (int) curOptionIdx, step, (int) presetValues.size()
                 );
         }
         
-        *cur_value = preset_values[cur_option_idx];
+        *curValue = presetValues[curOptionIdx];
         option = getCurOptionName();
         startJuiceAnimation(
             GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
         );
-        if(after_change) after_change();
+        if(afterChange) afterChange();
     }
     
 };
@@ -207,22 +207,22 @@ public:
     //--- Members ---
     
     //GUI for the top-level page.
-    GuiManager top_gui;
+    GuiManager topGui;
     
     //GUI for the controls options page.
-    GuiManager controls_gui;
+    GuiManager controlsGui;
     
     //GUI for the control binds options page.
-    GuiManager binds_gui;
+    GuiManager bindsGui;
     
     //GUI for the graphics options page.
-    GuiManager graphics_gui;
+    GuiManager graphicsGui;
     
     //GUI for the audio options page.
-    GuiManager audio_gui;
+    GuiManager audioGui;
     
     //GUI for the misc. options page.
-    GuiManager misc_gui;
+    GuiManager miscGui;
     
     
     //--- Function declarations ---
@@ -240,80 +240,80 @@ private:
     //--- Members ---
     
     //Known good resolution presets.
-    vector<std::pair<int, int> > resolution_presets;
+    vector<std::pair<int, int> > resolutionPresets;
     
     //Currently selected resolution.
-    std::pair<int, int> cur_resolution_option;
+    std::pair<int, int> curResolutionOption;
     
     //Bitmap of the menu background.
-    ALLEGRO_BITMAP* bmp_menu_bg = nullptr;
+    ALLEGRO_BITMAP* bmpMenuBg = nullptr;
     
     //Information about the current pack management menu, if any.
-    PacksMenu* packs_menu = nullptr;
+    PacksMenu* packsMenu = nullptr;
     
     //Auto-throw picker widget.
-    OptionsMenuPickerGuiItem<AUTO_THROW_MODE>* auto_throw_picker = nullptr;
+    OptionsMenuPickerGuiItem<AUTO_THROW_MODE>* autoThrowPicker = nullptr;
     
     //Resolution picker widget.
-    OptionsMenuPickerGuiItem<std::pair<int, int> >* resolution_picker = nullptr;
+    OptionsMenuPickerGuiItem<std::pair<int, int> >* resolutionPicker = nullptr;
     
     //Cursor speed picker widget.
-    OptionsMenuPickerGuiItem<float>* cursor_speed_picker = nullptr;
+    OptionsMenuPickerGuiItem<float>* cursorSpeedPicker = nullptr;
     
     //Cursor camera weight picker widget.
-    OptionsMenuPickerGuiItem<float>* cursor_cam_weight_picker = nullptr;
+    OptionsMenuPickerGuiItem<float>* cursorCamWeightPicker = nullptr;
     
     //Leaving confirmation picker widget.
     OptionsMenuPickerGuiItem<LEAVING_CONF_MODE>*
-    leaving_confirmation_picker = nullptr;
+    leavingConfirmationPicker = nullptr;
     
     //Master volume picker widget.
-    OptionsMenuPickerGuiItem<float>* master_vol_picker = nullptr;
+    OptionsMenuPickerGuiItem<float>* masterVolPicker = nullptr;
     
     //Gameplay sound effects volume picker widget.
-    OptionsMenuPickerGuiItem<float>* gameplay_sound_vol_picker = nullptr;
+    OptionsMenuPickerGuiItem<float>* gameplaySoundVolPicker = nullptr;
     
     //Music volume picker widget.
-    OptionsMenuPickerGuiItem<float>* music_vol_picker = nullptr;
+    OptionsMenuPickerGuiItem<float>* musicVolPicker = nullptr;
     
     //Ambiance sound effects volume picker widget.
-    OptionsMenuPickerGuiItem<float>* ambiance_sound_vol_picker = nullptr;
+    OptionsMenuPickerGuiItem<float>* ambianceSoundVolPicker = nullptr;
     
     //UI sound effects volume picker widget.
-    OptionsMenuPickerGuiItem<float>* ui_sound_vol_picker = nullptr;
+    OptionsMenuPickerGuiItem<float>* uiSoundVolPicker = nullptr;
     
     //Restart warning text widget.
-    TextGuiItem* warning_text = nullptr;
+    TextGuiItem* warningText = nullptr;
     
     //Type of control binds to show.
-    CONTROL_BINDS_MENU_TYPE binds_menu_type = CONTROL_BINDS_MENU_NORMAL;
+    CONTROL_BINDS_MENU_TYPE bindsMenuType = CONTROL_BINDS_MENU_NORMAL;
     
     //GUI for the "more..." options of an action type in the binds menu.
-    GuiManager binds_more_gui;
+    GuiManager bindsMoreGui;
     
     //Control binds list GUI item.
-    ListGuiItem* binds_list_box = nullptr;
+    ListGuiItem* bindsListBox = nullptr;
     
     //Is it currently capturing bind input? 0: No. 1: Capturing. 2: Finishing.
-    unsigned char capturing_input = 0;
+    unsigned char capturingInput = 0;
     
     //Time left before the input capturing times out.
-    float capturing_input_timeout = 0.0f;
+    float capturingInputTimeout = 0.0f;
     
     //Is it showing an action type's "more..." menu in the binds menu?
-    bool showing_binds_more = false;
+    bool showingBindsMore = false;
     
     //List of binds per player action type.
-    vector<vector<ControlBind> > binds_per_action_type;
+    vector<vector<ControlBind> > bindsPerActionType;
     
     //Current player action type.
-    PLAYER_ACTION_TYPE cur_action_type = PLAYER_ACTION_TYPE_NONE;
+    PLAYER_ACTION_TYPE curActionType = PLAYER_ACTION_TYPE_NONE;
     
     //Current global bind index we're working with.
-    size_t cur_bind_idx = 0;
+    size_t curBindIdx = 0;
     
     //Whether we need to populate the binds.
-    bool must_populate_binds = true;
+    bool mustPopulateBinds = true;
     
     
     //--- Function declarations ---

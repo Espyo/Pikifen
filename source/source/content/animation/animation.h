@@ -75,16 +75,16 @@ public:
     string name;
     
     //Parent bitmap, normally a spritesheet.
-    ALLEGRO_BITMAP* parent_bmp = nullptr;
+    ALLEGRO_BITMAP* parentBmp = nullptr;
     
     //Internal name of the parent bitmap it belongs to.
-    string bmp_name;
+    string bmpName;
     
     //Top-left corner of the sprite inside the parent bitmap.
-    Point bmp_pos;
+    Point bmpPos;
     
     //Size of the sprite inside the parent bitmap.
-    Point bmp_size;
+    Point bmpSize;
     
     //Offset. Move the sprite left/right/up/down to align with
     //the previous frames and such.
@@ -100,16 +100,16 @@ public:
     ALLEGRO_COLOR tint = COLOR_WHITE;
     
     //X&Y of the Pikmin's top (left/bud/flower).
-    Point top_pos;
+    Point topPos;
     
     //W&H of the Pikmin's top.
-    Point top_size = Point(5.5, 10);
+    Point topSize = Point(5.5, 10);
     
     //Angle of the Pikmin's top.
-    float top_angle = 0.0f;
+    float topAngle = 0.0f;
     
     //Does this sprite even have a visible Pikmin top?
-    bool top_visible = true;
+    bool topVisible = true;
     
     //The sprite's actual bitmap. This is a sub-bitmap of parent_bmp.
     ALLEGRO_BITMAP* bitmap = nullptr;
@@ -156,13 +156,13 @@ public:
     //--- Members ---
     
     //Name of the sprite to use in this frame.
-    string sprite_name;
+    string spriteName;
     
     //Index of the sprite. Cache for performance.
-    size_t sprite_idx = INVALID;
+    size_t spriteIdx = INVALID;
     
     //Pointer to the sprite. Cache for performance.
-    Sprite* sprite_ptr = nullptr;
+    Sprite* spritePtr = nullptr;
     
     //How long this frame lasts for, in seconds.
     float duration = 0.0f;
@@ -174,7 +174,7 @@ public:
     string sound;
     
     //Index of the sound to play, or INVALID. Cache for performance.
-    size_t sound_idx = INVALID;
+    size_t soundIdx = INVALID;
     
     //Signal to send, if any. INVALID = none.
     size_t signal = INVALID;
@@ -207,12 +207,12 @@ public:
     vector<Frame> frames;
     
     //The animation loops back to this frame index when it reaches the end.
-    size_t loop_frame = 0;
+    size_t loopFrame = 0;
     
     //If this animation represents an attack that can miss,
     //this represents the successful hit rate.
     //100 means it cannot miss and/or is a normal animation.
-    unsigned char hit_rate = 100;
+    unsigned char hitRate = 100;
     
     
     //--- Function declarations ---
@@ -253,13 +253,13 @@ public:
     vector<Sprite*> sprites;
     
     //List of known body parts.
-    vector<BodyPart*> body_parts;
+    vector<BodyPart*> bodyParts;
     
     //Conversion between pre-named animations and in-file animations.
-    vector<size_t> pre_named_conversions;
+    vector<size_t> preNamedConversions;
     
     //Maximum span of the hitboxes. Cache for performance.
-    float hitbox_span = 0.0f;
+    float hitboxSpan = 0.0f;
     
     
     //--- Function declarations ---
@@ -298,16 +298,16 @@ public:
     //--- Members ---
     
     //The animation currently running.
-    Animation* cur_anim = nullptr;
+    Animation* curAnim = nullptr;
     
     //The database this belongs to.
-    AnimationDatabase* anim_db = nullptr;
+    AnimationDatabase* animDb = nullptr;
     
     //Time passed on the current frame.
-    float cur_frame_time = 0.0f;
+    float curFrameTime = 0.0f;
     
     //Index of the current frame of animation, or INVALID for none.
-    size_t cur_frame_idx = INVALID;
+    size_t curFrameIdx = INVALID;
     
     
     //--- Function declarations ---

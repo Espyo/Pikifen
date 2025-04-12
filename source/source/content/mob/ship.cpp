@@ -47,33 +47,33 @@ const float TRACTOR_BEAM_RING_ANIM_DUR = 0.8f;
  */
 Ship::Ship(const Point &pos, ShipType* type, float angle) :
     Mob(pos, type, angle),
-    shi_type(type),
-    control_point_final_pos(
-        rotatePoint(type->control_point_offset, angle)
+    shiType(type),
+    controlPointFinalPos(
+        rotatePoint(type->controlPointOffset, angle)
     ),
-    receptacle_final_pos(
-        rotatePoint(type->receptacle_offset, angle)
+    receptacleFinalPos(
+        rotatePoint(type->receptacleOffset, angle)
     ),
-    control_point_to_receptacle_dist(
-        Distance(control_point_final_pos, receptacle_final_pos).toFloat()
+    controlPointToReceptacleDist(
+        Distance(controlPointFinalPos, receptacleFinalPos).toFloat()
     ) {
     
-    next_tractor_beam_ring_timer.on_end = [this] () {
-        next_tractor_beam_ring_timer.start();
-        tractor_beam_rings.push_back(0);
+    nextTractorBeamRingTimer.onEnd = [this] () {
+        nextTractorBeamRingTimer.start();
+        tractorBeamRings.push_back(0);
         float hue =
             fmod(
-                game.states.gameplay->area_time_passed * 360, 360
+                game.states.gameplay->areaTimePassed * 360, 360
             );
             
-        tractor_beam_ring_colors.push_back(hue);
+        tractorBeamRingColors.push_back(hue);
     };
-    next_tractor_beam_ring_timer.start();
+    nextTractorBeamRingTimer.start();
     
-    nest = new PikminNest(this, shi_type->nest);
+    nest = new PikminNest(this, shiType->nest);
     
-    control_point_final_pos += pos;
-    receptacle_final_pos += pos;
+    controlPointFinalPos += pos;
+    receptacleFinalPos += pos;
 }
 
 
@@ -99,7 +99,7 @@ void Ship::drawMob() {
         
         float ring_anim_ratio =
             fmod(
-                game.states.gameplay->area_time_passed +
+                game.states.gameplay->areaTimePassed +
                 SHIP::CONTROL_POINT_ANIM_DUR * ring_idx_ratio,
                 SHIP::CONTROL_POINT_ANIM_DUR
             );
@@ -132,11 +132,11 @@ void Ship::drawMob() {
                 1.0f, 0.3f
             );
         float ring_diameter =
-            shi_type->control_point_radius * 2.0f * ring_scale;
+            shiType->controlPointRadius * 2.0f * ring_scale;
             
         drawBitmap(
-            game.sys_content.bmp_bright_ring,
-            control_point_final_pos, Point(ring_diameter),
+            game.sysContent.bmpBrightRing,
+            controlPointFinalPos, Point(ring_diameter),
             0.0f,
             changeAlpha(ring_color, ring_alpha)
         );
@@ -144,10 +144,10 @@ void Ship::drawMob() {
     
     //Drawing the tractor beam rings.
     //Go in reverse to ensure the most recent rings are drawn underneath.
-    for(char r = (char) tractor_beam_rings.size() - 1; r > 0; r--) {
+    for(char r = (char) tractorBeamRings.size() - 1; r > 0; r--) {
     
         float ring_anim_ratio =
-            tractor_beam_rings[r] / SHIP::TRACTOR_BEAM_RING_ANIM_DUR;
+            tractorBeamRings[r] / SHIP::TRACTOR_BEAM_RING_ANIM_DUR;
             
         unsigned char ring_alpha = 80;
         if(ring_anim_ratio <= 0.3f) {
@@ -176,25 +176,25 @@ void Ship::drawMob() {
             );
             
         ALLEGRO_COLOR ring_color =
-            al_color_hsl(tractor_beam_ring_colors[r], 1.0f, ring_brightness);
+            al_color_hsl(tractorBeamRingColors[r], 1.0f, ring_brightness);
         ring_color = changeAlpha(ring_color, ring_alpha);
         
         float ring_scale =
             interpolateNumber(
                 ring_anim_ratio,
                 0.0f, 1.0f,
-                shi_type->control_point_radius * 2.5f, 1.0f
+                shiType->controlPointRadius * 2.5f, 1.0f
             );
             
-        float distance = control_point_to_receptacle_dist * ring_anim_ratio;
-        float angle = getAngle(control_point_final_pos, receptacle_final_pos);
+        float distance = controlPointToReceptacleDist * ring_anim_ratio;
+        float angle = getAngle(controlPointFinalPos, receptacleFinalPos);
         Point ring_pos(
-            control_point_final_pos.x + cos(angle) * distance,
-            control_point_final_pos.y + sin(angle) * distance
+            controlPointFinalPos.x + cos(angle) * distance,
+            controlPointFinalPos.y + sin(angle) * distance
         );
         
         drawBitmap(
-            game.sys_content.bmp_bright_ring,
+            game.sysContent.bmpBrightRing,
             ring_pos,
             Point(ring_scale),
             0.0f,
@@ -216,9 +216,9 @@ void Ship::healLeader(Leader* l) const {
     
     ParticleGenerator pg =
         standardParticleGenSetup(
-            game.sys_content_names.part_leader_heal, l
+            game.sysContentNames.parLeaderHeal, l
         );
-    l->particle_generators.push_back(pg);
+    l->particleGenerators.push_back(pg);
 }
 
 
@@ -231,8 +231,8 @@ void Ship::healLeader(Leader* l) const {
  */
 bool Ship::isLeaderOnCp(const Leader* l) const {
     return
-        Distance(l->pos, control_point_final_pos) <=
-        shi_type->control_point_radius;
+        Distance(l->pos, controlPointFinalPos) <=
+        shiType->controlPointRadius;
 }
 
 
@@ -256,19 +256,19 @@ void Ship::readScriptVars(const ScriptVarReader &svr) {
 void Ship::tickClassSpecifics(float delta_t) {
     nest->tick(delta_t);
     
-    if(mobs_being_beamed > 0) {
-        next_tractor_beam_ring_timer.tick(delta_t);
+    if(mobsBeingBeamed > 0) {
+        nextTractorBeamRingTimer.tick(delta_t);
     }
     
-    for(size_t r = 0; r < tractor_beam_rings.size(); ) {
+    for(size_t r = 0; r < tractorBeamRings.size(); ) {
         //Erase rings that have reached the end of their animation.
-        tractor_beam_rings[r] += delta_t;
-        if(tractor_beam_rings[r] > SHIP::TRACTOR_BEAM_RING_ANIM_DUR) {
-            tractor_beam_rings.erase(
-                tractor_beam_rings.begin() + r
+        tractorBeamRings[r] += delta_t;
+        if(tractorBeamRings[r] > SHIP::TRACTOR_BEAM_RING_ANIM_DUR) {
+            tractorBeamRings.erase(
+                tractorBeamRings.begin() + r
             );
-            tractor_beam_ring_colors.erase(
-                tractor_beam_ring_colors.begin() + r
+            tractorBeamRingColors.erase(
+                tractorBeamRingColors.begin() + r
             );
         } else {
             r++;

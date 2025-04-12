@@ -23,7 +23,7 @@
 PelletType::PelletType() :
     MobType(MOB_CATEGORY_PELLETS) {
     
-    target_type = MOB_TARGET_FLAG_NONE;
+    targetType = MOB_TARGET_FLAG_NONE;
     
     pellet_fsm::createFsm(this);
 }
@@ -52,21 +52,21 @@ void PelletType::loadCatProperties(DataNode* file) {
     string pik_type_str;
     DataNode* pik_type_node = nullptr;
     
-    rs.set("match_seeds", match_seeds);
-    rs.set("non_match_seeds", non_match_seeds);
+    rs.set("match_seeds", matchSeeds);
+    rs.set("non_match_seeds", nonMatchSeeds);
     rs.set("number", number);
     rs.set("pikmin_type", pik_type_str, &pik_type_node);
     
     if(
-        game.content.mob_types.list.pikmin.find(pik_type_str) ==
-        game.content.mob_types.list.pikmin.end()
+        game.content.mobTypes.list.pikmin.find(pik_type_str) ==
+        game.content.mobTypes.list.pikmin.end()
     ) {
         game.errors.report(
             "Unknown Pikmin type \"" + pik_type_str + "\"!",
             pik_type_node
         );
     } else {
-        pik_type = game.content.mob_types.list.pikmin[pik_type_str];
+        pikType = game.content.mobTypes.list.pikmin[pik_type_str];
     }
     
     weight = number;
@@ -86,7 +86,7 @@ void PelletType::loadCatResources(DataNode* file) {
     
     rs.set("number_image", number_image_str, &number_image_node);
     
-    bmp_number = game.content.bitmaps.list.get(number_image_str, number_image_node);
+    bmpNumber = game.content.bitmaps.list.get(number_image_str, number_image_node);
 }
 
 
@@ -94,5 +94,5 @@ void PelletType::loadCatResources(DataNode* file) {
  * @brief Unloads resources from memory.
  */
 void PelletType::unloadResources() {
-    game.content.bitmaps.list.free(bmp_number);
+    game.content.bitmaps.list.free(bmpNumber);
 }

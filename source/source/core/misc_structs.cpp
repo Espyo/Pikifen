@@ -142,103 +142,103 @@ const string NAMES[N_MAKER_TOOLS] = {
 void SystemContentNames::load(DataNode* file) {
     ReaderSetter gra_rs(file->getChildByName("graphics"));
     
-    gra_rs.set("bright_circle", bmp_bright_circle);
-    gra_rs.set("bright_ring", bmp_bright_ring);
-    gra_rs.set("bubble_box", bmp_bubble_box);
-    gra_rs.set("button_box", bmp_button_box);
-    gra_rs.set("checkbox_check", bmp_checkbox_check);
-    gra_rs.set("checkbox_no_check", bmp_checkbox_no_check);
-    gra_rs.set("cursor", bmp_cursor);
-    gra_rs.set("discord_icon", bmp_discord_icon);
-    gra_rs.set("editor_icons", bmp_editor_icons);
-    gra_rs.set("enemy_spirit", bmp_enemy_spirit);
-    gra_rs.set("focus_box", bmp_focus_box);
-    gra_rs.set("frame_box", bmp_frame_box);
-    gra_rs.set("github_icon", bmp_github_icon);
-    gra_rs.set("hard_bubble", bmp_hard_bubble);
-    gra_rs.set("icon", bmp_icon);
-    gra_rs.set("idle_glow", bmp_idle_glow);
-    gra_rs.set("key_box", bmp_key_box);
-    gra_rs.set("leader_silhouette_side", bmp_leader_silhouette_side);
-    gra_rs.set("leader_silhouette_top", bmp_leader_silhouette_top);
-    gra_rs.set("medal_bronze", bmp_medal_bronze);
-    gra_rs.set("medal_gold", bmp_medal_gold);
-    gra_rs.set("medal_none", bmp_medal_none);
-    gra_rs.set("medal_platinum", bmp_medal_platinum);
-    gra_rs.set("medal_silver", bmp_medal_silver);
-    gra_rs.set("menu_icons", bmp_menu_icons);
-    gra_rs.set("mission_clear", bmp_mission_clear);
-    gra_rs.set("mission_fail", bmp_mission_fail);
-    gra_rs.set("more", bmp_more);
-    gra_rs.set("mouse_cursor", bmp_mouse_cursor);
-    gra_rs.set("notification", bmp_notification);
-    gra_rs.set("pikmin_spirit", bmp_pikmin_spirit);
-    gra_rs.set("player_input_icons", bmp_player_input_icons);
-    gra_rs.set("random", bmp_random);
-    gra_rs.set("rock", bmp_rock);
-    gra_rs.set("shadow", bmp_shadow);
-    gra_rs.set("shadow_square", bmp_shadow_square);
-    gra_rs.set("smack", bmp_smack);
-    gra_rs.set("smoke", bmp_smoke);
-    gra_rs.set("sparkle", bmp_sparkle);
-    gra_rs.set("spotlight", bmp_spotlight);
-    gra_rs.set("swarm_arrow", bmp_swarm_arrow);
-    gra_rs.set("throw_invalid", bmp_throw_invalid);
-    gra_rs.set("throw_preview", bmp_throw_preview);
-    gra_rs.set("throw_preview_dashed", bmp_throw_preview_dashed);
-    gra_rs.set("title_screen_bg", bmp_title_screen_bg);
-    gra_rs.set("wave_ring", bmp_wave_ring);
+    gra_rs.set("bright_circle", bmpBrightCircle);
+    gra_rs.set("bright_ring", bmpBrightRing);
+    gra_rs.set("bubble_box", bmpBubbleBox);
+    gra_rs.set("button_box", bmpButtonBox);
+    gra_rs.set("checkbox_check", bmpCheckboxCheck);
+    gra_rs.set("checkbox_no_check", bmpCheckboxNoCheck);
+    gra_rs.set("cursor", bmpCursor);
+    gra_rs.set("discord_icon", bmpDiscordIcon);
+    gra_rs.set("editor_icons", bmpEditorIcons);
+    gra_rs.set("enemy_spirit", bmpEnemySpirit);
+    gra_rs.set("focus_box", bmpFocusBox);
+    gra_rs.set("frame_box", bmpFrameBox);
+    gra_rs.set("github_icon", bmpGithubIcon);
+    gra_rs.set("hard_bubble", bmpHardBubble);
+    gra_rs.set("icon", bmpIcon);
+    gra_rs.set("idle_glow", bmpIdleGlow);
+    gra_rs.set("key_box", bmpKeyBox);
+    gra_rs.set("leader_silhouette_side", bmpLeaderSilhouetteSide);
+    gra_rs.set("leader_silhouette_top", bmpLeaderSilhouetteTop);
+    gra_rs.set("medal_bronze", bmpMedalBronze);
+    gra_rs.set("medal_gold", bmpMedalGold);
+    gra_rs.set("medal_none", bmpMedalNone);
+    gra_rs.set("medal_platinum", bmpMedalPlatinum);
+    gra_rs.set("medal_silver", bmpMedalSilver);
+    gra_rs.set("menu_icons", bmpMenuIcons);
+    gra_rs.set("mission_clear", bmpMissionClear);
+    gra_rs.set("mission_fail", bmpMissionFail);
+    gra_rs.set("more", bmpMore);
+    gra_rs.set("mouse_cursor", bmpMouseCursor);
+    gra_rs.set("notification", bmpNotification);
+    gra_rs.set("pikmin_spirit", bmpPikminSpirit);
+    gra_rs.set("player_input_icons", bmpPlayerInputIcons);
+    gra_rs.set("random", bmpRandom);
+    gra_rs.set("rock", bmpRock);
+    gra_rs.set("shadow", bmpShadow);
+    gra_rs.set("shadow_square", bmpShadowSquare);
+    gra_rs.set("smack", bmpSmack);
+    gra_rs.set("smoke", bmpSmoke);
+    gra_rs.set("sparkle", bmpSparkle);
+    gra_rs.set("spotlight", bmpSpotlight);
+    gra_rs.set("swarm_arrow", bmpSwarmArrow);
+    gra_rs.set("throw_invalid", bmpThrowInvalid);
+    gra_rs.set("throw_preview", bmpThrowPreview);
+    gra_rs.set("throw_preview_dashed", bmpThrowPreviewDashed);
+    gra_rs.set("title_screen_bg", bmpTitleScreenBg);
+    gra_rs.set("wave_ring", bmpWaveRing);
     
     ReaderSetter fnt_rs(file->getChildByName("fonts"));
     
-    fnt_rs.set("area_name", fnt_area_name);
-    fnt_rs.set("counter", fnt_counter);
-    fnt_rs.set("cursor_counter", fnt_cursor_counter);
-    fnt_rs.set("editor_header", fnt_editor_header);
-    fnt_rs.set("editor_monospace", fnt_editor_monospace);
-    fnt_rs.set("editor_standard", fnt_editor_standard);
-    fnt_rs.set("slim", fnt_slim);
-    fnt_rs.set("standard", fnt_standard);
-    fnt_rs.set("value", fnt_value);
+    fnt_rs.set("area_name", fntAreaName);
+    fnt_rs.set("counter", fntCounter);
+    fnt_rs.set("cursor_counter", fntCursorCounter);
+    fnt_rs.set("editor_header", fntEditorHeader);
+    fnt_rs.set("editor_monospace", fntEditorMonospace);
+    fnt_rs.set("editor_standard", fntEditorStandard);
+    fnt_rs.set("slim", fntSlim);
+    fnt_rs.set("standard", fntStandard);
+    fnt_rs.set("value", fntValue);
     
     ReaderSetter snd_rs(file->getChildByName("sounds"));
     
-    snd_rs.set("attack", sound_attack);
-    snd_rs.set("camera", sound_camera);
-    snd_rs.set("menu_activate", sound_menu_activate);
-    snd_rs.set("menu_back", sound_menu_back);
-    snd_rs.set("menu_select", sound_menu_select);
-    snd_rs.set("switch_pikmin", sound_switch_pikmin);
+    snd_rs.set("attack", sndAttack);
+    snd_rs.set("camera", sndCamera);
+    snd_rs.set("menu_activate", sndMenuActivate);
+    snd_rs.set("menu_back", sndMenuBack);
+    snd_rs.set("menu_select", sndMenuSelect);
+    snd_rs.set("switch_pikmin", sndSwitchPikmin);
     
     ReaderSetter sng_rs(file->getChildByName("songs"));
     
-    sng_rs.set("boss", sng_boss);
-    sng_rs.set("boss_victory", sng_boss_victory);
-    sng_rs.set("editors", sng_editors);
-    sng_rs.set("menus", sng_menus);
+    sng_rs.set("boss", sngBoss);
+    sng_rs.set("boss_victory", sngBossVictory);
+    sng_rs.set("editors", sngEditors);
+    sng_rs.set("menus", sngMenus);
     
     ReaderSetter ani_rs(file->getChildByName("animations"));
     
-    ani_rs.set("sparks", anim_sparks);
+    ani_rs.set("sparks", anmSparks);
     
     ReaderSetter par_rs(file->getChildByName("particle_generators"));
     
-    par_rs.set("converter_insertion", part_converter_insertion);
-    par_rs.set("ding", part_ding);
-    par_rs.set("enemy_death", part_enemy_death);
-    par_rs.set("leader_heal", part_leader_heal);
-    par_rs.set("leader_land", part_leader_land);
-    par_rs.set("onion_generating_inside", part_onion_gen_inside);
-    par_rs.set("onion_insertion", part_onion_insertion);
-    par_rs.set("pikmin_pluck_dirt", part_pikmin_pluck_dirt);
-    par_rs.set("pikmin_seed_landed", part_pikmin_seed_landed);
-    par_rs.set("smack", part_smack);
-    par_rs.set("spray", part_spray);
-    par_rs.set("sprout_evolution", part_sprout_evolution);
-    par_rs.set("sprout_regression", part_sprout_regression);
-    par_rs.set("throw_trail", part_throw_trail);
-    par_rs.set("treasure", part_treasure);
-    par_rs.set("wave_ring", part_wave_ring);
+    par_rs.set("converter_insertion", parConverterInsertion);
+    par_rs.set("ding", parDing);
+    par_rs.set("enemy_death", parEnemyDeath);
+    par_rs.set("leader_heal", parLeaderHeal);
+    par_rs.set("leader_land", parLeaderLand);
+    par_rs.set("onion_generating_inside", parOnionGenInside);
+    par_rs.set("onion_insertion", parOnionInsertion);
+    par_rs.set("pikmin_pluck_dirt", parPikminPluckDirt);
+    par_rs.set("pikmin_seed_landed", parPikminSeedLanded);
+    par_rs.set("smack", parSmack);
+    par_rs.set("spray", parSpray);
+    par_rs.set("sprout_evolution", parSproutEvolution);
+    par_rs.set("sprout_regression", parSproutRegression);
+    par_rs.set("throw_trail", parThrowTrail);
+    par_rs.set("treasure", parTreasure);
+    par_rs.set("wave_ring", parWaveRing);
 }
 
 
@@ -253,9 +253,9 @@ void SystemContentNames::load(DataNode* file) {
 ALLEGRO_AUDIO_STREAM* AudioStreamManager::doLoad(
     const string &name, DataNode* node, bool report_errors
 ) {
-    const auto &it = game.content.song_tracks.manifests.find(name);
+    const auto &it = game.content.songTracks.manifests.find(name);
     string path =
-        it != game.content.song_tracks.manifests.end() ?
+        it != game.content.songTracks.manifests.end() ?
         it->second.path :
         name;
     ALLEGRO_AUDIO_STREAM* stream = loadAudioStream(path, node, report_errors);
@@ -304,7 +304,7 @@ ALLEGRO_BITMAP* BitmapManager::doLoad(
  * @param asset Bitmap to unload.
  */
 void BitmapManager::doUnload(ALLEGRO_BITMAP* asset) {
-    if(asset != game.bmp_error) {
+    if(asset != game.bmpError) {
         al_destroy_bitmap(asset);
     }
 }
@@ -317,7 +317,7 @@ void BitmapManager::doUnload(ALLEGRO_BITMAP* asset) {
  */
 void Camera::setPos(const Point &new_pos) {
     pos = new_pos;
-    target_pos = new_pos;
+    targetPos = new_pos;
 }
 
 
@@ -328,7 +328,7 @@ void Camera::setPos(const Point &new_pos) {
  */
 void Camera::set_zoom(float new_zoom) {
     zoom = new_zoom;
-    target_zoom = new_zoom;
+    targetZoom = new_zoom;
 }
 
 
@@ -339,27 +339,27 @@ void Camera::set_zoom(float new_zoom) {
  */
 void Camera::tick(float delta_t) {
     pos.x +=
-        (target_pos.x - pos.x) * (GAMEPLAY::CAMERA_SMOOTHNESS_MULT * delta_t);
+        (targetPos.x - pos.x) * (GAMEPLAY::CAMERA_SMOOTHNESS_MULT * delta_t);
     pos.y +=
-        (target_pos.y - pos.y) * (GAMEPLAY::CAMERA_SMOOTHNESS_MULT * delta_t);
+        (targetPos.y - pos.y) * (GAMEPLAY::CAMERA_SMOOTHNESS_MULT * delta_t);
     zoom +=
-        (target_zoom - zoom) * (GAMEPLAY::CAMERA_SMOOTHNESS_MULT * delta_t);
+        (targetZoom - zoom) * (GAMEPLAY::CAMERA_SMOOTHNESS_MULT * delta_t);
 }
 
 
 /**
  * @brief Updates the camera's visibility box,
- * based on the screen_to_world_transform transformation.
+ * based on the screenToWorldTransform transformation.
  */
 void Camera::updateBox() {
     box[0] = Point(0.0f);
-    box[1] = Point(game.win_w, game.win_h);
+    box[1] = Point(game.winW, game.winH);
     al_transform_coordinates(
-        &game.screen_to_world_transform,
+        &game.screenToWorldTransform,
         &box[0].x, &box[0].y
     );
     al_transform_coordinates(
-        &game.screen_to_world_transform,
+        &game.screenToWorldTransform,
         &box[1].x, &box[1].y
     );
     
@@ -419,7 +419,7 @@ void ErrorManager::logToFile(const string &s) {
     }
     
     //Write this session's header, if necessary.
-    if(nr_session_errors == 0) {
+    if(nrSessionErrors == 0) {
         string header;
         if(!prev_error_log.empty()) {
             header += "\n\n";
@@ -454,8 +454,8 @@ void ErrorManager::logToFile(const string &s) {
  * @brief Prepares everything for an area load.
  */
 void ErrorManager::prepareAreaLoad() {
-    nr_errors_on_area_load = nr_session_errors;
-    first_area_load_error.clear();
+    nrErrorsOnAreaLoad = nrSessionErrors;
+    firstAreaLoadError.clear();
 }
 
 
@@ -474,13 +474,13 @@ void ErrorManager::report(const string &s, const DataNode* d) {
         full_error += ")";
     }
     
-    if(first_area_load_error.empty()) first_area_load_error = full_error;
+    if(firstAreaLoadError.empty()) firstAreaLoadError = full_error;
     
     logToConsole(full_error);
     logToFile(full_error);
     emitInGameplay(full_error);
     
-    nr_session_errors++;
+    nrSessionErrors++;
 }
 
 
@@ -491,14 +491,14 @@ void ErrorManager::report(const string &s, const DataNode* d) {
  * the latest error, but that's okay since this information is more important.
  */
 void ErrorManager::reportAreaLoadErrors() {
-    if(nr_session_errors <= nr_errors_on_area_load) return;
+    if(nrSessionErrors <= nrErrorsOnAreaLoad) return;
     
     size_t nr_errors_found =
-        nr_session_errors - nr_errors_on_area_load;
+        nrSessionErrors - nrErrorsOnAreaLoad;
         
     string info_str =
         "\n\n\n"
-        "ERROR: " + first_area_load_error + "\n\n";
+        "ERROR: " + firstAreaLoadError + "\n\n";
     if(nr_errors_found > 1) {
         info_str += "(+" + i2s(nr_errors_found - 1) + " more) ";
     }
@@ -515,7 +515,7 @@ void ErrorManager::reportAreaLoadErrors() {
  * @return Whether it had errors.
  */
 bool ErrorManager::sessionHasErrors() {
-    return nr_session_errors > 0;
+    return nrSessionErrors > 0;
 }
 
 
@@ -524,11 +524,11 @@ bool ErrorManager::sessionHasErrors() {
  */
 void FadeManager::draw() {
     if(isFading()) {
-        unsigned char alpha = (game.fade_mgr.getPercLeft()) * 255;
+        unsigned char alpha = (game.fadeMgr.getPercLeft()) * 255;
         al_draw_filled_rectangle(
-            0, 0, game.win_w, game.win_h,
+            0, 0, game.winW, game.winH,
             al_map_rgba(
-                0, 0, 0, (game.fade_mgr.isFadeIn() ? alpha : 255 - alpha)
+                0, 0, 0, (game.fadeMgr.isFadeIn() ? alpha : 255 - alpha)
             )
         );
     }
@@ -541,7 +541,7 @@ void FadeManager::draw() {
  * @return The percentage.
  */
 float FadeManager::getPercLeft() const {
-    return time_left / GAME::FADE_DURATION;
+    return timeLeft / GAME::FADE_DURATION;
 }
 
 
@@ -551,7 +551,7 @@ float FadeManager::getPercLeft() const {
  * @return Whether it is a fade in.
  */
 bool FadeManager::isFadeIn() const {
-    return fade_in;
+    return fadeIn;
 }
 
 
@@ -561,7 +561,7 @@ bool FadeManager::isFadeIn() const {
  * @return Whether it is in progress.
  */
 bool FadeManager::isFading() const {
-    return time_left > 0;
+    return timeLeft > 0;
 }
 
 
@@ -574,9 +574,9 @@ bool FadeManager::isFading() const {
 void FadeManager::startFade(
     bool is_fade_in, const std::function<void()> &on_end
 ) {
-    time_left = GAME::FADE_DURATION;
-    fade_in = is_fade_in;
-    this->on_end = on_end;
+    timeLeft = GAME::FADE_DURATION;
+    fadeIn = is_fade_in;
+    this->onEnd = on_end;
 }
 
 
@@ -586,11 +586,11 @@ void FadeManager::startFade(
  * @param delta_t How long the frame's tick is, in seconds.
  */
 void FadeManager::tick(float delta_t) {
-    if(time_left == 0) return;
-    time_left -= delta_t;
-    if(time_left <= 0) {
-        time_left = 0;
-        if(on_end) on_end();
+    if(timeLeft == 0) return;
+    timeLeft -= delta_t;
+    if(timeLeft <= 0) {
+        timeLeft = 0;
+        if(onEnd) onEnd();
     }
 }
 
@@ -787,14 +787,14 @@ void MouseCursor::init() {
     hide();
     reset();
     
-    save_timer.on_end = [this] () {
-        save_timer.start();
-        history.push_back(s_pos);
+    saveTimer.onEnd = [this] () {
+        saveTimer.start();
+        history.push_back(sPos);
         if(history.size() > GAME::CURSOR_TRAIL_SAVE_N_SPOTS) {
             history.erase(history.begin());
         }
     };
-    save_timer.start(GAME::CURSOR_TRAIL_SAVE_INTERVAL);
+    saveTimer.start(GAME::CURSOR_TRAIL_SAVE_INTERVAL);
 }
 
 
@@ -804,12 +804,12 @@ void MouseCursor::init() {
 void MouseCursor::reset() {
     ALLEGRO_MOUSE_STATE mouse_state;
     al_get_mouse_state(&mouse_state);
-    game.mouse_cursor.s_pos.x = al_get_mouse_state_axis(&mouse_state, 0);
-    game.mouse_cursor.s_pos.y = al_get_mouse_state_axis(&mouse_state, 1);
-    game.mouse_cursor.w_pos = game.mouse_cursor.s_pos;
+    game.mouseCursor.sPos.x = al_get_mouse_state_axis(&mouse_state, 0);
+    game.mouseCursor.sPos.y = al_get_mouse_state_axis(&mouse_state, 1);
+    game.mouseCursor.wPos = game.mouseCursor.sPos;
     al_transform_coordinates(
-        &game.screen_to_world_transform,
-        &game.mouse_cursor.w_pos.x, &game.mouse_cursor.w_pos.y
+        &game.screenToWorldTransform,
+        &game.mouseCursor.wPos.x, &game.mouseCursor.wPos.y
     );
     history.clear();
 }
@@ -827,19 +827,19 @@ void MouseCursor::show() const {
  * @brief Updates the coordinates from an Allegro mouse event.
  *
  * @param ev Event to handle.
- * @param screen_to_world_transform Transformation to use to get the
+ * @param screenToWorldTransform Transformation to use to get the
  * screen coordinates.
  */
 void MouseCursor::updatePos(
     const ALLEGRO_EVENT &ev,
     ALLEGRO_TRANSFORM &screen_to_world_transform
 ) {
-    s_pos.x = ev.mouse.x;
-    s_pos.y = ev.mouse.y;
-    w_pos = s_pos;
+    sPos.x = ev.mouse.x;
+    sPos.y = ev.mouse.y;
+    wPos = sPos;
     al_transform_coordinates(
         &screen_to_world_transform,
-        &w_pos.x, &w_pos.y
+        &wPos.x, &wPos.y
     );
 }
 
@@ -869,8 +869,8 @@ void Notification::draw() const {
     al_compose_transform(&tra, &old_tra);
     al_use_transform(&tra);
     
-    int bmp_w = al_get_bitmap_width(game.sys_content.bmp_notification);
-    int bmp_h = al_get_bitmap_height(game.sys_content.bmp_notification);
+    int bmp_w = al_get_bitmap_width(game.sysContent.bmpNotification);
+    int bmp_h = al_get_bitmap_height(game.sysContent.bmpNotification);
     
     float text_box_x1 = -bmp_w * 0.5 + DRAWING::NOTIFICATION_PADDING;
     float text_box_x2 = bmp_w * 0.5 - DRAWING::NOTIFICATION_PADDING;
@@ -878,18 +878,18 @@ void Notification::draw() const {
     float text_box_y2 = DRAWING::NOTIFICATION_PADDING;
     
     drawBitmap(
-        game.sys_content.bmp_notification,
+        game.sysContent.bmpNotification,
         Point(0, -bmp_h * 0.5),
         Point(bmp_w, bmp_h),
         0,
         mapAlpha(DRAWING::NOTIFICATION_ALPHA * visibility)
     );
     
-    if(input_source.type != INPUT_SOURCE_TYPE_NONE) {
+    if(inputSource.type != INPUT_SOURCE_TYPE_NONE) {
         text_box_x1 +=
             DRAWING::NOTIFICATION_CONTROL_SIZE + DRAWING::NOTIFICATION_PADDING;
         drawPlayerInputSourceIcon(
-            game.sys_content.fnt_slim, input_source,
+            game.sysContent.fntSlim, inputSource,
             true,
             Point(
                 -bmp_w * 0.5 + DRAWING::NOTIFICATION_PADDING +
@@ -905,7 +905,7 @@ void Notification::draw() const {
     }
     
     drawText(
-        text, game.sys_content.fnt_standard,
+        text, game.sysContent.fntStandard,
         Point(
             (text_box_x1 + text_box_x2) * 0.5,
             (text_box_y1 + text_box_y2) * 0.5
@@ -938,7 +938,7 @@ float Notification::getVisibility() const {
  */
 void Notification::reset() {
     enabled = true;
-    input_source.type = INPUT_SOURCE_TYPE_NONE;
+    inputSource.type = INPUT_SOURCE_TYPE_NONE;
     text.clear();
     pos = Point();
     visibility = 0.0f;
@@ -955,7 +955,7 @@ void Notification::reset() {
 void Notification::setContents(
     const PlayerInputSource &input_source, const string &text, const Point &pos
 ) {
-    this->input_source = input_source;
+    this->inputSource = input_source;
     this->text = text;
     this->pos = pos;
 }
@@ -990,11 +990,11 @@ void Notification::tick(float delta_t) {
  * @brief Constructs a new performance monitor struct object.
  */
 PerformanceMonitor::PerformanceMonitor() :
-    cur_state(PERF_MON_STATE_LOADING),
+    curState(PERF_MON_STATE_LOADING),
     paused(false),
-    cur_state_start_time(0.0),
-    cur_measurement_start_time(0.0),
-    frame_samples(0) {
+    curStateStartTime(0.0),
+    curMeasurementStartTime(0.0),
+    frameSamples(0) {
     
     reset();
 }
@@ -1008,12 +1008,12 @@ PerformanceMonitor::PerformanceMonitor() :
 void PerformanceMonitor::enterState(const PERF_MON_STATE state) {
     if(paused) return;
     
-    cur_state = state;
-    cur_state_start_time = al_get_time();
-    cur_page = Page();
+    curState = state;
+    curStateStartTime = al_get_time();
+    curPage = Page();
     
-    if(cur_state == PERF_MON_STATE_FRAME) {
-        frame_samples++;
+    if(curState == PERF_MON_STATE_FRAME) {
+        frameSamples++;
     }
 }
 
@@ -1026,29 +1026,29 @@ void PerformanceMonitor::finishMeasurement() {
     
     //Check if we were measuring something.
     engineAssert(
-        cur_measurement_start_time != 0.0,
-        cur_page.measurements.empty() ?
+        curMeasurementStartTime != 0.0,
+        curPage.measurements.empty() ?
         "(No measurements)" :
-        "Last measurement: " + cur_page.measurements.back().first
+        "Last measurement: " + curPage.measurements.back().first
     );
     
-    double dur = al_get_time() - cur_measurement_start_time;
+    double dur = al_get_time() - curMeasurementStartTime;
     bool is_new = true;
     
-    for(size_t m = 0; m < cur_page.measurements.size(); m++) {
-        if(cur_page.measurements[m].first == cur_measurement_name) {
-            cur_page.measurements[m].second += dur;
+    for(size_t m = 0; m < curPage.measurements.size(); m++) {
+        if(curPage.measurements[m].first == curMeasurementName) {
+            curPage.measurements[m].second += dur;
             is_new = false;
             break;
         }
     }
     if(is_new) {
-        cur_page.measurements.push_back(
-            std::make_pair(cur_measurement_name, dur)
+        curPage.measurements.push_back(
+            std::make_pair(curMeasurementName, dur)
         );
     }
     
-    cur_measurement_start_time = 0.0;
+    curMeasurementStartTime = 0.0;
 }
 
 
@@ -1058,51 +1058,51 @@ void PerformanceMonitor::finishMeasurement() {
 void PerformanceMonitor::leaveState() {
     if(paused) return;
     
-    cur_page.duration = al_get_time() - cur_state_start_time;
+    curPage.duration = al_get_time() - curStateStartTime;
     
-    switch(cur_state) {
+    switch(curState) {
     case PERF_MON_STATE_LOADING: {
-        loading_page = cur_page;
+        loadingPage = curPage;
         break;
     }
     case PERF_MON_STATE_FRAME: {
         if(
-            frame_fastest_page.duration == 0.0 ||
-            cur_page.duration < frame_fastest_page.duration
+            frameFastestPage.duration == 0.0 ||
+            curPage.duration < frameFastestPage.duration
         ) {
-            frame_fastest_page = cur_page;
+            frameFastestPage = curPage;
             
         } else if(
-            frame_slowest_page.duration == 0.0 ||
-            cur_page.duration > frame_slowest_page.duration
+            frameSlowestPage.duration == 0.0 ||
+            curPage.duration > frameSlowestPage.duration
         ) {
-            frame_slowest_page = cur_page;
+            frameSlowestPage = curPage;
             
         }
         
-        if(frame_avg_page.duration == 0.0) {
-            frame_avg_page = cur_page;
+        if(frameAvgPage.duration == 0.0) {
+            frameAvgPage = curPage;
         } else {
-            frame_avg_page.duration += cur_page.duration;
-            for(size_t m = 0; m < cur_page.measurements.size(); m++) {
+            frameAvgPage.duration += curPage.duration;
+            for(size_t m = 0; m < curPage.measurements.size(); m++) {
                 bool is_new = true;
                 for(
                     size_t m2 = 0;
-                    m2 < frame_avg_page.measurements.size(); m2++
+                    m2 < frameAvgPage.measurements.size(); m2++
                 ) {
                     if(
-                        cur_page.measurements[m].first ==
-                        frame_avg_page.measurements[m2].first
+                        curPage.measurements[m].first ==
+                        frameAvgPage.measurements[m2].first
                     ) {
-                        frame_avg_page.measurements[m2].second +=
-                            cur_page.measurements[m].second;
+                        frameAvgPage.measurements[m2].second +=
+                            curPage.measurements[m].second;
                         is_new = false;
                         break;
                     }
                 }
                 if(is_new) {
-                    frame_avg_page.measurements.push_back(
-                        cur_page.measurements[m]
+                    frameAvgPage.measurements.push_back(
+                        curPage.measurements[m]
                     );
                 }
             }
@@ -1118,18 +1118,18 @@ void PerformanceMonitor::leaveState() {
  * @brief Resets all of the performance monitor's information.
  */
 void PerformanceMonitor::reset() {
-    area_name.clear();
-    cur_state = PERF_MON_STATE_LOADING;
+    areaName.clear();
+    curState = PERF_MON_STATE_LOADING;
     paused = false;
-    cur_state_start_time = 0.0;
-    cur_measurement_start_time = 0.0;
-    cur_measurement_name.clear();
-    cur_page = Page();
-    frame_samples = 0;
-    loading_page = Page();
-    frame_avg_page = Page();
-    frame_fastest_page = Page();
-    frame_slowest_page = Page();
+    curStateStartTime = 0.0;
+    curMeasurementStartTime = 0.0;
+    curMeasurementName.clear();
+    curPage = Page();
+    frameSamples = 0;
+    loadingPage = Page();
+    frameAvgPage = Page();
+    frameFastestPage = Page();
+    frameSlowestPage = Page();
 }
 
 
@@ -1137,15 +1137,15 @@ void PerformanceMonitor::reset() {
  * @brief Saves a log file with all known stats, if there is anything to save.
  */
 void PerformanceMonitor::saveLog() {
-    if(loading_page.measurements.empty()) {
+    if(loadingPage.measurements.empty()) {
         //Nothing to save.
         return;
     }
     
     //Average out the frames of gameplay.
-    frame_avg_page.duration /= (double) frame_samples;
-    for(size_t m = 0; m < frame_avg_page.measurements.size(); m++) {
-        frame_avg_page.measurements[m].second /= (double) frame_samples;
+    frameAvgPage.duration /= (double) frameSamples;
+    for(size_t m = 0; m < frameAvgPage.measurements.size(); m++) {
+        frameAvgPage.measurements[m].second /= (double) frameSamples;
     }
     
     //Fill out the string.
@@ -1158,20 +1158,20 @@ void PerformanceMonitor::saveLog() {
     }
     
     s +=
-        "\nData from the latest played area, " + area_name + ", with " +
-        i2s(frame_samples) + " gameplay frames sampled.\n";
+        "\nData from the latest played area, " + areaName + ", with " +
+        i2s(frameSamples) + " gameplay frames sampled.\n";
         
     s += "\nLoading times:\n";
-    loading_page.write(s);
+    loadingPage.write(s);
     
     s += "\nAverage frame processing times:\n";
-    frame_avg_page.write(s);
+    frameAvgPage.write(s);
     
     s += "\nFastest frame processing times:\n";
-    frame_fastest_page.write(s);
+    frameFastestPage.write(s);
     
     s += "\nSlowest frame processing times:\n";
-    frame_slowest_page.write(s);
+    frameSlowestPage.write(s);
     
     //Finally, write the string to a file.
     string prev_log;
@@ -1202,7 +1202,7 @@ void PerformanceMonitor::saveLog() {
  * @param name Name of the area.
  */
 void PerformanceMonitor::setAreaName(const string &name) {
-    area_name = name;
+    areaName = name;
 }
 
 
@@ -1226,14 +1226,14 @@ void PerformanceMonitor::startMeasurement(const string &name) {
     
     //Check if we were already measuring something.
     engineAssert(
-        cur_measurement_start_time == 0.0,
-        cur_page.measurements.empty() ?
+        curMeasurementStartTime == 0.0,
+        curPage.measurements.empty() ?
         "(No measurements)" :
-        "Last measurement: " + cur_page.measurements.back().first
+        "Last measurement: " + curPage.measurements.back().first
     );
     
-    cur_measurement_start_time = al_get_time();
-    cur_measurement_name = name;
+    curMeasurementStartTime = al_get_time();
+    curMeasurementName = name;
 }
 
 
@@ -1843,7 +1843,7 @@ SubgroupType* SubgroupTypeManager::getType(
         SubgroupType* t_ptr = types[t];
         if(
             t_ptr->category == category &&
-            t_ptr->specific_type == specific_type
+            t_ptr->specificType == specific_type
         ) {
             return t_ptr;
         }
@@ -1868,7 +1868,7 @@ void SubgroupTypeManager::registerType(
     SubgroupType* new_sg_type = new SubgroupType();
     
     new_sg_type->category = category;
-    new_sg_type->specific_type = specific_type;
+    new_sg_type->specificType = specific_type;
     new_sg_type->icon = icon;
     
     types.push_back(new_sg_type);
@@ -1880,39 +1880,39 @@ void SubgroupTypeManager::registerType(
  */
 Whistle::Whistle() :
     radius(0.0f),
-    fade_radius(0.0f),
-    fade_timer(WHISTLE::FADE_TIME),
-    next_dot_timer(WHISTLE::DOT_INTERVAL),
-    next_ring_timer(WHISTLE::RINGS_INTERVAL),
-    ring_prev_color(0),
+    fadeRadius(0.0f),
+    fadeTimer(WHISTLE::FADE_TIME),
+    nextDotTimer(WHISTLE::DOT_INTERVAL),
+    nextRingTimer(WHISTLE::RINGS_INTERVAL),
+    ringPrevColor(0),
     whistling(false) {
     
-    dot_radius[0] = -1;
-    dot_radius[1] = -1;
-    dot_radius[2] = -1;
-    dot_radius[3] = -1;
-    dot_radius[4] = -1;
-    dot_radius[5] = -1;
+    dotRadius[0] = -1;
+    dotRadius[1] = -1;
+    dotRadius[2] = -1;
+    dotRadius[3] = -1;
+    dotRadius[4] = -1;
+    dotRadius[5] = -1;
     
-    next_dot_timer.on_end = [this] () {
-        next_dot_timer.start();
+    nextDotTimer.onEnd = [this] () {
+        nextDotTimer.start();
         unsigned char dot = 255;
         for(unsigned char d = 0; d < 6; d++) { //Find WHAT dot to add.
-            if(dot_radius[d] == -1) {
+            if(dotRadius[d] == -1) {
                 dot = d;
                 break;
             }
         }
         
-        if(dot != 255) dot_radius[dot] = 0;
+        if(dot != 255) dotRadius[dot] = 0;
     };
     
-    next_ring_timer.on_end = [this] () {
-        next_ring_timer.start();
+    nextRingTimer.onEnd = [this] () {
+        nextRingTimer.start();
         rings.push_back(0);
-        ring_colors.push_back(ring_prev_color);
-        ring_prev_color =
-            sumAndWrap(ring_prev_color, 1, WHISTLE::N_RING_COLORS);
+        ringColors.push_back(ringPrevColor);
+        ringPrevColor =
+            sumAndWrap(ringPrevColor, 1, WHISTLE::N_RING_COLORS);
     };
     
 }
@@ -1923,10 +1923,10 @@ Whistle::Whistle() :
  */
 void Whistle::startWhistling() {
     for(unsigned char d = 0; d < 6; d++) {
-        dot_radius[d] = -1;
+        dotRadius[d] = -1;
     }
-    fade_timer.start();
-    fade_radius = 0;
+    fadeTimer.start();
+    fadeRadius = 0;
     whistling = true;
 }
 
@@ -1936,8 +1936,8 @@ void Whistle::startWhistling() {
  */
 void Whistle::stopWhistling() {
     whistling = false;
-    fade_timer.start();
-    fade_radius = radius;
+    fadeTimer.start();
+    fadeRadius = radius;
     radius = 0;
 }
 
@@ -1956,22 +1956,22 @@ void Whistle::tick(
 ) {
     this->center = center;
     
-    fade_timer.tick(delta_t);
+    fadeTimer.tick(delta_t);
     
     if(whistling) {
         //Create rings.
-        next_ring_timer.tick(delta_t);
-        next_dot_timer.tick(delta_t);
+        nextRingTimer.tick(delta_t);
+        nextDotTimer.tick(delta_t);
         
         for(unsigned char d = 0; d < 6; d++) {
-            if(dot_radius[d] == -1) continue;
+            if(dotRadius[d] == -1) continue;
             
-            dot_radius[d] += game.config.rules.whistle_growth_speed * delta_t;
-            if(radius > 0 && dot_radius[d] > whistle_range) {
-                dot_radius[d] = whistle_range;
+            dotRadius[d] += game.config.rules.whistleGrowthSpeed * delta_t;
+            if(radius > 0 && dotRadius[d] > whistle_range) {
+                dotRadius[d] = whistle_range;
                 
-            } else if(fade_radius > 0 && dot_radius[d] > fade_radius) {
-                dot_radius[d] = fade_radius;
+            } else if(fadeRadius > 0 && dotRadius[d] > fadeRadius) {
+                dotRadius[d] = fadeRadius;
             }
         }
     }
@@ -1981,7 +1981,7 @@ void Whistle::tick(
         rings[r] += WHISTLE::RING_SPEED * delta_t;
         if(leader_to_cursor_dist < rings[r]) {
             rings.erase(rings.begin() + r);
-            ring_colors.erase(ring_colors.begin() + r);
+            ringColors.erase(ringColors.begin() + r);
         } else {
             r++;
         }

@@ -22,8 +22,8 @@
  */
 Scale::Scale(const Point &pos, ScaleType* type, float angle) :
     Mob(pos, type, angle),
-    sca_type(type),
-    goal_number(type->goal_number) {
+    scaType(type),
+    goalNumber(type->goalNumber) {
     
     
 }
@@ -42,7 +42,7 @@ float Scale::calculateCurWeight() const {
     for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
         Mob* m_ptr = game.states.gameplay->mobs.all[m];
         
-        if(m_ptr->standing_on_mob == this) {
+        if(m_ptr->standingOnMob == this) {
             weighing_mobs.insert(m_ptr);
             for(size_t h = 0; h < m_ptr->holding.size(); h++) {
                 weighing_mobs.insert(m_ptr->holding[h]);
@@ -77,8 +77,8 @@ bool Scale::getFractionNumbersInfo(
     float weight = calculateCurWeight();
     if(weight <= 0 || health <= 0) return false;
     *fraction_value_nr = weight;
-    *fraction_req_nr = goal_number;
-    *fraction_color = game.config.aesthetic_gen.carrying_color_stop;
+    *fraction_req_nr = goalNumber;
+    *fraction_color = game.config.aestheticGen.carryingColorStop;
     return true;
 }
 
@@ -91,5 +91,5 @@ bool Scale::getFractionNumbersInfo(
 void Scale::readScriptVars(const ScriptVarReader &svr) {
     Mob::readScriptVars(svr);
     
-    svr.get("goal_number", goal_number);
+    svr.get("goal_number", goalNumber);
 }

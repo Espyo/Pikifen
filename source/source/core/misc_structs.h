@@ -106,10 +106,10 @@ struct Camera {
     Point pos;
     
     //Position it wants to be at.
-    Point target_pos;
+    Point targetPos;
     
     //Zoom it wants to be at.
-    float target_zoom = 1.0f;
+    float targetZoom = 1.0f;
     
     //Current zoom.
     float zoom = 1.0f;
@@ -142,13 +142,13 @@ struct ErrorManager {
     //--- Members ---
     
     //How many errors have been reported this application session.
-    size_t nr_session_errors = 0;
+    size_t nrSessionErrors = 0;
     
     //Errors reported by the time the area load started.
-    size_t nr_errors_on_area_load = 0;
+    size_t nrErrorsOnAreaLoad = 0;
     
     //First error reported during area load.
-    string first_area_load_error;
+    string firstAreaLoadError;
     
     
     //--- Function declarations ---
@@ -187,16 +187,16 @@ struct MouseCursor {
     //--- Members ---
     
     //Position, in screen coordinates.
-    Point s_pos;
+    Point sPos;
     
     //Position, in world coordinates, if applicable.
-    Point w_pos;
+    Point wPos;
     
     //Spots the cursor has been through. Used for the faint trail left behind.
     vector<Point> history;
     
     //Time left until the position of the cursor is saved on the vector.
-    Timer save_timer;
+    Timer saveTimer;
     
     
     //--- Function declarations ---
@@ -400,195 +400,195 @@ struct SystemContentList {
     //Graphics.
     
     //Bright circle.
-    ALLEGRO_BITMAP* bmp_bright_circle = nullptr;
+    ALLEGRO_BITMAP* bmpBrightCircle = nullptr;
     
     //Bright ring.
-    ALLEGRO_BITMAP* bmp_bright_ring = nullptr;
+    ALLEGRO_BITMAP* bmpBrightRing = nullptr;
     
     //Bubble 9-slice texture.
-    ALLEGRO_BITMAP* bmp_bubble_box = nullptr;
+    ALLEGRO_BITMAP* bmpBubbleBox = nullptr;
     
     //9-slice texture for player input buttons.
-    ALLEGRO_BITMAP* bmp_button_box = nullptr;
+    ALLEGRO_BITMAP* bmpButtonBox = nullptr;
     
     //Checkbox with a checkmark.
-    ALLEGRO_BITMAP* bmp_checkbox_check = nullptr;
+    ALLEGRO_BITMAP* bmpCheckboxCheck = nullptr;
     
     //Checkbox without a checkmark.
-    ALLEGRO_BITMAP* bmp_checkbox_no_check = nullptr;
+    ALLEGRO_BITMAP* bmpCheckboxNoCheck = nullptr;
     
     //Leader cursor.
-    ALLEGRO_BITMAP* bmp_cursor = nullptr;
+    ALLEGRO_BITMAP* bmpCursor = nullptr;
     
     //Discord icon.
-    ALLEGRO_BITMAP* bmp_discord_icon = nullptr;
+    ALLEGRO_BITMAP* bmpDiscordIcon = nullptr;
     
     //Enemy spirit.
-    ALLEGRO_BITMAP* bmp_enemy_spirit = nullptr;
+    ALLEGRO_BITMAP* bmpEnemySpirit = nullptr;
     
     //9-slice texture for the focused GUI item.
-    ALLEGRO_BITMAP* bmp_focus_box = nullptr;
+    ALLEGRO_BITMAP* bmpFocusBox = nullptr;
     
     //9-slice texture for GUI frames.
-    ALLEGRO_BITMAP* bmp_frame_box = nullptr;
+    ALLEGRO_BITMAP* bmpFrameBox = nullptr;
     
     //GitHub icon.
-    ALLEGRO_BITMAP* bmp_github_icon = nullptr;
+    ALLEGRO_BITMAP* bmpGithubIcon = nullptr;
     
     //A hard bubble.
-    ALLEGRO_BITMAP* bmp_hard_bubble = nullptr;
+    ALLEGRO_BITMAP* bmpHardBubble = nullptr;
     
     //Pikifen icon.
-    ALLEGRO_BITMAP* bmp_icon = nullptr;
+    ALLEGRO_BITMAP* bmpIcon = nullptr;
     
     //Idle glow.
-    ALLEGRO_BITMAP* bmp_idle_glow = nullptr;
+    ALLEGRO_BITMAP* bmpIdleGlow = nullptr;
     
     //9-slice texture for player input keys.
-    ALLEGRO_BITMAP* bmp_key_box = nullptr;
+    ALLEGRO_BITMAP* bmpKeyBox = nullptr;
     
     //Leader silhouette from the side.
-    ALLEGRO_BITMAP* bmp_leader_silhouette_side = nullptr;
+    ALLEGRO_BITMAP* bmpLeaderSilhouetteSide = nullptr;
     
     //Leader silhouette from the top.
-    ALLEGRO_BITMAP* bmp_leader_silhouette_top = nullptr;
+    ALLEGRO_BITMAP* bmpLeaderSilhouetteTop = nullptr;
     
     //Bronze mission medal.
-    ALLEGRO_BITMAP* bmp_medal_bronze = nullptr;
+    ALLEGRO_BITMAP* bmpMedalBronze = nullptr;
     
     //Gold mission medal.
-    ALLEGRO_BITMAP* bmp_medal_gold = nullptr;
+    ALLEGRO_BITMAP* bmpMedalGold = nullptr;
     
     //No mission medal.
-    ALLEGRO_BITMAP* bmp_medal_none = nullptr;
+    ALLEGRO_BITMAP* bmpMedalNone = nullptr;
     
     //Platinum mission medal.
-    ALLEGRO_BITMAP* bmp_medal_platinum = nullptr;
+    ALLEGRO_BITMAP* bmpMedalPlatinum = nullptr;
     
     //Silver mission medal.
-    ALLEGRO_BITMAP* bmp_medal_silver = nullptr;
+    ALLEGRO_BITMAP* bmpMedalSilver = nullptr;
     
     //Icons for menu buttons.
-    ALLEGRO_BITMAP* bmp_menu_icons = nullptr;
+    ALLEGRO_BITMAP* bmpMenuIcons = nullptr;
     
     //Mission clear stamp.
-    ALLEGRO_BITMAP* bmp_mission_clear = nullptr;
+    ALLEGRO_BITMAP* bmpMissionClear = nullptr;
     
     //Mission fail stamp.
-    ALLEGRO_BITMAP* bmp_mission_fail = nullptr;
+    ALLEGRO_BITMAP* bmpMissionFail = nullptr;
     
     //"More..." icon.
-    ALLEGRO_BITMAP* bmp_more = nullptr;
+    ALLEGRO_BITMAP* bmpMore = nullptr;
     
     //Mouse cursor.
-    ALLEGRO_BITMAP* bmp_mouse_cursor = nullptr;
+    ALLEGRO_BITMAP* bmpMouseCursor = nullptr;
     
     //Notification.
-    ALLEGRO_BITMAP* bmp_notification = nullptr;
+    ALLEGRO_BITMAP* bmpNotification = nullptr;
     
     //Pikmin spirit.
-    ALLEGRO_BITMAP* bmp_pikmin_spirit = nullptr;
+    ALLEGRO_BITMAP* bmpPikminSpirit = nullptr;
     
     //Misc. specific player input icons.
-    ALLEGRO_BITMAP* bmp_player_input_icons = nullptr;
+    ALLEGRO_BITMAP* bmpPlayerInputIcons = nullptr;
     
     //Randomness symbol.
-    ALLEGRO_BITMAP* bmp_random = nullptr;
+    ALLEGRO_BITMAP* bmpRandom = nullptr;
     
     //A rock.
-    ALLEGRO_BITMAP* bmp_rock = nullptr;
+    ALLEGRO_BITMAP* bmpRock = nullptr;
     
     //Mob shadow.
-    ALLEGRO_BITMAP* bmp_shadow = nullptr;
+    ALLEGRO_BITMAP* bmpShadow = nullptr;
     
     //Rectangular mob shadow.
-    ALLEGRO_BITMAP* bmp_shadow_square = nullptr;
+    ALLEGRO_BITMAP* bmpShadowSquare = nullptr;
     
     //Smack effect.
-    ALLEGRO_BITMAP* bmp_smack = nullptr;
+    ALLEGRO_BITMAP* bmpSmack = nullptr;
     
     //Smoke.
-    ALLEGRO_BITMAP* bmp_smoke = nullptr;
+    ALLEGRO_BITMAP* bmpSmoke = nullptr;
     
     //Sparkle effect.
-    ALLEGRO_BITMAP* bmp_sparkle = nullptr;
+    ALLEGRO_BITMAP* bmpSparkle = nullptr;
     
     //Spotlight for blackout.
-    ALLEGRO_BITMAP* bmp_spotlight = nullptr;
+    ALLEGRO_BITMAP* bmpSpotlight = nullptr;
     
     //Swarm arrow.
-    ALLEGRO_BITMAP* bmp_swarm_arrow = nullptr;
+    ALLEGRO_BITMAP* bmpSwarmArrow = nullptr;
     
     //Invalid throw marker.
-    ALLEGRO_BITMAP* bmp_throw_invalid = nullptr;
+    ALLEGRO_BITMAP* bmpThrowInvalid = nullptr;
     
     //Throw preview texture.
-    ALLEGRO_BITMAP* bmp_throw_preview = nullptr;
+    ALLEGRO_BITMAP* bmpThrowPreview = nullptr;
     
     //Dashed throw preview texture.
-    ALLEGRO_BITMAP* bmp_throw_preview_dashed = nullptr;
+    ALLEGRO_BITMAP* bmpThrowPreviewDashed = nullptr;
     
     //Wave ring.
-    ALLEGRO_BITMAP* bmp_wave_ring = nullptr;
+    ALLEGRO_BITMAP* bmpWaveRing = nullptr;
     
     //Fonts.
     
     //Font for area names.
-    ALLEGRO_FONT* fnt_area_name = nullptr;
+    ALLEGRO_FONT* fntAreaName = nullptr;
     
     //Allegro's built-in font.
-    ALLEGRO_FONT* fnt_builtin = nullptr;
+    ALLEGRO_FONT* fntBuiltin = nullptr;
     
     //Font for HUD counters.
-    ALLEGRO_FONT* fnt_counter = nullptr;
+    ALLEGRO_FONT* fntCounter = nullptr;
     
     //Counter displayed next to the cursor.
-    ALLEGRO_FONT* fnt_cursor_counter = nullptr;
+    ALLEGRO_FONT* fntCursorCounter = nullptr;
     
     //Font for slim text.
-    ALLEGRO_FONT* fnt_slim = nullptr;
+    ALLEGRO_FONT* fntSlim = nullptr;
     
     //Font for standard text.
-    ALLEGRO_FONT* fnt_standard = nullptr;
+    ALLEGRO_FONT* fntStandard = nullptr;
     
     //Font for the carrying / money values.
-    ALLEGRO_FONT* fnt_value = nullptr;
+    ALLEGRO_FONT* fntValue = nullptr;
     
     //Specifically Dear ImGui fonts.
     
     //Header editor font for Dear ImGui.
-    ImFont* fnt_imgui_header = nullptr;
+    ImFont* fntDearImGuiHeader = nullptr;
     
     //Monospace editor font for Dear ImGui.
-    ImFont* fnt_imgui_monospace = nullptr;
+    ImFont* fntDearImGuiMonospace = nullptr;
     
     //Standard editor font for Dear ImGui.
-    ImFont* fnt_imgui_standard = nullptr;
+    ImFont* fntDearImGuiStandard = nullptr;
     
     //Sound effects.
     
     //Attack.
-    ALLEGRO_SAMPLE* sound_attack = nullptr;
+    ALLEGRO_SAMPLE* sndAttack = nullptr;
     
     //Camera zoom level.
-    ALLEGRO_SAMPLE* sound_camera = nullptr;
+    ALLEGRO_SAMPLE* sndCamera = nullptr;
     
     //Menu item activation.
-    ALLEGRO_SAMPLE* sound_menu_activate = nullptr;
+    ALLEGRO_SAMPLE* sndMenuActivate = nullptr;
     
     //Menu item back.
-    ALLEGRO_SAMPLE* sound_menu_back = nullptr;
+    ALLEGRO_SAMPLE* sndMenuBack = nullptr;
     
     //Menu item selection.
-    ALLEGRO_SAMPLE* sound_menu_select = nullptr;
+    ALLEGRO_SAMPLE* sndMenuSelect = nullptr;
     
     //Switching standby Pikmin type.
-    ALLEGRO_SAMPLE* sound_switch_pikmin = nullptr;
+    ALLEGRO_SAMPLE* sndSwitchPikmin = nullptr;
     
     //Global animations.
     
     //Leader damage spark.
-    AnimationInstance anim_sparks;
+    AnimationInstance anmSparks;
     
 };
 
@@ -603,260 +603,260 @@ struct SystemContentNames {
     //Graphics.
     
     //Bright circle.
-    string bmp_bright_circle = "effects/bright_circle";
+    string bmpBrightCircle = "effects/bright_circle";
     
     //Bright ring.
-    string bmp_bright_ring = "effects/bright_ring";
+    string bmpBrightRing = "effects/bright_ring";
     
     //Bubble box.
-    string bmp_bubble_box = "gui/bubble_box";
+    string bmpBubbleBox = "gui/bubble_box";
     
     //9-slice texture for player input buttons.
-    string bmp_button_box = "gui/button_box";
+    string bmpButtonBox = "gui/button_box";
     
     //Checkbox with a checkmark.
-    string bmp_checkbox_check = "gui/checkbox_check";
+    string bmpCheckboxCheck = "gui/checkbox_check";
     
     //Checkbox without a checkmark.
-    string bmp_checkbox_no_check = "gui/checkbox_no_check";
+    string bmpCheckboxNoCheck = "gui/checkbox_no_check";
     
     //Leader cursor.
-    string bmp_cursor = "gui/cursor";
+    string bmpCursor = "gui/cursor";
     
     //Discord icon.
-    string bmp_discord_icon = "gui/discord_icon";
+    string bmpDiscordIcon = "gui/discord_icon";
     
     //Editor icons.
-    string bmp_editor_icons = "gui/editor_icons";
+    string bmpEditorIcons = "gui/editor_icons";
     
     //Enemy spirit.
-    string bmp_enemy_spirit = "effects/enemy_spirit";
+    string bmpEnemySpirit = "effects/enemy_spirit";
     
     //GUI focus box.
-    string bmp_focus_box = "gui/focus_box";
+    string bmpFocusBox = "gui/focus_box";
     
     //9-slice texture for GUI frames.
-    string bmp_frame_box = "gui/frame_box";
+    string bmpFrameBox = "gui/frame_box";
     
     //GitHub icon.
-    string bmp_github_icon = "gui/github_icon";
+    string bmpGithubIcon = "gui/github_icon";
     
     //A hard bubble.
-    string bmp_hard_bubble = "gui/hard_bubble";
+    string bmpHardBubble = "gui/hard_bubble";
     
     //Pikifen icon.
-    string bmp_icon = "gui/icon";
+    string bmpIcon = "gui/icon";
     
     //Idle glow.
-    string bmp_idle_glow = "effects/idle_glow";
+    string bmpIdleGlow = "effects/idle_glow";
     
     //9-slice texture for player input keys.
-    string bmp_key_box = "gui/key_box";
+    string bmpKeyBox = "gui/key_box";
     
     //Leader silhouette from the side.
-    string bmp_leader_silhouette_side = "gui/leader_silhouette_side";
+    string bmpLeaderSilhouetteSide = "gui/leader_silhouette_side";
     
     //Leader silhouette from the top.
-    string bmp_leader_silhouette_top = "gui/leader_silhouette_top";
+    string bmpLeaderSilhouetteTop = "gui/leader_silhouette_top";
     
     //Bronze medal.
-    string bmp_medal_bronze = "gui/medal_bronze";
+    string bmpMedalBronze = "gui/medal_bronze";
     
     //Gold medal.
-    string bmp_medal_gold = "gui/medal_gold";
+    string bmpMedalGold = "gui/medal_gold";
     
     //No medal.
-    string bmp_medal_none = "gui/medal_none";
+    string bmpMedalNone = "gui/medal_none";
     
     //Platinum medal.
-    string bmp_medal_platinum = "gui/medal_platinum";
+    string bmpMedalPlatinum = "gui/medal_platinum";
     
     //Silver medal.
-    string bmp_medal_silver = "gui/medal_silver";
+    string bmpMedalSilver = "gui/medal_silver";
     
     //Icons for menu buttons.
-    string bmp_menu_icons = "gui/menu_icons";
+    string bmpMenuIcons = "gui/menu_icons";
     
     //Mission clear stamp.
-    string bmp_mission_clear = "gui/mission_clear";
+    string bmpMissionClear = "gui/mission_clear";
     
     //Mission fail stamp.
-    string bmp_mission_fail = "gui/mission_fail";
+    string bmpMissionFail = "gui/mission_fail";
     
     //"More..." icon.
-    string bmp_more = "gui/more";
+    string bmpMore = "gui/more";
     
     //Mouse cursor.
-    string bmp_mouse_cursor = "gui/mouse_cursor";
+    string bmpMouseCursor = "gui/mouse_cursor";
     
     //Notification.
-    string bmp_notification = "gui/notification";
+    string bmpNotification = "gui/notification";
     
     //Pikmin spirit.
-    string bmp_pikmin_spirit = "effects/pikmin_spirit";
+    string bmpPikminSpirit = "effects/pikmin_spirit";
     
     //Misc. specific player input icons.
-    string bmp_player_input_icons = "gui/player_input_icons";
+    string bmpPlayerInputIcons = "gui/player_input_icons";
     
     //Randomness symbol.
-    string bmp_random = "gui/random";
+    string bmpRandom = "gui/random";
     
     //A rock.
-    string bmp_rock = "effects/rock";
+    string bmpRock = "effects/rock";
     
     //Mob shadow.
-    string bmp_shadow = "effects/shadow";
+    string bmpShadow = "effects/shadow";
     
     //Rectangular mob shadow.
-    string bmp_shadow_square = "effects/shadow_square";
+    string bmpShadowSquare = "effects/shadow_square";
     
     //Smack effect.
-    string bmp_smack = "effects/smack";
+    string bmpSmack = "effects/smack";
     
     //Smoke.
-    string bmp_smoke = "effects/smoke";
+    string bmpSmoke = "effects/smoke";
     
     //Sparkle effect.
-    string bmp_sparkle = "effects/sparkle";
+    string bmpSparkle = "effects/sparkle";
     
     //Spotlight for blackout.
-    string bmp_spotlight = "effects/spotlight";
+    string bmpSpotlight = "effects/spotlight";
     
     //Swarm arrow.
-    string bmp_swarm_arrow = "gui/swarm_arrow";
+    string bmpSwarmArrow = "gui/swarm_arrow";
     
     //Invalid throw marker.
-    string bmp_throw_invalid = "gui/throw_invalid";
+    string bmpThrowInvalid = "gui/throw_invalid";
     
     //Throw preview texture.
-    string bmp_throw_preview = "gui/throw_preview";
+    string bmpThrowPreview = "gui/throw_preview";
     
     //Dashed throw preview texture.
-    string bmp_throw_preview_dashed = "gui/throw_preview_dashed";
+    string bmpThrowPreviewDashed = "gui/throw_preview_dashed";
     
     //Title screen background.
-    string bmp_title_screen_bg = "gui/title_screen_bg";
+    string bmpTitleScreenBg = "gui/title_screen_bg";
     
     //Wave ring.
-    string bmp_wave_ring = "effects/wave_ring";
+    string bmpWaveRing = "effects/wave_ring";
     
     //Fonts.
     
     //Font for area names.
-    string fnt_area_name = "fonts/area_name";
+    string fntAreaName = "fonts/area_name";
     
     //Font for HUD counters.
-    string fnt_counter = "fonts/counter";
+    string fntCounter = "fonts/counter";
     
     //Font displayed next to the cursor.
-    string fnt_cursor_counter = "fonts/cursor_counter";
+    string fntCursorCounter = "fonts/cursor_counter";
     
     //TTF Dear ImGui header font for editors.
-    string fnt_editor_header = "fonts/editor_header";
+    string fntEditorHeader = "fonts/editor_header";
     
     //TTF Dear ImGui monospace font for editors.
-    string fnt_editor_monospace = "fonts/editor_monospace";
+    string fntEditorMonospace = "fonts/editor_monospace";
     
     //TTF Dear Imgui standard font for editors.
-    string fnt_editor_standard = "fonts/editor_standard";
+    string fntEditorStandard = "fonts/editor_standard";
     
     //Font for slim text.
-    string fnt_slim = "fonts/slim";
+    string fntSlim = "fonts/slim";
     
     //Font for standard text.
-    string fnt_standard = "fonts/standard";
+    string fntStandard = "fonts/standard";
     
     //Font for the carrying / money values.
-    string fnt_value = "fonts/value";
+    string fntValue = "fonts/value";
     
     //Sound effects.
     
     //Attack.
-    string sound_attack = "effects/attack";
+    string sndAttack = "effects/attack";
     
     //Camera zoom level.
-    string sound_camera = "gui/camera";
+    string sndCamera = "gui/camera";
     
     //Menu item activation.
-    string sound_menu_activate = "gui/menu_activate";
+    string sndMenuActivate = "gui/menu_activate";
     
     //Menu item back.
-    string sound_menu_back = "gui/menu_back";
+    string sndMenuBack = "gui/menu_back";
     
     //Menu item selection.
-    string sound_menu_select = "gui/menu_select";
+    string sndMenuSelect = "gui/menu_select";
     
     //Switching standby Pikmin type.
-    string sound_switch_pikmin = "gui/switch_pikmin";
+    string sndSwitchPikmin = "gui/switch_pikmin";
     
     //Songs.
     
     //Boss theme.
-    string sng_boss = "others/boss";
+    string sngBoss = "others/boss";
     
     //Boss victory theme.
-    string sng_boss_victory = "others/boss_victory";
+    string sngBossVictory = "others/boss_victory";
     
     //Editors.
-    string sng_editors = "others/editors";
+    string sngEditors = "others/editors";
     
     //Menus.
-    string sng_menus = "others/menus";
+    string sngMenus = "others/menus";
     
     //Global animations.
     
     //Leader damage spark.
-    string anim_sparks = "sparks";
+    string anmSparks = "sparks";
     
     //Particle generators.
     
     //Pikmin inserted in converter.
-    string part_converter_insertion = "converter_insertion";
+    string parConverterInsertion = "converter_insertion";
     
     //Useless attack ding.
-    string part_ding = "ding";
+    string parDing = "ding";
     
     //Enemy death sparkles.
-    string part_enemy_death = "enemy_death";
+    string parEnemyDeath = "enemy_death";
     
     //Leader being healed at a ship.
-    string part_leader_heal = "leader_heal";
+    string parLeaderHeal = "leader_heal";
     
     //Leader landed on the floor after some height.
-    string part_leader_land = "leader_land";
+    string parLeaderLand = "leader_land";
     
     //Onion generating inside.
-    string part_onion_gen_inside = "onion_generating_inside";
+    string parOnionGenInside = "onion_generating_inside";
     
     //Onion object insertion.
-    string part_onion_insertion = "onion_insertion";
+    string parOnionInsertion = "onion_insertion";
     
     //Dirt that comes out of the floor when a Pikmin gets plucked.
-    string part_pikmin_pluck_dirt = "pikmin_pluck_dirt";
+    string parPikminPluckDirt = "pikmin_pluck_dirt";
     
     //Dirt that comes out of the floor when a Pikmin seed lands.
-    string part_pikmin_seed_landed = "pikmin_seed_landed";
+    string parPikminSeedLanded = "pikmin_seed_landed";
     
     //Successful attack smack.
-    string part_smack = "smack";
+    string parSmack = "smack";
     
     //Leader spray.
-    string part_spray = "spray";
+    string parSpray = "spray";
     
     //Pikmin sprout maturity evolution.
-    string part_sprout_evolution = "sprout_evolution";
+    string parSproutEvolution = "sprout_evolution";
     
     //Pikmin sprout maturity regression.
-    string part_sprout_regression = "sprout_regression";
+    string parSproutRegression = "sprout_regression";
     
     //Throw trail.
-    string part_throw_trail = "throw_trail";
+    string parThrowTrail = "throw_trail";
     
     //Sparkles on top of treasures.
-    string part_treasure = "treasure";
+    string parTreasure = "treasure";
     
     //Wave ring as a ripple around mobs on water.
-    string part_wave_ring = "wave_ring";
+    string parWaveRing = "wave_ring";
     
     
     //--- Function declarations ---
@@ -887,13 +887,13 @@ struct FadeManager {
     //--- Members ---
     
     //Time left in the current fade in/out.
-    float time_left = 0.0f;
+    float timeLeft = 0.0f;
     
     //True if fading in, false if fading out.
-    bool fade_in = false;
+    bool fadeIn = false;
     
     //Code to run when the fade in/out finishes.
-    std::function<void()> on_end = nullptr;
+    std::function<void()> onEnd = nullptr;
     
 };
 
@@ -927,7 +927,7 @@ struct Notification {
     bool enabled = true;
     
     //What player input source icon to show.
-    PlayerInputSource input_source;
+    PlayerInputSource inputSource;
     
     //What text to write.
     string text;
@@ -960,10 +960,10 @@ struct BitmapEffect {
     Point scale = Point(1.0f);
     
     //Tint the bitmap by this color. Also makes it transparent.
-    ALLEGRO_COLOR tint_color = COLOR_WHITE;
+    ALLEGRO_COLOR tintColor = COLOR_WHITE;
     
     //Re-draws the bitmap on top, in additive blend, with this color.
-    ALLEGRO_COLOR glow_color = COLOR_BLACK;
+    ALLEGRO_COLOR glowColor = COLOR_BLACK;
     
 };
 
@@ -1038,40 +1038,40 @@ struct PerformanceMonitor {
     //--- Members ---
     
     //Name of the area being monitored.
-    string area_name;
+    string areaName;
     
     //Current state.
-    PERF_MON_STATE cur_state = PERF_MON_STATE_LOADING;
+    PERF_MON_STATE curState = PERF_MON_STATE_LOADING;
     
     //Is the monitoring currently paused?
     bool paused = false;
     
     //When the current state began.
-    double cur_state_start_time = 0.0f;
+    double curStateStartTime = 0.0f;
     
     //When the current measurement began.
-    double cur_measurement_start_time = 0.0f;
+    double curMeasurementStartTime = 0.0f;
     
     //Name of the current measurement.
-    string cur_measurement_name;
+    string curMeasurementName;
     
     //Page of information about the current working info.
-    PerformanceMonitor::Page cur_page;
+    PerformanceMonitor::Page curPage;
     
     //How many frames of gameplay have been sampled.
-    size_t frame_samples = 0;
+    size_t frameSamples = 0;
     
     //Page of information about the loading process.
-    PerformanceMonitor::Page loading_page;
+    PerformanceMonitor::Page loadingPage;
     
     //Page of information about the average frame.
-    PerformanceMonitor::Page frame_avg_page;
+    PerformanceMonitor::Page frameAvgPage;
     
     //Page of information about the fastest frame.
-    PerformanceMonitor::Page frame_fastest_page;
+    PerformanceMonitor::Page frameFastestPage;
     
     //Page of information about the slowest frame.
-    PerformanceMonitor::Page frame_slowest_page;
+    PerformanceMonitor::Page frameSlowestPage;
     
 };
 
@@ -1102,7 +1102,7 @@ private:
     SUBGROUP_TYPE_CATEGORY category = SUBGROUP_TYPE_CATEGORY_LEADER;
     
     //Specific mob type it refers to.
-    MobType* specific_type = nullptr;
+    MobType* specificType = nullptr;
     
     //Icon used to represent this subgroup type.
     ALLEGRO_BITMAP* icon = nullptr;
@@ -1152,10 +1152,10 @@ struct SprayStats {
     //--- Members ---
     
     //Number of sprays of this type owned.
-    size_t nr_sprays = 0;
+    size_t nrSprays = 0;
     
     //Number of concoction ingredients owned.
-    size_t nr_ingredients = 0;
+    size_t nrIngredients = 0;
     
 };
 
@@ -1174,52 +1174,52 @@ struct Statistics {
     double runtime = 0.0f;
     
     //Time gameplay happened for, in seconds.
-    double gameplay_time = 0.0f;
+    double gameplayTime = 0.0f;
     
     //Times areas were entered.
-    uint32_t area_entries = 0;
+    uint32_t areaEntries = 0;
     
     //Times Pikmin were born from an Onion.
-    uint64_t pikmin_births = 0;
+    uint64_t pikminBirths = 0;
     
     //Times Pikmin died for other reasons.
-    uint64_t pikmin_deaths = 0;
+    uint64_t pikminDeaths = 0;
     
     //Times Pikmin died by being eaten.
-    uint64_t pikmin_eaten = 0;
+    uint64_t pikminEaten = 0;
     
     //Times Pikmin died from a hazard.
-    uint64_t pikmin_hazard_deaths = 0;
+    uint64_t pikminHazardDeaths = 0;
     
     //Times Pikmin bloomed (leaf to bud, leaf to flower, or bud to flower).
-    uint64_t pikmin_blooms = 0;
+    uint64_t pikminBlooms = 0;
     
     //Times Pikmin were saved from a hazard by being whistled.
-    uint64_t pikmin_saved = 0;
+    uint64_t pikminSaved = 0;
     
     //Times enemies died.
-    uint64_t enemy_deaths = 0;
+    uint64_t enemyDeaths = 0;
     
     //Times Pikmin were thrown. Leaders thrown don't count.
-    uint64_t pikmin_thrown = 0;
+    uint64_t pikminThrown = 0;
     
     //Times the whistle was used.
-    uint64_t whistle_uses = 0;
+    uint64_t whistleUses = 0;
     
     //Distance walked by an active leader, in pixels.
-    double distance_walked = 0.0f;
+    double distanceWalked = 0.0f;
     
     //Damage suffered by leaders.
-    double leader_damage_suffered = 0.0f;
+    double leaderDamageSuffered = 0.0f;
     
     //Damage caused by punches.
-    double punch_damage_caused = 0.0f;
+    double punchDamageCaused = 0.0f;
     
     //Times leaders were KO'd.
-    uint64_t leader_kos = 0;
+    uint64_t leaderKos = 0;
     
     //Times sprays were used.
-    uint64_t sprays_used = 0;
+    uint64_t spraysUsed = 0;
     
 };
 
@@ -1241,13 +1241,13 @@ struct EdgeOffsetCache {
     ALLEGRO_COLOR colors[2] = {COLOR_EMPTY, COLOR_EMPTY};
     
     //Length of the effect's "elbow", per end vertex. 0 for none.
-    float elbow_lengths[2] = {0.0f, 0.0f};
+    float elbowLengths[2] = {0.0f, 0.0f};
     
     //Angle of the effect's "elbow", per end vertex.
-    float elbow_angles[2] = {0.0f, 0.0f};
+    float elbowAngles[2] = {0.0f, 0.0f};
     
     //Index of the vertex that should be processed first.
-    unsigned char first_end_vertex_idx = 0;
+    unsigned char firstEndVertexIdx = 0;
     
 };
 
@@ -1266,25 +1266,25 @@ struct Whistle {
     float radius = 0.0f;
     
     //Radius of every 6th dot.
-    float dot_radius[6] = {-1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f};
+    float dotRadius[6] = {-1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f};
     
     //Radius the whistle was at pre-fade.
-    float fade_radius = 0.0f;
+    float fadeRadius = 0.0f;
     
     //Time left for the whistle's fading animations.
-    Timer fade_timer = Timer(WHISTLE::FADE_TIME);
+    Timer fadeTimer = Timer(WHISTLE::FADE_TIME);
     
     //Time left until the next series of dots begins.
-    Timer next_dot_timer = Timer(WHISTLE::DOT_INTERVAL);
+    Timer nextDotTimer = Timer(WHISTLE::DOT_INTERVAL);
     
     //Time left until the next ring is spat out.
-    Timer next_ring_timer = Timer(WHISTLE::RINGS_INTERVAL);
+    Timer nextRingTimer = Timer(WHISTLE::RINGS_INTERVAL);
     
     //Color index of each ring.
-    vector<unsigned char> ring_colors;
+    vector<unsigned char> ringColors;
     
     //Color index of the previous ring.
-    unsigned char ring_prev_color = 0;
+    unsigned char ringPrevColor = 0;
     
     //Distance of each ring.
     vector<float> rings;
@@ -1367,11 +1367,11 @@ public:
             asset_t asset_ptr =
                 doLoad(name, node, report_errors);
             list[name] = AssetUse(asset_ptr);
-            total_uses++;
+            totalUses++;
             return asset_ptr;
         } else {
             list[name].uses++;
-            total_uses++;
+            totalUses++;
             return list[name].ptr;
         }
     }
@@ -1410,7 +1410,7 @@ public:
             doUnload(asset.second.ptr);
         }
         list.clear();
-        total_uses = 0;
+        totalUses = 0;
     }
     
     /**
@@ -1419,7 +1419,7 @@ public:
      * @return The amount.
      */
     long getTotalUses() const {
-        return total_uses;
+        return totalUses;
     }
     
     /**
@@ -1466,7 +1466,7 @@ protected:
     map<string, AssetUse> list;
     
     //Total sum of uses. Useful for debugging.
-    long total_uses = 0;
+    long totalUses = 0;
     
     
     //--- Function definitions ---
@@ -1480,7 +1480,7 @@ protected:
     void free(typename map<string, AssetUse>::iterator it) {
         if(it == list.end()) return;
         it->second.uses--;
-        total_uses--;
+        totalUses--;
         if(it->second.uses == 0) {
             doUnload(it->second.ptr);
             list.erase(it);

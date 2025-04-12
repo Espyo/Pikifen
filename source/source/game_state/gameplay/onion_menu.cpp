@@ -44,8 +44,8 @@ const size_t TYPES_PER_PAGE = 5;
 OnionMenu::OnionMenu(
     PikminNest* n_ptr, Leader* l_ptr
 ) :
-    n_ptr(n_ptr),
-    l_ptr(l_ptr) {
+    nestPtr(n_ptr),
+    leaderPtr(l_ptr) {
     
     for(size_t t = 0; t < n_ptr->nest_type->pik_types.size(); t++) {
         types.push_back(
@@ -53,7 +53,7 @@ OnionMenu::OnionMenu(
         );
     }
     
-    nr_pages = ceil(types.size() / (float) ONION_MENU::TYPES_PER_PAGE);
+    nrPages = ceil(types.size() / (float) ONION_MENU::TYPES_PER_PAGE);
     
     gui.registerCoords("instructions",     50,  7, 90, 20);
     gui.registerCoords("cancel",           16, 85, 18, 11);
@@ -91,28 +91,28 @@ OnionMenu::OnionMenu(
     gui.registerCoords("group_right_more", 95, 60,  3,  4);
     gui.registerCoords("tooltip",          50, 95, 95,  8);
     gui.readCoords(
-        game.content.gui_defs.list[ONION_MENU::GUI_FILE_NAME].getChildByName("positions")
+        game.content.guiDefs.list[ONION_MENU::GUI_FILE_NAME].getChildByName("positions")
     );
     
     //Instructions text.
     TextGuiItem* instructions_text =
         new TextGuiItem(
-        "Call or store Pikmin", game.sys_content.fnt_standard, al_map_rgb(188, 230, 230)
+        "Call or store Pikmin", game.sysContent.fntStandard, al_map_rgb(188, 230, 230)
     );
     gui.addItem(instructions_text, "instructions");
     
     //Cancel button.
-    gui.back_item =
+    gui.backItem =
         new ButtonGuiItem(
-        "Cancel", game.sys_content.fnt_standard, al_map_rgb(226, 112, 112)
+        "Cancel", game.sysContent.fntStandard, al_map_rgb(226, 112, 112)
     );
-    gui.back_item->on_activate =
+    gui.backItem->onActivate =
     [this] (const Point &) {
         start_closing();
     };
-    gui.back_item->on_get_tooltip =
+    gui.backItem->onGetTooltip =
     [] () { return "Forget all changes and leave the Onion menu."; };
-    gui.addItem(gui.back_item, "cancel");
+    gui.addItem(gui.backItem, "cancel");
     
     //Cancel input icon.
     guiAddBackInputIcon(&gui, "cancel_input");
@@ -120,21 +120,21 @@ OnionMenu::OnionMenu(
     //Ok button.
     ButtonGuiItem* ok_button =
         new ButtonGuiItem(
-        "Ok", game.sys_content.fnt_standard, al_map_rgb(96, 226, 80)
+        "Ok", game.sysContent.fntStandard, al_map_rgb(96, 226, 80)
     );
-    ok_button->on_activate =
+    ok_button->onActivate =
     [this] (const Point &) {
         confirm();
         start_closing();
     };
-    ok_button->on_get_tooltip =
+    ok_button->onGetTooltip =
     [] () { return "Confirm changes."; };
     gui.addItem(ok_button, "ok");
     
     //Field amount text.
-    field_amount_text =
-        new TextGuiItem("", game.sys_content.fnt_standard);
-    field_amount_text->on_draw =
+    fieldAmountText =
+        new TextGuiItem("", game.sysContent.fntStandard);
+    fieldAmountText->onDraw =
     [this] (const DrawInfo & draw) {
         int total_delta = 0;
         for(size_t t = 0; t < this->types.size(); t++) {
@@ -142,13 +142,13 @@ OnionMenu::OnionMenu(
         }
         
         drawFilledRoundedRectangle(
-            draw.center, draw.size, game.win_w * 0.01,
+            draw.center, draw.size, game.winW * 0.01,
             al_map_rgba(188, 230, 230, 128)
         );
         
         ALLEGRO_COLOR color = al_map_rgb(188, 230, 230);
-        const auto &red_it = this->red_items.find(field_amount_text);
-        if(red_it != this->red_items.end()) {
+        const auto &red_it = this->redItems.find(fieldAmountText);
+        if(red_it != this->redItems.end()) {
             color =
                 interpolateColor(
                     red_it->second,
@@ -157,25 +157,25 @@ OnionMenu::OnionMenu(
                 );
         }
         
-        float juicy_grow_amount = field_amount_text->getJuiceValue();
+        float juicy_grow_amount = fieldAmountText->getJuiceValue();
         drawText(
             "Field: " +
-            i2s(game.states.gameplay->mobs.pikmin_list.size() + total_delta),
-            game.sys_content.fnt_standard, draw.center,
+            i2s(game.states.gameplay->mobs.pikmin.size() + total_delta),
+            game.sysContent.fntStandard, draw.center,
             draw.size * GUI::STANDARD_CONTENT_SIZE, color,
             ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
             Point(1.0f + juicy_grow_amount)
         );
     };
-    gui.addItem(field_amount_text, "field");
+    gui.addItem(fieldAmountText, "field");
     
     //Select all checkbox.
     CheckGuiItem* select_all_check =
         new CheckGuiItem(
-        &select_all,
-        "Select all", game.sys_content.fnt_standard, al_map_rgb(188, 230, 230)
+        &selectAll,
+        "Select all", game.sysContent.fntStandard, al_map_rgb(188, 230, 230)
     );
-    select_all_check->on_activate =
+    select_all_check->onActivate =
     [this, select_all_check] (const Point &) {
         growButtons();
         select_all_check->startJuiceAnimation(
@@ -185,7 +185,7 @@ OnionMenu::OnionMenu(
     };
     select_all_check->visible = types.size() > 1;
     select_all_check->selectable = types.size() > 1;
-    select_all_check->on_get_tooltip =
+    select_all_check->onGetTooltip =
     [] () { return "Control all Pikmin numbers at once?"; };
     gui.addItem(select_all_check, "select_all");
     
@@ -194,87 +194,87 @@ OnionMenu::OnionMenu(
         string id = "onion_" + i2s(t + 1) + "_button";
         
         GuiItem* onion_icon = new GuiItem(false);
-        onion_icon->on_draw =
+        onion_icon->onDraw =
         [this, t, onion_icon] (const DrawInfo & draw) {
-            OnionMenuPikminType* t_ptr = this->on_screen_types[t];
-            if(t_ptr->pik_type->bmp_onion_icon) {
+            OnionMenuPikminType* t_ptr = this->onScreenTypes[t];
+            if(t_ptr->pikType->bmpOnionIcon) {
                 float juicy_grow_amount = onion_icon->getJuiceValue();
                 drawBitmapInBox(
-                    t_ptr->pik_type->bmp_onion_icon, draw.center,
+                    t_ptr->pikType->bmpOnionIcon, draw.center,
                     (draw.size * 0.8f) + juicy_grow_amount, true
                 );
             }
         };
         gui.addItem(onion_icon, id);
-        onion_icon_items.push_back(onion_icon);
+        onionIconItems.push_back(onion_icon);
         
         ButtonGuiItem* onion_button =
-            new ButtonGuiItem("", game.sys_content.fnt_standard);
-        onion_button->on_draw =
+            new ButtonGuiItem("", game.sysContent.fntStandard);
+        onion_button->onDraw =
         [this, onion_button] (const DrawInfo & draw) {
             float juicy_grow_amount = onion_button->getJuiceValue();
             drawButton(
                 draw.center,
                 draw.size + juicy_grow_amount,
-                "", game.sys_content.fnt_standard, COLOR_WHITE,
+                "", game.sysContent.fntStandard, COLOR_WHITE,
                 onion_button->selected
             );
         };
-        onion_button->on_activate =
+        onion_button->onActivate =
         [this, t] (const Point &) {
-            addToOnion(on_screen_types[t]->type_idx);
+            addToOnion(onScreenTypes[t]->typeIdx);
         };
-        onion_button->can_auto_repeat = true;
-        onion_button->on_get_tooltip =
+        onion_button->canAutoRepeat = true;
+        onion_button->onGetTooltip =
         [this, t] () {
-            OnionMenuPikminType* t_ptr = this->on_screen_types[t];
-            return "Store one " + t_ptr->pik_type->name + " inside.";
+            OnionMenuPikminType* t_ptr = this->onScreenTypes[t];
+            return "Store one " + t_ptr->pikType->name + " inside.";
         };
         gui.addItem(onion_button, id);
-        onion_button_items.push_back(onion_button);
+        onionButtonItems.push_back(onion_button);
     }
     
     //Onion's all button.
-    onion_all_button =
-        new ButtonGuiItem("", game.sys_content.fnt_standard);
-    onion_all_button->on_draw =
+    onionAllButton =
+        new ButtonGuiItem("", game.sysContent.fntStandard);
+    onionAllButton->onDraw =
     [this] (const DrawInfo & draw) {
-        float juicy_grow_amount = onion_all_button->getJuiceValue();
+        float juicy_grow_amount = onionAllButton->getJuiceValue();
         drawButton(
             draw.center,
             draw.size + juicy_grow_amount,
-            "", game.sys_content.fnt_standard, COLOR_WHITE,
-            onion_all_button->selected
+            "", game.sysContent.fntStandard, COLOR_WHITE,
+            onionAllButton->selected
         );
     };
-    onion_all_button->on_activate =
+    onionAllButton->onActivate =
     [this] (const Point &) {
         addAllToOnion();
     };
-    onion_all_button->can_auto_repeat = true;
-    onion_all_button->on_get_tooltip =
+    onionAllButton->canAutoRepeat = true;
+    onionAllButton->onGetTooltip =
     [] () { return "Store one Pikmin of each type inside."; };
-    gui.addItem(onion_all_button, "onion_all");
+    gui.addItem(onionAllButton, "onion_all");
     
     //Onion amounts.
     for(size_t t = 0; t < ONION_MENU::TYPES_PER_PAGE; t++) {
         GuiItem* onion_amount_text = new GuiItem(false);
-        onion_amount_text->on_draw =
+        onion_amount_text->onDraw =
             [this, t, onion_amount_text]
         (const DrawInfo & draw) {
-            OnionMenuPikminType* t_ptr = this->on_screen_types[t];
+            OnionMenuPikminType* t_ptr = this->onScreenTypes[t];
             
             size_t real_onion_amount =
-                this->n_ptr->getAmountByType(t_ptr->pik_type);
+                this->nestPtr->getAmountByType(t_ptr->pikType);
                 
             drawFilledRoundedRectangle(
-                draw.center, draw.size, game.win_w * 0.01,
+                draw.center, draw.size, game.winW * 0.01,
                 al_map_rgba(188, 230, 230, 128)
             );
             
             ALLEGRO_COLOR color = al_map_rgb(255, 255, 255);
-            const auto &red_it = this->red_items.find(onion_amount_text);
-            if(red_it != this->red_items.end()) {
+            const auto &red_it = this->redItems.find(onion_amount_text);
+            if(red_it != this->redItems.end()) {
                 color =
                     interpolateColor(
                         red_it->second,
@@ -286,14 +286,14 @@ OnionMenu::OnionMenu(
             float juicy_grow_amount = onion_amount_text->getJuiceValue();
             drawText(
                 i2s(real_onion_amount - t_ptr->delta),
-                game.sys_content.fnt_area_name, draw.center,
+                game.sysContent.fntAreaName, draw.center,
                 draw.size * GUI::STANDARD_CONTENT_SIZE, color,
                 ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
                 Point(1.0f + juicy_grow_amount)
             );
         };
         gui.addItem(onion_amount_text, "onion_" + i2s(t + 1) + "_amount");
-        onion_amount_items.push_back(onion_amount_text);
+        onionAmountItems.push_back(onion_amount_text);
     }
     
     //Group icons and buttons.
@@ -301,87 +301,87 @@ OnionMenu::OnionMenu(
         string id = "group_" + i2s(t + 1) + "_button";
         
         GuiItem* group_icon = new GuiItem(false);
-        group_icon->on_draw =
+        group_icon->onDraw =
         [this, t, group_icon] (const DrawInfo & draw) {
-            OnionMenuPikminType* t_ptr = this->on_screen_types[t];
+            OnionMenuPikminType* t_ptr = this->onScreenTypes[t];
             float juicy_grow_amount = group_icon->getJuiceValue();
-            if(t_ptr->pik_type->bmp_icon) {
+            if(t_ptr->pikType->bmpIcon) {
                 drawBitmapInBox(
-                    t_ptr->pik_type->bmp_icon, draw.center,
+                    t_ptr->pikType->bmpIcon, draw.center,
                     (draw.size * 0.8f) + juicy_grow_amount, true
                 );
             }
         };
         gui.addItem(group_icon, id);
-        group_icon_items.push_back(group_icon);
+        groupIconItems.push_back(group_icon);
         
         ButtonGuiItem* group_button =
-            new ButtonGuiItem("", game.sys_content.fnt_standard);
-        group_button->on_draw =
+            new ButtonGuiItem("", game.sysContent.fntStandard);
+        group_button->onDraw =
         [this, group_button] (const DrawInfo & draw) {
             float juicy_grow_amount = group_button->getJuiceValue();
             drawButton(
                 draw.center,
                 draw.size + juicy_grow_amount,
-                "", game.sys_content.fnt_standard, COLOR_WHITE,
+                "", game.sysContent.fntStandard, COLOR_WHITE,
                 group_button->selected
             );
         };
-        group_button->on_activate =
+        group_button->onActivate =
         [this, t] (const Point &) {
-            addToGroup(on_screen_types[t]->type_idx);
+            addToGroup(onScreenTypes[t]->typeIdx);
         };
-        group_button->can_auto_repeat = true;
-        group_button->on_get_tooltip =
+        group_button->canAutoRepeat = true;
+        group_button->onGetTooltip =
         [this, t] () {
-            OnionMenuPikminType* t_ptr = this->on_screen_types[t];
-            return "Call one " + t_ptr->pik_type->name + " to the group.";
+            OnionMenuPikminType* t_ptr = this->onScreenTypes[t];
+            return "Call one " + t_ptr->pikType->name + " to the group.";
         };
         gui.addItem(group_button, id);
-        group_button_items.push_back(group_button);
+        groupButtonItems.push_back(group_button);
     }
     
     //Group's all button.
-    group_all_button =
-        new ButtonGuiItem("", game.sys_content.fnt_standard);
-    group_all_button->on_draw =
+    groupAllButton =
+        new ButtonGuiItem("", game.sysContent.fntStandard);
+    groupAllButton->onDraw =
     [this] (const DrawInfo & draw) {
-        float juicy_grow_amount = group_all_button->getJuiceValue();
+        float juicy_grow_amount = groupAllButton->getJuiceValue();
         drawButton(
             draw.center,
             draw.size + juicy_grow_amount,
-            "", game.sys_content.fnt_standard, COLOR_WHITE,
-            group_all_button->selected
+            "", game.sysContent.fntStandard, COLOR_WHITE,
+            groupAllButton->selected
         );
     };
-    group_all_button->on_activate =
+    groupAllButton->onActivate =
     [this] (const Point &) {
         addAllToGroup();
     };
-    group_all_button->can_auto_repeat = true;
-    group_all_button->on_get_tooltip =
+    groupAllButton->canAutoRepeat = true;
+    groupAllButton->onGetTooltip =
     [] () { return "Call one Pikmin of each type to the group."; };
-    gui.addItem(group_all_button, "group_all");
+    gui.addItem(groupAllButton, "group_all");
     
     //Group amounts.
     for(size_t t = 0; t < ONION_MENU::TYPES_PER_PAGE; t++) {
         GuiItem* group_amount_text = new GuiItem(false);
-        group_amount_text->on_draw =
+        group_amount_text->onDraw =
             [this, t, group_amount_text]
         (const DrawInfo & draw) {
-            OnionMenuPikminType* t_ptr = this->on_screen_types[t];
+            OnionMenuPikminType* t_ptr = this->onScreenTypes[t];
             
             size_t real_group_amount =
-                this->l_ptr->group->getAmountByType(t_ptr->pik_type);
+                this->leaderPtr->group->getAmountByType(t_ptr->pikType);
                 
             drawFilledRoundedRectangle(
-                draw.center, draw.size, game.win_w * 0.01,
+                draw.center, draw.size, game.winW * 0.01,
                 al_map_rgba(188, 230, 230, 128)
             );
             
             ALLEGRO_COLOR color = al_map_rgb(255, 255, 255);
-            const auto &red_it = this->red_items.find(group_amount_text);
-            if(red_it != this->red_items.end()) {
+            const auto &red_it = this->redItems.find(group_amount_text);
+            if(red_it != this->redItems.end()) {
                 color =
                     interpolateColor(
                         red_it->second,
@@ -393,117 +393,117 @@ OnionMenu::OnionMenu(
             float juicy_grow_amount = group_amount_text->getJuiceValue();
             drawText(
                 i2s(real_group_amount + t_ptr->delta),
-                game.sys_content.fnt_area_name, draw.center,
+                game.sysContent.fntAreaName, draw.center,
                 draw.size * GUI::STANDARD_CONTENT_SIZE, color,
                 ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
                 Point(1.0f + juicy_grow_amount)
             );
         };
         gui.addItem(group_amount_text, "group_" + i2s(t + 1) + "_amount");
-        group_amount_items.push_back(group_amount_text);
+        groupAmountItems.push_back(group_amount_text);
     }
     
     //Onion left "more" indicator.
-    onion_more_l_icon = new GuiItem(false);
-    onion_more_l_icon->on_draw =
+    onionMoreLIcon = new GuiItem(false);
+    onionMoreLIcon->onDraw =
     [this] (const DrawInfo & draw) {
         drawBitmap(
-            game.sys_content.bmp_more,
+            game.sysContent.bmpMore,
             draw.center,
             Point(-draw.size.x, draw.size.y) * 0.8f,
             0, mapGray(128)
         );
     };
-    gui.addItem(onion_more_l_icon, "onion_left_more");
+    gui.addItem(onionMoreLIcon, "onion_left_more");
     
     //Onion right "more" indicator.
-    onion_more_r_icon = new GuiItem(false);
-    onion_more_r_icon->on_draw =
+    onionMoreRIcon = new GuiItem(false);
+    onionMoreRIcon->onDraw =
     [this] (const DrawInfo & draw) {
         drawBitmap(
-            game.sys_content.bmp_more,
+            game.sysContent.bmpMore,
             draw.center,
             draw.size * 0.8f,
             0, mapGray(128)
         );
     };
-    gui.addItem(onion_more_r_icon, "onion_right_more");
+    gui.addItem(onionMoreRIcon, "onion_right_more");
     
     //Group left "more" indicator.
-    group_more_l_icon = new GuiItem(false);
-    group_more_l_icon->on_draw =
+    groupMoreLIcon = new GuiItem(false);
+    groupMoreLIcon->onDraw =
     [this] (const DrawInfo & draw) {
         drawBitmap(
-            game.sys_content.bmp_more,
+            game.sysContent.bmpMore,
             draw.center,
             Point(-draw.size.x, draw.size.y) * 0.8f,
             0, mapGray(128)
         );
     };
-    gui.addItem(group_more_l_icon, "group_left_more");
+    gui.addItem(groupMoreLIcon, "group_left_more");
     
     //Group right "more" indicator.
-    group_more_r_icon = new GuiItem(false);
-    group_more_r_icon->on_draw =
+    groupMoreRIcon = new GuiItem(false);
+    groupMoreRIcon->onDraw =
     [this] (const DrawInfo & draw) {
         drawBitmap(
-            game.sys_content.bmp_more,
+            game.sysContent.bmpMore,
             draw.center,
             draw.size * 0.8f,
             0, mapGray(128)
         );
     };
-    gui.addItem(group_more_r_icon, "group_right_more");
+    gui.addItem(groupMoreRIcon, "group_right_more");
     
     //Previous page button.
-    prev_page_button = new GuiItem(true);
-    prev_page_button->on_draw =
+    prevPageButton = new GuiItem(true);
+    prevPageButton->onDraw =
     [this] (const DrawInfo & draw) {
         drawBitmap(
-            game.sys_content.bmp_more,
+            game.sysContent.bmpMore,
             draw.center, Point(-draw.size.x, draw.size.y) * 0.5f
         );
         
         drawButton(
-            draw.center, draw.size, "", game.sys_content.fnt_standard, COLOR_WHITE,
-            prev_page_button->selected,
-            prev_page_button->getJuiceValue()
+            draw.center, draw.size, "", game.sysContent.fntStandard, COLOR_WHITE,
+            prevPageButton->selected,
+            prevPageButton->getJuiceValue()
         );
     };
-    prev_page_button->on_activate =
+    prevPageButton->onActivate =
     [this] (const Point &) {
-        goToPage(sumAndWrap((int) page, -1, (int) nr_pages));
+        goToPage(sumAndWrap((int) page, -1, (int) nrPages));
     };
-    prev_page_button->visible = nr_pages > 1;
-    prev_page_button->selectable = nr_pages > 1;
-    prev_page_button->on_get_tooltip =
+    prevPageButton->visible = nrPages > 1;
+    prevPageButton->selectable = nrPages > 1;
+    prevPageButton->onGetTooltip =
     [] () { return "Go to the previous page of Pikmin types."; };
-    gui.addItem(prev_page_button, "prev_page");
+    gui.addItem(prevPageButton, "prev_page");
     
     //Next page button.
-    next_page_button = new GuiItem(true);
-    next_page_button->on_draw =
+    nextPageButton = new GuiItem(true);
+    nextPageButton->onDraw =
     [this] (const DrawInfo & draw) {
         drawBitmap(
-            game.sys_content.bmp_more,
+            game.sysContent.bmpMore,
             draw.center, draw.size * 0.5f
         );
         
         drawButton(
-            draw.center, draw.size, "", game.sys_content.fnt_standard, COLOR_WHITE,
-            next_page_button->selected,
-            next_page_button->getJuiceValue()
+            draw.center, draw.size, "", game.sysContent.fntStandard, COLOR_WHITE,
+            nextPageButton->selected,
+            nextPageButton->getJuiceValue()
         );
     };
-    next_page_button->on_activate =
+    nextPageButton->onActivate =
     [this] (const Point &) {
-        goToPage(sumAndWrap((int) page, 1, (int) nr_pages));
+        goToPage(sumAndWrap((int) page, 1, (int) nrPages));
     };
-    next_page_button->visible = nr_pages > 1;
-    next_page_button->selectable = nr_pages > 1;
-    next_page_button->on_get_tooltip =
+    nextPageButton->visible = nrPages > 1;
+    nextPageButton->selectable = nrPages > 1;
+    nextPageButton->onGetTooltip =
     [] () { return "Go to the next page of Pikmin types."; };
-    gui.addItem(next_page_button, "next_page");
+    gui.addItem(nextPageButton, "next_page");
     
     //Tooltip text.
     TooltipGuiItem* tooltip_text =
@@ -554,13 +554,13 @@ void OnionMenu::addAllToOnion() {
  */
 void OnionMenu::addToGroup(size_t type_idx) {
     size_t real_onion_amount =
-        n_ptr->getAmountByType(n_ptr->nest_type->pik_types[type_idx]);
+        nestPtr->getAmountByType(nestPtr->nest_type->pik_types[type_idx]);
         
     //First, check if there are enough in the Onion to take out.
     if((signed int) (real_onion_amount - types[type_idx].delta) <= 0) {
-        size_t screen_idx = types[type_idx].on_screen_idx;
+        size_t screen_idx = types[type_idx].onScreenIdx;
         if(screen_idx != INVALID) {
-            makeGuiItemRed(onion_amount_items[screen_idx]);
+            makeGuiItemRed(onionAmountItems[screen_idx]);
         }
         return;
     }
@@ -571,25 +571,25 @@ void OnionMenu::addToGroup(size_t type_idx) {
         total_delta += types[t].delta;
     }
     if(
-        game.states.gameplay->mobs.pikmin_list.size() + total_delta >=
-        game.config.rules.max_pikmin_in_field
+        game.states.gameplay->mobs.pikmin.size() + total_delta >=
+        game.config.rules.maxPikminInField
     ) {
-        makeGuiItemRed(field_amount_text);
+        makeGuiItemRed(fieldAmountText);
         return;
     }
     
     types[type_idx].delta++;
     
-    size_t on_screen_idx = types[type_idx].on_screen_idx;
+    size_t on_screen_idx = types[type_idx].onScreenIdx;
     if(on_screen_idx != INVALID) {
-        onion_amount_items[on_screen_idx]->startJuiceAnimation(
+        onionAmountItems[on_screen_idx]->startJuiceAnimation(
             GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
         );
-        group_amount_items[on_screen_idx]->startJuiceAnimation(
+        groupAmountItems[on_screen_idx]->startJuiceAnimation(
             GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
         );
     }
-    field_amount_text->startJuiceAnimation(
+    fieldAmountText->startJuiceAnimation(
         GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
     );
     
@@ -603,28 +603,28 @@ void OnionMenu::addToGroup(size_t type_idx) {
  */
 void OnionMenu::addToOnion(size_t type_idx) {
     size_t real_group_amount =
-        l_ptr->group->getAmountByType(n_ptr->nest_type->pik_types[type_idx]);
+        leaderPtr->group->getAmountByType(nestPtr->nest_type->pik_types[type_idx]);
         
     if((signed int) (real_group_amount + types[type_idx].delta) <= 0) {
-        size_t screen_idx = types[type_idx].on_screen_idx;
+        size_t screen_idx = types[type_idx].onScreenIdx;
         if(screen_idx != INVALID) {
-            makeGuiItemRed(group_amount_items[screen_idx]);
+            makeGuiItemRed(groupAmountItems[screen_idx]);
         }
         return;
     }
     
     types[type_idx].delta--;
     
-    size_t on_screen_idx = types[type_idx].on_screen_idx;
+    size_t on_screen_idx = types[type_idx].onScreenIdx;
     if(on_screen_idx != INVALID) {
-        onion_amount_items[on_screen_idx]->startJuiceAnimation(
+        onionAmountItems[on_screen_idx]->startJuiceAnimation(
             GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
         );
-        group_amount_items[on_screen_idx]->startJuiceAnimation(
+        groupAmountItems[on_screen_idx]->startJuiceAnimation(
             GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
         );
     }
-    field_amount_text->startJuiceAnimation(
+    fieldAmountText->startJuiceAnimation(
         GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
     );
 }
@@ -637,10 +637,10 @@ void OnionMenu::addToOnion(size_t type_idx) {
 void OnionMenu::confirm() {
     for(size_t t = 0; t < types.size(); t++) {
         if(types[t].delta > 0) {
-            n_ptr->requestPikmin(t, types[t].delta, l_ptr);
+            nestPtr->requestPikmin(t, types[t].delta, leaderPtr);
         } else if(types[t].delta < 0) {
-            l_ptr->orderPikminToOnion(
-                types[t].pik_type, n_ptr, -types[t].delta
+            leaderPtr->orderPikminToOnion(
+                types[t].pikType, nestPtr, -types[t].delta
             );
         }
     }
@@ -664,23 +664,23 @@ void OnionMenu::goToPage(size_t page) {
  */
 void OnionMenu::growButtons() {
     for(size_t t = 0; t < ONION_MENU::TYPES_PER_PAGE; t++) {
-        onion_icon_items[t]->startJuiceAnimation(
+        onionIconItems[t]->startJuiceAnimation(
             GuiItem::JUICE_TYPE_GROW_ICON
         );
-        onion_button_items[t]->startJuiceAnimation(
+        onionButtonItems[t]->startJuiceAnimation(
             GuiItem::JUICE_TYPE_GROW_ICON
         );
-        group_icon_items[t]->startJuiceAnimation(
+        groupIconItems[t]->startJuiceAnimation(
             GuiItem::JUICE_TYPE_GROW_ICON
         );
-        group_button_items[t]->startJuiceAnimation(
+        groupButtonItems[t]->startJuiceAnimation(
             GuiItem::JUICE_TYPE_GROW_ICON
         );
     }
-    onion_all_button->startJuiceAnimation(
+    onionAllButton->startJuiceAnimation(
         GuiItem::JUICE_TYPE_GROW_ICON
     );
-    group_all_button->startJuiceAnimation(
+    groupAllButton->startJuiceAnimation(
         GuiItem::JUICE_TYPE_GROW_ICON
     );
 }
@@ -712,7 +712,7 @@ void OnionMenu::handlePlayerAction(const PlayerAction &action) {
  * @param item The item.
  */
 void OnionMenu::makeGuiItemRed(GuiItem* item) {
-    red_items[item] = ONION_MENU::RED_TEXT_DURATION;
+    redItems[item] = ONION_MENU::RED_TEXT_DURATION;
 }
 
 
@@ -721,7 +721,7 @@ void OnionMenu::makeGuiItemRed(GuiItem* item) {
  */
 void OnionMenu::start_closing() {
     closing = true;
-    closing_timer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
+    closingTimer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
     gui.startAnimation(
         GUI_MANAGER_ANIM_CENTER_TO_UP, GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
     );
@@ -742,11 +742,11 @@ void OnionMenu::tick(float delta_t) {
     //Correct the amount of wanted group members, if they are invalid.
     int total_delta = 0;
     
-    for(size_t t = 0; t < n_ptr->nest_type->pik_types.size(); t++) {
+    for(size_t t = 0; t < nestPtr->nest_type->pik_types.size(); t++) {
         //Get how many the player really has with them.
         int real_group_amount =
-            (int) l_ptr->group->getAmountByType(
-                n_ptr->nest_type->pik_types[t]
+            (int) leaderPtr->group->getAmountByType(
+                nestPtr->nest_type->pik_types[t]
             );
             
         //Make sure the player can't request to store more than what they have.
@@ -754,7 +754,7 @@ void OnionMenu::tick(float delta_t) {
         
         //Get how many are really in the Onion.
         int real_onion_amount =
-            (int) n_ptr->getAmountByType(n_ptr->nest_type->pik_types[t]);
+            (int) nestPtr->getAmountByType(nestPtr->nest_type->pik_types[t]);
             
         //Make sure the player can't request to call more than the Onion has.
         types[t].delta = std::min(real_onion_amount, (int) types[t].delta);
@@ -765,17 +765,17 @@ void OnionMenu::tick(float delta_t) {
     
     //Make sure the player can't request to have more than the field limit.
     int delta_over_limit =
-        (int) game.states.gameplay->mobs.pikmin_list.size() +
+        (int) game.states.gameplay->mobs.pikmin.size() +
         total_delta -
-        (int) game.config.rules.max_pikmin_in_field;
+        (int) game.config.rules.maxPikminInField;
         
     while(delta_over_limit > 0) {
         vector<size_t> candidate_types;
         
-        for(size_t t = 0; t < n_ptr->nest_type->pik_types.size(); t++) {
+        for(size_t t = 0; t < nestPtr->nest_type->pik_types.size(); t++) {
             int real_group_amount =
-                (int) l_ptr->group->getAmountByType(
-                    n_ptr->nest_type->pik_types[t]
+                (int) leaderPtr->group->getAmountByType(
+                    nestPtr->nest_type->pik_types[t]
                 );
                 
             if((-types[t].delta) < real_group_amount) {
@@ -800,10 +800,10 @@ void OnionMenu::tick(float delta_t) {
     }
     
     //Animate red text, if any.
-    for(auto w = red_items.begin(); w != red_items.end();) {
+    for(auto w = redItems.begin(); w != redItems.end();) {
         w->second -= delta_t;
         if(w->second <= 0.0f) {
-            w = red_items.erase(w);
+            w = redItems.erase(w);
         } else {
             ++w;
         }
@@ -817,13 +817,13 @@ void OnionMenu::tick(float delta_t) {
         1.0f / GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME;
     const float diff =
         closing ? -bg_alpha_mult_speed : bg_alpha_mult_speed;
-    bg_alpha_mult = std::clamp(bg_alpha_mult + diff * delta_t, 0.0f, 1.0f);
+    bgAlphaMult = std::clamp(bgAlphaMult + diff * delta_t, 0.0f, 1.0f);
     
     //Tick the menu closing.
     if(closing) {
-        closing_timer -= delta_t;
-        if(closing_timer <= 0.0f) {
-            to_delete = true;
+        closingTimer -= delta_t;
+        if(closingTimer <= 0.0f) {
+            toDelete = true;
         }
     }
 }
@@ -833,7 +833,7 @@ void OnionMenu::tick(float delta_t) {
  * @brief Toggles the "select all" mode.
  */
 void OnionMenu::toggleSelectAll() {
-    select_all = !select_all;
+    selectAll = !selectAll;
     
     update();
 }
@@ -844,100 +844,100 @@ void OnionMenu::toggleSelectAll() {
  */
 void OnionMenu::update() {
     //Reset the on-screen types.
-    on_screen_types.clear();
+    onScreenTypes.clear();
     
     for(size_t t = 0; t < types.size(); t++) {
-        types[t].on_screen_idx = INVALID;
+        types[t].onScreenIdx = INVALID;
     }
     
     //Reset the button and amount states.
     for(size_t t = 0; t < ONION_MENU::TYPES_PER_PAGE; t++) {
-        onion_icon_items[t]->visible = false;
-        onion_button_items[t]->visible = false;
-        onion_button_items[t]->selectable = false;
-        onion_amount_items[t]->visible = false;
-        group_icon_items[t]->visible = false;
-        group_button_items[t]->visible = false;
-        group_button_items[t]->selectable = false;
-        group_amount_items[t]->visible = false;
+        onionIconItems[t]->visible = false;
+        onionButtonItems[t]->visible = false;
+        onionButtonItems[t]->selectable = false;
+        onionAmountItems[t]->visible = false;
+        groupIconItems[t]->visible = false;
+        groupButtonItems[t]->visible = false;
+        groupButtonItems[t]->selectable = false;
+        groupAmountItems[t]->visible = false;
     }
     
     //Assign the on-screen types.
     for(
         size_t t = page * ONION_MENU::TYPES_PER_PAGE;
         t < (page + 1) * ONION_MENU::TYPES_PER_PAGE &&
-        t < n_ptr->nest_type->pik_types.size();
+        t < nestPtr->nest_type->pik_types.size();
         t++
     ) {
-        types[t].on_screen_idx = on_screen_types.size();
-        on_screen_types.push_back(&types[t]);
+        types[t].onScreenIdx = onScreenTypes.size();
+        onScreenTypes.push_back(&types[t]);
     }
     
     //Assign the coordinates of the on-screen-type-related GUI items.
-    float splits = on_screen_types.size() + 1;
+    float splits = onScreenTypes.size() + 1;
     float leftmost = 0.50f;
     float rightmost = 0.50f;
     
-    for(size_t t = 0; t < on_screen_types.size(); t++) {
+    for(size_t t = 0; t < onScreenTypes.size(); t++) {
         float x = 1.0f / splits * (t + 1);
-        onion_icon_items[t]->ratio_center.x = x;
-        onion_button_items[t]->ratio_center.x = x;
-        onion_amount_items[t]->ratio_center.x = x;
-        group_icon_items[t]->ratio_center.x = x;
-        group_button_items[t]->ratio_center.x = x;
-        group_amount_items[t]->ratio_center.x = x;
+        onionIconItems[t]->ratioCenter.x = x;
+        onionButtonItems[t]->ratioCenter.x = x;
+        onionAmountItems[t]->ratioCenter.x = x;
+        groupIconItems[t]->ratioCenter.x = x;
+        groupButtonItems[t]->ratioCenter.x = x;
+        groupAmountItems[t]->ratioCenter.x = x;
         
         leftmost =
             std::min(
                 leftmost,
-                x - onion_button_items[t]->ratio_size.x / 2.0f
+                x - onionButtonItems[t]->ratioSize.x / 2.0f
             );
         rightmost =
             std::max(
                 rightmost,
-                x + onion_button_items[t]->ratio_size.x / 2.0f
+                x + onionButtonItems[t]->ratioSize.x / 2.0f
             );
     }
     
     //Make all relevant GUI items active.
-    for(size_t t = 0; t < on_screen_types.size(); t++) {
-        onion_icon_items[t]->visible = true;
-        onion_amount_items[t]->visible = true;
-        group_icon_items[t]->visible = true;
-        group_amount_items[t]->visible = true;
-        if(!select_all) {
-            onion_button_items[t]->visible = true;
-            onion_button_items[t]->selectable = true;
-            group_button_items[t]->visible = true;
-            group_button_items[t]->selectable = true;
+    for(size_t t = 0; t < onScreenTypes.size(); t++) {
+        onionIconItems[t]->visible = true;
+        onionAmountItems[t]->visible = true;
+        groupIconItems[t]->visible = true;
+        groupAmountItems[t]->visible = true;
+        if(!selectAll) {
+            onionButtonItems[t]->visible = true;
+            onionButtonItems[t]->selectable = true;
+            groupButtonItems[t]->visible = true;
+            groupButtonItems[t]->selectable = true;
         }
     }
     
-    if(nr_pages > 1) {
+    if(nrPages > 1) {
         leftmost =
             std::min(
                 leftmost,
-                onion_more_l_icon->ratio_center.x - onion_more_l_icon->ratio_size.x / 2.0f
+                onionMoreLIcon->ratioCenter.x - onionMoreLIcon->ratioSize.x / 2.0f
             );
         rightmost =
             std::max(
                 rightmost,
-                onion_more_r_icon->ratio_center.x + onion_more_r_icon->ratio_size.x / 2.0f
+                onionMoreRIcon->ratioCenter.x + onionMoreRIcon->ratioSize.x / 2.0f
             );
     }
     
-    onion_more_l_icon->visible = nr_pages > 1 && select_all;
-    onion_more_r_icon->visible = nr_pages > 1 && select_all;
-    group_more_l_icon->visible = nr_pages > 1 && select_all;
-    group_more_r_icon->visible = nr_pages > 1 && select_all;
+    onionMoreLIcon->visible = nrPages > 1 && selectAll;
+    onionMoreRIcon->visible = nrPages > 1 && selectAll;
+    groupMoreLIcon->visible = nrPages > 1 && selectAll;
+    groupMoreRIcon->visible = nrPages > 1 && selectAll;
     
-    onion_all_button->ratio_size.x = rightmost - leftmost;
-    group_all_button->ratio_size.x = rightmost - leftmost;
+    onionAllButton->ratioSize.x = rightmost - leftmost;
+    groupAllButton->ratioSize.x = rightmost - leftmost;
     
-    onion_all_button->visible = select_all;
-    onion_all_button->selectable = select_all;
-    group_all_button->visible = select_all;
-    group_all_button->selectable = select_all;
+    onionAllButton->visible = selectAll;
+    onionAllButton->selectable = selectAll;
+    groupAllButton->visible = selectAll;
+    groupAllButton->selectable = selectAll;
 }
 
 
@@ -950,7 +950,7 @@ void OnionMenu::update() {
 OnionMenuPikminType::OnionMenuPikminType(
     size_t idx, PikminType* pik_type
 ) :
-    type_idx(idx),
-    pik_type(pik_type) {
+    typeIdx(idx),
+    pikType(pik_type) {
     
 }

@@ -57,7 +57,7 @@ void bridge_fsm::createFsm(MobType* typ) {
     
     
     typ->states = efc.finish();
-    typ->first_state_idx = fixStates(typ->states, "idling", typ);
+    typ->firstStateIdx = fixStates(typ->states, "idling", typ);
     
     //Check if the number in the enum and the total match up.
     engineAssert(

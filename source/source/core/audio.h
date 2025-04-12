@@ -193,10 +193,10 @@ struct SoundSourceConfig {
     bitmask_8_t flags = 0;
     
     //How it should stack with other playbacks.
-    SOUND_STACK_MODE stack_mode = SOUND_STACK_MODE_NORMAL;
+    SOUND_STACK_MODE stackMode = SOUND_STACK_MODE_NORMAL;
     
     //Minimum time of other playbacks before stacking. Avoid 0 (always stack).
-    float stack_min_pos = AUDIO::DEF_STACK_MIN_POS;
+    float stackMinPos = AUDIO::DEF_STACK_MIN_POS;
     
     //Gain at which it plays. 0 to 1.
     float gain = 1.0f;
@@ -205,13 +205,13 @@ struct SoundSourceConfig {
     float speed = 1.0f;
     
     //Randomness to the gain every time it emits the sound. 0 for none.
-    float gain_deviation = 0.0f;
+    float gainDeviation = 0.0f;
     
     //Randomness to the speed every time it emits the sound. 0 for none.
-    float speed_deviation = 0.0f;
+    float speedDeviation = 0.0f;
     
     //Randomly delay the emission between 0 and this amount. 0 for none.
-    float random_delay = 0.0f;
+    float randomDelay = 0.0f;
     
     //Interval between emissions of the sound. 0 means it plays once.
     float interval = 0.0f;
@@ -242,7 +242,7 @@ struct SoundSource {
     Point pos;
     
     //Time left until the next emission.
-    float emit_time_left = 0.0f;
+    float emitTimeLeft = 0.0f;
     
     //Does it need to be deleted?
     bool destroyed = false;
@@ -259,10 +259,10 @@ struct SoundPlayback {
     //--- Members ---
     
     //The source of the sound effect.
-    size_t source_id = 0;
+    size_t sourceId = 0;
     
     //Its Allegro sample instance.
-    ALLEGRO_SAMPLE_INSTANCE* allegro_sample_instance = nullptr;
+    ALLEGRO_SAMPLE_INSTANCE* allegroSampleInstance = nullptr;
     
     //State.
     SOUND_PLAYBACK_STATE state = SOUND_PLAYBACK_STATE_PLAYING;
@@ -271,22 +271,22 @@ struct SoundPlayback {
     float gain = 1.0f;
     
     //Gain that it wants to be at.
-    float target_gain = 1.0f;
+    float targetGain = 1.0f;
     
     //Base gain, before any position or fade-based operations.
-    float base_gain = 1.0f;
+    float baseGain = 1.0f;
     
     //Current pan.
     float pan = 0.0f;
     
     //Pan that it wants to be at.
-    float target_pan = 0.0f;
+    float targetPan = 0.0f;
     
     //Multiply the gain by this much, due to the playback's state.
-    float state_gain_mult = 1.0f;
+    float stateGainMult = 1.0f;
     
     //Position before pausing.
-    unsigned int pre_pause_pos = 0;
+    unsigned int prePausePos = 0;
     
 };
 
@@ -305,25 +305,25 @@ struct Song : public Content {
     //--- Members ---
     
     //The main track. Other tracks can be mixed on top of this if applicable.
-    ALLEGRO_AUDIO_STREAM* main_track = nullptr;
+    ALLEGRO_AUDIO_STREAM* mainTrack = nullptr;
     
     //Other tracks to mix in with the main track.
-    map<MIX_TRACK_TYPE, ALLEGRO_AUDIO_STREAM*> mix_tracks;
+    map<MIX_TRACK_TYPE, ALLEGRO_AUDIO_STREAM*> mixTracks;
     
     //Current gain.
     float gain = 0.0f;
     
     //Point it was at when it stopped, if any.
-    float stop_point = 0.0f;
+    float stopPoint = 0.0f;
     
     //State.
     SONG_STATE state = SONG_STATE_STOPPED;
     
     //Loop region start point, in seconds.
-    double loop_start = 0;
+    double loopStart = 0;
     
     //Loop region end point, in seconds. 0 = end of song.
-    double loop_end = 0;
+    double loopEnd = 0;
     
     
     //--- Function declarations ---
@@ -344,7 +344,7 @@ public:
     //--- Members ---
     
     //Callback for when a song ends, if any.
-    std::function<void(const string &name)> on_song_finished = nullptr;
+    std::function<void(const string &name)> onSongFinished = nullptr;
     
     
     //--- Function declarations ---
@@ -398,28 +398,28 @@ private:
     //--- Members ---
     
     //Master mixer.
-    ALLEGRO_MIXER* master_mixer = nullptr;
+    ALLEGRO_MIXER* masterMixer = nullptr;
     
     //In-world gameplay sound effect mixer.
-    ALLEGRO_MIXER* gameplay_sound_mixer = nullptr;
+    ALLEGRO_MIXER* gameplaySoundMixer = nullptr;
     
     //Music mixer.
-    ALLEGRO_MIXER* music_mixer = nullptr;
+    ALLEGRO_MIXER* musicMixer = nullptr;
     
     //In-world ambiance sound effect mixer.
-    ALLEGRO_MIXER* ambiance_sound_mixer = nullptr;
+    ALLEGRO_MIXER* ambianceSoundMixer = nullptr;
     
     //UI sound effect mixer.
-    ALLEGRO_MIXER* ui_sound_mixer = nullptr;
+    ALLEGRO_MIXER* uiSoundMixer = nullptr;
     
     //Allegro voice from which the sound effects play.
     ALLEGRO_VOICE* voice = nullptr;
     
     //Incremental ID, used for the next source to create.
-    size_t next_sound_source_id = 1;
+    size_t nextSoundSourceId = 1;
     
     //Mob-specific sound effect sources.
-    map<size_t, Mob*> mob_sources;
+    map<size_t, Mob*> mobSources;
     
     //All sound effect sources.
     map<size_t, SoundSource> sources;
@@ -428,16 +428,16 @@ private:
     vector<SoundPlayback> playbacks;
     
     //Status for things that affect mix tracks this frame.
-    vector<bool> mix_statuses;
+    vector<bool> mixStatuses;
     
     //Current volume of each mix track type.
-    vector<float> mix_volumes;
+    vector<float> mixVolumes;
     
     //Top-left camera coordinates.
-    Point cam_tl;
+    Point camTL;
     
     //Bottom-right camera coordinates.
-    Point cam_br;
+    Point camBR;
     
     
     //--- Function declarations ---

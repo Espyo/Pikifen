@@ -33,10 +33,10 @@ EnemyCategory::EnemyCategory() :
  * @brief Clears the list of registered types of enemy.
  */
 void EnemyCategory::clearTypes() {
-    for(auto &t : game.content.mob_types.list.enemy) {
+    for(auto &t : game.content.mobTypes.list.enemy) {
         delete t.second;
     }
-    game.content.mob_types.list.enemy.clear();
+    game.content.mobTypes.list.enemy.clear();
 }
 
 
@@ -91,8 +91,8 @@ void EnemyCategory::eraseMob(Mob* m) {
  * @return The type, or nullptr on error.
  */
 MobType* EnemyCategory::getType(const string &internal_name) const {
-    auto it = game.content.mob_types.list.enemy.find(internal_name);
-    if(it == game.content.mob_types.list.enemy.end()) return nullptr;
+    auto it = game.content.mobTypes.list.enemy.find(internal_name);
+    if(it == game.content.mobTypes.list.enemy.end()) return nullptr;
     return it->second;
 }
 
@@ -103,7 +103,7 @@ MobType* EnemyCategory::getType(const string &internal_name) const {
  * @param list This list gets filled with the mob type internal names.
  */
 void EnemyCategory::getTypeNames(vector<string> &list) const {
-    for(auto &t : game.content.mob_types.list.enemy) {
+    for(auto &t : game.content.mobTypes.list.enemy) {
         list.push_back(t.first);
     }
 }
@@ -116,5 +116,5 @@ void EnemyCategory::getTypeNames(vector<string> &list) const {
  * @param type Mob type to register.
  */
 void EnemyCategory::registerType(const string &internal_name, MobType* type) {
-    game.content.mob_types.list.enemy[internal_name] = (EnemyType*) type;
+    game.content.mobTypes.list.enemy[internal_name] = (EnemyType*) type;
 }

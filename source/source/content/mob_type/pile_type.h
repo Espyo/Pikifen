@@ -56,31 +56,31 @@ public:
     ResourceType* contents = nullptr;
     
     //How often the pile recharges its contents, if it at all does.
-    float recharge_interval = 0.0f;
+    float rechargeInterval = 0.0f;
     
     //When recharging its contents, it adds these many to the pile.
-    int recharge_amount = 0;
+    int rechargeAmount = 0;
     
     //Maximum amount of contents it can hold.
-    size_t max_amount = 1;
+    size_t maxAmount = 1;
     
     //How much health must it lose before it drops a resource.
-    float health_per_resource = 1.0f;
+    float healthPerResource = 1.0f;
     
     //If true, it can drop multiple resources at once if the health checks out.
-    bool can_drop_multiple = false;
+    bool canDropMultiple = false;
     
     //Should it show the amount above it?
-    bool show_amount = true;
+    bool showAmount = true;
     
     //Should the mob be hidden when it is empty?
-    bool hide_when_empty = true;
+    bool hideWhenEmpty = true;
     
     //Auto-radius-shrinking's radius when there's only 1 resource. 0 = off.
-    float auto_shrink_smallest_radius = 0.0f;
+    float autoShrinkSmallestRadius = 0.0f;
     
     //Should the mob be deleted when it is no longer needed?
-    bool delete_when_finished = true;
+    bool deleteWhenFinished = true;
     
     
     //--- Function declarations ---

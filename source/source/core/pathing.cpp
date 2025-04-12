@@ -43,9 +43,9 @@ const float MIN_STOP_RADIUS = 16.0f;
  * @param end_idx Index number of the path stop at the end of this link.
  */
 PathLink::PathLink(PathStop* start_ptr, PathStop* end_ptr, size_t end_idx) :
-    start_ptr(start_ptr),
-    end_ptr(end_ptr),
-    end_idx(end_idx) {
+    startPtr(start_ptr),
+    endPtr(end_ptr),
+    endIdx(end_idx) {
     
 }
 
@@ -58,7 +58,7 @@ PathLink::PathLink(PathStop* start_ptr, PathStop* end_ptr, size_t end_idx) :
  * @param start_ptr The path stop at the start of this link.
  */
 void PathLink::calculateDist(const PathStop* start_ptr) {
-    distance = Distance(start_ptr->pos, end_ptr->pos).toFloat();
+    distance = Distance(start_ptr->pos, endPtr->pos).toFloat();
 }
 
 
@@ -80,7 +80,7 @@ void PathLink::clone(PathLink* destination) const {
  * @return Whether it's one-way.
  */
 bool PathLink::isOneWay() const {
-    return end_ptr->get_link(start_ptr) == nullptr;
+    return endPtr->get_link(startPtr) == nullptr;
 }
 
 
@@ -88,14 +88,14 @@ bool PathLink::isOneWay() const {
  * @brief Clears all info.
  */
 void PathManager::clear() {
-    if(!game.cur_area_data) return;
+    if(!game.curAreaData) return;
     
     obstructions.clear();
     
-    for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
-        PathStop* s_ptr = game.cur_area_data->path_stops[s];
+    for(size_t s = 0; s < game.curAreaData->pathStops.size(); s++) {
+        PathStop* s_ptr = game.curAreaData->pathStops[s];
         for(size_t l = 0; l < s_ptr->links.size(); l++) {
-            game.cur_area_data->path_stops[s]->links[l]->blocked_by_obstacle =
+            game.curAreaData->pathStops[s]->links[l]->blockedByObstacle =
                 false;
         }
     }
@@ -108,11 +108,11 @@ void PathManager::clear() {
  */
 void PathManager::handleAreaLoad() {
     //Go through all path stops and check if they're on hazardous sectors.
-    for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
-        PathStop* s_ptr = game.cur_area_data->path_stops[s];
-        if(!s_ptr->sector_ptr) continue;
-        if(s_ptr->sector_ptr->hazards.empty()) continue;
-        hazardous_stops.insert(s_ptr);
+    for(size_t s = 0; s < game.curAreaData->pathStops.size(); s++) {
+        PathStop* s_ptr = game.curAreaData->pathStops[s];
+        if(!s_ptr->sectorPtr) continue;
+        if(s_ptr->sectorPtr->hazards.empty()) continue;
+        hazardousStops.insert(s_ptr);
     }
 }
 
@@ -128,20 +128,20 @@ void PathManager::handleObstacleAdd(Mob* m) {
     bool paths_changed = false;
     
     //Go through all path links and check if they have obstacles.
-    for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
-        PathStop* s_ptr = game.cur_area_data->path_stops[s];
+    for(size_t s = 0; s < game.curAreaData->pathStops.size(); s++) {
+        PathStop* s_ptr = game.curAreaData->pathStops[s];
         
         for(size_t l = 0; l < s_ptr->links.size(); l++) {
-            PathLink* l_ptr = game.cur_area_data->path_stops[s]->links[l];
+            PathLink* l_ptr = game.curAreaData->pathStops[s]->links[l];
             
             if(
                 circleIntersectsLineSeg(
                     m->pos, m->radius,
-                    s_ptr->pos, l_ptr->end_ptr->pos
+                    s_ptr->pos, l_ptr->endPtr->pos
                 )
             ) {
                 obstructions[l_ptr].insert(m);
-                l_ptr->blocked_by_obstacle = true;
+                l_ptr->blockedByObstacle = true;
                 paths_changed = true;
             }
         }
@@ -151,7 +151,7 @@ void PathManager::handleObstacleAdd(Mob* m) {
         //Re-calculate the paths of mobs taking paths.
         for(size_t m2 = 0; m2 < game.states.gameplay->mobs.all.size(); m2++) {
             Mob* m2_ptr = game.states.gameplay->mobs.all[m2];
-            if(!m2_ptr->path_info) continue;
+            if(!m2_ptr->pathInfo) continue;
             
             m2_ptr->fsm.runEvent(MOB_EV_PATHS_CHANGED);
         }
@@ -173,7 +173,7 @@ void PathManager::handleObstacleRemove(Mob* m) {
         bool to_delete = false;
         if(o->second.erase(m) > 0) {
             if(o->second.empty()) {
-                o->first->blocked_by_obstacle = false;
+                o->first->blockedByObstacle = false;
                 to_delete = true;
                 paths_changed = true;
             }
@@ -189,7 +189,7 @@ void PathManager::handleObstacleRemove(Mob* m) {
         //Re-calculate the paths of mobs taking paths.
         for(size_t m2 = 0; m2 < game.states.gameplay->mobs.all.size(); m2++) {
             Mob* m2_ptr = game.states.gameplay->mobs.all[m2];
-            if(!m2_ptr->path_info) continue;
+            if(!m2_ptr->pathInfo) continue;
             
             m2_ptr->fsm.runEvent(MOB_EV_PATHS_CHANGED);
         }
@@ -207,9 +207,9 @@ void PathManager::handleSectorHazardChange(Sector* sector_ptr) {
     //Remove relevant stops from our list.
     bool paths_changed = false;
     
-    for(auto s = hazardous_stops.begin(); s != hazardous_stops.end();) {
+    for(auto s = hazardousStops.begin(); s != hazardousStops.end();) {
         bool to_delete = false;
-        if((*s)->sector_ptr == sector_ptr) {
+        if((*s)->sectorPtr == sector_ptr) {
             paths_changed = true;
             if(sector_ptr->hazards.empty()) {
                 //We only want to delete it if it became hazardless.
@@ -218,7 +218,7 @@ void PathManager::handleSectorHazardChange(Sector* sector_ptr) {
         }
         
         if(to_delete) {
-            s = hazardous_stops.erase(s);
+            s = hazardousStops.erase(s);
         } else {
             ++s;
         }
@@ -228,7 +228,7 @@ void PathManager::handleSectorHazardChange(Sector* sector_ptr) {
         //Re-calculate the paths of mobs taking paths.
         for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
             Mob* m_ptr = game.states.gameplay->mobs.all[m];
-            if(!m_ptr->path_info) continue;
+            if(!m_ptr->pathInfo) continue;
             
             m_ptr->fsm.runEvent(MOB_EV_PATHS_CHANGED);
         }
@@ -315,8 +315,8 @@ void PathStop::calculateDistsPlusNeighbors() {
         l_ptr->calculateDist(this);
     }
     
-    for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
-        PathStop* s_ptr = game.cur_area_data->path_stops[s];
+    for(size_t s = 0; s < game.curAreaData->pathStops.size(); s++) {
+        PathStop* s_ptr = game.curAreaData->pathStops[s];
         PathLink* l_ptr = s_ptr->get_link(this);
         if(l_ptr) {
             l_ptr->calculateDist(s_ptr);
@@ -347,7 +347,7 @@ void PathStop::clone(PathStop* destination) const {
  */
 PathLink* PathStop::get_link(const PathStop* other_stop) const {
     for(size_t l = 0; l < links.size(); l++) {
-        if(links[l]->end_ptr == other_stop) return links[l];
+        if(links[l]->endPtr == other_stop) return links[l];
     }
     return nullptr;
 }
@@ -378,7 +378,7 @@ void PathStop::removeLink(const PathLink* link_ptr) {
  */
 void PathStop::removeLink(const PathStop* other_stop) {
     for(size_t l = 0; l < links.size(); l++) {
-        if(links[l]->end_ptr == other_stop) {
+        if(links[l]->endPtr == other_stop) {
             delete links[l];
             links.erase(links.begin() + l);
             return;
@@ -399,7 +399,7 @@ bool canTakePathStop(
     PathStop* stop_ptr, const PathFollowSettings &settings,
     PATH_BLOCK_REASON* out_reason
 ) {
-    Sector* sector_ptr = stop_ptr->sector_ptr;
+    Sector* sector_ptr = stop_ptr->sectorPtr;
     if(!sector_ptr) {
         //We're probably in the area editor, where things change too often
         //for us to cache the sector pointer and access said cache.
@@ -461,7 +461,7 @@ bool canTakePathStop(
     //Check if the end stop is hazardous, by checking its sector.
     bool touching_hazard =
         sector_ptr && (
-            !sector_ptr->hazard_floor ||
+            !sector_ptr->hazardFloor ||
             !hasFlag(settings.flags, PATH_FOLLOW_FLAG_AIRBORNE)
         );
         
@@ -472,7 +472,7 @@ bool canTakePathStop(
         !sector_ptr->hazards.empty()
     ) {
         for(size_t sh = 0; sh < sector_ptr->hazards.size(); sh++) {
-            if(!sector_ptr->hazards[sh]->blocks_paths) {
+            if(!sector_ptr->hazards[sh]->blocksPaths) {
                 //This hazard doesn't cause Pikmin to try and avoid it.
                 continue;
             }
@@ -515,29 +515,29 @@ bool canTraversePathLink(
     //Check if there's an obstacle in the way.
     if(
         !hasFlag(settings.flags, PATH_FOLLOW_FLAG_IGNORE_OBSTACLES) &&
-        link_ptr->blocked_by_obstacle
+        link_ptr->blockedByObstacle
     ) {
         if(out_reason) *out_reason = PATH_BLOCK_REASON_OBSTACLE;
         return false;
     }
     
     //Get the start and end sectors.
-    Sector* start_sector = link_ptr->start_ptr->sector_ptr;
+    Sector* start_sector = link_ptr->startPtr->sectorPtr;
     if(!start_sector) {
         //We're probably in the area editor, where things change too often
         //for us to cache the sector pointer and access said cache.
         //Let's calculate now real quick.
-        start_sector = getSector(link_ptr->start_ptr->pos, nullptr, false);
+        start_sector = getSector(link_ptr->startPtr->pos, nullptr, false);
         if(!start_sector) {
             //It's really the void. Nothing that can be done here then.
             if(out_reason) *out_reason = PATH_BLOCK_REASON_STOP_IN_VOID;
             return false;
         }
     }
-    Sector* end_sector = link_ptr->end_ptr->sector_ptr;
+    Sector* end_sector = link_ptr->endPtr->sectorPtr;
     if(!end_sector) {
         //Same as above.
-        end_sector = getSector(link_ptr->end_ptr->pos, nullptr, false);
+        end_sector = getSector(link_ptr->endPtr->pos, nullptr, false);
         if(!end_sector) {
             if(out_reason) *out_reason = PATH_BLOCK_REASON_STOP_IN_VOID;
             return false;
@@ -561,7 +561,7 @@ bool canTraversePathLink(
     }
     
     //Check if there's any problem with the stop.
-    if(!canTakePathStop(link_ptr->end_ptr, settings, end_sector, out_reason)) {
+    if(!canTakePathStop(link_ptr->endPtr, settings, end_sector, out_reason)) {
         return false;
     }
     
@@ -585,7 +585,7 @@ void depthFirstSearch(
     unordered_set<PathStop*> links;
     
     for(size_t l = 0; l < start->links.size(); l++) {
-        links.insert(start->links[l]->end_ptr);
+        links.insert(start->links[l]->endPtr);
     }
     
     for(size_t n = 0; n < nodes.size(); n++) {
@@ -693,7 +693,7 @@ PATH_RESULT aStar(
         //Part 4: Check the neighbors.
         for(size_t l = 0; l < cur_node->links.size(); l++) {
             PathLink* l_ptr = cur_node->links[l];
-            PathStop* neighbor = l_ptr->end_ptr;
+            PathStop* neighbor = l_ptr->endPtr;
             
             //Can this link be traversed?
             if(!canTraversePathLink(l_ptr, settings)) {
@@ -769,19 +769,19 @@ PATH_RESULT getPath(
 
     full_path.clear();
     
-    if(game.cur_area_data->path_stops.empty()) {
+    if(game.curAreaData->pathStops.empty()) {
         if(out_total_dist) *out_total_dist = 0.0f;
         return PATH_RESULT_DIRECT_NO_STOPS;
     }
     
     Point start_to_use =
         hasFlag(settings.flags, PATH_FOLLOW_FLAG_FAKED_START) ?
-        settings.faked_start :
+        settings.fakedStart :
         start;
         
     Point end_to_use =
         hasFlag(settings.flags, PATH_FOLLOW_FLAG_FAKED_END) ?
-        settings.faked_end :
+        settings.fakedEnd :
         end;
         
     //Start by finding the closest stops to the start and finish.
@@ -790,8 +790,8 @@ PATH_RESULT getPath(
     float closest_to_start_dist = 0.0f;
     float closest_to_end_dist = 0.0f;
     
-    for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
-        PathStop* s_ptr = game.cur_area_data->path_stops[s];
+    for(size_t s = 0; s < game.curAreaData->pathStops.size(); s++) {
+        PathStop* s_ptr = game.curAreaData->pathStops[s];
         
         float dist_to_start =
             Distance(start_to_use, s_ptr->pos).toFloat() - s_ptr->radius;

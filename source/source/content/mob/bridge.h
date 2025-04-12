@@ -38,38 +38,38 @@ private:
     //--- Members ---
     
     //How many chunks are needed to fully build this bridge.
-    size_t total_chunks_needed = 10;
+    size_t totalChunksNeeded = 10;
     
     //Total length that the bridge should have.
-    float total_length = 192.0f;
+    float totalLength = 192.0f;
     
     //Total vertical offset over the bridge.
-    float delta_z = 0.0f;
+    float deltaZ = 0.0f;
     
     //Starting position of the bridge.
-    Point start_pos;
+    Point startPos;
     
     //Starting vertical position of the bridge.
-    float start_z = 0.0f;
+    float startZ = 0.0f;
     
     //How many chunks have successfully been created so far.
     size_t chunks = 0;
     
     //Z offset of the previous chunk. Cache for convenience.
-    float prev_chunk_z_offset = LARGE_FLOAT;
+    float prevChunkZOffset = LARGE_FLOAT;
     
     //Components of the previous chunk. Cache for convenience.
-    vector<Mob*> prev_chunk_components;
+    vector<Mob*> prevChunkComponents;
     
     //How many times did we combine chunks? Cache for convenience.
-    size_t prev_chunk_combo = 0;
+    size_t prevChunkCombo = 0;
     
 public:
 
     //--- Members ---
     
     //What type of bridge it is.
-    BridgeType* bri_type = nullptr;
+    BridgeType* briType = nullptr;
     
     
     //--- Function declarations ---

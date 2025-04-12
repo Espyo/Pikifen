@@ -60,7 +60,7 @@ struct SectorTexture {
     ALLEGRO_COLOR tint = COLOR_WHITE;
     
     //Internal name of the texture bitmap.
-    string bmp_name;
+    string bmpName;
     
 };
 
@@ -80,7 +80,7 @@ struct Sector {
     SECTOR_TYPE type = SECTOR_TYPE_NORMAL;
     
     //Is it a bottomless pit?
-    bool is_bottomless_pit = false;
+    bool isBottomlessPit = false;
     
     //Z coordinate of the floor.
     float z = 0.0f;
@@ -92,31 +92,31 @@ struct Sector {
     unsigned char brightness = GEOMETRY::DEF_SECTOR_BRIGHTNESS;
     
     //Information about its texture.
-    SectorTexture texture_info;
+    SectorTexture textureInfo;
     
     //Is this sector meant to fade textures from neighboring sectors?
     bool fade = false;
     
     //String representing its hazards. Used for the editor.
-    string hazards_str;
+    string hazardsStr;
     
     //List of hazards.
     vector<Hazard*> hazards;
     
     //Is only floor hazardous, or the air as well?
-    bool hazard_floor = true;
+    bool hazardFloor = true;
     
     //Time left to drain the liquid in the sector.
-    float liquid_drain_left = 0.0f;
+    float liquidDrainLeft = 0.0f;
     
     //Is it currently draining its liquid?
-    bool draining_liquid = false;
+    bool drainingLiquid = false;
     
     //Scrolling speed, if any.
     Point scroll;
     
     //Index number of the edges that make up this sector.
-    vector<size_t> edge_idxs;
+    vector<size_t> edgeIdxs;
     
     //Edges that make up this sector.
     vector<Edge*> edges;

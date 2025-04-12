@@ -175,9 +175,9 @@ private:
     //--- Members ---
     
     //List of mobs in the previous state.
-    vector<Mob*> prev_state_mobs;
+    vector<Mob*> prevStateMobs;
     
     //Index of the previous leader.
-    size_t prev_leader_idx = INVALID;
+    size_t prevLeaderIdx = INVALID;
     
 };

@@ -65,22 +65,22 @@ const float SPEW_V_SPEED = 600.0f;
  */
 Onion::Onion(const Point &pos, OnionType* type, float angle) :
     Mob(pos, type, angle),
-    oni_type(type) {
+    oniType(type) {
     
-    nest = new PikminNest(this, oni_type->nest);
+    nest = new PikminNest(this, oniType->nest);
     
     //Increase its Z by one so that mobs that walk at
     //ground level next to it will appear under it.
-    gravity_mult = 0.0f;
+    gravityMult = 0.0f;
     z++;
     
-    generation_delay_timer.on_end =
+    generationDelayTimer.onEnd =
     [this] () { startGenerating(); };
-    next_generation_timer.on_end =
+    nextGenerationTimer.onEnd =
     [this] () {
-        for(size_t t = 0; t < oni_type->nest->pik_types.size(); t++) {
-            if(generation_queue[t] > 0) {
-                next_generation_timer.start();
+        for(size_t t = 0; t < oniType->nest->pik_types.size(); t++) {
+            if(generationQueue[t] > 0) {
+                nextGenerationTimer.start();
                 generate();
                 return;
             }
@@ -88,8 +88,8 @@ Onion::Onion(const Point &pos, OnionType* type, float angle) :
         stopGenerating();
     };
     
-    for(size_t t = 0; t < oni_type->nest->pik_types.size(); t++) {
-        generation_queue.push_back(0);
+    for(size_t t = 0; t < oniType->nest->pik_types.size(); t++) {
+        generationQueue.push_back(0);
     }
 }
 
@@ -123,7 +123,7 @@ void Onion::drawMob() {
         SPRITE_BMP_EFFECT_DELIVERY
     );
     
-    eff.tint_color.a *= (seethrough / 255.0f);
+    eff.tintColor.a *= (seethrough / 255.0f);
     
     drawBitmapWithEffects(cur_s_ptr->bitmap, eff);
 }
@@ -145,30 +145,30 @@ void Onion::readScriptVars(const ScriptVarReader &svr) {
  * @brief Spew a Pikmin seed in the queue or add it to the Onion's storage.
  */
 void Onion::generate() {
-    for(size_t t = 0; t < generation_queue.size(); t++) {
-        if(generation_queue[t] == 0) continue;
+    for(size_t t = 0; t < generationQueue.size(); t++) {
+        if(generationQueue[t] == 0) continue;
         
-        generation_queue[t]--;
+        generationQueue[t]--;
         
-        game.statistics.pikmin_births++;
-        game.states.gameplay->pikmin_born++;
-        game.states.gameplay->pikmin_born_per_type[
-            oni_type->nest->pik_types[t]
+        game.statistics.pikminBirths++;
+        game.states.gameplay->pikminBorn++;
+        game.states.gameplay->pikminBornPerType[
+            oniType->nest->pik_types[t]
         ]++;
-        game.states.gameplay->last_pikmin_born_pos = pos;
+        game.states.gameplay->lastPikminBornPos = pos;
         
         size_t total_after =
-            game.states.gameplay->mobs.pikmin_list.size() + 1;
+            game.states.gameplay->mobs.pikmin.size() + 1;
             
-        if(total_after > game.config.rules.max_pikmin_in_field) {
+        if(total_after > game.config.rules.maxPikminInField) {
             nest->pikmin_inside[t][0]++;
             
             ParticleGenerator pg =
                 standardParticleGenSetup(
-                    game.sys_content_names.part_onion_gen_inside, this
+                    game.sysContentNames.parOnionGenInside, this
                 );
-            pg.base_particle.priority = PARTICLE_PRIORITY_LOW;
-            particle_generators.push_back(pg);
+            pg.baseParticle.priority = PARTICLE_PRIORITY_LOW;
+            particleGenerators.push_back(pg);
             
             return;
         }
@@ -180,14 +180,14 @@ void Onion::generate() {
                 ONION::SPEW_H_SPEED_DEVIATION
             );
         spewPikminSeed(
-            pos, z + ONION::NEW_SEED_Z_OFFSET, oni_type->nest->pik_types[t],
-            next_spew_angle, horizontal_strength, ONION::SPEW_V_SPEED
+            pos, z + ONION::NEW_SEED_Z_OFFSET, oniType->nest->pik_types[t],
+            nextSpewAngle, horizontal_strength, ONION::SPEW_V_SPEED
         );
         
-        next_spew_angle += ONION::SPEW_ANGLE_SHIFT;
-        next_spew_angle = normalizeAngle(next_spew_angle);
+        nextSpewAngle += ONION::SPEW_ANGLE_SHIFT;
+        nextSpewAngle = normalizeAngle(nextSpewAngle);
         
-        playSound(oni_type->sound_pop_idx);
+        playSound(oniType->soundPopIdx);
         
         return;
     }
@@ -198,8 +198,8 @@ void Onion::generate() {
  * @brief Starts generating Pikmin.
  */
 void Onion::startGenerating() {
-    generation_delay_timer.stop();
-    next_generation_timer.start();
+    generationDelayTimer.stop();
+    nextGenerationTimer.start();
     string msg = "started_generation";
     sendScriptMessage(this, msg);
 }
@@ -209,8 +209,8 @@ void Onion::startGenerating() {
  * @brief Stops generating Pikmin.
  */
 void Onion::stopGenerating() {
-    generation_delay_timer.stop();
-    next_generation_timer.stop();
+    generationDelayTimer.stop();
+    nextGenerationTimer.stop();
     string msg = "stopped_generation";
     sendScriptMessage(this, msg);
 }
@@ -222,16 +222,16 @@ void Onion::stopGenerating() {
  * @param delta_t How long the frame's tick is, in seconds.
  */
 void Onion::tickClassSpecifics(float delta_t) {
-    generation_delay_timer.tick(delta_t);
-    next_generation_timer.tick(delta_t);
+    generationDelayTimer.tick(delta_t);
+    nextGenerationTimer.tick(delta_t);
     
     unsigned char final_alpha = 255;
     
     if(
-        game.states.gameplay->cur_leader_ptr &&
+        game.states.gameplay->curLeaderPtr &&
         BBoxCheck(
-            game.states.gameplay->cur_leader_ptr->pos, pos,
-            game.states.gameplay->cur_leader_ptr->radius +
+            game.states.gameplay->curLeaderPtr->pos, pos,
+            game.states.gameplay->curLeaderPtr->radius +
             radius * 3
         )
     ) {
@@ -239,10 +239,10 @@ void Onion::tickClassSpecifics(float delta_t) {
     }
     
     if(
-        game.states.gameplay->cur_leader_ptr &&
+        game.states.gameplay->curLeaderPtr &&
         BBoxCheck(
-            game.states.gameplay->leader_cursor_w, pos,
-            game.states.gameplay->cur_leader_ptr->radius +
+            game.states.gameplay->leaderCursorW, pos,
+            game.states.gameplay->curLeaderPtr->radius +
             radius * 3
         )
     ) {

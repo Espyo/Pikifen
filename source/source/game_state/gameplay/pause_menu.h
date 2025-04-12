@@ -107,28 +107,28 @@ struct PauseMenu {
     GuiManager gui;
     
     //GUI manager for the radar page.
-    GuiManager radar_gui;
+    GuiManager radarGui;
     
     //GUI manager for the status page.
-    GuiManager status_gui;
+    GuiManager statusGui;
     
     //GUI manager for the mission page.
-    GuiManager mission_gui;
+    GuiManager missionGui;
     
     //GUI manager for the leaving confirmation page.
-    GuiManager confirmation_gui;
+    GuiManager confirmationGui;
     
     //Multiply the background alpha by this much.
-    float bg_alpha_mult = 0.0f;
+    float bgAlphaMult = 0.0f;
     
     //Control lockout time left for when the menu opens.
-    float opening_lockout_timer = 0.0f;
+    float openingLockoutTimer = 0.0f;
     
     //Time left until the menu finishes closing.
-    float closing_timer = 0.0f;
+    float closingTimer = 0.0f;
     
     //Is the struct meant to be deleted?
-    bool to_delete = false;
+    bool toDelete = false;
     
     
     //--- Function declarations ---
@@ -148,115 +148,115 @@ private:
     bool closing = false;
     
     //Confirmation page explanation text.
-    TextGuiItem* confirmation_explanation_text = nullptr;
+    TextGuiItem* confirmationExplanationText = nullptr;
     
     //Radar GUI item.
-    GuiItem* radar_item = nullptr;
+    GuiItem* radarItem = nullptr;
     
     //Pikmin status list.
-    ListGuiItem* pikmin_list = nullptr;
+    ListGuiItem* pikminList = nullptr;
     
     //Where the player intends to go by leaving.
-    GAMEPLAY_LEAVE_TARGET leave_target = GAMEPLAY_LEAVE_TARGET_AREA_SELECT;
+    GAMEPLAY_LEAVE_TARGET leaveTarget = GAMEPLAY_LEAVE_TARGET_AREA_SELECT;
     
     //Pages available, in order.
     vector<PAUSE_MENU_PAGE> pages;
     
     //Information about the current secondary menu, if any.
-    Menu* secondary_menu = nullptr;
+    Menu* secondaryMenu = nullptr;
     
     //Z of the lowest sector.
-    float lowest_sector_z = 0.0f;
+    float lowestSectorZ = 0.0f;
     
     //Z of the highest sector.
-    float highest_sector_z = 0.0f;
+    float highestSectorZ = 0.0f;
     
     //World coordinates to radar screen coordinates transformation.
-    ALLEGRO_TRANSFORM world_to_radar_screen_transform;
+    ALLEGRO_TRANSFORM worldToRadarScreenTransform;
     
     //Radar screen coordinates to world coordinates transformation.
-    ALLEGRO_TRANSFORM radar_screen_to_world_transform;
+    ALLEGRO_TRANSFORM radarScreenToWorldTransform;
     
     //Radar camera information.
-    Camera radar_cam;
+    Camera radarCam;
     
     //Location of the radar cursor, in world coordinates.
-    Point radar_cursor;
+    Point radarCursor;
     
     //Whether a mouse button is being held in the radar.
-    bool radar_mouse_down = false;
+    bool radarMouseDown = false;
     
     //Point where the mouse button was first held in the radar (screen coords).
-    Point radar_mouse_down_point;
+    Point radarMouseDownPoint;
     
     //Whether the player is dragging the mouse. False for just a (fuzzy) click.
-    bool radar_mouse_dragging = false;
+    bool radarMouseDragging = false;
     
     //Minimum coordinates the radar can pan to.
-    Point radar_min_coords;
+    Point radarMinCoords;
     
     //Maximum coordinates the radar can pan to.
-    Point radar_max_coords;
+    Point radarMaxCoords;
     
     //Icon for the radar cursor.
-    ALLEGRO_BITMAP* bmp_radar_cursor = nullptr;
+    ALLEGRO_BITMAP* bmpRadarCursor = nullptr;
     
     //Icon for a Pikmin in the radar.
-    ALLEGRO_BITMAP* bmp_radar_pikmin = nullptr;
+    ALLEGRO_BITMAP* bmpRadarPikmin = nullptr;
     
     //Icon for a treasure in the radar.
-    ALLEGRO_BITMAP* bmp_radar_treasure = nullptr;
+    ALLEGRO_BITMAP* bmpRadarTreasure = nullptr;
     
     //Icon for a living enemy in the radar.
-    ALLEGRO_BITMAP* bmp_radar_enemy_alive = nullptr;
+    ALLEGRO_BITMAP* bmpRadarEnemyAlive = nullptr;
     
     //Icon for a dead enemy in the radar.
-    ALLEGRO_BITMAP* bmp_radar_enemy_dead = nullptr;
+    ALLEGRO_BITMAP* bmpRadarEnemyDead = nullptr;
     
     //Bubble that surrounds a leader's icon in the radar.
-    ALLEGRO_BITMAP* bmp_radar_leader_bubble = nullptr;
+    ALLEGRO_BITMAP* bmpRadarLeaderBubble = nullptr;
     
     //X imposed on a KO'd leader's icon.
-    ALLEGRO_BITMAP* bmp_radar_leader_x = nullptr;
+    ALLEGRO_BITMAP* bmpRadarLeaderX = nullptr;
     
     //Icon representing a generic obstacle that blocks paths.
-    ALLEGRO_BITMAP* bmp_radar_obstacle = nullptr;
+    ALLEGRO_BITMAP* bmpRadarObstacle = nullptr;
     
     //Skeleton part of an Onion's icon in the radar.
-    ALLEGRO_BITMAP* bmp_radar_onion_skeleton = nullptr;
+    ALLEGRO_BITMAP* bmpRadarOnionSkeleton = nullptr;
     
     //Bulb part of an Onion's icon in the radar.
-    ALLEGRO_BITMAP* bmp_radar_onion_bulb = nullptr;
+    ALLEGRO_BITMAP* bmpRadarOnionBulb = nullptr;
     
     //Icon for a ship in the radar.
-    ALLEGRO_BITMAP* bmp_radar_ship = nullptr;
+    ALLEGRO_BITMAP* bmpRadarShip = nullptr;
     
     //Texture for a path in the radar.
-    ALLEGRO_BITMAP* bmp_radar_path = nullptr;
+    ALLEGRO_BITMAP* bmpRadarPath = nullptr;
     
     //Selected leader in the radar.
-    Mob* radar_selected_leader = nullptr;
+    Mob* radarSelectedLeader = nullptr;
     
     //Leader under the cursor in the radar.
-    Mob* radar_cursor_leader = nullptr;
+    Mob* radarCursorLeader = nullptr;
     
     //Time left before another Go Here calculation.
-    float go_here_calc_time = 0.0f;
+    float goHereCalcTime = 0.0f;
     
     //Go Here path.
-    vector<PathStop*> go_here_path;
+    vector<PathStop*> goHerePath;
     
     //Go Here path result.
-    PATH_RESULT go_here_path_result = PATH_RESULT_NOT_CALCULATED;
+    PATH_RESULT goHerePathResult = PATH_RESULT_NOT_CALCULATED;
     
     //Pan speed and amount.
-    MovementInfo radar_pan;
+    MovementInfo radarPan;
     
     //Whether the radar zoom-in input is pressed.
-    bool radar_zoom_in = false;
+    bool radarZoomIn = false;
     
     //Whether the radar zoom-out input is pressed.
-    bool radar_zoom_out = false;
+    bool radarZoomOut = false;
     
     
     //--- Function declarations ---

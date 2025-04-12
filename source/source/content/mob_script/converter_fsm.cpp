@@ -80,7 +80,7 @@ void converter_fsm::createFsm(MobType* typ) {
     
     
     typ->states = efc.finish();
-    typ->first_state_idx = fixStates(typ->states, "idling", typ);
+    typ->firstStateIdx = fixStates(typ->states, "idling", typ);
     
     //Check if the number in the enum and the total match up.
     engineAssert(
@@ -103,12 +103,12 @@ void converter_fsm::becomeIdle(Mob* m, void* info1, void* info2) {
     
     con_ptr->setAnimation(
         con_ptr->getAnimationIdxFromBaseAndGroup(
-            CONVERTER_ANIM_IDLING, N_CONVERTER_ANIMS, con_ptr->current_type_idx
+            CONVERTER_ANIM_IDLING, N_CONVERTER_ANIMS, con_ptr->currentTypeIdx
         ),
         START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
     );
-    con_ptr->cur_base_anim_idx = CONVERTER_ANIM_IDLING;
-    con_ptr->type_change_timer.start();
+    con_ptr->curBaseAnimIdx = CONVERTER_ANIM_IDLING;
+    con_ptr->typeChangeTimer.start();
 }
 
 
@@ -124,12 +124,12 @@ void converter_fsm::bumped(Mob* m, void* info1, void* info2) {
     
     con_ptr->setAnimation(
         con_ptr->getAnimationIdxFromBaseAndGroup(
-            CONVERTER_ANIM_BUMPED, N_CONVERTER_ANIMS, con_ptr->current_type_idx
+            CONVERTER_ANIM_BUMPED, N_CONVERTER_ANIMS, con_ptr->currentTypeIdx
         )
     );
-    con_ptr->cur_base_anim_idx = CONVERTER_ANIM_BUMPED;
-    con_ptr->type_change_timer.stop();
-    con_ptr->auto_conversion_timer.stop();
+    con_ptr->curBaseAnimIdx = CONVERTER_ANIM_BUMPED;
+    con_ptr->typeChangeTimer.stop();
+    con_ptr->autoConversionTimer.stop();
 }
 
 
@@ -153,7 +153,7 @@ void converter_fsm::finishBeingBumped(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void converter_fsm::finishDying(Mob* m, void* info1, void* info2) {
-    m->to_delete = true;
+    m->toDelete = true;
 }
 
 
@@ -183,35 +183,35 @@ void converter_fsm::handlePikmin(Mob* m, void* info1, void* info2) {
     Converter* con_ptr = (Converter*) m;
     Pikmin* pik_ptr = (Pikmin*) info1;
     
-    if(con_ptr->amount_in_buffer == con_ptr->con_type->buffer_size) {
+    if(con_ptr->amountInBuffer == con_ptr->conType->bufferSize) {
         //A Pikmin tried to sneak in in the middle of a conversion! Denied.
         return;
     }
     
-    con_ptr->amount_in_buffer++;
+    con_ptr->amountInBuffer++;
     if(
-        con_ptr->con_type->same_type_counts_for_output ||
-        pik_ptr->pik_type != con_ptr->current_type
+        con_ptr->conType->sameTypeCountsForOutput ||
+        pik_ptr->pikType != con_ptr->currentType
     ) {
-        con_ptr->input_pikmin_left--;
+        con_ptr->inputPikminLeft--;
     }
-    con_ptr->type_change_timer.stop();
-    con_ptr->auto_conversion_timer.start();
+    con_ptr->typeChangeTimer.stop();
+    con_ptr->autoConversionTimer.start();
     
-    pik_ptr->to_delete = true;
+    pik_ptr->toDelete = true;
     
     if(
-        con_ptr->input_pikmin_left == 0 ||
-        con_ptr->amount_in_buffer == con_ptr->con_type->buffer_size
+        con_ptr->inputPikminLeft == 0 ||
+        con_ptr->amountInBuffer == con_ptr->conType->bufferSize
     ) {
         con_ptr->close();
     }
     
     ParticleGenerator pg =
         standardParticleGenSetup(
-            game.sys_content_names.part_converter_insertion, m
+            game.sysContentNames.parConverterInsertion, m
         );
-    m->particle_generators.push_back(pg);
+    m->particleGenerators.push_back(pg);
 }
 
 
@@ -226,10 +226,10 @@ void converter_fsm::open(Mob* m, void* info1, void* info2) {
     Converter* con_ptr = (Converter*) m;
     con_ptr->setAnimation(
         con_ptr->getAnimationIdxFromBaseAndGroup(
-            CONVERTER_ANIM_OPENING, N_CONVERTER_ANIMS, con_ptr->current_type_idx
+            CONVERTER_ANIM_OPENING, N_CONVERTER_ANIMS, con_ptr->currentTypeIdx
         )
     );
-    con_ptr->cur_base_anim_idx = CONVERTER_ANIM_OPENING;
+    con_ptr->curBaseAnimIdx = CONVERTER_ANIM_OPENING;
 }
 
 
@@ -244,7 +244,7 @@ void converter_fsm::open(Mob* m, void* info1, void* info2) {
 void converter_fsm::openOrDie(Mob* m, void* info1, void* info2) {
     Converter* con_ptr = (Converter*) m;
     
-    if(con_ptr->input_pikmin_left == 0) {
+    if(con_ptr->inputPikminLeft == 0) {
         con_ptr->fsm.setState(CONVERTER_STATE_DYING);
     } else {
         con_ptr->fsm.setState(CONVERTER_STATE_OPENING);
@@ -263,7 +263,7 @@ void converter_fsm::openOrDie(Mob* m, void* info1, void* info2) {
 void converter_fsm::openOrSpit(Mob* m, void* info1, void* info2) {
     Converter* con_ptr = (Converter*) m;
     
-    if(con_ptr->amount_in_buffer == 0) {
+    if(con_ptr->amountInBuffer == 0) {
         con_ptr->fsm.setState(CONVERTER_STATE_OPENING);
     } else {
         con_ptr->fsm.setState(CONVERTER_STATE_SPITTING);
@@ -283,10 +283,10 @@ void converter_fsm::spew(Mob* m, void* info1, void* info2) {
     
     con_ptr->setAnimation(
         con_ptr->getAnimationIdxFromBaseAndGroup(
-            CONVERTER_ANIM_SPITTING, N_CONVERTER_ANIMS, con_ptr->current_type_idx
+            CONVERTER_ANIM_SPITTING, N_CONVERTER_ANIMS, con_ptr->currentTypeIdx
         )
     );
-    con_ptr->cur_base_anim_idx = CONVERTER_ANIM_SPITTING;
+    con_ptr->curBaseAnimIdx = CONVERTER_ANIM_SPITTING;
     con_ptr->spew();
 }
 
@@ -303,8 +303,8 @@ void converter_fsm::startDying(Mob* m, void* info1, void* info2) {
     
     con_ptr->setAnimation(
         con_ptr->getAnimationIdxFromBaseAndGroup(
-            CONVERTER_ANIM_DYING, N_CONVERTER_ANIMS, con_ptr->current_type_idx
+            CONVERTER_ANIM_DYING, N_CONVERTER_ANIMS, con_ptr->currentTypeIdx
         )
     );
-    con_ptr->cur_base_anim_idx = CONVERTER_ANIM_DYING;
+    con_ptr->curBaseAnimIdx = CONVERTER_ANIM_DYING;
 }

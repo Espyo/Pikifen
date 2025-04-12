@@ -27,13 +27,13 @@
  */
 Pile::Pile(const Point &pos, PileType* type, float angle) :
     Mob(pos, type, angle),
-    pil_type(type),
-    amount(type->max_amount) {
+    pilType(type),
+    amount(type->maxAmount) {
     
     team = MOB_TEAM_OBSTACLE;
     
-    recharge_timer =
-    Timer(pil_type->recharge_interval, [this] () { this->recharge(); });
+    rechargeTimer =
+    Timer(pilType->rechargeInterval, [this] () { this->recharge(); });
 }
 
 
@@ -44,10 +44,10 @@ Pile::Pile(const Point &pos, PileType* type, float angle) :
  */
 void Pile::changeAmount(int change) {
     if(change < 0 && amount == 0) return;
-    if(change > 0 && amount == pil_type->max_amount) return;
+    if(change > 0 && amount == pilType->maxAmount) return;
     
     amount += change;
-    setHealth(true, false, change * pil_type->health_per_resource);
+    setHealth(true, false, change * pilType->healthPerResource);
     
     update();
 }
@@ -67,10 +67,10 @@ bool Pile::getFractionNumbersInfo(
     float* fraction_value_nr, float* fraction_req_nr,
     ALLEGRO_COLOR* fraction_color
 ) const {
-    if(amount == 0 || !pil_type->show_amount) return false;
+    if(amount == 0 || !pilType->showAmount) return false;
     *fraction_value_nr = amount;
     *fraction_req_nr = 0;
-    *fraction_color = game.config.aesthetic_gen.carrying_color_stop;
+    *fraction_color = game.config.aestheticGen.carryingColorStop;
     return true;
 }
 
@@ -87,11 +87,11 @@ void Pile::readScriptVars(const ScriptVarReader &svr) {
     
     if(svr.get("amount", amount_var)) {
         amount = amount_var;
-        amount = std::clamp(amount, (size_t) 0, pil_type->max_amount);
+        amount = std::clamp(amount, (size_t) 0, pilType->maxAmount);
     }
     
-    health = pil_type->health_per_resource * amount;
-    max_health = health;
+    health = pilType->healthPerResource * amount;
+    maxHealth = health;
     update();
 }
 
@@ -100,8 +100,8 @@ void Pile::readScriptVars(const ScriptVarReader &svr) {
  * @brief Adds some more to the pile from a periodic recharge.
  */
 void Pile::recharge() {
-    recharge_timer.start();
-    changeAmount(pil_type->recharge_amount);
+    rechargeTimer.start();
+    changeAmount(pilType->rechargeAmount);
 }
 
 
@@ -111,9 +111,9 @@ void Pile::recharge() {
  * @param delta_t How long the frame's tick is, in seconds.
  */
 void Pile::tickClassSpecifics(float delta_t) {
-    recharge_timer.tick(delta_t);
+    rechargeTimer.tick(delta_t);
     
-    if(amount == 0 && pil_type->delete_when_finished) {
+    if(amount == 0 && pilType->deleteWhenFinished) {
         //Ready to delete. Unless it's being used, that is.
         
         for(
@@ -121,12 +121,12 @@ void Pile::tickClassSpecifics(float delta_t) {
             r < game.states.gameplay->mobs.resources.size(); r++
         ) {
             Resource* r_ptr = game.states.gameplay->mobs.resources[r];
-            if(r_ptr->origin_pile == this) {
+            if(r_ptr->originPile == this) {
                 return;
             }
         }
         
-        to_delete = true;
+        toDelete = true;
     }
 }
 
@@ -136,19 +136,19 @@ void Pile::tickClassSpecifics(float delta_t) {
  * some other things.
  */
 void Pile::update() {
-    amount = std::clamp(amount, (size_t) 0, pil_type->max_amount);
+    amount = std::clamp(amount, (size_t) 0, pilType->maxAmount);
     
-    if(amount == pil_type->max_amount) {
-        recharge_timer.stop();
+    if(amount == pilType->maxAmount) {
+        rechargeTimer.stop();
     }
     
     size_t anim_amount_nr = 0;
-    size_t n_groups = pil_type->animation_group_suffixes.size();
+    size_t n_groups = pilType->animationGroupSuffixes.size();
     if(n_groups > 1 && amount > 0) {
         anim_amount_nr =
             ceil(
                 (n_groups - 1) *
-                ((float) amount / (float) pil_type->max_amount)
+                ((float) amount / (float) pilType->maxAmount)
             );
         anim_amount_nr = std::clamp(anim_amount_nr, (size_t) 0, n_groups - 1);
     }
@@ -159,16 +159,16 @@ void Pile::update() {
         START_ANIM_OPTION_NO_RESTART, true
     );
     
-    if(pil_type->auto_shrink_smallest_radius != 0.0f) {
+    if(pilType->autoShrinkSmallestRadius != 0.0f) {
         setRadius(
             interpolateNumber(
-                amount, 1, pil_type->max_amount,
-                pil_type->auto_shrink_smallest_radius, pil_type->radius
+                amount, 1, pilType->maxAmount,
+                pilType->autoShrinkSmallestRadius, pilType->radius
             )
         );
     }
     
-    if(pil_type->hide_when_empty) {
+    if(pilType->hideWhenEmpty) {
         if(amount == 0) {
             enableFlag(flags, MOB_FLAG_HIDDEN);
             enableFlag(flags, MOB_FLAG_INTANGIBLE);

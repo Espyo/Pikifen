@@ -144,24 +144,24 @@ const float THROW_PREVIEW_MIN_THICKNESS = 2.0f;
  */
 Leader::Leader(const Point &pos, LeaderType* type, float angle) :
     Mob(pos, type, angle),
-    lea_type(type),
-    auto_throw_repeater(&game.auto_throw_settings) {
+    leaType(type),
+    autoThrowRepeater(&game.autoThrowSettings) {
     
     team = MOB_TEAM_PLAYER_1;
-    invuln_period = Timer(LEADER::INVULN_PERIOD_NORMAL);
+    invulnPeriod = Timer(LEADER::INVULN_PERIOD_NORMAL);
     
-    subgroup_type_ptr =
-        game.states.gameplay->subgroup_types.getType(
+    subgroupTypePtr =
+        game.states.gameplay->subgroupTypes.getType(
             SUBGROUP_TYPE_CATEGORY_LEADER
         );
         
-    swarm_next_arrow_timer.on_end = [this] () {
-        swarm_next_arrow_timer.start();
-        swarm_arrows.push_back(0);
+    swarmNextArrowTimer.onEnd = [this] () {
+        swarmNextArrowTimer.start();
+        swarmArrows.push_back(0);
         
         Particle p;
         unsigned char color_idx = game.rng.i(0, WHISTLE::N_DOT_COLORS);
-        p.bitmap = game.sys_content.bmp_bright_circle;
+        p.bitmap = game.sysContent.bmpBrightCircle;
         ALLEGRO_COLOR c =
             al_map_rgba(
                 WHISTLE::DOT_COLORS[color_idx][0],
@@ -183,24 +183,24 @@ Leader::Leader(const Point &pos, LeaderType* type, float angle) :
         p.priority = PARTICLE_PRIORITY_MEDIUM;
         p.size.setKeyframeValue(0, LEADER::SWARM_PARTICLE_SIZE);
         float p_speed =
-            game.states.gameplay->swarm_magnitude *
+            game.states.gameplay->swarmMagnitude *
             LEADER::SWARM_PARTICLE_SPEED_MULT +
             game.rng.f(
                 -LEADER::SWARM_PARTICLE_SPEED_DEVIATION,
                 LEADER::SWARM_PARTICLE_SPEED_DEVIATION
             );
         float p_angle =
-            game.states.gameplay->swarm_angle +
+            game.states.gameplay->swarmAngle +
             game.rng.f(
                 -LEADER::SWARM_PARTICLE_ANGLE_DEVIATION,
                 LEADER::SWARM_PARTICLE_ANGLE_DEVIATION
             );
-        p.linear_speed = KeyframeInterpolator<Point>(rotatePoint(Point(p_speed, 0.0f), p_angle));
+        p.linearSpeed = KeyframeInterpolator<Point>(rotatePoint(Point(p_speed, 0.0f), p_angle));
         p.time = p.duration;
         p.z = this->z + this->height / 2.0f;
         game.states.gameplay->particles.add(p);
     };
-    swarm_next_arrow_timer.start();
+    swarmNextArrowTimer.start();
 }
 
 
@@ -213,16 +213,16 @@ Leader::Leader(const Point &pos, LeaderType* type, float angle) :
 bool Leader::canGrabGroupMember(Mob* m) const {
     //Check if the leader is on a hazard that the member can't go to.
     if(
-        ground_sector &&
-        !standing_on_mob &&
-        !ground_sector->hazards.empty()
+        groundSector &&
+        !standingOnMob &&
+        !groundSector->hazards.empty()
     ) {
-        for(size_t sh = 0; sh < ground_sector->hazards.size(); sh++) {
-            if(!ground_sector->hazards[sh]->blocks_paths) {
+        for(size_t sh = 0; sh < groundSector->hazards.size(); sh++) {
+            if(!groundSector->hazards[sh]->blocksPaths) {
                 //This hazard doesn't cause Pikmin to try and avoid it.
                 continue;
             }
-            if(getHazardVulnerability(ground_sector->hazards[sh]).effect_mult != 0.0f) {
+            if(getHazardVulnerability(groundSector->hazards[sh]).effectMult != 0.0f) {
                 return false;
             }
         }
@@ -231,7 +231,7 @@ bool Leader::canGrabGroupMember(Mob* m) const {
     //Check if the mob is within range.
     if(
         Distance(m->pos, pos) >
-        game.config.leaders.group_member_grab_range
+        game.config.leaders.groupMemberGrabRange
     ) {
         return false;
     }
@@ -244,8 +244,8 @@ bool Leader::canGrabGroupMember(Mob* m) const {
     //Check if the mob isn't too far under the leader
     //when on the same height sector.
     if(z - m->z > GEOMETRY::STEP_HEIGHT &&
-       center_sector->z == m->center_sector->z
-       && standing_on_mob == m->standing_on_mob
+       centerSector->z == m->centerSector->z
+       && standingOnMob == m->standingOnMob
       ) {
         return false;
     }
@@ -300,10 +300,10 @@ void Leader::dismiss() {
     float base_angle;
     
     //First, calculate what direction the group should be dismissed to.
-    if(game.states.gameplay->swarm_magnitude > 0) {
+    if(game.states.gameplay->swarmMagnitude > 0) {
         //If the leader's swarming,
         //they should be dismissed in that direction.
-        base_angle = game.states.gameplay->swarm_angle;
+        base_angle = game.states.gameplay->swarmAngle;
     } else {
         //Leftmost member coordinate, rightmost, etc.
         Point min_coords, max_coords;
@@ -349,14 +349,14 @@ void Leader::dismiss() {
     
     //Go through all subgroups and populate the vector of data.
     SubgroupType* first_type =
-        game.states.gameplay->subgroup_types.getFirstType();
+        game.states.gameplay->subgroupTypes.getFirstType();
     SubgroupType* cur_type = first_type;
     
     do {
     
         if(
             cur_type !=
-            game.states.gameplay->subgroup_types.getType(
+            game.states.gameplay->subgroupTypes.getType(
                 SUBGROUP_TYPE_CATEGORY_LEADER
             )
         ) {
@@ -365,7 +365,7 @@ void Leader::dismiss() {
             
             for(size_t m = 0; m < n_group_members; m++) {
                 Mob* m_ptr = group->members[m];
-                if(m_ptr->subgroup_type_ptr != cur_type) continue;
+                if(m_ptr->subgroupTypePtr != cur_type) continue;
                 
                 if(!subgroup_exists) {
                     subgroups_info.push_back(DismissSubgroup());
@@ -378,7 +378,7 @@ void Leader::dismiss() {
         }
         
         cur_type =
-            game.states.gameplay->subgroup_types.getNextType(cur_type);
+            game.states.gameplay->subgroupTypes.getNextType(cur_type);
             
     } while(cur_type != first_type);
     
@@ -396,8 +396,8 @@ void Leader::dismiss() {
         //it appears to the left and right of the center.
         //So count each one twice. Except for the central one.
         subgroups_info[s].radius =
-            game.config.pikmin.standard_radius +
-            game.config.pikmin.standard_radius * 2 *
+            game.config.pikmin.standardRadius +
+            game.config.pikmin.standardRadius * 2 *
             LEADER::DISMISS_MEMBER_SIZE_MULTIPLIER * (n_rows - 1);
     }
     
@@ -570,7 +570,7 @@ void Leader::dismiss() {
                     subgroups_info[s].center +
                     angleToCoordinates(
                         member_angle,
-                        cur_row_idx * game.config.pikmin.standard_radius * 2 *
+                        cur_row_idx * game.config.pikmin.standardRadius * 2 *
                         LEADER::DISMISS_MEMBER_SIZE_MULTIPLIER
                     );
             }
@@ -609,7 +609,7 @@ void Leader::dismiss() {
     }
     
     //Final things.
-    playSound(lea_type->sound_data_idxs[LEADER_SOUND_DISMISSING]);
+    playSound(leaType->soundDataIdxs[LEADER_SOUND_DISMISSING]);
     for(size_t p = 0; p < LEADER::DISMISS_PARTICLE_AMOUNT; p++) {
         Particle par;
         const unsigned char* color_idx =
@@ -624,7 +624,7 @@ void Leader::dismiss() {
             
         par.color.setKeyframeValue(0, c);
         par.color.add(1, changeAlpha(c, 0));
-        par.bitmap = game.sys_content.bmp_bright_circle;
+        par.bitmap = game.sysContent.bmpBrightCircle;
         par.duration =
             game.rng.f(
                 LEADER::DISMISS_PARTICLE_MIN_DURATION,
@@ -640,7 +640,7 @@ void Leader::dismiss() {
                 LEADER::DISMISS_PARTICLE_MAX_SPEED
             );
         float par_angle = TAU / LEADER::DISMISS_PARTICLE_AMOUNT * p;
-        par.linear_speed = KeyframeInterpolator<Point>(rotatePoint(Point(par_speed, 0.0f), par_angle));
+        par.linearSpeed = KeyframeInterpolator<Point>(rotatePoint(Point(par_speed, 0.0f), par_angle));
         par.time = par.duration;
         par.z = z + height / 2.0f;
         game.states.gameplay->particles.add(par);
@@ -673,9 +673,9 @@ void Leader::drawMob() {
         SPRITE_BMP_EFFECT_CARRY
     );
     
-    if(invuln_period.time_left > 0.0f) {
+    if(invulnPeriod.timeLeft > 0.0f) {
         Sprite* spark_s;
-        game.sys_content.anim_sparks.getSpriteData(
+        game.sysContent.anmSparks.getSpriteData(
             &spark_s, nullptr, nullptr
         );
         
@@ -725,21 +725,21 @@ void Leader::getGroupSpotInfo(
     out_spot->y = 0.0f;
     *out_dist = 0.0f;
     
-    if(!following_group || !following_group->group) {
+    if(!followingGroup || !followingGroup->group) {
         return;
     }
     
-    Group* leader_group_ptr = following_group->group;
+    Group* leader_group_ptr = followingGroup->group;
     
     float distance =
-        following_group->radius +
-        radius + game.config.pikmin.standard_radius;
+        followingGroup->radius +
+        radius + game.config.pikmin.standardRadius;
         
     for(size_t me = 0; me < leader_group_ptr->members.size(); me++) {
         Mob* member_ptr = leader_group_ptr->members[me];
         if(member_ptr == this) {
             break;
-        } else if(member_ptr->subgroup_type_ptr == subgroup_type_ptr) {
+        } else if(member_ptr->subgroupTypePtr == subgroupTypePtr) {
             //If this member is also a leader,
             //then that means the current leader should stick behind.
             distance +=
@@ -747,7 +747,7 @@ void Leader::getGroupSpotInfo(
         }
     }
     
-    *out_spot = following_group->pos;
+    *out_spot = followingGroup->pos;
     *out_dist = distance;
 }
 
@@ -834,7 +834,7 @@ void Leader::queueThrow() {
         return;
     }
     
-    throw_queued = true;
+    throwQueued = true;
 }
 
 
@@ -862,10 +862,10 @@ void Leader::signalSwarmStart() const {
  * @brief Starts the auto-throw mode.
  */
 void Leader::startAutoThrowing() {
-    auto_throw_repeater.start();
+    autoThrowRepeater.start();
     //Already do the first throw, but two frames from now. This is because
     //manual press players can only throw as quickly as two frames.
-    auto_throw_repeater.next_trigger = game.delta_t * 2.0f;
+    autoThrowRepeater.nextTrigger = game.deltaT * 2.0f;
 }
 
 
@@ -876,26 +876,26 @@ void Leader::startAutoThrowing() {
 void Leader::startThrowTrail() {
     ParticleGenerator pg =
         standardParticleGenSetup(
-            game.sys_content_names.part_throw_trail, this
+            game.sysContentNames.parThrowTrail, this
         );
-    pg.follow_z_offset = 0.0f;
+    pg.followZOffset = 0.0f;
     adjustKeyframeInterpolatorValues<float>(
-        pg.base_particle.size,
+        pg.baseParticle.size,
     [ = ] (const float & f) { return f * radius; }
     );
     adjustKeyframeInterpolatorValues<ALLEGRO_COLOR>(
-        pg.base_particle.color,
+        pg.baseParticle.color,
     [ = ] (const ALLEGRO_COLOR & c) {
         ALLEGRO_COLOR new_c = c;
-        new_c.r *= type->main_color.r;
-        new_c.g *= type->main_color.g;
-        new_c.b *= type->main_color.b;
-        new_c.a *= type->main_color.a;
+        new_c.r *= type->mainColor.r;
+        new_c.g *= type->mainColor.g;
+        new_c.b *= type->mainColor.b;
+        new_c.a *= type->mainColor.a;
         return new_c;
     }
     );
     pg.id = MOB_PARTICLE_GENERATOR_ID_THROW;
-    particle_generators.push_back(pg);
+    particleGenerators.push_back(pg);
 }
 
 
@@ -906,20 +906,20 @@ void Leader::startWhistling() {
     game.states.gameplay->whistle.startWhistling();
     
     size_t whistling_sound_idx =
-        lea_type->sound_data_idxs[LEADER_SOUND_WHISTLING];
+        leaType->soundDataIdxs[LEADER_SOUND_WHISTLING];
     if(whistling_sound_idx != INVALID) {
         MobType::Sound* whistling_sound =
             &type->sounds[whistling_sound_idx];
-        whistle_sound_source_id =
+        whistleSoundSourceId =
             game.audio.createPosSoundSource(
                 whistling_sound->sample,
-                game.states.gameplay->leader_cursor_w, false,
+                game.states.gameplay->leaderCursorW, false,
                 whistling_sound->config
             );
     }
     setAnimation(LEADER_ANIM_WHISTLING);
-    script_timer.start(2.5f);
-    game.statistics.whistle_uses++;
+    scriptTimer.start(2.5f);
+    game.statistics.whistleUses++;
 }
 
 
@@ -927,7 +927,7 @@ void Leader::startWhistling() {
  * @brief Stops the auto-throw mode.
  */
 void Leader::stopAutoThrowing() {
-    auto_throw_repeater.stop();
+    autoThrowRepeater.stop();
 }
 
 
@@ -937,8 +937,8 @@ void Leader::stopAutoThrowing() {
 void Leader::stopWhistling() {
     if(!game.states.gameplay->whistle.whistling) return;
     game.states.gameplay->whistle.stopWhistling();
-    game.audio.destroySoundSource(whistle_sound_source_id);
-    whistle_sound_source_id = 0;
+    game.audio.destroySoundSource(whistleSoundSourceId);
+    whistleSoundSourceId = 0;
 }
 
 
@@ -955,7 +955,7 @@ void Leader::swapHeldPikmin(Mob* new_pik) {
     MobEvent* old_pik_ev = old_pik->fsm.getEvent(MOB_EV_RELEASED);
     MobEvent* new_pik_ev = new_pik->fsm.getEvent(MOB_EV_GRABBED_BY_FRIEND);
     
-    group->sort(new_pik->subgroup_type_ptr);
+    group->sort(new_pik->subgroupTypePtr);
     
     if(!old_pik_ev || !new_pik_ev) return;
     
@@ -978,11 +978,11 @@ void Leader::swapHeldPikmin(Mob* new_pik) {
  */
 void Leader::tickClassSpecifics(float delta_t) {
     //Throw-related things.
-    if(throw_cooldown > 0.0f) {
-        throw_cooldown -= delta_t;
+    if(throwCooldown > 0.0f) {
+        throwCooldown -= delta_t;
     }
     
-    size_t n_auto_throws = auto_throw_repeater.tick(delta_t);
+    size_t n_auto_throws = autoThrowRepeater.tick(delta_t);
     if(n_auto_throws > 0) {
         bool grabbed = grabClosestGroupMember();
         if(grabbed) {
@@ -991,18 +991,18 @@ void Leader::tickClassSpecifics(float delta_t) {
     }
     
     if(
-        throw_queued &&
-        throw_cooldown <= 0.0f &&
+        throwQueued &&
+        throwCooldown <= 0.0f &&
         checkThrowOk()
     ) {
         fsm.runEvent(LEADER_EV_THROW);
         updateThrowVariables();
-        throw_cooldown = LEADER::THROW_COOLDOWN_DURATION;
-        throw_queued = false;
+        throwCooldown = LEADER::THROW_COOLDOWN_DURATION;
+        throwQueued = false;
     }
     
-    if(throw_cooldown <= 0.0f) {
-        throw_queued = false;
+    if(throwCooldown <= 0.0f) {
+        throwQueued = false;
     }
     
     if(group && group->members.empty()) {
@@ -1011,23 +1011,23 @@ void Leader::tickClassSpecifics(float delta_t) {
     
     if(game.states.gameplay->whistle.whistling) {
         game.audio.setSoundSourcePos(
-            whistle_sound_source_id,
-            game.states.gameplay->leader_cursor_w
+            whistleSoundSourceId,
+            game.states.gameplay->leaderCursorW
         );
     }
     
     //Health wheel logic.
-    health_wheel_visible_ratio +=
-        ((health / max_health) - health_wheel_visible_ratio) *
+    healthWheelVisibleRatio +=
+        ((health / maxHealth) - healthWheelVisibleRatio) *
         (IN_WORLD_HEALTH_WHEEL::SMOOTHNESS_MULT * delta_t);
         
     if(
-        health < max_health * LEADER::HEALTH_CAUTION_RATIO ||
-        health_wheel_caution_timer > 0.0f
+        health < maxHealth * LEADER::HEALTH_CAUTION_RATIO ||
+        healthWheelCautionTimer > 0.0f
     ) {
-        health_wheel_caution_timer += delta_t;
-        if(health_wheel_caution_timer >= LEADER::HEALTH_CAUTION_RING_DURATION) {
-            health_wheel_caution_timer = 0.0f;
+        healthWheelCautionTimer += delta_t;
+        if(healthWheelCautionTimer >= LEADER::HEALTH_CAUTION_RING_DURATION) {
+            healthWheelCautionTimer = 0.0f;
         }
     }
 }
@@ -1040,8 +1040,8 @@ void Leader::updateThrowVariables() {
     throwee = nullptr;
     if(!holding.empty()) {
         throwee = holding[0];
-    } else if(game.states.gameplay->cur_leader_ptr == this) {
-        throwee = game.states.gameplay->closest_group_member[BUBBLE_RELATION_CURRENT];
+    } else if(game.states.gameplay->curLeaderPtr == this) {
+        throwee = game.states.gameplay->closestGroupMember[BUBBLE_RELATION_CURRENT];
     }
     
     if(!throwee) {
@@ -1049,12 +1049,12 @@ void Leader::updateThrowVariables() {
     }
     
     float target_z;
-    if(game.states.gameplay->throw_dest_mob) {
+    if(game.states.gameplay->throwDestMob) {
         target_z =
-            game.states.gameplay->throw_dest_mob->z +
-            game.states.gameplay->throw_dest_mob->height;
-    } else if(game.states.gameplay->throw_dest_sector) {
-        target_z = game.states.gameplay->throw_dest_sector->z;
+            game.states.gameplay->throwDestMob->z +
+            game.states.gameplay->throwDestMob->height;
+    } else if(game.states.gameplay->throwDestSector) {
+        target_z = game.states.gameplay->throwDestSector->z;
     } else {
         target_z = z;
     }
@@ -1062,10 +1062,10 @@ void Leader::updateThrowVariables() {
     float max_height;
     switch (throwee->type->category->id) {
     case MOB_CATEGORY_PIKMIN: {
-        max_height = ((Pikmin*) throwee)->pik_type->max_throw_height;
+        max_height = ((Pikmin*) throwee)->pikType->maxThrowHeight;
         break;
     } case MOB_CATEGORY_LEADERS: {
-        max_height = ((Leader*) throwee)->lea_type->max_throw_height;
+        max_height = ((Leader*) throwee)->leaType->maxThrowHeight;
         break;
     } default: {
         max_height = std::max(128.0f, (target_z - z) * 1.2f);
@@ -1079,27 +1079,27 @@ void Leader::updateThrowVariables() {
     
     if(max_height >= (target_z - z)) {
         //Can reach.
-        throwee_can_reach = true;
+        throweeCanReach = true;
     } else {
         //Can't reach! Just do a convincing throw that is sure to fail.
         //Limiting the "target" Z makes it so the horizontal velocity isn't
         //so wild.
         target_z = z + max_height * 0.75;
-        throwee_can_reach = false;
+        throweeCanReach = false;
     }
     
-    throwee_max_z = z + max_height;
+    throweeMaxZ = z + max_height;
     
     calculateThrow(
         pos,
         z,
-        game.states.gameplay->throw_dest,
+        game.states.gameplay->throwDest,
         target_z,
         max_height,
         MOB::GRAVITY_ADDER,
-        &throwee_speed,
-        &throwee_speed_z,
-        &throwee_angle
+        &throweeSpeed,
+        &throweeSpeedZ,
+        &throweeAngle
     );
 }
 
@@ -1117,17 +1117,17 @@ void Leader::updateThrowVariables() {
 void changeToNextLeader(
     bool forward, bool force_success, bool keep_idx
 ) {
-    if(game.states.gameplay->available_leaders.empty()) {
+    if(game.states.gameplay->availableLeaders.empty()) {
         //There are no leaders remaining. Set the current leader to none.
-        game.states.gameplay->cur_leader_idx = INVALID;
-        game.states.gameplay->cur_leader_ptr = nullptr;
+        game.states.gameplay->curLeaderIdx = INVALID;
+        game.states.gameplay->curLeaderPtr = nullptr;
         game.states.gameplay->updateClosestGroupMembers();
         return;
     }
     
     if(
-        game.states.gameplay->available_leaders.size() == 1 &&
-        game.states.gameplay->cur_leader_ptr &&
+        game.states.gameplay->availableLeaders.size() == 1 &&
+        game.states.gameplay->curLeaderPtr &&
         !keep_idx
     ) {
         return;
@@ -1135,8 +1135,8 @@ void changeToNextLeader(
     
     if(
         (
-            game.states.gameplay->cur_leader_ptr &&
-            !game.states.gameplay->cur_leader_ptr->fsm.getEvent(
+            game.states.gameplay->curLeaderPtr &&
+            !game.states.gameplay->curLeaderPtr->fsm.getEvent(
                 LEADER_EV_INACTIVATED
             )
         ) &&
@@ -1152,13 +1152,13 @@ void changeToNextLeader(
     //If we return to the current leader without anything being
     //changed, then stop trying; no leader can be switched to.
     
-    int new_leader_idx = (int) game.states.gameplay->cur_leader_idx;
+    int new_leader_idx = (int) game.states.gameplay->curLeaderIdx;
     if(keep_idx) {
         forward ? new_leader_idx-- : new_leader_idx++;
     }
     Leader* new_leader_ptr = nullptr;
     bool searching = true;
-    Leader* original_leader_ptr = game.states.gameplay->cur_leader_ptr;
+    Leader* original_leader_ptr = game.states.gameplay->curLeaderPtr;
     bool cant_find_new_leader = false;
     bool success = false;
     
@@ -1167,9 +1167,9 @@ void changeToNextLeader(
             sumAndWrap(
                 new_leader_idx,
                 (forward ? 1 : -1),
-                (int) game.states.gameplay->available_leaders.size()
+                (int) game.states.gameplay->availableLeaders.size()
             );
-        new_leader_ptr = game.states.gameplay->available_leaders[new_leader_idx];
+        new_leader_ptr = game.states.gameplay->availableLeaders[new_leader_idx];
         
         if(new_leader_ptr == original_leader_ptr) {
             //Back to the original; stop trying.
@@ -1182,7 +1182,7 @@ void changeToNextLeader(
         //If after we called the event, the leader is the same,
         //then that means the leader can't be switched to.
         //Try a new one.
-        if(game.states.gameplay->cur_leader_ptr != original_leader_ptr) {
+        if(game.states.gameplay->curLeaderPtr != original_leader_ptr) {
             searching = false;
             success = true;
         }
@@ -1190,17 +1190,17 @@ void changeToNextLeader(
     
     if(cant_find_new_leader && force_success) {
         //Ok, we need to force a leader to accept the focus. Let's do so.
-        game.states.gameplay->cur_leader_idx =
+        game.states.gameplay->curLeaderIdx =
             sumAndWrap(
                 new_leader_idx,
                 (forward ? 1 : -1),
-                (int) game.states.gameplay->available_leaders.size()
+                (int) game.states.gameplay->availableLeaders.size()
             );
-        game.states.gameplay->cur_leader_ptr =
+        game.states.gameplay->curLeaderPtr =
             game.states.gameplay->
-            available_leaders[game.states.gameplay->cur_leader_idx];
+            availableLeaders[game.states.gameplay->curLeaderIdx];
             
-        game.states.gameplay->cur_leader_ptr->fsm.setState(
+        game.states.gameplay->curLeaderPtr->fsm.setState(
             LEADER_STATE_ACTIVE
         );
         success = true;
@@ -1208,7 +1208,7 @@ void changeToNextLeader(
     
     if(success) {
         game.states.gameplay->updateClosestGroupMembers();
-        game.states.gameplay->cur_leader_ptr->swarm_arrows.clear();
+        game.states.gameplay->curLeaderPtr->swarmArrows.clear();
     }
 }
 
@@ -1220,21 +1220,21 @@ void changeToNextLeader(
  * @return Whether it succeeded.
  */
 bool grabClosestGroupMember() {
-    if(!game.states.gameplay->cur_leader_ptr) return false;
+    if(!game.states.gameplay->curLeaderPtr) return false;
     
     //Check if there is even a closest group member.
-    if(!game.states.gameplay->closest_group_member[BUBBLE_RELATION_CURRENT]) {
+    if(!game.states.gameplay->closestGroupMember[BUBBLE_RELATION_CURRENT]) {
         return false;
     }
     
     //Check if the leader can grab, and the group member can be grabbed.
     MobEvent* grabbed_ev =
         game.states.gameplay->
-        closest_group_member[BUBBLE_RELATION_CURRENT]->fsm.getEvent(
+        closestGroupMember[BUBBLE_RELATION_CURRENT]->fsm.getEvent(
             MOB_EV_GRABBED_BY_FRIEND
         );
     MobEvent* grabber_ev =
-        game.states.gameplay->cur_leader_ptr->fsm.getEvent(
+        game.states.gameplay->curLeaderPtr->fsm.getEvent(
             LEADER_EV_HOLDING
         );
     if(!grabber_ev || !grabbed_ev) {
@@ -1243,8 +1243,8 @@ bool grabClosestGroupMember() {
     
     //Check if there's anything in the way.
     if(
-        !game.states.gameplay->cur_leader_ptr->hasClearLine(
-            game.states.gameplay->closest_group_member[BUBBLE_RELATION_CURRENT]
+        !game.states.gameplay->curLeaderPtr->hasClearLine(
+            game.states.gameplay->closestGroupMember[BUBBLE_RELATION_CURRENT]
         )
     ) {
         return false;
@@ -1252,12 +1252,12 @@ bool grabClosestGroupMember() {
     
     //Run the grabbing logic then.
     grabber_ev->run(
-        game.states.gameplay->cur_leader_ptr,
-        (void*) game.states.gameplay->closest_group_member[BUBBLE_RELATION_CURRENT]
+        game.states.gameplay->curLeaderPtr,
+        (void*) game.states.gameplay->closestGroupMember[BUBBLE_RELATION_CURRENT]
     );
     grabbed_ev->run(
-        game.states.gameplay->closest_group_member[BUBBLE_RELATION_CURRENT],
-        (void*) game.states.gameplay->cur_leader_ptr
+        game.states.gameplay->closestGroupMember[BUBBLE_RELATION_CURRENT],
+        (void*) game.states.gameplay->curLeaderPtr
     );
     
     return true;

@@ -20,16 +20,16 @@
 EnemyType::EnemyType() :
     MobType(MOB_CATEGORY_ENEMIES) {
     
-    target_type = MOB_TARGET_FLAG_ENEMY;
-    huntable_targets =
+    targetType = MOB_TARGET_FLAG_ENEMY;
+    huntableTargets =
         MOB_TARGET_FLAG_ENEMY |
         MOB_TARGET_FLAG_PLAYER;
-    hurtable_targets =
+    hurtableTargets =
         MOB_TARGET_FLAG_ENEMY |
         MOB_TARGET_FLAG_PLAYER |
         MOB_TARGET_FLAG_FRAGILE;
         
-    starting_team = MOB_TEAM_ENEMY_1;
+    startingTeam = MOB_TEAM_ENEMY_1;
     
     addCarryingStates();
 }
@@ -43,9 +43,9 @@ EnemyType::EnemyType() :
 void EnemyType::loadCatProperties(DataNode* file) {
     ReaderSetter rs(file);
     
-    rs.set("allow_ground_attacks", allow_ground_attacks);
-    rs.set("drops_corpse", drops_corpse);
-    rs.set("pikmin_seeds", pikmin_seeds);
+    rs.set("allow_ground_attacks", allowGroundAttacks);
+    rs.set("drops_corpse", dropsCorpse);
+    rs.set("pikmin_seeds", pikminSeeds);
     rs.set("points", points);
-    rs.set("is_boss", is_boss);
+    rs.set("is_boss", isBoss);
 }

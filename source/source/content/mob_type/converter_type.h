@@ -87,26 +87,26 @@ public:
     //--- Members ---
     
     //List of Pikmin types it can convert to.
-    vector<PikminType*> available_pikmin_types;
+    vector<PikminType*> availablePikminTypes;
     
     //How often it changes the current conversion type.
-    float type_change_interval = 3.0f;
+    float typeChangeInterval = 3.0f;
     
     //How many Pikmin it can input before it dies.
-    size_t total_input_pikmin = 5;
+    size_t totalInputPikmin = 5;
     
     //How many Pikmin it outputs per input.
-    size_t pikmin_per_conversion = 1;
+    size_t pikminPerConversion = 1;
     
     //How many Pikmin it can store in the buffer until it's forced to convert.
-    size_t buffer_size = 5;
+    size_t bufferSize = 5;
     
     //If fed an input type that matches the output, should that count for
     //the output limit?
-    bool same_type_counts_for_output = false;
+    bool sameTypeCountsForOutput = false;
     
     //Time left until it converts what is in the buffer.
-    float auto_conversion_timeout = 5.0f;
+    float autoConversionTimeout = 5.0f;
     
     
     //--- Function declarations ---

@@ -75,7 +75,7 @@ const float TRANSITION_OUT_DURATION = 1.5f;
 InWorldFraction::InWorldFraction(Mob* m) :
     InWorldHudItem(m) {
     
-    transition_timer = IN_WORLD_FRACTION::TRANSITION_IN_DURATION;
+    transitionTimer = IN_WORLD_FRACTION::TRANSITION_IN_DURATION;
 }
 
 
@@ -89,14 +89,14 @@ void InWorldFraction::draw() {
     switch(transition) {
     case IN_WORLD_HUD_TRANSITION_IN: {
         float timer_ratio =
-            1 - (transition_timer / IN_WORLD_FRACTION::TRANSITION_IN_DURATION);
+            1 - (transitionTimer / IN_WORLD_FRACTION::TRANSITION_IN_DURATION);
         alpha_mult = timer_ratio;
         size_mult = ease(EASE_METHOD_OUT, timer_ratio) * 0.5 + 0.5;
         break;
     }
     case IN_WORLD_HUD_TRANSITION_OUT: {
         alpha_mult =
-            transition_timer / IN_WORLD_FRACTION::TRANSITION_OUT_DURATION;
+            transitionTimer / IN_WORLD_FRACTION::TRANSITION_OUT_DURATION;
         break;
     }
     default: {
@@ -104,25 +104,25 @@ void InWorldFraction::draw() {
     }
     }
     
-    if(grow_juice_timer > 0.0f) {
+    if(growJuiceTimer > 0.0f) {
         float anim_ratio =
-            1 - (grow_juice_timer / IN_WORLD_FRACTION::GROW_JUICE_DURATION);
+            1 - (growJuiceTimer / IN_WORLD_FRACTION::GROW_JUICE_DURATION);
         anim_ratio = ease(EASE_METHOD_UP_AND_DOWN, anim_ratio);
         size_mult += IN_WORLD_FRACTION::GROW_JUICE_AMOUNT * anim_ratio;
     }
     
     ALLEGRO_COLOR final_color;
-    if(req_met_juice_timer > 0.0f) {
+    if(reqMetJuiceTimer > 0.0f) {
         final_color =
             interpolateColor(
-                req_met_juice_timer, 0.0f,
+                reqMetJuiceTimer, 0.0f,
                 IN_WORLD_FRACTION::REQ_MET_JUICE_DURATION,
                 color, COLOR_WHITE
             );
             
         float anim_ratio =
             1.0f -
-            (req_met_juice_timer / IN_WORLD_FRACTION::REQ_MET_JUICE_DURATION);
+            (reqMetJuiceTimer / IN_WORLD_FRACTION::REQ_MET_JUICE_DURATION);
         anim_ratio = ease(EASE_METHOD_UP_AND_DOWN, anim_ratio);
         size_mult += IN_WORLD_FRACTION::REQ_MET_GROW_JUICE_AMOUNT * anim_ratio;
     } else {
@@ -130,21 +130,21 @@ void InWorldFraction::draw() {
     }
     final_color.a *= alpha_mult;
     
-    if(requirement_number > 0) {
+    if(requirementNumber > 0) {
         Point pos(m->pos.x, m->pos.y - m->radius - IN_WORLD_FRACTION::PADDING);
         drawFraction(
             pos,
-            value_number, requirement_number, final_color, size_mult
+            valueNumber, requirementNumber, final_color, size_mult
         );
     } else {
         Point pos(
             m->pos.x,
             m->pos.y - m->radius -
-            al_get_font_line_height(game.sys_content.fnt_standard) -
+            al_get_font_line_height(game.sysContent.fntStandard) -
             IN_WORLD_FRACTION::PADDING
         );
         drawText(
-            i2s(value_number), game.sys_content.fnt_standard, pos,
+            i2s(valueNumber), game.sysContent.fntStandard, pos,
             Point(LARGE_FLOAT, IN_WORLD_FRACTION::ROW_HEIGHT * size_mult),
             final_color
         );
@@ -161,7 +161,7 @@ void InWorldFraction::setColor(const ALLEGRO_COLOR &new_color) {
     if(color == new_color) return;
     
     color = new_color;
-    grow_juice_timer = IN_WORLD_FRACTION::GROW_JUICE_DURATION;
+    growJuiceTimer = IN_WORLD_FRACTION::GROW_JUICE_DURATION;
 }
 
 
@@ -171,19 +171,19 @@ void InWorldFraction::setColor(const ALLEGRO_COLOR &new_color) {
  * @param new_req_nr Requirement number to set to.
  */
 void InWorldFraction::setRequirementNumber(float new_req_nr) {
-    if(requirement_number == new_req_nr) return;
+    if(requirementNumber == new_req_nr) return;
     
-    bool req_was_met = value_number >= requirement_number;
-    requirement_number = new_req_nr;
+    bool req_was_met = valueNumber >= requirementNumber;
+    requirementNumber = new_req_nr;
     
     if(
-        requirement_number > 0.0f &&
+        requirementNumber > 0.0f &&
         !req_was_met &&
-        value_number >= requirement_number
+        valueNumber >= requirementNumber
     ) {
-        req_met_juice_timer = IN_WORLD_FRACTION::REQ_MET_JUICE_DURATION;
+        reqMetJuiceTimer = IN_WORLD_FRACTION::REQ_MET_JUICE_DURATION;
     } else {
-        grow_juice_timer = IN_WORLD_FRACTION::GROW_JUICE_DURATION;
+        growJuiceTimer = IN_WORLD_FRACTION::GROW_JUICE_DURATION;
     }
 }
 
@@ -194,20 +194,20 @@ void InWorldFraction::setRequirementNumber(float new_req_nr) {
  * @param new_value_nr Value number to set to.
  */
 void InWorldFraction::setValueNumber(float new_value_nr) {
-    if(value_number == new_value_nr) return;
+    if(valueNumber == new_value_nr) return;
     
-    bool req_was_met = value_number >= requirement_number;
+    bool req_was_met = valueNumber >= requirementNumber;
     
-    value_number = new_value_nr;
+    valueNumber = new_value_nr;
     
     if(
-        requirement_number > 0.0f &&
+        requirementNumber > 0.0f &&
         !req_was_met &&
-        value_number >= requirement_number
+        valueNumber >= requirementNumber
     ) {
-        req_met_juice_timer = IN_WORLD_FRACTION::REQ_MET_JUICE_DURATION;
+        reqMetJuiceTimer = IN_WORLD_FRACTION::REQ_MET_JUICE_DURATION;
     } else {
-        grow_juice_timer = IN_WORLD_FRACTION::GROW_JUICE_DURATION;
+        growJuiceTimer = IN_WORLD_FRACTION::GROW_JUICE_DURATION;
     }
 }
 
@@ -220,7 +220,7 @@ void InWorldFraction::startFading() {
         return;
     }
     transition = IN_WORLD_HUD_TRANSITION_OUT;
-    transition_timer = IN_WORLD_FRACTION::TRANSITION_OUT_DURATION;
+    transitionTimer = IN_WORLD_FRACTION::TRANSITION_OUT_DURATION;
 }
 
 
@@ -231,11 +231,11 @@ void InWorldFraction::startFading() {
  */
 void InWorldFraction::tick(float delta_t) {
     InWorldHudItem::tick(delta_t);
-    if(grow_juice_timer > 0.0f) {
-        grow_juice_timer -= delta_t;
+    if(growJuiceTimer > 0.0f) {
+        growJuiceTimer -= delta_t;
     }
-    if(req_met_juice_timer > 0.0f) {
-        req_met_juice_timer -= delta_t;
+    if(reqMetJuiceTimer > 0.0f) {
+        reqMetJuiceTimer -= delta_t;
     }
 }
 
@@ -248,10 +248,10 @@ void InWorldFraction::tick(float delta_t) {
 InWorldHealthWheel::InWorldHealthWheel(Mob* m) :
     InWorldHudItem(m) {
     
-    if(m->max_health > 0.0f) {
-        visible_ratio = m->health / m->max_health;
+    if(m->maxHealth > 0.0f) {
+        visibleRatio = m->health / m->maxHealth;
     }
-    transition_timer = IN_WORLD_HEALTH_WHEEL::TRANSITION_IN_DURATION;
+    transitionTimer = IN_WORLD_HEALTH_WHEEL::TRANSITION_IN_DURATION;
 }
 
 
@@ -265,14 +265,14 @@ void InWorldHealthWheel::draw() {
     case IN_WORLD_HUD_TRANSITION_IN: {
         float timer_ratio =
             1.0f -
-            (transition_timer / IN_WORLD_HEALTH_WHEEL::TRANSITION_IN_DURATION);
+            (transitionTimer / IN_WORLD_HEALTH_WHEEL::TRANSITION_IN_DURATION);
         alpha_mult = timer_ratio;
         size_mult = ease(EASE_METHOD_OUT, timer_ratio) * 0.5 + 0.5;
         break;
     }
     case IN_WORLD_HUD_TRANSITION_OUT: {
         alpha_mult =
-            transition_timer / IN_WORLD_HEALTH_WHEEL::TRANSITION_OUT_DURATION;
+            transitionTimer / IN_WORLD_HEALTH_WHEEL::TRANSITION_OUT_DURATION;
         break;
     }
     default: {
@@ -287,7 +287,7 @@ void InWorldHealthWheel::draw() {
             m->pos.y - m->radius -
             radius - IN_WORLD_HEALTH_WHEEL::PADDING
         ),
-        visible_ratio,
+        visibleRatio,
         IN_WORLD_HEALTH_WHEEL::OPACITY * alpha_mult,
         radius
     );
@@ -302,7 +302,7 @@ void InWorldHealthWheel::startFading() {
         return;
     }
     transition = IN_WORLD_HUD_TRANSITION_OUT;
-    transition_timer = IN_WORLD_HEALTH_WHEEL::TRANSITION_OUT_DURATION;
+    transitionTimer = IN_WORLD_HEALTH_WHEEL::TRANSITION_OUT_DURATION;
 }
 
 
@@ -314,10 +314,10 @@ void InWorldHealthWheel::startFading() {
 void InWorldHealthWheel::tick(float delta_t) {
     InWorldHudItem::tick(delta_t);
     
-    if(m->max_health == 0.0f) return;
+    if(m->maxHealth == 0.0f) return;
     
-    visible_ratio +=
-        ((m->health / m->max_health) - visible_ratio) *
+    visibleRatio +=
+        ((m->health / m->maxHealth) - visibleRatio) *
         (IN_WORLD_HEALTH_WHEEL::SMOOTHNESS_MULT * delta_t);
 }
 
@@ -341,16 +341,16 @@ InWorldHudItem::InWorldHudItem(Mob* m) :
 void InWorldHudItem::tick(float delta_t) {
     switch(transition) {
     case IN_WORLD_HUD_TRANSITION_IN: {
-        transition_timer -= delta_t;
-        if(transition_timer <= 0.0f) {
+        transitionTimer -= delta_t;
+        if(transitionTimer <= 0.0f) {
             transition = IN_WORLD_HUD_TRANSITION_NONE;
         }
         break;
     }
     case IN_WORLD_HUD_TRANSITION_OUT: {
-        transition_timer -= delta_t;
-        if(transition_timer <= 0.0f) {
-            to_delete = true;
+        transitionTimer -= delta_t;
+        if(transitionTimer <= 0.0f) {
+            toDelete = true;
         }
         break;
     }

@@ -1464,7 +1464,7 @@ void leader_fsm::createFsm(MobType* typ) {
     }
     
     typ->states = efc.finish();
-    typ->first_state_idx = fixStates(typ->states, "idling", typ);
+    typ->firstStateIdx = fixStates(typ->states, "idling", typ);
     
     //Check if the number in the enum and the total match up.
     engineAssert(
@@ -1487,7 +1487,7 @@ void leader_fsm::beAttacked(Mob* m, void* info1, void* info2) {
     
     Leader* lea_ptr = (Leader*) m;
     
-    if(m->invuln_period.time_left > 0.0f) return;
+    if(m->invulnPeriod.timeLeft > 0.0f) return;
     
     HitboxInteraction* info = (HitboxInteraction*) info1;
     
@@ -1513,18 +1513,18 @@ void leader_fsm::beAttacked(Mob* m, void* info1, void* info2) {
     m->doAttackEffects(info->mob2, info->h2, info->h1, damage, knockback);
     
     if(knockback > 0) {
-        m->invuln_period.start(LEADER::INVULN_PERIOD_KB);
+        m->invulnPeriod.start(LEADER::INVULN_PERIOD_KB);
         if(lea_ptr->active) m->fsm.setState(LEADER_STATE_KNOCKED_BACK);
         else m->fsm.setState(LEADER_STATE_INACTIVE_KNOCKED_BACK);
     } else {
-        m->invuln_period.start(LEADER::INVULN_PERIOD_NORMAL);
+        m->invulnPeriod.start(LEADER::INVULN_PERIOD_NORMAL);
         if(lea_ptr->active) m->fsm.setState(LEADER_STATE_PAIN);
         else m->fsm.setState(LEADER_STATE_INACTIVE_PAIN);
     }
     
-    game.states.gameplay->last_hurt_leader_pos = m->pos;
+    game.states.gameplay->lastHurtLeaderPos = m->pos;
     if(health_before > 0.0f && m->health < health_before) {
-        game.statistics.leader_damage_suffered += health_before - m->health;
+        game.statistics.leaderDamageSuffered += health_before - m->health;
     }
 }
 
@@ -1604,8 +1604,8 @@ void leader_fsm::beThrownByBouncer(Mob* m, void* info1, void* info2) {
 void leader_fsm::becomeActive(Mob* m, void* info1, void* info2) {
     Leader* lea_ptr = (Leader*) m;
     
-    if(game.states.gameplay->cur_leader_ptr) {
-        game.states.gameplay->cur_leader_ptr->fsm.runEvent(
+    if(game.states.gameplay->curLeaderPtr) {
+        game.states.gameplay->curLeaderPtr->fsm.runEvent(
             LEADER_EV_INACTIVATED
         );
     }
@@ -1615,25 +1615,25 @@ void leader_fsm::becomeActive(Mob* m, void* info1, void* info2) {
     //whistled by another and then swapped to mid-pluck).
     //Let's swap the group members over.
     if(
-        lea_ptr->following_group &&
-        lea_ptr->following_group->type->category->id == MOB_CATEGORY_LEADERS
+        lea_ptr->followingGroup &&
+        lea_ptr->followingGroup->type->category->id == MOB_CATEGORY_LEADERS
     ) {
-        Mob* old_leader = lea_ptr->following_group;
+        Mob* old_leader = lea_ptr->followingGroup;
         lea_ptr->leaveGroup();
         old_leader->fsm.runEvent(MOB_EV_WHISTLED, (void*) lea_ptr);
     }
     
     //Update pointers and such.
-    size_t new_leader_idx = game.states.gameplay->cur_leader_idx;
-    for(size_t l = 0; l < game.states.gameplay->available_leaders.size(); l++) {
-        if(game.states.gameplay->available_leaders[l] == lea_ptr) {
+    size_t new_leader_idx = game.states.gameplay->curLeaderIdx;
+    for(size_t l = 0; l < game.states.gameplay->availableLeaders.size(); l++) {
+        if(game.states.gameplay->availableLeaders[l] == lea_ptr) {
             new_leader_idx = l;
             break;
         }
     }
     
-    game.states.gameplay->cur_leader_ptr = lea_ptr;
-    game.states.gameplay->cur_leader_idx = new_leader_idx;
+    game.states.gameplay->curLeaderPtr = lea_ptr;
+    game.states.gameplay->curLeaderIdx = new_leader_idx;
     lea_ptr->active = true;
     
     //Check if we're in the middle of loading or of an interlude. If so
@@ -1641,12 +1641,12 @@ void leader_fsm::becomeActive(Mob* m, void* info1, void* info2) {
     //We should probably not play the name call then.
     if(
         !game.states.gameplay->loading &&
-        game.states.gameplay->cur_interlude == INTERLUDE_NONE
+        game.states.gameplay->curInterlude == INTERLUDE_NONE
     ) {
         //Play the name call as a global sound, so that even leaders far away
         //can have their name call play clearly.
         size_t name_call_sound_idx =
-            lea_ptr->lea_type->sound_data_idxs[LEADER_SOUND_NAME_CALL];
+            lea_ptr->leaType->soundDataIdxs[LEADER_SOUND_NAME_CALL];
         if(name_call_sound_idx != INVALID) {
             MobType::Sound* name_call_sound =
                 &m->type->sounds[name_call_sound_idx];
@@ -1722,9 +1722,9 @@ void leader_fsm::calledWhileKnockedDown(Mob* m, void* info1, void* info2) {
  */
 void leader_fsm::checkBoredomAnimEnd(Mob* m, void* info1, void* info2) {
     Leader* lea_ptr = (Leader*) m;
-    if(!lea_ptr->in_bored_animation) return;
+    if(!lea_ptr->inBoredAnimation) return;
     m->setAnimation(LEADER_ANIM_IDLING);
-    lea_ptr->in_bored_animation = false;
+    lea_ptr->inBoredAnimation = false;
     m->setTimer(
         game.rng.f(LEADER::BORED_ANIM_MIN_DELAY, LEADER::BORED_ANIM_MAX_DELAY)
     );
@@ -1750,7 +1750,7 @@ void leader_fsm::checkPunchDamage(Mob* m, void* info1, void* info2) {
         m->canHurt(info->mob2) &&
         m->calculateDamage(info->mob2, info->h1, info->h2, &damage)
     ) {
-        game.statistics.punch_damage_caused += damage;
+        game.statistics.punchDamageCaused += damage;
     }
 }
 
@@ -1765,7 +1765,7 @@ void leader_fsm::checkPunchDamage(Mob* m, void* info1, void* info2) {
 void leader_fsm::clearBoredomData(Mob* m, void* info1, void* info2) {
     Leader* lea_ptr = (Leader*) m;
     leader_fsm::clearTimer(m, info1, info2);
-    lea_ptr->in_bored_animation = false;
+    lea_ptr->inBoredAnimation = false;
 }
 
 
@@ -1794,21 +1794,21 @@ void leader_fsm::decidePluckAction(Mob* m, void* info1, void* info2) {
     Distance d;
     Pikmin* new_pikmin = nullptr;
     
-    if(!lea_ptr->queued_pluck_cancel) {
+    if(!lea_ptr->queuedPluckCancel) {
         new_pikmin =
             getClosestSprout(lea_ptr->pos, &d, false);
     }
     
-    if(lea_ptr->queued_pluck_cancel) {
+    if(lea_ptr->queuedPluckCancel) {
         //It should only signal to stop if it wanted to stop.
         //If there are no more sprouts in range, that doesn't mean the leaders
         //following it can't continue with the sprouts in their range.
         leader_fsm::signalStopAutoPluck(m, info1, info2);
     }
     
-    lea_ptr->queued_pluck_cancel = false;
+    lea_ptr->queuedPluckCancel = false;
     
-    if(new_pikmin && d <= game.config.leaders.next_pluck_range) {
+    if(new_pikmin && d <= game.config.leaders.nextPluckRange) {
         lea_ptr->fsm.runEvent(LEADER_EV_GO_PLUCK, (void*) new_pikmin);
     } else {
         lea_ptr->fsm.runEvent(LEADER_EV_CANCEL);
@@ -1832,7 +1832,7 @@ void leader_fsm::die(Mob* m, void* info1, void* info2) {
     m->finishDying();
     
     game.states.gameplay->updateAvailableLeaders();
-    if(m == game.states.gameplay->cur_leader_ptr) {
+    if(m == game.states.gameplay->curLeaderPtr) {
         changeToNextLeader(true, true, true);
     }
     
@@ -1841,7 +1841,7 @@ void leader_fsm::die(Mob* m, void* info1, void* info2) {
     m->becomeUncarriable();
     m->setAnimation(LEADER_ANIM_KO);
     
-    game.states.gameplay->last_hurt_leader_pos = m->pos;
+    game.states.gameplay->lastHurtLeaderPos = m->pos;
 }
 
 
@@ -1879,11 +1879,11 @@ void leader_fsm::doThrow(Mob* m, void* info1, void* info2) {
     holding_ptr->pos = leader_ptr->pos;
     holding_ptr->z = leader_ptr->z;
     
-    holding_ptr->z_cap = leader_ptr->throwee_max_z;
+    holding_ptr->zCap = leader_ptr->throweeMaxZ;
     
-    holding_ptr->face(leader_ptr->throwee_angle, nullptr, true);
-    holding_ptr->speed = leader_ptr->throwee_speed;
-    holding_ptr->speed_z = leader_ptr->throwee_speed_z;
+    holding_ptr->face(leader_ptr->throweeAngle, nullptr, true);
+    holding_ptr->speed = leader_ptr->throweeSpeed;
+    holding_ptr->speedZ = leader_ptr->throweeSpeedZ;
     
     enableFlag(holding_ptr->flags, MOB_FLAG_WAS_THROWN);
     holding_ptr->leaveGroup();
@@ -1892,7 +1892,7 @@ void leader_fsm::doThrow(Mob* m, void* info1, void* info2) {
     leader_ptr->setAnimation(LEADER_ANIM_THROWING);
     
     if(holding_ptr->type->category->id == MOB_CATEGORY_PIKMIN) {
-        game.statistics.pikmin_thrown++;
+        game.statistics.pikminThrown++;
     }
 }
 
@@ -1905,7 +1905,7 @@ void leader_fsm::doThrow(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void leader_fsm::enterActive(Mob* m, void* info1, void* info2) {
-    ((Leader*) m)->is_in_walking_anim = false;
+    ((Leader*) m)->isInWalkingAnim = false;
     m->setAnimation(
         LEADER_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
     );
@@ -1959,7 +1959,7 @@ void leader_fsm::fallAsleep(Mob* m, void* info1, void* info2) {
 void leader_fsm::fallDownPit(Mob* m, void* info1, void* info2) {
     m->leaveGroup();
     m->setHealth(true, true, -0.2);
-    m->invuln_period.start(LEADER::INVULN_PERIOD_NORMAL);
+    m->invulnPeriod.start(LEADER::INVULN_PERIOD_NORMAL);
     m->respawn();
 }
 
@@ -1973,7 +1973,7 @@ void leader_fsm::fallDownPit(Mob* m, void* info1, void* info2) {
  */
 void leader_fsm::finishCalledAnim(Mob* m, void* info1, void* info2) {
     Leader* lea_ptr = (Leader*) m;
-    Mob* caller = lea_ptr->focused_mob;
+    Mob* caller = lea_ptr->focusedMob;
     
     if(lea_ptr) {
         leader_fsm::joinGroup(m, (void*) caller, info2);
@@ -1992,18 +1992,18 @@ void leader_fsm::finishCalledAnim(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void leader_fsm::finishDrinking(Mob* m, void* info1, void* info2) {
-    engineAssert(m->focused_mob != nullptr, m->printStateHistory());
-    Drop* dro_ptr = (Drop*) m->focused_mob;
+    engineAssert(m->focusedMob != nullptr, m->printStateHistory());
+    Drop* dro_ptr = (Drop*) m->focusedMob;
     
-    switch(dro_ptr->dro_type->effect) {
+    switch(dro_ptr->droType->effect) {
     case DROP_EFFECT_INCREASE_SPRAYS: {
         game.states.gameplay->changeSprayCount(
-            dro_ptr->dro_type->spray_type_to_increase,
-            dro_ptr->dro_type->increase_amount
+            dro_ptr->droType->sprayTypeToIncrease,
+            dro_ptr->droType->increaseAmount
         );
         break;
     } case DROP_EFFECT_GIVE_STATUS: {
-        m->applyStatusEffect(dro_ptr->dro_type->status_to_give, false, false);
+        m->applyStatusEffect(dro_ptr->droType->statusToGive, false, false);
         break;
     } default: {
         break;
@@ -2022,9 +2022,9 @@ void leader_fsm::finishDrinking(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void leader_fsm::finishGettingUp(Mob* m, void* info1, void* info2) {
-    Mob* prev_focused_mob = m->focused_mob;
+    Mob* prev_focused_mob = m->focusedMob;
     
-    if(m == game.states.gameplay->cur_leader_ptr) {
+    if(m == game.states.gameplay->curLeaderPtr) {
         m->fsm.setState(LEADER_STATE_ACTIVE);
     } else {
         m->fsm.setState(LEADER_STATE_IDLING);
@@ -2082,9 +2082,9 @@ void leader_fsm::getKnockedDown(Mob* m, void* info1, void* info2) {
     
     //Let's use the "temp" variable to specify whether or not
     //it already received the getting up timer bonus.
-    lea_ptr->temp_i = 0;
+    lea_ptr->tempI = 0;
     
-    m->setTimer(lea_ptr->lea_type->knocked_down_duration);
+    m->setTimer(lea_ptr->leaType->knockedDownDuration);
     
     m->setAnimation(LEADER_ANIM_LYING);
 }
@@ -2102,15 +2102,15 @@ void leader_fsm::getUpFaster(Mob* m, void* info1, void* info2) {
     
     //Let's use the "temp" variable to specify whether or not
     //it already received the getting up timer bonus.
-    if(lea_ptr->temp_i == 1) return;
+    if(lea_ptr->tempI == 1) return;
     
-    lea_ptr->script_timer.time_left =
+    lea_ptr->scriptTimer.timeLeft =
         std::max(
             0.01f,
-            lea_ptr->script_timer.time_left -
-            lea_ptr->lea_type->knocked_down_whistle_bonus
+            lea_ptr->scriptTimer.timeLeft -
+            lea_ptr->leaType->knockedDownWhistleBonus
         );
-    lea_ptr->temp_i = 1;
+    lea_ptr->tempI = 1;
 }
 
 
@@ -2128,22 +2128,22 @@ void leader_fsm::goPluck(Mob* m, void* info1, void* info2) {
     Leader* lea_ptr = (Leader*) m;
     Pikmin* pik_ptr = (Pikmin*) info1;
     
-    lea_ptr->queued_pluck_cancel = false;
+    lea_ptr->queuedPluckCancel = false;
     
-    lea_ptr->auto_plucking = true;
-    lea_ptr->pluck_target = pik_ptr;
+    lea_ptr->autoPlucking = true;
+    lea_ptr->pluckTarget = pik_ptr;
     lea_ptr->chase(
         &pik_ptr->pos, &pik_ptr->z,
         Point(), 0.0f,
         CHASE_FLAG_ANY_ANGLE,
         pik_ptr->radius + lea_ptr->radius
     );
-    pik_ptr->pluck_reserved = true;
+    pik_ptr->pluckReserved = true;
     
     //Now for the leaders in the group.
     for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); l++) {
         Leader* l2_ptr = game.states.gameplay->mobs.leaders[l];
-        if(l2_ptr->following_group == lea_ptr) {
+        if(l2_ptr->followingGroup == lea_ptr) {
             l2_ptr->fsm.runEvent(LEADER_EV_MUST_SEARCH_SEED);
         }
     }
@@ -2170,7 +2170,7 @@ void leader_fsm::grabMob(Mob* m, void* info1, void* info2) {
         LEADER::HELD_GROUP_MEMBER_V_DIST,
         false, HOLD_ROTATION_METHOD_FACE_HOLDER
     );
-    lea_ptr->group->sort(grabbed_mob->subgroup_type_ptr);
+    lea_ptr->group->sort(grabbed_mob->subgroupTypePtr);
 }
 
 
@@ -2185,7 +2185,7 @@ void leader_fsm::grabMob(Mob* m, void* info1, void* info2) {
 void leader_fsm::idleOrRejoin(Mob* m, void* info1, void* info2) {
     Leader* lea_ptr = (Leader*) m;
     
-    if(lea_ptr->following_group) {
+    if(lea_ptr->followingGroup) {
         lea_ptr->fsm.setState(LEADER_STATE_IN_GROUP_CHASING);
     } else {
         lea_ptr->fsm.setState(LEADER_STATE_IDLING);
@@ -2206,10 +2206,10 @@ void leader_fsm::joinGroup(Mob* m, void* info1, void* info2) {
     Leader* caller = (Leader*) info1;
     Mob* top_leader = caller;
     
-    if(top_leader->following_group) {
+    if(top_leader->followingGroup) {
         //If this leader is following another one,
         //then the new leader should be in the group of that top leader.
-        top_leader = top_leader->following_group;
+        top_leader = top_leader->followingGroup;
     }
     
     top_leader->addToGroup(lea_ptr);
@@ -2234,7 +2234,7 @@ void leader_fsm::land(Mob* m, void* info1, void* info2) {
     
     m->removeParticleGenerator(MOB_PARTICLE_GENERATOR_ID_THROW);
     
-    if(m == game.states.gameplay->cur_leader_ptr) {
+    if(m == game.states.gameplay->curLeaderPtr) {
         m->fsm.setState(LEADER_STATE_ACTIVE);
     } else {
         m->fsm.setState(LEADER_STATE_IDLING);
@@ -2253,7 +2253,7 @@ void leader_fsm::leftHazard(Mob* m, void* info1, void* info2) {
     engineAssert(info1 != nullptr, m->printStateHistory());
     
     Hazard* h = (Hazard*) info1;
-    if(h->associated_liquid) {
+    if(h->associatedLiquid) {
         m->removeParticleGenerator(MOB_PARTICLE_GENERATOR_ID_WAVE_RING);
     }
 }
@@ -2290,7 +2290,7 @@ void leader_fsm::move(Mob* m, void* info1, void* info2) {
     mov->getInfo(
         &final_coords, &dummy_angle, &dummy_magnitude
     );
-    final_coords *= lea_ptr->type->move_speed;
+    final_coords *= lea_ptr->type->moveSpeed;
     final_coords += lea_ptr->pos;
     lea_ptr->chase(final_coords, lea_ptr->z, CHASE_FLAG_ANY_ANGLE);
 }
@@ -2333,7 +2333,7 @@ void leader_fsm::punch(Mob* m, void* info1, void* info2) {
  */
 void leader_fsm::queueStopAutoPluck(Mob* m, void* info1, void* info2) {
     Leader* lea_ptr = (Leader*) m;
-    lea_ptr->queued_pluck_cancel = true;
+    lea_ptr->queuedPluckCancel = true;
 }
 
 
@@ -2368,12 +2368,12 @@ void leader_fsm::searchSeed(Mob* m, void* info1, void* info2) {
     
     Distance d;
     Pikmin* new_pikmin = nullptr;
-    if(!lea_ptr->queued_pluck_cancel) {
+    if(!lea_ptr->queuedPluckCancel) {
         new_pikmin =
             getClosestSprout(lea_ptr->pos, &d, false);
     }
     
-    if(new_pikmin && d <= game.config.leaders.next_pluck_range) {
+    if(new_pikmin && d <= game.config.leaders.nextPluckRange) {
         lea_ptr->fsm.runEvent(LEADER_EV_GO_PLUCK, (void*) new_pikmin);
     }
 }
@@ -2389,13 +2389,13 @@ void leader_fsm::searchSeed(Mob* m, void* info1, void* info2) {
 void leader_fsm::setCorrectActiveAnim(Mob* m, void* info1, void* info2) {
     Leader* lea_ptr = (Leader*) m;
     bool must_use_walking_anim =
-        lea_ptr->is_active_walking || lea_ptr->is_active_turning;
+        lea_ptr->isActiveWalking || lea_ptr->isActiveTurning;
         
-    if(must_use_walking_anim && !lea_ptr->is_in_walking_anim) {
-        lea_ptr->is_in_walking_anim = true;
+    if(must_use_walking_anim && !lea_ptr->isInWalkingAnim) {
+        lea_ptr->isInWalkingAnim = true;
         lea_ptr->setAnimation(LEADER_ANIM_WALKING);
-    } else if(!must_use_walking_anim && lea_ptr->is_in_walking_anim) {
-        lea_ptr->is_in_walking_anim = false;
+    } else if(!must_use_walking_anim && lea_ptr->isInWalkingAnim) {
+        lea_ptr->isInWalkingAnim = false;
         lea_ptr->setAnimation(LEADER_ANIM_IDLING);
     }
 }
@@ -2410,8 +2410,8 @@ void leader_fsm::setCorrectActiveAnim(Mob* m, void* info1, void* info2) {
  */
 void leader_fsm::setIsTurningFalse(Mob* m, void* info1, void* info2) {
     Leader* lea_ptr = (Leader*) m;
-    if(lea_ptr->is_active_turning) {
-        lea_ptr->is_active_turning = false;
+    if(lea_ptr->isActiveTurning) {
+        lea_ptr->isActiveTurning = false;
         leader_fsm::setCorrectActiveAnim(m, info1, info2);
     }
 }
@@ -2426,8 +2426,8 @@ void leader_fsm::setIsTurningFalse(Mob* m, void* info1, void* info2) {
  */
 void leader_fsm::setIsTurningTrue(Mob* m, void* info1, void* info2) {
     Leader* lea_ptr = (Leader*) m;
-    if(!lea_ptr->is_active_turning) {
-        lea_ptr->is_active_turning = true;
+    if(!lea_ptr->isActiveTurning) {
+        lea_ptr->isActiveTurning = true;
         leader_fsm::setCorrectActiveAnim(m, info1, info2);
     }
 }
@@ -2442,8 +2442,8 @@ void leader_fsm::setIsTurningTrue(Mob* m, void* info1, void* info2) {
  */
 void leader_fsm::setIsWalkingFalse(Mob* m, void* info1, void* info2) {
     Leader* lea_ptr = (Leader*) m;
-    if(lea_ptr->is_active_walking) {
-        lea_ptr->is_active_walking = false;
+    if(lea_ptr->isActiveWalking) {
+        lea_ptr->isActiveWalking = false;
         leader_fsm::setCorrectActiveAnim(m, info1, info2);
     }
 }
@@ -2458,8 +2458,8 @@ void leader_fsm::setIsWalkingFalse(Mob* m, void* info1, void* info2) {
  */
 void leader_fsm::setIsWalkingTrue(Mob* m, void* info1, void* info2) {
     Leader* lea_ptr = (Leader*) m;
-    if(!lea_ptr->is_active_walking) {
-        lea_ptr->is_active_walking = true;
+    if(!lea_ptr->isActiveWalking) {
+        lea_ptr->isActiveWalking = true;
         leader_fsm::setCorrectActiveAnim(m, info1, info2);
     }
 }
@@ -2489,7 +2489,7 @@ void leader_fsm::signalStopAutoPluck(Mob* m, void* info1, void* info2) {
     Leader* lea_ptr = (Leader*) m;
     for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); l++) {
         Leader* l2_ptr = game.states.gameplay->mobs.leaders[l];
-        if(l2_ptr->following_group == lea_ptr) {
+        if(l2_ptr->followingGroup == lea_ptr) {
             l2_ptr->fsm.runEvent(LEADER_EV_CANCEL);
         }
     }
@@ -2505,21 +2505,21 @@ void leader_fsm::signalStopAutoPluck(Mob* m, void* info1, void* info2) {
  */
 void leader_fsm::spray(Mob* m, void* info1, void* info2) {
     size_t spray_idx = *((size_t*) info1);
-    SprayType &spray_type_ref = *game.config.misc.spray_order[spray_idx];
+    SprayType &spray_type_ref = *game.config.misc.sprayOrder[spray_idx];
     
-    if(game.states.gameplay->spray_stats[spray_idx].nr_sprays == 0) {
+    if(game.states.gameplay->sprayStats[spray_idx].nrSprays == 0) {
         m->fsm.setState(LEADER_STATE_ACTIVE);
         return;
     }
     
     float cursor_angle =
-        getAngle(m->pos, game.states.gameplay->leader_cursor_w);
+        getAngle(m->pos, game.states.gameplay->leaderCursorW);
     float shoot_angle =
         cursor_angle + ((spray_type_ref.angle) ? TAU / 2 : 0);
         
     unordered_set<Mob*> affected_mobs;
     
-    if(spray_type_ref.affects_user) {
+    if(spray_type_ref.affectsUser) {
         affected_mobs.insert(m);
     }
     
@@ -2528,7 +2528,7 @@ void leader_fsm::spray(Mob* m, void* info1, void* info2) {
             Mob* gm_ptr = m->group->members[gm];
             if(
                 gm_ptr->type->category->id != MOB_CATEGORY_PIKMIN &&
-                spray_type_ref.group_pikmin_only
+                spray_type_ref.groupPikminOnly
             ) {
                 continue;
             }
@@ -2550,7 +2550,7 @@ void leader_fsm::spray(Mob* m, void* info1, void* info2) {
             
             if(
                 Distance(m->pos, am_ptr->pos) >
-                spray_type_ref.distance_range + am_ptr->radius
+                spray_type_ref.distanceRange + am_ptr->radius
             ) {
                 continue;
             }
@@ -2560,7 +2560,7 @@ void leader_fsm::spray(Mob* m, void* info1, void* info2) {
                     shoot_angle,
                     getAngle(m->pos, am_ptr->pos)
                 );
-            if(angle_dif > spray_type_ref.angle_range / 2) continue;
+            if(angle_dif > spray_type_ref.angleRange / 2) continue;
             
             affected_mobs.insert(am_ptr);
         }
@@ -2569,45 +2569,45 @@ void leader_fsm::spray(Mob* m, void* info1, void* info2) {
     
     for(auto &am : affected_mobs) {
         am->fsm.runEvent(
-            MOB_EV_TOUCHED_SPRAY, (void*) game.config.misc.spray_order[spray_idx]
+            MOB_EV_TOUCHED_SPRAY, (void*) game.config.misc.sprayOrder[spray_idx]
         );
     }
     
     Point particle_speed_vector =
         rotatePoint(
-            Point(spray_type_ref.distance_range * 0.8, 0),
+            Point(spray_type_ref.distanceRange * 0.8, 0),
             spray_type_ref.angle
         );
     ParticleGenerator pg =
         standardParticleGenSetup(
-            game.sys_content_names.part_spray, m
+            game.sysContentNames.parSpray, m
         );
     adjustKeyframeInterpolatorValues<Point>(
-        pg.base_particle.linear_speed,
+        pg.baseParticle.linearSpeed,
     [ = ] (const Point &) { return particle_speed_vector; }
     );
     adjustKeyframeInterpolatorValues<ALLEGRO_COLOR>(
-        pg.base_particle.color,
+        pg.baseParticle.color,
     [ = ] (const ALLEGRO_COLOR & c) {
         ALLEGRO_COLOR new_c = c;
-        new_c.r *= spray_type_ref.main_color.r;
-        new_c.g *= spray_type_ref.main_color.g;
-        new_c.b *= spray_type_ref.main_color.b;
-        new_c.a *= spray_type_ref.main_color.a;
+        new_c.r *= spray_type_ref.mainColor.r;
+        new_c.g *= spray_type_ref.mainColor.g;
+        new_c.b *= spray_type_ref.mainColor.b;
+        new_c.a *= spray_type_ref.mainColor.a;
         return new_c;
     }
     );
-    pg.linear_speed_angle_deviation = spray_type_ref.angle_range / 2.0f;
-    pg.linear_speed_deviation.x = spray_type_ref.distance_range * 0.4;
-    pg.base_particle.priority = PARTICLE_PRIORITY_HIGH;
-    m->particle_generators.push_back(pg);
+    pg.linearSpeedAngleDeviation = spray_type_ref.angleRange / 2.0f;
+    pg.linearSpeedDeviation.x = spray_type_ref.distanceRange * 0.4;
+    pg.baseParticle.priority = PARTICLE_PRIORITY_HIGH;
+    m->particleGenerators.push_back(pg);
     
     game.states.gameplay->changeSprayCount(spray_idx, -1);
     
     m->stopChasing();
     m->setAnimation(LEADER_ANIM_SPRAYING);
     
-    game.statistics.sprays_used++;
+    game.statistics.spraysUsed++;
 }
 
 
@@ -2637,11 +2637,11 @@ void leader_fsm::startBoredomAnim(Mob* m, void* info1, void* info2) {
     Leader* lea_ptr = (Leader*) m;
     
     size_t looking_around_anim_idx =
-        m->type->anim_db->findAnimation("looking_around");
+        m->type->animDb->findAnimation("looking_around");
     size_t sitting_anim_idx =
-        m->type->anim_db->findAnimation("sitting");
+        m->type->animDb->findAnimation("sitting");
     size_t stretching_anim_idx =
-        m->type->anim_db->findAnimation("stretching");
+        m->type->animDb->findAnimation("stretching");
     vector<size_t> boredom_anims;
     if(looking_around_anim_idx != INVALID) {
         boredom_anims.push_back(looking_around_anim_idx);
@@ -2656,7 +2656,7 @@ void leader_fsm::startBoredomAnim(Mob* m, void* info1, void* info2) {
     if(boredom_anims.empty()) return;
     size_t anim_idx = boredom_anims[game.rng.i(0, (int) (boredom_anims.size() - 1))];
     m->setAnimation(anim_idx, START_ANIM_OPTION_NORMAL, false);
-    lea_ptr->in_bored_animation = true;
+    lea_ptr->inBoredAnimation = true;
 }
 
 
@@ -2668,7 +2668,7 @@ void leader_fsm::startBoredomAnim(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void leader_fsm::startChasingLeader(Mob* m, void* info1, void* info2) {
-    m->focusOnMob(m->following_group);
+    m->focusOnMob(m->followingGroup);
     leader_fsm::updateInGroupChasing(m, nullptr, nullptr);
 }
 
@@ -2714,7 +2714,7 @@ void leader_fsm::startGoHere(Mob* m, void* info1, void* info2) {
     Point destination = *((Point*) info1);
     
     PathFollowSettings settings;
-    settings.target_point = destination;
+    settings.targetPoint = destination;
     
     float speed = lea_ptr->getBaseSpeed();
     for(size_t gm = 0; gm < lea_ptr->group->members.size(); gm++) {
@@ -2733,7 +2733,7 @@ void leader_fsm::startGoHere(Mob* m, void* info1, void* info2) {
             LEADER_STATE_MID_GO_HERE :
             LEADER_STATE_INACTIVE_MID_GO_HERE
         );
-        lea_ptr->mid_go_here = true;
+        lea_ptr->midGoHere = true;
         leader_fsm::setIsWalkingTrue(m, nullptr, nullptr);
     }
 }
@@ -2748,11 +2748,11 @@ void leader_fsm::startGoHere(Mob* m, void* info1, void* info2) {
  */
 void leader_fsm::startPluck(Mob* m, void* info1, void* info2) {
     Leader* lea_ptr = (Leader*) m;
-    engineAssert(lea_ptr->pluck_target != nullptr, m->printStateHistory());
+    engineAssert(lea_ptr->pluckTarget != nullptr, m->printStateHistory());
     
-    lea_ptr->pluck_target->fsm.runEvent(MOB_EV_PLUCKED, (void*) lea_ptr);
-    lea_ptr->pluck_target->pluck_reserved = false;
-    lea_ptr->pluck_target = nullptr;
+    lea_ptr->pluckTarget->fsm.runEvent(MOB_EV_PLUCKED, (void*) lea_ptr);
+    lea_ptr->pluckTarget->pluckReserved = false;
+    lea_ptr->pluckTarget = nullptr;
     lea_ptr->setAnimation(LEADER_ANIM_PLUCKING);
 }
 
@@ -2774,15 +2774,15 @@ void leader_fsm::startRidingTrack(Mob* m, void* info1, void* info2) {
     m->startHeightEffect();
     
     vector<size_t> checkpoints;
-    for(size_t c = 0; c < tra_ptr->type->anim_db->body_parts.size(); c++) {
+    for(size_t c = 0; c < tra_ptr->type->animDb->bodyParts.size(); c++) {
         checkpoints.push_back(c);
     }
-    m->track_info =
+    m->trackInfo =
         new TrackRideInfo(
-        tra_ptr, checkpoints, tra_ptr->tra_type->ride_speed
+        tra_ptr, checkpoints, tra_ptr->traType->rideSpeed
     );
     
-    switch(tra_ptr->tra_type->riding_pose) {
+    switch(tra_ptr->traType->ridingPose) {
     case TRACK_RIDING_POSE_STOPPED: {
         m->setAnimation(LEADER_ANIM_WALKING);
         break;
@@ -2806,8 +2806,8 @@ void leader_fsm::startRidingTrack(Mob* m, void* info1, void* info2) {
  */
 void leader_fsm::startWakingUp(Mob* m, void* info1, void* info2) {
     m->becomeUncarriable();
-    delete m->delivery_info;
-    m->delivery_info = nullptr;
+    delete m->deliveryInfo;
+    m->deliveryInfo = nullptr;
     m->setAnimation(LEADER_ANIM_GETTING_UP);
 }
 
@@ -2821,13 +2821,13 @@ void leader_fsm::startWakingUp(Mob* m, void* info1, void* info2) {
  */
 void leader_fsm::stopAutoPluck(Mob* m, void* info1, void* info2) {
     Leader* lea_ptr = (Leader*) m;
-    if(lea_ptr->pluck_target) {
+    if(lea_ptr->pluckTarget) {
         lea_ptr->stopChasing();
-        lea_ptr->pluck_target->pluck_reserved = false;
+        lea_ptr->pluckTarget->pluckReserved = false;
     }
-    lea_ptr->auto_plucking = false;
-    lea_ptr->queued_pluck_cancel = false;
-    lea_ptr->pluck_target = nullptr;
+    lea_ptr->autoPlucking = false;
+    lea_ptr->queuedPluckCancel = false;
+    lea_ptr->pluckTarget = nullptr;
     lea_ptr->setAnimation(LEADER_ANIM_IDLING);
 }
 
@@ -2855,7 +2855,7 @@ void leader_fsm::stopBeingThrown(Mob* m, void* info1, void* info2) {
 void leader_fsm::stopGoHere(Mob* m, void* info1, void* info2) {
     Leader* lea_ptr = (Leader*) m;
     lea_ptr->stopFollowingPath();
-    lea_ptr->mid_go_here = false;
+    lea_ptr->midGoHere = false;
 }
 
 
@@ -2895,10 +2895,10 @@ void leader_fsm::stopWhistle(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void leader_fsm::tickActiveState(Mob* m, void* info1, void* info2) {
-    m->face(getAngle(m->pos, game.states.gameplay->leader_cursor_w), nullptr);
+    m->face(getAngle(m->pos, game.states.gameplay->leaderCursorW), nullptr);
     
     bool should_be_turning =
-        getAngleSmallestDiff(m->angle, m->intended_turn_angle) > TAU / 300.0f;
+        getAngleSmallestDiff(m->angle, m->intendedTurnAngle) > TAU / 300.0f;
     if(should_be_turning) {
         leader_fsm::setIsTurningTrue(m, info1, info2);
     } else {
@@ -2915,7 +2915,7 @@ void leader_fsm::tickActiveState(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void leader_fsm::tickTrackRide(Mob* m, void* info1, void* info2) {
-    engineAssert(m->track_info != nullptr, m->printStateHistory());
+    engineAssert(m->trackInfo != nullptr, m->printStateHistory());
     
     if(m->tickTrackRide()) {
         //Finished!
@@ -2942,20 +2942,20 @@ void leader_fsm::touchedHazard(Mob* m, void* info1, void* info2) {
     Hazard* h = (Hazard*) info1;
     MobType::Vulnerability vuln = m->getHazardVulnerability(h);
     
-    if(!vuln.status_to_apply || !vuln.status_overrides) {
+    if(!vuln.statusToApply || !vuln.statusOverrides) {
         for(size_t e = 0; e < h->effects.size(); e++) {
             l->applyStatusEffect(h->effects[e], false, true);
         }
     }
-    if(vuln.status_to_apply) {
-        l->applyStatusEffect(vuln.status_to_apply, false, true);
+    if(vuln.statusToApply) {
+        l->applyStatusEffect(vuln.statusToApply, false, true);
     }
     
-    if(h->associated_liquid) {
+    if(h->associatedLiquid) {
         bool already_generating = false;
-        for(size_t g = 0; g < m->particle_generators.size(); g++) {
+        for(size_t g = 0; g < m->particleGenerators.size(); g++) {
             if(
-                m->particle_generators[g].id ==
+                m->particleGenerators[g].id ==
                 MOB_PARTICLE_GENERATOR_ID_WAVE_RING
             ) {
                 already_generating = true;
@@ -2966,15 +2966,15 @@ void leader_fsm::touchedHazard(Mob* m, void* info1, void* info2) {
         if(!already_generating) {
             ParticleGenerator pg =
                 standardParticleGenSetup(
-                    game.sys_content_names.part_wave_ring, m
+                    game.sysContentNames.parWaveRing, m
                 );
-            pg.follow_z_offset = 1.0f;
+            pg.followZOffset = 1.0f;
             adjustKeyframeInterpolatorValues<float>(
-                pg.base_particle.size,
+                pg.baseParticle.size,
             [ = ] (const float & f) { return f * m->radius; }
             );
             pg.id = MOB_PARTICLE_GENERATOR_ID_WAVE_RING;
-            m->particle_generators.push_back(pg);
+            m->particleGenerators.push_back(pg);
         }
     }
 }
@@ -3016,7 +3016,7 @@ void leader_fsm::updateInGroupChasing(Mob* m, void* info1, void* info2) {
     lea_ptr->getGroupSpotInfo(&target_pos, &target_dist);
     
     m->chase(
-        target_pos, lea_ptr->following_group->z,
+        target_pos, lea_ptr->followingGroup->z,
         CHASE_FLAG_ANY_ANGLE, target_dist
     );
     
@@ -3045,11 +3045,11 @@ void leader_fsm::whistle(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void leader_fsm::whistledWhileRiding(Mob* m, void* info1, void* info2) {
-    engineAssert(m->track_info, m->printStateHistory());
+    engineAssert(m->trackInfo, m->printStateHistory());
     
-    Track* tra_ptr = (Track*) (m->track_info->m);
+    Track* tra_ptr = (Track*) (m->trackInfo->m);
     
-    if(!tra_ptr->tra_type->cancellable_with_whistle) {
+    if(!tra_ptr->traType->cancellableWithWhistle) {
         return;
     }
     

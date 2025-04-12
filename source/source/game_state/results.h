@@ -45,16 +45,16 @@ private:
     GuiManager gui;
     
     //Time spent on this state.
-    float gui_time_spent = 0.0f;
+    float guiTimeSpent = 0.0f;
     
     //GUI items that need to grow during the periodic text animation.
-    vector<GuiItem*> text_to_animate;
+    vector<GuiItem*> textToAnimate;
     
     //Stats box GUI item.
-    ListGuiItem* stats_list = nullptr;
+    ListGuiItem* statsList = nullptr;
     
     //Final mission score. Cache for convenience.
-    int final_mission_score = 0;
+    int finalMissionScore = 0;
     
     
     //--- Function declarations ---

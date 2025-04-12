@@ -45,7 +45,7 @@ const float SPIRIT_SIZE_MULT = 0.7;
  */
 Enemy::Enemy(const Point &pos, EnemyType* type, float angle) :
     Mob(pos, type, angle),
-    ene_type(type) {
+    eneType(type) {
     
 }
 
@@ -93,7 +93,7 @@ void Enemy::drawMob() {
  */
 void Enemy::finishDyingClassSpecifics() {
     //Corpse.
-    if(ene_type->drops_corpse) {
+    if(eneType->dropsCorpse) {
         becomeCarriable(CARRY_DESTINATION_SHIP_NO_ONION);
         fsm.setState(ENEMY_EXTRA_STATE_CARRIABLE_WAITING);
     }
@@ -107,11 +107,11 @@ void Enemy::finishDyingClassSpecifics() {
         ),
         2, PARTICLE_PRIORITY_MEDIUM
     );
-    par.bitmap = game.sys_content.bmp_enemy_spirit;
+    par.bitmap = game.sysContent.bmpEnemySpirit;
     par.friction = 0.5f;
-    par.linear_speed = KeyframeInterpolator<Point>(Point(-50, -50));
-    par.linear_speed.add(0.5f, Point(50, -50));
-    par.linear_speed.add(1, Point(-50, -50));
+    par.linearSpeed = KeyframeInterpolator<Point>(Point(-50, -50));
+    par.linearSpeed.add(0.5f, Point(50, -50));
+    par.linearSpeed.add(1, Point(-50, -50));
     
     par.color = KeyframeInterpolator<ALLEGRO_COLOR>(al_map_rgba(255, 192, 255, 0));
     par.color.add(0.1f, al_map_rgb(255, 192, 255));
@@ -126,29 +126,29 @@ void Enemy::finishDyingClassSpecifics() {
  */
 void Enemy::startDyingClassSpecifics() {
     //Numbers.
-    game.states.gameplay->enemy_deaths++;
-    if(!game.cur_area_data->mission.enemy_points_on_collection) {
-        game.states.gameplay->enemy_points_collected += ene_type->points;
+    game.states.gameplay->enemyDeaths++;
+    if(!game.curAreaData->mission.enemyPointsOnCollection) {
+        game.states.gameplay->enemyPointsCollected += eneType->points;
     }
-    game.states.gameplay->last_enemy_killed_pos = pos;
-    game.statistics.enemy_deaths++;
+    game.states.gameplay->lastEnemyKilledPos = pos;
+    game.statistics.enemyDeaths++;
     
-    if(game.cur_area_data->mission.goal == MISSION_GOAL_BATTLE_ENEMIES) {
-        game.states.gameplay->mission_remaining_mob_ids.erase(id);
+    if(game.curAreaData->mission.goal == MISSION_GOAL_BATTLE_ENEMIES) {
+        game.states.gameplay->missionRemainingMobIds.erase(id);
     }
     
     //Music.
-    if(ene_type->is_boss) {
-        switch(game.states.gameplay->boss_music_state) {
+    if(eneType->isBoss) {
+        switch(game.states.gameplay->bossMusicState) {
         case BOSS_MUSIC_STATE_PLAYING: {
             bool near_boss;
             game.states.gameplay->isNearEnemyAndBoss(nullptr, &near_boss);
             if(!near_boss) {
                 //Only play the victory fanfare if they're not near another one.
                 game.audio.setCurrentSong(
-                    game.sys_content_names.sng_boss_victory, true, false, false
+                    game.sysContentNames.sngBossVictory, true, false, false
                 );
-                game.states.gameplay->boss_music_state =
+                game.states.gameplay->bossMusicState =
                     BOSS_MUSIC_STATE_VICTORY;
             }
         } default: {
@@ -160,7 +160,7 @@ void Enemy::startDyingClassSpecifics() {
     //Particles.
     ParticleGenerator pg =
         standardParticleGenSetup(
-            game.sys_content_names.part_enemy_death, this
+            game.sysContentNames.parEnemyDeath, this
         );
-    particle_generators.push_back(pg);
+    particleGenerators.push_back(pg);
 }

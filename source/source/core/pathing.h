@@ -171,14 +171,14 @@ struct PathFollowSettings {
     //--- Members ---
     
     //Target location.
-    Point target_point;
+    Point targetPoint;
     
     //If the target is a mob, this points to it.
-    Mob* target_mob = nullptr;
+    Mob* targetMob = nullptr;
     
     //For the final chase, from the last path stop to
     //the destination, use this for the target distance parameter.
-    float final_target_distance = PATHS::DEF_CHASE_TARGET_DISTANCE;
+    float finalTargetDistance = PATHS::DEF_CHASE_TARGET_DISTANCE;
     
     //Some flags. Use PATH_FOLLOW_FLAG_*.
     bitmask_8_t flags = 0;
@@ -190,10 +190,10 @@ struct PathFollowSettings {
     string label;
     
     //Faked start point. Used to fake calculations.
-    Point faked_start;
+    Point fakedStart;
     
     //Faked end point. Used to fake calculations.
-    Point faked_end;
+    Point fakedEnd;
     
 };
 
@@ -227,7 +227,7 @@ struct PathStop {
     vector<PathLink*> links;
     
     //Sector it's on. Only applicable during gameplay. Cache for performance.
-    Sector* sector_ptr = nullptr;
+    Sector* sectorPtr = nullptr;
     
     
     //--- Function declarations ---
@@ -257,13 +257,13 @@ struct PathLink {
     //--- Members ---
     
     //Pointer to the path stop at the start.
-    PathStop* start_ptr = nullptr;
+    PathStop* startPtr = nullptr;
     
     //Pointer to the path stop at the end.
-    PathStop* end_ptr = nullptr;
+    PathStop* endPtr = nullptr;
     
     //Index number of the path stop at the end.
-    size_t end_idx = 0;
+    size_t endIdx = 0;
     
     //Type. Used for special restrictions and behaviors.
     PATH_LINK_TYPE type = PATH_LINK_TYPE_NORMAL;
@@ -272,7 +272,7 @@ struct PathLink {
     float distance = 0.0f;
     
     //Is the stop currently blocked by an obstacle? Cache for performance.
-    bool blocked_by_obstacle = false;
+    bool blockedByObstacle = false;
     
     
     //--- Function declarations ---
@@ -305,7 +305,7 @@ struct PathManager {
     map<PathLink*, unordered_set<Mob*> > obstructions;
     
     //Stops known to have hazards.
-    unordered_set<PathStop*> hazardous_stops;
+    unordered_set<PathStop*> hazardousStops;
     
     
     //--- Function declarations ---

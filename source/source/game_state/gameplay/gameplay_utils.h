@@ -36,10 +36,10 @@ struct PendingIntermobEvent {
     Distance d;
     
     //Pointer to the relevant event.
-    MobEvent* event_ptr = nullptr;
+    MobEvent* eventPtr = nullptr;
     
     //Mob who the event belongs to.
-    Mob* mob_ptr = nullptr;
+    Mob* mobPtr = nullptr;
     
     
     //--- Function definitions ---
@@ -48,8 +48,8 @@ struct PendingIntermobEvent {
         const Distance &d, MobEvent* event_ptr, Mob* mob_ptr
     ):
         d(d),
-        event_ptr(event_ptr),
-        mob_ptr(mob_ptr) {
+        eventPtr(event_ptr),
+        mobPtr(mob_ptr) {
         
     }
     

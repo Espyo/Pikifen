@@ -34,25 +34,25 @@ struct Edge {
     Vertex* vertexes[2] = { nullptr, nullptr };
     
     //Index of the vertexes that make up the edge.
-    size_t vertex_idxs[2] = { INVALID, INVALID };
+    size_t vertexIdxs[2] = { INVALID, INVALID };
     
     //Sectors on each side of the edge.
     Sector* sectors[2] = { nullptr, nullptr };
     
     //Index of the sectors on each side of the edge.
-    size_t sector_idxs[2] = { INVALID, INVALID };
+    size_t sectorIdxs[2] = { INVALID, INVALID };
     
     //Length of the wall shadow. 0 = none. LARGE_FLOAT = auto.
-    float wall_shadow_length = LARGE_FLOAT;
+    float wallShadowLength = LARGE_FLOAT;
     
     //Color of the wall shadow, opacity included.
-    ALLEGRO_COLOR wall_shadow_color = GEOMETRY::SHADOW_DEF_COLOR;
+    ALLEGRO_COLOR wallShadowColor = GEOMETRY::SHADOW_DEF_COLOR;
     
     //Length of the ledge smoothing effect. 0 = none.
-    float ledge_smoothing_length = 0.0f;
+    float ledgeSmoothingLength = 0.0f;
     
     //Color of the ledge smoothing effect, opacity included.
-    ALLEGRO_COLOR ledge_smoothing_color = GEOMETRY::SMOOTHING_DEF_COLOR;
+    ALLEGRO_COLOR ledgeSmoothingColor = GEOMETRY::SMOOTHING_DEF_COLOR;
     
     
     //--- Function declarations ---

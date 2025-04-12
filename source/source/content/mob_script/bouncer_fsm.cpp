@@ -48,7 +48,7 @@ void bouncer_fsm::createFsm(MobType* typ) {
     
     
     typ->states = efc.finish();
-    typ->first_state_idx = fixStates(typ->states, "idling", typ);
+    typ->firstStateIdx = fixStates(typ->states, "idling", typ);
     
     //Check if the number in the enum and the total match up.
     engineAssert(
@@ -87,7 +87,7 @@ void bouncer_fsm::handleMob(Mob* m, void* info1, void* info2) {
     
     //Check if a compatible mob touched it.
     if(
-        hasFlag(bou_ptr->bou_type->riders, BOUNCER_RIDER_FLAG_PIKMIN) &&
+        hasFlag(bou_ptr->bouType->riders, BOUNCER_RIDER_FLAG_PIKMIN) &&
         toucher->type->category->id == MOB_CATEGORY_PIKMIN
     ) {
     
@@ -95,7 +95,7 @@ void bouncer_fsm::handleMob(Mob* m, void* info1, void* info2) {
         ev = toucher->fsm.getEvent(MOB_EV_TOUCHED_BOUNCER);
         
     } else if(
-        hasFlag(bou_ptr->bou_type->riders, BOUNCER_RIDER_FLAG_LEADERS) &&
+        hasFlag(bou_ptr->bouType->riders, BOUNCER_RIDER_FLAG_LEADERS) &&
         toucher->type->category->id == MOB_CATEGORY_LEADERS
     ) {
     
@@ -103,10 +103,10 @@ void bouncer_fsm::handleMob(Mob* m, void* info1, void* info2) {
         ev = toucher->fsm.getEvent(MOB_EV_TOUCHED_BOUNCER);
         
     } else if(
-        hasFlag(bou_ptr->bou_type->riders, BOUNCER_RIDER_FLAG_PIKMIN) &&
-        toucher->path_info &&
+        hasFlag(bou_ptr->bouType->riders, BOUNCER_RIDER_FLAG_PIKMIN) &&
+        toucher->pathInfo &&
         hasFlag(
-            toucher->path_info->settings.flags,
+            toucher->pathInfo->settings.flags,
             PATH_FOLLOW_FLAG_LIGHT_LOAD
         )
     ) {
@@ -134,7 +134,7 @@ void bouncer_fsm::handleMob(Mob* m, void* info1, void* info2) {
         target_mob->z + target_mob->height,
         max_h, MOB::GRAVITY_ADDER,
         &toucher->speed,
-        &toucher->speed_z,
+        &toucher->speedZ,
         &angle
     );
     

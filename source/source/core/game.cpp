@@ -59,29 +59,29 @@ const size_t FRAMERATE_HISTORY_SIZE = 300;
  * @brief Constructs a new game class object.
  */
 Game::Game() {
-    team_internal_names[MOB_TEAM_NONE] = "none";
-    team_internal_names[MOB_TEAM_PLAYER_1] = "player_1";
-    team_internal_names[MOB_TEAM_PLAYER_2] = "player_2";
-    team_internal_names[MOB_TEAM_PLAYER_3] = "player_3";
-    team_internal_names[MOB_TEAM_PLAYER_4] = "player_4";
-    team_internal_names[MOB_TEAM_ENEMY_1] = "enemy_1";
-    team_internal_names[MOB_TEAM_ENEMY_2] = "enemy_2";
-    team_internal_names[MOB_TEAM_ENEMY_3] = "enemy_3";
-    team_internal_names[MOB_TEAM_ENEMY_4] = "enemy_4";
-    team_internal_names[MOB_TEAM_OBSTACLE] = "obstacle";
-    team_internal_names[MOB_TEAM_OTHER] = "other";
+    teamInternalNames[MOB_TEAM_NONE] = "none";
+    teamInternalNames[MOB_TEAM_PLAYER_1] = "player_1";
+    teamInternalNames[MOB_TEAM_PLAYER_2] = "player_2";
+    teamInternalNames[MOB_TEAM_PLAYER_3] = "player_3";
+    teamInternalNames[MOB_TEAM_PLAYER_4] = "player_4";
+    teamInternalNames[MOB_TEAM_ENEMY_1] = "enemy_1";
+    teamInternalNames[MOB_TEAM_ENEMY_2] = "enemy_2";
+    teamInternalNames[MOB_TEAM_ENEMY_3] = "enemy_3";
+    teamInternalNames[MOB_TEAM_ENEMY_4] = "enemy_4";
+    teamInternalNames[MOB_TEAM_OBSTACLE] = "obstacle";
+    teamInternalNames[MOB_TEAM_OTHER] = "other";
     
-    team_names[MOB_TEAM_NONE] = "None";
-    team_names[MOB_TEAM_PLAYER_1] = "Player 1";
-    team_names[MOB_TEAM_PLAYER_2] = "Player 2";
-    team_names[MOB_TEAM_PLAYER_3] = "Player 3";
-    team_names[MOB_TEAM_PLAYER_4] = "Player 4";
-    team_names[MOB_TEAM_ENEMY_1] = "Enemy 1";
-    team_names[MOB_TEAM_ENEMY_2] = "Enemy 2";
-    team_names[MOB_TEAM_ENEMY_3] = "Enemy 3";
-    team_names[MOB_TEAM_ENEMY_4] = "Enemy 4";
-    team_names[MOB_TEAM_OBSTACLE] = "Obstacle";
-    team_names[MOB_TEAM_OTHER] = "Other";
+    teamNames[MOB_TEAM_NONE] = "None";
+    teamNames[MOB_TEAM_PLAYER_1] = "Player 1";
+    teamNames[MOB_TEAM_PLAYER_2] = "Player 2";
+    teamNames[MOB_TEAM_PLAYER_3] = "Player 3";
+    teamNames[MOB_TEAM_PLAYER_4] = "Player 4";
+    teamNames[MOB_TEAM_ENEMY_1] = "Enemy 1";
+    teamNames[MOB_TEAM_ENEMY_2] = "Enemy 2";
+    teamNames[MOB_TEAM_ENEMY_3] = "Enemy 3";
+    teamNames[MOB_TEAM_ENEMY_4] = "Enemy 4";
+    teamNames[MOB_TEAM_OBSTACLE] = "Obstacle";
+    teamNames[MOB_TEAM_OTHER] = "Other";
 }
 
 
@@ -97,23 +97,23 @@ Game::Game() {
 void Game::changeState(
     GameState* new_state, bool unload_current, bool load_new
 ) {
-    if(cur_state && unload_current) {
-        cur_state->unload();
-        cur_state->loaded = false;
+    if(curState && unload_current) {
+        curState->unload();
+        curState->loaded = false;
     }
     
-    cur_state = new_state;
+    curState = new_state;
     
     if(load_new) {
-        cur_state->load();
-        cur_state->loaded = true;
+        curState->load();
+        curState->loaded = true;
     }
     
     //Because during the loading screens there is no activity, on the
     //next frame, the game will assume the time between that and the last
     //non-loading frame is normal. This could be something like 2 seconds.
     //Let's reset the delta_t, then.
-    reset_delta_t = true;
+    resetDeltaT = true;
 }
 
 
@@ -123,8 +123,8 @@ void Game::changeState(
  * @return The name.
  */
 string Game::getCurStateName() const {
-    if(!cur_state) return "none";
-    return cur_state->getName();
+    if(!curState) return "none";
+    return curState->getName();
 }
 
 
@@ -133,19 +133,19 @@ string Game::getCurStateName() const {
  */
 void Game::globalDrawing() {
     //Dear ImGui.
-    if(debug.show_dear_imgui_demo) {
+    if(debug.showDearImGuiDemo) {
         ImGui::ShowDemoWindow();
     }
     ImGui::Render();
-    if(!skip_dear_imgui_frame) {
+    if(!skipDearImGuiFrame) {
         ImGui_ImplAllegro5_RenderDrawData(ImGui::GetDrawData());
     } else {
-        skip_dear_imgui_frame = false;
+        skipDearImGuiFrame = false;
     }
     
     //Fade manager.
-    if(!debug.show_dear_imgui_demo) {
-        game.fade_mgr.draw();
+    if(!debug.showDearImGuiDemo) {
+        game.fadeMgr.draw();
     }
 }
 
@@ -155,23 +155,23 @@ void Game::globalDrawing() {
  */
 void Game::globalLogic() {
     //Player action handling.
-    for(size_t a = 0; a < player_actions.size();) {
-        if(maker_tools.handleGlobalPlayerAction(player_actions[a])) {
-            player_actions.erase(player_actions.begin() + a);
-        } else if(globalHandleSystemPlayerAction(player_actions[a])) {
-            player_actions.erase(player_actions.begin() + a);
+    for(size_t a = 0; a < playerActions.size();) {
+        if(makerTools.handleGlobalPlayerAction(playerActions[a])) {
+            playerActions.erase(playerActions.begin() + a);
+        } else if(globalHandleSystemPlayerAction(playerActions[a])) {
+            playerActions.erase(playerActions.begin() + a);
         } else {
             a++;
         }
     }
     
     //Cursor trail.
-    if(options.advanced.draw_cursor_trail) {
-        mouse_cursor.save_timer.tick(delta_t);
+    if(options.advanced.drawCursorTrail) {
+        mouseCursor.saveTimer.tick(deltaT);
     }
     
     //Audio.
-    audio.tick(delta_t);
+    audio.tick(deltaT);
     
     //Dear ImGui.
     ImGui_ImplAllegro5_NewFrame();
@@ -192,7 +192,7 @@ void Game::globalHandleAllegroEvent(const ALLEGRO_EVENT &ev) {
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP
     ) {
         //Mouse cursor.
-        mouse_cursor.updatePos(ev, screen_to_world_transform);
+        mouseCursor.updatePos(ev, screenToWorldTransform);
         
     } else if(ev.type == ALLEGRO_EVENT_AUDIO_STREAM_FINISHED) {
         //Audio stream finished.
@@ -202,12 +202,12 @@ void Game::globalHandleAllegroEvent(const ALLEGRO_EVENT &ev) {
         
     } else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
         //Hitting the X on the game window.
-        is_game_running = false;
+        isGameRunning = false;
         
     } else if(ev.type == ALLEGRO_EVENT_DISPLAY_SWITCH_IN) {
         //On Windows, when you tab out then back in, sometimes you'd see
         //weird artifacts. This workaround fixes it.
-        al_resize_display(display, win_w, win_h);
+        al_resize_display(display, winW, winH);
         
     }
     
@@ -231,7 +231,7 @@ bool Game::globalHandleSystemPlayerAction(const PlayerAction &action) {
     
     switch(action.actionTypeId) {
     case PLAYER_ACTION_TYPE_SYSTEM_INFO: {
-        show_system_info = !show_system_info;
+        showSystemInfo = !showSystemInfo;
         break;
         
     } case PLAYER_ACTION_TYPE_SCREENSHOT: {
@@ -254,8 +254,8 @@ void Game::mainLoop() {
     ALLEGRO_EVENT ev;
     
     //Main loop.
-    al_start_timer(main_timer);
-    while(is_game_running) {
+    al_start_timer(mainTimer);
+    while(isGameRunning) {
     
         /*  ************************************************
           *** | _ |                                  | _ | ***
@@ -263,23 +263,23 @@ void Game::mainLoop() {
           *** +---+                                  +---+ ***
             ************************************************/
         
-        al_wait_for_event(event_queue, &ev);
+        al_wait_for_event(eventQueue, &ev);
         
         globalHandleAllegroEvent(ev);
-        cur_state->handleAllegroEvent(ev);
+        curState->handleAllegroEvent(ev);
         controls.handleAllegroEvent(ev);
         
         switch(ev.type) {
         case ALLEGRO_EVENT_TIMER: {
-            if(al_is_event_queue_empty(event_queue)) {
+            if(al_is_event_queue_empty(eventQueue)) {
             
                 double cur_frame_start_time = al_get_time();
-                if(reset_delta_t) {
+                if(resetDeltaT) {
                     //Failsafe.
                     prev_frame_start_time =
                         cur_frame_start_time -
-                        1.0f / options.advanced.target_fps;
-                    reset_delta_t = false;
+                        1.0f / options.advanced.targetFps;
+                    resetDeltaT = false;
                 }
                 
                 float real_delta_t =
@@ -287,18 +287,18 @@ void Game::mainLoop() {
                 statistics.runtime += real_delta_t;
                 
                 //Anti speed-burst cap.
-                delta_t = std::min(real_delta_t, 0.2f);
+                deltaT = std::min(real_delta_t, 0.2f);
                 
-                time_passed += delta_t;
-                GameState* prev_state = cur_state;
+                timePassed += deltaT;
+                GameState* prev_state = curState;
                 
-                player_actions = controls.newFrame(delta_t);
+                playerActions = controls.newFrame(deltaT);
                 globalLogic();
-                cur_state->doLogic();
+                curState->doLogic();
                 
-                if(cur_state == prev_state) {
+                if(curState == prev_state) {
                     //Only draw if we didn't change states in the meantime.
-                    cur_state->doDrawing();
+                    curState->doDrawing();
                     globalDrawing();
                     al_flip_display();
                 } else {
@@ -306,7 +306,7 @@ void Game::mainLoop() {
                 }
                 
                 double cur_frame_end_time = al_get_time();
-                cur_frame_process_time =
+                curFrameProcessTime =
                     cur_frame_end_time - cur_frame_start_time;
                     
                 prev_frame_start_time = cur_frame_start_time;
@@ -324,12 +324,12 @@ void Game::mainLoop() {
  * @brief Shuts down the program, cleanly freeing everything.
  */
 void Game::shutdown() {
-    if(perf_mon) {
-        perf_mon->saveLog();
+    if(perfMon) {
+        perfMon->saveLog();
     }
     
-    if(cur_state) {
-        cur_state->unload();
+    if(curState) {
+        curState->unload();
     }
     
     content.unloadAll(
@@ -342,13 +342,13 @@ void Game::shutdown() {
     }
     );
     
-    delete dummy_mob_state;
+    delete dummyMobState;
     
     unloadMiscResources();
     destroyMobCategories();
     states.destroy();
     destroyMisc();
-    destroyEventThings(main_timer, event_queue);
+    destroyEventThings(mainTimer, eventQueue);
     destroyAllegro();
 }
 
@@ -361,7 +361,7 @@ void Game::shutdown() {
  */
 void Game::registerAudioStreamSource(ALLEGRO_AUDIO_STREAM* stream) {
     al_register_event_source(
-        event_queue,
+        eventQueue,
         al_get_audio_stream_event_source(stream)
     );
 }
@@ -404,7 +404,7 @@ int Game::start() {
     saveStatistics();
     
     //Event stuff.
-    initEventThings(main_timer, event_queue);
+    initEventThings(mainTimer, eventQueue);
     
     //Other fundamental initializations and loadings.
     initMisc();
@@ -438,54 +438,54 @@ int Game::start() {
     loadMakerTools();
     saveMakerTools();
     
-    dummy_mob_state = new MobState("dummy");
+    dummyMobState = new MobState("dummy");
     
-    if(maker_tools.use_perf_mon) {
-        perf_mon = new PerformanceMonitor();
+    if(makerTools.usePerfMon) {
+        perfMon = new PerformanceMonitor();
     }
     
     //Auto-start in some state.
     if(
-        maker_tools.enabled &&
-        maker_tools.auto_start_state == "play" &&
-        !maker_tools.auto_start_option.empty()
+        makerTools.enabled &&
+        makerTools.autoStartState == "play" &&
+        !makerTools.autoStartOption.empty()
     ) {
-        states.gameplay->path_of_area_to_load =
-            maker_tools.auto_start_option;
+        states.gameplay->pathOfAreaToLoad =
+            makerTools.autoStartOption;
         changeState(states.gameplay);
         
     } else if(
-        maker_tools.enabled &&
-        maker_tools.auto_start_state == "animation_editor"
+        makerTools.enabled &&
+        makerTools.autoStartState == "animation_editor"
     ) {
-        states.animation_ed->auto_load_file =
-            maker_tools.auto_start_option;
-        changeState(states.animation_ed);
+        states.animationEd->autoLoadFile =
+            makerTools.autoStartOption;
+        changeState(states.animationEd);
         
     } else if(
-        maker_tools.enabled &&
-        maker_tools.auto_start_state == "area_editor"
+        makerTools.enabled &&
+        makerTools.autoStartState == "area_editor"
     ) {
-        states.area_ed->auto_load_folder =
-            maker_tools.auto_start_option;
-        changeState(states.area_ed);
+        states.areaEd->autoLoadFolder =
+            makerTools.autoStartOption;
+        changeState(states.areaEd);
         
     } else if(
-        maker_tools.enabled &&
-        maker_tools.auto_start_state == "gui_editor"
+        makerTools.enabled &&
+        makerTools.autoStartState == "gui_editor"
     ) {
-        states.gui_ed->auto_load_file =
-            maker_tools.auto_start_option;
-        changeState(states.gui_ed);
+        states.guiEd->autoLoadFile =
+            makerTools.autoStartOption;
+        changeState(states.guiEd);
     } else if(
-        maker_tools.enabled &&
-        maker_tools.auto_start_state == "particle_editor"
+        makerTools.enabled &&
+        makerTools.autoStartState == "particle_editor"
     ) {
-        states.particle_ed->auto_load_file =
-            maker_tools.auto_start_option;
-        changeState(states.particle_ed);
+        states.particleEd->autoLoadFile =
+            makerTools.autoStartOption;
+        changeState(states.particleEd);
     } else {
-        changeState(states.title_screen);
+        changeState(states.titleScreen);
     }
     
     return 0;
@@ -512,7 +512,7 @@ void Game::unloadLoadedState(GameState* loaded_state) {
  */
 void Game::unregisterAudioStreamSource(ALLEGRO_AUDIO_STREAM* stream) {
     al_unregister_event_source(
-        event_queue,
+        eventQueue,
         al_get_audio_stream_event_source(stream)
     );
 }
@@ -522,21 +522,21 @@ void Game::unregisterAudioStreamSource(ALLEGRO_AUDIO_STREAM* stream) {
  * @brief Destroys the states in the list.
  */
 void GameStateList::destroy() {
-    delete animation_ed;
-    delete area_ed;
-    delete annex_screen;
+    delete animationEd;
+    delete areaEd;
+    delete annexScreen;
     delete gameplay;
-    delete gui_ed;
-    delete particle_ed;
-    delete title_screen;
+    delete guiEd;
+    delete particleEd;
+    delete titleScreen;
     delete results;
     
-    animation_ed = nullptr;
-    area_ed = nullptr;
+    animationEd = nullptr;
+    areaEd = nullptr;
     gameplay = nullptr;
-    gui_ed = nullptr;
-    particle_ed = nullptr;
-    title_screen = nullptr;
+    guiEd = nullptr;
+    particleEd = nullptr;
+    titleScreen = nullptr;
     results = nullptr;
 }
 
@@ -545,13 +545,13 @@ void GameStateList::destroy() {
  * @brief Initializes the states in the list.
  */
 void GameStateList::init() {
-    animation_ed = new AnimationEditor();
-    area_ed = new AreaEditor();
-    annex_screen = new AnnexScreen();
+    animationEd = new AnimationEditor();
+    areaEd = new AreaEditor();
+    annexScreen = new AnnexScreen();
     gameplay = new GameplayState();
-    gui_ed = new GuiEditor();
-    particle_ed = new ParticleEditor();
-    title_screen = new TitleScreen();
+    guiEd = new GuiEditor();
+    particleEd = new ParticleEditor();
+    titleScreen = new TitleScreen();
     results = new Results();
 }
 

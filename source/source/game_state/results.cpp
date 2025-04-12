@@ -37,24 +37,24 @@ const string GUI_FILE_NAME = "results_menu";
  */
 void Results::addScoreStat(const MISSION_SCORE_CRITERIA criterion) {
     if(
-        game.cur_area_data->type != AREA_TYPE_MISSION ||
-        game.cur_area_data->mission.grading_mode != MISSION_GRADING_MODE_POINTS
+        game.curAreaData->type != AREA_TYPE_MISSION ||
+        game.curAreaData->mission.gradingMode != MISSION_GRADING_MODE_POINTS
     ) {
         return;
     }
     
-    MissionScoreCriterion* c_ptr = game.mission_score_criteria[criterion];
-    MissionData* mission = &game.cur_area_data->mission;
+    MissionScoreCriterion* c_ptr = game.missionScoreCriteria[criterion];
+    MissionData* mission = &game.curAreaData->mission;
     int mult = c_ptr->getMultiplier(mission);
     
     if(mult == 0) return;
     
     bool goal_was_cleared =
-        game.states.gameplay->mission_fail_reason ==
+        game.states.gameplay->missionFailReason ==
         (MISSION_FAIL_COND) INVALID;
     bool lost =
         hasFlag(
-            game.cur_area_data->mission.point_loss_data,
+            game.curAreaData->mission.pointLossData,
             getIdxBitmask(criterion)
         ) &&
         !goal_was_cleared;
@@ -88,7 +88,7 @@ void Results::addStat(
     const string &label, const string &value,
     const ALLEGRO_COLOR &color
 ) {
-    size_t stat_idx = stats_list->children.size() / 2.0f;
+    size_t stat_idx = statsList->children.size() / 2.0f;
     const float STAT_HEIGHT = 0.12f;
     const float STAT_PADDING = 0.02f;
     const float STATS_OFFSET = 0.01f;
@@ -98,26 +98,26 @@ void Results::addStat(
         
     BulletGuiItem* label_bullet =
         new BulletGuiItem(
-        label, game.sys_content.fnt_standard, color
+        label, game.sysContent.fntStandard, color
     );
-    label_bullet->ratio_center =
+    label_bullet->ratioCenter =
         Point(0.50f, stat_center_y);
-    label_bullet->ratio_size =
+    label_bullet->ratioSize =
         Point(0.96f, STAT_HEIGHT);
-    stats_list->addChild(label_bullet);
+    statsList->addChild(label_bullet);
     gui.addItem(label_bullet);
     
     TextGuiItem* value_text =
         new TextGuiItem(
-        value, game.sys_content.fnt_counter, color, ALLEGRO_ALIGN_RIGHT
+        value, game.sysContent.fntCounter, color, ALLEGRO_ALIGN_RIGHT
     );
-    value_text->ratio_center =
+    value_text->ratioCenter =
         Point(0.75f, stat_center_y);
-    value_text->ratio_size =
+    value_text->ratioSize =
         Point(0.44f, STAT_HEIGHT);
-    stats_list->addChild(value_text);
+    statsList->addChild(value_text);
     gui.addItem(value_text);
-    text_to_animate.push_back(value_text);
+    textToAnimate.push_back(value_text);
 }
 
 
@@ -126,9 +126,9 @@ void Results::addStat(
  * continue playing the area.
  */
 void Results::continuePlaying() {
-    game.fade_mgr.startFade(false, [] () {
-        game.states.gameplay->after_hours = true;
-        game.states.gameplay->mission_fail_reason =
+    game.fadeMgr.startFade(false, [] () {
+        game.states.gameplay->afterHours = true;
+        game.states.gameplay->missionFailReason =
             (MISSION_FAIL_COND) INVALID;
         game.changeState(game.states.gameplay, true, false);
         game.states.gameplay->enter();
@@ -143,12 +143,12 @@ void Results::doDrawing() {
     //Background.
     al_clear_to_color(al_map_rgb(143, 149, 62));
     
-    float logo_width = al_get_bitmap_width(game.sys_content.bmp_icon);
-    float logo_height = al_get_bitmap_height(game.sys_content.bmp_icon);
-    logo_height = game.win_w * 0.08f * (logo_width / logo_height);
-    logo_width = game.win_w * 0.08f;
+    float logo_width = al_get_bitmap_width(game.sysContent.bmpIcon);
+    float logo_height = al_get_bitmap_height(game.sysContent.bmpIcon);
+    logo_height = game.winW * 0.08f * (logo_width / logo_height);
+    logo_width = game.winW * 0.08f;
     drawBackgroundLogos(
-        gui_time_spent, 6, 6, Point(logo_width, logo_height), mapAlpha(75),
+        guiTimeSpent, 6, 6, Point(logo_width, logo_height), mapAlpha(75),
         Point(-60.0f, 30.0f), -TAU / 6.0f
     );
     
@@ -162,36 +162,36 @@ void Results::doDrawing() {
  * @brief Ticks one frame's worth of logic.
  */
 void Results::doLogic() {
-    if(!game.fade_mgr.isFading()) {
-        for(size_t a = 0; a < game.player_actions.size(); a++) {
-            gui.handlePlayerAction(game.player_actions[a]);
+    if(!game.fadeMgr.isFading()) {
+        for(size_t a = 0; a < game.playerActions.size(); a++) {
+            gui.handlePlayerAction(game.playerActions[a]);
         }
     }
     
-    gui_time_spent += game.delta_t;
+    guiTimeSpent += game.deltaT;
     
     //Make the different texts grow every two or so seconds.
     const float TEXT_ANIM_ALL_DURATION = 1.5f;
     const float TEXT_ANIM_PAUSE_DURATION = 1.0f;
     const float anim_time =
-        fmod(gui_time_spent, TEXT_ANIM_ALL_DURATION + TEXT_ANIM_PAUSE_DURATION);
-    const float time_per_item = TEXT_ANIM_ALL_DURATION / text_to_animate.size();
-    const int old_time_cp = (anim_time - game.delta_t) / time_per_item;
+        fmod(guiTimeSpent, TEXT_ANIM_ALL_DURATION + TEXT_ANIM_PAUSE_DURATION);
+    const float time_per_item = TEXT_ANIM_ALL_DURATION / textToAnimate.size();
+    const int old_time_cp = (anim_time - game.deltaT) / time_per_item;
     const int new_time_cp = anim_time / time_per_item;
     
     if(
         old_time_cp != new_time_cp &&
         old_time_cp >= 0 &&
-        old_time_cp <= (int) text_to_animate.size() - 1
+        old_time_cp <= (int) textToAnimate.size() - 1
     ) {
-        text_to_animate[old_time_cp]->startJuiceAnimation(
+        textToAnimate[old_time_cp]->startJuiceAnimation(
             GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
         );
     }
     
-    gui.tick(game.delta_t);
+    gui.tick(game.deltaT);
     
-    game.fade_mgr.tick(game.delta_t);
+    game.fadeMgr.tick(game.deltaT);
 }
 
 
@@ -211,7 +211,7 @@ string Results::getName() const {
  * @param ev Event to handle.
  */
 void Results::handleAllegroEvent(ALLEGRO_EVENT &ev) {
-    if(game.fade_mgr.isFading()) return;
+    if(game.fadeMgr.isFading()) return;
     
     gui.handleAllegroEvent(ev);
 }
@@ -221,17 +221,17 @@ void Results::handleAllegroEvent(ALLEGRO_EVENT &ev) {
  * @brief Leaves the results menu and goes to the area menu.
  */
 void Results::leave() {
-    game.fade_mgr.startFade(false, [] () {
-        AREA_TYPE area_type = game.cur_area_data->type;
+    game.fadeMgr.startFade(false, [] () {
+        AREA_TYPE area_type = game.curAreaData->type;
         game.unloadLoadedState(game.states.gameplay);
-        if(game.states.area_ed->quick_play_area_path.empty()) {
-            game.states.annex_screen->area_menu_area_type =
+        if(game.states.areaEd->quickPlayAreaPath.empty()) {
+            game.states.annexScreen->areaMenuAreaType =
                 area_type;
-            game.states.annex_screen->menu_to_load =
+            game.states.annexScreen->menuToLoad =
                 ANNEX_SCREEN_MENU_AREA_SELECTION;
-            game.changeState(game.states.annex_screen);
+            game.changeState(game.states.annexScreen);
         } else {
-            game.changeState(game.states.area_ed);
+            game.changeState(game.states.areaEd);
         }
     });
 }
@@ -242,26 +242,26 @@ void Results::leave() {
  */
 void Results::load() {
     bool goal_was_cleared =
-        game.states.gameplay->mission_fail_reason ==
+        game.states.gameplay->missionFailReason ==
         (MISSION_FAIL_COND) INVALID;
         
     //Calculate score things.
-    final_mission_score = game.cur_area_data->mission.starting_points;
+    finalMissionScore = game.curAreaData->mission.startingPoints;
     
-    for(size_t c = 0; c < game.mission_score_criteria.size(); c++) {
+    for(size_t c = 0; c < game.missionScoreCriteria.size(); c++) {
         MissionScoreCriterion* c_ptr =
-            game.mission_score_criteria[c];
+            game.missionScoreCriteria[c];
         int c_score =
-            c_ptr->getScore(game.states.gameplay, &game.cur_area_data->mission);
+            c_ptr->getScore(game.states.gameplay, &game.curAreaData->mission);
         bool lost =
             hasFlag(
-                game.cur_area_data->mission.point_loss_data,
+                game.curAreaData->mission.pointLossData,
                 getIdxBitmask(c)
             ) &&
             !goal_was_cleared;
             
         if(!lost) {
-            final_mission_score += c_score;
+            finalMissionScore += c_score;
         }
     }
     
@@ -271,7 +271,7 @@ void Results::load() {
     DataNode mission_records;
     mission_records.loadFile(FILE_PATHS_FROM_ROOT::MISSION_RECORDS, true, false, true);
     string record_entry_name =
-        getMissionRecordEntryName(game.cur_area_data);
+        getMissionRecordEntryName(game.curAreaData);
     DataNode* entry_node;
     if(mission_records.getNrOfChildrenByName(record_entry_name) > 0) {
         entry_node =
@@ -293,8 +293,8 @@ void Results::load() {
         is_new_record = true;
     } else if(old_record.clear == goal_was_cleared) {
         if(
-            game.cur_area_data->mission.grading_mode == MISSION_GRADING_MODE_POINTS &&
-            old_record.score < final_mission_score
+            game.curAreaData->mission.gradingMode == MISSION_GRADING_MODE_POINTS &&
+            old_record.score < finalMissionScore
         ) {
             is_new_record = true;
         }
@@ -303,12 +303,12 @@ void Results::load() {
     bool saved_successfully = true;
     if(
         is_new_record &&
-        game.states.area_ed->quick_play_area_path.empty() &&
-        !game.maker_tools.used_helping_tools &&
-        !game.states.gameplay->after_hours
+        game.states.areaEd->quickPlayAreaPath.empty() &&
+        !game.makerTools.usedHelpingTools &&
+        !game.states.gameplay->afterHours
     ) {
         string clear_str = goal_was_cleared ? "1" : "0";
-        string score_str = i2s(final_mission_score);
+        string score_str = i2s(finalMissionScore);
         string date_str = getCurrentTime(false);
         
         entry_node->value = clear_str + ";" + score_str + ";" + date_str;
@@ -333,7 +333,7 @@ void Results::load() {
         );
     }
     
-    text_to_animate.clear();
+    textToAnimate.clear();
     
     //Menu items.
     gui.registerCoords("area_name",        50,  7, 45, 10);
@@ -353,40 +353,40 @@ void Results::load() {
     gui.registerCoords("pick_area_input",  91, 91,  4,  4);
     gui.registerCoords("tooltip",          50, 96, 96,  4);
     gui.readCoords(
-        game.content.gui_defs.list[RESULTS::GUI_FILE_NAME].getChildByName("positions")
+        game.content.guiDefs.list[RESULTS::GUI_FILE_NAME].getChildByName("positions")
     );
     
     //Area name text.
     TextGuiItem* area_name_text =
         new TextGuiItem(
-        game.cur_area_data->name, game.sys_content.fnt_area_name, COLOR_GOLD
+        game.curAreaData->name, game.sysContent.fntAreaName, COLOR_GOLD
     );
     gui.addItem(area_name_text, "area_name");
-    text_to_animate.push_back(area_name_text);
+    textToAnimate.push_back(area_name_text);
     
     //Area subtitle text.
     string subtitle =
         getSubtitleOrMissionGoal(
-            game.cur_area_data->subtitle,
-            game.cur_area_data->type,
-            game.cur_area_data->mission.goal
+            game.curAreaData->subtitle,
+            game.curAreaData->type,
+            game.curAreaData->mission.goal
         );
     if(!subtitle.empty()) {
         TextGuiItem* area_subtitle_text =
-            new TextGuiItem(subtitle, game.sys_content.fnt_area_name);
+            new TextGuiItem(subtitle, game.sysContent.fntAreaName);
         gui.addItem(area_subtitle_text, "area_subtitle");
-        text_to_animate.push_back(area_subtitle_text);
+        textToAnimate.push_back(area_subtitle_text);
     }
     
-    if(game.cur_area_data->type == AREA_TYPE_MISSION) {
+    if(game.curAreaData->type == AREA_TYPE_MISSION) {
         //Goal stamp image item.
         GuiItem* goal_stamp_item = new GuiItem;
-        goal_stamp_item->on_draw =
+        goal_stamp_item->onDraw =
         [goal_was_cleared] (const DrawInfo & draw) {
             drawBitmapInBox(
                 goal_was_cleared ?
-                game.sys_content.bmp_mission_clear :
-                game.sys_content.bmp_mission_fail,
+                game.sysContent.bmpMissionClear :
+                game.sysContent.bmpMissionFail,
                 draw.center, draw.size,
                 true
             );
@@ -397,21 +397,21 @@ void Results::load() {
         string end_reason;
         if(goal_was_cleared) {
             end_reason =
-                game.mission_goals[game.cur_area_data->mission.goal]->
-                getEndReason(&game.cur_area_data->mission);
+                game.missionGoals[game.curAreaData->mission.goal]->
+                getEndReason(&game.curAreaData->mission);
         } else {
             end_reason =
-                game.mission_fail_conds[
-                    game.states.gameplay->mission_fail_reason
+                game.missionFailConds[
+                    game.states.gameplay->missionFailReason
                 ]->getEndReason(
-                    &game.cur_area_data->mission
+                    &game.curAreaData->mission
                 );
         }
         
         if(!end_reason.empty()) {
             TextGuiItem* end_reason_text =
                 new TextGuiItem(
-                end_reason, game.sys_content.fnt_standard,
+                end_reason, game.sysContent.fntStandard,
                 goal_was_cleared ?
                 al_map_rgba(112, 200, 100, 192) :
                 al_map_rgba(242, 160, 160, 192)
@@ -423,33 +423,33 @@ void Results::load() {
         MISSION_MEDAL medal = MISSION_MEDAL_NONE;
         string medal_reason;
         ALLEGRO_COLOR medal_reason_color;
-        switch(game.cur_area_data->mission.grading_mode) {
+        switch(game.curAreaData->mission.gradingMode) {
         case MISSION_GRADING_MODE_POINTS: {
-            medal_reason = "Got " + i2s(final_mission_score) + " points";
+            medal_reason = "Got " + i2s(finalMissionScore) + " points";
             if(
-                final_mission_score >=
-                game.cur_area_data->mission.platinum_req
+                finalMissionScore >=
+                game.curAreaData->mission.platinumReq
             ) {
                 medal = MISSION_MEDAL_PLATINUM;
                 medal_reason += "!";
                 medal_reason_color = al_map_rgba(145, 226, 210, 192);
             } else if(
-                final_mission_score >=
-                game.cur_area_data->mission.gold_req
+                finalMissionScore >=
+                game.curAreaData->mission.goldReq
             ) {
                 medal = MISSION_MEDAL_GOLD;
                 medal_reason += "!";
                 medal_reason_color = al_map_rgba(233, 200, 80, 192);
             } else if(
-                final_mission_score >=
-                game.cur_area_data->mission.silver_req
+                finalMissionScore >=
+                game.curAreaData->mission.silverReq
             ) {
                 medal = MISSION_MEDAL_SILVER;
                 medal_reason += "!";
                 medal_reason_color = al_map_rgba(216, 216, 200, 192);
             } else if(
-                final_mission_score >=
-                game.cur_area_data->mission.bronze_req
+                finalMissionScore >=
+                game.curAreaData->mission.bronzeReq
             ) {
                 medal = MISSION_MEDAL_BRONZE;
                 medal_reason += "!";
@@ -481,24 +481,24 @@ void Results::load() {
         
         //Medal image item.
         GuiItem* medal_item = new GuiItem;
-        medal_item->on_draw =
+        medal_item->onDraw =
         [medal] (const DrawInfo & draw) {
             ALLEGRO_BITMAP* bmp = nullptr;
             switch(medal) {
             case MISSION_MEDAL_NONE: {
-                bmp = game.sys_content.bmp_medal_none;
+                bmp = game.sysContent.bmpMedalNone;
                 break;
             } case MISSION_MEDAL_BRONZE: {
-                bmp = game.sys_content.bmp_medal_bronze;
+                bmp = game.sysContent.bmpMedalBronze;
                 break;
             } case MISSION_MEDAL_SILVER: {
-                bmp = game.sys_content.bmp_medal_silver;
+                bmp = game.sysContent.bmpMedalSilver;
                 break;
             } case MISSION_MEDAL_GOLD: {
-                bmp = game.sys_content.bmp_medal_gold;
+                bmp = game.sysContent.bmpMedalGold;
                 break;
             } case MISSION_MEDAL_PLATINUM: {
-                bmp = game.sys_content.bmp_medal_platinum;
+                bmp = game.sysContent.bmpMedalPlatinum;
                 break;
             }
             }
@@ -509,7 +509,7 @@ void Results::load() {
         //Medal reason.
         TextGuiItem* medal_reason_text =
             new TextGuiItem(
-            medal_reason, game.sys_content.fnt_standard, medal_reason_color
+            medal_reason, game.sysContent.fntStandard, medal_reason_color
         );
         gui.addItem(medal_reason_text, "medal_reason");
     }
@@ -518,19 +518,19 @@ void Results::load() {
     string conclusion_label = "Conclusion:";
     TextGuiItem* conclusion_label_text =
         new TextGuiItem(
-        conclusion_label, game.sys_content.fnt_standard,
+        conclusion_label, game.sysContent.fntStandard,
         al_map_rgba(255, 255, 255, 192)
     );
     gui.addItem(conclusion_label_text, "conclusion_label");
     
     //Conclusion text.
     string conclusion;
-    switch(game.cur_area_data->type) {
+    switch(game.curAreaData->type) {
     case AREA_TYPE_SIMPLE: {
-        if(!game.states.area_ed->quick_play_area_path.empty()) {
+        if(!game.states.areaEd->quickPlayAreaPath.empty()) {
             conclusion =
                 "Area editor playtest ended.";
-        } else if(game.maker_tools.used_helping_tools) {
+        } else if(game.makerTools.usedHelpingTools) {
             conclusion =
                 "Nothing to report, other than maker tools being used.";
         } else {
@@ -539,23 +539,23 @@ void Results::load() {
         }
         break;
     } case AREA_TYPE_MISSION: {
-        if(game.states.gameplay->after_hours) {
+        if(game.states.gameplay->afterHours) {
             conclusion =
                 "Played in after hours, so the "
                 "result past that point won't be saved.";
-        } else if(!game.states.area_ed->quick_play_area_path.empty()) {
+        } else if(!game.states.areaEd->quickPlayAreaPath.empty()) {
             conclusion =
                 "This was an area editor playtest, "
                 "so the result won't be saved.";
-        } else if(game.maker_tools.used_helping_tools) {
+        } else if(game.makerTools.usedHelpingTools) {
             conclusion =
                 "Maker tools were used, "
                 "so the result won't be saved.";
         } else if(
-            game.cur_area_data->mission.grading_mode == MISSION_GRADING_MODE_POINTS &&
+            game.curAreaData->mission.gradingMode == MISSION_GRADING_MODE_POINTS &&
             old_record.clear &&
             !goal_was_cleared &&
-            old_record.score < final_mission_score
+            old_record.score < finalMissionScore
         ) {
             conclusion =
                 "High score, but the old record was a "
@@ -576,81 +576,81 @@ void Results::load() {
     }
     }
     TextGuiItem* conclusion_text =
-        new TextGuiItem(conclusion, game.sys_content.fnt_standard);
+        new TextGuiItem(conclusion, game.sysContent.fntStandard);
     gui.addItem(conclusion_text, "conclusion");
     
     //Stats label text.
     TextGuiItem* stats_label_text =
         new TextGuiItem(
-        "Stats:", game.sys_content.fnt_standard, al_map_rgba(255, 255, 255, 192)
+        "Stats:", game.sysContent.fntStandard, al_map_rgba(255, 255, 255, 192)
     );
     gui.addItem(stats_label_text, "stats_label");
     
     //Stats box.
-    stats_list = new ListGuiItem();
-    stats_list->on_draw =
+    statsList = new ListGuiItem();
+    statsList->onDraw =
     [this] (const DrawInfo & draw) {
         drawFilledRoundedRectangle(
             draw.center, draw.size, 8.0f, al_map_rgba(0, 0, 0, 40)
         );
         drawTexturedBox(
-            draw.center, draw.size, game.sys_content.bmp_frame_box,
+            draw.center, draw.size, game.sysContent.bmpFrameBox,
             COLOR_TRANSPARENT_WHITE
         );
     };
-    gui.addItem(stats_list, "stats");
+    gui.addItem(statsList, "stats");
     
     //Stats list scrollbar.
     ScrollGuiItem* stats_scroll = new ScrollGuiItem();
-    stats_scroll->list_item = stats_list;
+    stats_scroll->listItem = statsList;
     gui.addItem(stats_scroll, "stats_scroll");
     
     if(
-        game.cur_area_data->type == AREA_TYPE_MISSION &&
-        game.cur_area_data->mission.starting_points != 0
+        game.curAreaData->type == AREA_TYPE_MISSION &&
+        game.curAreaData->mission.startingPoints != 0
     ) {
         //Starting score bullet.
         addStat(
             "Starting score: ",
-            i2s(game.cur_area_data->mission.starting_points),
+            i2s(game.curAreaData->mission.startingPoints),
             COLOR_GOLD
         );
     }
     
     //Time taken bullet.
     unsigned int ds =
-        fmod(game.states.gameplay->gameplay_time_passed * 10, 10);
+        fmod(game.states.gameplay->gameplayTimePassed * 10, 10);
     unsigned char seconds =
-        fmod(game.states.gameplay->gameplay_time_passed, 60);
+        fmod(game.states.gameplay->gameplayTimePassed, 60);
     size_t minutes =
-        game.states.gameplay->gameplay_time_passed / 60.0f;
+        game.states.gameplay->gameplayTimePassed / 60.0f;
     addStat(
         "Time taken:",
         i2s(minutes) + ":" + padString(i2s(seconds), 2, '0') + "." + i2s(ds)
     );
     
     //Pikmin born bullet.
-    addStat("Pikmin born:", i2s(game.states.gameplay->pikmin_born));
+    addStat("Pikmin born:", i2s(game.states.gameplay->pikminBorn));
     
     //Pikmin born points bullet.
     addScoreStat(MISSION_SCORE_CRITERIA_PIKMIN_BORN);
     
     //Pikmin deaths bullet.
-    addStat("Pikmin deaths:", i2s(game.states.gameplay->pikmin_deaths));
+    addStat("Pikmin deaths:", i2s(game.states.gameplay->pikminDeaths));
     
     //Pikmin death points bullet.
     addScoreStat(MISSION_SCORE_CRITERIA_PIKMIN_DEATH);
     
     if(
-        game.cur_area_data->type == AREA_TYPE_MISSION &&
-        game.cur_area_data->mission.points_per_sec_left != 0
+        game.curAreaData->type == AREA_TYPE_MISSION &&
+        game.curAreaData->mission.pointsPerSecLeft != 0
     ) {
         //Seconds left bullet.
         addStat(
             "Seconds left:",
             i2s(
-                game.cur_area_data->mission.fail_time_limit -
-                floor(game.states.gameplay->gameplay_time_passed)
+                game.curAreaData->mission.failTimeLimit -
+                floor(game.states.gameplay->gameplayTimePassed)
             )
         );
         
@@ -659,13 +659,13 @@ void Results::load() {
     }
     
     if(
-        game.cur_area_data->type == AREA_TYPE_MISSION &&
-        game.cur_area_data->mission.points_per_sec_passed != 0
+        game.curAreaData->type == AREA_TYPE_MISSION &&
+        game.curAreaData->mission.pointsPerSecPassed != 0
     ) {
         //Seconds passed bullet.
         addStat(
             "Seconds passed:",
-            i2s(game.states.gameplay->gameplay_time_passed)
+            i2s(game.states.gameplay->gameplayTimePassed)
         );
         
         //Seconds passed points bullet.
@@ -675,15 +675,15 @@ void Results::load() {
     //Treasures bullet.
     addStat(
         "Treasures:",
-        i2s(game.states.gameplay->treasures_collected) + "/" +
-        i2s(game.states.gameplay->treasures_total)
+        i2s(game.states.gameplay->treasuresCollected) + "/" +
+        i2s(game.states.gameplay->treasuresTotal)
     );
     
     //Treasure points bullet.
     addStat(
         "Treasure points:",
-        i2s(game.states.gameplay->treasure_points_collected) + "/" +
-        i2s(game.states.gameplay->treasure_points_total)
+        i2s(game.states.gameplay->treasurePointsCollected) + "/" +
+        i2s(game.states.gameplay->treasurePointsTotal)
     );
     
     //Treasure points points bullet.
@@ -692,28 +692,28 @@ void Results::load() {
     //Enemy deaths bullet.
     addStat(
         "Enemy deaths:",
-        i2s(game.states.gameplay->enemy_deaths) + "/" +
-        i2s(game.states.gameplay->enemy_total)
+        i2s(game.states.gameplay->enemyDeaths) + "/" +
+        i2s(game.states.gameplay->enemyTotal)
     );
     
     //Enemy points bullet.
     addStat(
         "Enemy kill points:",
-        i2s(game.states.gameplay->enemy_points_collected) + "/" +
-        i2s(game.states.gameplay->enemy_points_total)
+        i2s(game.states.gameplay->enemyPointsCollected) + "/" +
+        i2s(game.states.gameplay->enemyPointsTotal)
     );
     
     //Enemy points points bullet.
     addScoreStat(MISSION_SCORE_CRITERIA_ENEMY_POINTS);
     
     if(
-        game.cur_area_data->type == AREA_TYPE_MISSION &&
-        game.cur_area_data->mission.grading_mode == MISSION_GRADING_MODE_POINTS
+        game.curAreaData->type == AREA_TYPE_MISSION &&
+        game.curAreaData->mission.gradingMode == MISSION_GRADING_MODE_POINTS
     ) {
         //Final score bullet.
         addStat(
             "Final score:",
-            i2s(final_mission_score),
+            i2s(finalMissionScore),
             COLOR_GOLD
         );
         
@@ -725,10 +725,10 @@ void Results::load() {
         );
         
         //Maker's record bullet.
-        if(!game.cur_area_data->mission.maker_record_date.empty()) {
+        if(!game.curAreaData->mission.makerRecordDate.empty()) {
             addStat(
                 "Maker's record:",
-                i2s(game.cur_area_data->mission.maker_record),
+                i2s(game.curAreaData->mission.makerRecord),
                 COLOR_WHITE
             );
         }
@@ -737,27 +737,27 @@ void Results::load() {
     
     //Retry button.
     ButtonGuiItem* retry_button =
-        new ButtonGuiItem("Retry", game.sys_content.fnt_standard);
-    retry_button->on_activate =
+        new ButtonGuiItem("Retry", game.sysContent.fntStandard);
+    retry_button->onActivate =
     [this] (const Point &) {
         retryArea();
     };
-    retry_button->on_get_tooltip =
+    retry_button->onGetTooltip =
     [] () { return "Retry the area from the start."; };
     gui.addItem(retry_button, "retry");
     
     //Keep playing button.
     if(
-        game.states.gameplay->mission_fail_reason ==
+        game.states.gameplay->missionFailReason ==
         MISSION_FAIL_COND_TIME_LIMIT
     ) {
         ButtonGuiItem* continue_button =
-            new ButtonGuiItem("Keep playing", game.sys_content.fnt_standard);
-        continue_button->on_activate =
+            new ButtonGuiItem("Keep playing", game.sysContent.fntStandard);
+        continue_button->onActivate =
         [this] (const Point &) {
             continuePlaying();
         };
-        continue_button->on_get_tooltip =
+        continue_button->onGetTooltip =
         [] () {
             return
                 "Continue playing anyway, from where you left off. "
@@ -767,25 +767,25 @@ void Results::load() {
     }
     
     //Pick an area button.
-    gui.back_item =
+    gui.backItem =
         new ButtonGuiItem(
-        game.states.area_ed->quick_play_area_path.empty() ?
+        game.states.areaEd->quickPlayAreaPath.empty() ?
         "Pick an area" :
         "Back to editor",
-        game.sys_content.fnt_standard
+        game.sysContent.fntStandard
     );
-    gui.back_item->on_activate =
+    gui.backItem->onActivate =
     [this] (const Point &) {
         leave();
     };
-    gui.back_item->on_get_tooltip =
+    gui.backItem->onGetTooltip =
     [] () {
         return
-            game.states.area_ed->quick_play_area_path.empty() ?
+            game.states.areaEd->quickPlayAreaPath.empty() ?
             "Return to the area selection menu." :
             "Return to the area editor.";
     };
-    gui.addItem(gui.back_item, "pick_area");
+    gui.addItem(gui.backItem, "pick_area");
     
     //Pick an area input icon.
     guiAddBackInputIcon(&gui, "pick_area_input");
@@ -796,10 +796,10 @@ void Results::load() {
     gui.addItem(tooltip_text, "tooltip");
     
     //Finishing touches.
-    game.audio.setCurrentSong(game.sys_content_names.sng_editors);
-    game.fade_mgr.startFade(true, nullptr);
-    gui.setSelectedItem(gui.back_item, true);
-    gui_time_spent = 0.0f;
+    game.audio.setCurrentSong(game.sysContentNames.sngEditors);
+    game.fadeMgr.startFade(true, nullptr);
+    gui.setSelectedItem(gui.backItem, true);
+    guiTimeSpent = 0.0f;
 }
 
 
@@ -808,7 +808,7 @@ void Results::load() {
  * the area.
  */
 void Results::retryArea() {
-    game.fade_mgr.startFade(false, [] () {
+    game.fadeMgr.startFade(false, [] () {
         game.unloadLoadedState(game.states.gameplay);
         game.changeState(game.states.gameplay);
     });

@@ -23,14 +23,14 @@ BridgeType::BridgeType() :
     MobType(MOB_CATEGORY_BRIDGES) {
     
     radius = 32;
-    max_health = 2000;
+    maxHealth = 2000;
     pushable = false;
     pushes = false;
-    can_block_paths = true;
-    target_type = MOB_TARGET_FLAG_PIKMIN_OBSTACLE;
-    starting_team = MOB_TEAM_OBSTACLE;
+    canBlockPaths = true;
+    targetType = MOB_TARGET_FLAG_PIKMIN_OBSTACLE;
+    startingTeam = MOB_TEAM_OBSTACLE;
     
-    area_editor_tips =
+    areaEditorTips =
         "Link this object to another object, so that "
         "you can specify where the bridge ends. "
         "A \"Dummy\" object works perfectly for this.\n"
@@ -42,14 +42,14 @@ BridgeType::BridgeType() :
     aep_chunks.name = "Chunks";
     aep_chunks.var = "chunks";
     aep_chunks.type = AEMP_TYPE_INT;
-    aep_chunks.def_value = "10";
-    aep_chunks.min_value = 1;
-    aep_chunks.max_value = 50;
+    aep_chunks.defValue = "10";
+    aep_chunks.minValue = 1;
+    aep_chunks.maxValue = 50;
     aep_chunks.tooltip =
         "How many chunks it's divided by. "
         "If the bridge goes up or down, it may need "
         "more chunks in order to allow enough steps.";
-    area_editor_props.push_back(aep_chunks);
+    areaEditorProps.push_back(aep_chunks);
     
     bridge_fsm::createFsm(this);
 }
@@ -74,7 +74,7 @@ anim_conversion_vector BridgeType::getAnimConversions() const {
 void BridgeType::loadCatProperties(DataNode* file) {
     ReaderSetter rs(file);
     
-    rs.set("rail_width", rail_width);
+    rs.set("rail_width", railWidth);
 }
 
 
@@ -86,20 +86,20 @@ void BridgeType::loadCatProperties(DataNode* file) {
 void BridgeType::loadCatResources(DataNode* file) {
     ReaderSetter rs(file);
     
-    rs.set("main_texture", main_texture_bmp_name);
-    rs.set("left_rail_texture", left_rail_texture_bmp_name);
-    rs.set("right_rail_texture", right_rail_texture_bmp_name);
+    rs.set("main_texture", mainTextureBmpName);
+    rs.set("left_rail_texture", leftRailTextureBmpName);
+    rs.set("right_rail_texture", rightRailTextureBmpName);
     
-    if(!main_texture_bmp_name.empty()) {
-        bmp_main_texture = game.content.bitmaps.list.get(main_texture_bmp_name);
+    if(!mainTextureBmpName.empty()) {
+        bmpMainTexture = game.content.bitmaps.list.get(mainTextureBmpName);
     }
-    if(!left_rail_texture_bmp_name.empty()) {
-        bmp_left_rail_texture =
-            game.content.bitmaps.list.get(left_rail_texture_bmp_name);
+    if(!leftRailTextureBmpName.empty()) {
+        bmpLeftRailTexture =
+            game.content.bitmaps.list.get(leftRailTextureBmpName);
     }
-    if(!right_rail_texture_bmp_name.empty()) {
-        bmp_right_rail_texture =
-            game.content.bitmaps.list.get(right_rail_texture_bmp_name);
+    if(!rightRailTextureBmpName.empty()) {
+        bmpRightRailTexture =
+            game.content.bitmaps.list.get(rightRailTextureBmpName);
     }
 }
 
@@ -108,7 +108,7 @@ void BridgeType::loadCatResources(DataNode* file) {
  * @brief Unloads resources from memory.
  */
 void BridgeType::unloadResources() {
-    game.content.bitmaps.list.free(main_texture_bmp_name);
-    game.content.bitmaps.list.free(left_rail_texture_bmp_name);
-    game.content.bitmaps.list.free(right_rail_texture_bmp_name);
+    game.content.bitmaps.list.free(mainTextureBmpName);
+    game.content.bitmaps.list.free(leftRailTextureBmpName);
+    game.content.bitmaps.list.free(rightRailTextureBmpName);
 }

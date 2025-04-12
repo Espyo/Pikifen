@@ -33,19 +33,19 @@ public:
     vector<GuiManager*> guis;
     
     //Callback for when the player enters this menu.
-    std::function<void()> enter_callback;
+    std::function<void()> enterCallback;
     
     //Callback for when the player chooses to leave this menu.
-    std::function<void()> leave_callback;
+    std::function<void()> leaveCallback;
     
     //Callback for when the menu object finishes loading.
-    std::function<void()> load_callback;
+    std::function<void()> loadCallback;
     
     //Callback for when the menu object finishes unloading.
-    std::function<void()> unload_callback;
+    std::function<void()> unloadCallback;
     
     //If not LARGE_FLOAT, unloading will automatically occur after this time.
-    float unload_timer = LARGE_FLOAT;
+    float unloadTimer = LARGE_FLOAT;
     
     //Is the menu loaded?
     bool loaded = false;

@@ -40,10 +40,10 @@ public:
     //--- Members ---
     
     //What type of tool it is.
-    ToolType* too_type = nullptr;
+    ToolType* tooType = nullptr;
     
     //Flags indicating if and how the mob can be held by other mobs.
-    unsigned char holdability_flags = 0;
+    unsigned char holdabilityFlags = 0;
     
     //If a Pikmin is already reserved to get this tool, this points to it.
     Pikmin* reserved = nullptr;

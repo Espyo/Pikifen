@@ -33,10 +33,10 @@ GroupTaskCategory::GroupTaskCategory() :
  * @brief Clears the list of registered types of group tasks.
  */
 void GroupTaskCategory::clearTypes() {
-    for(auto &t : game.content.mob_types.list.group_task) {
+    for(auto &t : game.content.mobTypes.list.group_task) {
         delete t.second;
     }
-    game.content.mob_types.list.group_task.clear();
+    game.content.mobTypes.list.group_task.clear();
 }
 
 
@@ -52,7 +52,7 @@ Mob* GroupTaskCategory::createMob(
     const Point &pos, MobType* type, float angle
 ) {
     GroupTask* m = new GroupTask(pos, (GroupTaskType*) type, angle);
-    game.states.gameplay->mobs.group_tasks.push_back(m);
+    game.states.gameplay->mobs.groupTasks.push_back(m);
     return m;
 }
 
@@ -73,10 +73,10 @@ MobType* GroupTaskCategory::createType() {
  * @param m The mob to erase.
  */
 void GroupTaskCategory::eraseMob(Mob* m) {
-    game.states.gameplay->mobs.group_tasks.erase(
+    game.states.gameplay->mobs.groupTasks.erase(
         find(
-            game.states.gameplay->mobs.group_tasks.begin(),
-            game.states.gameplay->mobs.group_tasks.end(),
+            game.states.gameplay->mobs.groupTasks.begin(),
+            game.states.gameplay->mobs.groupTasks.end(),
             (GroupTask*) m
         )
     );
@@ -91,8 +91,8 @@ void GroupTaskCategory::eraseMob(Mob* m) {
  * @return The type.
  */
 MobType* GroupTaskCategory::getType(const string &internal_name) const {
-    auto it = game.content.mob_types.list.group_task.find(internal_name);
-    if(it == game.content.mob_types.list.group_task.end()) return nullptr;
+    auto it = game.content.mobTypes.list.group_task.find(internal_name);
+    if(it == game.content.mobTypes.list.group_task.end()) return nullptr;
     return it->second;
 }
 
@@ -103,7 +103,7 @@ MobType* GroupTaskCategory::getType(const string &internal_name) const {
  * @param list This list gets filled with the mob type internal names.
  */
 void GroupTaskCategory::getTypeNames(vector<string> &list) const {
-    for(auto &t : game.content.mob_types.list.group_task) {
+    for(auto &t : game.content.mobTypes.list.group_task) {
         list.push_back(t.first);
     }
 }
@@ -116,5 +116,5 @@ void GroupTaskCategory::getTypeNames(vector<string> &list) const {
  * @param type The mob type to register.
  */
 void GroupTaskCategory::registerType(const string &internal_name, MobType* type) {
-    game.content.mob_types.list.group_task[internal_name] = (GroupTaskType*) type;
+    game.content.mobTypes.list.group_task[internal_name] = (GroupTaskType*) type;
 }

@@ -21,49 +21,49 @@
 DecorationType::DecorationType() :
     MobType(MOB_CATEGORY_DECORATIONS) {
     
-    target_type = MOB_TARGET_FLAG_NONE;
+    targetType = MOB_TARGET_FLAG_NONE;
     
     AreaEditorProp aep_random_anim_delay;
     aep_random_anim_delay.name = "Random animation delay";
     aep_random_anim_delay.var = "random_animation_delay";
     aep_random_anim_delay.type = AEMP_TYPE_BOOL;
-    aep_random_anim_delay.def_value = "true";
+    aep_random_anim_delay.defValue = "true";
     aep_random_anim_delay.tooltip =
         "If this decoration type can have a random animation delay,\n"
         "this property makes this decoration use it or not.";
-    area_editor_props.push_back(aep_random_anim_delay);
+    areaEditorProps.push_back(aep_random_anim_delay);
     
     AreaEditorProp aep_random_tint;
     aep_random_tint.name = "Random tint";
     aep_random_tint.var = "random_tint";
     aep_random_tint.type = AEMP_TYPE_BOOL;
-    aep_random_tint.def_value = "true";
+    aep_random_tint.defValue = "true";
     aep_random_tint.tooltip =
         "If this decoration type can have a random color tint,\n"
         "this property makes this decoration use it or not.";
-    area_editor_props.push_back(aep_random_tint);
+    areaEditorProps.push_back(aep_random_tint);
     
     AreaEditorProp aep_random_scale;
     aep_random_scale.name = "Random scale";
     aep_random_scale.var = "random_scale";
     aep_random_scale.type = AEMP_TYPE_BOOL;
-    aep_random_scale.def_value = "true";
+    aep_random_scale.defValue = "true";
     aep_random_scale.tooltip =
         "If this decoration type can have a random scale,\n"
         "this property makes this decoration use it or not.";
-    area_editor_props.push_back(aep_random_scale);
+    areaEditorProps.push_back(aep_random_scale);
     
     AreaEditorProp aep_random_rotation;
     aep_random_rotation.name = "Random rotation";
     aep_random_rotation.var = "random_rotation";
     aep_random_rotation.type = AEMP_TYPE_BOOL;
-    aep_random_rotation.def_value = "true";
+    aep_random_rotation.defValue = "true";
     aep_random_rotation.tooltip =
         "If this decoration type can have a random scale,\n"
         "this property makes this decoration use it or not.";
-    area_editor_props.push_back(aep_random_rotation);
+    areaEditorProps.push_back(aep_random_rotation);
     
-    blackout_radius = 0.0f;
+    blackoutRadius = 0.0f;
     
     decoration_fsm::createFsm(this);
 }
@@ -88,10 +88,10 @@ anim_conversion_vector DecorationType::getAnimConversions() const {
 void DecorationType::loadCatProperties(DataNode* file) {
     ReaderSetter rs(file);
     
-    rs.set("random_animation_delay", random_animation_delay);
-    rs.set("rotation_random_variation", rotation_random_variation);
-    rs.set("scale_random_variation", scale_random_variation);
-    rs.set("tint_random_maximum", tint_random_maximum);
+    rs.set("random_animation_delay", randomAnimationDelay);
+    rs.set("rotation_random_variation", rotationRandomVariation);
+    rs.set("scale_random_variation", scaleRandomVariation);
+    rs.set("tint_random_maximum", tintRandomMaximum);
     
-    rotation_random_variation = degToRad(rotation_random_variation);
+    rotationRandomVariation = degToRad(rotationRandomVariation);
 }

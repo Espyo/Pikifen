@@ -40,7 +40,7 @@ public:
     //--- Members ---
     
     //Type of area that the menu is dealing with.
-    AREA_TYPE area_type = AREA_TYPE_SIMPLE;
+    AREA_TYPE areaType = AREA_TYPE_SIMPLE;
     
     //Main GUI.
     GuiManager gui;
@@ -55,76 +55,76 @@ private:
     //--- Members ---
     
     //Button for each area available.
-    vector<GuiItem*> area_buttons;
+    vector<GuiItem*> areaButtons;
     
     //Records of each area available.
-    vector<MissionRecord> area_records;
+    vector<MissionRecord> areaRecords;
     
     //Area info GUI item.
-    GuiItem* info_box = nullptr;
+    GuiItem* infoBox = nullptr;
     
     //Mission specs GUI item.
-    GuiItem* specs_box = nullptr;
+    GuiItem* specsBox = nullptr;
     
     //Currently selected area, or INVALID for none.
-    size_t cur_area_idx = INVALID;
+    size_t curAreaIdx = INVALID;
     
     //Area list box item.
-    ListGuiItem* list_box = nullptr;
+    ListGuiItem* listBox = nullptr;
     
     //Button of the first area available, if any.
-    ButtonGuiItem* first_area_button = nullptr;
+    ButtonGuiItem* firstAreaButton = nullptr;
     
     //Name text item, in the info page.
-    TextGuiItem* info_name_text = nullptr;
+    TextGuiItem* infoNameText = nullptr;
     
     //Name text item, in the specs page.
-    TextGuiItem* specs_name_text = nullptr;
+    TextGuiItem* specsNameText = nullptr;
     
     //Subtitle text item.
-    TextGuiItem* subtitle_text = nullptr;
+    TextGuiItem* subtitleText = nullptr;
     
     //Thumbnail of the currently selected area.
-    ALLEGRO_BITMAP* cur_thumb = nullptr;
+    ALLEGRO_BITMAP* curThumb = nullptr;
     
     //Description text item.
-    TextGuiItem* description_text = nullptr;
+    TextGuiItem* descriptionText = nullptr;
     
     //Difficulty text item.
-    TextGuiItem* difficulty_text = nullptr;
+    TextGuiItem* difficultyText = nullptr;
     
     //Tags text item.
-    TextGuiItem* tags_text = nullptr;
+    TextGuiItem* tagsText = nullptr;
     
     //Maker text item.
-    TextGuiItem* maker_text = nullptr;
+    TextGuiItem* makerText = nullptr;
     
     //Version text item.
-    TextGuiItem* version_text = nullptr;
+    TextGuiItem* versionText = nullptr;
     
     //Record info text item.
-    TextGuiItem* record_info_text = nullptr;
+    TextGuiItem* recordInfoText = nullptr;
     
     //Record stamp of the currently selected area.
-    ALLEGRO_BITMAP* cur_stamp = nullptr;
+    ALLEGRO_BITMAP* curStamp = nullptr;
     
     //Record medal of the currently selected area.
-    ALLEGRO_BITMAP* cur_medal = nullptr;
+    ALLEGRO_BITMAP* curMedal = nullptr;
     
     //Record date text item.
-    TextGuiItem* record_date_text = nullptr;
+    TextGuiItem* recordDateText = nullptr;
     
     //Goal text item.
-    TextGuiItem* goal_text = nullptr;
+    TextGuiItem* goalText = nullptr;
     
     //Fail explanation list item.
-    ListGuiItem* fail_list = nullptr;
+    ListGuiItem* failList = nullptr;
     
     //Grading explanation list item.
-    ListGuiItem* grading_list = nullptr;
+    ListGuiItem* gradingList = nullptr;
     
     //Show the mission specs?
-    bool show_mission_specs = false;
+    bool showMissionSpecs = false;
     
     
     //--- Function declarations ---

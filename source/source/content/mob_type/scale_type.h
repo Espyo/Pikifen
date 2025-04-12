@@ -23,7 +23,7 @@ public:
     //--- Members ---
     
     //Default weight number that must be met to reach a goal. 0 for none.
-    size_t goal_number = 0;
+    size_t goalNumber = 0;
     
     
     //--- Function declarations ---

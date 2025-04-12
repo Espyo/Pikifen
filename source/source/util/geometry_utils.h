@@ -127,13 +127,13 @@ struct Distance {
     //--- Members ---
     
     //Distance squared. Most operations are based on this number.
-    float distance_squared = 0.0f;
+    float distanceSquared = 0.0f;
     
     //Square root of the distance squared. Only used if necessary.
-    float normal_distance = 0.0f;
+    float normalDistance = 0.0f;
     
     //Do we know the normal distance?
-    bool has_normal_distance = false;
+    bool hasNormalDistance = false;
     
 };
 

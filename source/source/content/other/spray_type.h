@@ -40,32 +40,32 @@ public:
     bool group = true;
     
     //Does it only apply to Pikmin in the group, or leaders too?
-    bool group_pikmin_only = true;
+    bool groupPikminOnly = true;
     
     //Apply the spray to its user as well.
-    bool affects_user = false;
+    bool affectsUser = false;
     
     //If applied outside of the group, this is the angle of shooting.
     float angle = 0.0f;
     
     //If applied outside of the group, this is the distance range.
-    float distance_range = 0.0f;
+    float distanceRange = 0.0f;
     
     //If applied outside of the group, this is the angle range.
-    float angle_range = 0.0f;
+    float angleRange = 0.0f;
     
     //Main color that represents this spray.
-    ALLEGRO_COLOR main_color = COLOR_EMPTY;
+    ALLEGRO_COLOR mainColor = COLOR_EMPTY;
     
     //Bitmap for the spray count.
-    ALLEGRO_BITMAP* bmp_spray = nullptr;
+    ALLEGRO_BITMAP* bmpSpray = nullptr;
     
     //How many ingredients are needed in order to concot a new spray.
     //0 means there are no ingredients for this spray type.
-    size_t ingredients_needed = 10;
+    size_t ingredientsNeeded = 10;
     
     //Does it bury Pikmin?
-    bool buries_pikmin = false;
+    bool buriesPikmin = false;
     
     //--- Function declarations ---
     

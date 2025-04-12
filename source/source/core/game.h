@@ -54,25 +54,25 @@ struct GameStateList {
     //--- Members ---
     
     //Animation editor.
-    AnimationEditor* animation_ed = nullptr;
+    AnimationEditor* animationEd = nullptr;
     
     //Area editor.
-    AreaEditor* area_ed = nullptr;
+    AreaEditor* areaEd = nullptr;
     
     //Annex screen for misc. menus.
-    AnnexScreen* annex_screen = nullptr;
+    AnnexScreen* annexScreen = nullptr;
     
     //Gameplay state.
     GameplayState* gameplay = nullptr;
     
     //GUI editor state.
-    GuiEditor* gui_ed = nullptr;
+    GuiEditor* guiEd = nullptr;
     
     //GUI editor state.
-    ParticleEditor* particle_ed = nullptr;
+    ParticleEditor* particleEd = nullptr;
     
     //Title screen.
-    TitleScreen* title_screen = nullptr;
+    TitleScreen* titleScreen = nullptr;
     
     //Area results screen.
     Results* results = nullptr;
@@ -99,7 +99,7 @@ public:
     AudioManager audio;
     
     //The error bitmap used to represent bitmaps that were not loaded.
-    ALLEGRO_BITMAP* bmp_error = nullptr;
+    ALLEGRO_BITMAP* bmpError = nullptr;
     
     //Player 1's camera.
     Camera cam;
@@ -111,25 +111,25 @@ public:
     ControlsMediator controls;
     
     //Total amount of time the current frame took to process, in seconds.
-    double cur_frame_process_time = 0.0f;
+    double curFrameProcessTime = 0.0f;
     
     //Info about the maker tools.
-    MakerTools maker_tools;
+    MakerTools makerTools;
     
     //Game content.
     ContentManager content;
     
     //Data about the area that's currently being used.
-    Area* cur_area_data = nullptr;
+    Area* curAreaData = nullptr;
     
     //Time between the previous frame and the current.
-    double delta_t = 0.0f;
+    double deltaT = 0.0f;
     
     //Allegro display that represents the program window.
     ALLEGRO_DISPLAY* display = nullptr;
     
     //A dummy mob state for mobs with no state to use.
-    MobState* dummy_mob_state = nullptr;
+    MobState* dummyMobState = nullptr;
     
     //Error manager.
     ErrorManager errors;
@@ -138,87 +138,87 @@ public:
     ShaderManager shaders;
     
     //Manager for all full-screen fade-ins and fade-outs.
-    FadeManager fade_mgr;
+    FadeManager fadeMgr;
     
     //Duration of the last few frames.
-    vector<double> framerate_history;
+    vector<double> framerateHistory;
     
     //Last framerate average started at this point in the history.
-    size_t framerate_last_avg_point = 0.0f;
+    size_t framerateLastAvgPoint = 0.0f;
     
     //Identity matrix transformation. Cache for convenience.
-    ALLEGRO_TRANSFORM identity_transform;
+    ALLEGRO_TRANSFORM identityTransform;
     
     //Default Dear ImGui style.
-    ImVec4 imgui_default_style[ImGuiCol_COUNT];
+    ImVec4 DearImGuiDefaultStyle[ImGuiCol_COUNT];
     
     //Set to false to stop program execution next frame.
-    bool is_game_running = true;
+    bool isGameRunning = true;
     
     //What Allegro joystick maps to what number.
-    map<ALLEGRO_JOYSTICK*, int> controller_numbers;
-
+    map<ALLEGRO_JOYSTICK*, int> controllerNumbers;
+    
     //Auto-repeater settings for leader auto-throws.
-    AutoRepeaterSettings auto_throw_settings{
+    AutoRepeaterSettings autoThrowSettings{
         LEADER::AUTO_THROW_SLOWEST_INTERVAL,
         LEADER::AUTO_THROW_FASTEST_INTERVAL,
         LEADER::AUTO_THROW_RAMP_TIME
     };
     
     //Buffer with the liquid limit effect.
-    ALLEGRO_BITMAP* liquid_limit_effect_buffer = nullptr;
+    ALLEGRO_BITMAP* liquidLimitEffectBuffer = nullptr;
     
     //Info on every edge's liquid limit offset effect. Cache for performance.
-    vector<EdgeOffsetCache> liquid_limit_effect_caches;
+    vector<EdgeOffsetCache> liquidLimitEffectCaches;
     
     //Loading screen subtext buffer.
-    ALLEGRO_BITMAP* loading_subtext_bmp = nullptr;
+    ALLEGRO_BITMAP* loadingSubtextBmp = nullptr;
     
     //Loading screen main text buffer.
-    ALLEGRO_BITMAP* loading_text_bmp = nullptr;
+    ALLEGRO_BITMAP* loadingTextBmp = nullptr;
     
     //List of mob actions.
-    vector<MobAction> mob_actions;
+    vector<MobAction> mobActions;
     
     //List of mob categories.
-    CategoryManager mob_categories;
+    CategoryManager mobCategories;
     
     //Mouse cursor information.
-    MouseCursor mouse_cursor;
+    MouseCursor mouseCursor;
     
     //Database of all mission fail conditions.
-    vector<MissionFail*> mission_fail_conds;
+    vector<MissionFail*> missionFailConds;
     
     //Database of all mission goals.
-    vector<MissionGoal*> mission_goals;
+    vector<MissionGoal*> missionGoals;
     
     //Database of all mission score criteria.
-    vector<MissionScoreCriterion*> mission_score_criteria;
+    vector<MissionScoreCriterion*> missionScoreCriteria;
     
     //User options.
     Options options;
     
     //Performance monitor.
-    PerformanceMonitor* perf_mon = nullptr;
+    PerformanceMonitor* perfMon = nullptr;
     
     //Player actions in this frame.
-    vector<PlayerAction> player_actions;
+    vector<PlayerAction> playerActions;
     
     //Randomness manager.
     RngManager rng;
     
     //Database of all sector types and their names.
-    EnumNameDatabase sector_types;
+    EnumNameDatabase sectorTypes;
     
     //Screen to world coordinate matrix. Cache for convenience.
-    ALLEGRO_TRANSFORM screen_to_world_transform;
+    ALLEGRO_TRANSFORM screenToWorldTransform;
     
     //Should we be showing system info? (Framerate, version, etc.)
-    bool show_system_info = false;
+    bool showSystemInfo = false;
     
     //Skip rendering the scene with Dear ImGui for this frame.
     //It's a bit of a hack that fixes some corner cases.
-    bool skip_dear_imgui_frame = false;
+    bool skipDearImGuiFrame = false;
     
     //List of game states.
     GameStateList states;
@@ -227,40 +227,40 @@ public:
     Statistics statistics;
     
     //List of internal names of content that is needed by the system.
-    SystemContentNames sys_content_names;
+    SystemContentNames sysContentNames;
     
     //List of content that is needed system-wide.
-    SystemContentList sys_content;
+    SystemContentList sysContent;
     
     //List of all mob team's internal names.
-    string team_internal_names[N_MOB_TEAMS];
+    string teamInternalNames[N_MOB_TEAMS];
     
     //List of all mob team names, in proper English.
-    string team_names[N_MOB_TEAMS];
+    string teamNames[N_MOB_TEAMS];
     
     //How much time has passed since the program booted.
-    float time_passed = 0.0f;
+    float timePassed = 0.0f;
     
     //Buffer with the wall shadows and ledge smoothings.
-    ALLEGRO_BITMAP* wall_offset_effect_buffer = nullptr;
+    ALLEGRO_BITMAP* wallOffsetEffectBuffer = nullptr;
     
     //Info on every edge's wall shadow offset effect. Cache for performance.
-    vector<EdgeOffsetCache> wall_shadow_effect_caches;
+    vector<EdgeOffsetCache> wallShadowEffectCaches;
     
     //Info on every edge's wall smoothing offset effect. Cache for performance.
-    vector<EdgeOffsetCache> wall_smoothing_effect_caches;
+    vector<EdgeOffsetCache> wallSmoothingEffectCaches;
     
     //Current fullscreen state.
-    bool win_fullscreen = OPTIONS::GRAPHICS_D::WIN_FULLSCREEN;
+    bool winFullscreen = OPTIONS::GRAPHICS_D::WIN_FULLSCREEN;
     
     //Current window height.
-    unsigned int win_h = OPTIONS::GRAPHICS_D::WIN_H;
+    unsigned int winH = OPTIONS::GRAPHICS_D::WIN_H;
     
     //Current window width.
-    unsigned int win_w = OPTIONS::GRAPHICS_D::WIN_W;
+    unsigned int winW = OPTIONS::GRAPHICS_D::WIN_W;
     
     //World to screen coordinate matrix. Cache for convenience.
-    ALLEGRO_TRANSFORM world_to_screen_transform;
+    ALLEGRO_TRANSFORM worldToScreenTransform;
     
     //Engine debugging tools.
     //Set them to true in the Game constructor as needed.
@@ -269,7 +269,7 @@ public:
         //--- Members ---
         
         //Show and operate on a Dear ImGui demo window.
-        bool show_dear_imgui_demo = false;
+        bool showDearImGuiDemo = false;
         
     } debug;
     
@@ -294,16 +294,16 @@ private:
     //--- Members ---
     
     //Current game state: title screen, gameplay, etc.
-    GameState* cur_state = nullptr;
+    GameState* curState = nullptr;
     
     //Queue of Allegro events.
-    ALLEGRO_EVENT_QUEUE* event_queue = nullptr;
+    ALLEGRO_EVENT_QUEUE* eventQueue = nullptr;
     
     //Timer for the main frame logic.
-    ALLEGRO_TIMER* main_timer = nullptr;
+    ALLEGRO_TIMER* mainTimer = nullptr;
     
     //Is delta_t meant to be reset for the next frame?
-    bool reset_delta_t = true;
+    bool resetDeltaT = true;
     
     
     //--- Function declarations ---

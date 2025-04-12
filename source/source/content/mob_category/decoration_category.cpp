@@ -33,10 +33,10 @@ DecorationCategory::DecorationCategory() :
  * @brief Clears the list of registered types of decorations.
  */
 void DecorationCategory::clearTypes() {
-    for(auto &t : game.content.mob_types.list.decoration) {
+    for(auto &t : game.content.mobTypes.list.decoration) {
         delete t.second;
     }
-    game.content.mob_types.list.decoration.clear();
+    game.content.mobTypes.list.decoration.clear();
 }
 
 
@@ -91,8 +91,8 @@ void DecorationCategory::eraseMob(Mob* m) {
  * @return The type, or nullptr on error.
  */
 MobType* DecorationCategory::getType(const string &internal_name) const {
-    auto it = game.content.mob_types.list.decoration.find(internal_name);
-    if(it == game.content.mob_types.list.decoration.end()) return nullptr;
+    auto it = game.content.mobTypes.list.decoration.find(internal_name);
+    if(it == game.content.mobTypes.list.decoration.end()) return nullptr;
     return it->second;
 }
 
@@ -103,7 +103,7 @@ MobType* DecorationCategory::getType(const string &internal_name) const {
  * @param list This list gets filled with the mob type internal names.
  */
 void DecorationCategory::getTypeNames(vector<string> &list) const {
-    for(auto &t : game.content.mob_types.list.decoration) {
+    for(auto &t : game.content.mobTypes.list.decoration) {
         list.push_back(t.first);
     }
 }
@@ -116,5 +116,5 @@ void DecorationCategory::getTypeNames(vector<string> &list) const {
  * @param type Mob type to register.
  */
 void DecorationCategory::registerType(const string &internal_name, MobType* type) {
-    game.content.mob_types.list.decoration[internal_name] = (DecorationType*) type;
+    game.content.mobTypes.list.decoration[internal_name] = (DecorationType*) type;
 }

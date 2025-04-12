@@ -33,11 +33,11 @@ void Liquid::loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level) {
     ReaderSetter rs(node);
     string animation_str;
     
-    rs.set("body_color", body_color);
-    rs.set("shine_color", shine_color);
-    rs.set("radar_color", radar_color);
-    rs.set("shine_min_threshold", shine_min_threshold);
-    rs.set("shine_max_threshold", shine_max_threshold);
-    rs.set("distortion_amount", distortion_amount);
-    rs.set("animation_speed", anim_speed);
+    rs.set("body_color", bodyColor);
+    rs.set("shine_color", shineColor);
+    rs.set("radar_color", radarColor);
+    rs.set("shine_min_threshold", shineMinThreshold);
+    rs.set("shine_max_threshold", shineMaxThreshold);
+    rs.set("distortion_amount", distortionAmount);
+    rs.set("animation_speed", animSpeed);
 }

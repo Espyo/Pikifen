@@ -26,7 +26,7 @@ public:
     //--- Members ---
     
     //What type of interactable it is.
-    InteractableType* int_type = nullptr;
+    InteractableType* intType = nullptr;
     
     
     //--- Function declarations ---

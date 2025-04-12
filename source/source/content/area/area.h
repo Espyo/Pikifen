@@ -59,7 +59,7 @@ struct Blockmap {
     //--- Members ---
     
     //Top-left corner of the blockmap.
-    Point top_left_corner;
+    Point topLeftCorner;
     
     //Specifies a list of edges in each block.
     vector<vector<vector<Edge*> > > edges;
@@ -68,10 +68,10 @@ struct Blockmap {
     vector<vector<unordered_set<Sector*> > >  sectors;
     
     //Number of columns.
-    size_t n_cols = 0;
+    size_t nCols = 0;
     
     //Number of rows.
-    size_t n_rows = 0;
+    size_t nRows = 0;
     
     
     //--- Function declarations ---
@@ -111,10 +111,10 @@ struct MobGen {
     string vars;
     
     //Indexes of linked objects.
-    vector<size_t> link_idxs;
+    vector<size_t> linkIdxs;
     
     //Index to the mob storing this one inside, if any.
-    size_t stored_inside = INVALID;
+    size_t storedInside = INVALID;
     
     //Linked objects. Cache for performance.
     vector<MobGen*> links;
@@ -140,7 +140,7 @@ struct TreeShadow {
     //--- Members ---
     
     //Internal name of the tree shadow texture.
-    string bmp_name;
+    string bmpName;
     
     //Tree shadow texture.
     ALLEGRO_BITMAP* bitmap = nullptr;
@@ -199,28 +199,28 @@ struct Area : public Content {
     vector<Sector*> sectors;
     
     //List of mob generators.
-    vector<MobGen*> mob_generators;
+    vector<MobGen*> mobGenerators;
     
     //List of path stops.
-    vector<PathStop*> path_stops;
+    vector<PathStop*> pathStops;
     
     //List of tree shadows.
-    vector<TreeShadow*> tree_shadows;
+    vector<TreeShadow*> treeShadows;
     
     //Bitmap of the background.
-    ALLEGRO_BITMAP* bg_bmp = nullptr;
+    ALLEGRO_BITMAP* bgBmp = nullptr;
     
     //Internal name of the background bitmap.
-    string bg_bmp_name;
+    string bgBmpName;
     
     //Zoom the background by this much.
-    float bg_bmp_zoom = 1.0f;
+    float bgBmpZoom = 1.0f;
     
     //How far away the background is.
-    float bg_dist = 2.0f;
+    float bgDist = 2.0f;
     
     //Tint the background with this color.
-    ALLEGRO_COLOR bg_color = COLOR_BLACK;
+    ALLEGRO_COLOR bgColor = COLOR_BLACK;
     
     //Area subtitle, if any.
     string subtitle;
@@ -232,22 +232,22 @@ struct Area : public Content {
     unsigned char difficulty = AREA::DEF_DIFFICULTY;
     
     //String representing the starting amounts of each spray.
-    string spray_amounts;
+    string sprayAmounts;
     
     //Song to play.
-    string song_name;
+    string songName;
     
     //Weather condition to use.
-    Weather weather_condition;
+    Weather weatherCondition;
     
     //Name of the weather condition to use.
-    string weather_name;
+    string weatherName;
     
     //Area day time at the start of gameplay. This is in minutes.
-    size_t day_time_start = AREA::DEF_DAY_TIME_START;
+    size_t dayTimeStart = AREA::DEF_DAY_TIME_START;
     
     //Area day time speed, in game-minutes per real-minutes.
-    float day_time_speed = AREA::DEF_DAY_TIME_SPEED;
+    float dayTimeSpeed = AREA::DEF_DAY_TIME_SPEED;
     
     //Known geometry problems.
     GeometryProblems problems;
@@ -256,7 +256,7 @@ struct Area : public Content {
     MissionData mission;
     
     //Path to the user data folder for this area.
-    string user_data_path;
+    string userDataPath;
     
     
     //--- Function declarations ---

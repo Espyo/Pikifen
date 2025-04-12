@@ -26,7 +26,7 @@
 Status::Status(StatusType* type) :
     type(type) {
     
-    time_left = type->auto_remove_time;
+    timeLeft = type->autoRemoveTime;
 }
 
 
@@ -37,10 +37,10 @@ Status::Status(StatusType* type) :
  * @param delta_t How long the frame's tick is, in seconds.
  */
 void Status::tick(float delta_t) {
-    if(type->auto_remove_time > 0.0f) {
-        time_left -= delta_t;
-        if(time_left <= 0.0f) {
-            to_delete = true;
+    if(type->autoRemoveTime > 0.0f) {
+        timeLeft -= delta_t;
+        if(timeLeft <= 0.0f) {
+            toDelete = true;
         }
     }
 }
@@ -73,30 +73,30 @@ void StatusType::loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level) {
     rs.set("tint",                    tint);
     rs.set("glow",                    glow);
     rs.set("affects",                 affects_str);
-    rs.set("removable_with_whistle",  removable_with_whistle);
-    rs.set("remove_on_hazard_leave",  remove_on_hazard_leave);
-    rs.set("auto_remove_time",        auto_remove_time);
+    rs.set("removable_with_whistle",  removableWithWhistle);
+    rs.set("remove_on_hazard_leave",  removeOnHazardLeave);
+    rs.set("auto_remove_time",        autoRemoveTime);
     rs.set("reapply_rule",            reapply_rule_str, &reapply_rule_node);
-    rs.set("health_change",           health_change);
-    rs.set("health_change_ratio",     health_change_ratio);
+    rs.set("health_change",           healthChange);
+    rs.set("health_change_ratio",     healthChangeRatio);
     rs.set("state_change_type",       sc_type_str, &sc_type_node);
-    rs.set("state_change_name",       state_change_name);
-    rs.set("animation_change",        animation_change);
-    rs.set("speed_multiplier",        speed_multiplier);
-    rs.set("attack_multiplier",       attack_multiplier);
-    rs.set("defense_multiplier",      defense_multiplier);
-    rs.set("maturity_change_amount",  maturity_change_amount);
-    rs.set("disables_attack",         disables_attack);
-    rs.set("turns_inedible",          turns_inedible);
-    rs.set("turns_invisible",         turns_invisible);
-    rs.set("anim_speed_multiplier",   anim_speed_multiplier);
-    rs.set("freezes_animation",       freezes_animation);
-    rs.set("shaking_effect",          shaking_effect);
-    rs.set("overlay_animation",       overlay_animation);
-    rs.set("overlay_anim_mob_scale",  overlay_anim_mob_scale);
+    rs.set("state_change_name",       stateChangeName);
+    rs.set("animation_change",        animationChange);
+    rs.set("speed_multiplier",        speedMultiplier);
+    rs.set("attack_multiplier",       attackMultiplier);
+    rs.set("defense_multiplier",      defenseMultiplier);
+    rs.set("maturity_change_amount",  maturityChangeAmount);
+    rs.set("disables_attack",         disablesAttack);
+    rs.set("turns_inedible",          turnsInedible);
+    rs.set("turns_invisible",         turnsInvisible);
+    rs.set("anim_speed_multiplier",   animSpeedMultiplier);
+    rs.set("freezes_animation",       freezesAnimation);
+    rs.set("shaking_effect",          shakingEffect);
+    rs.set("overlay_animation",       overlayAnimation);
+    rs.set("overlay_anim_mob_scale",  overlayAnimMobScale);
     rs.set("particle_generator",      particle_gen_str, &particle_gen_node);
     rs.set("particle_offset",         particle_offset_str);
-    rs.set("replacement_on_timeout",  replacement_on_timeout_str);
+    rs.set("replacement_on_timeout",  replacementOnTimeoutStr);
     
     affects = 0;
     vector<string> affects_str_parts = semicolonListToVector(affects_str);
@@ -119,11 +119,11 @@ void StatusType::loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level) {
     
     if(reapply_rule_node) {
         if(reapply_rule_str == "keep_time") {
-            reapply_rule = STATUS_REAPPLY_RULE_KEEP_TIME;
+            reapplyRule = STATUS_REAPPLY_RULE_KEEP_TIME;
         } else if(reapply_rule_str == "reset_time") {
-            reapply_rule = STATUS_REAPPLY_RULE_RESET_TIME;
+            reapplyRule = STATUS_REAPPLY_RULE_RESET_TIME;
         } else if(reapply_rule_str == "add_time") {
-            reapply_rule = STATUS_REAPPLY_RULE_ADD_TIME;
+            reapplyRule = STATUS_REAPPLY_RULE_ADD_TIME;
         } else {
             game.errors.report(
                 "Unknown reapply rule \"" +
@@ -134,13 +134,13 @@ void StatusType::loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level) {
     
     if(sc_type_node) {
         if(sc_type_str == "flailing") {
-            state_change_type = STATUS_STATE_CHANGE_FLAILING;
+            stateChangeType = STATUS_STATE_CHANGE_FLAILING;
         } else if(sc_type_str == "helpless") {
-            state_change_type = STATUS_STATE_CHANGE_HELPLESS;
+            stateChangeType = STATUS_STATE_CHANGE_HELPLESS;
         } else if(sc_type_str == "panic") {
-            state_change_type = STATUS_STATE_CHANGE_PANIC;
+            stateChangeType = STATUS_STATE_CHANGE_PANIC;
         } else if(sc_type_str == "custom") {
-            state_change_type = STATUS_STATE_CHANGE_CUSTOM;
+            stateChangeType = STATUS_STATE_CHANGE_CUSTOM;
         } else {
             game.errors.report(
                 "Unknown state change type \"" +
@@ -151,26 +151,26 @@ void StatusType::loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level) {
     
     if(particle_gen_node) {
         if(
-            game.content.particle_gen.list.find(particle_gen_str) ==
-            game.content.particle_gen.list.end()
+            game.content.particleGens.list.find(particle_gen_str) ==
+            game.content.particleGens.list.end()
         ) {
             game.errors.report(
                 "Unknown particle generator \"" +
                 particle_gen_str + "\"!", particle_gen_node
             );
         } else {
-            generates_particles =
+            generatesParticles =
                 true;
-            particle_gen =
-                &game.content.particle_gen.list[particle_gen_str];
-            particle_offset_pos =
-                s2p(particle_offset_str, &particle_offset_z);
+            particleGen =
+                &game.content.particleGens.list[particle_gen_str];
+            particleOffsetPos =
+                s2p(particle_offset_str, &particleOffsetZ);
         }
     }
     
     if(level >= CONTENT_LOAD_LEVEL_FULL) {
-        if(!overlay_animation.empty()) {
-            overlay_anim.initToFirstAnim(&game.content.global_anim_dbs.list[overlay_animation]);
+        if(!overlayAnimation.empty()) {
+            overlayAnim.initToFirstAnim(&game.content.globalAnimDbs.list[overlayAnimation]);
         }
     }
 }

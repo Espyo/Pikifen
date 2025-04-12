@@ -27,7 +27,7 @@ void ParticleEditor::openLoadDialog() {
     
     //Set up the picker's behavior and data.
     vector<PickerItem> file_items;
-    for(const auto &g : game.content.particle_gen.list) {
+    for(const auto &g : game.content.particleGens.list) {
         ContentManifest* man = g.second.manifest;
         file_items.push_back(
             PickerItem(
@@ -39,9 +39,9 @@ void ParticleEditor::openLoadDialog() {
         );
     }
     
-    load_dialog_picker = Picker(this);
-    load_dialog_picker.items = file_items;
-    load_dialog_picker.pick_callback =
+    loadDialogPicker = Picker(this);
+    loadDialogPicker.items = file_items;
+    loadDialogPicker.pickCallback =
         std::bind(
             &ParticleEditor::pickPartGenFile, this,
             std::placeholders::_1,
@@ -56,7 +56,7 @@ void ParticleEditor::openLoadDialog() {
         "Load a particle generator file",
         std::bind(&ParticleEditor::processGuiLoadDialog, this)
     );
-    dialogs.back()->close_callback =
+    dialogs.back()->closeCallback =
         std::bind(&ParticleEditor::closeLoadDialog, this);
 }
 
@@ -69,13 +69,13 @@ void ParticleEditor::openNewDialog() {
         "Create a new particle generator",
         std::bind(&ParticleEditor::processGuiNewDialog, this)
     );
-    dialogs.back()->custom_size = Point(400, 0);
-    dialogs.back()->close_callback = [this] () {
-        new_dialog.pack.clear();
-        new_dialog.internal_name = "my_particle_generator";
-        new_dialog.part_gen_path.clear();
-        new_dialog.last_checked_part_gen_path.clear();
-        new_dialog.part_gen_path_exists = false;
+    dialogs.back()->customSize = Point(400, 0);
+    dialogs.back()->closeCallback = [this] () {
+        newDialog.pack.clear();
+        newDialog.internalName = "my_particle_generator";
+        newDialog.partGenPath.clear();
+        newDialog.lastCheckedPartGenPath.clear();
+        newDialog.partGenPathExists = false;
     };
     
 }
@@ -89,7 +89,7 @@ void ParticleEditor::openOptionsDialog() {
         "Options",
         std::bind(&ParticleEditor::processGuiOptionsDialog, this)
     );
-    dialogs.back()->close_callback =
+    dialogs.back()->closeCallback =
         std::bind(&ParticleEditor::closeOptionsDialog, this);
 }
 
@@ -100,7 +100,7 @@ void ParticleEditor::openOptionsDialog() {
 void ParticleEditor::processGui() {
     //Set up the entire editor window.
     ImGui::SetNextWindowPos(ImVec2(0, 0));
-    ImGui::SetNextWindowSize(ImVec2(game.win_w, game.win_h));
+    ImGui::SetNextWindowSize(ImVec2(game.winW, game.winH));
     ImGui::Begin(
         "Particle editor", nullptr,
         ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_MenuBar |
@@ -121,14 +121,14 @@ void ParticleEditor::processGui() {
     //Draw the canvas now.
     ImGui::BeginChild("canvas", ImVec2(0, -EDITOR::STATUS_BAR_HEIGHT));
     ImGui::EndChild();
-    is_mouse_in_gui =
+    isMouseInGui =
         !ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem);
     ImVec2 tl = ImGui::GetItemRectMin();
-    canvas_tl.x = tl.x;
-    canvas_tl.y = tl.y;
+    canvasTL.x = tl.x;
+    canvasTL.y = tl.y;
     ImVec2 br = ImGui::GetItemRectMax();
-    canvas_br.x = br.x;
-    canvas_br.y = br.y;
+    canvasBR.x = br.x;
+    canvasBR.y = br.y;
     ImGui::GetWindowDrawList()->AddCallback(drawCanvasDearImGuiCallback, nullptr);
     
     //Status bar.
@@ -137,11 +137,11 @@ void ParticleEditor::processGui() {
     //Set up the separator for the control panel.
     ImGui::NextColumn();
     
-    if(canvas_separator_x == -1) {
-        canvas_separator_x = game.win_w * 0.675;
-        ImGui::SetColumnWidth(0, canvas_separator_x);
+    if(canvasSeparatorX == -1) {
+        canvasSeparatorX = game.winW * 0.675;
+        ImGui::SetColumnWidth(0, canvasSeparatorX);
     } else {
-        canvas_separator_x = ImGui::GetColumnOffset(1);
+        canvasSeparatorX = ImGui::GetColumnOffset(1);
     }
     
     //Do the control panel now.
@@ -161,7 +161,7 @@ void ParticleEditor::processGui() {
  * @brief Processes the Dear ImGui control panel for this frame.
  */
 void ParticleEditor::processGuiControlPanel() {
-    if(manifest.internal_name.empty()) return;
+    if(manifest.internalName.empty()) return;
     
     ImGui::BeginChild("panel");
     
@@ -170,13 +170,13 @@ void ParticleEditor::processGuiControlPanel() {
     
     //Current file text.
     ImGui::SameLine();
-    monoText("%s", manifest.internal_name.c_str());
+    monoText("%s", manifest.internalName.c_str());
     string file_tooltip =
         getFileTooltip(manifest.path) + "\n\n"
         "File state: ";
-    if(!changes_mgr.existsOnDisk()) {
+    if(!changesMgr.existsOnDisk()) {
         file_tooltip += "Not saved to disk yet!";
-    } else if(changes_mgr.hasUnsavedChanges()) {
+    } else if(changesMgr.hasUnsavedChanges()) {
         file_tooltip += "You have unsaved changes.";
     } else {
         file_tooltip += "Everything ok.";
@@ -199,7 +199,7 @@ void ParticleEditor::processGuiControlPanel() {
 void ParticleEditor::processGuiDeletePartGenDialog() {
     //Explanation text.
     string explanation_str;
-    if(!changes_mgr.existsOnDisk()) {
+    if(!changesMgr.existsOnDisk()) {
         explanation_str =
             "You have never saved this particle generator to disk, so if you\n"
             "delete, you will only lose your unsaved progress.";
@@ -252,7 +252,7 @@ void ParticleEditor::processGuiDeletePartGenDialog() {
 void ParticleEditor::processGuiLoadDialog() {
     //History node.
     processGuiHistory(
-        game.options.particle_editor.history,
+        game.options.partEd.history,
     [this](const string &path) -> string {
         return path;
     },
@@ -281,7 +281,7 @@ void ParticleEditor::processGuiLoadDialog() {
     //Load node.
     ImGui::Spacer();
     if(saveableTreeNode("load", "Load")) {
-        load_dialog_picker.process();
+        loadDialogPicker.process();
         
         ImGui::TreePop();
     }
@@ -299,7 +299,7 @@ void ParticleEditor::processGuiMenuBar() {
         
             //Load file item.
             if(ImGui::MenuItem("Load or create...", "Ctrl+L")) {
-                load_widget_pos = getLastWidgetPost();
+                loadWidgetPos = getLastWidgetPost();
                 loadCmd(1.0f);
             }
             setTooltip(
@@ -309,7 +309,7 @@ void ParticleEditor::processGuiMenuBar() {
             
             //Reload current file item.
             if(ImGui::MenuItem("Reload current particle generator")) {
-                reload_widget_pos = getLastWidgetPost();
+                reloadWidgetPos = getLastWidgetPost();
                 reloadCmd(1.0f);
             }
             setTooltip(
@@ -346,7 +346,7 @@ void ParticleEditor::processGuiMenuBar() {
             
             //Quit editor item.
             if(ImGui::MenuItem("Quit", "Ctrl+Q")) {
-                quit_widget_pos = getLastWidgetPost();
+                quitWidgetPos = getLastWidgetPost();
                 quitCmd(1.0f);
             }
             setTooltip(
@@ -398,11 +398,11 @@ void ParticleEditor::processGuiMenuBar() {
             //Show tooltips item.
             if(
                 ImGui::MenuItem(
-                    "Show tooltips", "", &game.options.editors.show_tooltips
+                    "Show tooltips", "", &game.options.editors.showTooltips
                 )
             ) {
                 string state_str =
-                    game.options.editors.show_tooltips ? "Enabled" : "Disabled";
+                    game.options.editors.showTooltips ? "Enabled" : "Disabled";
                 setStatus(state_str + " tooltips.");
                 saveOptions();
             }
@@ -448,14 +448,14 @@ void ParticleEditor::processGuiNewDialog() {
     bool hit_create_button = false;
     
     //Pack widgets.
-    processGuiNewDialogPackWidgets(&new_dialog.pack);
+    processGuiNewDialogPackWidgets(&newDialog.pack);
     
     //Internal name input.
     ImGui::Spacer();
-    ImGui::FocusOnInputText(new_dialog.needs_text_focus);
+    ImGui::FocusOnInputText(newDialog.needsTextFocus);
     if(
         monoInputText(
-            "Internal name", &new_dialog.internal_name,
+            "Internal name", &newDialog.internalName,
             ImGuiInputTextFlags_EnterReturnsTrue
         )
     ) {
@@ -468,24 +468,24 @@ void ParticleEditor::processGuiNewDialog() {
     
     //Check if everything's ok.
     ContentManifest temp_man;
-    temp_man.pack = new_dialog.pack;
-    temp_man.internal_name = new_dialog.internal_name;
-    new_dialog.part_gen_path =
-        game.content.particle_gen.manifestToPath(temp_man);
-    if(new_dialog.last_checked_part_gen_path != new_dialog.part_gen_path) {
-        new_dialog.part_gen_path_exists =
-            fileExists(new_dialog.part_gen_path);
-        new_dialog.last_checked_part_gen_path = new_dialog.part_gen_path;
+    temp_man.pack = newDialog.pack;
+    temp_man.internalName = newDialog.internalName;
+    newDialog.partGenPath =
+        game.content.particleGens.manifestToPath(temp_man);
+    if(newDialog.lastCheckedPartGenPath != newDialog.partGenPath) {
+        newDialog.partGenPathExists =
+            fileExists(newDialog.partGenPath);
+        newDialog.lastCheckedPartGenPath = newDialog.partGenPath;
     }
     
-    if(new_dialog.internal_name.empty()) {
+    if(newDialog.internalName.empty()) {
         problem = "You have to type an internal name first!";
-    } else if(!isInternalNameGood(new_dialog.internal_name)) {
+    } else if(!isInternalNameGood(newDialog.internalName)) {
         problem =
             "The internal name should only have lowercase letters,\n"
             "numbers, and underscores!";
     } else {
-        if(new_dialog.part_gen_path_exists) {
+        if(newDialog.partGenPathExists) {
             problem =
                 "There is already a particle generator with\n"
                 "that internal name in that pack!";
@@ -510,14 +510,14 @@ void ParticleEditor::processGuiNewDialog() {
     if(hit_create_button) {
         if(!problem.empty()) return;
         auto really_create = [this] () {
-            createPartGen(new_dialog.part_gen_path);
+            createPartGen(newDialog.partGenPath);
             closeTopDialog();
             closeTopDialog(); //Close the load dialog.
         };
         
         if(
-            new_dialog.pack == FOLDER_NAMES::BASE_PACK &&
-            !game.options.advanced.engine_dev
+            newDialog.pack == FOLDER_NAMES::BASE_PACK &&
+            !game.options.advanced.engineDev
         ) {
             openBaseContentWarningDialog(really_create);
         } else {
@@ -535,7 +535,7 @@ void ParticleEditor::processGuiOptionsDialog() {
     if(saveableTreeNode("options", "Controls")) {
     
         //Middle mouse button pans checkbox.
-        ImGui::Checkbox("Use MMB to pan", &game.options.editors.mmb_pan);
+        ImGui::Checkbox("Use MMB to pan", &game.options.editors.mmbPan);
         setTooltip(
             "Use the middle mouse button to pan the camera\n"
             "(and RMB to reset camera/zoom).\n"
@@ -545,7 +545,7 @@ void ParticleEditor::processGuiOptionsDialog() {
         
         //Grid interval text.
         ImGui::Text(
-            "Grid interval: %f", game.options.particle_editor.grid_interval
+            "Grid interval: %f", game.options.partEd.gridInterval
         );
         
         //Increase grid interval button.
@@ -596,13 +596,13 @@ void ParticleEditor::processGuiOptionsDialog() {
     if(saveableTreeNode("options", "Misc.")) {
     
         //Background texture checkbox.
-        if(ImGui::Checkbox("Use background texture", &use_bg)) {
-            if(!use_bg) {
+        if(ImGui::Checkbox("Use background texture", &useBg)) {
+            if(!useBg) {
                 if(bg) {
                     al_destroy_bitmap(bg);
                     bg = nullptr;
                 }
-                game.options.particle_editor.bg_path.clear();
+                game.options.partEd.bgPath.clear();
             }
         }
         setTooltip(
@@ -610,20 +610,20 @@ void ParticleEditor::processGuiOptionsDialog() {
             "of the editor."
         );
         
-        if(use_bg) {
+        if(useBg) {
             ImGui::Indent();
             
             //Remove background texture button.
             unsigned char rem_bg_opacity =
-                game.options.particle_editor.bg_path.empty() ? 50 : 255;
+                game.options.partEd.bgPath.empty() ? 50 : 255;
             if(
                 ImGui::ImageButton(
-                    "remBgButton", editor_icons[EDITOR_ICON_REMOVE],
+                    "remBgButton", editorIcons[EDITOR_ICON_REMOVE],
                     Point(ImGui::GetTextLineHeight()), Point(), Point(1.0f),
                     COLOR_EMPTY, mapAlpha(rem_bg_opacity)
                 )
             ) {
-                game.options.particle_editor.bg_path.clear();
+                game.options.partEd.bgPath.clear();
                 if(bg) {
                     al_destroy_bitmap(bg);
                     bg = nullptr;
@@ -646,14 +646,14 @@ void ParticleEditor::processGuiOptionsDialog() {
                     );
                     
                 if(!f.empty() && !f[0].empty()) {
-                    game.options.particle_editor.bg_path = f[0];
+                    game.options.partEd.bgPath = f[0];
                     if(bg) {
                         al_destroy_bitmap(bg);
                         bg = nullptr;
                     }
                     bg =
                         loadBmp(
-                            game.options.particle_editor.bg_path,
+                            game.options.partEd.bgPath,
                             nullptr, false, false, false
                         );
                 }
@@ -664,10 +664,10 @@ void ParticleEditor::processGuiOptionsDialog() {
             
             //Background texture name text.
             string bg_file_name =
-                getPathLastComponent(game.options.particle_editor.bg_path);
+                getPathLastComponent(game.options.partEd.bgPath);
             ImGui::SameLine();
             monoText("%s", bg_file_name.c_str());
-            setTooltip("Full path:\n" + game.options.particle_editor.bg_path);
+            setTooltip("Full path:\n" + game.options.partEd.bgPath);
             
             ImGui::Unindent();
         }
@@ -689,16 +689,16 @@ void ParticleEditor::processGuiPanelGenerator() {
     ImGui::Indent();
     ImGui::Text(
         "Particles: %lu / %lu",
-        part_mgr.getCount(), game.options.advanced.max_particles
+        partMgr.getCount(), game.options.advanced.maxParticles
     );
     
     //Play/pause particle system button.
     if(
         ImGui::ImageButton(
             "playSystemButton",
-            mgr_running ?
-            editor_icons[EDITOR_ICON_STOP] :
-            editor_icons[EDITOR_ICON_PLAY],
+            mgrRunning ?
+            editorIcons[EDITOR_ICON_STOP] :
+            editorIcons[EDITOR_ICON_PLAY],
             Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
@@ -714,7 +714,7 @@ void ParticleEditor::processGuiPanelGenerator() {
     //Clear particles button.
     if(
         ImGui::ImageButton(
-            "clearParticlesButton", editor_icons[EDITOR_ICON_REMOVE],
+            "clearParticlesButton", editorIcons[EDITOR_ICON_REMOVE],
             Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
@@ -733,16 +733,16 @@ void ParticleEditor::processGuiPanelGenerator() {
     if(
         ImGui::ImageButton(
             "playGeneratorButton",
-            gen_running ?
-            editor_icons[EDITOR_ICON_STOP] :
-            editor_icons[EDITOR_ICON_PLAY],
+            genRunning ?
+            editorIcons[EDITOR_ICON_STOP] :
+            editorIcons[EDITOR_ICON_PLAY],
             Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         partGenPlaybackToggleCmd(1.0f);
     }
     setTooltip(
-        loaded_gen.emission.interval == 0.0f ?
+        loadedGen.emission.interval == 0.0f ?
         "Emit particles now." :
         "Play or pause the particle generator's emission.",
         "Spacebar"
@@ -751,7 +751,7 @@ void ParticleEditor::processGuiPanelGenerator() {
     //Particle generator angle value.
     ImGui::SameLine();
     ImGui::SetNextItemWidth(85);
-    ImGui::SliderAngle("Angle", &generator_angle_offset, 0.0f);
+    ImGui::SliderAngle("Angle", &generatorAngleOffset, 0.0f);
     setTooltip(
         "Rotate the generator's facing angle in the editor by this much.\n"
         "You can move the generator by just dragging the mouse in the canvas.",
@@ -778,27 +778,27 @@ void ParticleEditor::processGuiPanelGenerator() {
             ImGui::Text("Mode:");
             
             //Emit once radio.
-            int emit_mode = loaded_gen.emission.interval == 0.0f ? 0 : 1;
+            int emit_mode = loadedGen.emission.interval == 0.0f ? 0 : 1;
             ImGui::SameLine();
             if(ImGui::RadioButton("Once", &emit_mode, 0)) {
-                if(loaded_gen.emission.interval != 0.0f) {
-                    loaded_gen.emission.interval = 0.0f;
-                    loaded_gen.emission.interval_deviation = 0.0f;
-                    loaded_gen.restartTimer();
+                if(loadedGen.emission.interval != 0.0f) {
+                    loadedGen.emission.interval = 0.0f;
+                    loadedGen.emission.intervalDeviation = 0.0f;
+                    loadedGen.restartTimer();
                 }
-                changes_mgr.markAsChanged();
+                changesMgr.markAsChanged();
             }
             setTooltip("The particles are created just once.");
             
             //Emit continuously radio.
             ImGui::SameLine();
             if(ImGui::RadioButton("Interval", &emit_mode, 1)) {
-                if(loaded_gen.emission.interval == 0.0f) {
-                    loaded_gen.emission.interval = 0.01f;
-                    loaded_gen.emission.interval_deviation = 0.0f;
-                    loaded_gen.restartTimer();
+                if(loadedGen.emission.interval == 0.0f) {
+                    loadedGen.emission.interval = 0.01f;
+                    loadedGen.emission.intervalDeviation = 0.0f;
+                    loadedGen.restartTimer();
                 }
-                changes_mgr.markAsChanged();
+                changesMgr.markAsChanged();
             }
             setTooltip(
                 "The particles are constantly being created\n"
@@ -811,11 +811,11 @@ void ParticleEditor::processGuiPanelGenerator() {
                 ImGui::SetNextItemWidth(85);
                 if(
                     ImGui::DragFloat(
-                        "##interval", &loaded_gen.emission.interval,
+                        "##interval", &loadedGen.emission.interval,
                         0.01f, 0.01f, FLT_MAX
                     )
                 ) {
-                    changes_mgr.markAsChanged();
+                    changesMgr.markAsChanged();
                 }
                 setTooltip(
                     "How long between particle emissions, in seconds.",
@@ -832,11 +832,11 @@ void ParticleEditor::processGuiPanelGenerator() {
                 if(
                     ImGui::DragFloat(
                         "##intervalDeviation",
-                        &loaded_gen.emission.interval_deviation,
+                        &loadedGen.emission.intervalDeviation,
                         0.01f, 0.0f, FLT_MAX
                     )
                 ) {
-                    changes_mgr.markAsChanged();
+                    changesMgr.markAsChanged();
                 }
                 setTooltip(
                     "The emission interval varies randomly up or down "
@@ -851,21 +851,21 @@ void ParticleEditor::processGuiPanelGenerator() {
             ImGui::Text("Number:");
             
             //Emission number value.
-            int number_int = (int) loaded_gen.emission.number;
+            int number_int = (int) loadedGen.emission.number;
             ImGui::Indent();
             ImGui::SetNextItemWidth(85);
             if(
                 ImGui::DragInt(
-                    "##number", &number_int, 1, 1, (int) game.options.advanced.max_particles
+                    "##number", &number_int, 1, 1, (int) game.options.advanced.maxParticles
                 )
             ) {
-                changes_mgr.markAsChanged();
+                changesMgr.markAsChanged();
             }
             setTooltip(
                 "How many particles are created per emission.",
                 "", WIDGET_EXPLANATION_DRAG
             );
-            loaded_gen.emission.number = number_int;
+            loadedGen.emission.number = number_int;
             
             //Emission number deviation text.
             ImGui::SameLine();
@@ -874,21 +874,21 @@ void ParticleEditor::processGuiPanelGenerator() {
             //Emission number deviation value.
             ImGui::SameLine();
             ImGui::SetNextItemWidth(70);
-            int number_dev_int = (int) loaded_gen.emission.number_deviation;
+            int number_dev_int = (int) loadedGen.emission.numberDeviation;
             if(
                 ImGui::DragInt(
                     "##numberDeviation",
-                    &number_dev_int, 1, 0, (int) game.options.advanced.max_particles
+                    &number_dev_int, 1, 0, (int) game.options.advanced.maxParticles
                 )
             ) {
-                changes_mgr.markAsChanged();
+                changesMgr.markAsChanged();
             }
             setTooltip(
                 "The creation amount varies randomly up or down by this "
                 "amount.",
                 "", WIDGET_EXPLANATION_DRAG
             );
-            loaded_gen.emission.number_deviation = number_dev_int;
+            loadedGen.emission.numberDeviation = number_dev_int;
             
             ImGui::Unindent();
             
@@ -907,13 +907,13 @@ void ParticleEditor::processGuiPanelGenerator() {
         if(open_shape_node) {
         
             //Circle emission shape radio.
-            int shape = loaded_gen.emission.shape;
+            int shape = loadedGen.emission.shape;
             if(
                 ImGui::RadioButton(
                     "Circle", &shape, PARTICLE_EMISSION_SHAPE_CIRCLE
                 )
             ) {
-                changes_mgr.markAsChanged();
+                changesMgr.markAsChanged();
             }
             setTooltip(
                 "Makes it so particles are created in a circle or \n"
@@ -927,27 +927,27 @@ void ParticleEditor::processGuiPanelGenerator() {
                     "Rectangle", &shape, PARTICLE_EMISSION_SHAPE_RECTANGLE
                 )
             ) {
-                changes_mgr.markAsChanged();
+                changesMgr.markAsChanged();
             }
             setTooltip(
                 "Makes it so particles are created in a rectangle or \n"
                 "rectangular ring shape around the origin."
             );
-            loaded_gen.emission.shape = (PARTICLE_EMISSION_SHAPE)shape;
+            loadedGen.emission.shape = (PARTICLE_EMISSION_SHAPE)shape;
             
             ImGui::Indent();
-            switch (loaded_gen.emission.shape) {
+            switch (loadedGen.emission.shape) {
             case PARTICLE_EMISSION_SHAPE_CIRCLE: {
                 //Circle emission inner distance value.
                 ImGui::SetNextItemWidth(75);
                 if(
                     ImGui::DragFloat(
                         "Inner distance",
-                        &loaded_gen.emission.circle_inner_dist,
+                        &loadedGen.emission.circleInnerDist,
                         0.1f, 0.0f, FLT_MAX
                     )
                 ) {
-                    changes_mgr.markAsChanged();
+                    changesMgr.markAsChanged();
                 }
                 setTooltip(
                     "Minimum emission distance for particle creation.",
@@ -959,36 +959,36 @@ void ParticleEditor::processGuiPanelGenerator() {
                 if(
                     ImGui::DragFloat(
                         "Outer distance",
-                        &loaded_gen.emission.circle_outer_dist,
+                        &loadedGen.emission.circleOuterDist,
                         0.1f, 0.0f, FLT_MAX
                     )
                 ) {
-                    changes_mgr.markAsChanged();
+                    changesMgr.markAsChanged();
                 }
                 setTooltip(
                     "Maximum emission distance for particle creation.",
                     "", WIDGET_EXPLANATION_DRAG
                 );
                 
-                loaded_gen.emission.circle_inner_dist =
+                loadedGen.emission.circleInnerDist =
                     std::max(
-                        loaded_gen.emission.circle_inner_dist,
+                        loadedGen.emission.circleInnerDist,
                         0.0f
                     );
-                loaded_gen.emission.circle_outer_dist =
+                loadedGen.emission.circleOuterDist =
                     std::max(
-                        loaded_gen.emission.circle_inner_dist,
-                        loaded_gen.emission.circle_outer_dist
+                        loadedGen.emission.circleInnerDist,
+                        loadedGen.emission.circleOuterDist
                     );
                     
                 //Circle emission arc value.
                 ImGui::SetNextItemWidth(150);
                 if(
                     ImGui::SliderAngle(
-                        "Arc", &loaded_gen.emission.circle_arc, 0
+                        "Arc", &loadedGen.emission.circleArc, 0
                     )
                 ) {
-                    changes_mgr.markAsChanged();
+                    changesMgr.markAsChanged();
                 }
                 setTooltip(
                     "Arc of the circle for particle creation.",
@@ -999,11 +999,11 @@ void ParticleEditor::processGuiPanelGenerator() {
                 ImGui::SetNextItemWidth(150);
                 if(
                     ImGui::SliderAngle(
-                        "Arc rotation", &loaded_gen.emission.circle_arc_rot,
+                        "Arc rotation", &loadedGen.emission.circleArcRot,
                         0.0f
                     )
                 ) {
-                    changes_mgr.markAsChanged();
+                    changesMgr.markAsChanged();
                 }
                 setTooltip(
                     "Rotate the emission arc by these many degrees.",
@@ -1014,10 +1014,10 @@ void ParticleEditor::processGuiPanelGenerator() {
                 ImGui::SetNextItemWidth(150);
                 if(
                     ImGui::Checkbox(
-                        "Evenly spread", &loaded_gen.emission.evenly_spread
+                        "Evenly spread", &loadedGen.emission.evenlySpread
                     )
                 ) {
-                    changes_mgr.markAsChanged();
+                    changesMgr.markAsChanged();
                 }
                 setTooltip(
                     "Evenly spread the particles throughout the emission\n"
@@ -1032,11 +1032,11 @@ void ParticleEditor::processGuiPanelGenerator() {
                 if(
                     ImGui::DragFloat2(
                         "Inner distance",
-                        (float*) &loaded_gen.emission.rect_inner_dist,
+                        (float*) &loadedGen.emission.rectInnerDist,
                         0.1f, 0.0f, FLT_MAX
                     )
                 ) {
-                    changes_mgr.markAsChanged();
+                    changesMgr.markAsChanged();
                 }
                 setTooltip(
                     "Minimum emission distance (X and Y) for particle "
@@ -1049,11 +1049,11 @@ void ParticleEditor::processGuiPanelGenerator() {
                 if(
                     ImGui::DragFloat2(
                         "Outer distance",
-                        (float*) &loaded_gen.emission.rect_outer_dist,
+                        (float*) &loadedGen.emission.rectOuterDist,
                         0.1f, 0.0f, FLT_MAX
                     )
                 ) {
-                    changes_mgr.markAsChanged();
+                    changesMgr.markAsChanged();
                 }
                 setTooltip(
                     "Maximum emission distance (X and Y) for particle "
@@ -1061,25 +1061,25 @@ void ParticleEditor::processGuiPanelGenerator() {
                     "", WIDGET_EXPLANATION_DRAG
                 );
                 
-                loaded_gen.emission.rect_inner_dist.x =
+                loadedGen.emission.rectInnerDist.x =
                     std::max(
-                        loaded_gen.emission.rect_inner_dist.x,
+                        loadedGen.emission.rectInnerDist.x,
                         0.0f
                     );
-                loaded_gen.emission.rect_inner_dist.y =
+                loadedGen.emission.rectInnerDist.y =
                     std::max(
-                        loaded_gen.emission.rect_inner_dist.y,
+                        loadedGen.emission.rectInnerDist.y,
                         0.0f
                     );
-                loaded_gen.emission.rect_outer_dist.x =
+                loadedGen.emission.rectOuterDist.x =
                     std::max(
-                        loaded_gen.emission.rect_outer_dist.x,
-                        loaded_gen.emission.rect_inner_dist.x
+                        loadedGen.emission.rectOuterDist.x,
+                        loadedGen.emission.rectInnerDist.x
                     );
-                loaded_gen.emission.rect_outer_dist.y =
+                loadedGen.emission.rectOuterDist.y =
                     std::max(
-                        loaded_gen.emission.rect_outer_dist.y,
-                        loaded_gen.emission.rect_inner_dist.y
+                        loadedGen.emission.rectOuterDist.y,
+                        loadedGen.emission.rectInnerDist.y
                     );
                     
                 break;
@@ -1114,19 +1114,19 @@ void ParticleEditor::processGuiPanelGenerator() {
         
             //Remove bitmap button.
             unsigned char rem_bmp_opacity =
-                loaded_gen.base_particle.bmp_name.empty() ? 50 : 255;
+                loadedGen.baseParticle.bmpName.empty() ? 50 : 255;
             if(
                 ImGui::ImageButton(
-                    "remBmpButton", editor_icons[EDITOR_ICON_REMOVE],
+                    "remBmpButton", editorIcons[EDITOR_ICON_REMOVE],
                     Point(ImGui::GetTextLineHeight()), Point(), Point(1.0f),
                     COLOR_EMPTY, mapAlpha(rem_bmp_opacity)
                 )
             ) {
                 //We can't have living particles with destroyed bitmaps,
                 //so clear them all.
-                part_mgr.clear();
-                loaded_gen.base_particle.setBitmap("");
-                changes_mgr.markAsChanged();
+                partMgr.clear();
+                loadedGen.baseParticle.setBitmap("");
+                changesMgr.markAsChanged();
             }
             setTooltip(
                 "Remove the particles' image.\n"
@@ -1140,9 +1140,9 @@ void ParticleEditor::processGuiPanelGenerator() {
                 [this] (const string &bmp) {
                     //We can't have living particles with destroyed bitmaps,
                     //so clear them all.
-                    part_mgr.clear();
-                    loaded_gen.base_particle.setBitmap(bmp);
-                    changes_mgr.markAsChanged();
+                    partMgr.clear();
+                    loadedGen.baseParticle.setBitmap(bmp);
+                    changesMgr.markAsChanged();
                     setStatus("Picked an image successfully.");
                 },
                 "."
@@ -1152,17 +1152,17 @@ void ParticleEditor::processGuiPanelGenerator() {
             
             //Image name text.
             ImGui::SameLine();
-            monoText("%s", loaded_gen.base_particle.bmp_name.c_str());
-            setTooltip("Internal name:\n" + loaded_gen.base_particle.bmp_name);
+            monoText("%s", loadedGen.baseParticle.bmpName.c_str());
+            setTooltip("Internal name:\n" + loadedGen.baseParticle.bmpName);
             
-            if(loaded_gen.base_particle.bitmap) {
+            if(loadedGen.baseParticle.bitmap) {
             
                 //Image angle text.
                 ImGui::Spacer();
                 ImGui::Text("Angle:");
                 
                 //Fixed angle radio.
-                int angle_type_int = loaded_gen.base_particle.bmp_angle_type;
+                int angle_type_int = loadedGen.baseParticle.bmpAngleType;
                 ImGui::SameLine();
                 if(
                     ImGui::RadioButton(
@@ -1170,7 +1170,7 @@ void ParticleEditor::processGuiPanelGenerator() {
                         PARTICLE_ANGLE_TYPE_FIXED
                     )
                 ) {
-                    changes_mgr.markAsChanged();
+                    changesMgr.markAsChanged();
                 }
                 setTooltip(
                     "A particle's image angle is fixed all throughout."
@@ -1184,17 +1184,17 @@ void ParticleEditor::processGuiPanelGenerator() {
                         PARTICLE_ANGLE_TYPE_DIRECTION
                     )
                 ) {
-                    changes_mgr.markAsChanged();
+                    changesMgr.markAsChanged();
                 }
                 setTooltip(
                     "A particle's image angle matches the direction it's "
                     "traveling."
                 );
-                loaded_gen.base_particle.bmp_angle_type =
+                loadedGen.baseParticle.bmpAngleType =
                     (PARTICLE_ANGLE_TYPE) angle_type_int;
                     
                 if(
-                    loaded_gen.base_particle.bmp_angle_type ==
+                    loadedGen.baseParticle.bmpAngleType ==
                     PARTICLE_ANGLE_TYPE_FIXED
                 ) {
                 
@@ -1204,10 +1204,10 @@ void ParticleEditor::processGuiPanelGenerator() {
                     if(
                         ImGui::SliderAngle(
                             "##imgAngle",
-                            &loaded_gen.base_particle.bmp_angle, 0.0f
+                            &loadedGen.baseParticle.bmpAngle, 0.0f
                         )
                     ) {
-                        changes_mgr.markAsChanged();
+                        changesMgr.markAsChanged();
                     }
                     setTooltip(
                         "Angle of the image.",
@@ -1224,10 +1224,10 @@ void ParticleEditor::processGuiPanelGenerator() {
                     if(
                         ImGui::SliderAngle(
                             "##imgAngleDev",
-                            &loaded_gen.bmp_angle_deviation, 0, 180
+                            &loadedGen.bmpAngleDeviation, 0, 180
                         )
                     ) {
-                        changes_mgr.markAsChanged();
+                        changesMgr.markAsChanged();
                     }
                     setTooltip(
                         "A particle's image angle varies randomly up or down\n"
@@ -1255,11 +1255,11 @@ void ParticleEditor::processGuiPanelGenerator() {
             //Color keyframe editor.
             if(
                 keyframeEditor(
-                    "Color", loaded_gen.base_particle.color,
-                    selected_color_keyframe
+                    "Color", loadedGen.baseParticle.color,
+                    selectedColorKeyframe
                 )
             ) {
-                changes_mgr.markAsChanged();
+                changesMgr.markAsChanged();
             }
             
             //Blend mode text.
@@ -1267,14 +1267,14 @@ void ParticleEditor::processGuiPanelGenerator() {
             ImGui::Text("Blend:");
             
             //Normal blending radio.
-            int blend_int = loaded_gen.base_particle.blend_type;
+            int blend_int = loadedGen.baseParticle.blendType;
             ImGui::SameLine();
             if(
                 ImGui::RadioButton(
                     "Normal", &blend_int, PARTICLE_BLEND_TYPE_NORMAL
                 )
             ) {
-                changes_mgr.markAsChanged();
+                changesMgr.markAsChanged();
             }
             setTooltip(
                 "Particles appear on top of other particles like normal."
@@ -1287,14 +1287,14 @@ void ParticleEditor::processGuiPanelGenerator() {
                     "Additive", &blend_int, PARTICLE_BLEND_TYPE_ADDITIVE
                 )
             ) {
-                changes_mgr.markAsChanged();
+                changesMgr.markAsChanged();
             }
             setTooltip(
                 "Particle colors add onto the color of particles underneath\n"
                 "them. This makes it so the more particles there are,\n"
                 "the brighter the color gets."
             );
-            loaded_gen.base_particle.blend_type =
+            loadedGen.baseParticle.blendType =
                 (PARTICLE_BLEND_TYPE) blend_int;
                 
             ImGui::TreePop();
@@ -1313,18 +1313,18 @@ void ParticleEditor::processGuiPanelGenerator() {
             //Size keyframe editor.
             if(
                 keyframeEditor(
-                    "Size", loaded_gen.base_particle.size,
-                    selected_size_keyframe
+                    "Size", loadedGen.baseParticle.size,
+                    selectedSizeKeyframe
                 )
             ) {
-                changes_mgr.markAsChanged();
+                changesMgr.markAsChanged();
             }
-            loaded_gen.base_particle.size.setKeyframeValue(
-                selected_size_keyframe,
+            loadedGen.baseParticle.size.setKeyframeValue(
+                selectedSizeKeyframe,
                 std::max(
                     0.0f,
-                    loaded_gen.base_particle.size.getKeyframe(
-                        selected_size_keyframe
+                    loadedGen.baseParticle.size.getKeyframe(
+                        selectedSizeKeyframe
                     ).second
                 )
             );
@@ -1334,11 +1334,11 @@ void ParticleEditor::processGuiPanelGenerator() {
             ImGui::SetNextItemWidth(70);
             if(
                 ImGui::DragFloat(
-                    "Size deviation", &loaded_gen.size_deviation,
+                    "Size deviation", &loadedGen.sizeDeviation,
                     0.5f, 0.0f, FLT_MAX
                 )
             ) {
-                changes_mgr.markAsChanged();
+                changesMgr.markAsChanged();
             }
             setTooltip(
                 "A particle's size varies randomly up or down by this amount.",
@@ -1376,11 +1376,11 @@ void ParticleEditor::processGuiPanelGenerator() {
             ImGui::SetNextItemWidth(85);
             if(
                 ImGui::DragFloat(
-                    "##particleDur", &loaded_gen.base_particle.duration,
+                    "##particleDur", &loadedGen.baseParticle.duration,
                     0.01f, 0.01f, FLT_MAX
                 )
             ) {
-                changes_mgr.markAsChanged();
+                changesMgr.markAsChanged();
             }
             setTooltip(
                 "How long each particle lives for, in seconds.",
@@ -1397,10 +1397,10 @@ void ParticleEditor::processGuiPanelGenerator() {
             if(
                 ImGui::DragFloat(
                     "##particleDurDev",
-                    &loaded_gen.duration_deviation, 0.01f, 0.0f, FLT_MAX
+                    &loadedGen.durationDeviation, 0.01f, 0.0f, FLT_MAX
                 )
             ) {
-                changes_mgr.markAsChanged();
+                changesMgr.markAsChanged();
             }
             setTooltip(
                 "A particle's lifespan varies randomly up or down by this "
@@ -1412,10 +1412,10 @@ void ParticleEditor::processGuiPanelGenerator() {
             ImGui::Spacer();
             if(
                 ImGui::Checkbox(
-                    "Absolute angles", &loaded_gen.angles_are_absolute
+                    "Absolute angles", &loadedGen.anglesAreAbsolute
                 )
             ) {
-                changes_mgr.markAsChanged();
+                changesMgr.markAsChanged();
             }
             setTooltip(
                 "If unchecked, the angles the particles move at are relative\n"
@@ -1440,11 +1440,11 @@ void ParticleEditor::processGuiPanelGenerator() {
             //Linear speed keyframe editor.
             if(
                 keyframeEditor(
-                    "Speed", loaded_gen.base_particle.linear_speed,
-                    selected_linear_speed_keyframe
+                    "Speed", loadedGen.baseParticle.linearSpeed,
+                    selectedLinearSpeedKeyframe
                 )
             ) {
-                changes_mgr.markAsChanged();
+                changesMgr.markAsChanged();
             }
             
             //Linear speed deviation value.
@@ -1453,11 +1453,11 @@ void ParticleEditor::processGuiPanelGenerator() {
             if(
                 ImGui::DragFloat2(
                     "Speed deviation",
-                    (float*) &loaded_gen.linear_speed_deviation,
+                    (float*) &loadedGen.linearSpeedDeviation,
                     0.5f, 0.0f, FLT_MAX
                 )
             ) {
-                changes_mgr.markAsChanged();
+                changesMgr.markAsChanged();
             }
             setTooltip(
                 "A particle's linear speed varies randomly up or down\n"
@@ -1471,10 +1471,10 @@ void ParticleEditor::processGuiPanelGenerator() {
             if(
                 ImGui::SliderAngle(
                     "Angle deviation",
-                    &loaded_gen.linear_speed_angle_deviation, 0, 180
+                    &loadedGen.linearSpeedAngleDeviation, 0, 180
                 )
             ) {
-                changes_mgr.markAsChanged();
+                changesMgr.markAsChanged();
             }
             setTooltip(
                 "A particle's movement angle varies randomly up or down\n"
@@ -1500,11 +1500,11 @@ void ParticleEditor::processGuiPanelGenerator() {
             //Outwards speed keyframe editor.
             if(
                 keyframeEditor(
-                    "Speed", loaded_gen.base_particle.outwards_speed,
-                    selected_outward_velocity_keyframe
+                    "Speed", loadedGen.baseParticle.outwardsSpeed,
+                    selectedOutwardVelocityKeyframe
                 )
             ) {
-                changes_mgr.markAsChanged();
+                changesMgr.markAsChanged();
             }
             
             //Outward speed deviation value.
@@ -1513,11 +1513,11 @@ void ParticleEditor::processGuiPanelGenerator() {
             if(
                 ImGui::DragFloat(
                     "Speed deviation",
-                    &loaded_gen.outwards_speed_deviation,
+                    &loadedGen.outwardsSpeedDeviation,
                     0.5f, 0.0f, FLT_MAX
                 )
             ) {
-                changes_mgr.markAsChanged();
+                changesMgr.markAsChanged();
             }
             setTooltip(
                 "A particle's outward speed varies randomly up or down\n"
@@ -1541,11 +1541,11 @@ void ParticleEditor::processGuiPanelGenerator() {
             //Orbital speed keyframe editor.
             if(
                 keyframeEditor(
-                    "Speed", loaded_gen.base_particle.orbital_speed,
-                    selected_oribital_velocity_keyframe
+                    "Speed", loadedGen.baseParticle.orbitalSpeed,
+                    selectedOrbitalVelocityKeyframe
                 )
             ) {
-                changes_mgr.markAsChanged();
+                changesMgr.markAsChanged();
             }
             
             //Orbital speed deviation value.
@@ -1554,11 +1554,11 @@ void ParticleEditor::processGuiPanelGenerator() {
             if(
                 ImGui::DragFloat(
                     "Speed deviation",
-                    &loaded_gen.orbital_speed_deviation,
+                    &loadedGen.orbitalSpeedDeviation,
                     0.5f, 0.0f, FLT_MAX
                 )
             ) {
-                changes_mgr.markAsChanged();
+                changesMgr.markAsChanged();
             }
             setTooltip(
                 "A particle's orbital speed varies randomly up or down\n"
@@ -1583,10 +1583,10 @@ void ParticleEditor::processGuiPanelGenerator() {
             if(
                 ImGui::DragFloat(
                     "##particleFriction",
-                    &loaded_gen.base_particle.friction, 0.1f, -FLT_MAX, FLT_MAX
+                    &loadedGen.baseParticle.friction, 0.1f, -FLT_MAX, FLT_MAX
                 )
             ) {
-                changes_mgr.markAsChanged();
+                changesMgr.markAsChanged();
             }
             setTooltip(
                 "Slowing factor applied to a particle.\n"
@@ -1604,10 +1604,10 @@ void ParticleEditor::processGuiPanelGenerator() {
             if(
                 ImGui::DragFloat(
                     "##particleFrictionDev",
-                    &loaded_gen.friction_deviation, 0.1f, 0.0f, FLT_MAX
+                    &loadedGen.frictionDeviation, 0.1f, 0.0f, FLT_MAX
                 )
             ) {
-                changes_mgr.markAsChanged();
+                changesMgr.markAsChanged();
             }
             setTooltip(
                 "A particle's friction varies randomly up or down\n"
@@ -1634,9 +1634,9 @@ void ParticleEditor::processGuiPanelGenerator() {
     
         //Name input.
         if(
-            ImGui::InputText("Name", &loaded_gen.name)
+            ImGui::InputText("Name", &loadedGen.name)
         ) {
-            changes_mgr.markAsChanged();
+            changesMgr.markAsChanged();
         }
         setTooltip(
             "Name of this particle generator. Optional."
@@ -1644,9 +1644,9 @@ void ParticleEditor::processGuiPanelGenerator() {
         
         //Description input.
         if(
-            ImGui::InputText("Description", &loaded_gen.description)
+            ImGui::InputText("Description", &loadedGen.description)
         ) {
-            changes_mgr.markAsChanged();
+            changesMgr.markAsChanged();
         }
         setTooltip(
             "Description of this particle generator. Optional."
@@ -1654,9 +1654,9 @@ void ParticleEditor::processGuiPanelGenerator() {
         
         //Version input.
         if(
-            monoInputText("Version", &loaded_gen.version)
+            monoInputText("Version", &loadedGen.version)
         ) {
-            changes_mgr.markAsChanged();
+            changesMgr.markAsChanged();
         }
         setTooltip(
             "Version of the file, preferably in the \"X.Y.Z\" format. "
@@ -1665,9 +1665,9 @@ void ParticleEditor::processGuiPanelGenerator() {
         
         //Maker input.
         if(
-            ImGui::InputText("Maker", &loaded_gen.maker)
+            ImGui::InputText("Maker", &loadedGen.maker)
         ) {
-            changes_mgr.markAsChanged();
+            changesMgr.markAsChanged();
         }
         setTooltip(
             "Name (or nickname) of who made this file. "
@@ -1676,9 +1676,9 @@ void ParticleEditor::processGuiPanelGenerator() {
         
         //Maker notes input.
         if(
-            ImGui::InputText("Maker notes", &loaded_gen.maker_notes)
+            ImGui::InputText("Maker notes", &loadedGen.makerNotes)
         ) {
-            changes_mgr.markAsChanged();
+            changesMgr.markAsChanged();
         }
         setTooltip(
             "Extra notes or comments about the file for other makers to see. "
@@ -1686,8 +1686,8 @@ void ParticleEditor::processGuiPanelGenerator() {
         );
         
         //Notes input.
-        if(ImGui::InputText("Notes", &loaded_gen.notes)) {
-            changes_mgr.markAsChanged();
+        if(ImGui::InputText("Notes", &loadedGen.notes)) {
+            changesMgr.markAsChanged();
         }
         setTooltip(
             "Extra notes or comments of any kind. "
@@ -1711,17 +1711,17 @@ void ParticleEditor::processGuiStatusBar() {
     //Spacer dummy widget.
     ImGui::SameLine();
     float size =
-        canvas_separator_x - ImGui::GetItemRectSize().x -
+        canvasSeparatorX - ImGui::GetItemRectSize().x -
         EDITOR::MOUSE_COORDS_TEXT_WIDTH;
     ImGui::Dummy(ImVec2(size, 0));
     
     //Mouse coordinates text.
-    if(!is_mouse_in_gui || is_m1_pressed) {
+    if(!isMouseInGui || isM1Pressed) {
         ImGui::SameLine();
         monoText(
             "%s, %s",
-            boxString(f2s(game.mouse_cursor.w_pos.x), 7).c_str(),
-            boxString(f2s(game.mouse_cursor.w_pos.y), 7).c_str()
+            boxString(f2s(game.mouseCursor.wPos.x), 7).c_str(),
+            boxString(f2s(game.mouseCursor.wPos.y), 7).c_str()
         );
     }
 }
@@ -1734,11 +1734,11 @@ void ParticleEditor::processGuiToolbar() {
     //Quit button.
     if(
         ImGui::ImageButton(
-            "quitButton", editor_icons[EDITOR_ICON_QUIT],
+            "quitButton", editorIcons[EDITOR_ICON_QUIT],
             Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
-        quit_widget_pos = getLastWidgetPost();
+        quitWidgetPos = getLastWidgetPost();
         quitCmd(1.0f);
     }
     setTooltip(
@@ -1750,11 +1750,11 @@ void ParticleEditor::processGuiToolbar() {
     ImGui::SameLine();
     if(
         ImGui::ImageButton(
-            "loadButton", editor_icons[EDITOR_ICON_LOAD],
+            "loadButton", editorIcons[EDITOR_ICON_LOAD],
             Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
-        load_widget_pos = getLastWidgetPost();
+        loadWidgetPos = getLastWidgetPost();
         loadCmd(1.0f);
     }
     setTooltip(
@@ -1767,9 +1767,9 @@ void ParticleEditor::processGuiToolbar() {
     if(
         ImGui::ImageButton(
             "saveButton",
-            changes_mgr.hasUnsavedChanges() ?
-            editor_icons[EDITOR_ICON_SAVE_UNSAVED] :
-            editor_icons[EDITOR_ICON_SAVE],
+            changesMgr.hasUnsavedChanges() ?
+            editorIcons[EDITOR_ICON_SAVE_UNSAVED] :
+            editorIcons[EDITOR_ICON_SAVE],
             Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
@@ -1784,7 +1784,7 @@ void ParticleEditor::processGuiToolbar() {
     ImGui::SameLine(0, 16);
     if(
         ImGui::ImageButton(
-            "gridButton", editor_icons[EDITOR_ICON_GRID],
+            "gridButton", editorIcons[EDITOR_ICON_GRID],
             Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
@@ -1799,7 +1799,7 @@ void ParticleEditor::processGuiToolbar() {
     ImGui::SameLine();
     if(
         ImGui::ImageButton(
-            "silhouetteButton", editor_icons[EDITOR_ICON_LEADER_SILHOUETTE],
+            "silhouetteButton", editorIcons[EDITOR_ICON_LEADER_SILHOUETTE],
             Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
@@ -1814,7 +1814,7 @@ void ParticleEditor::processGuiToolbar() {
     ImGui::SameLine();
     if(
         ImGui::ImageButton(
-            "emissionShapeButton", editor_icons[EDITOR_ICON_MOB_RADIUS],
+            "emissionShapeButton", editorIcons[EDITOR_ICON_MOB_RADIUS],
             Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {

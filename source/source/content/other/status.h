@@ -106,88 +106,88 @@ public:
     ALLEGRO_COLOR glow = COLOR_EMPTY;
     
     //Can the status effect be removed if the affected mob is whistled?
-    bool removable_with_whistle = false;
+    bool removableWithWhistle = false;
     
     //Remove the status when the affected mob leaves the hazard causing it?
-    bool remove_on_hazard_leave = false;
+    bool removeOnHazardLeave = false;
     
     //Remove the status automatically after these many seconds. 0 for never.
-    float auto_remove_time = 0.0f;
+    float autoRemoveTime = 0.0f;
     
     //Rule to follow when re-applying the status effect.
-    STATUS_REAPPLY_RULE reapply_rule = STATUS_REAPPLY_RULE_KEEP_TIME;
+    STATUS_REAPPLY_RULE reapplyRule = STATUS_REAPPLY_RULE_KEEP_TIME;
     
     //Health addition/subtraction per second.
-    float health_change = 0.0f;
+    float healthChange = 0.0f;
     
     //Health addition/subtraction percentage per second.
-    float health_change_ratio = 0.0f;
+    float healthChangeRatio = 0.0f;
     
     //Increase/decrease in maturity when the status is gained.
-    int maturity_change_amount = 0;
+    int maturityChangeAmount = 0;
     
     //How the affected mob's state changes, if it does at all.
-    STATUS_STATE_CHANGE state_change_type = STATUS_STATE_CHANGE_NONE;
+    STATUS_STATE_CHANGE stateChangeType = STATUS_STATE_CHANGE_NONE;
     
     //Name of the mob state to change to, if any.
-    string state_change_name;
+    string stateChangeName;
     
     //Name of the mob animation to change to, if any.
-    string animation_change;
+    string animationChange;
     
     //Multiply the affected mob's speed by this much.
-    float speed_multiplier = 1.0f;
+    float speedMultiplier = 1.0f;
     
     //Multiply the affected mob's attack power by this much.
-    float attack_multiplier = 1.0f;
+    float attackMultiplier = 1.0f;
     
     //Multiply the affected mob's defense by this much.
-    float defense_multiplier = 1.0f;
+    float defenseMultiplier = 1.0f;
     
     //Multiply the affected mob's animation speed by this much.
-    float anim_speed_multiplier = 1.0f;
+    float animSpeedMultiplier = 1.0f;
     
     //Does this status effect disable the affected mob's attacking ability?
-    bool disables_attack = false;
+    bool disablesAttack = false;
     
     //Does this status effect make the mob inedible?
-    bool turns_inedible = false;
+    bool turnsInedible = false;
     
     //Does this status effect make the mob invisible?
-    bool turns_invisible = false;
+    bool turnsInvisible = false;
     
     //Does this status effect freeze the mob's animation?
-    bool freezes_animation = false;
+    bool freezesAnimation = false;
     
     //Generates particles? We need to know so we can remove the generator later.
-    bool generates_particles = false;
+    bool generatesParticles = false;
     
     //Particle generator, if any.
-    ParticleGenerator* particle_gen = nullptr;
+    ParticleGenerator* particleGen = nullptr;
     
     //Horizontal offset of the particle generator.
-    Point particle_offset_pos;
+    Point particleOffsetPos;
     
     //Vertical offset of the particle generator.
-    float particle_offset_z = 0.0f;
+    float particleOffsetZ = 0.0f;
     
     //How much the affected mob should shake by, if at all.
-    float shaking_effect = 0.0f;
+    float shakingEffect = 0.0f;
     
     //Name of the animation to overlay on top of affected mobs.
-    string overlay_animation;
+    string overlayAnimation;
     
     //Scale the overlay animation by this much, related to the mob's size.
-    float overlay_anim_mob_scale = 1.0f;
+    float overlayAnimMobScale = 1.0f;
     
     //Animation instance for the overlay animation.
-    AnimationInstance overlay_anim;
+    AnimationInstance overlayAnim;
     
     //Replace with this other status effect, when its time is over.
-    StatusType* replacement_on_timeout = nullptr;
+    StatusType* replacementOnTimeout = nullptr;
     
     //Replacement name. Used during loading.
-    string replacement_on_timeout_str;
+    string replacementOnTimeoutStr;
     
     
     //--- Function declarations ---
@@ -208,13 +208,13 @@ struct Status {
     StatusType* type = nullptr;
     
     //Time left, if this status effect auto-removes itself.
-    float time_left = 0.0f;
+    float timeLeft = 0.0f;
     
     //Was this status inflicted by a hazard?
-    bool from_hazard = false;
+    bool fromHazard = false;
     
     //Should this status be deleted from the mob's statuses?
-    bool to_delete = false;
+    bool toDelete = false;
     
     
     //--- Function declarations ---

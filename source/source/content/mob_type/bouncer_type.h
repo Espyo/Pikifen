@@ -79,7 +79,7 @@ public:
     unsigned char riders = BOUNCER_RIDER_FLAG_PIKMIN;
     
     //Pose that riders should take.
-    BOUNCER_RIDING_POSE riding_pose = BOUNCER_RIDING_POSE_STOPPED;
+    BOUNCER_RIDING_POSE ridingPose = BOUNCER_RIDING_POSE_STOPPED;
     
     
     //--- Function declarations ---

@@ -104,7 +104,7 @@ struct ContentManifest {
     //--- Members ---
     
     //Internal name. Basically file name sans extension or folder name.
-    string internal_name;
+    string internalName;
     
     //Path to the content, relative to the packs folder.
     string path;
@@ -163,10 +163,10 @@ public:
     string version;
     
     //Optional version of the engine it was made for.
-    string engine_version;
+    string engineVersion;
     
     //Optional notes for other makers to see.
-    string maker_notes;
+    string makerNotes;
     
     //Optional notes of any kind.
     string notes;
@@ -203,7 +203,7 @@ struct Pack {
     string version;
     
     //Optional version of the engine it was made for.
-    string engine_version;
+    string engineVersion;
     
     //Optional tags, separated by semicolon.
     string tags;

@@ -20,19 +20,19 @@
  */
 void ParticleEditor::handleKeyCharCanvas(const ALLEGRO_EVENT &ev) {
     if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_LEFT)) {
-        game.cam.target_pos.x -=
+        game.cam.targetPos.x -=
             AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
             
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_RIGHT)) {
-        game.cam.target_pos.x +=
+        game.cam.targetPos.x +=
             AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
             
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_UP)) {
-        game.cam.target_pos.y -=
+        game.cam.targetPos.y -=
             AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
             
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_DOWN)) {
-        game.cam.target_pos.y +=
+        game.cam.targetPos.y +=
             AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
             
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_MINUS)) {
@@ -94,7 +94,7 @@ void ParticleEditor::handleKeyDownAnywhere(const ALLEGRO_EVENT &ev) {
         emissionShapeToggleCmd(1.0f);
         
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_ESCAPE)) {
-        escape_was_pressed = true;
+        escapeWasPressed = true;
         
         if(!dialogs.empty()) {
             closeTopDialog();
@@ -132,7 +132,7 @@ void ParticleEditor::handleLmbDoubleClick(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void ParticleEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
-    generator_pos_offset = game.mouse_cursor.w_pos;
+    generatorPosOffset = game.mouseCursor.wPos;
 }
 
 
@@ -142,7 +142,7 @@ void ParticleEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void ParticleEditor::handleLmbDrag(const ALLEGRO_EVENT &ev) {
-    generator_pos_offset = game.mouse_cursor.w_pos;
+    generatorPosOffset = game.mouseCursor.wPos;
 }
 
 
@@ -152,7 +152,7 @@ void ParticleEditor::handleLmbDrag(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void ParticleEditor::handleLmbUp(const ALLEGRO_EVENT &ev) {
-    generator_pos_offset = Point();
+    generatorPosOffset = Point();
 }
 
 
@@ -163,7 +163,7 @@ void ParticleEditor::handleLmbUp(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void ParticleEditor::handleMmbDown(const ALLEGRO_EVENT &ev) {
-    if(!game.options.editors.mmb_pan) {
+    if(!game.options.editors.mmbPan) {
         zoomAndPosResetCmd(1.0f);
     }
 }
@@ -176,7 +176,7 @@ void ParticleEditor::handleMmbDown(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void ParticleEditor::handleMmbDrag(const ALLEGRO_EVENT &ev) {
-    if(game.options.editors.mmb_pan) {
+    if(game.options.editors.mmbPan) {
         panCam(ev);
     }
 }
@@ -209,7 +209,7 @@ void ParticleEditor::handleMouseWheel(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void ParticleEditor::handleRmbDown(const ALLEGRO_EVENT &ev) {
-    if(game.options.editors.mmb_pan) {
+    if(game.options.editors.mmbPan) {
         zoomAndPosResetCmd(1.0f);
     }
 }
@@ -222,7 +222,7 @@ void ParticleEditor::handleRmbDown(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void ParticleEditor::handleRmbDrag(const ALLEGRO_EVENT &ev) {
-    if(!game.options.editors.mmb_pan) {
+    if(!game.options.editors.mmbPan) {
         panCam(ev);
     }
 }

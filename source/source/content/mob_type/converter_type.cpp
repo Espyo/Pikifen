@@ -21,7 +21,7 @@
 ConverterType::ConverterType() :
     MobType(MOB_CATEGORY_CONVERTERS) {
     
-    target_type = MOB_TARGET_FLAG_NONE;
+    targetType = MOB_TARGET_FLAG_NONE;
     
     converter_fsm::createFsm(this);
 }
@@ -57,19 +57,19 @@ void ConverterType::loadCatProperties(DataNode* file) {
     DataNode* pikmin_types_node = nullptr;
     DataNode* type_animation_suffixes_node = nullptr;
     
-    rs.set("auto_conversion_timeout", auto_conversion_timeout);
+    rs.set("auto_conversion_timeout", autoConversionTimeout);
     rs.set("available_pikmin_types", pikmin_types_str, &pikmin_types_node);
-    rs.set("buffer_size", buffer_size);
-    rs.set("pikmin_per_conversion", pikmin_per_conversion);
-    rs.set("same_type_counts_for_output", same_type_counts_for_output);
-    rs.set("total_input_pikmin", total_input_pikmin);
+    rs.set("buffer_size", bufferSize);
+    rs.set("pikmin_per_conversion", pikminPerConversion);
+    rs.set("same_type_counts_for_output", sameTypeCountsForOutput);
+    rs.set("total_input_pikmin", totalInputPikmin);
     rs.set(
         "type_animation_suffixes", type_animation_suffixes_str,
         &type_animation_suffixes_node
     );
-    rs.set("type_change_interval", type_change_interval);
+    rs.set("type_change_interval", typeChangeInterval);
     
-    MobCategory* pik_cat = game.mob_categories.get(MOB_CATEGORY_PIKMIN);
+    MobCategory* pik_cat = game.mobCategories.get(MOB_CATEGORY_PIKMIN);
     vector<string> pikmin_types_strs =
         semicolonListToVector(pikmin_types_str);
         
@@ -77,7 +77,7 @@ void ConverterType::loadCatProperties(DataNode* file) {
         MobType* type_ptr = pik_cat->getType(pikmin_types_strs[t]);
         
         if(type_ptr) {
-            available_pikmin_types.push_back((PikminType*) type_ptr);
+            availablePikminTypes.push_back((PikminType*) type_ptr);
         } else {
             game.errors.report(
                 "Unknown Pikmin type \"" + pikmin_types_strs[t] + "\"!",
@@ -86,16 +86,16 @@ void ConverterType::loadCatProperties(DataNode* file) {
         }
     }
     
-    animation_group_suffixes =
+    animationGroupSuffixes =
         semicolonListToVector(type_animation_suffixes_str);
         
-    if(available_pikmin_types.size() == 1 && animation_group_suffixes.empty()) {
+    if(availablePikminTypes.size() == 1 && animationGroupSuffixes.empty()) {
         //Let's make life easier. This is a one-type converter,
         //so no need to involve suffixes.
-        animation_group_suffixes.push_back("");
+        animationGroupSuffixes.push_back("");
     }
     
-    if(available_pikmin_types.empty()) {
+    if(availablePikminTypes.empty()) {
         game.errors.report(
             "A converter needs to have at least one available Pikmin type! "
             "Please fill in the \"available_pikmin_types\" property.",
@@ -103,7 +103,7 @@ void ConverterType::loadCatProperties(DataNode* file) {
         );
     }
     
-    if(animation_group_suffixes.size() != available_pikmin_types.size()) {
+    if(animationGroupSuffixes.size() != availablePikminTypes.size()) {
         game.errors.report(
             "The number of animation type suffixes needs to match the "
             "number of available Pikmin types! Did you forget an animation "

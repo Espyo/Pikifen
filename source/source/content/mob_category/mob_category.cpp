@@ -39,12 +39,12 @@ MobCategory::MobCategory(
     const string &name, const string &plural_name,
     const string &folder_name, const ALLEGRO_COLOR editor_color
 ) :
-    internal_name(internal_name),
+    internalName(internal_name),
     name(name),
     id(id),
-    plural_name(plural_name),
-    folder_name(folder_name),
-    editor_color(editor_color) {
+    pluralName(plural_name),
+    folderName(folder_name),
+    editorColor(editor_color) {
     
 }
 
@@ -99,7 +99,7 @@ MobCategory* CategoryManager::getFromFolderName(
     const string &name
 ) const {
     for(size_t n = 0; n < categories.size(); n++) {
-        if(categories[n]->folder_name == name) return categories[n];
+        if(categories[n]->folderName == name) return categories[n];
     }
     game.errors.report(
         "Mob category with the folder name \"" + name + "\" not found!"
@@ -118,7 +118,7 @@ MobCategory* CategoryManager::getFromInternalName(
     const string &internal_name
 ) const {
     for(size_t n = 0; n < categories.size(); n++) {
-        if(categories[n]->internal_name == internal_name) return categories[n];
+        if(categories[n]->internalName == internal_name) return categories[n];
     }
     return nullptr;
 }
@@ -146,7 +146,7 @@ MobCategory* CategoryManager::getFromName(const string &name) const {
  */
 MobCategory* CategoryManager::getFromPName(const string &pname) const {
     for(size_t n = 0; n < categories.size(); n++) {
-        if(categories[n]->plural_name == pname) return categories[n];
+        if(categories[n]->pluralName == pname) return categories[n];
     }
     return nullptr;
 }

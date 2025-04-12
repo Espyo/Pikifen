@@ -134,10 +134,10 @@ struct GeometryProblems {
     //--- Members ---
     
     //Non-simple sectors found, and their reason for being broken.
-    map<Sector*, TRIANGULATION_ERROR> non_simples;
+    map<Sector*, TRIANGULATION_ERROR> nonSimples;
     
     //List of lone edges found.
-    unordered_set<Edge*> lone_edges;
+    unordered_set<Edge*> loneEdges;
     
 };
 

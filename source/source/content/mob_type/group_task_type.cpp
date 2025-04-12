@@ -22,15 +22,15 @@
 GroupTaskType::GroupTaskType() :
     MobType(MOB_CATEGORY_GROUP_TASKS) {
     
-    target_type = MOB_TARGET_FLAG_NONE;
+    targetType = MOB_TARGET_FLAG_NONE;
     
     AreaEditorProp aep_power_goal;
     aep_power_goal.name = "Power goal";
     aep_power_goal.var = "power_goal";
     aep_power_goal.type = AEMP_TYPE_INT;
-    aep_power_goal.def_value = i2s(power_goal);
+    aep_power_goal.defValue = i2s(powerGoal);
     aep_power_goal.tooltip = "Pikmin power required for the task's goal.";
-    area_editor_props.push_back(aep_power_goal);
+    areaEditorProps.push_back(aep_power_goal);
 }
 
 
@@ -51,29 +51,29 @@ void GroupTaskType::loadCatProperties(DataNode* file) {
         "contribution_method", contribution_method_str,
         &contribution_method_node
     );
-    rs.set("flying_pikmin_only", flying_pikmin_only);
-    rs.set("first_row_p1", first_row_p1);
-    rs.set("first_row_p2", first_row_p2);
-    rs.set("interval_between_rows", interval_between_rows);
-    rs.set("max_pikmin", max_pikmin);
-    rs.set("pikmin_per_row", pikmin_per_row);
-    rs.set("power_goal", power_goal);
-    rs.set("speed_bonus", speed_bonus);
-    rs.set("spots_z", spots_z);
-    rs.set("worker_pikmin_angle", worker_pikmin_angle);
+    rs.set("flying_pikmin_only", flyingPikminOnly);
+    rs.set("first_row_p1", firstRowP1);
+    rs.set("first_row_p2", firstRowP2);
+    rs.set("interval_between_rows", intervalBetweenRows);
+    rs.set("max_pikmin", maxPikmin);
+    rs.set("pikmin_per_row", pikminPerRow);
+    rs.set("power_goal", powerGoal);
+    rs.set("speed_bonus", speedBonus);
+    rs.set("spots_z", spotsZ);
+    rs.set("worker_pikmin_angle", workerPikminAngle);
     rs.set(
         "worker_pikmin_pose", worker_pikmin_pose_str, &worker_pikmin_pose_node
     );
     
     if(contribution_method_node) {
         if(contribution_method_str == "normal") {
-            contribution_method = GROUP_TASK_CONTRIBUTION_NORMAL;
+            contributionMethod = GROUP_TASK_CONTRIBUTION_NORMAL;
         } else if(contribution_method_str == "weight") {
-            contribution_method = GROUP_TASK_CONTRIBUTION_WEIGHT;
+            contributionMethod = GROUP_TASK_CONTRIBUTION_WEIGHT;
         } else if(contribution_method_str == "carry_strength") {
-            contribution_method = GROUP_TASK_CONTRIBUTION_CARRY_STRENGTH;
+            contributionMethod = GROUP_TASK_CONTRIBUTION_CARRY_STRENGTH;
         } else if(contribution_method_str == "push_strength") {
-            contribution_method = GROUP_TASK_CONTRIBUTION_PUSH_STRENGTH;
+            contributionMethod = GROUP_TASK_CONTRIBUTION_PUSH_STRENGTH;
         } else {
             game.errors.report(
                 "Unknown contribution type \"" +
@@ -82,17 +82,17 @@ void GroupTaskType::loadCatProperties(DataNode* file) {
         }
     }
     
-    worker_pikmin_angle = degToRad(worker_pikmin_angle);
+    workerPikminAngle = degToRad(workerPikminAngle);
     
     if(worker_pikmin_pose_node) {
         if(worker_pikmin_pose_str == "stopped") {
-            worker_pikmin_pose = GROUP_TASK_PIKMIN_POSE_STOPPED;
+            workerPikminPose = GROUP_TASK_PIKMIN_POSE_STOPPED;
         } else if(worker_pikmin_pose_str == "arms_out") {
-            worker_pikmin_pose = GROUP_TASK_PIKMIN_POSE_ARMS_OUT;
+            workerPikminPose = GROUP_TASK_PIKMIN_POSE_ARMS_OUT;
         } else if(worker_pikmin_pose_str == "pushing") {
-            worker_pikmin_pose = GROUP_TASK_PIKMIN_POSE_PUSHING;
+            workerPikminPose = GROUP_TASK_PIKMIN_POSE_PUSHING;
         } else if(worker_pikmin_pose_str == "carrying") {
-            worker_pikmin_pose = GROUP_TASK_PIKMIN_POSE_CARRYING;
+            workerPikminPose = GROUP_TASK_PIKMIN_POSE_CARRYING;
         } else {
             game.errors.report(
                 "Unknown pose \"" + worker_pikmin_pose_str + "\"!",
@@ -101,5 +101,5 @@ void GroupTaskType::loadCatProperties(DataNode* file) {
         }
     }
     
-    area_editor_props.back().def_value = i2s(power_goal);
+    areaEditorProps.back().defValue = i2s(powerGoal);
 }

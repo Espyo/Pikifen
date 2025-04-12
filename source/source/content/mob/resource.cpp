@@ -24,8 +24,8 @@
  */
 Resource::Resource(const Point &pos, ResourceType* type, float angle) :
     Mob(pos, type, angle),
-    res_type(type),
-    origin_pile(nullptr) {
+    resType(type),
+    originPile(nullptr) {
     
-    becomeCarriable(res_type->carrying_destination);
+    becomeCarriable(resType->carryingDestination);
 }

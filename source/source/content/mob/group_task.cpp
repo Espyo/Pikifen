@@ -24,32 +24,32 @@ GroupTask::GroupTask(
     const Point &pos, GroupTaskType* type, float angle
 ):
     Mob(pos, type, angle),
-    tas_type(type),
-    power_goal(type->power_goal) {
+    tasType(type),
+    powerGoal(type->powerGoal) {
     
     //Initialize spots.
-    float row_angle = getAngle(tas_type->first_row_p1, tas_type->first_row_p2);
+    float row_angle = getAngle(tasType->firstRowP1, tasType->firstRowP2);
     size_t needed_rows =
-        ceil(tas_type->max_pikmin / (float) tas_type->pikmin_per_row);
+        ceil(tasType->maxPikmin / (float) tasType->pikminPerRow);
     float point_dist =
-        Distance(tas_type->first_row_p1, tas_type->first_row_p2).toFloat();
+        Distance(tasType->firstRowP1, tasType->firstRowP2).toFloat();
     float space_between_neighbors =
-        point_dist / (float) (tas_type->pikmin_per_row - 1);
+        point_dist / (float) (tasType->pikminPerRow - 1);
         
     //Create a transformation based on the anchor -- p1.
     ALLEGRO_TRANSFORM trans;
     al_identity_transform(&trans);
     al_rotate_transform(&trans, row_angle);
     al_translate_transform(
-        &trans, tas_type->first_row_p1.x, tas_type->first_row_p1.y
+        &trans, tasType->firstRowP1.x, tasType->firstRowP1.y
     );
     
     for(size_t r = 0; r < needed_rows; r++) {
     
-        for(size_t s = 0; s < tas_type->pikmin_per_row; s++) {
+        for(size_t s = 0; s < tasType->pikminPerRow; s++) {
         
             float x;
-            if(tas_type->pikmin_per_row % 2 == 0) {
+            if(tasType->pikminPerRow % 2 == 0) {
                 x =
                     space_between_neighbors / 2.0 +
                     space_between_neighbors * ceil((s - 1.0f) / 2.0);
@@ -64,7 +64,7 @@ GroupTask::GroupTask(
             }
             x += point_dist / 2.0f;
             
-            Point s_pos(x, r * tas_type->interval_between_rows);
+            Point s_pos(x, r * tasType->intervalBetweenRows);
             al_transform_coordinates(&trans, &s_pos.x, &s_pos.y);
             
             spots.push_back(GroupTaskSpot(s_pos));
@@ -82,31 +82,31 @@ GroupTask::GroupTask(
  */
 void GroupTask::addWorker(Pikmin* who) {
     for(size_t s = 0; s < spots.size(); s++) {
-        if(spots[s].pikmin_here == who) {
+        if(spots[s].pikminHere == who) {
             spots[s].state = 2;
             break;
         }
     }
     
-    bool had_goal = power >= power_goal;
+    bool had_goal = power >= powerGoal;
     
-    switch(tas_type->contribution_method) {
+    switch(tasType->contributionMethod) {
     case GROUP_TASK_CONTRIBUTION_NORMAL: {
         power++;
         break;
     } case GROUP_TASK_CONTRIBUTION_WEIGHT: {
-        power += who->pik_type->weight;
+        power += who->pikType->weight;
         break;
     } case GROUP_TASK_CONTRIBUTION_CARRY_STRENGTH: {
-        power += who->pik_type->carry_strength;
+        power += who->pikType->carryStrength;
         break;
     } case GROUP_TASK_CONTRIBUTION_PUSH_STRENGTH: {
-        power += who->pik_type->push_strength;
+        power += who->pikType->pushStrength;
         break;
     }
     }
     
-    if(!had_goal && power >= power_goal) {
+    if(!had_goal && power >= powerGoal) {
         string msg = "goal_reached";
         who->sendScriptMessage(this, msg);
     }
@@ -119,10 +119,10 @@ void GroupTask::addWorker(Pikmin* who) {
 void GroupTask::finishTask() {
     for(
         size_t p = 0;
-        p < game.states.gameplay->mobs.pikmin_list.size(); p++
+        p < game.states.gameplay->mobs.pikmin.size(); p++
     ) {
-        Pikmin* p_ptr = game.states.gameplay->mobs.pikmin_list[p];
-        if(p_ptr->focused_mob && p_ptr->focused_mob == this) {
+        Pikmin* p_ptr = game.states.gameplay->mobs.pikmin[p];
+        if(p_ptr->focusedMob && p_ptr->focusedMob == this) {
             p_ptr->fsm.runEvent(MOB_EV_FOCUSED_MOB_UNAVAILABLE);
         }
     }
@@ -138,36 +138,36 @@ void GroupTask::freeUpSpot(Pikmin* whose) {
     bool was_contributing = false;
     
     for(size_t s = 0; s < spots.size(); s++) {
-        if(spots[s].pikmin_here == whose) {
+        if(spots[s].pikminHere == whose) {
             if(spots[s].state == 2) {
                 was_contributing = true;
             }
             spots[s].state = 0;
-            spots[s].pikmin_here = nullptr;
+            spots[s].pikminHere = nullptr;
             break;
         }
     }
     
     if(was_contributing) {
-        bool had_goal = power >= power_goal;
+        bool had_goal = power >= powerGoal;
         
-        switch(tas_type->contribution_method) {
+        switch(tasType->contributionMethod) {
         case GROUP_TASK_CONTRIBUTION_NORMAL: {
             power--;
             break;
         } case GROUP_TASK_CONTRIBUTION_WEIGHT: {
-            power -= whose->pik_type->weight;
+            power -= whose->pikType->weight;
             break;
         } case GROUP_TASK_CONTRIBUTION_CARRY_STRENGTH: {
-            power -= whose->pik_type->carry_strength;
+            power -= whose->pikType->carryStrength;
             break;
         } case GROUP_TASK_CONTRIBUTION_PUSH_STRENGTH: {
-            power -= whose->pik_type->push_strength;
+            power -= whose->pikType->pushStrength;
             break;
         }
         }
         
-        if(had_goal && power < power_goal) {
+        if(had_goal && power < powerGoal) {
             string msg = "goal_lost";
             whose->sendScriptMessage(this, msg);
         }
@@ -192,8 +192,8 @@ bool GroupTask::getFractionNumbersInfo(
 ) const {
     if(getPower() <= 0) return false;
     *fraction_value_nr = getPower();
-    *fraction_req_nr = power_goal;
-    *fraction_color = game.config.aesthetic_gen.carrying_color_stop;
+    *fraction_req_nr = powerGoal;
+    *fraction_color = game.config.aestheticGen.carryingColorStop;
     return true;
 }
 
@@ -210,7 +210,7 @@ GroupTask::GroupTaskSpot* GroupTask::getFreeSpot() {
     for(size_t s = 0; s < spots.size(); s++) {
         if(spots[s].state != 0) {
             spots_taken++;
-            if(spots_taken == tas_type->max_pikmin) {
+            if(spots_taken == tasType->maxPikmin) {
                 //Max Pikmin reached! The Pikmin can't join,
                 //regardless of there being free spots.
                 return nullptr;
@@ -241,8 +241,8 @@ float GroupTask::getPower() const {
  */
 Point GroupTask::getSpotPos(const Pikmin* whose) const {
     for(size_t s = 0; s < spots.size(); s++) {
-        if(spots[s].pikmin_here == whose) {
-            return spots[s].absolute_pos;
+        if(spots[s].pikminHere == whose) {
+            return spots[s].absolutePos;
         }
     }
     return Point();
@@ -257,7 +257,7 @@ Point GroupTask::getSpotPos(const Pikmin* whose) const {
 void GroupTask::readScriptVars(const ScriptVarReader &svr) {
     Mob::readScriptVars(svr);
     
-    svr.get("power_goal", power_goal);
+    svr.get("power_goal", powerGoal);
 }
 
 
@@ -269,7 +269,7 @@ void GroupTask::readScriptVars(const ScriptVarReader &svr) {
  */
 void GroupTask::reserveSpot(GroupTask::GroupTaskSpot* spot, Pikmin* who) {
     spot->state = 1;
-    spot->pikmin_here = who;
+    spot->pikminHere = who;
 }
 
 
@@ -279,26 +279,26 @@ void GroupTask::reserveSpot(GroupTask::GroupTaskSpot* spot, Pikmin* who) {
  * @param delta_t How long the frame's tick is, in seconds.
  */
 void GroupTask::tickClassSpecifics(float delta_t) {
-    if(health <= 0 && !ran_task_finished_code) {
-        ran_task_finished_code = true;
+    if(health <= 0 && !ranTaskFinishedCode) {
+        ranTaskFinishedCode = true;
         finishTask();
     }
     
     if(health > 0) {
-        ran_task_finished_code = false;
+        ranTaskFinishedCode = false;
     }
     
     if(
-        chase_info.state == CHASE_STATE_CHASING &&
-        power >= power_goal &&
-        tas_type->speed_bonus != 0.0f
+        chaseInfo.state == CHASE_STATE_CHASING &&
+        power >= powerGoal &&
+        tasType->speedBonus != 0.0f
     ) {
         //Being moved and movements can go through speed bonuses?
         //Let's update the speed.
-        chase_info.max_speed =
-            type->move_speed +
-            (power - power_goal) * tas_type->speed_bonus;
-        chase_info.acceleration = MOB::CARRIED_MOB_ACCELERATION;
+        chaseInfo.maxSpeed =
+            type->moveSpeed +
+            (power - powerGoal) * tasType->speedBonus;
+        chaseInfo.acceleration = MOB::CARRIED_MOB_ACCELERATION;
     }
     
     updateSpotAbsolutePositions();
@@ -317,8 +317,8 @@ void GroupTask::updateSpotAbsolutePositions() {
     al_translate_transform(&t, pos.x, pos.y);
     
     for(size_t s = 0; s < spots.size(); s++) {
-        Point* p = &(spots[s].absolute_pos);
-        *p = spots[s].relative_pos;
+        Point* p = &(spots[s].absolutePos);
+        *p = spots[s].relativePos;
         al_transform_coordinates(&t, &(p->x), &(p->y));
     }
 }
@@ -330,7 +330,7 @@ void GroupTask::updateSpotAbsolutePositions() {
  * @param pos Position of the spot, in relative coordinates.
  */
 GroupTask::GroupTaskSpot::GroupTaskSpot(const Point &pos) :
-    relative_pos(pos),
-    absolute_pos(pos) {
+    relativePos(pos),
+    absolutePos(pos) {
     
 }

@@ -19,7 +19,7 @@
  * @brief Constructs a new maker tools info object.
  */
 MakerTools::MakerTools() {
-    info_print_timer = Timer(1.0f, [this] () { info_print_text.clear(); });
+    infoPrintTimer = Timer(1.0f, [this] () { infoPrintText.clear(); });
 }
 
 
@@ -63,11 +63,11 @@ bool MakerTools::handleGameplayPlayerAction(const PlayerAction &action) {
         unsigned char setting_idx = getMakerToolSettingIdx();
         ALLEGRO_BITMAP* bmp =
             game.states.gameplay->drawToBitmap(
-                game.maker_tools.area_image_settings[setting_idx]
+                game.makerTools.areaImageSettings[setting_idx]
             );
         string file_name =
             FOLDER_PATHS_FROM_ROOT::USER_DATA + "/area_" +
-            sanitizeFileName(game.cur_area_data->name) +
+            sanitizeFileName(game.curAreaData->name) +
             "_" + getCurrentTime(true) + ".png";
             
         if(!al_save_bitmap(file_name.c_str(), bmp)) {
@@ -77,7 +77,7 @@ bool MakerTools::handleGameplayPlayerAction(const PlayerAction &action) {
             );
         }
         
-        game.maker_tools.used_helping_tools = true;
+        game.makerTools.usedHelpingTools = true;
         break;
         
     } case PLAYER_ACTION_TYPE_MT_CHANGE_SPEED: {
@@ -85,32 +85,32 @@ bool MakerTools::handleGameplayPlayerAction(const PlayerAction &action) {
         unsigned char setting_idx =
             getMakerToolSettingIdx();
         bool final_state = false;
-        if(!game.maker_tools.change_speed) {
+        if(!game.makerTools.changeSpeed) {
             final_state = true;
         } else {
-            if(game.maker_tools.change_speed_setting_idx != setting_idx) {
+            if(game.makerTools.changeSpeedSettingIdx != setting_idx) {
                 final_state = true;
             }
         }
         
         if(final_state) {
-            game.maker_tools.change_speed_setting_idx = setting_idx;
+            game.makerTools.changeSpeedSettingIdx = setting_idx;
         }
-        game.maker_tools.change_speed = final_state;
+        game.makerTools.changeSpeed = final_state;
         
-        game.maker_tools.used_helping_tools = true;
+        game.makerTools.usedHelpingTools = true;
         break;
         
     } case PLAYER_ACTION_TYPE_MT_GEOMETRY_INFO: {
 
-        game.maker_tools.geometry_info =
-            !game.maker_tools.geometry_info;
-        game.maker_tools.used_helping_tools = true;
+        game.makerTools.geometryInfo =
+            !game.makerTools.geometryInfo;
+        game.makerTools.usedHelpingTools = true;
         break;
         
     } case PLAYER_ACTION_TYPE_MT_HUD: {
 
-        game.maker_tools.hud = !game.maker_tools.hud;
+        game.makerTools.hud = !game.makerTools.hud;
         break;
         
     } case PLAYER_ACTION_TYPE_MT_HURT_MOB: {
@@ -120,10 +120,10 @@ bool MakerTools::handleGameplayPlayerAction(const PlayerAction &action) {
         if(m) {
             m->setHealth(
                 true, true,
-                -game.maker_tools.mob_hurting_settings[setting_idx]
+                -game.makerTools.mobHurtingSettings[setting_idx]
             );
         }
-        game.maker_tools.used_helping_tools = true;
+        game.makerTools.usedHelpingTools = true;
         break;
         
     } case PLAYER_ACTION_TYPE_MT_MOB_INFO: {
@@ -134,7 +134,7 @@ bool MakerTools::handleGameplayPlayerAction(const PlayerAction &action) {
             &is_shift_pressed, &is_ctrl_pressed, nullptr
         );
         
-        Mob* prev_lock_mob = game.maker_tools.info_lock;
+        Mob* prev_lock_mob = game.makerTools.infoLock;
         Mob* m;
         if(is_shift_pressed) {
             m = getNextMobNearCursor(prev_lock_mob, false);
@@ -144,21 +144,21 @@ bool MakerTools::handleGameplayPlayerAction(const PlayerAction &action) {
             m = getClosestMobToCursor(false);
         }
         
-        game.maker_tools.info_lock = prev_lock_mob == m ? nullptr : m;
+        game.makerTools.infoLock = prev_lock_mob == m ? nullptr : m;
         if(
             prev_lock_mob != nullptr &&
-            game.maker_tools.info_lock == nullptr
+            game.makerTools.infoLock == nullptr
         ) {
             printInfo("Mob: None.", 2.0f, 2.0f);
         }
-        game.maker_tools.used_helping_tools = true;
+        game.makerTools.usedHelpingTools = true;
         break;
         
     } case PLAYER_ACTION_TYPE_MT_NEW_PIKMIN: {
 
         if(
-            game.states.gameplay->mobs.pikmin_list.size() <
-            game.config.rules.max_pikmin_in_field
+            game.states.gameplay->mobs.pikmin.size() <
+            game.config.rules.maxPikminInField
         ) {
             bool is_shift_pressed;
             bool is_ctrl_pressed;
@@ -167,55 +167,55 @@ bool MakerTools::handleGameplayPlayerAction(const PlayerAction &action) {
             );
             
             bool must_use_last_type =
-                (is_shift_pressed && game.maker_tools.last_pikmin_type);
+                (is_shift_pressed && game.makerTools.lastPikminType);
             PikminType* new_pikmin_type = nullptr;
             
             if(must_use_last_type) {
-                new_pikmin_type = game.maker_tools.last_pikmin_type;
+                new_pikmin_type = game.makerTools.lastPikminType;
             } else {
                 new_pikmin_type =
-                    game.content.mob_types.list.pikmin.begin()->second;
+                    game.content.mobTypes.list.pikmin.begin()->second;
                     
-                auto p = game.content.mob_types.list.pikmin.begin();
-                for(; p != game.content.mob_types.list.pikmin.end(); ++p) {
-                    if(p->second == game.maker_tools.last_pikmin_type) {
+                auto p = game.content.mobTypes.list.pikmin.begin();
+                for(; p != game.content.mobTypes.list.pikmin.end(); ++p) {
+                    if(p->second == game.makerTools.lastPikminType) {
                         ++p;
-                        if(p != game.content.mob_types.list.pikmin.end()) {
+                        if(p != game.content.mobTypes.list.pikmin.end()) {
                             new_pikmin_type = p->second;
                         }
                         break;
                     }
                 }
-                game.maker_tools.last_pikmin_type = new_pikmin_type;
+                game.makerTools.lastPikminType = new_pikmin_type;
             }
             
             createMob(
-                game.mob_categories.get(MOB_CATEGORY_PIKMIN),
-                game.mouse_cursor.w_pos, new_pikmin_type, 0,
+                game.mobCategories.get(MOB_CATEGORY_PIKMIN),
+                game.mouseCursor.wPos, new_pikmin_type, 0,
                 is_ctrl_pressed ? "maturity=0" : "maturity=2"
             );
-            game.maker_tools.used_helping_tools = true;
+            game.makerTools.usedHelpingTools = true;
         }
         break;
         
     } case PLAYER_ACTION_TYPE_MT_PATH_INFO: {
 
-        game.maker_tools.path_info = !game.maker_tools.path_info;
-        game.maker_tools.used_helping_tools = true;
+        game.makerTools.pathInfo = !game.makerTools.pathInfo;
+        game.makerTools.usedHelpingTools = true;
         break;
         
     } case PLAYER_ACTION_TYPE_MT_SHOW_COLLISION: {
 
-        game.maker_tools.collision =
-            !game.maker_tools.collision;
-        game.maker_tools.used_helping_tools = true;
+        game.makerTools.collision =
+            !game.makerTools.collision;
+        game.makerTools.usedHelpingTools = true;
         break;
         
     } case PLAYER_ACTION_TYPE_MT_SHOW_HITBOXES: {
 
-        game.maker_tools.hitboxes =
-            !game.maker_tools.hitboxes;
-        game.maker_tools.used_helping_tools = true;
+        game.makerTools.hitboxes =
+            !game.makerTools.hitboxes;
+        game.makerTools.usedHelpingTools = true;
         break;
         
     } case PLAYER_ACTION_TYPE_MT_TELEPORT: {
@@ -224,20 +224,20 @@ bool MakerTools::handleGameplayPlayerAction(const PlayerAction &action) {
         getShiftCtrlAltState(&is_shift_pressed, nullptr, nullptr);
         
         Mob* mob_to_teleport =
-            (is_shift_pressed && game.maker_tools.info_lock) ?
-            game.maker_tools.info_lock :
-            game.states.gameplay->cur_leader_ptr;
+            (is_shift_pressed && game.makerTools.infoLock) ?
+            game.makerTools.infoLock :
+            game.states.gameplay->curLeaderPtr;
             
         Sector* mouse_sector =
-            getSector(game.mouse_cursor.w_pos, nullptr, true);
+            getSector(game.mouseCursor.wPos, nullptr, true);
         if(mouse_sector && mob_to_teleport) {
             mob_to_teleport->chase(
-                game.mouse_cursor.w_pos, mouse_sector->z,
+                game.mouseCursor.wPos, mouse_sector->z,
                 CHASE_FLAG_TELEPORT
             );
-            game.cam.setPos(game.mouse_cursor.w_pos);
+            game.cam.setPos(game.mouseCursor.wPos);
         }
-        game.maker_tools.used_helping_tools = true;
+        game.makerTools.usedHelpingTools = true;
         break;
     }
     }
@@ -265,33 +265,33 @@ bool MakerTools::handleGlobalPlayerAction(const PlayerAction &action) {
     case PLAYER_ACTION_TYPE_MT_AUTO_START: {
 
         string cur_state_name = game.getCurStateName();
-        if(cur_state_name == game.states.animation_ed->getName()) {
-            auto_start_state = "animation_editor";
-            auto_start_option =
-                game.states.animation_ed->getOpenedContentPath();
-        } else if(cur_state_name == game.states.area_ed->getName()) {
-            auto_start_state = "area_editor";
-            auto_start_option =
-                game.states.area_ed->getOpenedContentPath();
-        } else if(cur_state_name == game.states.gui_ed->getName()) {
-            auto_start_state = "gui_editor";
-            auto_start_option =
-                game.states.gui_ed->getOpenedContentPath();
-        } else if(cur_state_name == game.states.particle_ed->getName()) {
-            auto_start_state = "particle_editor";
-            auto_start_option =
-                game.states.particle_ed->getOpenedContentPath();
+        if(cur_state_name == game.states.animationEd->getName()) {
+            autoStartState = "animation_editor";
+            autoStartOption =
+                game.states.animationEd->getOpenedContentPath();
+        } else if(cur_state_name == game.states.areaEd->getName()) {
+            autoStartState = "area_editor";
+            autoStartOption =
+                game.states.areaEd->getOpenedContentPath();
+        } else if(cur_state_name == game.states.guiEd->getName()) {
+            autoStartState = "gui_editor";
+            autoStartOption =
+                game.states.guiEd->getOpenedContentPath();
+        } else if(cur_state_name == game.states.particleEd->getName()) {
+            autoStartState = "particle_editor";
+            autoStartOption =
+                game.states.particleEd->getOpenedContentPath();
         } else if(cur_state_name == game.states.gameplay->getName()) {
-            auto_start_state = "play";
-            auto_start_option =
-                game.states.gameplay->path_of_area_to_load;
+            autoStartState = "play";
+            autoStartOption =
+                game.states.gameplay->pathOfAreaToLoad;
         } else {
-            auto_start_state.clear();
-            auto_start_option.clear();
+            autoStartState.clear();
+            autoStartOption.clear();
         }
         saveMakerTools();
         
-        game.maker_tools.used_helping_tools = true;
+        game.makerTools.usedHelpingTools = true;
         break;
         
     } case PLAYER_ACTION_TYPE_MT_SET_SONG_POS_NEAR_LOOP: {
@@ -331,10 +331,10 @@ void MakerTools::loadFromDataNode(DataNode* node) {
         };
         for(unsigned char s = 0; s < 3; s++) {
             ReaderSetter rs(settings_nodes[s]);
-            rs.set("size", area_image_settings[s].size);
-            rs.set("padding", area_image_settings[s].padding);
-            rs.set("mobs", area_image_settings[s].mobs);
-            rs.set("shadows", area_image_settings[s].shadows);
+            rs.set("size", areaImageSettings[s].size);
+            rs.set("padding", areaImageSettings[s].padding);
+            rs.set("mobs", areaImageSettings[s].mobs);
+            rs.set("shadows", areaImageSettings[s].shadows);
         }
     }
     
@@ -342,8 +342,8 @@ void MakerTools::loadFromDataNode(DataNode* node) {
     {
         DataNode* auto_start_node = node->getChildByName("auto_start");
         ReaderSetter rs(auto_start_node);
-        rs.set("state", auto_start_state);
-        rs.set("option", auto_start_option);
+        rs.set("state", autoStartState);
+        rs.set("option", autoStartOption);
     }
     
     //Change speed.
@@ -356,7 +356,7 @@ void MakerTools::loadFromDataNode(DataNode* node) {
         };
         for(unsigned char s = 0; s < 3; s++) {
             ReaderSetter rs(settings_nodes[s]);
-            rs.set("multiplier", change_speed_settings[s]);
+            rs.set("multiplier", changeSpeedSettings[s]);
         }
     }
     
@@ -371,9 +371,9 @@ void MakerTools::loadFromDataNode(DataNode* node) {
         for(unsigned char s = 0; s < 3; s++) {
             ReaderSetter rs(settings_nodes[s]);
             DataNode* n;
-            rs.set("percentage", mob_hurting_settings[s], &n);
+            rs.set("percentage", mobHurtingSettings[s], &n);
             if(n) {
-                mob_hurting_settings[s] /= 100.0f;
+                mobHurtingSettings[s] /= 100.0f;
             }
         }
     }
@@ -382,7 +382,7 @@ void MakerTools::loadFromDataNode(DataNode* node) {
     {
         DataNode* perf_mon_node = node->getChildByName("performance_monitor");
         ReaderSetter rs(perf_mon_node);
-        rs.set("enabled", use_perf_mon);
+        rs.set("enabled", usePerfMon);
     }
 }
 
@@ -392,15 +392,15 @@ void MakerTools::loadFromDataNode(DataNode* node) {
  * tool affecting the experience.
  */
 void MakerTools::resetForGameplay() {
-    change_speed = false;
+    changeSpeed = false;
     collision = false;
-    geometry_info = false;
+    geometryInfo = false;
     hitboxes = false;
     hud = true;
-    info_lock = nullptr;
-    last_pikmin_type = nullptr;
-    path_info = false;
-    used_helping_tools = false;
+    infoLock = nullptr;
+    lastPikminType = nullptr;
+    pathInfo = false;
+    usedHelpingTools = false;
 }
 
 
@@ -425,10 +425,10 @@ void MakerTools::saveToDataNode(DataNode* node) {
         };
         for(unsigned char s = 0; s < 3; s++) {
             GetterWriter sgw(settings_nodes[s]);
-            sgw.get("size", area_image_settings[s].size);
-            sgw.get("padding", area_image_settings[s].padding);
-            sgw.get("mobs", area_image_settings[s].mobs);
-            sgw.get("shadows", area_image_settings[s].shadows);
+            sgw.get("size", areaImageSettings[s].size);
+            sgw.get("padding", areaImageSettings[s].padding);
+            sgw.get("mobs", areaImageSettings[s].mobs);
+            sgw.get("shadows", areaImageSettings[s].shadows);
         }
     }
     
@@ -436,8 +436,8 @@ void MakerTools::saveToDataNode(DataNode* node) {
     {
         DataNode* auto_start_node = node->addNew("auto_start");
         GetterWriter agw(auto_start_node);
-        agw.get("state", auto_start_state);
-        agw.get("option", auto_start_option);
+        agw.get("state", autoStartState);
+        agw.get("option", autoStartOption);
     }
     
     //Change speed.
@@ -450,7 +450,7 @@ void MakerTools::saveToDataNode(DataNode* node) {
         };
         for(unsigned char s = 0; s < 3; s++) {
             GetterWriter sgw(settings_nodes[s]);
-            sgw.get("multiplier", change_speed_settings[s]);
+            sgw.get("multiplier", changeSpeedSettings[s]);
         }
     }
     
@@ -464,7 +464,7 @@ void MakerTools::saveToDataNode(DataNode* node) {
         };
         for(unsigned char s = 0; s < 3; s++) {
             GetterWriter sgw(settings_nodes[s]);
-            sgw.get("percentage", mob_hurting_settings[s] * 100.0f);
+            sgw.get("percentage", mobHurtingSettings[s] * 100.0f);
         }
     }
     
@@ -472,6 +472,6 @@ void MakerTools::saveToDataNode(DataNode* node) {
     {
         DataNode* perf_mon_node = node->addNew("performance_monitor");
         GetterWriter pgw(perf_mon_node);
-        pgw.get("enabled", use_perf_mon);
+        pgw.get("enabled", usePerfMon);
     }
 }

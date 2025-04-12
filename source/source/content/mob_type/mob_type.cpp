@@ -53,8 +53,8 @@ const float DEF_ROTATION_SPEED = 630.0f;
  * @param category_id The ID of the category it belongs to.
  */
 MobType::MobType(MOB_CATEGORY category_id) :
-    category(game.mob_categories.get(category_id)),
-    custom_category_name(category->name) {
+    category(game.mobCategories.get(category_id)),
+    customCategoryName(category->name) {
     
 }
 
@@ -64,10 +64,10 @@ MobType::MobType(MOB_CATEGORY category_id) :
  */
 MobType::~MobType() {
     states.clear();
-    for(size_t a = 0; a < init_actions.size(); a++) {
-        delete init_actions[a];
+    for(size_t a = 0; a < initActions.size(); a++) {
+        delete initActions[a];
     }
-    init_actions.clear();
+    initActions.clear();
 }
 
 
@@ -235,81 +235,81 @@ void MobType::loadFromDataNode(
     DataNode* inactive_logic_node = nullptr;
     
     rs.set("acceleration", acceleration);
-    rs.set("appears_in_area_editor", appears_in_area_editor);
+    rs.set("appears_in_area_editor", appearsInAreaEditor);
     rs.set(
         "area_editor_recommend_links_from",
-        area_editor_recommend_links_from
+        areaEditorRecommendLinksFrom
     );
     rs.set(
         "area_editor_recommend_links_to",
-        area_editor_recommend_links_to
+        areaEditorRecommendLinksTo
     );
-    rs.set("area_editor_tips", area_editor_tips, &area_editor_tips_node);
-    rs.set("blackout_radius", blackout_radius);
-    rs.set("can_block_paths", can_block_paths);
-    rs.set("can_free_move", can_free_move);
+    rs.set("area_editor_tips", areaEditorTips, &area_editor_tips_node);
+    rs.set("blackout_radius", blackoutRadius);
+    rs.set("can_block_paths", canBlockPaths);
+    rs.set("can_free_move", canFreeMove);
     rs.set(
         "can_hunt", huntable_targets_str, &huntable_targets_node
     );
     rs.set(
         "can_hurt", hurtable_targets_str, &hurtable_targets_node
     );
-    rs.set("can_walk_on_others", can_walk_on_others);
-    rs.set("casts_shadow", casts_shadow);
+    rs.set("can_walk_on_others", canWalkOnOthers);
+    rs.set("casts_shadow", castsShadow);
     rs.set(
         "custom_carry_spots", custom_carry_spots_str, &custom_carry_spots_node
     );
-    rs.set("custom_category_name", custom_category_name);
-    rs.set("default_vulnerability", default_vulnerability);
+    rs.set("custom_category_name", customCategoryName);
+    rs.set("default_vulnerability", defaultVulnerability);
     rs.set("description", description);
-    rs.set("has_group", has_group);
-    rs.set("health_regen", health_regen);
+    rs.set("has_group", hasGroup);
+    rs.set("health_regen", healthRegen);
     rs.set("height", height);
     rs.set("inactive_logic", inactive_logic_str, &inactive_logic_node);
-    rs.set("itch_damage", itch_damage);
-    rs.set("itch_time", itch_time);
-    rs.set("main_color", main_color);
-    rs.set("max_carriers", max_carriers);
-    rs.set("max_health", max_health);
-    rs.set("move_speed", move_speed);
+    rs.set("itch_damage", itchDamage);
+    rs.set("itch_time", itchTime);
+    rs.set("main_color", mainColor);
+    rs.set("max_carriers", maxCarriers);
+    rs.set("max_health", maxHealth);
+    rs.set("move_speed", moveSpeed);
     rs.set("pushable", pushable);
     rs.set("pushes", pushes);
-    rs.set("pushes_softly", pushes_softly);
-    rs.set("pushes_with_hitboxes", pushes_with_hitboxes);
+    rs.set("pushes_softly", pushesSoftly);
+    rs.set("pushes_with_hitboxes", pushesWithHitboxes);
     rs.set("radius", radius);
-    rs.set("rectangular_dimensions", rectangular_dim);
-    rs.set("rotation_speed", rotation_speed);
-    rs.set("show_health", show_health);
+    rs.set("rectangular_dimensions", rectangularDim);
+    rs.set("rotation_speed", rotationSpeed);
+    rs.set("show_health", showHealth);
     rs.set("spike_damage", spike_damage_str, &spike_damage_node);
     rs.set("target_type", target_type_str, &target_type_node);
     rs.set("team", team_str, &team_node);
-    rs.set("terrain_radius", terrain_radius);
-    rs.set("territory_radius", territory_radius);
+    rs.set("terrain_radius", terrainRadius);
+    rs.set("territory_radius", territoryRadius);
     rs.set("walkable", walkable);
     rs.set("weight", weight);
     
     if(area_editor_tips_node) {
-        area_editor_tips = unescapeString(area_editor_tips);
+        areaEditorTips = unescapeString(areaEditorTips);
     }
     
     if(!custom_carry_spots_str.empty()) {
         vector<string> points =
             semicolonListToVector(custom_carry_spots_str);
-        if(points.size() != max_carriers) {
+        if(points.size() != maxCarriers) {
             game.errors.report(
                 "The number of custom carry spots (" + i2s(points.size()) +
                 ") does not match the number of max carriers (" +
-                i2s(max_carriers) + ")!",
+                i2s(maxCarriers) + ")!",
                 custom_carry_spots_node
             );
         } else {
             for(size_t p = 0; p < points.size(); p++) {
-                custom_carry_spots.push_back(s2p(points[p]));
+                customCarrySpots.push_back(s2p(points[p]));
             }
         }
     }
     
-    rotation_speed = degToRad(rotation_speed);
+    rotationSpeed = degToRad(rotationSpeed);
     
     //Vulnerabilities.
     DataNode* vulnerabilities_node =
@@ -319,7 +319,7 @@ void MobType::loadFromDataNode(
         DataNode* vuln_node = vulnerabilities_node->getChild(h);
         auto hazard_it = game.content.hazards.list.find(vuln_node->name);
         vector<string> words = split(vuln_node->value);
-        float percentage = default_vulnerability;
+        float percentage = defaultVulnerability;
         string status_name;
         bool status_overrides = false;
         if(!words.empty()) {
@@ -331,7 +331,7 @@ void MobType::loadFromDataNode(
         if(words.size() >= 3) {
             status_overrides = s2b(words[2]);
         }
-        auto status_it = game.content.status_types.list.find(status_name);
+        auto status_it = game.content.statusTypes.list.find(status_name);
         
         if(hazard_it == game.content.hazards.list.end()) {
             game.errors.report(
@@ -340,7 +340,7 @@ void MobType::loadFromDataNode(
             );
             
         } else if(
-            !status_name.empty() && status_it == game.content.status_types.list.end()
+            !status_name.empty() && status_it == game.content.statusTypes.list.end()
         ) {
             game.errors.report(
                 "Unknown status type \"" + status_name + "\"!",
@@ -349,25 +349,25 @@ void MobType::loadFromDataNode(
             
         } else {
             MobType::Vulnerability &vuln =
-                hazard_vulnerabilities[&(hazard_it->second)];
-            vuln.effect_mult = percentage / 100.0f;
+                hazardVulnerabilities[&(hazard_it->second)];
+            vuln.effectMult = percentage / 100.0f;
             if(!status_name.empty()) {
-                vuln.status_to_apply = status_it->second;
+                vuln.statusToApply = status_it->second;
             }
-            vuln.status_overrides = status_overrides;
+            vuln.statusOverrides = status_overrides;
         }
     }
     
     //Spike damage.
-    auto sd_it = game.content.spike_damage_types.list.find(spike_damage_str);
+    auto sd_it = game.content.spikeDamageTypes.list.find(spike_damage_str);
     if(spike_damage_node) {
-        if(sd_it == game.content.spike_damage_types.list.end()) {
+        if(sd_it == game.content.spikeDamageTypes.list.end()) {
             game.errors.report(
                 "Unknown spike damage type \"" + spike_damage_str + "\"!",
                 spike_damage_node
             );
         } else {
-            spike_damage = &(sd_it->second);
+            spikeDamage = &(sd_it->second);
         }
     }
     
@@ -375,7 +375,7 @@ void MobType::loadFromDataNode(
     if(team_node) {
         MOB_TEAM t = stringToTeamNr(team_str);
         if(t != INVALID) {
-            starting_team = t;
+            startingTeam = t;
         } else {
             game.errors.report(
                 "Invalid team \"" + team_str + "\"!",
@@ -387,16 +387,16 @@ void MobType::loadFromDataNode(
     //Inactive logic.
     if(inactive_logic_node) {
         if(inactive_logic_str == "normal") {
-            inactive_logic =
+            inactiveLogic =
                 0;
         } else if(inactive_logic_str == "ticks") {
-            inactive_logic =
+            inactiveLogic =
                 INACTIVE_LOGIC_FLAG_TICKS;
         } else if(inactive_logic_str == "interactions") {
-            inactive_logic =
+            inactiveLogic =
                 INACTIVE_LOGIC_FLAG_INTERACTIONS;
         } else if(inactive_logic_str == "all_logic") {
-            inactive_logic =
+            inactiveLogic =
                 INACTIVE_LOGIC_FLAG_TICKS | INACTIVE_LOGIC_FLAG_INTERACTIONS;
         } else {
             game.errors.report(
@@ -414,7 +414,7 @@ void MobType::loadFromDataNode(
     for(size_t v = 0; v < n_sd_vuln; v++) {
     
         DataNode* vul_node = spike_damage_vuln_node->getChild(v);
-        auto sdv_it = game.content.spike_damage_types.list.find(vul_node->name);
+        auto sdv_it = game.content.spikeDamageTypes.list.find(vul_node->name);
         vector<string> words = split(vul_node->value);
         float percentage = 1.0f;
         string status_name;
@@ -424,16 +424,16 @@ void MobType::loadFromDataNode(
         if(words.size() >= 2) {
             status_name = words[1];
         }
-        auto status_it = game.content.status_types.list.find(status_name);
+        auto status_it = game.content.statusTypes.list.find(status_name);
         
-        if(sdv_it == game.content.spike_damage_types.list.end()) {
+        if(sdv_it == game.content.spikeDamageTypes.list.end()) {
             game.errors.report(
                 "Unknown spike damage type \"" + vul_node->name + "\"!",
                 vul_node
             );
             
         } else if(
-            !status_name.empty() && status_it == game.content.status_types.list.end()
+            !status_name.empty() && status_it == game.content.statusTypes.list.end()
         ) {
             game.errors.report(
                 "Unknown status type \"" + status_name + "\"!",
@@ -441,9 +441,9 @@ void MobType::loadFromDataNode(
             );
             
         } else {
-            auto &s = spike_damage_vulnerabilities[&(sdv_it->second)];
-            s.effect_mult = percentage / 100.0f;
-            s.status_to_apply = status_it->second;
+            auto &s = spikeDamageVulnerabilities[&(sdv_it->second)];
+            s.effectMult = percentage / 100.0f;
+            s.statusToApply = status_it->second;
             
         }
     }
@@ -456,7 +456,7 @@ void MobType::loadFromDataNode(
     for(size_t v = 0; v < n_s_vuln; v++) {
     
         DataNode* vul_node = status_vuln_node->getChild(v);
-        auto sv_it = game.content.status_types.list.find(vul_node->name);
+        auto sv_it = game.content.statusTypes.list.find(vul_node->name);
         vector<string> words = split(vul_node->value);
         float percentage = 1.0f;
         string status_override_name;
@@ -466,9 +466,9 @@ void MobType::loadFromDataNode(
         if(words.size() >= 2) {
             status_override_name = words[1];
         }
-        auto status_override_it = game.content.status_types.list.find(status_override_name);
+        auto status_override_it = game.content.statusTypes.list.find(status_override_name);
         
-        if(sv_it == game.content.status_types.list.end()) {
+        if(sv_it == game.content.statusTypes.list.end()) {
             game.errors.report(
                 "Unknown status type \"" + vul_node->name + "\"!",
                 vul_node
@@ -476,7 +476,7 @@ void MobType::loadFromDataNode(
             
         } else if(
             !status_override_name.empty() &&
-            status_override_it == game.content.status_types.list.end()
+            status_override_it == game.content.statusTypes.list.end()
         ) {
             game.errors.report(
                 "Unknown status type \"" + status_override_name + "\"!",
@@ -484,12 +484,12 @@ void MobType::loadFromDataNode(
             );
             
         } else {
-            auto &s = status_vulnerabilities[sv_it->second];
-            s.effect_mult = percentage / 100.0f;
-            if(status_override_it != game.content.status_types.list.end()) {
-                s.status_to_apply = status_override_it->second;
+            auto &s = statusVulnerabilities[sv_it->second];
+            s.effectMult = percentage / 100.0f;
+            if(status_override_it != game.content.statusTypes.list.end()) {
+                s.statusToApply = status_override_it->second;
             }
-            s.status_overrides = true;
+            s.statusOverrides = true;
         }
         
     }
@@ -512,11 +512,11 @@ void MobType::loadFromDataNode(
             continue;
         }
         
-        new_reach.radius_1 = s2f(r_strings[0]);
-        new_reach.angle_1 = degToRad(s2f(r_strings[1]));
+        new_reach.radius1 = s2f(r_strings[0]);
+        new_reach.angle1 = degToRad(s2f(r_strings[1]));
         if(r_strings.size() == 4) {
-            new_reach.radius_2 = s2f(r_strings[2]);
-            new_reach.angle_2 = degToRad(s2f(r_strings[3]));
+            new_reach.radius2 = s2f(r_strings[2]);
+            new_reach.angle2 = degToRad(s2f(r_strings[3]));
         }
         reaches.push_back(new_reach);
     }
@@ -532,17 +532,17 @@ void MobType::loadFromDataNode(
         string coords_str;
         
         new_spawn.name = spawn_node->name;
-        spawn_rs.set("object", new_spawn.mob_type_name);
+        spawn_rs.set("object", new_spawn.mobTypeName);
         spawn_rs.set("relative", new_spawn.relative);
         spawn_rs.set("coordinates", coords_str);
         spawn_rs.set("angle", new_spawn.angle);
         spawn_rs.set("vars", new_spawn.vars);
-        spawn_rs.set("link_object_to_spawn", new_spawn.link_object_to_spawn);
-        spawn_rs.set("link_spawn_to_object", new_spawn.link_spawn_to_object);
+        spawn_rs.set("link_object_to_spawn", new_spawn.linkObjectToSpawn);
+        spawn_rs.set("link_spawn_to_object", new_spawn.linkSpawnToObject);
         spawn_rs.set("momentum", new_spawn.momentum);
         
         if(!coords_str.empty()) {
-            new_spawn.coords_xy = s2p(coords_str, &new_spawn.coords_z);
+            new_spawn.coordsXY = s2p(coords_str, &new_spawn.coordsZ);
         }
         new_spawn.angle = degToRad(new_spawn.angle);
         
@@ -564,46 +564,46 @@ void MobType::loadFromDataNode(
         DataNode* hold_rotation_node;
         
         new_child.name = child_node->name;
-        child_rs.set("spawn", new_child.spawn_name);
-        child_rs.set("parent_holds", new_child.parent_holds);
-        child_rs.set("hold_body_part", new_child.hold_body_part);
-        child_rs.set("hold_offset_distance", new_child.hold_offset_dist);
+        child_rs.set("spawn", new_child.spawnName);
+        child_rs.set("parent_holds", new_child.parentHolds);
+        child_rs.set("hold_body_part", new_child.holdBodyPart);
+        child_rs.set("hold_offset_distance", new_child.holdOffsetDist);
         child_rs.set(
-            "hold_offset_vertical_distance", new_child.hold_offset_vert_dist
+            "hold_offset_vertical_distance", new_child.holdOffsetVertDist
         );
-        child_rs.set("hold_offset_angle", new_child.hold_offset_angle);
+        child_rs.set("hold_offset_angle", new_child.holdOffsetAngle);
         child_rs.set(
             "hold_rotation_method", hold_rotation_method, &hold_rotation_node
         );
-        child_rs.set("handle_damage", new_child.handle_damage);
-        child_rs.set("relay_damage", new_child.relay_damage);
-        child_rs.set("handle_events", new_child.handle_events);
-        child_rs.set("relay_events", new_child.relay_events);
-        child_rs.set("handle_statuses", new_child.handle_statuses);
-        child_rs.set("relay_statuses", new_child.relay_statuses);
-        child_rs.set("limb_animation", new_child.limb_anim_name);
-        child_rs.set("limb_thickness", new_child.limb_thickness);
-        child_rs.set("limb_parent_body_part", new_child.limb_parent_body_part);
-        child_rs.set("limb_parent_offset", new_child.limb_parent_offset);
-        child_rs.set("limb_child_body_part", new_child.limb_child_body_part);
-        child_rs.set("limb_child_offset", new_child.limb_child_offset);
+        child_rs.set("handle_damage", new_child.handleDamage);
+        child_rs.set("relay_damage", new_child.relayDamage);
+        child_rs.set("handle_events", new_child.handleEvents);
+        child_rs.set("relay_events", new_child.relayEvents);
+        child_rs.set("handle_statuses", new_child.handleStatuses);
+        child_rs.set("relay_statuses", new_child.relayStatuses);
+        child_rs.set("limb_animation", new_child.limbAnimName);
+        child_rs.set("limb_thickness", new_child.limbThickness);
+        child_rs.set("limb_parent_body_part", new_child.limbParentBodyPart);
+        child_rs.set("limb_parent_offset", new_child.limbParentOffset);
+        child_rs.set("limb_child_body_part", new_child.limbChildBodyPart);
+        child_rs.set("limb_child_offset", new_child.limbChildOffset);
         child_rs.set("limb_draw_method", limb_draw_method, &limb_draw_node);
         
-        new_child.hold_offset_angle = degToRad(new_child.hold_offset_angle);
+        new_child.holdOffsetAngle = degToRad(new_child.holdOffsetAngle);
         
         if(limb_draw_node) {
             if(limb_draw_method == "below_both") {
-                new_child.limb_draw_method = LIMB_DRAW_METHOD_BELOW_BOTH;
+                new_child.limbDrawMethod = LIMB_DRAW_METHOD_BELOW_BOTH;
             } else if(limb_draw_method == "below_child") {
-                new_child.limb_draw_method = LIMB_DRAW_METHOD_BELOW_CHILD;
+                new_child.limbDrawMethod = LIMB_DRAW_METHOD_BELOW_CHILD;
             } else if(limb_draw_method == "below_parent") {
-                new_child.limb_draw_method = LIMB_DRAW_METHOD_BELOW_PARENT;
+                new_child.limbDrawMethod = LIMB_DRAW_METHOD_BELOW_PARENT;
             } else if(limb_draw_method == "above_parent") {
-                new_child.limb_draw_method = LIMB_DRAW_METHOD_ABOVE_PARENT;
+                new_child.limbDrawMethod = LIMB_DRAW_METHOD_ABOVE_PARENT;
             } else if(limb_draw_method == "above_child") {
-                new_child.limb_draw_method = LIMB_DRAW_METHOD_ABOVE_CHILD;
+                new_child.limbDrawMethod = LIMB_DRAW_METHOD_ABOVE_CHILD;
             } else if(limb_draw_method == "above_both") {
-                new_child.limb_draw_method = LIMB_DRAW_METHOD_ABOVE_BOTH;
+                new_child.limbDrawMethod = LIMB_DRAW_METHOD_ABOVE_BOTH;
             } else {
                 game.errors.report(
                     "Unknow limb draw method \"" +
@@ -614,13 +614,13 @@ void MobType::loadFromDataNode(
         
         if(hold_rotation_node) {
             if(hold_rotation_method == "never") {
-                new_child.hold_rotation_method =
+                new_child.holdRotationMethod =
                     HOLD_ROTATION_METHOD_NEVER;
             } else if(hold_rotation_method == "face_parent") {
-                new_child.hold_rotation_method =
+                new_child.holdRotationMethod =
                     HOLD_ROTATION_METHOD_FACE_HOLDER;
             } else if(hold_rotation_method == "copy_parent") {
-                new_child.hold_rotation_method =
+                new_child.holdRotationMethod =
                     HOLD_ROTATION_METHOD_COPY_HOLDER;
             } else {
                 game.errors.report(
@@ -657,13 +657,13 @@ void MobType::loadFromDataNode(
         sound_rs.set("file", file_str, &file_node);
         sound_rs.set("type", type_str, &type_node);
         sound_rs.set("stack_mode", stack_mode_str, &stack_mode_node);
-        sound_rs.set("stack_min_pos", new_sound.config.stack_min_pos);
+        sound_rs.set("stack_min_pos", new_sound.config.stackMinPos);
         sound_rs.set("loop", loop_bool);
         sound_rs.set("volume", volume_float);
         sound_rs.set("speed", speed_float);
-        sound_rs.set("volume_deviation", new_sound.config.gain_deviation);
-        sound_rs.set("speed_deviation", new_sound.config.speed_deviation);
-        sound_rs.set("random_delay", new_sound.config.random_delay);
+        sound_rs.set("volume_deviation", new_sound.config.gainDeviation);
+        sound_rs.set("speed_deviation", new_sound.config.speedDeviation);
+        sound_rs.set("random_delay", new_sound.config.randomDelay);
         
         new_sound.sample = game.content.sounds.list.get(file_str, file_node);
         
@@ -688,11 +688,11 @@ void MobType::loadFromDataNode(
         
         if(stack_mode_node) {
             if(stack_mode_str == "normal") {
-                new_sound.config.stack_mode = SOUND_STACK_MODE_NORMAL;
+                new_sound.config.stackMode = SOUND_STACK_MODE_NORMAL;
             } else if(stack_mode_str == "override") {
-                new_sound.config.stack_mode = SOUND_STACK_MODE_OVERRIDE;
+                new_sound.config.stackMode = SOUND_STACK_MODE_OVERRIDE;
             } else if(stack_mode_str == "never") {
-                new_sound.config.stack_mode = SOUND_STACK_MODE_NEVER;
+                new_sound.config.stackMode = SOUND_STACK_MODE_NEVER;
             } else {
                 game.errors.report(
                     "Unknow sound effect stack mode \"" +
@@ -711,8 +711,8 @@ void MobType::loadFromDataNode(
         new_sound.config.speed = speed_float / 100.0f;
         new_sound.config.speed = std::max(0.0f, new_sound.config.speed);
         
-        new_sound.config.gain_deviation /= 100.0f;
-        new_sound.config.speed_deviation /= 100.0f;
+        new_sound.config.gainDeviation /= 100.0f;
+        new_sound.config.speedDeviation /= 100.0f;
         
         sounds.push_back(new_sound);
     }
@@ -734,9 +734,9 @@ void MobType::loadFromDataNode(
         
         prop_rs.set("var", new_prop.var);
         prop_rs.set("type", type_str, &type_node);
-        prop_rs.set("def_value", new_prop.def_value);
-        prop_rs.set("min_value", new_prop.min_value);
-        prop_rs.set("max_value", new_prop.max_value);
+        prop_rs.set("def_value", new_prop.defValue);
+        prop_rs.set("min_value", new_prop.minValue);
+        prop_rs.set("max_value", new_prop.maxValue);
         prop_rs.set("list", list_str);
         prop_rs.set("tooltip", new_prop.tooltip);
         
@@ -766,8 +766,8 @@ void MobType::loadFromDataNode(
             );
         }
         
-        if(new_prop.min_value > new_prop.max_value) {
-            std::swap(new_prop.min_value, new_prop.max_value);
+        if(new_prop.minValue > new_prop.maxValue) {
+            std::swap(new_prop.minValue, new_prop.maxValue);
         }
         
         if(new_prop.type == AEMP_TYPE_LIST || new_prop.type == AEMP_TYPE_NR_LIST) {
@@ -777,13 +777,13 @@ void MobType::loadFromDataNode(
                     "a list of values!", prop_node
                 );
             } else {
-                new_prop.value_list = semicolonListToVector(list_str);
+                new_prop.valueList = semicolonListToVector(list_str);
             }
         }
         
         new_prop.tooltip = unescapeString(new_prop.tooltip);
         
-        area_editor_props.push_back(new_prop);
+        areaEditorProps.push_back(new_prop);
     }
     
     if(target_type_node) {
@@ -795,14 +795,14 @@ void MobType::loadFromDataNode(
                 target_type_node
             );
         } else {
-            target_type = target_type_value;
+            targetType = target_type_value;
         }
     }
     
     vector<string> huntable_targets_strs =
         semicolonListToVector(huntable_targets_str);
     if(huntable_targets_node) {
-        huntable_targets = 0;
+        huntableTargets = 0;
     }
     for(size_t h = 0; h < huntable_targets_strs.size(); h++) {
         size_t v = stringToMobTargetType(huntable_targets_strs[h]);
@@ -812,14 +812,14 @@ void MobType::loadFromDataNode(
                 huntable_targets_node
             );
         } else {
-            huntable_targets |= (bitmask_16_t) v;
+            huntableTargets |= (bitmask_16_t) v;
         }
     }
     
     vector<string> hurtable_targets_strs =
         semicolonListToVector(hurtable_targets_str);
     if(hurtable_targets_node) {
-        hurtable_targets = 0;
+        hurtableTargets = 0;
     }
     for(size_t h = 0; h < hurtable_targets_strs.size(); h++) {
         size_t v = stringToMobTargetType(hurtable_targets_strs[h]);
@@ -829,14 +829,14 @@ void MobType::loadFromDataNode(
                 hurtable_targets_node
             );
         } else {
-            hurtable_targets |= (bitmask_16_t) v;
+            hurtableTargets |= (bitmask_16_t) v;
         }
     }
     
     //Resources.
     if(level >= CONTENT_LOAD_LEVEL_FULL) {
-        anim_db = &game.content.mob_anim_dbs.list[category->id][manifest->internal_name];
-        anim_db->fillSoundIdxCaches(this);
+        animDb = &game.content.mobAnimDbs.list[category->id][manifest->internalName];
+        animDb->fillSoundIdxCaches(this);
         
         DataNode script_file;
         script_file.loadFile(folder_path + "/script.txt", true, true);
@@ -844,19 +844,19 @@ void MobType::loadFromDataNode(
         
         DataNode* death_state_name_node =
             script_file.getChildByName("death_state");
-        dying_state_name = death_state_name_node->value;
+        dyingStateName = death_state_name_node->value;
         
-        states_ignoring_death =
+        statesIgnoringDeath =
             semicolonListToVector(
                 script_file.getChildByName("states_ignoring_death")->value
             );
             
-        states_ignoring_spray =
+        statesIgnoringSpray =
             semicolonListToVector(
                 script_file.getChildByName("states_ignoring_spray")->value
             );
             
-        states_ignoring_hazard =
+        statesIgnoringHazard =
             semicolonListToVector(
                 script_file.getChildByName("states_ignoring_hazard")->value
             );
@@ -864,7 +864,7 @@ void MobType::loadFromDataNode(
         //Load init actions.
         loadActions(
             this,
-            script_file.getChildByName("init"), &init_actions, nullptr
+            script_file.getChildByName("init"), &initActions, nullptr
         );
         //Load the rest of the script.
         loadScript(
@@ -882,11 +882,11 @@ void MobType::loadFromDataNode(
             
             for(size_t s = 0; s < states.size(); s++) {
                 if(states[s]->name == first_state_name) {
-                    first_state_idx = s;
+                    firstStateIdx = s;
                     break;
                 }
             }
-            if(first_state_idx == INVALID) {
+            if(firstStateIdx == INVALID) {
                 game.errors.report(
                     "Unknown state \"" + first_state_name + "\" "
                     "to set as the first state!",
@@ -894,16 +894,16 @@ void MobType::loadFromDataNode(
                 );
             }
             
-            if(!dying_state_name.empty()) {
+            if(!dyingStateName.empty()) {
                 for(size_t s = 0; s < states.size(); s++) {
-                    if(states[s]->name == dying_state_name) {
-                        dying_state_idx = s;
+                    if(states[s]->name == dyingStateName) {
+                        dyingStateIdx = s;
                         break;
                     }
                 }
-                if(dying_state_idx == INVALID) {
+                if(dyingStateIdx == INVALID) {
                     game.errors.report(
-                        "Unknown state \"" + dying_state_name + "\" "
+                        "Unknown state \"" + dyingStateName + "\" "
                         "to set as the death state!",
                         death_state_name_node
                     );
@@ -918,18 +918,18 @@ void MobType::loadFromDataNode(
     //Category-specific resources.
     if(level >= CONTENT_LOAD_LEVEL_FULL) {
         loadCatResources(node);
-        anim_db->createConversions(getAnimConversions(), node);
+        animDb->createConversions(getAnimConversions(), node);
     }
     
-    physical_span =
+    physicalSpan =
         calculateMobPhysicalSpan(
             radius,
-            (level >= CONTENT_LOAD_LEVEL_FULL ? anim_db->hitbox_span : 0),
-            rectangular_dim
+            (level >= CONTENT_LOAD_LEVEL_FULL ? animDb->hitboxSpan : 0),
+            rectangularDim
         );
         
-    if(custom_category_name.empty()) {
-        custom_category_name = category->name;
+    if(customCategoryName.empty()) {
+        customCategoryName = category->name;
     }
 }
 
@@ -958,12 +958,12 @@ MobTypeWithAnimGroups::getAnimConversionsWithGroups(
 ) const {
     anim_conversion_vector new_v;
     
-    for(size_t g = 0; g < animation_group_suffixes.size(); g++) {
+    for(size_t g = 0; g < animationGroupSuffixes.size(); g++) {
         for(size_t c = 0; c < v.size(); c++) {
             new_v.push_back(
                 make_pair(
                     g * base_anim_total + v[c].first,
-                    v[c].second + animation_group_suffixes[g]
+                    v[c].second + animationGroupSuffixes[g]
                 )
             );
         }
@@ -979,20 +979,20 @@ MobTypeWithAnimGroups::getAnimConversionsWithGroups(
  */
 void createSpecialMobTypes() {
     MobCategory* custom_category =
-        game.mob_categories.get(MOB_CATEGORY_CUSTOM);
+        game.mobCategories.get(MOB_CATEGORY_CUSTOM);
         
     MobType* bridge_component_type = custom_category->createType();
     bridge_component_type->name = "Bridge component";
-    bridge_component_type->blackout_radius = 0;
-    bridge_component_type->appears_in_area_editor = false;
-    bridge_component_type->casts_shadow = false;
-    bridge_component_type->custom_category_name = "Misc";
+    bridge_component_type->blackoutRadius = 0;
+    bridge_component_type->appearsInAreaEditor = false;
+    bridge_component_type->castsShadow = false;
+    bridge_component_type->customCategoryName = "Misc";
     bridge_component_type->height = 8.0f;
-    bridge_component_type->physical_span = 8.0f;
+    bridge_component_type->physicalSpan = 8.0f;
     bridge_component_type->radius = 8.0f;
     bridge_component_type->walkable = true;
-    bridge_component_type->draw_mob_callback = Bridge::drawComponent;
+    bridge_component_type->drawMobCallback = Bridge::drawComponent;
     bridge_component_type->pushes = true;
-    bridge_component_type->pushes_softly = false;
+    bridge_component_type->pushesSoftly = false;
     custom_category->registerType("bridge_component", bridge_component_type);
 }

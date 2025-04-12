@@ -38,22 +38,22 @@ public:
     float damage = 0.0f;
     
     //If true, damage is only dealt if the victim is eaten. e.g. White Pikmin.
-    bool ingestion_only = false;
+    bool ingestionOnly = false;
     
     //If true, the damage var represents max HP ratio. If false, absolute HP.
-    bool is_damage_ratio = false;
+    bool isDamageRatio = false;
     
     //Particle generator to use to generate particles, if any.
-    ParticleGenerator* particle_gen = nullptr;
+    ParticleGenerator* particleGen = nullptr;
     
     //Offset the particles by this much, horizontally.
-    Point particle_offset_pos;
+    Point particleOffsetPos;
     
     //Offset the particles by this much, vertically.
-    float particle_offset_z = 0.0f;
+    float particleOffsetZ = 0.0f;
     
     //Apply this status effect when the spike damage is applied.
-    StatusType* status_to_apply = nullptr;
+    StatusType* statusToApply = nullptr;
     
     
     //--- Function declarations ---

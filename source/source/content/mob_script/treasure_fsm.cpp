@@ -130,7 +130,7 @@ void treasure_fsm::createFsm(MobType* typ) {
     
     
     typ->states = efc.finish();
-    typ->first_state_idx = fixStates(typ->states, "idle_waiting", typ);
+    typ->firstStateIdx = fixStates(typ->states, "idle_waiting", typ);
     
     //Check if the number in the enum and the total match up.
     engineAssert(

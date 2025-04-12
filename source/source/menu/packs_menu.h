@@ -52,44 +52,44 @@ private:
     
     //Working copy of the order of the packs. This is a list of internal
     //names and excludes the base pack.
-    vector<string> pack_order;
+    vector<string> packOrder;
     
     //Working copy of the list of disabled packs. This is a list of internal
     //names and excludes the base pack.
-    vector<string> packs_disabled;
+    vector<string> packsDisabled;
     
     //Pack list item.
-    ListGuiItem* packs_list = nullptr;
+    ListGuiItem* packsList = nullptr;
     
     //Pack bullet items, in order.
-    vector<BulletGuiItem*> pack_bullets;
+    vector<BulletGuiItem*> packBullets;
     
     //Pack check items, in order.
-    vector<CheckGuiItem*> pack_checks;
+    vector<CheckGuiItem*> packChecks;
     
     //Pack name text item.
-    TextGuiItem* pack_name_text = nullptr;
+    TextGuiItem* packNameText = nullptr;
     
     //Pack description text item.
-    TextGuiItem* pack_description_text = nullptr;
+    TextGuiItem* packDescriptionText = nullptr;
     
     //Pack tags text item.
-    TextGuiItem* pack_tags_text = nullptr;
+    TextGuiItem* packTagsText = nullptr;
     
     //Pack maker text item.
-    TextGuiItem* pack_maker_text = nullptr;
+    TextGuiItem* packMakerText = nullptr;
     
     //Pack version text item.
-    TextGuiItem* pack_version_text = nullptr;
+    TextGuiItem* packVersionText = nullptr;
     
     //Restart warning text item.
-    TextGuiItem* warning_text = nullptr;
+    TextGuiItem* warningText = nullptr;
     
     //Internal name of the currently-selected pack, if any.
-    string cur_pack_name;
+    string curPackName;
     
     //Bitmaps for each pack's thumbnail.
-    std::map<string, ALLEGRO_BITMAP*> pack_thumbs;
+    std::map<string, ALLEGRO_BITMAP*> packThumbs;
     
     //--- Function declarations ---
     

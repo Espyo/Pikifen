@@ -30,10 +30,10 @@ void GuiEditor::doDrawing() {
  * Dear ImGui rendering process.
  */
 void GuiEditor::drawCanvas() {
-    al_use_transform(&game.world_to_screen_transform);
+    al_use_transform(&game.worldToScreenTransform);
     al_set_clipping_rectangle(
-        canvas_tl.x, canvas_tl.y,
-        canvas_br.x - canvas_tl.x, canvas_br.y - canvas_tl.y
+        canvasTL.x, canvasTL.y,
+        canvasBR.x - canvasTL.x, canvasBR.y - canvasTL.y
     );
     
     //Background.
@@ -46,7 +46,7 @@ void GuiEditor::drawCanvas() {
     
     //Grid.
     drawGrid(
-        game.options.gui_editor.grid_interval,
+        game.options.guiEd.gridInterval,
         al_map_rgba(64, 64, 64, 84),
         al_map_rgba(64, 64, 64, 40)
     );
@@ -84,7 +84,7 @@ void GuiEditor::drawCanvas() {
         float clip_x = items[i].center.x - items[i].size.x / 2.0f;
         float clip_y = items[i].center.y - items[i].size.y / 2.0f;
         al_transform_coordinates(
-            &game.world_to_screen_transform, &clip_x, &clip_y
+            &game.worldToScreenTransform, &clip_x, &clip_y
         );
         float clip_w = items[i].size.x * game.cam.zoom;
         float clip_h = items[i].size.y * game.cam.zoom;
@@ -93,7 +93,7 @@ void GuiEditor::drawCanvas() {
             clip_x, clip_y, clip_w, clip_h
         );
         drawText(
-            items[i].name, game.sys_content.fnt_builtin,
+            items[i].name, game.sysContent.fntBuiltin,
             Point(
                 (items[i].center.x - items[i].size.x / 2.0f) +
                 (4.0f / game.cam.zoom),
@@ -107,7 +107,7 @@ void GuiEditor::drawCanvas() {
             orig_clip_x, orig_clip_y, orig_clip_w, orig_clip_h
         );
         
-        if(cur_item != i) {
+        if(curItem != i) {
             drawRoundedRectangle(
                 items[i].center,
                 items[i].size,
@@ -118,10 +118,10 @@ void GuiEditor::drawCanvas() {
         }
     }
     
-    if(cur_item != INVALID && items[cur_item].size.x != 0.0f) {
-        cur_transformation_widget.draw(
-            &items[cur_item].center,
-            &items[cur_item].size,
+    if(curItem != INVALID && items[curItem].size.x != 0.0f) {
+        curTransformationWidget.draw(
+            &items[curItem].center,
+            &items[curItem].size,
             nullptr,
             1.0f / game.cam.zoom
         );
@@ -129,5 +129,5 @@ void GuiEditor::drawCanvas() {
     
     //Finish up.
     al_reset_clipping_rectangle();
-    al_use_transform(&game.identity_transform);
+    al_use_transform(&game.identityTransform);
 }

@@ -26,7 +26,7 @@
  */
 Treasure::Treasure(const Point &pos, TreasureType* type, float angle) :
     Mob(pos, type, angle),
-    tre_type(type) {
+    treType(type) {
     
     becomeCarriable(CARRY_DESTINATION_SHIP);
     
@@ -36,10 +36,10 @@ Treasure::Treasure(const Point &pos, TreasureType* type, float angle) :
     
     ParticleGenerator pg =
         standardParticleGenSetup(
-            game.sys_content_names.part_treasure, this
+            game.sysContentNames.parTreasure, this
         );
-    pg.emission.circle_outer_dist *= radius;
-    pg.base_particle.priority = PARTICLE_PRIORITY_LOW;
-    particle_generators.push_back(pg);
+    pg.emission.circleOuterDist *= radius;
+    pg.baseParticle.priority = PARTICLE_PRIORITY_LOW;
+    particleGenerators.push_back(pg);
     
 }

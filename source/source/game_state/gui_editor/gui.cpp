@@ -25,7 +25,7 @@ void GuiEditor::openLoadDialog() {
     
     //Set up the picker's behavior and data.
     vector<PickerItem> file_items;
-    for(const auto &f : game.content.gui_defs.manifests) {
+    for(const auto &f : game.content.guiDefs.manifests) {
         file_items.push_back(
             PickerItem(
                 f.first,
@@ -36,9 +36,9 @@ void GuiEditor::openLoadDialog() {
         );
     }
     
-    load_dialog_picker = Picker(this);
-    load_dialog_picker.items = file_items;
-    load_dialog_picker.pick_callback =
+    loadDialogPicker = Picker(this);
+    loadDialogPicker.items = file_items;
+    loadDialogPicker.pickCallback =
         std::bind(
             &GuiEditor::pickGuiDefFile, this,
             std::placeholders::_1,
@@ -53,7 +53,7 @@ void GuiEditor::openLoadDialog() {
         "Load a GUI definition file",
         std::bind(&GuiEditor::processGuiLoadDialog, this)
     );
-    dialogs.back()->close_callback =
+    dialogs.back()->closeCallback =
         std::bind(&GuiEditor::closeLoadDialog, this);
 }
 
@@ -62,18 +62,18 @@ void GuiEditor::openLoadDialog() {
  * @brief Opens the "new" dialog.
  */
 void GuiEditor::openNewDialog() {
-    new_dialog.must_update = true;
+    newDialog.mustUpdate = true;
     openDialog(
         "Create a new GUI definition",
         std::bind(&GuiEditor::processGuiNewDialog, this)
     );
-    dialogs.back()->custom_size = Point(400, 0);
-    dialogs.back()->close_callback = [this] () {
-        new_dialog.pack.clear();
-        new_dialog.internal_name.clear();
-        new_dialog.problem.clear();
-        new_dialog.def_path.clear();
-        new_dialog.must_update = true;
+    dialogs.back()->customSize = Point(400, 0);
+    dialogs.back()->closeCallback = [this] () {
+        newDialog.pack.clear();
+        newDialog.internalName.clear();
+        newDialog.problem.clear();
+        newDialog.defPath.clear();
+        newDialog.mustUpdate = true;
     };
 }
 
@@ -86,7 +86,7 @@ void GuiEditor::openOptionsDialog() {
         "Options",
         std::bind(&GuiEditor::processGuiOptionsDialog, this)
     );
-    dialogs.back()->close_callback =
+    dialogs.back()->closeCallback =
         std::bind(&GuiEditor::closeOptionsDialog, this);
 }
 
@@ -97,7 +97,7 @@ void GuiEditor::openOptionsDialog() {
 void GuiEditor::processGui() {
     //Set up the entire editor window.
     ImGui::SetNextWindowPos(ImVec2(0, 0));
-    ImGui::SetNextWindowSize(ImVec2(game.win_w, game.win_h));
+    ImGui::SetNextWindowSize(ImVec2(game.winW, game.winH));
     ImGui::Begin(
         "GUI editor", nullptr,
         ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_MenuBar |
@@ -118,20 +118,20 @@ void GuiEditor::processGui() {
     //Draw the canvas now.
     ImGui::BeginChild("canvas", ImVec2(0, -EDITOR::STATUS_BAR_HEIGHT));
     ImGui::EndChild();
-    is_mouse_in_gui =
+    isMouseInGui =
         !ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem);
     ImVec2 tl = ImGui::GetItemRectMin();
-    canvas_tl.x = tl.x;
-    canvas_tl.y = tl.y;
+    canvasTL.x = tl.x;
+    canvasTL.y = tl.y;
     ImVec2 br = ImGui::GetItemRectMax();
-    canvas_br.x = br.x;
-    canvas_br.y = br.y;
+    canvasBR.x = br.x;
+    canvasBR.y = br.y;
     ImGui::GetWindowDrawList()->AddCallback(drawCanvasDearImGuiCallback, nullptr);
     
     //Small hack. Recenter the camera, if necessary.
-    if(must_recenter_cam) {
+    if(mustRecenterCam) {
         resetCam(true);
-        must_recenter_cam = false;
+        mustRecenterCam = false;
     }
     
     //Status bar.
@@ -140,11 +140,11 @@ void GuiEditor::processGui() {
     //Set up the separator for the control panel.
     ImGui::NextColumn();
     
-    if(canvas_separator_x == -1) {
-        canvas_separator_x = game.win_w * 0.675;
-        ImGui::SetColumnWidth(0, canvas_separator_x);
+    if(canvasSeparatorX == -1) {
+        canvasSeparatorX = game.winW * 0.675;
+        ImGui::SetColumnWidth(0, canvasSeparatorX);
     } else {
-        canvas_separator_x = ImGui::GetColumnOffset(1);
+        canvasSeparatorX = ImGui::GetColumnOffset(1);
     }
     
     //Do the control panel now.
@@ -164,7 +164,7 @@ void GuiEditor::processGui() {
  * @brief Processes the Dear ImGui control panel for this frame.
  */
 void GuiEditor::processGuiControlPanel() {
-    if(manifest.internal_name.empty()) return;
+    if(manifest.internalName.empty()) return;
     
     ImGui::BeginChild("panel");
     
@@ -173,13 +173,13 @@ void GuiEditor::processGuiControlPanel() {
     
     //Current file text.
     ImGui::SameLine();
-    monoText("%s", manifest.internal_name.c_str());
+    monoText("%s", manifest.internalName.c_str());
     string file_tooltip =
         getFileTooltip(manifest.path) + "\n\n"
         "File state: ";
-    if(!changes_mgr.existsOnDisk()) {
+    if(!changesMgr.existsOnDisk()) {
         file_tooltip += "Not saved to disk yet!";
-    } else if(changes_mgr.hasUnsavedChanges()) {
+    } else if(changesMgr.hasUnsavedChanges()) {
         file_tooltip += "You have unsaved changes.";
     } else {
         file_tooltip += "Everything ok.";
@@ -207,7 +207,7 @@ void GuiEditor::processGuiControlPanel() {
 void GuiEditor::processGuiDeleteGuiDefDialog() {
     //Explanation text.
     string explanation_str;
-    if(!changes_mgr.existsOnDisk()) {
+    if(!changesMgr.existsOnDisk()) {
         explanation_str =
             "You have never saved this GUI definition to disk, so if you\n"
             "delete, you will only lose your unsaved progress.";
@@ -260,7 +260,7 @@ void GuiEditor::processGuiDeleteGuiDefDialog() {
 void GuiEditor::processGuiLoadDialog() {
     //History node.
     processGuiHistory(
-        game.options.gui_editor.history,
+        game.options.guiEd.history,
     [this](const string &path) -> string {
         return path;
     },
@@ -290,7 +290,7 @@ void GuiEditor::processGuiLoadDialog() {
     //Load node.
     ImGui::Spacer();
     if(saveableTreeNode("load", "Load")) {
-        load_dialog_picker.process();
+        loadDialogPicker.process();
         
         ImGui::TreePop();
     }
@@ -308,7 +308,7 @@ void GuiEditor::processGuiMenuBar() {
         
             //Load file item.
             if(ImGui::MenuItem("Load or create...", "Ctrl+L")) {
-                load_widget_pos = getLastWidgetPost();
+                loadWidgetPos = getLastWidgetPost();
                 loadCmd(1.0f);
             }
             setTooltip(
@@ -318,7 +318,7 @@ void GuiEditor::processGuiMenuBar() {
             
             //Reload current file item.
             if(ImGui::MenuItem("Reload current GUI definition")) {
-                reload_widget_pos = getLastWidgetPost();
+                reloadWidgetPos = getLastWidgetPost();
                 reloadCmd(1.0f);
             }
             setTooltip(
@@ -355,7 +355,7 @@ void GuiEditor::processGuiMenuBar() {
             
             //Quit editor item.
             if(ImGui::MenuItem("Quit", "Ctrl+Q")) {
-                quit_widget_pos = getLastWidgetPost();
+                quitWidgetPos = getLastWidgetPost();
                 quitCmd(1.0f);
             }
             setTooltip(
@@ -407,11 +407,11 @@ void GuiEditor::processGuiMenuBar() {
             //Show tooltips item.
             if(
                 ImGui::MenuItem(
-                    "Show tooltips", "", &game.options.editors.show_tooltips
+                    "Show tooltips", "", &game.options.editors.showTooltips
                 )
             ) {
                 string state_str =
-                    game.options.editors.show_tooltips ? "Enabled" : "Disabled";
+                    game.options.editors.showTooltips ? "Enabled" : "Disabled";
                 setStatus(state_str + " tooltips.");
                 saveOptions();
             }
@@ -459,77 +459,77 @@ void GuiEditor::processGuiMenuBar() {
  */
 void GuiEditor::processGuiNewDialog() {
     //Pack widgets.
-    new_dialog.must_update |=
-        processGuiNewDialogPackWidgets(&new_dialog.pack);
+    newDialog.mustUpdate |=
+        processGuiNewDialogPackWidgets(&newDialog.pack);
         
     //GUI definition combo.
     vector<string> gui_files;
-    for(const auto &g : game.content.gui_defs.manifests) {
+    for(const auto &g : game.content.guiDefs.manifests) {
         gui_files.push_back(g.first);
     }
     ImGui::Spacer();
-    new_dialog.must_update |=
-        monoCombo("File", &new_dialog.internal_name, gui_files);
+    newDialog.mustUpdate |=
+        monoCombo("File", &newDialog.internalName, gui_files);
         
     //Check if everything's ok.
-    if(new_dialog.must_update) {
-        new_dialog.problem.clear();
-        if(new_dialog.internal_name.empty()) {
-            new_dialog.problem =
+    if(newDialog.mustUpdate) {
+        newDialog.problem.clear();
+        if(newDialog.internalName.empty()) {
+            newDialog.problem =
                 "You have to select a file!";
-        } else if(!isInternalNameGood(new_dialog.internal_name)) {
-            new_dialog.problem =
+        } else if(!isInternalNameGood(newDialog.internalName)) {
+            newDialog.problem =
                 "The internal name should only have lowercase letters,\n"
                 "numbers, and underscores!";
-        } else if(new_dialog.pack == FOLDER_NAMES::BASE_PACK) {
-            new_dialog.problem =
+        } else if(newDialog.pack == FOLDER_NAMES::BASE_PACK) {
+            newDialog.problem =
                 "All the GUI definition files already live in the\n"
                 "base pack! The idea is you pick one of those so it'll\n"
                 "be copied onto a different pack for you to edit.";
         } else {
             ContentManifest temp_man;
-            temp_man.internal_name = new_dialog.internal_name;
-            temp_man.pack = new_dialog.pack;
-            new_dialog.def_path =
-                game.content.gui_defs.manifestToPath(temp_man);
-            if(fileExists(new_dialog.def_path)) {
-                new_dialog.problem =
+            temp_man.internalName = newDialog.internalName;
+            temp_man.pack = newDialog.pack;
+            newDialog.defPath =
+                game.content.guiDefs.manifestToPath(temp_man);
+            if(fileExists(newDialog.defPath)) {
+                newDialog.problem =
                     "There is already a GUI definition\n"
                     "file for that GUI in that pack!";
             }
         }
-        new_dialog.must_update = false;
+        newDialog.mustUpdate = false;
     }
     
     //Create button.
     ImGui::Spacer();
     ImGui::SetupCentering(180);
-    if(!new_dialog.problem.empty()) {
+    if(!newDialog.problem.empty()) {
         ImGui::BeginDisabled();
     }
     if(ImGui::Button("Create GUI definition", ImVec2(180, 40))) {
         auto really_create = [this] () {
-            createGuiDef(string(new_dialog.internal_name), new_dialog.pack);
+            createGuiDef(string(newDialog.internalName), newDialog.pack);
             closeTopDialog();
             closeTopDialog(); //Close the load dialog.
         };
         
         if(
-            new_dialog.pack == FOLDER_NAMES::BASE_PACK &&
-            !game.options.advanced.engine_dev
+            newDialog.pack == FOLDER_NAMES::BASE_PACK &&
+            !game.options.advanced.engineDev
         ) {
             openBaseContentWarningDialog(really_create);
         } else {
             really_create();
         }
     }
-    if(!new_dialog.problem.empty()) {
+    if(!newDialog.problem.empty()) {
         ImGui::EndDisabled();
     }
     setTooltip(
-        new_dialog.problem.empty() ?
+        newDialog.problem.empty() ?
         "Create the GUI definition!" :
-        new_dialog.problem
+        newDialog.problem
     );
 }
 
@@ -542,7 +542,7 @@ void GuiEditor::processGuiOptionsDialog() {
     if(saveableTreeNode("options", "Controls")) {
     
         //Middle mouse button pans checkbox.
-        ImGui::Checkbox("Use MMB to pan", &game.options.editors.mmb_pan);
+        ImGui::Checkbox("Use MMB to pan", &game.options.editors.mmbPan);
         setTooltip(
             "Use the middle mouse button to pan the camera\n"
             "(and RMB to reset camera/zoom).\n"
@@ -552,7 +552,7 @@ void GuiEditor::processGuiOptionsDialog() {
         
         //Grid interval text.
         ImGui::Text(
-            "Grid interval: %f", game.options.gui_editor.grid_interval
+            "Grid interval: %f", game.options.guiEd.gridInterval
         );
         
         //Increase grid interval button.
@@ -603,9 +603,9 @@ void GuiEditor::processGuiOptionsDialog() {
  * @brief Processes the GUI item info panel for this frame.
  */
 void GuiEditor::processGuiPanelItem() {
-    if(cur_item == INVALID) return;
+    if(curItem == INVALID) return;
     
-    Item* cur_item_ptr = &items[cur_item];
+    Item* cur_item_ptr = &items[curItem];
     
     if(cur_item_ptr->size.x == 0.0f) return;
     
@@ -616,7 +616,7 @@ void GuiEditor::processGuiPanelItem() {
     if(
         ImGui::DragFloat2("Center", (float*) &cur_item_ptr->center, 0.10f)
     ) {
-        changes_mgr.markAsChanged();
+        changesMgr.markAsChanged();
     }
     setTooltip(
         "Center coordinates of the item. e.g. 32,100 is 32% of the\n"
@@ -631,7 +631,7 @@ void GuiEditor::processGuiPanelItem() {
             "Size", cur_item_ptr->size, 0.10f, false, false, 0.10f
         )
     ) {
-        changes_mgr.markAsChanged();
+        changesMgr.markAsChanged();
     }
     setTooltip(
         "Width and height of the item. e.g. 40,90 is 40% of the screen width,\n"
@@ -674,7 +674,7 @@ void GuiEditor::processGuiPanelItem() {
             cur_item_ptr->center = new_center;
             cur_item_ptr->size = new_size;
         }
-        changes_mgr.markAsChanged();
+        changesMgr.markAsChanged();
     }
 }
 
@@ -710,7 +710,7 @@ void GuiEditor::processGuiPanelItems() {
                     items[i].size.x = 0.0f;
                     items[i].size.y = 0.0f;
                 }
-                changes_mgr.markAsChanged();
+                changesMgr.markAsChanged();
             }
             setTooltip(
                 "Whether this item is visible in-game or not."
@@ -721,17 +721,17 @@ void GuiEditor::processGuiPanelItems() {
             ImGui::Text("  ");
             
             //Item selectable.
-            bool selected = cur_item == i;
+            bool selected = curItem == i;
             ImGui::SameLine();
             if(
                 monoSelectable(items[i].name.c_str(), &selected)
             ) {
-                cur_item = i;
+                curItem = i;
             }
             
-            if(must_focus_on_cur_item && selected) {
+            if(mustFocusOnCurItem && selected) {
                 ImGui::SetScrollHereY(0.5f);
-                must_focus_on_cur_item = false;
+                mustFocusOnCurItem = false;
             }
             
         }
@@ -750,17 +750,17 @@ void GuiEditor::processGuiStatusBar() {
     //Spacer dummy widget.
     ImGui::SameLine();
     float size =
-        canvas_separator_x - ImGui::GetItemRectSize().x -
+        canvasSeparatorX - ImGui::GetItemRectSize().x -
         EDITOR::MOUSE_COORDS_TEXT_WIDTH;
     ImGui::Dummy(ImVec2(size, 0));
     
     //Mouse coordinates text.
-    if(!is_mouse_in_gui || is_m1_pressed) {
+    if(!isMouseInGui || isM1Pressed) {
         ImGui::SameLine();
         monoText(
             "%s, %s",
-            boxString(f2s(game.mouse_cursor.w_pos.x), 7, "%").c_str(),
-            boxString(f2s(game.mouse_cursor.w_pos.y), 7, "%").c_str()
+            boxString(f2s(game.mouseCursor.wPos.x), 7, "%").c_str(),
+            boxString(f2s(game.mouseCursor.wPos.y), 7, "%").c_str()
         );
     }
 }
@@ -770,16 +770,16 @@ void GuiEditor::processGuiStatusBar() {
  * @brief Processes the Dear ImGui toolbar for this frame.
  */
 void GuiEditor::processGuiToolbar() {
-    if(manifest.internal_name.empty()) return;
+    if(manifest.internalName.empty()) return;
     
     //Quit button.
     if(
         ImGui::ImageButton(
-            "quitButton", editor_icons[EDITOR_ICON_QUIT],
+            "quitButton", editorIcons[EDITOR_ICON_QUIT],
             Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
-        quit_widget_pos = getLastWidgetPost();
+        quitWidgetPos = getLastWidgetPost();
         quitCmd(1.0f);
     }
     setTooltip(
@@ -791,11 +791,11 @@ void GuiEditor::processGuiToolbar() {
     ImGui::SameLine();
     if(
         ImGui::ImageButton(
-            "loadButton", editor_icons[EDITOR_ICON_LOAD],
+            "loadButton", editorIcons[EDITOR_ICON_LOAD],
             Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
-        load_widget_pos = getLastWidgetPost();
+        loadWidgetPos = getLastWidgetPost();
         loadCmd(1.0f);
     }
     setTooltip(
@@ -808,9 +808,9 @@ void GuiEditor::processGuiToolbar() {
     if(
         ImGui::ImageButton(
             "saveButton",
-            changes_mgr.hasUnsavedChanges() ?
-            editor_icons[EDITOR_ICON_SAVE_UNSAVED] :
-            editor_icons[EDITOR_ICON_SAVE],
+            changesMgr.hasUnsavedChanges() ?
+            editorIcons[EDITOR_ICON_SAVE_UNSAVED] :
+            editorIcons[EDITOR_ICON_SAVE],
             Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
@@ -824,11 +824,11 @@ void GuiEditor::processGuiToolbar() {
     //Snap mode button.
     ALLEGRO_BITMAP* snap_mode_bmp = nullptr;
     string snap_mode_description;
-    if(game.options.gui_editor.snap) {
-        snap_mode_bmp = editor_icons[EDITOR_ICON_SNAP_GRID];
+    if(game.options.guiEd.snap) {
+        snap_mode_bmp = editorIcons[EDITOR_ICON_SNAP_GRID];
         snap_mode_description = "grid. Holding Shift disables snapping.";
     } else {
-        snap_mode_bmp = editor_icons[EDITOR_ICON_SNAP_NOTHING];
+        snap_mode_bmp = editorIcons[EDITOR_ICON_SNAP_NOTHING];
         snap_mode_description = "nothing. Holding Shift snaps to grid.";
     }
     

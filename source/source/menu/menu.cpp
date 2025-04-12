@@ -33,7 +33,7 @@ void Menu::draw() {
 void Menu::enter() {
     if(!loaded) return;
     
-    if(enter_callback) enter_callback();
+    if(enterCallback) enterCallback();
 }
 
 
@@ -75,7 +75,7 @@ void Menu::handlePlayerAction(const PlayerAction &action) {
 void Menu::leave() {
     if(!loaded) return;
     active = false;
-    if(leave_callback) leave_callback();
+    if(leaveCallback) leaveCallback();
 }
 
 
@@ -86,7 +86,7 @@ void Menu::load() {
     if(loaded) return;
     
     loaded = true;
-    if(load_callback) load_callback();
+    if(loadCallback) loadCallback();
 }
 
 
@@ -106,11 +106,11 @@ void Menu::tick(float delta_t) {
     }
     
     //Tick the unload timer.
-    if(unload_timer != LARGE_FLOAT) {
-        unload_timer -= delta_t;
-        if(unload_timer <= 0.0f) {
+    if(unloadTimer != LARGE_FLOAT) {
+        unloadTimer -= delta_t;
+        if(unloadTimer <= 0.0f) {
             unload();
-            unload_timer = LARGE_FLOAT;
+            unloadTimer = LARGE_FLOAT;
         }
     }
 }
@@ -130,5 +130,5 @@ void Menu::unload() {
     guis.clear();
     
     loaded = false;
-    if(unload_callback) unload_callback();
+    if(unloadCallback) unloadCallback();
 }

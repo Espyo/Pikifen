@@ -60,7 +60,7 @@ void drop_fsm::createFsm(MobType* typ) {
     
     
     typ->states = efc.finish();
-    typ->first_state_idx = fixStates(typ->states, "falling", typ);
+    typ->firstStateIdx = fixStates(typ->states, "falling", typ);
     
     //Check if the number in the enum and the total match up.
     engineAssert(
@@ -96,18 +96,18 @@ void drop_fsm::onTouched(Mob* m, void* info1, void* info2) {
     Mob* toucher = (Mob*) info1;
     bool will_drink = false;
     
-    if(dro_ptr->doses_left == 0) return;
+    if(dro_ptr->dosesLeft == 0) return;
     
     //Check if a compatible mob touched it.
     if(
-        dro_ptr->dro_type->consumer == DROP_CONSUMER_PIKMIN &&
+        dro_ptr->droType->consumer == DROP_CONSUMER_PIKMIN &&
         toucher->type->category->id == MOB_CATEGORY_PIKMIN
     ) {
     
         //Pikmin is about to drink it.
         Pikmin* pik_ptr = (Pikmin*) toucher;
         
-        switch(dro_ptr->dro_type->effect) {
+        switch(dro_ptr->droType->effect) {
         case DROP_EFFECT_MATURATE: {
             if(pik_ptr->maturity < N_MATURITIES - 1) {
                 will_drink = true;
@@ -122,12 +122,12 @@ void drop_fsm::onTouched(Mob* m, void* info1, void* info2) {
         }
         
     } else if(
-        dro_ptr->dro_type->consumer == DROP_CONSUMER_LEADERS &&
+        dro_ptr->droType->consumer == DROP_CONSUMER_LEADERS &&
         toucher->type->category->id == MOB_CATEGORY_LEADERS
     ) {
     
         //Leader is about to drink it.
-        switch(dro_ptr->dro_type->effect) {
+        switch(dro_ptr->droType->effect) {
         case DROP_EFFECT_INCREASE_SPRAYS:
         case DROP_EFFECT_GIVE_STATUS: {
             will_drink = true;
@@ -152,14 +152,14 @@ void drop_fsm::onTouched(Mob* m, void* info1, void* info2) {
     
     if(will_drink) {
         ev->run(toucher, (void*) m);
-        dro_ptr->doses_left--;
+        dro_ptr->dosesLeft--;
     } else {
         //This mob won't drink it. Just a bump.
         bool toucher_is_moving =
             toucher->speed.x != 0 || toucher->speed.y != 0 ||
-            toucher->chase_info.state == CHASE_STATE_CHASING;
+            toucher->chaseInfo.state == CHASE_STATE_CHASING;
         if(
-            m->fsm.cur_state->id != DROP_STATE_BUMPED &&
+            m->fsm.curState->id != DROP_STATE_BUMPED &&
             toucher_is_moving
         ) {
             m->fsm.setState(DROP_STATE_BUMPED, info1, info2);

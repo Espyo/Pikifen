@@ -542,10 +542,10 @@ struct MobActionParam {
     MOB_ACTION_PARAM type = MOB_ACTION_PARAM_STRING;
     
     //If true, it must be a constant value. Else, it can also be a var.
-    bool force_const = false;
+    bool forceConst = false;
     
     //If true, this is an array of them (minimum amount 0).
-    bool is_extras = false;
+    bool isExtras = false;
     
     
     //--- Function declarations ---
@@ -577,13 +577,13 @@ struct MobActionRunData {
     vector<string> args;
     
     //Event custom data 1.
-    void* custom_data_1 = nullptr;
+    void* customData1 = nullptr;
     
     //Event custom data 2.
-    void* custom_data_2 = nullptr;
+    void* customData2 = nullptr;
     
     //Return value, if applicable.
-    bool return_value = false;
+    bool returnValue = false;
     
     
     //--- Function declarations ---
@@ -626,7 +626,7 @@ struct MobAction {
     mob_action_code_t* code = nullptr;
     
     //Extra logic to run when this action is loaded from a script file.
-    mob_action_load_code_t* extra_load_logic = nullptr;
+    mob_action_load_code_t* extraLoadLogic = nullptr;
     
     //Parameters that it can take.
     vector<MobActionParam> parameters;
@@ -652,13 +652,13 @@ struct MobActionCall {
     vector<string> args;
     
     //List of which arguments are variable names.
-    vector<bool> arg_is_var;
+    vector<bool> argIsVar;
     
     //If something went wrong in parsing it, this describes the error.
-    string custom_error;
+    string customError;
     
     //Event the action belongs to.
-    MOB_EV parent_event = MOB_EV_UNKNOWN;
+    MOB_EV parentEvent = MOB_EV_UNKNOWN;
     
     //Mob type that owns these calls.
     MobType* mt = nullptr;

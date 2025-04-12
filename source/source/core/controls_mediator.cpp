@@ -47,11 +47,11 @@ void ControlsMediator::addPlayerActionType(
     a.category = category;
     a.name = name;
     a.description = description;
-    a.internal_name = internal_name;
-    a.default_bind_str = default_bind_str;
+    a.internalName = internal_name;
+    a.defaultBindStr = default_bind_str;
     a.autoRepeat = auto_repeat;
     
-    player_action_types.push_back(a);
+    playerActionTypes.push_back(a);
     mgr.actionTypes[id] = a;
 }
 
@@ -103,7 +103,7 @@ PlayerInput ControlsMediator::allegroEventToInput(
     } case ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN:
     case ALLEGRO_EVENT_JOYSTICK_BUTTON_UP: {
         input.source.type = INPUT_SOURCE_TYPE_CONTROLLER_BUTTON;
-        input.source.deviceNr = game.controller_numbers[ev.joystick.id];
+        input.source.deviceNr = game.controllerNumbers[ev.joystick.id];
         input.source.buttonNr = ev.joystick.button;
         input.value = (ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN) ? 1 : 0;
         break;
@@ -116,7 +116,7 @@ PlayerInput ControlsMediator::allegroEventToInput(
             input.source.type = INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG;
             input.value = -ev.joystick.pos;
         }
-        input.source.deviceNr = game.controller_numbers[ev.joystick.id];
+        input.source.deviceNr = game.controllerNumbers[ev.joystick.id];
         input.source.stickNr = ev.joystick.stick;
         input.source.axisNr = ev.joystick.axis;
         break;
@@ -166,9 +166,9 @@ ControlBind ControlsMediator::findBind(
 ControlBind ControlsMediator::findBind(
     const string &action_name
 ) const {
-    for(size_t b = 0; b < player_action_types.size(); b++) {
-        if(player_action_types[b].internal_name == action_name) {
-            return findBind(player_action_types[b].id);
+    for(size_t b = 0; b < playerActionTypes.size(); b++) {
+        if(playerActionTypes[b].internalName == action_name) {
+            return findBind(playerActionTypes[b].id);
         }
     }
     return ControlBind();
@@ -182,7 +182,7 @@ ControlBind ControlsMediator::findBind(
  */
 const vector<PfePlayerActionType>
 &ControlsMediator::getAllPlayerActionTypes() const {
-    return player_action_types;
+    return playerActionTypes;
 }
 
 
@@ -195,9 +195,9 @@ const vector<PfePlayerActionType>
 PfePlayerActionType ControlsMediator::getPlayerActionType(
     int action_id
 ) const {
-    for(size_t b = 0; b < player_action_types.size(); b++) {
-        if(player_action_types[b].id == action_id) {
-            return player_action_types[b];
+    for(size_t b = 0; b < playerActionTypes.size(); b++) {
+        if(playerActionTypes[b].id == action_id) {
+            return playerActionTypes[b];
         }
     }
     return PfePlayerActionType();
@@ -214,9 +214,9 @@ PfePlayerActionType ControlsMediator::getPlayerActionType(
 string ControlsMediator::getPlayerActionTypeInternalName(
     int action_id
 ) {
-    for(size_t b = 0; b < player_action_types.size(); b++) {
-        if(player_action_types[b].id == action_id) {
-            return player_action_types[b].internal_name;
+    for(size_t b = 0; b < playerActionTypes.size(); b++) {
+        if(playerActionTypes[b].id == action_id) {
+            return playerActionTypes[b].internalName;
         }
     }
     return "";
@@ -308,7 +308,7 @@ void ControlsMediator::loadBindsFromDataNode(
         getAllPlayerActionTypes();
         
     for(size_t a = 0; a < player_action_types.size(); a++) {
-        string action_type_name = player_action_types[a].internal_name;
+        string action_type_name = player_action_types[a].internalName;
         if(action_type_name.empty()) continue;
         
         DataNode* bind_node = node->getChildByName(action_type_name);
@@ -396,7 +396,7 @@ void ControlsMediator::saveBindsToDataNode(
     
     //Fill the defaults, which are all empty strings.
     for(size_t b = 0; b < player_action_types.size(); b++) {
-        string action_type_name = player_action_types[b].internal_name;
+        string action_type_name = player_action_types[b].internalName;
         if(action_type_name.empty()) continue;
         bind_strs[action_type_name].clear();
     }
@@ -406,7 +406,7 @@ void ControlsMediator::saveBindsToDataNode(
         if(all_binds[b].playerNr != player_nr) continue;
         PfePlayerActionType action_type =
             getPlayerActionType(all_binds[b].actionTypeId);
-        bind_strs[action_type.internal_name] +=
+        bind_strs[action_type.internalName] +=
             inputSourceToStr(all_binds[b].inputSource) + ";";
     }
     

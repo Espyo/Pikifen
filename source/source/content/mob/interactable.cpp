@@ -22,6 +22,6 @@ Interactable::Interactable(
     const Point &pos, InteractableType* type, float angle
 ):
     Mob(pos, type, angle),
-    int_type(type) {
+    intType(type) {
     
 }

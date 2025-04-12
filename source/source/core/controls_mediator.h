@@ -293,10 +293,10 @@ struct PfePlayerActionType : public PlayerActionType {
     string description;
     
     //Its name in the options file.
-    string internal_name;
+    string internalName;
     
     //String representing of this action type's default control bind.
-    string default_bind_str;
+    string defaultBindStr;
     
 };
 
@@ -350,7 +350,7 @@ struct ControlsMediator {
     //--- Members ---
     
     //List of registered player action types.
-    vector<PfePlayerActionType> player_action_types;
+    vector<PfePlayerActionType> playerActionTypes;
     
     //Controls manager.
     ControlsManager mgr;

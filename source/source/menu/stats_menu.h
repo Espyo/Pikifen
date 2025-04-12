@@ -49,10 +49,10 @@ private:
     //--- Members ---
     
     //Statistics list item.
-    ListGuiItem* stats_list = nullptr;
+    ListGuiItem* statsList = nullptr;
     
     //Runtime stat text item.
-    TextGuiItem* runtime_value_text = nullptr;
+    TextGuiItem* runtimeValueText = nullptr;
     
     
     //--- Function declarations ---

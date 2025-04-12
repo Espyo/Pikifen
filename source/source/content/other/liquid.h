@@ -38,25 +38,25 @@ struct Liquid : public Content {
     //--- Members ---
     
     //Color the body of liquid is.
-    ALLEGRO_COLOR body_color = COLOR_BLACK;
+    ALLEGRO_COLOR bodyColor = COLOR_BLACK;
     
     //Color the shine of liquid is.
-    ALLEGRO_COLOR shine_color = COLOR_WHITE;
+    ALLEGRO_COLOR shineColor = COLOR_WHITE;
     
     //Color used for this liquid in the radar.
-    ALLEGRO_COLOR radar_color = COLOR_EMPTY;
+    ALLEGRO_COLOR radarColor = COLOR_EMPTY;
     
     //Maximum displacement amount.
-    Point distortion_amount = Point(14.0f, 4.0f);
+    Point distortionAmount = Point(14.0f, 4.0f);
     
     //Noise threshold for how much of the liquid will have no shines.
-    float shine_min_threshold = 0.5f;
+    float shineMinThreshold = 0.5f;
     
     //Noise threshold for how much of the liquid fully covered in shines.
-    float shine_max_threshold = 1.0f;
+    float shineMaxThreshold = 1.0f;
     
     //How fast the water animates.
-    float anim_speed = 1;
+    float animSpeed = 1;
     
     //--- Function declarations ---
     

@@ -168,102 +168,102 @@ void GameConfig::load(DataNode* file) {
     //Aesthetic general.
     {
         ReaderSetter ars(file->getChildByName("aesthetic_general"));
-
-        ars.set("carrying_color_move", aesthetic_gen.carrying_color_move);
-        ars.set("carrying_color_stop", aesthetic_gen.carrying_color_stop);
-        ars.set("cursor_spin_speed", aesthetic_gen.cursor_spin_speed);
-        ars.set("gameplay_msg_char_interval", aesthetic_gen.g_msg_ch_interval);
-        ars.set("no_pikmin_color", aesthetic_gen.no_pikmin_color);
-
-        aesthetic_gen.cursor_spin_speed =
-            degToRad(aesthetic_gen.cursor_spin_speed);
+        
+        ars.set("carrying_color_move", aestheticGen.carryingColorMove);
+        ars.set("carrying_color_stop", aestheticGen.carryingColorStop);
+        ars.set("cursor_spin_speed", aestheticGen.cursorSpinSpeed);
+        ars.set("gameplay_msg_char_interval", aestheticGen.gameplayMsgChInterval);
+        ars.set("no_pikmin_color", aestheticGen.noPikminColor);
+        
+        aestheticGen.cursorSpinSpeed =
+            degToRad(aestheticGen.cursorSpinSpeed);
     }
-
+    
     //Aesthetic radar.
     {
         ReaderSetter ars(file->getChildByName("aesthetic_radar"));
-
-        ars.set("background_color", aesthetic_radar.background_color);
-        ars.set("edge_color", aesthetic_radar.edge_color);
-        ars.set("highest_color", aesthetic_radar.highest_color);
-        ars.set("lowest_color", aesthetic_radar.lowest_color);
+        
+        ars.set("background_color", aestheticRadar.backgroundColor);
+        ars.set("edge_color", aestheticRadar.edgeColor);
+        ars.set("highest_color", aestheticRadar.highestColor);
+        ars.set("lowest_color", aestheticRadar.lowestColor);
     }
-
+    
     //Carrying.
     {
         ReaderSetter crs(file->getChildByName("carrying"));
         
-        crs.set("speed_base_mult", carrying.speed_base_mult);
-        crs.set("speed_max_mult", carrying.speed_max_mult);
-        crs.set("speed_weight_mult", carrying.speed_weight_mult);
+        crs.set("speed_base_mult", carrying.speedBaseMult);
+        crs.set("speed_max_mult", carrying.speedMaxMult);
+        crs.set("speed_weight_mult", carrying.speedWeightMult);
     }
-
+    
     //General.
     {
         ReaderSetter grs(file->getChildByName("general"));
-
+        
         grs.set("game_name", general.name);
         grs.set("game_version", general.version);
     }
-
+    
     //Leaders.
     {
         ReaderSetter lrs(file->getChildByName("leaders"));
         string leader_order_str;
-
-        lrs.set("group_member_grab_range", leaders.group_member_grab_range);
-        lrs.set("next_pluck_range", leaders.next_pluck_range);
-        lrs.set("onion_open_range", leaders.onion_open_range);
+        
+        lrs.set("group_member_grab_range", leaders.groupMemberGrabRange);
+        lrs.set("next_pluck_range", leaders.nextPluckRange);
+        lrs.set("onion_open_range", leaders.onionOpenRange);
         lrs.set("order", leader_order_str);
-        lrs.set("pluck_range", leaders.pluck_range);
-        lrs.set("standard_height", leaders.standard_height);
-        lrs.set("standard_radius", leaders.standard_radius);        
-
-        leaders.order_strings = semicolonListToVector(leader_order_str);
+        lrs.set("pluck_range", leaders.pluckRange);
+        lrs.set("standard_height", leaders.standardHeight);
+        lrs.set("standard_radius", leaders.standardRadius);
+        
+        leaders.orderStrings = semicolonListToVector(leader_order_str);
     }
-
+    
     //Misc.
     {
         ReaderSetter mrs(file->getChildByName("misc"));
         string spray_order_str;
-   
-        mrs.set("day_minutes_end", misc.day_minutes_end);
-        mrs.set("day_minutes_start", misc.day_minutes_start);
+        
+        mrs.set("day_minutes_end", misc.dayMinutesEnd);
+        mrs.set("day_minutes_start", misc.dayMinutesStart);
         mrs.set("spray_order", spray_order_str);
-     
-        misc.spray_order_strings = semicolonListToVector(spray_order_str);
+        
+        misc.sprayOrderStrings = semicolonListToVector(spray_order_str);
     }
-
+    
     //Pikmin.
     {
         ReaderSetter prs(file->getChildByName("pikmin"));
         string pikmin_order_str;
-
-        prs.set("chase_range", pikmin.chase_range);
-        prs.set("idle_bump_delay", pikmin.idle_bump_delay);
-        prs.set("idle_bump_range", pikmin.idle_bump_range);
-        prs.set("idle_task_range", pikmin.idle_task_range);
-        prs.set("maturity_power_mult", pikmin.maturity_power_mult);
-        prs.set("maturity_speed_mult", pikmin.maturity_speed_mult);
+        
+        prs.set("chase_range", pikmin.chaseRange);
+        prs.set("idle_bump_delay", pikmin.idleBumpDelay);
+        prs.set("idle_bump_range", pikmin.idleBumpRange);
+        prs.set("idle_task_range", pikmin.idleTaskRange);
+        prs.set("maturity_power_mult", pikmin.maturityPowerMult);
+        prs.set("maturity_speed_mult", pikmin.maturitySpeedMult);
         prs.set("order", pikmin_order_str);
-        prs.set("standard_height", pikmin.standard_height);
-        prs.set("standard_radius", pikmin.standard_radius);
-        prs.set("swarm_task_range", pikmin.swarm_task_range);
-
-        pikmin.order_strings = semicolonListToVector(pikmin_order_str);
+        prs.set("standard_height", pikmin.standardHeight);
+        prs.set("standard_radius", pikmin.standardRadius);
+        prs.set("swarm_task_range", pikmin.swarmTaskRange);
+        
+        pikmin.orderStrings = semicolonListToVector(pikmin_order_str);
     }
-
+    
     //Rules.
     {
         ReaderSetter rrs(file->getChildByName("rules"));
         
-        rrs.set("can_throw_leaders", rules.can_throw_leaders);
-        rrs.set("cursor_max_dist", rules.cursor_max_dist);
-        rrs.set("max_pikmin_in_field", rules.max_pikmin_in_field);
-        rrs.set("throw_max_dist", rules.throw_max_dist);
-        rrs.set("whistle_growth_speed", rules.whistle_growth_speed);
-        rrs.set("whistle_max_dist", rules.whistle_max_dist);
-        rrs.set("zoom_max_level", rules.zoom_max_level);
-        rrs.set("zoom_min_level", rules.zoom_min_level);
+        rrs.set("can_throw_leaders", rules.canThrowLeaders);
+        rrs.set("cursor_max_dist", rules.cursorMaxDist);
+        rrs.set("max_pikmin_in_field", rules.maxPikminInField);
+        rrs.set("throw_max_dist", rules.throwMaxDist);
+        rrs.set("whistle_growth_speed", rules.whistleGrowthSpeed);
+        rrs.set("whistle_max_dist", rules.whistleMaxDist);
+        rrs.set("zoom_max_level", rules.zoomMaxLevel);
+        rrs.set("zoom_min_level", rules.zoomMinLevel);
     }
 }

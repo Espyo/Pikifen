@@ -24,7 +24,7 @@
 TreasureType::TreasureType() :
     MobType(MOB_CATEGORY_TREASURES) {
     
-    target_type = MOB_TARGET_FLAG_NONE;
+    targetType = MOB_TARGET_FLAG_NONE;
     
     treasure_fsm::createFsm(this);
 }

@@ -35,7 +35,7 @@ void drawEdgeOffsetOnBuffer(
 ) {
     //Keep the end opacity as a constant. Changing it helps with debugging.
     const float END_OPACITY = 0.0f;
-    Edge* e_ptr = game.cur_area_data->edges[e_idx];
+    Edge* e_ptr = game.curAreaData->edges[e_idx];
     
     //End vertexes. Like in updateOffsetEffectCaches, order is important.
     Vertex* end_vertexes[2];
@@ -48,7 +48,7 @@ void drawEdgeOffsetOnBuffer(
     //Color of the effect, for each end vertex.
     ALLEGRO_COLOR end_colors[2];
     
-    if(caches[e_idx].first_end_vertex_idx == 0) {
+    if(caches[e_idx].firstEndVertexIdx == 0) {
         end_vertexes[0] = e_ptr->vertexes[0];
         end_vertexes[1] = e_ptr->vertexes[1];
     } else {
@@ -63,8 +63,8 @@ void drawEdgeOffsetOnBuffer(
         if(length == 0.0f) continue;
         
         float angle = caches[e_idx].angles[end];
-        float elbow_length = caches[e_idx].elbow_lengths[end];
-        float elbow_angle = caches[e_idx].elbow_angles[end];
+        float elbow_length = caches[e_idx].elbowLengths[end];
+        float elbow_angle = caches[e_idx].elbowAngles[end];
         end_colors[end] = caches[e_idx].colors[end];
         
         //This end of the effect starts at the vertex,
@@ -131,7 +131,7 @@ void drawEdgeOffsetOnBuffer(
     //Let's transform the "rectangle" coordinates for the buffer.
     for(unsigned char v = 0; v < 4; v++) {
         al_transform_coordinates(
-            &game.world_to_screen_transform, &av[v].x, &av[v].y
+            &game.worldToScreenTransform, &av[v].x, &av[v].y
         );
     }
     
@@ -164,7 +164,7 @@ void drawEdgeOffsetOnBuffer(
             elbow_av[e][v + 2].color = end_colors[e];
             elbow_av[e][v + 2].color.a = END_OPACITY;
             al_transform_coordinates(
-                &game.world_to_screen_transform,
+                &game.worldToScreenTransform,
                 &elbow_av[e][v + 2].x, &elbow_av[e][v + 2].y
             );
         }
@@ -193,7 +193,7 @@ void drawEdgeOffsetOnBuffer(
 void drawSectorEdgeOffsets(
     Sector* s_ptr, ALLEGRO_BITMAP* buffer, float opacity
 ) {
-    if(s_ptr->is_bottomless_pit) return;
+    if(s_ptr->isBottomlessPit) return;
     
     size_t n_vertexes = s_ptr->triangles.size() * 3;
     ALLEGRO_VERTEX* av = new ALLEGRO_VERTEX[n_vertexes];
@@ -207,7 +207,7 @@ void drawSectorEdgeOffsets(
         av[v].x = vx;
         av[v].y = vy;
         al_transform_coordinates(
-            &game.world_to_screen_transform, &vx, &vy
+            &game.worldToScreenTransform, &vx, &vy
         );
         av[v].u = vx;
         av[v].v = vy;
@@ -644,8 +644,8 @@ void updateOffsetEffectBuffer(
 ) {
     unordered_set<size_t> edges;
     
-    for(size_t s = 0; s < game.cur_area_data->sectors.size(); s++) {
-        Sector* s_ptr = game.cur_area_data->sectors[s];
+    for(size_t s = 0; s < game.curAreaData->sectors.size(); s++) {
+        Sector* s_ptr = game.curAreaData->sectors[s];
         
         if(
             !rectanglesIntersect(
@@ -684,7 +684,7 @@ void updateOffsetEffectBuffer(
                 }
             }
             
-            edges.insert(s_ptr->edge_idxs[e]);
+            edges.insert(s_ptr->edgeIdxs[e]);
         }
     }
     
@@ -741,11 +741,11 @@ void updateOffsetEffectCaches (
 ) {
     unordered_set<size_t> edges_to_update;
     for(Vertex* v : vertexes_to_update) {
-        edges_to_update.insert(v->edge_idxs.begin(), v->edge_idxs.end());
+        edges_to_update.insert(v->edgeIdxs.begin(), v->edgeIdxs.end());
     }
     
     for(size_t e : edges_to_update) {
-        Edge* e_ptr = game.cur_area_data->edges[e];
+        Edge* e_ptr = game.curAreaData->edges[e];
         
         Sector* unaffected_sector = nullptr;
         Sector* affected_sector = nullptr;
@@ -765,11 +765,11 @@ void updateOffsetEffectCaches (
         if(e_ptr->sectors[0] == affected_sector) {
             ends_to_process[0] = e_ptr->vertexes[0];
             ends_to_process[1] = e_ptr->vertexes[1];
-            caches[e].first_end_vertex_idx = 0;
+            caches[e].firstEndVertexIdx = 0;
         } else {
             ends_to_process[0] = e_ptr->vertexes[1];
             ends_to_process[1] = e_ptr->vertexes[0];
-            caches[e].first_end_vertex_idx = 1;
+            caches[e].firstEndVertexIdx = 1;
         }
         float edge_process_angle =
             getAngle(v2p(ends_to_process[0]), v2p(ends_to_process[1]));
@@ -803,8 +803,8 @@ void updateOffsetEffectCaches (
             caches[e].lengths[end] = length;
             caches[e].angles[end] = normalizeAngle(angle);
             caches[e].colors[end] = end_color;
-            caches[e].elbow_angles[end] = normalizeAngle(elbow_angle);
-            caches[e].elbow_lengths[end] = elbow_length;
+            caches[e].elbowAngles[end] = normalizeAngle(elbow_angle);
+            caches[e].elbowLengths[end] = elbow_length;
         }
     }
 }

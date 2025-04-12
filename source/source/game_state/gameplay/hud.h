@@ -82,7 +82,7 @@ struct Hud {
         float ratio = 0.0f;
         
         //Timer for the low-health caution animation.
-        float caution_timer = 0.0f;
+        float cautionTimer = 0.0f;
         
     };
     
@@ -93,94 +93,94 @@ struct Hud {
     GuiManager gui;
     
     //Bubble graphic, used for the HUD.
-    ALLEGRO_BITMAP* bmp_bubble = nullptr;
+    ALLEGRO_BITMAP* bmpBubble = nullptr;
     
     //Group counter bubble graphic, used for the HUD.
-    ALLEGRO_BITMAP* bmp_counter_bubble_group = nullptr;
+    ALLEGRO_BITMAP* bmpCounterBubbleGroup = nullptr;
     
     //Field counter bubble graphic, used for the HUD.
-    ALLEGRO_BITMAP* bmp_counter_bubble_field = nullptr;
+    ALLEGRO_BITMAP* bmpCounterBubbleField = nullptr;
     
     //Standby counter bubble graphic, used for the HUD.
-    ALLEGRO_BITMAP* bmp_counter_bubble_standby = nullptr;
+    ALLEGRO_BITMAP* bmpCounterBubbleStandby = nullptr;
     
     //Total counter bubble graphic, used for the HUD.
-    ALLEGRO_BITMAP* bmp_counter_bubble_total = nullptr;
+    ALLEGRO_BITMAP* bmpCounterBubbleTotal = nullptr;
     
     //Day counter bubble graphic, used for the HUD.
-    ALLEGRO_BITMAP* bmp_day_bubble = nullptr;
+    ALLEGRO_BITMAP* bmpDayBubble = nullptr;
     
     //Distant Pikmin marker graphic, used for the HUD.
-    ALLEGRO_BITMAP* bmp_distant_pikmin_marker = nullptr;
+    ALLEGRO_BITMAP* bmpDistantPikminMarker = nullptr;
     
     //Hard bubble graphic, used for the HUD.
-    ALLEGRO_BITMAP* bmp_hard_bubble = nullptr;
+    ALLEGRO_BITMAP* bmpHardBubble = nullptr;
     
     //No Pikmin marker graphic, used for the HUD.
-    ALLEGRO_BITMAP* bmp_no_pikmin_bubble = nullptr;
+    ALLEGRO_BITMAP* bmpNoPikminBubble = nullptr;
     
     //Sun icon graphic, used for the HUD.
-    ALLEGRO_BITMAP* bmp_sun = nullptr;
+    ALLEGRO_BITMAP* bmpSun = nullptr;
     
     //Bubble manager for leader icon items.
-    HudBubbleManager<LeaderIconBubble> leader_icon_mgr;
+    HudBubbleManager<LeaderIconBubble> leaderIconMgr;
     
     //Bubble manager for leader health items.
-    HudBubbleManager<LeaderHealthBubble> leader_health_mgr;
+    HudBubbleManager<LeaderHealthBubble> leaderHealthMgr;
     
     //Bubble manager for the standby type.
-    HudBubbleManager<ALLEGRO_BITMAP*> standby_icon_mgr;
+    HudBubbleManager<ALLEGRO_BITMAP*> standbyIconMgr;
     
     //Bubble manager for the spray icons.
-    HudBubbleManager<ALLEGRO_BITMAP*> spray_icon_mgr;
+    HudBubbleManager<ALLEGRO_BITMAP*> sprayIconMgr;
     
     //Opacity of the standby HUD items.
-    float standby_items_opacity = 0.0f;
+    float standbyItemsOpacity = 0.0f;
     
     //Time left before the standby items start fading out.
-    float standby_items_fade_timer = 0.0f;
+    float standbyItemsFadeTimer = 0.0f;
     
     //Opacity of the spray HUD items.
-    float spray_items_opacity = 0.0f;
+    float sprayItemsOpacity = 0.0f;
     
     //Time left before the spray items start fading out.
-    float spray_items_fade_timer = 0.0f;
+    float sprayItemsFadeTimer = 0.0f;
     
     //Standby type in the previous frame.
-    SubgroupType* prev_standby_type = nullptr;
+    SubgroupType* prevStandbyType = nullptr;
     
     //Maturity icon in the previous frame.
-    ALLEGRO_BITMAP* prev_maturity_icon = nullptr;
+    ALLEGRO_BITMAP* prevMaturityIcon = nullptr;
     
     //Spray 1 amount text. Cache for convenience.
-    GuiItem* spray_1_amount = nullptr;
+    GuiItem* spray1Amount = nullptr;
     
     //Spray 2 amount text. Cache for convenience.
-    GuiItem* spray_2_amount = nullptr;
+    GuiItem* spray2Amount = nullptr;
     
     //Current standby count.
-    size_t standby_count_nr = 0;
+    size_t standbyCountNr = 0;
     
     //Standby count text. Cache for convenience.
-    GuiItem* standby_amount = nullptr;
+    GuiItem* standbyAmount = nullptr;
     
     //Current group count.
-    size_t group_count_nr = 0;
+    size_t groupCountNr = 0;
     
     //Group count text. Cache for convenience.
-    GuiItem* group_amount = nullptr;
+    GuiItem* groupAmount = nullptr;
     
     //Current field count.
-    size_t field_count_nr = 0;
+    size_t fieldCountNr = 0;
     
     //Field count text. Cache for convenience.
-    GuiItem* field_amount = nullptr;
+    GuiItem* fieldAmount = nullptr;
     
     //Current total count.
-    size_t total_count_nr = 0;
+    size_t totalCountNr = 0;
     
     //Total count text. Cache for convenience.
-    GuiItem* total_amount = nullptr;
+    GuiItem* totalAmount = nullptr;
     
     
     //--- Function declarations ---

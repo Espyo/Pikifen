@@ -97,13 +97,13 @@ private:
     map<HELP_CATEGORY, vector<Tidbit> > tidbits;
     
     //Currently shown tidbit, if any.
-    Tidbit* cur_tidbit = nullptr;
+    Tidbit* curTidbit = nullptr;
     
     //Category text GUI item.
-    TextGuiItem* category_text = nullptr;
+    TextGuiItem* categoryText = nullptr;
     
     //Tidbit list.
-    ListGuiItem* tidbit_list = nullptr;
+    ListGuiItem* tidbitList = nullptr;
     
     
     //--- Function declarations ---

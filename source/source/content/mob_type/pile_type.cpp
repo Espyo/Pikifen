@@ -23,16 +23,16 @@
 PileType::PileType() :
     MobType(MOB_CATEGORY_PILES) {
     
-    target_type = MOB_TARGET_FLAG_PIKMIN_OBSTACLE;
+    targetType = MOB_TARGET_FLAG_PIKMIN_OBSTACLE;
     
     AreaEditorProp aep_amount;
     aep_amount.name = "Amount";
     aep_amount.var = "amount";
     aep_amount.type = AEMP_TYPE_TEXT;
-    aep_amount.def_value = "";
+    aep_amount.defValue = "";
     aep_amount.tooltip =
         "How many resources this pile starts with, or leave empty for the max.";
-    area_editor_props.push_back(aep_amount);
+    areaEditorProps.push_back(aep_amount);
     
     pile_fsm::createFsm(this);
 }
@@ -64,20 +64,20 @@ void PileType::loadCatProperties(DataNode* file) {
     string size_animation_suffixes_str;
     DataNode* contents_node = nullptr;
     
-    rs.set("auto_shrink_smallest_radius", auto_shrink_smallest_radius);
-    rs.set("can_drop_multiple", can_drop_multiple);
+    rs.set("auto_shrink_smallest_radius", autoShrinkSmallestRadius);
+    rs.set("can_drop_multiple", canDropMultiple);
     rs.set("contents", contents_str, &contents_node);
-    rs.set("delete_when_finished", delete_when_finished);
-    rs.set("health_per_resource", health_per_resource);
-    rs.set("hide_when_empty", hide_when_empty);
-    rs.set("max_amount", max_amount);
-    rs.set("recharge_amount", recharge_amount);
-    rs.set("recharge_interval", recharge_interval);
-    rs.set("show_amount", show_amount);
+    rs.set("delete_when_finished", deleteWhenFinished);
+    rs.set("health_per_resource", healthPerResource);
+    rs.set("hide_when_empty", hideWhenEmpty);
+    rs.set("max_amount", maxAmount);
+    rs.set("recharge_amount", rechargeAmount);
+    rs.set("recharge_interval", rechargeInterval);
+    rs.set("show_amount", showAmount);
     rs.set("size_animation_suffixes", size_animation_suffixes_str);
     
-    auto res_type = game.content.mob_types.list.resource.find(contents_str);
-    if(res_type != game.content.mob_types.list.resource.end()) {
+    auto res_type = game.content.mobTypes.list.resource.find(contents_str);
+    if(res_type != game.content.mobTypes.list.resource.end()) {
         contents = res_type->second;
     } else {
         game.errors.report(
@@ -85,14 +85,14 @@ void PileType::loadCatProperties(DataNode* file) {
         );
     }
     
-    animation_group_suffixes =
+    animationGroupSuffixes =
         semicolonListToVector(size_animation_suffixes_str);
         
-    if(animation_group_suffixes.empty()) {
+    if(animationGroupSuffixes.empty()) {
         //Let's make life easier. If no suffixes were given, then create an
         //implied one.
-        animation_group_suffixes.push_back("");
+        animationGroupSuffixes.push_back("");
     }
     
-    max_health = health_per_resource * max_amount;
+    maxHealth = healthPerResource * maxAmount;
 }

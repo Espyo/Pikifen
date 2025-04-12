@@ -85,22 +85,22 @@ void destroyEventThings(
  * @brief Destroys miscellaneous things.
  */
 void destroyMisc() {
-    al_destroy_bitmap(game.bmp_error);
+    al_destroy_bitmap(game.bmpError);
     game.audio.destroy();
     
-    game.sector_types.clear();
-    for(size_t g = 0; g < game.mission_goals.size(); g++) {
-        delete game.mission_goals[g];
+    game.sectorTypes.clear();
+    for(size_t g = 0; g < game.missionGoals.size(); g++) {
+        delete game.missionGoals[g];
     }
-    game.mission_goals.clear();
-    for(size_t c = 0; c < game.mission_fail_conds.size(); c++) {
-        delete game.mission_fail_conds[c];
+    game.missionGoals.clear();
+    for(size_t c = 0; c < game.missionFailConds.size(); c++) {
+        delete game.missionFailConds[c];
     }
-    game.mission_fail_conds.clear();
-    for(size_t c = 0; c < game.mission_score_criteria.size(); c++) {
-        delete game.mission_score_criteria[c];
+    game.missionFailConds.clear();
+    for(size_t c = 0; c < game.missionScoreCriteria.size(); c++) {
+        delete game.missionScoreCriteria[c];
     }
-    game.mission_score_criteria.clear();
+    game.missionScoreCriteria.clear();
 }
 
 
@@ -108,7 +108,7 @@ void destroyMisc() {
  * @brief Destroys registered mob categories.
  */
 void destroyMobCategories() {
-    game.mob_categories.clear();
+    game.mobCategories.clear();
 }
 
 
@@ -645,7 +645,7 @@ void initControls() {
     const vector<PfePlayerActionType> &action_types =
         game.controls.getAllPlayerActionTypes();
     for(size_t a = 0; a < action_types.size(); a++) {
-        const string &def = action_types[a].default_bind_str;
+        const string &def = action_types[a].defaultBindStr;
         if(def.empty()) continue;
         
         ControlBind bind;
@@ -695,19 +695,19 @@ void initDearImGui() {
     };
     
     add_font(
-        &game.sys_content.fnt_imgui_header,
-        game.sys_content_names.fnt_editor_header, 22
+        &game.sysContent.fntDearImGuiHeader,
+        game.sysContentNames.fntEditorHeader, 22
     );
     add_font(
-        &game.sys_content.fnt_imgui_monospace,
-        game.sys_content_names.fnt_editor_monospace, 18
+        &game.sysContent.fntDearImGuiMonospace,
+        game.sysContentNames.fntEditorMonospace, 18
     );
     add_font(
-        &game.sys_content.fnt_imgui_standard,
-        game.sys_content_names.fnt_editor_standard, 18
+        &game.sysContent.fntDearImGuiStandard,
+        game.sysContentNames.fntEditorStandard, 18
     );
     
-    io.FontDefault = game.sys_content.fnt_imgui_standard;
+    io.FontDefault = game.sysContent.fntDearImGuiStandard;
     
     //Other stuff.
     initDearImGuiColors();
@@ -787,7 +787,7 @@ void initDearImGuiColors() {
     
     //Finally, save the default style colors.
     for(size_t c = 0; c < ImGuiCol_COUNT; c++) {
-        game.imgui_default_style[c] = style.Colors[c];
+        game.DearImGuiDefaultStyle[c] = style.Colors[c];
     }
 }
 
@@ -797,8 +797,8 @@ void initDearImGuiColors() {
  */
 void initErrorBitmap() {
     //Error bitmap.
-    game.bmp_error = al_create_bitmap(32, 32);
-    al_set_target_bitmap(game.bmp_error); {
+    game.bmpError = al_create_bitmap(32, 32);
+    al_set_target_bitmap(game.bmpError); {
         al_clear_to_color(al_map_rgba(0, 0, 0, 192));
         al_draw_filled_rectangle(
             0.0, 0.0, 16.0, 16.0,
@@ -809,7 +809,7 @@ void initErrorBitmap() {
             al_map_rgba(255, 0, 255, 192)
         );
     } al_set_target_backbuffer(game.display);
-    game.bmp_error = recreateBitmap(game.bmp_error);
+    game.bmpError = recreateBitmap(game.bmpError);
 }
 
 
@@ -839,36 +839,36 @@ void initEventThings(
         al_get_new_display_flags() |
         ALLEGRO_OPENGL | ALLEGRO_PROGRAMMABLE_PIPELINE
     );
-    if(game.options.advanced.window_pos_hack) al_set_new_window_position(64, 64);
-    if(game.win_fullscreen) {
+    if(game.options.advanced.windowPosHack) al_set_new_window_position(64, 64);
+    if(game.winFullscreen) {
         al_set_new_display_flags(
             al_get_new_display_flags() |
             (
-                game.options.graphics.true_fullscreen ?
+                game.options.graphics.trueFullscreen ?
                 ALLEGRO_FULLSCREEN :
                 ALLEGRO_FULLSCREEN_WINDOW
             )
         );
     }
-    game.display = al_create_display(game.win_w, game.win_h);
+    game.display = al_create_display(game.winW, game.winH);
     
     //It's possible that this resolution is not valid for fullscreen.
     //Detect this and try again in windowed.
-    if(!game.display && game.win_fullscreen) {
+    if(!game.display && game.winFullscreen) {
         game.errors.report(
             "Could not create a fullscreen window with the resolution " +
-            i2s(game.win_w) + "x" + i2s(game.win_h) + ". "
+            i2s(game.winW) + "x" + i2s(game.winH) + ". "
             "Setting the fullscreen option back to false. "
             "You can try a different resolution, "
             "preferably one from the options menu."
         );
-        game.win_fullscreen = false;
-        game.options.graphics.intended_win_fullscreen = false;
+        game.winFullscreen = false;
+        game.options.graphics.intendedWinFullscreen = false;
         saveOptions();
         al_set_new_display_flags(
             al_get_new_display_flags() & ~ALLEGRO_FULLSCREEN
         );
-        game.display = al_create_display(game.win_w, game.win_h);
+        game.display = al_create_display(game.winW, game.winH);
     }
     
     if(!game.display) {
@@ -877,9 +877,9 @@ void initEventThings(
     
     //For some reason some resolutions aren't properly created under Windows.
     //This hack fixes it.
-    al_resize_display(game.display, game.win_w, game.win_h);
+    al_resize_display(game.display, game.winW, game.winH);
     
-    main_timer = al_create_timer(1.0f / game.options.advanced.target_fps);
+    main_timer = al_create_timer(1.0f / game.options.advanced.targetFps);
     if(!main_timer) {
         reportFatalError("Could not create the main game timer!");
     }
@@ -904,41 +904,41 @@ void initEventThings(
  * @brief Initializes miscellaneous things and settings.
  */
 void initMisc() {
-    game.mouse_cursor.init();
+    game.mouseCursor.init();
     game.shaders.compileShaders();
     
     al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
     al_set_window_title(game.display, "Pikifen");
     int new_bitmap_flags = ALLEGRO_NO_PREMULTIPLIED_ALPHA;
-    if(game.options.advanced.smooth_scaling) {
+    if(game.options.advanced.smoothScaling) {
         enableFlag(new_bitmap_flags, ALLEGRO_MAG_LINEAR);
         enableFlag(new_bitmap_flags, ALLEGRO_MIN_LINEAR);
     }
-    if(game.options.advanced.mipmaps_enabled) {
+    if(game.options.advanced.mipmapsEnabled) {
         enableFlag(new_bitmap_flags, ALLEGRO_MIPMAP);
     }
     al_set_new_bitmap_flags(new_bitmap_flags);
     al_reserve_samples(16);
     
-    al_identity_transform(&game.identity_transform);
+    al_identity_transform(&game.identityTransform);
     
     game.rng.init();
     
-    game.states.gameplay->whistle.next_dot_timer.start();
-    game.states.gameplay->whistle.next_ring_timer.start();
+    game.states.gameplay->whistle.nextDotTimer.start();
+    game.states.gameplay->whistle.nextRingTimer.start();
     
     game.states.gameplay->particles =
-        ParticleManager(game.options.advanced.max_particles);
+        ParticleManager(game.options.advanced.maxParticles);
         
-    game.options.advanced.zoom_mid_level =
+    game.options.advanced.zoomMidLevel =
         std::clamp(
-            game.options.advanced.zoom_mid_level,
-            game.config.rules.zoom_min_level,
-            game.config.rules.zoom_max_level
+            game.options.advanced.zoomMidLevel,
+            game.config.rules.zoomMinLevel,
+            game.config.rules.zoomMaxLevel
         );
         
-    game.liquid_limit_effect_buffer = al_create_bitmap(game.win_w, game.win_h);
-    game.wall_offset_effect_buffer = al_create_bitmap(game.win_w, game.win_h);
+    game.liquidLimitEffectBuffer = al_create_bitmap(game.winW, game.winH);
+    game.wallOffsetEffectBuffer = al_create_bitmap(game.winW, game.winH);
 }
 
 
@@ -947,79 +947,79 @@ void initMisc() {
  */
 void initMiscDatabases() {
     //Sector types.
-    game.sector_types.registerItem(
+    game.sectorTypes.registerItem(
         SECTOR_TYPE_NORMAL, "normal"
     );
-    game.sector_types.registerItem(
+    game.sectorTypes.registerItem(
         SECTOR_TYPE_BLOCKING, "blocking"
     );
     
     //Mission goals.
     //Order matters, and should match MISSION_GOAL.
-    game.mission_goals.push_back(
+    game.missionGoals.push_back(
         new MissionGoalEndManually()
     );
-    game.mission_goals.push_back(
+    game.missionGoals.push_back(
         new MissionGoalCollectTreasures()
     );
-    game.mission_goals.push_back(
+    game.missionGoals.push_back(
         new MissionGoalBattleEnemies()
     );
-    game.mission_goals.push_back(
+    game.missionGoals.push_back(
         new MissionGoalTimedSurvival()
     );
-    game.mission_goals.push_back(
+    game.missionGoals.push_back(
         new MissionGoalGetToExit()
     );
-    game.mission_goals.push_back(
+    game.missionGoals.push_back(
         new MissionGoalGrowPikmin()
     );
     
     //Mission fail conditions.
     //Order matters, and should match MISSION_FAIL_COND.
-    game.mission_fail_conds.push_back(
+    game.missionFailConds.push_back(
         new MissionFailTimeLimit()
     );
-    game.mission_fail_conds.push_back(
+    game.missionFailConds.push_back(
         new MissionFailTooFewPikmin()
     );
-    game.mission_fail_conds.push_back(
+    game.missionFailConds.push_back(
         new MissionFailTooManyPikmin()
     );
-    game.mission_fail_conds.push_back(
+    game.missionFailConds.push_back(
         new MissionFailLosePikmin()
     );
-    game.mission_fail_conds.push_back(
+    game.missionFailConds.push_back(
         new MissionFailTakeDamage()
     );
-    game.mission_fail_conds.push_back(
+    game.missionFailConds.push_back(
         new MissionFailLoseLeaders()
     );
-    game.mission_fail_conds.push_back(
+    game.missionFailConds.push_back(
         new MissionFailKillEnemies()
     );
-    game.mission_fail_conds.push_back(
+    game.missionFailConds.push_back(
         new MissionFailPauseMenu()
     );
     
     //Mission score criteria.
     //Order matters, and should match MISSION_SCORE_CRITERIA.
-    game.mission_score_criteria.push_back(
+    game.missionScoreCriteria.push_back(
         new MissionScoreCriterionPikminBorn()
     );
-    game.mission_score_criteria.push_back(
+    game.missionScoreCriteria.push_back(
         new MissionScoreCriterionPikminDeath()
     );
-    game.mission_score_criteria.push_back(
+    game.missionScoreCriteria.push_back(
         new MissionScoreCriterionSecLeft()
     );
-    game.mission_score_criteria.push_back(
+    game.missionScoreCriteria.push_back(
         new MissionScoreCriterionSecPassed()
     );
-    game.mission_score_criteria.push_back(
+    game.missionScoreCriteria.push_back(
         new MissionScoreCriterionTreasurePoints()
     );
-    game.mission_score_criteria.push_back(
+    game.missionScoreCriteria.push_back(
         new MissionScoreCriterionEnemyPoints()
     );
 }
@@ -1033,16 +1033,16 @@ void initMobActions() {
 #define reg_param(p_name, p_type, constant, extras) \
     params.push_back(MobActionParam(p_name, p_type, constant, extras));
 #define reg_action(a_type, a_name, run_code, load_code) \
-    a = &(game.mob_actions[a_type]); \
+    a = &(game.mobActions[a_type]); \
     a->type = a_type; \
     a->name = a_name; \
     a->code = run_code; \
-    a->extra_load_logic = load_code; \
+    a->extraLoadLogic = load_code; \
     a->parameters = params; \
     params.clear();
 
 
-    game.mob_actions.assign(N_MOB_ACTIONS, MobAction());
+    game.mobActions.assign(N_MOB_ACTIONS, MobAction());
     vector<MobActionParam> params;
     MobAction* a;
     
@@ -1771,67 +1771,67 @@ void initMobActions() {
  */
 void initMobCategories() {
 
-    game.mob_categories.registerCategory(
+    game.mobCategories.registerCategory(
         MOB_CATEGORY_NONE, new NoneCategory()
     );
-    game.mob_categories.registerCategory(
+    game.mobCategories.registerCategory(
         MOB_CATEGORY_PIKMIN, new PikminCategory()
     );
-    game.mob_categories.registerCategory(
+    game.mobCategories.registerCategory(
         MOB_CATEGORY_ONIONS, new OnionCategory()
     );
-    game.mob_categories.registerCategory(
+    game.mobCategories.registerCategory(
         MOB_CATEGORY_LEADERS, new LeaderCategory()
     );
-    game.mob_categories.registerCategory(
+    game.mobCategories.registerCategory(
         MOB_CATEGORY_ENEMIES, new EnemyCategory()
     );
-    game.mob_categories.registerCategory(
+    game.mobCategories.registerCategory(
         MOB_CATEGORY_TREASURES, new TreasureCategory()
     );
-    game.mob_categories.registerCategory(
+    game.mobCategories.registerCategory(
         MOB_CATEGORY_PELLETS, new PelletCategory()
     );
-    game.mob_categories.registerCategory(
+    game.mobCategories.registerCategory(
         MOB_CATEGORY_CONVERTERS, new ConverterCategory()
     );
-    game.mob_categories.registerCategory(
+    game.mobCategories.registerCategory(
         MOB_CATEGORY_DROPS, new DropCategory()
     );
-    game.mob_categories.registerCategory(
+    game.mobCategories.registerCategory(
         MOB_CATEGORY_RESOURCES, new ResourceCategory()
     );
-    game.mob_categories.registerCategory(
+    game.mobCategories.registerCategory(
         MOB_CATEGORY_PILES, new PileCategory()
     );
-    game.mob_categories.registerCategory(
+    game.mobCategories.registerCategory(
         MOB_CATEGORY_TOOLS, new ToolCategory()
     );
-    game.mob_categories.registerCategory(
+    game.mobCategories.registerCategory(
         MOB_CATEGORY_SHIPS, new ShipCategory()
     );
-    game.mob_categories.registerCategory(
+    game.mobCategories.registerCategory(
         MOB_CATEGORY_BRIDGES, new BridgeCategory()
     );
-    game.mob_categories.registerCategory(
+    game.mobCategories.registerCategory(
         MOB_CATEGORY_GROUP_TASKS, new GroupTaskCategory()
     );
-    game.mob_categories.registerCategory(
+    game.mobCategories.registerCategory(
         MOB_CATEGORY_SCALES, new ScaleCategory()
     );
-    game.mob_categories.registerCategory(
+    game.mobCategories.registerCategory(
         MOB_CATEGORY_TRACKS, new TrackCategory()
     );
-    game.mob_categories.registerCategory(
+    game.mobCategories.registerCategory(
         MOB_CATEGORY_BOUNCERS, new BouncerCategory()
     );
-    game.mob_categories.registerCategory(
+    game.mobCategories.registerCategory(
         MOB_CATEGORY_DECORATIONS, new DecorationCategory()
     );
-    game.mob_categories.registerCategory(
+    game.mobCategories.registerCategory(
         MOB_CATEGORY_INTERACTABLES, new InteractableCategory()
     );
-    game.mob_categories.registerCategory(
+    game.mobCategories.registerCategory(
         MOB_CATEGORY_CUSTOM, new CustomCategory()
     );
 }

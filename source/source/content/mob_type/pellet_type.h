@@ -52,19 +52,19 @@ public:
     //--- Members ---
     
     //Type of Pikmin this pellet relates to.
-    PikminType* pik_type = nullptr;
+    PikminType* pikType = nullptr;
     
     //Number on the pellet, and hence, its weight.
     size_t number = 0;
     
     //Number of seeds given out if the pellet's taken to a matching Onion.
-    size_t match_seeds = 0;
+    size_t matchSeeds = 0;
     
     //Number of seeds given out if the pellet's taken to a non-matching Onion.
-    size_t non_match_seeds = 0;
+    size_t nonMatchSeeds = 0;
     
     //Bitmap to use to represent the number on the pellet.
-    ALLEGRO_BITMAP* bmp_number = nullptr;
+    ALLEGRO_BITMAP* bmpNumber = nullptr;
     
     
     //--- Function declarations ---

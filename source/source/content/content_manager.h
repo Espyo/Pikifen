@@ -28,16 +28,16 @@ struct PackManager {
     //--- Members ---
     
     //Manifests, sans the base pack, organized via the player's options.
-    vector<string> manifests_sans_base;
+    vector<string> manifestsSansBase;
     
     //Manifests, with the base pack, organized via the player's options.
-    vector<string> manifests_with_base;
+    vector<string> manifestsWithBase;
     
     //Manifests, sans the base pack, not organized via the player's options.
-    vector<string> manifests_sans_base_raw;
+    vector<string> manifestsSansBaseRaw;
     
     //Manifests, with the base pack, not organized via the player's options.
-    vector<string> manifests_with_base_raw;
+    vector<string> manifestsWithBaseRaw;
     
     //List of loaded packs, with the base pack.
     map<string, Pack> list;
@@ -67,10 +67,10 @@ struct ContentManager {
     BitmapContentManager bitmaps;
     
     //Global animation databases.
-    GlobalAnimContentManager global_anim_dbs;
+    GlobalAnimContentManager globalAnimDbs;
     
     //GUI definitions.
-    GuiContentManager gui_defs;
+    GuiContentManager guiDefs;
     
     //Hazards.
     HazardContentManager hazards;
@@ -79,37 +79,37 @@ struct ContentManager {
     LiquidContentManager liquids;
     
     //Misc. configurations.
-    MiscConfigContentManager misc_configs;
+    MiscConfigContentManager miscConfigs;
     
     //Mob animation databases.
-    MobAnimContentManager mob_anim_dbs;
+    MobAnimContentManager mobAnimDbs;
     
     //Mob types.
-    MobTypeContentManager mob_types;
+    MobTypeContentManager mobTypes;
     
     //Particle generators.
-    ParticleGenContentManager particle_gen;
+    ParticleGenContentManager particleGens;
     
     //Songs.
     SongContentManager songs;
     
     //Song tracks.
-    SongTrackContentManager song_tracks;
+    SongTrackContentManager songTracks;
     
     //Sounds.
     SoundContentManager sounds;
     
     //Spike damage types.
-    SpikeDamageTypeContentManager spike_damage_types;
+    SpikeDamageTypeContentManager spikeDamageTypes;
     
     //Spray types.
-    SprayTypeContentManager spray_types;
+    SprayTypeContentManager sprayTypes;
     
     //Status types.
-    StatusTypeContentManager status_types;
+    StatusTypeContentManager statusTypes;
     
     //Weather conditions.
-    WeatherConditionContentManager weather_conditions;
+    WeatherConditionContentManager weatherConditions;
     
     //Packs.
     PackManager packs;
@@ -135,7 +135,7 @@ struct ContentManager {
     
     //--- Members ---
     
-    CONTENT_LOAD_LEVEL load_levels[N_CONTENT_TYPES];
+    CONTENT_LOAD_LEVEL loadLevels[N_CONTENT_TYPES];
     
     
     //--- Function declarations ---

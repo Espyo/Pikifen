@@ -46,7 +46,7 @@ struct ShaderManager {
     //--- Members ---
     
     //Array of compiled shaders,
-    ALLEGRO_SHADER* compiled_shaders[N_SHADER_TYPES];
+    ALLEGRO_SHADER* compiledShaders[N_SHADER_TYPES];
     
     
     //--- Function declarations ---

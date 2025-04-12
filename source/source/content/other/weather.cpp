@@ -42,9 +42,9 @@ Weather::Weather(
     const PRECIPITATION_TYPE pt
 ) :
     daylight(dl),
-    sun_strength(ss),
-    blackout_strength(bs),
-    precipitation_type(pt) {
+    sunStrength(ss),
+    blackoutStrength(bs),
+    precipitationType(pt) {
     
     name = n;
 }
@@ -61,7 +61,7 @@ unsigned char Weather::getBlackoutStrength() {
     unsigned char strength2;
     bool success =
         getTableValues(
-            blackout_strength, game.states.gameplay->day_minutes,
+            blackoutStrength, game.states.gameplay->dayMinutes,
             &ratio, &strength1, &strength2
         );
         
@@ -84,7 +84,7 @@ ALLEGRO_COLOR Weather::getDaylightColor() {
     ALLEGRO_COLOR color2;
     bool success =
         getTableValues(
-            daylight, game.states.gameplay->day_minutes,
+            daylight, game.states.gameplay->dayMinutes,
             &ratio, &color1, &color2
         );
         
@@ -107,7 +107,7 @@ ALLEGRO_COLOR Weather::getFogColor() {
     ALLEGRO_COLOR color2;
     bool success =
         getTableValues(
-            fog_color, game.states.gameplay->day_minutes,
+            fogColor, game.states.gameplay->dayMinutes,
             &ratio, &color1, &color2
         );
         
@@ -130,7 +130,7 @@ float Weather::getSunStrength() {
     unsigned char strength2;
     bool success =
         getTableValues(
-            sun_strength, game.states.gameplay->day_minutes,
+            sunStrength, game.states.gameplay->dayMinutes,
             &ratio, &strength1, &strength2
         );
         
@@ -156,11 +156,11 @@ void Weather::loadFromDataNode(DataNode* node) {
     //Standard data.
     ReaderSetter rs(node);
     
-    rs.set("fog_near", fog_near);
-    rs.set("fog_far", fog_far);
+    rs.set("fog_near", fogNear);
+    rs.set("fog_far", fogFar);
     
-    fog_near = std::max(fog_near, 0.0f);
-    fog_far = std::max(fog_far, fog_near);
+    fogNear = std::max(fogNear, 0.0f);
+    fogFar = std::max(fogFar, fogNear);
     
     //Lighting.
     vector<std::pair<int, string> > lighting_table =
@@ -180,7 +180,7 @@ void Weather::loadFromDataNode(DataNode* node) {
         getWeatherTable(node->getChildByName("sun_strength"));
         
     for(size_t p = 0; p < sun_strength_table.size(); p++) {
-        sun_strength.push_back(
+        sunStrength.push_back(
             std::make_pair(
                 sun_strength_table[p].first,
                 s2i(sun_strength_table[p].second)
@@ -195,7 +195,7 @@ void Weather::loadFromDataNode(DataNode* node) {
         );
         
     for(size_t p = 0; p < blackout_strength_table.size(); p++) {
-        blackout_strength.push_back(
+        blackoutStrength.push_back(
             std::make_pair(
                 blackout_strength_table[p].first,
                 s2i(blackout_strength_table[p].second)
@@ -209,7 +209,7 @@ void Weather::loadFromDataNode(DataNode* node) {
             node->getChildByName("fog_color")
         );
     for(size_t p = 0; p < fog_color_table.size(); p++) {
-        fog_color.push_back(
+        fogColor.push_back(
             std::make_pair(
                 fog_color_table[p].first,
                 s2c(fog_color_table[p].second)

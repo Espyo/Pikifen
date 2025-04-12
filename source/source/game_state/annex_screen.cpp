@@ -23,11 +23,11 @@ void AnnexScreen::doDrawing() {
     al_clear_to_color(COLOR_BLACK);
     
     drawBitmap(
-        bmp_bg, Point(game.win_w * 0.5, game.win_h * 0.5),
-        Point(game.win_w, game.win_h), 0, mapGray(64)
+        bmpBg, Point(game.winW * 0.5, game.winH * 0.5),
+        Point(game.winW, game.winH), 0, mapGray(64)
     );
     
-    if(cur_menu) cur_menu->draw();
+    if(curMenu) curMenu->draw();
     
     drawMouseCursor(GAME::CURSOR_STANDARD_COLOR);
 }
@@ -37,23 +37,23 @@ void AnnexScreen::doDrawing() {
  * @brief Ticks one frame's worth of logic.
  */
 void AnnexScreen::doLogic() {
-    if(!game.fade_mgr.isFading()) {
-        for(size_t a = 0; a < game.player_actions.size(); a++) {
-            if(cur_menu) cur_menu->handlePlayerAction(game.player_actions[a]);
+    if(!game.fadeMgr.isFading()) {
+        for(size_t a = 0; a < game.playerActions.size(); a++) {
+            if(curMenu) curMenu->handlePlayerAction(game.playerActions[a]);
         }
     }
     
-    if(cur_menu) {
-        if(cur_menu->loaded) {
-            cur_menu->tick(game.delta_t);
+    if(curMenu) {
+        if(curMenu->loaded) {
+            curMenu->tick(game.deltaT);
         }
-        if(!cur_menu->loaded) {
-            delete cur_menu;
-            cur_menu = nullptr;
+        if(!curMenu->loaded) {
+            delete curMenu;
+            curMenu = nullptr;
         }
     }
     
-    game.fade_mgr.tick(game.delta_t);
+    game.fadeMgr.tick(game.deltaT);
 }
 
 
@@ -73,9 +73,9 @@ string AnnexScreen::getName() const {
  * @param ev Event to handle.
  */
 void AnnexScreen::handleAllegroEvent(ALLEGRO_EVENT &ev) {
-    if(game.fade_mgr.isFading()) return;
+    if(game.fadeMgr.isFading()) return;
     
-    if(cur_menu) cur_menu->handleAllegroEvent(ev);
+    if(curMenu) curMenu->handleAllegroEvent(ev);
 }
 
 
@@ -83,8 +83,8 @@ void AnnexScreen::handleAllegroEvent(ALLEGRO_EVENT &ev) {
  * @brief Leaves the annex screen state and goes to the title screen.
  */
 void AnnexScreen::leave() {
-    game.fade_mgr.startFade(false, [] () {
-        game.changeState(game.states.title_screen);
+    game.fadeMgr.startFade(false, [] () {
+        game.changeState(game.states.titleScreen);
     });
 }
 
@@ -94,9 +94,9 @@ void AnnexScreen::leave() {
  */
 void AnnexScreen::load() {
     //Resources.
-    bmp_bg =
+    bmpBg =
         game.content.bitmaps.list.get(
-            game.sys_content_names.bmp_title_screen_bg
+            game.sysContentNames.bmpTitleScreenBg
         );
         
     //Game content.
@@ -110,16 +110,16 @@ void AnnexScreen::load() {
     );
     
     //Load the intended concrete menu.
-    switch(menu_to_load) {
+    switch(menuToLoad) {
     case ANNEX_SCREEN_MENU_AREA_SELECTION: {
         AreaMenu* area_menu = new AreaMenu();
-        area_menu->area_type = area_menu_area_type;
-        area_menu->leave_callback =
+        area_menu->areaType = areaMenuAreaType;
+        area_menu->leaveCallback =
         [this] () {
-            game.states.title_screen->page_to_load = MAIN_MENU_PAGE_PLAY;
+            game.states.titleScreen->pageToLoad = MAIN_MENU_PAGE_PLAY;
             leave();
         };
-        cur_menu = area_menu;
+        curMenu = area_menu;
         break;
         
     } case ANNEX_SCREEN_MENU_HELP: {
@@ -144,7 +144,7 @@ void AnnexScreen::load() {
         CONTENT_LOAD_LEVEL_FULL
         );
         HelpMenu* help_menu = new HelpMenu();
-        help_menu->unload_callback =
+        help_menu->unloadCallback =
         [this] () {
             game.content.unloadAll(
             vector<CONTENT_TYPE> {
@@ -161,42 +161,42 @@ void AnnexScreen::load() {
             }
             );
         };
-        help_menu->leave_callback =
+        help_menu->leaveCallback =
         [this] () {
-            game.states.title_screen->page_to_load = MAIN_MENU_PAGE_MAIN;
+            game.states.titleScreen->pageToLoad = MAIN_MENU_PAGE_MAIN;
             leave();
         };
-        cur_menu = help_menu;
+        curMenu = help_menu;
         break;
         
     } case ANNEX_SCREEN_MENU_OPTIONS: {
         OptionsMenu* options_menu = new OptionsMenu();
-        options_menu->leave_callback = [this] () {
-            game.states.title_screen->page_to_load = MAIN_MENU_PAGE_MAIN;
+        options_menu->leaveCallback = [this] () {
+            game.states.titleScreen->pageToLoad = MAIN_MENU_PAGE_MAIN;
             leave();
         };
-        cur_menu = options_menu;
+        curMenu = options_menu;
         break;
         
     } case ANNEX_SCREEN_MENU_STATS: {
         StatsMenu* stats_menu = new StatsMenu();
-        stats_menu->leave_callback = [this] () {
-            game.states.title_screen->page_to_load = MAIN_MENU_PAGE_MAIN;
+        stats_menu->leaveCallback = [this] () {
+            game.states.titleScreen->pageToLoad = MAIN_MENU_PAGE_MAIN;
             leave();
         };
-        cur_menu = stats_menu;
+        curMenu = stats_menu;
         break;
         
     }
     }
     
-    cur_menu->load();
-    cur_menu->enter();
-    menu_to_load = ANNEX_SCREEN_MENU_HELP;
+    curMenu->load();
+    curMenu->enter();
+    menuToLoad = ANNEX_SCREEN_MENU_HELP;
     
     //Finishing touches.
-    game.audio.setCurrentSong(game.sys_content_names.sng_menus, false);
-    game.fade_mgr.startFade(true, nullptr);
+    game.audio.setCurrentSong(game.sysContentNames.sngMenus, false);
+    game.fadeMgr.startFade(true, nullptr);
 }
 
 
@@ -205,13 +205,13 @@ void AnnexScreen::load() {
  */
 void AnnexScreen::unload() {
     //Resources.
-    game.content.bitmaps.list.free(bmp_bg);
+    game.content.bitmaps.list.free(bmpBg);
     
     //Menus.
-    if(cur_menu) {
-        cur_menu->unload();
-        delete cur_menu;
-        cur_menu = nullptr;
+    if(curMenu) {
+        curMenu->unload();
+        delete curMenu;
+        curMenu = nullptr;
     }
     
     //Game content.

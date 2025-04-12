@@ -29,7 +29,7 @@ const string GUI_FILE_NAME = "statistics_menu";
  * @param label Name of the header.
  */
 void StatsMenu::addHeader(const string &label) {
-    float list_bottom_y = stats_list->getChildBottom();
+    float list_bottom_y = statsList->getChildBottom();
     const float HEADER_HEIGHT = 0.09f;
     const float STAT_PADDING = 0.02f;
     const float STATS_OFFSET = 0.01f;
@@ -38,12 +38,12 @@ void StatsMenu::addHeader(const string &label) {
         (list_bottom_y == 0.0f ? STATS_OFFSET : STAT_PADDING);
         
     TextGuiItem* label_text =
-        new TextGuiItem(label, game.sys_content.fnt_area_name);
-    label_text->ratio_center =
+        new TextGuiItem(label, game.sysContent.fntAreaName);
+    label_text->ratioCenter =
         Point(0.50f, stat_center_y);
-    label_text->ratio_size =
+    label_text->ratioSize =
         Point(0.96f, HEADER_HEIGHT);
-    stats_list->addChild(label_text);
+    statsList->addChild(label_text);
     gui.addItem(label_text);
 }
 
@@ -59,7 +59,7 @@ void StatsMenu::addHeader(const string &label) {
 TextGuiItem* StatsMenu::addStat(
     const string &label, const string &value, const string &description
 ) {
-    float list_bottom_y = stats_list->getChildBottom();
+    float list_bottom_y = statsList->getChildBottom();
     const float STAT_HEIGHT = 0.08f;
     const float STAT_PADDING = 0.02f;
     const float STATS_OFFSET = 0.01f;
@@ -69,25 +69,25 @@ TextGuiItem* StatsMenu::addStat(
         
     BulletGuiItem* label_bullet =
         new BulletGuiItem(
-        label, game.sys_content.fnt_standard
+        label, game.sysContent.fntStandard
     );
-    label_bullet->ratio_center =
+    label_bullet->ratioCenter =
         Point(0.50f, stat_center_y);
-    label_bullet->ratio_size =
+    label_bullet->ratioSize =
         Point(0.96f, STAT_HEIGHT);
-    label_bullet->on_get_tooltip = [description] () { return description; };
-    stats_list->addChild(label_bullet);
+    label_bullet->onGetTooltip = [description] () { return description; };
+    statsList->addChild(label_bullet);
     gui.addItem(label_bullet);
     
     TextGuiItem* value_text =
         new TextGuiItem(
-        value, game.sys_content.fnt_counter, COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
+        value, game.sysContent.fntCounter, COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
     );
-    value_text->ratio_center =
+    value_text->ratioCenter =
         Point(0.75f, stat_center_y);
-    value_text->ratio_size =
+    value_text->ratioSize =
         Point(0.44f, STAT_HEIGHT);
-    stats_list->addChild(value_text);
+    statsList->addChild(value_text);
     gui.addItem(value_text);
     
     return value_text;
@@ -106,20 +106,20 @@ void StatsMenu::initGuiMain() {
     gui.registerCoords("list_scroll", 91, 51,  2, 82);
     gui.registerCoords("tooltip",     50, 96, 96,  4);
     gui.readCoords(
-        game.content.gui_defs.list[STATS_MENU::GUI_FILE_NAME].getChildByName("positions")
+        game.content.guiDefs.list[STATS_MENU::GUI_FILE_NAME].getChildByName("positions")
     );
     
     //Back button.
-    gui.back_item =
-        new ButtonGuiItem("Back", game.sys_content.fnt_standard);
-    gui.back_item->on_activate =
+    gui.backItem =
+        new ButtonGuiItem("Back", game.sysContent.fntStandard);
+    gui.backItem->onActivate =
     [this] (const Point &) {
         saveStatistics();
         leave();
     };
-    gui.back_item->on_get_tooltip =
+    gui.backItem->onGetTooltip =
     [] () { return "Return to the previous menu."; };
-    gui.addItem(gui.back_item, "back");
+    gui.addItem(gui.backItem, "back");
     
     //Back input icon.
     guiAddBackInputIcon(&gui);
@@ -128,17 +128,17 @@ void StatsMenu::initGuiMain() {
     TextGuiItem* header_text =
         new TextGuiItem(
         "STATISTICS",
-        game.sys_content.fnt_area_name, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
+        game.sysContent.fntAreaName, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
     );
     gui.addItem(header_text, "header");
     
     //Statistics list.
-    stats_list = new ListGuiItem();
-    gui.addItem(stats_list, "list");
+    statsList = new ListGuiItem();
+    gui.addItem(statsList, "list");
     
     //Statistics list scrollbar.
     ScrollGuiItem* list_scroll = new ScrollGuiItem();
-    list_scroll->list_item = stats_list;
+    list_scroll->listItem = statsList;
     gui.addItem(list_scroll, "list_scroll");
     
     //Tooltip text.
@@ -149,7 +149,7 @@ void StatsMenu::initGuiMain() {
     populateStatsList();
     
     //Finishing touches.
-    gui.setSelectedItem(gui.back_item, true);
+    gui.setSelectedItem(gui.backItem, true);
 }
 
 
@@ -180,7 +180,7 @@ void StatsMenu::populateStatsList() {
         (game.config.general.name.empty() ? "Pikifen" : game.config.general.name) +
         " was started."
     );
-    runtime_value_text =
+    runtimeValueText =
         addStat(
             "Runtime", "",
             "Total amount of time " +
@@ -190,76 +190,76 @@ void StatsMenu::populateStatsList() {
     updateRuntimeValueText();
     addStat(
         "Gameplay time",
-        timeToStr3(game.statistics.gameplay_time, ":", ":", ""),
+        timeToStr3(game.statistics.gameplayTime, ":", ":", ""),
         "Total amount of gameplay time, in seconds. Menus, editors, "
         "pause menu, etc. don't count."
     );
     addStat(
-        "Area entries", i2s(game.statistics.area_entries),
+        "Area entries", i2s(game.statistics.areaEntries),
         "Total number of times that areas were entered. Includes retries "
         "and area editor tests."
     );
     
     addHeader("Pikmin life");
     addStat(
-        "Pikmin births", i2s(game.statistics.pikmin_births),
+        "Pikmin births", i2s(game.statistics.pikminBirths),
         "Total number of times Pikmin were born from an Onion."
     );
     addStat(
-        "Pikmin deaths", i2s(game.statistics.pikmin_deaths),
+        "Pikmin deaths", i2s(game.statistics.pikminDeaths),
         "Total number of times Pikmin died in any way."
     );
     addStat(
-        "Pikmin eaten", i2s(game.statistics.pikmin_eaten),
+        "Pikmin eaten", i2s(game.statistics.pikminEaten),
         "Total number of times Pikmin were swallowed by an enemy."
     );
     addStat(
-        "Pikmin hazard deaths", i2s(game.statistics.pikmin_hazard_deaths),
+        "Pikmin hazard deaths", i2s(game.statistics.pikminHazardDeaths),
         "Total number of times Pikmin died from a hazard."
     );
     addStat(
-        "Pikmin bloom count", i2s(game.statistics.pikmin_blooms),
+        "Pikmin bloom count", i2s(game.statistics.pikminBlooms),
         "Total number of times Pikmin matured (leaf to bud, leaf to flower, "
         "or bud to flower)."
     );
     addStat(
-        "Pikmin saved", i2s(game.statistics.pikmin_saved),
+        "Pikmin saved", i2s(game.statistics.pikminSaved),
         "Total number of times the whistle saved Pikmin from a hazard that was "
         "killing them."
     );
     addStat(
-        "Enemy deaths", i2s(game.statistics.enemy_deaths),
+        "Enemy deaths", i2s(game.statistics.enemyDeaths),
         "Total number of enemies that died."
     );
     
     addHeader("Leader control");
     addStat(
-        "Pikmin thrown", i2s(game.statistics.pikmin_thrown),
+        "Pikmin thrown", i2s(game.statistics.pikminThrown),
         "Total number of times Pikmin were thrown. Leaders thrown don't count."
     );
     addStat(
-        "Whistle uses", i2s(game.statistics.whistle_uses),
+        "Whistle uses", i2s(game.statistics.whistleUses),
         "Total number of times the whistle was used."
     );
     addStat(
         "Distance walked (m)",
-        f2s((game.statistics.distance_walked * CM_PER_PIXEL) / 100.0),
+        f2s((game.statistics.distanceWalked * CM_PER_PIXEL) / 100.0),
         "Total distance walked by an active leader, in meters."
     );
     addStat(
-        "Leader damage suffered", i2s(game.statistics.leader_damage_suffered),
+        "Leader damage suffered", i2s(game.statistics.leaderDamageSuffered),
         "Total amount of damage suffered by leaders."
     );
     addStat(
-        "Punch damage caused", i2s(game.statistics.punch_damage_caused),
+        "Punch damage caused", i2s(game.statistics.punchDamageCaused),
         "Total amount of damage caused by a leader punching."
     );
     addStat(
-        "Leader KOs", i2s(game.statistics.leader_kos),
+        "Leader KOs", i2s(game.statistics.leaderKos),
         "Total amount of times a leader got KO'd."
     );
     addStat(
-        "Sprays used", i2s(game.statistics.sprays_used),
+        "Sprays used", i2s(game.statistics.spraysUsed),
         "Total amount of times a spray was used."
     );
     
@@ -282,7 +282,7 @@ void StatsMenu::populateStatsList() {
         if(record.isPlatinum(area_ptr->mission)) {
             mission_platinums++;
         }
-        if(area_ptr->mission.grading_mode == MISSION_GRADING_MODE_POINTS) {
+        if(area_ptr->mission.gradingMode == MISSION_GRADING_MODE_POINTS) {
             mission_scores += record.score;
         }
     }
@@ -320,6 +320,6 @@ void StatsMenu::tick(float delta_t) {
  * @brief Updates the GUI text item for the runtime stat value.
  */
 void StatsMenu::updateRuntimeValueText() {
-    runtime_value_text->text =
+    runtimeValueText->text =
         timeToStr3(game.statistics.runtime, ":", ":", "");
 }

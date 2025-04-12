@@ -42,7 +42,7 @@ public:
     //--- Members ---
     
     //Automatically load this file upon boot-up of the editor, if any.
-    string auto_load_file;
+    string autoLoadFile;
     
     
     //--- Function declarations ---
@@ -103,7 +103,7 @@ private:
     AnimationDatabase db;
     
     //Is the current animation playing?
-    bool anim_playing = false;
+    bool animPlaying = false;
     
     //Whether to use a background texture, if any.
     ALLEGRO_BITMAP* bg = nullptr;
@@ -112,100 +112,100 @@ private:
     bool comparison = false;
     
     //Is the comparison sprite above the working sprite?
-    bool comparison_above = true;
+    bool comparisonAbove = true;
     
     //Is the comparison sprite meant to blink?
-    bool comparison_blink = true;
+    bool comparisonBlink = true;
     
     //Is the blinking comparison sprite currently visible?
-    bool comparison_blink_show = true;
+    bool comparisonBlinkShow = true;
     
     //Time left until the blinking comparison sprite's visibility is swapped.
-    Timer comparison_blink_timer;
+    Timer comparisonBlinkTimer;
     
     //Comparison sprite to use in sprite comparison mode.
-    Sprite* comparison_sprite = nullptr;
+    Sprite* comparisonSprite = nullptr;
     
     //Is the comparison sprite mode tinting the sprites?
-    bool comparison_tint = true;
+    bool comparisonTint = true;
     
     //Animation instance, for when the user is editing animations.
-    AnimationInstance cur_anim_i;
+    AnimationInstance curAnimInst;
     
     //Current hitbox.
-    Hitbox* cur_hitbox = nullptr;
+    Hitbox* curHitbox = nullptr;
     
     //The alpha is calculated using the sine of this value.
-    float cur_hitbox_alpha = 0.0f;
+    float curHitboxAlpha = 0.0f;
     
     //Index number of the current hitbox.
-    size_t cur_hitbox_idx = INVALID;
+    size_t curHitboxIdx = INVALID;
     
     //Current maturity to display on the Pikmin's top.
-    unsigned char cur_maturity = 0;
+    unsigned char curMaturity = 0;
     
     //Current sprite, for when the user is editing sprites.
-    Sprite* cur_sprite = nullptr;
+    Sprite* curSprite = nullptr;
     
     //Keep the aspect ratio when resizing the current sprite?
-    bool cur_sprite_keep_aspect_ratio = true;
+    bool curSpriteKeepAspectRatio = true;
     
     //Keep the total area when resizing the current sprite?
-    bool cur_sprite_keep_area = false;
+    bool curSpriteKeepArea = false;
     
     //The current transformation widget.
-    TransformationWidget cur_transformation_widget;
+    TransformationWidget curTransformationWidget;
     
     //Is the grid visible?
-    bool grid_visible = true;
+    bool gridVisible = true;
     
     //Are the hitboxes currently visible?
-    bool hitboxes_visible = true;
+    bool hitboxesVisible = true;
     
     //Last file used as for a spritesheet.
-    string last_spritesheet_used;
+    string lastSpritesheetUsed;
     
     //Picker info for the picker in the "load" dialog.
-    Picker load_dialog_picker;
+    Picker loadDialogPicker;
     
     //Mob type of the currently loaded animation database, if any.
-    MobType* loaded_mob_type = nullptr;
+    MobType* loadedMobType = nullptr;
     
     //Is the mob radius visible?
-    bool mob_radius_visible = false;
+    bool mobRadiusVisible = false;
     
     //Is the leader silhouette visible?
-    bool leader_silhouette_visible = false;
+    bool leaderSilhouetteVisible = false;
     
     //Before entering the sprite bitmap state, this was the camera position.
-    Point pre_sprite_bmp_cam_pos;
+    Point preSpriteBmpCamPos;
     
     //Before entering the sprite bitmap state, this was the camera zoom.
-    float pre_sprite_bmp_cam_zoom = 1.0f;
+    float preSpriteBmpCamZoom = 1.0f;
     
     //Is side view on?
-    bool side_view = false;
+    bool sideView = false;
     
     //Is the add mode on in the sprite bitmap state?
-    bool sprite_bmp_add_mode = false;
+    bool spriteBmpAddMode = false;
     
     //Top bitmaps for the current Pikmin type.
-    ALLEGRO_BITMAP* top_bmp[N_MATURITIES] = { nullptr, nullptr, nullptr };
+    ALLEGRO_BITMAP* topBmp[N_MATURITIES] = { nullptr, nullptr, nullptr };
     
     //Keep the aspect ratio when resizing the Pikmin top?
-    bool top_keep_aspect_ratio = true;
+    bool topKeepAspectRatio = true;
     
     //Whether to use a background texture.
-    bool use_bg = false;
+    bool useBg = false;
     
     //Position of the load widget.
-    Point load_widget_pos;
+    Point loadWidgetPos;
     
     //Position of the reload widget.
-    Point reload_widget_pos;
+    Point reloadWidgetPos;
     
     //Position of the quit widget.
-    Point quit_widget_pos;
+    Point quitWidgetPos;
     
     //Info about the "new" dialog.
     struct {
@@ -217,27 +217,27 @@ private:
         int type = 0;
         
         //Selected custom mob category, when picking a mob type.
-        string custom_mob_cat;
+        string customMobCat;
         
         //Selected mob type, when picking a mob type.
-        MobType* mob_type_ptr = nullptr;
+        MobType* mobTypePtr = nullptr;
         
         //Internal name of the new animation database.
-        string internal_name = "my_animation";
+        string internalName = "my_animation";
         
         //Path to the new animation database.
-        string anim_path;
+        string animPath;
         
         //Last time we checked if the new database path existed, it was this.
-        string last_checked_anim_path;
+        string lastCheckedAnimPath;
         
         //Does a file already exist under the new animation database's path?
-        bool anim_path_exists = false;
+        bool animPathExists = false;
         
         //Whether we need to focus on the text input widget.
-        bool needs_text_focus = true;
+        bool needsTextFocus = true;
         
-    } new_dialog;
+    } newDialog;
     
     
     //--- Function declarations ---

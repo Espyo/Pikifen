@@ -35,28 +35,28 @@ public:
     //--- Members ---
     
     //What type of converter it is.
-    ConverterType* con_type = nullptr;
+    ConverterType* conType = nullptr;
     
     //Amount of Pikmin currently inside the converter, in its "buffer".
-    size_t amount_in_buffer = 0;
+    size_t amountInBuffer = 0;
     
     //How many Pikmin are left until the converter dies.
-    size_t input_pikmin_left = 0;
+    size_t inputPikminLeft = 0;
     
     //Type of Pikmin it will convert to right now.
-    PikminType* current_type = nullptr;
+    PikminType* currentType = nullptr;
     
     //If it cycles between types, this is the index of the current type.
-    size_t current_type_idx = 0;
+    size_t currentTypeIdx = 0;
     
     //Time left before it cycles to the next type.
-    Timer type_change_timer;
+    Timer typeChangeTimer;
     
     //Time left before it auto-closes and converts the Pikmin in the buffer.
-    Timer auto_conversion_timer;
+    Timer autoConversionTimer;
     
     //Angle it will spit the next seed towards.
-    float next_spew_angle = 0.0f;
+    float nextSpewAngle = 0.0f;
     
     
     //--- Function declarations ---

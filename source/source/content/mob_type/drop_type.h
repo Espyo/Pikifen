@@ -101,19 +101,19 @@ public:
     DROP_EFFECT effect = DROP_EFFECT_MATURATE;
     
     //How many doses does this drop have? i.e. how many mobs can it serve?
-    size_t total_doses = 1;
+    size_t totalDoses = 1;
     
     //If the consumption effect increases something, this specifies the amount.
-    int increase_amount = 2;
+    int increaseAmount = 2;
     
     //If it increases a spray type count, this specifies the spray type index.
-    size_t spray_type_to_increase = INVALID;
+    size_t sprayTypeToIncrease = INVALID;
     
     //If it gives a status effect, this points to the status type.
-    StatusType* status_to_give = nullptr;
+    StatusType* statusToGive = nullptr;
     
     //How quickly it shrinks. Aesthetic only.
-    float shrink_speed = 40.0f;
+    float shrinkSpeed = 40.0f;
     
     
     //--- Function declarations ---

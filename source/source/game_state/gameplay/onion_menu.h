@@ -40,13 +40,13 @@ struct OnionMenuPikminType {
     int delta = 0;
     
     //Index of this type in the Onion's list. Cache for convenience.
-    size_t type_idx = INVALID;
+    size_t typeIdx = INVALID;
     
     //Index in the on-screen list, or INVALID. Cache for convenience.
-    size_t on_screen_idx = INVALID;
+    size_t onScreenIdx = INVALID;
     
     //Pikmin type associated. Cache for convenience.
-    PikminType* pik_type = nullptr;
+    PikminType* pikType = nullptr;
     
     
     //--- Function declarations ---
@@ -67,10 +67,10 @@ struct OnionMenu {
     //--- Members ---
     
     //Pointer to the struct with nest information.
-    PikminNest* n_ptr = nullptr;
+    PikminNest* nestPtr = nullptr;
     
     //Pointer to the leader responsible.
-    Leader* l_ptr = nullptr;
+    Leader* leaderPtr = nullptr;
     
     //Information on every type's management.
     vector<OnionMenuPikminType> types;
@@ -79,73 +79,73 @@ struct OnionMenu {
     GuiManager gui;
     
     //Is "select all" currently on?
-    bool select_all = false;
+    bool selectAll = false;
     
     //If it manages more than 5, this is the Pikmin type page index.
     size_t page = 0;
     
     //Which GUI items are in red right now, if any, and how much time left.
-    map<GuiItem*, float> red_items;
+    map<GuiItem*, float> redItems;
     
     //Total page amount. Cache for convenience.
-    size_t nr_pages = 0;
+    size_t nrPages = 0;
     
     //Pikmin types currently on-screen. Cache for convenience.
-    vector<OnionMenuPikminType*> on_screen_types;
+    vector<OnionMenuPikminType*> onScreenTypes;
     
     //List of GUI items for the Onion icons. Cache for convenience.
-    vector<GuiItem*> onion_icon_items;
+    vector<GuiItem*> onionIconItems;
     
     //List of GUI items for the Onion buttons. Cache for convenience.
-    vector<GuiItem*> onion_button_items;
+    vector<GuiItem*> onionButtonItems;
     
     //List of GUI items for the Onion amounts. Cache for convenience.
-    vector<GuiItem*> onion_amount_items;
+    vector<GuiItem*> onionAmountItems;
     
     //List of GUI items for the group icons. Cache for convenience.
-    vector<GuiItem*> group_icon_items;
+    vector<GuiItem*> groupIconItems;
     
     //List of GUI items for the group buttons. Cache for convenience.
-    vector<GuiItem*> group_button_items;
+    vector<GuiItem*> groupButtonItems;
     
     //List of GUI items for the group amounts. Cache for convenience.
-    vector<GuiItem*> group_amount_items;
+    vector<GuiItem*> groupAmountItems;
     
     //The button that controls all Onions. Cache for convenience.
-    GuiItem* onion_all_button = nullptr;
+    GuiItem* onionAllButton = nullptr;
     
     //The button that controls all groups. Cache for convenience.
-    GuiItem* group_all_button = nullptr;
+    GuiItem* groupAllButton = nullptr;
     
     //Left Onion "more..." icon. Cache for convenience.
-    GuiItem* onion_more_l_icon = nullptr;
+    GuiItem* onionMoreLIcon = nullptr;
     
     //Right Onion "more..." icon. Cache for convenience.
-    GuiItem* onion_more_r_icon = nullptr;
+    GuiItem* onionMoreRIcon = nullptr;
     
     //Left group "more..." icon. Cache for convenience.
-    GuiItem* group_more_l_icon = nullptr;
+    GuiItem* groupMoreLIcon = nullptr;
     
     //Right group "more..." icon. Cache for convenience.
-    GuiItem* group_more_r_icon = nullptr;
+    GuiItem* groupMoreRIcon = nullptr;
     
     //Previous page button. Cache for convenience.
-    GuiItem* prev_page_button = nullptr;
+    GuiItem* prevPageButton = nullptr;
     
     //Next page button. Cache for convenience.
-    GuiItem* next_page_button = nullptr;
+    GuiItem* nextPageButton = nullptr;
     
     //Field amount text. Cache for convenience.
-    GuiItem* field_amount_text = nullptr;
+    GuiItem* fieldAmountText = nullptr;
     
     //Multiply the background alpha by this much.
-    float bg_alpha_mult = 0.0f;
+    float bgAlphaMult = 0.0f;
     
     //Time left until the menu finishes closing.
-    float closing_timer = 0.0f;
+    float closingTimer = 0.0f;
     
     //Is the struct meant to be deleted?
-    bool to_delete = false;
+    bool toDelete = false;
     
     
     //--- Function declarations ---

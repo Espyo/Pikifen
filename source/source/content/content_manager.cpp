@@ -21,7 +21,7 @@
  */
 ContentManager::ContentManager() {
     for(size_t c = 0; c < N_CONTENT_TYPES; c++) {
-        load_levels[c] = CONTENT_LOAD_LEVEL_UNLOADED;
+        loadLevels[c] = CONTENT_LOAD_LEVEL_UNLOADED;
     }
 }
 
@@ -41,10 +41,10 @@ ContentTypeManager* ContentManager::getMgrPtr(CONTENT_TYPE type) {
         return &bitmaps;
         break;
     } case CONTENT_TYPE_GLOBAL_ANIMATION: {
-        return &global_anim_dbs;
+        return &globalAnimDbs;
         break;
     } case CONTENT_TYPE_GUI: {
-        return &gui_defs;
+        return &guiDefs;
         break;
     } case CONTENT_TYPE_HAZARD: {
         return &hazards;
@@ -53,37 +53,37 @@ ContentTypeManager* ContentManager::getMgrPtr(CONTENT_TYPE type) {
         return &liquids;
         break;
     } case CONTENT_TYPE_MISC: {
-        return &misc_configs;
+        return &miscConfigs;
         break;
     } case CONTENT_TYPE_MOB_ANIMATION: {
-        return &mob_anim_dbs;
+        return &mobAnimDbs;
         break;
     } case CONTENT_TYPE_MOB_TYPE: {
-        return &mob_types;
+        return &mobTypes;
         break;
     } case CONTENT_TYPE_PARTICLE_GEN: {
-        return &particle_gen;
+        return &particleGens;
         break;
     } case CONTENT_TYPE_SONG: {
         return &songs;
         break;
     } case CONTENT_TYPE_SONG_TRACK: {
-        return &song_tracks;
+        return &songTracks;
         break;
     } case CONTENT_TYPE_SOUND: {
         return &sounds;
         break;
     } case CONTENT_TYPE_SPIKE_DAMAGE_TYPE: {
-        return &spike_damage_types;
+        return &spikeDamageTypes;
         break;
     } case CONTENT_TYPE_SPRAY_TYPE: {
-        return &spray_types;
+        return &sprayTypes;
         break;
     } case CONTENT_TYPE_STATUS_TYPE: {
-        return &status_types;
+        return &statusTypes;
         break;
     } case CONTENT_TYPE_WEATHER_CONDITION: {
-        return &weather_conditions;
+        return &weatherConditions;
         break;
     } case N_CONTENT_TYPES: {
         break;
@@ -107,7 +107,7 @@ void ContentManager::loadAll(const vector<CONTENT_TYPE> &types, CONTENT_LOAD_LEV
     for(size_t t = 0; t < types.size(); t++) {
         ContentTypeManager* mgr_ptr = getMgrPtr(types[t]);
         engineAssert(
-            load_levels[types[t]] == CONTENT_LOAD_LEVEL_UNLOADED,
+            loadLevels[types[t]] == CONTENT_LOAD_LEVEL_UNLOADED,
             "Tried to load all content of type " + mgr_ptr->getName() +
             " even though it's already loaded!"
         );
@@ -118,14 +118,14 @@ void ContentManager::loadAll(const vector<CONTENT_TYPE> &types, CONTENT_LOAD_LEV
     for(size_t t = 0; t < types.size(); t++) {
         ContentTypeManager* mgr_ptr = getMgrPtr(types[t]);
         const string &perf_mon_name = mgr_ptr->getPerfMonMeasurementName();
-        if(!perf_mon_name.empty() && game.perf_mon) {
-            game.perf_mon->startMeasurement(perf_mon_name);
+        if(!perf_mon_name.empty() && game.perfMon) {
+            game.perfMon->startMeasurement(perf_mon_name);
         }
         mgr_ptr->loadAll(level);
-        if(!perf_mon_name.empty() && game.perf_mon) {
-            game.perf_mon->finishMeasurement();
+        if(!perf_mon_name.empty() && game.perfMon) {
+            game.perfMon->finishMeasurement();
         }
-        load_levels[types[t]] = level;
+        loadLevels[types[t]] = level;
     }
     
 }
@@ -191,20 +191,20 @@ bool ContentManager::loadAreaAsCurrent(
     CONTENT_LOAD_LEVEL level, bool from_backup
 ) {
     engineAssert(
-        game.cur_area_data == nullptr,
+        game.curAreaData == nullptr,
         "Tried to load area \"" + requested_area_path + "\" as the current "
         "one even though there is already a loaded current area, \"" +
         (
-            game.cur_area_data->manifest ?
-            game.cur_area_data->manifest->path :
+            game.curAreaData->manifest ?
+            game.curAreaData->manifest->path :
             "(unsaved)"
         ) + "\"!"
     );
     
-    game.cur_area_data = new Area();
+    game.curAreaData = new Area();
     bool success =
         areas.loadArea(
-            game.cur_area_data, requested_area_path, manif_ptr,
+            game.curAreaData, requested_area_path, manif_ptr,
             level, from_backup
         );
         
@@ -234,10 +234,10 @@ void ContentManager::reloadPacks() {
  * @param level Should match the level at which the content got loaded.
  */
 void ContentManager::unloadCurrentArea(CONTENT_LOAD_LEVEL level) {
-    if(!game.cur_area_data) return;
-    game.cur_area_data->clear();
-    delete game.cur_area_data;
-    game.cur_area_data = nullptr;
+    if(!game.curAreaData) return;
+    game.curAreaData->clear();
+    delete game.curAreaData;
+    game.curAreaData = nullptr;
 }
 
 
@@ -251,15 +251,15 @@ void ContentManager::unloadAll(const vector<CONTENT_TYPE> &types) {
         ContentTypeManager* mgr_ptr = getMgrPtr(types[t]);
         
         engineAssert(
-            load_levels[types[t]] != CONTENT_LOAD_LEVEL_UNLOADED,
+            loadLevels[types[t]] != CONTENT_LOAD_LEVEL_UNLOADED,
             "Tried to unload all content of type " + mgr_ptr->getName() +
             " even though it's already unloaded!"
         );
         
-        mgr_ptr->unloadAll(load_levels[types[t]]);
+        mgr_ptr->unloadAll(loadLevels[types[t]]);
         mgr_ptr->clearManifests();
         
-        load_levels[types[t]] = CONTENT_LOAD_LEVEL_UNLOADED;
+        loadLevels[types[t]] = CONTENT_LOAD_LEVEL_UNLOADED;
     }
 }
 
@@ -268,10 +268,10 @@ void ContentManager::unloadAll(const vector<CONTENT_TYPE> &types) {
  * @brief Clears all loaded manifests.
  */
 void PackManager::clearManifests() {
-    manifests_sans_base_raw.clear();
-    manifests_with_base_raw.clear();
-    manifests_sans_base.clear();
-    manifests_with_base.clear();
+    manifestsSansBaseRaw.clear();
+    manifestsWithBaseRaw.clear();
+    manifestsSansBase.clear();
+    manifestsWithBase.clear();
 }
 
 
@@ -285,15 +285,15 @@ void PackManager::fillManifests() {
         
     for(size_t f = 0; f < raw_folders.size(); f++) {
         if(raw_folders[f] != FOLDER_NAMES::BASE_PACK) {
-            manifests_sans_base_raw.push_back(raw_folders[f]);
+            manifestsSansBaseRaw.push_back(raw_folders[f]);
         }
     }
     
-    manifests_with_base_raw.push_back(FOLDER_NAMES::BASE_PACK);
-    manifests_with_base_raw.insert(
-        manifests_with_base_raw.end(),
-        manifests_sans_base_raw.begin(),
-        manifests_sans_base_raw.end()
+    manifestsWithBaseRaw.push_back(FOLDER_NAMES::BASE_PACK);
+    manifestsWithBaseRaw.insert(
+        manifestsWithBaseRaw.end(),
+        manifestsSansBaseRaw.begin(),
+        manifestsSansBaseRaw.end()
     );
     
     //Organized manifests.
@@ -306,15 +306,15 @@ void PackManager::fillManifests() {
         
     for(size_t f = 0; f < organized_folders.size(); f++) {
         if(organized_folders[f] != FOLDER_NAMES::BASE_PACK) {
-            manifests_sans_base.push_back(organized_folders[f]);
+            manifestsSansBase.push_back(organized_folders[f]);
         }
     }
     
-    manifests_with_base.push_back(FOLDER_NAMES::BASE_PACK);
-    manifests_with_base.insert(
-        manifests_with_base.end(),
-        manifests_sans_base.begin(),
-        manifests_sans_base.end()
+    manifestsWithBase.push_back(FOLDER_NAMES::BASE_PACK);
+    manifestsWithBase.insert(
+        manifestsWithBase.end(),
+        manifestsSansBase.begin(),
+        manifestsSansBase.end()
     );
 }
 
@@ -326,28 +326,28 @@ void PackManager::fillManifests() {
  * player options.
  */
 void PackManager::loadAll() {
-    for(size_t p = 0; p < manifests_with_base_raw.size(); p++) {
+    for(size_t p = 0; p < manifestsWithBaseRaw.size(); p++) {
         DataNode pack_file =
             loadDataFile(
                 FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
-                manifests_with_base_raw[p] + "/" +
+                manifestsWithBaseRaw[p] + "/" +
                 FILE_NAMES::PACK_DATA
             );
             
         Pack pack_data;
-        pack_data.name = manifests_with_base_raw[p];
+        pack_data.name = manifestsWithBaseRaw[p];
         ReaderSetter rs(&pack_file);
         rs.set("name", pack_data.name);
         rs.set("description", pack_data.description);
         rs.set("tags", pack_data.tags);
         rs.set("maker", pack_data.maker);
         rs.set("version", pack_data.version);
-        rs.set("engine_version", pack_data.engine_version);
+        rs.set("engine_version", pack_data.engineVersion);
         rs.set("dependencies", pack_data.dependencies);
         rs.set("conflicts", pack_data.conflicts);
         rs.set("notes", pack_data.notes);
         
-        list[manifests_with_base_raw[p]] = pack_data;
+        list[manifestsWithBaseRaw[p]] = pack_data;
     }
 }
 

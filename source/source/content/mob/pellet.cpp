@@ -23,7 +23,7 @@
  */
 Pellet::Pellet(const Point &pos, PelletType* type, float angle) :
     Mob(pos, type, angle),
-    pel_type(type) {
+    pelType(type) {
     
     becomeCarriable(CARRY_DESTINATION_ONION);
     
@@ -59,5 +59,5 @@ void Pellet::drawMob() {
     eff.scale *= radius * 2.0f / bmp_size;
     
     drawBitmapWithEffects(cur_s_ptr->bitmap, eff);
-    drawBitmapWithEffects(pel_type->bmp_number, eff);
+    drawBitmapWithEffects(pelType->bmpNumber, eff);
 }

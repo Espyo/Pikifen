@@ -157,7 +157,7 @@ void resource_fsm::createFsm(MobType* typ) {
     
     
     typ->states = efc.finish();
-    typ->first_state_idx = fixStates(typ->states, "idle_waiting", typ);
+    typ->firstStateIdx = fixStates(typ->states, "idle_waiting", typ);
     
     //Check if the number in the enum and the total match up.
     engineAssert(
@@ -179,11 +179,11 @@ void resource_fsm::createFsm(MobType* typ) {
 void resource_fsm::handleDelivery(Mob* m, void* info1, void* info2) {
     Resource* res_ptr = (Resource*) m;
     if(
-        res_ptr->res_type->delivery_result ==
+        res_ptr->resType->deliveryResult ==
         RESOURCE_DELIVERY_RESULT_DAMAGE_MOB
     ) {
-        res_ptr->focused_mob->setHealth(
-            true, false, -res_ptr->res_type->damage_mob_amount
+        res_ptr->focusedMob->setHealth(
+            true, false, -res_ptr->resType->damageMobAmount
         );
         
         HitboxInteraction ev_info(res_ptr, nullptr, nullptr);
@@ -201,12 +201,12 @@ void resource_fsm::handleDelivery(Mob* m, void* info1, void* info2) {
  */
 void resource_fsm::handleDropped(Mob* m, void* info1, void* info2) {
     Resource* res_ptr = (Resource*) m;
-    if(!res_ptr->res_type->vanish_on_drop) return;
+    if(!res_ptr->resType->vanishOnDrop) return;
     
-    if(res_ptr->res_type->vanish_delay == 0) {
+    if(res_ptr->resType->vanishDelay == 0) {
         resource_fsm::vanish(m, info1, info2);
     } else {
-        res_ptr->setTimer(res_ptr->res_type->vanish_delay);
+        res_ptr->setTimer(res_ptr->resType->vanishDelay);
     }
 }
 
@@ -220,7 +220,7 @@ void resource_fsm::handleDropped(Mob* m, void* info1, void* info2) {
  */
 void resource_fsm::handleReachDestination(Mob* m, void* info1, void* info2) {
     Resource* res_ptr = (Resource*) m;
-    if(res_ptr->res_type->delivery_result == RESOURCE_DELIVERY_RESULT_STAY) {
+    if(res_ptr->resType->deliveryResult == RESOURCE_DELIVERY_RESULT_STAY) {
         m->stopFollowingPath();
         m->fsm.setState(RESOURCE_STATE_STAYING_AFTER_DELIVERY);
     } else {
@@ -252,7 +252,7 @@ void resource_fsm::handleStartMoving(Mob* m, void* info1, void* info2) {
 void resource_fsm::loseMomentum(Mob* m, void* info1, void* info2) {
     m->speed.x = 0;
     m->speed.y = 0;
-    m->speed_z = 0;
+    m->speedZ = 0;
 }
 
 
@@ -265,10 +265,10 @@ void resource_fsm::loseMomentum(Mob* m, void* info1, void* info2) {
  */
 void resource_fsm::startBeingDelivered(Mob* m, void* info1, void* info2) {
     if(
-        m->carry_info->intended_mob &&
-        m->carry_info->intended_mob->type->category->id == MOB_CATEGORY_BRIDGES
+        m->carryInfo->intendedMob &&
+        m->carryInfo->intendedMob->type->category->id == MOB_CATEGORY_BRIDGES
     ) {
-        m->delivery_info->anim_type = DELIVERY_ANIM_TOSS;
+        m->deliveryInfo->animType = DELIVERY_ANIM_TOSS;
     }
 }
 
@@ -283,17 +283,17 @@ void resource_fsm::startBeingDelivered(Mob* m, void* info1, void* info2) {
 void resource_fsm::startWaiting(Mob* m, void* info1, void* info2) {
     Resource* res_ptr = (Resource*) m;
     
-    if(res_ptr->to_delete) return;
+    if(res_ptr->toDelete) return;
     
-    if(res_ptr->origin_pile) {
-        res_ptr->carry_info->must_return = true;
-        res_ptr->carry_info->return_point = res_ptr->origin_pile->pos;
-        res_ptr->carry_info->return_dist =
-            res_ptr->origin_pile->radius +
-            game.config.pikmin.standard_radius +
-            game.config.pikmin.idle_task_range / 2.0f;
+    if(res_ptr->originPile) {
+        res_ptr->carryInfo->mustReturn = true;
+        res_ptr->carryInfo->returnPoint = res_ptr->originPile->pos;
+        res_ptr->carryInfo->returnDist =
+            res_ptr->originPile->radius +
+            game.config.pikmin.standardRadius +
+            game.config.pikmin.idleTaskRange / 2.0f;
     } else {
-        res_ptr->carry_info->must_return = false;
+        res_ptr->carryInfo->mustReturn = false;
     }
     
     res_ptr->setAnimation(
@@ -312,10 +312,10 @@ void resource_fsm::startWaiting(Mob* m, void* info1, void* info2) {
  */
 void resource_fsm::vanish(Mob* m, void* info1, void* info2) {
     Resource* res_ptr = (Resource*) m;
-    if(res_ptr->res_type->return_to_pile_on_vanish && res_ptr->origin_pile) {
-        res_ptr->origin_pile->changeAmount(+1);
+    if(res_ptr->resType->returnToPileOnVanish && res_ptr->originPile) {
+        res_ptr->originPile->changeAmount(+1);
     }
     
     res_ptr->becomeUncarriable();
-    res_ptr->to_delete = true;
+    res_ptr->toDelete = true;
 }

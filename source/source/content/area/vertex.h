@@ -35,7 +35,7 @@ struct Vertex {
     float y = 0.0f;
     
     //Index number of the edges connected to it.
-    vector<size_t> edge_idxs;
+    vector<size_t> edgeIdxs;
     
     //Edges around it.
     vector<Edge*> edges;

@@ -68,16 +68,16 @@ public:
         string name;
         
         //Radius of possibility 1.
-        float radius_1 = -1.0f;
+        float radius1 = -1.0f;
         
         //Angle of possibility 1.
-        float angle_1 = -1.0f;
+        float angle1 = -1.0f;
         
         //Radius of possibility 2.
-        float radius_2 = -1.0f;
+        float radius2 = -1.0f;
         
         //Angle of possibility 2.
-        float angle_2 = -1.0f;
+        float angle2 = -1.0f;
         
     };
     
@@ -92,16 +92,16 @@ public:
         string name;
         
         //Name of the mob type to spawn.
-        string mob_type_name;
+        string mobTypeName;
         
         //Spawn in coordinates relative to the spawner?
         bool relative = true;
         
         //Coordenates to spawn on.
-        Point coords_xy;
+        Point coordsXY;
         
         //Z coordinate to spawn on.
-        float coords_z = 0.0f;
+        float coordsZ = 0.0f;
         
         //Angle of the spawned object. Could be relative or absolute.
         float angle = 0.0f;
@@ -110,10 +110,10 @@ public:
         string vars;
         
         //Should the spawner link to the spawned?
-        bool link_object_to_spawn = false;
+        bool linkObjectToSpawn = false;
         
         //Should the spawned link to the spawner?
-        bool link_spawn_to_object = false;
+        bool linkSpawnToObject = false;
         
         //Momentum to apply in a random direction upon spawn, if any.
         float momentum = 0.0f;
@@ -131,64 +131,64 @@ public:
         string name;
         
         //Name of the spawn information block to use.
-        string spawn_name;
+        string spawnName;
         
         //Does the parent mob hold the child mob?
-        bool parent_holds = false;
+        bool parentHolds = false;
         
         //If the parent holds, this is the name of the body part that holds.
-        string hold_body_part;
+        string holdBodyPart;
         
         //If the parent holds, this is how far from the body part center.
-        float hold_offset_dist = 0.0f;
+        float holdOffsetDist = 0.0f;
         
         //If the parent holds, this is how far from the body part Z.
-        float hold_offset_vert_dist = 0.0f;
+        float holdOffsetVertDist = 0.0f;
         
         //If the parent holds, this is in what direction from the body part.
-        float hold_offset_angle = 0.0f;
+        float holdOffsetAngle = 0.0f;
         
         //Method by which the parent should hold the child.
-        HOLD_ROTATION_METHOD hold_rotation_method = HOLD_ROTATION_METHOD_NEVER;
+        HOLD_ROTATION_METHOD holdRotationMethod = HOLD_ROTATION_METHOD_NEVER;
         
         //Should the child handle damage?
-        bool handle_damage = false;
+        bool handleDamage = false;
         
         //Should the child relay damage to the parent?
-        bool relay_damage = false;
+        bool relayDamage = false;
         
         //Should the child handle script events?
-        bool handle_events = false;
+        bool handleEvents = false;
         
         //Should the child relay script events to the parent?
-        bool relay_events = false;
+        bool relayEvents = false;
         
         //Should the child handle status effects?
-        bool handle_statuses = false;
+        bool handleStatuses = false;
         
         //Should the child relay status effects to the parent?
-        bool relay_statuses = false;
+        bool relayStatuses = false;
         
         //Name of the limb animation between parent and child.
-        string limb_anim_name;
+        string limbAnimName;
         
         //Thickness of the limb.
-        float limb_thickness = 32.0f;
+        float limbThickness = 32.0f;
         
         //Body part of the parent to link the limb to.
-        string limb_parent_body_part;
+        string limbParentBodyPart;
         
         //Offset from the parent body part to link the limb at.
-        float limb_parent_offset = 0.0f;
+        float limbParentOffset = 0.0f;
         
         //Body part of the child to link the limb to.
-        string limb_child_body_part;
+        string limbChildBodyPart;
         
         //Offset from the child body part to link the limb at.
-        float limb_child_offset = 0.0f;
+        float limbChildOffset = 0.0f;
         
         //Method by which the limb should be drawn.
-        LIMB_DRAW_METHOD limb_draw_method = LIMB_DRAW_METHOD_ABOVE_BOTH;
+        LIMB_DRAW_METHOD limbDrawMethod = LIMB_DRAW_METHOD_ABOVE_BOTH;
         
     };
     
@@ -210,16 +210,16 @@ public:
         AEMP_TYPE type = AEMP_TYPE_TEXT;
         
         //Default value.
-        string def_value;
+        string defValue;
         
         //Minimum value.
-        float min_value = -LARGE_FLOAT;
+        float minValue = -LARGE_FLOAT;
         
         //Maximum value.
-        float max_value = LARGE_FLOAT;
+        float maxValue = LARGE_FLOAT;
         
         //If it's a list, this list the values.
-        vector<string> value_list;
+        vector<string> valueList;
         
         //Tooltip to show on the widget, if any.
         string tooltip;
@@ -234,13 +234,13 @@ public:
         //--- Members ---
         
         //Multiply the effects (damage taken, speed reduction, etc.) by this.
-        float effect_mult = 1.0f;
+        float effectMult = 1.0f;
         
         //When affected by the source, receive this status effect.
-        StatusType* status_to_apply = nullptr;
+        StatusType* statusToApply = nullptr;
         
-        //If "status_to_apply" overrides any status effect that'd be received.
-        bool status_overrides = true;
+        //If "statusToApply" overrides any status effect that'd be received.
+        bool statusOverrides = true;
         
     };
     
@@ -274,24 +274,24 @@ public:
     MobCategory* category = nullptr;
     
     //Custom category name. Used in editors.
-    string custom_category_name;
+    string customCategoryName;
     
     //- Visuals -
     
     //Database with all its animation data.
-    AnimationDatabase* anim_db = nullptr;
+    AnimationDatabase* animDb = nullptr;
     
     //A color that represents this mob.
-    ALLEGRO_COLOR main_color = al_map_rgb(128, 128, 128);
+    ALLEGRO_COLOR mainColor = al_map_rgb(128, 128, 128);
     
     //Show its health?
-    bool show_health = true;
+    bool showHealth = true;
     
     //Does it cast a shadow?
-    bool casts_shadow = true;
+    bool castsShadow = true;
     
     //How much light does it cast in a blackout? <0 to use the mob's radius.
-    float blackout_radius = -1.0f;
+    float blackoutRadius = -1.0f;
     
     //List of sounds it can play.
     vector<Sound> sounds;
@@ -299,16 +299,16 @@ public:
     //- Movement -
     
     //Moves these many units per second.
-    float move_speed = 0.0f;
+    float moveSpeed = 0.0f;
     
     //Acceleration. This is in units per second per second.
     float acceleration = MOB_TYPE::DEF_ACCELERATION;
     
     //Rotates these many radians per second.
-    float rotation_speed = MOB_TYPE::DEF_ROTATION_SPEED;
+    float rotationSpeed = MOB_TYPE::DEF_ROTATION_SPEED;
     
     //True if it can move in any direction, as opposed to just forward.
-    bool can_free_move = false;
+    bool canFreeMove = false;
     
     //- Physical space -
     
@@ -319,13 +319,13 @@ public:
     float height = 0.0f;
     
     //Rectangular dimensions, if it's meant to use them instead of a radius.
-    Point rectangular_dim;
+    Point rectangularDim;
     
     //Pikmin strength needed to carry it.
     float weight = 0.0f;
     
     //How many Pikmin can carry it, at most.
-    size_t max_carriers = 0;
+    size_t maxCarriers = 0;
     
     //Pushes other mobs (only those that can be pushed).
     bool pushes = false;
@@ -334,94 +334,94 @@ public:
     bool pushable = false;
     
     //If true, the push is soft and allows squeezing through with persistance.
-    bool pushes_softly = false;
+    bool pushesSoftly = false;
     
     //If true, the push is via hitbox, as opposed to the mob's radius.
-    bool pushes_with_hitboxes = false;
+    bool pushesWithHitboxes = false;
     
     //Radius for terrain collision. Negative = use regular radius property.
-    float terrain_radius = - 1.0f;
+    float terrainRadius = - 1.0f;
     
     //Can you walk on top of this mob?
     bool walkable = false;
     
     //Can this mob walk on top of other mobs?
-    bool can_walk_on_others = false;
+    bool canWalkOnOthers = false;
     
     //If true, carrier Pikmin will be considered blocked if it's in the way.
-    bool can_block_paths = false;
+    bool canBlockPaths = false;
     
     //Override the carrying spots with these coordinates, if not-empty.
-    vector<Point> custom_carry_spots;
+    vector<Point> customCarrySpots;
     
     //- General behavior -
     
     //Maximum health. Can be overridden on a per-mob basis.
-    float max_health = 100.0f;
+    float maxHealth = 100.0f;
     
     //Regenerates these many health points per second.
-    float health_regen = 0.0f;
+    float healthRegen = 0.0f;
     
     //How far its territory reaches from the home point.
-    float territory_radius = 0.0f;
+    float territoryRadius = 0.0f;
     
     //Information on all of its "reaches".
     vector<Reach> reaches;
     
     //After it takes this much damage, it sends an "itch" event to the FSM.
-    float itch_damage = 0.0f;
+    float itchDamage = 0.0f;
     
     //Only send an "itch" event after these many seconds have passed.
-    float itch_time = 0.0f;
+    float itchTime = 0.0f;
     
     //Other mobs decide if they can/want to hurt it by this target type.
-    MOB_TARGET_FLAG target_type = MOB_TARGET_FLAG_NONE;
+    MOB_TARGET_FLAG targetType = MOB_TARGET_FLAG_NONE;
     
     //What types of targets this mob can hunt down.
-    bitmask_16_t huntable_targets =
+    bitmask_16_t huntableTargets =
         MOB_TARGET_FLAG_PLAYER |
         MOB_TARGET_FLAG_ENEMY;
         
     //What types of targets this mob can hurt.
-    bitmask_16_t hurtable_targets =
+    bitmask_16_t hurtableTargets =
         MOB_TARGET_FLAG_PLAYER |
         MOB_TARGET_FLAG_ENEMY |
         MOB_TARGET_FLAG_FRAGILE;
         
     //Its initial team.
-    MOB_TEAM starting_team = MOB_TEAM_NONE;
+    MOB_TEAM startingTeam = MOB_TEAM_NONE;
     
     //Logic for when it's inactive. Use INACTIVE_LOGIC_FLAG.
-    bitmask_8_t inactive_logic = 0;
+    bitmask_8_t inactiveLogic = 0;
     
     //Custom behavior callbacks.
-    void(*draw_mob_callback)(Mob* m) = nullptr;
+    void(*drawMobCallback)(Mob* m) = nullptr;
     
     //- Script -
     
     //Actions to run on spawn.
-    vector<MobActionCall*> init_actions;
+    vector<MobActionCall*> initActions;
     
     //The states, events and actions. Basically, the FSM.
     vector<MobState*> states;
     
     //Index of the state a mob starts at.
-    size_t first_state_idx = INVALID;
+    size_t firstStateIdx = INVALID;
     
     //Name of the state to go to when it's dying.
-    string dying_state_name;
+    string dyingStateName;
     
     //Index of the state to go to when it's dying.
-    size_t dying_state_idx = INVALID;
+    size_t dyingStateIdx = INVALID;
     
     //States that ignore the death event.
-    vector<string> states_ignoring_death;
+    vector<string> statesIgnoringDeath;
     
     //States that ignore the spray event.
-    vector<string> states_ignoring_spray;
+    vector<string> statesIgnoringSpray;
     
     //States that ignore the hazard events.
-    vector<string> states_ignoring_hazard;
+    vector<string> statesIgnoringHazard;
     
     //Interactions with other objects
     
@@ -432,47 +432,47 @@ public:
     vector<Child> children;
     
     //Does this mob have a group of other mobs following it (e.g. leader)?
-    bool has_group = false;
+    bool hasGroup = false;
     
     //- Vulnerabilities -
     
     //All damage received is multiplied by this much.
-    float default_vulnerability = 1.0f;
+    float defaultVulnerability = 1.0f;
     
     //For every hazard, multiply its effects by this much.
-    map<Hazard*, Vulnerability> hazard_vulnerabilities;
+    map<Hazard*, Vulnerability> hazardVulnerabilities;
     
     //What sort of spike damage it causes, if any.
-    SpikeDamageType* spike_damage = nullptr;
+    SpikeDamageType* spikeDamage = nullptr;
     
     //For every type of spike damage, multiply its effects by this much.
-    map<SpikeDamageType*, Vulnerability> spike_damage_vulnerabilities;
+    map<SpikeDamageType*, Vulnerability> spikeDamageVulnerabilities;
     
     //For every type of status, multiply its effects by this much.
-    map<StatusType*, Vulnerability> status_vulnerabilities;
+    map<StatusType*, Vulnerability> statusVulnerabilities;
     
     //- Editor info -
     
     //Tips to show in the area editor about this mob type, if any.
-    string area_editor_tips;
+    string areaEditorTips;
     
     //Widgets to show on the area editor, to help parametrize each mob.
-    vector<AreaEditorProp> area_editor_props;
+    vector<AreaEditorProp> areaEditorProps;
     
     //Can the player choose to place one of these in the area editor?
-    bool appears_in_area_editor = true;
+    bool appearsInAreaEditor = true;
     
     //Should it have links going out of it?
-    bool area_editor_recommend_links_from = false;
+    bool areaEditorRecommendLinksFrom = false;
     
     //Should it have links going into it?
-    bool area_editor_recommend_links_to = false;
+    bool areaEditorRecommendLinksTo = false;
     
     //- Caches -
     
     //How far its radius or hitboxes reach from the center.
     //Cache for performance.
-    float physical_span = 0.0f;
+    float physicalSpan = 0.0f;
     
     
     //--- Function declarations ---
@@ -510,7 +510,7 @@ public:
     //--- Members ---
     
     //Suffixes used for each animation group.
-    vector<string> animation_group_suffixes;
+    vector<string> animationGroupSuffixes;
     
     
     //--- Function declarations ---

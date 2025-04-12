@@ -38,14 +38,14 @@ void SprayType::loadFromDataNode(
     rs.set("effects", effects_str, &effects_node);
     rs.set("icon", icon_str, &icon_node);
     rs.set("group", group);
-    rs.set("group_pikmin_only", group_pikmin_only);
-    rs.set("affects_user", affects_user);
+    rs.set("group_pikmin_only", groupPikminOnly);
+    rs.set("affects_user", affectsUser);
     rs.set("angle", angle);
-    rs.set("distance_range", distance_range);
-    rs.set("angle_range", angle_range);
-    rs.set("color", main_color);
-    rs.set("ingredients_needed", ingredients_needed);
-    rs.set("buries_pikmin", buries_pikmin);
+    rs.set("distance_range", distanceRange);
+    rs.set("angle_range", angleRange);
+    rs.set("color", mainColor);
+    rs.set("ingredients_needed", ingredientsNeeded);
+    rs.set("buries_pikmin", buriesPikmin);
     
     if(effects_node) {
         vector<string> effects_strs =
@@ -53,23 +53,23 @@ void SprayType::loadFromDataNode(
         for(size_t e = 0; e < effects_strs.size(); e++) {
             string effect_name = effects_strs[e];
             if(
-                game.content.status_types.list.find(effect_name) ==
-                game.content.status_types.list.end()
+                game.content.statusTypes.list.find(effect_name) ==
+                game.content.statusTypes.list.end()
             ) {
                 game.errors.report(
                     "Unknown status effect \"" + effect_name + "\"!",
                     effects_node
                 );
             } else {
-                effects.push_back(game.content.status_types.list[effect_name]);
+                effects.push_back(game.content.statusTypes.list[effect_name]);
             }
         }
     }
     
     angle = degToRad(angle);
-    angle_range = degToRad(angle_range);
+    angleRange = degToRad(angleRange);
     
     if(level >= CONTENT_LOAD_LEVEL_FULL) {
-        bmp_spray = game.content.bitmaps.list.get(icon_str, icon_node);
+        bmpSpray = game.content.bitmaps.list.get(icon_str, icon_node);
     }
 }

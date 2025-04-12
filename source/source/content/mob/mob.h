@@ -101,7 +101,7 @@ public:
     MobType* type = nullptr;
     
     //Schedule this mob to be deleted from memory at the end of the frame.
-    bool to_delete = false;
+    bool toDelete = false;
     
     //-Position-
     
@@ -115,13 +115,13 @@ public:
     float angle = 0.0f;
     
     //The highest ground below the entire mob.
-    Sector* ground_sector = nullptr;
+    Sector* groundSector = nullptr;
     
     //Sector that the mob's center is on.
-    Sector* center_sector = nullptr;
+    Sector* centerSector = nullptr;
     
     //Mob this mob is standing on top of, if any.
-    Mob* standing_on_mob = nullptr;
+    Mob* standingOnMob = nullptr;
     
     //-Basic movement-
     
@@ -129,47 +129,47 @@ public:
     Point speed;
     
     //Same as speed, but for the Z coordinate.
-    float speed_z = 0.0f;
+    float speedZ = 0.0f;
     
     //Due to framerate imperfections, thrown Pikmin/leaders can reach higher
     //than intended. z_cap forces a cap. FLT_MAX = no cap.
-    float z_cap = FLT_MAX;
+    float zCap = FLT_MAX;
     
     //Multiply the mob's gravity by this.
-    float gravity_mult = 1.0f;
+    float gravityMult = 1.0f;
     
     //How much it's being pushed by another mob.
-    float push_amount = 0.0f;
+    float pushAmount = 0.0f;
     
     //Angle that another mob is pushing it to.
-    float push_angle = 0.0f;
+    float pushAngle = 0.0f;
     
     //How much the mob moved this frame, if it's walkable.
-    Point walkable_moved;
+    Point walkableMoved;
     
     //Highest value of the Z coordinate since the last time it was grounded.
     //FLT_MAX = not midair.
-    float highest_midair_z = 0.0f;
+    float highestMidairZ = 0.0f;
     
     //-Complex states-
     
     //Information about what it is chasing after.
-    ChaseInfo chase_info;
+    ChaseInfo chaseInfo;
     
     //Information about the path it is following, if any.
-    Path* path_info = nullptr;
+    Path* pathInfo = nullptr;
     
     //Information about the mob/point it's circling, if any.
-    CirclingInfo* circling_info = nullptr;
+    CirclingInfo* circlingInfo = nullptr;
     
     //Riding a track. If nullptr, the mob is not riding on any track.
-    TrackRideInfo* track_info = nullptr;
+    TrackRideInfo* trackInfo = nullptr;
     
     //Info on how this mob should be carried. Uncarriable if nullptr.
-    CarryInfo* carry_info = nullptr;
+    CarryInfo* carryInfo = nullptr;
     
     //Onion delivery info. If nullptr, the mob is not being delivered.
-    DeliveryInfo* delivery_info = nullptr;
+    DeliveryInfo* deliveryInfo = nullptr;
     
     //-Physical space-
     
@@ -180,7 +180,7 @@ public:
     float height = 0.0f;
     
     //Current rectangular dimensions.
-    Point rectangular_dim;
+    Point rectangularDim;
     
     //-Scripting-
     
@@ -188,7 +188,7 @@ public:
     MobFsm fsm;
     
     //The script-controlled timer.
-    Timer script_timer;
+    Timer scriptTimer;
     
     //Variables.
     map<string, string> vars;
@@ -196,28 +196,28 @@ public:
     //-Brain and behavior-
     
     //The mob it has focus on.
-    Mob* focused_mob = nullptr;
+    Mob* focusedMob = nullptr;
     
     //Further memory of focused mobs.
-    map<size_t, Mob*> focused_mob_memory;
+    map<size_t, Mob*> focusedMobMemory;
     
     //Angle the mob wants to be facing.
-    float intended_turn_angle;
+    float intendedTurnAngle;
     
     //Variable that holds the position the mob wants to be facing.
-    Point* intended_turn_pos = nullptr;
+    Point* intendedTurnPos = nullptr;
     
     //Starting coordinates; what the mob calls "home".
     Point home;
     
     //Index of the reach to use for "X in reach" events.
-    size_t far_reach = INVALID;
+    size_t farReach = INVALID;
     
     //Index or the reach to use for "focused mob out of reach" events.
-    size_t near_reach = INVALID;
+    size_t nearReach = INVALID;
     
     //How long it's been alive for.
-    float time_alive = 0.0f;
+    float timeAlive = 0.0f;
     
     //Incremental ID. Used for misc. things.
     size_t id = 0;
@@ -228,25 +228,25 @@ public:
     float health = 0.0f;
     
     //Maximum health.
-    float max_health = 0.0f;
+    float maxHealth = 0.0f;
     
     //During this period, the mob cannot be attacked.
-    Timer invuln_period;
+    Timer invulnPeriod;
     
     //Mobs that it just hit. Used to stop hitboxes from hitting every frame.
-    vector<std::pair<float, Mob*> > hit_opponents;
+    vector<std::pair<float, Mob*> > hitOpponents;
     
     //How much damage did it take since the last time the itch event triggered?
-    float itch_damage = 0.0f;
+    float itchDamage = 0.0f;
     
     //How much time has passed the last time the itch event triggered?
-    float itch_time = 0.0f;
+    float itchTime = 0.0f;
     
     //Status effects currently inflicted on the mob.
     vector<Status> statuses;
     
     //Hazard of the sector the mob is currently on.
-    Hazard* on_hazard = nullptr;
+    Hazard* onHazard = nullptr;
     
     //If this mob is a sub-mob, this points to the parent mob.
     Parent* parent = nullptr;
@@ -266,16 +266,16 @@ public:
     vector<Mob*> holding;
     
     //If it's stored inside another mob, this indicates which mob it is.
-    Mob* stored_inside_another = nullptr;
+    Mob* storedInsideAnother = nullptr;
     
     //List of body parts that will chomp Pikmin.
-    vector<int> chomp_body_parts;
+    vector<int> chompBodyParts;
     
     //List of mobs currently in its mouth, i.e., chomped.
-    vector<Mob*> chomping_mobs;
+    vector<Mob*> chompingMobs;
     
     //Max number of mobs it can chomp in the current attack.
-    size_t chomp_max = 0;
+    size_t chompMax = 0;
     
     //Mob's team (who it can damage).
     MOB_TEAM team = MOB_TEAM_NONE;
@@ -283,13 +283,13 @@ public:
     //-Group-
     
     //The current mob is following this mob's group.
-    Mob* following_group = nullptr;
+    Mob* followingGroup = nullptr;
     
     //Index of this mob's spot in the leader's group spots.
-    size_t group_spot_idx = INVALID;
+    size_t groupSpotIdx = INVALID;
     
     //The current subgroup type.
-    SubgroupType* subgroup_type_ptr = nullptr;
+    SubgroupType* subgroupTypePtr = nullptr;
     
     //Info on the group this mob is a leader of, if any.
     Group* group = nullptr;
@@ -300,25 +300,25 @@ public:
     AnimationInstance anim;
     
     //Force the usage of this specific sprite.
-    Sprite* forced_sprite = nullptr;
+    Sprite* forcedSprite = nullptr;
     
     //If not 0, speed up or slow down the current animation based on the
     //mob's speed, using this value as a baseline (1.0x speed).
-    float mob_speed_anim_baseline = 0.0f;
+    float mobSpeedAnimBaseline = 0.0f;
     
     //-Aesthetic-
     
     //If not LARGE_FLOAT, compare the Z with this to shrink/grow the sprite.
-    float height_effect_pivot = LARGE_FLOAT;
+    float heightEffectPivot = LARGE_FLOAT;
     
     //Time left in the current damage squash and stretch animation.
-    float damage_squash_time = 0.0f;
+    float damageSquashTime = 0.0f;
     
     //Particle generators attached to it.
-    vector<ParticleGenerator> particle_generators;
+    vector<ParticleGenerator> particleGenerators;
     
     //Data about its on-screen health wheel, if any.
-    InWorldHealthWheel* health_wheel = nullptr;
+    InWorldHealthWheel* healthWheel = nullptr;
     
     //Data about its on-screen fraction numbers, if any.
     InWorldFraction* fraction = nullptr;
@@ -326,25 +326,25 @@ public:
     //-Caches-
     
     //Cached value of the angle's cosine.
-    float angle_cos = 0.0f;
+    float angleCos = 0.0f;
     
     //Cached value of the angle's sine.
-    float angle_sin = 0.0f;
+    float angleSin = 0.0f;
     
     //How far its radius or hitboxes reach from the center.
     //Cache for performance.
-    float physical_span = 0.0f;
+    float physicalSpan = 0.0f;
     
     //How far it can interact with another mob, from the center.
     //This includes the physical span and the span of the reaches.
     //Cache for performance.
-    float interaction_span;
+    float interactionSpan;
     
     //It's invisible due to a status effect. Cache for performance.
-    bool has_invisibility_status = false;
+    bool hasInvisibilityStatus = false;
     
     //Whether it's active this frame. Cache for performance.
-    bool is_active = false;
+    bool isActive = false;
     
     
     //--- Function declarations ---
@@ -527,7 +527,7 @@ protected:
     //--- Members ---
     
     //Is it currently capable of blocking paths?
-    bool can_block_paths = false;
+    bool canBlockPaths = false;
     
     
     //--- Function declarations ---
@@ -580,7 +580,7 @@ public:
     //--- Members ---
     
     //Index of its current base animation.
-    size_t cur_base_anim_idx = INVALID;
+    size_t curBaseAnimIdx = INVALID;
     
     
     //--- Function declarations ---

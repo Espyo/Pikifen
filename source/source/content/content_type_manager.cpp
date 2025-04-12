@@ -128,7 +128,7 @@ bool AreaContentManager::loadArea(
             FOLDER_NAMES::SIMPLE_AREAS :
             FOLDER_NAMES::MISSION_AREAS
         ) + "/" +
-        temp_manif.internal_name;
+        temp_manif.internalName;
     string base_folder_path = from_backup ? user_data_path : temp_manif.path;
     
     string data_file_path = base_folder_path + "/" + FILE_NAMES::AREA_MAIN_DATA;
@@ -140,29 +140,29 @@ bool AreaContentManager::loadArea(
     if(!geometry_file.fileWasOpened) return false;
     
     area_ptr->type = requested_area_type;
-    area_ptr->user_data_path = user_data_path;
+    area_ptr->userDataPath = user_data_path;
     
     if(manif_ptr) {
         area_ptr->manifest = manif_ptr;
     } else {
         area_ptr->manifest =
             findManifest(
-                temp_manif.internal_name, temp_manif.pack, requested_area_type
+                temp_manif.internalName, temp_manif.pack, requested_area_type
             );
     }
     
     //Main data.
-    if(game.perf_mon) game.perf_mon->startMeasurement("Area -- Data");
+    if(game.perfMon) game.perfMon->startMeasurement("Area -- Data");
     area_ptr->loadMainDataFromDataNode(&data_file, level);
     area_ptr->loadMissionDataFromDataNode(&data_file);
-    if(game.perf_mon) game.perf_mon->finishMeasurement();
+    if(game.perfMon) game.perfMon->finishMeasurement();
     
     //Loading screen.
     if(level >= CONTENT_LOAD_LEVEL_EDITOR) {
-        if(game.loading_text_bmp) al_destroy_bitmap(game.loading_text_bmp);
-        if(game.loading_subtext_bmp) al_destroy_bitmap(game.loading_subtext_bmp);
-        game.loading_text_bmp = nullptr;
-        game.loading_subtext_bmp = nullptr;
+        if(game.loadingTextBmp) al_destroy_bitmap(game.loadingTextBmp);
+        if(game.loadingSubtextBmp) al_destroy_bitmap(game.loadingSubtextBmp);
+        game.loadingTextBmp = nullptr;
+        game.loadingSubtextBmp = nullptr;
         drawLoadingScreen(
             area_ptr->name,
             getSubtitleOrMissionGoal(
@@ -228,7 +228,7 @@ string AreaContentManager::manifestToPath(
             FOLDER_PATHS_FROM_PACK::SIMPLE_AREAS :
             FOLDER_PATHS_FROM_PACK::MISSION_AREAS
         ) + "/" +
-        manifest.internal_name;
+        manifest.internalName;
 }
 
 
@@ -332,7 +332,7 @@ string BitmapContentManager::manifestToPath(
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
         manifest.pack + "/" +
         FOLDER_PATHS_FROM_PACK::GRAPHICS + "/" +
-        manifest.internal_name + extension;
+        manifest.internalName + extension;
 }
 
 
@@ -381,7 +381,7 @@ void BitmapContentManager::unloadAll(CONTENT_LOAD_LEVEL level) {
 void ContentTypeManager::fillManifestsMap(
     map<string, ContentManifest> &manifests, const string &content_rel_path, bool folders
 ) {
-    for(const auto &p : game.content.packs.manifests_with_base) {
+    for(const auto &p : game.content.packs.manifestsWithBase) {
         fillManifestsMapFromPack(manifests, p, content_rel_path, folders);
     }
 }
@@ -473,7 +473,7 @@ void GlobalAnimContentManager::loadAnimationDb(ContentManifest* manifest, CONTEN
     AnimationDatabase db;
     db.manifest = manifest;
     db.loadFromDataNode(&file);
-    list[manifest->internal_name] = db;
+    list[manifest->internalName] = db;
 }
 
 
@@ -491,7 +491,7 @@ string GlobalAnimContentManager::manifestToPath(
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
         manifest.pack + "/" +
         FOLDER_PATHS_FROM_PACK::GLOBAL_ANIMATIONS + "/" +
-        manifest.internal_name + ".txt";
+        manifest.internalName + ".txt";
 }
 
 
@@ -585,7 +585,7 @@ string GuiContentManager::manifestToPath(
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
         manifest.pack + "/" +
         FOLDER_PATHS_FROM_PACK::GUI + "/" +
-        manifest.internal_name + ".txt";
+        manifest.internalName + ".txt";
 }
 
 
@@ -677,7 +677,7 @@ void HazardContentManager::loadHazard(
     Hazard new_h;
     new_h.manifest = manifest;
     new_h.loadFromDataNode(&file);
-    list[manifest->internal_name] = new_h;
+    list[manifest->internalName] = new_h;
 }
 
 
@@ -695,7 +695,7 @@ string HazardContentManager::manifestToPath(
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
         manifest.pack + "/" +
         FOLDER_PATHS_FROM_PACK::HAZARDS + "/" +
-        manifest.internal_name + ".txt";
+        manifest.internalName + ".txt";
 }
 
 
@@ -787,7 +787,7 @@ void LiquidContentManager::loadLiquid(
     Liquid* new_l = new Liquid();
     new_l->manifest = manifest;
     new_l->loadFromDataNode(&file, level);
-    list[manifest->internal_name] = new_l;
+    list[manifest->internalName] = new_l;
 }
 
 
@@ -805,7 +805,7 @@ string LiquidContentManager::manifestToPath(
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
         manifest.pack + "/" +
         FOLDER_PATHS_FROM_PACK::LIQUIDS + "/" +
-        manifest.internal_name + ".txt";
+        manifest.internalName + ".txt";
 }
 
 
@@ -898,7 +898,7 @@ void MiscConfigContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
         removeExtension(FILE_NAMES::SYSTEM_CONTENT_NAMES);
     DataNode scn_file =
         loadDataFile(manifests[scn_file_internal_name].path);
-    game.sys_content_names.load(&scn_file);
+    game.sysContentNames.load(&scn_file);
 }
 
 
@@ -916,7 +916,7 @@ string MiscConfigContentManager::manifestToPath(
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
         manifest.pack + "/" +
         FOLDER_PATHS_FROM_PACK::MISC + "/" +
-        manifest.internal_name + ".txt";
+        manifest.internalName + ".txt";
 }
 
 
@@ -959,10 +959,10 @@ void MobAnimContentManager::fillManifests() {
     for(size_t c = 0; c < N_MOB_CATEGORIES; c++) {
         manifests.push_back(map<string, ContentManifest>());
         if(c == MOB_CATEGORY_NONE) continue;
-        MobCategory* category = game.mob_categories.get((MOB_CATEGORY) c);
-        if(category->folder_name.empty()) return;
+        MobCategory* category = game.mobCategories.get((MOB_CATEGORY) c);
+        if(category->folderName.empty()) return;
         
-        for(const auto &p : game.content.packs.manifests_with_base) {
+        for(const auto &p : game.content.packs.manifestsWithBase) {
             fillCatManifestsFromPack(category, p);
         }
     }
@@ -979,7 +979,7 @@ void MobAnimContentManager::fillCatManifestsFromPack(
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
         pack_name + "/" +
         FOLDER_PATHS_FROM_PACK::MOB_TYPES + "/" +
-        category->folder_name;
+        category->folderName;
     vector<string> type_folders = folderToVectorRecursively(category_path, true);
     for(size_t f = 0; f < type_folders.size(); f++) {
         string internal_name = type_folders[f];
@@ -1042,7 +1042,7 @@ void MobAnimContentManager::loadAnimationDb(ContentManifest* manifest, CONTENT_L
     AnimationDatabase db;
     db.manifest = manifest;
     db.loadFromDataNode(&file);
-    list[category_id][manifest->internal_name] = db;
+    list[category_id][manifest->internalName] = db;
 }
 
 
@@ -1138,7 +1138,7 @@ void MobTypeContentManager::fillManifests() {
         fillManifestsMap(
             manifests[c],
             FOLDER_PATHS_FROM_PACK::MOB_TYPES + "/" +
-            game.mob_categories.get((MOB_CATEGORY) c)->folder_name,
+            game.mobCategories.get((MOB_CATEGORY) c)->folderName,
             true
         );
     }
@@ -1177,24 +1177,24 @@ void MobTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
             continue;
         }
         
-        MobCategory* category = game.mob_categories.get((MOB_CATEGORY) c);
-        if(game.perf_mon) {
-            game.perf_mon->startMeasurement(
+        MobCategory* category = game.mobCategories.get((MOB_CATEGORY) c);
+        if(game.perfMon) {
+            game.perfMon->startMeasurement(
                 "Object types -- " + category->name
             );
         }
         
         loadMobTypesOfCategory(category, level);
         
-        if(game.perf_mon) {
-            game.perf_mon->finishMeasurement();
+        if(game.perfMon) {
+            game.perfMon->finishMeasurement();
         }
     }
     
     //Pikmin type order.
     vector<string> missing_pikmin_order_types;
     for(auto &p : list.pikmin) {
-        if(!isInContainer(game.config.pikmin.order_strings, p.first)) {
+        if(!isInContainer(game.config.pikmin.orderStrings, p.first)) {
             //Missing from the list? Add it to the "missing" pile.
             missing_pikmin_order_types.push_back(p.first);
         }
@@ -1204,14 +1204,14 @@ void MobTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
             missing_pikmin_order_types.begin(),
             missing_pikmin_order_types.end()
         );
-        game.config.pikmin.order_strings.insert(
-            game.config.pikmin.order_strings.end(),
+        game.config.pikmin.orderStrings.insert(
+            game.config.pikmin.orderStrings.end(),
             missing_pikmin_order_types.begin(),
             missing_pikmin_order_types.end()
         );
     }
-    for(size_t o = 0; o < game.config.pikmin.order_strings.size(); o++) {
-        string s = game.config.pikmin.order_strings[o];
+    for(size_t o = 0; o < game.config.pikmin.orderStrings.size(); o++) {
+        string s = game.config.pikmin.orderStrings[o];
         if(list.pikmin.find(s) != list.pikmin.end()) {
             game.config.pikmin.order.push_back(list.pikmin[s]);
         } else {
@@ -1227,10 +1227,10 @@ void MobTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
     for(auto &l : list.leader) {
         if(
             find(
-                game.config.leaders.order_strings.begin(),
-                game.config.leaders.order_strings.end(),
+                game.config.leaders.orderStrings.begin(),
+                game.config.leaders.orderStrings.end(),
                 l.first
-            ) == game.config.leaders.order_strings.end()
+            ) == game.config.leaders.orderStrings.end()
         ) {
             //Missing from the list? Add it to the "missing" pile.
             missing_leader_order_types.push_back(l.first);
@@ -1241,14 +1241,14 @@ void MobTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
             missing_leader_order_types.begin(),
             missing_leader_order_types.end()
         );
-        game.config.leaders.order_strings.insert(
-            game.config.leaders.order_strings.end(),
+        game.config.leaders.orderStrings.insert(
+            game.config.leaders.orderStrings.end(),
             missing_leader_order_types.begin(),
             missing_leader_order_types.end()
         );
     }
-    for(size_t o = 0; o < game.config.leaders.order_strings.size(); o++) {
-        string s = game.config.leaders.order_strings[o];
+    for(size_t o = 0; o < game.config.leaders.orderStrings.size(); o++) {
+        string s = game.config.leaders.orderStrings[o];
         if(list.leader.find(s) != list.leader.end()) {
             game.config.leaders.order.push_back(list.leader[s]);
         } else {
@@ -1271,7 +1271,7 @@ void MobTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
  * @param level Level to load at.
  */
 void MobTypeContentManager::loadMobTypesOfCategory(MobCategory* category, CONTENT_LOAD_LEVEL level) {
-    if(category->folder_name.empty()) return;
+    if(category->folderName.empty()) return;
     
     map<string, ContentManifest> &man = manifests[category->id];
     for(auto &t : man) {
@@ -1304,7 +1304,7 @@ string MobTypeContentManager::manifestToPath(
         manifest.pack + "/" +
         FOLDER_PATHS_FROM_PACK::MOB_TYPES + "/" +
         category + "/" +
-        manifest.internal_name;
+        manifest.internalName;
 }
 
 
@@ -1343,7 +1343,7 @@ void MobTypeContentManager::unloadAll(CONTENT_LOAD_LEVEL level) {
     game.config.pikmin.order.clear();
     
     for(size_t c = 0; c < N_MOB_CATEGORIES; c++) {
-        MobCategory* category = game.mob_categories.get((MOB_CATEGORY) c);
+        MobCategory* category = game.mobCategories.get((MOB_CATEGORY) c);
         unloadMobTypesOfCategory(category, level);
     }
 }
@@ -1451,7 +1451,7 @@ void ParticleGenContentManager::loadGenerator(
     ParticleGenerator new_pg;
     new_pg.manifest = manifest;
     new_pg.loadFromDataNode(&file, level);
-    list[manifest->internal_name] = new_pg;
+    list[manifest->internalName] = new_pg;
 }
 
 
@@ -1469,7 +1469,7 @@ string ParticleGenContentManager::manifestToPath(
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
         manifest.pack + "/" +
         FOLDER_PATHS_FROM_PACK::PARTICLE_GENERATORS + "/" +
-        manifest.internal_name + ".txt";
+        manifest.internalName + ".txt";
 }
 
 
@@ -1495,7 +1495,7 @@ void ParticleGenContentManager::pathToManifest(
  */
 void ParticleGenContentManager::unloadAll(CONTENT_LOAD_LEVEL level) {
     for(auto g = list.begin(); g != list.end(); ++g) {
-        game.content.bitmaps.list.free(g->second.base_particle.bitmap);
+        game.content.bitmaps.list.free(g->second.baseParticle.bitmap);
     }
     list.clear();
 }
@@ -1562,7 +1562,7 @@ string SoundContentManager::manifestToPath(
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
         manifest.pack + "/" +
         FOLDER_PATHS_FROM_PACK::SOUNDS + "/" +
-        manifest.internal_name + extension;
+        manifest.internalName + extension;
 }
 
 
@@ -1661,7 +1661,7 @@ void SongContentManager::loadSong(ContentManifest* manifest, CONTENT_LOAD_LEVEL 
     Song new_song;
     new_song.manifest = manifest;
     new_song.loadFromDataNode(&file);
-    list[manifest->internal_name] = new_song;
+    list[manifest->internalName] = new_song;
 }
 
 
@@ -1679,7 +1679,7 @@ string SongContentManager::manifestToPath(
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
         manifest.pack + "/" +
         FOLDER_PATHS_FROM_PACK::SONGS + "/" +
-        manifest.internal_name + ".txt";
+        manifest.internalName + ".txt";
 }
 
 
@@ -1772,7 +1772,7 @@ string SongTrackContentManager::manifestToPath(
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
         manifest.pack + "/" +
         FOLDER_PATHS_FROM_PACK::SONG_TRACKS + "/" +
-        manifest.internal_name + extension;
+        manifest.internalName + extension;
 }
 
 
@@ -1872,7 +1872,7 @@ void SpikeDamageTypeContentManager::loadSpikeDamageType(ContentManifest* manifes
     SpikeDamageType new_t;
     new_t.manifest = manifest;
     new_t.loadFromDataNode(&file);
-    list[manifest->internal_name] = new_t;
+    list[manifest->internalName] = new_t;
 }
 
 
@@ -1890,7 +1890,7 @@ string SpikeDamageTypeContentManager::manifestToPath(
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
         manifest.pack + "/" +
         FOLDER_PATHS_FROM_PACK::SPIKE_DAMAGES_TYPES + "/" +
-        manifest.internal_name + ".txt";
+        manifest.internalName + ".txt";
 }
 
 
@@ -1970,10 +1970,10 @@ void SprayTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
     for(auto &s : list) {
         if(
             find(
-                game.config.misc.spray_order_strings.begin(),
-                game.config.misc.spray_order_strings.end(),
+                game.config.misc.sprayOrderStrings.begin(),
+                game.config.misc.sprayOrderStrings.end(),
                 s.first
-            ) == game.config.misc.spray_order_strings.end()
+            ) == game.config.misc.sprayOrderStrings.end()
         ) {
             //Missing from the list? Add it to the "missing" pile.
             missing_spray_order_types.push_back(s.first);
@@ -1984,16 +1984,16 @@ void SprayTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
             missing_spray_order_types.begin(),
             missing_spray_order_types.end()
         );
-        game.config.misc.spray_order_strings.insert(
-            game.config.misc.spray_order_strings.end(),
+        game.config.misc.sprayOrderStrings.insert(
+            game.config.misc.sprayOrderStrings.end(),
             missing_spray_order_types.begin(),
             missing_spray_order_types.end()
         );
     }
-    for(size_t o = 0; o < game.config.misc.spray_order_strings.size(); o++) {
-        string s = game.config.misc.spray_order_strings[o];
+    for(size_t o = 0; o < game.config.misc.sprayOrderStrings.size(); o++) {
+        string s = game.config.misc.sprayOrderStrings[o];
         if(list.find(s) != list.end()) {
-            game.config.misc.spray_order.push_back(&list[s]);
+            game.config.misc.sprayOrder.push_back(&list[s]);
         } else {
             game.errors.report(
                 "Unknown spray type \"" + s + "\" found "
@@ -2017,7 +2017,7 @@ void SprayTypeContentManager::loadSprayType(ContentManifest* manifest, CONTENT_L
     SprayType new_t;
     new_t.manifest = manifest;
     new_t.loadFromDataNode(&file, level);
-    list[manifest->internal_name] = new_t;
+    list[manifest->internalName] = new_t;
 }
 
 
@@ -2035,7 +2035,7 @@ string SprayTypeContentManager::manifestToPath(
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
         manifest.pack + "/" +
         FOLDER_PATHS_FROM_PACK::SPRAYS + "/" +
-        manifest.internal_name + ".txt";
+        manifest.internalName + ".txt";
 }
 
 
@@ -2061,9 +2061,9 @@ void SprayTypeContentManager::pathToManifest(
  */
 void SprayTypeContentManager::unloadAll(CONTENT_LOAD_LEVEL level) {
     for(const auto &s : list) {
-        game.content.bitmaps.list.free(s.second.bmp_spray);
+        game.content.bitmaps.list.free(s.second.bmpSpray);
     }
-    game.config.misc.spray_order.clear();
+    game.config.misc.sprayOrder.clear();
     list.clear();
 }
 
@@ -2118,10 +2118,10 @@ void StatusTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
     }
     
     for(auto &s : list) {
-        if(!s.second->replacement_on_timeout_str.empty()) {
+        if(!s.second->replacementOnTimeoutStr.empty()) {
             types_with_replacements.push_back(s.second);
             types_with_replacements_names.push_back(
-                s.second->replacement_on_timeout_str
+                s.second->replacementOnTimeoutStr
             );
         }
     }
@@ -2131,7 +2131,7 @@ void StatusTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
         bool found = false;
         for(auto &s2 : list) {
             if(s2.first == rn) {
-                types_with_replacements[s]->replacement_on_timeout =
+                types_with_replacements[s]->replacementOnTimeout =
                     s2.second;
                 found = true;
                 break;
@@ -2162,7 +2162,7 @@ void StatusTypeContentManager::loadStatusType(ContentManifest* manifest, CONTENT
     StatusType* new_t = new StatusType();
     new_t->manifest = manifest;
     new_t->loadFromDataNode(&file, level);
-    list[manifest->internal_name] = new_t;
+    list[manifest->internalName] = new_t;
 }
 
 
@@ -2180,7 +2180,7 @@ string StatusTypeContentManager::manifestToPath(
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
         manifest.pack + "/" +
         FOLDER_PATHS_FROM_PACK::STATUSES + "/" +
-        manifest.internal_name + ".txt";
+        manifest.internalName + ".txt";
 }
 
 
@@ -2273,7 +2273,7 @@ void WeatherConditionContentManager::loadWeatherCondition(ContentManifest* manif
     Weather new_w;
     new_w.manifest = manifest;
     new_w.loadFromDataNode(&file);
-    list[manifest->internal_name] = new_w;
+    list[manifest->internalName] = new_w;
 }
 
 
@@ -2291,7 +2291,7 @@ string WeatherConditionContentManager::manifestToPath(
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
         manifest.pack + "/" +
         FOLDER_PATHS_FROM_PACK::WEATHER + "/" +
-        manifest.internal_name + ".txt";
+        manifest.internalName + ".txt";
 }
 
 

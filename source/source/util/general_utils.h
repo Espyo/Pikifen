@@ -84,13 +84,13 @@ struct AutoRepeaterSettings {
     //--- Members ---
     
     //Interval between triggers, at the slowest speed.
-    float slowest_interval = 0.3f;
+    float slowestInterval = 0.3f;
     
     //Interval between triggers, at the fastest speed.
-    float fastest_interval = 0.05f;
+    float fastestInterval = 0.05f;
     
     //How long it takes for the trigger intervals to reach the fastest speed.
-    float ramp_time = 0.9f;
+    float rampTime = 0.9f;
     
 };
 
@@ -107,7 +107,7 @@ struct AutoRepeater {
     float time = LARGE_FLOAT;
     
     //When the next trigger will happen. LARGE_FLOAT if inactive.
-    float next_trigger = LARGE_FLOAT;
+    float nextTrigger = LARGE_FLOAT;
     
     //Settings to use.
     AutoRepeaterSettings* settings = nullptr;
@@ -161,9 +161,9 @@ struct KeyframeInterpolator {
     //--- Function definitions ---
     
     explicit KeyframeInterpolator(const InterT &initial_value = InterT()) {
-        keyframe_times.push_back(0.0f);
-        keyframe_values.push_back(initial_value);
-        keyframe_eases.push_back(EASE_METHOD_NONE);
+        keyframeTimes.push_back(0.0f);
+        keyframeValues.push_back(initial_value);
+        keyframeEases.push_back(EASE_METHOD_NONE);
     };
     
     
@@ -174,29 +174,29 @@ struct KeyframeInterpolator {
      * @return The value.
      */
     InterT get(float t) {
-        if(t < 0.0f) return keyframe_values[0];
+        if(t < 0.0f) return keyframeValues[0];
         
-        if(t < keyframe_times[0]) {
-            return keyframe_values[0];
+        if(t < keyframeTimes[0]) {
+            return keyframeValues[0];
         }
         
-        for(size_t k = 1; k < keyframe_times.size(); ++k) {
-            if(t <= keyframe_times[k]) {
+        for(size_t k = 1; k < keyframeTimes.size(); ++k) {
+            if(t <= keyframeTimes[k]) {
                 float delta_t =
-                    std::max(keyframe_times[k] - keyframe_times[k - 1], 0.01f);
+                    std::max(keyframeTimes[k] - keyframeTimes[k - 1], 0.01f);
                 float relative_t =
-                    t - keyframe_times[k - 1];
+                    t - keyframeTimes[k - 1];
                 float ratio =
                     relative_t / delta_t;
-                ratio = ease(keyframe_eases[k], ratio);
+                ratio = ease(keyframeEases[k], ratio);
                 return
                     interpolate(
-                        keyframe_values[k - 1], keyframe_values[k], ratio
+                        keyframeValues[k - 1], keyframeValues[k], ratio
                     );
             }
         }
         
-        return keyframe_values.back();
+        return keyframeValues.back();
     }
     
     
@@ -217,9 +217,9 @@ struct KeyframeInterpolator {
         
         if(out_idx) *out_idx = new_idx;
         
-        keyframe_times.insert(keyframe_times.begin() + new_idx, t);
-        keyframe_values.insert(keyframe_values.begin() + new_idx, value);
-        keyframe_eases.insert(keyframe_eases.begin() + new_idx, ease);
+        keyframeTimes.insert(keyframeTimes.begin() + new_idx, t);
+        keyframeValues.insert(keyframeValues.begin() + new_idx, value);
+        keyframeEases.insert(keyframeEases.begin() + new_idx, ease);
     }
     
     
@@ -237,8 +237,8 @@ struct KeyframeInterpolator {
         float t, const InterT &value,
         EASING_METHOD ease = EASE_METHOD_NONE, size_t* out_idx = nullptr
     ) {
-        for(size_t k = 0; k < keyframe_times.size(); ++k) {
-            if(keyframe_times[k] == t) {
+        for(size_t k = 0; k < keyframeTimes.size(); ++k) {
+            if(keyframeTimes[k] == t) {
                 if(out_idx) *out_idx = k;
                 setKeyframeValue(k, value);
                 return;
@@ -255,9 +255,9 @@ struct KeyframeInterpolator {
      * @param idx Its index.
      */
     void remove(size_t idx) {
-        keyframe_times.erase(keyframe_times.begin() + idx);
-        keyframe_values.erase(keyframe_values.begin() + idx);
-        keyframe_eases.erase(keyframe_eases.begin() + idx);
+        keyframeTimes.erase(keyframeTimes.begin() + idx);
+        keyframeValues.erase(keyframeValues.begin() + idx);
+        keyframeEases.erase(keyframeEases.begin() + idx);
     }
     
     
@@ -267,7 +267,7 @@ struct KeyframeInterpolator {
      * @return The total.
      */
     size_t getKeyframeCount() {
-        return keyframe_times.size();
+        return keyframeTimes.size();
     }
     
     
@@ -278,7 +278,7 @@ struct KeyframeInterpolator {
      * @return A pair with the keyframe's time and value.
      */
     std::pair<float, InterT> getKeyframe(size_t idx) {
-        return std::make_pair(keyframe_times[idx], keyframe_values[idx]);
+        return std::make_pair(keyframeTimes[idx], keyframeValues[idx]);
     }
     
     
@@ -289,7 +289,7 @@ struct KeyframeInterpolator {
      * @param value The new value.
      */
     void setKeyframeValue(size_t idx, const InterT &value) {
-        keyframe_values[idx] = value;
+        keyframeValues[idx] = value;
     }
     
     
@@ -308,26 +308,26 @@ struct KeyframeInterpolator {
         
         while(
             cur_idx > 0 &&
-            time < keyframe_times[cur_idx - 1]
+            time < keyframeTimes[cur_idx - 1]
         ) {
-            std::swap(keyframe_times[cur_idx], keyframe_times[cur_idx - 1]);
-            std::swap(keyframe_values[cur_idx], keyframe_values[cur_idx - 1]);
-            std::swap(keyframe_eases[cur_idx], keyframe_eases[cur_idx - 1]);
+            std::swap(keyframeTimes[cur_idx], keyframeTimes[cur_idx - 1]);
+            std::swap(keyframeValues[cur_idx], keyframeValues[cur_idx - 1]);
+            std::swap(keyframeEases[cur_idx], keyframeEases[cur_idx - 1]);
             cur_idx--;
         }
         while(
             cur_idx < (getKeyframeCount() - 1) &&
-            time > keyframe_times[cur_idx + 1]
+            time > keyframeTimes[cur_idx + 1]
         ) {
-            std::swap(keyframe_times[cur_idx], keyframe_times[cur_idx + 1]);
-            std::swap(keyframe_values[cur_idx], keyframe_values[cur_idx + 1]);
-            std::swap(keyframe_eases[cur_idx], keyframe_eases[cur_idx + 1]);
+            std::swap(keyframeTimes[cur_idx], keyframeTimes[cur_idx + 1]);
+            std::swap(keyframeValues[cur_idx], keyframeValues[cur_idx + 1]);
+            std::swap(keyframeEases[cur_idx], keyframeEases[cur_idx + 1]);
             cur_idx++;
         }
         
         if(out_new_idx) *out_new_idx = cur_idx;
         
-        keyframe_times[cur_idx] = time;
+        keyframeTimes[cur_idx] = time;
     }
     
     
@@ -342,9 +342,9 @@ struct KeyframeInterpolator {
             return;
         }
         
-        keyframe_times.clear();
-        keyframe_values.clear();
-        keyframe_eases.clear();
+        keyframeTimes.clear();
+        keyframeValues.clear();
+        keyframeEases.clear();
         
         for(size_t c = 0; c < node->getNrOfChildren(); c++) {
             DataNode* c_node = node->getChild(c);
@@ -359,13 +359,13 @@ private:
     //--- Members ---
     
     //Keyframe times.
-    vector<float> keyframe_times;
+    vector<float> keyframeTimes;
     
     //Keyframe values.
-    vector<InterT> keyframe_values;
+    vector<InterT> keyframeValues;
     
     //Keyframe easing methods.
-    vector<EASING_METHOD> keyframe_eases;
+    vector<EASING_METHOD> keyframeEases;
     
     
     //--- Function definitions ---
@@ -379,8 +379,8 @@ private:
      */
     size_t getInsertionIdx(float t) {
         size_t idx = 0;
-        for(; idx < keyframe_times.size(); idx++) {
-            if(keyframe_times[idx] >= t) break;
+        for(; idx < keyframeTimes.size(); idx++) {
+            if(keyframeTimes[idx] >= t) break;
         }
         return idx;
     }
@@ -473,13 +473,13 @@ struct Timer {
     //--- Members ---
     
     //How much time is left until 0.
-    float time_left = 0.0f;
+    float timeLeft = 0.0f;
     
     //When the timer starts, its time is set to this.
     float duration = 0.0f;
     
     //Code to run when the timer ends, if any.
-    std::function<void()> on_end = nullptr;
+    std::function<void()> onEnd = nullptr;
     
     
     //--- Function declarations ---

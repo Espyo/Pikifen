@@ -119,34 +119,34 @@ struct ParticleEmission {
     size_t number = 0;
     
     //Maximum random deviation of amount.
-    size_t number_deviation = 0;
+    size_t numberDeviation = 0;
     
     //Interval at which to emit a new one. 0 means they're emitted once only.
     float interval = 0.0f;
     
     //Maximum random deviation of interval.
-    float interval_deviation = 0.0f;
+    float intervalDeviation = 0.0f;
     
     //Maximum random deviation of position, for square shapes.
-    Point rect_outer_dist = Point(0.0f);
+    Point rectOuterDist = Point(0.0f);
     
     //Minimum random deviation of position, for square shapes.
-    Point rect_inner_dist = Point(0.0f);
+    Point rectInnerDist = Point(0.0f);
     
     //Maximum radius for circular emission.
-    float circle_outer_dist = 0;
+    float circleOuterDist = 0;
     
     //Minimum radius for circular emission.
-    float circle_inner_dist = 0;
+    float circleInnerDist = 0;
     
     //How many radians around the center particles can emit.
-    float circle_arc = TAU;
+    float circleArc = TAU;
     
     //How many radians the arc is rotated by.
-    float circle_arc_rot = 0;
+    float circleArcRot = 0;
     
     //Are the particles placed evenly spread? If not, they're randomly spread.
-    bool evenly_spread = false;
+    bool evenlySpread = false;
     
     
     //--- Function declarations ---
@@ -178,13 +178,13 @@ struct Particle {
     ALLEGRO_BITMAP* bitmap = nullptr;
     
     //Angle the bitmap should be at.
-    float bmp_angle = 0.0f;
+    float bmpAngle = 0.0f;
     
     //Type of bitmap rotation.
-    PARTICLE_ANGLE_TYPE bmp_angle_type = PARTICLE_ANGLE_TYPE_FIXED;
+    PARTICLE_ANGLE_TYPE bmpAngleType = PARTICLE_ANGLE_TYPE_FIXED;
     
     //The bitmap's internal name, or an empty string to use a circle.
-    string bmp_name = "";
+    string bmpName = "";
     
     //Current state.
     
@@ -204,13 +204,13 @@ struct Particle {
     KeyframeInterpolator<float> size;
     
     //Linear velocity over time.
-    KeyframeInterpolator<Point> linear_speed;
+    KeyframeInterpolator<Point> linearSpeed;
     
     //Outwards velocity over time.
-    KeyframeInterpolator<float> outwards_speed;
+    KeyframeInterpolator<float> outwardsSpeed;
     
     //Orbital velocity over time.
-    KeyframeInterpolator<float> orbital_speed;
+    KeyframeInterpolator<float> orbitalSpeed;
     
     //Current color.
     KeyframeInterpolator<ALLEGRO_COLOR> color;
@@ -219,10 +219,10 @@ struct Particle {
     float friction = 0.0f;
     
     //How much the particle has been slowed since being created.
-    Point total_friction_applied = Point(0.0f);
+    Point totalFrictionApplied = Point(0.0f);
     
     //Blend type.
-    PARTICLE_BLEND_TYPE blend_type = PARTICLE_BLEND_TYPE_NORMAL;
+    PARTICLE_BLEND_TYPE blendType = PARTICLE_BLEND_TYPE_NORMAL;
     
     //Other stuff.
     
@@ -289,7 +289,7 @@ struct ParticleManager {
     size_t count = 0;
     
     //Maximum number that can be stored.
-    size_t max_nr = 0;
+    size_t maxNr = 0;
     
     
     //--- Function declarations ---
@@ -313,49 +313,49 @@ struct ParticleGenerator : public Content {
     MOB_PARTICLE_GENERATOR_ID id = MOB_PARTICLE_GENERATOR_ID_NONE;
     
     //All particles created are based on this one.
-    Particle base_particle;
+    Particle baseParticle;
     
     //How the generator should emit particles.
     ParticleEmission emission;
     
     //Follow the given mob's coordinates.
-    Mob* follow_mob = nullptr;
+    Mob* followMob = nullptr;
     
     //Offset the follow mob coordinates by this, relative to the mob angle.
-    Point follow_pos_offset;
+    Point followPosOffset;
     
     //Offset the follow mob Z by this.
-    float follow_z_offset = 0.0f;
+    float followZOffset = 0.0f;
     
     //Follow the given angle. e.g. a mob's angle.
-    float* follow_angle = nullptr;
+    float* followAngle = nullptr;
     
     //Maximum random deviation of the bitmap's rotation.
-    float bmp_angle_deviation = 0.0f;
+    float bmpAngleDeviation = 0.0f;
     
     //Maximum random deviation of duration.
-    float duration_deviation = 0.0f;
+    float durationDeviation = 0.0f;
     
     //Maximum random deviation of friction.
-    float friction_deviation = 0.0f;
+    float frictionDeviation = 0.0f;
     
     //Maximum random deviation of size.
-    float size_deviation = 0.0f;
+    float sizeDeviation = 0.0f;
     
     //Maximum random deviation of outward_speed.
-    float outwards_speed_deviation = 0.0f;
+    float outwardsSpeedDeviation = 0.0f;
     
     //Maximum random deviation of orbital speed.
-    float orbital_speed_deviation = 0.0f;
+    float orbitalSpeedDeviation = 0.0f;
     
     //Maximum random deviation of speed.
-    Point linear_speed_deviation = Point(0.0f);
+    Point linearSpeedDeviation = Point(0.0f);
     
     //How many degress linear speed can be rotated by.
-    float linear_speed_angle_deviation = 0.0f;
+    float linearSpeedAngleDeviation = 0.0f;
     
     //Are the directions and angles provided absolute, or relative (to a mob)?
-    bool angles_are_absolute = false;
+    bool anglesAreAbsolute = false;
     
     
     //--- Function declarations ---
@@ -376,6 +376,6 @@ struct ParticleGenerator : public Content {
     //--- Members ---
     
     //Time left before the next emission.
-    float emission_timer = 0.0f;
+    float emissionTimer = 0.0f;
     
 };

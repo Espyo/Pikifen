@@ -110,7 +110,7 @@ size_t AudioManager::createMobSoundSource(
             ambiance ? SOUND_TYPE_AMBIANCE_POS : SOUND_TYPE_GAMEPLAY_POS,
             config, m_ptr->pos
         );
-    mob_sources[source_id] = m_ptr;
+    mobSources[source_id] = m_ptr;
     return source_id;
 }
 
@@ -157,7 +157,7 @@ size_t AudioManager::createSoundSource(
 ) {
     if(!sample) return 0;
     
-    size_t id = next_sound_source_id;
+    size_t id = nextSoundSourceId;
     
     sources[id] = SoundSource();
     sources[id].sample = sample;
@@ -167,13 +167,13 @@ size_t AudioManager::createSoundSource(
     
     if(!hasFlag(config.flags, SOUND_FLAG_DONT_EMIT_ON_CREATION)) {
         scheduleEmission(id, true);
-        if(sources[id].emit_time_left <= 0.0f) {
+        if(sources[id].emitTimeLeft <= 0.0f) {
             emit(id);
             scheduleEmission(id, false);
         }
     }
     
-    next_sound_source_id++; //Hopefully there will be no collisions.
+    nextSoundSourceId++; //Hopefully there will be no collisions.
     
     return id;
 }
@@ -201,11 +201,11 @@ size_t AudioManager::createUiSoundsource(
  */
 void AudioManager::destroy() {
     al_detach_voice(voice);
-    al_destroy_mixer(gameplay_sound_mixer);
-    al_destroy_mixer(music_mixer);
-    al_destroy_mixer(ambiance_sound_mixer);
-    al_destroy_mixer(ui_sound_mixer);
-    al_destroy_mixer(master_mixer);
+    al_destroy_mixer(gameplaySoundMixer);
+    al_destroy_mixer(musicMixer);
+    al_destroy_mixer(ambianceSoundMixer);
+    al_destroy_mixer(uiSoundMixer);
+    al_destroy_mixer(masterMixer);
     al_destroy_voice(voice);
 }
 
@@ -222,23 +222,23 @@ bool AudioManager::destroySoundPlayback(size_t playback_idx) {
     if(playback_ptr->state == SOUND_PLAYBACK_STATE_DESTROYED) return false;
     playback_ptr->state = SOUND_PLAYBACK_STATE_DESTROYED;
     
-    SoundSource* source_ptr = getSource(playback_ptr->source_id);
+    SoundSource* source_ptr = getSource(playback_ptr->sourceId);
     
     //Destroy the source, if applicable.
     if(source_ptr) {
         if(!hasFlag(source_ptr->config.flags, SOUND_FLAG_KEEP_ON_PLAYBACK_END)) {
-            destroySoundSource(playback_ptr->source_id);
+            destroySoundSource(playback_ptr->sourceId);
         }
     }
     
     //Destroy the Allegro sample instance.
     ALLEGRO_SAMPLE_INSTANCE* instance =
-        playback_ptr->allegro_sample_instance;
+        playback_ptr->allegroSampleInstance;
     if(instance) {
         al_set_sample_instance_playing(instance, false);
         al_detach_sample_instance(instance);
         if(instance) al_destroy_sample_instance(instance);
-        playback_ptr->allegro_sample_instance = nullptr;
+        playback_ptr->allegroSampleInstance = nullptr;
     }
     
     return true;
@@ -266,7 +266,7 @@ bool AudioManager::destroySoundSource(size_t source_id) {
         )
     ) {
         for(size_t p = 0; p < playbacks.size(); p++) {
-            if(playbacks[p].source_id == source_id) {
+            if(playbacks[p].sourceId == source_id) {
                 stopSoundPlayback(p);
             }
         }
@@ -293,17 +293,17 @@ bool AudioManager::emit(size_t source_id) {
     //Check if other playbacks exist to prevent stacking.
     float lowest_stacking_playback_pos = FLT_MAX;
     if(
-        source_ptr->config.stack_min_pos > 0.0f ||
-        source_ptr->config.stack_mode == SOUND_STACK_MODE_NEVER
+        source_ptr->config.stackMinPos > 0.0f ||
+        source_ptr->config.stackMode == SOUND_STACK_MODE_NEVER
     ) {
         for(size_t p = 0; p < playbacks.size(); p++) {
             SoundPlayback* playback = &playbacks[p];
-            SoundSource* p_source_ptr = getSource(playback->source_id);
+            SoundSource* p_source_ptr = getSource(playback->sourceId);
             if(!p_source_ptr || p_source_ptr->sample != sample) continue;
             
             float playback_pos =
                 al_get_sample_instance_position(
-                    playback->allegro_sample_instance
+                    playback->allegroSampleInstance
                 ) /
                 (float) al_get_sample_frequency(p_source_ptr->sample);
             lowest_stacking_playback_pos =
@@ -311,15 +311,15 @@ bool AudioManager::emit(size_t source_id) {
         }
         
         if(
-            source_ptr->config.stack_min_pos > 0.0f &&
-            lowest_stacking_playback_pos < source_ptr->config.stack_min_pos
+            source_ptr->config.stackMinPos > 0.0f &&
+            lowest_stacking_playback_pos < source_ptr->config.stackMinPos
         ) {
             //Can't emit. This would stack the sounds, and there are other
             //playbacks that haven't reached the minimum stack threshold yet.
             return false;
         }
         if(
-            source_ptr->config.stack_mode == SOUND_STACK_MODE_NEVER &&
+            source_ptr->config.stackMode == SOUND_STACK_MODE_NEVER &&
             lowest_stacking_playback_pos < FLT_MAX
         ) {
             //Can't emit. This would stack the sounds.
@@ -328,10 +328,10 @@ bool AudioManager::emit(size_t source_id) {
     }
     
     //Check if other playbacks exist and if we need to stop them.
-    if(source_ptr->config.stack_mode == SOUND_STACK_MODE_OVERRIDE) {
+    if(source_ptr->config.stackMode == SOUND_STACK_MODE_OVERRIDE) {
         for(size_t p = 0; p < playbacks.size(); p++) {
             SoundPlayback* playback = &playbacks[p];
-            SoundSource* p_source_ptr = getSource(playback->source_id);
+            SoundSource* p_source_ptr = getSource(playback->sourceId);
             if(!p_source_ptr || p_source_ptr->sample != sample) {
                 continue;
             }
@@ -342,70 +342,70 @@ bool AudioManager::emit(size_t source_id) {
     //Create the playback.
     playbacks.push_back(SoundPlayback());
     SoundPlayback* playback_ptr = &playbacks.back();
-    playback_ptr->source_id = source_id;
-    playback_ptr->allegro_sample_instance = al_create_sample_instance(sample);
-    if(!playback_ptr->allegro_sample_instance) return false;
+    playback_ptr->sourceId = source_id;
+    playback_ptr->allegroSampleInstance = al_create_sample_instance(sample);
+    if(!playback_ptr->allegroSampleInstance) return false;
     
-    playback_ptr->base_gain = source_ptr->config.gain;
-    if(source_ptr->config.gain_deviation != 0.0f) {
-        playback_ptr->base_gain +=
+    playback_ptr->baseGain = source_ptr->config.gain;
+    if(source_ptr->config.gainDeviation != 0.0f) {
+        playback_ptr->baseGain +=
             game.rng.f(
-                -source_ptr->config.gain_deviation,
-                source_ptr->config.gain_deviation
+                -source_ptr->config.gainDeviation,
+                source_ptr->config.gainDeviation
             );
-        playback_ptr->base_gain =
-            std::clamp(playback_ptr->base_gain, 0.0f, 1.0f);
+        playback_ptr->baseGain =
+            std::clamp(playback_ptr->baseGain, 0.0f, 1.0f);
     }
     
     //Play.
     updatePlaybackTargetGainAndPan(playbacks.size() - 1);
-    playback_ptr->gain = playback_ptr->target_gain;
-    playback_ptr->pan = playback_ptr->target_pan;
+    playback_ptr->gain = playback_ptr->targetGain;
+    playback_ptr->pan = playback_ptr->targetPan;
     
     ALLEGRO_MIXER* mixer = nullptr;
     switch(source_ptr->type) {
     case SOUND_TYPE_GAMEPLAY_GLOBAL:
     case SOUND_TYPE_GAMEPLAY_POS: {
-        mixer = gameplay_sound_mixer;
+        mixer = gameplaySoundMixer;
         break;
     } case SOUND_TYPE_AMBIANCE_GLOBAL: {
     } case SOUND_TYPE_AMBIANCE_POS: {
-        mixer = ambiance_sound_mixer;
+        mixer = ambianceSoundMixer;
         break;
     } case SOUND_TYPE_UI: {
-        mixer = ui_sound_mixer;
+        mixer = uiSoundMixer;
         break;
     }
     }
     
     al_attach_sample_instance_to_mixer(
-        playback_ptr->allegro_sample_instance, mixer
+        playback_ptr->allegroSampleInstance, mixer
     );
     
     al_set_sample_instance_playmode(
-        playback_ptr->allegro_sample_instance,
+        playback_ptr->allegroSampleInstance,
         hasFlag(source_ptr->config.flags, SOUND_FLAG_LOOP) ?
         ALLEGRO_PLAYMODE_LOOP :
         ALLEGRO_PLAYMODE_ONCE
     );
     float speed = source_ptr->config.speed;
-    if(source_ptr->config.speed_deviation != 0.0f) {
+    if(source_ptr->config.speedDeviation != 0.0f) {
         speed +=
             game.rng.f(
-                -source_ptr->config.speed_deviation,
-                source_ptr->config.speed_deviation
+                -source_ptr->config.speedDeviation,
+                source_ptr->config.speedDeviation
             );
     }
     speed = std::max(0.0f, speed);
-    al_set_sample_instance_speed(playback_ptr->allegro_sample_instance, speed);
+    al_set_sample_instance_speed(playback_ptr->allegroSampleInstance, speed);
     updatePlaybackGainAndPan(playbacks.size() - 1);
     
     al_set_sample_instance_position(
-        playback_ptr->allegro_sample_instance,
+        playback_ptr->allegroSampleInstance,
         0.0f
     );
     al_set_sample_instance_playing(
-        playback_ptr->allegro_sample_instance,
+        playback_ptr->allegroSampleInstance,
         true
     );
     
@@ -432,9 +432,9 @@ SoundSource* AudioManager::getSource(size_t source_id) {
  * @param m_ptr Mob that got deleted.
  */
 void AudioManager::handleMobDeletion(const Mob* m_ptr) {
-    for(auto s = mob_sources.begin(); s != mob_sources.end();) {
+    for(auto s = mobSources.begin(); s != mobSources.end();) {
         if(s->second == m_ptr) {
-            s = mob_sources.erase(s);
+            s = mobSources.erase(s);
         } else {
             ++s;
         }
@@ -449,8 +449,8 @@ void AudioManager::handleMobDeletion(const Mob* m_ptr) {
  */
 void AudioManager::handleStreamFinished(ALLEGRO_AUDIO_STREAM* stream) {
     for(const auto &s : game.content.songs.list) {
-        if(s.second.main_track == stream) {
-            if(on_song_finished) on_song_finished(s.first);
+        if(s.second.mainTrack == stream) {
+            if(onSongFinished) onSongFinished(s.first);
         }
     }
 }
@@ -467,7 +467,7 @@ void AudioManager::handleWorldPause() {
             continue;
         }
         
-        SoundSource* source_ptr = getSource(playback_ptr->source_id);
+        SoundSource* source_ptr = getSource(playback_ptr->sourceId);
         if(!source_ptr) continue;
         
         if(
@@ -504,7 +504,7 @@ void AudioManager::handleWorldUnpause() {
             continue;
         }
         
-        SoundSource* source_ptr = getSource(playback_ptr->source_id);
+        SoundSource* source_ptr = getSource(playback_ptr->sourceId);
         if(!source_ptr) continue;
         
         if(
@@ -515,12 +515,12 @@ void AudioManager::handleWorldUnpause() {
         ) {
             playback_ptr->state = SOUND_PLAYBACK_STATE_UNPAUSING;
             al_set_sample_instance_playing(
-                playback_ptr->allegro_sample_instance,
+                playback_ptr->allegroSampleInstance,
                 true
             );
             al_set_sample_instance_position(
-                playback_ptr->allegro_sample_instance,
-                playback_ptr->pre_pause_pos
+                playback_ptr->allegroSampleInstance,
+                playback_ptr->prePausePos
             );
         }
     }
@@ -558,39 +558,39 @@ void AudioManager::init(
         );
         
     //Master mixer.
-    master_mixer =
+    masterMixer =
         al_create_mixer(
             44100, ALLEGRO_AUDIO_DEPTH_FLOAT32, ALLEGRO_CHANNEL_CONF_2
         );
-    al_attach_mixer_to_voice(master_mixer, voice);
+    al_attach_mixer_to_voice(masterMixer, voice);
     
     //Gameplay sound effects mixer.
-    gameplay_sound_mixer =
+    gameplaySoundMixer =
         al_create_mixer(
             44100, ALLEGRO_AUDIO_DEPTH_FLOAT32, ALLEGRO_CHANNEL_CONF_2
         );
-    al_attach_mixer_to_mixer(gameplay_sound_mixer, master_mixer);
+    al_attach_mixer_to_mixer(gameplaySoundMixer, masterMixer);
     
     //Music mixer.
-    music_mixer =
+    musicMixer =
         al_create_mixer(
             44100, ALLEGRO_AUDIO_DEPTH_FLOAT32, ALLEGRO_CHANNEL_CONF_2
         );
-    al_attach_mixer_to_mixer(music_mixer, master_mixer);
+    al_attach_mixer_to_mixer(musicMixer, masterMixer);
     
     //Ambiance sounds mixer.
-    ambiance_sound_mixer =
+    ambianceSoundMixer =
         al_create_mixer(
             44100, ALLEGRO_AUDIO_DEPTH_FLOAT32, ALLEGRO_CHANNEL_CONF_2
         );
-    al_attach_mixer_to_mixer(ambiance_sound_mixer, master_mixer);
+    al_attach_mixer_to_mixer(ambianceSoundMixer, masterMixer);
     
     //UI sound effects mixer.
-    ui_sound_mixer =
+    uiSoundMixer =
         al_create_mixer(
             44100, ALLEGRO_AUDIO_DEPTH_FLOAT32, ALLEGRO_CHANNEL_CONF_2
         );
-    al_attach_mixer_to_mixer(ui_sound_mixer, master_mixer);
+    al_attach_mixer_to_mixer(uiSoundMixer, masterMixer);
     
     //Set all of the mixer volumes.
     updateVolumes(
@@ -603,8 +603,8 @@ void AudioManager::init(
     
     //Initialization of every mix track type.
     for(size_t m = 0; m < N_MIX_TRACK_TYPES; m++) {
-        mix_statuses.push_back(false);
-        mix_volumes.push_back(0.0f);
+        mixStatuses.push_back(false);
+        mixVolumes.push_back(0.0f);
     }
 }
 
@@ -615,7 +615,7 @@ void AudioManager::init(
  * @param track_type Track type to mark.
  */
 void AudioManager::markMixTrackStatus(MIX_TRACK_TYPE track_type) {
-    mix_statuses[track_type] = true;
+    mixStatuses[track_type] = true;
 }
 
 
@@ -630,9 +630,9 @@ bool AudioManager::rewindSong(const string &name) {
     if(song_it == game.content.songs.list.end()) return false;
     Song* song_ptr = &song_it->second;
     
-    song_ptr->stop_point = 0.0f;
-    al_rewind_audio_stream(song_ptr->main_track);
-    for(auto const &m : song_ptr->mix_tracks) {
+    song_ptr->stopPoint = 0.0f;
+    al_rewind_audio_stream(song_ptr->mainTrack);
+    for(auto const &m : song_ptr->mixTracks) {
         al_rewind_audio_stream(m.second);
     }
     
@@ -652,10 +652,10 @@ bool AudioManager::scheduleEmission(size_t source_id, bool first) {
     SoundSource* source_ptr = getSource(source_id);
     if(!source_ptr) return false;
     
-    source_ptr->emit_time_left = first ? 0.0f : source_ptr->config.interval;
+    source_ptr->emitTimeLeft = first ? 0.0f : source_ptr->config.interval;
     if(first || source_ptr->config.interval > 0.0f) {
-        source_ptr->emit_time_left +=
-            game.rng.f(0, source_ptr->config.random_delay);
+        source_ptr->emitTimeLeft +=
+            game.rng.f(0, source_ptr->config.randomDelay);
     }
     
     return true;
@@ -669,8 +669,8 @@ bool AudioManager::scheduleEmission(size_t source_id, bool first) {
  * @param cam_br Current coordinates of the camera's bottom-right corner.
  */
 void AudioManager::setCameraPos(const Point &cam_tl, const Point &cam_br) {
-    this->cam_tl = cam_tl;
-    this->cam_br = cam_br;
+    this->camTL = cam_tl;
+    this->camBR = cam_br;
 }
 
 
@@ -744,9 +744,9 @@ bool AudioManager::setCurrentSong(
         //Start it.
         if(song_ptr->state == SONG_STATE_STOPPED) {
             startSongTrack(
-                song_ptr, song_ptr->main_track, from_start, fade_in, loop
+                song_ptr, song_ptr->mainTrack, from_start, fade_in, loop
             );
-            for(auto const &m : song_ptr->mix_tracks) {
+            for(auto const &m : song_ptr->mixTracks) {
                 startSongTrack(song_ptr, m.second, from_start, fade_in, loop);
             }
         }
@@ -765,9 +765,9 @@ bool AudioManager::setCurrentSong(
  */
 void AudioManager::setSongPosNearLoop() {
     for(auto s : game.content.songs.list) {
-        double pos = std::max(0.0, s.second.loop_end - 4.0f);
-        al_seek_audio_stream_secs(s.second.main_track, pos);
-        for(auto const &m : s.second.mix_tracks) {
+        double pos = std::max(0.0, s.second.loopEnd - 4.0f);
+        al_seek_audio_stream_secs(s.second.mainTrack, pos);
+        for(auto const &m : s.second.mixTracks) {
             al_seek_audio_stream_secs(m.second, pos);
         }
     }
@@ -807,15 +807,15 @@ void AudioManager::startSongTrack(
 ) {
     if(!stream) return;
     al_set_audio_stream_gain(stream, fade_in ? 0.0f : 1.0f);
-    al_seek_audio_stream_secs(stream, from_start ? 0.0f : song_ptr->stop_point);
+    al_seek_audio_stream_secs(stream, from_start ? 0.0f : song_ptr->stopPoint);
     al_set_audio_stream_loop_secs(
-        stream, song_ptr->loop_start, song_ptr->loop_end
+        stream, song_ptr->loopStart, song_ptr->loopEnd
     );
     al_set_audio_stream_playmode(
         stream, loop ? ALLEGRO_PLAYMODE_LOOP : ALLEGRO_PLAYMODE_ONCE
     );
     
-    al_attach_audio_stream_to_mixer(stream, music_mixer);
+    al_attach_audio_stream_to_mixer(stream, musicMixer);
     al_set_audio_stream_playing(stream, true);
 }
 
@@ -835,7 +835,7 @@ void AudioManager::stopAllPlaybacks(const ALLEGRO_SAMPLE* filter) {
         } else {
             SoundPlayback* playback_ptr = &playbacks[p];
             SoundSource* source_ptr =
-                getSource(playback_ptr->source_id);
+                getSource(playback_ptr->sourceId);
             if(source_ptr && source_ptr->sample == filter) {
                 to_stop = true;
             }
@@ -870,10 +870,10 @@ bool AudioManager::stopSoundPlayback(size_t playback_idx) {
  */
 void AudioManager::tick(float delta_t) {
     //Clear deleted mob sources.
-    for(auto s = mob_sources.begin(); s != mob_sources.end();) {
+    for(auto s = mobSources.begin(); s != mobSources.end();) {
         Mob* mob_ptr = s->second;
-        if(!mob_ptr || mob_ptr->to_delete) {
-            s = mob_sources.erase(s);
+        if(!mob_ptr || mob_ptr->toDelete) {
+            s = mobSources.erase(s);
         } else {
             ++s;
         }
@@ -882,20 +882,20 @@ void AudioManager::tick(float delta_t) {
     //Update the position of sources tied to mobs.
     for(auto &s : sources) {
         if(s.second.destroyed) continue;
-        auto mob_source_it = mob_sources.find(s.first);
-        if(mob_source_it == mob_sources.end()) continue;
+        auto mob_source_it = mobSources.find(s.first);
+        if(mob_source_it == mobSources.end()) continue;
         Mob* mob_ptr = mob_source_it->second;
-        if(!mob_ptr || mob_ptr->to_delete) continue;
+        if(!mob_ptr || mob_ptr->toDelete) continue;
         s.second.pos = mob_ptr->pos;
     }
     
     //Emit playbacks from sources that want to emit.
     for(auto &s : sources) {
         if(s.second.destroyed) continue;
-        if(s.second.emit_time_left == 0.0f) continue;
+        if(s.second.emitTimeLeft == 0.0f) continue;
         
-        s.second.emit_time_left -= delta_t;
-        if(s.second.emit_time_left <= 0.0f) {
+        s.second.emitTimeLeft -= delta_t;
+        if(s.second.emitTimeLeft <= 0.0f) {
             emit(s.first);
             scheduleEmission(s.first, false);
         }
@@ -908,7 +908,7 @@ void AudioManager::tick(float delta_t) {
         
         if(
             !al_get_sample_instance_playing(
-                playback_ptr->allegro_sample_instance
+                playback_ptr->allegroSampleInstance
             ) &&
             playback_ptr->state != SOUND_PLAYBACK_STATE_PAUSED
         ) {
@@ -924,46 +924,46 @@ void AudioManager::tick(float delta_t) {
             playback_ptr->gain =
                 inchTowards(
                     playback_ptr->gain,
-                    playback_ptr->target_gain,
+                    playback_ptr->targetGain,
                     AUDIO::PLAYBACK_GAIN_SPEED * delta_t
                 );
             playback_ptr->pan =
                 inchTowards(
                     playback_ptr->pan,
-                    playback_ptr->target_pan,
+                    playback_ptr->targetPan,
                     AUDIO::PLAYBACK_PAN_SPEED * delta_t
                 );
                 
             //Pausing and unpausing.
             if(playback_ptr->state == SOUND_PLAYBACK_STATE_PAUSING) {
-                playback_ptr->state_gain_mult -=
+                playback_ptr->stateGainMult -=
                     AUDIO::PLAYBACK_PAUSE_GAIN_SPEED * delta_t;
-                if(playback_ptr->state_gain_mult <= 0.0f) {
-                    playback_ptr->state_gain_mult = 0.0f;
+                if(playback_ptr->stateGainMult <= 0.0f) {
+                    playback_ptr->stateGainMult = 0.0f;
                     playback_ptr->state = SOUND_PLAYBACK_STATE_PAUSED;
-                    playback_ptr->pre_pause_pos =
+                    playback_ptr->prePausePos =
                         al_get_sample_instance_position(
-                            playback_ptr->allegro_sample_instance
+                            playback_ptr->allegroSampleInstance
                         );
                     al_set_sample_instance_playing(
-                        playback_ptr->allegro_sample_instance,
+                        playback_ptr->allegroSampleInstance,
                         false
                     );
                 }
             } else if(playback_ptr->state == SOUND_PLAYBACK_STATE_UNPAUSING) {
-                playback_ptr->state_gain_mult +=
+                playback_ptr->stateGainMult +=
                     AUDIO::PLAYBACK_PAUSE_GAIN_SPEED * delta_t;
-                if(playback_ptr->state_gain_mult >= 1.0f) {
-                    playback_ptr->state_gain_mult = 1.0f;
+                if(playback_ptr->stateGainMult >= 1.0f) {
+                    playback_ptr->stateGainMult = 1.0f;
                     playback_ptr->state = SOUND_PLAYBACK_STATE_PLAYING;
                 }
             }
             
             //Stopping.
             if(playback_ptr->state == SOUND_PLAYBACK_STATE_STOPPING) {
-                playback_ptr->state_gain_mult -=
+                playback_ptr->stateGainMult -=
                     AUDIO::PLAYBACK_STOP_GAIN_SPEED * delta_t;
-                if(playback_ptr->state_gain_mult <= 0.0f) {
+                if(playback_ptr->stateGainMult <= 0.0f) {
                     destroySoundPlayback(p);
                 }
             }
@@ -985,9 +985,9 @@ void AudioManager::tick(float delta_t) {
     //Delete destroyed sources.
     for(auto s = sources.begin(); s != sources.end();) {
         if(s->second.destroyed) {
-            auto mob_source_it = mob_sources.find(s->first);
-            if(mob_source_it != mob_sources.end()) {
-                mob_sources.erase(mob_source_it);
+            auto mob_source_it = mobSources.find(s->first);
+            if(mob_source_it != mobSources.end()) {
+                mobSources.erase(mob_source_it);
             }
             s = sources.erase(s);
         } else {
@@ -1007,7 +1007,7 @@ void AudioManager::tick(float delta_t) {
                     1.0f,
                     AUDIO::SONG_GAIN_SPEED * delta_t
                 );
-            al_set_audio_stream_gain(song_ptr->main_track, song_ptr->gain);
+            al_set_audio_stream_gain(song_ptr->mainTrack, song_ptr->gain);
             if(song_ptr->gain == 1.0f) {
                 song_ptr->state = SONG_STATE_PLAYING;
             }
@@ -1022,7 +1022,7 @@ void AudioManager::tick(float delta_t) {
                     AUDIO::SONG_SOFTENED_GAIN,
                     AUDIO::SONG_GAIN_SPEED * delta_t
                 );
-            al_set_audio_stream_gain(song_ptr->main_track, song_ptr->gain);
+            al_set_audio_stream_gain(song_ptr->mainTrack, song_ptr->gain);
             if(song_ptr->gain == AUDIO::SONG_SOFTENED_GAIN) {
                 song_ptr->state = SONG_STATE_SOFTENED;
             }
@@ -1037,7 +1037,7 @@ void AudioManager::tick(float delta_t) {
                     1.0f,
                     AUDIO::SONG_GAIN_SPEED * delta_t
                 );
-            al_set_audio_stream_gain(song_ptr->main_track, song_ptr->gain);
+            al_set_audio_stream_gain(song_ptr->mainTrack, song_ptr->gain);
             if(song_ptr->gain == 1.0f) {
                 song_ptr->state = SONG_STATE_PLAYING;
             }
@@ -1049,16 +1049,16 @@ void AudioManager::tick(float delta_t) {
                     0.0f,
                     AUDIO::SONG_GAIN_SPEED * delta_t
                 );
-            al_set_audio_stream_gain(song_ptr->main_track, song_ptr->gain);
+            al_set_audio_stream_gain(song_ptr->mainTrack, song_ptr->gain);
             if(song_ptr->gain == 0.0f) {
-                al_set_audio_stream_playing(song_ptr->main_track, false);
-                al_detach_audio_stream(song_ptr->main_track);
-                for(auto &m : song_ptr->mix_tracks) {
+                al_set_audio_stream_playing(song_ptr->mainTrack, false);
+                al_detach_audio_stream(song_ptr->mainTrack);
+                for(auto &m : song_ptr->mixTracks) {
                     al_set_audio_stream_playing(m.second, false);
                     al_detach_audio_stream(m.second);
                 }
-                song_ptr->stop_point =
-                    al_get_audio_stream_position_secs(song_ptr->main_track);
+                song_ptr->stopPoint =
+                    al_get_audio_stream_position_secs(song_ptr->mainTrack);
                 song_ptr->state = SONG_STATE_STOPPED;
             }
             break;
@@ -1071,10 +1071,10 @@ void AudioManager::tick(float delta_t) {
     
     //Update the status of mix track types, and their volumes.
     for(size_t m = 0; m < N_MIX_TRACK_TYPES; m++) {
-        mix_volumes[m] =
+        mixVolumes[m] =
             inchTowards(
-                mix_volumes[m],
-                mix_statuses[m] ? 1.0f : 0.0f,
+                mixVolumes[m],
+                mixStatuses[m] ? 1.0f : 0.0f,
                 AUDIO::MIX_TRACK_GAIN_SPEED * delta_t
             );
             
@@ -1084,11 +1084,11 @@ void AudioManager::tick(float delta_t) {
                 continue;
             }
             
-            auto track_it = song_ptr->mix_tracks.find((MIX_TRACK_TYPE) m);
-            if(track_it == song_ptr->mix_tracks.end()) continue;
+            auto track_it = song_ptr->mixTracks.find((MIX_TRACK_TYPE) m);
+            if(track_it == song_ptr->mixTracks.end()) continue;
             
             al_set_audio_stream_gain(
-                track_it->second, mix_volumes[m] * song_ptr->gain
+                track_it->second, mixVolumes[m] * song_ptr->gain
             );
         }
         
@@ -1096,7 +1096,7 @@ void AudioManager::tick(float delta_t) {
     
     //Prepare the statuses for the next frame.
     for(size_t s = 0; s < N_MIX_TRACK_TYPES; s++) {
-        mix_statuses[s] = false;
+        mixStatuses[s] = false;
     }
 }
 
@@ -1113,18 +1113,18 @@ void AudioManager::updatePlaybackGainAndPan(size_t playback_idx) {
     if(playback_ptr->state == SOUND_PLAYBACK_STATE_DESTROYED) return;
     
     playback_ptr->gain = std::clamp(playback_ptr->gain, 0.0f, 1.0f);
-    float final_gain = playback_ptr->gain * playback_ptr->state_gain_mult;
-    final_gain *= playback_ptr->base_gain;
+    float final_gain = playback_ptr->gain * playback_ptr->stateGainMult;
+    final_gain *= playback_ptr->baseGain;
     final_gain = std::clamp(final_gain, 0.0f, 1.0f);
     al_set_sample_instance_gain(
-        playback_ptr->allegro_sample_instance,
+        playback_ptr->allegroSampleInstance,
         final_gain
     );
     
     playback_ptr->pan = std::clamp(playback_ptr->pan, -1.0f, 1.0f);
     
     al_set_sample_instance_pan(
-        playback_ptr->allegro_sample_instance,
+        playback_ptr->allegroSampleInstance,
         playback_ptr->pan
     );
 }
@@ -1145,7 +1145,7 @@ void AudioManager::updatePlaybackTargetGainAndPan(size_t playback_idx) {
     SoundPlayback* playback_ptr = &playbacks[playback_idx];
     if(playback_ptr->state == SOUND_PLAYBACK_STATE_DESTROYED) return;
     
-    SoundSource* source_ptr = getSource(playback_ptr->source_id);
+    SoundSource* source_ptr = getSource(playback_ptr->sourceId);
     if(!source_ptr) return;
     
     bool is_positional =
@@ -1154,10 +1154,10 @@ void AudioManager::updatePlaybackTargetGainAndPan(size_t playback_idx) {
     if(!is_positional) return;
     
     //Calculate screen and camera things.
-    Point screen_size = cam_br - cam_tl;
+    Point screen_size = camBR - camTL;
     if(screen_size.x == 0.0f || screen_size.y == 0.0f) return;
     
-    Point cam_center = (cam_tl + cam_br) / 2.0f;
+    Point cam_center = (camTL + camBR) / 2.0f;
     float d = Distance(cam_center, source_ptr->pos).toFloat();
     Point delta = source_ptr->pos - cam_center;
     
@@ -1169,7 +1169,7 @@ void AudioManager::updatePlaybackTargetGainAndPan(size_t playback_idx) {
             1.0f, 0.0f
         );
     gain = std::clamp(gain, 0.0f, 1.0f);
-    playback_ptr->target_gain = gain;
+    playback_ptr->targetGain = gain;
     
     //Set the pan.
     float pan_abs =
@@ -1180,7 +1180,7 @@ void AudioManager::updatePlaybackTargetGainAndPan(size_t playback_idx) {
         );
     pan_abs = std::clamp(pan_abs, 0.0f, 1.0f);
     float pan = delta.x > 0.0f ? pan_abs : -pan_abs;
-    playback_ptr->target_pan = pan;
+    playback_ptr->targetPan = pan;
 }
 
 
@@ -1198,19 +1198,19 @@ void AudioManager::updateVolumes(
     float ambiance_sound_volume, float ui_sound_volume
 ) {
     master_volume = std::clamp(master_volume, 0.0f, 1.0f);
-    al_set_mixer_gain(master_mixer, master_volume);
+    al_set_mixer_gain(masterMixer, master_volume);
     
     gameplay_sound_volume = std::clamp(gameplay_sound_volume, 0.0f, 1.0f);
-    al_set_mixer_gain(gameplay_sound_mixer, gameplay_sound_volume);
+    al_set_mixer_gain(gameplaySoundMixer, gameplay_sound_volume);
     
     music_volume = std::clamp(music_volume, 0.0f, 1.0f);
-    al_set_mixer_gain(music_mixer, music_volume);
+    al_set_mixer_gain(musicMixer, music_volume);
     
     ambiance_sound_volume = std::clamp(ambiance_sound_volume, 0.0f, 1.0f);
-    al_set_mixer_gain(ambiance_sound_mixer, ambiance_sound_volume);
+    al_set_mixer_gain(ambianceSoundMixer, ambiance_sound_volume);
     
     ui_sound_volume = std::clamp(ui_sound_volume, 0.0f, 1.0f);
-    al_set_mixer_gain(ui_sound_mixer, ui_sound_volume);
+    al_set_mixer_gain(uiSoundMixer, ui_sound_volume);
 }
 
 
@@ -1230,12 +1230,12 @@ void Song::loadFromDataNode(DataNode* node) {
     DataNode* main_track_node = nullptr;
     
     rs.set("main_track", main_track_str, &main_track_node);
-    rs.set("loop_start", loop_start);
-    rs.set("loop_end", loop_end);
+    rs.set("loop_start", loopStart);
+    rs.set("loop_end", loopEnd);
     rs.set("name", name);
     
-    main_track =
-        game.content.song_tracks.list.get(main_track_str, main_track_node);
+    mainTrack =
+        game.content.songTracks.list.get(main_track_str, main_track_node);
         
     DataNode* mix_tracks_node = node->getChildByName("mix_tracks");
     size_t n_mix_tracks = mix_tracks_node->getNrOfChildren();
@@ -1255,15 +1255,15 @@ void Song::loadFromDataNode(DataNode* node) {
             continue;
         }
         
-        mix_tracks[trigger] =
-            game.content.song_tracks.list.get(mix_track_node->value, mix_track_node);
+        mixTracks[trigger] =
+            game.content.songTracks.list.get(mix_track_node->value, mix_track_node);
     }
     
-    if(loop_end == 0.0f) {
-        loop_end = al_get_audio_stream_length_secs(main_track);
+    if(loopEnd == 0.0f) {
+        loopEnd = al_get_audio_stream_length_secs(mainTrack);
     }
-    if(loop_end < loop_start) {
-        loop_start = 0.0f;
+    if(loopEnd < loopStart) {
+        loopStart = 0.0f;
     }
 }
 
@@ -1272,8 +1272,8 @@ void Song::loadFromDataNode(DataNode* node) {
  * @brief Unloads the song.
  */
 void Song::unload() {
-    game.content.song_tracks.list.free(main_track);
-    for(auto &t : mix_tracks) {
-        game.content.song_tracks.list.free(t.second);
+    game.content.songTracks.list.free(mainTrack);
+    for(auto &t : mixTracks) {
+        game.content.songTracks.list.free(t.second);
     }
 }

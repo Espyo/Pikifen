@@ -74,10 +74,10 @@ public:
     IN_WORLD_HUD_TRANSITION transition = IN_WORLD_HUD_TRANSITION_IN;
     
     //Time left in the current transition, if any.
-    float transition_timer = 0.0f;
+    float transitionTimer = 0.0f;
     
     //Does it need to be deleted?
-    bool to_delete = false;
+    bool toDelete = false;
     
     
     //--- Function declarations ---
@@ -113,19 +113,19 @@ private:
     //--- Members ---
     
     //Upper number, the one representing the current value.
-    float value_number = 0.0f;
+    float valueNumber = 0.0f;
     
     //Lower number, the one representing the requirement.
-    float requirement_number = 0.0f;
+    float requirementNumber = 0.0f;
     
     //Color to use.
     ALLEGRO_COLOR color = COLOR_BLACK;
     
     //Value change growth juice timer. 0 means not animating.
-    float grow_juice_timer = 0.0f;
+    float growJuiceTimer = 0.0f;
     
     //Requirement met flash juice timer. 0 means not animating.
-    float req_met_juice_timer = 0.0f;
+    float reqMetJuiceTimer = 0.0f;
     
 };
 
@@ -141,7 +141,7 @@ public:
     //--- Members ---
     
     //How much the health wheel is filled. Gradually moves to the target amount.
-    float visible_ratio = 0.0f;
+    float visibleRatio = 0.0f;
     
     
     //--- Function declarations ---

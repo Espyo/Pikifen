@@ -26,13 +26,13 @@ public:
     //--- Members ---
     
     //What type of pile it is.
-    PileType* pil_type = nullptr;
+    PileType* pilType = nullptr;
     
     //Current amount of resources.
     size_t amount = 0;
     
     //Time left until it recharges.
-    Timer recharge_timer;
+    Timer rechargeTimer;
     
     
     //--- Function declarations ---

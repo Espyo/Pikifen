@@ -35,16 +35,16 @@ public:
         //--- Members ---
         
         //Is position relative to the mob's position and angle.
-        Point relative_pos;
+        Point relativePos;
         
         //Its absolute coordinates.
-        Point absolute_pos;
+        Point absolutePos;
         
         //Current state. 0 = free. 1 = reserved. 2 = occupied.
         unsigned char state = 0;
         
         //What Pikmin is reserving/occupying. nullptr if free.
-        Pikmin* pikmin_here = nullptr;
+        Pikmin* pikminHere = nullptr;
         
         
         //--- Function declarations ---
@@ -57,10 +57,10 @@ public:
     //--- Members ---
     
     //What type of group task it is.
-    GroupTaskType* tas_type = nullptr;
+    GroupTaskType* tasType = nullptr;
     
     //Power requirement in order to reach the goal. Group task type override.
-    size_t power_goal = 0;
+    size_t powerGoal = 0;
     
     //List of spots for Pikmin to use.
     vector<GroupTaskSpot> spots;
@@ -96,7 +96,7 @@ private:
     float power = 0.0f;
     
     //Has it already run the "task finished" code?
-    bool ran_task_finished_code = false;
+    bool ranTaskFinishedCode = false;
     
     
     //--- Function declarations ---

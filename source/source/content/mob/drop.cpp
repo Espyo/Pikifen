@@ -25,8 +25,8 @@
  */
 Drop::Drop(const Point &pos, DropType* type, float angle) :
     Mob(pos, type, angle),
-    dro_type(type),
-    doses_left(dro_type->total_doses) {
+    droType(type),
+    dosesLeft(droType->totalDoses) {
     
     
 }
@@ -54,7 +54,7 @@ void Drop::drawMob() {
         SPRITE_BMP_EFFECT_DELIVERY
     );
     
-    eff.scale *= cur_scale;
+    eff.scale *= curScale;
     
     drawBitmapWithEffects(cur_s_ptr->bitmap, eff);
 }
@@ -68,29 +68,29 @@ void Drop::drawMob() {
 void Drop::tickClassSpecifics(float delta_t) {
     float intended_scale;
     
-    if(doses_left == dro_type->total_doses) {
+    if(dosesLeft == droType->totalDoses) {
         intended_scale = 1.0f;
-    } else if(doses_left == 0) {
+    } else if(dosesLeft == 0) {
         intended_scale = 0.0f;
     } else {
         intended_scale =
-            interpolateNumber(doses_left, 1, dro_type->total_doses, 0.5, 1.0);
+            interpolateNumber(dosesLeft, 1, droType->totalDoses, 0.5, 1.0);
     }
     
-    if(cur_scale > intended_scale) {
-        cur_scale -= dro_type->shrink_speed * delta_t;
-        cur_scale = std::max(intended_scale, cur_scale);
+    if(curScale > intended_scale) {
+        curScale -= droType->shrinkSpeed * delta_t;
+        curScale = std::max(intended_scale, curScale);
     }
     
-    if(cur_scale == 0) {
+    if(curScale == 0) {
         //Disappeared into nothingness. Time to delete...if it's not being used.
         
         for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
-            if(game.states.gameplay->mobs.all[m]->focused_mob == this) {
+            if(game.states.gameplay->mobs.all[m]->focusedMob == this) {
                 return;
             }
         }
         
-        to_delete = true;
+        toDelete = true;
     }
 }

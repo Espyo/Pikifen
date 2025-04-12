@@ -24,19 +24,19 @@
  */
 void AnimationEditor::handleKeyCharCanvas(const ALLEGRO_EVENT &ev) {
     if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_LEFT)) {
-        game.cam.target_pos.x -=
+        game.cam.targetPos.x -=
             AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
             
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_RIGHT)) {
-        game.cam.target_pos.x +=
+        game.cam.targetPos.x +=
             AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
             
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_UP)) {
-        game.cam.target_pos.y -=
+        game.cam.targetPos.y -=
             AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
             
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_DOWN)) {
-        game.cam.target_pos.y +=
+        game.cam.targetPos.y +=
             AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
             
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_MINUS)) {
@@ -87,7 +87,7 @@ void AnimationEditor::handleKeyDownAnywhere(const ALLEGRO_EVENT &ev) {
         
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_ESCAPE)) {
     
-        escape_was_pressed = true;
+        escapeWasPressed = true;
         
         if(!dialogs.empty()) {
             closeTopDialog();
@@ -151,47 +151,47 @@ void AnimationEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
     
     switch(state) {
     case EDITOR_STATE_SPRITE_TRANSFORM: {
-        Point cur_sprite_size = cur_sprite->scale * cur_sprite->bmp_size;
+        Point cur_sprite_size = curSprite->scale * curSprite->bmpSize;
         if(
-            cur_transformation_widget.handleMouseDown(
-                game.mouse_cursor.w_pos,
-                &cur_sprite->offset,
+            curTransformationWidget.handleMouseDown(
+                game.mouseCursor.wPos,
+                &curSprite->offset,
                 &cur_sprite_size,
-                &cur_sprite->angle,
+                &curSprite->angle,
                 1.0f / game.cam.zoom
             )
         ) {
-            cur_sprite->scale = cur_sprite_size / cur_sprite->bmp_size;
+            curSprite->scale = cur_sprite_size / curSprite->bmpSize;
         }
         break;
         
     } case EDITOR_STATE_HITBOXES: {
-        if(cur_sprite) {
+        if(curSprite) {
             bool tw_handled = false;
-            if(cur_hitbox) {
-                if(!side_view) {
+            if(curHitbox) {
+                if(!sideView) {
                     Point hitbox_size(
-                        cur_hitbox->radius * 2.0f, cur_hitbox->radius * 2.0f
+                        curHitbox->radius * 2.0f, curHitbox->radius * 2.0f
                     );
                     tw_handled =
-                        cur_transformation_widget.handleMouseDown(
-                            game.mouse_cursor.w_pos,
-                            &cur_hitbox->pos,
+                        curTransformationWidget.handleMouseDown(
+                            game.mouseCursor.wPos,
+                            &curHitbox->pos,
                             &hitbox_size,
                             nullptr,
                             1.0f / game.cam.zoom
                         );
                 } else {
                     Point hitbox_center(
-                        cur_hitbox->pos.x,
-                        (-(cur_hitbox->height / 2.0f)) - cur_hitbox->z
+                        curHitbox->pos.x,
+                        (-(curHitbox->height / 2.0f)) - curHitbox->z
                     );
                     Point hitbox_size(
-                        cur_hitbox->radius * 2.0f, cur_hitbox->height
+                        curHitbox->radius * 2.0f, curHitbox->height
                     );
                     tw_handled =
-                        cur_transformation_widget.handleMouseDown(
-                            game.mouse_cursor.w_pos,
+                        curTransformationWidget.handleMouseDown(
+                            game.mouseCursor.wPos,
                             &hitbox_center,
                             &hitbox_size,
                             nullptr,
@@ -202,10 +202,10 @@ void AnimationEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
             
             if(!tw_handled) {
                 vector<size_t> clicked_hitboxes;
-                for(size_t h = 0; h < cur_sprite->hitboxes.size(); h++) {
-                    Hitbox* h_ptr = &cur_sprite->hitboxes[h];
+                for(size_t h = 0; h < curSprite->hitboxes.size(); h++) {
+                    Hitbox* h_ptr = &curSprite->hitboxes[h];
                     
-                    if(side_view) {
+                    if(sideView) {
                         Point tl(h_ptr->pos.x - h_ptr->radius, 0.0f);
                         Point br(h_ptr->pos.x + h_ptr->radius, 0.0f);
                         if(h_ptr->height != 0.0f) {
@@ -218,14 +218,14 @@ void AnimationEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
                         if(
                             BBoxCheck(
                                 tl, br,
-                                game.mouse_cursor.w_pos, 1.0f / game.cam.zoom
+                                game.mouseCursor.wPos, 1.0f / game.cam.zoom
                             )
                         ) {
                             clicked_hitboxes.push_back(h);
                         }
                     } else {
                         if(
-                            Distance(game.mouse_cursor.w_pos, h_ptr->pos) <=
+                            Distance(game.mouseCursor.wPos, h_ptr->pos) <=
                             h_ptr->radius
                         ) {
                             clicked_hitboxes.push_back(h);
@@ -234,13 +234,13 @@ void AnimationEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
                 }
                 
                 if(clicked_hitboxes.empty()) {
-                    cur_hitbox = nullptr;
-                    cur_hitbox_idx = INVALID;
+                    curHitbox = nullptr;
+                    curHitboxIdx = INVALID;
                     
                 } else {
                     size_t cur_hitbox_idx_idx = INVALID;
                     for(size_t i = 0; i < clicked_hitboxes.size(); i++) {
-                        if(cur_hitbox_idx == clicked_hitboxes[i]) {
+                        if(curHitboxIdx == clicked_hitboxes[i]) {
                             cur_hitbox_idx_idx = i;
                             break;
                         }
@@ -255,18 +255,18 @@ void AnimationEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
                                 (int) clicked_hitboxes.size()
                             );
                     }
-                    cur_hitbox_idx = clicked_hitboxes[cur_hitbox_idx_idx];
-                    cur_hitbox = &cur_sprite->hitboxes[cur_hitbox_idx];
+                    curHitboxIdx = clicked_hitboxes[cur_hitbox_idx_idx];
+                    curHitbox = &curSprite->hitboxes[curHitboxIdx];
                 }
             }
         }
         break;
         
     } case EDITOR_STATE_SPRITE_BITMAP: {
-        if(cur_sprite && cur_sprite->parent_bmp) {
-            Point bmp_size = getBitmapDimensions(cur_sprite->parent_bmp);
+        if(curSprite && curSprite->parentBmp) {
+            Point bmp_size = getBitmapDimensions(curSprite->parentBmp);
             Point bmp_pos = 0.0f - bmp_size / 2.0f;
-            Point bmp_click_pos = game.mouse_cursor.w_pos;
+            Point bmp_click_pos = game.mouseCursor.wPos;
             bmp_click_pos.x = floor(bmp_click_pos.x - bmp_pos.x);
             bmp_click_pos.y = floor(bmp_click_pos.y - bmp_pos.y);
             
@@ -277,34 +277,34 @@ void AnimationEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
             Point selection_br;
             if(
                 (
-                    cur_sprite->bmp_size.x == 0 ||
-                    cur_sprite->bmp_size.y == 0
-                ) || !sprite_bmp_add_mode
+                    curSprite->bmpSize.x == 0 ||
+                    curSprite->bmpSize.y == 0
+                ) || !spriteBmpAddMode
             ) {
                 selection_tl = bmp_click_pos;
                 selection_br = bmp_click_pos;
             } else {
-                selection_tl = cur_sprite->bmp_pos;
+                selection_tl = curSprite->bmpPos;
                 selection_br.x =
-                    cur_sprite->bmp_pos.x + cur_sprite->bmp_size.x - 1;
+                    curSprite->bmpPos.x + curSprite->bmpSize.x - 1;
                 selection_br.y =
-                    cur_sprite->bmp_pos.y + cur_sprite->bmp_size.y - 1;
+                    curSprite->bmpPos.y + curSprite->bmpSize.y - 1;
             }
             
             bool* selection_pixels = new bool[(int) (bmp_size.x * bmp_size.y)];
             memset(selection_pixels, 0, sizeof(bool) * ((int) (bmp_size.x * bmp_size.y)));
             
             al_lock_bitmap(
-                cur_sprite->parent_bmp,
+                curSprite->parentBmp,
                 ALLEGRO_PIXEL_FORMAT_ABGR_8888_LE, ALLEGRO_LOCK_READONLY
             );
             
             spriteBmpFloodFill(
-                cur_sprite->parent_bmp, selection_pixels,
+                curSprite->parentBmp, selection_pixels,
                 bmp_click_pos.x, bmp_click_pos.y
             );
             
-            al_unlock_bitmap(cur_sprite->parent_bmp);
+            al_unlock_bitmap(curSprite->parentBmp);
             
             size_t p;
             for(size_t y = 0; y < (size_t) bmp_size.y; y++) {
@@ -319,22 +319,22 @@ void AnimationEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
             
             delete[] selection_pixels;
             
-            cur_sprite->bmp_pos = selection_tl;
-            cur_sprite->bmp_size = selection_br - selection_tl + 1;
-            cur_sprite->setBitmap(
-                cur_sprite->bmp_name, cur_sprite->bmp_pos, cur_sprite->bmp_size
+            curSprite->bmpPos = selection_tl;
+            curSprite->bmpSize = selection_br - selection_tl + 1;
+            curSprite->setBitmap(
+                curSprite->bmpName, curSprite->bmpPos, curSprite->bmpSize
             );
-            changes_mgr.markAsChanged();
+            changesMgr.markAsChanged();
         }
         break;
         
     } case EDITOR_STATE_TOP: {
-        if(cur_sprite && cur_sprite->top_visible) {
-            cur_transformation_widget.handleMouseDown(
-                game.mouse_cursor.w_pos,
-                &cur_sprite->top_pos,
-                &cur_sprite->top_size,
-                &cur_sprite->top_angle,
+        if(curSprite && curSprite->topVisible) {
+            curTransformationWidget.handleMouseDown(
+                game.mouseCursor.wPos,
+                &curSprite->topPos,
+                &curSprite->topSize,
+                &curSprite->topAngle,
                 1.0f / game.cam.zoom
             );
         }
@@ -358,56 +358,56 @@ void AnimationEditor::handleLmbDrag(const ALLEGRO_EVENT &ev) {
     
     switch(state) {
     case EDITOR_STATE_SPRITE_TRANSFORM: {
-        Point cur_sprite_size = cur_sprite->scale * cur_sprite->bmp_size;
+        Point cur_sprite_size = curSprite->scale * curSprite->bmpSize;
         if(
-            cur_transformation_widget.handleMouseMove(
-                game.mouse_cursor.w_pos,
-                &cur_sprite->offset,
+            curTransformationWidget.handleMouseMove(
+                game.mouseCursor.wPos,
+                &curSprite->offset,
                 &cur_sprite_size,
-                &cur_sprite->angle,
+                &curSprite->angle,
                 1.0f / game.cam.zoom,
-                cur_sprite_keep_aspect_ratio,
-                cur_sprite_keep_area,
+                curSpriteKeepAspectRatio,
+                curSpriteKeepArea,
                 -FLT_MAX,
-                is_alt_pressed
+                isAltPressed
             )
         ) {
-            cur_sprite->scale = cur_sprite_size / cur_sprite->bmp_size;
-            changes_mgr.markAsChanged();
+            curSprite->scale = cur_sprite_size / curSprite->bmpSize;
+            changesMgr.markAsChanged();
         }
         break;
         
     } case EDITOR_STATE_HITBOXES: {
-        if(cur_sprite && cur_hitbox) {
+        if(curSprite && curHitbox) {
             bool tw_handled;
-            if(!side_view) {
+            if(!sideView) {
                 Point hitbox_size(
-                    cur_hitbox->radius * 2.0f, cur_hitbox->radius * 2.0f
+                    curHitbox->radius * 2.0f, curHitbox->radius * 2.0f
                 );
                 tw_handled =
-                    cur_transformation_widget.handleMouseMove(
-                        game.mouse_cursor.w_pos,
-                        &cur_hitbox->pos,
+                    curTransformationWidget.handleMouseMove(
+                        game.mouseCursor.wPos,
+                        &curHitbox->pos,
                         &hitbox_size,
                         nullptr,
                         1.0f / game.cam.zoom,
                         true,
                         false,
                         ANIM_EDITOR::HITBOX_MIN_RADIUS * 2.0f,
-                        is_alt_pressed
+                        isAltPressed
                     );
-                cur_hitbox->radius = hitbox_size.x / 2.0f;
+                curHitbox->radius = hitbox_size.x / 2.0f;
             } else {
                 Point hitbox_center(
-                    cur_hitbox->pos.x,
-                    (-(cur_hitbox->height / 2.0f)) - cur_hitbox->z
+                    curHitbox->pos.x,
+                    (-(curHitbox->height / 2.0f)) - curHitbox->z
                 );
                 Point hitbox_size(
-                    cur_hitbox->radius * 2.0f, cur_hitbox->height
+                    curHitbox->radius * 2.0f, curHitbox->height
                 );
                 tw_handled =
-                    cur_transformation_widget.handleMouseMove(
-                        game.mouse_cursor.w_pos,
+                    curTransformationWidget.handleMouseMove(
+                        game.mouseCursor.wPos,
                         &hitbox_center,
                         &hitbox_size,
                         nullptr,
@@ -415,36 +415,36 @@ void AnimationEditor::handleLmbDrag(const ALLEGRO_EVENT &ev) {
                         false,
                         false,
                         ANIM_EDITOR::HITBOX_MIN_RADIUS * 2.0f,
-                        is_alt_pressed
+                        isAltPressed
                     );
-                cur_hitbox->pos.x = hitbox_center.x;
-                cur_hitbox->radius = hitbox_size.x / 2.0f;
-                cur_hitbox->z = -(hitbox_center.y + hitbox_size.y / 2.0f);
-                cur_hitbox->height = hitbox_size.y;
+                curHitbox->pos.x = hitbox_center.x;
+                curHitbox->radius = hitbox_size.x / 2.0f;
+                curHitbox->z = -(hitbox_center.y + hitbox_size.y / 2.0f);
+                curHitbox->height = hitbox_size.y;
             }
             
             if(tw_handled) {
-                changes_mgr.markAsChanged();
+                changesMgr.markAsChanged();
             }
         }
         break;
         
     } case EDITOR_STATE_TOP: {
-        if(cur_sprite && cur_sprite->top_visible) {
+        if(curSprite && curSprite->topVisible) {
             if(
-                cur_transformation_widget.handleMouseMove(
-                    game.mouse_cursor.w_pos,
-                    &cur_sprite->top_pos,
-                    &cur_sprite->top_size,
-                    &cur_sprite->top_angle,
+                curTransformationWidget.handleMouseMove(
+                    game.mouseCursor.wPos,
+                    &curSprite->topPos,
+                    &curSprite->topSize,
+                    &curSprite->topAngle,
                     1.0f / game.cam.zoom,
-                    top_keep_aspect_ratio,
+                    topKeepAspectRatio,
                     false,
                     ANIM_EDITOR::TOP_MIN_SIZE,
-                    is_alt_pressed
+                    isAltPressed
                 )
             ) {
-                changes_mgr.markAsChanged();
+                changesMgr.markAsChanged();
             }
         }
         break;
@@ -459,14 +459,14 @@ void AnimationEditor::handleLmbDrag(const ALLEGRO_EVENT &ev) {
  */
 void AnimationEditor::handleLmbDragInTimeline() {
     float cursor_time = getCursorTimelineTime();
-    size_t old_frame_idx = cur_anim_i.cur_frame_idx;
-    cur_anim_i.cur_anim->getFrameAndTime(
-        cursor_time, &cur_anim_i.cur_frame_idx, &cur_anim_i.cur_frame_time
+    size_t old_frame_idx = curAnimInst.curFrameIdx;
+    curAnimInst.curAnim->getFrameAndTime(
+        cursor_time, &curAnimInst.curFrameIdx, &curAnimInst.curFrameTime
     );
-    if(cur_anim_i.cur_frame_idx != old_frame_idx) {
-        Frame* f = &cur_anim_i.cur_anim->frames[cur_anim_i.cur_frame_idx];
-        if(f->sound_idx != INVALID) {
-            playSound(f->sound_idx);
+    if(curAnimInst.curFrameIdx != old_frame_idx) {
+        Frame* f = &curAnimInst.curAnim->frames[curAnimInst.curFrameIdx];
+        if(f->soundIdx != INVALID) {
+            playSound(f->soundIdx);
         }
     }
 }
@@ -480,18 +480,18 @@ void AnimationEditor::handleLmbDragInTimeline() {
 void AnimationEditor::handleLmbUp(const ALLEGRO_EVENT &ev) {
     switch(state) {
     case EDITOR_STATE_SPRITE_TRANSFORM: {
-        cur_transformation_widget.handleMouseUp();
+        curTransformationWidget.handleMouseUp();
         break;
         
     } case EDITOR_STATE_TOP: {
-        if(cur_sprite && cur_sprite->top_visible) {
-            cur_transformation_widget.handleMouseUp();
+        if(curSprite && curSprite->topVisible) {
+            curTransformationWidget.handleMouseUp();
         }
         break;
         
     } case EDITOR_STATE_HITBOXES: {
-        if(cur_sprite && cur_hitbox) {
-            cur_transformation_widget.handleMouseUp();
+        if(curSprite && curHitbox) {
+            curTransformationWidget.handleMouseUp();
         }
         break;
         
@@ -507,7 +507,7 @@ void AnimationEditor::handleLmbUp(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void AnimationEditor::handleMmbDoubleClick(const ALLEGRO_EVENT &ev) {
-    if(!game.options.editors.mmb_pan) {
+    if(!game.options.editors.mmbPan) {
         resetCamXY();
     }
 }
@@ -520,7 +520,7 @@ void AnimationEditor::handleMmbDoubleClick(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void AnimationEditor::handleMmbDown(const ALLEGRO_EVENT &ev) {
-    if(!game.options.editors.mmb_pan) {
+    if(!game.options.editors.mmbPan) {
         resetCamZoom();
     }
 }
@@ -533,7 +533,7 @@ void AnimationEditor::handleMmbDown(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void AnimationEditor::handleMmbDrag(const ALLEGRO_EVENT &ev) {
-    if(game.options.editors.mmb_pan) {
+    if(game.options.editors.mmbPan) {
         panCam(ev);
     }
 }
@@ -565,7 +565,7 @@ void AnimationEditor::handleMouseWheel(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void AnimationEditor::handleRmbDoubleClick(const ALLEGRO_EVENT &ev) {
-    if(game.options.editors.mmb_pan) {
+    if(game.options.editors.mmbPan) {
         resetCamXY();
     }
 }
@@ -578,7 +578,7 @@ void AnimationEditor::handleRmbDoubleClick(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void AnimationEditor::handleRmbDown(const ALLEGRO_EVENT &ev) {
-    if(game.options.editors.mmb_pan) {
+    if(game.options.editors.mmbPan) {
         resetCamZoom();
     }
 }
@@ -591,7 +591,7 @@ void AnimationEditor::handleRmbDown(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void AnimationEditor::handleRmbDrag(const ALLEGRO_EVENT &ev) {
-    if(!game.options.editors.mmb_pan) {
+    if(!game.options.editors.mmbPan) {
         panCam(ev);
     }
 }

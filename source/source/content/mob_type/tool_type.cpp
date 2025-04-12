@@ -20,8 +20,8 @@
 ToolType::ToolType() :
     MobType(MOB_CATEGORY_TOOLS) {
     
-    target_type = MOB_TARGET_FLAG_FRAGILE;
-    hurtable_targets =
+    targetType = MOB_TARGET_FLAG_FRAGILE;
+    hurtableTargets =
         MOB_TARGET_FLAG_PLAYER |
         MOB_TARGET_FLAG_ENEMY |
         MOB_TARGET_FLAG_WEAK_PLAIN_OBSTACLE |
@@ -40,16 +40,16 @@ ToolType::ToolType() :
 void ToolType::loadCatProperties(DataNode* file) {
     ReaderSetter rs(file);
     
-    rs.set("dropped_when_pikmin_is_whistled", dropped_when_pikmin_is_whistled);
-    rs.set("dropped_when_pikmin_lands", dropped_when_pikmin_lands);
+    rs.set("dropped_when_pikmin_is_whistled", droppedWhenPikminIsWhistled);
+    rs.set("dropped_when_pikmin_lands", droppedWhenPikminLands);
     rs.set(
         "dropped_when_pikmin_lands_on_opponent",
-        dropped_when_pikmin_lands_on_opponent
+        droppedWhenPikminLandsOnOpponent
     );
-    rs.set("pikmin_returns_after_using", pikmin_returns_after_using);
+    rs.set("pikmin_returns_after_using", pikminReturnsAfterUsing);
     rs.set(
         "stuck_when_pikmin_lands_on_opponent",
-        stuck_when_pikmin_lands_on_opponent
+        stuckWhenPikminLandsOnOpponent
     );
 }
 
@@ -67,5 +67,5 @@ void ToolType::loadCatResources(DataNode* file) {
     
     rs.set("icon", icon_str, &icon_node);
     
-    bmp_icon = game.content.bitmaps.list.get(icon_str, icon_node);
+    bmpIcon = game.content.bitmaps.list.get(icon_str, icon_node);
 }

@@ -73,10 +73,10 @@ struct HudBubbleManager {
         t content = t();
         
         //Reference pre-transition.
-        void* pre_transition_ref = nullptr;
+        void* preTransitionRef = nullptr;
         
         //Content that it held, pre-transition.
-        t pre_transition_content = t();
+        t preTransitionContent = t();
         
         
         //--- Function definitions ---
@@ -99,10 +99,10 @@ struct HudBubbleManager {
     GuiManager* hud = nullptr;
     
     //How long a transition lasts for.
-    float transition_duration = 0.0f;
+    float transitionDuration = 0.0f;
     
     //How to move the bubbles around during a transition.
-    HUD_BUBBLE_MOVE_METHOD move_method = HUD_BUBBLE_MOVE_METHOD_STRAIGHT;
+    HUD_BUBBLE_MOVE_METHOD moveMethod = HUD_BUBBLE_MOVE_METHOD_STRAIGHT;
     
     
     //--- Function definitions ---
@@ -130,7 +130,7 @@ struct HudBubbleManager {
         size_t id,
         t* content, DrawInfo* draw
     ) {
-        float transition_anim_ratio = transition_timer / transition_duration;
+        float transition_anim_ratio = transitionTimer / transitionDuration;
         
         auto it = bubbles.find(id);
         if(it == bubbles.end()) {
@@ -159,9 +159,9 @@ struct HudBubbleManager {
         ) {
             if(
                 transition_anim_ratio > 0.5f &&
-                it->second.pre_transition_ref &&
+                it->second.preTransitionRef &&
                 match_it->second.ref ==
-                it->second.pre_transition_ref
+                it->second.preTransitionRef
             ) {
                 //In the first half of the animation, we want to search
                 //for a bubble that has the contents that our bubble
@@ -171,7 +171,7 @@ struct HudBubbleManager {
             if(
                 transition_anim_ratio <= 0.5f &&
                 it->second.ref &&
-                match_it->second.pre_transition_ref ==
+                match_it->second.preTransitionRef ==
                 it->second.ref
             ) {
                 //In the second half, the match had the contents that
@@ -208,7 +208,7 @@ struct HudBubbleManager {
                 
             if(transition_anim_ratio > 0.5f) {
                 //First half of the animation. Move to the first half.
-                switch(move_method) {
+                switch(moveMethod) {
                 case HUD_BUBBLE_MOVE_METHOD_STRAIGHT: {
                     draw->center =
                         interpolatePoint(
@@ -237,7 +237,7 @@ struct HudBubbleManager {
                     
             } else {
                 //Second half of the animation. Move from the first half.
-                switch(move_method) {
+                switch(moveMethod) {
                 case HUD_BUBBLE_MOVE_METHOD_STRAIGHT: {
                     draw->center =
                         interpolatePoint(
@@ -282,7 +282,7 @@ struct HudBubbleManager {
         
         //Set the content.
         if(transition_anim_ratio > 0.5f) {
-            *content = it->second.pre_transition_content;
+            *content = it->second.preTransitionContent;
         } else {
             *content = it->second.content;
         }
@@ -306,10 +306,10 @@ struct HudBubbleManager {
     * @param delta_t How long the frame's tick is, in seconds.
     */
     void tick(float delta_t) {
-        if(transition_timer > 0.0f) {
-            transition_timer -= delta_t;
-            transition_timer = std::max(transition_timer, 0.0f);
-            transition_is_setup = false;
+        if(transitionTimer > 0.0f) {
+            transitionTimer -= delta_t;
+            transitionTimer = std::max(transitionTimer, 0.0f);
+            transitionIsSetup = false;
         }
     }
     
@@ -323,13 +323,13 @@ struct HudBubbleManager {
     void update(size_t id, void* new_ref, t new_content) {
         auto it = bubbles.find(id);
         if(it == bubbles.end()) return;
-        if(it->second.ref != new_ref && !transition_is_setup) {
+        if(it->second.ref != new_ref && !transitionIsSetup) {
             for(auto &b : bubbles) {
-                b.second.pre_transition_ref = b.second.ref;
-                b.second.pre_transition_content = b.second.content;
+                b.second.preTransitionRef = b.second.ref;
+                b.second.preTransitionContent = b.second.content;
             }
-            transition_timer = transition_duration;
-            transition_is_setup = true;
+            transitionTimer = transitionDuration;
+            transitionIsSetup = true;
         }
         it->second.ref = new_ref;
         it->second.content = new_content;
@@ -343,9 +343,9 @@ private:
     map<size_t, Bubble> bubbles;
     
     //Time left in the current transition, or 0 if none.
-    float transition_timer = 0.0f;
+    float transitionTimer = 0.0f;
     
     //Have we set each bubble's "pre-transition" class members yet?
-    bool transition_is_setup = false;
+    bool transitionIsSetup = false;
     
 };

@@ -57,7 +57,7 @@ bool areaWallsBetween(
     
     set<Edge*> candidate_edges;
     if(
-        !game.cur_area_data->bmap.getEdgesInRegion(
+        !game.curAreaData->bmap.getEdgesInRegion(
             bb_tl, bb_br,
             candidate_edges
         )
@@ -116,16 +116,16 @@ bool areaWallsBetween(
  * @brief Clears the textures of the area's sectors from memory.
  */
 void clearAreaTextures() {
-    if(!game.cur_area_data) return;
+    if(!game.curAreaData) return;
     
-    for(size_t s = 0; s < game.cur_area_data->sectors.size(); s++) {
-        Sector* s_ptr = game.cur_area_data->sectors[s];
+    for(size_t s = 0; s < game.curAreaData->sectors.size(); s++) {
+        Sector* s_ptr = game.curAreaData->sectors[s];
         if(
-            s_ptr->texture_info.bitmap &&
-            s_ptr->texture_info.bitmap != game.bmp_error
+            s_ptr->textureInfo.bitmap &&
+            s_ptr->textureInfo.bitmap != game.bmpError
         ) {
-            game.content.bitmaps.list.free(s_ptr->texture_info.bmp_name);
-            s_ptr->texture_info.bitmap = nullptr;
+            game.content.bitmaps.list.free(s_ptr->textureInfo.bmpName);
+            s_ptr->textureInfo.bitmap = nullptr;
         }
     }
 }
@@ -165,8 +165,8 @@ void crash(const string &reason, const string &info, int exit_status) {
     error_str +=
         "  Game state: " + game.getCurStateName() + ". delta_t: " +
         (
-            game.delta_t == 0.0f ? "0" :
-            f2s(game.delta_t) + " (" + f2s(1.0f / game.delta_t) + " FPS)"
+            game.deltaT == 0.0f ? "0" :
+            f2s(game.deltaT) + " (" + f2s(1.0f / game.deltaT) + " FPS)"
         ) + ".\n"
         "  Mob count: " +
         i2s(game.states.gameplay->mobs.all.size()) + ". Particle count: " +
@@ -175,42 +175,42 @@ void crash(const string &reason, const string &info, int exit_status) {
         i2s(game.content.bitmaps.list.getTotalUses()) + " total uses).\n" +
         "  Current area: ";
         
-    if(game.cur_area_data && !game.cur_area_data->name.empty()) {
+    if(game.curAreaData && !game.curAreaData->name.empty()) {
         error_str +=
-            game.cur_area_data->name + ", version " +
-            game.cur_area_data->version + ".\n";
+            game.curAreaData->name + ", version " +
+            game.curAreaData->version + ".\n";
     } else {
         error_str += "none.\n";
     }
     
     error_str += "  Current leader: ";
     
-    if(game.states.gameplay->cur_leader_ptr) {
+    if(game.states.gameplay->curLeaderPtr) {
         error_str +=
-            game.states.gameplay->cur_leader_ptr->type->name + ", at " +
-            p2s(game.states.gameplay->cur_leader_ptr->pos) +
+            game.states.gameplay->curLeaderPtr->type->name + ", at " +
+            p2s(game.states.gameplay->curLeaderPtr->pos) +
             ", state history: " +
-            game.states.gameplay->cur_leader_ptr->fsm.cur_state->name;
+            game.states.gameplay->curLeaderPtr->fsm.curState->name;
         for(size_t h = 0; h < STATE_HISTORY_SIZE; h++) {
             error_str +=
                 " " +
-                game.states.gameplay->cur_leader_ptr->
-                fsm.prev_state_names[h];
+                game.states.gameplay->curLeaderPtr->
+                fsm.prevStateNames[h];
         }
         error_str += "\n  10 closest Pikmin to that leader:\n";
         
         vector<Pikmin*> closest_pikmin =
-            game.states.gameplay->mobs.pikmin_list;
+            game.states.gameplay->mobs.pikmin;
         sort(
             closest_pikmin.begin(), closest_pikmin.end(),
         [] (const Pikmin * p1, const Pikmin * p2) -> bool {
             return
             Distance(
-                game.states.gameplay->cur_leader_ptr->pos,
+                game.states.gameplay->curLeaderPtr->pos,
                 p1->pos
             ).toFloat() <
             Distance(
-                game.states.gameplay->cur_leader_ptr->pos,
+                game.states.gameplay->curLeaderPtr->pos,
                 p2->pos
             ).toFloat();
         }
@@ -221,9 +221,9 @@ void crash(const string &reason, const string &info, int exit_status) {
             error_str +=
                 "    " + closest_pikmin[p]->type->name + ", at " +
                 p2s(closest_pikmin[p]->pos) + ", history: " +
-                closest_pikmin[p]->fsm.cur_state->name;
+                closest_pikmin[p]->fsm.curState->name;
             for(size_t h = 0; h < STATE_HISTORY_SIZE; h++) {
-                error_str += " " + closest_pikmin[p]->fsm.prev_state_names[h];
+                error_str += " " + closest_pikmin[p]->fsm.prevStateNames[h];
             }
             error_str += "\n";
         }
@@ -261,11 +261,11 @@ bool doesEdgeHaveLedgeSmoothing(
     Edge* e_ptr, Sector** out_affected_sector, Sector** out_unaffected_sector
 ) {
     //Never-smooth walls don't have the effect.
-    if(e_ptr->ledge_smoothing_length <= 0.0f) return false;
+    if(e_ptr->ledgeSmoothingLength <= 0.0f) return false;
     
     if(
         (e_ptr->sectors[0] && !e_ptr->sectors[1]) ||
-        e_ptr->sectors[1]->is_bottomless_pit
+        e_ptr->sectors[1]->isBottomlessPit
     ) {
         //If 0 exists but 1 doesn't.
         *out_affected_sector = e_ptr->sectors[0];
@@ -274,7 +274,7 @@ bool doesEdgeHaveLedgeSmoothing(
         
     } else if(
         (!e_ptr->sectors[0] && e_ptr->sectors[1]) ||
-        e_ptr->sectors[0]->is_bottomless_pit
+        e_ptr->sectors[0]->isBottomlessPit
     ) {
         //If 1 exists but 0 doesn't.
         *out_affected_sector = e_ptr->sectors[1];
@@ -320,7 +320,7 @@ bool doesEdgeHaveLiquidLimit(
     bool has_liquid[2] = {false, false};
     for(unsigned char s = 0; s < 2; s++) {
         for(size_t h = 0; h < e_ptr->sectors[s]->hazards.size(); h++) {
-            if(e_ptr->sectors[s]->hazards[h]->associated_liquid) {
+            if(e_ptr->sectors[s]->hazards[h]->associatedLiquid) {
                 has_liquid[s] = true;
             }
         }
@@ -356,12 +356,12 @@ bool doesEdgeHaveWallShadow(
     Edge* e_ptr, Sector** out_affected_sector, Sector** out_unaffected_sector
 ) {
     //Never-cast walls don't cast.
-    if(e_ptr->wall_shadow_length <= 0.0f) return false;
+    if(e_ptr->wallShadowLength <= 0.0f) return false;
     
     //Invalid sectors don't cast.
     if(!e_ptr->sectors[0] || !e_ptr->sectors[1]) return false;
-    if(e_ptr->sectors[0]->is_bottomless_pit) return false;
-    if(e_ptr->sectors[1]->is_bottomless_pit) return false;
+    if(e_ptr->sectors[0]->isBottomlessPit) return false;
+    if(e_ptr->sectors[1]->isBottomlessPit) return false;
     
     //Same-height sectors can't cast.
     if(e_ptr->sectors[0]->z == e_ptr->sectors[1]->z) return false;
@@ -375,7 +375,7 @@ bool doesEdgeHaveWallShadow(
         *out_affected_sector = e_ptr->sectors[0];
     }
     
-    if(e_ptr->wall_shadow_length != LARGE_FLOAT) {
+    if(e_ptr->wallShadowLength != LARGE_FLOAT) {
         //Fixed shadow length.
         return true;
     } else {
@@ -401,12 +401,12 @@ Mob* getClosestMobToCursor(bool must_have_health) {
     for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
         Mob* m_ptr = game.states.gameplay->mobs.all[m];
         
-        bool has_health = m_ptr->health > 0.0f && m_ptr->max_health > 0.0f;
+        bool has_health = m_ptr->health > 0.0f && m_ptr->maxHealth > 0.0f;
         if(must_have_health && !has_health) continue;
         if(m_ptr->isStoredInsideMob()) continue;
-        if(!m_ptr->fsm.cur_state) continue;
+        if(!m_ptr->fsm.curState) continue;
         
-        Distance d = Distance(game.mouse_cursor.w_pos, m_ptr->pos);
+        Distance d = Distance(game.mouseCursor.wPos, m_ptr->pos);
         if(!closest_mob_to_cursor || d < closest_mob_to_cursor_dist) {
             closest_mob_to_cursor = m_ptr;
             closest_mob_to_cursor_dist = d;
@@ -437,7 +437,7 @@ string getEngineVersionString() {
  * @return The color.
  */
 ALLEGRO_COLOR getLedgeSmoothingColor(Edge* e_ptr) {
-    return e_ptr->ledge_smoothing_color;
+    return e_ptr->ledgeSmoothingColor;
 }
 
 
@@ -448,7 +448,7 @@ ALLEGRO_COLOR getLedgeSmoothingColor(Edge* e_ptr) {
  * @return The length.
  */
 float getLedgeSmoothingLength(Edge* e_ptr) {
-    return e_ptr->ledge_smoothing_length;
+    return e_ptr->ledgeSmoothingLength;
 }
 
 
@@ -481,7 +481,7 @@ float getLiquidLimitLength(Edge* e_ptr) {
         (hashNr2(min_coords.x, min_coords.y) / (float) UINT32_MAX) * 5.0f;
     return
         15.0f +
-        12.0f * sin((game.states.gameplay->area_time_passed * 2.0f) + r);
+        12.0f * sin((game.states.gameplay->areaTimePassed * 2.0f) + r);
 }
 
 
@@ -522,12 +522,12 @@ Mob* getNextMobNearCursor(Mob* pivot, bool must_have_health) {
     for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
         Mob* m_ptr = game.states.gameplay->mobs.all[m];
         
-        bool has_health = m_ptr->health > 0.0f && m_ptr->max_health > 0.0f;
+        bool has_health = m_ptr->health > 0.0f && m_ptr->maxHealth > 0.0f;
         if(must_have_health && !has_health) continue;
         if(m_ptr->isStoredInsideMob()) continue;
-        if(!m_ptr->fsm.cur_state) continue;
+        if(!m_ptr->fsm.curState) continue;
         
-        Distance d = Distance(game.mouse_cursor.w_pos, m_ptr->pos);
+        Distance d = Distance(game.mouseCursor.wPos, m_ptr->pos);
         if(d < 8.0f) {
             mobs_near_cursor.push_back(m_ptr);
         }
@@ -575,7 +575,7 @@ string getSubtitleOrMissionGoal(
     const MISSION_GOAL goal
 ) {
     if(subtitle.empty() && area_type == AREA_TYPE_MISSION) {
-        return game.mission_goals[goal]->getName();
+        return game.missionGoals[goal]->getName();
     }
     
     return subtitle;
@@ -737,7 +737,7 @@ map<string, string> getVarMap(const string &vars_string) {
  * @return The color.
  */
 ALLEGRO_COLOR getWallShadowColor(Edge* e_ptr) {
-    return e_ptr->wall_shadow_color;
+    return e_ptr->wallShadowColor;
 }
 
 
@@ -748,8 +748,8 @@ ALLEGRO_COLOR getWallShadowColor(Edge* e_ptr) {
  * @return The length.
  */
 float getWallShadowLength(Edge* e_ptr) {
-    if(e_ptr->wall_shadow_length != LARGE_FLOAT) {
-        return e_ptr->wall_shadow_length;
+    if(e_ptr->wallShadowLength != LARGE_FLOAT) {
+        return e_ptr->wallShadowLength;
     }
     
     float height_difference =
@@ -824,15 +824,15 @@ vector<std::pair<int, string> > getWeatherTable(DataNode* node) {
  */
 void guiAddBackInputIcon(GuiManager* gui, const string &item_name) {
     GuiItem* back_input = new GuiItem();
-    back_input->on_draw =
+    back_input->onDraw =
     [] (const GuiItem::DrawInfo & draw) {
-        if(!game.options.misc.show_hud_input_icons) return;
-        const PlayerInputSource& s =
+        if(!game.options.misc.showHudInputIcons) return;
+        const PlayerInputSource &s =
             game.controls.findBind(PLAYER_ACTION_TYPE_MENU_BACK).
             inputSource;
         if(s.type == INPUT_SOURCE_TYPE_NONE) return;
         drawPlayerInputSourceIcon(
-            game.sys_content.fnt_slim, s, true, draw.center, draw.size
+            game.sysContent.fntSlim, s, true, draw.center, draw.size
         );
     };
     gui->addItem(back_input, item_name);
@@ -848,7 +848,7 @@ void guiAddBackInputIcon(GuiManager* gui, const string &item_name) {
  * @return Whether the button was activated.
  */
 bool monoButton(const char* label, const ImVec2 &size) {
-    ImGui::PushFont(game.sys_content.fnt_imgui_monospace);
+    ImGui::PushFont(game.sysContent.fntDearImGuiMonospace);
     bool result = ImGui::Button(label, size);
     ImGui::PopFont();
     
@@ -873,7 +873,7 @@ bool monoCombo(
 ) {
     bool has_text = label[0] != '#';
     ImGui::BeginGroup();
-    ImGui::PushFont(game.sys_content.fnt_imgui_monospace);
+    ImGui::PushFont(game.sysContent.fntDearImGuiMonospace);
     bool result =
         ImGui::Combo(
             has_text ? "##cb" + label : label,
@@ -909,7 +909,7 @@ bool monoCombo(
 ) {
     bool has_text = label[0] != '#';
     ImGui::BeginGroup();
-    ImGui::PushFont(game.sys_content.fnt_imgui_monospace);
+    ImGui::PushFont(game.sysContent.fntDearImGuiMonospace);
     bool result =
         ImGui::Combo(
             has_text ? "##cb" + label : label,
@@ -949,7 +949,7 @@ bool monoCombo(
 ) {
     bool has_text = label[0] != '#';
     ImGui::BeginGroup();
-    ImGui::PushFont(game.sys_content.fnt_imgui_monospace);
+    ImGui::PushFont(game.sysContent.fntDearImGuiMonospace);
     bool result =
         ImGui::Combo(
             has_text ? "##cb" + label : label,
@@ -985,7 +985,7 @@ bool monoInputText(
 ) {
     bool has_text = label[0] != '#';
     ImGui::BeginGroup();
-    ImGui::PushFont(game.sys_content.fnt_imgui_monospace);
+    ImGui::PushFont(game.sysContent.fntDearImGuiMonospace);
     bool result =
         ImGui::InputText(
             has_text ? ("##ti" + string(label)).c_str() : label,
@@ -1023,7 +1023,7 @@ bool monoInputTextWithHint(
     bool has_text = label[0] != '#';
     bool str_empty = str->empty();
     ImGui::BeginGroup();
-    if(!str_empty) ImGui::PushFont(game.sys_content.fnt_imgui_monospace);
+    if(!str_empty) ImGui::PushFont(game.sysContent.fntDearImGuiMonospace);
     bool result =
         ImGui::InputTextWithHint(
             has_text ? ("##ti" + string(label)).c_str() : label,
@@ -1057,7 +1057,7 @@ bool monoListBox(
 ) {
     bool has_text = label[0] != '#';
     ImGui::BeginGroup();
-    ImGui::PushFont(game.sys_content.fnt_imgui_monospace);
+    ImGui::PushFont(game.sysContent.fntDearImGuiMonospace);
     bool result =
         ImGui::ListBox(
             has_text ? ("##lb" + string(label)).c_str() : label,
@@ -1089,7 +1089,7 @@ bool monoSelectable(
     const char* label, bool selected, ImGuiSelectableFlags flags,
     const ImVec2 &size
 ) {
-    ImGui::PushFont(game.sys_content.fnt_imgui_monospace);
+    ImGui::PushFont(game.sysContent.fntDearImGuiMonospace);
     bool result = ImGui::Selectable(label, selected, flags, size);
     ImGui::PopFont();
     return result;
@@ -1110,7 +1110,7 @@ bool monoSelectable(
     const char* label, bool* p_selected, ImGuiSelectableFlags flags,
     const ImVec2 &size
 ) {
-    ImGui::PushFont(game.sys_content.fnt_imgui_monospace);
+    ImGui::PushFont(game.sysContent.fntDearImGuiMonospace);
     bool result = ImGui::Selectable(label, p_selected, flags, size);
     ImGui::PopFont();
     return result;
@@ -1147,10 +1147,10 @@ bool openManual(const string &page) {
 void printInfo(
     const string &text, float total_duration, float fade_duration
 ) {
-    game.maker_tools.info_print_text = text;
-    game.maker_tools.info_print_duration = total_duration;
-    game.maker_tools.info_print_fade_duration = fade_duration;
-    game.maker_tools.info_print_timer.start(total_duration);
+    game.makerTools.infoPrintText = text;
+    game.makerTools.infoPrintDuration = total_duration;
+    game.makerTools.infoPrintFadeDuration = fade_duration;
+    game.makerTools.infoPrintTimer.start(total_duration);
 }
 
 
@@ -1181,7 +1181,7 @@ void reportFatalError(const string &s, const DataNode* dn) {
  */
 void saveMakerTools() {
     DataNode file("", "");
-    game.maker_tools.saveToDataNode(&file);
+    game.makerTools.saveToDataNode(&file);
     file.saveFile(FILE_PATHS_FROM_ROOT::MAKER_TOOLS, true, true);
 }
 
@@ -1269,22 +1269,22 @@ void saveStatistics() {
     
     gw.get("startups", s.startups);
     gw.get("runtime", s.runtime);
-    gw.get("gameplay_time", s.gameplay_time);
-    gw.get("area_entries", s.area_entries);
-    gw.get("pikmin_births", s.pikmin_births);
-    gw.get("pikmin_deaths", s.pikmin_deaths);
-    gw.get("pikmin_eaten", s.pikmin_eaten);
-    gw.get("pikmin_hazard_deaths", s.pikmin_hazard_deaths);
-    gw.get("pikmin_blooms", s.pikmin_blooms);
-    gw.get("pikmin_saved", s.pikmin_saved);
-    gw.get("enemy_deaths", s.enemy_deaths);
-    gw.get("pikmin_thrown", s.pikmin_thrown);
-    gw.get("whistle_uses", s.whistle_uses);
-    gw.get("distance_walked", s.distance_walked);
-    gw.get("leader_damage_suffered", s.leader_damage_suffered);
-    gw.get("punch_damage_caused", s.punch_damage_caused);
-    gw.get("leader_kos", s.leader_kos);
-    gw.get("sprays_used", s.sprays_used);
+    gw.get("gameplay_time", s.gameplayTime);
+    gw.get("area_entries", s.areaEntries);
+    gw.get("pikmin_births", s.pikminBirths);
+    gw.get("pikmin_deaths", s.pikminDeaths);
+    gw.get("pikmin_eaten", s.pikminEaten);
+    gw.get("pikmin_hazard_deaths", s.pikminHazardDeaths);
+    gw.get("pikmin_blooms", s.pikminBlooms);
+    gw.get("pikmin_saved", s.pikminSaved);
+    gw.get("enemy_deaths", s.enemyDeaths);
+    gw.get("pikmin_thrown", s.pikminThrown);
+    gw.get("whistle_uses", s.whistleUses);
+    gw.get("distance_walked", s.distanceWalked);
+    gw.get("leader_damage_suffered", s.leaderDamageSuffered);
+    gw.get("punch_damage_caused", s.punchDamageCaused);
+    gw.get("leader_kos", s.leaderKos);
+    gw.get("sprays_used", s.spraysUsed);
     
     stats_file.saveFile(FILE_PATHS_FROM_ROOT::STATISTICS, true, true, true);
 }
@@ -1378,14 +1378,14 @@ void spewPikminSeed(
         (
             (Pikmin*)
             createMob(
-                game.mob_categories.get(MOB_CATEGORY_PIKMIN),
+                game.mobCategories.get(MOB_CATEGORY_PIKMIN),
                 pos, pik_type, angle, "", nullptr, PIKMIN_STATE_SEED
             )
         );
     new_pikmin->z = z;
     new_pikmin->speed.x = cos(angle) * horizontal_speed;
     new_pikmin->speed.y = sin(angle) * horizontal_speed;
-    new_pikmin->speed_z = vertical_speed;
+    new_pikmin->speedZ = vertical_speed;
     new_pikmin->maturity = 0;
 }
 
@@ -1489,11 +1489,11 @@ ParticleGenerator standardParticleGenSetup(
     const string &internal_name, Mob* target_mob
 ) {
     ParticleGenerator pg =
-        game.content.particle_gen.list[internal_name];
+        game.content.particleGens.list[internal_name];
     pg.restartTimer();
-    pg.follow_mob = target_mob;
-    pg.follow_angle = target_mob ? &target_mob->angle : nullptr;
-    pg.follow_z_offset =
+    pg.followMob = target_mob;
+    pg.followAngle = target_mob ? &target_mob->angle : nullptr;
+    pg.followZOffset =
         target_mob ? target_mob->getDrawingHeight() + 1.0f : 0.0f;
     return pg;
 }
@@ -1512,15 +1512,15 @@ ParticleGenerator standardParticleGenSetup(
 void startGameplayMessage(const string &text, ALLEGRO_BITMAP* speaker_bmp) {
     if(!text.empty()) {
         string final_text = unescapeString(text);
-        game.states.gameplay->msg_box =
+        game.states.gameplay->msgBox =
             new GameplayMessageBox(final_text, speaker_bmp);
         game.states.gameplay->hud->gui.startAnimation(
             GUI_MANAGER_ANIM_IN_TO_OUT,
             GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
         );
     } else {
-        delete game.states.gameplay->msg_box;
-        game.states.gameplay->msg_box = nullptr;
+        delete game.states.gameplay->msgBox;
+        game.states.gameplay->msgBox = nullptr;
         game.states.gameplay->hud->gui.startAnimation(
             GUI_MANAGER_ANIM_OUT_TO_IN,
             GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME

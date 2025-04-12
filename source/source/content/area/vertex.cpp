@@ -41,7 +41,7 @@ void Vertex::addEdge(Edge* e_ptr, size_t e_idx) {
         }
     }
     edges.push_back(e_ptr);
-    edge_idxs.push_back(e_idx);
+    edgeIdxs.push_back(e_idx);
 }
 
 
@@ -163,7 +163,7 @@ void Vertex::removeEdge(const Edge* e_ptr) {
     for(; i < edges.size(); i++) {
         if(edges[i] == e_ptr) {
             edges.erase(edges.begin() + i);
-            edge_idxs.erase(edge_idxs.begin() + i);
+            edgeIdxs.erase(edgeIdxs.begin() + i);
             return;
         }
     }

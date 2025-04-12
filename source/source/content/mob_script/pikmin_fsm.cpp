@@ -1957,7 +1957,7 @@ void pikmin_fsm::createFsm(MobType* typ) {
     }
     
     typ->states = efc.finish();
-    typ->first_state_idx = fixStates(typ->states, "idling", typ);
+    typ->firstStateIdx = fixStates(typ->states, "idling", typ);
     
     //Check if the number in the enum and the total match up.
     engineAssert(
@@ -1987,7 +1987,7 @@ void pikmin_fsm::beAttacked(Mob* m, void* info1, void* info2) {
         m->applyAttackDamage(info->mob2, info->h2, info->h1, damage);
         if(pik_ptr->health <= 0.0f && health_before > 0.0f) {
             if(!info->h2->hazards.empty()) {
-                game.statistics.pikmin_hazard_deaths++;
+                game.statistics.pikminHazardDeaths++;
             }
         }
         
@@ -2000,9 +2000,9 @@ void pikmin_fsm::beAttacked(Mob* m, void* info1, void* info2) {
         m->applyKnockback(knockback, knockback_angle);
         
         //Withering.
-        if(info->h2->wither_chance > 0 && pik_ptr->maturity > 0) {
+        if(info->h2->witherChance > 0 && pik_ptr->maturity > 0) {
             unsigned char wither_roll = game.rng.i(0, 100);
-            if(wither_roll < info->h2->wither_chance) {
+            if(wither_roll < info->h2->witherChance) {
                 pik_ptr->increaseMaturity(-1);
             }
         }
@@ -2035,7 +2035,7 @@ void pikmin_fsm::beAttacked(Mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::beCrushed(Mob* m, void* info1, void* info2) {
     pikmin_fsm::startDying(m, info1, info2);
-    m->z = m->ground_sector->z;
+    m->z = m->groundSector->z;
     m->setAnimation(PIKMIN_ANIM_CRUSHED);
 }
 
@@ -2051,14 +2051,14 @@ void pikmin_fsm::beDismissed(Mob* m, void* info1, void* info2) {
     Pikmin* pik_ptr = (Pikmin*) m;
     engineAssert(info1 != nullptr, m->printStateHistory());
     
-    if(pik_ptr->pik_type->can_fly) {
+    if(pik_ptr->pikType->canFly) {
         enableFlag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
     
     m->chase(*((Point*) info1), m->z);
     
     m->setAnimation(PIKMIN_ANIM_IDLING);
-    m->playSound(pik_ptr->pik_type->sound_data_idxs[PIKMIN_SOUND_IDLE]);
+    m->playSound(pik_ptr->pikType->soundDataIdxs[PIKMIN_SOUND_IDLE]);
 }
 
 
@@ -2078,12 +2078,12 @@ void pikmin_fsm::beGrabbedByEnemy(Mob* m, void* info1, void* info2) {
     Hitbox* hbox_ptr = (Hitbox*) info2;
     
     ene_ptr->chomp(pik_ptr, hbox_ptr);
-    pik_ptr->is_grabbed_by_enemy = true;
+    pik_ptr->isGrabbedByEnemy = true;
     disableFlag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     pik_ptr->leaveGroup();
     
     pik_ptr->setAnimation(PIKMIN_ANIM_FLAILING, START_ANIM_OPTION_RANDOM_TIME);
-    m->playSound(pik_ptr->pik_type->sound_data_idxs[PIKMIN_SOUND_CAUGHT]);
+    m->playSound(pik_ptr->pikType->soundDataIdxs[PIKMIN_SOUND_CAUGHT]);
     
 }
 
@@ -2099,7 +2099,7 @@ void pikmin_fsm::beGrabbedByFriend(Mob* m, void* info1, void* info2) {
     Pikmin* pik_ptr = (Pikmin*) m;
     disableFlag(m->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     m->setAnimation(PIKMIN_ANIM_IDLING);
-    m->playSound(pik_ptr->pik_type->sound_data_idxs[PIKMIN_SOUND_HELD]);
+    m->playSound(pik_ptr->pikType->soundDataIdxs[PIKMIN_SOUND_HELD]);
 }
 
 
@@ -2112,10 +2112,10 @@ void pikmin_fsm::beGrabbedByFriend(Mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::beReleased(Mob* m, void* info1, void* info2) {
     Pikmin* pik_ptr = (Pikmin*) m;
-    ((Pikmin*) m)->is_grabbed_by_enemy = false;
+    ((Pikmin*) m)->isGrabbedByEnemy = false;
     
     size_t held_sound_idx =
-        pik_ptr->pik_type->sound_data_idxs[PIKMIN_SOUND_HELD];
+        pik_ptr->pikType->soundDataIdxs[PIKMIN_SOUND_HELD];
     if(held_sound_idx != INVALID) {
         game.audio.stopAllPlaybacks(
             pik_ptr->type->sounds[held_sound_idx].sample
@@ -2138,7 +2138,7 @@ void pikmin_fsm::beThrown(Mob* m, void* info1, void* info2) {
     m->setAnimation(PIKMIN_ANIM_THROWN);
     
     size_t held_sound_idx =
-        pik_ptr->pik_type->sound_data_idxs[PIKMIN_SOUND_HELD];
+        pik_ptr->pikType->soundDataIdxs[PIKMIN_SOUND_HELD];
     if(held_sound_idx != INVALID) {
         game.audio.stopAllPlaybacks(
             pik_ptr->type->sounds[held_sound_idx].sample
@@ -2146,12 +2146,12 @@ void pikmin_fsm::beThrown(Mob* m, void* info1, void* info2) {
     }
     
     size_t throw_sound_idx =
-        pik_ptr->pik_type->sound_data_idxs[PIKMIN_SOUND_THROWN];
+        pik_ptr->pikType->soundDataIdxs[PIKMIN_SOUND_THROWN];
     if(throw_sound_idx != INVALID) {
         MobType::Sound* throw_sound =
             &pik_ptr->type->sounds[throw_sound_idx];
         SoundSourceConfig throw_sound_config;
-        throw_sound_config.stack_mode = SOUND_STACK_MODE_OVERRIDE;
+        throw_sound_config.stackMode = SOUND_STACK_MODE_OVERRIDE;
         game.audio.createMobSoundSource(
             throw_sound->sample,
             m, false, throw_sound_config
@@ -2170,8 +2170,8 @@ void pikmin_fsm::beThrown(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void pikmin_fsm::beThrownAfterPluck(Mob* m, void* info1, void* info2) {
-    float throw_angle = getAngle(m->pos, m->focused_mob->pos);
-    m->speed_z = PIKMIN::THROW_VER_SPEED;
+    float throw_angle = getAngle(m->pos, m->focusedMob->pos);
+    m->speedZ = PIKMIN::THROW_VER_SPEED;
     m->speed = angleToCoordinates(throw_angle, PIKMIN::THROW_HOR_SPEED);
     m->face(throw_angle + TAU / 2.0f, nullptr, true);
     
@@ -2180,9 +2180,9 @@ void pikmin_fsm::beThrownAfterPluck(Mob* m, void* info1, void* info2) {
     
     ParticleGenerator pg =
         standardParticleGenSetup(
-            game.sys_content_names.part_pikmin_pluck_dirt, m
+            game.sysContentNames.parPikminPluckDirt, m
         );
-    m->particle_generators.push_back(pg);
+    m->particleGenerators.push_back(pg);
 }
 
 
@@ -2228,11 +2228,11 @@ void pikmin_fsm::becomeIdle(Mob* m, void* info1, void* info2) {
     
     pikmin_fsm::standStill(m, info1, info2);
     
-    if(pik_ptr->pik_type->can_fly) {
+    if(pik_ptr->pikType->canFly) {
         enableFlag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
         pik_ptr->chase(
             pik_ptr->pos,
-            pik_ptr->ground_sector->z + PIKMIN::FLIER_ABOVE_FLOOR_HEIGHT
+            pik_ptr->groundSector->z + PIKMIN::FLIER_ABOVE_FLOOR_HEIGHT
         );
     }
     
@@ -2260,7 +2260,7 @@ void pikmin_fsm::becomeSprout(Mob* m, void* info1, void* info2) {
     enableFlag(m->flags, MOB_FLAG_NON_HUNTABLE);
     enableFlag(m->flags, MOB_FLAG_NON_HURTABLE);
     disableFlag(m->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
-    ((Pikmin*) m)->is_seed_or_sprout = true;
+    ((Pikmin*) m)->isSeedOrSprout = true;
     m->setAnimation(
         PIKMIN_ANIM_SPROUT, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
     );
@@ -2284,7 +2284,7 @@ void pikmin_fsm::beginPluck(Mob* m, void* info1, void* info2) {
     disableFlag(m->flags, MOB_FLAG_NON_HUNTABLE);
     disableFlag(m->flags, MOB_FLAG_NON_HURTABLE);
     disableFlag(m->flags, MOB_FLAG_INTANGIBLE);
-    pik_ptr->is_seed_or_sprout = false;
+    pik_ptr->isSeedOrSprout = false;
     pikmin_fsm::clearTimer(m, info1, info2); //Clear sprout evolution timer.
     
     pik_ptr->setAnimation(PIKMIN_ANIM_PLUCKING);
@@ -2305,15 +2305,15 @@ void pikmin_fsm::called(Mob* m, void* info1, void* info2) {
     Pikmin* pik_ptr = (Pikmin*) m;
     Mob* caller = (Mob*) info1;
     
-    pik_ptr->was_last_hit_dud = false;
-    pik_ptr->consecutive_dud_hits = 0;
+    pik_ptr->wasLastHitDud = false;
+    pik_ptr->consecutiveDudHits = 0;
     pikmin_fsm::standStill(m, info1, info2);
     
     pik_ptr->focusOnMob(caller);
     
     pik_ptr->setAnimation(PIKMIN_ANIM_CALLED);
     if(info2 == nullptr) {
-        m->playSound(pik_ptr->pik_type->sound_data_idxs[PIKMIN_SOUND_CALLED]);
+        m->playSound(pik_ptr->pikType->soundDataIdxs[PIKMIN_SOUND_CALLED]);
     }
 }
 
@@ -2334,18 +2334,18 @@ void pikmin_fsm::calledWhileKnockedDown(Mob* m, void* info1, void* info2) {
     
     //Let's use the "temp" variable to specify whether or not a leader
     //already whistled it.
-    if(pik_ptr->temp_i == 1) return;
+    if(pik_ptr->tempI == 1) return;
     
     pik_ptr->focusOnMob(caller);
     
-    pik_ptr->script_timer.time_left =
+    pik_ptr->scriptTimer.timeLeft =
         std::max(
             0.01f,
-            pik_ptr->script_timer.time_left -
-            pik_ptr->pik_type->knocked_down_whistle_bonus
+            pik_ptr->scriptTimer.timeLeft -
+            pik_ptr->pikType->knockedDownWhistleBonus
         );
         
-    pik_ptr->temp_i = 1;
+    pik_ptr->tempI = 1;
 }
 
 
@@ -2375,9 +2375,9 @@ void pikmin_fsm::celebrate(Mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::checkBoredomAnimEnd(Mob* m, void* info1, void* info2) {
     Pikmin* pik_ptr = (Pikmin*) m;
-    if(!pik_ptr->in_bored_animation) return;
+    if(!pik_ptr->inBoredAnimation) return;
     m->setAnimation(PIKMIN_ANIM_IDLING);
-    pik_ptr->in_bored_animation = false;
+    pik_ptr->inBoredAnimation = false;
     m->setTimer(
         game.rng.f(PIKMIN::BORED_ANIM_MIN_DELAY, PIKMIN::BORED_ANIM_MAX_DELAY)
     );
@@ -2399,7 +2399,7 @@ void pikmin_fsm::checkIncomingAttack(Mob* m, void* info1, void* info2) {
     HitboxInteraction* info = (HitboxInteraction*) info1;
     Pikmin* pik_ptr = (Pikmin*) m;
     
-    if(pik_ptr->invuln_period.time_left > 0) {
+    if(pik_ptr->invulnPeriod.timeLeft > 0) {
         //The Pikmin cannot be attacked right now.
         return;
     }
@@ -2430,8 +2430,8 @@ void pikmin_fsm::checkIncomingAttack(Mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::checkLeaderBump(Mob* m, void* info1, void* info2) {
     Pikmin* pik_ptr = (Pikmin*) m;
-    if(pik_ptr->bump_lock > 0.0f) {
-        pik_ptr->bump_lock = game.config.pikmin.idle_bump_delay;
+    if(pik_ptr->bumpLock > 0.0f) {
+        pik_ptr->bumpLock = game.config.pikmin.idleBumpDelay;
         return;
     }
     if(
@@ -2465,7 +2465,7 @@ void pikmin_fsm::checkOutgoingAttack(Mob* m, void* info1, void* info2) {
         pik_ptr->calculateDamage(info->mob2, info->h1, info->h2, &damage);
         
     if(damage == 0 || !attack_success) {
-        pik_ptr->was_last_hit_dud = true;
+        pik_ptr->wasLastHitDud = true;
     }
 }
 
@@ -2480,9 +2480,9 @@ void pikmin_fsm::checkOutgoingAttack(Mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::checkShakingAnimEnd(Mob* m, void* info1, void* info2) {
     Pikmin* pik_ptr = (Pikmin*) m;
-    if(!pik_ptr->in_shaking_animation) return;
+    if(!pik_ptr->inShakingAnimation) return;
     m->setAnimation(PIKMIN_ANIM_IDLING);
-    pik_ptr->in_shaking_animation = false;
+    pik_ptr->inShakingAnimation = false;
     m->setTimer(
         game.rng.f(PIKMIN::BORED_ANIM_MIN_DELAY, PIKMIN::BORED_ANIM_MAX_DELAY)
     );
@@ -2510,12 +2510,12 @@ void pikmin_fsm::circleOpponent(Mob* m, void* info1, void* info2) {
     
     bool go_cw = game.rng.f(0.0f, 1.0f) <= 0.5f;
     m->circleAround(
-        m->focused_mob, Point(), m->focused_mob->radius + m->radius, go_cw,
+        m->focusedMob, Point(), m->focusedMob->radius + m->radius, go_cw,
         m->getBaseSpeed(), true
     );
     
     m->setAnimation(
-        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_NORMAL, true, m->type->move_speed
+        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_NORMAL, true, m->type->moveSpeed
     );
 }
 
@@ -2530,7 +2530,7 @@ void pikmin_fsm::circleOpponent(Mob* m, void* info1, void* info2) {
 void pikmin_fsm::clearBoredomData(Mob* m, void* info1, void* info2) {
     Pikmin* pik_ptr = (Pikmin*) m;
     pikmin_fsm::clearTimer(m, info1, info2);
-    pik_ptr->in_bored_animation = false;
+    pik_ptr->inBoredAnimation = false;
 }
 
 
@@ -2555,9 +2555,9 @@ void pikmin_fsm::clearTimer(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void pikmin_fsm::decideAttack(Mob* m, void* info1, void* info2) {
-    engineAssert(m->focused_mob != nullptr, m->printStateHistory());
+    engineAssert(m->focusedMob != nullptr, m->printStateHistory());
     
-    if(m->invuln_period.time_left > 0) {
+    if(m->invulnPeriod.timeLeft > 0) {
         //Don't let the Pikmin attack while invulnerable. Otherwise, this can
         //be exploited to let Pikmin vulnerable to a hazard attack the obstacle
         //emitting said hazard.
@@ -2566,7 +2566,7 @@ void pikmin_fsm::decideAttack(Mob* m, void* info1, void* info2) {
     
     Pikmin* pik_ptr = (Pikmin*) m;
     
-    if(pik_ptr->pik_type->can_fly) {
+    if(pik_ptr->pikType->canFly) {
         enableFlag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
     
@@ -2574,25 +2574,25 @@ void pikmin_fsm::decideAttack(Mob* m, void* info1, void* info2) {
     pik_ptr->stopCircling();
     
     bool can_circle =
-        pik_ptr->fsm.cur_state->id != PIKMIN_STATE_CIRCLING_OPPONENT &&
-        m->focused_mob->type->category->id == MOB_CATEGORY_ENEMIES;
+        pik_ptr->fsm.curState->id != PIKMIN_STATE_CIRCLING_OPPONENT &&
+        m->focusedMob->type->category->id == MOB_CATEGORY_ENEMIES;
         
-    switch(pik_ptr->pik_type->attack_method) {
+    switch(pik_ptr->pikType->attackMethod) {
     case PIKMIN_ATTACK_LATCH: {
         //This Pikmin latches on to things and/or smacks with its top.
         Distance d;
         Hitbox* closest_h =
-            pik_ptr->focused_mob->getClosestHitbox(
+            pik_ptr->focusedMob->getClosestHitbox(
                 pik_ptr->pos, HITBOX_TYPE_NORMAL, &d
             );
         float h_z = 0;
         
         if(closest_h) {
-            h_z = closest_h->z + pik_ptr->focused_mob->z;
+            h_z = closest_h->z + pik_ptr->focusedMob->z;
         }
         
         if(
-            !closest_h || !closest_h->can_pikmin_latch ||
+            !closest_h || !closest_h->canPikminLatch ||
             h_z > pik_ptr->z + pik_ptr->height ||
             h_z + closest_h->height < pik_ptr->z ||
             d >= closest_h->radius + pik_ptr->radius
@@ -2623,7 +2623,7 @@ void pikmin_fsm::decideAttack(Mob* m, void* info1, void* info2) {
                 pik_ptr->fsm.setState(PIKMIN_STATE_CIRCLING_OPPONENT);
             } else {
                 //Latch on.
-                pik_ptr->latch(pik_ptr->focused_mob, closest_h);
+                pik_ptr->latch(pik_ptr->focusedMob, closest_h);
                 pik_ptr->fsm.setState(PIKMIN_STATE_ATTACKING_LATCHED);
             }
             
@@ -2669,21 +2669,21 @@ void pikmin_fsm::doImpactBounce(Mob* m, void* info1, void* info2) {
     float impact_angle = 0.0f;
     float impact_speed = 0.0f;
     
-    if(pik_ptr->focused_mob) {
-        if(pik_ptr->focused_mob->rectangular_dim.x != 0) {
+    if(pik_ptr->focusedMob) {
+        if(pik_ptr->focusedMob->rectangularDim.x != 0) {
             impact_angle =
                 getAngle(
                     getClosestPointInRotatedRectangle(
                         pik_ptr->pos,
-                        pik_ptr->focused_mob->pos,
-                        pik_ptr->focused_mob->rectangular_dim,
-                        pik_ptr->focused_mob->angle,
+                        pik_ptr->focusedMob->pos,
+                        pik_ptr->focusedMob->rectangularDim,
+                        pik_ptr->focusedMob->angle,
                         nullptr
                     ),
                     pik_ptr->pos
                 );
         } else {
-            impact_angle = getAngle(pik_ptr->focused_mob->pos, pik_ptr->pos);
+            impact_angle = getAngle(pik_ptr->focusedMob->pos, pik_ptr->pos);
         }
         impact_speed = 200.0f;
     }
@@ -2692,7 +2692,7 @@ void pikmin_fsm::doImpactBounce(Mob* m, void* info1, void* info2) {
         angleToCoordinates(
             impact_angle, impact_speed
         );
-    pik_ptr->speed_z = 500.0f;
+    pik_ptr->speedZ = 500.0f;
     pik_ptr->face(impact_angle + TAU / 2.0f, nullptr, true);
     
     pik_ptr->setAnimation(PIKMIN_ANIM_KNOCKED_BACK);
@@ -2707,20 +2707,20 @@ void pikmin_fsm::doImpactBounce(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void pikmin_fsm::enterOnion(Mob* m, void* info1, void* info2) {
-    engineAssert(m->focused_mob != nullptr, m->printStateHistory());
+    engineAssert(m->focusedMob != nullptr, m->printStateHistory());
     
     Pikmin* pik_ptr = (Pikmin*) m;
-    Onion* oni_ptr = (Onion*) pik_ptr->focused_mob;
+    Onion* oni_ptr = (Onion*) pik_ptr->focusedMob;
     
     disableFlag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     
     //Set its data to start climbing.
     vector<size_t> checkpoints;
-    checkpoints.push_back((pik_ptr->temp_i * 2) + 1);
-    checkpoints.push_back(pik_ptr->temp_i * 2);
+    checkpoints.push_back((pik_ptr->tempI * 2) + 1);
+    checkpoints.push_back(pik_ptr->tempI * 2);
     
-    pik_ptr->track_info = new TrackRideInfo(
-        oni_ptr, checkpoints, oni_ptr->oni_type->nest->pikmin_enter_speed
+    pik_ptr->trackInfo = new TrackRideInfo(
+        oni_ptr, checkpoints, oni_ptr->oniType->nest->pikmin_enter_speed
     );
     
     pik_ptr->setAnimation(PIKMIN_ANIM_CLIMBING);
@@ -2749,13 +2749,13 @@ void pikmin_fsm::fallDownPit(Mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::finishCalledAnim(Mob* m, void* info1, void* info2) {
     Pikmin* pik_ptr = (Pikmin*) m;
-    Mob* lea_ptr = pik_ptr->focused_mob;
+    Mob* lea_ptr = pik_ptr->focusedMob;
     
     if(lea_ptr) {
-        if(lea_ptr->following_group) {
+        if(lea_ptr->followingGroup) {
             //If this leader is following another one,
             //then the new Pikmin should be in the group of that top leader.
-            lea_ptr = lea_ptr->following_group;
+            lea_ptr = lea_ptr->followingGroup;
         }
         lea_ptr->addToGroup(pik_ptr);
         pik_ptr->fsm.setState(
@@ -2783,11 +2783,11 @@ void pikmin_fsm::finishCalledAnim(Mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::finishCarrying(Mob* m, void* info1, void* info2) {
     Pikmin* pik_ptr = (Pikmin*) m;
-    engineAssert(pik_ptr->carrying_mob != nullptr, m->printStateHistory());
+    engineAssert(pik_ptr->carryingMob != nullptr, m->printStateHistory());
     
-    if(pik_ptr->carrying_mob->carry_info->must_return) {
+    if(pik_ptr->carryingMob->carryInfo->mustReturn) {
         //The Pikmin should return somewhere (like a pile).
-        pik_ptr->fsm.setState(PIKMIN_STATE_RETURNING, (void*) pik_ptr->carrying_mob);
+        pik_ptr->fsm.setState(PIKMIN_STATE_RETURNING, (void*) pik_ptr->carryingMob);
         
     } else {
         //The Pikmin can just sit and chill.
@@ -2804,17 +2804,17 @@ void pikmin_fsm::finishCarrying(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void pikmin_fsm::finishDrinking(Mob* m, void* info1, void* info2) {
-    engineAssert(m->focused_mob != nullptr, m->printStateHistory());
+    engineAssert(m->focusedMob != nullptr, m->printStateHistory());
     Pikmin* pik_ptr = (Pikmin*) m;
-    Drop* dro_ptr = (Drop*) m->focused_mob;
+    Drop* dro_ptr = (Drop*) m->focusedMob;
     
-    switch(dro_ptr->dro_type->effect) {
+    switch(dro_ptr->droType->effect) {
     case DROP_EFFECT_MATURATE: {
-        pik_ptr->increaseMaturity(dro_ptr->dro_type->increase_amount);
+        pik_ptr->increaseMaturity(dro_ptr->droType->increaseAmount);
         break;
     } case DROP_EFFECT_GIVE_STATUS: {
         pik_ptr->applyStatusEffect(
-            dro_ptr->dro_type->status_to_give, false, false
+            dro_ptr->droType->statusToGive, false, false
         );
         break;
     } default: {
@@ -2847,7 +2847,7 @@ void pikmin_fsm::finishDying(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void pikmin_fsm::finishGettingUp(Mob* m, void* info1, void* info2) {
-    Mob* prev_focused_mob = m->focused_mob;
+    Mob* prev_focused_mob = m->focusedMob;
     
     m->fsm.setState(PIKMIN_STATE_IDLING);
     
@@ -2880,14 +2880,14 @@ void pikmin_fsm::finishGettingUp(Mob* m, void* info1, void* info2) {
 void pikmin_fsm::finishMobLanding(Mob* m, void* info1, void* info2) {
     Pikmin* pik_ptr = (Pikmin*) m;
     
-    if(!m->focused_mob) {
+    if(!m->focusedMob) {
         //The mob has died or vanished since the Pikmin first landed.
         //Return to idle.
         pik_ptr->fsm.setState(PIKMIN_STATE_IDLING);
         return;
     }
     
-    switch(pik_ptr->pik_type->attack_method) {
+    switch(pik_ptr->pikType->attackMethod) {
     case PIKMIN_ATTACK_LATCH: {
         pik_ptr->fsm.setState(PIKMIN_STATE_ATTACKING_LATCHED);
         break;
@@ -2910,19 +2910,19 @@ void pikmin_fsm::finishMobLanding(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void pikmin_fsm::finishPickingUp(Mob* m, void* info1, void* info2) {
-    Tool* too_ptr = (Tool*) (m->focused_mob);
+    Tool* too_ptr = (Tool*) (m->focusedMob);
     
-    if(!hasFlag(too_ptr->holdability_flags, HOLDABILITY_FLAG_PIKMIN)) {
+    if(!hasFlag(too_ptr->holdabilityFlags, HOLDABILITY_FLAG_PIKMIN)) {
         m->fsm.setState(PIKMIN_STATE_IDLING);
         return;
     }
     
-    m->subgroup_type_ptr =
-        game.states.gameplay->subgroup_types.getType(
-            SUBGROUP_TYPE_CATEGORY_TOOL, m->focused_mob->type
+    m->subgroupTypePtr =
+        game.states.gameplay->subgroupTypes.getType(
+            SUBGROUP_TYPE_CATEGORY_TOOL, m->focusedMob->type
         );
     m->hold(
-        m->focused_mob, INVALID, 4, 0, 0.5f,
+        m->focusedMob, INVALID, 4, 0, 0.5f,
         true, HOLD_ROTATION_METHOD_FACE_HOLDER
     );
     m->unfocusFromMob();
@@ -2952,14 +2952,14 @@ void pikmin_fsm::flailToLeader(Mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::forgetCarriableObject(Mob* m, void* info1, void* info2) {
     Pikmin* pik_ptr = (Pikmin*) m;
-    if(!pik_ptr->carrying_mob) return;
+    if(!pik_ptr->carryingMob) return;
     
-    pik_ptr->carrying_mob->carry_info->spot_info[pik_ptr->temp_i].state =
+    pik_ptr->carryingMob->carryInfo->spotInfo[pik_ptr->tempI].state =
         CARRY_SPOT_STATE_FREE;
-    pik_ptr->carrying_mob->carry_info->spot_info[pik_ptr->temp_i].pik_ptr =
+    pik_ptr->carryingMob->carryInfo->spotInfo[pik_ptr->tempI].pikPtr =
         nullptr;
         
-    pik_ptr->carrying_mob = nullptr;
+    pik_ptr->carryingMob = nullptr;
 }
 
 
@@ -2971,9 +2971,9 @@ void pikmin_fsm::forgetCarriableObject(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void pikmin_fsm::forgetGroupTask(Mob* m, void* info1, void* info2) {
-    if(!m->focused_mob) return;
+    if(!m->focusedMob) return;
     
-    GroupTask* tas_ptr = (GroupTask*) (m->focused_mob);
+    GroupTask* tas_ptr = (GroupTask*) (m->focusedMob);
     Pikmin* pik_ptr = (Pikmin*) m;
     tas_ptr->freeUpSpot(pik_ptr);
     m->unfocusFromMob();
@@ -2988,9 +2988,9 @@ void pikmin_fsm::forgetGroupTask(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void pikmin_fsm::forgetTool(Mob* m, void* info1, void* info2) {
-    if(!m->focused_mob) return;
+    if(!m->focusedMob) return;
     
-    Tool* too_ptr = (Tool*) (m->focused_mob);
+    Tool* too_ptr = (Tool*) (m->focusedMob);
     too_ptr->reserved = nullptr;
     m->unfocusFromMob();
 }
@@ -3021,13 +3021,13 @@ void pikmin_fsm::getKnockedDown(Mob* m, void* info1, void* info2) {
     
     //Let's use the "temp" variable to specify whether or not a leader
     //already whistled it.
-    pik_ptr->temp_i = 0;
+    pik_ptr->tempI = 0;
     
-    if(pik_ptr->pik_type->can_fly) {
+    if(pik_ptr->pikType->canFly) {
         enableFlag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
     
-    m->setTimer(pik_ptr->pik_type->knocked_down_duration);
+    m->setTimer(pik_ptr->pikType->knockedDownDuration);
     
     m->setAnimation(PIKMIN_ANIM_LYING);
 }
@@ -3046,11 +3046,11 @@ void pikmin_fsm::goToCarriableObject(Mob* m, void* info1, void* info2) {
     Mob* carriable_mob = (Mob*) info1;
     Pikmin* pik_ptr = (Pikmin*) m;
     
-    if(pik_ptr->pik_type->can_fly) {
+    if(pik_ptr->pikType->canFly) {
         enableFlag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
     
-    pik_ptr->carrying_mob = carriable_mob;
+    pik_ptr->carryingMob = carriable_mob;
     pik_ptr->leaveGroup();
     pik_ptr->stopChasing();
     
@@ -3062,17 +3062,17 @@ void pikmin_fsm::goToCarriableObject(Mob* m, void* info1, void* info2) {
     //If this is the first Pikmin to go to the carriable mob, rotate
     //the points such that 0 faces this Pikmin instead.
     if(
-        carriable_mob->carry_info->isEmpty() &&
-        carriable_mob->type->custom_carry_spots.empty()
+        carriable_mob->carryInfo->isEmpty() &&
+        carriable_mob->type->customCarrySpots.empty()
     ) {
-        carriable_mob->carry_info->rotatePoints(
+        carriable_mob->carryInfo->rotatePoints(
             getAngle(carriable_mob->pos, pik_ptr->pos)
         );
     }
     
-    for(size_t s = 0; s < carriable_mob->type->max_carriers; s++) {
+    for(size_t s = 0; s < carriable_mob->type->maxCarriers; s++) {
         CarrierSpot* spot_ptr =
-            &carriable_mob->carry_info->spot_info[s];
+            &carriable_mob->carryInfo->spotInfo[s];
         if(spot_ptr->state != CARRY_SPOT_STATE_FREE) continue;
         
         Point spot_offset =
@@ -3090,9 +3090,9 @@ void pikmin_fsm::goToCarriableObject(Mob* m, void* info1, void* info2) {
     if(!closest_spot_ptr) return;
     
     pik_ptr->focusOnMob(carriable_mob);
-    pik_ptr->temp_i = closest_spot;
+    pik_ptr->tempI = closest_spot;
     closest_spot_ptr->state = CARRY_SPOT_STATE_RESERVED;
-    closest_spot_ptr->pik_ptr = pik_ptr;
+    closest_spot_ptr->pikPtr = pik_ptr;
     
     pik_ptr->chase(
         &carriable_mob->pos, &carriable_mob->z,
@@ -3101,7 +3101,7 @@ void pikmin_fsm::goToCarriableObject(Mob* m, void* info1, void* info2) {
     pik_ptr->setTimer(PIKMIN::GOTO_TIMEOUT);
     
     m->setAnimation(
-        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_NORMAL, true, m->type->move_speed
+        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_NORMAL, true, m->type->moveSpeed
     );
     
 }
@@ -3122,7 +3122,7 @@ void pikmin_fsm::goToGroupTask(Mob* m, void* info1, void* info2) {
     
     if(
         !hasFlag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR) &&
-        tas_ptr->tas_type->flying_pikmin_only
+        tas_ptr->tasType->flyingPikminOnly
     ) {
         //Only flying Pikmin can use this, and this Pikmin doesn't fly.
         return;
@@ -3136,7 +3136,7 @@ void pikmin_fsm::goToGroupTask(Mob* m, void* info1, void* info2) {
     
     tas_ptr->reserveSpot(free_spot, pik_ptr);
     
-    if(pik_ptr->pik_type->can_fly) {
+    if(pik_ptr->pikType->canFly) {
         enableFlag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
     
@@ -3146,13 +3146,13 @@ void pikmin_fsm::goToGroupTask(Mob* m, void* info1, void* info2) {
     m->focusOnMob(tas_ptr);
     
     m->chase(
-        &(free_spot->absolute_pos), &tas_ptr->z,
-        Point(), tas_ptr->tas_type->spots_z
+        &(free_spot->absolutePos), &tas_ptr->z,
+        Point(), tas_ptr->tasType->spotsZ
     );
     pik_ptr->setTimer(PIKMIN::GOTO_TIMEOUT);
     
     m->setAnimation(
-        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_NORMAL, true, m->type->move_speed
+        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_NORMAL, true, m->type->moveSpeed
     );
     
     pik_ptr->fsm.setState(PIKMIN_STATE_GOING_TO_GROUP_TASK);
@@ -3174,20 +3174,20 @@ void pikmin_fsm::goToOnion(Mob* m, void* info1, void* info2) {
     PikminNest* nest_ptr = (PikminNest*) info1;
     
     //Pick a leg at random.
-    pik_ptr->temp_i =
+    pik_ptr->tempI =
         game.rng.i(
             0, (int) (nest_ptr->nest_type->leg_body_parts.size() / 2) - 1
         );
     size_t leg_foot_bp_idx =
-        nest_ptr->m_ptr->anim.anim_db->findBodyPart(
-            nest_ptr->nest_type->leg_body_parts[pik_ptr->temp_i * 2 + 1]
+        nest_ptr->m_ptr->anim.animDb->findBodyPart(
+            nest_ptr->nest_type->leg_body_parts[pik_ptr->tempI * 2 + 1]
         );
     Point coords =
         nest_ptr->m_ptr->getHitbox(
             leg_foot_bp_idx
         )->getCurPos(nest_ptr->m_ptr->pos, nest_ptr->m_ptr->angle);
         
-    if(pik_ptr->pik_type->can_fly) {
+    if(pik_ptr->pikType->canFly) {
         enableFlag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
     
@@ -3200,7 +3200,7 @@ void pikmin_fsm::goToOnion(Mob* m, void* info1, void* info2) {
     m->leaveGroup();
     
     m->setAnimation(
-        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_NORMAL, true, m->type->move_speed
+        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_NORMAL, true, m->type->moveSpeed
     );
 }
 
@@ -3218,11 +3218,11 @@ void pikmin_fsm::goToOpponent(Mob* m, void* info1, void* info2) {
     Pikmin* pik_ptr = (Pikmin*) m;
     
     Mob* other_ptr = (Mob*) info1;
-    if(!pik_ptr->pik_type->can_fly) {
+    if(!pik_ptr->pikType->canFly) {
         //Grounded Pikmin.
         if(other_ptr->type->category->id == MOB_CATEGORY_ENEMIES) {
             Enemy* ene_ptr = (Enemy*) info1;
-            if(!ene_ptr->ene_type->allow_ground_attacks) return;
+            if(!ene_ptr->eneType->allowGroundAttacks) return;
             if(ene_ptr->z > m->z + m->height) return;
         }
     } else {
@@ -3235,33 +3235,33 @@ void pikmin_fsm::goToOpponent(Mob* m, void* info1, void* info2) {
     
     Point offset = Point();
     float target_distance =
-        m->focused_mob->radius + m->radius + PIKMIN::GROUNDED_ATTACK_DIST;
+        m->focusedMob->radius + m->radius + PIKMIN::GROUNDED_ATTACK_DIST;
         
-    if(m->focused_mob->rectangular_dim.x != 0.0f) {
+    if(m->focusedMob->rectangularDim.x != 0.0f) {
         bool is_inside = false;
         offset =
             getClosestPointInRotatedRectangle(
                 m->pos,
-                m->focused_mob->pos,
-                m->focused_mob->rectangular_dim,
-                m->focused_mob->angle,
+                m->focusedMob->pos,
+                m->focusedMob->rectangularDim,
+                m->focusedMob->angle,
                 &is_inside
-            ) - m->focused_mob->pos;
-        target_distance -= m->focused_mob->radius;
+            ) - m->focusedMob->pos;
+        target_distance -= m->focusedMob->radius;
     }
     
     m->chase(
-        &m->focused_mob->pos, &m->focused_mob->z,
+        &m->focusedMob->pos, &m->focusedMob->z,
         offset, 0.0f, 0,
         target_distance
     );
     m->leaveGroup();
     
-    pik_ptr->was_last_hit_dud = false;
-    pik_ptr->consecutive_dud_hits = 0;
+    pik_ptr->wasLastHitDud = false;
+    pik_ptr->consecutiveDudHits = 0;
     
     m->setAnimation(
-        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_NORMAL, true, m->type->move_speed
+        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_NORMAL, true, m->type->moveSpeed
     );
     
     m->fsm.setState(PIKMIN_STATE_GOING_TO_OPPONENT);
@@ -3285,18 +3285,18 @@ void pikmin_fsm::goToTool(Mob* m, void* info1, void* info2) {
         //Another Pikmin is already going for it. Ignore it.
         return;
     }
-    if(!pik_ptr->pik_type->can_carry_tools) {
+    if(!pik_ptr->pikType->canCarryTools) {
         //This Pikmin can't carry tools. Forget it.
         return;
     }
-    if(!hasFlag(too_ptr->holdability_flags, HOLDABILITY_FLAG_PIKMIN)) {
+    if(!hasFlag(too_ptr->holdabilityFlags, HOLDABILITY_FLAG_PIKMIN)) {
         //Can't hold this. Forget it.
         return;
     }
     
     too_ptr->reserved = pik_ptr;
     
-    if(pik_ptr->pik_type->can_fly) {
+    if(pik_ptr->pikType->canFly) {
         enableFlag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
     
@@ -3313,7 +3313,7 @@ void pikmin_fsm::goToTool(Mob* m, void* info1, void* info2) {
     pik_ptr->setTimer(PIKMIN::GOTO_TIMEOUT);
     
     m->setAnimation(
-        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_NORMAL, true, m->type->move_speed
+        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_NORMAL, true, m->type->moveSpeed
     );
     
     pik_ptr->fsm.setState(PIKMIN_STATE_GOING_TO_TOOL);
@@ -3331,7 +3331,7 @@ void pikmin_fsm::goToTool(Mob* m, void* info1, void* info2) {
 void pikmin_fsm::goingToDismissSpot(Mob* m, void* info1, void* info2) {
     Pikmin* pik_ptr = (Pikmin*) m;
     
-    if(pik_ptr->pik_type->can_fly) {
+    if(pik_ptr->pikType->canFly) {
         enableFlag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
     
@@ -3339,7 +3339,7 @@ void pikmin_fsm::goingToDismissSpot(Mob* m, void* info1, void* info2) {
     
     m->setAnimation(
         m->holding.empty() ? PIKMIN_ANIM_WALKING : PIKMIN_ANIM_CARRYING,
-        START_ANIM_OPTION_NORMAL, true, m->type->move_speed
+        START_ANIM_OPTION_NORMAL, true, m->type->moveSpeed
     );
 }
 
@@ -3380,15 +3380,15 @@ void pikmin_fsm::landAfterImpactBounce(Mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::landAfterPluck(Mob* m, void* info1, void* info2) {
     Pikmin* pik_ptr = (Pikmin*) m;
-    Mob* lea_ptr = pik_ptr->focused_mob;
+    Mob* lea_ptr = pik_ptr->focusedMob;
     
     pik_ptr->setAnimation(PIKMIN_ANIM_IDLING);
     
     if(lea_ptr) {
-        if(lea_ptr->following_group) {
+        if(lea_ptr->followingGroup) {
             //If this leader is following another one,
             //then the new Pikmin should be in the group of that top leader.
-            lea_ptr = lea_ptr->following_group;
+            lea_ptr = lea_ptr->followingGroup;
         }
         lea_ptr->addToGroup(pik_ptr);
         pik_ptr->fsm.setState(PIKMIN_STATE_IN_GROUP_CHASING, info1, info2);
@@ -3426,8 +3426,8 @@ void pikmin_fsm::landOnMob(Mob* m, void* info1, void* info2) {
     if(
         !hbox_ptr ||
         (
-            pik_ptr->pik_type->attack_method == PIKMIN_ATTACK_LATCH &&
-            !hbox_ptr->can_pikmin_latch
+            pik_ptr->pikType->attackMethod == PIKMIN_ATTACK_LATCH &&
+            !hbox_ptr->canPikminLatch
         )
     ) {
         //No good. Make it bounce back.
@@ -3437,17 +3437,17 @@ void pikmin_fsm::landOnMob(Mob* m, void* info1, void* info2) {
     }
     
     pik_ptr->stopHeightEffect();
-    pik_ptr->focused_mob = m2_ptr;
+    pik_ptr->focusedMob = m2_ptr;
     disableFlag(pik_ptr->flags, MOB_FLAG_WAS_THROWN);
     
-    switch(pik_ptr->pik_type->attack_method) {
+    switch(pik_ptr->pikType->attackMethod) {
     case PIKMIN_ATTACK_LATCH: {
         pik_ptr->latch(m2_ptr, hbox_ptr);
         break;
         
     }
     case PIKMIN_ATTACK_IMPACT: {
-        pik_ptr->speed.x = pik_ptr->speed.y = pik_ptr->speed_z = 0;
+        pik_ptr->speed.x = pik_ptr->speed.y = pik_ptr->speedZ = 0;
         break;
         
     }
@@ -3484,15 +3484,15 @@ void pikmin_fsm::landOnMobWhileHolding(Mob* m, void* info1, void* info2) {
     
     disableFlag(pik_ptr->flags, MOB_FLAG_WAS_THROWN);
     
-    if(too_ptr->too_type->dropped_when_pikmin_lands_on_opponent) {
+    if(too_ptr->tooType->droppedWhenPikminLandsOnOpponent) {
         pikmin_fsm::releaseTool(m, nullptr, nullptr);
         m->fsm.setState(PIKMIN_STATE_IDLING);
         
-        if(too_ptr->too_type->stuck_when_pikmin_lands_on_opponent && info->h2) {
-            too_ptr->speed.x = too_ptr->speed.y = too_ptr->speed_z = 0;
+        if(too_ptr->tooType->stuckWhenPikminLandsOnOpponent && info->h2) {
+            too_ptr->speed.x = too_ptr->speed.y = too_ptr->speedZ = 0;
             too_ptr->stopHeightEffect();
             
-            too_ptr->focused_mob = m2_ptr;
+            too_ptr->focusedMob = m2_ptr;
             
             float h_offset_dist;
             float h_offset_angle;
@@ -3502,26 +3502,26 @@ void pikmin_fsm::landOnMobWhileHolding(Mob* m, void* info1, void* info2) {
                 &h_offset_dist, &h_offset_angle, &v_offset_dist
             );
             m2_ptr->hold(
-                too_ptr, info->h2->body_part_idx,
+                too_ptr, info->h2->bodyPartIdx,
                 h_offset_dist, h_offset_angle, v_offset_dist,
                 true, HOLD_ROTATION_METHOD_FACE_HOLDER
             );
         }
         
         if(
-            too_ptr->too_type->pikmin_returns_after_using &&
-            game.states.gameplay->cur_leader_ptr
+            too_ptr->tooType->pikminReturnsAfterUsing &&
+            game.states.gameplay->curLeaderPtr
         ) {
             if(
                 !pik_ptr->holding.empty() &&
                 pik_ptr->holding[0]->type->category->id == MOB_CATEGORY_TOOLS
             ) {
                 m->fsm.setState(
-                    PIKMIN_STATE_CALLED_H, game.states.gameplay->cur_leader_ptr
+                    PIKMIN_STATE_CALLED_H, game.states.gameplay->curLeaderPtr
                 );
             } else {
                 m->fsm.setState(
-                    PIKMIN_STATE_CALLED, game.states.gameplay->cur_leader_ptr
+                    PIKMIN_STATE_CALLED, game.states.gameplay->curLeaderPtr
                 );
             }
         }
@@ -3545,28 +3545,28 @@ void pikmin_fsm::landWhileHolding(Mob* m, void* info1, void* info2) {
     
     pikmin_fsm::standStill(m, nullptr, nullptr);
     
-    pik_ptr->is_tool_primed_for_whistle = true;
+    pik_ptr->isToolPrimedForWhistle = true;
     
     m->setAnimation(PIKMIN_ANIM_IDLING);
     
-    if(too_ptr->too_type->dropped_when_pikmin_lands) {
+    if(too_ptr->tooType->droppedWhenPikminLands) {
         pikmin_fsm::releaseTool(m, nullptr, nullptr);
         m->fsm.setState(PIKMIN_STATE_IDLING);
         
         if(
-            too_ptr->too_type->pikmin_returns_after_using &&
-            game.states.gameplay->cur_leader_ptr
+            too_ptr->tooType->pikminReturnsAfterUsing &&
+            game.states.gameplay->curLeaderPtr
         ) {
             if(
                 !pik_ptr->holding.empty() &&
                 pik_ptr->holding[0]->type->category->id == MOB_CATEGORY_TOOLS
             ) {
                 m->fsm.setState(
-                    PIKMIN_STATE_CALLED_H, game.states.gameplay->cur_leader_ptr
+                    PIKMIN_STATE_CALLED_H, game.states.gameplay->curLeaderPtr
                 );
             } else {
                 m->fsm.setState(
-                    PIKMIN_STATE_CALLED, game.states.gameplay->cur_leader_ptr
+                    PIKMIN_STATE_CALLED, game.states.gameplay->curLeaderPtr
                 );
             }
         }
@@ -3602,7 +3602,7 @@ void pikmin_fsm::leftHazard(Mob* m, void* info1, void* info2) {
     engineAssert(info1 != nullptr, m->printStateHistory());
     
     Hazard* h = (Hazard*) info1;
-    if(h->associated_liquid) {
+    if(h->associatedLiquid) {
         m->removeParticleGenerator(MOB_PARTICLE_GENERATOR_ID_WAVE_RING);
     }
 }
@@ -3629,9 +3629,9 @@ void pikmin_fsm::loseLatchedMob(Mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::notifyLeaderRelease(Mob* m, void* info1, void* info2) {
     Pikmin* pik_ptr = ((Pikmin*) m);
-    if(!pik_ptr->following_group) return;
-    if(pik_ptr->holder.m != pik_ptr->following_group) return;
-    pik_ptr->following_group->fsm.runEvent(MOB_EV_RELEASE_ORDER);
+    if(!pik_ptr->followingGroup) return;
+    if(pik_ptr->holder.m != pik_ptr->followingGroup) return;
+    pik_ptr->followingGroup->fsm.runEvent(MOB_EV_RELEASE_ORDER);
 }
 
 
@@ -3663,25 +3663,25 @@ void pikmin_fsm::panicNewChase(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void pikmin_fsm::prepareToAttack(Mob* m, void* info1, void* info2) {
-    engineAssert(m->focused_mob != nullptr, m->printStateHistory());
+    engineAssert(m->focusedMob != nullptr, m->printStateHistory());
     
     Pikmin* pik_ptr = (Pikmin*) m;
-    pik_ptr->was_last_hit_dud = false;
+    pik_ptr->wasLastHitDud = false;
     
-    if(pik_ptr->focused_mob->rectangular_dim.x != 0.0f) {
+    if(pik_ptr->focusedMob->rectangularDim.x != 0.0f) {
         bool is_inside = false;
         Point target =
             getClosestPointInRotatedRectangle(
                 m->pos,
-                m->focused_mob->pos,
-                m->focused_mob->rectangular_dim,
-                m->focused_mob->angle,
+                m->focusedMob->pos,
+                m->focusedMob->rectangularDim,
+                m->focusedMob->angle,
                 &is_inside
             );
         pik_ptr->face(getAngle(m->pos, target), nullptr);
         
     } else {
-        pik_ptr->face(0, &pik_ptr->focused_mob->pos);
+        pik_ptr->face(0, &pik_ptr->focusedMob->pos);
         
     }
     
@@ -3698,11 +3698,11 @@ void pikmin_fsm::prepareToAttack(Mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::reachCarriableObject(Mob* m, void* info1, void* info2) {
     Pikmin* pik_ptr = (Pikmin*) m;
-    Mob* carriable_mob = pik_ptr->carrying_mob;
+    Mob* carriable_mob = pik_ptr->carryingMob;
     
     Point spot_offset =
         rotatePoint(
-            carriable_mob->carry_info->spot_info[pik_ptr->temp_i].pos,
+            carriable_mob->carryInfo->spotInfo[pik_ptr->tempI].pos,
             carriable_mob->angle
         );
     Point final_pos = carriable_mob->pos + spot_offset;
@@ -3717,11 +3717,11 @@ void pikmin_fsm::reachCarriableObject(Mob* m, void* info1, void* info2) {
     pik_ptr->face(getAngle(final_pos, carriable_mob->pos), nullptr);
     
     //Let the carriable mob know that a new Pikmin has grabbed on.
-    pik_ptr->carrying_mob->fsm.runEvent(
+    pik_ptr->carryingMob->fsm.runEvent(
         MOB_EV_CARRIER_ADDED, (void*) pik_ptr
     );
     
-    pik_ptr->in_carry_struggle_animation = false;
+    pik_ptr->inCarryStruggleAnimation = false;
     pik_ptr->setAnimation(PIKMIN_ANIM_CARRYING);
 }
 
@@ -3751,22 +3751,22 @@ void pikmin_fsm::rechaseOpponent(Mob* m, void* info1, void* info2) {
 
     Pikmin* pik_ptr = (Pikmin*) m;
     
-    if(pik_ptr->was_last_hit_dud) {
+    if(pik_ptr->wasLastHitDud) {
         //Check if the Pikmin's last hits were duds.
         //If so, maybe give up and sigh.
-        pik_ptr->consecutive_dud_hits++;
-        if(pik_ptr->consecutive_dud_hits >= 4) {
-            pik_ptr->consecutive_dud_hits = 0;
+        pik_ptr->consecutiveDudHits++;
+        if(pik_ptr->consecutiveDudHits >= 4) {
+            pik_ptr->consecutiveDudHits = 0;
             pik_ptr->fsm.setState(PIKMIN_STATE_SIGHING);
             return;
         }
     }
     
     bool can_continue_attacking =
-        m->focused_mob &&
-        m->focused_mob->health > 0 &&
-        Distance(m->pos, m->focused_mob->pos) <=
-        (m->radius + m->focused_mob->radius + PIKMIN::GROUNDED_ATTACK_DIST);
+        m->focusedMob &&
+        m->focusedMob->health > 0 &&
+        Distance(m->pos, m->focusedMob->pos) <=
+        (m->radius + m->focusedMob->radius + PIKMIN::GROUNDED_ATTACK_DIST);
         
     if(!can_continue_attacking) {
         //The opponent cannot be chased down. Become idle.
@@ -3806,13 +3806,13 @@ void pikmin_fsm::releaseTool(Mob* m, void* info1, void* info2) {
     pik_ptr->release(too_ptr);
     too_ptr->pos = m->pos;
     too_ptr->speed = Point();
-    too_ptr->push_amount = 0.0f;
-    m->subgroup_type_ptr =
-        game.states.gameplay->subgroup_types.getType(
-            SUBGROUP_TYPE_CATEGORY_PIKMIN, pik_ptr->pik_type
+    too_ptr->pushAmount = 0.0f;
+    m->subgroupTypePtr =
+        game.states.gameplay->subgroupTypes.getType(
+            SUBGROUP_TYPE_CATEGORY_PIKMIN, pik_ptr->pikType
         );
-    if(m->following_group) {
-        m->following_group->group->changeStandbyTypeIfNeeded();
+    if(m->followingGroup) {
+        m->followingGroup->group->changeStandbyTypeIfNeeded();
         game.states.gameplay->updateClosestGroupMembers();
     }
 }
@@ -3829,9 +3829,9 @@ void pikmin_fsm::seedLanded(Mob* m, void* info1, void* info2) {
     //Generate the rock particles that come out.
     ParticleGenerator pg =
         standardParticleGenSetup(
-            game.sys_content_names.part_pikmin_seed_landed, m
+            game.sysContentNames.parPikminSeedLanded, m
         );
-    m->particle_generators.push_back(pg);
+    m->particleGenerators.push_back(pg);
 }
 
 
@@ -3844,7 +3844,7 @@ void pikmin_fsm::seedLanded(Mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::setBumpLock(Mob* m, void* info1, void* info2) {
     Pikmin* pik_ptr = (Pikmin*) m;
-    pik_ptr->bump_lock = game.config.pikmin.idle_bump_delay;
+    pik_ptr->bumpLock = game.config.pikmin.idleBumpDelay;
 }
 
 
@@ -3856,7 +3856,7 @@ void pikmin_fsm::setBumpLock(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void pikmin_fsm::setIdleTaskReach(Mob* m, void* info1, void* info2) {
-    m->near_reach = 0;
+    m->nearReach = 0;
     m->updateInteractionSpan();
 }
 
@@ -3869,7 +3869,7 @@ void pikmin_fsm::setIdleTaskReach(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void pikmin_fsm::setSwarmReach(Mob* m, void* info1, void* info2) {
-    m->near_reach = 1;
+    m->nearReach = 1;
     m->updateInteractionSpan();
 }
 
@@ -3902,9 +3902,9 @@ void pikmin_fsm::sproutEvolve(Mob* m, void* info1, void* info2) {
         
         ParticleGenerator pg =
             standardParticleGenSetup(
-                game.sys_content_names.part_sprout_evolution, pik_ptr
+                game.sysContentNames.parSproutEvolution, pik_ptr
             );
-        pik_ptr->particle_generators.push_back(pg);
+        pik_ptr->particleGenerators.push_back(pg);
         
     } else {
         //Flower to leaf.
@@ -3913,9 +3913,9 @@ void pikmin_fsm::sproutEvolve(Mob* m, void* info1, void* info2) {
         
         ParticleGenerator pg =
             standardParticleGenSetup(
-                game.sys_content_names.part_sprout_regression, pik_ptr
+                game.sysContentNames.parSproutRegression, pik_ptr
             );
-        pik_ptr->particle_generators.push_back(pg);
+        pik_ptr->particleGenerators.push_back(pg);
     }
 }
 
@@ -3929,7 +3929,7 @@ void pikmin_fsm::sproutEvolve(Mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::sproutScheduleEvol(Mob* m, void* info1, void* info2) {
     Pikmin* pik_ptr = (Pikmin*) m;
-    m->setTimer(pik_ptr->pik_type->sprout_evolution_time[pik_ptr->maturity]);
+    m->setTimer(pik_ptr->pikType->sproutEvolutionTime[pik_ptr->maturity]);
 }
 
 
@@ -3960,11 +3960,11 @@ void pikmin_fsm::startBoredomAnim(Mob* m, void* info1, void* info2) {
     Pikmin* pik_ptr = (Pikmin*) m;
     
     size_t looking_around_anim_idx =
-        m->type->anim_db->findAnimation("looking_around");
+        m->type->animDb->findAnimation("looking_around");
     size_t sitting_anim_idx =
-        m->type->anim_db->findAnimation("sitting");
+        m->type->animDb->findAnimation("sitting");
     size_t lounging_anim_idx =
-        m->type->anim_db->findAnimation("lounging");
+        m->type->animDb->findAnimation("lounging");
     vector<size_t> boredom_anims;
     if(looking_around_anim_idx != INVALID) {
         boredom_anims.push_back(looking_around_anim_idx);
@@ -3979,7 +3979,7 @@ void pikmin_fsm::startBoredomAnim(Mob* m, void* info1, void* info2) {
     if(boredom_anims.empty()) return;
     size_t anim_idx = boredom_anims[game.rng.i(0, (int) (boredom_anims.size() - 1))];
     m->setAnimation(anim_idx, START_ANIM_OPTION_NORMAL, false);
-    pik_ptr->in_bored_animation = true;
+    pik_ptr->inBoredAnimation = true;
 }
 
 
@@ -3993,11 +3993,11 @@ void pikmin_fsm::startBoredomAnim(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void pikmin_fsm::startChasingLeader(Mob* m, void* info1, void* info2) {
-    m->focusOnMob(m->following_group);
+    m->focusOnMob(m->followingGroup);
     pikmin_fsm::updateInGroupChasing(m, nullptr, nullptr);
     m->setAnimation(
         m->holding.empty() ? PIKMIN_ANIM_WALKING : PIKMIN_ANIM_CARRYING,
-        START_ANIM_OPTION_NORMAL, true, m->type->move_speed
+        START_ANIM_OPTION_NORMAL, true, m->type->moveSpeed
     );
 }
 
@@ -4090,7 +4090,7 @@ void pikmin_fsm::startFlailing(Mob* m, void* info1, void* info2) {
 void pikmin_fsm::startGettingUp(Mob* m, void* info1, void* info2) {
     Pikmin* pik_ptr = (Pikmin*) m;
     
-    if(pik_ptr->pik_type->can_fly) {
+    if(pik_ptr->pikType->canFly) {
         enableFlag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
     
@@ -4106,9 +4106,9 @@ void pikmin_fsm::startGettingUp(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void pikmin_fsm::startImpactLunge(Mob* m, void* info1, void* info2) {
-    engineAssert(m->focused_mob != nullptr, m->printStateHistory());
+    engineAssert(m->focusedMob != nullptr, m->printStateHistory());
     
-    m->chase(&m->focused_mob->pos, &m->focused_mob->z);
+    m->chase(&m->focusedMob->pos, &m->focusedMob->z);
     m->setAnimation(PIKMIN_ANIM_ATTACKING);
 }
 
@@ -4134,13 +4134,13 @@ void pikmin_fsm::startMobLanding(Mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::startPanicking(Mob* m, void* info1, void* info2) {
     Pikmin* pik_ptr = (Pikmin*) m;
-    if(pik_ptr->pik_type->can_fly) {
+    if(pik_ptr->pikType->canFly) {
         enableFlag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
     m->leaveGroup();
     pikmin_fsm::panicNewChase(m, info1, info2);
     m->setAnimation(
-        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_NORMAL, true, m->type->move_speed
+        PIKMIN_ANIM_WALKING, START_ANIM_OPTION_NORMAL, true, m->type->moveSpeed
     );
 }
 
@@ -4172,15 +4172,15 @@ void pikmin_fsm::startReturning(Mob* m, void* info1, void* info2) {
     Pikmin* pik_ptr = (Pikmin*) m;
     Mob* carried_mob = (Mob*) info1;
     
-    if(pik_ptr->pik_type->can_fly) {
+    if(pik_ptr->pikType->canFly) {
         enableFlag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
     
     PathFollowSettings settings;
-    settings.target_point = carried_mob->carry_info->return_point;
-    settings.final_target_distance = carried_mob->carry_info->return_dist;
+    settings.targetPoint = carried_mob->carryInfo->returnPoint;
+    settings.finalTargetDistance = carried_mob->carryInfo->returnDist;
     
-    if(carried_mob->carry_info->destination == CARRY_DESTINATION_LINKED_MOB) {
+    if(carried_mob->carryInfo->destination == CARRY_DESTINATION_LINKED_MOB) {
         //Special case: bridges.
         //Pikmin are meant to carry to the current tip of the bridge,
         //but whereas the start of the bridge is on firm ground, the tip may
@@ -4189,12 +4189,12 @@ void pikmin_fsm::startReturning(Mob* m, void* info1, void* info2) {
         //Let's fake the start point to be the start of the bridge,
         //for the sake of path calculations.
         if(
-            carried_mob->carry_info->intended_mob->type->category->id ==
+            carried_mob->carryInfo->intendedMob->type->category->id ==
             MOB_CATEGORY_BRIDGES
         ) {
-            Bridge* bri_ptr = (Bridge*) carried_mob->carry_info->intended_mob;
+            Bridge* bri_ptr = (Bridge*) carried_mob->carryInfo->intendedMob;
             enableFlag(settings.flags, PATH_FOLLOW_FLAG_FAKED_START);
-            settings.faked_start = bri_ptr->getStartPoint();
+            settings.fakedStart = bri_ptr->getStartPoint();
         }
     }
     
@@ -4205,7 +4205,7 @@ void pikmin_fsm::startReturning(Mob* m, void* info1, void* info2) {
     ) {
         m->setAnimation(
             PIKMIN_ANIM_WALKING, START_ANIM_OPTION_NORMAL, true,
-            m->type->move_speed
+            m->type->moveSpeed
         );
     } else {
         pik_ptr->fsm.setState(PIKMIN_STATE_IDLING);
@@ -4230,15 +4230,15 @@ void pikmin_fsm::startRidingTrack(Mob* m, void* info1, void* info2) {
     m->startHeightEffect();
     
     vector<size_t> checkpoints;
-    for(size_t c = 0; c < tra_ptr->type->anim_db->body_parts.size(); c++) {
+    for(size_t c = 0; c < tra_ptr->type->animDb->bodyParts.size(); c++) {
         checkpoints.push_back(c);
     }
-    m->track_info =
+    m->trackInfo =
         new TrackRideInfo(
-        tra_ptr, checkpoints, tra_ptr->tra_type->ride_speed
+        tra_ptr, checkpoints, tra_ptr->traType->rideSpeed
     );
     
-    switch(tra_ptr->tra_type->riding_pose) {
+    switch(tra_ptr->traType->ridingPose) {
     case TRACK_RIDING_POSE_STOPPED: {
         m->setAnimation(PIKMIN_ANIM_WALKING);
         break;
@@ -4262,8 +4262,8 @@ void pikmin_fsm::startRidingTrack(Mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::stopBeingIdle(Mob* m, void* info1, void* info2) {
     Pikmin* pik_ptr = (Pikmin*) m;
-    pik_ptr->bump_lock = 0.0f;
-    pik_ptr->in_shaking_animation = false;
+    pik_ptr->bumpLock = 0.0f;
+    pik_ptr->inShakingAnimation = false;
 }
 
 
@@ -4288,11 +4288,11 @@ void pikmin_fsm::stopBeingThrown(Mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::stopCarrying(Mob* m, void* info1, void* info2) {
     Pikmin* pik_ptr = (Pikmin*) m;
-    if(!pik_ptr->carrying_mob) return;
+    if(!pik_ptr->carryingMob) return;
     
-    pik_ptr->carrying_mob->fsm.runEvent(MOB_EV_CARRIER_REMOVED, (void*) pik_ptr);
+    pik_ptr->carryingMob->fsm.runEvent(MOB_EV_CARRIER_REMOVED, (void*) pik_ptr);
     
-    pik_ptr->carrying_mob = nullptr;
+    pik_ptr->carryingMob = nullptr;
     pik_ptr->setTimer(0);
 }
 
@@ -4308,9 +4308,9 @@ void pikmin_fsm::stopInGroup(Mob* m, void* info1, void* info2) {
     Pikmin* pik_ptr = (Pikmin*) m;
     
     m->stopChasing();
-    m->face(0, &m->following_group->pos);
+    m->face(0, &m->followingGroup->pos);
     
-    if(pik_ptr->pik_type->can_fly) {
+    if(pik_ptr->pikType->canFly) {
         enableFlag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
     
@@ -4332,16 +4332,16 @@ void pikmin_fsm::tickCarrying(Mob* m, void* info1, void* info2) {
     Pikmin* pik_ptr = (Pikmin*) m;
     
     if(
-        pik_ptr->in_carry_struggle_animation &&
-        pik_ptr->carrying_mob->carry_info->is_moving
+        pik_ptr->inCarryStruggleAnimation &&
+        pik_ptr->carryingMob->carryInfo->isMoving
     ) {
-        pik_ptr->in_carry_struggle_animation = false;
+        pik_ptr->inCarryStruggleAnimation = false;
         pik_ptr->setAnimation(PIKMIN_ANIM_CARRYING);
     } else if(
-        !pik_ptr->in_carry_struggle_animation &&
-        !pik_ptr->carrying_mob->carry_info->is_moving
+        !pik_ptr->inCarryStruggleAnimation &&
+        !pik_ptr->carryingMob->carryInfo->isMoving
     ) {
-        pik_ptr->in_carry_struggle_animation = true;
+        pik_ptr->inCarryStruggleAnimation = true;
         pik_ptr->setAnimation(PIKMIN_ANIM_CARRYING_STRUGGLE);
     }
 }
@@ -4355,12 +4355,12 @@ void pikmin_fsm::tickCarrying(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void pikmin_fsm::tickEnteringOnion(Mob* m, void* info1, void* info2) {
-    engineAssert(m->track_info != nullptr, m->printStateHistory());
-    engineAssert(m->focused_mob != nullptr, m->printStateHistory());
+    engineAssert(m->trackInfo != nullptr, m->printStateHistory());
+    engineAssert(m->focusedMob != nullptr, m->printStateHistory());
     
     if(m->tickTrackRide()) {
         //Finished!
-        ((Onion*) m->focused_mob)->nest->storePikmin((Pikmin*) m);
+        ((Onion*) m->focusedMob)->nest->storePikmin((Pikmin*) m);
     }
 }
 
@@ -4373,12 +4373,12 @@ void pikmin_fsm::tickEnteringOnion(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void pikmin_fsm::tickGroupTaskWork(Mob* m, void* info1, void* info2) {
-    engineAssert(m->focused_mob != nullptr, m->printStateHistory());
+    engineAssert(m->focusedMob != nullptr, m->printStateHistory());
     
     Pikmin* pik_ptr = (Pikmin*) m;
-    GroupTask* tas_ptr = (GroupTask*) (m->focused_mob);
+    GroupTask* tas_ptr = (GroupTask*) (m->focusedMob);
     Point cur_spot_pos = tas_ptr->getSpotPos(pik_ptr);
-    float cur_spot_z = tas_ptr->z + tas_ptr->tas_type->spots_z;
+    float cur_spot_z = tas_ptr->z + tas_ptr->tasType->spotsZ;
     
     pik_ptr->chase(
         cur_spot_pos, cur_spot_z,
@@ -4386,7 +4386,7 @@ void pikmin_fsm::tickGroupTaskWork(Mob* m, void* info1, void* info2) {
         CHASE_FLAG_TELEPORTS_CONSTANTLY
     );
     pik_ptr->face(
-        tas_ptr->angle + tas_ptr->tas_type->worker_pikmin_angle, nullptr, true
+        tas_ptr->angle + tas_ptr->tasType->workerPikminAngle, nullptr, true
     );
     pik_ptr->stopTurning();
 }
@@ -4400,27 +4400,27 @@ void pikmin_fsm::tickGroupTaskWork(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void pikmin_fsm::tickTrackRide(Mob* m, void* info1, void* info2) {
-    engineAssert(m->track_info != nullptr, m->printStateHistory());
+    engineAssert(m->trackInfo != nullptr, m->printStateHistory());
     Pikmin* pik_ptr = (Pikmin*) m;
     
     if(m->tickTrackRide()) {
         //Finished!
         m->fsm.setState(PIKMIN_STATE_IDLING, nullptr, nullptr);
         if(
-            pik_ptr->leader_to_return_to &&
-            !pik_ptr->leader_to_return_to->to_delete &&
-            pik_ptr->leader_to_return_to->health > 0.0f
+            pik_ptr->leaderToReturnTo &&
+            !pik_ptr->leaderToReturnTo->toDelete &&
+            pik_ptr->leaderToReturnTo->health > 0.0f
         ) {
             if(
                 !pik_ptr->holding.empty() &&
                 pik_ptr->holding[0]->type->category->id == MOB_CATEGORY_TOOLS
             ) {
                 m->fsm.setState(
-                    PIKMIN_STATE_CALLED_H, pik_ptr->leader_to_return_to, info2
+                    PIKMIN_STATE_CALLED_H, pik_ptr->leaderToReturnTo, info2
                 );
             } else {
                 m->fsm.setState(
-                    PIKMIN_STATE_CALLED, pik_ptr->leader_to_return_to, info2
+                    PIKMIN_STATE_CALLED, pik_ptr->leaderToReturnTo, info2
                 );
             }
         }
@@ -4439,13 +4439,13 @@ void pikmin_fsm::touchedEatHitbox(Mob* m, void* info1, void* info2) {
     engineAssert(info1 != nullptr, m->printStateHistory());
     engineAssert(info2 != nullptr, m->printStateHistory());
     
-    if(m->invuln_period.time_left > 0) return;
+    if(m->invulnPeriod.timeLeft > 0) return;
     if(m->health <= 0) {
         return;
     }
     
     for(size_t s = 0; s < m->statuses.size(); s++) {
-        if(m->statuses[s].type->turns_inedible) {
+        if(m->statuses[s].type->turnsInedible) {
             return;
         }
     }
@@ -4476,11 +4476,11 @@ void pikmin_fsm::touchedHazard(Mob* m, void* info1, void* info2) {
         }
     }
     
-    if(haz_ptr->associated_liquid) {
+    if(haz_ptr->associatedLiquid) {
         bool already_generating = false;
-        for(size_t g = 0; g < m->particle_generators.size(); g++) {
+        for(size_t g = 0; g < m->particleGenerators.size(); g++) {
             if(
-                m->particle_generators[g].id ==
+                m->particleGenerators[g].id ==
                 MOB_PARTICLE_GENERATOR_ID_WAVE_RING
             ) {
                 already_generating = true;
@@ -4491,29 +4491,29 @@ void pikmin_fsm::touchedHazard(Mob* m, void* info1, void* info2) {
         if(!already_generating) {
             ParticleGenerator pg =
                 standardParticleGenSetup(
-                    game.sys_content_names.part_wave_ring, m
+                    game.sysContentNames.parWaveRing, m
                 );
-            pg.follow_z_offset = 1.0f;
+            pg.followZOffset = 1.0f;
             adjustKeyframeInterpolatorValues<float>(
-                pg.base_particle.size,
+                pg.baseParticle.size,
             [ = ] (const float & f) { return f * m->radius; }
             );
             pg.id = MOB_PARTICLE_GENERATOR_ID_WAVE_RING;
-            m->particle_generators.push_back(pg);
+            m->particleGenerators.push_back(pg);
         }
     }
     
-    if(pik_ptr->invuln_period.time_left > 0) return;
+    if(pik_ptr->invulnPeriod.timeLeft > 0) return;
     MobType::Vulnerability vuln = pik_ptr->getHazardVulnerability(haz_ptr);
-    if(vuln.effect_mult == 0.0f) return;
+    if(vuln.effectMult == 0.0f) return;
     
-    if(!vuln.status_to_apply || !vuln.status_overrides) {
+    if(!vuln.statusToApply || !vuln.statusOverrides) {
         for(size_t e = 0; e < haz_ptr->effects.size(); e++) {
             pik_ptr->applyStatusEffect(haz_ptr->effects[e], false, true);
         }
     }
-    if(vuln.status_to_apply) {
-        pik_ptr->applyStatusEffect(vuln.status_to_apply, false, true);
+    if(vuln.statusToApply) {
+        pik_ptr->applyStatusEffect(vuln.statusToApply, false, true);
     }
 }
 
@@ -4534,7 +4534,7 @@ void pikmin_fsm::touchedSpray(Mob* m, void* info1, void* info2) {
         m->applyStatusEffect(s->effects[e], false, false);
     }
     
-    if(s->buries_pikmin) {
+    if(s->buriesPikmin) {
         m->fsm.setState(PIKMIN_STATE_SPROUT, nullptr, nullptr);
     }
 }
@@ -4554,8 +4554,8 @@ void pikmin_fsm::tryHeldItemHotswap(Mob* m, void* info1, void* info2) {
     
     Tool* too_ptr = (Tool*) * (m->holding.begin());
     if(
-        !too_ptr->too_type->can_be_hotswapped &&
-        hasFlag(too_ptr->holdability_flags, HOLDABILITY_FLAG_ENEMIES)
+        !too_ptr->tooType->canBeHotswapped &&
+        hasFlag(too_ptr->holdabilityFlags, HOLDABILITY_FLAG_ENEMIES)
     ) {
         //This tool can't be hotswapped... The Pikmin has to get chomped.
         pikmin_fsm::releaseTool(m, nullptr, nullptr);
@@ -4567,7 +4567,7 @@ void pikmin_fsm::tryHeldItemHotswap(Mob* m, void* info1, void* info2) {
     pikmin_fsm::releaseTool(m, nullptr, nullptr);
     //Receive some invulnerability period to make sure it's not hurt by
     //the same attack.
-    m->invuln_period.start();
+    m->invulnPeriod.start();
     //Finally, get knocked back on purpose.
     m->leaveGroup();
     pikmin_fsm::beReleased(m, info1, info2);
@@ -4584,9 +4584,9 @@ void pikmin_fsm::tryHeldItemHotswap(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void pikmin_fsm::unlatch(Mob* m, void* info1, void* info2) {
-    if(!m->focused_mob) return;
+    if(!m->focusedMob) return;
     
-    m->focused_mob->release(m);
+    m->focusedMob->release(m);
     ((Pikmin*) m)->latched = false;
 }
 
@@ -4604,7 +4604,7 @@ void pikmin_fsm::updateInGroupChasing(Mob* m, void* info1, void* info2) {
     Point target_pos;
     float target_dist; //Unused dummy value.
     
-    if(pik_ptr->pik_type->can_fly) {
+    if(pik_ptr->pikType->canFly) {
         enableFlag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
     
@@ -4616,7 +4616,7 @@ void pikmin_fsm::updateInGroupChasing(Mob* m, void* info1, void* info2) {
     
     m->chase(
         target_pos,
-        pik_ptr->following_group->z + PIKMIN::FLIER_ABOVE_FLOOR_HEIGHT
+        pik_ptr->followingGroup->z + PIKMIN::FLIER_ABOVE_FLOOR_HEIGHT
     );
     
 }
@@ -4634,13 +4634,13 @@ void pikmin_fsm::whistledWhileHolding(Mob* m, void* info1, void* info2) {
     Tool* too_ptr = (Tool*) * (m->holding.begin());
     
     if(
-        too_ptr->too_type->dropped_when_pikmin_is_whistled &&
-        pik_ptr->is_tool_primed_for_whistle
+        too_ptr->tooType->droppedWhenPikminIsWhistled &&
+        pik_ptr->isToolPrimedForWhistle
     ) {
         pikmin_fsm::releaseTool(m, nullptr, nullptr);
     }
     
-    pik_ptr->is_tool_primed_for_whistle = false;
+    pik_ptr->isToolPrimedForWhistle = false;
     
     if(
         !pik_ptr->holding.empty() &&
@@ -4662,12 +4662,12 @@ void pikmin_fsm::whistledWhileHolding(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void pikmin_fsm::whistledWhileRiding(Mob* m, void* info1, void* info2) {
-    engineAssert(m->track_info, m->printStateHistory());
+    engineAssert(m->trackInfo, m->printStateHistory());
     
     Pikmin* pik_ptr = (Pikmin*) m;
-    Track* tra_ptr = (Track*) (m->track_info->m);
+    Track* tra_ptr = (Track*) (m->trackInfo->m);
     
-    if(tra_ptr->tra_type->cancellable_with_whistle) {
+    if(tra_ptr->traType->cancellableWithWhistle) {
         m->stopTrackRide();
         if(
             !pik_ptr->holding.empty() &&
@@ -4689,12 +4689,12 @@ void pikmin_fsm::whistledWhileRiding(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void pikmin_fsm::workOnGroupTask(Mob* m, void* info1, void* info2) {
-    engineAssert(m->focused_mob != nullptr, m->printStateHistory());
+    engineAssert(m->focusedMob != nullptr, m->printStateHistory());
     
-    GroupTask* tas_ptr = (GroupTask*) (m->focused_mob);
+    GroupTask* tas_ptr = (GroupTask*) (m->focusedMob);
     Pikmin* pik_ptr = (Pikmin*) m;
     
-    if(pik_ptr->pik_type->can_fly) {
+    if(pik_ptr->pikType->canFly) {
         enableFlag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
     
@@ -4702,11 +4702,11 @@ void pikmin_fsm::workOnGroupTask(Mob* m, void* info1, void* info2) {
     
     pik_ptr->stopChasing();
     pik_ptr->face(
-        tas_ptr->angle + tas_ptr->tas_type->worker_pikmin_angle,
+        tas_ptr->angle + tas_ptr->tasType->workerPikminAngle,
         nullptr
     );
     
-    switch(tas_ptr->tas_type->worker_pikmin_pose) {
+    switch(tas_ptr->tasType->workerPikminPose) {
     case GROUP_TASK_PIKMIN_POSE_STOPPED: {
         pik_ptr->setAnimation(PIKMIN_ANIM_IDLING);
         break;

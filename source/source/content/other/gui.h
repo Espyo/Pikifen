@@ -145,10 +145,10 @@ public:
     GuiManager* manager = nullptr;
     
     //Its raw on-screen position, in screen ratio (or parent ratio).
-    Point ratio_center;
+    Point ratioCenter;
     
     //Its raw width and height, in screen ratio (or parent ratio).
-    Point ratio_size;
+    Point ratioSize;
     
     //Is it currently visible?
     bool visible = true;
@@ -175,40 +175,40 @@ public:
     float padding = 0.0f;
     
     //Can this item's activation be auto-repeated by holding the button down?
-    bool can_auto_repeat = false;
+    bool canAutoRepeat = false;
     
     //Type of the current juice animation.
-    JUICE_TYPE juice_type = JUICE_TYPE_NONE;
+    JUICE_TYPE juiceType = JUICE_TYPE_NONE;
     
     //Timer that controls the current juice animation.
-    float juice_timer = 0.0f;
+    float juiceTimer = 0.0f;
     
     //What to do when it's time to draw it.
-    std::function<void(const DrawInfo &draw)> on_draw = nullptr;
+    std::function<void(const DrawInfo &draw)> onDraw = nullptr;
     
     //What to do when it's time to tick one frame.
-    std::function<void(float time)> on_tick = nullptr;
+    std::function<void(float time)> onTick = nullptr;
     
     //What to do when it receives any Allegro event.
-    std::function<void(const ALLEGRO_EVENT &ev)> on_allegro_event = nullptr;
+    std::function<void(const ALLEGRO_EVENT &ev)> onAllegroEvent = nullptr;
     
     //What to do when the item is activated.
-    std::function<void(const Point &cursor_pos)> on_activate = nullptr;
+    std::function<void(const Point &cursor_pos)> onActivate = nullptr;
     
     //What to do when the mouse cursor is on top of it this frame.
-    std::function<void(const Point &cursor_pos)> on_mouse_over = nullptr;
+    std::function<void(const Point &cursor_pos)> onMouseOver = nullptr;
     
     //What to do when a directional button's pressed with the item selected.
-    std::function<bool(size_t button_id)> on_menu_dir_button = nullptr;
+    std::function<bool(size_t button_id)> onMenuDirButton = nullptr;
     
     //What to do when it gets selected.
-    std::function<void()> on_selected = nullptr;
+    std::function<void()> onSelected = nullptr;
     
     //What to do when one of its children became the selected item.
-    std::function<void(const GuiItem* child)> on_child_selected = nullptr;
+    std::function<void(const GuiItem* child)> onChildSelected = nullptr;
     
     //What to do when its tooltip needs to be retrieved.
-    std::function<string()> on_get_tooltip = nullptr;
+    std::function<string()> onGetTooltip = nullptr;
     
     
     //--- Function declarations ---
@@ -308,7 +308,7 @@ public:
     
     //If not nullptr, the value is automatically adjusted to reflect this
     //variable and vice-versa.
-    bool* value_ptr = nullptr;
+    bool* valuePtr = nullptr;
     
     //Text to display on the button.
     string text;
@@ -349,7 +349,7 @@ public:
     //--- Members ---
     
     //What the offset is supposed to be, after it finishes animating.
-    float target_offset = 0.0f;
+    float targetOffset = 0.0f;
     
     
     //--- Function declarations ---
@@ -375,22 +375,22 @@ public:
     //--- Members ---
     
     //The text to show before the currently selected option.
-    string base_text;
+    string baseText;
     
     //The currently selected option.
     string option;
     
     //Total amount of options. Optional.
-    size_t nr_options = 0;
+    size_t nrOptions = 0;
     
     //Index of the currently selected option. Only used if nr_options > 0.
-    size_t cur_option_idx = INVALID;
+    size_t curOptionIdx = INVALID;
     
     //What to do when the user picks the previous option.
-    std::function<void()> on_previous = nullptr;
+    std::function<void()> onPrevious = nullptr;
     
     //What to do when the user picks the next option.
-    std::function<void()> on_next = nullptr;
+    std::function<void()> onNext = nullptr;
     
     
     //--- Function declarations ---
@@ -411,7 +411,7 @@ private:
     //--- Members ---
     
     //Highlight one of the arrows due to mouse-over. 255 = none.
-    unsigned char arrow_highlight = 255;
+    unsigned char arrowHighlight = 255;
     
 };
 
@@ -426,7 +426,7 @@ public:
     //--- Members ---
     
     //What item this scrollbar is in charge of controlling.
-    ListGuiItem* list_item = nullptr;
+    ListGuiItem* listItem = nullptr;
     
     
     //--- Function declarations ---
@@ -462,10 +462,10 @@ public:
     int flags = ALLEGRO_ALIGN_CENTER;
     
     //Wrap long lines. Also enables markup.
-    bool line_wrap = false;
+    bool lineWrap = false;
     
     //Whether to show a selection box when selected.
-    bool show_selection_box = false;
+    bool showSelectionBox = false;
     
     
     //--- Function declarations ---
@@ -507,7 +507,7 @@ private:
     //--- Members ---
     
     //Text it was showing the previous frame.
-    string prev_text;
+    string prevText;
     
 };
 
@@ -533,19 +533,19 @@ public:
     vector<GuiItem*> items;
     
     //Which item is currently selected.
-    GuiItem* selected_item = nullptr;
+    GuiItem* selectedItem = nullptr;
     
     //Item to activate when the user chooses to go back.
-    GuiItem* back_item = nullptr;
+    GuiItem* backItem = nullptr;
     
     //Is it currently responding to input?
     bool responsive = true;
     
     //Should it ignore input while animating?
-    bool ignore_input_on_animation = true;
+    bool ignoreInputOnAnimation = true;
     
     //What to do when the currently selected item changes.
-    std::function<void()> on_selection_changed = nullptr;
+    std::function<void()> onSelectionChanged = nullptr;
     
     
     //--- Function declarations ---
@@ -578,43 +578,43 @@ private:
     //--- Members ---
     
     //Registered default centers.
-    map<string, Point> registered_centers;
+    map<string, Point> registeredCenters;
     
     //Registered default sizes.
-    map<string, Point> registered_sizes;
+    map<string, Point> registeredSizes;
     
     //Is the right button pressed?
-    bool right_pressed = false;
+    bool rightPressed = false;
     
     //Is the up button pressed?
-    bool up_pressed = false;
+    bool upPressed = false;
     
     //Is the left button pressed?
-    bool left_pressed = false;
+    bool leftPressed = false;
     
     //Is the down button pressed?
-    bool down_pressed = false;
+    bool downPressed = false;
     
     //Is the OK button pressed?
-    bool ok_pressed = false;
+    bool okPressed = false;
     
     //Is the back button pressed?
-    bool back_pressed = false;
+    bool backPressed = false;
     
     //Was the last input given a mouse movement?
-    bool last_input_was_mouse = false;
+    bool lastInputWasMouse = false;
     
     //Auto-repeater settings.
-    AutoRepeaterSettings auto_repeater_settings;
+    AutoRepeaterSettings autoRepeaterSettings;
     
     //Auto-repeat data for the current item's activation.
-    AutoRepeater auto_repeater;
+    AutoRepeater autoRepeater;
     
     //Type of the current animation, if any.
-    GUI_MANAGER_ANIM anim_type = GUI_MANAGER_ANIM_NONE;
+    GUI_MANAGER_ANIM animType = GUI_MANAGER_ANIM_NONE;
     
     //Timer for the current animation.
-    Timer anim_timer;
+    Timer animTimer;
     
     //Are the items currently visible?
     bool visible = true;

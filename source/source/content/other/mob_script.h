@@ -389,16 +389,16 @@ public:
     Mob* m = nullptr;
     
     //Current state the mob is in.
-    MobState* cur_state = nullptr;
+    MobState* curState = nullptr;
     
     //Conversion between pre-named states and in-file states.
-    vector<size_t> pre_named_conversions;
+    vector<size_t> preNamedConversions;
     
     //Knowing the previous states' names helps with debugging.
-    string prev_state_names[STATE_HISTORY_SIZE];
+    string prevStateNames[STATE_HISTORY_SIZE];
     
     //If this is INVALID, use the mob type's first state index. Else, use this.
-    size_t first_state_override = INVALID;
+    size_t firstStateOverride = INVALID;
     
     
     //--- Function declarations ---
@@ -451,10 +451,10 @@ private:
     vector<MobState*> states;
     
     //State currently being staged.
-    MobState* cur_state = nullptr;
+    MobState* curState = nullptr;
     
     //Event currently being staged.
-    MobEvent* cur_event = nullptr;
+    MobEvent* curEvent = nullptr;
     
     
     //--- Function declarations ---

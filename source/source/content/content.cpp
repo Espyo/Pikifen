@@ -22,14 +22,14 @@
 void Content::loadMetadataFromDataNode(DataNode* node) {
     ReaderSetter rs(node);
     
-    if(manifest) name = manifest->internal_name;
+    if(manifest) name = manifest->internalName;
     rs.set("name", name);
     rs.set("description", description);
     rs.set("tags", tags);
     rs.set("maker", maker);
     rs.set("version", version);
-    rs.set("engine_version", engine_version);
-    rs.set("maker_notes", maker_notes);
+    rs.set("engine_version", engineVersion);
+    rs.set("maker_notes", makerNotes);
     rs.set("notes", notes);
 }
 
@@ -43,8 +43,8 @@ void Content::resetMetadata() {
     tags.clear();
     maker.clear();
     version.clear();
-    engine_version.clear();
-    maker_notes.clear();
+    engineVersion.clear();
+    makerNotes.clear();
     notes.clear();
 }
 
@@ -64,8 +64,8 @@ void Content::saveMetadataToDataNode(DataNode* node) const {
     save_opt("tags", tags);
     save_opt("maker", maker);
     save_opt("version", version);
-    save_opt("engine_version", engine_version);
-    save_opt("maker_notes", maker_notes);
+    save_opt("engine_version", engineVersion);
+    save_opt("maker_notes", makerNotes);
     save_opt("notes", notes);
     
 #undef save_opt
@@ -86,7 +86,7 @@ ContentManifest::ContentManifest() {}
  * @param pack Pack it belongs to.
  */
 ContentManifest::ContentManifest(const string &name, const string &path, const string &pack) :
-    internal_name(name),
+    internalName(name),
     path(path),
     pack(pack) {
     
@@ -97,7 +97,7 @@ ContentManifest::ContentManifest(const string &name, const string &path, const s
  * @brief Clears all the information in a manifest.
  */
 void ContentManifest::clear() {
-    internal_name.clear();
+    internalName.clear();
     path.clear();
     pack.clear();
 }
@@ -123,5 +123,5 @@ void ContentManifest::fillFromPath(const string &path) {
     
     this->path = path;
     this->pack = parts[game_data_idx + 1];
-    this->internal_name = removeExtension(parts.back());
+    this->internalName = removeExtension(parts.back());
 }

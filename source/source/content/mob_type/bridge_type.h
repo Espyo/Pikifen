@@ -56,25 +56,25 @@ public:
     //--- Members ---
     
     //Texture used for the main bridge floor.
-    ALLEGRO_BITMAP* bmp_main_texture = nullptr;
+    ALLEGRO_BITMAP* bmpMainTexture = nullptr;
     
     //Texture used for the left rail.
-    ALLEGRO_BITMAP* bmp_left_rail_texture = nullptr;
+    ALLEGRO_BITMAP* bmpLeftRailTexture = nullptr;
     
     //Texture used for the right rail.
-    ALLEGRO_BITMAP* bmp_right_rail_texture = nullptr;
+    ALLEGRO_BITMAP* bmpRightRailTexture = nullptr;
     
     //Internal name of the main texture bitmap.
-    string main_texture_bmp_name;
+    string mainTextureBmpName;
     
     //Internal name of the left rail texture bitmap.
-    string left_rail_texture_bmp_name;
+    string leftRailTextureBmpName;
     
     //Internal name of the right rail texture bitmap.
-    string right_rail_texture_bmp_name;
+    string rightRailTextureBmpName;
     
     //Width of each rail.
-    float rail_width = 16.0f;
+    float railWidth = 16.0f;
     
     
     //--- Function declarations ---

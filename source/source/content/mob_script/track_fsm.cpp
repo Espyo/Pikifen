@@ -34,7 +34,7 @@ void track_fsm::createFsm(MobType* typ) {
     
     
     typ->states = efc.finish();
-    typ->first_state_idx = fixStates(typ->states, "idling", typ);
+    typ->firstStateIdx = fixStates(typ->states, "idling", typ);
     
     //Check if the number in the enum and the total match up.
     engineAssert(
@@ -60,7 +60,7 @@ void track_fsm::onTouched(Mob* m, void* info1, void* info2) {
     
     //Check if a compatible mob touched it.
     if(
-        hasFlag(tra_ptr->tra_type->riders, TRACK_RIDER_FLAG_PIKMIN) &&
+        hasFlag(tra_ptr->traType->riders, TRACK_RIDER_FLAG_PIKMIN) &&
         toucher->type->category->id == MOB_CATEGORY_PIKMIN
     ) {
     
@@ -68,7 +68,7 @@ void track_fsm::onTouched(Mob* m, void* info1, void* info2) {
         ev = toucher->fsm.getEvent(MOB_EV_TOUCHED_TRACK);
         
     } else if(
-        hasFlag(tra_ptr->tra_type->riders, TRACK_RIDER_FLAG_LEADERS) &&
+        hasFlag(tra_ptr->traType->riders, TRACK_RIDER_FLAG_LEADERS) &&
         toucher->type->category->id == MOB_CATEGORY_LEADERS
     ) {
     

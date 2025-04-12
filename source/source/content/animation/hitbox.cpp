@@ -38,9 +38,9 @@ Hitbox::Hitbox(
     const string &bpn, size_t bpi, BodyPart* bpp, const Point &pos,
     float z, float height, float radius
 ) :
-    body_part_name(bpn),
-    body_part_idx(bpi),
-    body_part_ptr(bpp),
+    bodyPartName(bpn),
+    bodyPartIdx(bpi),
+    bodyPartPtr(bpp),
     pos(pos),
     z(z),
     height(height),

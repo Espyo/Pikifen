@@ -42,40 +42,40 @@ PikminType::PikminType() :
     MobType(MOB_CATEGORY_PIKMIN) {
     
     for(size_t m = 0; m < N_MATURITIES; m++) {
-        sprout_evolution_time[m] = DEFAULT_SPROUT_EVOLUTION_TIME[m];
-        bmp_top[m] = nullptr;
-        bmp_maturity_icon[m] = nullptr;
+        sproutEvolutionTime[m] = DEFAULT_SPROUT_EVOLUTION_TIME[m];
+        bmpTop[m] = nullptr;
+        bmpMaturityIcon[m] = nullptr;
     }
     for(size_t s = 0; s < N_PIKMIN_SOUNDS; s++) {
-        sound_data_idxs[s] = INVALID;
+        soundDataIdxs[s] = INVALID;
     }
     
-    inactive_logic =
+    inactiveLogic =
         INACTIVE_LOGIC_FLAG_TICKS | INACTIVE_LOGIC_FLAG_INTERACTIONS;
     weight = 1;
-    show_health = false;
+    showHealth = false;
     
     MobType::Reach idle_attack_reach;
-    idle_attack_reach.angle_1 = TAU;
-    idle_attack_reach.radius_1 = game.config.pikmin.idle_task_range;
+    idle_attack_reach.angle1 = TAU;
+    idle_attack_reach.radius1 = game.config.pikmin.idleTaskRange;
     reaches.push_back(idle_attack_reach);
     MobType::Reach swarm_attack_reach;
-    swarm_attack_reach.angle_1 = TAU;
-    swarm_attack_reach.radius_1 = game.config.pikmin.swarm_task_range;
+    swarm_attack_reach.angle1 = TAU;
+    swarm_attack_reach.radius1 = game.config.pikmin.swarmTaskRange;
     reaches.push_back(swarm_attack_reach);
     MobType::Reach chase_reach;
-    chase_reach.angle_1 = TAU;
-    chase_reach.radius_1 = game.config.pikmin.chase_range;
+    chase_reach.angle1 = TAU;
+    chase_reach.radius1 = game.config.pikmin.chaseRange;
     reaches.push_back(chase_reach);
-    target_type = MOB_TARGET_FLAG_PLAYER;
-    huntable_targets =
+    targetType = MOB_TARGET_FLAG_PLAYER;
+    huntableTargets =
         MOB_TARGET_FLAG_PLAYER |
         MOB_TARGET_FLAG_ENEMY |
         MOB_TARGET_FLAG_WEAK_PLAIN_OBSTACLE |
         MOB_TARGET_FLAG_STRONG_PLAIN_OBSTACLE |
         MOB_TARGET_FLAG_PIKMIN_OBSTACLE |
         MOB_TARGET_FLAG_EXPLODABLE_PIKMIN_OBSTACLE;
-    hurtable_targets =
+    hurtableTargets =
         MOB_TARGET_FLAG_PLAYER |
         MOB_TARGET_FLAG_ENEMY |
         MOB_TARGET_FLAG_WEAK_PLAIN_OBSTACLE |
@@ -88,32 +88,32 @@ PikminType::PikminType() :
     aep_maturity.name = "Maturity";
     aep_maturity.var = "maturity";
     aep_maturity.type = AEMP_TYPE_NR_LIST;
-    aep_maturity.def_value = "2";
-    aep_maturity.value_list.push_back("Leaf");
-    aep_maturity.value_list.push_back("Bud");
-    aep_maturity.value_list.push_back("Flower");
+    aep_maturity.defValue = "2";
+    aep_maturity.valueList.push_back("Leaf");
+    aep_maturity.valueList.push_back("Bud");
+    aep_maturity.valueList.push_back("Flower");
     aep_maturity.tooltip = "The Pikmin's starting maturity.";
-    area_editor_props.push_back(aep_maturity);
+    areaEditorProps.push_back(aep_maturity);
     
     AreaEditorProp aep_sprout;
     aep_sprout.name = "Sprout";
     aep_sprout.var = "sprout";
     aep_sprout.type = AEMP_TYPE_BOOL;
-    aep_sprout.def_value = "false";
+    aep_sprout.defValue = "false";
     aep_sprout.tooltip =
         "True if this Pikmin spawns as a sprout, "
         "false if it spawns as an idle Pikmin.";
-    area_editor_props.push_back(aep_sprout);
+    areaEditorProps.push_back(aep_sprout);
     
     AreaEditorProp aep_follow_link;
     aep_sprout.name = "Follow link as leader";
     aep_sprout.var = "follow_link_as_leader";
     aep_sprout.type = AEMP_TYPE_BOOL;
-    aep_sprout.def_value = "false";
+    aep_sprout.defValue = "false";
     aep_sprout.tooltip =
         "True if this Pikmin should follow its linked object, "
         "as if it were its leader.";
-    area_editor_props.push_back(aep_sprout);
+    areaEditorProps.push_back(aep_sprout);
     
     pikmin_fsm::createFsm(this);
 }
@@ -182,25 +182,25 @@ void PikminType::loadCatProperties(DataNode* file) {
     DataNode* top_flower_node = nullptr;
     
     rs.set("attack_method", attack_method_str, &attack_method_node);
-    rs.set("knocked_down_duration", knocked_down_duration);
-    rs.set("knocked_down_whistle_bonus", knocked_down_whistle_bonus);
-    rs.set("can_carry_tools", can_carry_tools);
-    rs.set("can_fly", can_fly);
-    rs.set("carry_strength", carry_strength);
-    rs.set("max_throw_height", max_throw_height);
-    rs.set("push_strength", push_strength);
-    rs.set("sprout_evolution_time_1", sprout_evolution_time[0]);
-    rs.set("sprout_evolution_time_2", sprout_evolution_time[1]);
-    rs.set("sprout_evolution_time_3", sprout_evolution_time[2]);
+    rs.set("knocked_down_duration", knockedDownDuration);
+    rs.set("knocked_down_whistle_bonus", knockedDownWhistleBonus);
+    rs.set("can_carry_tools", canCarryTools);
+    rs.set("can_fly", canFly);
+    rs.set("carry_strength", carryStrength);
+    rs.set("max_throw_height", maxThrowHeight);
+    rs.set("push_strength", pushStrength);
+    rs.set("sprout_evolution_time_1", sproutEvolutionTime[0]);
+    rs.set("sprout_evolution_time_2", sproutEvolutionTime[1]);
+    rs.set("sprout_evolution_time_3", sproutEvolutionTime[2]);
     rs.set("top_bud", top_bud_str, &top_bud_node);
     rs.set("top_flower", top_flower_str, &top_flower_node);
     rs.set("top_leaf", top_leaf_str, &top_leaf_node);
     
     if(attack_method_node) {
         if(attack_method_str == "latch") {
-            attack_method = PIKMIN_ATTACK_LATCH;
+            attackMethod = PIKMIN_ATTACK_LATCH;
         } else if(attack_method_str == "impact") {
-            attack_method = PIKMIN_ATTACK_IMPACT;
+            attackMethod = PIKMIN_ATTACK_IMPACT;
         } else {
             game.errors.report(
                 "Unknown Pikmin attack type \"" + attack_method_str + "\"!",
@@ -211,28 +211,28 @@ void PikminType::loadCatProperties(DataNode* file) {
     
     for(size_t s = 0; s < sounds.size(); s++) {
         if(sounds[s].name == "called") {
-            sound_data_idxs[PIKMIN_SOUND_CALLED] = s;
+            soundDataIdxs[PIKMIN_SOUND_CALLED] = s;
         } else if(sounds[s].name == "carrying") {
-            sound_data_idxs[PIKMIN_SOUND_CARRYING] = s;
+            soundDataIdxs[PIKMIN_SOUND_CARRYING] = s;
         } else if(sounds[s].name == "carrying_grab") {
-            sound_data_idxs[PIKMIN_SOUND_CARRYING_GRAB] = s;
+            soundDataIdxs[PIKMIN_SOUND_CARRYING_GRAB] = s;
         } else if(sounds[s].name == "caught") {
-            sound_data_idxs[PIKMIN_SOUND_CAUGHT] = s;
+            soundDataIdxs[PIKMIN_SOUND_CAUGHT] = s;
         } else if(sounds[s].name == "dying") {
-            sound_data_idxs[PIKMIN_SOUND_DYING] = s;
+            soundDataIdxs[PIKMIN_SOUND_DYING] = s;
         } else if(sounds[s].name == "held") {
-            sound_data_idxs[PIKMIN_SOUND_HELD] = s;
+            soundDataIdxs[PIKMIN_SOUND_HELD] = s;
         } else if(sounds[s].name == "idle") {
-            sound_data_idxs[PIKMIN_SOUND_IDLE] = s;
+            soundDataIdxs[PIKMIN_SOUND_IDLE] = s;
         } else if(sounds[s].name == "thrown") {
-            sound_data_idxs[PIKMIN_SOUND_THROWN] = s;
+            soundDataIdxs[PIKMIN_SOUND_THROWN] = s;
         }
     }
     
     //Always load these since they're necessary for the animation editor.
-    bmp_top[0] = game.content.bitmaps.list.get(top_leaf_str, top_leaf_node);
-    bmp_top[1] = game.content.bitmaps.list.get(top_bud_str, top_bud_node);
-    bmp_top[2] = game.content.bitmaps.list.get(top_flower_str, top_flower_node);
+    bmpTop[0] = game.content.bitmaps.list.get(top_leaf_str, top_leaf_node);
+    bmpTop[1] = game.content.bitmaps.list.get(top_bud_str, top_bud_node);
+    bmpTop[2] = game.content.bitmaps.list.get(top_flower_str, top_flower_node);
 }
 
 
@@ -261,13 +261,13 @@ void PikminType::loadCatResources(DataNode* file) {
     rs.set("icon_leaf", icon_leaf_str, &icon_leaf_node);
     rs.set("icon_onion", icon_onion_str, &icon_onion_node);
     
-    bmp_icon = game.content.bitmaps.list.get(icon_str, icon_node);
-    bmp_maturity_icon[0] = game.content.bitmaps.list.get(icon_leaf_str, icon_leaf_node);
-    bmp_maturity_icon[1] = game.content.bitmaps.list.get(icon_bud_str, icon_bud_node);
-    bmp_maturity_icon[2] = game.content.bitmaps.list.get(icon_flower_str, icon_flower_node);
+    bmpIcon = game.content.bitmaps.list.get(icon_str, icon_node);
+    bmpMaturityIcon[0] = game.content.bitmaps.list.get(icon_leaf_str, icon_leaf_node);
+    bmpMaturityIcon[1] = game.content.bitmaps.list.get(icon_bud_str, icon_bud_node);
+    bmpMaturityIcon[2] = game.content.bitmaps.list.get(icon_flower_str, icon_flower_node);
     
     if(icon_onion_node) {
-        bmp_onion_icon = game.content.bitmaps.list.get(icon_onion_str, icon_onion_node);
+        bmpOnionIcon = game.content.bitmaps.list.get(icon_onion_str, icon_onion_node);
     }
 }
 
@@ -276,14 +276,14 @@ void PikminType::loadCatResources(DataNode* file) {
  * @brief Unloads resources from memory.
  */
 void PikminType::unloadResources() {
-    game.content.bitmaps.list.free(bmp_icon);
-    game.content.bitmaps.list.free(bmp_maturity_icon[0]);
-    game.content.bitmaps.list.free(bmp_maturity_icon[1]);
-    game.content.bitmaps.list.free(bmp_maturity_icon[2]);
-    game.content.bitmaps.list.free(bmp_top[0]);
-    game.content.bitmaps.list.free(bmp_top[1]);
-    game.content.bitmaps.list.free(bmp_top[2]);
-    if(bmp_onion_icon) {
-        game.content.bitmaps.list.free(bmp_onion_icon);
+    game.content.bitmaps.list.free(bmpIcon);
+    game.content.bitmaps.list.free(bmpMaturityIcon[0]);
+    game.content.bitmaps.list.free(bmpMaturityIcon[1]);
+    game.content.bitmaps.list.free(bmpMaturityIcon[2]);
+    game.content.bitmaps.list.free(bmpTop[0]);
+    game.content.bitmaps.list.free(bmpTop[1]);
+    game.content.bitmaps.list.free(bmpTop[2]);
+    if(bmpOnionIcon) {
+        game.content.bitmaps.list.free(bmpOnionIcon);
     }
 }

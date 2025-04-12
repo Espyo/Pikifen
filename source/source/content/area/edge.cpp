@@ -25,7 +25,7 @@
  * @param v2 Its second vertex.
  */
 Edge::Edge(size_t v1, size_t v2) {
-    vertex_idxs[0] = v1; vertex_idxs[1] = v2;
+    vertexIdxs[0] = v1; vertexIdxs[1] = v2;
 }
 
 
@@ -36,10 +36,10 @@ Edge::Edge(size_t v1, size_t v2) {
  * @param destination Edge to clone the data into.
  */
 void Edge::clone(Edge* destination) const {
-    destination->wall_shadow_length = wall_shadow_length;
-    destination->wall_shadow_color = wall_shadow_color;
-    destination->ledge_smoothing_length = ledge_smoothing_length;
-    destination->ledge_smoothing_color = ledge_smoothing_color;
+    destination->wallShadowLength = wallShadowLength;
+    destination->wallShadowColor = wallShadowColor;
+    destination->ledgeSmoothingLength = ledgeSmoothingLength;
+    destination->ledgeSmoothingColor = ledgeSmoothingColor;
 }
 
 
@@ -128,14 +128,14 @@ size_t Edge::removeFromSectors() {
             Edge* e_ptr = s_ptr->edges[e];
             if(e_ptr == this) {
                 s_ptr->edges.erase(s_ptr->edges.begin() + e);
-                auto nr_it = s_ptr->edge_idxs.begin() + e;
+                auto nr_it = s_ptr->edgeIdxs.begin() + e;
                 e_idx = *nr_it;
-                s_ptr->edge_idxs.erase(nr_it);
+                s_ptr->edgeIdxs.erase(nr_it);
                 break;
             }
         }
         sectors[s] = nullptr;
-        sector_idxs[s] = INVALID;
+        sectorIdxs[s] = INVALID;
     }
     return e_idx;
 }
@@ -156,14 +156,14 @@ size_t Edge::removeFromVertexes() {
             Edge* e_ptr = v_ptr->edges[e];
             if(e_ptr == this) {
                 v_ptr->edges.erase(v_ptr->edges.begin() + e);
-                auto nr_it = v_ptr->edge_idxs.begin() + e;
+                auto nr_it = v_ptr->edgeIdxs.begin() + e;
                 e_idx = *nr_it;
-                v_ptr->edge_idxs.erase(nr_it);
+                v_ptr->edgeIdxs.erase(nr_it);
                 break;
             }
         }
         vertexes[v] = nullptr;
-        vertex_idxs[v] = INVALID;
+        vertexIdxs[v] = INVALID;
     }
     return e_idx;
 }
@@ -175,9 +175,9 @@ size_t Edge::removeFromVertexes() {
  */
 void Edge::swapVertexes() {
     std::swap(vertexes[0], vertexes[1]);
-    std::swap(vertex_idxs[0], vertex_idxs[1]);
+    std::swap(vertexIdxs[0], vertexIdxs[1]);
     std::swap(sectors[0], sectors[1]);
-    std::swap(sector_idxs[0], sector_idxs[1]);
+    std::swap(sectorIdxs[0], sectorIdxs[1]);
 }
 
 
@@ -199,7 +199,7 @@ void Edge::transferSector(
     );
     
     sectors[idx] = to;
-    sector_idxs[idx] = to_idx;
+    sectorIdxs[idx] = to_idx;
     
     if(from) from->removeEdge(this);
     if(to) to->addEdge(this, edge_idx);

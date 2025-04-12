@@ -71,13 +71,13 @@ void Replay::addState(
         new_state_mobs.end(), obstacle_list.begin(), obstacle_list.end()
     );
     
-    if(!prev_state_mobs.empty()) {
-        for(size_t pm = 0; pm < prev_state_mobs.size(); pm++) {
+    if(!prevStateMobs.empty()) {
+        for(size_t pm = 0; pm < prevStateMobs.size(); pm++) {
             //Is this mob in the list of new mobs?
             auto m =
                 find(
                     new_state_mobs.begin(), new_state_mobs.end(),
-                    prev_state_mobs[pm]
+                    prevStateMobs[pm]
                 );
             if(m == new_state_mobs.end()) {
                 //It isn't. That means it was removed.
@@ -90,10 +90,10 @@ void Replay::addState(
             //Is this mob in the list of previous mobs?
             auto pm =
                 find(
-                    prev_state_mobs.begin(), prev_state_mobs.end(),
+                    prevStateMobs.begin(), prevStateMobs.end(),
                     new_state_mobs[m]
                 );
-            if(pm == prev_state_mobs.end()) {
+            if(pm == prevStateMobs.end()) {
                 //It isn't. That means it's new.
                 ReplayEvent ev(REPLAY_EVENT_ADDED, m);
                 new_state_ptr->events.push_back(ev);
@@ -101,10 +101,10 @@ void Replay::addState(
         }
     }
     
-    if(cur_leader_idx != prev_leader_idx) {
+    if(cur_leader_idx != prevLeaderIdx) {
         ReplayEvent ev(REPLAY_EVENT_LEADER_SWITCHED, cur_leader_idx);
         new_state_ptr->events.push_back(ev);
-        prev_leader_idx = cur_leader_idx;
+        prevLeaderIdx = cur_leader_idx;
     }
     
     new_state_ptr->elements.reserve(
@@ -146,7 +146,7 @@ void Replay::addState(
         );
     }
     
-    prev_state_mobs = new_state_mobs;
+    prevStateMobs = new_state_mobs;
 }
 
 
@@ -155,8 +155,8 @@ void Replay::addState(
  */
 void Replay::clear() {
     states.clear();
-    prev_leader_idx = INVALID;
-    prev_state_mobs.clear();
+    prevLeaderIdx = INVALID;
+    prevStateMobs.clear();
 }
 
 

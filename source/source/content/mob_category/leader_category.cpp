@@ -34,10 +34,10 @@ LeaderCategory::LeaderCategory() :
  * @brief Clears the list of registered types of leader.
  */
 void LeaderCategory::clearTypes() {
-    for(auto &t : game.content.mob_types.list.leader) {
+    for(auto &t : game.content.mobTypes.list.leader) {
         delete t.second;
     }
-    game.content.mob_types.list.leader.clear();
+    game.content.mobTypes.list.leader.clear();
 }
 
 
@@ -94,8 +94,8 @@ void LeaderCategory::eraseMob(Mob* m) {
  * @return The type, or nullptr on error.
  */
 MobType* LeaderCategory::getType(const string &internal_name) const {
-    auto it = game.content.mob_types.list.leader.find(internal_name);
-    if(it == game.content.mob_types.list.leader.end()) return nullptr;
+    auto it = game.content.mobTypes.list.leader.find(internal_name);
+    if(it == game.content.mobTypes.list.leader.end()) return nullptr;
     return it->second;
 }
 
@@ -106,7 +106,7 @@ MobType* LeaderCategory::getType(const string &internal_name) const {
  * @param list This list gets filled with the mob type internal names.
  */
 void LeaderCategory::getTypeNames(vector<string> &list) const {
-    for(auto &t : game.content.mob_types.list.leader) {
+    for(auto &t : game.content.mobTypes.list.leader) {
         list.push_back(t.first);
     }
 }
@@ -119,5 +119,5 @@ void LeaderCategory::getTypeNames(vector<string> &list) const {
  * @param type Mob type to register.
  */
 void LeaderCategory::registerType(const string &internal_name, MobType* type) {
-    game.content.mob_types.list.leader[internal_name] = (LeaderType*) type;
+    game.content.mobTypes.list.leader[internal_name] = (LeaderType*) type;
 }

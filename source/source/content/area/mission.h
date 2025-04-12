@@ -160,101 +160,101 @@ struct MissionData {
     MISSION_GOAL goal = MISSION_GOAL_END_MANUALLY;
     
     //Does the mission goal require all relevant items, or just specific ones?
-    bool goal_all_mobs = true;
+    bool goalAllMobs = true;
     
     //If the mission goal requires specific items, their mob indexes go here.
-    unordered_set<size_t> goal_mob_idxs;
+    unordered_set<size_t> goalMobIdxs;
     
     //Total amount of something required for the current mission goal.
-    size_t goal_amount = 1;
+    size_t goalAmount = 1;
     
     //Mission exit region center coordinates.
-    Point goal_exit_center;
+    Point goalExitCenter;
     
     //Mission exit region dimensions.
-    Point goal_exit_size =
+    Point goalExitSize =
         Point(
             MISSION::EXIT_MIN_SIZE,
             MISSION::EXIT_MIN_SIZE
         );
         
     //Mission fail conditions bitmask. Use MISSION_FAIL_COND_*'s indexes.
-    bitmask_8_t fail_conditions = 0;
+    bitmask_8_t failConditions = 0;
     
     //Amount for the "reach too few Pikmin" mission fail condition.
-    size_t fail_too_few_pik_amount = 0;
+    size_t failTooFewPikAmount = 0;
     
     //Amount for the "reach too many Pikmin" mission fail condition.
-    size_t fail_too_many_pik_amount = 1;
+    size_t failTooManyPikAmount = 1;
     
     //Amount for the "lose Pikmin" mission fail condition.
-    size_t fail_pik_killed = 1;
+    size_t failPikKilled = 1;
     
     //Amount for the "lose leaders" mission fail condition.
-    size_t fail_leaders_kod = 1;
+    size_t failLeadersKod = 1;
     
     //Amount for the "kill enemies" mission fail condition.
-    size_t fail_enemies_killed = 1;
+    size_t failEnemiesKilled = 1;
     
     //Seconds amount for the "time limit" mission fail condition.
-    size_t fail_time_limit = MISSION::DEF_TIME_LIMIT;
+    size_t failTimeLimit = MISSION::DEF_TIME_LIMIT;
     
     //Primary HUD element's fail condition. INVALID for none.
-    size_t fail_hud_primary_cond = INVALID;
+    size_t failHudPrimaryCond = INVALID;
     
     //Secondary HUD element's fail condition. INVALID for none.
-    size_t fail_hud_secondary_cond = INVALID;
+    size_t failHudSecondaryCond = INVALID;
     
     //Mission grading mode.
-    MISSION_GRADING_MODE grading_mode = MISSION_GRADING_MODE_GOAL;
+    MISSION_GRADING_MODE gradingMode = MISSION_GRADING_MODE_GOAL;
     
     //Mission point multiplier for each Pikmin born.
-    int points_per_pikmin_born = 0;
+    int pointsPerPikminBorn = 0;
     
     //Mission point multiplier for each Pikmin lost.
-    int points_per_pikmin_death = 0;
+    int pointsPerPikminDeath = 0;
     
     //Mission point multiplier for each second left (only if time limit is on).
-    int points_per_sec_left;
+    int pointsPerSecLeft;
     
     //Mission point multiplier for each second passed.
-    int points_per_sec_passed = 0;
+    int pointsPerSecPassed = 0;
     
     //Mission point multiplier for each treasure point obtained.
-    int points_per_treasure_point = 0;
+    int pointsPerTreasurePoint = 0;
     
     //Mission point multiplier for each enemy point obtained.
-    int points_per_enemy_point = 0;
+    int pointsPerEnemyPoint = 0;
     
     //If true, award points on enemy collection rather than on death.
-    bool enemy_points_on_collection = false;
+    bool enemyPointsOnCollection = false;
     
     //Bitmask for mission fail point loss criteria. Use MISSION_SCORE_CRITERIA.
-    bitmask_8_t point_loss_data = 0;
+    bitmask_8_t pointLossData = 0;
     
     //Bitmask for score HUD calculation criteria. Use MISSION_SCORE_CRITERIA.
-    bitmask_8_t point_hud_data = 255;
+    bitmask_8_t pointHudData = 255;
     
     //Starting number of points.
-    int starting_points = 0;
+    int startingPoints = 0;
     
     //Bronze medal point requirement.
-    int bronze_req = MISSION::DEF_MEDAL_REQ_BRONZE;
+    int bronzeReq = MISSION::DEF_MEDAL_REQ_BRONZE;
     
     //Silver medal point requirement.
-    int silver_req = MISSION::DEF_MEDAL_REQ_SILVER;
+    int silverReq = MISSION::DEF_MEDAL_REQ_SILVER;
     
     //Gold medal point requirement.
-    int gold_req = MISSION::DEF_MEDAL_REQ_GOLD;
+    int goldReq = MISSION::DEF_MEDAL_REQ_GOLD;
     
     //Platinum medal point requirement.
-    int platinum_req = MISSION::DEF_MEDAL_REQ_PLATINUM;
+    int platinumReq = MISSION::DEF_MEDAL_REQ_PLATINUM;
     
     //The maker's record.
-    int maker_record = 0;
+    int makerRecord = 0;
     
     //The date of the maker's record, or empty for no record.
-    string maker_record_date = "";
+    string makerRecordDate = "";
     
 };
 

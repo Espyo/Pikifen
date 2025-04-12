@@ -74,76 +74,76 @@ public:
     //--- Members ---
     
     //What type of leader it is.
-    LeaderType* lea_type = nullptr;
+    LeaderType* leaType = nullptr;
     
     //Is it active? i.e. being controlled by a player.
     bool active = false;
     
     //Is it currently auto-plucking?
-    bool auto_plucking = false;
+    bool autoPlucking = false;
     
     //Pikmin it wants to pluck.
-    Pikmin* pluck_target = nullptr;
+    Pikmin* pluckTarget = nullptr;
     
     //Has the player asked for the auto-plucking to stop?
-    bool queued_pluck_cancel = false;
+    bool queuedPluckCancel = false;
     
     //Mid Go Here.
-    bool mid_go_here = false;
+    bool midGoHere = false;
     
     //Is the leader currently in the walking animation?
-    bool is_in_walking_anim = false;
+    bool isInWalkingAnim = false;
     
     //Is the leader currently turning in place, in the active state?
-    bool is_active_turning = false;
+    bool isActiveTurning = false;
     
     //Is the leader currently walking, in the active state?
-    bool is_active_walking = false;
+    bool isActiveWalking = false;
     
     //Time until the next arrow in the list of swarm arrows appears.
-    Timer swarm_next_arrow_timer = Timer(LEADER::SWARM_ARROW_INTERVAL);
+    Timer swarmNextArrowTimer = Timer(LEADER::SWARM_ARROW_INTERVAL);
     
     //List of swarm mode arrows.
-    vector<float> swarm_arrows;
+    vector<float> swarmArrows;
     
     //Time left before the leader can throw again.
-    float throw_cooldown = 0.0f;
+    float throwCooldown = 0.0f;
     
     //Whether or not a throw has been queued to be pulled off.
-    bool throw_queued = false;
+    bool throwQueued = false;
     
     //Auto-repeater for auto-throwing.
-    AutoRepeater auto_throw_repeater;
+    AutoRepeater autoThrowRepeater;
     
     //Provided there's a throw, this is the mob to throw.
     Mob* throwee = nullptr;
     
     //Provided there's a throw, this is the angle.
-    float throwee_angle = 0.0f;
+    float throweeAngle = 0.0f;
     
     //Provided there's a throw, this is the max Z.
-    float throwee_max_z = 0.0f;
+    float throweeMaxZ = 0.0f;
     
     //Provided there's a throw, this is the horizontal speed.
-    Point throwee_speed;
+    Point throweeSpeed;
     
     //Provided there's a throw, this is the vertical speed.
-    float throwee_speed_z = 0.0f;
+    float throweeSpeedZ = 0.0f;
     
     //Provided there's a throw, this indicates whether it's low enough to reach.
-    bool throwee_can_reach = false;
+    bool throweeCanReach = false;
     
     //How much the health wheel is filled. Gradually moves to the target amount.
-    float health_wheel_visible_ratio = 1.0f;
+    float healthWheelVisibleRatio = 1.0f;
     
     //Timer for the animation of the health wheel's caution ring.
-    float health_wheel_caution_timer = 0.0f;
+    float healthWheelCautionTimer = 0.0f;
     
     //Is it currently doing some boredom-related animation?
-    bool in_bored_animation = false;
+    bool inBoredAnimation = false;
     
     //Temporary variable. Hacky, but effective. Only use within the same state!
-    size_t temp_i = 0;
+    size_t tempI = 0;
     
     
     //--- Function declarations ---
@@ -183,7 +183,7 @@ private:
     //--- Members ---
     
     //Sound effect source ID of the whistle, or 0 for none.
-    size_t whistle_sound_source_id = 0;
+    size_t whistleSoundSourceId = 0;
     
     //Returns how many rows are needed for all members' dismissal.
     size_t getDismissRows(size_t n_members) const;

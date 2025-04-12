@@ -22,7 +22,7 @@
 ALLEGRO_SHADER* ShaderManager::getShader(SHADER_TYPE shader_type) {
     assert(shader_type < N_SHADER_TYPES);
     
-    return compiled_shaders[(int) shader_type];
+    return compiledShaders[(int) shader_type];
 }
 
 
@@ -31,18 +31,18 @@ ALLEGRO_SHADER* ShaderManager::getShader(SHADER_TYPE shader_type) {
  */
 void ShaderManager::compileShaders() {
     //Liquid.
-    compiled_shaders[SHADER_TYPE_LIQUID] =
+    compiledShaders[SHADER_TYPE_LIQUID] =
         al_create_shader(ALLEGRO_SHADER_GLSL);
         
     tryAttachShader(
-        compiled_shaders[SHADER_TYPE_LIQUID],
+        compiledShaders[SHADER_TYPE_LIQUID],
         ALLEGRO_PIXEL_SHADER, SHADER_SOURCE_FILES::LIQUID_FRAG_SHADER
     );
     tryAttachShader(
-        compiled_shaders[SHADER_TYPE_LIQUID],
+        compiledShaders[SHADER_TYPE_LIQUID],
         ALLEGRO_VERTEX_SHADER, SHADER_SOURCE_FILES::DEFAULT_VERT_SHADER
     );
-    al_build_shader(compiled_shaders[SHADER_TYPE_LIQUID]);
+    al_build_shader(compiledShaders[SHADER_TYPE_LIQUID]);
     
 }
 

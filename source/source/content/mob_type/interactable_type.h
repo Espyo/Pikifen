@@ -25,10 +25,10 @@ public:
     //--- Members ---
     
     //Text to display above the mob, prompting the player on what to do.
-    string prompt_text;
+    string promptText;
     
     //How close the leader must be before the player can interact with it.
-    float trigger_range = 64.0f;
+    float triggerRange = 64.0f;
     
     
     //--- Function declarations ---

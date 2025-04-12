@@ -69,13 +69,13 @@ public:
     //--- Members ---
     
     //The name of the body part to use.
-    string body_part_name;
+    string bodyPartName;
     
     //Index of the body part. Cache for performance.
-    size_t body_part_idx;
+    size_t bodyPartIdx;
     
     //Pointer to the body part. Cache for performance.
-    BodyPart* body_part_ptr = nullptr;
+    BodyPart* bodyPartPtr = nullptr;
     
     //Center of the hitbox (relative coordinates).
     Point pos;
@@ -93,7 +93,7 @@ public:
     HITBOX_TYPE type = HITBOX_TYPE_NORMAL;
     
     //String representing the list of hazards.
-    string hazards_str;
+    string hazardsStr;
     
     //List of hazards.
     vector<Hazard*> hazards;
@@ -103,20 +103,20 @@ public:
     float value = 1.0f;
     
     //If true, the Pikmin is knocked away from the center.
-    bool knockback_outward = true;
+    bool knockbackOutward = true;
     
     //Knockback angle.
-    float knockback_angle = 0.0f;
+    float knockbackAngle = 0.0f;
     
     //Knockback strength.
     float knockback = 1.0f;
     
     //Chance of this attack withering a Pikmin's maturity (0-100).
-    unsigned char wither_chance = 0.0f;
+    unsigned char witherChance = 0.0f;
     
     //Can the Pikmin latch on to this hitbox to continue inflicting damage?
     //Example of a non-latchable hitbox: Goolix' larger core.
-    bool can_pikmin_latch = false;
+    bool canPikminLatch = false;
     
     
     //--- Function declarations ---

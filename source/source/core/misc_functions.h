@@ -45,8 +45,8 @@
 
 //Returns the task range for whether the Pikmin is idling or being C-sticked.
 #define taskRange(p) \
-    (((p)->following_group == cur_leader_ptr && swarm_magnitude) ? \
-     game.config.pikmin.swarm_task_range : game.config.pikmin.idle_task_range)
+    (((p)->followingGroup == curLeaderPtr && swarmMagnitude) ? \
+     game.config.pikmin.swarmTaskRange : game.config.pikmin.idleTaskRange)
 
 
 /**
@@ -269,7 +269,7 @@ bool adjustKeyframeInterpolatorValues(
  */
 template <typename ...args_t>
 void monoText(args_t && ...args) {
-    ImGui::PushFont(game.sys_content.fnt_imgui_monospace);
+    ImGui::PushFont(game.sysContent.fntDearImGuiMonospace);
     ImGui::Text(std::forward<args_t>(args)...);
     ImGui::PopFont();
 }

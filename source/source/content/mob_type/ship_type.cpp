@@ -25,19 +25,19 @@ ShipType::ShipType() :
     
     nest = new PikminNestType();
     
-    target_type = MOB_TARGET_FLAG_NONE;
+    targetType = MOB_TARGET_FLAG_NONE;
     
     AreaEditorProp aep_pik_inside;
     aep_pik_inside.name = "Pikmin inside";
     aep_pik_inside.var = "pikmin_inside";
     aep_pik_inside.type = AEMP_TYPE_TEXT;
-    aep_pik_inside.def_value = "";
+    aep_pik_inside.defValue = "";
     aep_pik_inside.tooltip =
         "How many Pikmin are inside. "
         "One word per maturity. The first three words are for the first type, "
         "then three more for the second type, and so on. "
         "e.g.: \"8 0 1\" means it has 8 leaf Pikmin inside, and 1 flower.";
-    area_editor_props.push_back(aep_pik_inside);
+    areaEditorProps.push_back(aep_pik_inside);
     
     ship_fsm::createFsm(this);
 }
@@ -71,10 +71,10 @@ anim_conversion_vector ShipType::getAnimConversions() const {
 void ShipType::loadCatProperties(DataNode* file) {
     ReaderSetter rs(file);
     
-    rs.set("can_heal", can_heal);
-    rs.set("control_point_radius", control_point_radius);
-    rs.set("control_point_offset", control_point_offset);
-    rs.set("receptacle_offset", receptacle_offset);
+    rs.set("can_heal", canHeal);
+    rs.set("control_point_radius", controlPointRadius);
+    rs.set("control_point_offset", controlPointOffset);
+    rs.set("receptacle_offset", receptacleOffset);
     
     nest->loadProperties(file);
 }
@@ -90,7 +90,7 @@ void ShipType::loadCatResources(DataNode* file) {
     //is run, then the animations are definitely loaded.
     //Now's a good time to check the leg body parts.
     for(size_t b = 0; b < nest->leg_body_parts.size(); b++) {
-        if(anim_db->findBodyPart(nest->leg_body_parts[b]) == INVALID) {
+        if(animDb->findBodyPart(nest->leg_body_parts[b]) == INVALID) {
             game.errors.report(
                 "The ship type \"" + name + "\" specifies a leg body part "
                 "called \"" + nest->leg_body_parts[b] + "\", "

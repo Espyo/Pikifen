@@ -46,7 +46,7 @@ void HelpMenu::drawTidbit(
     
     int line_height = al_get_font_line_height(font);
     
-    setStringTokenWidths(tokens, font, game.sys_content.fnt_slim, line_height, true);
+    setStringTokenWidths(tokens, font, game.sysContent.fntSlim, line_height, true);
     
     //Split long lines.
     vector<vector<StringToken> > tokens_per_line =
@@ -67,7 +67,7 @@ void HelpMenu::drawTidbit(
     //Draw!
     for(size_t l = 0; l < tokens_per_line.size(); l++) {
         drawStringTokens(
-            tokens_per_line[l], game.sys_content.fnt_standard, game.sys_content.fnt_slim,
+            tokens_per_line[l], game.sysContent.fntStandard, game.sysContent.fntSlim,
             true,
             Point(
                 where.x,
@@ -88,7 +88,7 @@ void HelpMenu::load() {
     const vector<string> category_node_names {
         "gameplay_basics", "advanced_gameplay", "controls", "", "objects"
     };
-    DataNode* gui_file = &game.content.gui_defs.list[HELP_MENU::GUI_FILE_NAME];
+    DataNode* gui_file = &game.content.guiDefs.list[HELP_MENU::GUI_FILE_NAME];
     
     //Load the tidbits.
     DataNode* tidbits_node = gui_file->getChildByName("tidbits");
@@ -114,7 +114,7 @@ void HelpMenu::load() {
         Tidbit new_t;
         new_t.name = game.config.pikmin.order[p]->name;
         new_t.description = game.config.pikmin.order[p]->description;
-        new_t.image = game.config.pikmin.order[p]->bmp_icon;
+        new_t.image = game.config.pikmin.order[p]->bmpIcon;
         tidbits[HELP_CATEGORY_PIKMIN].push_back(new_t);
     }
     
@@ -148,29 +148,29 @@ void HelpMenu::initGuiMain(DataNode* gui_file) {
     gui.readCoords(gui_file->getChildByName("positions"));
     
     //Back button.
-    gui.back_item =
+    gui.backItem =
         new ButtonGuiItem(
-        "Back", game.sys_content.fnt_standard
+        "Back", game.sysContent.fntStandard
     );
-    gui.back_item->on_activate =
+    gui.backItem->onActivate =
     [this] (const Point &) {
         leave();
     };
-    gui.back_item->on_get_tooltip =
+    gui.backItem->onGetTooltip =
     [] () { return "Return to the previous menu."; };
-    gui.addItem(gui.back_item, "back");
+    gui.addItem(gui.backItem, "back");
     
     //Back input icon.
     guiAddBackInputIcon(&gui);
     
     //Gameplay basics button.
     ButtonGuiItem* gameplay1_button =
-        new ButtonGuiItem("Gameplay basics", game.sys_content.fnt_standard);
-    gameplay1_button->on_activate =
+        new ButtonGuiItem("Gameplay basics", game.sysContent.fntStandard);
+    gameplay1_button->onActivate =
     [this] (const Point &) {
         populateTidbits(HELP_CATEGORY_GAMEPLAY1);
     };
-    gameplay1_button->on_get_tooltip =
+    gameplay1_button->onGetTooltip =
     [] () {
         return "Show help about basic gameplay features.";
     };
@@ -178,12 +178,12 @@ void HelpMenu::initGuiMain(DataNode* gui_file) {
     
     //Gameplay advanced button.
     ButtonGuiItem* gameplay2_button =
-        new ButtonGuiItem("Advanced gameplay", game.sys_content.fnt_standard);
-    gameplay2_button->on_activate =
+        new ButtonGuiItem("Advanced gameplay", game.sysContent.fntStandard);
+    gameplay2_button->onActivate =
     [this] (const Point &) {
         populateTidbits(HELP_CATEGORY_GAMEPLAY2);
     };
-    gameplay2_button->on_get_tooltip =
+    gameplay2_button->onGetTooltip =
     [] () {
         return "Show advanced gameplay tips.";
     };
@@ -191,12 +191,12 @@ void HelpMenu::initGuiMain(DataNode* gui_file) {
     
     //Controls button.
     ButtonGuiItem* controls_button =
-        new ButtonGuiItem("Controls", game.sys_content.fnt_standard);
-    controls_button->on_activate =
+        new ButtonGuiItem("Controls", game.sysContent.fntStandard);
+    controls_button->onActivate =
     [this] (const Point &) {
         populateTidbits(HELP_CATEGORY_CONTROLS);
     };
-    controls_button->on_get_tooltip =
+    controls_button->onGetTooltip =
     [] () {
         return "Show game controls and certain actions you can perform.";
     };
@@ -204,12 +204,12 @@ void HelpMenu::initGuiMain(DataNode* gui_file) {
     
     //Pikmin button.
     ButtonGuiItem* pikmin_button =
-        new ButtonGuiItem("Pikmin types", game.sys_content.fnt_standard);
-    pikmin_button->on_activate =
+        new ButtonGuiItem("Pikmin types", game.sysContent.fntStandard);
+    pikmin_button->onActivate =
     [this] (const Point &) {
         populateTidbits(HELP_CATEGORY_PIKMIN);
     };
-    pikmin_button->on_get_tooltip =
+    pikmin_button->onGetTooltip =
     [] () {
         return "Show a description of each Pikmin type.";
     };
@@ -217,12 +217,12 @@ void HelpMenu::initGuiMain(DataNode* gui_file) {
     
     //Objects button.
     ButtonGuiItem* objects_button =
-        new ButtonGuiItem("Objects", game.sys_content.fnt_standard);
-    objects_button->on_activate =
+        new ButtonGuiItem("Objects", game.sysContent.fntStandard);
+    objects_button->onActivate =
     [this] (const Point &) {
         populateTidbits(HELP_CATEGORY_OBJECTS);
     };
-    objects_button->on_get_tooltip =
+    objects_button->onGetTooltip =
     [] () {
         return "Show help about some noteworthy objects you'll find.";
     };
@@ -230,38 +230,38 @@ void HelpMenu::initGuiMain(DataNode* gui_file) {
     
     //Manual text.
     BulletGuiItem* manual_bullet =
-        new BulletGuiItem("More help...", game.sys_content.fnt_standard);
-    manual_bullet->on_activate =
+        new BulletGuiItem("More help...", game.sysContent.fntStandard);
+    manual_bullet->onActivate =
     [] (const Point &) {
         openManual("home.html");
     };
-    manual_bullet->on_get_tooltip = [] () {
+    manual_bullet->onGetTooltip = [] () {
         return
             "Click to open the manual (in the game's folder) for more help.";
     };
     gui.addItem(manual_bullet, "manual");
     
     //Category text.
-    category_text = new TextGuiItem("Help", game.sys_content.fnt_standard);
-    gui.addItem(category_text, "category");
+    categoryText = new TextGuiItem("Help", game.sysContent.fntStandard);
+    gui.addItem(categoryText, "category");
     
     //Tidbit list box.
-    tidbit_list = new ListGuiItem();
-    gui.addItem(tidbit_list, "list");
+    tidbitList = new ListGuiItem();
+    gui.addItem(tidbitList, "list");
     
     //Tidbit list scrollbar.
     ScrollGuiItem* list_scroll = new ScrollGuiItem();
-    list_scroll->list_item = tidbit_list;
+    list_scroll->listItem = tidbitList;
     gui.addItem(list_scroll, "list_scroll");
     
     //Image item.
     GuiItem* image_item = new GuiItem();
-    image_item->on_draw =
+    image_item->onDraw =
     [this] (const DrawInfo & draw) {
-        if(cur_tidbit == nullptr) return;
-        if(cur_tidbit->image == nullptr) return;
+        if(curTidbit == nullptr) return;
+        if(curTidbit->image == nullptr) return;
         drawBitmapInBox(
-            cur_tidbit->image,
+            curTidbit->image,
             draw.center, draw.size, false
         );
     };
@@ -269,22 +269,22 @@ void HelpMenu::initGuiMain(DataNode* gui_file) {
     
     //Tooltip text.
     TextGuiItem* tooltip_text =
-        new TextGuiItem("", game.sys_content.fnt_standard);
-    tooltip_text->on_draw =
+        new TextGuiItem("", game.sysContent.fntStandard);
+    tooltip_text->onDraw =
         [this]
     (const DrawInfo & draw) {
         drawTidbit(
-            game.sys_content.fnt_standard, draw.center, draw.size,
+            game.sysContent.fntStandard, draw.center, draw.size,
             gui.getCurrentTooltip()
         );
     };
     gui.addItem(tooltip_text, "tooltip");
     
     //Finishing touches.
-    gui.setSelectedItem(gui.back_item, true);
-    gui.on_selection_changed =
+    gui.setSelectedItem(gui.backItem, true);
+    gui.onSelectionChanged =
     [this] () {
-        cur_tidbit = nullptr;
+        curTidbit = nullptr;
     };
 }
 
@@ -299,51 +299,51 @@ void HelpMenu::populateTidbits(const HELP_CATEGORY category) {
     
     switch(category) {
     case HELP_CATEGORY_GAMEPLAY1: {
-        category_text->text = "Gameplay basics";
+        categoryText->text = "Gameplay basics";
         break;
     } case HELP_CATEGORY_GAMEPLAY2: {
-        category_text->text = "Advanced gameplay";
+        categoryText->text = "Advanced gameplay";
         break;
     } case HELP_CATEGORY_CONTROLS: {
-        category_text->text = "Controls";
+        categoryText->text = "Controls";
         break;
     } case HELP_CATEGORY_PIKMIN: {
-        category_text->text = "Pikmin";
+        categoryText->text = "Pikmin";
         break;
     } case HELP_CATEGORY_OBJECTS: {
-        category_text->text = "Objects";
+        categoryText->text = "Objects";
         break;
     } default: {
-        category_text->text = "Help";
+        categoryText->text = "Help";
         break;
     }
     }
     
-    tidbit_list->deleteAllChildren();
+    tidbitList->deleteAllChildren();
     
     for(size_t t = 0; t < category_tidbits.size(); t++) {
         Tidbit* t_ptr = &category_tidbits[t];
         BulletGuiItem* tidbit_bullet =
             new BulletGuiItem(
             t_ptr->name,
-            game.sys_content.fnt_standard
+            game.sysContent.fntStandard
         );
-        tidbit_bullet->ratio_center = Point(0.50f, 0.045f + t * 0.10f);
-        tidbit_bullet->ratio_size = Point(1.0f, 0.09f);
-        tidbit_bullet->on_get_tooltip = [this, t_ptr] () {
+        tidbit_bullet->ratioCenter = Point(0.50f, 0.045f + t * 0.10f);
+        tidbit_bullet->ratioSize = Point(1.0f, 0.09f);
+        tidbit_bullet->onGetTooltip = [this, t_ptr] () {
             return t_ptr->description;
         };
-        tidbit_bullet->on_selected = [this, t_ptr] () {
-            cur_tidbit = t_ptr;
+        tidbit_bullet->onSelected = [this, t_ptr] () {
+            curTidbit = t_ptr;
         };
         tidbit_bullet->startJuiceAnimation(
             GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
         );
-        tidbit_list->addChild(tidbit_bullet);
+        tidbitList->addChild(tidbit_bullet);
         gui.addItem(tidbit_bullet);
     }
     
-    category_text->startJuiceAnimation(
+    categoryText->startJuiceAnimation(
         GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
     );
 }

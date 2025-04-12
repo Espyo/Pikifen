@@ -38,18 +38,18 @@ void AnimationEditor::doDrawing() {
  */
 void AnimationEditor::drawCanvas() {
     al_set_clipping_rectangle(
-        canvas_tl.x, canvas_tl.y,
-        canvas_br.x - canvas_tl.x, canvas_br.y - canvas_tl.y
+        canvasTL.x, canvasTL.y,
+        canvasBR.x - canvasTL.x, canvasBR.y - canvasTL.y
     );
     
-    if(use_bg && bg) {
-        Point texture_tl = canvas_tl;
-        Point texture_br = canvas_br;
+    if(useBg && bg) {
+        Point texture_tl = canvasTL;
+        Point texture_br = canvasBR;
         al_transform_coordinates(
-            &game.screen_to_world_transform, &texture_tl.x, &texture_tl.y
+            &game.screenToWorldTransform, &texture_tl.x, &texture_tl.y
         );
         al_transform_coordinates(
-            &game.screen_to_world_transform, &texture_br.x, &texture_br.y
+            &game.screenToWorldTransform, &texture_br.x, &texture_br.y
         );
         ALLEGRO_VERTEX bg_vertexes[4];
         for(size_t v = 0; v < 4; v++) {
@@ -57,23 +57,23 @@ void AnimationEditor::drawCanvas() {
             bg_vertexes[v].color = COLOR_WHITE;
         }
         //Top-left vertex.
-        bg_vertexes[0].x = canvas_tl.x;
-        bg_vertexes[0].y = canvas_tl.y;
+        bg_vertexes[0].x = canvasTL.x;
+        bg_vertexes[0].y = canvasTL.y;
         bg_vertexes[0].u = texture_tl.x;
         bg_vertexes[0].v = texture_tl.y;
         //Top-right vertex.
-        bg_vertexes[1].x = canvas_br.x;
-        bg_vertexes[1].y = canvas_tl.y;
+        bg_vertexes[1].x = canvasBR.x;
+        bg_vertexes[1].y = canvasTL.y;
         bg_vertexes[1].u = texture_br.x;
         bg_vertexes[1].v = texture_tl.y;
         //Bottom-right vertex.
-        bg_vertexes[2].x = canvas_br.x;
-        bg_vertexes[2].y = canvas_br.y;
+        bg_vertexes[2].x = canvasBR.x;
+        bg_vertexes[2].y = canvasBR.y;
         bg_vertexes[2].u = texture_br.x;
         bg_vertexes[2].v = texture_br.y;
         //Bottom-left vertex.
-        bg_vertexes[3].x = canvas_tl.x;
-        bg_vertexes[3].y = canvas_br.y;
+        bg_vertexes[3].x = canvasTL.x;
+        bg_vertexes[3].y = canvasBR.y;
         bg_vertexes[3].u = texture_tl.x;
         bg_vertexes[3].v = texture_br.y;
         
@@ -85,12 +85,12 @@ void AnimationEditor::drawCanvas() {
         al_clear_to_color(al_map_rgb(128, 144, 128));
     }
     
-    al_use_transform(&game.world_to_screen_transform);
+    al_use_transform(&game.worldToScreenTransform);
     
     Sprite* s = nullptr;
     
-    if(state == EDITOR_STATE_ANIMATION && cur_anim_i.validFrame()) {
-        s = cur_anim_i.cur_anim->frames[cur_anim_i.cur_frame_idx].sprite_ptr;
+    if(state == EDITOR_STATE_ANIMATION && curAnimInst.validFrame()) {
+        s = curAnimInst.curAnim->frames[curAnimInst.curFrameIdx].spritePtr;
         
     } else if(
         state == EDITOR_STATE_SPRITE || state == EDITOR_STATE_TOP ||
@@ -98,14 +98,14 @@ void AnimationEditor::drawCanvas() {
         state == EDITOR_STATE_SPRITE_BITMAP ||
         state == EDITOR_STATE_SPRITE_TRANSFORM
     ) {
-        s = cur_sprite;
+        s = curSprite;
         
     }
     
-    bool draw_hitboxes = hitboxes_visible;
-    bool draw_mob_radius = mob_radius_visible;
-    bool draw_leader_silhouette = leader_silhouette_visible;
-    float grid_opacity = grid_visible ? 0.33f : 0.0f;
+    bool draw_hitboxes = hitboxesVisible;
+    bool draw_mob_radius = mobRadiusVisible;
+    bool draw_leader_silhouette = leaderSilhouetteVisible;
+    float grid_opacity = gridVisible ? 0.33f : 0.0f;
     
     if(state == EDITOR_STATE_SPRITE_TRANSFORM || state == EDITOR_STATE_TOP) {
         draw_hitboxes = false;
@@ -116,20 +116,20 @@ void AnimationEditor::drawCanvas() {
         draw_mob_radius = false;
         draw_leader_silhouette = false;
         
-        if(s && s->parent_bmp) {
-            int bmp_w = al_get_bitmap_width(s->parent_bmp);
-            int bmp_h = al_get_bitmap_height(s->parent_bmp);
+        if(s && s->parentBmp) {
+            int bmp_w = al_get_bitmap_width(s->parentBmp);
+            int bmp_h = al_get_bitmap_height(s->parentBmp);
             int bmp_x = -bmp_w / 2.0;
             int bmp_y = -bmp_h / 2.0;
-            al_draw_bitmap(s->parent_bmp, bmp_x, bmp_y, 0);
+            al_draw_bitmap(s->parentBmp, bmp_x, bmp_y, 0);
             
             Point scene_tl = Point(-1.0f);
-            Point scene_br = Point(canvas_br.x + 1, canvas_br.y + 1);
+            Point scene_br = Point(canvasBR.x + 1, canvasBR.y + 1);
             al_transform_coordinates(
-                &game.screen_to_world_transform, &scene_tl.x, &scene_tl.y
+                &game.screenToWorldTransform, &scene_tl.x, &scene_tl.y
             );
             al_transform_coordinates(
-                &game.screen_to_world_transform, &scene_br.x, &scene_br.y
+                &game.screenToWorldTransform, &scene_br.x, &scene_br.y
             );
             
             for(unsigned char x = 0; x < 3; x++) {
@@ -137,14 +137,14 @@ void AnimationEditor::drawCanvas() {
                 switch(x) {
                 case 0: {
                     rec_tl.x = scene_tl.x;
-                    rec_br.x = bmp_x + s->bmp_pos.x;
+                    rec_br.x = bmp_x + s->bmpPos.x;
                     break;
                 } case 1: {
-                    rec_tl.x = bmp_x + s->bmp_pos.x;
-                    rec_br.x = bmp_x + s->bmp_pos.x + s->bmp_size.x;
+                    rec_tl.x = bmp_x + s->bmpPos.x;
+                    rec_br.x = bmp_x + s->bmpPos.x + s->bmpSize.x;
                     break;
                 } default: {
-                    rec_tl.x = bmp_x + s->bmp_pos.x + s->bmp_size.x;
+                    rec_tl.x = bmp_x + s->bmpPos.x + s->bmpSize.x;
                     rec_br.x = scene_br.x;
                     break;
                 }
@@ -156,14 +156,14 @@ void AnimationEditor::drawCanvas() {
                     switch(y) {
                     case 0: {
                         rec_tl.y = scene_tl.y;
-                        rec_br.y = bmp_y + s->bmp_pos.y;
+                        rec_br.y = bmp_y + s->bmpPos.y;
                         break;
                     } case 1: {
-                        rec_tl.y = bmp_y + s->bmp_pos.y;
-                        rec_br.y = bmp_y + s->bmp_pos.y + s->bmp_size.y;
+                        rec_tl.y = bmp_y + s->bmpPos.y;
+                        rec_br.y = bmp_y + s->bmpPos.y + s->bmpSize.y;
                         break;
                     } default: {
-                        rec_tl.y = bmp_y + s->bmp_pos.y + s->bmp_size.y;
+                        rec_tl.y = bmp_y + s->bmpPos.y + s->bmpSize.y;
                         rec_br.y = scene_br.y;
                         break;
                     }
@@ -177,15 +177,15 @@ void AnimationEditor::drawCanvas() {
                 }
             }
             
-            if(s->bmp_size.x > 0 && s->bmp_size.y > 0) {
+            if(s->bmpSize.x > 0 && s->bmpSize.y > 0) {
             
                 unsigned char outline_alpha =
-                    255 * ((sin(cur_hitbox_alpha) / 2.0) + 0.5);
+                    255 * ((sin(curHitboxAlpha) / 2.0) + 0.5);
                 al_draw_rectangle(
-                    bmp_x + s->bmp_pos.x + 0.5,
-                    bmp_y + s->bmp_pos.y + 0.5,
-                    bmp_x + s->bmp_pos.x + s->bmp_size.x - 0.5,
-                    bmp_y + s->bmp_pos.y + s->bmp_size.y - 0.5,
+                    bmp_x + s->bmpPos.x + 0.5,
+                    bmp_y + s->bmpPos.y + 0.5,
+                    bmp_x + s->bmpPos.x + s->bmpSize.x - 0.5,
+                    bmp_y + s->bmpPos.y + s->bmpSize.y - 0.5,
                     al_map_rgba(224, 192, 0, outline_alpha), 1.0
                 );
             }
@@ -193,7 +193,7 @@ void AnimationEditor::drawCanvas() {
         
     } else if(s) {
     
-        if(side_view && state == EDITOR_STATE_HITBOXES) {
+        if(sideView && state == EDITOR_STATE_HITBOXES) {
             drawSideViewSprite(s);
         } else {
             drawTopDownViewSprite(s);
@@ -201,7 +201,7 @@ void AnimationEditor::drawCanvas() {
         
         if(draw_hitboxes) {
             unsigned char hitbox_outline_alpha =
-                63 + 192 * ((sin(cur_hitbox_alpha) / 2.0) + 0.5);
+                63 + 192 * ((sin(curHitboxAlpha) / 2.0) + 0.5);
             size_t n_hitboxes = s->hitboxes.size();
             
             for(int h = (int) n_hitboxes - 1; h >= 0; --h) {
@@ -230,7 +230,7 @@ void AnimationEditor::drawCanvas() {
                 }
                 
                 if(
-                    cur_hitbox_idx == (size_t) h &&
+                    curHitboxIdx == (size_t) h &&
                     state == EDITOR_STATE_HITBOXES
                 ) {
                     hitbox_outline_thickness =
@@ -239,7 +239,7 @@ void AnimationEditor::drawCanvas() {
                         changeAlpha(hitbox_color, hitbox_outline_alpha);
                 }
                 
-                if(side_view && state == EDITOR_STATE_HITBOXES) {
+                if(sideView && state == EDITOR_STATE_HITBOXES) {
                     drawSideViewHitbox(
                         h_ptr, hitbox_color,
                         hitbox_outline_color, hitbox_outline_thickness
@@ -254,42 +254,42 @@ void AnimationEditor::drawCanvas() {
         }
         
         if(state == EDITOR_STATE_SPRITE_TRANSFORM) {
-            Point cur_sprite_size = cur_sprite->scale * cur_sprite->bmp_size;
-            cur_transformation_widget.draw(
-                &cur_sprite->offset,
+            Point cur_sprite_size = curSprite->scale * curSprite->bmpSize;
+            curTransformationWidget.draw(
+                &curSprite->offset,
                 &cur_sprite_size,
-                &cur_sprite->angle,
+                &curSprite->angle,
                 1.0f / game.cam.zoom
             );
             
-        } else if(state == EDITOR_STATE_TOP && s->top_visible) {
-            cur_transformation_widget.draw(
-                &s->top_pos,
-                &s->top_size,
-                &s->top_angle,
+        } else if(state == EDITOR_STATE_TOP && s->topVisible) {
+            curTransformationWidget.draw(
+                &s->topPos,
+                &s->topSize,
+                &s->topAngle,
                 1.0f / game.cam.zoom
             );
             
-        } else if(state == EDITOR_STATE_HITBOXES && cur_hitbox) {
-            if(!side_view) {
+        } else if(state == EDITOR_STATE_HITBOXES && curHitbox) {
+            if(!sideView) {
                 Point hitbox_size(
-                    cur_hitbox->radius * 2.0f, cur_hitbox->radius * 2.0f
+                    curHitbox->radius * 2.0f, curHitbox->radius * 2.0f
                 );
-                cur_transformation_widget.draw(
-                    &cur_hitbox->pos,
+                curTransformationWidget.draw(
+                    &curHitbox->pos,
                     &hitbox_size,
                     nullptr,
                     1.0f / game.cam.zoom
                 );
-            } else if(cur_hitbox->height != 0.0f) {
+            } else if(curHitbox->height != 0.0f) {
                 Point hitbox_center(
-                    cur_hitbox->pos.x,
-                    (-(cur_hitbox->height / 2.0f)) - cur_hitbox->z
+                    curHitbox->pos.x,
+                    (-(curHitbox->height / 2.0f)) - curHitbox->z
                 );
                 Point hitbox_size(
-                    cur_hitbox->radius * 2.0f, cur_hitbox->height
+                    curHitbox->radius * 2.0f, curHitbox->height
                 );
-                cur_transformation_widget.draw(
+                curTransformationWidget.draw(
                     &hitbox_center,
                     &hitbox_size,
                     nullptr,
@@ -310,13 +310,13 @@ void AnimationEditor::drawCanvas() {
         );
         
         Point cam_top_left_corner(0, 0);
-        Point cam_bottom_right_corner(canvas_br.x, canvas_br.y);
+        Point cam_bottom_right_corner(canvasBR.x, canvasBR.y);
         al_transform_coordinates(
-            &game.screen_to_world_transform,
+            &game.screenToWorldTransform,
             &cam_top_left_corner.x, &cam_top_left_corner.y
         );
         al_transform_coordinates(
-            &game.screen_to_world_transform,
+            &game.screenToWorldTransform,
             &cam_bottom_right_corner.x, &cam_bottom_right_corner.y
         );
         
@@ -330,21 +330,21 @@ void AnimationEditor::drawCanvas() {
         );
     }
     
-    if(draw_mob_radius && loaded_mob_type) {
-        if(side_view && state == EDITOR_STATE_HITBOXES) {
+    if(draw_mob_radius && loadedMobType) {
+        if(sideView && state == EDITOR_STATE_HITBOXES) {
             //The radius isn't meant to be shown in side view.
         } else {
-            drawTopDownViewMobRadius(loaded_mob_type);
+            drawTopDownViewMobRadius(loadedMobType);
         }
     }
     
     if(draw_leader_silhouette) {
         float x_offset = 32;
-        if(loaded_mob_type) {
-            x_offset += loaded_mob_type->radius;
+        if(loadedMobType) {
+            x_offset += loadedMobType->radius;
         }
         
-        if(side_view && state == EDITOR_STATE_HITBOXES) {
+        if(sideView && state == EDITOR_STATE_HITBOXES) {
             drawSideViewLeaderSilhouette(x_offset);
         } else {
             drawTopDownViewLeaderSilhouette(x_offset);
@@ -352,13 +352,13 @@ void AnimationEditor::drawCanvas() {
     }
     
     if(state == EDITOR_STATE_ANIMATION) {
-        al_use_transform(&game.identity_transform);
+        al_use_transform(&game.identityTransform);
         drawTimeline();
     }
     
     //Finish up.
     al_reset_clipping_rectangle();
-    al_use_transform(&game.identity_transform);
+    al_use_transform(&game.identityTransform);
 }
 
 
@@ -367,23 +367,23 @@ void AnimationEditor::drawCanvas() {
  */
 void AnimationEditor::drawComparison() {
     if(
-        comparison && comparison_blink_show &&
-        comparison_sprite && comparison_sprite->bitmap
+        comparison && comparisonBlinkShow &&
+        comparisonSprite && comparisonSprite->bitmap
     ) {
         ALLEGRO_COLOR tint;
-        if(comparison_tint) {
+        if(comparisonTint) {
             tint = al_map_rgb(255, 128, 0);
         } else {
-            tint = comparison_sprite->tint;
+            tint = comparisonSprite->tint;
         }
         drawBitmap(
-            comparison_sprite->bitmap,
-            comparison_sprite->offset,
+            comparisonSprite->bitmap,
+            comparisonSprite->offset,
             Point(
-                comparison_sprite->bmp_size.x * comparison_sprite->scale.x,
-                comparison_sprite->bmp_size.y * comparison_sprite->scale.y
+                comparisonSprite->bmpSize.x * comparisonSprite->scale.x,
+                comparisonSprite->bmpSize.y * comparisonSprite->scale.y
             ),
-            comparison_sprite->angle, tint
+            comparisonSprite->angle, tint
         );
     }
 }
@@ -408,13 +408,13 @@ void AnimationEditor::drawSideViewHitbox(
     if(h_ptr->height == 0) {
         //Set the coordinates to the screen top and screen bottom. Add some
         //padding just to make sure.
-        z_to_use = game.win_h + 1;
+        z_to_use = game.winH + 1;
         h_to_use = 0 - 1;
         al_transform_coordinates(
-            &game.screen_to_world_transform, &dummy, &z_to_use
+            &game.screenToWorldTransform, &dummy, &z_to_use
         );
         al_transform_coordinates(
-            &game.screen_to_world_transform, &dummy, &h_to_use
+            &game.screenToWorldTransform, &dummy, &h_to_use
         );
         //The height is the height from the top of the screen to the bottom.
         h_to_use = z_to_use - h_to_use;
@@ -448,9 +448,9 @@ void AnimationEditor::drawSideViewHitbox(
  */
 void AnimationEditor::drawSideViewLeaderSilhouette(float x_offset) {
     drawBitmap(
-        game.sys_content.bmp_leader_silhouette_side,
-        Point(x_offset, -game.config.leaders.standard_height / 2.0),
-        Point(-1, game.config.leaders.standard_height),
+        game.sysContent.bmpLeaderSilhouetteSide,
+        Point(x_offset, -game.config.leaders.standardHeight / 2.0),
+        Point(-1, game.config.leaders.standardHeight),
         0, al_map_rgba(240, 240, 240, 160)
     );
 }
@@ -466,14 +466,14 @@ void AnimationEditor::drawSideViewSprite(const Sprite* s) {
     ALLEGRO_COLOR color = COLOR_EMPTY;
     
     getTransformedRectangleBBox(
-        s->offset, s->bmp_size * s->scale, s->angle,
+        s->offset, s->bmpSize * s->scale, s->angle,
         &min, &max
     );
     max.y = 0; //Bottom aligns with the floor.
     
-    if(loaded_mob_type) {
-        color = loaded_mob_type->main_color;
-        min.y = loaded_mob_type->height;
+    if(loadedMobType) {
+        color = loadedMobType->mainColor;
+        min.y = loadedMobType->height;
     } else {
         min.y = max.x - min.x;
     }
@@ -489,22 +489,22 @@ void AnimationEditor::drawSideViewSprite(const Sprite* s) {
  * @brief Draws a timeline for the current animation.
  */
 void AnimationEditor::drawTimeline() {
-    if(!cur_anim_i.validFrame()) return;
+    if(!curAnimInst.validFrame()) return;
     
     //Some initial calculations.
     float anim_total_duration = 0;
     float anim_cur_time = 0;
     float anim_loop_time = 0;
-    for(size_t f = 0; f < cur_anim_i.cur_anim->frames.size(); f++) {
-        float f_dur = cur_anim_i.cur_anim->frames[f].duration;
+    for(size_t f = 0; f < curAnimInst.curAnim->frames.size(); f++) {
+        float f_dur = curAnimInst.curAnim->frames[f].duration;
         
-        if(f < cur_anim_i.cur_frame_idx) {
+        if(f < curAnimInst.curFrameIdx) {
             anim_cur_time += f_dur;
-        } else if(f == cur_anim_i.cur_frame_idx) {
-            anim_cur_time += cur_anim_i.cur_frame_time;
+        } else if(f == curAnimInst.curFrameIdx) {
+            anim_cur_time += curAnimInst.curFrameTime;
         }
         
-        if(f < cur_anim_i.cur_anim->loop_frame) {
+        if(f < curAnimInst.curAnim->loopFrame) {
             anim_loop_time += f_dur;
         }
         
@@ -513,7 +513,7 @@ void AnimationEditor::drawTimeline() {
     if(anim_total_duration == 0.0f) return;
     
     float scale =
-        (canvas_br.x - canvas_tl.x - ANIM_EDITOR::TIMELINE_PADDING * 2.0f) /
+        (canvasBR.x - canvasTL.x - ANIM_EDITOR::TIMELINE_PADDING * 2.0f) /
         anim_total_duration;
     float milestone_interval = 32.0f / scale;
     milestone_interval = floor(milestone_interval * 100.0f) / 100.0f;
@@ -521,22 +521,22 @@ void AnimationEditor::drawTimeline() {
     
     //Draw the entire timeline's rectangle.
     al_draw_filled_rectangle(
-        canvas_tl.x, canvas_br.y - ANIM_EDITOR::TIMELINE_HEIGHT,
-        canvas_br.x, canvas_br.y,
+        canvasTL.x, canvasBR.y - ANIM_EDITOR::TIMELINE_HEIGHT,
+        canvasBR.x, canvasBR.y,
         al_map_rgb(160, 180, 160)
     );
     
     //Draw every frame as a rectangle.
-    float frame_rectangles_cur_x = canvas_tl.x + ANIM_EDITOR::TIMELINE_PADDING;
+    float frame_rectangles_cur_x = canvasTL.x + ANIM_EDITOR::TIMELINE_PADDING;
     float frame_rectangle_top =
-        canvas_br.y -
+        canvasBR.y -
         ANIM_EDITOR::TIMELINE_HEIGHT + ANIM_EDITOR::TIMELINE_HEADER_HEIGHT;
     float frame_rectangle_bottom =
-        canvas_br.y - ANIM_EDITOR::TIMELINE_PADDING;
-    for(size_t f = 0; f < cur_anim_i.cur_anim->frames.size(); f++) {
+        canvasBR.y - ANIM_EDITOR::TIMELINE_PADDING;
+    for(size_t f = 0; f < curAnimInst.curAnim->frames.size(); f++) {
         float end_x =
             frame_rectangles_cur_x +
-            cur_anim_i.cur_anim->frames[f].duration * scale;
+            curAnimInst.curAnim->frames[f].duration * scale;
         ALLEGRO_COLOR color =
             f % 2 == 0 ?
             al_map_rgb(128, 132, 128) :
@@ -553,7 +553,7 @@ void AnimationEditor::drawTimeline() {
     //Draw a triangle for the start of the loop frame.
     if(anim_total_duration) {
         float loop_x =
-            canvas_tl.x + ANIM_EDITOR::TIMELINE_PADDING +
+            canvasTL.x + ANIM_EDITOR::TIMELINE_PADDING +
             anim_loop_time * scale;
         al_draw_filled_triangle(
             loop_x,
@@ -568,10 +568,10 @@ void AnimationEditor::drawTimeline() {
     
     //Draw a line indicating where we are in the animation.
     float cur_time_line_x =
-        canvas_tl.x + ANIM_EDITOR::TIMELINE_PADDING + anim_cur_time * scale;
+        canvasTL.x + ANIM_EDITOR::TIMELINE_PADDING + anim_cur_time * scale;
     al_draw_line(
-        cur_time_line_x, canvas_br.y - ANIM_EDITOR::TIMELINE_HEIGHT,
-        cur_time_line_x, canvas_br.y,
+        cur_time_line_x, canvasBR.y - ANIM_EDITOR::TIMELINE_HEIGHT,
+        cur_time_line_x, canvasBR.y,
         al_map_rgb(128, 48, 48), 2.0f
     );
     
@@ -581,10 +581,10 @@ void AnimationEditor::drawTimeline() {
     
     while(
         next_marker_x <
-        canvas_br.x - canvas_tl.x - ANIM_EDITOR::TIMELINE_PADDING * 2
+        canvasBR.x - canvasTL.x - ANIM_EDITOR::TIMELINE_PADDING * 2
     ) {
         float x_to_use =
-            next_marker_x + canvas_tl.x + ANIM_EDITOR::TIMELINE_PADDING;
+            next_marker_x + canvasTL.x + ANIM_EDITOR::TIMELINE_PADDING;
         switch(next_marker_type) {
         case 0: {
             string text = f2s(next_marker_x / scale);
@@ -592,17 +592,17 @@ void AnimationEditor::drawTimeline() {
                 text = text.substr(1, 3);
             }
             drawText(
-                text, game.sys_content.fnt_builtin,
+                text, game.sysContent.fntBuiltin,
                 Point(
                     floor(x_to_use) + 2,
-                    canvas_br.y - ANIM_EDITOR::TIMELINE_HEIGHT + 2
+                    canvasBR.y - ANIM_EDITOR::TIMELINE_HEIGHT + 2
                 ),
                 Point(LARGE_FLOAT, 8.0f), al_map_rgb(32, 32, 32),
                 ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP
             );
             al_draw_line(
-                x_to_use + 0.5, canvas_br.y - ANIM_EDITOR::TIMELINE_HEIGHT,
-                x_to_use + 0.5, canvas_br.y - ANIM_EDITOR::TIMELINE_HEIGHT +
+                x_to_use + 0.5, canvasBR.y - ANIM_EDITOR::TIMELINE_HEIGHT,
+                x_to_use + 0.5, canvasBR.y - ANIM_EDITOR::TIMELINE_HEIGHT +
                 ANIM_EDITOR::TIMELINE_HEADER_HEIGHT,
                 al_map_rgb(32, 32, 32), 1.0f
             );
@@ -611,9 +611,9 @@ void AnimationEditor::drawTimeline() {
         } case 1:
         case 3: {
             al_draw_line(
-                x_to_use + 0.5, canvas_br.y - ANIM_EDITOR::TIMELINE_HEIGHT,
+                x_to_use + 0.5, canvasBR.y - ANIM_EDITOR::TIMELINE_HEIGHT,
                 x_to_use + 0.5,
-                canvas_br.y - ANIM_EDITOR::TIMELINE_HEIGHT +
+                canvasBR.y - ANIM_EDITOR::TIMELINE_HEIGHT +
                 ANIM_EDITOR::TIMELINE_HEADER_HEIGHT * 0.66f,
                 al_map_rgb(32, 32, 32), 1.0f
             );
@@ -621,9 +621,9 @@ void AnimationEditor::drawTimeline() {
             
         } case 2: {
             al_draw_line(
-                x_to_use + 0.5, canvas_br.y - ANIM_EDITOR::TIMELINE_HEIGHT,
+                x_to_use + 0.5, canvasBR.y - ANIM_EDITOR::TIMELINE_HEIGHT,
                 x_to_use + 0.5,
-                canvas_br.y - ANIM_EDITOR::TIMELINE_HEIGHT +
+                canvasBR.y - ANIM_EDITOR::TIMELINE_HEIGHT +
                 ANIM_EDITOR::TIMELINE_HEADER_HEIGHT * 0.33f,
                 al_map_rgb(32, 32, 32), 1.0f
             );
@@ -673,8 +673,8 @@ void AnimationEditor::drawTopDownViewLeaderSilhouette(
     float x_offset
 ) {
     drawBitmap(
-        game.sys_content.bmp_leader_silhouette_top, Point(x_offset, 0),
-        Point(-1, game.config.leaders.standard_radius * 2.0f),
+        game.sysContent.bmpLeaderSilhouetteTop, Point(x_offset, 0),
+        Point(-1, game.config.leaders.standardRadius * 2.0f),
         0, al_map_rgba(240, 240, 240, 160)
     );
 }
@@ -690,10 +690,10 @@ void AnimationEditor::drawTopDownViewMobRadius(MobType* mt) {
         0, 0, mt->radius,
         al_map_rgb(240, 240, 240), 1.0f / game.cam.zoom
     );
-    if(mt->rectangular_dim.x != 0) {
+    if(mt->rectangularDim.x != 0) {
         al_draw_rectangle(
-            -mt->rectangular_dim.x / 2.0, -mt->rectangular_dim.y / 2.0,
-            mt->rectangular_dim.x / 2.0, mt->rectangular_dim.y / 2.0,
+            -mt->rectangularDim.x / 2.0, -mt->rectangularDim.y / 2.0,
+            mt->rectangularDim.x / 2.0, mt->rectangularDim.y / 2.0,
             al_map_rgb(240, 240, 240), 1.0f / game.cam.zoom
         );
     }
@@ -706,14 +706,14 @@ void AnimationEditor::drawTopDownViewMobRadius(MobType* mt) {
  * @param s Sprite to draw.
  */
 void AnimationEditor::drawTopDownViewSprite(Sprite* s) {
-    if(!comparison_above) {
+    if(!comparisonAbove) {
         drawComparison();
     }
     
     Sprite* next_s = nullptr;
     float interpolation_factor = 0.0f;
-    if(state == EDITOR_STATE_ANIMATION && cur_anim_i.validFrame()) {
-        cur_anim_i.getSpriteData(
+    if(state == EDITOR_STATE_ANIMATION && curAnimInst.validFrame()) {
+        curAnimInst.getSpriteData(
             nullptr, &next_s, &interpolation_factor
         );
     }
@@ -732,24 +732,24 @@ void AnimationEditor::drawTopDownViewSprite(Sprite* s) {
         
         if(
             state == EDITOR_STATE_SPRITE_TRANSFORM &&
-            comparison && comparison_tint &&
-            comparison_sprite && comparison_sprite->bitmap
+            comparison && comparisonTint &&
+            comparisonSprite && comparisonSprite->bitmap
         ) {
             tint = al_map_rgb(0, 128, 255);
         }
         drawBitmap(
             s->bitmap, coords,
             Point(
-                s->bmp_size.x * scale.x,
-                s->bmp_size.y * scale.y
+                s->bmpSize.x * scale.x,
+                s->bmpSize.y * scale.y
             ),
             angle, tint
         );
     }
     
     if(
-        s->top_visible && loaded_mob_type
-        && loaded_mob_type->category->id == MOB_CATEGORY_PIKMIN
+        s->topVisible && loadedMobType
+        && loadedMobType->category->id == MOB_CATEGORY_PIKMIN
     ) {
         Point coords;
         float angle;
@@ -758,10 +758,10 @@ void AnimationEditor::drawTopDownViewSprite(Sprite* s) {
             s, next_s, interpolation_factor,
             &coords, &angle, &size
         );
-        drawBitmap(top_bmp[cur_maturity], coords, size, angle);
+        drawBitmap(topBmp[curMaturity], coords, size, angle);
     }
     
-    if(comparison_above) {
+    if(comparisonAbove) {
         drawComparison();
     }
 }

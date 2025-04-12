@@ -60,22 +60,22 @@ public:
     vector<std::pair<int, ALLEGRO_COLOR> > daylight;
     
     //Sun strength table for specific times of day, in minutes.
-    vector<std::pair<int, unsigned char> > sun_strength;
+    vector<std::pair<int, unsigned char> > sunStrength;
     
     //Blackout effect's strength table for specific times of day, in minutes.
-    vector<std::pair<int, unsigned char> > blackout_strength;
+    vector<std::pair<int, unsigned char> > blackoutStrength;
     
     //Fog -- distance at which everything is still fully visible.
-    float fog_near = 0.0f;
+    float fogNear = 0.0f;
     
     //Fog -- distance at which everything is 100% foggy.
-    float fog_far = 0.0f;
+    float fogFar = 0.0f;
     
     //Fog -- color and density at 100% fogginess. Values throughout the day.
-    vector<std::pair<int, ALLEGRO_COLOR> > fog_color;
+    vector<std::pair<int, ALLEGRO_COLOR> > fogColor;
     
     //Precipitation type, if any.
-    PRECIPITATION_TYPE precipitation_type = PRECIPITATION_TYPE_NONE;
+    PRECIPITATION_TYPE precipitationType = PRECIPITATION_TYPE_NONE;
     
     
     //--- Function declarations ---

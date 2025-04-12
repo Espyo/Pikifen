@@ -66,7 +66,7 @@ void onion_fsm::createFsm(MobType* typ) {
     }
     
     typ->states = efc.finish();
-    typ->first_state_idx = fixStates(typ->states, "idling", typ);
+    typ->firstStateIdx = fixStates(typ->states, "idling", typ);
     
     //Check if the number in the enum and the total match up.
     engineAssert(
@@ -125,22 +125,22 @@ void onion_fsm::receiveMob(Mob* m, void* info1, void* info2) {
     
     switch(delivery->type->category->id) {
     case MOB_CATEGORY_ENEMIES: {
-        seeds = ((Enemy*) delivery)->ene_type->pikmin_seeds;
+        seeds = ((Enemy*) delivery)->eneType->pikminSeeds;
         
-        if(game.cur_area_data->mission.enemy_points_on_collection) {
-            game.states.gameplay->enemy_points_collected += ((Enemy*) delivery)->ene_type->points;
+        if(game.curAreaData->mission.enemyPointsOnCollection) {
+            game.states.gameplay->enemyPointsCollected += ((Enemy*) delivery)->eneType->points;
         }
         
         break;
     } case MOB_CATEGORY_PELLETS: {
         Pellet* pel_ptr = (Pellet*) delivery;
         if(
-            pel_ptr->pel_type->pik_type ==
-            delivery->delivery_info->intended_pik_type
+            pel_ptr->pelType->pikType ==
+            delivery->deliveryInfo->intendedPikType
         ) {
-            seeds = pel_ptr->pel_type->match_seeds;
+            seeds = pel_ptr->pelType->matchSeeds;
         } else {
-            seeds = pel_ptr->pel_type->non_match_seeds;
+            seeds = pel_ptr->pelType->nonMatchSeeds;
         }
         break;
     } default: {
@@ -149,25 +149,25 @@ void onion_fsm::receiveMob(Mob* m, void* info1, void* info2) {
     }
     
     size_t type_idx = 0;
-    for(; type_idx < oni_ptr->oni_type->nest->pik_types.size(); type_idx++) {
+    for(; type_idx < oni_ptr->oniType->nest->pik_types.size(); type_idx++) {
         if(
-            oni_ptr->oni_type->nest->pik_types[type_idx] ==
-            delivery->delivery_info->intended_pik_type
+            oni_ptr->oniType->nest->pik_types[type_idx] ==
+            delivery->deliveryInfo->intendedPikType
         ) {
             break;
         }
     }
     
     oni_ptr->stopGenerating();
-    oni_ptr->generation_delay_timer.start();
-    oni_ptr->generation_queue[type_idx] += seeds;
+    oni_ptr->generationDelayTimer.start();
+    oni_ptr->generationQueue[type_idx] += seeds;
     
     ParticleGenerator pg =
         standardParticleGenSetup(
-            game.sys_content_names.part_onion_insertion, oni_ptr
+            game.sysContentNames.parOnionInsertion, oni_ptr
         );
-    pg.follow_z_offset -= 2.0f; //Must appear below the Onion's bulb.
-    oni_ptr->particle_generators.push_back(pg);
+    pg.followZOffset -= 2.0f; //Must appear below the Onion's bulb.
+    oni_ptr->particleGenerators.push_back(pg);
     
 }
 

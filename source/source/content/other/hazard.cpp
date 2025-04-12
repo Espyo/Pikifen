@@ -35,8 +35,8 @@ void Hazard::loadFromDataNode(DataNode* node) {
     DataNode* effects_node = nullptr;
     DataNode* liquid_node = nullptr;
     
-    rs.set("blocks_paths", blocks_paths);
-    rs.set("color", main_color);
+    rs.set("blocks_paths", blocksPaths);
+    rs.set("color", mainColor);
     rs.set("effects", effects_str, &effects_node);
     rs.set("liquid", liquid_str, &liquid_node);
     
@@ -45,8 +45,8 @@ void Hazard::loadFromDataNode(DataNode* node) {
         for(size_t e = 0; e < effects_strs.size(); e++) {
             string effect_name = effects_strs[e];
             if(
-                game.content.status_types.list.find(effect_name) ==
-                game.content.status_types.list.end()
+                game.content.statusTypes.list.find(effect_name) ==
+                game.content.statusTypes.list.end()
             ) {
                 game.errors.report(
                     "Unknown status effect \"" + effect_name + "\"!",
@@ -54,7 +54,7 @@ void Hazard::loadFromDataNode(DataNode* node) {
                 );
             } else {
                 effects.push_back(
-                    game.content.status_types.list[effect_name]
+                    game.content.statusTypes.list[effect_name]
                 );
             }
         }
@@ -67,7 +67,7 @@ void Hazard::loadFromDataNode(DataNode* node) {
                 liquid_node
             );
         } else {
-            associated_liquid = game.content.liquids.list[liquid_str];
+            associatedLiquid = game.content.liquids.list[liquid_str];
         }
     }
 }

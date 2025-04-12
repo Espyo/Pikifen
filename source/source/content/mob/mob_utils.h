@@ -60,7 +60,7 @@ struct CarrierSpot {
     Point pos;
     
     //Pikmin that is in this spot.
-    Mob* pik_ptr = nullptr;
+    Mob* pikPtr = nullptr;
     
     
     //--- Function declarations ---
@@ -84,37 +84,37 @@ struct CarryInfo {
     CARRY_DESTINATION destination = CARRY_DESTINATION_SHIP;
     
     //Information about each carrier spot.
-    vector<CarrierSpot> spot_info;
+    vector<CarrierSpot> spotInfo;
     
     //Current carrying strength. Cache for performance.
-    float cur_carrying_strength = 0.0f;
+    float curCarryingStrength = 0.0f;
     
     //Number of carriers, including reserves. Cache for performance.
-    size_t cur_n_carriers = 0;
+    size_t curNCarriers = 0;
     
     //Is the object moving at the moment?
-    bool is_moving = false;
+    bool isMoving = false;
     
     //When the object begins moving, the idea is to carry it to this mob.
-    Mob* intended_mob = nullptr;
+    Mob* intendedMob = nullptr;
     
     //When the object begins moving, the idea is to carry it to this point.
-    Point intended_point;
+    Point intendedPoint;
     
     //When delivering to an Onion, this is the Pikmin type that will benefit.
-    PikminType* intended_pik_type = nullptr;
+    PikminType* intendedPikType = nullptr;
     
     //True if a destination does exist, false otherwise.
-    bool destination_exists = false;
+    bool destinationExists = false;
     
     //Is the Pikmin meant to return somewhere after carrying?
-    bool must_return = false;
+    bool mustReturn = false;
     
     //Location to return to once they finish carrying.
-    Point return_point;
+    Point returnPoint;
     
     //Distance from the return point to stop at.
-    float return_dist = 0.0f;
+    float returnDist = 0.0f;
     
     
     //--- Function declarations ---
@@ -147,25 +147,25 @@ struct ChaseInfo {
     Point offset;
     
     //Same as above, but for the Z coordinate.
-    float offset_z = 0.0f;
+    float offsetZ = 0.0f;
     
     //Pointer to the origin of the coordinates, or nullptr for the world origin.
-    Point* orig_coords = nullptr;
+    Point* origCoords = nullptr;
     
     //Same as above, but for the Z coordinate.
-    float* orig_z = nullptr;
+    float* origZ = nullptr;
     
     //Distance from the target in which the mob is considered as being there.
-    float target_dist = 0.0f;
+    float targetDist = 0.0f;
     
     //Acceleration to apply, in units per second per second.
     float acceleration = 0.0f;
     
     //Current speed to move towards the target at.
-    float cur_speed = 0.0f;
+    float curSpeed = 0.0f;
     
     //Maximum speed.
-    float max_speed = -1.0f;
+    float maxSpeed = -1.0f;
     
 };
 
@@ -182,10 +182,10 @@ struct CirclingInfo {
     Mob* m = nullptr;
     
     //Mob that it is circling.
-    Mob* circling_mob = nullptr;
+    Mob* circlingMob = nullptr;
     
     //Point that it is circling, if it's not circling a mob.
-    Point circling_point;
+    Point circlingPoint;
     
     //Radius at which to circle around.
     float radius = 0.0f;
@@ -197,10 +197,10 @@ struct CirclingInfo {
     float speed = 0.0f;
     
     //Can the mob move freely, or only forward?
-    bool can_free_move = false;
+    bool canFreeMove = false;
     
     //Angle of the circle to go to.
-    float cur_angle = 0.0f;
+    float curAngle = 0.0f;
     
     
     //--- Function declarations ---
@@ -218,16 +218,16 @@ struct DeliveryInfo {
     //--- Members ---
     
     //Animation type.
-    DELIVERY_ANIM anim_type = DELIVERY_ANIM_SUCK;
+    DELIVERY_ANIM animType = DELIVERY_ANIM_SUCK;
     
     //Ratio of time left in the animation.
-    float anim_time_ratio_left = 1.0f;
+    float animTimeRatioLeft = 1.0f;
     
     //Color to make the mob glow with.
     ALLEGRO_COLOR color;
     
     //Intended delivery Pikmin type, in the case of Onions.
-    PikminType* intended_pik_type = nullptr;
+    PikminType* intendedPikType = nullptr;
     
     
     //--- Function declarations ---
@@ -273,13 +273,13 @@ struct Group {
         Point pos;
         
         //Mob in this spot.
-        Mob* mob_ptr = nullptr;
+        Mob* mobPtr = nullptr;
         
         
         //--- Function declarations ---
         
         explicit GroupSpot(const Point &p = Point(), Mob* m = nullptr) :
-            pos(p), mob_ptr(m) {}
+            pos(p), mobPtr(m) {}
             
     };
     
@@ -299,13 +299,13 @@ struct Group {
     Point anchor;
     
     //Angle from the leader to the anchor.
-    float anchor_angle = TAU / 2.0f;
+    float anchorAngle = TAU / 2.0f;
     
     //Transformation to apply to the group, like from swarming.
     ALLEGRO_TRANSFORM transform;
     
     //Currently selected standby type.
-    SubgroupType* cur_standby_type = nullptr;
+    SubgroupType* curStandbyType = nullptr;
     
     //Mode of operation.
     MODE mode = MODE_SHUFFLE;
@@ -344,22 +344,22 @@ struct HoldInfo {
     
     //Index of the hitbox the mob is attached to.
     //If INVALID, it's attached to the mob center.
-    size_t hitbox_idx = INVALID;
+    size_t hitboxIdx = INVALID;
     
     //Ratio of distance from the hitbox/body center. 1 is the full radius.
-    float offset_dist = 0.0f;
+    float offsetDist = 0.0f;
     
     //Angle the mob makes with the center of the hitbox/body.
-    float offset_angle = 0.0f;
+    float offsetAngle = 0.0f;
     
     //Ratio of distance from the hitbox/body's bottom. 1 is the very top.
-    float vertical_dist = 0.0f;
+    float verticalDist = 0.0f;
     
     //If true, force the mob to be drawn above the holder?
-    bool force_above_holder = false;
+    bool forceAboveHolder = false;
     
     //How should the held object rotate?
-    HOLD_ROTATION_METHOD rotation_method = HOLD_ROTATION_METHOD_NEVER;
+    HOLD_ROTATION_METHOD rotationMethod = HOLD_ROTATION_METHOD_NEVER;
     
     
     //--- Function declarations ---
@@ -422,7 +422,7 @@ struct MobLists {
     vector<Enemy*> enemies;
     
     //Group tasks.
-    vector<GroupTask*> group_tasks;
+    vector<GroupTask*> groupTasks;
     
     //Interactables.
     vector<Interactable*> interactables;
@@ -437,7 +437,7 @@ struct MobLists {
     vector<Pellet*> pellets;
     
     //Pikmin.
-    vector<Pikmin*> pikmin_list;
+    vector<Pikmin*> pikmin;
     
     //Piles.
     vector<Pile*> piles;

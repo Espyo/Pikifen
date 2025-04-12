@@ -27,35 +27,35 @@ Decoration::Decoration(
     const Point &pos, DecorationType* type, float angle
 ) :
     Mob(pos, type, angle),
-    dec_type(type) {
+    decType(type) {
     
     float tint_interpol_ratio = game.rng.f(0.0f, 1.0f);
-    ALLEGRO_COLOR tint_limit = dec_type->tint_random_maximum;
+    ALLEGRO_COLOR tint_limit = decType->tintRandomMaximum;
     tint_limit.a = 1.0f;
     
-    individual_tint =
+    individualTint =
         interpolateColor(
             tint_interpol_ratio, 0.0, 1.0,
             tint_limit, al_map_rgba(255, 255, 255, 255)
         );
         
     float alpha_interpol_ratio = game.rng.f(0.0f, 1.0f);
-    individual_tint.a =
+    individualTint.a =
         interpolateNumber(
             alpha_interpol_ratio, 0.0f, 1.0f,
-            dec_type->tint_random_maximum.a, 1.0f
+            decType->tintRandomMaximum.a, 1.0f
         );
         
-    individual_rotation +=
+    individualRotation +=
         game.rng.f(
-            -dec_type->rotation_random_variation,
-            dec_type->rotation_random_variation
+            -decType->rotationRandomVariation,
+            decType->rotationRandomVariation
         );
         
-    individual_scale +=
+    individualScale +=
         game.rng.f(
-            -dec_type->scale_random_variation,
-            dec_type->scale_random_variation
+            -decType->scaleRandomVariation,
+            decType->scaleRandomVariation
         );
 }
 
@@ -82,13 +82,13 @@ void Decoration::drawMob() {
         SPRITE_BMP_EFFECT_DELIVERY
     );
     
-    eff.tint_color.r *= individual_tint.r;
-    eff.tint_color.g *= individual_tint.g;
-    eff.tint_color.b *= individual_tint.b;
-    eff.tint_color.a *= individual_tint.a;
+    eff.tintColor.r *= individualTint.r;
+    eff.tintColor.g *= individualTint.g;
+    eff.tintColor.b *= individualTint.b;
+    eff.tintColor.a *= individualTint.a;
     
-    eff.scale *= individual_scale;
-    eff.rotation += individual_rotation;
+    eff.scale *= individualScale;
+    eff.rotation += individualRotation;
     
     drawBitmapWithEffects(cur_s_ptr->bitmap, eff);
 }
@@ -108,21 +108,21 @@ void Decoration::readScriptVars(const ScriptVarReader &svr) {
     bool random_rotation_var;
     
     if(svr.get("random_animation_delay", random_animation_delay_var)) {
-        individual_random_anim_delay = random_animation_delay_var;
+        individualRandomAnimDelay = random_animation_delay_var;
     }
     if(svr.get("random_tint", random_tint_var)) {
         if(!random_tint_var) {
-            individual_tint = COLOR_WHITE;
+            individualTint = COLOR_WHITE;
         }
     }
     if(svr.get("random_scale", random_scale_var)) {
         if(!random_scale_var) {
-            individual_scale = 1.0f;
+            individualScale = 1.0f;
         }
     }
     if(svr.get("random_rotation", random_rotation_var)) {
         if(!random_rotation_var) {
-            individual_rotation = 0.0f;
+            individualRotation = 0.0f;
         }
     }
 }

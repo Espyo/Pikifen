@@ -20,19 +20,19 @@
  */
 void GuiEditor::handleKeyCharCanvas(const ALLEGRO_EVENT &ev) {
     if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_LEFT)) {
-        game.cam.target_pos.x -=
+        game.cam.targetPos.x -=
             AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
             
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_RIGHT)) {
-        game.cam.target_pos.x +=
+        game.cam.targetPos.x +=
             AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
             
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_UP)) {
-        game.cam.target_pos.y -=
+        game.cam.targetPos.y -=
             AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
             
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_DOWN)) {
-        game.cam.target_pos.y +=
+        game.cam.targetPos.y +=
             AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
             
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_MINUS)) {
@@ -75,7 +75,7 @@ void GuiEditor::handleKeyDownAnywhere(const ALLEGRO_EVENT &ev) {
         saveCmd(1.0f);
         
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_ESCAPE)) {
-        escape_was_pressed = true;
+        escapeWasPressed = true;
         
         if(!dialogs.empty()) {
             closeTopDialog();
@@ -117,12 +117,12 @@ void GuiEditor::handleLmbDoubleClick(const ALLEGRO_EVENT &ev) {
  */
 void GuiEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
     bool tw_handled = false;
-    if(cur_item != INVALID && items[cur_item].size.x != 0.0f) {
+    if(curItem != INVALID && items[curItem].size.x != 0.0f) {
         tw_handled =
-            cur_transformation_widget.handleMouseDown(
-                game.mouse_cursor.w_pos,
-                &items[cur_item].center,
-                &items[cur_item].size,
+            curTransformationWidget.handleMouseDown(
+                game.mouseCursor.wPos,
+                &items[curItem].center,
+                &items[curItem].size,
                 nullptr,
                 1.0f / game.cam.zoom
             );
@@ -134,7 +134,7 @@ void GuiEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
             Item* item_ptr = &items[i];
             if(
                 isPointInRectangle(
-                    game.mouse_cursor.w_pos,
+                    game.mouseCursor.wPos,
                     item_ptr->center,
                     item_ptr->size
                 )
@@ -144,12 +144,12 @@ void GuiEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
         }
         
         if(clicked_items.empty()) {
-            cur_item = INVALID;
+            curItem = INVALID;
             
         } else {
             size_t cur_item_idx = INVALID;
             for(size_t i = 0; i < clicked_items.size(); i++) {
-                if(cur_item == clicked_items[i]) {
+                if(curItem == clicked_items[i]) {
                     cur_item_idx = i;
                     break;
                 }
@@ -164,8 +164,8 @@ void GuiEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
                         (int) clicked_items.size()
                     );
             }
-            cur_item = clicked_items[cur_item_idx];
-            must_focus_on_cur_item = true;
+            curItem = clicked_items[cur_item_idx];
+            mustFocusOnCurItem = true;
         }
     }
 }
@@ -177,21 +177,21 @@ void GuiEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void GuiEditor::handleLmbDrag(const ALLEGRO_EVENT &ev) {
-    if(cur_item != INVALID && items[cur_item].size.x != 0.0f) {
+    if(curItem != INVALID && items[curItem].size.x != 0.0f) {
         bool tw_handled =
-            cur_transformation_widget.handleMouseMove(
-                snapPoint(game.mouse_cursor.w_pos),
-                &items[cur_item].center,
-                &items[cur_item].size,
+            curTransformationWidget.handleMouseMove(
+                snapPoint(game.mouseCursor.wPos),
+                &items[curItem].center,
+                &items[curItem].size,
                 nullptr,
                 1.0f / game.cam.zoom,
                 false,
                 false,
                 0.10f,
-                is_alt_pressed
+                isAltPressed
             );
         if(tw_handled) {
-            changes_mgr.markAsChanged();
+            changesMgr.markAsChanged();
         }
     }
 }
@@ -203,7 +203,7 @@ void GuiEditor::handleLmbDrag(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void GuiEditor::handleLmbUp(const ALLEGRO_EVENT &ev) {
-    cur_transformation_widget.handleMouseUp();
+    curTransformationWidget.handleMouseUp();
 }
 
 
@@ -214,7 +214,7 @@ void GuiEditor::handleLmbUp(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void GuiEditor::handleMmbDown(const ALLEGRO_EVENT &ev) {
-    if(!game.options.editors.mmb_pan) {
+    if(!game.options.editors.mmbPan) {
         resetCam(false);
     }
 }
@@ -227,7 +227,7 @@ void GuiEditor::handleMmbDown(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void GuiEditor::handleMmbDrag(const ALLEGRO_EVENT &ev) {
-    if(game.options.editors.mmb_pan) {
+    if(game.options.editors.mmbPan) {
         panCam(ev);
     }
 }
@@ -260,7 +260,7 @@ void GuiEditor::handleMouseWheel(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void GuiEditor::handleRmbDown(const ALLEGRO_EVENT &ev) {
-    if(game.options.editors.mmb_pan) {
+    if(game.options.editors.mmbPan) {
         resetCam(false);
     }
 }
@@ -273,7 +273,7 @@ void GuiEditor::handleRmbDown(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void GuiEditor::handleRmbDrag(const ALLEGRO_EVENT &ev) {
-    if(!game.options.editors.mmb_pan) {
+    if(!game.options.editors.mmbPan) {
         panCam(ev);
     }
 }

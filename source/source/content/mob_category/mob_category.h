@@ -112,7 +112,7 @@ public:
     //--- Members ---
     
     //Internal name.
-    string internal_name;
+    string internalName;
     
     //Name of the mob category.
     string name;
@@ -121,13 +121,13 @@ public:
     MOB_CATEGORY id = MOB_CATEGORY_NONE;
     
     //Name used when referring to objects of this category in plural.
-    string plural_name;
+    string pluralName;
     
     //Name of the folder for this category.
-    string folder_name;
+    string folderName;
     
     //Color used to represent objects of this category in the area editor.
-    ALLEGRO_COLOR editor_color = COLOR_WHITE;
+    ALLEGRO_COLOR editorColor = COLOR_WHITE;
     
     
     //--- Function declarations ---

@@ -30,9 +30,9 @@
  * @param new_state State to change to.
  */
 void EasyFsmCreator::changeState(const string &new_state) {
-    cur_event->actions.push_back(new MobActionCall(MOB_ACTION_SET_STATE));
-    cur_event->actions.back()->args.push_back(new_state);
-    cur_event->actions.back()->arg_is_var.push_back(false);
+    curEvent->actions.push_back(new MobActionCall(MOB_ACTION_SET_STATE));
+    curEvent->actions.back()->args.push_back(new_state);
+    curEvent->actions.back()->argIsVar.push_back(false);
 }
 
 
@@ -40,8 +40,8 @@ void EasyFsmCreator::changeState(const string &new_state) {
  * @brief Finishes the event that is currently under construction, if any.
  */
 void EasyFsmCreator::commitEvent() {
-    if(!cur_event) return;
-    cur_event = nullptr;
+    if(!curEvent) return;
+    curEvent = nullptr;
 }
 
 
@@ -49,9 +49,9 @@ void EasyFsmCreator::commitEvent() {
  * @brief Finishes the state that is currently under construction, if any.
  */
 void EasyFsmCreator::commitState() {
-    if(!cur_state) return;
+    if(!curState) return;
     commitEvent();
-    cur_state = nullptr;
+    curState = nullptr;
 }
 
 
@@ -82,8 +82,8 @@ vector<MobState*> EasyFsmCreator::finish() {
  */
 void EasyFsmCreator::newEvent(const MOB_EV type) {
     commitEvent();
-    cur_event = new MobEvent(type);
-    cur_state->events[type] = cur_event;
+    curEvent = new MobEvent(type);
+    curState->events[type] = curEvent;
 }
 
 
@@ -96,8 +96,8 @@ void EasyFsmCreator::newEvent(const MOB_EV type) {
  */
 void EasyFsmCreator::newState(const string &name, size_t id) {
     commitState();
-    cur_state = new MobState(name, id);
-    states.push_back(cur_state);
+    curState = new MobState(name, id);
+    states.push_back(curState);
 }
 
 
@@ -108,7 +108,7 @@ void EasyFsmCreator::newState(const string &name, size_t id) {
  * @param code Function with said code.
  */
 void EasyFsmCreator::run(custom_action_code_t code) {
-    cur_event->actions.push_back(new MobActionCall(code));
+    curEvent->actions.push_back(new MobActionCall(code));
 }
 
 
@@ -183,7 +183,7 @@ MobEvent::MobEvent(
     }
     
     for(size_t a = 0; a < this->actions.size(); a++) {
-        this->actions[a]->parent_event = (MOB_EV) type;
+        this->actions[a]->parentEvent = (MOB_EV) type;
     }
 }
 
@@ -318,7 +318,7 @@ MobFsm::MobFsm(Mob* m) {
  * @return The event.
  */
 MobEvent* MobFsm::getEvent(const MOB_EV type) const {
-    return cur_state->events[type];
+    return curState->events[type];
 }
 
 
@@ -357,7 +357,7 @@ void MobFsm::runEvent(
         cout <<
              "Missing event on run_event() - Mob " <<
              m << ", event " << type << ", state " <<
-             (this->cur_state ? this->cur_state->name : "[None]") <<
+             (this->curState ? this->curState->name : "[None]") <<
              endl;
 #endif
              
@@ -378,23 +378,23 @@ void MobFsm::runEvent(
 bool MobFsm::setState(size_t new_state, void* info1, void* info2) {
 
     //Run the code to leave the current state.
-    if(cur_state) {
+    if(curState) {
         for(unsigned char p = STATE_HISTORY_SIZE - 1; p > 0; --p) {
-            prev_state_names[p] = prev_state_names[p - 1];
+            prevStateNames[p] = prevStateNames[p - 1];
         }
-        prev_state_names[0] = cur_state->name;
+        prevStateNames[0] = curState->name;
         runEvent(MOB_EV_ON_LEAVE, info1, info2);
     }
     
     //Uncomment this to be notified about state changes on stdout.
-    /*if(cur_state) {
-        cout << "State " << cur_state->name << " -> "
+    /*if(curState) {
+        cout << "State " << curState->name << " -> "
         << m->type->states[new_state]->name << "\n";
     }*/
     
     if(new_state < m->type->states.size() && new_state != INVALID) {
         //Switch states.
-        cur_state = m->type->states[new_state];
+        curState = m->type->states[new_state];
         
         //Run the code to enter the new state.
         runEvent(MOB_EV_ON_ENTER, info1, info2);
@@ -662,14 +662,14 @@ void loadState(
     
     //Inject a zero health event.
     if(
-        state_node->name != mt->dying_state_name &&
+        state_node->name != mt->dyingStateName &&
         !state_ptr->events[MOB_EV_ZERO_HEALTH] &&
         find(
-            mt->states_ignoring_death.begin(),
-            mt->states_ignoring_death.end(),
+            mt->statesIgnoringDeath.begin(),
+            mt->statesIgnoringDeath.end(),
             state_node->name
-        ) == mt->states_ignoring_death.end() &&
-        !mt->dying_state_name.empty()
+        ) == mt->statesIgnoringDeath.end() &&
+        !mt->dyingStateName.empty()
     ) {
         vector<MobActionCall*> de_actions;
         de_actions.push_back(new MobActionCall(gen_mob_fsm::goToDyingState));
@@ -693,10 +693,10 @@ void loadState(
     if(
         !state_ptr->events[MOB_EV_TOUCHED_SPRAY] &&
         find(
-            mt->states_ignoring_spray.begin(),
-            mt->states_ignoring_spray.end(),
+            mt->statesIgnoringSpray.begin(),
+            mt->statesIgnoringSpray.end(),
             state_node->name
-        ) == mt->states_ignoring_spray.end()
+        ) == mt->statesIgnoringSpray.end()
     ) {
         vector<MobActionCall*> s_actions;
         s_actions.push_back(
@@ -712,10 +712,10 @@ void loadState(
     if(
         !state_ptr->events[MOB_EV_TOUCHED_HAZARD] &&
         find(
-            mt->states_ignoring_hazard.begin(),
-            mt->states_ignoring_hazard.end(),
+            mt->statesIgnoringHazard.begin(),
+            mt->statesIgnoringHazard.end(),
             state_node->name
-        ) == mt->states_ignoring_hazard.end()
+        ) == mt->statesIgnoringHazard.end()
     ) {
         vector<MobActionCall*> s_actions;
         s_actions.push_back(

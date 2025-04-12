@@ -43,7 +43,7 @@ void pile_fsm::createFsm(MobType* typ) {
     
     
     typ->states = efc.finish();
-    typ->first_state_idx = fixStates(typ->states, "idling", typ);
+    typ->firstStateIdx = fixStates(typ->states, "idling", typ);
     
     //Check if the number in the enum and the total match up.
     engineAssert(
@@ -70,18 +70,18 @@ void pile_fsm::beAttacked(Mob* m, void* info1, void* info2) {
     
     size_t amount_before = pil_ptr->amount;
     int intended_amount =
-        ceil(pil_ptr->health / pil_ptr->pil_type->health_per_resource);
+        ceil(pil_ptr->health / pil_ptr->pilType->healthPerResource);
     int amount_to_spawn = (int) pil_ptr->amount - intended_amount;
     amount_to_spawn = std::max((int) 0, amount_to_spawn);
     
     if(amount_to_spawn == 0) return;
     
-    if(amount_to_spawn > 1 && !pil_ptr->pil_type->can_drop_multiple) {
+    if(amount_to_spawn > 1 && !pil_ptr->pilType->canDropMultiple) {
         //Can't drop multiple? Let's knock that number down.
         amount_to_spawn = 1;
         intended_amount = (int) (pil_ptr->amount - 1);
         pil_ptr->health =
-            pil_ptr->pil_type->health_per_resource * intended_amount;
+            pil_ptr->pilType->healthPerResource * intended_amount;
     }
     
     Resource* resource_to_pick_up = nullptr;
@@ -103,7 +103,7 @@ void pile_fsm::beAttacked(Mob* m, void* info1, void* info2) {
             spawn_pos =
                 pikmin_to_start_carrying->pos +
                 angleToCoordinates(
-                    spawn_angle, game.config.pikmin.standard_radius * 1.5
+                    spawn_angle, game.config.pikmin.standardRadius * 1.5
                 );
         } else {
             spawn_pos = pil_ptr->pos;
@@ -117,17 +117,17 @@ void pile_fsm::beAttacked(Mob* m, void* info1, void* info2) {
             (
                 (Resource*)
                 createMob(
-                    game.mob_categories.get(MOB_CATEGORY_RESOURCES),
-                    spawn_pos, pil_ptr->pil_type->contents,
+                    game.mobCategories.get(MOB_CATEGORY_RESOURCES),
+                    spawn_pos, pil_ptr->pilType->contents,
                     spawn_angle, "",
-        [pil_ptr] (Mob * m) { ((Resource*) m)->origin_pile = pil_ptr; }
+        [pil_ptr] (Mob * m) { ((Resource*) m)->originPile = pil_ptr; }
                 )
             );
             
         new_resource->z = spawn_z;
         new_resource->speed.x = cos(spawn_angle) * spawn_h_speed;
         new_resource->speed.y = sin(spawn_angle) * spawn_h_speed;
-        new_resource->speed_z = spawn_v_speed;
+        new_resource->speedZ = spawn_v_speed;
         new_resource->links = pil_ptr->links;
         
         if(r == 0) {
@@ -141,8 +141,8 @@ void pile_fsm::beAttacked(Mob* m, void* info1, void* info2) {
     
     pil_ptr->amount = intended_amount;
     
-    if(amount_before == pil_ptr->pil_type->max_amount) {
-        pil_ptr->recharge_timer.start();
+    if(amount_before == pil_ptr->pilType->maxAmount) {
+        pil_ptr->rechargeTimer.start();
     }
     pil_ptr->update();
 }

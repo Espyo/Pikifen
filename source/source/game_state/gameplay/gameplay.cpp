@@ -124,22 +124,22 @@ const float TREE_SHADOW_SWAY_SPEED = TAU / 8;
 void GameplayState::changeSprayCount(
     size_t type_idx, signed int amount
 ) {
-    spray_stats[type_idx].nr_sprays =
+    sprayStats[type_idx].nrSprays =
         std::max(
-            (signed int) spray_stats[type_idx].nr_sprays + amount,
+            (signed int) sprayStats[type_idx].nrSprays + amount,
             (signed int) 0
         );
         
     GuiItem* spray_hud_item = nullptr;
-    if(game.content.spray_types.list.size() > 2) {
-        if(selected_spray == type_idx) {
-            spray_hud_item = hud->spray_1_amount;
+    if(game.content.sprayTypes.list.size() > 2) {
+        if(selectedSpray == type_idx) {
+            spray_hud_item = hud->spray1Amount;
         }
     } else {
         if(type_idx == 0) {
-            spray_hud_item = hud->spray_1_amount;
+            spray_hud_item = hud->spray1Amount;
         } else {
-            spray_hud_item = hud->spray_2_amount;
+            spray_hud_item = hud->spray2Amount;
         }
     }
     if(spray_hud_item) {
@@ -156,8 +156,8 @@ void GameplayState::changeSprayCount(
 void GameplayState::doDrawing() {
     doGameDrawing();
     
-    if(game.perf_mon) {
-        game.perf_mon->leaveState();
+    if(game.perfMon) {
+        game.perfMon->leaveState();
     }
 }
 
@@ -166,39 +166,39 @@ void GameplayState::doDrawing() {
  * @brief Tick the gameplay logic by one frame.
  */
 void GameplayState::doLogic() {
-    if(game.perf_mon) {
-        if(is_input_allowed) {
+    if(game.perfMon) {
+        if(isInputAllowed) {
             //The first frame will have its speed all broken,
             //because of the long loading time that came before it.
-            game.perf_mon->setPaused(false);
-            game.perf_mon->enterState(PERF_MON_STATE_FRAME);
+            game.perfMon->setPaused(false);
+            game.perfMon->enterState(PERF_MON_STATE_FRAME);
         } else {
-            game.perf_mon->setPaused(true);
+            game.perfMon->setPaused(true);
         }
     }
     
-    float regular_delta_t = game.delta_t;
+    float regular_delta_t = game.deltaT;
     
-    if(game.maker_tools.change_speed) {
-        game.delta_t *=
-            game.maker_tools.change_speed_settings[
-                game.maker_tools.change_speed_setting_idx
+    if(game.makerTools.changeSpeed) {
+        game.deltaT *=
+            game.makerTools.changeSpeedSettings[
+                game.makerTools.changeSpeedSettingIdx
             ];
     }
     
     //Controls.
-    for(size_t a = 0; a < game.player_actions.size(); a++) {
-        handlePlayerAction(game.player_actions[a]);
-        if(onion_menu) onion_menu->handlePlayerAction(game.player_actions[a]);
-        if(pause_menu) pause_menu->handlePlayerAction(game.player_actions[a]);
-        game.maker_tools.handleGameplayPlayerAction(game.player_actions[a]);
+    for(size_t a = 0; a < game.playerActions.size(); a++) {
+        handlePlayerAction(game.playerActions[a]);
+        if(onionMenu) onionMenu->handlePlayerAction(game.playerActions[a]);
+        if(pauseMenu) pauseMenu->handlePlayerAction(game.playerActions[a]);
+        game.makerTools.handleGameplayPlayerAction(game.playerActions[a]);
     }
     
     //Game logic.
     if(!paused) {
-        game.statistics.gameplay_time += regular_delta_t;
-        doGameplayLogic(game.delta_t* delta_t_mult);
-        doAestheticLogic(game.delta_t* delta_t_mult);
+        game.statistics.gameplayTime += regular_delta_t;
+        doGameplayLogic(game.deltaT * deltaTMult);
+        doAestheticLogic(game.deltaT * deltaTMult);
     }
     doMenuLogic();
 }
@@ -210,40 +210,40 @@ void GameplayState::doLogic() {
  * @param cleared Did the player reach the goal?
  */
 void GameplayState::endMission(bool cleared) {
-    if(cur_interlude != INTERLUDE_NONE) {
+    if(curInterlude != INTERLUDE_NONE) {
         return;
     }
-    cur_interlude = INTERLUDE_MISSION_END;
-    interlude_time = 0.0f;
-    delta_t_mult = 0.5f;
-    leader_movement.reset(); //TODO replace with a better solution.
+    curInterlude = INTERLUDE_MISSION_END;
+    interludeTime = 0.0f;
+    deltaTMult = 0.5f;
+    leaderMovement.reset(); //TODO replace with a better solution.
     
     //Zoom in on the reason, if possible.
-    Point new_cam_pos = game.cam.target_pos;
-    float new_cam_zoom = game.cam.target_zoom;
+    Point new_cam_pos = game.cam.targetPos;
+    float new_cam_zoom = game.cam.targetZoom;
     if(cleared) {
         MissionGoal* goal =
-            game.mission_goals[game.cur_area_data->mission.goal];
+            game.missionGoals[game.curAreaData->mission.goal];
         if(goal->getEndZoomData(this, &new_cam_pos, &new_cam_zoom)) {
-            game.cam.target_pos = new_cam_pos;
-            game.cam.target_zoom = new_cam_zoom;
+            game.cam.targetPos = new_cam_pos;
+            game.cam.targetZoom = new_cam_zoom;
         }
         
     } else {
         MissionFail* cond =
-            game.mission_fail_conds[mission_fail_reason];
+            game.missionFailConds[missionFailReason];
         if(cond->getEndZoomData(this, &new_cam_pos, &new_cam_zoom)) {
-            game.cam.target_pos = new_cam_pos;
-            game.cam.target_zoom = new_cam_zoom;
+            game.cam.targetPos = new_cam_pos;
+            game.cam.targetZoom = new_cam_zoom;
         }
     }
     
     if(cleared) {
-        cur_big_msg = BIG_MESSAGE_MISSION_CLEAR;
+        curBigMsg = BIG_MESSAGE_MISSION_CLEAR;
     } else {
-        cur_big_msg = BIG_MESSAGE_MISSION_FAILED;
+        curBigMsg = BIG_MESSAGE_MISSION_FAILED;
     }
-    big_msg_time = 0.0f;
+    bigMsgTime = 0.0f;
     hud->gui.startAnimation(
         GUI_MANAGER_ANIM_IN_TO_OUT,
         GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
@@ -258,50 +258,50 @@ void GameplayState::endMission(bool cleared) {
 void GameplayState::enter() {
     updateTransformations();
     
-    last_enemy_killed_pos = Point(LARGE_FLOAT);
-    last_hurt_leader_pos = Point(LARGE_FLOAT);
-    last_pikmin_born_pos = Point(LARGE_FLOAT);
-    last_pikmin_death_pos = Point(LARGE_FLOAT);
-    last_ship_that_got_treasure_pos = Point(LARGE_FLOAT);
+    lastEnemyKilledPos = Point(LARGE_FLOAT);
+    lastHurtLeaderPos = Point(LARGE_FLOAT);
+    lastPikminBornPos = Point(LARGE_FLOAT);
+    lastPikminDeathPos = Point(LARGE_FLOAT);
+    lastShipThatGotTreasurePos = Point(LARGE_FLOAT);
     
-    mission_fail_reason = (MISSION_FAIL_COND) INVALID;
-    goal_indicator_ratio = 0.0f;
-    fail_1_indicator_ratio = 0.0f;
-    fail_2_indicator_ratio = 0.0f;
-    score_indicator = 0.0f;
+    missionFailReason = (MISSION_FAIL_COND) INVALID;
+    goalIndicatorRatio = 0.0f;
+    fail1IndicatorRatio = 0.0f;
+    fail2IndicatorRatio = 0.0f;
+    scoreIndicator = 0.0f;
     
     paused = false;
-    cur_interlude = INTERLUDE_READY;
-    interlude_time = 0.0f;
-    cur_big_msg = BIG_MESSAGE_READY;
-    big_msg_time = 0.0f;
-    delta_t_mult = 0.5f;
-    boss_music_state = BOSS_MUSIC_STATE_NEVER_PLAYED;
+    curInterlude = INTERLUDE_READY;
+    interludeTime = 0.0f;
+    curBigMsg = BIG_MESSAGE_READY;
+    bigMsgTime = 0.0f;
+    deltaTMult = 0.5f;
+    bossMusicState = BOSS_MUSIC_STATE_NEVER_PLAYED;
     
-    if(!game.states.area_ed->quick_play_area_path.empty()) {
+    if(!game.states.areaEd->quickPlayAreaPath.empty()) {
         //If this is an area editor quick play, skip the "Ready..." interlude.
-        interlude_time = GAMEPLAY::BIG_MSG_READY_DUR;
-        big_msg_time = GAMEPLAY::BIG_MSG_READY_DUR;
+        interludeTime = GAMEPLAY::BIG_MSG_READY_DUR;
+        bigMsgTime = GAMEPLAY::BIG_MSG_READY_DUR;
     }
     
     hud->gui.hideItems();
-    if(went_to_results) {
-        game.fade_mgr.startFade(true, nullptr);
-        if(pause_menu) {
-            pause_menu->to_delete = true;
+    if(wentToResults) {
+        game.fadeMgr.startFade(true, nullptr);
+        if(pauseMenu) {
+            pauseMenu->toDelete = true;
         }
     }
     
-    ready_for_input = false;
+    readyForInput = false;
     
-    game.mouse_cursor.reset();
-    leader_cursor_w = game.mouse_cursor.w_pos;
-    leader_cursor_s = game.mouse_cursor.s_pos;
+    game.mouseCursor.reset();
+    leaderCursorW = game.mouseCursor.wPos;
+    leaderCursorS = game.mouseCursor.sPos;
     
     notification.reset();
     
-    if(cur_leader_ptr) {
-        cur_leader_ptr->stopWhistling();
+    if(curLeaderPtr) {
+        curLeaderPtr->stopWhistling();
     }
     updateClosestGroupMembers();
 }
@@ -395,17 +395,17 @@ size_t GameplayState::getAmountOfFieldPikmin(const PikminType* filter) {
     size_t total = 0;
     
     //Check the Pikmin mobs.
-    for(size_t p = 0; p < mobs.pikmin_list.size(); p++) {
-        Pikmin* p_ptr = mobs.pikmin_list[p];
-        if(filter && p_ptr->pik_type != filter) continue;
+    for(size_t p = 0; p < mobs.pikmin.size(); p++) {
+        Pikmin* p_ptr = mobs.pikmin[p];
+        if(filter && p_ptr->pikType != filter) continue;
         total++;
     }
     
     //Check Pikmin inside converters.
     for(size_t c = 0; c < mobs.converters.size(); c++) {
         Converter* c_ptr = mobs.converters[c];
-        if(filter && c_ptr->current_type != filter) continue;
-        total += c_ptr->amount_in_buffer;
+        if(filter && c_ptr->currentType != filter) continue;
+        total += c_ptr->amountInBuffer;
     }
     
     return total;
@@ -421,10 +421,10 @@ size_t GameplayState::getAmountOfFieldPikmin(const PikminType* filter) {
 size_t GameplayState::getAmountOfGroupPikmin(const PikminType* filter) {
     size_t total = 0;
     
-    if(!cur_leader_ptr) return 0;
+    if(!curLeaderPtr) return 0;
     
-    for(size_t m = 0; m < cur_leader_ptr->group->members.size(); m++) {
-        Mob* m_ptr = cur_leader_ptr->group->members[m];
+    for(size_t m = 0; m < curLeaderPtr->group->members.size(); m++) {
+        Mob* m_ptr = curLeaderPtr->group->members[m];
         if(m_ptr->type->category->id != MOB_CATEGORY_PIKMIN) continue;
         if(filter && m_ptr->type != filter) continue;
         total++;
@@ -443,12 +443,12 @@ size_t GameplayState::getAmountOfGroupPikmin(const PikminType* filter) {
 size_t GameplayState::getAmountOfIdlePikmin(const PikminType* filter) {
     size_t total = 0;
     
-    for(size_t p = 0; p < mobs.pikmin_list.size(); p++) {
-        Pikmin* p_ptr = mobs.pikmin_list[p];
+    for(size_t p = 0; p < mobs.pikmin.size(); p++) {
+        Pikmin* p_ptr = mobs.pikmin[p];
         if(filter && p_ptr->type != filter) continue;
         if(
-            p_ptr->fsm.cur_state->id == PIKMIN_STATE_IDLING ||
-            p_ptr->fsm.cur_state->id == PIKMIN_STATE_IDLING_H
+            p_ptr->fsm.curState->id == PIKMIN_STATE_IDLING ||
+            p_ptr->fsm.curState->id == PIKMIN_STATE_IDLING_H
         ) {
             total++;
         }
@@ -473,10 +473,10 @@ long GameplayState::getAmountOfOnionPikmin(const PikminType* filter) {
         Onion* o_ptr = mobs.onions[o];
         for(
             size_t t = 0;
-            t < o_ptr->oni_type->nest->pik_types.size();
+            t < o_ptr->oniType->nest->pik_types.size();
             t++
         ) {
-            if(filter && o_ptr->oni_type->nest->pik_types[t] != filter) {
+            if(filter && o_ptr->oniType->nest->pik_types[t] != filter) {
                 continue;
             }
             for(size_t m = 0; m < N_MATURITIES; m++) {
@@ -491,10 +491,10 @@ long GameplayState::getAmountOfOnionPikmin(const PikminType* filter) {
         if(!s_ptr->nest) continue;
         for(
             size_t t = 0;
-            t < s_ptr->shi_type->nest->pik_types.size();
+            t < s_ptr->shiType->nest->pik_types.size();
             t++
         ) {
-            if(filter && s_ptr->shi_type->nest->pik_types[t] != filter) {
+            if(filter && s_ptr->shiType->nest->pik_types[t] != filter) {
                 continue;
             }
             for(size_t m = 0; m < N_MATURITIES; m++) {
@@ -543,7 +543,7 @@ long GameplayState::getAmountOfTotalPikmin(const PikminType* filter) {
 Mob* GameplayState::getClosestGroupMember(
     const SubgroupType* type, bool* distant
 ) {
-    if(!cur_leader_ptr) return nullptr;
+    if(!curLeaderPtr) return nullptr;
     
     Mob* result = nullptr;
     
@@ -557,11 +557,11 @@ Mob* GameplayState::getClosestGroupMember(
     }
     
     //Fetch the closest, for each maturity.
-    size_t n_members = cur_leader_ptr->group->members.size();
+    size_t n_members = curLeaderPtr->group->members.size();
     for(size_t m = 0; m < n_members; m++) {
     
-        Mob* member_ptr = cur_leader_ptr->group->members[m];
-        if(member_ptr->subgroup_type_ptr != type) {
+        Mob* member_ptr = curLeaderPtr->group->members[m];
+        if(member_ptr->subgroupTypePtr != type) {
             continue;
         }
         
@@ -569,14 +569,14 @@ Mob* GameplayState::getClosestGroupMember(
         if(member_ptr->type->category->id == MOB_CATEGORY_PIKMIN) {
             maturity = ((Pikmin*) member_ptr)->maturity;
         }
-        bool can_grab = cur_leader_ptr->canGrabGroupMember(member_ptr);
+        bool can_grab = curLeaderPtr->canGrabGroupMember(member_ptr);
         
         if(!can_grab && can_grab_closest[maturity]) {
             //Skip if we'd replace a grabbable Pikmin with a non-grabbable one.
             continue;
         }
         
-        Distance d(cur_leader_ptr->pos, member_ptr->pos);
+        Distance d(curLeaderPtr->pos, member_ptr->pos);
         
         if(
             (can_grab && !can_grab_closest[maturity]) ||
@@ -636,10 +636,10 @@ string GameplayState::getName() const {
  */
 void GameplayState::handleAllegroEvent(ALLEGRO_EVENT &ev) {
     //Handle the Onion menu first so events don't bleed from gameplay to it.
-    if(onion_menu) {
-        onion_menu->handleAllegroEvent(ev);
-    } else if(pause_menu) {
-        pause_menu->handleAllegroEvent(ev);
+    if(onionMenu) {
+        onionMenu->handleAllegroEvent(ev);
+    } else if(pauseMenu) {
+        pauseMenu->handleAllegroEvent(ev);
     }
     
     if(ev.type == ALLEGRO_EVENT_DISPLAY_SWITCH_OUT) {
@@ -669,14 +669,14 @@ void GameplayState::initHud() {
 void GameplayState::leave(const GAMEPLAY_LEAVE_TARGET target) {
     if(unloading) return;
     
-    if(game.perf_mon) {
+    if(game.perfMon) {
         //Don't register the final frame, since it won't draw anything.
-        game.perf_mon->setPaused(true);
+        game.perfMon->setPaused(true);
     }
     
     game.audio.stopAllPlaybacks();
     game.audio.setCurrentSong("");
-    boss_music_state = BOSS_MUSIC_STATE_NEVER_PLAYED;
+    bossMusicState = BOSS_MUSIC_STATE_NEVER_PLAYED;
     saveStatistics();
     
     switch(target) {
@@ -684,20 +684,20 @@ void GameplayState::leave(const GAMEPLAY_LEAVE_TARGET target) {
         game.changeState(game.states.gameplay);
         break;
     } case GAMEPLAY_LEAVE_TARGET_END: {
-        went_to_results = true;
+        wentToResults = true;
         //Change state, but don't unload this one, since the player
         //may pick the "keep playing" option in the results screen.
         game.changeState(game.states.results, false);
         break;
     } case GAMEPLAY_LEAVE_TARGET_AREA_SELECT: {
-        if(game.states.area_ed->quick_play_area_path.empty()) {
-            game.states.annex_screen->area_menu_area_type =
-                game.cur_area_data->type;
-            game.states.annex_screen->menu_to_load =
+        if(game.states.areaEd->quickPlayAreaPath.empty()) {
+            game.states.annexScreen->areaMenuAreaType =
+                game.curAreaData->type;
+            game.states.annexScreen->menuToLoad =
                 ANNEX_SCREEN_MENU_AREA_SELECTION;
-            game.changeState(game.states.annex_screen);
+            game.changeState(game.states.annexScreen);
         } else {
-            game.changeState(game.states.area_ed);
+            game.changeState(game.states.areaEd);
         }
         break;
     }
@@ -709,68 +709,68 @@ void GameplayState::leave(const GAMEPLAY_LEAVE_TARGET target) {
  * @brief Loads the "gameplay" state into memory.
  */
 void GameplayState::load() {
-    if(game.perf_mon) {
-        game.perf_mon->reset();
-        game.perf_mon->enterState(PERF_MON_STATE_LOADING);
-        game.perf_mon->setPaused(false);
+    if(game.perfMon) {
+        game.perfMon->reset();
+        game.perfMon->enterState(PERF_MON_STATE_LOADING);
+        game.perfMon->setPaused(false);
     }
     
     loading = true;
     game.errors.prepareAreaLoad();
-    went_to_results = false;
+    wentToResults = false;
     
     drawLoadingScreen("", "", 1.0f);
     al_flip_display();
     
-    game.statistics.area_entries++;
+    game.statistics.areaEntries++;
     
     //Game content.
     loadGameContent();
     
     //Initialize some important things.
-    for(size_t s = 0; s < game.content.spray_types.list.size(); s++) {
-        spray_stats.push_back(SprayStats());
+    for(size_t s = 0; s < game.content.sprayTypes.list.size(); s++) {
+        sprayStats.push_back(SprayStats());
     }
     
-    area_time_passed = 0.0f;
-    gameplay_time_passed = 0.0f;
-    game.maker_tools.resetForGameplay();
-    area_title_fade_timer.start();
+    areaTimePassed = 0.0f;
+    gameplayTimePassed = 0.0f;
+    game.makerTools.resetForGameplay();
+    areaTitleFadeTimer.start();
     
-    after_hours = false;
-    pikmin_born = 0;
-    pikmin_deaths = 0;
-    treasures_collected = 0;
-    treasures_total = 0;
-    goal_treasures_collected = 0;
-    goal_treasures_total = 0;
-    treasure_points_collected = 0;
-    treasure_points_total = 0;
-    enemy_deaths = 0;
-    enemy_total = 0;
-    enemy_points_collected = 0;
-    enemy_points_total = 0;
-    cur_leaders_in_mission_exit = 0;
-    mission_required_mob_amount = 0;
-    mission_score = 0;
-    old_mission_score = 0;
-    old_mission_goal_cur = 0;
-    old_mission_fail_1_cur = 0;
-    old_mission_fail_2_cur = 0;
-    nr_living_leaders = 0;
-    leaders_kod = 0;
+    afterHours = false;
+    pikminBorn = 0;
+    pikminDeaths = 0;
+    treasuresCollected = 0;
+    treasuresTotal = 0;
+    goalTreasuresCollected = 0;
+    goalTreasuresTotal = 0;
+    treasurePointsCollected = 0;
+    treasurePointsTotal = 0;
+    enemyDeaths = 0;
+    enemyTotal = 0;
+    enemyPointsCollected = 0;
+    enemyPointsTotal = 0;
+    curLeadersInMissionExit = 0;
+    missionRequiredMobAmount = 0;
+    missionScore = 0;
+    oldMissionScore = 0;
+    oldMissionGoalCur = 0;
+    oldMissionFail1Cur = 0;
+    oldMissionFail2Cur = 0;
+    nrLivingLeaders = 0;
+    leadersKod = 0;
     
-    game.framerate_last_avg_point = 0;
-    game.framerate_history.clear();
+    game.framerateLastAvgPoint = 0;
+    game.framerateHistory.clear();
     
-    boss_music_state = BOSS_MUSIC_STATE_NEVER_PLAYED;
+    bossMusicState = BOSS_MUSIC_STATE_NEVER_PLAYED;
     game.audio.setCurrentSong("");
-    game.audio.on_song_finished = [this] (const string &name) {
-        if(name == game.sys_content_names.sng_boss_victory) {
-            switch(boss_music_state) {
+    game.audio.onSongFinished = [this] (const string &name) {
+        if(name == game.sysContentNames.sngBossVictory) {
+            switch(bossMusicState) {
             case BOSS_MUSIC_STATE_VICTORY: {
-                game.audio.setCurrentSong(game.cur_area_data->song_name, false);
-                boss_music_state = BOSS_MUSIC_STATE_PAUSED;
+                game.audio.setCurrentSong(game.curAreaData->songName, false);
+                bossMusicState = BOSS_MUSIC_STATE_PAUSED;
             } default: {
                 break;
             }
@@ -779,16 +779,16 @@ void GameplayState::load() {
     };
     
     auto spark_anim_db_it =
-        game.content.global_anim_dbs.list.find(
-            game.sys_content_names.anim_sparks
+        game.content.globalAnimDbs.list.find(
+            game.sysContentNames.anmSparks
         );
-    if(spark_anim_db_it == game.content.global_anim_dbs.list.end()) {
+    if(spark_anim_db_it == game.content.globalAnimDbs.list.end()) {
         game.errors.report(
-            "Unknown global animation \"" + game.sys_content_names.anim_sparks +
+            "Unknown global animation \"" + game.sysContentNames.anmSparks +
             "\" when trying to load the leader damage sparks!"
         );
     } else {
-        game.sys_content.anim_sparks.initToFirstAnim(
+        game.sysContent.anmSparks.initToFirstAnim(
             &spark_anim_db_it->second
         );
     }
@@ -796,43 +796,43 @@ void GameplayState::load() {
     //Load the area.
     if(
         !game.content.loadAreaAsCurrent(
-            path_of_area_to_load, nullptr,
+            pathOfAreaToLoad, nullptr,
             CONTENT_LOAD_LEVEL_FULL, false
         )
     ) {
-        game.changeState(game.states.title_screen, true);
+        game.changeState(game.states.titleScreen, true);
         return;
     }
     
-    if(!game.cur_area_data->weather_condition.blackout_strength.empty()) {
-        lightmap_bmp = al_create_bitmap(game.win_w, game.win_h);
+    if(!game.curAreaData->weatherCondition.blackoutStrength.empty()) {
+        lightmapBmp = al_create_bitmap(game.winW, game.winH);
     }
-    if(!game.cur_area_data->weather_condition.fog_color.empty()) {
-        bmp_fog =
+    if(!game.curAreaData->weatherCondition.fogColor.empty()) {
+        bmpFog =
             generateFogBitmap(
-                game.cur_area_data->weather_condition.fog_near,
-                game.cur_area_data->weather_condition.fog_far
+                game.curAreaData->weatherCondition.fogNear,
+                game.curAreaData->weatherCondition.fogFar
             );
     }
     
     //Generate mobs.
-    next_mob_id = 0;
-    if(game.perf_mon) {
-        game.perf_mon->startMeasurement("Object generation");
+    nextMobId = 0;
+    if(game.perfMon) {
+        game.perfMon->startMeasurement("Object generation");
     }
     
     vector<Mob*> mobs_per_gen;
     
-    for(size_t m = 0; m < game.cur_area_data->mob_generators.size(); m++) {
-        MobGen* m_ptr = game.cur_area_data->mob_generators[m];
+    for(size_t m = 0; m < game.curAreaData->mobGenerators.size(); m++) {
+        MobGen* m_ptr = game.curAreaData->mobGenerators[m];
         bool valid = true;
         
         if(!m_ptr->type) {
             valid = false;
         } else if(
             m_ptr->type->category->id == MOB_CATEGORY_PIKMIN &&
-            game.states.gameplay->mobs.pikmin_list.size() >=
-            game.config.rules.max_pikmin_in_field
+            game.states.gameplay->mobs.pikmin.size() >=
+            game.config.rules.maxPikminInField
         ) {
             valid = false;
         }
@@ -854,31 +854,31 @@ void GameplayState::load() {
     //does not necessarily correspond to mob index X. Hence, we need
     //to keep the pointers to the created mobs in a vector, and use this
     //to link the mobs by (generator) index.
-    for(size_t m = 0; m < game.cur_area_data->mob_generators.size(); m++) {
-        MobGen* gen_ptr = game.cur_area_data->mob_generators[m];
+    for(size_t m = 0; m < game.curAreaData->mobGenerators.size(); m++) {
+        MobGen* gen_ptr = game.curAreaData->mobGenerators[m];
         Mob* mob_ptr = mobs_per_gen[m];
         if(!mob_ptr) continue;
         
-        for(size_t l = 0; l < gen_ptr->link_idxs.size(); l++) {
-            size_t link_target_gen_idx = gen_ptr->link_idxs[l];
+        for(size_t l = 0; l < gen_ptr->linkIdxs.size(); l++) {
+            size_t link_target_gen_idx = gen_ptr->linkIdxs[l];
             Mob* link_target_mob_ptr = mobs_per_gen[link_target_gen_idx];
             mob_ptr->links.push_back(link_target_mob_ptr);
         }
     }
     
     //Mobs stored inside other. Same logic as mob links.
-    for(size_t m = 0; m < game.cur_area_data->mob_generators.size(); m++) {
-        MobGen* holdee_gen_ptr = game.cur_area_data->mob_generators[m];
-        if(holdee_gen_ptr->stored_inside == INVALID) continue;
+    for(size_t m = 0; m < game.curAreaData->mobGenerators.size(); m++) {
+        MobGen* holdee_gen_ptr = game.curAreaData->mobGenerators[m];
+        if(holdee_gen_ptr->storedInside == INVALID) continue;
         Mob* holdee_ptr = mobs_per_gen[m];
-        Mob* holder_mob_ptr = mobs_per_gen[holdee_gen_ptr->stored_inside];
+        Mob* holder_mob_ptr = mobs_per_gen[holdee_gen_ptr->storedInside];
         holder_mob_ptr->storeMobInside(holdee_ptr);
     }
     
     //Save each path stop's sector.
-    for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
-        game.cur_area_data->path_stops[s]->sector_ptr =
-            getSector(game.cur_area_data->path_stops[s]->pos, nullptr, true);
+    for(size_t s = 0; s < game.curAreaData->pathStops.size(); s++) {
+        game.curAreaData->pathStops[s]->sectorPtr =
+            getSector(game.curAreaData->pathStops[s]->pos, nullptr, true);
     }
     
     //Sort leaders.
@@ -888,51 +888,51 @@ void GameplayState::load() {
         size_t priority_l1 =
         find(
             game.config.leaders.order.begin(),
-            game.config.leaders.order.end(), l1->lea_type
+            game.config.leaders.order.end(), l1->leaType
         ) -
         game.config.leaders.order.begin();
         size_t priority_l2 =
         find(
             game.config.leaders.order.begin(),
-            game.config.leaders.order.end(), l2->lea_type
+            game.config.leaders.order.end(), l2->leaType
         ) -
         game.config.leaders.order.begin();
         return priority_l1 < priority_l2;
     }
     );
     
-    if(game.perf_mon) {
-        game.perf_mon->finishMeasurement();
+    if(game.perfMon) {
+        game.perfMon->finishMeasurement();
     }
     
     //In case a leader is stored in another mob,
     //update the available list.
     updateAvailableLeaders();
     
-    cur_leader_idx = INVALID;
-    cur_leader_ptr = nullptr;
-    starting_nr_of_leaders = mobs.leaders.size();
+    curLeaderIdx = INVALID;
+    curLeaderPtr = nullptr;
+    startingNrOfLeaders = mobs.leaders.size();
     
     if(!mobs.leaders.empty()) {
         changeToNextLeader(true, false, false);
     }
     
-    if(cur_leader_ptr) {
-        game.cam.setPos(cur_leader_ptr->pos);
+    if(curLeaderPtr) {
+        game.cam.setPos(curLeaderPtr->pos);
     } else {
         game.cam.setPos(Point());
     }
-    game.cam.set_zoom(game.options.advanced.zoom_mid_level);
+    game.cam.set_zoom(game.options.advanced.zoomMidLevel);
     
     //Memorize mobs required by the mission.
-    if(game.cur_area_data->type == AREA_TYPE_MISSION) {
+    if(game.curAreaData->type == AREA_TYPE_MISSION) {
         unordered_set<size_t> mission_required_mob_gen_idxs;
         
-        if(game.cur_area_data->mission.goal_all_mobs) {
+        if(game.curAreaData->mission.goalAllMobs) {
             for(size_t m = 0; m < mobs_per_gen.size(); m++) {
                 if(
                     mobs_per_gen[m] &&
-                    game.mission_goals[game.cur_area_data->mission.goal]->
+                    game.missionGoals[game.curAreaData->mission.goal]->
                     isMobApplicable(mobs_per_gen[m]->type)
                 ) {
                     mission_required_mob_gen_idxs.insert(m);
@@ -941,15 +941,15 @@ void GameplayState::load() {
             
         } else {
             mission_required_mob_gen_idxs =
-                game.cur_area_data->mission.goal_mob_idxs;
+                game.curAreaData->mission.goalMobIdxs;
         }
         
         for(size_t i : mission_required_mob_gen_idxs) {
-            mission_remaining_mob_ids.insert(mobs_per_gen[i]->id);
+            missionRemainingMobIds.insert(mobs_per_gen[i]->id);
         }
-        mission_required_mob_amount = mission_remaining_mob_ids.size();
+        missionRequiredMobAmount = missionRemainingMobIds.size();
         
-        if(game.cur_area_data->mission.goal == MISSION_GOAL_COLLECT_TREASURE) {
+        if(game.curAreaData->mission.goal == MISSION_GOAL_COLLECT_TREASURE) {
             //Since the collect treasure goal can accept piles and resources
             //meant to add treasure points, we'll need some special treatment.
             for(size_t i : mission_required_mob_gen_idxs) {
@@ -958,9 +958,9 @@ void GameplayState::load() {
                     MOB_CATEGORY_PILES
                 ) {
                     Pile* pil_ptr = (Pile*) mobs_per_gen[i];
-                    goal_treasures_total += pil_ptr->amount;
+                    goalTreasuresTotal += pil_ptr->amount;
                 } else {
-                    goal_treasures_total++;
+                    goalTreasuresTotal++;
                 }
             }
         }
@@ -968,129 +968,129 @@ void GameplayState::load() {
     
     //Figure out the total amount of treasures and their points.
     for(size_t t = 0; t < mobs.treasures.size(); t++) {
-        treasures_total++;
-        treasure_points_total +=
-            mobs.treasures[t]->tre_type->points;
+        treasuresTotal++;
+        treasurePointsTotal +=
+            mobs.treasures[t]->treType->points;
     }
     for(size_t p = 0; p < mobs.piles.size(); p++) {
         Pile* p_ptr = mobs.piles[p];
-        ResourceType* res_type = p_ptr->pil_type->contents;
+        ResourceType* res_type = p_ptr->pilType->contents;
         if(
-            res_type->delivery_result !=
+            res_type->deliveryResult !=
             RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS
         ) {
             continue;
         }
-        treasures_total += p_ptr->amount;
-        treasure_points_total +=
-            p_ptr->amount * res_type->point_amount;
+        treasuresTotal += p_ptr->amount;
+        treasurePointsTotal +=
+            p_ptr->amount * res_type->pointAmount;
     }
     for(size_t r = 0; r < mobs.resources.size(); r++) {
         Resource* r_ptr = mobs.resources[r];
         if(
-            r_ptr->res_type->delivery_result !=
+            r_ptr->resType->deliveryResult !=
             RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS
         ) {
             continue;
         }
-        treasures_total++;
-        treasure_points_total += r_ptr->res_type->point_amount;
+        treasuresTotal++;
+        treasurePointsTotal += r_ptr->resType->pointAmount;
     }
     
     //Figure out the total amount of enemies and their points.
-    enemy_total = mobs.enemies.size();
+    enemyTotal = mobs.enemies.size();
     for(size_t e = 0; e < mobs.enemies.size(); e++) {
-        enemy_points_total += mobs.enemies[e]->ene_type->points;
+        enemyPointsTotal += mobs.enemies[e]->eneType->points;
     }
     
     //Initialize the area's active cells.
     float area_width =
-        game.cur_area_data->bmap.n_cols * GEOMETRY::BLOCKMAP_BLOCK_SIZE;
+        game.curAreaData->bmap.nCols * GEOMETRY::BLOCKMAP_BLOCK_SIZE;
     float area_height =
-        game.cur_area_data->bmap.n_rows * GEOMETRY::BLOCKMAP_BLOCK_SIZE;
+        game.curAreaData->bmap.nRows * GEOMETRY::BLOCKMAP_BLOCK_SIZE;
     size_t nr_area_cell_cols =
         ceil(area_width / GEOMETRY::AREA_CELL_SIZE) + 1;
     size_t nr_area_cell_rows =
         ceil(area_height / GEOMETRY::AREA_CELL_SIZE) + 1;
         
-    area_active_cells.clear();
-    area_active_cells.assign(
+    areaActiveCells.clear();
+    areaActiveCells.assign(
         nr_area_cell_cols, vector<bool>(nr_area_cell_rows, false)
     );
     
     //Initialize some other things.
-    path_mgr.handleAreaLoad();
+    pathMgr.handleAreaLoad();
     
     initHud();
     
-    day_minutes = game.cur_area_data->day_time_start;
+    dayMinutes = game.curAreaData->dayTimeStart;
     
     map<string, string> spray_strs =
-        getVarMap(game.cur_area_data->spray_amounts);
+        getVarMap(game.curAreaData->sprayAmounts);
         
     for(auto &s : spray_strs) {
         size_t spray_idx = 0;
-        for(; spray_idx < game.config.misc.spray_order.size(); spray_idx++) {
-            if(game.config.misc.spray_order[spray_idx]->manifest->internal_name == s.first) {
+        for(; spray_idx < game.config.misc.sprayOrder.size(); spray_idx++) {
+            if(game.config.misc.sprayOrder[spray_idx]->manifest->internalName == s.first) {
                 break;
             }
         }
-        if(spray_idx == game.content.spray_types.list.size()) {
+        if(spray_idx == game.content.sprayTypes.list.size()) {
             game.errors.report(
                 "Unknown spray type \"" + s.first + "\", "
                 "while trying to set the starting number of sprays for "
-                "area \"" + game.cur_area_data->name + "\"!", nullptr
+                "area \"" + game.curAreaData->name + "\"!", nullptr
             );
             continue;
         }
         
-        spray_stats[spray_idx].nr_sprays = s2i(s.second);
+        sprayStats[spray_idx].nrSprays = s2i(s.second);
     }
     
     //Effect caches.
-    game.liquid_limit_effect_caches.clear();
-    game.liquid_limit_effect_caches.insert(
-        game.liquid_limit_effect_caches.begin(),
-        game.cur_area_data->edges.size(),
+    game.liquidLimitEffectCaches.clear();
+    game.liquidLimitEffectCaches.insert(
+        game.liquidLimitEffectCaches.begin(),
+        game.curAreaData->edges.size(),
         EdgeOffsetCache()
     );
     updateOffsetEffectCaches(
-        game.liquid_limit_effect_caches,
+        game.liquidLimitEffectCaches,
         unordered_set<Vertex*>(
-            game.cur_area_data->vertexes.begin(),
-            game.cur_area_data->vertexes.end()
+            game.curAreaData->vertexes.begin(),
+            game.curAreaData->vertexes.end()
         ),
         doesEdgeHaveLiquidLimit,
         getLiquidLimitLength,
         getLiquidLimitColor
     );
-    game.wall_smoothing_effect_caches.clear();
-    game.wall_smoothing_effect_caches.insert(
-        game.wall_smoothing_effect_caches.begin(),
-        game.cur_area_data->edges.size(),
+    game.wallSmoothingEffectCaches.clear();
+    game.wallSmoothingEffectCaches.insert(
+        game.wallSmoothingEffectCaches.begin(),
+        game.curAreaData->edges.size(),
         EdgeOffsetCache()
     );
     updateOffsetEffectCaches(
-        game.wall_smoothing_effect_caches,
+        game.wallSmoothingEffectCaches,
         unordered_set<Vertex*>(
-            game.cur_area_data->vertexes.begin(),
-            game.cur_area_data->vertexes.end()
+            game.curAreaData->vertexes.begin(),
+            game.curAreaData->vertexes.end()
         ),
         doesEdgeHaveLedgeSmoothing,
         getLedgeSmoothingLength,
         getLedgeSmoothingColor
     );
-    game.wall_shadow_effect_caches.clear();
-    game.wall_shadow_effect_caches.insert(
-        game.wall_shadow_effect_caches.begin(),
-        game.cur_area_data->edges.size(),
+    game.wallShadowEffectCaches.clear();
+    game.wallShadowEffectCaches.insert(
+        game.wallShadowEffectCaches.begin(),
+        game.curAreaData->edges.size(),
         EdgeOffsetCache()
     );
     updateOffsetEffectCaches(
-        game.wall_shadow_effect_caches,
+        game.wallShadowEffectCaches,
         unordered_set<Vertex*>(
-            game.cur_area_data->vertexes.begin(),
-            game.cur_area_data->vertexes.end()
+            game.curAreaData->vertexes.begin(),
+            game.curAreaData->vertexes.end()
         ),
         doesEdgeHaveWallShadow,
         getWallShadowLength,
@@ -1099,26 +1099,26 @@ void GameplayState::load() {
     
     //TODO Uncomment this when replays are implemented.
     /*
-    replay_timer = timer(
+    replayTimer = timer(
         GAMEPLAY::REPLAY_SAVE_FREQUENCY,
     [this] () {
-        this->replay_timer.start();
+        this->replayTimer.start();
         vector<mob*> obstacles; //TODO
-        gameplay_replay.addState(
+        gameplayReplay.addState(
             leaders, pikmin_list, enemies, treasures, onions, obstacles,
-            cur_leader_idx
+            curLeaderIdx
         );
     }
     );
-    replay_timer.start();
-    gameplay_replay.clear();*/
+    replayTimer.start();
+    gameplayReplay.clear();*/
     
     //Report any errors with the loading process.
     game.errors.reportAreaLoadErrors();
     
-    if(game.perf_mon) {
-        game.perf_mon->setAreaName(game.cur_area_data->name);
-        game.perf_mon->leaveState();
+    if(game.perfMon) {
+        game.perfMon->setAreaName(game.curAreaData->name);
+        game.perfMon->leaveState();
     }
     
     enter();
@@ -1166,25 +1166,25 @@ void GameplayState::loadGameContent() {
     
     //Register leader sub-group types.
     for(size_t p = 0; p < game.config.pikmin.order.size(); p++) {
-        subgroup_types.registerType(
+        subgroupTypes.registerType(
             SUBGROUP_TYPE_CATEGORY_PIKMIN, game.config.pikmin.order[p],
-            game.config.pikmin.order[p]->bmp_icon
+            game.config.pikmin.order[p]->bmpIcon
         );
     }
     
     vector<string> tool_types_vector;
-    for(auto &t : game.content.mob_types.list.tool) {
+    for(auto &t : game.content.mobTypes.list.tool) {
         tool_types_vector.push_back(t.first);
     }
     sort(tool_types_vector.begin(), tool_types_vector.end());
     for(size_t t = 0; t < tool_types_vector.size(); t++) {
-        ToolType* tt_ptr = game.content.mob_types.list.tool[tool_types_vector[t]];
-        subgroup_types.registerType(
-            SUBGROUP_TYPE_CATEGORY_TOOL, tt_ptr, tt_ptr->bmp_icon
+        ToolType* tt_ptr = game.content.mobTypes.list.tool[tool_types_vector[t]];
+        subgroupTypes.registerType(
+            SUBGROUP_TYPE_CATEGORY_TOOL, tt_ptr, tt_ptr->bmpIcon
         );
     }
     
-    subgroup_types.registerType(SUBGROUP_TYPE_CATEGORY_LEADER);
+    subgroupTypes.registerType(SUBGROUP_TYPE_CATEGORY_LEADER);
 }
 
 
@@ -1194,7 +1194,7 @@ void GameplayState::loadGameContent() {
  * @param target Where to leave to.
  */
 void GameplayState::startLeaving(const GAMEPLAY_LEAVE_TARGET target) {
-    game.fade_mgr.startFade( false, [this, target] () { leave(target); });
+    game.fadeMgr.startFade( false, [this, target] () { leave(target); });
 }
 
 
@@ -1210,13 +1210,13 @@ void GameplayState::unload() {
         hud = nullptr;
     }
     
-    cur_leader_idx = INVALID;
-    cur_leader_ptr = nullptr;
+    curLeaderIdx = INVALID;
+    curLeaderPtr = nullptr;
     
-    close_to_interactable_to_use = nullptr;
-    close_to_nest_to_open = nullptr;
-    close_to_pikmin_to_pluck = nullptr;
-    close_to_ship_to_heal = nullptr;
+    closeToInteractableToUse = nullptr;
+    closeToNestToOpen = nullptr;
+    closeToPikminToPluck = nullptr;
+    closeToShipToHeal = nullptr;
     
     game.cam.setPos(Point());
     game.cam.set_zoom(1.0f);
@@ -1225,40 +1225,40 @@ void GameplayState::unload() {
         deleteMob(*mobs.all.begin(), true);
     }
     
-    if(lightmap_bmp) {
-        al_destroy_bitmap(lightmap_bmp);
-        lightmap_bmp = nullptr;
+    if(lightmapBmp) {
+        al_destroy_bitmap(lightmapBmp);
+        lightmapBmp = nullptr;
     }
     
-    mission_remaining_mob_ids.clear();
-    path_mgr.clear();
-    spray_stats.clear();
+    missionRemainingMobIds.clear();
+    pathMgr.clear();
+    sprayStats.clear();
     particles.clear();
     
-    leader_movement.reset(); //TODO replace with a better solution.
+    leaderMovement.reset(); //TODO replace with a better solution.
     
-    game.sys_content.anim_sparks.clear();
+    game.sysContent.anmSparks.clear();
     unloadGameContent();
     game.content.unloadCurrentArea(CONTENT_LOAD_LEVEL_FULL);
     
-    if(bmp_fog) {
-        al_destroy_bitmap(bmp_fog);
-        bmp_fog = nullptr;
+    if(bmpFog) {
+        al_destroy_bitmap(bmpFog);
+        bmpFog = nullptr;
     }
     
-    if(msg_box) {
-        delete msg_box;
-        msg_box = nullptr;
+    if(msgBox) {
+        delete msgBox;
+        msgBox = nullptr;
     }
-    if(onion_menu) {
-        delete onion_menu;
-        onion_menu = nullptr;
+    if(onionMenu) {
+        delete onionMenu;
+        onionMenu = nullptr;
     }
-    if(pause_menu) {
-        delete pause_menu;
-        pause_menu = nullptr;
+    if(pauseMenu) {
+        delete pauseMenu;
+        pauseMenu = nullptr;
     }
-    game.maker_tools.info_print_text.clear();
+    game.makerTools.infoPrintText.clear();
     
     unloading = false;
 }
@@ -1268,7 +1268,7 @@ void GameplayState::unload() {
  * @brief Unloads loaded game content.
  */
 void GameplayState::unloadGameContent() {
-    subgroup_types.clear();
+    subgroupTypes.clear();
     
     game.content.unloadAll(
     vector<CONTENT_TYPE> {
@@ -1294,15 +1294,15 @@ void GameplayState::unloadGameContent() {
  */
 void GameplayState::updateAvailableLeaders() {
     //Build the list.
-    available_leaders.clear();
+    availableLeaders.clear();
     for(size_t l = 0; l < mobs.leaders.size(); l++) {
         if(mobs.leaders[l]->health <= 0.0f) continue;
-        if(mobs.leaders[l]->to_delete) continue;
+        if(mobs.leaders[l]->toDelete) continue;
         if(mobs.leaders[l]->isStoredInsideMob()) continue;
-        available_leaders.push_back(mobs.leaders[l]);
+        availableLeaders.push_back(mobs.leaders[l]);
     }
     
-    if(available_leaders.empty()) {
+    if(availableLeaders.empty()) {
         return;
     }
     
@@ -1310,7 +1310,7 @@ void GameplayState::updateAvailableLeaders() {
     //If there are multiple leaders of the same type, leaders with a lower
     //mob index number come first.
     std::sort(
-        available_leaders.begin(), available_leaders.end(),
+        availableLeaders.begin(), availableLeaders.end(),
     [] (const Leader * l1, const Leader * l2) -> bool {
         size_t l1_order_idx = INVALID;
         size_t l2_order_idx = INVALID;
@@ -1326,9 +1326,9 @@ void GameplayState::updateAvailableLeaders() {
     );
     
     //Update the current leader's index, which could've changed.
-    for(size_t l = 0; l < available_leaders.size(); l++) {
-        if(available_leaders[l] == cur_leader_ptr) {
-            cur_leader_idx = l;
+    for(size_t l = 0; l < availableLeaders.size(); l++) {
+        if(availableLeaders[l] == curLeaderPtr) {
+            curLeaderIdx = l;
             break;
         }
     }
@@ -1346,44 +1346,44 @@ void GameplayState::updateAvailableLeaders() {
  * Sets to nullptr if there is no member of that subgroup available.
  */
 void GameplayState::updateClosestGroupMembers() {
-    closest_group_member[BUBBLE_RELATION_PREVIOUS] = nullptr;
-    closest_group_member[BUBBLE_RELATION_CURRENT] = nullptr;
-    closest_group_member[BUBBLE_RELATION_NEXT] = nullptr;
-    closest_group_member_distant = false;
+    closestGroupMember[BUBBLE_RELATION_PREVIOUS] = nullptr;
+    closestGroupMember[BUBBLE_RELATION_CURRENT] = nullptr;
+    closestGroupMember[BUBBLE_RELATION_NEXT] = nullptr;
+    closestGroupMemberDistant = false;
     
-    if(!cur_leader_ptr) return;
-    if(cur_leader_ptr->group->members.empty()) {
-        cur_leader_ptr->updateThrowVariables();
+    if(!curLeaderPtr) return;
+    if(curLeaderPtr->group->members.empty()) {
+        curLeaderPtr->updateThrowVariables();
         return;
     }
     
     //Get the closest group members for the three relevant subgroup types.
     SubgroupType* prev_type;
-    cur_leader_ptr->group->getNextStandbyType(true, &prev_type);
+    curLeaderPtr->group->getNextStandbyType(true, &prev_type);
     
     if(prev_type) {
-        closest_group_member[BUBBLE_RELATION_PREVIOUS] =
+        closestGroupMember[BUBBLE_RELATION_PREVIOUS] =
             getClosestGroupMember(prev_type);
     }
     
-    if(cur_leader_ptr->group->cur_standby_type) {
-        closest_group_member[BUBBLE_RELATION_CURRENT] =
+    if(curLeaderPtr->group->curStandbyType) {
+        closestGroupMember[BUBBLE_RELATION_CURRENT] =
             getClosestGroupMember(
-                cur_leader_ptr->group->cur_standby_type,
-                &closest_group_member_distant
+                curLeaderPtr->group->curStandbyType,
+                &closestGroupMemberDistant
             );
     }
     
     SubgroupType* next_type;
-    cur_leader_ptr->group->getNextStandbyType(false, &next_type);
+    curLeaderPtr->group->getNextStandbyType(false, &next_type);
     
     if(next_type) {
-        closest_group_member[BUBBLE_RELATION_NEXT] =
+        closestGroupMember[BUBBLE_RELATION_NEXT] =
             getClosestGroupMember(next_type);
     }
     
-    if(closest_group_member[BUBBLE_RELATION_CURRENT]) {
-        cur_leader_ptr->updateThrowVariables();
+    if(closestGroupMember[BUBBLE_RELATION_CURRENT]) {
+        curLeaderPtr->updateThrowVariables();
     }
 }
 
@@ -1394,19 +1394,19 @@ void GameplayState::updateClosestGroupMembers() {
  */
 void GameplayState::updateTransformations() {
     //World coordinates to screen coordinates.
-    game.world_to_screen_transform = game.identity_transform;
+    game.worldToScreenTransform = game.identityTransform;
     al_translate_transform(
-        &game.world_to_screen_transform,
-        -game.cam.pos.x + game.win_w / 2.0 / game.cam.zoom,
-        -game.cam.pos.y + game.win_h / 2.0 / game.cam.zoom
+        &game.worldToScreenTransform,
+        -game.cam.pos.x + game.winW / 2.0 / game.cam.zoom,
+        -game.cam.pos.y + game.winH / 2.0 / game.cam.zoom
     );
     al_scale_transform(
-        &game.world_to_screen_transform, game.cam.zoom, game.cam.zoom
+        &game.worldToScreenTransform, game.cam.zoom, game.cam.zoom
     );
     
     //Screen coordinates to world coordinates.
-    game.screen_to_world_transform = game.world_to_screen_transform;
-    al_invert_transform(&game.screen_to_world_transform);
+    game.screenToWorldTransform = game.worldToScreenTransform;
+    al_invert_transform(&game.screenToWorldTransform);
 }
 
 
@@ -1418,7 +1418,7 @@ void GameplayState::updateTransformations() {
  * is talking.
  */
 GameplayMessageBox::GameplayMessageBox(const string &text, ALLEGRO_BITMAP* speaker_icon):
-    speaker_icon(speaker_icon) {
+    speakerIcon(speaker_icon) {
     
     string message = unescapeString(text);
     if(message.size() && message.back() == '\n') {
@@ -1426,21 +1426,21 @@ GameplayMessageBox::GameplayMessageBox(const string &text, ALLEGRO_BITMAP* speak
     }
     vector<StringToken> tokens = tokenizeString(message);
     setStringTokenWidths(
-        tokens, game.sys_content.fnt_standard, game.sys_content.fnt_slim,
-        al_get_font_line_height(game.sys_content.fnt_standard), true
+        tokens, game.sysContent.fntStandard, game.sysContent.fntSlim,
+        al_get_font_line_height(game.sysContent.fntStandard), true
     );
     
     vector<StringToken> line;
     for(size_t t = 0; t < tokens.size(); t++) {
         if(tokens[t].type == STRING_TOKEN_LINE_BREAK) {
-            tokens_per_line.push_back(line);
+            tokensPerLine.push_back(line);
             line.clear();
         } else {
             line.push_back(tokens[t]);
         }
     }
     if(!line.empty()) {
-        tokens_per_line.push_back(line);
+        tokensPerLine.push_back(line);
     }
 }
 
@@ -1451,30 +1451,30 @@ GameplayMessageBox::GameplayMessageBox(const string &text, ALLEGRO_BITMAP* speak
  */
 void GameplayMessageBox::advance() {
     if(
-        transition_timer > 0.0f ||
-        misinput_protection_timer > 0.0f ||
-        swipe_timer > 0.0f
+        transitionTimer > 0.0f ||
+        misinputProtectionTimer > 0.0f ||
+        swipeTimer > 0.0f
     ) return;
     
     size_t last_token = 0;
     for(size_t l = 0; l < 3; l++) {
-        size_t line_idx = cur_section * 3 + l;
-        if(line_idx >= tokens_per_line.size()) break;
-        last_token += tokens_per_line[line_idx].size();
+        size_t line_idx = curSection * 3 + l;
+        if(line_idx >= tokensPerLine.size()) break;
+        last_token += tokensPerLine[line_idx].size();
     }
     
-    if(cur_token >= last_token + 1) {
-        if(cur_section >= ceil(tokens_per_line.size() / 3.0f) - 1) {
+    if(curToken >= last_token + 1) {
+        if(curSection >= ceil(tokensPerLine.size() / 3.0f) - 1) {
             //End of the message. Start closing the message box.
             close();
         } else {
             //Start swiping to go to the next section.
-            swipe_timer = GAMEPLAY_MSG_BOX::TOKEN_SWIPE_DURATION;
+            swipeTimer = GAMEPLAY_MSG_BOX::TOKEN_SWIPE_DURATION;
         }
     } else {
         //Skip the text typing and show everything in this section.
-        skipped_at_token = cur_token;
-        cur_token = last_token + 1;
+        skippedAtToken = curToken;
+        curToken = last_token + 1;
     }
 }
 
@@ -1483,9 +1483,9 @@ void GameplayMessageBox::advance() {
  * @brief Closes the message box, even if it is still writing something.
  */
 void GameplayMessageBox::close() {
-    if(!transition_in && transition_timer > 0.0f) return;
-    transition_in = false;
-    transition_timer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
+    if(!transitionIn && transitionTimer > 0.0f) return;
+    transitionIn = false;
+    transitionTimer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
 }
 
 
@@ -1497,86 +1497,86 @@ void GameplayMessageBox::close() {
 void GameplayMessageBox::tick(float delta_t) {
     size_t tokens_in_section = 0;
     for(size_t l = 0; l < 3; l++) {
-        size_t line_idx = cur_section * 3 + l;
-        if(line_idx >= tokens_per_line.size()) break;
-        tokens_in_section += tokens_per_line[line_idx].size();
+        size_t line_idx = curSection * 3 + l;
+        if(line_idx >= tokensPerLine.size()) break;
+        tokens_in_section += tokensPerLine[line_idx].size();
     }
     
     //Animate the swipe animation.
-    if(swipe_timer > 0.0f) {
-        swipe_timer -= delta_t;
-        if(swipe_timer <= 0.0f) {
+    if(swipeTimer > 0.0f) {
+        swipeTimer -= delta_t;
+        if(swipeTimer <= 0.0f) {
             //Go to the next section.
-            swipe_timer = 0.0f;
-            cur_section++;
-            total_token_anim_time = 0.0f;
-            total_skip_anim_time = 0.0f;
-            skipped_at_token = INVALID;
+            swipeTimer = 0.0f;
+            curSection++;
+            totalTokenAnimTime = 0.0f;
+            totalSkipAnimTime = 0.0f;
+            skippedAtToken = INVALID;
         }
     }
     
-    if(!transition_in || transition_timer == 0.0f) {
+    if(!transitionIn || transitionTimer == 0.0f) {
     
         //Animate the text.
-        if(game.config.aesthetic_gen.g_msg_ch_interval == 0.0f) {
-            skipped_at_token = 0;
-            cur_token = tokens_in_section + 1;
+        if(game.config.aestheticGen.gameplayMsgChInterval == 0.0f) {
+            skippedAtToken = 0;
+            curToken = tokens_in_section + 1;
         } else {
-            total_token_anim_time += delta_t;
-            if(skipped_at_token == INVALID) {
-                size_t prev_token = cur_token;
-                cur_token =
-                    total_token_anim_time /
-                    game.config.aesthetic_gen.g_msg_ch_interval;
-                cur_token =
-                    std::min(cur_token, tokens_in_section + 1);
+            totalTokenAnimTime += delta_t;
+            if(skippedAtToken == INVALID) {
+                size_t prev_token = curToken;
+                curToken =
+                    totalTokenAnimTime /
+                    game.config.aestheticGen.gameplayMsgChInterval;
+                curToken =
+                    std::min(curToken, tokens_in_section + 1);
                 if(
-                    cur_token == tokens_in_section + 1 &&
-                    prev_token != cur_token
+                    curToken == tokens_in_section + 1 &&
+                    prev_token != curToken
                 ) {
                     //We've reached the last token organically.
                     //Start a misinput protection timer, so the player
                     //doesn't accidentally go to the next section when they
                     //were just trying to skip the text.
-                    misinput_protection_timer =
+                    misinputProtectionTimer =
                         GAMEPLAY_MSG_BOX::MISINPUT_PROTECTION_DURATION;
                 }
             } else {
-                total_skip_anim_time += delta_t;
+                totalSkipAnimTime += delta_t;
             }
         }
         
     }
     
     //Animate the transition.
-    transition_timer -= delta_t;
-    transition_timer = std::max(0.0f, transition_timer);
-    if(!transition_in && transition_timer == 0.0f) {
-        to_delete = true;
+    transitionTimer -= delta_t;
+    transitionTimer = std::max(0.0f, transitionTimer);
+    if(!transitionIn && transitionTimer == 0.0f) {
+        toDelete = true;
     }
     
     //Misinput protection logic.
-    misinput_protection_timer -= delta_t;
-    misinput_protection_timer = std::max(0.0f, misinput_protection_timer);
+    misinputProtectionTimer -= delta_t;
+    misinputProtectionTimer = std::max(0.0f, misinputProtectionTimer);
     
     //Button opacity logic.
     if(
-        transition_timer == 0.0f &&
-        misinput_protection_timer == 0.0f &&
-        swipe_timer == 0.0f &&
-        cur_token >= tokens_in_section + 1
+        transitionTimer == 0.0f &&
+        misinputProtectionTimer == 0.0f &&
+        swipeTimer == 0.0f &&
+        curToken >= tokens_in_section + 1
     ) {
-        advance_button_alpha =
+        advanceButtonAlpha =
             std::min(
-                advance_button_alpha +
+                advanceButtonAlpha +
                 GAMEPLAY_MSG_BOX::ADVANCE_BUTTON_FADE_SPEED * delta_t,
                 1.0f
             );
     } else {
-        advance_button_alpha =
+        advanceButtonAlpha =
             std::max(
                 0.0f,
-                advance_button_alpha -
+                advanceButtonAlpha -
                 GAMEPLAY_MSG_BOX::ADVANCE_BUTTON_FADE_SPEED * delta_t
             );
     }

@@ -24,8 +24,8 @@
  */
 Sector::~Sector() {
     for(size_t t = 0; t < 2; t++) {
-        if(texture_info.bitmap && texture_info.bitmap != game.bmp_error) {
-            game.content.bitmaps.list.free(texture_info.bmp_name);
+        if(textureInfo.bitmap && textureInfo.bitmap != game.bmpError) {
+            game.content.bitmaps.list.free(textureInfo.bmpName);
         }
     }
 }
@@ -44,7 +44,7 @@ void Sector::addEdge(Edge* e_ptr, size_t e_idx) {
         }
     }
     edges.push_back(e_ptr);
-    edge_idxs.push_back(e_idx);
+    edgeIdxs.push_back(e_idx);
 }
 
 
@@ -81,17 +81,17 @@ void Sector::calculateBoundingBox() {
  */
 void Sector::clone(Sector* destination) const {
     destination->type = type;
-    destination->is_bottomless_pit = is_bottomless_pit;
+    destination->isBottomlessPit = isBottomlessPit;
     destination->z = z;
     destination->tag = tag;
     destination->hazards = hazards;
-    destination->hazard_floor = hazard_floor;
-    destination->hazards_str = hazards_str;
+    destination->hazardFloor = hazardFloor;
+    destination->hazardsStr = hazardsStr;
     destination->brightness = brightness;
-    destination->texture_info.scale = texture_info.scale;
-    destination->texture_info.translation = texture_info.translation;
-    destination->texture_info.rot = texture_info.rot;
-    destination->texture_info.tint = texture_info.tint;
+    destination->textureInfo.scale = textureInfo.scale;
+    destination->textureInfo.translation = textureInfo.translation;
+    destination->textureInfo.rot = textureInfo.rot;
+    destination->textureInfo.tint = textureInfo.tint;
     destination->fade = fade;
 }
 
@@ -219,7 +219,7 @@ void Sector::getTextureMergeSectors(Sector** s1, Sector** s2) const {
     } else if(!texture_sector[1]) {
         //Nothing to draw.
         return;
-    } else if(texture_sector[1]->is_bottomless_pit) {
+    } else if(texture_sector[1]->isBottomlessPit) {
         std::swap(texture_sector[0], texture_sector[1]);
     }
     
@@ -278,7 +278,7 @@ void Sector::removeEdge(const Edge* e_ptr) {
     for(; i < edges.size(); i++) {
         if(edges[i] == e_ptr) {
             edges.erase(edges.begin() + i);
-            edge_idxs.erase(edge_idxs.begin() + i);
+            edgeIdxs.erase(edgeIdxs.begin() + i);
             return;
         }
     }
@@ -302,12 +302,12 @@ Sector* getSector(
 
     if(use_blockmap) {
     
-        size_t col = game.cur_area_data->bmap.getCol(p.x);
-        size_t row = game.cur_area_data->bmap.getRow(p.y);
+        size_t col = game.curAreaData->bmap.getCol(p.x);
+        size_t row = game.curAreaData->bmap.getRow(p.y);
         if(col == INVALID || row == INVALID) return nullptr;
         
         unordered_set<Sector*>* sectors =
-            &game.cur_area_data->bmap.sectors[col][row];
+            &game.curAreaData->bmap.sectors[col][row];
             
         if(sectors->size() == 1) return *sectors->begin();
         
@@ -325,8 +325,8 @@ Sector* getSector(
         
     } else {
     
-        for(size_t s = 0; s < game.cur_area_data->sectors.size(); s++) {
-            Sector* s_ptr = game.cur_area_data->sectors[s];
+        for(size_t s = 0; s < game.curAreaData->sectors.size(); s++) {
+            Sector* s_ptr = game.curAreaData->sectors[s];
             
             if(
                 p.x < s_ptr->bbox[0].x ||

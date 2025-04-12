@@ -21,7 +21,7 @@
 DropType::DropType() :
     MobType(MOB_CATEGORY_DROPS) {
     
-    target_type = MOB_TARGET_FLAG_NONE;
+    targetType = MOB_TARGET_FLAG_NONE;
     height = 8.0f;
     
     drop_fsm::createFsm(this);
@@ -61,11 +61,11 @@ void DropType::loadCatProperties(DataNode* file) {
     
     rs.set("consumer", consumer_str, &consumer_node);
     rs.set("effect", effect_str, &effect_node);
-    rs.set("increase_amount", increase_amount);
-    rs.set("shrink_speed", shrink_speed);
+    rs.set("increase_amount", increaseAmount);
+    rs.set("shrink_speed", shrinkSpeed);
     rs.set("spray_type_to_increase", spray_name_str, &spray_name_node);
     rs.set("status_to_give", status_name_str, &status_name_node);
-    rs.set("total_doses", total_doses, &total_doses_node);
+    rs.set("total_doses", totalDoses, &total_doses_node);
     
     if(consumer_str == "pikmin") {
         consumer = DROP_CONSUMER_PIKMIN;
@@ -90,16 +90,16 @@ void DropType::loadCatProperties(DataNode* file) {
     }
     
     if(effect == DROP_EFFECT_INCREASE_SPRAYS) {
-        for(size_t s = 0; s < game.config.misc.spray_order.size(); s++) {
+        for(size_t s = 0; s < game.config.misc.sprayOrder.size(); s++) {
             if(
-                game.config.misc.spray_order[s]->manifest->internal_name ==
+                game.config.misc.sprayOrder[s]->manifest->internalName ==
                 spray_name_str
             ) {
-                spray_type_to_increase = s;
+                sprayTypeToIncrease = s;
                 break;
             }
         }
-        if(spray_type_to_increase == INVALID) {
+        if(sprayTypeToIncrease == INVALID) {
             game.errors.report(
                 "Unknown spray type \"" + spray_name_str + "\"!",
                 spray_name_node
@@ -108,9 +108,9 @@ void DropType::loadCatProperties(DataNode* file) {
     }
     
     if(status_name_node) {
-        auto s = game.content.status_types.list.find(status_name_str);
-        if(s != game.content.status_types.list.end()) {
-            status_to_give = s->second;
+        auto s = game.content.statusTypes.list.find(status_name_str);
+        if(s != game.content.statusTypes.list.end()) {
+            statusToGive = s->second;
         } else {
             game.errors.report(
                 "Unknown status type \"" + status_name_str + "\"!",
@@ -119,11 +119,11 @@ void DropType::loadCatProperties(DataNode* file) {
         }
     }
     
-    if(total_doses == 0) {
+    if(totalDoses == 0) {
         game.errors.report(
             "The number of total doses cannot be zero!", total_doses_node
         );
     }
     
-    shrink_speed /= 100.0f;
+    shrinkSpeed /= 100.0f;
 }

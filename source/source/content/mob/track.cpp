@@ -22,7 +22,7 @@ Track::Track(
     const Point &pos, TrackType* type, float angle
 ):
     Mob(pos, type, angle),
-    tra_type(type) {
+    traType(type) {
     
     team = MOB_TEAM_NONE;
 }

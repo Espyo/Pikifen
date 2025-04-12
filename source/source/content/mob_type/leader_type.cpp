@@ -39,23 +39,23 @@ const float DEF_WHISTLE_RANGE = 80.0f;
 LeaderType::LeaderType() :
     MobType(MOB_CATEGORY_LEADERS) {
     
-    inactive_logic =
+    inactiveLogic =
         INACTIVE_LOGIC_FLAG_TICKS | INACTIVE_LOGIC_FLAG_INTERACTIONS;
-    main_color = al_map_rgb(128, 128, 128);
-    show_health = false;
-    target_type = MOB_TARGET_FLAG_PLAYER;
-    has_group = true;
-    huntable_targets =
+    mainColor = al_map_rgb(128, 128, 128);
+    showHealth = false;
+    targetType = MOB_TARGET_FLAG_PLAYER;
+    hasGroup = true;
+    huntableTargets =
         MOB_TARGET_FLAG_PLAYER |
         MOB_TARGET_FLAG_ENEMY;
-    hurtable_targets =
+    hurtableTargets =
         MOB_TARGET_FLAG_ENEMY |
         MOB_TARGET_FLAG_PLAYER |
         MOB_TARGET_FLAG_WEAK_PLAIN_OBSTACLE |
         MOB_TARGET_FLAG_FRAGILE;
         
     for(size_t s = 0; s < N_LEADER_SOUNDS; s++) {
-        sound_data_idxs[s] = INVALID;
+        soundDataIdxs[s] = INVALID;
     }
     
     leader_fsm::createFsm(this);
@@ -94,18 +94,18 @@ anim_conversion_vector LeaderType::getAnimConversions() const {
 void LeaderType::loadCatProperties(DataNode* file) {
     ReaderSetter rs(file);
     
-    rs.set("knocked_down_duration", knocked_down_duration);
-    rs.set("knocked_down_whistle_bonus", knocked_down_whistle_bonus);
-    rs.set("max_throw_height", max_throw_height);
-    rs.set("whistle_range", whistle_range);
+    rs.set("knocked_down_duration", knockedDownDuration);
+    rs.set("knocked_down_whistle_bonus", knockedDownWhistleBonus);
+    rs.set("max_throw_height", maxThrowHeight);
+    rs.set("whistle_range", whistleRange);
     
     for(size_t s = 0; s < sounds.size(); s++) {
         if(sounds[s].name == "whistling") {
-            sound_data_idxs[LEADER_SOUND_WHISTLING] = s;
+            soundDataIdxs[LEADER_SOUND_WHISTLING] = s;
         } else if(sounds[s].name == "dismissing") {
-            sound_data_idxs[LEADER_SOUND_DISMISSING] = s;
+            soundDataIdxs[LEADER_SOUND_DISMISSING] = s;
         } else if(sounds[s].name == "name_call") {
-            sound_data_idxs[LEADER_SOUND_NAME_CALL] = s;
+            soundDataIdxs[LEADER_SOUND_NAME_CALL] = s;
         }
     }
 }
@@ -130,7 +130,7 @@ void LeaderType::loadCatResources(DataNode* file) {
     rs.set("name_call_sound", name_call_sound_str);
     rs.set("whistle_sound", whistle_sound_str);
     
-    bmp_icon = game.content.bitmaps.list.get(icon_str, icon_node);
+    bmpIcon = game.content.bitmaps.list.get(icon_str, icon_node);
 }
 
 
@@ -138,5 +138,5 @@ void LeaderType::loadCatResources(DataNode* file) {
  * @brief Unloads resources from memory.
  */
 void LeaderType::unloadResources() {
-    game.content.bitmaps.list.free(bmp_icon);
+    game.content.bitmaps.list.free(bmpIcon);
 }

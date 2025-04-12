@@ -43,7 +43,7 @@ public:
     //--- Members ---
     
     //What type of Onion it is.
-    OnionType* oni_type = nullptr;
+    OnionType* oniType = nullptr;
     
     //Nest data.
     PikminNest* nest = nullptr;
@@ -52,16 +52,16 @@ public:
     bool activated = true;
     
     //How many seeds are queued up to be spat, of each type.
-    vector<size_t> generation_queue;
+    vector<size_t> generationQueue;
     
     //Time left until it starts the Pikmin generation process.
-    Timer generation_delay_timer = Timer(ONION::GENERATION_DELAY);
+    Timer generationDelayTimer = Timer(ONION::GENERATION_DELAY);
     
     //Time left until it generates the next Pikmin in the queue.
-    Timer next_generation_timer = Timer(ONION::NEXT_GENERATION_INTERVAL);
+    Timer nextGenerationTimer = Timer(ONION::NEXT_GENERATION_INTERVAL);
     
     //Angle at which the next seed will be spit.
-    float next_spew_angle = 0.0f;
+    float nextSpewAngle = 0.0f;
     
     //The Onion's alpha.
     unsigned char seethrough = 255;

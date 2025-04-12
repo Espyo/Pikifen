@@ -79,7 +79,7 @@ BulletGuiItem::BulletGuiItem(
     font(font),
     color(color) {
     
-    on_draw =
+    onDraw =
     [this] (const DrawInfo & draw) {
         this->defDrawCode(draw);
     };
@@ -102,7 +102,7 @@ void BulletGuiItem::defDrawCode(
     );
     
     drawBitmap(
-        game.sys_content.bmp_hard_bubble,
+        game.sysContent.bmpHardBubble,
         Point(
             item_x_start + GUI::BULLET_RADIUS + GUI::BULLET_PADDING,
             draw.center.y
@@ -122,8 +122,8 @@ void BulletGuiItem::defDrawCode(
     if(selected) {
         drawTexturedBox(
             draw.center,
-            draw.size + 10.0 + sin(game.time_passed * TAU) * 2.0f,
-            game.sys_content.bmp_focus_box
+            draw.size + 10.0 + sin(game.timePassed * TAU) * 2.0f,
+            game.sysContent.bmpFocusBox
         );
     }
 }
@@ -144,7 +144,7 @@ ButtonGuiItem::ButtonGuiItem(
     font(font),
     color(color) {
     
-    on_draw =
+    onDraw =
     [this] (const DrawInfo & draw) {
         this->defDrawCode(draw);
     };
@@ -183,12 +183,12 @@ CheckGuiItem::CheckGuiItem(
     font(font),
     color(color) {
     
-    on_draw =
+    onDraw =
     [this] (const DrawInfo & draw) {
         this->defDrawCode(draw);
     };
     
-    on_activate =
+    onActivate =
     [this] (const Point &) {
         this->defActivateCode();
     };
@@ -209,7 +209,7 @@ CheckGuiItem::CheckGuiItem(
 ) :
     CheckGuiItem(*value_ptr, text, font, color) {
     
-    this->value_ptr = value_ptr;
+    this->valuePtr = value_ptr;
 }
 
 
@@ -218,7 +218,7 @@ CheckGuiItem::CheckGuiItem(
  */
 void CheckGuiItem::defActivateCode() {
     value = !value;
-    if(value_ptr) (*value_ptr) = !(*value_ptr);
+    if(valuePtr) (*valuePtr) = !(*valuePtr);
     startJuiceAnimation(JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM);
 }
 
@@ -239,8 +239,8 @@ void CheckGuiItem::defDrawCode(const DrawInfo &draw) {
     
     drawBitmap(
         this->value ?
-        game.sys_content.bmp_checkbox_check :
-        game.sys_content.bmp_checkbox_no_check,
+        game.sysContent.bmpCheckboxCheck :
+        game.sysContent.bmpCheckboxNoCheck,
         this->text.empty() ?
         draw.center :
         Point((draw.center.x + draw.size.x * 0.5) - 40, draw.center.y),
@@ -251,14 +251,14 @@ void CheckGuiItem::defDrawCode(const DrawInfo &draw) {
         selected ? al_map_rgb(87, 200, 208) : COLOR_WHITE;
         
     drawTexturedBox(
-        draw.center, draw.size, game.sys_content.bmp_bubble_box, box_tint
+        draw.center, draw.size, game.sysContent.bmpBubbleBox, box_tint
     );
     
     if(selected) {
         drawTexturedBox(
             draw.center,
-            draw.size + 10.0 + sin(game.time_passed * TAU) * 2.0f,
-            game.sys_content.bmp_focus_box
+            draw.size + 10.0 + sin(game.timePassed * TAU) * 2.0f,
+            game.sysContent.bmpFocusBox
         );
     }
 }
@@ -282,13 +282,13 @@ GuiItem::GuiItem(bool selectable) :
  * @return Whether it could activate it.
  */
 bool GuiItem::activate(const Point &cursor_pos) {
-    if(!on_activate) return false;
-    on_activate(cursor_pos);
+    if(!onActivate) return false;
+    onActivate(cursor_pos);
     
     ALLEGRO_SAMPLE* sample =
-        this == manager->back_item ?
-        game.sys_content.sound_menu_back :
-        game.sys_content.sound_menu_activate;
+        this == manager->backItem ?
+        game.sysContent.sndMenuBack :
+        game.sysContent.sndMenuActivate;
     SoundSourceConfig activate_sound_config;
     activate_sound_config.gain = 0.75f;
     game.audio.createUiSoundsource(sample, activate_sound_config);
@@ -334,7 +334,7 @@ float GuiItem::getChildBottom() {
         bottommost =
             std::max(
                 bottommost,
-                c_ptr->ratio_center.y + (c_ptr->ratio_size.y / 2.0f)
+                c_ptr->ratioCenter.y + (c_ptr->ratioSize.y / 2.0f)
             );
     }
     return bottommost;
@@ -347,52 +347,52 @@ float GuiItem::getChildBottom() {
  * @return The juice value, or 0 if there's no animation.
  */
 float GuiItem::getJuiceValue() {
-    switch(juice_type) {
+    switch(juiceType) {
     case JUICE_TYPE_GROW_TEXT_LOW: {
         float anim_ratio =
-            1.0f - (juice_timer / GUI::JUICY_GROW_DURATION);
+            1.0f - (juiceTimer / GUI::JUICY_GROW_DURATION);
         return
             ease(EASE_METHOD_UP_AND_DOWN, anim_ratio) *
             GUI::JUICY_GROW_TEXT_LOW_MULT;
     }
     case JUICE_TYPE_GROW_TEXT_MEDIUM: {
         float anim_ratio =
-            1.0f - (juice_timer / GUI::JUICY_GROW_DURATION);
+            1.0f - (juiceTimer / GUI::JUICY_GROW_DURATION);
         return
             ease(EASE_METHOD_UP_AND_DOWN, anim_ratio) *
             GUI::JUICY_GROW_TEXT_MEDIUM_MULT;
     }
     case JUICE_TYPE_GROW_TEXT_HIGH: {
         float anim_ratio =
-            1.0f - (juice_timer / GUI::JUICY_GROW_DURATION);
+            1.0f - (juiceTimer / GUI::JUICY_GROW_DURATION);
         return
             ease(EASE_METHOD_UP_AND_DOWN, anim_ratio) *
             GUI::JUICY_GROW_TEXT_HIGH_MULT;
     }
     case JUICE_TYPE_GROW_TEXT_ELASTIC_LOW: {
         float anim_ratio =
-            1.0f - (juice_timer / GUI::JUICY_GROW_ELASTIC_DURATION);
+            1.0f - (juiceTimer / GUI::JUICY_GROW_ELASTIC_DURATION);
         return
             ease(EASE_METHOD_UP_AND_DOWN_ELASTIC, anim_ratio) *
             GUI::JUICY_GROW_TEXT_LOW_MULT;
     }
     case JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM: {
         float anim_ratio =
-            1.0f - (juice_timer / GUI::JUICY_GROW_ELASTIC_DURATION);
+            1.0f - (juiceTimer / GUI::JUICY_GROW_ELASTIC_DURATION);
         return
             ease(EASE_METHOD_UP_AND_DOWN_ELASTIC, anim_ratio) *
             GUI::JUICY_GROW_TEXT_MEDIUM_MULT;
     }
     case JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH: {
         float anim_ratio =
-            1.0f - (juice_timer / GUI::JUICY_GROW_ELASTIC_DURATION);
+            1.0f - (juiceTimer / GUI::JUICY_GROW_ELASTIC_DURATION);
         return
             ease(EASE_METHOD_UP_AND_DOWN_ELASTIC, anim_ratio) *
             GUI::JUICY_GROW_TEXT_HIGH_MULT;
     }
     case JUICE_TYPE_GROW_ICON: {
         float anim_ratio =
-            1.0f - (juice_timer / GUI::JUICY_GROW_DURATION);
+            1.0f - (juiceTimer / GUI::JUICY_GROW_DURATION);
         return
             ease(EASE_METHOD_UP_AND_DOWN, anim_ratio) *
             GUI::JUICY_GROW_ICON_MULT;
@@ -416,13 +416,13 @@ Point GuiItem::getReferenceCenter() {
             parent->getReferenceSize() - (parent->padding * 2.0f);
         Point parent_c =
             parent->getReferenceCenter();
-        Point result = ratio_center * parent_s;
+        Point result = ratioCenter * parent_s;
         result.x += parent_c.x - parent_s.x / 2.0f;
         result.y += parent_c.y - parent_s.y / 2.0f;
         result.y -= parent_s.y * parent->offset;
         return result;
     } else {
-        return Point(ratio_center.x * game.win_w, ratio_center.y * game.win_h);
+        return Point(ratioCenter.x * game.winW, ratioCenter.y * game.winH);
     }
 }
 
@@ -437,10 +437,10 @@ Point GuiItem::getReferenceSize() {
     if(parent) {
         mult = parent->getReferenceSize() - (parent->padding * 2.0f);
     } else {
-        mult.x = game.win_w;
-        mult.y = game.win_h;
+        mult.x = game.winW;
+        mult.y = game.winH;
     }
-    return ratio_size * mult;
+    return ratioSize * mult;
 }
 
 
@@ -511,19 +511,19 @@ void GuiItem::removeChild(GuiItem* item) {
  * @param type Type of juice animation.
  */
 void GuiItem::startJuiceAnimation(JUICE_TYPE type) {
-    juice_type = type;
+    juiceType = type;
     switch(type) {
     case JUICE_TYPE_GROW_TEXT_LOW:
     case JUICE_TYPE_GROW_TEXT_MEDIUM:
     case JUICE_TYPE_GROW_TEXT_HIGH:
     case JUICE_TYPE_GROW_ICON: {
-        juice_timer = GUI::JUICY_GROW_DURATION;
+        juiceTimer = GUI::JUICY_GROW_DURATION;
         break;
     }
     case JUICE_TYPE_GROW_TEXT_ELASTIC_LOW:
     case JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM:
     case JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH: {
-        juice_timer = GUI::JUICY_GROW_ELASTIC_DURATION;
+        juiceTimer = GUI::JUICY_GROW_ELASTIC_DURATION;
         break;
     }
     default: {
@@ -537,12 +537,12 @@ void GuiItem::startJuiceAnimation(JUICE_TYPE type) {
  * @brief Constructs a new gui manager object.
  */
 GuiManager::GuiManager() :
-    auto_repeater(&auto_repeater_settings) {
+    autoRepeater(&autoRepeaterSettings) {
     
-    anim_timer =
+    animTimer =
         Timer(
     0.0f, [this] () {
-        switch(anim_type) {
+        switch(animType) {
         case GUI_MANAGER_ANIM_IN_TO_OUT:
         case GUI_MANAGER_ANIM_CENTER_TO_UP:
         case GUI_MANAGER_ANIM_CENTER_TO_DOWN:
@@ -569,13 +569,13 @@ GuiManager::GuiManager() :
  * Empty string if none.
  */
 void GuiManager::addItem(GuiItem* item, const string &id) {
-    auto c = registered_centers.find(id);
-    if(c != registered_centers.end()) {
-        item->ratio_center = c->second;
+    auto c = registeredCenters.find(id);
+    if(c != registeredCenters.end()) {
+        item->ratioCenter = c->second;
     }
-    auto s = registered_sizes.find(id);
-    if(s != registered_sizes.end()) {
-        item->ratio_size = s->second;
+    auto s = registeredSizes.find(id);
+    if(s != registeredSizes.end()) {
+        item->ratioSize = s->second;
     }
     
     items.push_back(item);
@@ -588,13 +588,13 @@ void GuiManager::addItem(GuiItem* item, const string &id) {
  */
 void GuiManager::destroy() {
     setSelectedItem(nullptr);
-    back_item = nullptr;
+    backItem = nullptr;
     for(size_t i = 0; i < items.size(); i++) {
         delete items[i];
     }
     items.clear();
-    registered_centers.clear();
-    registered_sizes.clear();
+    registeredCenters.clear();
+    registeredSizes.clear();
 }
 
 
@@ -613,7 +613,7 @@ void GuiManager::draw() {
     
         GuiItem* i_ptr = items[i];
         
-        if(!i_ptr->on_draw) continue;
+        if(!i_ptr->onDraw) continue;
         
         DrawInfo draw;
         draw.center = i_ptr->getReferenceCenter();
@@ -635,7 +635,7 @@ void GuiManager::draw() {
             );
         }
         
-        i_ptr->on_draw(draw);
+        i_ptr->onDraw(draw);
         
         if(i_ptr->parent) {
             al_set_clipping_rectangle(ocr_x, ocr_y, ocr_w, ocr_h);
@@ -650,9 +650,9 @@ void GuiManager::draw() {
  * @return The tooltip.
  */
 string GuiManager::getCurrentTooltip() {
-    if(!selected_item) return string();
-    if(!selected_item->on_get_tooltip) return string();
-    return selected_item->on_get_tooltip();
+    if(!selectedItem) return string();
+    if(!selectedItem->onGetTooltip) return string();
+    return selectedItem->onGetTooltip();
 }
 
 
@@ -668,31 +668,31 @@ bool GuiManager::getItemDrawInfo(
     GuiItem* item, DrawInfo* draw
 ) {
     if(!item->isVisible()) return false;
-    if(item->ratio_size.x == 0.0f) return false;
+    if(item->ratioSize.x == 0.0f) return false;
     
     Point final_center = item->getReferenceCenter();
     Point final_size = item->getReferenceSize();
     
-    if(anim_timer.time_left > 0.0f) {
-        switch(anim_type) {
+    if(animTimer.timeLeft > 0.0f) {
+        switch(animType) {
         case GUI_MANAGER_ANIM_OUT_TO_IN: {
             Point start_center;
             float angle =
                 getAngle(
-                    Point(game.win_w, game.win_h) / 2.0f,
+                    Point(game.winW, game.winH) / 2.0f,
                     final_center
                 );
-            start_center.x = final_center.x + cos(angle) * game.win_w;
-            start_center.y = final_center.y + sin(angle) * game.win_h;
+            start_center.x = final_center.x + cos(angle) * game.winW;
+            start_center.y = final_center.y + sin(angle) * game.winH;
             
             final_center.x =
                 interpolateNumber(
-                    ease(EASE_METHOD_OUT, 1.0f - anim_timer.getRatioLeft()),
+                    ease(EASE_METHOD_OUT, 1.0f - animTimer.getRatioLeft()),
                     0.0f, 1.0f, start_center.x, final_center.x
                 );
             final_center.y =
                 interpolateNumber(
-                    ease(EASE_METHOD_OUT, 1.0f - anim_timer.getRatioLeft()),
+                    ease(EASE_METHOD_OUT, 1.0f - animTimer.getRatioLeft()),
                     0.0f, 1.0f, start_center.y, final_center.y
                 );
             break;
@@ -701,20 +701,20 @@ bool GuiManager::getItemDrawInfo(
             Point end_center;
             float angle =
                 getAngle(
-                    Point(game.win_w, game.win_h) / 2.0f,
+                    Point(game.winW, game.winH) / 2.0f,
                     final_center
                 );
-            end_center.x = final_center.x + cos(angle) * game.win_w;
-            end_center.y = final_center.y + sin(angle) * game.win_h;
+            end_center.x = final_center.x + cos(angle) * game.winW;
+            end_center.y = final_center.y + sin(angle) * game.winH;
             
             final_center.x =
                 interpolateNumber(
-                    ease(EASE_METHOD_IN, 1.0f - anim_timer.getRatioLeft()),
+                    ease(EASE_METHOD_IN, 1.0f - animTimer.getRatioLeft()),
                     0.0f, 1.0f, final_center.x, end_center.x
                 );
             final_center.y =
                 interpolateNumber(
-                    ease(EASE_METHOD_IN, 1.0f - anim_timer.getRatioLeft()),
+                    ease(EASE_METHOD_IN, 1.0f - animTimer.getRatioLeft()),
                     0.0f, 1.0f, final_center.y, end_center.y
                 );
             break;
@@ -722,64 +722,64 @@ bool GuiManager::getItemDrawInfo(
         } case GUI_MANAGER_ANIM_UP_TO_CENTER: {
             final_center.y =
                 interpolateNumber(
-                    ease(EASE_METHOD_OUT, 1.0f - anim_timer.getRatioLeft()),
-                    0.0f, 1.0f, final_center.y - game.win_h, final_center.y
+                    ease(EASE_METHOD_OUT, 1.0f - animTimer.getRatioLeft()),
+                    0.0f, 1.0f, final_center.y - game.winH, final_center.y
                 );
             break;
             
         } case GUI_MANAGER_ANIM_CENTER_TO_UP: {
             final_center.y =
                 interpolateNumber(
-                    ease(EASE_METHOD_OUT, 1.0f - anim_timer.getRatioLeft()),
-                    0.0f, 1.0f, final_center.y, final_center.y - game.win_h
+                    ease(EASE_METHOD_OUT, 1.0f - animTimer.getRatioLeft()),
+                    0.0f, 1.0f, final_center.y, final_center.y - game.winH
                 );
             break;
             
         } case GUI_MANAGER_ANIM_DOWN_TO_CENTER: {
             final_center.y =
                 interpolateNumber(
-                    ease(EASE_METHOD_OUT, 1.0f - anim_timer.getRatioLeft()),
-                    0.0f, 1.0f, final_center.y + game.win_h, final_center.y
+                    ease(EASE_METHOD_OUT, 1.0f - animTimer.getRatioLeft()),
+                    0.0f, 1.0f, final_center.y + game.winH, final_center.y
                 );
             break;
             
         } case GUI_MANAGER_ANIM_CENTER_TO_DOWN: {
             final_center.y =
                 interpolateNumber(
-                    ease(EASE_METHOD_OUT, 1.0f - anim_timer.getRatioLeft()),
-                    0.0f, 1.0f, final_center.y, final_center.y + game.win_h
+                    ease(EASE_METHOD_OUT, 1.0f - animTimer.getRatioLeft()),
+                    0.0f, 1.0f, final_center.y, final_center.y + game.winH
                 );
             break;
             
         } case GUI_MANAGER_ANIM_LEFT_TO_CENTER: {
             final_center.x =
                 interpolateNumber(
-                    ease(EASE_METHOD_OUT, 1.0f - anim_timer.getRatioLeft()),
-                    0.0f, 1.0f, final_center.x - game.win_w, final_center.x
+                    ease(EASE_METHOD_OUT, 1.0f - animTimer.getRatioLeft()),
+                    0.0f, 1.0f, final_center.x - game.winW, final_center.x
                 );
             break;
             
         } case GUI_MANAGER_ANIM_CENTER_TO_LEFT: {
             final_center.x =
                 interpolateNumber(
-                    ease(EASE_METHOD_OUT, 1.0f - anim_timer.getRatioLeft()),
-                    0.0f, 1.0f, final_center.x, final_center.x - game.win_w
+                    ease(EASE_METHOD_OUT, 1.0f - animTimer.getRatioLeft()),
+                    0.0f, 1.0f, final_center.x, final_center.x - game.winW
                 );
             break;
             
         } case GUI_MANAGER_ANIM_RIGHT_TO_CENTER: {
             final_center.x =
                 interpolateNumber(
-                    ease(EASE_METHOD_OUT, 1.0f - anim_timer.getRatioLeft()),
-                    0.0f, 1.0f, final_center.x + game.win_w, final_center.x
+                    ease(EASE_METHOD_OUT, 1.0f - animTimer.getRatioLeft()),
+                    0.0f, 1.0f, final_center.x + game.winW, final_center.x
                 );
             break;
             
         } case GUI_MANAGER_ANIM_CENTER_TO_RIGHT: {
             final_center.x =
                 interpolateNumber(
-                    ease(EASE_METHOD_OUT, 1.0f - anim_timer.getRatioLeft()),
-                    0.0f, 1.0f, final_center.x, final_center.x + game.win_w
+                    ease(EASE_METHOD_OUT, 1.0f - animTimer.getRatioLeft()),
+                    0.0f, 1.0f, final_center.x, final_center.x + game.winW
                 );
             break;
             
@@ -804,7 +804,7 @@ bool GuiManager::getItemDrawInfo(
  */
 void GuiManager::handleAllegroEvent(const ALLEGRO_EVENT &ev) {
     if(!responsive) return;
-    if(anim_timer.getRatioLeft() > 0.0f && ignore_input_on_animation) return;
+    if(animTimer.getRatioLeft() > 0.0f && ignoreInputOnAnimation) return;
     
     bool mouse_moved = false;
     
@@ -822,8 +822,8 @@ void GuiManager::handleAllegroEvent(const ALLEGRO_EVENT &ev) {
                 i_ptr->selectable
             ) {
                 selection_result = i_ptr;
-                if(i_ptr->on_mouse_over) {
-                    i_ptr->on_mouse_over(Point(ev.mouse.x, ev.mouse.y));
+                if(i_ptr->onMouseOver) {
+                    i_ptr->onMouseOver(Point(ev.mouse.x, ev.mouse.y));
                 }
                 break;
             }
@@ -834,28 +834,28 @@ void GuiManager::handleAllegroEvent(const ALLEGRO_EVENT &ev) {
     
     if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN && ev.mouse.button == 1) {
         if(
-            selected_item &&
-            selected_item->isResponsive() &&
-            selected_item->on_activate
+            selectedItem &&
+            selectedItem->isResponsive() &&
+            selectedItem->onActivate
         ) {
-            selected_item->activate(Point(ev.mouse.x, ev.mouse.y));
-            auto_repeater.start();
+            selectedItem->activate(Point(ev.mouse.x, ev.mouse.y));
+            autoRepeater.start();
         }
         mouse_moved = true;
     }
     
     if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP && ev.mouse.button == 1) {
-        auto_repeater.stop();
+        autoRepeater.stop();
         mouse_moved = true;
     }
     
     for(size_t i = 0; i < items.size(); i++) {
-        if(items[i]->isResponsive() && items[i]->on_allegro_event) {
-            items[i]->on_allegro_event(ev);
+        if(items[i]->isResponsive() && items[i]->onAllegroEvent) {
+            items[i]->onAllegroEvent(ev);
         }
     }
     
-    if(mouse_moved) last_input_was_mouse = true;
+    if(mouse_moved) lastInputWasMouse = true;
 }
 
 
@@ -870,8 +870,8 @@ bool GuiManager::handlePlayerAction(const PlayerAction &action) {
         return false;
     }
     if(
-        anim_timer.getRatioLeft() > 0.0f &&
-        ignore_input_on_animation
+        animTimer.getRatioLeft() > 0.0f &&
+        ignoreInputOnAnimation
     ) {
         return false;
     }
@@ -890,28 +890,28 @@ bool GuiManager::handlePlayerAction(const PlayerAction &action) {
         
         switch(action.actionTypeId) {
         case PLAYER_ACTION_TYPE_MENU_RIGHT: {
-            if(!right_pressed && is_down) {
+            if(!rightPressed && is_down) {
                 pressed = PLAYER_ACTION_TYPE_MENU_RIGHT;
             }
-            right_pressed = is_down;
+            rightPressed = is_down;
             break;
         } case PLAYER_ACTION_TYPE_MENU_UP: {
-            if(!up_pressed && is_down) {
+            if(!upPressed && is_down) {
                 pressed = PLAYER_ACTION_TYPE_MENU_UP;
             }
-            up_pressed = is_down;
+            upPressed = is_down;
             break;
         } case PLAYER_ACTION_TYPE_MENU_LEFT: {
-            if(!left_pressed && is_down) {
+            if(!leftPressed && is_down) {
                 pressed = PLAYER_ACTION_TYPE_MENU_LEFT;
             }
-            left_pressed = is_down;
+            leftPressed = is_down;
             break;
         } case PLAYER_ACTION_TYPE_MENU_DOWN: {
-            if(!down_pressed && is_down) {
+            if(!downPressed && is_down) {
                 pressed = PLAYER_ACTION_TYPE_MENU_DOWN;
             }
-            down_pressed = is_down;
+            downPressed = is_down;
             break;
         } default: {
             break;
@@ -920,18 +920,18 @@ bool GuiManager::handlePlayerAction(const PlayerAction &action) {
         
         if(pressed == PLAYER_ACTION_TYPE_NONE) break;
         
-        if(!selected_item) {
+        if(!selectedItem) {
             for(size_t i = 0; i < items.size(); i++) {
                 if(items[i]->isResponsive() && items[i]->selectable) {
                     setSelectedItem(items[i]);
                     break;
                 }
             }
-            if(selected_item) {
+            if(selectedItem) {
                 break;
             }
         }
-        if(!selected_item) {
+        if(!selectedItem) {
             //No item can be selected.
             break;
         }
@@ -957,11 +957,11 @@ bool GuiManager::handlePlayerAction(const PlayerAction &action) {
         }
         
         if(
-            selected_item &&
-            selected_item->isResponsive() &&
-            selected_item->on_menu_dir_button
+            selectedItem &&
+            selectedItem->isResponsive() &&
+            selectedItem->onMenuDirButton
         ) {
-            if(selected_item->on_menu_dir_button(pressed)) {
+            if(selectedItem->onMenuDirButton(pressed)) {
                 //If it returned true, that means the following logic about
                 //changing the current item needs to be skipped.
                 break;
@@ -969,13 +969,13 @@ bool GuiManager::handlePlayerAction(const PlayerAction &action) {
         }
         
         float min_y = 0;
-        float max_y = game.win_h;
+        float max_y = game.winH;
         
         for(size_t i = 0; i < items.size(); i++) {
             GuiItem* i_ptr = items[i];
             if(i_ptr->isResponsive() && i_ptr->selectable) {
                 Point i_center = i_ptr->getReferenceCenter();
-                if(i_ptr == selected_item) {
+                if(i_ptr == selectedItem) {
                     selectable_idx = selectables.size();
                 }
                 
@@ -992,17 +992,17 @@ bool GuiManager::handlePlayerAction(const PlayerAction &action) {
                 selectables,
                 selectable_idx,
                 direction,
-                Point(game.win_w, max_y - min_y)
+                Point(game.winW, max_y - min_y)
             );
             
         if(new_selectable_idx != selectable_idx) {
             setSelectedItem(selectable_ptrs[new_selectable_idx]);
             if(
-                selected_item->parent &&
-                selected_item->parent->on_child_selected
+                selectedItem->parent &&
+                selectedItem->parent->onChildSelected
             ) {
-                selected_item->parent->on_child_selected(
-                    selected_item
+                selectedItem->parent->onChildSelected(
+                    selectedItem
                 );
             }
         }
@@ -1012,20 +1012,20 @@ bool GuiManager::handlePlayerAction(const PlayerAction &action) {
     } case PLAYER_ACTION_TYPE_MENU_OK: {
         if(
             is_down &&
-            selected_item &&
-            selected_item->on_activate &&
-            selected_item->isResponsive()
+            selectedItem &&
+            selectedItem->onActivate &&
+            selectedItem->isResponsive()
         ) {
-            selected_item->activate(Point(LARGE_FLOAT));
-            auto_repeater.start();
+            selectedItem->activate(Point(LARGE_FLOAT));
+            autoRepeater.start();
         } else if(!is_down) {
-            auto_repeater.stop();
+            autoRepeater.stop();
         }
         break;
         
     } case PLAYER_ACTION_TYPE_MENU_BACK: {
-        if(is_down && back_item && back_item->isResponsive()) {
-            back_item->activate(Point(LARGE_FLOAT));
+        if(is_down && backItem && backItem->isResponsive()) {
+            backItem->activate(Point(LARGE_FLOAT));
         }
         break;
         
@@ -1037,7 +1037,7 @@ bool GuiManager::handlePlayerAction(const PlayerAction &action) {
     }
     
     if(button_recognized) {
-        last_input_was_mouse = false;
+        lastInputWasMouse = false;
     }
     return button_recognized;
 }
@@ -1085,9 +1085,9 @@ void GuiManager::registerCoords(
     const string &id,
     float cx, float cy, float w, float h
 ) {
-    registered_centers[id] =
+    registeredCenters[id] =
         Point(cx / 100.0f, cy / 100.0f);
-    registered_sizes[id] =
+    registeredSizes[id] =
         Point(w / 100.0f, h / 100.0f);
 }
 
@@ -1098,11 +1098,11 @@ void GuiManager::registerCoords(
  * @param item Item to remove.
  */
 void GuiManager::removeItem(GuiItem* item) {
-    if(selected_item == item) {
+    if(selectedItem == item) {
         setSelectedItem(nullptr);
     }
-    if(back_item == item) {
-        back_item = nullptr;
+    if(backItem == item) {
+        backItem = nullptr;
     }
     
     for(size_t i = 0; i < items.size(); i++) {
@@ -1123,34 +1123,34 @@ void GuiManager::removeItem(GuiItem* item) {
  * but because it's the default selected item when the GUI loads.
  */
 void GuiManager::setSelectedItem(GuiItem* item, bool silent) {
-    if(selected_item == item) {
+    if(selectedItem == item) {
         return;
     }
     
-    auto_repeater.stop();
+    autoRepeater.stop();
     
-    if(selected_item) {
-        selected_item->selected = false;
+    if(selectedItem) {
+        selectedItem->selected = false;
     }
-    selected_item = item;
-    if(selected_item) {
-        selected_item->selected = true;
+    selectedItem = item;
+    if(selectedItem) {
+        selectedItem->selected = true;
     }
     
-    if(on_selection_changed) on_selection_changed();
-    if(selected_item) {
-        if(selected_item->on_selected) {
-            selected_item->on_selected();
+    if(onSelectionChanged) onSelectionChanged();
+    if(selectedItem) {
+        if(selectedItem->onSelected) {
+            selectedItem->onSelected();
         }
     }
     
-    if(selected_item && !silent) {
+    if(selectedItem && !silent) {
         SoundSourceConfig select_sound_config;
         select_sound_config.gain = 0.5f;
-        select_sound_config.speed_deviation = 0.1f;
-        select_sound_config.stack_min_pos = 0.01f;
+        select_sound_config.speedDeviation = 0.1f;
+        select_sound_config.stackMinPos = 0.01f;
         game.audio.createUiSoundsource(
-            game.sys_content.sound_menu_select,
+            game.sysContent.sndMenuSelect,
             select_sound_config
         );
     }
@@ -1174,8 +1174,8 @@ void GuiManager::showItems() {
 void GuiManager::startAnimation(
     const GUI_MANAGER_ANIM type, float duration
 ) {
-    anim_type = type;
-    anim_timer.start(duration);
+    animType = type;
+    animTimer.start(duration);
     visible = true;
 }
 
@@ -1187,30 +1187,30 @@ void GuiManager::startAnimation(
  */
 void GuiManager::tick(float delta_t) {
     //Tick the animation.
-    anim_timer.tick(delta_t);
+    animTimer.tick(delta_t);
     
     //Tick all items.
     for(size_t i = 0; i < items.size(); i++) {
         GuiItem* i_ptr = items[i];
-        if(i_ptr->on_tick) {
-            i_ptr->on_tick(delta_t);
+        if(i_ptr->onTick) {
+            i_ptr->onTick(delta_t);
         }
-        if(i_ptr->juice_timer > 0) {
-            i_ptr->juice_timer =
-                std::max(0.0f, i_ptr->juice_timer - delta_t);
+        if(i_ptr->juiceTimer > 0) {
+            i_ptr->juiceTimer =
+                std::max(0.0f, i_ptr->juiceTimer - delta_t);
         } else {
-            i_ptr->juice_type = GuiItem::JUICE_TYPE_NONE;
+            i_ptr->juiceType = GuiItem::JUICE_TYPE_NONE;
         }
     }
     
     //Auto-repeat activations of the selected item, if applicable.
-    size_t auto_repeat_triggers = auto_repeater.tick(delta_t);
+    size_t auto_repeat_triggers = autoRepeater.tick(delta_t);
     if(
-        selected_item &&
-        selected_item->can_auto_repeat && selected_item->on_activate
+        selectedItem &&
+        selectedItem->canAutoRepeat && selectedItem->onActivate
     ) {
         for(size_t r = 0; r < auto_repeat_triggers; r++) {
-            selected_item->activate(Point(LARGE_FLOAT));
+            selectedItem->activate(Point(LARGE_FLOAT));
         }
     }
 }
@@ -1222,7 +1222,7 @@ void GuiManager::tick(float delta_t) {
  * @return Whether it was a mouse input.
  */
 bool GuiManager::wasLastInputMouse() {
-    return last_input_was_mouse;
+    return lastInputWasMouse;
 }
 
 
@@ -1233,19 +1233,19 @@ ListGuiItem::ListGuiItem() :
     GuiItem() {
     
     padding = 8.0f;
-    on_draw =
+    onDraw =
     [this] (const DrawInfo & draw) {
         this->defDrawCode(draw);
     };
-    on_tick =
+    onTick =
     [this] (float delta_t) {
         this->defTickCode(delta_t);
     };
-    on_allegro_event =
+    onAllegroEvent =
     [this] (const ALLEGRO_EVENT & ev) {
         this->defEventCode(ev);
     };
-    on_child_selected =
+    onChildSelected =
     [this] (const GuiItem * child) {
         this->defChildSelectedCode(child);
     };
@@ -1261,9 +1261,9 @@ void ListGuiItem::defChildSelectedCode(const GuiItem* child) {
     if(child_bottom <= 1.0f && offset == 0.0f) {
         return;
     }
-    target_offset =
+    targetOffset =
         std::clamp(
-            child->ratio_center.y - 0.5f,
+            child->ratioCenter.y - 0.5f,
             0.0f,
             child_bottom - 1.0f
         );
@@ -1275,7 +1275,7 @@ void ListGuiItem::defChildSelectedCode(const GuiItem* child) {
  */
 void ListGuiItem::defDrawCode(const DrawInfo &draw) {
     drawTexturedBox(
-        draw.center, draw.size, game.sys_content.bmp_frame_box,
+        draw.center, draw.size, game.sysContent.bmpFrameBox,
         COLOR_TRANSPARENT_WHITE
     );
     if(offset > 0.0f) {
@@ -1371,9 +1371,9 @@ void ListGuiItem::defEventCode(const ALLEGRO_EVENT  &ev) {
         if(child_bottom <= 1.0f && offset == 0.0f) {
             return;
         }
-        target_offset =
+        targetOffset =
             std::clamp(
-                target_offset + (-ev.mouse.dz) * 0.2f,
+                targetOffset + (-ev.mouse.dz) * 0.2f,
                 0.0f,
                 child_bottom - 1.0f
             );
@@ -1387,11 +1387,11 @@ void ListGuiItem::defEventCode(const ALLEGRO_EVENT  &ev) {
 void ListGuiItem::defTickCode(float delta_t) {
     float child_bottom = getChildBottom();
     if(child_bottom < 1.0f) {
-        target_offset = 0.0f;
+        targetOffset = 0.0f;
         offset = 0.0f;
     } else {
-        target_offset = std::clamp(target_offset, 0.0f, child_bottom - 1.0f);
-        offset += (target_offset - offset) * (10.0f * delta_t);
+        targetOffset = std::clamp(targetOffset, 0.0f, child_bottom - 1.0f);
+        offset += (targetOffset - offset) * (10.0f * delta_t);
         offset = std::clamp(offset, 0.0f, child_bottom - 1.0f);
         if(offset <= 0.01f) offset = 0.0f;
         if(child_bottom > 1.0f) {
@@ -1416,27 +1416,27 @@ PickerGuiItem::PickerGuiItem(
     size_t nr_options, size_t cur_option_idx
 ) :
     GuiItem(true),
-    base_text(base_text),
+    baseText(base_text),
     option(option),
-    nr_options(nr_options),
-    cur_option_idx(cur_option_idx) {
+    nrOptions(nr_options),
+    curOptionIdx(cur_option_idx) {
     
-    on_draw =
+    onDraw =
     [this] (const DrawInfo & draw) {
         this->defDrawCode(draw);
     };
     
-    on_activate =
+    onActivate =
     [this] (const Point & cursor_pos) {
         this->defActivateCode(cursor_pos);
     };
     
-    on_menu_dir_button =
+    onMenuDirButton =
     [this] (size_t button_id) -> bool{
         return this->defMenuDirCode(button_id);
     };
     
-    on_mouse_over =
+    onMouseOver =
     [this] (const Point & cursor_pos) {
         this->defMouseOverCode(cursor_pos);
     };
@@ -1448,9 +1448,9 @@ PickerGuiItem::PickerGuiItem(
  */
 void PickerGuiItem::defActivateCode(const Point &cursor_pos) {
     if(cursor_pos.x >= getReferenceCenter().x) {
-        on_next();
+        onNext();
     } else {
-        on_previous();
+        onPrevious();
     }
 }
 
@@ -1459,20 +1459,20 @@ void PickerGuiItem::defActivateCode(const Point &cursor_pos) {
  * @brief Default picker GUI item draw code.
  */
 void PickerGuiItem::defDrawCode(const DrawInfo &draw) {
-    if(this->nr_options != 0 && selected) {
+    if(this->nrOptions != 0 && selected) {
         Point option_boxes_start(
             draw.center.x - draw.size.x / 2.0f + 20.0f,
             draw.center.y + draw.size.y / 2.0f - 12.0f
         );
         float option_boxes_interval =
-            (draw.size.x - 40.0f) / (this->nr_options - 0.5f);
-        for(size_t o = 0; o < this->nr_options; o++) {
+            (draw.size.x - 40.0f) / (this->nrOptions - 0.5f);
+        for(size_t o = 0; o < this->nrOptions; o++) {
             float x1 = option_boxes_start.x + o * option_boxes_interval;
             float y1 = option_boxes_start.y;
             al_draw_filled_rectangle(
                 x1, y1,
                 x1 + option_boxes_interval * 0.5f, y1 + 4.0f,
-                this->cur_option_idx == o ?
+                this->curOptionIdx == o ?
                 al_map_rgba(255, 255, 255, 160) :
                 al_map_rgba(255, 255, 255, 64)
             );
@@ -1485,7 +1485,7 @@ void PickerGuiItem::defDrawCode(const DrawInfo &draw) {
         manager &&
         manager->wasLastInputMouse()
     ) {
-        real_arrow_highlight = arrow_highlight;
+        real_arrow_highlight = arrowHighlight;
     }
     ALLEGRO_COLOR arrow_highlight_color = al_map_rgb(87, 200, 208);
     ALLEGRO_COLOR arrow_regular_color = COLOR_WHITE;
@@ -1498,7 +1498,7 @@ void PickerGuiItem::defDrawCode(const DrawInfo &draw) {
     );
     drawText(
         "<",
-        game.sys_content.fnt_standard,
+        game.sysContent.fntStandard,
         Point(draw.center.x - draw.size.x * 0.45, draw.center.y),
         arrow_box,
         real_arrow_highlight == 0 ?
@@ -1512,7 +1512,7 @@ void PickerGuiItem::defDrawCode(const DrawInfo &draw) {
     );
     drawText(
         ">",
-        game.sys_content.fnt_standard,
+        game.sysContent.fntStandard,
         Point(draw.center.x + draw.size.x * 0.45, draw.center.y),
         arrow_box,
         real_arrow_highlight == 1 ?
@@ -1529,8 +1529,8 @@ void PickerGuiItem::defDrawCode(const DrawInfo &draw) {
     
     Point text_box(draw.size.x * 0.80, draw.size.y * GUI::STANDARD_CONTENT_SIZE.y);
     drawText(
-        this->base_text + this->option,
-        game.sys_content.fnt_standard,
+        this->baseText + this->option,
+        game.sysContent.fntStandard,
         Point(draw.center.x - draw.size.x * 0.40, draw.center.y),
         text_box,
         COLOR_WHITE,
@@ -1543,14 +1543,14 @@ void PickerGuiItem::defDrawCode(const DrawInfo &draw) {
         selected ? al_map_rgb(87, 200, 208) : COLOR_WHITE;
         
     drawTexturedBox(
-        draw.center, draw.size, game.sys_content.bmp_bubble_box, box_tint
+        draw.center, draw.size, game.sysContent.bmpBubbleBox, box_tint
     );
     
     if(selected) {
         drawTexturedBox(
             draw.center,
-            draw.size + 10.0 + sin(game.time_passed * TAU) * 2.0f,
-            game.sys_content.bmp_focus_box
+            draw.size + 10.0 + sin(game.timePassed * TAU) * 2.0f,
+            game.sysContent.bmpFocusBox
         );
     }
 }
@@ -1561,10 +1561,10 @@ void PickerGuiItem::defDrawCode(const DrawInfo &draw) {
  */
 bool PickerGuiItem::defMenuDirCode(size_t button_id) {
     if(button_id == PLAYER_ACTION_TYPE_MENU_RIGHT) {
-        on_next();
+        onNext();
         return true;
     } else if(button_id == PLAYER_ACTION_TYPE_MENU_LEFT) {
-        on_previous();
+        onPrevious();
         return true;
     }
     return false;
@@ -1575,7 +1575,7 @@ bool PickerGuiItem::defMenuDirCode(size_t button_id) {
  * @brief Default picker GUI item mouse over code.
  */
 void PickerGuiItem::defMouseOverCode(const Point  &cursor_pos) {
-    arrow_highlight =
+    arrowHighlight =
         cursor_pos.x >= getReferenceCenter().x ? 1 : 0;
 }
 
@@ -1586,11 +1586,11 @@ void PickerGuiItem::defMouseOverCode(const Point  &cursor_pos) {
 ScrollGuiItem::ScrollGuiItem() :
     GuiItem() {
     
-    on_draw =
+    onDraw =
     [this] (const DrawInfo & draw) {
         this->defDrawCode(draw);
     };
-    on_allegro_event =
+    onAllegroEvent =
     [this] (const ALLEGRO_EVENT & ev) {
         this->defEventCode(ev);
     };
@@ -1603,17 +1603,17 @@ ScrollGuiItem::ScrollGuiItem() :
 void ScrollGuiItem::defDrawCode(const DrawInfo &draw) {
     float bar_y = 0.0f; //Top, in height ratio.
     float bar_h = 0.0f; //In height ratio.
-    float list_bottom = list_item->getChildBottom();
+    float list_bottom = listItem->getChildBottom();
     unsigned char alpha = 48;
     if(list_bottom > 1.0f) {
-        float offset = std::min(list_item->offset, list_bottom - 1.0f);
+        float offset = std::min(listItem->offset, list_bottom - 1.0f);
         bar_y = offset / list_bottom;
         bar_h = 1.0f / list_bottom;
         alpha = 128;
     }
     
     drawTexturedBox(
-        draw.center, draw.size, game.sys_content.bmp_frame_box,
+        draw.center, draw.size, game.sysContent.bmpFrameBox,
         al_map_rgba(255, 255, 255, alpha)
     );
     
@@ -1626,7 +1626,7 @@ void ScrollGuiItem::defDrawCode(const DrawInfo &draw) {
                 (draw.size.y * bar_h * 0.5f)
             ),
             Point(draw.size.x, (draw.size.y * bar_h)),
-            game.sys_content.bmp_bubble_box
+            game.sysContent.bmpBubbleBox
         );
     }
 }
@@ -1641,7 +1641,7 @@ void ScrollGuiItem::defEventCode(const ALLEGRO_EVENT  &ev) {
         ev.mouse.button == 1 &&
         isMouseOn(Point(ev.mouse.x, ev.mouse.y))
     ) {
-        float list_bottom = list_item->getChildBottom();
+        float list_bottom = listItem->getChildBottom();
         if(list_bottom <= 1.0f) {
             return;
         }
@@ -1654,7 +1654,7 @@ void ScrollGuiItem::defEventCode(const ALLEGRO_EVENT  &ev) {
         float click = (ev.mouse.y - y1) / (y2 - y1);
         click = std::clamp(click, 0.0f, 1.0f);
         
-        list_item->target_offset = click * (list_bottom - 1.0f);
+        listItem->targetOffset = click * (list_bottom - 1.0f);
     }
 }
 
@@ -1677,7 +1677,7 @@ TextGuiItem::TextGuiItem(
     color(color),
     flags(flags) {
     
-    on_draw =
+    onDraw =
     [this] (const DrawInfo & draw) {
         this->defDrawCode(draw);
     };
@@ -1702,21 +1702,21 @@ void TextGuiItem::defDrawCode(const DrawInfo &draw) {
     float juicy_grow_amount = getJuiceValue();
     int text_y = draw.center.y;
     
-    if(line_wrap) {
+    if(lineWrap) {
     
         text_y = draw.center.y - draw.size.y / 2.0f;
         int line_height = al_get_font_line_height(this->font);
         vector<StringToken> tokens =
             tokenizeString(this->text);
         setStringTokenWidths(
-            tokens, this->font, game.sys_content.fnt_slim, line_height, false
+            tokens, this->font, game.sysContent.fntSlim, line_height, false
         );
         vector<vector<StringToken> > tokens_per_line =
             splitLongStringWithTokens(tokens, draw.size.x);
             
         for(size_t l = 0; l < tokens_per_line.size(); l++) {
             drawStringTokens(
-                tokens_per_line[l], this->font, game.sys_content.fnt_slim,
+                tokens_per_line[l], this->font, game.sysContent.fntSlim,
                 false,
                 Point(
                     text_x,
@@ -1739,11 +1739,11 @@ void TextGuiItem::defDrawCode(const DrawInfo &draw) {
         
     }
     
-    if(selected && show_selection_box) {
+    if(selected && showSelectionBox) {
         drawTexturedBox(
             draw.center,
-            draw.size + 10.0 + sin(game.time_passed * TAU) * 2.0f,
-            game.sys_content.bmp_focus_box
+            draw.size + 10.0 + sin(game.timePassed * TAU) * 2.0f,
+            game.sysContent.bmpFocusBox
         );
     }
 }
@@ -1758,7 +1758,7 @@ TooltipGuiItem::TooltipGuiItem(GuiManager* gui) :
     GuiItem(),
     gui(gui) {
     
-    on_draw =
+    onDraw =
     [this] (const DrawInfo & draw) {
         this->defDrawCode(draw);
     };
@@ -1770,13 +1770,13 @@ TooltipGuiItem::TooltipGuiItem(GuiManager* gui) :
  */
 void TooltipGuiItem::defDrawCode(const DrawInfo &draw) {
     string cur_text = this->gui->getCurrentTooltip();
-    if(cur_text != this->prev_text) {
+    if(cur_text != this->prevText) {
         this->startJuiceAnimation(JUICE_TYPE_GROW_TEXT_LOW);
-        this->prev_text = cur_text;
+        this->prevText = cur_text;
     }
     float juicy_grow_amount = getJuiceValue();
     drawText(
-        cur_text, game.sys_content.fnt_standard,
+        cur_text, game.sysContent.fntStandard,
         draw.center, draw.size,
         COLOR_WHITE, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
         TEXT_SETTING_FLAG_CANT_GROW,

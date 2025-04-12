@@ -23,10 +23,10 @@
 BouncerType::BouncerType() :
     MobType(MOB_CATEGORY_BOUNCERS) {
     
-    target_type = MOB_TARGET_FLAG_NONE;
+    targetType = MOB_TARGET_FLAG_NONE;
     walkable = true;
     
-    area_editor_tips =
+    areaEditorTips =
         "Link this object to another object, so that "
         "bounced Pikmin land in that location. "
         "A \"Dummy\" object works perfectly for this.";
@@ -81,9 +81,9 @@ void BouncerType::loadCatProperties(DataNode* file) {
     
     if(riding_pose_node) {
         if(riding_pose_str == "stopped") {
-            riding_pose = BOUNCER_RIDING_POSE_STOPPED;
+            ridingPose = BOUNCER_RIDING_POSE_STOPPED;
         } else if(riding_pose_str == "somersault") {
-            riding_pose = BOUNCER_RIDING_POSE_SOMERSAULT;
+            ridingPose = BOUNCER_RIDING_POSE_SOMERSAULT;
         } else {
             game.errors.report(
                 "Unknown type of riding pose \"" + riding_pose_str + "\"!",

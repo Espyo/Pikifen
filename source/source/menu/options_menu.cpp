@@ -68,19 +68,19 @@ const string TOP_GUI_FILE_NAME = "options_menu_top";
 void OptionsMenu::chooseInput(
     const PLAYER_ACTION_TYPE action_type, size_t bind_idx
 ) {
-    capturing_input = 1;
-    capturing_input_timeout = OPTIONS_MENU::INPUT_CAPTURE_TIMEOUT_DURATION;
+    capturingInput = 1;
+    capturingInputTimeout = OPTIONS_MENU::INPUT_CAPTURE_TIMEOUT_DURATION;
     game.controls.startIgnoringActions();
     
     const vector<ControlBind> &all_binds = game.controls.binds();
     size_t binds_counted = 0;
-    cur_action_type = action_type;
-    cur_bind_idx = all_binds.size();
+    curActionType = action_type;
+    curBindIdx = all_binds.size();
     
     for(size_t b = 0; b < all_binds.size(); b++) {
         if(all_binds[b].actionTypeId != action_type) continue;
         if(binds_counted == bind_idx) {
-            cur_bind_idx = b;
+            curBindIdx = b;
             break;
         } else {
             binds_counted++;
@@ -111,7 +111,7 @@ void OptionsMenu::deleteBind(
         }
     }
     
-    must_populate_binds = true;
+    mustPopulateBinds = true;
 }
 
 
@@ -120,21 +120,21 @@ void OptionsMenu::deleteBind(
  */
 void OptionsMenu::draw() {
     Menu::draw();
-    if(packs_menu) packs_menu->draw();
+    if(packsMenu) packsMenu->draw();
     
-    if(capturing_input == 1) {
+    if(capturingInput == 1) {
         al_draw_filled_rectangle(
-            0, 0, game.win_w, game.win_h,
+            0, 0, game.winW, game.winH,
             al_map_rgba(24, 24, 32, 192)
         );
         
         drawTextLines(
             "Please perform the new input for \n" +
-            game.controls.getPlayerActionType(cur_action_type).name + "\n"
+            game.controls.getPlayerActionType(curActionType).name + "\n"
             "\n"
-            "(Or wait " + i2s(capturing_input_timeout + 1) + "s to cancel...)",
-            game.sys_content.fnt_standard,
-            Point(game.win_w / 2.0f, game.win_h / 2.0f),
+            "(Or wait " + i2s(capturingInputTimeout + 1) + "s to cancel...)",
+            game.sysContent.fntStandard,
+            Point(game.winW / 2.0f, game.winH / 2.0f),
             Point(LARGE_FLOAT),
             COLOR_WHITE, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
             TEXT_SETTING_FLAG_CANT_GROW
@@ -151,7 +151,7 @@ void OptionsMenu::draw() {
 void OptionsMenu::handleAllegroEvent(const ALLEGRO_EVENT &ev) {
     if(!active) return;
     
-    switch(capturing_input) {
+    switch(capturingInput) {
     case 0: {
         //Not capturing.
         break;
@@ -160,19 +160,19 @@ void OptionsMenu::handleAllegroEvent(const ALLEGRO_EVENT &ev) {
         PlayerInput input = game.controls.allegroEventToInput(ev);
         if(input.value >= 0.5f) {
             vector<ControlBind> &all_binds = game.controls.binds();
-            if(cur_bind_idx >= all_binds.size()) {
+            if(curBindIdx >= all_binds.size()) {
                 ControlBind new_bind;
-                new_bind.actionTypeId = cur_action_type;
+                new_bind.actionTypeId = curActionType;
                 new_bind.playerNr = 0;
                 new_bind.inputSource = input.source;
                 all_binds.push_back(new_bind);
             } else {
-                game.controls.binds()[cur_bind_idx].inputSource = input.source;
+                game.controls.binds()[curBindIdx].inputSource = input.source;
             }
-            capturing_input = 2;
+            capturingInput = 2;
             game.controls.stopIgnoringActions();
             game.controls.startIgnoringInputSource(input.source);
-            must_populate_binds = true;
+            mustPopulateBinds = true;
         }
         return;
         break;
@@ -185,7 +185,7 @@ void OptionsMenu::handleAllegroEvent(const ALLEGRO_EVENT &ev) {
     }
     
     Menu::handleAllegroEvent(ev);
-    if(packs_menu) packs_menu->handleAllegroEvent(ev);
+    if(packsMenu) packsMenu->handleAllegroEvent(ev);
 }
 
 
@@ -195,9 +195,9 @@ void OptionsMenu::handleAllegroEvent(const ALLEGRO_EVENT &ev) {
  * @param action Data about the player action.
  */
 void OptionsMenu::handlePlayerAction(const PlayerAction &action) {
-    if(capturing_input != 0) return;
+    if(capturingInput != 0) return;
     Menu::handlePlayerAction(action);
-    if(packs_menu) packs_menu->handlePlayerAction(action);
+    if(packsMenu) packsMenu->handlePlayerAction(action);
 }
 
 
@@ -206,50 +206,50 @@ void OptionsMenu::handlePlayerAction(const PlayerAction &action) {
  */
 void OptionsMenu::initGuiAudioPage() {
     //Menu items.
-    audio_gui.registerCoords("back",                  12,  5,   20,  6);
-    audio_gui.registerCoords("back_input",             3,  7,    4,  4);
-    audio_gui.registerCoords("header",                50, 10,   50,  6);
-    audio_gui.registerCoords("master_volume",         50, 25,   70, 10);
-    audio_gui.registerCoords("gameplay_sound_volume", 50, 37.5, 65, 10);
-    audio_gui.registerCoords("music_volume",          50, 50,   65, 10);
-    audio_gui.registerCoords("ambiance_sound_volume", 50, 62.5, 65, 10);
-    audio_gui.registerCoords("ui_sound_volume",       50, 75,   65, 10);
-    audio_gui.registerCoords("tooltip",               50, 96,   96,  4);
-    audio_gui.readCoords(
-        game.content.gui_defs.list[OPTIONS_MENU::AUDIO_GUI_FILE_NAME].
+    audioGui.registerCoords("back",                  12,  5,   20,  6);
+    audioGui.registerCoords("back_input",             3,  7,    4,  4);
+    audioGui.registerCoords("header",                50, 10,   50,  6);
+    audioGui.registerCoords("master_volume",         50, 25,   70, 10);
+    audioGui.registerCoords("gameplay_sound_volume", 50, 37.5, 65, 10);
+    audioGui.registerCoords("music_volume",          50, 50,   65, 10);
+    audioGui.registerCoords("ambiance_sound_volume", 50, 62.5, 65, 10);
+    audioGui.registerCoords("ui_sound_volume",       50, 75,   65, 10);
+    audioGui.registerCoords("tooltip",               50, 96,   96,  4);
+    audioGui.readCoords(
+        game.content.guiDefs.list[OPTIONS_MENU::AUDIO_GUI_FILE_NAME].
         getChildByName("positions")
     );
     
     //Back button.
-    audio_gui.back_item =
-        new ButtonGuiItem("Back", game.sys_content.fnt_standard);
-    audio_gui.back_item->on_activate =
+    audioGui.backItem =
+        new ButtonGuiItem("Back", game.sysContent.fntStandard);
+    audioGui.backItem->onActivate =
     [this] (const Point &) {
-        audio_gui.responsive = false;
-        audio_gui.startAnimation(
+        audioGui.responsive = false;
+        audioGui.startAnimation(
             GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
             OPTIONS_MENU::HUD_MOVE_TIME
         );
-        top_gui.responsive = true;
-        top_gui.startAnimation(
+        topGui.responsive = true;
+        topGui.startAnimation(
             GUI_MANAGER_ANIM_LEFT_TO_CENTER,
             OPTIONS_MENU::HUD_MOVE_TIME
         );
     };
-    audio_gui.back_item->on_get_tooltip =
+    audioGui.backItem->onGetTooltip =
     [] () { return "Return to the top-level options menu."; };
-    audio_gui.addItem(audio_gui.back_item, "back");
+    audioGui.addItem(audioGui.backItem, "back");
     
     //Back input icon.
-    guiAddBackInputIcon(&audio_gui);
+    guiAddBackInputIcon(&audioGui);
     
     //Header text.
     TextGuiItem* header_text =
         new TextGuiItem(
         "AUDIO OPTIONS",
-        game.sys_content.fnt_area_name, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
+        game.sysContent.fntAreaName, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
     );
-    audio_gui.addItem(header_text, "header");
+    audioGui.addItem(header_text, "header");
     
     vector<float> preset_volume_values = {
         0.00f, 0.05f, 0.10f, 0.15f, 0.20f, 0.25f, 0.30f, 0.35f, 0.40f, 0.45f,
@@ -263,93 +263,93 @@ void OptionsMenu::initGuiAudioPage() {
     };
     auto update_volumes = [this] () {
         game.audio.updateVolumes(
-            game.options.audio.master_vol,
-            game.options.audio.gameplay_sound_vol,
-            game.options.audio.music_vol,
-            game.options.audio.ambiance_sound_vol,
-            game.options.audio.ui_sound_vol
+            game.options.audio.masterVol,
+            game.options.audio.gameplaySoundVol,
+            game.options.audio.musicVol,
+            game.options.audio.ambianceSoundVol,
+            game.options.audio.uiSoundVol
         );
     };
     
     //Master volume picker.
-    master_vol_picker =
+    masterVolPicker =
         new OptionsMenuPickerGuiItem<float>(
         "Master volume: ",
-        &game.options.audio.master_vol,
+        &game.options.audio.masterVol,
         OPTIONS::AUDIO_D::MASTER_VOL,
         preset_volume_values,
         preset_volume_names,
         "Volume of the final mix of all audio."
     );
-    master_vol_picker->after_change = update_volumes;
-    master_vol_picker->init();
-    audio_gui.addItem(master_vol_picker, "master_volume");
+    masterVolPicker->afterChange = update_volumes;
+    masterVolPicker->init();
+    audioGui.addItem(masterVolPicker, "master_volume");
     
     //Gameplay sound effects volume picker.
-    gameplay_sound_vol_picker =
+    gameplaySoundVolPicker =
         new OptionsMenuPickerGuiItem<float>(
         "Gameplay sound effects volume: ",
-        &game.options.audio.gameplay_sound_vol,
+        &game.options.audio.gameplaySoundVol,
         OPTIONS::AUDIO_D::GAMEPLAY_SOUND_VOL,
         preset_volume_values,
         preset_volume_names,
         "Volume for in-world gameplay sound effects specifically."
     );
-    gameplay_sound_vol_picker->after_change = update_volumes;
-    gameplay_sound_vol_picker->init();
-    audio_gui.addItem(gameplay_sound_vol_picker, "gameplay_sound_volume");
+    gameplaySoundVolPicker->afterChange = update_volumes;
+    gameplaySoundVolPicker->init();
+    audioGui.addItem(gameplaySoundVolPicker, "gameplay_sound_volume");
     
     //Music volume picker.
-    music_vol_picker =
+    musicVolPicker =
         new OptionsMenuPickerGuiItem<float>(
         "Music volume: ",
-        &game.options.audio.music_vol,
+        &game.options.audio.musicVol,
         OPTIONS::AUDIO_D::MUSIC_VOL,
         preset_volume_values,
         preset_volume_names,
         "Volume for music specifically."
     );
-    music_vol_picker->after_change = update_volumes;
-    music_vol_picker->init();
-    audio_gui.addItem(music_vol_picker, "music_volume");
+    musicVolPicker->afterChange = update_volumes;
+    musicVolPicker->init();
+    audioGui.addItem(musicVolPicker, "music_volume");
     
     //Ambiance sound volume picker.
-    ambiance_sound_vol_picker =
+    ambianceSoundVolPicker =
         new OptionsMenuPickerGuiItem<float>(
         "Ambiance sound effects volume: ",
-        &game.options.audio.ambiance_sound_vol,
+        &game.options.audio.ambianceSoundVol,
         OPTIONS::AUDIO_D::AMBIANCE_SOUND_VOl,
         preset_volume_values,
         preset_volume_names,
         "Volume for in-world ambiance sound effects specifically."
     );
-    ambiance_sound_vol_picker->after_change = update_volumes;
-    ambiance_sound_vol_picker->init();
-    audio_gui.addItem(ambiance_sound_vol_picker, "ambiance_sound_volume");
+    ambianceSoundVolPicker->afterChange = update_volumes;
+    ambianceSoundVolPicker->init();
+    audioGui.addItem(ambianceSoundVolPicker, "ambiance_sound_volume");
     
     //UI sound effects volume picker.
-    ui_sound_vol_picker =
+    uiSoundVolPicker =
         new OptionsMenuPickerGuiItem<float>(
         "UI sound effects volume: ",
-        &game.options.audio.ui_sound_vol,
+        &game.options.audio.uiSoundVol,
         OPTIONS::AUDIO_D::UI_SOUND_VOL,
         preset_volume_values,
         preset_volume_names,
         "Volume for interface sound effects specifically."
     );
-    ui_sound_vol_picker->after_change = update_volumes;
-    ui_sound_vol_picker->init();
-    audio_gui.addItem(ui_sound_vol_picker, "ui_sound_volume");
+    uiSoundVolPicker->afterChange = update_volumes;
+    uiSoundVolPicker->init();
+    audioGui.addItem(uiSoundVolPicker, "ui_sound_volume");
     
     //Tooltip text.
     TooltipGuiItem* tooltip_text =
-        new TooltipGuiItem(&audio_gui);
-    audio_gui.addItem(tooltip_text, "tooltip");
+        new TooltipGuiItem(&audioGui);
+    audioGui.addItem(tooltip_text, "tooltip");
     
     //Finishing touches.
-    audio_gui.setSelectedItem(master_vol_picker, true);
-    audio_gui.responsive = false;
-    audio_gui.hideItems();
+    audioGui.setSelectedItem(masterVolPicker, true);
+    audioGui.responsive = false;
+    audioGui.hideItems();
 }
 
 
@@ -358,68 +358,68 @@ void OptionsMenu::initGuiAudioPage() {
  */
 void OptionsMenu::initGuiControlBindsPage() {
     //Menu items.
-    binds_gui.registerCoords("back",        12,  5, 20,  6);
-    binds_gui.registerCoords("back_input",   3,  7,  4,  4);
-    binds_gui.registerCoords("header",      50,  5, 50,  6);
-    binds_gui.registerCoords("list",        50, 51, 88, 82);
-    binds_gui.registerCoords("list_scroll", 97, 51,  2, 82);
-    binds_gui.registerCoords("tooltip",     50, 96, 96,  4);
-    binds_gui.readCoords(
-        game.content.gui_defs.list[OPTIONS_MENU::CONTROL_BINDS_GUI_FILE_NAME].
+    bindsGui.registerCoords("back",        12,  5, 20,  6);
+    bindsGui.registerCoords("back_input",   3,  7,  4,  4);
+    bindsGui.registerCoords("header",      50,  5, 50,  6);
+    bindsGui.registerCoords("list",        50, 51, 88, 82);
+    bindsGui.registerCoords("list_scroll", 97, 51,  2, 82);
+    bindsGui.registerCoords("tooltip",     50, 96, 96,  4);
+    bindsGui.readCoords(
+        game.content.guiDefs.list[OPTIONS_MENU::CONTROL_BINDS_GUI_FILE_NAME].
         getChildByName("positions")
     );
     
     //Back button.
-    binds_gui.back_item =
-        new ButtonGuiItem("Back", game.sys_content.fnt_standard);
-    binds_gui.back_item->on_activate =
+    bindsGui.backItem =
+        new ButtonGuiItem("Back", game.sysContent.fntStandard);
+    bindsGui.backItem->onActivate =
     [this] (const Point &) {
-        binds_gui.responsive = false;
-        binds_gui.startAnimation(
+        bindsGui.responsive = false;
+        bindsGui.startAnimation(
             GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
             OPTIONS_MENU::HUD_MOVE_TIME
         );
-        controls_gui.responsive = true;
-        controls_gui.startAnimation(
+        controlsGui.responsive = true;
+        controlsGui.startAnimation(
             GUI_MANAGER_ANIM_LEFT_TO_CENTER,
             OPTIONS_MENU::HUD_MOVE_TIME
         );
         saveOptions();
         saveMakerTools();
     };
-    binds_gui.back_item->on_get_tooltip =
+    bindsGui.backItem->onGetTooltip =
     [] () { return "Return to the previous menu."; };
-    binds_gui.addItem(binds_gui.back_item, "back");
+    bindsGui.addItem(bindsGui.backItem, "back");
     
     //Back input icon.
-    guiAddBackInputIcon(&binds_gui);
+    guiAddBackInputIcon(&bindsGui);
     
     //Header text.
     TextGuiItem* header_text =
         new TextGuiItem(
         "CONTROL BINDS",
-        game.sys_content.fnt_area_name, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
+        game.sysContent.fntAreaName, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
     );
-    binds_gui.addItem(header_text, "header");
+    bindsGui.addItem(header_text, "header");
     
     //Controls list box.
-    binds_list_box = new ListGuiItem();
-    binds_gui.addItem(binds_list_box, "list");
+    bindsListBox = new ListGuiItem();
+    bindsGui.addItem(bindsListBox, "list");
     
     //Controls list scrollbar.
     ScrollGuiItem* list_scroll = new ScrollGuiItem();
-    list_scroll->list_item = binds_list_box;
-    binds_gui.addItem(list_scroll, "list_scroll");
+    list_scroll->listItem = bindsListBox;
+    bindsGui.addItem(list_scroll, "list_scroll");
     
     //Tooltip text.
     TooltipGuiItem* tooltip_text =
-        new TooltipGuiItem(&binds_gui);
-    binds_gui.addItem(tooltip_text, "tooltip");
+        new TooltipGuiItem(&bindsGui);
+    bindsGui.addItem(tooltip_text, "tooltip");
     
     //Finishing touches.
-    binds_gui.setSelectedItem(binds_gui.back_item, true);
-    binds_gui.responsive = false;
-    binds_gui.hideItems();
+    bindsGui.setSelectedItem(bindsGui.backItem, true);
+    bindsGui.responsive = false;
+    bindsGui.hideItems();
     al_reconfigure_joysticks();
 }
 
@@ -429,136 +429,136 @@ void OptionsMenu::initGuiControlBindsPage() {
  */
 void OptionsMenu::initGuiControlsPage() {
     //Menu items.
-    controls_gui.registerCoords("back",          12,    5, 20,  6);
-    controls_gui.registerCoords("back_input",     3,    7,  4,  4);
-    controls_gui.registerCoords("header",        50,   10, 50,  6);
-    controls_gui.registerCoords("normal_binds",  50,   25, 70, 10);
-    controls_gui.registerCoords("special_binds", 50, 36.5, 58,  9);
-    controls_gui.registerCoords("cursor_speed",  50,   54, 70, 10);
-    controls_gui.registerCoords("auto_throw",    50,   70, 70, 10);
-    controls_gui.registerCoords("tooltip",       50,   96, 96,  4);
-    controls_gui.readCoords(
-        game.content.gui_defs.list[OPTIONS_MENU::CONTROLS_GUI_FILE_NAME].
+    controlsGui.registerCoords("back",          12,    5, 20,  6);
+    controlsGui.registerCoords("back_input",     3,    7,  4,  4);
+    controlsGui.registerCoords("header",        50,   10, 50,  6);
+    controlsGui.registerCoords("normal_binds",  50,   25, 70, 10);
+    controlsGui.registerCoords("special_binds", 50, 36.5, 58,  9);
+    controlsGui.registerCoords("cursor_speed",  50,   54, 70, 10);
+    controlsGui.registerCoords("auto_throw",    50,   70, 70, 10);
+    controlsGui.registerCoords("tooltip",       50,   96, 96,  4);
+    controlsGui.readCoords(
+        game.content.guiDefs.list[OPTIONS_MENU::CONTROLS_GUI_FILE_NAME].
         getChildByName("positions")
     );
     
     //Back button.
-    controls_gui.back_item =
-        new ButtonGuiItem("Back", game.sys_content.fnt_standard);
-    controls_gui.back_item->on_activate =
+    controlsGui.backItem =
+        new ButtonGuiItem("Back", game.sysContent.fntStandard);
+    controlsGui.backItem->onActivate =
     [this] (const Point &) {
-        controls_gui.responsive = false;
-        controls_gui.startAnimation(
+        controlsGui.responsive = false;
+        controlsGui.startAnimation(
             GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
             OPTIONS_MENU::HUD_MOVE_TIME
         );
-        top_gui.responsive = true;
-        top_gui.startAnimation(
+        topGui.responsive = true;
+        topGui.startAnimation(
             GUI_MANAGER_ANIM_LEFT_TO_CENTER,
             OPTIONS_MENU::HUD_MOVE_TIME
         );
     };
-    controls_gui.back_item->on_get_tooltip =
+    controlsGui.backItem->onGetTooltip =
     [] () { return "Return to the top-level options menu."; };
-    controls_gui.addItem(controls_gui.back_item, "back");
+    controlsGui.addItem(controlsGui.backItem, "back");
     
     //Back input icon.
-    guiAddBackInputIcon(&controls_gui);
+    guiAddBackInputIcon(&controlsGui);
     
     //Header text.
     TextGuiItem* header_text =
         new TextGuiItem(
         "CONTROLS OPTIONS",
-        game.sys_content.fnt_area_name, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
+        game.sysContent.fntAreaName, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
     );
-    controls_gui.addItem(header_text, "header");
+    controlsGui.addItem(header_text, "header");
     
     //Normal control binds button.
     ButtonGuiItem* normal_binds_button =
-        new ButtonGuiItem("Normal control binds...", game.sys_content.fnt_standard);
-    normal_binds_button->on_activate =
+        new ButtonGuiItem("Normal control binds...", game.sysContent.fntStandard);
+    normal_binds_button->onActivate =
     [this] (const Point &) {
-        binds_menu_type = CONTROL_BINDS_MENU_NORMAL;
-        controls_gui.responsive = false;
-        controls_gui.startAnimation(
+        bindsMenuType = CONTROL_BINDS_MENU_NORMAL;
+        controlsGui.responsive = false;
+        controlsGui.startAnimation(
             GUI_MANAGER_ANIM_CENTER_TO_LEFT,
             OPTIONS_MENU::HUD_MOVE_TIME
         );
-        binds_gui.responsive = true;
-        binds_gui.startAnimation(
+        bindsGui.responsive = true;
+        bindsGui.startAnimation(
             GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
             OPTIONS_MENU::HUD_MOVE_TIME
         );
-        must_populate_binds = true;
+        mustPopulateBinds = true;
     };
-    normal_binds_button->on_get_tooltip =
+    normal_binds_button->onGetTooltip =
     [] () { return "Choose what buttons do what regular actions."; };
-    controls_gui.addItem(normal_binds_button, "normal_binds");
+    controlsGui.addItem(normal_binds_button, "normal_binds");
     
     //Special control binds button.
     ButtonGuiItem* special_binds_button =
-        new ButtonGuiItem("Special control binds...", game.sys_content.fnt_standard);
-    special_binds_button->on_activate =
+        new ButtonGuiItem("Special control binds...", game.sysContent.fntStandard);
+    special_binds_button->onActivate =
     [this] (const Point &) {
-        binds_menu_type = CONTROL_BINDS_MENU_SPECIAL;
-        controls_gui.responsive = false;
-        controls_gui.startAnimation(
+        bindsMenuType = CONTROL_BINDS_MENU_SPECIAL;
+        controlsGui.responsive = false;
+        controlsGui.startAnimation(
             GUI_MANAGER_ANIM_CENTER_TO_LEFT,
             OPTIONS_MENU::HUD_MOVE_TIME
         );
-        binds_gui.responsive = true;
-        binds_gui.startAnimation(
+        bindsGui.responsive = true;
+        bindsGui.startAnimation(
             GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
             OPTIONS_MENU::HUD_MOVE_TIME
         );
-        must_populate_binds = true;
+        mustPopulateBinds = true;
     };
-    special_binds_button->on_get_tooltip =
+    special_binds_button->onGetTooltip =
     [] () { return "Choose what buttons do what special features."; };
-    controls_gui.addItem(special_binds_button, "special_binds");
+    controlsGui.addItem(special_binds_button, "special_binds");
     
     //Cursor speed.
-    cursor_speed_picker =
+    cursorSpeedPicker =
         new OptionsMenuPickerGuiItem<float>(
         "Cursor speed: ",
-        &game.options.controls.cursor_speed,
+        &game.options.controls.cursorSpeed,
         OPTIONS::CONTROLS_D::CURSOR_SPEED,
     {250.0f, 350.0f, 500.0f, 700.0f, 1000.0f},
     {"Very slow", "Slow", "Medium", "Fast", "Very fast"},
     "Cursor speed, when controlling without a mouse."
     );
-    cursor_speed_picker->value_to_string = [] (float v) {
+    cursorSpeedPicker->valueToString = [] (float v) {
         return f2s(v);
     };
-    cursor_speed_picker->init();
-    controls_gui.addItem(cursor_speed_picker, "cursor_speed");
+    cursorSpeedPicker->init();
+    controlsGui.addItem(cursorSpeedPicker, "cursor_speed");
     
     //Auto-throw mode.
-    auto_throw_picker =
+    autoThrowPicker =
         new OptionsMenuPickerGuiItem<AUTO_THROW_MODE>(
         "Auto-throw: ",
-        &game.options.controls.auto_throw_mode,
+        &game.options.controls.autoThrowMode,
         OPTIONS::CONTROLS_D::AUTO_THROW,
     {AUTO_THROW_MODE_OFF, AUTO_THROW_MODE_HOLD, AUTO_THROW_MODE_TOGGLE},
     {"Off", "Hold input", "Input toggles"}
     );
-    auto_throw_picker->preset_descriptions = {
+    autoThrowPicker->presetDescriptions = {
         "Pikmin are only thrown when you release the throw input.",
         "Auto-throw Pikmin periodically as long as the throw input is held.",
         "Do the throw input once to auto-throw periodically, and again to stop."
     };
-    auto_throw_picker->init();
-    controls_gui.addItem(auto_throw_picker, "auto_throw");
+    autoThrowPicker->init();
+    controlsGui.addItem(autoThrowPicker, "auto_throw");
     
     //Tooltip text.
     TooltipGuiItem* tooltip_text =
-        new TooltipGuiItem(&controls_gui);
-    controls_gui.addItem(tooltip_text, "tooltip");
+        new TooltipGuiItem(&controlsGui);
+    controlsGui.addItem(tooltip_text, "tooltip");
     
     //Finishing touches.
-    controls_gui.setSelectedItem(normal_binds_button, true);
-    controls_gui.responsive = false;
-    controls_gui.hideItems();
+    controlsGui.setSelectedItem(normal_binds_button, true);
+    controlsGui.responsive = false;
+    controlsGui.hideItems();
 }
 
 
@@ -567,116 +567,116 @@ void OptionsMenu::initGuiControlsPage() {
  */
 void OptionsMenu::initGuiGraphicsPage() {
     //Menu items.
-    graphics_gui.registerCoords("back",            12,  5,   20,  6);
-    graphics_gui.registerCoords("back_input",       3,  7,    4,  4);
-    graphics_gui.registerCoords("header",          50, 10,   50,  6);
-    graphics_gui.registerCoords("fullscreen",      50, 25,   70, 10);
-    graphics_gui.registerCoords("resolution",      50, 42.5, 70, 10);
-    graphics_gui.registerCoords("tooltip",         50, 96,   96,  4);
-    graphics_gui.registerCoords("restart_warning", 50, 85,   70,  6);
-    graphics_gui.readCoords(
-        game.content.gui_defs.list[OPTIONS_MENU::GRAPHICS_GUI_FILE_NAME].
+    graphicsGui.registerCoords("back",            12,  5,   20,  6);
+    graphicsGui.registerCoords("back_input",       3,  7,    4,  4);
+    graphicsGui.registerCoords("header",          50, 10,   50,  6);
+    graphicsGui.registerCoords("fullscreen",      50, 25,   70, 10);
+    graphicsGui.registerCoords("resolution",      50, 42.5, 70, 10);
+    graphicsGui.registerCoords("tooltip",         50, 96,   96,  4);
+    graphicsGui.registerCoords("restart_warning", 50, 85,   70,  6);
+    graphicsGui.readCoords(
+        game.content.guiDefs.list[OPTIONS_MENU::GRAPHICS_GUI_FILE_NAME].
         getChildByName("positions")
     );
     
     //Back button.
-    graphics_gui.back_item =
-        new ButtonGuiItem("Back", game.sys_content.fnt_standard);
-    graphics_gui.back_item->on_activate =
+    graphicsGui.backItem =
+        new ButtonGuiItem("Back", game.sysContent.fntStandard);
+    graphicsGui.backItem->onActivate =
     [this] (const Point &) {
-        graphics_gui.responsive = false;
-        graphics_gui.startAnimation(
+        graphicsGui.responsive = false;
+        graphicsGui.startAnimation(
             GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
             OPTIONS_MENU::HUD_MOVE_TIME
         );
-        top_gui.responsive = true;
-        top_gui.startAnimation(
+        topGui.responsive = true;
+        topGui.startAnimation(
             GUI_MANAGER_ANIM_LEFT_TO_CENTER,
             OPTIONS_MENU::HUD_MOVE_TIME
         );
     };
-    graphics_gui.back_item->on_get_tooltip =
+    graphicsGui.backItem->onGetTooltip =
     [] () { return "Return to the top-level options menu."; };
-    graphics_gui.addItem(graphics_gui.back_item, "back");
+    graphicsGui.addItem(graphicsGui.backItem, "back");
     
     //Back input icon.
-    guiAddBackInputIcon(&graphics_gui);
+    guiAddBackInputIcon(&graphicsGui);
     
     //Header text.
     TextGuiItem* header_text =
         new TextGuiItem(
         "GRAPHICS OPTIONS",
-        game.sys_content.fnt_area_name, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
+        game.sysContent.fntAreaName, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
     );
-    graphics_gui.addItem(header_text, "header");
+    graphicsGui.addItem(header_text, "header");
     
     //Fullscreen checkbox.
     CheckGuiItem* fullscreen_check =
         new CheckGuiItem(
-        &game.options.graphics.intended_win_fullscreen,
-        "Fullscreen", game.sys_content.fnt_standard
+        &game.options.graphics.intendedWinFullscreen,
+        "Fullscreen", game.sysContent.fntStandard
     );
-    fullscreen_check->on_activate =
+    fullscreen_check->onActivate =
     [this, fullscreen_check] (const Point &) {
         fullscreen_check->defActivateCode();
         triggerRestartWarning();
     };
-    fullscreen_check->on_get_tooltip =
+    fullscreen_check->onGetTooltip =
     [] () {
         return
             "Show the game in fullscreen, or in a window? Default: " +
             b2s(OPTIONS::GRAPHICS_D::WIN_FULLSCREEN) + ".";
     };
-    graphics_gui.addItem(fullscreen_check, "fullscreen");
+    graphicsGui.addItem(fullscreen_check, "fullscreen");
     
     //Resolution picker.
     vector<string> resolution_preset_names;
-    for(size_t p = 0; p < resolution_presets.size(); p++) {
+    for(size_t p = 0; p < resolutionPresets.size(); p++) {
         resolution_preset_names.push_back(
-            i2s(resolution_presets[p].first) + "x" +
-            i2s(resolution_presets[p].second)
+            i2s(resolutionPresets[p].first) + "x" +
+            i2s(resolutionPresets[p].second)
         );
     }
-    cur_resolution_option.first = game.options.graphics.intended_win_w;
-    cur_resolution_option.second = game.options.graphics.intended_win_h;
-    resolution_picker =
+    curResolutionOption.first = game.options.graphics.intendedWinW;
+    curResolutionOption.second = game.options.graphics.intendedWinH;
+    resolutionPicker =
         new OptionsMenuPickerGuiItem<std::pair<int, int> >(
         "Resolution: ",
-        &cur_resolution_option,
+        &curResolutionOption,
         std::make_pair(OPTIONS::GRAPHICS_D::WIN_W, OPTIONS::GRAPHICS_D::WIN_H),
-        resolution_presets,
+        resolutionPresets,
         resolution_preset_names,
         "The game's width and height."
     );
-    resolution_picker->after_change = [this] () {
-        game.options.graphics.intended_win_w = cur_resolution_option.first;
-        game.options.graphics.intended_win_h = cur_resolution_option.second;
+    resolutionPicker->afterChange = [this] () {
+        game.options.graphics.intendedWinW = curResolutionOption.first;
+        game.options.graphics.intendedWinH = curResolutionOption.second;
         triggerRestartWarning();
     };
-    resolution_picker->value_to_string = [] (const std::pair<int, int> &v) {
+    resolutionPicker->valueToString = [] (const std::pair<int, int> &v) {
         return i2s(v.first) + "x" + i2s(v.second);
     };
-    resolution_picker->init();
-    graphics_gui.addItem(resolution_picker, "resolution");
+    resolutionPicker->init();
+    graphicsGui.addItem(resolutionPicker, "resolution");
     
     //Warning text.
-    warning_text =
+    warningText =
         new TextGuiItem(
         "Please restart for the changes to take effect.",
-        game.sys_content.fnt_standard, COLOR_WHITE, ALLEGRO_ALIGN_CENTER
+        game.sysContent.fntStandard, COLOR_WHITE, ALLEGRO_ALIGN_CENTER
     );
-    warning_text->visible = false;
-    graphics_gui.addItem(warning_text, "restart_warning");
+    warningText->visible = false;
+    graphicsGui.addItem(warningText, "restart_warning");
     
     //Tooltip text.
     TooltipGuiItem* tooltip_text =
-        new TooltipGuiItem(&graphics_gui);
-    graphics_gui.addItem(tooltip_text, "tooltip");
+        new TooltipGuiItem(&graphicsGui);
+    graphicsGui.addItem(tooltip_text, "tooltip");
     
     //Finishing touches.
-    graphics_gui.setSelectedItem(fullscreen_check, true);
-    graphics_gui.responsive = false;
-    graphics_gui.hideItems();
+    graphicsGui.setSelectedItem(fullscreen_check, true);
+    graphicsGui.responsive = false;
+    graphicsGui.hideItems();
 }
 
 
@@ -685,84 +685,84 @@ void OptionsMenu::initGuiGraphicsPage() {
  */
 void OptionsMenu::initGuiMiscPage() {
     //Menu items.
-    misc_gui.registerCoords("back",                 12,  5,   20,  6);
-    misc_gui.registerCoords("back_input",            3,  7,    4,  4);
-    misc_gui.registerCoords("header",               50, 10,   50,  6);
-    misc_gui.registerCoords("cursor_cam_weight",    50, 22.5, 70, 10);
-    misc_gui.registerCoords("show_hud_input_icons", 50, 40,   70, 10);
-    misc_gui.registerCoords("leaving_confirmation", 50, 57.5, 70, 10);
-    misc_gui.registerCoords("tooltip",              50, 96,   96,  4);
-    misc_gui.readCoords(
-        game.content.gui_defs.list[OPTIONS_MENU::MISC_GUI_FILE_NAME].
+    miscGui.registerCoords("back",                 12,  5,   20,  6);
+    miscGui.registerCoords("back_input",            3,  7,    4,  4);
+    miscGui.registerCoords("header",               50, 10,   50,  6);
+    miscGui.registerCoords("cursor_cam_weight",    50, 22.5, 70, 10);
+    miscGui.registerCoords("show_hud_input_icons", 50, 40,   70, 10);
+    miscGui.registerCoords("leaving_confirmation", 50, 57.5, 70, 10);
+    miscGui.registerCoords("tooltip",              50, 96,   96,  4);
+    miscGui.readCoords(
+        game.content.guiDefs.list[OPTIONS_MENU::MISC_GUI_FILE_NAME].
         getChildByName("positions")
     );
     
     //Back button.
-    misc_gui.back_item =
-        new ButtonGuiItem("Back", game.sys_content.fnt_standard);
-    misc_gui.back_item->on_activate =
+    miscGui.backItem =
+        new ButtonGuiItem("Back", game.sysContent.fntStandard);
+    miscGui.backItem->onActivate =
     [this] (const Point &) {
-        misc_gui.responsive = false;
-        misc_gui.startAnimation(
+        miscGui.responsive = false;
+        miscGui.startAnimation(
             GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
             OPTIONS_MENU::HUD_MOVE_TIME
         );
-        top_gui.responsive = true;
-        top_gui.startAnimation(
+        topGui.responsive = true;
+        topGui.startAnimation(
             GUI_MANAGER_ANIM_LEFT_TO_CENTER,
             OPTIONS_MENU::HUD_MOVE_TIME
         );
     };
-    misc_gui.back_item->on_get_tooltip =
+    miscGui.backItem->onGetTooltip =
     [] () { return "Return to the top-level options menu."; };
-    misc_gui.addItem(misc_gui.back_item, "back");
+    miscGui.addItem(miscGui.backItem, "back");
     
     //Back input icon.
-    guiAddBackInputIcon(&misc_gui);
+    guiAddBackInputIcon(&miscGui);
     
     //Header text.
     TextGuiItem* header_text =
         new TextGuiItem(
         "MISC. OPTIONS",
-        game.sys_content.fnt_area_name, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
+        game.sysContent.fntAreaName, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
     );
-    misc_gui.addItem(header_text, "header");
+    miscGui.addItem(header_text, "header");
     
     //Cursor camera weight.
-    cursor_cam_weight_picker =
+    cursorCamWeightPicker =
         new OptionsMenuPickerGuiItem<float>(
         "Cursor cam weight: ",
-        &game.options.misc.cursor_cam_weight,
+        &game.options.misc.cursorCamWeight,
         OPTIONS::MISC_D::CURSOR_CAM_WEIGHT,
     {0.0f, 0.1f, 0.3f, 0.6f},
     {"None", "Small", "Medium", "Large"},
     "When you move the cursor, how much does it affect the camera?"
     );
-    cursor_cam_weight_picker->value_to_string = [] (float v) {
+    cursorCamWeightPicker->valueToString = [] (float v) {
         return f2s(v);
     };
-    cursor_cam_weight_picker->init();
-    misc_gui.addItem(cursor_cam_weight_picker, "cursor_cam_weight");
+    cursorCamWeightPicker->init();
+    miscGui.addItem(cursorCamWeightPicker, "cursor_cam_weight");
     
     //Show HUD player input icons checkbox.
     CheckGuiItem* show_hud_input_icons_check =
         new CheckGuiItem(
-        &game.options.misc.show_hud_input_icons,
-        "Show input icons on HUD", game.sys_content.fnt_standard
+        &game.options.misc.showHudInputIcons,
+        "Show input icons on HUD", game.sysContent.fntStandard
     );
-    show_hud_input_icons_check->on_get_tooltip =
+    show_hud_input_icons_check->onGetTooltip =
     [] () {
         return
             "Show icons of the player inputs near relevant HUD items? "
             "Default: " + b2s(OPTIONS::MISC_D::SHOW_HUD_INPUT_ICONS) + ".";
     };
-    misc_gui.addItem(show_hud_input_icons_check, "show_hud_input_icons");
+    miscGui.addItem(show_hud_input_icons_check, "show_hud_input_icons");
     
     //Leaving confirmation mode.
-    leaving_confirmation_picker =
+    leavingConfirmationPicker =
         new OptionsMenuPickerGuiItem<LEAVING_CONF_MODE>(
         "Leave confirm: ",
-        &game.options.misc.leaving_conf_mode,
+        &game.options.misc.leavingConfMode,
     OPTIONS::MISC_D::LEAVING_CONF, {
         LEAVING_CONF_MODE_ALWAYS,
         LEAVING_CONF_MODE_1_MIN,
@@ -770,24 +770,24 @@ void OptionsMenu::initGuiMiscPage() {
     },
     {"Always", "After 1min", "Never"}
     );
-    leaving_confirmation_picker->preset_descriptions = {
+    leavingConfirmationPicker->presetDescriptions = {
         "When leaving from the pause menu, always ask to confirm.",
         "When leaving from the pause menu, only ask to confirm "
         "if one minute has passed.",
         "When leaving from the pause menu, never ask to confirm."
     };
-    leaving_confirmation_picker->init();
-    misc_gui.addItem(leaving_confirmation_picker, "leaving_confirmation");
+    leavingConfirmationPicker->init();
+    miscGui.addItem(leavingConfirmationPicker, "leaving_confirmation");
     
     //Tooltip text.
     TooltipGuiItem* tooltip_text =
-        new TooltipGuiItem(&misc_gui);
-    misc_gui.addItem(tooltip_text, "tooltip");
+        new TooltipGuiItem(&miscGui);
+    miscGui.addItem(tooltip_text, "tooltip");
     
     //Finishing touches.
-    misc_gui.setSelectedItem(cursor_cam_weight_picker, true);
-    misc_gui.responsive = false;
-    misc_gui.hideItems();
+    miscGui.setSelectedItem(cursorCamWeightPicker, true);
+    miscGui.responsive = false;
+    miscGui.hideItems();
 }
 
 
@@ -795,7 +795,7 @@ void OptionsMenu::initGuiMiscPage() {
  * @brief Initializes the top-level menu GUI.
  */
 void OptionsMenu::initGuiTopPage() {
-    DataNode* gui_file = &game.content.gui_defs.list[OPTIONS_MENU::TOP_GUI_FILE_NAME];
+    DataNode* gui_file = &game.content.guiDefs.list[OPTIONS_MENU::TOP_GUI_FILE_NAME];
     
     //Button icon positions.
     DataNode* icons_node = gui_file->getChildByName("icons_to_the_left");
@@ -812,45 +812,45 @@ void OptionsMenu::initGuiTopPage() {
 #undef icon_left
     
     //Menu items.
-    top_gui.registerCoords("back",       12,  5, 20,  6);
-    top_gui.registerCoords("back_input",  3,  7,  4,  4);
-    top_gui.registerCoords("header",     50, 10, 50,  6);
-    top_gui.registerCoords("controls",   50, 25, 65, 10);
-    top_gui.registerCoords("graphics",   50, 37, 65, 10);
-    top_gui.registerCoords("audio",      50, 49, 65, 10);
-    top_gui.registerCoords("packs",      50, 61, 65, 10);
-    top_gui.registerCoords("misc",       50, 73, 60, 10);
-    top_gui.registerCoords("advanced",   87, 86, 22,  8);
-    top_gui.registerCoords("tooltip",    50, 96, 96,  4);
-    top_gui.readCoords(gui_file->getChildByName("positions"));
+    topGui.registerCoords("back",       12,  5, 20,  6);
+    topGui.registerCoords("back_input",  3,  7,  4,  4);
+    topGui.registerCoords("header",     50, 10, 50,  6);
+    topGui.registerCoords("controls",   50, 25, 65, 10);
+    topGui.registerCoords("graphics",   50, 37, 65, 10);
+    topGui.registerCoords("audio",      50, 49, 65, 10);
+    topGui.registerCoords("packs",      50, 61, 65, 10);
+    topGui.registerCoords("misc",       50, 73, 60, 10);
+    topGui.registerCoords("advanced",   87, 86, 22,  8);
+    topGui.registerCoords("tooltip",    50, 96, 96,  4);
+    topGui.readCoords(gui_file->getChildByName("positions"));
     
     //Back button.
-    top_gui.back_item =
-        new ButtonGuiItem("Back", game.sys_content.fnt_standard);
-    top_gui.back_item->on_activate =
+    topGui.backItem =
+        new ButtonGuiItem("Back", game.sysContent.fntStandard);
+    topGui.backItem->onActivate =
     [this] (const Point &) {
         saveOptions();
         leave();
     };
-    top_gui.back_item->on_get_tooltip =
+    topGui.backItem->onGetTooltip =
     [] () { return "Return to the previous menu."; };
-    top_gui.addItem(top_gui.back_item, "back");
+    topGui.addItem(topGui.backItem, "back");
     
     //Back input icon.
-    guiAddBackInputIcon(&top_gui);
+    guiAddBackInputIcon(&topGui);
     
     //Header text.
     TextGuiItem* header_text =
         new TextGuiItem(
         "OPTIONS",
-        game.sys_content.fnt_area_name, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
+        game.sysContent.fntAreaName, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
     );
-    top_gui.addItem(header_text, "header");
+    topGui.addItem(header_text, "header");
     
     //Controls options button.
     ButtonGuiItem* controls_button =
-        new ButtonGuiItem("Controls", game.sys_content.fnt_standard);
-    controls_button->on_draw =
+        new ButtonGuiItem("Controls", game.sysContent.fntStandard);
+    controls_button->onDraw =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
             MENU_ICON_CONTROLS, draw.center, draw.size, controls_icon_left
@@ -862,27 +862,27 @@ void OptionsMenu::initGuiTopPage() {
             controls_button->getJuiceValue()
         );
     };
-    controls_button->on_activate =
+    controls_button->onActivate =
     [this] (const Point &) {
-        top_gui.responsive = false;
-        top_gui.startAnimation(
+        topGui.responsive = false;
+        topGui.startAnimation(
             GUI_MANAGER_ANIM_CENTER_TO_LEFT,
             OPTIONS_MENU::HUD_MOVE_TIME
         );
-        controls_gui.responsive = true;
-        controls_gui.startAnimation(
+        controlsGui.responsive = true;
+        controlsGui.startAnimation(
             GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
             OPTIONS_MENU::HUD_MOVE_TIME
         );
     };
-    controls_button->on_get_tooltip =
+    controls_button->onGetTooltip =
     [] () { return "Change the way you control the game."; };
-    top_gui.addItem(controls_button, "controls");
+    topGui.addItem(controls_button, "controls");
     
     //Graphics options button.
     ButtonGuiItem* graphics_button =
-        new ButtonGuiItem("Graphics", game.sys_content.fnt_standard);
-    graphics_button->on_draw =
+        new ButtonGuiItem("Graphics", game.sysContent.fntStandard);
+    graphics_button->onDraw =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
             MENU_ICON_GRAPHICS, draw.center, draw.size, graphics_icon_left
@@ -894,27 +894,27 @@ void OptionsMenu::initGuiTopPage() {
             graphics_button->getJuiceValue()
         );
     };
-    graphics_button->on_activate =
+    graphics_button->onActivate =
     [this] (const Point &) {
-        top_gui.responsive = false;
-        top_gui.startAnimation(
+        topGui.responsive = false;
+        topGui.startAnimation(
             GUI_MANAGER_ANIM_CENTER_TO_LEFT,
             OPTIONS_MENU::HUD_MOVE_TIME
         );
-        graphics_gui.responsive = true;
-        graphics_gui.startAnimation(
+        graphicsGui.responsive = true;
+        graphicsGui.startAnimation(
             GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
             OPTIONS_MENU::HUD_MOVE_TIME
         );
     };
-    graphics_button->on_get_tooltip =
+    graphics_button->onGetTooltip =
     [] () { return "Change some options about how the game looks."; };
-    top_gui.addItem(graphics_button, "graphics");
+    topGui.addItem(graphics_button, "graphics");
     
     //Audio options button.
     ButtonGuiItem* audio_button =
-        new ButtonGuiItem("Audio", game.sys_content.fnt_standard);
-    audio_button->on_draw =
+        new ButtonGuiItem("Audio", game.sysContent.fntStandard);
+    audio_button->onDraw =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
             MENU_ICON_AUDIO, draw.center, draw.size, audio_icon_left
@@ -926,27 +926,27 @@ void OptionsMenu::initGuiTopPage() {
             audio_button->getJuiceValue()
         );
     };
-    audio_button->on_activate =
+    audio_button->onActivate =
     [this] (const Point &) {
-        top_gui.responsive = false;
-        top_gui.startAnimation(
+        topGui.responsive = false;
+        topGui.startAnimation(
             GUI_MANAGER_ANIM_CENTER_TO_LEFT,
             OPTIONS_MENU::HUD_MOVE_TIME
         );
-        audio_gui.responsive = true;
-        audio_gui.startAnimation(
+        audioGui.responsive = true;
+        audioGui.startAnimation(
             GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
             OPTIONS_MENU::HUD_MOVE_TIME
         );
     };
-    audio_button->on_get_tooltip =
+    audio_button->onGetTooltip =
     [] () { return "Change options about the way the game sounds."; };
-    top_gui.addItem(audio_button, "audio");
+    topGui.addItem(audio_button, "audio");
     
     //Packs options button.
     ButtonGuiItem* packs_button =
-        new ButtonGuiItem("Packs", game.sys_content.fnt_standard);
-    packs_button->on_draw =
+        new ButtonGuiItem("Packs", game.sysContent.fntStandard);
+    packs_button->onDraw =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
             MENU_ICON_PACKS, draw.center, draw.size, packs_icon_left
@@ -958,43 +958,43 @@ void OptionsMenu::initGuiTopPage() {
             packs_button->getJuiceValue()
         );
     };
-    packs_button->on_activate =
+    packs_button->onActivate =
     [this] (const Point &) {
-        top_gui.responsive = false;
-        top_gui.startAnimation(
+        topGui.responsive = false;
+        topGui.startAnimation(
             GUI_MANAGER_ANIM_CENTER_TO_LEFT,
             OPTIONS_MENU::HUD_MOVE_TIME
         );
-        packs_menu = new PacksMenu();
-        packs_menu->gui.responsive = true;
-        packs_menu->gui.startAnimation(
+        packsMenu = new PacksMenu();
+        packsMenu->gui.responsive = true;
+        packsMenu->gui.startAnimation(
             GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
             OPTIONS_MENU::HUD_MOVE_TIME
         );
-        packs_menu->leave_callback = [ = ] () {
-            packs_menu->unload_timer = OPTIONS_MENU::HUD_MOVE_TIME;
-            packs_menu->gui.responsive = false;
-            packs_menu->gui.startAnimation(
+        packsMenu->leaveCallback = [ = ] () {
+            packsMenu->unloadTimer = OPTIONS_MENU::HUD_MOVE_TIME;
+            packsMenu->gui.responsive = false;
+            packsMenu->gui.startAnimation(
                 GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
                 OPTIONS_MENU::HUD_MOVE_TIME
             );
-            top_gui.responsive = true;
-            top_gui.startAnimation(
+            topGui.responsive = true;
+            topGui.startAnimation(
                 GUI_MANAGER_ANIM_LEFT_TO_CENTER,
                 OPTIONS_MENU::HUD_MOVE_TIME
             );
         };
-        packs_menu->load();
-        packs_menu->enter();
+        packsMenu->load();
+        packsMenu->enter();
     };
-    packs_button->on_get_tooltip =
+    packs_button->onGetTooltip =
     [] () { return "Manage any content packs you have installed."; };
-    top_gui.addItem(packs_button, "packs");
+    topGui.addItem(packs_button, "packs");
     
     //Misc. options button.
     ButtonGuiItem* misc_button =
-        new ButtonGuiItem("Misc.", game.sys_content.fnt_standard);
-    misc_button->on_draw =
+        new ButtonGuiItem("Misc.", game.sysContent.fntStandard);
+    misc_button->onDraw =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
             MENU_ICON_OPTIONS_MISC, draw.center, draw.size, misc_icon_left
@@ -1006,45 +1006,45 @@ void OptionsMenu::initGuiTopPage() {
             misc_button->getJuiceValue()
         );
     };
-    misc_button->on_activate =
+    misc_button->onActivate =
     [this] (const Point &) {
-        top_gui.responsive = false;
-        top_gui.startAnimation(
+        topGui.responsive = false;
+        topGui.startAnimation(
             GUI_MANAGER_ANIM_CENTER_TO_LEFT,
             OPTIONS_MENU::HUD_MOVE_TIME
         );
-        misc_gui.responsive = true;
-        misc_gui.startAnimation(
+        miscGui.responsive = true;
+        miscGui.startAnimation(
             GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
             OPTIONS_MENU::HUD_MOVE_TIME
         );
     };
-    misc_button->on_get_tooltip =
+    misc_button->onGetTooltip =
     [] () { return "Change some miscellaneous gameplay and game options."; };
-    top_gui.addItem(misc_button, "misc");
+    topGui.addItem(misc_button, "misc");
     
     //Advanced bullet point.
     BulletGuiItem* advanced_bullet =
-        new BulletGuiItem("Advanced...", game.sys_content.fnt_standard);
-    advanced_bullet->on_activate =
+        new BulletGuiItem("Advanced...", game.sysContent.fntStandard);
+    advanced_bullet->onActivate =
     [] (const Point &) {
         openManual("options.html");
     };
-    advanced_bullet->on_get_tooltip =
+    advanced_bullet->onGetTooltip =
     [] () {
         return
             "Click to open the manual (in the game's folder) for info "
             "on advanced options.";
     };
-    top_gui.addItem(advanced_bullet, "advanced");
+    topGui.addItem(advanced_bullet, "advanced");
     
     //Tooltip text.
     TooltipGuiItem* tooltip_text =
-        new TooltipGuiItem(&top_gui);
-    top_gui.addItem(tooltip_text, "tooltip");
+        new TooltipGuiItem(&topGui);
+    topGui.addItem(tooltip_text, "tooltip");
     
     //Finishing touches.
-    top_gui.setSelectedItem(controls_button, true);
+    topGui.setSelectedItem(controls_button, true);
 }
 
 
@@ -1061,22 +1061,22 @@ void OptionsMenu::load() {
         if(!al_get_display_mode(d, &d_info)) continue;
         if(d_info.width < SMALLEST_WIN_WIDTH) continue;
         if(d_info.height < SMALLEST_WIN_HEIGHT) continue;
-        resolution_presets.push_back(
+        resolutionPresets.push_back(
             std::make_pair(d_info.width, d_info.height)
         );
     }
     
     //In case things go wrong, at least add these presets.
-    resolution_presets.push_back(
+    resolutionPresets.push_back(
         std::make_pair(OPTIONS::GRAPHICS_D::WIN_W, OPTIONS::GRAPHICS_D::WIN_H)
     );
-    resolution_presets.push_back(
+    resolutionPresets.push_back(
         std::make_pair(SMALLEST_WIN_WIDTH, SMALLEST_WIN_HEIGHT)
     );
     
     //Sort the list.
     sort(
-        resolution_presets.begin(), resolution_presets.end(),
+        resolutionPresets.begin(), resolutionPresets.end(),
     [] (std::pair<int, int> p1, std::pair<int, int> p2) -> bool {
         if(p1.first == p2.first) {
             return p1.second < p2.second;
@@ -1086,9 +1086,9 @@ void OptionsMenu::load() {
     );
     
     //Remove any duplicates.
-    for(size_t p = 0; p < resolution_presets.size() - 1;) {
-        if(resolution_presets[p] == resolution_presets[p + 1]) {
-            resolution_presets.erase(resolution_presets.begin() + (p + 1));
+    for(size_t p = 0; p < resolutionPresets.size() - 1;) {
+        if(resolutionPresets[p] == resolutionPresets[p + 1]) {
+            resolutionPresets.erase(resolutionPresets.begin() + (p + 1));
         } else {
             p++;
         }
@@ -1103,12 +1103,12 @@ void OptionsMenu::load() {
     initGuiMiscPage();
     
     //Finish the menu class setup.
-    guis.push_back(&top_gui);
-    guis.push_back(&controls_gui);
-    guis.push_back(&binds_gui);
-    guis.push_back(&graphics_gui);
-    guis.push_back(&audio_gui);
-    guis.push_back(&misc_gui);
+    guis.push_back(&topGui);
+    guis.push_back(&controlsGui);
+    guis.push_back(&bindsGui);
+    guis.push_back(&graphicsGui);
+    guis.push_back(&audioGui);
+    guis.push_back(&miscGui);
     Menu::load();
 }
 
@@ -1118,7 +1118,7 @@ void OptionsMenu::load() {
  */
 void OptionsMenu::populateBinds() {
     unordered_set<PLAYER_ACTION_CAT> allowed_categories;
-    switch(binds_menu_type) {
+    switch(bindsMenuType) {
     case CONTROL_BINDS_MENU_NORMAL: {
         allowed_categories = {
             PLAYER_ACTION_CAT_MAIN,
@@ -1136,20 +1136,20 @@ void OptionsMenu::populateBinds() {
     }
     }
     
-    binds_list_box->deleteAllChildren();
+    bindsListBox->deleteAllChildren();
     
     const vector<PfePlayerActionType> &all_player_action_types =
         game.controls.getAllPlayerActionTypes();
     vector<ControlBind> &all_binds = game.controls.binds();
     
-    binds_per_action_type.clear();
-    binds_per_action_type.assign(all_player_action_types.size(), vector<ControlBind>());
+    bindsPerActionType.clear();
+    bindsPerActionType.assign(all_player_action_types.size(), vector<ControlBind>());
     
     //Read all binds and sort them by player action type.
     for(size_t b = 0; b < all_binds.size(); b++) {
         const ControlBind &bind = all_binds[b];
         if(bind.playerNr != 0) continue;
-        binds_per_action_type[bind.actionTypeId].push_back(bind);
+        bindsPerActionType[bind.actionTypeId].push_back(bind);
     }
     
     PLAYER_ACTION_CAT last_cat = PLAYER_ACTION_CAT_NONE;
@@ -1157,11 +1157,11 @@ void OptionsMenu::populateBinds() {
     for(size_t a = 0; a < all_player_action_types.size(); a++) {
         const PfePlayerActionType &action_type = all_player_action_types[a];
         
-        if(action_type.internal_name.empty()) continue;
+        if(action_type.internalName.empty()) continue;
         if(!isInContainer(allowed_categories, action_type.category)) continue;
         
         float action_y =
-            binds_list_box->getChildBottom() +
+            bindsListBox->getChildBottom() +
             OPTIONS_MENU::BIND_BUTTON_PADDING;
             
         if(action_type.category != last_cat) {
@@ -1192,19 +1192,19 @@ void OptionsMenu::populateBinds() {
             }
             }
             TextGuiItem* section_text =
-                new TextGuiItem(section_name, game.sys_content.fnt_area_name);
-            section_text->ratio_center =
+                new TextGuiItem(section_name, game.sysContent.fntAreaName);
+            section_text->ratioCenter =
                 Point(
                     0.50f,
                     action_y + OPTIONS_MENU::BIND_BUTTON_HEIGHT / 2.0f
                 );
-            section_text->ratio_size =
+            section_text->ratioSize =
                 Point(0.50f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
-            binds_list_box->addChild(section_text);
-            binds_gui.addItem(section_text);
+            bindsListBox->addChild(section_text);
+            bindsGui.addItem(section_text);
             
             action_y =
-                binds_list_box->getChildBottom() +
+                bindsListBox->getChildBottom() +
                 OPTIONS_MENU::BIND_BUTTON_PADDING;
                 
             last_cat = action_type.category;
@@ -1215,110 +1215,110 @@ void OptionsMenu::populateBinds() {
         
         //Action type name bullet.
         BulletGuiItem* name_bullet =
-            new BulletGuiItem(action_type.name, game.sys_content.fnt_standard);
-        name_bullet->ratio_center =
+            new BulletGuiItem(action_type.name, game.sysContent.fntStandard);
+        name_bullet->ratioCenter =
             Point(0.22f, cur_y);
-        name_bullet->ratio_size =
+        name_bullet->ratioSize =
             Point(0.34f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
-        name_bullet->on_get_tooltip =
+        name_bullet->onGetTooltip =
         [action_type] () { return action_type.description; };
-        binds_list_box->addChild(name_bullet);
-        binds_gui.addItem(name_bullet);
+        bindsListBox->addChild(name_bullet);
+        bindsGui.addItem(name_bullet);
         
         //More button.
         ButtonGuiItem* more_button =
-            new ButtonGuiItem("...", game.sys_content.fnt_standard);
-        more_button->on_activate =
+            new ButtonGuiItem("...", game.sysContent.fntStandard);
+        more_button->onActivate =
         [this, action_type] (const Point &) {
-            if(showing_binds_more && action_type.id == cur_action_type) {
-                showing_binds_more = false;
+            if(showingBindsMore && action_type.id == curActionType) {
+                showingBindsMore = false;
             } else {
-                cur_action_type = action_type.id;
-                showing_binds_more = true;
+                curActionType = action_type.id;
+                showingBindsMore = true;
             }
-            must_populate_binds = true;
+            mustPopulateBinds = true;
         };
-        more_button->ratio_center =
+        more_button->ratioCenter =
             Point(0.92f, cur_y);
-        more_button->ratio_size =
+        more_button->ratioSize =
             Point(0.05f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
         string tooltip =
-            (showing_binds_more && action_type.id == cur_action_type) ?
+            (showingBindsMore && action_type.id == curActionType) ?
             "Hide options." :
             "Show information and options for this action.";
-        more_button->on_get_tooltip =
+        more_button->onGetTooltip =
         [tooltip] () { return tooltip; };
-        binds_list_box->addChild(more_button);
-        binds_gui.addItem(more_button);
-        if(action_type.id == cur_action_type) {
-            binds_gui.setSelectedItem(more_button, true);
+        bindsListBox->addChild(more_button);
+        bindsGui.addItem(more_button);
+        if(action_type.id == curActionType) {
+            bindsGui.setSelectedItem(more_button, true);
         }
         
-        vector<ControlBind> a_binds = binds_per_action_type[action_type.id];
+        vector<ControlBind> a_binds = bindsPerActionType[action_type.id];
         for(size_t b = 0; b < a_binds.size(); b++) {
         
             //Change bind button.
             ButtonGuiItem* bind_button =
-                new ButtonGuiItem("", game.sys_content.fnt_standard);
-            bind_button->on_activate =
+                new ButtonGuiItem("", game.sysContent.fntStandard);
+            bind_button->onActivate =
             [this, action_type, b] (const Point &) {
                 chooseInput(action_type.id, b);
             };
-            bind_button->on_draw =
+            bind_button->onDraw =
                 [this, b, a_binds, bind_button]
             (const DrawInfo & draw) {
                 drawPlayerInputSourceIcon(
-                    game.sys_content.fnt_slim, a_binds[b].inputSource, false,
+                    game.sysContent.fntSlim, a_binds[b].inputSource, false,
                     draw.center, draw.size * 0.8f
                 );
                 
                 drawButton(
                     draw.center, draw.size,
-                    "", game.sys_content.fnt_standard, COLOR_WHITE,
+                    "", game.sysContent.fntStandard, COLOR_WHITE,
                     bind_button->selected,
                     bind_button->getJuiceValue()
                 );
             };
-            bind_button->ratio_center =
+            bind_button->ratioCenter =
                 Point(0.63f, cur_y);
-            bind_button->ratio_size =
+            bind_button->ratioSize =
                 Point(0.34f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
-            bind_button->on_get_tooltip =
+            bind_button->onGetTooltip =
             [] () { return "Change the input for this action."; };
-            binds_list_box->addChild(bind_button);
-            binds_gui.addItem(bind_button);
+            bindsListBox->addChild(bind_button);
+            bindsGui.addItem(bind_button);
             
-            if(showing_binds_more && action_type.id == cur_action_type) {
+            if(showingBindsMore && action_type.id == curActionType) {
                 //Remove bind button.
                 ButtonGuiItem* remove_bind_button =
-                    new ButtonGuiItem("", game.sys_content.fnt_standard);
-                remove_bind_button->on_activate =
+                    new ButtonGuiItem("", game.sysContent.fntStandard);
+                remove_bind_button->onActivate =
                 [this, action_type, b] (const Point &) {
                     deleteBind(action_type.id, b);
                 };
-                remove_bind_button->on_draw =
+                remove_bind_button->onDraw =
                     [this, remove_bind_button]
                 (const DrawInfo & draw) {
                     drawButton(
-                        draw.center, draw.size, "X", game.sys_content.fnt_standard, COLOR_WHITE,
+                        draw.center, draw.size, "X", game.sysContent.fntStandard, COLOR_WHITE,
                         remove_bind_button->selected,
                         remove_bind_button->getJuiceValue()
                     );
                 };
-                remove_bind_button->ratio_center =
+                remove_bind_button->ratioCenter =
                     Point(0.85f, cur_y);
-                remove_bind_button->ratio_size =
+                remove_bind_button->ratioSize =
                     Point(0.05f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
-                remove_bind_button->on_get_tooltip =
+                remove_bind_button->onGetTooltip =
                 [] () { return "Remove this input from this action."; };
-                binds_list_box->addChild(remove_bind_button);
-                binds_gui.addItem(remove_bind_button);
+                bindsListBox->addChild(remove_bind_button);
+                bindsGui.addItem(remove_bind_button);
                 remove_bind_button->startJuiceAnimation(
                     GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
                 );
             }
             
-            if(action_type.id == cur_action_type) {
+            if(action_type.id == curActionType) {
                 bind_button->startJuiceAnimation(
                     GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
                 );
@@ -1334,28 +1334,28 @@ void OptionsMenu::populateBinds() {
         
             //Add first bind button.
             ButtonGuiItem* bind_button =
-                new ButtonGuiItem("", game.sys_content.fnt_standard);
-            bind_button->on_activate =
+                new ButtonGuiItem("", game.sysContent.fntStandard);
+            bind_button->onActivate =
             [this, action_type] (const Point &) {
                 chooseInput(action_type.id, 0);
             };
-            bind_button->on_draw =
+            bind_button->onDraw =
                 [this, bind_button]
             (const DrawInfo & draw) {
                 drawButton(
-                    draw.center, draw.size, "", game.sys_content.fnt_standard, COLOR_WHITE,
+                    draw.center, draw.size, "", game.sysContent.fntStandard, COLOR_WHITE,
                     bind_button->selected,
                     bind_button->getJuiceValue()
                 );
             };
-            bind_button->ratio_center =
+            bind_button->ratioCenter =
                 Point(0.63f, cur_y);
-            bind_button->ratio_size =
+            bind_button->ratioSize =
                 Point(0.34f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
-            bind_button->on_get_tooltip =
+            bind_button->onGetTooltip =
             [] () { return "Choose an input for this action."; };
-            binds_list_box->addChild(bind_button);
-            binds_gui.addItem(bind_button);
+            bindsListBox->addChild(bind_button);
+            bindsGui.addItem(bind_button);
             bind_button->startJuiceAnimation(
                 GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
             );
@@ -1364,23 +1364,23 @@ void OptionsMenu::populateBinds() {
                 OPTIONS_MENU::BIND_BUTTON_HEIGHT +
                 OPTIONS_MENU::BIND_BUTTON_PADDING;
                 
-        } else if(showing_binds_more && action_type.id == cur_action_type) {
+        } else if(showingBindsMore && action_type.id == curActionType) {
         
             //Add button.
             ButtonGuiItem* add_button =
-                new ButtonGuiItem("Add...", game.sys_content.fnt_standard);
-            add_button->ratio_center =
+                new ButtonGuiItem("Add...", game.sysContent.fntStandard);
+            add_button->ratioCenter =
                 Point(0.63f, cur_y);
-            add_button->ratio_size =
+            add_button->ratioSize =
                 Point(0.34f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
-            add_button->on_activate =
+            add_button->onActivate =
             [this, action_type, a_binds] (const Point &) {
                 chooseInput(action_type.id, a_binds.size());
             };
-            add_button->on_get_tooltip =
+            add_button->onGetTooltip =
             [] () { return "Add another input to this action."; };
-            binds_list_box->addChild(add_button);
-            binds_gui.addItem(add_button);
+            bindsListBox->addChild(add_button);
+            bindsGui.addItem(add_button);
             add_button->startJuiceAnimation(
                 GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
             );
@@ -1391,23 +1391,23 @@ void OptionsMenu::populateBinds() {
                 
         }
         
-        if(showing_binds_more && action_type.id == cur_action_type) {
+        if(showingBindsMore && action_type.id == curActionType) {
         
             //Restore default button.
             ButtonGuiItem* restore_button =
-                new ButtonGuiItem("Restore defaults", game.sys_content.fnt_standard);
-            restore_button->ratio_center =
+                new ButtonGuiItem("Restore defaults", game.sysContent.fntStandard);
+            restore_button->ratioCenter =
                 Point(0.63f, cur_y);
-            restore_button->ratio_size =
+            restore_button->ratioSize =
                 Point(0.34f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
-            restore_button->on_activate =
+            restore_button->onActivate =
             [this, action_type] (const Point &) {
                 restoreDefaultBinds(action_type.id);
             };
-            restore_button->on_get_tooltip =
+            restore_button->onGetTooltip =
             [] () { return "Restore this action's default inputs."; };
-            binds_list_box->addChild(restore_button);
-            binds_gui.addItem(restore_button);
+            bindsListBox->addChild(restore_button);
+            bindsGui.addItem(restore_button);
             restore_button->startJuiceAnimation(
                 GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
             );
@@ -1419,45 +1419,45 @@ void OptionsMenu::populateBinds() {
             //Default label.
             TextGuiItem* default_label_text =
                 new TextGuiItem(
-                "Default:", game.sys_content.fnt_standard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
+                "Default:", game.sysContent.fntStandard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
             );
-            default_label_text->ratio_center =
+            default_label_text->ratioCenter =
                 Point(0.63f, cur_y);
-            default_label_text->ratio_size =
+            default_label_text->ratioSize =
                 Point(0.30f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
-            binds_list_box->addChild(default_label_text);
-            binds_gui.addItem(default_label_text);
+            bindsListBox->addChild(default_label_text);
+            bindsGui.addItem(default_label_text);
             default_label_text->startJuiceAnimation(
                 GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
             );
             
             //Default icon.
             PlayerInputSource def_input_source =
-                game.controls.strToInputSource(action_type.default_bind_str);
+                game.controls.strToInputSource(action_type.defaultBindStr);
             GuiItem* default_icon = new GuiItem();
-            default_icon->ratio_center =
+            default_icon->ratioCenter =
                 Point(0.68f, cur_y);
-            default_icon->ratio_size =
+            default_icon->ratioSize =
                 Point(0.17f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
-            default_icon->on_draw =
+            default_icon->onDraw =
             [def_input_source] (const DrawInfo & draw) {
                 drawPlayerInputSourceIcon(
-                    game.sys_content.fnt_slim, def_input_source, false, draw.center, draw.size
+                    game.sysContent.fntSlim, def_input_source, false, draw.center, draw.size
                 );
             };
-            binds_list_box->addChild(default_icon);
-            binds_gui.addItem(default_icon);
+            bindsListBox->addChild(default_icon);
+            bindsGui.addItem(default_icon);
             
         }
         
         //Spacer line.
         GuiItem* line = new GuiItem();
-        line->ratio_center =
+        line->ratioCenter =
             Point(
-                0.50f, binds_list_box->getChildBottom() + 0.02f
+                0.50f, bindsListBox->getChildBottom() + 0.02f
             );
-        line->ratio_size = Point(0.90f, 0.02f);
-        line->on_draw =
+        line->ratioSize = Point(0.90f, 0.02f);
+        line->onDraw =
         [] (const DrawInfo & draw) {
             al_draw_line(
                 draw.center.x - draw.size.x / 2.0f,
@@ -1468,8 +1468,8 @@ void OptionsMenu::populateBinds() {
                 1.0f
             );
         };
-        binds_list_box->addChild(line);
-        binds_gui.addItem(line);
+        bindsListBox->addChild(line);
+        bindsGui.addItem(line);
     }
 }
 
@@ -1499,7 +1499,7 @@ void OptionsMenu::restoreDefaultBinds(
     }
     
     PlayerInputSource def_input_source =
-        game.controls.strToInputSource(action_type.default_bind_str);
+        game.controls.strToInputSource(action_type.defaultBindStr);
     ControlBind new_bind;
     
     if(def_input_source.type != INPUT_SOURCE_TYPE_NONE) {
@@ -1509,8 +1509,8 @@ void OptionsMenu::restoreDefaultBinds(
         all_binds.push_back(new_bind);
     }
     
-    showing_binds_more = false;
-    must_populate_binds = true;
+    showingBindsMore = false;
+    mustPopulateBinds = true;
 }
 
 
@@ -1522,32 +1522,32 @@ void OptionsMenu::restoreDefaultBinds(
 void OptionsMenu::tick(float delta_t) {
     Menu::tick(delta_t);
     
-    if(must_populate_binds) {
+    if(mustPopulateBinds) {
         populateBinds();
-        must_populate_binds = false;
+        mustPopulateBinds = false;
     }
     
     //Tick the GUIs.
-    if(packs_menu) {
-        if(packs_menu->loaded) {
-            packs_menu->tick(game.delta_t);
+    if(packsMenu) {
+        if(packsMenu->loaded) {
+            packsMenu->tick(game.deltaT);
         }
-        if(!packs_menu->loaded) {
-            delete packs_menu;
-            packs_menu = nullptr;
+        if(!packsMenu->loaded) {
+            delete packsMenu;
+            packsMenu = nullptr;
         }
     }
     
     //Input capturing logic.
-    if(capturing_input == 1) {
-        capturing_input_timeout -= game.delta_t;
-        if(capturing_input_timeout <= 0.0f) {
+    if(capturingInput == 1) {
+        capturingInputTimeout -= game.deltaT;
+        if(capturingInputTimeout <= 0.0f) {
             //Timed out. Cancel.
-            capturing_input = 0;
+            capturingInput = 0;
         }
-    } else if(capturing_input == 2) {
+    } else if(capturingInput == 2) {
         //A frame has passed in the post-capture cooldown. Finish the cooldown.
-        capturing_input = 0;
+        capturingInput = 0;
     }
 }
 
@@ -1556,9 +1556,9 @@ void OptionsMenu::tick(float delta_t) {
  * @brief Triggers the restart warning at the bottom of the screen.
  */
 void OptionsMenu::triggerRestartWarning() {
-    if(!warning_text->visible) {
-        warning_text->visible = true;
-        warning_text->startJuiceAnimation(
+    if(!warningText->visible) {
+        warningText->visible = true;
+        warningText->startJuiceAnimation(
             GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
         );
     }
@@ -1569,10 +1569,10 @@ void OptionsMenu::triggerRestartWarning() {
  * @brief Unloads the menu.
  */
 void OptionsMenu::unload() {
-    if(packs_menu) {
-        packs_menu->unload();
-        delete packs_menu;
-        packs_menu = nullptr;
+    if(packsMenu) {
+        packsMenu->unload();
+        delete packsMenu;
+        packsMenu = nullptr;
     }
     
     Menu::unload();

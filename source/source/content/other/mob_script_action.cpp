@@ -32,9 +32,9 @@ using std::set;
  */
 MobActionCall::MobActionCall(MOB_ACTION type) {
 
-    for(size_t a = 0; a < game.mob_actions.size(); a++) {
-        if(game.mob_actions[a].type == type) {
-            action = &(game.mob_actions[a]);
+    for(size_t a = 0; a < game.mobActions.size(); a++) {
+        if(game.mobActions[a].type == type) {
+            action = &(game.mobActions[a]);
             break;
         }
     }
@@ -49,9 +49,9 @@ MobActionCall::MobActionCall(MOB_ACTION type) {
 MobActionCall::MobActionCall(custom_action_code_t code) :
     code(code) {
     
-    for(size_t a = 0; a < game.mob_actions.size(); a++) {
-        if(game.mob_actions[a].type == MOB_ACTION_UNKNOWN) {
-            action = &(game.mob_actions[a]);
+    for(size_t a = 0; a < game.mobActions.size(); a++) {
+        if(game.mobActions[a].type == MOB_ACTION_UNKNOWN) {
+            action = &(game.mobActions[a]);
             break;
         }
     }
@@ -81,10 +81,10 @@ bool MobActionCall::loadFromDataNode(DataNode* dn, MobType* mt) {
     words.erase(words.begin());
     
     //Find the corresponding action.
-    for(size_t a = 0; a < game.mob_actions.size(); a++) {
-        if(game.mob_actions[a].type == MOB_ACTION_UNKNOWN) continue;
-        if(game.mob_actions[a].name == name) {
-            action = &(game.mob_actions[a]);
+    for(size_t a = 0; a < game.mobActions.size(); a++) {
+        if(game.mobActions[a].type == MOB_ACTION_UNKNOWN) continue;
+        if(game.mobActions[a].name == name) {
+            action = &(game.mobActions[a]);
         }
     }
     
@@ -97,7 +97,7 @@ bool MobActionCall::loadFromDataNode(DataNode* dn, MobType* mt) {
     size_t mandatory_parameters = action->parameters.size();
     
     if(mandatory_parameters > 0) {
-        if(action->parameters[mandatory_parameters - 1].is_extras) {
+        if(action->parameters[mandatory_parameters - 1].isExtras) {
             mandatory_parameters--;
         }
     }
@@ -137,7 +137,7 @@ bool MobActionCall::loadFromDataNode(DataNode* dn, MobType* mt) {
         }
         
         if(is_var) {
-            if(action->parameters[param_idx].force_const) {
+            if(action->parameters[param_idx].forceConst) {
                 game.errors.report(
                     "Argument #" + i2s(w + 1) + " (\"" + words[w] + "\") is a "
                     "variable, but the parameter \"" +
@@ -161,14 +161,14 @@ bool MobActionCall::loadFromDataNode(DataNode* dn, MobType* mt) {
         }
         
         args.push_back(words[w]);
-        arg_is_var.push_back(is_var);
+        argIsVar.push_back(is_var);
     }
     
     //If this action needs extra parsing, do it now.
-    if(action->extra_load_logic) {
-        bool success = action->extra_load_logic(*this);
-        if(!custom_error.empty()) {
-            game.errors.report(custom_error, dn);
+    if(action->extraLoadLogic) {
+        bool success = action->extraLoadLogic(*this);
+        if(!customError.empty()) {
+            game.errors.report(customError, dn);
         }
         return success;
     }
@@ -199,15 +199,15 @@ bool MobActionCall::run(
     //Fill the arguments. Fetch values from variables if needed.
     data.args = args;
     for(size_t a = 0; a < args.size(); a++) {
-        if(arg_is_var[a]) {
+        if(argIsVar[a]) {
             data.args[a] = m->vars[args[a]];
         }
     }
-    data.custom_data_1 = custom_data_1;
-    data.custom_data_2 = custom_data_2;
+    data.customData1 = custom_data_1;
+    data.customData2 = custom_data_2;
     
     action->code(data);
-    return data.return_value;
+    return data.returnValue;
 }
 
 
@@ -283,7 +283,7 @@ bool mob_action_loaders::getAreaInfo(MobActionCall &call) {
     } else if(call.args[1] == "field_pikmin") {
         call.args[1] = i2s(MOB_ACTION_GET_AREA_INFO_TYPE_FIELD_PIKMIN);
     } else {
-        call.custom_error =
+        call.customError =
             "Unknown info type \"" + call.args[0] + "\"! "
             "Try using \"get_mob_info\" or \"get_event_info\".";
         return false;
@@ -315,7 +315,7 @@ bool mob_action_loaders::getEventInfo(MobActionCall &call) {
     } else if(call.args[1] == "other_body_part") {
         call.args[1] = i2s(MOB_ACTION_GET_EV_INFO_TYPE_OTHER_BODY_PART);
     } else {
-        call.custom_error =
+        call.customError =
             "Unknown info type \"" + call.args[1] + "\"! "
             "Try using \"get_mob_info\" or \"get_area_info\".";
         return false;
@@ -370,7 +370,7 @@ bool mob_action_loaders::getMobInfo(MobActionCall &call) {
     } else if(call.args[2] == "z") {
         call.args[2] = i2s(MOB_ACTION_GET_MOB_INFO_TYPE_Z);
     } else {
-        call.custom_error =
+        call.customError =
             "Unknown info type \"" + call.args[0] + "\"! "
             "Try using \"get_event_info\" or \"get_area_info\".";
         return false;
@@ -387,9 +387,9 @@ bool mob_action_loaders::getMobInfo(MobActionCall &call) {
  * @return Whether it succeeded.
  */
 bool mob_action_loaders::holdFocus(MobActionCall &call) {
-    size_t p_idx = call.mt->anim_db->findBodyPart(call.args[0]);
+    size_t p_idx = call.mt->animDb->findBodyPart(call.args[0]);
     if(p_idx == INVALID) {
-        call.custom_error =
+        call.customError =
             "Unknown body part \"" + call.args[0] + "\"!";
         return false;
     }
@@ -492,7 +492,7 @@ bool mob_action_loaders::playSound(MobActionCall &call) {
             return true;
         }
     }
-    call.custom_error =
+    call.customError =
         "Unknown sound info block \"" + call.args[0] + "\"!";
     return false;
 }
@@ -505,8 +505,8 @@ bool mob_action_loaders::playSound(MobActionCall &call) {
  * @return Whether it succeeded.
  */
 bool mob_action_loaders::receiveStatus(MobActionCall &call) {
-    if(game.content.status_types.list.find(call.args[0]) == game.content.status_types.list.end()) {
-        call.custom_error =
+    if(game.content.statusTypes.list.find(call.args[0]) == game.content.statusTypes.list.end()) {
+        call.customError =
             "Unknown status effect \"" + call.args[0] + "\"!";
         return false;
     }
@@ -521,8 +521,8 @@ bool mob_action_loaders::receiveStatus(MobActionCall &call) {
  * @return Whether it succeeded.
  */
 bool mob_action_loaders::removeStatus(MobActionCall &call) {
-    if(game.content.status_types.list.find(call.args[0]) == game.content.status_types.list.end()) {
-        call.custom_error =
+    if(game.content.statusTypes.list.find(call.args[0]) == game.content.statusTypes.list.end()) {
+        call.customError =
             "Unknown status effect \"" + call.args[0] + "\"!";
         return false;
     }
@@ -540,7 +540,7 @@ void mob_action_loaders::reportEnumError(
     MobActionCall &call, size_t arg_idx
 ) {
     size_t param_idx = std::min(arg_idx, call.action->parameters.size() - 1);
-    call.custom_error =
+    call.customError =
         "The parameter \"" + call.action->parameters[param_idx].name + "\" "
         "does not know what the value \"" +
         call.args[arg_idx] + "\" means!";
@@ -554,9 +554,9 @@ void mob_action_loaders::reportEnumError(
  * @return Whether it succeeded.
  */
 bool mob_action_loaders::setAnimation(MobActionCall &call) {
-    size_t a_pos = call.mt->anim_db->findAnimation(call.args[0]);
+    size_t a_pos = call.mt->animDb->findAnimation(call.args[0]);
     if(a_pos == INVALID) {
-        call.custom_error =
+        call.customError =
             "Unknown animation \"" + call.args[0] + "\"!";
         return false;
     }
@@ -591,7 +591,7 @@ bool mob_action_loaders::setFarReach(MobActionCall &call) {
             return true;
         }
     }
-    call.custom_error = "Unknown reach \"" + call.args[0] + "\"!";
+    call.customError = "Unknown reach \"" + call.args[0] + "\"!";
     return false;
 }
 
@@ -630,7 +630,7 @@ bool mob_action_loaders::setNearReach(MobActionCall &call) {
             return true;
         }
     }
-    call.custom_error = "Unknown reach \"" + call.args[0] + "\"!";
+    call.customError = "Unknown reach \"" + call.args[0] + "\"!";
     return false;
 }
 
@@ -665,7 +665,7 @@ bool mob_action_loaders::spawn(MobActionCall &call) {
             return true;
         }
     }
-    call.custom_error =
+    call.customError =
         "Unknown spawn info block \"" + call.args[0] + "\"!";
     return false;
 }
@@ -698,9 +698,9 @@ bool mob_action_loaders::stabilizeZ(MobActionCall &call) {
  */
 bool mob_action_loaders::startChomping(MobActionCall &call) {
     for(size_t s = 1; s < call.args.size(); s++) {
-        size_t p_nr = call.mt->anim_db->findBodyPart(call.args[s]);
+        size_t p_nr = call.mt->animDb->findBodyPart(call.args[s]);
         if(p_nr == INVALID) {
-            call.custom_error =
+            call.customError =
                 "Unknown body part \"" + call.args[s] + "\"!";
             return false;
         }
@@ -718,10 +718,10 @@ bool mob_action_loaders::startChomping(MobActionCall &call) {
  */
 bool mob_action_loaders::startParticles(MobActionCall &call) {
     if(
-        game.content.particle_gen.list.find(call.args[0]) ==
-        game.content.particle_gen.list.end()
+        game.content.particleGens.list.find(call.args[0]) ==
+        game.content.particleGens.list.end()
     ) {
-        call.custom_error =
+        call.customError =
             "Unknown particle generator \"" + call.args[0] + "\"!";
         return false;
     }
@@ -767,8 +767,8 @@ MobActionParam::MobActionParam(
 ):
     name(name),
     type(type),
-    force_const(force_const),
-    is_extras(is_extras) {
+    forceConst(force_const),
+    isExtras(is_extras) {
     
 }
 
@@ -862,7 +862,7 @@ void mob_action_runners::calculate(MobActionRunData &data) {
  * @param data Data about the action call.
  */
 void mob_action_runners::deleteFunction(MobActionRunData &data) {
-    data.m->to_delete = true;
+    data.m->toDelete = true;
 }
 
 
@@ -880,7 +880,7 @@ void mob_action_runners::drainLiquid(MobActionRunData &data) {
     s_ptr->getNeighborSectorsConditionally(
     [] (Sector * s) -> bool {
         for(size_t h = 0; h < s->hazards.size(); h++) {
-            if(s->hazards[h]->associated_liquid) {
+            if(s->hazards[h]->associatedLiquid) {
                 return true;
             }
         }
@@ -890,8 +890,8 @@ void mob_action_runners::drainLiquid(MobActionRunData &data) {
     );
     
     for(size_t s = 0; s < sectors_to_drain.size(); s++) {
-        sectors_to_drain[s]->draining_liquid = true;
-        sectors_to_drain[s]->liquid_drain_left =
+        sectors_to_drain[s]->drainingLiquid = true;
+        sectors_to_drain[s]->liquidDrainLeft =
             GEOMETRY::LIQUID_DRAIN_DURATION;
     }
 }
@@ -941,13 +941,13 @@ void mob_action_runners::followPathRandomly(MobActionRunData &data) {
         //If there's no label, then any stop is eligible.
         choices.insert(
             choices.end(),
-            game.cur_area_data->path_stops.begin(),
-            game.cur_area_data->path_stops.end()
+            game.curAreaData->pathStops.begin(),
+            game.curAreaData->pathStops.end()
         );
     } else {
         //If there's a label, we should only pick stops that have the label.
-        for(size_t s = 0; s < game.cur_area_data->path_stops.size(); s++) {
-            PathStop* s_ptr = game.cur_area_data->path_stops[s];
+        for(size_t s = 0; s < game.curAreaData->pathStops.size(); s++) {
+            PathStop* s_ptr = game.curAreaData->pathStops[s];
             if(s_ptr->label == label) {
                 choices.push_back(s_ptr);
             }
@@ -976,7 +976,7 @@ void mob_action_runners::followPathRandomly(MobActionRunData &data) {
     //so it can emit the MOB_EV_REACHED_DESTINATION event, and hopefully
     //make it clear that there was an error.
     PathFollowSettings settings;
-    settings.target_point = final_stop ? final_stop->pos : data.m->pos;
+    settings.targetPoint = final_stop ? final_stop->pos : data.m->pos;
     enableFlag(settings.flags, PATH_FOLLOW_FLAG_CAN_CONTINUE);
     enableFlag(settings.flags, PATH_FOLLOW_FLAG_SCRIPT_USE);
     settings.label = label;
@@ -996,7 +996,7 @@ void mob_action_runners::followPathToAbsolute(MobActionRunData &data) {
     float y = s2f(data.args[1]);
     
     PathFollowSettings settings;
-    settings.target_point = Point(x, y);
+    settings.targetPoint = Point(x, y);
     enableFlag(settings.flags, PATH_FOLLOW_FLAG_CAN_CONTINUE);
     enableFlag(settings.flags, PATH_FOLLOW_FLAG_SCRIPT_USE);
     if(data.args.size() >= 3) {
@@ -1038,11 +1038,11 @@ void mob_action_runners::getAreaInfo(MobActionRunData &data) {
         
     switch (t) {
     case MOB_ACTION_GET_AREA_INFO_TYPE_DAY_MINUTES: {
-        *var = i2s(game.states.gameplay->day_minutes);
+        *var = i2s(game.states.gameplay->dayMinutes);
         break;
         
     } case MOB_ACTION_GET_AREA_INFO_TYPE_FIELD_PIKMIN: {
-        *var = i2s(game.states.gameplay->mobs.pikmin_list.size());
+        *var = i2s(game.states.gameplay->mobs.pikmin.size());
         break;
         
     }
@@ -1056,10 +1056,10 @@ void mob_action_runners::getAreaInfo(MobActionRunData &data) {
  * @param data Data about the action call.
  */
 void mob_action_runners::getChomped(MobActionRunData &data) {
-    if(data.call->parent_event == MOB_EV_HITBOX_TOUCH_EAT) {
-        ((Mob*) (data.custom_data_1))->chomp(
+    if(data.call->parentEvent == MOB_EV_HITBOX_TOUCH_EAT) {
+        ((Mob*) (data.customData1))->chomp(
             data.m,
-            (Hitbox*) (data.custom_data_2)
+            (Hitbox*) (data.customData2)
         );
     }
 }
@@ -1110,83 +1110,83 @@ void mob_action_runners::getEventInfo(MobActionRunData &data) {
     switch (t) {
     case MOB_ACTION_GET_EV_INFO_TYPE_BODY_PART: {
         if(
-            data.call->parent_event == MOB_EV_HITBOX_TOUCH_A_N ||
-            data.call->parent_event == MOB_EV_HITBOX_TOUCH_N_A ||
-            data.call->parent_event == MOB_EV_HITBOX_TOUCH_N_N ||
-            data.call->parent_event == MOB_EV_DAMAGE
+            data.call->parentEvent == MOB_EV_HITBOX_TOUCH_A_N ||
+            data.call->parentEvent == MOB_EV_HITBOX_TOUCH_N_A ||
+            data.call->parentEvent == MOB_EV_HITBOX_TOUCH_N_N ||
+            data.call->parentEvent == MOB_EV_DAMAGE
         ) {
             *var =
                 (
-                    (HitboxInteraction*)(data.custom_data_1)
-                )->h1->body_part_name;
+                    (HitboxInteraction*)(data.customData1)
+                )->h1->bodyPartName;
         } else if(
-            data.call->parent_event == MOB_EV_TOUCHED_OBJECT ||
-            data.call->parent_event == MOB_EV_TOUCHED_OPPONENT ||
-            data.call->parent_event == MOB_EV_THROWN_PIKMIN_LANDED
+            data.call->parentEvent == MOB_EV_TOUCHED_OBJECT ||
+            data.call->parentEvent == MOB_EV_TOUCHED_OPPONENT ||
+            data.call->parentEvent == MOB_EV_THROWN_PIKMIN_LANDED
         ) {
             *var =
                 data.m->getClosestHitbox(
-                    ((Mob*)(data.custom_data_1))->pos
-                )->body_part_name;
+                    ((Mob*)(data.customData1))->pos
+                )->bodyPartName;
         }
         break;
         
     } case MOB_ACTION_GET_EV_INFO_TYPE_FRAME_SIGNAL: {
-        if(data.call->parent_event == MOB_EV_FRAME_SIGNAL) {
-            *var = i2s(*((size_t*)(data.custom_data_1)));
+        if(data.call->parentEvent == MOB_EV_FRAME_SIGNAL) {
+            *var = i2s(*((size_t*)(data.customData1)));
         }
         break;
         
     } case MOB_ACTION_GET_EV_INFO_TYPE_HAZARD: {
         if(
-            data.call->parent_event == MOB_EV_TOUCHED_HAZARD ||
-            data.call->parent_event == MOB_EV_LEFT_HAZARD
+            data.call->parentEvent == MOB_EV_TOUCHED_HAZARD ||
+            data.call->parentEvent == MOB_EV_LEFT_HAZARD
         ) {
-            *var = ((Hazard*)data.custom_data_1)->manifest->internal_name;
+            *var = ((Hazard*)data.customData1)->manifest->internalName;
         }
         break;
         
     } case MOB_ACTION_GET_EV_INFO_TYPE_INPUT_NAME: {
-        if(data.call->parent_event == MOB_EV_INPUT_RECEIVED) {
+        if(data.call->parentEvent == MOB_EV_INPUT_RECEIVED) {
             *var =
                 game.controls.getPlayerActionTypeInternalName(
-                    ((PlayerAction*) (data.custom_data_1))->actionTypeId
+                    ((PlayerAction*) (data.customData1))->actionTypeId
                 );
         }
         break;
         
     } case MOB_ACTION_GET_EV_INFO_TYPE_INPUT_VALUE: {
-        if(data.call->parent_event == MOB_EV_INPUT_RECEIVED) {
-            *var = f2s(((PlayerAction*) (data.custom_data_1))->value);
+        if(data.call->parentEvent == MOB_EV_INPUT_RECEIVED) {
+            *var = f2s(((PlayerAction*) (data.customData1))->value);
         }
         break;
         
     } case MOB_ACTION_GET_EV_INFO_TYPE_MESSAGE: {
-        if(data.call->parent_event == MOB_EV_RECEIVE_MESSAGE) {
-            *var = *((string*)(data.custom_data_1));
+        if(data.call->parentEvent == MOB_EV_RECEIVE_MESSAGE) {
+            *var = *((string*)(data.customData1));
         }
         break;
         
     } case MOB_ACTION_GET_EV_INFO_TYPE_OTHER_BODY_PART: {
         if(
-            data.call->parent_event == MOB_EV_HITBOX_TOUCH_A_N ||
-            data.call->parent_event == MOB_EV_HITBOX_TOUCH_N_A ||
-            data.call->parent_event == MOB_EV_HITBOX_TOUCH_N_N ||
-            data.call->parent_event == MOB_EV_DAMAGE
+            data.call->parentEvent == MOB_EV_HITBOX_TOUCH_A_N ||
+            data.call->parentEvent == MOB_EV_HITBOX_TOUCH_N_A ||
+            data.call->parentEvent == MOB_EV_HITBOX_TOUCH_N_N ||
+            data.call->parentEvent == MOB_EV_DAMAGE
         ) {
             *var =
                 (
-                    (HitboxInteraction*)(data.custom_data_1)
-                )->h2->body_part_name;
+                    (HitboxInteraction*)(data.customData1)
+                )->h2->bodyPartName;
         } else if(
-            data.call->parent_event == MOB_EV_TOUCHED_OBJECT ||
-            data.call->parent_event == MOB_EV_TOUCHED_OPPONENT ||
-            data.call->parent_event == MOB_EV_THROWN_PIKMIN_LANDED
+            data.call->parentEvent == MOB_EV_TOUCHED_OBJECT ||
+            data.call->parentEvent == MOB_EV_TOUCHED_OPPONENT ||
+            data.call->parentEvent == MOB_EV_THROWN_PIKMIN_LANDED
         ) {
             *var =
-                ((Mob*)(data.custom_data_1))->getClosestHitbox(
+                ((Mob*)(data.customData1))->getClosestHitbox(
                     data.m->pos
-                )->body_part_name;
+                )->bodyPartName;
         }
         break;
         
@@ -1214,9 +1214,9 @@ void mob_action_runners::getFloorZ(MobActionRunData &data) {
  * @param data Data about the action call.
  */
 void mob_action_runners::getFocusVar(MobActionRunData &data) {
-    if(!data.m->focused_mob) return;
+    if(!data.m->focusedMob) return;
     data.m->vars[data.args[0]] =
-        data.m->focused_mob->vars[data.args[1]];
+        data.m->focusedMob->vars[data.args[1]];
 }
 
 
@@ -1241,13 +1241,13 @@ void mob_action_runners::getMobInfo(MobActionRunData &data) {
         break;
         
     } case MOB_ACTION_GET_MOB_INFO_TYPE_CHOMPED_PIKMIN: {
-        *var = i2s(target->chomping_mobs.size());
+        *var = i2s(target->chompingMobs.size());
         break;
         
     } case MOB_ACTION_GET_MOB_INFO_TYPE_FOCUS_DISTANCE: {
-        if(target->focused_mob) {
+        if(target->focusedMob) {
             float d =
-                Distance(target->pos, target->focused_mob->pos).toFloat();
+                Distance(target->pos, target->focusedMob->pos).toFloat();
             *var = f2s(d);
         }
         break;
@@ -1263,8 +1263,8 @@ void mob_action_runners::getMobInfo(MobActionRunData &data) {
         break;
         
     } case MOB_ACTION_GET_MOB_INFO_TYPE_HEALTH_RATIO: {
-        if(target->max_health != 0.0f) {
-            *var = f2s(target->health / target->max_health);
+        if(target->maxHealth != 0.0f) {
+            *var = f2s(target->health / target->maxHealth);
         } else {
             *var = 0.0f;
         }
@@ -1283,15 +1283,15 @@ void mob_action_runners::getMobInfo(MobActionRunData &data) {
         break;
         
     } case MOB_ACTION_GET_MOB_INFO_TYPE_MOB_CATEGORY: {
-        *var = target->type->category->internal_name;
+        *var = target->type->category->internalName;
         break;
         
     } case MOB_ACTION_GET_MOB_INFO_TYPE_MOB_TYPE: {
-        *var = target->type->manifest->internal_name;
+        *var = target->type->manifest->internalName;
         break;
         
     } case MOB_ACTION_GET_MOB_INFO_TYPE_STATE: {
-        *var = target->fsm.cur_state->name;
+        *var = target->fsm.curState->name;
         break;
         
     } case MOB_ACTION_GET_MOB_INFO_TYPE_WEIGHT: {
@@ -1353,7 +1353,7 @@ Mob* getTargetMob(
         return data.m;
         break;
     } case MOB_ACTION_MOB_TARGET_TYPE_FOCUS: {
-        return data.m->focused_mob;
+        return data.m->focusedMob;
         break;
     } case MOB_ACTION_MOB_TARGET_TYPE_TRIGGER: {
         return getTriggerMob(data);
@@ -1381,9 +1381,9 @@ Mob* getTargetMob(
  * @param data Data about the action call.
  */
 void mob_action_runners::holdFocus(MobActionRunData &data) {
-    if(data.m->focused_mob) {
+    if(data.m->focusedMob) {
         data.m->hold(
-            data.m->focused_mob,
+            data.m->focusedMob,
             s2i(data.args[0]), 0.0f, 0.0f, 0.5f,
             data.args.size() >= 2 ? s2b(data.args[1]) : false,
             HOLD_ROTATION_METHOD_COPY_HOLDER
@@ -1406,34 +1406,34 @@ void mob_action_runners::ifFunction(MobActionRunData &data) {
     switch(op) {
     case MOB_ACTION_IF_OP_EQUAL: {
         if(isNumber(lhs) && isNumber(rhs)) {
-            data.return_value = (s2f(lhs) == s2f(rhs));
+            data.returnValue = (s2f(lhs) == s2f(rhs));
         } else {
-            data.return_value = (lhs == rhs);
+            data.returnValue = (lhs == rhs);
         }
         break;
         
     } case MOB_ACTION_IF_OP_NOT: {
         if(isNumber(lhs) && isNumber(rhs)) {
-            data.return_value = (s2f(lhs) != s2f(rhs));
+            data.returnValue = (s2f(lhs) != s2f(rhs));
         } else {
-            data.return_value = (lhs != rhs);
+            data.returnValue = (lhs != rhs);
         }
         break;
         
     } case MOB_ACTION_IF_OP_LESS: {
-        data.return_value = (s2f(lhs) < s2f(rhs));
+        data.returnValue = (s2f(lhs) < s2f(rhs));
         break;
         
     } case MOB_ACTION_IF_OP_MORE: {
-        data.return_value = (s2f(lhs) > s2f(rhs));
+        data.returnValue = (s2f(lhs) > s2f(rhs));
         break;
         
     } case MOB_ACTION_IF_OP_LESS_E: {
-        data.return_value = (s2f(lhs) <= s2f(rhs));
+        data.returnValue = (s2f(lhs) <= s2f(rhs));
         break;
         
     } case MOB_ACTION_IF_OP_MORE_E: {
-        data.return_value = (s2f(lhs) >= s2f(rhs));
+        data.returnValue = (s2f(lhs) >= s2f(rhs));
         break;
         
     }
@@ -1447,18 +1447,18 @@ void mob_action_runners::ifFunction(MobActionRunData &data) {
  * @param data Data about the action call.
  */
 void mob_action_runners::linkWithFocus(MobActionRunData &data) {
-    if(!data.m->focused_mob) {
+    if(!data.m->focusedMob) {
         return;
     }
     
     for(size_t l = 0; l < data.m->links.size(); l++) {
-        if(data.m->links[l] == data.m->focused_mob) {
+        if(data.m->links[l] == data.m->focusedMob) {
             //Already linked.
             return;
         }
     }
     
-    data.m->links.push_back(data.m->focused_mob);
+    data.m->links.push_back(data.m->focusedMob);
 }
 
 
@@ -1468,11 +1468,11 @@ void mob_action_runners::linkWithFocus(MobActionRunData &data) {
  * @param data Data about the action call.
  */
 void mob_action_runners::loadFocusMemory(MobActionRunData &data) {
-    if(data.m->focused_mob_memory.empty()) {
+    if(data.m->focusedMobMemory.empty()) {
         return;
     }
     
-    data.m->focusOnMob(data.m->focused_mob_memory[s2i(data.args[0])]);
+    data.m->focusOnMob(data.m->focusedMobMemory[s2i(data.args[0])]);
 }
 
 
@@ -1513,8 +1513,8 @@ void mob_action_runners::moveToTarget(MobActionRunData &data) {
     
     switch(t) {
     case MOB_ACTION_MOVE_TYPE_AWAY_FROM_FOCUS: {
-        if(data.m->focused_mob) {
-            float a = getAngle(data.m->pos, data.m->focused_mob->pos);
+        if(data.m->focusedMob) {
+            float a = getAngle(data.m->pos, data.m->focusedMob->pos);
             Point offset = Point(2000, 0);
             offset = rotatePoint(offset, a + TAU / 2.0);
             data.m->chase(data.m->pos + offset, data.m->z);
@@ -1524,16 +1524,16 @@ void mob_action_runners::moveToTarget(MobActionRunData &data) {
         break;
         
     } case MOB_ACTION_MOVE_TYPE_FOCUS: {
-        if(data.m->focused_mob) {
-            data.m->chase(&data.m->focused_mob->pos, &data.m->focused_mob->z);
+        if(data.m->focusedMob) {
+            data.m->chase(&data.m->focusedMob->pos, &data.m->focusedMob->z);
         } else {
             data.m->stopChasing();
         }
         break;
         
     } case MOB_ACTION_MOVE_TYPE_FOCUS_POS: {
-        if(data.m->focused_mob) {
-            data.m->chase(data.m->focused_mob->pos, data.m->focused_mob->z);
+        if(data.m->focusedMob) {
+            data.m->chase(data.m->focusedMob->pos, data.m->focusedMob->z);
         } else {
             data.m->stopChasing();
         }
@@ -1612,7 +1612,7 @@ void mob_action_runners::print(MobActionRunData &data) {
  * @param data Data about the action call.
  */
 void mob_action_runners::receiveStatus(MobActionRunData &data) {
-    data.m->applyStatusEffect(game.content.status_types.list[data.args[0]], false, false);
+    data.m->applyStatusEffect(game.content.statusTypes.list[data.args[0]], false, false);
 }
 
 
@@ -1643,8 +1643,8 @@ void mob_action_runners::releaseStoredMobs(MobActionRunData &data) {
  */
 void mob_action_runners::removeStatus(MobActionRunData &data) {
     for(size_t s = 0; s < data.m->statuses.size(); s++) {
-        if(data.m->statuses[s].type->manifest->internal_name == data.args[0]) {
-            data.m->statuses[s].to_delete = true;
+        if(data.m->statuses[s].type->manifest->internalName == data.args[0]) {
+            data.m->statuses[s].toDelete = true;
         }
     }
 }
@@ -1656,11 +1656,11 @@ void mob_action_runners::removeStatus(MobActionRunData &data) {
  * @param data Data about the action call.
  */
 void mob_action_runners::saveFocusMemory(MobActionRunData &data) {
-    if(!data.m->focused_mob) {
+    if(!data.m->focusedMob) {
         return;
     }
     
-    data.m->focused_mob_memory[s2i(data.args[0])] = data.m->focused_mob;
+    data.m->focusedMobMemory[s2i(data.args[0])] = data.m->focusedMob;
 }
 
 
@@ -1670,8 +1670,8 @@ void mob_action_runners::saveFocusMemory(MobActionRunData &data) {
  * @param data Data about the action call.
  */
 void mob_action_runners::sendMessageToFocus(MobActionRunData &data) {
-    if(!data.m->focused_mob) return;
-    data.m->sendScriptMessage(data.m->focused_mob, data.args[0]);
+    if(!data.m->focusedMob) return;
+    data.m->sendScriptMessage(data.m->focusedMob, data.args[0]);
 }
 
 
@@ -1725,7 +1725,7 @@ void mob_action_runners::setAnimation(MobActionRunData &data) {
     }
     if(data.args.size() > 2) {
         if(s2b(data.args[2])) {
-            mob_speed_baseline = data.m->type->move_speed;
+            mob_speed_baseline = data.m->type->moveSpeed;
         };
     }
     
@@ -1751,7 +1751,7 @@ void mob_action_runners::setCanBlockPaths(MobActionRunData &data) {
  * @param data Data about the action call.
  */
 void mob_action_runners::setFarReach(MobActionRunData &data) {
-    data.m->far_reach = s2i(data.args[0]);
+    data.m->farReach = s2i(data.args[0]);
     data.m->updateInteractionSpan();
 }
 
@@ -1776,7 +1776,7 @@ void mob_action_runners::setFlying(MobActionRunData &data) {
  * @param data Data about the action call.
  */
 void mob_action_runners::setGravity(MobActionRunData &data) {
-    data.m->gravity_mult = s2f(data.args[0]);
+    data.m->gravityMult = s2f(data.args[0]);
 }
 
 
@@ -1802,7 +1802,7 @@ void mob_action_runners::setHeight(MobActionRunData &data) {
         //Update the Z of mobs standing on top of it.
         for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
             Mob* m2_ptr = game.states.gameplay->mobs.all[m];
-            if(m2_ptr->standing_on_mob == data.m) {
+            if(m2_ptr->standingOnMob == data.m) {
                 m2_ptr->z = data.m->z + data.m->height;
             }
         }
@@ -1835,7 +1835,7 @@ void mob_action_runners::setHoldable(MobActionRunData &data) {
         for(size_t i = 0; i < data.args.size(); i++) {
             flags |= s2i(data.args[i]);
         }
-        ((Tool*) (data.m))->holdability_flags = flags;
+        ((Tool*) (data.m))->holdabilityFlags = flags;
     }
 }
 
@@ -1863,17 +1863,17 @@ void mob_action_runners::setLimbAnimation(MobActionRunData &data) {
     if(!data.m->parent) {
         return;
     }
-    if(!data.m->parent->limb_anim.anim_db) {
+    if(!data.m->parent->limb_anim.animDb) {
         return;
     }
     
-    size_t a = data.m->parent->limb_anim.anim_db->findAnimation(data.args[0]);
+    size_t a = data.m->parent->limb_anim.animDb->findAnimation(data.args[0]);
     if(a == INVALID) {
         return;
     }
     
-    data.m->parent->limb_anim.cur_anim =
-        data.m->parent->limb_anim.anim_db->animations[a];
+    data.m->parent->limb_anim.curAnim =
+        data.m->parent->limb_anim.animDb->animations[a];
     data.m->parent->limb_anim.toStart();
     
 }
@@ -1885,7 +1885,7 @@ void mob_action_runners::setLimbAnimation(MobActionRunData &data) {
  * @param data Data about the action call.
  */
 void mob_action_runners::setNearReach(MobActionRunData &data) {
-    data.m->near_reach = s2i(data.args[0]);
+    data.m->nearReach = s2i(data.args[0]);
     data.m->updateInteractionSpan();
 }
 
@@ -1936,8 +1936,8 @@ void mob_action_runners::setShadowVisibility(MobActionRunData &data) {
 void mob_action_runners::setState(MobActionRunData &data) {
     data.m->fsm.setState(
         s2i(data.args[0]),
-        data.custom_data_1,
-        data.custom_data_2
+        data.customData1,
+        data.customData2
     );
 }
 
@@ -2052,10 +2052,10 @@ void mob_action_runners::stabilizeZ(MobActionRunData &data) {
  * @param data Data about the action call.
  */
 void mob_action_runners::startChomping(MobActionRunData &data) {
-    data.m->chomp_max = s2i(data.args[0]);
-    data.m->chomp_body_parts.clear();
+    data.m->chompMax = s2i(data.args[0]);
+    data.m->chompBodyParts.clear();
     for(size_t p = 1; p < data.args.size(); p++) {
-        data.m->chomp_body_parts.push_back(s2i(data.args[p]));
+        data.m->chompBodyParts.push_back(s2i(data.args[p]));
     }
 }
 
@@ -2095,10 +2095,10 @@ void mob_action_runners::startParticles(MobActionRunData &data) {
     
     ParticleGenerator pg =
         standardParticleGenSetup(data.args[0], data.m);
-    pg.follow_pos_offset = Point(offset_x, offset_y);
-    pg.follow_z_offset = offset_z;
+    pg.followPosOffset = Point(offset_x, offset_y);
+    pg.followZOffset = offset_z;
     pg.id = MOB_PARTICLE_GENERATOR_ID_SCRIPT;
-    data.m->particle_generators.push_back(pg);
+    data.m->particleGenerators.push_back(pg);
 }
 
 
@@ -2120,8 +2120,8 @@ void mob_action_runners::stop(MobActionRunData &data) {
  * @param data Data about the action call.
  */
 void mob_action_runners::stopChomping(MobActionRunData &data) {
-    data.m->chomp_max = 0;
-    data.m->chomp_body_parts.clear();
+    data.m->chompMax = 0;
+    data.m->chompBodyParts.clear();
 }
 
 
@@ -2161,7 +2161,7 @@ void mob_action_runners::stopSound(MobActionRunData &data) {
  * @param data Data about the action call.
  */
 void mob_action_runners::stopVertically(MobActionRunData &data) {
-    data.m->speed_z = 0;
+    data.m->speedZ = 0;
 }
 
 
@@ -2171,8 +2171,8 @@ void mob_action_runners::stopVertically(MobActionRunData &data) {
  * @param data Data about the action call.
  */
 void mob_action_runners::storeFocusInside(MobActionRunData &data) {
-    if(data.m->focused_mob && !data.m->focused_mob->isStoredInsideMob()) {
-        data.m->storeMobInside(data.m->focused_mob);
+    if(data.m->focusedMob && !data.m->focusedMob->isStoredInsideMob()) {
+        data.m->storeMobInside(data.m->focusedMob);
     }
 }
 
@@ -2193,7 +2193,7 @@ void mob_action_runners::swallow(MobActionRunData &data) {
  * @param data Data about the action call.
  */
 void mob_action_runners::swallowAll(MobActionRunData &data) {
-    data.m->swallowChompedPikmin(data.m->chomping_mobs.size());
+    data.m->swallowChompedPikmin(data.m->chompingMobs.size());
 }
 
 
@@ -2238,12 +2238,12 @@ void mob_action_runners::teleportToRelative(MobActionRunData &data) {
  * @param data Data about the action call.
  */
 void mob_action_runners::throwFocus(MobActionRunData &data) {
-    if(!data.m->focused_mob) {
+    if(!data.m->focusedMob) {
         return;
     }
     
-    if(data.m->focused_mob->holder.m == data.m) {
-        data.m->release(data.m->focused_mob);
+    if(data.m->focusedMob->holder.m == data.m) {
+        data.m->release(data.m->focusedMob);
     }
     
     float max_height = s2f(data.args[3]);
@@ -2255,11 +2255,11 @@ void mob_action_runners::throwFocus(MobActionRunData &data) {
     
     data.m->startHeightEffect();
     calculateThrow(
-        data.m->focused_mob->pos, data.m->focused_mob->z,
+        data.m->focusedMob->pos, data.m->focusedMob->z,
         Point(s2f(data.args[0]), s2f(data.args[1])), s2f(data.args[2]),
         max_height, MOB::GRAVITY_ADDER,
-        &data.m->focused_mob->speed,
-        &data.m->focused_mob->speed_z,
+        &data.m->focusedMob->speed,
+        &data.m->focusedMob->speedZ,
         nullptr
     );
 }
@@ -2316,8 +2316,8 @@ void mob_action_runners::turnToTarget(MobActionRunData &data) {
         break;
         
     } case MOB_ACTION_TURN_TYPE_FOCUSED_MOB: {
-        if(data.m->focused_mob) {
-            data.m->face(0, &data.m->focused_mob->pos);
+        if(data.m->focusedMob) {
+            data.m->face(0, &data.m->focusedMob->pos);
         }
         break;
         
@@ -2453,31 +2453,31 @@ bool assertActions(
  */
 Mob* getTriggerMob(MobActionRunData &data) {
     if(
-        data.call->parent_event == MOB_EV_OBJECT_IN_REACH ||
-        data.call->parent_event == MOB_EV_OPPONENT_IN_REACH ||
-        data.call->parent_event == MOB_EV_THROWN_PIKMIN_LANDED ||
-        data.call->parent_event == MOB_EV_TOUCHED_OBJECT ||
-        data.call->parent_event == MOB_EV_TOUCHED_OPPONENT ||
-        data.call->parent_event == MOB_EV_HELD ||
-        data.call->parent_event == MOB_EV_RELEASED ||
-        data.call->parent_event == MOB_EV_SWALLOWED ||
-        data.call->parent_event == MOB_EV_STARTED_RECEIVING_DELIVERY ||
-        data.call->parent_event == MOB_EV_FINISHED_RECEIVING_DELIVERY
+        data.call->parentEvent == MOB_EV_OBJECT_IN_REACH ||
+        data.call->parentEvent == MOB_EV_OPPONENT_IN_REACH ||
+        data.call->parentEvent == MOB_EV_THROWN_PIKMIN_LANDED ||
+        data.call->parentEvent == MOB_EV_TOUCHED_OBJECT ||
+        data.call->parentEvent == MOB_EV_TOUCHED_OPPONENT ||
+        data.call->parentEvent == MOB_EV_HELD ||
+        data.call->parentEvent == MOB_EV_RELEASED ||
+        data.call->parentEvent == MOB_EV_SWALLOWED ||
+        data.call->parentEvent == MOB_EV_STARTED_RECEIVING_DELIVERY ||
+        data.call->parentEvent == MOB_EV_FINISHED_RECEIVING_DELIVERY
     ) {
-        return (Mob*)(data.custom_data_1);
+        return (Mob*)(data.customData1);
         
     } else if(
-        data.call->parent_event == MOB_EV_RECEIVE_MESSAGE
+        data.call->parentEvent == MOB_EV_RECEIVE_MESSAGE
     ) {
-        return(Mob*)(data.custom_data_2);
+        return(Mob*)(data.customData2);
         
     } else if(
-        data.call->parent_event == MOB_EV_HITBOX_TOUCH_A_N ||
-        data.call->parent_event == MOB_EV_HITBOX_TOUCH_N_A ||
-        data.call->parent_event == MOB_EV_HITBOX_TOUCH_N_N ||
-        data.call->parent_event == MOB_EV_DAMAGE
+        data.call->parentEvent == MOB_EV_HITBOX_TOUCH_A_N ||
+        data.call->parentEvent == MOB_EV_HITBOX_TOUCH_N_A ||
+        data.call->parentEvent == MOB_EV_HITBOX_TOUCH_N_N ||
+        data.call->parentEvent == MOB_EV_DAMAGE
     ) {
-        return ((HitboxInteraction*)(data.custom_data_1))->mob2;
+        return ((HitboxInteraction*)(data.customData1))->mob2;
         
     }
     

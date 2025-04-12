@@ -20,7 +20,7 @@
 InteractableType::InteractableType() :
     MobType(MOB_CATEGORY_INTERACTABLES) {
     
-    target_type = MOB_TARGET_FLAG_NONE;
+    targetType = MOB_TARGET_FLAG_NONE;
     
 }
 
@@ -33,6 +33,6 @@ InteractableType::InteractableType() :
 void InteractableType::loadCatProperties(DataNode* file) {
     ReaderSetter rs(file);
     
-    rs.set("prompt_text", prompt_text);
-    rs.set("trigger_range", trigger_range);
+    rs.set("prompt_text", promptText);
+    rs.set("trigger_range", triggerRange);
 }

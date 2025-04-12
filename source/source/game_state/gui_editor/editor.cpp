@@ -35,10 +35,10 @@ const float ZOOM_MIN_LEVEL = 0.5f;
  * @brief Constructs a new GUI editor object.
  */
 GuiEditor::GuiEditor() :
-    load_dialog_picker(this) {
+    loadDialogPicker(this) {
     
-    zoom_max_level = GUI_EDITOR::ZOOM_MAX_LEVEL;
-    zoom_min_level = GUI_EDITOR::ZOOM_MIN_LEVEL;
+    zoomMaxLevel = GUI_EDITOR::ZOOM_MAX_LEVEL;
+    zoomMinLevel = GUI_EDITOR::ZOOM_MIN_LEVEL;
     
 #define register_cmd(ptr, name) \
     commands.push_back( \
@@ -70,7 +70,7 @@ GuiEditor::GuiEditor() :
  * @brief Code to run when the load dialog is closed.
  */
 void GuiEditor::closeLoadDialog() {
-    if(manifest.internal_name.empty() && dialogs.size() == 1) {
+    if(manifest.internalName.empty() && dialogs.size() == 1) {
         //If nothing got loaded, we can't return to the editor proper.
         //Quit out, since most of the time that's the user's intent. (e.g.
         //they entered the editor and want to leave without doing anything.)
@@ -101,22 +101,22 @@ void GuiEditor::createGuiDef(
 ) {
     //Load the base pack one first.
     ContentManifest temp_orig_man;
-    temp_orig_man.internal_name = internal_name;
+    temp_orig_man.internalName = internal_name;
     temp_orig_man.pack = FOLDER_NAMES::BASE_PACK;
     string orig_path =
-        game.content.gui_defs.manifestToPath(temp_orig_man);
+        game.content.guiDefs.manifestToPath(temp_orig_man);
         
     loadGuiDefFile(orig_path, false);
     
     //Change the manifest under the hood so it's pointing to the new one.
     manifest.pack = pack;
-    manifest.path = game.content.gui_defs.manifestToPath(manifest);
+    manifest.path = game.content.guiDefs.manifestToPath(manifest);
     
-    changes_mgr.markAsNonExistent();
+    changesMgr.markAsNonExistent();
     
     setStatus(
         "Created GUI definition \"" +
-        manifest.internal_name + "\" successfully."
+        manifest.internalName + "\" successfully."
     );
 }
 
@@ -125,12 +125,12 @@ void GuiEditor::createGuiDef(
  * @brief Deletes the current GUI definition.
  */
 void GuiEditor::deleteCurrentGuiDef() {
-    string orig_internal_name = manifest.internal_name;
+    string orig_internal_name = manifest.internalName;
     bool go_to_load_dialog = true;
     bool success = false;
     string message_box_text;
     
-    if(!changes_mgr.existsOnDisk()) {
+    if(!changesMgr.existsOnDisk()) {
         //If the definition doesn't exist on disk, since it was never
         //saved, then there's nothing to delete.
         success = true;
@@ -223,7 +223,7 @@ void GuiEditor::deleteGuiDefCmd(float input_value) {
         "Delete GUI definition?",
         std::bind(&GuiEditor::processGuiDeleteGuiDefDialog, this)
     );
-    dialogs.back()->custom_size = Point(600, 0);
+    dialogs.back()->customSize = Point(600, 0);
 }
 
 
@@ -248,7 +248,7 @@ void GuiEditor::doLogic() {
 void GuiEditor::drawCanvasDearImGuiCallback(
     const ImDrawList* parent_list, const ImDrawCmd* cmd
 ) {
-    game.states.gui_ed->drawCanvas();
+    game.states.guiEd->drawCanvas();
 }
 
 
@@ -261,11 +261,11 @@ void GuiEditor::drawCanvasDearImGuiCallback(
  */
 string GuiEditor::getFileTooltip(const string &path) const {
     ContentManifest temp_manif;
-    game.content.gui_defs.pathToManifest(
+    game.content.guiDefs.pathToManifest(
         path, &temp_manif
     );
     return
-        "Internal name: " + temp_manif.internal_name + "\n"
+        "Internal name: " + temp_manif.internalName + "\n"
         "File path: " + path + "\n"
         "Pack: " + game.content.packs.list[temp_manif.pack].name;
 }
@@ -308,13 +308,13 @@ void GuiEditor::load() {
     );
     
     //Misc. setup.
-    must_recenter_cam = true;
+    mustRecenterCam = true;
     
-    game.audio.setCurrentSong(game.sys_content_names.sng_editors, false);
+    game.audio.setCurrentSong(game.sysContentNames.sngEditors, false);
     
     //Automatically load a file if needed, or show the load dialog.
-    if(!auto_load_file.empty()) {
-        loadGuiDefFile(auto_load_file, true);
+    if(!autoLoadFile.empty()) {
+        loadGuiDefFile(autoLoadFile, true);
     } else {
         openLoadDialog();
     }
@@ -333,13 +333,13 @@ void GuiEditor::loadGuiDefFile(
 ) {
     //Setup.
     setupForNewGuiDef();
-    changes_mgr.markAsNonExistent();
+    changesMgr.markAsNonExistent();
     
     //Load.
     manifest.fillFromPath(path);
-    file_node = DataNode(manifest.path);
+    fileNode = DataNode(manifest.path);
     
-    if(!file_node.fileWasOpened) {
+    if(!fileNode.fileWasOpened) {
         openMessageDialog(
             "Load failed!",
             "Failed to load the GUI definition file \"" + manifest.path + "\"!",
@@ -349,7 +349,7 @@ void GuiEditor::loadGuiDefFile(
         return;
     }
     
-    DataNode* positions_node = file_node.getChildByName("positions");
+    DataNode* positions_node = fileNode.getChildByName("positions");
     size_t n_items = positions_node->getNrOfChildren();
     
     for(size_t i = 0; i < n_items; i++) {
@@ -366,11 +366,11 @@ void GuiEditor::loadGuiDefFile(
     }
     
     //Finish up.
-    changes_mgr.reset();
+    changesMgr.reset();
     if(should_update_history) {
-        updateHistory(game.options.gui_editor.history, manifest, "");
+        updateHistory(game.options.guiEd.history, manifest, "");
     }
-    setStatus("Loaded file \"" + manifest.internal_name + "\" successfully.");
+    setStatus("Loaded file \"" + manifest.internalName + "\" successfully.");
 }
 
 
@@ -411,7 +411,7 @@ void GuiEditor::pickGuiDefFile(
     
     if(
         temp_manif->pack == FOLDER_NAMES::BASE_PACK &&
-        !game.options.advanced.engine_dev
+        !game.options.advanced.engineDev
     ) {
         openBaseContentWarningDialog(really_load);
     } else {
@@ -432,16 +432,16 @@ void GuiEditor::gridIntervalDecreaseCmd(float input_value) {
     for(size_t i = 0; i < GUI_EDITOR::GRID_INTERVALS.size(); i++) {
         if(
             GUI_EDITOR::GRID_INTERVALS[i] >=
-            game.options.gui_editor.grid_interval
+            game.options.guiEd.gridInterval
         ) {
             break;
         }
         new_grid_interval = GUI_EDITOR::GRID_INTERVALS[i];
     }
-    game.options.gui_editor.grid_interval = new_grid_interval;
+    game.options.guiEd.gridInterval = new_grid_interval;
     setStatus(
         "Decreased grid interval to " +
-        f2s(game.options.gui_editor.grid_interval) + "."
+        f2s(game.options.guiEd.gridInterval) + "."
     );
 }
 
@@ -458,16 +458,16 @@ void GuiEditor::gridIntervalIncreaseCmd(float input_value) {
     for(int i = (int) (GUI_EDITOR::GRID_INTERVALS.size() - 1); i >= 0; --i) {
         if(
             GUI_EDITOR::GRID_INTERVALS[i] <=
-            game.options.gui_editor.grid_interval
+            game.options.guiEd.gridInterval
         ) {
             break;
         }
         new_grid_interval = GUI_EDITOR::GRID_INTERVALS[i];
     }
-    game.options.gui_editor.grid_interval = new_grid_interval;
+    game.options.guiEd.gridInterval = new_grid_interval;
     setStatus(
         "Increased grid interval to " +
-        f2s(game.options.gui_editor.grid_interval) + "."
+        f2s(game.options.guiEd.gridInterval) + "."
     );
 }
 
@@ -480,8 +480,8 @@ void GuiEditor::gridIntervalIncreaseCmd(float input_value) {
 void GuiEditor::loadCmd(float input_value) {
     if(input_value < 0.5f) return;
     
-    changes_mgr.askIfUnsaved(
-        load_widget_pos,
+    changesMgr.askIfUnsaved(
+        loadWidgetPos,
         "loading a file", "load",
         std::bind(&GuiEditor::openLoadDialog, this),
         std::bind(&GuiEditor::saveGuiDef, this)
@@ -497,8 +497,8 @@ void GuiEditor::loadCmd(float input_value) {
 void GuiEditor::quitCmd(float input_value) {
     if(input_value < 0.5f) return;
     
-    changes_mgr.askIfUnsaved(
-        quit_widget_pos,
+    changesMgr.askIfUnsaved(
+        quitWidgetPos,
         "quitting", "quit",
         std::bind(&GuiEditor::leave, this),
         std::bind(&GuiEditor::saveGuiDef, this)
@@ -514,10 +514,10 @@ void GuiEditor::quitCmd(float input_value) {
 void GuiEditor::reloadCmd(float input_value) {
     if(input_value < 0.5f) return;
     
-    if(!changes_mgr.existsOnDisk()) return;
+    if(!changesMgr.existsOnDisk()) return;
     
-    changes_mgr.askIfUnsaved(
-        reload_widget_pos,
+    changesMgr.askIfUnsaved(
+        reloadWidgetPos,
         "reloading the current file", "reload",
     [this] () { loadGuiDefFile(string(manifest.path), false); },
     std::bind(&GuiEditor::saveGuiDef, this)
@@ -565,9 +565,9 @@ void GuiEditor::saveCmd(float input_value) {
 void GuiEditor::snapModeCmd(float input_value) {
     if(input_value < 0.5f) return;
     
-    game.options.gui_editor.snap = !game.options.gui_editor.snap;
+    game.options.guiEd.snap = !game.options.guiEd.snap;
     string final_status_text = "Set snap mode to ";
-    if(game.options.gui_editor.snap) {
+    if(game.options.guiEd.snap) {
         final_status_text += "nothing";
     } else {
         final_status_text += "grid";
@@ -597,11 +597,11 @@ void GuiEditor::zoomAndPosResetCmd(float input_value) {
 void GuiEditor::zoomInCmd(float input_value) {
     if(input_value < 0.5f) return;
     
-    game.cam.target_zoom =
+    game.cam.targetZoom =
         std::clamp(
-            game.cam.target_zoom +
+            game.cam.targetZoom +
             game.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
-            zoom_min_level, zoom_max_level
+            zoomMinLevel, zoomMaxLevel
         );
 }
 
@@ -614,11 +614,11 @@ void GuiEditor::zoomInCmd(float input_value) {
 void GuiEditor::zoomOutCmd(float input_value) {
     if(input_value < 0.5f) return;
     
-    game.cam.target_zoom =
+    game.cam.targetZoom =
         std::clamp(
-            game.cam.target_zoom -
+            game.cam.targetZoom -
             game.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
-            zoom_min_level, zoom_max_level
+            zoomMinLevel, zoomMaxLevel
         );
 }
 
@@ -640,13 +640,13 @@ void GuiEditor::resetCam(bool instantaneous) {
  * @return Whether it succeded.
  */
 bool GuiEditor::saveGuiDef() {
-    DataNode* positions_node = file_node.getChildByName("positions");
+    DataNode* positions_node = fileNode.getChildByName("positions");
     for(size_t i = 0; i < items.size(); i++) {
         DataNode* item_node = positions_node->getChild(i);
         item_node->value = p2s(items[i].center) + " " + p2s(items[i].size);
     }
     
-    if(!file_node.saveFile(manifest.path)) {
+    if(!fileNode.saveFile(manifest.path)) {
         showSystemMessageBox(
             nullptr, "Save failed!",
             "Could not save the GUI file!",
@@ -662,11 +662,11 @@ bool GuiEditor::saveGuiDef() {
         return false;
     } else {
         setStatus("Saved GUI file successfully.");
-        changes_mgr.markAsSaved();
+        changesMgr.markAsSaved();
         return true;
     }
     
-    updateHistory(game.options.gui_editor.history, manifest, "");
+    updateHistory(game.options.guiEd.history, manifest, "");
 }
 
 
@@ -677,14 +677,14 @@ bool GuiEditor::saveGuiDef() {
 void GuiEditor::setupForNewGuiDef() {
     manifest.clear();
     items.clear();
-    cur_item = INVALID;
+    curItem = INVALID;
     
     //We could reset the camera directly, but if the player enters the editor
     //via the auto start maker tool, processGui() won't have a chance
     //to run before we load the file, and that function is what gives
     //us the canvas coordinates necessary for camera centering.
     //Let's flag the need for recentering so it gets handled when possible.
-    must_recenter_cam = true;
+    mustRecenterCam = true;
 }
 
 
@@ -697,18 +697,18 @@ void GuiEditor::setupForNewGuiDef() {
  */
 Point GuiEditor::snapPoint(const Point &p) {
     Point final_point = p;
-    bool do_snap = game.options.gui_editor.snap;
+    bool do_snap = game.options.guiEd.snap;
     
-    if(is_ctrl_pressed) {
-        if(cur_transformation_widget.isMovingCenterHandle()) {
+    if(isCtrlPressed) {
+        if(curTransformationWidget.isMovingCenterHandle()) {
             final_point =
                 snapPointToAxis(
-                    final_point, cur_transformation_widget.getOldCenter()
+                    final_point, curTransformationWidget.getOldCenter()
                 );
         }
     }
     
-    if(is_shift_pressed) {
+    if(isShiftPressed) {
         do_snap = !do_snap;
     }
     
@@ -718,10 +718,10 @@ Point GuiEditor::snapPoint(const Point &p) {
     
     return
         Point(
-            round(final_point.x / game.options.gui_editor.grid_interval) *
-            game.options.gui_editor.grid_interval,
-            round(final_point.y / game.options.gui_editor.grid_interval) *
-            game.options.gui_editor.grid_interval
+            round(final_point.x / game.options.guiEd.gridInterval) *
+            game.options.guiEd.gridInterval,
+            round(final_point.y / game.options.guiEd.gridInterval) *
+            game.options.guiEd.gridInterval
         );
 }
 
@@ -733,7 +733,7 @@ void GuiEditor::unload() {
     Editor::unload();
     
     items.clear();
-    cur_item = INVALID;
+    curItem = INVALID;
     
     game.content.unloadAll(
     vector<CONTENT_TYPE> {

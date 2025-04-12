@@ -54,16 +54,16 @@ public:
     //--- Members ---
     
     //Maximum amount it can deviate the tint by, for every color component.
-    ALLEGRO_COLOR tint_random_maximum = COLOR_EMPTY;
+    ALLEGRO_COLOR tintRandomMaximum = COLOR_EMPTY;
     
     //Maximum amount it can deviate the scale by.
-    float scale_random_variation = 0.0f;
+    float scaleRandomVariation = 0.0f;
     
     //Maximum amount it can deviate the rotation by.
-    float rotation_random_variation = 0.0f;
+    float rotationRandomVariation = 0.0f;
     
     //Should it skip to a random point of the animation when it starts?
-    bool random_animation_delay = false;
+    bool randomAnimationDelay = false;
     
     
     //--- Function declarations ---

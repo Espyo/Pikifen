@@ -247,22 +247,22 @@ public:
     //--- Members ---
     
     //How far its whistle reaches from the center point.
-    float whistle_range = LEADER_TYPE::DEF_WHISTLE_RANGE;
+    float whistleRange = LEADER_TYPE::DEF_WHISTLE_RANGE;
     
     //How high it can reach when thrown.
-    float max_throw_height = 0.0f;
+    float maxThrowHeight = 0.0f;
     
     //How long it stays on the floor for after knocked down, if left alone.
-    float knocked_down_duration = LEADER_TYPE::DEF_KNOCKED_DOWN_DURATION;
+    float knockedDownDuration = LEADER_TYPE::DEF_KNOCKED_DOWN_DURATION;
     
     //A whistled Pikmin that got knocked down loses this much in lie-down time.
-    float knocked_down_whistle_bonus = LEADER_TYPE::DEF_KNOCKED_DOWN_WHISTLE_BONUS;
+    float knockedDownWhistleBonus = LEADER_TYPE::DEF_KNOCKED_DOWN_WHISTLE_BONUS;
     
     //Standby icon.
-    ALLEGRO_BITMAP* bmp_icon = nullptr;
+    ALLEGRO_BITMAP* bmpIcon = nullptr;
     
     //Sound data index for each sound. Cache for performance.
-    size_t sound_data_idxs[N_LEADER_SOUNDS];
+    size_t soundDataIdxs[N_LEADER_SOUNDS];
     
     
     //--- Function declarations ---

@@ -73,7 +73,7 @@ extern const float STANDARD_HEIGHT;
 extern const float STANDARD_RADIUS;
 extern const float SWARM_TASK_RANGE;
 }
-    
+
 namespace RULES_D {
 extern const bool CAN_THROW_LEADERS;
 extern const float CURSOR_MAX_DIST;
@@ -96,64 +96,64 @@ using namespace GAME_CONFIG;
 struct GameConfig {
 
     //--- Members ---
-
+    
     //General aesthetic details.
     struct {
-
+    
         //Color that represents a non-Onion carriable object when moving.
-        ALLEGRO_COLOR carrying_color_move =
+        ALLEGRO_COLOR carryingColorMove =
             AESTHETIC_GENERAL_D::CARRYING_COLOR_MOVE;
-        
+            
         //Color that represents a non-Onion carriable object when stopped.
-        ALLEGRO_COLOR carrying_color_stop =
+        ALLEGRO_COLOR carryingColorStop =
             AESTHETIC_GENERAL_D::CARRYING_COLOR_STOP;
-    
+            
         //How much the cursor spins per second.
-        float cursor_spin_speed =
+        float cursorSpinSpeed =
             AESTHETIC_GENERAL_D::CURSOR_SPIN_SPEED;
-    
+            
         //These many seconds until a new character of
         //the gameplay message is drawn.
-        float g_msg_ch_interval =
+        float gameplayMsgChInterval =
             AESTHETIC_GENERAL_D::GAMEPLAY_MSG_CHAR_INTERVAL;
-        
+            
         //Color that represents the absence of Pikmin.
-        ALLEGRO_COLOR no_pikmin_color =
+        ALLEGRO_COLOR noPikminColor =
             AESTHETIC_GENERAL_D::NO_PIKMIN_COLOR;
-        
-    } aesthetic_gen;
-
+            
+    } aestheticGen;
+    
     //Radar aesthetic details.
     struct {
-
+    
         //Color of the background in the radar.
-        ALLEGRO_COLOR background_color = AESTHETIC_RADAR_D::BG_COLOR;
+        ALLEGRO_COLOR backgroundColor = AESTHETIC_RADAR_D::BG_COLOR;
         
         //Color of edges in the radar.
-        ALLEGRO_COLOR edge_color = AESTHETIC_RADAR_D::EDGE_COLOR;
+        ALLEGRO_COLOR edgeColor = AESTHETIC_RADAR_D::EDGE_COLOR;
         
         //Color for the highest sector in the radar.
-        ALLEGRO_COLOR highest_color = AESTHETIC_RADAR_D::HIGHEST_COLOR;
+        ALLEGRO_COLOR highestColor = AESTHETIC_RADAR_D::HIGHEST_COLOR;
         
         //Color for the lowest sector in the radar.
-        ALLEGRO_COLOR lowest_color = AESTHETIC_RADAR_D::LOWEST_COLOR;
+        ALLEGRO_COLOR lowestColor = AESTHETIC_RADAR_D::LOWEST_COLOR;
+        
+    } aestheticRadar;
     
-    } aesthetic_radar;
-
     //Carrying information.
     struct {
-        
+    
         //Used for the slowest carrying speed an object can go.
-        float speed_base_mult = CARRYING_D::SPEED_BASE_MULT;
+        float speedBaseMult = CARRYING_D::SPEED_BASE_MULT;
         
         //Used for the fastest carrying speed an object can go.
-        float speed_max_mult = CARRYING_D::SPEED_MAX_MULT;
+        float speedMaxMult = CARRYING_D::SPEED_MAX_MULT;
         
         //Decreases carry speed by this much per unit of weight.
-        float speed_weight_mult = CARRYING_D::SPEED_WEIGHT_MULT;
-
+        float speedWeightMult = CARRYING_D::SPEED_WEIGHT_MULT;
+        
     } carrying;
-
+    
     //General game info.
     struct {
     
@@ -162,122 +162,122 @@ struct GameConfig {
         
         //Version of the game.
         string version;
-
+        
     } general;
-
+    
     //Leader-related properties.
     struct {
-
+    
         //A leader can grab a group member only within this range.
-        float group_member_grab_range = LEADERS_D::GROUP_MEMBER_GRAB_RANGE;
+        float groupMemberGrabRange = LEADERS_D::GROUP_MEMBER_GRAB_RANGE;
         
         //How far a leader can go to auto-pluck the next Pikmin.
-        float next_pluck_range = LEADERS_D::NEXT_PLUCK_RANGE;
+        float nextPluckRange = LEADERS_D::NEXT_PLUCK_RANGE;
         
         //Onions can be opened if the leader is within this distance.
-        float onion_open_range = LEADERS_D::ONION_OPEN_RANGE;
-
+        float onionOpenRange = LEADERS_D::ONION_OPEN_RANGE;
+        
         //List of leader types, ordered by the game configuration.
         vector<LeaderType*> order;
-    
+        
         //Loaded strings representing the standard leader order. Used for later.
-        vector<string> order_strings;
+        vector<string> orderStrings;
         
         //A leader can start the plucking mode if they're this close.
-        float pluck_range = LEADERS_D::PLUCK_RANGE;
+        float pluckRange = LEADERS_D::PLUCK_RANGE;
         
         //A standard leader is this tall.
-        float standard_height = LEADERS_D::STANDARD_HEIGHT;
-    
+        float standardHeight = LEADERS_D::STANDARD_HEIGHT;
+        
         //A standard leader has this radius.
-        float standard_radius = LEADERS_D::STANDARD_RADIUS;
-
+        float standardRadius = LEADERS_D::STANDARD_RADIUS;
+        
     } leaders;
-
+    
     //Misc.
     struct {
-        
+    
         //The day ends when the in-game minutes reach this value.
-        float day_minutes_end = GAME_CONFIG::MISC_D::DAY_MINUTES_END;
+        float dayMinutesEnd = GAME_CONFIG::MISC_D::DAY_MINUTES_END;
         
         //The in-game minutes start with this value every day.
-        float day_minutes_start = GAME_CONFIG::MISC_D::DAY_MINUTES_START;
-
+        float dayMinutesStart = GAME_CONFIG::MISC_D::DAY_MINUTES_START;
+        
         //List of spray types, ordered by the game configuration.
-        vector<SprayType*> spray_order;
+        vector<SprayType*> sprayOrder;
         
         //Loaded strings representing the standard spray order. Used for later.
-        vector<string> spray_order_strings;
-    
+        vector<string> sprayOrderStrings;
+        
     } misc;
-
+    
     //Pikmin-related properties.
     struct {
-
+    
         //Pikmin will only chase enemies in this range.
-        float chase_range = PIKMIN_D::CHASE_RANGE;
-            
+        float chaseRange = PIKMIN_D::CHASE_RANGE;
+        
         //Idle Pikmin are only bumped if away from a leader for these many secs.
-        float idle_bump_delay = PIKMIN_D::IDLE_BUMP_DELAY;
-            
+        float idleBumpDelay = PIKMIN_D::IDLE_BUMP_DELAY;
+        
         //Idle Pikmin will be bumped by a leader within this distance.
-        float idle_bump_range = PIKMIN_D::IDLE_BUMP_RANGE;
-
+        float idleBumpRange = PIKMIN_D::IDLE_BUMP_RANGE;
+        
         //Idle Pikmin will go for a task if they are within this distance of it.
-        float idle_task_range = PIKMIN_D::IDLE_TASK_RANGE;
-
+        float idleTaskRange = PIKMIN_D::IDLE_TASK_RANGE;
+        
         //Every level of maturity, multiply the attack power by 1 + this much.
-        float maturity_power_mult = PIKMIN_D::MATURITY_POWER_MULT;
-
+        float maturityPowerMult = PIKMIN_D::MATURITY_POWER_MULT;
+        
         //Every level of maturity, multiply the speed by 1 + this much.
-        float maturity_speed_mult = PIKMIN_D::MATURITY_SPEED_MULT;
-
+        float maturitySpeedMult = PIKMIN_D::MATURITY_SPEED_MULT;
+        
         //List of Pikmin types, ordered by the game configuration.
         vector<PikminType*> order;
-
+        
         //Loaded strings representing the standard Pikmin order. Used for later.
-        vector<string> order_strings;
-
+        vector<string> orderStrings;
+        
         //A standard Pikmin is this tall.
-        float standard_height = PIKMIN_D::STANDARD_HEIGHT;
-
+        float standardHeight = PIKMIN_D::STANDARD_HEIGHT;
+        
         //A standard Pikmin has this radius.
-        float standard_radius = PIKMIN_D::STANDARD_RADIUS;
-
+        float standardRadius = PIKMIN_D::STANDARD_RADIUS;
+        
         //Pikmin that are swarming can go for tasks within this range.
-        float swarm_task_range = PIKMIN_D::SWARM_TASK_RANGE;
-
+        float swarmTaskRange = PIKMIN_D::SWARM_TASK_RANGE;
+        
     } pikmin;
-
+    
     //General gameplay rules.
     struct {
-
-        //Can a leader throw other leaders?
-        bool can_throw_leaders = RULES_D::CAN_THROW_LEADERS;
     
+        //Can a leader throw other leaders?
+        bool canThrowLeaders = RULES_D::CAN_THROW_LEADERS;
+        
         //Maximum distance from the leader the cursor can go.
-        float cursor_max_dist = RULES_D::CURSOR_MAX_DIST;
+        float cursorMaxDist = RULES_D::CURSOR_MAX_DIST;
         
         //Maximum number of Pikmin that can be out in the field at once.
-        size_t max_pikmin_in_field = RULES_D::MAX_PIKMIN_IN_FIELD;
-
+        size_t maxPikminInField = RULES_D::MAX_PIKMIN_IN_FIELD;
+        
         //Maximum distance from the leader that a throw can be aimed to.
-        float throw_max_dist = RULES_D::THROW_MAX_DIST;
+        float throwMaxDist = RULES_D::THROW_MAX_DIST;
         
         //Speed at which the whistle grows.
-        float whistle_growth_speed = RULES_D::WHISTLE_GROWTH_SPEED;
+        float whistleGrowthSpeed = RULES_D::WHISTLE_GROWTH_SPEED;
         
         //Maximum distance from the leader that the whistle can start from.
-        float whistle_max_dist = RULES_D::WHISTLE_MAX_DIST;
+        float whistleMaxDist = RULES_D::WHISTLE_MAX_DIST;
         
         //The closest zoom level the player can get.
-        float zoom_max_level = RULES_D::ZOOM_MAX_LEVEL;
+        float zoomMaxLevel = RULES_D::ZOOM_MAX_LEVEL;
         
         //The farthest zoom level the player can get.
-        float zoom_min_level = RULES_D::ZOOM_MIN_LEVEL;
-
+        float zoomMinLevel = RULES_D::ZOOM_MIN_LEVEL;
+        
     } rules;
-
+    
     
     //--- Function declarations ---
     

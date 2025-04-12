@@ -59,7 +59,7 @@ void Particle::draw() {
     bool used_custom_blend = false;
     int old_op = 0, old_source = 0, old_dest = 0;
     
-    switch(blend_type) {
+    switch(blendType) {
     case PARTICLE_BLEND_TYPE_ADDITIVE: {
         al_get_blender(&old_op, &old_source, &old_dest);
         al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_ONE);
@@ -73,7 +73,7 @@ void Particle::draw() {
     if(bitmap) {
         drawBitmap(
             bitmap, pos, Point(final_size, -1),
-            bmp_angle, final_color
+            bmpAngle, final_color
         );
     } else {
         al_draw_filled_circle(
@@ -105,29 +105,29 @@ void Particle::tick(const float delta_t) {
     
     float t = 1.0f - time / duration;
     
-    Point total_velocity = linear_speed.get(t);
+    Point total_velocity = linearSpeed.get(t);
     float outwards_angle = getAngle(pos - origin);
     
     if(pos == origin) {
         outwards_angle = game.rng.f(-180, 180);
     }
     total_velocity +=
-        angleToCoordinates(outwards_angle, outwards_speed.get(t));
+        angleToCoordinates(outwards_angle, outwardsSpeed.get(t));
         
     //Add 90 degrees to make the angle tangential.
     total_velocity +=
-        angleToCoordinates(outwards_angle + (TAU / 4), orbital_speed.get(t));
+        angleToCoordinates(outwards_angle + (TAU / 4), orbitalSpeed.get(t));
         
     //Accumulate and apply friction.
-    total_velocity -= total_friction_applied;
+    total_velocity -= totalFrictionApplied;
     Point new_friction = total_velocity * (delta_t* friction);
-    total_friction_applied += new_friction;
+    totalFrictionApplied += new_friction;
     total_velocity -= new_friction;
     
     pos += total_velocity * delta_t;
     
-    if(bmp_angle_type == PARTICLE_ANGLE_TYPE_DIRECTION) {
-        coordinatesToAngle(total_velocity, &bmp_angle, nullptr);
+    if(bmpAngleType == PARTICLE_ANGLE_TYPE_DIRECTION) {
+        coordinatesToAngle(total_velocity, &bmpAngle, nullptr);
     }
 }
 
@@ -145,24 +145,24 @@ void Particle::tick(const float delta_t) {
 void Particle::setBitmap(
     const string &new_bmp_name, DataNode* node
 ) {
-    if(new_bmp_name != bmp_name && bitmap) {
-        game.content.bitmaps.list.free(bmp_name);
+    if(new_bmp_name != bmpName && bitmap) {
+        game.content.bitmaps.list.free(bmpName);
         bitmap = nullptr;
     }
     
     if(new_bmp_name.empty()) {
-        bmp_name.clear();
+        bmpName.clear();
         return;
     }
     
-    if(new_bmp_name != bmp_name || !bitmap) {
+    if(new_bmp_name != bmpName || !bitmap) {
         bitmap =
             game.content.bitmaps.list.get(
                 new_bmp_name, node, node != nullptr
             );
     }
     
-    bmp_name = new_bmp_name;
+    bmpName = new_bmp_name;
 }
 
 
@@ -175,13 +175,13 @@ void Particle::setBitmap(
  * Their properties will deviate randomly based on the
  * deviation members of the particle generator object.
  * @param number Number of particles to spawn.
- * This number is also deviated by number_deviation.
+ * This number is also deviated by numberDeviation.
  */
 ParticleGenerator::ParticleGenerator(
     const float emission_interval,
     const Particle &base_particle, const size_t number
 ) :
-    base_particle(base_particle) {
+    baseParticle(base_particle) {
     emission = ParticleEmission(emission_interval, number);
 }
 
@@ -192,14 +192,14 @@ ParticleGenerator::ParticleGenerator(
  * @param manager The particle manager to place these particles on.
  */
 void ParticleGenerator::emit(ParticleManager &manager) {
-    Point base_p_pos = base_particle.pos;
-    float base_p_z = base_particle.z;
-    Point offs = follow_pos_offset;
-    if(follow_angle) {
-        offs = rotatePoint(offs, *follow_angle);
+    Point base_p_pos = baseParticle.pos;
+    float base_p_z = baseParticle.z;
+    Point offs = followPosOffset;
+    if(followAngle) {
+        offs = rotatePoint(offs, *followAngle);
     }
     base_p_pos += offs;
-    base_p_z += follow_z_offset;
+    base_p_z += followZOffset;
     
     if(
         base_p_pos.x < game.cam.box[0].x ||
@@ -216,40 +216,40 @@ void ParticleGenerator::emit(ParticleManager &manager) {
             0,
             (int) emission.number +
             game.rng.i(
-                (int) (0 - emission.number_deviation),
-                (int) emission.number_deviation
+                (int) (0 - emission.numberDeviation),
+                (int) emission.numberDeviation
             )
         );
         
     for(size_t p = 0; p < final_nr; p++) {
-        Particle new_p = base_particle;
+        Particle new_p = baseParticle;
         
         new_p.duration =
             std::max(
                 0.0f,
                 new_p.duration +
-                game.rng.f(-duration_deviation, duration_deviation)
+                game.rng.f(-durationDeviation, durationDeviation)
             );
         new_p.time = new_p.duration;
         
-        if(new_p.bmp_angle_type == PARTICLE_ANGLE_TYPE_FIXED) {
-            new_p.bmp_angle +=
-                game.rng.f(-bmp_angle_deviation, bmp_angle_deviation);
+        if(new_p.bmpAngleType == PARTICLE_ANGLE_TYPE_FIXED) {
+            new_p.bmpAngle +=
+                game.rng.f(-bmpAngleDeviation, bmpAngleDeviation);
         }
         new_p.friction +=
-            game.rng.f(-friction_deviation, friction_deviation);
+            game.rng.f(-frictionDeviation, frictionDeviation);
             
         new_p.pos = base_p_pos;
         new_p.origin = base_p_pos;
         Point offset = emission.getEmissionOffset(p / (float) final_nr);
-        if(follow_angle) {
-            offset = rotatePoint(offset, *follow_angle);
+        if(followAngle) {
+            offset = rotatePoint(offset, *followAngle);
         }
         new_p.pos += offset;
         
         new_p.z = base_p_z;
         
-        float s_dev = game.rng.f(-size_deviation, size_deviation);
+        float s_dev = game.rng.f(-sizeDeviation, sizeDeviation);
         for(size_t s = 0; s < new_p.size.getKeyframeCount(); s++) {
             auto kf = new_p.size.getKeyframe(s);
             new_p.size.setKeyframeValue((int) s, kf.second + s_dev);
@@ -257,40 +257,40 @@ void ParticleGenerator::emit(ParticleManager &manager) {
         
         float angle_to_use =
             game.rng.f(
-                -linear_speed_angle_deviation,
-                linear_speed_angle_deviation
+                -linearSpeedAngleDeviation,
+                linearSpeedAngleDeviation
             );
-        if(follow_angle && !angles_are_absolute) {
-            angle_to_use += (*follow_angle);
+        if(followAngle && !anglesAreAbsolute) {
+            angle_to_use += (*followAngle);
         }
         
         float v_dev_x =
-            game.rng.f(-linear_speed_deviation.x, linear_speed_deviation.x);
+            game.rng.f(-linearSpeedDeviation.x, linearSpeedDeviation.x);
         float v_dev_y =
-            game.rng.f(-linear_speed_deviation.y, linear_speed_deviation.y);
-        for(size_t s = 0; s < new_p.linear_speed.getKeyframeCount(); s++) {
-            auto kf = new_p.linear_speed.getKeyframe(s);
+            game.rng.f(-linearSpeedDeviation.y, linearSpeedDeviation.y);
+        for(size_t s = 0; s < new_p.linearSpeed.getKeyframeCount(); s++) {
+            auto kf = new_p.linearSpeed.getKeyframe(s);
             Point base = kf.second;
             Point result = Point(base.x + v_dev_x, base.y + v_dev_y);
             result =
                 rotatePoint(
                     result, angle_to_use
                 );
-            new_p.linear_speed.setKeyframeValue((int) s, result);
+            new_p.linearSpeed.setKeyframeValue((int) s, result);
         }
         
         float out_dev =
-            game.rng.f(-outwards_speed_deviation, outwards_speed_deviation);
-        for(size_t s = 0; s < new_p.outwards_speed.getKeyframeCount(); s++) {
-            auto kf = new_p.outwards_speed.getKeyframe(s);
-            new_p.outwards_speed.setKeyframeValue((int) s, kf.second + out_dev);
+            game.rng.f(-outwardsSpeedDeviation, outwardsSpeedDeviation);
+        for(size_t s = 0; s < new_p.outwardsSpeed.getKeyframeCount(); s++) {
+            auto kf = new_p.outwardsSpeed.getKeyframe(s);
+            new_p.outwardsSpeed.setKeyframeValue((int) s, kf.second + out_dev);
         }
         
         float orb_dev =
-            game.rng.f(-orbital_speed_deviation, orbital_speed_deviation);
-        for(size_t s = 0; s < new_p.orbital_speed.getKeyframeCount(); s++) {
-            auto kf = new_p.orbital_speed.getKeyframe(s);
-            new_p.orbital_speed.setKeyframeValue((int) s, kf.second + orb_dev);
+            game.rng.f(-orbitalSpeedDeviation, orbitalSpeedDeviation);
+        for(size_t s = 0; s < new_p.orbitalSpeed.getKeyframeCount(); s++) {
+            auto kf = new_p.orbitalSpeed.getKeyframe(s);
+            new_p.orbitalSpeed.setKeyframeValue((int) s, kf.second + orb_dev);
         }
         
         manager.add(new_p);
@@ -327,21 +327,21 @@ void ParticleGenerator::loadFromDataNode(
     ers.set("interval", emission_interval_float);
     emission = ParticleEmission(emission_interval_float, number_int);
     
-    ers.set("interval_deviation", emission.interval_deviation);
-    ers.set("number_deviation", emission.number_deviation);
+    ers.set("interval_deviation", emission.intervalDeviation);
+    ers.set("number_deviation", emission.numberDeviation);
     ers.set("shape", shape_int);
     
     switch (shape_int) {
     case PARTICLE_EMISSION_SHAPE_CIRCLE: {
-        ers.set("circle_outer_dist", emission.circle_outer_dist);
-        ers.set("circle_inner_dist", emission.circle_inner_dist);
-        ers.set("circle_arc", emission.circle_arc);
-        ers.set("circle_arc_rot", emission.circle_arc_rot);
-        ers.set("evenly_spread", emission.evenly_spread);
+        ers.set("circle_outer_dist", emission.circleOuterDist);
+        ers.set("circle_inner_dist", emission.circleInnerDist);
+        ers.set("circle_arc", emission.circleArc);
+        ers.set("circle_arc_rot", emission.circleArcRot);
+        ers.set("evenly_spread", emission.evenlySpread);
         break;
     } case PARTICLE_EMISSION_SHAPE_RECTANGLE: {
-        ers.set("rect_outer_dist", emission.rect_outer_dist);
-        ers.set("rect_inner_dist", emission.rect_inner_dist);
+        ers.set("rect_outer_dist", emission.rectOuterDist);
+        ers.set("rect_inner_dist", emission.rectInnerDist);
         break;
     }
     }
@@ -352,65 +352,65 @@ void ParticleGenerator::loadFromDataNode(
     size_t angle_type_int = 0;
     size_t blend_int = 0;
     
-    prs.set("bitmap", base_particle.bmp_name, &bitmap_node);
-    prs.set("bitmap_angle", base_particle.bmp_angle);
+    prs.set("bitmap", baseParticle.bmpName, &bitmap_node);
+    prs.set("bitmap_angle", baseParticle.bmpAngle);
     prs.set("bitmap_angle_type", angle_type_int);
-    prs.set("duration", base_particle.duration);
-    prs.set("friction", base_particle.friction);
+    prs.set("duration", baseParticle.duration);
+    prs.set("friction", baseParticle.friction);
     prs.set("blend_type", blend_int);
     
-    base_particle.bmp_angle_type = (PARTICLE_ANGLE_TYPE) angle_type_int;
-    base_particle.blend_type = (PARTICLE_BLEND_TYPE) blend_int;
-    base_particle.bmp_angle = degToRad(base_particle.bmp_angle);
+    baseParticle.bmpAngleType = (PARTICLE_ANGLE_TYPE) angle_type_int;
+    baseParticle.blendType = (PARTICLE_BLEND_TYPE) blend_int;
+    baseParticle.bmpAngle = degToRad(baseParticle.bmpAngle);
     
-    base_particle.color.loadFromDataNode(
+    baseParticle.color.loadFromDataNode(
         base_particle_node->getChildByName("color")
     );
-    base_particle.size.loadFromDataNode(
+    baseParticle.size.loadFromDataNode(
         base_particle_node->getChildByName("size")
     );
-    base_particle.linear_speed.loadFromDataNode(
+    baseParticle.linearSpeed.loadFromDataNode(
         base_particle_node->getChildByName("linear_speed")
     );
-    base_particle.outwards_speed.loadFromDataNode(
+    baseParticle.outwardsSpeed.loadFromDataNode(
         base_particle_node->getChildByName("outwards_speed")
     );
-    base_particle.orbital_speed.loadFromDataNode(
+    baseParticle.orbitalSpeed.loadFromDataNode(
         base_particle_node->getChildByName("orbital_speed")
     );
     
     if(bitmap_node) {
         if(level >= CONTENT_LOAD_LEVEL_FULL) {
-            base_particle.bitmap =
+            baseParticle.bitmap =
                 game.content.bitmaps.list.get(
-                    base_particle.bmp_name, bitmap_node
+                    baseParticle.bmpName, bitmap_node
                 );
         }
     } else {
-        base_particle.bmp_name = "";
-        base_particle.bitmap = nullptr;
+        baseParticle.bmpName = "";
+        baseParticle.bitmap = nullptr;
     }
     
-    base_particle.time = base_particle.duration;
-    base_particle.priority = PARTICLE_PRIORITY_MEDIUM;
+    baseParticle.time = baseParticle.duration;
+    baseParticle.priority = PARTICLE_PRIORITY_MEDIUM;
     
-    grs.set("bitmap_angle_deviation", bmp_angle_deviation);
-    grs.set("duration_deviation", duration_deviation);
-    grs.set("friction_deviation", friction_deviation);
-    grs.set("size_deviation", size_deviation);
-    grs.set("angle_deviation", linear_speed_angle_deviation);
-    grs.set("linear_speed_deviation", linear_speed_deviation);
-    grs.set("orbital_speed_deviation", orbital_speed_deviation);
-    grs.set("outwards_speed_deviation", outwards_speed_deviation);
-    grs.set("angles_are_absolute", angles_are_absolute);
+    grs.set("bitmap_angle_deviation", bmpAngleDeviation);
+    grs.set("duration_deviation", durationDeviation);
+    grs.set("friction_deviation", frictionDeviation);
+    grs.set("size_deviation", sizeDeviation);
+    grs.set("angle_deviation", linearSpeedAngleDeviation);
+    grs.set("linear_speed_deviation", linearSpeedDeviation);
+    grs.set("orbital_speed_deviation", orbitalSpeedDeviation);
+    grs.set("outwards_speed_deviation", outwardsSpeedDeviation);
+    grs.set("angles_are_absolute", anglesAreAbsolute);
     
-    bmp_angle_deviation = degToRad(bmp_angle_deviation);
-    linear_speed_angle_deviation = degToRad(linear_speed_angle_deviation);
+    bmpAngleDeviation = degToRad(bmpAngleDeviation);
+    linearSpeedAngleDeviation = degToRad(linearSpeedAngleDeviation);
     
     id =
         (MOB_PARTICLE_GENERATOR_ID) (
             MOB_PARTICLE_GENERATOR_ID_STATUS +
-            game.content.particle_gen.list.size()
+            game.content.particleGens.list.size()
         );
 }
 
@@ -429,22 +429,22 @@ void ParticleGenerator::saveToDataNode(DataNode* node) {
     GetterWriter egw(emission_node);
     
     egw.get("number", emission.number);
-    egw.get("number_deviation", emission.number_deviation);
+    egw.get("number_deviation", emission.numberDeviation);
     egw.get("interval", emission.interval);
-    egw.get("interval_deviation", emission.interval_deviation);
+    egw.get("interval_deviation", emission.intervalDeviation);
     egw.get("shape", emission.shape);
     
     switch (emission.shape) {
     case PARTICLE_EMISSION_SHAPE_CIRCLE: {
-        egw.get("circle_outer_dist", emission.circle_outer_dist);
-        egw.get("circle_inner_dist", emission.circle_inner_dist);
-        egw.get("circle_arc", emission.circle_arc);
-        egw.get("circle_arc_rot", emission.circle_arc_rot);
-        egw.get("evenly_spread", emission.evenly_spread);
+        egw.get("circle_outer_dist", emission.circleOuterDist);
+        egw.get("circle_inner_dist", emission.circleInnerDist);
+        egw.get("circle_arc", emission.circleArc);
+        egw.get("circle_arc_rot", emission.circleArcRot);
+        egw.get("evenly_spread", emission.evenlySpread);
         break;
     } case PARTICLE_EMISSION_SHAPE_RECTANGLE: {
-        egw.get("rect_outer_dist", emission.rect_outer_dist);
-        egw.get("rect_inner_dist", emission.rect_inner_dist);
+        egw.get("rect_outer_dist", emission.rectOuterDist);
+        egw.get("rect_inner_dist", emission.rectInnerDist);
         break;
     }
     }
@@ -453,65 +453,65 @@ void ParticleGenerator::saveToDataNode(DataNode* node) {
     DataNode* base_particle_node = node->addNew("base");
     GetterWriter pgw(base_particle_node);
     
-    pgw.get("bitmap", base_particle.bmp_name);
-    pgw.get("bitmap_angle", base_particle.bmp_angle);
-    pgw.get("bitmap_angle_type", base_particle.bmp_angle_type);
-    pgw.get("duration", base_particle.duration);
-    pgw.get("friction", base_particle.friction);
-    pgw.get("blend_type", base_particle.blend_type);
+    pgw.get("bitmap", baseParticle.bmpName);
+    pgw.get("bitmap_angle", baseParticle.bmpAngle);
+    pgw.get("bitmap_angle_type", baseParticle.bmpAngleType);
+    pgw.get("duration", baseParticle.duration);
+    pgw.get("friction", baseParticle.friction);
+    pgw.get("blend_type", baseParticle.blendType);
     
     DataNode* color_node = base_particle_node->addNew("color");
     GetterWriter pcgw(color_node);
     
-    for(size_t c = 0; c < base_particle.color.getKeyframeCount(); c++) {
-        auto keyframe = base_particle.color.getKeyframe(c);
+    for(size_t c = 0; c < baseParticle.color.getKeyframeCount(); c++) {
+        auto keyframe = baseParticle.color.getKeyframe(c);
         pcgw.get(f2s(keyframe.first), keyframe.second);
     }
     
     DataNode* size_node = base_particle_node->addNew("size");
     GetterWriter psgw(size_node);
     
-    for(size_t c = 0; c < base_particle.size.getKeyframeCount(); c++) {
-        auto keyframe = base_particle.size.getKeyframe(c);
+    for(size_t c = 0; c < baseParticle.size.getKeyframeCount(); c++) {
+        auto keyframe = baseParticle.size.getKeyframe(c);
         psgw.get(f2s(keyframe.first), keyframe.second);
     }
     
     DataNode* lin_speed_node = base_particle_node->addNew("linear_speed");
     GetterWriter plsgw(lin_speed_node);
     
-    for(size_t c = 0; c < base_particle.linear_speed.getKeyframeCount(); c++) {
-        auto keyframe = base_particle.linear_speed.getKeyframe(c);
+    for(size_t c = 0; c < baseParticle.linearSpeed.getKeyframeCount(); c++) {
+        auto keyframe = baseParticle.linearSpeed.getKeyframe(c);
         plsgw.get(f2s(keyframe.first), keyframe.second);
     }
     
     DataNode* out_speed_node = base_particle_node->addNew("outwards_speed");
     GetterWriter posgw(out_speed_node);
     
-    for(size_t c = 0; c < base_particle.outwards_speed.getKeyframeCount(); c++) {
-        auto keyframe = base_particle.outwards_speed.getKeyframe(c);
+    for(size_t c = 0; c < baseParticle.outwardsSpeed.getKeyframeCount(); c++) {
+        auto keyframe = baseParticle.outwardsSpeed.getKeyframe(c);
         posgw.get(f2s(keyframe.first), keyframe.second);
     }
     
     DataNode* orb_speed_node = base_particle_node->addNew("orbital_speed");
     GetterWriter porsgw(orb_speed_node);
     
-    for(size_t c = 0; c < base_particle.orbital_speed.getKeyframeCount(); c++) {
-        auto keyframe = base_particle.orbital_speed.getKeyframe(c);
+    for(size_t c = 0; c < baseParticle.orbitalSpeed.getKeyframeCount(); c++) {
+        auto keyframe = baseParticle.orbitalSpeed.getKeyframe(c);
         porsgw.get(f2s(keyframe.first), keyframe.second);
     }
     
     //Generator.
     GetterWriter ggw(node);
     
-    ggw.get("bitmap_angle_deviation", radToDeg(bmp_angle_deviation));
-    ggw.get("duration_deviation", duration_deviation);
-    ggw.get("friction_deviation", friction_deviation);
-    ggw.get("size_deviation", size_deviation);
-    ggw.get("orbital_speed_deviation", orbital_speed_deviation);
-    ggw.get("outwards_speed_deviation", outwards_speed_deviation);
-    ggw.get("angle_deviation", radToDeg(linear_speed_angle_deviation));
-    ggw.get("linear_speed_deviation", linear_speed_deviation);
-    ggw.get("angles_are_absolute", angles_are_absolute);
+    ggw.get("bitmap_angle_deviation", radToDeg(bmpAngleDeviation));
+    ggw.get("duration_deviation", durationDeviation);
+    ggw.get("friction_deviation", frictionDeviation);
+    ggw.get("size_deviation", sizeDeviation);
+    ggw.get("orbital_speed_deviation", orbitalSpeedDeviation);
+    ggw.get("outwards_speed_deviation", outwardsSpeedDeviation);
+    ggw.get("angle_deviation", radToDeg(linearSpeedAngleDeviation));
+    ggw.get("linear_speed_deviation", linearSpeedDeviation);
+    ggw.get("angles_are_absolute", anglesAreAbsolute);
 }
 
 
@@ -520,13 +520,13 @@ void ParticleGenerator::saveToDataNode(DataNode* node) {
  * Call this when copying from another generator.
  */
 void ParticleGenerator::restartTimer() {
-    if(emission.interval_deviation == 0.0f) {
-        emission_timer = emission.interval;
+    if(emission.intervalDeviation == 0.0f) {
+        emissionTimer = emission.interval;
     } else {
-        emission_timer =
+        emissionTimer =
             game.rng.f(
-                std::max(0.0f, emission.interval - emission.interval_deviation),
-                emission.interval + emission.interval_deviation
+                std::max(0.0f, emission.interval - emission.intervalDeviation),
+                emission.interval + emission.intervalDeviation
             );
     }
 }
@@ -539,22 +539,22 @@ void ParticleGenerator::restartTimer() {
  * @param manager The manager of all particles.
  */
 void ParticleGenerator::tick(float delta_t, ParticleManager &manager) {
-    if(follow_mob) {
-        base_particle.pos = follow_mob->pos;
-        base_particle.z = follow_mob->z;
+    if(followMob) {
+        baseParticle.pos = followMob->pos;
+        baseParticle.z = followMob->z;
     }
-    emission_timer -= delta_t;
-    if(emission_timer <= 0.0f) {
+    emissionTimer -= delta_t;
+    if(emissionTimer <= 0.0f) {
         emit(manager);
-        if(emission.interval_deviation == 0.0f) {
-            emission_timer = emission.interval;
+        if(emission.intervalDeviation == 0.0f) {
+            emissionTimer = emission.interval;
         } else {
-            emission_timer =
+            emissionTimer =
                 game.rng.f(
                     std::max(
-                        0.0f, emission.interval - emission.interval_deviation
+                        0.0f, emission.interval - emission.intervalDeviation
                     ),
-                    emission.interval + emission.interval_deviation
+                    emission.interval + emission.intervalDeviation
                 );
         }
     }
@@ -567,7 +567,7 @@ void ParticleGenerator::tick(float delta_t, ParticleManager &manager) {
  * @param max_nr Maximum number of particles it can manage.
  */
 ParticleManager::ParticleManager(size_t max_nr) :
-    max_nr(max_nr) {
+    maxNr(max_nr) {
     
     if(max_nr == 0) return;
     particles = new Particle[max_nr];
@@ -582,9 +582,9 @@ ParticleManager::ParticleManager(size_t max_nr) :
  */
 ParticleManager::ParticleManager(const ParticleManager &pm2) :
     count(pm2.count),
-    max_nr(pm2.max_nr) {
+    maxNr(pm2.maxNr) {
     
-    particles = new Particle[max_nr];
+    particles = new Particle[maxNr];
     for(size_t p = 0; p < count; p++) {
         this->particles[p] = pm2.particles[p];
     }
@@ -606,10 +606,10 @@ ParticleManager &ParticleManager::operator =(
             delete[] this->particles;
         }
         this->particles = nullptr;
-        max_nr = pm2.max_nr;
+        maxNr = pm2.maxNr;
         count = pm2.count;
-        if(max_nr == 0) return *this;
-        this->particles = new Particle[max_nr];
+        if(maxNr == 0) return *this;
+        this->particles = new Particle[maxNr];
         for(size_t p = 0; p < count; p++) {
             this->particles[p] = pm2.particles[p];
         }
@@ -634,16 +634,16 @@ ParticleManager::~ParticleManager() {
  * @param p Particle to add.
  */
 void ParticleManager::add(const Particle &p) {
-    if(max_nr == 0) return;
+    if(maxNr == 0) return;
     
     //The first "count" particles are alive. Add the new one after.
     //...Unless count already equals the max. That means the list is full.
     //Let's try to dump a particle with lower priority.
     //Starting from 0 will (hopefully) give us the oldest one first.
     bool success = true;
-    if(count == max_nr) {
+    if(count == maxNr) {
         success = false;
-        for(size_t i = 0; i < max_nr; i++) {
+        for(size_t i = 0; i < maxNr; i++) {
             if(particles[i].priority < p.priority) {
                 remove(i);
                 success = true;
@@ -665,7 +665,7 @@ void ParticleManager::add(const Particle &p) {
  * @brief Clears the list.
  */
 void ParticleManager::clear() {
-    for(size_t p = 0; p < max_nr; p++) {
+    for(size_t p = 0; p < maxNr; p++) {
         particles[p].time = 0.0f;
     }
     count = 0;
@@ -774,7 +774,7 @@ void ParticleManager::tickAll(float delta_t) {
  * Their properties will deviate randomly based on the
  * deviation members of the particle generator object.
  * @param number Number of particles to spawn.
- * This number is also deviated by number_deviation.
+ * This number is also deviated by numberDeviation.
  */
 ParticleEmission::ParticleEmission(
     const float emission_interval, const size_t num
@@ -794,17 +794,17 @@ ParticleEmission::ParticleEmission(
 Point ParticleEmission::getEmissionOffset(float number_ratio) {
     switch (shape) {
     case PARTICLE_EMISSION_SHAPE_CIRCLE: {
-        if(evenly_spread) {
+        if(evenlySpread) {
             return
                 getRatioPointInRing(
-                    circle_inner_dist, circle_outer_dist,
-                    circle_arc, circle_arc_rot, number_ratio
+                    circleInnerDist, circleOuterDist,
+                    circleArc, circleArcRot, number_ratio
                 );
         } else {
             return
                 getRandomPointInRing(
-                    circle_inner_dist, circle_outer_dist,
-                    circle_arc, circle_arc_rot,
+                    circleInnerDist, circleOuterDist,
+                    circleArc, circleArcRot,
                     game.rng.f(0.0, 1.0f), game.rng.f(0.0, 1.0f)
                 );
         }
@@ -813,7 +813,7 @@ Point ParticleEmission::getEmissionOffset(float number_ratio) {
     } case PARTICLE_EMISSION_SHAPE_RECTANGLE: {
         return
             getRandomPointInRectangularRing(
-                rect_inner_dist, rect_outer_dist,
+                rectInnerDist, rectOuterDist,
                 game.rng.i(0.0, 1.0f), game.rng.f(0.0, 1.0f),
                 game.rng.f(0.0, 1.0f), game.rng.f(0.0, 1.0f),
                 game.rng.i(0.0, 1.0f)

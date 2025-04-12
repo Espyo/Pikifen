@@ -82,7 +82,7 @@ PauseMenu::PauseMenu(bool start_on_radar) {
     pages.push_back(PAUSE_MENU_PAGE_SYSTEM);
     pages.push_back(PAUSE_MENU_PAGE_RADAR);
     pages.push_back(PAUSE_MENU_PAGE_STATUS);
-    if(game.cur_area_data->type == AREA_TYPE_MISSION) {
+    if(game.curAreaData->type == AREA_TYPE_MISSION) {
         pages.push_back(PAUSE_MENU_PAGE_MISSION);
     }
     
@@ -94,28 +94,28 @@ PauseMenu::PauseMenu(bool start_on_radar) {
     
     //Initialize some radar things.
     bool found_valid_sector = false;
-    lowest_sector_z = FLT_MAX;
-    highest_sector_z = -FLT_MAX;
+    lowestSectorZ = FLT_MAX;
+    highestSectorZ = -FLT_MAX;
     
-    for(size_t s = 0; s < game.cur_area_data->sectors.size(); s++) {
-        Sector* s_ptr = game.cur_area_data->sectors[s];
+    for(size_t s = 0; s < game.curAreaData->sectors.size(); s++) {
+        Sector* s_ptr = game.curAreaData->sectors[s];
         if(s_ptr->type == SECTOR_TYPE_BLOCKING) continue;
-        lowest_sector_z = std::min(lowest_sector_z, s_ptr->z);
-        highest_sector_z = std::max(highest_sector_z, s_ptr->z);
+        lowestSectorZ = std::min(lowestSectorZ, s_ptr->z);
+        highestSectorZ = std::max(highestSectorZ, s_ptr->z);
         found_valid_sector = true;
     }
     
-    if(!found_valid_sector || lowest_sector_z == highest_sector_z) {
-        lowest_sector_z = -32.0f;
-        highest_sector_z = 32.0f;
+    if(!found_valid_sector || lowestSectorZ == highestSectorZ) {
+        lowestSectorZ = -32.0f;
+        highestSectorZ = 32.0f;
     }
     
     bool found_valid_edge = false;
-    radar_min_coords = Point(FLT_MAX);
-    radar_max_coords = Point(-FLT_MAX);
+    radarMinCoords = Point(FLT_MAX);
+    radarMaxCoords = Point(-FLT_MAX);
     
-    for(size_t e = 0; e < game.cur_area_data->edges.size(); e++) {
-        Edge* e_ptr = game.cur_area_data->edges[e];
+    for(size_t e = 0; e < game.curAreaData->edges.size(); e++) {
+        Edge* e_ptr = game.curAreaData->edges[e];
         if(!e_ptr->sectors[0] || !e_ptr->sectors[1]) continue;
         if(
             e_ptr->sectors[0]->type == SECTOR_TYPE_BLOCKING &&
@@ -125,32 +125,32 @@ PauseMenu::PauseMenu(bool start_on_radar) {
         }
         found_valid_edge = true;
         updateMinMaxCoords(
-            radar_min_coords, radar_max_coords,
+            radarMinCoords, radarMaxCoords,
             v2p(e_ptr->vertexes[0])
         );
         updateMinMaxCoords(
-            radar_min_coords, radar_max_coords,
+            radarMinCoords, radarMaxCoords,
             v2p(e_ptr->vertexes[1])
         );
     }
     
     if(!found_valid_edge) {
-        radar_min_coords = Point();
-        radar_max_coords = Point();
+        radarMinCoords = Point();
+        radarMaxCoords = Point();
     }
-    radar_min_coords = radar_min_coords - 16.0f;
-    radar_max_coords = radar_max_coords + 16.0f;
+    radarMinCoords = radarMinCoords - 16.0f;
+    radarMaxCoords = radarMaxCoords + 16.0f;
     
-    radar_selected_leader = game.states.gameplay->cur_leader_ptr;
+    radarSelectedLeader = game.states.gameplay->curLeaderPtr;
     
-    if(radar_selected_leader) {
-        radar_cam.setPos(radar_selected_leader->pos);
+    if(radarSelectedLeader) {
+        radarCam.setPos(radarSelectedLeader->pos);
     }
-    radar_cam.set_zoom(game.states.gameplay->radar_zoom);
+    radarCam.set_zoom(game.states.gameplay->radarZoom);
     
     //Start the process.
-    opening_lockout_timer = PAUSE_MENU::ENTRY_LOCKOUT_TIME;
-    GuiManager* first_gui = start_on_radar ? &radar_gui : &gui;
+    openingLockoutTimer = PAUSE_MENU::ENTRY_LOCKOUT_TIME;
+    GuiManager* first_gui = start_on_radar ? &radarGui : &gui;
     first_gui->responsive = true;
     first_gui->startAnimation(
         GUI_MANAGER_ANIM_UP_TO_CENTER, GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
@@ -163,41 +163,41 @@ PauseMenu::PauseMenu(bool start_on_radar) {
  */
 PauseMenu::~PauseMenu() {
     gui.destroy();
-    radar_gui.destroy();
-    status_gui.destroy();
-    mission_gui.destroy();
-    confirmation_gui.destroy();
+    radarGui.destroy();
+    statusGui.destroy();
+    missionGui.destroy();
+    confirmationGui.destroy();
     
-    if(secondary_menu) {
-        secondary_menu->unload();
-        delete secondary_menu;
-        secondary_menu = nullptr;
+    if(secondaryMenu) {
+        secondaryMenu->unload();
+        delete secondaryMenu;
+        secondaryMenu = nullptr;
     }
     
-    game.content.bitmaps.list.free(bmp_radar_cursor);
-    game.content.bitmaps.list.free(bmp_radar_pikmin);
-    game.content.bitmaps.list.free(bmp_radar_treasure);
-    game.content.bitmaps.list.free(bmp_radar_enemy_alive);
-    game.content.bitmaps.list.free(bmp_radar_enemy_dead);
-    game.content.bitmaps.list.free(bmp_radar_leader_bubble);
-    game.content.bitmaps.list.free(bmp_radar_leader_x);
-    game.content.bitmaps.list.free(bmp_radar_obstacle);
-    game.content.bitmaps.list.free(bmp_radar_onion_skeleton);
-    game.content.bitmaps.list.free(bmp_radar_onion_bulb);
-    game.content.bitmaps.list.free(bmp_radar_ship);
-    game.content.bitmaps.list.free(bmp_radar_path);
-    bmp_radar_cursor = nullptr;
-    bmp_radar_pikmin = nullptr;
-    bmp_radar_treasure = nullptr;
-    bmp_radar_enemy_alive = nullptr;
-    bmp_radar_enemy_dead = nullptr;
-    bmp_radar_leader_bubble = nullptr;
-    bmp_radar_leader_x = nullptr;
-    bmp_radar_obstacle = nullptr;
-    bmp_radar_onion_skeleton = nullptr;
-    bmp_radar_onion_bulb = nullptr;
-    bmp_radar_ship = nullptr;
-    bmp_radar_path = nullptr;
+    game.content.bitmaps.list.free(bmpRadarCursor);
+    game.content.bitmaps.list.free(bmpRadarPikmin);
+    game.content.bitmaps.list.free(bmpRadarTreasure);
+    game.content.bitmaps.list.free(bmpRadarEnemyAlive);
+    game.content.bitmaps.list.free(bmpRadarEnemyDead);
+    game.content.bitmaps.list.free(bmpRadarLeaderBubble);
+    game.content.bitmaps.list.free(bmpRadarLeaderX);
+    game.content.bitmaps.list.free(bmpRadarObstacle);
+    game.content.bitmaps.list.free(bmpRadarOnionSkeleton);
+    game.content.bitmaps.list.free(bmpRadarOnionBulb);
+    game.content.bitmaps.list.free(bmpRadarShip);
+    game.content.bitmaps.list.free(bmpRadarPath);
+    bmpRadarCursor = nullptr;
+    bmpRadarPikmin = nullptr;
+    bmpRadarTreasure = nullptr;
+    bmpRadarEnemyAlive = nullptr;
+    bmpRadarEnemyDead = nullptr;
+    bmpRadarLeaderBubble = nullptr;
+    bmpRadarLeaderX = nullptr;
+    bmpRadarObstacle = nullptr;
+    bmpRadarOnionSkeleton = nullptr;
+    bmpRadarOnionBulb = nullptr;
+    bmpRadarShip = nullptr;
+    bmpRadarPath = nullptr;
 }
 
 
@@ -223,12 +223,12 @@ void PauseMenu::addBullet(
         
     BulletGuiItem* bullet =
         new BulletGuiItem(
-        text, game.sys_content.fnt_standard, color
+        text, game.sysContent.fntStandard, color
     );
-    bullet->ratio_center = Point(0.50f, bullet_center_y);
-    bullet->ratio_size = Point(0.96f, BULLET_HEIGHT);
+    bullet->ratioCenter = Point(0.50f, bullet_center_y);
+    bullet->ratioSize = Point(0.96f, BULLET_HEIGHT);
     list->addChild(bullet);
-    mission_gui.addItem(bullet);
+    missionGui.addItem(bullet);
 }
 
 
@@ -274,7 +274,7 @@ void PauseMenu::addPikminStatusLine(
     const float item_y = y1 + item_height / 2.0f + item_y_spacing;
     
     ALLEGRO_FONT* font =
-        (is_single && !is_totals) ? game.sys_content.fnt_standard : game.sys_content.fnt_counter;
+        (is_single && !is_totals) ? game.sysContent.fntStandard : game.sysContent.fntCounter;
     string tooltip_start =
         pik_type ?
         "Number of " + pik_type->name + " " :
@@ -285,34 +285,34 @@ void PauseMenu::addPikminStatusLine(
     
         //Pikmin type.
         GuiItem* type_item = new GuiItem();
-        type_item->on_draw =
+        type_item->onDraw =
         [pik_type] (const DrawInfo & draw) {
             drawBitmapInBox(
-                pik_type->bmp_icon, draw.center, draw.size, true
+                pik_type->bmpIcon, draw.center, draw.size, true
             );
         };
-        type_item->ratio_center =
+        type_item->ratioCenter =
             Point(
                 first_x + item_x_interval * 0,
                 item_y
             );
-        type_item->ratio_size = Point(item_width, item_height);
+        type_item->ratioSize = Point(item_width, item_height);
         list->addChild(type_item);
-        status_gui.addItem(type_item);
+        statusGui.addItem(type_item);
         
     } else if(is_totals) {
     
         //Totals header.
         TextGuiItem* totals_header_item =
-            new TextGuiItem("Total", game.sys_content.fnt_area_name);
-        totals_header_item->ratio_center =
+            new TextGuiItem("Total", game.sysContent.fntAreaName);
+        totals_header_item->ratioCenter =
             Point(
                 first_x + item_x_interval * 0,
                 item_y
             );
-        totals_header_item->ratio_size = Point(item_width, item_height);
+        totals_header_item->ratioSize = Point(item_width, item_height);
         list->addChild(totals_header_item);
-        status_gui.addItem(totals_header_item);
+        statusGui.addItem(totals_header_item);
         
     }
     
@@ -320,15 +320,15 @@ void PauseMenu::addPikminStatusLine(
     TextGuiItem* group_text_item =
         new TextGuiItem(group_text, font);
     group_text_item->selectable = can_select;
-    group_text_item->show_selection_box = can_select;
-    group_text_item->ratio_center =
+    group_text_item->showSelectionBox = can_select;
+    group_text_item->ratioCenter =
         Point(
             first_x + item_x_interval * 1,
             item_y
         );
-    group_text_item->ratio_size = Point(item_width, number_item_height);
+    group_text_item->ratioSize = Point(item_width, number_item_height);
     if(can_select) {
-        group_text_item->on_get_tooltip =
+        group_text_item->onGetTooltip =
         [tooltip_start] () {
             return tooltip_start + "in your active leader's group.";
         };
@@ -337,21 +337,21 @@ void PauseMenu::addPikminStatusLine(
         group_text_item->color = changeAlpha(group_text_item->color, 64);
     }
     list->addChild(group_text_item);
-    status_gui.addItem(group_text_item);
+    statusGui.addItem(group_text_item);
     
     //Idle Pikmin.
     TextGuiItem* idle_text_item =
         new TextGuiItem(idle_text, font);
     idle_text_item->selectable = can_select;
-    idle_text_item->show_selection_box = can_select;
-    idle_text_item->ratio_center =
+    idle_text_item->showSelectionBox = can_select;
+    idle_text_item->ratioCenter =
         Point(
             first_x + item_x_interval * 2,
             item_y
         );
-    idle_text_item->ratio_size = Point(item_width, number_item_height);
+    idle_text_item->ratioSize = Point(item_width, number_item_height);
     if(can_select) {
-        idle_text_item->on_get_tooltip =
+        idle_text_item->onGetTooltip =
         [tooltip_start] () {
             return tooltip_start + "idling in the field.";
         };
@@ -360,21 +360,21 @@ void PauseMenu::addPikminStatusLine(
         idle_text_item->color = changeAlpha(idle_text_item->color, 64);
     }
     list->addChild(idle_text_item);
-    status_gui.addItem(idle_text_item);
+    statusGui.addItem(idle_text_item);
     
     //Field Pikmin.
     TextGuiItem* field_text_item =
         new TextGuiItem(field_text, font);
     field_text_item->selectable = can_select;
-    field_text_item->show_selection_box = can_select;
-    field_text_item->ratio_center =
+    field_text_item->showSelectionBox = can_select;
+    field_text_item->ratioCenter =
         Point(
             first_x + item_x_interval * 3,
             item_y
         );
-    field_text_item->ratio_size = Point(item_width, number_item_height);
+    field_text_item->ratioSize = Point(item_width, number_item_height);
     if(can_select) {
-        field_text_item->on_get_tooltip =
+        field_text_item->onGetTooltip =
         [tooltip_start] () {
             return tooltip_start + "out in the field.";
         };
@@ -383,21 +383,21 @@ void PauseMenu::addPikminStatusLine(
         field_text_item->color = changeAlpha(field_text_item->color, 64);
     }
     list->addChild(field_text_item);
-    status_gui.addItem(field_text_item);
+    statusGui.addItem(field_text_item);
     
     //Onion Pikmin.
     TextGuiItem* onion_text_item =
         new TextGuiItem(onion_text, font);
     onion_text_item->selectable = can_select;
-    onion_text_item->show_selection_box = can_select;
-    onion_text_item->ratio_center =
+    onion_text_item->showSelectionBox = can_select;
+    onion_text_item->ratioCenter =
         Point(
             first_x + item_x_interval * 4,
             item_y
         );
-    onion_text_item->ratio_size = Point(item_width, number_item_height);
+    onion_text_item->ratioSize = Point(item_width, number_item_height);
     if(can_select) {
-        onion_text_item->on_get_tooltip =
+        onion_text_item->onGetTooltip =
         [tooltip_start] () {
             return tooltip_start + "inside Onions.";
         };
@@ -406,21 +406,21 @@ void PauseMenu::addPikminStatusLine(
         onion_text_item->color = changeAlpha(onion_text_item->color, 64);
     }
     list->addChild(onion_text_item);
-    status_gui.addItem(onion_text_item);
+    statusGui.addItem(onion_text_item);
     
     //Total Pikmin.
     TextGuiItem* total_text_item =
         new TextGuiItem(total_text, font, COLOR_GOLD);
     total_text_item->selectable = can_select;
-    total_text_item->show_selection_box = can_select;
-    total_text_item->ratio_center =
+    total_text_item->showSelectionBox = can_select;
+    total_text_item->ratioCenter =
         Point(
             first_x + item_x_interval * 5,
             item_y
         );
-    total_text_item->ratio_size = Point(item_width, number_item_height);
+    total_text_item->ratioSize = Point(item_width, number_item_height);
     if(can_select) {
-        total_text_item->on_get_tooltip =
+        total_text_item->onGetTooltip =
         [tooltip_start] () {
             return tooltip_start + "you have.";
         };
@@ -429,14 +429,14 @@ void PauseMenu::addPikminStatusLine(
         total_text_item->color = changeAlpha(total_text_item->color, 64);
     }
     list->addChild(total_text_item);
-    status_gui.addItem(total_text_item);
+    statusGui.addItem(total_text_item);
     
     //Separator.
     GuiItem* separator_item = new GuiItem();
-    separator_item->ratio_center =
+    separator_item->ratioCenter =
         Point(first_x + item_x_interval * 5.5f, item_y);
-    separator_item->ratio_size = Point(1.0f, item_height);
-    separator_item->on_draw =
+    separator_item->ratioSize = Point(1.0f, item_height);
+    separator_item->onDraw =
     [] (const DrawInfo & draw) {
         al_draw_line(
             draw.center.x, draw.center.y - draw.size.y / 2.0f,
@@ -445,21 +445,21 @@ void PauseMenu::addPikminStatusLine(
         );
     };
     list->addChild(separator_item);
-    status_gui.addItem(separator_item);
+    statusGui.addItem(separator_item);
     
     //New Pikmin.
     TextGuiItem* new_text_item =
         new TextGuiItem(new_text, font, al_map_rgb(210, 255, 210));
     new_text_item->selectable = can_select;
-    new_text_item->show_selection_box = can_select;
-    new_text_item->ratio_center =
+    new_text_item->showSelectionBox = can_select;
+    new_text_item->ratioCenter =
         Point(
             first_x + item_x_interval * 6,
             item_y
         );
-    new_text_item->ratio_size = Point(item_width, number_item_height);
+    new_text_item->ratioSize = Point(item_width, number_item_height);
     if(can_select) {
-        new_text_item->on_get_tooltip =
+        new_text_item->onGetTooltip =
         [tooltip_start] () {
             return tooltip_start + "born today.";
         };
@@ -468,21 +468,21 @@ void PauseMenu::addPikminStatusLine(
         new_text_item->color = changeAlpha(new_text_item->color, 64);
     }
     list->addChild(new_text_item);
-    status_gui.addItem(new_text_item);
+    statusGui.addItem(new_text_item);
     
     //Lost Pikmin.
     TextGuiItem* lost_text_item =
         new TextGuiItem(lost_text, font, al_map_rgb(255, 210, 210));
     lost_text_item->selectable = can_select;
-    lost_text_item->show_selection_box = can_select;
-    lost_text_item->ratio_center =
+    lost_text_item->showSelectionBox = can_select;
+    lost_text_item->ratioCenter =
         Point(
             first_x + item_x_interval * 7,
             item_y
         );
-    lost_text_item->ratio_size = Point(item_width, number_item_height);
+    lost_text_item->ratioSize = Point(item_width, number_item_height);
     if(can_select) {
-        lost_text_item->on_get_tooltip =
+        lost_text_item->onGetTooltip =
         [tooltip_start] () {
             return tooltip_start + "lost today.";
         };
@@ -491,49 +491,49 @@ void PauseMenu::addPikminStatusLine(
         lost_text_item->color = changeAlpha(lost_text_item->color, 64);
     }
     list->addChild(lost_text_item);
-    status_gui.addItem(lost_text_item);
+    statusGui.addItem(lost_text_item);
 }
 
 
 /**
  * @brief Calculates the Go Here path from the selected leader to the radar
- * cursor, if applicable, and stores the results in go_here_path and
- * go_here_path_result.
+ * cursor, if applicable, and stores the results in goHerePath and
+ * goHerePathResult.
  */
 void PauseMenu::calculateGoHerePath() {
-    radar_cursor_leader = nullptr;
+    radarCursorLeader = nullptr;
     for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); l++) {
         Leader* l_ptr = game.states.gameplay->mobs.leaders[l];
         if(
             l_ptr->health > 0 &&
-            Distance(l_ptr->pos, radar_cursor) <= 24.0f / radar_cam.zoom
+            Distance(l_ptr->pos, radarCursor) <= 24.0f / radarCam.zoom
         ) {
-            radar_cursor_leader = l_ptr;
+            radarCursorLeader = l_ptr;
             break;
         }
     }
     
     if(
-        !radar_selected_leader ||
-        radar_cursor_leader ||
-        Distance(radar_selected_leader->pos, radar_cursor) < 128.0f
+        !radarSelectedLeader ||
+        radarCursorLeader ||
+        Distance(radarSelectedLeader->pos, radarCursor) < 128.0f
     ) {
-        go_here_path.clear();
-        go_here_path_result = PATH_RESULT_ERROR;
+        goHerePath.clear();
+        goHerePathResult = PATH_RESULT_ERROR;
         return;
     }
     
-    if(!radar_selected_leader->fsm.getEvent(LEADER_EV_GO_HERE)) {
-        go_here_path.clear();
-        go_here_path_result = PATH_RESULT_ERROR;
+    if(!radarSelectedLeader->fsm.getEvent(LEADER_EV_GO_HERE)) {
+        goHerePath.clear();
+        goHerePathResult = PATH_RESULT_ERROR;
         return;
     }
     
-    Sector* cursor_sector = getSector(radar_cursor, nullptr, true);
+    Sector* cursor_sector = getSector(radarCursor, nullptr, true);
     
     if(!cursor_sector || cursor_sector->type == SECTOR_TYPE_BLOCKING) {
-        go_here_path.clear();
-        go_here_path_result = PATH_RESULT_ERROR;
+        goHerePath.clear();
+        goHerePathResult = PATH_RESULT_ERROR;
         return;
     }
     
@@ -541,16 +541,16 @@ void PauseMenu::calculateGoHerePath() {
     settings.flags =
         PATH_FOLLOW_FLAG_CAN_CONTINUE | PATH_FOLLOW_FLAG_LIGHT_LOAD;
     settings.invulnerabilities =
-        radar_selected_leader->group->getGroupInvulnerabilities(
-            radar_selected_leader
+        radarSelectedLeader->group->getGroupInvulnerabilities(
+            radarSelectedLeader
         );
         
-    go_here_path_result =
+    goHerePathResult =
         getPath(
-            radar_selected_leader->pos,
-            radar_cursor,
+            radarSelectedLeader->pos,
+            radarCursor,
             settings,
-            go_here_path, nullptr, nullptr, nullptr
+            goHerePath, nullptr, nullptr, nullptr
         );
 }
 
@@ -562,13 +562,13 @@ void PauseMenu::calculateGoHerePath() {
  */
 void PauseMenu::confirmOrLeave() {
     bool do_confirmation = false;
-    switch(game.options.misc.leaving_conf_mode) {
+    switch(game.options.misc.leavingConfMode) {
     case LEAVING_CONF_MODE_NEVER: {
         do_confirmation = false;
         break;
     } case LEAVING_CONF_MODE_1_MIN: {
         do_confirmation =
-            game.states.gameplay->gameplay_time_passed >= 60.0f;
+            game.states.gameplay->gameplayTimePassed >= 60.0f;
         break;
     } case LEAVING_CONF_MODE_ALWAYS: {
         do_confirmation = true;
@@ -579,33 +579,33 @@ void PauseMenu::confirmOrLeave() {
     }
     
     if(do_confirmation) {
-        switch(leave_target) {
+        switch(leaveTarget) {
         case GAMEPLAY_LEAVE_TARGET_RETRY: {
-            confirmation_explanation_text->text =
+            confirmationExplanationText->text =
                 "If you retry, you will LOSE all of your progress "
                 "and start over. Are you sure you want to retry?";
             break;
         } case GAMEPLAY_LEAVE_TARGET_END: {
-            confirmation_explanation_text->text =
+            confirmationExplanationText->text =
                 "If you end now, you will stop playing and will go to the "
                 "results menu.";
-            if(game.cur_area_data->type == AREA_TYPE_MISSION) {
+            if(game.curAreaData->type == AREA_TYPE_MISSION) {
                 if(
-                    game.cur_area_data->mission.goal ==
+                    game.curAreaData->mission.goal ==
                     MISSION_GOAL_END_MANUALLY
                 ) {
-                    confirmation_explanation_text->text +=
+                    confirmationExplanationText->text +=
                         " The goal of this mission is to end through here, so "
                         "make sure you've done everything you need first.";
                 } else {
-                    confirmation_explanation_text->text +=
+                    confirmationExplanationText->text +=
                         " This will end the mission as a fail, "
                         "even though you may still get a medal from it.";
                     if(
-                        game.cur_area_data->mission.grading_mode ==
+                        game.curAreaData->mission.gradingMode ==
                         MISSION_GRADING_MODE_POINTS
                     ) {
-                        confirmation_explanation_text->text +=
+                        confirmationExplanationText->text +=
                             " Note that since you fail the mission, you may "
                             "lose out on some points. You should check the "
                             "pause menu's mission page for more information.";
@@ -613,11 +613,11 @@ void PauseMenu::confirmOrLeave() {
                     
                 }
             }
-            confirmation_explanation_text->text +=
+            confirmationExplanationText->text +=
                 " Are you sure you want to end?";
             break;
         } case GAMEPLAY_LEAVE_TARGET_AREA_SELECT: {
-            confirmation_explanation_text->text =
+            confirmationExplanationText->text =
                 "If you quit, you will LOSE all of your progress and instantly "
                 "stop playing. Are you sure you want to quit?";
             break;
@@ -629,8 +629,8 @@ void PauseMenu::confirmOrLeave() {
             GUI_MANAGER_ANIM_CENTER_TO_UP,
             GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
         );
-        confirmation_gui.responsive = true;
-        confirmation_gui.startAnimation(
+        confirmationGui.responsive = true;
+        confirmationGui.startAnimation(
             GUI_MANAGER_ANIM_UP_TO_CENTER,
             GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
         );
@@ -682,13 +682,13 @@ ButtonGuiItem* PauseMenu::createPageButton(
         left ?
         "< " + page_name :
         page_name + " >",
-        game.sys_content.fnt_standard
+        game.sysContent.fntStandard
     );
-    new_button->on_activate =
+    new_button->onActivate =
     [this, cur_gui, target_page, left] (const Point &) {
         switchPage(cur_gui, target_page, left);
     };
-    new_button->on_get_tooltip =
+    new_button->onGetTooltip =
     [tooltip_name] () {
         return "Go to the pause menu's " + tooltip_name + " page.";
     };
@@ -721,15 +721,15 @@ void PauseMenu::createPageButtons(
     
     //Left page input icon.
     GuiItem* left_page_input = new GuiItem();
-    left_page_input->on_draw =
+    left_page_input->onDraw =
     [this] (const DrawInfo & draw) {
-        if(!game.options.misc.show_hud_input_icons) return;
+        if(!game.options.misc.showHudInputIcons) return;
         const PlayerInputSource &s =
             game.controls.findBind(PLAYER_ACTION_TYPE_MENU_PAGE_LEFT).
             inputSource;
         if(s.type == INPUT_SOURCE_TYPE_NONE) return;
         drawPlayerInputSourceIcon(
-            game.sys_content.fnt_slim, s, true, draw.center, draw.size
+            game.sysContent.fntSlim, s, true, draw.center, draw.size
         );
     };
     cur_gui->addItem(left_page_input, "left_page_input");
@@ -741,15 +741,15 @@ void PauseMenu::createPageButtons(
     
     //Right page input icon.
     GuiItem* right_page_input = new GuiItem();
-    right_page_input->on_draw =
+    right_page_input->onDraw =
     [this] (const DrawInfo & draw) {
-        if(!game.options.misc.show_hud_input_icons) return;
+        if(!game.options.misc.showHudInputIcons) return;
         const PlayerInputSource &s =
             game.controls.findBind(PLAYER_ACTION_TYPE_MENU_PAGE_RIGHT).
             inputSource;
         if(s.type == INPUT_SOURCE_TYPE_NONE) return;
         drawPlayerInputSourceIcon(
-            game.sys_content.fnt_slim, s, true, draw.center, draw.size
+            game.sysContent.fntSlim, s, true, draw.center, draw.size
         );
     };
     cur_gui->addItem(right_page_input, "right_page_input");
@@ -761,11 +761,11 @@ void PauseMenu::createPageButtons(
  */
 void PauseMenu::draw() {
     gui.draw();
-    radar_gui.draw();
-    status_gui.draw();
-    mission_gui.draw();
-    confirmation_gui.draw();
-    if(secondary_menu) secondary_menu->draw();
+    radarGui.draw();
+    statusGui.draw();
+    missionGui.draw();
+    confirmationGui.draw();
+    if(secondaryMenu) secondaryMenu->draw();
 }
 
 
@@ -783,7 +783,7 @@ void PauseMenu::drawGoHereSegment(
     const Point &start, const Point &end,
     const ALLEGRO_COLOR &color, float* texture_point
 ) {
-    const float PATH_SEGMENT_THICKNESS = 12.0f / radar_cam.zoom;
+    const float PATH_SEGMENT_THICKNESS = 12.0f / radarCam.zoom;
     const float PATH_SEGMENT_TIME_MULT = 10.0f;
     
     ALLEGRO_VERTEX av[4];
@@ -791,11 +791,11 @@ void PauseMenu::drawGoHereSegment(
         av[a].color = color;
         av[a].z = 0.0f;
     }
-    int bmp_h = al_get_bitmap_height(bmp_radar_path);
-    float texture_scale = bmp_h / PATH_SEGMENT_THICKNESS / radar_cam.zoom;
+    int bmp_h = al_get_bitmap_height(bmpRadarPath);
+    float texture_scale = bmp_h / PATH_SEGMENT_THICKNESS / radarCam.zoom;
     float angle = getAngle(start, end);
-    float distance = Distance(start, end).toFloat() * radar_cam.zoom;
-    float texture_offset = game.time_passed * PATH_SEGMENT_TIME_MULT;
+    float distance = Distance(start, end).toFloat() * radarCam.zoom;
+    float texture_offset = game.timePassed * PATH_SEGMENT_TIME_MULT;
     float texture_start = *texture_point;
     float texture_end = texture_start + distance;
     Point rot_offset = rotatePoint(Point(0, PATH_SEGMENT_THICKNESS), angle);
@@ -819,7 +819,7 @@ void PauseMenu::drawGoHereSegment(
     av[3].v = bmp_h;
     
     al_draw_prim(
-        av, nullptr, bmp_radar_path, 0, 4, ALLEGRO_PRIM_TRIANGLE_STRIP
+        av, nullptr, bmpRadarPath, 0, 4, ALLEGRO_PRIM_TRIANGLE_STRIP
     );
     
     *texture_point = texture_end;
@@ -844,7 +844,7 @@ void PauseMenu::drawRadar(
     al_copy_transform(&old_transform, al_get_current_transform());
     al_get_clipping_rectangle(&old_cr_x, &old_cr_y, &old_cr_w, &old_cr_h);
     
-    al_use_transform(&world_to_radar_screen_transform);
+    al_use_transform(&worldToRadarScreenTransform);
     al_set_clipping_rectangle(
         center.x - size.x / 2.0f,
         center.y - size.y / 2.0f,
@@ -853,26 +853,26 @@ void PauseMenu::drawRadar(
     );
     
     //Background fill.
-    al_clear_to_color(game.config.aesthetic_radar.background_color);
+    al_clear_to_color(game.config.aestheticRadar.backgroundColor);
     
     //Draw each sector.
-    for(size_t s = 0; s < game.cur_area_data->sectors.size(); s++) {
-        Sector* s_ptr = game.cur_area_data->sectors[s];
+    for(size_t s = 0; s < game.curAreaData->sectors.size(); s++) {
+        Sector* s_ptr = game.curAreaData->sectors[s];
         
         if(s_ptr->type == SECTOR_TYPE_BLOCKING) continue;
         ALLEGRO_COLOR color =
             interpolateColor(
-                s_ptr->z, lowest_sector_z, highest_sector_z,
-                game.config.aesthetic_radar.lowest_color,
-                game.config.aesthetic_radar.highest_color
+                s_ptr->z, lowestSectorZ, highestSectorZ,
+                game.config.aestheticRadar.lowestColor,
+                game.config.aestheticRadar.highestColor
             );
             
         for(size_t h = 0; h < s_ptr->hazards.size(); h++) {
-            if(!s_ptr->hazards[h]->associated_liquid) continue;
+            if(!s_ptr->hazards[h]->associatedLiquid) continue;
             color =
                 interpolateColor(
                     0.80f, 0.0f, 1.0f,
-                    color, s_ptr->hazards[h]->associated_liquid->radar_color
+                    color, s_ptr->hazards[h]->associatedLiquid->radarColor
                 );
         }
         
@@ -895,8 +895,8 @@ void PauseMenu::drawRadar(
     }
     
     //Draw each edge.
-    for(size_t e = 0; e < game.cur_area_data->edges.size(); e++) {
-        Edge* e_ptr = game.cur_area_data->edges[e];
+    for(size_t e = 0; e < game.curAreaData->edges.size(); e++) {
+        Edge* e_ptr = game.curAreaData->edges[e];
         
         if(!e_ptr->sectors[0] || !e_ptr->sectors[1]) {
             //The other side is already the void, so no need for an edge.
@@ -916,8 +916,8 @@ void PauseMenu::drawRadar(
             e_ptr->vertexes[0]->y,
             e_ptr->vertexes[1]->x,
             e_ptr->vertexes[1]->y,
-            game.config.aesthetic_radar.edge_color,
-            1.5f / radar_cam.zoom
+            game.config.aestheticRadar.edgeColor,
+            1.5f / radarCam.zoom
         );
     }
     
@@ -933,7 +933,7 @@ void PauseMenu::drawRadar(
             float fade_cycle_pos =
                 std::min(
                     (float) fmod(
-                        game.time_passed,
+                        game.timePassed,
                         PAUSE_MENU::RADAR_ONION_COLOR_FADE_CYCLE_DUR
                     ),
                     PAUSE_MENU::RADAR_ONION_COLOR_FADE_DUR
@@ -941,7 +941,7 @@ void PauseMenu::drawRadar(
                 
             size_t pik_type_idx_target =
                 (int) (
-                    game.time_passed /
+                    game.timePassed /
                     PAUSE_MENU::RADAR_ONION_COLOR_FADE_CYCLE_DUR
                 ) % nr_pik_types;
             size_t pik_type_idx_prev =
@@ -951,20 +951,20 @@ void PauseMenu::drawRadar(
                 interpolateColor(
                     fade_cycle_pos, 0.0f,
                     PAUSE_MENU::RADAR_ONION_COLOR_FADE_DUR,
-                    pik_types_ptr->at(pik_type_idx_prev)->main_color,
-                    pik_types_ptr->at(pik_type_idx_target)->main_color
+                    pik_types_ptr->at(pik_type_idx_prev)->mainColor,
+                    pik_types_ptr->at(pik_type_idx_target)->mainColor
                 );
                 
             drawBitmap(
-                bmp_radar_onion_bulb, o_ptr->pos,
-                Point(24.0f / radar_cam.zoom),
+                bmpRadarOnionBulb, o_ptr->pos,
+                Point(24.0f / radarCam.zoom),
                 0.0f,
                 target_color
             );
         }
         drawBitmap(
-            bmp_radar_onion_skeleton, o_ptr->pos,
-            Point(24.0f / radar_cam.zoom)
+            bmpRadarOnionSkeleton, o_ptr->pos,
+            Point(24.0f / radarCam.zoom)
         );
     }
     
@@ -973,8 +973,8 @@ void PauseMenu::drawRadar(
         Ship* s_ptr = game.states.gameplay->mobs.ships[s];
         
         drawBitmap(
-            bmp_radar_ship, s_ptr->pos,
-            Point(24.0f / radar_cam.zoom)
+            bmpRadarShip, s_ptr->pos,
+            Point(24.0f / radarCam.zoom)
         );
     }
     
@@ -984,10 +984,10 @@ void PauseMenu::drawRadar(
         if(e_ptr->parent) continue;
         
         drawBitmap(
-            e_ptr->health > 0 ? bmp_radar_enemy_alive : bmp_radar_enemy_dead,
+            e_ptr->health > 0 ? bmpRadarEnemyAlive : bmpRadarEnemyDead,
             e_ptr->pos,
-            Point(24.0f / radar_cam.zoom),
-            e_ptr->health > 0 ? game.time_passed : 0.0f
+            Point(24.0f / radarCam.zoom),
+            e_ptr->health > 0 ? game.timePassed : 0.0f
         );
     }
     
@@ -996,23 +996,23 @@ void PauseMenu::drawRadar(
         Leader* l_ptr = game.states.gameplay->mobs.leaders[l];
         
         drawBitmap(
-            l_ptr->lea_type->bmp_icon, l_ptr->pos,
-            Point(40.0f / radar_cam.zoom)
+            l_ptr->leaType->bmpIcon, l_ptr->pos,
+            Point(40.0f / radarCam.zoom)
         );
         drawBitmap(
-            bmp_radar_leader_bubble, l_ptr->pos,
-            Point(48.0f / radar_cam.zoom),
+            bmpRadarLeaderBubble, l_ptr->pos,
+            Point(48.0f / radarCam.zoom),
             0.0f,
-            radar_selected_leader == l_ptr ?
+            radarSelectedLeader == l_ptr ?
             al_map_rgb(0, 255, 255) :
             COLOR_WHITE
         );
         drawFilledEquilateralTriangle(
             l_ptr->pos +
-            rotatePoint(Point(24.5f / radar_cam.zoom, 0.0f), l_ptr->angle),
-            6.0f / radar_cam.zoom,
+            rotatePoint(Point(24.5f / radarCam.zoom, 0.0f), l_ptr->angle),
+            6.0f / radarCam.zoom,
             l_ptr->angle,
-            radar_selected_leader == l_ptr ?
+            radarSelectedLeader == l_ptr ?
             al_map_rgb(0, 255, 255) :
             l_ptr->health > 0 ?
             COLOR_WHITE :
@@ -1020,8 +1020,8 @@ void PauseMenu::drawRadar(
         );
         if(l_ptr->health <= 0) {
             drawBitmap(
-                bmp_radar_leader_x, l_ptr->pos,
-                Point(36.0f / radar_cam.zoom)
+                bmpRadarLeaderX, l_ptr->pos,
+                Point(36.0f / radarCam.zoom)
             );
         }
     }
@@ -1031,65 +1031,65 @@ void PauseMenu::drawRadar(
         Treasure* t_ptr = game.states.gameplay->mobs.treasures[t];
         
         drawBitmap(
-            bmp_radar_treasure, t_ptr->pos,
-            Point(32.0f / radar_cam.zoom),
-            sin(game.time_passed * 2.0f) * (TAU * 0.05f)
+            bmpRadarTreasure, t_ptr->pos,
+            Point(32.0f / radarCam.zoom),
+            sin(game.timePassed * 2.0f) * (TAU * 0.05f)
         );
     }
     for(size_t r = 0; r < game.states.gameplay->mobs.resources.size(); r++) {
         Resource* r_ptr = game.states.gameplay->mobs.resources[r];
         if(
-            r_ptr->res_type->delivery_result !=
+            r_ptr->resType->deliveryResult !=
             RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS
         ) {
             continue;
         }
         
         drawBitmap(
-            bmp_radar_treasure, r_ptr->pos,
-            Point(32.0f / radar_cam.zoom),
-            sin(game.time_passed * 2.0f) * (TAU * 0.05f)
+            bmpRadarTreasure, r_ptr->pos,
+            Point(32.0f / radarCam.zoom),
+            sin(game.timePassed * 2.0f) * (TAU * 0.05f)
         );
     }
     for(size_t p = 0; p < game.states.gameplay->mobs.piles.size(); p++) {
         Pile* p_ptr = game.states.gameplay->mobs.piles[p];
         if(
-            !p_ptr->pil_type->contents ||
+            !p_ptr->pilType->contents ||
             p_ptr->amount == 0 ||
-            p_ptr->pil_type->contents->delivery_result !=
+            p_ptr->pilType->contents->deliveryResult !=
             RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS
         ) {
             continue;
         }
         
         drawBitmap(
-            bmp_radar_treasure, p_ptr->pos,
-            Point(32.0f / radar_cam.zoom),
-            sin(game.time_passed * 2.0f) * (TAU * 0.05f)
+            bmpRadarTreasure, p_ptr->pos,
+            Point(32.0f / radarCam.zoom),
+            sin(game.timePassed * 2.0f) * (TAU * 0.05f)
         );
     }
     
     //Pikmin icons.
-    for(size_t p = 0; p < game.states.gameplay->mobs.pikmin_list.size(); p++) {
-        Pikmin* p_ptr = game.states.gameplay->mobs.pikmin_list[p];
+    for(size_t p = 0; p < game.states.gameplay->mobs.pikmin.size(); p++) {
+        Pikmin* p_ptr = game.states.gameplay->mobs.pikmin[p];
         
         drawBitmap(
-            bmp_radar_pikmin, p_ptr->pos,
-            Point(16.0f / radar_cam.zoom),
+            bmpRadarPikmin, p_ptr->pos,
+            Point(16.0f / radarCam.zoom),
             0.0f,
-            p_ptr->pik_type->main_color
+            p_ptr->pikType->mainColor
         );
     }
     
     //Obstacle icons.
     unordered_set<Mob*> obstacles;
-    for(const auto &o : game.states.gameplay->path_mgr.obstructions) {
+    for(const auto &o : game.states.gameplay->pathMgr.obstructions) {
         obstacles.insert(o.second.begin(), o.second.end());
     }
     for(const auto &o : obstacles) {
         drawBitmap(
-            bmp_radar_obstacle, o->pos,
-            Point(40.0f / radar_cam.zoom),
+            bmpRadarObstacle, o->pos,
+            Point(40.0f / radarCam.zoom),
             o->angle
         );
     }
@@ -1097,19 +1097,19 @@ void PauseMenu::drawRadar(
     //Currently-active Go Here paths.
     for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); l++) {
         Leader* l_ptr = game.states.gameplay->mobs.leaders[l];
-        if(!l_ptr->mid_go_here) continue;
+        if(!l_ptr->midGoHere) continue;
         
         float path_texture_point = 0.0f;
         ALLEGRO_COLOR color = al_map_rgba(120, 140, 170, 192);
         
-        switch(l_ptr->path_info->result) {
+        switch(l_ptr->pathInfo->result) {
         case PATH_RESULT_DIRECT:
         case PATH_RESULT_DIRECT_NO_STOPS: {
             //Go directly from A to B.
             
             drawGoHereSegment(
                 l_ptr->pos,
-                l_ptr->path_info->settings.target_point,
+                l_ptr->pathInfo->settings.targetPoint,
                 color, &path_texture_point
             );
             
@@ -1119,28 +1119,28 @@ void PauseMenu::drawRadar(
         case PATH_RESULT_PATH_WITH_SINGLE_STOP:
         case PATH_RESULT_PATH_WITH_OBSTACLES: {
     
-            size_t first_stop = l_ptr->path_info->cur_path_stop_idx;
-            if(first_stop >= l_ptr->path_info->path.size()) continue;
+            size_t first_stop = l_ptr->pathInfo->cur_path_stop_idx;
+            if(first_stop >= l_ptr->pathInfo->path.size()) continue;
             
             drawGoHereSegment(
                 l_ptr->pos,
-                l_ptr->path_info->path[first_stop]->pos,
+                l_ptr->pathInfo->path[first_stop]->pos,
                 color, &path_texture_point
             );
             for(
                 size_t s = first_stop + 1;
-                s < l_ptr->path_info->path.size();
+                s < l_ptr->pathInfo->path.size();
                 s++
             ) {
                 drawGoHereSegment(
-                    l_ptr->path_info->path[s - 1]->pos,
-                    l_ptr->path_info->path[s]->pos,
+                    l_ptr->pathInfo->path[s - 1]->pos,
+                    l_ptr->pathInfo->path[s]->pos,
                     color, &path_texture_point
                 );
             }
             drawGoHereSegment(
-                l_ptr->path_info->path.back()->pos,
-                l_ptr->path_info->settings.target_point,
+                l_ptr->pathInfo->path.back()->pos,
+                l_ptr->pathInfo->settings.targetPoint,
                 color, &path_texture_point
             );
             
@@ -1155,14 +1155,14 @@ void PauseMenu::drawRadar(
     
     //Go Here choice path.
     float path_texture_point = 0.0f;
-    switch(go_here_path_result) {
+    switch(goHerePathResult) {
     case PATH_RESULT_DIRECT:
     case PATH_RESULT_DIRECT_NO_STOPS: {
         //Go directly from A to B.
         
         drawGoHereSegment(
-            radar_selected_leader->pos,
-            radar_cursor,
+            radarSelectedLeader->pos,
+            radarCursor,
             al_map_rgb(64, 200, 240), &path_texture_point
         );
         
@@ -1173,28 +1173,28 @@ void PauseMenu::drawRadar(
     case PATH_RESULT_PATH_WITH_OBSTACLES: {
         //Regular path.
         ALLEGRO_COLOR color;
-        if(go_here_path_result == PATH_RESULT_PATH_WITH_OBSTACLES) {
+        if(goHerePathResult == PATH_RESULT_PATH_WITH_OBSTACLES) {
             color = al_map_rgb(200, 64, 64);
         } else {
             color = al_map_rgb(64, 200, 240);
         }
         
-        if(!go_here_path.empty()) {
+        if(!goHerePath.empty()) {
             drawGoHereSegment(
-                radar_selected_leader->pos,
-                go_here_path[0]->pos,
+                radarSelectedLeader->pos,
+                goHerePath[0]->pos,
                 color, &path_texture_point
             );
-            for(size_t s = 1; s < go_here_path.size(); s++) {
+            for(size_t s = 1; s < goHerePath.size(); s++) {
                 drawGoHereSegment(
-                    go_here_path[s - 1]->pos,
-                    go_here_path[s]->pos,
+                    goHerePath[s - 1]->pos,
+                    goHerePath[s]->pos,
                     color, &path_texture_point
                 );
             }
             drawGoHereSegment(
-                go_here_path.back()->pos,
-                radar_cursor,
+                goHerePath.back()->pos,
+                radarCursor,
                 color, &path_texture_point
             );
         }
@@ -1209,9 +1209,9 @@ void PauseMenu::drawRadar(
     
     //Radar cursor.
     drawBitmap(
-        bmp_radar_cursor, radar_cursor,
-        Point(48.0f / radar_cam.zoom),
-        game.time_passed * TAU * 0.3f
+        bmpRadarCursor, radarCursor,
+        Point(48.0f / radarCam.zoom),
+        game.timePassed * TAU * 0.3f
     );
     
     //Debugging feature -- show area active cells.
@@ -1227,10 +1227,10 @@ void PauseMenu::drawRadar(
             cell_y++
         ) {
             float start_x =
-                game.cur_area_data->bmap.top_left_corner.x +
+                game.curAreaData->bmap.top_left_corner.x +
                 cell_x * GEOMETRY::AREA_CELL_SIZE;
             float start_y =
-                game.cur_area_data->bmap.top_left_corner.y +
+                game.curAreaData->bmap.top_left_corner.y +
                 cell_y * GEOMETRY::AREA_CELL_SIZE;
             al_draw_rectangle(
                 start_x + (1.0f / radar_cam.zoom),
@@ -1257,16 +1257,16 @@ void PauseMenu::drawRadar(
     );
     al_draw_filled_circle(
         north_ind_center.x, north_ind_center.y,
-        12.0f, game.config.aesthetic_radar.background_color
+        12.0f, game.config.aestheticRadar.backgroundColor
     );
     drawText(
-        "N", game.sys_content.fnt_slim,
+        "N", game.sysContent.fntSlim,
         Point(
             north_ind_center.x,
             north_ind_center.y + 1.0f
         ),
         Point(12.0f),
-        game.config.aesthetic_radar.highest_color
+        game.config.aestheticRadar.highestColor
     );
     al_draw_filled_triangle(
         north_ind_center.x,
@@ -1275,7 +1275,7 @@ void PauseMenu::drawRadar(
         north_ind_center.y - 6.0f,
         north_ind_center.x + 6.0f,
         north_ind_center.y - 6.0f,
-        game.config.aesthetic_radar.highest_color
+        game.config.aestheticRadar.highestColor
     );
     
     //Area name.
@@ -1289,11 +1289,11 @@ void PauseMenu::drawRadar(
     );
     drawFilledRoundedRectangle(
         area_name_center, area_name_size,
-        12.0f, game.config.aesthetic_radar.background_color
+        12.0f, game.config.aestheticRadar.backgroundColor
     );
     drawText(
-        game.cur_area_data->name, game.sys_content.fnt_standard,
-        area_name_center, area_name_size, game.config.aesthetic_radar.highest_color
+        game.curAreaData->name, game.sysContent.fntStandard,
+        area_name_center, area_name_size, game.config.aestheticRadar.highestColor
     );
     
     //Draw some scan lines.
@@ -1324,7 +1324,7 @@ void PauseMenu::drawRadar(
     
     //Draw a rectangle all around.
     drawTexturedBox(
-        center, size, game.sys_content.bmp_frame_box,
+        center, size, game.sysContent.bmpFrameBox,
         COLOR_TRANSPARENT_WHITE
     );
 }
@@ -1336,17 +1336,17 @@ void PauseMenu::drawRadar(
  * @param list List item to fill.
  */
 void PauseMenu::fillMissionFailList(ListGuiItem* list) {
-    for(size_t f = 0; f < game.mission_fail_conds.size(); f++) {
+    for(size_t f = 0; f < game.missionFailConds.size(); f++) {
         if(
             hasFlag(
-                game.cur_area_data->mission.fail_conditions,
+                game.curAreaData->mission.failConditions,
                 getIdxBitmask(f)
             )
         ) {
-            MissionFail* cond = game.mission_fail_conds[f];
+            MissionFail* cond = game.missionFailConds[f];
             
             string description =
-                cond->getPlayerDescription(&game.cur_area_data->mission);
+                cond->getPlayerDescription(&game.curAreaData->mission);
             addBullet(list, description, al_map_rgb(255, 200, 200));
             
             float percentage = 0.0f;
@@ -1365,7 +1365,7 @@ void PauseMenu::fillMissionFailList(ListGuiItem* list) {
         }
     }
     
-    if(game.cur_area_data->mission.fail_conditions == 0) {
+    if(game.curAreaData->mission.failConditions == 0) {
         addBullet(list, "(None)");
     }
 }
@@ -1377,7 +1377,7 @@ void PauseMenu::fillMissionFailList(ListGuiItem* list) {
  * @param list List item to fill.
  */
 void PauseMenu::fillMissionGradingList(ListGuiItem* list) {
-    switch(game.cur_area_data->mission.grading_mode) {
+    switch(game.curAreaData->mission.gradingMode) {
     case MISSION_GRADING_MODE_POINTS: {
         addBullet(
             list,
@@ -1386,33 +1386,33 @@ void PauseMenu::fillMissionGradingList(ListGuiItem* list) {
         addBullet(
             list,
             "    Platinum: " +
-            i2s(game.cur_area_data->mission.platinum_req) + "+ points.",
+            i2s(game.curAreaData->mission.platinumReq) + "+ points.",
             al_map_rgb(255, 255, 200)
         );
         addBullet(
             list,
             "    Gold: " +
-            i2s(game.cur_area_data->mission.gold_req) + "+ points.",
+            i2s(game.curAreaData->mission.goldReq) + "+ points.",
             al_map_rgb(255, 255, 200)
         );
         addBullet(
             list,
             "    Silver: " +
-            i2s(game.cur_area_data->mission.silver_req) + "+ points.",
+            i2s(game.curAreaData->mission.silverReq) + "+ points.",
             al_map_rgb(255, 255, 200)
         );
         addBullet(
             list,
             "    Bronze: " +
-            i2s(game.cur_area_data->mission.bronze_req) + "+ points.",
+            i2s(game.curAreaData->mission.bronzeReq) + "+ points.",
             al_map_rgb(255, 255, 200)
         );
         
         vector<string> score_notes;
-        for(size_t c = 0; c < game.mission_score_criteria.size(); c++) {
+        for(size_t c = 0; c < game.missionScoreCriteria.size(); c++) {
             MissionScoreCriterion* c_ptr =
-                game.mission_score_criteria[c];
-            int mult = c_ptr->getMultiplier(&game.cur_area_data->mission);
+                game.missionScoreCriteria[c];
+            int mult = c_ptr->getMultiplier(&game.curAreaData->mission);
             if(mult != 0) {
                 score_notes.push_back(
                     "    " + c_ptr->getName() + " x " + i2s(mult) + "."
@@ -1435,12 +1435,12 @@ void PauseMenu::fillMissionGradingList(ListGuiItem* list) {
         }
         
         vector<string> loss_notes;
-        for(size_t c = 0; c < game.mission_score_criteria.size(); c++) {
+        for(size_t c = 0; c < game.missionScoreCriteria.size(); c++) {
             MissionScoreCriterion* c_ptr =
-                game.mission_score_criteria[c];
+                game.missionScoreCriteria[c];
             if(
                 hasFlag(
-                    game.cur_area_data->mission.point_loss_data,
+                    game.curAreaData->mission.pointLossData,
                     getIdxBitmask(c)
                 )
             ) {
@@ -1487,17 +1487,17 @@ void PauseMenu::fillMissionGradingList(ListGuiItem* list) {
 string PauseMenu::getMissionGoalStatus() {
     float percentage = 0.0f;
     int cur =
-        game.mission_goals[game.cur_area_data->mission.goal]->
+        game.missionGoals[game.curAreaData->mission.goal]->
         getCurAmount(game.states.gameplay);
     int req =
-        game.mission_goals[game.cur_area_data->mission.goal]->
+        game.missionGoals[game.curAreaData->mission.goal]->
         getReqAmount(game.states.gameplay);
     if(req != 0.0f) {
         percentage = cur / (float) req;
     }
     percentage *= 100;
     return
-        game.mission_goals[game.cur_area_data->mission.goal]->
+        game.missionGoals[game.curAreaData->mission.goal]->
         getStatus(cur, req, percentage);
 }
 
@@ -1509,53 +1509,53 @@ string PauseMenu::getMissionGoalStatus() {
  */
 void PauseMenu::handleAllegroEvent(const ALLEGRO_EVENT &ev) {
     gui.handleAllegroEvent(ev);
-    radar_gui.handleAllegroEvent(ev);
-    status_gui.handleAllegroEvent(ev);
-    mission_gui.handleAllegroEvent(ev);
-    confirmation_gui.handleAllegroEvent(ev);
-    if(secondary_menu) secondary_menu->handleAllegroEvent(ev);
+    radarGui.handleAllegroEvent(ev);
+    statusGui.handleAllegroEvent(ev);
+    missionGui.handleAllegroEvent(ev);
+    confirmationGui.handleAllegroEvent(ev);
+    if(secondaryMenu) secondaryMenu->handleAllegroEvent(ev);
     
     //Handle some radar logic.
     DrawInfo radar_draw;
-    radar_gui.getItemDrawInfo(radar_item, &radar_draw);
+    radarGui.getItemDrawInfo(radarItem, &radar_draw);
     bool mouse_in_radar =
-        radar_gui.responsive &&
+        radarGui.responsive &&
         isPointInRectangle(
-            game.mouse_cursor.s_pos,
+            game.mouseCursor.sPos,
             radar_draw.center, radar_draw.size
         );
         
     if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
         if(mouse_in_radar) {
-            radar_mouse_down = true;
-            radar_mouse_down_point = game.mouse_cursor.s_pos;
+            radarMouseDown = true;
+            radarMouseDownPoint = game.mouseCursor.sPos;
         }
         
     } else if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP) {
-        if(mouse_in_radar && !radar_mouse_dragging) {
+        if(mouse_in_radar && !radarMouseDragging) {
             //Clicked somewhere.
             radarConfirm();
         }
         
-        radar_mouse_down = false;
-        radar_mouse_dragging = false;
+        radarMouseDown = false;
+        radarMouseDragging = false;
         
     } else if(ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
         if(
-            radar_mouse_down &&
+            radarMouseDown &&
             (
-                fabs(game.mouse_cursor.s_pos.x - radar_mouse_down_point.x) >
+                fabs(game.mouseCursor.sPos.x - radarMouseDownPoint.x) >
                 4.0f ||
-                fabs(game.mouse_cursor.s_pos.y - radar_mouse_down_point.y) >
+                fabs(game.mouseCursor.sPos.y - radarMouseDownPoint.y) >
                 4.0f
             )
         ) {
             //Consider the mouse down as part of a mouse drag, not a click.
-            radar_mouse_dragging = true;
+            radarMouseDragging = true;
         }
         
         if(
-            radar_mouse_dragging &&
+            radarMouseDragging &&
             (ev.mouse.dx != 0.0f || ev.mouse.dy != 0.0f)
         ) {
             //Pan the radar around.
@@ -1578,7 +1578,7 @@ void PauseMenu::handleAllegroEvent(const ALLEGRO_EVENT &ev) {
  * @param action Data about the player action.
  */
 void PauseMenu::handlePlayerAction(const PlayerAction &action) {
-    if(opening_lockout_timer > 0.0f) {
+    if(openingLockoutTimer > 0.0f) {
         //Don't accept inputs shortly after the menu opens.
         //This helps errant inputs from before the menu bleeding into the menu
         //immediately after it opens, like the "radar toggle" action.
@@ -1588,36 +1588,36 @@ void PauseMenu::handlePlayerAction(const PlayerAction &action) {
     
     bool handled_by_radar = false;
     
-    if(radar_gui.responsive) {
+    if(radarGui.responsive) {
         switch(action.actionTypeId) {
         case PLAYER_ACTION_TYPE_RADAR: {
             if(action.value >= 0.5f) {
-                startClosing(&radar_gui);
+                startClosing(&radarGui);
                 handled_by_radar = true;
             }
             break;
         } case PLAYER_ACTION_TYPE_RADAR_RIGHT: {
-            radar_pan.right = action.value;
+            radarPan.right = action.value;
             handled_by_radar = true;
             break;
         } case PLAYER_ACTION_TYPE_RADAR_UP: {
-            radar_pan.up = action.value;
+            radarPan.up = action.value;
             handled_by_radar = true;
             break;
         } case PLAYER_ACTION_TYPE_RADAR_LEFT: {
-            radar_pan.left = action.value;
+            radarPan.left = action.value;
             handled_by_radar = true;
             break;
         } case PLAYER_ACTION_TYPE_RADAR_DOWN: {
-            radar_pan.down = action.value;
+            radarPan.down = action.value;
             handled_by_radar = true;
             break;
         } case PLAYER_ACTION_TYPE_RADAR_ZOOM_IN: {
-            radar_zoom_in = action.value;
+            radarZoomIn = action.value;
             handled_by_radar = true;
             break;
         } case PLAYER_ACTION_TYPE_RADAR_ZOOM_OUT: {
-            radar_zoom_out = action.value;
+            radarZoomOut = action.value;
             handled_by_radar = true;
             break;
         } case PLAYER_ACTION_TYPE_MENU_OK: {
@@ -1633,11 +1633,11 @@ void PauseMenu::handlePlayerAction(const PlayerAction &action) {
         //we could see GUI item selections move around or such because
         //radar and menus actions share binds.
         gui.handlePlayerAction(action);
-        radar_gui.handlePlayerAction(action);
-        status_gui.handlePlayerAction(action);
-        mission_gui.handlePlayerAction(action);
-        confirmation_gui.handlePlayerAction(action);
-        if(secondary_menu) secondary_menu->handlePlayerAction(action);
+        radarGui.handlePlayerAction(action);
+        statusGui.handlePlayerAction(action);
+        missionGui.handlePlayerAction(action);
+        confirmationGui.handlePlayerAction(action);
+        if(secondaryMenu) secondaryMenu->handlePlayerAction(action);
         
         switch(action.actionTypeId) {
         case PLAYER_ACTION_TYPE_MENU_PAGE_LEFT:
@@ -1645,14 +1645,14 @@ void PauseMenu::handlePlayerAction(const PlayerAction &action) {
             if(action.value >= 0.5f) {
                 GuiManager* cur_gui = &gui;
                 PAUSE_MENU_PAGE cur_page = PAUSE_MENU_PAGE_SYSTEM;
-                if(radar_gui.responsive) {
-                    cur_gui = &radar_gui;
+                if(radarGui.responsive) {
+                    cur_gui = &radarGui;
                     cur_page = PAUSE_MENU_PAGE_RADAR;
-                } else if(status_gui.responsive) {
-                    cur_gui = &status_gui;
+                } else if(statusGui.responsive) {
+                    cur_gui = &statusGui;
                     cur_page = PAUSE_MENU_PAGE_STATUS;
-                } else if(mission_gui.responsive) {
-                    cur_gui = &mission_gui;
+                } else if(missionGui.responsive) {
+                    cur_gui = &missionGui;
                     cur_page = PAUSE_MENU_PAGE_MISSION;
                 }
                 size_t cur_page_idx =
@@ -1686,27 +1686,27 @@ void PauseMenu::handlePlayerAction(const PlayerAction &action) {
  * @brief Initializes the leaving confirmation page.
  */
 void PauseMenu::initConfirmationPage() {
-    DataNode* gui_file = &game.content.gui_defs.list[PAUSE_MENU::CONFIRMATION_GUI_FILE_NAME];
+    DataNode* gui_file = &game.content.guiDefs.list[PAUSE_MENU::CONFIRMATION_GUI_FILE_NAME];
     
     //Menu items.
-    confirmation_gui.registerCoords("cancel",           19, 83, 30, 10);
-    confirmation_gui.registerCoords("cancel_input",      5, 87,  4,  4);
-    confirmation_gui.registerCoords("confirm",          81, 83, 30, 10);
-    confirmation_gui.registerCoords("header",           50,  8, 92,  8);
-    confirmation_gui.registerCoords("explanation",      50, 40, 84, 20);
-    confirmation_gui.registerCoords("options_reminder", 50, 69, 92, 10);
-    confirmation_gui.registerCoords("tooltip",          50, 96, 96,  4);
-    confirmation_gui.readCoords(gui_file->getChildByName("positions"));
+    confirmationGui.registerCoords("cancel",           19, 83, 30, 10);
+    confirmationGui.registerCoords("cancel_input",      5, 87,  4,  4);
+    confirmationGui.registerCoords("confirm",          81, 83, 30, 10);
+    confirmationGui.registerCoords("header",           50,  8, 92,  8);
+    confirmationGui.registerCoords("explanation",      50, 40, 84, 20);
+    confirmationGui.registerCoords("options_reminder", 50, 69, 92, 10);
+    confirmationGui.registerCoords("tooltip",          50, 96, 96,  4);
+    confirmationGui.readCoords(gui_file->getChildByName("positions"));
     
     //Cancel button.
-    confirmation_gui.back_item =
+    confirmationGui.backItem =
         new ButtonGuiItem(
-        "Cancel", game.sys_content.fnt_standard
+        "Cancel", game.sysContent.fntStandard
     );
-    confirmation_gui.back_item->on_activate =
+    confirmationGui.backItem->onActivate =
     [this] (const Point &) {
-        confirmation_gui.responsive = false;
-        confirmation_gui.startAnimation(
+        confirmationGui.responsive = false;
+        confirmationGui.startAnimation(
             GUI_MANAGER_ANIM_CENTER_TO_UP,
             GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
         );
@@ -1716,54 +1716,54 @@ void PauseMenu::initConfirmationPage() {
             GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
         );
     };
-    confirmation_gui.back_item->on_get_tooltip =
+    confirmationGui.backItem->onGetTooltip =
     [] () { return "Return to the pause menu."; };
-    confirmation_gui.addItem(confirmation_gui.back_item, "cancel");
+    confirmationGui.addItem(confirmationGui.backItem, "cancel");
     
     //Cancel input icon.
-    guiAddBackInputIcon(&confirmation_gui, "cancel_input");
+    guiAddBackInputIcon(&confirmationGui, "cancel_input");
     
     //Confirm button.
     ButtonGuiItem* confirm_button =
-        new ButtonGuiItem("Confirm", game.sys_content.fnt_standard);
-    confirm_button->on_activate =
+        new ButtonGuiItem("Confirm", game.sysContent.fntStandard);
+    confirm_button->onActivate =
     [this] (const Point &) {
         startLeavingGameplay();
     };
-    confirm_button->on_get_tooltip =
+    confirm_button->onGetTooltip =
     [] () {
         return "Yes, I'm sure.";
     };
-    confirmation_gui.addItem(confirm_button, "confirm");
+    confirmationGui.addItem(confirm_button, "confirm");
     
     //Header text.
     TextGuiItem* header_text =
-        new TextGuiItem("Are you sure?", game.sys_content.fnt_area_name);
-    confirmation_gui.addItem(header_text, "header");
+        new TextGuiItem("Are you sure?", game.sysContent.fntAreaName);
+    confirmationGui.addItem(header_text, "header");
     
     //Explanation text.
-    confirmation_explanation_text =
-        new TextGuiItem("", game.sys_content.fnt_standard);
-    confirmation_explanation_text->line_wrap = true;
-    confirmation_gui.addItem(confirmation_explanation_text, "explanation");
+    confirmationExplanationText =
+        new TextGuiItem("", game.sysContent.fntStandard);
+    confirmationExplanationText->lineWrap = true;
+    confirmationGui.addItem(confirmationExplanationText, "explanation");
     
     //Options reminder text.
     TextGuiItem* options_reminder_text =
         new TextGuiItem(
         "You can disable this confirmation question in the options menu.",
-        game.sys_content.fnt_standard
+        game.sysContent.fntStandard
     );
-    confirmation_gui.addItem(options_reminder_text, "options_reminder");
+    confirmationGui.addItem(options_reminder_text, "options_reminder");
     
     //Tooltip text.
     TooltipGuiItem* tooltip_text =
         new TooltipGuiItem(&gui);
-    confirmation_gui.addItem(tooltip_text, "tooltip");
+    confirmationGui.addItem(tooltip_text, "tooltip");
     
     //Finishing touches.
-    confirmation_gui.setSelectedItem(confirmation_gui.back_item, true);
-    confirmation_gui.responsive = false;
-    confirmation_gui.hideItems();
+    confirmationGui.setSelectedItem(confirmationGui.backItem, true);
+    confirmationGui.responsive = false;
+    confirmationGui.hideItems();
 }
 
 
@@ -1790,13 +1790,13 @@ void PauseMenu::initMainPauseMenu() {
     gui.registerCoords("quit",             87,   88, 22,  8);
     gui.registerCoords("tooltip",          50,   96, 96,  4);
     gui.readCoords(
-        game.content.gui_defs.list[PAUSE_MENU::GUI_FILE_NAME].getChildByName("positions")
+        game.content.guiDefs.list[PAUSE_MENU::GUI_FILE_NAME].getChildByName("positions")
     );
     
     //Header.
     TextGuiItem* header_text =
         new TextGuiItem(
-        "PAUSED", game.sys_content.fnt_area_name,
+        "PAUSED", game.sysContent.fntAreaName,
         COLOR_TRANSPARENT_WHITE
     );
     gui.addItem(header_text, "header");
@@ -1806,7 +1806,7 @@ void PauseMenu::initMainPauseMenu() {
     
     //Line.
     GuiItem* line = new GuiItem();
-    line->on_draw =
+    line->onDraw =
     [] (const DrawInfo & draw) {
         drawFilledRoundedRectangle(
             draw.center,
@@ -1820,7 +1820,7 @@ void PauseMenu::initMainPauseMenu() {
     //Area name.
     TextGuiItem* area_name_text =
         new TextGuiItem(
-        game.cur_area_data->name, game.sys_content.fnt_area_name,
+        game.curAreaData->name, game.sysContent.fntAreaName,
         changeAlpha(COLOR_GOLD, 192)
     );
     gui.addItem(area_name_text, "area_name");
@@ -1829,24 +1829,24 @@ void PauseMenu::initMainPauseMenu() {
     TextGuiItem* area_subtitle_text =
         new TextGuiItem(
         getSubtitleOrMissionGoal(
-            game.cur_area_data->subtitle, game.cur_area_data->type,
-            game.cur_area_data->mission.goal
+            game.curAreaData->subtitle, game.curAreaData->type,
+            game.curAreaData->mission.goal
         ),
-        game.sys_content.fnt_area_name,
+        game.sysContent.fntAreaName,
         changeAlpha(COLOR_WHITE, 192)
     );
     gui.addItem(area_subtitle_text, "area_subtitle");
     
     //Continue button.
-    gui.back_item =
-        new ButtonGuiItem("Continue", game.sys_content.fnt_standard);
-    gui.back_item->on_activate =
+    gui.backItem =
+        new ButtonGuiItem("Continue", game.sysContent.fntStandard);
+    gui.backItem->onActivate =
     [this] (const Point &) {
         startClosing(&gui);
     };
-    gui.back_item->on_get_tooltip =
+    gui.backItem->onGetTooltip =
     [] () { return "Unpause and continue playing."; };
-    gui.addItem(gui.back_item, "continue");
+    gui.addItem(gui.backItem, "continue");
     
     //Continue input icon.
     guiAddBackInputIcon(&gui, "continue_input");
@@ -1854,20 +1854,20 @@ void PauseMenu::initMainPauseMenu() {
     //Retry button.
     ButtonGuiItem* retry_button =
         new ButtonGuiItem(
-        game.cur_area_data->type == AREA_TYPE_SIMPLE ?
+        game.curAreaData->type == AREA_TYPE_SIMPLE ?
         "Restart exploration" :
         "Retry mission",
-        game.sys_content.fnt_standard
+        game.sysContent.fntStandard
     );
-    retry_button->on_activate =
+    retry_button->onActivate =
     [this] (const Point &) {
-        leave_target = GAMEPLAY_LEAVE_TARGET_RETRY;
+        leaveTarget = GAMEPLAY_LEAVE_TARGET_RETRY;
         confirmOrLeave();
     };
-    retry_button->on_get_tooltip =
+    retry_button->onGetTooltip =
     [] () {
         return
-            game.cur_area_data->type == AREA_TYPE_SIMPLE ?
+            game.curAreaData->type == AREA_TYPE_SIMPLE ?
             "Restart this area's exploration." :
             "Retry the mission from the start.";
     };
@@ -1876,25 +1876,25 @@ void PauseMenu::initMainPauseMenu() {
     //End button.
     ButtonGuiItem* end_button =
         new ButtonGuiItem(
-        game.cur_area_data->type == AREA_TYPE_SIMPLE ?
+        game.curAreaData->type == AREA_TYPE_SIMPLE ?
         "End exploration" :
         "End mission",
-        game.sys_content.fnt_standard
+        game.sysContent.fntStandard
     );
-    end_button->on_activate =
+    end_button->onActivate =
     [this] (const Point &) {
-        leave_target = GAMEPLAY_LEAVE_TARGET_END;
+        leaveTarget = GAMEPLAY_LEAVE_TARGET_END;
         confirmOrLeave();
     };
-    end_button->on_get_tooltip =
+    end_button->onGetTooltip =
     [] () {
         bool as_fail =
             hasFlag(
-                game.cur_area_data->mission.fail_conditions,
+                game.curAreaData->mission.failConditions,
                 getIdxBitmask(MISSION_FAIL_COND_PAUSE_MENU)
             );
         return
-            game.cur_area_data->type == AREA_TYPE_SIMPLE ?
+            game.curAreaData->type == AREA_TYPE_SIMPLE ?
             "End this area's exploration." :
             as_fail ?
             "End this mission as a fail." :
@@ -1904,8 +1904,8 @@ void PauseMenu::initMainPauseMenu() {
     
     //Help button.
     ButtonGuiItem* help_button =
-        new ButtonGuiItem("Help", game.sys_content.fnt_standard);
-    help_button->on_activate =
+        new ButtonGuiItem("Help", game.sysContent.fntStandard);
+    help_button->onActivate =
     [this] (const Point &) {
         gui.responsive = false;
         gui.startAnimation(
@@ -1918,8 +1918,8 @@ void PauseMenu::initMainPauseMenu() {
             GUI_MANAGER_ANIM_DOWN_TO_CENTER,
             GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
         );
-        help_menu->leave_callback = [this, help_menu] () {
-            help_menu->unload_timer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
+        help_menu->leaveCallback = [this, help_menu] () {
+            help_menu->unloadTimer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
             help_menu->gui.responsive = false;
             help_menu->gui.startAnimation(
                 GUI_MANAGER_ANIM_CENTER_TO_DOWN,
@@ -1933,9 +1933,9 @@ void PauseMenu::initMainPauseMenu() {
         };
         help_menu->load();
         help_menu->enter();
-        secondary_menu = help_menu;
+        secondaryMenu = help_menu;
     };
-    help_button->on_get_tooltip =
+    help_button->onGetTooltip =
     [] () {
         return
             "Quick help and tips about how to play. "
@@ -1945,8 +1945,8 @@ void PauseMenu::initMainPauseMenu() {
     
     //Options button.
     ButtonGuiItem* options_button =
-        new ButtonGuiItem("Options", game.sys_content.fnt_standard);
-    options_button->on_activate =
+        new ButtonGuiItem("Options", game.sysContent.fntStandard);
+    options_button->onActivate =
     [this] (const Point &) {
         gui.responsive = false;
         gui.startAnimation(
@@ -1954,15 +1954,15 @@ void PauseMenu::initMainPauseMenu() {
             GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
         );
         OptionsMenu* options_menu = new OptionsMenu();
-        options_menu->top_gui.responsive = true;
-        options_menu->top_gui.startAnimation(
+        options_menu->topGui.responsive = true;
+        options_menu->topGui.startAnimation(
             GUI_MANAGER_ANIM_DOWN_TO_CENTER,
             GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
         );
-        options_menu->leave_callback = [this, options_menu] () {
-            options_menu->unload_timer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
-            options_menu->top_gui.responsive = false;
-            options_menu->top_gui.startAnimation(
+        options_menu->leaveCallback = [this, options_menu] () {
+            options_menu->unloadTimer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
+            options_menu->topGui.responsive = false;
+            options_menu->topGui.startAnimation(
                 GUI_MANAGER_ANIM_CENTER_TO_DOWN,
                 GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
             );
@@ -1974,9 +1974,9 @@ void PauseMenu::initMainPauseMenu() {
         };
         options_menu->load();
         options_menu->enter();
-        secondary_menu = options_menu;
+        secondaryMenu = options_menu;
     };
-    options_button->on_get_tooltip =
+    options_button->onGetTooltip =
     [] () {
         return
             "Customize your playing experience. "
@@ -1986,8 +1986,8 @@ void PauseMenu::initMainPauseMenu() {
     
     //Statistics button.
     ButtonGuiItem* stats_button =
-        new ButtonGuiItem("Statistics", game.sys_content.fnt_standard);
-    stats_button->on_activate =
+        new ButtonGuiItem("Statistics", game.sysContent.fntStandard);
+    stats_button->onActivate =
     [this] (const Point &) {
         gui.responsive = false;
         gui.startAnimation(
@@ -2000,8 +2000,8 @@ void PauseMenu::initMainPauseMenu() {
             GUI_MANAGER_ANIM_DOWN_TO_CENTER,
             GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
         );
-        stats_menu->leave_callback = [this, stats_menu] () {
-            stats_menu->unload_timer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
+        stats_menu->leaveCallback = [this, stats_menu] () {
+            stats_menu->unloadTimer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
             stats_menu->gui.responsive = false;
             stats_menu->gui.startAnimation(
                 GUI_MANAGER_ANIM_CENTER_TO_DOWN,
@@ -2015,9 +2015,9 @@ void PauseMenu::initMainPauseMenu() {
         };
         stats_menu->load();
         stats_menu->enter();
-        secondary_menu = stats_menu;
+        secondaryMenu = stats_menu;
     };
-    stats_button->on_get_tooltip =
+    stats_button->onGetTooltip =
     [] () {
         return
             "Check out some fun lifetime statistics. "
@@ -2028,22 +2028,22 @@ void PauseMenu::initMainPauseMenu() {
     //Quit button.
     ButtonGuiItem* quit_button =
         new ButtonGuiItem(
-        game.states.area_ed->quick_play_area_path.empty() ?
+        game.states.areaEd->quickPlayAreaPath.empty() ?
         "Quit" :
         "Back to editor",
-        game.sys_content.fnt_standard
+        game.sysContent.fntStandard
     );
-    quit_button->on_activate =
+    quit_button->onActivate =
     [this] (const Point &) {
-        leave_target = GAMEPLAY_LEAVE_TARGET_AREA_SELECT;
+        leaveTarget = GAMEPLAY_LEAVE_TARGET_AREA_SELECT;
         confirmOrLeave();
     };
-    quit_button->on_get_tooltip =
+    quit_button->onGetTooltip =
     [] () {
         return
             "Lose your progress and return to the " +
             string(
-                game.states.area_ed->quick_play_area_path.empty() ?
+                game.states.areaEd->quickPlayAreaPath.empty() ?
                 "area selection menu" :
                 "area editor"
             ) + ".";
@@ -2056,7 +2056,7 @@ void PauseMenu::initMainPauseMenu() {
     gui.addItem(tooltip_text, "tooltip");
     
     //Finishing touches.
-    gui.setSelectedItem(gui.back_item, true);
+    gui.setSelectedItem(gui.backItem, true);
     gui.responsive = false;
     gui.hideItems();
 }
@@ -2066,43 +2066,43 @@ void PauseMenu::initMainPauseMenu() {
  * @brief Initializes the mission page.
  */
 void PauseMenu::initMissionPage() {
-    DataNode* gui_file = &game.content.gui_defs.list[PAUSE_MENU::MISSION_GUI_FILE_NAME];
+    DataNode* gui_file = &game.content.guiDefs.list[PAUSE_MENU::MISSION_GUI_FILE_NAME];
     
     //Menu items.
-    mission_gui.registerCoords("header",           50,  5, 52,  6);
-    mission_gui.registerCoords("left_page",        12,  5, 20,  6);
-    mission_gui.registerCoords("left_page_input",   3,  7,  4,  4);
-    mission_gui.registerCoords("right_page",       88,  5, 20,  6);
-    mission_gui.registerCoords("right_page_input", 97,  7,  4,  4);
-    mission_gui.registerCoords("line",             50, 11, 96,  2);
-    mission_gui.registerCoords("continue",         10, 16, 16,  4);
-    mission_gui.registerCoords("continue_input",    3, 17,  4,  4);
-    mission_gui.registerCoords("goal_header",      50, 16, 60,  4);
-    mission_gui.registerCoords("goal",             50, 22, 96,  4);
-    mission_gui.registerCoords("goal_status",      50, 26, 96,  4);
-    mission_gui.registerCoords("fail_header",      50, 32, 96,  4);
-    mission_gui.registerCoords("fail_list",        48, 48, 92, 24);
-    mission_gui.registerCoords("fail_scroll",      97, 48,  2, 24);
-    mission_gui.registerCoords("grading_header",   50, 64, 96,  4);
-    mission_gui.registerCoords("grading_list",     48, 80, 92, 24);
-    mission_gui.registerCoords("grading_scroll",   97, 80,  2, 24);
-    mission_gui.registerCoords("tooltip",          50, 96, 96,  4);
-    mission_gui.readCoords(gui_file->getChildByName("positions"));
+    missionGui.registerCoords("header",           50,  5, 52,  6);
+    missionGui.registerCoords("left_page",        12,  5, 20,  6);
+    missionGui.registerCoords("left_page_input",   3,  7,  4,  4);
+    missionGui.registerCoords("right_page",       88,  5, 20,  6);
+    missionGui.registerCoords("right_page_input", 97,  7,  4,  4);
+    missionGui.registerCoords("line",             50, 11, 96,  2);
+    missionGui.registerCoords("continue",         10, 16, 16,  4);
+    missionGui.registerCoords("continue_input",    3, 17,  4,  4);
+    missionGui.registerCoords("goal_header",      50, 16, 60,  4);
+    missionGui.registerCoords("goal",             50, 22, 96,  4);
+    missionGui.registerCoords("goal_status",      50, 26, 96,  4);
+    missionGui.registerCoords("fail_header",      50, 32, 96,  4);
+    missionGui.registerCoords("fail_list",        48, 48, 92, 24);
+    missionGui.registerCoords("fail_scroll",      97, 48,  2, 24);
+    missionGui.registerCoords("grading_header",   50, 64, 96,  4);
+    missionGui.registerCoords("grading_list",     48, 80, 92, 24);
+    missionGui.registerCoords("grading_scroll",   97, 80,  2, 24);
+    missionGui.registerCoords("tooltip",          50, 96, 96,  4);
+    missionGui.readCoords(gui_file->getChildByName("positions"));
     
     //Header.
     TextGuiItem* header_text =
         new TextGuiItem(
-        "MISSION", game.sys_content.fnt_area_name,
+        "MISSION", game.sysContent.fntAreaName,
         COLOR_TRANSPARENT_WHITE
     );
-    mission_gui.addItem(header_text, "header");
+    missionGui.addItem(header_text, "header");
     
     //Page buttons and inputs.
-    createPageButtons(PAUSE_MENU_PAGE_MISSION, &mission_gui);
+    createPageButtons(PAUSE_MENU_PAGE_MISSION, &missionGui);
     
     //Line.
     GuiItem* line = new GuiItem();
-    line->on_draw =
+    line->onDraw =
     [] (const DrawInfo & draw) {
         drawFilledRoundedRectangle(
             draw.center,
@@ -2111,84 +2111,84 @@ void PauseMenu::initMissionPage() {
             COLOR_TRANSPARENT_WHITE
         );
     };
-    mission_gui.addItem(line, "line");
+    missionGui.addItem(line, "line");
     
     //Continue button.
-    mission_gui.back_item =
-        new ButtonGuiItem("Continue", game.sys_content.fnt_standard);
-    mission_gui.back_item->on_activate =
+    missionGui.backItem =
+        new ButtonGuiItem("Continue", game.sysContent.fntStandard);
+    missionGui.backItem->onActivate =
     [this] (const Point &) {
-        startClosing(&mission_gui);
+        startClosing(&missionGui);
     };
-    mission_gui.back_item->on_get_tooltip =
+    missionGui.backItem->onGetTooltip =
     [] () { return "Unpause and continue playing."; };
-    mission_gui.addItem(mission_gui.back_item, "continue");
+    missionGui.addItem(missionGui.backItem, "continue");
     
     //Continue input icon.
-    guiAddBackInputIcon(&mission_gui, "continue_input");
+    guiAddBackInputIcon(&missionGui, "continue_input");
     
     //Goal header text.
     TextGuiItem* goal_header_text =
-        new TextGuiItem("Goal", game.sys_content.fnt_area_name);
-    mission_gui.addItem(goal_header_text, "goal_header");
+        new TextGuiItem("Goal", game.sysContent.fntAreaName);
+    missionGui.addItem(goal_header_text, "goal_header");
     
     //Goal explanation text.
     TextGuiItem* goal_text =
         new TextGuiItem(
-        game.mission_goals[game.cur_area_data->mission.goal]->
-        getPlayerDescription(&game.cur_area_data->mission),
-        game.sys_content.fnt_standard,
+        game.missionGoals[game.curAreaData->mission.goal]->
+        getPlayerDescription(&game.curAreaData->mission),
+        game.sysContent.fntStandard,
         al_map_rgb(255, 255, 200)
     );
-    mission_gui.addItem(goal_text, "goal");
+    missionGui.addItem(goal_text, "goal");
     
     //Goal status text.
     TextGuiItem* goal_status_text =
         new TextGuiItem(
         getMissionGoalStatus(),
-        game.sys_content.fnt_standard
+        game.sysContent.fntStandard
     );
-    mission_gui.addItem(goal_status_text, "goal_status");
+    missionGui.addItem(goal_status_text, "goal_status");
     
     //Fail conditions header text.
     TextGuiItem* fail_header_text =
-        new TextGuiItem("Fail conditions", game.sys_content.fnt_area_name);
-    mission_gui.addItem(fail_header_text, "fail_header");
+        new TextGuiItem("Fail conditions", game.sysContent.fntAreaName);
+    missionGui.addItem(fail_header_text, "fail_header");
     
     //Fail condition explanation list.
     ListGuiItem* mission_fail_list = new ListGuiItem();
-    mission_gui.addItem(mission_fail_list, "fail_list");
+    missionGui.addItem(mission_fail_list, "fail_list");
     fillMissionFailList(mission_fail_list);
     
     //Fail condition explanation scrollbar.
     ScrollGuiItem* fail_scroll = new ScrollGuiItem();
-    fail_scroll->list_item = mission_fail_list;
-    mission_gui.addItem(fail_scroll, "fail_scroll");
+    fail_scroll->listItem = mission_fail_list;
+    missionGui.addItem(fail_scroll, "fail_scroll");
     
     //Grading header text.
     TextGuiItem* grading_header_text =
-        new TextGuiItem("Grading", game.sys_content.fnt_area_name);
-    mission_gui.addItem(grading_header_text, "grading_header");
+        new TextGuiItem("Grading", game.sysContent.fntAreaName);
+    missionGui.addItem(grading_header_text, "grading_header");
     
     //Grading explanation list.
     ListGuiItem* mission_grading_list = new ListGuiItem();
-    mission_gui.addItem(mission_grading_list, "grading_list");
+    missionGui.addItem(mission_grading_list, "grading_list");
     fillMissionGradingList(mission_grading_list);
     
     //Grading explanation scrollbar.
     ScrollGuiItem* grading_scroll = new ScrollGuiItem();
-    grading_scroll->list_item = mission_grading_list;
-    mission_gui.addItem(grading_scroll, "grading_scroll");
+    grading_scroll->listItem = mission_grading_list;
+    missionGui.addItem(grading_scroll, "grading_scroll");
     
     //Tooltip text.
     TooltipGuiItem* tooltip_text =
-        new TooltipGuiItem(&mission_gui);
-    mission_gui.addItem(tooltip_text, "tooltip");
+        new TooltipGuiItem(&missionGui);
+    missionGui.addItem(tooltip_text, "tooltip");
     
     //Finishing touches.
-    mission_gui.setSelectedItem(mission_gui.back_item, true);
-    mission_gui.responsive = false;
-    mission_gui.hideItems();
+    missionGui.setSelectedItem(missionGui.backItem, true);
+    missionGui.responsive = false;
+    missionGui.hideItems();
 }
 
 
@@ -2196,7 +2196,7 @@ void PauseMenu::initMissionPage() {
  * @brief Initializes the radar page.
  */
 void PauseMenu::initRadarPage() {
-    DataNode* gui_file = &game.content.gui_defs.list[PAUSE_MENU::RADAR_GUI_FILE_NAME];
+    DataNode* gui_file = &game.content.guiDefs.list[PAUSE_MENU::RADAR_GUI_FILE_NAME];
     
     //Assets.
     DataNode* bitmaps_node = gui_file->getChildByName("files");
@@ -2208,56 +2208,56 @@ void PauseMenu::initRadarPage() {
                                          bitmaps_node->getChildByName(name) \
                                        );
     
-    loader(bmp_radar_cursor,         "cursor");
-    loader(bmp_radar_pikmin,         "pikmin");
-    loader(bmp_radar_treasure,       "treasure");
-    loader(bmp_radar_enemy_alive,    "enemy_alive");
-    loader(bmp_radar_enemy_dead,     "enemy_dead");
-    loader(bmp_radar_leader_bubble,  "leader_bubble");
-    loader(bmp_radar_leader_x,       "leader_x");
-    loader(bmp_radar_obstacle,       "obstacle");
-    loader(bmp_radar_onion_skeleton, "onion_skeleton");
-    loader(bmp_radar_onion_bulb,     "onion_bulb");
-    loader(bmp_radar_ship,           "ship");
-    loader(bmp_radar_path,           "path");
+    loader(bmpRadarCursor,         "cursor");
+    loader(bmpRadarPikmin,         "pikmin");
+    loader(bmpRadarTreasure,       "treasure");
+    loader(bmpRadarEnemyAlive,    "enemy_alive");
+    loader(bmpRadarEnemyDead,     "enemy_dead");
+    loader(bmpRadarLeaderBubble,  "leader_bubble");
+    loader(bmpRadarLeaderX,       "leader_x");
+    loader(bmpRadarObstacle,       "obstacle");
+    loader(bmpRadarOnionSkeleton, "onion_skeleton");
+    loader(bmpRadarOnionBulb,     "onion_bulb");
+    loader(bmpRadarShip,           "ship");
+    loader(bmpRadarPath,           "path");
     
 #undef loader
     
     //Menu items.
-    radar_gui.registerCoords("header",              50,     5,    52,    6);
-    radar_gui.registerCoords("left_page",           12,     5,    20,    6);
-    radar_gui.registerCoords("left_page_input",      3,     7,     4,    4);
-    radar_gui.registerCoords("right_page",          88,     5,    20,    6);
-    radar_gui.registerCoords("right_page_input",    97,     7,     4,    4);
-    radar_gui.registerCoords("line",                50,    11,    96,    2);
-    radar_gui.registerCoords("continue",            10,    16,    16,    4);
-    radar_gui.registerCoords("continue_input",       3,    17,     4,    4);
-    radar_gui.registerCoords("radar",               37.5,  56.25, 70,   72.5);
-    radar_gui.registerCoords("group_pikmin_label",  86.25, 77.5,  22.5,  5);
-    radar_gui.registerCoords("group_pikmin_number", 86.25, 85,    22.5,  5);
-    radar_gui.registerCoords("idle_pikmin_label",   86.25, 62.5,  22.5,  5);
-    radar_gui.registerCoords("idle_pikmin_number",  86.25, 70,    22.5,  5);
-    radar_gui.registerCoords("field_pikmin_label",  86.25, 47.5,  22.5,  5);
-    radar_gui.registerCoords("field_pikmin_number", 86.25, 55,    22.5,  5);
-    radar_gui.registerCoords("cursor_info",         86.25, 33.75, 22.5, 17.5);
-    radar_gui.registerCoords("instructions",        58.75, 16,    77.5,  4);
-    radar_gui.registerCoords("tooltip",             50,    96,    96,    4);
-    radar_gui.readCoords(gui_file->getChildByName("positions"));
+    radarGui.registerCoords("header",              50,     5,    52,    6);
+    radarGui.registerCoords("left_page",           12,     5,    20,    6);
+    radarGui.registerCoords("left_page_input",      3,     7,     4,    4);
+    radarGui.registerCoords("right_page",          88,     5,    20,    6);
+    radarGui.registerCoords("right_page_input",    97,     7,     4,    4);
+    radarGui.registerCoords("line",                50,    11,    96,    2);
+    radarGui.registerCoords("continue",            10,    16,    16,    4);
+    radarGui.registerCoords("continue_input",       3,    17,     4,    4);
+    radarGui.registerCoords("radar",               37.5,  56.25, 70,   72.5);
+    radarGui.registerCoords("group_pikmin_label",  86.25, 77.5,  22.5,  5);
+    radarGui.registerCoords("group_pikmin_number", 86.25, 85,    22.5,  5);
+    radarGui.registerCoords("idle_pikmin_label",   86.25, 62.5,  22.5,  5);
+    radarGui.registerCoords("idle_pikmin_number",  86.25, 70,    22.5,  5);
+    radarGui.registerCoords("field_pikmin_label",  86.25, 47.5,  22.5,  5);
+    radarGui.registerCoords("field_pikmin_number", 86.25, 55,    22.5,  5);
+    radarGui.registerCoords("cursor_info",         86.25, 33.75, 22.5, 17.5);
+    radarGui.registerCoords("instructions",        58.75, 16,    77.5,  4);
+    radarGui.registerCoords("tooltip",             50,    96,    96,    4);
+    radarGui.readCoords(gui_file->getChildByName("positions"));
     
     //Header.
     TextGuiItem* header_text =
         new TextGuiItem(
-        "RADAR", game.sys_content.fnt_area_name,
+        "RADAR", game.sysContent.fntAreaName,
         COLOR_TRANSPARENT_WHITE
     );
-    radar_gui.addItem(header_text, "header");
+    radarGui.addItem(header_text, "header");
     
     //Page buttons and inputs.
-    createPageButtons(PAUSE_MENU_PAGE_RADAR, &radar_gui);
+    createPageButtons(PAUSE_MENU_PAGE_RADAR, &radarGui);
     
     //Line.
     GuiItem* line = new GuiItem();
-    line->on_draw =
+    line->onDraw =
     [] (const DrawInfo & draw) {
         drawFilledRoundedRectangle(
             draw.center,
@@ -2266,85 +2266,85 @@ void PauseMenu::initRadarPage() {
             COLOR_TRANSPARENT_WHITE
         );
     };
-    radar_gui.addItem(line, "line");
+    radarGui.addItem(line, "line");
     
     //Continue button.
-    radar_gui.back_item =
-        new ButtonGuiItem("Continue", game.sys_content.fnt_standard);
-    radar_gui.back_item->on_activate =
+    radarGui.backItem =
+        new ButtonGuiItem("Continue", game.sysContent.fntStandard);
+    radarGui.backItem->onActivate =
     [this] (const Point &) {
-        startClosing(&radar_gui);
+        startClosing(&radarGui);
     };
-    radar_gui.back_item->on_get_tooltip =
+    radarGui.backItem->onGetTooltip =
     [] () { return "Unpause and continue playing."; };
-    radar_gui.addItem(radar_gui.back_item, "continue");
+    radarGui.addItem(radarGui.backItem, "continue");
     
     //Continue input icon.
-    guiAddBackInputIcon(&radar_gui, "continue_input");
+    guiAddBackInputIcon(&radarGui, "continue_input");
     
     //Radar item.
-    radar_item = new GuiItem();
-    radar_item->on_draw =
+    radarItem = new GuiItem();
+    radarItem->onDraw =
     [this] (const DrawInfo & draw) {
         drawRadar(draw.center, draw.size);
     };
-    radar_gui.addItem(radar_item, "radar");
+    radarGui.addItem(radarItem, "radar");
     
     //Group Pikmin label text.
     TextGuiItem* group_pik_label_text =
         new TextGuiItem(
-        "Group Pikmin:", game.sys_content.fnt_standard,
+        "Group Pikmin:", game.sysContent.fntStandard,
         COLOR_WHITE, ALLEGRO_ALIGN_LEFT
     );
-    radar_gui.addItem(group_pik_label_text, "group_pikmin_label");
+    radarGui.addItem(group_pik_label_text, "group_pikmin_label");
     
     //Group Pikmin number text.
     TextGuiItem* group_pik_nr_text =
         new TextGuiItem(
         i2s(game.states.gameplay->getAmountOfGroupPikmin()),
-        game.sys_content.fnt_counter,
+        game.sysContent.fntCounter,
         COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
     );
-    radar_gui.addItem(group_pik_nr_text, "group_pikmin_number");
+    radarGui.addItem(group_pik_nr_text, "group_pikmin_number");
     
     //Idle Pikmin label text.
     TextGuiItem* idle_pik_label_text =
         new TextGuiItem(
-        "Idle Pikmin:", game.sys_content.fnt_standard,
+        "Idle Pikmin:", game.sysContent.fntStandard,
         COLOR_WHITE, ALLEGRO_ALIGN_LEFT
     );
-    radar_gui.addItem(idle_pik_label_text, "idle_pikmin_label");
+    radarGui.addItem(idle_pik_label_text, "idle_pikmin_label");
     
     //Idle Pikmin number text.
     TextGuiItem* idle_pik_nr_text =
         new TextGuiItem(
         i2s(game.states.gameplay->getAmountOfIdlePikmin()),
-        game.sys_content.fnt_counter,
+        game.sysContent.fntCounter,
         COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
     );
-    radar_gui.addItem(idle_pik_nr_text, "idle_pikmin_number");
+    radarGui.addItem(idle_pik_nr_text, "idle_pikmin_number");
     
     //Field Pikmin label text.
     TextGuiItem* field_pik_label_text =
         new TextGuiItem(
-        "Field Pikmin:", game.sys_content.fnt_standard,
+        "Field Pikmin:", game.sysContent.fntStandard,
         COLOR_WHITE, ALLEGRO_ALIGN_LEFT
     );
-    radar_gui.addItem(field_pik_label_text, "field_pikmin_label");
+    radarGui.addItem(field_pik_label_text, "field_pikmin_label");
     
     //Field Pikmin number text.
     TextGuiItem* field_pik_nr_text =
         new TextGuiItem(
         i2s(game.states.gameplay->getAmountOfFieldPikmin()),
-        game.sys_content.fnt_counter, COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
+        game.sysContent.fntCounter, COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
     );
-    radar_gui.addItem(field_pik_nr_text, "field_pikmin_number");
+    radarGui.addItem(field_pik_nr_text, "field_pikmin_number");
     
     //Cursor info text.
     TextGuiItem* cursor_info_text =
-        new TextGuiItem("", game.sys_content.fnt_standard);
-    cursor_info_text->line_wrap = true;
-    cursor_info_text->on_draw =
+        new TextGuiItem("", game.sysContent.fntStandard);
+    cursor_info_text->lineWrap = true;
+    cursor_info_text->onDraw =
     [this, cursor_info_text] (const DrawInfo & draw) {
         if(cursor_info_text->text.empty()) return;
         
@@ -2352,7 +2352,7 @@ void PauseMenu::initRadarPage() {
         int line_height = al_get_font_line_height(cursor_info_text->font);
         vector<StringToken> tokens = tokenizeString(cursor_info_text->text);
         setStringTokenWidths(
-            tokens, game.sys_content.fnt_standard, game.sys_content.fnt_slim, line_height, false
+            tokens, game.sysContent.fntStandard, game.sysContent.fntSlim, line_height, false
         );
         vector<vector<StringToken> > tokens_per_line =
             splitLongStringWithTokens(tokens, draw.size.x);
@@ -2360,7 +2360,7 @@ void PauseMenu::initRadarPage() {
         
         for(size_t l = 0; l < tokens_per_line.size(); l++) {
             drawStringTokens(
-                tokens_per_line[l], game.sys_content.fnt_standard, game.sys_content.fnt_slim,
+                tokens_per_line[l], game.sysContent.fntStandard, game.sysContent.fntSlim,
                 false,
                 Point(
                     draw.center.x,
@@ -2373,15 +2373,15 @@ void PauseMenu::initRadarPage() {
         
         //Draw a box around it.
         drawTexturedBox(
-            draw.center, draw.size, game.sys_content.bmp_frame_box,
+            draw.center, draw.size, game.sysContent.bmpFrameBox,
             COLOR_TRANSPARENT_WHITE
         );
         
         //Draw a connection from here to the radar cursor.
         Point line_anchor(draw.center.x - draw.size.x / 2.0f - 16.0f, draw.center.y);
-        Point cursor_screen_pos = radar_cursor;
+        Point cursor_screen_pos = radarCursor;
         al_transform_coordinates(
-            &world_to_radar_screen_transform,
+            &worldToRadarScreenTransform,
             &cursor_screen_pos.x, &cursor_screen_pos.y
         );
         
@@ -2403,24 +2403,24 @@ void PauseMenu::initRadarPage() {
             COLOR_TRANSPARENT_WHITE, 2.0f
         );
     };
-    cursor_info_text->on_tick =
+    cursor_info_text->onTick =
     [this, cursor_info_text] (float delta_t) {
-        if(radar_cursor_leader) {
+        if(radarCursorLeader) {
             cursor_info_text->text =
                 (
-                    radar_cursor_leader == radar_selected_leader ?
+                    radarCursorLeader == radarSelectedLeader ?
                     "" :
                     "\\k menu_ok \\k "
-                ) + radar_cursor_leader->type->name;
+                ) + radarCursorLeader->type->name;
         } else if(
-            radar_selected_leader &&
-            !radar_selected_leader->fsm.getEvent(LEADER_EV_GO_HERE)
+            radarSelectedLeader &&
+            !radarSelectedLeader->fsm.getEvent(LEADER_EV_GO_HERE)
         ) {
             cursor_info_text->text =
                 "Can't go here... Leader is busy!";
             cursor_info_text->color = COLOR_WHITE;
         } else {
-            switch(go_here_path_result) {
+            switch(goHerePathResult) {
             case PATH_RESULT_DIRECT:
             case PATH_RESULT_DIRECT_NO_STOPS:
             case PATH_RESULT_NORMAL_PATH:
@@ -2444,7 +2444,7 @@ void PauseMenu::initRadarPage() {
             }
         }
     };
-    radar_gui.addItem(cursor_info_text, "cursor_info");
+    radarGui.addItem(cursor_info_text, "cursor_info");
     
     //Instructions text.
     TextGuiItem* instructions_text =
@@ -2455,21 +2455,21 @@ void PauseMenu::initRadarPage() {
         "\\k menu_radar_right \\k Pan   "
         "\\k menu_radar_zoom_in \\k"
         "\\k menu_radar_zoom_out \\k Zoom",
-        game.sys_content.fnt_slim,
+        game.sysContent.fntSlim,
         COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_RIGHT
     );
-    instructions_text->line_wrap = true;
-    radar_gui.addItem(instructions_text, "instructions");
+    instructions_text->lineWrap = true;
+    radarGui.addItem(instructions_text, "instructions");
     
     //Tooltip text.
     TooltipGuiItem* tooltip_text =
-        new TooltipGuiItem(&radar_gui);
-    radar_gui.addItem(tooltip_text, "tooltip");
+        new TooltipGuiItem(&radarGui);
+    radarGui.addItem(tooltip_text, "tooltip");
     
     //Finishing touches.
-    radar_gui.setSelectedItem(nullptr);
-    radar_gui.responsive = false;
-    radar_gui.hideItems();
+    radarGui.setSelectedItem(nullptr);
+    radarGui.responsive = false;
+    radarGui.hideItems();
 }
 
 
@@ -2477,39 +2477,39 @@ void PauseMenu::initRadarPage() {
  * @brief Initializes the status page.
  */
 void PauseMenu::initStatusPage() {
-    DataNode* gui_file = &game.content.gui_defs.list[PAUSE_MENU::STATUS_GUI_FILE_NAME];
+    DataNode* gui_file = &game.content.guiDefs.list[PAUSE_MENU::STATUS_GUI_FILE_NAME];
     
     //Menu items.
-    status_gui.registerCoords("header",           50,     5,   52,    6);
-    status_gui.registerCoords("left_page",        12,     5,   20,    6);
-    status_gui.registerCoords("left_page_input",   3,     7,    4,    4);
-    status_gui.registerCoords("right_page",       88,     5,   20,    6);
-    status_gui.registerCoords("right_page_input", 97,     7,    4,    4);
-    status_gui.registerCoords("line",             50,    11,   96,    2);
-    status_gui.registerCoords("continue",         10,    16,   16,    4);
-    status_gui.registerCoords("continue_input",    3,    17,    4,    4);
-    status_gui.registerCoords("list_header",      50,    23.5, 88,    7);
-    status_gui.registerCoords("list",             50,    56,   88,   56);
-    status_gui.registerCoords("list_scroll",      97,    56,    2,   56);
-    status_gui.registerCoords("totals",           50,    89,   88,    8);
-    status_gui.registerCoords("instructions",     58.75, 16,   77.5,  4);
-    status_gui.registerCoords("tooltip",          50,    96,   96,    4);
-    status_gui.readCoords(gui_file->getChildByName("positions"));
+    statusGui.registerCoords("header",           50,     5,   52,    6);
+    statusGui.registerCoords("left_page",        12,     5,   20,    6);
+    statusGui.registerCoords("left_page_input",   3,     7,    4,    4);
+    statusGui.registerCoords("right_page",       88,     5,   20,    6);
+    statusGui.registerCoords("right_page_input", 97,     7,    4,    4);
+    statusGui.registerCoords("line",             50,    11,   96,    2);
+    statusGui.registerCoords("continue",         10,    16,   16,    4);
+    statusGui.registerCoords("continue_input",    3,    17,    4,    4);
+    statusGui.registerCoords("list_header",      50,    23.5, 88,    7);
+    statusGui.registerCoords("list",             50,    56,   88,   56);
+    statusGui.registerCoords("list_scroll",      97,    56,    2,   56);
+    statusGui.registerCoords("totals",           50,    89,   88,    8);
+    statusGui.registerCoords("instructions",     58.75, 16,   77.5,  4);
+    statusGui.registerCoords("tooltip",          50,    96,   96,    4);
+    statusGui.readCoords(gui_file->getChildByName("positions"));
     
     //Header.
     TextGuiItem* header_text =
         new TextGuiItem(
-        "STATUS", game.sys_content.fnt_area_name,
+        "STATUS", game.sysContent.fntAreaName,
         COLOR_TRANSPARENT_WHITE
     );
-    status_gui.addItem(header_text, "header");
+    statusGui.addItem(header_text, "header");
     
     //Page buttons and inputs.
-    createPageButtons(PAUSE_MENU_PAGE_STATUS, &status_gui);
+    createPageButtons(PAUSE_MENU_PAGE_STATUS, &statusGui);
     
     //Line.
     GuiItem* line = new GuiItem();
-    line->on_draw =
+    line->onDraw =
     [] (const DrawInfo & draw) {
         drawFilledRoundedRectangle(
             draw.center,
@@ -2518,47 +2518,47 @@ void PauseMenu::initStatusPage() {
             COLOR_TRANSPARENT_WHITE
         );
     };
-    status_gui.addItem(line, "line");
+    statusGui.addItem(line, "line");
     
     //Continue button.
-    status_gui.back_item =
-        new ButtonGuiItem("Continue", game.sys_content.fnt_standard);
-    status_gui.back_item->on_activate =
+    statusGui.backItem =
+        new ButtonGuiItem("Continue", game.sysContent.fntStandard);
+    statusGui.backItem->onActivate =
     [this] (const Point &) {
-        startClosing(&status_gui);
+        startClosing(&statusGui);
     };
-    status_gui.back_item->on_get_tooltip =
+    statusGui.backItem->onGetTooltip =
     [] () { return "Unpause and continue playing."; };
-    status_gui.addItem(status_gui.back_item, "continue");
+    statusGui.addItem(statusGui.backItem, "continue");
     
     //Continue input icon.
-    guiAddBackInputIcon(&status_gui, "continue_input");
+    guiAddBackInputIcon(&statusGui, "continue_input");
     
     //Pikmin list header box.
     ListGuiItem* list_header = new ListGuiItem();
-    list_header->on_draw =
+    list_header->onDraw =
     [] (const DrawInfo &) {};
-    status_gui.addItem(list_header, "list_header");
+    statusGui.addItem(list_header, "list_header");
     
     //Pikmin list box.
-    pikmin_list = new ListGuiItem();
-    status_gui.addItem(pikmin_list, "list");
+    pikminList = new ListGuiItem();
+    statusGui.addItem(pikminList, "list");
     
     //Pikmin list scrollbar.
     ScrollGuiItem* list_scroll = new ScrollGuiItem();
-    list_scroll->list_item = pikmin_list;
-    status_gui.addItem(list_scroll, "list_scroll");
+    list_scroll->listItem = pikminList;
+    statusGui.addItem(list_scroll, "list_scroll");
     
     //Pikmin totals box.
     ListGuiItem* totals = new ListGuiItem();
-    totals->on_draw =
+    totals->onDraw =
     [] (const DrawInfo &) {};
-    status_gui.addItem(totals, "totals");
+    statusGui.addItem(totals, "totals");
     
     //Tooltip text.
     TooltipGuiItem* tooltip_text =
-        new TooltipGuiItem(&status_gui);
-    status_gui.addItem(tooltip_text, "tooltip");
+        new TooltipGuiItem(&statusGui);
+    statusGui.addItem(tooltip_text, "tooltip");
     
     //Setup the list header.
     addPikminStatusLine(
@@ -2598,20 +2598,20 @@ void PauseMenu::initStatusPage() {
         
         long new_piks = 0;
         auto new_it =
-            game.states.gameplay->pikmin_born_per_type.find(pt_ptr);
-        if(new_it != game.states.gameplay->pikmin_born_per_type.end()) {
+            game.states.gameplay->pikminBornPerType.find(pt_ptr);
+        if(new_it != game.states.gameplay->pikminBornPerType.end()) {
             new_piks = new_it->second;
         }
         long lost = 0;
         auto lost_it =
-            game.states.gameplay->pikmin_deaths_per_type.find(pt_ptr);
-        if(lost_it != game.states.gameplay->pikmin_deaths_per_type.end()) {
+            game.states.gameplay->pikminDeathsPerType.find(pt_ptr);
+        if(lost_it != game.states.gameplay->pikminDeathsPerType.end()) {
             lost = lost_it->second;
         }
         
         if(total + new_piks + lost > 0) {
             addPikminStatusLine(
-                pikmin_list,
+                pikminList,
                 pt_ptr,
                 i2s(in_group),
                 i2s(idling),
@@ -2648,9 +2648,9 @@ void PauseMenu::initStatusPage() {
     );
     
     //Finishing touches.
-    status_gui.setSelectedItem(status_gui.back_item, true);
-    status_gui.responsive = false;
-    status_gui.hideItems();
+    statusGui.setSelectedItem(statusGui.backItem, true);
+    statusGui.responsive = false;
+    statusGui.hideItems();
 }
 
 
@@ -2660,12 +2660,12 @@ void PauseMenu::initStatusPage() {
  * @param amount How much to pan by.
  */
 void PauseMenu::panRadar(Point amount) {
-    Point delta = amount / radar_cam.zoom;
-    radar_cam.pos += delta;
-    radar_cam.pos.x =
-        std::clamp(radar_cam.pos.x, radar_min_coords.x, radar_max_coords.x);
-    radar_cam.pos.y =
-        std::clamp(radar_cam.pos.y, radar_min_coords.y, radar_max_coords.y);
+    Point delta = amount / radarCam.zoom;
+    radarCam.pos += delta;
+    radarCam.pos.x =
+        std::clamp(radarCam.pos.x, radarMinCoords.x, radarMaxCoords.x);
+    radarCam.pos.y =
+        std::clamp(radarCam.pos.y, radarMinCoords.y, radarMaxCoords.y);
 }
 
 
@@ -2675,21 +2675,21 @@ void PauseMenu::panRadar(Point amount) {
 void PauseMenu::radarConfirm() {
     calculateGoHerePath();
     
-    if(radar_cursor_leader) {
+    if(radarCursorLeader) {
         //Select a leader.
-        radar_selected_leader = radar_cursor_leader;
+        radarSelectedLeader = radarCursorLeader;
         
     } else if(
-        go_here_path_result == PATH_RESULT_DIRECT ||
-        go_here_path_result == PATH_RESULT_DIRECT_NO_STOPS ||
-        go_here_path_result == PATH_RESULT_NORMAL_PATH ||
-        go_here_path_result == PATH_RESULT_PATH_WITH_SINGLE_STOP
+        goHerePathResult == PATH_RESULT_DIRECT ||
+        goHerePathResult == PATH_RESULT_DIRECT_NO_STOPS ||
+        goHerePathResult == PATH_RESULT_NORMAL_PATH ||
+        goHerePathResult == PATH_RESULT_PATH_WITH_SINGLE_STOP
     ) {
         //Start Go Here.
-        radar_selected_leader->fsm.runEvent(
-            LEADER_EV_GO_HERE, (void*) &radar_cursor
+        radarSelectedLeader->fsm.runEvent(
+            LEADER_EV_GO_HERE, (void*) &radarCursor
         );
-        startClosing(&radar_gui);
+        startClosing(&radarGui);
         
     }
 }
@@ -2711,9 +2711,9 @@ void PauseMenu::startClosing(GuiManager* cur_gui) {
         GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
     );
     closing = true;
-    closing_timer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
+    closingTimer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
     
-    game.states.gameplay->radar_zoom = radar_cam.zoom;
+    game.states.gameplay->radarZoom = radarCam.zoom;
 }
 
 
@@ -2722,16 +2722,16 @@ void PauseMenu::startClosing(GuiManager* cur_gui) {
  */
 void PauseMenu::startLeavingGameplay() {
     if(
-        leave_target == GAMEPLAY_LEAVE_TARGET_END &&
+        leaveTarget == GAMEPLAY_LEAVE_TARGET_END &&
         hasFlag(
-            game.cur_area_data->mission.fail_conditions,
+            game.curAreaData->mission.failConditions,
             getIdxBitmask(MISSION_FAIL_COND_PAUSE_MENU)
         )
     ) {
-        game.states.gameplay->mission_fail_reason =
+        game.states.gameplay->missionFailReason =
             MISSION_FAIL_COND_PAUSE_MENU;
     }
-    game.states.gameplay->startLeaving(leave_target);
+    game.states.gameplay->startLeaving(leaveTarget);
 }
 
 
@@ -2751,13 +2751,13 @@ void PauseMenu::switchPage(
         new_gui = &gui;
         break;
     } case PAUSE_MENU_PAGE_RADAR: {
-        new_gui = &radar_gui;
+        new_gui = &radarGui;
         break;
     } case PAUSE_MENU_PAGE_STATUS: {
-        new_gui = &status_gui;
+        new_gui = &statusGui;
         break;
     } case PAUSE_MENU_PAGE_MISSION: {
-        new_gui = &mission_gui;
+        new_gui = &missionGui;
         break;
     }
     }
@@ -2787,18 +2787,18 @@ void PauseMenu::switchPage(
 void PauseMenu::tick(float delta_t) {
     //Tick the GUI.
     gui.tick(delta_t);
-    radar_gui.tick(delta_t);
-    status_gui.tick(delta_t);
-    mission_gui.tick(delta_t);
-    confirmation_gui.tick(delta_t);
+    radarGui.tick(delta_t);
+    statusGui.tick(delta_t);
+    missionGui.tick(delta_t);
+    confirmationGui.tick(delta_t);
     
-    if(secondary_menu) {
-        if(secondary_menu->loaded) {
-            secondary_menu->tick(game.delta_t);
+    if(secondaryMenu) {
+        if(secondaryMenu->loaded) {
+            secondaryMenu->tick(game.deltaT);
         }
-        if(!secondary_menu->loaded) {
-            delete secondary_menu;
-            secondary_menu = nullptr;
+        if(!secondaryMenu->loaded) {
+            delete secondaryMenu;
+            secondaryMenu = nullptr;
         }
     }
     
@@ -2807,60 +2807,60 @@ void PauseMenu::tick(float delta_t) {
         1.0f / GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME;
     const float diff =
         closing ? -bg_alpha_mult_speed : bg_alpha_mult_speed;
-    bg_alpha_mult = std::clamp(bg_alpha_mult + diff * delta_t, 0.0f, 1.0f);
+    bgAlphaMult = std::clamp(bgAlphaMult + diff * delta_t, 0.0f, 1.0f);
     
     //Tick the menu opening and closing.
-    if(opening_lockout_timer > 0.0f) {
-        opening_lockout_timer -= delta_t;
+    if(openingLockoutTimer > 0.0f) {
+        openingLockoutTimer -= delta_t;
     }
     if(closing) {
-        closing_timer -= delta_t;
-        if(closing_timer <= 0.0f) {
-            to_delete = true;
+        closingTimer -= delta_t;
+        if(closingTimer <= 0.0f) {
+            toDelete = true;
         }
     }
     
     //Tick radar things.
     DrawInfo radar_draw;
-    radar_gui.getItemDrawInfo(radar_item, &radar_draw);
+    radarGui.getItemDrawInfo(radarItem, &radar_draw);
     
     updateRadarTransformations(radar_draw.center, radar_draw.size);
     
-    if(radar_gui.responsive) {
+    if(radarGui.responsive) {
     
         Point radar_pan_coords;
         float dummy_angle;
         float dummy_magnitude;
-        radar_pan.getInfo(&radar_pan_coords, &dummy_angle, &dummy_magnitude);
+        radarPan.getInfo(&radar_pan_coords, &dummy_angle, &dummy_magnitude);
         if(radar_pan_coords.x != 0.0f || radar_pan_coords.y != 0.0f) {
             panRadar(radar_pan_coords * PAUSE_MENU::RADAR_PAN_SPEED * delta_t);
         }
         
-        if(radar_zoom_in && !radar_zoom_out) {
+        if(radarZoomIn && !radarZoomOut) {
             zoomRadar(PAUSE_MENU::RADAR_ZOOM_SPEED * delta_t);
-        } else if(radar_zoom_out && !radar_zoom_in) {
+        } else if(radarZoomOut && !radarZoomIn) {
             zoomRadar(-PAUSE_MENU::RADAR_ZOOM_SPEED * delta_t);
         }
         
         bool mouse_in_radar =
             isPointInRectangle(
-                game.mouse_cursor.s_pos,
+                game.mouseCursor.sPos,
                 radar_draw.center, radar_draw.size
             );
             
         if(mouse_in_radar) {
-            radar_cursor = game.mouse_cursor.s_pos;
+            radarCursor = game.mouseCursor.sPos;
             al_transform_coordinates(
-                &radar_screen_to_world_transform,
-                &radar_cursor.x, &radar_cursor.y
+                &radarScreenToWorldTransform,
+                &radarCursor.x, &radarCursor.y
             );
         } else {
-            radar_cursor = radar_cam.pos;
+            radarCursor = radarCam.pos;
         }
         
-        go_here_calc_time -= delta_t;
-        if(go_here_calc_time <= 0.0f) {
-            go_here_calc_time = PAUSE_MENU::GO_HERE_CALC_INTERVAL;
+        goHereCalcTime -= delta_t;
+        if(goHereCalcTime <= 0.0f) {
+            goHereCalcTime = PAUSE_MENU::GO_HERE_CALC_INTERVAL;
             
             calculateGoHerePath();
         }
@@ -2879,18 +2879,18 @@ void PauseMenu::tick(float delta_t) {
 void PauseMenu::updateRadarTransformations(
     const Point &radar_center, const Point &radar_size
 ) {
-    world_to_radar_screen_transform = game.identity_transform;
+    worldToRadarScreenTransform = game.identityTransform;
     al_translate_transform(
-        &world_to_radar_screen_transform,
-        -radar_cam.pos.x + radar_center.x / radar_cam.zoom,
-        -radar_cam.pos.y + radar_center.y / radar_cam.zoom
+        &worldToRadarScreenTransform,
+        -radarCam.pos.x + radar_center.x / radarCam.zoom,
+        -radarCam.pos.y + radar_center.y / radarCam.zoom
     );
     al_scale_transform(
-        &world_to_radar_screen_transform, radar_cam.zoom, radar_cam.zoom
+        &worldToRadarScreenTransform, radarCam.zoom, radarCam.zoom
     );
     
-    radar_screen_to_world_transform = world_to_radar_screen_transform;
-    al_invert_transform(&radar_screen_to_world_transform);
+    radarScreenToWorldTransform = worldToRadarScreenTransform;
+    al_invert_transform(&radarScreenToWorldTransform);
 }
 
 
@@ -2900,11 +2900,11 @@ void PauseMenu::updateRadarTransformations(
  * @param amount How much to zoom by.
  */
 void PauseMenu::zoomRadar(float amount) {
-    float delta = amount * radar_cam.zoom;
-    radar_cam.zoom += delta;
-    radar_cam.zoom =
+    float delta = amount * radarCam.zoom;
+    radarCam.zoom += delta;
+    radarCam.zoom =
         std::clamp(
-            radar_cam.zoom,
+            radarCam.zoom,
             PAUSE_MENU::RADAR_MIN_ZOOM, PAUSE_MENU::RADAR_MAX_ZOOM
         );
 }
@@ -2921,33 +2921,33 @@ void PauseMenu::zoomRadarWithMouse(
     float amount, const Point &radar_center, const Point &radar_size
 ) {
     //Keep a backup of the old cursor coordinates.
-    Point old_cursor_pos = radar_cursor;
+    Point old_cursor_pos = radarCursor;
     
     //Do the zoom.
     zoomRadar(amount);
     updateRadarTransformations(radar_center, radar_size);
     
     //Figure out where the cursor will be after the zoom.
-    radar_cursor = game.mouse_cursor.s_pos;
+    radarCursor = game.mouseCursor.sPos;
     al_transform_coordinates(
-        &radar_screen_to_world_transform,
-        &radar_cursor.x, &radar_cursor.y
+        &radarScreenToWorldTransform,
+        &radarCursor.x, &radarCursor.y
     );
     
     //Readjust the transformation by shifting the camera
     //so that the cursor ends up where it was before.
     panRadar(
         Point(
-            (old_cursor_pos.x - radar_cursor.x) * radar_cam.zoom,
-            (old_cursor_pos.y - radar_cursor.y) * radar_cam.zoom
+            (old_cursor_pos.x - radarCursor.x) * radarCam.zoom,
+            (old_cursor_pos.y - radarCursor.y) * radarCam.zoom
         )
     );
     
     //Update the cursor coordinates again.
     updateRadarTransformations(radar_center, radar_size);
-    radar_cursor = game.mouse_cursor.s_pos;
+    radarCursor = game.mouseCursor.sPos;
     al_transform_coordinates(
-        &radar_screen_to_world_transform,
-        &radar_cursor.x, &radar_cursor.y
+        &radarScreenToWorldTransform,
+        &radarCursor.x, &radarCursor.y
     );
 }

@@ -23,7 +23,7 @@
 TrackType::TrackType() :
     MobType(MOB_CATEGORY_TRACKS) {
     
-    target_type = MOB_TARGET_FLAG_NONE;
+    targetType = MOB_TARGET_FLAG_NONE;
     
     track_fsm::createFsm(this);
 }
@@ -54,8 +54,8 @@ void TrackType::loadCatProperties(DataNode* file) {
     DataNode* riders_node = nullptr;
     DataNode* riding_pose_node = nullptr;
     
-    rs.set("cancellable_with_whistle", cancellable_with_whistle);
-    rs.set("ride_speed", ride_speed);
+    rs.set("cancellable_with_whistle", cancellableWithWhistle);
+    rs.set("ride_speed", rideSpeed);
     rs.set("riders", riders_str, &riders_node);
     rs.set("riding_pose", riding_pose_str, &riding_pose_node);
     
@@ -78,11 +78,11 @@ void TrackType::loadCatProperties(DataNode* file) {
     
     if(riding_pose_node) {
         if(riding_pose_str == "stopped") {
-            riding_pose = TRACK_RIDING_POSE_STOPPED;
+            ridingPose = TRACK_RIDING_POSE_STOPPED;
         } else if(riding_pose_str == "sliding") {
-            riding_pose = TRACK_RIDING_POSE_SLIDING;
+            ridingPose = TRACK_RIDING_POSE_SLIDING;
         } else if(riding_pose_str == "climbing") {
-            riding_pose = TRACK_RIDING_POSE_CLIMBING;
+            ridingPose = TRACK_RIDING_POSE_CLIMBING;
         } else {
             game.errors.report(
                 "Unknown type of riding pose \"" + riding_pose_str + "\"!",
@@ -103,11 +103,11 @@ void TrackType::loadCatResources(DataNode* file) {
     //We don't actually need to load any, but we know that if this function
     //is run, then the animations are definitely loaded.
     //Now's a good time to check if the track has 2+ checkpoints.
-    if(anim_db->body_parts.size() < 2) {
+    if(animDb->bodyParts.size() < 2) {
         game.errors.report(
             "The track type \"" + name + "\" needs to have at least 2 "
             "checkpoints (body parts), but it only has " +
-            i2s(anim_db->body_parts.size()) + "!"
+            i2s(animDb->bodyParts.size()) + "!"
         );
     }
 }
