@@ -556,11 +556,13 @@ void GameplayState::doGameplayLeaderLogic(float delta_t) {
     ********************/
     
     //Closest enemy check for the music mix track.
-    if(game.states.gameplay->mobs.enemies.size() > 0) {
+    if(
+        game.states.gameplay->mobs.enemies.size() > 0 &&
+        curInterlude == INTERLUDE_NONE
+    ) {
         bool near_enemy = false;
         bool near_boss = false;
         isNearEnemyAndBoss(&near_enemy, &near_boss);
-        
         
         if(near_enemy) {
             game.audio.markMixTrackStatus(MIX_TRACK_TYPE_ENEMY);

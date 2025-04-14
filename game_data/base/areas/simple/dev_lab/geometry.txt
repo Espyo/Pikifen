@@ -10226,7 +10226,7 @@ sectors{
 		texture_scale=0.7500 0.7500
 	}
 	s{
-		z=200.0000
+		z=220.0000
 		texture=textures/glass
 		texture_scale=0.5000 0.5000
 		texture_trans=64.0000 -64.0000

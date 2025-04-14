@@ -2,15 +2,15 @@ name = Very foggy
 description = Very dense fog. It also starts quite near.
 
 lighting {
-    0    = 0   0   32  160
-    300  = 0   0   32  160
+    0    = 0   0   32  96
+    300  = 0   0   32  96
     360  = 16  16  32  128
     420  = 32  16  32  48
     480  = 0   0   0   48
     1020 = 0   0   0   48
     1080 = 48  24  0   48
     1140 = 0   0   32  96
-    1200 = 0   0   32  160
+    1200 = 0   0   32  96
 }
 sun_strength {
     0    = 96

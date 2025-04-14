@@ -1,16 +1,14 @@
 ﻿Point I left on (so I can continue the next day without losing my train of thought)
-    
+
 
 Current tasks (tasks being worked on, but not yet committed)
-    
+    Make the default angle north?
+    Make sectors and hitboxes use one hazard max
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Starting an area right next to a boss makes the theme start playing, then stop
     
     --- 0.26 ---
-    Helodity's new area and such
-    Ease up on the darkness of weather conditions at night
     Update Dear ImGui to version 1.91.9b
         "Image: removed tint_col and border_col parameter from Image() function"
     Revamp sounds
@@ -147,8 +145,6 @@ Next tasks (roughly sorted most important first)
         All sound files should be at peak amplitude
     Compose and add songs
         Start with a leitmotif?
-        Title screen
-        Options menu and such
         Editors
         A couple of gameplay songs
         Results screen
@@ -169,9 +165,6 @@ Next tasks (roughly sorted most important first)
         Style Tutorial Meadow to be more DEV Lab-like
         Add Pro Controller controls to the default controls
     Create a release candidate for people to playtest
-    Use a screenshot for the title screen
-        The left side should be all organic, and the right side should have some DEV Lab stuff. The bottom should probably be something special but not attention-grabbing, the top should give space for the Pikmin to form the letters, and the topmost pixels should probably help the disclaimer text and version number readable, but not call attention
-        Maybe the play and the make sides could have their own backgrounds, and once you flip to either of those pages the backgrounds slides in
     Leader animations
         New animations
             Thrown (add to the logic of bouncers too, including Pikmin)
@@ -263,8 +256,8 @@ Next tasks (roughly sorted most important first)
         The difficulty listing in the area menu should use fire icons instead of numbers
     GUI things
         Game state refactor
-            Add a gui.start_transition function so that we don't have to do the responsive = true/false thing when we call gui.start_animation
-            Some sort of sub-menus manager so we don't have to have half a dozen if(sub_gui) sub_gui.handle_player_action() and stuff like that
+            Add a gui.startTransition function so that we don't have to do the responsive = true/false thing when we call gui.startAnimation
+            Some sort of sub-menus manager so we don't have to have half a dozen if(subGui) subGui.handlePlayerAction() and stuff like that
         Allow the player to drag their mouse on the scrollbar GUI item
         GUI items should draw with opacity (or a tint color), set by the GUI manager in the same way as position and size
         GUI items could be told they are currently being activated, so that buttons can appear pressed in
@@ -284,7 +277,7 @@ Next tasks (roughly sorted most important first)
             Each action type should be able to specify if it allows button-downs without button-ups (for Pikmin, holding button 1 to whistle, and then pressing button 2 shouldn't restart the whistle, but in Rhythm Heaven, holding button 1 to do a hit, and then pressing button 2 should be another hit)
                 Basically, this means if it should always add to the action queue whenever an event drops, or if it should use the state variables, to then do events when a new frame starts
                 Also, a way for an action type to specify if it's digital in nature (only 0 or 1). This way, the player can bind zoom to an analog trigger in a controller and not have the game change zoom multiple times because their trigger press amount went from 0.62 to 0.63 to 0.65 to 0.61 etc.
-            Implement the ability for a player actions to go back in the queue if the game code doesn't handle that action in that frame. Doing this should count that action's TTL down by delta_t
+            Implement the ability for a player actions to go back in the queue if the game code doesn't handle that action in that frame. Doing this should count that action's TTL down by deltaT
             If you have the same action bound to two inputs, where one of them is an analog stick, it may be nearly impossible to get the other input to register because analog stick jitter will keep convincing the manager that for that frame, that player action's input is always changing by minute amounts
                 It should probably use the largest value of all inputs. Like if you bind move cursor right to both analog sticks, if one is held 50% of the way, the other can be wiggled between 0% and 49% of the way but the action will always be recognized as 50%
                 Add an option to allow event coalescing? Basically, if before a frame we received an event for analog stick right 0.3 and also a 0.4, just coalesce into a single event of 0.4
@@ -393,7 +386,7 @@ Next tasks (roughly sorted most important first)
             Candypop Buds can't accept Pikmin from another team
             Group tasks can't accept Pikmin from another team
             When one team loses all their leaders, their player(s)'s screen goes black (important because if their leader mob got deleted, the engine won't be able to show anything anyway) and just has "KO" written on it or something
-                The current logic just abruptly ends the gameplay state if there are no more leaders. But it should probably be changed such that all calls to cur_leader_ptr (or the equivalent to each player's leader pointer) are protected, so that if the pointer is nullptr they just try something peaceful instead of crashing
+                The current logic just abruptly ends the gameplay state if there are no more leaders. But it should probably be changed such that all calls to curLeaderPtr (or the equivalent to each player's leader pointer) are protected, so that if the pointer is nullptr they just try something peaceful instead of crashing
                 Actually, the "KO" should be in a corner or something, and the player should be allowed to pan the camera to spectate
         [NEEDS BRAINSTORMING] Figure out how the game is meant to work when:
             A player's leader needs to throw another's
@@ -732,21 +725,21 @@ Misc things (so I don't forget)
             https://www.youtube.com/watch?v=tu-Qe66AvtY
                 Have a "trauma" variable (0-1) that goes up (something like 0.4) every time a shake happens, and goes down over time
                 When shaking the screen, the multiplier of the amount to shake should be trauma^2 or trauma^3 so it's smooth
-                Don't offset the camera negatively, but use something like offsetX = maxOffset * shake_mult * GetPerlinNoise(seed, time);  offsetY = maxOffset * shake_mult * GetPerlinNoise(seed + 1, time);
+                Don't offset the camera negatively, but use something like offsetX = maxOffset * shakeMult * GetPerlinNoise(seed, time);  offsetY = maxOffset * shakeMult * GetPerlinNoise(seed + 1, time);
                     Or instead of PerlinNoise, use simple value noise http://www.scratchapixel.com/lessons/procedural-generation-virtual-worlds/procedural-patterns-noise-part-1/creating-simple-1D-noise
         Leaders getting hurt should make their HUD icon turn red and shake
         Mobs shrinking or increasing in size because of their height should be limited -- fall too much and your dimensions turn negative
-        Loading screen area names and subtitles should have custom colors like https://cdn.discordapp.com/attachments/212795100818833408/1095572527583080488/image.png (thanks Captain Salty)
         On a walkable object, if you have a leader and their Pikmin on top, the Pikmin will kinda jerk along, not very smoothly
         There should be some petal particle effects when a Pikmin loses their maturity
             Each Pikmin type needs to specify its own petal color
         If a Pikmin type has black as the color, the idle glow needs to... not be black
         Water isn't fading with darkness if you have fader textures https://cdn.discordapp.com/attachments/347158607734767636/449334153763356672/Pikifen_alpha_5_24_2018_6_12_41_PM.png https://cdn.discordapp.com/attachments/459094782648778772/491739297548992513/unknown.png
-            Make it use the same logic as draw_texture, where a fade sector must draw the liquid twice, with the second time fading
+            Make it use the same logic as drawTexture, where a fade sector must draw the liquid twice, with the second time fading
         Maybe water should have random sparkle particles?
         Mob shadows could just be the sprite itself again, instead of a circle? (thanks Helodity)
         A small "Got it!" for the score bar, to mark the medal you have
         Animate the mission results screen. Basically, reveal one thing at a time
+        Loading screen area names and subtitles should have custom colors like https://cdn.discordapp.com/attachments/212795100818833408/1095572527583080488/image.png (thanks Captain Salty)
         Animated loading screens
             When loading stuff, the loading functions could receive a callback as an argument. Then, for every one piece of content they load, they call the callback. The callback would be a function that checks if it's time to draw a frame, and if not, quits out. If it is meant to draw a frame, it just draws it
             See how Allegro's ex_loading_thread.c does it
@@ -757,6 +750,10 @@ Misc things (so I don't forget)
                 If we can't get away with many variants, explain in the FAQ why that is
                 What if only one variant can play at a time, but multiple can be supported? Playing the base song and also the fight, task, treasure, and Spiderwort overlays means five streamed songs. But if only one is allowed to be picked at a time, it's probably still good without sacrificing performance -- the music manager would be told what conditions are currently met (leader is fighting an enemy, Pikmin are working somewhere, leader is near Spiderwort, etc.), and then play the variant for the highest priority one. When swapping variants, it should quickly fade the old variant down and fade the new one up
         Leaders should have their antenna light separated like Pikmin do
+        Use a screenshot for the title screen
+            The left side should be all organic, and the right side should have some DEV Lab stuff. The bottom should probably be something special but not attention-grabbing, the top should give space for the Pikmin to form the letters, and the topmost pixels should probably help the disclaimer text and version number readable, but not call attention
+            Maybe the play and the make sides could have their own backgrounds, and once you flip to either of those pages the backgrounds slides in
+            The Pikmin flowers should render a small shadow under them too
     New options
         Option to pause the game if the window is not focused
         An option that changes the font to something easier to read, and decreases the effect of GUI text juice grow
@@ -989,8 +986,6 @@ Misc things (so I don't forget)
     Maker tools
         A maker tool that just lists how many particles are active, how many mobs, bitmaps loaded, etc.
         A maker tool that lets you go frame-by-frame
-        Maker tools should be bound to inputs in the same way the regular controls are, instead of being stuck in the number and F keys
-        Should they be implemented using Dear ImGui? This could allow someone to, for instance, focus on a mob and have a detailed pretty table, or even set some properties. Or to change the game speed, have a Dear ImGui pop-up appear for a second, and if they want, mess with one of the sliders there to customize the speed on the fly
     Code cleanup
         Switch angles to vectors?
         If I need intervals, I can use the code on the "misc info" text file
@@ -1117,7 +1112,7 @@ Tasks for later on (I might never implement these)
             https://www.reddit.com/r/aestheticrain/comments/7m61zy/blossom_on_a_pond_1080p/
             See the Pikmin 2 ending movie, for instance
         When something contributes to the mission goal, score, or fail condition, it should fly into the HUD element
-    When al_clear_keyboard_state is available, use that instead of game.controls.release_all()
+    When al_clear_keyboard_state is available, use that instead of game.controls.releaseAll()
     The ability for particle generators to consist of multiple particle generators
     A competitive mode where each team's marble is out in the open in their base, but you can throw Pikmin at piles of twigs, shards of iron, etc. found in the area. They carry it (like bomb rocks), and when thrown in the room where the marble is, they start working with the materials they have and build a solid block there. Creating complex mazes and traps with the blocks is what stops the enemy team from gathering the marble so easily.
     Missions could have unlock criteria, like a mission only unlocking if another one is cleared, or if another one has a platinum medal, or if the player beat that other one with no Pikmin deaths (thanks Helodity)

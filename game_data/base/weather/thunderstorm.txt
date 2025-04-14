@@ -2,15 +2,15 @@ name = Thunderstorm
 description = Heavy rain and random thunder. Lighting is darker.
 
 lighting {
-    0    = 0   0   32  176
-    300  = 0   0   32  176
+    0    = 0   0   32  108
+    300  = 0   0   32  108
     360  = 8   8   24  128
     420  = 16  8   24  112
     480  = 0   0   0   112
     1020 = 0   0   0   112
     1080 = 24  16  0   112
     1140 = 0   0   32  112
-    1200 = 0   0   32  176
+    1200 = 0   0   32  108
 }
 sun_strength {
     0    = 96

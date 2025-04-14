@@ -2,15 +2,15 @@ name = Sandstorm
 description = Sand and dust floating about, wind, and a yellow fog.
 
 lighting {
-    0    = 32  24  8  192
-    300  = 32  24  8  192
+    0    = 32  24  8  108
+    300  = 32  24  8  108
     360  = 64  48  0   160
     420  = 255 128 96  96
     480  = 255 192 96  64
     1020 = 255 192 96  64
     1080 = 255 160 64  96
     1140 = 32  24  8  128
-    1200 = 32  24  8  192
+    1200 = 32  24  8  108
 }
 sun_strength {
     0    = 96
