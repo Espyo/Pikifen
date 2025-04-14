@@ -46,6 +46,9 @@ const unsigned char CURSOR_TRAIL_SAVE_N_SPOTS = 16;
 //Duration of full-screen fades.
 const float FADE_DURATION = 0.15f;
 
+//Duration of slow full-screen fades.
+const float FADE_SLOW_DURATION = 0.5f;
+
 //When getting a framerate average, use a sample of this size.
 const size_t FRAMERATE_AVG_SAMPLE_SIZE = 30;
 

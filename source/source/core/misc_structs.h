@@ -875,6 +875,8 @@ struct FadeManager {
     
     //--- Function declarations ---
     
+    FadeManager(float duration);
+    void setNextFadeDuration(float duration);
     void startFade(bool fade_in, const std::function<void()> &on_end);
     bool isFadeIn() const;
     bool isFading() const;
@@ -885,6 +887,12 @@ struct FadeManager {
     private:
     
     //--- Members ---
+    
+    //Standard duration of a fade in/out.
+    float duration = 0.0f;
+    
+    //Override the next fade in/out's duration with this. 0 for no override.
+    float durationOverride = 0.0f;
     
     //Time left in the current fade in/out.
     float timeLeft = 0.0f;

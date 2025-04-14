@@ -41,6 +41,7 @@ extern const float CURSOR_TRAIL_MIN_SPOT_DIFF;
 extern const float CURSOR_TRAIL_SAVE_INTERVAL;
 extern const unsigned char CURSOR_TRAIL_SAVE_N_SPOTS;
 extern const float FADE_DURATION;
+extern const float FADE_SLOW_DURATION;
 extern const size_t FRAMERATE_AVG_SAMPLE_SIZE;
 extern const size_t FRAMERATE_HISTORY_SIZE;
 }
@@ -138,7 +139,7 @@ public:
     ShaderManager shaders;
     
     //Manager for all full-screen fade-ins and fade-outs.
-    FadeManager fadeMgr;
+    FadeManager fadeMgr = FadeManager(GAME::FADE_DURATION);
     
     //Duration of the last few frames.
     vector<double> framerateHistory;

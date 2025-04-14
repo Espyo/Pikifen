@@ -520,6 +520,16 @@ bool ErrorManager::sessionHasErrors() {
 
 
 /**
+ * @brief Constructs a new fade manager object.
+ *
+ * @param duration Standard duration of a fade in/out.
+ */
+FadeManager::FadeManager(float duration) :
+    duration(duration) {
+}
+
+
+/**
  * @brief Draws the fade overlay, if there is a fade in progress.
  */
 void FadeManager::draw() {
@@ -541,7 +551,9 @@ void FadeManager::draw() {
  * @return The percentage.
  */
 float FadeManager::getPercLeft() const {
-    return timeLeft / GAME::FADE_DURATION;
+    float curDuration = durationOverride == 0.0f ? duration : durationOverride;
+    if(curDuration == 0.0f) return 0.0f;
+    return timeLeft / curDuration;
 }
 
 
@@ -561,7 +573,19 @@ bool FadeManager::isFadeIn() const {
  * @return Whether it is in progress.
  */
 bool FadeManager::isFading() const {
-    return timeLeft > 0;
+    float curDuration = durationOverride == 0.0f ? duration : durationOverride;
+    return timeLeft > 0 && curDuration != 0.0f;
+}
+
+
+/**
+ * @brief Sets the duration of the next fade. After that one, it goes back to
+ * the regular duration.
+ *
+ * @param duration The duration.
+ */
+void FadeManager::setNextFadeDuration(float duration) {
+    durationOverride = duration;
 }
 
 
@@ -574,7 +598,8 @@ bool FadeManager::isFading() const {
 void FadeManager::startFade(
     bool is_fade_in, const std::function<void()> &on_end
 ) {
-    timeLeft = GAME::FADE_DURATION;
+    float curDuration = durationOverride == 0.0f ? duration : durationOverride;
+    timeLeft = curDuration;
     fadeIn = is_fade_in;
     this->onEnd = on_end;
 }
@@ -591,6 +616,7 @@ void FadeManager::tick(float delta_t) {
     if(timeLeft <= 0) {
         timeLeft = 0;
         if(onEnd) onEnd();
+        if(durationOverride > 0.0f) durationOverride = 0.0f;
     }
 }
 

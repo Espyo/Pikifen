@@ -1018,6 +1018,9 @@ void TitleScreen::load() {
     
     //Finishing touches.
     game.audio.setCurrentSong(game.sysContentNames.sngMenus, false);
+    if(game.timePassed == 0.0f) {
+        game.fadeMgr.setNextFadeDuration(GAME::FADE_SLOW_DURATION);
+    }
     game.fadeMgr.startFade(true, nullptr);
     if(game.debug.showDearImGuiDemo) game.mouseCursor.show();
 }
