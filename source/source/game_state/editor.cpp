@@ -204,11 +204,11 @@ void Editor::drawGrid(
     Point cam_top_left_corner(0, 0);
     Point cam_bottom_right_corner(canvasBR.x, canvasBR.y);
     al_transform_coordinates(
-        &game.screenToWorldTransform,
+        &game.cam.screenToWorldTransform,
         &cam_top_left_corner.x, &cam_top_left_corner.y
     );
     al_transform_coordinates(
-        &game.screenToWorldTransform,
+        &game.cam.screenToWorldTransform,
         &cam_bottom_right_corner.x, &cam_bottom_right_corner.y
     );
     
@@ -3188,19 +3188,19 @@ void Editor::updateTransformations() {
         (canvasTL.x + canvasBR.x) / 2.0,
         (canvasTL.y + canvasBR.y) / 2.0
     );
-    game.worldToScreenTransform = game.identityTransform;
+    game.cam.worldToScreenTransform = game.identityTransform;
     al_translate_transform(
-        &game.worldToScreenTransform,
+        &game.cam.worldToScreenTransform,
         -game.cam.pos.x + canvas_center.x / game.cam.zoom,
         -game.cam.pos.y + canvas_center.y / game.cam.zoom
     );
     al_scale_transform(
-        &game.worldToScreenTransform, game.cam.zoom, game.cam.zoom
+        &game.cam.worldToScreenTransform, game.cam.zoom, game.cam.zoom
     );
     
     //Screen coordinates to world coordinates.
-    game.screenToWorldTransform = game.worldToScreenTransform;
-    al_invert_transform(&game.screenToWorldTransform);
+    game.cam.screenToWorldTransform = game.cam.worldToScreenTransform;
+    al_invert_transform(&game.cam.screenToWorldTransform);
 }
 
 
@@ -3221,7 +3221,7 @@ void Editor::zoomWithCursor(float new_zoom) {
     //Figure out where the mouse will be after the zoom.
     game.mouseCursor.wPos = game.mouseCursor.sPos;
     al_transform_coordinates(
-        &game.screenToWorldTransform,
+        &game.cam.screenToWorldTransform,
         &game.mouseCursor.wPos.x, &game.mouseCursor.wPos.y
     );
     
@@ -3238,7 +3238,7 @@ void Editor::zoomWithCursor(float new_zoom) {
     updateTransformations();
     game.mouseCursor.wPos = game.mouseCursor.sPos;
     al_transform_coordinates(
-        &game.screenToWorldTransform,
+        &game.cam.screenToWorldTransform,
         &game.mouseCursor.wPos.x, &game.mouseCursor.wPos.y
     );
 }

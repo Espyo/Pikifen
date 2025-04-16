@@ -30,7 +30,7 @@ void GuiEditor::doDrawing() {
  * Dear ImGui rendering process.
  */
 void GuiEditor::drawCanvas() {
-    al_use_transform(&game.worldToScreenTransform);
+    al_use_transform(&game.cam.worldToScreenTransform);
     al_set_clipping_rectangle(
         canvasTL.x, canvasTL.y,
         canvasBR.x - canvasTL.x, canvasBR.y - canvasTL.y
@@ -84,7 +84,7 @@ void GuiEditor::drawCanvas() {
         float clip_x = items[i].center.x - items[i].size.x / 2.0f;
         float clip_y = items[i].center.y - items[i].size.y / 2.0f;
         al_transform_coordinates(
-            &game.worldToScreenTransform, &clip_x, &clip_y
+            &game.cam.worldToScreenTransform, &clip_x, &clip_y
         );
         float clip_w = items[i].size.x * game.cam.zoom;
         float clip_h = items[i].size.y * game.cam.zoom;

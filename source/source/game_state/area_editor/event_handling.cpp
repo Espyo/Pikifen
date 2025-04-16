@@ -1806,7 +1806,7 @@ void AreaEditor::handleMouseUpdate(const ALLEGRO_EVENT &ev) {
     game.mouseCursor.sPos.y = ev.mouse.y;
     game.mouseCursor.wPos = game.mouseCursor.sPos;
     al_transform_coordinates(
-        &game.screenToWorldTransform,
+        &game.cam.screenToWorldTransform,
         &game.mouseCursor.wPos.x, &game.mouseCursor.wPos.y
     );
     

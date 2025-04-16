@@ -1,0 +1,107 @@
+vertexes{
+	v=-320.0000 -320.0000
+	v=320.0000 -320.0000
+	v=320.0000 320.0000
+	v=-320.0000 320.0000
+	v=0.0000 -320.0000
+	v=12.2498 -77.9823
+	v=320.0000 -64.0000
+	v=3.6709 -96.1328
+	v=64.0000 -64.0000
+	v=0.0000 -128.0000
+	v=31.6840 -68.0404
+}
+edges{
+	e{
+		s=-1 1
+		v=3 0
+	}
+	e{
+		s=-1 1
+		v=0 4
+	}
+	e{
+		s=-1 0
+		v=1 6
+		shadow_color=11 26 12 230
+		smoothing_length=61.6000
+		smoothing_color=6 36 20 178
+	}
+	e{
+		s=-1 1
+		v=2 3
+	}
+	e{
+		s=-1 1
+		v=6 2
+	}
+	e{
+		s=1 0
+		v=9 4
+		shadow_color=11 26 12 230
+		smoothing_length=61.6000
+		smoothing_color=6 36 20 178
+	}
+	e{
+		s=1 0
+		v=10 5
+		shadow_color=11 26 12 230
+		smoothing_length=61.6000
+		smoothing_color=6 36 20 178
+	}
+	e{
+		s=1 0
+		v=5 7
+		shadow_color=11 26 12 230
+		smoothing_length=61.6000
+		smoothing_color=6 36 20 178
+	}
+	e{
+		s=0 1
+		v=8 6
+		shadow_color=11 26 12 230
+		smoothing_length=61.6000
+		smoothing_color=6 36 20 178
+	}
+	e{
+		s=1 0
+		v=7 9
+		shadow_color=11 26 12 230
+		smoothing_length=61.6000
+		smoothing_color=6 36 20 178
+	}
+	e{
+		s=1 0
+		v=8 10
+		shadow_color=11 26 12 230
+		smoothing_length=61.6000
+		smoothing_color=6 36 20 178
+	}
+	e{
+		s=-1 0
+		v=4 1
+		shadow_color=11 26 12 230
+		smoothing_length=61.6000
+		smoothing_color=6 36 20 178
+	}
+}
+sectors{
+	s{
+		z=-18.0000
+		hazards=water
+		hazards_floor=true
+		texture=textures/snow_clean
+	}
+	s{
+		z=0.0000
+		texture=textures/grass_dark
+	}
+}
+mobs{
+	leader{
+		type=olimar
+		p=0.0000 0.0000
+	}
+}
+path_stops
+tree_shadows

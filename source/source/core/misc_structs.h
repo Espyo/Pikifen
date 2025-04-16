@@ -102,9 +102,18 @@ struct Camera {
     //These also include a margin of GAMEPLAY::CAMERA_BOX_MARGIN.
     Point box[2];
     
+    // Canvas Position, of the screen center.
+    Point canvasPos;
+
+    // Canvas Size in pixels.
+    Point canvasSize;
+
     //Current position.
     Point pos;
     
+    //Screen to world coordinate matrix. Cache for convenience.
+    ALLEGRO_TRANSFORM screenToWorldTransform;
+
     //Position it wants to be at.
     Point targetPos;
     
@@ -114,12 +123,15 @@ struct Camera {
     //Current zoom.
     float zoom = 1.0f;
     
+    //World to screen coordinate matrix. Cache for convenience.
+    ALLEGRO_TRANSFORM worldToScreenTransform;
     
     //--- Function declarations ---
     
     void setPos(const Point &new_pos);
     void set_zoom(float new_zoom);
     void tick(float delta_t);
+    void updateTransformations();
     void updateBox();
     
 };

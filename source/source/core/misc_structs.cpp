@@ -346,6 +346,28 @@ void Camera::tick(float delta_t) {
         (targetZoom - zoom) * (GAMEPLAY::CAMERA_SMOOTHNESS_MULT * delta_t);
 }
 
+void Camera::updateTransformations() {
+    //World coordinates to screen coordinates.
+    worldToScreenTransform = game.identityTransform;
+    al_translate_transform(
+        &worldToScreenTransform,
+        -pos.x + canvasPos.x / zoom,
+        -pos.y + canvasPos.y / zoom
+    );
+    al_scale_transform(
+            &worldToScreenTransform, zoom, zoom
+    );
+    
+    al_set_clipping_rectangle(canvasPos.x-canvasSize.x*0.5f,
+        canvasPos.y-canvasSize.y*0.5f,
+        canvasSize.x,
+        canvasSize.y
+    );
+
+    //Screen coordinates to world coordinates.
+    screenToWorldTransform = worldToScreenTransform;
+    al_invert_transform(&screenToWorldTransform);
+}
 
 /**
  * @brief Updates the camera's visibility box,
@@ -353,13 +375,13 @@ void Camera::tick(float delta_t) {
  */
 void Camera::updateBox() {
     box[0] = Point(0.0f);
-    box[1] = Point(game.winW, game.winH);
+    box[1] = Point(canvasSize.x, canvasSize.y);
     al_transform_coordinates(
-        &game.screenToWorldTransform,
+        &game.cam.screenToWorldTransform,
         &box[0].x, &box[0].y
     );
     al_transform_coordinates(
-        &game.screenToWorldTransform,
+        &game.cam.screenToWorldTransform,
         &box[1].x, &box[1].y
     );
     
@@ -834,7 +856,7 @@ void MouseCursor::reset() {
     game.mouseCursor.sPos.y = al_get_mouse_state_axis(&mouse_state, 1);
     game.mouseCursor.wPos = game.mouseCursor.sPos;
     al_transform_coordinates(
-        &game.screenToWorldTransform,
+        &game.cam.screenToWorldTransform,
         &game.mouseCursor.wPos.x, &game.mouseCursor.wPos.y
     );
     history.clear();

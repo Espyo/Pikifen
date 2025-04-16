@@ -1394,19 +1394,19 @@ void GameplayState::updateClosestGroupMembers() {
  */
 void GameplayState::updateTransformations() {
     //World coordinates to screen coordinates.
-    game.worldToScreenTransform = game.identityTransform;
+    game.cam.worldToScreenTransform = game.identityTransform;
     al_translate_transform(
-        &game.worldToScreenTransform,
+        &game.cam.worldToScreenTransform,
         -game.cam.pos.x + game.winW / 2.0 / game.cam.zoom,
         -game.cam.pos.y + game.winH / 2.0 / game.cam.zoom
     );
     al_scale_transform(
-        &game.worldToScreenTransform, game.cam.zoom, game.cam.zoom
+        &game.cam.worldToScreenTransform, game.cam.zoom, game.cam.zoom
     );
     
     //Screen coordinates to world coordinates.
-    game.screenToWorldTransform = game.worldToScreenTransform;
-    al_invert_transform(&game.screenToWorldTransform);
+    game.cam.screenToWorldTransform = game.cam.worldToScreenTransform;
+    al_invert_transform(&game.cam.screenToWorldTransform);
 }
 
 

@@ -497,7 +497,7 @@ void GameplayState::doGameplayLeaderLogic(float delta_t) {
             game.mouseCursor.wPos = leaderCursorW;
             game.mouseCursor.sPos = game.mouseCursor.wPos;
             al_transform_coordinates(
-                &game.worldToScreenTransform,
+                &game.cam.worldToScreenTransform,
                 &game.mouseCursor.sPos.x, &game.mouseCursor.sPos.y
             );
         }
@@ -505,7 +505,7 @@ void GameplayState::doGameplayLeaderLogic(float delta_t) {
     
     leaderCursorS = leaderCursorW;
     al_transform_coordinates(
-        &game.worldToScreenTransform,
+        &game.cam.worldToScreenTransform,
         &leaderCursorS.x, &leaderCursorS.y
     );
     
@@ -647,7 +647,7 @@ void GameplayState::doGameplayLogic(float delta_t) {
         
         game.mouseCursor.wPos = game.mouseCursor.sPos;
         al_transform_coordinates(
-            &game.screenToWorldTransform,
+            &game.cam.screenToWorldTransform,
             &game.mouseCursor.wPos.x, &game.mouseCursor.wPos.y
         );
         

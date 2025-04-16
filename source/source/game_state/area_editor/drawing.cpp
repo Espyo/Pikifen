@@ -99,7 +99,7 @@ void AreaEditor::drawArrow(
  * This is called as a callback inside the Dear ImGui rendering process.
  */
 void AreaEditor::drawCanvas() {
-    al_use_transform(&game.worldToScreenTransform);
+    al_use_transform(&game.cam.worldToScreenTransform);
     al_set_clipping_rectangle(
         canvasTL.x, canvasTL.y,
         canvasBR.x - canvasTL.x, canvasBR.y - canvasTL.y
@@ -1365,7 +1365,7 @@ void AreaEditor::drawCanvas() {
         Point nr_coords = quickHeightSetStartPos;
         nr_coords.x += 100.0f;
         al_transform_coordinates(
-            &game.screenToWorldTransform, &nr_coords.x, &nr_coords.y
+            &game.cam.screenToWorldTransform, &nr_coords.x, &nr_coords.y
         );
         float offset = getQuickHeightSetOffset();
         drawDebugText(

@@ -49,8 +49,8 @@ void GameplayState::doGameDrawing(
         blend_old_aop, blend_old_asrc, blend_old_adst;
         
     if(bmp_output) {
-        old_world_to_screen_transform = game.worldToScreenTransform;
-        game.worldToScreenTransform = *bmp_transform;
+        old_world_to_screen_transform = game.cam.worldToScreenTransform;
+        game.cam.worldToScreenTransform = *bmp_transform;
         al_set_target_bitmap(bmp_output);
         al_get_separate_blender(
             &blend_old_op, &blend_old_src, &blend_old_dst,
@@ -78,7 +78,7 @@ void GameplayState::doGameDrawing(
     if(game.perfMon) {
         game.perfMon->startMeasurement("Drawing -- World");
     }
-    al_use_transform(&game.worldToScreenTransform);
+    al_use_transform(&game.cam.worldToScreenTransform);
     drawWorldComponents(bmp_output);
     if(game.perfMon) {
         game.perfMon->finishMeasurement();
@@ -123,7 +123,7 @@ void GameplayState::doGameDrawing(
             blend_old_op, blend_old_src, blend_old_dst,
             blend_old_aop, blend_old_asrc, blend_old_adst
         );
-        game.worldToScreenTransform = old_world_to_screen_transform;
+        game.cam.worldToScreenTransform = old_world_to_screen_transform;
         al_set_target_backbuffer(game.display);
         return;
     }
@@ -138,7 +138,7 @@ void GameplayState::doGameDrawing(
     }
     
     //Layer 7 -- Leader cursor.
-    al_use_transform(&game.worldToScreenTransform);
+    al_use_transform(&game.cam.worldToScreenTransform);
     ALLEGRO_COLOR cursor_color = game.config.aestheticGen.noPikminColor;
     if(closestGroupMember[BUBBLE_RELATION_CURRENT]) {
         cursor_color =
@@ -592,7 +592,7 @@ void GameplayState::drawDebugTools() {
     
     //Group stuff.
     /*
-    al_use_transform(&game.worldToScreenTransform);
+    al_use_transform(&game.cam.worldToScreenTransform);
     for(size_t m = 0; m < curLeaderPtr->group->members.size(); m++) {
         point offset = curLeaderPtr->group->get_spot_offset(m);
         al_draw_filled_circle(
@@ -1022,7 +1022,7 @@ void GameplayState::drawLeaderCursor(const ALLEGRO_COLOR &color) {
         );
     }
     
-    al_use_transform(&game.worldToScreenTransform);
+    al_use_transform(&game.cam.worldToScreenTransform);
 }
 
 
@@ -1051,11 +1051,11 @@ void GameplayState::drawLightingFilter() {
                 game.curAreaData->weatherCondition.fogFar
             );
         al_transform_coordinates(
-            &game.worldToScreenTransform,
+            &game.cam.worldToScreenTransform,
             &fog_top_left.x, &fog_top_left.y
         );
         al_transform_coordinates(
-            &game.worldToScreenTransform,
+            &game.cam.worldToScreenTransform,
             &fog_bottom_right.x, &fog_bottom_right.y
         );
         
@@ -1138,7 +1138,7 @@ void GameplayState::drawLightingFilter() {
             
             Point pos = m_ptr->pos;
             al_transform_coordinates(
-                &game.worldToScreenTransform,
+                &game.cam.worldToScreenTransform,
                 &pos.x, &pos.y
             );
             float radius = 4.0f * game.cam.zoom;

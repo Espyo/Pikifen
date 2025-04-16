@@ -211,9 +211,6 @@ public:
     //Database of all sector types and their names.
     EnumNameDatabase sectorTypes;
     
-    //Screen to world coordinate matrix. Cache for convenience.
-    ALLEGRO_TRANSFORM screenToWorldTransform;
-    
     //Should we be showing system info? (Framerate, version, etc.)
     bool showSystemInfo = false;
     
@@ -260,8 +257,6 @@ public:
     //Current window width.
     unsigned int winW = OPTIONS::GRAPHICS_D::WIN_W;
     
-    //World to screen coordinate matrix. Cache for convenience.
-    ALLEGRO_TRANSFORM worldToScreenTransform;
     
     //Engine debugging tools.
     //Set them to true in the Game constructor as needed.
