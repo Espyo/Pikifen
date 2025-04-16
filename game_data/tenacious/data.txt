@@ -1,9 +1,0 @@
-name=Tenacious
-description=
-maker=
-version=1.0.0
-engine_version=0.25.0
-tags=
-dependencies=
-conflicts=
-notes=
