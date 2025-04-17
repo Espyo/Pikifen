@@ -345,23 +345,26 @@ void Camera::tick(float delta_t) {
     zoom +=
         (targetZoom - zoom) * (GAMEPLAY::CAMERA_SMOOTHNESS_MULT * delta_t);
 }
-
+/**
+ * @brief Updates the transforms of the camera and the clipping of the viewport
+ */
 void Camera::updateTransformations() {
+    Point proportions = Point(viewportSize.x/game.winW,viewportSize.y/game.winH);
     //World coordinates to screen coordinates.
     worldToScreenTransform = game.identityTransform;
     al_translate_transform(
         &worldToScreenTransform,
-        -pos.x + canvasPos.x / zoom,
-        -pos.y + canvasPos.y / zoom
+        -pos.x + viewportPos.x / (zoom*proportions.x),
+        -pos.y + viewportPos.y / (zoom*proportions.y)
     );
     al_scale_transform(
-            &worldToScreenTransform, zoom, zoom
+            &worldToScreenTransform, zoom*proportions.x, zoom*proportions.y
     );
     
-    al_set_clipping_rectangle(canvasPos.x-canvasSize.x*0.5f,
-        canvasPos.y-canvasSize.y*0.5f,
-        canvasSize.x,
-        canvasSize.y
+    al_set_clipping_rectangle(viewportPos.x-viewportSize.x*0.5f,
+        viewportPos.y-viewportSize.y*0.5f,
+        viewportSize.x,
+        viewportSize.y
     );
 
     //Screen coordinates to world coordinates.
@@ -375,7 +378,7 @@ void Camera::updateTransformations() {
  */
 void Camera::updateBox() {
     box[0] = Point(0.0f);
-    box[1] = Point(canvasSize.x, canvasSize.y);
+    box[1] = Point(viewportSize.x, viewportSize.y);
     al_transform_coordinates(
         &game.cam.screenToWorldTransform,
         &box[0].x, &box[0].y

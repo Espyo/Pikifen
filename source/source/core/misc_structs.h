@@ -102,11 +102,11 @@ struct Camera {
     //These also include a margin of GAMEPLAY::CAMERA_BOX_MARGIN.
     Point box[2];
     
-    // Canvas Position, of the screen center.
-    Point canvasPos;
+    // Viewport Position, of the screen center.
+    Point viewportPos;
 
-    // Canvas Size in pixels.
-    Point canvasSize;
+    // Viewport Size in pixels.
+    Point viewportSize;
 
     //Current position.
     Point pos;
