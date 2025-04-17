@@ -514,7 +514,7 @@ sprites{
 				radius=12.0000
 				type=1
 				value=30.0000
-				hazards=stab
+				hazard=stab
 				knockback=1.0000
 			}
 			mouth_kb{
@@ -554,7 +554,7 @@ sprites{
 				radius=24.0000
 				type=1
 				value=30.0000
-				hazards=stab
+				hazard=stab
 				knockback=1.0000
 			}
 			mouth_kb{

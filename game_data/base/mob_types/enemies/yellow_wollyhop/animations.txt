@@ -428,7 +428,7 @@ sprites{
 				radius=48.0000
 				type=1
 				value=40.0000
-				hazards=crush
+				hazard=crush
 				knockback_outward=true
 				knockback=0.0100
 			}
@@ -453,7 +453,7 @@ sprites{
 				radius=48.0000
 				type=1
 				value=40.0000
-				hazards=crush
+				hazard=crush
 				knockback_outward=true
 				knockback=0.0100
 			}
@@ -478,7 +478,7 @@ sprites{
 				radius=48.0000
 				type=1
 				value=40.0000
-				hazards=crush
+				hazard=crush
 				knockback_outward=true
 				knockback=0.0100
 			}
@@ -503,7 +503,7 @@ sprites{
 				radius=48.0000
 				type=1
 				value=40.0000
-				hazards=crush
+				hazard=crush
 				knockback_outward=true
 				knockback=0.0100
 			}

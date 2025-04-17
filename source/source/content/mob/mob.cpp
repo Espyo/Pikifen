@@ -866,21 +866,16 @@ bool Mob::calculateDamage(
     if(attack_h) {
         attacker_offense = attack_h->value;
         
-        if(!attack_h->hazards.empty()) {
-            float max_vulnerability = 0.0f;
-            for(size_t h = 0; h < attack_h->hazards.size(); h++) {
-                MobType::Vulnerability vuln =
-                    victim->getHazardVulnerability(attack_h->hazards[h]);
-                max_vulnerability =
-                    std::max(vuln.effectMult, max_vulnerability);
-            }
-            
-            if(max_vulnerability == 0.0f) {
+        if(attack_h->hazard) {
+            MobType::Vulnerability vuln =
+                victim->getHazardVulnerability(attack_h->hazard);
+                
+            if(vuln.effectMult == 0.0f) {
                 //The victim is immune to this hazard!
                 *damage = 0;
                 return true;
             } else {
-                defense_multiplier = 1.0f / max_vulnerability;
+                defense_multiplier = 1.0f / vuln.effectMult;
             }
             
         } else {

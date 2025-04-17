@@ -174,7 +174,7 @@ sprites{
 				radius=40.0000
 				type=1
 				value=60.0000
-				hazards=crush
+				hazard=crush
 				knockback_outward=true
 				knockback=0.5000
 			}

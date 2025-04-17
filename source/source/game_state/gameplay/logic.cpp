@@ -695,13 +695,9 @@ void GameplayState::doGameplayLogic(float delta_t) {
                 
                 if(s_ptr->liquidDrainLeft <= 0) {
                 
-                    for(size_t h = 0; h < s_ptr->hazards.size();) {
-                        if(s_ptr->hazards[h]->associatedLiquid) {
-                            s_ptr->hazards.erase(s_ptr->hazards.begin() + h);
-                            pathMgr.handleSectorHazardChange(s_ptr);
-                        } else {
-                            h++;
-                        }
+                    if(s_ptr->hazard && s_ptr->hazard->associatedLiquid) {
+                        s_ptr->hazard = nullptr;
+                        pathMgr.handleSectorHazardChange(s_ptr);
                     }
                     
                     s_ptr->liquidDrainLeft = 0;
@@ -2263,8 +2259,9 @@ void GameplayState::processMobTouches(
                     
                     //Hazard resistance check.
                     if(
-                        !h2_ptr->hazards.empty() &&
-                        m_ptr->isResistantToHazards(h2_ptr->hazards)
+                        h2_ptr->hazard &&
+                        m_ptr->getHazardVulnerability(h2_ptr->hazard).
+                        effectMult == 0.0f
                     ) {
                         continue;
                     }
@@ -2322,22 +2319,17 @@ void GameplayState::processMobTouches(
                     !disable_attack_status &&
                     h1_ptr->type == HITBOX_TYPE_NORMAL &&
                     h2_ptr->type == HITBOX_TYPE_ATTACK &&
-                    !h2_ptr->hazards.empty()
+                    h2_ptr->hazard
                 ) {
-                    for(
-                        size_t h = 0;
-                        h < h2_ptr->hazards.size(); h++
-                    ) {
-                        HitboxInteraction ev_info =
-                            HitboxInteraction(
-                                m2_ptr, h1_ptr, h2_ptr
-                            );
-                        hitbox_touch_haz_ev->run(
-                            m_ptr,
-                            (void*) h2_ptr->hazards[h],
-                            (void*) &ev_info
+                    HitboxInteraction ev_info =
+                        HitboxInteraction(
+                            m2_ptr, h1_ptr, h2_ptr
                         );
-                    }
+                    hitbox_touch_haz_ev->run(
+                        m_ptr,
+                        (void*) h2_ptr->hazard,
+                        (void*) &ev_info
+                    );
                     reported_haz_ev = true;
                     
                     //Re-fetch the other events, since this event

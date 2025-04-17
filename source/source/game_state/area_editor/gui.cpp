@@ -5106,41 +5106,52 @@ void AreaEditor::processGuiPanelSector() {
             "", WIDGET_EXPLANATION_DRAG
         );
         
-        //Sector hazards node.
+        //Sector hazard node.
         ImGui::Spacer();
-        if(saveableTreeNode("layout", "Hazards")) {
+        if(saveableTreeNode("layout", "Hazard")) {
         
-            static int selected_hazard_idx = 0;
-            vector<string> hazard_inames =
-                semicolonListToVector(s_ptr->hazardsStr);
-            if(
-                processGuiHazardManagementWidgets(
-                    hazard_inames, selected_hazard_idx
-                )
-            ) {
-                registerChange("sector hazard changes");
-                s_ptr->hazardsStr = join(hazard_inames, ";");
-                s_ptr->hazards.clear();
-                for(size_t h = 0; h < hazard_inames.size(); h++) {
-                    s_ptr->hazards.push_back(
-                        &(game.content.hazards.list[hazard_inames[h]])
-                    );
-                }
+            string hazard_iname;
+            if(s_ptr->hazard) {
+                hazard_iname = s_ptr->hazard->manifest->internalName;
             }
-            setTooltip("List of hazards this sector has.");
+            if(processGuiHazardManagementWidgets(hazard_iname)) {
+                registerChange("sector hazard changes");
+                s_ptr->hazard =
+                    hazard_iname.empty() ?
+                    nullptr :
+                    &game.content.hazards.list[hazard_iname];
+            }
+            setTooltip("This sector's hazard, if any.");
             
-            if(!hazard_inames.empty()) {
+            if(!hazard_iname.empty()) {
                 //Sector hazard floor only checkbox.
                 bool sector_hazard_floor = s_ptr->hazardFloor;
+                ImGui::Indent();
                 if(ImGui::Checkbox("Floor only", &sector_hazard_floor)) {
                     registerChange("sector hazard floor option change");
                     s_ptr->hazardFloor = sector_hazard_floor;
                 }
+                ImGui::Unindent();
                 setTooltip(
                     "Do the hazards only affects objects on the floor,\n"
                     "or do they affect airborne objects in the sector too?"
                 );
             }
+            
+            //Sector bottomless pit checkbox.
+            bool sector_bottomless_pit = s_ptr->isBottomlessPit;
+            if(ImGui::Checkbox("Bottomless pit", &sector_bottomless_pit)) {
+                registerChange("sector bottomless pit change");
+                s_ptr->isBottomlessPit = sector_bottomless_pit;
+                if(!sector_bottomless_pit) {
+                    updateSectorTexture(s_ptr, s_ptr->textureInfo.bmpName);
+                }
+            }
+            setTooltip(
+                "Is this sector's floor a bottomless pit?\n"
+                "Pikmin die when they fall in pits,\n"
+                "and you can see the background (or void)."
+            );
             
             ImGui::TreePop();
         }
@@ -5165,20 +5176,6 @@ void AreaEditor::processGuiPanelSector() {
             }
             setTooltip(
                 "What type of sector this is."
-            );
-            
-            //Sector bottomless pit checkbox.
-            bool sector_bottomless_pit = s_ptr->isBottomlessPit;
-            if(ImGui::Checkbox("Bottomless pit", &sector_bottomless_pit)) {
-                registerChange("sector bottomless pit change");
-                s_ptr->isBottomlessPit = sector_bottomless_pit;
-                if(!sector_bottomless_pit) {
-                    updateSectorTexture(s_ptr, s_ptr->textureInfo.bmpName);
-                }
-            }
-            setTooltip(
-                "Is this sector's floor a bottomless pit?\n"
-                "Pikmin die when they fall in, and you can see the void."
             );
             
             ImGui::Spacer();

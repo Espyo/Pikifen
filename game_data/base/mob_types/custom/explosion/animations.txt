@@ -44,7 +44,7 @@ sprites{
 				radius=34.0000
 				type=1
 				value=600.0000
-				hazards=explosion
+				hazard=explosion
 				knockback_outward=true
 				knockback=3.0000
 			}
@@ -63,7 +63,7 @@ sprites{
 				radius=68.0000
 				type=1
 				value=600.0000
-				hazards=explosion
+				hazard=explosion
 				knockback_outward=true
 				knockback=3.0000
 			}
@@ -82,7 +82,7 @@ sprites{
 				radius=68.0000
 				type=1
 				value=600.0000
-				hazards=explosion
+				hazard=explosion
 				knockback_outward=true
 				knockback=3.0000
 			}
@@ -101,7 +101,7 @@ sprites{
 				radius=68.0000
 				type=1
 				value=600.0000
-				hazards=explosion
+				hazard=explosion
 				knockback_outward=true
 				knockback=3.0000
 			}
@@ -120,7 +120,7 @@ sprites{
 				radius=68.0000
 				type=1
 				value=600.0000
-				hazards=explosion
+				hazard=explosion
 				knockback_outward=true
 				knockback=3.0000
 			}
@@ -139,7 +139,7 @@ sprites{
 				radius=68.0000
 				type=1
 				value=600.0000
-				hazards=explosion
+				hazard=explosion
 				knockback_outward=true
 				knockback=3.0000
 			}
@@ -157,7 +157,7 @@ sprites{
 				radius=26.0000
 				type=1
 				value=600.0000
-				hazards=explosion
+				hazard=explosion
 				knockback_outward=true
 				knockback=3.0000
 			}

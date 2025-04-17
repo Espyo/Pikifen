@@ -1211,21 +1211,17 @@ void Area::loadGeometryFromDataNode(
                 game.content.bitmaps.list.get(new_sector->textureInfo.bmpName, nullptr);
         }
         
-        DataNode* hazards_node = sector_data->getChildByName("hazards");
-        vector<string> hazards_strs =
-            semicolonListToVector(hazards_node->value);
-        for(size_t h = 0; h < hazards_strs.size(); h++) {
-            string hazard_name = hazards_strs[h];
-            if(game.content.hazards.list.find(hazard_name) == game.content.hazards.list.end()) {
+        DataNode* hazard_node = sector_data->getChildByName("hazard");
+        if(!hazard_node->value.empty()) {
+            if(game.content.hazards.list.find(hazard_node->value) == game.content.hazards.list.end()) {
                 game.errors.report(
-                    "Unknown hazard \"" + hazard_name +
-                    "\"!", hazards_node
+                    "Unknown hazard \"" + hazard_node->value +
+                    "\"!", hazard_node
                 );
             } else {
-                new_sector->hazards.push_back(&(game.content.hazards.list[hazard_name]));
+                new_sector->hazard = &(game.content.hazards.list[hazard_node->value]);
             }
         }
-        new_sector->hazardsStr = hazards_node->value;
         new_sector->hazardFloor =
             s2b(
                 sector_data->getChildByName(
@@ -1773,8 +1769,8 @@ void Area::saveGeometryToDataNode(DataNode* node) {
         if(s_ptr->fade) {
             sgw.get("fade", s_ptr->fade);
         }
-        if(!s_ptr->hazardsStr.empty()) {
-            sgw.get("hazards", s_ptr->hazardsStr);
+        if(s_ptr->hazard) {
+            sgw.get("hazard", s_ptr->hazard->manifest->internalName);
             sgw.get("hazards_floor", s_ptr->hazardFloor);
         }
         

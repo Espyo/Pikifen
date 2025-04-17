@@ -6573,7 +6573,7 @@ sectors{
 	}
 	s{
 		z=-8.0000
-		hazards=water
+		hazard=water
 		hazards_floor=true
 		texture=textures/dirt
 		texture_tint=175 175 175
@@ -6608,7 +6608,7 @@ sectors{
 	}
 	s{
 		z=-8.0000
-		hazards=water
+		hazard=water
 		hazards_floor=true
 		texture=textures/grass_light
 		texture_tint=175 175 175
@@ -6675,7 +6675,7 @@ sectors{
 	}
 	s{
 		z=-8.0000
-		hazards=water
+		hazard=water
 		hazards_floor=true
 		texture=textures/dirt
 		texture_tint=175 175 175
@@ -6686,7 +6686,7 @@ sectors{
 	}
 	s{
 		z=192.0000
-		hazards=water
+		hazard=water
 		hazards_floor=true
 		texture=textures/grass_light
 		texture_tint=175 175 175
@@ -6772,7 +6772,7 @@ sectors{
 		z=0.0000
 		brightness=199
 		fade=true
-		hazards=water
+		hazard=water
 		hazards_floor=true
 		texture=textures/dirt
 		texture_tint=175 175 175
@@ -6790,7 +6790,7 @@ sectors{
 	s{
 		z=0.0000
 		brightness=160
-		hazards=water
+		hazard=water
 		hazards_floor=true
 		texture=textures/dirt_soft
 		texture_tint=175 175 175
@@ -6889,7 +6889,7 @@ sectors{
 	}
 	s{
 		z=-8.0000
-		hazards=water
+		hazard=water
 		hazards_floor=true
 		texture=textures/dirt
 		texture_rotate=1.6406
@@ -6909,7 +6909,7 @@ sectors{
 	s{
 		z=-8.0000
 		brightness=160
-		hazards=water
+		hazard=water
 		hazards_floor=true
 		texture=textures/dirt_soft
 		texture_tint=175 175 175
@@ -7208,7 +7208,7 @@ sectors{
 	s{
 		type=blocking
 		z=342.0000
-		hazards=water
+		hazard=water
 		hazards_floor=true
 		texture=textures/grass_dark
 		texture_tint=175 175 175
@@ -7222,7 +7222,7 @@ sectors{
 	s{
 		type=blocking
 		z=342.0000
-		hazards=water
+		hazard=water
 		hazards_floor=true
 		texture=textures/grass_dark
 		texture_tint=175 175 175
@@ -7290,7 +7290,7 @@ sectors{
 	s{
 		type=blocking
 		z=342.0000
-		hazards=water
+		hazard=water
 		hazards_floor=true
 		texture=textures/grass_dark
 		texture_tint=175 175 175
@@ -7326,7 +7326,7 @@ sectors{
 	}
 	s{
 		z=192.0000
-		hazards=water
+		hazard=water
 		hazards_floor=true
 		texture=textures/dirt
 		texture_tint=175 175 175
@@ -7439,7 +7439,7 @@ sectors{
 	}
 	s{
 		z=192.0000
-		hazards=water
+		hazard=water
 		hazards_floor=true
 		texture=textures/wood_plank
 		texture_rotate=0.2220

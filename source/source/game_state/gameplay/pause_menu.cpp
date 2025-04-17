@@ -867,12 +867,11 @@ void PauseMenu::drawRadar(
                 game.config.aestheticRadar.highestColor
             );
             
-        for(size_t h = 0; h < s_ptr->hazards.size(); h++) {
-            if(!s_ptr->hazards[h]->associatedLiquid) continue;
+        if(s_ptr->hazard && s_ptr->hazard->associatedLiquid) {
             color =
                 interpolateColor(
                     0.80f, 0.0f, 1.0f,
-                    color, s_ptr->hazards[h]->associatedLiquid->radarColor
+                    color, s_ptr->hazard->associatedLiquid->radarColor
                 );
         }
         

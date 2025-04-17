@@ -97,11 +97,8 @@ struct Sector {
     //Is this sector meant to fade textures from neighboring sectors?
     bool fade = false;
     
-    //String representing its hazards. Used for the editor.
-    string hazardsStr;
-    
-    //List of hazards.
-    vector<Hazard*> hazards;
+    //Hazard, if any.
+    Hazard* hazard = nullptr;
     
     //Is only floor hazardous, or the air as well?
     bool hazardFloor = true;

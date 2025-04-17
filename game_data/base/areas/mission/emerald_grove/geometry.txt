@@ -4400,7 +4400,7 @@ sectors{
 	}
 	s{
 		z=-50.0000
-		hazards=mud
+		hazard=mud
 		hazards_floor=true
 		texture=textures/dirt
 		texture_tint=170 133 92
@@ -4413,7 +4413,7 @@ sectors{
 	}
 	s{
 		z=100.0000
-		hazards=mud
+		hazard=mud
 		hazards_floor=true
 		texture=textures/dirt
 		texture_tint=169 133 91
@@ -4643,7 +4643,7 @@ sectors{
 	}
 	s{
 		z=400.0000
-		hazards=mud
+		hazard=mud
 		hazards_floor=true
 		texture=textures/dirt_soft
 		texture_tint=202 179 156
@@ -4655,14 +4655,14 @@ sectors{
 	}
 	s{
 		z=400.0000
-		hazards=mud
+		hazard=mud
 		hazards_floor=true
 		texture=textures/dirt_soft
 		texture_tint=202 179 156
 	}
 	s{
 		z=400.0000
-		hazards=mud
+		hazard=mud
 		hazards_floor=true
 		texture=textures/dirt_soft
 		texture_tint=202 179 156
@@ -4680,7 +4680,7 @@ sectors{
 	}
 	s{
 		z=99.0000
-		hazards=mud
+		hazard=mud
 		hazards_floor=true
 		texture=textures/dirt
 		texture_tint=170 133 92
@@ -4726,14 +4726,14 @@ sectors{
 	}
 	s{
 		z=249.0000
-		hazards=mud
+		hazard=mud
 		hazards_floor=true
 		texture=textures/dirt_soft
 		texture_tint=153 126 99
 	}
 	s{
 		z=349.0000
-		hazards=mud
+		hazard=mud
 		hazards_floor=true
 		texture=textures/dirt_soft
 		texture_tint=152 125 99
@@ -4747,7 +4747,7 @@ sectors{
 	s{
 		type=blocking
 		z=999.0000
-		hazards=mud
+		hazard=mud
 		hazards_floor=true
 		texture=textures/grass_dark
 		texture_tint=30 71 23
@@ -4916,7 +4916,7 @@ sectors{
 	s{
 		type=blocking
 		z=1000.0000
-		hazards=mud
+		hazard=mud
 		hazards_floor=true
 		texture=textures/dirt_soft
 		texture_tint=101 109 84
@@ -4930,7 +4930,7 @@ sectors{
 	s{
 		type=blocking
 		z=900.0000
-		hazards=mud
+		hazard=mud
 		hazards_floor=true
 		texture=textures/grass_dark
 		texture_tint=30 71 23
@@ -4938,7 +4938,7 @@ sectors{
 	s{
 		type=blocking
 		z=950.0000
-		hazards=mud
+		hazard=mud
 		hazards_floor=true
 		texture=textures/grass_dark
 		texture_tint=30 71 23
@@ -4946,7 +4946,7 @@ sectors{
 	s{
 		type=blocking
 		z=850.0000
-		hazards=mud
+		hazard=mud
 		hazards_floor=true
 		texture=textures/grass_dark
 		texture_tint=30 71 23
@@ -4954,7 +4954,7 @@ sectors{
 	s{
 		type=blocking
 		z=800.0000
-		hazards=mud
+		hazard=mud
 		hazards_floor=true
 		texture=textures/grass_dark
 		texture_tint=30 71 23
@@ -5018,7 +5018,7 @@ sectors{
 	}
 	s{
 		z=250.0000
-		hazards=mud
+		hazard=mud
 		hazards_floor=true
 		texture=textures/grass_light
 		texture_tint=120 155 122
@@ -5152,7 +5152,7 @@ sectors{
 	s{
 		type=blocking
 		z=1000.0000
-		hazards=mud
+		hazard=mud
 		hazards_floor=true
 		texture=textures/dirt_soft
 		texture_tint=101 109 84
@@ -5160,7 +5160,7 @@ sectors{
 	s{
 		type=blocking
 		z=1000.0000
-		hazards=mud
+		hazard=mud
 		hazards_floor=true
 		texture=textures/dirt_soft
 		texture_tint=101 109 84
@@ -5177,7 +5177,7 @@ sectors{
 	}
 	s{
 		z=250.0000
-		hazards=mud
+		hazard=mud
 		hazards_floor=true
 		texture=textures/grass_light
 		texture_tint=120 155 122

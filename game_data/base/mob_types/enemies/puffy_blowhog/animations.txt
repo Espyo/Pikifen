@@ -602,7 +602,7 @@ sprites{
 				radius=100.0000
 				type=1
 				value=1.0000
-				hazards=wind
+				hazard=wind
 				knockback_outward=true
 				knockback=5.0000
 			}
@@ -636,7 +636,7 @@ sprites{
 				radius=100.0000
 				type=1
 				value=1.0000
-				hazards=wind
+				hazard=wind
 				knockback_outward=true
 				knockback=5.0000
 			}
@@ -1647,7 +1647,7 @@ sprites{
 				radius=100.0000
 				type=2
 				value=1.0000
-				hazards=wind
+				hazard=wind
 			}
 		}
 	}

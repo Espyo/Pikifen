@@ -265,12 +265,12 @@ void AreaEditor::drawCanvas() {
         ) {
             if(previewMode) {
                 bool has_liquid = false;
-                for(size_t h = 0; h < s_ptr->hazards.size(); h++) {
-                    Liquid* l_ptr = s_ptr->hazards[h]->associatedLiquid;
-                    if(!l_ptr) continue;
-                    drawLiquid(s_ptr, l_ptr, Point(), 1.0f, game.timePassed);
-                    has_liquid = true;
-                    break;
+                if(s_ptr->hazard) {
+                    Liquid* l_ptr = s_ptr->hazard->associatedLiquid;
+                    if(l_ptr) {
+                        drawLiquid(s_ptr, l_ptr, Point(), 1.0f, game.timePassed);
+                        has_liquid = true;
+                    }
                 }
                 if(!has_liquid) {
                     drawSectorTexture(s_ptr, Point(), 1.0, textures_opacity);

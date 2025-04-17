@@ -3993,7 +3993,7 @@ sectors{
 	}
 	s{
 		z=300.0000
-		hazards=water
+		hazard=water
 		hazards_floor=true
 		texture=textures/dirt
 		texture_scale=0.8000 0.8000
@@ -4225,7 +4225,7 @@ sectors{
 		z=300.0000
 		brightness=160
 		fade=true
-		hazards=water
+		hazard=water
 		hazards_floor=true
 		texture=textures/dirt
 		texture_scale=0.8000 0.8000
@@ -4233,7 +4233,7 @@ sectors{
 	s{
 		z=300.0000
 		brightness=160
-		hazards=water
+		hazard=water
 		hazards_floor=true
 		texture=textures/dirt
 		texture_scale=0.8000 0.8000
@@ -4431,7 +4431,7 @@ sectors{
 	s{
 		z=400.0000
 		brightness=160
-		hazards=water
+		hazard=water
 		hazards_floor=true
 		texture=textures/dirt
 		texture_scale=0.8000 0.8000
@@ -4439,7 +4439,7 @@ sectors{
 	s{
 		z=350.0000
 		brightness=160
-		hazards=water
+		hazard=water
 		hazards_floor=true
 		texture=textures/dirt
 		texture_scale=0.8000 0.8000

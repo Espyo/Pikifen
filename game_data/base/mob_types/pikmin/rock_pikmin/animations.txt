@@ -2051,7 +2051,7 @@ sprites{
 				radius=10.0000
 				type=1
 				value=20.0000
-				hazards=rock
+				hazard=rock
 				knockback_outward=true
 				knockback=1.0000
 			}

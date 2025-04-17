@@ -879,12 +879,7 @@ void mob_action_runners::drainLiquid(MobActionRunData &data) {
     
     s_ptr->getNeighborSectorsConditionally(
     [] (Sector * s) -> bool {
-        for(size_t h = 0; h < s->hazards.size(); h++) {
-            if(s->hazards[h]->associatedLiquid) {
-                return true;
-            }
-        }
-        return false;
+        return s->hazard && s->hazard->associatedLiquid;
     },
     sectors_to_drain
     );

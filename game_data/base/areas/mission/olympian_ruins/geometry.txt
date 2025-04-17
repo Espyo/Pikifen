@@ -2856,7 +2856,7 @@ sectors{
 	}
 	s{
 		z=-8.0000
-		hazards=water
+		hazard=water
 		hazards_floor=true
 		texture=textures/stone_2
 		texture_rotate=1.5010
@@ -3002,14 +3002,14 @@ sectors{
 	}
 	s{
 		z=92.0000
-		hazards=water
+		hazard=water
 		hazards_floor=true
 		texture=textures/stone
 		texture_tint=156 165 175
 	}
 	s{
 		z=-8.0000
-		hazards=water
+		hazard=water
 		hazards_floor=true
 		texture=textures/grass_dark
 		texture_tint=156 165 175

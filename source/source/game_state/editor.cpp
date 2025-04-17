@@ -2027,96 +2027,30 @@ void Editor::processGuiEditorStyle() {
 
 
 /**
- * @brief Processes the Dear ImGui widgets that let users add or remove
- * hazards in a list.
+ * @brief Processes the Dear ImGui widgets that let users select a hazard.
  *
- * @param hazard_inames List with the hazards' internal names.
- * @param selected_hazard_idx Index of the currently selected hazard on
- * the list.
- * @return Whether the list was modified.
+ * @param selected_hazard_iname Internal name of the currently selected hazard.
+ * @return Whether the hazard was changed.
  */
-bool Editor::processGuiHazardManagementWidgets(
-    vector<string> &hazard_inames, int &selected_hazard_idx
-) {
-    bool result = false;
-    
-    //Hazard addition button.
-    if(
-        ImGui::ImageButton(
-            "hitboxAddButton", editorIcons[EDITOR_ICON_ADD],
-            Point(EDITOR::ICON_BMP_SIZE)
-        )
-    ) {
-        ImGui::OpenPopup("addHazard");
-    }
-    setTooltip(
-        "Add a new hazard to the list.\n"
-        "Click to open a pop-up for you to choose from."
-    );
-    
-    //Hitbox hazard addition popup.
-    vector<string> all_hazard_inames;
-    vector<string> all_hazard_names;
-    vector<string> all_hazard_labels;
+bool Editor::processGuiHazardManagementWidgets(string &selected_hazard_iname) {
+    //Hazard combo.
+    int selected_hazard_idx = -1;
+    vector<string> all_hazard_inames = {""};
+    vector<string> all_hazard_labels = {NONE_OPTION + "##(none)"};
     for(auto &h : game.content.hazards.list) {
         all_hazard_inames.push_back(h.first);
-        all_hazard_names.push_back(h.second.name);
         all_hazard_labels.push_back(h.second.name + "##" + h.first);
-    }
-    
-    int added_hazard_idx = -1;
-    if(
-        listPopup(
-            "addHazard", all_hazard_labels, &added_hazard_idx, true
-        )
-    ) {
-        string hazard_iname = all_hazard_inames[added_hazard_idx];
-        string hazard_name = all_hazard_names[added_hazard_idx];
-        if(!isInContainer(hazard_inames, hazard_iname)) {
-            hazard_inames.push_back(hazard_iname);
-            selected_hazard_idx = (int) hazard_inames.size() - 1;
-            result = true;
+        if(selected_hazard_iname == h.first) {
+            selected_hazard_idx = all_hazard_labels.size() - 1;
         }
     }
     
-    //Hazard removal button.
-    if(
-        selected_hazard_idx >= 0 &&
-        selected_hazard_idx < (int) hazard_inames.size()
-    ) {
-        ImGui::SameLine();
-        if(
-            ImGui::ImageButton(
-                "hitboxRemButton", editorIcons[EDITOR_ICON_REMOVE],
-                Point(EDITOR::ICON_BMP_SIZE)
-            )
-        ) {
-            string hazard_iname = hazard_inames[selected_hazard_idx];
-            hazard_inames = removeAllInVector(hazard_iname, hazard_inames);
-            selected_hazard_idx =
-                std::min(
-                    selected_hazard_idx, (int) hazard_inames.size() - 1
-                );
-            result = true;
-        }
-        setTooltip(
-            "Remove the selected hazard from the list."
-        );
-    }
+    if(selected_hazard_idx == -1) selected_hazard_idx = 0;
     
-    //Hazard list.
-    if(!hazard_inames.empty()) {
-        vector<string> hazard_names;
-        for(size_t h = 0; h < hazard_inames.size(); h++) {
-            hazard_names.push_back(
-                game.content.hazards.list[hazard_inames[h]].name
-            );
-        }
-        monoListBox(
-            "Hazards", &selected_hazard_idx, hazard_names,
-            std::min((int) hazard_names.size(), 4)
-        );
-    }
+    bool result =
+        ImGui::Combo("Hazard", &selected_hazard_idx, all_hazard_labels);
+        
+    selected_hazard_iname = all_hazard_inames[selected_hazard_idx];
     
     return result;
 }

@@ -197,7 +197,7 @@ sprites{
 				radius=18.0000
 				type=1
 				value=30.0000
-				hazards=fire
+				hazard=fire
 			}
 			fire2{
 				coords=112.0000 0.0000 -32.0000
@@ -205,7 +205,7 @@ sprites{
 				radius=18.0000
 				type=1
 				value=30.0000
-				hazards=fire
+				hazard=fire
 			}
 			fire3{
 				coords=142.0000 0.0000 -32.0000
@@ -213,7 +213,7 @@ sprites{
 				radius=18.0000
 				type=1
 				value=30.0000
-				hazards=fire
+				hazard=fire
 			}
 		}
 	}
@@ -237,7 +237,7 @@ sprites{
 				radius=30.0000
 				type=1
 				value=30.0000
-				hazards=fire
+				hazard=fire
 			}
 			fire2{
 				coords=158.0000 0.0000 -32.0000
@@ -245,7 +245,7 @@ sprites{
 				radius=30.0000
 				type=1
 				value=30.0000
-				hazards=fire
+				hazard=fire
 			}
 			fire3{
 				coords=216.0000 0.0000 -32.0000
@@ -253,7 +253,7 @@ sprites{
 				radius=30.0000
 				type=1
 				value=30.0000
-				hazards=fire
+				hazard=fire
 			}
 		}
 	}
@@ -277,7 +277,7 @@ sprites{
 				radius=30.0000
 				type=1
 				value=30.0000
-				hazards=fire
+				hazard=fire
 			}
 			fire2{
 				coords=158.0000 0.0000 -32.0000
@@ -285,7 +285,7 @@ sprites{
 				radius=30.0000
 				type=1
 				value=30.0000
-				hazards=fire
+				hazard=fire
 			}
 			fire3{
 				coords=216.0000 0.0000 -32.0000
@@ -293,7 +293,7 @@ sprites{
 				radius=30.0000
 				type=1
 				value=30.0000
-				hazards=fire
+				hazard=fire
 			}
 		}
 	}
@@ -317,7 +317,7 @@ sprites{
 				radius=30.0000
 				type=1
 				value=30.0000
-				hazards=fire
+				hazard=fire
 			}
 			fire2{
 				coords=158.0000 0.0000 -32.0000
@@ -325,7 +325,7 @@ sprites{
 				radius=30.0000
 				type=1
 				value=30.0000
-				hazards=fire
+				hazard=fire
 			}
 			fire3{
 				coords=216.0000 0.0000 -32.0000
@@ -333,7 +333,7 @@ sprites{
 				radius=30.0000
 				type=1
 				value=30.0000
-				hazards=fire
+				hazard=fire
 			}
 		}
 	}
@@ -357,7 +357,7 @@ sprites{
 				radius=30.0000
 				type=2
 				value=30.0000
-				hazards=fire
+				hazard=fire
 			}
 			fire2{
 				coords=158.0000 0.0000 -32.0000
@@ -365,7 +365,7 @@ sprites{
 				radius=30.0000
 				type=1
 				value=30.0000
-				hazards=fire
+				hazard=fire
 			}
 			fire3{
 				coords=216.0000 0.0000 -32.0000
@@ -373,7 +373,7 @@ sprites{
 				radius=30.0000
 				type=1
 				value=30.0000
-				hazards=fire
+				hazard=fire
 			}
 		}
 	}

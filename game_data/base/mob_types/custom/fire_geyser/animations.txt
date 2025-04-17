@@ -89,7 +89,7 @@ sprites{
 				radius=28.0000
 				type=1
 				value=1.0000
-				hazards=fire
+				hazard=fire
 			}
 			hit{
 				coords=0.0000 0.0000 0.0000
@@ -132,7 +132,7 @@ sprites{
 				radius=32.0000
 				type=1
 				value=30.0000
-				hazards=fire
+				hazard=fire
 			}
 			hit{
 				coords=0.0000 0.0000 0.0000
@@ -155,7 +155,7 @@ sprites{
 				radius=32.0000
 				type=1
 				value=30.0000
-				hazards=fire
+				hazard=fire
 			}
 			hit{
 				coords=0.0000 0.0000 0.0000
@@ -163,7 +163,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				hazards=fire
+				hazard=fire
 			}
 		}
 	}
@@ -178,7 +178,7 @@ sprites{
 				radius=32.0000
 				type=1
 				value=30.0000
-				hazards=fire
+				hazard=fire
 			}
 			hit{
 				coords=0.0000 0.0000 0.0000
@@ -186,7 +186,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				hazards=fire
+				hazard=fire
 			}
 		}
 	}
@@ -202,7 +202,7 @@ sprites{
 				radius=32.0000
 				type=1
 				value=30.0000
-				hazards=fire
+				hazard=fire
 			}
 			hit{
 				coords=0.0000 0.0000 0.0000
@@ -210,7 +210,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				hazards=fire
+				hazard=fire
 			}
 		}
 	}

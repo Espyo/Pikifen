@@ -9815,7 +9815,7 @@ sectors{
 	}
 	s{
 		z=-108.0000
-		hazards=water
+		hazard=water
 		hazards_floor=true
 		texture=textures/dirt
 		texture_scale=0.7500 0.7500
@@ -9886,7 +9886,7 @@ sectors{
 	}
 	s{
 		z=-108.0000
-		hazards=water
+		hazard=water
 		hazards_floor=true
 		texture=textures/dirt
 		texture_scale=0.7500 0.7500
@@ -9924,7 +9924,7 @@ sectors{
 	}
 	s{
 		z=-108.0000
-		hazards=water
+		hazard=water
 		hazards_floor=true
 		texture=textures/dirt
 		texture_scale=0.7500 0.7500
@@ -10087,7 +10087,7 @@ sectors{
 	}
 	s{
 		z=-108.0000
-		hazards=water
+		hazard=water
 		hazards_floor=true
 		texture=textures/dirt
 		texture_scale=0.7500 0.7500
@@ -10330,7 +10330,7 @@ sectors{
 	}
 	s{
 		z=-100.0000
-		hazards=fatal_electricity
+		hazard=fatal_electricity
 		hazards_floor=true
 		texture=textures/white
 		texture_scale=0.7500 0.7500
@@ -10338,7 +10338,7 @@ sectors{
 	}
 	s{
 		z=-100.0000
-		hazards=fatal_electricity
+		hazard=fatal_electricity
 		hazards_floor=false
 		texture=textures/white
 		texture_scale=0.7500 0.7500
@@ -10346,7 +10346,7 @@ sectors{
 	}
 	s{
 		z=-100.0000
-		hazards=fire
+		hazard=fire
 		hazards_floor=true
 		texture=textures/white
 		texture_scale=0.7500 0.7500
@@ -10354,7 +10354,7 @@ sectors{
 	}
 	s{
 		z=-100.0000
-		hazards=fire
+		hazard=fire
 		hazards_floor=false
 		texture=textures/white
 		texture_scale=0.7500 0.7500
@@ -10362,7 +10362,7 @@ sectors{
 	}
 	s{
 		z=-100.0000
-		hazards=ink
+		hazard=ink
 		hazards_floor=true
 		texture=textures/white
 		texture_scale=0.7500 0.7500
@@ -10370,7 +10370,7 @@ sectors{
 	}
 	s{
 		z=-100.0000
-		hazards=poison
+		hazard=poison
 		hazards_floor=true
 		texture=textures/white
 		texture_scale=0.7500 0.7500
@@ -10378,7 +10378,7 @@ sectors{
 	}
 	s{
 		z=-100.0000
-		hazards=stunning_electricity
+		hazard=stunning_electricity
 		hazards_floor=true
 		texture=textures/white
 		texture_scale=0.7500 0.7500
@@ -10386,7 +10386,7 @@ sectors{
 	}
 	s{
 		z=-100.0000
-		hazards=water_bubble
+		hazard=water_bubble
 		hazards_floor=true
 		texture=textures/white
 		texture_scale=0.7500 0.7500
@@ -10394,7 +10394,7 @@ sectors{
 	}
 	s{
 		z=-100.0000
-		hazards=ink
+		hazard=ink
 		hazards_floor=false
 		texture=textures/white
 		texture_scale=0.7500 0.7500
@@ -10402,7 +10402,7 @@ sectors{
 	}
 	s{
 		z=-100.0000
-		hazards=poison
+		hazard=poison
 		hazards_floor=false
 		texture=textures/white
 		texture_scale=0.7500 0.7500
@@ -10410,7 +10410,7 @@ sectors{
 	}
 	s{
 		z=-100.0000
-		hazards=stunning_electricity
+		hazard=stunning_electricity
 		hazards_floor=false
 		texture=textures/white
 		texture_scale=0.7500 0.7500
@@ -10418,7 +10418,7 @@ sectors{
 	}
 	s{
 		z=-100.0000
-		hazards=water_bubble
+		hazard=water_bubble
 		hazards_floor=false
 		texture=textures/white
 		texture_scale=0.7500 0.7500
@@ -11073,7 +11073,7 @@ sectors{
 	}
 	s{
 		z=-108.0000
-		hazards=water
+		hazard=water
 		hazards_floor=true
 		texture=textures/dirt
 		texture_scale=0.7500 0.7500
@@ -11552,14 +11552,14 @@ sectors{
 	}
 	s{
 		z=-100.0000
-		hazards=water
+		hazard=water
 		hazards_floor=true
 		texture=textures/stone
 		texture_scale=0.7500 0.7500
 	}
 	s{
 		z=-108.0000
-		hazards=water
+		hazard=water
 		hazards_floor=true
 		texture=textures/dirt
 		texture_scale=0.7500 0.7500
@@ -11593,21 +11593,21 @@ sectors{
 	}
 	s{
 		z=-100.0000
-		hazards=water
+		hazard=water
 		hazards_floor=true
 		texture=textures/stone
 		texture_scale=0.7500 0.7500
 	}
 	s{
 		z=-108.0000
-		hazards=water
+		hazard=water
 		hazards_floor=true
 		texture=textures/dirt
 		texture_scale=0.7500 0.7500
 	}
 	s{
 		z=-108.0000
-		hazards=water
+		hazard=water
 		hazards_floor=true
 		texture=textures/dirt
 		texture_scale=0.7500 0.7500
@@ -12011,14 +12011,14 @@ sectors{
 	}
 	s{
 		z=-108.0000
-		hazards=water
+		hazard=water
 		hazards_floor=true
 		texture=textures/dirt
 		texture_scale=0.7500 0.7500
 	}
 	s{
 		z=-108.0000
-		hazards=water
+		hazard=water
 		hazards_floor=true
 		texture=textures/dirt
 		texture_scale=0.7500 0.7500

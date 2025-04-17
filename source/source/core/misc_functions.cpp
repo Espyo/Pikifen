@@ -319,11 +319,9 @@ bool doesEdgeHaveLiquidLimit(
     //Check which ones have liquid.
     bool has_liquid[2] = {false, false};
     for(unsigned char s = 0; s < 2; s++) {
-        for(size_t h = 0; h < e_ptr->sectors[s]->hazards.size(); h++) {
-            if(e_ptr->sectors[s]->hazards[h]->associatedLiquid) {
-                has_liquid[s] = true;
-            }
-        }
+        has_liquid[s] =
+            e_ptr->sectors[s]->hazard &&
+            e_ptr->sectors[s]->hazard->associatedLiquid;
     }
     
     //Return edges with liquid on one side only.

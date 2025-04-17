@@ -2022,18 +2022,15 @@ void GameplayState::drawWorldComponents(ALLEGRO_BITMAP* bmp_output) {
         if(c_ptr->sector_ptr) {
         
             bool has_liquid = false;
-            for(size_t h = 0; h < c_ptr->sector_ptr->hazards.size(); h++) {
-                if(c_ptr->sector_ptr->hazards[h]->associatedLiquid) {
-                    drawLiquid(
-                        c_ptr->sector_ptr,
-                        c_ptr->sector_ptr->hazards[h]->associatedLiquid,
-                        Point(),
-                        1.0f,
-                        areaTimePassed
-                    );
-                    has_liquid = true;
-                    break;
-                }
+            if(c_ptr->sector_ptr->hazard && c_ptr->sector_ptr->hazard->associatedLiquid) {
+                drawLiquid(
+                    c_ptr->sector_ptr,
+                    c_ptr->sector_ptr->hazard->associatedLiquid,
+                    Point(),
+                    1.0f,
+                    areaTimePassed
+                );
+                has_liquid = true;
             }
             if(!has_liquid) {
                 drawSectorTexture(c_ptr->sector_ptr, Point(), 1.0f, 1.0f);

@@ -75,7 +75,7 @@ sprites{
 				radius=24.0000
 				type=1
 				value=300.0000
-				hazards=crush
+				hazard=crush
 			}
 		}
 	}

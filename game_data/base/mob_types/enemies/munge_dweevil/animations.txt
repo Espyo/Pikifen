@@ -335,7 +335,7 @@ sprites{
 				radius=70.0000
 				type=1
 				value=0.0000
-				hazards=poison
+				hazard=poison
 			}
 			treasure{
 				coords=0.0000 0.0000 48.0000
@@ -365,7 +365,7 @@ sprites{
 				radius=70.0000
 				type=1
 				value=0.0000
-				hazards=poison
+				hazard=poison
 			}
 			treasure{
 				coords=0.0000 0.0000 48.0000

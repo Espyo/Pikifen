@@ -437,126 +437,71 @@ void AnimationDatabase::loadFromDataNode(DataNode* node) {
     for(size_t s = 0; s < n_sprites; s++) {
     
         DataNode* sprite_node = sprites_node->getChild(s);
-        vector<Hitbox> hitboxes;
+        ReaderSetter srs(sprite_node);
+        Sprite* new_s = new Sprite(sprite_node->name);
+        DataNode* file_node = nullptr;
         
-        DataNode* hitboxes_node =
-            sprite_node->getChildByName("hitboxes");
+        srs.set("file_pos", new_s->bmpPos);
+        srs.set("file_size", new_s->bmpSize);
+        srs.set("offset", new_s->offset);
+        srs.set("scale", new_s->scale);
+        srs.set("angle", new_s->angle);
+        srs.set("tint", new_s->tint);
+        srs.set("file", new_s->bmpName, &file_node);
+        srs.set("top_visible", new_s->topVisible);
+        srs.set("top_pos", new_s->topPos);
+        srs.set("top_size", new_s->topSize);
+        srs.set("top_angle", new_s->topAngle);
+        
+        //Hitboxes.
+        DataNode* hitboxes_node = sprite_node->getChildByName("hitboxes");
         size_t n_hitboxes = hitboxes_node->getNrOfChildren();
-        
         for(size_t h = 0; h < n_hitboxes; h++) {
-        
-            DataNode* hitbox_node =
-                hitboxes_node->getChild(h);
-            Hitbox cur_hitbox = Hitbox();
+            DataNode* hitbox_node = hitboxes_node->getChild(h);
+            ReaderSetter hrs(hitbox_node);
+            Hitbox new_hitbox;
+            string coords_str;
+            int hitbox_type_int;
+            string hazard_str;
+            DataNode* hazard_node = nullptr;
             
-            cur_hitbox.pos =
-                s2p(
-                    hitbox_node->getChildByName("coords")->value,
-                    &cur_hitbox.z
-                );
-            cur_hitbox.height =
-                s2f(hitbox_node->getChildByName("height")->value);
-            cur_hitbox.radius =
-                s2f(hitbox_node->getChildByName("radius")->value);
-            cur_hitbox.bodyPartName =
-                hitbox_node->name;
-            cur_hitbox.type =
-                (HITBOX_TYPE)
-                s2i(hitbox_node->getChildByName("type")->value);
-            cur_hitbox.value =
-                s2f(
-                    hitbox_node->getChildByName("value")->value
-                );
-            cur_hitbox.canPikminLatch =
-                s2b(
-                    hitbox_node->getChildByName(
-                        "can_pikmin_latch"
-                    )->getValueOrDefault("false")
-                );
-            cur_hitbox.knockbackOutward =
-                s2b(
-                    hitbox_node->getChildByName(
-                        "knockback_outward"
-                    )->getValueOrDefault("false")
-                );
-            cur_hitbox.knockbackAngle =
-                s2f(hitbox_node->getChildByName("knockback_angle")->value);
-            cur_hitbox.knockback =
-                s2f(
-                    hitbox_node->getChildByName(
-                        "knockback"
-                    )->getValueOrDefault("0")
-                );
-            cur_hitbox.witherChance =
-                s2i(
-                    hitbox_node->getChildByName("wither_chance")->value
-                );
-                
-            DataNode* hazards_node =
-                hitbox_node->getChildByName("hazards");
-            cur_hitbox.hazardsStr = hazards_node->value;
-            vector<string> hazards_strs =
-                semicolonListToVector(cur_hitbox.hazardsStr);
-            for(size_t hs = 0; hs < hazards_strs.size(); hs++) {
-                const string &hazard_name = hazards_strs[hs];
-                if(game.content.hazards.list.find(hazard_name) == game.content.hazards.list.end()) {
-                    game.errors.report(
-                        "Unknown hazard \"" + hazard_name + "\"!",
-                        hazards_node
-                    );
+            hrs.set("coords", coords_str);
+            hrs.set("height", new_hitbox.height);
+            hrs.set("radius", new_hitbox.radius);
+            hrs.set("type", hitbox_type_int);
+            hrs.set("value", new_hitbox.value);
+            hrs.set("can_pikmin_latch", new_hitbox.canPikminLatch);
+            hrs.set("knockback_outward", new_hitbox.knockbackOutward);
+            hrs.set("knockback_angle", new_hitbox.knockbackAngle);
+            hrs.set("knockback", new_hitbox.knockback);
+            hrs.set("wither_chance", new_hitbox.witherChance);
+            hrs.set("hazard", hazard_str, &hazard_node);
+            
+            new_hitbox.bodyPartName = hitbox_node->name;
+            new_hitbox.pos = s2p(coords_str, &new_hitbox.z);
+            new_hitbox.type = (HITBOX_TYPE) hitbox_type_int;
+            if(!hazard_str.empty()) {
+                auto hazard_it = game.content.hazards.list.find(hazard_str);
+                if(hazard_it != game.content.hazards.list.end()) {
+                    new_hitbox.hazard = &(hazard_it->second);
                 } else {
-                    cur_hitbox.hazards.push_back(
-                        &(game.content.hazards.list[hazard_name])
+                    game.errors.report(
+                        "Unknown hazard \"" + hazard_str + "\"!",
+                        hazard_node
                     );
                 }
             }
             
-            
-            hitboxes.push_back(cur_hitbox);
+            new_s->hitboxes.push_back(new_hitbox);
             
         }
         
-        Sprite* new_s =
-            new Sprite(
-            sprite_node->name,
-            nullptr,
-            s2p(sprite_node->getChildByName("file_pos")->value),
-            s2p(sprite_node->getChildByName("file_size")->value),
-            hitboxes
-        );
-        sprites.push_back(new_s);
-        
-        new_s->offset = s2p(sprite_node->getChildByName("offset")->value);
-        new_s->scale =
-            s2p(
-                sprite_node->getChildByName(
-                    "scale"
-                )->getValueOrDefault("1 1")
-            );
-        new_s->angle = s2f(sprite_node->getChildByName("angle")->value);
-        new_s->tint =
-            s2c(
-                sprite_node->getChildByName("tint")->getValueOrDefault(
-                    "255 255 255 255"
-                )
-            );
-        new_s->bmpName = sprite_node->getChildByName("file")->value;
         new_s->setBitmap(
             new_s->bmpName, new_s->bmpPos, new_s->bmpSize,
-            sprite_node->getChildByName("file")
+            file_node
         );
-        new_s->topVisible =
-            s2b(
-                sprite_node->getChildByName("top_visible")->value
-            );
-        new_s->topPos =
-            s2p(sprite_node->getChildByName("top_pos")->value);
-        new_s->topSize =
-            s2p(sprite_node->getChildByName("top_size")->value);
-        new_s->topAngle =
-            s2f(
-                sprite_node->getChildByName("top_angle")->value
-            );
+        
+        sprites.push_back(new_s);
     }
     
     //Animations.
@@ -565,43 +510,41 @@ void AnimationDatabase::loadFromDataNode(DataNode* node) {
     for(size_t a = 0; a < n_anims; a++) {
     
         DataNode* anim_node = anims_node->getChild(a);
-        vector<Frame> frames;
+        ReaderSetter ars(anim_node);
+        Animation* new_a = new Animation(anim_node->name);
         
-        DataNode* frames_node =
-            anim_node->getChildByName("frames");
-        size_t n_frames =
-            frames_node->getNrOfChildren();
-            
+        ars.set("loop_frame", new_a->loopFrame);
+        ars.set("hit_rate", new_a->hitRate);
+        
+        new_a->name = anim_node->name;
+        
+        //Frames.
+        DataNode* frames_node = anim_node->getChildByName("frames");
+        size_t n_frames = frames_node->getNrOfChildren();
         for(size_t f = 0; f < n_frames; f++) {
             DataNode* frame_node = frames_node->getChild(f);
-            size_t s_pos = findSprite(frame_node->name);
-            string signal_str =
-                frame_node->getChildByName("signal")->value;
-            frames.push_back(
-                Frame(
-                    frame_node->name,
-                    s_pos,
-                    (s_pos == INVALID) ? nullptr : sprites[s_pos],
-                    s2f(frame_node->getChildByName("duration")->value),
-                    s2b(frame_node->getChildByName("interpolate")->value),
-                    frame_node->getChildByName("sound")->value,
-                    (signal_str.empty() ? INVALID : s2i(signal_str))
-                )
-            );
+            ReaderSetter frs(frame_node);
+            Frame new_frame;
+            string signal_str;
+            
+            frs.set("signal", signal_str);
+            frs.set("duration", new_frame.duration);
+            frs.set("interpolate", new_frame.interpolate);
+            frs.set("sound", new_frame.sound);
+            frs.set("sound", new_frame.sound);
+            
+            new_frame.spriteName = frame_node->name;
+            new_frame.spriteIdx = findSprite(frame_node->name);
+            new_frame.spritePtr =
+                new_frame.spriteIdx == INVALID ?
+                nullptr :
+                sprites[new_frame.spriteIdx];
+            new_frame.signal = signal_str.empty() ? INVALID : s2i(signal_str);
+            
+            new_a->frames.push_back(new_frame);
         }
         
-        animations.push_back(
-            new Animation(
-                anim_node->name,
-                frames,
-                s2i(anim_node->getChildByName("loop_frame")->value),
-                s2i(
-                    anim_node->getChildByName(
-                        "hit_rate"
-                    )->getValueOrDefault("100")
-                )
-            )
-        );
+        animations.push_back(new_a);
     }
     
     //Finish up.
@@ -625,7 +568,7 @@ void AnimationDatabase::saveToDataNode(
     //Animations.
     DataNode* animations_node = node->addNew("animations");
     for(size_t a = 0; a < animations.size(); a++) {
-
+    
         //Animation.
         Animation* a_ptr = animations[a];
         DataNode* anim_node = animations_node->addNew(a_ptr->name);
@@ -637,11 +580,11 @@ void AnimationDatabase::saveToDataNode(
         if(a_ptr->hitRate != 100) {
             agw.get("hit_rate", a_ptr->hitRate);
         }
-
+        
         //Frames.
         DataNode* frames_node = anim_node->addNew("frames");
         for(size_t f = 0; f < a_ptr->frames.size(); f++) {
-
+        
             //Frame.
             Frame* f_ptr = &a_ptr->frames[f];
             DataNode* frame_node = frames_node->addNew(f_ptr->spriteName);
@@ -663,7 +606,7 @@ void AnimationDatabase::saveToDataNode(
     //Sprites.
     DataNode* sprites_node = node->addNew("sprites");
     for(size_t s = 0; s < sprites.size(); s++) {
-
+    
         //Sprite.
         Sprite* s_ptr = sprites[s];
         DataNode* sprite_node = sprites_node->addNew(sprites[s]->name);
@@ -693,11 +636,11 @@ void AnimationDatabase::saveToDataNode(
         }
         
         if(!s_ptr->hitboxes.empty()) {
-
+        
             //Hitboxes.
             DataNode* hitboxes_node = sprite_node->addNew("hitboxes");
             for(size_t h = 0; h < s_ptr->hitboxes.size(); h++) {
-
+            
                 //Hitbox.
                 Hitbox* h_ptr = &s_ptr->hitboxes[h];
                 DataNode* hitbox_node = hitboxes_node->addNew(h_ptr->bodyPartName);
@@ -714,8 +657,8 @@ void AnimationDatabase::saveToDataNode(
                 ) {
                     hgw.get("can_pikmin_latch", h_ptr->canPikminLatch);
                 }
-                if(!h_ptr->hazardsStr.empty()) {
-                    hgw.get("hazards", h_ptr->hazardsStr);
+                if(h_ptr->hazard) {
+                    hgw.get("hazard", h_ptr->hazard->manifest->internalName);
                 }
                 if(
                     h_ptr->type == HITBOX_TYPE_ATTACK &&
@@ -748,7 +691,7 @@ void AnimationDatabase::saveToDataNode(
     //Body parts.
     DataNode* body_parts_node = node->addNew("body_parts");
     for(size_t b = 0; b < bodyParts.size(); b++) {
-
+    
         //Body part.
         BodyPart* b_ptr = bodyParts[b];
         body_parts_node->addNew(b_ptr->name);

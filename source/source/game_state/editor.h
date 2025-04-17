@@ -738,9 +738,7 @@ protected:
     void processGuiBaseContentWarningDialog();
     void processGuiBitmapDialog();
     void processGuiEditorStyle();
-    bool processGuiHazardManagementWidgets(
-        vector<string> &hazard_inames, int &selected_hazard_idx
-    );
+    bool processGuiHazardManagementWidgets(string &selected_hazard_iname);
     void processGuiHelpDialog();
     void processGuiHistory(
         const vector<pair<string, string> > &history,

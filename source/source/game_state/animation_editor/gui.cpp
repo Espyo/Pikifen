@@ -290,24 +290,18 @@ void AnimationEditor::processGuiDeleteAnimDbDialog() {
  * as well as the widgets necessary to control it, for this frame.
  */
 void AnimationEditor::processGuiHitboxHazards() {
-    //Hitbox hazards node.
-    if(saveableTreeNode("hitbox", "Hazards")) {
-    
-        static int selected_hazard_idx = 0;
-        vector<string> hazard_inames =
-            semicolonListToVector(curHitbox->hazardsStr);
-        if(
-            processGuiHazardManagementWidgets(
-                hazard_inames, selected_hazard_idx
-            )
-        ) {
-            changesMgr.markAsChanged();
-            curHitbox->hazardsStr = join(hazard_inames, ";");
-        }
-        setTooltip("List of hazards this hitbox has.");
-        
-        ImGui::TreePop();
+    string hazard_iname;
+    if(curHitbox->hazard) {
+        hazard_iname = curHitbox->hazard->manifest->internalName;
     }
+    if(processGuiHazardManagementWidgets(hazard_iname)) {
+        changesMgr.markAsChanged();
+        curHitbox->hazard =
+            hazard_iname.empty() ?
+            nullptr :
+            &game.content.hazards.list[hazard_iname];
+    }
+    setTooltip("Hazard, if any.");
 }
 
 
@@ -2489,9 +2483,7 @@ void AnimationEditor::processGuiPanelSpriteHitboxes() {
                 "Can the Pikmin latch on to this hitbox?"
             );
             
-            ImGui::Spacer();
-            
-            //Hazards list.
+            //Hazard.
             processGuiHitboxHazards();
             
             break;
@@ -2566,9 +2558,7 @@ void AnimationEditor::processGuiPanelSpriteHitboxes() {
                 "", WIDGET_EXPLANATION_SLIDER
             );
             
-            ImGui::Spacer();
-            
-            //Hazards list.
+            //Hazard.
             processGuiHitboxHazards();
             
             break;

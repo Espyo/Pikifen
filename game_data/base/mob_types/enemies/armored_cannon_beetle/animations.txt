@@ -872,7 +872,7 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				hazards=fire
+				hazard=fire
 			}
 			hot_flesh{
 				coords=0.0000 0.0000 50.0000
@@ -880,7 +880,7 @@ sprites{
 				radius=110.0000
 				type=1
 				value=10.0000
-				hazards=fire
+				hazard=fire
 			}
 			blowhole{
 				coords=116.0000 0.0000 50.0000
@@ -1391,7 +1391,7 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				hazards=fire
+				hazard=fire
 			}
 			hot_flesh{
 				coords=0.0000 2.0000 50.0000
@@ -1399,7 +1399,7 @@ sprites{
 				radius=110.0000
 				type=1
 				value=10.0000
-				hazards=fire
+				hazard=fire
 			}
 			blowhole{
 				coords=116.0000 2.0000 50.0000
@@ -1430,7 +1430,7 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				hazards=fire
+				hazard=fire
 			}
 			hot_flesh{
 				coords=0.0000 4.0000 50.0000
@@ -1438,7 +1438,7 @@ sprites{
 				radius=110.0000
 				type=1
 				value=10.0000
-				hazards=fire
+				hazard=fire
 			}
 			blowhole{
 				coords=116.0000 4.0000 50.0000
@@ -1470,7 +1470,7 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				hazards=fire
+				hazard=fire
 			}
 			hot_flesh{
 				coords=0.0000 -2.0000 50.0000
@@ -1478,7 +1478,7 @@ sprites{
 				radius=110.0000
 				type=1
 				value=10.0000
-				hazards=fire
+				hazard=fire
 			}
 			blowhole{
 				coords=116.0000 -2.0000 50.0000
@@ -1510,7 +1510,7 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				hazards=fire
+				hazard=fire
 			}
 			hot_flesh{
 				coords=0.0000 -4.0000 50.0000
@@ -1518,7 +1518,7 @@ sprites{
 				radius=110.0000
 				type=1
 				value=10.0000
-				hazards=fire
+				hazard=fire
 			}
 			blowhole{
 				coords=116.0000 -4.0000 50.0000
@@ -1585,7 +1585,7 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				hazards=fire
+				hazard=fire
 			}
 			hot_flesh{
 				coords=-10.0000 0.0000 50.0000
@@ -1593,7 +1593,7 @@ sprites{
 				radius=100.0000
 				type=1
 				value=10.0000
-				hazards=fire
+				hazard=fire
 			}
 			blowhole{
 				coords=116.0000 0.0000 50.0000

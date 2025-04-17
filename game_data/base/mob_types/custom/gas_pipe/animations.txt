@@ -40,7 +40,7 @@ sprites{
 				radius=48.0000
 				type=2
 				value=0.0000
-				hazards=poison
+				hazard=poison
 			}
 		}
 	}
@@ -55,7 +55,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				hazards=poison
+				hazard=poison
 			}
 			gas{
 				coords=0.0000 0.0000 0.0000
@@ -63,7 +63,7 @@ sprites{
 				radius=80.0000
 				type=1
 				value=0.0000
-				hazards=poison
+				hazard=poison
 			}
 		}
 	}
@@ -79,7 +79,7 @@ sprites{
 				radius=24.0000
 				type=0
 				value=1.0000
-				hazards=poison
+				hazard=poison
 			}
 			gas{
 				coords=0.0000 0.0000 0.0000
@@ -87,7 +87,7 @@ sprites{
 				radius=80.0000
 				type=1
 				value=0.0000
-				hazards=poison
+				hazard=poison
 			}
 		}
 	}

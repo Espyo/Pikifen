@@ -111,7 +111,7 @@ void PathManager::handleAreaLoad() {
     for(size_t s = 0; s < game.curAreaData->pathStops.size(); s++) {
         PathStop* s_ptr = game.curAreaData->pathStops[s];
         if(!s_ptr->sectorPtr) continue;
-        if(s_ptr->sectorPtr->hazards.empty()) continue;
+        if(!s_ptr->sectorPtr->hazard) continue;
         hazardousStops.insert(s_ptr);
     }
 }
@@ -211,7 +211,7 @@ void PathManager::handleSectorHazardChange(Sector* sector_ptr) {
         bool to_delete = false;
         if((*s)->sectorPtr == sector_ptr) {
             paths_changed = true;
-            if(sector_ptr->hazards.empty()) {
+            if(!sector_ptr->hazard) {
                 //We only want to delete it if it became hazardless.
                 to_delete = true;
             }
@@ -469,27 +469,23 @@ bool canTakePathStop(
         !hasFlag(settings.flags, PATH_FOLLOW_FLAG_IGNORE_OBSTACLES) &&
         touching_hazard &&
         sector_ptr &&
-        !sector_ptr->hazards.empty()
+        sector_ptr->hazard &&
+        sector_ptr->hazard->blocksPaths
     ) {
-        for(size_t sh = 0; sh < sector_ptr->hazards.size(); sh++) {
-            if(!sector_ptr->hazards[sh]->blocksPaths) {
-                //This hazard doesn't cause Pikmin to try and avoid it.
-                continue;
+        //Check if this hazard doesn't cause Pikmin to try and avoid it.
+        bool invulnerable = false;
+        for(size_t ih = 0; ih < settings.invulnerabilities.size(); ih++) {
+            if(
+                settings.invulnerabilities[ih] ==
+                sector_ptr->hazard
+            ) {
+                invulnerable = true;
+                break;
             }
-            bool invulnerable = false;
-            for(size_t ih = 0; ih < settings.invulnerabilities.size(); ih++) {
-                if(
-                    settings.invulnerabilities[ih] ==
-                    sector_ptr->hazards[sh]
-                ) {
-                    invulnerable = true;
-                    break;
-                }
-            }
-            if(!invulnerable) {
-                if(out_reason) *out_reason = PATH_BLOCK_REASON_HAZARDOUS_STOP;
-                return false;
-            }
+        }
+        if(!invulnerable) {
+            if(out_reason) *out_reason = PATH_BLOCK_REASON_HAZARDOUS_STOP;
+            return false;
         }
     }
     

@@ -92,24 +92,21 @@ public:
     //Type of hitbox.
     HITBOX_TYPE type = HITBOX_TYPE_NORMAL;
     
-    //String representing the list of hazards.
-    string hazardsStr;
-    
-    //List of hazards.
-    vector<Hazard*> hazards;
+    //Hazard, if any.
+    Hazard* hazard = nullptr;
     
     //If it's a normal hitbox, this is the defense multiplier.
     //If it's an attack one, the attack power.
     float value = 1.0f;
     
     //If true, the Pikmin is knocked away from the center.
-    bool knockbackOutward = true;
+    bool knockbackOutward = false;
     
     //Knockback angle.
     float knockbackAngle = 0.0f;
     
     //Knockback strength.
-    float knockback = 1.0f;
+    float knockback = 0.0f;
     
     //Chance of this attack withering a Pikmin's maturity (0-100).
     unsigned char witherChance = 0.0f;

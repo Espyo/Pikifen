@@ -214,18 +214,12 @@ bool Leader::canGrabGroupMember(Mob* m) const {
     //Check if the leader is on a hazard that the member can't go to.
     if(
         groundSector &&
+        groundSector->hazard &&
         !standingOnMob &&
-        !groundSector->hazards.empty()
+        groundSector->hazard->blocksPaths &&
+        m->getHazardVulnerability(groundSector->hazard).effectMult != 0.0f
     ) {
-        for(size_t sh = 0; sh < groundSector->hazards.size(); sh++) {
-            if(!groundSector->hazards[sh]->blocksPaths) {
-                //This hazard doesn't cause Pikmin to try and avoid it.
-                continue;
-            }
-            if(getHazardVulnerability(groundSector->hazards[sh]).effectMult != 0.0f) {
-                return false;
-            }
-        }
+        return false;
     }
     
     //Check if the mob is within range.

@@ -228,7 +228,7 @@ sprites{
 				radius=24.0000
 				type=1
 				value=1.0000
-				hazards=stab
+				hazard=stab
 			}
 		}
 	}
@@ -252,7 +252,7 @@ sprites{
 				radius=24.0000
 				type=1
 				value=1.0000
-				hazards=stab
+				hazard=stab
 			}
 		}
 	}

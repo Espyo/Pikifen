@@ -1986,7 +1986,7 @@ void pikmin_fsm::beAttacked(Mob* m, void* info1, void* info2) {
         info->mob2->calculateDamage(m, info->h2, info->h1, &damage);
         m->applyAttackDamage(info->mob2, info->h2, info->h1, damage);
         if(pik_ptr->health <= 0.0f && health_before > 0.0f) {
-            if(!info->h2->hazards.empty()) {
+            if(info->h2->hazard) {
                 game.statistics.pikminHazardDeaths++;
             }
         }

@@ -784,12 +784,12 @@ void Mob::tickVerticalMovementPhysics(
                 fsm.runEvent(MOB_EV_BOTTOMLESS_PIT);
             }
             
-            for(size_t h = 0; h < groundSector->hazards.size(); h++) {
+            if(groundSector->hazard) {
                 fsm.runEvent(
                     MOB_EV_TOUCHED_HAZARD,
-                    (void*) groundSector->hazards[h]
+                    (void*) groundSector->hazard
                 );
-                new_on_hazard = groundSector->hazards[h];
+                new_on_hazard = groundSector->hazard;
             }
         }
     }
@@ -807,12 +807,12 @@ void Mob::tickVerticalMovementPhysics(
             leader_ground &&
             game.states.gameplay->curLeaderPtr->z <= leader_ground->z
         ) {
-            for(size_t h = 0; h < leader_ground->hazards.size(); h++) {
+            if(leader_ground->hazard) {
                 fsm.runEvent(
                     MOB_EV_TOUCHED_HAZARD,
-                    (void*) leader_ground->hazards[h]
+                    (void*) leader_ground->hazard
                 );
-                new_on_hazard = leader_ground->hazards[h];
+                new_on_hazard = leader_ground->hazard;
             }
         }
     }
@@ -826,14 +826,16 @@ void Mob::tickVerticalMovementPhysics(
     }
     
     //On a sector that has a hazard that is not on the floor.
-    if(z > groundSector->z && !groundSector->hazardFloor) {
-        for(size_t h = 0; h < groundSector->hazards.size(); h++) {
-            fsm.runEvent(
-                MOB_EV_TOUCHED_HAZARD,
-                (void*) groundSector->hazards[h]
-            );
-            new_on_hazard = groundSector->hazards[h];
-        }
+    if(
+        groundSector->hazard &&
+        !groundSector->hazardFloor &&
+        z > groundSector->z
+    ) {
+        fsm.runEvent(
+            MOB_EV_TOUCHED_HAZARD,
+            (void*) groundSector->hazard
+        );
+        new_on_hazard = groundSector->hazard;
     }
     
     //Check if any hazards have been left.

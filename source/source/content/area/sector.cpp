@@ -84,9 +84,8 @@ void Sector::clone(Sector* destination) const {
     destination->isBottomlessPit = isBottomlessPit;
     destination->z = z;
     destination->tag = tag;
-    destination->hazards = hazards;
+    destination->hazard = hazard;
     destination->hazardFloor = hazardFloor;
-    destination->hazardsStr = hazardsStr;
     destination->brightness = brightness;
     destination->textureInfo.scale = textureInfo.scale;
     destination->textureInfo.translation = textureInfo.translation;
