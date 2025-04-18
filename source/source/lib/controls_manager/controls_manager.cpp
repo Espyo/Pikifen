@@ -78,6 +78,11 @@ vector<int> ControlsManager::getActionTypesFromInput(
 void ControlsManager::handleCleanInput(
     const PlayerInput &input, bool addDirectly
 ) {
+    if(processInputIgnoring(input)) {
+        //We have to ignore this one.
+        return;
+    }
+    
     //Find what game action types are bound to this input.
     vector<int> actionTypes = getActionTypesFromInput(input);
     
@@ -118,11 +123,6 @@ float ControlsManager::getValue(int playerActionTypeId) const {
 void ControlsManager::handleInput(
     const PlayerInput &input
 ) {
-    if(processInputIgnoring(input)) {
-        //We have to ignore this one.
-        return;
-    }
-    
     if(
         input.source.type == INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS ||
         input.source.type == INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG
@@ -277,7 +277,7 @@ void ControlsManager::processAutoRepeats(
 bool ControlsManager::processInputIgnoring(
     const PlayerInput &input
 ) {
-    for(size_t i = 0; i < ignoredInputSources.size(); ) {
+    for(size_t i = 0; i < ignoredInputSources.size(); i++) {
         if(ignoredInputSources[i] == input.source) {
             if(input.value != 0.0f) {
                 //We just ignore it and keep it on the list.

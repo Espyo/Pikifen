@@ -204,8 +204,9 @@ public:
     //What to do when it gets selected.
     std::function<void()> onSelected = nullptr;
     
-    //What to do when one of its children became the selected item.
-    std::function<void(const GuiItem* child)> onChildSelected = nullptr;
+    //What to do when one of its children became the selected item via
+    //directional selection.
+    std::function<void(const GuiItem* child)> onChildDirSelected = nullptr;
     
     //What to do when its tooltip needs to be retrieved.
     std::function<string()> onGetTooltip = nullptr;
@@ -356,7 +357,7 @@ public:
     
     ListGuiItem();
     
-    void defChildSelectedCode(const GuiItem* child);
+    void defChildDirSelectedCode(const GuiItem* child);
     void defDrawCode(const DrawInfo &draw);
     void defEventCode(const ALLEGRO_EVENT  &ev);
     void defTickCode(float delta_t);

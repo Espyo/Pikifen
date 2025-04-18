@@ -1117,6 +1117,8 @@ void OptionsMenu::load() {
  * @brief Populates the list of binds.
  */
 void OptionsMenu::populateBinds() {
+    GuiItem* item_to_select = nullptr;
+    
     unordered_set<PLAYER_ACTION_CAT> allowed_categories;
     switch(bindsMenuType) {
     case CONTROL_BINDS_MENU_NORMAL: {
@@ -1251,7 +1253,7 @@ void OptionsMenu::populateBinds() {
         bindsListBox->addChild(more_button);
         bindsGui.addItem(more_button);
         if(action_type.id == curActionType) {
-            bindsGui.setSelectedItem(more_button, true);
+            item_to_select = more_button;
         }
         
         vector<ControlBind> a_binds = bindsPerActionType[action_type.id];
@@ -1471,6 +1473,12 @@ void OptionsMenu::populateBinds() {
         bindsListBox->addChild(line);
         bindsGui.addItem(line);
     }
+    
+    if(item_to_select) {
+        bindsGui.setSelectedItem(item_to_select, true);
+        //Try to center it.
+        bindsListBox->onChildDirSelected(item_to_select);
+    }
 }
 
 
@@ -1544,6 +1552,7 @@ void OptionsMenu::tick(float delta_t) {
         if(capturingInputTimeout <= 0.0f) {
             //Timed out. Cancel.
             capturingInput = 0;
+            game.controls.stopIgnoringActions();
         }
     } else if(capturingInput == 2) {
         //A frame has passed in the post-capture cooldown. Finish the cooldown.

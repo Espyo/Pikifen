@@ -999,9 +999,9 @@ bool GuiManager::handlePlayerAction(const PlayerAction &action) {
             setSelectedItem(selectable_ptrs[new_selectable_idx]);
             if(
                 selectedItem->parent &&
-                selectedItem->parent->onChildSelected
+                selectedItem->parent->onChildDirSelected
             ) {
-                selectedItem->parent->onChildSelected(
+                selectedItem->parent->onChildDirSelected(
                     selectedItem
                 );
             }
@@ -1245,17 +1245,17 @@ ListGuiItem::ListGuiItem() :
     [this] (const ALLEGRO_EVENT & ev) {
         this->defEventCode(ev);
     };
-    onChildSelected =
+    onChildDirSelected =
     [this] (const GuiItem * child) {
-        this->defChildSelectedCode(child);
+        this->defChildDirSelectedCode(child);
     };
 }
 
 
 /**
- * @brief Default list GUI item child selected code.
+ * @brief Default list GUI item child directionally selected code.
  */
-void ListGuiItem::defChildSelectedCode(const GuiItem* child) {
+void ListGuiItem::defChildDirSelectedCode(const GuiItem* child) {
     //Try to center the child.
     float child_bottom = getChildBottom();
     if(child_bottom <= 1.0f && offset == 0.0f) {
