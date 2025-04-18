@@ -250,47 +250,47 @@ struct GetterWriter {
     //--- Function declarations ---
     
     explicit GetterWriter(DataNode* dn = nullptr);
-    void get(
+    void write(
         const string &child_name, const string &var,
         DataNode** out_child_node = nullptr
     );
-    void get(
+    void write(
         const string &child_name, const char* var,
         DataNode** out_child_node = nullptr
     );
-    void get(
+    void write(
         const string &child_name, const size_t &var,
         DataNode** out_child_node = nullptr
     );
-    void get(
+    void write(
         const string &child_name, const int &var,
         DataNode** out_child_node = nullptr
     );
-    void get(
+    void write(
         const string &child_name, const unsigned int &var,
         DataNode** out_child_node = nullptr
     );
-    void get(
+    void write(
         const string &child_name, const unsigned char &var,
         DataNode** out_child_node = nullptr
     );
-    void get(
+    void write(
         const string &child_name, const bool &var,
         DataNode** out_child_node = nullptr
     );
-    void get(
+    void write(
         const string &child_name, const float &var,
         DataNode** out_child_node = nullptr
     );
-    void get(
+    void write(
         const string &child_name, const double &var,
         DataNode** out_child_node = nullptr
     );
-    void get(
+    void write(
         const string &child_name, const ALLEGRO_COLOR &var,
         DataNode** out_child_node = nullptr
     );
-    void get(
+    void write(
         const string &child_name, const Point &var,
         DataNode** out_child_node = nullptr
     );

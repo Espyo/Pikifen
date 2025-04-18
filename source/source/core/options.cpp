@@ -503,22 +503,22 @@ void Options::saveToDataNode(DataNode* file) const {
     {
         GetterWriter agw(file->addNew("advanced"));
         
-        agw.get("draw_cursor_trail", advanced.drawCursorTrail);
-        agw.get("engine_developer", advanced.engineDev);
-        agw.get("fps", advanced.targetFps);
-        agw.get("joystick_max_deadzone", advanced.joystickMaxDeadzone);
-        agw.get("joystick_min_deadzone", advanced.joystickMinDeadzone);
-        agw.get("max_particles", advanced.maxParticles);
-        agw.get("middle_zoom_level", advanced.zoomMidLevel);
-        agw.get("mipmaps", advanced.mipmapsEnabled);
+        agw.write("draw_cursor_trail", advanced.drawCursorTrail);
+        agw.write("engine_developer", advanced.engineDev);
+        agw.write("fps", advanced.targetFps);
+        agw.write("joystick_max_deadzone", advanced.joystickMaxDeadzone);
+        agw.write("joystick_min_deadzone", advanced.joystickMinDeadzone);
+        agw.write("max_particles", advanced.maxParticles);
+        agw.write("middle_zoom_level", advanced.zoomMidLevel);
+        agw.write("mipmaps", advanced.mipmapsEnabled);
         for(unsigned char p = 0; p < MAX_PLAYERS; p++) {
-            agw.get(
+            agw.write(
                 "p" + i2s((p + 1)) + "_mouse_moves_cursor",
                 advanced.mouseMovesCursor[p]
             );
         }
-        agw.get("smooth_scaling", advanced.smoothScaling);
-        agw.get("window_position_hack", advanced.windowPosHack);
+        agw.write("smooth_scaling", advanced.smoothScaling);
+        agw.write("window_position_hack", advanced.windowPosHack);
     }
     
     //Animation editor.
@@ -526,8 +526,8 @@ void Options::saveToDataNode(DataNode* file) const {
         string history_str = saveEditorHistory(animEd.history);
         GetterWriter agw(file->addNew("animation_editor"));
         
-        agw.get("bg_path", animEd.bgPath);
-        agw.get("history", history_str);
+        agw.write("bg_path", animEd.bgPath);
+        agw.write("history", history_str);
     }
     
     //Area editor.
@@ -535,30 +535,30 @@ void Options::saveToDataNode(DataNode* file) const {
         string history_str = saveEditorHistory(areaEd.history);
         GetterWriter agw(file->addNew("area_editor"));
         
-        agw.get("advanced_mode", areaEd.advancedMode);
-        agw.get("backup_interval", areaEd.backupInterval);
-        agw.get("grid_interval", areaEd.gridInterval);
-        agw.get("history", history_str);
-        agw.get("selection_transformation", areaEd.selTrans);
-        agw.get("show_circular_info", areaEd.showCircularInfo);
-        agw.get("show_edge_length", areaEd.showEdgeLength);
-        agw.get("show_path_link_length", areaEd.showPathLinkLength);
-        agw.get("show_territory", areaEd.showTerritory);
-        agw.get("snap_mode", areaEd.snapMode);
-        agw.get("snap_threshold", areaEd.snapThreshold);
-        agw.get("undo_limit", areaEd.undoLimit);
-        agw.get("view_mode", areaEd.viewMode);
+        agw.write("advanced_mode", areaEd.advancedMode);
+        agw.write("backup_interval", areaEd.backupInterval);
+        agw.write("grid_interval", areaEd.gridInterval);
+        agw.write("history", history_str);
+        agw.write("selection_transformation", areaEd.selTrans);
+        agw.write("show_circular_info", areaEd.showCircularInfo);
+        agw.write("show_edge_length", areaEd.showEdgeLength);
+        agw.write("show_path_link_length", areaEd.showPathLinkLength);
+        agw.write("show_territory", areaEd.showTerritory);
+        agw.write("snap_mode", areaEd.snapMode);
+        agw.write("snap_threshold", areaEd.snapThreshold);
+        agw.write("undo_limit", areaEd.undoLimit);
+        agw.write("view_mode", areaEd.viewMode);
     }
     
     //Audio.
     {
         GetterWriter agw(file->addNew("audio"));
         
-        agw.get("ambiance_sound_volume", audio.ambianceSoundVol);
-        agw.get("gameplay_sound_volume", audio.gameplaySoundVol);
-        agw.get("master_volume", audio.masterVol);
-        agw.get("music_volume", audio.musicVol);
-        agw.get("ui_sound_volume", audio.uiSoundVol);
+        agw.write("ambiance_sound_volume", audio.ambianceSoundVol);
+        agw.write("gameplay_sound_volume", audio.gameplaySoundVol);
+        agw.write("master_volume", audio.masterVol);
+        agw.write("music_volume", audio.musicVol);
+        agw.write("ui_sound_volume", audio.uiSoundVol);
     }
     
     //Control binds.
@@ -574,8 +574,8 @@ void Options::saveToDataNode(DataNode* file) const {
     {
         GetterWriter cgw(file->addNew("controls"));
         
-        cgw.get("auto_throw_mode", controls.autoThrowMode);
-        cgw.get("cursor_speed", controls.cursorSpeed);
+        cgw.write("auto_throw_mode", controls.autoThrowMode);
+        cgw.write("cursor_speed", controls.cursorSpeed);
     }
     
     //Editors.
@@ -587,15 +587,15 @@ void Options::saveToDataNode(DataNode* file) const {
         string open_nodes_str = join(open_nodes_strs, ";");
         GetterWriter egw(file->addNew("editors"));
         
-        egw.get("highlight_color", editors.highlightColor);
-        egw.get("mmb_pan", editors.mmbPan);
-        egw.get("mouse_drag_threshold", editors.mouseDragThreshold);
-        egw.get("open_nodes", open_nodes_str);
-        egw.get("primary_color", editors.primaryColor);
-        egw.get("secondary_color", editors.secondaryColor);
-        egw.get("show_tooltips", editors.showTooltips);
-        egw.get("text_color", editors.textColor);
-        egw.get("use_custom_style", editors.useCustomStyle);
+        egw.write("highlight_color", editors.highlightColor);
+        egw.write("mmb_pan", editors.mmbPan);
+        egw.write("mouse_drag_threshold", editors.mouseDragThreshold);
+        egw.write("open_nodes", open_nodes_str);
+        egw.write("primary_color", editors.primaryColor);
+        egw.write("secondary_color", editors.secondaryColor);
+        egw.write("show_tooltips", editors.showTooltips);
+        egw.write("text_color", editors.textColor);
+        egw.write("use_custom_style", editors.useCustomStyle);
     }
     
     //Graphics.
@@ -604,9 +604,9 @@ void Options::saveToDataNode(DataNode* file) const {
             i2s(graphics.intendedWinW) + " " + i2s(graphics.intendedWinH);
         GetterWriter ggw(file->addNew("graphics"));
         
-        ggw.get("fullscreen", graphics.intendedWinFullscreen);
-        ggw.get("resolution", resolution_str);
-        ggw.get("true_fullscreen", graphics.trueFullscreen);
+        ggw.write("fullscreen", graphics.intendedWinFullscreen);
+        ggw.write("resolution", resolution_str);
+        ggw.write("true_fullscreen", graphics.trueFullscreen);
     }
     
     //Gui editor.
@@ -614,18 +614,18 @@ void Options::saveToDataNode(DataNode* file) const {
         string history_str = saveEditorHistory(guiEd.history);
         GetterWriter ggw(file->addNew("gui_editor"));
         
-        ggw.get("grid_interval", guiEd.gridInterval);
-        ggw.get("history", history_str);
-        ggw.get("snap", guiEd.snap);
+        ggw.write("grid_interval", guiEd.gridInterval);
+        ggw.write("history", history_str);
+        ggw.write("snap", guiEd.snap);
     }
     
     //Misc.
     {
         GetterWriter mgw(file->addNew("misc"));
         
-        mgw.get("cursor_cam_weight", misc.cursorCamWeight);
-        mgw.get("leaving_confirmation_mode", misc.leavingConfMode);
-        mgw.get("show_hud_input_icons", misc.showHudInputIcons);
+        mgw.write("cursor_cam_weight", misc.cursorCamWeight);
+        mgw.write("leaving_confirmation_mode", misc.leavingConfMode);
+        mgw.write("show_hud_input_icons", misc.showHudInputIcons);
     }
     
     //Packs.
@@ -634,8 +634,8 @@ void Options::saveToDataNode(DataNode* file) const {
         string pack_load_order_str = join(packs.order, ";");
         GetterWriter pgw(file->addNew("packs"));
         
-        pgw.get("disabled", packs_disabled_str);
-        pgw.get("order", pack_load_order_str);
+        pgw.write("disabled", packs_disabled_str);
+        pgw.write("order", pack_load_order_str);
     }
     
     //Particle editor.
@@ -643,8 +643,8 @@ void Options::saveToDataNode(DataNode* file) const {
         string history_str = saveEditorHistory(partEd.history);
         GetterWriter pgw(file->addNew("particle_editor"));
         
-        pgw.get("bg_path", partEd.bgPath);
-        pgw.get("grid_interval", partEd.gridInterval);
-        pgw.get("history", history_str);
+        pgw.write("bg_path", partEd.bgPath);
+        pgw.write("grid_interval", partEd.gridInterval);
+        pgw.write("history", history_str);
     }
 }

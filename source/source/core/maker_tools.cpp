@@ -413,7 +413,7 @@ void MakerTools::saveToDataNode(DataNode* node) {
     GetterWriter gw(node);
     
     //General.
-    gw.get("enabled", enabled);
+    gw.write("enabled", enabled);
     
     //Area image.
     {
@@ -425,10 +425,10 @@ void MakerTools::saveToDataNode(DataNode* node) {
         };
         for(unsigned char s = 0; s < 3; s++) {
             GetterWriter sgw(settings_nodes[s]);
-            sgw.get("size", areaImageSettings[s].size);
-            sgw.get("padding", areaImageSettings[s].padding);
-            sgw.get("mobs", areaImageSettings[s].mobs);
-            sgw.get("shadows", areaImageSettings[s].shadows);
+            sgw.write("size", areaImageSettings[s].size);
+            sgw.write("padding", areaImageSettings[s].padding);
+            sgw.write("mobs", areaImageSettings[s].mobs);
+            sgw.write("shadows", areaImageSettings[s].shadows);
         }
     }
     
@@ -436,8 +436,8 @@ void MakerTools::saveToDataNode(DataNode* node) {
     {
         DataNode* auto_start_node = node->addNew("auto_start");
         GetterWriter agw(auto_start_node);
-        agw.get("state", autoStartState);
-        agw.get("option", autoStartOption);
+        agw.write("state", autoStartState);
+        agw.write("option", autoStartOption);
     }
     
     //Change speed.
@@ -450,7 +450,7 @@ void MakerTools::saveToDataNode(DataNode* node) {
         };
         for(unsigned char s = 0; s < 3; s++) {
             GetterWriter sgw(settings_nodes[s]);
-            sgw.get("multiplier", changeSpeedSettings[s]);
+            sgw.write("multiplier", changeSpeedSettings[s]);
         }
     }
     
@@ -464,7 +464,7 @@ void MakerTools::saveToDataNode(DataNode* node) {
         };
         for(unsigned char s = 0; s < 3; s++) {
             GetterWriter sgw(settings_nodes[s]);
-            sgw.get("percentage", mobHurtingSettings[s] * 100.0f);
+            sgw.write("percentage", mobHurtingSettings[s] * 100.0f);
         }
     }
     
@@ -472,6 +472,6 @@ void MakerTools::saveToDataNode(DataNode* node) {
     {
         DataNode* perf_mon_node = node->addNew("performance_monitor");
         GetterWriter pgw(perf_mon_node);
-        pgw.get("enabled", usePerfMon);
+        pgw.write("enabled", usePerfMon);
     }
 }

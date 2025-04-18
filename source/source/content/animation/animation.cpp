@@ -575,10 +575,10 @@ void AnimationDatabase::saveToDataNode(
         GetterWriter agw(anim_node);
         
         if(a_ptr->loopFrame > 0) {
-            agw.get("loop_frame", a_ptr->loopFrame);
+            agw.write("loop_frame", a_ptr->loopFrame);
         }
         if(a_ptr->hitRate != 100) {
-            agw.get("hit_rate", a_ptr->hitRate);
+            agw.write("hit_rate", a_ptr->hitRate);
         }
         
         //Frames.
@@ -590,15 +590,15 @@ void AnimationDatabase::saveToDataNode(
             DataNode* frame_node = frames_node->addNew(f_ptr->spriteName);
             GetterWriter fgw(frame_node);
             
-            fgw.get("duration", f_ptr->duration);
+            fgw.write("duration", f_ptr->duration);
             if(f_ptr->interpolate) {
-                fgw.get("interpolate", f_ptr->interpolate);
+                fgw.write("interpolate", f_ptr->interpolate);
             }
             if(f_ptr->signal != INVALID) {
-                fgw.get("signal", f_ptr->signal);
+                fgw.write("signal", f_ptr->signal);
             }
             if(!f_ptr->sound.empty() && f_ptr->sound != NONE_OPTION) {
-                fgw.get("sound", f_ptr->sound);
+                fgw.write("sound", f_ptr->sound);
             }
         }
     }
@@ -612,27 +612,27 @@ void AnimationDatabase::saveToDataNode(
         DataNode* sprite_node = sprites_node->addNew(sprites[s]->name);
         GetterWriter sgw(sprite_node);
         
-        sgw.get("file", s_ptr->bmpName);
-        sgw.get("file_pos", s_ptr->bmpPos);
-        sgw.get("file_size", s_ptr->bmpSize);
+        sgw.write("file", s_ptr->bmpName);
+        sgw.write("file_pos", s_ptr->bmpPos);
+        sgw.write("file_size", s_ptr->bmpSize);
         if(s_ptr->offset.x != 0.0 || s_ptr->offset.y != 0.0) {
-            sgw.get("offset", s_ptr->offset);
+            sgw.write("offset", s_ptr->offset);
         }
         if(s_ptr->scale.x != 1.0 || s_ptr->scale.y != 1.0) {
-            sgw.get("scale", s_ptr->scale);
+            sgw.write("scale", s_ptr->scale);
         }
         if(s_ptr->angle != 0.0) {
-            sgw.get("angle", s_ptr->angle);
+            sgw.write("angle", s_ptr->angle);
         }
         if(s_ptr->tint != COLOR_WHITE) {
-            sgw.get("tint", s_ptr->tint);
+            sgw.write("tint", s_ptr->tint);
         }
         
         if(save_top_data) {
-            sgw.get("top_visible", s_ptr->topVisible);
-            sgw.get("top_pos", s_ptr->topPos);
-            sgw.get("top_size", s_ptr->topSize);
-            sgw.get("top_angle", s_ptr->topAngle);
+            sgw.write("top_visible", s_ptr->topVisible);
+            sgw.write("top_pos", s_ptr->topPos);
+            sgw.write("top_size", s_ptr->topSize);
+            sgw.write("top_angle", s_ptr->topAngle);
         }
         
         if(!s_ptr->hitboxes.empty()) {
@@ -646,43 +646,43 @@ void AnimationDatabase::saveToDataNode(
                 DataNode* hitbox_node = hitboxes_node->addNew(h_ptr->bodyPartName);
                 GetterWriter hgw(hitbox_node);
                 
-                hgw.get("coords", p2s(h_ptr->pos, &h_ptr->z));
-                hgw.get("height", h_ptr->height);
-                hgw.get("radius", h_ptr->radius);
-                hgw.get("type", h_ptr->type);
-                hgw.get("value", h_ptr->value);
+                hgw.write("coords", p2s(h_ptr->pos, &h_ptr->z));
+                hgw.write("height", h_ptr->height);
+                hgw.write("radius", h_ptr->radius);
+                hgw.write("type", h_ptr->type);
+                hgw.write("value", h_ptr->value);
                 if(
                     h_ptr->type == HITBOX_TYPE_NORMAL &&
                     h_ptr->canPikminLatch
                 ) {
-                    hgw.get("can_pikmin_latch", h_ptr->canPikminLatch);
+                    hgw.write("can_pikmin_latch", h_ptr->canPikminLatch);
                 }
                 if(h_ptr->hazard) {
-                    hgw.get("hazard", h_ptr->hazard->manifest->internalName);
+                    hgw.write("hazard", h_ptr->hazard->manifest->internalName);
                 }
                 if(
                     h_ptr->type == HITBOX_TYPE_ATTACK &&
                     h_ptr->knockbackOutward
                 ) {
-                    hgw.get("knockback_outward", h_ptr->knockbackOutward);
+                    hgw.write("knockback_outward", h_ptr->knockbackOutward);
                 }
                 if(
                     h_ptr->type == HITBOX_TYPE_ATTACK &&
                     h_ptr->knockbackAngle != 0
                 ) {
-                    hgw.get("knockback_angle", h_ptr->knockbackAngle);
+                    hgw.write("knockback_angle", h_ptr->knockbackAngle);
                 }
                 if(
                     h_ptr->type == HITBOX_TYPE_ATTACK &&
                     h_ptr->knockback != 0
                 ) {
-                    hgw.get("knockback", h_ptr->knockback);
+                    hgw.write("knockback", h_ptr->knockback);
                 }
                 if(
                     h_ptr->type == HITBOX_TYPE_ATTACK &&
                     h_ptr->witherChance > 0
                 ) {
-                    hgw.get("wither_chance", h_ptr->witherChance);
+                    hgw.write("wither_chance", h_ptr->witherChance);
                 }
             }
         }

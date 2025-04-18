@@ -56,10 +56,10 @@ void Content::resetMetadata() {
  */
 void Content::saveMetadataToDataNode(DataNode* node) const {
     GetterWriter gw(node);
-    gw.get("name", name);
-
-#define save_opt(n, v) if(!v.empty()) gw.get((n), (v))
-
+    gw.write("name", name);
+    
+#define save_opt(n, v) if(!v.empty()) gw.write((n), (v))
+    
     save_opt("description", description);
     save_opt("tags", tags);
     save_opt("maker", maker);

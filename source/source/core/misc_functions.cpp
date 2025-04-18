@@ -1265,24 +1265,24 @@ void saveStatistics() {
     const Statistics &s = game.statistics;
     GetterWriter gw(&stats_file);
     
-    gw.get("startups", s.startups);
-    gw.get("runtime", s.runtime);
-    gw.get("gameplay_time", s.gameplayTime);
-    gw.get("area_entries", s.areaEntries);
-    gw.get("pikmin_births", s.pikminBirths);
-    gw.get("pikmin_deaths", s.pikminDeaths);
-    gw.get("pikmin_eaten", s.pikminEaten);
-    gw.get("pikmin_hazard_deaths", s.pikminHazardDeaths);
-    gw.get("pikmin_blooms", s.pikminBlooms);
-    gw.get("pikmin_saved", s.pikminSaved);
-    gw.get("enemy_deaths", s.enemyDeaths);
-    gw.get("pikmin_thrown", s.pikminThrown);
-    gw.get("whistle_uses", s.whistleUses);
-    gw.get("distance_walked", s.distanceWalked);
-    gw.get("leader_damage_suffered", s.leaderDamageSuffered);
-    gw.get("punch_damage_caused", s.punchDamageCaused);
-    gw.get("leader_kos", s.leaderKos);
-    gw.get("sprays_used", s.spraysUsed);
+    gw.write("startups", s.startups);
+    gw.write("runtime", s.runtime);
+    gw.write("gameplay_time", s.gameplayTime);
+    gw.write("area_entries", s.areaEntries);
+    gw.write("pikmin_births", s.pikminBirths);
+    gw.write("pikmin_deaths", s.pikminDeaths);
+    gw.write("pikmin_eaten", s.pikminEaten);
+    gw.write("pikmin_hazard_deaths", s.pikminHazardDeaths);
+    gw.write("pikmin_blooms", s.pikminBlooms);
+    gw.write("pikmin_saved", s.pikminSaved);
+    gw.write("enemy_deaths", s.enemyDeaths);
+    gw.write("pikmin_thrown", s.pikminThrown);
+    gw.write("whistle_uses", s.whistleUses);
+    gw.write("distance_walked", s.distanceWalked);
+    gw.write("leader_damage_suffered", s.leaderDamageSuffered);
+    gw.write("punch_damage_caused", s.punchDamageCaused);
+    gw.write("leader_kos", s.leaderKos);
+    gw.write("sprays_used", s.spraysUsed);
     
     stats_file.saveFile(FILE_PATHS_FROM_ROOT::STATISTICS, true, true, true);
 }

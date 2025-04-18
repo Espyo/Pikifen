@@ -428,23 +428,23 @@ void ParticleGenerator::saveToDataNode(DataNode* node) {
     DataNode* emission_node = node->addNew("emission");
     GetterWriter egw(emission_node);
     
-    egw.get("number", emission.number);
-    egw.get("number_deviation", emission.numberDeviation);
-    egw.get("interval", emission.interval);
-    egw.get("interval_deviation", emission.intervalDeviation);
-    egw.get("shape", emission.shape);
+    egw.write("number", emission.number);
+    egw.write("number_deviation", emission.numberDeviation);
+    egw.write("interval", emission.interval);
+    egw.write("interval_deviation", emission.intervalDeviation);
+    egw.write("shape", emission.shape);
     
     switch (emission.shape) {
     case PARTICLE_EMISSION_SHAPE_CIRCLE: {
-        egw.get("circle_outer_dist", emission.circleOuterDist);
-        egw.get("circle_inner_dist", emission.circleInnerDist);
-        egw.get("circle_arc", emission.circleArc);
-        egw.get("circle_arc_rot", emission.circleArcRot);
-        egw.get("evenly_spread", emission.evenlySpread);
+        egw.write("circle_outer_dist", emission.circleOuterDist);
+        egw.write("circle_inner_dist", emission.circleInnerDist);
+        egw.write("circle_arc", emission.circleArc);
+        egw.write("circle_arc_rot", emission.circleArcRot);
+        egw.write("evenly_spread", emission.evenlySpread);
         break;
     } case PARTICLE_EMISSION_SHAPE_RECTANGLE: {
-        egw.get("rect_outer_dist", emission.rectOuterDist);
-        egw.get("rect_inner_dist", emission.rectInnerDist);
+        egw.write("rect_outer_dist", emission.rectOuterDist);
+        egw.write("rect_inner_dist", emission.rectInnerDist);
         break;
     }
     }
@@ -453,19 +453,19 @@ void ParticleGenerator::saveToDataNode(DataNode* node) {
     DataNode* base_particle_node = node->addNew("base");
     GetterWriter pgw(base_particle_node);
     
-    pgw.get("bitmap", baseParticle.bmpName);
-    pgw.get("bitmap_angle", baseParticle.bmpAngle);
-    pgw.get("bitmap_angle_type", baseParticle.bmpAngleType);
-    pgw.get("duration", baseParticle.duration);
-    pgw.get("friction", baseParticle.friction);
-    pgw.get("blend_type", baseParticle.blendType);
+    pgw.write("bitmap", baseParticle.bmpName);
+    pgw.write("bitmap_angle", baseParticle.bmpAngle);
+    pgw.write("bitmap_angle_type", baseParticle.bmpAngleType);
+    pgw.write("duration", baseParticle.duration);
+    pgw.write("friction", baseParticle.friction);
+    pgw.write("blend_type", baseParticle.blendType);
     
     DataNode* color_node = base_particle_node->addNew("color");
     GetterWriter pcgw(color_node);
     
     for(size_t c = 0; c < baseParticle.color.getKeyframeCount(); c++) {
         auto keyframe = baseParticle.color.getKeyframe(c);
-        pcgw.get(f2s(keyframe.first), keyframe.second);
+        pcgw.write(f2s(keyframe.first), keyframe.second);
     }
     
     DataNode* size_node = base_particle_node->addNew("size");
@@ -473,7 +473,7 @@ void ParticleGenerator::saveToDataNode(DataNode* node) {
     
     for(size_t c = 0; c < baseParticle.size.getKeyframeCount(); c++) {
         auto keyframe = baseParticle.size.getKeyframe(c);
-        psgw.get(f2s(keyframe.first), keyframe.second);
+        psgw.write(f2s(keyframe.first), keyframe.second);
     }
     
     DataNode* lin_speed_node = base_particle_node->addNew("linear_speed");
@@ -481,7 +481,7 @@ void ParticleGenerator::saveToDataNode(DataNode* node) {
     
     for(size_t c = 0; c < baseParticle.linearSpeed.getKeyframeCount(); c++) {
         auto keyframe = baseParticle.linearSpeed.getKeyframe(c);
-        plsgw.get(f2s(keyframe.first), keyframe.second);
+        plsgw.write(f2s(keyframe.first), keyframe.second);
     }
     
     DataNode* out_speed_node = base_particle_node->addNew("outwards_speed");
@@ -489,7 +489,7 @@ void ParticleGenerator::saveToDataNode(DataNode* node) {
     
     for(size_t c = 0; c < baseParticle.outwardsSpeed.getKeyframeCount(); c++) {
         auto keyframe = baseParticle.outwardsSpeed.getKeyframe(c);
-        posgw.get(f2s(keyframe.first), keyframe.second);
+        posgw.write(f2s(keyframe.first), keyframe.second);
     }
     
     DataNode* orb_speed_node = base_particle_node->addNew("orbital_speed");
@@ -497,21 +497,21 @@ void ParticleGenerator::saveToDataNode(DataNode* node) {
     
     for(size_t c = 0; c < baseParticle.orbitalSpeed.getKeyframeCount(); c++) {
         auto keyframe = baseParticle.orbitalSpeed.getKeyframe(c);
-        porsgw.get(f2s(keyframe.first), keyframe.second);
+        porsgw.write(f2s(keyframe.first), keyframe.second);
     }
     
     //Generator.
     GetterWriter ggw(node);
     
-    ggw.get("bitmap_angle_deviation", radToDeg(bmpAngleDeviation));
-    ggw.get("duration_deviation", durationDeviation);
-    ggw.get("friction_deviation", frictionDeviation);
-    ggw.get("size_deviation", sizeDeviation);
-    ggw.get("orbital_speed_deviation", orbitalSpeedDeviation);
-    ggw.get("outwards_speed_deviation", outwardsSpeedDeviation);
-    ggw.get("angle_deviation", radToDeg(linearSpeedAngleDeviation));
-    ggw.get("linear_speed_deviation", linearSpeedDeviation);
-    ggw.get("angles_are_absolute", anglesAreAbsolute);
+    ggw.write("bitmap_angle_deviation", radToDeg(bmpAngleDeviation));
+    ggw.write("duration_deviation", durationDeviation);
+    ggw.write("friction_deviation", frictionDeviation);
+    ggw.write("size_deviation", sizeDeviation);
+    ggw.write("orbital_speed_deviation", orbitalSpeedDeviation);
+    ggw.write("outwards_speed_deviation", outwardsSpeedDeviation);
+    ggw.write("angle_deviation", radToDeg(linearSpeedAngleDeviation));
+    ggw.write("linear_speed_deviation", linearSpeedDeviation);
+    ggw.write("angles_are_absolute", anglesAreAbsolute);
 }
 
 

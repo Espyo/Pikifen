@@ -153,15 +153,15 @@ bool ContentManager::createPack(
     //Create the data file.
     DataNode data;
     GetterWriter gw(&data);
-    gw.get("name", name);
-    gw.get("description", description);
-    gw.get("maker", maker);
-    gw.get("version", "1.0.0");
-    gw.get("engine_version", getEngineVersionString());
-    gw.get("tags", "");
-    gw.get("dependencies", "");
-    gw.get("conflicts", "");
-    gw.get("notes", "");
+    gw.write("name", name);
+    gw.write("description", description);
+    gw.write("maker", maker);
+    gw.write("version", "1.0.0");
+    gw.write("engine_version", getEngineVersionString());
+    gw.write("tags", "");
+    gw.write("dependencies", "");
+    gw.write("conflicts", "");
+    gw.write("notes", "");
     data.saveFile(pack_path + "/" + FILE_NAMES::PACK_DATA, true, true);
     
     //Update the list and manifest.

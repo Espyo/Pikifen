@@ -3200,11 +3200,11 @@ void AreaEditor::saveReference() {
     DataNode reference_file("", "");
     GetterWriter gw(&reference_file);
     
-    gw.get("file", referenceFilePath);
-    gw.get("center", referenceCenter);
-    gw.get("size", referenceSize);
-    gw.get("alpha", referenceAlpha);
-    gw.get("visible", showReference);
+    gw.write("file", referenceFilePath);
+    gw.write("center", referenceCenter);
+    gw.write("size", referenceSize);
+    gw.write("alpha", referenceAlpha);
+    gw.write("visible", showReference);
     
     reference_file.saveFile(file_path);
 }

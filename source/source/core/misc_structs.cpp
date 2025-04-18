@@ -639,7 +639,7 @@ GetterWriter::GetterWriter(DataNode* dn) :
  * @param var The var to get. This is an Allegro color.
  * @param out_child_node If not nullptr, the new node is returned here.
  */
-void GetterWriter::get(
+void GetterWriter::write(
     const string &child_name, const ALLEGRO_COLOR &var, DataNode** out_child_node
 ) {
     DataNode* new_node = node->addNew(child_name, c2s(var));
@@ -654,7 +654,7 @@ void GetterWriter::get(
  * @param var The var to get. This is a string.
  * @param out_child_node If not nullptr, the new node is returned here.
  */
-void GetterWriter::get(
+void GetterWriter::write(
     const string &child_name, const string &var, DataNode** out_child_node
 ) {
     DataNode* new_node = node->addNew(child_name, var);
@@ -669,7 +669,7 @@ void GetterWriter::get(
  * @param var The var to get. This is a string.
  * @param out_child_node If not nullptr, the new node is returned here.
  */
-void GetterWriter::get(
+void GetterWriter::write(
     const string &child_name, const char* var, DataNode** out_child_node
 ) {
     DataNode* new_node = node->addNew(child_name, var);
@@ -684,7 +684,7 @@ void GetterWriter::get(
  * @param var The var to get. This is an integer.
  * @param out_child_node If not nullptr, the new node is returned here.
  */
-void GetterWriter::get(
+void GetterWriter::write(
     const string &child_name, const size_t &var, DataNode** out_child_node
 ) {
     DataNode* new_node = node->addNew(child_name, i2s(var));
@@ -699,7 +699,7 @@ void GetterWriter::get(
  * @param var The var to get. This is an integer.
  * @param out_child_node If not nullptr, the new node is returned here.
  */
-void GetterWriter::get(
+void GetterWriter::write(
     const string &child_name, const int &var, DataNode** out_child_node
 ) {
     DataNode* new_node = node->addNew(child_name, i2s(var));
@@ -714,7 +714,7 @@ void GetterWriter::get(
  * @param var The var to get. This is an unsigned integer.
  * @param out_child_node If not nullptr, the new node is returned here.
  */
-void GetterWriter::get(
+void GetterWriter::write(
     const string &child_name, const unsigned int &var, DataNode** out_child_node
 ) {
     DataNode* new_node = node->addNew(child_name, i2s(var));
@@ -729,7 +729,7 @@ void GetterWriter::get(
  * @param var The var to get. This is an unsigned char.
  * @param out_child_node If not nullptr, the new node is returned here.
  */
-void GetterWriter::get(
+void GetterWriter::write(
     const string &child_name, const unsigned char &var, DataNode** out_child_node
 ) {
     DataNode* new_node = node->addNew(child_name, i2s(var));
@@ -744,7 +744,7 @@ void GetterWriter::get(
  * @param var The var to get. This is a boolean.
  * @param out_child_node If not nullptr, the new node is returned here.
  */
-void GetterWriter::get(
+void GetterWriter::write(
     const string &child_name, const bool &var, DataNode** out_child_node
 ) {
     DataNode* new_node = node->addNew(child_name, b2s(var));
@@ -759,7 +759,7 @@ void GetterWriter::get(
  * @param var The var to get. This is a float.
  * @param out_child_node If not nullptr, the new node is returned here.
  */
-void GetterWriter::get(
+void GetterWriter::write(
     const string &child_name, const float &var, DataNode** out_child_node
 ) {
     DataNode* new_node = node->addNew(child_name, f2s(var));
@@ -774,7 +774,7 @@ void GetterWriter::get(
  * @param var The var to get. This is a double.
  * @param out_child_node If not nullptr, the new node is returned here.
  */
-void GetterWriter::get(
+void GetterWriter::write(
     const string &child_name, const double &var, DataNode** out_child_node
 ) {
     DataNode* new_node = node->addNew(child_name, f2s(var));
@@ -789,7 +789,7 @@ void GetterWriter::get(
  * @param var The var to get. This is a point.
  * @param out_child_node If not nullptr, the new node is returned here.
  */
-void GetterWriter::get(
+void GetterWriter::write(
     const string &child_name, const Point &var, DataNode** out_child_node
 ) {
     DataNode* new_node = node->addNew(child_name, p2s(var));

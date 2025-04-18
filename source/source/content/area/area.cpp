@@ -1724,23 +1724,23 @@ void Area::saveGeometryToDataNode(DataNode* node) {
         string v_str =
             i2s(e_ptr->vertexIdxs[0]) + " " + i2s(e_ptr->vertexIdxs[1]);
             
-        egw.get("s", s_str);
-        egw.get("v", v_str);
+        egw.write("s", s_str);
+        egw.write("v", v_str);
         
         if(e_ptr->wallShadowLength != LARGE_FLOAT) {
-            egw.get("shadow_length", e_ptr->wallShadowLength);
+            egw.write("shadow_length", e_ptr->wallShadowLength);
         }
         
         if(e_ptr->wallShadowColor != GEOMETRY::SHADOW_DEF_COLOR) {
-            egw.get("shadow_color", e_ptr->wallShadowColor);
+            egw.write("shadow_color", e_ptr->wallShadowColor);
         }
         
         if(e_ptr->ledgeSmoothingLength != 0.0f) {
-            egw.get("smoothing_length", e_ptr->ledgeSmoothingLength);
+            egw.write("smoothing_length", e_ptr->ledgeSmoothingLength);
         }
         
         if(e_ptr->ledgeSmoothingColor != GEOMETRY::SMOOTHING_DEF_COLOR) {
-            egw.get("smoothing_color", e_ptr->ledgeSmoothingColor);
+            egw.write("smoothing_color", e_ptr->ledgeSmoothingColor);
         }
     }
     
@@ -1754,44 +1754,44 @@ void Area::saveGeometryToDataNode(DataNode* node) {
         GetterWriter sgw(sector_node);
         
         if(s_ptr->type != SECTOR_TYPE_NORMAL) {
-            sgw.get("type", game.sectorTypes.getName(s_ptr->type));
+            sgw.write("type", game.sectorTypes.getName(s_ptr->type));
         }
         if(s_ptr->isBottomlessPit) {
-            sgw.get("is_bottomless_pit", true);
+            sgw.write("is_bottomless_pit", true);
         }
-        sgw.get("z", s_ptr->z);
+        sgw.write("z", s_ptr->z);
         if(s_ptr->brightness != GEOMETRY::DEF_SECTOR_BRIGHTNESS) {
-            sgw.get("brightness", s_ptr->brightness);
+            sgw.write("brightness", s_ptr->brightness);
         }
         if(!s_ptr->tag.empty()) {
-            sgw.get("tag", s_ptr->tag);
+            sgw.write("tag", s_ptr->tag);
         }
         if(s_ptr->fade) {
-            sgw.get("fade", s_ptr->fade);
+            sgw.write("fade", s_ptr->fade);
         }
         if(s_ptr->hazard) {
-            sgw.get("hazard", s_ptr->hazard->manifest->internalName);
-            sgw.get("hazards_floor", s_ptr->hazardFloor);
+            sgw.write("hazard", s_ptr->hazard->manifest->internalName);
+            sgw.write("hazards_floor", s_ptr->hazardFloor);
         }
         
         if(!s_ptr->textureInfo.bmpName.empty()) {
-            sgw.get("texture", s_ptr->textureInfo.bmpName);
+            sgw.write("texture", s_ptr->textureInfo.bmpName);
         }
         
         if(s_ptr->textureInfo.rot != 0) {
-            sgw.get("texture_rotate", s_ptr->textureInfo.rot);
+            sgw.write("texture_rotate", s_ptr->textureInfo.rot);
         }
         if(
             s_ptr->textureInfo.scale.x != 1 ||
             s_ptr->textureInfo.scale.y != 1
         ) {
-            sgw.get("texture_scale", s_ptr->textureInfo.scale);
+            sgw.write("texture_scale", s_ptr->textureInfo.scale);
         }
         if(
             s_ptr->textureInfo.translation.x != 0 ||
             s_ptr->textureInfo.translation.y != 0
         ) {
-            sgw.get("texture_trans", s_ptr->textureInfo.translation);
+            sgw.write("texture_trans", s_ptr->textureInfo.translation);
         }
         if(
             s_ptr->textureInfo.tint.r != 1.0 ||
@@ -1799,7 +1799,7 @@ void Area::saveGeometryToDataNode(DataNode* node) {
             s_ptr->textureInfo.tint.b != 1.0 ||
             s_ptr->textureInfo.tint.a != 1.0
         ) {
-            sgw.get("texture_tint", s_ptr->textureInfo.tint);
+            sgw.write("texture_tint", s_ptr->textureInfo.tint);
         }
         
     }
@@ -1818,14 +1818,14 @@ void Area::saveGeometryToDataNode(DataNode* node) {
         GetterWriter mgw(mob_node);
         
         if(m_ptr->type) {
-            mgw.get("type", m_ptr->type->manifest->internalName);
+            mgw.write("type", m_ptr->type->manifest->internalName);
         }
-        mgw.get("p", m_ptr->pos);
+        mgw.write("p", m_ptr->pos);
         if(m_ptr->angle != 0) {
-            mgw.get("angle", m_ptr->angle);
+            mgw.write("angle", m_ptr->angle);
         }
         if(!m_ptr->vars.empty()) {
-            mgw.get("vars", m_ptr->vars);
+            mgw.write("vars", m_ptr->vars);
         }
         
         string links_str;
@@ -1835,11 +1835,11 @@ void Area::saveGeometryToDataNode(DataNode* node) {
         }
         
         if(!links_str.empty()) {
-            mgw.get("links", links_str);
+            mgw.write("links", links_str);
         }
         
         if(m_ptr->storedInside != INVALID) {
-            mgw.get("stored_inside", m_ptr->storedInside);
+            mgw.write("stored_inside", m_ptr->storedInside);
         }
     }
     
@@ -1852,15 +1852,15 @@ void Area::saveGeometryToDataNode(DataNode* node) {
         DataNode* path_stop_node = path_stops_node->addNew("s");
         GetterWriter sgw(path_stop_node);
         
-        sgw.get("pos", s_ptr->pos);
+        sgw.write("pos", s_ptr->pos);
         if(s_ptr->radius != PATHS::MIN_STOP_RADIUS) {
-            sgw.get("radius", s_ptr->radius);
+            sgw.write("radius", s_ptr->radius);
         }
         if(s_ptr->flags != 0) {
-            sgw.get("flags", s_ptr->flags);
+            sgw.write("flags", s_ptr->flags);
         }
         if(!s_ptr->label.empty()) {
-            sgw.get("label", s_ptr->label);
+            sgw.write("label", s_ptr->label);
         }
         
         DataNode* links_node = path_stop_node->addNew("links");
@@ -1884,15 +1884,15 @@ void Area::saveGeometryToDataNode(DataNode* node) {
         DataNode* shadow_node = shadows_node->addNew("shadow");
         GetterWriter sgw(shadow_node);
         
-        sgw.get("pos", s_ptr->center);
-        sgw.get("size", s_ptr->size);
-        sgw.get("file", s_ptr->bmpName);
-        sgw.get("sway", s_ptr->sway);
+        sgw.write("pos", s_ptr->center);
+        sgw.write("size", s_ptr->size);
+        sgw.write("file", s_ptr->bmpName);
+        sgw.write("sway", s_ptr->sway);
         if(s_ptr->angle != 0) {
-            sgw.get("angle", s_ptr->angle);
+            sgw.write("angle", s_ptr->angle);
         }
         if(s_ptr->alpha != 255) {
-            sgw.get("alpha", s_ptr->alpha);
+            sgw.write("alpha", s_ptr->alpha);
         }
         
     }
@@ -1911,17 +1911,17 @@ void Area::saveMainDataToDataNode(DataNode* node) {
     GetterWriter gw(node);
     
     //Main data.
-    gw.get("subtitle", subtitle);
-    gw.get("difficulty", difficulty);
-    gw.get("bg_bmp", bgBmpName);
-    gw.get("bg_color", bgColor);
-    gw.get("bg_dist", bgDist);
-    gw.get("bg_zoom", bgBmpZoom);
-    gw.get("song", songName);
-    gw.get("weather", weatherName);
-    gw.get("day_time_start", dayTimeStart);
-    gw.get("day_time_speed", dayTimeSpeed);
-    gw.get("spray_amounts", sprayAmounts);
+    gw.write("subtitle", subtitle);
+    gw.write("difficulty", difficulty);
+    gw.write("bg_bmp", bgBmpName);
+    gw.write("bg_color", bgColor);
+    gw.write("bg_dist", bgDist);
+    gw.write("bg_zoom", bgBmpZoom);
+    gw.write("song", songName);
+    gw.write("weather", weatherName);
+    gw.write("day_time_start", dayTimeStart);
+    gw.write("day_time_speed", dayTimeSpeed);
+    gw.write("spray_amounts", sprayAmounts);
 }
 
 
@@ -1935,35 +1935,35 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
     
     if(mission.goal != MISSION_GOAL_END_MANUALLY) {
         string goal_name = game.missionGoals[mission.goal]->getName();
-        gw.get("mission_goal", goal_name);
+        gw.write("mission_goal", goal_name);
     }
     if(
         mission.goal == MISSION_GOAL_TIMED_SURVIVAL ||
         mission.goal == MISSION_GOAL_GROW_PIKMIN
     ) {
-        gw.get("mission_goal_amount", mission.goalAmount);
+        gw.write("mission_goal_amount", mission.goalAmount);
     }
     if(
         mission.goal == MISSION_GOAL_COLLECT_TREASURE ||
         mission.goal == MISSION_GOAL_BATTLE_ENEMIES ||
         mission.goal == MISSION_GOAL_GET_TO_EXIT
     ) {
-        gw.get("mission_goal_all_mobs", mission.goalAllMobs);
+        gw.write("mission_goal_all_mobs", mission.goalAllMobs);
         vector<string> mission_mob_idx_strs;
         for(auto m : mission.goalMobIdxs) {
             mission_mob_idx_strs.push_back(i2s(m));
         }
         string mission_mob_idx_str = join(mission_mob_idx_strs, ";");
         if(!mission_mob_idx_str.empty()) {
-            gw.get("mission_required_mobs", mission_mob_idx_str);
+            gw.write("mission_required_mobs", mission_mob_idx_str);
         }
     }
     if(mission.goal == MISSION_GOAL_GET_TO_EXIT) {
-        gw.get("mission_goal_exit_center", mission.goalExitCenter);
-        gw.get("mission_goal_exit_size", mission.goalExitSize);
+        gw.write("mission_goal_exit_center", mission.goalExitCenter);
+        gw.write("mission_goal_exit_size", mission.goalExitSize);
     }
     if(mission.failConditions > 0) {
-        gw.get("mission_fail_conditions", mission.failConditions);
+        gw.write("mission_fail_conditions", mission.failConditions);
     }
     if(
         hasFlag(
@@ -1971,7 +1971,7 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
             getIdxBitmask(MISSION_FAIL_COND_TOO_FEW_PIKMIN)
         )
     ) {
-        gw.get("mission_fail_too_few_pik_amount", mission.failTooFewPikAmount);
+        gw.write("mission_fail_too_few_pik_amount", mission.failTooFewPikAmount);
     }
     if(
         hasFlag(
@@ -1979,7 +1979,7 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
             getIdxBitmask(MISSION_FAIL_COND_TOO_MANY_PIKMIN)
         )
     ) {
-        gw.get("mission_fail_too_many_pik_amount", mission.failTooManyPikAmount);
+        gw.write("mission_fail_too_many_pik_amount", mission.failTooManyPikAmount);
     }
     if(
         hasFlag(
@@ -1987,7 +1987,7 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
             getIdxBitmask(MISSION_FAIL_COND_LOSE_PIKMIN)
         )
     ) {
-        gw.get("mission_fail_pik_killed", mission.failPikKilled);
+        gw.write("mission_fail_pik_killed", mission.failPikKilled);
     }
     if(
         hasFlag(
@@ -1995,7 +1995,7 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
             getIdxBitmask(MISSION_FAIL_COND_LOSE_LEADERS)
         )
     ) {
-        gw.get("mission_fail_leaders_kod", mission.failLeadersKod);
+        gw.write("mission_fail_leaders_kod", mission.failLeadersKod);
     }
     if(
         hasFlag(
@@ -2003,7 +2003,7 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
             getIdxBitmask(MISSION_FAIL_COND_KILL_ENEMIES)
         )
     ) {
-        gw.get("mission_fail_enemies_killed", mission.failEnemiesKilled);
+        gw.write("mission_fail_enemies_killed", mission.failEnemiesKilled);
     }
     if(
         hasFlag(
@@ -2011,53 +2011,53 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
             getIdxBitmask(MISSION_FAIL_COND_TIME_LIMIT)
         )
     ) {
-        gw.get("mission_fail_time_limit", mission.failTimeLimit);
+        gw.write("mission_fail_time_limit", mission.failTimeLimit);
     }
     if(mission.failHudPrimaryCond != INVALID) {
-        gw.get("mission_fail_hud_primary_cond", mission.failHudPrimaryCond);
+        gw.write("mission_fail_hud_primary_cond", mission.failHudPrimaryCond);
     }
     if(mission.failHudSecondaryCond != INVALID) {
-        gw.get("mission_fail_hud_secondary_cond", mission.failHudSecondaryCond);
+        gw.write("mission_fail_hud_secondary_cond", mission.failHudSecondaryCond);
     }
-    gw.get("mission_grading_mode", mission.gradingMode);
+    gw.write("mission_grading_mode", mission.gradingMode);
     if(mission.gradingMode == MISSION_GRADING_MODE_POINTS) {
         if(mission.pointsPerPikminBorn != 0) {
-            gw.get("mission_points_per_pikmin_born", mission.pointsPerPikminBorn);
+            gw.write("mission_points_per_pikmin_born", mission.pointsPerPikminBorn);
         }
         if(mission.pointsPerPikminDeath != 0) {
-            gw.get("mission_points_per_pikmin_death", mission.pointsPerPikminDeath);
+            gw.write("mission_points_per_pikmin_death", mission.pointsPerPikminDeath);
         }
         if(mission.pointsPerSecLeft != 0) {
-            gw.get("mission_points_per_sec_left", mission.pointsPerSecLeft);
+            gw.write("mission_points_per_sec_left", mission.pointsPerSecLeft);
         }
         if(mission.pointsPerSecPassed != 0) {
-            gw.get("mission_points_per_sec_passed", mission.pointsPerSecPassed);
+            gw.write("mission_points_per_sec_passed", mission.pointsPerSecPassed);
         }
         if(mission.pointsPerTreasurePoint != 0) {
-            gw.get("mission_points_per_treasure_point", mission.pointsPerTreasurePoint);
+            gw.write("mission_points_per_treasure_point", mission.pointsPerTreasurePoint);
         }
         if(mission.pointsPerEnemyPoint != 0) {
-            gw.get("mission_points_per_enemy_point", mission.pointsPerEnemyPoint);
+            gw.write("mission_points_per_enemy_point", mission.pointsPerEnemyPoint);
         }
         if(mission.enemyPointsOnCollection) {
-            gw.get("enemy_points_on_collection", mission.enemyPointsOnCollection);
+            gw.write("enemy_points_on_collection", mission.enemyPointsOnCollection);
         }
         if(mission.pointLossData > 0) {
-            gw.get("mission_point_loss_data", mission.pointLossData);
+            gw.write("mission_point_loss_data", mission.pointLossData);
         }
         if(mission.pointHudData != 255) {
-            gw.get("mission_point_hud_data", mission.pointHudData);
+            gw.write("mission_point_hud_data", mission.pointHudData);
         }
         if(mission.startingPoints != 0) {
-            gw.get("mission_starting_points", mission.startingPoints);
+            gw.write("mission_starting_points", mission.startingPoints);
         }
-        gw.get("mission_bronze_req", mission.bronzeReq);
-        gw.get("mission_silver_req", mission.silverReq);
-        gw.get("mission_gold_req", mission.goldReq);
-        gw.get("mission_platinum_req", mission.platinumReq);
+        gw.write("mission_bronze_req", mission.bronzeReq);
+        gw.write("mission_silver_req", mission.silverReq);
+        gw.write("mission_gold_req", mission.goldReq);
+        gw.write("mission_platinum_req", mission.platinumReq);
         if(!mission.makerRecordDate.empty()) {
-            gw.get("mission_maker_record", mission.makerRecord);
-            gw.get("mission_maker_record_date", mission.makerRecordDate);
+            gw.write("mission_maker_record", mission.makerRecord);
+            gw.write("mission_maker_record_date", mission.makerRecordDate);
         }
     }
 }
