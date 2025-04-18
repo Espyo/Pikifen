@@ -171,14 +171,8 @@ private:
     //Z of the highest sector.
     float highestSectorZ = 0.0f;
     
-    //World coordinates to radar window coordinates transformation.
-    ALLEGRO_TRANSFORM worldToRadarWindowTransform;
-    
-    //Radar window coordinates to world coordinates transformation.
-    ALLEGRO_TRANSFORM radarWindowToWorldTransform;
-    
-    //Radar camera information.
-    Camera radarCam;
+    //Radar viewport information.
+    Viewport radarView;
     
     //Location of the radar cursor, in world coordinates.
     Point radarCursor;
@@ -302,9 +296,6 @@ private:
     void startLeavingGameplay();
     void switchPage(
         GuiManager* cur_gui, PAUSE_MENU_PAGE new_page, bool left
-    );
-    void updateRadarTransformations(
-        const Point &radar_center, const Point &radar_size
     );
     void zoomRadar(float amount);
     void zoomRadarWithMouse(

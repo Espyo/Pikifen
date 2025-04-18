@@ -102,9 +102,6 @@ public:
     //The error bitmap used to represent bitmaps that were not loaded.
     ALLEGRO_BITMAP* bmpError = nullptr;
     
-    //Player 1's camera.
-    Camera cam;
-    
     //Game's configuration.
     GameConfig config;
     
@@ -211,9 +208,6 @@ public:
     //Database of all sector types and their names.
     EnumNameDatabase sectorTypes;
     
-    //Screen to world coordinate matrix. Cache for convenience.
-    ALLEGRO_TRANSFORM windowToWorldTransform;
-    
     //Should we be showing system info? (Framerate, version, etc.)
     bool showSystemInfo = false;
     
@@ -242,6 +236,9 @@ public:
     //How much time has passed since the program booted.
     float timePassed = 0.0f;
     
+    //Player 1's viewport.
+    Viewport view;
+    
     //Buffer with the wall shadows and ledge smoothings.
     ALLEGRO_BITMAP* wallOffsetEffectBuffer = nullptr;
     
@@ -259,9 +256,6 @@ public:
     
     //Current window width.
     unsigned int winW = OPTIONS::GRAPHICS_D::WIN_W;
-    
-    //World to window coordinate matrix. Cache for convenience.
-    ALLEGRO_TRANSFORM worldToWindowTransform;
     
     //Engine debugging tools.
     //Set them to true in the Game constructor as needed.

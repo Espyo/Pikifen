@@ -403,7 +403,6 @@ public:
     void handleAllegroEvent(ALLEGRO_EVENT &ev) override;
     void doLogic() override;
     void doDrawing() override;
-    void updateTransformations() override;
     string getName() const override;
     
 private:

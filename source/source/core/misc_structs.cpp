@@ -326,7 +326,7 @@ void Camera::setPos(const Point &new_pos) {
  *
  * @param new_zoom Zoom to set to.
  */
-void Camera::set_zoom(float new_zoom) {
+void Camera::setZoom(float new_zoom) {
     zoom = new_zoom;
     targetZoom = new_zoom;
 }
@@ -344,31 +344,6 @@ void Camera::tick(float delta_t) {
         (targetPos.y - pos.y) * (GAMEPLAY::CAMERA_SMOOTHNESS_MULT * delta_t);
     zoom +=
         (targetZoom - zoom) * (GAMEPLAY::CAMERA_SMOOTHNESS_MULT * delta_t);
-}
-
-
-/**
- * @brief Updates the camera's visibility box,
- * based on the windowToWorldTransform transformation.
- */
-void Camera::updateBox() {
-    box[0] = Point(0.0f);
-    box[1] = Point(game.winW, game.winH);
-    al_transform_coordinates(
-        &game.windowToWorldTransform,
-        &box[0].x, &box[0].y
-    );
-    al_transform_coordinates(
-        &game.windowToWorldTransform,
-        &box[1].x, &box[1].y
-    );
-    
-    game.audio.setCameraPos(box[0], box[1]);
-    
-    box[0].x -= GAMEPLAY::CAMERA_BOX_MARGIN;
-    box[0].y -= GAMEPLAY::CAMERA_BOX_MARGIN;
-    box[1].x += GAMEPLAY::CAMERA_BOX_MARGIN;
-    box[1].y += GAMEPLAY::CAMERA_BOX_MARGIN;
 }
 
 
@@ -832,10 +807,10 @@ void MouseCursor::reset() {
     al_get_mouse_state(&mouse_state);
     game.mouseCursor.winPos.x = al_get_mouse_state_axis(&mouse_state, 0);
     game.mouseCursor.winPos.y = al_get_mouse_state_axis(&mouse_state, 1);
-    game.mouseCursor.worldPos = game.mouseCursor.winPos;
+    game.view.cursorWorldPos = game.mouseCursor.winPos;
     al_transform_coordinates(
-        &game.windowToWorldTransform,
-        &game.mouseCursor.worldPos.x, &game.mouseCursor.worldPos.y
+        &game.view.windowToWorldTransform,
+        &game.view.cursorWorldPos.x, &game.view.cursorWorldPos.y
     );
     history.clear();
 }
@@ -853,20 +828,10 @@ void MouseCursor::show() const {
  * @brief Updates the coordinates from an Allegro mouse event.
  *
  * @param ev Event to handle.
- * @param window_to_world_transform Transformation to use to get the
- * window coordinates.
  */
-void MouseCursor::updatePos(
-    const ALLEGRO_EVENT &ev,
-    ALLEGRO_TRANSFORM &window_to_world_transform
-) {
+void MouseCursor::updatePos(const ALLEGRO_EVENT &ev) {
     winPos.x = ev.mouse.x;
     winPos.y = ev.mouse.y;
-    worldPos = winPos;
-    al_transform_coordinates(
-        &window_to_world_transform,
-        &worldPos.x, &worldPos.y
-    );
 }
 
 
@@ -883,13 +848,13 @@ void Notification::draw() const {
     al_scale_transform(&tra, scale, scale);
     al_translate_transform(
         &tra,
-        pos.x * game.cam.zoom,
-        pos.y * game.cam.zoom
+        pos.x * game.view.cam.zoom,
+        pos.y * game.view.cam.zoom
     );
     al_scale_transform(
         &tra,
-        1.0f / game.cam.zoom,
-        1.0f / game.cam.zoom
+        1.0f / game.view.cam.zoom,
+        1.0f / game.view.cam.zoom
     );
     al_copy_transform(&old_tra, al_get_current_transform());
     al_compose_transform(&tra, &old_tra);
@@ -1898,6 +1863,86 @@ void SubgroupTypeManager::registerType(
     new_sg_type->icon = icon;
     
     types.push_back(new_sg_type);
+}
+
+
+/**
+ * @brief Returns the bottom-right corner's coordinates, in window coordinates.
+ *
+ * @return The coordinates.
+ */
+Point Viewport::getBottomRight() {
+    return center + size / 2.0f;
+}
+
+
+/**
+ * @brief Returns the top-left corner's coordinates, in window coordinates.
+ *
+ * @return The coordinates.
+ */
+Point Viewport::getTopLeft() {
+    return center - size / 2.0f;
+}
+
+
+/**
+ * @brief Updates the viewport's visibility box,
+ * based on the windowToWorldTransform transformation.
+ */
+void Viewport::updateBox() {
+    box[0] = center - size / 2.0f;
+    box[1] = center + size / 2.0f;
+    al_transform_coordinates(
+        &windowToWorldTransform,
+        &box[0].x, &box[0].y
+    );
+    al_transform_coordinates(
+        &windowToWorldTransform,
+        &box[1].x, &box[1].y
+    );
+    
+    box[0].x -= boxMargin.x;
+    box[0].y -= boxMargin.y;
+    box[1].x += boxMargin.x;
+    box[1].y += boxMargin.y;
+}
+
+
+/**
+ * @brief Updates the mouse cursor position, given the game window
+ * cursor coordinates.
+ *
+ * @param windowPos Window coordinates.
+ */
+void Viewport::updateCursor(const Point &windowPos) {
+    cursorWorldPos = windowPos;
+    al_transform_coordinates(
+        &windowToWorldTransform,
+        &cursorWorldPos.x, &cursorWorldPos.y
+    );
+}
+
+
+/**
+ * @brief Updates the transformations with the current camera coordinates,
+ * zoom, etc.
+ */
+void Viewport::updateTransformations() {
+    //World coordinates to window coordinates.
+    worldToWindowTransform = game.identityTransform;
+    al_translate_transform(
+        &worldToWindowTransform,
+        -cam.pos.x + center.x / cam.zoom,
+        -cam.pos.y + center.y / cam.zoom
+    );
+    al_scale_transform(
+        &worldToWindowTransform, cam.zoom, cam.zoom
+    );
+    
+    //Window coordinates to world coordinates.
+    windowToWorldTransform = worldToWindowTransform;
+    al_invert_transform(&windowToWorldTransform);
 }
 
 

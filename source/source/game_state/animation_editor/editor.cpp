@@ -125,15 +125,15 @@ void AnimationEditor::centerCameraOnSpriteBitmap(bool instant) {
         
         centerCamera(bmp_pos, bmp_pos + bmp_size);
     } else {
-        game.cam.targetZoom = 1.0f;
-        game.cam.targetPos = Point();
+        game.view.cam.targetZoom = 1.0f;
+        game.view.cam.targetPos = Point();
     }
     
     if(instant) {
-        game.cam.pos = game.cam.targetPos;
-        game.cam.zoom = game.cam.targetZoom;
+        game.view.cam.pos = game.view.cam.targetPos;
+        game.view.cam.zoom = game.view.cam.targetZoom;
     }
-    updateTransformations();
+    game.view.updateTransformations();
 }
 
 
@@ -350,6 +350,9 @@ float AnimationEditor::getCursorTimelineTime() {
     if(!curAnimInst.validFrame()) {
         return 0.0f;
     }
+    
+    Point canvasTL = game.view.getTopLeft();
+    Point canvasBR = game.view.getBottomRight();
     float anim_x1 = canvasTL.x + ANIM_EDITOR::TIMELINE_PADDING;
     float anim_w = (canvasBR.x - ANIM_EDITOR::TIMELINE_PADDING) - anim_x1;
     float mouse_x = game.mouseCursor.winPos.x - anim_x1;
@@ -519,6 +522,8 @@ void AnimationEditor::importSpriteTransformationData(const string &name) {
  * @return Whether the cursor is inside.
  */
 bool AnimationEditor::isCursorInTimeline() {
+    Point canvasTL = game.view.getTopLeft();
+    Point canvasBR = game.view.getBottomRight();
     return
         state == EDITOR_STATE_ANIMATION &&
         game.mouseCursor.winPos.x >= canvasTL.x &&
@@ -654,10 +659,10 @@ void AnimationEditor::loadAnimDbFile(
  * @param ev Event to handle.
  */
 void AnimationEditor::panCam(const ALLEGRO_EVENT &ev) {
-    game.cam.setPos(
+    game.view.cam.setPos(
         Point(
-            game.cam.pos.x - ev.mouse.dx / game.cam.zoom,
-            game.cam.pos.y - ev.mouse.dy / game.cam.zoom
+            game.view.cam.pos.x - ev.mouse.dx / game.view.cam.zoom,
+            game.view.cam.pos.y - ev.mouse.dy / game.view.cam.zoom
         )
     );
 }
@@ -941,10 +946,10 @@ void AnimationEditor::saveCmd(float input_value) {
 void AnimationEditor::zoomAndPosResetCmd(float input_value) {
     if(input_value < 0.5f) return;
     
-    if(game.cam.targetZoom == 1.0f) {
-        game.cam.targetPos = Point();
+    if(game.view.cam.targetZoom == 1.0f) {
+        game.view.cam.targetPos = Point();
     } else {
-        game.cam.targetZoom = 1.0f;
+        game.view.cam.targetZoom = 1.0f;
     }
 }
 
@@ -1001,10 +1006,10 @@ void AnimationEditor::zoomEverythingCmd(float input_value) {
 void AnimationEditor::zoomInCmd(float input_value) {
     if(input_value < 0.5f) return;
     
-    game.cam.targetZoom =
+    game.view.cam.targetZoom =
         std::clamp(
-            game.cam.targetZoom +
-            game.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
+            game.view.cam.targetZoom +
+            game.view.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
             zoomMinLevel, zoomMaxLevel
         );
 }
@@ -1018,10 +1023,10 @@ void AnimationEditor::zoomInCmd(float input_value) {
 void AnimationEditor::zoomOutCmd(float input_value) {
     if(input_value < 0.5f) return;
     
-    game.cam.targetZoom =
+    game.view.cam.targetZoom =
         std::clamp(
-            game.cam.targetZoom -
-            game.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
+            game.view.cam.targetZoom -
+            game.view.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
             zoomMinLevel, zoomMaxLevel
         );
 }
@@ -1214,7 +1219,7 @@ void AnimationEditor::renameSprite(
  * @brief Resets the camera's X and Y coordinates.
  */
 void AnimationEditor::resetCamXY() {
-    game.cam.targetPos = Point();
+    game.view.cam.targetPos = Point();
 }
 
 
@@ -1382,11 +1387,13 @@ void AnimationEditor::setupForNewAnimDbPost() {
  * takes place.
  */
 void AnimationEditor::setupForNewAnimDbPre() {
+    game.view.updateTransformations();
+    
     if(state == EDITOR_STATE_SPRITE_BITMAP) {
         //Ideally, states would be handled by a state machine, and this
         //logic would be placed in the sprite bitmap state's "on exit" code...
-        game.cam.setPos(preSpriteBmpCamPos);
-        game.cam.set_zoom(preSpriteBmpCamZoom);
+        game.view.cam.setPos(preSpriteBmpCamPos);
+        game.view.cam.setZoom(preSpriteBmpCamZoom);
     }
     
     db.destroy();
@@ -1398,8 +1405,8 @@ void AnimationEditor::setupForNewAnimDbPre() {
     curHitboxIdx = 0;
     loadedMobType = nullptr;
     
-    game.cam.setPos(Point());
-    game.cam.set_zoom(1.0f);
+    game.view.cam.setPos(Point());
+    game.view.cam.setZoom(1.0f);
     changeState(EDITOR_STATE_MAIN);
     
     //At this point we'll have nearly unloaded stuff like the current sprite.

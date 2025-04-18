@@ -98,10 +98,6 @@ struct Camera {
 
     //--- Members ---
     
-    //Top-left and bottom-right world coordinates that this camera can see.
-    //These also include a margin of GAMEPLAY::CAMERA_BOX_MARGIN.
-    Point box[2];
-    
     //Current position.
     Point pos;
     
@@ -118,9 +114,53 @@ struct Camera {
     //--- Function declarations ---
     
     void setPos(const Point &new_pos);
-    void set_zoom(float new_zoom);
+    void setZoom(float new_zoom);
     void tick(float delta_t);
+    
+};
+
+
+/**
+ * @brief A segment of the game window that shows a view into the game world.
+ * For instance, regular gameplay, the radar, the area editor's canvas, etc.
+ */
+struct Viewport {
+
+    //--- Members ---
+    
+    //Center, in game window coordinates.
+    Point center;
+    
+    //Width and height, in game window coordinates.
+    Point size;
+    
+    //Allegro transformation for converting window to world coordinates.
+    ALLEGRO_TRANSFORM windowToWorldTransform;
+    
+    //Allegro transformation for converting world to window coordinates.
+    ALLEGRO_TRANSFORM worldToWindowTransform;
+    
+    //Camera.
+    Camera cam;
+    
+    //Top-left and bottom-right world coordinates that this camera can see.
+    //These also include the specified margin.
+    Point box[2];
+    
+    //Margin for the box coordinates.
+    Point boxMargin;
+    
+    //Cursor position, in world coordinates, if any.
+    Point cursorWorldPos;
+    
+    
+    //--- Function declarations ---
+    
+    Point getBottomRight();
+    Point getTopLeft();
     void updateBox();
+    void updateCursor(const Point &windowPos);
+    void updateTransformations();
     
 };
 
@@ -189,13 +229,11 @@ struct MouseCursor {
     //Position, in window coordinates.
     Point winPos;
     
-    //Position, in world coordinates, if applicable.
-    Point worldPos;
-    
-    //Spots the cursor has been through. Used for the faint trail left behind.
+    //Spots the cursor has been through, in window coordinates.
+    //Used for the faint trail left behind.
     vector<Point> history;
     
-    //Time left until the position of the cursor is saved on the vector.
+    //Time left until the position of the cursor is saved on the history.
     Timer saveTimer;
     
     
@@ -205,10 +243,7 @@ struct MouseCursor {
     void init();
     void reset();
     void show() const;
-    void updatePos(
-        const ALLEGRO_EVENT &ev,
-        ALLEGRO_TRANSFORM &window_to_world_transform
-    );
+    void updatePos(const ALLEGRO_EVENT &ev);
     
 };
 

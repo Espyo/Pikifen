@@ -64,7 +64,6 @@ public:
     void load() override;
     void unload() override;
     virtual void updateStyle();
-    void updateTransformations() override;
     string getName() const override = 0;
     virtual size_t getHistorySize() const;
     
@@ -556,12 +555,6 @@ protected:
     //Bitmap with all of the editor icons.
     ALLEGRO_BITMAP* bmpEditorIcons = nullptr;
     
-    //Top-left corner of the canvas.
-    Point canvasTL;
-    
-    //Bottom right corner of the canvas.
-    Point canvasBR;
-    
     //X coordinate of the canvas GUI separator. -1 = undefined.
     int canvasSeparatorX = -1;
     
@@ -737,6 +730,7 @@ protected:
     void processDialogs();
     void processGuiBaseContentWarningDialog();
     void processGuiBitmapDialog();
+    void processGuiCanvas();
     void processGuiEditorStyle();
     bool processGuiHazardManagementWidgets(string &selected_hazard_iname);
     void processGuiHelpDialog();

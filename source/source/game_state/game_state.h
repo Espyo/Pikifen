@@ -38,14 +38,13 @@ public:
     
     //--- Function declarations ---
     
-    GameState();
+    GameState() = default;
     virtual ~GameState() = default;
     virtual void load() = 0;
     virtual void unload() = 0;
     virtual void handleAllegroEvent(ALLEGRO_EVENT &ev) = 0;
     virtual void doLogic() = 0;
     virtual void doDrawing() = 0;
-    virtual void updateTransformations();
     virtual string getName() const = 0;
     
 };

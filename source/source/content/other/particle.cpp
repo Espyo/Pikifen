@@ -202,10 +202,10 @@ void ParticleGenerator::emit(ParticleManager &manager) {
     base_p_z += followZOffset;
     
     if(
-        base_p_pos.x < game.cam.box[0].x ||
-        base_p_pos.x > game.cam.box[1].x ||
-        base_p_pos.y < game.cam.box[0].y ||
-        base_p_pos.y > game.cam.box[1].y
+        base_p_pos.x < game.view.box[0].x ||
+        base_p_pos.x > game.view.box[1].x ||
+        base_p_pos.y < game.view.box[0].y ||
+        base_p_pos.y > game.view.box[1].y
     ) {
         //Too far off-camera.
         return;

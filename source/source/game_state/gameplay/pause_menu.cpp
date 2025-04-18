@@ -144,9 +144,9 @@ PauseMenu::PauseMenu(bool start_on_radar) {
     radarSelectedLeader = game.states.gameplay->curLeaderPtr;
     
     if(radarSelectedLeader) {
-        radarCam.setPos(radarSelectedLeader->pos);
+        radarView.cam.setPos(radarSelectedLeader->pos);
     }
-    radarCam.set_zoom(game.states.gameplay->radarZoom);
+    radarView.cam.setZoom(game.states.gameplay->radarZoom);
     
     //Start the process.
     openingLockoutTimer = PAUSE_MENU::ENTRY_LOCKOUT_TIME;
@@ -506,7 +506,7 @@ void PauseMenu::calculateGoHerePath() {
         Leader* l_ptr = game.states.gameplay->mobs.leaders[l];
         if(
             l_ptr->health > 0 &&
-            Distance(l_ptr->pos, radarCursor) <= 24.0f / radarCam.zoom
+            Distance(l_ptr->pos, radarCursor) <= 24.0f / radarView.cam.zoom
         ) {
             radarCursorLeader = l_ptr;
             break;
@@ -783,7 +783,7 @@ void PauseMenu::drawGoHereSegment(
     const Point &start, const Point &end,
     const ALLEGRO_COLOR &color, float* texture_point
 ) {
-    const float PATH_SEGMENT_THICKNESS = 12.0f / radarCam.zoom;
+    const float PATH_SEGMENT_THICKNESS = 12.0f / radarView.cam.zoom;
     const float PATH_SEGMENT_TIME_MULT = 10.0f;
     
     ALLEGRO_VERTEX av[4];
@@ -792,9 +792,9 @@ void PauseMenu::drawGoHereSegment(
         av[a].z = 0.0f;
     }
     int bmp_h = al_get_bitmap_height(bmpRadarPath);
-    float texture_scale = bmp_h / PATH_SEGMENT_THICKNESS / radarCam.zoom;
+    float texture_scale = bmp_h / PATH_SEGMENT_THICKNESS / radarView.cam.zoom;
     float angle = getAngle(start, end);
-    float distance = Distance(start, end).toFloat() * radarCam.zoom;
+    float distance = Distance(start, end).toFloat() * radarView.cam.zoom;
     float texture_offset = game.timePassed * PATH_SEGMENT_TIME_MULT;
     float texture_start = *texture_point;
     float texture_end = texture_start + distance;
@@ -844,7 +844,7 @@ void PauseMenu::drawRadar(
     al_copy_transform(&old_transform, al_get_current_transform());
     al_get_clipping_rectangle(&old_cr_x, &old_cr_y, &old_cr_w, &old_cr_h);
     
-    al_use_transform(&worldToRadarWindowTransform);
+    al_use_transform(&radarView.worldToWindowTransform);
     al_set_clipping_rectangle(
         center.x - size.x / 2.0f,
         center.y - size.y / 2.0f,
@@ -916,7 +916,7 @@ void PauseMenu::drawRadar(
             e_ptr->vertexes[1]->x,
             e_ptr->vertexes[1]->y,
             game.config.aestheticRadar.edgeColor,
-            1.5f / radarCam.zoom
+            1.5f / radarView.cam.zoom
         );
     }
     
@@ -956,14 +956,14 @@ void PauseMenu::drawRadar(
                 
             drawBitmap(
                 bmpRadarOnionBulb, o_ptr->pos,
-                Point(24.0f / radarCam.zoom),
+                Point(24.0f / radarView.cam.zoom),
                 0.0f,
                 target_color
             );
         }
         drawBitmap(
             bmpRadarOnionSkeleton, o_ptr->pos,
-            Point(24.0f / radarCam.zoom)
+            Point(24.0f / radarView.cam.zoom)
         );
     }
     
@@ -973,7 +973,7 @@ void PauseMenu::drawRadar(
         
         drawBitmap(
             bmpRadarShip, s_ptr->pos,
-            Point(24.0f / radarCam.zoom)
+            Point(24.0f / radarView.cam.zoom)
         );
     }
     
@@ -985,7 +985,7 @@ void PauseMenu::drawRadar(
         drawBitmap(
             e_ptr->health > 0 ? bmpRadarEnemyAlive : bmpRadarEnemyDead,
             e_ptr->pos,
-            Point(24.0f / radarCam.zoom),
+            Point(24.0f / radarView.cam.zoom),
             e_ptr->health > 0 ? game.timePassed : 0.0f
         );
     }
@@ -996,11 +996,11 @@ void PauseMenu::drawRadar(
         
         drawBitmap(
             l_ptr->leaType->bmpIcon, l_ptr->pos,
-            Point(40.0f / radarCam.zoom)
+            Point(40.0f / radarView.cam.zoom)
         );
         drawBitmap(
             bmpRadarLeaderBubble, l_ptr->pos,
-            Point(48.0f / radarCam.zoom),
+            Point(48.0f / radarView.cam.zoom),
             0.0f,
             radarSelectedLeader == l_ptr ?
             al_map_rgb(0, 255, 255) :
@@ -1008,8 +1008,8 @@ void PauseMenu::drawRadar(
         );
         drawFilledEquilateralTriangle(
             l_ptr->pos +
-            rotatePoint(Point(24.5f / radarCam.zoom, 0.0f), l_ptr->angle),
-            6.0f / radarCam.zoom,
+            rotatePoint(Point(24.5f / radarView.cam.zoom, 0.0f), l_ptr->angle),
+            6.0f / radarView.cam.zoom,
             l_ptr->angle,
             radarSelectedLeader == l_ptr ?
             al_map_rgb(0, 255, 255) :
@@ -1020,7 +1020,7 @@ void PauseMenu::drawRadar(
         if(l_ptr->health <= 0) {
             drawBitmap(
                 bmpRadarLeaderX, l_ptr->pos,
-                Point(36.0f / radarCam.zoom)
+                Point(36.0f / radarView.cam.zoom)
             );
         }
     }
@@ -1031,7 +1031,7 @@ void PauseMenu::drawRadar(
         
         drawBitmap(
             bmpRadarTreasure, t_ptr->pos,
-            Point(32.0f / radarCam.zoom),
+            Point(32.0f / radarView.cam.zoom),
             sin(game.timePassed * 2.0f) * (TAU * 0.05f)
         );
     }
@@ -1046,7 +1046,7 @@ void PauseMenu::drawRadar(
         
         drawBitmap(
             bmpRadarTreasure, r_ptr->pos,
-            Point(32.0f / radarCam.zoom),
+            Point(32.0f / radarView.cam.zoom),
             sin(game.timePassed * 2.0f) * (TAU * 0.05f)
         );
     }
@@ -1063,7 +1063,7 @@ void PauseMenu::drawRadar(
         
         drawBitmap(
             bmpRadarTreasure, p_ptr->pos,
-            Point(32.0f / radarCam.zoom),
+            Point(32.0f / radarView.cam.zoom),
             sin(game.timePassed * 2.0f) * (TAU * 0.05f)
         );
     }
@@ -1074,7 +1074,7 @@ void PauseMenu::drawRadar(
         
         drawBitmap(
             bmpRadarPikmin, p_ptr->pos,
-            Point(16.0f / radarCam.zoom),
+            Point(16.0f / radarView.cam.zoom),
             0.0f,
             p_ptr->pikType->mainColor
         );
@@ -1088,7 +1088,7 @@ void PauseMenu::drawRadar(
     for(const auto &o : obstacles) {
         drawBitmap(
             bmpRadarObstacle, o->pos,
-            Point(40.0f / radarCam.zoom),
+            Point(40.0f / radarView.cam.zoom),
             o->angle
         );
     }
@@ -1209,7 +1209,7 @@ void PauseMenu::drawRadar(
     //Radar cursor.
     drawBitmap(
         bmpRadarCursor, radarCursor,
-        Point(48.0f / radarCam.zoom),
+        Point(48.0f / radarView.cam.zoom),
         game.timePassed * TAU * 0.3f
     );
     
@@ -1507,6 +1507,8 @@ string PauseMenu::getMissionGoalStatus() {
  * @param ev Event to handle.
  */
 void PauseMenu::handleAllegroEvent(const ALLEGRO_EVENT &ev) {
+    radarView.updateCursor(game.mouseCursor.winPos);
+    
     gui.handleAllegroEvent(ev);
     radarGui.handleAllegroEvent(ev);
     statusGui.handleAllegroEvent(ev);
@@ -2380,7 +2382,7 @@ void PauseMenu::initRadarPage() {
         Point line_anchor(draw.center.x - draw.size.x / 2.0f - 16.0f, draw.center.y);
         Point cursor_window_pos = radarCursor;
         al_transform_coordinates(
-            &worldToRadarWindowTransform,
+            &radarView.worldToWindowTransform,
             &cursor_window_pos.x, &cursor_window_pos.y
         );
         
@@ -2659,12 +2661,12 @@ void PauseMenu::initStatusPage() {
  * @param amount How much to pan by.
  */
 void PauseMenu::panRadar(Point amount) {
-    Point delta = amount / radarCam.zoom;
-    radarCam.pos += delta;
-    radarCam.pos.x =
-        std::clamp(radarCam.pos.x, radarMinCoords.x, radarMaxCoords.x);
-    radarCam.pos.y =
-        std::clamp(radarCam.pos.y, radarMinCoords.y, radarMaxCoords.y);
+    Point delta = amount / radarView.cam.zoom;
+    radarView.cam.pos += delta;
+    radarView.cam.pos.x =
+        std::clamp(radarView.cam.pos.x, radarMinCoords.x, radarMaxCoords.x);
+    radarView.cam.pos.y =
+        std::clamp(radarView.cam.pos.y, radarMinCoords.y, radarMaxCoords.y);
 }
 
 
@@ -2712,7 +2714,7 @@ void PauseMenu::startClosing(GuiManager* cur_gui) {
     closing = true;
     closingTimer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
     
-    game.states.gameplay->radarZoom = radarCam.zoom;
+    game.states.gameplay->radarZoom = radarView.cam.zoom;
 }
 
 
@@ -2822,8 +2824,9 @@ void PauseMenu::tick(float delta_t) {
     //Tick radar things.
     DrawInfo radar_draw;
     radarGui.getItemDrawInfo(radarItem, &radar_draw);
-    
-    updateRadarTransformations(radar_draw.center, radar_draw.size);
+    radarView.center = radar_draw.center;
+    radarView.size = radar_draw.size;
+    radarView.updateTransformations();
     
     if(radarGui.responsive) {
     
@@ -2848,13 +2851,9 @@ void PauseMenu::tick(float delta_t) {
             );
             
         if(mouse_in_radar) {
-            radarCursor = game.mouseCursor.winPos;
-            al_transform_coordinates(
-                &radarWindowToWorldTransform,
-                &radarCursor.x, &radarCursor.y
-            );
+            radarCursor = radarView.cursorWorldPos;
         } else {
-            radarCursor = radarCam.pos;
+            radarCursor = radarView.cam.pos;
         }
         
         goHereCalcTime -= delta_t;
@@ -2870,40 +2869,16 @@ void PauseMenu::tick(float delta_t) {
 
 
 /**
- * @brief Updates the radar transformations.
- *
- * @param radar_center Coordinates of the radar's center.
- * @param radar_size Dimensions of the radar.
- */
-void PauseMenu::updateRadarTransformations(
-    const Point &radar_center, const Point &radar_size
-) {
-    worldToRadarWindowTransform = game.identityTransform;
-    al_translate_transform(
-        &worldToRadarWindowTransform,
-        -radarCam.pos.x + radar_center.x / radarCam.zoom,
-        -radarCam.pos.y + radar_center.y / radarCam.zoom
-    );
-    al_scale_transform(
-        &worldToRadarWindowTransform, radarCam.zoom, radarCam.zoom
-    );
-    
-    radarWindowToWorldTransform = worldToRadarWindowTransform;
-    al_invert_transform(&radarWindowToWorldTransform);
-}
-
-
-/**
  * @brief Zooms the radar by an amount.
  *
  * @param amount How much to zoom by.
  */
 void PauseMenu::zoomRadar(float amount) {
-    float delta = amount * radarCam.zoom;
-    radarCam.zoom += delta;
-    radarCam.zoom =
+    float delta = amount * radarView.cam.zoom;
+    radarView.cam.zoom += delta;
+    radarView.cam.zoom =
         std::clamp(
-            radarCam.zoom,
+            radarView.cam.zoom,
             PAUSE_MENU::RADAR_MIN_ZOOM, PAUSE_MENU::RADAR_MAX_ZOOM
         );
 }
@@ -2924,12 +2899,12 @@ void PauseMenu::zoomRadarWithMouse(
     
     //Do the zoom.
     zoomRadar(amount);
-    updateRadarTransformations(radar_center, radar_size);
+    radarView.updateTransformations();
     
     //Figure out where the cursor will be after the zoom.
     radarCursor = game.mouseCursor.winPos;
     al_transform_coordinates(
-        &radarWindowToWorldTransform,
+        &radarView.windowToWorldTransform,
         &radarCursor.x, &radarCursor.y
     );
     
@@ -2937,16 +2912,16 @@ void PauseMenu::zoomRadarWithMouse(
     //so that the cursor ends up where it was before.
     panRadar(
         Point(
-            (old_cursor_pos.x - radarCursor.x) * radarCam.zoom,
-            (old_cursor_pos.y - radarCursor.y) * radarCam.zoom
+            (old_cursor_pos.x - radarCursor.x) * radarView.cam.zoom,
+            (old_cursor_pos.y - radarCursor.y) * radarView.cam.zoom
         )
     );
     
     //Update the cursor coordinates again.
-    updateRadarTransformations(radar_center, radar_size);
+    radarView.updateTransformations();
     radarCursor = game.mouseCursor.winPos;
     al_transform_coordinates(
-        &radarWindowToWorldTransform,
+        &radarView.windowToWorldTransform,
         &radarCursor.x, &radarCursor.y
     );
 }

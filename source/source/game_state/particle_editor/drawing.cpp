@@ -33,9 +33,11 @@ void ParticleEditor::doDrawing() {
  * Dear ImGui rendering process.
  */
 void ParticleEditor::drawCanvas() {
+    Point canvasTL = game.view.getTopLeft();
+    Point canvasBR = game.view.getBottomRight();
+    
     al_set_clipping_rectangle(
-        canvasTL.x, canvasTL.y,
-        canvasBR.x - canvasTL.x, canvasBR.y - canvasTL.y
+        canvasTL.x, canvasTL.y, game.view.size.x, game.view.size.y
     );
     
     //Background.
@@ -43,10 +45,10 @@ void ParticleEditor::drawCanvas() {
         Point texture_tl = canvasTL;
         Point texture_br = canvasBR;
         al_transform_coordinates(
-            &game.windowToWorldTransform, &texture_tl.x, &texture_tl.y
+            &game.view.windowToWorldTransform, &texture_tl.x, &texture_tl.y
         );
         al_transform_coordinates(
-            &game.windowToWorldTransform, &texture_br.x, &texture_br.y
+            &game.view.windowToWorldTransform, &texture_br.x, &texture_br.y
         );
         ALLEGRO_VERTEX bg_vertexes[4];
         for(size_t v = 0; v < 4; ++v) {
@@ -82,12 +84,12 @@ void ParticleEditor::drawCanvas() {
         al_clear_to_color(al_map_rgb(128, 144, 128));
     }
     
-    al_use_transform(&game.worldToWindowTransform);
+    al_use_transform(&game.view.worldToWindowTransform);
     
     //Particles.
     vector<WorldComponent> components;
     components.reserve(partMgr.getCount());
-    partMgr.fillComponentList(components, game.cam.box[0], game.cam.box[1]);
+    partMgr.fillComponentList(components, game.view.box[0], game.view.box[1]);
     
     for(size_t c = 0; c < components.size(); ++c) {
         components[c].idx = c;
@@ -114,21 +116,21 @@ void ParticleEditor::drawCanvas() {
         Point cam_top_left_corner(0, 0);
         Point cam_bottom_right_corner(canvasBR.x, canvasBR.y);
         al_transform_coordinates(
-            &game.windowToWorldTransform,
+            &game.view.windowToWorldTransform,
             &cam_top_left_corner.x, &cam_top_left_corner.y
         );
         al_transform_coordinates(
-            &game.windowToWorldTransform,
+            &game.view.windowToWorldTransform,
             &cam_bottom_right_corner.x, &cam_bottom_right_corner.y
         );
         
         al_draw_line(
             0, cam_top_left_corner.y, 0, cam_bottom_right_corner.y,
-            al_map_rgb(240, 240, 240), 1.0f / game.cam.zoom
+            al_map_rgb(240, 240, 240), 1.0f / game.view.cam.zoom
         );
         al_draw_line(
             cam_top_left_corner.x, 0, cam_bottom_right_corner.x, 0,
-            al_map_rgb(240, 240, 240), 1.0f / game.cam.zoom
+            al_map_rgb(240, 240, 240), 1.0f / game.view.cam.zoom
         );
     }
     
@@ -141,12 +143,12 @@ void ParticleEditor::drawCanvas() {
                 al_draw_circle(
                     generatorPosOffset.x, generatorPosOffset.y,
                     loadedGen.emission.circleOuterDist,
-                    al_map_rgb(100, 240, 100), 3.0f / game.cam.zoom
+                    al_map_rgb(100, 240, 100), 3.0f / game.view.cam.zoom
                 );
                 al_draw_circle(
                     generatorPosOffset.x, generatorPosOffset.y,
                     loadedGen.emission.circleInnerDist,
-                    al_map_rgb(240, 100, 100), 3.0f / game.cam.zoom
+                    al_map_rgb(240, 100, 100), 3.0f / game.view.cam.zoom
                 );
             } else {
                 al_draw_arc(
@@ -156,7 +158,7 @@ void ParticleEditor::drawCanvas() {
                     loadedGen.emission.circleArcRot +
                     generatorAngleOffset,
                     loadedGen.emission.circleArc,
-                    al_map_rgb(100, 240, 100), 3.0f / game.cam.zoom
+                    al_map_rgb(100, 240, 100), 3.0f / game.view.cam.zoom
                 );
                 al_draw_arc(
                     generatorPosOffset.x, generatorPosOffset.y,
@@ -165,7 +167,7 @@ void ParticleEditor::drawCanvas() {
                     loadedGen.emission.circleArcRot +
                     generatorAngleOffset,
                     loadedGen.emission.circleArc,
-                    al_map_rgb(240, 100, 100), 3.0f / game.cam.zoom
+                    al_map_rgb(240, 100, 100), 3.0f / game.view.cam.zoom
                 );
             }
             break;
@@ -176,13 +178,13 @@ void ParticleEditor::drawCanvas() {
                 generatorPosOffset,
                 loadedGen.emission.rectOuterDist * 2.0f,
                 generatorAngleOffset,
-                al_map_rgb(100, 240, 100), 3.0f / game.cam.zoom
+                al_map_rgb(100, 240, 100), 3.0f / game.view.cam.zoom
             );
             drawRotatedRectangle(
                 generatorPosOffset,
                 loadedGen.emission.rectInnerDist * 2.0f,
                 generatorAngleOffset,
-                al_map_rgb(240, 100, 100), 3.0f / game.cam.zoom
+                al_map_rgb(240, 100, 100), 3.0f / game.view.cam.zoom
             );
             break;
             

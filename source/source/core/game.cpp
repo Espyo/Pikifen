@@ -195,7 +195,8 @@ void Game::globalHandleAllegroEvent(const ALLEGRO_EVENT &ev) {
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP
     ) {
         //Mouse cursor.
-        mouseCursor.updatePos(ev, windowToWorldTransform);
+        mouseCursor.updatePos(ev);
+        view.updateCursor(mouseCursor.winPos);
         
     } else if(ev.type == ALLEGRO_EVENT_AUDIO_STREAM_FINISHED) {
         //Audio stream finished.

@@ -119,16 +119,7 @@ void ParticleEditor::processGui() {
     processGuiToolbar();
     
     //Draw the canvas now.
-    ImGui::BeginChild("canvas", ImVec2(0, -EDITOR::STATUS_BAR_HEIGHT));
-    ImGui::EndChild();
-    isMouseInGui =
-        !ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem);
-    ImVec2 tl = ImGui::GetItemRectMin();
-    canvasTL.x = tl.x;
-    canvasTL.y = tl.y;
-    ImVec2 br = ImGui::GetItemRectMax();
-    canvasBR.x = br.x;
-    canvasBR.y = br.y;
+    processGuiCanvas();
     ImGui::GetWindowDrawList()->AddCallback(drawCanvasDearImGuiCallback, nullptr);
     
     //Status bar.
@@ -1720,8 +1711,8 @@ void ParticleEditor::processGuiStatusBar() {
         ImGui::SameLine();
         monoText(
             "%s, %s",
-            boxString(f2s(game.mouseCursor.worldPos.x), 7).c_str(),
-            boxString(f2s(game.mouseCursor.worldPos.y), 7).c_str()
+            boxString(f2s(game.view.cursorWorldPos.x), 7).c_str(),
+            boxString(f2s(game.view.cursorWorldPos.y), 7).c_str()
         );
     }
 }

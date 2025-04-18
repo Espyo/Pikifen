@@ -291,8 +291,8 @@ void AreaEditor::clearCurrentArea() {
         }
     }
     
-    game.cam.setPos(Point());
-    game.cam.set_zoom(1.0f);
+    game.view.cam.setPos(Point());
+    game.view.cam.setZoom(1.0f);
     showCrossSection = false;
     showCrossSectionGrid = false;
     showBlockingSectors = false;
@@ -543,7 +543,7 @@ void AreaEditor::createDrawingVertexes() {
 void AreaEditor::createMobUnderCursor() {
     registerChange("object creation");
     subState = EDITOR_SUB_STATE_NONE;
-    Point hotspot = snapPoint(game.mouseCursor.worldPos);
+    Point hotspot = snapPoint(game.view.cursorWorldPos);
     
     if(lastMobCustomCatName.empty()) {
         lastMobCustomCatName =
@@ -997,7 +997,7 @@ void AreaEditor::finishLayoutMoving() {
         vector<std::pair<Distance, Vertex*> > merge_vertexes =
             getMergeVertexes(
                 p, game.curAreaData->vertexes,
-                AREA_EDITOR::VERTEX_MERGE_RADIUS / game.cam.zoom
+                AREA_EDITOR::VERTEX_MERGE_RADIUS / game.view.cam.zoom
             );
             
         for(size_t mv = 0; mv < merge_vertexes.size(); ) {
@@ -1381,20 +1381,20 @@ string AreaEditor::getFolderTooltip(
 void AreaEditor::getHoveredLayoutElement(
     Vertex** hovered_vertex, Edge** hovered_edge, Sector** hovered_sector
 ) const {
-    *hovered_vertex = getVertexUnderPoint(game.mouseCursor.worldPos);
+    *hovered_vertex = getVertexUnderPoint(game.view.cursorWorldPos);
     *hovered_edge = nullptr;
     *hovered_sector = nullptr;
     
     if(*hovered_vertex) return;
     
     if(selectionFilter != SELECTION_FILTER_VERTEXES) {
-        *hovered_edge = getEdgeUnderPoint(game.mouseCursor.worldPos);
+        *hovered_edge = getEdgeUnderPoint(game.view.cursorWorldPos);
     }
     
     if(*hovered_edge) return;
     
     if(selectionFilter == SELECTION_FILTER_SECTORS) {
-        *hovered_sector = getSectorUnderPoint(game.mouseCursor.worldPos);
+        *hovered_sector = getSectorUnderPoint(game.view.cursorWorldPos);
     }
 }
 
@@ -1788,8 +1788,8 @@ void AreaEditor::load() {
     //Automatically load a file if needed, or show the load dialog.
     if(!quickPlayAreaPath.empty()) {
         loadAreaFolder(quickPlayAreaPath, false, true);
-        game.cam.setPos(quickPlayCamPos);
-        game.cam.set_zoom(quickPlayCamZ);
+        game.view.cam.setPos(quickPlayCamPos);
+        game.view.cam.setZoom(quickPlayCamZ);
         quickPlayAreaPath.clear();
         
     } else if(!autoLoadFolder.empty()) {
@@ -1941,10 +1941,10 @@ void AreaEditor::loadReference() {
  * @param ev Event to handle.
  */
 void AreaEditor::panCam(const ALLEGRO_EVENT &ev) {
-    game.cam.setPos(
+    game.view.cam.setPos(
         Point(
-            game.cam.pos.x - ev.mouse.dx / game.cam.zoom,
-            game.cam.pos.y - ev.mouse.dy / game.cam.zoom
+            game.view.cam.pos.x - ev.mouse.dx / game.view.cam.zoom,
+            game.view.cam.pos.y - ev.mouse.dy / game.view.cam.zoom
         )
     );
 }
@@ -2393,8 +2393,8 @@ void AreaEditor::quickPlayCmd(float input_value) {
     
     if(!saveArea(false)) return;
     quickPlayAreaPath = manifest.path;
-    quickPlayCamPos = game.cam.pos;
-    quickPlayCamZ = game.cam.zoom;
+    quickPlayCamPos = game.view.cam.pos;
+    quickPlayCamZ = game.view.cam.zoom;
     leave();
 }
 
@@ -2830,10 +2830,10 @@ void AreaEditor::undoCmd(float input_value) {
 void AreaEditor::zoomAndPosResetCmd(float input_value) {
     if(input_value < 0.5f) return;
     
-    if(game.cam.targetZoom == 1.0f) {
-        game.cam.targetPos = Point();
+    if(game.view.cam.targetZoom == 1.0f) {
+        game.view.cam.targetPos = Point();
     } else {
-        game.cam.targetZoom = 1.0f;
+        game.view.cam.targetZoom = 1.0f;
     }
 }
 
@@ -2914,10 +2914,10 @@ void AreaEditor::zoomEverythingCmd(float input_value) {
 void AreaEditor::zoomInCmd(float input_value) {
     if(input_value < 0.5f) return;
     
-    game.cam.targetZoom =
+    game.view.cam.targetZoom =
         std::clamp(
-            game.cam.targetZoom +
-            game.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
+            game.view.cam.targetZoom +
+            game.view.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
             zoomMinLevel, zoomMaxLevel
         );
 }
@@ -2931,10 +2931,10 @@ void AreaEditor::zoomInCmd(float input_value) {
 void AreaEditor::zoomOutCmd(float input_value) {
     if(input_value < 0.5f) return;
     
-    game.cam.targetZoom =
+    game.view.cam.targetZoom =
         std::clamp(
-            game.cam.targetZoom -
-            game.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
+            game.view.cam.targetZoom -
+            game.view.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
             zoomMinLevel, zoomMaxLevel
         );
 }
@@ -3062,7 +3062,7 @@ void AreaEditor::removeThumbnail() {
  * @brief Resets the camera's X and Y coordinates.
  */
 void AreaEditor::resetCamXY() {
-    game.cam.targetPos = Point();
+    game.view.cam.targetPos = Point();
 }
 
 
@@ -3287,7 +3287,7 @@ void AreaEditor::setNewCircleSectorPoints() {
     float anchor_angle =
         getAngle(newCircleSectorCenter, newCircleSectorAnchor);
     float cursor_angle =
-        getAngle(newCircleSectorCenter, game.mouseCursor.worldPos);
+        getAngle(newCircleSectorCenter, game.view.cursorWorldPos);
     float radius =
         Distance(
             newCircleSectorCenter, newCircleSectorAnchor
@@ -3522,8 +3522,8 @@ void AreaEditor::setupForNewAreaPre() {
     clearCurrentArea();
     manifest.clear();
     
-    game.cam.zoom = 1.0f;
-    game.cam.pos = Point();
+    game.view.cam.zoom = 1.0f;
+    game.view.cam.pos = Point();
     
     state = EDITOR_STATE_MAIN;
     
@@ -3545,7 +3545,7 @@ void AreaEditor::startMobMove() {
     for(auto const &m : selectedMobs) {
         preMoveMobCoords[m] = m->pos;
         
-        Distance d(game.mouseCursor.worldPos, m->pos);
+        Distance d(game.view.cursorWorldPos, m->pos);
         if(!moveClosestMob || d < move_closest_mob_dist) {
             moveClosestMob = m;
             move_closest_mob_dist = d;
@@ -3553,7 +3553,7 @@ void AreaEditor::startMobMove() {
         }
     }
     
-    moveMouseStartPos = game.mouseCursor.worldPos;
+    moveMouseStartPos = game.view.cursorWorldPos;
     moving = true;
 }
 
@@ -3572,7 +3572,7 @@ void AreaEditor::startPathStopMove() {
     ) {
         preMoveStopCoords[*s] = (*s)->pos;
         
-        Distance d(game.mouseCursor.worldPos, (*s)->pos);
+        Distance d(game.view.cursorWorldPos, (*s)->pos);
         if(!moveClosestStop || d < move_closest_stop_dist) {
             moveClosestStop = *s;
             move_closest_stop_dist = d;
@@ -3580,7 +3580,7 @@ void AreaEditor::startPathStopMove() {
         }
     }
     
-    moveMouseStartPos = game.mouseCursor.worldPos;
+    moveMouseStartPos = game.view.cursorWorldPos;
     moving = true;
 }
 
@@ -3597,7 +3597,7 @@ void AreaEditor::startVertexMove() {
         Point p = v2p(v);
         preMoveVertexCoords[v] = p;
         
-        Distance d(game.mouseCursor.worldPos, p);
+        Distance d(game.view.cursorWorldPos, p);
         if(!moveClosestVertex || d < move_closest_vertex_dist) {
             moveClosestVertex = v;
             move_closest_vertex_dist = d;
@@ -3605,7 +3605,7 @@ void AreaEditor::startVertexMove() {
         }
     }
     
-    moveMouseStartPos = game.mouseCursor.worldPos;
+    moveMouseStartPos = game.view.cursorWorldPos;
     moving = true;
 }
 
@@ -4016,7 +4016,7 @@ AreaEditor::LayoutDrawingNode::LayoutDrawingNode(
     vector<std::pair<Distance, Vertex*> > merge_vertexes =
         getMergeVertexes(
             mouse_click, game.curAreaData->vertexes,
-            AREA_EDITOR::VERTEX_MERGE_RADIUS / game.cam.zoom
+            AREA_EDITOR::VERTEX_MERGE_RADIUS / game.view.cam.zoom
         );
     if(!merge_vertexes.empty()) {
         sort(

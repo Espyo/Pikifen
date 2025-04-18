@@ -20,20 +20,20 @@
  */
 void ParticleEditor::handleKeyCharCanvas(const ALLEGRO_EVENT &ev) {
     if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_LEFT)) {
-        game.cam.targetPos.x -=
-            AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
+        game.view.cam.targetPos.x -=
+            AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.view.cam.zoom;
             
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_RIGHT)) {
-        game.cam.targetPos.x +=
-            AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
+        game.view.cam.targetPos.x +=
+            AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.view.cam.zoom;
             
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_UP)) {
-        game.cam.targetPos.y -=
-            AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
+        game.view.cam.targetPos.y -=
+            AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.view.cam.zoom;
             
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_DOWN)) {
-        game.cam.targetPos.y +=
-            AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
+        game.view.cam.targetPos.y +=
+            AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.view.cam.zoom;
             
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_MINUS)) {
         zoomOutCmd(1.0f);
@@ -132,7 +132,7 @@ void ParticleEditor::handleLmbDoubleClick(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void ParticleEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
-    generatorPosOffset = game.mouseCursor.worldPos;
+    generatorPosOffset = game.view.cursorWorldPos;
 }
 
 
@@ -142,7 +142,7 @@ void ParticleEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void ParticleEditor::handleLmbDrag(const ALLEGRO_EVENT &ev) {
-    generatorPosOffset = game.mouseCursor.worldPos;
+    generatorPosOffset = game.view.cursorWorldPos;
 }
 
 
@@ -198,7 +198,7 @@ void ParticleEditor::handleMouseUpdate(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void ParticleEditor::handleMouseWheel(const ALLEGRO_EVENT &ev) {
-    zoomWithCursor(game.cam.zoom + (game.cam.zoom * ev.mouse.dz * 0.1));
+    zoomWithCursor(game.view.cam.zoom + (game.view.cam.zoom * ev.mouse.dz * 0.1));
 }
 
 

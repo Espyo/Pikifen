@@ -49,8 +49,8 @@ void GameplayState::doGameDrawing(
         blend_old_aop, blend_old_asrc, blend_old_adst;
         
     if(bmp_output) {
-        old_world_to_window_transform = game.worldToWindowTransform;
-        game.worldToWindowTransform = *bmp_transform;
+        old_world_to_window_transform = game.view.worldToWindowTransform;
+        game.view.worldToWindowTransform = *bmp_transform;
         al_set_target_bitmap(bmp_output);
         al_get_separate_blender(
             &blend_old_op, &blend_old_src, &blend_old_dst,
@@ -78,7 +78,7 @@ void GameplayState::doGameDrawing(
     if(game.perfMon) {
         game.perfMon->startMeasurement("Drawing -- World");
     }
-    al_use_transform(&game.worldToWindowTransform);
+    al_use_transform(&game.view.worldToWindowTransform);
     drawWorldComponents(bmp_output);
     if(game.perfMon) {
         game.perfMon->finishMeasurement();
@@ -123,7 +123,7 @@ void GameplayState::doGameDrawing(
             blend_old_op, blend_old_src, blend_old_dst,
             blend_old_aop, blend_old_asrc, blend_old_adst
         );
-        game.worldToWindowTransform = old_world_to_window_transform;
+        game.view.worldToWindowTransform = old_world_to_window_transform;
         al_set_target_backbuffer(game.display);
         return;
     }
@@ -138,7 +138,7 @@ void GameplayState::doGameDrawing(
     }
     
     //Layer 7 -- Leader cursor.
-    al_use_transform(&game.worldToWindowTransform);
+    al_use_transform(&game.view.worldToWindowTransform);
     ALLEGRO_COLOR cursor_color = game.config.aestheticGen.noPikminColor;
     if(closestGroupMember[BUBBLE_RELATION_CURRENT]) {
         cursor_color =
@@ -221,7 +221,7 @@ void GameplayState::drawBackground(ALLEGRO_BITMAP* bmp_output) {
     //I apologize if you're trying to understand what it means.
     int bmp_w = bmp_output ? al_get_bitmap_width(bmp_output) : game.winW;
     int bmp_h = bmp_output ? al_get_bitmap_height(bmp_output) : game.winH;
-    float zoom_to_use = bmp_output ? 0.5 : game.cam.zoom;
+    float zoom_to_use = bmp_output ? 0.5 : game.view.cam.zoom;
     Point final_zoom(
         bmp_w * 0.5 * game.curAreaData->bgDist / zoom_to_use,
         bmp_h * 0.5 * game.curAreaData->bgDist / zoom_to_use
@@ -232,33 +232,33 @@ void GameplayState::drawBackground(ALLEGRO_BITMAP* bmp_output) {
     bg_v[0].y =
         0;
     bg_v[0].u =
-        (game.cam.pos.x - final_zoom.x) / game.curAreaData->bgBmpZoom;
+        (game.view.cam.pos.x - final_zoom.x) / game.curAreaData->bgBmpZoom;
     bg_v[0].v =
-        (game.cam.pos.y - final_zoom.y) / game.curAreaData->bgBmpZoom;
+        (game.view.cam.pos.y - final_zoom.y) / game.curAreaData->bgBmpZoom;
     bg_v[1].x =
         bmp_w;
     bg_v[1].y =
         0;
     bg_v[1].u =
-        (game.cam.pos.x + final_zoom.x) / game.curAreaData->bgBmpZoom;
+        (game.view.cam.pos.x + final_zoom.x) / game.curAreaData->bgBmpZoom;
     bg_v[1].v =
-        (game.cam.pos.y - final_zoom.y) / game.curAreaData->bgBmpZoom;
+        (game.view.cam.pos.y - final_zoom.y) / game.curAreaData->bgBmpZoom;
     bg_v[2].x =
         bmp_w;
     bg_v[2].y =
         bmp_h;
     bg_v[2].u =
-        (game.cam.pos.x + final_zoom.x) / game.curAreaData->bgBmpZoom;
+        (game.view.cam.pos.x + final_zoom.x) / game.curAreaData->bgBmpZoom;
     bg_v[2].v =
-        (game.cam.pos.y + final_zoom.y) / game.curAreaData->bgBmpZoom;
+        (game.view.cam.pos.y + final_zoom.y) / game.curAreaData->bgBmpZoom;
     bg_v[3].x =
         0;
     bg_v[3].y =
         bmp_h;
     bg_v[3].u =
-        (game.cam.pos.x - final_zoom.x) / game.curAreaData->bgBmpZoom;
+        (game.view.cam.pos.x - final_zoom.x) / game.curAreaData->bgBmpZoom;
     bg_v[3].v =
-        (game.cam.pos.y + final_zoom.y) / game.curAreaData->bgBmpZoom;
+        (game.view.cam.pos.y + final_zoom.y) / game.curAreaData->bgBmpZoom;
         
     al_draw_prim(
         bg_v, nullptr, game.curAreaData->bgBmp,
@@ -592,7 +592,7 @@ void GameplayState::drawDebugTools() {
     
     //Group stuff.
     /*
-    al_use_transform(&game.worldToWindowTransform);
+    al_use_transform(&game.view.worldToWindowTransform);
     for(size_t m = 0; m < curLeaderPtr->group->members.size(); m++) {
         point offset = curLeaderPtr->group->get_spot_offset(m);
         al_draw_filled_circle(
@@ -1010,7 +1010,7 @@ void GameplayState::drawLeaderCursor(const ALLEGRO_COLOR &color) {
     al_use_transform(&game.identityTransform);
     
     float count_offset =
-        std::max(bmp_cursor_size.x, bmp_cursor_size.y) * 0.18f * game.cam.zoom;
+        std::max(bmp_cursor_size.x, bmp_cursor_size.y) * 0.18f * game.view.cam.zoom;
         
     if(n_standby_pikmin > 0) {
         drawText(
@@ -1022,7 +1022,7 @@ void GameplayState::drawLeaderCursor(const ALLEGRO_COLOR &color) {
         );
     }
     
-    al_use_transform(&game.worldToWindowTransform);
+    al_use_transform(&game.view.worldToWindowTransform);
 }
 
 
@@ -1039,23 +1039,23 @@ void GameplayState::drawLightingFilter() {
         //Start by drawing the central fog fade out effect.
         
         Point fog_top_left =
-            game.cam.pos -
+            game.view.cam.pos -
             Point(
                 game.curAreaData->weatherCondition.fogFar,
                 game.curAreaData->weatherCondition.fogFar
             );
         Point fog_bottom_right =
-            game.cam.pos +
+            game.view.cam.pos +
             Point(
                 game.curAreaData->weatherCondition.fogFar,
                 game.curAreaData->weatherCondition.fogFar
             );
         al_transform_coordinates(
-            &game.worldToWindowTransform,
+            &game.view.worldToWindowTransform,
             &fog_top_left.x, &fog_top_left.y
         );
         al_transform_coordinates(
-            &game.worldToWindowTransform,
+            &game.view.worldToWindowTransform,
             &fog_bottom_right.x, &fog_bottom_right.y
         );
         
@@ -1138,10 +1138,10 @@ void GameplayState::drawLightingFilter() {
             
             Point pos = m_ptr->pos;
             al_transform_coordinates(
-                &game.worldToWindowTransform,
+                &game.view.worldToWindowTransform,
                 &pos.x, &pos.y
             );
-            float radius = 4.0f * game.cam.zoom;
+            float radius = 4.0f * game.view.cam.zoom;
             
             if(m_ptr->type->blackoutRadius > 0.0f) {
                 radius *= m_ptr->type->blackoutRadius;
@@ -1826,19 +1826,19 @@ void GameplayState::drawWorldComponents(ALLEGRO_BITMAP* bmp_output) {
     ALLEGRO_BITMAP* custom_liquid_limit_effect_buffer = nullptr;
     if(!bmp_output) {
         updateOffsetEffectBuffer(
-            game.cam.box[0], game.cam.box[1],
+            game.view.box[0], game.view.box[1],
             game.liquidLimitEffectCaches,
             game.liquidLimitEffectBuffer,
             true
         );
         updateOffsetEffectBuffer(
-            game.cam.box[0], game.cam.box[1],
+            game.view.box[0], game.view.box[1],
             game.wallSmoothingEffectCaches,
             game.wallOffsetEffectBuffer,
             true
         );
         updateOffsetEffectBuffer(
-            game.cam.box[0], game.cam.box[1],
+            game.view.box[0], game.view.box[1],
             game.wallShadowEffectCaches,
             game.wallOffsetEffectBuffer,
             false
@@ -1894,7 +1894,7 @@ void GameplayState::drawWorldComponents(ALLEGRO_BITMAP* bmp_output) {
             !bmp_output &&
             !rectanglesIntersect(
                 s_ptr->bbox[0], s_ptr->bbox[1],
-                game.cam.box[0], game.cam.box[1]
+                game.view.box[0], game.view.box[1]
             )
         ) {
             //Off-camera.
@@ -1908,7 +1908,7 @@ void GameplayState::drawWorldComponents(ALLEGRO_BITMAP* bmp_output) {
     }
     
     //Particles.
-    particles.fillComponentList(components, game.cam.box[0], game.cam.box[1]);
+    particles.fillComponentList(components, game.view.box[0], game.view.box[1]);
     
     //Mobs.
     for(size_t m = 0; m < mobs.all.size(); m++) {

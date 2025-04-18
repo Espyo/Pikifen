@@ -37,19 +37,21 @@ void AnimationEditor::doDrawing() {
  * This is called as a callback inside the Dear ImGui rendering process.
  */
 void AnimationEditor::drawCanvas() {
+    Point canvasTL = game.view.getTopLeft();
+    Point canvasBR = game.view.getBottomRight();
+    
     al_set_clipping_rectangle(
-        canvasTL.x, canvasTL.y,
-        canvasBR.x - canvasTL.x, canvasBR.y - canvasTL.y
+        canvasTL.x, canvasTL.y, game.view.size.x, game.view.size.y
     );
     
     if(useBg && bg) {
         Point texture_tl = canvasTL;
         Point texture_br = canvasBR;
         al_transform_coordinates(
-            &game.windowToWorldTransform, &texture_tl.x, &texture_tl.y
+            &game.view.windowToWorldTransform, &texture_tl.x, &texture_tl.y
         );
         al_transform_coordinates(
-            &game.windowToWorldTransform, &texture_br.x, &texture_br.y
+            &game.view.windowToWorldTransform, &texture_br.x, &texture_br.y
         );
         ALLEGRO_VERTEX bg_vertexes[4];
         for(size_t v = 0; v < 4; v++) {
@@ -85,7 +87,7 @@ void AnimationEditor::drawCanvas() {
         al_clear_to_color(al_map_rgb(128, 144, 128));
     }
     
-    al_use_transform(&game.worldToWindowTransform);
+    al_use_transform(&game.view.worldToWindowTransform);
     
     Sprite* s = nullptr;
     
@@ -126,10 +128,10 @@ void AnimationEditor::drawCanvas() {
             Point scene_tl = Point(-1.0f);
             Point scene_br = Point(canvasBR.x + 1, canvasBR.y + 1);
             al_transform_coordinates(
-                &game.windowToWorldTransform, &scene_tl.x, &scene_tl.y
+                &game.view.windowToWorldTransform, &scene_tl.x, &scene_tl.y
             );
             al_transform_coordinates(
-                &game.windowToWorldTransform, &scene_br.x, &scene_br.y
+                &game.view.windowToWorldTransform, &scene_br.x, &scene_br.y
             );
             
             for(unsigned char x = 0; x < 3; x++) {
@@ -211,7 +213,7 @@ void AnimationEditor::drawCanvas() {
                 //lower ones makes it all more intuitive and cohesive.
                 Hitbox* h_ptr = &s->hitboxes[h];
                 ALLEGRO_COLOR hitbox_color, hitbox_outline_color;
-                float hitbox_outline_thickness = 2.0f / game.cam.zoom;
+                float hitbox_outline_thickness = 2.0f / game.view.cam.zoom;
                 
                 switch(h_ptr->type) {
                 case HITBOX_TYPE_NORMAL: {
@@ -234,7 +236,7 @@ void AnimationEditor::drawCanvas() {
                     state == EDITOR_STATE_HITBOXES
                 ) {
                     hitbox_outline_thickness =
-                        3.0f / game.cam.zoom;
+                        3.0f / game.view.cam.zoom;
                     hitbox_outline_color =
                         changeAlpha(hitbox_color, hitbox_outline_alpha);
                 }
@@ -259,7 +261,7 @@ void AnimationEditor::drawCanvas() {
                 &curSprite->offset,
                 &cur_sprite_size,
                 &curSprite->angle,
-                1.0f / game.cam.zoom
+                1.0f / game.view.cam.zoom
             );
             
         } else if(state == EDITOR_STATE_TOP && s->topVisible) {
@@ -267,7 +269,7 @@ void AnimationEditor::drawCanvas() {
                 &s->topPos,
                 &s->topSize,
                 &s->topAngle,
-                1.0f / game.cam.zoom
+                1.0f / game.view.cam.zoom
             );
             
         } else if(state == EDITOR_STATE_HITBOXES && curHitbox) {
@@ -279,7 +281,7 @@ void AnimationEditor::drawCanvas() {
                     &curHitbox->pos,
                     &hitbox_size,
                     nullptr,
-                    1.0f / game.cam.zoom
+                    1.0f / game.view.cam.zoom
                 );
             } else if(curHitbox->height != 0.0f) {
                 Point hitbox_center(
@@ -293,7 +295,7 @@ void AnimationEditor::drawCanvas() {
                     &hitbox_center,
                     &hitbox_size,
                     nullptr,
-                    1.0f / game.cam.zoom
+                    1.0f / game.view.cam.zoom
                 );
             }
             
@@ -312,21 +314,21 @@ void AnimationEditor::drawCanvas() {
         Point cam_top_left_corner(0, 0);
         Point cam_bottom_right_corner(canvasBR.x, canvasBR.y);
         al_transform_coordinates(
-            &game.windowToWorldTransform,
+            &game.view.windowToWorldTransform,
             &cam_top_left_corner.x, &cam_top_left_corner.y
         );
         al_transform_coordinates(
-            &game.windowToWorldTransform,
+            &game.view.windowToWorldTransform,
             &cam_bottom_right_corner.x, &cam_bottom_right_corner.y
         );
         
         al_draw_line(
             0, cam_top_left_corner.y, 0, cam_bottom_right_corner.y,
-            al_map_rgb(240, 240, 240), 1.0f / game.cam.zoom
+            al_map_rgb(240, 240, 240), 1.0f / game.view.cam.zoom
         );
         al_draw_line(
             cam_top_left_corner.x, 0, cam_bottom_right_corner.x, 0,
-            al_map_rgb(240, 240, 240), 1.0f / game.cam.zoom
+            al_map_rgb(240, 240, 240), 1.0f / game.view.cam.zoom
         );
     }
     
@@ -411,10 +413,10 @@ void AnimationEditor::drawSideViewHitbox(
         z_to_use = game.winH + 1;
         h_to_use = 0 - 1;
         al_transform_coordinates(
-            &game.windowToWorldTransform, &dummy, &z_to_use
+            &game.view.windowToWorldTransform, &dummy, &z_to_use
         );
         al_transform_coordinates(
-            &game.windowToWorldTransform, &dummy, &h_to_use
+            &game.view.windowToWorldTransform, &dummy, &h_to_use
         );
         //The height is the height from the top of the window to the bottom.
         h_to_use = z_to_use - h_to_use;
@@ -512,6 +514,8 @@ void AnimationEditor::drawTimeline() {
     }
     if(anim_total_duration == 0.0f) return;
     
+    Point canvasTL = game.view.getTopLeft();
+    Point canvasBR = game.view.getBottomRight();
     float scale =
         (canvasBR.x - canvasTL.x - ANIM_EDITOR::TIMELINE_PADDING * 2.0f) /
         anim_total_duration;
@@ -688,13 +692,13 @@ void AnimationEditor::drawTopDownViewLeaderSilhouette(
 void AnimationEditor::drawTopDownViewMobRadius(MobType* mt) {
     al_draw_circle(
         0, 0, mt->radius,
-        al_map_rgb(240, 240, 240), 1.0f / game.cam.zoom
+        al_map_rgb(240, 240, 240), 1.0f / game.view.cam.zoom
     );
     if(mt->rectangularDim.x != 0) {
         al_draw_rectangle(
             -mt->rectangularDim.x / 2.0, -mt->rectangularDim.y / 2.0,
             mt->rectangularDim.x / 2.0, mt->rectangularDim.y / 2.0,
-            al_map_rgb(240, 240, 240), 1.0f / game.cam.zoom
+            al_map_rgb(240, 240, 240), 1.0f / game.view.cam.zoom
         );
     }
 }

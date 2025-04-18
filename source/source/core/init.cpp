@@ -921,6 +921,13 @@ void initMisc() {
     al_reserve_samples(16);
     
     al_identity_transform(&game.identityTransform);
+    game.view.size.x = game.winW;
+    game.view.size.y = game.winH;
+    game.view.center.x = game.winW / 2.0f;
+    game.view.center.y = game.winH / 2.0f;
+    game.view.boxMargin.x = GAMEPLAY::CAMERA_BOX_MARGIN;
+    game.view.boxMargin.y = GAMEPLAY::CAMERA_BOX_MARGIN;
+    game.view.updateTransformations();
     
     game.rng.init();
     

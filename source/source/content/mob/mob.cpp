@@ -2701,7 +2701,7 @@ bool Mob::isOffCamera() const {
     }
     
     float radius_to_use = std::max(sprite_bound, collision_bound);
-    return !BBoxCheck(game.cam.box[0], game.cam.box[1], pos, radius_to_use);
+    return !BBoxCheck(game.view.box[0], game.view.box[1], pos, radius_to_use);
 }
 
 

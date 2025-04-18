@@ -225,7 +225,7 @@ void GameplayState::doGameplayLeaderLogic(float delta_t) {
         cursor_weight /= weight_sums;
         group_weight /= weight_sums;
         
-        game.cam.targetPos =
+        game.view.cam.targetPos =
             curLeaderPtr->pos * leader_weight +
             leaderCursorW * cursor_weight +
             group_center * group_weight;
@@ -477,7 +477,7 @@ void GameplayState::doGameplayLeaderLogic(float delta_t) {
     mouse_cursor_speed =
         mouse_cursor_speed * delta_t* game.options.controls.cursorSpeed;
         
-    leaderCursorW = game.mouseCursor.worldPos;
+    leaderCursorW = game.view.cursorWorldPos;
     
     float cursor_angle = getAngle(curLeaderPtr->pos, leaderCursorW);
     
@@ -494,10 +494,10 @@ void GameplayState::doGameplayLeaderLogic(float delta_t) {
         if(mouse_cursor_speed.x != 0 || mouse_cursor_speed.y != 0) {
             //If we're speeding the mouse cursor (via analog stick),
             //don't let it go beyond the edges.
-            game.mouseCursor.worldPos = leaderCursorW;
-            game.mouseCursor.winPos = game.mouseCursor.worldPos;
+            game.view.cursorWorldPos = leaderCursorW;
+            game.mouseCursor.winPos = game.view.cursorWorldPos;
             al_transform_coordinates(
-                &game.worldToWindowTransform,
+                &game.view.worldToWindowTransform,
                 &game.mouseCursor.winPos.x, &game.mouseCursor.winPos.y
             );
         }
@@ -505,7 +505,7 @@ void GameplayState::doGameplayLeaderLogic(float delta_t) {
     
     leaderCursorWin = leaderCursorW;
     al_transform_coordinates(
-        &game.worldToWindowTransform,
+        &game.view.worldToWindowTransform,
         &leaderCursorWin.x, &leaderCursorWin.y
     );
     
@@ -616,14 +616,16 @@ void GameplayState::doGameplayLogic(float delta_t) {
         float dummy_angle;
         float dummy_magnitude;
         leaderMovement.getInfo(&coords, &dummy_angle, &dummy_magnitude);
-        game.cam.targetPos = game.cam.pos + (coords * 120.0f / game.cam.zoom);
+        game.view.cam.targetPos = game.view.cam.pos + (coords * 120.0f / game.view.cam.zoom);
     }
     
-    game.cam.tick(delta_t);
-    
-    updateTransformations();
-    
-    game.cam.updateBox();
+    game.view.cam.tick(delta_t);
+    game.view.updateTransformations();
+    game.view.updateBox();
+    game.audio.setCameraPos(
+        game.view.box[0] + game.view.boxMargin,
+        game.view.box[1] - game.view.boxMargin
+    );
     
     if(!msgBox) {
     
@@ -645,10 +647,10 @@ void GameplayState::doGameplayLogic(float delta_t) {
             
         game.mouseCursor.winPos += mouse_cursor_speed;
         
-        game.mouseCursor.worldPos = game.mouseCursor.winPos;
+        game.view.cursorWorldPos = game.mouseCursor.winPos;
         al_transform_coordinates(
-            &game.windowToWorldTransform,
-            &game.mouseCursor.worldPos.x, &game.mouseCursor.worldPos.y
+            &game.view.windowToWorldTransform,
+            &game.view.cursorWorldPos.x, &game.view.cursorWorldPos.y
         );
         
         areaTimePassed += delta_t;
@@ -1352,17 +1354,17 @@ void GameplayState::doMenuLogic() {
     //Print mouse coordinates.
     if(game.makerTools.geometryInfo) {
         Sector* mouse_sector =
-            getSector(game.mouseCursor.worldPos, nullptr, true);
+            getSector(game.view.cursorWorldPos, nullptr, true);
             
         string coords_str =
-            boxString(f2s(game.mouseCursor.worldPos.x), 6) + " " +
-            boxString(f2s(game.mouseCursor.worldPos.y), 6);
+            boxString(f2s(game.view.cursorWorldPos.x), 6) + " " +
+            boxString(f2s(game.view.cursorWorldPos.y), 6);
         string blockmap_str =
             boxString(
-                i2s(game.curAreaData->bmap.getCol(game.mouseCursor.worldPos.x)),
+                i2s(game.curAreaData->bmap.getCol(game.view.cursorWorldPos.x)),
                 5, " "
             ) +
-            i2s(game.curAreaData->bmap.getRow(game.mouseCursor.worldPos.y));
+            i2s(game.curAreaData->bmap.getRow(game.view.cursorWorldPos.y));
         string sector_z_str, sector_light_str, sector_tex_str;
         if(mouse_sector) {
             sector_z_str =
@@ -2390,7 +2392,7 @@ void GameplayState::updateAreaActiveCells() {
     }
     
     //Mark the region in-camera (plus padding) as active.
-    markAreaCellsActive(game.cam.box[0], game.cam.box[1]);
+    markAreaCellsActive(game.view.box[0], game.view.box[1]);
 }
 
 

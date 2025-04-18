@@ -219,22 +219,22 @@ void GameplayState::endMission(bool cleared) {
     leaderMovement.reset(); //TODO replace with a better solution.
     
     //Zoom in on the reason, if possible.
-    Point new_cam_pos = game.cam.targetPos;
-    float new_cam_zoom = game.cam.targetZoom;
+    Point new_cam_pos = game.view.cam.targetPos;
+    float new_cam_zoom = game.view.cam.targetZoom;
     if(cleared) {
         MissionGoal* goal =
             game.missionGoals[game.curAreaData->mission.goal];
         if(goal->getEndZoomData(this, &new_cam_pos, &new_cam_zoom)) {
-            game.cam.targetPos = new_cam_pos;
-            game.cam.targetZoom = new_cam_zoom;
+            game.view.cam.targetPos = new_cam_pos;
+            game.view.cam.targetZoom = new_cam_zoom;
         }
         
     } else {
         MissionFail* cond =
             game.missionFailConds[missionFailReason];
         if(cond->getEndZoomData(this, &new_cam_pos, &new_cam_zoom)) {
-            game.cam.targetPos = new_cam_pos;
-            game.cam.targetZoom = new_cam_zoom;
+            game.view.cam.targetPos = new_cam_pos;
+            game.view.cam.targetZoom = new_cam_zoom;
         }
     }
     
@@ -256,7 +256,11 @@ void GameplayState::endMission(bool cleared) {
  * from the result menu's "keep playing" option.
  */
 void GameplayState::enter() {
-    updateTransformations();
+    game.view.size.x = game.winW;
+    game.view.size.y = game.winH;
+    game.view.center.x = game.winW / 2.0f;
+    game.view.center.y = game.winH / 2.0f;
+    game.view.updateTransformations();
     
     lastEnemyKilledPos = Point(LARGE_FLOAT);
     lastHurtLeaderPos = Point(LARGE_FLOAT);
@@ -295,7 +299,7 @@ void GameplayState::enter() {
     readyForInput = false;
     
     game.mouseCursor.reset();
-    leaderCursorW = game.mouseCursor.worldPos;
+    leaderCursorW = game.view.cursorWorldPos;
     leaderCursorWin = game.mouseCursor.winPos;
     
     notification.reset();
@@ -918,11 +922,11 @@ void GameplayState::load() {
     }
     
     if(curLeaderPtr) {
-        game.cam.setPos(curLeaderPtr->pos);
+        game.view.cam.setPos(curLeaderPtr->pos);
     } else {
-        game.cam.setPos(Point());
+        game.view.cam.setPos(Point());
     }
-    game.cam.set_zoom(game.options.advanced.zoomMidLevel);
+    game.view.cam.setZoom(game.options.advanced.zoomMidLevel);
     
     //Memorize mobs required by the mission.
     if(game.curAreaData->type == AREA_TYPE_MISSION) {
@@ -1218,8 +1222,8 @@ void GameplayState::unload() {
     closeToPikminToPluck = nullptr;
     closeToShipToHeal = nullptr;
     
-    game.cam.setPos(Point());
-    game.cam.set_zoom(1.0f);
+    game.view.cam.setPos(Point());
+    game.view.cam.setZoom(1.0f);
     
     while(!mobs.all.empty()) {
         deleteMob(*mobs.all.begin(), true);
@@ -1385,28 +1389,6 @@ void GameplayState::updateClosestGroupMembers() {
     if(closestGroupMember[BUBBLE_RELATION_CURRENT]) {
         curLeaderPtr->updateThrowVariables();
     }
-}
-
-
-/**
- * @brief Updates the transformations, with the current camera coordinates,
- * zoom, etc.
- */
-void GameplayState::updateTransformations() {
-    //World coordinates to window coordinates.
-    game.worldToWindowTransform = game.identityTransform;
-    al_translate_transform(
-        &game.worldToWindowTransform,
-        -game.cam.pos.x + game.winW / 2.0 / game.cam.zoom,
-        -game.cam.pos.y + game.winH / 2.0 / game.cam.zoom
-    );
-    al_scale_transform(
-        &game.worldToWindowTransform, game.cam.zoom, game.cam.zoom
-    );
-    
-    //Window coordinates to world coordinates.
-    game.windowToWorldTransform = game.worldToWindowTransform;
-    al_invert_transform(&game.windowToWorldTransform);
 }
 
 
