@@ -42,8 +42,8 @@ struct OnionMenuPikminType {
     //Index of this type in the Onion's list. Cache for convenience.
     size_t typeIdx = INVALID;
     
-    //Index in the on-screen list, or INVALID. Cache for convenience.
-    size_t onScreenIdx = INVALID;
+    //Index in the on-window list, or INVALID. Cache for convenience.
+    size_t onWindowIdx = INVALID;
     
     //Pikmin type associated. Cache for convenience.
     PikminType* pikType = nullptr;
@@ -90,8 +90,8 @@ struct OnionMenu {
     //Total page amount. Cache for convenience.
     size_t nrPages = 0;
     
-    //Pikmin types currently on-screen. Cache for convenience.
-    vector<OnionMenuPikminType*> onScreenTypes;
+    //Pikmin types currently on-window. Cache for convenience.
+    vector<OnionMenuPikminType*> onWindowTypes;
     
     //List of GUI items for the Onion icons. Cache for convenience.
     vector<GuiItem*> onionIconItems;

@@ -46,10 +46,10 @@ void AnimationEditor::drawCanvas() {
         Point texture_tl = canvasTL;
         Point texture_br = canvasBR;
         al_transform_coordinates(
-            &game.screenToWorldTransform, &texture_tl.x, &texture_tl.y
+            &game.windowToWorldTransform, &texture_tl.x, &texture_tl.y
         );
         al_transform_coordinates(
-            &game.screenToWorldTransform, &texture_br.x, &texture_br.y
+            &game.windowToWorldTransform, &texture_br.x, &texture_br.y
         );
         ALLEGRO_VERTEX bg_vertexes[4];
         for(size_t v = 0; v < 4; v++) {
@@ -85,7 +85,7 @@ void AnimationEditor::drawCanvas() {
         al_clear_to_color(al_map_rgb(128, 144, 128));
     }
     
-    al_use_transform(&game.worldToScreenTransform);
+    al_use_transform(&game.worldToWindowTransform);
     
     Sprite* s = nullptr;
     
@@ -126,10 +126,10 @@ void AnimationEditor::drawCanvas() {
             Point scene_tl = Point(-1.0f);
             Point scene_br = Point(canvasBR.x + 1, canvasBR.y + 1);
             al_transform_coordinates(
-                &game.screenToWorldTransform, &scene_tl.x, &scene_tl.y
+                &game.windowToWorldTransform, &scene_tl.x, &scene_tl.y
             );
             al_transform_coordinates(
-                &game.screenToWorldTransform, &scene_br.x, &scene_br.y
+                &game.windowToWorldTransform, &scene_br.x, &scene_br.y
             );
             
             for(unsigned char x = 0; x < 3; x++) {
@@ -312,11 +312,11 @@ void AnimationEditor::drawCanvas() {
         Point cam_top_left_corner(0, 0);
         Point cam_bottom_right_corner(canvasBR.x, canvasBR.y);
         al_transform_coordinates(
-            &game.screenToWorldTransform,
+            &game.windowToWorldTransform,
             &cam_top_left_corner.x, &cam_top_left_corner.y
         );
         al_transform_coordinates(
-            &game.screenToWorldTransform,
+            &game.windowToWorldTransform,
             &cam_bottom_right_corner.x, &cam_bottom_right_corner.y
         );
         
@@ -406,17 +406,17 @@ void AnimationEditor::drawSideViewHitbox(
     float h_to_use = h_ptr->height;
     
     if(h_ptr->height == 0) {
-        //Set the coordinates to the screen top and screen bottom. Add some
+        //Set the coordinates to the window top and window bottom. Add some
         //padding just to make sure.
         z_to_use = game.winH + 1;
         h_to_use = 0 - 1;
         al_transform_coordinates(
-            &game.screenToWorldTransform, &dummy, &z_to_use
+            &game.windowToWorldTransform, &dummy, &z_to_use
         );
         al_transform_coordinates(
-            &game.screenToWorldTransform, &dummy, &h_to_use
+            &game.windowToWorldTransform, &dummy, &h_to_use
         );
-        //The height is the height from the top of the screen to the bottom.
+        //The height is the height from the top of the window to the bottom.
         h_to_use = z_to_use - h_to_use;
         //Z needs to be flipped.
         z_to_use = -z_to_use;

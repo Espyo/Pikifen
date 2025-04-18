@@ -1153,9 +1153,9 @@ void AudioManager::updatePlaybackTargetGainAndPan(size_t playback_idx) {
         source_ptr->type == SOUND_TYPE_AMBIANCE_POS;
     if(!is_positional) return;
     
-    //Calculate screen and camera things.
-    Point screen_size = camBR - camTL;
-    if(screen_size.x == 0.0f || screen_size.y == 0.0f) return;
+    //Calculate camera things.
+    Point cam_size = camBR - camTL;
+    if(cam_size.x == 0.0f || cam_size.y == 0.0f) return;
     
     Point cam_center = (camTL + camBR) / 2.0f;
     float d = Distance(cam_center, source_ptr->pos).toFloat();

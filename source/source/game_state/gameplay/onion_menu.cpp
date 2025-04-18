@@ -196,7 +196,7 @@ OnionMenu::OnionMenu(
         GuiItem* onion_icon = new GuiItem(false);
         onion_icon->onDraw =
         [this, t, onion_icon] (const DrawInfo & draw) {
-            OnionMenuPikminType* t_ptr = this->onScreenTypes[t];
+            OnionMenuPikminType* t_ptr = this->onWindowTypes[t];
             if(t_ptr->pikType->bmpOnionIcon) {
                 float juicy_grow_amount = onion_icon->getJuiceValue();
                 drawBitmapInBox(
@@ -222,12 +222,12 @@ OnionMenu::OnionMenu(
         };
         onion_button->onActivate =
         [this, t] (const Point &) {
-            addToOnion(onScreenTypes[t]->typeIdx);
+            addToOnion(onWindowTypes[t]->typeIdx);
         };
         onion_button->canAutoRepeat = true;
         onion_button->onGetTooltip =
         [this, t] () {
-            OnionMenuPikminType* t_ptr = this->onScreenTypes[t];
+            OnionMenuPikminType* t_ptr = this->onWindowTypes[t];
             return "Store one " + t_ptr->pikType->name + " inside.";
         };
         gui.addItem(onion_button, id);
@@ -262,7 +262,7 @@ OnionMenu::OnionMenu(
         onion_amount_text->onDraw =
             [this, t, onion_amount_text]
         (const DrawInfo & draw) {
-            OnionMenuPikminType* t_ptr = this->onScreenTypes[t];
+            OnionMenuPikminType* t_ptr = this->onWindowTypes[t];
             
             size_t real_onion_amount =
                 this->nestPtr->getAmountByType(t_ptr->pikType);
@@ -303,7 +303,7 @@ OnionMenu::OnionMenu(
         GuiItem* group_icon = new GuiItem(false);
         group_icon->onDraw =
         [this, t, group_icon] (const DrawInfo & draw) {
-            OnionMenuPikminType* t_ptr = this->onScreenTypes[t];
+            OnionMenuPikminType* t_ptr = this->onWindowTypes[t];
             float juicy_grow_amount = group_icon->getJuiceValue();
             if(t_ptr->pikType->bmpIcon) {
                 drawBitmapInBox(
@@ -329,12 +329,12 @@ OnionMenu::OnionMenu(
         };
         group_button->onActivate =
         [this, t] (const Point &) {
-            addToGroup(onScreenTypes[t]->typeIdx);
+            addToGroup(onWindowTypes[t]->typeIdx);
         };
         group_button->canAutoRepeat = true;
         group_button->onGetTooltip =
         [this, t] () {
-            OnionMenuPikminType* t_ptr = this->onScreenTypes[t];
+            OnionMenuPikminType* t_ptr = this->onWindowTypes[t];
             return "Call one " + t_ptr->pikType->name + " to the group.";
         };
         gui.addItem(group_button, id);
@@ -369,7 +369,7 @@ OnionMenu::OnionMenu(
         group_amount_text->onDraw =
             [this, t, group_amount_text]
         (const DrawInfo & draw) {
-            OnionMenuPikminType* t_ptr = this->onScreenTypes[t];
+            OnionMenuPikminType* t_ptr = this->onWindowTypes[t];
             
             size_t real_group_amount =
                 this->leaderPtr->group->getAmountByType(t_ptr->pikType);
@@ -558,9 +558,9 @@ void OnionMenu::addToGroup(size_t type_idx) {
         
     //First, check if there are enough in the Onion to take out.
     if((signed int) (real_onion_amount - types[type_idx].delta) <= 0) {
-        size_t screen_idx = types[type_idx].onScreenIdx;
-        if(screen_idx != INVALID) {
-            makeGuiItemRed(onionAmountItems[screen_idx]);
+        size_t window_idx = types[type_idx].onWindowIdx;
+        if(window_idx != INVALID) {
+            makeGuiItemRed(onionAmountItems[window_idx]);
         }
         return;
     }
@@ -580,12 +580,12 @@ void OnionMenu::addToGroup(size_t type_idx) {
     
     types[type_idx].delta++;
     
-    size_t on_screen_idx = types[type_idx].onScreenIdx;
-    if(on_screen_idx != INVALID) {
-        onionAmountItems[on_screen_idx]->startJuiceAnimation(
+    size_t on_window_idx = types[type_idx].onWindowIdx;
+    if(on_window_idx != INVALID) {
+        onionAmountItems[on_window_idx]->startJuiceAnimation(
             GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
         );
-        groupAmountItems[on_screen_idx]->startJuiceAnimation(
+        groupAmountItems[on_window_idx]->startJuiceAnimation(
             GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
         );
     }
@@ -606,21 +606,21 @@ void OnionMenu::addToOnion(size_t type_idx) {
         leaderPtr->group->getAmountByType(nestPtr->nest_type->pik_types[type_idx]);
         
     if((signed int) (real_group_amount + types[type_idx].delta) <= 0) {
-        size_t screen_idx = types[type_idx].onScreenIdx;
-        if(screen_idx != INVALID) {
-            makeGuiItemRed(groupAmountItems[screen_idx]);
+        size_t window_idx = types[type_idx].onWindowIdx;
+        if(window_idx != INVALID) {
+            makeGuiItemRed(groupAmountItems[window_idx]);
         }
         return;
     }
     
     types[type_idx].delta--;
     
-    size_t on_screen_idx = types[type_idx].onScreenIdx;
-    if(on_screen_idx != INVALID) {
-        onionAmountItems[on_screen_idx]->startJuiceAnimation(
+    size_t on_window_idx = types[type_idx].onWindowIdx;
+    if(on_window_idx != INVALID) {
+        onionAmountItems[on_window_idx]->startJuiceAnimation(
             GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
         );
-        groupAmountItems[on_screen_idx]->startJuiceAnimation(
+        groupAmountItems[on_window_idx]->startJuiceAnimation(
             GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
         );
     }
@@ -843,11 +843,11 @@ void OnionMenu::toggleSelectAll() {
  * @brief Updates some things about the Onion's state, especially caches.
  */
 void OnionMenu::update() {
-    //Reset the on-screen types.
-    onScreenTypes.clear();
+    //Reset the on-window types.
+    onWindowTypes.clear();
     
     for(size_t t = 0; t < types.size(); t++) {
-        types[t].onScreenIdx = INVALID;
+        types[t].onWindowIdx = INVALID;
     }
     
     //Reset the button and amount states.
@@ -862,23 +862,23 @@ void OnionMenu::update() {
         groupAmountItems[t]->visible = false;
     }
     
-    //Assign the on-screen types.
+    //Assign the on-window types.
     for(
         size_t t = page * ONION_MENU::TYPES_PER_PAGE;
         t < (page + 1) * ONION_MENU::TYPES_PER_PAGE &&
         t < nestPtr->nest_type->pik_types.size();
         t++
     ) {
-        types[t].onScreenIdx = onScreenTypes.size();
-        onScreenTypes.push_back(&types[t]);
+        types[t].onWindowIdx = onWindowTypes.size();
+        onWindowTypes.push_back(&types[t]);
     }
     
-    //Assign the coordinates of the on-screen-type-related GUI items.
-    float splits = onScreenTypes.size() + 1;
+    //Assign the coordinates of the on-window-type-related GUI items.
+    float splits = onWindowTypes.size() + 1;
     float leftmost = 0.50f;
     float rightmost = 0.50f;
     
-    for(size_t t = 0; t < onScreenTypes.size(); t++) {
+    for(size_t t = 0; t < onWindowTypes.size(); t++) {
         float x = 1.0f / splits * (t + 1);
         onionIconItems[t]->ratioCenter.x = x;
         onionButtonItems[t]->ratioCenter.x = x;
@@ -900,7 +900,7 @@ void OnionMenu::update() {
     }
     
     //Make all relevant GUI items active.
-    for(size_t t = 0; t < onScreenTypes.size(); t++) {
+    for(size_t t = 0; t < onWindowTypes.size(); t++) {
         onionIconItems[t]->visible = true;
         onionAmountItems[t]->visible = true;
         groupIconItems[t]->visible = true;

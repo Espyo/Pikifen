@@ -104,7 +104,7 @@ Editor::Editor() :
 /**
  * @brief Centers the camera so that these four points are in view.
  * A bit of padding is added, so that, for instance, the top-left
- * point isn't exactly on the top-left of the screen,
+ * point isn't exactly on the top-left of the window,
  * where it's hard to see.
  *
  * @param min_coords Top-left coordinates of the content to focus on.
@@ -204,11 +204,11 @@ void Editor::drawGrid(
     Point cam_top_left_corner(0, 0);
     Point cam_bottom_right_corner(canvasBR.x, canvasBR.y);
     al_transform_coordinates(
-        &game.screenToWorldTransform,
+        &game.windowToWorldTransform,
         &cam_top_left_corner.x, &cam_top_left_corner.y
     );
     al_transform_coordinates(
-        &game.screenToWorldTransform,
+        &game.windowToWorldTransform,
         &cam_bottom_right_corner.x, &cam_bottom_right_corner.y
     );
     
@@ -321,7 +321,7 @@ size_t Editor::getHistorySize() const {
 
 
 /**
- * @brief Returns the position of the last widget, in screen coordinates.
+ * @brief Returns the position of the last widget, in window coordinates.
  *
  * @return The position.
  */
@@ -2785,7 +2785,7 @@ void Editor::setStatus(const string &text, bool error) {
     statusText = text;
     if(error) {
         opErrorFlashTimer.start();
-        opErrorPos = game.mouseCursor.sPos;
+        opErrorPos = game.mouseCursor.winPos;
     }
 }
 
@@ -3117,24 +3117,24 @@ void Editor::updateStyle() {
  * zoom, etc.
  */
 void Editor::updateTransformations() {
-    //World coordinates to screen coordinates.
+    //World coordinates to window coordinates.
     Point canvas_center(
         (canvasTL.x + canvasBR.x) / 2.0,
         (canvasTL.y + canvasBR.y) / 2.0
     );
-    game.worldToScreenTransform = game.identityTransform;
+    game.worldToWindowTransform = game.identityTransform;
     al_translate_transform(
-        &game.worldToScreenTransform,
+        &game.worldToWindowTransform,
         -game.cam.pos.x + canvas_center.x / game.cam.zoom,
         -game.cam.pos.y + canvas_center.y / game.cam.zoom
     );
     al_scale_transform(
-        &game.worldToScreenTransform, game.cam.zoom, game.cam.zoom
+        &game.worldToWindowTransform, game.cam.zoom, game.cam.zoom
     );
     
-    //Screen coordinates to world coordinates.
-    game.screenToWorldTransform = game.worldToScreenTransform;
-    al_invert_transform(&game.screenToWorldTransform);
+    //Window coordinates to world coordinates.
+    game.windowToWorldTransform = game.worldToWindowTransform;
+    al_invert_transform(&game.windowToWorldTransform);
 }
 
 
@@ -3146,34 +3146,34 @@ void Editor::updateTransformations() {
  */
 void Editor::zoomWithCursor(float new_zoom) {
     //Keep a backup of the old mouse coordinates.
-    Point old_mouse_pos = game.mouseCursor.wPos;
+    Point old_mouse_pos = game.mouseCursor.worldPos;
     
     //Do the zoom.
     game.cam.set_zoom(std::clamp(new_zoom, zoomMinLevel, zoomMaxLevel));
     updateTransformations();
     
     //Figure out where the mouse will be after the zoom.
-    game.mouseCursor.wPos = game.mouseCursor.sPos;
+    game.mouseCursor.worldPos = game.mouseCursor.winPos;
     al_transform_coordinates(
-        &game.screenToWorldTransform,
-        &game.mouseCursor.wPos.x, &game.mouseCursor.wPos.y
+        &game.windowToWorldTransform,
+        &game.mouseCursor.worldPos.x, &game.mouseCursor.worldPos.y
     );
     
     //Readjust the transformation by shifting the camera
     //so that the cursor ends up where it was before.
     game.cam.setPos(
         Point(
-            game.cam.pos.x += (old_mouse_pos.x - game.mouseCursor.wPos.x),
-            game.cam.pos.y += (old_mouse_pos.y - game.mouseCursor.wPos.y)
+            game.cam.pos.x += (old_mouse_pos.x - game.mouseCursor.worldPos.x),
+            game.cam.pos.y += (old_mouse_pos.y - game.mouseCursor.worldPos.y)
         )
     );
     
     //Update the mouse coordinates again.
     updateTransformations();
-    game.mouseCursor.wPos = game.mouseCursor.sPos;
+    game.mouseCursor.worldPos = game.mouseCursor.winPos;
     al_transform_coordinates(
-        &game.screenToWorldTransform,
-        &game.mouseCursor.wPos.x, &game.mouseCursor.wPos.y
+        &game.windowToWorldTransform,
+        &game.mouseCursor.worldPos.x, &game.mouseCursor.worldPos.y
     );
 }
 
@@ -3194,7 +3194,7 @@ Editor::ChangesManager::ChangesManager(Editor* ed) :
  * Otherwise, it opens a dialog asking the user if they
  * want to cancel, save and then do the action, or do the action without saving.
  *
- * @param pos Screen coordinates to show the warning on.
+ * @param pos Window coordinates to show the warning on.
  * If 0,0, then these will be set to the last processed widget's position.
  * @param action_long String representing the action the user is attempting
  * in a long format. This is for the main prompt of the warning dialog,
@@ -3222,7 +3222,7 @@ bool Editor::ChangesManager::askIfUnsaved(
             "Unsaved changes!",
             std::bind(&Editor::processGuiUnsavedChangesDialog, ed)
         );
-        ed->dialogs.back()->customPos = game.mouseCursor.sPos;
+        ed->dialogs.back()->customPos = game.mouseCursor.winPos;
         ed->dialogs.back()->customSize = Point(580, 0);
         ed->dialogs.back()->eventCallback =
         [this] (const ALLEGRO_EVENT * ev) {
@@ -3790,7 +3790,7 @@ Editor::PickerItem::PickerItem(
 
 
 /**
- * @brief Draws the widget on-screen.
+ * @brief Draws the widget.
  *
  * @param center Center point.
  * @param size Width and height. If nullptr, no scale handles will be drawn.

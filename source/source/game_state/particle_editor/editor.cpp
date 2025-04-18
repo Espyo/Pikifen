@@ -266,7 +266,7 @@ void ParticleEditor::doLogic() {
 
 
 /**
- * @brief Dear ImGui callback for when the canvas needs to be drawn on-screen.
+ * @brief Dear ImGui callback for when the canvas needs to be drawn on-window.
  *
  * @param parent_list Unused.
  * @param cmd Unused.

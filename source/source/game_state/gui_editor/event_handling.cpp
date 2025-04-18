@@ -120,7 +120,7 @@ void GuiEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
     if(curItem != INVALID && items[curItem].size.x != 0.0f) {
         tw_handled =
             curTransformationWidget.handleMouseDown(
-                game.mouseCursor.wPos,
+                game.mouseCursor.worldPos,
                 &items[curItem].center,
                 &items[curItem].size,
                 nullptr,
@@ -134,7 +134,7 @@ void GuiEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
             Item* item_ptr = &items[i];
             if(
                 isPointInRectangle(
-                    game.mouseCursor.wPos,
+                    game.mouseCursor.worldPos,
                     item_ptr->center,
                     item_ptr->size
                 )
@@ -180,7 +180,7 @@ void GuiEditor::handleLmbDrag(const ALLEGRO_EVENT &ev) {
     if(curItem != INVALID && items[curItem].size.x != 0.0f) {
         bool tw_handled =
             curTransformationWidget.handleMouseMove(
-                snapPoint(game.mouseCursor.wPos),
+                snapPoint(game.mouseCursor.worldPos),
                 &items[curItem].center,
                 &items[curItem].size,
                 nullptr,

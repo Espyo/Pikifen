@@ -430,8 +430,8 @@ void GuiEditor::processGuiMenuBar() {
                     "In the canvas you can find the \"game window\", but in "
                     "reality, it's just some square. This is because the "
                     "coordinates you work in go from 0% to 100%, instead of "
-                    "using a real screen size, since the player can choose "
-                    "whatever screen size they want. In addition, for the sake "
+                    "using a real window size, since the player can choose "
+                    "whatever window size they want. In addition, for the sake "
                     "of simplicity, the editor won't show what each GUI item "
                     "looks like. So you will have to use your imagination to "
                     "visualize how everything will really look in-game."
@@ -634,8 +634,8 @@ void GuiEditor::processGuiPanelItem() {
         changesMgr.markAsChanged();
     }
     setTooltip(
-        "Width and height of the item. e.g. 40,90 is 40% of the screen width,\n"
-        "and 90% of the screen height.",
+        "Width and height of the item. e.g. 40,90 is 40% of the window width,\n"
+        "and 90% of the window height.",
         "",
         WIDGET_EXPLANATION_DRAG
     );
@@ -759,8 +759,8 @@ void GuiEditor::processGuiStatusBar() {
         ImGui::SameLine();
         monoText(
             "%s, %s",
-            boxString(f2s(game.mouseCursor.wPos.x), 7, "%").c_str(),
-            boxString(f2s(game.mouseCursor.wPos.y), 7, "%").c_str()
+            boxString(f2s(game.mouseCursor.worldPos.x), 7, "%").c_str(),
+            boxString(f2s(game.mouseCursor.worldPos.y), 7, "%").c_str()
         );
     }
 }

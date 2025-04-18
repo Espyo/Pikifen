@@ -138,7 +138,7 @@ public:
     //Shader manager.
     ShaderManager shaders;
     
-    //Manager for all full-screen fade-ins and fade-outs.
+    //Manager for all full-window fade-ins and fade-outs.
     FadeManager fadeMgr = FadeManager(GAME::FADE_DURATION);
     
     //Duration of the last few frames.
@@ -212,7 +212,7 @@ public:
     EnumNameDatabase sectorTypes;
     
     //Screen to world coordinate matrix. Cache for convenience.
-    ALLEGRO_TRANSFORM screenToWorldTransform;
+    ALLEGRO_TRANSFORM windowToWorldTransform;
     
     //Should we be showing system info? (Framerate, version, etc.)
     bool showSystemInfo = false;
@@ -260,8 +260,8 @@ public:
     //Current window width.
     unsigned int winW = OPTIONS::GRAPHICS_D::WIN_W;
     
-    //World to screen coordinate matrix. Cache for convenience.
-    ALLEGRO_TRANSFORM worldToScreenTransform;
+    //World to window coordinate matrix. Cache for convenience.
+    ALLEGRO_TRANSFORM worldToWindowTransform;
     
     //Engine debugging tools.
     //Set them to true in the Game constructor as needed.

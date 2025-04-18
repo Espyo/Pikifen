@@ -131,7 +131,7 @@ void drawEdgeOffsetOnBuffer(
     //Let's transform the "rectangle" coordinates for the buffer.
     for(unsigned char v = 0; v < 4; v++) {
         al_transform_coordinates(
-            &game.worldToScreenTransform, &av[v].x, &av[v].y
+            &game.worldToWindowTransform, &av[v].x, &av[v].y
         );
     }
     
@@ -164,7 +164,7 @@ void drawEdgeOffsetOnBuffer(
             elbow_av[e][v + 2].color = end_colors[e];
             elbow_av[e][v + 2].color.a = END_OPACITY;
             al_transform_coordinates(
-                &game.worldToScreenTransform,
+                &game.worldToWindowTransform,
                 &elbow_av[e][v + 2].x, &elbow_av[e][v + 2].y
             );
         }
@@ -207,7 +207,7 @@ void drawSectorEdgeOffsets(
         av[v].x = vx;
         av[v].y = vy;
         al_transform_coordinates(
-            &game.worldToScreenTransform, &vx, &vy
+            &game.worldToWindowTransform, &vx, &vy
         );
         av[v].u = vx;
         av[v].v = vy;
@@ -627,8 +627,9 @@ void getNextOffsetEffectEdge(
 
 
 /**
- * @brief Draws edge offset effects for all edges on-screen onto a buffer image,
- * so that sectors may then sample from it to draw what effects they need.
+ * @brief Draws edge offset effects for all edges visible in the game window
+ * onto a buffer image, so that sectors may then sample from it to draw
+ * what effects they need.
  *
  * @param cam_tl Top-left corner of the camera boundaries.
  * The edges of any sector that is beyond these boundaries will be ignored.

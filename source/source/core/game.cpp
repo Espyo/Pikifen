@@ -43,10 +43,10 @@ const float CURSOR_TRAIL_SAVE_INTERVAL = 0.016f;
 //Number of positions of the cursor to keep track of.
 const unsigned char CURSOR_TRAIL_SAVE_N_SPOTS = 16;
 
-//Duration of full-screen fades.
+//Duration of full-window fades.
 const float FADE_DURATION = 0.15f;
 
-//Duration of slow full-screen fades.
+//Duration of slow full-window fades.
 const float FADE_SLOW_DURATION = 0.5f;
 
 //When getting a framerate average, use a sample of this size.
@@ -195,7 +195,7 @@ void Game::globalHandleAllegroEvent(const ALLEGRO_EVENT &ev) {
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP
     ) {
         //Mouse cursor.
-        mouseCursor.updatePos(ev, screenToWorldTransform);
+        mouseCursor.updatePos(ev, windowToWorldTransform);
         
     } else if(ev.type == ALLEGRO_EVENT_AUDIO_STREAM_FINISHED) {
         //Audio stream finished.

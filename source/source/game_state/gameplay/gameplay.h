@@ -74,7 +74,7 @@ enum INTERLUDE {
 };
 
 
-//Types of big messages -- text that appears in large letters on-screen.
+//Types of big messages -- text that appears in large letters on the HUD.
 enum BIG_MESSAGE {
 
     //None.
@@ -188,8 +188,8 @@ public:
     //Position of the last ship that got a treasure. LARGE_FLOAT for none.
     Point lastShipThatGotTreasurePos;
     
-    //Player 1's leader cursor, in screen coordinates.
-    Point leaderCursorS;
+    //Player 1's leader cursor, in window coordinates.
+    Point leaderCursorWin;
     
     //Sector that player 1's leader cursor is on, if any.
     Sector* leaderCursorSector = nullptr;

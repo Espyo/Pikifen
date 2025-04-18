@@ -123,11 +123,11 @@ private:
     //GUI for the tutorial question page.
     GuiManager tutorialGui;
     
-    //Top-left coordinates of the logo, in screen percentage.
-    Point logoMinScreenLimit = Point(10.0f);
+    //Top-left coordinates of the logo, in window percentage.
+    Point logoMinWindowLimit = Point(10.0f);
     
-    //Bottom-right coordinates of the logo, in screen percentage.
-    Point logoMaxScreenLimit = Point(90.0f, 50.0f);
+    //Bottom-right coordinates of the logo, in window percentage.
+    Point logoMaxWindowLimit = Point(90.0f, 50.0f);
     
     //Maximum speed a logo Pikmin can move at.
     float logoPikminMaxSpeed = 800.0f;

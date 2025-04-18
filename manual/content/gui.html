@@ -41,10 +41,10 @@
       <dd>Once you open a file, you'll see a green square in a black void in the canvas, on the left half of the editor. This square represents the player's game window, and is where all the items are positioned.</dd>
 
       <dt><b>GUI item positions and sizes aren't specified in pixels.</b></dt>
-      <dd>You may find it weird how the green shape in the canvas is a square, since almost nobody uses a square game window. The trick with this editor, and with the way GUI item positions and sizes work, is that you don't specify exact coordinates for where they should go, or how big they should be. If you want to horizontally center a certain item on-screen, you can't just say its center's X coordinate is 512 pixels or something. While 512 pixels may look centered in your game's window, it may look completely off in the window of somebody with a different size &ndash; remember each player can set the game's window size in the options menu!</dd>
+      <dd>You may find it weird how the green shape in the canvas is a square, since almost nobody uses a square game window. The trick with this editor, and with the way GUI item positions and sizes work, is that you don't specify exact coordinates for where they should go, or how big they should be. If you want to horizontally center a certain item in the game's window, you can't just say its center's X coordinate is 512 pixels or something. While 512 pixels may look centered in your game's window, it may look completely off in the window of somebody with a different size &ndash; remember each player can set the game's window size in the options menu!</dd>
 
-      <dt><b>Positions and sizes are measured in screen percentages.</b></dt>
-      <dd>Instead of pixels, you have to specify percentages of the screen. To center something horizontally, you specify its center's X coordinate as 50%. To make it flush to the top of the screen, its Y coordinate should be 0%. To make it take up a third of the screen horizontally, its width should be 33%. And so on. So, in reality, the green square you see in the canvas is just a representation of percentages, and while it's a square here, the real game window will likely be stretched differently depending on each player's resolution. Still, the idea is for items to be placed in the portion of the screen they work best at, for items to look good together, for items to look nice when spaced evenly apart, etc., so exact pixels don't really matter.</dd>
+      <dt><b>Positions and sizes are measured in window percentages.</b></dt>
+      <dd>Instead of pixels, you have to specify percentages of the window's dimensions. To center something horizontally, you specify its center's X coordinate as 50%. To make it flush to the top of the window, its Y coordinate should be 0%. To make it take up a third of the window horizontally, its width should be 33%. And so on. So, in reality, the green square you see in the canvas is just a representation of percentages, and while it's a square here, the real game window will likely be stretched differently depending on each player's resolution. Still, the idea is for items to be placed in the portion of the game window they work best at, for items to look good together, for items to look nice when spaced evenly apart, etc., so exact pixels don't really matter.</dd>
 
       <dt><b>The mouse cursor's position can be seen in the status bar.</b></dt>
       <dd>As you move the mouse cursor about, you can see where it is positioned in the green square by checking the right side of the status bar, located at the bottom of the editor.</dd>
@@ -63,7 +63,7 @@
       <dd>When you click an item (not its checkbox), you will see some information about that item appear below the list in the panel. You will also see some handles on the canvas, surrounding that item. Those handles are explained later.</dd>
 
       <dt><b>Edit the selected item's position or size in the widgets below the list.</b></dt>
-      <dd>The numbers in the "center" and "size" widgets represent screen percentages, as explained above. If instead you would like to specify where an item's top-left corner is, or bottom-right corner, there are some widgets to adjust things that way.</dd>
+      <dd>The numbers in the "center" and "size" widgets represent window percentages, as explained above. If instead you would like to specify where an item's top-left corner is, or bottom-right corner, there are some widgets to adjust things that way.</dd>
     </dl>
 
     <h3 id="canvas">Interacting with the canvas</h3>
@@ -101,10 +101,10 @@
       <dd>If you give an item a large width, but a small height, you may be surprised to find that, in-game, it doesn't look stretched out, and in fact looks pretty tiny. There is no one rule that controls what each item looks like &ndash; every single item in a menu or HUD behaves however it wants. The size properties in the GUI definition simply dictate the <i>maximum</i> width or height that the item is allowed to have. Normally, a GUI item will never be larger than the width or height you specified, though it can be smaller.</dd>
 
       <dt><b>GUI items can animate, including moving around.</b></dt>
-      <dd>When gameplay starts, the HUD moves into view from the edges of the screen. When you pause, the menu slides into view from off-screen. A GUI's definition does not include any information about this, since that's all controlled by the engine. So don't be surprised that a GUI item can be in a position different from the one you specified &ndash; it's just moving into place! Likewise, some counters animate by growing their text whenever their number changes. This can result in them being bigger than the specified size, even if it's only temporary. If you're absolutely worried that this might make it bump into another item, remember to give the item some extra breathing room in the editor.</dd>
+      <dd>When gameplay starts, the HUD moves into view from the edges of the game window. When you pause, the menu slides into view from off-scene. A GUI's definition does not include any information about this, since that's all controlled by the engine. So don't be surprised that a GUI item can be in a position different from the one you specified &ndash; it's just moving into place! Likewise, some counters animate by growing their text whenever their number changes. This can result in them being bigger than the specified size, even if it's only temporary. If you're absolutely worried that this might make it bump into another item, remember to give the item some extra breathing room in the editor.</dd>
 
-      <dt><b>If you want an item gone, mark it as invisible instead of placing it off-screen.</b></dt>
-      <dd>While a GUI item can be partially off-screen if you want, they shouldn't be entirely off-screen. Because GUI items can animate and move during transitions, an item that is placed off-screen might come into view during these times, which can confuse the player. Plus, having these items off-screen will still make the engine waste resources on processing them, even if they're practically useless in-game. Instead, untick its checkbox in the list of items, in the panel.</dd>
+      <dt><b>If you want an item gone, mark it as invisible instead of placing it out of bounds.</b></dt>
+      <dd>While a GUI item can be partially visible from an edge of the game window if you want, they shouldn't be entirely off the window. Because GUI items can animate and move during transitions, an item that is placed out of bounds might come into view during these times, which can confuse the player. Plus, having these items off-window will still make the engine waste resources on processing them, even if they're practically useless in-game. Instead, untick its checkbox in the list of items, in the panel.</dd>
     </dl>
 
     <h2 id="definitions">GUI definitions</h2>
@@ -317,15 +317,15 @@
       </ul>
       <li><b>Logo:</b> The logo that is made of Pikmin can be customized in the <code>logo</code> block.</li>
       <ul>
-        <li><code>min_screen_limit</code>: Top-left coordinates of the logo's placement on-screen, in screen width or height percentage.</li>
-        <li><code>max_screen_limit</code>: Same as above, but for the bottom-right.</li>
+        <li><code>min_window_limit</code>: Top-left coordinates of the logo's placement on the game window, in window width or height percentage.</li>
+        <li><code>max_window_limit</code>: Same as above, but for the bottom-right.</li>
         <li><code>pikmin_max_speed</code>: Each Pikmin's speed is random. This is the maximum speed possible, in pixels per second.</li>
         <li><code>pikmin_min_speed</code>: Same as above, but minimum possible.</li>
         <li><code>pikmin_speed_smoothness</code>: The closer to their destination, the more the Pikmin slow down, based on this multiplier. <code>0.08</code> is a good number.</li>
         <li><code>pikmin_sway_amount</code>: How many pixels a Pikmin sways left or right when standing still.</li>
         <li><code>pikmin_sway_max_speed</code>: Each Pikmin's swaying speed is random. This is the maximum speed, in radians per second (the Y part is ignored when swaying).</li>
         <li><code>pikmin_sway_min_speed</code>: Same as above, but the minimum speed.</li>
-        <li><code>pikmin_size</code>: Pikmin size, in screen dimension percentage. For instance, <code>3 2</code> means each Pikmin cannot be any larger than 3% of the screen width nor 2% of the screen height.</li>
+        <li><code>pikmin_size</code>: Pikmin size, in window dimension percentage. For instance, <code>3 2</code> means each Pikmin cannot be any larger than 3% of the window width nor 2% of the window height.</li>
         <li><code>pikmin_types</code>: This block specifies the types of Pikmin you'll encounter in the title logo. Except every type is simply defined by the image of its flower. In this block, every line is a type, in the format <code>character = image</code>, where <code>character</code> is a text character representing this Pikmin type in the logo map (see below), and <code>image</code> is the <a href="making.html#content">internal name</a> of the image in the <code>game_data/&lt;<a href="making.html#packs">pack</a>&gt;/graphics</code> folders.</li>
         <li><code>map</code>: A representation of the logo. The Pikmin are organized in a grid, and that grid is spread to fit in the limits specified above. Every line in this block represents a line in the grid, with every character matching a cell in that line. A character represents a Pikmin type or a blank space, if it's a character specified in the <code>pikmin_types</code> block or a dot (<code>.</code>), respectively.</li>
       </ul>

@@ -829,8 +829,8 @@ void PauseMenu::drawGoHereSegment(
 /**
  * @brief Draws the radar itself.
  *
- * @param center Center coordinates of the radar on-screen.
- * @param size Width and height of the radar on-screen.
+ * @param center Center coordinates of the radar on-window.
+ * @param size Width and height of the radar on-window.
  */
 void PauseMenu::drawRadar(
     const Point &center, const Point &size
@@ -844,7 +844,7 @@ void PauseMenu::drawRadar(
     al_copy_transform(&old_transform, al_get_current_transform());
     al_get_clipping_rectangle(&old_cr_x, &old_cr_y, &old_cr_w, &old_cr_h);
     
-    al_use_transform(&worldToRadarScreenTransform);
+    al_use_transform(&worldToRadarWindowTransform);
     al_set_clipping_rectangle(
         center.x - size.x / 2.0f,
         center.y - size.y / 2.0f,
@@ -1520,14 +1520,14 @@ void PauseMenu::handleAllegroEvent(const ALLEGRO_EVENT &ev) {
     bool mouse_in_radar =
         radarGui.responsive &&
         isPointInRectangle(
-            game.mouseCursor.sPos,
+            game.mouseCursor.winPos,
             radar_draw.center, radar_draw.size
         );
         
     if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
         if(mouse_in_radar) {
             radarMouseDown = true;
-            radarMouseDownPoint = game.mouseCursor.sPos;
+            radarMouseDownPoint = game.mouseCursor.winPos;
         }
         
     } else if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP) {
@@ -1543,9 +1543,9 @@ void PauseMenu::handleAllegroEvent(const ALLEGRO_EVENT &ev) {
         if(
             radarMouseDown &&
             (
-                fabs(game.mouseCursor.sPos.x - radarMouseDownPoint.x) >
+                fabs(game.mouseCursor.winPos.x - radarMouseDownPoint.x) >
                 4.0f ||
-                fabs(game.mouseCursor.sPos.y - radarMouseDownPoint.y) >
+                fabs(game.mouseCursor.winPos.y - radarMouseDownPoint.y) >
                 4.0f
             )
         ) {
@@ -2378,10 +2378,10 @@ void PauseMenu::initRadarPage() {
         
         //Draw a connection from here to the radar cursor.
         Point line_anchor(draw.center.x - draw.size.x / 2.0f - 16.0f, draw.center.y);
-        Point cursor_screen_pos = radarCursor;
+        Point cursor_window_pos = radarCursor;
         al_transform_coordinates(
-            &worldToRadarScreenTransform,
-            &cursor_screen_pos.x, &cursor_screen_pos.y
+            &worldToRadarWindowTransform,
+            &cursor_window_pos.x, &cursor_window_pos.y
         );
         
         al_draw_line(
@@ -2390,15 +2390,15 @@ void PauseMenu::initRadarPage() {
             COLOR_TRANSPARENT_WHITE, 2.0f
         );
         
-        cursor_screen_pos =
-            cursor_screen_pos +
+        cursor_window_pos =
+            cursor_window_pos +
             rotatePoint(
                 Point(24.0f, 0.0f),
-                getAngle(cursor_screen_pos, line_anchor)
+                getAngle(cursor_window_pos, line_anchor)
             );
         al_draw_line(
             line_anchor.x, line_anchor.y,
-            cursor_screen_pos.x, cursor_screen_pos.y,
+            cursor_window_pos.x, cursor_window_pos.y,
             COLOR_TRANSPARENT_WHITE, 2.0f
         );
     };
@@ -2843,14 +2843,14 @@ void PauseMenu::tick(float delta_t) {
         
         bool mouse_in_radar =
             isPointInRectangle(
-                game.mouseCursor.sPos,
+                game.mouseCursor.winPos,
                 radar_draw.center, radar_draw.size
             );
             
         if(mouse_in_radar) {
-            radarCursor = game.mouseCursor.sPos;
+            radarCursor = game.mouseCursor.winPos;
             al_transform_coordinates(
-                &radarScreenToWorldTransform,
+                &radarWindowToWorldTransform,
                 &radarCursor.x, &radarCursor.y
             );
         } else {
@@ -2878,18 +2878,18 @@ void PauseMenu::tick(float delta_t) {
 void PauseMenu::updateRadarTransformations(
     const Point &radar_center, const Point &radar_size
 ) {
-    worldToRadarScreenTransform = game.identityTransform;
+    worldToRadarWindowTransform = game.identityTransform;
     al_translate_transform(
-        &worldToRadarScreenTransform,
+        &worldToRadarWindowTransform,
         -radarCam.pos.x + radar_center.x / radarCam.zoom,
         -radarCam.pos.y + radar_center.y / radarCam.zoom
     );
     al_scale_transform(
-        &worldToRadarScreenTransform, radarCam.zoom, radarCam.zoom
+        &worldToRadarWindowTransform, radarCam.zoom, radarCam.zoom
     );
     
-    radarScreenToWorldTransform = worldToRadarScreenTransform;
-    al_invert_transform(&radarScreenToWorldTransform);
+    radarWindowToWorldTransform = worldToRadarWindowTransform;
+    al_invert_transform(&radarWindowToWorldTransform);
 }
 
 
@@ -2927,9 +2927,9 @@ void PauseMenu::zoomRadarWithMouse(
     updateRadarTransformations(radar_center, radar_size);
     
     //Figure out where the cursor will be after the zoom.
-    radarCursor = game.mouseCursor.sPos;
+    radarCursor = game.mouseCursor.winPos;
     al_transform_coordinates(
-        &radarScreenToWorldTransform,
+        &radarWindowToWorldTransform,
         &radarCursor.x, &radarCursor.y
     );
     
@@ -2944,9 +2944,9 @@ void PauseMenu::zoomRadarWithMouse(
     
     //Update the cursor coordinates again.
     updateRadarTransformations(radar_center, radar_size);
-    radarCursor = game.mouseCursor.sPos;
+    radarCursor = game.mouseCursor.winPos;
     al_transform_coordinates(
-        &radarScreenToWorldTransform,
+        &radarWindowToWorldTransform,
         &radarCursor.x, &radarCursor.y
     );
 }

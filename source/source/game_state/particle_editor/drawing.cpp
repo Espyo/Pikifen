@@ -43,10 +43,10 @@ void ParticleEditor::drawCanvas() {
         Point texture_tl = canvasTL;
         Point texture_br = canvasBR;
         al_transform_coordinates(
-            &game.screenToWorldTransform, &texture_tl.x, &texture_tl.y
+            &game.windowToWorldTransform, &texture_tl.x, &texture_tl.y
         );
         al_transform_coordinates(
-            &game.screenToWorldTransform, &texture_br.x, &texture_br.y
+            &game.windowToWorldTransform, &texture_br.x, &texture_br.y
         );
         ALLEGRO_VERTEX bg_vertexes[4];
         for(size_t v = 0; v < 4; ++v) {
@@ -82,7 +82,7 @@ void ParticleEditor::drawCanvas() {
         al_clear_to_color(al_map_rgb(128, 144, 128));
     }
     
-    al_use_transform(&game.worldToScreenTransform);
+    al_use_transform(&game.worldToWindowTransform);
     
     //Particles.
     vector<WorldComponent> components;
@@ -114,11 +114,11 @@ void ParticleEditor::drawCanvas() {
         Point cam_top_left_corner(0, 0);
         Point cam_bottom_right_corner(canvasBR.x, canvasBR.y);
         al_transform_coordinates(
-            &game.screenToWorldTransform,
+            &game.windowToWorldTransform,
             &cam_top_left_corner.x, &cam_top_left_corner.y
         );
         al_transform_coordinates(
-            &game.screenToWorldTransform,
+            &game.windowToWorldTransform,
             &cam_bottom_right_corner.x, &cam_bottom_right_corner.y
         );
         

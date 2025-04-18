@@ -440,7 +440,7 @@ void PacksMenu::populatePacksList() {
 
 
 /**
- * @brief Triggers the restart warning at the bottom of the screen.
+ * @brief Triggers the restart warning.
  */
 void PacksMenu::triggerRestartWarning() {
     if(!warningText->visible) {

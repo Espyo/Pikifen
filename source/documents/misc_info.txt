@@ -434,8 +434,8 @@ Bag of notes (useful stuff)
         Only load the mob types, hazards, etc. required by the area.
         Vector -> list?
         All maps of strings should be replaced with maps of ints
-        Make off-screen mobs only tick every other frame -- remember to make them tick worth the total amount of time they've missed out on
-            Certain mobs (decoration) shouldn't even tick at all when off-screen, and tick every other frame when on-screen
+        Make off-camera mobs only tick every other frame -- remember to make them tick worth the total amount of time they've missed out on
+            Certain mobs (decoration) shouldn't even tick at all when off-camera, and tick every other frame when on-camera
         Don't re-calculate ALL the ears, convex, etc. every clip, when triangulating
         http://blog2.emptycrate.com/content/c-loop-optimization
         http://stackoverflow.com/questions/25078285/replacing-a-32-bit-loop-count-variable-with-64-bit-introduces-crazy-performance?rq=1

@@ -295,8 +295,8 @@ void GameplayState::enter() {
     readyForInput = false;
     
     game.mouseCursor.reset();
-    leaderCursorW = game.mouseCursor.wPos;
-    leaderCursorS = game.mouseCursor.sPos;
+    leaderCursorW = game.mouseCursor.worldPos;
+    leaderCursorWin = game.mouseCursor.winPos;
     
     notification.reset();
     
@@ -1393,20 +1393,20 @@ void GameplayState::updateClosestGroupMembers() {
  * zoom, etc.
  */
 void GameplayState::updateTransformations() {
-    //World coordinates to screen coordinates.
-    game.worldToScreenTransform = game.identityTransform;
+    //World coordinates to window coordinates.
+    game.worldToWindowTransform = game.identityTransform;
     al_translate_transform(
-        &game.worldToScreenTransform,
+        &game.worldToWindowTransform,
         -game.cam.pos.x + game.winW / 2.0 / game.cam.zoom,
         -game.cam.pos.y + game.winH / 2.0 / game.cam.zoom
     );
     al_scale_transform(
-        &game.worldToScreenTransform, game.cam.zoom, game.cam.zoom
+        &game.worldToWindowTransform, game.cam.zoom, game.cam.zoom
     );
     
-    //Screen coordinates to world coordinates.
-    game.screenToWorldTransform = game.worldToScreenTransform;
-    al_invert_transform(&game.screenToWorldTransform);
+    //Window coordinates to world coordinates.
+    game.windowToWorldTransform = game.worldToWindowTransform;
+    al_invert_transform(&game.windowToWorldTransform);
 }
 
 

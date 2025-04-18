@@ -447,7 +447,7 @@ Point GuiItem::getReferenceSize() {
 /**
  * @brief Returns whether the mouse cursor is on top of it.
  *
- * @param cursor_pos Position of the mouse cursor, in screen coordinates.
+ * @param cursor_pos Position of the mouse cursor, in window coordinates.
  * @return Whether the cursor is on top.
  */
 bool GuiItem::isMouseOn(const Point &cursor_pos) {
@@ -599,7 +599,7 @@ void GuiManager::destroy() {
 
 
 /**
- * @brief Draws all items on-screen.
+ * @brief Draws all items.
  */
 void GuiManager::draw() {
     if(!visible) return;
@@ -1076,10 +1076,10 @@ void GuiManager::readCoords(DataNode* node) {
  * @brief Registers an item's default center and size.
  *
  * @param id String ID of the item.
- * @param cx Center X, in screen percentage.
- * @param cy Center Y, in screen percentage.
- * @param w Width, in screen percentage.
- * @param h Height, in screen percentage.
+ * @param cx Center X, in window percentage.
+ * @param cy Center Y, in window percentage.
+ * @param w Width, in window percentage.
+ * @param h Height, in window percentage.
  */
 void GuiManager::registerCoords(
     const string &id,

@@ -186,11 +186,11 @@ struct MouseCursor {
 
     //--- Members ---
     
-    //Position, in screen coordinates.
-    Point sPos;
+    //Position, in window coordinates.
+    Point winPos;
     
     //Position, in world coordinates, if applicable.
-    Point wPos;
+    Point worldPos;
     
     //Spots the cursor has been through. Used for the faint trail left behind.
     vector<Point> history;
@@ -207,7 +207,7 @@ struct MouseCursor {
     void show() const;
     void updatePos(
         const ALLEGRO_EVENT &ev,
-        ALLEGRO_TRANSFORM &screen_to_world_transform
+        ALLEGRO_TRANSFORM &window_to_world_transform
     );
     
 };
@@ -908,7 +908,7 @@ struct FadeManager {
 
 
 /**
- * @brief Info about the current on-screen notification during gameplay.
+ * @brief Info about the currently visible notification during gameplay.
  * This is stuff like a note above the leader telling the player
  * what button to press to do something, like plucking.
  */

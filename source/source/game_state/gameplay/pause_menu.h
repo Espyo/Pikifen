@@ -171,11 +171,11 @@ private:
     //Z of the highest sector.
     float highestSectorZ = 0.0f;
     
-    //World coordinates to radar screen coordinates transformation.
-    ALLEGRO_TRANSFORM worldToRadarScreenTransform;
+    //World coordinates to radar window coordinates transformation.
+    ALLEGRO_TRANSFORM worldToRadarWindowTransform;
     
-    //Radar screen coordinates to world coordinates transformation.
-    ALLEGRO_TRANSFORM radarScreenToWorldTransform;
+    //Radar window coordinates to world coordinates transformation.
+    ALLEGRO_TRANSFORM radarWindowToWorldTransform;
     
     //Radar camera information.
     Camera radarCam;
@@ -186,7 +186,7 @@ private:
     //Whether a mouse button is being held in the radar.
     bool radarMouseDown = false;
     
-    //Point where the mouse button was first held in the radar (screen coords).
+    //Point where the mouse button was first held in the radar (window coords).
     Point radarMouseDownPoint;
     
     //Whether the player is dragging the mouse. False for just a (fuzzy) click.

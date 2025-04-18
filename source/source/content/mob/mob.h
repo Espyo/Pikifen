@@ -317,10 +317,10 @@ public:
     //Particle generators attached to it.
     vector<ParticleGenerator> particleGenerators;
     
-    //Data about its on-screen health wheel, if any.
+    //Data about its in-world health wheel, if any.
     InWorldHealthWheel* healthWheel = nullptr;
     
-    //Data about its on-screen fraction numbers, if any.
+    //Data about its in-world fraction numbers, if any.
     InWorldFraction* fraction = nullptr;
     
     //-Caches-

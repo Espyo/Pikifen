@@ -191,7 +191,7 @@ bool MakerTools::handleGameplayPlayerAction(const PlayerAction &action) {
             
             createMob(
                 game.mobCategories.get(MOB_CATEGORY_PIKMIN),
-                game.mouseCursor.wPos, new_pikmin_type, 0,
+                game.mouseCursor.worldPos, new_pikmin_type, 0,
                 is_ctrl_pressed ? "maturity=0" : "maturity=2"
             );
             game.makerTools.usedHelpingTools = true;
@@ -229,13 +229,13 @@ bool MakerTools::handleGameplayPlayerAction(const PlayerAction &action) {
             game.states.gameplay->curLeaderPtr;
             
         Sector* mouse_sector =
-            getSector(game.mouseCursor.wPos, nullptr, true);
+            getSector(game.mouseCursor.worldPos, nullptr, true);
         if(mouse_sector && mob_to_teleport) {
             mob_to_teleport->chase(
-                game.mouseCursor.wPos, mouse_sector->z,
+                game.mouseCursor.worldPos, mouse_sector->z,
                 CHASE_FLAG_TELEPORT
             );
-            game.cam.setPos(game.mouseCursor.wPos);
+            game.cam.setPos(game.mouseCursor.worldPos);
         }
         game.makerTools.usedHelpingTools = true;
         break;

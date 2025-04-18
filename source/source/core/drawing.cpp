@@ -65,10 +65,10 @@ const int LOADING_SCREEN_PADDING = 64;
 //Loading screen subtext scale.
 const float LOADING_SCREEN_SUBTEXT_SCALE = 0.6f;
 
-//Loading screen text height, in screen ratio.
+//Loading screen text height, in window ratio.
 const float LOADING_SCREEN_TEXT_HEIGHT = 0.10f;
 
-//Loading screen text width, in screen ratio.
+//Loading screen text width, in window ratio.
 const float LOADING_SCREEN_TEXT_WIDTH = 0.70f;
 
 //Notification opacity.
@@ -85,7 +85,7 @@ const float NOTIFICATION_PADDING = 8.0f;
 
 /**
  * @brief Draws a series of logos, to serve as a background.
- * They move along individually, and wrap around when they reach a screen edge.
+ * They move along individually, and wrap around when they reach a window edge.
  *
  * @param time_spent How much time has passed.
  * @param rows Rows of logos to draw.
@@ -185,7 +185,7 @@ void drawBitmapWithEffects(
 
 
 /**
- * @brief Draws a button on the screen.
+ * @brief Draws a button.
  *
  * @param center Center coordinates.
  * @param size Width and height.
@@ -989,7 +989,7 @@ void drawMouseCursor(const ALLEGRO_COLOR &color) {
     //Mouse cursor graphic.
     drawBitmap(
         game.sysContent.bmpMouseCursor,
-        game.mouseCursor.sPos,
+        game.mouseCursor.winPos,
         getBitmapDimensions(game.sysContent.bmpMouseCursor),
         -(game.timePassed * game.config.aestheticGen.cursorSpinSpeed),
         color

@@ -328,7 +328,7 @@ void AnimationEditor::doLogic() {
 
 
 /**
- * @brief Dear ImGui callback for when the canvas needs to be drawn on-screen.
+ * @brief Dear ImGui callback for when the canvas needs to be drawn.
  *
  * @param parent_list Unused.
  * @param cmd Unused.
@@ -352,7 +352,7 @@ float AnimationEditor::getCursorTimelineTime() {
     }
     float anim_x1 = canvasTL.x + ANIM_EDITOR::TIMELINE_PADDING;
     float anim_w = (canvasBR.x - ANIM_EDITOR::TIMELINE_PADDING) - anim_x1;
-    float mouse_x = game.mouseCursor.sPos.x - anim_x1;
+    float mouse_x = game.mouseCursor.winPos.x - anim_x1;
     mouse_x = std::clamp(mouse_x, 0.0f, anim_w);
     return curAnimInst.curAnim->getDuration() * (mouse_x / anim_w);
 }
@@ -521,11 +521,11 @@ void AnimationEditor::importSpriteTransformationData(const string &name) {
 bool AnimationEditor::isCursorInTimeline() {
     return
         state == EDITOR_STATE_ANIMATION &&
-        game.mouseCursor.sPos.x >= canvasTL.x &&
-        game.mouseCursor.sPos.x <= canvasBR.x &&
-        game.mouseCursor.sPos.y >= canvasBR.y -
+        game.mouseCursor.winPos.x >= canvasTL.x &&
+        game.mouseCursor.winPos.x <= canvasBR.x &&
+        game.mouseCursor.winPos.y >= canvasBR.y -
         ANIM_EDITOR::TIMELINE_HEIGHT &&
-        game.mouseCursor.sPos.y <= canvasBR.y;
+        game.mouseCursor.winPos.y <= canvasBR.y;
 }
 
 
@@ -1404,7 +1404,7 @@ void AnimationEditor::setupForNewAnimDbPre() {
     
     //At this point we'll have nearly unloaded stuff like the current sprite.
     //Since Dear ImGui still hasn't rendered the current frame, which could
-    //have had those assets on-screen, if it tries now it'll crash. So skip.
+    //have had those assets visible, if it tries now it'll crash. So skip.
     game.skipDearImGuiFrame = true;
 }
 

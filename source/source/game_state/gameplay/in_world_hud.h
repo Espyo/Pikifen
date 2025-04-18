@@ -58,7 +58,7 @@ class Mob;
 
 /**
  * @brief Info about some HUD item that is located in the game world.
- * Sort of. Instead of being in a fixed position on-screen, these follow
+ * Sort of. Instead of being in a fixed position in the HUD, these follow
  * mobs around.
  */
 class InWorldHudItem {

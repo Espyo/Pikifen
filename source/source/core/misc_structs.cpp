@@ -32,7 +32,7 @@ namespace GAMEPLAY_MSG_BOX {
 //How quickly the advance button icon fades, in alpha (0-1) per second.
 const float ADVANCE_BUTTON_FADE_SPEED = 4.0f;
 
-//How many pixels of margin between the message box and screen borders.
+//How many pixels of margin between the message box and window borders.
 const float MARGIN = 16.0f;
 
 //How long to protect the player from misinputs for.
@@ -349,17 +349,17 @@ void Camera::tick(float delta_t) {
 
 /**
  * @brief Updates the camera's visibility box,
- * based on the screenToWorldTransform transformation.
+ * based on the windowToWorldTransform transformation.
  */
 void Camera::updateBox() {
     box[0] = Point(0.0f);
     box[1] = Point(game.winW, game.winH);
     al_transform_coordinates(
-        &game.screenToWorldTransform,
+        &game.windowToWorldTransform,
         &box[0].x, &box[0].y
     );
     al_transform_coordinates(
-        &game.screenToWorldTransform,
+        &game.windowToWorldTransform,
         &box[1].x, &box[1].y
     );
     
@@ -815,7 +815,7 @@ void MouseCursor::init() {
     
     saveTimer.onEnd = [this] () {
         saveTimer.start();
-        history.push_back(sPos);
+        history.push_back(winPos);
         if(history.size() > GAME::CURSOR_TRAIL_SAVE_N_SPOTS) {
             history.erase(history.begin());
         }
@@ -830,12 +830,12 @@ void MouseCursor::init() {
 void MouseCursor::reset() {
     ALLEGRO_MOUSE_STATE mouse_state;
     al_get_mouse_state(&mouse_state);
-    game.mouseCursor.sPos.x = al_get_mouse_state_axis(&mouse_state, 0);
-    game.mouseCursor.sPos.y = al_get_mouse_state_axis(&mouse_state, 1);
-    game.mouseCursor.wPos = game.mouseCursor.sPos;
+    game.mouseCursor.winPos.x = al_get_mouse_state_axis(&mouse_state, 0);
+    game.mouseCursor.winPos.y = al_get_mouse_state_axis(&mouse_state, 1);
+    game.mouseCursor.worldPos = game.mouseCursor.winPos;
     al_transform_coordinates(
-        &game.screenToWorldTransform,
-        &game.mouseCursor.wPos.x, &game.mouseCursor.wPos.y
+        &game.windowToWorldTransform,
+        &game.mouseCursor.worldPos.x, &game.mouseCursor.worldPos.y
     );
     history.clear();
 }
@@ -853,25 +853,25 @@ void MouseCursor::show() const {
  * @brief Updates the coordinates from an Allegro mouse event.
  *
  * @param ev Event to handle.
- * @param screenToWorldTransform Transformation to use to get the
- * screen coordinates.
+ * @param window_to_world_transform Transformation to use to get the
+ * window coordinates.
  */
 void MouseCursor::updatePos(
     const ALLEGRO_EVENT &ev,
-    ALLEGRO_TRANSFORM &screen_to_world_transform
+    ALLEGRO_TRANSFORM &window_to_world_transform
 ) {
-    sPos.x = ev.mouse.x;
-    sPos.y = ev.mouse.y;
-    wPos = sPos;
+    winPos.x = ev.mouse.x;
+    winPos.y = ev.mouse.y;
+    worldPos = winPos;
     al_transform_coordinates(
-        &screen_to_world_transform,
-        &wPos.x, &wPos.y
+        &window_to_world_transform,
+        &worldPos.x, &worldPos.y
     );
 }
 
 
 /**
- * @brief Draws the notification on-screen.
+ * @brief Draws the notification.
  */
 void Notification::draw() const {
     if(visibility == 0.0f) return;

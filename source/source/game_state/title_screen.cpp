@@ -937,8 +937,8 @@ void TitleScreen::load() {
             std::max(map_total_cols, map_node->getChild(r)->name.size());
     }
     
-    logo_rs.set("min_screen_limit", logoMinScreenLimit);
-    logo_rs.set("max_screen_limit", logoMaxScreenLimit);
+    logo_rs.set("min_window_limit", logoMinWindowLimit);
+    logo_rs.set("max_window_limit", logoMaxWindowLimit);
     logo_rs.set("pikmin_max_speed", logoPikminMaxSpeed);
     logo_rs.set("pikmin_min_speed", logoPikminMinSpeed);
     logo_rs.set("pikmin_speed_smoothness", logoPikminSpeedSmoothness);
@@ -966,10 +966,10 @@ void TitleScreen::load() {
             
             LogoPikmin pik;
             
-            Point min_pos = logoMinScreenLimit;
+            Point min_pos = logoMinWindowLimit;
             min_pos.x *= game.winW / 100.0f;
             min_pos.y *= game.winH / 100.0f;
-            Point max_pos = logoMaxScreenLimit;
+            Point max_pos = logoMaxWindowLimit;
             max_pos.x *= game.winW / 100.0f;
             max_pos.y *= game.winH / 100.0f;
             

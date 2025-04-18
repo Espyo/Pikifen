@@ -477,7 +477,7 @@ void GameplayState::doGameplayLeaderLogic(float delta_t) {
     mouse_cursor_speed =
         mouse_cursor_speed * delta_t* game.options.controls.cursorSpeed;
         
-    leaderCursorW = game.mouseCursor.wPos;
+    leaderCursorW = game.mouseCursor.worldPos;
     
     float cursor_angle = getAngle(curLeaderPtr->pos, leaderCursorW);
     
@@ -494,19 +494,19 @@ void GameplayState::doGameplayLeaderLogic(float delta_t) {
         if(mouse_cursor_speed.x != 0 || mouse_cursor_speed.y != 0) {
             //If we're speeding the mouse cursor (via analog stick),
             //don't let it go beyond the edges.
-            game.mouseCursor.wPos = leaderCursorW;
-            game.mouseCursor.sPos = game.mouseCursor.wPos;
+            game.mouseCursor.worldPos = leaderCursorW;
+            game.mouseCursor.winPos = game.mouseCursor.worldPos;
             al_transform_coordinates(
-                &game.worldToScreenTransform,
-                &game.mouseCursor.sPos.x, &game.mouseCursor.sPos.y
+                &game.worldToWindowTransform,
+                &game.mouseCursor.winPos.x, &game.mouseCursor.winPos.y
             );
         }
     }
     
-    leaderCursorS = leaderCursorW;
+    leaderCursorWin = leaderCursorW;
     al_transform_coordinates(
-        &game.worldToScreenTransform,
-        &leaderCursorS.x, &leaderCursorS.y
+        &game.worldToWindowTransform,
+        &leaderCursorWin.x, &leaderCursorWin.y
     );
     
     
@@ -643,12 +643,12 @@ void GameplayState::doGameplayLogic(float delta_t) {
         mouse_cursor_speed =
             mouse_cursor_speed * delta_t* game.options.controls.cursorSpeed;
             
-        game.mouseCursor.sPos += mouse_cursor_speed;
+        game.mouseCursor.winPos += mouse_cursor_speed;
         
-        game.mouseCursor.wPos = game.mouseCursor.sPos;
+        game.mouseCursor.worldPos = game.mouseCursor.winPos;
         al_transform_coordinates(
-            &game.screenToWorldTransform,
-            &game.mouseCursor.wPos.x, &game.mouseCursor.wPos.y
+            &game.windowToWorldTransform,
+            &game.mouseCursor.worldPos.x, &game.mouseCursor.worldPos.y
         );
         
         areaTimePassed += delta_t;
@@ -1352,17 +1352,17 @@ void GameplayState::doMenuLogic() {
     //Print mouse coordinates.
     if(game.makerTools.geometryInfo) {
         Sector* mouse_sector =
-            getSector(game.mouseCursor.wPos, nullptr, true);
+            getSector(game.mouseCursor.worldPos, nullptr, true);
             
         string coords_str =
-            boxString(f2s(game.mouseCursor.wPos.x), 6) + " " +
-            boxString(f2s(game.mouseCursor.wPos.y), 6);
+            boxString(f2s(game.mouseCursor.worldPos.x), 6) + " " +
+            boxString(f2s(game.mouseCursor.worldPos.y), 6);
         string blockmap_str =
             boxString(
-                i2s(game.curAreaData->bmap.getCol(game.mouseCursor.wPos.x)),
+                i2s(game.curAreaData->bmap.getCol(game.mouseCursor.worldPos.x)),
                 5, " "
             ) +
-            i2s(game.curAreaData->bmap.getRow(game.mouseCursor.wPos.y));
+            i2s(game.curAreaData->bmap.getRow(game.mouseCursor.worldPos.y));
         string sector_z_str, sector_light_str, sector_tex_str;
         if(mouse_sector) {
             sector_z_str =

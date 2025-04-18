@@ -703,7 +703,7 @@ private:
     //Sector heights when the quick height set mode was entered.
     map<Sector*, float> quickHeightSetStartHeights;
     
-    //Mouse coordinates (screen) when the quick height set mode was entered.
+    //Mouse coordinates (window) when the quick height set mode was entered.
     Point quickHeightSetStartPos;
     
     //Time left in the quick preview mode, including fade out.

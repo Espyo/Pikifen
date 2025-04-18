@@ -20,7 +20,7 @@
     
     <p>Most of these tools are used while playing the engine, and are called by pressing the key or button bound to them in the options. Their effects vary, but their purpose is to help content makers by making mundane tasks easier and providing helpful information that can be useful in debugging any problems. It is possible to set which tools run on which player input, and it's also possible to change some of the tools' settings. There are also some other tools that are not run on demand and instead affect the behavior of some part of the game.</p>
 
-    <p>You can hold down the input to repeat the effect over and over. This is useful, for instance, for spawning several Pikmin quickly. Some also change their behavior if you were holding Shift or Ctrl before pressing the input. A handful of the tools print out information on the top of the screen, on top of a see-through black box. This info disappears after some seconds, unless you call it again.</p>
+    <p>You can hold down the input to repeat the effect over and over. This is useful, for instance, for spawning several Pikmin quickly. Some also change their behavior if you were holding Shift or Ctrl before pressing the input. A handful of the tools print out information on the top of the game window, on top of a see-through black box. This info disappears after some seconds, unless you call it again.</p>
 
     <h2 id="config">Configuration file</h2>
     
@@ -115,7 +115,7 @@
 
     <h3 id="geometry-info">Geometry info</h3>
     
-    <p>Prints out geometry info about what's under the mouse cursor (or stops if pressed again), on the top of the screen. It uses the mouse cursor for this, not the leader's cursor. This prints out the cursor's coordinates, as well as some basic info about the sector that the cursor is on: its height and texture.</p>
+    <p>Prints out geometry info about what's under the mouse cursor (or stops if pressed again), on the top of the game window. It uses the mouse cursor for this, not the leader's cursor. This prints out the cursor's coordinates, as well as some basic info about the sector that the cursor is on: its height and texture.</p>
     
     <p><b>Tool internal name</b>: <code>geometry_info</code>.</p>
 
@@ -150,7 +150,7 @@
 
     <h3 id="mob-info">Mob info</h3>
     
-    <p>Prints out important information about the mob closest to the cursor, on the top of the screen. It uses the mouse cursor for this, not the leader's cursor. When you press the button, it locks-on to that mob, and only unlocks if the mob is deleted or if you press the button again while pointing to the same mob. Pointing to a different mob will lock to that one instead. This lock-on can also be useful for other maker tools. If you were holding Shift, it will instead scan for mobs whose centers are around the cursor, and iterate between them; this is useful if multiple mobs are bundled in the same spot. If you were holding Ctrl, it will stop locking on. The information shown is:</p>
+    <p>Prints out important information about the mob closest to the cursor, on the top of the game window. It uses the mouse cursor for this, not the leader's cursor. When you press the button, it locks-on to that mob, and only unlocks if the mob is deleted or if you press the button again while pointing to the same mob. Pointing to a different mob will lock to that one instead. This lock-on can also be useful for other maker tools. If you were holding Shift, it will instead scan for mobs whose centers are around the cursor, and iterate between them; this is useful if multiple mobs are bundled in the same spot. If you were holding Ctrl, it will stop locking on. The information shown is:</p>
     
     <ul>
       <li><b>Name</b>: The name of the type of mob this is (e.g. Red Bulborb, Olimar).</li>
@@ -248,7 +248,7 @@
     
     <p>The data for each recorded area is split into four parts. The first is the loading times; with this, you can tell how long the engine took to load the particle generator info, the HUD settings, the weather data, etc. For object types, it will also split the measurements by each category of object type. Besides that, the log will also show how long it took to process the different parts of the area generation procedure. All of this information can help you realize what's making your area take so long to load &ndash; maybe it has too many objects, maybe its sectors are too complex, or maybe your pellet graphics are just too high-resolution.</p>
     
-    <p>The other three parts of the report refer to the framerate. The second part measures how long the average frame takes to process and draw on-screen, while the third and fourth parts report the fastest frame you had, and the slowest, respectively. This difference can be useful in figuring out if something during gameplay is causing severe frame drops. In these reports, the log will tell you how long the engine takes to completely process one frame, measuring how long it takes to process all particles, object physics, etc., as well as how long it takes to draw the background, world components, HUD, and so on. With this data, you may come to a conclusion about what's making your framerate be so low, or so unstable &ndash; maybe your area has too many objects colliding against each other, maybe one of your enemy scripts is too heavy when doing some specific calculation, or maybe you just have way too many tree shadows.</p>
+    <p>The other three parts of the report refer to the framerate. The second part measures how long the average frame takes to process and draw on the game window, while the third and fourth parts report the fastest frame you had, and the slowest, respectively. This difference can be useful in figuring out if something during gameplay is causing severe frame drops. In these reports, the log will tell you how long the engine takes to completely process one frame, measuring how long it takes to process all particles, object physics, etc., as well as how long it takes to draw the background, world components, HUD, and so on. With this data, you may come to a conclusion about what's making your framerate be so low, or so unstable &ndash; maybe your area has too many objects colliding against each other, maybe one of your enemy scripts is too heavy when doing some specific calculation, or maybe you just have way too many tree shadows.</p>
 
     <p><b>Tool internal name</b>: <code>performance_monitor</code>.</p>
 

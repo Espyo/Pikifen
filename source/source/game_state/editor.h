@@ -236,7 +236,7 @@ protected:
     };
     
     /*
-     * A widget that's drawn on-screen, and with handles that the user
+     * A widget that's drawn on the window, and with handles that the user
      * can drag in order to translate, scale, or rotate something.
      * The transformation properties are not tied to anything, and are
      * meant to be fed into the widget's functions so it can edit them.
@@ -613,7 +613,7 @@ protected:
     //Number of the mouse button pressed.
     size_t lastMouseClick = INVALID;
     
-    //Screen location of the cursor on the last mouse button press.
+    //Window location of the cursor on the last mouse button press.
     Point lastMouseClickPos;
     
     //Editor sub-state during the last mouse click.

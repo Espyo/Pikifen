@@ -44,13 +44,13 @@ void GameplayState::doGameDrawing(
       ***  \/                             \/  ***
         ***************************************/
     
-    ALLEGRO_TRANSFORM old_world_to_screen_transform;
+    ALLEGRO_TRANSFORM old_world_to_window_transform;
     int blend_old_op, blend_old_src, blend_old_dst,
         blend_old_aop, blend_old_asrc, blend_old_adst;
         
     if(bmp_output) {
-        old_world_to_screen_transform = game.worldToScreenTransform;
-        game.worldToScreenTransform = *bmp_transform;
+        old_world_to_window_transform = game.worldToWindowTransform;
+        game.worldToWindowTransform = *bmp_transform;
         al_set_target_bitmap(bmp_output);
         al_get_separate_blender(
             &blend_old_op, &blend_old_src, &blend_old_dst,
@@ -78,7 +78,7 @@ void GameplayState::doGameDrawing(
     if(game.perfMon) {
         game.perfMon->startMeasurement("Drawing -- World");
     }
-    al_use_transform(&game.worldToScreenTransform);
+    al_use_transform(&game.worldToWindowTransform);
     drawWorldComponents(bmp_output);
     if(game.perfMon) {
         game.perfMon->finishMeasurement();
@@ -123,7 +123,7 @@ void GameplayState::doGameDrawing(
             blend_old_op, blend_old_src, blend_old_dst,
             blend_old_aop, blend_old_asrc, blend_old_adst
         );
-        game.worldToScreenTransform = old_world_to_screen_transform;
+        game.worldToWindowTransform = old_world_to_window_transform;
         al_set_target_backbuffer(game.display);
         return;
     }
@@ -138,7 +138,7 @@ void GameplayState::doGameDrawing(
     }
     
     //Layer 7 -- Leader cursor.
-    al_use_transform(&game.worldToScreenTransform);
+    al_use_transform(&game.worldToWindowTransform);
     ALLEGRO_COLOR cursor_color = game.config.aestheticGen.noPikminColor;
     if(closestGroupMember[BUBBLE_RELATION_CURRENT]) {
         cursor_color =
@@ -592,7 +592,7 @@ void GameplayState::drawDebugTools() {
     
     //Group stuff.
     /*
-    al_use_transform(&game.worldToScreenTransform);
+    al_use_transform(&game.worldToWindowTransform);
     for(size_t m = 0; m < curLeaderPtr->group->members.size(); m++) {
         point offset = curLeaderPtr->group->get_spot_offset(m);
         al_draw_filled_circle(
@@ -1015,19 +1015,19 @@ void GameplayState::drawLeaderCursor(const ALLEGRO_COLOR &color) {
     if(n_standby_pikmin > 0) {
         drawText(
             i2s(n_standby_pikmin), game.sysContent.fntCursorCounter,
-            leaderCursorS +
+            leaderCursorWin +
             Point(count_offset),
             Point(LARGE_FLOAT, game.winH * 0.02f), color,
             ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP
         );
     }
     
-    al_use_transform(&game.worldToScreenTransform);
+    al_use_transform(&game.worldToWindowTransform);
 }
 
 
 /**
- * @brief Draws the full-screen effects that will represent lighting.
+ * @brief Draws the full-window effects that will represent lighting.
  */
 void GameplayState::drawLightingFilter() {
     al_use_transform(&game.identityTransform);
@@ -1051,11 +1051,11 @@ void GameplayState::drawLightingFilter() {
                 game.curAreaData->weatherCondition.fogFar
             );
         al_transform_coordinates(
-            &game.worldToScreenTransform,
+            &game.worldToWindowTransform,
             &fog_top_left.x, &fog_top_left.y
         );
         al_transform_coordinates(
-            &game.worldToScreenTransform,
+            &game.worldToWindowTransform,
             &fog_bottom_right.x, &fog_bottom_right.y
         );
         
@@ -1109,10 +1109,10 @@ void GameplayState::drawLightingFilter() {
     if(blackout_s > 0) {
         //First, we'll create the lightmap.
         //This is inverted (white = darkness, black = light), because we'll
-        //apply it to the screen using a subtraction operation.
+        //apply it to the window using a subtraction operation.
         al_set_target_bitmap(lightmapBmp);
         
-        //For starters, the whole screen is dark (white in the map).
+        //For starters, the whole window is dark (white in the map).
         al_clear_to_color(mapGray(blackout_s));
         
         int old_op, old_src, old_dst, old_aop, old_asrc, old_adst;
@@ -1138,7 +1138,7 @@ void GameplayState::drawLightingFilter() {
             
             Point pos = m_ptr->pos;
             al_transform_coordinates(
-                &game.worldToScreenTransform,
+                &game.worldToWindowTransform,
                 &pos.x, &pos.y
             );
             float radius = 4.0f * game.cam.zoom;
@@ -1159,7 +1159,7 @@ void GameplayState::drawLightingFilter() {
         }
         al_hold_bitmap_drawing(false);
         
-        //Now, simply darken the screen using the map.
+        //Now, simply darken the window using the map.
         al_set_target_backbuffer(game.display);
         
         al_draw_bitmap(lightmapBmp, 0, 0, 0);

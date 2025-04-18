@@ -1553,7 +1553,7 @@ void OptionsMenu::tick(float delta_t) {
 
 
 /**
- * @brief Triggers the restart warning at the bottom of the screen.
+ * @brief Triggers the restart warning.
  */
 void OptionsMenu::triggerRestartWarning() {
     if(!warningText->visible) {

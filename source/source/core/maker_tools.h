@@ -139,7 +139,7 @@ struct MakerTools {
     //Mob currently locked-on to for the mob information tool. nullptr if off.
     Mob* infoLock = nullptr;
     
-    //If any maker info is being printed, this is how long it lasts on-screen.
+    //If any maker info is being printed, this is how long it stays visible for.
     float infoPrintDuration = 5.0f;
     
     //If any maker info is being printed, this is how long its fade lasts.

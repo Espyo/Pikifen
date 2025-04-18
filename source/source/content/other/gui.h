@@ -144,10 +144,10 @@ public:
     //What GUI manager it belongs to, if any.
     GuiManager* manager = nullptr;
     
-    //Its raw on-screen position, in screen ratio (or parent ratio).
+    //Its raw on-window position, in window ratio (or parent ratio).
     Point ratioCenter;
     
-    //Its raw width and height, in screen ratio (or parent ratio).
+    //Its raw width and height, in window ratio (or parent ratio).
     Point ratioSize;
     
     //Is it currently visible?
@@ -517,7 +517,7 @@ private:
  *
  * This manager is not used in the editors, since those work with
  * Dear ImGui. It is responsible for holding information about all GUI
- * elements present on-screen, managing their coordinates, which one is
+ * elements present on the game window, managing their coordinates, which one is
  * selected, ordering them to be rendered or to handle being activated, etc.
  * Due to the system's flexibility, this is used both to manage the game's
  * heads-up display (HUD) during gameplay, as well as the interactable elements

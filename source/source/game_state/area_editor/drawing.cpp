@@ -99,7 +99,7 @@ void AreaEditor::drawArrow(
  * This is called as a callback inside the Dear ImGui rendering process.
  */
 void AreaEditor::drawCanvas() {
-    al_use_transform(&game.worldToScreenTransform);
+    al_use_transform(&game.worldToWindowTransform);
     al_set_clipping_rectangle(
         canvasTL.x, canvasTL.y,
         canvasBR.x - canvasTL.x, canvasBR.y - canvasTL.y
@@ -1026,7 +1026,7 @@ void AreaEditor::drawCanvas() {
             for(size_t s = 0; s < game.curAreaData->pathStops.size(); s++) {
                 PathStop* s_ptr = game.curAreaData->pathStops[s];
                 float d =
-                    Distance(game.mouseCursor.wPos, s_ptr->pos).toFloat() -
+                    Distance(game.mouseCursor.worldPos, s_ptr->pos).toFloat() -
                     s_ptr->radius;
                     
                 if(!closest || d < closest_dist) {
@@ -1037,7 +1037,7 @@ void AreaEditor::drawCanvas() {
             
             if(closest) {
                 al_draw_line(
-                    game.mouseCursor.wPos.x, game.mouseCursor.wPos.y,
+                    game.mouseCursor.worldPos.x, game.mouseCursor.worldPos.y,
                     closest->pos.x, closest->pos.y,
                     al_map_rgb(192, 128, 32), 2.0 / game.cam.zoom
                 );
@@ -1283,7 +1283,7 @@ void AreaEditor::drawCanvas() {
                     al_map_rgb(255, 0, 0),
                     al_map_rgb(64, 255, 64)
                 );
-            Point hotspot = snapPoint(game.mouseCursor.wPos);
+            Point hotspot = snapPoint(game.mouseCursor.worldPos);
             
             al_draw_line(
                 drawingNodes.back().snappedSpot.x,
@@ -1365,7 +1365,7 @@ void AreaEditor::drawCanvas() {
         Point nr_coords = quickHeightSetStartPos;
         nr_coords.x += 100.0f;
         al_transform_coordinates(
-            &game.screenToWorldTransform, &nr_coords.x, &nr_coords.y
+            &game.windowToWorldTransform, &nr_coords.x, &nr_coords.y
         );
         float offset = getQuickHeightSetOffset();
         drawDebugText(
@@ -1384,7 +1384,7 @@ void AreaEditor::drawCanvas() {
     //Path drawing.
     if(subState == EDITOR_SUB_STATE_PATH_DRAWING) {
         if(pathDrawingStop1) {
-            Point hotspot = snapPoint(game.mouseCursor.wPos);
+            Point hotspot = snapPoint(game.mouseCursor.worldPos);
             al_draw_line(
                 pathDrawingStop1->pos.x,
                 pathDrawingStop1->pos.y,
@@ -1428,7 +1428,7 @@ void AreaEditor::drawCanvas() {
         subState == EDITOR_SUB_STATE_PATH_DRAWING ||
         subState == EDITOR_SUB_STATE_NEW_SHADOW
     ) {
-        Point marker = game.mouseCursor.wPos;
+        Point marker = game.mouseCursor.worldPos;
         
         if(subState != EDITOR_SUB_STATE_ADD_MOB_LINK) {
             marker = snapPoint(marker);
@@ -1454,7 +1454,7 @@ void AreaEditor::drawCanvas() {
     if(
         subState == EDITOR_SUB_STATE_DEL_MOB_LINK
     ) {
-        Point marker = game.mouseCursor.wPos;
+        Point marker = game.mouseCursor.worldPos;
         
         al_draw_line(
             marker.x - 10 / game.cam.zoom,
@@ -1710,7 +1710,7 @@ void AreaEditor::drawCanvas() {
         float cursor_segment_ratio = 0;
         getClosestPointInLineSeg(
             crossSectionCheckpoints[0], crossSectionCheckpoints[1],
-            Point(game.mouseCursor.wPos.x, game.mouseCursor.wPos.y),
+            Point(game.mouseCursor.worldPos.x, game.mouseCursor.worldPos.y),
             &cursor_segment_ratio
         );
         if(cursor_segment_ratio >= 0 && cursor_segment_ratio <= 1) {

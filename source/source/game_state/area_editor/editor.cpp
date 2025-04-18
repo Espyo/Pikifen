@@ -543,7 +543,7 @@ void AreaEditor::createDrawingVertexes() {
 void AreaEditor::createMobUnderCursor() {
     registerChange("object creation");
     subState = EDITOR_SUB_STATE_NONE;
-    Point hotspot = snapPoint(game.mouseCursor.wPos);
+    Point hotspot = snapPoint(game.mouseCursor.worldPos);
     
     if(lastMobCustomCatName.empty()) {
         lastMobCustomCatName =
@@ -908,7 +908,7 @@ void AreaEditor::doSectorSplit() {
 
 
 /**
- * @brief Dear ImGui callback for when the canvas needs to be drawn on-screen.
+ * @brief Dear ImGui callback for when the canvas needs to be drawn.
  *
  * @param parent_list Unused.
  * @param cmd Unused.
@@ -1381,20 +1381,20 @@ string AreaEditor::getFolderTooltip(
 void AreaEditor::getHoveredLayoutElement(
     Vertex** hovered_vertex, Edge** hovered_edge, Sector** hovered_sector
 ) const {
-    *hovered_vertex = getVertexUnderPoint(game.mouseCursor.wPos);
+    *hovered_vertex = getVertexUnderPoint(game.mouseCursor.worldPos);
     *hovered_edge = nullptr;
     *hovered_sector = nullptr;
     
     if(*hovered_vertex) return;
     
     if(selectionFilter != SELECTION_FILTER_VERTEXES) {
-        *hovered_edge = getEdgeUnderPoint(game.mouseCursor.wPos);
+        *hovered_edge = getEdgeUnderPoint(game.mouseCursor.worldPos);
     }
     
     if(*hovered_edge) return;
     
     if(selectionFilter == SELECTION_FILTER_SECTORS) {
-        *hovered_sector = getSectorUnderPoint(game.mouseCursor.wPos);
+        *hovered_sector = getSectorUnderPoint(game.mouseCursor.worldPos);
     }
 }
 
@@ -1466,7 +1466,7 @@ string AreaEditor::getOpenedContentPath() const {
  * @return The offset.
  */
 float AreaEditor::getQuickHeightSetOffset() const {
-    float offset = quickHeightSetStartPos.y - game.mouseCursor.sPos.y;
+    float offset = quickHeightSetStartPos.y - game.mouseCursor.winPos.y;
     offset = floor(offset / 2.0f);
     offset = floor(offset / 10.0f);
     offset *= 10.0f;
@@ -3287,7 +3287,7 @@ void AreaEditor::setNewCircleSectorPoints() {
     float anchor_angle =
         getAngle(newCircleSectorCenter, newCircleSectorAnchor);
     float cursor_angle =
-        getAngle(newCircleSectorCenter, game.mouseCursor.wPos);
+        getAngle(newCircleSectorCenter, game.mouseCursor.worldPos);
     float radius =
         Distance(
             newCircleSectorCenter, newCircleSectorAnchor
@@ -3529,7 +3529,7 @@ void AreaEditor::setupForNewAreaPre() {
     
     //At this point we'll have nearly unloaded some assets like the thumbnail.
     //Since Dear ImGui still hasn't rendered the current frame, which could
-    //have had those assets on-screen, if it tries now it'll crash. So skip.
+    //have had those assets visible, if it tries now it'll crash. So skip.
     game.skipDearImGuiFrame = true;
 }
 
@@ -3545,7 +3545,7 @@ void AreaEditor::startMobMove() {
     for(auto const &m : selectedMobs) {
         preMoveMobCoords[m] = m->pos;
         
-        Distance d(game.mouseCursor.wPos, m->pos);
+        Distance d(game.mouseCursor.worldPos, m->pos);
         if(!moveClosestMob || d < move_closest_mob_dist) {
             moveClosestMob = m;
             move_closest_mob_dist = d;
@@ -3553,7 +3553,7 @@ void AreaEditor::startMobMove() {
         }
     }
     
-    moveMouseStartPos = game.mouseCursor.wPos;
+    moveMouseStartPos = game.mouseCursor.worldPos;
     moving = true;
 }
 
@@ -3572,7 +3572,7 @@ void AreaEditor::startPathStopMove() {
     ) {
         preMoveStopCoords[*s] = (*s)->pos;
         
-        Distance d(game.mouseCursor.wPos, (*s)->pos);
+        Distance d(game.mouseCursor.worldPos, (*s)->pos);
         if(!moveClosestStop || d < move_closest_stop_dist) {
             moveClosestStop = *s;
             move_closest_stop_dist = d;
@@ -3580,7 +3580,7 @@ void AreaEditor::startPathStopMove() {
         }
     }
     
-    moveMouseStartPos = game.mouseCursor.wPos;
+    moveMouseStartPos = game.mouseCursor.worldPos;
     moving = true;
 }
 
@@ -3597,7 +3597,7 @@ void AreaEditor::startVertexMove() {
         Point p = v2p(v);
         preMoveVertexCoords[v] = p;
         
-        Distance d(game.mouseCursor.wPos, p);
+        Distance d(game.mouseCursor.worldPos, p);
         if(!moveClosestVertex || d < move_closest_vertex_dist) {
             moveClosestVertex = v;
             move_closest_vertex_dist = d;
@@ -3605,7 +3605,7 @@ void AreaEditor::startVertexMove() {
         }
     }
     
-    moveMouseStartPos = game.mouseCursor.wPos;
+    moveMouseStartPos = game.mouseCursor.worldPos;
     moving = true;
 }
 

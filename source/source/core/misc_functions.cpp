@@ -404,7 +404,7 @@ Mob* getClosestMobToCursor(bool must_have_health) {
         if(m_ptr->isStoredInsideMob()) continue;
         if(!m_ptr->fsm.curState) continue;
         
-        Distance d = Distance(game.mouseCursor.wPos, m_ptr->pos);
+        Distance d = Distance(game.mouseCursor.worldPos, m_ptr->pos);
         if(!closest_mob_to_cursor || d < closest_mob_to_cursor_dist) {
             closest_mob_to_cursor = m_ptr;
             closest_mob_to_cursor_dist = d;
@@ -525,7 +525,7 @@ Mob* getNextMobNearCursor(Mob* pivot, bool must_have_health) {
         if(m_ptr->isStoredInsideMob()) continue;
         if(!m_ptr->fsm.curState) continue;
         
-        Distance d = Distance(game.mouseCursor.wPos, m_ptr->pos);
+        Distance d = Distance(game.mouseCursor.worldPos, m_ptr->pos);
         if(d < 8.0f) {
             mobs_near_cursor.push_back(m_ptr);
         }
@@ -1136,7 +1136,7 @@ bool openManual(const string &page) {
 
 
 /**
- * @brief Prints a bit of info onto the screen, for some seconds.
+ * @brief Prints a bit of info onto the game window, for some seconds.
  *
  * @param text Text to print. Can use line breaks.
  * @param total_duration Total amount of time in which the text is present.
