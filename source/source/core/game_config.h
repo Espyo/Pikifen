@@ -81,8 +81,8 @@ extern const size_t MAX_PIKMIN_IN_FIELD;
 extern const float THROW_MAX_DIST;
 extern const float WHISTLE_GROWTH_SPEED;
 extern const float WHISTLE_MAX_DIST;
-extern const float ZOOM_MAX_LEVEL;
-extern const float ZOOM_MIN_LEVEL;
+extern const float ZOOM_CLOSEST_REACH;
+extern const float ZOOM_FARTHEST_REACH;
 }
 
 }
@@ -270,11 +270,13 @@ struct GameConfig {
         //Maximum distance from the leader that the whistle can start from.
         float whistleMaxDist = RULES_D::WHISTLE_MAX_DIST;
         
-        //The closest zoom level the player can get.
-        float zoomMaxLevel = RULES_D::ZOOM_MAX_LEVEL;
+        //The camera reach for the closest zoom level. In reality,
+        //the camera keeps on-view an area of these many pixels squared.
+        float zoomClosestReach = RULES_D::ZOOM_CLOSEST_REACH;
         
-        //The farthest zoom level the player can get.
-        float zoomMinLevel = RULES_D::ZOOM_MIN_LEVEL;
+        //The camera reach for the farthest zoom level. In reality,
+        //the camera keeps on-view an area of these many pixels squared.
+        float zoomFarthestReach = RULES_D::ZOOM_FARTHEST_REACH;
         
     } rules;
     

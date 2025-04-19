@@ -147,11 +147,11 @@ const float WHISTLE_GROWTH_SPEED = 180.0f;
 //Default value for the maximum whistle distance.
 const float WHISTLE_MAX_DIST = CURSOR_MAX_DIST;
 
-//Default value for the maximum zoom level.
-const float ZOOM_MAX_LEVEL = 3.0f;
+//Default value for the zoom closest reach.
+const float ZOOM_CLOSEST_REACH = 295.0f;
 
-//Default value for the minimum zoom level.
-const float ZOOM_MIN_LEVEL = 0.66f;
+//Default value for the zoom farthest reach.
+const float ZOOM_FARTHEST_REACH = 1340.0f;
 
 }
 
@@ -263,7 +263,7 @@ void GameConfig::load(DataNode* file) {
         rrs.set("throw_max_dist", rules.throwMaxDist);
         rrs.set("whistle_growth_speed", rules.whistleGrowthSpeed);
         rrs.set("whistle_max_dist", rules.whistleMaxDist);
-        rrs.set("zoom_max_level", rules.zoomMaxLevel);
-        rrs.set("zoom_min_level", rules.zoomMinLevel);
+        rrs.set("zoom_closest_reach", rules.zoomClosestReach);
+        rrs.set("zoom_farthest_reach", rules.zoomFarthestReach);
     }
 }

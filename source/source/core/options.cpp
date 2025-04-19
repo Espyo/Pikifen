@@ -53,8 +53,8 @@ const unsigned int TARGET_FPS = 60;
 //Default value for whether to use the window position hack.
 const bool WINDOW_POS_HACK = false;
 
-//Default value for the middle zoom level.
-const float ZOOM_MID_LEVEL = 1.4f;
+//Default value for the zoom medium reach.
+const float ZOOM_MEDIUM_REACH = 630.0f;
 
 }
 
@@ -241,7 +241,6 @@ void Options::loadFromDataNode(DataNode* file) {
         ars.set("joystick_max_deadzone", advanced.joystickMaxDeadzone);
         ars.set("joystick_min_deadzone", advanced.joystickMinDeadzone);
         ars.set("max_particles", advanced.maxParticles);
-        ars.set("middle_zoom_level", advanced.zoomMidLevel);
         ars.set("mipmaps", advanced.mipmapsEnabled);
         for(unsigned char p = 0; p < MAX_PLAYERS; p++) {
             ars.set(
@@ -251,6 +250,7 @@ void Options::loadFromDataNode(DataNode* file) {
         }
         ars.set("smooth_scaling", advanced.smoothScaling);
         ars.set("window_position_hack", advanced.windowPosHack);
+        ars.set("zoom_medium_reach", advanced.zoomMediumReach);
         
         advanced.targetFps = std::max(LOWEST_FRAMERATE, advanced.targetFps);
         
@@ -509,7 +509,6 @@ void Options::saveToDataNode(DataNode* file) const {
         agw.write("joystick_max_deadzone", advanced.joystickMaxDeadzone);
         agw.write("joystick_min_deadzone", advanced.joystickMinDeadzone);
         agw.write("max_particles", advanced.maxParticles);
-        agw.write("middle_zoom_level", advanced.zoomMidLevel);
         agw.write("mipmaps", advanced.mipmapsEnabled);
         for(unsigned char p = 0; p < MAX_PLAYERS; p++) {
             agw.write(
@@ -519,6 +518,7 @@ void Options::saveToDataNode(DataNode* file) const {
         }
         agw.write("smooth_scaling", advanced.smoothScaling);
         agw.write("window_position_hack", advanced.windowPosHack);
+        agw.write("zoom_medium_reach", advanced.zoomMediumReach);
     }
     
     //Animation editor.

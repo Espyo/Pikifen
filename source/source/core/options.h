@@ -74,7 +74,7 @@ extern const bool MOUSE_MOVES_CURSOR[MAX_PLAYERS];
 extern const bool SMOOTH_SCALING;
 extern const unsigned int TARGET_FPS;
 extern const bool WINDOW_POS_HACK;
-extern const float ZOOM_MID_LEVEL;
+extern const float ZOOM_MEDIUM_REACH;
 }
 
 namespace AUDIO_D {
@@ -195,7 +195,7 @@ struct Options {
         bool windowPosHack = ADVANCED_D::WINDOW_POS_HACK;
         
         //Set the camera's middle zoom level to this amount.
-        float zoomMidLevel = ADVANCED_D::ZOOM_MID_LEVEL;
+        float zoomMediumReach = ADVANCED_D::ZOOM_MEDIUM_REACH;
         
     } advanced;
     

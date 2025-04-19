@@ -262,6 +262,24 @@ void GameplayState::enter() {
     game.view.center.y = game.winH / 2.0f;
     game.view.updateTransformations();
     
+    float zoomReaches[3] = {
+        game.config.rules.zoomClosestReach,
+        game.options.advanced.zoomMediumReach,
+        game.config.rules.zoomFarthestReach
+    };
+    float viewportReach = sqrt(game.view.size.x * game.view.size.y);
+    for(int z = 0; z < 3; z++) {
+        zoomLevels[z] = viewportReach / zoomReaches[z];
+    }
+    
+    if(curLeaderPtr) {
+        game.view.cam.setPos(curLeaderPtr->pos);
+    } else {
+        game.view.cam.setPos(Point());
+    }
+    game.view.cam.setZoom(zoomLevels[1]);
+    game.view.updateTransformations();
+    
     lastEnemyKilledPos = Point(LARGE_FLOAT);
     lastHurtLeaderPos = Point(LARGE_FLOAT);
     lastPikminBornPos = Point(LARGE_FLOAT);
@@ -920,13 +938,6 @@ void GameplayState::load() {
     if(!mobs.leaders.empty()) {
         changeToNextLeader(true, false, false);
     }
-    
-    if(curLeaderPtr) {
-        game.view.cam.setPos(curLeaderPtr->pos);
-    } else {
-        game.view.cam.setPos(Point());
-    }
-    game.view.cam.setZoom(game.options.advanced.zoomMidLevel);
     
     //Memorize mobs required by the mission.
     if(game.curAreaData->type == AREA_TYPE_MISSION) {

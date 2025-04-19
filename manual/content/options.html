@@ -62,12 +62,6 @@
         <td>1000</td>
       </tr>
       <tr>
-        <td><code>middle_zoom_level</code></td>
-        <td>When pressing the camera button, the zoom level swaps between near, far, and this amount.</td>
-        <td>Number</td>
-        <td>1.50</td>
-      </tr>
-      <tr>
         <td><code>mipmaps</code></td>
         <td><code>true</code> to enable <a href="http://en.wikipedia.org/wiki/Mipmap">mipmaps</a>, <code>false</code> to disable them. Enabling them is recommended, and increases VRAM usage for slightly less GPU usage. Turn it off if you need RAM. Might affect performance.</td>
         <td>Boolean</td>
@@ -108,6 +102,12 @@
         <td>For some users, the game window does not appear, although the engine is definitely running fine. This is because it somehow gets placed out of the operative system's screen. Set this to <code>true</code> to force it to appear inside the screen.</td>
         <td>Boolean</td>
         <td>false</td>
+      </tr>
+      <tr>
+        <td><code>zoom_medium_reach</code></td>
+        <td>Same as the <code>zoom_closest_reach</code> <a href="game_config.html#rules">game configuration property</a>, but for the medium zoom level.</td>
+        <td>Number</td>
+        <td>630</td>
       </tr>
     </table>
 

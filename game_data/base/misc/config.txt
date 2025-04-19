@@ -60,6 +60,6 @@ rules {
     throw_max_dist = 200
     whistle_growth_speed = 180
     whistle_max_dist = 200
-    zoom_max_level = 3.0
-    zoom_min_level = 0.66
+    zoom_closest_reach = 295
+    zoom_farthest_reach = 1340
 }

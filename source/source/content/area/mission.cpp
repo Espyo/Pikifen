@@ -83,7 +83,7 @@ bool MissionFailKillEnemies::getEndZoomData(
 ) const {
     if(gameplay->lastEnemyKilledPos.x != LARGE_FLOAT) {
         *out_cam_pos = gameplay->lastEnemyKilledPos;
-        *out_cam_zoom = game.config.rules.zoomMaxLevel;
+        *out_cam_zoom = gameplay->zoomLevels[0];
         return true;
     }
     return false;
@@ -228,7 +228,7 @@ bool MissionFailLoseLeaders::getEndZoomData(
 ) const {
     if(gameplay->lastHurtLeaderPos.x != LARGE_FLOAT) {
         *out_cam_pos = gameplay->lastHurtLeaderPos;
-        *out_cam_zoom = game.config.rules.zoomMaxLevel;
+        *out_cam_zoom = gameplay->zoomLevels[0];
         return true;
     }
     return false;
@@ -371,7 +371,7 @@ bool MissionFailLosePikmin::getEndZoomData(
 ) const {
     if(gameplay->lastPikminDeathPos.x != LARGE_FLOAT) {
         *out_cam_pos = gameplay->lastPikminDeathPos;
-        *out_cam_zoom = game.config.rules.zoomMaxLevel;
+        *out_cam_zoom = gameplay->zoomLevels[0];
         return true;
     }
     return false;
@@ -639,7 +639,7 @@ bool MissionFailTakeDamage::getEndZoomData(
 ) const {
     if(gameplay->lastHurtLeaderPos.x != LARGE_FLOAT) {
         *out_cam_pos = gameplay->lastHurtLeaderPos;
-        *out_cam_zoom = game.config.rules.zoomMaxLevel;
+        *out_cam_zoom = gameplay->zoomLevels[0];
         return true;
     }
     return false;
@@ -933,7 +933,7 @@ bool MissionFailTooFewPikmin::getEndZoomData(
 ) const {
     if(gameplay->lastPikminDeathPos.x != LARGE_FLOAT) {
         *out_cam_pos = gameplay->lastPikminDeathPos;
-        *out_cam_zoom = game.config.rules.zoomMaxLevel;
+        *out_cam_zoom = gameplay->zoomLevels[0];
         return true;
     }
     return false;
@@ -1076,7 +1076,7 @@ bool MissionFailTooManyPikmin::getEndZoomData(
 ) const {
     if(gameplay->lastPikminBornPos.x != LARGE_FLOAT) {
         *out_cam_pos = gameplay->lastPikminBornPos;
-        *out_cam_zoom = game.config.rules.zoomMaxLevel;
+        *out_cam_zoom = gameplay->zoomLevels[0];
         return true;
     }
     return false;
@@ -1231,7 +1231,7 @@ bool MissionGoalBattleEnemies::getEndZoomData(
 ) const {
     if(gameplay->lastEnemyKilledPos.x != LARGE_FLOAT) {
         *out_cam_pos = gameplay->lastEnemyKilledPos;
-        *out_cam_zoom = game.config.rules.zoomMaxLevel;
+        *out_cam_zoom = gameplay->zoomLevels[0];
         return true;
     }
     return false;
@@ -1383,7 +1383,7 @@ bool MissionGoalCollectTreasures::getEndZoomData(
 ) const {
     if(gameplay->lastShipThatGotTreasurePos.x != LARGE_FLOAT) {
         *out_cam_pos = gameplay->lastShipThatGotTreasurePos;
-        *out_cam_zoom = game.config.rules.zoomMaxLevel;
+        *out_cam_zoom = gameplay->zoomLevels[0];
         return true;
     }
     return false;
@@ -1850,7 +1850,7 @@ bool MissionGoalGrowPikmin::getEndZoomData(
 ) const {
     if(gameplay->lastPikminBornPos.x != LARGE_FLOAT) {
         *out_cam_pos = gameplay->lastPikminBornPos;
-        *out_cam_zoom = game.config.rules.zoomMaxLevel;
+        *out_cam_zoom = gameplay->zoomLevels[0];
         return true;
     }
     return false;

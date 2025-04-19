@@ -116,8 +116,7 @@ Bag of notes (useful stuff)
     Ideas for representing height
         Distant sectors (above, below, or both?) could have fog drawn on top of them
     What about upscaling the game?
-        Forget it. It's an insane headache. Between changing all of the file formats, variables, constants, etc. to the new numbers, you'd have to update the SVG and PNG files, and there are other tiny code problems that aren't immediately apparent. Players can just increase the resolution and zoom_mid_level.
-        What if a higher resolution zooms in the game further (except for the HUD and menus and such), and zoom_mid_level can be used to see more or less by default? This makes sense, since if the game's min zoom is 0.5, that's because the creator doesn't want you to see too far.
+        Forget it. It's an insane headache. Between changing all of the file formats, variables, constants, etc. to the new numbers, you'd have to update the SVG and PNG files, and there are other tiny code problems that aren't immediately apparent. Players can just increase the resolution and zoom_medium_reach.
     Pathing
         The only possible way to calculate the stops is by doing it first, before paths. If the engine could decide any stop at will, then were would the threshold be? What would stop it from deciding the last stop is like on the opposite side of the map from the target spot?
         Mobs that care about paths can only be in one of two stats: moving, or stuck

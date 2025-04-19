@@ -662,7 +662,8 @@ void OptionsMenu::initGuiGraphicsPage() {
     //Warning text.
     warningText =
         new TextGuiItem(
-        "Please restart for the changes to take effect.",
+        "Please leave this menu and then restart for the "
+        "changes to take effect.",
         game.sysContent.fntStandard, COLOR_WHITE, ALLEGRO_ALIGN_CENTER
     );
     warningText->visible = false;

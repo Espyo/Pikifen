@@ -360,7 +360,8 @@ void PacksMenu::initGuiMain() {
     //Restart warning text.
     warningText =
         new TextGuiItem(
-        "You may need to restart for some of the changes to take effect.",
+        "You may need to leave this menu and then restart for some of "
+        "the changes to take effect.",
         game.sysContent.fntStandard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
     );
     warningText->visible = false;

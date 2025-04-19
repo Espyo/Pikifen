@@ -313,16 +313,16 @@
         <td>200</td>
       </tr>
       <tr>
-        <td>zoom_max_level</td>
-        <td>Maximum level of zoom (i.e. how close the camera can get).</td>
+        <td>zoom_closest_reach</td>
+        <td>At the closest zoom level, the camera shows an area depending on this value, in world pixels. You can think of this as "on average, the player has a horizontal view span or vertical view span of this amount". The area is calculated as this value squared.<br>Because different window resolutions can show more on one direction than another, and because the corners of the window show much farther than the sides, it's no use trying to control exactly how <i>far</i> the player sees, and so <i>Pikifen</i> instead focuses on the <i>total area</i> of visible world pixels at any moment. As an example, for an area of 87'025 pixels (295 squared), on a square window resolution like 1024x1024, the player will see 295 pixels far horizontally and 295 vertically. On a 16:9 resolution like 1024x768, the player will see around 340 horizontally and 256 vertically (around 87'040 pixels).</td>
         <td>Number</td>
-        <td>3</td>
+        <td>295</td>
       </tr>
       <tr>
-        <td>zoom_min_level</td>
-        <td>Minimum level of zoom (i.e. how far away the camera can get).</td>
+        <td>zoom_farthest_level</td>
+        <td>Same as <code>zoom_closest_reach</code>, but for the farthest zoom level.</td>
         <td>Number</td>
-        <td>0.66</td>
+        <td>1340</td>
       </tr>
     </table>
     

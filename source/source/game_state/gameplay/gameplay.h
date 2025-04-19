@@ -380,6 +380,9 @@ public:
     //Number of Pikmin lost so far, per type.
     map<PikminType*, long> pikminDeathsPerType;
     
+    //Closest, middle, and farthest zoom levels. Cache for convenience.
+    float zoomLevels[3] = { 0.0f, 0.0f, 0.0f };
+    
     
     //--- Function declarations ---
     
