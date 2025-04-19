@@ -2,8 +2,7 @@
 
 
 Current tasks (tasks being worked on, but not yet committed)
-    Make the default angle north?
-    Make sectors and hitboxes use one hazard max
+    
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
@@ -144,7 +143,6 @@ Next tasks (roughly sorted most important first)
             Plucking -- sounds like crap
         All sound files should be at peak amplitude
     Compose and add songs
-        Start with a leitmotif?
         Editors
         A couple of gameplay songs
         Results screen
@@ -200,6 +198,7 @@ Next tasks (roughly sorted most important first)
     Test everything in the regression tests
     Test everything in DEV Lab
     Test all Pikmin and leader states
+    Test it on the Steam Deck
     Check one final time for leaks, run a static analysis, etc.
     Format the whole code with Astyle, once #563 is fixed
         This setup seemed to work ok, or at least as a start:

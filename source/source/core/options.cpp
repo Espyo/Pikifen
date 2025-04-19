@@ -252,7 +252,7 @@ void Options::loadFromDataNode(DataNode* file) {
         ars.set("smooth_scaling", advanced.smoothScaling);
         ars.set("window_position_hack", advanced.windowPosHack);
         
-        advanced.targetFps = std::max(1, advanced.targetFps);
+        advanced.targetFps = std::max(LOWEST_FRAMERATE, advanced.targetFps);
         
         if(advanced.joystickMinDeadzone > advanced.joystickMaxDeadzone) {
             std::swap(advanced.joystickMinDeadzone, advanced.joystickMaxDeadzone);

@@ -37,6 +37,9 @@ constexpr unsigned char VERSION_REV   = 0;
 //these elsewhere. At least they're really important and global, so I guess
 //they fit here in and of themselves.
 
+//Lowest possible framerate.
+constexpr int LOWEST_FRAMERATE = 30;
+
 //Number of Pikmin maturities.
 constexpr size_t N_MATURITIES = 3;
 

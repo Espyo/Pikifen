@@ -16,299 +16,464 @@
     
     <p>The following is an explanation of the player options in <i>Pikifen</i>.</p>
 
-    <p>All options saved by the game can be found in the <code>user_data/options.txt</code> file. You can edit this <a href="making.html#data-file">data file</a> manually, though it's more comfortable to try to change these options in the options menu, or in the respective editor's options menu. Some options can't be found in either of those, since they are too niche or complex to show in-game, and need to be changed manually. The following options can be found in the file, though the player controls are also saved here, but aren't listed in this table for simplicity's sake:</p>
+    <p>All options saved by the game can be found in the <code>user_data/options.txt</code> file. You can edit this <a href="making.html#data-file">data file</a> manually, though it's more comfortable to try to change these options in the options menu, or in the respective editor's options menu. Some options can't be found in either of those, since they are too niche or complex to show in-game, and need to be changed manually. Some others can be changed in-game, but you may want more customized values, in which case you'll have to edit them by hand too. If you want to find options that affect performance, just use your browser's "find" feature to search for <code>performance</code> in this page! The following options exist, organized into different blocks:</p>
 
-    <table>
+    <h2 id="advanced">Advanced</h2>
+
+    <p>Advanced options that most players will not need to change.</p>
+
+    <p>Block: <code>advanced</code></p>
+
+    <table class="props-t props-t-o">
       <tr>
-        <th>Option</th><th>Description</th><th>Default</th><th>Performance impact?</th>
-      </tr>
-      <tr>
-        <th><code>ambiance_sound_volume</code></th>
-        <td>Volume for in-world ambiance sound effects, from 0 to 1.</td>
-        <td><code>1</code></td>
-        <td>No</td>
-      </tr>
-      <tr>
-        <th><code>anim_editor_bg_path</code></th>
-        <td>Full path to the background texture for the animation editor, if any.</td>
-        <td><code></code></td>
-        <td>No</td>
-      </tr>
-      <tr>
-        <th><code>area_editor_advanced_mode</code></th>
-        <td>If <code>true</code>, the area editor will use an advanced interface mode.</td>
-        <td><code>false</code></td>
-        <td>No</td>
-      </tr>
-      <tr>
-        <th><code>area_editor_backup_interval</code></th>
-        <td>How often the area editor creates a backup of the current area, in seconds.</td>
-        <td><code>120</code></td>
-        <td>No</td>
-      </tr>
-      <tr>
-        <th><code>area_editor_grid_interval</code></th>
-        <td>Space between each grid cell in the area editor.</td>
-        <td><code>32</code></td>
-        <td>No</td>
-      </tr>
-      <tr>
-        <th><code>area_editor_selection_transformation</code></th>
-        <td>If <code>true</code>, a transformation widget will appear around the selection.</td>
-        <td><code>false</code></td>
-        <td>No</td>
-      </tr>
-      <tr>
-        <th><code>area_editor_show_circular_info</code></th>
-        <td>If <code>true</code>, the radius and number of vertexes of a circular sector will be shown when dragging one.</td>
-        <td><code>true</code></td>
-        <td>No</td>
-      </tr>
-      <tr>
-        <th><code>area_editor_show_edge_length</code></th>
-        <td>If <code>true</code>, the length of nearby edges will be shown, when dragging them or drawing them.</td>
-        <td><code>true</code></td>
-        <td>No</td>
-      </tr>
-      <tr>
-        <th><code>area_editor_show_path_link_length</code></th>
-        <td>If <code>true</code>, the length of nearby path links will be shown, when dragging them or drawing them.</td>
-        <td><code>true</code></td>
-        <td>No</td>
-      </tr>
-      <tr>
-        <th><code>area_editor_show_territory</code></th>
-        <td>If <code>true</code>, the territory radius of an object will appear around it, when selected.</td>
-        <td><code>true</code></td>
-        <td>No</td>
-      </tr>
-      <tr>
-        <th><code>area_editor_snap_mode</code></th>
-        <td>Current snap mode used.</td>
-        <td><code>0</code></td>
-        <td>No</td>
-      </tr>
-      <tr>
-        <th><code>area_editor_snap_threshold</code></th>
-        <td>The cursor only snaps when it is within these many pixels of something that can be snapped to.</td>
-        <td><code>80</code></td>
-        <td>No</td>
-      </tr>
-      <tr>
-        <th><code>area_editor_undo_limit</code></th>
-        <td>How many steps can be saved in the undo history, at most. 0 disables the undo feature.</td>
-        <td><code>20</code></td>
-        <td>No</td>
-      </tr>
-      <tr>
-        <th><code>area_editor_view_mode</code></th>
-        <td>View mode to use. 0 for standard, 1 for wireframe, 2 for height map, 3 for brightness map.</td>
-        <td><code>0</code></td>
-        <td><b>Yes</b></td>
-      </tr>
-      <tr>
-        <th><code>auto_throw_mode</code></th>
-        <td>What mode auto-throwing is set to. 0 is off, 1 is via holding, 2 is via button toggle.</td>
-        <td><code>0</code></td>
-        <td>No</td>
-      </tr>
-      <tr>
-        <th><code>cursor_cam_weight</code></th>
-        <td>When moving the cursor, how much does it influence the movement of the camera? 0 means none, 1 means just as much as the leader's position. You can use values beyond these ranges, but be warned that things will likely be weird.</td>
-        <td><code>0</code></td>
-        <td>No</td>
-      </tr>
-      <tr>
-        <th><code>cursor_speed</code></th>
-        <td>The speed at which the cursor moves, used when controlling it without a mouse. This is in window pixels per second.</td>
-        <td><code>500</code></td>
-        <td>No</td>
-      </tr>
-      <tr>
-        <th><code>draw_cursor_trail</code></th>
+        <td><code>draw_cursor_trail</code></td>
         <td>If <code>false</code>, the faint trail that follows the cursor will be removed, which could help with performance.</td>
-        <td><code>true</code></td>
-        <td><b>Yes</b></td>
+        <td>Boolean</td>
+        <td>true</td>
       </tr>
       <tr>
-        <th><code>editor_mmb_pan</code></th>
-        <td>In editors, should the middle mouse button pan (<code>true</code>) or reset the camera/zoom (<code>false</code>)? The right mouse button will do the other function.</td>
-        <td><code>false</code></td>
-        <td>No</td>
-      </tr>
-      <tr>
-        <th><code>editor_mouse_drag_threshold</code></th>
-        <td>In editors, the mouse will only be considered dragged if it's moved at least these many pixels.</td>
-        <td><code>4</code></td>
-        <td>No</td>
-      </tr>
-      <tr>
-        <th><code>editor_open_nodes</code></th>
-        <td>In editors, these nodes have been opened by the player. Next time they visit the editor, that node will already be opened. The nodes are named after the editor and the node itself, and are separated by semicolon.</td>
-        <td></td>
-        <td>No</td>
-      </tr>
-      <tr>
-        <th><code>editor_primary_color</code></th>
-        <td>In editors, if the player is using a custom style, this is the primary color to use for the widgets.</td>
-        <td><code>12 12 12</code></td>
-        <td>No</td>
-      </tr>
-      <tr>
-        <th><code>editor_secondary_color</code></th>
-        <td>In editors, if the player is using a custom style, this is the secondary color to use for the widgets.</td>
-        <td><code>48 119 198</code></td>
-        <td>No</td>
-      </tr>
-      <tr>
-        <th><code>editor_show_tooltips</code></th>
-        <td>In editors, should widget tooltips appear when the player places the mouse cursor over them?</td>
-        <td><code>true</code></td>
-        <td>No</td>
-      </tr>
-      <tr>
-        <th><code>editor_text_color</code></th>
-        <td>In editors, if the player is using a custom style, this is the text color to use for the widgets.</td>
-        <td><code>255 255 255</code></td>
-        <td>No</td>
-      </tr>
-      <tr>
-        <th><code>editor_use_custom_style</code></th>
-        <td>In editors, should a custom color style be used for the widgets?</td>
-        <td><code>false</code></td>
-        <td>No</td>
-      </tr>
-      <tr>
-        <th><code>engine_developer</code></th>
+        <td><code>engine_developer</code></td>
         <td>Whether you are a developer of <i>Pikifen</i>. This basically removes the warning that shows up when you try to edit the base pack.</td>
-        <td><code>false</code></td>
-        <td>No</td>
+        <td>Boolean</td>
+        <td>false</td>
       </tr>
       <tr>
-        <th><code>fps</code></th>
-        <td>Framerate cap. The higher it is, the smoother the gameplay is, but the heavier on performance the engine will be.</td>
-        <td><code>60</code></td>
-        <td><b>Yes</b></td>
+        <td><code>fps</code></td>
+        <td>Framerate cap. The higher it is, the smoother the gameplay is, but the heavier on performance the engine will be. The minimum is 30 FPS.</td>
+        <td>Number</td>
+        <td>60</td>
       </tr>
       <tr>
-        <th><code>gameplay_sound_volume</code></th>
-        <td>Volume for in-world gameplay sound effects, from 0 to 1.</td>
-        <td><code>1</code></td>
-        <td>No</td>
-      </tr>
-      <tr>
-        <th><code>fullscreen</code></th>
-        <td>Is the window fullscreen (<code>true</code>) or windowed (<code>false</code>)? Note that if the specified resolution doesn't work in fullscreen, the engine will revert the option to windowed mode.</td>
-        <td><code>false</code></td>
-        <td><b>Yes</b></td>
-      </tr>
-      <tr>
-        <th><code>joystick_min_deadzone</code></th>
-        <td>Tilting the joystick this far or less will be considered the same as keeping the joystick in neutral. If your analog stick is wobbly, and you see actions happening in-game even thought you're not moving the analog stick, try increasing this value. <code>0.2</code> (20%) is a good value for most cases.</td>
-        <td><code>0.2</code></td>
-        <td>No</td>
-      </tr>
-      <tr>
-        <th><code>joystick_max_deadzone</code></th>
+        <td><code>joystick_max_deadzone</code></td>
         <td>Tilting the joystick this far or more will be considered the same as holding the joystick fully in that direction. If you tilt your analog stick fully, but realize that the engine is responding like if you only tilted it a bit, try lowering this value. <code>0.9</code> (90%) is a good value for most cases.</td>
-        <td><code>0.9</code></td>
-        <td>No</td>
+        <td>Number</td>
+        <td>0.9</td>
       </tr>
       <tr>
-        <th><code>leaving_confirmation_mode</code></th>
-        <td>How the game should ask the player if they really confirm they want to leave the area. 0 is never, 1 is after 1 minute, 2 is always.</td>
-        <td><code>2</code></td>
-        <td>No</td>
+        <td><code>joystick_min_deadzone</code></td>
+        <td>Tilting the joystick this far or less will be considered the same as keeping the joystick in neutral. If your analog stick is wobbly, and you see actions happening in-game even thought you're not moving the analog stick, try increasing this value. <code>0.2</code> (20%) is a good value for most cases.</td>
+        <td>Number</td>
+        <td>0.2</td>
       </tr>
       <tr>
-        <th><code>master_volume</code></th>
-        <td>Master game volume, from 0 to 1.</td>
-        <td><code>0.8</code></td>
-        <td>No</td>
+        <td><code>max_particles</code></td>
+        <td>Maximum number of particles to have on the world at once. If more particles than this need to be created, older particles are deleted. The more particles active at once, the worse for performance.</td>
+        <td>Number</td>
+        <td>1000</td>
       </tr>
       <tr>
-        <th><code>max_particles</code></th>
-        <td>Maximum number of particles to have on the world at once. If more particles than this need to be created, older particles are deleted.</td>
-        <td><code>1000</code></td>
-        <td><b>Yes</b></td>
-      </tr>
-      <tr>
-        <th><code>middle_zoom_level</code></th>
+        <td><code>middle_zoom_level</code></td>
         <td>When pressing the camera button, the zoom level swaps between near, far, and this amount.</td>
-        <td><code>1.50</code></td>
-        <td>No</td>
+        <td>Number</td>
+        <td>1.50</td>
       </tr>
       <tr>
-        <th><code>mipmaps</code></th>
-        <td><code>true</code> to enable <a href="http://en.wikipedia.org/wiki/mipmaps">mipmaps</a>, <code>false</code> to disable them. Enabling them is recommended, and increases VRAM usage for slightly less GPU usage. Turn it off if you need RAM.</td>
-        <td><code>true</code></td>
-        <td><b>Yes</b></td>
+        <td><code>mipmaps</code></td>
+        <td><code>true</code> to enable <a href="http://en.wikipedia.org/wiki/Mipmap">mipmaps</a>, <code>false</code> to disable them. Enabling them is recommended, and increases VRAM usage for slightly less GPU usage. Turn it off if you need RAM. Might affect performance.</td>
+        <td>Boolean</td>
+        <td>true</td>
       </tr>
       <tr>
-        <th><code>music_volume</code></th>
-        <td>Volume for music, from 0 to 1.</td>
-        <td><code>1</code></td>
-        <td>No</td>
+        <td><code>p1_mouse_moves_cursor</code></td>
+        <td>Whether player 1's leader cursor matches the mouse cursor.</td>
+        <td>Boolean</td>
+        <td>true</td>
       </tr>
       <tr>
-        <th><code>pack_order</code></th>
-        <td>The order in which each pack is loaded, separated by semicolon. You're better off controlling this from the options menu's pack management menu.</td>
-        <td><code></code></td>
-        <td>No</td>
+        <td><code>p2_mouse_moves_cursor</code></td>
+        <td>Whether player 2's leader cursor matches the mouse cursor.</td>
+        <td>Boolean</td>
+        <td>false</td>
       </tr>
       <tr>
-        <th><code>packs_disabled</code></th>
-        <td>List of packs that are currently disabled, separated by semicolon. You're better off controlling this from the options menu's pack management menu.</td>
-        <td><code></code></td>
-        <td>No</td>
+        <td><code>p3_mouse_moves_cursor</code></td>
+        <td>Whether player 3's leader cursor matches the mouse cursor.</td>
+        <td>Boolean</td>
+        <td>false</td>
       </tr>
       <tr>
-        <th><code>particle_editor_grid_interval</code></th>
-        <td>Space between each grid cell in the particle editor.</td>
-        <td><code>32</code></td>
-        <td>No</td>
+        <td><code>p4_mouse_moves_cursor</code></td>
+        <td>Whether player 4's leader cursor matches the mouse cursor.</td>
+        <td>Boolean</td>
+        <td>false</td>
       </tr>
       <tr>
-        <th><code>particle_editor_bg_path</code></th>
-        <td>Full path to the background texture for the particle editor, if any.</td>
-        <td><code>32</code></td>
-        <td>No</td>
-      </tr>
-      <tr>
-        <th><code>resolution</code></th>
-        <td>Width and height of the game window. The engine was made with a small-medium resolution in mind, although you can change the window size to anything you want.</td>
-        <td><code>1024 768</code></td>
-        <td><b>Yes</b></td>
-      </tr>
-      <tr>
-        <th><code>smooth_scaling</code></th>
+        <td><code>smooth_scaling</code></td>
         <td>If <code>true</code>, images that need to shrink or grow big will do so smoothly. Otherwise it will look pixelated, but it might help with performance.</td>
-        <td><code>true</code></td>
-        <td><b>Yes</b></td>
+        <td>Boolean</td>
+        <td>true</td>
       </tr>
       <tr>
-        <th><code>true_fullscreen</code></th>
-        <td>If <code>true</code>, fullscreen mode will really use a fullscreen window. If <code>false</code>, it will use a borderless window. Borderless window is recommended, since true fullscreen can cause issues when you Alt+Tab to a different window, as well as when a system message box pops up (like browsing for a file in an editor).</td>
-        <td><code>false</code></td>
-        <td>No</td>
-      </tr>
-      <tr>
-        <th><code>ui_sound_volume</code></th>
-        <td>Volume for UI sound effects, from 0 to 1.</td>
-        <td><code>1</code></td>
-        <td>No</td>
-      </tr>
-      <tr>
-        <th><code>window_position_hack</code></th>
+        <td><code>window_position_hack</code></td>
         <td>For some users, the game window does not appear, although the engine is definitely running fine. This is because it somehow gets placed out of the operative system's screen. Set this to <code>true</code> to force it to appear inside the screen.</td>
-        <td><code>false</code></td>
-        <td>No</td>
+        <td>Boolean</td>
+        <td>false</td>
+      </tr>
+    </table>
+
+    <h2 id="animation-editor">Animation editor</h2>
+
+    <p>Options pertaining to the animation editor.</p>
+
+    <p>Block: <code>animation_editor</code></p>
+
+    <table class="props-t props-t-o">
+      <tr>
+        <td><code>bg_path</code></td>
+        <td>Full path to the background texture for the animation editor, if any.</td>
+        <td>Text</td>
+        <td></td>
       </tr>
       <tr>
-        <th><code>animation_editor_history_&lt;<i>number</i>&gt;</code></th>
-        <td>List of recently-opened files on the animation editor. This does not need to be edited by the player, as the engine controls the list by itself.</td>
+        <td><code>history</code></td>
+        <td>List of recently-opened content. This is a semicolon-separated list of pairs. The first item in the pair is the content's path, and the second is its name.</td>
+        <td>Text</td>
         <td></td>
-        <td>No</td>
+      </tr>
+    </table>
+
+    <h2 id="area-editor">Area editor</h2>
+
+    <p>Options pertaining to the area editor.</p>
+    
+    <p>Block: <code>area_editor</code></p>
+
+    <table class="props-t props-t-o">
+      <tr>
+        <td><code>advanced_mode</code></td>
+        <td>If <code>true</code>, the area editor will use an advanced interface mode.</td>
+        <td>Boolean</td>
+        <td>false</td>
+      </tr>
+      <tr>
+        <td><code>backup_interval</code></td>
+        <td>How often the area editor creates a backup of the current area, in seconds.</td>
+        <td>Number</td>
+        <td>120</td>
+      </tr>
+      <tr>
+        <td><code>grid_interval</code></td>
+        <td>Space between each grid cell in the area editor.</td>
+        <td>Number</td>
+        <td>32</td>
+      </tr>
+      <tr>
+        <td><code>history</code></td>
+        <td>List of recently-opened content. This is a semicolon-separated list of pairs. The first item in the pair is the content's path, and the second is its name.</td>
+        <td>Text</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><code>selection_transformation</code></td>
+        <td>If <code>true</code>, a transformation widget will appear around the selection.</td>
+        <td>Boolean</td>
+        <td>false</td>
+      </tr>
+      <tr>
+        <td><code>show_circular_info</code></td>
+        <td>If <code>true</code>, the radius and number of vertexes of a circular sector will be shown when dragging one.</td>
+        <td>Boolean</td>
+        <td>true</td>
+      </tr>
+      <tr>
+        <td><code>show_edge_length</code></td>
+        <td>If <code>true</code>, the length of nearby edges will be shown, when dragging them or drawing them.</td>
+        <td>Boolean</td>
+        <td>true</td>
+      </tr>
+      <tr>
+        <td><code>show_path_link_length</code></td>
+        <td>If <code>true</code>, the length of nearby path links will be shown, when dragging them or drawing them.</td>
+        <td>Boolean</td>
+        <td>true</td>
+      </tr>
+      <tr>
+        <td><code>show_territory</code></td>
+        <td>If <code>true</code>, the territory radius of an object will appear around it, when selected.</td>
+        <td>Boolean</td>
+        <td>true</td>
+      </tr>
+      <tr>
+        <td><code>snap_mode</code></td>
+        <td>Cursor snap mode used.</td>
+        <td>Number</td>
+        <td>0</td>
+      </tr>
+      <tr>
+        <td><code>snap_threshold</code></td>
+        <td>The cursor only snaps when it is within these many pixels of something that can be snapped to.</td>
+        <td>Number</td>
+        <td>80</td>
+      </tr>
+      <tr>
+        <td><code>undo_limit</code></td>
+        <td>How many steps can be saved in the undo history, at most. 0 disables the undo feature. The higher the number, the more system memory the game will use.</td>
+        <td>Number</td>
+        <td>20</td>
+      </tr>
+      <tr>
+        <td><code>view_mode</code></td>
+        <td>View mode to use. 0 for standard, 1 for wireframe, 2 for height map, 3 for brightness map.</td>
+        <td>Number</td>
+        <td>0</td>
+      </tr>
+    </table>
+
+    <h2 id="audio-editor">Audio</h2>
+
+    <p>Options about the game's audio.</p>
+    
+    <p>Block: <code>audio</code></p>
+
+    <table class="props-t props-t-o">
+      <tr>
+        <td><code>ambiance_sound_volume</code></td>
+        <td>Volume for in-world ambiance sound effects, from 0 to 1.</td>
+        <td>Number</td>
+        <td>1</td>
+      </tr>
+      <tr>
+        <td><code>gameplay_sound_volume</code></td>
+        <td>Volume for in-world gameplay sound effects, from 0 to 1.</td>
+        <td>Number</td>
+        <td>1</td>
+      </tr>
+      <tr>
+        <td><code>master_volume</code></td>
+        <td>Master game volume, from 0 to 1.</td>
+        <td>Number</td>
+        <td>0.8</td>
+      </tr>
+      <tr>
+        <td><code>music_volume</code></td>
+        <td>Volume for music, from 0 to 1.</td>
+        <td>Number</td>
+        <td>1</td>
+      </tr>
+      <tr>
+        <td><code>ui_sound_volume</code></td>
+        <td>Volume for UI sound effects, from 0 to 1.</td>
+        <td>Number</td>
+        <td>1</td>
+      </tr>
+    </table>
+
+    <h2 id="control-binds">Control binds</h2>
+
+    <p>Each player's control binds. For simplicity's sake, this page will not go into detail.</p>
+    
+    <p>Blocks: <code>control_binds_p1</code> to <code>control_binds_p4</code></p>
+
+    <h2 id="controls">Controls</h2>
+
+    <p>Miscellaneous options about player controls.</p>
+    
+    <p>Block: <code>controls</code></p>
+
+    <table class="props-t props-t-o">
+      <tr>
+        <td><code>auto_throw_mode</code></td>
+        <td>What mode auto-throwing is set to. 0 is off, 1 is via holding, 2 is via button toggle.</td>
+        <td>Number</td>
+        <td>0</td>
+      </tr>
+      <tr>
+        <td><code>cursor_speed</code></td>
+        <td>The speed at which the cursor moves, used when controlling it without a mouse. This is in window pixels per second.</td>
+        <td>Number</td>
+        <td>500</td>
+      </tr>
+    </table>
+
+    <h2 id="editors">Editors</h2>
+
+    <p>Options that are common to all editors.</p>
+    
+    <p>Block: <code>editors</code></p>
+
+    <table class="props-t props-t-o">
+      <tr>
+        <td><code>highlight_color</code></td>
+        <td>Color of highlighted elements in the canvas, when using a custom editor style.</td>
+        <td>Color</td>
+        <td>255 255 255</td>
+      </tr>
+      <tr>
+        <td><code>mmb_pan</code></td>
+        <td>In editors, should the middle mouse button pan (<code>true</code>) or reset the camera/zoom (<code>false</code>)? The right mouse button will do the other function.</td>
+        <td>Boolean</td>
+        <td>false</td>
+      </tr>
+      <tr>
+        <td><code>mouse_drag_threshold</code></td>
+        <td>In editors, the mouse will only be considered dragged if it's moved at least these many pixels.</td>
+        <td>Number</td>
+        <td>4</td>
+      </tr>
+      <tr>
+        <td><code>open_nodes</code></td>
+        <td>In editors, these nodes have been opened by the player. Next time they visit the editor, that node will already be opened. The nodes are named after the editor and the node itself, and are separated by semicolon.</td>
+        <td>Text</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><code>primary_color</code></td>
+        <td>In editors, if the player is using a custom style, this is the primary color to use for the widgets.</td>
+        <td>Color</td>
+        <td>12 12 12</td>
+      </tr>
+      <tr>
+        <td><code>secondary_color</code></td>
+        <td>In editors, if the player is using a custom style, this is the secondary color to use for the widgets.</td>
+        <td>Color</td>
+        <td>48 119 198</td>
+      </tr>
+      <tr>
+        <td><code>show_tooltips</code></td>
+        <td>In editors, should widget tooltips appear when the player places the mouse cursor over them?</td>
+        <td>Boolean</td>
+        <td>true</td>
+      </tr>
+      <tr>
+        <td><code>text_color</code></td>
+        <td>In editors, if the player is using a custom style, this is the text color to use for the widgets.</td>
+        <td>Color</td>
+        <td>255 255 255</td>
+      </tr>
+      <tr>
+        <td><code>use_custom_style</code></td>
+        <td>In editors, should a custom color style be used for the widgets?</td>
+        <td>Boolean</td>
+        <td>false</td>
+      </tr>
+    </table>
+
+    <h2 id="graphics">Graphics</h2>
+
+    <p>Options about the game's graphics.</p>
+    
+    <p>Block: <code>graphics</code></p>
+
+    <table class="props-t props-t-o">
+      <tr>
+        <td><code>fullscreen</code></td>
+        <td>Is the window fullscreen (<code>true</code>) or windowed (<code>false</code>)? Note that if the specified resolution doesn't work in fullscreen, the engine will revert the option to windowed mode. Affects performance negatively or positively, in that the more pixels are drawn on-screen the higher the cost, but also because the <code>true_fullscreen</code> option has an impact.</td>
+        <td>Boolean</td>
+        <td>false</td>
+      </tr>
+      <tr>
+        <td><code>resolution</code></td>
+        <td>Width and height of the game window. The engine was made with a small-medium resolution in mind, and a 4:3 aspect ratio, although you can change the window size to anything you want. The higher the resolution, the worse on performance.</td>
+        <td>Boolean</td>
+        <td>1024 768</td>
+      </tr>
+      <tr>
+        <td><code>true_fullscreen</code></td>
+        <td>If <code>true</code>, fullscreen mode will really use a fullscreen window. If <code>false</code>, it will use a borderless window. True fullscreen can cause issues when you Alt+Tab to a different window, as well as when a system message box pops up (like browsing for a file in an editor). On the other hand, true fullscreen can be better for performance since depending on your operative system and graphics card, the game will have exclusive access to the display.</td>
+        <td>Boolean</td>
+        <td>false</td>
+      </tr>
+    </table>
+
+    <h2 id="gui-editor">GUI editor</h2>
+
+    <p>Options pertaining to the GUI editor.</p>
+
+    <p>Block: <code>gui_editor</code></p>
+
+    <table class="props-t props-t-o">
+      <tr>
+        <td><code>grid_interval</code></td>
+        <td>Space between each grid cell in the GUI editor.</td>
+        <td>Number</td>
+        <td>2.5</td>
+      </tr>
+      <tr>
+        <td><code>history</code></td>
+        <td>List of recently-opened content. This is a semicolon-separated list of pairs. The first item in the pair is the content's path, and the second is its name.</td>
+        <td>Text</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><code>snap</code></td>
+        <td>Whether the cursor snaps to the grid.</td>
+        <td>Boolean</td>
+        <td>true</td>
+      </tr>
+    </table>
+
+    <h2 id="misc">Misc.</h2>
+
+    <p>Miscellaneous options that do not fit anywhere else.</p>
+
+    <p>Block: <code>misc</code></p>
+
+    <table class="props-t props-t-o">
+      <tr>
+        <td><code>cursor_cam_weight</code></td>
+        <td>When moving the cursor, how much does it influence the movement of the camera? 0 means none, 1 means just as much as the leader's position. 0.5 is something in-between. You can use values beyond these ranges, but be warned that things will likely be weird.</td>
+        <td>Number</td>
+        <td>0</td>
+      </tr>
+      <tr>
+        <td><code>leaving_confirmation_mode</code></td>
+        <td>How the game should ask the player if they really confirm they want to leave the area. 0 is never, 1 is after 1 minute, 2 is always.</td>
+        <td>Number</td>
+        <td>2</td>
+      </tr>
+      <tr>
+        <td><code>show_hud_input_icons</code></td>
+        <td>Whether to show input icons on the HUD for various GUI items or game features.</td>
+        <td>Boolean</td>
+        <td>true</td>
+      </tr>
+    </table>
+
+    <h2 id="packs">Packs</h2>
+
+    <p>Options about any installed packs. These do not affect the base pack.</p>
+
+    <p>Block: <code>packs</code></p>
+
+    <table class="props-t props-t-o">
+      <tr>
+        <td><code>disabled</code></td>
+        <td>List of packs that are currently disabled, separated by semicolon.</td>
+        <td>Text</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><code>order</code></td>
+        <td>The order in which each pack is loaded, separated by semicolon.</td>
+        <td>Text</td>
+        <td></td>
+      </tr>
+    </table>
+
+    <h2 id="particle-editor">Particle editor</h2>
+
+    <p>Options pertaining to the particle editor.</p>
+
+    <p>Block: <code>particle_editor</code></p>
+
+    <table class="props-t props-t-o">
+      <tr>
+        <td><code>bg_path</code></td>
+        <td>Full path to the background texture for the particle editor, if any.</td>
+        <td>Text</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><code>grid_interval</code></td>
+        <td>Space between each grid cell in the particle editor.</td>
+        <td>Number</td>
+        <td>32</td>
+      </tr>
+      <tr>
+        <td><code>history</code></td>
+        <td>List of recently-opened content. This is a semicolon-separated list of pairs. The first item in the pair is the content's path, and the second is its name.</td>
+        <td>Text</td>
+        <td></td>
       </tr>
     </table>
 
