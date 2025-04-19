@@ -64,7 +64,14 @@ void TitleScreen::doDrawing() {
     
     for(size_t p = 0; p < logoPikmin.size(); p++) {
         LogoPikmin* pik = &logoPikmin[p];
-        
+        drawBitmapInBox(
+            game.sysContent.bmpShadow,
+            pik->pos + pik_size * 0.30f, pik_size * 1.2f,
+            true, 0.0f, COLOR_TRANSPARENT_WHITE
+        );
+    }
+    for(size_t p = 0; p < logoPikmin.size(); p++) {
+        LogoPikmin* pik = &logoPikmin[p];
         drawBitmapInBox(
             pik->top, pik->pos, pik_size, true, pik->angle
         );
@@ -110,6 +117,7 @@ void TitleScreen::doLogic() {
     if(game.debug.showDearImGuiDemo) return;
     
     //Animate the logo Pikmin.
+    int largest_window_dim = std::max(game.winW, game.winH);
     for(size_t p = 0; p < logoPikmin.size(); p++) {
         LogoPikmin* pik = &logoPikmin[p];
         
@@ -117,7 +125,7 @@ void TitleScreen::doLogic() {
             float a = getAngle(pik->pos, pik->destination);
             float speed =
                 std::min(
-                    (float) (pik->speed * game.deltaT),
+                    (float) (pik->speed * largest_window_dim * game.deltaT),
                     Distance(pik->pos, pik->destination).toFloat() *
                     logoPikminSpeedSmoothness
                 );
@@ -984,26 +992,16 @@ void TitleScreen::load() {
                     (r / (float) map_total_rows)
                 );
                 
-            unsigned char h_side = game.rng.i(0, 1);
-            unsigned char v_side = game.rng.i(0, 1);
-            
             pik.pos =
-                Point(
-                    game.rng.f(0, game.winW * 0.5),
-                    game.rng.f(0, game.winH * 0.5)
+                Point(game.winW / 2.0f, game.winH / 2.0f) +
+                getRandomPointInRectangularRing(
+                    Point(game.winW * 1.2, game.winH * 1.2),
+                    Point(game.winW * 1.4, game.winH * 1.4),
+                    game.rng.i(0, 1), game.rng.f(0.0f, 1.0f),
+                    game.rng.f(0.0f, 1.0f), game.rng.f(0.0f, 1.0f),
+                    game.rng.i(0, 1)
                 );
                 
-            if(h_side == 0) {
-                pik.pos.x -= game.winW * 1.2;
-            } else {
-                pik.pos.x += game.winW * 1.2;
-            }
-            if(v_side == 0) {
-                pik.pos.y -= game.winH * 1.2;
-            } else {
-                pik.pos.y += game.winH * 1.2;
-            }
-            
             pik.angle = game.rng.f(0, TAU);
             pik.speed = game.rng.f(logoPikminMinSpeed, logoPikminMaxSpeed);
             pik.swaySpeed =

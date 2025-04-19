@@ -15,8 +15,8 @@ positions{
 logo{
 	min_window_limit=10 10
 	max_window_limit=90 40
-	pikmin_max_speed=800
-	pikmin_min_speed=600
+	pikmin_max_speed=0.80
+	pikmin_min_speed=0.60
 	pikmin_speed_smoothness=0.08
 	pikmin_sway_amount=3
 	pikmin_sway_max_speed=5.5

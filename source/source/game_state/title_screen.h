@@ -129,10 +129,12 @@ private:
     //Bottom-right coordinates of the logo, in window percentage.
     Point logoMaxWindowLimit = Point(90.0f, 50.0f);
     
-    //Maximum speed a logo Pikmin can move at.
+    //Maximum speed a logo Pikmin can move at, in window width or height ratio
+    //per second (the largest of width or height).
     float logoPikminMaxSpeed = 800.0f;
     
-    //Minimum speed a logo Pikmin can move at.
+    //Minimum speed a logo Pikmin can move at, in window width or height ratio
+    //per second (the largest of width or height).
     float logoPikminMinSpeed = 600.0f;
     
     //How much to smooth a logo Pikmin's speed by.
