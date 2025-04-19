@@ -1538,8 +1538,28 @@ float RngManager::f(float minimum, float maximum) {
     if(minimum > maximum) std::swap(minimum, maximum);
     
     return
-        (float) linearCongruentialGenerator(&state) /
+        (float) generateGoodInt() /
         ((float) INT32_MAX / (maximum - minimum)) + minimum;
+}
+
+
+/**
+ * @brief Calls the PRNG in order to get a decent random number.
+ *
+ * @return The generated number.
+ */
+int32_t RngManager::generateGoodInt() {
+    //Let's generate two, get their top 16 bits, and merge them.
+    //This is because relying on the least significant bits of an LCG is
+    //a bad idea (for instance, the numbers always come out alternating
+    //between odd and even).
+    int32_t n1 = linearCongruentialGenerator(&state);
+    int32_t n2 = linearCongruentialGenerator(&state);
+    
+    int16_t msb1 = (n1 >> 16) & 0xFFFF;
+    int16_t msb2 = (n2 >> 16) & 0xFFFF;
+    
+    return ((int32_t) msb1 << 16) | msb2;
 }
 
 
@@ -1558,7 +1578,7 @@ int32_t RngManager::i(int32_t minimum, int32_t maximum) {
     if(minimum > maximum) std::swap(minimum, maximum);
     return
         (
-            (linearCongruentialGenerator(&state)) %
+            (generateGoodInt()) %
             (maximum - minimum + 1)
         ) + minimum;
 }

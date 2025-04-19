@@ -265,6 +265,13 @@ struct RngManager {
     void init(int32_t initial_seed);
     int32_t i(int32_t minimum, int32_t maximum);
     float f(float minimum, float maximum);
+    
+    
+    private:
+    
+    //--- Function declarations ---
+    
+    int32_t generateGoodInt();
 };
 
 
