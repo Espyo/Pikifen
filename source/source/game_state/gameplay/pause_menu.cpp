@@ -1614,11 +1614,11 @@ void PauseMenu::handlePlayerAction(const PlayerAction &action) {
             handled_by_radar = true;
             break;
         } case PLAYER_ACTION_TYPE_RADAR_ZOOM_IN: {
-            radarZoomIn = action.value;
+            radarZoom.up = action.value;
             handled_by_radar = true;
             break;
         } case PLAYER_ACTION_TYPE_RADAR_ZOOM_OUT: {
-            radarZoomOut = action.value;
+            radarZoom.down = action.value;
             handled_by_radar = true;
             break;
         } case PLAYER_ACTION_TYPE_MENU_OK: {
@@ -2830,18 +2830,17 @@ void PauseMenu::tick(float delta_t) {
     
     if(radarGui.responsive) {
     
-        Point radar_pan_coords;
+        Point radar_mov_coords;
         float dummy_angle;
         float dummy_magnitude;
-        radarPan.getInfo(&radar_pan_coords, &dummy_angle, &dummy_magnitude);
-        if(radar_pan_coords.x != 0.0f || radar_pan_coords.y != 0.0f) {
-            panRadar(radar_pan_coords * PAUSE_MENU::RADAR_PAN_SPEED * delta_t);
+        radarPan.getInfo(&radar_mov_coords, &dummy_angle, &dummy_magnitude);
+        if(radar_mov_coords.x != 0.0f || radar_mov_coords.y != 0.0f) {
+            panRadar(radar_mov_coords * PAUSE_MENU::RADAR_PAN_SPEED * delta_t);
         }
         
-        if(radarZoomIn && !radarZoomOut) {
-            zoomRadar(PAUSE_MENU::RADAR_ZOOM_SPEED * delta_t);
-        } else if(radarZoomOut && !radarZoomIn) {
-            zoomRadar(-PAUSE_MENU::RADAR_ZOOM_SPEED * delta_t);
+        radarZoom.getInfo(&radar_mov_coords, &dummy_angle, &dummy_magnitude);
+        if(radar_mov_coords.y != 0.0f) {
+            zoomRadar((-radar_mov_coords.y) * PAUSE_MENU::RADAR_ZOOM_SPEED * delta_t);
         }
         
         bool mouse_in_radar =

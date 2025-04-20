@@ -243,14 +243,11 @@ private:
     //Go Here path result.
     PATH_RESULT goHerePathResult = PATH_RESULT_NOT_CALCULATED;
     
-    //Pan speed and amount.
+    //Radar pan inputs direction and amount.
     MovementInfo radarPan;
-    
-    //Whether the radar zoom-in input is pressed.
-    bool radarZoomIn = false;
-    
-    //Whether the radar zoom-out input is pressed.
-    bool radarZoomOut = false;
+
+    //Radar zoom inputs direction and amount.
+    MovementInfo radarZoom;
     
     
     //--- Function declarations ---
