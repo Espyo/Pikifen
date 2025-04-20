@@ -454,7 +454,7 @@ void AreaEditor::handleLmbDoubleClick(const ALLEGRO_EVENT &ev) {
                     PathStop* new_stop =
                         splitPathLink(
                             clicked_link_1, clicked_link_2,
-                            game.view.cursorWorldPos
+                            snapPoint(game.view.cursorWorldPos)
                         );
                     clearSelection();
                     selectedPathStops.insert(new_stop);
@@ -1026,7 +1026,7 @@ void AreaEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
                     clicked_stop =
                         splitPathLink(
                             clicked_link_1, clicked_link_2,
-                            game.view.cursorWorldPos
+                            snapPoint(game.view.cursorWorldPos)
                         );
                     clearSelection();
                     selectedPathStops.insert(clicked_stop);
