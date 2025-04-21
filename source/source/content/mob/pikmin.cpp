@@ -571,17 +571,19 @@ void Pikmin::tickClassSpecifics(float delta_t) {
     bumpLock = std::max(bumpLock - delta_t, 0.0f);
     
     //Forcefully follow another mob as a leader.
-    if(mustFollowLinkAsLeader) {
-        if(!links.empty() && links[0]) {
-            fsm.runEvent(
-                MOB_EV_TOUCHED_ACTIVE_LEADER,
-                (void*) (links[0]),
-                (void*) 1 //Be silent.
-            );
+    if(mustFollowLinkAsLeader && !links.empty()) {
+        Mob* leader = links[0];
+        fsm.runEvent(
+            MOB_EV_TOUCHED_ACTIVE_LEADER,
+            (void*) (leader),
+            (void*) 1 //Be silent.
+        );
+        
+        //If the leader is an enemy, let's keep these Pikmin safe.
+        if(leader->type->category->id == MOB_CATEGORY_ENEMIES) {
+            enableFlag(flags, MOB_FLAG_NON_HUNTABLE);
+            enableFlag(flags, MOB_FLAG_NON_HURTABLE);
         }
-        //Since this leader is likely an enemy, let's keep these Pikmin safe.
-        enableFlag(flags, MOB_FLAG_NON_HUNTABLE);
-        enableFlag(flags, MOB_FLAG_NON_HURTABLE);
         mustFollowLinkAsLeader = false;
     }
     

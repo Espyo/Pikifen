@@ -800,7 +800,10 @@ void Mob::tickVerticalMovementPhysics(
     }
     
     //Held Pikmin are also touching the same hazards as the leader.
-    if(holder.m == game.states.gameplay->curLeaderPtr) {
+    if(
+        game.states.gameplay->curLeaderPtr &&
+        holder.m == game.states.gameplay->curLeaderPtr
+    ) {
         Sector* leader_ground =
             game.states.gameplay->curLeaderPtr->groundSector;
         if(
