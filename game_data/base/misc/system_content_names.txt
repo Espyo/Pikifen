@@ -81,7 +81,7 @@ animations {
 particle_generators {
     converter_insertion = converter_insertion
     ding = ding
-    enemy_death = enemy_death
+    enemy_defeat = enemy_defeat
     leader_heal = leader_heal
     leader_land = leader_land
     onion_generating_inside = onion_gen_inside

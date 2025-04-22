@@ -282,12 +282,15 @@ Next tasks (roughly sorted most important first)
                 Add an option to allow event coalescing? Basically, if before a frame we received an event for analog stick right 0.3 and also a 0.4, just coalesce into a single event of 0.4
             Allow for button combinations
                 Basically, the bind struct has a chord variable, of the input type, and if this is not-none-typed, then this input is required before the main input is performed
+                If pressing an input generates both non-chord actions and chord actions, only do the chord actions
             Implement a screen stack system, with push&pop
                 If you're holding inputs at the area start interlude, the inputs should go into effect frame 1 when gameplay starts
                 If you're holding a direction as you read a sign, you'll continue to go in that direction, even if you let go. Pressing again fixes this. Make sure this is fixed.
                 If you're whistling, pause the game, release the whistle, and unpause, the game will probably not detect the release -- do something about it
                 Watch out for the input that causes a push/pop in the first place. e.g. the key down for when you hit Esc to pause, and then key up for when you get out of the pause menu while not holding it
             Some sort of priority system, or maybe just some logic for button combination overlap? If I bind M+A to take be the area image creator tool, I don't want my leader to walk to the left
+            Panning the radar with an analog stick will also move the menu selector, if there are binds for it to move with the analog stick
+                I think the controls manager needs to know the state of every input every frame. Then, at every frame, it uses that info to figure out how much each action's value is (average or highest). Then if two actions are marked as mutually-exclusive, an input only contributes to one and not the other. These mutually-exclusive things are told to turn on or off at run-time, and only apply to inputs that do both things
         Menus
             Options menu
                 Links to the control binds menu and the player setup menu
@@ -359,7 +362,7 @@ Next tasks (roughly sorted most important first)
                 Does it make sense to create a FOF above a bottomless pit?
                 https://www.deviantart.com/ronindude/art/Battlemap-Beach-Cave-730069774 I like the style of this -- maybe it can help with readability?
     [NEEDS BRAINSTORMING] Re-think how missions work
-        Achieving a simple ruleset, like Collect Treasures! is difficult, achieving a complex ruleset is difficult, and the whole system doesn't support edge-cases very well (what if you want a mission where you have to get all treasures AND kill all enemies?)
+        Achieving a simple ruleset, like Collect Treasures! is difficult, achieving a complex ruleset is difficult, and the whole system doesn't support edge-cases very well (what if you want a mission where you have to get all treasures AND defeat all enemies?)
         I think it may be best to just make the system very open and customizable, and also have presets or something for the most popular types of mission
     Multiplayer
         1 struct of info for each player, multiplayer controls
@@ -471,7 +474,7 @@ Next tasks (roughly sorted most important first)
             Tag?
                 One team's leader is "it", and hitting another's leader (via Pikmin or punch) causes them to be "it". When a player becomes "it", all Pikmin in the area go under their control, and theirs only. "It" players can leave Pikmin in chokepoints, use pincer maneuvers, juggle between growing more Pikmin, or keeping a low army to make life worse for the next "it". Runaway leaders can't do much other than run and punch each other, or wildlife. Every team has a timer that ticks up when they are "it", and the first to reach 3 minutes or so loses.
             Time?
-                When time is up, the player with the most Pikmin wins. Or with the most enemy kills. Or treasure points collected. And so on.
+                When time is up, the player with the most Pikmin wins. Or with the most enemy defeats. Or treasure points collected. And so on.
             Delivery?
                 There are loose, 1-weight objects stranded around the area, and players can send their Pikmin to deliver them to a pick-up point somewhere in the center of the area. The player to reach the highest amount of deliveries wins
         Rulesets

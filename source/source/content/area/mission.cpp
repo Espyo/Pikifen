@@ -46,10 +46,10 @@ const float EXIT_MIN_SIZE = 32.0f;
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The amount.
  */
-int MissionFailKillEnemies::getCurAmount(
+int MissionFailDefeatEnemies::getCurAmount(
     GameplayState* gameplay
 ) const {
-    return (int) gameplay->enemyDeaths;
+    return (int) gameplay->enemyDefeats;
 }
 
 
@@ -59,12 +59,12 @@ int MissionFailKillEnemies::getCurAmount(
  * @param mission Mission data object to get info from.
  * @return The reason.
  */
-string MissionFailKillEnemies::getEndReason(
+string MissionFailDefeatEnemies::getEndReason(
     MissionData* mission
 ) const {
     return
-        "Killed " +
-        amountStr((int) mission->failEnemiesKilled, "enemy", "enemies") +
+        "Defeated " +
+        amountStr((int) mission->failEnemiesDefeated, "enemy", "enemies") +
         "...";
 }
 
@@ -78,11 +78,11 @@ string MissionFailKillEnemies::getEndReason(
  * @param out_cam_zoom The final camera zoom is returned here.
  * @return Whether the camera should zoom somewhere.
  */
-bool MissionFailKillEnemies::getEndZoomData(
+bool MissionFailDefeatEnemies::getEndZoomData(
     GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
 ) const {
-    if(gameplay->lastEnemyKilledPos.x != LARGE_FLOAT) {
-        *out_cam_pos = gameplay->lastEnemyKilledPos;
+    if(gameplay->lastEnemyDefeatedPos.x != LARGE_FLOAT) {
+        *out_cam_pos = gameplay->lastEnemyDefeatedPos;
         *out_cam_zoom = gameplay->zoomLevels[0];
         return true;
     }
@@ -96,7 +96,7 @@ bool MissionFailKillEnemies::getEndZoomData(
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The label.
  */
-string MissionFailKillEnemies::getHudLabel(
+string MissionFailDefeatEnemies::getHudLabel(
     GameplayState* gameplay
 ) const {
     return "Enemies";
@@ -108,8 +108,8 @@ string MissionFailKillEnemies::getHudLabel(
  *
  * @return The name.
  */
-string MissionFailKillEnemies::getName() const {
-    return "Kill enemies";
+string MissionFailDefeatEnemies::getName() const {
+    return "Defeat enemies";
 }
 
 
@@ -119,13 +119,13 @@ string MissionFailKillEnemies::getName() const {
  * @param mission Mission data object to get info from.
  * @return The description.
  */
-string MissionFailKillEnemies::getPlayerDescription(
+string MissionFailDefeatEnemies::getPlayerDescription(
     MissionData* mission
 ) const {
     return
-        "Kill " +
+        "Defeat " +
         amountStr(
-            (int) mission->failEnemiesKilled, "enemy", "enemies"
+            (int) mission->failEnemiesDefeated, "enemy", "enemies"
         ) +
         " or more.";
 }
@@ -137,10 +137,10 @@ string MissionFailKillEnemies::getPlayerDescription(
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return The amount.
  */
-int MissionFailKillEnemies::getReqAmount(
+int MissionFailDefeatEnemies::getReqAmount(
     GameplayState* gameplay
 ) const {
-    return (int) game.curAreaData->mission.failEnemiesKilled;
+    return (int) game.curAreaData->mission.failEnemiesDefeated;
 }
 
 
@@ -152,11 +152,11 @@ int MissionFailKillEnemies::getReqAmount(
  * @param percentage Percentage cleared.
  * @return The status.
  */
-string MissionFailKillEnemies::getStatus(
+string MissionFailDefeatEnemies::getStatus(
     int cur, int req, float percentage
 ) const {
     return
-        "You have killed " +
+        "You have defeated " +
         i2s(cur) + "/" + i2s(req) +
         " enemies. (" + i2s(percentage) + "%)";
 }
@@ -167,7 +167,7 @@ string MissionFailKillEnemies::getStatus(
  *
  * @return Whether it has content.
  */
-bool MissionFailKillEnemies::hasHudContent() const {
+bool MissionFailDefeatEnemies::hasHudContent() const {
     return true;
 }
 
@@ -178,7 +178,7 @@ bool MissionFailKillEnemies::hasHudContent() const {
  * @param gameplay Pointer to the gameplay state to get info from.
  * @return Whether it is met.
  */
-bool MissionFailKillEnemies::isMet(
+bool MissionFailDefeatEnemies::isMet(
     GameplayState* gameplay
 ) const {
     return getCurAmount(gameplay) >= getReqAmount(gameplay);
@@ -1229,8 +1229,8 @@ string MissionGoalBattleEnemies::getEndReason(
 bool MissionGoalBattleEnemies::getEndZoomData(
     GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
 ) const {
-    if(gameplay->lastEnemyKilledPos.x != LARGE_FLOAT) {
-        *out_cam_pos = gameplay->lastEnemyKilledPos;
+    if(gameplay->lastEnemyDefeatedPos.x != LARGE_FLOAT) {
+        *out_cam_pos = gameplay->lastEnemyDefeatedPos;
         *out_cam_zoom = gameplay->zoomLevels[0];
         return true;
     }
@@ -1304,7 +1304,7 @@ string MissionGoalBattleEnemies::getStatus(
     int cur, int req, float percentage
 ) const {
     return
-        "You have killed " + i2s(cur) + "/" + i2s(req) +
+        "You have defeated " + i2s(cur) + "/" + i2s(req) +
         " enemies. (" + i2s(percentage) + "%)";
 }
 

@@ -482,7 +482,7 @@ void loadStatistics() {
     rs.set("pikmin_hazard_deaths",   s.pikminHazardDeaths);
     rs.set("pikmin_blooms",          s.pikminBlooms);
     rs.set("pikmin_saved",           s.pikminSaved);
-    rs.set("enemy_deaths",           s.enemyDeaths);
+    rs.set("enemy_defeats",          s.enemyDefeats);
     rs.set("pikmin_thrown",          s.pikminThrown);
     rs.set("whistle_uses",           s.whistleUses);
     rs.set("distance_walked",        s.distanceWalked);

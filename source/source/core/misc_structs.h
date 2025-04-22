@@ -858,8 +858,8 @@ struct SystemContentNames {
     //Useless attack ding.
     string parDing = "ding";
     
-    //Enemy death sparkles.
-    string parEnemyDeath = "enemy_death";
+    //Enemy defeat sparkles.
+    string parEnemyDefeat = "enemy_defeat";
     
     //Leader being healed at a ship.
     string parLeaderHeal = "leader_heal";
@@ -1247,8 +1247,8 @@ struct Statistics {
     //Times Pikmin were saved from a hazard by being whistled.
     uint64_t pikminSaved = 0;
     
-    //Times enemies died.
-    uint64_t enemyDeaths = 0;
+    //Times enemies were defeated.
+    uint64_t enemyDefeats = 0;
     
     //Times Pikmin were thrown. Leaders thrown don't count.
     uint64_t pikminThrown = 0;

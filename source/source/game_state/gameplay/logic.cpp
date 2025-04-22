@@ -955,7 +955,7 @@ void GameplayState::doGameplayLogic(float delta_t) {
             //Reset the positions of the last mission-end-related things,
             //since if they didn't get used in endMission, then they
             //may be stale from here on.
-            lastEnemyKilledPos = Point(LARGE_FLOAT);
+            lastEnemyDefeatedPos = Point(LARGE_FLOAT);
             lastHurtLeaderPos = Point(LARGE_FLOAT);
             lastPikminBornPos = Point(LARGE_FLOAT);
             lastPikminDeathPos = Point(LARGE_FLOAT);

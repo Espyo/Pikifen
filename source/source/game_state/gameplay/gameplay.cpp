@@ -280,7 +280,7 @@ void GameplayState::enter() {
     game.view.cam.setZoom(zoomLevels[1]);
     game.view.updateTransformations();
     
-    lastEnemyKilledPos = Point(LARGE_FLOAT);
+    lastEnemyDefeatedPos = Point(LARGE_FLOAT);
     lastHurtLeaderPos = Point(LARGE_FLOAT);
     lastPikminBornPos = Point(LARGE_FLOAT);
     lastPikminDeathPos = Point(LARGE_FLOAT);
@@ -768,7 +768,7 @@ void GameplayState::load() {
     goalTreasuresTotal = 0;
     treasurePointsCollected = 0;
     treasurePointsTotal = 0;
-    enemyDeaths = 0;
+    enemyDefeats = 0;
     enemyTotal = 0;
     enemyPointsCollected = 0;
     enemyPointsTotal = 0;

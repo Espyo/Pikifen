@@ -80,8 +80,8 @@ enum MISSION_FAIL_COND {
     //Losing a certain amount of leaders.
     MISSION_FAIL_COND_LOSE_LEADERS,
     
-    //Killing a certain amount of enemies.
-    MISSION_FAIL_COND_KILL_ENEMIES,
+    //Defeating a certain amount of enemies.
+    MISSION_FAIL_COND_DEFEAT_ENEMIES,
     
     //Ending from the pause menu.
     MISSION_FAIL_COND_PAUSE_MENU,
@@ -143,7 +143,7 @@ enum MISSION_SCORE_CRITERIA {
     //Points per treasure point.
     MISSION_SCORE_CRITERIA_TREASURE_POINTS,
     
-    //Points per enemy kill point.
+    //Points per enemy defeat point.
     MISSION_SCORE_CRITERIA_ENEMY_POINTS,
     
 };
@@ -193,8 +193,8 @@ struct MissionData {
     //Amount for the "lose leaders" mission fail condition.
     size_t failLeadersKod = 1;
     
-    //Amount for the "kill enemies" mission fail condition.
-    size_t failEnemiesKilled = 1;
+    //Amount for the "defeat enemies" mission fail condition.
+    size_t failEnemiesDefeated = 1;
     
     //Seconds amount for the "time limit" mission fail condition.
     size_t failTimeLimit = MISSION::DEF_TIME_LIMIT;
@@ -226,7 +226,7 @@ struct MissionData {
     //Mission point multiplier for each enemy point obtained.
     int pointsPerEnemyPoint = 0;
     
-    //If true, award points on enemy collection rather than on death.
+    //If true, award points on enemy collection rather than on defeat.
     bool enemyPointsOnCollection = false;
     
     //Bitmask for mission fail point loss criteria. Use MISSION_SCORE_CRITERIA.
@@ -312,9 +312,9 @@ public:
 
 
 /**
- * @brief Class representing the "kill enemies" mission fail condition.
+ * @brief Class representing the "defeat enemies" mission fail condition.
  */
-class MissionFailKillEnemies : public MissionFail {
+class MissionFailDefeatEnemies : public MissionFail {
 
 public:
 

@@ -3301,36 +3301,36 @@ void AreaEditor::processGuiPanelMissionFail(
         ImGui::Unindent();
     }
     
-    //Kill enemies checkbox.
+    //Defeat enemies checkbox.
     fail_flags_changed |=
         ImGui::CheckboxFlags(
-            "Kill enemies",
+            "Defeat enemies",
             &fail_flags,
-            getIdxBitmask(MISSION_FAIL_COND_KILL_ENEMIES)
+            getIdxBitmask(MISSION_FAIL_COND_DEFEAT_ENEMIES)
         );
     setTooltip(
         "The mission ends as a fail if a certain amount of\n"
-        "enemies get killed."
+        "enemies get defeated."
     );
     
     if(
         hasFlag(
             fail_flags,
-            getIdxBitmask(MISSION_FAIL_COND_KILL_ENEMIES)
+            getIdxBitmask(MISSION_FAIL_COND_DEFEAT_ENEMIES)
         )
     ) {
-        //Enemy kills value.
+        //Enemy defeats value.
         int amount =
-            (int) game.curAreaData->mission.failEnemiesKilled;
+            (int) game.curAreaData->mission.failEnemiesDefeated;
         ImGui::Indent();
         ImGui::SetNextItemWidth(50);
-        if(ImGui::DragInt("Kills", &amount, 0.1f, 1, INT_MAX)) {
+        if(ImGui::DragInt("Defeats", &amount, 0.1f, 1, INT_MAX)) {
             registerChange("mission fail conditions change");
-            game.curAreaData->mission.failEnemiesKilled =
+            game.curAreaData->mission.failEnemiesDefeated =
                 (size_t) amount;
         }
         setTooltip(
-            "Enemy kill amount that, when reached, ends the mission\n"
+            "Enemy defeat amount that, when reached, ends the mission\n"
             "as a fail.",
             "", WIDGET_EXPLANATION_DRAG
         );
@@ -3793,7 +3793,7 @@ void AreaEditor::processGuiPanelMissionGrading() {
             setTooltip(
                 "If checked, enemy points will be awarded on enemy\n"
                 "collection. If unchecked, enemy points will be awarded\n"
-                "on enemy death."
+                "on enemy defeat."
             );
             ImGui::Unindent();
         }

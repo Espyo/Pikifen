@@ -158,7 +158,7 @@ script {
     destroyed {
         on_enter {
             set_animation dying
-            start_particles enemy_death 0 0 150
+            start_particles enemy_defeat 0 0 150
             start_particles pellet_posy_1_petals 40 0 150
             start_dying
             if $cur_color = red

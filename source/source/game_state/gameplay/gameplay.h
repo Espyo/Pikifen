@@ -173,8 +173,8 @@ public:
     //Information about the in-game HUD.
     Hud* hud = nullptr;
     
-    //Position of the last enemy killed. LARGE_FLOAT for none.
-    Point lastEnemyKilledPos;
+    //Position of the last enemy defeated. LARGE_FLOAT for none.
+    Point lastEnemyDefeatedPos;
     
     //Position of the last leader to get hurt. LARGE_FLOAT for none.
     Point lastHurtLeaderPos;
@@ -290,8 +290,8 @@ public:
     //How many treasure points exist in total.
     size_t treasurePointsTotal = 0;
     
-    //How many enemy deaths so far.
-    size_t enemyDeaths = 0;
+    //How many enemy defeats so far.
+    size_t enemyDefeats = 0;
     
     //How many enemies exist in total.
     size_t enemyTotal = 0;

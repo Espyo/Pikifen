@@ -225,7 +225,7 @@ void SystemContentNames::load(DataNode* file) {
     
     par_rs.set("converter_insertion", parConverterInsertion);
     par_rs.set("ding", parDing);
-    par_rs.set("enemy_death", parEnemyDeath);
+    par_rs.set("enemy_defeat", parEnemyDefeat);
     par_rs.set("leader_heal", parLeaderHeal);
     par_rs.set("leader_land", parLeaderLand);
     par_rs.set("onion_generating_inside", parOnionGenInside);

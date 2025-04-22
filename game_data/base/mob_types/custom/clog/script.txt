@@ -33,7 +33,7 @@ script {
             set_tangible false
             set_height 1
             set_animation destroyed
-            start_particles enemy_death 0 0 32
+            start_particles enemy_defeat 0 0 32
             start_particles large_rock_explosion 0 0 32
             play_sound obstacle_cleared
             play_sound rock_breaking

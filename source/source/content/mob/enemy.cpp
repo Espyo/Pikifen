@@ -126,12 +126,12 @@ void Enemy::finishDyingClassSpecifics() {
  */
 void Enemy::startDyingClassSpecifics() {
     //Numbers.
-    game.states.gameplay->enemyDeaths++;
+    game.states.gameplay->enemyDefeats++;
     if(!game.curAreaData->mission.enemyPointsOnCollection) {
         game.states.gameplay->enemyPointsCollected += eneType->points;
     }
-    game.states.gameplay->lastEnemyKilledPos = pos;
-    game.statistics.enemyDeaths++;
+    game.states.gameplay->lastEnemyDefeatedPos = pos;
+    game.statistics.enemyDefeats++;
     
     if(game.curAreaData->mission.goal == MISSION_GOAL_BATTLE_ENEMIES) {
         game.states.gameplay->missionRemainingMobIds.erase(id);
@@ -160,7 +160,7 @@ void Enemy::startDyingClassSpecifics() {
     //Particles.
     ParticleGenerator pg =
         standardParticleGenSetup(
-            game.sysContentNames.parEnemyDeath, this
+            game.sysContentNames.parEnemyDefeat, this
         );
     particleGenerators.push_back(pg);
 }

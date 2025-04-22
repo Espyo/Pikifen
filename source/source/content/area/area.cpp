@@ -367,7 +367,7 @@ void Area::clone(Area &other) {
     other.mission.failTooManyPikAmount = mission.failTooManyPikAmount;
     other.mission.failPikKilled = mission.failPikKilled;
     other.mission.failLeadersKod = mission.failLeadersKod;
-    other.mission.failEnemiesKilled = mission.failEnemiesKilled;
+    other.mission.failEnemiesDefeated = mission.failEnemiesDefeated;
     other.mission.failTimeLimit = mission.failTimeLimit;
     other.mission.gradingMode = mission.gradingMode;
     other.mission.pointsPerPikminBorn = mission.pointsPerPikminBorn;
@@ -971,7 +971,7 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
     rs.set("mission_fail_too_many_pik_amount", mission.failTooManyPikAmount);
     rs.set("mission_fail_pik_killed", mission.failPikKilled);
     rs.set("mission_fail_leaders_kod", mission.failLeadersKod);
-    rs.set("mission_fail_enemies_killed", mission.failEnemiesKilled);
+    rs.set("mission_fail_enemies_defeated", mission.failEnemiesDefeated);
     rs.set("mission_fail_time_limit", mission.failTimeLimit);
     rs.set("mission_fail_hud_primary_cond", mission.failHudPrimaryCond);
     rs.set("mission_fail_hud_secondary_cond", mission.failHudSecondaryCond);
@@ -2000,10 +2000,10 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
     if(
         hasFlag(
             mission.failConditions,
-            getIdxBitmask(MISSION_FAIL_COND_KILL_ENEMIES)
+            getIdxBitmask(MISSION_FAIL_COND_DEFEAT_ENEMIES)
         )
     ) {
-        gw.write("mission_fail_enemies_killed", mission.failEnemiesKilled);
+        gw.write("mission_fail_enemies_defeated", mission.failEnemiesDefeated);
     }
     if(
         hasFlag(

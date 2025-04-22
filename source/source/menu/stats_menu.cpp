@@ -228,8 +228,8 @@ void StatsMenu::populateStatsList() {
         "killing them."
     );
     addStat(
-        "Enemy deaths", i2s(game.statistics.enemyDeaths),
-        "Total number of enemies that died."
+        "Enemy defeats", i2s(game.statistics.enemyDefeats),
+        "Total number of enemies that were defeated."
     );
     
     addHeader("Leader control");

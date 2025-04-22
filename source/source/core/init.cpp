@@ -1003,7 +1003,7 @@ void initMiscDatabases() {
         new MissionFailLoseLeaders()
     );
     game.missionFailConds.push_back(
-        new MissionFailKillEnemies()
+        new MissionFailDefeatEnemies()
     );
     game.missionFailConds.push_back(
         new MissionFailPauseMenu()

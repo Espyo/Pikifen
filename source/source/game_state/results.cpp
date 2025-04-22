@@ -689,16 +689,16 @@ void Results::load() {
     //Treasure points points bullet.
     addScoreStat(MISSION_SCORE_CRITERIA_TREASURE_POINTS);
     
-    //Enemy deaths bullet.
+    //Enemy defeats bullet.
     addStat(
-        "Enemy deaths:",
-        i2s(game.states.gameplay->enemyDeaths) + "/" +
+        "Enemy defeats:",
+        i2s(game.states.gameplay->enemyDefeats) + "/" +
         i2s(game.states.gameplay->enemyTotal)
     );
     
     //Enemy points bullet.
     addStat(
-        "Enemy kill points:",
+        "Enemy defeat points:",
         i2s(game.states.gameplay->enemyPointsCollected) + "/" +
         i2s(game.states.gameplay->enemyPointsTotal)
     );

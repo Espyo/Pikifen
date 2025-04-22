@@ -1275,7 +1275,7 @@ void saveStatistics() {
     gw.write("pikmin_hazard_deaths", s.pikminHazardDeaths);
     gw.write("pikmin_blooms", s.pikminBlooms);
     gw.write("pikmin_saved", s.pikminSaved);
-    gw.write("enemy_deaths", s.enemyDeaths);
+    gw.write("enemy_defeats", s.enemyDefeats);
     gw.write("pikmin_thrown", s.pikminThrown);
     gw.write("whistle_uses", s.whistleUses);
     gw.write("distance_walked", s.distanceWalked);
