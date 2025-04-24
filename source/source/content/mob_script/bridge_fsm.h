@@ -16,7 +16,7 @@
 /**
  * @brief Functions about the bridge's finite state machine and behavior.
  */
-namespace bridge_fsm {
+namespace BridgeFsm {
 void createFsm(MobType* typ);
 
 void checkHealth(Mob* m, void* info1, void* info2);

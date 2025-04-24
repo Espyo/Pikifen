@@ -32,24 +32,24 @@
  * @param category Its category.
  * @param name Its name.
  * @param description Its descripton.
- * @param internal_name The name of its property in the options file.
- * @param default_bind_str String representing of this action's default
+ * @param internalName The name of its property in the options file.
+ * @param defaultBindStr String representing of this action's default
  * control bind.
- * @param auto_repeat Auto-repeat threshold.
+ * @param autoRepeat Auto-repeat threshold.
  */
 void ControlsMediator::addPlayerActionType(
     PLAYER_ACTION_TYPE id, PLAYER_ACTION_CAT category,
-    const string &name, const string &description, const string &internal_name,
-    const string &default_bind_str, float auto_repeat
+    const string &name, const string &description, const string &internalName,
+    const string &defaultBindStr, float autoRepeat
 ) {
     PfePlayerActionType a;
     a.id = id;
     a.category = category;
     a.name = name;
     a.description = description;
-    a.internalName = internal_name;
-    a.defaultBindStr = default_bind_str;
-    a.autoRepeat = auto_repeat;
+    a.internalName = internalName;
+    a.defaultBindStr = defaultBindStr;
+    a.autoRepeat = autoRepeat;
     
     playerActionTypes.push_back(a);
     mgr.actionTypes[id] = a;
@@ -141,14 +141,14 @@ vector<ControlBind> &ControlsMediator::binds() {
  * @brief Finds a registered control bind for player 1 that matches
  * the requested action. Returns an empty bind if none is found.
  *
- * @param action_type_id ID of the action type.
+ * @param actionTypeId ID of the action type.
  * @return The bind.
  */
 ControlBind ControlsMediator::findBind(
-    const PLAYER_ACTION_TYPE action_type_id
+    const PLAYER_ACTION_TYPE actionTypeId
 ) const {
     for(size_t b = 0; b < mgr.binds.size(); b++) {
-        if(mgr.binds[b].actionTypeId == action_type_id) {
+        if(mgr.binds[b].actionTypeId == actionTypeId) {
             return mgr.binds[b];
         }
     }
@@ -160,14 +160,14 @@ ControlBind ControlsMediator::findBind(
  * @brief Finds a registered control bind for player 1 that matches
  * the requested action. Returns an empty bind if none is found.
  *
- * @param action_name Name of the action.
+ * @param actionName Name of the action.
  * @return The bind.
  */
 ControlBind ControlsMediator::findBind(
-    const string &action_name
+    const string &actionName
 ) const {
     for(size_t b = 0; b < playerActionTypes.size(); b++) {
-        if(playerActionTypes[b].internalName == action_name) {
+        if(playerActionTypes[b].internalName == actionName) {
             return findBind(playerActionTypes[b].id);
         }
     }
@@ -189,14 +189,14 @@ const vector<PfePlayerActionType>
 /**
  * @brief Returns a registered type, given its ID.
  *
- * @param action_id ID of the player action.
+ * @param actionId ID of the player action.
  * @return The type, or an empty type on failure.
  */
 PfePlayerActionType ControlsMediator::getPlayerActionType(
-    int action_id
+    int actionId
 ) const {
     for(size_t b = 0; b < playerActionTypes.size(); b++) {
-        if(playerActionTypes[b].id == action_id) {
+        if(playerActionTypes[b].id == actionId) {
             return playerActionTypes[b];
         }
     }
@@ -208,14 +208,14 @@ PfePlayerActionType ControlsMediator::getPlayerActionType(
  * @brief Returns the internal name from an input ID,
  * used in the on_input_recieved event.
  *
- * @param action_id ID of the player action.
+ * @param actionId ID of the player action.
  * @return The name, or an empty string on failure.
  */
 string ControlsMediator::getPlayerActionTypeInternalName(
-    int action_id
+    int actionId
 ) {
     for(size_t b = 0; b < playerActionTypes.size(); b++) {
-        if(playerActionTypes[b].id == action_id) {
+        if(playerActionTypes[b].id == actionId) {
             return playerActionTypes[b].internalName;
         }
     }
@@ -226,13 +226,13 @@ string ControlsMediator::getPlayerActionTypeInternalName(
 /**
  * @brief Returns the current input value of a given action type.
  *
- * @param player_action_type_id Action type to use.
+ * @param playerActionTypeId Action type to use.
  * @return The value.
  */
 float ControlsMediator::getPlayerActionTypeValue(
-    PLAYER_ACTION_TYPE player_action_type_id
+    PLAYER_ACTION_TYPE playerActionTypeId
 ) {
-    return mgr.getValue((int) player_action_type_id);
+    return mgr.getValue((int) playerActionTypeId);
 }
 
 
@@ -299,30 +299,30 @@ string ControlsMediator::inputSourceToStr(
  * "<action type>=<input 1>;<input 2>;<...>"
  *
  * @param node The node.
- * @param player_nr Player number.
+ * @param playerNr Player number.
  */
 void ControlsMediator::loadBindsFromDataNode(
-    DataNode* node, unsigned char player_nr
+    DataNode* node, unsigned char playerNr
 ) {
-    const vector<PfePlayerActionType> &player_action_types =
+    const vector<PfePlayerActionType> &playerActionTypes =
         getAllPlayerActionTypes();
         
-    for(size_t a = 0; a < player_action_types.size(); a++) {
-        string action_type_name = player_action_types[a].internalName;
-        if(action_type_name.empty()) continue;
+    for(size_t a = 0; a < playerActionTypes.size(); a++) {
+        string actionTypeName = playerActionTypes[a].internalName;
+        if(actionTypeName.empty()) continue;
         
-        DataNode* bind_node = node->getChildByName(action_type_name);
-        vector<string> inputs = semicolonListToVector(bind_node->value);
+        DataNode* bindNode = node->getChildByName(actionTypeName);
+        vector<string> inputs = semicolonListToVector(bindNode->value);
         
         for(size_t c = 0; c < inputs.size(); c++) {
-            PlayerInputSource input_source = strToInputSource(inputs[c]);
-            if(input_source.type == INPUT_SOURCE_TYPE_NONE) continue;
+            PlayerInputSource inputSource = strToInputSource(inputs[c]);
+            if(inputSource.type == INPUT_SOURCE_TYPE_NONE) continue;
             
-            ControlBind new_bind;
-            new_bind.actionTypeId = player_action_types[a].id;
-            new_bind.playerNr = player_nr;
-            new_bind.inputSource = input_source;
-            binds().push_back(new_bind);
+            ControlBind newBind;
+            newBind.actionTypeId = playerActionTypes[a].id;
+            newBind.playerNr = playerNr;
+            newBind.inputSource = inputSource;
+            binds().push_back(newBind);
         }
     }
 }
@@ -340,12 +340,12 @@ void ControlsMediator::startIgnoringActions() {
  * @brief Ignores an input source from now on until the player performs the
  * input with value 0, at which point it becomes unignored.
  *
- * @param input_source Input source to ignore.
+ * @param inputSource Input source to ignore.
  */
 void ControlsMediator::startIgnoringInputSource(
-    const PlayerInputSource &input_source
+    const PlayerInputSource &inputSource
 ) {
-    mgr.startIgnoringInputSource(input_source);
+    mgr.startIgnoringInputSource(inputSource);
 }
 
 
@@ -361,11 +361,11 @@ void ControlsMediator::stopIgnoringActions() {
  * @brief Returns the player actions that occurred during the last frame
  * of gameplay, and begins a new frame.
  *
- * @param delta_t How much time has passed since the last frame.
+ * @param deltaT How much time has passed since the last frame.
  * @return The player actions.
  */
-vector<PlayerAction> ControlsMediator::newFrame(float delta_t) {
-    return mgr.newFrame(delta_t);
+vector<PlayerAction> ControlsMediator::newFrame(float deltaT) {
+    return mgr.newFrame(deltaT);
 }
 
 
@@ -384,34 +384,34 @@ void ControlsMediator::releaseAll() {
  * @brief Loads the list of binds to a data node.
  *
  * @param node The node.
- * @param player_nr Player number.
+ * @param playerNr Player number.
  */
 void ControlsMediator::saveBindsToDataNode(
-    DataNode* node, unsigned char player_nr
+    DataNode* node, unsigned char playerNr
 ) {
-    map<string, string> bind_strs;
-    const vector<PfePlayerActionType> &player_action_types =
+    map<string, string> bindStrs;
+    const vector<PfePlayerActionType> &playerActionTypes =
         getAllPlayerActionTypes();
-    const vector<ControlBind> &all_binds = binds();
+    const vector<ControlBind> &allBinds = binds();
     
     //Fill the defaults, which are all empty strings.
-    for(size_t b = 0; b < player_action_types.size(); b++) {
-        string action_type_name = player_action_types[b].internalName;
-        if(action_type_name.empty()) continue;
-        bind_strs[action_type_name].clear();
+    for(size_t b = 0; b < playerActionTypes.size(); b++) {
+        string actionTypeName = playerActionTypes[b].internalName;
+        if(actionTypeName.empty()) continue;
+        bindStrs[actionTypeName].clear();
     }
     
     //Fill their input strings.
-    for(size_t b = 0; b < all_binds.size(); b++) {
-        if(all_binds[b].playerNr != player_nr) continue;
-        PfePlayerActionType action_type =
-            getPlayerActionType(all_binds[b].actionTypeId);
-        bind_strs[action_type.internalName] +=
-            inputSourceToStr(all_binds[b].inputSource) + ";";
+    for(size_t b = 0; b < allBinds.size(); b++) {
+        if(allBinds[b].playerNr != playerNr) continue;
+        PfePlayerActionType actionType =
+            getPlayerActionType(allBinds[b].actionTypeId);
+        bindStrs[actionType.internalName] +=
+            inputSourceToStr(allBinds[b].inputSource) + ";";
     }
     
     //Save them all.
-    for(auto &c : bind_strs) {
+    for(auto &c : bindStrs) {
         //Remove the final character, which is always an extra semicolon.
         if(c.second.size()) c.second.erase(c.second.size() - 1);
         
@@ -447,58 +447,58 @@ void ControlsMediator::setOptions(const ControlsManagerOptions &options) {
 PlayerInputSource ControlsMediator::strToInputSource(
     const string &s
 ) const {
-    PlayerInputSource input_source;
+    PlayerInputSource inputSource;
     
     vector<string> parts = split(s, "_");
-    size_t n_parts = parts.size();
+    size_t nParts = parts.size();
     
-    if(n_parts == 0) return input_source;
+    if(nParts == 0) return inputSource;
     
-    if(parts[0] == "k" && n_parts >= 2) {
+    if(parts[0] == "k" && nParts >= 2) {
         //Keyboard.
-        input_source.type = INPUT_SOURCE_TYPE_KEYBOARD_KEY;
-        input_source.buttonNr = s2i(parts[1]);
+        inputSource.type = INPUT_SOURCE_TYPE_KEYBOARD_KEY;
+        inputSource.buttonNr = s2i(parts[1]);
         
-    } else if(parts[0] == "mb" && n_parts >= 2) {
+    } else if(parts[0] == "mb" && nParts >= 2) {
         //Mouse button.
-        input_source.type = INPUT_SOURCE_TYPE_MOUSE_BUTTON;
-        input_source.buttonNr = s2i(parts[1]);
+        inputSource.type = INPUT_SOURCE_TYPE_MOUSE_BUTTON;
+        inputSource.buttonNr = s2i(parts[1]);
         
     } else if(parts[0] == "mwu") {
         //Mouse wheel up.
-        input_source.type = INPUT_SOURCE_TYPE_MOUSE_WHEEL_UP;
+        inputSource.type = INPUT_SOURCE_TYPE_MOUSE_WHEEL_UP;
         
     } else if(parts[0] == "mwd") {
         //Mouse wheel down.
-        input_source.type = INPUT_SOURCE_TYPE_MOUSE_WHEEL_DOWN;
+        inputSource.type = INPUT_SOURCE_TYPE_MOUSE_WHEEL_DOWN;
         
     } else if(parts[0] == "mwl") {
         //Mouse wheel left.
-        input_source.type = INPUT_SOURCE_TYPE_MOUSE_WHEEL_LEFT;
+        inputSource.type = INPUT_SOURCE_TYPE_MOUSE_WHEEL_LEFT;
         
     } else if(parts[0] == "mwr") {
         //Mouse wheel right.
-        input_source.type = INPUT_SOURCE_TYPE_MOUSE_WHEEL_RIGHT;
+        inputSource.type = INPUT_SOURCE_TYPE_MOUSE_WHEEL_RIGHT;
         
-    } else if(parts[0] == "jb" && n_parts >= 3) {
+    } else if(parts[0] == "jb" && nParts >= 3) {
         //Controller button.
-        input_source.type = INPUT_SOURCE_TYPE_CONTROLLER_BUTTON;
-        input_source.deviceNr = s2i(parts[1]);
-        input_source.buttonNr = s2i(parts[2]);
+        inputSource.type = INPUT_SOURCE_TYPE_CONTROLLER_BUTTON;
+        inputSource.deviceNr = s2i(parts[1]);
+        inputSource.buttonNr = s2i(parts[2]);
         
-    } else if(parts[0] == "jap" && n_parts >= 4) {
+    } else if(parts[0] == "jap" && nParts >= 4) {
         //Controller stick axis, positive.
-        input_source.type = INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS;
-        input_source.deviceNr = s2i(parts[1]);
-        input_source.stickNr = s2i(parts[2]);
-        input_source.axisNr = s2i(parts[3]);
+        inputSource.type = INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS;
+        inputSource.deviceNr = s2i(parts[1]);
+        inputSource.stickNr = s2i(parts[2]);
+        inputSource.axisNr = s2i(parts[3]);
         
-    } else if(parts[0] == "jan" && n_parts >= 4) {
+    } else if(parts[0] == "jan" && nParts >= 4) {
         //Controller stick axis, negative.
-        input_source.type = INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG;
-        input_source.deviceNr = s2i(parts[1]);
-        input_source.stickNr = s2i(parts[2]);
-        input_source.axisNr = s2i(parts[3]);
+        inputSource.type = INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG;
+        inputSource.deviceNr = s2i(parts[1]);
+        inputSource.stickNr = s2i(parts[2]);
+        inputSource.axisNr = s2i(parts[3]);
         
     } else {
         game.errors.report(
@@ -506,5 +506,5 @@ PlayerInputSource ControlsMediator::strToInputSource(
         );
     }
     
-    return input_source;
+    return inputSource;
 }

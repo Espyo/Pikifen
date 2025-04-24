@@ -118,32 +118,32 @@ const float TREE_SHADOW_SWAY_SPEED = TAU / 8;
  * @brief Changes the amount of sprays of a certain type the player owns.
  * It also animates the correct HUD item, if any.
  *
- * @param type_idx Index number of the spray type.
+ * @param typeIdx Index number of the spray type.
  * @param amount Amount to change by.
  */
 void GameplayState::changeSprayCount(
-    size_t type_idx, signed int amount
+    size_t typeIdx, signed int amount
 ) {
-    sprayStats[type_idx].nrSprays =
+    sprayStats[typeIdx].nrSprays =
         std::max(
-            (signed int) sprayStats[type_idx].nrSprays + amount,
+            (signed int) sprayStats[typeIdx].nrSprays + amount,
             (signed int) 0
         );
         
-    GuiItem* spray_hud_item = nullptr;
+    GuiItem* sprayHudItem = nullptr;
     if(game.content.sprayTypes.list.size() > 2) {
-        if(selectedSpray == type_idx) {
-            spray_hud_item = hud->spray1Amount;
+        if(selectedSpray == typeIdx) {
+            sprayHudItem = hud->spray1Amount;
         }
     } else {
-        if(type_idx == 0) {
-            spray_hud_item = hud->spray1Amount;
+        if(typeIdx == 0) {
+            sprayHudItem = hud->spray1Amount;
         } else {
-            spray_hud_item = hud->spray2Amount;
+            sprayHudItem = hud->spray2Amount;
         }
     }
-    if(spray_hud_item) {
-        spray_hud_item->startJuiceAnimation(
+    if(sprayHudItem) {
+        sprayHudItem->startJuiceAnimation(
             GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
         );
     }
@@ -177,7 +177,7 @@ void GameplayState::doLogic() {
         }
     }
     
-    float regular_delta_t = game.deltaT;
+    float regularDeltaT = game.deltaT;
     
     if(game.makerTools.changeSpeed) {
         game.deltaT *=
@@ -196,7 +196,7 @@ void GameplayState::doLogic() {
     
     //Game logic.
     if(!paused) {
-        game.statistics.gameplayTime += regular_delta_t;
+        game.statistics.gameplayTime += regularDeltaT;
         doGameplayLogic(game.deltaT * deltaTMult);
         doAestheticLogic(game.deltaT * deltaTMult);
     }
@@ -219,22 +219,22 @@ void GameplayState::endMission(bool cleared) {
     leaderMovement.reset(); //TODO replace with a better solution.
     
     //Zoom in on the reason, if possible.
-    Point new_cam_pos = game.view.cam.targetPos;
-    float new_cam_zoom = game.view.cam.targetZoom;
+    Point newCamPos = game.view.cam.targetPos;
+    float newCamZoom = game.view.cam.targetZoom;
     if(cleared) {
         MissionGoal* goal =
             game.missionGoals[game.curAreaData->mission.goal];
-        if(goal->getEndZoomData(this, &new_cam_pos, &new_cam_zoom)) {
-            game.view.cam.targetPos = new_cam_pos;
-            game.view.cam.targetZoom = new_cam_zoom;
+        if(goal->getEndZoomData(this, &newCamPos, &newCamZoom)) {
+            game.view.cam.targetPos = newCamPos;
+            game.view.cam.targetZoom = newCamZoom;
         }
         
     } else {
         MissionFail* cond =
             game.missionFailConds[missionFailReason];
-        if(cond->getEndZoomData(this, &new_cam_pos, &new_cam_zoom)) {
-            game.view.cam.targetPos = new_cam_pos;
-            game.view.cam.targetZoom = new_cam_zoom;
+        if(cond->getEndZoomData(this, &newCamPos, &newCamZoom)) {
+            game.view.cam.targetPos = newCamPos;
+            game.view.cam.targetZoom = newCamZoom;
         }
     }
     
@@ -332,14 +332,14 @@ void GameplayState::enter() {
 /**
  * @brief Generates the bitmap that'll draw the fog fade effect.
  *
- * @param near_radius Until this radius, the fog is not present.
- * @param far_radius From this radius on, the fog is fully dense.
+ * @param nearRadius Until this radius, the fog is not present.
+ * @param farRadius From this radius on, the fog is fully dense.
  * @return The bitmap.
  */
 ALLEGRO_BITMAP* GameplayState::generateFogBitmap(
-    float near_radius, float far_radius
+    float nearRadius, float farRadius
 ) {
-    if(far_radius == 0) return nullptr;
+    if(farRadius == 0) return nullptr;
     
     ALLEGRO_BITMAP* bmp =
         al_create_bitmap(GAMEPLAY::FOG_BITMAP_SIZE, GAMEPLAY::FOG_BITMAP_SIZE);
@@ -358,19 +358,19 @@ ALLEGRO_BITMAP* GameplayState::generateFogBitmap(
     //apply them to the respective pixels on the other quadrants as well.
     
     //This is where the "near" section of the fog is.
-    float near_ratio = near_radius / far_radius;
+    float nearRatio = nearRadius / farRadius;
     
-#define fill_pixel(x, row) \
+#define fillPixel(x, row) \
     row[(x) * 4 + 0] = 255; \
     row[(x) * 4 + 1] = 255; \
     row[(x) * 4 + 2] = 255; \
-    row[(x) * 4 + 3] = cur_a; \
+    row[(x) * 4 + 3] = curA; \
     
     for(int y = 0; y < ceil(GAMEPLAY::FOG_BITMAP_SIZE / 2.0); y++) {
         for(int x = 0; x < ceil(GAMEPLAY::FOG_BITMAP_SIZE / 2.0); x++) {
             //First, get how far this pixel is from the center.
             //Center = 0, radius or beyond = 1.
-            float cur_ratio =
+            float curRatio =
                 Distance(
                     Point(x, y),
                     Point(
@@ -378,27 +378,27 @@ ALLEGRO_BITMAP* GameplayState::generateFogBitmap(
                         GAMEPLAY::FOG_BITMAP_SIZE / 2.0
                     )
                 ).toFloat() / (GAMEPLAY::FOG_BITMAP_SIZE / 2.0);
-            cur_ratio = std::min(cur_ratio, 1.0f);
+            curRatio = std::min(curRatio, 1.0f);
             //Then, map that ratio to a different ratio that considers
             //the start of the "near" section as 0.
-            cur_ratio =
-                interpolateNumber(cur_ratio, near_ratio, 1.0f, 0.0f, 1.0f);
+            curRatio =
+                interpolateNumber(curRatio, nearRatio, 1.0f, 0.0f, 1.0f);
             //Finally, clamp the value and get the alpha.
-            cur_ratio = std::clamp(cur_ratio, 0.0f, 1.0f);
-            unsigned char cur_a = 255 * cur_ratio;
+            curRatio = std::clamp(curRatio, 0.0f, 1.0f);
+            unsigned char curA = 255 * curRatio;
             
             //Save the memory location of the opposite row's pixels.
-            unsigned char* opposite_row =
+            unsigned char* oppositeRow =
                 row + region->pitch * (GAMEPLAY::FOG_BITMAP_SIZE - y - y - 1);
-            fill_pixel(x, row);
-            fill_pixel(GAMEPLAY::FOG_BITMAP_SIZE - x - 1, row);
-            fill_pixel(x, opposite_row);
-            fill_pixel(GAMEPLAY::FOG_BITMAP_SIZE - x - 1, opposite_row);
+            fillPixel(x, row);
+            fillPixel(GAMEPLAY::FOG_BITMAP_SIZE - x - 1, row);
+            fillPixel(x, oppositeRow);
+            fillPixel(GAMEPLAY::FOG_BITMAP_SIZE - x - 1, oppositeRow);
         }
         row += region->pitch;
     }
     
-#undef fill_pixel
+#undef fillPixel
     
     al_unlock_bitmap(bmp);
     bmp = recreateBitmap(bmp); //Refresh mipmaps.
@@ -418,16 +418,16 @@ size_t GameplayState::getAmountOfFieldPikmin(const PikminType* filter) {
     
     //Check the Pikmin mobs.
     for(size_t p = 0; p < mobs.pikmin.size(); p++) {
-        Pikmin* p_ptr = mobs.pikmin[p];
-        if(filter && p_ptr->pikType != filter) continue;
+        Pikmin* pPtr = mobs.pikmin[p];
+        if(filter && pPtr->pikType != filter) continue;
         total++;
     }
     
     //Check Pikmin inside converters.
     for(size_t c = 0; c < mobs.converters.size(); c++) {
-        Converter* c_ptr = mobs.converters[c];
-        if(filter && c_ptr->currentType != filter) continue;
-        total += c_ptr->amountInBuffer;
+        Converter* cPtr = mobs.converters[c];
+        if(filter && cPtr->currentType != filter) continue;
+        total += cPtr->amountInBuffer;
     }
     
     return total;
@@ -446,9 +446,9 @@ size_t GameplayState::getAmountOfGroupPikmin(const PikminType* filter) {
     if(!curLeaderPtr) return 0;
     
     for(size_t m = 0; m < curLeaderPtr->group->members.size(); m++) {
-        Mob* m_ptr = curLeaderPtr->group->members[m];
-        if(m_ptr->type->category->id != MOB_CATEGORY_PIKMIN) continue;
-        if(filter && m_ptr->type != filter) continue;
+        Mob* mPtr = curLeaderPtr->group->members[m];
+        if(mPtr->type->category->id != MOB_CATEGORY_PIKMIN) continue;
+        if(filter && mPtr->type != filter) continue;
         total++;
     }
     
@@ -466,11 +466,11 @@ size_t GameplayState::getAmountOfIdlePikmin(const PikminType* filter) {
     size_t total = 0;
     
     for(size_t p = 0; p < mobs.pikmin.size(); p++) {
-        Pikmin* p_ptr = mobs.pikmin[p];
-        if(filter && p_ptr->type != filter) continue;
+        Pikmin* pPtr = mobs.pikmin[p];
+        if(filter && pPtr->type != filter) continue;
         if(
-            p_ptr->fsm.curState->id == PIKMIN_STATE_IDLING ||
-            p_ptr->fsm.curState->id == PIKMIN_STATE_IDLING_H
+            pPtr->fsm.curState->id == PIKMIN_STATE_IDLING ||
+            pPtr->fsm.curState->id == PIKMIN_STATE_IDLING_H
         ) {
             total++;
         }
@@ -492,35 +492,35 @@ long GameplayState::getAmountOfOnionPikmin(const PikminType* filter) {
     
     //Check Onions proper.
     for(size_t o = 0; o < mobs.onions.size(); o++) {
-        Onion* o_ptr = mobs.onions[o];
+        Onion* oPtr = mobs.onions[o];
         for(
             size_t t = 0;
-            t < o_ptr->oniType->nest->pik_types.size();
+            t < oPtr->oniType->nest->pikTypes.size();
             t++
         ) {
-            if(filter && o_ptr->oniType->nest->pik_types[t] != filter) {
+            if(filter && oPtr->oniType->nest->pikTypes[t] != filter) {
                 continue;
             }
             for(size_t m = 0; m < N_MATURITIES; m++) {
-                total += (long) o_ptr->nest->pikmin_inside[t][m];
+                total += (long) oPtr->nest->pikminInside[t][m];
             }
         }
     }
     
     //Check ships.
     for(size_t s = 0; s < mobs.ships.size(); s++) {
-        Ship* s_ptr = mobs.ships[s];
-        if(!s_ptr->nest) continue;
+        Ship* sPtr = mobs.ships[s];
+        if(!sPtr->nest) continue;
         for(
             size_t t = 0;
-            t < s_ptr->shiType->nest->pik_types.size();
+            t < sPtr->shiType->nest->pikTypes.size();
             t++
         ) {
-            if(filter && s_ptr->shiType->nest->pik_types[t] != filter) {
+            if(filter && sPtr->shiType->nest->pikTypes[t] != filter) {
                 continue;
             }
             for(size_t m = 0; m < N_MATURITIES; m++) {
-                total += (long) s_ptr->nest->pikmin_inside[t][m];
+                total += (long) sPtr->nest->pikminInside[t][m];
             }
         }
     }
@@ -570,55 +570,55 @@ Mob* GameplayState::getClosestGroupMember(
     Mob* result = nullptr;
     
     //Closest members so far for each maturity.
-    Distance closest_dists[N_MATURITIES];
-    Mob* closest_ptrs[N_MATURITIES];
-    bool can_grab_closest[N_MATURITIES];
+    Distance closestDists[N_MATURITIES];
+    Mob* closestPtrs[N_MATURITIES];
+    bool canGrabClosest[N_MATURITIES];
     for(unsigned char m = 0; m < N_MATURITIES; m++) {
-        closest_ptrs[m] = nullptr;
-        can_grab_closest[m] = false;
+        closestPtrs[m] = nullptr;
+        canGrabClosest[m] = false;
     }
     
     //Fetch the closest, for each maturity.
-    size_t n_members = curLeaderPtr->group->members.size();
-    for(size_t m = 0; m < n_members; m++) {
+    size_t nMembers = curLeaderPtr->group->members.size();
+    for(size_t m = 0; m < nMembers; m++) {
     
-        Mob* member_ptr = curLeaderPtr->group->members[m];
-        if(member_ptr->subgroupTypePtr != type) {
+        Mob* memberPtr = curLeaderPtr->group->members[m];
+        if(memberPtr->subgroupTypePtr != type) {
             continue;
         }
         
         unsigned char maturity = 0;
-        if(member_ptr->type->category->id == MOB_CATEGORY_PIKMIN) {
-            maturity = ((Pikmin*) member_ptr)->maturity;
+        if(memberPtr->type->category->id == MOB_CATEGORY_PIKMIN) {
+            maturity = ((Pikmin*) memberPtr)->maturity;
         }
-        bool can_grab = curLeaderPtr->canGrabGroupMember(member_ptr);
+        bool canGrab = curLeaderPtr->canGrabGroupMember(memberPtr);
         
-        if(!can_grab && can_grab_closest[maturity]) {
+        if(!canGrab && canGrabClosest[maturity]) {
             //Skip if we'd replace a grabbable Pikmin with a non-grabbable one.
             continue;
         }
         
-        Distance d(curLeaderPtr->pos, member_ptr->pos);
+        Distance d(curLeaderPtr->pos, memberPtr->pos);
         
         if(
-            (can_grab && !can_grab_closest[maturity]) ||
-            !closest_ptrs[maturity] ||
-            d < closest_dists[maturity]
+            (canGrab && !canGrabClosest[maturity]) ||
+            !closestPtrs[maturity] ||
+            d < closestDists[maturity]
         ) {
-            closest_dists[maturity] = d;
-            closest_ptrs[maturity] = member_ptr;
-            can_grab_closest[maturity] = can_grab;
+            closestDists[maturity] = d;
+            closestPtrs[maturity] = memberPtr;
+            canGrabClosest[maturity] = canGrab;
             
         }
     }
     
     //Now, try to get the one with the highest maturity within reach.
-    Distance closest_dist;
+    Distance closestDist;
     for(unsigned char m = 0; m < N_MATURITIES; m++) {
-        if(!closest_ptrs[2 - m]) continue;
-        if(!can_grab_closest[2 - m]) continue;
-        result = closest_ptrs[2 - m];
-        closest_dist = closest_dists[2 - m];
+        if(!closestPtrs[2 - m]) continue;
+        if(!canGrabClosest[2 - m]) continue;
+        result = closestPtrs[2 - m];
+        closestDist = closestDists[2 - m];
         break;
     }
     
@@ -628,11 +628,11 @@ Mob* GameplayState::getClosestGroupMember(
         //Couldn't find any within reach? Then just set it to the closest one.
         //Maturity is irrelevant for this case.
         for(unsigned char m = 0; m < N_MATURITIES; m++) {
-            if(!closest_ptrs[m]) continue;
+            if(!closestPtrs[m]) continue;
             
-            if(!result || closest_dists[m] < closest_dist) {
-                result = closest_ptrs[m];
-                closest_dist = closest_dists[m];
+            if(!result || closestDists[m] < closestDist) {
+                result = closestPtrs[m];
+                closestDist = closestDists[m];
             }
         }
     }
@@ -800,18 +800,18 @@ void GameplayState::load() {
         }
     };
     
-    auto spark_anim_db_it =
+    auto sparkAnimDbIt =
         game.content.globalAnimDbs.list.find(
             game.sysContentNames.anmSparks
         );
-    if(spark_anim_db_it == game.content.globalAnimDbs.list.end()) {
+    if(sparkAnimDbIt == game.content.globalAnimDbs.list.end()) {
         game.errors.report(
             "Unknown global animation \"" + game.sysContentNames.anmSparks +
             "\" when trying to load the leader damage sparks!"
         );
     } else {
         game.sysContent.anmSparks.initToFirstAnim(
-            &spark_anim_db_it->second
+            &sparkAnimDbIt->second
         );
     }
     
@@ -843,16 +843,16 @@ void GameplayState::load() {
         game.perfMon->startMeasurement("Object generation");
     }
     
-    vector<Mob*> mobs_per_gen;
+    vector<Mob*> mobsPerGen;
     
     for(size_t m = 0; m < game.curAreaData->mobGenerators.size(); m++) {
-        MobGen* m_ptr = game.curAreaData->mobGenerators[m];
+        MobGen* mPtr = game.curAreaData->mobGenerators[m];
         bool valid = true;
         
-        if(!m_ptr->type) {
+        if(!mPtr->type) {
             valid = false;
         } else if(
-            m_ptr->type->category->id == MOB_CATEGORY_PIKMIN &&
+            mPtr->type->category->id == MOB_CATEGORY_PIKMIN &&
             game.states.gameplay->mobs.pikmin.size() >=
             game.config.rules.maxPikminInField
         ) {
@@ -860,14 +860,14 @@ void GameplayState::load() {
         }
         
         if(valid) {
-            Mob* new_mob =
+            Mob* newMob =
                 createMob(
-                    m_ptr->type->category, m_ptr->pos, m_ptr->type,
-                    m_ptr->angle, m_ptr->vars
+                    mPtr->type->category, mPtr->pos, mPtr->type,
+                    mPtr->angle, mPtr->vars
                 );
-            mobs_per_gen.push_back(new_mob);
+            mobsPerGen.push_back(newMob);
         } else {
-            mobs_per_gen.push_back(nullptr);
+            mobsPerGen.push_back(nullptr);
         }
     }
     
@@ -877,24 +877,24 @@ void GameplayState::load() {
     //to keep the pointers to the created mobs in a vector, and use this
     //to link the mobs by (generator) index.
     for(size_t m = 0; m < game.curAreaData->mobGenerators.size(); m++) {
-        MobGen* gen_ptr = game.curAreaData->mobGenerators[m];
-        Mob* mob_ptr = mobs_per_gen[m];
-        if(!mob_ptr) continue;
+        MobGen* genPtr = game.curAreaData->mobGenerators[m];
+        Mob* mobPtr = mobsPerGen[m];
+        if(!mobPtr) continue;
         
-        for(size_t l = 0; l < gen_ptr->linkIdxs.size(); l++) {
-            size_t link_target_gen_idx = gen_ptr->linkIdxs[l];
-            Mob* link_target_mob_ptr = mobs_per_gen[link_target_gen_idx];
-            mob_ptr->links.push_back(link_target_mob_ptr);
+        for(size_t l = 0; l < genPtr->linkIdxs.size(); l++) {
+            size_t linkTargetGenIdx = genPtr->linkIdxs[l];
+            Mob* linkTargetMobPtr = mobsPerGen[linkTargetGenIdx];
+            mobPtr->links.push_back(linkTargetMobPtr);
         }
     }
     
     //Mobs stored inside other. Same logic as mob links.
     for(size_t m = 0; m < game.curAreaData->mobGenerators.size(); m++) {
-        MobGen* holdee_gen_ptr = game.curAreaData->mobGenerators[m];
-        if(holdee_gen_ptr->storedInside == INVALID) continue;
-        Mob* holdee_ptr = mobs_per_gen[m];
-        Mob* holder_mob_ptr = mobs_per_gen[holdee_gen_ptr->storedInside];
-        holder_mob_ptr->storeMobInside(holdee_ptr);
+        MobGen* holdeeGenPtr = game.curAreaData->mobGenerators[m];
+        if(holdeeGenPtr->storedInside == INVALID) continue;
+        Mob* holdeePtr = mobsPerGen[m];
+        Mob* holderMobPtr = mobsPerGen[holdeeGenPtr->storedInside];
+        holderMobPtr->storeMobInside(holdeePtr);
     }
     
     //Save each path stop's sector.
@@ -907,19 +907,19 @@ void GameplayState::load() {
     sort(
         mobs.leaders.begin(), mobs.leaders.end(),
     [] (Leader * l1, Leader * l2) -> bool {
-        size_t priority_l1 =
+        size_t priorityL1 =
         find(
             game.config.leaders.order.begin(),
             game.config.leaders.order.end(), l1->leaType
         ) -
         game.config.leaders.order.begin();
-        size_t priority_l2 =
+        size_t priorityL2 =
         find(
             game.config.leaders.order.begin(),
             game.config.leaders.order.end(), l2->leaType
         ) -
         game.config.leaders.order.begin();
-        return priority_l1 < priority_l2;
+        return priorityL1 < priorityL2;
     }
     );
     
@@ -941,39 +941,39 @@ void GameplayState::load() {
     
     //Memorize mobs required by the mission.
     if(game.curAreaData->type == AREA_TYPE_MISSION) {
-        unordered_set<size_t> mission_required_mob_gen_idxs;
+        unordered_set<size_t> missionRequiredMobGenIdxs;
         
         if(game.curAreaData->mission.goalAllMobs) {
-            for(size_t m = 0; m < mobs_per_gen.size(); m++) {
+            for(size_t m = 0; m < mobsPerGen.size(); m++) {
                 if(
-                    mobs_per_gen[m] &&
+                    mobsPerGen[m] &&
                     game.missionGoals[game.curAreaData->mission.goal]->
-                    isMobApplicable(mobs_per_gen[m]->type)
+                    isMobApplicable(mobsPerGen[m]->type)
                 ) {
-                    mission_required_mob_gen_idxs.insert(m);
+                    missionRequiredMobGenIdxs.insert(m);
                 }
             }
             
         } else {
-            mission_required_mob_gen_idxs =
+            missionRequiredMobGenIdxs =
                 game.curAreaData->mission.goalMobIdxs;
         }
         
-        for(size_t i : mission_required_mob_gen_idxs) {
-            missionRemainingMobIds.insert(mobs_per_gen[i]->id);
+        for(size_t i : missionRequiredMobGenIdxs) {
+            missionRemainingMobIds.insert(mobsPerGen[i]->id);
         }
         missionRequiredMobAmount = missionRemainingMobIds.size();
         
         if(game.curAreaData->mission.goal == MISSION_GOAL_COLLECT_TREASURE) {
             //Since the collect treasure goal can accept piles and resources
             //meant to add treasure points, we'll need some special treatment.
-            for(size_t i : mission_required_mob_gen_idxs) {
+            for(size_t i : missionRequiredMobGenIdxs) {
                 if(
-                    mobs_per_gen[i]->type->category->id ==
+                    mobsPerGen[i]->type->category->id ==
                     MOB_CATEGORY_PILES
                 ) {
-                    Pile* pil_ptr = (Pile*) mobs_per_gen[i];
-                    goalTreasuresTotal += pil_ptr->amount;
+                    Pile* pilPtr = (Pile*) mobsPerGen[i];
+                    goalTreasuresTotal += pilPtr->amount;
                 } else {
                     goalTreasuresTotal++;
                 }
@@ -988,28 +988,28 @@ void GameplayState::load() {
             mobs.treasures[t]->treType->points;
     }
     for(size_t p = 0; p < mobs.piles.size(); p++) {
-        Pile* p_ptr = mobs.piles[p];
-        ResourceType* res_type = p_ptr->pilType->contents;
+        Pile* pPtr = mobs.piles[p];
+        ResourceType* resType = pPtr->pilType->contents;
         if(
-            res_type->deliveryResult !=
+            resType->deliveryResult !=
             RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS
         ) {
             continue;
         }
-        treasuresTotal += p_ptr->amount;
+        treasuresTotal += pPtr->amount;
         treasurePointsTotal +=
-            p_ptr->amount * res_type->pointAmount;
+            pPtr->amount * resType->pointAmount;
     }
     for(size_t r = 0; r < mobs.resources.size(); r++) {
-        Resource* r_ptr = mobs.resources[r];
+        Resource* rPtr = mobs.resources[r];
         if(
-            r_ptr->resType->deliveryResult !=
+            rPtr->resType->deliveryResult !=
             RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS
         ) {
             continue;
         }
         treasuresTotal++;
-        treasurePointsTotal += r_ptr->resType->pointAmount;
+        treasurePointsTotal += rPtr->resType->pointAmount;
     }
     
     //Figure out the total amount of enemies and their points.
@@ -1019,18 +1019,18 @@ void GameplayState::load() {
     }
     
     //Initialize the area's active cells.
-    float area_width =
+    float areaWidth =
         game.curAreaData->bmap.nCols * GEOMETRY::BLOCKMAP_BLOCK_SIZE;
-    float area_height =
+    float areaHeight =
         game.curAreaData->bmap.nRows * GEOMETRY::BLOCKMAP_BLOCK_SIZE;
-    size_t nr_area_cell_cols =
-        ceil(area_width / GEOMETRY::AREA_CELL_SIZE) + 1;
-    size_t nr_area_cell_rows =
-        ceil(area_height / GEOMETRY::AREA_CELL_SIZE) + 1;
+    size_t nrAreaCellCols =
+        ceil(areaWidth / GEOMETRY::AREA_CELL_SIZE) + 1;
+    size_t nrAreaCellRows =
+        ceil(areaHeight / GEOMETRY::AREA_CELL_SIZE) + 1;
         
     areaActiveCells.clear();
     areaActiveCells.assign(
-        nr_area_cell_cols, vector<bool>(nr_area_cell_rows, false)
+        nrAreaCellCols, vector<bool>(nrAreaCellRows, false)
     );
     
     //Initialize some other things.
@@ -1040,17 +1040,17 @@ void GameplayState::load() {
     
     dayMinutes = game.curAreaData->dayTimeStart;
     
-    map<string, string> spray_strs =
+    map<string, string> sprayStrs =
         getVarMap(game.curAreaData->sprayAmounts);
         
-    for(auto &s : spray_strs) {
-        size_t spray_idx = 0;
-        for(; spray_idx < game.config.misc.sprayOrder.size(); spray_idx++) {
-            if(game.config.misc.sprayOrder[spray_idx]->manifest->internalName == s.first) {
+    for(auto &s : sprayStrs) {
+        size_t sprayIdx = 0;
+        for(; sprayIdx < game.config.misc.sprayOrder.size(); sprayIdx++) {
+            if(game.config.misc.sprayOrder[sprayIdx]->manifest->internalName == s.first) {
                 break;
             }
         }
-        if(spray_idx == game.content.sprayTypes.list.size()) {
+        if(sprayIdx == game.content.sprayTypes.list.size()) {
             game.errors.report(
                 "Unknown spray type \"" + s.first + "\", "
                 "while trying to set the starting number of sprays for "
@@ -1059,7 +1059,7 @@ void GameplayState::load() {
             continue;
         }
         
-        sprayStats[spray_idx].nrSprays = s2i(s.second);
+        sprayStats[sprayIdx].nrSprays = s2i(s.second);
     }
     
     //Effect caches.
@@ -1120,7 +1120,7 @@ void GameplayState::load() {
         this->replayTimer.start();
         vector<mob*> obstacles; //TODO
         gameplayReplay.addState(
-            leaders, pikmin_list, enemies, treasures, onions, obstacles,
+            leaders, pikminList, enemies, treasures, onions, obstacles,
             curLeaderIdx
         );
     }
@@ -1187,15 +1187,15 @@ void GameplayState::loadGameContent() {
         );
     }
     
-    vector<string> tool_types_vector;
+    vector<string> toolTypesVector;
     for(auto &t : game.content.mobTypes.list.tool) {
-        tool_types_vector.push_back(t.first);
+        toolTypesVector.push_back(t.first);
     }
-    sort(tool_types_vector.begin(), tool_types_vector.end());
-    for(size_t t = 0; t < tool_types_vector.size(); t++) {
-        ToolType* tt_ptr = game.content.mobTypes.list.tool[tool_types_vector[t]];
+    sort(toolTypesVector.begin(), toolTypesVector.end());
+    for(size_t t = 0; t < toolTypesVector.size(); t++) {
+        ToolType* ttPtr = game.content.mobTypes.list.tool[toolTypesVector[t]];
         subgroupTypes.registerType(
-            SUBGROUP_TYPE_CATEGORY_TOOL, tt_ptr, tt_ptr->bmpIcon
+            SUBGROUP_TYPE_CATEGORY_TOOL, ttPtr, ttPtr->bmpIcon
         );
     }
     
@@ -1327,16 +1327,16 @@ void GameplayState::updateAvailableLeaders() {
     std::sort(
         availableLeaders.begin(), availableLeaders.end(),
     [] (const Leader * l1, const Leader * l2) -> bool {
-        size_t l1_order_idx = INVALID;
-        size_t l2_order_idx = INVALID;
+        size_t l1OrderIdx = INVALID;
+        size_t l2OrderIdx = INVALID;
         for(size_t t = 0; t < game.config.leaders.order.size(); t++) {
-            if(game.config.leaders.order[t] == l1->type) l1_order_idx = t;
-            if(game.config.leaders.order[t] == l2->type) l2_order_idx = t;
+            if(game.config.leaders.order[t] == l1->type) l1OrderIdx = t;
+            if(game.config.leaders.order[t] == l2->type) l2OrderIdx = t;
         }
-        if(l1_order_idx == l2_order_idx) {
+        if(l1OrderIdx == l2OrderIdx) {
             return l1->id < l2->id;
         }
-        return l1_order_idx < l2_order_idx;
+        return l1OrderIdx < l2OrderIdx;
     }
     );
     
@@ -1373,12 +1373,12 @@ void GameplayState::updateClosestGroupMembers() {
     }
     
     //Get the closest group members for the three relevant subgroup types.
-    SubgroupType* prev_type;
-    curLeaderPtr->group->getNextStandbyType(true, &prev_type);
+    SubgroupType* prevType;
+    curLeaderPtr->group->getNextStandbyType(true, &prevType);
     
-    if(prev_type) {
+    if(prevType) {
         closestGroupMember[BUBBLE_RELATION_PREVIOUS] =
-            getClosestGroupMember(prev_type);
+            getClosestGroupMember(prevType);
     }
     
     if(curLeaderPtr->group->curStandbyType) {
@@ -1389,12 +1389,12 @@ void GameplayState::updateClosestGroupMembers() {
             );
     }
     
-    SubgroupType* next_type;
-    curLeaderPtr->group->getNextStandbyType(false, &next_type);
+    SubgroupType* nextType;
+    curLeaderPtr->group->getNextStandbyType(false, &nextType);
     
-    if(next_type) {
+    if(nextType) {
         closestGroupMember[BUBBLE_RELATION_NEXT] =
-            getClosestGroupMember(next_type);
+            getClosestGroupMember(nextType);
     }
     
     if(closestGroupMember[BUBBLE_RELATION_CURRENT]) {
@@ -1407,11 +1407,11 @@ void GameplayState::updateClosestGroupMembers() {
  * @brief Constructs a new message box info object.
  *
  * @param text Text to display.
- * @param speaker_icon If not nullptr, use this bitmap to represent who
+ * @param speakerIcon If not nullptr, use this bitmap to represent who
  * is talking.
  */
-GameplayMessageBox::GameplayMessageBox(const string &text, ALLEGRO_BITMAP* speaker_icon):
-    speakerIcon(speaker_icon) {
+GameplayMessageBox::GameplayMessageBox(const string &text, ALLEGRO_BITMAP* speakerIcon):
+    speakerIcon(speakerIcon) {
     
     string message = unescapeString(text);
     if(message.size() && message.back() == '\n') {
@@ -1449,14 +1449,14 @@ void GameplayMessageBox::advance() {
         swipeTimer > 0.0f
     ) return;
     
-    size_t last_token = 0;
+    size_t lastToken = 0;
     for(size_t l = 0; l < 3; l++) {
-        size_t line_idx = curSection * 3 + l;
-        if(line_idx >= tokensPerLine.size()) break;
-        last_token += tokensPerLine[line_idx].size();
+        size_t lineIdx = curSection * 3 + l;
+        if(lineIdx >= tokensPerLine.size()) break;
+        lastToken += tokensPerLine[lineIdx].size();
     }
     
-    if(curToken >= last_token + 1) {
+    if(curToken >= lastToken + 1) {
         if(curSection >= ceil(tokensPerLine.size() / 3.0f) - 1) {
             //End of the message. Start closing the message box.
             close();
@@ -1467,7 +1467,7 @@ void GameplayMessageBox::advance() {
     } else {
         //Skip the text typing and show everything in this section.
         skippedAtToken = curToken;
-        curToken = last_token + 1;
+        curToken = lastToken + 1;
     }
 }
 
@@ -1485,19 +1485,19 @@ void GameplayMessageBox::close() {
 /**
  * @brief Ticks time by one frame of logic.
  *
- * @param delta_t How long the frame's tick is, in seconds.
+ * @param deltaT How long the frame's tick is, in seconds.
  */
-void GameplayMessageBox::tick(float delta_t) {
-    size_t tokens_in_section = 0;
+void GameplayMessageBox::tick(float deltaT) {
+    size_t tokensInSection = 0;
     for(size_t l = 0; l < 3; l++) {
-        size_t line_idx = curSection * 3 + l;
-        if(line_idx >= tokensPerLine.size()) break;
-        tokens_in_section += tokensPerLine[line_idx].size();
+        size_t lineIdx = curSection * 3 + l;
+        if(lineIdx >= tokensPerLine.size()) break;
+        tokensInSection += tokensPerLine[lineIdx].size();
     }
     
     //Animate the swipe animation.
     if(swipeTimer > 0.0f) {
-        swipeTimer -= delta_t;
+        swipeTimer -= deltaT;
         if(swipeTimer <= 0.0f) {
             //Go to the next section.
             swipeTimer = 0.0f;
@@ -1513,19 +1513,19 @@ void GameplayMessageBox::tick(float delta_t) {
         //Animate the text.
         if(game.config.aestheticGen.gameplayMsgChInterval == 0.0f) {
             skippedAtToken = 0;
-            curToken = tokens_in_section + 1;
+            curToken = tokensInSection + 1;
         } else {
-            totalTokenAnimTime += delta_t;
+            totalTokenAnimTime += deltaT;
             if(skippedAtToken == INVALID) {
-                size_t prev_token = curToken;
+                size_t prevToken = curToken;
                 curToken =
                     totalTokenAnimTime /
                     game.config.aestheticGen.gameplayMsgChInterval;
                 curToken =
-                    std::min(curToken, tokens_in_section + 1);
+                    std::min(curToken, tokensInSection + 1);
                 if(
-                    curToken == tokens_in_section + 1 &&
-                    prev_token != curToken
+                    curToken == tokensInSection + 1 &&
+                    prevToken != curToken
                 ) {
                     //We've reached the last token organically.
                     //Start a misinput protection timer, so the player
@@ -1535,21 +1535,21 @@ void GameplayMessageBox::tick(float delta_t) {
                         GAMEPLAY_MSG_BOX::MISINPUT_PROTECTION_DURATION;
                 }
             } else {
-                totalSkipAnimTime += delta_t;
+                totalSkipAnimTime += deltaT;
             }
         }
         
     }
     
     //Animate the transition.
-    transitionTimer -= delta_t;
+    transitionTimer -= deltaT;
     transitionTimer = std::max(0.0f, transitionTimer);
     if(!transitionIn && transitionTimer == 0.0f) {
         toDelete = true;
     }
     
     //Misinput protection logic.
-    misinputProtectionTimer -= delta_t;
+    misinputProtectionTimer -= deltaT;
     misinputProtectionTimer = std::max(0.0f, misinputProtectionTimer);
     
     //Button opacity logic.
@@ -1557,12 +1557,12 @@ void GameplayMessageBox::tick(float delta_t) {
         transitionTimer == 0.0f &&
         misinputProtectionTimer == 0.0f &&
         swipeTimer == 0.0f &&
-        curToken >= tokens_in_section + 1
+        curToken >= tokensInSection + 1
     ) {
         advanceButtonAlpha =
             std::min(
                 advanceButtonAlpha +
-                GAMEPLAY_MSG_BOX::ADVANCE_BUTTON_FADE_SPEED * delta_t,
+                GAMEPLAY_MSG_BOX::ADVANCE_BUTTON_FADE_SPEED * deltaT,
                 1.0f
             );
     } else {
@@ -1570,7 +1570,7 @@ void GameplayMessageBox::tick(float delta_t) {
             std::max(
                 0.0f,
                 advanceButtonAlpha -
-                GAMEPLAY_MSG_BOX::ADVANCE_BUTTON_FADE_SPEED * delta_t
+                GAMEPLAY_MSG_BOX::ADVANCE_BUTTON_FADE_SPEED * deltaT
             );
     }
 }

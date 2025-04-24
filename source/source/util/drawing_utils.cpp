@@ -34,12 +34,12 @@ void drawBitmap(
 
     if(size.x == 0 && size.y == 0) return;
     
-    Point bmp_size = getBitmapDimensions(bmp);
-    Point scale = size / bmp_size;
+    Point bmpSize = getBitmapDimensions(bmp);
+    Point scale = size / bmpSize;
     al_draw_tinted_scaled_rotated_bitmap(
         bmp,
         tint,
-        bmp_size.x / 2.0, bmp_size.y / 2.0,
+        bmpSize.x / 2.0, bmpSize.y / 2.0,
         center.x, center.y,
         (size.x == -1) ? scale.y : scale.x,
         (size.y == -1) ? scale.x : scale.y,
@@ -55,29 +55,29 @@ void drawBitmap(
  *
  * @param bmp The bitmap.
  * @param center Center coordinates.
- * @param box_size Width and height of the box.
- * @param scale_up If true, the bitmap is scaled up to fit the box.
+ * @param boxSize Width and height of the box.
+ * @param scaleUp If true, the bitmap is scaled up to fit the box.
  * If false, it stays at its original size (unless it needs to be scaled down).
  * @param angle Angle to rotate the bitmap by.
  * The box does not take angling into account.
  * @param tint Tint the bitmap with this color.
  */
 void drawBitmapInBox(
-    ALLEGRO_BITMAP* bmp, const Point &center, const Point &box_size,
-    bool scale_up, float angle, const ALLEGRO_COLOR &tint
+    ALLEGRO_BITMAP* bmp, const Point &center, const Point &boxSize,
+    bool scaleUp, float angle, const ALLEGRO_COLOR &tint
 ) {
-    if(box_size.x == 0 || box_size.y == 0) return;
-    int bmp_w = al_get_bitmap_width(bmp);
-    int bmp_h = al_get_bitmap_height(bmp);
-    float w_diff = bmp_w / box_size.x;
-    float h_diff = bmp_h / box_size.y;
-    float max_w = scale_up ? box_size.x : std::min((int) box_size.x, bmp_w);
-    float max_h = scale_up ? box_size.y : std::min((int) box_size.y, bmp_h);
+    if(boxSize.x == 0 || boxSize.y == 0) return;
+    int bmpW = al_get_bitmap_width(bmp);
+    int bmpH = al_get_bitmap_height(bmp);
+    float wDiff = bmpW / boxSize.x;
+    float hDiff = bmpH / boxSize.y;
+    float maxW = scaleUp ? boxSize.x : std::min((int) boxSize.x, bmpW);
+    float maxH = scaleUp ? boxSize.y : std::min((int) boxSize.y, bmpH);
     
-    if(w_diff > h_diff) {
-        drawBitmap(bmp, center, Point(max_w, -1), angle, tint);
+    if(wDiff > hDiff) {
+        drawBitmap(bmp, center, Point(maxW, -1), angle, tint);
     } else {
-        drawBitmap(bmp, center, Point(-1, max_h), angle, tint);
+        drawBitmap(bmp, center, Point(-1, maxH), angle, tint);
     }
 }
 
@@ -164,13 +164,13 @@ void drawFilledRoundedRectangle(
     const Point &center, const Point &size, float radii,
     const ALLEGRO_COLOR &color
 ) {
-    float final_radii = std::min(radii, size.x / 2.0f);
-    final_radii = std::min(final_radii, size.y / 2.0f);
-    final_radii = std::max(0.0f, final_radii);
+    float finalRadii = std::min(radii, size.x / 2.0f);
+    finalRadii = std::min(finalRadii, size.y / 2.0f);
+    finalRadii = std::max(0.0f, finalRadii);
     al_draw_filled_rounded_rectangle(
         center.x - size.x / 2.0f, center.y - size.y / 2.0f,
         center.x + size.x / 2.0f, center.y + size.y / 2.0f,
-        final_radii, final_radii,
+        finalRadii, finalRadii,
         color
     );
 }
@@ -189,20 +189,20 @@ void drawRotatedRectangle(
     const Point &center, const Point &dimensions,
     float angle, const ALLEGRO_COLOR &color, float thickness
 ) {
-    ALLEGRO_TRANSFORM rot_transform, old_transform;
-    al_copy_transform(&old_transform, al_get_current_transform());
-    al_identity_transform(&rot_transform);
-    al_rotate_transform(&rot_transform, angle);
-    al_translate_transform(&rot_transform, center.x, center.y);
-    al_compose_transform(&rot_transform, &old_transform);
+    ALLEGRO_TRANSFORM rotTransform, oldTransform;
+    al_copy_transform(&oldTransform, al_get_current_transform());
+    al_identity_transform(&rotTransform);
+    al_rotate_transform(&rotTransform, angle);
+    al_translate_transform(&rotTransform, center.x, center.y);
+    al_compose_transform(&rotTransform, &oldTransform);
     
-    al_use_transform(&rot_transform); {
+    al_use_transform(&rotTransform); {
         al_draw_rectangle(
             -dimensions.x / 2.0, -dimensions.y / 2.0,
             dimensions.x / 2.0, dimensions.y / 2.0,
             color, thickness
         );
-    }; al_use_transform(&old_transform);
+    }; al_use_transform(&oldTransform);
 }
 
 
@@ -221,13 +221,13 @@ void drawRoundedRectangle(
     const Point &center, const Point &size, float radii,
     const ALLEGRO_COLOR &color, float thickness
 ) {
-    float final_radii = std::min(radii, size.x / 2.0f);
-    final_radii = std::min(final_radii, size.y / 2.0f);
-    final_radii = std::max(0.0f, final_radii);
+    float finalRadii = std::min(radii, size.x / 2.0f);
+    finalRadii = std::min(finalRadii, size.y / 2.0f);
+    finalRadii = std::max(0.0f, finalRadii);
     al_draw_rounded_rectangle(
         center.x - size.x / 2.0f, center.y - size.y / 2.0f,
         center.x + size.x / 2.0f, center.y + size.y / 2.0f,
-        final_radii, final_radii,
+        finalRadii, finalRadii,
         color, thickness
     );
 }
@@ -239,69 +239,69 @@ void drawRoundedRectangle(
  * @param text Text to draw.
  * @param font Font to use.
  * @param where Coordinates to draw it at.
- * @param box_size Size of the box it must be scaled to.
+ * @param boxSize Size of the box it must be scaled to.
  * @param color Tint the text with this color.
- * @param text_flags Allegro text drawing function flags.
- * @param v_align Vertical alignment.
+ * @param textFlags Allegro text drawing function flags.
+ * @param vAlign Vertical alignment.
  * @param settings Settings to control how the text can be scaled.
  * Use TEXT_SETTING_FLAG.
- * @param further_scale After calculating everything, further scale the
+ * @param furtherScale After calculating everything, further scale the
  * text by this much before drawing.
  */
 void drawText(
     const string &text, const ALLEGRO_FONT* const font,
-    const Point &where, const Point &box_size, const ALLEGRO_COLOR &color,
-    int text_flags, V_ALIGN_MODE v_align, bitmask_8_t settings,
-    const Point &further_scale
+    const Point &where, const Point &boxSize, const ALLEGRO_COLOR &color,
+    int textFlags, V_ALIGN_MODE vAlign, Bitmask8 settings,
+    const Point &furtherScale
 ) {
     //Initial checks.
     if(text.empty()) return;
-    if(box_size.x == 0 || box_size.y == 0) return;
+    if(boxSize.x == 0 || boxSize.y == 0) return;
     
     //Get the raw text information.
-    int text_orig_ox;
-    int text_orig_oy;
-    int text_orig_w;
-    int text_orig_h;
+    int textOrigOx;
+    int textOrigOy;
+    int textOrigW;
+    int textOrigH;
     al_get_text_dimensions(
         font, text.c_str(),
-        &text_orig_ox, &text_orig_oy, &text_orig_w, &text_orig_h
+        &textOrigOx, &textOrigOy, &textOrigW, &textOrigH
     );
     
     //Figure out the scales.
-    Point text_orig_size(text_orig_w, text_orig_h);
-    Point text_final_scale =
+    Point textOrigSize(textOrigW, textOrigH);
+    Point textFinalScale =
         scaleRectangleToBox(
-            text_orig_size,
-            box_size,
+            textOrigSize,
+            boxSize,
             !hasFlag(settings, TEXT_SETTING_FLAG_CANT_GROW_X),
             !hasFlag(settings, TEXT_SETTING_FLAG_CANT_GROW_Y),
             !hasFlag(settings, TEXT_SETTING_FLAG_CANT_SHRINK_X),
             !hasFlag(settings, TEXT_SETTING_FLAG_CANT_SHRINK_Y),
             hasFlag(settings, TEXT_SETTING_FLAG_CAN_CHANGE_RATIO)
         );
-    Point text_final_size = text_orig_size * text_final_scale;
+    Point textFinalSize = textOrigSize * textFinalScale;
     
     //Figure out offsets.
-    float v_align_offset =
-        getVerticalAlignOffset(v_align, text_final_size.y);
+    float vAlignOffset =
+        getVerticalAlignOffset(vAlign, textFinalSize.y);
         
     //Create the transformation.
-    ALLEGRO_TRANSFORM text_transform, old_transform;
+    ALLEGRO_TRANSFORM textTransform, oldTransform;
     getTextDrawingTransforms(
         where,
-        text_final_scale * further_scale,
+        textFinalScale * furtherScale,
         hasFlag(settings, TEXT_SETTING_COMPENSATE_Y_OFFSET) ?
-        text_orig_oy :
+        textOrigOy :
         0.0f,
-        v_align_offset * further_scale.y,
-        &text_transform, &old_transform
+        vAlignOffset * furtherScale.y,
+        &textTransform, &oldTransform
     );
     
     //Draw!
-    al_use_transform(&text_transform); {
-        al_draw_text(font, color, 0, 0, text_flags, text.c_str());
-    }; al_use_transform(&old_transform);
+    al_use_transform(&textTransform); {
+        al_draw_text(font, color, 0, 0, textFlags, text.c_str());
+    }; al_use_transform(&oldTransform);
 }
 
 
@@ -312,68 +312,68 @@ void drawText(
  * @param text Text to draw.
  * @param font Font to use.
  * @param where Coordinates to draw it at.
- * @param box_size Size of the box it must be scaled to.
+ * @param boxSize Size of the box it must be scaled to.
  * @param color Tint the text with this color.
- * @param text_flags Allegro text drawing function flags.
- * @param v_align Vertical alignment.
+ * @param textFlags Allegro text drawing function flags.
+ * @param vAlign Vertical alignment.
  * @param settings Settings to control how the text can be scaled.
  * Use TEXT_SETTING_FLAG.
- * @param further_scale After calculating everything, further scale the
+ * @param furtherScale After calculating everything, further scale the
  * text by this much before drawing.
  */
 void drawTextLines(
     const string &text, const ALLEGRO_FONT* const font,
-    const Point &where, const Point &box_size, const ALLEGRO_COLOR &color,
-    int text_flags, V_ALIGN_MODE v_align, bitmask_8_t settings,
-    const Point &further_scale
+    const Point &where, const Point &boxSize, const ALLEGRO_COLOR &color,
+    int textFlags, V_ALIGN_MODE vAlign, Bitmask8 settings,
+    const Point &furtherScale
 ) {
     //Initial checks.
     if(text.empty()) return;
-    if(box_size.x == 0 || box_size.y == 0) return;
+    if(boxSize.x == 0 || boxSize.y == 0) return;
     
     vector<string> lines = split(text, "\n", true);
     
     //Get the basic text information.
-    int total_orig_width = 0;
-    int total_orig_height = 0;
-    int line_orig_height = 0;
+    int totalOrigWidth = 0;
+    int totalOrigHeight = 0;
+    int lineOrigHeight = 0;
     getMultilineTextDimensions(
-        lines, font, &total_orig_width, &total_orig_height, &line_orig_height
+        lines, font, &totalOrigWidth, &totalOrigHeight, &lineOrigHeight
     );
-    Point total_orig_size(total_orig_width, total_orig_height);
+    Point totalOrigSize(totalOrigWidth, totalOrigHeight);
     
     //Figure out the scales.
-    Point total_final_scale =
+    Point totalFinalScale =
         scaleRectangleToBox(
-            total_orig_size, box_size,
+            totalOrigSize, boxSize,
             !hasFlag(settings, TEXT_SETTING_FLAG_CANT_GROW_X),
             !hasFlag(settings, TEXT_SETTING_FLAG_CANT_GROW_Y),
             !hasFlag(settings, TEXT_SETTING_FLAG_CANT_SHRINK_X),
             !hasFlag(settings, TEXT_SETTING_FLAG_CANT_SHRINK_Y),
             hasFlag(settings, TEXT_SETTING_FLAG_CAN_CHANGE_RATIO)
         );
-    Point total_final_size = total_orig_size * total_final_scale;
+    Point totalFinalSize = totalOrigSize * totalFinalScale;
     
     //Figure out offsets.
-    float v_align_offset =
-        getVerticalAlignOffset(v_align, total_final_size.y);
+    float vAlignOffset =
+        getVerticalAlignOffset(vAlign, totalFinalSize.y);
         
     //Create the transformation.
-    ALLEGRO_TRANSFORM text_transform, old_transform;
+    ALLEGRO_TRANSFORM textTransform, oldTransform;
     getTextDrawingTransforms(
         where,
-        total_final_scale * further_scale,
-        0.0f, v_align_offset * further_scale.y,
-        &text_transform, &old_transform
+        totalFinalScale * furtherScale,
+        0.0f, vAlignOffset * furtherScale.y,
+        &textTransform, &oldTransform
     );
     
     //Draw!
-    al_use_transform(&text_transform); {
+    al_use_transform(&textTransform); {
         for(size_t l = 0; l < lines.size(); l++) {
-            float line_y = (line_orig_height + 1) * l;
-            al_draw_text(font, color, 0, line_y, text_flags, lines[l].c_str());
+            float lineY = (lineOrigHeight + 1) * l;
+            al_draw_text(font, color, 0, lineY, textFlags, lines[l].c_str());
         }
-    }; al_use_transform(&old_transform);
+    }; al_use_transform(&oldTransform);
 }
 
 
@@ -402,34 +402,34 @@ void drawTexturedBox(
     
     //Some caches.
     //Vertex total. 9 sections * 2 tris * 3 vertexes.
-    constexpr size_t total_vertexes = 9 * 2 * 3;
+    constexpr size_t totalVertexes = 9 * 2 * 3;
     //Top-left coordinates.
     const Point tl = center - size / 2.0f;
     //Bitmap size.
-    const int bmp_w = al_get_bitmap_width(texture);
-    const int bmp_h = al_get_bitmap_height(texture);
+    const int bmpW = al_get_bitmap_width(texture);
+    const int bmpH = al_get_bitmap_height(texture);
     //Minimum size at which the corner graphics are drawn in full.
     //Workaround: For some reason there's a seam visible when the edges are
     //around < 6 pixels wide. I can't figure out why. So I'm bumping
     //this threshold to be 8 pixels longer than normal.
-    const Point corner_treshold(
+    const Point cornerTreshold(
         std::max(8.0f, size.x / 2.0f - 8),
         std::max(8.0f, size.y / 2.0f - 8)
     );
     //Corner size.
-    Point corner_size(bmp_w / 3.0f, bmp_h / 3.0f);
-    if(corner_treshold.x < corner_size.x) {
-        corner_size.x = corner_treshold.x;
-        corner_size.y = corner_size.x * (bmp_w / bmp_h);
+    Point cornerSize(bmpW / 3.0f, bmpH / 3.0f);
+    if(cornerTreshold.x < cornerSize.x) {
+        cornerSize.x = cornerTreshold.x;
+        cornerSize.y = cornerSize.x * (bmpW / bmpH);
     }
-    if(corner_treshold.y < corner_size.y) {
-        corner_size.y = corner_treshold.y;
-        corner_size.x = corner_size.y * (bmp_h / bmp_w);
+    if(cornerTreshold.y < cornerSize.y) {
+        cornerSize.y = cornerTreshold.y;
+        cornerSize.x = cornerSize.y * (bmpH / bmpW);
     }
     
     //Initialize the vertexes.
-    ALLEGRO_VERTEX vert[total_vertexes];
-    for(unsigned char v = 0; v < total_vertexes; v++) {
+    ALLEGRO_VERTEX vert[totalVertexes];
+    for(unsigned char v = 0; v < totalVertexes; v++) {
         vert[v].color = tint;
         vert[v].z = 0;
     }
@@ -444,22 +444,22 @@ void drawTexturedBox(
         switch(r) {
         case 0: {
             y1 = tl.y;
-            y2 = tl.y + corner_size.y;
+            y2 = tl.y + cornerSize.y;
             break;
         } case 1: {
-            y1 = tl.y + corner_size.y;
-            y2 = tl.y + size.y - corner_size.y;
+            y1 = tl.y + cornerSize.y;
+            y2 = tl.y + size.y - cornerSize.y;
             break;
         } case 2: {
-            y1 = tl.y + size.y - corner_size.y;
+            y1 = tl.y + size.y - cornerSize.y;
             y2 = tl.y + size.y;
             break;
         }
         }
         
         //And the start and end Y texture coordinates.
-        float v1 = (bmp_h / 3.0f) * r;
-        float v2 = (bmp_h / 3.0f) * (r + 1);
+        float v1 = (bmpH / 3.0f) * r;
+        float v2 = (bmpH / 3.0f) * (r + 1);
         
         for(size_t c = 0; c < 3; c++) {
             //For every column.
@@ -470,22 +470,22 @@ void drawTexturedBox(
             switch(c) {
             case 0: {
                 x1 = tl.x;
-                x2 = tl.x + corner_size.x;
+                x2 = tl.x + cornerSize.x;
                 break;
             } case 1: {
-                x1 = tl.x + corner_size.x;
-                x2 = tl.x + size.x - corner_size.x;
+                x1 = tl.x + cornerSize.x;
+                x2 = tl.x + size.x - cornerSize.x;
                 break;
             } case 2: {
-                x1 = tl.x + size.x - corner_size.x;
+                x1 = tl.x + size.x - cornerSize.x;
                 x2 = tl.x + size.x;
                 break;
             }
             }
             
             //And the start and end X texture coordinates.
-            float u1 = (bmp_w / 3.0f) * c;
-            float u2 = (bmp_w / 3.0f) * (c + 1);
+            float u1 = (bmpW / 3.0f) * c;
+            float u2 = (bmpW / 3.0f) * (c + 1);
             
             //Finally, fill the vertex info!
             //First triangle (top-left).
@@ -521,7 +521,7 @@ void drawTexturedBox(
     }
     
     al_draw_prim(
-        vert, nullptr, texture, 0, total_vertexes, ALLEGRO_PRIM_TRIANGLE_LIST
+        vert, nullptr, texture, 0, totalVertexes, ALLEGRO_PRIM_TRIANGLE_LIST
     );
 }
 
@@ -535,33 +535,33 @@ void drawTexturedBox(
  *
  * @param lines The text lines.
  * @param font The text's font.
- * @param out_width If not nullptr, the width is returned here.
- * @param out_height If not nullptr, the height is returned here.
- * @param out_line_height If not nullptr, the line height is returned here.
+ * @param outWidth If not nullptr, the width is returned here.
+ * @param outHeight If not nullptr, the height is returned here.
+ * @param outLineHeight If not nullptr, the line height is returned here.
  */
 void getMultilineTextDimensions(
     const vector<string> &lines, const ALLEGRO_FONT* const font,
-    int* out_width, int* out_height, int* out_line_height
+    int* outWidth, int* outHeight, int* outLineHeight
 ) {
     int lh = al_get_font_line_height(font);
     
-    if(out_height) {
-        *out_height = std::max(0, (int) ((lh + 1) * lines.size()) - 1);
+    if(outHeight) {
+        *outHeight = std::max(0, (int) ((lh + 1) * lines.size()) - 1);
     }
     
-    if(out_width) {
-        int largest_w = 0;
+    if(outWidth) {
+        int largestW = 0;
         for(size_t l = 0; l < lines.size(); l++) {
-            largest_w =
+            largestW =
                 std::max(
-                    largest_w, al_get_text_width(font, lines[l].c_str())
+                    largestW, al_get_text_width(font, lines[l].c_str())
                 );
         }
         
-        *out_width = largest_w;
+        *outWidth = largestW;
     }
     
-    if(out_line_height) *out_line_height = lh;
+    if(outLineHeight) *outLineHeight = lh;
 }
 
 
@@ -571,24 +571,24 @@ void getMultilineTextDimensions(
  *
  * @param where Coordinates to draw the text at.
  * @param scale Text scale.
- * @param text_orig_oy The text's original Y offset,
+ * @param textOrigOy The text's original Y offset,
  * from al_get_text_dimensions.
- * @param v_align_offset Vertical alignment offset.
- * @param out_text_transform The text transform is returned here.
- * @param out_old_transform The old (current) transform is returned here.
+ * @param vAlignOffset Vertical alignment offset.
+ * @param outTextTransform The text transform is returned here.
+ * @param outOldTransform The old (current) transform is returned here.
  */
 void getTextDrawingTransforms(
     const Point &where, const Point &scale,
-    float text_orig_oy, float v_align_offset,
-    ALLEGRO_TRANSFORM* out_text_transform, ALLEGRO_TRANSFORM* out_old_transform
+    float textOrigOY, float vAlignOffset,
+    ALLEGRO_TRANSFORM* outTextTransform, ALLEGRO_TRANSFORM* outOldTransform
 ) {
-    al_copy_transform(out_old_transform, al_get_current_transform());
-    al_identity_transform(out_text_transform);
-    al_scale_transform(out_text_transform, scale.x, scale.y);
+    al_copy_transform(outOldTransform, al_get_current_transform());
+    al_identity_transform(outTextTransform);
+    al_scale_transform(outTextTransform, scale.x, scale.y);
     al_translate_transform(
-        out_text_transform,
+        outTextTransform,
         where.x,
-        where.y - v_align_offset - text_orig_oy
+        where.y - vAlignOffset - textOrigOY
     );
-    al_compose_transform(out_text_transform, out_old_transform);
+    al_compose_transform(outTextTransform, outOldTransform);
 }

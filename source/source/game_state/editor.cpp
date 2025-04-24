@@ -107,27 +107,27 @@ Editor::Editor() :
  * point isn't exactly on the top-left of the window,
  * where it's hard to see.
  *
- * @param min_coords Top-left coordinates of the content to focus on.
- * @param max_coords Bottom-right coordinates of the content to focus on.
+ * @param minCoords Top-left coordinates of the content to focus on.
+ * @param maxCoords Bottom-right coordinates of the content to focus on.
  * @param instantaneous If true, the camera moves there instantaneously.
  * If false, it smoothly gets there over time.
  */
 void Editor::centerCamera(
-    const Point &min_coords, const Point &max_coords,
+    const Point &minCoords, const Point &maxCoords,
     bool instantaneous
 ) {
-    Point min_c = min_coords;
-    Point max_c = max_coords;
-    if(min_c == max_c) {
-        min_c = min_c - 2.0;
-        max_c = max_c + 2.0;
+    Point minC = minCoords;
+    Point maxC = maxCoords;
+    if(minC == maxC) {
+        minC = minC - 2.0;
+        maxC = maxC + 2.0;
     }
     
-    float width = max_c.x - min_c.x;
-    float height = max_c.y - min_c.y;
+    float width = maxC.x - minC.x;
+    float height = maxC.y - minC.y;
     
-    game.view.cam.targetPos.x = floor(min_c.x + width  / 2);
-    game.view.cam.targetPos.y = floor(min_c.y + height / 2);
+    game.view.cam.targetPos.x = floor(minC.x + width  / 2);
+    game.view.cam.targetPos.y = floor(minC.y + height / 2);
     
     float z;
     if(width > height) z = game.view.size.x / width;
@@ -150,9 +150,9 @@ void Editor::centerCamera(
  */
 void Editor::closeTopDialog() {
     for(size_t d = 0; d < dialogs.size(); d++) {
-        Dialog* d_ptr = dialogs[dialogs.size() - (d + 1)];
-        if(d_ptr->isOpen) {
-            d_ptr->isOpen = false;
+        Dialog* dPtr = dialogs[dialogs.size() - (d + 1)];
+        if(dPtr->isOpen) {
+            dPtr->isOpen = false;
             return;
         }
     }
@@ -192,75 +192,75 @@ void Editor::doLogicPre() {
  * @brief Draws the grid, using the current game camera.
  *
  * @param interval Interval between grid lines.
- * @param major_color Color to use for major lines.
+ * @param majorColor Color to use for major lines.
  * These are lines that happen at major milestones (i.e. twice the interval).
- * @param minor_color Color to use for minor lines.
+ * @param minorColor Color to use for minor lines.
  * These are lines that aren't major.
  */
 void Editor::drawGrid(
     float interval,
-    const ALLEGRO_COLOR &major_color, const ALLEGRO_COLOR &minor_color
+    const ALLEGRO_COLOR &majorColor, const ALLEGRO_COLOR &minorColor
 ) {
     Point canvasTL = game.view.getTopLeft();
     Point canvasBR = game.view.getBottomRight();
     
-    Point cam_top_left_corner = canvasTL;
-    Point cam_bottom_right_corner = canvasBR;
+    Point camTLCorner = canvasTL;
+    Point camBRCorner = canvasBR;
     al_transform_coordinates(
         &game.view.windowToWorldTransform,
-        &cam_top_left_corner.x, &cam_top_left_corner.y
+        &camTLCorner.x, &camTLCorner.y
     );
     al_transform_coordinates(
         &game.view.windowToWorldTransform,
-        &cam_bottom_right_corner.x, &cam_bottom_right_corner.y
+        &camBRCorner.x, &camBRCorner.y
     );
     
-    float x = floor(cam_top_left_corner.x / interval) * interval;
-    while(x < cam_bottom_right_corner.x + interval) {
-        ALLEGRO_COLOR c = minor_color;
-        bool draw_line = true;
+    float x = floor(camTLCorner.x / interval) * interval;
+    while(x < camBRCorner.x + interval) {
+        ALLEGRO_COLOR c = minorColor;
+        bool drawLine = true;
         
         if(fmod(x, interval * 2) == 0) {
-            c = major_color;
+            c = majorColor;
             if((interval * 2) * game.view.cam.zoom <= 6) {
-                draw_line = false;
+                drawLine = false;
             }
         } else {
             if(interval * game.view.cam.zoom <= 6) {
-                draw_line = false;
+                drawLine = false;
             }
         }
         
-        if(draw_line) {
+        if(drawLine) {
             al_draw_line(
-                x, cam_top_left_corner.y,
-                x, cam_bottom_right_corner.y + interval,
+                x, camTLCorner.y,
+                x, camBRCorner.y + interval,
                 c, 1.0f / game.view.cam.zoom
             );
         }
         x += interval;
     }
     
-    float y = floor(cam_top_left_corner.y / interval) * interval;
-    while(y < cam_bottom_right_corner.y + interval) {
-        ALLEGRO_COLOR c = minor_color;
-        bool draw_line = true;
+    float y = floor(camTLCorner.y / interval) * interval;
+    while(y < camBRCorner.y + interval) {
+        ALLEGRO_COLOR c = minorColor;
+        bool drawLine = true;
         
         if(fmod(y, interval * 2) == 0) {
-            c = major_color;
+            c = majorColor;
             if((interval * 2) * game.view.cam.zoom <= 6) {
-                draw_line = false;
+                drawLine = false;
             }
         } else {
             if(interval * game.view.cam.zoom <= 6) {
-                draw_line = false;
+                drawLine = false;
             }
         }
         
-        if(draw_line) {
+        if(drawLine) {
             al_draw_line(
-                cam_top_left_corner.x, y,
-                cam_bottom_right_corner.x + interval, y,
+                camTLCorner.x, y,
+                camBRCorner.x + interval, y,
                 c, 1.0f / game.view.cam.zoom
             );
         }
@@ -273,8 +273,8 @@ void Editor::drawGrid(
  * @brief Draws a small red X on the cursor, signifying an operation has failed.
  */
 void Editor::drawOpErrorCursor() {
-    float error_flash_time_ratio = opErrorFlashTimer.getRatioLeft();
-    if(error_flash_time_ratio <= 0.0f) return;
+    float errorFlashTimeRatio = opErrorFlashTimer.getRatioLeft();
+    if(errorFlashTimeRatio <= 0.0f) return;
     Point pos = opErrorPos;
     drawBitmap(
         game.sysContent.bmpNotification,
@@ -287,19 +287,19 @@ void Editor::drawOpErrorCursor() {
             EDITOR::OP_ERROR_CURSOR_SIZE * 2.0f
         ),
         0.0f,
-        mapAlpha(error_flash_time_ratio * 192)
+        mapAlpha(errorFlashTimeRatio * 192)
     );
     pos.x +=
         EDITOR::OP_ERROR_CURSOR_SHAKE_WIDTH *
         sin(game.timePassed * EDITOR::OP_ERROR_CURSOR_SHAKE_SPEED) *
-        error_flash_time_ratio;
+        errorFlashTimeRatio;
     pos.y -= EDITOR::OP_ERROR_CURSOR_SIZE;
     al_draw_line(
         pos.x - EDITOR::OP_ERROR_CURSOR_SIZE / 2.0f,
         pos.y - EDITOR::OP_ERROR_CURSOR_SIZE / 2.0f,
         pos.x + EDITOR::OP_ERROR_CURSOR_SIZE / 2.0f,
         pos.y + EDITOR::OP_ERROR_CURSOR_SIZE / 2.0f,
-        al_map_rgba_f(1.0f, 0.0f, 0.0f, error_flash_time_ratio),
+        al_map_rgba_f(1.0f, 0.0f, 0.0f, errorFlashTimeRatio),
         EDITOR::OP_ERROR_CURSOR_THICKNESS
     );
     al_draw_line(
@@ -307,7 +307,7 @@ void Editor::drawOpErrorCursor() {
         pos.y - EDITOR::OP_ERROR_CURSOR_SIZE / 2.0f,
         pos.x - EDITOR::OP_ERROR_CURSOR_SIZE / 2.0f,
         pos.y + EDITOR::OP_ERROR_CURSOR_SIZE / 2.0f,
-        al_map_rgba_f(1.0f, 0.0f, 0.0f, error_flash_time_ratio),
+        al_map_rgba_f(1.0f, 0.0f, 0.0f, errorFlashTimeRatio),
         EDITOR::OP_ERROR_CURSOR_THICKNESS
     );
 }
@@ -360,7 +360,7 @@ bool Editor::guiNeedsKeyboard() {
 void Editor::handleAllegroEvent(ALLEGRO_EVENT &ev) {
     if(game.fadeMgr.isFading()) return;
     
-    bool is_mouse_in_canvas =
+    bool isMouseInCanvas =
         dialogs.empty() && !isMouseInGui;
         
     if(
@@ -377,7 +377,7 @@ void Editor::handleAllegroEvent(ALLEGRO_EVENT &ev) {
     
     if(
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN &&
-        is_mouse_in_canvas
+        isMouseInCanvas
     ) {
         //Mouse button down, inside the canvas.
         
@@ -514,7 +514,7 @@ void Editor::handleAllegroEvent(ALLEGRO_EVENT &ev) {
         }
         if(
             (ev.mouse.dz != 0 || ev.mouse.dw != 0) &&
-            is_mouse_in_canvas
+            isMouseInCanvas
         ) {
             handleMouseWheel(ev);
         }
@@ -791,10 +791,10 @@ void Editor::handleRmbUp(const ALLEGRO_EVENT &ev) {}
 bool Editor::isInternalNameGood(const string &name) const {
     for(size_t c = 0; c < name.size(); c++) {
         char ch = name[c];
-        const bool is_lowercase = ch >= 'a' && ch <= 'z';
-        const bool is_digit = ch >= '0' && ch <= '9';
-        const bool is_underscore = ch == '_';
-        if(!is_lowercase && !is_digit && !is_underscore) return false;
+        const bool isLowercase = ch >= 'a' && ch <= 'z';
+        const bool isDigit = ch >= '0' && ch <= '9';
+        const bool isUnderscore = ch == '_';
+        if(!isLowercase && !isDigit && !isUnderscore) return false;
     }
     return true;
 }
@@ -804,24 +804,24 @@ bool Editor::isInternalNameGood(const string &name) const {
  * @brief Returns whether or not the pressed key corresponds to the specified
  * key combination. Used for keyboard shortcuts.
  *
- * @param pressed_key Key that the user pressed.
- * @param match_key Key that must be matched in order to return true.
- * @param needs_ctrl If true, only returns true if Ctrl was also pressed.
- * @param needs_shift If true, only returns true if Shift was also pressed.
+ * @param pressedKey Key that the user pressed.
+ * @param matchKey Key that must be matched in order to return true.
+ * @param needsCtrl If true, only returns true if Ctrl was also pressed.
+ * @param needsShift If true, only returns true if Shift was also pressed.
  * @return Whether the pressed key corresponds.
  */
 bool Editor::keyCheck(
-    int pressed_key, int match_key,
-    bool needs_ctrl, bool needs_shift
+    int pressedKey, int matchKey,
+    bool needsCtrl, bool needsShift
 ) {
 
-    if(pressed_key != match_key) {
+    if(pressedKey != matchKey) {
         return false;
     }
-    if(needs_ctrl != isCtrlPressed) {
+    if(needsCtrl != isCtrlPressed) {
         return false;
     }
-    if(needs_shift != isShiftPressed) {
+    if(needsShift != isShiftPressed) {
         return false;
     }
     return true;
@@ -832,51 +832,51 @@ bool Editor::keyCheck(
  * @brief Draws a Dear ImGui-like visualizer for keyframes involving colors.
  *
  * @param interpolator Interpolator to get the information from.
- * @param sel_keyframe_idx Index of the currently selected keyframe.
+ * @param selKeyframeIdx Index of the currently selected keyframe.
  */
 void Editor::keyframeVisualizer(
     KeyframeInterpolator<ALLEGRO_COLOR> &interpolator,
-    size_t sel_keyframe_idx
+    size_t selKeyframeIdx
 ) {
     if(interpolator.getKeyframeCount() <= 1) return;
     
     //Setup.
-    ImDrawList* draw_list = ImGui::GetWindowDrawList();
+    ImDrawList* drawList = ImGui::GetWindowDrawList();
     ImVec2 pos = ImGui::GetCursorScreenPos();
     
     //Draw the classic alpha checkboard background.
     ImGui::RenderColorRectWithAlphaCheckerboard(
-        draw_list, pos,
+        drawList, pos,
         ImVec2(pos.x + (ImGui::GetColumnWidth() - 1), pos.y + 40),
         ImColor(0.0f, 0.0f, 0.0f, 0.0f), 5, ImVec2(0.0f, 0.0f)
     );
     
     //Draw the rectangle of the color from the start to the first keyframe.
-    auto first_kf = interpolator.getKeyframe(0);
-    ALLEGRO_COLOR c_start = first_kf.second;
-    draw_list->AddRectFilled(
+    auto firstKf = interpolator.getKeyframe(0);
+    ALLEGRO_COLOR cStart = firstKf.second;
+    drawList->AddRectFilled(
         pos,
         ImVec2(
-            pos.x + (ImGui::GetColumnWidth() - 1) * first_kf.first,
+            pos.x + (ImGui::GetColumnWidth() - 1) * firstKf.first,
             pos.y + 40
         ),
-        ImColor(c_start.r, c_start.g, c_start.b, c_start.a)
+        ImColor(cStart.r, cStart.g, cStart.b, cStart.a)
     );
     
     //Draw the rectangles of the colors between the keyframes.
     for(size_t t = 0; t < interpolator.getKeyframeCount() - 1; t++) {
-        auto kf_1 = interpolator.getKeyframe(t);
-        auto kf_2 = interpolator.getKeyframe(t + 1);
-        ALLEGRO_COLOR c1 = kf_1.second;
-        ALLEGRO_COLOR c2 = kf_2.second;
+        auto kf1 = interpolator.getKeyframe(t);
+        auto kf2 = interpolator.getKeyframe(t + 1);
+        ALLEGRO_COLOR c1 = kf1.second;
+        ALLEGRO_COLOR c2 = kf2.second;
         
-        draw_list->AddRectFilledMultiColor(
+        drawList->AddRectFilledMultiColor(
             ImVec2(
-                pos.x + (ImGui::GetColumnWidth() - 1) * kf_1.first,
+                pos.x + (ImGui::GetColumnWidth() - 1) * kf1.first,
                 pos.y
             ),
             ImVec2(
-                pos.x + (ImGui::GetColumnWidth() - 1) * kf_2.first,
+                pos.x + (ImGui::GetColumnWidth() - 1) * kf2.first,
                 pos.y + 40
             ),
             ImColor(c1.r, c1.g, c1.b, c1.a), ImColor(c2.r, c2.g, c2.b, c2.a),
@@ -885,28 +885,28 @@ void Editor::keyframeVisualizer(
     }
     
     //Draw the rectangle of the color from the final keyframe to the end.
-    auto last_kf = interpolator.getKeyframe(interpolator.getKeyframeCount() - 1);
-    ALLEGRO_COLOR c_end = last_kf.second;
-    draw_list->AddRectFilled(
+    auto lastKf = interpolator.getKeyframe(interpolator.getKeyframeCount() - 1);
+    ALLEGRO_COLOR cEnd = lastKf.second;
+    drawList->AddRectFilled(
         ImVec2(
-            pos.x + (ImGui::GetColumnWidth() - 1) * last_kf.first,
+            pos.x + (ImGui::GetColumnWidth() - 1) * lastKf.first,
             pos.y
         ),
         ImVec2(pos.x + (ImGui::GetColumnWidth() - 1), pos.y + 40),
-        ImColor(c_end.r, c_end.g, c_end.b, c_end.a)
+        ImColor(cEnd.r, cEnd.g, cEnd.b, cEnd.a)
     );
     
     //Draw the bars indicating the position of each keyframe.
     for(size_t c = 0; c < interpolator.getKeyframeCount(); c++) {
         float time = interpolator.getKeyframe(c).first;
-        float line_x = time * (ImGui::GetColumnWidth() - 1);
+        float lineX = time * (ImGui::GetColumnWidth() - 1);
         ImColor col =
-            c == sel_keyframe_idx ?
+            c == selKeyframeIdx ?
             ImGui::GetColorU32(ImGuiCol_PlotLinesHovered) :
             ImGui::GetColorU32(ImGuiCol_PlotLines);
-        draw_list->AddRectFilled(
-            ImVec2(pos.x + line_x - 2, pos.y),
-            ImVec2(pos.x + line_x + 2, pos.y + 43),
+        drawList->AddRectFilled(
+            ImVec2(pos.x + lineX - 2, pos.y),
+            ImVec2(pos.x + lineX + 2, pos.y + 43),
             col
         );
     }
@@ -926,11 +926,11 @@ void Editor::keyframeVisualizer(
  * @brief Draws a Dear ImGui-like visualizer for keyframes involving floats.
  *
  * @param interpolator Interpolator to get the information from.
- * @param sel_keyframe_idx Index of the currently selected keyframe.
+ * @param selKeyframeIdx Index of the currently selected keyframe.
  */
 void Editor::keyframeVisualizer(
     KeyframeInterpolator<float> &interpolator,
-    size_t sel_keyframe_idx
+    size_t selKeyframeIdx
 ) {
     if(interpolator.getKeyframeCount() <= 1) return;
     
@@ -938,44 +938,44 @@ void Editor::keyframeVisualizer(
     //so we need to make our own.
     
     //Setup.
-    ImDrawList* draw_list = ImGui::GetWindowDrawList();
+    ImDrawList* drawList = ImGui::GetWindowDrawList();
     ImVec2 pos = ImGui::GetCursorScreenPos();
     ImVec2 size = ImVec2((ImGui::GetColumnWidth() - 1), 40);
     
-    float min_value = FLT_MAX;
-    float max_value = -FLT_MAX;
+    float minValue = FLT_MAX;
+    float maxValue = -FLT_MAX;
     
     for(size_t t = 0; t < interpolator.getKeyframeCount(); t++) {
-        min_value = std::min(interpolator.getKeyframe(t).second, min_value);
-        max_value = std::max(interpolator.getKeyframe(t).second, max_value);
+        minValue = std::min(interpolator.getKeyframe(t).second, minValue);
+        maxValue = std::max(interpolator.getKeyframe(t).second, maxValue);
     }
     
-    if(min_value == max_value) {
+    if(minValue == maxValue) {
         //Add the same space above and below to get a nice line at the middle.
-        min_value -= 10.0f;
-        max_value += 10.0f;
+        minValue -= 10.0f;
+        maxValue += 10.0f;
     }
     
     //Draw the background.
-    draw_list->AddRectFilled(
+    drawList->AddRectFilled(
         ImVec2(pos.x, pos.y),
         ImVec2(pos.x + (ImGui::GetColumnWidth() - 1), pos.y + 40),
         ImGui::GetColorU32(ImGuiCol_FrameBg)
     );
     
     //Draw the chart line from the start to the first keyframe.
-    auto first_kf = interpolator.getKeyframe(0);
-    draw_list->AddLine(
+    auto firstKf = interpolator.getKeyframe(0);
+    drawList->AddLine(
         ImVec2(
             pos.x,
             pos.y + interpolateNumber(
-                first_kf.second, min_value, max_value, size.y, 1
+                firstKf.second, minValue, maxValue, size.y, 1
             )
         ),
         ImVec2(
-            pos.x + size.x * first_kf.first,
+            pos.x + size.x * firstKf.first,
             pos.y + interpolateNumber(
-                first_kf.second, min_value, max_value, size.y, 1
+                firstKf.second, minValue, maxValue, size.y, 1
             )
         ),
         ImGui::GetColorU32(ImGuiCol_PlotLines)
@@ -983,22 +983,22 @@ void Editor::keyframeVisualizer(
     
     //Draw the chart lines between the keyframes.
     for(size_t t = 0; t < interpolator.getKeyframeCount() - 1; t++) {
-        auto kf_1 = interpolator.getKeyframe(t);
-        auto kf_2 = interpolator.getKeyframe(t + 1);
-        float f1 = kf_1.second;
-        float f2 = kf_2.second;
+        auto kf1 = interpolator.getKeyframe(t);
+        auto kf2 = interpolator.getKeyframe(t + 1);
+        float f1 = kf1.second;
+        float f2 = kf2.second;
         
-        draw_list->AddLine(
+        drawList->AddLine(
             ImVec2(
-                pos.x + size.x * kf_1.first,
+                pos.x + size.x * kf1.first,
                 pos.y + interpolateNumber(
-                    f1, min_value, max_value, size.y, 1
+                    f1, minValue, maxValue, size.y, 1
                 )
             ),
             ImVec2(
-                pos.x + size.x * kf_2.first,
+                pos.x + size.x * kf2.first,
                 pos.y + interpolateNumber(
-                    f2, min_value, max_value, size.y, 1
+                    f2, minValue, maxValue, size.y, 1
                 )
             ),
             ImGui::GetColorU32(ImGuiCol_PlotLines)
@@ -1006,18 +1006,18 @@ void Editor::keyframeVisualizer(
     }
     
     //Draw the chart line from the final keyframe to the end.
-    auto last_kf = interpolator.getKeyframe(interpolator.getKeyframeCount() - 1);
-    draw_list->AddLine(
+    auto lastKf = interpolator.getKeyframe(interpolator.getKeyframeCount() - 1);
+    drawList->AddLine(
         ImVec2(
-            pos.x + size.x * last_kf.first,
+            pos.x + size.x * lastKf.first,
             pos.y + interpolateNumber(
-                last_kf.second, min_value, max_value, size.y, 1
+                lastKf.second, minValue, maxValue, size.y, 1
             )
         ),
         ImVec2(
             pos.x + size.x,
             pos.y + interpolateNumber(
-                last_kf.second, min_value, max_value, size.y, 1
+                lastKf.second, minValue, maxValue, size.y, 1
             )
         ),
         ImGui::GetColorU32(ImGuiCol_PlotLines)
@@ -1026,14 +1026,14 @@ void Editor::keyframeVisualizer(
     //Draw the bars indicating the position of each keyframe.
     for(size_t c = 0; c < interpolator.getKeyframeCount(); c++) {
         float time = interpolator.getKeyframe(c).first;
-        float line_x = time * (ImGui::GetColumnWidth() - 1);
+        float lineX = time * (ImGui::GetColumnWidth() - 1);
         ImColor col =
-            c == sel_keyframe_idx ?
+            c == selKeyframeIdx ?
             ImGui::GetColorU32(ImGuiCol_PlotLinesHovered) :
             ImGui::GetColorU32(ImGuiCol_PlotLines);
-        draw_list->AddRectFilled(
-            ImVec2(pos.x + line_x - 2, pos.y),
-            ImVec2(pos.x + line_x + 2, pos.y + 43),
+        drawList->AddRectFilled(
+            ImVec2(pos.x + lineX - 2, pos.y),
+            ImVec2(pos.x + lineX + 2, pos.y + 43),
             col
         );
     }
@@ -1054,30 +1054,30 @@ void Editor::keyframeVisualizer(
  * involving points.
  *
  * @param interpolator Interpolator to get the information from.
- * @param sel_keyframe_idx Index of the currently selected keyframe.
+ * @param selKeyframeIdx Index of the currently selected keyframe.
  */
 void Editor::keyframeVisualizer(
     KeyframeInterpolator<Point> &interpolator,
-    size_t sel_keyframe_idx
+    size_t selKeyframeIdx
 ) {
     if(interpolator.getKeyframeCount() <= 1) return;
     
     //Split the interpolator into two, one for each axis.
-    KeyframeInterpolator<float> x_inter(interpolator.getKeyframe(0).second.x);
-    KeyframeInterpolator<float> y_inter(interpolator.getKeyframe(0).second.y);
+    KeyframeInterpolator<float> xInter(interpolator.getKeyframe(0).second.x);
+    KeyframeInterpolator<float> yInter(interpolator.getKeyframe(0).second.y);
     
-    x_inter.setKeyframeTime(0, interpolator.getKeyframe(0).first);
-    y_inter.setKeyframeTime(0, interpolator.getKeyframe(0).first);
+    xInter.setKeyframeTime(0, interpolator.getKeyframe(0).first);
+    yInter.setKeyframeTime(0, interpolator.getKeyframe(0).first);
     
     for(size_t s = 1; s < interpolator.getKeyframeCount(); s++) {
         auto kf = interpolator.getKeyframe(s);
-        x_inter.add(kf.first, kf.second.x);
-        y_inter.add(kf.first, kf.second.y);
+        xInter.add(kf.first, kf.second.x);
+        yInter.add(kf.first, kf.second.y);
     }
     
     //Draw the two visualizers.
-    keyframeVisualizer(x_inter, sel_keyframe_idx);
-    keyframeVisualizer(y_inter, sel_keyframe_idx);
+    keyframeVisualizer(xInter, selKeyframeIdx);
+    keyframeVisualizer(yInter, selKeyframeIdx);
 }
 
 
@@ -1086,16 +1086,16 @@ void Editor::keyframeVisualizer(
  * interpolators.
  *
  * @tparam InterT Type of the interpolator value.
- * @param button_id Prefix for the Dear ImGui ID of the navigation buttons.
+ * @param buttonId Prefix for the Dear ImGui ID of the navigation buttons.
  * @param interpolator Interpolator to get data from.
- * @param sel_keyframe_idx Index of the currently selected keyframe.
+ * @param selKeyframeIdx Index of the currently selected keyframe.
  * @return Whether anything in the interpolator was changed.
  */
 template <class InterT>
 bool Editor::keyframeOrganizer(
-    const string &button_id,
+    const string &buttonId,
     KeyframeInterpolator<InterT> &interpolator,
-    size_t &sel_keyframe_idx
+    size_t &selKeyframeIdx
 ) {
     bool result = false;
     
@@ -1107,24 +1107,24 @@ bool Editor::keyframeOrganizer(
     //Current keyframe text.
     ImGui::Text(
         "Keyframe: %lu/%lu",
-        sel_keyframe_idx + 1,
+        selKeyframeIdx + 1,
         interpolator.getKeyframeCount()
     );
     
     if(interpolator.getKeyframeCount() > 1) {
         //Previous keyframe button.
         ImGui::SameLine();
-        string prevLabel = button_id + "prevButton";
+        string prevLabel = buttonId + "prevButton";
         if(
             ImGui::ImageButton(
                 prevLabel, editorIcons[EDITOR_ICON_PREVIOUS],
                 Point(EDITOR::ICON_BMP_SIZE / 2.0f)
             )
         ) {
-            if(sel_keyframe_idx == 0) {
-                sel_keyframe_idx = interpolator.getKeyframeCount() - 1;
+            if(selKeyframeIdx == 0) {
+                selKeyframeIdx = interpolator.getKeyframeCount() - 1;
             } else {
-                sel_keyframe_idx--;
+                selKeyframeIdx--;
             }
         }
         setTooltip(
@@ -1133,17 +1133,17 @@ bool Editor::keyframeOrganizer(
         
         //Next keyframe button.
         ImGui::SameLine();
-        string nextLabel = button_id + "nextButton";
+        string nextLabel = buttonId + "nextButton";
         if(
             ImGui::ImageButton(
                 nextLabel, editorIcons[EDITOR_ICON_NEXT],
                 Point(EDITOR::ICON_BMP_SIZE / 2.0f)
             )
         ) {
-            if(sel_keyframe_idx == interpolator.getKeyframeCount() - 1) {
-                sel_keyframe_idx = 0;
+            if(selKeyframeIdx == interpolator.getKeyframeCount() - 1) {
+                selKeyframeIdx = 0;
             } else {
-                sel_keyframe_idx++;
+                selKeyframeIdx++;
             }
         }
         setTooltip(
@@ -1153,24 +1153,24 @@ bool Editor::keyframeOrganizer(
     
     //Add keyframe button.
     ImGui::SameLine();
-    string addLabel = button_id + "addButton";
+    string addLabel = buttonId + "addButton";
     if(
         ImGui::ImageButton(
             addLabel, editorIcons[EDITOR_ICON_ADD],
             Point(EDITOR::ICON_BMP_SIZE / 2.0f)
         )
     ) {
-        float prev_t = interpolator.getKeyframe(sel_keyframe_idx).first;
-        float next_t =
-            sel_keyframe_idx == interpolator.getKeyframeCount() - 1 ?
+        float prevT = interpolator.getKeyframe(selKeyframeIdx).first;
+        float nextT =
+            selKeyframeIdx == interpolator.getKeyframeCount() - 1 ?
             1.0f :
-            interpolator.getKeyframe(sel_keyframe_idx + 1).first;
-        float new_t = (prev_t + next_t) / 2.0f;
+            interpolator.getKeyframe(selKeyframeIdx + 1).first;
+        float newT = (prevT + nextT) / 2.0f;
         
-        interpolator.add(new_t, interpolator.get(new_t));
-        sel_keyframe_idx++;
+        interpolator.add(newT, interpolator.get(newT));
+        selKeyframeIdx++;
         setStatus(
-            "Added keyframe #" + i2s(sel_keyframe_idx + 1) + "."
+            "Added keyframe #" + i2s(selKeyframeIdx + 1) + "."
         );
         result = true;
     }
@@ -1182,20 +1182,20 @@ bool Editor::keyframeOrganizer(
     if(interpolator.getKeyframeCount() > 1) {
         //Delete frame button.
         ImGui::SameLine();
-        string removeButton = button_id + "removeButton";
+        string removeButton = buttonId + "removeButton";
         if(
             ImGui::ImageButton(
                 removeButton, editorIcons[EDITOR_ICON_REMOVE],
                 Point(EDITOR::ICON_BMP_SIZE / 2.0f)
             )
         ) {
-            size_t deleted_frame_idx = sel_keyframe_idx;
-            interpolator.remove(deleted_frame_idx);
-            if(sel_keyframe_idx == interpolator.getKeyframeCount()) {
-                sel_keyframe_idx--;
+            size_t deletedFrameIdx = selKeyframeIdx;
+            interpolator.remove(deletedFrameIdx);
+            if(selKeyframeIdx == interpolator.getKeyframeCount()) {
+                selKeyframeIdx--;
             }
             setStatus(
-                "Deleted keyframe #" + i2s(deleted_frame_idx + 1) + "."
+                "Deleted keyframe #" + i2s(deletedFrameIdx + 1) + "."
             );
             result = true;
         }
@@ -1214,26 +1214,26 @@ bool Editor::keyframeOrganizer(
  *
  * @param label Label for a keyframe's value.
  * @param interpolator Interpolator to edit.
- * @param sel_keyframe_idx Index of the currently selected keyframe.
+ * @param selKeyframeIdx Index of the currently selected keyframe.
  * @return Whether anything in the interpolator was changed.
  */
 bool Editor::keyframeEditor(
     const string &label,
     KeyframeInterpolator<ALLEGRO_COLOR> &interpolator,
-    size_t &sel_keyframe_idx
+    size_t &selKeyframeIdx
 ) {
     //Visualizer.
-    keyframeVisualizer(interpolator, sel_keyframe_idx);
+    keyframeVisualizer(interpolator, selKeyframeIdx);
     
     //Organizer.
-    bool result = keyframeOrganizer(label, interpolator, sel_keyframe_idx);
+    bool result = keyframeOrganizer(label, interpolator, selKeyframeIdx);
     
     if(interpolator.getKeyframeCount() > 1) {
         //Time value.
-        float time = interpolator.getKeyframe(sel_keyframe_idx).first;
+        float time = interpolator.getKeyframe(selKeyframeIdx).first;
         if(ImGui::SliderFloat("Time", &time, 0.0f, 1.0f)) {
             interpolator.setKeyframeTime(
-                sel_keyframe_idx, time, &sel_keyframe_idx
+                selKeyframeIdx, time, &selKeyframeIdx
             );
             result = true;
         }
@@ -1245,9 +1245,9 @@ bool Editor::keyframeEditor(
     }
     
     //Color editor.
-    ALLEGRO_COLOR value = interpolator.getKeyframe(sel_keyframe_idx).second;
+    ALLEGRO_COLOR value = interpolator.getKeyframe(selKeyframeIdx).second;
     if(ImGui::ColorEdit4(label.c_str(), (float*) &value)) {
-        interpolator.setKeyframeValue(sel_keyframe_idx, value);
+        interpolator.setKeyframeValue(selKeyframeIdx, value);
         result = true;
     }
     setTooltip("What color to use at this keyframe.");
@@ -1262,26 +1262,26 @@ bool Editor::keyframeEditor(
  *
  * @param label Label for a keyframe's value.
  * @param interpolator Interpolator to edit.
- * @param sel_keyframe_idx Index of the currently selected keyframe.
+ * @param selKeyframeIdx Index of the currently selected keyframe.
  * @return Whether anything in the interpolator was changed.
  */
 bool Editor::keyframeEditor(
     const string &label,
     KeyframeInterpolator<float> &interpolator,
-    size_t &sel_keyframe_idx
+    size_t &selKeyframeIdx
 ) {
     //Visualizer.
-    keyframeVisualizer(interpolator, sel_keyframe_idx);
+    keyframeVisualizer(interpolator, selKeyframeIdx);
     
     //Organizer.
-    bool result = keyframeOrganizer(label, interpolator, sel_keyframe_idx);
+    bool result = keyframeOrganizer(label, interpolator, selKeyframeIdx);
     
     if(interpolator.getKeyframeCount() > 1) {
         //Time value.
-        float time = interpolator.getKeyframe(sel_keyframe_idx).first;
+        float time = interpolator.getKeyframe(selKeyframeIdx).first;
         if(ImGui::SliderFloat("Time", &time, 0.0f, 1.0f)) {
             interpolator.setKeyframeTime(
-                sel_keyframe_idx, time, &sel_keyframe_idx
+                selKeyframeIdx, time, &selKeyframeIdx
             );
             result = true;
         }
@@ -1293,9 +1293,9 @@ bool Editor::keyframeEditor(
     }
     
     //Float value.
-    float value = interpolator.getKeyframe(sel_keyframe_idx).second;
+    float value = interpolator.getKeyframe(selKeyframeIdx).second;
     if(ImGui::DragFloat(label.c_str(), &value)) {
-        interpolator.setKeyframeValue(sel_keyframe_idx, value);
+        interpolator.setKeyframeValue(selKeyframeIdx, value);
         result = true;
     }
     setTooltip("What value to use at this keyframe.");
@@ -1310,26 +1310,26 @@ bool Editor::keyframeEditor(
  *
  * @param label Label for a keyframe's value.
  * @param interpolator Interpolator to edit.
- * @param sel_keyframe_idx Index of the currently selected keyframe.
+ * @param selKeyframeIdx Index of the currently selected keyframe.
  * @return Whether anything in the interpolator was changed.
  */
 bool Editor::keyframeEditor(
     const string &label,
     KeyframeInterpolator<Point> &interpolator,
-    size_t &sel_keyframe_idx
+    size_t &selKeyframeIdx
 ) {
     //Visualizer.
-    keyframeVisualizer(interpolator, sel_keyframe_idx);
+    keyframeVisualizer(interpolator, selKeyframeIdx);
     
     //Organizer.
-    bool result = keyframeOrganizer(label, interpolator, sel_keyframe_idx);
+    bool result = keyframeOrganizer(label, interpolator, selKeyframeIdx);
     
     if(interpolator.getKeyframeCount() > 1) {
         //Time value.
-        float time = interpolator.getKeyframe(sel_keyframe_idx).first;
+        float time = interpolator.getKeyframe(selKeyframeIdx).first;
         if(ImGui::SliderFloat("Time", &time, 0.0f, 1.0f)) {
             interpolator.setKeyframeTime(
-                sel_keyframe_idx, time, &sel_keyframe_idx
+                selKeyframeIdx, time, &selKeyframeIdx
             );
             result = true;
         }
@@ -1341,9 +1341,9 @@ bool Editor::keyframeEditor(
     }
     
     //Float values.
-    Point value = interpolator.getKeyframe(sel_keyframe_idx).second;
+    Point value = interpolator.getKeyframe(selKeyframeIdx).second;
     if(ImGui::DragFloat2(label.c_str(), (float*) &value)) {
-        interpolator.setKeyframeValue(sel_keyframe_idx, value);
+        interpolator.setKeyframeValue(selKeyframeIdx, value);
         result = true;
     }
     setTooltip("What coordinates to use at this keyframe.");
@@ -1380,32 +1380,32 @@ void Editor::leave() {
  *
  * @param label Name of the popup.
  * @param items List of items.
- * @param picked_item If an item was picked, set this to its name.
- * @param use_monospace Whether to use a monospace font for the items.
+ * @param pickedItem If an item was picked, set this to its name.
+ * @param useMonospace Whether to use a monospace font for the items.
  * @return Whether an item was clicked on.
  */
 bool Editor::listPopup(
-    const char* label, const vector<string> &items, string* picked_item,
-    bool use_monospace
+    const char* label, const vector<string> &items, string* pickedItem,
+    bool useMonospace
 ) {
     bool ret = false;
     if(ImGui::BeginPopup(label)) {
         if(escapeWasPressed) {
             ImGui::CloseCurrentPopup();
         }
-        if(use_monospace) ImGui::PushFont(game.sysContent.fntDearImGuiMonospace);
+        if(useMonospace) ImGui::PushFont(game.sysContent.fntDearImGuiMonospace);
         for(size_t i = 0; i < items.size(); i++) {
             string name = items[i];
-            bool hit_button =
-                use_monospace ?
+            bool hitButton =
+                useMonospace ?
                 monoSelectable(name.c_str()) :
                 ImGui::Selectable(name.c_str());
-            if(hit_button) {
-                *picked_item = name;
+            if(hitButton) {
+                *pickedItem = name;
                 ret = true;
             }
         }
-        if(use_monospace) ImGui::PopFont();
+        if(useMonospace) ImGui::PopFont();
         ImGui::EndPopup();
     }
     return ret;
@@ -1418,32 +1418,32 @@ bool Editor::listPopup(
  *
  * @param label Name of the popup.
  * @param items List of items.
- * @param picked_item_idx If an item was picked, set this to its index.
- * @param use_monospace Whether to use a monospace font for the items.
+ * @param pickedItemIdx If an item was picked, set this to its index.
+ * @param useMonospace Whether to use a monospace font for the items.
  * @return Whether an item was clicked on.
  */
 bool Editor::listPopup(
-    const char* label, const vector<string> &items, int* picked_item_idx,
-    bool use_monospace
+    const char* label, const vector<string> &items, int* pickedItemIdx,
+    bool useMonospace
 ) {
     bool ret = false;
     if(ImGui::BeginPopup(label)) {
         if(escapeWasPressed) {
             ImGui::CloseCurrentPopup();
         }
-        if(use_monospace) ImGui::PushFont(game.sysContent.fntDearImGuiMonospace);
+        if(useMonospace) ImGui::PushFont(game.sysContent.fntDearImGuiMonospace);
         for(size_t i = 0; i < items.size(); i++) {
             string name = items[i];
-            bool hit_button =
-                use_monospace ?
+            bool hitButton =
+                useMonospace ?
                 monoSelectable(name.c_str()) :
                 ImGui::Selectable(name.c_str());
-            if(hit_button) {
-                *picked_item_idx = (int) i;
+            if(hitButton) {
+                *pickedItemIdx = (int) i;
                 ret = true;
             }
         }
-        if(use_monospace) ImGui::PopFont();
+        if(useMonospace) ImGui::PopFont();
         ImGui::EndPopup();
     }
     return ret;
@@ -1493,35 +1493,35 @@ void Editor::load() {
 /**
  * @brief Loads all mob types into the customCatTypes list.
  *
- * @param is_area_editor If true, mob types that do not appear in the
+ * @param isAreaEditor If true, mob types that do not appear in the
  * area editor will not be counted for here.
  */
-void Editor::loadCustomMobCatTypes(bool is_area_editor) {
+void Editor::loadCustomMobCatTypes(bool isAreaEditor) {
     //Load.
     for(size_t c = 0; c < N_MOB_CATEGORIES; c++) {
-        MobCategory* c_ptr = game.mobCategories.get((MOB_CATEGORY) c);
-        vector<string> type_names;
-        c_ptr->getTypeNames(type_names);
+        MobCategory* cPtr = game.mobCategories.get((MOB_CATEGORY) c);
+        vector<string> typeNames;
+        cPtr->getTypeNames(typeNames);
         
-        for(size_t tn = 0; tn < type_names.size(); tn++) {
-            MobType* mt_ptr = c_ptr->getType(type_names[tn]);
+        for(size_t tn = 0; tn < typeNames.size(); tn++) {
+            MobType* mtPtr = cPtr->getType(typeNames[tn]);
             
-            if(is_area_editor && !mt_ptr->appearsInAreaEditor) {
+            if(isAreaEditor && !mtPtr->appearsInAreaEditor) {
                 continue;
             }
             
-            string custom_cat_name = mt_ptr->customCategoryName;
-            size_t custom_cat_idx;
-            map<string, size_t>::iterator custom_cat_idx_it =
-                customCatNameIdxs.find(custom_cat_name);
-            if(custom_cat_idx_it == customCatNameIdxs.end()) {
-                customCatNameIdxs[custom_cat_name] =
+            string customCatName = mtPtr->customCategoryName;
+            size_t customCatIdx;
+            map<string, size_t>::iterator customCatIdxIt =
+                customCatNameIdxs.find(customCatName);
+            if(customCatIdxIt == customCatNameIdxs.end()) {
+                customCatNameIdxs[customCatName] =
                     customCatTypes.size();
                 customCatTypes.push_back(vector<MobType*>());
             }
-            custom_cat_idx = customCatNameIdxs[custom_cat_name];
+            customCatIdx = customCatNameIdxs[customCatName];
             
-            customCatTypes[custom_cat_idx].push_back(mt_ptr);
+            customCatTypes[customCatIdx].push_back(mtPtr);
         }
     }
     
@@ -1556,13 +1556,13 @@ void Editor::loadCustomMobCatTypes(bool is_area_editor) {
  * @brief Opens a dialog warning the maker that they're editing something
  * in the base pack. Does not do anything if the player is an engine developer.
  *
- * @param do_pick_callback Callback for if we actually have to do the pick.
+ * @param doPickCallback Callback for if we actually have to do the pick.
  */
 void Editor::openBaseContentWarningDialog(
-    const std::function<void()> &do_pick_callback
+    const std::function<void()> &doPickCallback
 ) {
     if(game.options.advanced.engineDev) {
-        do_pick_callback();
+        doPickCallback();
         return;
     }
     
@@ -1571,7 +1571,7 @@ void Editor::openBaseContentWarningDialog(
         std::bind(&Editor::processGuiBaseContentWarningDialog, this)
     );
     dialogs.back()->customSize = Point(320, 0);
-    baseContentWarningDoPickCallback = do_pick_callback;
+    baseContentWarningDoPickCallback = doPickCallback;
 }
 
 
@@ -1579,21 +1579,21 @@ void Editor::openBaseContentWarningDialog(
  * @brief Opens a dialog where the user can choose a bitmap from the
  * game content.
  *
- * @param ok_callback Callback for when the user chooses a bitmap.
- * @param recommended_folder If not empty, recommend that the user picks bitmaps
+ * @param okCallback Callback for when the user chooses a bitmap.
+ * @param recommendedFolder If not empty, recommend that the user picks bitmaps
  * with this folder name. Use "." for the graphics root folder.
  */
 void Editor::openBitmapDialog(
-    std::function<void(const string &)> ok_callback,
-    const string &recommended_folder
+    std::function<void(const string &)> okCallback,
+    const string &recommendedFolder
 ) {
-    bitmapDialogOkCallback = ok_callback;
-    bitmapDialogRecommendedFolder = recommended_folder;
+    bitmapDialogOkCallback = okCallback;
+    bitmapDialogRecommendedFolder = recommendedFolder;
     bitmapDialogPicker.pickCallback =
         [this] (
-            const string &new_bmp_name, const string &, const string &, void*, bool
+            const string &newBmpName, const string &, const string &, void*, bool
     ) {
-        bitmapDialogNewBmpName = new_bmp_name;
+        bitmapDialogNewBmpName = newBmpName;
     };
     bitmapDialogPicker.needsFilterBoxFocus = true;
     
@@ -1619,19 +1619,19 @@ void Editor::openBitmapDialog(
  *
  * @param title Title of the dialog window.
  * This is normally a request to the user, like "Pick an area.".
- * @param process_callback A function to call when it's time to process
+ * @param processCallback A function to call when it's time to process
  * the contents inside the dialog.
  */
 void Editor::openDialog(
     const string &title,
-    const std::function<void()> &process_callback
+    const std::function<void()> &processCallback
 ) {
-    Dialog* new_dialog = new Dialog();
+    Dialog* newDialog = new Dialog();
     
-    new_dialog->title = title;
-    new_dialog->processCallback = process_callback;
+    newDialog->title = title;
+    newDialog->processCallback = processCallback;
     
-    dialogs.push_back(new_dialog);
+    dialogs.push_back(newDialog);
 }
 
 
@@ -1670,16 +1670,16 @@ void Editor::openInputPopup(const char* label) {
  *
  * @param title Message box title.
  * @param message Text message.
- * @param close_callback Code to run when the dialog is closed, if any.
+ * @param closeCallback Code to run when the dialog is closed, if any.
  */
 void Editor::openMessageDialog(
     const string &title, const string &message,
-    const std::function<void()> &close_callback
+    const std::function<void()> &closeCallback
 ) {
     messageDialogMessage = message;
     openDialog(title, std::bind(&Editor::processGuiMessageDialog, this));
     dialogs.back()->customSize = Point(400, 0);
-    dialogs.back()->closeCallback = close_callback;
+    dialogs.back()->closeCallback = closeCallback;
 }
 
 
@@ -1702,17 +1702,17 @@ void Editor::openNewPackDialog() {
  * @param title Title of the picker's dialog window.
  * This is normally a request to the user, like "Pick an area.".
  * @param items List of items to populate the picker with.
- * @param pick_callback A function to call when the user clicks an item
+ * @param pickCallback A function to call when the user clicks an item
  * or enters a new one.
  * This function's first argument is the name of the item.
  * Its second argument is the top-level category of the item, or empty string.
  * Its third argument is the second-level category of the item, or empty string.
  * Its fourth argument is a void pointer to any custom info, or nullptr.
  * Its fifth argument is whether it's a new item or not.
- * @param list_header If not-empty, display this text above the list.
- * @param can_make_new If true, the user can create a new element,
+ * @param listHeader If not-empty, display this text above the list.
+ * @param canMakeNew If true, the user can create a new element,
  * by writing its name on the textbox, and pressing the "+" button.
- * @param use_monospace Whether the items should use a monospace font.
+ * @param useMonospace Whether the items should use a monospace font.
  * @param filter Filter of names. Only items that match this will appear.
  */
 void Editor::openPickerDialog(
@@ -1720,31 +1720,31 @@ void Editor::openPickerDialog(
     const vector<PickerItem> &items,
     const std::function <void(
         const string &, const string &, const string &, void*, bool
-    )> &pick_callback,
-    const string &list_header,
-    bool can_make_new,
-    bool use_monospace,
+    )> &pickCallback,
+    const string &listHeader,
+    bool canMakeNew,
+    bool useMonospace,
     const string &filter
 ) {
-    Picker* new_picker = new Picker(this);
+    Picker* newPicker = new Picker(this);
     
-    new_picker->items = items;
-    new_picker->listHeader = list_header;
-    new_picker->pickCallback = pick_callback;
-    new_picker->canMakeNew = can_make_new;
-    new_picker->useMonospace = use_monospace;
-    new_picker->filter = filter;
+    newPicker->items = items;
+    newPicker->listHeader = listHeader;
+    newPicker->pickCallback = pickCallback;
+    newPicker->canMakeNew = canMakeNew;
+    newPicker->useMonospace = useMonospace;
+    newPicker->filter = filter;
     
-    Dialog* new_dialog = new Dialog();
-    dialogs.push_back(new_dialog);
+    Dialog* newDialog = new Dialog();
+    dialogs.push_back(newDialog);
     
-    new_dialog->title = title;
-    new_dialog->processCallback =
-        std::bind(&Editor::Picker::process, new_picker);
-    new_dialog->closeCallback = [new_picker] () {
-        delete new_picker;
+    newDialog->title = title;
+    newDialog->processCallback =
+        std::bind(&Editor::Picker::process, newPicker);
+    newDialog->closeCallback = [newPicker] () {
+        delete newPicker;
     };
-    new_picker->dialogPtr = new_dialog;
+    newPicker->dialogPtr = newDialog;
 }
 
 
@@ -1788,13 +1788,13 @@ bool Editor::popup(const char* label, ImGuiWindowFlags flags) {
 void Editor::processDialogs() {
     //Delete closed ones.
     for(size_t d = 0; d < dialogs.size();) {
-        Dialog* d_ptr = dialogs[d];
+        Dialog* dPtr = dialogs[d];
         
-        if(!d_ptr->isOpen) {
-            if(d_ptr->closeCallback) {
-                d_ptr->closeCallback();
+        if(!dPtr->isOpen) {
+            if(dPtr->closeCallback) {
+                dPtr->closeCallback();
             }
-            delete d_ptr;
+            delete dPtr;
             dialogs.erase(dialogs.begin() + d);
         } else {
             d++;
@@ -1851,14 +1851,14 @@ void Editor::processGuiBaseContentWarningDialog() {
  * @brief Processes the bitmap picker dialog for this frame.
  */
 void Editor::processGuiBitmapDialog() {
-    static bool filter_with_recommended_folder = true;
+    static bool filterWithRecommendedFolder = true;
     
     //Fill the picker's items.
     bitmapDialogPicker.items.clear();
     for(auto &b : game.content.bitmaps.manifests) {
         if(
             !bitmapDialogRecommendedFolder.empty() &&
-            filter_with_recommended_folder
+            filterWithRecommendedFolder
         ) {
             vector<string> parts = split(b.first, "/");
             string folder = parts.size() == 1 ? "." : parts[0];
@@ -1908,16 +1908,16 @@ void Editor::processGuiBitmapDialog() {
     }
     
     //Recommended folder text.
-    string folder_str =
+    string folderStr =
         bitmapDialogRecommendedFolder == "." ?
         "(root)" : bitmapDialogRecommendedFolder;
     ImGui::Spacer();
-    ImGui::Text("Recommended folder: %s", folder_str.c_str());
+    ImGui::Text("Recommended folder: %s", folderStr.c_str());
     
     //Recommended folder only checkbox.
     if(!bitmapDialogRecommendedFolder.empty()) {
         ImGui::Checkbox(
-            "That folder only", &filter_with_recommended_folder
+            "That folder only", &filterWithRecommendedFolder
         );
         setTooltip(
             "If checked, only images that belong to the\n"
@@ -1931,11 +1931,11 @@ void Editor::processGuiBitmapDialog() {
     
     //Preview image.
     if(bitmapDialogCurBmpPtr) {
-        const int thumb_max_size = 300;
+        const int thumbMaxSize = 300;
         Point size =
             resizeToBoxKeepingAspectRatio(
                 getBitmapDimensions(bitmapDialogCurBmpPtr),
-                Point(thumb_max_size)
+                Point(thumbMaxSize)
             );
         ImGui::Image(bitmapDialogCurBmpPtr, size);
     }
@@ -2055,28 +2055,28 @@ void Editor::processGuiEditorStyle() {
 /**
  * @brief Processes the Dear ImGui widgets that let users select a hazard.
  *
- * @param selected_hazard_iname Internal name of the currently selected hazard.
+ * @param selectedHazardIname Internal name of the currently selected hazard.
  * @return Whether the hazard was changed.
  */
-bool Editor::processGuiHazardManagementWidgets(string &selected_hazard_iname) {
+bool Editor::processGuiHazardManagementWidgets(string &selectedHazardIname) {
     //Hazard combo.
-    int selected_hazard_idx = -1;
-    vector<string> all_hazard_inames = {""};
-    vector<string> all_hazard_labels = {NONE_OPTION + "##(none)"};
+    int selectedHazardIdx = -1;
+    vector<string> allHazardInames = {""};
+    vector<string> allHazardLabels = {NONE_OPTION + "##(none)"};
     for(auto &h : game.content.hazards.list) {
-        all_hazard_inames.push_back(h.first);
-        all_hazard_labels.push_back(h.second.name + "##" + h.first);
-        if(selected_hazard_iname == h.first) {
-            selected_hazard_idx = all_hazard_labels.size() - 1;
+        allHazardInames.push_back(h.first);
+        allHazardLabels.push_back(h.second.name + "##" + h.first);
+        if(selectedHazardIname == h.first) {
+            selectedHazardIdx = allHazardLabels.size() - 1;
         }
     }
     
-    if(selected_hazard_idx == -1) selected_hazard_idx = 0;
+    if(selectedHazardIdx == -1) selectedHazardIdx = 0;
     
     bool result =
-        ImGui::Combo("Hazard", &selected_hazard_idx, all_hazard_labels);
+        ImGui::Combo("Hazard", &selectedHazardIdx, allHazardLabels);
         
-    selected_hazard_iname = all_hazard_inames[selected_hazard_idx];
+    selectedHazardIname = allHazardInames[selectedHazardIdx];
     
     return result;
 }
@@ -2087,12 +2087,12 @@ bool Editor::processGuiHazardManagementWidgets(string &selected_hazard_iname) {
  */
 void Editor::processGuiHelpDialog() {
     //Text.
-    static int text_width = 0;
-    if(text_width != 0) {
-        ImGui::SetupCentering(text_width);
+    static int textWidth = 0;
+    if(textWidth != 0) {
+        ImGui::SetupCentering(textWidth);
     }
     ImGui::TextWrapped("%s", helpDialogMessage.c_str());
-    text_width = ImGui::GetItemRectSize().x;
+    textWidth = ImGui::GetItemRectSize().x;
     
     //Open manual button.
     ImGui::Spacer();
@@ -2112,25 +2112,25 @@ void Editor::processGuiHelpDialog() {
 /**
  * @brief Processes the widgets that show the editor's history.
  *
- * @param name_display_callback When an entry's name needs to be displayed as
+ * @param nameDisplayCallback When an entry's name needs to be displayed as
  * button text, this function gets called with the entry name as an argument,
  * to determine what the final button text will be.
- * @param pick_callback Code to run when an entry is picked.
- * @param tooltip_callback Code to obtain an entry's tooltip with, if any.
+ * @param pickCallback Code to run when an entry is picked.
+ * @param tooltipCallback Code to obtain an entry's tooltip with, if any.
  */
 void Editor::processGuiHistory(
     const vector<pair<string, string> > &history,
-    const std::function<string(const string &)> &name_display_callback,
-    const std::function<void(const string &)> &pick_callback,
-    const std::function<string(const string &)> &tooltip_callback
+    const std::function<string(const string &)> &nameDisplayCallback,
+    const std::function<void(const string &)> &pickCallback,
+    const std::function<string(const string &)> &tooltipCallback
 ) {
     if(saveableTreeNode("load", "History")) {
     
         if(!history.empty() && !history[0].first.empty()) {
         
-            size_t n_filled_entries = 0;
+            size_t nFilledEntries = 0;
             for(size_t h = 0; h < history.size(); h++) {
-                if(!history[h].first.empty()) n_filled_entries++;
+                if(!history[h].first.empty()) nFilledEntries++;
             }
             
             for(size_t h = 0; h < history.size(); h++) {
@@ -2139,19 +2139,19 @@ void Editor::processGuiHistory(
                 
                 string name = history[h].second;
                 if(name.empty()) name = history[h].first;
-                name = name_display_callback(name);
+                name = nameDisplayCallback(name);
                 name = trimWithEllipsis(name, 16);
                 
                 //History entry button.
-                const ImVec2 button_size(120, 24);
-                if(ImGui::Button((name + "##" + i2s(h)).c_str(), button_size)) {
-                    pick_callback(path);
+                const ImVec2 buttonSize(120, 24);
+                if(ImGui::Button((name + "##" + i2s(h)).c_str(), buttonSize)) {
+                    pickCallback(path);
                 }
-                if(tooltip_callback) {
-                    setTooltip(tooltip_callback(path));
+                if(tooltipCallback) {
+                    setTooltip(tooltipCallback(path));
                 }
                 ImGui::SetupButtonWrapping(
-                    button_size.x, (int) (h + 1), (int) n_filled_entries
+                    buttonSize.x, (int) (h + 1), (int) nFilledEntries
                 );
             }
             
@@ -2175,11 +2175,11 @@ void Editor::processGuiHistory(
  * @param label Name of the popup.
  * @param prompt What to prompt to the user. e.g.: "New name:"
  * @param text Pointer to the starting text, as well as the user's final text.
- * @param use_monospace Whether to use a monospace font.
+ * @param useMonospace Whether to use a monospace font.
  * @return Whether the user pressed Return or the Ok button.
  */
 bool Editor::processGuiInputPopup(
-    const char* label, const char* prompt, string* text, bool use_monospace
+    const char* label, const char* prompt, string* text, bool useMonospace
 ) {
     bool ret = false;
     if(ImGui::BeginPopup(label)) {
@@ -2188,23 +2188,23 @@ bool Editor::processGuiInputPopup(
         }
         ImGui::Text("%s", prompt);
         ImGui::FocusOnInputText(needsInputPopupTextFocus);
-        bool hit_enter = false;
-        if(use_monospace) {
-            hit_enter =
+        bool hitEnter = false;
+        if(useMonospace) {
+            hitEnter =
                 monoInputText(
                     "##inputPopupText", text,
                     ImGuiInputTextFlags_EnterReturnsTrue |
                     ImGuiInputTextFlags_AutoSelectAll
                 );
         } else {
-            hit_enter =
+            hitEnter =
                 ImGui::InputText(
                     "##inputPopupText", text,
                     ImGuiInputTextFlags_EnterReturnsTrue |
                     ImGuiInputTextFlags_AutoSelectAll
                 );
         }
-        if(hit_enter) {
+        if(hitEnter) {
             ret = true;
             ImGui::CloseCurrentPopup();
         }
@@ -2227,12 +2227,12 @@ bool Editor::processGuiInputPopup(
  */
 void Editor::processGuiMessageDialog() {
     //Text.
-    static int text_width = 0;
-    if(text_width != 0) {
-        ImGui::SetupCentering(text_width);
+    static int textWidth = 0;
+    if(textWidth != 0) {
+        ImGui::SetupCentering(textWidth);
     }
     ImGui::TextWrapped("%s", messageDialogMessage.c_str());
-    text_width = ImGui::GetItemRectSize().x;
+    textWidth = ImGui::GetItemRectSize().x;
     
     //Ok button.
     ImGui::Spacer();
@@ -2247,34 +2247,34 @@ void Editor::processGuiMessageDialog() {
  * @brief Processes the category and type widgets that allow a user to
  * select a mob type.
  *
- * @param custom_cat_name Pointer to the custom category name reflected
+ * @param customCatName Pointer to the custom category name reflected
  * in the combo box.
  * @param type Pointer to the type reflected in the combo box.
- * @param pack_filter If not empty, only show mob types from this pack.
+ * @param packFilter If not empty, only show mob types from this pack.
  * @return Whether the user changed the category/type.
  */
 bool Editor::processGuiMobTypeWidgets(
-    string* custom_cat_name, MobType** type, const string &pack_filter
+    string* customCatName, MobType** type, const string &packFilter
 ) {
     bool result = false;
     
     //These are used to communicate with the picker dialog, since that one
     //is processed somewhere else entirely.
-    static bool internal_changed_by_dialog = false;
-    static string internal_custom_cat_name;
-    static MobType* internal_mob_type = nullptr;
+    static bool internalChangedByDialog = false;
+    static string internalCustomCatName;
+    static MobType* internalMobType = nullptr;
     
-    if(internal_changed_by_dialog) {
+    if(internalChangedByDialog) {
         //Somewhere else in the code, the picker dialog changed these variables
         //to whatever the user picked. Let's use them now, instead of the
         //ones passed by the function's arguments.
         result = true;
-        internal_changed_by_dialog = false;
+        internalChangedByDialog = false;
     } else {
         //The picker dialog hasn't changed these variables. Just use
         //whatever the function's arguments state.
-        internal_custom_cat_name = *custom_cat_name;
-        internal_mob_type = *type;
+        internalCustomCatName = *customCatName;
+        internalMobType = *type;
     }
     
     //Column setup.
@@ -2283,57 +2283,57 @@ bool Editor::processGuiMobTypeWidgets(
     
     //Search button.
     ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(14.0f, 14.0f));
-    bool search_button_pressed =
+    bool searchButtonPressed =
         ImGui::ImageButton(
             "searchButton", editorIcons[EDITOR_ICON_SEARCH],
             Point(EDITOR::ICON_BMP_SIZE)
         );
     ImGui::PopStyleVar();
     
-    vector<vector<MobType*> > final_list;
-    if(!pack_filter.empty()) {
+    vector<vector<MobType*> > finalList;
+    if(!packFilter.empty()) {
         for(size_t c = 0; c < customCatTypes.size(); c++) {
-            final_list.push_back(vector<MobType*>());
+            finalList.push_back(vector<MobType*>());
             for(size_t n = 0; n < customCatTypes[c].size(); n++) {
-                MobType* mt_ptr = customCatTypes[c][n];
-                if(mt_ptr->manifest && mt_ptr->manifest->pack == pack_filter) {
-                    final_list[c].push_back(mt_ptr);
+                MobType* mtPtr = customCatTypes[c][n];
+                if(mtPtr->manifest && mtPtr->manifest->pack == packFilter) {
+                    finalList[c].push_back(mtPtr);
                 }
             }
         }
     } else {
-        final_list = customCatTypes;
+        finalList = customCatTypes;
     }
     
-    if(search_button_pressed) {
+    if(searchButtonPressed) {
         vector<PickerItem> items;
-        for(size_t c = 0; c < final_list.size(); c++) {
-            for(size_t n = 0; n < final_list[c].size(); n++) {
-                MobType* mt_ptr = final_list[c][n];
+        for(size_t c = 0; c < finalList.size(); c++) {
+            for(size_t n = 0; n < finalList[c].size(); n++) {
+                MobType* mtPtr = finalList[c][n];
                 items.push_back(
                     PickerItem(
-                        mt_ptr->name, mt_ptr->customCategoryName
+                        mtPtr->name, mtPtr->customCategoryName
                     )
                 );
             }
         }
         openPickerDialog(
             "Pick an object type", items,
-            [this, final_list] (
+            [this, finalList] (
                 const string &n, const string &tc, const string &sc, void*, bool
         ) {
             //For clarity, this code will NOT be run within the context
             //of editor::processGuiMobTypeWidgets, but will instead
             //be run wherever dialogs are processed.
-            internal_changed_by_dialog = true;
-            internal_custom_cat_name = tc;
-            internal_mob_type = nullptr;
-            size_t custom_cat_idx = customCatNameIdxs[tc];
+            internalChangedByDialog = true;
+            internalCustomCatName = tc;
+            internalMobType = nullptr;
+            size_t customCatIdx = customCatNameIdxs[tc];
             const vector<MobType*> &types =
-                final_list[custom_cat_idx];
+                finalList[customCatIdx];
             for(size_t t = 0; t < types.size(); t++) {
                 if(types[t]->name == n) {
-                    internal_mob_type = types[t];
+                    internalMobType = types[t];
                     return;
                 }
             }
@@ -2349,48 +2349,48 @@ bool Editor::processGuiMobTypeWidgets(
     
     //Object category combobox.
     vector<string> categories;
-    int selected_category_idx = -1;
-    for(size_t c = 0; c < final_list.size(); c++) {
+    int selectedCategoryIdx = -1;
+    for(size_t c = 0; c < finalList.size(); c++) {
         string cn =
             customCatTypes[c].front()->customCategoryName;
         categories.push_back(cn);
-        if(cn == internal_custom_cat_name) {
-            selected_category_idx = (int) c;
+        if(cn == internalCustomCatName) {
+            selectedCategoryIdx = (int) c;
         }
     }
     
-    if(ImGui::Combo("Category", &selected_category_idx, categories, 15)) {
+    if(ImGui::Combo("Category", &selectedCategoryIdx, categories, 15)) {
         result = true;
-        internal_custom_cat_name = categories[selected_category_idx];
-        internal_mob_type =
-            final_list[selected_category_idx].empty() ?
+        internalCustomCatName = categories[selectedCategoryIdx];
+        internalMobType =
+            finalList[selectedCategoryIdx].empty() ?
             nullptr :
-            final_list[selected_category_idx][0];
+            finalList[selectedCategoryIdx][0];
     }
     setTooltip(
         "What category this object belongs to: a Pikmin, a leader, etc."
     );
     
-    if(!internal_custom_cat_name.empty()) {
+    if(!internalCustomCatName.empty()) {
     
         //Object type combobox.
-        vector<string> type_names;
-        size_t custom_cat_idx = customCatNameIdxs[internal_custom_cat_name];
-        const vector<MobType*> &types = final_list[custom_cat_idx];
+        vector<string> typeNames;
+        size_t customCatIdx = customCatNameIdxs[internalCustomCatName];
+        const vector<MobType*> &types = finalList[customCatIdx];
         for(size_t t = 0; t < types.size(); t++) {
-            MobType* t_ptr = types[t];
-            type_names.push_back(t_ptr->name);
+            MobType* tPtr = types[t];
+            typeNames.push_back(tPtr->name);
         }
         
-        string selected_type_name;
-        if(internal_mob_type) {
-            selected_type_name = internal_mob_type->name;
+        string selectedTypeName;
+        if(internalMobType) {
+            selectedTypeName = internalMobType->name;
         }
-        if(ImGui::Combo("Type", &selected_type_name, type_names, 15)) {
+        if(ImGui::Combo("Type", &selectedTypeName, typeNames, 15)) {
             result = true;
             for(size_t t = 0; t < types.size(); t++) {
-                if(types[t]->name == selected_type_name) {
-                    internal_mob_type = types[t];
+                if(types[t]->name == selectedTypeName) {
+                    internalMobType = types[t];
                     break;
                 }
             }
@@ -2403,8 +2403,8 @@ bool Editor::processGuiMobTypeWidgets(
     ImGui::Columns();
     
     if(result) {
-        *custom_cat_name = internal_custom_cat_name;
-        *type = internal_mob_type;
+        *customCatName = internalCustomCatName;
+        *type = internalMobType;
     }
     
     return result;
@@ -2449,22 +2449,22 @@ bool Editor::processGuiNewDialogPackWidgets(string* pack) {
  * @brief Processes the dialog for creating a new pack.
  */
 void Editor::processGuiNewPackDialog() {
-    static string internal_name = "my_pack";
+    static string internalName = "my_pack";
     static string name = "My pack!";
     static string description;
     static string maker;
     string problem;
-    bool hit_create_button = false;
+    bool hitCreateButton = false;
     
     //Internal name input.
     ImGui::FocusOnInputText(needsNewPackTextFocus);
     if(
         monoInputText(
-            "Internal name", &internal_name,
+            "Internal name", &internalName,
             ImGuiInputTextFlags_EnterReturnsTrue
         )
     ) {
-        hit_create_button = true;
+        hitCreateButton = true;
     }
     setTooltip(
         "Internal name of the new pack.\n"
@@ -2479,7 +2479,7 @@ void Editor::processGuiNewPackDialog() {
             ImGuiInputTextFlags_EnterReturnsTrue
         )
     ) {
-        hit_create_button = true;
+        hitCreateButton = true;
     }
     setTooltip("Proper name of the new pack.");
     
@@ -2490,7 +2490,7 @@ void Editor::processGuiNewPackDialog() {
             ImGuiInputTextFlags_EnterReturnsTrue
         )
     ) {
-        hit_create_button = true;
+        hitCreateButton = true;
     }
     setTooltip("A description of the pack.");
     
@@ -2501,7 +2501,7 @@ void Editor::processGuiNewPackDialog() {
             ImGuiInputTextFlags_EnterReturnsTrue
         )
     ) {
-        hit_create_button = true;
+        hitCreateButton = true;
     }
     setTooltip("Who made the pack. So really, type your name or nickname.");
     
@@ -2515,13 +2515,13 @@ void Editor::processGuiNewPackDialog() {
     ImGui::TextWrapped("%s", explanation.c_str());
     
     //Path text.
-    string path_to_show =
-        internal_name.empty() ?
+    string pathToShow =
+        internalName.empty() ?
         "" :
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
-        internal_name + "/" +
+        internalName + "/" +
         FILE_NAMES::PACK_DATA;
-    monoText("%s", path_to_show.c_str());
+    monoText("%s", pathToShow.c_str());
     
     //Open manual button.
     if(ImGui::Button("Open manual")) {
@@ -2529,15 +2529,15 @@ void Editor::processGuiNewPackDialog() {
     }
     
     //Check if everything's ok.
-    if(internal_name.empty()) {
+    if(internalName.empty()) {
         problem = "You have to type an internal name first!";
-    } else if(!isInternalNameGood(internal_name)) {
+    } else if(!isInternalNameGood(internalName)) {
         problem =
             "The internal name should only have lowercase letters,\n"
             "numbers, and underscores!";
     } else {
         for(const auto &p : game.content.packs.manifestsWithBase) {
-            if(internal_name == p) {
+            if(internalName == p) {
                 problem = "There is already a pack with that internal name!";
                 break;
             }
@@ -2554,7 +2554,7 @@ void Editor::processGuiNewPackDialog() {
         ImGui::BeginDisabled();
     }
     if(ImGui::Button("Create pack", ImVec2(100, 40))) {
-        hit_create_button = true;
+        hitCreateButton = true;
     }
     if(!problem.empty()) {
         ImGui::EndDisabled();
@@ -2564,18 +2564,18 @@ void Editor::processGuiNewPackDialog() {
     );
     
     //Creation logic.
-    if(hit_create_button) {
+    if(hitCreateButton) {
         if(!problem.empty()) return;
         game.content.createPack(
-            internal_name, name, description, maker
+            internalName, name, description, maker
         );
         for(size_t p = 0; p < game.content.packs.manifestsWithBase.size(); p++) {
-            if(game.content.packs.manifestsWithBase[p] == internal_name) {
+            if(game.content.packs.manifestsWithBase[p] == internalName) {
                 newContentDialogPackIdx = p;
                 break;
             }
         }
-        internal_name.clear();
+        internalName.clear();
         name.clear();
         description.clear();
         maker.clear();
@@ -2590,79 +2590,79 @@ void Editor::processGuiNewPackDialog() {
  *
  * @param label Label for the widgets.
  * @param size Size variable to alter.
- * @param v_speed Variable change speed. Same value you'd pass to
+ * @param vSpeed Variable change speed. Same value you'd pass to
  * ImGui::DragFloat2. 1.0f for default.
- * @param keep_aspect_ratio If true, changing one will change the other
+ * @param keepAspectRatio If true, changing one will change the other
  * in the same ratio.
- * @param keep_area If true, changing one will change the other
+ * @param keepArea If true, changing one will change the other
  * such that the total area is preserved.
- * @param min_size Minimum value that either width or height is allowed
+ * @param minSize Minimum value that either width or height is allowed
  * to have. Use -FLT_MAX for none.
  * @return Whether the user changed one of the values.
  */
 bool Editor::processGuiSizeWidgets(
-    const char* label, Point &size, float v_speed,
-    bool keep_aspect_ratio,
-    bool keep_area,
-    float min_size
+    const char* label, Point &size, float vSpeed,
+    bool keepAspectRatio,
+    bool keepArea,
+    float minSize
 ) {
     bool ret = false;
-    Point new_size = size;
+    Point newSize = size;
     if(
         ImGui::DragFloat2(
-            label, (float*) &new_size, v_speed, min_size, FLT_MAX
+            label, (float*) &newSize, vSpeed, minSize, FLT_MAX
         )
     ) {
     
-        bool free_resize = !keep_aspect_ratio && !keep_area;
-        bool values_valid =
+        bool freeResize = !keepAspectRatio && !keepArea;
+        bool valuesValid =
             size.x != 0.0f && size.y != 0.0f &&
-            new_size.x != 0.0f && new_size.y != 0.0f;
+            newSize.x != 0.0f && newSize.y != 0.0f;
             
-        if(free_resize || !values_valid) {
+        if(freeResize || !valuesValid) {
             //Just change them, forget about keeping the aspect ratio or area.
-            new_size.x = std::max(min_size, new_size.x);
-            new_size.y = std::max(min_size, new_size.y);
+            newSize.x = std::max(minSize, newSize.x);
+            newSize.y = std::max(minSize, newSize.y);
             
-        } else if(keep_aspect_ratio) {
+        } else if(keepAspectRatio) {
             //Keep the aspect ratio.
             float ratio = size.x / size.y;
-            if(new_size.x != size.x) {
+            if(newSize.x != size.x) {
                 //Must adjust Y.
-                if(min_size != -FLT_MAX) {
-                    new_size.x = std::max(min_size * ratio, new_size.x);
-                    new_size.x = std::max(min_size, new_size.x);
+                if(minSize != -FLT_MAX) {
+                    newSize.x = std::max(minSize * ratio, newSize.x);
+                    newSize.x = std::max(minSize, newSize.x);
                 }
-                new_size.y = new_size.x / ratio;
+                newSize.y = newSize.x / ratio;
             } else {
                 //Must adjust X.
-                if(min_size != -FLT_MAX) {
-                    new_size.y = std::max(min_size / ratio, new_size.y);
-                    new_size.y = std::max(min_size, new_size.y);
+                if(minSize != -FLT_MAX) {
+                    newSize.y = std::max(minSize / ratio, newSize.y);
+                    newSize.y = std::max(minSize, newSize.y);
                 }
-                new_size.x = new_size.y * ratio;
+                newSize.x = newSize.y * ratio;
             }
             
         } else {
             //Keep the area.
             double area = (double) size.x * (double) size.y;
-            if(new_size.x != size.x) {
+            if(newSize.x != size.x) {
                 //Must adjust Y.
-                if(min_size != -FLT_MAX) {
-                    new_size.x = std::max(min_size, new_size.x);
+                if(minSize != -FLT_MAX) {
+                    newSize.x = std::max(minSize, newSize.x);
                 }
-                new_size.y = area / new_size.x;
+                newSize.y = area / newSize.x;
             } else {
                 //Must adjust X.
-                if(min_size != -FLT_MAX) {
-                    new_size.y = std::max(min_size, new_size.y);
+                if(minSize != -FLT_MAX) {
+                    newSize.y = std::max(minSize, newSize.y);
                 }
-                new_size.x = area / new_size.y;
+                newSize.x = area / newSize.y;
             }
             
         }
         
-        size = new_size;
+        size = newSize;
         ret = true;
     }
     
@@ -2678,29 +2678,29 @@ bool Editor::processGuiSizeWidgets(
  * and coloring the text in case it's an error that needs to be flashed red.
  */
 void Editor::processGuiStatusBarText() {
-    float error_flash_time_ratio = opErrorFlashTimer.getRatioLeft();
-    if(error_flash_time_ratio > 0.0f) {
-        ImVec4 normal_color_v = ImGui::GetStyle().Colors[ImGuiCol_Text];
-        ALLEGRO_COLOR normal_color;
-        normal_color.r = normal_color_v.x;
-        normal_color.g = normal_color_v.y;
-        normal_color.b = normal_color_v.z;
-        normal_color.a = normal_color_v.w;
-        ALLEGRO_COLOR error_flash_color =
+    float errorFlashTimeRatio = opErrorFlashTimer.getRatioLeft();
+    if(errorFlashTimeRatio > 0.0f) {
+        ImVec4 normalColorV = ImGui::GetStyle().Colors[ImGuiCol_Text];
+        ALLEGRO_COLOR normalColor;
+        normalColor.r = normalColorV.x;
+        normalColor.g = normalColorV.y;
+        normalColor.b = normalColorV.z;
+        normalColor.a = normalColorV.w;
+        ALLEGRO_COLOR errorFlashColor =
             interpolateColor(
-                error_flash_time_ratio,
+                errorFlashTimeRatio,
                 0.0f, 1.0f,
-                normal_color, al_map_rgb(255, 0, 0)
+                normalColor, al_map_rgb(255, 0, 0)
             );
-        ImVec4 error_flash_color_v;
-        error_flash_color_v.x = error_flash_color.r;
-        error_flash_color_v.y = error_flash_color.g;
-        error_flash_color_v.z = error_flash_color.b;
-        error_flash_color_v.w = error_flash_color.a;
-        ImGui::PushStyleColor(ImGuiCol_Text, error_flash_color_v);
+        ImVec4 errorFlashColorV;
+        errorFlashColorV.x = errorFlashColor.r;
+        errorFlashColorV.y = errorFlashColor.g;
+        errorFlashColorV.z = errorFlashColor.b;
+        errorFlashColorV.w = errorFlashColor.a;
+        ImGui::PushStyleColor(ImGuiCol_Text, errorFlashColorV);
     }
     ImGui::Text("%s", (statusText.empty() ? "Ready." : statusText.c_str()));
-    if(error_flash_time_ratio) {
+    if(errorFlashTimeRatio) {
         ImGui::PopStyleColor();
     }
 }
@@ -2712,10 +2712,10 @@ void Editor::processGuiStatusBarText() {
  */
 void Editor::processGuiUnsavedChangesDialog() {
     //Explanation 1 text.
-    size_t nr_unsaved_changes = changesMgr.getUnsavedChanges();
-    string explanation1_str =
+    size_t nrUnsavedChanges = changesMgr.getUnsavedChanges();
+    string explanation1Str =
         "You have " +
-        amountStr((int) nr_unsaved_changes, "unsaved change") +
+        amountStr((int) nrUnsavedChanges, "unsaved change") +
         ", made in the last " +
         timeToStr3(
             changesMgr.getUnsavedTimeDelta(),
@@ -2724,15 +2724,15 @@ void Editor::processGuiUnsavedChangesDialog() {
             TIME_TO_STR_FLAG_NO_LEADING_ZERO_PORTIONS
         ) +
         ".";
-    ImGui::SetupCentering(ImGui::CalcTextSize(explanation1_str.c_str()).x);
-    ImGui::Text("%s", explanation1_str.c_str());
+    ImGui::SetupCentering(ImGui::CalcTextSize(explanation1Str.c_str()).x);
+    ImGui::Text("%s", explanation1Str.c_str());
     
     //Explanation 3 text.
-    string explanation2_str =
+    string explanation2Str =
         "Do you want to save before " +
         changesMgr.getUnsavedWarningActionLong() + "?";
-    ImGui::SetupCentering(ImGui::CalcTextSize(explanation2_str.c_str()).x);
-    ImGui::Text("%s", explanation2_str.c_str());
+    ImGui::SetupCentering(ImGui::CalcTextSize(explanation2Str.c_str()).x);
+    ImGui::Text("%s", explanation2Str.c_str());
     
     //Cancel button.
     ImGui::SetupCentering(180 + 180 + 180 + 20);
@@ -2745,12 +2745,12 @@ void Editor::processGuiUnsavedChangesDialog() {
     ImGui::SameLine(0.0f, 10);
     if(ImGui::Button("Save", ImVec2(180, 30))) {
         closeTopDialog();
-        const std::function<bool()> &save_callback =
+        const std::function<bool()> &saveCallback =
             changesMgr.getUnsavedWarningSaveCallback();
-        const std::function<void()> &action_callback =
+        const std::function<void()> &actionCallback =
             changesMgr.getUnsavedWarningActionCallback();
-        if(save_callback()) {
-            action_callback();
+        if(saveCallback()) {
+            actionCallback();
         }
     }
     setTooltip(
@@ -2763,15 +2763,15 @@ void Editor::processGuiUnsavedChangesDialog() {
     ImGui::SameLine(0.0f, 10);
     if(ImGui::Button("Don't save", ImVec2(180, 30))) {
         closeTopDialog();
-        const std::function<void()> action_callback =
+        const std::function<void()> actionCallback =
             changesMgr.getUnsavedWarningActionCallback();
-        action_callback();
+        actionCallback();
     }
-    string dont_save_tooltip =
+    string dontSaveTooltip =
         changesMgr.getUnsavedWarningActionShort() +
         " without saving.";
-    dont_save_tooltip[0] = toupper(dont_save_tooltip[0]);
-    setTooltip(dont_save_tooltip, "Ctrl + D");
+    dontSaveTooltip[0] = toupper(dontSaveTooltip[0]);
+    setTooltip(dontSaveTooltip, "Ctrl + D");
 }
 
 
@@ -2780,7 +2780,7 @@ void Editor::processGuiUnsavedChangesDialog() {
  * closes it based on the user's preferences.
  *
  * It also saves the user's preferences as they open and close the node.
- * In order for these preferences to be saved onto disk, save_options must
+ * In order for these preferences to be saved onto disk, saveOptions must
  * be called.
  *
  * @param category Category this node belongs to.
@@ -2790,13 +2790,13 @@ void Editor::processGuiUnsavedChangesDialog() {
  * @return Whether the node is open.
  */
 bool Editor::saveableTreeNode(const string &category, const string &label) {
-    string node_name = getName() + "/" + category + "/" + label;
-    ImGui::SetNextItemOpen(game.options.editors.openNodes[node_name]);
+    string nodeName = getName() + "/" + category + "/" + label;
+    ImGui::SetNextItemOpen(game.options.editors.openNodes[nodeName]);
     ImGui::PushFont(game.sysContent.fntDearImGuiHeader);
-    bool is_open = ImGui::TreeNode(label.c_str());
+    bool isOpen = ImGui::TreeNode(label.c_str());
     ImGui::PopFont();
-    game.options.editors.openNodes[node_name] = is_open;
-    return is_open;
+    game.options.editors.openNodes[nodeName] = isOpen;
+    return isOpen;
 }
 
 
@@ -2821,12 +2821,12 @@ void Editor::setStatus(const string &text, bool error) {
  *
  * @param explanation Text explaining the widget.
  * @param shortcut If the widget has a shortcut key, specify its name here.
- * @param widget_explanation If the way the widget works needs to be explained,
+ * @param widgetExplanation If the way the widget works needs to be explained,
  * specify the explanation type here.
  */
 void Editor::setTooltip(
     const string &explanation, const string &shortcut,
-    const WIDGET_EXPLANATION widget_explanation
+    const WIDGET_EXPLANATION widgetExplanation
 ) {
     if(!game.options.editors.showTooltips) {
         return;
@@ -2848,30 +2848,30 @@ void Editor::setTooltip(
         
             ImGui::Text("%s", explanation.c_str());
             
-            string widget_explanation_text;
-            switch(widget_explanation) {
+            string widgetExplanationText;
+            switch(widgetExplanation) {
             case WIDGET_EXPLANATION_NONE: {
                 break;
             }
             case WIDGET_EXPLANATION_DRAG: {
-                widget_explanation_text =
+                widgetExplanationText =
                     "Click and drag left or right to change.\n"
                     "Hold Alt or Shift to change speed.\n"
                     "Click once or Ctrl + click to write a value.";
                 break;
             }
             case WIDGET_EXPLANATION_SLIDER: {
-                widget_explanation_text =
+                widgetExplanationText =
                     "Click and/or drag left or right to change.\n"
                     "Ctrl + click to write a value.";
                 break;
             }
             }
             
-            if(!widget_explanation_text.empty()) {
+            if(!widgetExplanationText.empty()) {
                 ImGui::TextColored(
                     ImVec4(0.50f, 0.50f, 0.50f, 1.0f),
-                    "%s", widget_explanation_text.c_str()
+                    "%s", widgetExplanationText.c_str()
                 );
             }
             
@@ -2897,9 +2897,9 @@ void Editor::setTooltip(
  * @return The snapped point.
  */
 Point Editor::snapPointToAxis(const Point &p, const Point &anchor) {
-    float h_diff = fabs(p.x - anchor.x);
-    float v_diff = fabs(p.y - anchor.y);
-    if(h_diff > v_diff) {
+    float hDiff = fabs(p.x - anchor.x);
+    float vDiff = fabs(p.y - anchor.y);
+    if(hDiff > vDiff) {
         return Point(p.x, anchor.y);
     } else {
         return Point(anchor.x, p.y);
@@ -2911,14 +2911,14 @@ Point Editor::snapPointToAxis(const Point &p, const Point &anchor) {
  * @brief Snaps a point to the nearest grid intersection.
  *
  * @param p Point to snap.
- * @param grid_interval Current grid interval.
+ * @param gridInterval Current grid interval.
  * @return The snapped point.
  */
-Point Editor::snapPointToGrid(const Point &p, float grid_interval) {
+Point Editor::snapPointToGrid(const Point &p, float gridInterval) {
     return
         Point(
-            round(p.x / grid_interval) * grid_interval,
-            round(p.y / grid_interval) * grid_interval
+            round(p.x / gridInterval) * gridInterval,
+            round(p.y / gridInterval) * gridInterval
         );
 }
 
@@ -2951,7 +2951,7 @@ void Editor::updateHistory(
     vector<pair<string, string> > &history,
     const ContentManifest &manifest, const string &name
 ) {
-    string final_name = name.empty() ? manifest.internalName : name;
+    string finalName = name.empty() ? manifest.internalName : name;
     
     //First, check if it exists.
     size_t pos = INVALID;
@@ -2965,19 +2965,19 @@ void Editor::updateHistory(
     
     if(pos == 0) {
         //Already #1? Just update the name.
-        history[0].second = final_name;
+        history[0].second = finalName;
     } else if(pos == INVALID) {
         //If it doesn't exist, create it and add it to the top.
         history.insert(
             history.begin(),
-            make_pair(manifest.path, final_name)
+            make_pair(manifest.path, finalName)
         );
     } else {
         //Otherwise, remove it from its spot and bump it to the top.
         history.erase(history.begin() + pos);
         history.insert(
             history.begin(),
-            make_pair(manifest.path, final_name)
+            make_pair(manifest.path, finalName)
         );
     }
     
@@ -3142,14 +3142,14 @@ void Editor::updateStyle() {
  * @brief Zooms to the specified level, keeping the mouse cursor in
  * the same spot.
  *
- * @param new_zoom New zoom level.
+ * @param newZoom New zoom level.
  */
-void Editor::zoomWithCursor(float new_zoom) {
+void Editor::zoomWithCursor(float newZoom) {
     //Keep a backup of the old mouse coordinates.
-    Point old_mouse_pos = game.view.cursorWorldPos;
+    Point oldMousePos = game.view.cursorWorldPos;
     
     //Do the zoom.
-    game.view.cam.setZoom(std::clamp(new_zoom, zoomMinLevel, zoomMaxLevel));
+    game.view.cam.setZoom(std::clamp(newZoom, zoomMinLevel, zoomMaxLevel));
     game.view.updateTransformations();
     
     //Figure out where the mouse will be after the zoom.
@@ -3163,8 +3163,8 @@ void Editor::zoomWithCursor(float new_zoom) {
     //so that the cursor ends up where it was before.
     game.view.cam.setPos(
         Point(
-            game.view.cam.pos.x += (old_mouse_pos.x - game.view.cursorWorldPos.x),
-            game.view.cam.pos.y += (old_mouse_pos.y - game.view.cursorWorldPos.y)
+            game.view.cam.pos.x += (oldMousePos.x - game.view.cursorWorldPos.x),
+            game.view.cam.pos.y += (oldMousePos.y - game.view.cursorWorldPos.y)
         )
     );
     
@@ -3196,27 +3196,27 @@ Editor::ChangesManager::ChangesManager(Editor* ed) :
  *
  * @param pos Window coordinates to show the warning on.
  * If 0,0, then these will be set to the last processed widget's position.
- * @param action_long String representing the action the user is attempting
+ * @param actionLong String representing the action the user is attempting
  * in a long format. This is for the main prompt of the warning dialog,
  * so it can be as long as you want. It should start with a lowercase.
- * @param action_short String representing the action the user is attempting
+ * @param actionShort String representing the action the user is attempting
  * in a short format. This is for the buttons of the warning dialog,
  * so it should ideally be only one word. It should start with a lowercase.
- * @param action_callback Code to run to perform the action.
- * @param save_callback Code to run when the unsaved changes must be saved.
+ * @param actionCallback Code to run to perform the action.
+ * @param saveCallback Code to run when the unsaved changes must be saved.
  * @return Whether there were unsaved changes.
  */
 bool Editor::ChangesManager::askIfUnsaved(
     const Point &pos,
-    const string &action_long, const string &action_short,
-    const std::function<void()> &action_callback,
-    const std::function<bool()> &save_callback
+    const string &actionLong, const string &actionShort,
+    const std::function<void()> &actionCallback,
+    const std::function<bool()> &saveCallback
 ) {
     if(unsavedChanges > 0) {
-        unsavedWarningActionLong = action_long;
-        unsavedWarningActionShort = action_short;
-        unsavedWarningActionCallback = action_callback;
-        unsavedWarningSaveCallback = save_callback;
+        unsavedWarningActionLong = actionLong;
+        unsavedWarningActionShort = actionShort;
+        unsavedWarningActionCallback = actionCallback;
+        unsavedWarningSaveCallback = saveCallback;
         
         ed->openDialog(
             "Unsaved changes!",
@@ -3231,20 +3231,20 @@ bool Editor::ChangesManager::askIfUnsaved(
                     ed->keyCheck(ev->keyboard.keycode, ALLEGRO_KEY_S, true)
                 ) {
                     ed->closeTopDialog();
-                    const std::function<bool()> &save_callback =
+                    const std::function<bool()> &saveCallback =
                         this->getUnsavedWarningSaveCallback();
-                    const std::function<void()> &action_callback =
+                    const std::function<void()> &actionCallback =
                         this->getUnsavedWarningActionCallback();
-                    if(save_callback()) {
-                        action_callback();
+                    if(saveCallback()) {
+                        actionCallback();
                     }
                 } else if(
                     ed->keyCheck(ev->keyboard.keycode, ALLEGRO_KEY_D, true)
                 ) {
                     ed->closeTopDialog();
-                    const std::function<void()> &action_callback =
+                    const std::function<void()> &actionCallback =
                         this->getUnsavedWarningActionCallback();
-                    action_callback();
+                    actionCallback();
                 }
             }
         };
@@ -3253,7 +3253,7 @@ bool Editor::ChangesManager::askIfUnsaved(
         
     } else {
     
-        action_callback();
+        actionCallback();
         
         return false;
     }
@@ -3399,7 +3399,7 @@ void Editor::ChangesManager::reset() {
  * @param f Function to run.
  * @param n Name.
  */
-Editor::Command::Command(command_func_t f, const string &n) :
+Editor::Command::Command(CommandFunc f, const string &n) :
     func(f),
     name(n) {
 }
@@ -3408,10 +3408,10 @@ Editor::Command::Command(command_func_t f, const string &n) :
 /**
  * @brief Runs the function.
  *
- * @param input_value Input value, if needed by the command.
+ * @param inputValue Input value, if needed by the command.
  */
-void Editor::Command::run(float input_value) {
-    func(input_value);
+void Editor::Command::run(float inputValue) {
+    func(inputValue);
 }
 
 
@@ -3468,10 +3468,10 @@ void Editor::Dialog::process() {
 /**
  * @brief Constructs a new picker info object.
  *
- * @param editor_ptr Pointer to the editor in charge.
+ * @param editorPtr Pointer to the editor in charge.
  */
-Editor::Picker::Picker(Editor* editor_ptr) :
-    editorPtr(editor_ptr) {
+Editor::Picker::Picker(Editor* editorPtr) :
+    editorPtr(editorPtr) {
 }
 
 
@@ -3479,54 +3479,54 @@ Editor::Picker::Picker(Editor* editor_ptr) :
  * @brief Processes the picker for this frame.
  */
 void Editor::Picker::process() {
-    vector<string> top_cat_names;
-    vector<vector<string> > sec_cat_names;
-    vector<vector<vector<PickerItem> > > final_items;
-    string filter_lower = strToLower(filter);
+    vector<string> topCatNames;
+    vector<vector<string> > secCatNames;
+    vector<vector<vector<PickerItem> > > finalItems;
+    string filterLower = strToLower(filter);
     
     //Figure out the items.
     for(size_t i = 0; i < items.size(); i++) {
         if(!filter.empty()) {
-            string name_lower = strToLower(items[i].name);
-            if(name_lower.find(filter_lower) == string::npos) {
+            string nameLower = strToLower(items[i].name);
+            if(nameLower.find(filterLower) == string::npos) {
                 continue;
             }
         }
         
-        size_t top_cat_idx = INVALID;
-        for(size_t c = 0; c < top_cat_names.size(); c++) {
-            if(top_cat_names[c] == items[i].topCategory) {
-                top_cat_idx = c;
+        size_t topCatIdx = INVALID;
+        for(size_t c = 0; c < topCatNames.size(); c++) {
+            if(topCatNames[c] == items[i].topCategory) {
+                topCatIdx = c;
                 break;
             }
         }
         
-        if(top_cat_idx == INVALID) {
-            top_cat_names.push_back(items[i].topCategory);
-            sec_cat_names.push_back(vector<string>());
-            final_items.push_back(vector<vector<PickerItem> >());
-            top_cat_idx = top_cat_names.size() - 1;
+        if(topCatIdx == INVALID) {
+            topCatNames.push_back(items[i].topCategory);
+            secCatNames.push_back(vector<string>());
+            finalItems.push_back(vector<vector<PickerItem> >());
+            topCatIdx = topCatNames.size() - 1;
         }
         
-        size_t sec_cat_idx = INVALID;
-        for(size_t c = 0; c < sec_cat_names[top_cat_idx].size(); c++) {
-            if(sec_cat_names[top_cat_idx][c] == items[i].secCategory) {
-                sec_cat_idx = c;
+        size_t secCatIdx = INVALID;
+        for(size_t c = 0; c < secCatNames[topCatIdx].size(); c++) {
+            if(secCatNames[topCatIdx][c] == items[i].secCategory) {
+                secCatIdx = c;
                 break;
             }
         }
         
-        if(sec_cat_idx == INVALID) {
-            sec_cat_names[top_cat_idx].push_back(items[i].secCategory);
-            final_items[top_cat_idx].push_back(vector<PickerItem>());
-            sec_cat_idx = sec_cat_names[top_cat_idx].size() - 1;
+        if(secCatIdx == INVALID) {
+            secCatNames[topCatIdx].push_back(items[i].secCategory);
+            finalItems[topCatIdx].push_back(vector<PickerItem>());
+            secCatIdx = secCatNames[topCatIdx].size() - 1;
         }
         
-        final_items[top_cat_idx][sec_cat_idx].push_back(items[i]);
+        finalItems[topCatIdx][secCatIdx].push_back(items[i]);
     }
     
     //Stuff for creating a new item.
-    auto try_make_new = [this] () {
+    auto tryMakeNew = [this] () {
         if(filter.empty()) return;
         
         if(
@@ -3539,18 +3539,18 @@ void Editor::Picker::process() {
             return;
         }
         
-        bool is_really_new = true;
+        bool isReallyNew = true;
         for(size_t i = 0; i < items.size(); i++) {
             if(
                 filter == items[i].name &&
                 newItemTopCat == items[i].topCategory
             ) {
-                is_really_new = false;
+                isReallyNew = false;
                 break;
             }
         }
         
-        pickCallback(filter, newItemTopCat, "", nullptr, is_really_new);
+        pickCallback(filter, newItemTopCat, "", nullptr, isReallyNew);
         if(dialogPtr) {
             dialogPtr->isOpen = false;
         }
@@ -3567,51 +3567,51 @@ void Editor::Picker::process() {
         ImGui::PushStyleColor(
             ImGuiCol_ButtonActive, (ImVec4) ImColor(208, 32, 32)
         );
-        bool hit_create_button = ImGui::Button("+", ImVec2(64.0f, 0.0f));
+        bool hitCreateButton = ImGui::Button("+", ImVec2(64.0f, 0.0f));
         editorPtr->setTooltip("Create a new item with the given name!");
-        if(hit_create_button) try_make_new();
+        if(hitCreateButton) tryMakeNew();
         ImGui::PopStyleColor(3);
         ImGui::SameLine();
     }
     
     //Search filter input.
-    string filter_widget_hint =
+    string filterWidgetHint =
         canMakeNew ?
         "Search filter or new item name" :
         "Search filter";
         
     ImGui::FocusOnInputText(needsFilterBoxFocus);
-    bool hit_filter_widget = false;
+    bool hitFilterWidget = false;
     if(filter.empty()) {
-        hit_filter_widget =
+        hitFilterWidget =
             ImGui::InputTextWithHint(
-                "##filter", filter_widget_hint.c_str(), &filter,
+                "##filter", filterWidgetHint.c_str(), &filter,
                 ImGuiInputTextFlags_EnterReturnsTrue
             );
     } else {
-        hit_filter_widget =
+        hitFilterWidget =
             monoInputTextWithHint(
-                "##filter", filter_widget_hint.c_str(), &filter,
+                "##filter", filterWidgetHint.c_str(), &filter,
                 ImGuiInputTextFlags_EnterReturnsTrue
             );
     }
     
-    if(hit_filter_widget) {
+    if(hitFilterWidget) {
         if(filter.empty()) return;
         
         if(canMakeNew) {
-            try_make_new();
+            tryMakeNew();
         } else {
-            size_t possible_choices = 0;
-            for(size_t c = 0; c < final_items.size(); c++) {
-                possible_choices += final_items[c].size();
+            size_t possibleChoices = 0;
+            for(size_t c = 0; c < finalItems.size(); c++) {
+                possibleChoices += finalItems[c].size();
             }
-            if(possible_choices > 0) {
+            if(possibleChoices > 0) {
                 pickCallback(
-                    final_items[0][0][0].name,
-                    final_items[0][0][0].topCategory,
-                    final_items[0][0][0].secCategory,
-                    final_items[0][0][0].info,
+                    finalItems[0][0][0].name,
+                    finalItems[0][0][0].topCategory,
+                    finalItems[0][0][0].secCategory,
+                    finalItems[0][0][0].info,
                     false
                 );
                 if(dialogPtr) {
@@ -3635,7 +3635,7 @@ void Editor::Picker::process() {
                 if(ImGui::Selectable(newItemTopCatChoices[c].c_str())) {
                     newItemTopCat = newItemTopCatChoices[c];
                     ImGui::CloseCurrentPopup();
-                    try_make_new();
+                    tryMakeNew();
                 }
             }
             ImGui::EndChild();
@@ -3657,54 +3657,54 @@ void Editor::Picker::process() {
     //Item list.
     ImGui::BeginChild("list");
     
-    for(size_t tc = 0; tc < final_items.size(); tc++) {
+    for(size_t tc = 0; tc < finalItems.size(); tc++) {
     
-        bool top_cat_opened = true;
-        if(!top_cat_names[tc].empty()) {
+        bool topCatOpened = true;
+        if(!topCatNames[tc].empty()) {
             //Top category node.
             ImGui::SetNextItemOpen(true, ImGuiCond_Once);
-            top_cat_opened = ImGui::TreeNode(top_cat_names[tc].c_str());
+            topCatOpened = ImGui::TreeNode(topCatNames[tc].c_str());
         }
         
-        if(!top_cat_opened) continue;
+        if(!topCatOpened) continue;
         
-        for(size_t sc = 0; sc < final_items[tc].size(); sc++) {
+        for(size_t sc = 0; sc < finalItems[tc].size(); sc++) {
         
-            bool sec_cat_opened = true;
-            if(!sec_cat_names[tc][sc].empty()) {
+            bool secCatOpened = true;
+            if(!secCatNames[tc][sc].empty()) {
                 //Secondary category node.
                 ImGui::SetNextItemOpen(true, ImGuiCond_Once);
-                sec_cat_opened = ImGui::TreeNode(sec_cat_names[tc][sc].c_str());
+                secCatOpened = ImGui::TreeNode(secCatNames[tc][sc].c_str());
             }
             
-            if(!sec_cat_opened) continue;
+            if(!secCatOpened) continue;
             
-            for(size_t i = 0; i < final_items[tc][sc].size(); i++) {
-                PickerItem* i_ptr = &final_items[tc][sc][i];
+            for(size_t i = 0; i < finalItems[tc][sc].size(); i++) {
+                PickerItem* iPtr = &finalItems[tc][sc][i];
                 string widgetId = i2s(tc) + "-" + i2s(sc) + "-" + i2s(i);
                 ImGui::PushID(widgetId.c_str());
                 if(useMonospace) {
                     ImGui::PushFont(game.sysContent.fntDearImGuiMonospace);
                 }
                 
-                Point button_size;
+                Point buttonSize;
                 
-                if(i_ptr->bitmap) {
+                if(iPtr->bitmap) {
                 
                     ImGui::BeginGroup();
                     
                     //Item image button.
-                    button_size = Point(EDITOR::PICKER_IMG_BUTTON_SIZE);
-                    bool button_pressed =
+                    buttonSize = Point(EDITOR::PICKER_IMG_BUTTON_SIZE);
+                    bool buttonPressed =
                         ImGui::ImageButtonOrganized(
                             widgetId + "Button",
-                            i_ptr->bitmap,
-                            button_size - 4.0f, button_size
+                            iPtr->bitmap,
+                            buttonSize - 4.0f, buttonSize
                         );
                         
-                    if(button_pressed) {
+                    if(buttonPressed) {
                         pickCallback(
-                            i_ptr->name, i_ptr->topCategory, i_ptr->secCategory, i_ptr->info, false
+                            iPtr->name, iPtr->topCategory, iPtr->secCategory, iPtr->info, false
                         );
                         if(dialogPtr) {
                             dialogPtr->isOpen = false;
@@ -3712,11 +3712,11 @@ void Editor::Picker::process() {
                     }
                     
                     //Item name text.
-                    string display_name =
+                    string displayName =
                         trimWithEllipsis(
-                            getPathLastComponent(i_ptr->name), 18
+                            getPathLastComponent(iPtr->name), 18
                         );
-                    ImGui::TextWrapped("%s", display_name.c_str());
+                    ImGui::TextWrapped("%s", displayName.c_str());
                     
                     //Item spacer widget.
                     ImGui::Dummy(ImVec2(0.0f, 8.0f));
@@ -3725,10 +3725,10 @@ void Editor::Picker::process() {
                 } else {
                 
                     //Item button.
-                    button_size = Point(EDITOR::PICKER_IMG_BUTTON_SIZE, 32.0f);
-                    if(ImGui::Button(i_ptr->name.c_str(), ImVec2(button_size.x, button_size.y))) {
+                    buttonSize = Point(EDITOR::PICKER_IMG_BUTTON_SIZE, 32.0f);
+                    if(ImGui::Button(iPtr->name.c_str(), ImVec2(buttonSize.x, buttonSize.y))) {
                         pickCallback(
-                            i_ptr->name, i_ptr->topCategory, i_ptr->secCategory, i_ptr->info, false
+                            iPtr->name, iPtr->topCategory, iPtr->secCategory, iPtr->info, false
                         );
                         if(dialogPtr) {
                             dialogPtr->isOpen = false;
@@ -3737,24 +3737,24 @@ void Editor::Picker::process() {
                     
                 }
                 
-                if(!i_ptr->tooltip.empty()) {
-                    editorPtr->setTooltip(i_ptr->tooltip);
+                if(!iPtr->tooltip.empty()) {
+                    editorPtr->setTooltip(iPtr->tooltip);
                 }
                 
                 ImGui::SetupButtonWrapping(
-                    button_size.x, (int) (i + 1), (int) final_items[tc][sc].size()
+                    buttonSize.x, (int) (i + 1), (int) finalItems[tc][sc].size()
                 );
                 
                 if(useMonospace) ImGui::PopFont();
                 ImGui::PopID();
             }
             
-            if(!sec_cat_names[tc][sc].empty() && sec_cat_opened) {
+            if(!secCatNames[tc][sc].empty() && secCatOpened) {
                 ImGui::TreePop();
             }
         }
         
-        if(!top_cat_names[tc].empty() && top_cat_opened) {
+        if(!topCatNames[tc].empty() && topCatOpened) {
             ImGui::TreePop();
         }
     }
@@ -3767,21 +3767,21 @@ void Editor::Picker::process() {
  * @brief Constructs a new picker item object.
  *
  * @param name Name of the item.
- * @param top_category Top-level category it belongs to.
+ * @param topCategory Top-level category it belongs to.
  * If none, use an empty string.
- * @param sec_category Second-level category it belongs to.
+ * @param secCategory Second-level category it belongs to.
  * If none, use an empty string.
  * @param info Information to pass to the code when the item is picked, if any.
  * @param tooltip Tooltip, if any.
  * @param bitmap Bitmap to display on the item. If none, use nullptr.
  */
 Editor::PickerItem::PickerItem(
-    const string &name, const string &top_category, const string &sec_category,
+    const string &name, const string &topCategory, const string &secCategory,
     void* info, const string &tooltip, ALLEGRO_BITMAP* bitmap
 ) :
     name(name),
-    topCategory(top_category),
-    secCategory(sec_category),
+    topCategory(topCategory),
+    secCategory(secCategory),
     info(info),
     tooltip(tooltip),
     bitmap(bitmap) {
@@ -3852,51 +3852,51 @@ void Editor::TransformationWidget::draw(
  * @param handles Return the location of all nine translation and scale
  * handles here.
  * @param radius Return the angle handle's radius here.
- * @param out_transform If not nullptr, the transformation used is
+ * @param outTransform If not nullptr, the transformation used is
  * returned here.
  * The transformation will only rotate and translate, not scale.
  */
 void Editor::TransformationWidget::getLocations(
     const Point* const center, const Point* const size,
     const float* const angle, Point* handles, float* radius,
-    ALLEGRO_TRANSFORM* out_transform
+    ALLEGRO_TRANSFORM* outTransform
 ) const {
-    Point size_to_use(EDITOR::TW_DEF_SIZE, EDITOR::TW_DEF_SIZE);
-    if(size) size_to_use = *size;
+    Point sizeToUse(EDITOR::TW_DEF_SIZE, EDITOR::TW_DEF_SIZE);
+    if(size) sizeToUse = *size;
     
     //First, the Allegro transformation.
-    ALLEGRO_TRANSFORM transform_to_use;
-    al_identity_transform(&transform_to_use);
+    ALLEGRO_TRANSFORM transformToUse;
+    al_identity_transform(&transformToUse);
     if(angle) {
-        al_rotate_transform(&transform_to_use, *angle);
+        al_rotate_transform(&transformToUse, *angle);
     }
-    al_translate_transform(&transform_to_use, center->x, center->y);
+    al_translate_transform(&transformToUse, center->x, center->y);
     
     //Get the coordinates of all translation and scale handles.
-    handles[0] = { -size_to_use.x / 2.0f, -size_to_use.y / 2.0f };
-    handles[1] = { 0.0f,                  -size_to_use.y / 2.0f };
-    handles[2] = { size_to_use.x / 2.0f,  -size_to_use.y / 2.0f };
-    handles[3] = { -size_to_use.x / 2.0f, 0.0f                  };
+    handles[0] = { -sizeToUse.x / 2.0f, -sizeToUse.y / 2.0f };
+    handles[1] = { 0.0f,                  -sizeToUse.y / 2.0f };
+    handles[2] = { sizeToUse.x / 2.0f,  -sizeToUse.y / 2.0f };
+    handles[3] = { -sizeToUse.x / 2.0f, 0.0f                  };
     handles[4] = { 0.0f,                  0.0f                  };
-    handles[5] = { size_to_use.x / 2.0f,  0.0f                  };
-    handles[6] = { -size_to_use.x / 2.0f, size_to_use.y / 2.0f  };
-    handles[7] = { 0.0f,                  size_to_use.y / 2.0f  };
-    handles[8] = { size_to_use.x / 2.0f,  size_to_use.y / 2.0f  };
+    handles[5] = { sizeToUse.x / 2.0f,  0.0f                  };
+    handles[6] = { -sizeToUse.x / 2.0f, sizeToUse.y / 2.0f  };
+    handles[7] = { 0.0f,                  sizeToUse.y / 2.0f  };
+    handles[8] = { sizeToUse.x / 2.0f,  sizeToUse.y / 2.0f  };
     
     for(unsigned char h = 0; h < 9; h++) {
         al_transform_coordinates(
-            &transform_to_use, &handles[h].x, &handles[h].y
+            &transformToUse, &handles[h].x, &handles[h].y
         );
     }
     
-    float diameter = Distance(Point(), size_to_use).toFloat();
+    float diameter = Distance(Point(), sizeToUse).toFloat();
     if(diameter == 0.0f) {
         *radius = 0.0f;
     } else {
         *radius = diameter / 2.0f;
     }
     
-    if(out_transform) *out_transform = transform_to_use;
+    if(outTransform) *outTransform = transformToUse;
 }
 
 
@@ -3913,7 +3913,7 @@ Point Editor::TransformationWidget::getOldCenter() const {
 /**
  * @brief Handles the user having held the left mouse button down.
  *
- * @param mouse_coords Mouse coordinates.
+ * @param mouseCoords Mouse coordinates.
  * @param center Center point.
  * @param size Width and height. If nullptr, no scale handling will be performed.
  * @param angle Angle. If nullptr, no rotation handling will be performed.
@@ -3921,7 +3921,7 @@ Point Editor::TransformationWidget::getOldCenter() const {
  * @return Whether the user clicked on a handle.
  */
 bool Editor::TransformationWidget::handleMouseDown(
-    const Point &mouse_coords, const Point* const center,
+    const Point &mouseCoords, const Point* const center,
     const Point* const size, const float* const angle, float zoom
 ) {
     if(!center) return false;
@@ -3932,7 +3932,7 @@ bool Editor::TransformationWidget::handleMouseDown(
     
     //Check if the user clicked on a translation or scale handle.
     for(unsigned char h = 0; h < 9; h++) {
-        if(Distance(handles[h], mouse_coords) <= EDITOR::TW_HANDLE_RADIUS * zoom) {
+        if(Distance(handles[h], mouseCoords) <= EDITOR::TW_HANDLE_RADIUS * zoom) {
             if(h == 4) {
                 movingHandle = h;
                 oldCenter = *center;
@@ -3947,14 +3947,14 @@ bool Editor::TransformationWidget::handleMouseDown(
     
     //Check if the user clicked on the rotation handle.
     if(angle) {
-        Distance d(*center, mouse_coords);
+        Distance d(*center, mouseCoords);
         if(
             d >= radius - EDITOR::TW_ROTATION_HANDLE_THICKNESS / 2.0f * zoom &&
             d <= radius + EDITOR::TW_ROTATION_HANDLE_THICKNESS / 2.0f * zoom
         ) {
             movingHandle = 9;
             oldAngle = *angle;
-            oldMouseAngle = getAngle(*center, mouse_coords);
+            oldMouseAngle = getAngle(*center, mouseCoords);
             return true;
         }
     }
@@ -3966,24 +3966,24 @@ bool Editor::TransformationWidget::handleMouseDown(
 /**
  * @brief Handles the user having moved the mouse cursor.
  *
- * @param mouse_coords Mouse coordinates.
+ * @param mouseCoords Mouse coordinates.
  * @param center Center point.
  * @param size Width and height. If nullptr, no scale handling will be performed.
  * @param angle Angle. If nullptr, no rotation handling will be performed.
  * @param zoom Zoom the widget's components by this much.
- * @param keep_aspect_ratio If true, aspect ratio is kept when resizing.
- * @param keep_area If true, keep the same total area.
+ * @param keepAspectRatio If true, aspect ratio is kept when resizing.
+ * @param keepArea If true, keep the same total area.
  * Used for squash and stretch.
- * @param min_size Minimum possible size for the width or height.
+ * @param minSize Minimum possible size for the width or height.
  * Use -FLT_MAX for none.
- * @param lock_center If true, scaling happens with the center locked.
+ * @param lockCenter If true, scaling happens with the center locked.
  * If false, the opposite edge or corner is locked instead.
  * @return Whether the user is dragging a handle.
  */
 bool Editor::TransformationWidget::handleMouseMove(
-    const Point &mouse_coords, Point* center, Point* size, float* angle,
-    float zoom, bool keep_aspect_ratio, bool keep_area,
-    float min_size, bool lock_center
+    const Point &mouseCoords, Point* center, Point* size, float* angle,
+    float zoom, bool keepAspectRatio, bool keepArea,
+    float minSize, bool lockCenter
 ) {
     if(!center) return false;
     
@@ -3993,7 +3993,7 @@ bool Editor::TransformationWidget::handleMouseMove(
     
     //Logic for moving the center handle.
     if(movingHandle == 4) {
-        *center = mouse_coords;
+        *center = mouseCoords;
         return true;
     }
     
@@ -4001,7 +4001,7 @@ bool Editor::TransformationWidget::handleMouseMove(
     if(movingHandle == 9 && angle) {
         *angle =
             oldAngle +
-            getAngle(*center, mouse_coords) - oldMouseAngle;
+            getAngle(*center, mouseCoords) - oldMouseAngle;
         return true;
     }
     
@@ -4016,26 +4016,26 @@ bool Editor::TransformationWidget::handleMouseMove(
     getLocations(center, size, angle, handles, &radius, &t);
     al_invert_transform(&t);
     
-    Point transformed_mouse = mouse_coords;
-    Point transformed_center = *center;
-    Point new_size = oldSize;
-    al_transform_coordinates(&t, &transformed_mouse.x, &transformed_mouse.y);
-    al_transform_coordinates(&t, &transformed_center.x, &transformed_center.y);
-    bool scaling_x = false;
-    bool scaling_y = false;
+    Point transformedMouse = mouseCoords;
+    Point transformedCenter = *center;
+    Point newSize = oldSize;
+    al_transform_coordinates(&t, &transformedMouse.x, &transformedMouse.y);
+    al_transform_coordinates(&t, &transformedCenter.x, &transformedCenter.y);
+    bool scalingX = false;
+    bool scalingY = false;
     
     switch(movingHandle) {
     case 0:
     case 3:
     case 6: {
-        new_size.x = size->x / 2.0f - transformed_mouse.x;
-        scaling_x = true;
+        newSize.x = size->x / 2.0f - transformedMouse.x;
+        scalingX = true;
         break;
     } case 2:
     case 5:
     case 8: {
-        new_size.x = transformed_mouse.x - (-size->x / 2.0f);
-        scaling_x = true;
+        newSize.x = transformedMouse.x - (-size->x / 2.0f);
+        scalingX = true;
         break;
     }
     }
@@ -4044,66 +4044,66 @@ bool Editor::TransformationWidget::handleMouseMove(
     case 0:
     case 1:
     case 2: {
-        new_size.y = (size->y / 2.0f) - transformed_mouse.y;
-        scaling_y = true;
+        newSize.y = (size->y / 2.0f) - transformedMouse.y;
+        scalingY = true;
         break;
     } case 6:
     case 7:
     case 8: {
-        new_size.y = transformed_mouse.y - (-size->y / 2.0f);
-        scaling_y = true;
+        newSize.y = transformedMouse.y - (-size->y / 2.0f);
+        scalingY = true;
         break;
     }
     }
     
-    new_size.x = std::max(min_size, new_size.x);
-    new_size.y = std::max(min_size, new_size.y);
+    newSize.x = std::max(minSize, newSize.x);
+    newSize.y = std::max(minSize, newSize.y);
     
-    if(keep_aspect_ratio && oldSize.x != 0.0f && oldSize.y != 0.0f) {
-        float scale_to_use;
-        float w_scale = new_size.x / oldSize.x;
-        float h_scale = new_size.y / oldSize.y;
-        if(!scaling_y) {
-            scale_to_use = w_scale;
-        } else if(!scaling_x) {
-            scale_to_use = h_scale;
+    if(keepAspectRatio && oldSize.x != 0.0f && oldSize.y != 0.0f) {
+        float scaleToUse;
+        float wScale = newSize.x / oldSize.x;
+        float hScale = newSize.y / oldSize.y;
+        if(!scalingY) {
+            scaleToUse = wScale;
+        } else if(!scalingX) {
+            scaleToUse = hScale;
         } else {
-            if(fabs(w_scale) > fabs(h_scale)) {
-                scale_to_use = w_scale;
+            if(fabs(wScale) > fabs(hScale)) {
+                scaleToUse = wScale;
             } else {
-                scale_to_use = h_scale;
+                scaleToUse = hScale;
             }
         }
-        scale_to_use = std::max(min_size / oldSize.x, scale_to_use);
-        scale_to_use = std::max(min_size / oldSize.y, scale_to_use);
-        new_size = oldSize * scale_to_use;
+        scaleToUse = std::max(minSize / oldSize.x, scaleToUse);
+        scaleToUse = std::max(minSize / oldSize.y, scaleToUse);
+        newSize = oldSize * scaleToUse;
         
-    } else if(keep_area && oldSize.x != 0.0f && oldSize.y != 0.0f) {
-        bool by_x;
-        float w_scale = new_size.x / oldSize.x;
-        float h_scale = new_size.y / oldSize.y;
-        double old_area = (double) oldSize.x * (double) oldSize.y;
-        if(!scaling_y) {
-            by_x = true;
-        } else if(!scaling_x) {
-            by_x = false;
+    } else if(keepArea && oldSize.x != 0.0f && oldSize.y != 0.0f) {
+        bool byX;
+        float wScale = newSize.x / oldSize.x;
+        float hScale = newSize.y / oldSize.y;
+        double oldArea = (double) oldSize.x * (double) oldSize.y;
+        if(!scalingY) {
+            byX = true;
+        } else if(!scalingX) {
+            byX = false;
         } else {
-            if(fabs(w_scale) < fabs(h_scale)) {
-                by_x = true;
+            if(fabs(wScale) < fabs(hScale)) {
+                byX = true;
             } else {
-                by_x = false;
+                byX = false;
             }
         }
-        if(by_x) {
-            if(min_size != -FLT_MAX) {
-                new_size.x = std::max(min_size, new_size.x);
+        if(byX) {
+            if(minSize != -FLT_MAX) {
+                newSize.x = std::max(minSize, newSize.x);
             }
-            new_size.y = old_area / new_size.x;
+            newSize.y = oldArea / newSize.x;
         } else {
-            if(min_size != -FLT_MAX) {
-                new_size.y = std::max(min_size, new_size.y);
+            if(minSize != -FLT_MAX) {
+                newSize.y = std::max(minSize, newSize.y);
             }
-            new_size.x = old_area / new_size.y;
+            newSize.x = oldArea / newSize.y;
         }
     }
     
@@ -4111,15 +4111,15 @@ bool Editor::TransformationWidget::handleMouseMove(
     case 0:
     case 3:
     case 6: {
-        if(!lock_center) {
-            transformed_center.x = (size->x / 2.0f) - new_size.x / 2.0f;
+        if(!lockCenter) {
+            transformedCenter.x = (size->x / 2.0f) - newSize.x / 2.0f;
         }
         break;
     } case 2:
     case 5:
     case 8: {
-        if(!lock_center) {
-            transformed_center.x = (-size->x / 2.0f) + new_size.x / 2.0f;
+        if(!lockCenter) {
+            transformedCenter.x = (-size->x / 2.0f) + newSize.x / 2.0f;
         }
         break;
     }
@@ -4129,26 +4129,26 @@ bool Editor::TransformationWidget::handleMouseMove(
     case 0:
     case 1:
     case 2: {
-        if(!lock_center) {
-            transformed_center.y = (size->y / 2.0f) - new_size.y / 2.0f;
+        if(!lockCenter) {
+            transformedCenter.y = (size->y / 2.0f) - newSize.y / 2.0f;
         }
         break;
     } case 6:
     case 7:
     case 8: {
-        if(!lock_center) {
-            transformed_center.y = (-size->y / 2.0f) + new_size.y / 2.0f;
+        if(!lockCenter) {
+            transformedCenter.y = (-size->y / 2.0f) + newSize.y / 2.0f;
         }
         break;
     }
     }
     
-    Point new_center = transformed_center;
+    Point newCenter = transformedCenter;
     al_invert_transform(&t);
-    al_transform_coordinates(&t, &new_center.x, &new_center.y);
+    al_transform_coordinates(&t, &newCenter.x, &newCenter.y);
     
-    *center = new_center;
-    *size = new_size;
+    *center = newCenter;
+    *size = newSize;
     
     return true;
 }

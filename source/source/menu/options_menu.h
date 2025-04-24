@@ -90,24 +90,24 @@ public:
     /**
      * @brief Constructs a new options menu picker GUI item object.
      *
-     * @param base_text Base text.
-     * @param cur_value Current value.
-     * @param def_value Default value.
-     * @param preset_values Value of each preset.
-     * @param preset_names Name of each preset.
+     * @param baseText Base text.
+     * @param curValue Current value.
+     * @param defValue Default value.
+     * @param presetValues Value of each preset.
+     * @param presetNames Name of each preset.
      * @param tooltip Base tooltip.
      */
     OptionsMenuPickerGuiItem(
-        const string &base_text, t* cur_value, const t &def_value,
-        const vector<t> &preset_values, const vector<string> &preset_names,
+        const string &baseText, t* curValue, const t &defValue,
+        const vector<t> &presetValues, const vector<string> &presetNames,
         const string &tooltip = ""
     ) :
-        PickerGuiItem(base_text, ""),
-        curValue(cur_value),
-        defValue(def_value),
+        PickerGuiItem(baseText, ""),
+        curValue(curValue),
+        defValue(defValue),
         tooltip(tooltip),
-        presetValues(preset_values),
-        presetNames(preset_names) {
+        presetValues(presetValues),
+        presetNames(presetNames) {
     }
     
     
@@ -131,24 +131,24 @@ public:
         onPrevious = [this] () { changeOption(-1); };
         onNext = [this] () { changeOption(1); };
         onGetTooltip = [this] () {
-            size_t def_idx = 0;
-            string full_tooltip;
-            for(; def_idx < this->presetValues.size(); def_idx++) {
-                if(this->presetValues[def_idx] == this->defValue) {
+            size_t defIdx = 0;
+            string fullTooltip;
+            for(; defIdx < this->presetValues.size(); defIdx++) {
+                if(this->presetValues[defIdx] == this->defValue) {
                     break;
                 }
             }
             if(presetDescriptions.empty()) {
-                full_tooltip = this->tooltip;
+                fullTooltip = this->tooltip;
             } else {
                 if(curOptionIdx == INVALID) {
-                    full_tooltip = "Using a custom value.";
+                    fullTooltip = "Using a custom value.";
                 } else {
-                    full_tooltip = presetDescriptions[curOptionIdx];
+                    fullTooltip = presetDescriptions[curOptionIdx];
                 }
             }
-            full_tooltip += " Default: " + this->presetNames[def_idx] + ".";
-            return full_tooltip;
+            fullTooltip += " Default: " + this->presetNames[defIdx] + ".";
+            return fullTooltip;
         };
     }
     
@@ -232,7 +232,7 @@ public:
     void handleAllegroEvent(const ALLEGRO_EVENT &ev) override;
     void handlePlayerAction(const PlayerAction &action) override;
     void unload() override;
-    void tick(float delta_t);
+    void tick(float deltaT);
     
     
 private:
@@ -326,12 +326,12 @@ private:
     void initGuiTopPage();
     void triggerRestartWarning();
     void chooseInput(
-        const PLAYER_ACTION_TYPE action_type, size_t bind_idx
+        const PLAYER_ACTION_TYPE actionType, size_t bindIdx
     );
     void deleteBind(
-        const PLAYER_ACTION_TYPE action_type, size_t bind_idx
+        const PLAYER_ACTION_TYPE actionType, size_t bindIdx
     );
     void populateBinds();
-    void restoreDefaultBinds(const PLAYER_ACTION_TYPE action_type);
+    void restoreDefaultBinds(const PLAYER_ACTION_TYPE actionType);
     
 };

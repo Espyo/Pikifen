@@ -89,7 +89,7 @@ void drawBitmap(
 );
 void drawBitmapInBox(
     ALLEGRO_BITMAP* bmp, const Point &center,
-    const Point &box_size, bool scale_up,
+    const Point &boxSize, bool scaleUp,
     float angle = 0,
     const ALLEGRO_COLOR &tint = COLOR_WHITE
 );
@@ -118,19 +118,19 @@ void drawRoundedRectangle(
 );
 void drawText(
     const string &text, const ALLEGRO_FONT* const font,
-    const Point &where, const Point &box_size,
+    const Point &where, const Point &boxSize,
     const ALLEGRO_COLOR &color = COLOR_WHITE,
-    int text_flags = ALLEGRO_ALIGN_CENTER,
-    V_ALIGN_MODE v_align = V_ALIGN_MODE_CENTER, bitmask_8_t settings = 0,
-    const Point &further_scale = Point(1.0f)
+    int textFlags = ALLEGRO_ALIGN_CENTER,
+    V_ALIGN_MODE vAlign = V_ALIGN_MODE_CENTER, Bitmask8 settings = 0,
+    const Point &furtherScale = Point(1.0f)
 );
 void drawTextLines(
     const string &text, const ALLEGRO_FONT* const font,
-    const Point &where, const Point &box_size,
+    const Point &where, const Point &boxSize,
     const ALLEGRO_COLOR &color = COLOR_WHITE,
     int text_flags = ALLEGRO_ALIGN_CENTER,
-    V_ALIGN_MODE v_align = V_ALIGN_MODE_CENTER, bitmask_8_t settings = 0,
-    const Point &further_scale = Point(1.0f)
+    V_ALIGN_MODE vAlign = V_ALIGN_MODE_CENTER, Bitmask8 settings = 0,
+    const Point &furtherScale = Point(1.0f)
 );
 void drawTexturedBox(
     const Point &center, const Point &size, ALLEGRO_BITMAP* texture,
@@ -138,10 +138,10 @@ void drawTexturedBox(
 );
 void getMultilineTextDimensions(
     const vector<string> &lines, const ALLEGRO_FONT* const font,
-    int* out_width, int* out_height, int* out_line_height
+    int* outWidth, int* outHeight, int* outLineHeight
 );
 void getTextDrawingTransforms(
     const Point &where, const Point &scale,
-    float text_orig_oy, float v_align_offset,
-    ALLEGRO_TRANSFORM* out_text_transform, ALLEGRO_TRANSFORM* out_old_transform
+    float textOrigOy, float vAlignOffset,
+    ALLEGRO_TRANSFORM* outTextTransform, ALLEGRO_TRANSFORM* outOldTransform
 );

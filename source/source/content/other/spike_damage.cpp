@@ -24,35 +24,35 @@ void SpikeDamageType::loadFromDataNode(DataNode* node) {
     loadMetadataFromDataNode(node);
     
     //Standard data.
-    ReaderSetter rs(node);
+    ReaderSetter sRS(node);
     
-    string particle_generator_name;
-    string status_name;
-    DataNode* damage_node = nullptr;
-    DataNode* particle_generator_node = nullptr;
-    DataNode* status_name_node = nullptr;
+    string particleGeneratorName;
+    string statusName;
+    DataNode* damageNode = nullptr;
+    DataNode* particleGeneratorNode = nullptr;
+    DataNode* statusNameNode = nullptr;
     
-    rs.set("damage", damage, &damage_node);
-    rs.set("ingestion_only", ingestionOnly);
-    rs.set("is_damage_ratio", isDamageRatio);
-    rs.set("status_to_apply", status_name, &status_name_node);
-    rs.set(
-        "particle_generator", particle_generator_name,
-        &particle_generator_node
+    sRS.set("damage", damage, &damageNode);
+    sRS.set("ingestion_only", ingestionOnly);
+    sRS.set("is_damage_ratio", isDamageRatio);
+    sRS.set("status_to_apply", statusName, &statusNameNode);
+    sRS.set(
+        "particle_generator", particleGeneratorName,
+        &particleGeneratorNode
     );
     
-    if(particle_generator_node) {
+    if(particleGeneratorNode) {
         if(
-            game.content.particleGens.list.find(particle_generator_name) ==
+            game.content.particleGens.list.find(particleGeneratorName) ==
             game.content.particleGens.list.end()
         ) {
             game.errors.report(
                 "Unknown particle generator \"" +
-                particle_generator_name + "\"!", particle_generator_node
+                particleGeneratorName + "\"!", particleGeneratorNode
             );
         } else {
             particleGen =
-                &game.content.particleGens.list[particle_generator_name];
+                &game.content.particleGens.list[particleGeneratorName];
             particleOffsetPos =
                 s2p(
                     node->getChildByName("particle_offset")->value,
@@ -61,14 +61,14 @@ void SpikeDamageType::loadFromDataNode(DataNode* node) {
         }
     }
     
-    if(status_name_node) {
-        auto s = game.content.statusTypes.list.find(status_name);
+    if(statusNameNode) {
+        auto s = game.content.statusTypes.list.find(statusName);
         if(s != game.content.statusTypes.list.end()) {
             statusToApply = s->second;
         } else {
             game.errors.report(
-                "Unknown status type \"" + status_name + "\"!",
-                status_name_node
+                "Unknown status type \"" + statusName + "\"!",
+                statusNameNode
             );
         }
     }

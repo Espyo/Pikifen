@@ -16,7 +16,7 @@
 /**
  * @brief Functions about the converter's finite state machine and behavior.
  */
-namespace converter_fsm {
+namespace ConverterFsm {
 void createFsm(MobType* typ);
 
 void becomeIdle(Mob* m, void* info1, void* info2);

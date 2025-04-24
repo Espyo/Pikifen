@@ -39,13 +39,13 @@ public:
     
     //--- Function declarations ---
     
-    Drop(const Point &pos, DropType* dro_type, float angle);
+    Drop(const Point &pos, DropType* type, float angle);
     void drawMob() override;
     
 protected:
 
     //--- Function declarations ---
     
-    void tickClassSpecifics(float delta_t) override;
+    void tickClassSpecifics(float deltaT) override;
     
 };

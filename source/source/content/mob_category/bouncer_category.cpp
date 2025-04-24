@@ -87,11 +87,11 @@ void BouncerCategory::eraseMob(Mob* m) {
  * @brief Returns a type of bouncer given its internal name,
  * or nullptr on error.
  *
- * @param internal_name Internal name of the mob type to get.
+ * @param internalName Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-MobType* BouncerCategory::getType(const string &internal_name) const {
-    auto it = game.content.mobTypes.list.bouncer.find(internal_name);
+MobType* BouncerCategory::getType(const string &internalName) const {
+    auto it = game.content.mobTypes.list.bouncer.find(internalName);
     if(it == game.content.mobTypes.list.bouncer.end()) return nullptr;
     return it->second;
 }
@@ -112,9 +112,9 @@ void BouncerCategory::getTypeNames(vector<string> &list) const {
 /**
  * @brief Registers a created type of bouncer.
  *
- * @param internal_name Internal name of the mob type.
+ * @param internalName Internal name of the mob type.
  * @param type Mob type to register.
  */
-void BouncerCategory::registerType(const string &internal_name, MobType* type) {
-    game.content.mobTypes.list.bouncer[internal_name] = (BouncerType*) type;
+void BouncerCategory::registerType(const string &internalName, MobType* type) {
+    game.content.mobTypes.list.bouncer[internalName] = (BouncerType*) type;
 }

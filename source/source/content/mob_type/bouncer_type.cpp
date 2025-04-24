@@ -31,15 +31,15 @@ BouncerType::BouncerType() :
         "bounced Pikmin land in that location. "
         "A \"Dummy\" object works perfectly for this.";
         
-    bouncer_fsm::createFsm(this);
+    BouncerFsm::createFsm(this);
 }
 
 
 /**
  * @brief Returns the vector of animation conversions.
  */
-anim_conversion_vector BouncerType::getAnimConversions() const {
-    anim_conversion_vector v;
+AnimConversionVector BouncerType::getAnimConversions() const {
+    AnimConversionVector v;
     v.push_back(std::make_pair(BOUNCER_ANIM_IDLING, "idling"));
     v.push_back(std::make_pair(BOUNCER_ANIM_BOUNCING, "bouncing"));
     return v;
@@ -52,42 +52,42 @@ anim_conversion_vector BouncerType::getAnimConversions() const {
  * @param file File to read from.
  */
 void BouncerType::loadCatProperties(DataNode* file) {
-    ReaderSetter rs(file);
+    ReaderSetter bRS(file);
     
-    string riders_str;
-    string riding_pose_str;
-    DataNode* riders_node = nullptr;
-    DataNode* riding_pose_node = nullptr;
+    string ridersStr;
+    string ridingPoseStr;
+    DataNode* ridersNode = nullptr;
+    DataNode* ridingPoseNode = nullptr;
     
-    rs.set("riders", riders_str, &riders_node);
-    rs.set("riding_pose", riding_pose_str, &riding_pose_node);
+    bRS.set("riders", ridersStr, &ridersNode);
+    bRS.set("riding_pose", ridingPoseStr, &ridingPoseNode);
     
-    if(riders_node) {
+    if(ridersNode) {
         riders = 0;
-        vector<string> riders_str_words = split(riders_str);
-        for(size_t r = 0; r < riders_str_words.size(); r++) {
-            if(riders_str_words[r] == "pikmin") {
+        vector<string> ridersStrWords = split(ridersStr);
+        for(size_t r = 0; r < ridersStrWords.size(); r++) {
+            if(ridersStrWords[r] == "pikmin") {
                 enableFlag(riders, BOUNCER_RIDER_FLAG_PIKMIN);
-            } else if(riders_str_words[r] == "leaders") {
+            } else if(ridersStrWords[r] == "leaders") {
                 enableFlag(riders, BOUNCER_RIDER_FLAG_LEADERS);
             } else {
                 game.errors.report(
-                    "Unknown type of rider \"" + riders_str_words[r] + "\"!",
-                    riders_node
+                    "Unknown type of rider \"" + ridersStrWords[r] + "\"!",
+                    ridersNode
                 );
             }
         }
     }
     
-    if(riding_pose_node) {
-        if(riding_pose_str == "stopped") {
+    if(ridingPoseNode) {
+        if(ridingPoseStr == "stopped") {
             ridingPose = BOUNCER_RIDING_POSE_STOPPED;
-        } else if(riding_pose_str == "somersault") {
+        } else if(ridingPoseStr == "somersault") {
             ridingPose = BOUNCER_RIDING_POSE_SOMERSAULT;
         } else {
             game.errors.report(
-                "Unknown type of riding pose \"" + riding_pose_str + "\"!",
-                riding_pose_node
+                "Unknown type of riding pose \"" + ridingPoseStr + "\"!",
+                ridingPoseNode
             );
         }
     }

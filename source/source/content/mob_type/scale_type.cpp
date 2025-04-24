@@ -23,13 +23,13 @@ ScaleType::ScaleType() :
     targetType = MOB_TARGET_FLAG_NONE;
     walkable = true;
     
-    AreaEditorProp aep_goal;
-    aep_goal.name = "Goal weight";
-    aep_goal.var = "goal_number";
-    aep_goal.type = AEMP_TYPE_INT;
-    aep_goal.defValue = i2s(goalNumber);
-    aep_goal.tooltip = "Pikmin weight required for the goal, if any.";
-    areaEditorProps.push_back(aep_goal);
+    AreaEditorProp aepGoal;
+    aepGoal.name = "Goal weight";
+    aepGoal.var = "goal_number";
+    aepGoal.type = AEMP_TYPE_INT;
+    aepGoal.defValue = i2s(goalNumber);
+    aepGoal.tooltip = "Pikmin weight required for the goal, if any.";
+    areaEditorProps.push_back(aepGoal);
 }
 
 
@@ -39,9 +39,9 @@ ScaleType::ScaleType() :
  * @param file File to read from.
  */
 void ScaleType::loadCatProperties(DataNode* file) {
-    ReaderSetter rs(file);
+    ReaderSetter sRS(file);
     
-    rs.set("goal_number", goalNumber);
+    sRS.set("goal_number", goalNumber);
     
     areaEditorProps.back().defValue = i2s(goalNumber);
 }

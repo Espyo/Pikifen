@@ -38,16 +38,16 @@ ToolType::ToolType() :
  * @param file File to read from.
  */
 void ToolType::loadCatProperties(DataNode* file) {
-    ReaderSetter rs(file);
+    ReaderSetter tRS(file);
     
-    rs.set("dropped_when_pikmin_is_whistled", droppedWhenPikminIsWhistled);
-    rs.set("dropped_when_pikmin_lands", droppedWhenPikminLands);
-    rs.set(
+    tRS.set("dropped_when_pikmin_is_whistled", droppedWhenPikminIsWhistled);
+    tRS.set("dropped_when_pikmin_lands", droppedWhenPikminLands);
+    tRS.set(
         "dropped_when_pikmin_lands_on_opponent",
         droppedWhenPikminLandsOnOpponent
     );
-    rs.set("pikmin_returns_after_using", pikminReturnsAfterUsing);
-    rs.set(
+    tRS.set("pikmin_returns_after_using", pikminReturnsAfterUsing);
+    tRS.set(
         "stuck_when_pikmin_lands_on_opponent",
         stuckWhenPikminLandsOnOpponent
     );
@@ -60,12 +60,12 @@ void ToolType::loadCatProperties(DataNode* file) {
  * @param file File to read from.
  */
 void ToolType::loadCatResources(DataNode* file) {
-    ReaderSetter rs(file);
+    ReaderSetter tRS(file);
     
-    string icon_str;
-    DataNode* icon_node = nullptr;
+    string iconStr;
+    DataNode* iconNode = nullptr;
     
-    rs.set("icon", icon_str, &icon_node);
+    tRS.set("icon", iconStr, &iconNode);
     
-    bmpIcon = game.content.bitmaps.list.get(icon_str, icon_node);
+    bmpIcon = game.content.bitmaps.list.get(iconStr, iconNode);
 }

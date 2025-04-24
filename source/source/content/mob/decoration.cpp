@@ -29,20 +29,20 @@ Decoration::Decoration(
     Mob(pos, type, angle),
     decType(type) {
     
-    float tint_interpol_ratio = game.rng.f(0.0f, 1.0f);
-    ALLEGRO_COLOR tint_limit = decType->tintRandomMaximum;
-    tint_limit.a = 1.0f;
+    float tintInterpolRatio = game.rng.f(0.0f, 1.0f);
+    ALLEGRO_COLOR tintLimit = decType->tintRandomMaximum;
+    tintLimit.a = 1.0f;
     
     individualTint =
         interpolateColor(
-            tint_interpol_ratio, 0.0, 1.0,
-            tint_limit, al_map_rgba(255, 255, 255, 255)
+            tintInterpolRatio, 0.0, 1.0,
+            tintLimit, al_map_rgba(255, 255, 255, 255)
         );
         
-    float alpha_interpol_ratio = game.rng.f(0.0f, 1.0f);
+    float alphaInterpolRatio = game.rng.f(0.0f, 1.0f);
     individualTint.a =
         interpolateNumber(
-            alpha_interpol_ratio, 0.0f, 1.0f,
+            alphaInterpolRatio, 0.0f, 1.0f,
             decType->tintRandomMaximum.a, 1.0f
         );
         
@@ -65,15 +65,15 @@ Decoration::Decoration(
  * tinting it, rotating it, etc.
  */
 void Decoration::drawMob() {
-    Sprite* cur_s_ptr;
-    Sprite* next_s_ptr;
-    float interpolation_factor;
-    getSpriteData(&cur_s_ptr, &next_s_ptr, &interpolation_factor);
-    if(!cur_s_ptr) return;
+    Sprite* curSPtr;
+    Sprite* nextSPtr;
+    float interpolationFactor;
+    getSpriteData(&curSPtr, &nextSPtr, &interpolationFactor);
+    if(!curSPtr) return;
     
     BitmapEffect eff;
     getSpriteBitmapEffects(
-        cur_s_ptr, next_s_ptr, interpolation_factor,
+        curSPtr, nextSPtr, interpolationFactor,
         &eff,
         SPRITE_BMP_EFFECT_FLAG_STANDARD |
         SPRITE_BMP_EFFECT_FLAG_STATUS |
@@ -90,7 +90,7 @@ void Decoration::drawMob() {
     eff.scale *= individualScale;
     eff.rotation += individualRotation;
     
-    drawBitmapWithEffects(cur_s_ptr->bitmap, eff);
+    drawBitmapWithEffects(curSPtr->bitmap, eff);
 }
 
 
@@ -102,26 +102,26 @@ void Decoration::drawMob() {
 void Decoration::readScriptVars(const ScriptVarReader &svr) {
     Mob::readScriptVars(svr);
     
-    bool random_animation_delay_var;
-    bool random_tint_var;
-    bool random_scale_var;
-    bool random_rotation_var;
+    bool randomAnimationDelayVar;
+    bool randomTintVar;
+    bool randomScaleVar;
+    bool randomRotationVar;
     
-    if(svr.get("random_animation_delay", random_animation_delay_var)) {
-        individualRandomAnimDelay = random_animation_delay_var;
+    if(svr.get("random_animation_delay", randomAnimationDelayVar)) {
+        individualRandomAnimDelay = randomAnimationDelayVar;
     }
-    if(svr.get("random_tint", random_tint_var)) {
-        if(!random_tint_var) {
+    if(svr.get("random_tint", randomTintVar)) {
+        if(!randomTintVar) {
             individualTint = COLOR_WHITE;
         }
     }
-    if(svr.get("random_scale", random_scale_var)) {
-        if(!random_scale_var) {
+    if(svr.get("random_scale", randomScaleVar)) {
+        if(!randomScaleVar) {
             individualScale = 1.0f;
         }
     }
-    if(svr.get("random_rotation", random_rotation_var)) {
-        if(!random_rotation_var) {
+    if(svr.get("random_rotation", randomRotationVar)) {
+        if(!randomRotationVar) {
             individualRotation = 0.0f;
         }
     }

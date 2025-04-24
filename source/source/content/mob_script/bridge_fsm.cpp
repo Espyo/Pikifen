@@ -23,25 +23,25 @@
  *
  * @param typ Mob type to create the finite state machine for.
  */
-void bridge_fsm::createFsm(MobType* typ) {
+void BridgeFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;
     efc.newState("idling", BRIDGE_STATE_IDLING); {
         efc.newEvent(MOB_EV_ON_ENTER); {
-            efc.run(bridge_fsm::setAnim);
+            efc.run(BridgeFsm::setAnim);
         }
         efc.newEvent(MOB_EV_ON_READY); {
-            efc.run(bridge_fsm::setup);
+            efc.run(BridgeFsm::setup);
         }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_N_A); {
-            efc.run(gen_mob_fsm::beAttacked);
-            efc.run(bridge_fsm::checkHealth);
+            efc.run(GenMobFsm::beAttacked);
+            efc.run(BridgeFsm::checkHealth);
         }
         efc.newEvent(MOB_EV_FINISHED_RECEIVING_DELIVERY); {
-            efc.run(bridge_fsm::checkHealth);
+            efc.run(BridgeFsm::checkHealth);
         }
         efc.newEvent(MOB_EV_ZERO_HEALTH); {
-            efc.run(bridge_fsm::checkHealth);
-            efc.run(bridge_fsm::open);
+            efc.run(BridgeFsm::checkHealth);
+            efc.run(BridgeFsm::open);
             efc.changeState("destroyed");
         }
     }
@@ -75,9 +75,9 @@ void bridge_fsm::createFsm(MobType* typ) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void bridge_fsm::checkHealth(Mob* m, void* info1, void* info2) {
-    Bridge* bri_ptr = (Bridge*) m;
-    if(bri_ptr->checkHealth()) {
+void BridgeFsm::checkHealth(Mob* m, void* info1, void* info2) {
+    Bridge* briPtr = (Bridge*) m;
+    if(briPtr->checkHealth()) {
         m->fsm.setState(BRIDGE_STATE_CREATING_CHUNK);
     }
 }
@@ -90,12 +90,12 @@ void bridge_fsm::checkHealth(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void bridge_fsm::open(Mob* m, void* info1, void* info2) {
-    Bridge* bri_ptr = (Bridge*) m;
-    bri_ptr->setAnimation(BRIDGE_ANIM_DESTROYED);
-    bri_ptr->startDying();
-    bri_ptr->finishDying();
-    enableFlag(bri_ptr->flags, MOB_FLAG_INTANGIBLE);
+void BridgeFsm::open(Mob* m, void* info1, void* info2) {
+    Bridge* briPtr = (Bridge*) m;
+    briPtr->setAnimation(BRIDGE_ANIM_DESTROYED);
+    briPtr->startDying();
+    briPtr->finishDying();
+    enableFlag(briPtr->flags, MOB_FLAG_INTANGIBLE);
 }
 
 
@@ -106,7 +106,7 @@ void bridge_fsm::open(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void bridge_fsm::setAnim(Mob* m, void* info1, void* info2) {
+void BridgeFsm::setAnim(Mob* m, void* info1, void* info2) {
     m->setAnimation(
         BRIDGE_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
     );
@@ -121,7 +121,7 @@ void bridge_fsm::setAnim(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void bridge_fsm::setup(Mob* m, void* info1, void* info2) {
-    Bridge* bri_ptr = (Bridge*) m;
-    bri_ptr->setup();
+void BridgeFsm::setup(Mob* m, void* info1, void* info2) {
+    Bridge* briPtr = (Bridge*) m;
+    briPtr->setup();
 }

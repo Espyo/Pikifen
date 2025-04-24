@@ -167,13 +167,13 @@ void GameConfig::load(DataNode* file) {
 
     //Aesthetic general.
     {
-        ReaderSetter ars(file->getChildByName("aesthetic_general"));
+        ReaderSetter aRS(file->getChildByName("aesthetic_general"));
         
-        ars.set("carrying_color_move", aestheticGen.carryingColorMove);
-        ars.set("carrying_color_stop", aestheticGen.carryingColorStop);
-        ars.set("cursor_spin_speed", aestheticGen.cursorSpinSpeed);
-        ars.set("gameplay_msg_char_interval", aestheticGen.gameplayMsgChInterval);
-        ars.set("no_pikmin_color", aestheticGen.noPikminColor);
+        aRS.set("carrying_color_move", aestheticGen.carryingColorMove);
+        aRS.set("carrying_color_stop", aestheticGen.carryingColorStop);
+        aRS.set("cursor_spin_speed", aestheticGen.cursorSpinSpeed);
+        aRS.set("gameplay_msg_char_interval", aestheticGen.gameplayMsgChInterval);
+        aRS.set("no_pikmin_color", aestheticGen.noPikminColor);
         
         aestheticGen.cursorSpinSpeed =
             degToRad(aestheticGen.cursorSpinSpeed);
@@ -181,89 +181,89 @@ void GameConfig::load(DataNode* file) {
     
     //Aesthetic radar.
     {
-        ReaderSetter ars(file->getChildByName("aesthetic_radar"));
+        ReaderSetter aRS(file->getChildByName("aesthetic_radar"));
         
-        ars.set("background_color", aestheticRadar.backgroundColor);
-        ars.set("edge_color", aestheticRadar.edgeColor);
-        ars.set("highest_color", aestheticRadar.highestColor);
-        ars.set("lowest_color", aestheticRadar.lowestColor);
+        aRS.set("background_color", aestheticRadar.backgroundColor);
+        aRS.set("edge_color", aestheticRadar.edgeColor);
+        aRS.set("highest_color", aestheticRadar.highestColor);
+        aRS.set("lowest_color", aestheticRadar.lowestColor);
     }
     
     //Carrying.
     {
-        ReaderSetter crs(file->getChildByName("carrying"));
+        ReaderSetter cRS(file->getChildByName("carrying"));
         
-        crs.set("speed_base_mult", carrying.speedBaseMult);
-        crs.set("speed_max_mult", carrying.speedMaxMult);
-        crs.set("speed_weight_mult", carrying.speedWeightMult);
+        cRS.set("speed_base_mult", carrying.speedBaseMult);
+        cRS.set("speed_max_mult", carrying.speedMaxMult);
+        cRS.set("speed_weight_mult", carrying.speedWeightMult);
     }
     
     //General.
     {
-        ReaderSetter grs(file->getChildByName("general"));
+        ReaderSetter gRS(file->getChildByName("general"));
         
-        grs.set("game_name", general.name);
-        grs.set("game_version", general.version);
+        gRS.set("game_name", general.name);
+        gRS.set("game_version", general.version);
     }
     
     //Leaders.
     {
-        ReaderSetter lrs(file->getChildByName("leaders"));
-        string leader_order_str;
+        ReaderSetter lRS(file->getChildByName("leaders"));
+        string leaderOrderStr;
         
-        lrs.set("group_member_grab_range", leaders.groupMemberGrabRange);
-        lrs.set("next_pluck_range", leaders.nextPluckRange);
-        lrs.set("onion_open_range", leaders.onionOpenRange);
-        lrs.set("order", leader_order_str);
-        lrs.set("pluck_range", leaders.pluckRange);
-        lrs.set("standard_height", leaders.standardHeight);
-        lrs.set("standard_radius", leaders.standardRadius);
+        lRS.set("group_member_grab_range", leaders.groupMemberGrabRange);
+        lRS.set("next_pluck_range", leaders.nextPluckRange);
+        lRS.set("onion_open_range", leaders.onionOpenRange);
+        lRS.set("order", leaderOrderStr);
+        lRS.set("pluck_range", leaders.pluckRange);
+        lRS.set("standard_height", leaders.standardHeight);
+        lRS.set("standard_radius", leaders.standardRadius);
         
-        leaders.orderStrings = semicolonListToVector(leader_order_str);
+        leaders.orderStrings = semicolonListToVector(leaderOrderStr);
     }
     
     //Misc.
     {
-        ReaderSetter mrs(file->getChildByName("misc"));
-        string spray_order_str;
+        ReaderSetter mRS(file->getChildByName("misc"));
+        string sprayOrderStr;
         
-        mrs.set("day_minutes_end", misc.dayMinutesEnd);
-        mrs.set("day_minutes_start", misc.dayMinutesStart);
-        mrs.set("spray_order", spray_order_str);
+        mRS.set("day_minutes_end", misc.dayMinutesEnd);
+        mRS.set("day_minutes_start", misc.dayMinutesStart);
+        mRS.set("spray_order", sprayOrderStr);
         
-        misc.sprayOrderStrings = semicolonListToVector(spray_order_str);
+        misc.sprayOrderStrings = semicolonListToVector(sprayOrderStr);
     }
     
     //Pikmin.
     {
-        ReaderSetter prs(file->getChildByName("pikmin"));
-        string pikmin_order_str;
+        ReaderSetter pRS(file->getChildByName("pikmin"));
+        string pikminOrderStr;
         
-        prs.set("chase_range", pikmin.chaseRange);
-        prs.set("idle_bump_delay", pikmin.idleBumpDelay);
-        prs.set("idle_bump_range", pikmin.idleBumpRange);
-        prs.set("idle_task_range", pikmin.idleTaskRange);
-        prs.set("maturity_power_mult", pikmin.maturityPowerMult);
-        prs.set("maturity_speed_mult", pikmin.maturitySpeedMult);
-        prs.set("order", pikmin_order_str);
-        prs.set("standard_height", pikmin.standardHeight);
-        prs.set("standard_radius", pikmin.standardRadius);
-        prs.set("swarm_task_range", pikmin.swarmTaskRange);
+        pRS.set("chase_range", pikmin.chaseRange);
+        pRS.set("idle_bump_delay", pikmin.idleBumpDelay);
+        pRS.set("idle_bump_range", pikmin.idleBumpRange);
+        pRS.set("idle_task_range", pikmin.idleTaskRange);
+        pRS.set("maturity_power_mult", pikmin.maturityPowerMult);
+        pRS.set("maturity_speed_mult", pikmin.maturitySpeedMult);
+        pRS.set("order", pikminOrderStr);
+        pRS.set("standard_height", pikmin.standardHeight);
+        pRS.set("standard_radius", pikmin.standardRadius);
+        pRS.set("swarm_task_range", pikmin.swarmTaskRange);
         
-        pikmin.orderStrings = semicolonListToVector(pikmin_order_str);
+        pikmin.orderStrings = semicolonListToVector(pikminOrderStr);
     }
     
     //Rules.
     {
-        ReaderSetter rrs(file->getChildByName("rules"));
+        ReaderSetter rRS(file->getChildByName("rules"));
         
-        rrs.set("can_throw_leaders", rules.canThrowLeaders);
-        rrs.set("cursor_max_dist", rules.cursorMaxDist);
-        rrs.set("max_pikmin_in_field", rules.maxPikminInField);
-        rrs.set("throw_max_dist", rules.throwMaxDist);
-        rrs.set("whistle_growth_speed", rules.whistleGrowthSpeed);
-        rrs.set("whistle_max_dist", rules.whistleMaxDist);
-        rrs.set("zoom_closest_reach", rules.zoomClosestReach);
-        rrs.set("zoom_farthest_reach", rules.zoomFarthestReach);
+        rRS.set("can_throw_leaders", rules.canThrowLeaders);
+        rRS.set("cursor_max_dist", rules.cursorMaxDist);
+        rRS.set("max_pikmin_in_field", rules.maxPikminInField);
+        rRS.set("throw_max_dist", rules.throwMaxDist);
+        rRS.set("whistle_growth_speed", rules.whistleGrowthSpeed);
+        rRS.set("whistle_max_dist", rules.whistleMaxDist);
+        rRS.set("zoom_closest_reach", rules.zoomClosestReach);
+        rRS.set("zoom_farthest_reach", rules.zoomFarthestReach);
     }
 }

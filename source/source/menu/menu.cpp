@@ -93,21 +93,21 @@ void Menu::load() {
 /**
  * @brief Ticks time by one frame of logic.
  *
- * @param delta_t How long the frame's tick is, in seconds.
+ * @param deltaT How long the frame's tick is, in seconds.
  */
-void Menu::tick(float delta_t) {
+void Menu::tick(float deltaT) {
     if(!loaded) return;
     
     //Tick the GUIs.
     for(size_t g = 0; g < guis.size(); g++) {
         if(guis[g]) {
-            guis[g]->tick(delta_t);
+            guis[g]->tick(deltaT);
         }
     }
     
     //Tick the unload timer.
     if(unloadTimer != LARGE_FLOAT) {
-        unloadTimer -= delta_t;
+        unloadTimer -= deltaT;
         if(unloadTimer <= 0.0f) {
             unload();
             unloadTimer = LARGE_FLOAT;

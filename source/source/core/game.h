@@ -273,11 +273,11 @@ public:
     
     Game();
     void changeState(
-        GameState* new_state,
-        bool unload_current = true, bool load_new = true
+        GameState* newState,
+        bool unloadCurrent = true, bool loadNew = true
     );
     string getCurStateName() const;
-    void unloadLoadedState(GameState* loaded_state);
+    void unloadLoadedState(GameState* loadedState);
     void registerAudioStreamSource(ALLEGRO_AUDIO_STREAM* stream);
     void unregisterAudioStreamSource(ALLEGRO_AUDIO_STREAM* stream);
     int start();
@@ -297,7 +297,7 @@ private:
     //Timer for the main frame logic.
     ALLEGRO_TIMER* mainTimer = nullptr;
     
-    //Is delta_t meant to be reset for the next frame?
+    //Is deltaT meant to be reset for the next frame?
     bool resetDeltaT = true;
     
     

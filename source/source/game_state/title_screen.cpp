@@ -58,22 +58,22 @@ void TitleScreen::doDrawing() {
     );
     
     //Draw the logo Pikmin.
-    Point pik_size = logoPikminSize;
-    pik_size.x *= game.winW / 100.0f;
-    pik_size.y *= game.winH / 100.0f;
+    Point pikSize = logoPikminSize;
+    pikSize.x *= game.winW / 100.0f;
+    pikSize.y *= game.winH / 100.0f;
     
     for(size_t p = 0; p < logoPikmin.size(); p++) {
         LogoPikmin* pik = &logoPikmin[p];
         drawBitmapInBox(
             game.sysContent.bmpShadow,
-            pik->pos + pik_size * 0.30f, pik_size * 1.2f,
+            pik->pos + pikSize * 0.30f, pikSize * 1.2f,
             true, 0.0f, COLOR_TRANSPARENT_WHITE
         );
     }
     for(size_t p = 0; p < logoPikmin.size(); p++) {
         LogoPikmin* pik = &logoPikmin[p];
         drawBitmapInBox(
-            pik->top, pik->pos, pik_size, true, pik->angle
+            pik->top, pik->pos, pikSize, true, pik->angle
         );
     }
     
@@ -84,18 +84,18 @@ void TitleScreen::doDrawing() {
         Point(game.winW * 0.45f, game.winH * 0.02f), mapAlpha(192),
         ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP
     );
-    string version_text;
+    string versionText;
     if(!game.config.general.name.empty()) {
-        version_text = game.config.general.name;
+        versionText = game.config.general.name;
         if(!game.config.general.version.empty()) {
-            version_text += " " + game.config.general.version;
+            versionText += " " + game.config.general.version;
         }
-        version_text += ", powered by ";
+        versionText += ", powered by ";
     }
-    version_text +=
+    versionText +=
         "Pikifen " + getEngineVersionString();
     drawText(
-        version_text, game.sysContent.fntSlim,
+        versionText, game.sysContent.fntSlim,
         Point(game.winW - 8, 8),
         Point(game.winW * 0.45f, game.winH * 0.02f), mapAlpha(192),
         ALLEGRO_ALIGN_RIGHT, V_ALIGN_MODE_TOP
@@ -117,7 +117,7 @@ void TitleScreen::doLogic() {
     if(game.debug.showDearImGuiDemo) return;
     
     //Animate the logo Pikmin.
-    int largest_window_dim = std::max(game.winW, game.winH);
+    int largestWindowDim = std::max(game.winW, game.winH);
     for(size_t p = 0; p < logoPikmin.size(); p++) {
         LogoPikmin* pik = &logoPikmin[p];
         
@@ -125,7 +125,7 @@ void TitleScreen::doLogic() {
             float a = getAngle(pik->pos, pik->destination);
             float speed =
                 std::min(
-                    (float) (pik->speed * largest_window_dim * game.deltaT),
+                    (float) (pik->speed * largestWindowDim * game.deltaT),
                     Distance(pik->pos, pik->destination).toFloat() *
                     logoPikminSpeedSmoothness
                 );
@@ -199,22 +199,22 @@ void TitleScreen::handleAllegroEvent(ALLEGRO_EVENT &ev) {
  * @brief Loads the GUI elements for the main menu's main page.
  */
 void TitleScreen::initGuiMainPage() {
-    DataNode* gui_file = &game.content.guiDefs.list[TITLE_SCREEN::GUI_FILE_NAME];
+    DataNode* guiFile = &game.content.guiDefs.list[TITLE_SCREEN::GUI_FILE_NAME];
     
     //Button icon positions.
-    DataNode* icons_node = gui_file->getChildByName("icons_to_the_left");
+    DataNode* iconsNode = guiFile->getChildByName("icons_to_the_left");
     
-#define icon_left(name, def) s2b(icons_node->getChildByName(name)-> \
-                                 getValueOrDefault(def))
+#define iconLeft(name, def) s2b(iconsNode->getChildByName(name)-> \
+                                getValueOrDefault(def))
     
-    bool play_icon_left = icon_left("play", "true");
-    bool make_icon_left = icon_left("make", "false");
-    bool help_icon_left = icon_left("help", "true");
-    bool options_icon_left = icon_left("options", "true");
-    bool stats_icon_left = icon_left("statistics", "true");
-    bool quit_icon_left = icon_left("quit", "false");
+    bool playIconLeft = iconLeft("play", "true");
+    bool makeIconLeft = iconLeft("make", "false");
+    bool helpIconLeft = iconLeft("help", "true");
+    bool optionsIconLeft = iconLeft("options", "true");
+    bool statsIconLeft = iconLeft("statistics", "true");
+    bool quitIconLeft = iconLeft("quit", "false");
     
-#undef icon_left
+#undef iconLeft
     
     //Menu items.
     mainGui.registerCoords("play",       42, 58, 44, 12);
@@ -227,24 +227,24 @@ void TitleScreen::initGuiMainPage() {
     mainGui.registerCoords("exit",       91, 91, 14,  6);
     mainGui.registerCoords("exit_input", 97, 93,  4,  4);
     mainGui.registerCoords("tooltip",    50, 96, 96,  4);
-    mainGui.readCoords(gui_file->getChildByName("positions"));
+    mainGui.readCoords(guiFile->getChildByName("positions"));
     
     //Play button.
-    ButtonGuiItem* play_button =
+    ButtonGuiItem* playButton =
         new ButtonGuiItem("Play", game.sysContent.fntAreaName);
-    play_button->onDraw =
+    playButton->onDraw =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
-            MENU_ICON_PLAY, draw.center, draw.size, play_icon_left
+            MENU_ICON_PLAY, draw.center, draw.size, playIconLeft
         );
         drawButton(
             draw.center, draw.size,
-            play_button->text, play_button->font,
-            play_button->color, play_button->selected,
-            play_button->getJuiceValue()
+            playButton->text, playButton->font,
+            playButton->color, playButton->selected,
+            playButton->getJuiceValue()
         );
     };
-    play_button->onActivate =
+    playButton->onActivate =
     [this] (const Point &) {
         mainGui.responsive = false;
         mainGui.startAnimation(
@@ -265,26 +265,26 @@ void TitleScreen::initGuiMainPage() {
             );
         }
     };
-    play_button->onGetTooltip =
+    playButton->onGetTooltip =
     [] () { return "Choose an area to play in."; };
-    mainGui.addItem(play_button, "play");
+    mainGui.addItem(playButton, "play");
     
     //Make button.
-    ButtonGuiItem* make_button =
+    ButtonGuiItem* makeButton =
         new ButtonGuiItem("Make", game.sysContent.fntAreaName);
-    make_button->onDraw =
+    makeButton->onDraw =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
-            MENU_ICON_MAKE, draw.center, draw.size, make_icon_left
+            MENU_ICON_MAKE, draw.center, draw.size, makeIconLeft
         );
         drawButton(
             draw.center, draw.size,
-            make_button->text, make_button->font,
-            make_button->color, make_button->selected,
-            make_button->getJuiceValue()
+            makeButton->text, makeButton->font,
+            makeButton->color, makeButton->selected,
+            makeButton->getJuiceValue()
         );
     };
-    make_button->onActivate =
+    makeButton->onActivate =
     [this] (const Point &) {
         mainGui.responsive = false;
         mainGui.startAnimation(
@@ -297,55 +297,55 @@ void TitleScreen::initGuiMainPage() {
             TITLE_SCREEN::HUD_MOVE_TIME
         );
     };
-    make_button->onGetTooltip =
+    makeButton->onGetTooltip =
     [] () { return "Make your own content, like areas or animations."; };
-    mainGui.addItem(make_button, "make");
+    mainGui.addItem(makeButton, "make");
     
     //Help button.
-    ButtonGuiItem* help_button =
+    ButtonGuiItem* helpButton =
         new ButtonGuiItem("Help", game.sysContent.fntAreaName);
-    help_button->onDraw =
+    helpButton->onDraw =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
-            MENU_ICON_HELP, draw.center, draw.size, help_icon_left
+            MENU_ICON_HELP, draw.center, draw.size, helpIconLeft
         );
         drawButton(
             draw.center, draw.size,
-            help_button->text, help_button->font,
-            help_button->color, help_button->selected,
-            help_button->getJuiceValue()
+            helpButton->text, helpButton->font,
+            helpButton->color, helpButton->selected,
+            helpButton->getJuiceValue()
         );
     };
-    help_button->onActivate =
+    helpButton->onActivate =
     [this] (const Point &) {
         game.fadeMgr.startFade(false, [] () {
             game.changeState(game.states.annexScreen);
         });
     };
-    help_button->onGetTooltip =
+    helpButton->onGetTooltip =
     [] () {
         return
             "Quick help and tips about how to play. "
             "You can also find this in the pause menu.";
     };
-    mainGui.addItem(help_button, "help");
+    mainGui.addItem(helpButton, "help");
     
     //Options button.
-    ButtonGuiItem* options_button =
+    ButtonGuiItem* optionsButton =
         new ButtonGuiItem("Options", game.sysContent.fntAreaName);
-    options_button->onDraw =
+    optionsButton->onDraw =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
-            MENU_ICON_OPTIONS, draw.center, draw.size, options_icon_left
+            MENU_ICON_OPTIONS, draw.center, draw.size, optionsIconLeft
         );
         drawButton(
             draw.center, draw.size,
-            options_button->text, options_button->font,
-            options_button->color, options_button->selected,
-            options_button->getJuiceValue()
+            optionsButton->text, optionsButton->font,
+            optionsButton->color, optionsButton->selected,
+            optionsButton->getJuiceValue()
         );
     };
-    options_button->onActivate =
+    optionsButton->onActivate =
     [] (const Point &) {
         game.fadeMgr.startFade(false, [] () {
             game.states.annexScreen->menuToLoad =
@@ -353,30 +353,30 @@ void TitleScreen::initGuiMainPage() {
             game.changeState(game.states.annexScreen);
         });
     };
-    options_button->onGetTooltip =
+    optionsButton->onGetTooltip =
     [] () {
         return
             "Customize your playing experience. "
             "You can also find this in the pause menu.";
     };
-    mainGui.addItem(options_button, "options");
+    mainGui.addItem(optionsButton, "options");
     
     //Statistics button.
-    ButtonGuiItem* stats_button =
+    ButtonGuiItem* statsButton =
         new ButtonGuiItem("Statistics", game.sysContent.fntAreaName);
-    stats_button->onDraw =
+    statsButton->onDraw =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
-            MENU_ICON_STATISTICS, draw.center, draw.size, stats_icon_left
+            MENU_ICON_STATISTICS, draw.center, draw.size, statsIconLeft
         );
         drawButton(
             draw.center, draw.size,
-            stats_button->text, stats_button->font,
-            stats_button->color, stats_button->selected,
-            stats_button->getJuiceValue()
+            statsButton->text, statsButton->font,
+            statsButton->color, statsButton->selected,
+            statsButton->getJuiceValue()
         );
     };
-    stats_button->onActivate =
+    statsButton->onActivate =
     [] (const Point &) {
         game.fadeMgr.startFade(false, [] () {
             game.states.annexScreen->menuToLoad =
@@ -384,71 +384,71 @@ void TitleScreen::initGuiMainPage() {
             game.changeState(game.states.annexScreen);
         });
     };
-    stats_button->onGetTooltip =
+    statsButton->onGetTooltip =
     [] () {
         return
             "Check out some fun lifetime statistics. "
             "You can also find this in the pause menu.";
     };
-    mainGui.addItem(stats_button, "stats");
+    mainGui.addItem(statsButton, "stats");
     
     //Discord server button.
-    ButtonGuiItem* discord_button =
+    ButtonGuiItem* discordButton =
         new ButtonGuiItem("", game.sysContent.fntAreaName);
-    discord_button->onDraw =
+    discordButton->onDraw =
     [ = ] (const DrawInfo & draw) {
         drawBitmapInBox(
             game.sysContent.bmpDiscordIcon, draw.center, draw.size * 0.8f, true
         );
         drawButton(
             draw.center, draw.size,
-            discord_button->text, discord_button->font,
-            discord_button->color, discord_button->selected,
-            discord_button->getJuiceValue()
+            discordButton->text, discordButton->font,
+            discordButton->color, discordButton->selected,
+            discordButton->getJuiceValue()
         );
     };
-    discord_button->onActivate =
+    discordButton->onActivate =
     [] (const Point &) {
         openWebBrowser(DISCORD_SERVER_URL);
     };
-    discord_button->onGetTooltip =
+    discordButton->onGetTooltip =
     [] () {
         return
             "Open the project's Discord server! Discussions! Feedback! "
             "Questions! New content!";
     };
-    mainGui.addItem(discord_button, "discord");
+    mainGui.addItem(discordButton, "discord");
     
     //GitHub page button.
-    ButtonGuiItem* github_button =
+    ButtonGuiItem* githubButton =
         new ButtonGuiItem("", game.sysContent.fntAreaName);
-    github_button->onDraw =
+    githubButton->onDraw =
     [ = ] (const DrawInfo & draw) {
         drawBitmapInBox(
             game.sysContent.bmpGithubIcon, draw.center, draw.size * 0.8f, true
         );
         drawButton(
             draw.center, draw.size,
-            github_button->text, github_button->font,
-            github_button->color, github_button->selected,
-            github_button->getJuiceValue()
+            githubButton->text, githubButton->font,
+            githubButton->color, githubButton->selected,
+            githubButton->getJuiceValue()
         );
     };
-    github_button->onActivate =
+    githubButton->onActivate =
     [] (const Point &) {
         openWebBrowser(GITHUB_PAGE_URL);
     };
-    github_button->onGetTooltip =
+    githubButton->onGetTooltip =
     [] () { return "Open the project's GitHub (development) page!"; };
-    mainGui.addItem(github_button, "github");
+    mainGui.addItem(githubButton, "github");
     
     //Exit button.
     mainGui.backItem =
         new ButtonGuiItem("Exit", game.sysContent.fntAreaName);
     mainGui.backItem->onDraw =
-    [this, quit_icon_left] (const DrawInfo & draw) {
+    [this, quitIconLeft] (const DrawInfo & draw) {
         drawMenuButtonIcon(
-            MENU_ICON_QUIT, draw.center, draw.size, quit_icon_left
+            MENU_ICON_QUIT, draw.center, draw.size, quitIconLeft
         );
         drawButton(
             draw.center, draw.size,
@@ -477,12 +477,12 @@ void TitleScreen::initGuiMainPage() {
     guiAddBackInputIcon(&mainGui, "exit_input");
     
     //Tooltip text.
-    TooltipGuiItem* tooltip_text =
+    TooltipGuiItem* tooltipText =
         new TooltipGuiItem(&mainGui);
-    mainGui.addItem(tooltip_text, "tooltip");
+    mainGui.addItem(tooltipText, "tooltip");
     
     //Finishing touches.
-    mainGui.setSelectedItem(play_button, true);
+    mainGui.setSelectedItem(playButton, true);
     mainGui.responsive = false;
     mainGui.hideItems();
 }
@@ -492,20 +492,20 @@ void TitleScreen::initGuiMainPage() {
  * @brief Loads the GUI elements for the main menu's make page.
  */
 void TitleScreen::initGuiMakePage() {
-    DataNode* gui_file = &game.content.guiDefs.list[TITLE_SCREEN::MAKE_GUI_FILE_NAME];
+    DataNode* guiFile = &game.content.guiDefs.list[TITLE_SCREEN::MAKE_GUI_FILE_NAME];
     
     //Button icon positions.
-    DataNode* icons_node = gui_file->getChildByName("icons_to_the_left");
+    DataNode* iconsNode = guiFile->getChildByName("icons_to_the_left");
     
-#define icon_left(name, def) s2b(icons_node->getChildByName(name)-> \
-                                 getValueOrDefault(def))
+#define iconLeft(name, def) s2b(iconsNode->getChildByName(name)-> \
+                                getValueOrDefault(def))
     
-    bool anim_editor_icon_left = icon_left("animation_editor", "true");
-    bool area_editor_icon_left = icon_left("area_editor", "false");
-    bool particle_editor_icon_left = icon_left("particle_editor", "true");
-    bool gui_editor_icon_left = icon_left("gui_editor", "false");
+    bool animEditorIconLeft = iconLeft("animation_editor", "true");
+    bool areaEditorIconLeft = iconLeft("area_editor", "false");
+    bool particleEditorIconLeft = iconLeft("particle_editor", "true");
+    bool guiEditorIconLeft = iconLeft("gui_editor", "false");
     
-#undef icon_left
+#undef iconLeft
     
     //Menu items.
     makeGui.registerCoords("animation_editor", 27.5, 63, 43, 12);
@@ -516,107 +516,107 @@ void TitleScreen::initGuiMakePage() {
     makeGui.registerCoords("back_input",          3, 93,  4,  4);
     makeGui.registerCoords("more",               91, 91, 14,  6);
     makeGui.registerCoords("tooltip",            50, 96, 96,  4);
-    makeGui.readCoords(gui_file->getChildByName("positions"));
+    makeGui.readCoords(guiFile->getChildByName("positions"));
     
     //Animation editor button.
-    ButtonGuiItem* anim_ed_button =
+    ButtonGuiItem* animEdButton =
         new ButtonGuiItem("Animations", game.sysContent.fntAreaName);
-    anim_ed_button->onDraw =
+    animEdButton->onDraw =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
-            MENU_ICON_ANIM_EDITOR, draw.center, draw.size, anim_editor_icon_left
+            MENU_ICON_ANIM_EDITOR, draw.center, draw.size, animEditorIconLeft
         );
         drawButton(
             draw.center, draw.size,
-            anim_ed_button->text, anim_ed_button->font,
-            anim_ed_button->color, anim_ed_button->selected,
-            anim_ed_button->getJuiceValue()
+            animEdButton->text, animEdButton->font,
+            animEdButton->color, animEdButton->selected,
+            animEdButton->getJuiceValue()
         );
     };
-    anim_ed_button->onActivate =
+    animEdButton->onActivate =
     [] (const Point &) {
         game.fadeMgr.startFade(false, [] () {
             game.changeState(game.states.animationEd);
         });
     };
-    anim_ed_button->onGetTooltip =
+    animEdButton->onGetTooltip =
     [] () { return "Make an animation for any object in the game."; };
-    makeGui.addItem(anim_ed_button, "animation_editor");
+    makeGui.addItem(animEdButton, "animation_editor");
     
     //Area editor button.
-    ButtonGuiItem* area_ed_button =
+    ButtonGuiItem* areaEdButton =
         new ButtonGuiItem("Areas", game.sysContent.fntAreaName);
-    area_ed_button->onDraw =
+    areaEdButton->onDraw =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
-            MENU_ICON_AREA_EDITOR, draw.center, draw.size, area_editor_icon_left
+            MENU_ICON_AREA_EDITOR, draw.center, draw.size, areaEditorIconLeft
         );
         drawButton(
             draw.center, draw.size,
-            area_ed_button->text, area_ed_button->font,
-            area_ed_button->color, area_ed_button->selected,
-            area_ed_button->getJuiceValue()
+            areaEdButton->text, areaEdButton->font,
+            areaEdButton->color, areaEdButton->selected,
+            areaEdButton->getJuiceValue()
         );
     };
-    area_ed_button->onActivate =
+    areaEdButton->onActivate =
     [] (const Point &) {
         game.fadeMgr.startFade(false, [] () {
             game.changeState(game.states.areaEd);
         });
     };
-    area_ed_button->onGetTooltip =
+    areaEdButton->onGetTooltip =
     [] () { return "Make an area to play on."; };
-    makeGui.addItem(area_ed_button, "area_editor");
+    makeGui.addItem(areaEdButton, "area_editor");
     
     //Particle editor button.
-    ButtonGuiItem* part_ed_button =
+    ButtonGuiItem* partEdButton =
         new ButtonGuiItem("Particles", game.sysContent.fntAreaName);
-    part_ed_button->onDraw =
+    partEdButton->onDraw =
     [ = ](const DrawInfo & draw) {
         drawMenuButtonIcon(
-            MENU_ICON_PARTICLE_EDITOR, draw.center, draw.size, particle_editor_icon_left
+            MENU_ICON_PARTICLE_EDITOR, draw.center, draw.size, particleEditorIconLeft
         );
         drawButton(
             draw.center, draw.size,
-            part_ed_button->text, part_ed_button->font,
-            part_ed_button->color, part_ed_button->selected,
-            part_ed_button->getJuiceValue()
+            partEdButton->text, partEdButton->font,
+            partEdButton->color, partEdButton->selected,
+            partEdButton->getJuiceValue()
         );
     };
-    part_ed_button->onActivate =
+    partEdButton->onActivate =
     [](const Point &) {
         game.fadeMgr.startFade(false, []() {
             game.changeState(game.states.particleEd);
         });
     };
-    part_ed_button->onGetTooltip =
+    partEdButton->onGetTooltip =
     []() { return "Make generators that create particles."; };
-    makeGui.addItem(part_ed_button, "particle_editor");
+    makeGui.addItem(partEdButton, "particle_editor");
     
     //GUI editor button.
-    ButtonGuiItem* gui_ed_button =
+    ButtonGuiItem* guiEdButton =
         new ButtonGuiItem("GUI", game.sysContent.fntAreaName);
-    gui_ed_button->onDraw =
+    guiEdButton->onDraw =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
-            MENU_ICON_GUI_EDITOR, draw.center, draw.size, gui_editor_icon_left
+            MENU_ICON_GUI_EDITOR, draw.center, draw.size, guiEditorIconLeft
         );
         drawButton(
             draw.center, draw.size,
-            gui_ed_button->text, gui_ed_button->font,
-            gui_ed_button->color, gui_ed_button->selected,
-            gui_ed_button->getJuiceValue()
+            guiEdButton->text, guiEdButton->font,
+            guiEdButton->color, guiEdButton->selected,
+            guiEdButton->getJuiceValue()
         );
     };
-    gui_ed_button->onActivate =
+    guiEdButton->onActivate =
     [] (const Point &) {
         game.fadeMgr.startFade(false, [] () {
             game.changeState(game.states.guiEd);
         });
     };
-    gui_ed_button->onGetTooltip =
+    guiEdButton->onGetTooltip =
     [] () { return "Change the way menus and the gameplay HUD look."; };
-    makeGui.addItem(gui_ed_button, "gui_editor");
+    makeGui.addItem(guiEdButton, "gui_editor");
     
     //Back button.
     makeGui.backItem =
@@ -644,27 +644,27 @@ void TitleScreen::initGuiMakePage() {
     guiAddBackInputIcon(&makeGui);
     
     //More bullet point.
-    BulletGuiItem* more_bullet =
+    BulletGuiItem* moreBullet =
         new BulletGuiItem("More...", game.sysContent.fntStandard);
-    more_bullet->onActivate =
+    moreBullet->onActivate =
     [] (const Point &) {
         openManual("making.html");
     };
-    more_bullet->onGetTooltip =
+    moreBullet->onGetTooltip =
     [] () {
         return
             "Click to open the manual (in the game's folder) for "
             "more info on content making.";
     };
-    makeGui.addItem(more_bullet, "more");
+    makeGui.addItem(moreBullet, "more");
     
     //Tooltip text.
-    TooltipGuiItem* tooltip_text =
+    TooltipGuiItem* tooltipText =
         new TooltipGuiItem(&makeGui);
-    makeGui.addItem(tooltip_text, "tooltip");
+    makeGui.addItem(tooltipText, "tooltip");
     
     //Finishing touches.
-    makeGui.setSelectedItem(anim_ed_button, true);
+    makeGui.setSelectedItem(animEdButton, true);
     makeGui.responsive = false;
     makeGui.hideItems();
 }
@@ -674,18 +674,18 @@ void TitleScreen::initGuiMakePage() {
  * @brief Loads the GUI elements for the main menu's play page.
  */
 void TitleScreen::initGuiPlayPage() {
-    DataNode* gui_file = &game.content.guiDefs.list[TITLE_SCREEN::PLAY_GUI_FILE_NAME];
+    DataNode* guiFile = &game.content.guiDefs.list[TITLE_SCREEN::PLAY_GUI_FILE_NAME];
     
     //Button icon positions.
-    DataNode* icons_node = gui_file->getChildByName("icons_to_the_left");
+    DataNode* iconsNode = guiFile->getChildByName("icons_to_the_left");
     
-#define icon_left(name, def) s2b(icons_node->getChildByName(name)-> \
-                                 getValueOrDefault(def))
+#define iconLeft(name, def) s2b(iconsNode->getChildByName(name)-> \
+                                getValueOrDefault(def))
     
-    bool simple_areas_icon_left = icon_left("simple_areas", "true");
-    bool missions_icon_left = icon_left("missions", "true");
+    bool simpleAreasIconLeft = iconLeft("simple_areas", "true");
+    bool missionsIconLeft = iconLeft("missions", "true");
     
-#undef icon_left
+#undef iconLeft
     
     //Menu items.
     playGui.registerCoords("simple",     42, 60, 60, 12.5);
@@ -693,24 +693,24 @@ void TitleScreen::initGuiPlayPage() {
     playGui.registerCoords("back",        9, 91, 14,    6);
     playGui.registerCoords("back_input",  3, 93,  4,    4);
     playGui.registerCoords("tooltip",    50, 96, 96,    4);
-    playGui.readCoords(gui_file->getChildByName("positions"));
+    playGui.readCoords(guiFile->getChildByName("positions"));
     
     //Play a simple area button.
-    ButtonGuiItem* simple_button =
+    ButtonGuiItem* simpleButton =
         new ButtonGuiItem("Simple areas", game.sysContent.fntAreaName);
-    simple_button->onDraw =
+    simpleButton->onDraw =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
-            MENU_ICON_SIMPLE_AREAS, draw.center, draw.size, simple_areas_icon_left
+            MENU_ICON_SIMPLE_AREAS, draw.center, draw.size, simpleAreasIconLeft
         );
         drawButton(
             draw.center, draw.size,
-            simple_button->text, simple_button->font,
-            simple_button->color, simple_button->selected,
-            simple_button->getJuiceValue()
+            simpleButton->text, simpleButton->font,
+            simpleButton->color, simpleButton->selected,
+            simpleButton->getJuiceValue()
         );
     };
-    simple_button->onActivate =
+    simpleButton->onActivate =
     [] (const Point &) {
         game.fadeMgr.startFade(false, [] () {
             game.states.annexScreen->areaMenuAreaType =
@@ -720,26 +720,26 @@ void TitleScreen::initGuiPlayPage() {
             game.changeState(game.states.annexScreen);
         });
     };
-    simple_button->onGetTooltip =
+    simpleButton->onGetTooltip =
     [] () { return "Pick a simple area with no goal, and start playing!"; };
-    playGui.addItem(simple_button, "simple");
+    playGui.addItem(simpleButton, "simple");
     
     //Play a mission area button.
-    ButtonGuiItem* mission_button =
+    ButtonGuiItem* missionButton =
         new ButtonGuiItem("Missions", game.sysContent.fntAreaName);
-    mission_button->onDraw =
+    missionButton->onDraw =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
-            MENU_ICON_MISSIONS, draw.center, draw.size, missions_icon_left
+            MENU_ICON_MISSIONS, draw.center, draw.size, missionsIconLeft
         );
         drawButton(
             draw.center, draw.size,
-            mission_button->text, mission_button->font,
-            mission_button->color, mission_button->selected,
-            mission_button->getJuiceValue()
+            missionButton->text, missionButton->font,
+            missionButton->color, missionButton->selected,
+            missionButton->getJuiceValue()
         );
     };
-    mission_button->onActivate =
+    missionButton->onActivate =
     [] (const Point &) {
         game.fadeMgr.startFade(false, [] () {
             game.states.annexScreen->areaMenuAreaType =
@@ -749,13 +749,13 @@ void TitleScreen::initGuiPlayPage() {
             game.changeState(game.states.annexScreen);
         });
     };
-    mission_button->onGetTooltip =
+    missionButton->onGetTooltip =
     [] () {
         return
             "Pick a mission area with goals and limitations, "
             "and start playing!";
     };
-    playGui.addItem(mission_button, "mission");
+    playGui.addItem(missionButton, "mission");
     
     //Back button.
     playGui.backItem =
@@ -783,12 +783,12 @@ void TitleScreen::initGuiPlayPage() {
     guiAddBackInputIcon(&playGui);
     
     //Tooltip text.
-    TooltipGuiItem* tooltip_text =
+    TooltipGuiItem* tooltipText =
         new TooltipGuiItem(&playGui);
-    playGui.addItem(tooltip_text, "tooltip");
+    playGui.addItem(tooltipText, "tooltip");
     
     //Finishing touches.
-    playGui.setSelectedItem(simple_button, true);
+    playGui.setSelectedItem(simpleButton, true);
     playGui.responsive = false;
     playGui.hideItems();
 }
@@ -798,7 +798,7 @@ void TitleScreen::initGuiPlayPage() {
  * @brief Loads the GUI elements for the main menu's tutorial question page.
  */
 void TitleScreen::initGuiTutorialPage() {
-    DataNode* gui_file = &game.content.guiDefs.list[TITLE_SCREEN::TUTORIAL_GUI_FILE_NAME];
+    DataNode* guiFile = &game.content.guiDefs.list[TITLE_SCREEN::TUTORIAL_GUI_FILE_NAME];
     
     //Menu items.
     tutorialGui.registerCoords("question", 50,     60, 60,  12.5);
@@ -806,18 +806,18 @@ void TitleScreen::initGuiTutorialPage() {
     tutorialGui.registerCoords("no_input",  7,     85,  4,     4);
     tutorialGui.registerCoords("yes",      74,     81, 40,    10);
     tutorialGui.registerCoords("tooltip",  50,     96, 96,     4);
-    tutorialGui.readCoords(gui_file->getChildByName("positions"));
+    tutorialGui.readCoords(guiFile->getChildByName("positions"));
     
     //Question text.
-    TextGuiItem* question_text =
+    TextGuiItem* questionText =
         new TextGuiItem(
         "If you're new to Pikifen, it is recommended to play the "
         "\"Tutorial Meadow\" mission first.\n\n"
         "Do you want to play there now?",
         game.sysContent.fntStandard
     );
-    question_text->lineWrap = true;
-    tutorialGui.addItem(question_text, "question");
+    questionText->lineWrap = true;
+    tutorialGui.addItem(questionText, "question");
     
     //No button.
     tutorialGui.backItem =
@@ -846,9 +846,9 @@ void TitleScreen::initGuiTutorialPage() {
     guiAddBackInputIcon(&tutorialGui, "no_input");
     
     //Yes button.
-    ButtonGuiItem* yes_button =
+    ButtonGuiItem* yesButton =
         new ButtonGuiItem("Yes", game.sysContent.fntStandard);
-    yes_button->onActivate =
+    yesButton->onActivate =
     [] (const Point &) {
         game.states.gameplay->pathOfAreaToLoad =
             game.content.areas.manifestToPath(
@@ -860,20 +860,20 @@ void TitleScreen::initGuiTutorialPage() {
             game.changeState(game.states.gameplay);
         });
     };
-    yes_button->onGetTooltip =
+    yesButton->onGetTooltip =
     [] () {
         return
             "Play Tutorial Meadow now.";
     };
-    tutorialGui.addItem(yes_button, "yes");
+    tutorialGui.addItem(yesButton, "yes");
     
     //Tooltip text.
-    TooltipGuiItem* tooltip_text =
+    TooltipGuiItem* tooltipText =
         new TooltipGuiItem(&tutorialGui);
-    tutorialGui.addItem(tooltip_text, "tooltip");
+    tutorialGui.addItem(tooltipText, "tooltip");
     
     //Finishing touches.
-    tutorialGui.setSelectedItem(yes_button, true);
+    tutorialGui.setSelectedItem(yesButton, true);
     tutorialGui.responsive = false;
     tutorialGui.hideItems();
 }
@@ -918,52 +918,52 @@ void TitleScreen::load() {
     }
     pageToLoad = MAIN_MENU_PAGE_MAIN;
     
-    DataNode* settings_file = &game.content.guiDefs.list[TITLE_SCREEN::GUI_FILE_NAME];
+    DataNode* settingsFile = &game.content.guiDefs.list[TITLE_SCREEN::GUI_FILE_NAME];
     
     //Resources.
     bmpMenuBg = game.content.bitmaps.list.get(game.sysContentNames.bmpTitleScreenBg);
     
     //Logo pikmin.
-    DataNode* logo_node = settings_file->getChildByName("logo");
-    ReaderSetter logo_rs(logo_node);
+    DataNode* logoNode = settingsFile->getChildByName("logo");
+    ReaderSetter lRS(logoNode);
     
-    DataNode* pik_types_node =
-        logo_node->getChildByName("pikmin_types");
-    for(size_t t = 0; t < pik_types_node->getNrOfChildren(); t++) {
-        DataNode* type_node = pik_types_node->getChild(t);
-        if(type_node->name.empty()) continue;
-        logoTypeBitmaps[type_node->name[0]] =
-            game.content.bitmaps.list.get(type_node->value, type_node);
+    DataNode* pikTypesNode =
+        logoNode->getChildByName("pikmin_types");
+    for(size_t t = 0; t < pikTypesNode->getNrOfChildren(); t++) {
+        DataNode* typeNode = pikTypesNode->getChild(t);
+        if(typeNode->name.empty()) continue;
+        logoTypeBitmaps[typeNode->name[0]] =
+            game.content.bitmaps.list.get(typeNode->value, typeNode);
     }
     
-    DataNode* map_node =
-        logo_node->getChildByName("map");
-    size_t map_total_rows = map_node->getNrOfChildren();
-    size_t map_total_cols = 0;
-    for(size_t r = 0; r < map_total_rows; r++) {
-        map_total_cols =
-            std::max(map_total_cols, map_node->getChild(r)->name.size());
+    DataNode* mapNode =
+        logoNode->getChildByName("map");
+    size_t mapTotalRows = mapNode->getNrOfChildren();
+    size_t mapTotalCols = 0;
+    for(size_t r = 0; r < mapTotalRows; r++) {
+        mapTotalCols =
+            std::max(mapTotalCols, mapNode->getChild(r)->name.size());
     }
     
-    logo_rs.set("min_window_limit", logoMinWindowLimit);
-    logo_rs.set("max_window_limit", logoMaxWindowLimit);
-    logo_rs.set("pikmin_max_speed", logoPikminMaxSpeed);
-    logo_rs.set("pikmin_min_speed", logoPikminMinSpeed);
-    logo_rs.set("pikmin_speed_smoothness", logoPikminSpeedSmoothness);
-    logo_rs.set("pikmin_sway_amount", logoPikminSwayAmount);
-    logo_rs.set("pikmin_sway_max_speed", logoPikminSwayMaxSpeed);
-    logo_rs.set("pikmin_sway_min_speed", logoPikminSwayMinSpeed);
-    logo_rs.set("pikmin_size", logoPikminSize);
+    lRS.set("min_window_limit", logoMinWindowLimit);
+    lRS.set("max_window_limit", logoMaxWindowLimit);
+    lRS.set("pikmin_max_speed", logoPikminMaxSpeed);
+    lRS.set("pikmin_min_speed", logoPikminMinSpeed);
+    lRS.set("pikmin_speed_smoothness", logoPikminSpeedSmoothness);
+    lRS.set("pikmin_sway_amount", logoPikminSwayAmount);
+    lRS.set("pikmin_sway_max_speed", logoPikminSwayMaxSpeed);
+    lRS.set("pikmin_sway_min_speed", logoPikminSwayMinSpeed);
+    lRS.set("pikmin_size", logoPikminSize);
     
-    bool map_ok = true;
+    bool mapOk = true;
     
-    for(size_t r = 0; r < map_total_rows; r++) {
-        string row = map_node->getChild(r)->name;
+    for(size_t r = 0; r < mapTotalRows; r++) {
+        string row = mapNode->getChild(r)->name;
         
         for(size_t c = 0; c < row.size(); c++) {
             if(row[c] == '.') continue;
             if(logoTypeBitmaps.find(row[c]) == logoTypeBitmaps.end()) {
-                map_ok = false;
+                mapOk = false;
                 game.errors.report(
                     "Title screen Pikmin logo map has an unknown character \"" +
                     string(1, row[c]) + "\" on row " + i2s(r + 1) +
@@ -974,22 +974,22 @@ void TitleScreen::load() {
             
             LogoPikmin pik;
             
-            Point min_pos = logoMinWindowLimit;
-            min_pos.x *= game.winW / 100.0f;
-            min_pos.y *= game.winH / 100.0f;
-            Point max_pos = logoMaxWindowLimit;
-            max_pos.x *= game.winW / 100.0f;
-            max_pos.y *= game.winH / 100.0f;
+            Point minPos = logoMinWindowLimit;
+            minPos.x *= game.winW / 100.0f;
+            minPos.y *= game.winH / 100.0f;
+            Point maxPos = logoMaxWindowLimit;
+            maxPos.x *= game.winW / 100.0f;
+            maxPos.y *= game.winH / 100.0f;
             
             pik.top = logoTypeBitmaps[row[c]];
             pik.destination =
                 Point(
-                    min_pos.x +
-                    (max_pos.x - min_pos.x) *
-                    (c / (float) map_total_cols),
-                    min_pos.y +
-                    (max_pos.y - min_pos.y) *
-                    (r / (float) map_total_rows)
+                    minPos.x +
+                    (maxPos.x - minPos.x) *
+                    (c / (float) mapTotalCols),
+                    minPos.y +
+                    (maxPos.y - minPos.y) *
+                    (r / (float) mapTotalRows)
                 );
                 
             pik.pos =
@@ -1011,7 +1011,7 @@ void TitleScreen::load() {
             logoPikmin.push_back(pik);
         }
         
-        if(!map_ok) break;
+        if(!mapOk) break;
     }
     
     //Finishing touches.

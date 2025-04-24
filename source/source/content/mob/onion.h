@@ -84,6 +84,6 @@ protected:
 
     //--- Function declarations ---
     
-    void tickClassSpecifics(float delta_t) override;
+    void tickClassSpecifics(float deltaT) override;
     
 };

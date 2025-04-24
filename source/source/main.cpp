@@ -22,9 +22,9 @@
 int main(int argc, char** argv) {
     game = Game();
     
-    int game_start_result = game.start();
-    if(game_start_result != 0) {
-        return game_start_result;
+    int gameStartResult = game.start();
+    if(gameStartResult != 0) {
+        return gameStartResult;
     }
     
     game.mainLoop();

@@ -22,11 +22,11 @@
  * @brief Returns a string representing the current date and time,
  * in ISO 8601 format (YYYY/MM/DD)).
  *
- * @param file_name_friendly If true, slashes become dashes,
+ * @param fileNameFriendly If true, slashes become dashes,
  * and semicolons become dots.
  * @return The string.
  */
-string getCurrentTime(bool file_name_friendly) {
+string getCurrentTime(bool fileNameFriendly) {
     time_t tt;
     time(&tt);
     struct tm t;
@@ -39,15 +39,15 @@ string getCurrentTime(bool file_name_friendly) {
     
     return
         i2s(t.tm_year + 1900) +
-        (file_name_friendly ? "-" : "/") +
+        (fileNameFriendly ? "-" : "/") +
         leadingZero(t.tm_mon + 1) +
-        (file_name_friendly ? "-" : "/") +
+        (fileNameFriendly ? "-" : "/") +
         leadingZero(t.tm_mday) +
-        (file_name_friendly ? "_" : " ") +
+        (fileNameFriendly ? "_" : " ") +
         leadingZero(t.tm_hour) +
-        (file_name_friendly ? "." : ":") +
+        (fileNameFriendly ? "." : ":") +
         leadingZero(t.tm_min) +
-        (file_name_friendly ? "." : ":") +
+        (fileNameFriendly ? "." : ":") +
         leadingZero(t.tm_sec);
 }
 

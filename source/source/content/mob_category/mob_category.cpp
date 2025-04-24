@@ -26,25 +26,25 @@ using std::string;
  * @brief Constructs a new mob category object.
  *
  * @param id This category's ID.
- * @param internal_name Internal name.
+ * @param internalName Internal name.
  * @param name Standard category name, in singular.
- * @param plural_name Standard category name, in plural.
- * @param folder_name Name of the folder where the mob types for this
+ * @param pluralName Standard category name, in plural.
+ * @param folderName Name of the folder where the mob types for this
  * category are.
- * @param editor_color In the area editor, objects of this category get
+ * @param editorColor In the area editor, objects of this category get
  * this color.
  */
 MobCategory::MobCategory(
-    const MOB_CATEGORY id, const string &internal_name,
-    const string &name, const string &plural_name,
-    const string &folder_name, const ALLEGRO_COLOR editor_color
+    const MOB_CATEGORY id, const string &internalName,
+    const string &name, const string &pluralName,
+    const string &folderName, const ALLEGRO_COLOR editorColor
 ) :
-    internalName(internal_name),
+    internalName(internalName),
     name(name),
     id(id),
-    pluralName(plural_name),
-    folderName(folder_name),
-    editorColor(editor_color) {
+    pluralName(pluralName),
+    folderName(folderName),
+    editorColor(editorColor) {
     
 }
 
@@ -111,14 +111,14 @@ MobCategory* CategoryManager::getFromFolderName(
 /**
  * @brief Returns a category given its internal name.
  *
- * @param internal_name Internal name of the category.
+ * @param internalName Internal name of the category.
  * @return The category, or nullptr on error.
  */
 MobCategory* CategoryManager::getFromInternalName(
-    const string &internal_name
+    const string &internalName
 ) const {
     for(size_t n = 0; n < categories.size(); n++) {
-        if(categories[n]->internalName == internal_name) return categories[n];
+        if(categories[n]->internalName == internalName) return categories[n];
     }
     return nullptr;
 }
@@ -224,10 +224,10 @@ void NoneCategory::eraseMob(Mob* m) { }
  * @brief Returns a type of mob given its internal name,
  * or nullptr on error.
  *
- * @param internal_name Internal name of the mob type to get.
+ * @param internalName Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-MobType* NoneCategory::getType(const string &internal_name) const {
+MobType* NoneCategory::getType(const string &internalName) const {
     return nullptr;
 }
 
@@ -243,7 +243,7 @@ void NoneCategory::getTypeNames(vector<string> &list) const { }
 /**
  * @brief Registers a created type of leader.
  *
- * @param internal_name Internal name of the mob type.
+ * @param internalName Internal name of the mob type.
  * @param type Mob type to register.
  */
-void NoneCategory::registerType(const string &internal_name, MobType* type) { }
+void NoneCategory::registerType(const string &internalName, MobType* type) { }

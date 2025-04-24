@@ -161,7 +161,7 @@ public:
     //What time of the day is it in-game? In minutes.
     float dayMinutes = 0.0f;
     
-    //Multiply the delta_t by this much. Only affects gameplay stuff, not menus.
+    //Multiply the deltaT by this much. Only affects gameplay stuff, not menus.
     float deltaTMult = 1.0f;
     
     //Replay of the gameplay.
@@ -392,13 +392,13 @@ public:
     void enter();
     void leave(const GAMEPLAY_LEAVE_TARGET target);
     void startLeaving(const GAMEPLAY_LEAVE_TARGET target);
-    void changeSprayCount(size_t type_idx, signed int amount);
+    void changeSprayCount(size_t typeIdx, signed int amount);
     size_t getAmountOfFieldPikmin(const PikminType* filter = nullptr);
     size_t getAmountOfGroupPikmin(const PikminType* filter = nullptr);
     size_t getAmountOfIdlePikmin(const PikminType* filter = nullptr);
     long getAmountOfOnionPikmin(const PikminType* filter = nullptr);
     long getAmountOfTotalPikmin(const PikminType* filter = nullptr);
-    void isNearEnemyAndBoss(bool* near_enemy, bool* near_boss);
+    void isNearEnemyAndBoss(bool* nearEnemy, bool* nearBoss);
     void updateAvailableLeaders();
     void updateClosestGroupMembers();
     void load() override;
@@ -465,18 +465,18 @@ private:
     
     //--- Function declarations ---
     
-    void doAestheticLeaderLogic(float delta_t);
-    void doAestheticLogic(float delta_t);
+    void doAestheticLeaderLogic(float deltaT);
+    void doAestheticLogic(float deltaT);
     void doGameDrawing(
-        ALLEGRO_BITMAP* bmp_output = nullptr,
-        const ALLEGRO_TRANSFORM* bmp_transform = nullptr,
-        const MakerTools::AreaImageSettings &bmp_settings =
+        ALLEGRO_BITMAP* bmpOutput = nullptr,
+        const ALLEGRO_TRANSFORM* bmpTransform = nullptr,
+        const MakerTools::AreaImageSettings &bmpSettings =
             MakerTools::AreaImageSettings()
     );
-    void doGameplayLeaderLogic(float delta_t);
-    void doGameplayLogic(float delta_t);
+    void doGameplayLeaderLogic(float deltaT);
+    void doGameplayLogic(float deltaT);
     void doMenuLogic();
-    void drawBackground(ALLEGRO_BITMAP* bmp_output);
+    void drawBackground(ALLEGRO_BITMAP* bmpOutput);
     void drawDebugTools();
     void drawLeaderCursor(const ALLEGRO_COLOR &color);
     void drawIngameText();
@@ -489,10 +489,10 @@ private:
     void drawSystemStuff();
     void drawThrowPreview();
     void drawTreeShadows();
-    void drawWorldComponents(ALLEGRO_BITMAP* bmp_output);
+    void drawWorldComponents(ALLEGRO_BITMAP* bmpOutput);
     void endMission(bool cleared);
     ALLEGRO_BITMAP* generateFogBitmap(
-        float near_radius, float far_radius
+        float nearRadius, float farRadius
     );
     Mob* getClosestGroupMember(const SubgroupType* type, bool* distant = nullptr);
     void handlePlayerAction(const PlayerAction &action);
@@ -501,23 +501,23 @@ private:
     bool isMissionFailMet(MISSION_FAIL_COND* reason);
     void loadGameContent();
     void markAreaCellsActive(
-        const Point &top_left, const Point &bottom_right
+        const Point &top_left, const Point &bottomRight
     );
     void markAreaCellsActive(
-        int from_x, int to_x, int from_y, int to_y
+        int fromX, int toX, int fromY, int toY
     );
-    void processMobInteractions(Mob* m_ptr, size_t m);
+    void processMobInteractions(Mob* mPtr, size_t m);
     void processMobMiscInteractions(
-        Mob* m_ptr, Mob* m2_ptr, size_t m, size_t m2,
-        const Distance &d, const Distance &d_between,
-        vector<PendingIntermobEvent> &pending_intermob_events
+        Mob* mPtr, Mob* m2Ptr, size_t m, size_t m2,
+        const Distance &d, const Distance &dBetween,
+        vector<PendingIntermobEvent> &pendingIntermobEvents
     );
     void processMobReaches(
-        Mob* m_ptr, Mob* m2_ptr, size_t m, size_t m2, const Distance &d_between,
-        vector<PendingIntermobEvent> &pending_intermob_events
+        Mob* mPtr, Mob* m2Ptr, size_t m, size_t m2, const Distance &dBetween,
+        vector<PendingIntermobEvent> &pendingIntermobEvents
     );
     void processMobTouches(
-        Mob* m_ptr, Mob* m2_ptr, size_t m, size_t m2, Distance &d
+        Mob* mPtr, Mob* m2Ptr, size_t m, size_t m2, Distance &d
     );
     bool shouldIngorePlayerAction(const PlayerAction &action);
     void unloadGameContent();
@@ -576,9 +576,9 @@ struct GameplayMessageBox {
     
     //--- Function declarations ---
     
-    GameplayMessageBox(const string &text, ALLEGRO_BITMAP* speaker_icon);
+    GameplayMessageBox(const string &text, ALLEGRO_BITMAP* speakerIcon);
     void advance();
     void close();
-    void tick(float delta_t);
+    void tick(float deltaT);
     
 };

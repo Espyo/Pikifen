@@ -29,15 +29,15 @@ using std::size_t;
  *
  * @param typ Mob type to create the finite state machine for.
  */
-void pile_fsm::createFsm(MobType* typ) {
+void PileFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;
     
     efc.newState("idling", PILE_STATE_IDLING); {
         efc.newEvent(MOB_EV_ON_ENTER); {
-            efc.run(pile_fsm::becomeIdle);
+            efc.run(PileFsm::becomeIdle);
         }
         efc.newEvent(MOB_EV_HITBOX_TOUCH_N_A); {
-            efc.run(pile_fsm::beAttacked);
+            efc.run(PileFsm::beAttacked);
         }
     }
     
@@ -62,89 +62,89 @@ void pile_fsm::createFsm(MobType* typ) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void pile_fsm::beAttacked(Mob* m, void* info1, void* info2) {
-    gen_mob_fsm::beAttacked(m, info1, info2);
+void PileFsm::beAttacked(Mob* m, void* info1, void* info2) {
+    GenMobFsm::beAttacked(m, info1, info2);
     
     HitboxInteraction* info = (HitboxInteraction*) info1;
-    Pile* pil_ptr = (Pile*) m;
+    Pile* pilPtr = (Pile*) m;
     
-    size_t amount_before = pil_ptr->amount;
-    int intended_amount =
-        ceil(pil_ptr->health / pil_ptr->pilType->healthPerResource);
-    int amount_to_spawn = (int) pil_ptr->amount - intended_amount;
-    amount_to_spawn = std::max((int) 0, amount_to_spawn);
+    size_t amountBefore = pilPtr->amount;
+    int intendedAmount =
+        ceil(pilPtr->health / pilPtr->pilType->healthPerResource);
+    int amountToSpawn = (int) pilPtr->amount - intendedAmount;
+    amountToSpawn = std::max((int) 0, amountToSpawn);
     
-    if(amount_to_spawn == 0) return;
+    if(amountToSpawn == 0) return;
     
-    if(amount_to_spawn > 1 && !pil_ptr->pilType->canDropMultiple) {
+    if(amountToSpawn > 1 && !pilPtr->pilType->canDropMultiple) {
         //Can't drop multiple? Let's knock that number down.
-        amount_to_spawn = 1;
-        intended_amount = (int) (pil_ptr->amount - 1);
-        pil_ptr->health =
-            pil_ptr->pilType->healthPerResource * intended_amount;
+        amountToSpawn = 1;
+        intendedAmount = (int) (pilPtr->amount - 1);
+        pilPtr->health =
+            pilPtr->pilType->healthPerResource * intendedAmount;
     }
     
-    Resource* resource_to_pick_up = nullptr;
-    Pikmin* pikmin_to_start_carrying = nullptr;
+    Resource* resourceToPickUp = nullptr;
+    Pikmin* pikminToStartCarrying = nullptr;
     
-    for(size_t r = 0; r < (size_t) amount_to_spawn; r++) {
-        Point spawn_pos;
-        float spawn_z = 0;
-        float spawn_angle = 0;
-        float spawn_h_speed = 0;
-        float spawn_v_speed = 0;
+    for(size_t r = 0; r < (size_t) amountToSpawn; r++) {
+        Point spawnPos;
+        float spawnZ = 0;
+        float spawnAngle = 0;
+        float spawnHSpeed = 0;
+        float spawnVSpeed = 0;
         
         if(r == 0 && info->mob2->type->category->id == MOB_CATEGORY_PIKMIN) {
-            pikmin_to_start_carrying = (Pikmin*) (info->mob2);
+            pikminToStartCarrying = (Pikmin*) (info->mob2);
             //If this was a Pikmin's attack, spawn the first resource nearby
             //so it can pick it up.
-            spawn_angle =
-                getAngle(pil_ptr->pos, pikmin_to_start_carrying->pos);
-            spawn_pos =
-                pikmin_to_start_carrying->pos +
+            spawnAngle =
+                getAngle(pilPtr->pos, pikminToStartCarrying->pos);
+            spawnPos =
+                pikminToStartCarrying->pos +
                 angleToCoordinates(
-                    spawn_angle, game.config.pikmin.standardRadius * 1.5
+                    spawnAngle, game.config.pikmin.standardRadius * 1.5
                 );
         } else {
-            spawn_pos = pil_ptr->pos;
-            spawn_z = pil_ptr->height + 32.0f;
-            spawn_angle = game.rng.f(0, TAU);
-            spawn_h_speed = pil_ptr->radius * 3;
-            spawn_v_speed = 600.0f;
+            spawnPos = pilPtr->pos;
+            spawnZ = pilPtr->height + 32.0f;
+            spawnAngle = game.rng.f(0, TAU);
+            spawnHSpeed = pilPtr->radius * 3;
+            spawnVSpeed = 600.0f;
         }
         
-        Resource* new_resource =
+        Resource* newResource =
             (
                 (Resource*)
                 createMob(
                     game.mobCategories.get(MOB_CATEGORY_RESOURCES),
-                    spawn_pos, pil_ptr->pilType->contents,
-                    spawn_angle, "",
-        [pil_ptr] (Mob * m) { ((Resource*) m)->originPile = pil_ptr; }
+                    spawnPos, pilPtr->pilType->contents,
+                    spawnAngle, "",
+        [pilPtr] (Mob * m) { ((Resource*) m)->originPile = pilPtr; }
                 )
             );
             
-        new_resource->z = spawn_z;
-        new_resource->speed.x = cos(spawn_angle) * spawn_h_speed;
-        new_resource->speed.y = sin(spawn_angle) * spawn_h_speed;
-        new_resource->speedZ = spawn_v_speed;
-        new_resource->links = pil_ptr->links;
+        newResource->z = spawnZ;
+        newResource->speed.x = cos(spawnAngle) * spawnHSpeed;
+        newResource->speed.y = sin(spawnAngle) * spawnHSpeed;
+        newResource->speedZ = spawnVSpeed;
+        newResource->links = pilPtr->links;
         
         if(r == 0) {
-            resource_to_pick_up = new_resource;
+            resourceToPickUp = newResource;
         }
     }
     
-    if(pikmin_to_start_carrying) {
-        pikmin_to_start_carrying->forceCarry(resource_to_pick_up);
+    if(pikminToStartCarrying) {
+        pikminToStartCarrying->forceCarry(resourceToPickUp);
     }
     
-    pil_ptr->amount = intended_amount;
+    pilPtr->amount = intendedAmount;
     
-    if(amount_before == pil_ptr->pilType->maxAmount) {
-        pil_ptr->rechargeTimer.start();
+    if(amountBefore == pilPtr->pilType->maxAmount) {
+        pilPtr->rechargeTimer.start();
     }
-    pil_ptr->update();
+    pilPtr->update();
 }
 
 
@@ -155,7 +155,7 @@ void pile_fsm::beAttacked(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void pile_fsm::becomeIdle(Mob* m, void* info1, void* info2) {
-    Pile* pil_ptr = (Pile*) m;
-    pil_ptr->update();
+void PileFsm::becomeIdle(Mob* m, void* info1, void* info2) {
+    Pile* pilPtr = (Pile*) m;
+    pilPtr->update();
 }

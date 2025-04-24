@@ -58,19 +58,19 @@ void Pile::changeAmount(int change) {
  * This only keeps in mind things specific to this class, so it shouldn't
  * check for things like carrying, which is global to all mobs.
  *
- * @param fraction_value_nr The fraction's value (upper) number gets set here.
- * @param fraction_req_nr The fraction's required (lower) number gets set here.
- * @param fraction_color The fraction's color gets set here.
+ * @param fractionValueNr The fraction's value (upper) number gets set here.
+ * @param fractionReqNr The fraction's required (lower) number gets set here.
+ * @param fractionColor The fraction's color gets set here.
  * @return Whether the numbers should be shown.
  */
 bool Pile::getFractionNumbersInfo(
-    float* fraction_value_nr, float* fraction_req_nr,
-    ALLEGRO_COLOR* fraction_color
+    float* fractionValueNr, float* fractionReqNr,
+    ALLEGRO_COLOR* fractionColor
 ) const {
     if(amount == 0 || !pilType->showAmount) return false;
-    *fraction_value_nr = amount;
-    *fraction_req_nr = 0;
-    *fraction_color = game.config.aestheticGen.carryingColorStop;
+    *fractionValueNr = amount;
+    *fractionReqNr = 0;
+    *fractionColor = game.config.aestheticGen.carryingColorStop;
     return true;
 }
 
@@ -83,10 +83,10 @@ bool Pile::getFractionNumbersInfo(
 void Pile::readScriptVars(const ScriptVarReader &svr) {
     Mob::readScriptVars(svr);
     
-    size_t amount_var;
+    size_t amountVar;
     
-    if(svr.get("amount", amount_var)) {
-        amount = amount_var;
+    if(svr.get("amount", amountVar)) {
+        amount = amountVar;
         amount = std::clamp(amount, (size_t) 0, pilType->maxAmount);
     }
     
@@ -108,10 +108,10 @@ void Pile::recharge() {
 /**
  * @brief Ticks time by one frame of logic.
  *
- * @param delta_t How long the frame's tick is, in seconds.
+ * @param deltaT How long the frame's tick is, in seconds.
  */
-void Pile::tickClassSpecifics(float delta_t) {
-    rechargeTimer.tick(delta_t);
+void Pile::tickClassSpecifics(float deltaT) {
+    rechargeTimer.tick(deltaT);
     
     if(amount == 0 && pilType->deleteWhenFinished) {
         //Ready to delete. Unless it's being used, that is.
@@ -120,8 +120,8 @@ void Pile::tickClassSpecifics(float delta_t) {
             size_t r = 0;
             r < game.states.gameplay->mobs.resources.size(); r++
         ) {
-            Resource* r_ptr = game.states.gameplay->mobs.resources[r];
-            if(r_ptr->originPile == this) {
+            Resource* rPtr = game.states.gameplay->mobs.resources[r];
+            if(rPtr->originPile == this) {
                 return;
             }
         }
@@ -142,19 +142,19 @@ void Pile::update() {
         rechargeTimer.stop();
     }
     
-    size_t anim_amount_nr = 0;
-    size_t n_groups = pilType->animationGroupSuffixes.size();
-    if(n_groups > 1 && amount > 0) {
-        anim_amount_nr =
+    size_t animAmountNr = 0;
+    size_t nGroups = pilType->animationGroupSuffixes.size();
+    if(nGroups > 1 && amount > 0) {
+        animAmountNr =
             ceil(
-                (n_groups - 1) *
+                (nGroups - 1) *
                 ((float) amount / (float) pilType->maxAmount)
             );
-        anim_amount_nr = std::clamp(anim_amount_nr, (size_t) 0, n_groups - 1);
+        animAmountNr = std::clamp(animAmountNr, (size_t) 0, nGroups - 1);
     }
     setAnimation(
         getAnimationIdxFromBaseAndGroup(
-            PILE_ANIM_IDLING, N_PILE_ANIMS, anim_amount_nr
+            PILE_ANIM_IDLING, N_PILE_ANIMS, animAmountNr
         ),
         START_ANIM_OPTION_NO_RESTART, true
     );

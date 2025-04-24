@@ -25,7 +25,7 @@ PelletType::PelletType() :
     
     targetType = MOB_TARGET_FLAG_NONE;
     
-    pellet_fsm::createFsm(this);
+    PelletFsm::createFsm(this);
 }
 
 
@@ -34,8 +34,8 @@ PelletType::PelletType() :
  *
  * @return The vector.
  */
-anim_conversion_vector PelletType::getAnimConversions() const {
-    anim_conversion_vector v;
+AnimConversionVector PelletType::getAnimConversions() const {
+    AnimConversionVector v;
     v.push_back(std::make_pair(MOB_TYPE::ANIM_IDLING, "idling"));
     return v;
 }
@@ -47,26 +47,26 @@ anim_conversion_vector PelletType::getAnimConversions() const {
  * @param file File to read from.
  */
 void PelletType::loadCatProperties(DataNode* file) {
-    ReaderSetter rs(file);
+    ReaderSetter pRS(file);
     
-    string pik_type_str;
-    DataNode* pik_type_node = nullptr;
+    string pikTypeStr;
+    DataNode* pikTypeNode = nullptr;
     
-    rs.set("match_seeds", matchSeeds);
-    rs.set("non_match_seeds", nonMatchSeeds);
-    rs.set("number", number);
-    rs.set("pikmin_type", pik_type_str, &pik_type_node);
+    pRS.set("match_seeds", matchSeeds);
+    pRS.set("non_match_seeds", nonMatchSeeds);
+    pRS.set("number", number);
+    pRS.set("pikmin_type", pikTypeStr, &pikTypeNode);
     
     if(
-        game.content.mobTypes.list.pikmin.find(pik_type_str) ==
+        game.content.mobTypes.list.pikmin.find(pikTypeStr) ==
         game.content.mobTypes.list.pikmin.end()
     ) {
         game.errors.report(
-            "Unknown Pikmin type \"" + pik_type_str + "\"!",
-            pik_type_node
+            "Unknown Pikmin type \"" + pikTypeStr + "\"!",
+            pikTypeNode
         );
     } else {
-        pikType = game.content.mobTypes.list.pikmin[pik_type_str];
+        pikType = game.content.mobTypes.list.pikmin[pikTypeStr];
     }
     
     weight = number;
@@ -79,14 +79,14 @@ void PelletType::loadCatProperties(DataNode* file) {
  * @param file File to read from.
  */
 void PelletType::loadCatResources(DataNode* file) {
-    ReaderSetter rs(file);
+    ReaderSetter pRS(file);
     
-    string number_image_str;
-    DataNode* number_image_node = nullptr;
+    string numberImageStr;
+    DataNode* numberImageNode = nullptr;
     
-    rs.set("number_image", number_image_str, &number_image_node);
+    pRS.set("number_image", numberImageStr, &numberImageNode);
     
-    bmpNumber = game.content.bitmaps.list.get(number_image_str, number_image_node);
+    bmpNumber = game.content.bitmaps.list.get(numberImageStr, numberImageNode);
 }
 
 

@@ -13,15 +13,15 @@
 #include "code_debug.h"
 
 
-double code_debug_benchmark_measure_start;
-double code_debug_benchmark_sum;
-unsigned int code_debug_benchmark_iterations;
+double codeDebugBenchmarkMeasureStart;
+double codeDebugBenchmarkSum;
+unsigned int codeDebugBenchmarkIterations;
 
 
 #ifdef CODE_DEBUG_NEW
 
-map<void*, string> code_debug_new_allocs;
-bool code_debug_new_recording;
+map<void*, string> codeDebugNewAllocs;
+bool codeDebugNewRecording;
 
 /**
  * @brief Overrides operator delete.
@@ -29,10 +29,10 @@ bool code_debug_new_recording;
  * @param ptr Pointer to memory to deallocate.
  */
 void operator delete(void* ptr) noexcept {
-    if(code_debug_new_recording) {
-        map<void*, string>::iterator it = code_debug_new_allocs.find(ptr);
-        if(it != code_debug_new_allocs.end()) {
-            code_debug_new_allocs.erase(it);
+    if(codeDebugNewRecording) {
+        map<void*, string>::iterator it = codeDebugNewAllocs.find(ptr);
+        if(it != codeDebugNewAllocs.end()) {
+            codeDebugNewAllocs.erase(it);
         }
     }
     return free(ptr);
@@ -45,10 +45,10 @@ void operator delete(void* ptr) noexcept {
  * @param ptr Pointer to memory to deallocate.
  */
 void operator delete[](void* ptr) noexcept {
-    if(code_debug_new_recording) {
-        map<void*, string>::iterator it = code_debug_new_allocs.find(ptr);
-        if(it != code_debug_new_allocs.end()) {
-            code_debug_new_allocs.erase(it);
+    if(codeDebugNewRecording) {
+        map<void*, string>::iterator it = codeDebugNewAllocs.find(ptr);
+        if(it != codeDebugNewAllocs.end()) {
+            codeDebugNewAllocs.erase(it);
         }
     }
     return free(ptr);
@@ -64,8 +64,8 @@ void operator delete[](void* ptr) noexcept {
  */
 void* operator new(size_t size, char* file, int line) {
     void* ptr = malloc(size);
-    if(code_debug_new_recording) {
-        code_debug_new_allocs[ptr] =
+    if(codeDebugNewRecording) {
+        codeDebugNewAllocs[ptr] =
             string(file) + ":" + to_string((long long) line);
     }
     return ptr;
@@ -81,8 +81,8 @@ void* operator new(size_t size, char* file, int line) {
  */
 void* operator new[](size_t size, char* file, int line) {
     void* ptr = malloc(size);
-    if(code_debug_new_recording) {
-        code_debug_new_allocs[ptr] =
+    if(codeDebugNewRecording) {
+        codeDebugNewAllocs[ptr] =
             string(file) + ":" + to_string((long long) line);
     }
     return ptr;
@@ -97,7 +97,7 @@ void* operator new[](size_t size, char* file, int line) {
  * @brief Starts a time measurement for benchmarking.
  */
 void codeDebugBenchmarkStartMeasuring() {
-    code_debug_benchmark_measure_start = al_get_time();
+    codeDebugBenchmarkMeasureStart = al_get_time();
 }
 
 
@@ -108,9 +108,9 @@ void codeDebugBenchmarkStartMeasuring() {
  * @return The time difference.
  */
 double codeDebugBenchmarkEndMeasuring() {
-    double duration = al_get_time() - code_debug_benchmark_measure_start;
-    code_debug_benchmark_sum += duration;
-    code_debug_benchmark_iterations++;
+    double duration = al_get_time() - codeDebugBenchmarkMeasureStart;
+    codeDebugBenchmarkSum += duration;
+    codeDebugBenchmarkIterations++;
     return duration;
 }
 
@@ -121,7 +121,7 @@ double codeDebugBenchmarkEndMeasuring() {
  * @return The average duration.
  */
 double codeDebugBenchmarkGetAvgDuration() {
-    if(code_debug_benchmark_iterations == 0) return 0.0f;
+    if(codeDebugBenchmarkIterations == 0) return 0.0f;
     return
-        code_debug_benchmark_sum / (double) code_debug_benchmark_iterations;
+        codeDebugBenchmarkSum / (double) codeDebugBenchmarkIterations;
 }

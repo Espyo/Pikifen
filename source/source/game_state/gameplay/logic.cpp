@@ -29,27 +29,27 @@
  * If the game is paused, these can be frozen in place without
  * any negative impact.
  *
- * @param delta_t How long the frame's tick is, in seconds.
+ * @param deltaT How long the frame's tick is, in seconds.
  */
-void GameplayState::doAestheticLeaderLogic(float delta_t) {
+void GameplayState::doAestheticLeaderLogic(float deltaT) {
     if(!curLeaderPtr) return;
     
     //Swarming arrows.
     if(swarmMagnitude) {
-        curLeaderPtr->swarmNextArrowTimer.tick(delta_t);
+        curLeaderPtr->swarmNextArrowTimer.tick(deltaT);
     }
     
-    Distance leader_to_cursor_dist(curLeaderPtr->pos, leaderCursorW);
+    Distance leaderToCursorDist(curLeaderPtr->pos, leaderCursorW);
     for(size_t a = 0; a < curLeaderPtr->swarmArrows.size(); ) {
         curLeaderPtr->swarmArrows[a] +=
-            GAMEPLAY::SWARM_ARROW_SPEED * delta_t;
+            GAMEPLAY::SWARM_ARROW_SPEED * deltaT;
             
-        Distance max_dist =
+        Distance maxDist =
             (swarmMagnitude > 0) ?
             Distance(game.config.rules.cursorMaxDist * swarmMagnitude) :
-            leader_to_cursor_dist;
+            leaderToCursorDist;
             
-        if(max_dist < curLeaderPtr->swarmArrows[a]) {
+        if(maxDist < curLeaderPtr->swarmArrows[a]) {
             curLeaderPtr->swarmArrows.erase(
                 curLeaderPtr->swarmArrows.begin() + a
             );
@@ -59,33 +59,33 @@ void GameplayState::doAestheticLeaderLogic(float delta_t) {
     }
     
     //Whistle.
-    float whistle_dist;
-    Point whistle_pos;
+    float whistleDist;
+    Point whistlePos;
     
-    if(leader_to_cursor_dist > game.config.rules.whistleMaxDist) {
-        whistle_dist = game.config.rules.whistleMaxDist;
-        float whistle_angle =
+    if(leaderToCursorDist > game.config.rules.whistleMaxDist) {
+        whistleDist = game.config.rules.whistleMaxDist;
+        float whistleAngle =
             getAngle(curLeaderPtr->pos, leaderCursorW);
-        whistle_pos = angleToCoordinates(whistle_angle, whistle_dist);
-        whistle_pos += curLeaderPtr->pos;
+        whistlePos = angleToCoordinates(whistleAngle, whistleDist);
+        whistlePos += curLeaderPtr->pos;
     } else {
-        whistle_dist = leader_to_cursor_dist.toFloat();
-        whistle_pos = leaderCursorW;
+        whistleDist = leaderToCursorDist.toFloat();
+        whistlePos = leaderCursorW;
     }
     
     whistle.tick(
-        delta_t, whistle_pos,
-        curLeaderPtr->leaType->whistleRange, whistle_dist
+        deltaT, whistlePos,
+        curLeaderPtr->leaType->whistleRange, whistleDist
     );
     
     //Where the cursor is.
     cursorHeightDiffLight = 0;
     
-    if(leader_to_cursor_dist > game.config.rules.throwMaxDist) {
-        float throw_angle =
+    if(leaderToCursorDist > game.config.rules.throwMaxDist) {
+        float throwAngle =
             getAngle(curLeaderPtr->pos, leaderCursorW);
         throwDest =
-            angleToCoordinates(throw_angle, game.config.rules.throwMaxDist);
+            angleToCoordinates(throwAngle, game.config.rules.throwMaxDist);
         throwDest += curLeaderPtr->pos;
     } else {
         throwDest = leaderCursorW;
@@ -93,31 +93,31 @@ void GameplayState::doAestheticLeaderLogic(float delta_t) {
     
     throwDestMob = nullptr;
     for(size_t m = 0; m < mobs.all.size(); m++) {
-        Mob* m_ptr = mobs.all[m];
-        if(!BBoxCheck(throwDest, m_ptr->pos, m_ptr->physicalSpan)) {
+        Mob* mPtr = mobs.all[m];
+        if(!BBoxCheck(throwDest, mPtr->pos, mPtr->physicalSpan)) {
             //Too far away; of course the cursor isn't on it.
             continue;
         }
-        if(!m_ptr->type->pushable && !m_ptr->type->walkable) {
+        if(!mPtr->type->pushable && !mPtr->type->walkable) {
             //If it doesn't push and can't be walked on, there's probably
             //nothing really for the Pikmin to land on top of.
             continue;
         }
         if(
             throwDestMob &&
-            m_ptr->z + m_ptr->height <
+            mPtr->z + mPtr->height <
             throwDestMob->z + throwDestMob->height
         ) {
             //If this mob is lower than the previous known "under cursor" mob,
             //then forget it.
             continue;
         }
-        if(!m_ptr->isPointOn(throwDest)) {
+        if(!mPtr->isPointOn(throwDest)) {
             //The cursor is not really on top of this mob.
             continue;
         }
         
-        throwDestMob = m_ptr;
+        throwDestMob = mPtr;
     }
     
     leaderCursorSector =
@@ -139,23 +139,23 @@ void GameplayState::doAestheticLeaderLogic(float delta_t) {
 /**
  * @brief Ticks the logic of aesthetic things.
  *
- * @param delta_t How long the frame's tick is, in seconds.
+ * @param deltaT How long the frame's tick is, in seconds.
  */
-void GameplayState::doAestheticLogic(float delta_t) {
+void GameplayState::doAestheticLogic(float deltaT) {
     //Leader stuff.
-    doAestheticLeaderLogic(delta_t);
+    doAestheticLeaderLogic(deltaT);
     
     //Specific animations.
-    game.sysContent.anmSparks.tick(delta_t);
+    game.sysContent.anmSparks.tick(deltaT);
 }
 
 
 /**
  * @brief Ticks the logic of leader gameplay-related things.
  *
- * @param delta_t How long the frame's tick is, in seconds.
+ * @param deltaT How long the frame's tick is, in seconds.
  */
-void GameplayState::doGameplayLeaderLogic(float delta_t) {
+void GameplayState::doGameplayLeaderLogic(float deltaT) {
     if(!curLeaderPtr) return;
     
     if(game.perfMon) {
@@ -177,20 +177,20 @@ void GameplayState::doGameplayLeaderLogic(float delta_t) {
         whistle.whistling &&
         whistle.radius < curLeaderPtr->leaType->whistleRange
     ) {
-        whistle.radius += game.config.rules.whistleGrowthSpeed * delta_t;
+        whistle.radius += game.config.rules.whistleGrowthSpeed * deltaT;
         if(whistle.radius > curLeaderPtr->leaType->whistleRange) {
             whistle.radius = curLeaderPtr->leaType->whistleRange;
         }
     }
     
     //Current leader movement.
-    Point dummy_coords;
-    float dummy_angle;
-    float leader_move_magnitude;
+    Point dummyCoords;
+    float dummyAngle;
+    float leaderMoveMagnitude;
     leaderMovement.getInfo(
-        &dummy_coords, &dummy_angle, &leader_move_magnitude
+        &dummyCoords, &dummyAngle, &leaderMoveMagnitude
     );
-    if(leader_move_magnitude < 0.75) {
+    if(leaderMoveMagnitude < 0.75) {
         curLeaderPtr->fsm.runEvent(
             LEADER_EV_MOVE_END, (void*) &leaderMovement
         );
@@ -202,11 +202,11 @@ void GameplayState::doGameplayLeaderLogic(float delta_t) {
     
     if(curInterlude == INTERLUDE_NONE) {
         //Adjust the camera position.
-        float leader_weight = 1.0f;
-        float cursor_weight = game.options.misc.cursorCamWeight;
-        float group_weight = 0.0f;
+        float leaderWeight = 1.0f;
+        float cursorWeight = game.options.misc.cursorCamWeight;
+        float groupWeight = 0.0f;
         
-        Point group_center = curLeaderPtr->pos;
+        Point groupCenter = curLeaderPtr->pos;
         if(!curLeaderPtr->group->members.empty()) {
             Point tl = curLeaderPtr->group->members[0]->pos;
             Point br = tl;
@@ -214,31 +214,31 @@ void GameplayState::doGameplayLeaderLogic(float delta_t) {
                 Mob* member = curLeaderPtr->group->members[m];
                 updateMinMaxCoords(tl, br, member->pos);
             }
-            group_center.x = (tl.x + br.x) / 2.0f;
-            group_center.y = (tl.y + br.y) / 2.0f;
-            group_weight = 0.1f;
+            groupCenter.x = (tl.x + br.x) / 2.0f;
+            groupCenter.y = (tl.y + br.y) / 2.0f;
+            groupWeight = 0.1f;
         }
         
-        float weight_sums = leader_weight + cursor_weight + group_weight;
-        if(weight_sums == 0.0f) weight_sums = 0.01f;
-        leader_weight /= weight_sums;
-        cursor_weight /= weight_sums;
-        group_weight /= weight_sums;
+        float weightSums = leaderWeight + cursorWeight + groupWeight;
+        if(weightSums == 0.0f) weightSums = 0.01f;
+        leaderWeight /= weightSums;
+        cursorWeight /= weightSums;
+        groupWeight /= weightSums;
         
         game.view.cam.targetPos =
-            curLeaderPtr->pos * leader_weight +
-            leaderCursorW * cursor_weight +
-            group_center * group_weight;
+            curLeaderPtr->pos * leaderWeight +
+            leaderCursorW * cursorWeight +
+            groupCenter * groupWeight;
     }
     
     //Check what to show on the notification, if anything.
     notification.setEnabled(false);
     
-    bool notification_done = false;
+    bool notificationDone = false;
     
     //Lying down stop notification.
     if(
-        !notification_done &&
+        !notificationDone &&
         curLeaderPtr->carryInfo
     ) {
         notification.setEnabled(true);
@@ -250,12 +250,12 @@ void GameplayState::doGameplayLeaderLogic(float delta_t) {
                 curLeaderPtr->pos.y - curLeaderPtr->radius
             )
         );
-        notification_done = true;
+        notificationDone = true;
     }
     
     //Get up notification.
     if(
-        !notification_done &&
+        !notificationDone &&
         curLeaderPtr->fsm.curState->id == LEADER_STATE_KNOCKED_DOWN
     ) {
         notification.setEnabled(true);
@@ -267,11 +267,11 @@ void GameplayState::doGameplayLeaderLogic(float delta_t) {
                 curLeaderPtr->pos.y - curLeaderPtr->radius
             )
         );
-        notification_done = true;
+        notificationDone = true;
     }
     //Auto-throw stop notification.
     if(
-        !notification_done &&
+        !notificationDone &&
         curLeaderPtr->autoThrowRepeater.time != LARGE_FLOAT &&
         game.options.controls.autoThrowMode == AUTO_THROW_MODE_TOGGLE
     ) {
@@ -284,12 +284,12 @@ void GameplayState::doGameplayLeaderLogic(float delta_t) {
                 curLeaderPtr->pos.y - curLeaderPtr->radius
             )
         );
-        notification_done = true;
+        notificationDone = true;
     }
     
     //Pluck stop notification.
     if(
-        !notification_done &&
+        !notificationDone &&
         curLeaderPtr->autoPlucking
     ) {
         notification.setEnabled(true);
@@ -301,12 +301,12 @@ void GameplayState::doGameplayLeaderLogic(float delta_t) {
                 curLeaderPtr->pos.y - curLeaderPtr->radius
             )
         );
-        notification_done = true;
+        notificationDone = true;
     }
     
     //Go Here stop notification.
     if(
-        !notification_done &&
+        !notificationDone &&
         curLeaderPtr->midGoHere
     ) {
         notification.setEnabled(true);
@@ -318,30 +318,30 @@ void GameplayState::doGameplayLeaderLogic(float delta_t) {
                 curLeaderPtr->pos.y - curLeaderPtr->radius
             )
         );
-        notification_done = true;
+        notificationDone = true;
     }
     
     if(!curLeaderPtr->autoPlucking) {
-        Distance closest_d;
+        Distance closestD;
         Distance d;
         
         //Ship healing notification.
         closeToShipToHeal = nullptr;
         for(size_t s = 0; s < mobs.ships.size(); s++) {
-            Ship* s_ptr = mobs.ships[s];
-            d = Distance(curLeaderPtr->pos, s_ptr->pos);
-            if(!s_ptr->isLeaderOnCp(curLeaderPtr)) {
+            Ship* sPtr = mobs.ships[s];
+            d = Distance(curLeaderPtr->pos, sPtr->pos);
+            if(!sPtr->isLeaderOnCp(curLeaderPtr)) {
                 continue;
             }
             if(curLeaderPtr->health == curLeaderPtr->maxHealth) {
                 continue;
             }
-            if(!s_ptr->shiType->canHeal) {
+            if(!sPtr->shiType->canHeal) {
                 continue;
             }
-            if(d < closest_d || !closeToShipToHeal) {
-                closeToShipToHeal = s_ptr;
-                closest_d = d;
+            if(d < closestD || !closeToShipToHeal) {
+                closeToShipToHeal = sPtr;
+                closestD = d;
                 notification.setEnabled(true);
                 notification.setContents(
                     game.controls.findBind(PLAYER_ACTION_TYPE_THROW).inputSource,
@@ -352,23 +352,23 @@ void GameplayState::doGameplayLeaderLogic(float delta_t) {
                         closeToShipToHeal->radius
                     )
                 );
-                notification_done = true;
+                notificationDone = true;
             }
         }
         
         //Interactable mob notification.
-        closest_d = 0;
+        closestD = 0;
         d = 0;
         closeToInteractableToUse = nullptr;
-        if(!notification_done) {
+        if(!notificationDone) {
             for(size_t i = 0; i < mobs.interactables.size(); i++) {
                 d = Distance(curLeaderPtr->pos, mobs.interactables[i]->pos);
                 if(d > mobs.interactables[i]->intType->triggerRange) {
                     continue;
                 }
-                if(d < closest_d || !closeToInteractableToUse) {
+                if(d < closestD || !closeToInteractableToUse) {
                     closeToInteractableToUse = mobs.interactables[i];
-                    closest_d = d;
+                    closestD = d;
                     notification.setEnabled(true);
                     notification.setContents(
                         game.controls.findBind(PLAYER_ACTION_TYPE_THROW).
@@ -380,16 +380,16 @@ void GameplayState::doGameplayLeaderLogic(float delta_t) {
                             closeToInteractableToUse->radius
                         )
                     );
-                    notification_done = true;
+                    notificationDone = true;
                 }
             }
         }
         
         //Pikmin pluck notification.
-        closest_d = 0;
+        closestD = 0;
         d = 0;
         closeToPikminToPluck = nullptr;
-        if(!notification_done) {
+        if(!notificationDone) {
             Pikmin* p = getClosestSprout(curLeaderPtr->pos, &d, false);
             if(p && d <= game.config.leaders.pluckRange) {
                 closeToPikminToPluck = p;
@@ -404,33 +404,33 @@ void GameplayState::doGameplayLeaderLogic(float delta_t) {
                         p->radius
                     )
                 );
-                notification_done = true;
+                notificationDone = true;
             }
         }
         
         //Nest open notification.
-        closest_d = 0;
+        closestD = 0;
         d = 0;
         closeToNestToOpen = nullptr;
-        if(!notification_done) {
+        if(!notificationDone) {
             for(size_t o = 0; o < mobs.onions.size(); o++) {
                 d = Distance(curLeaderPtr->pos, mobs.onions[o]->pos);
                 if(d > game.config.leaders.onionOpenRange) continue;
-                if(d < closest_d || !closeToNestToOpen) {
+                if(d < closestD || !closeToNestToOpen) {
                     closeToNestToOpen = mobs.onions[o]->nest;
-                    closest_d = d;
+                    closestD = d;
                     notification.setEnabled(true);
                     notification.setContents(
                         game.controls.findBind(PLAYER_ACTION_TYPE_THROW).
                         inputSource,
                         "Check",
                         Point(
-                            closeToNestToOpen->m_ptr->pos.x,
-                            closeToNestToOpen->m_ptr->pos.y -
-                            closeToNestToOpen->m_ptr->radius
+                            closeToNestToOpen->mPtr->pos.x,
+                            closeToNestToOpen->mPtr->pos.y -
+                            closeToNestToOpen->mPtr->radius
                         )
                     );
-                    notification_done = true;
+                    notificationDone = true;
                 }
             }
             for(size_t s = 0; s < mobs.ships.size(); s++) {
@@ -438,30 +438,30 @@ void GameplayState::doGameplayLeaderLogic(float delta_t) {
                 if(!mobs.ships[s]->isLeaderOnCp(curLeaderPtr)) {
                     continue;
                 }
-                if(mobs.ships[s]->shiType->nest->pik_types.empty()) {
+                if(mobs.ships[s]->shiType->nest->pikTypes.empty()) {
                     continue;
                 }
-                if(d < closest_d || !closeToNestToOpen) {
+                if(d < closestD || !closeToNestToOpen) {
                     closeToNestToOpen = mobs.ships[s]->nest;
-                    closest_d = d;
+                    closestD = d;
                     notification.setEnabled(true);
                     notification.setContents(
                         game.controls.findBind(PLAYER_ACTION_TYPE_THROW).
                         inputSource,
                         "Check",
                         Point(
-                            closeToNestToOpen->m_ptr->pos.x,
-                            closeToNestToOpen->m_ptr->pos.y -
-                            closeToNestToOpen->m_ptr->radius
+                            closeToNestToOpen->mPtr->pos.x,
+                            closeToNestToOpen->mPtr->pos.y -
+                            closeToNestToOpen->mPtr->radius
                         )
                     );
-                    notification_done = true;
+                    notificationDone = true;
                 }
             }
         }
     }
     
-    notification.tick(delta_t);
+    notification.tick(deltaT);
     
     /********************
     *             .-.   *
@@ -469,29 +469,29 @@ void GameplayState::doGameplayLeaderLogic(float delta_t) {
     *             `-´   *
     ********************/
     
-    Point mouse_cursor_speed;
-    float dummy_magnitude;
+    Point mouseCursorSpeed;
+    float dummyMagnitude;
     cursorMovement.getInfo(
-        &mouse_cursor_speed, &dummy_angle, &dummy_magnitude
+        &mouseCursorSpeed, &dummyAngle, &dummyMagnitude
     );
-    mouse_cursor_speed =
-        mouse_cursor_speed * delta_t* game.options.controls.cursorSpeed;
+    mouseCursorSpeed =
+        mouseCursorSpeed * deltaT* game.options.controls.cursorSpeed;
         
     leaderCursorW = game.view.cursorWorldPos;
     
-    float cursor_angle = getAngle(curLeaderPtr->pos, leaderCursorW);
+    float cursorAngle = getAngle(curLeaderPtr->pos, leaderCursorW);
     
-    Distance leader_to_cursor_dist(curLeaderPtr->pos, leaderCursorW);
-    if(leader_to_cursor_dist > game.config.rules.cursorMaxDist) {
+    Distance leaderToCursorDist(curLeaderPtr->pos, leaderCursorW);
+    if(leaderToCursorDist > game.config.rules.cursorMaxDist) {
         //Cursor goes beyond the range limit.
         leaderCursorW.x =
             curLeaderPtr->pos.x +
-            (cos(cursor_angle) * game.config.rules.cursorMaxDist);
+            (cos(cursorAngle) * game.config.rules.cursorMaxDist);
         leaderCursorW.y =
             curLeaderPtr->pos.y +
-            (sin(cursor_angle) * game.config.rules.cursorMaxDist);
+            (sin(cursorAngle) * game.config.rules.cursorMaxDist);
             
-        if(mouse_cursor_speed.x != 0 || mouse_cursor_speed.y != 0) {
+        if(mouseCursorSpeed.x != 0 || mouseCursorSpeed.y != 0) {
             //If we're speeding the mouse cursor (via analog stick),
             //don't let it go beyond the edges.
             game.view.cursorWorldPos = leaderCursorW;
@@ -521,26 +521,26 @@ void GameplayState::doGameplayLeaderLogic(float delta_t) {
         closestGroupMember[BUBBLE_RELATION_CURRENT] = curLeaderPtr->holding[0];
     }
     
-    float old_swarm_magnitude = swarmMagnitude;
-    Point swarm_coords;
-    float new_swarm_angle;
+    float oldSwarmMagnitude = swarmMagnitude;
+    Point swarmCoords;
+    float newSwarmAngle;
     swarmMovement.getInfo(
-        &swarm_coords, &new_swarm_angle, &swarmMagnitude
+        &swarmCoords, &newSwarmAngle, &swarmMagnitude
     );
     if(swarmMagnitude > 0) {
         //This stops arrows that were fading away to the left from
         //turning to angle 0 because the magnitude reached 0.
-        swarmAngle = new_swarm_angle;
+        swarmAngle = newSwarmAngle;
     }
     
     if(swarmCursor) {
-        swarmAngle = cursor_angle;
-        leader_to_cursor_dist = Distance(curLeaderPtr->pos, leaderCursorW);
+        swarmAngle = cursorAngle;
+        leaderToCursorDist = Distance(curLeaderPtr->pos, leaderCursorW);
         swarmMagnitude =
-            leader_to_cursor_dist.toFloat() / game.config.rules.cursorMaxDist;
+            leaderToCursorDist.toFloat() / game.config.rules.cursorMaxDist;
     }
     
-    if(old_swarm_magnitude != swarmMagnitude) {
+    if(oldSwarmMagnitude != swarmMagnitude) {
         if(swarmMagnitude != 0) {
             curLeaderPtr->signalSwarmStart();
         } else {
@@ -560,15 +560,15 @@ void GameplayState::doGameplayLeaderLogic(float delta_t) {
         game.states.gameplay->mobs.enemies.size() > 0 &&
         curInterlude == INTERLUDE_NONE
     ) {
-        bool near_enemy = false;
-        bool near_boss = false;
-        isNearEnemyAndBoss(&near_enemy, &near_boss);
+        bool nearEnemy = false;
+        bool nearBoss = false;
+        isNearEnemyAndBoss(&nearEnemy, &nearBoss);
         
-        if(near_enemy) {
+        if(nearEnemy) {
             game.audio.markMixTrackStatus(MIX_TRACK_TYPE_ENEMY);
         }
         
-        if(near_boss) {
+        if(nearBoss) {
             switch(bossMusicState) {
             case BOSS_MUSIC_STATE_NEVER_PLAYED: {
                 game.audio.setCurrentSong(game.sysContentNames.sngBoss, true, false);
@@ -605,21 +605,21 @@ void GameplayState::doGameplayLeaderLogic(float delta_t) {
 /**
  * @brief Ticks the logic of gameplay-related things.
  *
- * @param delta_t How long the frame's tick is, in seconds.
+ * @param deltaT How long the frame's tick is, in seconds.
  */
-void GameplayState::doGameplayLogic(float delta_t) {
+void GameplayState::doGameplayLogic(float deltaT) {
 
     //Camera movement.
     if(!curLeaderPtr) {
         //If there's no leader being controlled, might as well move the camera.
         Point coords;
-        float dummy_angle;
-        float dummy_magnitude;
-        leaderMovement.getInfo(&coords, &dummy_angle, &dummy_magnitude);
+        float dummyAngle;
+        float dummyMagnitude;
+        leaderMovement.getInfo(&coords, &dummyAngle, &dummyMagnitude);
         game.view.cam.targetPos = game.view.cam.pos + (coords * 120.0f / game.view.cam.zoom);
     }
     
-    game.view.cam.tick(delta_t);
+    game.view.cam.tick(deltaT);
     game.view.updateTransformations();
     game.view.updateBox();
     game.audio.setCameraPos(
@@ -636,16 +636,16 @@ void GameplayState::doGameplayLogic(float delta_t) {
         *************************************/
         
         //Mouse cursor.
-        Point mouse_cursor_speed;
-        float dummy_angle;
-        float dummy_magnitude;
+        Point mouseCursorSpeed;
+        float dummyAngle;
+        float dummyMagnitude;
         cursorMovement.getInfo(
-            &mouse_cursor_speed, &dummy_angle, &dummy_magnitude
+            &mouseCursorSpeed, &dummyAngle, &dummyMagnitude
         );
-        mouse_cursor_speed =
-            mouse_cursor_speed * delta_t* game.options.controls.cursorSpeed;
+        mouseCursorSpeed =
+            mouseCursorSpeed * deltaT* game.options.controls.cursorSpeed;
             
-        game.mouseCursor.winPos += mouse_cursor_speed;
+        game.mouseCursor.winPos += mouseCursorSpeed;
         
         game.view.cursorWorldPos = game.mouseCursor.winPos;
         al_transform_coordinates(
@@ -653,11 +653,11 @@ void GameplayState::doGameplayLogic(float delta_t) {
             &game.view.cursorWorldPos.x, &game.view.cursorWorldPos.y
         );
         
-        areaTimePassed += delta_t;
+        areaTimePassed += deltaT;
         if(curInterlude == INTERLUDE_NONE) {
-            gameplayTimePassed += delta_t;
+            gameplayTimePassed += deltaT;
             dayMinutes +=
-                (game.curAreaData->dayTimeSpeed * delta_t / 60.0f);
+                (game.curAreaData->dayTimeSpeed * deltaT / 60.0f);
             if(dayMinutes > 60 * 24) {
                 dayMinutes -= 60 * 24;
             }
@@ -668,7 +668,7 @@ void GameplayState::doGameplayLogic(float delta_t) {
             game.perfMon->startMeasurement("Logic -- Particles");
         }
         
-        particles.tickAll(delta_t);
+        particles.tickAll(deltaT);
         
         if(game.perfMon) {
             game.perfMon->finishMeasurement();
@@ -676,7 +676,7 @@ void GameplayState::doGameplayLogic(float delta_t) {
         
         //Tick all status effect animations.
         for(auto &s : game.content.statusTypes.list) {
-            s.second->overlayAnim.tick(delta_t);
+            s.second->overlayAnim.tick(deltaT);
         }
         
         /*******************
@@ -689,30 +689,30 @@ void GameplayState::doGameplayLogic(float delta_t) {
         }
         
         for(size_t s = 0; s < game.curAreaData->sectors.size(); s++) {
-            Sector* s_ptr = game.curAreaData->sectors[s];
+            Sector* sPtr = game.curAreaData->sectors[s];
             
-            if(s_ptr->drainingLiquid) {
+            if(sPtr->drainingLiquid) {
             
-                s_ptr->liquidDrainLeft -= delta_t;
+                sPtr->liquidDrainLeft -= deltaT;
                 
-                if(s_ptr->liquidDrainLeft <= 0) {
+                if(sPtr->liquidDrainLeft <= 0) {
                 
-                    if(s_ptr->hazard && s_ptr->hazard->associatedLiquid) {
-                        s_ptr->hazard = nullptr;
-                        pathMgr.handleSectorHazardChange(s_ptr);
+                    if(sPtr->hazard && sPtr->hazard->associatedLiquid) {
+                        sPtr->hazard = nullptr;
+                        pathMgr.handleSectorHazardChange(sPtr);
                     }
                     
-                    s_ptr->liquidDrainLeft = 0;
-                    s_ptr->drainingLiquid = false;
+                    sPtr->liquidDrainLeft = 0;
+                    sPtr->drainingLiquid = false;
                     
-                    unordered_set<Vertex*> sector_vertexes;
-                    for(size_t e = 0; e < s_ptr->edges.size(); e++) {
-                        sector_vertexes.insert(s_ptr->edges[e]->vertexes[0]);
-                        sector_vertexes.insert(s_ptr->edges[e]->vertexes[1]);
+                    unordered_set<Vertex*> sectorVertexes;
+                    for(size_t e = 0; e < sPtr->edges.size(); e++) {
+                        sectorVertexes.insert(sPtr->edges[e]->vertexes[0]);
+                        sectorVertexes.insert(sPtr->edges[e]->vertexes[1]);
                     }
                     updateOffsetEffectCaches(
                         game.liquidLimitEffectCaches,
-                        sector_vertexes,
+                        sectorVertexes,
                         doesEdgeHaveLiquidLimit,
                         getLiquidLimitLength,
                         getLiquidLimitColor
@@ -720,8 +720,8 @@ void GameplayState::doGameplayLogic(float delta_t) {
                 }
             }
             
-            if(s_ptr->scroll.x != 0 || s_ptr->scroll.y != 0) {
-                s_ptr->textureInfo.translation += s_ptr->scroll * delta_t;
+            if(sPtr->scroll.x != 0 || sPtr->scroll.y != 0) {
+                sPtr->textureInfo.translation += sPtr->scroll * deltaT;
             }
         }
         
@@ -736,14 +736,14 @@ void GameplayState::doGameplayLogic(float delta_t) {
         *                *
         ******************/
         
-        size_t old_nr_living_leaders = nrLivingLeaders;
+        size_t oldNrLivingLeaders = nrLivingLeaders;
         //Some setup to calculate how far the leader walks.
-        Leader* old_leader = curLeaderPtr;
-        Point old_leader_pos;
-        bool old_leader_was_walking = false;
+        Leader* oldLeader = curLeaderPtr;
+        Point oldLeaderPos;
+        bool oldLeaderWasWalking = false;
         if(curLeaderPtr) {
-            old_leader_pos = curLeaderPtr->pos;
-            old_leader_was_walking =
+            oldLeaderPos = curLeaderPtr->pos;
+            oldLeaderWasWalking =
                 curLeaderPtr->active &&
                 !hasFlag(
                     curLeaderPtr->chaseInfo.flags,
@@ -759,42 +759,42 @@ void GameplayState::doGameplayLogic(float delta_t) {
         updateAreaActiveCells();
         updateMobIsActiveFlag();
         
-        size_t n_mobs = mobs.all.size();
-        for(size_t m = 0; m < n_mobs; m++) {
+        size_t nMobs = mobs.all.size();
+        for(size_t m = 0; m < nMobs; m++) {
             //Tick the mob.
-            Mob* m_ptr = mobs.all[m];
+            Mob* mPtr = mobs.all[m];
             if(
                 !hasFlag(
-                    m_ptr->type->inactiveLogic,
+                    mPtr->type->inactiveLogic,
                     INACTIVE_LOGIC_FLAG_TICKS
-                ) && !m_ptr->isActive &&
-                m_ptr->timeAlive > 0.1f
+                ) && !mPtr->isActive &&
+                mPtr->timeAlive > 0.1f
             ) {
                 continue;
             }
             
-            m_ptr->tick(delta_t);
-            if(!m_ptr->isStoredInsideMob()) {
-                processMobInteractions(m_ptr, m);
+            mPtr->tick(deltaT);
+            if(!mPtr->isStoredInsideMob()) {
+                processMobInteractions(mPtr, m);
             }
         }
         
-        for(size_t m = 0; m < n_mobs;) {
+        for(size_t m = 0; m < nMobs;) {
             //Mob deletion.
-            Mob* m_ptr = mobs.all[m];
-            if(m_ptr->toDelete) {
-                deleteMob(m_ptr);
-                n_mobs--;
+            Mob* mPtr = mobs.all[m];
+            if(mPtr->toDelete) {
+                deleteMob(mPtr);
+                nMobs--;
                 continue;
             }
             m++;
         }
         
-        doGameplayLeaderLogic(delta_t);
+        doGameplayLeaderLogic(deltaT);
         
         if(
-            curLeaderPtr && curLeaderPtr == old_leader &&
-            old_leader_was_walking
+            curLeaderPtr && curLeaderPtr == oldLeader &&
+            oldLeaderWasWalking
         ) {
             //This more or less tells us how far the leader walked in this
             //frame. It's not perfect, since it will also count the leader
@@ -804,7 +804,7 @@ void GameplayState::doGameplayLogic(float delta_t) {
             //But those are rare cases that don't really affect much in the
             //grand scheme of things, and don't really matter for a fun stat.
             game.statistics.distanceWalked +=
-                Distance(old_leader_pos, curLeaderPtr->pos).toFloat();
+                Distance(oldLeaderPos, curLeaderPtr->pos).toFloat();
         }
         
         nrLivingLeaders = 0;
@@ -813,9 +813,9 @@ void GameplayState::doGameplayLogic(float delta_t) {
                 nrLivingLeaders++;
             }
         }
-        if(nrLivingLeaders < old_nr_living_leaders) {
+        if(nrLivingLeaders < oldNrLivingLeaders) {
             game.statistics.leaderKos +=
-                old_nr_living_leaders - nrLivingLeaders;
+                oldNrLivingLeaders - nrLivingLeaders;
         }
         leadersKod = startingNrOfLeaders - nrLivingLeaders;
         
@@ -828,24 +828,24 @@ void GameplayState::doGameplayLogic(float delta_t) {
         
         /*
         if(
-            curAreaData.weather_condition.precipitation_type !=
+            curAreaData.weatherCondition.precipitationType !=
             PRECIPITATION_TYPE_NONE
         ) {
-            precipitationTimer.tick(delta_t);
+            precipitationTimer.tick(deltaT);
             if(precipitationTimer.ticked) {
                 precipitationTimer = timer(
-                    curAreaData.weather_condition.
-                    precipitation_frequency.get_random_number()
+                    curAreaData.weatherCondition.
+                    precipitationFrequency.getRandomNumber()
                 );
                 precipitationTimer.start();
-                precipitation.push_back(point(0.0f));
+                precipitation.pushBack(point(0.0f));
             }
         
             for(size_t p = 0; p < precipitation.size();) {
                 precipitation[p].y +=
-                    curAreaData.weather_condition.
-                    precipitation_speed.get_random_number() * delta_t;
-                if(precipitation[p].y > scr_h) {
+                    curAreaData.weatherCondition.
+                    precipitationSpeed.getRandomNumber() * deltaT;
+                if(precipitation[p].y > scrH) {
                     precipitation.erase(precipitation.begin() + p);
                 } else {
                     p++;
@@ -866,7 +866,7 @@ void GameplayState::doGameplayLogic(float delta_t) {
         ) {
             curLeadersInMissionExit = 0;
             for(size_t l = 0; l < mobs.leaders.size(); l++) {
-                Mob* l_ptr = mobs.leaders[l];
+                Mob* lPtr = mobs.leaders[l];
                 if(
                     !isInContainer(
                         missionRemainingMobIds, mobs.leaders[l]->id
@@ -877,12 +877,12 @@ void GameplayState::doGameplayLogic(float delta_t) {
                 }
                 if(
                     fabs(
-                        l_ptr->pos.x -
+                        lPtr->pos.x -
                         game.curAreaData->mission.goalExitCenter.x
                     ) <=
                     game.curAreaData->mission.goalExitSize.x / 2.0f &&
                     fabs(
-                        l_ptr->pos.y -
+                        lPtr->pos.y -
                         game.curAreaData->mission.goalExitCenter.y
                     ) <=
                     game.curAreaData->mission.goalExitSize.y / 2.0f
@@ -892,56 +892,56 @@ void GameplayState::doGameplayLogic(float delta_t) {
             }
         }
         
-        float real_goal_ratio = 0.0f;
-        int goal_cur_amount =
+        float realGoalRatio = 0.0f;
+        int goalCurAmount =
             game.missionGoals[game.curAreaData->mission.goal]->getCurAmount(
                 this
             );
-        int goal_req_amount =
+        int goalReqAmount =
             game.missionGoals[game.curAreaData->mission.goal]->getReqAmount(
                 this
             );
-        if(goal_req_amount != 0.0f) {
-            real_goal_ratio = goal_cur_amount / (float) goal_req_amount;
+        if(goalReqAmount != 0.0f) {
+            realGoalRatio = goalCurAmount / (float) goalReqAmount;
         }
         goalIndicatorRatio +=
-            (real_goal_ratio - goalIndicatorRatio) *
-            (HUD::GOAL_INDICATOR_SMOOTHNESS_MULT * delta_t);
+            (realGoalRatio - goalIndicatorRatio) *
+            (HUD::GOAL_INDICATOR_SMOOTHNESS_MULT * deltaT);
             
         if(game.curAreaData->mission.failHudPrimaryCond != INVALID) {
-            float real_fail_ratio = 0.0f;
-            int fail_cur_amount =
+            float realFailRatio = 0.0f;
+            int failCurAmount =
                 game.missionFailConds[
                     game.curAreaData->mission.failHudPrimaryCond
                 ]->getCurAmount(this);
-            int fail_req_amount =
+            int failReqAmount =
                 game.missionFailConds[
                     game.curAreaData->mission.failHudPrimaryCond
                 ]->getReqAmount(this);
-            if(fail_req_amount != 0.0f) {
-                real_fail_ratio = fail_cur_amount / (float) fail_req_amount;
+            if(failReqAmount != 0.0f) {
+                realFailRatio = failCurAmount / (float) failReqAmount;
             }
             fail1IndicatorRatio +=
-                (real_fail_ratio - fail1IndicatorRatio) *
-                (HUD::GOAL_INDICATOR_SMOOTHNESS_MULT * delta_t);
+                (realFailRatio - fail1IndicatorRatio) *
+                (HUD::GOAL_INDICATOR_SMOOTHNESS_MULT * deltaT);
         }
         
         if(game.curAreaData->mission.failHudSecondaryCond != INVALID) {
-            float real_fail_ratio = 0.0f;
-            int fail_cur_amount =
+            float realFailRatio = 0.0f;
+            int failCurAmount =
                 game.missionFailConds[
                     game.curAreaData->mission.failHudSecondaryCond
                 ]->getCurAmount(this);
-            int fail_req_amount =
+            int failReqAmount =
                 game.missionFailConds[
                     game.curAreaData->mission.failHudSecondaryCond
                 ]->getReqAmount(this);
-            if(fail_req_amount != 0.0f) {
-                real_fail_ratio = fail_cur_amount / (float) fail_req_amount;
+            if(failReqAmount != 0.0f) {
+                realFailRatio = failCurAmount / (float) failReqAmount;
             }
             fail2IndicatorRatio +=
-                (real_fail_ratio - fail2IndicatorRatio) *
-                (HUD::GOAL_INDICATOR_SMOOTHNESS_MULT * delta_t);
+                (realFailRatio - fail2IndicatorRatio) *
+                (HUD::GOAL_INDICATOR_SMOOTHNESS_MULT * deltaT);
         }
         
         if(game.curAreaData->type == AREA_TYPE_MISSION) {
@@ -971,11 +971,11 @@ void GameplayState::doGameplayLogic(float delta_t) {
                 ) {
                     continue;
                 }
-                MissionScoreCriterion* c_ptr =
+                MissionScoreCriterion* cPtr =
                     game.missionScoreCriteria[c];
-                int c_score =
-                    c_ptr->getScore(this, &game.curAreaData->mission);
-                missionScore += c_score;
+                int cScore =
+                    cPtr->getScore(this, &game.curAreaData->mission);
+                missionScore += cScore;
             }
             if(missionScore != oldMissionScore) {
                 missionScoreCurText->startJuiceAnimation(
@@ -986,16 +986,16 @@ void GameplayState::doGameplayLogic(float delta_t) {
             
             scoreIndicator +=
                 (missionScore - scoreIndicator) *
-                (HUD::SCORE_INDICATOR_SMOOTHNESS_MULT * delta_t);
+                (HUD::SCORE_INDICATOR_SMOOTHNESS_MULT * deltaT);
                 
-            int goal_cur =
+            int goalCur =
                 game.missionGoals[game.curAreaData->mission.goal]->
                 getCurAmount(game.states.gameplay);
-            if(goal_cur != oldMissionGoalCur) {
+            if(goalCur != oldMissionGoalCur) {
                 missionGoalCurText->startJuiceAnimation(
                     GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
                 );
-                oldMissionGoalCur = goal_cur;
+                oldMissionGoalCur = goalCur;
             }
             
             if(
@@ -1004,15 +1004,15 @@ void GameplayState::doGameplayLogic(float delta_t) {
             ) {
                 size_t cond =
                     game.curAreaData->mission.failHudPrimaryCond;
-                int fail_1_cur =
+                int fail1Cur =
                     game.missionFailConds[cond]->getCurAmount(
                         game.states.gameplay
                     );
-                if(fail_1_cur != oldMissionFail1Cur) {
+                if(fail1Cur != oldMissionFail1Cur) {
                     missionFail1CurText->startJuiceAnimation(
                         GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
                     );
-                    oldMissionFail1Cur = fail_1_cur;
+                    oldMissionFail1Cur = fail1Cur;
                 }
             }
             if(
@@ -1021,15 +1021,15 @@ void GameplayState::doGameplayLogic(float delta_t) {
             ) {
                 size_t cond =
                     game.curAreaData->mission.failHudSecondaryCond;
-                int fail_2_cur =
+                int fail2Cur =
                     game.missionFailConds[cond]->getCurAmount(
                         game.states.gameplay
                     );
-                if(fail_2_cur != oldMissionFail2Cur) {
+                if(fail2Cur != oldMissionFail2Cur) {
                     missionFail2CurText->startJuiceAnimation(
                         GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
                     );
-                    oldMissionFail2Cur = fail_2_cur;
+                    oldMissionFail2Cur = fail2Cur;
                 }
             }
             
@@ -1037,14 +1037,14 @@ void GameplayState::doGameplayLogic(float delta_t) {
         
     } else { //Displaying a gameplay message.
     
-        msgBox->tick(delta_t);
+        msgBox->tick(deltaT);
         if(msgBox->toDelete) {
             startGameplayMessage("", nullptr);
         }
         
     }
     
-    replayTimer.tick(delta_t);
+    replayTimer.tick(deltaT);
     
     if(!readyForInput) {
         readyForInput = true;
@@ -1084,9 +1084,9 @@ void GameplayState::doMenuLogic() {
     if(game.showSystemInfo) {
     
         //Make sure that speed changes don't affect the FPS calculation.
-        double real_delta_t = game.deltaT;
+        double realDeltaT = game.deltaT;
         if(game.makerTools.changeSpeed) {
-            real_delta_t /=
+            realDeltaT /=
                 game.makerTools.changeSpeedSettings[
                     game.makerTools.changeSpeedSettingIdx
                 ];
@@ -1099,8 +1099,8 @@ void GameplayState::doMenuLogic() {
         
         game.framerateLastAvgPoint++;
         
-        double sample_avg;
-        double sample_avg_capped;
+        double sampleAvg;
+        double sampleAvgCapped;
         
         if(game.framerateLastAvgPoint >= GAME::FRAMERATE_AVG_SAMPLE_SIZE) {
             //Let's get an average, using FRAMERATE_AVG_SAMPLE_SIZE frames.
@@ -1116,32 +1116,32 @@ void GameplayState::doMenuLogic() {
                 game.framerateLastAvgPoint =
                     GAME::FRAMERATE_AVG_SAMPLE_SIZE;
             }
-            double sample_avg_sum = 0;
-            double sample_avg_capped_sum = 0;
-            size_t sample_avg_point_count = 0;
-            size_t sample_size =
+            double sampleAvgSum = 0;
+            double sampleAvgCappedSum = 0;
+            size_t sampleAvgPointCount = 0;
+            size_t sampleSize =
                 std::min(
                     (size_t) GAME::FRAMERATE_AVG_SAMPLE_SIZE,
                     game.framerateHistory.size()
                 );
                 
-            for(size_t f = 0; f < sample_size; f++) {
+            for(size_t f = 0; f < sampleSize; f++) {
                 size_t idx =
                     game.framerateHistory.size() -
                     game.framerateLastAvgPoint + f;
-                sample_avg_sum += game.framerateHistory[idx];
-                sample_avg_capped_sum +=
+                sampleAvgSum += game.framerateHistory[idx];
+                sampleAvgCappedSum +=
                     std::max(
                         game.framerateHistory[idx],
                         (double) (1.0f / game.options.advanced.targetFps)
                     );
-                sample_avg_point_count++;
+                sampleAvgPointCount++;
             }
             
-            sample_avg =
-                sample_avg_sum / (float) sample_avg_point_count;
-            sample_avg_capped =
-                sample_avg_capped_sum / (float) sample_avg_point_count;
+            sampleAvg =
+                sampleAvgSum / (float) sampleAvgPointCount;
+            sampleAvgCapped =
+                sampleAvgCappedSum / (float) sampleAvgPointCount;
                 
         } else {
             //If there are fewer than FRAMERATE_AVG_SAMPLE_SIZE frames in
@@ -1149,8 +1149,8 @@ void GameplayState::doMenuLogic() {
             //that. This defeats the purpose of a smoothly-updating number,
             //so until that requirement is filled, let's stick to the oldest
             //record.
-            sample_avg = game.framerateHistory[0];
-            sample_avg_capped =
+            sampleAvg = game.framerateHistory[0];
+            sampleAvgCapped =
                 std::max(
                     game.framerateHistory[0],
                     (double) (1.0f / game.options.advanced.targetFps)
@@ -1158,61 +1158,61 @@ void GameplayState::doMenuLogic() {
                 
         }
         
-        string header_str =
+        string headerStr =
             boxString("", 12) +
             boxString("Now", 12) +
             boxString("Average", 12) +
             boxString("Target", 12);
-        string fps_str =
+        string fpsStr =
             boxString("FPS:", 12) +
-            boxString(std::to_string(1.0f / real_delta_t), 12) +
-            boxString(std::to_string(1.0f / sample_avg_capped), 12) +
+            boxString(std::to_string(1.0f / realDeltaT), 12) +
+            boxString(std::to_string(1.0f / sampleAvgCapped), 12) +
             boxString(i2s(game.options.advanced.targetFps), 12);
-        string fps_uncapped_str =
+        string fpsUncappedStr =
             boxString("FPS uncap.:", 12) +
             boxString(std::to_string(1.0f / game.curFrameProcessTime), 12) +
-            boxString(std::to_string(1.0f / sample_avg), 12) +
+            boxString(std::to_string(1.0f / sampleAvg), 12) +
             boxString("-", 12);
-        string frame_time_str =
+        string frameTimeStr =
             boxString("Frame time:", 12) +
             boxString(std::to_string(game.curFrameProcessTime), 12) +
-            boxString(std::to_string(sample_avg), 12) +
+            boxString(std::to_string(sampleAvg), 12) +
             boxString(std::to_string(1.0f / game.options.advanced.targetFps), 12);
-        string n_mobs_str =
+        string nMobsStr =
             boxString(i2s(mobs.all.size()), 7);
-        string n_particles_str =
+        string nParticlesStr =
             boxString(i2s(particles.getCount()), 7);
-        string resolution_str =
+        string resolutionStr =
             i2s(game.winW) + "x" + i2s(game.winH);
-        string area_v_str =
+        string areaVStr =
             game.curAreaData->version.empty() ?
             "-" :
             game.curAreaData->version;
-        string area_maker_str =
+        string areaMakerStr =
             game.curAreaData->maker.empty() ?
             "-" :
             game.curAreaData->maker;
-        string game_v_str =
+        string gameVStr =
             game.config.general.version.empty() ? "-" : game.config.general.version;
             
         printInfo(
-            header_str +
+            headerStr +
             "\n" +
-            fps_str +
+            fpsStr +
             "\n" +
-            fps_uncapped_str +
+            fpsUncappedStr +
             "\n" +
-            frame_time_str +
+            frameTimeStr +
             "\n"
             "\n"
-            "Mobs: " + n_mobs_str + " Particles: " + n_particles_str +
+            "Mobs: " + nMobsStr + " Particles: " + nParticlesStr +
             "\n"
-            "Resolution: " + resolution_str +
+            "Resolution: " + resolutionStr +
             "\n"
-            "Area version " + area_v_str + ", by " + area_maker_str +
+            "Area version " + areaVStr + ", by " + areaMakerStr +
             "\n"
             "Pikifen version " + getEngineVersionString() +
-            ", game version " + game_v_str,
+            ", game version " + gameVStr,
             1.0f, 1.0f
         );
         
@@ -1223,30 +1223,30 @@ void GameplayState::doMenuLogic() {
     
     //Print info on a mob.
     if(game.makerTools.infoLock) {
-        string name_str =
+        string nameStr =
             boxString(game.makerTools.infoLock->type->name, 26);
-        string coords_str =
+        string coordsStr =
             boxString(
                 boxString(f2s(game.makerTools.infoLock->pos.x), 8, " ") +
                 boxString(f2s(game.makerTools.infoLock->pos.y), 8, " ") +
                 boxString(f2s(game.makerTools.infoLock->z), 7),
                 23
             );
-        string state_h_str =
+        string stateHStr =
             (
                 game.makerTools.infoLock->fsm.curState ?
                 game.makerTools.infoLock->fsm.curState->name :
                 "(None!)"
             );
         for(unsigned char p = 0; p < STATE_HISTORY_SIZE; p++) {
-            state_h_str +=
+            stateHStr +=
                 " " + game.makerTools.infoLock->fsm.prevStateNames[p];
         }
-        string anim_str =
+        string animStr =
             game.makerTools.infoLock->anim.curAnim ?
             game.makerTools.infoLock->anim.curAnim->name :
             "(None!)";
-        string health_str =
+        string healthStr =
             boxString(
                 boxString(f2s(game.makerTools.infoLock->health), 6) +
                 " / " +
@@ -1255,32 +1255,27 @@ void GameplayState::doMenuLogic() {
                 ),
                 23
             );
-        string timer_str =
+        string timerStr =
             f2s(game.makerTools.infoLock->scriptTimer.timeLeft);
-        string vars_str;
+        string varsStr;
         if(!game.makerTools.infoLock->vars.empty()) {
             for(
                 auto v = game.makerTools.infoLock->vars.begin();
                 v != game.makerTools.infoLock->vars.end(); ++v
             ) {
-                vars_str += v->first + "=" + v->second + "; ";
+                varsStr += v->first + "=" + v->second + "; ";
             }
-            vars_str.erase(vars_str.size() - 2, 2);
+            varsStr.erase(varsStr.size() - 2, 2);
         } else {
-            vars_str = "(None)";
+            varsStr = "(None)";
         }
         
         printInfo(
-            "Mob: " + name_str +
-            "Coords: " + coords_str +
-            "\n"
-            "Last states: " + state_h_str +
-            "\n"
-            "Animation: " + anim_str +
-            "\n"
-            "Health: " + health_str + " Timer: " + timer_str +
-            "\n"
-            "Vars: " + vars_str,
+            "Mob: " + nameStr + "Coords: " + coordsStr + "\n"
+            "Last states: " + stateHStr + "\n"
+            "Animation: " + animStr + "\n"
+            "Health: " + healthStr + " Timer: " + timerStr + "\n"
+            "Vars: " + varsStr,
             5.0f, 3.0f
         );
     }
@@ -1290,57 +1285,57 @@ void GameplayState::doMenuLogic() {
         if(game.makerTools.infoLock->pathInfo) {
         
             Path* path = game.makerTools.infoLock->pathInfo;
-            string result_str = pathResultToString(path->result);
+            string resultStr = pathResultToString(path->result);
             
-            string stops_str =
-                boxString(i2s(path->cur_path_stop_idx + 1), 3) +
+            string stopsStr =
+                boxString(i2s(path->curPathStopIdx + 1), 3) +
                 "/" +
                 boxString(i2s(path->path.size()), 3);
                 
-            string settings_str;
+            string settingsStr;
             auto flags = path->settings.flags;
             if(hasFlag(flags, PATH_FOLLOW_FLAG_CAN_CONTINUE)) {
-                settings_str += "can continue, ";
+                settingsStr += "can continue, ";
             }
             if(hasFlag(flags, PATH_FOLLOW_FLAG_IGNORE_OBSTACLES)) {
-                settings_str += "ignore obstacles, ";
+                settingsStr += "ignore obstacles, ";
             }
             if(hasFlag(flags, PATH_FOLLOW_FLAG_FOLLOW_MOB)) {
-                settings_str += "follow mob, ";
+                settingsStr += "follow mob, ";
             }
             if(hasFlag(flags, PATH_FOLLOW_FLAG_FAKED_START)) {
-                settings_str += "faked start, ";
+                settingsStr += "faked start, ";
             }
             if(hasFlag(flags, PATH_FOLLOW_FLAG_FAKED_END)) {
-                settings_str += "faked end, ";
+                settingsStr += "faked end, ";
             }
             if(hasFlag(flags, PATH_FOLLOW_FLAG_SCRIPT_USE)) {
-                settings_str += "script, ";
+                settingsStr += "script, ";
             }
             if(hasFlag(flags, PATH_FOLLOW_FLAG_LIGHT_LOAD)) {
-                settings_str += "light load, ";
+                settingsStr += "light load, ";
             }
             if(hasFlag(flags, PATH_FOLLOW_FLAG_AIRBORNE)) {
-                settings_str += "airborne, ";
+                settingsStr += "airborne, ";
             }
-            if(settings_str.size() > 2) {
+            if(settingsStr.size() > 2) {
                 //Remove the extra comma and space.
-                settings_str.pop_back();
-                settings_str.pop_back();
+                settingsStr.pop_back();
+                settingsStr.pop_back();
             } else {
-                settings_str = "none";
+                settingsStr = "none";
             }
             
-            string block_str = pathBlockReasonToString(path->block_reason);
+            string blockStr = pathBlockReasonToString(path->blockReason);
             
             printInfo(
-                "Path calculation result: " + result_str +
+                "Path calculation result: " + resultStr +
                 "\n" +
-                "Heading to stop " + stops_str +
+                "Heading to stop " + stopsStr +
                 "\n" +
-                "Settings: " + settings_str +
+                "Settings: " + settingsStr +
                 "\n" +
-                "Block reason: " + block_str,
+                "Block reason: " + blockStr,
                 5.0f, 3.0f
             );
             
@@ -1353,41 +1348,41 @@ void GameplayState::doMenuLogic() {
     
     //Print mouse coordinates.
     if(game.makerTools.geometryInfo) {
-        Sector* mouse_sector =
+        Sector* mouseSector =
             getSector(game.view.cursorWorldPos, nullptr, true);
             
-        string coords_str =
+        string coordsStr =
             boxString(f2s(game.view.cursorWorldPos.x), 6) + " " +
             boxString(f2s(game.view.cursorWorldPos.y), 6);
-        string blockmap_str =
+        string blockmapStr =
             boxString(
                 i2s(game.curAreaData->bmap.getCol(game.view.cursorWorldPos.x)),
                 5, " "
             ) +
             i2s(game.curAreaData->bmap.getRow(game.view.cursorWorldPos.y));
-        string sector_z_str, sector_light_str, sector_tex_str;
-        if(mouse_sector) {
-            sector_z_str =
-                boxString(f2s(mouse_sector->z), 6);
-            sector_light_str =
-                boxString(i2s(mouse_sector->brightness), 3);
-            sector_tex_str =
-                mouse_sector->textureInfo.bmpName;
+        string sectorZStr, sectorLightStr, sectorTexStr;
+        if(mouseSector) {
+            sectorZStr =
+                boxString(f2s(mouseSector->z), 6);
+            sectorLightStr =
+                boxString(i2s(mouseSector->brightness), 3);
+            sectorTexStr =
+                mouseSector->textureInfo.bmpName;
         }
         
         string str =
-            "Mouse coords: " + coords_str +
+            "Mouse coords: " + coordsStr +
             "\n"
-            "Blockmap under mouse: " + blockmap_str +
+            "Blockmap under mouse: " + blockmapStr +
             "\n"
             "Sector under mouse: ";
             
-        if(mouse_sector) {
+        if(mouseSector) {
             str +=
                 "\n"
-                "  Z: " + sector_z_str + " Light: " + sector_light_str +
+                "  Z: " + sectorZStr + " Light: " + sectorLightStr +
                 "\n"
-                "  Texture: " + sector_tex_str;
+                "  Texture: " + sectorTexStr;
         } else {
             str += "None";
         }
@@ -1470,35 +1465,35 @@ void GameplayState::doMenuLogic() {
  * @brief Checks if the player is close to any living enemy and also if
  * they are close to any living boss.
  *
- * @param near_enemy If not nullptr, whether they are close to an enemy is
+ * @param nearEnemy If not nullptr, whether they are close to an enemy is
  * returned here.
- * @param near_boss If not nullptr, whether they are close to a boss is
+ * @param nearBoss If not nullptr, whether they are close to a boss is
  * returned here.
  */
-void GameplayState::isNearEnemyAndBoss(bool* near_enemy, bool* near_boss) {
-    bool found_enemy = false;
-    bool found_boss = false;
+void GameplayState::isNearEnemyAndBoss(bool* nearEnemy, bool* nearBoss) {
+    bool foundEnemy = false;
+    bool foundBoss = false;
     for(size_t e = 0; e < game.states.gameplay->mobs.enemies.size(); e++) {
-        Enemy* e_ptr = game.states.gameplay->mobs.enemies[e];
-        if(e_ptr->health <= 0.0f) continue;
+        Enemy* ePtr = game.states.gameplay->mobs.enemies[e];
+        if(ePtr->health <= 0.0f) continue;
         
-        Distance d = curLeaderPtr->getDistanceBetween(e_ptr);
+        Distance d = curLeaderPtr->getDistanceBetween(ePtr);
         
-        if(!e_ptr->eneType->isBoss) {
+        if(!ePtr->eneType->isBoss) {
             if(d <= GAMEPLAY::ENEMY_MIX_DISTANCE) {
-                found_enemy = true;
+                foundEnemy = true;
             }
         } else {
             if(d <= GAMEPLAY::BOSS_MUSIC_DISTANCE) {
-                found_boss = true;
+                foundBoss = true;
             }
         }
         
-        if(found_enemy && found_boss) break;
+        if(foundEnemy && foundBoss) break;
     }
     
-    if(near_enemy) *near_enemy = found_enemy;
-    if(near_boss) *near_boss = found_boss;
+    if(nearEnemy) *nearEnemy = foundEnemy;
+    if(nearBoss) *nearBoss = foundBoss;
 }
 
 
@@ -1539,28 +1534,28 @@ bool GameplayState::isMissionFailMet(MISSION_FAIL_COND* reason) {
 /**
  * @brief Marks all area cells in a given region as active.
  *
- * @param top_left Top-left coordinates (in world coordinates)
+ * @param topLeft Top-left coordinates (in world coordinates)
  * of the region.
- * @param bottom_right Bottom-right coordinates (in world coordinates)
+ * @param bottomRight Bottom-right coordinates (in world coordinates)
  * of the region.
  */
 void GameplayState::markAreaCellsActive(
-    const Point &top_left, const Point &bottom_right
+    const Point &topLeft, const Point &bottomRight
 ) {
-    int from_x =
-        (top_left.x - game.curAreaData->bmap.topLeftCorner.x) /
+    int fromX =
+        (topLeft.x - game.curAreaData->bmap.topLeftCorner.x) /
         GEOMETRY::AREA_CELL_SIZE;
-    int to_x =
-        (bottom_right.x - game.curAreaData->bmap.topLeftCorner.x) /
+    int toX =
+        (bottomRight.x - game.curAreaData->bmap.topLeftCorner.x) /
         GEOMETRY::AREA_CELL_SIZE;
-    int from_y =
-        (top_left.y - game.curAreaData->bmap.topLeftCorner.y) /
+    int fromY =
+        (topLeft.y - game.curAreaData->bmap.topLeftCorner.y) /
         GEOMETRY::AREA_CELL_SIZE;
-    int to_y =
-        (bottom_right.y - game.curAreaData->bmap.topLeftCorner.y) /
+    int toY =
+        (bottomRight.y - game.curAreaData->bmap.topLeftCorner.y) /
         GEOMETRY::AREA_CELL_SIZE;
         
-    markAreaCellsActive(from_x, to_x, from_y, to_y);
+    markAreaCellsActive(fromX, toX, fromY, toY);
 }
 
 
@@ -1568,21 +1563,21 @@ void GameplayState::markAreaCellsActive(
  * @brief Marks all area cells in a given region as active.
  * All coordinates provided are automatically adjusted if out-of-bounds.
  *
- * @param from_x Starting column index of the cells, inclusive.
- * @param to_x Ending column index of the cells, inclusive.
- * @param from_y Starting row index of the cells, inclusive.
- * @param to_y Ending row index of the cells, inclusive.
+ * @param fromX Starting column index of the cells, inclusive.
+ * @param toX Ending column index of the cells, inclusive.
+ * @param fromY Starting row index of the cells, inclusive.
+ * @param toY Ending row index of the cells, inclusive.
  */
 void GameplayState::markAreaCellsActive(
-    int from_x, int to_x, int from_y, int to_y
+    int fromX, int toX, int fromY, int toY
 ) {
-    from_x = std::max(0, from_x);
-    to_x = std::min(to_x, (int) areaActiveCells.size() - 1);
-    from_y = std::max(0, from_y);
-    to_y = std::min(to_y, (int) areaActiveCells[0].size() - 1);
+    fromX = std::max(0, fromX);
+    toX = std::min(toX, (int) areaActiveCells.size() - 1);
+    fromY = std::max(0, fromY);
+    toY = std::min(toY, (int) areaActiveCells[0].size() - 1);
     
-    for(int x = from_x; x <= to_x; x++) {
-        for(int y = from_y; y <= to_y; y++) {
+    for(int x = fromX; x <= toX; x++) {
+        for(int y = fromY; y <= toY; y++) {
             areaActiveCells[x][y] = true;
         }
     }
@@ -1593,34 +1588,34 @@ void GameplayState::markAreaCellsActive(
  * @brief Handles the logic required to tick a specific mob and its interactions
  * with other mobs.
  *
- * @param m_ptr Mob to process.
+ * @param mPtr Mob to process.
  * @param m Index of the mob.
  */
-void GameplayState::processMobInteractions(Mob* m_ptr, size_t m) {
-    vector<PendingIntermobEvent> pending_intermob_events;
-    MobState* state_before = m_ptr->fsm.curState;
+void GameplayState::processMobInteractions(Mob* mPtr, size_t m) {
+    vector<PendingIntermobEvent> pendingIntermobEvents;
+    MobState* stateBefore = mPtr->fsm.curState;
     
-    size_t n_mobs = mobs.all.size();
-    for(size_t m2 = 0; m2 < n_mobs; m2++) {
+    size_t nMobs = mobs.all.size();
+    for(size_t m2 = 0; m2 < nMobs; m2++) {
         if(m == m2) continue;
         
-        Mob* m2_ptr = mobs.all[m2];
+        Mob* m2Ptr = mobs.all[m2];
         if(
             !hasFlag(
-                m2_ptr->type->inactiveLogic,
+                m2Ptr->type->inactiveLogic,
                 INACTIVE_LOGIC_FLAG_INTERACTIONS
-            ) && !m2_ptr->isActive &&
-            m_ptr->timeAlive > 0.1f
+            ) && !m2Ptr->isActive &&
+            mPtr->timeAlive > 0.1f
         ) {
             continue;
         }
-        if(m2_ptr->toDelete) continue;
-        if(m2_ptr->isStoredInsideMob()) continue;
+        if(m2Ptr->toDelete) continue;
+        if(m2Ptr->isStoredInsideMob()) continue;
         
-        Distance d(m_ptr->pos, m2_ptr->pos);
-        Distance d_between = m_ptr->getDistanceBetween(m2_ptr, &d);
+        Distance d(mPtr->pos, m2Ptr->pos);
+        Distance dBetween = mPtr->getDistanceBetween(m2Ptr, &d);
         
-        if(d_between > m_ptr->interactionSpan + m2_ptr->physicalSpan) {
+        if(dBetween > mPtr->interactionSpan + m2Ptr->physicalSpan) {
             //The other mob is so far away that there is
             //no interaction possible.
             continue;
@@ -1630,10 +1625,10 @@ void GameplayState::processMobInteractions(Mob* m_ptr, size_t m) {
             game.perfMon->startMeasurement("Objects -- Touching others");
         }
         
-        if(d <= m_ptr->physicalSpan + m2_ptr->physicalSpan) {
+        if(d <= mPtr->physicalSpan + m2Ptr->physicalSpan) {
             //Only check if their radii or hitboxes
             //can (theoretically) reach each other.
-            processMobTouches(m_ptr, m2_ptr, m, m2, d);
+            processMobTouches(mPtr, m2Ptr, m, m2, d);
             
         }
         
@@ -1643,11 +1638,11 @@ void GameplayState::processMobInteractions(Mob* m_ptr, size_t m) {
         }
         
         if(
-            m2_ptr->health != 0 && m_ptr->nearReach != INVALID &&
-            !m2_ptr->hasInvisibilityStatus
+            m2Ptr->health != 0 && mPtr->nearReach != INVALID &&
+            !m2Ptr->hasInvisibilityStatus
         ) {
             processMobReaches(
-                m_ptr, m2_ptr, m, m2, d_between, pending_intermob_events
+                mPtr, m2Ptr, m, m2, dBetween, pendingIntermobEvents
             );
         }
         
@@ -1657,7 +1652,7 @@ void GameplayState::processMobInteractions(Mob* m_ptr, size_t m) {
         }
         
         processMobMiscInteractions(
-            m_ptr, m2_ptr, m, m2, d, d_between, pending_intermob_events
+            mPtr, m2Ptr, m, m2, d, dBetween, pendingIntermobEvents
         );
         
         if(game.perfMon) {
@@ -1671,28 +1666,28 @@ void GameplayState::processMobInteractions(Mob* m_ptr, size_t m) {
     
     //Check the pending inter-mob events.
     sort(
-        pending_intermob_events.begin(), pending_intermob_events.end(),
-    [m_ptr] (PendingIntermobEvent e1, PendingIntermobEvent e2) -> bool {
+        pendingIntermobEvents.begin(), pendingIntermobEvents.end(),
+    [mPtr] (PendingIntermobEvent e1, PendingIntermobEvent e2) -> bool {
         return
         (
             e1.d.toFloat() -
-            (m_ptr->radius + e1.mobPtr->radius)
+            (mPtr->radius + e1.mobPtr->radius)
         ) < (
             e2.d.toFloat() -
-            (m_ptr->radius + e2.mobPtr->radius)
+            (mPtr->radius + e2.mobPtr->radius)
         );
     }
     );
     
-    for(size_t e = 0; e < pending_intermob_events.size(); e++) {
-        if(m_ptr->fsm.curState != state_before) {
+    for(size_t e = 0; e < pendingIntermobEvents.size(); e++) {
+        if(mPtr->fsm.curState != stateBefore) {
             //We can't go on, since the new state might not even have the
             //event, and the reaches could've also changed.
             break;
         }
-        if(!pending_intermob_events[e].eventPtr) continue;
-        pending_intermob_events[e].eventPtr->run(
-            m_ptr, (void*) pending_intermob_events[e].mobPtr
+        if(!pendingIntermobEvents[e].eventPtr) continue;
+        pendingIntermobEvents[e].eventPtr->run(
+            mPtr, (void*) pendingIntermobEvents[e].mobPtr
         );
         
     }
@@ -1704,72 +1699,72 @@ void GameplayState::processMobInteractions(Mob* m_ptr, size_t m) {
 
 
 /**
- * @brief Handles the logic between m_ptr and m2_ptr regarding
+ * @brief Handles the logic between mPtr and m2Ptr regarding
  * miscellaneous things.
  *
- * @param m_ptr Mob that's being processed.
- * @param m2_ptr Check against this mob.
+ * @param mPtr Mob that's being processed.
+ * @param m2Ptr Check against this mob.
  * @param m Index of the mob being processed.
  * @param m2 Index of the mob to check against.
  * @param d Distance between the two's centers.
- * @param d_between Distance between the two.
- * @param pending_intermob_events Vector of events to be processed.
+ * @param dBetween Distance between the two.
+ * @param pendingIntermobEvents Vector of events to be processed.
  */
 void GameplayState::processMobMiscInteractions(
-    Mob* m_ptr, Mob* m2_ptr, size_t m, size_t m2,
-    const Distance &d, const Distance &d_between,
-    vector<PendingIntermobEvent> &pending_intermob_events
+    Mob* mPtr, Mob* m2Ptr, size_t m, size_t m2,
+    const Distance &d, const Distance &dBetween,
+    vector<PendingIntermobEvent> &pendingIntermobEvents
 ) {
     //Find a carriable mob to grab.
-    MobEvent* nco_event =
-        m_ptr->fsm.getEvent(MOB_EV_NEAR_CARRIABLE_OBJECT);
+    MobEvent* ncoEvent =
+        mPtr->fsm.getEvent(MOB_EV_NEAR_CARRIABLE_OBJECT);
     if(
-        nco_event &&
-        m2_ptr->carryInfo &&
-        !m2_ptr->carryInfo->isFull()
+        ncoEvent &&
+        m2Ptr->carryInfo &&
+        !m2Ptr->carryInfo->isFull()
     ) {
-        if(d_between <= taskRange(m_ptr)) {
-            pending_intermob_events.push_back(
-                PendingIntermobEvent(d_between, nco_event, m2_ptr)
+        if(dBetween <= taskRange(mPtr)) {
+            pendingIntermobEvents.push_back(
+                PendingIntermobEvent(dBetween, ncoEvent, m2Ptr)
             );
         }
     }
     
     //Find a tool mob.
-    MobEvent* nto_event =
-        m_ptr->fsm.getEvent(MOB_EV_NEAR_TOOL);
+    MobEvent* ntoEvent =
+        mPtr->fsm.getEvent(MOB_EV_NEAR_TOOL);
     if(
-        nto_event &&
-        typeid(*m2_ptr) == typeid(Tool)
+        ntoEvent &&
+        typeid(*m2Ptr) == typeid(Tool)
     ) {
-        if(d_between <= taskRange(m_ptr)) {
-            Tool* too_ptr = (Tool*) m2_ptr;
-            if(too_ptr->reserved && too_ptr->reserved != m_ptr) {
+        if(dBetween <= taskRange(mPtr)) {
+            Tool* tooPtr = (Tool*) m2Ptr;
+            if(tooPtr->reserved && tooPtr->reserved != mPtr) {
                 //Another Pikmin is already going for it. Ignore it.
             } else {
-                pending_intermob_events.push_back(
-                    PendingIntermobEvent(d_between, nto_event, m2_ptr)
+                pendingIntermobEvents.push_back(
+                    PendingIntermobEvent(dBetween, ntoEvent, m2Ptr)
                 );
             }
         }
     }
     
     //Find a group task mob.
-    MobEvent* ngto_event =
-        m_ptr->fsm.getEvent(MOB_EV_NEAR_GROUP_TASK);
+    MobEvent* ngtoEvent =
+        mPtr->fsm.getEvent(MOB_EV_NEAR_GROUP_TASK);
     if(
-        ngto_event &&
-        m2_ptr->health > 0 &&
-        typeid(*m2_ptr) == typeid(GroupTask)
+        ngtoEvent &&
+        m2Ptr->health > 0 &&
+        typeid(*m2Ptr) == typeid(GroupTask)
     ) {
-        if(d_between <= taskRange(m_ptr)) {
-            GroupTask* tas_ptr = (GroupTask*) m2_ptr;
-            GroupTask::GroupTaskSpot* free_spot = tas_ptr->getFreeSpot();
-            if(!free_spot) {
+        if(dBetween <= taskRange(mPtr)) {
+            GroupTask* tasPtr = (GroupTask*) m2Ptr;
+            GroupTask::GroupTaskSpot* freeSpot = tasPtr->getFreeSpot();
+            if(!freeSpot) {
                 //There are no free spots here. Ignore it.
             } else {
-                pending_intermob_events.push_back(
-                    PendingIntermobEvent(d_between, ngto_event, m2_ptr)
+                pendingIntermobEvents.push_back(
+                    PendingIntermobEvent(dBetween, ngtoEvent, m2Ptr)
                 );
             }
         }
@@ -1777,66 +1772,66 @@ void GameplayState::processMobMiscInteractions(
     }
     
     //"Bumped" by the active leader being nearby.
-    MobEvent* touch_le_ev =
-        m_ptr->fsm.getEvent(MOB_EV_TOUCHED_ACTIVE_LEADER);
+    MobEvent* touchLeEv =
+        mPtr->fsm.getEvent(MOB_EV_TOUCHED_ACTIVE_LEADER);
     if(
-        touch_le_ev &&
-        m2_ptr == curLeaderPtr &&
+        touchLeEv &&
+        m2Ptr == curLeaderPtr &&
         //Small hack. This way,
         //Pikmin don't get bumped by leaders that are,
         //for instance, lying down.
-        m2_ptr->fsm.curState->id == LEADER_STATE_ACTIVE &&
+        m2Ptr->fsm.curState->id == LEADER_STATE_ACTIVE &&
         d <= game.config.pikmin.idleBumpRange
     ) {
-        pending_intermob_events.push_back(
-            PendingIntermobEvent(d_between, touch_le_ev, m2_ptr)
+        pendingIntermobEvents.push_back(
+            PendingIntermobEvent(dBetween, touchLeEv, m2Ptr)
         );
     }
 }
 
 
 /**
- * @brief Handles the logic between m_ptr and m2_ptr regarding everything
+ * @brief Handles the logic between mPtr and m2Ptr regarding everything
  * involving one being in the other's reach.
  *
- * @param m_ptr Mob that's being processed.
- * @param m2_ptr Check against this mob.
+ * @param mPtr Mob that's being processed.
+ * @param m2Ptr Check against this mob.
  * @param m Index of the mob being processed.
  * @param m2 Index of the mob to check against.
- * @param d_between Distance between the two.
- * @param pending_intermob_events Vector of events to be processed.
+ * @param dBetween Distance between the two.
+ * @param pendingIntermobEvents Vector of events to be processed.
  */
 void GameplayState::processMobReaches(
-    Mob* m_ptr, Mob* m2_ptr, size_t m, size_t m2, const Distance &d_between,
-    vector<PendingIntermobEvent> &pending_intermob_events
+    Mob* mPtr, Mob* m2Ptr, size_t m, size_t m2, const Distance &dBetween,
+    vector<PendingIntermobEvent> &pendingIntermobEvents
 ) {
     //Check reaches.
-    MobEvent* obir_ev =
-        m_ptr->fsm.getEvent(MOB_EV_OBJECT_IN_REACH);
-    MobEvent* opir_ev =
-        m_ptr->fsm.getEvent(MOB_EV_OPPONENT_IN_REACH);
+    MobEvent* obirEv =
+        mPtr->fsm.getEvent(MOB_EV_OBJECT_IN_REACH);
+    MobEvent* opirEv =
+        mPtr->fsm.getEvent(MOB_EV_OPPONENT_IN_REACH);
         
-    if(!obir_ev && !opir_ev) return;
+    if(!obirEv && !opirEv) return;
     
-    MobType::Reach* r_ptr = &m_ptr->type->reaches[m_ptr->nearReach];
-    float angle_diff =
+    MobType::Reach* rPtr = &mPtr->type->reaches[mPtr->nearReach];
+    float angleDiff =
         getAngleSmallestDiff(
-            m_ptr->angle,
-            getAngle(m_ptr->pos, m2_ptr->pos)
+            mPtr->angle,
+            getAngle(mPtr->pos, m2Ptr->pos)
         );
         
-    if(isMobInReach(r_ptr, d_between, angle_diff)) {
-        if(obir_ev) {
-            pending_intermob_events.push_back(
+    if(isMobInReach(rPtr, dBetween, angleDiff)) {
+        if(obirEv) {
+            pendingIntermobEvents.push_back(
                 PendingIntermobEvent(
-                    d_between, obir_ev, m2_ptr
+                    dBetween, obirEv, m2Ptr
                 )
             );
         }
-        if(opir_ev && m_ptr->canHunt(m2_ptr)) {
-            pending_intermob_events.push_back(
+        if(opirEv && mPtr->canHunt(m2Ptr)) {
+            pendingIntermobEvents.push_back(
                 PendingIntermobEvent(
-                    d_between, opir_ev, m2_ptr
+                    dBetween, opirEv, m2Ptr
                 )
             );
         }
@@ -1845,83 +1840,83 @@ void GameplayState::processMobReaches(
 
 
 /**
- * @brief Handles the logic between m_ptr and m2_ptr regarding everything
+ * @brief Handles the logic between mPtr and m2Ptr regarding everything
  * involving one touching the other.
  *
- * @param m_ptr Mob that's being processed.
- * @param m2_ptr Check against this mob.
+ * @param mPtr Mob that's being processed.
+ * @param m2Ptr Check against this mob.
  * @param m Index of the mob being processed.
  * @param m2 Index of the mob to check against.
  * @param d Distance between the two.
  */
 void GameplayState::processMobTouches(
-    Mob* m_ptr, Mob* m2_ptr, size_t m, size_t m2, Distance &d
+    Mob* mPtr, Mob* m2Ptr, size_t m, size_t m2, Distance &d
 ) {
     //Check if mob 1 should be pushed by mob 2.
-    bool both_idle_pikmin =
-        m_ptr->type->category->id == MOB_CATEGORY_PIKMIN &&
-        m2_ptr->type->category->id == MOB_CATEGORY_PIKMIN &&
+    bool bothIdlePikmin =
+        mPtr->type->category->id == MOB_CATEGORY_PIKMIN &&
+        m2Ptr->type->category->id == MOB_CATEGORY_PIKMIN &&
         (
-            ((Pikmin*) m_ptr)->fsm.curState->id == PIKMIN_STATE_IDLING ||
-            ((Pikmin*) m_ptr)->fsm.curState->id == PIKMIN_STATE_IDLING_H
+            ((Pikmin*) mPtr)->fsm.curState->id == PIKMIN_STATE_IDLING ||
+            ((Pikmin*) mPtr)->fsm.curState->id == PIKMIN_STATE_IDLING_H
         ) && (
-            ((Pikmin*) m2_ptr)->fsm.curState->id == PIKMIN_STATE_IDLING ||
-            ((Pikmin*) m2_ptr)->fsm.curState->id == PIKMIN_STATE_IDLING_H
+            ((Pikmin*) m2Ptr)->fsm.curState->id == PIKMIN_STATE_IDLING ||
+            ((Pikmin*) m2Ptr)->fsm.curState->id == PIKMIN_STATE_IDLING_H
         );
-    bool ok_to_push = true;
+    bool okToPush = true;
     if(
-        hasFlag(m_ptr->flags, MOB_FLAG_INTANGIBLE) ||
-        hasFlag(m2_ptr->flags, MOB_FLAG_INTANGIBLE)
+        hasFlag(mPtr->flags, MOB_FLAG_INTANGIBLE) ||
+        hasFlag(m2Ptr->flags, MOB_FLAG_INTANGIBLE)
     ) {
-        ok_to_push = false;
-    } else if(!m_ptr->type->pushable) {
-        ok_to_push = false;
-    } else if(hasFlag(m_ptr->flags, MOB_FLAG_UNPUSHABLE)) {
-        ok_to_push = false;
-    } else if(m_ptr->standingOnMob == m2_ptr) {
-        ok_to_push = false;
+        okToPush = false;
+    } else if(!mPtr->type->pushable) {
+        okToPush = false;
+    } else if(hasFlag(mPtr->flags, MOB_FLAG_UNPUSHABLE)) {
+        okToPush = false;
+    } else if(mPtr->standingOnMob == m2Ptr) {
+        okToPush = false;
     }
     
     if(
-        ok_to_push &&
-        (m2_ptr->type->pushes || both_idle_pikmin) && (
+        okToPush &&
+        (m2Ptr->type->pushes || bothIdlePikmin) && (
             (
-                m2_ptr->z < m_ptr->z + m_ptr->height &&
-                m2_ptr->z + m2_ptr->height > m_ptr->z
+                m2Ptr->z < mPtr->z + mPtr->height &&
+                m2Ptr->z + m2Ptr->height > mPtr->z
             ) || (
-                m_ptr->height == 0
+                mPtr->height == 0
             ) || (
-                m2_ptr->height == 0
+                m2Ptr->height == 0
             )
         ) && !(
             //If they are both being carried by Pikmin, one of them
             //shouldn't push, otherwise the Pikmin
             //can get stuck in a deadlock.
-            m_ptr->carryInfo && m_ptr->carryInfo->isMoving &&
-            m2_ptr->carryInfo && m2_ptr->carryInfo->isMoving &&
+            mPtr->carryInfo && mPtr->carryInfo->isMoving &&
+            m2Ptr->carryInfo && m2Ptr->carryInfo->isMoving &&
             m < m2
         )
     ) {
-        float push_amount = 0;
-        float push_angle = 0;
+        float pushAmount = 0;
+        float pushAngle = 0;
         
-        if(m2_ptr->type->pushesWithHitboxes) {
+        if(m2Ptr->type->pushesWithHitboxes) {
             //Push with the hitboxes.
             
-            Sprite* s2_ptr;
-            m2_ptr->getSpriteData(&s2_ptr, nullptr, nullptr);
+            Sprite* s2Ptr;
+            m2Ptr->getSpriteData(&s2Ptr, nullptr, nullptr);
             
-            for(size_t h = 0; h < s2_ptr->hitboxes.size(); h++) {
-                Hitbox* h_ptr = &s2_ptr->hitboxes[h];
-                if(h_ptr->type == HITBOX_TYPE_DISABLED) continue;
-                Point h_pos(
-                    m2_ptr->pos.x + (
-                        h_ptr->pos.x * m2_ptr->angleCos -
-                        h_ptr->pos.y * m2_ptr->angleSin
+            for(size_t h = 0; h < s2Ptr->hitboxes.size(); h++) {
+                Hitbox* hPtr = &s2Ptr->hitboxes[h];
+                if(hPtr->type == HITBOX_TYPE_DISABLED) continue;
+                Point hPos(
+                    m2Ptr->pos.x + (
+                        hPtr->pos.x * m2Ptr->angleCos -
+                        hPtr->pos.y * m2Ptr->angleSin
                     ),
-                    m2_ptr->pos.y + (
-                        h_ptr->pos.x * m2_ptr->angleSin +
-                        h_ptr->pos.y * m2_ptr->angleCos
+                    m2Ptr->pos.y + (
+                        hPtr->pos.x * m2Ptr->angleSin +
+                        hPtr->pos.y * m2Ptr->angleCos
                     )
                 );
                 //It's more optimized to get the hitbox position here
@@ -1929,87 +1924,87 @@ void GameplayState::processMobTouches(
                 //we already know the sine and cosine, so they don't
                 //need to be re-calculated.
                 
-                Distance hd(m_ptr->pos, h_pos);
-                if(hd < m_ptr->radius + h_ptr->radius) {
+                Distance hd(mPtr->pos, hPos);
+                if(hd < mPtr->radius + hPtr->radius) {
                     float p =
                         fabs(
-                            hd.toFloat() - m_ptr->radius -
-                            h_ptr->radius
+                            hd.toFloat() - mPtr->radius -
+                            hPtr->radius
                         );
-                    if(push_amount == 0 || p > push_amount) {
-                        push_amount = p;
-                        push_angle = getAngle(h_pos, m_ptr->pos);
+                    if(pushAmount == 0 || p > pushAmount) {
+                        pushAmount = p;
+                        pushAngle = getAngle(hPos, mPtr->pos);
                     }
                 }
             }
             
         } else {
-            bool xy_collision = false;
-            float temp_push_amount = 0;
-            float temp_push_angle = 0;
+            bool xyCollision = false;
+            float tempPushAmount = 0;
+            float tempPushAngle = 0;
             if(
-                m_ptr->rectangularDim.x != 0 &&
-                m2_ptr->rectangularDim.x != 0
+                mPtr->rectangularDim.x != 0 &&
+                m2Ptr->rectangularDim.x != 0
             ) {
                 //Rectangle vs rectangle.
-                xy_collision =
+                xyCollision =
                     rectanglesIntersect(
-                        m_ptr->pos, m_ptr->rectangularDim, m_ptr->angle,
-                        m2_ptr->pos, m2_ptr->rectangularDim, m2_ptr->angle,
-                        &temp_push_amount, &temp_push_angle
+                        mPtr->pos, mPtr->rectangularDim, mPtr->angle,
+                        m2Ptr->pos, m2Ptr->rectangularDim, m2Ptr->angle,
+                        &tempPushAmount, &tempPushAngle
                     );
-            } else if(m_ptr->rectangularDim.x != 0) {
+            } else if(mPtr->rectangularDim.x != 0) {
                 //Rectangle vs circle.
-                xy_collision =
+                xyCollision =
                     circleIntersectsRectangle(
-                        m2_ptr->pos, m2_ptr->radius,
-                        m_ptr->pos, m_ptr->rectangularDim,
-                        m_ptr->angle, &temp_push_amount, &temp_push_angle
+                        m2Ptr->pos, m2Ptr->radius,
+                        mPtr->pos, mPtr->rectangularDim,
+                        mPtr->angle, &tempPushAmount, &tempPushAngle
                     );
-                temp_push_angle += TAU / 2.0f;
-            } else if(m2_ptr->rectangularDim.x != 0) {
+                tempPushAngle += TAU / 2.0f;
+            } else if(m2Ptr->rectangularDim.x != 0) {
                 //Circle vs rectangle.
-                xy_collision =
+                xyCollision =
                     circleIntersectsRectangle(
-                        m_ptr->pos, m_ptr->radius,
-                        m2_ptr->pos, m2_ptr->rectangularDim,
-                        m2_ptr->angle, &temp_push_amount, &temp_push_angle
+                        mPtr->pos, mPtr->radius,
+                        m2Ptr->pos, m2Ptr->rectangularDim,
+                        m2Ptr->angle, &tempPushAmount, &tempPushAngle
                     );
             } else {
                 //Circle vs circle.
-                xy_collision =
-                    d <= (m_ptr->radius + m2_ptr->radius);
-                if(xy_collision) {
+                xyCollision =
+                    d <= (mPtr->radius + m2Ptr->radius);
+                if(xyCollision) {
                     //Only bother calculating if there's a collision.
-                    temp_push_amount =
+                    tempPushAmount =
                         fabs(
-                            d.toFloat() - m_ptr->radius -
-                            m2_ptr->radius
+                            d.toFloat() - mPtr->radius -
+                            m2Ptr->radius
                         );
-                    temp_push_angle = getAngle(m2_ptr->pos, m_ptr->pos);
+                    tempPushAngle = getAngle(m2Ptr->pos, mPtr->pos);
                 }
             }
             
-            if(xy_collision) {
-                push_amount = temp_push_amount;
-                if(m2_ptr->type->pushesSoftly) {
-                    push_amount =
+            if(xyCollision) {
+                pushAmount = tempPushAmount;
+                if(m2Ptr->type->pushesSoftly) {
+                    pushAmount =
                         std::min(
-                            push_amount,
+                            pushAmount,
                             (float) (MOB::PUSH_SOFTLY_AMOUNT * game.deltaT)
                         );
                 }
-                push_angle = temp_push_angle;
-                if(both_idle_pikmin) {
+                pushAngle = tempPushAngle;
+                if(bothIdlePikmin) {
                     //Lower the push.
                     //Basically, make PUSH_EXTRA_AMOUNT do all the work.
-                    push_amount = 0.1f;
+                    pushAmount = 0.1f;
                     //Deviate the angle slightly. This way, if two Pikmin
                     //are in the same spot, they don't drag each other forever.
-                    push_angle += 0.1f * (m > m2);
+                    pushAngle += 0.1f * (m > m2);
                 } else if(
-                    m_ptr->timeAlive < MOB::PUSH_THROTTLE_TIMEOUT ||
-                    m2_ptr->timeAlive < MOB::PUSH_THROTTLE_TIMEOUT
+                    mPtr->timeAlive < MOB::PUSH_THROTTLE_TIMEOUT ||
+                    m2Ptr->timeAlive < MOB::PUSH_THROTTLE_TIMEOUT
                 ) {
                     //If either the pushed mob or the pusher mob spawned
                     //recently, then throttle the push. This avoids stuff like
@@ -2017,10 +2012,10 @@ void GameplayState::processMobTouches(
                     //Especially if there are multiple spoils.
                     //Setting the amount to 0.1 means it'll only really use the
                     //push provided by MOB_PUSH_EXTRA_AMOUNT.
-                    float time_factor =
-                        std::min(m_ptr->timeAlive, m2_ptr->timeAlive);
-                    push_amount *=
-                        time_factor /
+                    float timeFactor =
+                        std::min(mPtr->timeAlive, m2Ptr->timeAlive);
+                    pushAmount *=
+                        timeFactor /
                         MOB::PUSH_THROTTLE_TIMEOUT *
                         MOB::PUSH_THROTTLE_FACTOR;
                         
@@ -2030,144 +2025,144 @@ void GameplayState::processMobTouches(
         
         //If the mob is inside the other,
         //it needs to be pushed out.
-        if((push_amount / game.deltaT) > m_ptr->pushAmount) {
-            m_ptr->pushAmount = push_amount / game.deltaT;
-            m_ptr->pushAngle = push_angle;
+        if((pushAmount / game.deltaT) > mPtr->pushAmount) {
+            mPtr->pushAmount = pushAmount / game.deltaT;
+            mPtr->pushAngle = pushAngle;
         }
     }
     
     
     //Check touches. This does not use hitboxes,
     //only the object radii (or rectangular width/height).
-    MobEvent* touch_op_ev =
-        m_ptr->fsm.getEvent(MOB_EV_TOUCHED_OPPONENT);
-    MobEvent* touch_ob_ev =
-        m_ptr->fsm.getEvent(MOB_EV_TOUCHED_OBJECT);
-    if(touch_op_ev || touch_ob_ev) {
+    MobEvent* touchOpEv =
+        mPtr->fsm.getEvent(MOB_EV_TOUCHED_OPPONENT);
+    MobEvent* touchObEv =
+        mPtr->fsm.getEvent(MOB_EV_TOUCHED_OBJECT);
+    if(touchOpEv || touchObEv) {
     
-        bool z_touch;
+        bool zTouch;
         if(
-            m_ptr->height == 0 ||
-            m2_ptr->height == 0
+            mPtr->height == 0 ||
+            m2Ptr->height == 0
         ) {
-            z_touch = true;
+            zTouch = true;
         } else {
-            z_touch =
+            zTouch =
                 !(
-                    (m2_ptr->z > m_ptr->z + m_ptr->height) ||
-                    (m2_ptr->z + m2_ptr->height < m_ptr->z)
+                    (m2Ptr->z > mPtr->z + mPtr->height) ||
+                    (m2Ptr->z + m2Ptr->height < mPtr->z)
                 );
         }
         
-        bool xy_collision = false;
+        bool xyCollision = false;
         if(
-            m_ptr->rectangularDim.x != 0 &&
-            m2_ptr->rectangularDim.x != 0
+            mPtr->rectangularDim.x != 0 &&
+            m2Ptr->rectangularDim.x != 0
         ) {
             //Rectangle vs rectangle.
-            xy_collision =
+            xyCollision =
                 rectanglesIntersect(
-                    m_ptr->pos, m_ptr->rectangularDim, m_ptr->angle,
-                    m2_ptr->pos, m2_ptr->rectangularDim, m2_ptr->angle
+                    mPtr->pos, mPtr->rectangularDim, mPtr->angle,
+                    m2Ptr->pos, m2Ptr->rectangularDim, m2Ptr->angle
                 );
-        } else if(m_ptr->rectangularDim.x != 0) {
+        } else if(mPtr->rectangularDim.x != 0) {
             //Rectangle vs circle.
-            xy_collision =
+            xyCollision =
                 circleIntersectsRectangle(
-                    m2_ptr->pos, m2_ptr->radius,
-                    m_ptr->pos, m_ptr->rectangularDim,
-                    m_ptr->angle
+                    m2Ptr->pos, m2Ptr->radius,
+                    mPtr->pos, mPtr->rectangularDim,
+                    mPtr->angle
                 );
-        } else if(m2_ptr->rectangularDim.x != 0) {
+        } else if(m2Ptr->rectangularDim.x != 0) {
             //Circle vs rectangle.
-            xy_collision =
+            xyCollision =
                 circleIntersectsRectangle(
-                    m_ptr->pos, m_ptr->radius,
-                    m2_ptr->pos, m2_ptr->rectangularDim,
-                    m2_ptr->angle
+                    mPtr->pos, mPtr->radius,
+                    m2Ptr->pos, m2Ptr->rectangularDim,
+                    m2Ptr->angle
                 );
         } else {
             //Circle vs circle.
-            xy_collision =
-                d <= (m_ptr->radius + m2_ptr->radius);
+            xyCollision =
+                d <= (mPtr->radius + m2Ptr->radius);
         }
         
         if(
-            z_touch && !hasFlag(m2_ptr->flags, MOB_FLAG_INTANGIBLE) &&
-            xy_collision
+            zTouch && !hasFlag(m2Ptr->flags, MOB_FLAG_INTANGIBLE) &&
+            xyCollision
         ) {
-            if(touch_ob_ev) {
-                touch_ob_ev->run(m_ptr, (void*) m2_ptr);
+            if(touchObEv) {
+                touchObEv->run(mPtr, (void*) m2Ptr);
             }
-            if(touch_op_ev && m_ptr->canHunt(m2_ptr)) {
-                touch_op_ev->run(m_ptr, (void*) m2_ptr);
+            if(touchOpEv && mPtr->canHunt(m2Ptr)) {
+                touchOpEv->run(mPtr, (void*) m2Ptr);
             }
         }
         
     }
     
     //Check hitbox touches.
-    MobEvent* hitbox_touch_an_ev =
-        m_ptr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_A_N);
-    MobEvent* hitbox_touch_na_ev =
-        m_ptr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_N_A);
-    MobEvent* hitbox_touch_nn_ev =
-        m_ptr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_N_N);
-    MobEvent* hitbox_touch_eat_ev =
-        m_ptr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_EAT);
-    MobEvent* hitbox_touch_haz_ev =
-        m_ptr->fsm.getEvent(MOB_EV_TOUCHED_HAZARD);
+    MobEvent* hitboxTouchANEv =
+        mPtr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_A_N);
+    MobEvent* hitboxTouchNAEv =
+        mPtr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_N_A);
+    MobEvent* hitboxTouchNNEv =
+        mPtr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_N_N);
+    MobEvent* hitboxTouchEatEv =
+        mPtr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_EAT);
+    MobEvent* hitboxTouchHazEv =
+        mPtr->fsm.getEvent(MOB_EV_TOUCHED_HAZARD);
         
-    Sprite* s1_ptr;
-    m_ptr->getSpriteData(&s1_ptr, nullptr, nullptr);
-    Sprite* s2_ptr;
-    m2_ptr->getSpriteData(&s2_ptr, nullptr, nullptr);
+    Sprite* s1Ptr;
+    mPtr->getSpriteData(&s1Ptr, nullptr, nullptr);
+    Sprite* s2Ptr;
+    m2Ptr->getSpriteData(&s2Ptr, nullptr, nullptr);
     
     if(
         (
-            hitbox_touch_an_ev || hitbox_touch_na_ev || hitbox_touch_nn_ev ||
-            hitbox_touch_eat_ev
+            hitboxTouchANEv || hitboxTouchNAEv || hitboxTouchNNEv ||
+            hitboxTouchEatEv
         ) &&
-        s1_ptr && s2_ptr &&
-        !s1_ptr->hitboxes.empty() && !s2_ptr->hitboxes.empty()
+        s1Ptr && s2Ptr &&
+        !s1Ptr->hitboxes.empty() && !s2Ptr->hitboxes.empty()
     ) {
     
-        bool reported_an_ev = false;
-        bool reported_na_ev = false;
-        bool reported_nn_ev = false;
-        bool reported_eat_ev = false;
-        bool reported_haz_ev = false;
+        bool reportedANEv = false;
+        bool reportedNAEv = false;
+        bool reportedNNEv = false;
+        bool reportedEatEv = false;
+        bool reportedHazEv = false;
         
-        for(size_t h1 = 0; h1 < s1_ptr->hitboxes.size(); h1++) {
+        for(size_t h1 = 0; h1 < s1Ptr->hitboxes.size(); h1++) {
         
-            Hitbox* h1_ptr = &s1_ptr->hitboxes[h1];
-            if(h1_ptr->type == HITBOX_TYPE_DISABLED) continue;
+            Hitbox* h1Ptr = &s1Ptr->hitboxes[h1];
+            if(h1Ptr->type == HITBOX_TYPE_DISABLED) continue;
             
-            for(size_t h2 = 0; h2 < s2_ptr->hitboxes.size(); h2++) {
-                Hitbox* h2_ptr = &s2_ptr->hitboxes[h2];
-                if(h2_ptr->type == HITBOX_TYPE_DISABLED) continue;
+            for(size_t h2 = 0; h2 < s2Ptr->hitboxes.size(); h2++) {
+                Hitbox* h2Ptr = &s2Ptr->hitboxes[h2];
+                if(h2Ptr->type == HITBOX_TYPE_DISABLED) continue;
                 
                 //Get the real hitbox locations.
-                Point m1_h_pos =
-                    h1_ptr->getCurPos(
-                        m_ptr->pos, m_ptr->angleCos, m_ptr->angleSin
+                Point m1HPos =
+                    h1Ptr->getCurPos(
+                        mPtr->pos, mPtr->angleCos, mPtr->angleSin
                     );
-                Point m2_h_pos =
-                    h2_ptr->getCurPos(
-                        m2_ptr->pos, m2_ptr->angleCos, m2_ptr->angleSin
+                Point m2HPos =
+                    h2Ptr->getCurPos(
+                        m2Ptr->pos, m2Ptr->angleCos, m2Ptr->angleSin
                     );
-                float m1_h_z = m_ptr->z + h1_ptr->z;
-                float m2_h_z = m2_ptr->z + h2_ptr->z;
+                float m1HZ = mPtr->z + h1Ptr->z;
+                float m2HZ = m2Ptr->z + h2Ptr->z;
                 
                 bool collided = false;
                 
                 if(
                     (
-                        m_ptr->holder.m == m2_ptr &&
-                        m_ptr->holder.hitboxIdx == h2
+                        mPtr->holder.m == m2Ptr &&
+                        mPtr->holder.hitboxIdx == h2
                     ) || (
-                        m2_ptr->holder.m == m_ptr &&
-                        m2_ptr->holder.hitboxIdx == h1
+                        m2Ptr->holder.m == mPtr &&
+                        m2Ptr->holder.hitboxIdx == h1
                     )
                 ) {
                     //Mobs held by a hitbox are obviously touching it.
@@ -2175,21 +2170,21 @@ void GameplayState::processMobTouches(
                 }
                 
                 if(!collided) {
-                    bool z_collision;
-                    if(h1_ptr->height == 0 || h2_ptr->height == 0) {
-                        z_collision = true;
+                    bool zCollision;
+                    if(h1Ptr->height == 0 || h2Ptr->height == 0) {
+                        zCollision = true;
                     } else {
-                        z_collision =
+                        zCollision =
                             !(
-                                (m2_h_z > m1_h_z + h1_ptr->height) ||
-                                (m2_h_z + h2_ptr->height < m1_h_z)
+                                (m2HZ > m1HZ + h1Ptr->height) ||
+                                (m2HZ + h2Ptr->height < m1HZ)
                             );
                     }
                     
                     if(
-                        z_collision &&
-                        Distance(m1_h_pos, m2_h_pos) <
-                        (h1_ptr->radius + h2_ptr->radius)
+                        zCollision &&
+                        Distance(m1HPos, m2HPos) <
+                        (h1Ptr->radius + h2Ptr->radius)
                     ) {
                         collided = true;
                     }
@@ -2200,162 +2195,162 @@ void GameplayState::processMobTouches(
                 //Collision confirmed!
                 
                 if(
-                    hitbox_touch_an_ev && !reported_an_ev &&
-                    h1_ptr->type == HITBOX_TYPE_ATTACK &&
-                    h2_ptr->type == HITBOX_TYPE_NORMAL
+                    hitboxTouchANEv && !reportedANEv &&
+                    h1Ptr->type == HITBOX_TYPE_ATTACK &&
+                    h2Ptr->type == HITBOX_TYPE_NORMAL
                 ) {
-                    HitboxInteraction ev_info =
+                    HitboxInteraction evInfo =
                         HitboxInteraction(
-                            m2_ptr, h1_ptr, h2_ptr
+                            m2Ptr, h1Ptr, h2Ptr
                         );
                         
-                    hitbox_touch_an_ev->run(
-                        m_ptr, (void*) &ev_info
+                    hitboxTouchANEv->run(
+                        mPtr, (void*) &evInfo
                     );
-                    reported_an_ev = true;
+                    reportedANEv = true;
                     
                     //Re-fetch the other events, since this event
                     //could have triggered a state change.
-                    hitbox_touch_eat_ev =
-                        m_ptr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_EAT);
-                    hitbox_touch_haz_ev =
-                        m_ptr->fsm.getEvent(MOB_EV_TOUCHED_HAZARD);
-                    hitbox_touch_na_ev =
-                        m_ptr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_N_A);
-                    hitbox_touch_nn_ev =
-                        m_ptr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_N_N);
+                    hitboxTouchEatEv =
+                        mPtr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_EAT);
+                    hitboxTouchHazEv =
+                        mPtr->fsm.getEvent(MOB_EV_TOUCHED_HAZARD);
+                    hitboxTouchNAEv =
+                        mPtr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_N_A);
+                    hitboxTouchNNEv =
+                        mPtr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_N_N);
                 }
                 
                 if(
-                    hitbox_touch_nn_ev && !reported_nn_ev &&
-                    h1_ptr->type == HITBOX_TYPE_NORMAL &&
-                    h2_ptr->type == HITBOX_TYPE_NORMAL
+                    hitboxTouchNNEv && !reportedNNEv &&
+                    h1Ptr->type == HITBOX_TYPE_NORMAL &&
+                    h2Ptr->type == HITBOX_TYPE_NORMAL
                 ) {
-                    HitboxInteraction ev_info =
+                    HitboxInteraction evInfo =
                         HitboxInteraction(
-                            m2_ptr, h1_ptr, h2_ptr
+                            m2Ptr, h1Ptr, h2Ptr
                         );
                         
-                    hitbox_touch_nn_ev->run(
-                        m_ptr, (void*) &ev_info
+                    hitboxTouchNNEv->run(
+                        mPtr, (void*) &evInfo
                     );
-                    reported_nn_ev = true;
+                    reportedNNEv = true;
                     
                     //Re-fetch the other events, since this event
                     //could have triggered a state change.
-                    hitbox_touch_eat_ev =
-                        m_ptr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_EAT);
-                    hitbox_touch_haz_ev =
-                        m_ptr->fsm.getEvent(MOB_EV_TOUCHED_HAZARD);
-                    hitbox_touch_na_ev =
-                        m_ptr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_N_A);
-                    hitbox_touch_an_ev =
-                        m_ptr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_A_N);
+                    hitboxTouchEatEv =
+                        mPtr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_EAT);
+                    hitboxTouchHazEv =
+                        mPtr->fsm.getEvent(MOB_EV_TOUCHED_HAZARD);
+                    hitboxTouchNAEv =
+                        mPtr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_N_A);
+                    hitboxTouchANEv =
+                        mPtr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_A_N);
                 }
                 
                 if(
-                    h1_ptr->type == HITBOX_TYPE_NORMAL &&
-                    h2_ptr->type == HITBOX_TYPE_ATTACK
+                    h1Ptr->type == HITBOX_TYPE_NORMAL &&
+                    h2Ptr->type == HITBOX_TYPE_ATTACK
                 ) {
                     //Confirmed damage.
                     
                     //Hazard resistance check.
                     if(
-                        h2_ptr->hazard &&
-                        m_ptr->getHazardVulnerability(h2_ptr->hazard).
+                        h2Ptr->hazard &&
+                        mPtr->getHazardVulnerability(h2Ptr->hazard).
                         effectMult == 0.0f
                     ) {
                         continue;
                     }
                     
                     //Should this mob even attack this other mob?
-                    if(!m2_ptr->canHurt(m_ptr)) {
+                    if(!m2Ptr->canHurt(mPtr)) {
                         continue;
                     }
                 }
                 
                 //Check if m2 is under any status effect
                 //that disables attacks.
-                bool disable_attack_status = false;
-                for(size_t s = 0; s < m2_ptr->statuses.size(); s++) {
-                    if(m2_ptr->statuses[s].type->disablesAttack) {
-                        disable_attack_status = true;
+                bool disableAttackStatus = false;
+                for(size_t s = 0; s < m2Ptr->statuses.size(); s++) {
+                    if(m2Ptr->statuses[s].type->disablesAttack) {
+                        disableAttackStatus = true;
                         break;
                     }
                 }
                 
                 //First, the "touched eat hitbox" event.
                 if(
-                    hitbox_touch_eat_ev &&
-                    !reported_eat_ev &&
-                    !disable_attack_status &&
-                    h1_ptr->type == HITBOX_TYPE_NORMAL &&
-                    m2_ptr->chompingMobs.size() <
-                    m2_ptr->chompMax &&
+                    hitboxTouchEatEv &&
+                    !reportedEatEv &&
+                    !disableAttackStatus &&
+                    h1Ptr->type == HITBOX_TYPE_NORMAL &&
+                    m2Ptr->chompingMobs.size() <
+                    m2Ptr->chompMax &&
                     find(
-                        m2_ptr->chompBodyParts.begin(),
-                        m2_ptr->chompBodyParts.end(),
-                        h2_ptr->bodyPartIdx
+                        m2Ptr->chompBodyParts.begin(),
+                        m2Ptr->chompBodyParts.end(),
+                        h2Ptr->bodyPartIdx
                     ) !=
-                    m2_ptr->chompBodyParts.end()
+                    m2Ptr->chompBodyParts.end()
                 ) {
-                    hitbox_touch_eat_ev->run(
-                        m_ptr,
-                        (void*) m2_ptr,
-                        (void*) h2_ptr
+                    hitboxTouchEatEv->run(
+                        mPtr,
+                        (void*) m2Ptr,
+                        (void*) h2Ptr
                     );
-                    reported_eat_ev = true;
+                    reportedEatEv = true;
                     
                     //Re-fetch the other events, since this event
                     //could have triggered a state change.
-                    hitbox_touch_haz_ev =
-                        m_ptr->fsm.getEvent(MOB_EV_TOUCHED_HAZARD);
-                    hitbox_touch_na_ev =
-                        m_ptr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_N_A);
+                    hitboxTouchHazEv =
+                        mPtr->fsm.getEvent(MOB_EV_TOUCHED_HAZARD);
+                    hitboxTouchNAEv =
+                        mPtr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_N_A);
                 }
                 
                 //"Touched hazard" event.
                 if(
-                    hitbox_touch_haz_ev &&
-                    !reported_haz_ev &&
-                    !disable_attack_status &&
-                    h1_ptr->type == HITBOX_TYPE_NORMAL &&
-                    h2_ptr->type == HITBOX_TYPE_ATTACK &&
-                    h2_ptr->hazard
+                    hitboxTouchHazEv &&
+                    !reportedHazEv &&
+                    !disableAttackStatus &&
+                    h1Ptr->type == HITBOX_TYPE_NORMAL &&
+                    h2Ptr->type == HITBOX_TYPE_ATTACK &&
+                    h2Ptr->hazard
                 ) {
-                    HitboxInteraction ev_info =
+                    HitboxInteraction evInfo =
                         HitboxInteraction(
-                            m2_ptr, h1_ptr, h2_ptr
+                            m2Ptr, h1Ptr, h2Ptr
                         );
-                    hitbox_touch_haz_ev->run(
-                        m_ptr,
-                        (void*) h2_ptr->hazard,
-                        (void*) &ev_info
+                    hitboxTouchHazEv->run(
+                        mPtr,
+                        (void*) h2Ptr->hazard,
+                        (void*) &evInfo
                     );
-                    reported_haz_ev = true;
+                    reportedHazEv = true;
                     
                     //Re-fetch the other events, since this event
                     //could have triggered a state change.
-                    hitbox_touch_na_ev =
-                        m_ptr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_N_A);
+                    hitboxTouchNAEv =
+                        mPtr->fsm.getEvent(MOB_EV_HITBOX_TOUCH_N_A);
                 }
                 
                 //"Normal hitbox touched attack hitbox" event.
                 if(
-                    hitbox_touch_na_ev &&
-                    !reported_na_ev &&
-                    !disable_attack_status &&
-                    h1_ptr->type == HITBOX_TYPE_NORMAL &&
-                    h2_ptr->type == HITBOX_TYPE_ATTACK
+                    hitboxTouchNAEv &&
+                    !reportedNAEv &&
+                    !disableAttackStatus &&
+                    h1Ptr->type == HITBOX_TYPE_NORMAL &&
+                    h2Ptr->type == HITBOX_TYPE_ATTACK
                 ) {
-                    HitboxInteraction ev_info =
+                    HitboxInteraction evInfo =
                         HitboxInteraction(
-                            m2_ptr, h1_ptr, h2_ptr
+                            m2Ptr, h1Ptr, h2Ptr
                         );
-                    hitbox_touch_na_ev->run(
-                        m_ptr, (void*) &ev_info
+                    hitboxTouchNAEv->run(
+                        mPtr, (void*) &evInfo
                     );
-                    reported_na_ev = true;
+                    reportedNAEv = true;
                     
                 }
             }
@@ -2400,40 +2395,40 @@ void GameplayState::updateAreaActiveCells() {
  * @brief Updates the "isActive" member variable of all mobs for this frame.
  */
 void GameplayState::updateMobIsActiveFlag() {
-    unordered_set<Mob*> child_mobs;
+    unordered_set<Mob*> childMobs;
     
     for(size_t m = 0; m < mobs.all.size(); m++) {
-        Mob* m_ptr = mobs.all[m];
+        Mob* mPtr = mobs.all[m];
         
-        int cell_x =
-            (m_ptr->pos.x - game.curAreaData->bmap.topLeftCorner.x) /
+        int cellX =
+            (mPtr->pos.x - game.curAreaData->bmap.topLeftCorner.x) /
             GEOMETRY::AREA_CELL_SIZE;
-        int cell_y =
-            (m_ptr->pos.y - game.curAreaData->bmap.topLeftCorner.y) /
+        int cellY =
+            (mPtr->pos.y - game.curAreaData->bmap.topLeftCorner.y) /
             GEOMETRY::AREA_CELL_SIZE;
         if(
-            cell_x < 0 ||
-            cell_x >= (int) game.states.gameplay->areaActiveCells.size()
+            cellX < 0 ||
+            cellX >= (int) game.states.gameplay->areaActiveCells.size()
         ) {
-            m_ptr->isActive = false;
+            mPtr->isActive = false;
         } else if(
-            cell_y < 0 ||
-            cell_y >= (int) game.states.gameplay->areaActiveCells[0].size()
+            cellY < 0 ||
+            cellY >= (int) game.states.gameplay->areaActiveCells[0].size()
         ) {
-            m_ptr->isActive = false;
+            mPtr->isActive = false;
         } else {
-            m_ptr->isActive =
-                game.states.gameplay->areaActiveCells[cell_x][cell_y];
+            mPtr->isActive =
+                game.states.gameplay->areaActiveCells[cellX][cellY];
         }
         
-        if(m_ptr->parent && m_ptr->parent->m) child_mobs.insert(m_ptr);
+        if(mPtr->parent && mPtr->parent->m) childMobs.insert(mPtr);
     }
     
-    for(const auto &m : child_mobs) {
+    for(const auto &m : childMobs) {
         if(m->isActive) m->parent->m->isActive = true;
     }
     
-    for(auto &m : child_mobs) {
+    for(auto &m : childMobs) {
         if(m->parent->m->isActive) m->isActive = true;
     }
 }

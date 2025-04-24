@@ -152,9 +152,9 @@ struct ParticleEmission {
     //--- Function declarations ---
     
     explicit ParticleEmission(
-        const float emission_interval = 0.0f, const size_t number = 1
+        const float emissionInterval = 0.0f, const size_t number = 1
     );
-    Point getEmissionOffset(float number_ratio);
+    Point getEmissionOffset(float numberRatio);
     
 };
 
@@ -235,17 +235,17 @@ struct Particle {
     
     explicit Particle(
         const Point &pos = Point(), const float z = 0.0f,
-        const float initial_size = 0.0f,
+        const float initialSize = 0.0f,
         const float duration = 0.0f, const PARTICLE_PRIORITY priority =
             PARTICLE_PRIORITY_MEDIUM,
-        const ALLEGRO_COLOR initial_color = COLOR_WHITE
+        const ALLEGRO_COLOR initialColor = COLOR_WHITE
     );
     void draw();
     void setBitmap(
-        const string &new_bmp_name,
+        const string &newBmpName,
         DataNode* node = nullptr
     );
-    void tick(float delta_t);
+    void tick(float deltaT);
     
 };
 
@@ -267,10 +267,10 @@ struct ParticleManager {
     void clear();
     void fillComponentList(
         vector<WorldComponent> &list,
-        const Point &cam_tl = Point(), const Point &cam_br = Point()
+        const Point &camTL = Point(), const Point &camBR = Point()
     );
     size_t getCount() const;
-    void tickAll(float delta_t);
+    void tickAll(float deltaT);
     
     private:
     
@@ -342,7 +342,7 @@ struct ParticleGenerator : public Content {
     //Maximum random deviation of size.
     float sizeDeviation = 0.0f;
     
-    //Maximum random deviation of outward_speed.
+    //Maximum random deviation of outward speed.
     float outwardsSpeedDeviation = 0.0f;
     
     //Maximum random deviation of orbital speed.
@@ -361,10 +361,10 @@ struct ParticleGenerator : public Content {
     //--- Function declarations ---
     
     explicit ParticleGenerator(
-        float emission_interval = 0.0f,
-        const Particle &base_particle = Particle(), size_t number = 1
+        float emissionInterval = 0.0f,
+        const Particle &baseParticle = Particle(), size_t number = 1
     );
-    void tick(float delta_t, ParticleManager &manager);
+    void tick(float deltaT, ParticleManager &manager);
     void emit(ParticleManager &manager);
     void restartTimer();
     void loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level);

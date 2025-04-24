@@ -34,17 +34,17 @@ Sector::~Sector() {
 /**
  * @brief Adds an edge to the sector's list of edges, if it's not there already.
  *
- * @param e_ptr Edge to add.
- * @param e_idx Index of the edge to add.
+ * @param ePtr Edge to add.
+ * @param eIdx Index of the edge to add.
  */
-void Sector::addEdge(Edge* e_ptr, size_t e_idx) {
+void Sector::addEdge(Edge* ePtr, size_t eIdx) {
     for(size_t i = 0; i < edges.size(); i++) {
-        if(edges[i] == e_ptr) {
+        if(edges[i] == ePtr) {
             return;
         }
     }
-    edges.push_back(e_ptr);
-    edgeIdxs.push_back(e_idx);
+    edges.push_back(ePtr);
+    edgeIdxs.push_back(eIdx);
 }
 
 
@@ -101,34 +101,34 @@ void Sector::clone(Sector* destination) const {
  *
  * @param condition Function that accepts a sector and checks its criteria.
  * This function must return true if accepted, false if not.
- * @param sector_list List of sectors to be filled.
+ * @param sectorList List of sectors to be filled.
  * Also doubles as the list of visited sectors.
  */
 void Sector::getNeighborSectorsConditionally(
     const std::function<bool(Sector* s_ptr)> &condition,
-    vector<Sector*> &sector_list
+    vector<Sector*> &sectorList
 ) {
 
     //If this sector is already on the list, skip.
-    for(size_t s = 0; s < sector_list.size(); s++) {
-        if(sector_list[s] == this) return;
+    for(size_t s = 0; s < sectorList.size(); s++) {
+        if(sectorList[s] == this) return;
     }
     
     //If this sector is not eligible, return.
     if(!condition(this)) return;
     
     //This sector is valid!
-    sector_list.push_back(this);
+    sectorList.push_back(this);
     
     //Now check its neighbors.
-    Edge* e_ptr = nullptr;
-    Sector* other_s = nullptr;
+    Edge* ePtr = nullptr;
+    Sector* otherS = nullptr;
     for(size_t e = 0; e < edges.size(); e++) {
-        e_ptr = edges[e];
-        other_s = e_ptr->getOtherSector(this);
-        if(!other_s) continue;
+        ePtr = edges[e];
+        otherS = ePtr->getOtherSector(this);
+        if(!otherS) continue;
         
-        other_s->getNeighborSectorsConditionally(condition, sector_list);
+        otherS->getNeighborSectorsConditionally(condition, sectorList);
     }
 }
 
@@ -142,11 +142,11 @@ Vertex* Sector::getRightmostVertex() const {
     Vertex* rightmost = nullptr;
     
     for(size_t e = 0; e < edges.size(); e++) {
-        Edge* e_ptr = edges[e];
-        if(!rightmost) rightmost = e_ptr->vertexes[0];
+        Edge* ePtr = edges[e];
+        if(!rightmost) rightmost = ePtr->vertexes[0];
         else {
-            rightmost = ::getRightmostVertex(e_ptr->vertexes[0], rightmost);
-            rightmost = ::getRightmostVertex(e_ptr->vertexes[1], rightmost);
+            rightmost = ::getRightmostVertex(ePtr->vertexes[0], rightmost);
+            rightmost = ::getRightmostVertex(ePtr->vertexes[1], rightmost);
         }
     }
     
@@ -163,20 +163,20 @@ Vertex* Sector::getRightmostVertex() const {
  */
 void Sector::getTextureMergeSectors(Sector** s1, Sector** s2) const {
     //Check all edges to find which two textures need merging.
-    Edge* e_ptr = nullptr;
+    Edge* ePtr = nullptr;
     Sector* neighbor = nullptr;
     map<Sector*, Distance> neighbors;
-    Sector* texture_sector[2] = {nullptr, nullptr};
+    Sector* textureSector[2] = {nullptr, nullptr};
     
     //The two neighboring sectors with the lenghtiest edges are picked.
     //So save all sector/length pairs.
     //Sectors with different heights from the current one are also saved,
     //but they have lower priority compared to same-heigh sectors.
     for(size_t e = 0; e < edges.size(); e++) {
-        e_ptr = edges[e];
+        ePtr = edges[e];
         bool valid = true;
         
-        neighbor = e_ptr->getOtherSector(this);
+        neighbor = ePtr->getOtherSector(this);
         
         if(neighbor) {
             if(neighbor->fade) valid = false;
@@ -184,14 +184,14 @@ void Sector::getTextureMergeSectors(Sector** s1, Sector** s2) const {
         
         if(valid) {
             neighbors[neighbor] +=
-                Distance(v2p(e_ptr->vertexes[0]), v2p(e_ptr->vertexes[1]));
+                Distance(v2p(ePtr->vertexes[0]), v2p(ePtr->vertexes[1]));
         }
     }
     
     //Find the two lengthiest ones.
-    vector<std::pair<Distance, Sector*> > neighbors_vec;
+    vector<std::pair<Distance, Sector*> > neighborsVec;
     for(auto &n : neighbors) {
-        neighbors_vec.push_back(
+        neighborsVec.push_back(
             std::make_pair(
                 //Yes, we do need these casts, for g++.
                 (Distance) (n.second), (Sector*) (n.first)
@@ -199,31 +199,31 @@ void Sector::getTextureMergeSectors(Sector** s1, Sector** s2) const {
         );
     }
     sort(
-        neighbors_vec.begin(), neighbors_vec.end(),
+        neighborsVec.begin(), neighborsVec.end(),
     [this] (std::pair<Distance, Sector*> p1, std::pair<Distance, Sector*> p2) -> bool {
         return p1.first < p2.first;
     }
     );
-    if(neighbors_vec.size() >= 1) {
-        texture_sector[0] = neighbors_vec.back().second;
+    if(neighborsVec.size() >= 1) {
+        textureSector[0] = neighborsVec.back().second;
     }
-    if(neighbors_vec.size() >= 2) {
-        texture_sector[1] = neighbors_vec[neighbors_vec.size() - 2].second;
+    if(neighborsVec.size() >= 2) {
+        textureSector[1] = neighborsVec[neighborsVec.size() - 2].second;
     }
     
-    if(!texture_sector[1] && texture_sector[0]) {
+    if(!textureSector[1] && textureSector[0]) {
         //0 is always the bottom one. If we're fading into nothingness,
         //we should swap first.
-        std::swap(texture_sector[0], texture_sector[1]);
-    } else if(!texture_sector[1]) {
+        std::swap(textureSector[0], textureSector[1]);
+    } else if(!textureSector[1]) {
         //Nothing to draw.
         return;
-    } else if(texture_sector[1]->isBottomlessPit) {
-        std::swap(texture_sector[0], texture_sector[1]);
+    } else if(textureSector[1]->isBottomlessPit) {
+        std::swap(textureSector[0], textureSector[1]);
     }
     
-    *s1 = texture_sector[0];
-    *s2 = texture_sector[1];
+    *s1 = textureSector[0];
+    *s2 = textureSector[1];
 }
 
 
@@ -249,13 +249,13 @@ bool Sector::isClockwise() const {
  */
 bool Sector::isPointInSector(const Point &p) const {
     for(size_t t = 0; t < triangles.size(); t++) {
-        const Triangle* t_ptr = &triangles[t];
+        const Triangle* tPtr = &triangles[t];
         if(
             isPointInTriangle(
                 p,
-                v2p(t_ptr->points[0]),
-                v2p(t_ptr->points[1]),
-                v2p(t_ptr->points[2]),
+                v2p(tPtr->points[0]),
+                v2p(tPtr->points[1]),
+                v2p(tPtr->points[2]),
                 false
             )
         ) {
@@ -270,12 +270,12 @@ bool Sector::isPointInSector(const Point &p) const {
 /**
  * @brief Removes an edge from a sector's list of edges, if it is there.
  *
- * @param e_ptr Edge to remove.
+ * @param ePtr Edge to remove.
  */
-void Sector::removeEdge(const Edge* e_ptr) {
+void Sector::removeEdge(const Edge* ePtr) {
     size_t i = 0;
     for(; i < edges.size(); i++) {
-        if(edges[i] == e_ptr) {
+        if(edges[i] == ePtr) {
             edges.erase(edges.begin() + i);
             edgeIdxs.erase(edgeIdxs.begin() + i);
             return;
@@ -288,18 +288,18 @@ void Sector::removeEdge(const Edge* e_ptr) {
  * @brief Returns which sector the specified point belongs to.
  *
  * @param p Coordinates of the point.
- * @param out_sector_idx If not nullptr, the index of the sector on the
+ * @param outSectorIdx If not nullptr, the index of the sector on the
  * area map is returned here. The index will not be set if the search
  * is using the blockmap.
- * @param use_blockmap If true, use the blockmap to search.
+ * @param useBlockmap If true, use the blockmap to search.
  * This provides faster results, but the blockmap must be built.
  * @return The sector.
  */
 Sector* getSector(
-    const Point &p, size_t* out_sector_idx, bool use_blockmap
+    const Point &p, size_t* outSectorIdx, bool useBlockmap
 ) {
 
-    if(use_blockmap) {
+    if(useBlockmap) {
     
         size_t col = game.curAreaData->bmap.getCol(p.x);
         size_t row = game.curAreaData->bmap.getRow(p.y);
@@ -325,24 +325,24 @@ Sector* getSector(
     } else {
     
         for(size_t s = 0; s < game.curAreaData->sectors.size(); s++) {
-            Sector* s_ptr = game.curAreaData->sectors[s];
+            Sector* sPtr = game.curAreaData->sectors[s];
             
             if(
-                p.x < s_ptr->bbox[0].x ||
-                p.x > s_ptr->bbox[1].x ||
-                p.y < s_ptr->bbox[0].y ||
-                p.y > s_ptr->bbox[1].y
+                p.x < sPtr->bbox[0].x ||
+                p.x > sPtr->bbox[1].x ||
+                p.y < sPtr->bbox[0].y ||
+                p.y > sPtr->bbox[1].y
             ) {
                 continue;
             }
-            if(s_ptr->isPointInSector(p)) {
-                if(out_sector_idx) *out_sector_idx = s;
-                return s_ptr;
+            if(sPtr->isPointInSector(p)) {
+                if(outSectorIdx) *outSectorIdx = s;
+                return sPtr;
             }
             
         }
         
-        if(out_sector_idx) *out_sector_idx = INVALID;
+        if(outSectorIdx) *outSectorIdx = INVALID;
         return nullptr;
         
     }

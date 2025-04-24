@@ -16,7 +16,7 @@
 /**
  * @brief Functions about the drop's finite state machine and behavior.
  */
-namespace drop_fsm {
+namespace DropFsm {
 void createFsm(MobType* typ);
 
 void land(Mob* m, void* info1, void* info2);

@@ -220,6 +220,6 @@ struct Status {
     //--- Function declarations ---
     
     explicit Status(StatusType* type);
-    void tick(float delta_t);
+    void tick(float deltaT);
     
 };

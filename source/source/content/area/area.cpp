@@ -46,44 +46,44 @@ const unsigned char DEF_DIFFICULTY = 0;
  */
 void Area::checkStability() {
     for(size_t v = 0; v < vertexes.size(); v++) {
-        Vertex* v_ptr = vertexes[v];
+        Vertex* vPtr = vertexes[v];
         engineAssert(
-            v_ptr->edges.size() == v_ptr->edgeIdxs.size(),
-            i2s(v_ptr->edges.size()) + " " + i2s(v_ptr->edgeIdxs.size())
+            vPtr->edges.size() == vPtr->edgeIdxs.size(),
+            i2s(vPtr->edges.size()) + " " + i2s(vPtr->edgeIdxs.size())
         );
-        for(size_t e = 0; e < v_ptr->edges.size(); e++) {
-            engineAssert(v_ptr->edges[e] == edges[v_ptr->edgeIdxs[e]], "");
+        for(size_t e = 0; e < vPtr->edges.size(); e++) {
+            engineAssert(vPtr->edges[e] == edges[vPtr->edgeIdxs[e]], "");
         }
     }
     
     for(size_t e = 0; e < edges.size(); e++) {
-        Edge* e_ptr = edges[e];
+        Edge* ePtr = edges[e];
         for(size_t v = 0; v < 2; v++) {
             engineAssert(
-                e_ptr->vertexes[v] == vertexes[e_ptr->vertexIdxs[v]], ""
+                ePtr->vertexes[v] == vertexes[ePtr->vertexIdxs[v]], ""
             );
         }
         
         for(size_t s = 0; s < 2; s++) {
-            Sector* s_ptr = e_ptr->sectors[s];
+            Sector* sPtr = ePtr->sectors[s];
             if(
-                s_ptr == nullptr &&
-                e_ptr->sectorIdxs[s] == INVALID
+                sPtr == nullptr &&
+                ePtr->sectorIdxs[s] == INVALID
             ) {
                 continue;
             }
-            engineAssert(s_ptr == sectors[e_ptr->sectorIdxs[s]], "");
+            engineAssert(sPtr == sectors[ePtr->sectorIdxs[s]], "");
         }
     }
     
     for(size_t s = 0; s < sectors.size(); s++) {
-        Sector* s_ptr = sectors[s];
+        Sector* sPtr = sectors[s];
         engineAssert(
-            s_ptr->edges.size() == s_ptr->edgeIdxs.size(),
-            i2s(s_ptr->edges.size()) + " " + i2s(s_ptr->edgeIdxs.size())
+            sPtr->edges.size() == sPtr->edgeIdxs.size(),
+            i2s(sPtr->edges.size()) + " " + i2s(sPtr->edgeIdxs.size())
         );
-        for(size_t e = 0; e < s_ptr->edges.size(); e++) {
-            engineAssert(s_ptr->edges[e] == edges[s_ptr->edgeIdxs[e]], "");
+        for(size_t e = 0; e < sPtr->edges.size(); e++) {
+            engineAssert(sPtr->edges[e] == edges[sPtr->edgeIdxs[e]], "");
         }
     }
 }
@@ -153,21 +153,21 @@ void Area::clear() {
 /**
  * @brief Cleans up redundant data and such.
  *
- * @param out_deleted_sectors If not nullptr, whether any sectors got deleted
+ * @param outDeletedSectors If not nullptr, whether any sectors got deleted
  * is returned here.
  */
-void Area::cleanup(bool* out_deleted_sectors) {
+void Area::cleanup(bool* outDeletedSectors) {
     //Get rid of unused sectors.
-    bool deleted_sectors = false;
+    bool deletedSectors = false;
     for(size_t s = 0; s < sectors.size(); ) {
         if(sectors[s]->edges.empty()) {
             removeSector(s);
-            deleted_sectors = true;
+            deletedSectors = true;
         } else {
             s++;
         }
     }
-    if(out_deleted_sectors) *out_deleted_sectors = deleted_sectors;
+    if(outDeletedSectors) *outDeletedSectors = deletedSectors;
     
     //And some other cleanup.
     if(songName == NONE_OPTION) {
@@ -228,113 +228,113 @@ void Area::clone(Area &other) {
     }
     
     for(size_t v = 0; v < vertexes.size(); v++) {
-        Vertex* v_ptr = vertexes[v];
-        Vertex* ov_ptr = other.vertexes[v];
-        ov_ptr->x = v_ptr->x;
-        ov_ptr->y = v_ptr->y;
-        ov_ptr->edges.reserve(v_ptr->edges.size());
-        ov_ptr->edgeIdxs.reserve(v_ptr->edgeIdxs.size());
-        for(size_t e = 0; e < v_ptr->edges.size(); e++) {
-            size_t nr = v_ptr->edgeIdxs[e];
-            ov_ptr->edges.push_back(other.edges[nr]);
-            ov_ptr->edgeIdxs.push_back(nr);
+        Vertex* vPtr = vertexes[v];
+        Vertex* ovPtr = other.vertexes[v];
+        ovPtr->x = vPtr->x;
+        ovPtr->y = vPtr->y;
+        ovPtr->edges.reserve(vPtr->edges.size());
+        ovPtr->edgeIdxs.reserve(vPtr->edgeIdxs.size());
+        for(size_t e = 0; e < vPtr->edges.size(); e++) {
+            size_t nr = vPtr->edgeIdxs[e];
+            ovPtr->edges.push_back(other.edges[nr]);
+            ovPtr->edgeIdxs.push_back(nr);
         }
     }
     
     for(size_t e = 0; e < edges.size(); e++) {
-        Edge* e_ptr = edges[e];
-        Edge* oe_ptr = other.edges[e];
-        oe_ptr->vertexes[0] = other.vertexes[e_ptr->vertexIdxs[0]];
-        oe_ptr->vertexes[1] = other.vertexes[e_ptr->vertexIdxs[1]];
-        oe_ptr->vertexIdxs[0] = e_ptr->vertexIdxs[0];
-        oe_ptr->vertexIdxs[1] = e_ptr->vertexIdxs[1];
-        if(e_ptr->sectorIdxs[0] == INVALID) {
-            oe_ptr->sectors[0] = nullptr;
+        Edge* ePtr = edges[e];
+        Edge* oePtr = other.edges[e];
+        oePtr->vertexes[0] = other.vertexes[ePtr->vertexIdxs[0]];
+        oePtr->vertexes[1] = other.vertexes[ePtr->vertexIdxs[1]];
+        oePtr->vertexIdxs[0] = ePtr->vertexIdxs[0];
+        oePtr->vertexIdxs[1] = ePtr->vertexIdxs[1];
+        if(ePtr->sectorIdxs[0] == INVALID) {
+            oePtr->sectors[0] = nullptr;
         } else {
-            oe_ptr->sectors[0] = other.sectors[e_ptr->sectorIdxs[0]];
+            oePtr->sectors[0] = other.sectors[ePtr->sectorIdxs[0]];
         }
-        if(e_ptr->sectorIdxs[1] == INVALID) {
-            oe_ptr->sectors[1] = nullptr;
+        if(ePtr->sectorIdxs[1] == INVALID) {
+            oePtr->sectors[1] = nullptr;
         } else {
-            oe_ptr->sectors[1] = other.sectors[e_ptr->sectorIdxs[1]];
+            oePtr->sectors[1] = other.sectors[ePtr->sectorIdxs[1]];
         }
-        oe_ptr->sectorIdxs[0] = e_ptr->sectorIdxs[0];
-        oe_ptr->sectorIdxs[1] = e_ptr->sectorIdxs[1];
-        e_ptr->clone(oe_ptr);
+        oePtr->sectorIdxs[0] = ePtr->sectorIdxs[0];
+        oePtr->sectorIdxs[1] = ePtr->sectorIdxs[1];
+        ePtr->clone(oePtr);
     }
     
     for(size_t s = 0; s < sectors.size(); s++) {
-        Sector* s_ptr = sectors[s];
-        Sector* os_ptr = other.sectors[s];
-        s_ptr->clone(os_ptr);
-        os_ptr->textureInfo.bmpName = s_ptr->textureInfo.bmpName;
-        os_ptr->textureInfo.bitmap =
-            game.content.bitmaps.list.get(s_ptr->textureInfo.bmpName, nullptr, false);
-        os_ptr->edges.reserve(s_ptr->edges.size());
-        os_ptr->edgeIdxs.reserve(s_ptr->edgeIdxs.size());
-        for(size_t e = 0; e < s_ptr->edges.size(); e++) {
-            size_t nr = s_ptr->edgeIdxs[e];
-            os_ptr->edges.push_back(other.edges[nr]);
-            os_ptr->edgeIdxs.push_back(nr);
+        Sector* sPtr = sectors[s];
+        Sector* osPtr = other.sectors[s];
+        sPtr->clone(osPtr);
+        osPtr->textureInfo.bmpName = sPtr->textureInfo.bmpName;
+        osPtr->textureInfo.bitmap =
+            game.content.bitmaps.list.get(sPtr->textureInfo.bmpName, nullptr, false);
+        osPtr->edges.reserve(sPtr->edges.size());
+        osPtr->edgeIdxs.reserve(sPtr->edgeIdxs.size());
+        for(size_t e = 0; e < sPtr->edges.size(); e++) {
+            size_t nr = sPtr->edgeIdxs[e];
+            osPtr->edges.push_back(other.edges[nr]);
+            osPtr->edgeIdxs.push_back(nr);
         }
-        os_ptr->triangles.reserve(s_ptr->triangles.size());
-        for(size_t t = 0; t < s_ptr->triangles.size(); t++) {
-            Triangle* t_ptr = &s_ptr->triangles[t];
-            os_ptr->triangles.push_back(
+        osPtr->triangles.reserve(sPtr->triangles.size());
+        for(size_t t = 0; t < sPtr->triangles.size(); t++) {
+            Triangle* tPtr = &sPtr->triangles[t];
+            osPtr->triangles.push_back(
                 Triangle(
-                    other.vertexes[findVertexIdx(t_ptr->points[0])],
-                    other.vertexes[findVertexIdx(t_ptr->points[1])],
-                    other.vertexes[findVertexIdx(t_ptr->points[2])]
+                    other.vertexes[findVertexIdx(tPtr->points[0])],
+                    other.vertexes[findVertexIdx(tPtr->points[1])],
+                    other.vertexes[findVertexIdx(tPtr->points[2])]
                 )
             );
         }
-        os_ptr->bbox[0] = s_ptr->bbox[0];
-        os_ptr->bbox[1] = s_ptr->bbox[1];
+        osPtr->bbox[0] = sPtr->bbox[0];
+        osPtr->bbox[1] = sPtr->bbox[1];
     }
     
     for(size_t m = 0; m < mobGenerators.size(); m++) {
-        MobGen* m_ptr = mobGenerators[m];
-        MobGen* om_ptr = other.mobGenerators[m];
-        m_ptr->clone(om_ptr);
+        MobGen* mPtr = mobGenerators[m];
+        MobGen* omPtr = other.mobGenerators[m];
+        mPtr->clone(omPtr);
     }
     for(size_t m = 0; m < mobGenerators.size(); m++) {
-        MobGen* om_ptr = other.mobGenerators[m];
-        for(size_t l = 0; l < om_ptr->linkIdxs.size(); l++) {
-            om_ptr->links.push_back(
-                other.mobGenerators[om_ptr->linkIdxs[l]]
+        MobGen* omPtr = other.mobGenerators[m];
+        for(size_t l = 0; l < omPtr->linkIdxs.size(); l++) {
+            omPtr->links.push_back(
+                other.mobGenerators[omPtr->linkIdxs[l]]
             );
         }
     }
     
     for(size_t s = 0; s < pathStops.size(); s++) {
-        PathStop* s_ptr = pathStops[s];
-        PathStop* os_ptr = other.pathStops[s];
-        os_ptr->pos = s_ptr->pos;
-        s_ptr->clone(os_ptr);
-        os_ptr->links.reserve(s_ptr->links.size());
-        for(size_t l = 0; l < s_ptr->links.size(); l++) {
-            PathLink* new_link =
+        PathStop* sPtr = pathStops[s];
+        PathStop* osPtr = other.pathStops[s];
+        osPtr->pos = sPtr->pos;
+        sPtr->clone(osPtr);
+        osPtr->links.reserve(sPtr->links.size());
+        for(size_t l = 0; l < sPtr->links.size(); l++) {
+            PathLink* newLink =
                 new PathLink(
-                os_ptr,
-                other.pathStops[s_ptr->links[l]->endIdx],
-                s_ptr->links[l]->endIdx
+                osPtr,
+                other.pathStops[sPtr->links[l]->endIdx],
+                sPtr->links[l]->endIdx
             );
-            s_ptr->links[l]->clone(new_link);
-            new_link->distance = s_ptr->links[l]->distance;
-            os_ptr->links.push_back(new_link);
+            sPtr->links[l]->clone(newLink);
+            newLink->distance = sPtr->links[l]->distance;
+            osPtr->links.push_back(newLink);
         }
     }
     
     for(size_t t = 0; t < treeShadows.size(); t++) {
-        TreeShadow* t_ptr = treeShadows[t];
-        TreeShadow* ot_ptr = other.treeShadows[t];
-        ot_ptr->alpha = t_ptr->alpha;
-        ot_ptr->angle = t_ptr->angle;
-        ot_ptr->center = t_ptr->center;
-        ot_ptr->bmpName = t_ptr->bmpName;
-        ot_ptr->size = t_ptr->size;
-        ot_ptr->sway = t_ptr->sway;
-        ot_ptr->bitmap = game.content.bitmaps.list.get(t_ptr->bmpName, nullptr, false);
+        TreeShadow* tPtr = treeShadows[t];
+        TreeShadow* otPtr = other.treeShadows[t];
+        otPtr->alpha = tPtr->alpha;
+        otPtr->angle = tPtr->angle;
+        otPtr->center = tPtr->center;
+        otPtr->bmpName = tPtr->bmpName;
+        otPtr->size = tPtr->size;
+        otPtr->sway = tPtr->sway;
+        otPtr->bitmap = game.content.bitmaps.list.get(tPtr->bmpName, nullptr, false);
     }
     
     other.manifest = manifest;
@@ -407,20 +407,20 @@ void Area::clone(Area &other) {
  * This adds the sector and its index to the edge's
  * lists, and adds the edge and its index to the sector's.
  *
- * @param e_ptr Edge to connect.
- * @param s_ptr Sector to connect.
+ * @param ePtr Edge to connect.
+ * @param sPtr Sector to connect.
  * @param side Which of the sides of the edge the sector goes to.
  */
 void Area::connectEdgeToSector(
-    Edge* e_ptr, Sector* s_ptr, size_t side
+    Edge* ePtr, Sector* sPtr, size_t side
 ) {
-    if(e_ptr->sectors[side]) {
-        e_ptr->sectors[side]->removeEdge(e_ptr);
+    if(ePtr->sectors[side]) {
+        ePtr->sectors[side]->removeEdge(ePtr);
     }
-    e_ptr->sectors[side] = s_ptr;
-    e_ptr->sectorIdxs[side] = findSectorIdx(s_ptr);
-    if(s_ptr) {
-        s_ptr->addEdge(e_ptr, findEdgeIdx(e_ptr));
+    ePtr->sectors[side] = sPtr;
+    ePtr->sectorIdxs[side] = findSectorIdx(sPtr);
+    if(sPtr) {
+        sPtr->addEdge(ePtr, findEdgeIdx(ePtr));
     }
 }
 
@@ -431,55 +431,55 @@ void Area::connectEdgeToSector(
  * This adds the vertex and its index to the edge's
  * lists, and adds the edge and its index to the vertex's.
  *
- * @param e_ptr Edge to connect.
- * @param v_ptr Vertex to connect.
+ * @param ePtr Edge to connect.
+ * @param vPtr Vertex to connect.
  * @param endpoint Which of the edge endpoints the vertex goes to.
  */
 void Area::connectEdgeToVertex(
-    Edge* e_ptr, Vertex* v_ptr, size_t endpoint
+    Edge* ePtr, Vertex* vPtr, size_t endpoint
 ) {
-    if(e_ptr->vertexes[endpoint]) {
-        e_ptr->vertexes[endpoint]->removeEdge(e_ptr);
+    if(ePtr->vertexes[endpoint]) {
+        ePtr->vertexes[endpoint]->removeEdge(ePtr);
     }
-    e_ptr->vertexes[endpoint] = v_ptr;
-    e_ptr->vertexIdxs[endpoint] = findVertexIdx(v_ptr);
-    v_ptr->addEdge(e_ptr, findEdgeIdx(e_ptr));
+    ePtr->vertexes[endpoint] = vPtr;
+    ePtr->vertexIdxs[endpoint] = findVertexIdx(vPtr);
+    vPtr->addEdge(ePtr, findEdgeIdx(ePtr));
 }
 
 
 
 /**
  * @brief Connects the edges of a sector that link to it into the
- * edge_idxs vector.
+ * edgeIdxs vector.
  *
- * @param s_ptr The sector.
+ * @param sPtr The sector.
  */
-void Area::connectSectorEdges(Sector* s_ptr) {
-    s_ptr->edgeIdxs.clear();
+void Area::connectSectorEdges(Sector* sPtr) {
+    sPtr->edgeIdxs.clear();
     for(size_t e = 0; e < edges.size(); e++) {
-        Edge* e_ptr = edges[e];
-        if(e_ptr->sectors[0] == s_ptr || e_ptr->sectors[1] == s_ptr) {
-            s_ptr->edgeIdxs.push_back(e);
+        Edge* ePtr = edges[e];
+        if(ePtr->sectors[0] == sPtr || ePtr->sectors[1] == sPtr) {
+            sPtr->edgeIdxs.push_back(e);
         }
     }
-    fixSectorPointers(s_ptr);
+    fixSectorPointers(sPtr);
 }
 
 
 /**
  * @brief Connects the edges that link to it into the edge_idxs vector.
  *
- * @param v_ptr The vertex.
+ * @param vPtr The vertex.
  */
-void Area::connectVertexEdges(Vertex* v_ptr) {
-    v_ptr->edgeIdxs.clear();
+void Area::connectVertexEdges(Vertex* vPtr) {
+    vPtr->edgeIdxs.clear();
     for(size_t e = 0; e < edges.size(); e++) {
-        Edge* e_ptr = edges[e];
-        if(e_ptr->vertexes[0] == v_ptr || e_ptr->vertexes[1] == v_ptr) {
-            v_ptr->edgeIdxs.push_back(e);
+        Edge* ePtr = edges[e];
+        if(ePtr->vertexes[0] == vPtr || ePtr->vertexes[1] == vPtr) {
+            vPtr->edgeIdxs.push_back(e);
         }
     }
-    fixVertexPointers(v_ptr);
+    fixVertexPointers(vPtr);
 }
 
 
@@ -487,12 +487,12 @@ void Area::connectVertexEdges(Vertex* v_ptr) {
  * @brief Scans the list of edges and retrieves the index of
  * the specified edge.
  *
- * @param e_ptr Edge to find.
+ * @param ePtr Edge to find.
  * @return The index, or INVALID if not found.
  */
-size_t Area::findEdgeIdx(const Edge* e_ptr) const {
+size_t Area::findEdgeIdx(const Edge* ePtr) const {
     for(size_t e = 0; e < edges.size(); e++) {
-        if(edges[e] == e_ptr) return e;
+        if(edges[e] == ePtr) return e;
     }
     return INVALID;
 }
@@ -502,12 +502,12 @@ size_t Area::findEdgeIdx(const Edge* e_ptr) const {
  * @brief Scans the list of mob generators and retrieves the index of
  * the specified mob generator.
  *
- * @param m_ptr Mob to find.
+ * @param mPtr Mob to find.
  * @return The index, or INVALID if not found.
  */
-size_t Area::findMobGenIdx(const MobGen* m_ptr) const {
+size_t Area::findMobGenIdx(const MobGen* mPtr) const {
     for(size_t m = 0; m < mobGenerators.size(); m++) {
-        if(mobGenerators[m] == m_ptr) return m;
+        if(mobGenerators[m] == mPtr) return m;
     }
     return INVALID;
 }
@@ -517,12 +517,12 @@ size_t Area::findMobGenIdx(const MobGen* m_ptr) const {
  * @brief Scans the list of sectors and retrieves the index of
  * the specified sector.
  *
- * @param s_ptr Sector to find.
+ * @param sPtr Sector to find.
  * @return The index, or INVALID if not found.
  */
-size_t Area::findSectorIdx(const Sector* s_ptr) const {
+size_t Area::findSectorIdx(const Sector* sPtr) const {
     for(size_t s = 0; s < sectors.size(); s++) {
-        if(sectors[s] == s_ptr) return s;
+        if(sectors[s] == sPtr) return s;
     }
     return INVALID;
 }
@@ -532,12 +532,12 @@ size_t Area::findSectorIdx(const Sector* s_ptr) const {
  * @brief Scans the list of vertexes and retrieves the index of
  * the specified vertex.
  *
- * @param v_ptr Vertex to find.
+ * @param vPtr Vertex to find.
  * @return The index, or INVALID if not found.
  */
-size_t Area::findVertexIdx(const Vertex* v_ptr) const {
+size_t Area::findVertexIdx(const Vertex* vPtr) const {
     for(size_t v = 0; v < vertexes.size(); v++) {
-        if(vertexes[v] == v_ptr) return v;
+        if(vertexes[v] == vPtr) return v;
     }
     return INVALID;
 }
@@ -548,22 +548,22 @@ size_t Area::findVertexIdx(const Vertex* v_ptr) const {
  * making them match the correct sectors and vertexes,
  * based on the existing sector and vertex pointers.
  *
- * @param e_ptr Edge to fix the indexes of.
+ * @param ePtr Edge to fix the indexes of.
  */
-void Area::fixEdgeIdxs(Edge* e_ptr) {
+void Area::fixEdgeIdxs(Edge* ePtr) {
     for(size_t s = 0; s < 2; s++) {
-        if(!e_ptr->sectors[s]) {
-            e_ptr->sectorIdxs[s] = INVALID;
+        if(!ePtr->sectors[s]) {
+            ePtr->sectorIdxs[s] = INVALID;
         } else {
-            e_ptr->sectorIdxs[s] = findSectorIdx(e_ptr->sectors[s]);
+            ePtr->sectorIdxs[s] = findSectorIdx(ePtr->sectors[s]);
         }
     }
     
     for(size_t v = 0; v < 2; v++) {
-        if(!e_ptr->vertexes[v]) {
-            e_ptr->vertexIdxs[v] = INVALID;
+        if(!ePtr->vertexes[v]) {
+            ePtr->vertexIdxs[v] = INVALID;
         } else {
-            e_ptr->vertexIdxs[v] = findVertexIdx(e_ptr->vertexes[v]);
+            ePtr->vertexIdxs[v] = findVertexIdx(ePtr->vertexes[v]);
         }
     }
 }
@@ -574,21 +574,21 @@ void Area::fixEdgeIdxs(Edge* e_ptr) {
  * making them point to the correct sectors and vertexes,
  * based on the existing sector and vertex indexes.
  *
- * @param e_ptr Edge to fix the pointers of.
+ * @param ePtr Edge to fix the pointers of.
  */
-void Area::fixEdgePointers(Edge* e_ptr) {
-    e_ptr->sectors[0] = nullptr;
-    e_ptr->sectors[1] = nullptr;
+void Area::fixEdgePointers(Edge* ePtr) {
+    ePtr->sectors[0] = nullptr;
+    ePtr->sectors[1] = nullptr;
     for(size_t s = 0; s < 2; s++) {
-        size_t s_idx = e_ptr->sectorIdxs[s];
-        e_ptr->sectors[s] = (s_idx == INVALID ? nullptr : sectors[s_idx]);
+        size_t sIdx = ePtr->sectorIdxs[s];
+        ePtr->sectors[s] = (sIdx == INVALID ? nullptr : sectors[sIdx]);
     }
     
-    e_ptr->vertexes[0] = nullptr;
-    e_ptr->vertexes[1] = nullptr;
+    ePtr->vertexes[0] = nullptr;
+    ePtr->vertexes[1] = nullptr;
     for(size_t v = 0; v < 2; v++) {
-        size_t v_idx = e_ptr->vertexIdxs[v];
-        e_ptr->vertexes[v] = (v_idx == INVALID ? nullptr : vertexes[v_idx]);
+        size_t vIdx = ePtr->vertexIdxs[v];
+        ePtr->vertexes[v] = (vIdx == INVALID ? nullptr : vertexes[vIdx]);
     }
 }
 
@@ -598,18 +598,18 @@ void Area::fixEdgePointers(Edge* e_ptr) {
  * making them match the correct path stops,
  * based on the existing path stop pointers.
  *
- * @param s_ptr Path stop to fix the indexes of.
+ * @param sPtr Path stop to fix the indexes of.
  */
-void Area::fixPathStopIdxs(PathStop* s_ptr) {
-    for(size_t l = 0; l < s_ptr->links.size(); l++) {
-        PathLink* l_ptr = s_ptr->links[l];
-        l_ptr->endIdx = INVALID;
+void Area::fixPathStopIdxs(PathStop* sPtr) {
+    for(size_t l = 0; l < sPtr->links.size(); l++) {
+        PathLink* lPtr = sPtr->links[l];
+        lPtr->endIdx = INVALID;
         
-        if(!l_ptr->endPtr) continue;
+        if(!lPtr->endPtr) continue;
         
         for(size_t s = 0; s < pathStops.size(); s++) {
-            if(l_ptr->endPtr == pathStops[s]) {
-                l_ptr->endIdx = s;
+            if(lPtr->endPtr == pathStops[s]) {
+                lPtr->endIdx = s;
                 break;
             }
         }
@@ -622,17 +622,17 @@ void Area::fixPathStopIdxs(PathStop* s_ptr) {
  * making them point to the correct path stops,
  * based on the existing path stop indexes.
  *
- * @param s_ptr Path stop to fix the pointers of.
+ * @param sPtr Path stop to fix the pointers of.
  */
-void Area::fixPathStopPointers(PathStop* s_ptr) {
-    for(size_t l = 0; l < s_ptr->links.size(); l++) {
-        PathLink* l_ptr = s_ptr->links[l];
-        l_ptr->endPtr = nullptr;
+void Area::fixPathStopPointers(PathStop* sPtr) {
+    for(size_t l = 0; l < sPtr->links.size(); l++) {
+        PathLink* lPtr = sPtr->links[l];
+        lPtr->endPtr = nullptr;
         
-        if(l_ptr->endIdx == INVALID) continue;
-        if(l_ptr->endIdx >= pathStops.size()) continue;
+        if(lPtr->endIdx == INVALID) continue;
+        if(lPtr->endIdx >= pathStops.size()) continue;
         
-        l_ptr->endPtr = pathStops[l_ptr->endIdx];
+        lPtr->endPtr = pathStops[lPtr->endIdx];
     }
 }
 
@@ -642,12 +642,12 @@ void Area::fixPathStopPointers(PathStop* s_ptr) {
  * making them match the correct edges,
  * based on the existing edge pointers.
  *
- * @param s_ptr Sector to fix the indexes of.
+ * @param sPtr Sector to fix the indexes of.
  */
-void Area::fixSectorIdxs(Sector* s_ptr) {
-    s_ptr->edgeIdxs.clear();
-    for(size_t e = 0; e < s_ptr->edges.size(); e++) {
-        s_ptr->edgeIdxs.push_back(findEdgeIdx(s_ptr->edges[e]));
+void Area::fixSectorIdxs(Sector* sPtr) {
+    sPtr->edgeIdxs.clear();
+    for(size_t e = 0; e < sPtr->edges.size(); e++) {
+        sPtr->edgeIdxs.push_back(findEdgeIdx(sPtr->edges[e]));
     }
 }
 
@@ -657,13 +657,13 @@ void Area::fixSectorIdxs(Sector* s_ptr) {
  * making them point to the correct edges,
  * based on the existing edge indexes.
  *
- * @param s_ptr Sector to fix the pointers of.
+ * @param sPtr Sector to fix the pointers of.
  */
-void Area::fixSectorPointers(Sector* s_ptr) {
-    s_ptr->edges.clear();
-    for(size_t e = 0; e < s_ptr->edgeIdxs.size(); e++) {
-        size_t e_idx = s_ptr->edgeIdxs[e];
-        s_ptr->edges.push_back(e_idx == INVALID ? nullptr : edges[e_idx]);
+void Area::fixSectorPointers(Sector* sPtr) {
+    sPtr->edges.clear();
+    for(size_t e = 0; e < sPtr->edgeIdxs.size(); e++) {
+        size_t eIdx = sPtr->edgeIdxs[e];
+        sPtr->edges.push_back(eIdx == INVALID ? nullptr : edges[eIdx]);
     }
 }
 
@@ -673,12 +673,12 @@ void Area::fixSectorPointers(Sector* s_ptr) {
  * making them match the correct edges,
  * based on the existing edge pointers.
  *
- * @param v_ptr Vertex to fix the indexes of.
+ * @param vPtr Vertex to fix the indexes of.
  */
-void Area::fixVertexIdxs(Vertex* v_ptr) {
-    v_ptr->edgeIdxs.clear();
-    for(size_t e = 0; e < v_ptr->edges.size(); e++) {
-        v_ptr->edgeIdxs.push_back(findEdgeIdx(v_ptr->edges[e]));
+void Area::fixVertexIdxs(Vertex* vPtr) {
+    vPtr->edgeIdxs.clear();
+    for(size_t e = 0; e < vPtr->edges.size(); e++) {
+        vPtr->edgeIdxs.push_back(findEdgeIdx(vPtr->edges[e]));
     }
 }
 
@@ -688,13 +688,13 @@ void Area::fixVertexIdxs(Vertex* v_ptr) {
  * making them point to the correct edges,
  * based on the existing edge indexes.
  *
- * @param v_ptr Vertex to fix the pointers of.
+ * @param vPtr Vertex to fix the pointers of.
  */
-void Area::fixVertexPointers(Vertex* v_ptr) {
-    v_ptr->edges.clear();
-    for(size_t e = 0; e < v_ptr->edgeIdxs.size(); e++) {
-        size_t e_idx = v_ptr->edgeIdxs[e];
-        v_ptr->edges.push_back(e_idx == INVALID ? nullptr : edges[e_idx]);
+void Area::fixVertexPointers(Vertex* vPtr) {
+    vPtr->edges.clear();
+    for(size_t e = 0; e < vPtr->edgeIdxs.size(); e++) {
+        size_t eIdx = vPtr->edgeIdxs[e];
+        vPtr->edges.push_back(eIdx == INVALID ? nullptr : edges[eIdx]);
     }
 }
 
@@ -708,21 +708,20 @@ void Area::generateBlockmap() {
     if(vertexes.empty()) return;
     
     //First, get the starting point and size of the blockmap.
-    Point min_coords = v2p(vertexes[0]);
-    Point max_coords = min_coords;
+    Point minCoords = v2p(vertexes[0]);
+    Point maxCoords = minCoords;
     
     for(size_t v = 0; v < vertexes.size(); v++) {
-        Vertex* v_ptr = vertexes[v];
-        updateMinMaxCoords(min_coords, max_coords, v2p(v_ptr));
+        updateMinMaxCoords(minCoords, maxCoords, v2p(vertexes[v]));
     }
     
-    bmap.topLeftCorner = min_coords;
+    bmap.topLeftCorner = minCoords;
     //Add one more to the cols/rows because, suppose there's an edge at y = 256.
     //The row would be 2. In reality, the row should be 3.
     bmap.nCols =
-        ceil((max_coords.x - min_coords.x) / GEOMETRY::BLOCKMAP_BLOCK_SIZE) + 1;
+        ceil((maxCoords.x - minCoords.x) / GEOMETRY::BLOCKMAP_BLOCK_SIZE) + 1;
     bmap.nRows =
-        ceil((max_coords.y - min_coords.y) / GEOMETRY::BLOCKMAP_BLOCK_SIZE) + 1;
+        ceil((maxCoords.y - minCoords.y) / GEOMETRY::BLOCKMAP_BLOCK_SIZE) + 1;
         
     bmap.edges.assign(
         bmap.nCols, vector<vector<Edge*> >(bmap.nRows, vector<Edge*>())
@@ -794,26 +793,26 @@ void Area::generateBlockmap() {
 /**
  * @brief Generates the blockmap for a set of edges.
  *
- * @param edge_list Edges to generate the blockmap around.
+ * @param edgeList Edges to generate the blockmap around.
  */
-void Area::generateEdgesBlockmap(const vector<Edge*> &edge_list) {
-    for(size_t e = 0; e < edge_list.size(); e++) {
+void Area::generateEdgesBlockmap(const vector<Edge*> &edgeList) {
+    for(size_t e = 0; e < edgeList.size(); e++) {
     
         //Get which blocks this edge belongs to, via bounding-box,
         //and only then thoroughly test which it is inside of.
         
-        Edge* e_ptr = edge_list[e];
-        Point min_coords = v2p(e_ptr->vertexes[0]);
-        Point max_coords = min_coords;
-        updateMinMaxCoords(min_coords, max_coords, v2p(e_ptr->vertexes[1]));
+        Edge* ePtr = edgeList[e];
+        Point minCoords = v2p(ePtr->vertexes[0]);
+        Point maxCoords = minCoords;
+        updateMinMaxCoords(minCoords, maxCoords, v2p(ePtr->vertexes[1]));
         
-        size_t b_min_x = bmap.getCol(min_coords.x);
-        size_t b_max_x = bmap.getCol(max_coords.x);
-        size_t b_min_y = bmap.getRow(min_coords.y);
-        size_t b_max_y = bmap.getRow(max_coords.y);
+        size_t bMinX = bmap.getCol(minCoords.x);
+        size_t bMaxX = bmap.getCol(maxCoords.x);
+        size_t bMinY = bmap.getRow(minCoords.y);
+        size_t bMaxY = bmap.getRow(maxCoords.y);
         
-        for(size_t bx = b_min_x; bx <= b_max_x; bx++) {
-            for(size_t by = b_min_y; by <= b_max_y; by++) {
+        for(size_t bx = bMinX; bx <= bMaxX; bx++) {
+            for(size_t by = bMinY; by <= bMaxY; by++) {
             
                 //Get the block's coordinates.
                 Point corner = bmap.getTopLeftCorner(bx, by);
@@ -823,28 +822,28 @@ void Area::generateEdgesBlockmap(const vector<Edge*> &edge_list) {
                     lineSegIntersectsRectangle(
                         corner,
                         corner + GEOMETRY::BLOCKMAP_BLOCK_SIZE,
-                        v2p(e_ptr->vertexes[0]), v2p(e_ptr->vertexes[1])
+                        v2p(ePtr->vertexes[0]), v2p(ePtr->vertexes[1])
                     )
                 ) {
                 
                     //If it is, add it and the sectors to the list.
-                    bool add_edge = true;
-                    if(e_ptr->sectors[0] && e_ptr->sectors[1]) {
+                    bool addEdge = true;
+                    if(ePtr->sectors[0] && ePtr->sectors[1]) {
                         //If there's no change in height, why bother?
                         if(
-                            (e_ptr->sectors[0]->z == e_ptr->sectors[1]->z) &&
-                            e_ptr->sectors[0]->type != SECTOR_TYPE_BLOCKING &&
-                            e_ptr->sectors[1]->type != SECTOR_TYPE_BLOCKING
+                            (ePtr->sectors[0]->z == ePtr->sectors[1]->z) &&
+                            ePtr->sectors[0]->type != SECTOR_TYPE_BLOCKING &&
+                            ePtr->sectors[1]->type != SECTOR_TYPE_BLOCKING
                         ) {
-                            add_edge = false;
+                            addEdge = false;
                         }
                     }
                     
-                    if(add_edge) bmap.edges[bx][by].push_back(e_ptr);
+                    if(addEdge) bmap.edges[bx][by].push_back(ePtr);
                     
-                    if(e_ptr->sectors[0] || e_ptr->sectors[1]) {
-                        bmap.sectors[bx][by].insert(e_ptr->sectors[0]);
-                        bmap.sectors[bx][by].insert(e_ptr->sectors[1]);
+                    if(ePtr->sectors[0] || ePtr->sectors[1]) {
+                        bmap.sectors[bx][by].insert(ePtr->sectors[0]);
+                        bmap.sectors[bx][by].insert(ePtr->sectors[1]);
                     }
                 }
             }
@@ -859,21 +858,21 @@ void Area::generateEdgesBlockmap(const vector<Edge*> &edge_list) {
  * @return The number of path links.
  */
 size_t Area::getNrPathLinks() {
-    size_t one_ways_found = 0;
-    size_t normals_found = 0;
+    size_t oneWaysFound = 0;
+    size_t normalsFound = 0;
     for(size_t s = 0; s < pathStops.size(); s++) {
-        PathStop* s_ptr = pathStops[s];
-        for(size_t l = 0; l < s_ptr->links.size(); l++) {
-            PathLink* l_ptr = s_ptr->links[l];
-            if(l_ptr->endPtr->get_link(s_ptr)) {
+        PathStop* sPtr = pathStops[s];
+        for(size_t l = 0; l < sPtr->links.size(); l++) {
+            PathLink* lPtr = sPtr->links[l];
+            if(lPtr->endPtr->getLink(sPtr)) {
                 //The other stop links to this one. So it's a two-way.
-                normals_found++;
+                normalsFound++;
             } else {
-                one_ways_found++;
+                oneWaysFound++;
             }
         }
     }
-    return (normals_found / 2.0f) + one_ways_found;
+    return (normalsFound / 2.0f) + oneWaysFound;
 }
 
 
@@ -890,21 +889,21 @@ void Area::loadMainDataFromDataNode(
     loadMetadataFromDataNode(node);
     
     //Area configuration data.
-    ReaderSetter rs(node);
-    DataNode* weather_node = nullptr;
-    DataNode* song_node = nullptr;
+    ReaderSetter aRS(node);
+    DataNode* weatherNode = nullptr;
+    DataNode* songNode = nullptr;
     
-    rs.set("subtitle", subtitle);
-    rs.set("difficulty", difficulty);
-    rs.set("spray_amounts", sprayAmounts);
-    rs.set("song", songName, &song_node);
-    rs.set("weather", weatherName, &weather_node);
-    rs.set("day_time_start", dayTimeStart);
-    rs.set("day_time_speed", dayTimeSpeed);
-    rs.set("bg_bmp", bgBmpName);
-    rs.set("bg_color", bgColor);
-    rs.set("bg_dist", bgDist);
-    rs.set("bg_zoom", bgBmpZoom);
+    aRS.set("subtitle", subtitle);
+    aRS.set("difficulty", difficulty);
+    aRS.set("spray_amounts", sprayAmounts);
+    aRS.set("song", songName, &songNode);
+    aRS.set("weather", weatherName, &weatherNode);
+    aRS.set("day_time_start", dayTimeStart);
+    aRS.set("day_time_speed", dayTimeSpeed);
+    aRS.set("bg_bmp", bgBmpName);
+    aRS.set("bg_color", bgColor);
+    aRS.set("bg_dist", bgDist);
+    aRS.set("bg_zoom", bgBmpZoom);
     
     //Weather.
     if(level > CONTENT_LOAD_LEVEL_BASIC) {
@@ -917,7 +916,7 @@ void Area::loadMainDataFromDataNode(
         ) {
             game.errors.report(
                 "Unknown weather condition \"" + weatherName + "\"!",
-                weather_node
+                weatherNode
             );
             weatherCondition = Weather();
             
@@ -935,7 +934,7 @@ void Area::loadMainDataFromDataNode(
         ) {
             game.errors.report(
                 "Unknown song \"" + songName + "\"!",
-                song_node
+                songNode
             );
         }
     }
@@ -955,62 +954,62 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
     mission.failHudPrimaryCond = INVALID;
     mission.failHudSecondaryCond = INVALID;
     
-    ReaderSetter rs(node);
-    string goal_str;
-    string required_mobs_str;
-    int mission_grading_mode_int = MISSION_GRADING_MODE_GOAL;
+    ReaderSetter mRS(node);
+    string goalStr;
+    string requiredMobsStr;
+    int missionGradingModeInt = MISSION_GRADING_MODE_GOAL;
     
-    rs.set("mission_goal", goal_str);
-    rs.set("mission_goal_amount", mission.goalAmount);
-    rs.set("mission_goal_all_mobs", mission.goalAllMobs);
-    rs.set("mission_required_mobs", required_mobs_str);
-    rs.set("mission_goal_exit_center", mission.goalExitCenter);
-    rs.set("mission_goal_exit_size", mission.goalExitSize);
-    rs.set("mission_fail_conditions", mission.failConditions);
-    rs.set("mission_fail_too_few_pik_amount", mission.failTooFewPikAmount);
-    rs.set("mission_fail_too_many_pik_amount", mission.failTooManyPikAmount);
-    rs.set("mission_fail_pik_killed", mission.failPikKilled);
-    rs.set("mission_fail_leaders_kod", mission.failLeadersKod);
-    rs.set("mission_fail_enemies_defeated", mission.failEnemiesDefeated);
-    rs.set("mission_fail_time_limit", mission.failTimeLimit);
-    rs.set("mission_fail_hud_primary_cond", mission.failHudPrimaryCond);
-    rs.set("mission_fail_hud_secondary_cond", mission.failHudSecondaryCond);
-    rs.set("mission_grading_mode", mission_grading_mode_int);
-    rs.set("mission_points_per_pikmin_born", mission.pointsPerPikminBorn);
-    rs.set("mission_points_per_pikmin_death", mission.pointsPerPikminDeath);
-    rs.set("mission_points_per_sec_left", mission.pointsPerSecLeft);
-    rs.set("mission_points_per_sec_passed", mission.pointsPerSecPassed);
-    rs.set("mission_points_per_treasure_point", mission.pointsPerTreasurePoint);
-    rs.set("mission_points_per_enemy_point", mission.pointsPerEnemyPoint);
-    rs.set("enemy_points_on_collection", mission.enemyPointsOnCollection);
-    rs.set("mission_point_loss_data", mission.pointLossData);
-    rs.set("mission_point_hud_data", mission.pointHudData);
-    rs.set("mission_starting_points", mission.startingPoints);
-    rs.set("mission_bronze_req", mission.bronzeReq);
-    rs.set("mission_silver_req", mission.silverReq);
-    rs.set("mission_gold_req", mission.goldReq);
-    rs.set("mission_platinum_req", mission.platinumReq);
-    rs.set("mission_maker_record", mission.makerRecord);
-    rs.set("mission_maker_record_date", mission.makerRecordDate);
+    mRS.set("mission_goal", goalStr);
+    mRS.set("mission_goal_amount", mission.goalAmount);
+    mRS.set("mission_goal_all_mobs", mission.goalAllMobs);
+    mRS.set("mission_required_mobs", requiredMobsStr);
+    mRS.set("mission_goal_exit_center", mission.goalExitCenter);
+    mRS.set("mission_goal_exit_size", mission.goalExitSize);
+    mRS.set("mission_fail_conditions", mission.failConditions);
+    mRS.set("mission_fail_too_few_pik_amount", mission.failTooFewPikAmount);
+    mRS.set("mission_fail_too_many_pik_amount", mission.failTooManyPikAmount);
+    mRS.set("mission_fail_pik_killed", mission.failPikKilled);
+    mRS.set("mission_fail_leaders_kod", mission.failLeadersKod);
+    mRS.set("mission_fail_enemies_defeated", mission.failEnemiesDefeated);
+    mRS.set("mission_fail_time_limit", mission.failTimeLimit);
+    mRS.set("mission_fail_hud_primary_cond", mission.failHudPrimaryCond);
+    mRS.set("mission_fail_hud_secondary_cond", mission.failHudSecondaryCond);
+    mRS.set("mission_grading_mode", missionGradingModeInt);
+    mRS.set("mission_points_per_pikmin_born", mission.pointsPerPikminBorn);
+    mRS.set("mission_points_per_pikmin_death", mission.pointsPerPikminDeath);
+    mRS.set("mission_points_per_sec_left", mission.pointsPerSecLeft);
+    mRS.set("mission_points_per_sec_passed", mission.pointsPerSecPassed);
+    mRS.set("mission_points_per_treasure_point", mission.pointsPerTreasurePoint);
+    mRS.set("mission_points_per_enemy_point", mission.pointsPerEnemyPoint);
+    mRS.set("enemy_points_on_collection", mission.enemyPointsOnCollection);
+    mRS.set("mission_point_loss_data", mission.pointLossData);
+    mRS.set("mission_point_hud_data", mission.pointHudData);
+    mRS.set("mission_starting_points", mission.startingPoints);
+    mRS.set("mission_bronze_req", mission.bronzeReq);
+    mRS.set("mission_silver_req", mission.silverReq);
+    mRS.set("mission_gold_req", mission.goldReq);
+    mRS.set("mission_platinum_req", mission.platinumReq);
+    mRS.set("mission_maker_record", mission.makerRecord);
+    mRS.set("mission_maker_record_date", mission.makerRecordDate);
     
     mission.goal = MISSION_GOAL_END_MANUALLY;
     for(size_t g = 0; g < game.missionGoals.size(); g++) {
-        if(game.missionGoals[g]->getName() == goal_str) {
+        if(game.missionGoals[g]->getName() == goalStr) {
             mission.goal = (MISSION_GOAL) g;
             break;
         }
     }
-    vector<string> mission_required_mobs_strs =
-        semicolonListToVector(required_mobs_str);
+    vector<string> missionRequiredMobsStr =
+        semicolonListToVector(requiredMobsStr);
     mission.goalMobIdxs.reserve(
-        mission_required_mobs_strs.size()
+        missionRequiredMobsStr.size()
     );
-    for(size_t m = 0; m < mission_required_mobs_strs.size(); m++) {
+    for(size_t m = 0; m < missionRequiredMobsStr.size(); m++) {
         mission.goalMobIdxs.insert(
-            s2i(mission_required_mobs_strs[m])
+            s2i(missionRequiredMobsStr[m])
         );
     }
-    mission.gradingMode = (MISSION_GRADING_MODE) mission_grading_mode_int;
+    mission.gradingMode = (MISSION_GRADING_MODE) missionGradingModeInt;
     
     //Automatically turn the pause menu fail condition on/off for convenience.
     if(mission.goal == MISSION_GOAL_END_MANUALLY) {
@@ -1059,16 +1058,16 @@ void Area::loadGeometryFromDataNode(
         game.perfMon->startMeasurement("Area -- Vertexes");
     }
     
-    size_t n_vertexes =
+    size_t nVertexes =
         node->getChildByName(
             "vertexes"
         )->getNrOfChildrenByName("v");
-    for(size_t v = 0; v < n_vertexes; v++) {
-        DataNode* vertex_data =
+    for(size_t v = 0; v < nVertexes; v++) {
+        DataNode* vertexNode =
             node->getChildByName(
                 "vertexes"
             )->getChildByName("v", v);
-        vector<string> words = split(vertex_data->value);
+        vector<string> words = split(vertexNode->value);
         if(words.size() == 2) {
             vertexes.push_back(
                 new Vertex(s2f(words[0]), s2f(words[1]))
@@ -1085,58 +1084,58 @@ void Area::loadGeometryFromDataNode(
         game.perfMon->startMeasurement("Area -- Edges");
     }
     
-    size_t n_edges =
+    size_t nEdges =
         node->getChildByName(
             "edges"
         )->getNrOfChildrenByName("e");
-    for(size_t e = 0; e < n_edges; e++) {
-        DataNode* edge_data =
+    for(size_t e = 0; e < nEdges; e++) {
+        DataNode* edgeNode =
             node->getChildByName(
                 "edges"
             )->getChildByName("e", e);
-        Edge* new_edge = new Edge();
+        Edge* newEdge = new Edge();
         
-        vector<string> s_idxs = split(edge_data->getChildByName("s")->value);
-        if(s_idxs.size() < 2) s_idxs.insert(s_idxs.end(), 2, "-1");
+        vector<string> sIdxs = split(edgeNode->getChildByName("s")->value);
+        if(sIdxs.size() < 2) sIdxs.insert(sIdxs.end(), 2, "-1");
         for(size_t s = 0; s < 2; s++) {
-            if(s_idxs[s] == "-1") new_edge->sectorIdxs[s] = INVALID;
-            else new_edge->sectorIdxs[s] = s2i(s_idxs[s]);
+            if(sIdxs[s] == "-1") newEdge->sectorIdxs[s] = INVALID;
+            else newEdge->sectorIdxs[s] = s2i(sIdxs[s]);
         }
         
-        vector<string> v_idxs = split(edge_data->getChildByName("v")->value);
-        if(v_idxs.size() < 2) v_idxs.insert(v_idxs.end(), 2, "0");
+        vector<string> vIdxs = split(edgeNode->getChildByName("v")->value);
+        if(vIdxs.size() < 2) vIdxs.insert(vIdxs.end(), 2, "0");
         
-        new_edge->vertexIdxs[0] = s2i(v_idxs[0]);
-        new_edge->vertexIdxs[1] = s2i(v_idxs[1]);
+        newEdge->vertexIdxs[0] = s2i(vIdxs[0]);
+        newEdge->vertexIdxs[1] = s2i(vIdxs[1]);
         
-        DataNode* shadow_length =
-            edge_data->getChildByName("shadow_length");
-        if(!shadow_length->value.empty()) {
-            new_edge->wallShadowLength =
-                s2f(shadow_length->value);
+        DataNode* shadowLengthNode =
+            edgeNode->getChildByName("shadow_length");
+        if(!shadowLengthNode->value.empty()) {
+            newEdge->wallShadowLength =
+                s2f(shadowLengthNode->value);
         }
         
-        DataNode* shadow_color =
-            edge_data->getChildByName("shadow_color");
-        if(!shadow_color->value.empty()) {
-            new_edge->wallShadowColor = s2c(shadow_color->value);
+        DataNode* shadowColorNode =
+            edgeNode->getChildByName("shadow_color");
+        if(!shadowColorNode->value.empty()) {
+            newEdge->wallShadowColor = s2c(shadowColorNode->value);
         }
         
-        DataNode* smoothing_length =
-            edge_data->getChildByName("smoothing_length");
-        if(!smoothing_length->value.empty()) {
-            new_edge->ledgeSmoothingLength =
-                s2f(smoothing_length->value);
+        DataNode* smoothingLengthNode =
+            edgeNode->getChildByName("smoothing_length");
+        if(!smoothingLengthNode->value.empty()) {
+            newEdge->ledgeSmoothingLength =
+                s2f(smoothingLengthNode->value);
         }
         
-        DataNode* smoothing_color =
-            edge_data->getChildByName("smoothing_color");
-        if(!smoothing_color->value.empty()) {
-            new_edge->ledgeSmoothingColor =
-                s2c(smoothing_color->value);
+        DataNode* smoothingColorNode =
+            edgeNode->getChildByName("smoothing_color");
+        if(!smoothingColorNode->value.empty()) {
+            newEdge->ledgeSmoothingColor =
+                s2c(smoothingColorNode->value);
         }
         
-        edges.push_back(new_edge);
+        edges.push_back(newEdge);
     }
     
     if(game.perfMon) {
@@ -1148,88 +1147,88 @@ void Area::loadGeometryFromDataNode(
         game.perfMon->startMeasurement("Area -- Sectors");
     }
     
-    size_t n_sectors =
+    size_t nSectors =
         node->getChildByName(
             "sectors"
         )->getNrOfChildrenByName("s");
-    for(size_t s = 0; s < n_sectors; s++) {
-        DataNode* sector_data =
+    for(size_t s = 0; s < nSectors; s++) {
+        DataNode* sectorNode =
             node->getChildByName(
                 "sectors"
             )->getChildByName("s", s);
-        Sector* new_sector = new Sector();
+        Sector* newSector = new Sector();
         
-        size_t new_type =
+        size_t newType =
             game.sectorTypes.getIdx(
-                sector_data->getChildByName("type")->value
+                sectorNode->getChildByName("type")->value
             );
-        if(new_type == INVALID) {
-            new_type = SECTOR_TYPE_NORMAL;
+        if(newType == INVALID) {
+            newType = SECTOR_TYPE_NORMAL;
         }
-        new_sector->type = (SECTOR_TYPE) new_type;
-        new_sector->isBottomlessPit =
+        newSector->type = (SECTOR_TYPE) newType;
+        newSector->isBottomlessPit =
             s2b(
-                sector_data->getChildByName(
+                sectorNode->getChildByName(
                     "is_bottomless_pit"
                 )->getValueOrDefault("false")
             );
-        new_sector->brightness =
+        newSector->brightness =
             s2f(
-                sector_data->getChildByName(
+                sectorNode->getChildByName(
                     "brightness"
                 )->getValueOrDefault(i2s(GEOMETRY::DEF_SECTOR_BRIGHTNESS))
             );
-        new_sector->tag = sector_data->getChildByName("tag")->value;
-        new_sector->z = s2f(sector_data->getChildByName("z")->value);
-        new_sector->fade = s2b(sector_data->getChildByName("fade")->value);
+        newSector->tag = sectorNode->getChildByName("tag")->value;
+        newSector->z = s2f(sectorNode->getChildByName("z")->value);
+        newSector->fade = s2b(sectorNode->getChildByName("fade")->value);
         
-        new_sector->textureInfo.bmpName =
-            sector_data->getChildByName("texture")->value;
-        new_sector->textureInfo.rot =
-            s2f(sector_data->getChildByName("texture_rotate")->value);
+        newSector->textureInfo.bmpName =
+            sectorNode->getChildByName("texture")->value;
+        newSector->textureInfo.rot =
+            s2f(sectorNode->getChildByName("texture_rotate")->value);
             
         vector<string> scales =
-            split(sector_data->getChildByName("texture_scale")->value);
+            split(sectorNode->getChildByName("texture_scale")->value);
         if(scales.size() >= 2) {
-            new_sector->textureInfo.scale.x = s2f(scales[0]);
-            new_sector->textureInfo.scale.y = s2f(scales[1]);
+            newSector->textureInfo.scale.x = s2f(scales[0]);
+            newSector->textureInfo.scale.y = s2f(scales[1]);
         }
         vector<string> translations =
-            split(sector_data->getChildByName("texture_trans")->value);
+            split(sectorNode->getChildByName("texture_trans")->value);
         if(translations.size() >= 2) {
-            new_sector->textureInfo.translation.x = s2f(translations[0]);
-            new_sector->textureInfo.translation.y = s2f(translations[1]);
+            newSector->textureInfo.translation.x = s2f(translations[0]);
+            newSector->textureInfo.translation.y = s2f(translations[1]);
         }
-        new_sector->textureInfo.tint =
+        newSector->textureInfo.tint =
             s2c(
-                sector_data->getChildByName("texture_tint")->
+                sectorNode->getChildByName("texture_tint")->
                 getValueOrDefault("255 255 255")
             );
             
-        if(!new_sector->fade && !new_sector->isBottomlessPit) {
-            new_sector->textureInfo.bitmap =
-                game.content.bitmaps.list.get(new_sector->textureInfo.bmpName, nullptr);
+        if(!newSector->fade && !newSector->isBottomlessPit) {
+            newSector->textureInfo.bitmap =
+                game.content.bitmaps.list.get(newSector->textureInfo.bmpName, nullptr);
         }
         
-        DataNode* hazard_node = sector_data->getChildByName("hazard");
-        if(!hazard_node->value.empty()) {
-            if(game.content.hazards.list.find(hazard_node->value) == game.content.hazards.list.end()) {
+        DataNode* hazardNode = sectorNode->getChildByName("hazard");
+        if(!hazardNode->value.empty()) {
+            if(game.content.hazards.list.find(hazardNode->value) == game.content.hazards.list.end()) {
                 game.errors.report(
-                    "Unknown hazard \"" + hazard_node->value +
-                    "\"!", hazard_node
+                    "Unknown hazard \"" + hazardNode->value +
+                    "\"!", hazardNode
                 );
             } else {
-                new_sector->hazard = &(game.content.hazards.list[hazard_node->value]);
+                newSector->hazard = &(game.content.hazards.list[hazardNode->value]);
             }
         }
-        new_sector->hazardFloor =
+        newSector->hazardFloor =
             s2b(
-                sector_data->getChildByName(
+                sectorNode->getChildByName(
                     "hazards_floor"
                 )->getValueOrDefault("true")
             );
             
-        sectors.push_back(new_sector);
+        sectors.push_back(newSector);
     }
     
     if(game.perfMon) {
@@ -1241,70 +1240,70 @@ void Area::loadGeometryFromDataNode(
         game.perfMon->startMeasurement("Area -- Object generators");
     }
     
-    vector<std::pair<size_t, size_t> > mob_links_buffer;
-    size_t n_mobs =
+    vector<std::pair<size_t, size_t> > mobLinksBuffer;
+    size_t nMobs =
         node->getChildByName("mobs")->getNrOfChildren();
         
-    for(size_t m = 0; m < n_mobs; m++) {
+    for(size_t m = 0; m < nMobs; m++) {
     
-        DataNode* mob_node =
+        DataNode* mobNode =
             node->getChildByName("mobs")->getChild(m);
             
-        MobGen* mob_ptr = new MobGen();
+        MobGen* newMob = new MobGen();
         
-        mob_ptr->pos = s2p(mob_node->getChildByName("p")->value);
-        mob_ptr->angle =
+        newMob->pos = s2p(mobNode->getChildByName("p")->value);
+        newMob->angle =
             s2f(
-                mob_node->getChildByName("angle")->getValueOrDefault("0")
+                mobNode->getChildByName("angle")->getValueOrDefault("0")
             );
-        mob_ptr->vars = mob_node->getChildByName("vars")->value;
+        newMob->vars = mobNode->getChildByName("vars")->value;
         
-        string category_name = mob_node->name;
-        string type_name;
+        string categoryName = mobNode->name;
+        string typeName;
         MobCategory* category =
-            game.mobCategories.getFromInternalName(category_name);
+            game.mobCategories.getFromInternalName(categoryName);
         if(category) {
-            type_name = mob_node->getChildByName("type")->value;
-            mob_ptr->type = category->getType(type_name);
+            typeName = mobNode->getChildByName("type")->value;
+            newMob->type = category->getType(typeName);
         } else {
             category = game.mobCategories.get(MOB_CATEGORY_NONE);
-            mob_ptr->type = nullptr;
+            newMob->type = nullptr;
         }
         
-        vector<string> link_strs =
-            split(mob_node->getChildByName("links")->value);
-        for(size_t l = 0; l < link_strs.size(); l++) {
-            mob_links_buffer.push_back(std::make_pair(m, s2i(link_strs[l])));
+        vector<string> linkStrs =
+            split(mobNode->getChildByName("links")->value);
+        for(size_t l = 0; l < linkStrs.size(); l++) {
+            mobLinksBuffer.push_back(std::make_pair(m, s2i(linkStrs[l])));
         }
         
-        DataNode* stored_inside_node =
-            mob_node->getChildByName("stored_inside");
-        if(!stored_inside_node->value.empty()) {
-            mob_ptr->storedInside = s2i(stored_inside_node->value);
+        DataNode* storedInsideNode =
+            mobNode->getChildByName("stored_inside");
+        if(!storedInsideNode->value.empty()) {
+            newMob->storedInside = s2i(storedInsideNode->value);
         }
         
         bool valid =
             category && category->id != MOB_CATEGORY_NONE &&
-            mob_ptr->type;
+            newMob->type;
             
         if(!valid) {
             //Error.
-            mob_ptr->type = nullptr;
+            newMob->type = nullptr;
             if(level >= CONTENT_LOAD_LEVEL_FULL) {
                 game.errors.report(
-                    "Unknown mob type \"" + type_name + "\" of category \"" +
-                    mob_node->name + "\"!",
-                    mob_node
+                    "Unknown mob type \"" + typeName + "\" of category \"" +
+                    mobNode->name + "\"!",
+                    mobNode
                 );
             }
         }
         
-        mobGenerators.push_back(mob_ptr);
+        mobGenerators.push_back(newMob);
     }
     
-    for(size_t l = 0; l < mob_links_buffer.size(); l++) {
-        size_t f = mob_links_buffer[l].first;
-        size_t s = mob_links_buffer[l].second;
+    for(size_t l = 0; l < mobLinksBuffer.size(); l++) {
+        size_t f = mobLinksBuffer[l].first;
+        size_t s = mobLinksBuffer[l].second;
         mobGenerators[f]->links.push_back(
             mobGenerators[s]
         );
@@ -1320,40 +1319,40 @@ void Area::loadGeometryFromDataNode(
         game.perfMon->startMeasurement("Area -- Paths");
     }
     
-    size_t n_stops =
+    size_t nStops =
         node->getChildByName("path_stops")->getNrOfChildren();
-    for(size_t s = 0; s < n_stops; s++) {
+    for(size_t s = 0; s < nStops; s++) {
     
-        DataNode* path_stop_node =
+        DataNode* pathStopNode =
             node->getChildByName("path_stops")->getChild(s);
             
-        PathStop* s_ptr = new PathStop();
+        PathStop* newStop = new PathStop();
         
-        s_ptr->pos = s2p(path_stop_node->getChildByName("pos")->value);
-        s_ptr->radius = s2f(path_stop_node->getChildByName("radius")->value);
-        s_ptr->flags = s2i(path_stop_node->getChildByName("flags")->value);
-        s_ptr->label = path_stop_node->getChildByName("label")->value;
-        DataNode* links_node = path_stop_node->getChildByName("links");
-        size_t n_links = links_node->getNrOfChildren();
+        newStop->pos = s2p(pathStopNode->getChildByName("pos")->value);
+        newStop->radius = s2f(pathStopNode->getChildByName("radius")->value);
+        newStop->flags = s2i(pathStopNode->getChildByName("flags")->value);
+        newStop->label = pathStopNode->getChildByName("label")->value;
+        DataNode* linksNode = pathStopNode->getChildByName("links");
+        size_t nLinks = linksNode->getNrOfChildren();
         
-        for(size_t l = 0; l < n_links; l++) {
+        for(size_t l = 0; l < nLinks; l++) {
         
-            string link_data = links_node->getChild(l)->value;
-            vector<string> link_data_parts = split(link_data);
+            string linkData = linksNode->getChild(l)->value;
+            vector<string> linkDataParts = split(linkData);
             
-            PathLink* l_ptr =
-                new PathLink(s_ptr, nullptr, s2i(link_data_parts[0]));
-            if(link_data_parts.size() >= 2) {
-                l_ptr->type = (PATH_LINK_TYPE) s2i(link_data_parts[1]);
+            PathLink* newLink =
+                new PathLink(newStop, nullptr, s2i(linkDataParts[0]));
+            if(linkDataParts.size() >= 2) {
+                newLink->type = (PATH_LINK_TYPE) s2i(linkDataParts[1]);
             }
             
-            s_ptr->links.push_back(l_ptr);
+            newStop->links.push_back(newLink);
             
         }
         
-        s_ptr->radius = std::max(s_ptr->radius, PATHS::MIN_STOP_RADIUS);
+        newStop->radius = std::max(newStop->radius, PATHS::MIN_STOP_RADIUS);
         
-        pathStops.push_back(s_ptr);
+        pathStops.push_back(newStop);
     }
     
     if(game.perfMon) {
@@ -1365,51 +1364,51 @@ void Area::loadGeometryFromDataNode(
         game.perfMon->startMeasurement("Area -- Tree shadows");
     }
     
-    size_t n_shadows =
+    size_t nShadows =
         node->getChildByName("tree_shadows")->getNrOfChildren();
-    for(size_t s = 0; s < n_shadows; s++) {
+    for(size_t s = 0; s < nShadows; s++) {
     
-        DataNode* shadow_node =
+        DataNode* shadowNode =
             node->getChildByName("tree_shadows")->getChild(s);
             
-        TreeShadow* s_ptr = new TreeShadow();
+        TreeShadow* newShadow = new TreeShadow();
         
         vector<string> words =
-            split(shadow_node->getChildByName("pos")->value);
-        s_ptr->center.x = (words.size() >= 1 ? s2f(words[0]) : 0);
-        s_ptr->center.y = (words.size() >= 2 ? s2f(words[1]) : 0);
+            split(shadowNode->getChildByName("pos")->value);
+        newShadow->center.x = (words.size() >= 1 ? s2f(words[0]) : 0);
+        newShadow->center.y = (words.size() >= 2 ? s2f(words[1]) : 0);
         
-        words = split(shadow_node->getChildByName("size")->value);
-        s_ptr->size.x = (words.size() >= 1 ? s2f(words[0]) : 0);
-        s_ptr->size.y = (words.size() >= 2 ? s2f(words[1]) : 0);
+        words = split(shadowNode->getChildByName("size")->value);
+        newShadow->size.x = (words.size() >= 1 ? s2f(words[0]) : 0);
+        newShadow->size.y = (words.size() >= 2 ? s2f(words[1]) : 0);
         
-        s_ptr->angle =
+        newShadow->angle =
             s2f(
-                shadow_node->getChildByName(
+                shadowNode->getChildByName(
                     "angle"
                 )->getValueOrDefault("0")
             );
-        s_ptr->alpha =
+        newShadow->alpha =
             s2i(
-                shadow_node->getChildByName(
+                shadowNode->getChildByName(
                     "alpha"
                 )->getValueOrDefault("255")
             );
-        s_ptr->bmpName = shadow_node->getChildByName("file")->value;
-        s_ptr->bitmap = game.content.bitmaps.list.get(s_ptr->bmpName, nullptr);
+        newShadow->bmpName = shadowNode->getChildByName("file")->value;
+        newShadow->bitmap = game.content.bitmaps.list.get(newShadow->bmpName, nullptr);
         
-        words = split(shadow_node->getChildByName("sway")->value);
-        s_ptr->sway.x = (words.size() >= 1 ? s2f(words[0]) : 0);
-        s_ptr->sway.y = (words.size() >= 2 ? s2f(words[1]) : 0);
+        words = split(shadowNode->getChildByName("sway")->value);
+        newShadow->sway.x = (words.size() >= 1 ? s2f(words[0]) : 0);
+        newShadow->sway.y = (words.size() >= 2 ? s2f(words[1]) : 0);
         
-        if(s_ptr->bitmap == game.bmpError && level >= CONTENT_LOAD_LEVEL_FULL) {
+        if(newShadow->bitmap == game.bmpError && level >= CONTENT_LOAD_LEVEL_FULL) {
             game.errors.report(
-                "Unknown tree shadow texture \"" + s_ptr->bmpName + "\"!",
-                shadow_node
+                "Unknown tree shadow texture \"" + newShadow->bmpName + "\"!",
+                shadowNode
             );
         }
         
-        treeShadows.push_back(s_ptr);
+        treeShadows.push_back(newShadow);
         
     }
     
@@ -1449,13 +1448,13 @@ void Area::loadGeometryFromDataNode(
         //Fade sectors that also fade brightness should be
         //at midway between the two neighbors.
         for(size_t s = 0; s < sectors.size(); s++) {
-            Sector* s_ptr = sectors[s];
-            if(s_ptr->fade) {
+            Sector* sPtr = sectors[s];
+            if(sPtr->fade) {
                 Sector* n1 = nullptr;
                 Sector* n2 = nullptr;
-                s_ptr->getTextureMergeSectors(&n1, &n2);
+                sPtr->getTextureMergeSectors(&n1, &n2);
                 if(n1 && n2) {
-                    s_ptr->brightness = (n1->brightness + n2->brightness) / 2;
+                    sPtr->brightness = (n1->brightness + n2->brightness) / 2;
                 }
             }
         }
@@ -1463,21 +1462,21 @@ void Area::loadGeometryFromDataNode(
     
     
     //Triangulate everything and save bounding boxes.
-    set<Edge*> lone_edges;
+    set<Edge*> loneEdges;
     for(size_t s = 0; s < sectors.size(); s++) {
-        Sector* s_ptr = sectors[s];
-        s_ptr->triangles.clear();
+        Sector* sPtr = sectors[s];
+        sPtr->triangles.clear();
         TRIANGULATION_ERROR res =
-            triangulateSector(s_ptr, &lone_edges, false);
+            triangulateSector(sPtr, &loneEdges, false);
             
         if(res != TRIANGULATION_ERROR_NONE && level == CONTENT_LOAD_LEVEL_EDITOR) {
-            problems.nonSimples[s_ptr] = res;
+            problems.nonSimples[sPtr] = res;
             problems.loneEdges.insert(
-                lone_edges.begin(), lone_edges.end()
+                loneEdges.begin(), loneEdges.end()
             );
         }
         
-        s_ptr->calculateBoundingBox();
+        sPtr->calculateBoundingBox();
     }
     
     if(level >= CONTENT_LOAD_LEVEL_EDITOR) generateBlockmap();
@@ -1492,17 +1491,17 @@ void Area::loadGeometryFromDataNode(
  * @brief Loads the thumbnail image from the disk and updates the
  * thumbnail class member.
  *
- * @param thumbnail_path Path to the bitmap.
+ * @param thumbnailPath Path to the bitmap.
  */
-void Area::loadThumbnail(const string &thumbnail_path) {
+void Area::loadThumbnail(const string &thumbnailPath) {
     if(thumbnail) {
         thumbnail = nullptr;
     }
     
-    if(al_filename_exists(thumbnail_path.c_str())) {
+    if(al_filename_exists(thumbnailPath.c_str())) {
         thumbnail =
             std::shared_ptr<ALLEGRO_BITMAP>(
-                al_load_bitmap(thumbnail_path.c_str()),
+                al_load_bitmap(thumbnailPath.c_str()),
         [](ALLEGRO_BITMAP * b) {
             al_destroy_bitmap(b);
         }
@@ -1517,9 +1516,9 @@ void Area::loadThumbnail(const string &thumbnail_path) {
  * @return The new edge's pointer.
  */
 Edge* Area::newEdge() {
-    Edge* e_ptr = new Edge();
-    edges.push_back(e_ptr);
-    return e_ptr;
+    Edge* ePtr = new Edge();
+    edges.push_back(ePtr);
+    return ePtr;
 }
 
 
@@ -1529,9 +1528,9 @@ Edge* Area::newEdge() {
  * @return The new sector's pointer.
  */
 Sector* Area::newSector() {
-    Sector* s_ptr = new Sector();
-    sectors.push_back(s_ptr);
-    return s_ptr;
+    Sector* sPtr = new Sector();
+    sectors.push_back(sPtr);
+    return sPtr;
 }
 
 
@@ -1541,49 +1540,49 @@ Sector* Area::newSector() {
  * @return The new vertex's pointer.
  */
 Vertex* Area::newVertex() {
-    Vertex* v_ptr = new Vertex();
-    vertexes.push_back(v_ptr);
-    return v_ptr;
+    Vertex* vPtr = new Vertex();
+    vertexes.push_back(vPtr);
+    return vPtr;
 }
 
 
 /**
  * @brief Removes an edge from the list, and updates all indexes after it.
  *
- * @param e_idx Index number of the edge to remove.
+ * @param eIdx Index number of the edge to remove.
  */
-void Area::removeEdge(size_t e_idx) {
-    edges.erase(edges.begin() + e_idx);
+void Area::removeEdge(size_t eIdx) {
+    edges.erase(edges.begin() + eIdx);
     for(size_t v = 0; v < vertexes.size(); v++) {
-        Vertex* v_ptr = vertexes[v];
-        for(size_t e = 0; e < v_ptr->edges.size(); e++) {
+        Vertex* vPtr = vertexes[v];
+        for(size_t e = 0; e < vPtr->edges.size(); e++) {
             if(
-                v_ptr->edgeIdxs[e] != INVALID &&
-                v_ptr->edgeIdxs[e] > e_idx
+                vPtr->edgeIdxs[e] != INVALID &&
+                vPtr->edgeIdxs[e] > eIdx
             ) {
-                v_ptr->edgeIdxs[e]--;
+                vPtr->edgeIdxs[e]--;
             } else {
                 //This should never happen.
                 engineAssert(
-                    v_ptr->edgeIdxs[e] != e_idx,
-                    i2s(v_ptr->edgeIdxs[e]) + " " + i2s(e_idx)
+                    vPtr->edgeIdxs[e] != eIdx,
+                    i2s(vPtr->edgeIdxs[e]) + " " + i2s(eIdx)
                 );
             }
         }
     }
     for(size_t s = 0; s < sectors.size(); s++) {
-        Sector* s_ptr = sectors[s];
-        for(size_t e = 0; e < s_ptr->edges.size(); e++) {
+        Sector* sPtr = sectors[s];
+        for(size_t e = 0; e < sPtr->edges.size(); e++) {
             if(
-                s_ptr->edgeIdxs[e] != INVALID &&
-                s_ptr->edgeIdxs[e] > e_idx
+                sPtr->edgeIdxs[e] != INVALID &&
+                sPtr->edgeIdxs[e] > eIdx
             ) {
-                s_ptr->edgeIdxs[e]--;
+                sPtr->edgeIdxs[e]--;
             } else {
                 //This should never happen.
                 engineAssert(
-                    s_ptr->edgeIdxs[e] != e_idx,
-                    i2s(s_ptr->edgeIdxs[e]) + " " + i2s(e_idx)
+                    sPtr->edgeIdxs[e] != eIdx,
+                    i2s(sPtr->edgeIdxs[e]) + " " + i2s(eIdx)
                 );
             }
         }
@@ -1594,11 +1593,11 @@ void Area::removeEdge(size_t e_idx) {
 /**
  * @brief Removes an edge from the list, and updates all indexes after it.
  *
- * @param e_ptr Pointer of the edge to remove.
+ * @param ePtr Pointer of the edge to remove.
  */
-void Area::removeEdge(const Edge* e_ptr) {
+void Area::removeEdge(const Edge* ePtr) {
     for(size_t e = 0; e < edges.size(); e++) {
-        if(edges[e] == e_ptr) {
+        if(edges[e] == ePtr) {
             removeEdge(e);
             return;
         }
@@ -1609,23 +1608,23 @@ void Area::removeEdge(const Edge* e_ptr) {
 /**
  * @brief Removes a sector from the list, and updates all indexes after it.
  *
- * @param s_idx Index number of the sector to remove.
+ * @param sIdx Index number of the sector to remove.
  */
-void Area::removeSector(size_t s_idx) {
-    sectors.erase(sectors.begin() + s_idx);
+void Area::removeSector(size_t sIdx) {
+    sectors.erase(sectors.begin() + sIdx);
     for(size_t e = 0; e < edges.size(); e++) {
-        Edge* e_ptr = edges[e];
+        Edge* ePtr = edges[e];
         for(size_t s = 0; s < 2; s++) {
             if(
-                e_ptr->sectorIdxs[s] != INVALID &&
-                e_ptr->sectorIdxs[s] > s_idx
+                ePtr->sectorIdxs[s] != INVALID &&
+                ePtr->sectorIdxs[s] > sIdx
             ) {
-                e_ptr->sectorIdxs[s]--;
+                ePtr->sectorIdxs[s]--;
             } else {
                 //This should never happen.
                 engineAssert(
-                    e_ptr->sectorIdxs[s] != s_idx,
-                    i2s(e_ptr->sectorIdxs[s]) + " " + i2s(s_idx)
+                    ePtr->sectorIdxs[s] != sIdx,
+                    i2s(ePtr->sectorIdxs[s]) + " " + i2s(sIdx)
                 );
             }
         }
@@ -1636,11 +1635,11 @@ void Area::removeSector(size_t s_idx) {
 /**
  * @brief Removes a sector from the list, and updates all indexes after it.
  *
- * @param s_ptr Pointer of the sector to remove.
+ * @param sPtr Pointer of the sector to remove.
  */
-void Area::removeSector(const Sector* s_ptr) {
+void Area::removeSector(const Sector* sPtr) {
     for(size_t s = 0; s < sectors.size(); s++) {
-        if(sectors[s] == s_ptr) {
+        if(sectors[s] == sPtr) {
             removeSector(s);
             return;
         }
@@ -1651,23 +1650,23 @@ void Area::removeSector(const Sector* s_ptr) {
 /**
  * @brief Removes a vertex from the list, and updates all indexes after it.
  *
- * @param v_idx Index number of the vertex to remove.
+ * @param vIdx Index number of the vertex to remove.
  */
-void Area::removeVertex(size_t v_idx) {
-    vertexes.erase(vertexes.begin() + v_idx);
+void Area::removeVertex(size_t vIdx) {
+    vertexes.erase(vertexes.begin() + vIdx);
     for(size_t e = 0; e < edges.size(); e++) {
-        Edge* e_ptr = edges[e];
+        Edge* ePtr = edges[e];
         for(size_t v = 0; v < 2; v++) {
             if(
-                e_ptr->vertexIdxs[v] != INVALID &&
-                e_ptr->vertexIdxs[v] > v_idx
+                ePtr->vertexIdxs[v] != INVALID &&
+                ePtr->vertexIdxs[v] > vIdx
             ) {
-                e_ptr->vertexIdxs[v]--;
+                ePtr->vertexIdxs[v]--;
             } else {
                 //This should never happen.
                 engineAssert(
-                    e_ptr->vertexIdxs[v] != v_idx,
-                    i2s(e_ptr->vertexIdxs[v]) + " " + i2s(v_idx)
+                    ePtr->vertexIdxs[v] != vIdx,
+                    i2s(ePtr->vertexIdxs[v]) + " " + i2s(vIdx)
                 );
             }
         }
@@ -1678,11 +1677,11 @@ void Area::removeVertex(size_t v_idx) {
 /**
  * @brief Removes a vertex from the list, and updates all indexes after it.
  *
- * @param v_ptr Pointer of the vertex to remove.
+ * @param vPtr Pointer of the vertex to remove.
  */
-void Area::removeVertex(const Vertex* v_ptr) {
+void Area::removeVertex(const Vertex* vPtr) {
     for(size_t v = 0; v < vertexes.size(); v++) {
-        if(vertexes[v] == v_ptr) {
+        if(vertexes[v] == vPtr) {
             removeVertex(v);
             return;
         }
@@ -1697,202 +1696,202 @@ void Area::removeVertex(const Vertex* v_ptr) {
  */
 void Area::saveGeometryToDataNode(DataNode* node) {
     //Vertexes.
-    DataNode* vertexes_node = node->addNew("vertexes");
+    DataNode* vertexesNode = node->addNew("vertexes");
     for(size_t v = 0; v < vertexes.size(); v++) {
     
         //Vertex.
-        Vertex* v_ptr = vertexes[v];
-        vertexes_node->addNew("v", p2s(v2p(v_ptr)));
+        Vertex* vPtr = vertexes[v];
+        vertexesNode->addNew("v", p2s(v2p(vPtr)));
     }
     
     //Edges.
-    DataNode* edges_node = node->addNew("edges");
+    DataNode* edgesNode = node->addNew("edges");
     for(size_t e = 0; e < edges.size(); e++) {
     
         //Edge.
-        Edge* e_ptr = edges[e];
-        DataNode* edge_node = edges_node->addNew("e");
-        GetterWriter egw(edge_node);
+        Edge* ePtr = edges[e];
+        DataNode* edgeNode = edgesNode->addNew("e");
+        GetterWriter eGW(edgeNode);
         
-        string s_str;
+        string sStr;
         for(size_t s = 0; s < 2; s++) {
-            if(e_ptr->sectorIdxs[s] == INVALID) s_str += "-1";
-            else s_str += i2s(e_ptr->sectorIdxs[s]);
-            s_str += " ";
+            if(ePtr->sectorIdxs[s] == INVALID) sStr += "-1";
+            else sStr += i2s(ePtr->sectorIdxs[s]);
+            sStr += " ";
         }
-        s_str.erase(s_str.size() - 1);
-        string v_str =
-            i2s(e_ptr->vertexIdxs[0]) + " " + i2s(e_ptr->vertexIdxs[1]);
+        sStr.erase(sStr.size() - 1);
+        string vStr =
+            i2s(ePtr->vertexIdxs[0]) + " " + i2s(ePtr->vertexIdxs[1]);
             
-        egw.write("s", s_str);
-        egw.write("v", v_str);
+        eGW.write("s", sStr);
+        eGW.write("v", vStr);
         
-        if(e_ptr->wallShadowLength != LARGE_FLOAT) {
-            egw.write("shadow_length", e_ptr->wallShadowLength);
+        if(ePtr->wallShadowLength != LARGE_FLOAT) {
+            eGW.write("shadow_length", ePtr->wallShadowLength);
         }
         
-        if(e_ptr->wallShadowColor != GEOMETRY::SHADOW_DEF_COLOR) {
-            egw.write("shadow_color", e_ptr->wallShadowColor);
+        if(ePtr->wallShadowColor != GEOMETRY::SHADOW_DEF_COLOR) {
+            eGW.write("shadow_color", ePtr->wallShadowColor);
         }
         
-        if(e_ptr->ledgeSmoothingLength != 0.0f) {
-            egw.write("smoothing_length", e_ptr->ledgeSmoothingLength);
+        if(ePtr->ledgeSmoothingLength != 0.0f) {
+            eGW.write("smoothing_length", ePtr->ledgeSmoothingLength);
         }
         
-        if(e_ptr->ledgeSmoothingColor != GEOMETRY::SMOOTHING_DEF_COLOR) {
-            egw.write("smoothing_color", e_ptr->ledgeSmoothingColor);
+        if(ePtr->ledgeSmoothingColor != GEOMETRY::SMOOTHING_DEF_COLOR) {
+            eGW.write("smoothing_color", ePtr->ledgeSmoothingColor);
         }
     }
     
     //Sectors.
-    DataNode* sectors_node = node->addNew("sectors");
+    DataNode* sectorsNode = node->addNew("sectors");
     for(size_t s = 0; s < sectors.size(); s++) {
     
         //Sector.
-        Sector* s_ptr = sectors[s];
-        DataNode* sector_node = sectors_node->addNew("s");
-        GetterWriter sgw(sector_node);
+        Sector* sPtr = sectors[s];
+        DataNode* sectorNode = sectorsNode->addNew("s");
+        GetterWriter sGW(sectorNode);
         
-        if(s_ptr->type != SECTOR_TYPE_NORMAL) {
-            sgw.write("type", game.sectorTypes.getName(s_ptr->type));
+        if(sPtr->type != SECTOR_TYPE_NORMAL) {
+            sGW.write("type", game.sectorTypes.getName(sPtr->type));
         }
-        if(s_ptr->isBottomlessPit) {
-            sgw.write("is_bottomless_pit", true);
+        if(sPtr->isBottomlessPit) {
+            sGW.write("is_bottomless_pit", true);
         }
-        sgw.write("z", s_ptr->z);
-        if(s_ptr->brightness != GEOMETRY::DEF_SECTOR_BRIGHTNESS) {
-            sgw.write("brightness", s_ptr->brightness);
+        sGW.write("z", sPtr->z);
+        if(sPtr->brightness != GEOMETRY::DEF_SECTOR_BRIGHTNESS) {
+            sGW.write("brightness", sPtr->brightness);
         }
-        if(!s_ptr->tag.empty()) {
-            sgw.write("tag", s_ptr->tag);
+        if(!sPtr->tag.empty()) {
+            sGW.write("tag", sPtr->tag);
         }
-        if(s_ptr->fade) {
-            sgw.write("fade", s_ptr->fade);
+        if(sPtr->fade) {
+            sGW.write("fade", sPtr->fade);
         }
-        if(s_ptr->hazard) {
-            sgw.write("hazard", s_ptr->hazard->manifest->internalName);
-            sgw.write("hazards_floor", s_ptr->hazardFloor);
-        }
-        
-        if(!s_ptr->textureInfo.bmpName.empty()) {
-            sgw.write("texture", s_ptr->textureInfo.bmpName);
+        if(sPtr->hazard) {
+            sGW.write("hazard", sPtr->hazard->manifest->internalName);
+            sGW.write("hazards_floor", sPtr->hazardFloor);
         }
         
-        if(s_ptr->textureInfo.rot != 0) {
-            sgw.write("texture_rotate", s_ptr->textureInfo.rot);
+        if(!sPtr->textureInfo.bmpName.empty()) {
+            sGW.write("texture", sPtr->textureInfo.bmpName);
+        }
+        
+        if(sPtr->textureInfo.rot != 0) {
+            sGW.write("texture_rotate", sPtr->textureInfo.rot);
         }
         if(
-            s_ptr->textureInfo.scale.x != 1 ||
-            s_ptr->textureInfo.scale.y != 1
+            sPtr->textureInfo.scale.x != 1 ||
+            sPtr->textureInfo.scale.y != 1
         ) {
-            sgw.write("texture_scale", s_ptr->textureInfo.scale);
+            sGW.write("texture_scale", sPtr->textureInfo.scale);
         }
         if(
-            s_ptr->textureInfo.translation.x != 0 ||
-            s_ptr->textureInfo.translation.y != 0
+            sPtr->textureInfo.translation.x != 0 ||
+            sPtr->textureInfo.translation.y != 0
         ) {
-            sgw.write("texture_trans", s_ptr->textureInfo.translation);
+            sGW.write("texture_trans", sPtr->textureInfo.translation);
         }
         if(
-            s_ptr->textureInfo.tint.r != 1.0 ||
-            s_ptr->textureInfo.tint.g != 1.0 ||
-            s_ptr->textureInfo.tint.b != 1.0 ||
-            s_ptr->textureInfo.tint.a != 1.0
+            sPtr->textureInfo.tint.r != 1.0 ||
+            sPtr->textureInfo.tint.g != 1.0 ||
+            sPtr->textureInfo.tint.b != 1.0 ||
+            sPtr->textureInfo.tint.a != 1.0
         ) {
-            sgw.write("texture_tint", s_ptr->textureInfo.tint);
+            sGW.write("texture_tint", sPtr->textureInfo.tint);
         }
         
     }
     
     //Mobs.
-    DataNode* mobs_node = node->addNew("mobs");
+    DataNode* mobsNode = node->addNew("mobs");
     for(size_t m = 0; m < mobGenerators.size(); m++) {
     
         //Mob.
-        MobGen* m_ptr = mobGenerators[m];
-        string cat_name = "unknown";
-        if(m_ptr->type && m_ptr->type->category) {
-            cat_name = m_ptr->type->category->internalName;
+        MobGen* mPtr = mobGenerators[m];
+        string catName = "unknown";
+        if(mPtr->type && mPtr->type->category) {
+            catName = mPtr->type->category->internalName;
         }
-        DataNode* mob_node = mobs_node->addNew(cat_name);
-        GetterWriter mgw(mob_node);
+        DataNode* mobNode = mobsNode->addNew(catName);
+        GetterWriter mGW(mobNode);
         
-        if(m_ptr->type) {
-            mgw.write("type", m_ptr->type->manifest->internalName);
+        if(mPtr->type) {
+            mGW.write("type", mPtr->type->manifest->internalName);
         }
-        mgw.write("p", m_ptr->pos);
-        if(m_ptr->angle != 0) {
-            mgw.write("angle", m_ptr->angle);
+        mGW.write("p", mPtr->pos);
+        if(mPtr->angle != 0) {
+            mGW.write("angle", mPtr->angle);
         }
-        if(!m_ptr->vars.empty()) {
-            mgw.write("vars", m_ptr->vars);
-        }
-        
-        string links_str;
-        for(size_t l = 0; l < m_ptr->linkIdxs.size(); l++) {
-            if(l > 0) links_str += " ";
-            links_str += i2s(m_ptr->linkIdxs[l]);
+        if(!mPtr->vars.empty()) {
+            mGW.write("vars", mPtr->vars);
         }
         
-        if(!links_str.empty()) {
-            mgw.write("links", links_str);
+        string linksStr;
+        for(size_t l = 0; l < mPtr->linkIdxs.size(); l++) {
+            if(l > 0) linksStr += " ";
+            linksStr += i2s(mPtr->linkIdxs[l]);
         }
         
-        if(m_ptr->storedInside != INVALID) {
-            mgw.write("stored_inside", m_ptr->storedInside);
+        if(!linksStr.empty()) {
+            mGW.write("links", linksStr);
+        }
+        
+        if(mPtr->storedInside != INVALID) {
+            mGW.write("stored_inside", mPtr->storedInside);
         }
     }
     
     //Path stops.
-    DataNode* path_stops_node = node->addNew("path_stops");
+    DataNode* pathStopsNode = node->addNew("path_stops");
     for(size_t s = 0; s < pathStops.size(); s++) {
     
         //Path stop.
-        PathStop* s_ptr = pathStops[s];
-        DataNode* path_stop_node = path_stops_node->addNew("s");
-        GetterWriter sgw(path_stop_node);
+        PathStop* sPtr = pathStops[s];
+        DataNode* pathStopNode = pathStopsNode->addNew("s");
+        GetterWriter sGW(pathStopNode);
         
-        sgw.write("pos", s_ptr->pos);
-        if(s_ptr->radius != PATHS::MIN_STOP_RADIUS) {
-            sgw.write("radius", s_ptr->radius);
+        sGW.write("pos", sPtr->pos);
+        if(sPtr->radius != PATHS::MIN_STOP_RADIUS) {
+            sGW.write("radius", sPtr->radius);
         }
-        if(s_ptr->flags != 0) {
-            sgw.write("flags", s_ptr->flags);
+        if(sPtr->flags != 0) {
+            sGW.write("flags", sPtr->flags);
         }
-        if(!s_ptr->label.empty()) {
-            sgw.write("label", s_ptr->label);
+        if(!sPtr->label.empty()) {
+            sGW.write("label", sPtr->label);
         }
         
-        DataNode* links_node = path_stop_node->addNew("links");
-        for(size_t l = 0; l < s_ptr->links.size(); l++) {
-            PathLink* l_ptr = s_ptr->links[l];
-            string link_data = i2s(l_ptr->endIdx);
-            if(l_ptr->type != PATH_LINK_TYPE_NORMAL) {
-                link_data += " " + i2s(l_ptr->type);
+        DataNode* linksNode = pathStopNode->addNew("links");
+        for(size_t l = 0; l < sPtr->links.size(); l++) {
+            PathLink* lPtr = sPtr->links[l];
+            string linkData = i2s(lPtr->endIdx);
+            if(lPtr->type != PATH_LINK_TYPE_NORMAL) {
+                linkData += " " + i2s(lPtr->type);
             }
-            links_node->addNew("l", link_data);
+            linksNode->addNew("l", linkData);
         }
         
     }
     
     //Tree shadows.
-    DataNode* shadows_node = node->addNew("tree_shadows");
+    DataNode* shadowsNode = node->addNew("tree_shadows");
     for(size_t s = 0; s < treeShadows.size(); s++) {
     
         //Tree shadow.
-        TreeShadow* s_ptr = treeShadows[s];
-        DataNode* shadow_node = shadows_node->addNew("shadow");
-        GetterWriter sgw(shadow_node);
+        TreeShadow* sPtr = treeShadows[s];
+        DataNode* shadowNode = shadowsNode->addNew("shadow");
+        GetterWriter sGW(shadowNode);
         
-        sgw.write("pos", s_ptr->center);
-        sgw.write("size", s_ptr->size);
-        sgw.write("file", s_ptr->bmpName);
-        sgw.write("sway", s_ptr->sway);
-        if(s_ptr->angle != 0) {
-            sgw.write("angle", s_ptr->angle);
+        sGW.write("pos", sPtr->center);
+        sGW.write("size", sPtr->size);
+        sGW.write("file", sPtr->bmpName);
+        sGW.write("sway", sPtr->sway);
+        if(sPtr->angle != 0) {
+            sGW.write("angle", sPtr->angle);
         }
-        if(s_ptr->alpha != 255) {
-            sgw.write("alpha", s_ptr->alpha);
+        if(sPtr->alpha != 255) {
+            sGW.write("alpha", sPtr->alpha);
         }
         
     }
@@ -1908,20 +1907,20 @@ void Area::saveMainDataToDataNode(DataNode* node) {
     //Content metadata.
     saveMetadataToDataNode(node);
     
-    GetterWriter gw(node);
+    GetterWriter aGW(node);
     
     //Main data.
-    gw.write("subtitle", subtitle);
-    gw.write("difficulty", difficulty);
-    gw.write("bg_bmp", bgBmpName);
-    gw.write("bg_color", bgColor);
-    gw.write("bg_dist", bgDist);
-    gw.write("bg_zoom", bgBmpZoom);
-    gw.write("song", songName);
-    gw.write("weather", weatherName);
-    gw.write("day_time_start", dayTimeStart);
-    gw.write("day_time_speed", dayTimeSpeed);
-    gw.write("spray_amounts", sprayAmounts);
+    aGW.write("subtitle", subtitle);
+    aGW.write("difficulty", difficulty);
+    aGW.write("bg_bmp", bgBmpName);
+    aGW.write("bg_color", bgColor);
+    aGW.write("bg_dist", bgDist);
+    aGW.write("bg_zoom", bgBmpZoom);
+    aGW.write("song", songName);
+    aGW.write("weather", weatherName);
+    aGW.write("day_time_start", dayTimeStart);
+    aGW.write("day_time_speed", dayTimeSpeed);
+    aGW.write("spray_amounts", sprayAmounts);
 }
 
 
@@ -1931,39 +1930,39 @@ void Area::saveMainDataToDataNode(DataNode* node) {
  * @param node Data node to save to.
  */
 void Area::saveMissionDataToDataNode(DataNode* node) {
-    GetterWriter gw(node);
+    GetterWriter mGW(node);
     
     if(mission.goal != MISSION_GOAL_END_MANUALLY) {
-        string goal_name = game.missionGoals[mission.goal]->getName();
-        gw.write("mission_goal", goal_name);
+        string goalName = game.missionGoals[mission.goal]->getName();
+        mGW.write("mission_goal", goalName);
     }
     if(
         mission.goal == MISSION_GOAL_TIMED_SURVIVAL ||
         mission.goal == MISSION_GOAL_GROW_PIKMIN
     ) {
-        gw.write("mission_goal_amount", mission.goalAmount);
+        mGW.write("mission_goal_amount", mission.goalAmount);
     }
     if(
         mission.goal == MISSION_GOAL_COLLECT_TREASURE ||
         mission.goal == MISSION_GOAL_BATTLE_ENEMIES ||
         mission.goal == MISSION_GOAL_GET_TO_EXIT
     ) {
-        gw.write("mission_goal_all_mobs", mission.goalAllMobs);
-        vector<string> mission_mob_idx_strs;
+        mGW.write("mission_goal_all_mobs", mission.goalAllMobs);
+        vector<string> missionMobIdxStrs;
         for(auto m : mission.goalMobIdxs) {
-            mission_mob_idx_strs.push_back(i2s(m));
+            missionMobIdxStrs.push_back(i2s(m));
         }
-        string mission_mob_idx_str = join(mission_mob_idx_strs, ";");
-        if(!mission_mob_idx_str.empty()) {
-            gw.write("mission_required_mobs", mission_mob_idx_str);
+        string missionMobIdxStr = join(missionMobIdxStrs, ";");
+        if(!missionMobIdxStr.empty()) {
+            mGW.write("mission_required_mobs", missionMobIdxStr);
         }
     }
     if(mission.goal == MISSION_GOAL_GET_TO_EXIT) {
-        gw.write("mission_goal_exit_center", mission.goalExitCenter);
-        gw.write("mission_goal_exit_size", mission.goalExitSize);
+        mGW.write("mission_goal_exit_center", mission.goalExitCenter);
+        mGW.write("mission_goal_exit_size", mission.goalExitSize);
     }
     if(mission.failConditions > 0) {
-        gw.write("mission_fail_conditions", mission.failConditions);
+        mGW.write("mission_fail_conditions", mission.failConditions);
     }
     if(
         hasFlag(
@@ -1971,7 +1970,7 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
             getIdxBitmask(MISSION_FAIL_COND_TOO_FEW_PIKMIN)
         )
     ) {
-        gw.write("mission_fail_too_few_pik_amount", mission.failTooFewPikAmount);
+        mGW.write("mission_fail_too_few_pik_amount", mission.failTooFewPikAmount);
     }
     if(
         hasFlag(
@@ -1979,7 +1978,7 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
             getIdxBitmask(MISSION_FAIL_COND_TOO_MANY_PIKMIN)
         )
     ) {
-        gw.write("mission_fail_too_many_pik_amount", mission.failTooManyPikAmount);
+        mGW.write("mission_fail_too_many_pik_amount", mission.failTooManyPikAmount);
     }
     if(
         hasFlag(
@@ -1987,7 +1986,7 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
             getIdxBitmask(MISSION_FAIL_COND_LOSE_PIKMIN)
         )
     ) {
-        gw.write("mission_fail_pik_killed", mission.failPikKilled);
+        mGW.write("mission_fail_pik_killed", mission.failPikKilled);
     }
     if(
         hasFlag(
@@ -1995,7 +1994,7 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
             getIdxBitmask(MISSION_FAIL_COND_LOSE_LEADERS)
         )
     ) {
-        gw.write("mission_fail_leaders_kod", mission.failLeadersKod);
+        mGW.write("mission_fail_leaders_kod", mission.failLeadersKod);
     }
     if(
         hasFlag(
@@ -2003,7 +2002,7 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
             getIdxBitmask(MISSION_FAIL_COND_DEFEAT_ENEMIES)
         )
     ) {
-        gw.write("mission_fail_enemies_defeated", mission.failEnemiesDefeated);
+        mGW.write("mission_fail_enemies_defeated", mission.failEnemiesDefeated);
     }
     if(
         hasFlag(
@@ -2011,53 +2010,53 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
             getIdxBitmask(MISSION_FAIL_COND_TIME_LIMIT)
         )
     ) {
-        gw.write("mission_fail_time_limit", mission.failTimeLimit);
+        mGW.write("mission_fail_time_limit", mission.failTimeLimit);
     }
     if(mission.failHudPrimaryCond != INVALID) {
-        gw.write("mission_fail_hud_primary_cond", mission.failHudPrimaryCond);
+        mGW.write("mission_fail_hud_primary_cond", mission.failHudPrimaryCond);
     }
     if(mission.failHudSecondaryCond != INVALID) {
-        gw.write("mission_fail_hud_secondary_cond", mission.failHudSecondaryCond);
+        mGW.write("mission_fail_hud_secondary_cond", mission.failHudSecondaryCond);
     }
-    gw.write("mission_grading_mode", mission.gradingMode);
+    mGW.write("mission_grading_mode", mission.gradingMode);
     if(mission.gradingMode == MISSION_GRADING_MODE_POINTS) {
         if(mission.pointsPerPikminBorn != 0) {
-            gw.write("mission_points_per_pikmin_born", mission.pointsPerPikminBorn);
+            mGW.write("mission_points_per_pikmin_born", mission.pointsPerPikminBorn);
         }
         if(mission.pointsPerPikminDeath != 0) {
-            gw.write("mission_points_per_pikmin_death", mission.pointsPerPikminDeath);
+            mGW.write("mission_points_per_pikmin_death", mission.pointsPerPikminDeath);
         }
         if(mission.pointsPerSecLeft != 0) {
-            gw.write("mission_points_per_sec_left", mission.pointsPerSecLeft);
+            mGW.write("mission_points_per_sec_left", mission.pointsPerSecLeft);
         }
         if(mission.pointsPerSecPassed != 0) {
-            gw.write("mission_points_per_sec_passed", mission.pointsPerSecPassed);
+            mGW.write("mission_points_per_sec_passed", mission.pointsPerSecPassed);
         }
         if(mission.pointsPerTreasurePoint != 0) {
-            gw.write("mission_points_per_treasure_point", mission.pointsPerTreasurePoint);
+            mGW.write("mission_points_per_treasure_point", mission.pointsPerTreasurePoint);
         }
         if(mission.pointsPerEnemyPoint != 0) {
-            gw.write("mission_points_per_enemy_point", mission.pointsPerEnemyPoint);
+            mGW.write("mission_points_per_enemy_point", mission.pointsPerEnemyPoint);
         }
         if(mission.enemyPointsOnCollection) {
-            gw.write("enemy_points_on_collection", mission.enemyPointsOnCollection);
+            mGW.write("enemy_points_on_collection", mission.enemyPointsOnCollection);
         }
         if(mission.pointLossData > 0) {
-            gw.write("mission_point_loss_data", mission.pointLossData);
+            mGW.write("mission_point_loss_data", mission.pointLossData);
         }
         if(mission.pointHudData != 255) {
-            gw.write("mission_point_hud_data", mission.pointHudData);
+            mGW.write("mission_point_hud_data", mission.pointHudData);
         }
         if(mission.startingPoints != 0) {
-            gw.write("mission_starting_points", mission.startingPoints);
+            mGW.write("mission_starting_points", mission.startingPoints);
         }
-        gw.write("mission_bronze_req", mission.bronzeReq);
-        gw.write("mission_silver_req", mission.silverReq);
-        gw.write("mission_gold_req", mission.goldReq);
-        gw.write("mission_platinum_req", mission.platinumReq);
+        mGW.write("mission_bronze_req", mission.bronzeReq);
+        mGW.write("mission_silver_req", mission.silverReq);
+        mGW.write("mission_gold_req", mission.goldReq);
+        mGW.write("mission_platinum_req", mission.platinumReq);
         if(!mission.makerRecordDate.empty()) {
-            gw.write("mission_maker_record", mission.makerRecord);
-            gw.write("mission_maker_record_date", mission.makerRecordDate);
+            mGW.write("mission_maker_record", mission.makerRecord);
+            mGW.write("mission_maker_record_date", mission.makerRecordDate);
         }
     }
 }
@@ -2067,16 +2066,16 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
  * @brief Saves the area's thumbnail to the disk, or deletes it from the disk
  * if it's meant to not exist.
  *
- * @param to_backup Whether it's to save to the area backup.
+ * @param toBackup Whether it's to save to the area backup.
  */
-void Area::saveThumbnail(bool to_backup) {
-    string thumb_path =
-        (to_backup ? userDataPath : manifest->path) +
+void Area::saveThumbnail(bool toBackup) {
+    string thumbPath =
+        (toBackup ? userDataPath : manifest->path) +
         "/" + FILE_NAMES::AREA_THUMBNAIL;
     if(thumbnail) {
-        al_save_bitmap(thumb_path.c_str(), thumbnail.get());
+        al_save_bitmap(thumbPath.c_str(), thumbnail.get());
     } else {
-        al_remove_filename(thumb_path.c_str());
+        al_remove_filename(thumbPath.c_str());
     }
 }
 
@@ -2101,9 +2100,9 @@ void Blockmap::clear() {
  */
 size_t Blockmap::getCol(float x) const {
     if(x < topLeftCorner.x) return INVALID;
-    float final_x = (x - topLeftCorner.x) / GEOMETRY::BLOCKMAP_BLOCK_SIZE;
-    if(final_x >= nCols) return INVALID;
-    return final_x;
+    float finalX = (x - topLeftCorner.x) / GEOMETRY::BLOCKMAP_BLOCK_SIZE;
+    if(finalX >= nCols) return INVALID;
+    return finalX;
 }
 
 
@@ -2113,11 +2112,11 @@ size_t Blockmap::getCol(float x) const {
  *
  * @param tl Top-left coordinates of the region.
  * @param br Bottom-right coordinates of the region.
- * @param out_edges Set to fill the edges into.
+ * @param outEdges Set to fill the edges into.
  * @return Whether it succeeded.
  */
 bool Blockmap::getEdgesInRegion(
-    const Point &tl, const Point &br, set<Edge*> &out_edges
+    const Point &tl, const Point &br, set<Edge*> &outEdges
 ) const {
 
     size_t bx1 = getCol(tl.x);
@@ -2136,10 +2135,10 @@ bool Blockmap::getEdgesInRegion(
     for(size_t bx = bx1; bx <= bx2; bx++) {
         for(size_t by = by1; by <= by2; by++) {
         
-            const vector<Edge*> &block_edges = edges[bx][by];
+            const vector<Edge*> &blockEdges = edges[bx][by];
             
-            for(size_t e = 0; e < block_edges.size(); e++) {
-                out_edges.insert(block_edges[e]);
+            for(size_t e = 0; e < blockEdges.size(); e++) {
+                outEdges.insert(blockEdges[e]);
             }
         }
     }
@@ -2156,9 +2155,9 @@ bool Blockmap::getEdgesInRegion(
  */
 size_t Blockmap::getRow(float y) const {
     if(y < topLeftCorner.y) return INVALID;
-    float final_y = (y - topLeftCorner.y) / GEOMETRY::BLOCKMAP_BLOCK_SIZE;
-    if(final_y >= nRows) return INVALID;
-    return final_y;
+    float finalY = (y - topLeftCorner.y) / GEOMETRY::BLOCKMAP_BLOCK_SIZE;
+    if(finalY >= nRows) return INVALID;
+    return finalY;
 }
 
 
@@ -2202,11 +2201,11 @@ MobGen::MobGen(
  * mob generator.
  *
  * @param destination Mob generator to clone the data into.
- * @param include_position If true, the position is included too.
+ * @param includePosition If true, the position is included too.
  */
-void MobGen::clone(MobGen* destination, bool include_position) const {
+void MobGen::clone(MobGen* destination, bool includePosition) const {
     destination->angle = angle;
-    if(include_position) destination->pos = pos;
+    if(includePosition) destination->pos = pos;
     destination->type = type;
     destination->vars = vars;
     destination->linkIdxs = linkIdxs;
@@ -2221,15 +2220,15 @@ void MobGen::clone(MobGen* destination, bool include_position) const {
  * @param size Width and height.
  * @param angle Angle it is rotated by.
  * @param alpha How opaque it is [0-255].
- * @param bmp_name Internal name of the tree shadow texture's bitmap.
+ * @param bmpName Internal name of the tree shadow texture's bitmap.
  * @param sway Multiply the sway distance by this much, horizontally and
  * vertically.
  */
 TreeShadow::TreeShadow(
     const Point &center, const Point &size, float angle,
-    unsigned char alpha, const string &bmp_name, const Point &sway
+    unsigned char alpha, const string &bmpName, const Point &sway
 ) :
-    bmpName(bmp_name),
+    bmpName(bmpName),
     bitmap(nullptr),
     center(center),
     size(size),

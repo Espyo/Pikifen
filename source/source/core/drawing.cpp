@@ -87,47 +87,47 @@ const float NOTIFICATION_PADDING = 8.0f;
  * @brief Draws a series of logos, to serve as a background.
  * They move along individually, and wrap around when they reach a window edge.
  *
- * @param time_spent How much time has passed.
+ * @param timeSpent How much time has passed.
  * @param rows Rows of logos to draw.
  * @param cols Columns of logos to draw.
- * @param logo_size Width and height of the logos.
+ * @param logoSize Width and height of the logos.
  * @param tint Tint the logos with this color.
  * @param speed Horizontal and vertical movement speed of each logo.
- * @param rotation_speed Rotation speed of each logo.
+ * @param rotationSpeed Rotation speed of each logo.
  */
 void drawBackgroundLogos(
-    float time_spent, size_t rows, size_t cols,
-    const Point &logo_size, const ALLEGRO_COLOR &tint,
-    const Point &speed, float rotation_speed
+    float timeSpent, size_t rows, size_t cols,
+    const Point &logoSize, const ALLEGRO_COLOR &tint,
+    const Point &speed, float rotationSpeed
 ) {
     al_hold_bitmap_drawing(true);
     
-    float spacing_x = (game.winW + logo_size.x) / cols;
-    float spacing_y = (game.winH + logo_size.y) / rows;
+    float spacingX = (game.winW + logoSize.x) / cols;
+    float spacingY = (game.winH + logoSize.y) / rows;
     
     for(size_t c = 0; c < cols; c++) {
         for(size_t r = 0; r < rows; r++) {
-            float x = (c * spacing_x) + time_spent * speed.x;
+            float x = (c * spacingX) + timeSpent * speed.x;
             if(r % 2 == 0) {
-                x += spacing_x / 2.0f;
+                x += spacingX / 2.0f;
             }
             x =
                 wrapFloat(
                     x,
-                    0 - logo_size.x * 0.5f,
-                    game.winW + logo_size.x * 0.5f
+                    0 - logoSize.x * 0.5f,
+                    game.winW + logoSize.x * 0.5f
                 );
             float y =
                 wrapFloat(
-                    (r * spacing_y) + time_spent * speed.y,
-                    0 - logo_size.y * 0.5f,
-                    game.winH + logo_size.y * 0.5f
+                    (r * spacingY) + timeSpent * speed.y,
+                    0 - logoSize.y * 0.5f,
+                    game.winH + logoSize.y * 0.5f
                 );
             drawBitmap(
                 game.sysContent.bmpIcon,
                 Point(x, y),
-                Point(logo_size.x, logo_size.y),
-                time_spent * rotation_speed,
+                Point(logoSize.x, logoSize.y),
+                timeSpent * rotationSpeed,
                 tint
             );
         }
@@ -147,38 +147,38 @@ void drawBitmapWithEffects(
     ALLEGRO_BITMAP* bmp, const BitmapEffect &effects
 ) {
 
-    Point bmp_size = getBitmapDimensions(bmp);
-    float scale_x =
+    Point bmpSize = getBitmapDimensions(bmp);
+    float scaleX =
         (effects.scale.x == LARGE_FLOAT) ? effects.scale.y : effects.scale.x;
-    float scale_y =
+    float scaleY =
         (effects.scale.y == LARGE_FLOAT) ? effects.scale.x : effects.scale.y;
     al_draw_tinted_scaled_rotated_bitmap(
         bmp,
         effects.tintColor,
-        bmp_size.x / 2, bmp_size.y / 2,
+        bmpSize.x / 2, bmpSize.y / 2,
         effects.translation.x, effects.translation.y,
-        scale_x, scale_y,
+        scaleX, scaleY,
         effects.rotation,
         0
     );
     
     if(effects.glowColor.a > 0) {
-        int old_op, old_src, old_dst, old_aop, old_asrc, old_adst;
+        int oldOp, oldSrc, oldDst, oldAop, oldAsrc, oldAdst;
         al_get_separate_blender(
-            &old_op, &old_src, &old_dst, &old_aop, &old_asrc, &old_adst
+            &oldOp, &oldSrc, &oldDst, &oldAop, &oldAsrc, &oldAdst
         );
         al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_ONE);
         al_draw_tinted_scaled_rotated_bitmap(
             bmp,
             effects.glowColor,
-            bmp_size.x / 2, bmp_size.y / 2,
+            bmpSize.x / 2, bmpSize.y / 2,
             effects.translation.x, effects.translation.y,
-            scale_x, scale_y,
+            scaleX, scaleY,
             effects.rotation,
             0
         );
         al_set_separate_blender(
-            old_op, old_src, old_dst, old_aop, old_asrc, old_adst
+            oldOp, oldSrc, oldDst, oldAop, oldAsrc, oldAdst
         );
     }
 }
@@ -193,26 +193,26 @@ void drawBitmapWithEffects(
  * @param font What font to write the text in.
  * @param color Color to draw the text with.
  * @param selected Is the button currently selected?
- * @param juicy_grow_amount If it's in the middle of a juicy grow animation,
+ * @param juicyGrowAmount If it's in the middle of a juicy grow animation,
  * specify the amount here.
  */
 void drawButton(
     const Point &center, const Point &size, const string &text,
     const ALLEGRO_FONT* font, const ALLEGRO_COLOR &color,
-    bool selected, float juicy_grow_amount
+    bool selected, float juicyGrowAmount
 ) {
     drawText(
         text, font, center, size * GUI::STANDARD_CONTENT_SIZE, color,
         ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
         TEXT_SETTING_FLAG_CANT_GROW,
-        Point(1.0 + juicy_grow_amount)
+        Point(1.0 + juicyGrowAmount)
     );
     
-    ALLEGRO_COLOR box_tint =
+    ALLEGRO_COLOR boxTint =
         selected ? al_map_rgb(87, 200, 208) : COLOR_WHITE;
         
     drawTexturedBox(
-        center, size, game.sysContent.bmpBubbleBox, box_tint
+        center, size, game.sysContent.bmpBubbleBox, boxTint
     );
     
     if(selected) {
@@ -231,39 +231,39 @@ void drawButton(
  * and the bottom number usually represents the required value for some goal.
  *
  * @param bottom Bottom center point of the text.
- * @param value_nr Number that represents the current value.
- * @param requirement_nr Number that represents the requirement.
+ * @param valueNr Number that represents the current value.
+ * @param requirementNr Number that represents the requirement.
  * @param color Color of the fraction's text.
  * @param scale Scale the text by this much.
  */
 void drawFraction(
-    const Point &bottom, size_t value_nr,
-    size_t requirement_nr, const ALLEGRO_COLOR &color, float scale
+    const Point &bottom, size_t valueNr,
+    size_t requirementNr, const ALLEGRO_COLOR &color, float scale
 ) {
-    const float value_nr_y = bottom.y - IN_WORLD_FRACTION::ROW_HEIGHT * 3;
-    const float value_nr_scale = value_nr >= requirement_nr ? 1.2f : 1.0f;
+    const float valueNrY = bottom.y - IN_WORLD_FRACTION::ROW_HEIGHT * 3;
+    const float valueNrScale = valueNr >= requirementNr ? 1.2f : 1.0f;
     drawText(
-        i2s(value_nr), game.sysContent.fntValue, Point(bottom.x, value_nr_y),
+        i2s(valueNr), game.sysContent.fntValue, Point(bottom.x, valueNrY),
         Point(LARGE_FLOAT, IN_WORLD_FRACTION::ROW_HEIGHT * scale),
         color, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_TOP, 0,
-        Point(value_nr_scale)
+        Point(valueNrScale)
     );
     
-    const float bar_y = bottom.y - IN_WORLD_FRACTION::ROW_HEIGHT * 2;
+    const float barY = bottom.y - IN_WORLD_FRACTION::ROW_HEIGHT * 2;
     drawText(
-        "-", game.sysContent.fntValue, Point(bottom.x, bar_y),
+        "-", game.sysContent.fntValue, Point(bottom.x, barY),
         Point(LARGE_FLOAT, IN_WORLD_FRACTION::ROW_HEIGHT * scale),
         color, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_TOP, 0
     );
     
-    float req_nr_y = bottom.y - IN_WORLD_FRACTION::ROW_HEIGHT;
-    float req_nr_scale = requirement_nr > value_nr ? 1.2f : 1.0f;
+    float reqNrY = bottom.y - IN_WORLD_FRACTION::ROW_HEIGHT;
+    float reqNrScale = requirementNr > valueNr ? 1.2f : 1.0f;
     drawText(
-        i2s(requirement_nr), game.sysContent.fntValue,
-        Point(bottom.x, req_nr_y),
+        i2s(requirementNr), game.sysContent.fntValue,
+        Point(bottom.x, reqNrY),
         Point(LARGE_FLOAT, IN_WORLD_FRACTION::ROW_HEIGHT * scale),
         color, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_TOP, 0,
-        Point(req_nr_scale)
+        Point(reqNrScale)
     );
 }
 
@@ -276,13 +276,13 @@ void drawFraction(
  * @param ratio Ratio of health that is filled. 0 is empty, 1 is full.
  * @param alpha Total opacity of the health wheel.
  * @param radius Radius of the wheel (the whole wheel, not just the pieslice).
- * @param just_chart If true, only draw the actual pieslice (pie-chart).
+ * @param justChart If true, only draw the actual pieslice (pie-chart).
  * Used for leader HP on the HUD.
  */
 void drawHealth(
     const Point &center,
     float ratio, float alpha,
-    float radius, bool just_chart
+    float radius, bool justChart
 ) {
     ALLEGRO_COLOR c;
     if(ratio >= 0.5) {
@@ -291,7 +291,7 @@ void drawHealth(
         c = al_map_rgba_f(1, (ratio * 2), 0, alpha);
     }
     
-    if(!just_chart) {
+    if(!justChart) {
         al_draw_filled_circle(
             center.x, center.y, radius, al_map_rgba(0, 0, 0, 128 * alpha)
         );
@@ -299,7 +299,7 @@ void drawHealth(
     al_draw_filled_pieslice(
         center.x, center.y, radius, -TAU / 4, -ratio * TAU, c
     );
-    if(!just_chart) {
+    if(!justChart) {
         al_draw_circle(
             center.x, center.y, radius + 1, al_map_rgba(0, 0, 0, alpha * 255), 2
         );
@@ -310,45 +310,45 @@ void drawHealth(
 /**
  * @brief Draws a liquid sector.
  *
- * @param s_ptr Pointer to the sector.
- * @param l_ptr Pointer to the liquid.
+ * @param sPtr Pointer to the sector.
+ * @param lPtr Pointer to the liquid.
  * @param where X and Y offset.
  * @param scale Scale the sector by this much.
  * @param time How much time has passed. Used to animate.
  */
 void drawLiquid(
-    Sector* s_ptr, Liquid* l_ptr, const Point &where, float scale,
+    Sector* sPtr, Liquid* lPtr, const Point &where, float scale,
     float time
 ) {
     //Setup.
-    if(!s_ptr) return;
-    if(s_ptr->isBottomlessPit) return;
+    if(!sPtr) return;
+    if(sPtr->isBottomlessPit) return;
     
-    float liquid_opacity_mult = 1.0f;
-    if(s_ptr->drainingLiquid) {
-        liquid_opacity_mult =
-            s_ptr->liquidDrainLeft / GEOMETRY::LIQUID_DRAIN_DURATION;
+    float liquidOpacityMult = 1.0f;
+    if(sPtr->drainingLiquid) {
+        liquidOpacityMult =
+            sPtr->liquidDrainLeft / GEOMETRY::LIQUID_DRAIN_DURATION;
     }
-    float brightness_mult = s_ptr->brightness / 255.0;
-    float sector_scroll[2] = {
-        s_ptr->scroll.x,
-        s_ptr->scroll.y
+    float brightnessMult = sPtr->brightness / 255.0;
+    float sectorScroll[2] = {
+        sPtr->scroll.x,
+        sPtr->scroll.y
     };
-    float distortion_amount[2] = {
-        l_ptr->distortionAmount.x,
-        l_ptr->distortionAmount.y
+    float distortionAmount[2] = {
+        lPtr->distortionAmount.x,
+        lPtr->distortionAmount.y
     };
-    float liquid_tint[4] = {
-        l_ptr->bodyColor.r,
-        l_ptr->bodyColor.g,
-        l_ptr->bodyColor.b,
-        l_ptr->bodyColor.a
+    float liquidTint[4] = {
+        lPtr->bodyColor.r,
+        lPtr->bodyColor.g,
+        lPtr->bodyColor.b,
+        lPtr->bodyColor.a
     };
-    float shine_color[4] = {
-        l_ptr->shineColor.r,
-        l_ptr->shineColor.g,
-        l_ptr->shineColor.b,
-        l_ptr->shineColor.a
+    float shineColor[4] = {
+        lPtr->shineColor.r,
+        lPtr->shineColor.g,
+        lPtr->shineColor.b,
+        lPtr->shineColor.a
     };
     
     //TODO Uncomment when liquids use foam edges.
@@ -359,29 +359,29 @@ void drawLiquid(
      * This could likely be optimized, but this has no noticable impact
      * on performance.
     
-    vector<sector*> checked_s {s_ptr};
-    vector<edge*> border_edges;
+    vector<sector*> checkedS {sPtr};
+    vector<edge*> borderEdges;
     
-    for(size_t s = 0; s < checked_s.size(); s++) {
-        sector* s2_ptr = checked_s[s];
-        for(size_t e = 0; e < s2_ptr->edges.size(); e++) {
-            edge* e_ptr = s2_ptr->edges[e];
-            sector* u_s = nullptr;
-            sector* a_s = nullptr;
-            if(doesEdgeHaveLiquidLimit(e_ptr, &u_s, &a_s)) {
-                border_edges.push_back(e_ptr);
+    for(size_t s = 0; s < checkedS.size(); s++) {
+        sector* s2Ptr = checkedS[s];
+        for(size_t e = 0; e < s2Ptr->edges.size(); e++) {
+            edge* ePtr = s2Ptr->edges[e];
+            sector* uS = nullptr;
+            sector* aS = nullptr;
+            if(doesEdgeHaveLiquidLimit(ePtr, &uS, &aS)) {
+                borderEdges.push_back(ePtr);
             }
     
-            sector* other_ptr = e_ptr->getOtherSector(s2_ptr);
-            if(other_ptr) {
-                for(size_t h = 0; h < other_ptr->hazards.size(); h++) {
-                    if(other_ptr->hazards[h]->associated_liquid) {
+            sector* otherPtr = ePtr->getOtherSector(s2Ptr);
+            if(otherPtr) {
+                for(size_t h = 0; h < otherPtr->hazards.size(); h++) {
+                    if(otherPtr->hazards[h]->associatedLiquid) {
                         if(
                             std::find(
-                                checked_s.begin(), checked_s.end(), other_ptr
-                            ) == checked_s.end()
+                                checkedS.begin(), checkedS.end(), otherPtr
+                            ) == checkedS.end()
                         ) {
-                            checked_s.push_back(other_ptr);
+                            checkedS.push_back(otherPtr);
                         }
                     }
                 }
@@ -389,17 +389,17 @@ void drawLiquid(
         }
     }
     
-    uint edge_count = border_edges.size();
+    uint edgeCount = borderEdges.size();
     
-    float buffer_edges[edge_count * 4];
+    float bufferEdges[edgeCount * 4];
     
-    for(size_t e = 0; e < edge_count; e++) {
-        edge* edge = border_edges[e];
+    for(size_t e = 0; e < edgeCount; e++) {
+        edge* edge = borderEdges[e];
     
-        buffer_edges[4 * e    ] = edge->vertexes[0]->x;
-        buffer_edges[4 * e + 1] = edge->vertexes[0]->y;
-        buffer_edges[4 * e + 2] = edge->vertexes[1]->x;
-        buffer_edges[4 * e + 3] = edge->vertexes[1]->y;
+        bufferEdges[4 * e    ] = edge->vertexes[0]->x;
+        bufferEdges[4 * e + 1] = edge->vertexes[0]->y;
+        bufferEdges[4 * e + 2] = edge->vertexes[1]->x;
+        bufferEdges[4 * e + 3] = edge->vertexes[1]->y;
     }
     
     //Put the buffer onto the shader
@@ -407,118 +407,118 @@ void drawLiquid(
     glGenBuffers(1, &ssbo);
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
     glBufferData(
-        GL_SHADER_STORAGE_BUFFER, sizeof(buffer_edges),
-        buffer_edges, GL_STREAM_READ
+        GL_SHADER_STORAGE_BUFFER, sizeof(bufferEdges),
+        bufferEdges, GL_STREAM_READ
     );
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 3, ssbo);
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
     */
     
     //Set up the shader.
-    ALLEGRO_SHADER* liq_shader = game.shaders.getShader(SHADER_TYPE_LIQUID);
-    al_use_shader(liq_shader);
-    al_set_shader_float("area_time", time * l_ptr->animSpeed);
-    al_set_shader_float("opacity", liquid_opacity_mult);
-    al_set_shader_float("sector_brightness", brightness_mult);
-    al_set_shader_float_vector("sector_scroll", 2, &sector_scroll[0], 1);
-    al_set_shader_float("shine_min_threshold", l_ptr->shineMinThreshold);
-    al_set_shader_float("shine_max_threshold", l_ptr->shineMaxThreshold);
-    al_set_shader_float_vector("distortion_amount", 2, &distortion_amount[0], 1);
-    al_set_shader_float_vector("surface_color", 4, &liquid_tint[0], 1);
-    al_set_shader_float_vector("shine_color", 4, &shine_color[0], 1);
+    ALLEGRO_SHADER* liqShader = game.shaders.getShader(SHADER_TYPE_LIQUID);
+    al_use_shader(liqShader);
+    al_set_shader_float("area_time", time * lPtr->animSpeed);
+    al_set_shader_float("opacity", liquidOpacityMult);
+    al_set_shader_float("sector_brightness", brightnessMult);
+    al_set_shader_float_vector("sector_scroll", 2, &sectorScroll[0], 1);
+    al_set_shader_float("shine_min_threshold", lPtr->shineMinThreshold);
+    al_set_shader_float("shine_max_threshold", lPtr->shineMaxThreshold);
+    al_set_shader_float_vector("distortion_amount", 2, &distortionAmount[0], 1);
+    al_set_shader_float_vector("surface_color", 4, &liquidTint[0], 1);
+    al_set_shader_float_vector("shine_color", 4, &shineColor[0], 1);
     
     //Draw the sector liquid now!
-    unsigned char n_textures = 1;
-    Sector* texture_sector[2] = {nullptr, nullptr};
-    if(s_ptr->fade) {
-        s_ptr->getTextureMergeSectors(
-            &texture_sector[0], &texture_sector[1]
+    unsigned char nTextures = 1;
+    Sector* textureSector[2] = {nullptr, nullptr};
+    if(sPtr->fade) {
+        sPtr->getTextureMergeSectors(
+            &textureSector[0], &textureSector[1]
         );
-        if(!texture_sector[0] && !texture_sector[1]) {
+        if(!textureSector[0] && !textureSector[1]) {
             //Can't draw this sector's liquid.
-            n_textures = 0;
+            nTextures = 0;
         } else {
-            n_textures = 2;
+            nTextures = 2;
         }
         
     } else {
-        texture_sector[0] = s_ptr;
+        textureSector[0] = sPtr;
         
     }
     
-    for(unsigned char t = 0; t < n_textures; t++) {
-        bool draw_sector_0 = true;
-        if(!texture_sector[0]) draw_sector_0 = false;
-        else if(texture_sector[0]->isBottomlessPit) {
-            draw_sector_0 = false;
+    for(unsigned char t = 0; t < nTextures; t++) {
+        bool drawSector0 = true;
+        if(!textureSector[0]) drawSector0 = false;
+        else if(textureSector[0]->isBottomlessPit) {
+            drawSector0 = false;
         }
         
-        if(n_textures == 2 && !draw_sector_0 && t == 0) {
+        if(nTextures == 2 && !drawSector0 && t == 0) {
             //Allows fading into the void.
             continue;
         }
         
-        if(!texture_sector[t] || texture_sector[t]->isBottomlessPit) {
+        if(!textureSector[t] || textureSector[t]->isBottomlessPit) {
             continue;
         }
-        size_t n_vertexes = s_ptr->triangles.size() * 3;
-        ALLEGRO_VERTEX* av = new ALLEGRO_VERTEX[n_vertexes];
+        size_t nVertexes = sPtr->triangles.size() * 3;
+        ALLEGRO_VERTEX* av = new ALLEGRO_VERTEX[nVertexes];
         
-        SectorTexture* texture_info_to_use =
-            &texture_sector[t]->textureInfo;
+        SectorTexture* textureInfoToUse =
+            &textureSector[t]->textureInfo;
             
         //Texture transformations.
         ALLEGRO_TRANSFORM tra;
         al_build_transform(
             &tra,
-            -texture_info_to_use->translation.x,
-            -texture_info_to_use->translation.y,
-            1.0f / texture_info_to_use->scale.x,
-            1.0f / texture_info_to_use->scale.y,
-            -texture_info_to_use->rot
+            -textureInfoToUse->translation.x,
+            -textureInfoToUse->translation.y,
+            1.0f / textureInfoToUse->scale.x,
+            1.0f / textureInfoToUse->scale.y,
+            -textureInfoToUse->rot
         );
         
-        float texture_offset[2] = {
-            texture_info_to_use->translation.x,
-            texture_info_to_use->translation.y
+        float textureOffset[2] = {
+            textureInfoToUse->translation.x,
+            textureInfoToUse->translation.y
         };
-        float texture_scale[2] = {
-            texture_info_to_use->scale.x,
-            texture_info_to_use->scale.y
+        float textureScale[2] = {
+            textureInfoToUse->scale.x,
+            textureInfoToUse->scale.y
         };
         
-        for(size_t v = 0; v < n_vertexes; v++) {
+        for(size_t v = 0; v < nVertexes; v++) {
         
-            const Triangle* t_ptr = &s_ptr->triangles[floor(v / 3.0)];
-            Vertex* v_ptr = t_ptr->points[v % 3];
-            float vx = v_ptr->x;
-            float vy = v_ptr->y;
+            const Triangle* tPtr = &sPtr->triangles[floor(v / 3.0)];
+            Vertex* vPtr = tPtr->points[v % 3];
+            float vx = vPtr->x;
+            float vy = vPtr->y;
             
-            float alpha_mult = 1;
-            float ts_brightness_mult = texture_sector[t]->brightness / 255.0;
+            float alphaMult = 1;
+            float tsBrightnessMult = textureSector[t]->brightness / 255.0;
             
             if(t == 1) {
-                if(!draw_sector_0) {
-                    alpha_mult = 0;
+                if(!drawSector0) {
+                    alphaMult = 0;
                     for(
-                        size_t e = 0; e < texture_sector[1]->edges.size(); e++
+                        size_t e = 0; e < textureSector[1]->edges.size(); e++
                     ) {
                         if(
-                            texture_sector[1]->edges[e]->vertexes[0] == v_ptr ||
-                            texture_sector[1]->edges[e]->vertexes[1] == v_ptr
+                            textureSector[1]->edges[e]->vertexes[0] == vPtr ||
+                            textureSector[1]->edges[e]->vertexes[1] == vPtr
                         ) {
-                            alpha_mult = 1;
+                            alphaMult = 1;
                         }
                     }
                 } else {
                     for(
-                        size_t e = 0; e < texture_sector[0]->edges.size(); e++
+                        size_t e = 0; e < textureSector[0]->edges.size(); e++
                     ) {
                         if(
-                            texture_sector[0]->edges[e]->vertexes[0] == v_ptr ||
-                            texture_sector[0]->edges[e]->vertexes[1] == v_ptr
+                            textureSector[0]->edges[e]->vertexes[0] == vPtr ||
+                            textureSector[0]->edges[e]->vertexes[1] == vPtr
                         ) {
-                            alpha_mult = 0;
+                            alphaMult = 0;
                         }
                     }
                 }
@@ -526,41 +526,41 @@ void drawLiquid(
             
             av[v].x = vx - where.x;
             av[v].y = vy - where.y;
-            if(texture_sector[t]) al_transform_coordinates(&tra, &vx, &vy);
+            if(textureSector[t]) al_transform_coordinates(&tra, &vx, &vy);
             av[v].u = vx;
             av[v].v = vy;
             av[v].z = 0;
             av[v].color =
                 al_map_rgba_f(
-                    texture_sector[t]->textureInfo.tint.r * ts_brightness_mult,
-                    texture_sector[t]->textureInfo.tint.g * ts_brightness_mult,
-                    texture_sector[t]->textureInfo.tint.b * ts_brightness_mult,
-                    texture_sector[t]->textureInfo.tint.a * alpha_mult
+                    textureSector[t]->textureInfo.tint.r * tsBrightnessMult,
+                    textureSector[t]->textureInfo.tint.g * tsBrightnessMult,
+                    textureSector[t]->textureInfo.tint.b * tsBrightnessMult,
+                    textureSector[t]->textureInfo.tint.a * alphaMult
                 );
         }
         
-        for(size_t v = 0; v < n_vertexes; v++) {
+        for(size_t v = 0; v < nVertexes; v++) {
             av[v].x *= scale;
             av[v].y *= scale;
         }
         
         ALLEGRO_BITMAP* tex =
-            texture_sector[t] ?
-            texture_sector[t]->textureInfo.bitmap :
-            texture_sector[t == 0 ? 1 : 0]->textureInfo.bitmap;
+            textureSector[t] ?
+            textureSector[t]->textureInfo.bitmap :
+            textureSector[t == 0 ? 1 : 0]->textureInfo.bitmap;
             
         int bmp_size[2] = {
             al_get_bitmap_width(tex),
             al_get_bitmap_height(tex)
         };
-        al_set_shader_float_vector("tex_translation", 2, texture_offset, 1);
-        al_set_shader_float_vector("tex_scale", 2, texture_scale, 1);
-        al_set_shader_float("tex_rotation", texture_info_to_use->rot);
+        al_set_shader_float_vector("tex_translation", 2, textureOffset, 1);
+        al_set_shader_float_vector("tex_scale", 2, textureScale, 1);
+        al_set_shader_float("tex_rotation", textureInfoToUse->rot);
         al_set_shader_int_vector("bmp_size", 2, &bmp_size[0], 1);
         
         al_draw_prim(
             av, nullptr, tex,
-            0, (int) n_vertexes, ALLEGRO_PRIM_TRIANGLE_LIST
+            0, (int) nVertexes, ALLEGRO_PRIM_TRIANGLE_LIST
         );
         
         delete[] av;
@@ -583,32 +583,32 @@ void drawLiquid(
 void drawLoadingScreen(
     const string &text, const string &subtext, float opacity
 ) {
-    const float text_w = game.winW * DRAWING::LOADING_SCREEN_TEXT_WIDTH;
-    const float text_h = game.winH * DRAWING::LOADING_SCREEN_TEXT_HEIGHT;
-    const float subtext_w = text_w * DRAWING::LOADING_SCREEN_SUBTEXT_SCALE;
-    const float subtext_h = text_h * DRAWING::LOADING_SCREEN_SUBTEXT_SCALE;
+    const float textW = game.winW * DRAWING::LOADING_SCREEN_TEXT_WIDTH;
+    const float textH = game.winH * DRAWING::LOADING_SCREEN_TEXT_HEIGHT;
+    const float subtextW = textW * DRAWING::LOADING_SCREEN_SUBTEXT_SCALE;
+    const float subtextH = textH * DRAWING::LOADING_SCREEN_SUBTEXT_SCALE;
     
-    unsigned char blackness_alpha = 255.0f * std::max(0.0f, opacity * 4 - 3);
+    unsigned char blacknessAlpha = 255.0f * std::max(0.0f, opacity * 4 - 3);
     al_draw_filled_rectangle(
-        0, 0, game.winW, game.winH, al_map_rgba(0, 0, 0, blackness_alpha)
+        0, 0, game.winW, game.winH, al_map_rgba(0, 0, 0, blacknessAlpha)
     );
     
-    int old_op, old_src, old_dst, old_aop, old_asrc, old_adst;
+    int oldOp, oldSrc, oldDst, oldAop, oldAsrc, oldAdst;
     al_get_separate_blender(
-        &old_op, &old_src, &old_dst, &old_aop, &old_asrc, &old_adst
+        &oldOp, &oldSrc, &oldDst, &oldAop, &oldAsrc, &oldAdst
     );
     al_set_blender(ALLEGRO_ADD, ALLEGRO_ONE, ALLEGRO_ONE);
     
     //Set up the bitmap that will hold the text if it doesn't exist.
     if(!text.empty() && !game.loadingTextBmp) {
-        game.loadingTextBmp = al_create_bitmap(text_w, text_h);
+        game.loadingTextBmp = al_create_bitmap(textW, textH);
         
         al_set_target_bitmap(game.loadingTextBmp); {
             al_clear_to_color(COLOR_EMPTY);
             drawText(
                 text, game.sysContent.fntAreaName,
-                Point(text_w * 0.5f, text_h * 0.5f),
-                Point(text_w, text_h),
+                Point(textW * 0.5f, textH * 0.5f),
+                Point(textW, textH),
                 COLOR_GOLD, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0
             );
         } al_set_target_backbuffer(game.display);
@@ -617,14 +617,14 @@ void drawLoadingScreen(
     
     //Set up the bitmap that will hold the text if it doesn't exist.
     if(!subtext.empty() && !game.loadingSubtextBmp) {
-        game.loadingSubtextBmp = al_create_bitmap(subtext_w, subtext_h);
+        game.loadingSubtextBmp = al_create_bitmap(subtextW, subtextH);
         
         al_set_target_bitmap(game.loadingSubtextBmp); {
             al_clear_to_color(COLOR_EMPTY);
             drawText(
                 subtext, game.sysContent.fntAreaName,
-                Point(subtext_w * 0.5f, subtext_h * 0.5f),
-                Point(subtext_w, subtext_h),
+                Point(subtextW * 0.5f, subtextH * 0.5f),
+                Point(subtextW, subtextH),
                 al_map_rgb(224, 224, 224),
                 ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0
             );
@@ -634,75 +634,75 @@ void drawLoadingScreen(
     }
     
     al_set_separate_blender(
-        old_op, old_src, old_dst, old_aop, old_asrc, old_adst
+        oldOp, oldSrc, oldDst, oldAop, oldAsrc, oldAdst
     );
     
     //Draw the text bitmap in its place.
-    const float text_x = game.winW * 0.5 - text_w * 0.5;
-    float text_y = game.winH * 0.5 - text_h * 0.5;
+    const float textX = game.winW * 0.5 - textW * 0.5;
+    float textY = game.winH * 0.5 - textH * 0.5;
     if(!text.empty()) {
         if(!subtext.empty()) {
-            text_y -= DRAWING::LOADING_SCREEN_PADDING * 0.5;
+            textY -= DRAWING::LOADING_SCREEN_PADDING * 0.5;
         }
         al_draw_tinted_bitmap(
             game.loadingTextBmp,
             al_map_rgba(255, 255, 255, 255.0 * opacity),
-            game.winW * 0.5 - text_w * 0.5, text_y, 0
+            game.winW * 0.5 - textW * 0.5, textY, 0
         );
         
     }
     
     //Draw the subtext bitmap in its place.
-    const float subtext_x = game.winW * 0.5 - subtext_w * 0.5;
-    float subtext_y = game.winH * 0.5 + DRAWING::LOADING_SCREEN_PADDING * 0.5;
+    const float subtextX = game.winW * 0.5 - subtextW * 0.5;
+    float subtextY = game.winH * 0.5 + DRAWING::LOADING_SCREEN_PADDING * 0.5;
     if(!subtext.empty()) {
     
         al_draw_tinted_bitmap(
             game.loadingSubtextBmp,
             al_map_rgba(255, 255, 255, 255.0 * opacity),
-            game.winW * 0.5 - subtext_w * 0.5, subtext_y, 0
+            game.winW * 0.5 - subtextW * 0.5, subtextY, 0
         );
         
     }
     
-    const unsigned char reflection_alpha = 128.0 * opacity;
+    const unsigned char reflectionAlpha = 128.0 * opacity;
     
     //Now, draw the polygon that will hold the reflection for the text.
     if(!text.empty()) {
     
-        ALLEGRO_VERTEX text_vertexes[4];
-        const float text_reflection_h = text_h * 0.80f;
+        ALLEGRO_VERTEX textVertexes[4];
+        const float textReflectionH = textH * 0.80f;
         //Top-left vertex.
-        text_vertexes[0].x = text_x;
-        text_vertexes[0].y = text_y + text_h;
-        text_vertexes[0].z = 0;
-        text_vertexes[0].u = 0;
-        text_vertexes[0].v = text_h;
-        text_vertexes[0].color = al_map_rgba(255, 255, 255, reflection_alpha);
+        textVertexes[0].x = textX;
+        textVertexes[0].y = textY + textH;
+        textVertexes[0].z = 0;
+        textVertexes[0].u = 0;
+        textVertexes[0].v = textH;
+        textVertexes[0].color = al_map_rgba(255, 255, 255, reflectionAlpha);
         //Top-right vertex.
-        text_vertexes[1].x = text_x + text_w;
-        text_vertexes[1].y = text_y + text_h;
-        text_vertexes[1].z = 0;
-        text_vertexes[1].u = text_w;
-        text_vertexes[1].v = text_h;
-        text_vertexes[1].color = al_map_rgba(255, 255, 255, reflection_alpha);
+        textVertexes[1].x = textX + textW;
+        textVertexes[1].y = textY + textH;
+        textVertexes[1].z = 0;
+        textVertexes[1].u = textW;
+        textVertexes[1].v = textH;
+        textVertexes[1].color = al_map_rgba(255, 255, 255, reflectionAlpha);
         //Bottom-right vertex.
-        text_vertexes[2].x = text_x + text_w;
-        text_vertexes[2].y = text_y + text_h + text_reflection_h;
-        text_vertexes[2].z = 0;
-        text_vertexes[2].u = text_w;
-        text_vertexes[2].v = text_h - text_reflection_h;
-        text_vertexes[2].color = al_map_rgba(255, 255, 255, 0);
+        textVertexes[2].x = textX + textW;
+        textVertexes[2].y = textY + textH + textReflectionH;
+        textVertexes[2].z = 0;
+        textVertexes[2].u = textW;
+        textVertexes[2].v = textH - textReflectionH;
+        textVertexes[2].color = al_map_rgba(255, 255, 255, 0);
         //Bottom-left vertex.
-        text_vertexes[3].x = text_x;
-        text_vertexes[3].y = text_y + text_h + text_reflection_h;
-        text_vertexes[3].z = 0;
-        text_vertexes[3].u = 0;
-        text_vertexes[3].v = text_h - text_reflection_h;
-        text_vertexes[3].color = al_map_rgba(255, 255, 255, 0);
+        textVertexes[3].x = textX;
+        textVertexes[3].y = textY + textH + textReflectionH;
+        textVertexes[3].z = 0;
+        textVertexes[3].u = 0;
+        textVertexes[3].v = textH - textReflectionH;
+        textVertexes[3].color = al_map_rgba(255, 255, 255, 0);
         
         al_draw_prim(
-            text_vertexes, nullptr, game.loadingTextBmp,
+            textVertexes, nullptr, game.loadingTextBmp,
             0, 4, ALLEGRO_PRIM_TRIANGLE_FAN
         );
         
@@ -711,41 +711,41 @@ void drawLoadingScreen(
     //And the polygon for the subtext.
     if(!subtext.empty()) {
     
-        ALLEGRO_VERTEX subtext_vertexes[4];
-        const float subtext_reflection_h = subtext_h * 0.80f;
+        ALLEGRO_VERTEX subtextVertexes[4];
+        const float subtextReflectionH = subtextH * 0.80f;
         //Top-left vertex.
-        subtext_vertexes[0].x = subtext_x;
-        subtext_vertexes[0].y = subtext_y + subtext_h;
-        subtext_vertexes[0].z = 0;
-        subtext_vertexes[0].u = 0;
-        subtext_vertexes[0].v = subtext_h;
-        subtext_vertexes[0].color =
-            al_map_rgba(255, 255, 255, reflection_alpha);
+        subtextVertexes[0].x = subtextX;
+        subtextVertexes[0].y = subtextY + subtextH;
+        subtextVertexes[0].z = 0;
+        subtextVertexes[0].u = 0;
+        subtextVertexes[0].v = subtextH;
+        subtextVertexes[0].color =
+            al_map_rgba(255, 255, 255, reflectionAlpha);
         //Top-right vertex.
-        subtext_vertexes[1].x = subtext_x + subtext_w;
-        subtext_vertexes[1].y = subtext_y + subtext_h;
-        subtext_vertexes[1].z = 0;
-        subtext_vertexes[1].u = subtext_w;
-        subtext_vertexes[1].v = subtext_h;
-        subtext_vertexes[1].color =
-            al_map_rgba(255, 255, 255, reflection_alpha);
+        subtextVertexes[1].x = subtextX + subtextW;
+        subtextVertexes[1].y = subtextY + subtextH;
+        subtextVertexes[1].z = 0;
+        subtextVertexes[1].u = subtextW;
+        subtextVertexes[1].v = subtextH;
+        subtextVertexes[1].color =
+            al_map_rgba(255, 255, 255, reflectionAlpha);
         //Bottom-right vertex.
-        subtext_vertexes[2].x = subtext_x + subtext_w;
-        subtext_vertexes[2].y = subtext_y + subtext_h + subtext_reflection_h;
-        subtext_vertexes[2].z = 0;
-        subtext_vertexes[2].u = subtext_w;
-        subtext_vertexes[2].v = subtext_h - subtext_reflection_h;
-        subtext_vertexes[2].color = al_map_rgba(255, 255, 255, 0);
+        subtextVertexes[2].x = subtextX + subtextW;
+        subtextVertexes[2].y = subtextY + subtextH + subtextReflectionH;
+        subtextVertexes[2].z = 0;
+        subtextVertexes[2].u = subtextW;
+        subtextVertexes[2].v = subtextH - subtextReflectionH;
+        subtextVertexes[2].color = al_map_rgba(255, 255, 255, 0);
         //Bottom-left vertex.
-        subtext_vertexes[3].x = subtext_x;
-        subtext_vertexes[3].y = subtext_y + subtext_h + subtext_reflection_h;
-        subtext_vertexes[3].z = 0;
-        subtext_vertexes[3].u = 0;
-        subtext_vertexes[3].v = subtext_h - subtext_reflection_h;
-        subtext_vertexes[3].color = al_map_rgba(255, 255, 255, 0);
+        subtextVertexes[3].x = subtextX;
+        subtextVertexes[3].y = subtextY + subtextH + subtextReflectionH;
+        subtextVertexes[3].z = 0;
+        subtextVertexes[3].u = 0;
+        subtextVertexes[3].v = subtextH - subtextReflectionH;
+        subtextVertexes[3].color = al_map_rgba(255, 255, 255, 0);
         
         al_draw_prim(
-            subtext_vertexes, nullptr, game.loadingSubtextBmp,
+            subtextVertexes, nullptr, game.loadingSubtextBmp,
             0, 4, ALLEGRO_PRIM_TRIANGLE_FAN
         );
         
@@ -754,26 +754,26 @@ void drawLoadingScreen(
     //Draw the game's logo to the left of the "Loading..." text,
     //if we're not fading.
     if(opacity == 1.0f) {
-        const Point text_box(game.winW * 0.11f, game.winH * 0.03f);
+        const Point textBox(game.winW * 0.11f, game.winH * 0.03f);
         
         if(
             game.sysContent.bmpIcon &&
             game.sysContent.bmpIcon != game.bmpError
         ) {
-            Point icon_pos(
-                game.winW - 8 - text_box.x - 8 - text_box.y / 2.0f,
-                game.winH - 8 - text_box.y / 2.0f
+            Point iconPos(
+                game.winW - 8 - textBox.x - 8 - textBox.y / 2.0f,
+                game.winH - 8 - textBox.y / 2.0f
             );
             drawBitmap(
-                game.sysContent.bmpIcon, icon_pos,
-                Point(-1, text_box.y),
+                game.sysContent.bmpIcon, iconPos,
+                Point(-1, textBox.y),
                 0, al_map_rgba(255, 255, 255, opacity * 255.0)
             );
         }
         
         drawText(
             "Loading...", game.sysContent.fntStandard,
-            Point(game.winW - 8, game.winH - 8), text_box,
+            Point(game.winW - 8, game.winH - 8), textBox,
             al_map_rgb(192, 192, 192), ALLEGRO_ALIGN_RIGHT, V_ALIGN_MODE_BOTTOM
         );
     }
@@ -785,33 +785,33 @@ void drawLoadingScreen(
  * @brief Draws the icon for a menu button.
  *
  * @param icon Icon ID.
- * @param button_center Center coordinates of the button.
- * @param button_size Dimensions of the button.
- * @param left_side If true, place the icon to the left side of the button.
+ * @param buttonCenter Center coordinates of the button.
+ * @param buttonSize Dimensions of the button.
+ * @param leftSide If true, place the icon to the left side of the button.
  * If false, place it to the right.
  */
 void drawMenuButtonIcon(
-    MENU_ICON icon, const Point &button_center, const Point &button_size,
-    bool left_side
+    MENU_ICON icon, const Point &buttonCenter, const Point &buttonSize,
+    bool leftSide
 ) {
     //All icons are square, and in a row, so the spritesheet height works.
-    int icon_size =
+    int iconSize =
         al_get_bitmap_height(game.sysContent.bmpMenuIcons);
     ALLEGRO_BITMAP* bmp =
         al_create_sub_bitmap(
             game.sysContent.bmpMenuIcons,
-            (icon_size + 1) * (int) icon, 0,
-            icon_size, icon_size
+            (iconSize + 1) * (int) icon, 0,
+            iconSize, iconSize
         );
-    Point icon_center(
-        left_side ?
-        button_center.x - button_size.x * 0.5 + button_size.y * 0.5 :
-        button_center.x + button_size.x * 0.5 - button_size.y * 0.5,
-        button_center.y
+    Point iconCenter(
+        leftSide ?
+        buttonCenter.x - buttonSize.x * 0.5 + buttonSize.y * 0.5 :
+        buttonCenter.x + buttonSize.x * 0.5 - buttonSize.y * 0.5,
+        buttonCenter.y
     );
     drawBitmapInBox(
-        bmp, icon_center,
-        Point(button_size.y),
+        bmp, iconCenter,
+        Point(buttonSize.y),
         true
     );
     al_destroy_bitmap(bmp);
@@ -822,52 +822,48 @@ void drawMenuButtonIcon(
  * @brief Draws a mob's shadow.
  *
  * @param m mob to draw the shadow for.
- * @param delta_z The mob is these many units above the floor directly below it.
- * @param shadow_stretch How much to stretch the shadow by
+ * @param deltaZ The mob is these many units above the floor directly below it.
+ * @param shadowStretch How much to stretch the shadow by
  * (used to simulate sun shadow direction casting).
  */
-void drawMobShadow(
-    const Mob* m,
-    float delta_z, float shadow_stretch
-) {
-
-    Point shadow_size = Point(m->radius * 2.2f);
+void drawMobShadow(const Mob* m, float deltaZ, float shadowStretch) {
+    Point shadowSize = Point(m->radius * 2.2f);
     if(m->rectangularDim.x != 0) {
-        shadow_size = m->rectangularDim * 1.1f;
+        shadowSize = m->rectangularDim * 1.1f;
     }
     
-    if(shadow_stretch <= 0) return;
+    if(shadowStretch <= 0) return;
     
-    float diameter = shadow_size.x;
-    float shadow_x = 0;
-    float shadow_w =
-        diameter + (diameter * shadow_stretch * MOB::SHADOW_STRETCH_MULT);
+    float diameter = shadowSize.x;
+    float shadowX = 0;
+    float shadowW =
+        diameter + (diameter * shadowStretch * MOB::SHADOW_STRETCH_MULT);
         
     if(game.states.gameplay->dayMinutes < 60 * 12) {
         //Shadows point to the West.
-        shadow_x = -shadow_w + diameter * 0.5;
-        shadow_x -= shadow_stretch * delta_z * MOB::SHADOW_Y_MULT;
+        shadowX = -shadowW + diameter * 0.5;
+        shadowX -= shadowStretch * deltaZ * MOB::SHADOW_Y_MULT;
     } else {
         //Shadows point to the East.
-        shadow_x = -(diameter * 0.5);
-        shadow_x += shadow_stretch * delta_z * MOB::SHADOW_Y_MULT;
+        shadowX = -(diameter * 0.5);
+        shadowX += shadowStretch * deltaZ * MOB::SHADOW_Y_MULT;
     }
     
     if(m->rectangularDim.x != 0) {
         drawBitmap(
             game.sysContent.bmpShadowSquare,
-            Point(m->pos.x + shadow_x + shadow_w / 2, m->pos.y),
-            shadow_size,
+            Point(m->pos.x + shadowX + shadowW / 2, m->pos.y),
+            shadowSize,
             m->angle,
-            mapAlpha(255 * (1 - shadow_stretch))
+            mapAlpha(255 * (1 - shadowStretch))
         );
     } else {
         drawBitmap(
             game.sysContent.bmpShadow,
-            Point(m->pos.x + shadow_x + shadow_w / 2, m->pos.y),
-            Point(shadow_w, diameter),
+            Point(m->pos.x + shadowX + shadowW / 2, m->pos.y),
+            Point(shadowW, diameter),
             0,
-            mapAlpha(255 * (1 - shadow_stretch))
+            mapAlpha(255 * (1 - shadowStretch))
         );
     }
 }
@@ -886,76 +882,76 @@ void drawMouseCursor(const ALLEGRO_COLOR &color) {
         size_t anchor = 0;
         
         for(size_t s = 1; s < game.mouseCursor.history.size(); s++) {
-            Point anchor_diff =
+            Point anchorDiff =
                 game.mouseCursor.history[anchor] -
                 game.mouseCursor.history[s];
             if(
-                fabs(anchor_diff.x) < GAME::CURSOR_TRAIL_MIN_SPOT_DIFF &&
-                fabs(anchor_diff.y) < GAME::CURSOR_TRAIL_MIN_SPOT_DIFF
+                fabs(anchorDiff.x) < GAME::CURSOR_TRAIL_MIN_SPOT_DIFF &&
+                fabs(anchorDiff.y) < GAME::CURSOR_TRAIL_MIN_SPOT_DIFF
             ) {
                 continue;
             }
             
-            float start_ratio =
+            float startRatio =
                 anchor / (float) game.mouseCursor.history.size();
-            float start_thickness =
-                GAME::CURSOR_TRAIL_MAX_WIDTH * start_ratio;
-            unsigned char start_alpha =
-                GAME::CURSOR_TRAIL_MAX_ALPHA * start_ratio;
-            ALLEGRO_COLOR start_color =
-                changeAlpha(color, start_alpha);
-            Point start_p1;
-            Point start_p2;
+            float startThickness =
+                GAME::CURSOR_TRAIL_MAX_WIDTH * startRatio;
+            unsigned char startAlpha =
+                GAME::CURSOR_TRAIL_MAX_ALPHA * startRatio;
+            ALLEGRO_COLOR startColor =
+                changeAlpha(color, startAlpha);
+            Point startP1;
+            Point startP2;
             
-            float end_ratio =
+            float endRatio =
                 s / (float) GAME::CURSOR_TRAIL_SAVE_N_SPOTS;
-            float end_thickness =
-                GAME::CURSOR_TRAIL_MAX_WIDTH * end_ratio;
-            unsigned char end_alpha =
-                GAME::CURSOR_TRAIL_MAX_ALPHA * end_ratio;
-            ALLEGRO_COLOR end_color =
-                changeAlpha(color, end_alpha);
-            Point end_p1;
-            Point end_p2;
+            float endThickness =
+                GAME::CURSOR_TRAIL_MAX_WIDTH * endRatio;
+            unsigned char endAlpha =
+                GAME::CURSOR_TRAIL_MAX_ALPHA * endRatio;
+            ALLEGRO_COLOR endColor =
+                changeAlpha(color, endAlpha);
+            Point endP1;
+            Point endP2;
             
             if(anchor == 0) {
-                Point cur_to_next =
+                Point curToNext =
                     game.mouseCursor.history[s] -
                     game.mouseCursor.history[anchor];
-                Point cur_to_next_normal(-cur_to_next.y, cur_to_next.x);
-                cur_to_next_normal = normalizeVector(cur_to_next_normal);
-                Point spot_offset = cur_to_next_normal * start_thickness / 2.0f;
-                start_p1 = game.mouseCursor.history[anchor] - spot_offset;
-                start_p2 = game.mouseCursor.history[anchor] + spot_offset;
+                Point curToNextNormal(-curToNext.y, curToNext.x);
+                curToNextNormal = normalizeVector(curToNextNormal);
+                Point spotOffset = curToNextNormal * startThickness / 2.0f;
+                startP1 = game.mouseCursor.history[anchor] - spotOffset;
+                startP2 = game.mouseCursor.history[anchor] + spotOffset;
             } else {
                 getMiterPoints(
                     game.mouseCursor.history[anchor - 1],
                     game.mouseCursor.history[anchor],
                     game.mouseCursor.history[anchor + 1],
-                    -start_thickness,
-                    &start_p1,
-                    &start_p2,
+                    -startThickness,
+                    &startP1,
+                    &startP2,
                     30.0f
                 );
             }
             
             if(s == game.mouseCursor.history.size() - 1) {
-                Point prev_to_cur =
+                Point prevToCur =
                     game.mouseCursor.history[s] -
                     game.mouseCursor.history[anchor];
-                Point prev_to_cur_normal(-prev_to_cur.y, prev_to_cur.x);
-                prev_to_cur_normal = normalizeVector(prev_to_cur_normal);
-                Point spot_offset = prev_to_cur_normal * start_thickness / 2.0f;
-                end_p1 = game.mouseCursor.history[s] - spot_offset;
-                end_p2 = game.mouseCursor.history[s] + spot_offset;
+                Point prevToCurNormal(-prevToCur.y, prevToCur.x);
+                prevToCurNormal = normalizeVector(prevToCurNormal);
+                Point spotOffset = prevToCurNormal * startThickness / 2.0f;
+                endP1 = game.mouseCursor.history[s] - spotOffset;
+                endP2 = game.mouseCursor.history[s] + spotOffset;
             } else {
                 getMiterPoints(
                     game.mouseCursor.history[s - 1],
                     game.mouseCursor.history[s],
                     game.mouseCursor.history[s + 1],
-                    -end_thickness,
-                    &end_p1,
-                    &end_p2,
+                    -endThickness,
+                    &endP1,
+                    &endP2,
                     30.0f
                 );
             }
@@ -965,18 +961,18 @@ void drawMouseCursor(const ALLEGRO_COLOR &color) {
                 vertexes[v].z = 0.0f;
             }
             
-            vertexes[0].x = start_p1.x;
-            vertexes[0].y = start_p1.y;
-            vertexes[0].color = start_color;
-            vertexes[1].x = start_p2.x;
-            vertexes[1].y = start_p2.y;
-            vertexes[1].color = start_color;
-            vertexes[2].x = end_p1.x;
-            vertexes[2].y = end_p1.y;
-            vertexes[2].color = end_color;
-            vertexes[3].x = end_p2.x;
-            vertexes[3].y = end_p2.y;
-            vertexes[3].color = end_color;
+            vertexes[0].x = startP1.x;
+            vertexes[0].y = startP1.y;
+            vertexes[0].color = startColor;
+            vertexes[1].x = startP2.x;
+            vertexes[1].y = startP2.y;
+            vertexes[1].color = startColor;
+            vertexes[2].x = endP1.x;
+            vertexes[2].y = endP1.y;
+            vertexes[2].color = endColor;
+            vertexes[3].x = endP2.x;
+            vertexes[3].y = endP2.y;
+            vertexes[3].color = endColor;
             
             al_draw_prim(
                 vertexes, nullptr, nullptr, 0, 4, ALLEGRO_PRIM_TRIANGLE_STRIP
@@ -1009,28 +1005,28 @@ void drawMouseCursor(const ALLEGRO_COLOR &color) {
  * the left or right key, controller inputs specify what controller number
  * it is, etc.
  * @param where Center of the place to draw at.
- * @param max_size Max width or height. Used to compress it if needed.
+ * @param maxSize Max width or height. Used to compress it if needed.
  * 0 = unlimited.
  * @param alpha Opacity.
  */
 void drawPlayerInputSourceIcon(
     const ALLEGRO_FONT* const font, const PlayerInputSource &s,
-    bool condensed, const Point &where, const Point &max_size,
+    bool condensed, const Point &where, const Point &maxSize,
     unsigned char alpha
 ) {
     if(alpha == 0) return;
     
     //Final text color.
-    const ALLEGRO_COLOR final_text_color =
+    const ALLEGRO_COLOR finalTextColor =
         changeAlpha(CONTROL_BIND_ICON::BASE_TEXT_COLOR, alpha);
         
     //Start by getting the icon's info for drawing.
     PLAYER_INPUT_ICON_SHAPE shape;
-    PLAYER_INPUT_ICON_SPRITE bitmap_sprite;
+    PLAYER_INPUT_ICON_SPRITE bitmapSprite;
     string text;
     getPlayerInputIconInfo(
         s, condensed,
-        &shape, &bitmap_sprite, &text
+        &shape, &bitmapSprite, &text
     );
     
     //If it's a bitmap, just draw it and be done with it.
@@ -1041,48 +1037,48 @@ void drawPlayerInputSourceIcon(
         ALLEGRO_BITMAP* bmp =
             al_create_sub_bitmap(
                 game.sysContent.bmpPlayerInputIcons,
-                (icon_size + 1) * (int) bitmap_sprite, 0,
+                (icon_size + 1) * (int) bitmapSprite, 0,
                 icon_size, icon_size
             );
-        drawBitmapInBox(bmp, where, max_size, true, 0.0f, mapAlpha(alpha));
+        drawBitmapInBox(bmp, where, maxSize, true, 0.0f, mapAlpha(alpha));
         al_destroy_bitmap(bmp);
         return;
     }
     
     //The size of the rectangle will depend on the text within.
-    int text_ox;
-    int text_oy;
-    int text_w;
-    int text_h;
+    int textOx;
+    int textOy;
+    int textW;
+    int textH;
     al_get_text_dimensions(
         font, text.c_str(),
-        &text_ox, &text_oy, &text_w, &text_h
+        &textOx, &textOy, &textW, &textH
     );
-    float total_width =
+    float totalWidth =
         std::min(
-            (float) (text_w + CONTROL_BIND_ICON::PADDING * 2),
-            (max_size.x == 0 ? FLT_MAX : max_size.x)
+            (float) (textW + CONTROL_BIND_ICON::PADDING * 2),
+            (maxSize.x == 0 ? FLT_MAX : maxSize.x)
         );
-    float total_height =
+    float totalHeight =
         std::min(
-            (float) (text_h + CONTROL_BIND_ICON::PADDING * 2),
-            (max_size.y == 0 ? FLT_MAX : max_size.y)
+            (float) (textH + CONTROL_BIND_ICON::PADDING * 2),
+            (maxSize.y == 0 ? FLT_MAX : maxSize.y)
         );
     //Force it to always be a square or horizontal rectangle. Never vertical.
-    total_width = std::max(total_width, total_height);
+    totalWidth = std::max(totalWidth, totalHeight);
     
     //Now, draw the rectangle, either sharp or rounded.
     switch(shape) {
     case PLAYER_INPUT_ICON_SHAPE_RECTANGLE: {
         drawTexturedBox(
-            where, Point(total_width, total_height),
+            where, Point(totalWidth, totalHeight),
             game.sysContent.bmpKeyBox
         );
         break;
     }
     case PLAYER_INPUT_ICON_SHAPE_ROUNDED: {
         drawTexturedBox(
-            where, Point(total_width, total_height),
+            where, Point(totalWidth, totalHeight),
             game.sysContent.bmpButtonBox
         );
         break;
@@ -1096,10 +1092,10 @@ void drawPlayerInputSourceIcon(
     drawText(
         text, font, where,
         Point(
-            (max_size.x == 0 ? 0 : max_size.x - CONTROL_BIND_ICON::PADDING),
-            (max_size.y == 0 ? 0 : max_size.y - CONTROL_BIND_ICON::PADDING)
+            (maxSize.x == 0 ? 0 : maxSize.x - CONTROL_BIND_ICON::PADDING),
+            (maxSize.y == 0 ? 0 : maxSize.y - CONTROL_BIND_ICON::PADDING)
         ),
-        final_text_color, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
+        finalTextColor, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
         TEXT_SETTING_FLAG_CANT_GROW | TEXT_SETTING_COMPENSATE_Y_OFFSET
     );
 }
@@ -1108,101 +1104,101 @@ void drawPlayerInputSourceIcon(
 /**
  * @brief Draws a sector, but only the texture (no wall shadows).
  *
- * @param s_ptr Pointer to the sector.
+ * @param sPtr Pointer to the sector.
  * @param where X and Y offset.
  * @param scale Scale the sector by this much.
  * @param opacity Draw the textures at this opacity, 0 - 1.
  */
 void drawSectorTexture(
-    Sector* s_ptr, const Point &where, float scale, float opacity
+    Sector* sPtr, const Point &where, float scale, float opacity
 ) {
-    if(!s_ptr) return;
-    if(s_ptr->isBottomlessPit) return;
+    if(!sPtr) return;
+    if(sPtr->isBottomlessPit) return;
     
-    unsigned char n_textures = 1;
-    Sector* texture_sector[2] = {nullptr, nullptr};
+    unsigned char nTextures = 1;
+    Sector* textureSector[2] = {nullptr, nullptr};
     
-    if(s_ptr->fade) {
-        s_ptr->getTextureMergeSectors(
-            &texture_sector[0], &texture_sector[1]
+    if(sPtr->fade) {
+        sPtr->getTextureMergeSectors(
+            &textureSector[0], &textureSector[1]
         );
-        if(!texture_sector[0] && !texture_sector[1]) {
+        if(!textureSector[0] && !textureSector[1]) {
             //Can't draw this sector.
             return;
         }
-        n_textures = 2;
+        nTextures = 2;
         
     } else {
-        texture_sector[0] = s_ptr;
+        textureSector[0] = sPtr;
         
     }
     
-    for(unsigned char t = 0; t < n_textures; t++) {
+    for(unsigned char t = 0; t < nTextures; t++) {
     
-        bool draw_sector_0 = true;
-        if(!texture_sector[0]) draw_sector_0 = false;
-        else if(texture_sector[0]->isBottomlessPit) {
-            draw_sector_0 = false;
+        bool drawSector0 = true;
+        if(!textureSector[0]) drawSector0 = false;
+        else if(textureSector[0]->isBottomlessPit) {
+            drawSector0 = false;
         }
         
-        if(n_textures == 2 && !draw_sector_0 && t == 0) {
+        if(nTextures == 2 && !drawSector0 && t == 0) {
             //Allows fading into the void.
             continue;
         }
         
-        if(!texture_sector[t] || texture_sector[t]->isBottomlessPit) {
+        if(!textureSector[t] || textureSector[t]->isBottomlessPit) {
             continue;
         }
         
-        size_t n_vertexes = s_ptr->triangles.size() * 3;
-        ALLEGRO_VERTEX* av = new ALLEGRO_VERTEX[n_vertexes];
+        size_t nVertexes = sPtr->triangles.size() * 3;
+        ALLEGRO_VERTEX* av = new ALLEGRO_VERTEX[nVertexes];
         
-        SectorTexture* texture_info_to_use =
-            &texture_sector[t]->textureInfo;
+        SectorTexture* textureInfoToUse =
+            &textureSector[t]->textureInfo;
             
         //Texture transformations.
         ALLEGRO_TRANSFORM tra;
         al_build_transform(
             &tra,
-            -texture_info_to_use->translation.x,
-            -texture_info_to_use->translation.y,
-            1.0f / texture_info_to_use->scale.x,
-            1.0f / texture_info_to_use->scale.y,
-            -texture_info_to_use->rot
+            -textureInfoToUse->translation.x,
+            -textureInfoToUse->translation.y,
+            1.0f / textureInfoToUse->scale.x,
+            1.0f / textureInfoToUse->scale.y,
+            -textureInfoToUse->rot
         );
         
-        for(size_t v = 0; v < n_vertexes; v++) {
+        for(size_t v = 0; v < nVertexes; v++) {
         
-            const Triangle* t_ptr = &s_ptr->triangles[floor(v / 3.0)];
-            Vertex* v_ptr = t_ptr->points[v % 3];
-            float vx = v_ptr->x;
-            float vy = v_ptr->y;
+            const Triangle* tPtr = &sPtr->triangles[floor(v / 3.0)];
+            Vertex* vPtr = tPtr->points[v % 3];
+            float vx = vPtr->x;
+            float vy = vPtr->y;
             
-            float alpha_mult = 1;
-            float brightness_mult = texture_sector[t]->brightness / 255.0;
+            float alphaMult = 1;
+            float brightnessMult = textureSector[t]->brightness / 255.0;
             
             if(t == 1) {
-                if(!draw_sector_0) {
-                    alpha_mult = 0;
+                if(!drawSector0) {
+                    alphaMult = 0;
                     for(
-                        size_t e = 0; e < texture_sector[1]->edges.size(); e++
+                        size_t e = 0; e < textureSector[1]->edges.size(); e++
                     ) {
                         if(
-                            texture_sector[1]->edges[e]->vertexes[0] == v_ptr ||
-                            texture_sector[1]->edges[e]->vertexes[1] == v_ptr
+                            textureSector[1]->edges[e]->vertexes[0] == vPtr ||
+                            textureSector[1]->edges[e]->vertexes[1] == vPtr
                         ) {
-                            alpha_mult = 1;
+                            alphaMult = 1;
                         }
                     }
                 } else {
                     for(
-                        size_t e = 0; e < texture_sector[0]->edges.size(); e++
+                        size_t e = 0; e < textureSector[0]->edges.size(); e++
                     ) {
                         if(
-                            texture_sector[0]->edges[e]->vertexes[0] == v_ptr ||
-                            texture_sector[0]->edges[e]->vertexes[1] == v_ptr
+                            textureSector[0]->edges[e]->vertexes[0] == vPtr ||
+                            textureSector[0]->edges[e]->vertexes[1] == vPtr
                         ) {
-                            alpha_mult = 0;
+                            alphaMult = 0;
                         }
                     }
                 }
@@ -1210,33 +1206,33 @@ void drawSectorTexture(
             
             av[v].x = vx - where.x;
             av[v].y = vy - where.y;
-            if(texture_sector[t]) al_transform_coordinates(&tra, &vx, &vy);
+            if(textureSector[t]) al_transform_coordinates(&tra, &vx, &vy);
             av[v].u = vx;
             av[v].v = vy;
             av[v].z = 0;
             av[v].color =
                 al_map_rgba_f(
-                    texture_sector[t]->textureInfo.tint.r * brightness_mult,
-                    texture_sector[t]->textureInfo.tint.g * brightness_mult,
-                    texture_sector[t]->textureInfo.tint.b * brightness_mult,
-                    texture_sector[t]->textureInfo.tint.a * alpha_mult *
+                    textureSector[t]->textureInfo.tint.r * brightnessMult,
+                    textureSector[t]->textureInfo.tint.g * brightnessMult,
+                    textureSector[t]->textureInfo.tint.b * brightnessMult,
+                    textureSector[t]->textureInfo.tint.a * alphaMult *
                     opacity
                 );
         }
         
-        for(size_t v = 0; v < n_vertexes; v++) {
+        for(size_t v = 0; v < nVertexes; v++) {
             av[v].x *= scale;
             av[v].y *= scale;
         }
         
         ALLEGRO_BITMAP* tex =
-            texture_sector[t] ?
-            texture_sector[t]->textureInfo.bitmap :
-            texture_sector[t == 0 ? 1 : 0]->textureInfo.bitmap;
+            textureSector[t] ?
+            textureSector[t]->textureInfo.bitmap :
+            textureSector[t == 0 ? 1 : 0]->textureInfo.bitmap;
             
         al_draw_prim(
             av, nullptr, tex,
-            0, (int) n_vertexes, ALLEGRO_PRIM_TRIANGLE_LIST
+            0, (int) nVertexes, ALLEGRO_PRIM_TRIANGLE_LIST
         );
         
         delete[] av;
@@ -1251,15 +1247,15 @@ void drawSectorTexture(
  * @param effects List of bitmap effects to use.
  */
 void drawStatusEffectBmp(const Mob* m, BitmapEffect &effects) {
-    float status_bmp_scale;
-    ALLEGRO_BITMAP* status_bmp = m->getStatusBitmap(&status_bmp_scale);
+    float statusBmpScale;
+    ALLEGRO_BITMAP* statusBmp = m->getStatusBitmap(&statusBmpScale);
     
-    if(!status_bmp) return;
+    if(!statusBmp) return;
     
     drawBitmap(
-        status_bmp,
+        statusBmp,
         m->pos,
-        Point(m->radius * 2 * status_bmp_scale, -1)
+        Point(m->radius * 2 * statusBmpScale, -1)
     );
 }
 
@@ -1268,65 +1264,65 @@ void drawStatusEffectBmp(const Mob* m, BitmapEffect &effects) {
  * @brief Draws string tokens.
  *
  * @param tokens Vector of tokens to draw.
- * @param text_font Text font.
- * @param control_font Font for control bind icons.
- * @param controls_condensed Whether control binds should be condensed.
+ * @param textFont Text font.
+ * @param controlFont Font for control bind icons.
+ * @param controlsCondensed Whether control binds should be condensed.
  * @param where Top-left coordinates to draw at.
  * @param flags Allegro text flags.
- * @param max_size Maximum width and height of the whole thing.
+ * @param maxSize Maximum width and height of the whole thing.
  * @param scale Scale each token by this amount.
  */
 void drawStringTokens(
-    const vector<StringToken> &tokens, const ALLEGRO_FONT* const text_font,
-    const ALLEGRO_FONT* const control_font, bool controls_condensed,
-    const Point &where, int flags, const Point &max_size,
+    const vector<StringToken> &tokens, const ALLEGRO_FONT* const textFont,
+    const ALLEGRO_FONT* const controlFont, bool controlsCondensed,
+    const Point &where, int flags, const Point &maxSize,
     const Point &scale
 ) {
-    unsigned int total_width = 0;
-    float x_scale = 1.0f;
+    unsigned int totalWidth = 0;
+    float xScale = 1.0f;
     for(size_t t = 0; t < tokens.size(); t++) {
-        total_width += tokens[t].width;
+        totalWidth += tokens[t].width;
     }
-    if(total_width > max_size.x) {
-        x_scale = max_size.x / total_width;
+    if(totalWidth > maxSize.x) {
+        xScale = maxSize.x / totalWidth;
     }
-    float y_scale = 1.0f;
-    unsigned int line_height = al_get_font_line_height(text_font);
-    if(line_height > max_size.y) {
-        y_scale = max_size.y / line_height;
+    float yScale = 1.0f;
+    unsigned int lineHeight = al_get_font_line_height(textFont);
+    if(lineHeight > maxSize.y) {
+        yScale = maxSize.y / lineHeight;
     }
     
-    float start_x = where.x;
+    float startX = where.x;
     if(hasFlag(flags, ALLEGRO_ALIGN_CENTER)) {
-        start_x -= (total_width * x_scale) / 2.0f;
+        startX -= (totalWidth * xScale) / 2.0f;
     } else if(hasFlag(flags, ALLEGRO_ALIGN_RIGHT)) {
-        start_x -= total_width * x_scale;
+        startX -= totalWidth * xScale;
     }
     
-    float caret = start_x;
+    float caret = startX;
     for(size_t t = 0; t < tokens.size(); t++) {
-        float token_final_width = tokens[t].width * x_scale;
+        float tokenFinalWidth = tokens[t].width * xScale;
         switch(tokens[t].type) {
         case STRING_TOKEN_CHAR: {
             drawText(
-                tokens[t].content, text_font, Point(caret, where.y),
+                tokens[t].content, textFont, Point(caret, where.y),
                 Point(LARGE_FLOAT), COLOR_WHITE,
                 ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP,
                 TEXT_SETTING_FLAG_CANT_GROW,
-                Point(x_scale * scale.x, y_scale * scale.y)
+                Point(xScale * scale.x, yScale * scale.y)
             );
             break;
         }
         case STRING_TOKEN_CONTROL_BIND: {
             drawPlayerInputSourceIcon(
-                control_font,
+                controlFont,
                 game.controls.findBind(tokens[t].content).inputSource,
-                controls_condensed,
+                controlsCondensed,
                 Point(
-                    caret + token_final_width / 2.0f,
-                    where.y + max_size.y / 2.0f
+                    caret + tokenFinalWidth / 2.0f,
+                    where.y + maxSize.y / 2.0f
                 ),
-                Point(token_final_width * scale.x, max_size.y * scale.y)
+                Point(tokenFinalWidth * scale.x, maxSize.y * scale.y)
             );
             break;
         }
@@ -1334,7 +1330,7 @@ void drawStringTokens(
             break;
         }
         }
-        caret += token_final_width;
+        caret += tokenFinalWidth;
     }
 }
 
@@ -1350,7 +1346,7 @@ void drawStringTokens(
  * the left or right key, controller inputs specify what controller number
  * it is, etc.
  * @param shape The shape is returned here.
- * @param bitmap_sprite If it's one of the icons in the control bind
+ * @param bitmapSprite If it's one of the icons in the control bind
  * icon spritesheet, the index of the sprite is returned here.
  * @param text The text to be written inside is returned here, or an
  * empty string is returned if there's nothing to write.
@@ -1358,11 +1354,11 @@ void drawStringTokens(
 void getPlayerInputIconInfo(
     const PlayerInputSource &s, bool condensed,
     PLAYER_INPUT_ICON_SHAPE* shape,
-    PLAYER_INPUT_ICON_SPRITE* bitmap_sprite,
+    PLAYER_INPUT_ICON_SPRITE* bitmapSprite,
     string* text
 ) {
     *shape = PLAYER_INPUT_ICON_SHAPE_ROUNDED;
-    *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_LMB;
+    *bitmapSprite = PLAYER_INPUT_ICON_SPRITE_LMB;
     *text = "(NONE)";
     
     if(s.type == INPUT_SOURCE_TYPE_NONE) return;
@@ -1372,45 +1368,45 @@ void getPlayerInputIconInfo(
     if(s.type == INPUT_SOURCE_TYPE_MOUSE_BUTTON) {
         if(s.buttonNr == 1) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
-            *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_LMB;
+            *bitmapSprite = PLAYER_INPUT_ICON_SPRITE_LMB;
             return;
         } else if(s.buttonNr == 2) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
-            *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_RMB;
+            *bitmapSprite = PLAYER_INPUT_ICON_SPRITE_RMB;
             return;
         } else if(s.buttonNr == 3) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
-            *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_MMB;
+            *bitmapSprite = PLAYER_INPUT_ICON_SPRITE_MMB;
             return;
         }
     } else if(s.type == INPUT_SOURCE_TYPE_MOUSE_WHEEL_UP) {
         *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
-        *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_MWU;
+        *bitmapSprite = PLAYER_INPUT_ICON_SPRITE_MWU;
         return;
     } else if(s.type == INPUT_SOURCE_TYPE_MOUSE_WHEEL_DOWN) {
         *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
-        *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_MWD;
+        *bitmapSprite = PLAYER_INPUT_ICON_SPRITE_MWD;
         return;
     } else if(s.type == INPUT_SOURCE_TYPE_KEYBOARD_KEY) {
         if(s.buttonNr == ALLEGRO_KEY_UP) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
-            *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_UP;
+            *bitmapSprite = PLAYER_INPUT_ICON_SPRITE_UP;
             return;
         } else if(s.buttonNr == ALLEGRO_KEY_LEFT) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
-            *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_LEFT;
+            *bitmapSprite = PLAYER_INPUT_ICON_SPRITE_LEFT;
             return;
         } else if(s.buttonNr == ALLEGRO_KEY_DOWN) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
-            *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_DOWN;
+            *bitmapSprite = PLAYER_INPUT_ICON_SPRITE_DOWN;
             return;
         } else if(s.buttonNr == ALLEGRO_KEY_RIGHT) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
-            *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_RIGHT;
+            *bitmapSprite = PLAYER_INPUT_ICON_SPRITE_RIGHT;
             return;
         } else if(s.buttonNr == ALLEGRO_KEY_BACKSPACE) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
-            *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_BACKSPACE;
+            *bitmapSprite = PLAYER_INPUT_ICON_SPRITE_BACKSPACE;
             return;
         } else if(
             condensed &&
@@ -1420,35 +1416,35 @@ void getPlayerInputIconInfo(
             )
         ) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
-            *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_SHIFT;
+            *bitmapSprite = PLAYER_INPUT_ICON_SPRITE_SHIFT;
             return;
         } else if(s.buttonNr == ALLEGRO_KEY_TAB) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
-            *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_TAB;
+            *bitmapSprite = PLAYER_INPUT_ICON_SPRITE_TAB;
             return;
         } else if(s.buttonNr == ALLEGRO_KEY_ENTER) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
-            *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_ENTER;
+            *bitmapSprite = PLAYER_INPUT_ICON_SPRITE_ENTER;
             return;
         }
     } else if(s.type == INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG && condensed) {
         if(s.axisNr == 0) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
-            *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_STICK_LEFT;
+            *bitmapSprite = PLAYER_INPUT_ICON_SPRITE_STICK_LEFT;
             return;
         } else if(s.axisNr == 1) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
-            *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_STICK_UP;
+            *bitmapSprite = PLAYER_INPUT_ICON_SPRITE_STICK_UP;
             return;
         }
     } else if(s.type == INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS && condensed) {
         if(s.axisNr == 0) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
-            *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_STICK_RIGHT;
+            *bitmapSprite = PLAYER_INPUT_ICON_SPRITE_STICK_RIGHT;
             return;
         } else if(s.axisNr == 1) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
-            *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_STICK_DOWN;
+            *bitmapSprite = PLAYER_INPUT_ICON_SPRITE_STICK_DOWN;
             return;
         }
     }
@@ -1558,31 +1554,31 @@ void getPlayerInputIconInfo(
  * For instance, keyboard keys that come in pairs specify whether they are
  * the left or right key, controller inputs specify what controller number
  * it is, etc.
- * @param max_bitmap_height If bitmap icons need to be condensed vertically
+ * @param maxBitmapHeight If bitmap icons need to be condensed vertically
  * to fit a certain space, then their width will be affected too.
  * Specify the maximum height here. Use 0 to indicate no maximum height.
  * @return The width.
  */
 float getPlayerInputIconWidth(
     const ALLEGRO_FONT* font, const PlayerInputSource &s, bool condensed,
-    float max_bitmap_height
+    float maxBitmapHeight
 ) {
     PLAYER_INPUT_ICON_SHAPE shape;
-    PLAYER_INPUT_ICON_SPRITE bitmap_sprite;
+    PLAYER_INPUT_ICON_SPRITE bitmapSprite;
     string text;
     getPlayerInputIconInfo(
         s, condensed,
-        &shape, &bitmap_sprite, &text
+        &shape, &bitmapSprite, &text
     );
     
     if(shape == PLAYER_INPUT_ICON_SHAPE_BITMAP) {
         //All icons are square, and in a row, so the spritesheet height works.
-        int bmp_height =
+        int bmpHeight =
             al_get_bitmap_height(game.sysContent.bmpPlayerInputIcons);
-        if(max_bitmap_height == 0.0f || bmp_height < max_bitmap_height) {
-            return bmp_height;
+        if(maxBitmapHeight == 0.0f || bmpHeight < maxBitmapHeight) {
+            return bmpHeight;
         } else {
-            return max_bitmap_height;
+            return maxBitmapHeight;
         }
     } else {
         return

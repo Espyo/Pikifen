@@ -33,27 +33,27 @@ using std::set;
  * @brief Loads a mission's record.
  *
  * @param file File data node to load from.
- * @param area_ptr The area's data.
+ * @param areaPtr The area's data.
  * @param record Record object to fill.
  */
 void loadAreaMissionRecord(
-    DataNode* file, Area* area_ptr, MissionRecord &record
+    DataNode* file, Area* areaPtr, MissionRecord &record
 ) {
-    string mission_record_entry_name =
-        getMissionRecordEntryName(area_ptr);
+    string missionRecordEntryName =
+        getMissionRecordEntryName(areaPtr);
         
-    vector<string> record_parts =
+    vector<string> recordParts =
         split(
             file->getChildByName(
-                mission_record_entry_name
+                missionRecordEntryName
             )->value,
             ";", true
         );
         
-    if(record_parts.size() == 3) {
-        record.clear = record_parts[0] == "1";
-        record.score = s2i(record_parts[1]);
-        record.date = record_parts[2];
+    if(recordParts.size() == 3) {
+        record.clear = recordParts[0] == "1";
+        record.score = s2i(recordParts[1]);
+        record.date = recordParts[2];
     }
 }
 
@@ -61,21 +61,21 @@ void loadAreaMissionRecord(
 /**
  * @brief Loads an audio stream from the game's content.
  *
- * @param file_path Name of the file to load.
+ * @param filePath Name of the file to load.
  * @param node If not nullptr, blame this data node if the file
  * doesn't exist.
- * @param report_errors Only issues errors if this is true.
+ * @param reportErrors Only issues errors if this is true.
  * @return The stream.
  */
 ALLEGRO_AUDIO_STREAM* loadAudioStream(
-    const string &file_path, DataNode* node, bool report_errors
+    const string &filePath, DataNode* node, bool reportErrors
 ) {
     ALLEGRO_AUDIO_STREAM* stream =
-        al_load_audio_stream((file_path).c_str(), 4, 2048);
+        al_load_audio_stream((filePath).c_str(), 4, 2048);
         
-    if(!stream && report_errors) {
+    if(!stream && reportErrors) {
         game.errors.report(
-            "Could not open audio stream file \"" + file_path + "\"!",
+            "Could not open audio stream file \"" + filePath + "\"!",
             node
         );
     }
@@ -89,39 +89,38 @@ ALLEGRO_AUDIO_STREAM* loadAudioStream(
  *
  * @param path Path to the bitmap file.
  * @param node If present, it will be used to report errors, if any.
- * @param report_error If false, omits error reporting.
- * @param error_bmp_on_error If true, returns the error bitmap in the case of an
+ * @param reportError If false, omits error reporting.
+ * @param errorBmpOnError If true, returns the error bitmap in the case of an
  * error. Otherwise, returns nullptr.
- * @param error_bmp_on_empty If true, returns the error bitmap in the case of an
+ * @param errorBmpOnEmpty If true, returns the error bitmap in the case of an
  * empty file name. Otherwise, returns nullptr.
- * @param path_from_root Normally, files are fetched from the images folder.
+ * @param pathFromRoot Normally, files are fetched from the images folder.
  * If this parameter is true, the path starts from the game's root.
  * @return The bitmap.
  */
 ALLEGRO_BITMAP* loadBmp(
     const string &path, DataNode* node,
-    bool report_error, bool error_bmp_on_error,
-    bool error_bmp_on_empty
+    bool reportError, bool errorBmpOnError,
+    bool errorBmpOnEmpty
 ) {
     if(path.empty()) {
-        if(error_bmp_on_empty) {
+        if(errorBmpOnEmpty) {
             return game.bmpError;
         } else {
             return nullptr;
         }
     }
     
-    ALLEGRO_BITMAP* b =
-        al_load_bitmap((path).c_str());
-        
+    ALLEGRO_BITMAP* b = al_load_bitmap((path).c_str());
+    
     if(!b) {
-        if(report_error) {
+        if(reportError) {
             game.errors.report(
                 "Could not open image \"" + path + "\"!",
                 node
             );
         }
-        if(error_bmp_on_error) {
+        if(errorBmpOnError) {
             b = game.bmpError;
         }
     }
@@ -133,13 +132,13 @@ ALLEGRO_BITMAP* loadBmp(
 /**
  * @brief Loads a data file from the game's content.
  *
- * @param file_path Path to the file, relative to the program root folder.
+ * @param filePath Path to the file, relative to the program root folder.
  */
-DataNode loadDataFile(const string &file_path) {
-    DataNode n = DataNode(file_path);
+DataNode loadDataFile(const string &filePath) {
+    DataNode n = DataNode(filePath);
     if(!n.fileWasOpened) {
         game.errors.report(
-            "Could not open data file \"" + file_path + "\"!"
+            "Could not open data file \"" + filePath + "\"!"
         );
     }
     
@@ -161,19 +160,19 @@ DataNode loadDataFile(const string &file_path) {
 ALLEGRO_FONT* loadFont(
     const string &path, int n, const int ranges[], int size
 ) {
-    const string &final_path =
+    const string &finalPath =
         game.content.bitmaps.manifests[path].path;
         
     ALLEGRO_FONT* result = nullptr;
     
     //First, try to load it as a TTF font.
     result =
-        al_load_ttf_font(final_path.c_str(), size, ALLEGRO_TTF_NO_KERNING);
+        al_load_ttf_font(finalPath.c_str(), size, ALLEGRO_TTF_NO_KERNING);
         
     if(result) return result;
     
     //Now try as a bitmap.
-    ALLEGRO_BITMAP* bmp = loadBmp(final_path);
+    ALLEGRO_BITMAP* bmp = loadBmp(finalPath);
     result = al_grab_font_from_bitmap(bmp, n, ranges);
     al_destroy_bitmap(bmp);
     
@@ -414,8 +413,8 @@ void loadOptions() {
     
     //Init game controllers.
     game.controllerNumbers.clear();
-    int n_joysticks = al_get_num_joysticks();
-    for(int j = 0; j < n_joysticks; j++) {
+    int nJoysticks = al_get_num_joysticks();
+    for(int j = 0; j < nJoysticks; j++) {
         game.controllerNumbers[al_get_joystick(j)] = j;
     }
     
@@ -427,12 +426,12 @@ void loadOptions() {
     game.winW = game.options.graphics.intendedWinW;
     game.winH = game.options.graphics.intendedWinH;
     
-    ControlsManagerOptions controls_mgr_options;
-    controls_mgr_options.stickMinDeadzone =
+    ControlsManagerOptions controlsMgrOptions;
+    controlsMgrOptions.stickMinDeadzone =
         game.options.advanced.joystickMinDeadzone;
-    controls_mgr_options.stickMaxDeadzone =
+    controlsMgrOptions.stickMaxDeadzone =
         game.options.advanced.joystickMaxDeadzone;
-    game.controls.setOptions(controls_mgr_options);
+    game.controls.setOptions(controlsMgrOptions);
 }
 
 
@@ -442,15 +441,15 @@ void loadOptions() {
  * @param path Path to the file to load.
  * @param node If not nullptr, blame this data node if the file
  * doesn't exist.
- * @param report_errors Only issues errors if this is true.
+ * @param reportErrors Only issues errors if this is true.
  * @return The sample.
  */
 ALLEGRO_SAMPLE* loadSample(
-    const string &path, DataNode* node, bool report_errors
+    const string &path, DataNode* node, bool reportErrors
 ) {
     ALLEGRO_SAMPLE* sample = al_load_sample((path).c_str());
     
-    if(!sample && report_errors) {
+    if(!sample && reportErrors) {
         game.errors.report(
             "Could not open audio file \"" + path + "\"!",
             node
@@ -465,31 +464,31 @@ ALLEGRO_SAMPLE* loadSample(
  * @brief Loads the engine's lifetime statistics.
  */
 void loadStatistics() {
-    DataNode stats_file;
-    stats_file.loadFile(FILE_PATHS_FROM_ROOT::STATISTICS, true, false, true);
-    if(!stats_file.fileWasOpened) return;
+    DataNode statsFile;
+    statsFile.loadFile(FILE_PATHS_FROM_ROOT::STATISTICS, true, false, true);
+    if(!statsFile.fileWasOpened) return;
     
     Statistics &s = game.statistics;
     
-    ReaderSetter rs(&stats_file);
-    rs.set("startups",               s.startups);
-    rs.set("runtime",                s.runtime);
-    rs.set("gameplay_time",          s.gameplayTime);
-    rs.set("area_entries",           s.areaEntries);
-    rs.set("pikmin_births",          s.pikminBirths);
-    rs.set("pikmin_deaths",          s.pikminDeaths);
-    rs.set("pikmin_eaten",           s.pikminEaten);
-    rs.set("pikmin_hazard_deaths",   s.pikminHazardDeaths);
-    rs.set("pikmin_blooms",          s.pikminBlooms);
-    rs.set("pikmin_saved",           s.pikminSaved);
-    rs.set("enemy_defeats",          s.enemyDefeats);
-    rs.set("pikmin_thrown",          s.pikminThrown);
-    rs.set("whistle_uses",           s.whistleUses);
-    rs.set("distance_walked",        s.distanceWalked);
-    rs.set("leader_damage_suffered", s.leaderDamageSuffered);
-    rs.set("punch_damage_caused",    s.punchDamageCaused);
-    rs.set("leader_kos",             s.leaderKos);
-    rs.set("sprays_used",            s.spraysUsed);
+    ReaderSetter sRS(&statsFile);
+    sRS.set("startups",               s.startups);
+    sRS.set("runtime",                s.runtime);
+    sRS.set("gameplay_time",          s.gameplayTime);
+    sRS.set("area_entries",           s.areaEntries);
+    sRS.set("pikmin_births",          s.pikminBirths);
+    sRS.set("pikmin_deaths",          s.pikminDeaths);
+    sRS.set("pikmin_eaten",           s.pikminEaten);
+    sRS.set("pikmin_hazard_deaths",   s.pikminHazardDeaths);
+    sRS.set("pikmin_blooms",          s.pikminBlooms);
+    sRS.set("pikmin_saved",           s.pikminSaved);
+    sRS.set("enemy_defeats",          s.enemyDefeats);
+    sRS.set("pikmin_thrown",          s.pikminThrown);
+    sRS.set("whistle_uses",           s.whistleUses);
+    sRS.set("distance_walked",        s.distanceWalked);
+    sRS.set("leader_damage_suffered", s.leaderDamageSuffered);
+    sRS.set("punch_damage_caused",    s.punchDamageCaused);
+    sRS.set("leader_kos",             s.leaderKos);
+    sRS.set("sprays_used",            s.spraysUsed);
 }
 
 

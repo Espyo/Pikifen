@@ -21,19 +21,19 @@
  *
  * @param typ Mob type to create the finite state machine for.
  */
-void decoration_fsm::createFsm(MobType* typ) {
+void DecorationFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;
     efc.newState("idling", DECORATION_STATE_IDLING); {
         efc.newEvent(MOB_EV_ON_ENTER); {
-            efc.run(decoration_fsm::becomeIdle);
+            efc.run(DecorationFsm::becomeIdle);
         }
         efc.newEvent(MOB_EV_TOUCHED_OBJECT); {
-            efc.run(decoration_fsm::checkBump);
+            efc.run(DecorationFsm::checkBump);
         }
     }
     efc.newState("bumped", DECORATION_STATE_BUMPED); {
         efc.newEvent(MOB_EV_ON_ENTER); {
-            efc.run(decoration_fsm::beBumped);
+            efc.run(DecorationFsm::beBumped);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {
             efc.changeState("idling");
@@ -60,7 +60,7 @@ void decoration_fsm::createFsm(MobType* typ) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void decoration_fsm::beBumped(Mob* m, void* info1, void* info2) {
+void DecorationFsm::beBumped(Mob* m, void* info1, void* info2) {
     m->setAnimation(DECORATION_ANIM_BUMPED);
 }
 
@@ -72,11 +72,11 @@ void decoration_fsm::beBumped(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void decoration_fsm::becomeIdle(Mob* m, void* info1, void* info2) {
-    Decoration* dec_ptr = (Decoration*) m;
+void DecorationFsm::becomeIdle(Mob* m, void* info1, void* info2) {
+    Decoration* decPtr = (Decoration*) m;
     if(
-        dec_ptr->decType->randomAnimationDelay &&
-        dec_ptr->individualRandomAnimDelay
+        decPtr->decType->randomAnimationDelay &&
+        decPtr->individualRandomAnimDelay
     ) {
         m->setAnimation(
             DECORATION_ANIM_IDLING,
@@ -95,7 +95,7 @@ void decoration_fsm::becomeIdle(Mob* m, void* info1, void* info2) {
  * @param info1 Pointer to the mob that touched it.
  * @param info2 Unused.
  */
-void decoration_fsm::checkBump(Mob* m, void* info1, void* info2) {
+void DecorationFsm::checkBump(Mob* m, void* info1, void* info2) {
     Mob* toucher = (Mob*) info1;
     if(
         toucher->speed.x == 0 && toucher->speed.y == 0 &&

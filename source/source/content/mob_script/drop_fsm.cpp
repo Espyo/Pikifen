@@ -20,11 +20,11 @@
  *
  * @param typ Mob type to create the finite state machine for.
  */
-void drop_fsm::createFsm(MobType* typ) {
+void DropFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;
     efc.newState("falling", DROP_STATE_FALLING); {
         efc.newEvent(MOB_EV_ON_ENTER); {
-            efc.run(drop_fsm::setFallingAnim);
+            efc.run(DropFsm::setFallingAnim);
         }
         efc.newEvent(MOB_EV_LANDED); {
             efc.changeState("landing");
@@ -32,7 +32,7 @@ void drop_fsm::createFsm(MobType* typ) {
     }
     efc.newState("landing", DROP_STATE_LANDING); {
         efc.newEvent(MOB_EV_ON_ENTER); {
-            efc.run(drop_fsm::land);
+            efc.run(DropFsm::land);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {
             efc.changeState("idling");
@@ -40,18 +40,18 @@ void drop_fsm::createFsm(MobType* typ) {
     }
     efc.newState("idling", DROP_STATE_IDLING); {
         efc.newEvent(MOB_EV_ON_ENTER); {
-            efc.run(drop_fsm::setIdlingAnim);
+            efc.run(DropFsm::setIdlingAnim);
         }
         efc.newEvent(MOB_EV_TOUCHED_OBJECT); {
-            efc.run(drop_fsm::onTouched);
+            efc.run(DropFsm::onTouched);
         }
     }
     efc.newState("bumped", DROP_STATE_BUMPED); {
         efc.newEvent(MOB_EV_ON_ENTER); {
-            efc.run(drop_fsm::setBumpedAnim);
+            efc.run(DropFsm::setBumpedAnim);
         }
         efc.newEvent(MOB_EV_TOUCHED_OBJECT); {
-            efc.run(drop_fsm::onTouched);
+            efc.run(DropFsm::onTouched);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {
             efc.changeState("idling");
@@ -78,7 +78,7 @@ void drop_fsm::createFsm(MobType* typ) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void drop_fsm::land(Mob* m, void* info1, void* info2) {
+void DropFsm::land(Mob* m, void* info1, void* info2) {
     m->stopChasing();
     m->setAnimation(DROP_ANIM_LANDING);
 }
@@ -91,30 +91,30 @@ void drop_fsm::land(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void drop_fsm::onTouched(Mob* m, void* info1, void* info2) {
-    Drop* dro_ptr = (Drop*) m;
+void DropFsm::onTouched(Mob* m, void* info1, void* info2) {
+    Drop* droPtr = (Drop*) m;
     Mob* toucher = (Mob*) info1;
-    bool will_drink = false;
+    bool willDrink = false;
     
-    if(dro_ptr->dosesLeft == 0) return;
+    if(droPtr->dosesLeft == 0) return;
     
     //Check if a compatible mob touched it.
     if(
-        dro_ptr->droType->consumer == DROP_CONSUMER_PIKMIN &&
+        droPtr->droType->consumer == DROP_CONSUMER_PIKMIN &&
         toucher->type->category->id == MOB_CATEGORY_PIKMIN
     ) {
     
         //Pikmin is about to drink it.
-        Pikmin* pik_ptr = (Pikmin*) toucher;
+        Pikmin* pikPtr = (Pikmin*) toucher;
         
-        switch(dro_ptr->droType->effect) {
+        switch(droPtr->droType->effect) {
         case DROP_EFFECT_MATURATE: {
-            if(pik_ptr->maturity < N_MATURITIES - 1) {
-                will_drink = true;
+            if(pikPtr->maturity < N_MATURITIES - 1) {
+                willDrink = true;
             }
             break;
         } case DROP_EFFECT_GIVE_STATUS: {
-            will_drink = true;
+            willDrink = true;
             break;
         } default: {
             break;
@@ -122,15 +122,15 @@ void drop_fsm::onTouched(Mob* m, void* info1, void* info2) {
         }
         
     } else if(
-        dro_ptr->droType->consumer == DROP_CONSUMER_LEADERS &&
+        droPtr->droType->consumer == DROP_CONSUMER_LEADERS &&
         toucher->type->category->id == MOB_CATEGORY_LEADERS
     ) {
     
         //Leader is about to drink it.
-        switch(dro_ptr->droType->effect) {
+        switch(droPtr->droType->effect) {
         case DROP_EFFECT_INCREASE_SPRAYS:
         case DROP_EFFECT_GIVE_STATUS: {
-            will_drink = true;
+            willDrink = true;
             break;
         } default: {
             break;
@@ -141,26 +141,26 @@ void drop_fsm::onTouched(Mob* m, void* info1, void* info2) {
     
     MobEvent* ev = nullptr;
     
-    if(will_drink) {
+    if(willDrink) {
         ev = toucher->fsm.getEvent(MOB_EV_TOUCHED_DROP);
     }
     
     if(!ev) {
         //Turns out it can't drink in this state after all.
-        will_drink = false;
+        willDrink = false;
     }
     
-    if(will_drink) {
+    if(willDrink) {
         ev->run(toucher, (void*) m);
-        dro_ptr->dosesLeft--;
+        droPtr->dosesLeft--;
     } else {
         //This mob won't drink it. Just a bump.
-        bool toucher_is_moving =
+        bool toucherIsMoving =
             toucher->speed.x != 0 || toucher->speed.y != 0 ||
             toucher->chaseInfo.state == CHASE_STATE_CHASING;
         if(
             m->fsm.curState->id != DROP_STATE_BUMPED &&
-            toucher_is_moving
+            toucherIsMoving
         ) {
             m->fsm.setState(DROP_STATE_BUMPED, info1, info2);
         }
@@ -175,7 +175,7 @@ void drop_fsm::onTouched(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void drop_fsm::setBumpedAnim(Mob* m, void* info1, void* info2) {
+void DropFsm::setBumpedAnim(Mob* m, void* info1, void* info2) {
     m->setAnimation(DROP_ANIM_BUMPED);
 }
 
@@ -187,7 +187,7 @@ void drop_fsm::setBumpedAnim(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void drop_fsm::setFallingAnim(Mob* m, void* info1, void* info2) {
+void DropFsm::setFallingAnim(Mob* m, void* info1, void* info2) {
     m->setAnimation(
         DROP_ANIM_FALLING,
         START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
@@ -202,6 +202,6 @@ void drop_fsm::setFallingAnim(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void drop_fsm::setIdlingAnim(Mob* m, void* info1, void* info2) {
+void DropFsm::setIdlingAnim(Mob* m, void* info1, void* info2) {
     m->setAnimation(DROP_ANIM_IDLING);
 }

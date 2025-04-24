@@ -16,7 +16,7 @@
 /**
  * @brief Functions about the treasure's finite state machine and behavior.
  */
-namespace treasure_fsm {
+namespace TreasureFsm {
 void createFsm(MobType* typ);
 
 void respawn(Mob* m, void* info1, void* info2);

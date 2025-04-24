@@ -16,7 +16,7 @@
 /**
  * @brief Functions about the generic mob's finite state machine and behavior.
  */
-namespace gen_mob_fsm {
+namespace GenMobFsm {
 void beAttacked(Mob* m, void* info1, void* info2);
 void carryBecomeStuck(Mob* m, void* info1, void* info2);
 void carryBeginMove(Mob* m, void* info1, void* info2);

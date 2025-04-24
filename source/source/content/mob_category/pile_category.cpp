@@ -87,11 +87,11 @@ void PileCategory::eraseMob(Mob* m) {
  * @brief Returns a type of pile given its name,
  * or nullptr on error.
  *
- * @param internal_name Internal name of the mob type to get.
+ * @param internalName Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-MobType* PileCategory::getType(const string &internal_name) const {
-    auto it = game.content.mobTypes.list.pile.find(internal_name);
+MobType* PileCategory::getType(const string &internalName) const {
+    auto it = game.content.mobTypes.list.pile.find(internalName);
     if(it == game.content.mobTypes.list.pile.end()) return nullptr;
     return it->second;
 }
@@ -112,9 +112,9 @@ void PileCategory::getTypeNames(vector<string> &list) const {
 /**
  * @brief Registers a created type of pile.
  *
- * @param internal_name Internal name of the mob type.
+ * @param internalName Internal name of the mob type.
  * @param type Mob type to register.
  */
-void PileCategory::registerType(const string &internal_name, MobType* type) {
-    game.content.mobTypes.list.pile[internal_name] = (PileType*) type;
+void PileCategory::registerType(const string &internalName, MobType* type) {
+    game.content.mobTypes.list.pile[internalName] = (PileType*) type;
 }

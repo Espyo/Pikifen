@@ -16,7 +16,7 @@
 /**
  * @brief Functions about the Pikmin's finite state machine and behavior.
  */
-namespace pikmin_fsm {
+namespace PikminFsm {
 void createFsm(MobType* typ);
 
 void beAttacked(Mob* m, void* info1, void* info2);

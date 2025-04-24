@@ -87,11 +87,11 @@ void ResourceCategory::eraseMob(Mob* m) {
  * @brief Returns a type of resource given its name,
  * or nullptr on error.
  *
- * @param internal_name Internal name of the mob type to get.
+ * @param internalName Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-MobType* ResourceCategory::getType(const string &internal_name) const {
-    auto it = game.content.mobTypes.list.resource.find(internal_name);
+MobType* ResourceCategory::getType(const string &internalName) const {
+    auto it = game.content.mobTypes.list.resource.find(internalName);
     if(it == game.content.mobTypes.list.resource.end()) return nullptr;
     return it->second;
 }
@@ -112,9 +112,9 @@ void ResourceCategory::getTypeNames(vector<string> &list) const {
 /**
  * @brief Registers a created type of resource.
  *
- * @param internal_name Internal name of the mob type.
+ * @param internalName Internal name of the mob type.
  * @param type Mob type to register.
  */
-void ResourceCategory::registerType(const string &internal_name, MobType* type) {
-    game.content.mobTypes.list.resource[internal_name] = (ResourceType*) type;
+void ResourceCategory::registerType(const string &internalName, MobType* type) {
+    game.content.mobTypes.list.resource[internalName] = (ResourceType*) type;
 }

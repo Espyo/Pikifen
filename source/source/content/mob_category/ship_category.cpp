@@ -87,11 +87,11 @@ void ShipCategory::eraseMob(Mob* m) {
  * @brief Returns a type of ship given its name,
  * or nullptr on error.
  *
- * @param internal_name Internal name of the mob type to get.
+ * @param internalName Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-MobType* ShipCategory::getType(const string &internal_name) const {
-    auto it = game.content.mobTypes.list.ship.find(internal_name);
+MobType* ShipCategory::getType(const string &internalName) const {
+    auto it = game.content.mobTypes.list.ship.find(internalName);
     if(it == game.content.mobTypes.list.ship.end()) return nullptr;
     return it->second;
 }
@@ -112,9 +112,9 @@ void ShipCategory::getTypeNames(vector<string> &list) const {
 /**
  * @brief Registers a created type of ship.
  *
- * @param internal_name Internal name of the mob type.
+ * @param internalName Internal name of the mob type.
  * @param type Mob type to register.
  */
-void ShipCategory::registerType(const string &internal_name, MobType* type) {
-    game.content.mobTypes.list.ship[internal_name] = (ShipType*) type;
+void ShipCategory::registerType(const string &internalName, MobType* type) {
+    game.content.mobTypes.list.ship[internalName] = (ShipType*) type;
 }

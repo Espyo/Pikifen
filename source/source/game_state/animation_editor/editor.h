@@ -243,7 +243,7 @@ private:
     //--- Function declarations ---
     
     void centerCameraOnSpriteBitmap(bool instant);
-    void changeState(const EDITOR_STATE new_state);
+    void changeState(const EDITOR_STATE newState);
     void closeLoadDialog();
     void closeOptionsDialog();
     void createAnimDb(const string &path);
@@ -258,17 +258,17 @@ private:
     void importSpriteTransformationData(const string &name);
     bool isCursorInTimeline();
     void loadAnimDbFile(
-        const string &path, bool should_update_history
+        const string &path, bool shouldUpdateHistory
     );
     void pickAnimDbFile(
-        const string &name, const string &top_cat, const string &sec_cat,
-        void* info, bool is_new
+        const string &name, const string &topCat, const string &secCat,
+        void* info, bool isNew
     );
-    void playSound(size_t sound_idx);
+    void playSound(size_t soundIdx);
     void reloadAnimDbs();
-    void renameAnimation(Animation* anim, const string &new_name);
-    void renameBodyPart(BodyPart* part, const string &new_name);
-    void renameSprite(Sprite* spr, const string &new_name);
+    void renameAnimation(Animation* anim, const string &newName);
+    void renameBodyPart(BodyPart* part, const string &newName);
+    void renameSprite(Sprite* spr, const string &newName);
     void resizeEverything(float mult);
     void resizeSprite(Sprite* s, float mult);
     bool saveAnimDb();
@@ -277,54 +277,54 @@ private:
     void setAllSpriteScales(float scale);
     void setBestFrameSprite();
     void spriteBmpFloodFill(
-        ALLEGRO_BITMAP* bmp, bool* selection_pixels, int x, int y
+        ALLEGRO_BITMAP* bmp, bool* selectionPixels, int x, int y
     );
     void updateCurHitbox();
     void updateHitboxes();
     static void drawCanvasDearImGuiCallback(
-        const ImDrawList* parent_list, const ImDrawCmd* cmd
+        const ImDrawList* parentList, const ImDrawCmd* cmd
     );
     void drawComparison();
     void drawSideViewHitbox(
-        Hitbox* h_ptr, const ALLEGRO_COLOR &color,
-        const ALLEGRO_COLOR &outline_color, float outline_thickness
+        Hitbox* hPtr, const ALLEGRO_COLOR &color,
+        const ALLEGRO_COLOR &outlineColor, float outlineThickness
     );
-    void drawSideViewLeaderSilhouette(float x_offset);
+    void drawSideViewLeaderSilhouette(float xOffset);
     void drawSideViewSprite(const Sprite* s);
     void drawTimeline();
     void drawTopDownViewHitbox(
-        Hitbox* h_ptr, const ALLEGRO_COLOR &color,
-        const ALLEGRO_COLOR &outline_color, float outline_thickness
+        Hitbox* hPtr, const ALLEGRO_COLOR &color,
+        const ALLEGRO_COLOR &outlineColor, float outlineThickness
     );
-    void drawTopDownViewLeaderSilhouette(float x_offset);
+    void drawTopDownViewLeaderSilhouette(float xOffset);
     void drawTopDownViewMobRadius(MobType* mt);
     void drawTopDownViewSprite(Sprite* s);
     void openLoadDialog();
     void openNewDialog();
     void openOptionsDialog();
     void pickAnimation(
-        const string &name, const string &top_cat, const string &sec_cat,
-        void* info, bool is_new
+        const string &name, const string &topCat, const string &secCat,
+        void* info, bool isNew
     );
     void pickSprite(
-        const string &name, const string &top_cat, const string &sec_cat,
-        void* info, bool is_new
+        const string &name, const string &topCat, const string &secCat,
+        void* info, bool isNew
     );
-    void deleteAnimDbCmd(float input_value);
-    void gridToggleCmd(float input_value);
-    void hitboxesToggleCmd(float input_value);
-    void leaderSilhouetteToggleCmd(float input_value);
-    void loadCmd(float input_value);
-    void mobRadiusToggleCmd(float input_value);
-    void playPauseAnimCmd(float input_value);
-    void quitCmd(float input_value);
-    void reloadCmd(float input_value);
-    void restartAnimCmd(float input_value);
-    void saveCmd(float input_value);
-    void zoomAndPosResetCmd(float input_value);
-    void zoomEverythingCmd(float input_value);
-    void zoomInCmd(float input_value);
-    void zoomOutCmd(float input_value);
+    void deleteAnimDbCmd(float inputValue);
+    void gridToggleCmd(float inputValue);
+    void hitboxesToggleCmd(float inputValue);
+    void leaderSilhouetteToggleCmd(float inputValue);
+    void loadCmd(float inputValue);
+    void mobRadiusToggleCmd(float inputValue);
+    void playPauseAnimCmd(float inputValue);
+    void quitCmd(float inputValue);
+    void reloadCmd(float inputValue);
+    void restartAnimCmd(float inputValue);
+    void saveCmd(float inputValue);
+    void zoomAndPosResetCmd(float inputValue);
+    void zoomEverythingCmd(float inputValue);
+    void zoomInCmd(float inputValue);
+    void zoomOutCmd(float inputValue);
     void processGui();
     void processGuiControlPanel();
     void processGuiDeleteAnimDbDialog();
@@ -336,8 +336,8 @@ private:
     void processGuiPanelAnimationData();
     void processGuiPanelAnimationHeader();
     void processGuiPanelBodyPart();
-    void processGuiPanelFrame(Frame* &frame_ptr);
-    void processGuiPanelFrameHeader(Frame* &frame_ptr);
+    void processGuiPanelFrame(Frame* &framePtr);
+    void processGuiPanelFrameHeader(Frame* &framePtr);
     void processGuiPanelInfo();
     void processGuiPanelMain();
     void processGuiPanelSprite();

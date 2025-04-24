@@ -114,15 +114,15 @@ ALLEGRO_COLOR changeColorLighting(const ALLEGRO_COLOR &c, float l) {
  * @param path Path to the file.
  * @return A status code.
  */
-FS_DELETE_RESULT deleteFile(const string &file_path) {
+FS_DELETE_RESULT deleteFile(const string &filePath) {
     //Panic check to make sure nothing went wrong and it's an important file.
     //"", "C:", "C:/, "/", etc. are all 3 characters or fewer, so this works.
     engineAssert(
-        file_path.size() >= 4,
-        "Tried to delete the file \"" + file_path + "\"!"
+        filePath.size() >= 4,
+        "Tried to delete the file \"" + filePath + "\"!"
     );
     
-    ALLEGRO_FS_ENTRY* file = al_create_fs_entry(file_path.c_str());
+    ALLEGRO_FS_ENTRY* file = al_create_fs_entry(filePath.c_str());
     if(!file) {
         return FS_DELETE_RESULT_NOT_FOUND;
     }
@@ -162,12 +162,12 @@ bool fileExists(const string &path) {
  */
 bool folderExists(const string &path) {
     bool result = true;
-    ALLEGRO_FS_ENTRY* fs_entry = al_create_fs_entry(path.c_str());
-    if(!fs_entry || !al_open_directory(fs_entry)) {
+    ALLEGRO_FS_ENTRY* fsEntry = al_create_fs_entry(path.c_str());
+    if(!fsEntry || !al_open_directory(fsEntry)) {
         result = false;
     }
-    al_close_directory(fs_entry);
-    al_destroy_fs_entry(fs_entry);
+    al_close_directory(fsEntry);
+    al_destroy_fs_entry(fsEntry);
     return result;
 }
 
@@ -175,29 +175,29 @@ bool folderExists(const string &path) {
 /**
  * @brief Stores the names of all files in a folder into a vector.
  *
- * @param folder_path Path to the folder.
+ * @param folderPath Path to the folder.
  * @param folders If true, only read folders. If false, only read files.
- * @param out_folder_found If not nullptr, whether the folder was
+ * @param outFolderFound If not nullptr, whether the folder was
  * found or not is returned here.
  * @return The vector.
  */
 vector<string> folderToVector(
-    string folder_path, bool folders, bool* out_folder_found
+    string folderPath, bool folders, bool* outFolderFound
 ) {
     vector<string> v;
     
-    if(folder_path.empty()) {
-        if(out_folder_found) *out_folder_found = false;
+    if(folderPath.empty()) {
+        if(outFolderFound) *outFolderFound = false;
         return v;
     }
     
     //Normalize the folder's path.
-    folder_path = standardizePath(folder_path);
+    folderPath = standardizePath(folderPath);
     
     ALLEGRO_FS_ENTRY* folder =
-        al_create_fs_entry(folder_path.c_str());
+        al_create_fs_entry(folderPath.c_str());
     if(!folder || !al_open_directory(folder)) {
-        if(out_folder_found) *out_folder_found = false;
+        if(outFolderFound) *outFolderFound = false;
         return v;
     }
     
@@ -209,17 +209,17 @@ vector<string> folderToVector(
             (hasFlag(al_get_fs_entry_mode(entry), ALLEGRO_FILEMODE_ISDIR))
         ) {
         
-            string entry_name =
+            string entryName =
                 standardizePath(al_get_fs_entry_name(entry));
                 
             //Only save what's after the final slash.
-            size_t pos = entry_name.find_last_of("/");
+            size_t pos = entryName.find_last_of("/");
             if(pos != string::npos) {
-                entry_name =
-                    entry_name.substr(pos + 1, entry_name.size() - pos - 1);
+                entryName =
+                    entryName.substr(pos + 1, entryName.size() - pos - 1);
             }
             
-            v.push_back(entry_name);
+            v.push_back(entryName);
         }
         al_destroy_fs_entry(entry);
     }
@@ -231,7 +231,7 @@ vector<string> folderToVector(
         return strToLower(s1) < strToLower(s2);
     });
     
-    if(out_folder_found) *out_folder_found = true;
+    if(outFolderFound) *outFolderFound = true;
     return v;
 }
 
@@ -240,29 +240,29 @@ vector<string> folderToVector(
  * @brief Stores the names of all files in a folder into a vector, but also
  * recursively enters subfolders.
  *
- * @param folder_path Path to the folder.
+ * @param folderPath Path to the folder.
  * @param folders If true, only read folders. If false, only read files.
- * @param out_folder_found If not nullptr, whether the folder was
+ * @param outFolderFound If not nullptr, whether the folder was
  * found or not is returned here.
  * @return The vector.
  */
 vector<string> folderToVectorRecursively(
-    string folder_path, bool folders, bool* out_folder_found
+    string folderPath, bool folders, bool* outFolderFound
 ) {
     //Figure out what subfolders exist, both to add to the list if needed, as
     //well as to navigate recursively.
     vector<string> v;
     bool found;
-    vector<string> subfolders = folderToVector(folder_path, true, &found);
+    vector<string> subfolders = folderToVector(folderPath, true, &found);
     
     if(!found) {
-        if(out_folder_found) *out_folder_found = false;
+        if(outFolderFound) *outFolderFound = false;
         return v;
     }
     
     //Add the current folder's things.
     if(!folders) {
-        vector<string> files = folderToVector(folder_path, false);
+        vector<string> files = folderToVector(folderPath, false);
         v.insert(v.end(), files.begin(), files.end());
     } else {
         v.insert(v.end(), subfolders.begin(), subfolders.end());
@@ -270,15 +270,15 @@ vector<string> folderToVectorRecursively(
     
     //Go recursively.
     for(size_t s = 0; s < subfolders.size(); s++) {
-        vector<string> recursive_result =
-            folderToVectorRecursively(folder_path + "/" + subfolders[s], folders);
-        for(size_t r = 0; r < recursive_result.size(); r++) {
-            v.push_back(subfolders[s] + "/" + recursive_result[r]);
+        vector<string> recursiveResult =
+            folderToVectorRecursively(folderPath + "/" + subfolders[s], folders);
+        for(size_t r = 0; r < recursiveResult.size(); r++) {
+            v.push_back(subfolders[s] + "/" + recursiveResult[r]);
         }
     }
     
     //Finish.
-    if(out_folder_found) *out_folder_found = true;
+    if(outFolderFound) *outFolderFound = true;
     return v;
 }
 
@@ -439,34 +439,34 @@ string getKeyName(int keycode, bool condensed) {
 /**
  * @brief Returns whether any Shift key, any Ctrl key, and any Alt key
  * is pressed.
- * 
- * @param out_shift_state If not nullptr,
+ *
+ * @param outShiftState If not nullptr,
  * whether Shift is pressed is returned here.
- * @param out_ctrl_state If not nullptr,
+ * @param outCtrlState If not nullptr,
  * whether Ctrl is pressed is returned here.
- * @param out_alt_state If not nullptr,
+ * @param outAltState If not nullptr,
  * whether Alt is pressed is returned here.
  */
 void getShiftCtrlAltState(
-    bool* out_shift_state, bool* out_ctrl_state, bool* out_alt_state
+    bool* outShiftState, bool* outCtrlState, bool* outAltState
 ) {
-    ALLEGRO_KEYBOARD_STATE keyboard_state;
-    al_get_keyboard_state(&keyboard_state);
-    if(out_shift_state) {
-        *out_shift_state =
-            al_key_down(&keyboard_state, ALLEGRO_KEY_LSHIFT) ||
-            al_key_down(&keyboard_state, ALLEGRO_KEY_RSHIFT);
+    ALLEGRO_KEYBOARD_STATE keyboardState;
+    al_get_keyboard_state(&keyboardState);
+    if(outShiftState) {
+        *outShiftState =
+            al_key_down(&keyboardState, ALLEGRO_KEY_LSHIFT) ||
+            al_key_down(&keyboardState, ALLEGRO_KEY_RSHIFT);
     }
-    if(out_ctrl_state) {
-        *out_ctrl_state =
-            al_key_down(&keyboard_state, ALLEGRO_KEY_LCTRL) ||
-            al_key_down(&keyboard_state, ALLEGRO_KEY_RCTRL) ||
-            al_key_down(&keyboard_state, ALLEGRO_KEY_COMMAND);
+    if(outCtrlState) {
+        *outCtrlState =
+            al_key_down(&keyboardState, ALLEGRO_KEY_LCTRL) ||
+            al_key_down(&keyboardState, ALLEGRO_KEY_RCTRL) ||
+            al_key_down(&keyboardState, ALLEGRO_KEY_COMMAND);
     }
-    if(out_alt_state) {
-        *out_alt_state =
-            al_key_down(&keyboard_state, ALLEGRO_KEY_ALT) ||
-            al_key_down(&keyboard_state, ALLEGRO_KEY_ALTGR);
+    if(outAltState) {
+        *outAltState =
+            al_key_down(&keyboardState, ALLEGRO_KEY_ALT) ||
+            al_key_down(&keyboardState, ALLEGRO_KEY_ALTGR);
     }
 }
 
@@ -483,20 +483,20 @@ void getline(ALLEGRO_FILE* file, string &line) {
         return;
     }
     
-    size_t bytes_read;
-    char* c_ptr = new char;
+    size_t bytesRead;
+    char* cPtr = new char;
     
-    bytes_read = al_fread(file, c_ptr, 1);
-    while(bytes_read > 0) {
-        unsigned char c = *((unsigned char*) c_ptr);
+    bytesRead = al_fread(file, cPtr, 1);
+    while(bytesRead > 0) {
+        unsigned char c = *((unsigned char*) cPtr);
         
         if(c == '\r') {
             //Let's check if the next character is a \n. If so, they should
             //both be consumed by al_fread().
-            bytes_read = al_fread(file, c_ptr, 1);
-            unsigned char peek_c = *((unsigned char*) c_ptr);
-            if(bytes_read > 0) {
-                if(peek_c == '\n') {
+            bytesRead = al_fread(file, cPtr, 1);
+            unsigned char peekC = *((unsigned char*) cPtr);
+            if(bytesRead > 0) {
+                if(peekC == '\n') {
                     //Yep. Done.
                     break;
                 } else {
@@ -516,10 +516,10 @@ void getline(ALLEGRO_FILE* file, string &line) {
             
         }
         
-        bytes_read = al_fread(file, c_ptr, 1);
+        bytesRead = al_fread(file, cPtr, 1);
     }
     
-    delete c_ptr;
+    delete cPtr;
 }
 
 
@@ -528,26 +528,26 @@ void getline(ALLEGRO_FILE* file, string &line) {
  * an interval.
  *
  * @param input The input number.
- * @param input_start Start of the interval the input number falls on,
- * inclusive. The closer to input_start, the closer the output is
- * to output_start.
- * @param input_end End of the interval the number falls on, inclusive.
- * @param output_start Color on the starting tip of the interpolation.
- * @param output_end Color on the ending tip of the interpolation.
+ * @param inputStart Start of the interval the input number falls on,
+ * inclusive. The closer to inputStart, the closer the output is
+ * to outputStart.
+ * @param inputEnd End of the interval the number falls on, inclusive.
+ * @param outputStart Color on the starting tip of the interpolation.
+ * @param outputEnd Color on the ending tip of the interpolation.
  * @return The interpolated color.
  */
 ALLEGRO_COLOR interpolateColor(
-    float input, float input_start, float input_end,
-    const ALLEGRO_COLOR &output_start, const ALLEGRO_COLOR &output_end
+    float input, float inputStart, float inputEnd,
+    const ALLEGRO_COLOR &outputStart, const ALLEGRO_COLOR &outputEnd
 ) {
     float progress =
-        (float) (input - input_start) / (float) (input_end - input_start);
+        (float) (input - inputStart) / (float) (inputEnd - inputStart);
     return
         al_map_rgba_f(
-            output_start.r + progress * (output_end.r - output_start.r),
-            output_start.g + progress * (output_end.g - output_start.g),
-            output_start.b + progress * (output_end.b - output_start.b),
-            output_start.a + progress * (output_end.a - output_start.a)
+            outputStart.r + progress * (outputEnd.r - outputStart.r),
+            outputStart.g + progress * (outputEnd.g - outputStart.g),
+            outputStart.b + progress * (outputEnd.b - outputStart.b),
+            outputStart.a + progress * (outputEnd.a - outputStart.a)
         );
 }
 
@@ -555,7 +555,7 @@ ALLEGRO_COLOR interpolateColor(
 /**
  * @brief Creates and opens an Allegro native file dialog.
  *
- * @param initial_path Initial path for the dialog.
+ * @param initialPath Initial path for the dialog.
  * @param title Title of the dialog.
  * @param patterns File name patterns to match, separated by semicolon.
  * @param mode al_create_native_file_dialog mode flags.
@@ -563,12 +563,12 @@ ALLEGRO_COLOR interpolateColor(
  * @return The user's choice(s).
  */
 vector<string> promptFileDialog(
-    const string &initial_path, const string &title,
+    const string &initialPath, const string &title,
     const string &patterns, int mode, ALLEGRO_DISPLAY* display
 ) {
     ALLEGRO_FILECHOOSER* dialog =
         al_create_native_file_dialog(
-            initial_path.c_str(), title.c_str(),
+            initialPath.c_str(), title.c_str(),
             patterns.c_str(), mode
         );
     al_show_native_file_dialog(display, dialog);
@@ -578,8 +578,8 @@ vector<string> promptFileDialog(
     setlocale(LC_ALL, "C");
     
     vector<string> result;
-    size_t n_choices = al_get_native_file_dialog_count(dialog);
-    for(size_t c = 0; c < n_choices; c++) {
+    size_t nChoices = al_get_native_file_dialog_count(dialog);
+    for(size_t c = 0; c < nChoices; c++) {
         result.push_back(
             standardizePath(
                 al_get_native_file_dialog_path(dialog, c)
@@ -603,7 +603,7 @@ vector<string> promptFileDialog(
  * rest of the path. Choices can also be contained inside subfolders of the
  * specified folder.
  *
- * @param folder_path The folder to lock to, without the ending slash.
+ * @param folderPath The folder to lock to, without the ending slash.
  * @param title Title of the dialog.
  * @param patterns File name patterns to match, separated by semicolon.
  * @param mode al_create_native_file_dialog mode flags.
@@ -612,12 +612,12 @@ vector<string> promptFileDialog(
  * @return The user's choice(s).
  */
 vector<string> promptFileDialogLockedToFolder(
-    const string &folder_path, const string &title,
+    const string &folderPath, const string &title,
     const string &patterns, int mode, FILE_DIALOG_RESULT* result,
     ALLEGRO_DISPLAY* display
 ) {
     vector<string> f =
-        promptFileDialog(folder_path + "/", title, patterns, mode, display);
+        promptFileDialog(folderPath + "/", title, patterns, mode, display);
         
     if(f.empty() || f[0].empty()) {
         *result = FILE_DIALOG_RESULT_CANCELED;
@@ -625,14 +625,14 @@ vector<string> promptFileDialogLockedToFolder(
     }
     
     for(size_t fi = 0; fi < f.size(); fi++) {
-        size_t folder_pos = f[0].find(folder_path);
-        if(folder_pos == string::npos) {
+        size_t folderPos = f[0].find(folderPath);
+        if(folderPos == string::npos) {
             //This isn't in the specified folder!
             *result = FILE_DIALOG_RESULT_WRONG_FOLDER;
             return vector<string>();
         } else {
             f[fi] =
-                f[fi].substr(folder_pos + folder_path.size() + 1, string::npos);
+                f[fi].substr(folderPos + folderPath.size() + 1, string::npos);
         }
     }
     
@@ -649,9 +649,9 @@ vector<string> promptFileDialogLockedToFolder(
  * @return The recreated bitmap.
  */
 ALLEGRO_BITMAP* recreateBitmap(ALLEGRO_BITMAP* b) {
-    ALLEGRO_BITMAP* fixed_mipmap = al_clone_bitmap(b);
+    ALLEGRO_BITMAP* fixedMipmap = al_clone_bitmap(b);
     al_destroy_bitmap(b);
-    return fixed_mipmap;
+    return fixedMipmap;
 }
 
 
@@ -716,13 +716,13 @@ void setCombinedClippingRectangles(
     float x1, float y1, float w1, float h1,
     float x2, float y2, float w2, float h2
 ) {
-    float best_left = std::max(x1, x2);
-    float best_top = std::max(y1, y2);
-    float best_right = std::min(x1 + w1, x2 + w2);
-    float best_bottom = std::min(y1 + h1, y2 + h2);
+    float bestLeft = std::max(x1, x2);
+    float bestTop = std::max(y1, y2);
+    float bestRight = std::min(x1 + w1, x2 + w2);
+    float bestBottom = std::min(y1 + h1, y2 + h2);
     al_set_clipping_rectangle(
-        best_left, best_top,
-        best_right - best_left, best_bottom - best_top
+        bestLeft, bestTop,
+        bestRight - bestLeft, bestBottom - bestTop
     );
 }
 
@@ -762,59 +762,59 @@ int showSystemMessageBox(
  * @brief Deletes all "non-important" files inside of a folder.
  * Then, if the folder ends up empty, also deletes the folder.
  *
- * @param folder_path Path to the folder to wipe.
- * @param non_important_files List of files that can be deleted.
+ * @param folderPath Path to the folder to wipe.
+ * @param nonImportantFiles List of files that can be deleted.
  * @return An error code.
  */
 FS_DELETE_RESULT wipeFolder(
-    const string &folder_path, const vector<string> &non_important_files
+    const string &folderPath, const vector<string> &nonImportantFiles
 ) {
     //Panic check to make sure nothing went wrong and it's an important folder.
     //"", "C:", "C:/, "/", etc. are all 3 characters or fewer, so this works.
     engineAssert(
-        folder_path.size() >= 4,
-        "Tried to wipe the folder \"" + folder_path + "\"!"
+        folderPath.size() >= 4,
+        "Tried to wipe the folder \"" + folderPath + "\"!"
     );
     
     ALLEGRO_FS_ENTRY* folder =
-        al_create_fs_entry(folder_path.c_str());
+        al_create_fs_entry(folderPath.c_str());
     if(!folder || !al_open_directory(folder)) {
         return FS_DELETE_RESULT_NOT_FOUND;
     }
     
-    bool has_important_files = false;
-    bool has_folders = false;
-    bool non_important_file_delete_error = false;
-    bool folder_delete_error = false;
+    bool hasImportantFiles = false;
+    bool hasFolders = false;
+    bool nonImportantFileDeleteError = false;
+    bool folderDeleteError = false;
     
     ALLEGRO_FS_ENTRY* entry = al_read_directory(folder);
     while(entry) {
         if(hasFlag(al_get_fs_entry_mode(entry), ALLEGRO_FILEMODE_ISDIR)) {
-            has_folders = true;
+            hasFolders = true;
             
         } else {
-            string entry_name =
+            string entryName =
                 standardizePath(al_get_fs_entry_name(entry));
                 
             //Only save what's after the final slash.
-            size_t pos = entry_name.find_last_of("/");
+            size_t pos = entryName.find_last_of("/");
             if(pos != string::npos) {
-                entry_name =
-                    entry_name.substr(pos + 1, entry_name.size() - pos - 1);
+                entryName =
+                    entryName.substr(pos + 1, entryName.size() - pos - 1);
             }
             
             if(
                 std::find(
-                    non_important_files.begin(),
-                    non_important_files.end(),
-                    entry_name
-                ) == non_important_files.end()
+                    nonImportantFiles.begin(),
+                    nonImportantFiles.end(),
+                    entryName
+                ) == nonImportantFiles.end()
             ) {
                 //Name not found in the non-important file list.
-                has_important_files = true;
+                hasImportantFiles = true;
             } else {
                 if(!al_remove_fs_entry(entry)) {
-                    non_important_file_delete_error = true;
+                    nonImportantFileDeleteError = true;
                 }
             }
             
@@ -827,21 +827,21 @@ FS_DELETE_RESULT wipeFolder(
     al_close_directory(folder);
     
     if(
-        !has_important_files &&
-        !has_folders &&
-        !non_important_file_delete_error
+        !hasImportantFiles &&
+        !hasFolders &&
+        !nonImportantFileDeleteError
     ) {
         if(!al_remove_fs_entry(folder)) {
-            folder_delete_error = true;
+            folderDeleteError = true;
         }
     }
     
     al_destroy_fs_entry(folder);
     
-    if(non_important_file_delete_error || folder_delete_error) {
+    if(nonImportantFileDeleteError || folderDeleteError) {
         return FS_DELETE_RESULT_DELETE_ERROR;
     }
-    if(has_important_files || has_folders) {
+    if(hasImportantFiles || hasFolders) {
         return FS_DELETE_RESULT_HAS_IMPORTANT;
     }
     return FS_DELETE_RESULT_OK;

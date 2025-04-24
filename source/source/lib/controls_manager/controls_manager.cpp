@@ -192,10 +192,10 @@ void ControlsManager::handleInput(
  * @brief Returns the player actions that occurred during the last frame of
  * gameplay, and begins a new frame.
  *
- * @param delta_t How much time has passed since the last frame.
+ * @param deltaT How much time has passed since the last frame.
  * @return The actions.
  */
-vector<PlayerAction> ControlsManager::newFrame(float delta_t) {
+vector<PlayerAction> ControlsManager::newFrame(float deltaT) {
     for(auto &a : actionTypeStatuses) {
         if(a.second.oldValue != a.second.value) {
             PlayerAction newAction;
@@ -206,8 +206,8 @@ vector<PlayerAction> ControlsManager::newFrame(float delta_t) {
     }
     
     for(auto &a : actionTypeStatuses) {
-        processStateTimers(a, delta_t);
-        processAutoRepeats(a, delta_t);
+        processStateTimers(a, deltaT);
+        processAutoRepeats(a, deltaT);
     }
     
     vector<PlayerAction> result;
@@ -229,10 +229,10 @@ vector<PlayerAction> ControlsManager::newFrame(float delta_t) {
  * @brief Processes logic for auto-repeating player actions.
  *
  * @param it Iterator of the map of action type statuses.
- * @param delta_t How much time has passed since the last frame.
+ * @param deltaT How much time has passed since the last frame.
  */
 void ControlsManager::processAutoRepeats(
-    std::pair<const int, ActionTypeStatus> &it, float delta_t
+    std::pair<const int, ActionTypeStatus> &it, float deltaT
 ) {
     float actionTypeAutoRepeat = actionTypes[it.first].autoRepeat;
     if(actionTypeAutoRepeat == 0.0f) return;
@@ -242,7 +242,7 @@ void ControlsManager::processAutoRepeats(
     if(autoRepeatFactor <= 0.0f) return;
     if(it.second.value == 0.0f) return;
     if(it.second.stateDuration == 0.0f) return;
-    float oldDuration = it.second.stateDuration - delta_t;
+    float oldDuration = it.second.stateDuration - deltaT;
     if(oldDuration >= it.second.nextAutoRepeatActivation) return;
     
     while(it.second.stateDuration >= it.second.nextAutoRepeatActivation) {
@@ -299,20 +299,20 @@ bool ControlsManager::processInputIgnoring(
  * @brief Processes the timers for action type states in a frame.
  *
  * @param it Iterator of the map of action type statuses.
- * @param delta_t How much time has passed since the last frame.
+ * @param deltaT How much time has passed since the last frame.
  */
 void ControlsManager::processStateTimers(
-    std::pair<const int, ActionTypeStatus> &it, float delta_t
+    std::pair<const int, ActionTypeStatus> &it, float deltaT
 ) {
-    bool is_active = it.second.value != 0.0f;
-    bool was_active = it.second.oldValue != 0.0f;
-    if(is_active != was_active) {
+    bool isActive = it.second.value != 0.0f;
+    bool wasActive = it.second.oldValue != 0.0f;
+    if(isActive != wasActive) {
         //State changed. Reset the timer.
         it.second.stateDuration = 0.0f;
         it.second.nextAutoRepeatActivation = options.autoRepeatMaxInterval;
     } else {
         //Same state, increase the timer.
-        it.second.stateDuration += delta_t;
+        it.second.stateDuration += deltaT;
     }
 }
 

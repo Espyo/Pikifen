@@ -87,11 +87,11 @@ void TreasureCategory::eraseMob(Mob* m) {
  * @brief Returns a type of treasure given its name,
  * or nullptr on error.
  *
- * @param internal_name Internal name of the mob type to get.
+ * @param internalName Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-MobType* TreasureCategory::getType(const string &internal_name) const {
-    auto it = game.content.mobTypes.list.treasure.find(internal_name);
+MobType* TreasureCategory::getType(const string &internalName) const {
+    auto it = game.content.mobTypes.list.treasure.find(internalName);
     if(it == game.content.mobTypes.list.treasure.end()) return nullptr;
     return it->second;
 }
@@ -112,9 +112,9 @@ void TreasureCategory::getTypeNames(vector<string> &list) const {
 /**
  * @brief Registers a created type of treasure.
  *
- * @param internal_name Internal name of the mob type.
+ * @param internalName Internal name of the mob type.
  * @param type Mob type to register.
  */
-void TreasureCategory::registerType(const string &internal_name, MobType* type) {
-    game.content.mobTypes.list.treasure[internal_name] = (TreasureType*) type;
+void TreasureCategory::registerType(const string &internalName, MobType* type) {
+    game.content.mobTypes.list.treasure[internalName] = (TreasureType*) type;
 }

@@ -221,27 +221,27 @@ Mob::~Mob() {
 /**
  * @brief Adds a mob to this mob's group.
  *
- * @param new_member The new member to add.
+ * @param newMember The new member to add.
  */
-void Mob::addToGroup(Mob* new_member) {
+void Mob::addToGroup(Mob* newMember) {
     //If it's already following, never mind.
-    if(new_member->followingGroup == this) return;
+    if(newMember->followingGroup == this) return;
     if(!group) return;
     
-    new_member->followingGroup = this;
-    group->members.push_back(new_member);
+    newMember->followingGroup = this;
+    group->members.push_back(newMember);
     
     //Find a spot.
-    group->initSpots(new_member);
-    new_member->groupSpotIdx = group->spots.size() - 1;
+    group->initSpots(newMember);
+    newMember->groupSpotIdx = group->spots.size() - 1;
     
     if(!group->curStandbyType) {
         if(
-            new_member->type->category->id != MOB_CATEGORY_LEADERS ||
+            newMember->type->category->id != MOB_CATEGORY_LEADERS ||
             game.config.rules.canThrowLeaders
         ) {
             group->curStandbyType =
-                new_member->subgroupTypePtr;
+                newMember->subgroupTypePtr;
         }
     }
     
@@ -257,12 +257,12 @@ void Mob::addToGroup(Mob* new_member) {
  * @brief Applies the damage caused by an attack from another mob to this one.
  *
  * @param attacker The mob that caused the attack.
- * @param attack_h Hitbox used for the attack.
- * @param victim_h Victim's hitbox that got hit.
+ * @param attackH Hitbox used for the attack.
+ * @param victimH Victim's hitbox that got hit.
  * @param damage Total damage the attack caused.
  */
 void Mob::applyAttackDamage(
-    Mob* attacker, Hitbox* attack_h, Hitbox* victim_h, float damage
+    Mob* attacker, Hitbox* attackH, Hitbox* victimH, float damage
 ) {
     //Register this hit, so the next frame doesn't hit it too.
     attacker->hitOpponents.push_back(
@@ -270,9 +270,9 @@ void Mob::applyAttackDamage(
     );
     
     //Will the parent mob be handling the damage?
-    if(parent && parent->relay_damage) {
-        parent->m->applyAttackDamage(attacker, attack_h, victim_h, damage);
-        if(!parent->handle_damage) {
+    if(parent && parent->relayDamage) {
+        parent->m->applyAttackDamage(attacker, attackH, victimH, damage);
+        if(!parent->handleDamage) {
             return;
         }
     }
@@ -281,8 +281,8 @@ void Mob::applyAttackDamage(
     if(damage > 0) {
         setHealth(true, false, -damage);
         
-        HitboxInteraction ev_info(this, victim_h, attack_h);
-        fsm.runEvent(MOB_EV_DAMAGE, (void*) &ev_info);
+        HitboxInteraction evInfo(this, victimH, attackH);
+        fsm.runEvent(MOB_EV_DAMAGE, (void*) &evInfo);
         
         attacker->causeSpikeDamage(this, false);
     }
@@ -296,13 +296,13 @@ void Mob::applyAttackDamage(
  * @brief Applies the knockback values to a mob, caused by an attack.
  *
  * @param knockback Total knockback value.
- * @param knockback_angle Angle to knockback towards.
+ * @param knockbackAngle Angle to knockback towards.
  */
-void Mob::applyKnockback(float knockback, float knockback_angle) {
+void Mob::applyKnockback(float knockback, float knockbackAngle) {
     if(knockback != 0) {
         stopChasing();
-        speed.x = cos(knockback_angle) * knockback * MOB::KNOCKBACK_H_POWER;
-        speed.y = sin(knockback_angle) * knockback * MOB::KNOCKBACK_H_POWER;
+        speed.x = cos(knockbackAngle) * knockback * MOB::KNOCKBACK_H_POWER;
+        speed.y = sin(knockbackAngle) * knockback * MOB::KNOCKBACK_H_POWER;
         speedZ = MOB::KNOCKBACK_V_POWER;
         face(getAngle(speed) + TAU / 2, nullptr, true);
         startHeightEffect();
@@ -314,37 +314,37 @@ void Mob::applyKnockback(float knockback, float knockback_angle) {
  * @brief Applies a status effect's effects.
  *
  * @param s Status effect to use.
- * @param given_by_parent If true, this status effect was given to the mob
+ * @param givenByParent If true, this status effect was given to the mob
  * by its parent mob.
- * @param from_hazard If true, this status effect was given from a hazard.
+ * @param fromHazard If true, this status effect was given from a hazard.
  */
 void Mob::applyStatusEffect(
-    StatusType* s, bool given_by_parent, bool from_hazard
+    StatusType* s, bool givenByParent, bool fromHazard
 ) {
-    if(parent && parent->relay_statuses && !given_by_parent) {
-        parent->m->applyStatusEffect(s, false, from_hazard);
-        if(!parent->handle_statuses) return;
+    if(parent && parent->relayStatuses && !givenByParent) {
+        parent->m->applyStatusEffect(s, false, fromHazard);
+        if(!parent->handleStatuses) return;
     }
     
-    if(!given_by_parent && !canReceiveStatus(s)) {
+    if(!givenByParent && !canReceiveStatus(s)) {
         return;
     }
     
     //Let's start by sending the status to the child mobs.
     for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
-        Mob* m2_ptr = game.states.gameplay->mobs.all[m];
-        if(m2_ptr->parent && m2_ptr->parent->m == this) {
-            m2_ptr->applyStatusEffect(s, true, from_hazard);
+        Mob* m2Ptr = game.states.gameplay->mobs.all[m];
+        if(m2Ptr->parent && m2Ptr->parent->m == this) {
+            m2Ptr->applyStatusEffect(s, true, fromHazard);
         }
     }
     
     //Get the vulnerabilities to this status.
-    auto vuln_it = type->statusVulnerabilities.find(s);
-    if(vuln_it != type->statusVulnerabilities.end()) {
-        if(vuln_it->second.statusToApply) {
+    auto vulnIt = type->statusVulnerabilities.find(s);
+    if(vulnIt != type->statusVulnerabilities.end()) {
+        if(vulnIt->second.statusToApply) {
             //It must instead receive this status.
             applyStatusEffect(
-                vuln_it->second.statusToApply, given_by_parent, from_hazard
+                vulnIt->second.statusToApply, givenByParent, fromHazard
             );
             return;
         }
@@ -374,9 +374,9 @@ void Mob::applyStatusEffect(
     }
     
     //This status is not already inflicted. Let's do so.
-    Status new_status(s);
-    new_status.fromHazard = from_hazard;
-    this->statuses.push_back(new_status);
+    Status newStatus(s);
+    newStatus.fromHazard = fromHazard;
+    this->statuses.push_back(newStatus);
     handleStatusEffectGain(s);
     
     if(!s->animationChange.empty()) {
@@ -411,33 +411,33 @@ void Mob::arachnorbFootMoveLogic() {
     if(!parent) {
         return;
     }
-    if(parent->limb_parent_body_part == INVALID) {
+    if(parent->limbParentBodyPart == INVALID) {
         return;
     }
     
-    float feet_normal_distance = s2f(parent->m->vars["feet_normal_distance"]);
-    if(feet_normal_distance == 0) {
-        feet_normal_distance = 175;
+    float feetNormalDist = s2f(parent->m->vars["feet_normal_distance"]);
+    if(feetNormalDist == 0) {
+        feetNormalDist = 175;
     }
     
-    float default_angle =
+    float defaultAngle =
         getAngle(
             Point(),
             parent->m->getHitbox(
-                parent->limb_parent_body_part
+                parent->limbParentBodyPart
             )->pos
         );
         
-    Point final_pos = s2p(parent->m->vars["_destination_pos"]);
-    float final_angle = s2f(parent->m->vars["_destination_angle"]);
+    Point finalPos = s2p(parent->m->vars["_destination_pos"]);
+    float finalAngle = s2f(parent->m->vars["_destination_angle"]);
     
-    Point offset = Point(feet_normal_distance, 0);
-    offset = rotatePoint(offset, default_angle);
-    offset = rotatePoint(offset, final_angle);
+    Point offset = Point(feetNormalDist, 0);
+    offset = rotatePoint(offset, defaultAngle);
+    offset = rotatePoint(offset, finalAngle);
     
-    final_pos += offset;
+    finalPos += offset;
     
-    chase(final_pos, z);
+    chase(finalPos, z);
 }
 
 
@@ -448,8 +448,8 @@ void Mob::arachnorbFootMoveLogic() {
 void Mob::arachnorbHeadTurnLogic() {
     if(links.empty()) return;
     
-    float angle_deviation_avg = 0;
-    size_t n_feet = 0;
+    float angleDeviationAvg = 0;
+    size_t nFeet = 0;
     
     for(size_t l = 0; l < links.size(); l++) {
         if(!links[l]) {
@@ -462,30 +462,30 @@ void Mob::arachnorbHeadTurnLogic() {
         if(links[l]->parent->m != this) {
             continue;
         }
-        if(links[l]->parent->limb_parent_body_part == INVALID) {
+        if(links[l]->parent->limbParentBodyPart == INVALID) {
             continue;
         }
         
-        n_feet++;
+        nFeet++;
         
-        float default_angle =
+        float defaultAngle =
             getAngle(
                 Point(),
                 getHitbox(
-                    links[l]->parent->limb_parent_body_part
+                    links[l]->parent->limbParentBodyPart
                 )->pos
             );
-        float cur_angle =
+        float curAngle =
             getAngle(pos, links[l]->pos) - angle;
-        float angle_deviation =
-            getAngleCwDiff(default_angle, cur_angle);
-        if(angle_deviation > M_PI) {
-            angle_deviation -= TAU;
+        float angleDeviation =
+            getAngleCwDiff(defaultAngle, curAngle);
+        if(angleDeviation > M_PI) {
+            angleDeviation -= TAU;
         }
-        angle_deviation_avg += angle_deviation;
+        angleDeviationAvg += angleDeviation;
     }
     
-    face(angle + (angle_deviation_avg / n_feet), nullptr);
+    face(angle + (angleDeviationAvg / nFeet), nullptr);
 }
 
 
@@ -498,62 +498,62 @@ void Mob::arachnorbHeadTurnLogic() {
 void Mob::arachnorbPlanLogic(
     MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE goal
 ) {
-    float max_step_distance = s2f(vars["max_step_distance"]);
-    float max_turn_angle = degToRad(s2f(vars["max_turn_angle"]));
-    float min_turn_angle = degToRad(s2f(vars["min_turn_angle"]));
-    if(max_step_distance == 0) {
-        max_step_distance = 100;
+    float maxStepDistance = s2f(vars["max_step_distance"]);
+    float maxTurnAngle = degToRad(s2f(vars["max_turn_angle"]));
+    float minTurnAngle = degToRad(s2f(vars["min_turn_angle"]));
+    if(maxStepDistance == 0) {
+        maxStepDistance = 100;
     }
-    if(max_turn_angle == 0) {
-        max_turn_angle = TAU * 0.2;
+    if(maxTurnAngle == 0) {
+        maxTurnAngle = TAU * 0.2;
     }
     
-    float amount_to_move = 0;
-    float amount_to_turn = 0;
+    float amountToMove = 0;
+    float amountToTurn = 0;
     
     switch(goal) {
     case MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_HOME: {
-        amount_to_turn = getAngleCwDiff(angle, getAngle(pos, home));
-        if(amount_to_turn > TAU / 2)  amount_to_turn -= TAU;
-        if(amount_to_turn < -TAU / 2) amount_to_turn += TAU;
+        amountToTurn = getAngleCwDiff(angle, getAngle(pos, home));
+        if(amountToTurn > TAU / 2)  amountToTurn -= TAU;
+        if(amountToTurn < -TAU / 2) amountToTurn += TAU;
         
-        if(fabs(amount_to_turn) < TAU * 0.05) {
+        if(fabs(amountToTurn) < TAU * 0.05) {
             //We can also start moving towards home now.
-            amount_to_move = Distance(pos, home).toFloat();
+            amountToMove = Distance(pos, home).toFloat();
         }
         break;
         
     } case MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_FORWARD: {
-        amount_to_move = max_step_distance;
+        amountToMove = maxStepDistance;
         break;
         
     } case MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_CW_TURN: {
-        amount_to_turn = game.rng.f(min_turn_angle, TAU * 0.25);
+        amountToTurn = game.rng.f(minTurnAngle, TAU * 0.25);
         break;
         
     } case MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_CCW_TURN: {
-        amount_to_turn = game.rng.f(-TAU * 0.25, -min_turn_angle);
+        amountToTurn = game.rng.f(-TAU * 0.25, -minTurnAngle);
         break;
         
     }
     }
     
-    amount_to_move = std::min(amount_to_move, max_step_distance);
-    amount_to_turn =
-        sign(amount_to_turn) *
-        std::min((double) fabs(amount_to_turn), (double) max_turn_angle);
+    amountToMove = std::min(amountToMove, maxStepDistance);
+    amountToTurn =
+        sign(amountToTurn) *
+        std::min((double) fabs(amountToTurn), (double) maxTurnAngle);
         
-    Point destination_pos = pos;
-    float destination_angle = angle + amount_to_turn;
-    normalizeAngle(destination_angle);
+    Point destinationPos = pos;
+    float destinationAngle = angle + amountToTurn;
+    normalizeAngle(destinationAngle);
     
-    Point offset = Point(amount_to_move, 0);
-    offset = rotatePoint(offset, destination_angle);
+    Point offset = Point(amountToMove, 0);
+    offset = rotatePoint(offset, destinationAngle);
     
-    destination_pos += offset;
+    destinationPos += offset;
     
-    vars["_destination_pos"] = p2s(destination_pos);
-    vars["_destination_angle"] = f2s(destination_angle);
+    vars["_destination_pos"] = p2s(destinationPos);
+    vars["_destination_angle"] = f2s(destinationAngle);
 }
 
 
@@ -595,30 +595,30 @@ void Mob::becomeUncarriable() {
  *
  * @param added The Pikmin that got added, if any.
  * @param removed The Pikmin that got removed, if any.
- * @param target_type Return the target Pikmin type (if any) here.
- * @param target_mob Return the target mob (if any) here.
- * @param target_point Return the target point here.
+ * @param targetType Return the target Pikmin type (if any) here.
+ * @param targetMob Return the target mob (if any) here.
+ * @param targetPoint Return the target point here.
  * @return Whether it succeeded.
  * Returns false if there are no available targets or if
  * something went wrong.
  */
 bool Mob::calculateCarryingDestination(
     Mob* added, Mob* removed,
-    PikminType** target_type, Mob** target_mob, Point* target_point
+    PikminType** targetType, Mob** targetMob, Point* targetPoint
 ) const {
-    *target_mob = nullptr;
-    *target_point = pos;
+    *targetMob = nullptr;
+    *targetPoint = pos;
     if(!carryInfo) return false;
     
     switch(carryInfo->destination) {
     case CARRY_DESTINATION_SHIP: {
 
         //Go to the nearest ship.
-        Ship* closest_ship = calculateCarryingShip();
+        Ship* target = calculateCarryingShip();
         
-        if(closest_ship) {
-            *target_mob = closest_ship;
-            *target_point = closest_ship->controlPointFinalPos;
+        if(target) {
+            *targetMob = target;
+            *targetPoint = target->controlPointFinalPos;
             return true;
             
         } else {
@@ -629,32 +629,32 @@ bool Mob::calculateCarryingDestination(
         
     } case CARRY_DESTINATION_ONION: {
 
-        Onion* target = calculateCarryingOnion(added, removed, target_type);
+        Onion* target = calculateCarryingOnion(added, removed, targetType);
         
         if(!target) {
             return false;
         }
-        *target_mob = target;
-        *target_point = (*target_mob)->pos;
+        *targetMob = target;
+        *targetPoint = (*targetMob)->pos;
         return true;
         
         break;
         
     } case CARRY_DESTINATION_SHIP_NO_ONION: {
 
-        Onion* oni_target = calculateCarryingOnion(added, removed, target_type);
+        Onion* oniTarget = calculateCarryingOnion(added, removed, targetType);
         
-        if(oni_target) {
-            *target_mob = oni_target;
-            *target_point = (*target_mob)->pos;
+        if(oniTarget) {
+            *targetMob = oniTarget;
+            *targetPoint = (*targetMob)->pos;
             return true;
         }
         
         //No onion, find a ship instead.
-        Ship* shi_target = calculateCarryingShip();
-        if(shi_target) {
-            *target_mob = shi_target;
-            *target_point = shi_target->controlPointFinalPos;
+        Ship* shiTarget = calculateCarryingShip();
+        if(shiTarget) {
+            *targetMob = shiTarget;
+            *targetPoint = shiTarget->controlPointFinalPos;
             return true;
         }
         return false;
@@ -662,21 +662,21 @@ bool Mob::calculateCarryingDestination(
     } case CARRY_DESTINATION_LINKED_MOB: {
 
         //If it's towards a linked mob, just go to the closest one.
-        Mob* closest_link = nullptr;
-        Distance closest_link_dist;
+        Mob* closestLink = nullptr;
+        Distance closestLinkDist;
         
         for(size_t s = 0; s < links.size(); s++) {
             Distance d(pos, links[s]->pos);
             
-            if(!closest_link || d < closest_link_dist) {
-                closest_link = links[s];
-                closest_link_dist = d;
+            if(!closestLink || d < closestLinkDist) {
+                closestLink = links[s];
+                closestLinkDist = d;
             }
         }
         
-        if(closest_link) {
-            *target_mob = closest_link;
-            *target_point = closest_link->pos;
+        if(closestLink) {
+            *targetMob = closestLink;
+            *targetPoint = closestLink->pos;
             return true;
         } else {
             return false;
@@ -691,51 +691,51 @@ bool Mob::calculateCarryingDestination(
             return false;
         }
         
-        unordered_set<PikminType*> available_types;
-        vector<std::pair<Mob*, PikminType*> > mobs_per_type;
+        unordered_set<PikminType*> availableTypes;
+        vector<std::pair<Mob*, PikminType*> > mobsPerType;
         
         for(size_t l = 0; l < links.size(); l++) {
             if(!links[l]) continue;
-            string type_name =
+            string typeName =
                 links[l]->vars["carry_destination_type"];
-            MobType* pik_type =
+            MobType* pikType =
                 game.mobCategories.get(MOB_CATEGORY_PIKMIN)->
-                getType(type_name);
-            if(!pik_type) continue;
+                getType(typeName);
+            if(!pikType) continue;
             
-            available_types.insert(
-                (PikminType*) pik_type
+            availableTypes.insert(
+                (PikminType*) pikType
             );
-            mobs_per_type.push_back(
-                std::make_pair(links[l], (PikminType*) pik_type)
+            mobsPerType.push_back(
+                std::make_pair(links[l], (PikminType*) pikType)
             );
         }
         
-        if(available_types.empty()) {
+        if(availableTypes.empty()) {
             //No available types?! Well...make the Pikmin stuck.
             return false;
         }
         
-        PikminType* decided_type =
-            decideCarryPikminType(available_types, added, removed);
+        PikminType* decidedType =
+            decideCarryPikminType(availableTypes, added, removed);
             
         //Figure out which linked mob matches the decided type.
-        size_t closest_target_idx = INVALID;
-        Distance closest_target_dist;
-        for(size_t m = 0; m < mobs_per_type.size(); m++) {
-            if(mobs_per_type[m].second != decided_type) continue;
+        size_t closestTargetIdx = INVALID;
+        Distance closestTargetDist;
+        for(size_t m = 0; m < mobsPerType.size(); m++) {
+            if(mobsPerType[m].second != decidedType) continue;
             
-            Distance d(pos, mobs_per_type[m].first->pos);
-            if(closest_target_idx == INVALID || d < closest_target_dist) {
-                closest_target_dist = d;
-                closest_target_idx = m;
+            Distance d(pos, mobsPerType[m].first->pos);
+            if(closestTargetIdx == INVALID || d < closestTargetDist) {
+                closestTargetDist = d;
+                closestTargetIdx = m;
             }
         }
         
         //Finally, set the destination data.
-        *target_type = decided_type;
-        *target_mob = links[closest_target_idx];
-        *target_point = (*target_mob)->pos;
+        *targetType = decidedType;
+        *targetMob = links[closestTargetIdx];
+        *targetPoint = (*targetMob)->pos;
         
         return true;
         
@@ -753,66 +753,66 @@ bool Mob::calculateCarryingDestination(
  *
  * @param added Newly added Pikmin, if any.
  * @param removed Newly removed Pikmin, if any.
- * @param target_type If not nullptr, the target Pikmin type is returned here.
+ * @param targettype If not nullptr, the target Pikmin type is returned here.
  * @return The Onion.
  */
 Onion* Mob::calculateCarryingOnion(
-    Mob* added, Mob* removed, PikminType** target_type
+    Mob* added, Mob* removed, PikminType** targetType
 ) const {
     //If it's meant for an Onion, we need to decide which Onion, based on
     //the Pikmin. First, check which Onion Pikmin types are even available.
-    unordered_set<PikminType*> available_types;
+    unordered_set<PikminType*> availableTypes;
     for(size_t o = 0; o < game.states.gameplay->mobs.onions.size(); o++) {
-        Onion* o_ptr = game.states.gameplay->mobs.onions[o];
-        if(o_ptr->activated) {
+        Onion* oPtr = game.states.gameplay->mobs.onions[o];
+        if(oPtr->activated) {
             for(
                 size_t t = 0;
-                t < o_ptr->oniType->nest->pik_types.size();
+                t < oPtr->oniType->nest->pikTypes.size();
                 t++
             ) {
-                available_types.insert(
-                    o_ptr->oniType->nest->pik_types[t]
+                availableTypes.insert(
+                    oPtr->oniType->nest->pikTypes[t]
                 );
             }
         }
     }
     
-    if(available_types.empty()) {
+    if(availableTypes.empty()) {
         //No available types?! Well...make the Pikmin stuck.
         return nullptr;
     }
     
-    PikminType* decided_type =
-        decideCarryPikminType(available_types, added, removed);
+    PikminType* decidedType =
+        decideCarryPikminType(availableTypes, added, removed);
         
     //Figure out where that type's Onion is.
-    size_t closest_onion_idx = INVALID;
-    Distance closest_onion_dist;
+    size_t closestOnionIdx = INVALID;
+    Distance closestOnionDist;
     for(size_t o = 0; o < game.states.gameplay->mobs.onions.size(); o++) {
-        Onion* o_ptr = game.states.gameplay->mobs.onions[o];
-        if(!o_ptr->activated) continue;
-        bool has_type = false;
+        Onion* oPtr = game.states.gameplay->mobs.onions[o];
+        if(!oPtr->activated) continue;
+        bool hasType = false;
         for(
             size_t t = 0;
-            t < o_ptr->oniType->nest->pik_types.size();
+            t < oPtr->oniType->nest->pikTypes.size();
             t++
         ) {
-            if(o_ptr->oniType->nest->pik_types[t] == decided_type) {
-                has_type = true;
+            if(oPtr->oniType->nest->pikTypes[t] == decidedType) {
+                hasType = true;
                 break;
             }
         }
-        if(!has_type) continue;
+        if(!hasType) continue;
         
-        Distance d(pos, o_ptr->pos);
-        if(closest_onion_idx == INVALID || d < closest_onion_dist) {
-            closest_onion_dist = d;
-            closest_onion_idx = o;
+        Distance d(pos, oPtr->pos);
+        if(closestOnionIdx == INVALID || d < closestOnionDist) {
+            closestOnionDist = d;
+            closestOnionIdx = o;
         }
     }
     
-    *target_type = decided_type;
-    return game.states.gameplay->mobs.onions[closest_onion_idx];
+    *targetType = decidedType;
+    return game.states.gameplay->mobs.onions[closestOnionIdx];
 }
 
 
@@ -823,19 +823,19 @@ Onion* Mob::calculateCarryingOnion(
  */
 Ship* Mob::calculateCarryingShip() const {
     //Go to the nearest ship.
-    Ship* closest_ship = nullptr;
-    Distance closest_ship_dist;
+    Ship* closestShip = nullptr;
+    Distance closestShipDist;
     
     for(size_t s = 0; s < game.states.gameplay->mobs.ships.size(); s++) {
-        Ship* s_ptr = game.states.gameplay->mobs.ships[s];
-        Distance d(pos, s_ptr->controlPointFinalPos);
+        Ship* sPtr = game.states.gameplay->mobs.ships[s];
+        Distance d(pos, sPtr->controlPointFinalPos);
         
-        if(!closest_ship || d < closest_ship_dist) {
-            closest_ship = s_ptr;
-            closest_ship_dist = d;
+        if(!closestShip || d < closestShipDist) {
+            closestShip = sPtr;
+            closestShipDist = d;
         }
     }
-    return closest_ship;
+    return closestShip;
 }
 
 
@@ -843,39 +843,39 @@ Ship* Mob::calculateCarryingShip() const {
  * @brief Calculates how much damage an attack will cause.
  *
  * @param victim The mob that'll take the damage.
- * @param attack_h Hitbox used for the attack.
- * @param victim_h Victim's hitbox that got hit.
+ * @param attackH Hitbox used for the attack.
+ * @param victimH Victim's hitbox that got hit.
  * @param damage Return the calculated damage here.
  * @return Whether the attack will hit.
  * Returns true even if it will end up causing zero damage.
  * Returns false if it cannot hit (e.g. the victim hitbox is not valid).
  */
 bool Mob::calculateDamage(
-    Mob* victim, Hitbox* attack_h, const Hitbox* victim_h, float* damage
+    Mob* victim, Hitbox* attackH, const Hitbox* victimH, float* damage
 ) const {
-    float attacker_offense = 0;
-    float defense_multiplier = 1;
+    float attackerOffense = 0;
+    float defenseMultiplier = 1;
     
     //First, check if this hitbox cannot be damaged.
-    if(victim_h->type != HITBOX_TYPE_NORMAL) {
+    if(victimH->type != HITBOX_TYPE_NORMAL) {
         //This hitbox can't be damaged! Abort!
         return false;
     }
     
     //Calculate the damage.
-    if(attack_h) {
-        attacker_offense = attack_h->value;
+    if(attackH) {
+        attackerOffense = attackH->value;
         
-        if(attack_h->hazard) {
+        if(attackH->hazard) {
             MobType::Vulnerability vuln =
-                victim->getHazardVulnerability(attack_h->hazard);
+                victim->getHazardVulnerability(attackH->hazard);
                 
             if(vuln.effectMult == 0.0f) {
                 //The victim is immune to this hazard!
                 *damage = 0;
                 return true;
             } else {
-                defense_multiplier = 1.0f / vuln.effectMult;
+                defenseMultiplier = 1.0f / vuln.effectMult;
             }
             
         } else {
@@ -885,42 +885,42 @@ bool Mob::calculateDamage(
                 *damage = 0;
                 return true;
             } else {
-                defense_multiplier = 1.0f / victim->type->defaultVulnerability;
+                defenseMultiplier = 1.0f / victim->type->defaultVulnerability;
             }
         }
         
     } else {
-        attacker_offense = 1;
+        attackerOffense = 1;
     }
     
-    if(victim_h->value == 0.0f) {
+    if(victimH->value == 0.0f) {
         //Hah, this hitbox is invulnerable!
         *damage = 0;
         return true;
     }
     
-    defense_multiplier *= victim_h->value;
+    defenseMultiplier *= victimH->value;
     
     for(size_t s = 0; s < statuses.size(); s++) {
-        attacker_offense *= statuses[s].type->attackMultiplier;
+        attackerOffense *= statuses[s].type->attackMultiplier;
     }
     for(size_t s = 0; s < victim->statuses.size(); s++) {
-        float vuln_mult = victim->statuses[s].type->defenseMultiplier - 1.0f;
-        auto vuln_it = type->statusVulnerabilities.find(statuses[s].type);
-        if(vuln_it != type->statusVulnerabilities.end()) {
-            vuln_mult *= vuln_it->second.effectMult;
+        float vulnMult = victim->statuses[s].type->defenseMultiplier - 1.0f;
+        auto vulnIt = type->statusVulnerabilities.find(statuses[s].type);
+        if(vulnIt != type->statusVulnerabilities.end()) {
+            vulnMult *= vulnIt->second.effectMult;
         }
-        defense_multiplier *= (vuln_mult + 1.0f);
+        defenseMultiplier *= (vulnMult + 1.0f);
     }
     
     if(this->type->category->id == MOB_CATEGORY_PIKMIN) {
         //It's easier to calculate the maturity attack boost here.
-        Pikmin* pik_ptr = (Pikmin*) this;
-        attacker_offense *=
-            1 + (game.config.pikmin.maturityPowerMult * pik_ptr->maturity);
+        Pikmin* pikPtr = (Pikmin*) this;
+        attackerOffense *=
+            1 + (game.config.pikmin.maturityPowerMult * pikPtr->maturity);
     }
     
-    *damage = attacker_offense * (1.0f / defense_multiplier);
+    *damage = attackerOffense * (1.0f / defenseMultiplier);
     return true;
 }
 
@@ -929,27 +929,27 @@ bool Mob::calculateDamage(
  * @brief Calculates how much knockback an attack will cause.
  *
  * @param victim The mob that'll take the damage.
- * @param attack_h The hitbox of the attacker mob, if any.
- * @param victim_h The hitbox of the victim mob, if any.
- * @param kb_strength The variable to return the knockback amount to.
- * @param kb_angle The variable to return the angle of the knockback to.
+ * @param attackh The hitbox of the attacker mob, if any.
+ * @param victimH The hitbox of the victim mob, if any.
+ * @param kbStrength The variable to return the knockback amount to.
+ * @param kbAngle The variable to return the angle of the knockback to.
  */
 void Mob::calculateKnockback(
-    const Mob* victim, const Hitbox* attack_h,
-    Hitbox* victim_h, float* kb_strength, float* kb_angle
+    const Mob* victim, const Hitbox* attackH,
+    Hitbox* victimH, float* kbStrength, float* kbAngle
 ) const {
-    if(attack_h) {
-        *kb_strength = attack_h->knockback;
-        if(attack_h->knockbackOutward) {
-            *kb_angle =
-                getAngle(attack_h->getCurPos(pos, angle), victim->pos);
+    if(attackH) {
+        *kbStrength = attackH->knockback;
+        if(attackH->knockbackOutward) {
+            *kbAngle =
+                getAngle(attackH->getCurPos(pos, angle), victim->pos);
         } else {
-            *kb_angle =
-                angle + attack_h->knockbackAngle;
+            *kbAngle =
+                angle + attackH->knockbackAngle;
         }
     } else {
-        *kb_strength = 0;
-        *kb_angle = 0;
+        *kbStrength = 0;
+        *kbAngle = 0;
     }
 }
 
@@ -1028,13 +1028,13 @@ bool Mob::canReceiveStatus(StatusType* s) const {
  * @brief Makes the mob cause spike damage to another mob.
  *
  * @param victim The mob that will be damaged.
- * @param is_ingestion If true, the attacker just got eaten.
+ * @param isIngestion If true, the attacker just got eaten.
  * If false, it merely got hurt.
  */
-void Mob::causeSpikeDamage(Mob* victim, bool is_ingestion) {
+void Mob::causeSpikeDamage(Mob* victim, bool isIngestion) {
     if(!type->spikeDamage) return;
     
-    if(type->spikeDamage->ingestionOnly != is_ingestion) return;
+    if(type->spikeDamage->ingestionOnly != isIngestion) return;
     
     float damage;
     if(type->spikeDamage->isDamageRatio) {
@@ -1081,14 +1081,14 @@ void Mob::causeSpikeDamage(Mob* victim, bool is_ingestion) {
 /**
  * @brief Sets a target for the mob to follow.
  *
- * @param orig_coords Pointer to changing coordinates. If nullptr, it is
+ * @param origcoords Pointer to changing coordinates. If nullptr, it is
  * the world origin. Use this to make the mob follow another mob
  * wherever they go, for instance.
- * @param orig_z Same as orig_coords, but for the Z coordinate.
- * @param offset Offset from orig_coords.
- * @param offset_z Z offset from orig_z.
+ * @param origZ Same as origCoords, but for the Z coordinate.
+ * @param offset Offset from origCoords.
+ * @param offsetZ Z offset from origZ.
  * @param flags Flags that control how to chase. Use CHASE_FLAG_*.
- * @param target_distance Distance at which the mob considers the
+ * @param targetDistance Distance at which the mob considers the
  * chase finished.
  * @param speed Speed at which to go to the target.
  * LARGE_FLOAT makes it use the mob's standard speed.
@@ -1096,22 +1096,22 @@ void Mob::causeSpikeDamage(Mob* victim, bool is_ingestion) {
  * LARGE_FLOAT makes it use the mob's standard acceleration.
  */
 void Mob::chase(
-    Point* orig_coords, float* orig_z,
-    const Point &offset, float offset_z,
-    bitmask_8_t flags,
-    float target_distance, float speed, float acceleration
+    Point* origCoords, float* origZ,
+    const Point &offset, float offsetZ,
+    Bitmask8 flags,
+    float targetDistance, float speed, float acceleration
 ) {
-    chaseInfo.origCoords = orig_coords;
-    chaseInfo.origZ = orig_z;
+    chaseInfo.origCoords = origCoords;
+    chaseInfo.origZ = origZ;
     chaseInfo.offset = offset;
-    chaseInfo.offsetZ = offset_z;
+    chaseInfo.offsetZ = offsetZ;
     
     chaseInfo.flags = flags;
     if(type->canFreeMove) {
         enableFlag(chaseInfo.flags, CHASE_FLAG_ANY_ANGLE);
     }
     
-    chaseInfo.targetDist = target_distance;
+    chaseInfo.targetDist = targetDistance;
     chaseInfo.maxSpeed =
         (speed == LARGE_FLOAT ? getBaseSpeed() : speed);
     chaseInfo.acceleration =
@@ -1125,9 +1125,9 @@ void Mob::chase(
  * @brief Sets a target for the mob to follow.
  *
  * @param coords Coordinates of the target.
- * @param coords_z Z coordinates of the target.
+ * @param coordsZ Z coordinates of the target.
  * @param flags Flags that control how to chase. Use CHASE_FLAG_*.
- * @param target_distance Distance at which the mob considers the
+ * @param targetDistance Distance at which the mob considers the
  * chase finished.
  * @param speed Speed at which to go to the target.
  * LARGE_FLOAT makes it use the mob's standard speed.
@@ -1135,13 +1135,13 @@ void Mob::chase(
  * LARGE_FLOAT makes it use the mob's standard acceleration.
  */
 void Mob::chase(
-    const Point &coords, float coords_z,
+    const Point &coords, float coordsZ,
     unsigned char flags,
-    float target_distance, float speed, float acceleration
+    float targetDistance, float speed, float acceleration
 ) {
     chase(
-        nullptr, nullptr, coords, coords_z,
-        flags, target_distance, speed, acceleration
+        nullptr, nullptr, coords, coordsZ,
+        flags, targetDistance, speed, acceleration
     );
 }
 
@@ -1151,12 +1151,12 @@ void Mob::chase(
  * on Pikmin.
  *
  * @param m The mob to be chomped.
- * @param hitbox_info Information about the hitbox that caused the chomp.
+ * @param hitboxInfo Information about the hitbox that caused the chomp.
  */
-void Mob::chomp(Mob* m, const Hitbox* hitbox_info) {
+void Mob::chomp(Mob* m, const Hitbox* hitboxInfo) {
     if(m->type->category->id == MOB_CATEGORY_TOOLS) {
-        Tool* too_ptr = (Tool*) m;
-        if(!hasFlag(too_ptr->holdabilityFlags, HOLDABILITY_FLAG_ENEMIES)) {
+        Tool* tooPtr = (Tool*) m;
+        if(!hasFlag(tooPtr->holdabilityFlags, HOLDABILITY_FLAG_ENEMIES)) {
             //Enemies can't chomp this tool right now.
             return;
         }
@@ -1169,15 +1169,15 @@ void Mob::chomp(Mob* m, const Hitbox* hitbox_info) {
         }
     }
     
-    float h_offset_dist;
-    float h_offset_angle;
-    float v_offset_dist;
+    float hOffsetDist;
+    float hOffsetAngle;
+    float vOffsetDist;
     getHitboxHoldPoint(
-        m, hitbox_info, &h_offset_dist, &h_offset_angle, &v_offset_dist
+        m, hitboxInfo, &hOffsetDist, &hOffsetAngle, &vOffsetDist
     );
     hold(
-        m, hitbox_info->bodyPartIdx,
-        h_offset_dist, h_offset_angle, v_offset_dist,
+        m, hitboxInfo->bodyPartIdx,
+        hOffsetDist, hOffsetAngle, vOffsetDist,
         true, HOLD_ROTATION_METHOD_NEVER
     );
     
@@ -1194,11 +1194,11 @@ void Mob::chomp(Mob* m, const Hitbox* hitbox_info) {
  * @param radius Circle these many units around the target.
  * @param clockwise Circle clockwise or counterclockwise?
  * @param speed Speed at which to move.
- * @param can_free_move Can the mob move freely, or only forward?
+ * @param canFreeMove Can the mob move freely, or only forward?
  */
 void Mob::circleAround(
     Mob* m, const Point &p, float radius, bool clockwise,
-    float speed, bool can_free_move
+    float speed, bool canFreeMove
 ) {
     if(!circlingInfo) {
         circlingInfo = new CirclingInfo(this);
@@ -1208,7 +1208,7 @@ void Mob::circleAround(
     circlingInfo->radius = radius;
     circlingInfo->clockwise = clockwise;
     circlingInfo->speed = speed;
-    circlingInfo->canFreeMove = can_free_move;
+    circlingInfo->canFreeMove = canFreeMove;
     circlingInfo->curAngle =
         getAngle((m ? m->pos : p), pos);
 }
@@ -1217,89 +1217,89 @@ void Mob::circleAround(
 /**
  * @brief Returns what Pikmin type is decided when carrying something.
  *
- * @param available_types List of Pikmin types that are currently
+ * @param availableTypes List of Pikmin types that are currently
  * available in the area.
  * @param added If a Pikmin got added to the carriers, specify it here.
  * @param removed If a Pikmin got removed from the carriers, specify it here.
  * @return The Pikmin type.
  */
 PikminType* Mob::decideCarryPikminType(
-    const unordered_set<PikminType*> &available_types,
+    const unordered_set<PikminType*> &availableTypes,
     Mob* added, Mob* removed
 ) const {
     //How many of each Pikmin type are carrying.
-    map<PikminType*, unsigned> type_quantity;
+    map<PikminType*, unsigned> typeQuantity;
     //The Pikmin type with the most carriers.
-    vector<PikminType*> majority_types;
+    vector<PikminType*> majorityTypes;
     
     //Count how many of each type there are carrying.
     for(size_t p = 0; p < type->maxCarriers; p++) {
-        Pikmin* pik_ptr = nullptr;
+        Pikmin* pikPtr = nullptr;
         
         if(carryInfo->spotInfo[p].state != CARRY_SPOT_STATE_USED) continue;
         
-        pik_ptr = (Pikmin*) carryInfo->spotInfo[p].pikPtr;
+        pikPtr = (Pikmin*) carryInfo->spotInfo[p].pikPtr;
         
         //If it doesn't have an Onion to carry to, it won't even count.
-        if(available_types.find(pik_ptr->pikType) == available_types.end()) {
+        if(availableTypes.find(pikPtr->pikType) == availableTypes.end()) {
             continue;
         }
         
-        type_quantity[pik_ptr->pikType]++;
+        typeQuantity[pikPtr->pikType]++;
     }
     
     //Then figure out what are the majority types.
     unsigned most = 0;
-    for(auto &t : type_quantity) {
+    for(auto &t : typeQuantity) {
         if(t.second > most) {
             most = t.second;
-            majority_types.clear();
+            majorityTypes.clear();
         }
-        if(t.second == most) majority_types.push_back(t.first);
+        if(t.second == most) majorityTypes.push_back(t.first);
     }
     
     //If we ended up with no candidates, pick a type at random,
     //out of all possible types.
-    bool force_random = false;
-    if(majority_types.empty()) {
-        force_random = true;
+    bool forceRandom = false;
+    if(majorityTypes.empty()) {
+        forceRandom = true;
         for(
-            auto t = available_types.begin();
-            t != available_types.end(); ++t
+            auto t = availableTypes.begin();
+            t != availableTypes.end(); ++t
         ) {
-            majority_types.push_back(*t);
+            majorityTypes.push_back(*t);
         }
     }
     
-    PikminType* decided_type = nullptr;
+    PikminType* decidedType = nullptr;
     
     //Now let's pick an Pikmin type from the candidates.
-    if(majority_types.size() == 1) {
+    if(majorityTypes.size() == 1) {
         //If there's only one possible type to pick, pick it.
-        decided_type = *majority_types.begin();
+        decidedType = *majorityTypes.begin();
         
     } else {
         //If the current type is a majority, it takes priority.
         //Otherwise, pick a majority at random.
         if(
             carryInfo->intendedPikType &&
-            !force_random &&
+            !forceRandom &&
             find(
-                majority_types.begin(),
-                majority_types.end(),
+                majorityTypes.begin(),
+                majorityTypes.end(),
                 carryInfo->intendedPikType
-            ) != majority_types.end()
+            ) != majorityTypes.end()
         ) {
-            decided_type = carryInfo->intendedPikType;
+            decidedType = carryInfo->intendedPikType;
         } else {
-            decided_type =
-                majority_types[
-                    game.rng.i(0, (int) majority_types.size() - 1)
+            decidedType =
+                majorityTypes[
+                    game.rng.i(0, (int) majorityTypes.size() - 1)
                 ];
         }
     }
     
-    return decided_type;
+    return decidedType;
 }
 
 
@@ -1307,33 +1307,33 @@ PikminType* Mob::decideCarryPikminType(
  * @brief Deletes all status effects asking to be deleted.
  */
 void Mob::deleteOldStatusEffects() {
-    vector<std::pair<StatusType*, bool> > new_statuses_to_apply;
-    bool removed_forced_sprite = false;
+    vector<std::pair<StatusType*, bool> > newStatusesToApply;
+    bool removedForcedSprite = false;
     
     for(size_t s = 0; s < statuses.size(); ) {
-        Status &s_ptr = statuses[s];
-        if(s_ptr.toDelete) {
-            handleStatusEffectLoss(s_ptr.type);
+        Status &sPtr = statuses[s];
+        if(sPtr.toDelete) {
+            handleStatusEffectLoss(sPtr.type);
             
-            if(s_ptr.type->generatesParticles) {
-                removeParticleGenerator(s_ptr.type->particleGen->id);
+            if(sPtr.type->generatesParticles) {
+                removeParticleGenerator(sPtr.type->particleGen->id);
             }
             
-            if(s_ptr.type->freezesAnimation) {
-                removed_forced_sprite = true;
+            if(sPtr.type->freezesAnimation) {
+                removedForcedSprite = true;
             }
             
-            if(s_ptr.type->replacementOnTimeout && s_ptr.timeLeft <= 0.0f) {
-                new_statuses_to_apply.push_back(
+            if(sPtr.type->replacementOnTimeout && sPtr.timeLeft <= 0.0f) {
+                newStatusesToApply.push_back(
                     std::make_pair(
-                        s_ptr.type->replacementOnTimeout,
-                        s_ptr.fromHazard
+                        sPtr.type->replacementOnTimeout,
+                        sPtr.fromHazard
                     )
                 );
-                if(s_ptr.type->replacementOnTimeout->freezesAnimation) {
+                if(sPtr.type->replacementOnTimeout->freezesAnimation) {
                     //Actually, never mind, let's keep the current forced
                     //sprite so that the next status effect can use it too.
-                    removed_forced_sprite = false;
+                    removedForcedSprite = false;
                 }
             }
             
@@ -1344,14 +1344,14 @@ void Mob::deleteOldStatusEffects() {
     }
     
     //Apply new status effects.
-    for(size_t s = 0; s < new_statuses_to_apply.size(); s++) {
+    for(size_t s = 0; s < newStatusesToApply.size(); s++) {
         applyStatusEffect(
-            new_statuses_to_apply[s].first,
-            false, new_statuses_to_apply[s].second
+            newStatusesToApply[s].first,
+            false, newStatusesToApply[s].second
         );
     }
     
-    if(removed_forced_sprite) {
+    if(removedForcedSprite) {
         forcedSprite = nullptr;
     }
     
@@ -1371,16 +1371,16 @@ void Mob::deleteOldStatusEffects() {
  * which could either be a meaty whack, or a harmless ding.
  *
  * @param attacker Mob that caused the attack.
- * @param attack_h Hitbox that caused the attack.
- * @param victim_h Hitbox that suffered the attack.
+ * @param attackH Hitbox that caused the attack.
+ * @param victimH Hitbox that suffered the attack.
  * @param damage Total damage caused.
  * @param knockback Total knockback strength.
  */
 void Mob::doAttackEffects(
-    const Mob* attacker, const Hitbox* attack_h, const Hitbox* victim_h,
+    const Mob* attacker, const Hitbox* attackH, const Hitbox* victimH,
     float damage, float knockback
 ) {
-    if(attack_h->value == 0.0f) {
+    if(attackH->value == 0.0f) {
         //Attack hitboxes that cause 0 damage don't need to smack or ding.
         //This way, objects can "attack" other objects at 0 damage for the
         //purposes of triggering events (like hazard touching), without
@@ -1391,24 +1391,24 @@ void Mob::doAttackEffects(
     }
     
     //Calculate the particle's final position.
-    Point attack_h_pos = attack_h->getCurPos(attacker->pos, attacker->angle);
-    Point victim_h_pos = victim_h->getCurPos(pos, angle);
+    Point attackHPos = attackH->getCurPos(attacker->pos, attacker->angle);
+    Point victimHPos = victimH->getCurPos(pos, angle);
     
-    float edges_d;
-    float a_to_v_angle;
+    float edgesD;
+    float aToVAngle;
     coordinatesToAngle(
-        victim_h_pos - attack_h_pos,
-        &a_to_v_angle, &edges_d
+        victimHPos - attackHPos,
+        &aToVAngle, &edgesD
     );
     
-    edges_d -= attack_h->radius;
-    edges_d -= victim_h->radius;
-    float offset = attack_h->radius + edges_d / 2.0;
+    edgesD -= attackH->radius;
+    edgesD -= victimH->radius;
+    float offset = attackH->radius + edgesD / 2.0;
     
-    Point particle_pos =
-        attack_h_pos +
-        Point(cos(a_to_v_angle) * offset, sin(a_to_v_angle) * offset);
-    float particle_z =
+    Point particlePos =
+        attackHPos +
+        Point(cos(aToVAngle) * offset, sin(aToVAngle) * offset);
+    float particleZ =
         std::max(
             z + getDrawingHeight() + 1.0f,
             attacker->z + attacker->getDrawingHeight() + 1.0f
@@ -1417,26 +1417,26 @@ void Mob::doAttackEffects(
     bool useless = (damage <= 0 && knockback == 0.0f);
     
     //Create the particle.
-    string particle_internal_name =
+    string particleInternalName =
         useless ?
         game.sysContentNames.parDing :
         game.sysContentNames.parSmack;
     ParticleGenerator pg =
         standardParticleGenSetup(
-            particle_internal_name, nullptr
+            particleInternalName, nullptr
         );
-    pg.baseParticle.pos = particle_pos;
-    pg.baseParticle.z = particle_z;
+    pg.baseParticle.pos = particlePos;
+    pg.baseParticle.z = particleZ;
     pg.emit(game.states.gameplay->particles);
     
     if(!useless) {
         //Play the sound.
         
-        SoundSourceConfig attack_sound_config;
-        attack_sound_config.gain = 0.6f;
+        SoundSourceConfig attackSoundConfig;
+        attackSoundConfig.gain = 0.6f;
         game.audio.createPosSoundSource(
             game.sysContent.sndAttack,
-            pos, false, attack_sound_config
+            pos, false, attackSoundConfig
         );
         
         //Damage squash and stretch animation.
@@ -1452,18 +1452,18 @@ void Mob::doAttackEffects(
  */
 void Mob::drawLimb() {
     if(!parent) return;
-    if(!parent->limb_anim.animDb) return;
-    Sprite* limb_cur_s_ptr;
-    Sprite* limb_next_s_ptr;
-    float limb_interpolation_factor;
-    parent->limb_anim.getSpriteData(
-        &limb_cur_s_ptr, &limb_next_s_ptr, &limb_interpolation_factor
+    if(!parent->limbAnim.animDb) return;
+    Sprite* limbCurSPtr;
+    Sprite* limbNextSPtr;
+    float limbInterpolationFactor;
+    parent->limbAnim.getSpriteData(
+        &limbCurSPtr, &limbNextSPtr, &limbInterpolationFactor
     );
-    if(!limb_cur_s_ptr) return;
+    if(!limbCurSPtr) return;
     
     BitmapEffect eff;
     getSpriteBitmapEffects(
-        limb_cur_s_ptr, limb_next_s_ptr, limb_interpolation_factor,
+        limbCurSPtr, limbNextSPtr, limbInterpolationFactor,
         &eff,
         SPRITE_BMP_EFFECT_FLAG_STANDARD |
         SPRITE_BMP_EFFECT_FLAG_STATUS |
@@ -1472,52 +1472,52 @@ void Mob::drawLimb() {
         SPRITE_BMP_EFFECT_DELIVERY
     );
     
-    Point parent_end;
-    if(parent->limb_parent_body_part == INVALID) {
-        parent_end = parent->m->pos;
+    Point parentEnd;
+    if(parent->limbParentBodyPart == INVALID) {
+        parentEnd = parent->m->pos;
     } else {
-        parent_end =
+        parentEnd =
             parent->m->getHitbox(
-                parent->limb_parent_body_part
+                parent->limbParentBodyPart
             )->getCurPos(
                 parent->m->pos, parent->m->angleCos, parent->m->angleSin
             );
     }
     
-    Point child_end;
-    if(parent->limb_child_body_part == INVALID) {
-        child_end = pos;
+    Point childEnd;
+    if(parent->limbChildBodyPart == INVALID) {
+        childEnd = pos;
     } else {
-        child_end =
+        childEnd =
             getHitbox(
-                parent->limb_child_body_part
+                parent->limbChildBodyPart
             )->getCurPos(pos, angleCos, angleSin);
     }
     
-    float p2c_angle = getAngle(parent_end, child_end);
+    float p2cAngle = getAngle(parentEnd, childEnd);
     
-    if(parent->limb_parent_offset) {
-        parent_end +=
+    if(parent->limbParentOffset) {
+        parentEnd +=
             rotatePoint(
-                Point(parent->limb_parent_offset, 0), p2c_angle
+                Point(parent->limbParentOffset, 0), p2cAngle
             );
     }
-    if(parent->limb_child_offset) {
-        child_end -=
+    if(parent->limbChildOffset) {
+        childEnd -=
             rotatePoint(
-                Point(parent->limb_child_offset, 0), p2c_angle
+                Point(parent->limbChildOffset, 0), p2cAngle
             );
     }
     
-    float length = Distance(parent_end, child_end).toFloat();
-    Point limb_bmp_size = getBitmapDimensions(limb_cur_s_ptr->bitmap);
+    float length = Distance(parentEnd, childEnd).toFloat();
+    Point limbBmpSize = getBitmapDimensions(limbCurSPtr->bitmap);
     
-    eff.translation = (parent_end + child_end) / 2.0;
-    eff.scale.x = length / limb_bmp_size.x;
-    eff.scale.y = parent->limb_thickness / limb_bmp_size.y;
-    eff.rotation = p2c_angle;
+    eff.translation = (parentEnd + childEnd) / 2.0;
+    eff.scale.x = length / limbBmpSize.x;
+    eff.scale.y = parent->limbThickness / limbBmpSize.y;
+    eff.rotation = p2cAngle;
     
-    drawBitmapWithEffects(limb_cur_s_ptr->bitmap, eff);
+    drawBitmapWithEffects(limbCurSPtr->bitmap, eff);
 }
 
 
@@ -1526,15 +1526,15 @@ void Mob::drawLimb() {
  * This is a generic function, and can be overwritten by child classes.
  */
 void Mob::drawMob() {
-    Sprite* cur_s_ptr;
-    Sprite* next_s_ptr;
-    float interpolation_factor;
-    getSpriteData(&cur_s_ptr, &next_s_ptr, &interpolation_factor);
-    if(!cur_s_ptr) return;
+    Sprite* curSPtr;
+    Sprite* nextSPtr;
+    float interpolationFactor;
+    getSpriteData(&curSPtr, &nextSPtr, &interpolationFactor);
+    if(!curSPtr) return;
     
     BitmapEffect eff;
     getSpriteBitmapEffects(
-        cur_s_ptr, next_s_ptr, interpolation_factor,
+        curSPtr, nextSPtr, interpolationFactor,
         &eff,
         SPRITE_BMP_EFFECT_FLAG_STANDARD |
         SPRITE_BMP_EFFECT_FLAG_STATUS |
@@ -1544,25 +1544,25 @@ void Mob::drawMob() {
         SPRITE_BMP_EFFECT_CARRY
     );
     
-    drawBitmapWithEffects(cur_s_ptr->bitmap, eff);
+    drawBitmapWithEffects(curSPtr->bitmap, eff);
 }
 
 
 /**
  * @brief Makes a mob intend to face a new angle, or face there right away.
  *
- * @param new_angle Face this angle.
- * @param new_pos If this is not nullptr, turn towards this point every frame,
+ * @param newAngle Face this angle.
+ * @param newPos If this is not nullptr, turn towards this point every frame,
  * instead.
  * @param instantly If true, the mob faces that angle instantly instead
  * of rotating towards that direction over time.
  */
-void Mob::face(float new_angle, Point* new_pos, bool instantly) {
+void Mob::face(float newAngle, Point* newPos, bool instantly) {
     if(carryInfo) return; //If it's being carried, it shouldn't rotate.
-    intendedTurnAngle = new_angle;
-    intendedTurnPos = new_pos;
+    intendedTurnAngle = newAngle;
+    intendedTurnPos = newPos;
     if(instantly) {
-        angle = new_angle;
+        angle = newAngle;
         angleCos = cos(angle);
         angleSin = sin(angle);
     }
@@ -1612,14 +1612,14 @@ bool Mob::followPath(
     const PathFollowSettings &settings,
     float speed, float acceleration
 ) {
-    bool was_blocked = false;
-    PathStop* old_next_stop = nullptr;
+    bool wasBlocked = false;
+    PathStop* oldNextStop = nullptr;
     
     //Some setup before we begin.
     if(hasFlag(settings.flags, PATH_FOLLOW_FLAG_CAN_CONTINUE) && pathInfo) {
-        was_blocked = pathInfo->block_reason != PATH_BLOCK_REASON_NONE;
-        if(pathInfo->cur_path_stop_idx < pathInfo->path.size()) {
-            old_next_stop = pathInfo->path[pathInfo->cur_path_stop_idx];
+        wasBlocked = pathInfo->blockReason != PATH_BLOCK_REASON_NONE;
+        if(pathInfo->curPathStopIdx < pathInfo->path.size()) {
+            oldNextStop = pathInfo->path[pathInfo->curPathStopIdx];
         }
     }
     
@@ -1627,16 +1627,16 @@ bool Mob::followPath(
         delete pathInfo;
     }
     
-    PathFollowSettings final_settings = settings;
+    PathFollowSettings finalSettings = settings;
     
     if(carryInfo) {
         //Check if this carriable is considered light load.
         if(type->weight == 1) {
-            enableFlag(final_settings.flags, PATH_FOLLOW_FLAG_LIGHT_LOAD);
+            enableFlag(finalSettings.flags, PATH_FOLLOW_FLAG_LIGHT_LOAD);
         }
         //The object will only be airborne if all its carriers can fly.
         if(carryInfo->canFly()) {
-            enableFlag(final_settings.flags, PATH_FOLLOW_FLAG_AIRBORNE);
+            enableFlag(finalSettings.flags, PATH_FOLLOW_FLAG_AIRBORNE);
         }
     } else {
         if(
@@ -1644,53 +1644,53 @@ bool Mob::followPath(
             type->category->id == MOB_CATEGORY_LEADERS
         ) {
             //Simple mobs are empty-handed, so that's considered light load.
-            enableFlag(final_settings.flags, PATH_FOLLOW_FLAG_LIGHT_LOAD);
+            enableFlag(finalSettings.flags, PATH_FOLLOW_FLAG_LIGHT_LOAD);
         }
         //Check if the object can fly directly.
         if(hasFlag(flags, MOB_FLAG_CAN_MOVE_MIDAIR)) {
-            enableFlag(final_settings.flags, PATH_FOLLOW_FLAG_AIRBORNE);
+            enableFlag(finalSettings.flags, PATH_FOLLOW_FLAG_AIRBORNE);
         }
     }
     
     if(carryInfo) {
         //The object is only as invulnerable as the Pikmin carrying it.
-        final_settings.invulnerabilities =
+        finalSettings.invulnerabilities =
             carryInfo->getCarrierInvulnerabilities();
     } if(group) {
         //The object is only as invulnerable as the members of its group.
-        final_settings.invulnerabilities =
+        finalSettings.invulnerabilities =
             group->getGroupInvulnerabilities(this);
     } else {
         //Use the object's standard invulnerabilities.
         for(auto &v : type->hazardVulnerabilities) {
             if(v.second.effectMult == 0.0f) {
-                final_settings.invulnerabilities.push_back(v.first);
+                finalSettings.invulnerabilities.push_back(v.first);
             }
         }
     }
     
     //Establish the mob's path-following information.
     //This also generates the path to take.
-    pathInfo = new Path(this, final_settings);
+    pathInfo = new Path(this, finalSettings);
     
     if(
         hasFlag(pathInfo->settings.flags, PATH_FOLLOW_FLAG_CAN_CONTINUE) &&
-        old_next_stop &&
-        !was_blocked &&
+        oldNextStop &&
+        !wasBlocked &&
         pathInfo->path.size() >= 2
     ) {
         for(size_t s = 1; s < pathInfo->path.size(); s++) {
-            if(pathInfo->path[s] == old_next_stop) {
+            if(pathInfo->path[s] == oldNextStop) {
                 //If before, the mob was already heading towards this stop,
                 //then just continue the new journey from there.
-                pathInfo->cur_path_stop_idx = s;
+                pathInfo->curPathStopIdx = s;
                 break;
             }
         }
     }
     
-    if(pathInfo->path.size() >= 2 && pathInfo->cur_path_stop_idx > 0) {
-        if(pathInfo->checkBlockage(&pathInfo->block_reason)) {
+    if(pathInfo->path.size() >= 2 && pathInfo->curPathStopIdx > 0) {
+        if(pathInfo->checkBlockage(&pathInfo->blockReason)) {
             fsm.runEvent(MOB_EV_PATH_BLOCKED);
         }
     }
@@ -1705,20 +1705,20 @@ bool Mob::followPath(
         
     } else if(!pathInfo->path.empty()) {
         //Head to the first stop.
-        PathStop* next_stop =
-            pathInfo->path[pathInfo->cur_path_stop_idx];
-        float next_stop_z = z;
+        PathStop* nextStop =
+            pathInfo->path[pathInfo->curPathStopIdx];
+        float nextStopZ = z;
         if(
             hasFlag(pathInfo->settings.flags, PATH_FOLLOW_FLAG_AIRBORNE) &&
-            next_stop->sectorPtr
+            nextStop->sectorPtr
         ) {
-            next_stop_z =
-                next_stop->sectorPtr->z +
+            nextStopZ =
+                nextStop->sectorPtr->z +
                 PIKMIN::FLIER_ABOVE_FLOOR_HEIGHT;
         }
         
         chase(
-            next_stop->pos, next_stop_z,
+            nextStop->pos, nextStopZ,
             CHASE_FLAG_ANY_ANGLE,
             PATHS::DEF_CHASE_TARGET_DISTANCE,
             speed, acceleration
@@ -1748,15 +1748,15 @@ float Mob::getBaseSpeed() const {
 /**
  * @brief Returns the actual location of the movement target.
  *
- * @param out_z If not nullptr, the Z coordinate is returned here.
+ * @param outZ If not nullptr, the Z coordinate is returned here.
  * @return The (X and Y) coordinates of the target.
  */
-Point Mob::getChaseTarget(float* out_z) const {
+Point Mob::getChaseTarget(float* outZ) const {
     Point p = chaseInfo.offset;
     if(chaseInfo.origCoords) p += (*chaseInfo.origCoords);
-    if(out_z) {
-        *out_z = chaseInfo.offsetZ;
-        if(chaseInfo.origZ) (*out_z) += (*chaseInfo.origZ);
+    if(outZ) {
+        *outZ = chaseInfo.offsetZ;
+        if(chaseInfo.origZ) (*outZ) += (*chaseInfo.origZ);
     }
     return p;
 }
@@ -1767,36 +1767,36 @@ Point Mob::getChaseTarget(float* out_z) const {
  * belonging to a mob's current frame of animation and position.
  *
  * @param p The point.
- * @param h_type Type of hitbox. INVALID means any.
+ * @param hType Type of hitbox. INVALID means any.
  * @param d Return the distance here, optionally.
  * @return The hitbox.
  */
 Hitbox* Mob::getClosestHitbox(
-    const Point &p, size_t h_type, Distance* d
+    const Point &p, size_t hType, Distance* d
 ) const {
     Sprite* s;
     getSpriteData(&s, nullptr, nullptr);
     if(!s) return nullptr;
-    Hitbox* closest_hitbox = nullptr;
-    float closest_hitbox_dist = 0;
+    Hitbox* closestHitbox = nullptr;
+    float closestHitboxDist = 0;
     
     for(size_t h = 0; h < s->hitboxes.size(); h++) {
-        Hitbox* h_ptr = &s->hitboxes[h];
-        if(h_type != INVALID && h_ptr->type != h_type) continue;
+        Hitbox* hPtr = &s->hitboxes[h];
+        if(hType != INVALID && hPtr->type != hType) continue;
         
-        float this_d =
+        float thisD =
             Distance(
-                h_ptr->getCurPos(pos, angleCos, angleSin), p
-            ).toFloat() - h_ptr->radius;
-        if(closest_hitbox == nullptr || this_d < closest_hitbox_dist) {
-            closest_hitbox_dist = this_d;
-            closest_hitbox = h_ptr;
+                hPtr->getCurPos(pos, angleCos, angleSin), p
+            ).toFloat() - hPtr->radius;
+        if(closestHitbox == nullptr || thisD < closestHitboxDist) {
+            closestHitboxDist = thisD;
+            closestHitbox = hPtr;
         }
     }
     
-    if(d) *d = closest_hitbox_dist;
+    if(d) *d = closestHitboxDist;
     
-    return closest_hitbox;
+    return closestHitbox;
 }
 
 
@@ -1808,24 +1808,24 @@ Hitbox* Mob::getClosestHitbox(
  * but it can return a forced sprite (e.g. from a status effect that
  * freezes animations).
  *
- * @param out_cur_sprite_ptr If not nullptr, the current frame's sprite is
+ * @param outCurSpritePtr If not nullptr, the current frame's sprite is
  * returned here.
- * @param out_next_sprite_ptr If not nullptr, the next frame's sprite is
+ * @param outNextSpritePtr If not nullptr, the next frame's sprite is
  * returned here.
- * @param out_interpolation_factor If not nullptr, the interpolation factor
+ * @param outInterpolationFactor If not nullptr, the interpolation factor
  * (0 to 1) between the two is returned here.
  */
 void Mob::getSpriteData(
-    Sprite** out_cur_sprite_ptr, Sprite** out_next_sprite_ptr,
-    float* out_interpolation_factor
+    Sprite** outCurSpritePtr, Sprite** outNextSpritePtr,
+    float* outInterpolationFactor
 ) const {
     if(forcedSprite) {
-        if(out_cur_sprite_ptr) *out_cur_sprite_ptr = forcedSprite;
-        if(out_next_sprite_ptr) *out_next_sprite_ptr = forcedSprite;
-        if(out_interpolation_factor) *out_interpolation_factor = 0.0f;
+        if(outCurSpritePtr) *outCurSpritePtr = forcedSprite;
+        if(outNextSpritePtr) *outNextSpritePtr = forcedSprite;
+        if(outInterpolationFactor) *outInterpolationFactor = 0.0f;
     } else {
         anim.getSpriteData(
-            out_cur_sprite_ptr, out_next_sprite_ptr, out_interpolation_factor
+            outCurSpritePtr, outNextSpritePtr, outInterpolationFactor
         );
     }
 }
@@ -1835,42 +1835,42 @@ void Mob::getSpriteData(
  * @brief Returns the distance between the limits of this mob and
  * the limits of another.
  *
- * @param m2_ptr Pointer to the mob to check.
- * @param regular_distance_cache If the regular distance had already been
+ * @param m2Ptr Pointer to the mob to check.
+ * @param regularDistanceCache If the regular distance had already been
  * calculated, specify it here. This should help with performance.
  * Otherwise, use nullptr.
  * @return The distance.
  */
 Distance Mob::getDistanceBetween(
-    const Mob* m2_ptr, const Distance* regular_distance_cache
+    const Mob* m2Ptr, const Distance* regularDistanceCache
 ) const {
-    Distance mob_to_hotspot_dist;
-    float dist_padding;
-    if(m2_ptr->rectangularDim.x != 0.0f) {
-        bool is_inside = false;
+    Distance mobToHotspotDist;
+    float distPadding;
+    if(m2Ptr->rectangularDim.x != 0.0f) {
+        bool isInside = false;
         Point hotspot =
             getClosestPointInRotatedRectangle(
                 pos,
-                m2_ptr->pos, m2_ptr->rectangularDim,
-                m2_ptr->angle,
-                &is_inside
+                m2Ptr->pos, m2Ptr->rectangularDim,
+                m2Ptr->angle,
+                &isInside
             );
-        if(is_inside) {
-            mob_to_hotspot_dist = Distance(0.0f);
+        if(isInside) {
+            mobToHotspotDist = Distance(0.0f);
         } else {
-            mob_to_hotspot_dist = Distance(pos, hotspot);
+            mobToHotspotDist = Distance(pos, hotspot);
         }
-        dist_padding = radius;
+        distPadding = radius;
     } else {
-        if(regular_distance_cache) {
-            mob_to_hotspot_dist = *regular_distance_cache;
+        if(regularDistanceCache) {
+            mobToHotspotDist = *regularDistanceCache;
         } else {
-            mob_to_hotspot_dist = Distance(pos, m2_ptr->pos);
+            mobToHotspotDist = Distance(pos, m2Ptr->pos);
         }
-        dist_padding = radius + m2_ptr->radius;
+        distPadding = radius + m2Ptr->radius;
     }
-    mob_to_hotspot_dist -= dist_padding;
-    return mob_to_hotspot_dist;
+    mobToHotspotDist -= distPadding;
+    return mobToHotspotDist;
 }
 
 
@@ -1879,38 +1879,38 @@ Distance Mob::getDistanceBetween(
  * This only keeps in mind things specific to this class, so it shouldn't
  * check for things like carrying, which is global to all mobs.
  *
- * @param fraction_value_nr The fraction's value (upper) number gets set here.
- * @param fraction_req_nr The fraction's required (lower) number gets set here.
- * @param fraction_color The fraction's color gets set here.
+ * @param fractionValueNr The fraction's value (upper) number gets set here.
+ * @param fractionReqNr The fraction's required (lower) number gets set here.
+ * @param fractionColor The fraction's color gets set here.
  * @return Whether the numbers should be shown.
  */
 bool Mob::getFractionNumbersInfo(
-    float* fraction_value_nr, float* fraction_req_nr,
-    ALLEGRO_COLOR* fraction_color
+    float* fractionValueNr, float* fractionReqNr,
+    ALLEGRO_COLOR* fractionColor
 ) const {
     if(!carryInfo || carryInfo->curCarryingStrength <= 0) return false;
-    bool destination_has_pikmin_type =
+    bool destinationHasPikminType =
         carryInfo->intendedMob &&
         carryInfo->intendedPikType;
-    if(type->weight <= 1 && !destination_has_pikmin_type) return false;
+    if(type->weight <= 1 && !destinationHasPikminType) return false;
     
-    *fraction_value_nr = carryInfo->curCarryingStrength;
-    *fraction_req_nr = type->weight;
+    *fractionValueNr = carryInfo->curCarryingStrength;
+    *fractionReqNr = type->weight;
     if(carryInfo->isMoving) {
         if(
             carryInfo->destination ==
             CARRY_DESTINATION_SHIP
         ) {
-            *fraction_color = game.config.aestheticGen.carryingColorMove;
+            *fractionColor = game.config.aestheticGen.carryingColorMove;
             
-        } else if(destination_has_pikmin_type) {
-            *fraction_color =
+        } else if(destinationHasPikminType) {
+            *fractionColor =
                 carryInfo->intendedPikType->mainColor;
         } else {
-            *fraction_color = game.config.aestheticGen.carryingColorMove;
+            *fractionColor = game.config.aestheticGen.carryingColorMove;
         }
     } else {
-        *fraction_color = game.config.aestheticGen.carryingColorStop;
+        *fractionColor = game.config.aestheticGen.carryingColorStop;
     }
     return true;
 }
@@ -1921,15 +1921,13 @@ bool Mob::getFractionNumbersInfo(
  * Basically, when it's in a leader's group, what point it should be following,
  * and within what distance.
  *
- * @param out_spot The final coordinates are returned here.
- * @param out_dist The final distance to those coordinates is returned here.
+ * @param outSpot The final coordinates are returned here.
+ * @param outDist The final distance to those coordinates is returned here.
  */
-void Mob::getGroupSpotInfo(
-    Point* out_spot, float* out_dist
-) const {
-    out_spot->x = 0.0f;
-    out_spot->y = 0.0f;
-    *out_dist = 0.0f;
+void Mob::getGroupSpotInfo(Point* outSpot, float* outDist) const {
+    outSpot->x = 0.0f;
+    outSpot->y = 0.0f;
+    *outDist = 0.0f;
 }
 
 
@@ -1937,16 +1935,14 @@ void Mob::getGroupSpotInfo(
  * @brief Returns how vulnerable the mob is to that specific hazard,
  * or the mob type's default if there is no vulnerability data for that hazard.
  *
- * @param h_ptr The hazard to check.
+ * @param hPtr The hazard to check.
  * @return The vulnerability info.
  */
-MobType::Vulnerability Mob::getHazardVulnerability(
-    Hazard* h_ptr
-) const {
+MobType::Vulnerability Mob::getHazardVulnerability(Hazard* hPtr) const {
     MobType::Vulnerability vuln;
     vuln.effectMult = type->defaultVulnerability;
     
-    auto v = type->hazardVulnerabilities.find(h_ptr);
+    auto v = type->hazardVulnerabilities.find(hPtr);
     if(v != type->hazardVulnerabilities.end()) {
         vuln = v->second;
     }
@@ -1974,35 +1970,35 @@ Hitbox* Mob::getHitbox(size_t idx) const {
  * @brief When a mob is meant to be held by a hitbox, this function
  * returns where in the hitbox the mob currently is.
  *
- * @param mob_to_hold The mob that will be held.
- * @param h_ptr Pointer to the hitbox to check.
- * @param offset_dist The distance from the center of the hitbox is
+ * @param mobToHold The mob that will be held.
+ * @param hPtr Pointer to the hitbox to check.
+ * @param offsetDist The distance from the center of the hitbox is
  * returned here. 1 means the full radius.
- * @param offset_angle The angle the mob to hold makes with the hitbox's
+ * @param offsetAngle The angle the mob to hold makes with the hitbox's
  * center is returned here.
- * @param vertical_dist Ratio of distance from the hitbox/body's bottom.
+ * @param verticalDist Ratio of distance from the hitbox/body's bottom.
  * 1 is the very top.
  */
 void Mob::getHitboxHoldPoint(
-    const Mob* mob_to_hold, const Hitbox* h_ptr,
-    float* offset_dist, float* offset_angle, float* vertical_dist
+    const Mob* mobToHold, const Hitbox* hPtr,
+    float* offsetDist, float* offsetAngle, float* verticalDist
 ) const {
-    Point actual_h_pos = h_ptr->getCurPos(pos, angleCos, angleSin);
-    float actual_h_z = z + h_ptr->z;
+    Point actualHPos = hPtr->getCurPos(pos, angleCos, angleSin);
+    float actualHZ = z + hPtr->z;
     
-    Point pos_dif = mob_to_hold->pos - actual_h_pos;
-    coordinatesToAngle(pos_dif, offset_angle, offset_dist);
+    Point posDif = mobToHold->pos - actualHPos;
+    coordinatesToAngle(posDif, offsetAngle, offsetDist);
     
     //Relative to 0 degrees.
-    *offset_angle -= angle;
+    *offsetAngle -= angle;
     //Distance in units to distance in percentage.
-    *offset_dist /= h_ptr->radius;
+    *offsetDist /= hPtr->radius;
     
-    if(h_ptr->height <= 0.0f) {
-        *vertical_dist = 0.0f;
+    if(hPtr->height <= 0.0f) {
+        *verticalDist = 0.0f;
     } else {
-        *vertical_dist = mob_to_hold->z - actual_h_z;
-        *vertical_dist /= h_ptr->height;
+        *verticalDist = mobToHold->z - actualHZ;
+        *verticalDist /= hPtr->height;
     }
 }
 
@@ -2018,10 +2014,10 @@ size_t Mob::getLatchedPikminAmount() const {
         size_t p = 0;
         p < game.states.gameplay->mobs.pikmin.size(); p++
     ) {
-        Pikmin* p_ptr = game.states.gameplay->mobs.pikmin[p];
-        if(p_ptr->focusedMob != this) continue;
-        if(p_ptr->holder.m != this) continue;
-        if(!p_ptr->latched) continue;
+        Pikmin* pPtr = game.states.gameplay->mobs.pikmin[p];
+        if(pPtr->focusedMob != this) continue;
+        if(pPtr->holder.m != this) continue;
+        if(!pPtr->latched) continue;
         total++;
     }
     return total;
@@ -2040,11 +2036,11 @@ float Mob::getLatchedPikminWeight() const {
         size_t p = 0;
         p < game.states.gameplay->mobs.pikmin.size(); p++
     ) {
-        Pikmin* p_ptr = game.states.gameplay->mobs.pikmin[p];
-        if(p_ptr->focusedMob != this) continue;
-        if(p_ptr->holder.m != this) continue;
-        if(!p_ptr->latched) continue;
-        total += p_ptr->type->weight;
+        Pikmin* pPtr = game.states.gameplay->mobs.pikmin[p];
+        if(pPtr->focusedMob != this) continue;
+        if(pPtr->holder.m != this) continue;
+        if(!pPtr->latched) continue;
+        total += pPtr->type->weight;
     }
     return total;
 }
@@ -2085,18 +2081,18 @@ void Mob::updateInteractionSpan() {
  * @return The multiplier.
  */
 float Mob::getSpeedMultiplier() const {
-    float move_speed_mult = 1.0f;
+    float moveSpeedMult = 1.0f;
     for(size_t s = 0; s < this->statuses.size(); s++) {
         if(!statuses[s].toDelete) {
-            float vuln_mult = this->statuses[s].type->speedMultiplier - 1.0f;
-            auto vuln_it = type->statusVulnerabilities.find(statuses[s].type);
-            if(vuln_it != type->statusVulnerabilities.end()) {
-                vuln_mult *= vuln_it->second.effectMult;
+            float vulnMult = this->statuses[s].type->speedMultiplier - 1.0f;
+            auto vulnIt = type->statusVulnerabilities.find(statuses[s].type);
+            if(vulnIt != type->statusVulnerabilities.end()) {
+                vulnMult *= vulnIt->second.effectMult;
             }
-            move_speed_mult *= (vuln_mult + 1.0f);
+            moveSpeedMult *= (vulnMult + 1.0f);
         }
     }
-    return move_speed_mult;
+    return moveSpeedMult;
 }
 
 
@@ -2104,45 +2100,45 @@ float Mob::getSpeedMultiplier() const {
  * @brief Returns what the given sprite's center, rotation, tint, etc. should be
  * at the present moment, for normal mob drawing routines.
  *
- * @param s_ptr Sprite to get info about.
- * @param next_s_ptr Next sprite in the animation, if any.
- * @param interpolation_factor If we're meant to interpolate from the current
+ * @param sPtr Sprite to get info about.
+ * @param nextSPtr Next sprite in the animation, if any.
+ * @param interpolationFactor If we're meant to interpolate from the current
  * sprite to the next, specify the interpolation factor (0 to 1) here.
  * @param info Struct to fill the info with.
  * @param effects What effects to use. Use SPRITE_BMP_EFFECT_FLAG for this.
  */
 void Mob::getSpriteBitmapEffects(
-    Sprite* s_ptr, Sprite* next_s_ptr, float interpolation_factor,
-    BitmapEffect* info, bitmask_16_t effects
+    Sprite* sPtr, Sprite* nextSPtr, float interpolationFactor,
+    BitmapEffect* info, Bitmask16 effects
 ) const {
 
     //Animation, position, angle, etc.
     if(hasFlag(effects, SPRITE_BMP_EFFECT_FLAG_STANDARD)) {
-        Point eff_trans;
-        float eff_angle;
-        Point eff_scale;
-        ALLEGRO_COLOR eff_tint;
+        Point effTrans;
+        float effAngle;
+        Point effScale;
+        ALLEGRO_COLOR effTint;
         
         getSpriteBasicEffects(
             pos, angle, angleCos, angleSin,
-            s_ptr, next_s_ptr, interpolation_factor,
-            &eff_trans, &eff_angle, &eff_scale, &eff_tint
+            sPtr, nextSPtr, interpolationFactor,
+            &effTrans, &effAngle, &effScale, &effTint
         );
         
-        info->translation += eff_trans;
-        info->rotation += eff_angle;
-        info->scale.x *= eff_scale.x;
-        info->scale.y *= eff_scale.y;
-        info->tintColor.r *= eff_tint.r;
-        info->tintColor.g *= eff_tint.g;
-        info->tintColor.b *= eff_tint.b;
-        info->tintColor.a *= eff_tint.a;
+        info->translation += effTrans;
+        info->rotation += effAngle;
+        info->scale.x *= effScale.x;
+        info->scale.y *= effScale.y;
+        info->tintColor.r *= effTint.r;
+        info->tintColor.g *= effTint.g;
+        info->tintColor.b *= effTint.b;
+        info->tintColor.a *= effTint.a;
     }
     
     //Status effects.
     if(hasFlag(effects, SPRITE_BMP_EFFECT_FLAG_STATUS)) {
-        size_t n_glow_colors = 0;
-        ALLEGRO_COLOR glow_color_sum = COLOR_EMPTY;
+        size_t nGlowColors = 0;
+        ALLEGRO_COLOR glowColorSum = COLOR_EMPTY;
         
         for(size_t s = 0; s < statuses.size(); s++) {
             StatusType* t = this->statuses[s].type;
@@ -2162,18 +2158,18 @@ void Mob::getSpriteBitmapEffects(
             info->tintColor.a *= t->tint.a;
             
             if(t->glow.a > 0) {
-                glow_color_sum.r += t->glow.r;
-                glow_color_sum.g += t->glow.g;
-                glow_color_sum.b += t->glow.b;
-                glow_color_sum.a += t->glow.a;
-                n_glow_colors++;
+                glowColorSum.r += t->glow.r;
+                glowColorSum.g += t->glow.g;
+                glowColorSum.b += t->glow.b;
+                glowColorSum.a += t->glow.a;
+                nGlowColors++;
             }
             
-            if(n_glow_colors > 0) {
-                t->glow.r = glow_color_sum.r / n_glow_colors;
-                t->glow.g = glow_color_sum.g / n_glow_colors;
-                t->glow.b = glow_color_sum.b / n_glow_colors;
-                t->glow.a = glow_color_sum.a / n_glow_colors;
+            if(nGlowColors > 0) {
+                t->glow.r = glowColorSum.r / nGlowColors;
+                t->glow.g = glowColorSum.g / nGlowColors;
+                t->glow.b = glowColorSum.b / nGlowColors;
+                t->glow.a = glowColorSum.a / nGlowColors;
             }
             
             if(t->shakingEffect != 0.0f) {
@@ -2188,70 +2184,70 @@ void Mob::getSpriteBitmapEffects(
     
     //Sector brightness tint.
     if(hasFlag(effects, SPRITE_BMP_EFFECT_FLAG_SECTOR_BRIGHTNESS)) {
-        Sector* sector_ptr = centerSector;
+        Sector* sectorPtr = centerSector;
         float brightness = centerSector->brightness / 255.0;
-        if(sector_ptr->fade) {
-            Sector* texture_sector[2] = {nullptr, nullptr};
-            sector_ptr->getTextureMergeSectors(
-                &texture_sector[0], &texture_sector[1]
+        if(sectorPtr->fade) {
+            Sector* textureSector[2] = {nullptr, nullptr};
+            sectorPtr->getTextureMergeSectors(
+                &textureSector[0], &textureSector[1]
             );
-            vector<Edge*> fade_edges[2];
-            size_t n_edges = sector_ptr->edges.size();
-            for(size_t e = 0; e < n_edges; e++) {
-                Edge* e_ptr = sector_ptr->edges[e];
-                Sector* o_sector = e_ptr->getOtherSector(sector_ptr);
-                if(o_sector == texture_sector[0]) {
-                    fade_edges[0].push_back(e_ptr);
+            vector<Edge*> fadeEdges[2];
+            size_t nEdges = sectorPtr->edges.size();
+            for(size_t e = 0; e < nEdges; e++) {
+                Edge* ePtr = sectorPtr->edges[e];
+                Sector* oSector = ePtr->getOtherSector(sectorPtr);
+                if(oSector == textureSector[0]) {
+                    fadeEdges[0].push_back(ePtr);
                 }
-                if(o_sector == texture_sector[1]) {
-                    fade_edges[1].push_back(e_ptr);
+                if(oSector == textureSector[1]) {
+                    fadeEdges[1].push_back(ePtr);
                 }
             }
             
-            Distance closest_dist[2] = {Distance(FLT_MAX), Distance(FLT_MAX)};
+            Distance closestDist[2] = {Distance(FLT_MAX), Distance(FLT_MAX)};
             for(size_t n = 0; n < 2; n++) {
-                for(size_t e = 0; e < fade_edges[n].size(); e++) {
-                    Point v1 = v2p(fade_edges[n][e]->vertexes[0]);
-                    Point v2 = v2p(fade_edges[n][e]->vertexes[1]);
-                    float segment_ratio;
-                    Point closest_pos = getClosestPointInLineSeg(v1, v2, pos, &segment_ratio);
-                    if(segment_ratio < 0) {
-                        Point v2_to_v1 = v2 - v1;
-                        closest_pos -= v2_to_v1 * abs(segment_ratio);
+                for(size_t e = 0; e < fadeEdges[n].size(); e++) {
+                    Point v1 = v2p(fadeEdges[n][e]->vertexes[0]);
+                    Point v2 = v2p(fadeEdges[n][e]->vertexes[1]);
+                    float segmentRatio;
+                    Point closestPos = getClosestPointInLineSeg(v1, v2, pos, &segmentRatio);
+                    if(segmentRatio < 0) {
+                        Point v2ToV1 = v2 - v1;
+                        closestPos -= v2ToV1 * abs(segmentRatio);
                     }
-                    if(segment_ratio > 1) {
-                        Point v2_to_v1 = v2 - v1;
-                        closest_pos -= v2_to_v1 * (segment_ratio - 1);
+                    if(segmentRatio > 1) {
+                        Point v2ToV1 = v2 - v1;
+                        closestPos -= v2ToV1 * (segmentRatio - 1);
                     }
                     
-                    Distance d(closest_pos, pos);
-                    closest_dist[n] = closest_dist[n] <= d ? closest_dist[n] : d;
+                    Distance d(closestPos, pos);
+                    closestDist[n] = closestDist[n] <= d ? closestDist[n] : d;
                 }
             }
-            float total_brightness = 0;
-            if(texture_sector[0]) {
-                total_brightness +=
-                    texture_sector[0]->brightness *
+            float totalBrightness = 0;
+            if(textureSector[0]) {
+                totalBrightness +=
+                    textureSector[0]->brightness *
                     (
-                        closest_dist[1].toFloat() /
+                        closestDist[1].toFloat() /
                         (
-                            closest_dist[0].toFloat() +
-                            closest_dist[1].toFloat()
+                            closestDist[0].toFloat() +
+                            closestDist[1].toFloat()
                         )
                     );
             }
-            if(texture_sector[1]) {
-                total_brightness +=
-                    texture_sector[1]->brightness *
+            if(textureSector[1]) {
+                totalBrightness +=
+                    textureSector[1]->brightness *
                     (
-                        closest_dist[0].toFloat() /
+                        closestDist[0].toFloat() /
                         (
-                            closest_dist[0].toFloat() +
-                            closest_dist[1].toFloat()
+                            closestDist[0].toFloat() +
+                            closestDist[1].toFloat()
                         )
                     );
             }
-            brightness = total_brightness / 255.0;
+            brightness = totalBrightness / 255.0;
         }
         
         info->tintColor.r *= brightness;
@@ -2262,22 +2258,22 @@ void Mob::getSpriteBitmapEffects(
     //Height effect.
     if(hasFlag(effects, SPRITE_BMP_EFFECT_FLAG_HEIGHT)) {
         if(heightEffectPivot != LARGE_FLOAT) {
-            float height_effect_scale = 1.0;
+            float heightEffectScale = 1.0;
             //First, check for the mob being in the air.
-            height_effect_scale +=
+            heightEffectScale +=
                 (z - heightEffectPivot) * MOB::HEIGHT_EFFECT_FACTOR;
-            height_effect_scale = std::max(height_effect_scale, 1.0f);
+            heightEffectScale = std::max(heightEffectScale, 1.0f);
             if(
                 groundSector->isBottomlessPit &&
-                height_effect_scale == 1.0f
+                heightEffectScale == 1.0f
             ) {
                 //When atop a pit, heightEffectPivot holds what height
                 //the mob fell from.
-                height_effect_scale =
+                heightEffectScale =
                     (z - groundSector->z) /
                     (heightEffectPivot - groundSector->z);
             }
-            info->scale *= height_effect_scale;
+            info->scale *= heightEffectScale;
         }
     }
     
@@ -2289,90 +2285,90 @@ void Mob::getSpriteBitmapEffects(
     ) {
         switch(deliveryInfo->animType) {
         case DELIVERY_ANIM_SUCK: {
-            ALLEGRO_COLOR new_glow;
-            float new_scale;
-            Point new_offset;
+            ALLEGRO_COLOR newGlow;
+            float newScale;
+            Point newOffset;
             
-            float shake_scale =
+            float shakeScale =
                 (1 - deliveryInfo->animTimeRatioLeft) *
                 MOB::DELIVERY_SUCK_SHAKING_MULT;
                 
             if(deliveryInfo->animTimeRatioLeft < 0.4) {
-                shake_scale =
+                shakeScale =
                     std::max(
                         interpolateNumber(
                             deliveryInfo->animTimeRatioLeft, 0.2, 0.4,
-                            0.0f, shake_scale),
+                            0.0f, shakeScale),
                         0.0f);
             }
             
-            new_offset.x =
+            newOffset.x =
                 sin(
                     game.states.gameplay->areaTimePassed *
                     MOB::DELIVERY_SUCK_SHAKING_TIME_MULT
-                ) * shake_scale;
+                ) * shakeScale;
                 
                 
             if(deliveryInfo->animTimeRatioLeft > 0.6) {
                 //Changing color.
-                new_glow =
+                newGlow =
                     interpolateColor(
                         deliveryInfo->animTimeRatioLeft, 0.6, 1.0,
                         deliveryInfo->color, mapGray(0)
                     );
-                new_scale = 1.0f;
+                newScale = 1.0f;
             } else if(deliveryInfo->animTimeRatioLeft > 0.4) {
                 //Fixed in color.
-                new_glow = deliveryInfo->color;
-                new_scale = 1.0f;
+                newGlow = deliveryInfo->color;
+                newScale = 1.0f;
             } else {
                 //Shrinking.
-                new_glow = deliveryInfo->color;
-                new_scale =
+                newGlow = deliveryInfo->color;
+                newScale =
                     interpolateNumber(
                         deliveryInfo->animTimeRatioLeft, 0.0, 0.4,
                         0.0f, 1.0f
                     );
-                new_scale = ease(EASE_METHOD_OUT, new_scale);
+                newScale = ease(EASE_METHOD_OUT, newScale);
                 
-                Point target_pos = focusedMob->pos;
+                Point targetPos = focusedMob->pos;
                 
                 if(focusedMob->type->category->id == MOB_CATEGORY_SHIPS) {
-                    Ship* shi_ptr = (Ship*) focusedMob;
-                    target_pos = shi_ptr->receptacleFinalPos;
+                    Ship* shiPtr = (Ship*) focusedMob;
+                    targetPos = shiPtr->receptacleFinalPos;
                 }
                 
-                Point end_offset = target_pos - pos;
+                Point endOffset = targetPos - pos;
                 
-                float absorb_ratio =
+                float absorbRatio =
                     interpolateNumber(
                         deliveryInfo->animTimeRatioLeft, 0.0, 0.4,
                         1.0f, 0.0f
                     );
-                absorb_ratio = ease(EASE_METHOD_IN, absorb_ratio);
-                new_offset += end_offset * absorb_ratio;
+                absorbRatio = ease(EASE_METHOD_IN, absorbRatio);
+                newOffset += endOffset * absorbRatio;
             }
             
             info->glowColor.r =
-                std::clamp(info->glowColor.r + new_glow.r, 0.0f, 1.0f);
+                std::clamp(info->glowColor.r + newGlow.r, 0.0f, 1.0f);
             info->glowColor.g =
-                std::clamp(info->glowColor.g + new_glow.g, 0.0f, 1.0f);
+                std::clamp(info->glowColor.g + newGlow.g, 0.0f, 1.0f);
             info->glowColor.b =
-                std::clamp(info->glowColor.b + new_glow.b, 0.0f, 1.0f);
+                std::clamp(info->glowColor.b + newGlow.b, 0.0f, 1.0f);
             info->glowColor.a =
-                std::clamp(info->glowColor.a + new_glow.a, 0.0f, 1.0f);
+                std::clamp(info->glowColor.a + newGlow.a, 0.0f, 1.0f);
                 
-            info->scale *= new_scale;
-            info->translation += new_offset;
+            info->scale *= newScale;
+            info->translation += newOffset;
             break;
         }
         case DELIVERY_ANIM_TOSS: {
-            Point new_offset;
-            float new_scale = 1.0f;
+            Point newOffset;
+            float newScale = 1.0f;
             
             if(deliveryInfo->animTimeRatioLeft > 0.85) {
                 //Wind-up.
-                new_offset.y =
+                newOffset.y =
                     sin(
                         interpolateNumber(
                             deliveryInfo->animTimeRatioLeft,
@@ -2380,10 +2376,10 @@ void Mob::getSpriteBitmapEffects(
                             0.0f, TAU / 2.0f
                         )
                     );
-                new_offset.y *= MOB::DELIVERY_TOSS_WINDUP_MULT;
+                newOffset.y *= MOB::DELIVERY_TOSS_WINDUP_MULT;
             } else {
                 //Toss.
-                new_offset.y =
+                newOffset.y =
                     sin(
                         interpolateNumber(
                             deliveryInfo->animTimeRatioLeft,
@@ -2391,19 +2387,19 @@ void Mob::getSpriteBitmapEffects(
                             TAU / 2.0f, TAU
                         )
                     );
-                new_offset.y *= MOB::DELIVERY_TOSS_MULT;
+                newOffset.y *= MOB::DELIVERY_TOSS_MULT;
                 //Randomly deviate left or right, slightly.
-                float deviation_mult =
+                float deviationMult =
                     hashNr((unsigned int) id) / (float) UINT32_MAX;
-                deviation_mult = deviation_mult * 2.0f - 1.0f;
-                deviation_mult *= MOB::DELIVERY_TOSS_X_OFFSET;
-                new_offset.x =
+                deviationMult = deviationMult * 2.0f - 1.0f;
+                deviationMult *= MOB::DELIVERY_TOSS_X_OFFSET;
+                newOffset.x =
                     interpolateNumber(
                         deliveryInfo->animTimeRatioLeft,
                         0.0f, 0.85f,
                         1.0f, 0.0f
-                    ) * deviation_mult;
-                new_scale =
+                    ) * deviationMult;
+                newScale =
                     interpolateNumber(
                         deliveryInfo->animTimeRatioLeft,
                         0.0f, 0.85f,
@@ -2411,8 +2407,8 @@ void Mob::getSpriteBitmapEffects(
                     );
             }
             
-            info->translation += new_offset;
-            info->scale *= new_scale;
+            info->translation += newOffset;
+            info->scale *= newScale;
             break;
         }
         }
@@ -2424,37 +2420,37 @@ void Mob::getSpriteBitmapEffects(
         hasFlag(effects, SPRITE_BMP_EFFECT_DAMAGE) &&
         damageSquashTime > 0.0f
     ) {
-        float damage_squash_time_ratio =
+        float damageSquashTimeRatio =
             damageSquashTime / MOB::DAMAGE_SQUASH_DURATION;
-        float damage_scale_y;
-        if(damage_squash_time_ratio > 0.5) {
-            damage_scale_y =
+        float damageScaleY;
+        if(damageSquashTimeRatio > 0.5) {
+            damageScaleY =
                 interpolateNumber(
-                    damage_squash_time_ratio,
+                    damageSquashTimeRatio,
                     0.5f, 1.0f, 0.0f, 1.0f
                 );
-            damage_scale_y =
+            damageScaleY =
                 ease(
                     EASE_METHOD_UP_AND_DOWN,
-                    damage_scale_y
+                    damageScaleY
                 );
-            damage_scale_y *= MOB::DAMAGE_SQUASH_AMOUNT;
+            damageScaleY *= MOB::DAMAGE_SQUASH_AMOUNT;
         } else {
-            damage_scale_y =
+            damageScaleY =
                 interpolateNumber(
-                    damage_squash_time_ratio,
+                    damageSquashTimeRatio,
                     0.0f, 0.5f, 1.0f, 0.0f
                 );
-            damage_scale_y =
+            damageScaleY =
                 ease(
                     EASE_METHOD_UP_AND_DOWN,
-                    damage_scale_y
+                    damageScaleY
                 );
-            damage_scale_y *= -MOB::DAMAGE_SQUASH_AMOUNT;
+            damageScaleY *= -MOB::DAMAGE_SQUASH_AMOUNT;
         }
-        damage_scale_y += 1.0f;
-        info->scale.y *= damage_scale_y;
-        info->scale.x *= 1.0f / damage_scale_y;
+        damageScaleY += 1.0f;
+        info->scale.y *= damageScaleY;
+        info->scale.x *= 1.0f / damageScaleY;
     }
     
     //Carry sway.
@@ -2488,18 +2484,18 @@ void Mob::getSpriteBitmapEffects(
  * @brief Returns the current sprite of one of the status effects
  * that the mob is under.
  *
- * @param bmp_scale Returns the mob size's scale to apply to the image.
+ * @param bmpScale Returns the mob size's scale to apply to the image.
  * @return The bitmap.
  */
-ALLEGRO_BITMAP* Mob::getStatusBitmap(float* bmp_scale) const {
-    *bmp_scale = 0.0f;
+ALLEGRO_BITMAP* Mob::getStatusBitmap(float* bmpScale) const {
+    *bmpScale = 0.0f;
     for(size_t st = 0; st < this->statuses.size(); st++) {
         StatusType* t = this->statuses[st].type;
         if(t->overlayAnimation.empty()) continue;
         Sprite* sp;
         t->overlayAnim.getSpriteData(&sp, nullptr, nullptr);
         if(!sp) return nullptr;
-        *bmp_scale = t->overlayAnimMobScale;
+        *bmpScale = t->overlayAnimMobScale;
         return sp->bitmap;
     }
     return nullptr;
@@ -2509,11 +2505,11 @@ ALLEGRO_BITMAP* Mob::getStatusBitmap(float* bmp_scale) const {
 /**
  * @brief Handles a status effect being applied.
  *
- * @param sta_type Status type to check.
+ * @param staType Status type to check.
  */
-void Mob::handleStatusEffectGain(StatusType* sta_type) {
-    if(sta_type->stateChangeType == STATUS_STATE_CHANGE_CUSTOM) {
-        size_t nr = fsm.getStateIdx(sta_type->stateChangeName);
+void Mob::handleStatusEffectGain(StatusType* staType) {
+    if(staType->stateChangeType == STATUS_STATE_CHANGE_CUSTOM) {
+        size_t nr = fsm.getStateIdx(staType->stateChangeName);
         if(nr != INVALID) {
             fsm.setState(nr);
         }
@@ -2524,9 +2520,9 @@ void Mob::handleStatusEffectGain(StatusType* sta_type) {
 /**
  * @brief Handles a status effect being removed.
  *
- * @param sta_type Status type to check.
+ * @param staType Status type to check.
  */
-void Mob::handleStatusEffectLoss(StatusType* sta_type) {
+void Mob::handleStatusEffectLoss(StatusType* staType) {
 }
 
 
@@ -2535,56 +2531,56 @@ void Mob::handleStatusEffectLoss(StatusType* sta_type) {
  * In other words, if a straight line is drawn between both,
  * is this line clear, or is it interrupted by a wall or pushing mob?
  *
- * @param target_mob The mob to check against.
+ * @param targetMob The mob to check against.
  * @return Whether it has a clear line.
  */
-bool Mob::hasClearLine(const Mob* target_mob) const {
+bool Mob::hasClearLine(const Mob* targetMob) const {
     //First, get a bounding box of the line to check.
     //This will help with performance later.
-    Point bb_tl = pos;
-    Point bb_br = pos;
-    updateMinMaxCoords(bb_tl, bb_br, target_mob->pos);
+    Point bbTL = pos;
+    Point bbBR = pos;
+    updateMinMaxCoords(bbTL, bbBR, targetMob->pos);
     
-    const float self_max_z = z + height;
-    const float target_mob_max_z = target_mob->z + target_mob->height;
+    const float selfMaxZ = z + height;
+    const float targetMobMaxZ = targetMob->z + targetMob->height;
     
     //Check against other mobs.
     for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
-        Mob* m_ptr = game.states.gameplay->mobs.all[m];
+        Mob* mPtr = game.states.gameplay->mobs.all[m];
         
-        if(!m_ptr->type->pushes) continue;
-        if(m_ptr == this || m_ptr == target_mob) continue;
-        if(hasFlag(m_ptr->flags, MOB_FLAG_INTANGIBLE)) continue;
+        if(!mPtr->type->pushes) continue;
+        if(mPtr == this || mPtr == targetMob) continue;
+        if(hasFlag(mPtr->flags, MOB_FLAG_INTANGIBLE)) continue;
         
-        const float m_ptr_max_z = m_ptr->z + m_ptr->height;
-        if(m_ptr_max_z < self_max_z || m_ptr_max_z < target_mob_max_z) continue;
+        const float mPtrMaxZ = mPtr->z + mPtr->height;
+        if(mPtrMaxZ < selfMaxZ || mPtrMaxZ < targetMobMaxZ) continue;
         if(
-            m_ptr->z > z + height &&
-            m_ptr->z > target_mob->z + target_mob->height
+            mPtr->z > z + height &&
+            mPtr->z > targetMob->z + targetMob->height
         ) {
             continue;
         }
         if(
-            target_mob->standingOnMob == m_ptr &&
-            fabs(z - target_mob->z) <= GEOMETRY::STEP_HEIGHT
+            targetMob->standingOnMob == mPtr &&
+            fabs(z - targetMob->z) <= GEOMETRY::STEP_HEIGHT
         ) {
             continue;
         }
         if(
             !rectanglesIntersect(
-                bb_tl, bb_br,
-                m_ptr->pos - m_ptr->physicalSpan,
-                m_ptr->pos + m_ptr->physicalSpan
+                bbTL, bbBR,
+                mPtr->pos - mPtr->physicalSpan,
+                mPtr->pos + mPtr->physicalSpan
             )
         ) {
             continue;
         }
         
-        if(m_ptr->rectangularDim.x != 0.0f) {
+        if(mPtr->rectangularDim.x != 0.0f) {
             if(
                 lineSegIntersectsRotatedRectangle(
-                    pos, target_mob->pos,
-                    m_ptr->pos, m_ptr->rectangularDim, m_ptr->angle
+                    pos, targetMob->pos,
+                    mPtr->pos, mPtr->rectangularDim, mPtr->angle
                 )
             ) {
                 return false;
@@ -2592,8 +2588,8 @@ bool Mob::hasClearLine(const Mob* target_mob) const {
         } else {
             if(
                 circleIntersectsLineSeg(
-                    m_ptr->pos, m_ptr->radius,
-                    pos, target_mob->pos,
+                    mPtr->pos, mPtr->radius,
+                    pos, targetMob->pos,
                     nullptr, nullptr
                 )
             ) {
@@ -2607,8 +2603,8 @@ bool Mob::hasClearLine(const Mob* target_mob) const {
     //both mobs, so use the lowest of the two Zs as a cut-off point.
     if(
         areaWallsBetween(
-            pos, target_mob->pos,
-            std::min(z + height, target_mob->z + target_mob->height) +
+            pos, targetMob->pos,
+            std::min(z + height, targetMob->z + targetMob->height) +
             GEOMETRY::STEP_HEIGHT
         )
     ) {
@@ -2624,19 +2620,19 @@ bool Mob::hasClearLine(const Mob* target_mob) const {
  * @brief Starts holding the specified mob.
  *
  * @param m  Mob to start holding.
- * @param hitbox_idx Index of the hitbox to hold on. INVALID for mob center.
- * @param offset_dist Distance from the hitbox/body center. 1 is full radius.
- * @param offset_angle Hitbox/body angle from which the mob will be held.
- * @param vertical_dist Ratio of distance from the hitbox/body's bottom.
+ * @param hitboxIdx Index of the hitbox to hold on. INVALID for mob center.
+ * @param offsetDist Distance from the hitbox/body center. 1 is full radius.
+ * @param offsetAngle Hitbox/body angle from which the mob will be held.
+ * @param verticalDist Ratio of distance from the hitbox/body's bottom.
  * 1 is the very top.
- * @param force_above_holder If true, force the mob to be drawn above the holder.
- * @param rotation_method How should the held mob rotate?
+ * @param forceAboveHolder If true, force the mob to be drawn above the holder.
+ * @param rotationMethod How should the held mob rotate?
  */
 void Mob::hold(
-    Mob* m, size_t hitbox_idx,
-    float offset_dist, float offset_angle,
-    float vertical_dist,
-    bool force_above_holder, const HOLD_ROTATION_METHOD rotation_method
+    Mob* m, size_t hitboxIdx,
+    float offsetDist, float offsetAngle,
+    float verticalDist,
+    bool forceAboveHolder, const HOLD_ROTATION_METHOD rotationMethod
 ) {
     if(m->holder.m != nullptr && m->holder.m != this) {
         //A different mob is already holding it.
@@ -2651,12 +2647,12 @@ void Mob::hold(
     
     holding.push_back(m);
     m->holder.m = this;
-    m->holder.hitboxIdx = hitbox_idx;
-    m->holder.offsetDist = offset_dist;
-    m->holder.offsetAngle = offset_angle;
-    m->holder.verticalDist = vertical_dist;
-    m->holder.forceAboveHolder = force_above_holder;
-    m->holder.rotationMethod = rotation_method;
+    m->holder.hitboxIdx = hitboxIdx;
+    m->holder.offsetDist = offsetDist;
+    m->holder.offsetAngle = offsetAngle;
+    m->holder.verticalDist = verticalDist;
+    m->holder.forceAboveHolder = forceAboveHolder;
+    m->holder.rotationMethod = rotationMethod;
     m->fsm.runEvent(MOB_EV_HELD, (void*) this);
     
     if(standingOnMob) {
@@ -2677,31 +2673,31 @@ void Mob::hold(
 bool Mob::isOffCamera() const {
     if(parent) return false;
     
-    float sprite_bound = 0;
-    Sprite* s_ptr;
-    anim.getSpriteData(&s_ptr, nullptr, nullptr);
-    if(s_ptr) {
-        Point sprite_size = s_ptr->bmpSize;
-        sprite_bound =
+    float spriteBound = 0;
+    Sprite* sPtr;
+    anim.getSpriteData(&sPtr, nullptr, nullptr);
+    if(sPtr) {
+        Point spriteSize = sPtr->bmpSize;
+        spriteBound =
             std::max(
-                sprite_size.x / 2.0,
-                sprite_size.y / 2.0
+                spriteSize.x / 2.0,
+                spriteSize.y / 2.0
             );
     }
     
-    float collision_bound = 0;
+    float collisionBound = 0;
     if(rectangularDim.x == 0) {
-        collision_bound = radius;
+        collisionBound = radius;
     } else {
-        collision_bound =
+        collisionBound =
             std::max(
                 rectangularDim.x / 2.0,
                 rectangularDim.y / 2.0
             );
     }
     
-    float radius_to_use = std::max(sprite_bound, collision_bound);
-    return !BBoxCheck(game.view.box[0], game.view.box[1], pos, radius_to_use);
+    float radiusToUse = std::max(spriteBound, collisionBound);
+    return !BBoxCheck(game.view.box[0], game.view.box[1], pos, radiusToUse);
 }
 
 
@@ -2716,13 +2712,13 @@ bool Mob::isPointOn(const Point &p) const {
         return Distance(p, pos) <= radius;
         
     } else {
-        Point p_delta = p - pos;
-        p_delta = rotatePoint(p_delta, -angle);
-        p_delta += rectangularDim / 2.0f;
+        Point pDelta = p - pos;
+        pDelta = rotatePoint(pDelta, -angle);
+        pDelta += rectangularDim / 2.0f;
         
         return
-            p_delta.x > 0 && p_delta.x < rectangularDim.x &&
-            p_delta.y > 0 && p_delta.y < rectangularDim.y;
+            pDelta.x > 0 && pDelta.x < rectangularDim.x &&
+            pDelta.y > 0 && pDelta.y < rectangularDim.y;
     }
 }
 
@@ -2762,19 +2758,19 @@ bool Mob::isStoredInsideMob() const {
 void Mob::leaveGroup() {
     if(!followingGroup) return;
     
-    Mob* group_leader = followingGroup;
+    Mob* groupLeader = followingGroup;
     
-    group_leader->group->members.erase(
+    groupLeader->group->members.erase(
         find(
-            group_leader->group->members.begin(),
-            group_leader->group->members.end(),
+            groupLeader->group->members.begin(),
+            groupLeader->group->members.end(),
             this
         )
     );
     
-    group_leader->group->initSpots(this);
+    groupLeader->group->initSpots(this);
     
-    group_leader->group->changeStandbyTypeIfNeeded();
+    groupLeader->group->changeStandbyTypeIfNeeded();
     
     followingGroup = nullptr;
     
@@ -2820,18 +2816,18 @@ void Mob::moveToPathEnd(float speed, float acceleration) {
 /**
  * @brief Plays a sound from the list of sounds in the mob type's data.
  *
- * @param sound_data_idx Index of the sound data in the list.
+ * @param soundDataIdx Index of the sound data in the list.
  * @return The sound source ID.
  */
-size_t Mob::playSound(size_t sound_data_idx) {
-    if(sound_data_idx >= type->sounds.size()) return 0;
+size_t Mob::playSound(size_t soundDataIdx) {
+    if(soundDataIdx >= type->sounds.size()) return 0;
     
     //During interludes, don't play any mob sounds. This allows stuff
     //like obstacles being cleared upon area load and not playing the
     //obstacle clear jingle.
     if(game.states.gameplay->curInterlude != INTERLUDE_NONE) return 0;
     
-    MobType::Sound* sound = &type->sounds[sound_data_idx];
+    MobType::Sound* sound = &type->sounds[soundDataIdx];
     
     switch(sound->type) {
     case SOUND_TYPE_GAMEPLAY_GLOBAL: {
@@ -2901,18 +2897,18 @@ string Mob::printStateHistory() const {
  * @param svr Script var reader to use.
  */
 void Mob::readScriptVars(const ScriptVarReader &svr) {
-    string team_var;
+    string teamVar;
     
-    if(svr.get("team", team_var)) {
-        MOB_TEAM team_nr = stringToTeamNr(team_var);
-        if(team_nr == INVALID) {
+    if(svr.get("team", teamVar)) {
+        MOB_TEAM teamNr = stringToTeamNr(teamVar);
+        if(teamNr == INVALID) {
             game.errors.report(
-                "Unknown team name \"" + team_var +
+                "Unknown team name \"" + teamVar +
                 "\", when trying to create mob (" +
                 getErrorMessageMobInfo(this) + ")!", nullptr
             );
         } else {
-            team = team_nr;
+            team = teamNr;
         }
     }
     
@@ -2976,16 +2972,16 @@ void Mob::releaseChompedPikmin() {
  */
 void Mob::releaseStoredMobs() {
     for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
-        Mob* m_ptr = game.states.gameplay->mobs.all[m];
-        if(m_ptr->storedInsideAnother == this) {
-            release(m_ptr);
-            m_ptr->storedInsideAnother = nullptr;
-            m_ptr->timeAlive = 0.0f;
+        Mob* mPtr = game.states.gameplay->mobs.all[m];
+        if(mPtr->storedInsideAnother == this) {
+            release(mPtr);
+            mPtr->storedInsideAnother = nullptr;
+            mPtr->timeAlive = 0.0f;
             float a = game.rng.f(0, TAU);
             const float momentum = 100;
-            m_ptr->speed.x = cos(a) * momentum;
-            m_ptr->speed.y = sin(a) * momentum;
-            m_ptr->speedZ = momentum * 7;
+            mPtr->speed.x = cos(a) * momentum;
+            mPtr->speed.y = sin(a) * momentum;
+            mPtr->speedZ = momentum * 7;
         }
     }
 }
@@ -3038,25 +3034,25 @@ void Mob::sendScriptMessage(Mob* receiver, string &msg) const {
  * @param idx Animation index.
  * It's the animation instance index from the database.
  * @param options Options to start the new animation with.
- * @param pre_named If true, the animation has already been named in-engine.
- * @param mob_speed_anim_baseline If not 0, the animation's speed will depend on
+ * @param preNamed If true, the animation has already been named in-engine.
+ * @param mobSpeedAnimBaseline If not 0, the animation's speed will depend on
  * the mob's speed, using this value as a baseline (for 1.0x speed).
  */
 void Mob::setAnimation(
-    size_t idx, const START_ANIM_OPTION options, bool pre_named,
-    float mob_speed_anim_baseline
+    size_t idx, const START_ANIM_OPTION options, bool preNamed,
+    float mobSpeedAnimBaseline
 ) {
     if(idx >= type->animDb->animations.size()) return;
     
-    size_t final_idx;
-    if(pre_named) {
+    size_t finalIdx;
+    if(preNamed) {
         if(anim.animDb->preNamedConversions.size() <= idx) return;
-        final_idx = anim.animDb->preNamedConversions[idx];
+        finalIdx = anim.animDb->preNamedConversions[idx];
     } else {
-        final_idx = idx;
+        finalIdx = idx;
     }
     
-    if(final_idx == INVALID) {
+    if(finalIdx == INVALID) {
         game.errors.report(
             "Mob (" + getErrorMessageMobInfo(this) +
             ") tried to switch from " +
@@ -3070,11 +3066,11 @@ void Mob::setAnimation(
         return;
     }
     
-    Animation* new_anim = anim.animDb->animations[final_idx];
-    anim.curAnim = new_anim;
-    this->mobSpeedAnimBaseline = mob_speed_anim_baseline;
+    Animation* newAnim = anim.animDb->animations[finalIdx];
+    anim.curAnim = newAnim;
+    this->mobSpeedAnimBaseline = mobSpeedAnimBaseline;
     
-    if(new_anim->frames.empty()) {
+    if(newAnim->frames.empty()) {
         anim.curFrameIdx = INVALID;
     } else {
         if(
@@ -3101,16 +3097,16 @@ void Mob::setAnimation(
  *
  * @param name Name of the animation.
  * @param options Options to start the new animation with.
- * @param mob_speed_anim_baseline If not 0, the animation's speed will depend on
+ * @param mobSpeedAnimBaseline If not 0, the animation's speed will depend on
  * the mob's speed, using this value as a baseline (for 1.0x speed).
  */
 void Mob::setAnimation(
     const string &name, const START_ANIM_OPTION options,
-    float mob_speed_anim_baseline
+    float mobSpeedAnimBaseline
 ) {
     size_t idx = anim.animDb->findAnimation(name);
     if(idx != INVALID) {
-        setAnimation(idx, options, false, mob_speed_anim_baseline);
+        setAnimation(idx, options, false, mobSpeedAnimBaseline);
     }
 }
 
@@ -3148,10 +3144,10 @@ void Mob::setCanBlockPaths(bool blocks) {
 void Mob::setHealth(bool add, bool ratio, float amount) {
     float change = amount;
     if(ratio) change = maxHealth * amount;
-    float base_nr = 0;
-    if(add) base_nr = health;
+    float baseNr = 0;
+    if(add) baseNr = health;
     
-    health = std::clamp(base_nr + change, 0.0f, maxHealth);
+    health = std::clamp(baseNr + change, 0.0f, maxHealth);
 }
 
 
@@ -3175,15 +3171,15 @@ void Mob::setRadius(float radius) {
 /**
  * @brief Sets the mob's rectangular dimensions to a different value.
  *
- * @param rectangular_dim New rectangular dimensions.
+ * @param rectangularDim New rectangular dimensions.
  */
-void Mob::setRectangularDim(const Point &rectangular_dim) {
-    this->rectangularDim = rectangular_dim;
+void Mob::setRectangularDim(const Point &rectangularDim) {
+    this->rectangularDim = rectangularDim;
     physicalSpan =
         calculateMobPhysicalSpan(
             radius,
             type->animDb ? type->animDb->hitboxSpan : 0.0f,
-            rectangular_dim
+            rectangularDim
         );
     updateInteractionSpan();
 }
@@ -3215,17 +3211,17 @@ void Mob::setVar(const string &name, const string &value) {
  * @brief Makes the current mob spawn a new mob, given some spawn information.
  *
  * @param info Structure with information about how to spawn it.
- * @param type_ptr If nullptr, the pointer to the mob type is obtained given its
+ * @param typePtr If nullptr, the pointer to the mob type is obtained given its
  * name in the information structure. If not nullptr, uses this instead.
  * @return The new mob.
  */
-Mob* Mob::spawn(const MobType::SpawnInfo* info, MobType* type_ptr) {
+Mob* Mob::spawn(const MobType::SpawnInfo* info, MobType* typePtr) {
     //First, find the mob.
-    if(!type_ptr) {
-        type_ptr = game.mobCategories.findMobType(info->mobTypeName);
+    if(!typePtr) {
+        typePtr = game.mobCategories.findMobType(info->mobTypeName);
     }
     
-    if(!type_ptr) {
+    if(!typePtr) {
         game.errors.report(
             "Mob (" + getErrorMessageMobInfo(this) +
             ") tried to spawn an object of the "
@@ -3236,65 +3232,65 @@ Mob* Mob::spawn(const MobType::SpawnInfo* info, MobType* type_ptr) {
     }
     
     if(
-        type_ptr->category->id == MOB_CATEGORY_PIKMIN &&
+        typePtr->category->id == MOB_CATEGORY_PIKMIN &&
         game.states.gameplay->mobs.pikmin.size() >=
         game.config.rules.maxPikminInField
     ) {
         return nullptr;
     }
     
-    Point new_xy;
-    float new_z = 0;
-    float new_angle = 0;
+    Point newXY;
+    float newZ = 0;
+    float newAngle = 0;
     
     if(info->relative) {
-        new_xy = pos + rotatePoint(info->coordsXY, angle);
-        new_z = z + info->coordsZ;
-        new_angle = angle + info->angle;
+        newXY = pos + rotatePoint(info->coordsXY, angle);
+        newZ = z + info->coordsZ;
+        newAngle = angle + info->angle;
     } else {
-        new_xy = info->coordsXY;
-        new_z = info->coordsZ;
-        new_angle = info->angle;
+        newXY = info->coordsXY;
+        newZ = info->coordsZ;
+        newAngle = info->angle;
     }
     
-    if(!getSector(new_xy, nullptr, true)) {
+    if(!getSector(newXY, nullptr, true)) {
         //Spawn out of bounds? No way!
         return nullptr;
     }
     
-    Mob* new_mob =
+    Mob* newMob =
         createMob(
-            type_ptr->category,
-            new_xy,
-            type_ptr,
-            new_angle,
+            typePtr->category,
+            newXY,
+            typePtr,
+            newAngle,
             info->vars
         );
         
-    new_mob->z = new_z;
+    newMob->z = newZ;
     
-    if(type_ptr->category->id == MOB_CATEGORY_TREASURES) {
+    if(typePtr->category->id == MOB_CATEGORY_TREASURES) {
         //This way, treasures that fall into the abyss respawn at the
         //spawner mob's original spot.
-        new_mob->home = home;
+        newMob->home = home;
     } else {
-        new_mob->home = new_xy;
+        newMob->home = newXY;
     }
     
     if(info->linkObjectToSpawn) {
-        links.push_back(new_mob);
+        links.push_back(newMob);
     }
     if(info->linkSpawnToObject) {
-        new_mob->links.push_back(this);
+        newMob->links.push_back(this);
     }
     if(info->momentum != 0) {
         float a = game.rng.f(0, TAU);
-        new_mob->speed.x = cos(a) * info->momentum;
-        new_mob->speed.y = sin(a) * info->momentum;
-        new_mob->speedZ = info->momentum * 7;
+        newMob->speed.x = cos(a) * info->momentum;
+        newMob->speed.y = sin(a) * info->momentum;
+        newMob->speedZ = info->momentum * 7;
     }
     
-    return new_mob;
+    return newMob;
 }
 
 
@@ -3410,8 +3406,8 @@ void Mob::stopHeightEffect() {
         type->category->id == MOB_CATEGORY_LEADERS &&
         highestMidairZ != FLT_MAX
     ) {
-        float distance_fallen = highestMidairZ - z;
-        if(distance_fallen > 0.0f) {
+        float distanceFallen = highestMidairZ - z;
+        if(distanceFallen > 0.0f) {
             ParticleGenerator pg =
                 standardParticleGenSetup(
                     game.sysContentNames.parLeaderLand, this
@@ -3422,7 +3418,7 @@ void Mob::stopHeightEffect() {
                 return
                     std::min(
                         GAMEPLAY::LEADER_LAND_PART_MAX_SIZE,
-                        s * distance_fallen *
+                        s * distanceFallen *
                         GAMEPLAY::LEADER_LAND_PART_SIZE_MULT
                     );
             }
@@ -3488,15 +3484,15 @@ void Mob::storeMobInside(Mob* m) {
 void Mob::swallowChompedPikmin(size_t amount) {
     amount = std::min(amount, chompingMobs.size());
     
-    vector<float> pick_random_floats;
+    vector<float> pickRandomFloats;
     for(size_t f = 0; f < chompingMobs.size(); f++) {
-        pick_random_floats.push_back(game.rng.f(0.0f, 1.0f));
+        pickRandomFloats.push_back(game.rng.f(0.0f, 1.0f));
     }
-    vector<Mob*> shuffled_list =
-        shuffleVector(chompingMobs, pick_random_floats);
+    vector<Mob*> shuffledList =
+        shuffleVector(chompingMobs, pickRandomFloats);
         
     for(size_t p = 0; p < amount; p++) {
-        swallowChompedPikmin(shuffled_list[p]);
+        swallowChompedPikmin(shuffledList[p]);
     }
 }
 
@@ -3504,14 +3500,14 @@ void Mob::swallowChompedPikmin(size_t amount) {
 /**
  * @brief Makes the mob swallow a specific opponent it has chomped on.
  *
- * @param m_ptr Pointer to the chomped mob.
+ * @param mPtr Pointer to the chomped mob.
  */
-void Mob::swallowChompedPikmin(Mob* m_ptr) {
-    if(!m_ptr) return;
+void Mob::swallowChompedPikmin(Mob* mPtr) {
+    if(!mPtr) return;
     
     size_t idx = INVALID;
     for(size_t m = 0; m < chompingMobs.size(); m++) {
-        if(chompingMobs[m] == m_ptr) {
+        if(chompingMobs[m] == mPtr) {
             idx = m;
             break;
         }
@@ -3522,11 +3518,11 @@ void Mob::swallowChompedPikmin(Mob* m_ptr) {
         return;
     }
     
-    m_ptr->fsm.runEvent(MOB_EV_SWALLOWED);
-    m_ptr->causeSpikeDamage(this, true);
-    m_ptr->setHealth(false, false, 0.0f);
-    release(m_ptr);
-    if(m_ptr->type->category->id == MOB_CATEGORY_PIKMIN) {
+    mPtr->fsm.runEvent(MOB_EV_SWALLOWED);
+    mPtr->causeSpikeDamage(this, true);
+    mPtr->setHealth(false, false, 0.0f);
+    release(mPtr);
+    if(mPtr->type->category->id == MOB_CATEGORY_PIKMIN) {
         game.statistics.pikminEaten++;
     }
     
@@ -3546,9 +3542,9 @@ void Mob::swallowChompedPikmin(Mob* m_ptr) {
  * send signals to the muscles, and gravity, intertia, etc.
  * take over the rest, to make you move.
  *
- * @param delta_t How long the frame's tick is, in seconds.
+ * @param deltaT How long the frame's tick is, in seconds.
  */
-void Mob::tick(float delta_t) {
+void Mob::tick(float deltaT) {
     //Since the mob could be marked for deletion after any little
     //interaction with the world, and since doing logic on a mob that already
     //forgot some things due to deletion is dangerous... Let's constantly
@@ -3560,7 +3556,7 @@ void Mob::tick(float delta_t) {
     if(game.perfMon) {
         game.perfMon->startMeasurement("Object -- Brain");
     }
-    tickBrain(delta_t);
+    tickBrain(deltaT);
     if(game.perfMon) {
         game.perfMon->finishMeasurement();
     }
@@ -3570,7 +3566,7 @@ void Mob::tick(float delta_t) {
     if(game.perfMon) {
         game.perfMon->startMeasurement("Object -- Physics");
     }
-    tickPhysics(delta_t);
+    tickPhysics(deltaT);
     if(game.perfMon) {
         game.perfMon->finishMeasurement();
     }
@@ -3580,7 +3576,7 @@ void Mob::tick(float delta_t) {
     if(game.perfMon) {
         game.perfMon->startMeasurement("Object -- Misc. logic");
     }
-    tickMiscLogic(delta_t);
+    tickMiscLogic(deltaT);
     if(game.perfMon) {
         game.perfMon->finishMeasurement();
     }
@@ -3590,7 +3586,7 @@ void Mob::tick(float delta_t) {
     if(game.perfMon) {
         game.perfMon->startMeasurement("Object -- Animation");
     }
-    tickAnimation(delta_t);
+    tickAnimation(deltaT);
     if(game.perfMon) {
         game.perfMon->finishMeasurement();
     }
@@ -3600,7 +3596,7 @@ void Mob::tick(float delta_t) {
     if(game.perfMon) {
         game.perfMon->startMeasurement("Object -- Script");
     }
-    tickScript(delta_t);
+    tickScript(deltaT);
     if(game.perfMon) {
         game.perfMon->finishMeasurement();
     }
@@ -3610,7 +3606,7 @@ void Mob::tick(float delta_t) {
     if(game.perfMon) {
         game.perfMon->startMeasurement("Object -- Misc. specifics");
     }
-    tickClassSpecifics(delta_t);
+    tickClassSpecifics(deltaT);
     if(game.perfMon) {
         game.perfMon->finishMeasurement();
     }
@@ -3620,46 +3616,46 @@ void Mob::tick(float delta_t) {
 /**
  * @brief Ticks animation time by one frame of logic.
  *
- * @param delta_t How long the frame's tick is, in seconds.
+ * @param deltaT How long the frame's tick is, in seconds.
  */
-void Mob::tickAnimation(float delta_t) {
+void Mob::tickAnimation(float deltaT) {
     float mult = 1.0f;
     for(size_t s = 0; s < this->statuses.size(); s++) {
-        float vuln_mult = this->statuses[s].type->animSpeedMultiplier - 1.0f;
-        auto vuln_it = type->statusVulnerabilities.find(statuses[s].type);
-        if(vuln_it != type->statusVulnerabilities.end()) {
-            vuln_mult *= vuln_it->second.effectMult;
+        float vulnMult = this->statuses[s].type->animSpeedMultiplier - 1.0f;
+        auto vulnIt = type->statusVulnerabilities.find(statuses[s].type);
+        if(vulnIt != type->statusVulnerabilities.end()) {
+            vulnMult *= vulnIt->second.effectMult;
         }
-        mult *= (vuln_mult + 1.0f);
+        mult *= (vulnMult + 1.0f);
     }
     
     if(mobSpeedAnimBaseline != 0.0f) {
-        float mob_speed_mult = chaseInfo.curSpeed / mobSpeedAnimBaseline;
-        mob_speed_mult =
+        float mobSpeedMult = chaseInfo.curSpeed / mobSpeedAnimBaseline;
+        mobSpeedMult =
             std::clamp(
-                mob_speed_mult,
+                mobSpeedMult,
                 MOB::MOB_SPEED_ANIM_MIN_MULT, MOB::MOB_SPEED_ANIM_MAX_MULT
             );
-        mult *= mob_speed_mult;
+        mult *= mobSpeedMult;
     }
     
-    vector<size_t> frame_signals;
-    vector<size_t> frame_sounds;
-    bool finished_anim =
-        anim.tick(delta_t* mult, &frame_signals, &frame_sounds);
+    vector<size_t> frameSignals;
+    vector<size_t> frameSounds;
+    bool finishedAnim =
+        anim.tick(deltaT* mult, &frameSignals, &frameSounds);
         
-    if(finished_anim) {
+    if(finishedAnim) {
         fsm.runEvent(MOB_EV_ANIMATION_END);
     }
-    for(size_t s = 0; s < frame_signals.size(); s++) {
-        fsm.runEvent(MOB_EV_FRAME_SIGNAL, &frame_signals[s]);
+    for(size_t s = 0; s < frameSignals.size(); s++) {
+        fsm.runEvent(MOB_EV_FRAME_SIGNAL, &frameSignals[s]);
     }
-    for(size_t s = 0; s < frame_sounds.size(); s++) {
-        playSound(frame_sounds[s]);
+    for(size_t s = 0; s < frameSounds.size(); s++) {
+        playSound(frameSounds[s]);
     }
     
     for(size_t h = 0; h < hitOpponents.size();) {
-        hitOpponents[h].first -= delta_t;
+        hitOpponents[h].first -= deltaT;
         if(hitOpponents[h].first <= 0.0f) {
             hitOpponents.erase(hitOpponents.begin() + h);
         } else {
@@ -3667,8 +3663,8 @@ void Mob::tickAnimation(float delta_t) {
         }
     }
     
-    if(parent && parent->limb_anim.animDb) {
-        parent->limb_anim.tick(delta_t* mult);
+    if(parent && parent->limbAnim.animDb) {
+        parent->limbAnim.tick(deltaT* mult);
     }
 }
 
@@ -3680,31 +3676,31 @@ void Mob::tickAnimation(float delta_t) {
  * This is related to mob-global things, like
  * thinking about where to move next and such.
  *
- * @param delta_t How long the frame's tick is, in seconds.
+ * @param deltaT How long the frame's tick is, in seconds.
  */
-void Mob::tickBrain(float delta_t) {
+void Mob::tickBrain(float deltaT) {
     //Circling around something.
     if(circlingInfo) {
-        Point circling_center =
+        Point circlingCenter =
             circlingInfo->circlingMob ?
             circlingInfo->circlingMob->pos :
             circlingInfo->circlingPoint;
-        float circling_z =
+        float circlingZ =
             circlingInfo->circlingMob ?
             circlingInfo->circlingMob->z :
             z;
             
         circlingInfo->curAngle +=
             linearDistToAngular(
-                circlingInfo->speed * delta_t, circlingInfo->radius
+                circlingInfo->speed * deltaT, circlingInfo->radius
             ) *
             (circlingInfo->clockwise ? 1 : -1);
             
         chase(
-            circling_center + angleToCoordinates(
+            circlingCenter + angleToCoordinates(
                 circlingInfo->curAngle, circlingInfo->radius
             ),
-            circling_z,
+            circlingZ,
             (circlingInfo->canFreeMove ? CHASE_FLAG_ANY_ANGLE : 0),
             PATHS::DEF_CHASE_TARGET_DISTANCE,
             circlingInfo->speed
@@ -3719,26 +3715,26 @@ void Mob::tickBrain(float delta_t) {
     ) {
     
         //Calculate where the target is.
-        Point final_target_pos = getChaseTarget();
-        Distance horiz_dist = Distance(pos, final_target_pos);
-        float vert_dist = 0.0f;
+        Point finalTargetPos = getChaseTarget();
+        Distance horizDist = Distance(pos, finalTargetPos);
+        float vertDist = 0.0f;
         if(hasFlag(flags, MOB_FLAG_CAN_MOVE_MIDAIR)) {
-            float final_target_z = chaseInfo.offsetZ;
-            if(chaseInfo.origZ) final_target_z += *chaseInfo.origZ;
-            vert_dist = fabs(z - final_target_z);
+            float finalTargetZ = chaseInfo.offsetZ;
+            if(chaseInfo.origZ) finalTargetZ += *chaseInfo.origZ;
+            vertDist = fabs(z - finalTargetZ);
         }
         
         if(
-            horiz_dist > chaseInfo.targetDist ||
-            vert_dist > 1.0f
+            horizDist > chaseInfo.targetDist ||
+            vertDist > 1.0f
         ) {
             //If it still hasn't reached its target
             //(or close enough to the target),
             //time to make it think about how to get there.
             
             //Let the mob think about facing the actual target.
-            if(!type->canFreeMove && horiz_dist > 0.0f) {
-                face(getAngle(pos, final_target_pos), nullptr);
+            if(!type->canFreeMove && horizDist > 0.0f) {
+                face(getAngle(pos, finalTargetPos), nullptr);
             }
             
         } else {
@@ -3751,36 +3747,36 @@ void Mob::tickBrain(float delta_t) {
                 );
             if(
                 pathInfo && !direct &&
-                pathInfo->block_reason == PATH_BLOCK_REASON_NONE
+                pathInfo->blockReason == PATH_BLOCK_REASON_NONE
             ) {
             
-                pathInfo->cur_path_stop_idx++;
+                pathInfo->curPathStopIdx++;
                 
-                if(pathInfo->cur_path_stop_idx < pathInfo->path.size()) {
+                if(pathInfo->curPathStopIdx < pathInfo->path.size()) {
                     //Reached a regular stop while traversing the path.
                     //Think about going to the next, if possible.
-                    if(pathInfo->checkBlockage(&pathInfo->block_reason)) {
+                    if(pathInfo->checkBlockage(&pathInfo->blockReason)) {
                         //Oop, there's an obstacle! Or some other blockage.
                         fsm.runEvent(MOB_EV_PATH_BLOCKED);
                     } else {
                         //All good. Head to the next stop.
-                        PathStop* next_stop =
-                            pathInfo->path[pathInfo->cur_path_stop_idx];
-                        float next_stop_z = z;
+                        PathStop* nextStop =
+                            pathInfo->path[pathInfo->curPathStopIdx];
+                        float nextStopZ = z;
                         if(
                             (
                                 pathInfo->settings.flags &
                                 PATH_FOLLOW_FLAG_AIRBORNE
                             ) &&
-                            next_stop->sectorPtr
+                            nextStop->sectorPtr
                         ) {
-                            next_stop_z =
-                                next_stop->sectorPtr->z +
+                            nextStopZ =
+                                nextStop->sectorPtr->z +
                                 PIKMIN::FLIER_ABOVE_FLOOR_HEIGHT;
                         }
                         
                         chase(
-                            next_stop->pos, next_stop_z,
+                            nextStop->pos, nextStopZ,
                             CHASE_FLAG_ANY_ANGLE,
                             PATHS::DEF_CHASE_TARGET_DISTANCE,
                             chaseInfo.maxSpeed
@@ -3788,7 +3784,7 @@ void Mob::tickBrain(float delta_t) {
                     }
                     
                 } else if(
-                    pathInfo->cur_path_stop_idx == pathInfo->path.size()
+                    pathInfo->curPathStopIdx == pathInfo->path.size()
                 ) {
                     //Reached the final stop of the path, but not the goal.
                     //Let's head there.
@@ -3797,7 +3793,7 @@ void Mob::tickBrain(float delta_t) {
                     );
                     
                 } else if(
-                    pathInfo->cur_path_stop_idx == pathInfo->path.size() + 1
+                    pathInfo->curPathStopIdx == pathInfo->path.size() + 1
                 ) {
                     //Reached the path's goal.
                     chaseInfo.state = CHASE_STATE_FINISHED;
@@ -3822,52 +3818,52 @@ void Mob::tickBrain(float delta_t) {
  * @brief Code specific for each class.
  * Meant to be overwritten by the child classes.
  *
- * @param delta_t How long the frame's tick is, in seconds.
+ * @param deltaT How long the frame's tick is, in seconds.
  */
-void Mob::tickClassSpecifics(float delta_t) {
+void Mob::tickClassSpecifics(float deltaT) {
 }
 
 
 /**
  * @brief Performs some logic code for this game frame.
  *
- * @param delta_t How long the frame's tick is, in seconds.
+ * @param deltaT How long the frame's tick is, in seconds.
  */
-void Mob::tickMiscLogic(float delta_t) {
+void Mob::tickMiscLogic(float deltaT) {
     if(timeAlive == 0.0f) {
         //This is a convenient spot to signal that the mob is ready.
         //This will only run once, and only after the mob is all set up.
         fsm.runEvent(MOB_EV_ON_READY);
     }
-    timeAlive += delta_t;
+    timeAlive += deltaT;
     
-    invulnPeriod.tick(delta_t);
+    invulnPeriod.tick(deltaT);
     
     for(size_t s = 0; s < this->statuses.size(); s++) {
-        statuses[s].tick(delta_t);
+        statuses[s].tick(deltaT);
         
-        float damage_mult = 1.0f;
-        auto vuln_it = type->statusVulnerabilities.find(statuses[s].type);
-        if(vuln_it != type->statusVulnerabilities.end()) {
-            damage_mult = vuln_it->second.effectMult;
+        float damageMult = 1.0f;
+        auto vulnIt = type->statusVulnerabilities.find(statuses[s].type);
+        if(vulnIt != type->statusVulnerabilities.end()) {
+            damageMult = vulnIt->second.effectMult;
         }
         
-        float health_before = health;
+        float healthBefore = health;
         
         if(statuses[s].type->healthChange != 0.0f) {
             setHealth(
                 true, false,
-                statuses[s].type->healthChange * damage_mult * delta_t
+                statuses[s].type->healthChange * damageMult * deltaT
             );
         }
         if(statuses[s].type->healthChangeRatio != 0.0f) {
             setHealth(
                 true, true,
-                statuses[s].type->healthChangeRatio * damage_mult * delta_t
+                statuses[s].type->healthChangeRatio * damageMult * deltaT
             );
         }
         
-        if(health <= 0.0f && health_before > 0.0f) {
+        if(health <= 0.0f && healthBefore > 0.0f) {
             if(
                 type->category->id == MOB_CATEGORY_PIKMIN &&
                 statuses[s].fromHazard
@@ -3880,7 +3876,7 @@ void Mob::tickMiscLogic(float delta_t) {
     
     for(size_t g = 0; g < particleGenerators.size();) {
         particleGenerators[g].tick(
-            delta_t, game.states.gameplay->particles
+            deltaT, game.states.gameplay->particles
         );
         if(particleGenerators[g].emission.interval == 0) {
             particleGenerators.erase(particleGenerators.begin() + g);
@@ -3900,19 +3896,19 @@ void Mob::tickMiscLogic(float delta_t) {
     }
     
     //Health wheel.
-    bool should_show_health =
+    bool shouldShowHealth =
         type->showHealth &&
         !hasFlag(flags, MOB_FLAG_HIDDEN) &&
         health > 0.0f &&
         health < maxHealth;
-    if(!healthWheel && should_show_health) {
+    if(!healthWheel && shouldShowHealth) {
         healthWheel = new InWorldHealthWheel(this);
-    } else if(healthWheel && !should_show_health) {
+    } else if(healthWheel && !shouldShowHealth) {
         healthWheel->startFading();
     }
     
     if(healthWheel) {
-        healthWheel->tick(delta_t);
+        healthWheel->tick(deltaT);
         if(healthWheel->toDelete) {
             delete healthWheel;
             healthWheel = nullptr;
@@ -3920,28 +3916,28 @@ void Mob::tickMiscLogic(float delta_t) {
     }
     
     //Fraction numbers.
-    float fraction_value_nr = 0.0f;
-    float fraction_req_nr = 0.0f;
-    ALLEGRO_COLOR fraction_color = COLOR_BLACK;
-    bool should_show_fraction =
+    float fractionValueNr = 0.0f;
+    float fractionReqNr = 0.0f;
+    ALLEGRO_COLOR fractionColor = COLOR_BLACK;
+    bool shouldShowFraction =
         getFractionNumbersInfo(
-            &fraction_value_nr, &fraction_req_nr, &fraction_color
+            &fractionValueNr, &fractionReqNr, &fractionColor
         );
         
-    if(!fraction && should_show_fraction) {
+    if(!fraction && shouldShowFraction) {
         fraction = new InWorldFraction(this);
-    } else if(fraction && !should_show_fraction) {
+    } else if(fraction && !shouldShowFraction) {
         fraction->startFading();
     }
     
     if(fraction) {
-        fraction->tick(delta_t);
-        if(should_show_fraction) {
+        fraction->tick(deltaT);
+        if(shouldShowFraction) {
             //Only update the numbers if we want to show a fraction, i.e.
             //if we actually KNOW the numbers. Otherwise, keep the old data.
-            fraction->setColor(fraction_color);
-            fraction->setValueNumber(fraction_value_nr);
-            fraction->setRequirementNumber(fraction_req_nr);
+            fraction->setColor(fractionColor);
+            fraction->setValueNumber(fractionValueNr);
+            fraction->setRequirementNumber(fractionReqNr);
         }
         if(fraction->toDelete) {
             delete fraction;
@@ -3952,19 +3948,19 @@ void Mob::tickMiscLogic(float delta_t) {
     //Group stuff.
     if(group && group->members.size()) {
     
-        Group::MODE old_mode = group->mode;
-        bool is_holding = !holding.empty();
-        bool is_far_from_group =
+        Group::MODE oldMode = group->mode;
+        bool isHolding = !holding.empty();
+        bool isFarFromGroup =
             Distance(group->getAverageMemberPos(), pos) >
             MOB::GROUP_SHUFFLE_DIST + (group->radius + radius);
-        bool is_swarming =
+        bool isSwarming =
             game.states.gameplay->swarmMagnitude &&
             game.states.gameplay->curLeaderPtr == this;
             
         //Find what mode we're in on this frame.
-        if(is_swarming) {
+        if(isSwarming) {
             group->mode = Group::MODE_SWARM;
-        } else if(is_holding || is_far_from_group) {
+        } else if(isHolding || isFarFromGroup) {
             group->mode = Group::MODE_FOLLOW_BACK;
         } else {
             group->mode = Group::MODE_SHUFFLE;
@@ -3976,12 +3972,12 @@ void Mob::tickMiscLogic(float delta_t) {
     
             //Follow the leader's back.
             group->anchorAngle = angle + TAU / 2.0f;
-            Point new_anchor_rel_pos =
+            Point newAnchorRelPos =
                 rotatePoint(
                     Point(radius + MOB::GROUP_SPOT_INTERVAL * 2.0f, 0.0f),
                     group->anchorAngle
                 );
-            group->anchor = pos + new_anchor_rel_pos;
+            group->anchor = pos + newAnchorRelPos;
             
             al_identity_transform(&group->transform);
             al_rotate_transform(
@@ -3993,21 +3989,21 @@ void Mob::tickMiscLogic(float delta_t) {
     
             //Casually shuffle with the leader, if needed.
             Point mov;
-            Point group_mid_point =
+            Point groupMidPoint =
                 group->anchor +
                 rotatePoint(
                     Point(group->radius, 0.0f),
                     group->anchorAngle
                 );
             movePoint(
-                group_mid_point,
+                groupMidPoint,
                 pos,
                 type->moveSpeed,
                 group->radius + radius + MOB::GROUP_SPOT_INTERVAL * 2.0f,
                 &mov,
-                nullptr, nullptr, delta_t
+                nullptr, nullptr, deltaT
             );
-            group->anchor += mov * delta_t;
+            group->anchor += mov * deltaT;
             
             al_identity_transform(&group->transform);
             al_rotate_transform(
@@ -4019,14 +4015,14 @@ void Mob::tickMiscLogic(float delta_t) {
     
             //Swarming.
             group->anchorAngle = game.states.gameplay->swarmAngle;
-            Point new_anchor_rel_pos =
+            Point newAnchorRelPos =
                 rotatePoint(
                     Point(radius + MOB::GROUP_SPOT_INTERVAL * 2.0f, 0.0f),
                     group->anchorAngle
                 );
-            group->anchor = pos + new_anchor_rel_pos;
+            group->anchor = pos + newAnchorRelPos;
             
-            float intensity_dist =
+            float intensityDist =
                 game.config.rules.cursorMaxDist *
                 game.states.gameplay->swarmMagnitude;
             al_identity_transform(&group->transform);
@@ -4035,7 +4031,7 @@ void Mob::tickMiscLogic(float delta_t) {
             );
             al_scale_transform(
                 &group->transform,
-                intensity_dist / (group->radius * 2),
+                intensityDist / (group->radius * 2),
                 1 -
                 (
                     MOB::SWARM_VERTICAL_SCALE*
@@ -4050,7 +4046,7 @@ void Mob::tickMiscLogic(float delta_t) {
         }
         
         if(
-            old_mode != Group::MODE_SHUFFLE &&
+            oldMode != Group::MODE_SHUFFLE &&
             group->mode == Group::MODE_SHUFFLE
         ) {
             //Started shuffling. Since it's a "casual" formation, we should
@@ -4062,7 +4058,7 @@ void Mob::tickMiscLogic(float delta_t) {
     
     //Damage squash stuff.
     if(damageSquashTime > 0.0f) {
-        damageSquashTime -= delta_t;
+        damageSquashTime -= deltaT;
         damageSquashTime = std::max(0.0f, damageSquashTime);
     }
     
@@ -4079,18 +4075,18 @@ void Mob::tickMiscLogic(float delta_t) {
 /**
  * @brief Checks general events in the mob's script for this frame.
  *
- * @param delta_t How long the frame's tick is, in seconds.
+ * @param deltaT How long the frame's tick is, in seconds.
  */
-void Mob::tickScript(float delta_t) {
+void Mob::tickScript(float deltaT) {
     if(!fsm.curState) return;
     
     //Timer events.
-    MobEvent* timer_ev = fsm.getEvent(MOB_EV_TIMER);
+    MobEvent* timerEv = fsm.getEvent(MOB_EV_TIMER);
     if(scriptTimer.duration > 0) {
         if(scriptTimer.timeLeft > 0) {
-            scriptTimer.tick(delta_t);
-            if(scriptTimer.timeLeft == 0.0f && timer_ev) {
-                timer_ev->run(this);
+            scriptTimer.tick(deltaT);
+            if(scriptTimer.timeLeft == 0.0f && timerEv) {
+                timerEv->run(this);
             }
         }
     }
@@ -4113,18 +4109,18 @@ void Mob::tickScript(float delta_t) {
         if(focusedMob) {
         
             Mob* focus = focusedMob;
-            MobEvent* for_ev = fsm.getEvent(MOB_EV_FOCUS_OFF_REACH);
+            MobEvent* forEv = fsm.getEvent(MOB_EV_FOCUS_OFF_REACH);
             
-            if(farReach != INVALID && for_ev) {
-                float angle_to_focus = getAngle(pos, focus->pos);
+            if(farReach != INVALID && forEv) {
+                float angleToFocus = getAngle(pos, focus->pos);
                 if(
                     !isMobInReach(
                         &type->reaches[farReach],
                         getDistanceBetween(focusedMob),
-                        getAngleSmallestDiff(angle, angle_to_focus)
+                        getAngleSmallestDiff(angle, angleToFocus)
                     )
                 ) {
-                    for_ev->run(this);
+                    forEv->run(this);
                 }
                 
             }
@@ -4134,13 +4130,13 @@ void Mob::tickScript(float delta_t) {
     
     //Itch event.
     if(type->itchDamage > 0 || type->itchTime > 0) {
-        itchTime += delta_t;
-        MobEvent* itch_ev = fsm.getEvent(MOB_EV_ITCH);
+        itchTime += deltaT;
+        MobEvent* itchEv = fsm.getEvent(MOB_EV_ITCH);
         if(
-            itch_ev &&
+            itchEv &&
             itchDamage > type->itchDamage && itchTime > type->itchTime
         ) {
-            itch_ev->run(this);
+            itchEv->run(this);
             itchDamage = 0;
             itchTime = 0;
         }
@@ -4148,7 +4144,7 @@ void Mob::tickScript(float delta_t) {
     
     //Health regeneration.
     if(health > 0) {
-        setHealth(true, false, type->healthRegen * delta_t);
+        setHealth(true, false, type->healthRegen * deltaT);
     }
     
     //Check if it got whistled.
@@ -4162,7 +4158,7 @@ void Mob::tickScript(float delta_t) {
             MOB_EV_WHISTLED, (void*) game.states.gameplay->curLeaderPtr
         );
         
-        bool saved_by_whistle = false;
+        bool savedByWhistle = false;
         for(size_t s = 0; s < statuses.size(); s++) {
             if(statuses[s].type->removableWithWhistle) {
                 statuses[s].toDelete = true;
@@ -4170,40 +4166,40 @@ void Mob::tickScript(float delta_t) {
                     statuses[s].type->healthChange < 0.0f ||
                     statuses[s].type->healthChangeRatio < 0.0f
                 ) {
-                    saved_by_whistle = true;
+                    savedByWhistle = true;
                 }
             }
         }
         deleteOldStatusEffects();
         
-        if(saved_by_whistle && type->category->id == MOB_CATEGORY_PIKMIN) {
+        if(savedByWhistle && type->category->id == MOB_CATEGORY_PIKMIN) {
             game.statistics.pikminSaved++;
         }
     }
     
     //Following a leader.
     if(followingGroup) {
-        MobEvent* spot_far_ev =  fsm.getEvent(MOB_EV_SPOT_IS_FAR);
+        MobEvent* spotFarEv =  fsm.getEvent(MOB_EV_SPOT_IS_FAR);
         
-        if(spot_far_ev) {
-            Point target_pos;
-            float target_dist;
+        if(spotFarEv) {
+            Point targetPos;
+            float targetDist;
             
-            getGroupSpotInfo(&target_pos, &target_dist);
+            getGroupSpotInfo(&targetPos, &targetDist);
             
-            Distance d(pos, target_pos);
-            if(d > target_dist) {
-                spot_far_ev->run(this, (void*) &target_pos);
+            Distance d(pos, targetPos);
+            if(d > targetDist) {
+                spotFarEv->run(this, (void*) &targetPos);
             }
         }
     }
     
     //Far away from home.
-    MobEvent* far_from_home_ev = fsm.getEvent(MOB_EV_FAR_FROM_HOME);
-    if(far_from_home_ev) {
+    MobEvent* farFromHomeEv = fsm.getEvent(MOB_EV_FAR_FROM_HOME);
+    if(farFromHomeEv) {
         Distance d(pos, home);
         if(d >= type->territoryRadius) {
-            far_from_home_ev->run(this);
+            farFromHomeEv->run(this);
         }
     }
     
@@ -4219,16 +4215,16 @@ void Mob::tickScript(float delta_t) {
  * @return Whether the ride is over.
  */
 bool Mob::tickTrackRide() {
-    trackInfo->cur_cp_progress +=
-        trackInfo->ride_speed * game.deltaT;
+    trackInfo->curCpProgress +=
+        trackInfo->rideSpeed * game.deltaT;
         
-    if(trackInfo->cur_cp_progress >= 1.0f) {
+    if(trackInfo->curCpProgress >= 1.0f) {
         //Next checkpoint.
-        trackInfo->cur_cp_idx++;
-        trackInfo->cur_cp_progress -= 1.0f;
+        trackInfo->curCpIdx++;
+        trackInfo->curCpProgress -= 1.0f;
         
         if(
-            trackInfo->cur_cp_idx ==
+            trackInfo->curCpIdx ==
             trackInfo->checkpoints.size() - 1
         ) {
             stopTrackRide();
@@ -4237,41 +4233,41 @@ bool Mob::tickTrackRide() {
     }
     
     //Teleport to the right spot.
-    Hitbox* cur_cp =
+    Hitbox* curCp =
         trackInfo->m->getHitbox(
-            trackInfo->checkpoints[trackInfo->cur_cp_idx]
+            trackInfo->checkpoints[trackInfo->curCpIdx]
         );
-    Hitbox* next_cp =
+    Hitbox* nextCp =
         trackInfo->m->getHitbox(
-            trackInfo->checkpoints[trackInfo->cur_cp_idx + 1]
+            trackInfo->checkpoints[trackInfo->curCpIdx + 1]
         );
-    Point cur_cp_pos =
-        cur_cp->getCurPos(trackInfo->m->pos, trackInfo->m->angle);
-    Point next_cp_pos =
-        next_cp->getCurPos(trackInfo->m->pos, trackInfo->m->angle);
+    Point curCpPos =
+        curCp->getCurPos(trackInfo->m->pos, trackInfo->m->angle);
+    Point nextCpPos =
+        nextCp->getCurPos(trackInfo->m->pos, trackInfo->m->angle);
         
-    Point dest_xy(
+    Point destXy(
         interpolateNumber(
-            trackInfo->cur_cp_progress, 0.0f, 1.0f,
-            cur_cp_pos.x, next_cp_pos.x
+            trackInfo->curCpProgress, 0.0f, 1.0f,
+            curCpPos.x, nextCpPos.x
         ),
         interpolateNumber(
-            trackInfo->cur_cp_progress, 0.0f, 1.0f,
-            cur_cp_pos.y, next_cp_pos.y
+            trackInfo->curCpProgress, 0.0f, 1.0f,
+            curCpPos.y, nextCpPos.y
         )
     );
     
-    float dest_z =
+    float destZ =
         interpolateNumber(
-            trackInfo->cur_cp_progress, 0.0f, 1.0f,
-            trackInfo->m->z + cur_cp->z,
-            trackInfo->m->z + next_cp->z
+            trackInfo->curCpProgress, 0.0f, 1.0f,
+            trackInfo->m->z + curCp->z,
+            trackInfo->m->z + nextCp->z
         );
         
-    float dest_angle = getAngle(cur_cp_pos, next_cp_pos);
+    float destAngle = getAngle(curCpPos, nextCpPos);
     
-    chase(dest_xy, dest_z, CHASE_FLAG_TELEPORT);
-    face(dest_angle, nullptr);
+    chase(destXy, destZ, CHASE_FLAG_TELEPORT);
+    face(destAngle, nullptr);
     
     return false;
 }
@@ -4289,14 +4285,14 @@ void Mob::unfocusFromMob() {
  * @brief Returns the index of an animation, given a base animation index and
  * group index.
  *
- * @param base_anim_idx Base animation index.
- * @param group_idx Group it belongs to.
- * @param base_anim_total Total index of base animations.
+ * @param baseAnimIdx Base animation index.
+ * @param groupIdx Group it belongs to.
+ * @param baseAnimTotal Total index of base animations.
  * @return The index.
  */
 size_t MobWithAnimGroups::getAnimationIdxFromBaseAndGroup(
-    size_t base_anim_idx, size_t group_idx,
-    size_t base_anim_total
+    size_t baseAnimIdx, size_t groupIdx,
+    size_t baseAnimTotal
 ) const {
-    return group_idx * base_anim_total + base_anim_idx;
+    return groupIdx * baseAnimTotal + baseAnimIdx;
 }

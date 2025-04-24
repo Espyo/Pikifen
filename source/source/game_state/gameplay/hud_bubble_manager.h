@@ -130,7 +130,7 @@ struct HudBubbleManager {
         size_t id,
         t* content, DrawInfo* draw
     ) {
-        float transition_anim_ratio = transitionTimer / transitionDuration;
+        float transitionAnimRatio = transitionTimer / transitionDuration;
         
         auto it = bubbles.find(id);
         if(it == bubbles.end()) {
@@ -145,22 +145,22 @@ struct HudBubbleManager {
             return;
         }
         
-        typename map<size_t, Bubble>::iterator match_it;
-        GuiItem* match_ptr = nullptr;
-        Point match_pos;
-        Point match_size;
+        typename map<size_t, Bubble>::iterator matchIt;
+        GuiItem* matchPtr = nullptr;
+        Point matchPos;
+        Point matchSize;
         
         //First, check if there's any matching bubble that
         //we can move to/from.
         for(
-            match_it = bubbles.begin();
-            match_it != bubbles.end();
-            ++match_it
+            matchIt = bubbles.begin();
+            matchIt != bubbles.end();
+            ++matchIt
         ) {
             if(
-                transition_anim_ratio > 0.5f &&
+                transitionAnimRatio > 0.5f &&
                 it->second.preTransitionRef &&
-                match_it->second.ref ==
+                matchIt->second.ref ==
                 it->second.preTransitionRef
             ) {
                 //In the first half of the animation, we want to search
@@ -169,9 +169,9 @@ struct HudBubbleManager {
                 break;
             }
             if(
-                transition_anim_ratio <= 0.5f &&
+                transitionAnimRatio <= 0.5f &&
                 it->second.ref &&
-                match_it->second.preTransitionRef ==
+                matchIt->second.preTransitionRef ==
                 it->second.ref
             ) {
                 //In the second half, the match had the contents that
@@ -180,59 +180,59 @@ struct HudBubbleManager {
             }
         }
         
-        if(match_it != bubbles.end()) {
-            match_ptr = match_it->second.bubble;
-            DrawInfo match_draw;
+        if(matchIt != bubbles.end()) {
+            matchPtr = matchIt->second.bubble;
+            DrawInfo matchDraw;
             if(
-                hud->getItemDrawInfo(match_ptr, &match_draw)
+                hud->getItemDrawInfo(matchPtr, &matchDraw)
             ) {
-                match_pos = match_draw.center;
-                match_size = match_draw.size;
+                matchPos = matchDraw.center;
+                matchSize = matchDraw.size;
             } else {
-                match_ptr = nullptr;
+                matchPtr = nullptr;
             }
         }
         
         //Figure out how to animate it, if we even should animate it.
-        if(match_ptr) {
+        if(matchPtr) {
             //This bubble is heading to a new spot.
             
-            Point match_pivot(
-                (draw->center.x + match_pos.x) / 2.0f,
-                (draw->center.y + match_pos.y) / 2.0f
+            Point matchPivot(
+                (draw->center.x + matchPos.x) / 2.0f,
+                (draw->center.y + matchPos.y) / 2.0f
             );
-            float mov_ratio =
-                ease(EASE_METHOD_IN_OUT_BACK, 1.0f - transition_anim_ratio);
-            float pivot_dist =
-                Distance(draw->center, match_pivot).toFloat();
+            float movRatio =
+                ease(EASE_METHOD_IN_OUT_BACK, 1.0f - transitionAnimRatio);
+            float pivotDist =
+                Distance(draw->center, matchPivot).toFloat();
                 
-            if(transition_anim_ratio > 0.5f) {
+            if(transitionAnimRatio > 0.5f) {
                 //First half of the animation. Move to the first half.
                 switch(moveMethod) {
                 case HUD_BUBBLE_MOVE_METHOD_STRAIGHT: {
                     draw->center =
                         interpolatePoint(
-                            ease(EASE_METHOD_OUT, 1.0f - transition_anim_ratio),
+                            ease(EASE_METHOD_OUT, 1.0f - transitionAnimRatio),
                             0.0f, 1.0f,
-                            draw->center, match_pos
+                            draw->center, matchPos
                         );
                     break;
                 } case HUD_BUBBLE_MOVE_METHOD_CIRCLE: {
-                    float match_start_angle = getAngle(match_pivot, draw->center);
+                    float matchStartAngle = getAngle(matchPivot, draw->center);
                     draw->center =
-                        match_pivot +
+                        matchPivot +
                         rotatePoint(
-                            Point(pivot_dist, 0.0f),
-                            match_start_angle + mov_ratio * TAU / 2.0f
+                            Point(pivotDist, 0.0f),
+                            matchStartAngle + movRatio * TAU / 2.0f
                         );
                     break;
                 }
                 }
                 draw->size =
                     interpolatePoint(
-                        ease(EASE_METHOD_OUT, 1.0f - transition_anim_ratio),
+                        ease(EASE_METHOD_OUT, 1.0f - transitionAnimRatio),
                         0.0f, 1.0f,
-                        draw->size, match_size
+                        draw->size, matchSize
                     );
                     
             } else {
@@ -241,27 +241,27 @@ struct HudBubbleManager {
                 case HUD_BUBBLE_MOVE_METHOD_STRAIGHT: {
                     draw->center =
                         interpolatePoint(
-                            ease(EASE_METHOD_OUT, 1.0f - transition_anim_ratio),
+                            ease(EASE_METHOD_OUT, 1.0f - transitionAnimRatio),
                             0.0f, 1.0f,
-                            match_pos, draw->center
+                            matchPos, draw->center
                         );
                     break;
                 } case HUD_BUBBLE_MOVE_METHOD_CIRCLE: {
-                    float match_start_angle = getAngle(match_pivot, match_pos);
+                    float matchStartAngle = getAngle(matchPivot, matchPos);
                     draw->center =
-                        match_pivot +
+                        matchPivot +
                         rotatePoint(
-                            Point(pivot_dist, 0.0f),
-                            match_start_angle + mov_ratio * TAU / 2.0f
+                            Point(pivotDist, 0.0f),
+                            matchStartAngle + movRatio * TAU / 2.0f
                         );
                     break;
                 }
                 }
                 draw->size =
                     interpolatePoint(
-                        ease(EASE_METHOD_OUT, 1.0f - transition_anim_ratio),
+                        ease(EASE_METHOD_OUT, 1.0f - transitionAnimRatio),
                         0.0f, 1.0f,
-                        match_size, draw->size
+                        matchSize, draw->size
                     );
                     
             }
@@ -269,19 +269,19 @@ struct HudBubbleManager {
         } else {
             //This bubble has no equivalent to go to.
             
-            if(transition_anim_ratio > 0.5f) {
+            if(transitionAnimRatio > 0.5f) {
                 //First half of the animation. Fade out.
-                draw->size *= ease(EASE_METHOD_OUT, (transition_anim_ratio - 0.5f) * 2.0f);
+                draw->size *= ease(EASE_METHOD_OUT, (transitionAnimRatio - 0.5f) * 2.0f);
                 
             } else {
                 //Second half of the animation. Fade in.
-                draw->size *= ease(EASE_METHOD_OUT, 1 - transition_anim_ratio * 2.0f);
+                draw->size *= ease(EASE_METHOD_OUT, 1 - transitionAnimRatio * 2.0f);
                 
             }
         }
         
         //Set the content.
-        if(transition_anim_ratio > 0.5f) {
+        if(transitionAnimRatio > 0.5f) {
             *content = it->second.preTransitionContent;
         } else {
             *content = it->second.content;
@@ -303,11 +303,11 @@ struct HudBubbleManager {
     /**
     * @brief Ticks time by one frame of logic.
     *
-    * @param delta_t How long the frame's tick is, in seconds.
+    * @param deltaT How long the frame's tick is, in seconds.
     */
-    void tick(float delta_t) {
+    void tick(float deltaT) {
         if(transitionTimer > 0.0f) {
-            transitionTimer -= delta_t;
+            transitionTimer -= deltaT;
             transitionTimer = std::max(transitionTimer, 0.0f);
             transitionIsSetup = false;
         }
@@ -317,13 +317,13 @@ struct HudBubbleManager {
     * @brief Updates the reference and content of a given bubble.
     *
     * @param id ID of the registered bubble.
-    * @param new_ref New reference.
-    * @param new_content New content.
+    * @param newRef New reference.
+    * @param newContent New content.
     */
-    void update(size_t id, void* new_ref, t new_content) {
+    void update(size_t id, void* newRef, t newContent) {
         auto it = bubbles.find(id);
         if(it == bubbles.end()) return;
-        if(it->second.ref != new_ref && !transitionIsSetup) {
+        if(it->second.ref != newRef && !transitionIsSetup) {
             for(auto &b : bubbles) {
                 b.second.preTransitionRef = b.second.ref;
                 b.second.preTransitionContent = b.second.content;
@@ -331,8 +331,8 @@ struct HudBubbleManager {
             transitionTimer = transitionDuration;
             transitionIsSetup = true;
         }
-        it->second.ref = new_ref;
-        it->second.content = new_content;
+        it->second.ref = newRef;
+        it->second.content = newContent;
     }
     
 private:

@@ -126,34 +126,34 @@ private:
     
     void closeLoadDialog();
     void closeOptionsDialog();
-    void createGuiDef(const string &internal_name, const string &pack);
+    void createGuiDef(const string &internalName, const string &pack);
     void deleteCurrentGuiDef();
-    void loadGuiDefFile(const string &path, bool should_update_history);
+    void loadGuiDefFile(const string &path, bool shouldUpdateHistory);
     void openLoadDialog();
     void openNewDialog();
     void openOptionsDialog();
     void pickGuiDefFile(
-        const string &name, const string &top_cat, const string &sec_cat, void* info, bool is_new
+        const string &name, const string &topCat, const string &secCat, void* info, bool isNew
     );
     bool saveGuiDef();
     void setupForNewGuiDef();
     Point snapPoint(const Point &p);
     static void drawCanvasDearImGuiCallback(
-        const ImDrawList* parent_list, const ImDrawCmd* cmd
+        const ImDrawList* parentList, const ImDrawCmd* cmd
     );
     string getFileTooltip(const string &path) const;
-    void gridIntervalDecreaseCmd(float input_value);
-    void gridIntervalIncreaseCmd(float input_value);
-    void deleteGuiDefCmd(float input_value);
-    void loadCmd(float input_value);
-    void quitCmd(float input_value);
-    void reloadCmd(float input_value);
+    void gridIntervalDecreaseCmd(float inputValue);
+    void gridIntervalIncreaseCmd(float inputValue);
+    void deleteGuiDefCmd(float inputValue);
+    void loadCmd(float inputValue);
+    void quitCmd(float inputValue);
+    void reloadCmd(float inputValue);
     void reloadGuiDefs();
-    void saveCmd(float input_value);
-    void snapModeCmd(float input_value);
-    void zoomAndPosResetCmd(float input_value);
-    void zoomInCmd(float input_value);
-    void zoomOutCmd(float input_value);
+    void saveCmd(float inputValue);
+    void snapModeCmd(float inputValue);
+    void zoomAndPosResetCmd(float inputValue);
+    void zoomInCmd(float inputValue);
+    void zoomOutCmd(float inputValue);
     void processGui();
     void processGuiControlPanel();
     void processGuiDeleteGuiDefDialog();

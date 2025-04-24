@@ -21,18 +21,18 @@
  * @brief Adjusts the hue, saturation, and value of a given Dear ImGui color.
  *
  * @param color Color to edit.
- * @param h_delta Hue amount (0-1) to add or subtract.
- * @param s_delta Saturation amount (0-1) to add or subtract.
- * @param v_delta Value amount (0-1) to add or subtract.
+ * @param hDelta Hue amount (0-1) to add or subtract.
+ * @param sDelta Saturation amount (0-1) to add or subtract.
+ * @param vDelta Value amount (0-1) to add or subtract.
  */
 void ImGui::AdjustColorHSV(
-    ImVec4 &color, float h_delta, float s_delta, float v_delta
+    ImVec4 &color, float hDelta, float sDelta, float vDelta
 ) {
     float h, s, v;
     ImGui::ColorConvertRGBtoHSV(color.x, color.y, color.z, h, s, v);
-    h += h_delta;
-    s += s_delta;
-    v += v_delta;
+    h += hDelta;
+    s += sDelta;
+    v += vDelta;
     ImGui::ColorConvertHSVtoRGB(h, s, v, color.x, color.y, color.z);
 }
 
@@ -42,25 +42,25 @@ void ImGui::AdjustColorHSV(
  * using a vector of strings for the list of items.
  *
  * @param label Combo widget label.
- * @param current_item Index number of the current selected item. -1 means none.
+ * @param currentItem Index number of the current selected item. -1 means none.
  * @param items List of items.
- * @param popup_max_height_in_items Maximum height of the popup,
+ * @param popupMaxHeightInItems Maximum height of the popup,
  * in number of items.
  * @return Whether the value was changed.
  */
 bool ImGui::Combo(
-    const string &label, int* current_item, const vector<string> &items,
-    int popup_max_height_in_items
+    const string &label, int* currentItem, const vector<string> &items,
+    int popupMaxHeightInItems
 ) {
-    string items_str;
+    string itemsStr;
     for(size_t i = 0; i < items.size(); i++) {
-        items_str += items[i] + '\0';
+        itemsStr += items[i] + '\0';
     }
     
     return
         ImGui::Combo(
-            label.c_str(), current_item, items_str.c_str(),
-            popup_max_height_in_items
+            label.c_str(), currentItem, itemsStr.c_str(),
+            popupMaxHeightInItems
         );
 }
 
@@ -71,36 +71,36 @@ bool ImGui::Combo(
  * as well as a vector of strings for the list of items.
  *
  * @param label Combo widget label.
- * @param current_item Name of the current selected item.
+ * @param currentItem Name of the current selected item.
  * @param items List of items.
- * @param popup_max_height_in_items Maximum height of the popup,
+ * @param popupMaxHeightInItems Maximum height of the popup,
  * in number of items.
  * @return Whether the value was changed.
  */
 bool ImGui::Combo(
-    const string &label, string* current_item, const vector<string> &items,
-    int popup_max_height_in_items
+    const string &label, string* currentItem, const vector<string> &items,
+    int popupMaxHeightInItems
 ) {
 
-    string items_str;
-    int item_idx = -1;
+    string itemsStr;
+    int itemIdx = -1;
     for(size_t i = 0; i < items.size(); i++) {
-        items_str += items[i] + '\0';
-        if(*current_item == items[i]) {
-            item_idx = (int) i;
+        itemsStr += items[i] + '\0';
+        if(*currentItem == items[i]) {
+            itemIdx = (int) i;
         }
     }
     
     bool result =
         ImGui::Combo(
-            label.c_str(), &item_idx, items_str.c_str(),
-            popup_max_height_in_items
+            label.c_str(), &itemIdx, itemsStr.c_str(),
+            popupMaxHeightInItems
         );
         
-    if(item_idx >= 0 && item_idx < (int) items.size()) {
-        *current_item = items[item_idx];
+    if(itemIdx >= 0 && itemIdx < (int) items.size()) {
+        *currentItem = items[itemIdx];
     } else {
-        *current_item = "";
+        *currentItem = "";
     }
     
     return result;
@@ -114,37 +114,37 @@ bool ImGui::Combo(
  * the internal values of each item, another with the names to display.
  *
  * @param label Combo widget label.
- * @param current_item Internal value of the current selected item.
- * @param item_internal_values List of internal values for each item.
- * @param item_display_names List of names to show the user for each item.
- * @param popup_max_height_in_items Maximum height of the popup,
+ * @param currentItem Internal value of the current selected item.
+ * @param itemInternalValues List of internal values for each item.
+ * @param itemDisplayNames List of names to show the user for each item.
+ * @param popupMaxHeightInItems Maximum height of the popup,
  * in number of items.
  * @return Whether the value was changed.
  */
 bool ImGui::Combo(
-    const string &label, string* current_item,
-    const vector<string> &item_internal_values,
-    const vector<string> &item_display_names,
-    int popup_max_height_in_items
+    const string &label, string* currentItem,
+    const vector<string> &itemInternalValues,
+    const vector<string> &itemDisplayNames,
+    int popupMaxHeightInItems
 ) {
-    int current_item_idx = -1;
-    for(size_t i = 0; i < item_internal_values.size(); i++) {
-        if(item_internal_values[i] == *current_item) {
-            current_item_idx = (int) i;
+    int currentItemIdx = -1;
+    for(size_t i = 0; i < itemInternalValues.size(); i++) {
+        if(itemInternalValues[i] == *currentItem) {
+            currentItemIdx = (int) i;
             break;
         }
     }
     
     bool result =
         ImGui::Combo(
-            label, &current_item_idx, item_display_names,
-            popup_max_height_in_items
+            label, &currentItemIdx, itemDisplayNames,
+            popupMaxHeightInItems
         );
         
-    if(current_item_idx == -1) {
-        current_item->clear();
+    if(currentItemIdx == -1) {
+        currentItem->clear();
     } else {
-        *current_item = item_internal_values[current_item_idx];
+        *currentItem = itemInternalValues[currentItemIdx];
     }
     
     return result;
@@ -157,7 +157,7 @@ bool ImGui::Combo(
  * Though with some arguments, this can be changed to hours and minutes.
  *
  * @param label Widget label.
- * @param total_amount Time in the total amount of seconds.
+ * @param totalAmount Time in the total amount of seconds.
  * Or minutes, or whatever the lowest unit represent is.
  * @param format1 String to write in front of the first component's value.
  * @param format2 String to write in front of the second component's value.
@@ -166,12 +166,12 @@ bool ImGui::Combo(
  * @return Whether either value was changed.
  */
 bool ImGui::DragTime2(
-    const string &label, int* total_amount,
+    const string &label, int* totalAmount,
     const string &format1, const string &format2,
     int limit1, int limit2
 ) {
-    int part1 = floor(*total_amount / 60.0f);
-    int part2 = *total_amount % 60;
+    int part1 = floor(*totalAmount / 60.0f);
+    int part2 = *totalAmount % 60;
     
     ImGui::BeginGroup();
     ImGui::PushID(label.c_str());
@@ -200,7 +200,7 @@ bool ImGui::DragTime2(
     ImGui::PopID();
     ImGui::EndGroup();
     
-    *total_amount = part1 * 60 + part2;
+    *totalAmount = part1 * 60 + part2;
     
     return result;
 }
@@ -227,25 +227,25 @@ void ImGui::FocusOnInputText(bool &condition) {
  * using Allegro bitmaps.
  *
  * @param bitmap Bitmap to show on the button.
- * @param bitmap_size Width and height of the bitmap.
+ * @param bitmapSize Width and height of the bitmap.
  * @param uv0 UV coordinates of the top-left coordinate.
  * @param uv1 UV coordinates of the bottom-right coordinate.
- * @param tint_col Tint color.
- * @param border_col Border color.
+ * @param tintCol Tint color.
+ * @param borderCol Border color.
  * @return Whether the button was pressed.
  */
 void ImGui::Image(
-    ALLEGRO_BITMAP* bitmap, const Point &bitmap_size,
+    ALLEGRO_BITMAP* bitmap, const Point &bitmapSize,
     const Point &uv0, const Point &uv1,
-    const ALLEGRO_COLOR &tint_col, const ALLEGRO_COLOR &border_col
+    const ALLEGRO_COLOR &tintCol, const ALLEGRO_COLOR &borderCol
 ) {
     ImGui::Image(
         (ImTextureID) (intptr_t) bitmap,
-        ImVec2(bitmap_size.x, bitmap_size.y),
+        ImVec2(bitmapSize.x, bitmapSize.y),
         ImVec2(uv0.x, uv0.y),
         ImVec2(uv1.x, uv1.y),
-        ImVec4(tint_col.r, tint_col.g, tint_col.b, tint_col.a),
-        ImVec4(border_col.r, border_col.g, border_col.b, border_col.a)
+        ImVec4(tintCol.r, tintCol.g, tintCol.b, tintCol.a),
+        ImVec4(borderCol.r, borderCol.g, borderCol.b, borderCol.a)
     );
 }
 
@@ -254,29 +254,29 @@ void ImGui::Image(
  * @brief Wrapper for creating a Dear ImGui image button widget, but
  * using Allegro bitmaps.
  *
- * @param str_id Button widget ID.
+ * @param strId Button widget ID.
  * @param bitmap Bitmap to show on the button.
- * @param bitmap_size Size to display the bitmap at in the GUI.
+ * @param bitmapSize Size to display the bitmap at in the GUI.
  * @param uv0 UV coordinates of the top-left coordinate.
  * @param uv1 UV coordinates of the bottom-right coordinate.
- * @param bg_col Bitmap background color.
- * @param tint_col Bitmap tint color.
+ * @param bgCol Bitmap background color.
+ * @param tintCol Bitmap tint color.
  * @return Whether the button was pressed.
  */
 bool ImGui::ImageButton(
-    const string &str_id, ALLEGRO_BITMAP* bitmap, const Point &bitmap_size,
+    const string &strId, ALLEGRO_BITMAP* bitmap, const Point &bitmapSize,
     const Point &uv0, const Point &uv1,
-    const ALLEGRO_COLOR &bg_col,
-    const ALLEGRO_COLOR &tint_col
+    const ALLEGRO_COLOR &bgCol,
+    const ALLEGRO_COLOR &tintCol
 ) {
     return
         ImGui::ImageButton(
-            str_id.c_str(), (ImTextureID) (intptr_t) bitmap,
-            ImVec2(bitmap_size.x, bitmap_size.y),
+            strId.c_str(), (ImTextureID) (intptr_t) bitmap,
+            ImVec2(bitmapSize.x, bitmapSize.y),
             ImVec2(uv0.x, uv0.y),
             ImVec2(uv1.x, uv1.y),
-            ImVec4(bg_col.r, bg_col.g, bg_col.b, bg_col.a),
-            ImVec4(tint_col.r, tint_col.g, tint_col.b, tint_col.a)
+            ImVec4(bgCol.r, bgCol.g, bgCol.b, bgCol.a),
+            ImVec4(tintCol.r, tintCol.g, tintCol.b, tintCol.a)
         );
 }
 
@@ -286,30 +286,30 @@ bool ImGui::ImageButton(
  * using Allegro bitmaps, and keeping the bitmap centered and in proportion,
  * while also allowing the button size to be specified.
  *
- * @param str_id Button widget ID.
+ * @param strId Button widget ID.
  * @param bitmap Bitmap to show on the button.
- * @param max_bitmap_size Maximum size to display the bitmap at in the GUI.
- * @param button_size Size of the button.
- * @param bg_col Bitmap background color.
- * @param tint_col Bitmap tint color.
+ * @param maxBitmapSize Maximum size to display the bitmap at in the GUI.
+ * @param buttonSize Size of the button.
+ * @param bgCol Bitmap background color.
+ * @param tintCol Bitmap tint color.
  * @return Whether the button was pressed.
  */
 bool ImGui::ImageButtonOrganized(
-    const string &str_id, ALLEGRO_BITMAP* bitmap,
-    const Point &max_bitmap_size, const Point &button_size,
-    const ALLEGRO_COLOR &bg_col, const ALLEGRO_COLOR &tint_col
+    const string &strId, ALLEGRO_BITMAP* bitmap,
+    const Point &maxBitmapSize, const Point &buttonSize,
+    const ALLEGRO_COLOR &bgCol, const ALLEGRO_COLOR &tintCol
 ) {
-    Point final_bmp_size =
+    Point finalBmpSize =
         resizeToBoxKeepingAspectRatio(
-            getBitmapDimensions(bitmap), max_bitmap_size
+            getBitmapDimensions(bitmap), maxBitmapSize
         );
         
-    Point padding = (button_size - final_bmp_size) / 2.0f;
+    Point padding = (buttonSize - finalBmpSize) / 2.0f;
     
     PushStyleVar(
         ImGuiStyleVar_FramePadding, ImVec2(padding.x, padding.y)
     );
-    bool result = ImageButton(str_id, bitmap, final_bmp_size);
+    bool result = ImageButton(strId, bitmap, finalBmpSize);
     PopStyleVar();
     
     return result;
@@ -322,24 +322,24 @@ bool ImGui::ImageButtonOrganized(
  *
  * @param id Button widget ID.
  * @param icon Icon to show on the button.
- * @param icon_size Size to display the bitmap at in the GUI.
- * @param button_padding Padding between the icon and button edges.
+ * @param iconSize Size to display the bitmap at in the GUI.
+ * @param buttonPadding Padding between the icon and button edges.
  * @param text The button's text.
  * @return Whether the button was pressed.
  */
 bool ImGui::ImageButtonAndText(
-    const string &id, ALLEGRO_BITMAP* icon, const Point &icon_size,
-    float button_padding, const string &text
+    const string &id, ALLEGRO_BITMAP* icon, const Point &iconSize,
+    float buttonPadding, const string &text
 ) {
     ImGui::BeginGroup();
     
     ImGui::PushStyleVar(
-        ImGuiStyleVar_FramePadding, ImVec2(button_padding, button_padding)
+        ImGuiStyleVar_FramePadding, ImVec2(buttonPadding, buttonPadding)
     );
-    bool result = ImGui::ImageButton(id, icon, icon_size);
+    bool result = ImGui::ImageButton(id, icon, iconSize);
     ImGui::PopStyleVar();
     
-    float offset = (icon_size.y + button_padding * 2 - 16.0f) / 2.0f;
+    float offset = (iconSize.y + buttonPadding * 2 - 16.0f) / 2.0f;
     offset -= 3.0f; //It's 3.0 too far, with the group + dummy approach.
     
     ImGui::SameLine();
@@ -359,14 +359,14 @@ bool ImGui::ImageButtonAndText(
  * using a vector of strings for the list of items.
  *
  * @param label ListBox widget label.
- * @param current_item Index number of the current selected item.
+ * @param currentItem Index number of the current selected item.
  * @param items List of items.
- * @param height_in_items Maximum height, in number of items.
+ * @param heightInItems Maximum height, in number of items.
  * @return Whether the value was changed.
  */
 bool ImGui::ListBox(
-    const string &label, int* current_item, const vector<string> &items,
-    int height_in_items
+    const string &label, int* currentItem, const vector<string> &items,
+    int heightInItems
 ) {
     //TODO check if items is empty
     const char** array = new const char* [items.size()];
@@ -378,8 +378,8 @@ bool ImGui::ListBox(
     return
         ImGui::ListBox(
             label.c_str(),
-            current_item, array, (int) items.size(),
-            height_in_items
+            currentItem, array, (int) items.size(),
+            heightInItems
         );
     //TODO free "array"
 }
@@ -422,11 +422,11 @@ void ImGui::Reset() {
 /**
  * @brief Prepares the "cursor X" so that the next widgets will be centered.
  *
- * @param upcoming_items_width Width of the items that will belong to this line.
+ * @param upcomingItemsWidth Width of the items that will belong to this line.
  */
-void ImGui::SetupCentering(int upcoming_items_width) {
-    int window_width = ImGui::GetWindowSize().x;
-    ImGui::SetCursorPosX((window_width - upcoming_items_width) * 0.5f);
+void ImGui::SetupCentering(int upcomingItemsWidth) {
+    int windowWidth = ImGui::GetWindowSize().x;
+    ImGui::SetCursorPosX((windowWidth - upcomingItemsWidth) * 0.5f);
 }
 
 
@@ -434,20 +434,20 @@ void ImGui::SetupCentering(int upcoming_items_width) {
  * @brief Prepares the state of the GUI to either place the next button
  * on the same line, or to break to a new line if it wouldn't fit.
  *
- * @param next_button_width Width of the next button.
- * @param next_button_idx Index of the next button.
- * @param total_n_buttons Total amount of buttons.
+ * @param nextButtonWidth Width of the next button.
+ * @param nextButtonIdx Index of the next button.
+ * @param totalNButtons Total amount of buttons.
  */
 void ImGui::SetupButtonWrapping(
-    int next_button_width, int next_button_idx, int total_n_buttons
+    int nextButtonWidth, int nextButtonIdx, int totalNButtons
 ) {
-    float last_x2 =
+    float lastX2 =
         ImGui::GetItemRectMax().x;
-    float next_x2 =
-        last_x2 + ImGui::GetStyle().ItemSpacing.x + next_button_width;
-    float window_x2 =
+    float nextX2 =
+        lastX2 + ImGui::GetStyle().ItemSpacing.x + nextButtonWidth;
+    float windowX2 =
         GetCursorScreenPos().x + GetContentRegionAvail().x;
-    if(next_button_idx < total_n_buttons && next_x2 < window_x2) {
+    if(nextButtonIdx < totalNButtons && nextX2 < windowX2) {
         ImGui::SameLine();
     }
 }

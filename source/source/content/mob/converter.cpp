@@ -101,9 +101,9 @@ void Converter::close() {
  * @brief Spews out the converted seeds.
  */
 void Converter::spew() {
-    size_t total_to_spit = amountInBuffer * conType->pikminPerConversion;
+    size_t totalToSpit = amountInBuffer * conType->pikminPerConversion;
     
-    for(size_t s = 0; s < total_to_spit; s++) {
+    for(size_t s = 0; s < totalToSpit; s++) {
         if(
             game.states.gameplay->mobs.pikmin.size() ==
             game.config.rules.maxPikminInField
@@ -111,7 +111,7 @@ void Converter::spew() {
             break;
         }
         
-        float horizontal_strength =
+        float horizontalStrength =
             CONVERTER::SPEW_H_SPEED +
             game.rng.f(
                 -CONVERTER::SPEW_H_SPEED_DEVIATION,
@@ -119,7 +119,7 @@ void Converter::spew() {
             );
         spewPikminSeed(
             pos, z + CONVERTER::NEW_SEED_Z_OFFSET, currentType,
-            nextSpewAngle, horizontal_strength, CONVERTER::SPEW_V_SPEED
+            nextSpewAngle, horizontalStrength, CONVERTER::SPEW_V_SPEED
         );
         
         nextSpewAngle += CONVERTER::SPEW_ANGLE_SHIFT;
@@ -134,9 +134,9 @@ void Converter::spew() {
 /**
  * @brief Ticks time by one frame of logic.
  *
- * @param delta_t How long the frame's tick is, in seconds.
+ * @param deltaT How long the frame's tick is, in seconds.
  */
-void Converter::tickClassSpecifics(float delta_t) {
-    typeChangeTimer.tick(delta_t);
-    autoConversionTimer.tick(delta_t);
+void Converter::tickClassSpecifics(float deltaT) {
+    typeChangeTimer.tick(deltaT);
+    autoConversionTimer.tick(deltaT);
 }

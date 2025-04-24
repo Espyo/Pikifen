@@ -112,14 +112,14 @@ void AnnexScreen::load() {
     //Load the intended concrete menu.
     switch(menuToLoad) {
     case ANNEX_SCREEN_MENU_AREA_SELECTION: {
-        AreaMenu* area_menu = new AreaMenu();
-        area_menu->areaType = areaMenuAreaType;
-        area_menu->leaveCallback =
+        AreaMenu* areaMenu = new AreaMenu();
+        areaMenu->areaType = areaMenuAreaType;
+        areaMenu->leaveCallback =
         [this] () {
             game.states.titleScreen->pageToLoad = MAIN_MENU_PAGE_PLAY;
             leave();
         };
-        curMenu = area_menu;
+        curMenu = areaMenu;
         break;
         
     } case ANNEX_SCREEN_MENU_HELP: {
@@ -143,8 +143,8 @@ void AnnexScreen::load() {
         },
         CONTENT_LOAD_LEVEL_FULL
         );
-        HelpMenu* help_menu = new HelpMenu();
-        help_menu->unloadCallback =
+        HelpMenu* helpMenu = new HelpMenu();
+        helpMenu->unloadCallback =
         [this] () {
             game.content.unloadAll(
             vector<CONTENT_TYPE> {
@@ -161,30 +161,30 @@ void AnnexScreen::load() {
             }
             );
         };
-        help_menu->leaveCallback =
+        helpMenu->leaveCallback =
         [this] () {
             game.states.titleScreen->pageToLoad = MAIN_MENU_PAGE_MAIN;
             leave();
         };
-        curMenu = help_menu;
+        curMenu = helpMenu;
         break;
         
     } case ANNEX_SCREEN_MENU_OPTIONS: {
-        OptionsMenu* options_menu = new OptionsMenu();
-        options_menu->leaveCallback = [this] () {
+        OptionsMenu* optionsMenu = new OptionsMenu();
+        optionsMenu->leaveCallback = [this] () {
             game.states.titleScreen->pageToLoad = MAIN_MENU_PAGE_MAIN;
             leave();
         };
-        curMenu = options_menu;
+        curMenu = optionsMenu;
         break;
         
     } case ANNEX_SCREEN_MENU_STATS: {
-        StatsMenu* stats_menu = new StatsMenu();
-        stats_menu->leaveCallback = [this] () {
+        StatsMenu* statsMenu = new StatsMenu();
+        statsMenu->leaveCallback = [this] () {
             game.states.titleScreen->pageToLoad = MAIN_MENU_PAGE_MAIN;
             leave();
         };
-        curMenu = stats_menu;
+        curMenu = statsMenu;
         break;
         
     }

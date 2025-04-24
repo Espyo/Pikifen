@@ -77,11 +77,11 @@ void CustomCategory::eraseMob(Mob* m) { }
  * @brief Returns a custom type given its internal name,
  * or nullptr on error.
  *
- * @param internal_name Internal name of the mob type to get.
+ * @param internalName Internal name of the mob type to get.
  * @return The type.
  */
-MobType* CustomCategory::getType(const string &internal_name) const {
-    auto it = game.content.mobTypes.list.custom.find(internal_name);
+MobType* CustomCategory::getType(const string &internalName) const {
+    auto it = game.content.mobTypes.list.custom.find(internalName);
     if(it == game.content.mobTypes.list.custom.end()) return nullptr;
     return it->second;
 }
@@ -102,9 +102,9 @@ void CustomCategory::getTypeNames(vector<string> &list) const {
 /**
  * @brief Registers a created custom type.
  *
- * @param internal_name Internal name of the mob type.
+ * @param internalName Internal name of the mob type.
  * @param type Mob type to register.
  */
-void CustomCategory::registerType(const string &internal_name, MobType* type) {
-    game.content.mobTypes.list.custom[internal_name] = type;
+void CustomCategory::registerType(const string &internalName, MobType* type) {
+    game.content.mobTypes.list.custom[internalName] = type;
 }

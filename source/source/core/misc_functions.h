@@ -57,7 +57,7 @@
  * The third parameter is where the unaffected sector gets returned to.
  * Returns whether it should receive the effect.
  */
-typedef bool (*offset_effect_checker_t)(Edge*, Sector**, Sector**);
+typedef bool (*OffsetEffectChecker)(Edge*, Sector**, Sector**);
 
 /**
  * @brief Function that returns an edge's edge offset effect color.
@@ -65,7 +65,7 @@ typedef bool (*offset_effect_checker_t)(Edge*, Sector**, Sector**);
  * The first parameter is the edge to check.
  * Returns the color.
  */
-typedef ALLEGRO_COLOR (*offset_effect_color_getter_t)(Edge*);
+typedef ALLEGRO_COLOR (*OffsetEffectColorGetter)(Edge*);
 
 /**
  * @brief Function that returns an edge's edge offset effect length.
@@ -73,126 +73,126 @@ typedef ALLEGRO_COLOR (*offset_effect_color_getter_t)(Edge*);
  * The first parameter is the edge to check.
  * Returns the length.
  */
-typedef float (*offset_effect_length_getter_t)(Edge*);
+typedef float (*OffsetEffectLengthGetter)(Edge*);
 
 
 
 bool areaWallsBetween(
     const Point &p1, const Point &p2,
-    float ignore_walls_below_z = -FLT_MAX, bool* out_impassable_walls = nullptr
+    float ignoreWallsBelowZ = -FLT_MAX, bool* outImpassableWalls = nullptr
 );
 void clearAreaTextures();
-void crash(const string &reason, const string &info, int exit_status);
+void crash(const string &reason, const string &info, int exitStatus);
 bool doesEdgeHaveLedgeSmoothing(
-    Edge* e_ptr, Sector** out_affected_sector, Sector** out_unaffected_sector
+    Edge* ePtr, Sector** outAffectedSector, Sector** outUnaffectedSector
 );
 bool doesEdgeHaveLiquidLimit(
-    Edge* e_ptr, Sector** out_affected_sector, Sector** out_unaffected_sector
+    Edge* ePtr, Sector** outAffectedSector, Sector** outUnaffectedSector
 );
 bool doesEdgeHaveWallShadow(
-    Edge* e_ptr, Sector** out_affected_sector, Sector** out_unaffected_sector
+    Edge* ePtr, Sector** outAffectedSector, Sector** outUnaffectedSector
 );
 void drawEdgeOffsetOnBuffer(
-    const vector<EdgeOffsetCache> &caches, size_t e_idx
+    const vector<EdgeOffsetCache> &caches, size_t eIdx
 );
-Mob* getClosestMobToCursor(bool must_have_health = false);
+Mob* getClosestMobToCursor(bool mustHaveHealth = false);
 void getEdgeOffsetEdgeInfo(
-    Edge* e_ptr, Vertex* end_vertex, unsigned char end_idx,
-    float edge_process_angle,
-    offset_effect_checker_t checker,
-    offset_effect_length_getter_t length_getter,
-    offset_effect_color_getter_t color_getter,
-    float* out_angle, float* out_length, ALLEGRO_COLOR* out_color,
-    float* out_elbow_angle, float* out_elbow_length
+    Edge* ePtr, Vertex* endVertex, unsigned char endIdx,
+    float edgeProcessAngle,
+    OffsetEffectChecker checker,
+    OffsetEffectLengthGetter lengthGetter,
+    OffsetEffectColorGetter colorGetter,
+    float* outAngle, float* outLength, ALLEGRO_COLOR* outColor,
+    float* outElbowAngle, float* outElbowLength
 );
 void getEdgeOffsetIntersection(
-    const Edge* e1, const Edge* e2, const Vertex* common_vertex,
-    float base_shadow_angle1, float base_shadow_angle2,
-    float shadow_length,
-    float* out_angle, float* out_length
+    const Edge* e1, const Edge* e2, const Vertex* commonVertex,
+    float baseShadowAngle1, float baseShadowAngle2,
+    float shadowLength,
+    float* outAngle, float* outLength
 );
-ALLEGRO_COLOR getLedgeSmoothingColor(Edge* e_ptr);
-ALLEGRO_COLOR getLiquidLimitColor(Edge* e_ptr);
-float getLedgeSmoothingLength(Edge* e_ptr);
-float getLiquidLimitLength(Edge* e_ptr);
-string getMissionRecordEntryName(Area* area_ptr);
+ALLEGRO_COLOR getLedgeSmoothingColor(Edge* ePtr);
+ALLEGRO_COLOR getLiquidLimitColor(Edge* ePtr);
+float getLedgeSmoothingLength(Edge* ePtr);
+float getLiquidLimitLength(Edge* ePtr);
+string getMissionRecordEntryName(Area* areaPtr);
 void getNextEdge(
-    Vertex* v_ptr, float pivot_angle, bool clockwise,
-    const Edge* ignore, Edge** out_edge, float* out_angle, float* out_diff
+    Vertex* vPtr, float pivotAngle, bool clockwise,
+    const Edge* ignore, Edge** outEdge, float* outAngle, float* outDiff
 );
 Mob* getNextMobNearCursor(
-    Mob* pivot, bool must_have_health = false
+    Mob* pivot, bool mustHaveHealth = false
 );
 void getNextOffsetEffectEdge(
-    Vertex* v_ptr, float pivot_angle, bool clockwise,
-    const Edge* ignore, offset_effect_checker_t edge_checker,
-    Edge** out_edge, float* out_angle, float* out_diff,
-    float* out_base_shadow_angle,
-    bool* out_shadow_cw
+    Vertex* vPtr, float pivotAngle, bool clockwise,
+    const Edge* ignore, OffsetEffectChecker edgeChecker,
+    Edge** outEdge, float* outAngle, float* outDiff,
+    float* outBaseShadowAngle,
+    bool* outShadowCw
 );
 string getSubtitleOrMissionGoal(
-    const string &subtitle, const AREA_TYPE area_type,
+    const string &subtitle, const AREA_TYPE areaType,
     const MISSION_GOAL goal
 );
 unsigned char getThrowPreviewVertexes(
     ALLEGRO_VERTEX* vertexes,
     float start, float end,
-    const Point &leader_pos, const Point &cursor_pos,
+    const Point &leaderPos, const Point &cursorPos,
     const ALLEGRO_COLOR &color,
-    float u_offset, float u_scale,
-    bool vary_thickness
+    float uOffset, float uScale,
+    bool varyThickness
 );
-map<string, string> getVarMap(const string &vars_string);
+map<string, string> getVarMap(const string &varsString);
 string getEngineVersionString();
-ALLEGRO_COLOR getWallShadowColor(Edge* e_ptr);
-float getWallShadowLength(Edge* e_ptr);
+ALLEGRO_COLOR getWallShadowColor(Edge* ePtr);
+float getWallShadowLength(Edge* ePtr);
 vector<std::pair<int, string> > getWeatherTable(DataNode* node);
 void guiAddBackInputIcon(
-    GuiManager* gui, const string &item_name = "back_input"
+    GuiManager* gui, const string &itemName = "back_input"
 );
 bool monoCombo(
-    const string &label, int* current_item, const vector<string> &items,
-    int popup_max_height_in_items = -1
+    const string &label, int* currentItem, const vector<string> &items,
+    int popupMaxHeightInItems = -1
 );
 bool monoCombo(
-    const string &label, string* current_item, const vector<string> &items,
-    int popup_max_height_in_items = -1
+    const string &label, string* currentItem, const vector<string> &items,
+    int popupMaxHeightInItems = -1
 );
 bool monoCombo(
-    const string &label, string* current_item,
-    const vector<string> &item_internal_values,
-    const vector<string> &item_display_names,
-    int popup_max_height_in_items = -1
+    const string &label, string* currentItem,
+    const vector<string> &itemInternalValues,
+    const vector<string> &itemDisplayNames,
+    int popupMaxHeightInItems = -1
 );
 bool monoButton(
     const char* label, const ImVec2 &size = ImVec2(0, 0)
 );
 bool monoInputText(
     const char* label, string* str, ImGuiInputTextFlags flags = 0,
-    ImGuiInputTextCallback callback = nullptr, void* user_data = nullptr
+    ImGuiInputTextCallback callback = nullptr, void* userData = nullptr
 );
 bool monoInputTextWithHint(
     const char* label, const char* hint, string* str,
     ImGuiInputTextFlags flags = 0, ImGuiInputTextCallback callback = nullptr,
-    void* user_data = nullptr
+    void* userData = nullptr
 );
 bool monoListBox(
-    const string &label, int* current_item, const vector<string> &items,
-    int height_in_items = -1
+    const string &label, int* currentItem, const vector<string> &items,
+    int heightInItems = -1
 );
 bool monoSelectable(
     const char* label, bool selected = false, ImGuiSelectableFlags flags = 0,
     const ImVec2 &size = ImVec2(0, 0)
 );
 bool monoSelectable(
-    const char* label, bool* p_selected, ImGuiSelectableFlags flags = 0,
+    const char* label, bool* pSelected, ImGuiSelectableFlags flags = 0,
     const ImVec2 &size = ImVec2(0, 0)
 );
 bool openManual(const string &page);
 void printInfo(
     const string &text,
-    float total_duration = 5.0f,
-    float fade_duration = 3.0f
+    float totalDuration = 5.0f,
+    float fadeDuration = 3.0f
 );
 void reportFatalError(const string &s, const DataNode* dn = nullptr);
 void saveMakerTools();
@@ -201,34 +201,34 @@ void saveScreenshot();
 void saveStatistics();
 void setStringTokenWidths(
     vector<StringToken> &tokens,
-    const ALLEGRO_FONT* text_font, const ALLEGRO_FONT* control_font,
-    float max_control_bitmap_height = 0, bool control_condensed = false
+    const ALLEGRO_FONT* textFont, const ALLEGRO_FONT* controlFont,
+    float maxControlBitmapHeight = 0, bool controlCondensed = false
 );
 void signalHandler(int signum);
 void spewPikminSeed(
-    const Point pos, float z, PikminType* pik_type,
-    float angle, float horizontal_speed, float vertical_speed
+    const Point pos, float z, PikminType* pikType,
+    float angle, float horizontalSpeed, float verticalSpeed
 );
 vector<vector<StringToken> > splitLongStringWithTokens(
-    const vector<StringToken> &tokens, int max_width
+    const vector<StringToken> &tokens, int maxWidth
 );
 ParticleGenerator standardParticleGenSetup(
-    const string &internal_name, Mob* target_mob
+    const string &internalName, Mob* targetMob
 );
-void startGameplayMessage(const string &text, ALLEGRO_BITMAP* speaker_bmp);
+void startGameplayMessage(const string &text, ALLEGRO_BITMAP* speakerBmp);
 vector<StringToken> tokenizeString(const string &s);
 string unescapeString(const string &s);
 void updateOffsetEffectBuffer(
-    const Point &cam_tl, const Point &cam_br,
+    const Point &camTL, const Point &camBR,
     const vector<EdgeOffsetCache> &caches, ALLEGRO_BITMAP* buffer,
-    bool clear_first
+    bool clearFirst
 );
 void updateOffsetEffectCaches (
     vector<EdgeOffsetCache> &caches,
-    const unordered_set<Vertex*> &vertexes_to_update,
-    offset_effect_checker_t checker,
-    offset_effect_length_getter_t length_getter,
-    offset_effect_color_getter_t color_getter
+    const unordered_set<Vertex*> &vertexesToUpdate,
+    OffsetEffectChecker checker,
+    OffsetEffectLengthGetter lengthGetter,
+    OffsetEffectColorGetter colorGetter
 );
 Point v2p(const Vertex* v);
 
@@ -250,10 +250,10 @@ bool adjustKeyframeInterpolatorValues(
     std::function<t(const t &)> predicate
 ) {
     bool result = false;
-    size_t n_keyframes = interpolator.getKeyframeCount();
-    for(size_t k = 0; k < n_keyframes; k++) {
-        const auto &orig_keyframe = interpolator.getKeyframe(k);
-        interpolator.setKeyframeValue(k, predicate(orig_keyframe.second));
+    size_t nKeyframes = interpolator.getKeyframeCount();
+    for(size_t k = 0; k < nKeyframes; k++) {
+        const auto &origKeyframe = interpolator.getKeyframe(k);
+        interpolator.setKeyframeValue(k, predicate(origKeyframe.second));
         result = true;
     }
     return result;
@@ -264,12 +264,12 @@ bool adjustKeyframeInterpolatorValues(
  * @brief Processes a Dear ImGui text widget, but sets the font to be
  * monospaced.
  *
- * @tparam args_t Function argument type.
+ * @tparam ArgsT Function argument type.
  * @param args Function arguments to pass to ImGui::Text().
  */
-template <typename ...args_t>
-void monoText(args_t && ...args) {
+template <typename ...Args_t>
+void monoText(Args_t && ...args) {
     ImGui::PushFont(game.sysContent.fntDearImGuiMonospace);
-    ImGui::Text(std::forward<args_t>(args)...);
+    ImGui::Text(std::forward<Args_t>(args)...);
     ImGui::PopFont();
 }

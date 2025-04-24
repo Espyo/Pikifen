@@ -28,46 +28,46 @@ void Hazard::loadFromDataNode(DataNode* node) {
     loadMetadataFromDataNode(node);
     
     //Standard data.
-    ReaderSetter rs(node);
+    ReaderSetter hRS(node);
     
-    string effects_str;
-    string liquid_str;
-    DataNode* effects_node = nullptr;
-    DataNode* liquid_node = nullptr;
+    string effectsStr;
+    string liquidStr;
+    DataNode* effectsNode = nullptr;
+    DataNode* liquidNode = nullptr;
     
-    rs.set("blocks_paths", blocksPaths);
-    rs.set("color", mainColor);
-    rs.set("effects", effects_str, &effects_node);
-    rs.set("liquid", liquid_str, &liquid_node);
+    hRS.set("blocks_paths", blocksPaths);
+    hRS.set("color", mainColor);
+    hRS.set("effects", effectsStr, &effectsNode);
+    hRS.set("liquid", liquidStr, &liquidNode);
     
-    if(effects_node) {
-        vector<string> effects_strs = semicolonListToVector(effects_str);
-        for(size_t e = 0; e < effects_strs.size(); e++) {
-            string effect_name = effects_strs[e];
+    if(effectsNode) {
+        vector<string> effectsStrs = semicolonListToVector(effectsStr);
+        for(size_t e = 0; e < effectsStrs.size(); e++) {
+            string effectName = effectsStrs[e];
             if(
-                game.content.statusTypes.list.find(effect_name) ==
+                game.content.statusTypes.list.find(effectName) ==
                 game.content.statusTypes.list.end()
             ) {
                 game.errors.report(
-                    "Unknown status effect \"" + effect_name + "\"!",
-                    effects_node
+                    "Unknown status effect \"" + effectName + "\"!",
+                    effectsNode
                 );
             } else {
                 effects.push_back(
-                    game.content.statusTypes.list[effect_name]
+                    game.content.statusTypes.list[effectName]
                 );
             }
         }
     }
     
-    if(liquid_node) {
-        if(game.content.liquids.list.find(liquid_str) == game.content.liquids.list.end()) {
+    if(liquidNode) {
+        if(game.content.liquids.list.find(liquidStr) == game.content.liquids.list.end()) {
             game.errors.report(
-                "Unknown liquid \"" + liquid_str + "\"!",
-                liquid_node
+                "Unknown liquid \"" + liquidStr + "\"!",
+                liquidNode
             );
         } else {
-            associatedLiquid = game.content.liquids.list[liquid_str];
+            associatedLiquid = game.content.liquids.list[liquidStr];
         }
     }
 }

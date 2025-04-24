@@ -589,12 +589,12 @@ Point angleToCoordinates(
 /**
  * @brief Converts angular distance to linear distance.
  *
- * @param angular_dist Angular distance value.
+ * @param angularDist Angular distance value.
  * @param radius Radius of the circle.
  * @return The linear distance.
  */
-float angularDistToLinear(float angular_dist, float radius) {
-    return (float) (2 * radius * tan(angular_dist / 2));
+float angularDistToLinear(float angularDist, float radius) {
+    return (float) (2 * radius * tan(angularDist / 2));
 }
 
 
@@ -645,31 +645,31 @@ bool BBoxCheck(
  * If the calculation is impossible (like if the peak height is lower than the
  * starting height), the speed variables will all be set to 0.
  *
- * @param start_xy Starting X and Y coordinates.
- * @param start_z Starting Z coordinate.
- * @param target_xy Target destination's X and Y coordinates.
- * @param target_z Target destination's Z coordinate.
- * @param max_h Maximum height, using the starting Z as the reference.
+ * @param startXy Starting X and Y coordinates.
+ * @param startZ Starting Z coordinate.
+ * @param targetXy Target destination's X and Y coordinates.
+ * @param targetZ Target destination's Z coordinate.
+ * @param maxH Maximum height, using the starting Z as the reference.
  * @param gravity Constant for the force of gravity, in units per
  * second squared.
- * @param req_speed_xy The required X and Y speed is returned here.
- * @param req_speed_z The required Z speed is returned here.
- * @param out_h_angle If not nullptr, the final horizontal angle is
+ * @param reqSpeedXy The required X and Y speed is returned here.
+ * @param reqSpeedZ The required Z speed is returned here.
+ * @param outHAngle If not nullptr, the final horizontal angle is
  * returned here.
  */
 void calculateThrow(
-    const Point &start_xy, float start_z,
-    const Point &target_xy, float target_z,
-    float max_h, float gravity,
-    Point* req_speed_xy, float* req_speed_z, float* out_h_angle
+    const Point &startXY, float startZ,
+    const Point &targetXY, float targetZ,
+    float maxH, float gravity,
+    Point* reqSpeedXY, float* reqSpeedZ, float* outHAngle
 ) {
 
-    if(target_z - start_z > max_h) {
+    if(targetZ - startZ > maxH) {
         //If the target is above the maximum height it can be thrown...
         //Then this is an impossible throw.
-        *req_speed_xy = Point();
-        *req_speed_z = 0.0f;
-        if(out_h_angle) *out_h_angle = 0.0f;
+        *reqSpeedXY = Point();
+        *reqSpeedZ = 0.0f;
+        if(outHAngle) *outHAngle = 0.0f;
         return;
     }
     
@@ -680,39 +680,39 @@ void calculateThrow(
     //We start with the vertical speed. This will be constant regardless
     //of how far the mob is thrown. In order to reach the required max height,
     //the vertical speed needs to be set thusly:
-    *req_speed_z = (float) sqrt(2.0 * (-gravity) * max_h);
+    *reqSpeedZ = (float) sqrt(2.0 * (-gravity) * maxH);
     
     //Now that we know the vertical speed, we can figure out how long it takes
     //for the mob to land at the target vertical coordinate. The formula for
     //this can be found on Wikipedia, for instance.
-    float height_delta = start_z - target_z;
+    float heightDelta = startZ - targetZ;
     //Because of floating point precision problems, the result of the sqrt
     //could end up negative. Let's cap it to zero.
-    float sqrt_part =
+    float sqrtPart =
         std::max(
             0.0f,
             (float)
             sqrt(
-                (*req_speed_z) * (*req_speed_z) +
-                2.0 * (-gravity) * (height_delta)
+                (*reqSpeedZ) * (*reqSpeedZ) +
+                2.0 * (-gravity) * (heightDelta)
             )
         );
-    float flight_time = ((*req_speed_z) + sqrt_part) / (-gravity);
+    float flightTime = ((*reqSpeedZ) + sqrtPart) / (-gravity);
     
     //Once we know the total flight time, we can divide the horizontal reach
     //by the total time to get the horizontal speed.
-    float h_angle, h_reach;
-    coordinatesToAngle(target_xy - start_xy, &h_angle, &h_reach);
+    float hAngle, hReach;
+    coordinatesToAngle(targetXY - startXY, &hAngle, &hReach);
     
-    float h_speed = h_reach / flight_time;
+    float hSpeed = hReach / flightTime;
     
     //Now that we know the vertical and horizontal speed, just split the
     //horizontal speed into X and Y 3D world components.
-    *req_speed_xy = angleToCoordinates(h_angle, h_speed);
+    *reqSpeedXY = angleToCoordinates(hAngle, hSpeed);
     
     //Return the final horizontal angle, if needed.
-    if(out_h_angle) {
-        *out_h_angle = h_angle;
+    if(outHAngle) {
+        *outHAngle = hAngle;
     }
 }
 
@@ -722,28 +722,28 @@ void calculateThrow(
  *
  * @param circle Coordinates of the circle.
  * @param radius Radius of the circle.
- * @param line_p1 Starting point of the line segment.
- * @param line_p2 Ending point of the line segment.
- * @param out_lix If not nullptr, the line intersection's X coordinate is
+ * @param lineP1 Starting point of the line segment.
+ * @param lineP2 Ending point of the line segment.
+ * @param outLix If not nullptr, the line intersection's X coordinate is
  * returned here.
- * @param out_liy If not nullptr, the line intersection's Y coordinate is
+ * @param outLiy If not nullptr, the line intersection's Y coordinate is
  * returned here.
  * @return Whether they intersect.
  */
 bool circleIntersectsLineSeg(
     const Point &circle, float radius,
-    const Point &line_p1, const Point &line_p2,
-    float* out_lix, float* out_liy
+    const Point &lineP1, const Point &lineP2,
+    float* outLix, float* outLiy
 ) {
 
     //Code by
     //  http://www.melloland.com/scripts-and-tutos/
     //  collision-detection-between-circles-and-lines
     
-    float vx = line_p2.x - line_p1.x;
-    float vy = line_p2.y - line_p1.y;
-    float xdiff = line_p1.x - circle.x;
-    float ydiff = line_p1.y - circle.y;
+    float vx = lineP2.x - lineP1.x;
+    float vy = lineP2.y - lineP1.y;
+    float xdiff = lineP1.x - circle.x;
+    float ydiff = lineP1.y - circle.y;
     float a = vx * vx + vy * vy;
     float b = 2 * ((vx * xdiff) + (vy * ydiff));
     float c = xdiff * xdiff + ydiff * ydiff - radius * radius;
@@ -754,17 +754,17 @@ bool circleIntersectsLineSeg(
         for(int i = -1; i <= 1; i += 2) {
             //Returns the two coordinates of the intersection points.
             float t = (i * -b + quadsqrt) / (2 * a);
-            float x = line_p1.x + (i * vx * t);
-            float y = line_p1.y + (i * vy * t);
+            float x = lineP1.x + (i * vx * t);
+            float y = lineP1.y + (i * vy * t);
             //If one of them is in the boundaries of the segment, it collides.
             if(
-                x >= std::min(line_p1.x, line_p2.x) &&
-                x <= std::max(line_p1.x, line_p2.x) &&
-                y >= std::min(line_p1.y, line_p2.y) &&
-                y <= std::max(line_p1.y, line_p2.y)
+                x >= std::min(lineP1.x, lineP2.x) &&
+                x <= std::max(lineP1.x, lineP2.x) &&
+                y >= std::min(lineP1.y, lineP2.y) &&
+                y <= std::max(lineP1.y, lineP2.y)
             ) {
-                if(out_lix) *out_lix = x;
-                if(out_liy) *out_liy = y;
+                if(outLix) *outLix = x;
+                if(outLiy) *outLiy = y;
                 return true;
             }
         }
@@ -780,84 +780,84 @@ bool circleIntersectsLineSeg(
  * @param circle Coordinates of the circle.
  * @param radius Radius of the circle.
  * @param rectangle Central coordinates of the rectangle.
- * @param rect_dim Dimensions of the rectangle.
- * @param rect_angle Angle the rectangle is facing.
- * @param out_overlap_dist If not nullptr, the amount of overlap is
+ * @param rectDim Dimensions of the rectangle.
+ * @param rectAngle Angle the rectangle is facing.
+ * @param outOverlapDist If not nullptr, the amount of overlap is
  * returned here.
- * @param out_rectangle_side_angle If not nullptr, the angle of the side of the
+ * @param outRectangleSideAngle If not nullptr, the angle of the side of the
  * rectangle that the circle is on, aligned to the sides of the rectangle, is
  * returned here.
  * @return Whether they intersect.
  */
 bool circleIntersectsRectangle(
     const Point &circle, float radius,
-    const Point &rectangle, const Point &rect_dim,
-    float rect_angle,
-    float* out_overlap_dist, float* out_rectangle_side_angle
+    const Point &rectangle, const Point &rectDim,
+    float rectAngle,
+    float* outOverlapDist, float* outRectangleSideAngle
 ) {
-    Point circle_rel_pos = circle - rectangle;
-    circle_rel_pos = rotatePoint(circle_rel_pos, -rect_angle);
+    Point circleRelPos = circle - rectangle;
+    circleRelPos = rotatePoint(circleRelPos, -rectAngle);
     Point nearest;
     
-    bool inside_x =
-        circle_rel_pos.x > -rect_dim.x / 2.0 &&
-        circle_rel_pos.x < rect_dim.x / 2.0;
-    bool inside_y =
-        circle_rel_pos.y > -rect_dim.y / 2.0 &&
-        circle_rel_pos.y < rect_dim.y / 2.0;
+    bool insideX =
+        circleRelPos.x > -rectDim.x / 2.0 &&
+        circleRelPos.x < rectDim.x / 2.0;
+    bool insideY =
+        circleRelPos.y > -rectDim.y / 2.0 &&
+        circleRelPos.y < rectDim.y / 2.0;
         
-    if(inside_x && inside_y) {
-        Point dist_to_pos(
-            rect_dim.x / 2.0f - circle_rel_pos.x,
-            rect_dim.y / 2.0f - circle_rel_pos.y
+    if(insideX && insideY) {
+        Point distToPos(
+            rectDim.x / 2.0f - circleRelPos.x,
+            rectDim.y / 2.0f - circleRelPos.y
         );
-        Point dist_to_neg(
-            -(-rect_dim.x / 2.0f - circle_rel_pos.x),
-            -(-rect_dim.y / 2.0f - circle_rel_pos.y)
+        Point distToNeg(
+            -(-rectDim.x / 2.0f - circleRelPos.x),
+            -(-rectDim.y / 2.0f - circleRelPos.y)
         );
-        float smallest_x = std::min(dist_to_neg.x, dist_to_pos.x);
-        float smallest_y = std::min(dist_to_neg.y, dist_to_pos.y);
-        float smallest = std::min(smallest_x, smallest_y);
+        float smallestX = std::min(distToNeg.x, distToPos.x);
+        float smallestY = std::min(distToNeg.y, distToPos.y);
+        float smallest = std::min(smallestX, smallestY);
         
-        if(smallest == dist_to_pos.x) {
-            nearest = Point(rect_dim.x / 2, circle_rel_pos.y);
-        } else if(smallest == dist_to_neg.x) {
-            nearest = Point(-rect_dim.x / 2, circle_rel_pos.y);
-        } else if(smallest == dist_to_pos.y) {
-            nearest = Point(circle_rel_pos.x, rect_dim.y / 2);
-        } else if(smallest == dist_to_neg.y) {
-            nearest = Point(circle_rel_pos.x, -rect_dim.y / 2);
+        if(smallest == distToPos.x) {
+            nearest = Point(rectDim.x / 2, circleRelPos.y);
+        } else if(smallest == distToNeg.x) {
+            nearest = Point(-rectDim.x / 2, circleRelPos.y);
+        } else if(smallest == distToPos.y) {
+            nearest = Point(circleRelPos.x, rectDim.y / 2);
+        } else if(smallest == distToNeg.y) {
+            nearest = Point(circleRelPos.x, -rectDim.y / 2);
         }
     } else {
         nearest =
             Point(
-                std::clamp(circle_rel_pos.x, -rect_dim.x / 2.0f, rect_dim.x / 2.0f),
-                std::clamp(circle_rel_pos.y, -rect_dim.y / 2.0f, rect_dim.y / 2.0f)
+                std::clamp(circleRelPos.x, -rectDim.x / 2.0f, rectDim.x / 2.0f),
+                std::clamp(circleRelPos.y, -rectDim.y / 2.0f, rectDim.y / 2.0f)
             );
     }
     
-    float d = Distance(circle_rel_pos, nearest).toFloat();
-    if(out_overlap_dist) {
-        if(inside_x && inside_y) {
-            *out_overlap_dist = d + radius;
+    float d = Distance(circleRelPos, nearest).toFloat();
+    if(outOverlapDist) {
+        if(insideX && insideY) {
+            *outOverlapDist = d + radius;
         } else {
-            *out_overlap_dist = radius - d;
+            *outOverlapDist = radius - d;
         }
     }
     
-    if(out_rectangle_side_angle) {
+    if(outRectangleSideAngle) {
         float angle;
-        if(inside_x && inside_y) {
-            angle = getAngle(circle_rel_pos, nearest);
+        if(insideX && insideY) {
+            angle = getAngle(circleRelPos, nearest);
         } else {
-            angle = getAngle(nearest, circle_rel_pos);
+            angle = getAngle(nearest, circleRelPos);
         }
         
         angle = (float) floor((angle + (TAU / 8)) / (TAU / 4)) * (TAU / 4);
-        *out_rectangle_side_angle = angle + rect_angle;
+        *outRectangleSideAngle = angle + rectAngle;
     }
     
-    if(inside_x && inside_y) {
+    if(insideX && insideY) {
         return true;
     }
     
@@ -873,32 +873,32 @@ bool circleIntersectsRectangle(
  * @param b Ending point of the first line segment.
  * @param c Starting point of the second line segment.
  * @param d Ending point of the second line segment.
- * @param out_intersection_tl If not nullptr, and if there is an intersection,
+ * @param outIntersectionTL If not nullptr, and if there is an intersection,
  * return the top-left corner of the intersection here.
- * @param out_intersection_br If not nullptr, and if there is an intersection,
+ * @param outIntersectionBR If not nullptr, and if there is an intersection,
  * return the bottom-right corner of the intersection here.
  * @return Whether they intersect.
  */
 bool collinearLineSegsIntersect(
     const Point &a, const Point &b, const Point &c, const Point &d,
-    Point* out_intersection_tl, Point* out_intersection_br
+    Point* outIntersectionTL, Point* outIntersectionBR
 ) {
     Point min1(std::min(a.x, b.x), std::min(a.y, b.y));
     Point max1(std::max(a.x, b.x), std::max(a.y, b.y));
     Point min2(std::min(c.x, d.x), std::min(c.y, d.y));
     Point max2(std::max(c.x, d.x), std::max(c.y, d.y));
     
-    Point i_tl(std::max(min1.x, min2.x), std::max(min1.y, min2.y));
-    Point i_br(std::min(max1.x, max2.x), std::min(max1.y, max2.y));
+    Point iTL(std::max(min1.x, min2.x), std::max(min1.y, min2.y));
+    Point iBR(std::min(max1.x, max2.x), std::min(max1.y, max2.y));
     
-    if(i_tl.x == i_br.x && i_tl.y == i_br.y) {
+    if(iTL.x == iBR.x && iTL.y == iBR.y) {
         //Special case -- they share just one point. Let it slide.
         return false;
     }
     
-    if(i_tl.x <= i_br.x && i_tl.y <= i_br.y) {
-        if(out_intersection_tl) *out_intersection_tl = i_tl;
-        if(out_intersection_br) *out_intersection_br = i_br;
+    if(iTL.x <= iBR.x && iTL.y <= iBR.y) {
+        if(outIntersectionTL) *outIntersectionTL = iTL;
+        if(outIntersectionBR) *outIntersectionBR = iBR;
         return true;
     }
     
@@ -1010,33 +1010,33 @@ float getAngleSmallestDiff(float a1, float a2) {
  * @param l1 Starting point of the line segment.
  * @param l2 Ending point of the line segment.
  * @param p Reference point.
- * @param out_segment_ratio If not nullptr, the ratio from l1 to l2 is
+ * @param outSegmentRatio If not nullptr, the ratio from l1 to l2 is
  * returned here. Between 0 and 1, it belongs to the line segment.
  * If not, it doesn't.
  * @return The closest point.
  */
 Point getClosestPointInLineSeg(
-    const Point &l1, const Point &l2, const Point &p, float* out_segment_ratio
+    const Point &l1, const Point &l2, const Point &p, float* outSegmentRatio
 ) {
 
     //Code by http://stackoverflow.com/a/3122532
     
-    Point l1_to_p = p - l1;
-    Point l1_to_l2 = l2 - l1;
+    Point l1ToP = p - l1;
+    Point l1ToL2 = l2 - l1;
     
-    float l1_to_l2_squared =
-        l1_to_l2.x * l1_to_l2.x +
-        l1_to_l2.y * l1_to_l2.y;
+    float l1ToL2Squared =
+        l1ToL2.x * l1ToL2.x +
+        l1ToL2.y * l1ToL2.y;
         
-    float l1_to_p_dot_l1_to_l2 =
-        l1_to_p.x * l1_to_l2.x +
-        l1_to_p.y * l1_to_l2.y;
+    float l1ToPDotL1ToL2 =
+        l1ToP.x * l1ToL2.x +
+        l1ToP.y * l1ToL2.y;
         
-    float r = l1_to_p_dot_l1_to_l2 / l1_to_l2_squared;
+    float r = l1ToPDotL1ToL2 / l1ToL2Squared;
     
-    if(out_segment_ratio) *out_segment_ratio = r;
+    if(outSegmentRatio) *outSegmentRatio = r;
     
-    return Point(l1.x + l1_to_l2.x * r, l1.y + l1_to_l2.y * r);
+    return Point(l1.x + l1ToL2.x * r, l1.y + l1ToL2.y * r);
 }
 
 
@@ -1046,65 +1046,65 @@ Point getClosestPointInLineSeg(
  * rectangle, otherwise the reference point's coordinates are returned instead.
  *
  * @param p Reference point.
- * @param rect_center Center of the rectangle.
- * @param rect_dim Width and height of the rectangle.
- * @param rect_angle Angle of the rectangle.
- * @param out_is_inside If not nullptr, whether or not the reference point
+ * @param rectCenter Center of the rectangle.
+ * @param rectDim Width and height of the rectangle.
+ * @param rectAngle Angle of the rectangle.
+ * @param outIsInside If not nullptr, whether or not the reference point
  * is inside the rectangle is returned here.
  * @return The closest point.
  */
 Point getClosestPointInRotatedRectangle(
     const Point &p,
-    const Point &rect_center, const Point &rect_dim, float rect_angle,
-    bool* out_is_inside
+    const Point &rectCenter, const Point &rectDim, float rectAngle,
+    bool* outIsInside
 ) {
-    Point closest_point;
-    Point perimeter = rect_dim / 2.0f;
-    if(out_is_inside) *out_is_inside = false;
+    Point closestPoint;
+    Point perimeter = rectDim / 2.0f;
+    if(outIsInside) *outIsInside = false;
     
     //First, transform the coordinates so the rectangle is axis-aligned, and
     //the rectangle's center is at the origin.
-    Point delta_p = p - rect_center;
-    delta_p = rotatePoint(delta_p, -rect_angle);
+    Point deltaP = p - rectCenter;
+    deltaP = rotatePoint(deltaP, -rectAngle);
     
     //Check the closest point.
-    if(delta_p.x <= -perimeter.x) {
-        if(delta_p.y <= -perimeter.y) {
+    if(deltaP.x <= -perimeter.x) {
+        if(deltaP.y <= -perimeter.y) {
             //Top-left corner.
-            closest_point = Point(-perimeter.x, -perimeter.y);
-        } else if(delta_p.y >= perimeter.y) {
+            closestPoint = Point(-perimeter.x, -perimeter.y);
+        } else if(deltaP.y >= perimeter.y) {
             //Bottom-left corner.
-            closest_point = Point(-perimeter.x, perimeter.y);
+            closestPoint = Point(-perimeter.x, perimeter.y);
         } else {
             //Left side.
-            closest_point = Point(-perimeter.x, delta_p.y);
+            closestPoint = Point(-perimeter.x, deltaP.y);
         }
-    } else if(delta_p.x >= perimeter.x) {
-        if(delta_p.y <= -perimeter.y) {
+    } else if(deltaP.x >= perimeter.x) {
+        if(deltaP.y <= -perimeter.y) {
             //Top-right corner.
-            closest_point = Point(perimeter.x, -perimeter.y);
-        } else if(delta_p.y >= perimeter.y) {
+            closestPoint = Point(perimeter.x, -perimeter.y);
+        } else if(deltaP.y >= perimeter.y) {
             //Bottom-right corner.
-            closest_point = Point(perimeter.x, perimeter.y);
+            closestPoint = Point(perimeter.x, perimeter.y);
         } else {
             //Right side.
-            closest_point = Point(perimeter.x, delta_p.y);
+            closestPoint = Point(perimeter.x, deltaP.y);
         }
-    } else if(delta_p.y <= -perimeter.y) {
+    } else if(deltaP.y <= -perimeter.y) {
         //Top side.
-        closest_point = Point(delta_p.x, -perimeter.y);
-    } else if(delta_p.y >= perimeter.y) {
+        closestPoint = Point(deltaP.x, -perimeter.y);
+    } else if(deltaP.y >= perimeter.y) {
         //Bottom side.
-        closest_point = Point(delta_p.x, perimeter.y);
+        closestPoint = Point(deltaP.x, perimeter.y);
     } else {
         //Inside.
-        closest_point = delta_p;
-        if(out_is_inside) *out_is_inside = true;
+        closestPoint = deltaP;
+        if(outIsInside) *outIsInside = true;
     }
     
     //Now, transform back.
-    closest_point = rotatePoint(closest_point, rect_angle);
-    return closest_point + rect_center;
+    closestPoint = rotatePoint(closestPoint, rectAngle);
+    return closestPoint + rectCenter;
 }
 
 
@@ -1118,44 +1118,44 @@ Point getClosestPointInRotatedRectangle(
  * the miter takes place, meaning this is the point between a and c.
  * @param c Final point of the second line segment.
  * @param thickness Line thickness.
- * @param miter_point_1 The first point is returned here.
- * @param miter_point_2 The second point is returned here.
- * @param max_miter_length If not 0, the miter is limited to this length.
+ * @param miterPoint1 The first point is returned here.
+ * @param miterPoint2 The second point is returned here.
+ * @param maxMiterLength If not 0, the miter is limited to this length.
  */
 void getMiterPoints(
     const Point &a, const Point &b, const Point &c, float thickness,
-    Point* miter_point_1, Point* miter_point_2, float max_miter_length
+    Point* miterPoint1, Point* miterPoint2, float maxMiterLength
 ) {
     //https://blog.scottlogic.com/2019/11/18/drawing-lines-with-webgl.html
     
     //Get the miter point's direction.
-    Point vec_ab = b - a;
-    Point vec_bc = c - b;
-    Point norm_vec_ab = normalizeVector(vec_ab);
-    Point norm_vec_bc = normalizeVector(vec_bc);
-    Point tangent = norm_vec_ab + norm_vec_bc;
-    Point norm_tangent = normalizeVector(tangent);
-    Point miter_direction(-norm_tangent.y, norm_tangent.x);
+    Point vecAB = b - a;
+    Point vecBC = c - b;
+    Point normVecAB = normalizeVector(vecAB);
+    Point normVecBC = normalizeVector(vecBC);
+    Point tangent = normVecAB + normVecBC;
+    Point normTangent = normalizeVector(tangent);
+    Point miterDirection(-normTangent.y, normTangent.x);
     
     //Get the miter point's distance.
-    Point normal_a(-vec_ab.y, vec_ab.x);
-    normal_a = normalizeVector(normal_a);
-    float miter_length =
-        (thickness / 2.0f) / dotProduct(miter_direction, normal_a);
+    Point normalA(-vecAB.y, vecAB.x);
+    normalA = normalizeVector(normalA);
+    float miterLength =
+        (thickness / 2.0f) / dotProduct(miterDirection, normalA);
         
-    if(isinf(miter_length)) {
-        miter_length = 1.0f;
+    if(isinf(miterLength)) {
+        miterLength = 1.0f;
     }
-    if(max_miter_length > 0.0f && fabs(miter_length) > max_miter_length) {
-        float miter_sign = miter_length >= 0.0f ? 1.0f : -1.0f;
-        miter_length =
-            std::min((float) fabs(miter_length), max_miter_length);
-        miter_length *= miter_sign;
+    if(maxMiterLength > 0.0f && fabs(miterLength) > maxMiterLength) {
+        float miterSign = miterLength >= 0.0f ? 1.0f : -1.0f;
+        miterLength =
+            std::min((float) fabs(miterLength), maxMiterLength);
+        miterLength *= miterSign;
     }
     
     //Return the final point.
-    *miter_point_1 = b + miter_direction * miter_length;
-    *miter_point_2 = b - miter_direction * miter_length;
+    *miterPoint1 = b + miterDirection * miterLength;
+    *miterPoint2 = b - miterDirection * miterLength;
 }
 
 
@@ -1180,24 +1180,24 @@ float getPointSign(const Point &p, const Point &lp1, const Point &lp2) {
  * <current point number> / <total number of points>. The distance from the
  * center point is the mid-point of the inner and outer ring.
  *
- * @param inner_dist Radius of the inner circle of the ring.
- * @param outer_dist Radius of the outer circle of the ring.
+ * @param innerDist Radius of the inner circle of the ring.
+ * @param outerDist Radius of the outer circle of the ring.
  * @param arc Arc of the ring, or M_TAU for the whole ring.
- * @param arc_rot Rotation of the arc.
+ * @param arcRot Rotation of the arc.
  * @param ratio Ratio of the current point number.
  * @return The point.
  */
 Point getRatioPointInRing(
-    float inner_dist, float outer_dist,
-    float arc, float arc_rot, float ratio
+    float innerDist, float outerDist,
+    float arc, float arcRot, float ratio
 ) {
 
-    float radius = (inner_dist + outer_dist) / 2.0f;
-    float angle1 = -arc / 2.0f + arc_rot;
-    float angle2 = arc / 2.0f + arc_rot;
-    float final_angle = (angle2 - angle1) * ratio + angle1;
+    float radius = (innerDist + outerDist) / 2.0f;
+    float angle1 = -arc / 2.0f + arcRot;
+    float angle2 = arc / 2.0f + arcRot;
+    float finalAngle = (angle2 - angle1) * ratio + angle1;
     
-    return angleToCoordinates(final_angle, radius);
+    return angleToCoordinates(finalAngle, radius);
 }
 
 
@@ -1205,28 +1205,28 @@ Point getRatioPointInRing(
  * @brief Returns a deterministically random point inside of a rectangular
  * ring, with uniform distribution.
  *
- * @param inner_dist Width and height of the inner rectangle of the ring.
- * @param outer_dist Width and height of the outer rectangle of the ring.
- * @param axis_random_int A previously-determined random int to
+ * @param innerDist Width and height of the inner rectangle of the ring.
+ * @param outerDist Width and height of the outer rectangle of the ring.
+ * @param axisRandomInt A previously-determined random int to
  * calculate the axis with [0, 1].
- * @param axis_random_float A previously-determined random float to
+ * @param axisRandomFloat A previously-determined random float to
  * calculate the axis with [0, 1].
- * @param px_random_float A previously-determined random float to
+ * @param pxRandomFloat A previously-determined random float to
  * calculate the X coordinate with [0, 1].
- * @param py_random_float A previously-determined random float to
+ * @param pyRandomFloat A previously-determined random float to
  * calculate the Y coordinate with [0, 1].
- * @param side_random_int A previously-determined random int to
+ * @param sideRandomInt A previously-determined random int to
  * calculate the side with [0, 1].
  * @return The point.
  */
 Point getRandomPointInRectangularRing(
-    const Point &inner_dist, const Point &outer_dist,
-    int axis_random_int, float axis_random_float, float px_random_float,
-    float py_random_float, int side_random_int
+    const Point &innerDist, const Point &outerDist,
+    int axisRandomInt, float axisRandomFloat, float pxRandomFloat,
+    float pyRandomFloat, int sideRandomInt
 ) {
-    float ring_thickness[2] {
-        outer_dist.x - inner_dist.x,
-        outer_dist.y - inner_dist.y
+    float ringThickness[2] {
+        outerDist.x - innerDist.x,
+        outerDist.y - innerDist.y
     };
     
     //The idea is to split the ring into four rectangles, organized in a
@@ -1234,56 +1234,56 @@ Point getRandomPointInRectangularRing(
     //In this pattern, the north and south rectangles have the exact same area,
     //and the same is true for the west and east ones. We can simplify the
     //process with this in mind.
-    Point rect_sizes[2] = {
+    Point rectSizes[2] = {
         Point(
-            ring_thickness[0],
-            outer_dist.y * 2.0f - ring_thickness[1]
+            ringThickness[0],
+            outerDist.y * 2.0f - ringThickness[1]
         ),
         Point(
-            outer_dist.x * 2.0f - ring_thickness[0],
-            ring_thickness[1]
+            outerDist.x * 2.0f - ringThickness[0],
+            ringThickness[1]
         )
     };
-    float rect_areas[2] = {
-        rect_sizes[0].x* rect_sizes[0].y,
-        rect_sizes[1].x* rect_sizes[1].y
+    float rectAreas[2] = {
+        rectSizes[0].x* rectSizes[0].y,
+        rectSizes[1].x* rectSizes[1].y
     };
     
     //Pick one of the four rectangles (or in this case, one of the two axes),
     //with weighted probability depending on the area.
-    size_t chosen_axis;
-    if(rect_areas[0] == 0.0f && rect_areas[1] == 0.0f) {
-        chosen_axis = axis_random_int;
+    size_t chosenAxis;
+    if(rectAreas[0] == 0.0f && rectAreas[1] == 0.0f) {
+        chosenAxis = axisRandomInt;
     } else {
-        chosen_axis =
+        chosenAxis =
             getRandomIdxWithWeights(
-                vector<float>(rect_areas, rect_areas + 2),
-                axis_random_float
+                vector<float>(rectAreas, rectAreas + 2),
+                axisRandomFloat
             );
     }
     
-    Point p_in_rectangle(
-        px_random_float * rect_sizes[chosen_axis].x,
-        py_random_float * rect_sizes[chosen_axis].y
+    Point pInRectangle(
+        pxRandomFloat * rectSizes[chosenAxis].x,
+        pyRandomFloat * rectSizes[chosenAxis].y
     );
-    Point final_p;
+    Point finalP;
     
-    if(chosen_axis == 0) {
+    if(chosenAxis == 0) {
         //West or east rectangle. Let's assume the east rectangle.
-        final_p.x = inner_dist.x + p_in_rectangle.x,
-        final_p.y = -outer_dist.y + p_in_rectangle.y;
+        finalP.x = innerDist.x + pInRectangle.x,
+        finalP.y = -outerDist.y + pInRectangle.y;
     } else {
         //North or south rectangle. Let's assume the south rectangle.
-        final_p.x = -inner_dist.x + p_in_rectangle.x;
-        final_p.y = inner_dist.y + p_in_rectangle.y;
+        finalP.x = -innerDist.x + pInRectangle.x;
+        finalP.y = innerDist.y + pInRectangle.y;
     }
     
-    if(side_random_int == 0) {
+    if(sideRandomInt == 0) {
         //Return our point.
-        return final_p;
+        return finalP;
     } else {
         //Swap to the rectangle on the opposite side.
-        return Point() - final_p;
+        return Point() - finalP;
     }
 }
 
@@ -1292,32 +1292,32 @@ Point getRandomPointInRectangularRing(
  * @brief Returns a deterministically random point inside of a circular
  * ring, with uniform distribution.
  *
- * @param inner_dist Radius of the inner circle of the ring.
- * @param outer_dist Radius of the outer circle of the ring.
+ * @param innerDist Radius of the inner circle of the ring.
+ * @param outerDist Radius of the outer circle of the ring.
  * @param arc Arc of the ring, or M_TAU for the whole ring.
- * @param arc_rot Rotation of the arc.
- * @param radius_random_float A previously-determined random float to
+ * @param arcRot Rotation of the arc.
+ * @param radiusRandomFloat A previously-determined random float to
  * calculate the radius with [0, 1].
- * @param angle_random_float A previously-determined random float to
+ * @param angleRandomFloat A previously-determined random float to
  * calculate the angle with [0, 1].
  * @return The point.
  */
 Point getRandomPointInRing(
-    float inner_dist, float outer_dist,
-    float arc, float arc_rot,
-    float radius_random_float, float angle_random_float
+    float innerDist, float outerDist,
+    float arc, float arcRot,
+    float radiusRandomFloat, float angleRandomFloat
 ) {
     //https://stackoverflow.com/q/30564015
     
     float r =
-        inner_dist +
-        (outer_dist - inner_dist) * (float) sqrt(radius_random_float);
+        innerDist +
+        (outerDist - innerDist) * (float) sqrt(radiusRandomFloat);
         
     float theta =
         interpolateNumber(
-            angle_random_float, 0.0f, 1.0f,
-            -arc / 2.0f + arc_rot,
-            arc / 2.0f + arc_rot
+            angleRandomFloat, 0.0f, 1.0f,
+            -arc / 2.0f + arcRot,
+            arc / 2.0f + arcRot
         );
         
     return Point(r * (float) cos(theta), r * (float) sin(theta));
@@ -1332,22 +1332,22 @@ Point getRandomPointInRing(
  * @param center Center point of the rectangle.
  * @param dimensions The rectangle's width and height.
  * @param angle Angle of rotation.
- * @param min_coords The top-left coordinates are returned here.
- * @param max_coords The bottom-right coordinates are returned here.
+ * @param minCoords The top-left coordinates are returned here.
+ * @param maxCoords The bottom-right coordinates are returned here.
  */
 void getTransformedRectangleBBox(
     const Point &center, const Point &dimensions, float angle,
-    Point* min_coords, Point* max_coords
+    Point* minCoords, Point* maxCoords
 ) {
 
-    if(!min_coords || !max_coords) return;
-    bool got_min_x = false;
-    bool got_max_x = false;
-    bool got_min_y = false;
-    bool got_max_y = false;
+    if(!minCoords || !maxCoords) return;
+    bool gotMinX = false;
+    bool gotMaxX = false;
+    bool gotMinY = false;
+    bool gotMaxY = false;
     
     for(unsigned char p = 0; p < 4; p++) {
-        Point corner, final_corner;
+        Point corner, finalCorner;
         
         if(p == 0 || p == 1) corner.x = center.x - (dimensions.x * 0.5f);
         else                 corner.x = center.x + (dimensions.x * 0.5f);
@@ -1355,24 +1355,24 @@ void getTransformedRectangleBBox(
         else                 corner.y = center.y + (dimensions.y * 0.5f);
         
         corner -= center;
-        final_corner = rotatePoint(corner, angle);
-        final_corner += center;
+        finalCorner = rotatePoint(corner, angle);
+        finalCorner += center;
         
-        if(final_corner.x < min_coords->x || !got_min_x) {
-            min_coords->x = final_corner.x;
-            got_min_x = true;
+        if(finalCorner.x < minCoords->x || !gotMinX) {
+            minCoords->x = finalCorner.x;
+            gotMinX = true;
         }
-        if(final_corner.y < min_coords->y || !got_min_y) {
-            min_coords->y = final_corner.y;
-            got_min_y = true;
+        if(finalCorner.y < minCoords->y || !gotMinY) {
+            minCoords->y = finalCorner.y;
+            gotMinY = true;
         }
-        if(final_corner.x > max_coords->x || !got_max_x) {
-            max_coords->x = final_corner.x;
-            got_max_x = true;
+        if(finalCorner.x > maxCoords->x || !gotMaxX) {
+            maxCoords->x = finalCorner.x;
+            gotMaxX = true;
         }
-        if(final_corner.y > max_coords->y || !got_max_y) {
-            max_coords->y = final_corner.y;
-            got_max_y = true;
+        if(finalCorner.y > maxCoords->y || !gotMaxY) {
+            maxCoords->y = finalCorner.y;
+            gotMaxY = true;
         }
     }
 }
@@ -1383,28 +1383,28 @@ void getTransformedRectangleBBox(
  * in an interval.
  *
  * @param input The input number.
- * @param input_start Start of the interval the input number falls on,
- * inclusive. The closer to input_start, the closer the output is to
- * output_start.
- * @param input_end End of the interval the number falls on, inclusive.
- * @param output_start Angle on the starting tip of the interpolation.
- * @param output_end Angle on the ending tip of the interpolation.
+ * @param inputStart Start of the interval the input number falls on,
+ * inclusive. The closer to inputStart, the closer the output is to
+ * outputStart.
+ * @param inputEnd End of the interval the number falls on, inclusive.
+ * @param outputStart Angle on the starting tip of the interpolation.
+ * @param outputEnd Angle on the ending tip of the interpolation.
  * @return The interpolated angle.
  */
 float interpolateAngle(
-    float input, float input_start, float input_end,
-    float &output_start, float &output_end
+    float input, float inputStart, float inputEnd,
+    float &outputStart, float &outputEnd
 ) {
-    float angle_cw_diff = getAngleCwDiff(output_start, output_end);
-    float angle_delta;
-    if(angle_cw_diff < TAU / 2.0f) {
-        angle_delta = angle_cw_diff;
+    float angleCwDiff = getAngleCwDiff(outputStart, outputEnd);
+    float angleDelta;
+    if(angleCwDiff < TAU / 2.0f) {
+        angleDelta = angleCwDiff;
     } else {
-        angle_delta = -(TAU - angle_cw_diff);
+        angleDelta = -(TAU - angleCwDiff);
     }
     return
-        output_start +
-        interpolateNumber(input, input_start, input_end, 0, angle_delta);
+        outputStart +
+        interpolateNumber(input, inputStart, inputEnd, 0, angleDelta);
 }
 
 
@@ -1413,25 +1413,25 @@ float interpolateAngle(
  * in an interval.
  *
  * @param input The input number.
- * @param input_start Start of the interval the input number falls on,
- * inclusive. The closer to input_start, the closer the output is to
- * output_start.
- * @param input_end End of the interval the number falls on, inclusive.
- * @param output_start Point on the starting tip of the interpolation.
- * @param output_end Point on the ending tip of the interpolation.
+ * @param inputStart Start of the interval the input number falls on,
+ * inclusive. The closer to inputStart, the closer the output is to
+ * outputStart.
+ * @param inputEnd End of the interval the number falls on, inclusive.
+ * @param outputStart Point on the starting tip of the interpolation.
+ * @param outputEnd Point on the ending tip of the interpolation.
  * @return The interpolated point.
  */
 Point interpolatePoint(
-    float input, float input_start, float input_end,
-    const Point &output_start, const Point &output_end
+    float input, float inputStart, float inputEnd,
+    const Point &outputStart, const Point &outputEnd
 ) {
     return
         Point(
             interpolateNumber(
-                input, input_start, input_end, output_start.x, output_end.x
+                input, inputStart, inputEnd, outputStart.x, outputEnd.x
             ),
             interpolateNumber(
-                input, input_start, input_end, output_start.y, output_end.y
+                input, inputStart, inputEnd, outputStart.y, outputEnd.y
             )
         );
         
@@ -1442,17 +1442,17 @@ Point interpolatePoint(
  * @brief Returns whether a point is inside a triangle or not.
  *
  * @param p The point to check.
- * @param rect_center Center coordinates of the rectangle.
- * @param rect_size Width and height of the rectangle.
+ * @param rectCenter Center coordinates of the rectangle.
+ * @param rectSize Width and height of the rectangle.
  * @return Whether it is inside.
  */
 bool isPointInRectangle(
-    const Point &p, const Point &rect_center, const Point &rect_size
+    const Point &p, const Point &rectCenter, const Point &rectSize
 ) {
-    if(p.x < rect_center.x - rect_size.x / 2.0f) return false;
-    if(p.x > rect_center.x + rect_size.x / 2.0f) return false;
-    if(p.y < rect_center.y - rect_size.y / 2.0f) return false;
-    if(p.y > rect_center.y + rect_size.y / 2.0f) return false;
+    if(p.x < rectCenter.x - rectSize.x / 2.0f) return false;
+    if(p.x > rectCenter.x + rectSize.x / 2.0f) return false;
+    if(p.y < rectCenter.y - rectSize.y / 2.0f) return false;
+    if(p.y > rectCenter.y + rectSize.y / 2.0f) return false;
     return true;
 }
 
@@ -1566,31 +1566,31 @@ bool lineSegIntersectsRectangle(
  *
  * @param lp1 First point of the line segment.
  * @param lp2 Second point of the line segment.
- * @param rect_center Center point of the rectangle.
- * @param rect_dim Width and height of the rectangle.
- * @param rect_angle Angle of the rectangle.
+ * @param rectCenter Center point of the rectangle.
+ * @param rectDim Width and height of the rectangle.
+ * @param rectAngle Angle of the rectangle.
  * @return Whether they intersect.
  */
 bool lineSegIntersectsRotatedRectangle(
     const Point &lp1, const Point &lp2,
-    const Point &rect_center, const Point &rect_dim, float rect_angle
+    const Point &rectCenter, const Point &rectDim, float rectAngle
 ) {
     //First, transform the coordinates so the rectangle is axis-aligned, and
     //the rectangle's center is at the origin.
-    Point delta_p1 = lp1 - rect_center;
-    delta_p1 = rotatePoint(delta_p1, -rect_angle);
-    Point delta_p2 = lp2 - rect_center;
-    delta_p2 = rotatePoint(delta_p2, -rect_angle);
+    Point deltaP1 = lp1 - rectCenter;
+    deltaP1 = rotatePoint(deltaP1, -rectAngle);
+    Point deltaP2 = lp2 - rectCenter;
+    deltaP2 = rotatePoint(deltaP2, -rectAngle);
     
     //Now, check if the line intersects the rectangle.
-    Point half_dim = rect_dim / 2.0f;
+    Point halfDim = rectDim / 2.0f;
     //Right side.
     if(
         lineSegsIntersect(
-            delta_p1,
-            delta_p2,
-            Point(half_dim.x, -half_dim.y),
-            Point(half_dim.x, half_dim.y),
+            deltaP1,
+            deltaP2,
+            Point(halfDim.x, -halfDim.y),
+            Point(halfDim.x, halfDim.y),
             nullptr
         )
     ) {
@@ -1600,10 +1600,10 @@ bool lineSegIntersectsRotatedRectangle(
     //Top side.
     if(
         lineSegsIntersect(
-            delta_p1,
-            delta_p2,
-            Point(-half_dim.x, -half_dim.y),
-            Point(half_dim.x, -half_dim.y),
+            deltaP1,
+            deltaP2,
+            Point(-halfDim.x, -halfDim.y),
+            Point(halfDim.x, -halfDim.y),
             nullptr
         )
     ) {
@@ -1613,10 +1613,10 @@ bool lineSegIntersectsRotatedRectangle(
     //Left side.
     if(
         lineSegsIntersect(
-            delta_p1,
-            delta_p2,
-            Point(-half_dim.x, -half_dim.y),
-            Point(-half_dim.x, half_dim.y),
+            deltaP1,
+            deltaP2,
+            Point(-halfDim.x, -halfDim.y),
+            Point(-halfDim.x, halfDim.y),
             nullptr
         )
     ) {
@@ -1626,10 +1626,10 @@ bool lineSegIntersectsRotatedRectangle(
     //Bottom side.
     if(
         lineSegsIntersect(
-            delta_p1,
-            delta_p2,
-            Point(-half_dim.x, half_dim.y),
-            Point(half_dim.x, half_dim.y),
+            deltaP1,
+            deltaP2,
+            Point(-halfDim.x, halfDim.y),
+            Point(halfDim.x, halfDim.y),
             nullptr
         )
     ) {
@@ -1665,22 +1665,22 @@ bool lineSegsAreCollinear(
  * @param l1p2 Ending point of the first line segment.
  * @param l2p1 Starting point of the second line segment.
  * @param l2p2 Ending point of the second line segment.
- * @param out_final_l1r If not nullptr and they intersect, the distance from
+ * @param outFinalL1r If not nullptr and they intersect, the distance from
  * the start of line 1 in which the intersection happens is returned here.
  * This is a ratio, so 0 is the start, 1 is the end of the line.
- * @param out_final_l2r Same as out_l1r, but for line 2.
+ * @param outFinalL2r Same as outFinalL1r, but for line 2.
  * @return Whether they intersect.
  */
 bool lineSegsIntersect(
     const Point &l1p1, const Point &l1p2, const Point &l2p1, const Point &l2p2,
-    float* out_final_l1r, float* out_final_l2r
+    float* outFinalL1r, float* outFinalL2r
 ) {
     float l1r = 0.0f;
     float l2r = 0.0f;
     bool result = linesIntersect(l1p1, l1p2, l2p1, l2p2, &l1r, &l2r);
     
-    if(out_final_l1r) *out_final_l1r = l1r;
-    if(out_final_l2r) *out_final_l2r = l2r;
+    if(outFinalL1r) *outFinalL1r = l1r;
+    if(outFinalL2r) *outFinalL2r = l2r;
     
     if(result) {
         //Return whether they intersect at the segments.
@@ -1700,22 +1700,22 @@ bool lineSegsIntersect(
  * @param l1p2 Ending point of the first line segment.
  * @param l2p1 Starting point of the second line segment.
  * @param l2p2 Ending point of the second line segment.
- * @param out_intersection If not null, return the intersection point here.
+ * @param outIntersection If not null, return the intersection point here.
  * @return Whether they intersect.
  */
 bool lineSegsIntersect(
     const Point &l1p1, const Point &l1p2, const Point &l2p1, const Point &l2p2,
-    Point* out_intersection
+    Point* outIntersection
 ) {
     float r;
-    if(out_intersection) {
-        out_intersection->x = 0.0f;
-        out_intersection->y = 0.0f;
+    if(outIntersection) {
+        outIntersection->x = 0.0f;
+        outIntersection->y = 0.0f;
     }
     if(!lineSegsIntersect(l1p1, l1p2, l2p1, l2p2, &r, nullptr)) return false;
-    if(out_intersection) {
-        out_intersection->x = l1p1.x + (l1p2.x - l1p1.x) * r;
-        out_intersection->y = l1p1.y + (l1p2.y - l1p1.y) * r;
+    if(outIntersection) {
+        outIntersection->x = l1p1.x + (l1p2.x - l1p1.x) * r;
+        outIntersection->y = l1p1.y + (l1p2.y - l1p1.y) * r;
     }
     return true;
 }
@@ -1724,12 +1724,12 @@ bool lineSegsIntersect(
 /**
  * @brief Converts linear distance to angular distance.
  *
- * @param linear_dist Linear distance.
+ * @param linearDist Linear distance.
  * @param radius Radius of the circle.
  * @return The angular distance.
  */
-float linearDistToAngular(float linear_dist, float radius) {
-    return (float) (2 * atan(linear_dist / (2 * radius)));
+float linearDistToAngular(float linearDist, float radius) {
+    return (float) (2 * atan(linearDist / (2 * radius)));
 }
 
 
@@ -1741,16 +1741,16 @@ float linearDistToAngular(float linear_dist, float radius) {
  * @param l1p2 Point 2 of the first line.
  * @param l2p1 Point 1 of the second line.
  * @param l2p2 Point 2 of the second line.
- * @param out_l1r If not nullptr and they intersect, returns the distance from
+ * @param outL1r If not nullptr and they intersect, returns the distance from
  * the start of line 1 in which the intersection happens.
  * This is a ratio, so 0 is the start, 1 is the end of the line.
- * @param out_l2r Same as out_l1r, but for line 2.
+ * @param outL2r Same as outL1r, but for line 2.
  * @return Whether they intersect.
  */
 bool linesIntersect(
     const Point &l1p1, const Point &l1p2,
     const Point &l2p1, const Point &l2p2,
-    float* out_l1r, float* out_l2r
+    float* outL1r, float* outL2r
 ) {
     float div =
         (l2p2.y - l2p1.y) * (l1p2.x - l1p1.x) -
@@ -1759,18 +1759,18 @@ bool linesIntersect(
     if(div != 0.0f) {
         //They intersect.
         
-        if(out_l1r) {
+        if(outL1r) {
             //Calculate the intersection distance from the start of line 1.
-            *out_l1r =
+            *outL1r =
                 (
                     (l2p2.x - l2p1.x) * (l1p1.y - l2p1.y) -
                     (l2p2.y - l2p1.y) * (l1p1.x - l2p1.x)
                 ) / div;
         }
         
-        if(out_l2r) {
+        if(outL2r) {
             //Calculate the intersection distance from the start of line 2.
-            *out_l2r =
+            *outL2r =
                 (
                     (l1p2.x - l1p1.x) * (l1p1.y - l2p1.y) -
                     (l1p2.y - l1p1.y) * (l1p1.x - l2p1.x)
@@ -1782,8 +1782,8 @@ bool linesIntersect(
     } else {
         //They don't intersect.
         
-        if(out_l1r) *out_l1r = 0.0f;
-        if(out_l2r) *out_l2r = 0.0f;
+        if(outL1r) *outL1r = 0.0f;
+        if(outL2r) *outL2r = 0.0f;
         
         return false;
         
@@ -1799,18 +1799,18 @@ bool linesIntersect(
  * @param l1p2 Point 2 of the first line.
  * @param l2p1 Point 1 of the second line.
  * @param l2p2 Point 2 of the second line.
- * @param out_point If not nullptr and they intersect,
+ * @param outPoint If not nullptr and they intersect,
  * the coordinates of where it happens is returned here.
  * @return Whether they intersect.
  */
 bool linesIntersect(
     const Point &l1p1, const Point &l1p2,
     const Point &l2p1, const Point &l2p2,
-    Point* out_point
+    Point* outPoint
 ) {
-    if(out_point) {
-        out_point->x = 0.0f;
-        out_point->y = 0.0f;
+    if(outPoint) {
+        outPoint->x = 0.0f;
+        outPoint->y = 0.0f;
     }
     
     float r = 0.0f;
@@ -1818,9 +1818,9 @@ bool linesIntersect(
         return false;
     }
     
-    if(out_point) {
-        out_point->x = l1p1.x + (l1p2.x - l1p1.x) * r;
-        out_point->y = l1p1.y + (l1p2.y - l1p1.y) * r;
+    if(outPoint) {
+        outPoint->x = l1p1.x + (l1p2.x - l1p1.x) * r;
+        outPoint->y = l1p1.y + (l1p2.y - l1p1.y) * r;
     }
     
     return true;
@@ -1833,26 +1833,26 @@ bool linesIntersect(
  * @param start Coordinates of the initial point.
  * @param target Coordinates of the target point.
  * @param speed Speed at which the point can move.
- * @param reach_radius If the point is within this range of the target,
+ * @param reachRadius If the point is within this range of the target,
  * consider it as already being there.
  * @param mov Variable to return the amount of movement to.
  * @param angle Variable to return the angle the point faces to.
  * @param reached Variable to return whether the point reached the target.
- * @param delta_t How long the frame's tick is, in seconds.
+ * @param deltaT How long the frame's tick is, in seconds.
  */
 void movePoint(
     const Point &start, const Point &target,
-    float speed, float reach_radius,
-    Point* mov, float* angle, bool* reached, float delta_t
+    float speed, float reachRadius,
+    Point* mov, float* angle, bool* reached, float deltaT
 ) {
     Point diff = target - start;
     float dis = (float) sqrt(diff.x * diff.x + diff.y * diff.y);
     
-    if(dis > reach_radius) {
-        float move_amount =
-            (float) std::min((double) (dis / delta_t / 2.0f), (double) speed);
+    if(dis > reachRadius) {
+        float moveAmount =
+            (float) std::min((double) (dis / deltaT / 2.0f), (double) speed);
             
-        diff *= (move_amount / dis);
+        diff *= (moveAmount / dis);
         
         if(mov) *mov = diff;
         if(angle) *angle = (float) atan2(diff.y, diff.x);
@@ -1931,14 +1931,14 @@ bool pointsAreCollinear(
  * if the new coordinates are a new maximum in either axis.
  * Each axis is processed separately.
  *
- * @param max_coords Maximum coordinates so far.
- * @param new_coords New coordinates to process and, if necessary, update with.
+ * @param maxCoords Maximum coordinates so far.
+ * @param newCoords New coordinates to process and, if necessary, update with.
  */
-void updateMaxCoords(Point &max_coords, const Point &new_coords) {
-    max_coords.x =
-        std::max(max_coords.x, new_coords.x);
-    max_coords.y =
-        std::max(max_coords.y, new_coords.y);
+void updateMaxCoords(Point &maxCoords, const Point &newCoords) {
+    maxCoords.x =
+        std::max(maxCoords.x, newCoords.x);
+    maxCoords.y =
+        std::max(maxCoords.y, newCoords.y);
 }
 
 
@@ -1947,14 +1947,14 @@ void updateMaxCoords(Point &max_coords, const Point &new_coords) {
  * if the new coordinates are a new minimum in either axis.
  * Each axis is processed separately.
  *
- * @param min_coords Minimum coordinates so far.
- * @param new_coords New coordinates to process and, if necessary, update with.
+ * @param minCoords Minimum coordinates so far.
+ * @param newCoords New coordinates to process and, if necessary, update with.
  */
-void updateMinCoords(Point &min_coords, const Point &new_coords) {
-    min_coords.x =
-        std::min(min_coords.x, new_coords.x);
-    min_coords.y =
-        std::min(min_coords.y, new_coords.y);
+void updateMinCoords(Point &minCoords, const Point &newCoords) {
+    minCoords.x =
+        std::min(minCoords.x, newCoords.x);
+    minCoords.y =
+        std::min(minCoords.y, newCoords.y);
 }
 
 
@@ -1963,15 +1963,15 @@ void updateMinCoords(Point &min_coords, const Point &new_coords) {
  * and maximum coordinates record, if the new coordinates are a new
  * minimum or maximum in either axis. Each axis is processed separately.
  *
- * @param min_coords Minimum coordinates so far.
- * @param max_coords Maximum coordinates so far.
- * @param new_coords New coordinates to process and, if necessary, update with.
+ * @param minCoords Minimum coordinates so far.
+ * @param maxCoords Maximum coordinates so far.
+ * @param newCoords New coordinates to process and, if necessary, update with.
  */
 void updateMinMaxCoords(
-    Point &min_coords, Point &max_coords, const Point &new_coords
+    Point &minCoords, Point &maxCoords, const Point &newCoords
 ) {
-    updateMinCoords(min_coords, new_coords);
-    updateMaxCoords(max_coords, new_coords);
+    updateMinCoords(minCoords, newCoords);
+    updateMaxCoords(maxCoords, newCoords);
 }
 
 
@@ -2033,40 +2033,40 @@ bool rectanglesIntersect(
  * rectangle or not. This includes being completely inside the rectangle.
  *
  * @param rect1 Center coordinates of the first rectangle.
- * @param rect_dim1 Dimensions of the first rectangle.
- * @param rect_angle1 Angle the first rectangle is facing.
+ * @param rectDim1 Dimensions of the first rectangle.
+ * @param rectAngle1 Angle the first rectangle is facing.
  * @param rect2 Center coordinates of the second rectangle.
- * @param rect_dim2 Dimensions of the second rectangle.
- * @param rect_angle2 Angle the second rectangle is facing.
- * @param out_overlap_dist If not nullptr, the amount of overlap is
+ * @param rectDim2 Dimensions of the second rectangle.
+ * @param rectAngle2 Angle the second rectangle is facing.
+ * @param outOverlapDist If not nullptr, the amount of overlap is
  * returned here.
- * @param out_overlap_angle If not nullptr, the direction that rectangle 1 would
+ * @param outOverlapAngle If not nullptr, the direction that rectangle 1 would
  * push rectangle 2 away with is returned here.
  * @return Whether they intersect.
  */
 bool rectanglesIntersect(
-    const Point &rect1, const Point &rect_dim1, float rect_angle1,
-    const Point &rect2, const Point &rect_dim2, float rect_angle2,
-    float* out_overlap_dist, float* out_overlap_angle
+    const Point &rect1, const Point &rectDim1, float rectAngle1,
+    const Point &rect2, const Point &rectDim2, float rectAngle2,
+    float* outOverlapDist, float* outOverlapAngle
 ) {
     //Start by getting the vertexes of the rectangles.
-    Point tl(-rect_dim1.x / 2.0f, -rect_dim1.y / 2.0f);
-    Point br(rect_dim1.x / 2.0f, rect_dim1.y / 2.0f);
-    vector<Point> rect1_vertexes {
-        rotatePoint(tl, rect_angle1) + rect1,
-        rotatePoint(Point(tl.x, br.y), rect_angle1) + rect1,
-        rotatePoint(br, rect_angle1) + rect1,
-        rotatePoint(Point(br.x, tl.y), rect_angle1) + rect1
+    Point tl(-rectDim1.x / 2.0f, -rectDim1.y / 2.0f);
+    Point br(rectDim1.x / 2.0f, rectDim1.y / 2.0f);
+    vector<Point> rect1Vertexes {
+        rotatePoint(tl, rectAngle1) + rect1,
+        rotatePoint(Point(tl.x, br.y), rectAngle1) + rect1,
+        rotatePoint(br, rectAngle1) + rect1,
+        rotatePoint(Point(br.x, tl.y), rectAngle1) + rect1
     };
     
-    tl = Point(-rect_dim2.x / 2, -rect_dim2.y / 2);
-    br = Point(rect_dim2.x / 2, rect_dim2.y / 2);
+    tl = Point(-rectDim2.x / 2, -rectDim2.y / 2);
+    br = Point(rectDim2.x / 2, rectDim2.y / 2);
     
-    vector<Point> rect2_vertexes {
-        rotatePoint(tl, rect_angle2) + rect2,
-        rotatePoint(Point(tl.x, br.y), rect_angle2) + rect2,
-        rotatePoint(br, rect_angle2) + rect2,
-        rotatePoint(Point(br.x, tl.y), rect_angle2) + rect2
+    vector<Point> rect2Vertexes {
+        rotatePoint(tl, rectAngle2) + rect2,
+        rotatePoint(Point(tl.x, br.y), rectAngle2) + rect2,
+        rotatePoint(br, rectAngle2) + rect2,
+        rotatePoint(Point(br.x, tl.y), rectAngle2) + rect2
     };
     
     //Code from https://www.youtube.com/watch?v=SUyG3aV
@@ -2075,13 +2075,13 @@ bool rectanglesIntersect(
     //(Separating Axis Theorem).
     
     Point normal(0, 0);
-    float min_overlap = INFINITY;
+    float minOverlap = INFINITY;
     
-    vector<Point> shape1 = rect1_vertexes;
+    vector<Point> shape1 = rect1Vertexes;
     
     for(int s = 0; s < 2; s++) {
         if(s == 1) {
-            shape1 = rect2_vertexes;
+            shape1 = rect2Vertexes;
         }
         
         //We only need to test the first two edges,
@@ -2093,23 +2093,23 @@ bool rectanglesIntersect(
             Point edge = b - a;
             Point axis(-edge.y, edge.x);
             
-            float min_1 = INFINITY;
-            float max_1 = -INFINITY;
-            float min_2 = INFINITY;
-            float max_2 = -INFINITY;
+            float min1 = INFINITY;
+            float max1 = -INFINITY;
+            float min2 = INFINITY;
+            float max2 = -INFINITY;
             
             //Project each vertex onto the axis.
-            projectVertexes(rect1_vertexes, axis, &min_1, &max_1);
-            projectVertexes(rect2_vertexes, axis, &min_2, &max_2);
+            projectVertexes(rect1Vertexes, axis, &min1, &max1);
+            projectVertexes(rect2Vertexes, axis, &min2, &max2);
             
-            if(min_1 >= max_2 || min_2 >= max_1) {
+            if(min1 >= max2 || min2 >= max1) {
                 //We found an opening, there can't be a collision.
                 return false;
             }
             
-            float cur_overlap = std::min(max_1 - min_2, max_2 - min_1);
-            if(cur_overlap < min_overlap) {
-                min_overlap = cur_overlap;
+            float curOverlap = std::min(max1 - min2, max2 - min1);
+            if(curOverlap < minOverlap) {
+                minOverlap = curOverlap;
                 normal = axis;
             }
         }
@@ -2117,7 +2117,7 @@ bool rectanglesIntersect(
     
     //The size of the axis results in a much bigger overlap,
     //so we correct it here.
-    min_overlap /= Distance(Point(0.0f), normal).toFloat();
+    minOverlap /= Distance(Point(0.0f), normal).toFloat();
     
     //Ensure the normal is facing outwards.
     Point dir = rect2 - rect1;
@@ -2125,11 +2125,11 @@ bool rectanglesIntersect(
         normal *= -1;
     }
     
-    if(out_overlap_dist) {
-        *out_overlap_dist = min_overlap;
+    if(outOverlapDist) {
+        *outOverlapDist = minOverlap;
     }
-    if(out_overlap_angle) {
-        *out_overlap_angle = getAngle(Point(0.0f), normal);
+    if(outOverlapAngle) {
+        *outOverlapAngle = getAngle(Point(0.0f), normal);
     }
     
     return true;
@@ -2141,28 +2141,28 @@ bool rectanglesIntersect(
  * specified "box" size as snuggly as possible, whilst keeping their original
  * aspect ratio.
  *
- * @param original_size The original size coordinates.
- * @param box_size Width and height of the box to fit into.
+ * @param originalSize The original size coordinates.
+ * @param boxSize Width and height of the box to fit into.
  * @return The resized dimensions.
  */
 Point resizeToBoxKeepingAspectRatio(
-    const Point &original_size,
-    const Point &box_size
+    const Point &originalSize,
+    const Point &boxSize
 ) {
-    if(original_size.y == 0.0f || box_size.y == 0.0f) return Point();
-    float original_aspect_ratio = original_size.x / original_size.y;
-    float box_aspect_ratio = box_size.x / box_size.y;
-    if(box_aspect_ratio > original_aspect_ratio) {
+    if(originalSize.y == 0.0f || boxSize.y == 0.0f) return Point();
+    float originalAspectRatio = originalSize.x / originalSize.y;
+    float boxAspectRatio = boxSize.x / boxSize.y;
+    if(boxAspectRatio > originalAspectRatio) {
         return
             Point(
-                original_size.x * box_size.y / original_size.y,
-                box_size.y
+                originalSize.x * boxSize.y / originalSize.y,
+                boxSize.y
             );
     } else {
         return
             Point(
-                box_size.x,
-                original_size.y * box_size.x / original_size.x
+                boxSize.x,
+                originalSize.y * boxSize.x / originalSize.x
             );
     }
 }
@@ -2188,10 +2188,10 @@ Point rotatePoint(const Point &coords, float angle) {
  * @brief Converts a string to a point.
  *
  * @param s String to convert.
- * @param out_z If not nullptr, the third word is returned here.
+ * @param outZ If not nullptr, the third word is returned here.
  * @return The (X and Y) coordinates.
  */
-Point s2p(const string &s, float* out_z) {
+Point s2p(const string &s, float* outZ) {
     vector<string> words = split(s);
     Point p;
     if(words.size() >= 1) {
@@ -2200,8 +2200,8 @@ Point s2p(const string &s, float* out_z) {
     if(words.size() >= 2) {
         p.y = (float) s2f(words[1]);
     }
-    if(out_z && words.size() >= 3) {
-        *out_z = (float) s2f(words[2]);
+    if(outZ && words.size() >= 3) {
+        *outZ = (float) s2f(words[2]);
     }
     return p;
 }
@@ -2212,53 +2212,53 @@ Point s2p(const string &s, float* out_z) {
  * based on a number of settings. If any of the settings cannot be respected,
  * a scale of 1,1 will be returned, even if that goes against the box.
  *
- * @param rect_size Width and height of the rectangle to scale.
- * @param box_size Box width and height.
- * @param can_grow_x Whether it's possible to increase the width.
- * @param can_grow_y Whether it's possible to increase the height.
- * @param can_shrink_x Whether it's possible to decrease the width.
- * @param can_shrink_y Whether it's possible to decrease the height.
- * @param can_change_ratio Whether it's possible to change the aspect ratio
+ * @param rectSize Width and height of the rectangle to scale.
+ * @param boxSize Box width and height.
+ * @param canGrowX Whether it's possible to increase the width.
+ * @param canGrowY Whether it's possible to increase the height.
+ * @param canShrinkX Whether it's possible to decrease the width.
+ * @param canShrinkY Whether it's possible to decrease the height.
+ * @param canChangeRatio Whether it's possible to change the aspect ratio
  * of the rectangle.
  * @return The scale factor for X and for Y.
  */
 Point scaleRectangleToBox(
-    const Point &rect_size, const Point &box_size,
-    bool can_grow_x, bool can_grow_y,
-    bool can_shrink_x, bool can_shrink_y,
-    bool can_change_ratio
+    const Point &rectSize, const Point &boxSize,
+    bool canGrowX, bool canGrowY,
+    bool canShrinkX, bool canShrinkY,
+    bool canChangeRatio
 ) {
-    Point final_scale(1.0f, 1.0f);
+    Point finalScale(1.0f, 1.0f);
     
     if(
-        rect_size.x == 0.0f || rect_size.y == 0.0f ||
-        box_size.x == 0.0f || box_size.y == 0.0f
+        rectSize.x == 0.0f || rectSize.y == 0.0f ||
+        boxSize.x == 0.0f || boxSize.y == 0.0f
     ) {
-        return final_scale;
+        return finalScale;
     }
     
-    Point box_to_use =
-        can_change_ratio ?
-        box_size :
-        resizeToBoxKeepingAspectRatio(rect_size, box_size);
-    bool can_scale_x =
-        (rect_size.x < box_to_use.x && can_grow_x) ||
-        (rect_size.x > box_to_use.x && can_shrink_x);
-    bool can_scale_y =
-        (rect_size.y < box_to_use.y && can_grow_y) ||
-        (rect_size.y > box_to_use.y && can_shrink_y);
+    Point boxToUse =
+        canChangeRatio ?
+        boxSize :
+        resizeToBoxKeepingAspectRatio(rectSize, boxSize);
+    bool canScaleX =
+        (rectSize.x < boxToUse.x && canGrowX) ||
+        (rectSize.x > boxToUse.x && canShrinkX);
+    bool canScaleY =
+        (rectSize.y < boxToUse.y && canGrowY) ||
+        (rectSize.y > boxToUse.y && canShrinkY);
         
-    if(can_change_ratio) {
-        if(can_scale_x) final_scale.x = box_to_use.x / rect_size.x;
-        if(can_scale_y) final_scale.y = box_to_use.y / rect_size.y;
+    if(canChangeRatio) {
+        if(canScaleX) finalScale.x = boxToUse.x / rectSize.x;
+        if(canScaleY) finalScale.y = boxToUse.y / rectSize.y;
     } else {
-        if(can_scale_x && can_scale_y) {
-            final_scale.x = box_to_use.x / rect_size.x;
-            final_scale.y = box_to_use.y / rect_size.y;
+        if(canScaleX && canScaleY) {
+            finalScale.x = boxToUse.x / rectSize.x;
+            finalScale.y = boxToUse.y / rectSize.y;
         }
     }
     
-    return final_scale;
+    return finalScale;
 }
 
 
@@ -2268,47 +2268,47 @@ Point scaleRectangleToBox(
  * several buttons the player can select multidirectionally in.
  * Also, it loops around.
  *
- * @param item_coordinates Vector with the center coordinates of all items.
- * @param selected_item Index of the selected item.
+ * @param itemCoordinates Vector with the center coordinates of all items.
+ * @param selectedItem Index of the selected item.
  * @param direction Angle specifying the direction.
- * @param loop_region Width and height of the loop region.
+ * @param loopRegion Width and height of the loop region.
  * @return The next item's index in the list.
  */
 size_t selectNextItemDirectionally(
-    const vector<Point> &item_coordinates, size_t selected_item,
-    float direction, const Point &loop_region
+    const vector<Point> &itemCoordinates, size_t selectedItem,
+    float direction, const Point &loopRegion
 ) {
     const float MIN_BLINDSPOT_ANGLE = (float) (TAU * 0.17f);
     const float MAX_BLINDSPOT_ANGLE = (float) (TAU * 0.33f);
     
-    float normalized_dir = normalizeAngle(direction);
-    const Point &sel_coords = item_coordinates[selected_item];
-    float best_score = FLT_MAX;
-    size_t best_item = selected_item;
+    float normalizedDir = normalizeAngle(direction);
+    const Point &selCoords = itemCoordinates[selectedItem];
+    float bestScore = FLT_MAX;
+    size_t bestItem = selectedItem;
     
     //Check each item that isn't the current one.
-    for(size_t i = 0; i < item_coordinates.size(); i++) {
+    for(size_t i = 0; i < itemCoordinates.size(); i++) {
     
-        if(i == selected_item) continue;
+        if(i == selectedItem) continue;
         
-        Point i_base_coords = item_coordinates[i];
+        Point iBaseCoords = itemCoordinates[i];
         
         //Get the standard coordinates for this item, and make them relative.
-        Point i_coords = i_base_coords;
-        i_coords = i_coords - sel_coords;
+        Point iCoords = iBaseCoords;
+        iCoords = iCoords - selCoords;
         
         //Rotate the coordinates such that the specified direction
         //lands to the right.
-        i_coords = rotatePoint(i_coords, -normalized_dir);
+        iCoords = rotatePoint(iCoords, -normalizedDir);
         
         //Check if it's between the blind spot angles.
         //We get the same result whether the Y is positive or negative,
         //so let's simplify things and make it positive.
-        float rel_angle =
-            getAngle(Point(i_coords.x, (float) fabs(i_coords.y)));
+        float relAngle =
+            getAngle(Point(iCoords.x, (float) fabs(iCoords.y)));
         if(
-            rel_angle >= MIN_BLINDSPOT_ANGLE &&
-            rel_angle <= MAX_BLINDSPOT_ANGLE
+            relAngle >= MIN_BLINDSPOT_ANGLE &&
+            relAngle <= MAX_BLINDSPOT_ANGLE
         ) {
             //If so, never let this item be chosen, no matter what. This is
             //useful to stop a list of items with no vertical variance from
@@ -2316,13 +2316,13 @@ size_t selectNextItemDirectionally(
             continue;
         }
         
-        if(i_coords.x > 0.0f) {
+        if(iCoords.x > 0.0f) {
             //If this item is in front of the selected one,
             //give it a score like normal.
-            float score = i_coords.x + (float) fabs(i_coords.y);
-            if(score < best_score) {
-                best_score = score;
-                best_item = i;
+            float score = iCoords.x + (float) fabs(iCoords.y);
+            if(score < bestScore) {
+                bestScore = score;
+                bestItem = i;
             }
             
         } else {
@@ -2344,33 +2344,33 @@ size_t selectNextItemDirectionally(
                     
                     //Get the coordinates in this parallel region, and make
                     //them relative.
-                    i_coords = i_base_coords;
-                    i_coords.x += loop_region.x * c;
-                    i_coords.y += loop_region.y * r;
-                    i_coords = i_coords - sel_coords;
+                    iCoords = iBaseCoords;
+                    iCoords.x += loopRegion.x * c;
+                    iCoords.y += loopRegion.y * r;
+                    iCoords = iCoords - selCoords;
                     
                     //Rotate the coordinates such that the specified direction
                     //lands to the right.
-                    i_coords = rotatePoint(i_coords, -normalized_dir);
+                    iCoords = rotatePoint(iCoords, -normalizedDir);
                     
                     //If these coordinates are behind the selected item,
                     //they cannot be selected.
-                    if(i_coords.x < 0.0f) {
+                    if(iCoords.x < 0.0f) {
                         continue;
                     }
                     
                     //Finally, figure out if this is the new best item.
-                    float score = i_coords.x + (float) fabs(i_coords.y);
-                    if(score < best_score) {
-                        best_score = score;
-                        best_item = i;
+                    float score = iCoords.x + (float) fabs(iCoords.y);
+                    if(score < bestScore) {
+                        bestScore = score;
+                        bestItem = i;
                     }
                 }
             }
         }
     }
     
-    return best_item;
+    return bestItem;
 }
 
 

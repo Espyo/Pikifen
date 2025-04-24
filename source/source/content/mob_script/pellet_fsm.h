@@ -16,7 +16,7 @@
 /**
  * @brief Functions about the Onion's finite state machine and behavior.
  */
-namespace pellet_fsm {
+namespace PelletFsm {
 void createFsm(MobType* typ);
 
 void standStill(Mob* m, void* info1, void* info2);

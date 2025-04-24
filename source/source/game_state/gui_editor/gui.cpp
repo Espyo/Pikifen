@@ -24,9 +24,9 @@ void GuiEditor::openLoadDialog() {
     reloadGuiDefs();
     
     //Set up the picker's behavior and data.
-    vector<PickerItem> file_items;
+    vector<PickerItem> fileItems;
     for(const auto &f : game.content.guiDefs.manifests) {
-        file_items.push_back(
+        fileItems.push_back(
             PickerItem(
                 f.first,
                 "Pack: " + game.content.packs.list[f.second.pack].name, "",
@@ -37,7 +37,7 @@ void GuiEditor::openLoadDialog() {
     }
     
     loadDialogPicker = Picker(this);
-    loadDialogPicker.items = file_items;
+    loadDialogPicker.items = fileItems;
     loadDialogPicker.pickCallback =
         std::bind(
             &GuiEditor::pickGuiDefFile, this,
@@ -165,17 +165,17 @@ void GuiEditor::processGuiControlPanel() {
     //Current file text.
     ImGui::SameLine();
     monoText("%s", manifest.internalName.c_str());
-    string file_tooltip =
+    string fileTooltip =
         getFileTooltip(manifest.path) + "\n\n"
         "File state: ";
     if(!changesMgr.existsOnDisk()) {
-        file_tooltip += "Not saved to disk yet!";
+        fileTooltip += "Not saved to disk yet!";
     } else if(changesMgr.hasUnsavedChanges()) {
-        file_tooltip += "You have unsaved changes.";
+        fileTooltip += "You have unsaved changes.";
     } else {
-        file_tooltip += "Everything ok.";
+        fileTooltip += "Everything ok.";
     }
-    setTooltip(file_tooltip);
+    setTooltip(fileTooltip);
     
     ImGui::Spacer();
     
@@ -197,26 +197,26 @@ void GuiEditor::processGuiControlPanel() {
  */
 void GuiEditor::processGuiDeleteGuiDefDialog() {
     //Explanation text.
-    string explanation_str;
+    string explanationStr;
     if(!changesMgr.existsOnDisk()) {
-        explanation_str =
+        explanationStr =
             "You have never saved this GUI definition to disk, so if you\n"
             "delete, you will only lose your unsaved progress.";
     } else {
-        explanation_str =
+        explanationStr =
             "If you delete, you will lose all unsaved progress, and the\n"
             "GUI definition's files on the disk will be gone FOREVER!";
     }
-    ImGui::SetupCentering(ImGui::CalcTextSize(explanation_str.c_str()).x);
-    ImGui::Text("%s", explanation_str.c_str());
+    ImGui::SetupCentering(ImGui::CalcTextSize(explanationStr.c_str()).x);
+    ImGui::Text("%s", explanationStr.c_str());
     
     //Final warning text.
-    string final_warning_str =
+    string finalWarningStr =
         "Are you sure you want to delete the current GUI definition?";
-    ImGui::SetupCentering(ImGui::CalcTextSize(final_warning_str.c_str()).x);
+    ImGui::SetupCentering(ImGui::CalcTextSize(finalWarningStr.c_str()).x);
     ImGui::TextColored(
         ImVec4(0.8, 0.6, 0.6, 1.0),
-        "%s", final_warning_str.c_str()
+        "%s", finalWarningStr.c_str()
     );
     
     //Cancel button.
@@ -401,9 +401,9 @@ void GuiEditor::processGuiMenuBar() {
                     "Show tooltips", "", &game.options.editors.showTooltips
                 )
             ) {
-                string state_str =
+                string stateStr =
                     game.options.editors.showTooltips ? "Enabled" : "Disabled";
-                setStatus(state_str + " tooltips.");
+                setStatus(stateStr + " tooltips.");
                 saveOptions();
             }
             setTooltip(
@@ -414,7 +414,7 @@ void GuiEditor::processGuiMenuBar() {
             
             //General help item.
             if(ImGui::MenuItem("Help...")) {
-                string help_str =
+                string helpStr =
                     "This editor allows you to change where each item "
                     "in a graphical user interface is, and how big it is. "
                     "It works both for the gameplay HUD and any menu's items. "
@@ -430,7 +430,7 @@ void GuiEditor::processGuiMenuBar() {
                     "If you need more help on how to use the GUI editor, "
                     "check out the tutorial in the manual, located "
                     "in the engine's folder.";
-                openHelpDialog(help_str, "gui.html");
+                openHelpDialog(helpStr, "gui.html");
             }
             setTooltip(
                 "Opens a general help message for this editor."
@@ -454,13 +454,13 @@ void GuiEditor::processGuiNewDialog() {
         processGuiNewDialogPackWidgets(&newDialog.pack);
         
     //GUI definition combo.
-    vector<string> gui_files;
+    vector<string> guiFiles;
     for(const auto &g : game.content.guiDefs.manifests) {
-        gui_files.push_back(g.first);
+        guiFiles.push_back(g.first);
     }
     ImGui::Spacer();
     newDialog.mustUpdate |=
-        monoCombo("File", &newDialog.internalName, gui_files);
+        monoCombo("File", &newDialog.internalName, guiFiles);
         
     //Check if everything's ok.
     if(newDialog.mustUpdate) {
@@ -478,11 +478,11 @@ void GuiEditor::processGuiNewDialog() {
                 "base pack! The idea is you pick one of those so it'll\n"
                 "be copied onto a different pack for you to edit.";
         } else {
-            ContentManifest temp_man;
-            temp_man.internalName = newDialog.internalName;
-            temp_man.pack = newDialog.pack;
+            ContentManifest tempMan;
+            tempMan.internalName = newDialog.internalName;
+            tempMan.pack = newDialog.pack;
             newDialog.defPath =
-                game.content.guiDefs.manifestToPath(temp_man);
+                game.content.guiDefs.manifestToPath(tempMan);
             if(fileExists(newDialog.defPath)) {
                 newDialog.problem =
                     "There is already a GUI definition\n"
@@ -499,7 +499,7 @@ void GuiEditor::processGuiNewDialog() {
         ImGui::BeginDisabled();
     }
     if(ImGui::Button("Create GUI definition", ImVec2(180, 40))) {
-        auto really_create = [this] () {
+        auto reallyCreate = [this] () {
             createGuiDef(string(newDialog.internalName), newDialog.pack);
             closeTopDialog();
             closeTopDialog(); //Close the load dialog.
@@ -509,9 +509,9 @@ void GuiEditor::processGuiNewDialog() {
             newDialog.pack == FOLDER_NAMES::BASE_PACK &&
             !game.options.advanced.engineDev
         ) {
-            openBaseContentWarningDialog(really_create);
+            openBaseContentWarningDialog(reallyCreate);
         } else {
-            really_create();
+            reallyCreate();
         }
     }
     if(!newDialog.problem.empty()) {
@@ -596,16 +596,16 @@ void GuiEditor::processGuiOptionsDialog() {
 void GuiEditor::processGuiPanelItem() {
     if(curItem == INVALID) return;
     
-    Item* cur_item_ptr = &items[curItem];
+    Item* curItemPtr = &items[curItem];
     
-    if(cur_item_ptr->size.x == 0.0f) return;
+    if(curItemPtr->size.x == 0.0f) return;
     
     //Item's name text.
-    ImGui::Text("Item \"%s\" data:", cur_item_ptr->name.c_str());
+    ImGui::Text("Item \"%s\" data:", curItemPtr->name.c_str());
     
     //Center values.
     if(
-        ImGui::DragFloat2("Center", (float*) &cur_item_ptr->center, 0.10f)
+        ImGui::DragFloat2("Center", (float*) &curItemPtr->center, 0.10f)
     ) {
         changesMgr.markAsChanged();
     }
@@ -619,7 +619,7 @@ void GuiEditor::processGuiPanelItem() {
     //Size values.
     if(
         processGuiSizeWidgets(
-            "Size", cur_item_ptr->size, 0.10f, false, false, 0.10f
+            "Size", curItemPtr->size, 0.10f, false, false, 0.10f
         )
     ) {
         changesMgr.markAsChanged();
@@ -631,39 +631,39 @@ void GuiEditor::processGuiPanelItem() {
         WIDGET_EXPLANATION_DRAG
     );
     
-    Point top_left(
-        cur_item_ptr->center.x - cur_item_ptr->size.x / 2.0f,
-        cur_item_ptr->center.y - cur_item_ptr->size.y / 2.0f
+    Point topLeft(
+        curItemPtr->center.x - curItemPtr->size.x / 2.0f,
+        curItemPtr->center.y - curItemPtr->size.y / 2.0f
     );
-    Point bottom_right(
-        cur_item_ptr->center.x + cur_item_ptr->size.x / 2.0f,
-        cur_item_ptr->center.y + cur_item_ptr->size.y / 2.0f
+    Point bottomRight(
+        curItemPtr->center.x + curItemPtr->size.x / 2.0f,
+        curItemPtr->center.y + curItemPtr->size.y / 2.0f
     );
-    bool update_from_corners = false;
+    bool updateFromCorners = false;
     
     //Top-left coordinates values.
     ImGui::Spacer();
-    if(ImGui::DragFloat2("Top-left", (float*) &top_left, 0.10f)) {
-        update_from_corners = true;
+    if(ImGui::DragFloat2("Top-left", (float*) &topLeft, 0.10f)) {
+        updateFromCorners = true;
     }
     
     //Bottom-right coordinates values.
-    if(ImGui::DragFloat2("Bottom-right", (float*) &bottom_right, 0.10f)) {
-        update_from_corners = true;
+    if(ImGui::DragFloat2("Bottom-right", (float*) &bottomRight, 0.10f)) {
+        updateFromCorners = true;
     }
     
-    if(update_from_corners) {
-        Point new_size(
-            bottom_right.x - top_left.x,
-            bottom_right.y - top_left.y
+    if(updateFromCorners) {
+        Point newSize(
+            bottomRight.x - topLeft.x,
+            bottomRight.y - topLeft.y
         );
-        if(new_size.x > 0.0f && new_size.y > 0.0f) {
-            Point new_center(
-                (top_left.x + bottom_right.x) / 2.0f,
-                (top_left.y + bottom_right.y) / 2.0f
+        if(newSize.x > 0.0f && newSize.y > 0.0f) {
+            Point newCenter(
+                (topLeft.x + bottomRight.x) / 2.0f,
+                (topLeft.y + bottomRight.y) / 2.0f
             );
-            cur_item_ptr->center = new_center;
-            cur_item_ptr->size = new_size;
+            curItemPtr->center = newCenter;
+            curItemPtr->size = newSize;
         }
         changesMgr.markAsChanged();
     }
@@ -813,27 +813,27 @@ void GuiEditor::processGuiToolbar() {
     );
     
     //Snap mode button.
-    ALLEGRO_BITMAP* snap_mode_bmp = nullptr;
-    string snap_mode_description;
+    ALLEGRO_BITMAP* snapModeBmp = nullptr;
+    string snapModeDescription;
     if(game.options.guiEd.snap) {
-        snap_mode_bmp = editorIcons[EDITOR_ICON_SNAP_GRID];
-        snap_mode_description = "grid. Holding Shift disables snapping.";
+        snapModeBmp = editorIcons[EDITOR_ICON_SNAP_GRID];
+        snapModeDescription = "grid. Holding Shift disables snapping.";
     } else {
-        snap_mode_bmp = editorIcons[EDITOR_ICON_SNAP_NOTHING];
-        snap_mode_description = "nothing. Holding Shift snaps to grid.";
+        snapModeBmp = editorIcons[EDITOR_ICON_SNAP_NOTHING];
+        snapModeDescription = "nothing. Holding Shift snaps to grid.";
     }
     
     ImGui::SameLine(0, 16);
     if(
         ImGui::ImageButton(
-            "snapButton", snap_mode_bmp,
+            "snapButton", snapModeBmp,
             Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {
         snapModeCmd(1.0f);
     }
     setTooltip(
-        "Current snap mode: " + snap_mode_description,
+        "Current snap mode: " + snapModeDescription,
         "X"
     );
 }

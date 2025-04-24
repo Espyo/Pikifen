@@ -38,28 +38,28 @@ BridgeType::BridgeType() :
         "Changing its max health changes how long Pikmin "
         "work on it for, or how many fragments are needed.";
         
-    AreaEditorProp aep_chunks;
-    aep_chunks.name = "Chunks";
-    aep_chunks.var = "chunks";
-    aep_chunks.type = AEMP_TYPE_INT;
-    aep_chunks.defValue = "10";
-    aep_chunks.minValue = 1;
-    aep_chunks.maxValue = 50;
-    aep_chunks.tooltip =
+    AreaEditorProp aepChunks;
+    aepChunks.name = "Chunks";
+    aepChunks.var = "chunks";
+    aepChunks.type = AEMP_TYPE_INT;
+    aepChunks.defValue = "10";
+    aepChunks.minValue = 1;
+    aepChunks.maxValue = 50;
+    aepChunks.tooltip =
         "How many chunks it's divided by. "
         "If the bridge goes up or down, it may need "
         "more chunks in order to allow enough steps.";
-    areaEditorProps.push_back(aep_chunks);
+    areaEditorProps.push_back(aepChunks);
     
-    bridge_fsm::createFsm(this);
+    BridgeFsm::createFsm(this);
 }
 
 
 /**
  * @brief Returns the vector of animation conversions.
  */
-anim_conversion_vector BridgeType::getAnimConversions() const {
-    anim_conversion_vector v;
+AnimConversionVector BridgeType::getAnimConversions() const {
+    AnimConversionVector v;
     v.push_back(std::make_pair(BRIDGE_ANIM_IDLING, "idling"));
     v.push_back(std::make_pair(BRIDGE_ANIM_DESTROYED, "destroyed"));
     return v;
@@ -72,9 +72,9 @@ anim_conversion_vector BridgeType::getAnimConversions() const {
  * @param file File to read from.
  */
 void BridgeType::loadCatProperties(DataNode* file) {
-    ReaderSetter rs(file);
+    ReaderSetter bRS(file);
     
-    rs.set("rail_width", railWidth);
+    bRS.set("rail_width", railWidth);
 }
 
 
@@ -84,11 +84,11 @@ void BridgeType::loadCatProperties(DataNode* file) {
  * @param file File to read from.
  */
 void BridgeType::loadCatResources(DataNode* file) {
-    ReaderSetter rs(file);
+    ReaderSetter bRS(file);
     
-    rs.set("main_texture", mainTextureBmpName);
-    rs.set("left_rail_texture", leftRailTextureBmpName);
-    rs.set("right_rail_texture", rightRailTextureBmpName);
+    bRS.set("main_texture", mainTextureBmpName);
+    bRS.set("left_rail_texture", leftRailTextureBmpName);
+    bRS.set("right_rail_texture", rightRailTextureBmpName);
     
     if(!mainTextureBmpName.empty()) {
         bmpMainTexture = game.content.bitmaps.list.get(mainTextureBmpName);

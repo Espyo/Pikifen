@@ -27,19 +27,19 @@ ShipType::ShipType() :
     
     targetType = MOB_TARGET_FLAG_NONE;
     
-    AreaEditorProp aep_pik_inside;
-    aep_pik_inside.name = "Pikmin inside";
-    aep_pik_inside.var = "pikmin_inside";
-    aep_pik_inside.type = AEMP_TYPE_TEXT;
-    aep_pik_inside.defValue = "";
-    aep_pik_inside.tooltip =
+    AreaEditorProp aepPikInside;
+    aepPikInside.name = "Pikmin inside";
+    aepPikInside.var = "pikmin_inside";
+    aepPikInside.type = AEMP_TYPE_TEXT;
+    aepPikInside.defValue = "";
+    aepPikInside.tooltip =
         "How many Pikmin are inside. "
         "One word per maturity. The first three words are for the first type, "
         "then three more for the second type, and so on. "
         "e.g.: \"8 0 1\" means it has 8 leaf Pikmin inside, and 1 flower.";
-    areaEditorProps.push_back(aep_pik_inside);
+    areaEditorProps.push_back(aepPikInside);
     
-    ship_fsm::createFsm(this);
+    ShipFsm::createFsm(this);
 }
 
 
@@ -56,8 +56,8 @@ ShipType::~ShipType() {
  *
  * @return The vector.
  */
-anim_conversion_vector ShipType::getAnimConversions() const {
-    anim_conversion_vector v;
+AnimConversionVector ShipType::getAnimConversions() const {
+    AnimConversionVector v;
     v.push_back(std::make_pair(SHIP_ANIM_IDLING, "idling"));
     return v;
 }
@@ -69,12 +69,12 @@ anim_conversion_vector ShipType::getAnimConversions() const {
  * @param file File to read from.
  */
 void ShipType::loadCatProperties(DataNode* file) {
-    ReaderSetter rs(file);
+    ReaderSetter sRS(file);
     
-    rs.set("can_heal", canHeal);
-    rs.set("control_point_radius", controlPointRadius);
-    rs.set("control_point_offset", controlPointOffset);
-    rs.set("receptacle_offset", receptacleOffset);
+    sRS.set("can_heal", canHeal);
+    sRS.set("control_point_radius", controlPointRadius);
+    sRS.set("control_point_offset", controlPointOffset);
+    sRS.set("receptacle_offset", receptacleOffset);
     
     nest->loadProperties(file);
 }
@@ -89,11 +89,11 @@ void ShipType::loadCatResources(DataNode* file) {
     //We don't actually need to load any, but we know that if this function
     //is run, then the animations are definitely loaded.
     //Now's a good time to check the leg body parts.
-    for(size_t b = 0; b < nest->leg_body_parts.size(); b++) {
-        if(animDb->findBodyPart(nest->leg_body_parts[b]) == INVALID) {
+    for(size_t b = 0; b < nest->legBodyParts.size(); b++) {
+        if(animDb->findBodyPart(nest->legBodyParts[b]) == INVALID) {
             game.errors.report(
                 "The ship type \"" + name + "\" specifies a leg body part "
-                "called \"" + nest->leg_body_parts[b] + "\", "
+                "called \"" + nest->legBodyParts[b] + "\", "
                 "but no such body part exists!"
             );
         }

@@ -27,11 +27,11 @@
  * @brief Creates a new action call for the current event, one that changes
  * the mob's state to something else.
  *
- * @param new_state State to change to.
+ * @param newState State to change to.
  */
-void EasyFsmCreator::changeState(const string &new_state) {
+void EasyFsmCreator::changeState(const string &newState) {
     curEvent->actions.push_back(new MobActionCall(MOB_ACTION_SET_STATE));
-    curEvent->actions.back()->args.push_back(new_state);
+    curEvent->actions.back()->args.push_back(newState);
     curEvent->actions.back()->argIsVar.push_back(false);
 }
 
@@ -107,7 +107,7 @@ void EasyFsmCreator::newState(const string &name, size_t id) {
  *
  * @param code Function with said code.
  */
-void EasyFsmCreator::run(custom_action_code_t code) {
+void EasyFsmCreator::run(CustomActionCode code) {
     curEvent->actions.push_back(new MobActionCall(code));
 }
 
@@ -205,13 +205,13 @@ MobEvent::MobEvent(const MOB_EV t, const vector<MobActionCall*> &a) :
  * @brief Runs a mob event. Basically runs all actions within.
  *
  * @param m The mob.
- * @param custom_data_1 Custom argument #1 to pass to the code.
- * @param custom_data_2 Custom argument #2 to pass to the code.
+ * @param customData1 Custom argument #1 to pass to the code.
+ * @param customData2 Custom argument #2 to pass to the code.
  */
-void MobEvent::run(Mob* m, void* custom_data_1, void* custom_data_2) {
-    if(m->parent && m->parent->relay_events) {
-        m->parent->m->fsm.runEvent(type, custom_data_1, custom_data_2);
-        if(!m->parent->handle_events) {
+void MobEvent::run(Mob* m, void* customData1, void* customData2) {
+    if(m->parent && m->parent->relayEvents) {
+        m->parent->m->fsm.runEvent(type, customData1, customData2);
+        if(!m->parent->handleEvents) {
             return;
         }
     }
@@ -223,28 +223,28 @@ void MobEvent::run(Mob* m, void* custom_data_1, void* custom_data_2) {
             //If statement. Look out for its return value, and
             //change the flow accordingly.
             
-            if(!actions[a]->run(m, custom_data_1, custom_data_2)) {
+            if(!actions[a]->run(m, customData1, customData2)) {
                 //If it returned true, execution continues as normal, but
                 //if it returned false, skip to the "else" or "end if" actions.
-                size_t next_a = a + 1;
+                size_t nextA = a + 1;
                 size_t depth = 0;
-                for(; next_a < actions.size(); next_a++) {
+                for(; nextA < actions.size(); nextA++) {
                     if(
-                        actions[next_a]->action->type == MOB_ACTION_IF
+                        actions[nextA]->action->type == MOB_ACTION_IF
                     ) {
                         depth++;
                     } else if(
-                        actions[next_a]->action->type == MOB_ACTION_ELSE
+                        actions[nextA]->action->type == MOB_ACTION_ELSE
                     ) {
                         if(depth == 0) break;
                     } else if(
-                        actions[next_a]->action->type == MOB_ACTION_END_IF
+                        actions[nextA]->action->type == MOB_ACTION_END_IF
                     ) {
                         if(depth == 0) break;
                         else depth--;
                     }
                 }
-                a = next_a;
+                a = nextA;
                 
             }
             
@@ -254,17 +254,17 @@ void MobEvent::run(Mob* m, void* custom_data_1, void* custom_data_2) {
             //If we actually managed to read an "else", that means we were
             //running through the normal execution of a "then" section.
             //Jump to the "end if".
-            size_t next_a = a + 1;
+            size_t nextA = a + 1;
             size_t depth = 0;
-            for(; next_a < actions.size(); next_a++) {
-                if(actions[next_a]->action->type == MOB_ACTION_IF) {
+            for(; nextA < actions.size(); nextA++) {
+                if(actions[nextA]->action->type == MOB_ACTION_IF) {
                     depth++;
-                } else if(actions[next_a]->action->type == MOB_ACTION_END_IF) {
+                } else if(actions[nextA]->action->type == MOB_ACTION_END_IF) {
                     if(depth == 0) break;
                     else depth--;
                 }
             }
-            a = next_a;
+            a = nextA;
             
             break;
             
@@ -287,7 +287,7 @@ void MobEvent::run(Mob* m, void* custom_data_1, void* custom_data_2) {
             
         } default: {
             //Normal action.
-            actions[a]->run(m, custom_data_1, custom_data_2);
+            actions[a]->run(m, customData1, customData2);
             //If the state got changed, jump out.
             if(actions[a]->action->type == MOB_ACTION_SET_STATE) return;
             
@@ -342,20 +342,20 @@ size_t MobFsm::getStateIdx(const string &name) const {
  * @brief Runs an event in the current state, if it exists.
  *
  * @param type The event's type.
- * @param custom_data_1 Custom argument #1 to pass to the code.
- * @param custom_data_2 Custom argument #2 to pass to the code.
+ * @param customData1 Custom argument #1 to pass to the code.
+ * @param customData2 Custom argument #2 to pass to the code.
  */
 void MobFsm::runEvent(
-    const MOB_EV type, void* custom_data_1, void* custom_data_2
+    const MOB_EV type, void* customData1, void* customData2
 ) {
     MobEvent* e = getEvent(type);
     if(e) {
-        e->run(m, custom_data_1, custom_data_2);
+        e->run(m, customData1, customData2);
     } else {
     
 #ifdef DEBUG_FSM
         cout <<
-             "Missing event on run_event() - Mob " <<
+             "Missing event on runEvent() - Mob " <<
              m << ", event " << type << ", state " <<
              (this->curState ? this->curState->name : "[None]") <<
              endl;
@@ -369,13 +369,13 @@ void MobFsm::runEvent(
 /**
  * @brief Changes the FSM to use a different state.
  *
- * @param new_state The state to change to.
+ * @param newState The state to change to.
  * @param info1 Data to pass on to the code after the state change.
  * This data comes from the event that started all of this.
  * @param info2 Same as info1, but a second variable.
  * @return Whether it succeeded.
  */
-bool MobFsm::setState(size_t new_state, void* info1, void* info2) {
+bool MobFsm::setState(size_t newState, void* info1, void* info2) {
 
     //Run the code to leave the current state.
     if(curState) {
@@ -389,12 +389,12 @@ bool MobFsm::setState(size_t new_state, void* info1, void* info2) {
     //Uncomment this to be notified about state changes on stdout.
     /*if(curState) {
         cout << "State " << curState->name << " -> "
-        << m->type->states[new_state]->name << "\n";
+        << m->type->states[newState]->name << "\n";
     }*/
     
-    if(new_state < m->type->states.size() && new_state != INVALID) {
+    if(newState < m->type->states.size() && newState != INVALID) {
         //Switch states.
-        curState = m->type->states[new_state];
+        curState = m->type->states[newState];
         
         //Run the code to enter the new state.
         runEvent(MOB_EV_ON_ENTER, info1, info2);
@@ -469,19 +469,19 @@ MobEvent* MobState::getEvent(const MOB_EV type) const {
  * For instance, state-switching actions that use a name instead of an index.
  *
  * @param states The vector of states.
- * @param starting_state Name of the starting state for the mob.
+ * @param startingState Name of the starting state for the mob.
  * @param mt Mob type these states belong to.
  * @return The index of the starting state.
  */
 size_t fixStates(
-    vector<MobState*> &states, const string &starting_state, const MobType* mt
+    vector<MobState*> &states, const string &startingState, const MobType* mt
 ) {
-    size_t starting_state_idx = INVALID;
+    size_t startingStateIdx = INVALID;
     
     //Fix actions that change the state that are using a string.
     for(size_t s = 0; s < states.size(); s++) {
         MobState* state = states[s];
-        if(state->name == starting_state) starting_state_idx = s;
+        if(state->name == startingState) startingStateIdx = s;
         
         for(size_t e = 0; e < N_MOB_EVENTS; e++) {
             MobEvent* ev = state->events[e];
@@ -491,37 +491,37 @@ size_t fixStates(
                 MobActionCall* call = ev->actions[a];
                 
                 if(call->action->type == MOB_ACTION_SET_STATE) {
-                    string state_name = call->args[0];
-                    size_t state_idx = 0;
-                    bool found_state = false;
+                    string stateName = call->args[0];
+                    size_t stateIdx = 0;
+                    bool foundState = false;
                     
-                    if(isNumber(state_name)) continue;
+                    if(isNumber(stateName)) continue;
                     
-                    for(; state_idx < states.size(); state_idx++) {
-                        if(states[state_idx]->name == state_name) {
-                            found_state = true;
+                    for(; stateIdx < states.size(); stateIdx++) {
+                        if(states[stateIdx]->name == stateName) {
+                            foundState = true;
                             break;
                         }
                     }
                     
-                    if(!found_state) {
-                        state_idx = INVALID;
+                    if(!foundState) {
+                        stateIdx = INVALID;
                         game.errors.report(
                             "State \"" + state->name +
                             "\" of the mob category \"" + mt->category->name +
                             "\" has an action to switch to an "
-                            "unknown state: \"" + state_name + "\"!",
+                            "unknown state: \"" + stateName + "\"!",
                             nullptr
                         );
                     }
                     
-                    call->args[0] = i2s(state_idx);
+                    call->args[0] = i2s(stateIdx);
                     
                 }
             }
         }
     }
-    return starting_state_idx;
+    return startingStateIdx;
 }
 
 
@@ -529,41 +529,41 @@ size_t fixStates(
  * @brief Loads the states from the script and global events data nodes.
  *
  * @param mt The type of mob the states are going to.
- * @param script_node The data node containing the mob's script.
- * @param global_node The data node containing global events.
- * @param out_states The loaded states are returned into this vector.
+ * @param scriptNode The data node containing the mob's script.
+ * @param globalNode The data node containing global events.
+ * @param outStates The loaded states are returned into this vector.
  */
 void loadScript(
-    MobType* mt, DataNode* script_node, DataNode* global_node,
-    vector<MobState*>* out_states
+    MobType* mt, DataNode* scriptNode, DataNode* globalNode,
+    vector<MobState*>* outStates
 ) {
-    size_t n_new_states = script_node->getNrOfChildren();
+    size_t nNewStates = scriptNode->getNrOfChildren();
     
     //Let's save the states now, so that the state switching events
     //can know what numbers the events they need correspond to.
-    for(size_t s = 0; s < n_new_states; s++) {
-        DataNode* state_node = script_node->getChild(s);
+    for(size_t s = 0; s < nNewStates; s++) {
+        DataNode* stateNode = scriptNode->getChild(s);
         bool skip = false;
-        for(size_t s2 = 0; s2 < out_states->size(); s2++) {
-            if((*out_states)[s2]->name == state_node->name) {
+        for(size_t s2 = 0; s2 < outStates->size(); s2++) {
+            if((*outStates)[s2]->name == stateNode->name) {
                 //Already exists, probably hardcoded. Skip this.
                 skip = true;
                 continue;
             }
         }
         if(!skip) {
-            out_states->push_back(new MobState(state_node->name));
+            outStates->push_back(new MobState(stateNode->name));
         }
     }
     
-    for(size_t s = 0; s < out_states->size(); s++) {
-        MobState* state_ptr = (*out_states)[s];
-        DataNode* state_node = script_node->getChildByName(state_ptr->name);
-        loadState(mt, state_node, global_node, state_ptr);
-        state_ptr->id = s;
+    for(size_t s = 0; s < outStates->size(); s++) {
+        MobState* statePtr = (*outStates)[s];
+        DataNode* stateNode = scriptNode->getChildByName(statePtr->name);
+        loadState(mt, stateNode, globalNode, statePtr);
+        statePtr->id = s;
     }
     
-    fixStates(*out_states, "", mt);
+    fixStates(*outStates, "", mt);
 }
 
 
@@ -571,69 +571,69 @@ void loadScript(
  * @brief Loads a state from the script and global events data nodes.
  *
  * @param mt The type of mob the states are going to.
- * @param state_node The state's data node.
- * @param global_node The data node containing global events.
- * @param state_ptr Pointer to the state to load.
+ * @param stateNode The state's data node.
+ * @param globalNode The data node containing global events.
+ * @param statePtr Pointer to the state to load.
  */
 void loadState(
-    MobType* mt, DataNode* state_node, DataNode* global_node,
-    MobState* state_ptr
+    MobType* mt, DataNode* stateNode, DataNode* globalNode,
+    MobState* statePtr
 ) {
-    size_t n_events = state_node->getNrOfChildren();
-    size_t n_global_events = global_node->getNrOfChildren();
-    if(n_events + n_global_events == 0) return;
+    size_t nEvents = stateNode->getNrOfChildren();
+    size_t nGlobalEvents = globalNode->getNrOfChildren();
+    if(nEvents + nGlobalEvents == 0) return;
     
     //Read the events.
-    vector<MobEvent*> new_events;
-    vector<bitmask_8_t> new_event_settings;
+    vector<MobEvent*> newEvents;
+    vector<Bitmask8> newEventSettings;
     
-    for(size_t e = 0; e < n_events; e++) {
-        DataNode* event_node = state_node->getChild(e);
+    for(size_t e = 0; e < nEvents; e++) {
+        DataNode* eventNode = stateNode->getChild(e);
         vector<MobActionCall*> actions;
-        bitmask_8_t settings;
+        Bitmask8 settings;
         
-        loadActions(mt, event_node, &actions, &settings);
+        loadActions(mt, eventNode, &actions, &settings);
         
-        new_events.push_back(new MobEvent(event_node, actions));
-        new_event_settings.push_back(settings);
+        newEvents.push_back(new MobEvent(eventNode, actions));
+        newEventSettings.push_back(settings);
         
-        assertActions(actions, event_node);
+        assertActions(actions, eventNode);
     }
     
     //Load global events.
-    vector<MobEvent*> global_events;
-    vector<bitmask_8_t> global_event_settings;
+    vector<MobEvent*> globalEvents;
+    vector<Bitmask8> globalEventSettings;
     
-    for(size_t e = 0; e < n_global_events; e++) {
-        DataNode* event_node = global_node->getChild(e);
+    for(size_t e = 0; e < nGlobalEvents; e++) {
+        DataNode* eventNode = globalNode->getChild(e);
         vector<MobActionCall*> actions;
-        bitmask_8_t settings;
+        Bitmask8 settings;
         
-        loadActions(mt, event_node, &actions, &settings);
+        loadActions(mt, eventNode, &actions, &settings);
         
-        global_events.push_back(new MobEvent(event_node, actions));
-        global_event_settings.push_back(settings);
+        globalEvents.push_back(new MobEvent(eventNode, actions));
+        globalEventSettings.push_back(settings);
         
-        assertActions(actions, event_node);
+        assertActions(actions, eventNode);
     }
     
     //Insert global events into the state.
-    for(size_t e = 0; e < global_events.size(); e++) {
-        MobEvent* global_event = global_events[e];
-        bitmask_8_t global_settings = global_event_settings[e];
+    for(size_t e = 0; e < globalEvents.size(); e++) {
+        MobEvent* globalEvent = globalEvents[e];
+        Bitmask8 globalSettings = globalEventSettings[e];
         
         bool merged = false;
-        for(size_t ne = 0; ne < n_events; ne++) {
-            MobEvent* ev_ptr = new_events[ne];
-            bitmask_8_t ev_settings = new_event_settings[ne];
+        for(size_t ne = 0; ne < nEvents; ne++) {
+            MobEvent* evPtr = newEvents[ne];
+            Bitmask8 evSettings = newEventSettings[ne];
             
-            if(ev_ptr->type != global_event->type) continue;
+            if(evPtr->type != globalEvent->type) continue;
             
             insertEventActions(
-                ev_ptr,
-                global_event->actions,
+                evPtr,
+                globalEvent->actions,
                 hasFlag(
-                    global_settings | ev_settings,
+                    globalSettings | evSettings,
                     EVENT_LOAD_FLAG_GLOBAL_ACTIONS_AFTER
                 )
             );
@@ -641,109 +641,109 @@ void loadState(
             break;
         }
         if(merged) {
-            delete global_event;
+            delete globalEvent;
         } else {
-            new_events.push_back(global_event);
-            new_event_settings.push_back(global_settings);
+            newEvents.push_back(globalEvent);
+            newEventSettings.push_back(globalSettings);
         }
     }
     
     //Inject a damage event.
-    if(!state_ptr->events[MOB_EV_HITBOX_TOUCH_N_A]) {
-        vector<MobActionCall*> da_actions;
-        da_actions.push_back(
-            new MobActionCall(gen_mob_fsm::beAttacked)
+    if(!statePtr->events[MOB_EV_HITBOX_TOUCH_N_A]) {
+        vector<MobActionCall*> daActions;
+        daActions.push_back(
+            new MobActionCall(GenMobFsm::beAttacked)
         );
-        new_events.push_back(
-            new MobEvent(MOB_EV_HITBOX_TOUCH_N_A, da_actions)
+        newEvents.push_back(
+            new MobEvent(MOB_EV_HITBOX_TOUCH_N_A, daActions)
         );
-        new_event_settings.push_back(0);
+        newEventSettings.push_back(0);
     }
     
     //Inject a zero health event.
     if(
-        state_node->name != mt->dyingStateName &&
-        !state_ptr->events[MOB_EV_ZERO_HEALTH] &&
+        stateNode->name != mt->dyingStateName &&
+        !statePtr->events[MOB_EV_ZERO_HEALTH] &&
         find(
             mt->statesIgnoringDeath.begin(),
             mt->statesIgnoringDeath.end(),
-            state_node->name
+            stateNode->name
         ) == mt->statesIgnoringDeath.end() &&
         !mt->dyingStateName.empty()
     ) {
-        vector<MobActionCall*> de_actions;
-        de_actions.push_back(new MobActionCall(gen_mob_fsm::goToDyingState));
-        new_events.push_back(new MobEvent(MOB_EV_ZERO_HEALTH, de_actions));
-        new_event_settings.push_back(0);
+        vector<MobActionCall*> deActions;
+        deActions.push_back(new MobActionCall(GenMobFsm::goToDyingState));
+        newEvents.push_back(new MobEvent(MOB_EV_ZERO_HEALTH, deActions));
+        newEventSettings.push_back(0);
     }
     
     //Inject a bottomless pit event.
-    if(!state_ptr->events[MOB_EV_BOTTOMLESS_PIT]) {
-        vector<MobActionCall*> bp_actions;
-        bp_actions.push_back(
-            new MobActionCall(gen_mob_fsm::fallDownPit)
+    if(!statePtr->events[MOB_EV_BOTTOMLESS_PIT]) {
+        vector<MobActionCall*> bpActions;
+        bpActions.push_back(
+            new MobActionCall(GenMobFsm::fallDownPit)
         );
-        new_events.push_back(
-            new MobEvent(MOB_EV_BOTTOMLESS_PIT, bp_actions)
+        newEvents.push_back(
+            new MobEvent(MOB_EV_BOTTOMLESS_PIT, bpActions)
         );
-        new_event_settings.push_back(0);
+        newEventSettings.push_back(0);
     }
     
     //Inject a spray touch event.
     if(
-        !state_ptr->events[MOB_EV_TOUCHED_SPRAY] &&
+        !statePtr->events[MOB_EV_TOUCHED_SPRAY] &&
         find(
             mt->statesIgnoringSpray.begin(),
             mt->statesIgnoringSpray.end(),
-            state_node->name
+            stateNode->name
         ) == mt->statesIgnoringSpray.end()
     ) {
-        vector<MobActionCall*> s_actions;
-        s_actions.push_back(
-            new MobActionCall(gen_mob_fsm::touchSpray)
+        vector<MobActionCall*> sActions;
+        sActions.push_back(
+            new MobActionCall(GenMobFsm::touchSpray)
         );
-        new_events.push_back(
-            new MobEvent(MOB_EV_TOUCHED_SPRAY, s_actions)
+        newEvents.push_back(
+            new MobEvent(MOB_EV_TOUCHED_SPRAY, sActions)
         );
-        new_event_settings.push_back(0);
+        newEventSettings.push_back(0);
     }
     
     //Inject a hazard event.
     if(
-        !state_ptr->events[MOB_EV_TOUCHED_HAZARD] &&
+        !statePtr->events[MOB_EV_TOUCHED_HAZARD] &&
         find(
             mt->statesIgnoringHazard.begin(),
             mt->statesIgnoringHazard.end(),
-            state_node->name
+            stateNode->name
         ) == mt->statesIgnoringHazard.end()
     ) {
-        vector<MobActionCall*> s_actions;
-        s_actions.push_back(
-            new MobActionCall(gen_mob_fsm::touchHazard)
+        vector<MobActionCall*> hActions;
+        hActions.push_back(
+            new MobActionCall(GenMobFsm::touchHazard)
         );
-        new_events.push_back(
-            new MobEvent(MOB_EV_TOUCHED_HAZARD, s_actions)
+        newEvents.push_back(
+            new MobEvent(MOB_EV_TOUCHED_HAZARD, hActions)
         );
-        new_event_settings.push_back(0);
+        newEventSettings.push_back(0);
     }
     
     //Connect all new events to the state.
-    for(size_t e = 0; e < new_events.size(); e++) {
-        MOB_EV ev_type = new_events[e]->type;
+    for(size_t e = 0; e < newEvents.size(); e++) {
+        MOB_EV evType = newEvents[e]->type;
         
-        if(state_ptr->events[ev_type]) {
+        if(statePtr->events[evType]) {
             insertEventActions(
-                state_ptr->events[ev_type],
-                new_events[e]->actions,
+                statePtr->events[evType],
+                newEvents[e]->actions,
                 hasFlag(
-                    new_event_settings[e],
+                    newEventSettings[e],
                     EVENT_LOAD_FLAG_CUSTOM_ACTIONS_AFTER
                 )
             );
-            delete new_events[e];
+            delete newEvents[e];
         } else {
             //New event. Just throw the data we created before.
-            state_ptr->events[ev_type] = new_events[e];
+            statePtr->events[evType] = newEvents[e];
         }
     }
 }
@@ -756,22 +756,22 @@ void loadState(
  */
 void unloadScript(MobType* mt) {
     for(size_t s = 0; s < mt->states.size(); s++) {
-        MobState* s_ptr = mt->states[s];
+        MobState* sPtr = mt->states[s];
         
         for(size_t e = 0; e < N_MOB_EVENTS; e++) {
-            MobEvent* e_ptr = s_ptr->events[e];
-            if(!e_ptr) continue;
+            MobEvent* ePtr = sPtr->events[e];
+            if(!ePtr) continue;
             
-            for(size_t a = 0; a < e_ptr->actions.size(); a++) {
-                delete e_ptr->actions[a];
+            for(size_t a = 0; a < ePtr->actions.size(); a++) {
+                delete ePtr->actions[a];
             }
             
-            e_ptr->actions.clear();
-            delete e_ptr;
+            ePtr->actions.clear();
+            delete ePtr;
             
         }
         
-        delete s_ptr;
+        delete sPtr;
         
     }
     mt->states.clear();

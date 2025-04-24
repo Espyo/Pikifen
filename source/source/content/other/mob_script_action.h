@@ -551,10 +551,8 @@ struct MobActionParam {
     //--- Function declarations ---
     
     MobActionParam(
-        const string &name,
-        const MOB_ACTION_PARAM type,
-        bool force_const,
-        bool is_extras
+        const string &name, const MOB_ACTION_PARAM type,
+        bool forceConst, bool isExtras
     );
     
 };
@@ -598,7 +596,7 @@ struct MobActionRunData {
  *
  * The first parameter is the data to run with.
  */
-typedef void (mob_action_code_t)(MobActionRunData &data);
+typedef void (MobActionCode)(MobActionRunData &data);
 
 /**
  * @brief Function to run when a mob action is loaded from a script.
@@ -606,7 +604,7 @@ typedef void (mob_action_code_t)(MobActionRunData &data);
  * The first parameter is the action call data.
  * Returns whether it loaded successfully.
  */
-typedef bool (mob_action_load_code_t)(MobActionCall &call);
+typedef bool (MobActionLoadCode)(MobActionCall &call);
 
 
 /**
@@ -623,10 +621,10 @@ struct MobAction {
     string name;
     
     //Code to run.
-    mob_action_code_t* code = nullptr;
+    MobActionCode* code = nullptr;
     
     //Extra logic to run when this action is loaded from a script file.
-    mob_action_load_code_t* extraLoadLogic = nullptr;
+    MobActionLoadCode* extraLoadLogic = nullptr;
     
     //Parameters that it can take.
     vector<MobActionParam> parameters;
@@ -646,7 +644,7 @@ struct MobActionCall {
     MobAction* action = nullptr;
     
     //Custom code to run, if any.
-    custom_action_code_t code = nullptr;
+    CustomActionCode code = nullptr;
     
     //Arguments to use.
     vector<string> args;
@@ -667,14 +665,14 @@ struct MobActionCall {
     //--- Function declarations ---
     
     explicit MobActionCall(MOB_ACTION type = MOB_ACTION_UNKNOWN);
-    explicit MobActionCall(custom_action_code_t code);
+    explicit MobActionCall(CustomActionCode code);
     bool loadFromDataNode(DataNode* dn, MobType* mt);
-    bool run(Mob* m, void* custom_data_1, void* custom_data_2);
+    bool run(Mob* m, void* customData1, void* customData2);
     
 };
 
 
-namespace mob_action_runners {
+namespace MobActionRunners {
 void addHealth(MobActionRunData &data);
 void arachnorbPlanLogic(MobActionRunData &data);
 void calculate(MobActionRunData &data);
@@ -759,7 +757,7 @@ void turnToTarget(MobActionRunData &data);
 };
 
 
-namespace mob_action_loaders {
+namespace MobActionLoaders {
 bool arachnorbPlanLogic(MobActionCall &call);
 bool calculate(MobActionCall &call);
 bool focus(MobActionCall &call);
@@ -783,8 +781,8 @@ bool startChomping(MobActionCall &call);
 bool startParticles(MobActionCall &call);
 bool turnToTarget(MobActionCall &call);
 
-void reportEnumError(MobActionCall &call, size_t arg_idx);
-bool loadMobTargetType(MobActionCall &call, size_t arg_idx);
+void reportEnumError(MobActionCall &call, size_t argIdx);
+bool loadMobTargetType(MobActionCall &call, size_t argIdx);
 };
 
 
@@ -796,9 +794,9 @@ Mob* getTargetMob(
     MobActionRunData &data, MOB_ACTION_MOB_TARGET_TYPE type
 );
 void insertEventActions(
-    MobEvent* ev, const vector<MobActionCall*> &actions, bool at_end
+    MobEvent* ev, const vector<MobActionCall*> &actions, bool atEnd
 );
 void loadActions(
     MobType* mt, DataNode* node,
-    vector<MobActionCall*>* out_actions, bitmask_8_t* out_settings = 0
+    vector<MobActionCall*>* outActions, Bitmask8* outSettings = 0
 );

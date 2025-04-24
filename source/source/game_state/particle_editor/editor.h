@@ -137,42 +137,42 @@ private:
     
     void closeLoadDialog();
     void closeOptionsDialog();
-    void createPartGen(const string &part_gen_path);
+    void createPartGen(const string &partGenPath);
     void deleteCurrentPartGen();
     string getFileTooltip(const string &path) const;
     void loadPartGenFile(
-        const string &path, const bool should_update_history
+        const string &path, const bool shouldUpdateHistory
     );
     void openLoadDialog();
     void openNewDialog();
     void openOptionsDialog();
     void pickPartGenFile(
-        const string &name, const string &top_cat, const string &sec_cat,
-        void* info, bool is_new
+        const string &name, const string &topCat, const string &secCat,
+        void* info, bool isNew
     );
     void reloadPartGens();
     void setupForNewPartGenPost();
     void setupForNewPartGenPre();
     bool savePartGen();
     static void drawCanvasDearImGuiCallback(
-        const ImDrawList* parent_list, const ImDrawCmd* cmd
+        const ImDrawList* parentList, const ImDrawCmd* cmd
     );
-    void gridIntervalDecreaseCmd(float input_value);
-    void gridIntervalIncreaseCmd(float input_value);
-    void gridToggleCmd(float input_value);
-    void deletePartGenCmd(float input_value);
-    void loadCmd(float input_value);
-    void quitCmd(float input_value);
-    void reloadCmd(float input_value);
-    void saveCmd(float input_value);
-    void zoomAndPosResetCmd(float input_value);
-    void zoomInCmd(float input_value);
-    void zoomOutCmd(float input_value);
-    void clearParticlesCmd(float input_value);
-    void emissionShapeToggleCmd(float input_value);
-    void leaderSilhouetteToggleCmd(float input_value);
-    void partGenPlaybackToggleCmd(float input_value);
-    void partMgrPlaybackToggleCmd(float input_value);
+    void gridIntervalDecreaseCmd(float inputValue);
+    void gridIntervalIncreaseCmd(float inputValue);
+    void gridToggleCmd(float inputValue);
+    void deletePartGenCmd(float inputValue);
+    void loadCmd(float inputValue);
+    void quitCmd(float inputValue);
+    void reloadCmd(float inputValue);
+    void saveCmd(float inputValue);
+    void zoomAndPosResetCmd(float inputValue);
+    void zoomInCmd(float inputValue);
+    void zoomOutCmd(float inputValue);
+    void clearParticlesCmd(float inputValue);
+    void emissionShapeToggleCmd(float inputValue);
+    void leaderSilhouetteToggleCmd(float inputValue);
+    void partGenPlaybackToggleCmd(float inputValue);
+    void partMgrPlaybackToggleCmd(float inputValue);
     void processGui();
     void processGuiControlPanel();
     void processGuiDeletePartGenDialog();

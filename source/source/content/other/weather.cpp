@@ -154,65 +154,65 @@ void Weather::loadFromDataNode(DataNode* node) {
     loadMetadataFromDataNode(node);
     
     //Standard data.
-    ReaderSetter rs(node);
+    ReaderSetter wRS(node);
     
-    rs.set("fog_near", fogNear);
-    rs.set("fog_far", fogFar);
+    wRS.set("fog_near", fogNear);
+    wRS.set("fog_far", fogFar);
     
     fogNear = std::max(fogNear, 0.0f);
     fogFar = std::max(fogFar, fogNear);
     
     //Lighting.
-    vector<std::pair<int, string> > lighting_table =
+    vector<std::pair<int, string> > lightingTable =
         getWeatherTable(node->getChildByName("lighting"));
         
-    for(size_t p = 0; p < lighting_table.size(); p++) {
+    for(size_t p = 0; p < lightingTable.size(); p++) {
         daylight.push_back(
             std::make_pair(
-                lighting_table[p].first,
-                s2c(lighting_table[p].second)
+                lightingTable[p].first,
+                s2c(lightingTable[p].second)
             )
         );
     }
     
     //Sun's strength.
-    vector<std::pair<int, string> > sun_strength_table =
+    vector<std::pair<int, string> > sunStrengthTable =
         getWeatherTable(node->getChildByName("sun_strength"));
         
-    for(size_t p = 0; p < sun_strength_table.size(); p++) {
+    for(size_t p = 0; p < sunStrengthTable.size(); p++) {
         sunStrength.push_back(
             std::make_pair(
-                sun_strength_table[p].first,
-                s2i(sun_strength_table[p].second)
+                sunStrengthTable[p].first,
+                s2i(sunStrengthTable[p].second)
             )
         );
     }
     
     //Blackout effect's strength.
-    vector<std::pair<int, string> > blackout_strength_table =
+    vector<std::pair<int, string> > blackoutStrengthTable =
         getWeatherTable(
             node->getChildByName("blackout_strength")
         );
         
-    for(size_t p = 0; p < blackout_strength_table.size(); p++) {
+    for(size_t p = 0; p < blackoutStrengthTable.size(); p++) {
         blackoutStrength.push_back(
             std::make_pair(
-                blackout_strength_table[p].first,
-                s2i(blackout_strength_table[p].second)
+                blackoutStrengthTable[p].first,
+                s2i(blackoutStrengthTable[p].second)
             )
         );
     }
     
     //Fog.
-    vector<std::pair<int, string> > fog_color_table =
+    vector<std::pair<int, string> > fogColorTable =
         getWeatherTable(
             node->getChildByName("fog_color")
         );
-    for(size_t p = 0; p < fog_color_table.size(); p++) {
+    for(size_t p = 0; p < fogColorTable.size(); p++) {
         fogColor.push_back(
             std::make_pair(
-                fog_color_table[p].first,
-                s2c(fog_color_table[p].second)
+                fogColorTable[p].first,
+                s2c(fogColorTable[p].second)
             )
         );
     }

@@ -16,7 +16,7 @@
 /**
  * @brief Functions about the Onion's finite state machine and behavior.
  */
-namespace onion_fsm {
+namespace OnionFsm {
 void createFsm(MobType* typ);
 
 void checkStartGenerating(Mob* m, void* info1, void* info2);

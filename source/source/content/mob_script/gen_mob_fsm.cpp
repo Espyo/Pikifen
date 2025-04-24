@@ -31,7 +31,7 @@
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void gen_mob_fsm::beAttacked(Mob* m, void* info1, void* info2) {
+void GenMobFsm::beAttacked(Mob* m, void* info1, void* info2) {
     engineAssert(info1 != nullptr, m->printStateHistory());
     
     HitboxInteraction* info = (HitboxInteraction*) info1;
@@ -53,7 +53,7 @@ void gen_mob_fsm::beAttacked(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void gen_mob_fsm::carryBecomeStuck(Mob* m, void* info1, void* info2) {
+void GenMobFsm::carryBecomeStuck(Mob* m, void* info1, void* info2) {
     engineAssert(m->carryInfo != nullptr, m->printStateHistory());
     
     m->circleAround(
@@ -72,7 +72,7 @@ void gen_mob_fsm::carryBecomeStuck(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void gen_mob_fsm::carryBeginMove(Mob* m, void* info1, void* info2) {
+void GenMobFsm::carryBeginMove(Mob* m, void* info1, void* info2) {
     m->carryInfo->isMoving = true;
     
     hasFlag(m->pathInfo->settings.flags, PATH_FOLLOW_FLAG_AIRBORNE) ?
@@ -97,7 +97,7 @@ void gen_mob_fsm::carryBeginMove(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void gen_mob_fsm::carryGetPath(Mob* m, void* info1, void* info2) {
+void GenMobFsm::carryGetPath(Mob* m, void* info1, void* info2) {
     PathFollowSettings settings;
     enableFlag(settings.flags, PATH_FOLLOW_FLAG_CAN_CONTINUE);
     
@@ -109,11 +109,11 @@ void gen_mob_fsm::carryGetPath(Mob* m, void* info1, void* info2) {
         //covering the control point, and not necessarily if the treasure
         //is on the same coordinates as the control point.
         if(m->carryInfo->intendedMob) {
-            Ship* shi_ptr = (Ship*) m->carryInfo->intendedMob;
+            Ship* shiPtr = (Ship*) m->carryInfo->intendedMob;
             settings.finalTargetDistance =
                 std::max(
                     m->radius -
-                    shi_ptr->shiType->controlPointRadius,
+                    shiPtr->shiType->controlPointRadius,
                     3.0f
                 );
         }
@@ -131,10 +131,10 @@ void gen_mob_fsm::carryGetPath(Mob* m, void* info1, void* info2) {
             m->carryInfo->intendedMob->type->category->id ==
             MOB_CATEGORY_BRIDGES
         ) {
-            Bridge* bri_ptr = (Bridge*) m->carryInfo->intendedMob;
+            Bridge* briPtr = (Bridge*) m->carryInfo->intendedMob;
             enableFlag(settings.flags, PATH_FOLLOW_FLAG_FAKED_END);
             enableFlag(settings.flags, PATH_FOLLOW_FLAG_FOLLOW_MOB);
-            settings.fakedEnd = bri_ptr->getStartPoint();
+            settings.fakedEnd = briPtr->getStartPoint();
         }
     }
     
@@ -149,7 +149,7 @@ void gen_mob_fsm::carryGetPath(Mob* m, void* info1, void* info2) {
         m->pathInfo->result = PATH_RESULT_NO_DESTINATION;
     }
     if(m->pathInfo->result < 0) {
-        m->pathInfo->block_reason = PATH_BLOCK_REASON_NO_PATH;
+        m->pathInfo->blockReason = PATH_BLOCK_REASON_NO_PATH;
         m->fsm.runEvent(MOB_EV_PATH_BLOCKED);
     }
 }
@@ -162,7 +162,7 @@ void gen_mob_fsm::carryGetPath(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void gen_mob_fsm::carryReachDestination(Mob* m, void* info1, void* info2) {
+void GenMobFsm::carryReachDestination(Mob* m, void* info1, void* info2) {
     m->stopFollowingPath();
     
     if(m->deliveryInfo) {
@@ -185,7 +185,7 @@ void gen_mob_fsm::carryReachDestination(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void gen_mob_fsm::carryStopBeingStuck(Mob* m, void* info1, void* info2) {
+void GenMobFsm::carryStopBeingStuck(Mob* m, void* info1, void* info2) {
     m->stopCircling();
 }
 
@@ -197,7 +197,7 @@ void gen_mob_fsm::carryStopBeingStuck(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void gen_mob_fsm::carryStopMove(Mob* m, void* info1, void* info2) {
+void GenMobFsm::carryStopMove(Mob* m, void* info1, void* info2) {
     if(!m->carryInfo) return;
     m->carryInfo->isMoving = false;
     disableFlag(m->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
@@ -213,7 +213,7 @@ void gen_mob_fsm::carryStopMove(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void gen_mob_fsm::fallDownPit(Mob* m, void* info1, void* info2) {
+void GenMobFsm::fallDownPit(Mob* m, void* info1, void* info2) {
     m->setHealth(false, false, 0);
     m->startDying();
     m->finishDying();
@@ -228,7 +228,7 @@ void gen_mob_fsm::fallDownPit(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void gen_mob_fsm::goToDyingState(Mob* m, void* info1, void* info2) {
+void GenMobFsm::goToDyingState(Mob* m, void* info1, void* info2) {
     if(m->type->dyingStateIdx == INVALID) return;
     m->fsm.setState(m->type->dyingStateIdx, info1, info2);
 }
@@ -241,17 +241,17 @@ void gen_mob_fsm::goToDyingState(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void gen_mob_fsm::handleCarrierAdded(Mob* m, void* info1, void* info2) {
-    Pikmin* pik_ptr = (Pikmin*) info1;
+void GenMobFsm::handleCarrierAdded(Mob* m, void* info1, void* info2) {
+    Pikmin* pikPtr = (Pikmin*) info1;
     
     //Save some data before changing anything.
-    bool could_move = m->carryInfo->curCarryingStrength >= m->type->weight;
-    Mob* prev_destination = m->carryInfo->intendedMob;
+    bool couldMove = m->carryInfo->curCarryingStrength >= m->type->weight;
+    Mob* prevDestination = m->carryInfo->intendedMob;
     
     //Update the numbers and such.
-    m->carryInfo->spotInfo[pik_ptr->tempI].pikPtr = pik_ptr;
-    m->carryInfo->spotInfo[pik_ptr->tempI].state = CARRY_SPOT_STATE_USED;
-    m->carryInfo->curCarryingStrength += pik_ptr->pikType->carryStrength;
+    m->carryInfo->spotInfo[pikPtr->tempI].pikPtr = pikPtr;
+    m->carryInfo->spotInfo[pikPtr->tempI].state = CARRY_SPOT_STATE_USED;
+    m->carryInfo->curCarryingStrength += pikPtr->pikType->carryStrength;
     m->carryInfo->curNCarriers++;
     
     m->chaseInfo.maxSpeed = m->carryInfo->getSpeed();
@@ -259,50 +259,50 @@ void gen_mob_fsm::handleCarrierAdded(Mob* m, void* info1, void* info2) {
     
     m->carryInfo->destinationExists =
         m->calculateCarryingDestination(
-            pik_ptr, nullptr,
+            pikPtr, nullptr,
             &m->carryInfo->intendedPikType,
             &m->carryInfo->intendedMob, &m->carryInfo->intendedPoint
         );
         
     //Check if we need to update the path.
-    bool must_update = false;
+    bool mustUpdate = false;
     
     //Start by checking if the mob can now start moving,
     //or if it already could and the target changed.
-    bool can_move = m->carryInfo->curCarryingStrength >= m->type->weight;
-    if(can_move) {
+    bool canMove = m->carryInfo->curCarryingStrength >= m->type->weight;
+    if(canMove) {
         if(
-            !could_move ||
-            (prev_destination != m->carryInfo->intendedMob)
+            !couldMove ||
+            (prevDestination != m->carryInfo->intendedMob)
         ) {
-            must_update = true;
+            mustUpdate = true;
         }
     }
     
     //Now, check if the fact that it can fly or not changed.
-    if(!must_update && m->pathInfo) {
-        bool old_is_airborne =
+    if(!mustUpdate && m->pathInfo) {
+        bool oldIsAirborne =
             hasFlag(m->pathInfo->settings.flags, PATH_FOLLOW_FLAG_AIRBORNE);
-        bool new_is_airborne = m->carryInfo->canFly();
-        must_update = old_is_airborne != new_is_airborne;
+        bool newIsAirborne = m->carryInfo->canFly();
+        mustUpdate = oldIsAirborne != newIsAirborne;
     }
     
     //Check if the list of invulnerabilities changed.
-    if(!must_update && m->pathInfo) {
-        vector<Hazard*> new_invulnerabilities =
+    if(!mustUpdate && m->pathInfo) {
+        vector<Hazard*> newInvulnerabilities =
             m->carryInfo->getCarrierInvulnerabilities();
             
         if(
             !vectorsContainSame(
-                new_invulnerabilities,
+                newInvulnerabilities,
                 m->pathInfo->settings.invulnerabilities
             )
         ) {
-            must_update = true;
+            mustUpdate = true;
         }
     }
     
-    if(must_update) {
+    if(mustUpdate) {
         //Send a move begin event, so that the mob can calculate
         //a (new) path and start taking it.
         m->fsm.runEvent(MOB_EV_CARRY_BEGIN_MOVE);
@@ -317,69 +317,69 @@ void gen_mob_fsm::handleCarrierAdded(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void gen_mob_fsm::handleCarrierRemoved(Mob* m, void* info1, void* info2) {
-    Pikmin* pik_ptr = (Pikmin*) info1;
+void GenMobFsm::handleCarrierRemoved(Mob* m, void* info1, void* info2) {
+    Pikmin* pikPtr = (Pikmin*) info1;
     
     //Save some data before changing anything.
-    bool could_move = m->carryInfo->curCarryingStrength >= m->type->weight;
-    Mob* prev_destination = m->carryInfo->intendedMob;
+    bool couldMove = m->carryInfo->curCarryingStrength >= m->type->weight;
+    Mob* prevDestination = m->carryInfo->intendedMob;
     
     //Update the numbers and such.
-    m->carryInfo->spotInfo[pik_ptr->tempI].pikPtr = nullptr;
-    m->carryInfo->spotInfo[pik_ptr->tempI].state = CARRY_SPOT_STATE_FREE;
-    m->carryInfo->curCarryingStrength -= pik_ptr->pikType->carryStrength;
+    m->carryInfo->spotInfo[pikPtr->tempI].pikPtr = nullptr;
+    m->carryInfo->spotInfo[pikPtr->tempI].state = CARRY_SPOT_STATE_FREE;
+    m->carryInfo->curCarryingStrength -= pikPtr->pikType->carryStrength;
     m->carryInfo->curNCarriers--;
     
     m->chaseInfo.maxSpeed = m->carryInfo->getSpeed();
     m->chaseInfo.acceleration = MOB::CARRIED_MOB_ACCELERATION;
     
     m->calculateCarryingDestination(
-        nullptr, pik_ptr,
+        nullptr, pikPtr,
         &m->carryInfo->intendedPikType,
         &m->carryInfo->intendedMob, &m->carryInfo->intendedPoint
     );
     
-    bool can_move = m->carryInfo->curCarryingStrength >= m->type->weight;
+    bool canMove = m->carryInfo->curCarryingStrength >= m->type->weight;
     
     //If the mob can no longer move, send a move stop event,
     //so the mob, well, stops.
-    if(could_move && !can_move) {
+    if(couldMove && !canMove) {
         m->fsm.runEvent(MOB_EV_CARRY_STOP_MOVE);
         return;
     }
     
     //Check if we need to update the path.
-    bool must_update = false;
+    bool mustUpdate = false;
     
     //Start by checking if the target changed.
-    if(can_move && (prev_destination != m->carryInfo->intendedMob)) {
-        must_update = true;
+    if(canMove && (prevDestination != m->carryInfo->intendedMob)) {
+        mustUpdate = true;
     }
     
     //Now, check if the fact that it can fly or not changed.
-    if(!must_update && m->pathInfo) {
-        bool old_is_airborne =
+    if(!mustUpdate && m->pathInfo) {
+        bool oldIsAirborne =
             hasFlag(m->pathInfo->settings.flags, PATH_FOLLOW_FLAG_AIRBORNE);
-        bool new_is_airborne = m->carryInfo->canFly();
-        must_update = old_is_airborne != new_is_airborne;
+        bool newIsAirborne = m->carryInfo->canFly();
+        mustUpdate = oldIsAirborne != newIsAirborne;
     }
     
     //Check if the list of invulnerabilities changed.
-    if(!must_update && m->pathInfo) {
-        vector<Hazard*> new_invulnerabilities =
+    if(!mustUpdate && m->pathInfo) {
+        vector<Hazard*> newInvulnerabilities =
             m->carryInfo->getCarrierInvulnerabilities();
             
         if(
             !vectorsContainSame(
-                new_invulnerabilities,
+                newInvulnerabilities,
                 m->pathInfo->settings.invulnerabilities
             )
         ) {
-            must_update = true;
+            mustUpdate = true;
         }
     }
     
-    if(must_update) {
+    if(mustUpdate) {
         //Send a move begin event, so that the mob can calculate
         //a (new) path and start taking it.
         m->fsm.runEvent(MOB_EV_CARRY_BEGIN_MOVE);
@@ -394,7 +394,7 @@ void gen_mob_fsm::handleCarrierRemoved(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void gen_mob_fsm::handleDelivery(Mob* m, void* info1, void* info2) {
+void GenMobFsm::handleDelivery(Mob* m, void* info1, void* info2) {
     engineAssert(m->focusedMob != nullptr, m->printStateHistory());
     
     m->focusedMob->fsm.runEvent(
@@ -412,7 +412,7 @@ void gen_mob_fsm::handleDelivery(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void gen_mob_fsm::loseMomentum(Mob* m, void* info1, void* info2) {
+void GenMobFsm::loseMomentum(Mob* m, void* info1, void* info2) {
     m->speed.x = m->speed.y = 0.0f;
 }
 
@@ -424,11 +424,11 @@ void gen_mob_fsm::loseMomentum(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void gen_mob_fsm::startBeingDelivered(Mob* m, void* info1, void* info2) {
+void GenMobFsm::startBeingDelivered(Mob* m, void* info1, void* info2) {
     for(size_t p = 0; p < m->carryInfo->spotInfo.size(); p++) {
-        Mob* pik_ptr = m->carryInfo->spotInfo[p].pikPtr;
-        if(pik_ptr) {
-            pik_ptr->fsm.runEvent(MOB_EV_FINISHED_CARRYING);
+        Mob* pikPtr = m->carryInfo->spotInfo[p].pikPtr;
+        if(pikPtr) {
+            pikPtr->fsm.runEvent(MOB_EV_FINISHED_CARRYING);
         }
     }
     
@@ -458,7 +458,7 @@ void gen_mob_fsm::startBeingDelivered(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void gen_mob_fsm::touchHazard(Mob* m, void* info1, void* info2) {
+void GenMobFsm::touchHazard(Mob* m, void* info1, void* info2) {
     engineAssert(info1 != nullptr, m->printStateHistory());
     
     Hazard* h = (Hazard*) info1;
@@ -476,7 +476,7 @@ void gen_mob_fsm::touchHazard(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void gen_mob_fsm::touchSpray(Mob* m, void* info1, void* info2) {
+void GenMobFsm::touchSpray(Mob* m, void* info1, void* info2) {
     engineAssert(info1 != nullptr, m->printStateHistory());
     
     SprayType* s = (SprayType*) info1;

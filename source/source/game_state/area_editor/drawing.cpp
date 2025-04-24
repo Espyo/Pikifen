@@ -46,16 +46,16 @@ void AreaEditor::doDrawing() {
  *
  * @param start Starting point of the arrow.
  * @param end Ending point of the arrow, where the arrow points to.
- * @param start_offset When considering where to place the triangle
+ * @param startOffset When considering where to place the triangle
  * in the line, pretend that the starting point is actually this distance
  * away from start. Useful for when mobs of different radii are involved.
- * @param end_offset Same as start_offset, but for the end point.
+ * @param endOffset Same as startOffset, but for the end point.
  * @param thickness Thickness of the arrow's line.
  * @param color Arrow color.
  */
 void AreaEditor::drawArrow(
     const Point &start, const Point &end,
-    float start_offset, float end_offset,
+    float startOffset, float endOffset,
     float thickness, const ALLEGRO_COLOR &color
 ) {
     al_draw_line(
@@ -66,16 +66,16 @@ void AreaEditor::drawArrow(
     if(game.view.cam.zoom >= 0.25) {
         float angle =
             getAngle(start, end);
-        Point final_start = Point(start_offset, 0);
-        final_start = rotatePoint(final_start, angle);
-        final_start += start;
-        Point final_end = Point(end_offset, 0);
-        final_end = rotatePoint(final_end, angle + TAU / 2.0);
-        final_end += end;
+        Point finalStart = Point(startOffset, 0);
+        finalStart = rotatePoint(finalStart, angle);
+        finalStart += start;
+        Point finalEnd = Point(endOffset, 0);
+        finalEnd = rotatePoint(finalEnd, angle + TAU / 2.0);
+        finalEnd += end;
         
         Point pivot(
-            final_start.x + (final_end.x - final_start.x) * 0.55,
-            final_start.y + (final_end.y - final_start.y) * 0.55
+            finalStart.x + (finalEnd.x - finalStart.x) * 0.55,
+            finalStart.y + (finalEnd.y - finalStart.y) * 0.55
         );
         const float delta =
             (thickness * 4) / game.view.cam.zoom;
@@ -114,61 +114,61 @@ void AreaEditor::drawCanvas() {
     
     al_use_transform(&game.view.worldToWindowTransform);
     
-    float lowest_sector_z = 0.0f;
-    float highest_sector_z = 0.0f;
+    float lowestSectorZ = 0.0f;
+    float highestSectorZ = 0.0f;
     if(
         game.options.areaEd.viewMode == VIEW_MODE_HEIGHTMAP &&
         !game.curAreaData->sectors.empty()
     ) {
-        lowest_sector_z = game.curAreaData->sectors[0]->z;
-        highest_sector_z = lowest_sector_z;
+        lowestSectorZ = game.curAreaData->sectors[0]->z;
+        highestSectorZ = lowestSectorZ;
         
         for(size_t s = 1; s < game.curAreaData->sectors.size(); s++) {
-            lowest_sector_z =
-                std::min(lowest_sector_z, game.curAreaData->sectors[s]->z);
-            highest_sector_z =
-                std::max(highest_sector_z, game.curAreaData->sectors[s]->z);
+            lowestSectorZ =
+                std::min(lowestSectorZ, game.curAreaData->sectors[s]->z);
+            highestSectorZ =
+                std::max(highestSectorZ, game.curAreaData->sectors[s]->z);
         }
     }
     
-    float selection_min_opacity = 0.25f;
-    float selection_max_opacity = 0.75f;
-    float textures_opacity = 0.4f;
-    float wall_shadows_opacity = 0.0f;
-    float edges_opacity = 0.25f;
-    float grid_opacity = 1.0f;
-    float mob_opacity = 0.15f;
-    ALLEGRO_COLOR highlight_color = COLOR_WHITE;
+    float selectionMinOpacity = 0.25f;
+    float selectionMaxOpacity = 0.75f;
+    float texturesOpacity = 0.4f;
+    float wallShadowsOpacity = 0.0f;
+    float edgesOpacity = 0.25f;
+    float gridOpacity = 1.0f;
+    float mobOpacity = 0.15f;
+    ALLEGRO_COLOR highlightColor = COLOR_WHITE;
     if(game.options.editors.useCustomStyle) {
-        highlight_color = game.options.editors.highlightColor;
+        highlightColor = game.options.editors.highlightColor;
     }
     switch(state) {
     case EDITOR_STATE_LAYOUT: {
-        textures_opacity = 0.5f;
-        edges_opacity = 1.0f;
+        texturesOpacity = 0.5f;
+        edgesOpacity = 1.0f;
         break;
         
     } case EDITOR_STATE_MOBS: {
-        mob_opacity = 1.0f;
+        mobOpacity = 1.0f;
         break;
         
     } case EDITOR_STATE_MAIN:
     case EDITOR_STATE_REVIEW: {
-        textures_opacity = 0.6f;
-        edges_opacity = 0.5f;
-        grid_opacity = 0.3f;
-        mob_opacity = 0.75f;
+        texturesOpacity = 0.6f;
+        edgesOpacity = 0.5f;
+        gridOpacity = 0.3f;
+        mobOpacity = 0.75f;
         break;
         
     }
     }
     
     if(previewMode) {
-        textures_opacity = 1.0f;
-        wall_shadows_opacity = 1.0f;
-        edges_opacity = 0.0f;
-        grid_opacity = 0.0f;
-        mob_opacity = 0.0f;
+        texturesOpacity = 1.0f;
+        wallShadowsOpacity = 1.0f;
+        edgesOpacity = 0.0f;
+        gridOpacity = 0.0f;
+        mobOpacity = 0.0f;
     } else if(subState == EDITOR_SUB_STATE_OCTEE) {
         quickPreviewTimer.start();
     }
@@ -179,50 +179,50 @@ void AreaEditor::drawCanvas() {
                 quickPreviewTimer.timeLeft,
                 quickPreviewTimer.duration / 2.0f
             );
-        selection_min_opacity =
+        selectionMinOpacity =
             interpolateNumber(
                 t, 0.0f, quickPreviewTimer.duration / 2.0f,
-                selection_min_opacity, 0.0f
+                selectionMinOpacity, 0.0f
             );
-        selection_max_opacity =
+        selectionMaxOpacity =
             interpolateNumber(
                 t, 0.0f, quickPreviewTimer.duration / 2.0f,
-                selection_max_opacity, 0.0f
+                selectionMaxOpacity, 0.0f
             );
-        textures_opacity =
+        texturesOpacity =
             interpolateNumber(
                 t, 0.0f, quickPreviewTimer.duration / 2.0f,
-                textures_opacity, 1.0f
+                texturesOpacity, 1.0f
             );
-        wall_shadows_opacity =
+        wallShadowsOpacity =
             interpolateNumber(
                 t, 0.0f, quickPreviewTimer.duration / 2.0f,
-                wall_shadows_opacity, 1.0f
+                wallShadowsOpacity, 1.0f
             );
-        edges_opacity =
+        edgesOpacity =
             interpolateNumber(
                 t, 0.0f, quickPreviewTimer.duration / 2.0f,
-                edges_opacity, 0.0f
+                edgesOpacity, 0.0f
             );
-        grid_opacity =
+        gridOpacity =
             interpolateNumber(
                 t, 0.0f, quickPreviewTimer.duration / 2.0f,
-                grid_opacity, 0.0f
+                gridOpacity, 0.0f
             );
-        mob_opacity =
+        mobOpacity =
             interpolateNumber(
                 t, 0.0f, quickPreviewTimer.duration / 2.0f,
-                mob_opacity, 0.0f
+                mobOpacity, 0.0f
             );
     }
     
-    float selection_opacity =
-        selection_min_opacity +
+    float selectionOpacity =
+        selectionMinOpacity +
         (sin(selectionEffect) + 1) *
-        (selection_max_opacity - selection_min_opacity) / 2.0;
+        (selectionMaxOpacity - selectionMinOpacity) / 2.0;
         
     //Sectors.
-    if(wall_shadows_opacity > 0.0f) {
+    if(wallShadowsOpacity > 0.0f) {
         updateOffsetEffectBuffer(
             game.view.box[0], game.view.box[1],
             game.liquidLimitEffectCaches,
@@ -242,9 +242,9 @@ void AreaEditor::drawCanvas() {
             false
         );
     }
-    size_t n_sectors = game.curAreaData->sectors.size();
-    for(size_t s = 0; s < n_sectors; s++) {
-        Sector* s_ptr;
+    size_t nSectors = game.curAreaData->sectors.size();
+    for(size_t s = 0; s < nSectors; s++) {
+        Sector* sPtr;
         if(
             preMoveAreaData &&
             moving &&
@@ -252,74 +252,74 @@ void AreaEditor::drawCanvas() {
                 state == EDITOR_STATE_LAYOUT
             )
         ) {
-            s_ptr = preMoveAreaData->sectors[s];
+            sPtr = preMoveAreaData->sectors[s];
         } else {
-            s_ptr = game.curAreaData->sectors[s];
+            sPtr = game.curAreaData->sectors[s];
         }
         
-        bool view_heightmap = false;
-        bool view_brightness = false;
+        bool viewHeightmap = false;
+        bool viewBrightness = false;
         
         if(
             game.options.areaEd.viewMode == VIEW_MODE_TEXTURES ||
             previewMode
         ) {
             if(previewMode) {
-                bool has_liquid = false;
-                if(s_ptr->hazard) {
-                    Liquid* l_ptr = s_ptr->hazard->associatedLiquid;
-                    if(l_ptr) {
-                        drawLiquid(s_ptr, l_ptr, Point(), 1.0f, game.timePassed);
-                        has_liquid = true;
+                bool hasLiquid = false;
+                if(sPtr->hazard) {
+                    Liquid* lPtr = sPtr->hazard->associatedLiquid;
+                    if(lPtr) {
+                        drawLiquid(sPtr, lPtr, Point(), 1.0f, game.timePassed);
+                        hasLiquid = true;
                     }
                 }
-                if(!has_liquid) {
-                    drawSectorTexture(s_ptr, Point(), 1.0, textures_opacity);
+                if(!hasLiquid) {
+                    drawSectorTexture(sPtr, Point(), 1.0, texturesOpacity);
                 }
             } else {
-                drawSectorTexture(s_ptr, Point(), 1.0, textures_opacity);
+                drawSectorTexture(sPtr, Point(), 1.0, texturesOpacity);
             }
             
-            if(wall_shadows_opacity > 0.0f) {
+            if(wallShadowsOpacity > 0.0f) {
                 drawSectorEdgeOffsets(
-                    s_ptr, game.liquidLimitEffectBuffer, 1.0f
+                    sPtr, game.liquidLimitEffectBuffer, 1.0f
                 );
                 drawSectorEdgeOffsets(
-                    s_ptr, game.wallOffsetEffectBuffer, wall_shadows_opacity
+                    sPtr, game.wallOffsetEffectBuffer, wallShadowsOpacity
                 );
             }
             
         } else if(game.options.areaEd.viewMode == VIEW_MODE_HEIGHTMAP) {
-            view_heightmap = true;
+            viewHeightmap = true;
             
         } else if(game.options.areaEd.viewMode == VIEW_MODE_BRIGHTNESS) {
-            view_brightness = true;
+            viewBrightness = true;
             
         }
         
         bool selected =
-            selectedSectors.find(s_ptr) != selectedSectors.end();
+            selectedSectors.find(sPtr) != selectedSectors.end();
         bool valid = true;
         bool highlighted =
-            s_ptr == highlightedSector &&
+            sPtr == highlightedSector &&
             selectionFilter == SELECTION_FILTER_SECTORS &&
             state == EDITOR_STATE_LAYOUT;
             
         if(
-            game.curAreaData->problems.nonSimples.find(s_ptr) !=
+            game.curAreaData->problems.nonSimples.find(sPtr) !=
             game.curAreaData->problems.nonSimples.end()
         ) {
             valid = false;
         }
-        if(s_ptr == problemSectorPtr) {
+        if(sPtr == problemSectorPtr) {
             valid = false;
         }
         
         if(
-            selected || !valid || view_heightmap ||
-            view_brightness || showBlockingSectors || highlighted
+            selected || !valid || viewHeightmap ||
+            viewBrightness || showBlockingSectors || highlighted
         ) {
-            for(size_t t = 0; t < s_ptr->triangles.size(); t++) {
+            for(size_t t = 0; t < sPtr->triangles.size(); t++) {
             
                 ALLEGRO_VERTEX av[3];
                 for(size_t v = 0; v < 3; v++) {
@@ -327,21 +327,21 @@ void AreaEditor::drawCanvas() {
                         av[v].color = al_map_rgba(160, 16, 16, 224);
                     } else if(showBlockingSectors) {
                         av[v].color =
-                            s_ptr->type == SECTOR_TYPE_BLOCKING ?
+                            sPtr->type == SECTOR_TYPE_BLOCKING ?
                             AREA_EDITOR::BLOCKING_COLOR :
                             AREA_EDITOR::NON_BLOCKING_COLOR;
-                    } else if(view_brightness) {
+                    } else if(viewBrightness) {
                         av[v].color =
                             al_map_rgba(
-                                s_ptr->brightness * 0.7,
-                                s_ptr->brightness * 0.8,
-                                s_ptr->brightness * 0.7,
+                                sPtr->brightness * 0.7,
+                                sPtr->brightness * 0.8,
+                                sPtr->brightness * 0.7,
                                 255
                             );
-                    } else if(view_heightmap) {
+                    } else if(viewHeightmap) {
                         unsigned char g =
                             interpolateNumber(
-                                s_ptr->z, lowest_sector_z, highest_sector_z,
+                                sPtr->z, lowestSectorZ, highestSectorZ,
                                 0, 224
                             );
                         av[v].color =
@@ -352,22 +352,22 @@ void AreaEditor::drawCanvas() {
                                 AREA_EDITOR::SELECTION_COLOR[0],
                                 AREA_EDITOR::SELECTION_COLOR[1],
                                 AREA_EDITOR::SELECTION_COLOR[2],
-                                selection_opacity * 0.5 * 255
+                                selectionOpacity * 0.5 * 255
                             );
                         if(highlighted && !selected) {
                             av[v].color =
                                 al_map_rgba(
-                                    highlight_color.r * 255,
-                                    highlight_color.g * 255,
-                                    highlight_color.b * 255,
+                                    highlightColor.r * 255,
+                                    highlightColor.g * 255,
+                                    highlightColor.b * 255,
                                     16
                                 );
                         }
                     }
                     av[v].u = 0;
                     av[v].v = 0;
-                    av[v].x = s_ptr->triangles[t].points[v]->x;
-                    av[v].y = s_ptr->triangles[t].points[v]->y;
+                    av[v].x = sPtr->triangles[t].points[v]->x;
+                    av[v].y = sPtr->triangles[t].points[v]->y;
                     av[v].z = 0;
                 }
                 
@@ -383,37 +383,37 @@ void AreaEditor::drawCanvas() {
     //Grid.
     drawGrid(
         game.options.areaEd.gridInterval,
-        al_map_rgba(64, 64, 64, grid_opacity * 255),
-        al_map_rgba(48, 48, 48, grid_opacity * 255)
+        al_map_rgba(64, 64, 64, gridOpacity * 255),
+        al_map_rgba(48, 48, 48, gridOpacity * 255)
     );
     
     //0,0 marker.
     al_draw_line(
         -(AREA_EDITOR::COMFY_DIST * 2), 0,
         AREA_EDITOR::COMFY_DIST * 2, 0,
-        al_map_rgba(192, 192, 224, grid_opacity * 255),
+        al_map_rgba(192, 192, 224, gridOpacity * 255),
         1.0f / game.view.cam.zoom
     );
     al_draw_line(
         0, -(AREA_EDITOR::COMFY_DIST * 2), 0,
         AREA_EDITOR::COMFY_DIST * 2,
-        al_map_rgba(192, 192, 224, grid_opacity * 255),
+        al_map_rgba(192, 192, 224, gridOpacity * 255),
         1.0f / game.view.cam.zoom
     );
     
     //Edges.
-    size_t n_edges = game.curAreaData->edges.size();
-    for(size_t e = 0; e < n_edges; e++) {
-        Edge* e_ptr = game.curAreaData->edges[e];
+    size_t nEdges = game.curAreaData->edges.size();
+    for(size_t e = 0; e < nEdges; e++) {
+        Edge* ePtr = game.curAreaData->edges[e];
         
-        if(!e_ptr->isValid()) continue;
+        if(!ePtr->isValid()) continue;
         
-        bool one_sided = true;
-        bool same_z = false;
+        bool oneSided = true;
+        bool sameZ = false;
         bool valid = true;
         bool selected = false;
         bool highlighted =
-            e_ptr == highlightedEdge &&
+            ePtr == highlightedEdge &&
             (
                 selectionFilter == SELECTION_FILTER_SECTORS ||
                 selectionFilter == SELECTION_FILTER_EDGES
@@ -422,77 +422,77 @@ void AreaEditor::drawCanvas() {
             
         if(problemSectorPtr) {
             if(
-                e_ptr->sectors[0] == problemSectorPtr ||
-                e_ptr->sectors[1] == problemSectorPtr
+                ePtr->sectors[0] == problemSectorPtr ||
+                ePtr->sectors[1] == problemSectorPtr
             ) {
                 valid = false;
             }
             
         }
         if(
-            problemEdgeIntersection.e1 == e_ptr ||
-            problemEdgeIntersection.e2 == e_ptr
+            problemEdgeIntersection.e1 == ePtr ||
+            problemEdgeIntersection.e2 == ePtr
         ) {
             valid = false;
         }
         
         if(
-            game.curAreaData->problems.loneEdges.find(e_ptr) !=
+            game.curAreaData->problems.loneEdges.find(ePtr) !=
             game.curAreaData->problems.loneEdges.end()
         ) {
             valid = false;
         }
         
         if(
-            game.curAreaData->problems.nonSimples.find(e_ptr->sectors[0]) !=
+            game.curAreaData->problems.nonSimples.find(ePtr->sectors[0]) !=
             game.curAreaData->problems.nonSimples.end() ||
-            game.curAreaData->problems.nonSimples.find(e_ptr->sectors[1]) !=
+            game.curAreaData->problems.nonSimples.find(ePtr->sectors[1]) !=
             game.curAreaData->problems.nonSimples.end()
         ) {
             valid = false;
         }
         
-        if(e_ptr->sectors[0] && e_ptr->sectors[1]) one_sided = false;
+        if(ePtr->sectors[0] && ePtr->sectors[1]) oneSided = false;
         
         if(
-            !one_sided &&
-            e_ptr->sectors[0]->z == e_ptr->sectors[1]->z &&
-            e_ptr->sectors[0]->type == e_ptr->sectors[1]->type
+            !oneSided &&
+            ePtr->sectors[0]->z == ePtr->sectors[1]->z &&
+            ePtr->sectors[0]->type == ePtr->sectors[1]->type
         ) {
-            same_z = true;
+            sameZ = true;
         }
         
-        if(selectedEdges.find(e_ptr) != selectedEdges.end()) {
+        if(selectedEdges.find(ePtr) != selectedEdges.end()) {
             selected = true;
         }
         
         al_draw_line(
-            e_ptr->vertexes[0]->x,
-            e_ptr->vertexes[0]->y,
-            e_ptr->vertexes[1]->x,
-            e_ptr->vertexes[1]->y,
+            ePtr->vertexes[0]->x,
+            ePtr->vertexes[0]->y,
+            ePtr->vertexes[1]->x,
+            ePtr->vertexes[1]->y,
             (
                 selected ?
                 al_map_rgba(
                     AREA_EDITOR::SELECTION_COLOR[0],
                     AREA_EDITOR::SELECTION_COLOR[1],
                     AREA_EDITOR::SELECTION_COLOR[2],
-                    selection_opacity * 255
+                    selectionOpacity * 255
                 ) :
                 !valid ?
-                al_map_rgba(192, 32,  32,  edges_opacity * 255) :
+                al_map_rgba(192, 32,  32,  edgesOpacity * 255) :
                 highlighted ?
                 al_map_rgba(
-                    highlight_color.r * 255,
-                    highlight_color.g * 255,
-                    highlight_color.b * 255,
-                    edges_opacity * 255
+                    highlightColor.r * 255,
+                    highlightColor.g * 255,
+                    highlightColor.b * 255,
+                    edgesOpacity * 255
                 ) :
-                one_sided ?
-                al_map_rgba(128, 128, 128, edges_opacity * 255) :
-                same_z ?
-                al_map_rgba(128, 128, 128, edges_opacity * 255) :
-                al_map_rgba(150, 150, 150, edges_opacity * 255)
+                oneSided ?
+                al_map_rgba(128, 128, 128, edgesOpacity * 255) :
+                sameZ ?
+                al_map_rgba(128, 128, 128, edgesOpacity * 255) :
+                al_map_rgba(150, 150, 150, edgesOpacity * 255)
             ),
             (selected ? 3.0 : 2.0) / game.view.cam.zoom
         );
@@ -502,42 +502,42 @@ void AreaEditor::drawCanvas() {
             moving &&
             game.options.areaEd.showEdgeLength
         ) {
-            bool draw_dist = false;
-            Point other_point;
+            bool drawDist = false;
+            Point otherPoint;
             if(
-                e_ptr->vertexes[0] == moveClosestVertex &&
-                selectedVertexes.find(e_ptr->vertexes[1]) ==
+                ePtr->vertexes[0] == moveClosestVertex &&
+                selectedVertexes.find(ePtr->vertexes[1]) ==
                 selectedVertexes.end()
             ) {
-                other_point.x = e_ptr->vertexes[1]->x;
-                other_point.y = e_ptr->vertexes[1]->y;
-                draw_dist = true;
+                otherPoint.x = ePtr->vertexes[1]->x;
+                otherPoint.y = ePtr->vertexes[1]->y;
+                drawDist = true;
             } else if(
-                e_ptr->vertexes[1] == moveClosestVertex &&
-                selectedVertexes.find(e_ptr->vertexes[0]) ==
+                ePtr->vertexes[1] == moveClosestVertex &&
+                selectedVertexes.find(ePtr->vertexes[0]) ==
                 selectedVertexes.end()
             ) {
-                other_point.x = e_ptr->vertexes[0]->x;
-                other_point.y = e_ptr->vertexes[0]->y;
-                draw_dist = true;
+                otherPoint.x = ePtr->vertexes[0]->x;
+                otherPoint.y = ePtr->vertexes[0]->y;
+                drawDist = true;
             }
             
-            if(draw_dist) {
-                drawLineDist(v2p(moveClosestVertex), other_point);
+            if(drawDist) {
+                drawLineDist(v2p(moveClosestVertex), otherPoint);
             }
         }
         
         if(debugTriangulation && !selectedSectors.empty()) {
-            Sector* s_ptr = *selectedSectors.begin();
-            for(size_t t = 0; t < s_ptr->triangles.size(); t++) {
-                Triangle* t_ptr = &s_ptr->triangles[t];
+            Sector* sPtr = *selectedSectors.begin();
+            for(size_t t = 0; t < sPtr->triangles.size(); t++) {
+                Triangle* tPtr = &sPtr->triangles[t];
                 al_draw_triangle(
-                    t_ptr->points[0]->x,
-                    t_ptr->points[0]->y,
-                    t_ptr->points[1]->x,
-                    t_ptr->points[1]->y,
-                    t_ptr->points[2]->x,
-                    t_ptr->points[2]->y,
+                    tPtr->points[0]->x,
+                    tPtr->points[0]->y,
+                    tPtr->points[1]->x,
+                    tPtr->points[1]->y,
+                    tPtr->points[2]->x,
+                    tPtr->points[2]->y,
                     al_map_rgb(192, 0, 160),
                     2.0f / game.view.cam.zoom
                 );
@@ -546,11 +546,11 @@ void AreaEditor::drawCanvas() {
         
         if(debugSectorIdxs) {
             Point middle(
-                (e_ptr->vertexes[0]->x + e_ptr->vertexes[1]->x) / 2.0f,
-                (e_ptr->vertexes[0]->y + e_ptr->vertexes[1]->y) / 2.0f
+                (ePtr->vertexes[0]->x + ePtr->vertexes[1]->x) / 2.0f,
+                (ePtr->vertexes[0]->y + ePtr->vertexes[1]->y) / 2.0f
             );
             float angle =
-                getAngle(v2p(e_ptr->vertexes[1]), v2p(e_ptr->vertexes[0]));
+                getAngle(v2p(ePtr->vertexes[1]), v2p(ePtr->vertexes[0]));
             drawDebugText(
                 al_map_rgb(192, 255, 192),
                 Point(
@@ -558,9 +558,9 @@ void AreaEditor::drawCanvas() {
                     middle.y + sin(angle + TAU / 4) * 4
                 ),
                 (
-                    e_ptr->sectorIdxs[0] == INVALID ?
+                    ePtr->sectorIdxs[0] == INVALID ?
                     "-" :
-                    i2s(e_ptr->sectorIdxs[0])
+                    i2s(ePtr->sectorIdxs[0])
                 ),
                 1
             );
@@ -572,9 +572,9 @@ void AreaEditor::drawCanvas() {
                     middle.y + sin(angle - TAU / 4) * 4
                 ),
                 (
-                    e_ptr->sectorIdxs[1] == INVALID ?
+                    ePtr->sectorIdxs[1] == INVALID ?
                     "-" :
-                    i2s(e_ptr->sectorIdxs[1])
+                    i2s(ePtr->sectorIdxs[1])
                 ),
                 2
             );
@@ -582,8 +582,8 @@ void AreaEditor::drawCanvas() {
         
         if(debugEdgeIdxs) {
             Point middle(
-                (e_ptr->vertexes[0]->x + e_ptr->vertexes[1]->x) / 2.0f,
-                (e_ptr->vertexes[0]->y + e_ptr->vertexes[1]->y) / 2.0f
+                (ePtr->vertexes[0]->x + ePtr->vertexes[1]->x) / 2.0f,
+                (ePtr->vertexes[0]->y + ePtr->vertexes[1]->y) / 2.0f
             );
             drawDebugText(al_map_rgb(255, 192, 192), middle, i2s(e));
         }
@@ -591,45 +591,45 @@ void AreaEditor::drawCanvas() {
     
     //Vertexes.
     if(state == EDITOR_STATE_LAYOUT) {
-        size_t n_vertexes = game.curAreaData->vertexes.size();
-        for(size_t v = 0; v < n_vertexes; v++) {
-            Vertex* v_ptr = game.curAreaData->vertexes[v];
+        size_t nVertexes = game.curAreaData->vertexes.size();
+        for(size_t v = 0; v < nVertexes; v++) {
+            Vertex* vPtr = game.curAreaData->vertexes[v];
             bool selected =
-                (selectedVertexes.find(v_ptr) != selectedVertexes.end());
+                (selectedVertexes.find(vPtr) != selectedVertexes.end());
             bool valid =
-                v_ptr != problemVertexPtr;
+                vPtr != problemVertexPtr;
             bool highlighted =
-                highlightedVertex == v_ptr &&
+                highlightedVertex == vPtr &&
                 (
                     selectionFilter == SELECTION_FILTER_SECTORS ||
                     selectionFilter == SELECTION_FILTER_EDGES ||
                     selectionFilter == SELECTION_FILTER_VERTEXES
                 );
             drawFilledDiamond(
-                v2p(v_ptr), 3.0 / game.view.cam.zoom,
+                v2p(vPtr), 3.0 / game.view.cam.zoom,
                 selected ?
                 al_map_rgba(
                     AREA_EDITOR::SELECTION_COLOR[0],
                     AREA_EDITOR::SELECTION_COLOR[1],
                     AREA_EDITOR::SELECTION_COLOR[2],
-                    selection_opacity * 255
+                    selectionOpacity * 255
                 ) :
                 !valid ?
                 al_map_rgb(192, 32, 32) :
                 highlighted ?
                 al_map_rgba(
-                    highlight_color.r * 255,
-                    highlight_color.g * 255,
-                    highlight_color.b * 255,
-                    edges_opacity * 255
+                    highlightColor.r * 255,
+                    highlightColor.g * 255,
+                    highlightColor.b * 255,
+                    edgesOpacity * 255
                 ) :
-                al_map_rgba(80, 160, 255, edges_opacity * 255)
+                al_map_rgba(80, 160, 255, edgesOpacity * 255)
             );
             
             if(debugVertexIdxs) {
                 drawDebugText(
                     al_map_rgb(192, 192, 255),
-                    v2p(v_ptr), i2s(v)
+                    v2p(vPtr), i2s(v)
                 );
             }
         }
@@ -650,47 +650,47 @@ void AreaEditor::drawCanvas() {
     }
     
     //Mobs.
-    if(state == EDITOR_STATE_MOBS && mob_opacity > 0.0f) {
+    if(state == EDITOR_STATE_MOBS && mobOpacity > 0.0f) {
         for(size_t m = 0; m < game.curAreaData->mobGenerators.size(); m++) {
-            MobGen* m_ptr = game.curAreaData->mobGenerators[m];
-            MobGen* m2_ptr = nullptr;
+            MobGen* mPtr = game.curAreaData->mobGenerators[m];
+            MobGen* m2Ptr = nullptr;
             
-            if(!m_ptr->type) continue;
+            if(!mPtr->type) continue;
             
-            bool is_selected =
-                selectedMobs.find(m_ptr) != selectedMobs.end();
+            bool isSelected =
+                selectedMobs.find(mPtr) != selectedMobs.end();
                 
-            for(size_t l = 0; l < m_ptr->links.size(); l++) {
-                m2_ptr = m_ptr->links[l];
-                if(!m2_ptr->type) continue;
+            for(size_t l = 0; l < mPtr->links.size(); l++) {
+                m2Ptr = mPtr->links[l];
+                if(!m2Ptr->type) continue;
                 
-                bool show_link =
-                    is_selected ||
-                    selectedMobs.find(m2_ptr) != selectedMobs.end();
+                bool showLink =
+                    isSelected ||
+                    selectedMobs.find(m2Ptr) != selectedMobs.end();
                     
-                if(show_link) {
+                if(showLink) {
                     drawArrow(
-                        m_ptr->pos, m2_ptr->pos,
-                        m_ptr->type->radius, m2_ptr->type->radius,
+                        mPtr->pos, m2Ptr->pos,
+                        mPtr->type->radius, m2Ptr->type->radius,
                         AREA_EDITOR::MOB_LINK_THICKNESS,
                         al_map_rgb(160, 224, 64)
                     );
                 }
             }
             
-            if(m_ptr->storedInside != INVALID) {
-                m2_ptr =
-                    game.curAreaData->mobGenerators[m_ptr->storedInside];
-                if(!m2_ptr->type) continue;
+            if(mPtr->storedInside != INVALID) {
+                m2Ptr =
+                    game.curAreaData->mobGenerators[mPtr->storedInside];
+                if(!m2Ptr->type) continue;
                 
-                bool show_store =
-                    is_selected ||
-                    selectedMobs.find(m2_ptr) != selectedMobs.end();
+                bool showStore =
+                    isSelected ||
+                    selectedMobs.find(m2Ptr) != selectedMobs.end();
                     
-                if(show_store) {
+                if(showStore) {
                     drawArrow(
-                        m_ptr->pos, m2_ptr->pos,
-                        m_ptr->type->radius, m2_ptr->type->radius,
+                        mPtr->pos, m2Ptr->pos,
+                        mPtr->type->radius, m2Ptr->type->radius,
                         AREA_EDITOR::MOB_LINK_THICKNESS,
                         al_map_rgb(224, 200, 200)
                     );
@@ -700,51 +700,51 @@ void AreaEditor::drawCanvas() {
     }
     
     for(size_t m = 0; m < game.curAreaData->mobGenerators.size(); m++) {
-        MobGen* m_ptr = game.curAreaData->mobGenerators[m];
+        MobGen* mPtr = game.curAreaData->mobGenerators[m];
         
-        float radius = getMobGenRadius(m_ptr);
+        float radius = getMobGenRadius(mPtr);
         ALLEGRO_COLOR color = al_map_rgb(255, 0, 0);
-        if(m_ptr->type && m_ptr != problemMobPtr) {
+        if(mPtr->type && mPtr != problemMobPtr) {
             color =
                 changeAlpha(
-                    m_ptr->type->category->editorColor, mob_opacity * 255
+                    mPtr->type->category->editorColor, mobOpacity * 255
                 );
         }
         
-        if(m_ptr->type && m_ptr->type->rectangularDim.x != 0) {
+        if(mPtr->type && mPtr->type->rectangularDim.x != 0) {
             drawRotatedRectangle(
-                m_ptr->pos, m_ptr->type->rectangularDim,
-                m_ptr->angle, color, 1.0f / game.view.cam.zoom
+                mPtr->pos, mPtr->type->rectangularDim,
+                mPtr->angle, color, 1.0f / game.view.cam.zoom
             );
         }
         
         //Draw children of this mob.
-        if(m_ptr->type) {
-            for(size_t c = 0; c < m_ptr->type->children.size(); c++) {
-                MobType::Child* child_info =
-                    &m_ptr->type->children[c];
-                MobType::SpawnInfo* spawn_info =
-                    getSpawnInfoFromChildInfo(m_ptr->type, child_info);
-                if(!spawn_info) continue;
+        if(mPtr->type) {
+            for(size_t c = 0; c < mPtr->type->children.size(); c++) {
+                MobType::Child* childInfo =
+                    &mPtr->type->children[c];
+                MobType::SpawnInfo* spawnInfo =
+                    getSpawnInfoFromChildInfo(mPtr->type, childInfo);
+                if(!spawnInfo) continue;
                 
-                Point c_pos =
-                    m_ptr->pos +
-                    rotatePoint(spawn_info->coordsXY, m_ptr->angle);
-                MobType* c_type =
+                Point cPos =
+                    mPtr->pos +
+                    rotatePoint(spawnInfo->coordsXY, mPtr->angle);
+                MobType* cType =
                     game.mobCategories.findMobType(
-                        spawn_info->mobTypeName
+                        spawnInfo->mobTypeName
                     );
-                if(!c_type) continue;
+                if(!cType) continue;
                 
-                if(c_type->rectangularDim.x != 0) {
-                    float c_rot = m_ptr->angle + spawn_info->angle;
+                if(cType->rectangularDim.x != 0) {
+                    float cRot = mPtr->angle + spawnInfo->angle;
                     drawRotatedRectangle(
-                        c_pos, c_type->rectangularDim,
-                        c_rot, color, 1.0f / game.view.cam.zoom
+                        cPos, cType->rectangularDim,
+                        cRot, color, 1.0f / game.view.cam.zoom
                     );
                 } else {
                     al_draw_circle(
-                        c_pos.x, c_pos.y, c_type->radius,
+                        cPos.x, cPos.y, cType->radius,
                         color, 1.0f / game.view.cam.zoom
                     );
                 }
@@ -753,88 +753,88 @@ void AreaEditor::drawCanvas() {
         }
         
         al_draw_filled_circle(
-            m_ptr->pos.x, m_ptr->pos.y,
+            mPtr->pos.x, mPtr->pos.y,
             radius, color
         );
         
-        float lrw = cos(m_ptr->angle) * radius;
-        float lrh = sin(m_ptr->angle) * radius;
+        float lrw = cos(mPtr->angle) * radius;
+        float lrh = sin(mPtr->angle) * radius;
         float lt = radius / 8.0;
         
         al_draw_line(
-            m_ptr->pos.x - lrw * 0.8, m_ptr->pos.y - lrh * 0.8,
-            m_ptr->pos.x + lrw * 0.8, m_ptr->pos.y + lrh * 0.8,
-            al_map_rgba(0, 0, 0, mob_opacity * 255), lt
+            mPtr->pos.x - lrw * 0.8, mPtr->pos.y - lrh * 0.8,
+            mPtr->pos.x + lrw * 0.8, mPtr->pos.y + lrh * 0.8,
+            al_map_rgba(0, 0, 0, mobOpacity * 255), lt
         );
         
-        float tx1 = m_ptr->pos.x + lrw;
-        float ty1 = m_ptr->pos.y + lrh;
+        float tx1 = mPtr->pos.x + lrw;
+        float ty1 = mPtr->pos.y + lrh;
         float tx2 =
-            tx1 + cos(m_ptr->angle - (TAU / 4 + TAU / 8)) * radius * 0.5;
+            tx1 + cos(mPtr->angle - (TAU / 4 + TAU / 8)) * radius * 0.5;
         float ty2 =
-            ty1 + sin(m_ptr->angle - (TAU / 4 + TAU / 8)) * radius * 0.5;
+            ty1 + sin(mPtr->angle - (TAU / 4 + TAU / 8)) * radius * 0.5;
         float tx3 =
-            tx1 + cos(m_ptr->angle + (TAU / 4 + TAU / 8)) * radius * 0.5;
+            tx1 + cos(mPtr->angle + (TAU / 4 + TAU / 8)) * radius * 0.5;
         float ty3 =
-            ty1 + sin(m_ptr->angle + (TAU / 4 + TAU / 8)) * radius * 0.5;
+            ty1 + sin(mPtr->angle + (TAU / 4 + TAU / 8)) * radius * 0.5;
             
         al_draw_filled_triangle(
             tx1, ty1,
             tx2, ty2,
             tx3, ty3,
-            al_map_rgba(0, 0, 0, mob_opacity * 255)
+            al_map_rgba(0, 0, 0, mobOpacity * 255)
         );
         
-        bool is_selected =
-            selectedMobs.find(m_ptr) != selectedMobs.end();
-        bool is_mission_requirement =
+        bool isSelected =
+            selectedMobs.find(mPtr) != selectedMobs.end();
+        bool isMissionRequirement =
             subState == EDITOR_SUB_STATE_MISSION_MOBS &&
             game.curAreaData->mission.goalMobIdxs.find(m) !=
             game.curAreaData->mission.goalMobIdxs.end();
-        bool is_highlighted =
-            highlightedMob == m_ptr &&
+        bool isHighlighted =
+            highlightedMob == mPtr &&
             state == EDITOR_STATE_MOBS;
             
-        if(is_selected || is_mission_requirement) {
+        if(isSelected || isMissionRequirement) {
             al_draw_filled_circle(
-                m_ptr->pos.x, m_ptr->pos.y, radius,
+                mPtr->pos.x, mPtr->pos.y, radius,
                 al_map_rgba(
                     AREA_EDITOR::SELECTION_COLOR[0],
                     AREA_EDITOR::SELECTION_COLOR[1],
                     AREA_EDITOR::SELECTION_COLOR[2],
-                    selection_opacity * 255
+                    selectionOpacity * 255
                 )
             );
             
             if(
                 game.options.areaEd.showTerritory &&
-                m_ptr->type &&
-                m_ptr->type->territoryRadius > 0 &&
-                is_selected
+                mPtr->type &&
+                mPtr->type->territoryRadius > 0 &&
+                isSelected
             ) {
                 al_draw_circle(
-                    m_ptr->pos.x, m_ptr->pos.y, m_ptr->type->territoryRadius,
+                    mPtr->pos.x, mPtr->pos.y, mPtr->type->territoryRadius,
                     al_map_rgb(240, 240, 192), 1.0f / game.view.cam.zoom
                 );
             }
             if(
                 game.options.areaEd.showTerritory &&
-                m_ptr->type &&
-                m_ptr->type->terrainRadius > 0 &&
-                is_selected
+                mPtr->type &&
+                mPtr->type->terrainRadius > 0 &&
+                isSelected
             ) {
                 al_draw_circle(
-                    m_ptr->pos.x, m_ptr->pos.y, m_ptr->type->terrainRadius,
+                    mPtr->pos.x, mPtr->pos.y, mPtr->type->terrainRadius,
                     al_map_rgb(240, 192, 192), 1.0f / game.view.cam.zoom
                 );
             }
-        } else if(is_highlighted) {
+        } else if(isHighlighted) {
             al_draw_filled_circle(
-                m_ptr->pos.x, m_ptr->pos.y, radius,
+                mPtr->pos.x, mPtr->pos.y, radius,
                 al_map_rgba(
-                    highlight_color.r * 255,
-                    highlight_color.g * 255,
-                    highlight_color.b * 255,
+                    highlightColor.r * 255,
+                    highlightColor.g * 255,
+                    highlightColor.b * 255,
                     64
                 )
             );
@@ -847,44 +847,44 @@ void AreaEditor::drawCanvas() {
     
         //Stops.
         for(size_t s = 0; s < game.curAreaData->pathStops.size(); s++) {
-            PathStop* s_ptr = game.curAreaData->pathStops[s];
-            bool highlighted = highlightedPathStop == s_ptr;
+            PathStop* sPtr = game.curAreaData->pathStops[s];
+            bool highlighted = highlightedPathStop == sPtr;
             ALLEGRO_COLOR color;
-            if(hasFlag(s_ptr->flags, PATH_STOP_FLAG_SCRIPT_ONLY)) {
+            if(hasFlag(sPtr->flags, PATH_STOP_FLAG_SCRIPT_ONLY)) {
                 color = al_map_rgba(187, 102, 34, 224);
-            } else if(hasFlag(s_ptr->flags, PATH_STOP_FLAG_LIGHT_LOAD_ONLY)) {
+            } else if(hasFlag(sPtr->flags, PATH_STOP_FLAG_LIGHT_LOAD_ONLY)) {
                 color = al_map_rgba(102, 170, 34, 224);
-            } else if(hasFlag(s_ptr->flags, PATH_STOP_FLAG_AIRBORNE_ONLY)) {
+            } else if(hasFlag(sPtr->flags, PATH_STOP_FLAG_AIRBORNE_ONLY)) {
                 color = al_map_rgba(187, 102, 153, 224);
             } else {
                 color = al_map_rgb(88, 177, 177);
             }
             al_draw_filled_circle(
-                s_ptr->pos.x, s_ptr->pos.y,
-                s_ptr->radius,
+                sPtr->pos.x, sPtr->pos.y,
+                sPtr->radius,
                 color
             );
             
             if(
-                selectedPathStops.find(s_ptr) !=
+                selectedPathStops.find(sPtr) !=
                 selectedPathStops.end()
             ) {
                 al_draw_filled_circle(
-                    s_ptr->pos.x, s_ptr->pos.y, s_ptr->radius,
+                    sPtr->pos.x, sPtr->pos.y, sPtr->radius,
                     al_map_rgba(
                         AREA_EDITOR::SELECTION_COLOR[0],
                         AREA_EDITOR::SELECTION_COLOR[1],
                         AREA_EDITOR::SELECTION_COLOR[2],
-                        selection_opacity * 255
+                        selectionOpacity * 255
                     )
                 );
             } else if(highlighted) {
                 al_draw_filled_circle(
-                    s_ptr->pos.x, s_ptr->pos.y, s_ptr->radius,
+                    sPtr->pos.x, sPtr->pos.y, sPtr->radius,
                     al_map_rgba(
-                        highlight_color.r * 255,
-                        highlight_color.g * 255,
-                        highlight_color.b * 255,
+                        highlightColor.r * 255,
+                        highlightColor.g * 255,
+                        highlightColor.b * 255,
                         128
                     )
                 );
@@ -892,23 +892,23 @@ void AreaEditor::drawCanvas() {
             
             if(debugPathIdxs) {
                 drawDebugText(
-                    al_map_rgb(80, 192, 192), s_ptr->pos, i2s(s)
+                    al_map_rgb(80, 192, 192), sPtr->pos, i2s(s)
                 );
             }
         }
         
         //Links.
         for(size_t s = 0; s < game.curAreaData->pathStops.size(); s++) {
-            PathStop* s_ptr = game.curAreaData->pathStops[s];
-            for(size_t l = 0; l < s_ptr->links.size(); l++) {
-                PathLink* l_ptr = s_ptr->links[l];
-                PathStop* s2_ptr = l_ptr->endPtr;
-                bool one_way =
-                    !l_ptr->endPtr->get_link(s_ptr);
+            PathStop* sPtr = game.curAreaData->pathStops[s];
+            for(size_t l = 0; l < sPtr->links.size(); l++) {
+                PathLink* lPtr = sPtr->links[l];
+                PathStop* s2Ptr = lPtr->endPtr;
+                bool oneWay =
+                    !lPtr->endPtr->getLink(sPtr);
                 bool selected =
-                    selectedPathLinks.find(l_ptr) !=
+                    selectedPathLinks.find(lPtr) !=
                     selectedPathLinks.end();
-                bool highlighted = highlightedPathLink == l_ptr;
+                bool highlighted = highlightedPathLink == lPtr;
                 ALLEGRO_COLOR color = COLOR_WHITE;
                 if(selected) {
                     color =
@@ -916,18 +916,18 @@ void AreaEditor::drawCanvas() {
                             AREA_EDITOR::SELECTION_COLOR[0],
                             AREA_EDITOR::SELECTION_COLOR[1],
                             AREA_EDITOR::SELECTION_COLOR[2],
-                            selection_opacity * 255
+                            selectionOpacity * 255
                         );
                 } else if(highlighted) {
                     color =
                         al_map_rgba(
-                            highlight_color.r * 255,
-                            highlight_color.g * 255,
-                            highlight_color.b * 255,
+                            highlightColor.r * 255,
+                            highlightColor.g * 255,
+                            highlightColor.b * 255,
                             255
                         );
                 } else {
-                    switch(l_ptr->type) {
+                    switch(lPtr->type) {
                     case PATH_LINK_TYPE_NORMAL: {
                         color = al_map_rgba(34, 136, 187, 224);
                         break;
@@ -936,22 +936,22 @@ void AreaEditor::drawCanvas() {
                         break;
                     }
                     }
-                    if(!one_way) {
+                    if(!oneWay) {
                         color = changeColorLighting(color, 0.33f);
                     }
                 }
                 
                 float angle =
-                    getAngle(s_ptr->pos, s2_ptr->pos);
+                    getAngle(sPtr->pos, s2Ptr->pos);
                 Point offset1 =
-                    angleToCoordinates(angle, s_ptr->radius);
+                    angleToCoordinates(angle, sPtr->radius);
                 Point offset2 =
-                    angleToCoordinates(angle, s2_ptr->radius);
+                    angleToCoordinates(angle, s2Ptr->radius);
                 al_draw_line(
-                    s_ptr->pos.x + offset1.x,
-                    s_ptr->pos.y + offset1.y,
-                    s2_ptr->pos.x - offset2.x,
-                    s2_ptr->pos.y - offset2.y,
+                    sPtr->pos.x + offset1.x,
+                    sPtr->pos.y + offset1.y,
+                    s2Ptr->pos.x - offset2.x,
+                    s2Ptr->pos.y - offset2.y,
                     color,
                     AREA_EDITOR::PATH_LINK_THICKNESS / game.view.cam.zoom
                 );
@@ -961,59 +961,59 @@ void AreaEditor::drawCanvas() {
                     moving &&
                     game.options.areaEd.showPathLinkLength
                 ) {
-                    bool draw_dist = false;
-                    Point other_point;
+                    bool drawDist = false;
+                    Point otherPoint;
                     if(
-                        l_ptr->startPtr == moveClosestStop &&
-                        selectedPathStops.find(l_ptr->endPtr) ==
+                        lPtr->startPtr == moveClosestStop &&
+                        selectedPathStops.find(lPtr->endPtr) ==
                         selectedPathStops.end()
                     ) {
-                        other_point.x = l_ptr->endPtr->pos.x;
-                        other_point.y = l_ptr->endPtr->pos.y;
-                        draw_dist = true;
+                        otherPoint.x = lPtr->endPtr->pos.x;
+                        otherPoint.y = lPtr->endPtr->pos.y;
+                        drawDist = true;
                     } else if(
-                        l_ptr->endPtr == moveClosestStop &&
-                        selectedPathStops.find(l_ptr->startPtr) ==
+                        lPtr->endPtr == moveClosestStop &&
+                        selectedPathStops.find(lPtr->startPtr) ==
                         selectedPathStops.end()
                     ) {
-                        other_point.x = l_ptr->startPtr->pos.x;
-                        other_point.y = l_ptr->startPtr->pos.y;
-                        draw_dist = true;
+                        otherPoint.x = lPtr->startPtr->pos.x;
+                        otherPoint.y = lPtr->startPtr->pos.y;
+                        drawDist = true;
                     }
                     
-                    if(draw_dist) {
-                        drawLineDist(moveClosestStop->pos, other_point);
+                    if(drawDist) {
+                        drawLineDist(moveClosestStop->pos, otherPoint);
                     }
                 }
                 
-                if(debugPathIdxs && (one_way || s < s_ptr->links[l]->endIdx)) {
-                    Point middle = (s_ptr->pos + s2_ptr->pos) / 2.0f;
+                if(debugPathIdxs && (oneWay || s < sPtr->links[l]->endIdx)) {
+                    Point middle = (sPtr->pos + s2Ptr->pos) / 2.0f;
                     drawDebugText(
                         al_map_rgb(96, 104, 224),
                         Point(
                             middle.x + cos(angle + TAU / 4) * 4,
                             middle.y + sin(angle + TAU / 4) * 4
                         ),
-                        f2s(s_ptr->links[l]->distance)
+                        f2s(sPtr->links[l]->distance)
                     );
                 }
                 
-                if(one_way) {
+                if(oneWay) {
                     //Draw a triangle down the middle.
-                    float mid_x =
-                        (s_ptr->pos.x + s2_ptr->pos.x) / 2.0f;
-                    float mid_y =
-                        (s_ptr->pos.y + s2_ptr->pos.y) / 2.0f;
+                    float midX =
+                        (sPtr->pos.x + s2Ptr->pos.x) / 2.0f;
+                    float midY =
+                        (sPtr->pos.y + s2Ptr->pos.y) / 2.0f;
                     const float delta =
                         (AREA_EDITOR::PATH_LINK_THICKNESS * 4) / game.view.cam.zoom;
                         
                     al_draw_filled_triangle(
-                        mid_x + cos(angle) * delta,
-                        mid_y + sin(angle) * delta,
-                        mid_x + cos(angle + TAU / 4) * delta,
-                        mid_y + sin(angle + TAU / 4) * delta,
-                        mid_x + cos(angle - TAU / 4) * delta,
-                        mid_y + sin(angle - TAU / 4) * delta,
+                        midX + cos(angle) * delta,
+                        midY + sin(angle) * delta,
+                        midX + cos(angle + TAU / 4) * delta,
+                        midY + sin(angle + TAU / 4) * delta,
+                        midX + cos(angle - TAU / 4) * delta,
+                        midY + sin(angle - TAU / 4) * delta,
                         color
                     );
                 }
@@ -1023,16 +1023,16 @@ void AreaEditor::drawCanvas() {
         //Closest stop line.
         if(showClosestStop) {
             PathStop* closest = nullptr;
-            float closest_dist = FLT_MAX;
+            float closestDist = FLT_MAX;
             for(size_t s = 0; s < game.curAreaData->pathStops.size(); s++) {
-                PathStop* s_ptr = game.curAreaData->pathStops[s];
+                PathStop* sPtr = game.curAreaData->pathStops[s];
                 float d =
-                    Distance(game.view.cursorWorldPos, s_ptr->pos).toFloat() -
-                    s_ptr->radius;
+                    Distance(game.view.cursorWorldPos, sPtr->pos).toFloat() -
+                    sPtr->radius;
                     
-                if(!closest || d < closest_dist) {
-                    closest = s_ptr;
-                    closest_dist = d;
+                if(!closest || d < closestDist) {
+                    closest = sPtr;
+                    closestDist = d;
                 }
             }
             
@@ -1048,9 +1048,9 @@ void AreaEditor::drawCanvas() {
         //Path preview.
         if(showPathPreview) {
             //Draw the lines of the path.
-            ALLEGRO_COLOR lines_color = al_map_rgb(255, 187, 136);
-            ALLEGRO_COLOR invalid_lines_color = al_map_rgb(221, 17, 17);
-            float lines_thickness = 4.0f / game.view.cam.zoom;
+            ALLEGRO_COLOR linesColor = al_map_rgb(255, 187, 136);
+            ALLEGRO_COLOR invalidLinesColor = al_map_rgb(221, 17, 17);
+            float linesThickness = 4.0f / game.view.cam.zoom;
             
             if(!pathPreview.empty()) {
                 al_draw_line(
@@ -1058,7 +1058,7 @@ void AreaEditor::drawCanvas() {
                     pathPreviewCheckpoints[0].y,
                     pathPreview[0]->pos.x,
                     pathPreview[0]->pos.y,
-                    lines_color, lines_thickness
+                    linesColor, linesThickness
                 );
                 for(size_t s = 0; s < pathPreview.size() - 1; s++) {
                     al_draw_line(
@@ -1066,7 +1066,7 @@ void AreaEditor::drawCanvas() {
                         pathPreview[s]->pos.y,
                         pathPreview[s + 1]->pos.x,
                         pathPreview[s + 1]->pos.y,
-                        lines_color, lines_thickness
+                        linesColor, linesThickness
                     );
                 }
                 al_draw_line(
@@ -1074,7 +1074,7 @@ void AreaEditor::drawCanvas() {
                     pathPreview.back()->pos.y,
                     pathPreviewCheckpoints[1].x,
                     pathPreviewCheckpoints[1].y,
-                    lines_color, lines_thickness
+                    linesColor, linesThickness
                 );
             } else if(
                 pathPreviewResult == PATH_RESULT_DIRECT ||
@@ -1085,7 +1085,7 @@ void AreaEditor::drawCanvas() {
                     pathPreviewCheckpoints[0].y,
                     pathPreviewCheckpoints[1].x,
                     pathPreviewCheckpoints[1].y,
-                    lines_color, lines_thickness
+                    linesColor, linesThickness
                 );
             } else {
                 for(size_t c = 0; c < 2; c++) {
@@ -1095,7 +1095,7 @@ void AreaEditor::drawCanvas() {
                             pathPreviewClosest[c]->pos.y,
                             pathPreviewCheckpoints[c].x,
                             pathPreviewCheckpoints[c].y,
-                            invalid_lines_color, lines_thickness
+                            invalidLinesColor, linesThickness
                         );
                     }
                 }
@@ -1136,48 +1136,48 @@ void AreaEditor::drawCanvas() {
     ) {
         for(size_t s = 0; s < game.curAreaData->treeShadows.size(); s++) {
         
-            TreeShadow* s_ptr = game.curAreaData->treeShadows[s];
+            TreeShadow* sPtr = game.curAreaData->treeShadows[s];
             if(
                 !previewMode &&
-                s_ptr == selectedShadow
+                sPtr == selectedShadow
             ) {
                 //Draw a white rectangle to contrast the shadow better.
                 ALLEGRO_TRANSFORM tra, current;
                 al_identity_transform(&tra);
-                al_rotate_transform(&tra, s_ptr->angle);
+                al_rotate_transform(&tra, sPtr->angle);
                 al_translate_transform(
-                    &tra, s_ptr->center.x, s_ptr->center.y
+                    &tra, sPtr->center.x, sPtr->center.y
                 );
                 al_copy_transform(&current, al_get_current_transform());
                 al_compose_transform(&tra, &current);
                 al_use_transform(&tra);
                 
                 al_draw_filled_rectangle(
-                    -s_ptr->size.x / 2.0,
-                    -s_ptr->size.y / 2.0,
-                    s_ptr->size.x / 2.0,
-                    s_ptr->size.y / 2.0,
-                    al_map_rgba(255, 255, 255, 96 * (s_ptr->alpha / 255.0))
+                    -sPtr->size.x / 2.0,
+                    -sPtr->size.y / 2.0,
+                    sPtr->size.x / 2.0,
+                    sPtr->size.y / 2.0,
+                    al_map_rgba(255, 255, 255, 96 * (sPtr->alpha / 255.0))
                 );
                 
                 al_use_transform(&current);
             }
             
             drawBitmap(
-                s_ptr->bitmap, s_ptr->center, s_ptr->size,
-                s_ptr->angle, mapAlpha(s_ptr->alpha)
+                sPtr->bitmap, sPtr->center, sPtr->size,
+                sPtr->angle, mapAlpha(sPtr->alpha)
             );
             
             if(state == EDITOR_STATE_DETAILS) {
-                Point min_coords, max_coords;
+                Point minCoords, maxCoords;
                 getTransformedRectangleBBox(
-                    s_ptr->center, s_ptr->size, s_ptr->angle,
-                    &min_coords, &max_coords
+                    sPtr->center, sPtr->size, sPtr->angle,
+                    &minCoords, &maxCoords
                 );
                 
-                if(selectedShadow != s_ptr) {
+                if(selectedShadow != sPtr) {
                     al_draw_rectangle(
-                        min_coords.x, min_coords.y, max_coords.x, max_coords.y,
+                        minCoords.x, minCoords.y, maxCoords.x, maxCoords.y,
                         al_map_rgb(128, 128, 64), 2.0 / game.view.cam.zoom
                     );
                 }
@@ -1277,7 +1277,7 @@ void AreaEditor::drawCanvas() {
             );
         }
         if(!drawingNodes.empty()) {
-            ALLEGRO_COLOR new_line_color =
+            ALLEGRO_COLOR newLineColor =
                 interpolateColor(
                     newSectorErrorTintTimer.getRatioLeft(),
                     1, 0,
@@ -1291,7 +1291,7 @@ void AreaEditor::drawCanvas() {
                 drawingNodes.back().snappedSpot.y,
                 hotspot.x,
                 hotspot.y,
-                new_line_color,
+                newLineColor,
                 3.0 / game.view.cam.zoom
             );
             
@@ -1305,14 +1305,14 @@ void AreaEditor::drawCanvas() {
     if(subState == EDITOR_SUB_STATE_CIRCLE_SECTOR) {
         switch(newCircleSectorStep) {
         case 1: {
-            float circle_radius =
+            float circleRadius =
                 Distance(
                     newCircleSectorCenter, newCircleSectorAnchor
                 ).toFloat();
             al_draw_circle(
                 newCircleSectorCenter.x,
                 newCircleSectorCenter.y,
-                circle_radius,
+                circleRadius,
                 al_map_rgb(64, 255, 64),
                 3.0 / game.view.cam.zoom
             );
@@ -1326,8 +1326,8 @@ void AreaEditor::drawCanvas() {
             
         } case 2: {
             for(size_t p = 0; p < newCircleSectorPoints.size(); p++) {
-                Point cur_point = newCircleSectorPoints[p];
-                Point next_point =
+                Point curPoint = newCircleSectorPoints[p];
+                Point nextPoint =
                     getNextInVector(newCircleSectorPoints, p);
                 ALLEGRO_COLOR color =
                     newCircleSectorValidEdges[p] ?
@@ -1335,8 +1335,8 @@ void AreaEditor::drawCanvas() {
                     al_map_rgb(255, 0, 0);
                     
                 al_draw_line(
-                    cur_point.x, cur_point.y,
-                    next_point.x, next_point.y,
+                    curPoint.x, curPoint.y,
+                    nextPoint.x, nextPoint.y,
                     color, 3.0 / game.view.cam.zoom
                 );
             }
@@ -1363,15 +1363,15 @@ void AreaEditor::drawCanvas() {
     
     //Quick sector height set.
     if(subState == EDITOR_SUB_STATE_QUICK_HEIGHT_SET) {
-        Point nr_coords = quickHeightSetStartPos;
-        nr_coords.x += 100.0f;
+        Point nrCoords = quickHeightSetStartPos;
+        nrCoords.x += 100.0f;
         al_transform_coordinates(
-            &game.view.windowToWorldTransform, &nr_coords.x, &nr_coords.y
+            &game.view.windowToWorldTransform, &nrCoords.x, &nrCoords.y
         );
         float offset = getQuickHeightSetOffset();
         drawDebugText(
             al_map_rgb(64, 255, 64),
-            nr_coords,
+            nrCoords,
             "Height " +
             string(offset < 0 ? "" : "+") + i2s(offset) + "" +
             (
@@ -1478,14 +1478,14 @@ void AreaEditor::drawCanvas() {
     //Cross-section graph.
     if(state == EDITOR_STATE_REVIEW && showCrossSection) {
     
-        Distance cross_section_world_length(
+        Distance crossSectionWorldLength(
             crossSectionCheckpoints[0], crossSectionCheckpoints[1]
         );
         float proportion =
             (crossSectionWindowEnd.x - crossSectionWindowStart.x) /
-            cross_section_world_length.toFloat();
+            crossSectionWorldLength.toFloat();
             
-        ALLEGRO_COLOR bg_color =
+        ALLEGRO_COLOR bgColor =
             game.options.editors.useCustomStyle ?
             changeColorLighting(game.options.editors.primaryColor, -0.3f) :
             al_map_rgb(0, 0, 64);
@@ -1493,7 +1493,7 @@ void AreaEditor::drawCanvas() {
         al_draw_filled_rectangle(
             crossSectionWindowStart.x, crossSectionWindowStart.y,
             crossSectionWindowEnd.x, crossSectionWindowEnd.y,
-            bg_color
+            bgColor
         );
         
         if(showCrossSectionGrid) {
@@ -1504,9 +1504,9 @@ void AreaEditor::drawCanvas() {
             );
         }
         
-        Sector* cs_left_sector =
+        Sector* csLeftSector =
             getSector(crossSectionCheckpoints[0], nullptr, false);
-        Sector* cs_right_sector =
+        Sector* csRightSector =
             getSector(crossSectionCheckpoints[1], nullptr, false);
             
         /**
@@ -1517,7 +1517,7 @@ void AreaEditor::drawCanvas() {
             //--- Members ---
             
             //Sector pointers.
-            Sector* sector_ptrs[2] = { nullptr, nullptr };
+            Sector* sectorPtrs[2] = { nullptr, nullptr };
             
             //Line 1 intersection point.
             float l1r = 0.0f;
@@ -1538,8 +1538,8 @@ void AreaEditor::drawCanvas() {
             Split(
                 Sector* s1, Sector* s2, float l1r, float l2r
             ) {
-                sector_ptrs[0] = s1;
-                sector_ptrs[1] = s2;
+                sectorPtrs[0] = s1;
+                sectorPtrs[1] = s2;
                 this->l1r = l1r;
                 this->l2r = l2r;
             }
@@ -1547,20 +1547,20 @@ void AreaEditor::drawCanvas() {
         };
         vector<Split> splits;
         for(size_t e = 0; e < game.curAreaData->edges.size(); e++) {
-            Edge* e_ptr = game.curAreaData->edges[e];
+            Edge* ePtr = game.curAreaData->edges[e];
             float l1r = 0;
             float l2r = 0;
             if(
                 lineSegsIntersect(
-                    v2p(e_ptr->vertexes[0]),
-                    v2p(e_ptr->vertexes[1]),
+                    v2p(ePtr->vertexes[0]),
+                    v2p(ePtr->vertexes[1]),
                     crossSectionCheckpoints[0],
                     crossSectionCheckpoints[1],
                     &l1r, &l2r
                 )
             ) {
                 splits.push_back(
-                    Split(e_ptr->sectors[0], e_ptr->sectors[1], l1r, l2r)
+                    Split(ePtr->sectors[0], ePtr->sectors[1], l1r, l2r)
                 );
             }
         }
@@ -1575,39 +1575,39 @@ void AreaEditor::drawCanvas() {
             
             splits.insert(
                 splits.begin(),
-                Split(cs_left_sector, cs_left_sector, 0, 0)
+                Split(csLeftSector, csLeftSector, 0, 0)
             );
             splits.push_back(
-                Split(cs_right_sector, cs_right_sector, 1, 1)
+                Split(csRightSector, csRightSector, 1, 1)
             );
             
             for(size_t s = 1; s < splits.size(); s++) {
-                if(splits[s].sector_ptrs[0] != splits[s - 1].sector_ptrs[1]) {
+                if(splits[s].sectorPtrs[0] != splits[s - 1].sectorPtrs[1]) {
                     std::swap(
-                        splits[s].sector_ptrs[0], splits[s].sector_ptrs[1]
+                        splits[s].sectorPtrs[0], splits[s].sectorPtrs[1]
                     );
                 }
             }
             
-            float lowest_z = 0;
-            bool got_lowest_z = false;
+            float lowestZ = 0;
+            bool gotLowestZ = false;
             for(size_t sp = 1; sp < splits.size(); sp++) {
                 for(size_t se = 0; se < 2; se++) {
                     if(
-                        splits[sp].sector_ptrs[se] &&
+                        splits[sp].sectorPtrs[se] &&
                         (
-                            splits[sp].sector_ptrs[se]->z < lowest_z ||
-                            !got_lowest_z
+                            splits[sp].sectorPtrs[se]->z < lowestZ ||
+                            !gotLowestZ
                         )
                     ) {
-                        lowest_z = splits[sp].sector_ptrs[se]->z;
-                        got_lowest_z = true;
+                        lowestZ = splits[sp].sectorPtrs[se]->z;
+                        gotLowestZ = true;
                     }
                 }
             }
             
-            int ocr_x, ocr_y, ocr_w, ocr_h;
-            al_get_clipping_rectangle(&ocr_x, &ocr_y, &ocr_w, &ocr_h);
+            int ocrX, ocrY, ocrW, ocrH;
+            al_get_clipping_rectangle(&ocrX, &ocrY, &ocrW, &ocrH);
             al_set_clipping_rectangle(
                 crossSectionWindowStart.x, crossSectionWindowStart.y,
                 crossSectionWindowEnd.x - crossSectionWindowStart.x,
@@ -1615,34 +1615,34 @@ void AreaEditor::drawCanvas() {
             );
             
             for(size_t s = 1; s < splits.size(); s++) {
-                if(!splits[s].sector_ptrs[0]) continue;
+                if(!splits[s].sectorPtrs[0]) continue;
                 drawCrossSectionSector(
                     splits[s - 1].l2r, splits[s].l2r, proportion,
-                    lowest_z, splits[s].sector_ptrs[0]
+                    lowestZ, splits[s].sectorPtrs[0]
                 );
             }
             
-            Sector* central_sector = nullptr;
+            Sector* centralSector = nullptr;
             for(size_t s = 1; s < splits.size(); s++) {
                 if(splits[s].l2r > 0.5) {
-                    central_sector = splits[s].sector_ptrs[0];
+                    centralSector = splits[s].sectorPtrs[0];
                     break;
                 }
             }
             
-            if(central_sector) {
-                float leader_silhouette_w =
+            if(centralSector) {
+                float leaderSilhouetteW =
                     game.config.leaders.standardRadius * 2.0 * proportion;
-                float leader_silhouette_h =
+                float leaderSilhouetteH =
                     game.config.leaders.standardHeight * proportion;
-                float leader_silhouette_pivot_x =
+                float leaderSilhouettePivotX =
                     (
                         crossSectionWindowStart.x +
                         crossSectionWindowEnd.x
                     ) / 2.0;
-                float leader_silhouette_pivot_y =
+                float leaderSilhouettePivotY =
                     crossSectionWindowEnd.y - 8 -
-                    ((central_sector->z - lowest_z) * proportion);
+                    ((centralSector->z - lowestZ) * proportion);
                 al_draw_tinted_scaled_bitmap(
                     game.sysContent.bmpLeaderSilhouetteSide,
                     COLOR_TRANSPARENT_WHITE,
@@ -1653,26 +1653,26 @@ void AreaEditor::drawCanvas() {
                     al_get_bitmap_height(
                         game.sysContent.bmpLeaderSilhouetteSide
                     ),
-                    leader_silhouette_pivot_x - leader_silhouette_w / 2.0,
-                    leader_silhouette_pivot_y - leader_silhouette_h,
-                    leader_silhouette_w, leader_silhouette_h,
+                    leaderSilhouettePivotX - leaderSilhouetteW / 2.0,
+                    leaderSilhouettePivotY - leaderSilhouetteH,
+                    leaderSilhouetteW, leaderSilhouetteH,
                     0
                 );
             }
             
-            al_set_clipping_rectangle(ocr_x, ocr_y, ocr_w, ocr_h);
+            al_set_clipping_rectangle(ocrX, ocrY, ocrW, ocrH);
             
-            float highest_z =
-                lowest_z + crossSectionWindowEnd.y / proportion;
+            float highestZ =
+                lowestZ + crossSectionWindowEnd.y / proportion;
                 
             if(showCrossSectionGrid) {
-                for(float z = lowest_z; z <= highest_z; z += 50) {
-                    float line_y =
+                for(float z = lowestZ; z <= highestZ; z += 50) {
+                    float lineY =
                         crossSectionWindowEnd.y - 8 -
-                        ((z - lowest_z) * proportion);
+                        ((z - lowestZ) * proportion);
                     al_draw_line(
-                        crossSectionWindowStart.x, line_y,
-                        crossSectionZWindowStart.x + 6, line_y,
+                        crossSectionWindowStart.x, lineY,
+                        crossSectionZWindowStart.x + 6, lineY,
                         COLOR_WHITE, 1
                     );
                     
@@ -1680,7 +1680,7 @@ void AreaEditor::drawCanvas() {
                         i2s(z), game.sysContent.fntBuiltin,
                         Point(
                             (crossSectionZWindowStart.x + 8),
-                            line_y
+                            lineY
                         ),
                         Point(LARGE_FLOAT, 8.0f), COLOR_WHITE,
                         ALLEGRO_ALIGN_LEFT
@@ -1708,37 +1708,37 @@ void AreaEditor::drawCanvas() {
             
         }
         
-        float cursor_segment_ratio = 0;
+        float cursorSegmentRatio = 0;
         getClosestPointInLineSeg(
             crossSectionCheckpoints[0], crossSectionCheckpoints[1],
             Point(game.view.cursorWorldPos.x, game.view.cursorWorldPos.y),
-            &cursor_segment_ratio
+            &cursorSegmentRatio
         );
-        if(cursor_segment_ratio >= 0 && cursor_segment_ratio <= 1) {
+        if(cursorSegmentRatio >= 0 && cursorSegmentRatio <= 1) {
             al_draw_line(
                 crossSectionWindowStart.x +
                 (crossSectionWindowEnd.x - crossSectionWindowStart.x) *
-                cursor_segment_ratio,
+                cursorSegmentRatio,
                 crossSectionWindowStart.y,
                 crossSectionWindowStart.x +
                 (crossSectionWindowEnd.x - crossSectionWindowStart.x) *
-                cursor_segment_ratio,
+                cursorSegmentRatio,
                 crossSectionWindowEnd.y,
                 al_map_rgba(255, 255, 255, 128), 1
             );
         }
         
-        float cross_section_x2 =
+        float crossSectionX2 =
             showCrossSectionGrid ? crossSectionZWindowEnd.x :
             crossSectionWindowEnd.x;
         al_draw_line(
             crossSectionWindowStart.x, crossSectionWindowEnd.y + 1,
-            cross_section_x2 + 2, crossSectionWindowEnd.y + 1,
+            crossSectionX2 + 2, crossSectionWindowEnd.y + 1,
             al_map_rgb(160, 96, 96), 2
         );
         al_draw_line(
-            cross_section_x2 + 1, crossSectionWindowStart.y,
-            cross_section_x2 + 1, crossSectionWindowEnd.y + 2,
+            crossSectionX2 + 1, crossSectionWindowStart.y,
+            crossSectionX2 + 1, crossSectionWindowEnd.y + 2,
             al_map_rgb(160, 96, 96), 2
         );
     }
@@ -1752,27 +1752,27 @@ void AreaEditor::drawCanvas() {
 /**
  * @brief Draws a sector on the cross-section view.
  *
- * @param start_ratio Where the sector starts on the graph ([0, 1]).
- * @param end_ratio Where the sector end on the graph ([0, 1]).
+ * @param startRatio Where the sector starts on the graph ([0, 1]).
+ * @param endRatio Where the sector end on the graph ([0, 1]).
  * @param proportion Ratio of how much to resize the heights by.
- * @param lowest_z What z coordinate represents the bottom of the graph.
- * @param sector_ptr Pointer to the sector to draw.
+ * @param lowestZ What z coordinate represents the bottom of the graph.
+ * @param sectorPtr Pointer to the sector to draw.
  */
 void AreaEditor::drawCrossSectionSector(
-    float start_ratio, float end_ratio, float proportion,
-    float lowest_z, const Sector* sector_ptr
+    float startRatio, float endRatio, float proportion,
+    float lowestZ, const Sector* sectorPtr
 ) {
-    float rectangle_x1 =
+    float rectangleX1 =
         crossSectionWindowStart.x +
         (crossSectionWindowEnd.x - crossSectionWindowStart.x) *
-        start_ratio;
-    float rectangle_x2 =
+        startRatio;
+    float rectangleX2 =
         crossSectionWindowStart.x +
         (crossSectionWindowEnd.x - crossSectionWindowStart.x) *
-        end_ratio;
-    float rectangle_y =
+        endRatio;
+    float rectangleY =
         crossSectionWindowEnd.y - 8 -
-        ((sector_ptr->z - lowest_z) * proportion);
+        ((sectorPtr->z - lowestZ) * proportion);
         
     ALLEGRO_COLOR color =
         game.options.editors.useCustomStyle ?
@@ -1780,23 +1780,23 @@ void AreaEditor::drawCrossSectionSector(
         al_map_rgb(0, 64, 0);
         
     al_draw_filled_rectangle(
-        rectangle_x1, rectangle_y,
-        rectangle_x2 + 1, crossSectionWindowEnd.y + 1,
+        rectangleX1, rectangleY,
+        rectangleX2 + 1, crossSectionWindowEnd.y + 1,
         color
     );
     al_draw_line(
-        rectangle_x1 + 0.5, rectangle_y,
-        rectangle_x1 + 0.5, crossSectionWindowEnd.y,
+        rectangleX1 + 0.5, rectangleY,
+        rectangleX1 + 0.5, crossSectionWindowEnd.y,
         al_map_rgb(192, 192, 192), 1
     );
     al_draw_line(
-        rectangle_x2 + 0.5, rectangle_y,
-        rectangle_x2 + 0.5, crossSectionWindowEnd.y,
+        rectangleX2 + 0.5, rectangleY,
+        rectangleX2 + 0.5, crossSectionWindowEnd.y,
         al_map_rgb(192, 192, 192), 1
     );
     al_draw_line(
-        rectangle_x1, rectangle_y + 0.5,
-        rectangle_x2, rectangle_y + 0.5,
+        rectangleX1, rectangleY + 0.5,
+        rectangleX2, rectangleY + 0.5,
         al_map_rgb(192, 192, 192), 1
     );
     
@@ -1824,50 +1824,50 @@ void AreaEditor::drawDebugText(
         &dox, &doy, &dw, &dh
     );
     
-    float bbox_w = (dw * AREA_EDITOR::DEBUG_TEXT_SCALE) / game.view.cam.zoom;
-    float bbox_h = (dh * AREA_EDITOR::DEBUG_TEXT_SCALE) / game.view.cam.zoom;
+    float bboxW = (dw * AREA_EDITOR::DEBUG_TEXT_SCALE) / game.view.cam.zoom;
+    float bboxH = (dh * AREA_EDITOR::DEBUG_TEXT_SCALE) / game.view.cam.zoom;
     
     al_draw_filled_rectangle(
-        where.x - bbox_w * 0.5, where.y - bbox_h * 0.5,
-        where.x + bbox_w * 0.5, where.y + bbox_h * 0.5,
+        where.x - bboxW * 0.5, where.y - bboxH * 0.5,
+        where.x + bboxW * 0.5, where.y + bboxH * 0.5,
         al_map_rgba(0, 0, 0, 128)
     );
     
     drawText(
         text, game.sysContent.fntBuiltin, where,
-        Point(bbox_w, bbox_h) * 0.80f, color
+        Point(bboxW, bboxH) * 0.80f, color
     );
     
     if(dots > 0) {
         al_draw_filled_rectangle(
             where.x - 3.0f / game.view.cam.zoom,
-            where.y + bbox_h * 0.5f,
+            where.y + bboxH * 0.5f,
             where.x + 3.0f / game.view.cam.zoom,
-            where.y + bbox_h * 0.5f + 3.0f / game.view.cam.zoom,
+            where.y + bboxH * 0.5f + 3.0f / game.view.cam.zoom,
             al_map_rgba(0, 0, 0, 128)
         );
         
         if(dots == 1) {
             al_draw_filled_rectangle(
                 where.x - 1.0f / game.view.cam.zoom,
-                where.y + bbox_h * 0.5f + 1.0f / game.view.cam.zoom,
+                where.y + bboxH * 0.5f + 1.0f / game.view.cam.zoom,
                 where.x + 1.0f / game.view.cam.zoom,
-                where.y + bbox_h * 0.5f + 3.0f / game.view.cam.zoom,
+                where.y + bboxH * 0.5f + 3.0f / game.view.cam.zoom,
                 color
             );
         } else {
             al_draw_filled_rectangle(
                 where.x - 3.0f / game.view.cam.zoom,
-                where.y + bbox_h * 0.5f + 1.0f / game.view.cam.zoom,
+                where.y + bboxH * 0.5f + 1.0f / game.view.cam.zoom,
                 where.x - 1.0f / game.view.cam.zoom,
-                where.y + bbox_h * 0.5f + 3.0f / game.view.cam.zoom,
+                where.y + bboxH * 0.5f + 3.0f / game.view.cam.zoom,
                 color
             );
             al_draw_filled_rectangle(
                 where.x + 1.0f / game.view.cam.zoom,
-                where.y + bbox_h * 0.5f + 1.0f / game.view.cam.zoom,
+                where.y + bboxH * 0.5f + 1.0f / game.view.cam.zoom,
                 where.x + 3.0f / game.view.cam.zoom,
-                where.y + bbox_h * 0.5f + 3.0f / game.view.cam.zoom,
+                where.y + bboxH * 0.5f + 3.0f / game.view.cam.zoom,
                 color
             );
         }
@@ -1890,12 +1890,12 @@ void AreaEditor::drawLineDist(
     if(d < 64) return;
     
     float angle = getAngle(focus, other);
-    Point length_nr_pos;
-    length_nr_pos.x = focus.x + cos(angle) * 64.0;
-    length_nr_pos.y = focus.y + sin(angle) * 64.0;
-    length_nr_pos.y -= 12;
+    Point lengthNrPos;
+    lengthNrPos.x = focus.x + cos(angle) * 64.0;
+    lengthNrPos.y = focus.y + sin(angle) * 64.0;
+    lengthNrPos.y -= 12;
     
     drawDebugText(
-        AREA_EDITOR::MEASUREMENT_COLOR, length_nr_pos, prefix + i2s(d)
+        AREA_EDITOR::MEASUREMENT_COLOR, lengthNrPos, prefix + i2s(d)
     );
 }

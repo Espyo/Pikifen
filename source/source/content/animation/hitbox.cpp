@@ -53,17 +53,17 @@ Hitbox::Hitbox(
  * @brief Returns the coordinates of the hitbox given the mob's
  * location and angle.
  *
- * @param mob_pos The mob's position.
- * @param mob_angle The angle the mob is facing.
+ * @param mobPos The mob's position.
+ * @param mobAngle The angle the mob is facing.
  * @return The position.
  */
-Point Hitbox::getCurPos(const Point &mob_pos, float mob_angle) const {
-    float mob_angle_cos = cos(mob_angle);
-    float mob_angle_sin = sin(mob_angle);
+Point Hitbox::getCurPos(const Point &mobPos, float mobAngle) const {
+    float mobAngleCos = cos(mobAngle);
+    float mobAngleSin = sin(mobAngle);
     return
         Point(
-            mob_pos.x + (pos.x * mob_angle_cos - pos.y * mob_angle_sin),
-            mob_pos.y + (pos.x * mob_angle_sin + pos.y * mob_angle_cos)
+            mobPos.x + (pos.x * mobAngleCos - pos.y * mobAngleSin),
+            mobPos.y + (pos.x * mobAngleSin + pos.y * mobAngleCos)
         );
 }
 
@@ -74,17 +74,17 @@ Point Hitbox::getCurPos(const Point &mob_pos, float mob_angle) const {
  * If the angle's sine and cosine are known from having been calculated
  * previously, use this function, since it's faster.
  *
- * @param mob_pos The mob's position.
- * @param mob_angle_cos Cosine of the angle the mob is facing.
- * @param mob_angle_sin Sine of the angle the mob is facing.
+ * @param mobPos The mob's position.
+ * @param mobAngleCos Cosine of the angle the mob is facing.
+ * @param mobAngleSin Sine of the angle the mob is facing.
  * @return The position.
  */
 Point Hitbox::getCurPos(
-    const Point &mob_pos, float mob_angle_cos, float mob_angle_sin
+    const Point &mobPos, float mobAngleCos, float mobAngleSin
 ) const {
     return
         Point(
-            mob_pos.x + (pos.x * mob_angle_cos - pos.y * mob_angle_sin),
-            mob_pos.y + (pos.x * mob_angle_sin + pos.y * mob_angle_cos)
+            mobPos.x + (pos.x * mobAngleCos - pos.y * mobAngleSin),
+            mobPos.y + (pos.x * mobAngleSin + pos.y * mobAngleCos)
         );
 }

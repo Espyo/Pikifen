@@ -37,15 +37,15 @@ Drop::Drop(const Point &pos, DropType* type, float angle) :
  * the process of vanishing.
  */
 void Drop::drawMob() {
-    Sprite* cur_s_ptr;
-    Sprite* next_s_ptr;
-    float interpolation_factor;
-    getSpriteData(&cur_s_ptr, &next_s_ptr, &interpolation_factor);
-    if(!cur_s_ptr) return;
+    Sprite* curSPtr;
+    Sprite* nextSPtr;
+    float interpolationFactor;
+    getSpriteData(&curSPtr, &nextSPtr, &interpolationFactor);
+    if(!curSPtr) return;
     
     BitmapEffect eff;
     getSpriteBitmapEffects(
-        cur_s_ptr, next_s_ptr, interpolation_factor,
+        curSPtr, nextSPtr, interpolationFactor,
         &eff,
         SPRITE_BMP_EFFECT_FLAG_STANDARD |
         SPRITE_BMP_EFFECT_FLAG_STATUS |
@@ -56,30 +56,30 @@ void Drop::drawMob() {
     
     eff.scale *= curScale;
     
-    drawBitmapWithEffects(cur_s_ptr->bitmap, eff);
+    drawBitmapWithEffects(curSPtr->bitmap, eff);
 }
 
 
 /**
  * @brief Ticks time by one frame of logic.
  *
- * @param delta_t How long the frame's tick is, in seconds.
+ * @param deltaT How long the frame's tick is, in seconds.
  */
-void Drop::tickClassSpecifics(float delta_t) {
-    float intended_scale;
+void Drop::tickClassSpecifics(float deltaT) {
+    float intendedScale;
     
     if(dosesLeft == droType->totalDoses) {
-        intended_scale = 1.0f;
+        intendedScale = 1.0f;
     } else if(dosesLeft == 0) {
-        intended_scale = 0.0f;
+        intendedScale = 0.0f;
     } else {
-        intended_scale =
+        intendedScale =
             interpolateNumber(dosesLeft, 1, droType->totalDoses, 0.5, 1.0);
     }
     
-    if(curScale > intended_scale) {
-        curScale -= droType->shrinkSpeed * delta_t;
-        curScale = std::max(intended_scale, curScale);
+    if(curScale > intendedScale) {
+        curScale -= droType->shrinkSpeed * deltaT;
+        curScale = std::max(intendedScale, curScale);
     }
     
     if(curScale == 0) {

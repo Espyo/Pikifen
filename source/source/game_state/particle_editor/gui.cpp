@@ -26,10 +26,10 @@ void ParticleEditor::openLoadDialog() {
     reloadPartGens();
     
     //Set up the picker's behavior and data.
-    vector<PickerItem> file_items;
+    vector<PickerItem> fileItems;
     for(const auto &g : game.content.particleGens.list) {
         ContentManifest* man = g.second.manifest;
-        file_items.push_back(
+        fileItems.push_back(
             PickerItem(
                 g.second.name,
                 "Pack: " + game.content.packs.list[man->pack].name, "",
@@ -40,7 +40,7 @@ void ParticleEditor::openLoadDialog() {
     }
     
     loadDialogPicker = Picker(this);
-    loadDialogPicker.items = file_items;
+    loadDialogPicker.items = fileItems;
     loadDialogPicker.pickCallback =
         std::bind(
             &ParticleEditor::pickPartGenFile, this,
@@ -162,17 +162,17 @@ void ParticleEditor::processGuiControlPanel() {
     //Current file text.
     ImGui::SameLine();
     monoText("%s", manifest.internalName.c_str());
-    string file_tooltip =
+    string fileTooltip =
         getFileTooltip(manifest.path) + "\n\n"
         "File state: ";
     if(!changesMgr.existsOnDisk()) {
-        file_tooltip += "Not saved to disk yet!";
+        fileTooltip += "Not saved to disk yet!";
     } else if(changesMgr.hasUnsavedChanges()) {
-        file_tooltip += "You have unsaved changes.";
+        fileTooltip += "You have unsaved changes.";
     } else {
-        file_tooltip += "Everything ok.";
+        fileTooltip += "Everything ok.";
     }
-    setTooltip(file_tooltip);
+    setTooltip(fileTooltip);
     
     ImGui::Spacer();
     
@@ -189,26 +189,26 @@ void ParticleEditor::processGuiControlPanel() {
  */
 void ParticleEditor::processGuiDeletePartGenDialog() {
     //Explanation text.
-    string explanation_str;
+    string explanationStr;
     if(!changesMgr.existsOnDisk()) {
-        explanation_str =
+        explanationStr =
             "You have never saved this particle generator to disk, so if you\n"
             "delete, you will only lose your unsaved progress.";
     } else {
-        explanation_str =
+        explanationStr =
             "If you delete, you will lose all unsaved progress, and the\n"
             "particle generator's files on the disk will be gone FOREVER!";
     }
-    ImGui::SetupCentering(ImGui::CalcTextSize(explanation_str.c_str()).x);
-    ImGui::Text("%s", explanation_str.c_str());
+    ImGui::SetupCentering(ImGui::CalcTextSize(explanationStr.c_str()).x);
+    ImGui::Text("%s", explanationStr.c_str());
     
     //Final warning text.
-    string final_warning_str =
+    string finalWarningStr =
         "Are you sure you want to delete the current particle generator?";
-    ImGui::SetupCentering(ImGui::CalcTextSize(final_warning_str.c_str()).x);
+    ImGui::SetupCentering(ImGui::CalcTextSize(finalWarningStr.c_str()).x);
     ImGui::TextColored(
         ImVec4(0.8, 0.6, 0.6, 1.0),
-        "%s", final_warning_str.c_str()
+        "%s", finalWarningStr.c_str()
     );
     
     //Cancel button.
@@ -392,9 +392,9 @@ void ParticleEditor::processGuiMenuBar() {
                     "Show tooltips", "", &game.options.editors.showTooltips
                 )
             ) {
-                string state_str =
+                string stateStr =
                     game.options.editors.showTooltips ? "Enabled" : "Disabled";
-                setStatus(state_str + " tooltips.");
+                setStatus(stateStr + " tooltips.");
                 saveOptions();
             }
             setTooltip(
@@ -405,7 +405,7 @@ void ParticleEditor::processGuiMenuBar() {
             
             //General help item.
             if(ImGui::MenuItem("Help...")) {
-                string help_str =
+                string helpStr =
                     "The particle editor allows you to change how each "
                     "particle generator works. In-game, particle generators "
                     "are responsible for generating particles, and each one "
@@ -416,7 +416,7 @@ void ParticleEditor::processGuiMenuBar() {
                     "If you need more help on how to use the particle editor, "
                     "check out the tutorial in the manual, located "
                     "in the engine's folder.";
-                openHelpDialog(help_str, "particle.html");
+                openHelpDialog(helpStr, "particle.html");
             }
             setTooltip(
                 "Opens a general help message for this editor."
@@ -436,7 +436,7 @@ void ParticleEditor::processGuiMenuBar() {
  */
 void ParticleEditor::processGuiNewDialog() {
     string problem;
-    bool hit_create_button = false;
+    bool hitCreateButton = false;
     
     //Pack widgets.
     processGuiNewDialogPackWidgets(&newDialog.pack);
@@ -450,7 +450,7 @@ void ParticleEditor::processGuiNewDialog() {
             ImGuiInputTextFlags_EnterReturnsTrue
         )
     ) {
-        hit_create_button = true;
+        hitCreateButton = true;
     }
     setTooltip(
         "Internal name of the new particle generator.\n"
@@ -458,11 +458,11 @@ void ParticleEditor::processGuiNewDialog() {
     );
     
     //Check if everything's ok.
-    ContentManifest temp_man;
-    temp_man.pack = newDialog.pack;
-    temp_man.internalName = newDialog.internalName;
+    ContentManifest tempMan;
+    tempMan.pack = newDialog.pack;
+    tempMan.internalName = newDialog.internalName;
     newDialog.partGenPath =
-        game.content.particleGens.manifestToPath(temp_man);
+        game.content.particleGens.manifestToPath(tempMan);
     if(newDialog.lastCheckedPartGenPath != newDialog.partGenPath) {
         newDialog.partGenPathExists =
             fileExists(newDialog.partGenPath);
@@ -490,7 +490,7 @@ void ParticleEditor::processGuiNewDialog() {
         ImGui::BeginDisabled();
     }
     if(ImGui::Button("Create particle generator", ImVec2(200, 40))) {
-        hit_create_button = true;
+        hitCreateButton = true;
     }
     if(!problem.empty()) {
         ImGui::EndDisabled();
@@ -498,9 +498,9 @@ void ParticleEditor::processGuiNewDialog() {
     setTooltip(problem.empty() ? "Create the particle generator!" : problem);
     
     //Creation logic.
-    if(hit_create_button) {
+    if(hitCreateButton) {
         if(!problem.empty()) return;
-        auto really_create = [this] () {
+        auto reallyCreate = [this] () {
             createPartGen(newDialog.partGenPath);
             closeTopDialog();
             closeTopDialog(); //Close the load dialog.
@@ -510,9 +510,9 @@ void ParticleEditor::processGuiNewDialog() {
             newDialog.pack == FOLDER_NAMES::BASE_PACK &&
             !game.options.advanced.engineDev
         ) {
-            openBaseContentWarningDialog(really_create);
+            openBaseContentWarningDialog(reallyCreate);
         } else {
-            really_create();
+            reallyCreate();
         }
     }
 }
@@ -605,13 +605,13 @@ void ParticleEditor::processGuiOptionsDialog() {
             ImGui::Indent();
             
             //Remove background texture button.
-            unsigned char rem_bg_opacity =
+            unsigned char remBgOpacity =
                 game.options.partEd.bgPath.empty() ? 50 : 255;
             if(
                 ImGui::ImageButton(
                     "remBgButton", editorIcons[EDITOR_ICON_REMOVE],
                     Point(ImGui::GetTextLineHeight()), Point(), Point(1.0f),
-                    COLOR_EMPTY, mapAlpha(rem_bg_opacity)
+                    COLOR_EMPTY, mapAlpha(remBgOpacity)
                 )
             ) {
                 game.options.partEd.bgPath.clear();
@@ -654,10 +654,10 @@ void ParticleEditor::processGuiOptionsDialog() {
             );
             
             //Background texture name text.
-            string bg_file_name =
+            string bgFileName =
                 getPathLastComponent(game.options.partEd.bgPath);
             ImGui::SameLine();
-            monoText("%s", bg_file_name.c_str());
+            monoText("%s", bgFileName.c_str());
             setTooltip("Full path:\n" + game.options.partEd.bgPath);
             
             ImGui::Unindent();
@@ -752,26 +752,26 @@ void ParticleEditor::processGuiPanelGenerator() {
     
     //Emission node.
     ImGui::Spacer();
-    bool open_emission_node =
+    bool openEmissionNode =
         saveableTreeNode("generator", "Emission");
     setTooltip(
         "Everything about how the particle generator emits new particles."
     );
-    if(open_emission_node) {
+    if(openEmissionNode) {
     
         //Basics node.
-        bool open_basics_node =
+        bool openBasicsNode =
             saveableTreeNode("generatorEmission", "Basics");
         setTooltip("Edit basic information about emission here.");
-        if(open_basics_node) {
+        if(openBasicsNode) {
         
             //Emit mode text.
             ImGui::Text("Mode:");
             
             //Emit once radio.
-            int emit_mode = loadedGen.emission.interval == 0.0f ? 0 : 1;
+            int emitMode = loadedGen.emission.interval == 0.0f ? 0 : 1;
             ImGui::SameLine();
-            if(ImGui::RadioButton("Once", &emit_mode, 0)) {
+            if(ImGui::RadioButton("Once", &emitMode, 0)) {
                 if(loadedGen.emission.interval != 0.0f) {
                     loadedGen.emission.interval = 0.0f;
                     loadedGen.emission.intervalDeviation = 0.0f;
@@ -783,7 +783,7 @@ void ParticleEditor::processGuiPanelGenerator() {
             
             //Emit continuously radio.
             ImGui::SameLine();
-            if(ImGui::RadioButton("Interval", &emit_mode, 1)) {
+            if(ImGui::RadioButton("Interval", &emitMode, 1)) {
                 if(loadedGen.emission.interval == 0.0f) {
                     loadedGen.emission.interval = 0.01f;
                     loadedGen.emission.intervalDeviation = 0.0f;
@@ -796,7 +796,7 @@ void ParticleEditor::processGuiPanelGenerator() {
                 "over time, with a set interval."
             );
             
-            if(emit_mode == 1) {
+            if(emitMode == 1) {
                 //Emission interval value.
                 ImGui::Indent();
                 ImGui::SetNextItemWidth(85);
@@ -842,12 +842,12 @@ void ParticleEditor::processGuiPanelGenerator() {
             ImGui::Text("Number:");
             
             //Emission number value.
-            int number_int = (int) loadedGen.emission.number;
+            int numberInt = (int) loadedGen.emission.number;
             ImGui::Indent();
             ImGui::SetNextItemWidth(85);
             if(
                 ImGui::DragInt(
-                    "##number", &number_int, 1, 1, (int) game.options.advanced.maxParticles
+                    "##number", &numberInt, 1, 1, (int) game.options.advanced.maxParticles
                 )
             ) {
                 changesMgr.markAsChanged();
@@ -856,7 +856,7 @@ void ParticleEditor::processGuiPanelGenerator() {
                 "How many particles are created per emission.",
                 "", WIDGET_EXPLANATION_DRAG
             );
-            loadedGen.emission.number = number_int;
+            loadedGen.emission.number = numberInt;
             
             //Emission number deviation text.
             ImGui::SameLine();
@@ -865,11 +865,11 @@ void ParticleEditor::processGuiPanelGenerator() {
             //Emission number deviation value.
             ImGui::SameLine();
             ImGui::SetNextItemWidth(70);
-            int number_dev_int = (int) loadedGen.emission.numberDeviation;
+            int numberDevInt = (int) loadedGen.emission.numberDeviation;
             if(
                 ImGui::DragInt(
                     "##numberDeviation",
-                    &number_dev_int, 1, 0, (int) game.options.advanced.maxParticles
+                    &numberDevInt, 1, 0, (int) game.options.advanced.maxParticles
                 )
             ) {
                 changesMgr.markAsChanged();
@@ -879,7 +879,7 @@ void ParticleEditor::processGuiPanelGenerator() {
                 "amount.",
                 "", WIDGET_EXPLANATION_DRAG
             );
-            loadedGen.emission.numberDeviation = number_dev_int;
+            loadedGen.emission.numberDeviation = numberDevInt;
             
             ImGui::Unindent();
             
@@ -889,13 +889,13 @@ void ParticleEditor::processGuiPanelGenerator() {
         
         //Shape node.
         ImGui::Spacer();
-        bool open_shape_node =
+        bool openShapeNode =
             saveableTreeNode("generatorEmission", "Shape");
         setTooltip(
             "If you want the particles to appear within a specific shape\n"
             "around the generator, edit these properties."
         );
-        if(open_shape_node) {
+        if(openShapeNode) {
         
             //Circle emission shape radio.
             int shape = loadedGen.emission.shape;
@@ -1087,30 +1087,30 @@ void ParticleEditor::processGuiPanelGenerator() {
     
     //Particle appearance node.
     ImGui::Spacer();
-    bool open_appearance_node =
+    bool openAppearanceNode =
         saveableTreeNode("generator", "Particle appearance");
     setTooltip(
         "Everything about how a particle looks."
     );
-    if(open_appearance_node) {
+    if(openAppearanceNode) {
     
         //Image node.
-        bool open_image_node =
+        bool openImageNode =
             saveableTreeNode("generatorAppearance", "Image");
         setTooltip(
             "Edit information about the image (if any) to draw\n"
             "on a particle here."
         );
-        if(open_image_node) {
+        if(openImageNode) {
         
             //Remove bitmap button.
-            unsigned char rem_bmp_opacity =
+            unsigned char remBmpOpacity =
                 loadedGen.baseParticle.bmpName.empty() ? 50 : 255;
             if(
                 ImGui::ImageButton(
                     "remBmpButton", editorIcons[EDITOR_ICON_REMOVE],
                     Point(ImGui::GetTextLineHeight()), Point(), Point(1.0f),
-                    COLOR_EMPTY, mapAlpha(rem_bmp_opacity)
+                    COLOR_EMPTY, mapAlpha(remBmpOpacity)
                 )
             ) {
                 //We can't have living particles with destroyed bitmaps,
@@ -1153,11 +1153,11 @@ void ParticleEditor::processGuiPanelGenerator() {
                 ImGui::Text("Angle:");
                 
                 //Fixed angle radio.
-                int angle_type_int = loadedGen.baseParticle.bmpAngleType;
+                int angleTypeInt = loadedGen.baseParticle.bmpAngleType;
                 ImGui::SameLine();
                 if(
                     ImGui::RadioButton(
-                        "Fixed", &angle_type_int,
+                        "Fixed", &angleTypeInt,
                         PARTICLE_ANGLE_TYPE_FIXED
                     )
                 ) {
@@ -1171,7 +1171,7 @@ void ParticleEditor::processGuiPanelGenerator() {
                 ImGui::SameLine();
                 if(
                     ImGui::RadioButton(
-                        "Direction", &angle_type_int,
+                        "Direction", &angleTypeInt,
                         PARTICLE_ANGLE_TYPE_DIRECTION
                     )
                 ) {
@@ -1182,7 +1182,7 @@ void ParticleEditor::processGuiPanelGenerator() {
                     "traveling."
                 );
                 loadedGen.baseParticle.bmpAngleType =
-                    (PARTICLE_ANGLE_TYPE) angle_type_int;
+                    (PARTICLE_ANGLE_TYPE) angleTypeInt;
                     
                 if(
                     loadedGen.baseParticle.bmpAngleType ==
@@ -1235,13 +1235,13 @@ void ParticleEditor::processGuiPanelGenerator() {
         
         //Particle color node.
         ImGui::Spacer();
-        bool open_color_node =
+        bool openColorNode =
             saveableTreeNode("generatorAppearance", "Color");
         setTooltip(
             "Control the color a particle has and how it changes over time "
             "here."
         );
-        if(open_color_node) {
+        if(openColorNode) {
         
             //Color keyframe editor.
             if(
@@ -1258,11 +1258,11 @@ void ParticleEditor::processGuiPanelGenerator() {
             ImGui::Text("Blend:");
             
             //Normal blending radio.
-            int blend_int = loadedGen.baseParticle.blendType;
+            int blendInt = loadedGen.baseParticle.blendType;
             ImGui::SameLine();
             if(
                 ImGui::RadioButton(
-                    "Normal", &blend_int, PARTICLE_BLEND_TYPE_NORMAL
+                    "Normal", &blendInt, PARTICLE_BLEND_TYPE_NORMAL
                 )
             ) {
                 changesMgr.markAsChanged();
@@ -1275,7 +1275,7 @@ void ParticleEditor::processGuiPanelGenerator() {
             ImGui::SameLine();
             if(
                 ImGui::RadioButton(
-                    "Additive", &blend_int, PARTICLE_BLEND_TYPE_ADDITIVE
+                    "Additive", &blendInt, PARTICLE_BLEND_TYPE_ADDITIVE
                 )
             ) {
                 changesMgr.markAsChanged();
@@ -1286,7 +1286,7 @@ void ParticleEditor::processGuiPanelGenerator() {
                 "the brighter the color gets."
             );
             loadedGen.baseParticle.blendType =
-                (PARTICLE_BLEND_TYPE) blend_int;
+                (PARTICLE_BLEND_TYPE) blendInt;
                 
             ImGui::TreePop();
             
@@ -1294,12 +1294,12 @@ void ParticleEditor::processGuiPanelGenerator() {
         
         //Particle size node.
         ImGui::Spacer();
-        bool open_size_node =
+        bool openSizeNode =
             saveableTreeNode("generatorAppearance", "Size");
         setTooltip(
             "Control a particle's size and how it changes over time here."
         );
-        if(open_size_node) {
+        if(openSizeNode) {
         
             //Size keyframe editor.
             if(
@@ -1345,20 +1345,20 @@ void ParticleEditor::processGuiPanelGenerator() {
     
     //Particle behavior node.
     ImGui::Spacer();
-    bool open_behavior_node =
+    bool openBehaviorNode =
         saveableTreeNode("generator", "Particle behavior");
     setTooltip(
         "Everything about how a particle behaves."
     );
-    if(open_behavior_node) {
+    if(openBehaviorNode) {
     
         //Basics node.
-        bool open_basics_node =
+        bool openBasicsNode =
             saveableTreeNode("generatorBehavior", "Basics");
         setTooltip(
             "Control how long a particle lasts for, and more, here."
         );
-        if(open_basics_node) {
+        if(openBasicsNode) {
         
             //Duration text.
             ImGui::Text("Duration:");
@@ -1421,12 +1421,12 @@ void ParticleEditor::processGuiPanelGenerator() {
         
         //Linear speed node.
         ImGui::Spacer();
-        bool open_linear_speed_node =
+        bool openLinearSpeedNode =
             saveableTreeNode("generatorBehavior", "Linear speed");
         setTooltip(
             "Control a particle's linear (simple) X and Y speed here."
         );
-        if(open_linear_speed_node) {
+        if(openLinearSpeedNode) {
         
             //Linear speed keyframe editor.
             if(
@@ -1479,14 +1479,14 @@ void ParticleEditor::processGuiPanelGenerator() {
         
         //Outwards speed node.
         ImGui::Spacer();
-        bool open_outwards_speed_node =
+        bool openOutwardsSpeedNode =
             saveableTreeNode("generatorBehavior", "Outwards speed");
         setTooltip(
             "Control the speed at which a particle moves out from\n"
             "the center here. Use negative values to make them move\n"
             "towards the center instead."
         );
-        if(open_outwards_speed_node) {
+        if(openOutwardsSpeedNode) {
         
             //Outwards speed keyframe editor.
             if(
@@ -1521,13 +1521,13 @@ void ParticleEditor::processGuiPanelGenerator() {
         
         //Orbital speed node.
         ImGui::Spacer();
-        bool open_orbital_speed_node =
+        bool openOrbitalSpeedNode =
             saveableTreeNode("generatorBehavior", "Orbital speed");
         setTooltip(
             "Control the speed at which a particle orbits around the center "
             "here."
         );
-        if(open_orbital_speed_node) {
+        if(openOrbitalSpeedNode) {
         
             //Orbital speed keyframe editor.
             if(
@@ -1562,12 +1562,12 @@ void ParticleEditor::processGuiPanelGenerator() {
         
         //Friction node.
         ImGui::Spacer();
-        bool open_friction_node =
+        bool openFrictionNode =
             saveableTreeNode("generatorBehavior", "Friction");
         setTooltip(
             "Control how a particle loses speed here."
         );
-        if(open_friction_node) {
+        if(openFrictionNode) {
         
             //Friction value.
             ImGui::SetNextItemWidth(85);
@@ -1616,12 +1616,12 @@ void ParticleEditor::processGuiPanelGenerator() {
     
     //Info node.
     ImGui::Spacer();
-    bool open_info_node =
+    bool openInfoNode =
         saveableTreeNode("generator", "Info");
     setTooltip(
         "Optional information about the particle generator."
     );
-    if(open_info_node) {
+    if(openInfoNode) {
     
         //Name input.
         if(

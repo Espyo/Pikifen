@@ -92,53 +92,53 @@ void Ship::drawMob() {
 
     //Draw the rings on the control point.
     for(unsigned char b = 0; b < SHIP::CONTROL_POINT_RING_AMOUNT; b++) {
-        float ring_idx_ratio = b / (float) SHIP::CONTROL_POINT_RING_AMOUNT;
+        float ringIdxRatio = b / (float) SHIP::CONTROL_POINT_RING_AMOUNT;
         
-        float ring_hue = 360 * ring_idx_ratio;
-        ALLEGRO_COLOR ring_color = al_color_hsl(ring_hue, 1.0f, 0.8f);
+        float ringHue = 360 * ringIdxRatio;
+        ALLEGRO_COLOR ringColor = al_color_hsl(ringHue, 1.0f, 0.8f);
         
-        float ring_anim_ratio =
+        float ringAnimRatio =
             fmod(
                 game.states.gameplay->areaTimePassed +
-                SHIP::CONTROL_POINT_ANIM_DUR * ring_idx_ratio,
+                SHIP::CONTROL_POINT_ANIM_DUR * ringIdxRatio,
                 SHIP::CONTROL_POINT_ANIM_DUR
             );
-        ring_anim_ratio /= SHIP::CONTROL_POINT_ANIM_DUR;
+        ringAnimRatio /= SHIP::CONTROL_POINT_ANIM_DUR;
         
-        unsigned char ring_alpha = 120;
+        unsigned char ringAlpha = 120;
         
-        if(ring_anim_ratio <= 0.3f) {
+        if(ringAnimRatio <= 0.3f) {
             //Fading into existence.
-            ring_alpha =
+            ringAlpha =
                 interpolateNumber(
-                    ring_anim_ratio,
+                    ringAnimRatio,
                     0.0f, 0.3f,
-                    0, ring_alpha
+                    0, ringAlpha
                 );
-        } else if(ring_anim_ratio >= 0.7f) {
+        } else if(ringAnimRatio >= 0.7f) {
             //Shrinking down.
-            ring_alpha =
+            ringAlpha =
                 interpolateNumber(
-                    ring_anim_ratio,
+                    ringAnimRatio,
                     0.7f, 1.0f,
-                    ring_alpha, 0
+                    ringAlpha, 0
                 );
         }
         
-        float ring_scale =
+        float ringScale =
             interpolateNumber(
-                ease(EASE_METHOD_IN, ring_anim_ratio),
+                ease(EASE_METHOD_IN, ringAnimRatio),
                 0.0f, 1.0f,
                 1.0f, 0.3f
             );
-        float ring_diameter =
-            shiType->controlPointRadius * 2.0f * ring_scale;
+        float ringDiameter =
+            shiType->controlPointRadius * 2.0f * ringScale;
             
         drawBitmap(
             game.sysContent.bmpBrightRing,
-            controlPointFinalPos, Point(ring_diameter),
+            controlPointFinalPos, Point(ringDiameter),
             0.0f,
-            changeAlpha(ring_color, ring_alpha)
+            changeAlpha(ringColor, ringAlpha)
         );
     }
     
@@ -146,59 +146,59 @@ void Ship::drawMob() {
     //Go in reverse to ensure the most recent rings are drawn underneath.
     for(char r = (char) tractorBeamRings.size() - 1; r > 0; r--) {
     
-        float ring_anim_ratio =
+        float ringAnimRatio =
             tractorBeamRings[r] / SHIP::TRACTOR_BEAM_RING_ANIM_DUR;
             
-        unsigned char ring_alpha = 80;
-        if(ring_anim_ratio <= 0.3f) {
+        unsigned char ringAlpha = 80;
+        if(ringAnimRatio <= 0.3f) {
             //Fading into existence.
-            ring_alpha =
+            ringAlpha =
                 interpolateNumber(
-                    ring_anim_ratio,
+                    ringAnimRatio,
                     0.0f, 0.3f,
-                    0, ring_alpha
+                    0, ringAlpha
                 );
-        } else if(ring_anim_ratio >= 0.5f) {
+        } else if(ringAnimRatio >= 0.5f) {
             //Shrinking down.
-            ring_alpha =
+            ringAlpha =
                 interpolateNumber(
-                    ring_anim_ratio,
+                    ringAnimRatio,
                     0.5f, 1.0f,
-                    ring_alpha, 0
+                    ringAlpha, 0
                 );
         }
         
-        float ring_brightness =
+        float ringBrightness =
             interpolateNumber(
-                ring_anim_ratio,
+                ringAnimRatio,
                 0.0f, 1.0f,
                 0.4f, 0.6f
             );
             
-        ALLEGRO_COLOR ring_color =
-            al_color_hsl(tractorBeamRingColors[r], 1.0f, ring_brightness);
-        ring_color = changeAlpha(ring_color, ring_alpha);
+        ALLEGRO_COLOR ringColor =
+            al_color_hsl(tractorBeamRingColors[r], 1.0f, ringBrightness);
+        ringColor = changeAlpha(ringColor, ringAlpha);
         
-        float ring_scale =
+        float ringScale =
             interpolateNumber(
-                ring_anim_ratio,
+                ringAnimRatio,
                 0.0f, 1.0f,
                 shiType->controlPointRadius * 2.5f, 1.0f
             );
             
-        float distance = controlPointToReceptacleDist * ring_anim_ratio;
+        float distance = controlPointToReceptacleDist * ringAnimRatio;
         float angle = getAngle(controlPointFinalPos, receptacleFinalPos);
-        Point ring_pos(
+        Point ringPos(
             controlPointFinalPos.x + cos(angle) * distance,
             controlPointFinalPos.y + sin(angle) * distance
         );
         
         drawBitmap(
             game.sysContent.bmpBrightRing,
-            ring_pos,
-            Point(ring_scale),
+            ringPos,
+            Point(ringScale),
             0.0f,
-            ring_color
+            ringColor
         );
     }
     
@@ -251,18 +251,18 @@ void Ship::readScriptVars(const ScriptVarReader &svr) {
 /**
  * @brief Ticks time by one frame of logic.
  *
- * @param delta_t How long the frame's tick is, in seconds.
+ * @param deltaT How long the frame's tick is, in seconds.
  */
-void Ship::tickClassSpecifics(float delta_t) {
-    nest->tick(delta_t);
+void Ship::tickClassSpecifics(float deltaT) {
+    nest->tick(deltaT);
     
     if(mobsBeingBeamed > 0) {
-        nextTractorBeamRingTimer.tick(delta_t);
+        nextTractorBeamRingTimer.tick(deltaT);
     }
     
     for(size_t r = 0; r < tractorBeamRings.size(); ) {
         //Erase rings that have reached the end of their animation.
-        tractorBeamRings[r] += delta_t;
+        tractorBeamRings[r] += deltaT;
         if(tractorBeamRings[r] > SHIP::TRACTOR_BEAM_RING_ANIM_DUR) {
             tractorBeamRings.erase(
                 tractorBeamRings.begin() + r

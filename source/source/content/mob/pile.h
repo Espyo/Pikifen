@@ -42,8 +42,8 @@ public:
     void recharge();
     void update();
     bool getFractionNumbersInfo(
-        float* fraction_value_nr, float* fraction_req_nr,
-        ALLEGRO_COLOR* fraction_color
+        float* fractionValueNr, float* fractionReqNr,
+        ALLEGRO_COLOR* fractionColor
     ) const override;
     void readScriptVars(const ScriptVarReader &svr) override;
     
@@ -51,6 +51,6 @@ protected:
 
     //--- Function declarations ---
     
-    void tickClassSpecifics(float delta_t) override;
+    void tickClassSpecifics(float deltaT) override;
     
 };

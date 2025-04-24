@@ -41,41 +41,41 @@ ParticleEditor::ParticleEditor() :
     zoomMaxLevel = PARTICLE_EDITOR::ZOOM_MAX_LEVEL;
     zoomMinLevel = PARTICLE_EDITOR::ZOOM_MIN_LEVEL;
     
-#define register_cmd(ptr, name) \
+#define registerCmd(ptr, name) \
     commands.push_back( \
                         Command(std::bind((ptr), this, std::placeholders::_1), \
                                 (name)) \
                       );
     
-    register_cmd(
+    registerCmd(
         &ParticleEditor::gridIntervalDecreaseCmd, "grid_interval_decrease"
     );
-    register_cmd(
+    registerCmd(
         &ParticleEditor::gridIntervalIncreaseCmd, "grid_interval_increase"
     );
-    register_cmd(&ParticleEditor::gridToggleCmd, "grid_toggle");
-    register_cmd(&ParticleEditor::deletePartGenCmd, "delete_part_gen");
-    register_cmd(&ParticleEditor::loadCmd, "load");
-    register_cmd(&ParticleEditor::quitCmd, "quit");
-    register_cmd(
+    registerCmd(&ParticleEditor::gridToggleCmd, "grid_toggle");
+    registerCmd(&ParticleEditor::deletePartGenCmd, "delete_part_gen");
+    registerCmd(&ParticleEditor::loadCmd, "load");
+    registerCmd(&ParticleEditor::quitCmd, "quit");
+    registerCmd(
         &ParticleEditor::partMgrPlaybackToggleCmd, "part_mgr_toggle"
     );
-    register_cmd(
+    registerCmd(
         &ParticleEditor::partGenPlaybackToggleCmd, "part_gen_toggle"
     );
-    register_cmd(
+    registerCmd(
         &ParticleEditor::leaderSilhouetteToggleCmd,
         "leader_silhouette_toggle"
     );
-    register_cmd(&ParticleEditor::reloadCmd, "reload");
-    register_cmd(&ParticleEditor::saveCmd, "save");
-    register_cmd(
+    registerCmd(&ParticleEditor::reloadCmd, "reload");
+    registerCmd(&ParticleEditor::saveCmd, "save");
+    registerCmd(
         &ParticleEditor::zoomAndPosResetCmd, "zoom_and_pos_reset"
     );
-    register_cmd(&ParticleEditor::zoomInCmd, "zoom_in");
-    register_cmd(&ParticleEditor::zoomOutCmd, "zoom_out");
+    registerCmd(&ParticleEditor::zoomInCmd, "zoom_in");
+    registerCmd(&ParticleEditor::zoomOutCmd, "zoom_out");
     
-#undef register_cmd
+#undef registerCmd
 }
 
 
@@ -105,10 +105,10 @@ void ParticleEditor::closeOptionsDialog() {
 /**
  * @brief Creates a new, empty particle generator.
  *
- * @param part_gen_path Path to the new particle generator.
+ * @param partGenPath Path to the new particle generator.
  */
 void ParticleEditor::createPartGen(
-    const string &part_gen_path
+    const string &partGenPath
 ) {
     //Setup.
     setupForNewPartGenPre();
@@ -117,7 +117,7 @@ void ParticleEditor::createPartGen(
     //Create a particle generator with some defaults.
     loadedGen = ParticleGenerator();
     game.content.particleGens.pathToManifest(
-        part_gen_path, &manifest
+        partGenPath, &manifest
     );
     loadedGen.manifest = &manifest;
     loadedGen.baseParticle.duration = 1.0f;
@@ -147,16 +147,16 @@ void ParticleEditor::createPartGen(
  * @brief Deletes the current particle generator.
  */
 void ParticleEditor::deleteCurrentPartGen() {
-    string orig_internal_name = manifest.internalName;
-    bool go_to_load_dialog = true;
+    string origInternalName = manifest.internalName;
+    bool goToLoadDialog = true;
     bool success = false;
-    string message_box_text;
+    string messageBoxText;
     
     if(!changesMgr.existsOnDisk()) {
         //If the generator doesn't exist on disk, since it was never
         //saved, then there's nothing to delete.
         success = true;
-        go_to_load_dialog = true;
+        goToLoadDialog = true;
         
     } else {
         //Delete the file.
@@ -166,23 +166,23 @@ void ParticleEditor::deleteCurrentPartGen() {
         case FS_DELETE_RESULT_OK:
         case FS_DELETE_RESULT_HAS_IMPORTANT: {
             success = true;
-            go_to_load_dialog = true;
+            goToLoadDialog = true;
             break;
         } case FS_DELETE_RESULT_NOT_FOUND: {
             success = false;
-            message_box_text =
-                "Particle generator \"" + orig_internal_name +
+            messageBoxText =
+                "Particle generator \"" + origInternalName +
                 "\" deletion failed! The file was not found!";
-            go_to_load_dialog = false;
+            goToLoadDialog = false;
             break;
         } case FS_DELETE_RESULT_DELETE_ERROR: {
             success = false;
-            message_box_text =
-                "Particle generator \"" + orig_internal_name +
+            messageBoxText =
+                "Particle generator \"" + origInternalName +
                 "\" deletion failed! Something went wrong. Please make sure "
                 "there are enough permissions to delete the file and "
                 "try again.";
-            go_to_load_dialog = false;
+            goToLoadDialog = false;
             break;
         }
         }
@@ -191,8 +191,8 @@ void ParticleEditor::deleteCurrentPartGen() {
     
     //This code will be run after everything is done, be it after the standard
     //procedure, or after the user hits OK on the message box.
-    const auto finish_up = [this, go_to_load_dialog] () {
-        if(go_to_load_dialog) {
+    const auto finishUp = [this, goToLoadDialog] () {
+        if(goToLoadDialog) {
             setupForNewPartGenPre();
             openLoadDialog();
         }
@@ -201,24 +201,24 @@ void ParticleEditor::deleteCurrentPartGen() {
     //Update the status bar.
     if(success) {
         setStatus(
-            "Deleted particle generator \"" + orig_internal_name +
+            "Deleted particle generator \"" + origInternalName +
             "\" successfully."
         );
     } else {
         setStatus(
-            "Particle generator \"" + orig_internal_name +
+            "Particle generator \"" + origInternalName +
             "\" deletion failed!", true
         );
     }
     
     //If there's something to tell the user, tell them.
-    if(message_box_text.empty()) {
-        finish_up();
+    if(messageBoxText.empty()) {
+        finishUp();
     } else {
         openMessageDialog(
             "Particle generator deletion failed!",
-            message_box_text,
-            finish_up
+            messageBoxText,
+            finishUp
         );
     }
 }
@@ -227,10 +227,10 @@ void ParticleEditor::deleteCurrentPartGen() {
 /**
  * @brief Code to run for the delete current particle generator command.
  *
- * @param input_value Value of the player input for the command.
+ * @param inputValue Value of the player input for the command.
  */
-void ParticleEditor::deletePartGenCmd(float input_value) {
-    if(input_value < 0.5f) return;
+void ParticleEditor::deletePartGenCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
     
     openDialog(
         "Delete particle generator?",
@@ -268,11 +268,11 @@ void ParticleEditor::doLogic() {
 /**
  * @brief Dear ImGui callback for when the canvas needs to be drawn on-window.
  *
- * @param parent_list Unused.
+ * @param parentList Unused.
  * @param cmd Unused.
  */
 void ParticleEditor::drawCanvasDearImGuiCallback(
-    const ImDrawList* parent_list, const ImDrawCmd* cmd
+    const ImDrawList* parentList, const ImDrawCmd* cmd
 ) {
     game.states.particleEd->drawCanvas();
 }
@@ -286,14 +286,14 @@ void ParticleEditor::drawCanvasDearImGuiCallback(
  * @return The tooltip text.
  */
 string ParticleEditor::getFileTooltip(const string &path) const {
-    ContentManifest temp_manif;
+    ContentManifest tempManif;
     game.content.particleGens.pathToManifest(
-        path, &temp_manif
+        path, &tempManif
     );
     return
-        "Internal name: " + temp_manif.internalName + "\n"
+        "Internal name: " + tempManif.internalName + "\n"
         "File path: " + path + "\n"
-        "Pack: " + game.content.packs.list[temp_manif.pack].name;
+        "Pack: " + game.content.packs.list[tempManif.pack].name;
 }
 
 
@@ -363,11 +363,11 @@ void ParticleEditor::load() {
  * @brief Loads a particle generator.
  *
  * @param path Path to the file.
- * @param should_update_history If true, this loading process should update
+ * @param shouldUpdateHistory If true, this loading process should update
  * the user's file open history.
  */
 void ParticleEditor::loadPartGenFile(
-    const string &path, const bool should_update_history
+    const string &path, const bool shouldUpdateHistory
 ) {
     //Setup.
     setupForNewPartGenPre();
@@ -395,7 +395,7 @@ void ParticleEditor::loadPartGenFile(
     setupForNewPartGenPost();
     changesMgr.reset();
     
-    if(should_update_history) {
+    if(shouldUpdateHistory) {
         updateHistory(game.options.partEd.history, manifest, loadedGen.name);
     }
     
@@ -422,29 +422,29 @@ void ParticleEditor::panCam(const ALLEGRO_EVENT &ev) {
  * @brief Callback for when the user picks a file from the picker.
  *
  * @param name Name of the file.
- * @param top_cat Unused.
- * @param sec_cat Unused.
+ * @param topCat Unused.
+ * @param secCat Unused.
  * @param info Pointer to the file's content manifest.
- * @param is_new Unused.
+ * @param isNew Unused.
  */
 void ParticleEditor::pickPartGenFile(
-    const string &name, const string &top_cat, const string &sec_cat,
-    void* info, bool is_new
+    const string &name, const string &topCat, const string &secCat,
+    void* info, bool isNew
 ) {
-    ContentManifest* temp_manif = (ContentManifest*) info;
+    ContentManifest* tempManif = (ContentManifest*) info;
     
-    auto really_load = [this, temp_manif] () {
+    auto reallyLoad = [this, tempManif] () {
         closeTopDialog();
-        loadPartGenFile(temp_manif->path, true);
+        loadPartGenFile(tempManif->path, true);
     };
     
     if(
-        temp_manif->pack == FOLDER_NAMES::BASE_PACK &&
+        tempManif->pack == FOLDER_NAMES::BASE_PACK &&
         !game.options.advanced.engineDev
     ) {
-        openBaseContentWarningDialog(really_load);
+        openBaseContentWarningDialog(reallyLoad);
     } else {
-        really_load();
+        reallyLoad();
     }
 }
 
@@ -470,12 +470,12 @@ void ParticleEditor::reloadPartGens() {
 /**
  * @brief Code to run for the grid interval decrease command.
  *
- * @param input_value Value of the player input for the command.
+ * @param inputValue Value of the player input for the command.
  */
-void ParticleEditor::gridIntervalDecreaseCmd(float input_value) {
-    if(input_value < 0.5f) return;
+void ParticleEditor::gridIntervalDecreaseCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
     
-    float new_grid_interval = PARTICLE_EDITOR::GRID_INTERVALS[0];
+    float newGridInterval = PARTICLE_EDITOR::GRID_INTERVALS[0];
     for(size_t i = 0; i < PARTICLE_EDITOR::GRID_INTERVALS.size(); ++i) {
         if(
             PARTICLE_EDITOR::GRID_INTERVALS[i] >=
@@ -483,9 +483,9 @@ void ParticleEditor::gridIntervalDecreaseCmd(float input_value) {
         ) {
             break;
         }
-        new_grid_interval = PARTICLE_EDITOR::GRID_INTERVALS[i];
+        newGridInterval = PARTICLE_EDITOR::GRID_INTERVALS[i];
     }
-    game.options.partEd.gridInterval = new_grid_interval;
+    game.options.partEd.gridInterval = newGridInterval;
     setStatus(
         "Decreased grid interval to " +
         f2s(game.options.partEd.gridInterval) + "."
@@ -496,12 +496,12 @@ void ParticleEditor::gridIntervalDecreaseCmd(float input_value) {
 /**
  * @brief Code to run for the grid interval increase command.
  *
- * @param input_value Value of the player input for the command.
+ * @param inputValue Value of the player input for the command.
  */
-void ParticleEditor::gridIntervalIncreaseCmd(float input_value) {
-    if(input_value < 0.5f) return;
+void ParticleEditor::gridIntervalIncreaseCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
     
-    float new_grid_interval = PARTICLE_EDITOR::GRID_INTERVALS.back();
+    float newGridInterval = PARTICLE_EDITOR::GRID_INTERVALS.back();
     for(int i = (int) (PARTICLE_EDITOR::GRID_INTERVALS.size() - 1); i >= 0; --i) {
         if(
             PARTICLE_EDITOR::GRID_INTERVALS[i] <=
@@ -509,9 +509,9 @@ void ParticleEditor::gridIntervalIncreaseCmd(float input_value) {
         ) {
             break;
         }
-        new_grid_interval = PARTICLE_EDITOR::GRID_INTERVALS[i];
+        newGridInterval = PARTICLE_EDITOR::GRID_INTERVALS[i];
     }
-    game.options.partEd.gridInterval = new_grid_interval;
+    game.options.partEd.gridInterval = newGridInterval;
     setStatus(
         "Increased grid interval to " +
         f2s(game.options.partEd.gridInterval) + "."
@@ -522,24 +522,24 @@ void ParticleEditor::gridIntervalIncreaseCmd(float input_value) {
 /**
  * @brief Code to run for the grid toggle command.
  *
- * @param input_value Value of the player input for the command.
+ * @param inputValue Value of the player input for the command.
  */
-void ParticleEditor::gridToggleCmd(float input_value) {
-    if(input_value < 0.5f) return;
+void ParticleEditor::gridToggleCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
     
     gridVisible = !gridVisible;
-    string state_str = (gridVisible ? "Enabled" : "Disabled");
-    setStatus(state_str + " grid visibility.");
+    string stateStr = (gridVisible ? "Enabled" : "Disabled");
+    setStatus(stateStr + " grid visibility.");
 }
 
 
 /**
  * @brief Code to run for the load command.
  *
- * @param input_value Value of the player input for the command.
+ * @param inputValue Value of the player input for the command.
  */
-void ParticleEditor::loadCmd(float input_value) {
-    if(input_value < 0.5f) return;
+void ParticleEditor::loadCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
     
     changesMgr.askIfUnsaved(
         loadWidgetPos,
@@ -553,10 +553,10 @@ void ParticleEditor::loadCmd(float input_value) {
 /**
  * @brief Code to run for the quit command.
  *
- * @param input_value Value of the player input for the command.
+ * @param inputValue Value of the player input for the command.
  */
-void ParticleEditor::quitCmd(float input_value) {
-    if(input_value < 0.5f) return;
+void ParticleEditor::quitCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
     
     changesMgr.askIfUnsaved(
         quitWidgetPos,
@@ -570,10 +570,10 @@ void ParticleEditor::quitCmd(float input_value) {
 /**
  * @brief Code to run for the reload command.
  *
- * @param input_value Value of the player input for the command.
+ * @param inputValue Value of the player input for the command.
  */
-void ParticleEditor::reloadCmd(float input_value) {
-    if(input_value < 0.5f) return;
+void ParticleEditor::reloadCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
     
     changesMgr.askIfUnsaved(
         reloadWidgetPos,
@@ -587,10 +587,10 @@ void ParticleEditor::reloadCmd(float input_value) {
 /**
  * @brief Code to run for the save command.
  *
- * @param input_value Value of the player input for the command.
+ * @param inputValue Value of the player input for the command.
  */
-void ParticleEditor::saveCmd(float input_value) {
-    if(input_value < 0.5f) return;
+void ParticleEditor::saveCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
     
     savePartGen();
 }
@@ -634,10 +634,10 @@ void ParticleEditor::setupForNewPartGenPre() {
 /**
  * @brief Code to run for the zoom and position reset command.
  *
- * @param input_value Value of the player input for the command.
+ * @param inputValue Value of the player input for the command.
  */
-void ParticleEditor::zoomAndPosResetCmd(float input_value) {
-    if(input_value < 0.5f) return;
+void ParticleEditor::zoomAndPosResetCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
     
     if(game.view.cam.targetZoom == 1.0f) {
         game.view.cam.targetPos = Point();
@@ -650,10 +650,10 @@ void ParticleEditor::zoomAndPosResetCmd(float input_value) {
 /**
  * @brief Code to run for the zoom in command.
  *
- * @param input_value Value of the player input for the command.
+ * @param inputValue Value of the player input for the command.
  */
-void ParticleEditor::zoomInCmd(float input_value) {
-    if(input_value < 0.5f) return;
+void ParticleEditor::zoomInCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
     
     game.view.cam.targetZoom =
         std::clamp(
@@ -667,10 +667,10 @@ void ParticleEditor::zoomInCmd(float input_value) {
 /**
  * @brief Code to run for the zoom out command.
  *
- * @param input_value Value of the player input for the command.
+ * @param inputValue Value of the player input for the command.
  */
-void ParticleEditor::zoomOutCmd(float input_value) {
-    if(input_value < 0.5f) return;
+void ParticleEditor::zoomOutCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
     
     game.view.cam.targetZoom =
         std::clamp(
@@ -684,24 +684,24 @@ void ParticleEditor::zoomOutCmd(float input_value) {
 /**
  * @brief Code to run for the leader silhouette toggle command.
  *
- * @param input_value Value of the player input for the command.
+ * @param inputValue Value of the player input for the command.
  */
-void ParticleEditor::leaderSilhouetteToggleCmd(float input_value) {
-    if(input_value < 0.5f) return;
+void ParticleEditor::leaderSilhouetteToggleCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
     
     leaderSilhouetteVisible = !leaderSilhouetteVisible;
-    string state_str = (leaderSilhouetteVisible ? "Enabled" : "Disabled");
-    setStatus(state_str + " leader silhouette visibility.");
+    string stateStr = (leaderSilhouetteVisible ? "Enabled" : "Disabled");
+    setStatus(stateStr + " leader silhouette visibility.");
 }
 
 
 /**
  * @brief Code to run for the particle clearing command.
  *
- * @param input_value Value of the player input for the command.
+ * @param inputValue Value of the player input for the command.
  */
-void ParticleEditor::clearParticlesCmd(float input_value) {
-    if(input_value < 0.5f) return;
+void ParticleEditor::clearParticlesCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
     
     partMgr.clear();
     setStatus("Cleared particles.");
@@ -711,42 +711,42 @@ void ParticleEditor::clearParticlesCmd(float input_value) {
 /**
  * @brief Code to run for the emission shape toggle command.
  *
- * @param input_value Value of the player input for the command.
+ * @param inputValue Value of the player input for the command.
  */
-void ParticleEditor::emissionShapeToggleCmd(float input_value) {
-    if(input_value < 0.5f) return;
+void ParticleEditor::emissionShapeToggleCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
     
     emissionShapeVisible = !emissionShapeVisible;
-    string state_str = (emissionShapeVisible ? "Enabled" : "Disabled");
-    setStatus(state_str + " emission shape visibility.");
+    string stateStr = (emissionShapeVisible ? "Enabled" : "Disabled");
+    setStatus(stateStr + " emission shape visibility.");
 }
 
 
 /**
  * @brief Code to run for the particle generator playback toggle command.
  *
- * @param input_value Value of the player input for the command.
+ * @param inputValue Value of the player input for the command.
  */
-void ParticleEditor::partGenPlaybackToggleCmd(float input_value) {
-    if(input_value < 0.5f) return;
+void ParticleEditor::partGenPlaybackToggleCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
     
     genRunning = !genRunning;
-    string state_str = (genRunning ? "Enabled" : "Disabled");
-    setStatus(state_str + " particle generator playback.");
+    string stateStr = (genRunning ? "Enabled" : "Disabled");
+    setStatus(stateStr + " particle generator playback.");
 }
 
 
 /**
  * @brief Code to run for the particle manager playback toggle command.
  *
- * @param input_value Value of the player input for the command.
+ * @param inputValue Value of the player input for the command.
  */
-void ParticleEditor::partMgrPlaybackToggleCmd(float input_value) {
-    if(input_value < 0.5f) return;
+void ParticleEditor::partMgrPlaybackToggleCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
     
     mgrRunning = !mgrRunning;
-    string state_str = (mgrRunning ? "Enabled" : "Disabled");
-    setStatus(state_str + " particle system playback.");
+    string stateStr = (mgrRunning ? "Enabled" : "Disabled");
+    setStatus(stateStr + " particle system playback.");
 }
 
 
@@ -774,10 +774,10 @@ void ParticleEditor::resetCamZoom() {
 bool ParticleEditor::savePartGen() {
     loadedGen.engineVersion = getEngineVersionString();
     
-    DataNode file_node = DataNode("", "");
-    loadedGen.saveToDataNode(&file_node);
+    DataNode fileNode = DataNode("", "");
+    loadedGen.saveToDataNode(&fileNode);
     
-    if(!file_node.saveFile(manifest.path)) {
+    if(!fileNode.saveFile(manifest.path)) {
         showSystemMessageBox(
             nullptr, "Save failed!",
             "Could not save the particle file!",

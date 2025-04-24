@@ -69,31 +69,31 @@ void al_fwrite(ALLEGRO_FILE* f, const string &s);
 string c2s(const ALLEGRO_COLOR &c);
 ALLEGRO_COLOR changeAlpha(const ALLEGRO_COLOR &c, unsigned char a);
 ALLEGRO_COLOR changeColorLighting(const ALLEGRO_COLOR &c, float l);
-FS_DELETE_RESULT deleteFile(const string &file_path);
+FS_DELETE_RESULT deleteFile(const string &filePath);
 Point getBitmapDimensions(ALLEGRO_BITMAP* bmp);
 string getKeyName(int keycode, bool condensed);
 void getShiftCtrlAltState(
-    bool* out_shift_state, bool* out_ctrl_state, bool* out_alt_state
+    bool* outShiftState, bool* outCtrlState, bool* outAltState
 );
 void getline(ALLEGRO_FILE* file, string &line);
 bool fileExists(const string &path);
 bool folderExists(const string &path);
 vector<string> folderToVector(
-    string folder_name, bool folders, bool* out_folder_found = nullptr
+    string folderName, bool folders, bool* outFolderFound = nullptr
 );
 vector<string> folderToVectorRecursively(
-    string folder_name, bool folders, bool* out_folder_found = nullptr
+    string folderName, bool folders, bool* outFolderFound = nullptr
 );
 ALLEGRO_COLOR interpolateColor(
-    float input, float input_start, float input_end,
-    const ALLEGRO_COLOR &output_start, const ALLEGRO_COLOR &output_end
+    float input, float inputStart, float inputEnd,
+    const ALLEGRO_COLOR &outputStart, const ALLEGRO_COLOR &outputEnd
 );
 vector<string> promptFileDialog(
-    const string &initial_path, const string &title,
+    const string &initialPath, const string &title,
     const string &patterns, int mode, ALLEGRO_DISPLAY* display
 );
 vector<string> promptFileDialogLockedToFolder(
-    const string &folder_path, const string &title,
+    const string &folderPath, const string &title,
     const string &patterns, int mode, FILE_DIALOG_RESULT* result,
     ALLEGRO_DISPLAY* display
 );
@@ -108,5 +108,5 @@ int showSystemMessageBox(
     char const* text, char const* buttons, int flags
 );
 FS_DELETE_RESULT wipeFolder(
-    const string &folder_path, const vector<string> &non_important_files
+    const string &folderPath, const vector<string> &nonImportantFiles
 );

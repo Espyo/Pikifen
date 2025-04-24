@@ -141,7 +141,7 @@ struct ChaseInfo {
     CHASE_STATE state = CHASE_STATE_STOPPED;
     
     //Flags that control how to chase. Use CHASE_FLAG_*.
-    bitmask_8_t flags = 0;
+    Bitmask8 flags = 0;
     
     //Chase after these coordinates, relative to the "origin" coordinates.
     Point offset;
@@ -313,21 +313,21 @@ struct Group {
     
     //--- Function declarations ---
     
-    explicit Group(Mob* leader_ptr);
-    void initSpots(Mob* affected_mob_ptr = nullptr);
-    void sort(SubgroupType* leading_type);
+    explicit Group(Mob* leaderptr);
+    void initSpots(Mob* affectedMobPtr = nullptr);
+    void sort(SubgroupType* leadingType);
     void changeStandbyTypeIfNeeded();
     size_t getAmountByType(const MobType* type) const;
     Point getAverageMemberPos() const;
     vector<Hazard*> getGroupInvulnerabilities(
-        Mob* include_leader = nullptr
+        Mob* includeLeader = nullptr
     ) const;
     bool getNextStandbyType(
-        bool move_backwards, SubgroupType** new_type
+        bool moveBackwards, SubgroupType** newType
     );
-    Point getSpotOffset(size_t spot_idx) const;
+    Point getSpotOffset(size_t spotIdx) const;
     void reassignSpots();
-    bool changeStandbyType(bool move_backwards);
+    bool changeStandbyType(bool moveBackwards);
 };
 
 
@@ -365,7 +365,7 @@ struct HoldInfo {
     //--- Function declarations ---
     
     void clear();
-    Point getFinalPos(float* out_z) const;
+    Point getFinalPos(float* outz) const;
     
 };
 
@@ -495,7 +495,7 @@ struct MobTypeLists {
     map<string, EnemyType*> enemy;
     
     //Group task types.
-    map<string, GroupTaskType*> group_task;
+    map<string, GroupTaskType*> groupTask;
     
     //Interactable types.
     map<string, InteractableType*> interactable;
@@ -547,43 +547,43 @@ struct Parent {
     Mob* m = nullptr;
     
     //Should the child handle damage?
-    bool handle_damage = false;
+    bool handleDamage = false;
     
     //Should the child relay damage to the parent?
-    bool relay_damage = false;
+    bool relayDamage = false;
     
     //Should the child handle status effects?
-    bool handle_statuses = false;
+    bool handleStatuses = false;
     
     //Should the child relay status effects to the parent?
-    bool relay_statuses = false;
+    bool relayStatuses = false;
     
     //Should the child handle script events?
-    bool handle_events = false;
+    bool handleEvents = false;
     
     //Should the child relay script events to the parent?
-    bool relay_events = false;
+    bool relayEvents = false;
     
     //Animation used for the limb connecting child and parent.
-    AnimationInstance limb_anim;
+    AnimationInstance limbAnim;
     
     //Thickness of the limb.
-    float limb_thickness = 32.0f;
+    float limbThickness = 32.0f;
     
     //Body part of the parent to link the limb to.
-    size_t limb_parent_body_part = INVALID;
+    size_t limbParentBodyPart = INVALID;
     
     //Offset from the parent body part to link the limb at.
-    float limb_parent_offset = 0.0f;
+    float limbParentOffset = 0.0f;
     
     //Body part of the child to link the limb to.
-    size_t limb_child_body_part = INVALID;
+    size_t limbChildBodyPart = INVALID;
     
     //Offset from the child body part to link the limb at.
-    float limb_child_offset = 0.0f;
+    float limbChildOffset = 0.0f;
     
     //Method by which the limb should be drawn.
-    LIMB_DRAW_METHOD limb_draw_method = LIMB_DRAW_METHOD_ABOVE_CHILD;
+    LIMB_DRAW_METHOD limbDrawMethod = LIMB_DRAW_METHOD_ABOVE_CHILD;
     
     
     //--- Function declarations ---
@@ -608,13 +608,13 @@ struct Path {
     vector<PathStop*> path;
     
     //Index of the current stop in the projected carrying path.
-    size_t cur_path_stop_idx = 0;
+    size_t curPathStopIdx = 0;
     
     //Result of the path calculation.
     PATH_RESULT result = PATH_RESULT_NOT_CALCULATED;
     
     //Is the way forward currently blocked? If so, why?
-    PATH_BLOCK_REASON block_reason = PATH_BLOCK_REASON_NONE;
+    PATH_BLOCK_REASON blockReason = PATH_BLOCK_REASON_NONE;
     
     //Settings about how the path should be followed.
     PathFollowSettings settings;
@@ -626,7 +626,7 @@ struct Path {
         Mob* m,
         const PathFollowSettings &settings
     );
-    bool checkBlockage(PATH_BLOCK_REASON* out_reason = nullptr);
+    bool checkBlockage(PATH_BLOCK_REASON* outReason = nullptr);
     
 };
 
@@ -640,16 +640,16 @@ struct PikminNestType {
     //--- Members ---
     
     //Pikmin types it can manage.
-    vector<PikminType*> pik_types;
+    vector<PikminType*> pikTypes;
     
     //Body parts that represent legs -- pairs of hole + foot.
-    vector<string> leg_body_parts;
+    vector<string> legBodyParts;
     
     //Speed at which Pikmin enter the nest.
-    float pikmin_enter_speed = 0.7f;
+    float pikminEnterSpeed = 0.7f;
     
     //Speed at which Pikmin exit the nest.
-    float pikmin_exit_speed = 2.0f;
+    float pikminExitSpeed = 2.0f;
     
     
     //--- Function declarations ---
@@ -670,35 +670,35 @@ struct PikminNest {
     //--- Members ---
     
     //Pointer to the nest mob responsible.
-    Mob* m_ptr = nullptr;
+    Mob* mPtr = nullptr;
     
     //Pointer to the type of nest.
-    PikminNestType* nest_type = nullptr;
+    PikminNestType* nestType = nullptr;
     
     //How many Pikmin are inside, per type, per maturity.
-    vector<vector<size_t> > pikmin_inside;
+    vector<vector<size_t> > pikminInside;
     
     //How many Pikmin are queued up to be called out, of each type.
-    vector<size_t> call_queue;
+    vector<size_t> callQueue;
     
     //Which leader is calling the Pikmin over?
-    Leader* calling_leader = nullptr;
+    Leader* callingLeader = nullptr;
     
     //Time left until it can eject the next Pikmin in the call queue.
-    float next_call_time = 0.0f;
+    float nextCallTime = 0.0f;
     
     
     //--- Function declarations ---
     
-    PikminNest(Mob* m_ptr, PikminNestType* type);
-    bool callPikmin(Mob* m_ptr, size_t type_idx);
+    PikminNest(Mob* mPtr, PikminNestType* type);
+    bool callPikmin(Mob* mPtr, size_t typeIdx);
     size_t getAmountByType(const PikminType* type);
     void readScriptVars(const ScriptVarReader &svr);
     void requestPikmin(
-        size_t type_idx, size_t amount, Leader* l_ptr
+        size_t typeIdx, size_t amount, Leader* lPtr
     );
-    void storePikmin(Pikmin* p_ptr);
-    void tick(float delta_t);
+    void storePikmin(Pikmin* pPtr);
+    void tick(float deltaT);
     
 };
 
@@ -718,14 +718,14 @@ struct TrackRideInfo {
     vector<size_t> checkpoints;
     
     //Current checkpoint of the track. This is the last checkpoint crossed.
-    size_t cur_cp_idx = 0;
+    size_t curCpIdx = 0;
     
     //Progress within the current checkpoint. 0 means at the checkpoint.
     //1 means it's at the next checkpoint.
-    float cur_cp_progress = 0.0f;
+    float curCpProgress = 0.0f;
     
     //Speed to ride at, in ratio per second.
-    float ride_speed = 0.0f;
+    float rideSpeed = 0.0f;
     
     
     //--- Function declarations ---
@@ -738,25 +738,25 @@ struct TrackRideInfo {
 
 
 float calculateMobPhysicalSpan(
-    float radius, float anim_hitbox_span,
-    const Point &rectangular_dim
+    float radius, float animHitboxSpan,
+    const Point &rectangularDim
 );
 Mob* createMob(
     MobCategory* category, const Point &pos, MobType* type,
     float angle, const string &vars,
-    std::function<void(Mob*)> code_after_creation = nullptr,
-    size_t first_state_override = INVALID
+    std::function<void(Mob*)> codeAfterCreation = nullptr,
+    size_t firstStateOverride = INVALID
 );
-void deleteMob(Mob* m, bool complete_destruction = false);
+void deleteMob(Mob* m, bool completeDestruction = false);
 string getErrorMessageMobInfo(Mob* m);
 vector<Hazard*> getMobTypeListInvulnerabilities(
     const unordered_set<MobType*> &types
 );
 MobType::SpawnInfo* getSpawnInfoFromChildInfo(
-    MobType* type, const MobType::Child* child_info
+    MobType* type, const MobType::Child* childInfo
 );
 bool isMobInReach(
-    MobType::Reach* reach_t_ptr, const Distance &dist_between, float angle_diff
+    MobType::Reach* reachTPtr, const Distance &distBetween, float angleDiff
 );
-MOB_TARGET_FLAG stringToMobTargetType(const string &type_str);
-MOB_TEAM stringToTeamNr(const string &team_str);
+MOB_TARGET_FLAG stringToMobTargetType(const string &typeStr);
+MOB_TEAM stringToTeamNr(const string &teamStr);

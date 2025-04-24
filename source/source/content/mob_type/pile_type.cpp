@@ -25,16 +25,16 @@ PileType::PileType() :
     
     targetType = MOB_TARGET_FLAG_PIKMIN_OBSTACLE;
     
-    AreaEditorProp aep_amount;
-    aep_amount.name = "Amount";
-    aep_amount.var = "amount";
-    aep_amount.type = AEMP_TYPE_TEXT;
-    aep_amount.defValue = "";
-    aep_amount.tooltip =
+    AreaEditorProp aepAmount;
+    aepAmount.name = "Amount";
+    aepAmount.var = "amount";
+    aepAmount.type = AEMP_TYPE_TEXT;
+    aepAmount.defValue = "";
+    aepAmount.tooltip =
         "How many resources this pile starts with, or leave empty for the max.";
-    areaEditorProps.push_back(aep_amount);
+    areaEditorProps.push_back(aepAmount);
     
-    pile_fsm::createFsm(this);
+    PileFsm::createFsm(this);
 }
 
 
@@ -43,8 +43,8 @@ PileType::PileType() :
  *
  * @return The vector.
  */
-anim_conversion_vector PileType::getAnimConversions() const {
-    anim_conversion_vector v;
+AnimConversionVector PileType::getAnimConversions() const {
+    AnimConversionVector v;
     
     v.push_back(std::make_pair(PILE_ANIM_IDLING, "idling"));
     
@@ -58,35 +58,35 @@ anim_conversion_vector PileType::getAnimConversions() const {
  * @param file File to read from.
  */
 void PileType::loadCatProperties(DataNode* file) {
-    ReaderSetter rs(file);
+    ReaderSetter pRS(file);
     
-    string contents_str;
-    string size_animation_suffixes_str;
-    DataNode* contents_node = nullptr;
+    string contentsStr;
+    string sizeAnimSuffixesStr;
+    DataNode* contentsNode = nullptr;
     
-    rs.set("auto_shrink_smallest_radius", autoShrinkSmallestRadius);
-    rs.set("can_drop_multiple", canDropMultiple);
-    rs.set("contents", contents_str, &contents_node);
-    rs.set("delete_when_finished", deleteWhenFinished);
-    rs.set("health_per_resource", healthPerResource);
-    rs.set("hide_when_empty", hideWhenEmpty);
-    rs.set("max_amount", maxAmount);
-    rs.set("recharge_amount", rechargeAmount);
-    rs.set("recharge_interval", rechargeInterval);
-    rs.set("show_amount", showAmount);
-    rs.set("size_animation_suffixes", size_animation_suffixes_str);
+    pRS.set("auto_shrink_smallest_radius", autoShrinkSmallestRadius);
+    pRS.set("can_drop_multiple", canDropMultiple);
+    pRS.set("contents", contentsStr, &contentsNode);
+    pRS.set("delete_when_finished", deleteWhenFinished);
+    pRS.set("health_per_resource", healthPerResource);
+    pRS.set("hide_when_empty", hideWhenEmpty);
+    pRS.set("max_amount", maxAmount);
+    pRS.set("recharge_amount", rechargeAmount);
+    pRS.set("recharge_interval", rechargeInterval);
+    pRS.set("show_amount", showAmount);
+    pRS.set("size_animation_suffixes", sizeAnimSuffixesStr);
     
-    auto res_type = game.content.mobTypes.list.resource.find(contents_str);
-    if(res_type != game.content.mobTypes.list.resource.end()) {
-        contents = res_type->second;
+    auto resType = game.content.mobTypes.list.resource.find(contentsStr);
+    if(resType != game.content.mobTypes.list.resource.end()) {
+        contents = resType->second;
     } else {
         game.errors.report(
-            "Unknown resource type \"" + contents_str + "\"!", contents_node
+            "Unknown resource type \"" + contentsStr + "\"!", contentsNode
         );
     }
     
     animationGroupSuffixes =
-        semicolonListToVector(size_animation_suffixes_str);
+        semicolonListToVector(sizeAnimSuffixesStr);
         
     if(animationGroupSuffixes.empty()) {
         //Let's make life easier. If no suffixes were given, then create an

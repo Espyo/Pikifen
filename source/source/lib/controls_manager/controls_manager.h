@@ -267,7 +267,7 @@ public:
     float getValue(int playerActionTypeId) const;
     void handleInput(const PlayerInput &input);
     void startIgnoringInputSource(const PlayerInputSource &inputSource);
-    vector<PlayerAction> newFrame(float delta_t);
+    vector<PlayerAction> newFrame(float deltaT);
     void setValue(int playerActionTypeId, float value);
     
     
@@ -299,10 +299,10 @@ private:
     );
     void handleCleanInput(const PlayerInput &input, bool addDirectly);
     void processAutoRepeats(
-        std::pair<const int, ActionTypeStatus> &it, float delta_t
+        std::pair<const int, ActionTypeStatus> &it, float deltaT
     );
     bool processInputIgnoring(const PlayerInput &input);
     void processStateTimers(
-        std::pair<const int, ActionTypeStatus> &it, float delta_t
+        std::pair<const int, ActionTypeStatus> &it, float deltaT
     );
 };

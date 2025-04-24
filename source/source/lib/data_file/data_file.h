@@ -88,7 +88,7 @@ public:
     //--- Function declarations ---
     
     DataNode();
-    explicit DataNode(const string &file_path);
+    explicit DataNode(const string &filePath);
     DataNode(const string &name, const string &value);
     DataNode(const DataNode &dn2);
     DataNode &operator=(const DataNode &dn2);
@@ -99,30 +99,30 @@ public:
     DataNode* getChild(size_t number);
     size_t getNrOfChildrenByName(const string &name) const;
     DataNode* getChildByName(
-        const string &name, size_t occurrence_number = 0
+        const string &name, size_t occurrenceNumber = 0
     );
-    size_t add(DataNode* new_node);
+    size_t add(DataNode* newNode);
     DataNode* addNew(const string& name, const string& value = "");
-    bool remove(DataNode* node_to_remove);
+    bool remove(DataNode* nodeToRemove);
     void loadFile(
-        const string &file_path,
-        bool trim_values = true,
+        const string &filePath,
+        bool trimValues = true,
         bool namesOnlyAfterRoot = false,
         bool encrypted = false
     );
     size_t loadNode(
-        const vector<string> &lines, bool trim_values,
-        size_t start_line = 0, size_t depth = 0,
+        const vector<string> &lines, bool trimValues,
+        size_t startLine = 0, size_t depth = 0,
         bool namesOnlyAfterRoot = false
     );
     bool saveFile(
-        string destination_file_path = "", bool childrenOnly = true,
-        bool include_empty_values = false,
+        string destinationFilePath = "", bool childrenOnly = true,
+        bool includeEmptyValues = false,
         bool encrypted = false
     ) const;
     void saveNode(
         ALLEGRO_FILE* file, size_t level = 0,
-        bool include_empty_values = false,
+        bool includeEmptyValues = false,
         bool encrypted = false
     ) const;
     

@@ -23,15 +23,15 @@ ConverterType::ConverterType() :
     
     targetType = MOB_TARGET_FLAG_NONE;
     
-    converter_fsm::createFsm(this);
+    ConverterFsm::createFsm(this);
 }
 
 
 /**
  * @brief Returns the vector of animation conversions.
  */
-anim_conversion_vector ConverterType::getAnimConversions() const {
-    anim_conversion_vector v;
+AnimConversionVector ConverterType::getAnimConversions() const {
+    AnimConversionVector v;
     
     v.push_back(std::make_pair(CONVERTER_ANIM_IDLING, "idling"));
     v.push_back(std::make_pair(CONVERTER_ANIM_BUMPED, "bumped"));
@@ -50,44 +50,43 @@ anim_conversion_vector ConverterType::getAnimConversions() const {
  * @param file File to read from.
  */
 void ConverterType::loadCatProperties(DataNode* file) {
-    ReaderSetter rs(file);
+    ReaderSetter cRS(file);
     
-    string pikmin_types_str;
-    string type_animation_suffixes_str;
-    DataNode* pikmin_types_node = nullptr;
-    DataNode* type_animation_suffixes_node = nullptr;
+    string pikminTypesStr;
+    string typeAnimSuffixesStr;
+    DataNode* pikminTypesNode = nullptr;
+    DataNode* typeAnimSuffixesNode = nullptr;
     
-    rs.set("auto_conversion_timeout", autoConversionTimeout);
-    rs.set("available_pikmin_types", pikmin_types_str, &pikmin_types_node);
-    rs.set("buffer_size", bufferSize);
-    rs.set("pikmin_per_conversion", pikminPerConversion);
-    rs.set("same_type_counts_for_output", sameTypeCountsForOutput);
-    rs.set("total_input_pikmin", totalInputPikmin);
-    rs.set(
-        "type_animation_suffixes", type_animation_suffixes_str,
-        &type_animation_suffixes_node
+    cRS.set("auto_conversion_timeout", autoConversionTimeout);
+    cRS.set("available_pikmin_types", pikminTypesStr, &pikminTypesNode);
+    cRS.set("buffer_size", bufferSize);
+    cRS.set("pikmin_per_conversion", pikminPerConversion);
+    cRS.set("same_type_counts_for_output", sameTypeCountsForOutput);
+    cRS.set("total_input_pikmin", totalInputPikmin);
+    cRS.set(
+        "type_animation_suffixes", typeAnimSuffixesStr, &typeAnimSuffixesNode
     );
-    rs.set("type_change_interval", typeChangeInterval);
+    cRS.set("type_change_interval", typeChangeInterval);
     
-    MobCategory* pik_cat = game.mobCategories.get(MOB_CATEGORY_PIKMIN);
-    vector<string> pikmin_types_strs =
-        semicolonListToVector(pikmin_types_str);
+    MobCategory* pikCat = game.mobCategories.get(MOB_CATEGORY_PIKMIN);
+    vector<string> pikminTypesStrs =
+        semicolonListToVector(pikminTypesStr);
         
-    for(size_t t = 0; t < pikmin_types_strs.size(); t++) {
-        MobType* type_ptr = pik_cat->getType(pikmin_types_strs[t]);
+    for(size_t t = 0; t < pikminTypesStrs.size(); t++) {
+        MobType* typePtr = pikCat->getType(pikminTypesStrs[t]);
         
-        if(type_ptr) {
-            availablePikminTypes.push_back((PikminType*) type_ptr);
+        if(typePtr) {
+            availablePikminTypes.push_back((PikminType*) typePtr);
         } else {
             game.errors.report(
-                "Unknown Pikmin type \"" + pikmin_types_strs[t] + "\"!",
-                pikmin_types_node
+                "Unknown Pikmin type \"" + pikminTypesStrs[t] + "\"!",
+                pikminTypesNode
             );
         }
     }
     
     animationGroupSuffixes =
-        semicolonListToVector(type_animation_suffixes_str);
+        semicolonListToVector(typeAnimSuffixesStr);
         
     if(availablePikminTypes.size() == 1 && animationGroupSuffixes.empty()) {
         //Let's make life easier. This is a one-type converter,
@@ -108,7 +107,7 @@ void ConverterType::loadCatProperties(DataNode* file) {
             "The number of animation type suffixes needs to match the "
             "number of available Pikmin types! Did you forget an animation "
             "suffix or a Pikmin type?",
-            type_animation_suffixes_node
+            typeAnimSuffixesNode
         );
     }
 }

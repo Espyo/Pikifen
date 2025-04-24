@@ -66,12 +66,12 @@ void GuiEditor::drawCanvas() {
     );
     
     //Items.
-    int orig_clip_x = 0;
-    int orig_clip_y = 0;
-    int orig_clip_w = 0;
-    int orig_clip_h = 0;
+    int origClipX = 0;
+    int origClipY = 0;
+    int origClipW = 0;
+    int origClipH = 0;
     al_get_clipping_rectangle(
-        &orig_clip_x, &orig_clip_y, &orig_clip_w, &orig_clip_h
+        &origClipX, &origClipY, &origClipW, &origClipH
     );
     for(size_t i = 0; i < items.size(); i++) {
         if(items[i].size.x == 0.0f) continue;
@@ -83,16 +83,16 @@ void GuiEditor::drawCanvas() {
             al_map_rgba(224, 224, 224, 64)
         );
         
-        float clip_x = items[i].center.x - items[i].size.x / 2.0f;
-        float clip_y = items[i].center.y - items[i].size.y / 2.0f;
+        float clipX = items[i].center.x - items[i].size.x / 2.0f;
+        float clipY = items[i].center.y - items[i].size.y / 2.0f;
         al_transform_coordinates(
-            &game.view.worldToWindowTransform, &clip_x, &clip_y
+            &game.view.worldToWindowTransform, &clipX, &clipY
         );
-        float clip_w = items[i].size.x * game.view.cam.zoom;
-        float clip_h = items[i].size.y * game.view.cam.zoom;
+        float clipW = items[i].size.x * game.view.cam.zoom;
+        float clipH = items[i].size.y * game.view.cam.zoom;
         setCombinedClippingRectangles(
-            orig_clip_x, orig_clip_y, orig_clip_w, orig_clip_h,
-            clip_x, clip_y, clip_w, clip_h
+            origClipX, origClipY, origClipW, origClipH,
+            clipX, clipY, clipW, clipH
         );
         drawText(
             items[i].name, game.sysContent.fntBuiltin,
@@ -106,7 +106,7 @@ void GuiEditor::drawCanvas() {
             al_map_rgb(40, 40, 96), ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP
         );
         al_set_clipping_rectangle(
-            orig_clip_x, orig_clip_y, orig_clip_w, orig_clip_h
+            origClipX, origClipY, origClipW, origClipH
         );
         
         if(curItem != i) {

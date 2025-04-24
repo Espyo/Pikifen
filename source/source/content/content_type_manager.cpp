@@ -49,16 +49,16 @@ void AreaContentManager::fillManifests() {
  * @brief Returns the manifest matching the specified area, or nullptr if none
  * was found.
  *
- * @param area_name Name of the area.
+ * @param areaName Name of the area.
  * @param pack Pack it belongs to.
  * @param type Area type.
  * @return The manifest, or nullptr.
  */
 ContentManifest* AreaContentManager::findManifest(
-    const string &area_name, const string &pack, AREA_TYPE type
+    const string &areaName, const string &pack, AREA_TYPE type
 ) {
     for(auto &m : manifests[type]) {
-        if(m.first == area_name && m.second.pack == pack) {
+        if(m.first == areaName && m.second.pack == pack) {
             return &m.second;
         }
     }
@@ -104,57 +104,57 @@ void AreaContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
 /**
  * @brief Loads an area.
  *
- * @param area_ptr Object to load into.
- * @param requested_area_path Path to the area's folder.
- * @param manif_ptr Set the manifest pointer to this. If nullptr, it'll be
+ * @param areaPtr Object to load into.
+ * @param requestedAreaPath Path to the area's folder.
+ * @param manifPtr Set the manifest pointer to this. If nullptr, it'll be
  * set from the list of manifests.
  * @param level Level to load at.
- * @param from_backup If true, load from a backup, if any.
+ * @param fromBackup If true, load from a backup, if any.
  * @return Whether it succeeded.
  */
 bool AreaContentManager::loadArea(
-    Area* area_ptr, const string &requested_area_path,
-    ContentManifest* manif_ptr, CONTENT_LOAD_LEVEL level, bool from_backup
+    Area* areaPtr, const string &requestedAreaPath,
+    ContentManifest* manifPtr, CONTENT_LOAD_LEVEL level, bool fromBackup
 ) {
     //Setup.
-    ContentManifest temp_manif;
-    AREA_TYPE requested_area_type;
-    pathToManifest(requested_area_path, &temp_manif, &requested_area_type);
-    string user_data_path =
+    ContentManifest tempManif;
+    AREA_TYPE requestedAreaType;
+    pathToManifest(requestedAreaPath, &tempManif, &requestedAreaType);
+    string userDataPath =
         FOLDER_PATHS_FROM_ROOT::AREA_USER_DATA + "/" +
-        temp_manif.pack + "/" +
+        tempManif.pack + "/" +
         (
-            requested_area_type == AREA_TYPE_SIMPLE ?
+            requestedAreaType == AREA_TYPE_SIMPLE ?
             FOLDER_NAMES::SIMPLE_AREAS :
             FOLDER_NAMES::MISSION_AREAS
         ) + "/" +
-        temp_manif.internalName;
-    string base_folder_path = from_backup ? user_data_path : temp_manif.path;
+        tempManif.internalName;
+    string baseFolderPath = fromBackup ? userDataPath : tempManif.path;
     
-    string data_file_path = base_folder_path + "/" + FILE_NAMES::AREA_MAIN_DATA;
-    DataNode data_file = loadDataFile(data_file_path);
-    if(!data_file.fileWasOpened) return false;
+    string dataFilePath = baseFolderPath + "/" + FILE_NAMES::AREA_MAIN_DATA;
+    DataNode dataFile = loadDataFile(dataFilePath);
+    if(!dataFile.fileWasOpened) return false;
     
-    string geometry_file_path = base_folder_path + "/" + FILE_NAMES::AREA_GEOMETRY;
-    DataNode geometry_file = loadDataFile(geometry_file_path);
-    if(!geometry_file.fileWasOpened) return false;
+    string geometryFilePath = baseFolderPath + "/" + FILE_NAMES::AREA_GEOMETRY;
+    DataNode geometryFile = loadDataFile(geometryFilePath);
+    if(!geometryFile.fileWasOpened) return false;
     
-    area_ptr->type = requested_area_type;
-    area_ptr->userDataPath = user_data_path;
+    areaPtr->type = requestedAreaType;
+    areaPtr->userDataPath = userDataPath;
     
-    if(manif_ptr) {
-        area_ptr->manifest = manif_ptr;
+    if(manifPtr) {
+        areaPtr->manifest = manifPtr;
     } else {
-        area_ptr->manifest =
+        areaPtr->manifest =
             findManifest(
-                temp_manif.internalName, temp_manif.pack, requested_area_type
+                tempManif.internalName, tempManif.pack, requestedAreaType
             );
     }
     
     //Main data.
     if(game.perfMon) game.perfMon->startMeasurement("Area -- Data");
-    area_ptr->loadMainDataFromDataNode(&data_file, level);
-    area_ptr->loadMissionDataFromDataNode(&data_file);
+    areaPtr->loadMainDataFromDataNode(&dataFile, level);
+    areaPtr->loadMissionDataFromDataNode(&dataFile);
     if(game.perfMon) game.perfMon->finishMeasurement();
     
     //Loading screen.
@@ -164,11 +164,11 @@ bool AreaContentManager::loadArea(
         game.loadingTextBmp = nullptr;
         game.loadingSubtextBmp = nullptr;
         drawLoadingScreen(
-            area_ptr->name,
+            areaPtr->name,
             getSubtitleOrMissionGoal(
-                area_ptr->subtitle,
-                area_ptr->type,
-                area_ptr->mission.goal
+                areaPtr->subtitle,
+                areaPtr->type,
+                areaPtr->mission.goal
             ),
             1.0f
         );
@@ -176,12 +176,12 @@ bool AreaContentManager::loadArea(
     }
     
     //Thumbnail image.
-    string thumbnail_path = base_folder_path + "/" + FILE_NAMES::AREA_THUMBNAIL;
-    area_ptr->loadThumbnail(thumbnail_path);
+    string thumbnailPath = baseFolderPath + "/" + FILE_NAMES::AREA_THUMBNAIL;
+    areaPtr->loadThumbnail(thumbnailPath);
     
     //Geometry.
     if(level >= CONTENT_LOAD_LEVEL_EDITOR) {
-        area_ptr->loadGeometryFromDataNode(&geometry_file, level);
+        areaPtr->loadGeometryFromDataNode(&geometryFile, level);
     }
     
     return true;
@@ -194,17 +194,16 @@ bool AreaContentManager::loadArea(
  *
  * @param manifest Manifest of the area.
  * @param type Type of area this is.
- * @param from_backup If true, load from a backup, if any.
+ * @param fromBackup If true, load from a backup, if any.
  */
 void AreaContentManager::loadAreaIntoVector(
-    ContentManifest* manifest, AREA_TYPE type,
-    bool from_backup
+    ContentManifest* manifest, AREA_TYPE type, bool fromBackup
 ) {
-    Area* new_area = new Area();
-    list[type].push_back(new_area);
+    Area* newArea = new Area();
+    list[type].push_back(newArea);
     loadArea(
-        new_area, manifest->path, manifest,
-        CONTENT_LOAD_LEVEL_BASIC, from_backup
+        newArea, manifest->path, manifest,
+        CONTENT_LOAD_LEVEL_BASIC, fromBackup
     );
 }
 
@@ -236,21 +235,21 @@ string AreaContentManager::manifestToPath(
  * @brief Returns the manifest of an area given its path.
  *
  * @param path Path to the area.
- * @param out_manifest If not nullptr, the manifest is returned here.
- * @param out_type If not nullptr, the area type is returned here.
+ * @param outManifest If not nullptr, the manifest is returned here.
+ * @param outType If not nullptr, the area type is returned here.
  */
 void AreaContentManager::pathToManifest(
-    const string &path, ContentManifest* out_manifest, AREA_TYPE* out_type
+    const string &path, ContentManifest* outManifest, AREA_TYPE* outType
 ) const {
-    if(out_manifest) {
-        out_manifest->fillFromPath(path);
+    if(outManifest) {
+        outManifest->fillFromPath(path);
     }
     
-    if(out_type) {
+    if(outType) {
         if(path.find("/" + FOLDER_NAMES::MISSION_AREAS + "/") != string::npos) {
-            *out_type = AREA_TYPE_MISSION;
+            *outType = AREA_TYPE_MISSION;
         } else {
-            *out_type = AREA_TYPE_SIMPLE;
+            *outType = AREA_TYPE_SIMPLE;
         }
     }
 }
@@ -340,22 +339,22 @@ string BitmapContentManager::manifestToPath(
  * @brief Returns the manifest of a bitmap given its path.
  *
  * @param path Path to the bitmap.
- * @param out_manifest If not nullptr, the manifest is returned here.
- * @param out_type If not nullptr, the file extension is returned here.
+ * @param outManifest If not nullptr, the manifest is returned here.
+ * @param outType If not nullptr, the file extension is returned here.
  */
 void BitmapContentManager::pathToManifest(
-    const string &path, ContentManifest* out_manifest, string* out_extension
+    const string &path, ContentManifest* outManifest, string* outExtension
 ) const {
-    if(out_manifest) {
-        out_manifest->fillFromPath(path);
+    if(outManifest) {
+        outManifest->fillFromPath(path);
     }
     
-    if(out_extension) {
+    if(outExtension) {
         size_t i = path.find_last_of(".");
         if(i == string::npos) {
-            *out_extension = "";
+            *outExtension = "";
         } else {
-            *out_extension = path.substr(i);
+            *outExtension = path.substr(i);
         }
     }
 }
@@ -374,15 +373,15 @@ void BitmapContentManager::unloadAll(CONTENT_LOAD_LEVEL level) {
  * @brief Fills in a given manifests map.
  *
  * @param manifests Manifests map to fill.
- * @param content_rel_path Path to the content, relative to the start
+ * @param contentRelPath Path to the content, relative to the start
  * of the pack.
  * @param folders True if the content is folders, false if it's files.
  */
 void ContentTypeManager::fillManifestsMap(
-    map<string, ContentManifest> &manifests, const string &content_rel_path, bool folders
+    map<string, ContentManifest> &manifests, const string &contentRelPath, bool folders
 ) {
     for(const auto &p : game.content.packs.manifestsWithBase) {
-        fillManifestsMapFromPack(manifests, p, content_rel_path, folders);
+        fillManifestsMapFromPack(manifests, p, contentRelPath, folders);
     }
 }
 
@@ -391,25 +390,25 @@ void ContentTypeManager::fillManifestsMap(
  * @brief Fills in a given manifests map from within a pack folder.
  *
  * @param manifests Manifests map to fill.
- * @param pack_name Name of the pack folder.
- * @param content_rel_path Path to the content, relative to the start
+ * @param packName Name of the pack folder.
+ * @param contentRelPath Path to the content, relative to the start
  * of the pack.
  * @param folders True if the content is folders, false if it's files.
  */
 void ContentTypeManager::fillManifestsMapFromPack(
-    map<string, ContentManifest> &manifests, const string &pack_name,
-    const string &content_rel_path, bool folders
+    map<string, ContentManifest> &manifests, const string &packName,
+    const string &contentRelPath, bool folders
 ) {
-    const string folder_path =
-        FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" + pack_name +
-        "/" + content_rel_path;
+    const string folderPath =
+        FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" + packName +
+        "/" + contentRelPath;
         
     vector<string> items =
-        folderToVectorRecursively(folder_path, folders);
+        folderToVectorRecursively(folderPath, folders);
         
     for(size_t i = 0; i < items.size(); i++) {
-        string internal_name = removeExtension(items[i]);
-        manifests[internal_name] = ContentManifest(internal_name, folder_path + "/" + items[i], pack_name);
+        string internalName = removeExtension(items[i]);
+        manifests[internalName] = ContentManifest(internalName, folderPath + "/" + items[i], packName);
     }
 }
 
@@ -499,13 +498,13 @@ string GlobalAnimContentManager::manifestToPath(
  * @brief Returns the manifest of a global animation database given its path.
  *
  * @param path Path to the animation database.
- * @param out_manifest If not nullptr, the manifest is returned here.
+ * @param outManifest If not nullptr, the manifest is returned here.
  */
 void GlobalAnimContentManager::pathToManifest(
-    const string &path, ContentManifest* out_manifest
+    const string &path, ContentManifest* outManifest
 ) const {
-    if(out_manifest) {
-        out_manifest->fillFromPath(path);
+    if(outManifest) {
+        outManifest->fillFromPath(path);
     }
 }
 
@@ -593,13 +592,13 @@ string GuiContentManager::manifestToPath(
  * @brief Returns the manifest of a GUI definition given its path.
  *
  * @param path Path to the definition.
- * @param out_manifest If not nullptr, the manifest is returned here.
+ * @param outManifest If not nullptr, the manifest is returned here.
  */
 void GuiContentManager::pathToManifest(
-    const string &path, ContentManifest* out_manifest
+    const string &path, ContentManifest* outManifest
 ) const {
-    if(out_manifest) {
-        out_manifest->fillFromPath(path);
+    if(outManifest) {
+        outManifest->fillFromPath(path);
     }
 }
 
@@ -674,10 +673,10 @@ void HazardContentManager::loadHazard(
     DataNode file = loadDataFile(manifest->path);
     if(!file.fileWasOpened) return;
     
-    Hazard new_h;
-    new_h.manifest = manifest;
-    new_h.loadFromDataNode(&file);
-    list[manifest->internalName] = new_h;
+    Hazard newH;
+    newH.manifest = manifest;
+    newH.loadFromDataNode(&file);
+    list[manifest->internalName] = newH;
 }
 
 
@@ -703,13 +702,13 @@ string HazardContentManager::manifestToPath(
  * @brief Returns the manifest of a hazard given its path.
  *
  * @param path Path to the hazard.
- * @param out_manifest If not nullptr, the manifest is returned here.
+ * @param outManifest If not nullptr, the manifest is returned here.
  */
 void HazardContentManager::pathToManifest(
-    const string &path, ContentManifest* out_manifest
+    const string &path, ContentManifest* outManifest
 ) const {
-    if(out_manifest) {
-        out_manifest->fillFromPath(path);
+    if(outManifest) {
+        outManifest->fillFromPath(path);
     }
 }
 
@@ -784,10 +783,10 @@ void LiquidContentManager::loadLiquid(
     DataNode file = loadDataFile(manifest->path);
     if(!file.fileWasOpened) return;
     
-    Liquid* new_l = new Liquid();
-    new_l->manifest = manifest;
-    new_l->loadFromDataNode(&file, level);
-    list[manifest->internalName] = new_l;
+    Liquid* newL = new Liquid();
+    newL->manifest = manifest;
+    newL->loadFromDataNode(&file, level);
+    list[manifest->internalName] = newL;
 }
 
 
@@ -813,13 +812,13 @@ string LiquidContentManager::manifestToPath(
  * @brief Returns the manifest of a liquid given its path.
  *
  * @param path Path to the liquid.
- * @param out_manifest If not nullptr, the manifest is returned here.
+ * @param outManifest If not nullptr, the manifest is returned here.
  */
 void LiquidContentManager::pathToManifest(
-    const string &path, ContentManifest* out_manifest
+    const string &path, ContentManifest* outManifest
 ) const {
-    if(out_manifest) {
-        out_manifest->fillFromPath(path);
+    if(outManifest) {
+        outManifest->fillFromPath(path);
     }
 }
 
@@ -880,11 +879,11 @@ string MiscConfigContentManager::getPerfMonMeasurementName() const {
  */
 void MiscConfigContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
     //Game config.
-    string config_file_internal_name =
+    string configFileInternalName =
         removeExtension(FILE_NAMES::GAME_CONFIG);
-    DataNode game_config_file =
-        loadDataFile(manifests[config_file_internal_name].path);
-    game.config.load(&game_config_file);
+    DataNode gameConfigFile =
+        loadDataFile(manifests[configFileInternalName].path);
+    game.config.load(&gameConfigFile);
     
     al_set_window_title(
         game.display,
@@ -894,11 +893,11 @@ void MiscConfigContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
     );
     
     //System content names.
-    string scn_file_internal_name =
+    string scnFileInternalName =
         removeExtension(FILE_NAMES::SYSTEM_CONTENT_NAMES);
-    DataNode scn_file =
-        loadDataFile(manifests[scn_file_internal_name].path);
-    game.sysContentNames.load(&scn_file);
+    DataNode scnFile =
+        loadDataFile(manifests[scnFileInternalName].path);
+    game.sysContentNames.load(&scnFile);
 }
 
 
@@ -924,13 +923,13 @@ string MiscConfigContentManager::manifestToPath(
  * @brief Returns the manifest of a misc. config given its path.
  *
  * @param path Path to the config.
- * @param out_manifest If not nullptr, the manifest is returned here.
+ * @param outManifest If not nullptr, the manifest is returned here.
  */
 void MiscConfigContentManager::pathToManifest(
-    const string &path, ContentManifest* out_manifest
+    const string &path, ContentManifest* outManifest
 ) const {
-    if(out_manifest) {
-        out_manifest->fillFromPath(path);
+    if(outManifest) {
+        outManifest->fillFromPath(path);
     }
 }
 
@@ -973,21 +972,21 @@ void MobAnimContentManager::fillManifests() {
  * @brief Fills in the manifests from a specific pack.
  */
 void MobAnimContentManager::fillCatManifestsFromPack(
-    MobCategory* category, const string &pack_name
+    MobCategory* category, const string &packName
 ) {
-    const string category_path =
+    const string categoryPath =
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
-        pack_name + "/" +
+        packName + "/" +
         FOLDER_PATHS_FROM_PACK::MOB_TYPES + "/" +
         category->folderName;
-    vector<string> type_folders = folderToVectorRecursively(category_path, true);
-    for(size_t f = 0; f < type_folders.size(); f++) {
-        string internal_name = type_folders[f];
-        manifests[category->id][internal_name] =
+    vector<string> typeFolders = folderToVectorRecursively(categoryPath, true);
+    for(size_t f = 0; f < typeFolders.size(); f++) {
+        string internalName = typeFolders[f];
+        manifests[category->id][internalName] =
             ContentManifest(
-                internal_name,
-                category_path + "/" +
-                internal_name + "/" +
+                internalName,
+                categoryPath + "/" +
+                internalName + "/" +
                 FILE_NAMES::MOB_TYPE_ANIMATION,
                 FOLDER_NAMES::BASE_PACK
             );
@@ -1035,14 +1034,14 @@ void MobAnimContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
  *
  * @param manifest Manifest of the animation database.
  * @param level Level to load at.
- * @param category_id Mob category ID.
+ * @param categoryId Mob category ID.
  */
-void MobAnimContentManager::loadAnimationDb(ContentManifest* manifest, CONTENT_LOAD_LEVEL level, MOB_CATEGORY category_id) {
+void MobAnimContentManager::loadAnimationDb(ContentManifest* manifest, CONTENT_LOAD_LEVEL level, MOB_CATEGORY categoryId) {
     DataNode file(manifest->path);
     AnimationDatabase db;
     db.manifest = manifest;
     db.loadFromDataNode(&file);
-    list[category_id][manifest->internalName] = db;
+    list[categoryId][manifest->internalName] = db;
 }
 
 
@@ -1073,32 +1072,32 @@ string MobAnimContentManager::manifestToPath(
  * @brief Returns the manifest of a mob animation database given its path.
  *
  * @param path Path to the animation database.
- * @param out_manifest If not nullptr, the manifest is returned here.
- * @param out_category If not nullptr, the mob category folder name
+ * @param outManifest If not nullptr, the manifest is returned here.
+ * @param outCategory If not nullptr, the mob category folder name
  * is returned here.
- * @param out_type If not nullptr, the mob type folder name
+ * @param outType If not nullptr, the mob type folder name
  * is returned here.
  */
 void MobAnimContentManager::pathToManifest(
-    const string &path, ContentManifest* out_manifest,
-    string* out_category, string* out_type
+    const string &path, ContentManifest* outManifest,
+    string* outCategory, string* outType
 ) const {
-    if(out_manifest) {
-        out_manifest->fillFromPath(path);
+    if(outManifest) {
+        outManifest->fillFromPath(path);
     }
     
-    if(out_category || out_type) {
+    if(outCategory || outType) {
         vector<string> parts = split(path, "/");
-        if(out_category) {
-            *out_category = "";
+        if(outCategory) {
+            *outCategory = "";
             if(parts.size() >= 3) {
-                *out_category = parts[parts.size() - 3];
+                *outCategory = parts[parts.size() - 3];
             }
         }
-        if(out_type) {
-            *out_type = "";
+        if(outType) {
+            *outType = "";
             if(parts.size() >= 2) {
-                *out_type = parts[parts.size() - 2];
+                *outType = parts[parts.size() - 2];
             }
         }
     }
@@ -1192,22 +1191,22 @@ void MobTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
     }
     
     //Pikmin type order.
-    vector<string> missing_pikmin_order_types;
+    vector<string> missingPikminOrderTypes;
     for(auto &p : list.pikmin) {
         if(!isInContainer(game.config.pikmin.orderStrings, p.first)) {
             //Missing from the list? Add it to the "missing" pile.
-            missing_pikmin_order_types.push_back(p.first);
+            missingPikminOrderTypes.push_back(p.first);
         }
     }
-    if(!missing_pikmin_order_types.empty()) {
+    if(!missingPikminOrderTypes.empty()) {
         std::sort(
-            missing_pikmin_order_types.begin(),
-            missing_pikmin_order_types.end()
+            missingPikminOrderTypes.begin(),
+            missingPikminOrderTypes.end()
         );
         game.config.pikmin.orderStrings.insert(
             game.config.pikmin.orderStrings.end(),
-            missing_pikmin_order_types.begin(),
-            missing_pikmin_order_types.end()
+            missingPikminOrderTypes.begin(),
+            missingPikminOrderTypes.end()
         );
     }
     for(size_t o = 0; o < game.config.pikmin.orderStrings.size(); o++) {
@@ -1223,7 +1222,7 @@ void MobTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
     }
     
     //Leader type order.
-    vector<string> missing_leader_order_types;
+    vector<string> missingLeaderOrderTypes;
     for(auto &l : list.leader) {
         if(
             find(
@@ -1233,18 +1232,18 @@ void MobTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
             ) == game.config.leaders.orderStrings.end()
         ) {
             //Missing from the list? Add it to the "missing" pile.
-            missing_leader_order_types.push_back(l.first);
+            missingLeaderOrderTypes.push_back(l.first);
         }
     }
-    if(!missing_leader_order_types.empty()) {
+    if(!missingLeaderOrderTypes.empty()) {
         std::sort(
-            missing_leader_order_types.begin(),
-            missing_leader_order_types.end()
+            missingLeaderOrderTypes.begin(),
+            missingLeaderOrderTypes.end()
         );
         game.config.leaders.orderStrings.insert(
             game.config.leaders.orderStrings.end(),
-            missing_leader_order_types.begin(),
-            missing_leader_order_types.end()
+            missingLeaderOrderTypes.begin(),
+            missingLeaderOrderTypes.end()
         );
     }
     for(size_t o = 0; o < game.config.leaders.orderStrings.size(); o++) {
@@ -1312,22 +1311,22 @@ string MobTypeContentManager::manifestToPath(
  * @brief Returns the manifest of a mob type given its path.
  *
  * @param path Path to the mob type.
- * @param out_manifest If not nullptr, the manifest is returned here.
- * @param out_category If not nullptr, the mob category folder name
+ * @param outManifest If not nullptr, the manifest is returned here.
+ * @param outCategory If not nullptr, the mob category folder name
  * is returned here.
  */
 void MobTypeContentManager::pathToManifest(
-    const string &path, ContentManifest* out_manifest, string* out_category
+    const string &path, ContentManifest* outManifest, string* outCategory
 ) const {
-    if(out_manifest) {
-        out_manifest->fillFromPath(path);
+    if(outManifest) {
+        outManifest->fillFromPath(path);
     }
     
-    if(out_category) {
+    if(outCategory) {
         vector<string> parts = split(path, "/");
-        *out_category = "";
+        *outCategory = "";
         if(parts.size() >= 2) {
-            *out_category = parts[parts.size() - 2];
+            *outCategory = parts[parts.size() - 2];
         }
     }
 }
@@ -1357,9 +1356,9 @@ void MobTypeContentManager::unloadAll(CONTENT_LOAD_LEVEL level) {
  */
 void MobTypeContentManager::unloadMobType(MobType* mt, CONTENT_LOAD_LEVEL level) {
     for(size_t s = 0; s < mt->sounds.size(); s++) {
-        ALLEGRO_SAMPLE* s_ptr = mt->sounds[s].sample;
+        ALLEGRO_SAMPLE* sPtr = mt->sounds[s].sample;
         if(!s) continue;
-        game.content.sounds.list.free(s_ptr);
+        game.content.sounds.list.free(sPtr);
     }
     unloadScript(mt);
     if(level >= CONTENT_LOAD_LEVEL_FULL) {
@@ -1376,11 +1375,11 @@ void MobTypeContentManager::unloadMobType(MobType* mt, CONTENT_LOAD_LEVEL level)
  */
 void MobTypeContentManager::unloadMobTypesOfCategory(MobCategory* category, CONTENT_LOAD_LEVEL level) {
 
-    vector<string> type_names;
-    category->getTypeNames(type_names);
+    vector<string> typeNames;
+    category->getTypeNames(typeNames);
     
-    for(size_t t = 0; t < type_names.size(); t++) {
-        MobType* mt = category->getType(type_names[t]);
+    for(size_t t = 0; t < typeNames.size(); t++) {
+        MobType* mt = category->getType(typeNames[t]);
         unloadMobType(mt, level);
     }
     
@@ -1448,10 +1447,10 @@ void ParticleGenContentManager::loadGenerator(
     DataNode file = loadDataFile(manifest->path);
     if(!file.fileWasOpened) return;
     
-    ParticleGenerator new_pg;
-    new_pg.manifest = manifest;
-    new_pg.loadFromDataNode(&file, level);
-    list[manifest->internalName] = new_pg;
+    ParticleGenerator newPg;
+    newPg.manifest = manifest;
+    newPg.loadFromDataNode(&file, level);
+    list[manifest->internalName] = newPg;
 }
 
 
@@ -1477,13 +1476,13 @@ string ParticleGenContentManager::manifestToPath(
  * @brief Returns the manifest of a particle generator given its path.
  *
  * @param path Path to the generator.
- * @param out_manifest If not nullptr, the manifest is returned here.
+ * @param outManifest If not nullptr, the manifest is returned here.
  */
 void ParticleGenContentManager::pathToManifest(
-    const string &path, ContentManifest* out_manifest
+    const string &path, ContentManifest* outManifest
 ) const {
-    if(out_manifest) {
-        out_manifest->fillFromPath(path);
+    if(outManifest) {
+        outManifest->fillFromPath(path);
     }
 }
 
@@ -1570,22 +1569,22 @@ string SoundContentManager::manifestToPath(
  * @brief Returns the manifest of a sample given its path.
  *
  * @param path Path to the sample.
- * @param out_manifest If not nullptr, the manifest is returned here.
- * @param out_type If not nullptr, the file extension is returned here.
+ * @param outManifest If not nullptr, the manifest is returned here.
+ * @param outType If not nullptr, the file extension is returned here.
  */
 void SoundContentManager::pathToManifest(
-    const string &path, ContentManifest* out_manifest, string* out_extension
+    const string &path, ContentManifest* outManifest, string* outExtension
 ) const {
-    if(out_manifest) {
-        out_manifest->fillFromPath(path);
+    if(outManifest) {
+        outManifest->fillFromPath(path);
     }
     
-    if(out_extension) {
+    if(outExtension) {
         size_t i = path.find_last_of(".");
         if(i == string::npos) {
-            *out_extension = "";
+            *outExtension = "";
         } else {
-            *out_extension = path.substr(i);
+            *outExtension = path.substr(i);
         }
     }
 }
@@ -1658,10 +1657,10 @@ void SongContentManager::loadSong(ContentManifest* manifest, CONTENT_LOAD_LEVEL 
     DataNode file = loadDataFile(manifest->path);
     if(!file.fileWasOpened) return;
     
-    Song new_song;
-    new_song.manifest = manifest;
-    new_song.loadFromDataNode(&file);
-    list[manifest->internalName] = new_song;
+    Song newSong;
+    newSong.manifest = manifest;
+    newSong.loadFromDataNode(&file);
+    list[manifest->internalName] = newSong;
 }
 
 
@@ -1687,13 +1686,13 @@ string SongContentManager::manifestToPath(
  * @brief Returns the manifest of a song given its path.
  *
  * @param path Path to the song.
- * @param out_manifest If not nullptr, the manifest is returned here.
+ * @param outManifest If not nullptr, the manifest is returned here.
  */
 void SongContentManager::pathToManifest(
-    const string &path, ContentManifest* out_manifest
+    const string &path, ContentManifest* outManifest
 ) const {
-    if(out_manifest) {
-        out_manifest->fillFromPath(path);
+    if(outManifest) {
+        outManifest->fillFromPath(path);
     }
 }
 
@@ -1780,22 +1779,22 @@ string SongTrackContentManager::manifestToPath(
  * @brief Returns the manifest of a song track given its path.
  *
  * @param path Path to the song track.
- * @param out_manifest If not nullptr, the manifest is returned here.
- * @param out_type If not nullptr, the file extension is returned here.
+ * @param outManifest If not nullptr, the manifest is returned here.
+ * @param outType If not nullptr, the file extension is returned here.
  */
 void SongTrackContentManager::pathToManifest(
-    const string &path, ContentManifest* out_manifest, string* out_extension
+    const string &path, ContentManifest* outManifest, string* outExtension
 ) const {
-    if(out_manifest) {
-        out_manifest->fillFromPath(path);
+    if(outManifest) {
+        outManifest->fillFromPath(path);
     }
     
-    if(out_extension) {
+    if(outExtension) {
         size_t i = path.find_last_of(".");
         if(i == string::npos) {
-            *out_extension = "";
+            *outExtension = "";
         } else {
-            *out_extension = path.substr(i);
+            *outExtension = path.substr(i);
         }
     }
 }
@@ -1869,10 +1868,10 @@ void SpikeDamageTypeContentManager::loadSpikeDamageType(ContentManifest* manifes
     DataNode file = loadDataFile(manifest->path);
     if(!file.fileWasOpened) return;
     
-    SpikeDamageType new_t;
-    new_t.manifest = manifest;
-    new_t.loadFromDataNode(&file);
-    list[manifest->internalName] = new_t;
+    SpikeDamageType newT;
+    newT.manifest = manifest;
+    newT.loadFromDataNode(&file);
+    list[manifest->internalName] = newT;
 }
 
 
@@ -1898,13 +1897,13 @@ string SpikeDamageTypeContentManager::manifestToPath(
  * @brief Returns the manifest of a spike damage type given its path.
  *
  * @param path Path to the spike damage type.
- * @param out_manifest If not nullptr, the manifest is returned here.
+ * @param outmanifest If not nullptr, the manifest is returned here.
  */
 void SpikeDamageTypeContentManager::pathToManifest(
-    const string &path, ContentManifest* out_manifest
+    const string &path, ContentManifest* outManifest
 ) const {
-    if(out_manifest) {
-        out_manifest->fillFromPath(path);
+    if(outManifest) {
+        outManifest->fillFromPath(path);
     }
 }
 
@@ -1966,7 +1965,7 @@ void SprayTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
     }
     
     //Spray type order.
-    vector<string> missing_spray_order_types;
+    vector<string> missingSprayOrderTypes;
     for(auto &s : list) {
         if(
             find(
@@ -1976,18 +1975,18 @@ void SprayTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
             ) == game.config.misc.sprayOrderStrings.end()
         ) {
             //Missing from the list? Add it to the "missing" pile.
-            missing_spray_order_types.push_back(s.first);
+            missingSprayOrderTypes.push_back(s.first);
         }
     }
-    if(!missing_spray_order_types.empty()) {
+    if(!missingSprayOrderTypes.empty()) {
         std::sort(
-            missing_spray_order_types.begin(),
-            missing_spray_order_types.end()
+            missingSprayOrderTypes.begin(),
+            missingSprayOrderTypes.end()
         );
         game.config.misc.sprayOrderStrings.insert(
             game.config.misc.sprayOrderStrings.end(),
-            missing_spray_order_types.begin(),
-            missing_spray_order_types.end()
+            missingSprayOrderTypes.begin(),
+            missingSprayOrderTypes.end()
         );
     }
     for(size_t o = 0; o < game.config.misc.sprayOrderStrings.size(); o++) {
@@ -2014,10 +2013,10 @@ void SprayTypeContentManager::loadSprayType(ContentManifest* manifest, CONTENT_L
     DataNode file = loadDataFile(manifest->path);
     if(!file.fileWasOpened) return;
     
-    SprayType new_t;
-    new_t.manifest = manifest;
-    new_t.loadFromDataNode(&file, level);
-    list[manifest->internalName] = new_t;
+    SprayType newT;
+    newT.manifest = manifest;
+    newT.loadFromDataNode(&file, level);
+    list[manifest->internalName] = newT;
 }
 
 
@@ -2043,13 +2042,13 @@ string SprayTypeContentManager::manifestToPath(
  * @brief Returns the manifest of a spray type given its path.
  *
  * @param path Path to the spray type.
- * @param out_manifest If not nullptr, the manifest is returned here.
+ * @param outManifest If not nullptr, the manifest is returned here.
  */
 void SprayTypeContentManager::pathToManifest(
-    const string &path, ContentManifest* out_manifest
+    const string &path, ContentManifest* outManifest
 ) const {
-    if(out_manifest) {
-        out_manifest->fillFromPath(path);
+    if(outManifest) {
+        outManifest->fillFromPath(path);
     }
 }
 
@@ -2110,8 +2109,8 @@ string StatusTypeContentManager::getPerfMonMeasurementName() const {
  * @param level Level to load at.
  */
 void StatusTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
-    vector<StatusType*> types_with_replacements;
-    vector<string> types_with_replacements_names;
+    vector<StatusType*> typesWithReplacements;
+    vector<string> typesWithReplacementsNames;
     
     for(auto &s : manifests) {
         loadStatusType(&s.second, level);
@@ -2119,19 +2118,19 @@ void StatusTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
     
     for(auto &s : list) {
         if(!s.second->replacementOnTimeoutStr.empty()) {
-            types_with_replacements.push_back(s.second);
-            types_with_replacements_names.push_back(
+            typesWithReplacements.push_back(s.second);
+            typesWithReplacementsNames.push_back(
                 s.second->replacementOnTimeoutStr
             );
         }
     }
     
-    for(size_t s = 0; s < types_with_replacements.size(); s++) {
-        string rn = types_with_replacements_names[s];
+    for(size_t s = 0; s < typesWithReplacements.size(); s++) {
+        string rn = typesWithReplacementsNames[s];
         bool found = false;
         for(auto &s2 : list) {
             if(s2.first == rn) {
-                types_with_replacements[s]->replacementOnTimeout =
+                typesWithReplacements[s]->replacementOnTimeout =
                     s2.second;
                 found = true;
                 break;
@@ -2141,7 +2140,7 @@ void StatusTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
         
         game.errors.report(
             "The status effect type \"" +
-            types_with_replacements[s]->name +
+            typesWithReplacements[s]->name +
             "\" has a replacement effect called \"" + rn + "\", but there is "
             "no status effect with that name!"
         );
@@ -2159,10 +2158,10 @@ void StatusTypeContentManager::loadStatusType(ContentManifest* manifest, CONTENT
     DataNode file = loadDataFile(manifest->path);
     if(!file.fileWasOpened) return;
     
-    StatusType* new_t = new StatusType();
-    new_t->manifest = manifest;
-    new_t->loadFromDataNode(&file, level);
-    list[manifest->internalName] = new_t;
+    StatusType* newT = new StatusType();
+    newT->manifest = manifest;
+    newT->loadFromDataNode(&file, level);
+    list[manifest->internalName] = newT;
 }
 
 
@@ -2188,13 +2187,13 @@ string StatusTypeContentManager::manifestToPath(
  * @brief Returns the manifest of a status type given its path.
  *
  * @param path Path to the status type.
- * @param out_manifest If not nullptr, the manifest is returned here.
+ * @param outManifest If not nullptr, the manifest is returned here.
  */
 void StatusTypeContentManager::pathToManifest(
-    const string &path, ContentManifest* out_manifest
+    const string &path, ContentManifest* outManifest
 ) const {
-    if(out_manifest) {
-        out_manifest->fillFromPath(path);
+    if(outManifest) {
+        outManifest->fillFromPath(path);
     }
 }
 
@@ -2270,10 +2269,10 @@ void WeatherConditionContentManager::loadWeatherCondition(ContentManifest* manif
     DataNode file = loadDataFile(manifest->path);
     if(!file.fileWasOpened) return;
     
-    Weather new_w;
-    new_w.manifest = manifest;
-    new_w.loadFromDataNode(&file);
-    list[manifest->internalName] = new_w;
+    Weather newW;
+    newW.manifest = manifest;
+    newW.loadFromDataNode(&file);
+    list[manifest->internalName] = newW;
 }
 
 
@@ -2299,13 +2298,13 @@ string WeatherConditionContentManager::manifestToPath(
  * @brief Returns the manifest of a weather condition given its path.
  *
  * @param path Path to the weather condition.
- * @param out_manifest If not nullptr, the manifest is returned here.
+ * @param outManifest If not nullptr, the manifest is returned here.
  */
 void WeatherConditionContentManager::pathToManifest(
-    const string &path, ContentManifest* out_manifest
+    const string &path, ContentManifest* outManifest
 ) const {
-    if(out_manifest) {
-        out_manifest->fillFromPath(path);
+    if(outManifest) {
+        outManifest->fillFromPath(path);
     }
 }
 

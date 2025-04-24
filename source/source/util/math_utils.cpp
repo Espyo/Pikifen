@@ -154,13 +154,13 @@ uint32_t hashNr2(unsigned int input1, unsigned int input2) {
  *
  * @param start Starting value.
  * @param target Target value.
- * @param max_step Maximum change in value allowed.
+ * @param maxStep Maximum change in value allowed.
  * @return The inched number.
  */
-float inchTowards(float start, float target, float max_step) {
-    if(fabs(target - start) <= max_step) return target;
-    if(start < target) return start + max_step;
-    return start - max_step;
+float inchTowards(float start, float target, float maxStep) {
+    if(fabs(target - start) <= maxStep) return target;
+    if(start < target) return start + maxStep;
+    return start - maxStep;
 }
 
 
@@ -169,22 +169,22 @@ float inchTowards(float start, float target, float max_step) {
  * an interval.
  *
  * @param input The input number.
- * @param input_start Start of the interval the input number falls on,
- * inclusive. The closer to input_start, the closer the output is
- * to output_start.
- * @param input_end End of the interval the number falls on, inclusive.
- * @param output_start Number on the starting tip of the interpolation.
- * @param output_end Number on the ending tip of the interpolation.
+ * @param inputStart Start of the interval the input number falls on,
+ * inclusive. The closer to inputStart, the closer the output is
+ * to outputStart.
+ * @param inputEnd End of the interval the number falls on, inclusive.
+ * @param outputStart Number on the starting tip of the interpolation.
+ * @param outputEnd Number on the ending tip of the interpolation.
  * @return The interpolated number.
  */
 float interpolateNumber(
-    float input, float input_start, float input_end,
-    float output_start, float output_end
+    float input, float inputStart, float inputEnd,
+    float outputStart, float outputEnd
 ) {
     return
-        output_start +
-        ((input - input_start) / (float) (input_end - input_start)) *
-        (output_end - output_start);
+        outputStart +
+        ((input - inputStart) / (float) (inputEnd - inputStart)) *
+        (outputEnd - outputStart);
 }
 
 
@@ -207,18 +207,18 @@ int32_t linearCongruentialGenerator(int32_t* state) {
  * and returns the index of the chosen item.
  *
  * @param weights A vector with the weight of each item.
- * @param point_random_float A previously-determined random float to
+ * @param pointRandomFloat A previously-determined random float to
  * calculate the weight sum point with [0, 1].
  * @return Index of the chosen item, or 0 on error.
  */
 size_t getRandomIdxWithWeights(
-    const vector<float> &weights, float point_random_float
+    const vector<float> &weights, float pointRandomFloat
 ) {
-    float weight_sum = 0.0f;
+    float weightSum = 0.0f;
     for(size_t i = 0; i < weights.size(); i++) {
-        weight_sum += weights[i];
+        weightSum += weights[i];
     }
-    float r = point_random_float * weight_sum;
+    float r = pointRandomFloat * weightSum;
     for(size_t i = 0; i < weights.size(); i++) {
         if(r < weights[i]) return i;
         r -= weights[i];
@@ -233,15 +233,15 @@ size_t getRandomIdxWithWeights(
  *
  * @param nr Base number.
  * @param sum Number to add (or subtract).
- * @param wrap_limit Wrap between [0 - wrap_limit[.
+ * @param wrapLimit Wrap between [0 - wrapLimit[.
  * @return The wrapped number.
  */
-int sumAndWrap(int nr, int sum, int wrap_limit) {
-    int final_nr = nr + sum;
-    while(final_nr < 0) {
-        final_nr += wrap_limit;
+int sumAndWrap(int nr, int sum, int wrapLimit) {
+    int finalNr = nr + sum;
+    while(finalNr < 0) {
+        finalNr += wrapLimit;
     }
-    return final_nr % wrap_limit;
+    return finalNr % wrapLimit;
 }
 
 

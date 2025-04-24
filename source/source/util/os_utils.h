@@ -16,7 +16,7 @@
 using std::string;
 
 
-string getCurrentTime(bool file_name_friendly);
+string getCurrentTime(bool fileNameFriendly);
 bool openFileExplorer(const std::string &path);
 bool openWebBrowser(const std::string &url);
 

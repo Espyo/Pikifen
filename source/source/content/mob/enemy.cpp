@@ -65,15 +65,15 @@ bool Enemy::canReceiveStatus(StatusType* s) const {
  * @brief Draws an enemy.
  */
 void Enemy::drawMob() {
-    Sprite* cur_s_ptr;
-    Sprite* next_s_ptr;
-    float interpolation_factor;
-    getSpriteData(&cur_s_ptr, &next_s_ptr, &interpolation_factor);
-    if(!cur_s_ptr) return;
+    Sprite* curSPtr;
+    Sprite* nextSPtr;
+    float interpolationFactor;
+    getSpriteData(&curSPtr, &nextSPtr, &interpolationFactor);
+    if(!curSPtr) return;
     
     BitmapEffect eff;
     getSpriteBitmapEffects(
-        cur_s_ptr, next_s_ptr, interpolation_factor,
+        curSPtr, nextSPtr, interpolationFactor,
         &eff,
         SPRITE_BMP_EFFECT_FLAG_STANDARD |
         SPRITE_BMP_EFFECT_FLAG_STATUS |
@@ -83,7 +83,7 @@ void Enemy::drawMob() {
         SPRITE_BMP_EFFECT_DAMAGE |
         SPRITE_BMP_EFFECT_CARRY
     );
-    drawBitmapWithEffects(cur_s_ptr->bitmap, eff);
+    drawBitmapWithEffects(curSPtr->bitmap, eff);
     drawStatusEffectBmp(this, eff);
 }
 
@@ -141,9 +141,9 @@ void Enemy::startDyingClassSpecifics() {
     if(eneType->isBoss) {
         switch(game.states.gameplay->bossMusicState) {
         case BOSS_MUSIC_STATE_PLAYING: {
-            bool near_boss;
-            game.states.gameplay->isNearEnemyAndBoss(nullptr, &near_boss);
-            if(!near_boss) {
+            bool nearBoss;
+            game.states.gameplay->isNearEnemyAndBoss(nullptr, &nearBoss);
+            if(!nearBoss) {
                 //Only play the victory fanfare if they're not near another one.
                 game.audio.setCurrentSong(
                     game.sysContentNames.sngBossVictory, true, false, false

@@ -29,22 +29,22 @@ const string GUI_FILE_NAME = "statistics_menu";
  * @param label Name of the header.
  */
 void StatsMenu::addHeader(const string &label) {
-    float list_bottom_y = statsList->getChildBottom();
+    float listBottomY = statsList->getChildBottom();
     const float HEADER_HEIGHT = 0.09f;
     const float STAT_PADDING = 0.02f;
     const float STATS_OFFSET = 0.01f;
-    const float stat_center_y =
-        list_bottom_y + (HEADER_HEIGHT / 2.0f) +
-        (list_bottom_y == 0.0f ? STATS_OFFSET : STAT_PADDING);
+    const float statCenterY =
+        listBottomY + (HEADER_HEIGHT / 2.0f) +
+        (listBottomY == 0.0f ? STATS_OFFSET : STAT_PADDING);
         
-    TextGuiItem* label_text =
+    TextGuiItem* labelText =
         new TextGuiItem(label, game.sysContent.fntAreaName);
-    label_text->ratioCenter =
-        Point(0.50f, stat_center_y);
-    label_text->ratioSize =
+    labelText->ratioCenter =
+        Point(0.50f, statCenterY);
+    labelText->ratioSize =
         Point(0.96f, HEADER_HEIGHT);
-    statsList->addChild(label_text);
-    gui.addItem(label_text);
+    statsList->addChild(labelText);
+    gui.addItem(labelText);
 }
 
 
@@ -59,38 +59,38 @@ void StatsMenu::addHeader(const string &label) {
 TextGuiItem* StatsMenu::addStat(
     const string &label, const string &value, const string &description
 ) {
-    float list_bottom_y = statsList->getChildBottom();
+    float listBottomY = statsList->getChildBottom();
     const float STAT_HEIGHT = 0.08f;
     const float STAT_PADDING = 0.02f;
     const float STATS_OFFSET = 0.01f;
-    const float stat_center_y =
-        list_bottom_y + (STAT_HEIGHT / 2.0f) +
-        (list_bottom_y == 0.0f ? STATS_OFFSET : STAT_PADDING);
+    const float statCenterY =
+        listBottomY + (STAT_HEIGHT / 2.0f) +
+        (listBottomY == 0.0f ? STATS_OFFSET : STAT_PADDING);
         
-    BulletGuiItem* label_bullet =
+    BulletGuiItem* labelBullet =
         new BulletGuiItem(
         label, game.sysContent.fntStandard
     );
-    label_bullet->ratioCenter =
-        Point(0.50f, stat_center_y);
-    label_bullet->ratioSize =
+    labelBullet->ratioCenter =
+        Point(0.50f, statCenterY);
+    labelBullet->ratioSize =
         Point(0.96f, STAT_HEIGHT);
-    label_bullet->onGetTooltip = [description] () { return description; };
-    statsList->addChild(label_bullet);
-    gui.addItem(label_bullet);
+    labelBullet->onGetTooltip = [description] () { return description; };
+    statsList->addChild(labelBullet);
+    gui.addItem(labelBullet);
     
-    TextGuiItem* value_text =
+    TextGuiItem* valueText =
         new TextGuiItem(
         value, game.sysContent.fntCounter, COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
     );
-    value_text->ratioCenter =
-        Point(0.75f, stat_center_y);
-    value_text->ratioSize =
+    valueText->ratioCenter =
+        Point(0.75f, statCenterY);
+    valueText->ratioSize =
         Point(0.44f, STAT_HEIGHT);
-    statsList->addChild(value_text);
-    gui.addItem(value_text);
+    statsList->addChild(valueText);
+    gui.addItem(valueText);
     
-    return value_text;
+    return valueText;
 }
 
 
@@ -125,26 +125,26 @@ void StatsMenu::initGuiMain() {
     guiAddBackInputIcon(&gui);
     
     //Header text.
-    TextGuiItem* header_text =
+    TextGuiItem* headerText =
         new TextGuiItem(
         "STATISTICS",
         game.sysContent.fntAreaName, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
     );
-    gui.addItem(header_text, "header");
+    gui.addItem(headerText, "header");
     
     //Statistics list.
     statsList = new ListGuiItem();
     gui.addItem(statsList, "list");
     
     //Statistics list scrollbar.
-    ScrollGuiItem* list_scroll = new ScrollGuiItem();
-    list_scroll->listItem = statsList;
-    gui.addItem(list_scroll, "list_scroll");
+    ScrollGuiItem* listScroll = new ScrollGuiItem();
+    listScroll->listItem = statsList;
+    gui.addItem(listScroll, "list_scroll");
     
     //Tooltip text.
-    TooltipGuiItem* tooltip_text =
+    TooltipGuiItem* tooltipText =
         new TooltipGuiItem(&gui);
-    gui.addItem(tooltip_text, "tooltip");
+    gui.addItem(tooltipText, "tooltip");
     
     populateStatsList();
     
@@ -263,43 +263,43 @@ void StatsMenu::populateStatsList() {
         "Total amount of times a spray was used."
     );
     
-    DataNode mission_records_file;
-    mission_records_file.loadFile(
+    DataNode missionRecordsFile;
+    missionRecordsFile.loadFile(
         FILE_PATHS_FROM_ROOT::MISSION_RECORDS, true, false, true
     );
     
-    size_t mission_clears = 0;
-    size_t mission_platinums = 0;
-    long mission_scores = 0;
+    size_t missionClears = 0;
+    size_t missionPlatinums = 0;
+    long missionScores = 0;
     
     for(size_t a = 0; a < game.content.areas.list[AREA_TYPE_MISSION].size(); a++) {
-        Area* area_ptr = game.content.areas.list[AREA_TYPE_MISSION][a];
+        Area* areaPtr = game.content.areas.list[AREA_TYPE_MISSION][a];
         MissionRecord record;
-        loadAreaMissionRecord(&mission_records_file, area_ptr, record);
+        loadAreaMissionRecord(&missionRecordsFile, areaPtr, record);
         if(record.clear) {
-            mission_clears++;
+            missionClears++;
         }
-        if(record.isPlatinum(area_ptr->mission)) {
-            mission_platinums++;
+        if(record.isPlatinum(areaPtr->mission)) {
+            missionPlatinums++;
         }
-        if(area_ptr->mission.gradingMode == MISSION_GRADING_MODE_POINTS) {
-            mission_scores += record.score;
+        if(areaPtr->mission.gradingMode == MISSION_GRADING_MODE_POINTS) {
+            missionScores += record.score;
         }
     }
     
     addHeader("Missions");
     addStat(
         "Cleared",
-        i2s(mission_clears) + "/" + i2s(game.content.areas.list[AREA_TYPE_MISSION].size()),
+        i2s(missionClears) + "/" + i2s(game.content.areas.list[AREA_TYPE_MISSION].size()),
         "Total amount of missions where the current record is a goal clear."
     );
     addStat(
         "Platinum medals",
-        i2s(mission_platinums) + "/" + i2s(game.content.areas.list[AREA_TYPE_MISSION].size()),
+        i2s(missionPlatinums) + "/" + i2s(game.content.areas.list[AREA_TYPE_MISSION].size()),
         "Total amount of missions where the current record is a platinum medal."
     );
     addStat(
-        "Combined score", i2s(mission_scores),
+        "Combined score", i2s(missionScores),
         "Total combined score points of the current records of all missions."
     );
 }
@@ -308,11 +308,11 @@ void StatsMenu::populateStatsList() {
 /**
  * @brief Ticks time by one frame of logic.
  *
- * @param delta_t How long the frame's tick is, in seconds.
+ * @param deltaT How long the frame's tick is, in seconds.
  */
-void StatsMenu::tick(float delta_t) {
+void StatsMenu::tick(float deltaT) {
     updateRuntimeValueText();
-    Menu::tick(delta_t);
+    Menu::tick(deltaT);
 }
 
 

@@ -143,25 +143,25 @@ struct GeometryProblems {
 
 
 void findTraceEdge(
-    Vertex* v_ptr, const Vertex* prev_v_ptr, const Sector* s_ptr,
-    float prev_e_angle, bool best_is_closest_cw,
-    Edge** next_e_ptr, float* next_e_angle, Vertex** next_v_ptr,
-    unordered_set<Edge*>* excluded_edges
+    Vertex* vptr, const Vertex* prevVPtr, const Sector* sPtr,
+    float prevEAngle, bool bestIsClosestCw,
+    Edge** nextEPtr, float* nextEAngle, Vertex** nextVPtr,
+    unordered_set<Edge*>* excludedEdges
 );
 void getCCE(
-    const vector<Vertex> &vertexes_left, vector<size_t> &ears,
-    vector<size_t> &convex_vertexes, vector<size_t> &concave_vertexes
+    const vector<Vertex> &vertexesLeft, vector<size_t> &ears,
+    vector<size_t> &convexVertexes, vector<size_t> &concaveVertexes
 );
 vector<std::pair<Distance, Vertex*> > getMergeVertexes(
-    const Point &p, const vector<Vertex*> &all_vertexes,
-    float merge_radius
+    const Point &p, const vector<Vertex*> &allVertexes,
+    float mergeRadius
 );
 TRIANGULATION_ERROR getPolys(
-    Sector* s_ptr, vector<Polygon>* outers, vector<vector<Polygon>>* inners
+    Sector* sPtr, vector<Polygon>* outers, vector<vector<Polygon>>* inners
 );
 bool getPolysIsOuter(
-    Vertex* v_ptr, const Sector* s_ptr, const unordered_set<Edge*> &edges_left,
-    bool doing_first_polygon
+    Vertex* vPtr, const Sector* sPtr, const unordered_set<Edge*> &edgesLeft,
+    bool doingFirstPolygon
 );
 Vertex* getRightmostVertex(const unordered_set<Edge*> &edges);
 Vertex* getRightmostVertex(Vertex* v1, Vertex* v2);
@@ -171,14 +171,14 @@ bool isVertexEar(
     const vector<Vertex*> &vec, const vector<size_t> &concaves, size_t idx
 );
 TRIANGULATION_ERROR traceEdges(
-    Vertex* start_v_ptr, const Sector* s_ptr, bool going_cw,
+    Vertex* startVPtr, const Sector* sPtr, bool goingCw,
     vector<Vertex*>* vertexes,
-    unordered_set<Edge*>* unvisited_edges,
-    unordered_set<Edge*>* polygon_edges_so_far
+    unordered_set<Edge*>* unvisitedEdges,
+    unordered_set<Edge*>* polygonEdgesSoFar
 );
 TRIANGULATION_ERROR triangulatePolygon(
     Polygon* poly, vector<Triangle>* triangles
 );
 TRIANGULATION_ERROR triangulateSector(
-    Sector* s_ptr, set<Edge*>* lone_edges, bool clear_lone_edges
+    Sector* s_ptr, set<Edge*>* loneEdges, bool clearLoneEdges
 );

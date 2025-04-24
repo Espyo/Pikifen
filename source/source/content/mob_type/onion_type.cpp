@@ -26,19 +26,19 @@ OnionType::OnionType() :
     
     targetType = MOB_TARGET_FLAG_NONE;
     
-    AreaEditorProp aep_pik_inside;
-    aep_pik_inside.name = "Pikmin inside";
-    aep_pik_inside.var = "pikmin_inside";
-    aep_pik_inside.type = AEMP_TYPE_TEXT;
-    aep_pik_inside.defValue = "";
-    aep_pik_inside.tooltip =
+    AreaEditorProp aepPikInside;
+    aepPikInside.name = "Pikmin inside";
+    aepPikInside.var = "pikmin_inside";
+    aepPikInside.type = AEMP_TYPE_TEXT;
+    aepPikInside.defValue = "";
+    aepPikInside.tooltip =
         "How many Pikmin are inside. One word per maturity.\n"
         "The first three words are for the first type, "
         "then three more for the second type, and so on. "
         "e.g.: \"8 0 1\" means it has 8 leaf Pikmin inside, and 1 flower.";
-    areaEditorProps.push_back(aep_pik_inside);
+    areaEditorProps.push_back(aepPikInside);
     
-    onion_fsm::createFsm(this);
+    OnionFsm::createFsm(this);
 }
 
 
@@ -55,8 +55,8 @@ OnionType::~OnionType() {
  *
  * @return The vector.
  */
-anim_conversion_vector OnionType::getAnimConversions() const {
-    anim_conversion_vector v;
+AnimConversionVector OnionType::getAnimConversions() const {
+    AnimConversionVector v;
     v.push_back(std::make_pair(ONION_ANIM_IDLING, "idling"));
     v.push_back(std::make_pair(ONION_ANIM_GENERATING, "generating"));
     v.push_back(
@@ -91,11 +91,11 @@ void OnionType::loadCatResources(DataNode* file) {
     //We don't actually need to load any, but we know that if this function
     //is run, then the animations are definitely loaded.
     //Now's a good time to check the leg body parts.
-    for(size_t b = 0; b < nest->leg_body_parts.size(); b++) {
-        if(animDb->findBodyPart(nest->leg_body_parts[b]) == INVALID) {
+    for(size_t b = 0; b < nest->legBodyParts.size(); b++) {
+        if(animDb->findBodyPart(nest->legBodyParts[b]) == INVALID) {
             game.errors.report(
                 "The Onion type \"" + name + "\" specifies a leg body part "
-                "called \"" + nest->leg_body_parts[b] + "\", "
+                "called \"" + nest->legBodyParts[b] + "\", "
                 "but no such body part exists!"
             );
         }

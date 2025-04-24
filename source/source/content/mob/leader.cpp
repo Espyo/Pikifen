@@ -160,13 +160,13 @@ Leader::Leader(const Point &pos, LeaderType* type, float angle) :
         swarmArrows.push_back(0);
         
         Particle p;
-        unsigned char color_idx = game.rng.i(0, WHISTLE::N_DOT_COLORS);
+        unsigned char colorIdx = game.rng.i(0, WHISTLE::N_DOT_COLORS);
         p.bitmap = game.sysContent.bmpBrightCircle;
         ALLEGRO_COLOR c =
             al_map_rgba(
-                WHISTLE::DOT_COLORS[color_idx][0],
-                WHISTLE::DOT_COLORS[color_idx][1],
-                WHISTLE::DOT_COLORS[color_idx][2],
+                WHISTLE::DOT_COLORS[colorIdx][0],
+                WHISTLE::DOT_COLORS[colorIdx][1],
+                WHISTLE::DOT_COLORS[colorIdx][2],
                 LEADER::SWARM_PARTICLE_ALPHA * 255
             );
         p.color = KeyframeInterpolator<ALLEGRO_COLOR>(c);
@@ -182,20 +182,20 @@ Leader::Leader(const Point &pos, LeaderType* type, float angle) :
         p.pos.y += game.rng.f(-this->radius * 0.5f, this->radius * 0.5f);
         p.priority = PARTICLE_PRIORITY_MEDIUM;
         p.size.setKeyframeValue(0, LEADER::SWARM_PARTICLE_SIZE);
-        float p_speed =
+        float pSpeed =
             game.states.gameplay->swarmMagnitude *
             LEADER::SWARM_PARTICLE_SPEED_MULT +
             game.rng.f(
                 -LEADER::SWARM_PARTICLE_SPEED_DEVIATION,
                 LEADER::SWARM_PARTICLE_SPEED_DEVIATION
             );
-        float p_angle =
+        float pAngle =
             game.states.gameplay->swarmAngle +
             game.rng.f(
                 -LEADER::SWARM_PARTICLE_ANGLE_DEVIATION,
                 LEADER::SWARM_PARTICLE_ANGLE_DEVIATION
             );
-        p.linearSpeed = KeyframeInterpolator<Point>(rotatePoint(Point(p_speed, 0.0f), p_angle));
+        p.linearSpeed = KeyframeInterpolator<Point>(rotatePoint(Point(pSpeed, 0.0f), pAngle));
         p.time = p.duration;
         p.z = this->z + this->height / 2.0f;
         game.states.gameplay->particles.add(p);
@@ -286,40 +286,40 @@ bool Leader::checkThrowOk() const {
  * and is dismissed close to the leader.
  */
 void Leader::dismiss() {
-    size_t n_group_members = group->members.size();
-    if(n_group_members == 0) return;
+    size_t nGroupMembers = group->members.size();
+    if(nGroupMembers == 0) return;
     
     //They are dismissed towards this angle.
     //This is then offset a bit for each subgroup, depending on a few factors.
-    float base_angle;
+    float baseAngle;
     
     //First, calculate what direction the group should be dismissed to.
     if(game.states.gameplay->swarmMagnitude > 0) {
         //If the leader's swarming,
         //they should be dismissed in that direction.
-        base_angle = game.states.gameplay->swarmAngle;
+        baseAngle = game.states.gameplay->swarmAngle;
     } else {
         //Leftmost member coordinate, rightmost, etc.
-        Point min_coords, max_coords;
+        Point minCoords, maxCoords;
         
-        for(size_t m = 0; m < n_group_members; m++) {
-            Mob* member_ptr = group->members[m];
+        for(size_t m = 0; m < nGroupMembers; m++) {
+            Mob* memberPtr = group->members[m];
             
-            if(member_ptr->pos.x < min_coords.x || m == 0)
-                min_coords.x = member_ptr->pos.x;
-            if(member_ptr->pos.x > max_coords.x || m == 0)
-                max_coords.x = member_ptr->pos.x;
-            if(member_ptr->pos.y < min_coords.y || m == 0)
-                min_coords.y = member_ptr->pos.y;
-            if(member_ptr->pos.y > max_coords.y || m == 0)
-                max_coords.y = member_ptr->pos.y;
+            if(memberPtr->pos.x < minCoords.x || m == 0)
+                minCoords.x = memberPtr->pos.x;
+            if(memberPtr->pos.x > maxCoords.x || m == 0)
+                maxCoords.x = memberPtr->pos.x;
+            if(memberPtr->pos.y < minCoords.y || m == 0)
+                minCoords.y = memberPtr->pos.y;
+            if(memberPtr->pos.y > maxCoords.y || m == 0)
+                maxCoords.y = memberPtr->pos.y;
         }
         
-        Point group_center(
-            (min_coords.x + max_coords.x) / 2,
-            (min_coords.y + max_coords.y) / 2
+        Point groupCenter(
+            (minCoords.x + maxCoords.x) / 2,
+            (minCoords.y + maxCoords.y) / 2
         );
-        base_angle = getAngle(pos, group_center);
+        baseAngle = getAngle(pos, groupCenter);
     }
     
     /**
@@ -339,42 +339,42 @@ void Leader::dismiss() {
         Point center;
         
     };
-    vector<DismissSubgroup> subgroups_info;
+    vector<DismissSubgroup> subgroupsInfo;
     
     //Go through all subgroups and populate the vector of data.
-    SubgroupType* first_type =
+    SubgroupType* firstType =
         game.states.gameplay->subgroupTypes.getFirstType();
-    SubgroupType* cur_type = first_type;
+    SubgroupType* curType = firstType;
     
     do {
     
         if(
-            cur_type !=
+            curType !=
             game.states.gameplay->subgroupTypes.getType(
                 SUBGROUP_TYPE_CATEGORY_LEADER
             )
         ) {
         
-            bool subgroup_exists = false;
+            bool subgroupExists = false;
             
-            for(size_t m = 0; m < n_group_members; m++) {
-                Mob* m_ptr = group->members[m];
-                if(m_ptr->subgroupTypePtr != cur_type) continue;
+            for(size_t m = 0; m < nGroupMembers; m++) {
+                Mob* mPtr = group->members[m];
+                if(mPtr->subgroupTypePtr != curType) continue;
                 
-                if(!subgroup_exists) {
-                    subgroups_info.push_back(DismissSubgroup());
-                    subgroup_exists = true;
+                if(!subgroupExists) {
+                    subgroupsInfo.push_back(DismissSubgroup());
+                    subgroupExists = true;
                 }
                 
-                subgroups_info.back().members.push_back(m_ptr);
+                subgroupsInfo.back().members.push_back(mPtr);
             }
             
         }
         
-        cur_type =
-            game.states.gameplay->subgroupTypes.getNextType(cur_type);
+        curType =
+            game.states.gameplay->subgroupTypes.getNextType(curType);
             
-    } while(cur_type != first_type);
+    } while(curType != firstType);
     
     //Let's figure out each subgroup's size.
     //Subgroups will be made by placing the members in
@@ -383,16 +383,16 @@ void Leader::dismiss() {
     //The second row is 6 spots around that one.
     //The third is 12 spots around those 6.
     //And so on. Each row fits an additional 6.
-    for(size_t s = 0; s < subgroups_info.size(); s++) {
-        size_t n_rows = getDismissRows(subgroups_info[s].members.size());
+    for(size_t s = 0; s < subgroupsInfo.size(); s++) {
+        size_t nRows = getDismissRows(subgroupsInfo[s].members.size());
         
         //Since each row loops all around,
         //it appears to the left and right of the center.
         //So count each one twice. Except for the central one.
-        subgroups_info[s].radius =
+        subgroupsInfo[s].radius =
             game.config.pikmin.standardRadius +
             game.config.pikmin.standardRadius * 2 *
-            LEADER::DISMISS_MEMBER_SIZE_MULTIPLIER * (n_rows - 1);
+            LEADER::DISMISS_MEMBER_SIZE_MULTIPLIER * (nRows - 1);
     }
     
     /**
@@ -413,158 +413,158 @@ void Leader::dismiss() {
         vector<size_t> subgroups;
         
         //Angular distance spread out from the row center.
-        float dist_between_center;
+        float distBetweenCenter;
         
         //How thick this row is.
         float thickness;
         
         //How much is taken up by Pikmin and padding.
-        float angle_occupation;
+        float angleOccupation;
         
         
         //--- Function definitions ---
         
         Row() {
-            dist_between_center = 0;
+            distBetweenCenter = 0;
             thickness = 0;
-            angle_occupation = 0;
+            angleOccupation = 0;
         }
         
     };
     
     bool done = false;
     vector<Row> rows;
-    Row cur_row;
-    cur_row.dist_between_center = LEADER::DISMISS_SUBGROUP_DISTANCE;
-    size_t cur_row_idx = 0;
-    size_t cur_subgroup_idx = 0;
+    Row curRow;
+    curRow.distBetweenCenter = LEADER::DISMISS_SUBGROUP_DISTANCE;
+    size_t curRowidx = 0;
+    size_t curSubgroupIdx = 0;
     
-    while(!done && !subgroups_info.empty()) {
-        float new_thickness =
+    while(!done && !subgroupsInfo.empty()) {
+        float newThickness =
             std::max(
-                cur_row.thickness, subgroups_info[cur_subgroup_idx].radius * 2
+                curRow.thickness, subgroupsInfo[curSubgroupIdx].radius * 2
             );
             
-        float new_angle_occupation = 0;
-        for(size_t s = 0; s < cur_row.subgroups.size(); s++) {
-            new_angle_occupation +=
+        float newAngleOccupation = 0;
+        for(size_t s = 0; s < curRow.subgroups.size(); s++) {
+            newAngleOccupation +=
                 linearDistToAngular(
-                    subgroups_info[cur_row.subgroups[s]].radius * 2.0,
-                    cur_row.dist_between_center +
-                    cur_row.thickness / 2.0f
+                    subgroupsInfo[curRow.subgroups[s]].radius * 2.0,
+                    curRow.distBetweenCenter +
+                    curRow.thickness / 2.0f
                 );
-            if(s < cur_row.subgroups.size() - 1) {
-                new_angle_occupation +=
+            if(s < curRow.subgroups.size() - 1) {
+                newAngleOccupation +=
                     linearDistToAngular(
                         LEADER::DISMISS_SUBGROUP_DISTANCE,
-                        cur_row.dist_between_center +
-                        cur_row.thickness / 2.0f
+                        curRow.distBetweenCenter +
+                        curRow.thickness / 2.0f
                     );
             }
         }
-        if(!cur_row.subgroups.empty()) {
-            new_angle_occupation +=
+        if(!curRow.subgroups.empty()) {
+            newAngleOccupation +=
                 linearDistToAngular(
                     LEADER::DISMISS_SUBGROUP_DISTANCE,
-                    cur_row.dist_between_center +
-                    new_thickness / 2.0f
+                    curRow.distBetweenCenter +
+                    newThickness / 2.0f
                 );
         }
-        new_angle_occupation +=
+        newAngleOccupation +=
             linearDistToAngular(
-                subgroups_info[cur_subgroup_idx].radius * 2.0,
-                cur_row.dist_between_center +
-                new_thickness / 2.0f
+                subgroupsInfo[curSubgroupIdx].radius * 2.0,
+                curRow.distBetweenCenter +
+                newThickness / 2.0f
             );
             
         //Will this group fit?
-        if(new_angle_occupation <= LEADER::DISMISS_ANGLE_RANGE) {
+        if(newAngleOccupation <= LEADER::DISMISS_ANGLE_RANGE) {
             //This subgroup still fits. Next!
-            cur_row.thickness = new_thickness;
-            cur_row.angle_occupation = new_angle_occupation;
+            curRow.thickness = newThickness;
+            curRow.angleOccupation = newAngleOccupation;
             
-            cur_row.subgroups.push_back(cur_subgroup_idx);
-            cur_subgroup_idx++;
+            curRow.subgroups.push_back(curSubgroupIdx);
+            curSubgroupIdx++;
         }
         
         if(
-            new_angle_occupation > LEADER::DISMISS_ANGLE_RANGE ||
-            cur_subgroup_idx == subgroups_info.size()
+            newAngleOccupation > LEADER::DISMISS_ANGLE_RANGE ||
+            curSubgroupIdx == subgroupsInfo.size()
         ) {
             //This subgroup doesn't fit. It'll have to be put in the next row.
             //Or this is the last subgroup, and the row needs to be committed.
             
-            rows.push_back(cur_row);
-            cur_row_idx++;
-            cur_row.dist_between_center +=
-                cur_row.thickness + LEADER::DISMISS_SUBGROUP_DISTANCE;
-            cur_row.subgroups.clear();
-            cur_row.thickness = 0;
-            cur_row.angle_occupation = 0;
+            rows.push_back(curRow);
+            curRowidx++;
+            curRow.distBetweenCenter +=
+                curRow.thickness + LEADER::DISMISS_SUBGROUP_DISTANCE;
+            curRow.subgroups.clear();
+            curRow.thickness = 0;
+            curRow.angleOccupation = 0;
         }
         
-        if(cur_subgroup_idx == subgroups_info.size()) done = true;
+        if(curSubgroupIdx == subgroupsInfo.size()) done = true;
     }
     
     //Now that we know which subgroups go into which row,
     //simply decide the positioning.
     for(size_t r = 0; r < rows.size(); r++) {
-        float start_angle = -(rows[r].angle_occupation / 2.0f);
-        float cur_angle = start_angle;
+        float startAngle = -(rows[r].angleOccupation / 2.0f);
+        float curAngle = startAngle;
         
         for(size_t s = 0; s < rows[r].subgroups.size(); s++) {
-            size_t s_idx = rows[r].subgroups[s];
-            float subgroup_angle = cur_angle;
+            size_t sIdx = rows[r].subgroups[s];
+            float subgroupAngle = curAngle;
             
-            cur_angle +=
+            curAngle +=
                 linearDistToAngular(
-                    subgroups_info[s_idx].radius * 2.0,
-                    rows[r].dist_between_center + rows[r].thickness / 2.0
+                    subgroupsInfo[sIdx].radius * 2.0,
+                    rows[r].distBetweenCenter + rows[r].thickness / 2.0
                 );
             if(s < rows[r].subgroups.size() - 1) {
-                cur_angle +=
+                curAngle +=
                     linearDistToAngular(
                         LEADER::DISMISS_SUBGROUP_DISTANCE,
-                        rows[r].dist_between_center + rows[r].thickness / 2.0
+                        rows[r].distBetweenCenter + rows[r].thickness / 2.0
                     );
             }
             
             //Center the subgroup's angle.
-            subgroup_angle +=
+            subgroupAngle +=
                 linearDistToAngular(
-                    subgroups_info[s_idx].radius,
-                    rows[r].dist_between_center + rows[r].thickness / 2.0
+                    subgroupsInfo[sIdx].radius,
+                    rows[r].distBetweenCenter + rows[r].thickness / 2.0
                 );
                 
-            subgroups_info[s_idx].center =
+            subgroupsInfo[sIdx].center =
                 angleToCoordinates(
-                    base_angle + subgroup_angle,
-                    rows[r].dist_between_center + rows[r].thickness / 2.0f
+                    baseAngle + subgroupAngle,
+                    rows[r].distBetweenCenter + rows[r].thickness / 2.0f
                 );
                 
         }
     }
     
     //Now, dismiss!
-    for(size_t s = 0; s < subgroups_info.size(); s++) {
-        cur_row_idx = 0;
-        size_t cur_row_spot_idx = 0;
-        size_t cur_row_spots = 1;
+    for(size_t s = 0; s < subgroupsInfo.size(); s++) {
+        curRowidx = 0;
+        size_t curRowSpotIdx = 0;
+        size_t curRowSpots = 1;
         
-        for(size_t m = 0; m < subgroups_info[s].members.size(); m++) {
+        for(size_t m = 0; m < subgroupsInfo[s].members.size(); m++) {
         
             Point destination;
             
-            if(cur_row_idx == 0) {
-                destination = subgroups_info[s].center;
+            if(curRowidx == 0) {
+                destination = subgroupsInfo[s].center;
             } else {
-                float member_angle =
-                    ((float) cur_row_spot_idx / cur_row_spots) * TAU;
+                float memberAngle =
+                    ((float) curRowSpotIdx / curRowSpots) * TAU;
                 destination =
-                    subgroups_info[s].center +
+                    subgroupsInfo[s].center +
                     angleToCoordinates(
-                        member_angle,
-                        cur_row_idx * game.config.pikmin.standardRadius * 2 *
+                        memberAngle,
+                        curRowidx * game.config.pikmin.standardRadius * 2 *
                         LEADER::DISMISS_MEMBER_SIZE_MULTIPLIER
                     );
             }
@@ -575,21 +575,21 @@ void Leader::dismiss() {
                     game.rng.f(-5.0, 5.0)
                 );
                 
-            cur_row_spot_idx++;
-            if(cur_row_spot_idx == cur_row_spots) {
-                cur_row_idx++;
-                cur_row_spot_idx = 0;
-                if(cur_row_idx == 1) {
-                    cur_row_spots = 6;
+            curRowSpotIdx++;
+            if(curRowSpotIdx == curRowSpots) {
+                curRowidx++;
+                curRowSpotIdx = 0;
+                if(curRowidx == 1) {
+                    curRowSpots = 6;
                 } else {
-                    cur_row_spots += 6;
+                    curRowSpots += 6;
                 }
             }
             
             destination += this->pos;
             
-            subgroups_info[s].members[m]->leaveGroup();
-            subgroups_info[s].members[m]->fsm.runEvent(
+            subgroupsInfo[s].members[m]->leaveGroup();
+            subgroupsInfo[s].members[m]->fsm.runEvent(
                 MOB_EV_DISMISSED, (void*) &destination
             );
             
@@ -606,13 +606,13 @@ void Leader::dismiss() {
     playSound(leaType->soundDataIdxs[LEADER_SOUND_DISMISSING]);
     for(size_t p = 0; p < LEADER::DISMISS_PARTICLE_AMOUNT; p++) {
         Particle par;
-        const unsigned char* color_idx =
+        const unsigned char* colorIdx =
             WHISTLE::DOT_COLORS[p % WHISTLE::N_DOT_COLORS];
         ALLEGRO_COLOR c =
             al_map_rgba(
-                color_idx[0],
-                color_idx[1],
-                color_idx[2],
+                colorIdx[0],
+                colorIdx[1],
+                colorIdx[2],
                 LEADER::DISMISS_PARTICLE_ALPHA * 255
             );
             
@@ -628,13 +628,13 @@ void Leader::dismiss() {
         par.pos = pos;
         par.priority = PARTICLE_PRIORITY_MEDIUM;
         par.size.setKeyframeValue(0, LEADER::DISMISS_PARTICLE_SIZE);
-        float par_speed =
+        float parSpeed =
             game.rng.f(
                 LEADER::DISMISS_PARTICLE_MIN_SPEED,
                 LEADER::DISMISS_PARTICLE_MAX_SPEED
             );
-        float par_angle = TAU / LEADER::DISMISS_PARTICLE_AMOUNT * p;
-        par.linearSpeed = KeyframeInterpolator<Point>(rotatePoint(Point(par_speed, 0.0f), par_angle));
+        float parAngle = TAU / LEADER::DISMISS_PARTICLE_AMOUNT * p;
+        par.linearSpeed = KeyframeInterpolator<Point>(rotatePoint(Point(parSpeed, 0.0f), parAngle));
         par.time = par.duration;
         par.z = z + height / 2.0f;
         game.states.gameplay->particles.add(par);
@@ -649,15 +649,15 @@ void Leader::dismiss() {
 void Leader::drawMob() {
     Mob::drawMob();
     
-    Sprite* cur_s_ptr;
-    Sprite* next_s_ptr;
-    float interpolation_factor;
-    getSpriteData(&cur_s_ptr, &next_s_ptr, &interpolation_factor);
-    if(!cur_s_ptr) return;
+    Sprite* curSPtr;
+    Sprite* nextSPtr;
+    float interpolationFactor;
+    getSpriteData(&curSPtr, &nextSPtr, &interpolationFactor);
+    if(!curSPtr) return;
     
     BitmapEffect eff;
     getSpriteBitmapEffects(
-        cur_s_ptr, next_s_ptr, interpolation_factor,
+        curSPtr, nextSPtr, interpolationFactor,
         &eff,
         SPRITE_BMP_EFFECT_FLAG_STANDARD |
         SPRITE_BMP_EFFECT_FLAG_STATUS |
@@ -668,17 +668,17 @@ void Leader::drawMob() {
     );
     
     if(invulnPeriod.timeLeft > 0.0f) {
-        Sprite* spark_s;
+        Sprite* sparkS;
         game.sysContent.anmSparks.getSpriteData(
-            &spark_s, nullptr, nullptr
+            &sparkS, nullptr, nullptr
         );
         
-        if(spark_s && spark_s->bitmap) {
-            BitmapEffect spark_eff = eff;
-            Point size = getBitmapDimensions(cur_s_ptr->bitmap) * eff.scale;
-            Point spark_size = getBitmapDimensions(spark_s->bitmap);
-            spark_eff.scale = size / spark_size;
-            drawBitmapWithEffects(spark_s->bitmap, spark_eff);
+        if(sparkS && sparkS->bitmap) {
+            BitmapEffect sparkEff = eff;
+            Point size = getBitmapDimensions(curSPtr->bitmap) * eff.scale;
+            Point sparkSize = getBitmapDimensions(sparkS->bitmap);
+            sparkEff.scale = size / sparkSize;
+            drawBitmapWithEffects(sparkS->bitmap, sparkEff);
         }
     }
     
@@ -690,17 +690,17 @@ void Leader::drawMob() {
  * @brief Returns how many rows will be needed to fit all of the members.
  * Used to calculate how subgroup members will be placed when dismissing.
  *
- * @param n_members Total number of group members to dismiss.
+ * @param nMembers Total number of group members to dismiss.
  * @return The amount of rows.
  */
-size_t Leader::getDismissRows(size_t n_members) const {
-    size_t members_that_fit = 1;
-    size_t rows_needed = 1;
-    while(members_that_fit < n_members) {
-        rows_needed++;
-        members_that_fit += 6 * (rows_needed - 1);
+size_t Leader::getDismissRows(size_t nMembers) const {
+    size_t membersThatFit = 1;
+    size_t rowsNeeded = 1;
+    while(membersThatFit < nMembers) {
+        rowsNeeded++;
+        membersThatFit += 6 * (rowsNeeded - 1);
     }
-    return rows_needed;
+    return rowsNeeded;
 }
 
 
@@ -709,40 +709,40 @@ size_t Leader::getDismissRows(size_t n_members) const {
  * Basically, when it's in a leader's group, what point it should be following,
  * and within what distance.
  *
- * @param out_spot The final coordinates are returned here.
- * @param out_dist The final distance to those coordinates is returned here.
+ * @param outSpot The final coordinates are returned here.
+ * @param outDist The final distance to those coordinates is returned here.
  */
 void Leader::getGroupSpotInfo(
-    Point* out_spot, float* out_dist
+    Point* outSpot, float* outDist
 ) const {
-    out_spot->x = 0.0f;
-    out_spot->y = 0.0f;
-    *out_dist = 0.0f;
+    outSpot->x = 0.0f;
+    outSpot->y = 0.0f;
+    *outDist = 0.0f;
     
     if(!followingGroup || !followingGroup->group) {
         return;
     }
     
-    Group* leader_group_ptr = followingGroup->group;
+    Group* leaderGroupPtr = followingGroup->group;
     
     float distance =
         followingGroup->radius +
         radius + game.config.pikmin.standardRadius;
         
-    for(size_t me = 0; me < leader_group_ptr->members.size(); me++) {
-        Mob* member_ptr = leader_group_ptr->members[me];
-        if(member_ptr == this) {
+    for(size_t me = 0; me < leaderGroupPtr->members.size(); me++) {
+        Mob* memberPtr = leaderGroupPtr->members[me];
+        if(memberPtr == this) {
             break;
-        } else if(member_ptr->subgroupTypePtr == subgroupTypePtr) {
+        } else if(memberPtr->subgroupTypePtr == subgroupTypePtr) {
             //If this member is also a leader,
             //then that means the current leader should stick behind.
             distance +=
-                member_ptr->radius * 2 + MOB::GROUP_SPOT_INTERVAL;
+                memberPtr->radius * 2 + MOB::GROUP_SPOT_INTERVAL;
         }
     }
     
-    *out_spot = followingGroup->pos;
-    *out_dist = distance;
+    *outSpot = followingGroup->pos;
+    *outDist = distance;
 }
 
 
@@ -752,32 +752,32 @@ void Leader::getGroupSpotInfo(
  * This function prioritizes less matured Pikmin, and ones closest to the nest.
  *
  * @param type Type of Pikmin to order.
- * @param n_ptr Nest to enter.
+ * @param nPtr Nest to enter.
  * @param amount Amount of Pikmin of the given type to order.
  * @return Whether the specified number of Pikmin were successfully ordered.
  * Returns false if there were not enough Pikmin of that type in the group
  * to fulfill the order entirely.
  */
 bool Leader::orderPikminToOnion(
-    const PikminType* type, PikminNest* n_ptr, size_t amount
+    const PikminType* type, PikminNest* nPtr, size_t amount
 ) {
     //Find Pikmin of that type.
     vector<std::pair<Distance, Pikmin*>> candidates;
-    size_t amount_ordered = 0;
+    size_t amountOrdered = 0;
     
     for(size_t m = 0; m < group->members.size(); m++) {
-        Mob* mob_ptr = group->members[m];
+        Mob* mobPtr = group->members[m];
         if(
-            mob_ptr->type->category->id != MOB_CATEGORY_PIKMIN ||
-            mob_ptr->type != type
+            mobPtr->type->category->id != MOB_CATEGORY_PIKMIN ||
+            mobPtr->type != type
         ) {
             continue;
         }
         
         candidates.push_back(
             std::make_pair(
-                Distance(mob_ptr->pos, n_ptr->m_ptr->pos),
-                (Pikmin*) mob_ptr
+                Distance(mobPtr->pos, nPtr->mPtr->pos),
+                (Pikmin*) mobPtr
             )
         );
     }
@@ -801,14 +801,14 @@ bool Leader::orderPikminToOnion(
     //Order Pikmin, in order.
     for(size_t p = 0; p < candidates.size(); p++) {
     
-        Pikmin* pik_ptr = candidates[p].second;
-        MobEvent* ev = pik_ptr->fsm.getEvent(MOB_EV_GO_TO_ONION);
+        Pikmin* pikPtr = candidates[p].second;
+        MobEvent* ev = pikPtr->fsm.getEvent(MOB_EV_GO_TO_ONION);
         if(!ev) continue;
         
-        ev->run(pik_ptr, (void*) n_ptr);
+        ev->run(pikPtr, (void*) nPtr);
         
-        amount_ordered++;
-        if(amount_ordered == amount) {
+        amountOrdered++;
+        if(amountOrdered == amount) {
             return true;
         }
     }
@@ -880,12 +880,12 @@ void Leader::startThrowTrail() {
     adjustKeyframeInterpolatorValues<ALLEGRO_COLOR>(
         pg.baseParticle.color,
     [ = ] (const ALLEGRO_COLOR & c) {
-        ALLEGRO_COLOR new_c = c;
-        new_c.r *= type->mainColor.r;
-        new_c.g *= type->mainColor.g;
-        new_c.b *= type->mainColor.b;
-        new_c.a *= type->mainColor.a;
-        return new_c;
+        ALLEGRO_COLOR newColor = c;
+        newColor.r *= type->mainColor.r;
+        newColor.g *= type->mainColor.g;
+        newColor.b *= type->mainColor.b;
+        newColor.a *= type->mainColor.a;
+        return newColor;
     }
     );
     pg.id = MOB_PARTICLE_GENERATOR_ID_THROW;
@@ -899,16 +899,16 @@ void Leader::startThrowTrail() {
 void Leader::startWhistling() {
     game.states.gameplay->whistle.startWhistling();
     
-    size_t whistling_sound_idx =
+    size_t whistlingSoundIdx =
         leaType->soundDataIdxs[LEADER_SOUND_WHISTLING];
-    if(whistling_sound_idx != INVALID) {
-        MobType::Sound* whistling_sound =
-            &type->sounds[whistling_sound_idx];
+    if(whistlingSoundIdx != INVALID) {
+        MobType::Sound* whistlingSound =
+            &type->sounds[whistlingSoundIdx];
         whistleSoundSourceId =
             game.audio.createPosSoundSource(
-                whistling_sound->sample,
+                whistlingSound->sample,
                 game.states.gameplay->leaderCursorW, false,
-                whistling_sound->config
+                whistlingSound->config
             );
     }
     setAnimation(LEADER_ANIM_WHISTLING);
@@ -939,25 +939,25 @@ void Leader::stopWhistling() {
 /**
  * @brief Swaps out the currently held Pikmin for a different one.
  *
- * @param new_pik The new Pikmin to hold.
+ * @param newPik The new Pikmin to hold.
  */
-void Leader::swapHeldPikmin(Mob* new_pik) {
+void Leader::swapHeldPikmin(Mob* newPik) {
     if(holding.empty()) return;
     
-    Mob* old_pik = holding[0];
+    Mob* oldPik = holding[0];
     
-    MobEvent* old_pik_ev = old_pik->fsm.getEvent(MOB_EV_RELEASED);
-    MobEvent* new_pik_ev = new_pik->fsm.getEvent(MOB_EV_GRABBED_BY_FRIEND);
+    MobEvent* oldPikEv = oldPik->fsm.getEvent(MOB_EV_RELEASED);
+    MobEvent* newPikEv = newPik->fsm.getEvent(MOB_EV_GRABBED_BY_FRIEND);
     
-    group->sort(new_pik->subgroupTypePtr);
+    group->sort(newPik->subgroupTypePtr);
     
-    if(!old_pik_ev || !new_pik_ev) return;
+    if(!oldPikEv || !newPikEv) return;
     
     release(holding[0]);
     
-    new_pik_ev->run(new_pik);
+    newPikEv->run(newPik);
     hold(
-        new_pik, INVALID,
+        newPik, INVALID,
         LEADER::HELD_GROUP_MEMBER_H_DIST, LEADER::HELD_GROUP_MEMBER_ANGLE,
         LEADER::HELD_GROUP_MEMBER_V_DIST,
         false, HOLD_ROTATION_METHOD_FACE_HOLDER
@@ -968,16 +968,16 @@ void Leader::swapHeldPikmin(Mob* new_pik) {
 /**
  * @brief Ticks time by one frame of logic.
  *
- * @param delta_t How long the frame's tick is, in seconds.
+ * @param deltaT How long the frame's tick is, in seconds.
  */
-void Leader::tickClassSpecifics(float delta_t) {
+void Leader::tickClassSpecifics(float deltaT) {
     //Throw-related things.
     if(throwCooldown > 0.0f) {
-        throwCooldown -= delta_t;
+        throwCooldown -= deltaT;
     }
     
-    size_t n_auto_throws = autoThrowRepeater.tick(delta_t);
-    if(n_auto_throws > 0) {
+    size_t nAutoThrows = autoThrowRepeater.tick(deltaT);
+    if(nAutoThrows > 0) {
         bool grabbed = grabClosestGroupMember();
         if(grabbed) {
             queueThrow();
@@ -1013,13 +1013,13 @@ void Leader::tickClassSpecifics(float delta_t) {
     //Health wheel logic.
     healthWheelVisibleRatio +=
         ((health / maxHealth) - healthWheelVisibleRatio) *
-        (IN_WORLD_HEALTH_WHEEL::SMOOTHNESS_MULT * delta_t);
+        (IN_WORLD_HEALTH_WHEEL::SMOOTHNESS_MULT * deltaT);
         
     if(
         health < maxHealth * LEADER::HEALTH_CAUTION_RATIO ||
         healthWheelCautionTimer > 0.0f
     ) {
-        healthWheelCautionTimer += delta_t;
+        healthWheelCautionTimer += deltaT;
         if(healthWheelCautionTimer >= LEADER::HEALTH_CAUTION_RING_DURATION) {
             healthWheelCautionTimer = 0.0f;
         }
@@ -1042,54 +1042,54 @@ void Leader::updateThrowVariables() {
         return;
     }
     
-    float target_z;
+    float targetZ;
     if(game.states.gameplay->throwDestMob) {
-        target_z =
+        targetZ =
             game.states.gameplay->throwDestMob->z +
             game.states.gameplay->throwDestMob->height;
     } else if(game.states.gameplay->throwDestSector) {
-        target_z = game.states.gameplay->throwDestSector->z;
+        targetZ = game.states.gameplay->throwDestSector->z;
     } else {
-        target_z = z;
+        targetZ = z;
     }
     
-    float max_height;
+    float maxHeight;
     switch (throwee->type->category->id) {
     case MOB_CATEGORY_PIKMIN: {
-        max_height = ((Pikmin*) throwee)->pikType->maxThrowHeight;
+        maxHeight = ((Pikmin*) throwee)->pikType->maxThrowHeight;
         break;
     } case MOB_CATEGORY_LEADERS: {
-        max_height = ((Leader*) throwee)->leaType->maxThrowHeight;
+        maxHeight = ((Leader*) throwee)->leaType->maxThrowHeight;
         break;
     } default: {
-        max_height = std::max(128.0f, (target_z - z) * 1.2f);
+        maxHeight = std::max(128.0f, (targetZ - z) * 1.2f);
         break;
     }
     }
     
     //Due to floating point inaccuracies, it's hard for mobs to actually
     //reach the intended value. Let's bump it up just a smidge.
-    max_height += 0.5f;
+    maxHeight += 0.5f;
     
-    if(max_height >= (target_z - z)) {
+    if(maxHeight >= (targetZ - z)) {
         //Can reach.
         throweeCanReach = true;
     } else {
         //Can't reach! Just do a convincing throw that is sure to fail.
         //Limiting the "target" Z makes it so the horizontal velocity isn't
         //so wild.
-        target_z = z + max_height * 0.75;
+        targetZ = z + maxHeight * 0.75;
         throweeCanReach = false;
     }
     
-    throweeMaxZ = z + max_height;
+    throweeMaxZ = z + maxHeight;
     
     calculateThrow(
         pos,
         z,
         game.states.gameplay->throwDest,
-        target_z,
-        max_height,
+        targetZ,
+        maxHeight,
         MOB::GRAVITY_ADDER,
         &throweeSpeed,
         &throweeSpeedZ,
@@ -1102,14 +1102,14 @@ void Leader::updateThrowVariables() {
  * @brief Switch active leader.
  *
  * @param forward If true, switch to the next one. If false, to the previous.
- * @param force_success If true, switch to this leader even if they can't
+ * @param forceSuccess If true, switch to this leader even if they can't
  * currently handle the leader switch script event.
- * @param keep_idx If true, swap to a leader that has the same index in the
+ * @param keepIdx If true, swap to a leader that has the same index in the
  * list of available leaders as the current one does.
  * Usually this is used because the current leader is no longer available.
  */
 void changeToNextLeader(
-    bool forward, bool force_success, bool keep_idx
+    bool forward, bool forceSuccess, bool keepIdx
 ) {
     if(game.states.gameplay->availableLeaders.empty()) {
         //There are no leaders remaining. Set the current leader to none.
@@ -1122,7 +1122,7 @@ void changeToNextLeader(
     if(
         game.states.gameplay->availableLeaders.size() == 1 &&
         game.states.gameplay->curLeaderPtr &&
-        !keep_idx
+        !keepIdx
     ) {
         return;
     }
@@ -1134,7 +1134,7 @@ void changeToNextLeader(
                 LEADER_EV_INACTIVATED
             )
         ) &&
-        !force_success
+        !forceSuccess
     ) {
         //This leader isn't ready to be switched out of. Forget it.
         return;
@@ -1146,47 +1146,47 @@ void changeToNextLeader(
     //If we return to the current leader without anything being
     //changed, then stop trying; no leader can be switched to.
     
-    int new_leader_idx = (int) game.states.gameplay->curLeaderIdx;
-    if(keep_idx) {
-        forward ? new_leader_idx-- : new_leader_idx++;
+    int newLeaderIdx = (int) game.states.gameplay->curLeaderIdx;
+    if(keepIdx) {
+        forward ? newLeaderIdx-- : newLeaderIdx++;
     }
-    Leader* new_leader_ptr = nullptr;
+    Leader* newLeaderPtr = nullptr;
     bool searching = true;
-    Leader* original_leader_ptr = game.states.gameplay->curLeaderPtr;
-    bool cant_find_new_leader = false;
+    Leader* originalLeaderPtr = game.states.gameplay->curLeaderPtr;
+    bool cantFindNewLeader = false;
     bool success = false;
     
     while(searching) {
-        new_leader_idx =
+        newLeaderIdx =
             sumAndWrap(
-                new_leader_idx,
+                newLeaderIdx,
                 (forward ? 1 : -1),
                 (int) game.states.gameplay->availableLeaders.size()
             );
-        new_leader_ptr = game.states.gameplay->availableLeaders[new_leader_idx];
+        newLeaderPtr = game.states.gameplay->availableLeaders[newLeaderIdx];
         
-        if(new_leader_ptr == original_leader_ptr) {
+        if(newLeaderPtr == originalLeaderPtr) {
             //Back to the original; stop trying.
-            cant_find_new_leader = true;
+            cantFindNewLeader = true;
             searching = false;
         }
         
-        new_leader_ptr->fsm.runEvent(LEADER_EV_ACTIVATED);
+        newLeaderPtr->fsm.runEvent(LEADER_EV_ACTIVATED);
         
         //If after we called the event, the leader is the same,
         //then that means the leader can't be switched to.
         //Try a new one.
-        if(game.states.gameplay->curLeaderPtr != original_leader_ptr) {
+        if(game.states.gameplay->curLeaderPtr != originalLeaderPtr) {
             searching = false;
             success = true;
         }
     }
     
-    if(cant_find_new_leader && force_success) {
+    if(cantFindNewLeader && forceSuccess) {
         //Ok, we need to force a leader to accept the focus. Let's do so.
         game.states.gameplay->curLeaderIdx =
             sumAndWrap(
-                new_leader_idx,
+                newLeaderIdx,
                 (forward ? 1 : -1),
                 (int) game.states.gameplay->availableLeaders.size()
             );
@@ -1222,16 +1222,16 @@ bool grabClosestGroupMember() {
     }
     
     //Check if the leader can grab, and the group member can be grabbed.
-    MobEvent* grabbed_ev =
+    MobEvent* grabbedEv =
         game.states.gameplay->
         closestGroupMember[BUBBLE_RELATION_CURRENT]->fsm.getEvent(
             MOB_EV_GRABBED_BY_FRIEND
         );
-    MobEvent* grabber_ev =
+    MobEvent* grabberEv =
         game.states.gameplay->curLeaderPtr->fsm.getEvent(
             LEADER_EV_HOLDING
         );
-    if(!grabber_ev || !grabbed_ev) {
+    if(!grabberEv || !grabbedEv) {
         return false;
     }
     
@@ -1245,11 +1245,11 @@ bool grabClosestGroupMember() {
     }
     
     //Run the grabbing logic then.
-    grabber_ev->run(
+    grabberEv->run(
         game.states.gameplay->curLeaderPtr,
         (void*) game.states.gameplay->closestGroupMember[BUBBLE_RELATION_CURRENT]
     );
-    grabbed_ev->run(
+    grabbedEv->run(
         game.states.gameplay->closestGroupMember[BUBBLE_RELATION_CURRENT],
         (void*) game.states.gameplay->curLeaderPtr
     );

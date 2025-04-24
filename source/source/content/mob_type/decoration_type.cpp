@@ -23,57 +23,57 @@ DecorationType::DecorationType() :
     
     targetType = MOB_TARGET_FLAG_NONE;
     
-    AreaEditorProp aep_random_anim_delay;
-    aep_random_anim_delay.name = "Random animation delay";
-    aep_random_anim_delay.var = "random_animation_delay";
-    aep_random_anim_delay.type = AEMP_TYPE_BOOL;
-    aep_random_anim_delay.defValue = "true";
-    aep_random_anim_delay.tooltip =
+    AreaEditorProp aepRandomAnimDelay;
+    aepRandomAnimDelay.name = "Random animation delay";
+    aepRandomAnimDelay.var = "random_animation_delay";
+    aepRandomAnimDelay.type = AEMP_TYPE_BOOL;
+    aepRandomAnimDelay.defValue = "true";
+    aepRandomAnimDelay.tooltip =
         "If this decoration type can have a random animation delay,\n"
         "this property makes this decoration use it or not.";
-    areaEditorProps.push_back(aep_random_anim_delay);
+    areaEditorProps.push_back(aepRandomAnimDelay);
     
-    AreaEditorProp aep_random_tint;
-    aep_random_tint.name = "Random tint";
-    aep_random_tint.var = "random_tint";
-    aep_random_tint.type = AEMP_TYPE_BOOL;
-    aep_random_tint.defValue = "true";
-    aep_random_tint.tooltip =
+    AreaEditorProp aepRandomTint;
+    aepRandomTint.name = "Random tint";
+    aepRandomTint.var = "random_tint";
+    aepRandomTint.type = AEMP_TYPE_BOOL;
+    aepRandomTint.defValue = "true";
+    aepRandomTint.tooltip =
         "If this decoration type can have a random color tint,\n"
         "this property makes this decoration use it or not.";
-    areaEditorProps.push_back(aep_random_tint);
+    areaEditorProps.push_back(aepRandomTint);
     
-    AreaEditorProp aep_random_scale;
-    aep_random_scale.name = "Random scale";
-    aep_random_scale.var = "random_scale";
-    aep_random_scale.type = AEMP_TYPE_BOOL;
-    aep_random_scale.defValue = "true";
-    aep_random_scale.tooltip =
+    AreaEditorProp aepRandomScale;
+    aepRandomScale.name = "Random scale";
+    aepRandomScale.var = "random_scale";
+    aepRandomScale.type = AEMP_TYPE_BOOL;
+    aepRandomScale.defValue = "true";
+    aepRandomScale.tooltip =
         "If this decoration type can have a random scale,\n"
         "this property makes this decoration use it or not.";
-    areaEditorProps.push_back(aep_random_scale);
+    areaEditorProps.push_back(aepRandomScale);
     
-    AreaEditorProp aep_random_rotation;
-    aep_random_rotation.name = "Random rotation";
-    aep_random_rotation.var = "random_rotation";
-    aep_random_rotation.type = AEMP_TYPE_BOOL;
-    aep_random_rotation.defValue = "true";
-    aep_random_rotation.tooltip =
+    AreaEditorProp aepRandomRotation;
+    aepRandomRotation.name = "Random rotation";
+    aepRandomRotation.var = "random_rotation";
+    aepRandomRotation.type = AEMP_TYPE_BOOL;
+    aepRandomRotation.defValue = "true";
+    aepRandomRotation.tooltip =
         "If this decoration type can have a random scale,\n"
         "this property makes this decoration use it or not.";
-    areaEditorProps.push_back(aep_random_rotation);
+    areaEditorProps.push_back(aepRandomRotation);
     
     blackoutRadius = 0.0f;
     
-    decoration_fsm::createFsm(this);
+    DecorationFsm::createFsm(this);
 }
 
 
 /**
  * @brief Returns the vector of animation conversions.
  */
-anim_conversion_vector DecorationType::getAnimConversions() const {
-    anim_conversion_vector v;
+AnimConversionVector DecorationType::getAnimConversions() const {
+    AnimConversionVector v;
     v.push_back(std::make_pair(DECORATION_ANIM_IDLING, "idling"));
     v.push_back(std::make_pair(DECORATION_ANIM_BUMPED, "bumped"));
     return v;
@@ -86,12 +86,12 @@ anim_conversion_vector DecorationType::getAnimConversions() const {
  * @param file File to read from.
  */
 void DecorationType::loadCatProperties(DataNode* file) {
-    ReaderSetter rs(file);
+    ReaderSetter dRS(file);
     
-    rs.set("random_animation_delay", randomAnimationDelay);
-    rs.set("rotation_random_variation", rotationRandomVariation);
-    rs.set("scale_random_variation", scaleRandomVariation);
-    rs.set("tint_random_maximum", tintRandomMaximum);
+    dRS.set("random_animation_delay", randomAnimationDelay);
+    dRS.set("rotation_random_variation", rotationRandomVariation);
+    dRS.set("scale_random_variation", scaleRandomVariation);
+    dRS.set("tint_random_maximum", tintRandomMaximum);
     
     rotationRandomVariation = degToRad(rotationRandomVariation);
 }

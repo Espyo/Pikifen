@@ -91,23 +91,23 @@ Game::Game() {
 /**
  * @brief Changes to a different game state.
  *
- * @param new_state State to change to.
- * @param unload_current If true, the current state is unloaded from memory.
- * @param load_new If true, the new state is loaded to memory.
+ * @param newState State to change to.
+ * @param unloadCurrent If true, the current state is unloaded from memory.
+ * @param loadNew If true, the new state is loaded to memory.
  * If you try to change to that state when it is not loaded,
  * things will go wrong.
  */
 void Game::changeState(
-    GameState* new_state, bool unload_current, bool load_new
+    GameState* newState, bool unloadCurrent, bool loadNew
 ) {
-    if(curState && unload_current) {
+    if(curState && unloadCurrent) {
         curState->unload();
         curState->loaded = false;
     }
     
-    curState = new_state;
+    curState = newState;
     
-    if(load_new) {
+    if(loadNew) {
         curState->load();
         curState->loaded = true;
     }
@@ -115,7 +115,7 @@ void Game::changeState(
     //Because during the loading screens there is no activity, on the
     //next frame, the game will assume the time between that and the last
     //non-loading frame is normal. This could be something like 2 seconds.
-    //Let's reset the delta_t, then.
+    //Let's reset the deltaT, then.
     resetDeltaT = true;
 }
 
@@ -227,10 +227,10 @@ void Game::globalHandleAllegroEvent(const ALLEGRO_EVENT &ev) {
  * @return Whether it got handled.
  */
 bool Game::globalHandleSystemPlayerAction(const PlayerAction &action) {
-    bool is_system_action =
+    bool isSystemAction =
         controls.getPlayerActionType(action.actionTypeId).category ==
         PLAYER_ACTION_CAT_SYSTEM;
-    if(!is_system_action) return false;
+    if(!isSystemAction) return false;
     if(action.value < 0.5f) return false;
     
     switch(action.actionTypeId) {
@@ -254,7 +254,7 @@ bool Game::globalHandleSystemPlayerAction(const PlayerAction &action) {
  */
 void Game::mainLoop() {
     //Used to calculate the time difference between the current and last frames.
-    double prev_frame_start_time = 0.0;
+    double prevFrameStartTime = 0.0;
     ALLEGRO_EVENT ev;
     
     //Main loop.
@@ -277,30 +277,30 @@ void Game::mainLoop() {
         case ALLEGRO_EVENT_TIMER: {
             if(al_is_event_queue_empty(eventQueue)) {
             
-                double cur_frame_start_time = al_get_time();
+                double curFrameStartTime = al_get_time();
                 if(resetDeltaT) {
                     //Failsafe.
-                    prev_frame_start_time =
-                        cur_frame_start_time -
+                    prevFrameStartTime =
+                        curFrameStartTime -
                         1.0f / options.advanced.targetFps;
                     resetDeltaT = false;
                 }
                 
-                float real_delta_t =
-                    cur_frame_start_time - prev_frame_start_time;
-                statistics.runtime += real_delta_t;
+                float realDeltaT =
+                    curFrameStartTime - prevFrameStartTime;
+                statistics.runtime += realDeltaT;
                 
                 //Anti speed-burst cap.
-                deltaT = std::min(real_delta_t, 0.2f);
+                deltaT = std::min(realDeltaT, 0.2f);
                 
                 timePassed += deltaT;
-                GameState* prev_state = curState;
+                GameState* prevState = curState;
                 
                 playerActions = controls.newFrame(deltaT);
                 globalLogic();
                 curState->doLogic();
                 
-                if(curState == prev_state) {
+                if(curState == prevState) {
                     //Only draw if we didn't change states in the meantime.
                     curState->doDrawing();
                     globalDrawing();
@@ -309,11 +309,11 @@ void Game::mainLoop() {
                     ImGui::EndFrame();
                 }
                 
-                double cur_frame_end_time = al_get_time();
+                double curFrameEndTime = al_get_time();
                 curFrameProcessTime =
-                    cur_frame_end_time - cur_frame_start_time;
+                    curFrameEndTime - curFrameStartTime;
                     
-                prev_frame_start_time = cur_frame_start_time;
+                prevFrameStartTime = curFrameStartTime;
                 
             }
             break;
@@ -501,10 +501,10 @@ int Game::start() {
  * be the case if changeState was called with instructions to not
  * unload the previous one.
  *
- * @param loaded_state Loaded state to unload.
+ * @param loadedState Loaded state to unload.
  */
-void Game::unloadLoadedState(GameState* loaded_state) {
-    loaded_state->unload();
+void Game::unloadLoadedState(GameState* loadedState) {
+    loadedState->unload();
 }
 
 

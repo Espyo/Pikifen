@@ -105,24 +105,24 @@ void ContentManager::loadAll(const vector<CONTENT_TYPE> &types, CONTENT_LOAD_LEV
     //Fill in all manifests first. This is because some content may rely on
     //another's manifest.
     for(size_t t = 0; t < types.size(); t++) {
-        ContentTypeManager* mgr_ptr = getMgrPtr(types[t]);
+        ContentTypeManager* mgrPtr = getMgrPtr(types[t]);
         engineAssert(
             loadLevels[types[t]] == CONTENT_LOAD_LEVEL_UNLOADED,
-            "Tried to load all content of type " + mgr_ptr->getName() +
+            "Tried to load all content of type " + mgrPtr->getName() +
             " even though it's already loaded!"
         );
-        mgr_ptr->fillManifests();
+        mgrPtr->fillManifests();
     }
     
     //Now load the content.
     for(size_t t = 0; t < types.size(); t++) {
-        ContentTypeManager* mgr_ptr = getMgrPtr(types[t]);
-        const string &perf_mon_name = mgr_ptr->getPerfMonMeasurementName();
-        if(!perf_mon_name.empty() && game.perfMon) {
-            game.perfMon->startMeasurement(perf_mon_name);
+        ContentTypeManager* mgrPtr = getMgrPtr(types[t]);
+        const string &perfMonName = mgrPtr->getPerfMonMeasurementName();
+        if(!perfMonName.empty() && game.perfMon) {
+            game.perfMon->startMeasurement(perfMonName);
         }
-        mgr_ptr->loadAll(level);
-        if(!perf_mon_name.empty() && game.perfMon) {
+        mgrPtr->loadAll(level);
+        if(!perfMonName.empty() && game.perfMon) {
             game.perfMon->finishMeasurement();
         }
         loadLevels[types[t]] = level;
@@ -134,35 +134,35 @@ void ContentManager::loadAll(const vector<CONTENT_TYPE> &types, CONTENT_LOAD_LEV
 /**
  * @brief Creates a new pack and updates the list of packs.
  *
- * @param internal_name Internal name of the pack, i.e. the pack's folder name.
+ * @param internalName Internal name of the pack, i.e. the pack's folder name.
  * @param name Proper name of the pack.
  * @param description Description.
  * @param maker Maker(s).
  * @return Whether it succeeded.
  */
 bool ContentManager::createPack(
-    const string &internal_name, const string &name,
+    const string &internalName, const string &name,
     const string &description, const string &maker
 ) {
-    string pack_path = FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" + internal_name;
+    string packPath = FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" + internalName;
     
     //Create the folder first.
-    bool could_make_folder = al_make_directory(pack_path.c_str());
-    if(!could_make_folder) return false;
+    bool couldMakeFolder = al_make_directory(packPath.c_str());
+    if(!couldMakeFolder) return false;
     
     //Create the data file.
     DataNode data;
-    GetterWriter gw(&data);
-    gw.write("name", name);
-    gw.write("description", description);
-    gw.write("maker", maker);
-    gw.write("version", "1.0.0");
-    gw.write("engine_version", getEngineVersionString());
-    gw.write("tags", "");
-    gw.write("dependencies", "");
-    gw.write("conflicts", "");
-    gw.write("notes", "");
-    data.saveFile(pack_path + "/" + FILE_NAMES::PACK_DATA, true, true);
+    GetterWriter pGW(&data);
+    pGW.write("name", name);
+    pGW.write("description", description);
+    pGW.write("maker", maker);
+    pGW.write("version", "1.0.0");
+    pGW.write("engine_version", getEngineVersionString());
+    pGW.write("tags", "");
+    pGW.write("dependencies", "");
+    pGW.write("conflicts", "");
+    pGW.write("notes", "");
+    data.saveFile(packPath + "/" + FILE_NAMES::PACK_DATA, true, true);
     
     //Update the list and manifest.
     packs.unloadAll();
@@ -178,21 +178,21 @@ bool ContentManager::createPack(
  * @brief Loads an area as the "current area". This does not load it into
  * the vector of areas.
  *
- * @param requested_area_path Path to the area folder.
- * @param manif_ptr Set the manifest pointer to this. If nullptr, it'll be
+ * @param requestedAreaPath Path to the area folder.
+ * @param manifPtr Set the manifest pointer to this. If nullptr, it'll be
  * set from the list of manifests.
  * @param type Type of area this is.
  * @param level Level to load at.
- * @param from_backup If true, load from a backup, if any.
+ * @param fromBackup If true, load from a backup, if any.
  * @return Whether it succeeded.
  */
 bool ContentManager::loadAreaAsCurrent(
-    const string &requested_area_path, ContentManifest* manif_ptr,
-    CONTENT_LOAD_LEVEL level, bool from_backup
+    const string &requestedAreaPath, ContentManifest* manifPtr,
+    CONTENT_LOAD_LEVEL level, bool fromBackup
 ) {
     engineAssert(
         game.curAreaData == nullptr,
-        "Tried to load area \"" + requested_area_path + "\" as the current "
+        "Tried to load area \"" + requestedAreaPath + "\" as the current "
         "one even though there is already a loaded current area, \"" +
         (
             game.curAreaData->manifest ?
@@ -204,8 +204,8 @@ bool ContentManager::loadAreaAsCurrent(
     game.curAreaData = new Area();
     bool success =
         areas.loadArea(
-            game.curAreaData, requested_area_path, manif_ptr,
-            level, from_backup
+            game.curAreaData, requestedAreaPath, manifPtr,
+            level, fromBackup
         );
         
     if(!success) {
@@ -248,16 +248,16 @@ void ContentManager::unloadCurrentArea(CONTENT_LOAD_LEVEL level) {
  */
 void ContentManager::unloadAll(const vector<CONTENT_TYPE> &types) {
     for(size_t t = 0; t < types.size(); t++) {
-        ContentTypeManager* mgr_ptr = getMgrPtr(types[t]);
+        ContentTypeManager* mgrPtr = getMgrPtr(types[t]);
         
         engineAssert(
             loadLevels[types[t]] != CONTENT_LOAD_LEVEL_UNLOADED,
-            "Tried to unload all content of type " + mgr_ptr->getName() +
+            "Tried to unload all content of type " + mgrPtr->getName() +
             " even though it's already unloaded!"
         );
         
-        mgr_ptr->unloadAll(loadLevels[types[t]]);
-        mgr_ptr->clearManifests();
+        mgrPtr->unloadAll(loadLevels[types[t]]);
+        mgrPtr->clearManifests();
         
         loadLevels[types[t]] = CONTENT_LOAD_LEVEL_UNLOADED;
     }
@@ -280,12 +280,12 @@ void PackManager::clearManifests() {
  */
 void PackManager::fillManifests() {
     //Raw manifests.
-    vector<string> raw_folders =
+    vector<string> rawFolders =
         folderToVector(FOLDER_PATHS_FROM_ROOT::GAME_DATA, true);
         
-    for(size_t f = 0; f < raw_folders.size(); f++) {
-        if(raw_folders[f] != FOLDER_NAMES::BASE_PACK) {
-            manifestsSansBaseRaw.push_back(raw_folders[f]);
+    for(size_t f = 0; f < rawFolders.size(); f++) {
+        if(rawFolders[f] != FOLDER_NAMES::BASE_PACK) {
+            manifestsSansBaseRaw.push_back(rawFolders[f]);
         }
     }
     
@@ -297,16 +297,16 @@ void PackManager::fillManifests() {
     );
     
     //Organized manifests.
-    vector<string> organized_folders =
-        filterVectorWithBanList(raw_folders, game.options.packs.disabled);
-    organized_folders =
+    vector<string> organizedFolders =
+        filterVectorWithBanList(rawFolders, game.options.packs.disabled);
+    organizedFolders =
         sortVectorWithPreferenceList(
-            organized_folders, game.options.packs.order
+            organizedFolders, game.options.packs.order
         );
         
-    for(size_t f = 0; f < organized_folders.size(); f++) {
-        if(organized_folders[f] != FOLDER_NAMES::BASE_PACK) {
-            manifestsSansBase.push_back(organized_folders[f]);
+    for(size_t f = 0; f < organizedFolders.size(); f++) {
+        if(organizedFolders[f] != FOLDER_NAMES::BASE_PACK) {
+            manifestsSansBase.push_back(organizedFolders[f]);
         }
     }
     
@@ -327,27 +327,27 @@ void PackManager::fillManifests() {
  */
 void PackManager::loadAll() {
     for(size_t p = 0; p < manifestsWithBaseRaw.size(); p++) {
-        DataNode pack_file =
+        DataNode packFile =
             loadDataFile(
                 FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
                 manifestsWithBaseRaw[p] + "/" +
                 FILE_NAMES::PACK_DATA
             );
             
-        Pack pack_data;
-        pack_data.name = manifestsWithBaseRaw[p];
-        ReaderSetter rs(&pack_file);
-        rs.set("name", pack_data.name);
-        rs.set("description", pack_data.description);
-        rs.set("tags", pack_data.tags);
-        rs.set("maker", pack_data.maker);
-        rs.set("version", pack_data.version);
-        rs.set("engine_version", pack_data.engineVersion);
-        rs.set("dependencies", pack_data.dependencies);
-        rs.set("conflicts", pack_data.conflicts);
-        rs.set("notes", pack_data.notes);
+        Pack packData;
+        packData.name = manifestsWithBaseRaw[p];
+        ReaderSetter pRS(&packFile);
+        pRS.set("name", packData.name);
+        pRS.set("description", packData.description);
+        pRS.set("tags", packData.tags);
+        pRS.set("maker", packData.maker);
+        pRS.set("version", packData.version);
+        pRS.set("engine_version", packData.engineVersion);
+        pRS.set("dependencies", packData.dependencies);
+        pRS.set("conflicts", packData.conflicts);
+        pRS.set("notes", packData.notes);
         
-        list[manifestsWithBaseRaw[p]] = pack_data;
+        list[manifestsWithBaseRaw[p]] = packData;
     }
 }
 

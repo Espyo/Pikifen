@@ -142,32 +142,32 @@ struct Distance {
 Point angleToCoordinates(
     float angle, float magnitude
 );
-float angularDistToLinear(float angular_dist, float radius);
+float angularDistToLinear(float angularDist, float radius);
 bool BBoxCheck(const Point &center1, const Point &center2, float r);
 bool BBoxCheck(
     const Point &tl1, const Point &br1,
     const Point &center2, float r
 );
 void calculateThrow(
-    const Point &start_xy, float start_z,
-    const Point &target_xy, float target_z,
-    float max_h, float gravity,
-    Point* req_speed_xy, float* req_speed_z, float* out_h_angle
+    const Point &startXY, float startZ,
+    const Point &targetXY, float targetZ,
+    float maxH, float gravity,
+    Point* reqSpeedXY, float* reqSpeedZ, float* outHAngle
 );
 bool circleIntersectsLineSeg(
     const Point &circle, float cr,
-    const Point &line_p1, const Point &line_p2,
-    float* out_lix = nullptr, float* out_liy = nullptr
+    const Point &lineP1, const Point &lineP2,
+    float* outLix = nullptr, float* outLiy = nullptr
 );
 bool circleIntersectsRectangle(
     const Point &circle, float cr,
-    const Point &rectangle, const Point &rect_dim,
-    float rect_angle,
-    float* out_overlap_dist = nullptr, float* out_rectangle_side_angle = nullptr
+    const Point &rectangle, const Point &rectDim,
+    float rectAngle,
+    float* outOverlapDist = nullptr, float* outRectangleSideAngle = nullptr
 );
 bool collinearLineSegsIntersect(
     const Point &a, const Point &b, const Point &c, const Point &d,
-    Point* out_intersection_tl = nullptr, Point* out_intersection_br = nullptr
+    Point* outIntersectionTL = nullptr, Point* outIntersectionBR = nullptr
 );
 void coordinatesToAngle(
     const Point &coordinates, float* angle, float* magnitude
@@ -180,54 +180,54 @@ float getAngleCwDiff(float a1, float a2);
 float getAngleSmallestDiff(float a1, float a2);
 Point getClosestPointInLineSeg(
     const Point &l1, const Point &l2, const Point &p,
-    float* out_segment_ratio = nullptr
+    float* outSegmentRatio = nullptr
 );
 Point getClosestPointInRotatedRectangle(
     const Point &p,
-    const Point &rect_center, const Point &rect_dim, float rect_angle,
-    bool* out_is_inside
+    const Point &rectCenter, const Point &rectDim, float rectAngle,
+    bool* outIsInside
 );
 void getMiterPoints(
     const Point &a, const Point &b, const Point &c, float thickness,
-    Point* miter_point_1, Point* miter_point_2, float max_miter_length = 0.0f
+    Point* miterPoint1, Point* miterPoint2, float maxMiterLength = 0.0f
 );
 float getPointSign(
     const Point &p, const Point &lp1, const Point &lp2
 );
 Point getRandomPointInRectangularRing(
-    const Point &inner_dist, const Point &outer_dist,
-    int axis_random_int, float axis_random_float, float px_random_float,
-    float py_random_float, int side_random_int
+    const Point &innerDist, const Point &outerDist,
+    int axisRandomInt, float axisRandomFloat, float pxRandomFloat,
+    float pyRandomFloat, int sideRandomInt
 );
 Point getRandomPointInRing(
-    float inner_dist, float outer_dist,
-    float arc, float arc_rot,
-    float radius_random_float, float angle_random_float
+    float innerDist, float outerDist,
+    float arc, float arcRot,
+    float radiusRandomFloat, float angleRandomFloat
 );
 Point getRatioPointInRing(
-    float inner_dist, float outer_dist,
-    float arc, float arc_rot, float ratio
+    float innerDist, float outerDist,
+    float arc, float arcRot, float ratio
 );
 void getTransformedRectangleBBox(
     const Point &center, const Point &dimensions, float angle,
-    Point* min_coords, Point* max_coords
+    Point* minCoords, Point* maxCoords
 );
 float interpolateAngle(
-    float input, float input_start, float input_end,
-    float &output_start, float &output_end
+    float input, float inputStart, float inputEnd,
+    float &outputStart, float &outputEnd
 );
 Point interpolatePoint(
-    float input, float input_start, float input_end,
-    const Point &output_start, const Point &output_end
+    float input, float inputStart, float inputEnd,
+    const Point &outputStart, const Point &outputEnd
 );
 bool isPointInRectangle(
-    const Point &p, const Point &rect_center, const Point &rect_size
+    const Point &p, const Point &rectCenter, const Point &rectSize
 );
 bool isPointInTriangle(
     const Point &p, const Point &tp1, const Point &tp2, const Point &tp3,
     bool loq
 );
-float linearDistToAngular(float linear_dist, float radius);
+float linearDistToAngular(float linearDist, float radius);
 bool lineSegsAreCollinear(
     const Point &a, const Point &b, const Point &c, const Point &d
 );
@@ -237,40 +237,40 @@ bool lineSegIntersectsRectangle(
 );
 bool lineSegIntersectsRotatedRectangle(
     const Point &lp1, const Point &lp2,
-    const Point &rect_center, const Point &rect_dim, float rect_angle
+    const Point &rectCenter, const Point &rectDim, float rectAngle
 );
 bool lineSegsIntersect(
     const Point &l1p1, const Point &l1p2, const Point &l2p1, const Point &l2p2,
-    float* out_final_l1r, float* out_final_l2r
+    float* outFinalL1r, float* outFinalL2r
 );
 bool lineSegsIntersect(
     const Point &l1p1, const Point &l1p2, const Point &l2p1, const Point &l2p2,
-    Point* out_intersection
+    Point* outIntersection
 );
 bool linesIntersect(
     const Point &l1p1, const Point &l1p2,
     const Point &l2p1, const Point &l2p2,
-    float* out_l1r, float* out_l2r
+    float* outL1r, float* outL2r
 );
 bool linesIntersect(
     const Point &l1p1, const Point &l1p2,
     const Point &l2p1, const Point &l2p2,
-    Point* out_point
+    Point* outPoint
 );
 void movePoint(
     const Point &start, const Point &target,
-    float speed, float reach_radius, Point* mov,
-    float* angle, bool* reached, float delta_t
+    float speed, float reachRadius, Point* mov,
+    float* angle, bool* reached, float deltaT
 );
 float normalizeAngle(float a);
 Point normalizeVector(const Point &v);
 bool pointsAreCollinear(
     const Point &a, const Point &b, const Point &c
 );
-void updateMaxCoords(Point &max_coords, const Point &new_coords);
-void updateMinCoords(Point &min_coords, const Point &new_coords);
+void updateMaxCoords(Point &maxCoords, const Point &newCoords);
+void updateMinCoords(Point &minCoords, const Point &newCoords);
 void updateMinMaxCoords(
-    Point &min_coords, Point &max_coords, const Point &new_coords
+    Point &minCoords, Point &maxCoords, const Point &newCoords
 );
 void projectVertexes(
     const vector<Point> &v, const Point axis, float* min, float* max
@@ -282,26 +282,26 @@ bool rectanglesIntersect(
     const Point &tl2, const Point &br2
 );
 bool rectanglesIntersect(
-    const Point &rect1, const Point &rect_dim1,
-    float rect_angle1,
-    const Point &rect2, const Point &rect_dim2,
-    float rect_angle2,
-    float* out_overlap_dist = nullptr, float* out_overlap_angle = nullptr
+    const Point &rect1, const Point &rectDim1,
+    float rectAngle1,
+    const Point &rect2, const Point &rectDim2,
+    float rectAngle2,
+    float* outOverlapDist = nullptr, float* outOverlapAngle = nullptr
 );
 Point resizeToBoxKeepingAspectRatio(
-    const Point &original_size,
-    const Point &box_size
+    const Point &originalSize,
+    const Point &boxSize
 );
 Point rotatePoint(const Point &coords, float angle);
-Point s2p(const string &s, float* out_z = nullptr);
+Point s2p(const string &s, float* outZ = nullptr);
 Point scaleRectangleToBox(
-    const Point &rect_size, const Point &box_size,
-    bool can_grow_x, bool can_grow_y,
-    bool can_shrink_x, bool can_shrink_y,
-    bool can_change_ratio
+    const Point &rectSize, const Point &boxSize,
+    bool canGrowX, bool canGrowY,
+    bool canShrinkX, bool canShrinkY,
+    bool canChangeRatio
 );
 size_t selectNextItemDirectionally(
-    const vector<Point> &item_coordinates, size_t selected_item,
-    float direction, const Point &loop_region
+    const vector<Point> &itemCoordinates, size_t selectedItem,
+    float direction, const Point &loopRegion
 );
 float getVerticalAlignOffset(V_ALIGN_MODE mode, float height);

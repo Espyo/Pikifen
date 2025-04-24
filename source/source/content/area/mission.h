@@ -179,7 +179,7 @@ struct MissionData {
         );
         
     //Mission fail conditions bitmask. Use MISSION_FAIL_COND_*'s indexes.
-    bitmask_8_t failConditions = 0;
+    Bitmask8 failConditions = 0;
     
     //Amount for the "reach too few Pikmin" mission fail condition.
     size_t failTooFewPikAmount = 0;
@@ -230,10 +230,10 @@ struct MissionData {
     bool enemyPointsOnCollection = false;
     
     //Bitmask for mission fail point loss criteria. Use MISSION_SCORE_CRITERIA.
-    bitmask_8_t pointLossData = 0;
+    Bitmask8 pointLossData = 0;
     
     //Bitmask for score HUD calculation criteria. Use MISSION_SCORE_CRITERIA.
-    bitmask_8_t pointHudData = 255;
+    Bitmask8 pointHudData = 255;
     
     //Starting number of points.
     int startingPoints = 0;
@@ -302,7 +302,7 @@ public:
     ) const = 0;
     virtual string getEndReason(MissionData* mission) const = 0;
     virtual bool getEndZoomData(
-        GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
+        GameplayState* gameplay, Point* outCamPos, float* outCamZoom
     ) const = 0;
     virtual string getHudLabel(GameplayState* gameplay) const = 0;
     virtual bool hasHudContent() const = 0;
@@ -329,7 +329,7 @@ public:
     ) const override;
     string getEndReason(MissionData* mission) const override;
     bool getEndZoomData(
-        GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
+        GameplayState* gameplay, Point* outCamPos, float* outCamZoom
     ) const override;
     string getHudLabel(GameplayState* gameplay) const override;
     bool hasHudContent() const override;
@@ -356,7 +356,7 @@ public:
     ) const override;
     string getEndReason(MissionData* mission) const override;
     bool getEndZoomData(
-        GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
+        GameplayState* gameplay, Point* outCamPos, float* outCamZoom
     ) const override;
     string getHudLabel(GameplayState* gameplay) const override;
     bool hasHudContent() const override;
@@ -383,7 +383,7 @@ public:
     ) const override;
     string getEndReason(MissionData* mission) const override;
     bool getEndZoomData(
-        GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
+        GameplayState* gameplay, Point* outCamPos, float* outCamZoom
     ) const override;
     string getHudLabel(GameplayState* gameplay) const override;
     bool hasHudContent() const override;
@@ -410,7 +410,7 @@ public:
     ) const override;
     string getEndReason(MissionData* mission) const override;
     bool getEndZoomData(
-        GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
+        GameplayState* gameplay, Point* outCamPos, float* outCamZoom
     ) const override;
     string getHudLabel(GameplayState* gameplay) const override;
     bool hasHudContent() const override;
@@ -437,7 +437,7 @@ public:
     ) const override;
     string getEndReason(MissionData* mission) const override;
     bool getEndZoomData(
-        GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
+        GameplayState* gameplay, Point* outCamPos, float* outCamZoom
     ) const override;
     string getHudLabel(GameplayState* gameplay) const override;
     bool hasHudContent() const override;
@@ -464,7 +464,7 @@ public:
     ) const override;
     string getEndReason(MissionData* mission) const override;
     bool getEndZoomData(
-        GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
+        GameplayState* gameplay, Point* outCamPos, float* outCamZoom
     ) const override;
     string getHudLabel(GameplayState* gameplay) const override;
     bool hasHudContent() const override;
@@ -491,7 +491,7 @@ public:
     ) const override;
     string getEndReason(MissionData* mission) const override;
     bool getEndZoomData(
-        GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
+        GameplayState* gameplay, Point* outCamPos, float* outCamZoom
     ) const override;
     string getHudLabel(GameplayState* gameplay) const override;
     bool hasHudContent() const override;
@@ -518,7 +518,7 @@ public:
     ) const override;
     string getEndReason(MissionData* mission) const override;
     bool getEndZoomData(
-        GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
+        GameplayState* gameplay, Point* outCamPos, float* outCamZoom
     ) const override;
     string getHudLabel(GameplayState* gameplay) const override;
     bool hasHudContent() const override;
@@ -546,7 +546,7 @@ public:
     ) const = 0;
     virtual string getEndReason(MissionData* mission) const = 0;
     virtual bool getEndZoomData(
-        GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
+        GameplayState* gameplay, Point* outCamPos, float* outCamZoom
     ) const = 0;
     virtual string getHudLabel() const = 0;
     virtual bool isMet(GameplayState* gameplay) const = 0;
@@ -573,7 +573,7 @@ public:
     ) const override;
     string getEndReason(MissionData* mission) const override;
     bool getEndZoomData(
-        GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
+        GameplayState* gameplay, Point* outCamPos, float* outCamZoom
     ) const override;
     string getHudLabel() const override;
     bool isMet(GameplayState* gameplay) const override;
@@ -600,7 +600,7 @@ public:
     ) const override;
     string getEndReason(MissionData* mission) const override;
     bool getEndZoomData(
-        GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
+        GameplayState* gameplay, Point* outCamPos, float* outCamZoom
     ) const override;
     string getHudLabel() const override;
     bool isMet(GameplayState* gameplay) const override;
@@ -627,7 +627,7 @@ public:
     ) const override;
     string getEndReason(MissionData* mission) const override;
     bool getEndZoomData(
-        GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
+        GameplayState* gameplay, Point* outCamPos, float* outCamZoom
     ) const override;
     string getHudLabel() const override;
     bool isMet(GameplayState* gameplay) const override;
@@ -654,7 +654,7 @@ public:
     ) const override;
     string getEndReason(MissionData* mission) const override;
     bool getEndZoomData(
-        GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
+        GameplayState* gameplay, Point* outCamPos, float* outCamZoom
     ) const override;
     string getHudLabel() const override;
     bool isMet(GameplayState* gameplay) const override;
@@ -681,7 +681,7 @@ public:
     ) const override;
     string getEndReason(MissionData* mission) const override;
     bool getEndZoomData(
-        GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
+        GameplayState* gameplay, Point* outCamPos, float* outCamZoom
     ) const override;
     string getHudLabel() const override;
     bool isMet(GameplayState* gameplay) const override;
@@ -708,7 +708,7 @@ public:
     ) const override;
     string getEndReason(MissionData* mission) const override;
     bool getEndZoomData(
-        GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
+        GameplayState* gameplay, Point* outCamPos, float* outCamZoom
     ) const override;
     string getHudLabel() const override;
     bool isMet(GameplayState* gameplay) const override;

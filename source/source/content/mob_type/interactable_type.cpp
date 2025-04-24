@@ -31,8 +31,8 @@ InteractableType::InteractableType() :
  * @param file File to read from.
  */
 void InteractableType::loadCatProperties(DataNode* file) {
-    ReaderSetter rs(file);
+    ReaderSetter iRS(file);
     
-    rs.set("prompt_text", promptText);
-    rs.set("trigger_range", triggerRange);
+    iRS.set("prompt_text", promptText);
+    iRS.set("trigger_range", triggerRange);
 }

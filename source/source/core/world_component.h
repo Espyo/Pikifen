@@ -29,19 +29,19 @@ public:
     //--- Members ---
     
     //If it's a sector, this points to it.
-    Sector* sector_ptr = nullptr;
+    Sector* sectorPtr = nullptr;
     
     //If it's a mob shadow, this points to its mob.
-    Mob* mob_shadow_ptr = nullptr;
+    Mob* mobShadowPtr = nullptr;
     
     //If it's a mob limb, this points to its mob.
-    Mob* mob_limb_ptr = nullptr;
+    Mob* mobLimbPtr = nullptr;
     
     //If it's a mob, this points to it.
-    Mob* mob_ptr = nullptr;
+    Mob* mobPtr = nullptr;
     
     //If it's a particle, this points to it.
-    Particle* particle_ptr = nullptr;
+    Particle* particlePtr = nullptr;
     
     //Its Z coordinate.
     float z = 0.0f;

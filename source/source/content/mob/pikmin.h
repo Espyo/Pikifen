@@ -115,9 +115,7 @@ public:
     bool canReceiveStatus(StatusType* s) const override;
     void drawMob() override;
     float getBaseSpeed() const override;
-    void getGroupSpotInfo(
-        Point* out_spot, float* out_dist
-    ) const override;
+    void getGroupSpotInfo(Point* outSpot, float* outDist) const override;
     void handleStatusEffectGain(StatusType* s) override;
     void handleStatusEffectLoss(StatusType* s) override;
     void readScriptVars(const ScriptVarReader &svr) override;
@@ -128,11 +126,11 @@ protected:
 
     //--- Function declarations ---
     
-    void tickClassSpecifics(float delta_t) override;
+    void tickClassSpecifics(float deltaT) override;
 };
 
 
 Pikmin* getClosestSprout(
-    const Point &pos, Distance* d, bool ignore_reserved
+    const Point &pos, Distance* d, bool ignoreReserved
     
 );

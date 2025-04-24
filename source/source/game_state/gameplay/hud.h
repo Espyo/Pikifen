@@ -187,7 +187,7 @@ struct Hud {
     
     Hud();
     ~Hud();
-    void tick(float delta_t);
+    void tick(float deltaT);
     
 private:
 

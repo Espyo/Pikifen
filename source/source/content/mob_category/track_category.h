@@ -30,9 +30,9 @@ public:
     
     TrackCategory();
     void getTypeNames(vector<string> &list) const override;
-    MobType* getType(const string &internal_name) const override;
+    MobType* getType(const string &internalName) const override;
     MobType* createType() override;
-    void registerType(const string &internal_name, MobType* type) override;
+    void registerType(const string &internalName, MobType* type) override;
     Mob* createMob(
         const Point &pos, MobType* type, float angle
     ) override;

@@ -116,9 +116,9 @@ void GuiEditor::handleLmbDoubleClick(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void GuiEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
-    bool tw_handled = false;
+    bool twHandled = false;
     if(curItem != INVALID && items[curItem].size.x != 0.0f) {
-        tw_handled =
+        twHandled =
             curTransformationWidget.handleMouseDown(
                 game.view.cursorWorldPos,
                 &items[curItem].center,
@@ -128,43 +128,43 @@ void GuiEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
             );
     }
     
-    if(!tw_handled) {
-        vector<size_t> clicked_items;
+    if(!twHandled) {
+        vector<size_t> clickedItems;
         for(size_t i = 0; i < items.size(); i++) {
-            Item* item_ptr = &items[i];
+            Item* itemPtr = &items[i];
             if(
                 isPointInRectangle(
                     game.view.cursorWorldPos,
-                    item_ptr->center,
-                    item_ptr->size
+                    itemPtr->center,
+                    itemPtr->size
                 )
             ) {
-                clicked_items.push_back(i);
+                clickedItems.push_back(i);
             }
         }
         
-        if(clicked_items.empty()) {
+        if(clickedItems.empty()) {
             curItem = INVALID;
             
         } else {
-            size_t cur_item_idx = INVALID;
-            for(size_t i = 0; i < clicked_items.size(); i++) {
-                if(curItem == clicked_items[i]) {
-                    cur_item_idx = i;
+            size_t curItemIdx = INVALID;
+            for(size_t i = 0; i < clickedItems.size(); i++) {
+                if(curItem == clickedItems[i]) {
+                    curItemIdx = i;
                     break;
                 }
             }
             
-            if(cur_item_idx == INVALID) {
-                cur_item_idx = 0;
+            if(curItemIdx == INVALID) {
+                curItemIdx = 0;
             } else {
-                cur_item_idx =
+                curItemIdx =
                     sumAndWrap(
-                        (int) cur_item_idx, 1,
-                        (int) clicked_items.size()
+                        (int) curItemIdx, 1,
+                        (int) clickedItems.size()
                     );
             }
-            curItem = clicked_items[cur_item_idx];
+            curItem = clickedItems[curItemIdx];
             mustFocusOnCurItem = true;
         }
     }
@@ -178,7 +178,7 @@ void GuiEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
  */
 void GuiEditor::handleLmbDrag(const ALLEGRO_EVENT &ev) {
     if(curItem != INVALID && items[curItem].size.x != 0.0f) {
-        bool tw_handled =
+        bool twHandled =
             curTransformationWidget.handleMouseMove(
                 snapPoint(game.view.cursorWorldPos),
                 &items[curItem].center,
@@ -190,7 +190,7 @@ void GuiEditor::handleLmbDrag(const ALLEGRO_EVENT &ev) {
                 0.10f,
                 isAltPressed
             );
-        if(tw_handled) {
+        if(twHandled) {
             changesMgr.markAsChanged();
         }
     }

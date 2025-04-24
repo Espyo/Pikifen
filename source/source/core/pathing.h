@@ -181,7 +181,7 @@ struct PathFollowSettings {
     float finalTargetDistance = PATHS::DEF_CHASE_TARGET_DISTANCE;
     
     //Some flags. Use PATH_FOLLOW_FLAG_*.
-    bitmask_8_t flags = 0;
+    Bitmask8 flags = 0;
     
     //Invulnerabilities of the mob/carriers.
     vector<Hazard*> invulnerabilities;
@@ -218,7 +218,7 @@ struct PathStop {
     float radius = PATHS::MIN_STOP_RADIUS;
     
     //Flags. Use PATH_STOP_FLAG.
-    bitmask_8_t flags = 0;
+    Bitmask8 flags = 0;
     
     //Its label, if any.
     string label;
@@ -238,10 +238,10 @@ struct PathStop {
     );
     ~PathStop();
     void clone(PathStop* destination) const;
-    void addLink(PathStop* other_stop, bool normal);
-    PathLink* get_link(const PathStop* other_stop) const;
-    void removeLink(const PathLink* link_ptr);
-    void removeLink(const PathStop* other_stop);
+    void addLink(PathStop* otherstop, bool normal);
+    PathLink* getLink(const PathStop* otherStop) const;
+    void removeLink(const PathLink* linkPtr);
+    void removeLink(const PathStop* otherStop);
     void calculateDists();
     void calculateDistsPlusNeighbors();
     
@@ -277,8 +277,8 @@ struct PathLink {
     
     //--- Function declarations ---
     
-    PathLink(PathStop* start_ptr, PathStop* end_ptr, size_t end_idx);
-    void calculateDist(const PathStop* start_ptr);
+    PathLink(PathStop* startPtr, PathStop* endPtr, size_t endIdx);
+    void calculateDist(const PathStop* startPtr);
     void clone(PathLink* destination) const;
     bool isOneWay() const;
     
@@ -313,39 +313,39 @@ struct PathManager {
     void handleAreaLoad();
     void handleObstacleAdd(Mob* m);
     void handleObstacleRemove(Mob* m);
-    void handleSectorHazardChange(Sector* sector_ptr);
+    void handleSectorHazardChange(Sector* sectorPtr);
     void clear();
     
 };
 
 
 bool canTakePathStop(
-    PathStop* stop_ptr, const PathFollowSettings &settings,
-    PATH_BLOCK_REASON* out_reason = nullptr
+    PathStop* stopPtr, const PathFollowSettings &settings,
+    PATH_BLOCK_REASON* outReason = nullptr
 );
 bool canTakePathStop(
-    const PathStop* stop_ptr, const PathFollowSettings &settings,
-    Sector* sector_ptr, PATH_BLOCK_REASON* out_reason = nullptr
+    const PathStop* stopPtr, const PathFollowSettings &settings,
+    Sector* sectorPtr, PATH_BLOCK_REASON* outReason = nullptr
 );
 bool canTraversePathLink(
-    PathLink* link_ptr, const PathFollowSettings &settings,
-    PATH_BLOCK_REASON* out_reason = nullptr
+    PathLink* linkPtr, const PathFollowSettings &settings,
+    PATH_BLOCK_REASON* outReason = nullptr
 );
 void depthFirstSearch(
     vector<PathStop*> &nodes,
     unordered_set<PathStop*> &visited, PathStop* start
 );
 PATH_RESULT aStar(
-    vector<PathStop*> &out_path,
-    PathStop* start_node, PathStop* end_node,
+    vector<PathStop*> &outPath,
+    PathStop* startNode, PathStop* endNode,
     const PathFollowSettings &settings,
-    float* out_total_dist
+    float* outTotalDist
 );
 PATH_RESULT getPath(
     const Point &start, const Point &end,
     const PathFollowSettings &settings,
-    vector<PathStop*> &full_path, float* out_total_dist,
-    PathStop** out_start_stop, PathStop** out_end_stop
+    vector<PathStop*> &fullPath, float* outTotalDist,
+    PathStop** outStartStop, PathStop** outEndStop
 );
 string pathBlockReasonToString(PATH_BLOCK_REASON reason);
 string pathResultToString(PATH_RESULT result);

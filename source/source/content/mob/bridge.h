@@ -74,7 +74,7 @@ public:
     
     //--- Function declarations ---
     
-    Bridge(const Point &pos, BridgeType* bri_type, float angle);
+    Bridge(const Point &pos, BridgeType* Type, float angle);
     static void drawComponent(Mob* m);
     bool checkHealth();
     Point getStartPoint();

@@ -69,14 +69,14 @@ void destroyAllegro() {
 /**
  * @brief Destroys Allegro's event-related things.
  *
- * @param main_timer The main game timer.
- * @param event_queue Queue of Allegro events.
+ * @param mainTimer The main game timer.
+ * @param eventQueue Queue of Allegro events.
  */
 void destroyEventThings(
-    ALLEGRO_TIMER* &main_timer, ALLEGRO_EVENT_QUEUE* &event_queue
+    ALLEGRO_TIMER* &mainTimer, ALLEGRO_EVENT_QUEUE* &eventQueue
 ) {
-    al_destroy_event_queue(event_queue);
-    al_destroy_timer(main_timer);
+    al_destroy_event_queue(eventQueue);
+    al_destroy_timer(mainTimer);
     al_destroy_display(game.display);
 }
 
@@ -642,14 +642,14 @@ void initControls() {
     
     //Populate the control binds with some default control binds for player 1.
     //If the options are loaded successfully, these binds are overwritten.
-    const vector<PfePlayerActionType> &action_types =
+    const vector<PfePlayerActionType> &actionTypes =
         game.controls.getAllPlayerActionTypes();
-    for(size_t a = 0; a < action_types.size(); a++) {
-        const string &def = action_types[a].defaultBindStr;
+    for(size_t a = 0; a < actionTypes.size(); a++) {
+        const string &def = actionTypes[a].defaultBindStr;
         if(def.empty()) continue;
         
         ControlBind bind;
-        bind.actionTypeId = action_types[a].id;
+        bind.actionTypeId = actionTypes[a].id;
         bind.playerNr = 0;
         bind.inputSource = game.controls.strToInputSource(def);
         game.controls.binds().push_back(bind);
@@ -670,15 +670,15 @@ void initDearImGui() {
     
     //Fonts.
     ImGuiIO &io = ImGui::GetIO();
-    ImFontConfig editor_font_cfg;
-    editor_font_cfg.OversampleH = editor_font_cfg.OversampleV = 1;
-    editor_font_cfg.PixelSnapH = true;
+    ImFontConfig editorFontCfg;
+    editorFontCfg.OversampleH = editorFontCfg.OversampleV = 1;
+    editorFontCfg.PixelSnapH = true;
     
-    const auto add_font =
-    [ = ] (ImFont** target_var, const string &asset_internal_name, int height) {
+    const auto addFont =
+    [ = ] (ImFont** targetVar, const string &assetInternalName, int height) {
         const string &path =
             game.content.bitmaps.manifests
-            [asset_internal_name].path;
+            [assetInternalName].path;
             
         if(!strEndsWith(strToLower(path), ".ttf")) {
             game.errors.report(
@@ -688,21 +688,21 @@ void initDearImGui() {
             return;
         }
         
-        *target_var =
+        *targetVar =
             io.Fonts->AddFontFromFileTTF(
-                path.c_str(), height, &editor_font_cfg
+                path.c_str(), height, &editorFontCfg
             );
     };
     
-    add_font(
+    addFont(
         &game.sysContent.fntDearImGuiHeader,
         game.sysContentNames.fntEditorHeader, 22
     );
-    add_font(
+    addFont(
         &game.sysContent.fntDearImGuiMonospace,
         game.sysContentNames.fntEditorMonospace, 18
     );
-    add_font(
+    addFont(
         &game.sysContent.fntDearImGuiStandard,
         game.sysContentNames.fntEditorStandard, 18
     );
@@ -724,7 +724,7 @@ void initDearImGuiColors() {
     //we can shift the hue left to get an equivalent green.
     //These color indexes are the ones that really have any blue hue,
     //so only mess with these.
-    vector<ImGuiCol_> colors_to_change {
+    vector<ImGuiCol_> colorsToChange {
         ImGuiCol_Border,
         ImGuiCol_BorderShadow,
         ImGuiCol_FrameBg,
@@ -758,8 +758,8 @@ void initDearImGuiColors() {
         ImGuiCol_NavCursor,
     };
     
-    for(size_t c = 0; c < colors_to_change.size(); c++) {
-        ImGui::AdjustColorHSV(style.Colors[colors_to_change[c]], -0.25f, 0.0f, 0.0f);
+    for(size_t c = 0; c < colorsToChange.size(); c++) {
+        ImGui::AdjustColorHSV(style.Colors[colorsToChange[c]], -0.25f, 0.0f, 0.0f);
     }
     
     //Manually adjust some of them.
@@ -829,11 +829,11 @@ void initEssentials() {
  * @brief Initializes things regarding Allegro events, like the queue,
  * timer, etc.
  *
- * @param main_timer The main game timer.
- * @param event_queue Queue of Allegro events.
+ * @param mainTimer The main game timer.
+ * @param eventQueue Queue of Allegro events.
  */
 void initEventThings(
-    ALLEGRO_TIMER* &main_timer, ALLEGRO_EVENT_QUEUE* &event_queue
+    ALLEGRO_TIMER* &mainTimer, ALLEGRO_EVENT_QUEUE* &eventQueue
 ) {
     al_set_new_display_flags(
         al_get_new_display_flags() |
@@ -879,23 +879,23 @@ void initEventThings(
     //This hack fixes it.
     al_resize_display(game.display, game.winW, game.winH);
     
-    main_timer = al_create_timer(1.0f / game.options.advanced.targetFps);
-    if(!main_timer) {
+    mainTimer = al_create_timer(1.0f / game.options.advanced.targetFps);
+    if(!mainTimer) {
         reportFatalError("Could not create the main game timer!");
     }
     
-    event_queue = al_create_event_queue();
-    if(!event_queue) {
+    eventQueue = al_create_event_queue();
+    if(!eventQueue) {
         reportFatalError("Could not create the main event queue!");
     }
-    al_register_event_source(event_queue, al_get_mouse_event_source());
-    al_register_event_source(event_queue, al_get_keyboard_event_source());
-    al_register_event_source(event_queue, al_get_joystick_event_source());
+    al_register_event_source(eventQueue, al_get_mouse_event_source());
+    al_register_event_source(eventQueue, al_get_keyboard_event_source());
+    al_register_event_source(eventQueue, al_get_joystick_event_source());
     al_register_event_source(
-        event_queue, al_get_display_event_source(game.display)
+        eventQueue, al_get_display_event_source(game.display)
     );
     al_register_event_source(
-        event_queue, al_get_timer_event_source(main_timer)
+        eventQueue, al_get_timer_event_source(mainTimer)
     );
 }
 
@@ -909,15 +909,15 @@ void initMisc() {
     
     al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
     al_set_window_title(game.display, "Pikifen");
-    int new_bitmap_flags = ALLEGRO_NO_PREMULTIPLIED_ALPHA;
+    int newBitmapFlags = ALLEGRO_NO_PREMULTIPLIED_ALPHA;
     if(game.options.advanced.smoothScaling) {
-        enableFlag(new_bitmap_flags, ALLEGRO_MAG_LINEAR);
-        enableFlag(new_bitmap_flags, ALLEGRO_MIN_LINEAR);
+        enableFlag(newBitmapFlags, ALLEGRO_MAG_LINEAR);
+        enableFlag(newBitmapFlags, ALLEGRO_MIN_LINEAR);
     }
     if(game.options.advanced.mipmapsEnabled) {
-        enableFlag(new_bitmap_flags, ALLEGRO_MIPMAP);
+        enableFlag(newBitmapFlags, ALLEGRO_MIPMAP);
     }
-    al_set_new_bitmap_flags(new_bitmap_flags);
+    al_set_new_bitmap_flags(newBitmapFlags);
     al_reserve_samples(16);
     
     al_identity_transform(&game.identityTransform);
@@ -1037,14 +1037,14 @@ void initMiscDatabases() {
  */
 void initMobActions() {
 
-#define reg_param(p_name, p_type, constant, extras) \
-    params.push_back(MobActionParam(p_name, p_type, constant, extras));
-#define reg_action(a_type, a_name, run_code, load_code) \
-    a = &(game.mobActions[a_type]); \
-    a->type = a_type; \
-    a->name = a_name; \
-    a->code = run_code; \
-    a->extraLoadLogic = load_code; \
+#define regParam(pName, pType, constant, extras) \
+    params.push_back(MobActionParam(pName, pType, constant, extras));
+#define regAction(aType, aName, runCode, loadCode) \
+    a = &(game.mobActions[aType]); \
+    a->type = aType; \
+    a->name = aName; \
+    a->code = runCode; \
+    a->extraLoadLogic = loadCode; \
     a->parameters = params; \
     params.clear();
 
@@ -1053,723 +1053,723 @@ void initMobActions() {
     vector<MobActionParam> params;
     MobAction* a;
     
-    reg_action(
+    regAction(
         MOB_ACTION_UNKNOWN,
         "unknown",
         nullptr,
         nullptr
     );
     
-    reg_param("amount", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_action(
+    regParam("amount", MOB_ACTION_PARAM_FLOAT, false, false);
+    regAction(
         MOB_ACTION_ADD_HEALTH,
         "add_health",
-        mob_action_runners::addHealth,
+        MobActionRunners::addHealth,
         nullptr
     );
     
-    reg_param("goal", MOB_ACTION_PARAM_ENUM, true, false);
-    reg_action(
+    regParam("goal", MOB_ACTION_PARAM_ENUM, true, false);
+    regAction(
         MOB_ACTION_ARACHNORB_PLAN_LOGIC,
         "arachnorb_plan_logic",
-        mob_action_runners::arachnorbPlanLogic,
-        mob_action_loaders::arachnorbPlanLogic
+        MobActionRunners::arachnorbPlanLogic,
+        MobActionLoaders::arachnorbPlanLogic
     );
     
-    reg_param("destination var name", MOB_ACTION_PARAM_STRING, true, false);
-    reg_param("operand", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_param("operation", MOB_ACTION_PARAM_ENUM, true, false);
-    reg_param("operand", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_action(
+    regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
+    regParam("operand", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("operation", MOB_ACTION_PARAM_ENUM, true, false);
+    regParam("operand", MOB_ACTION_PARAM_FLOAT, false, false);
+    regAction(
         MOB_ACTION_CALCULATE,
         "calculate",
-        mob_action_runners::calculate,
-        mob_action_loaders::calculate
+        MobActionRunners::calculate,
+        MobActionLoaders::calculate
     );
     
-    reg_action(
+    regAction(
         MOB_ACTION_DELETE,
         "delete",
-        mob_action_runners::deleteFunction,
+        MobActionRunners::deleteFunction,
         nullptr
     );
     
-    reg_action(
+    regAction(
         MOB_ACTION_DRAIN_LIQUID,
         "drain_liquid",
-        mob_action_runners::drainLiquid,
+        MobActionRunners::drainLiquid,
         nullptr
     );
     
-    reg_action(
+    regAction(
         MOB_ACTION_ELSE,
         "else",
         nullptr,
         nullptr
     );
     
-    reg_action(
+    regAction(
         MOB_ACTION_END_IF,
         "end_if",
         nullptr,
         nullptr
     );
     
-    reg_action(
+    regAction(
         MOB_ACTION_FINISH_DYING,
         "finish_dying",
-        mob_action_runners::finishDying,
+        MobActionRunners::finishDying,
         nullptr
     );
     
-    reg_param("target", MOB_ACTION_PARAM_ENUM, true, false);
-    reg_action(
+    regParam("target", MOB_ACTION_PARAM_ENUM, true, false);
+    regAction(
         MOB_ACTION_FOCUS,
         "focus",
-        mob_action_runners::focus,
-        mob_action_loaders::focus
+        MobActionRunners::focus,
+        MobActionLoaders::focus
     );
     
-    reg_param("label", MOB_ACTION_PARAM_STRING, false, true);
-    reg_action(
+    regParam("label", MOB_ACTION_PARAM_STRING, false, true);
+    regAction(
         MOB_ACTION_FOLLOW_PATH_RANDOMLY,
         "follow_path_randomly",
-        mob_action_runners::followPathRandomly,
+        MobActionRunners::followPathRandomly,
         nullptr
     );
     
-    reg_param("x", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_param("y", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_param("label", MOB_ACTION_PARAM_STRING, false, true);
-    reg_action(
+    regParam("x", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("y", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("label", MOB_ACTION_PARAM_STRING, false, true);
+    regAction(
         MOB_ACTION_FOLLOW_PATH_TO_ABSOLUTE,
         "follow_path_to_absolute",
-        mob_action_runners::followPathToAbsolute,
+        MobActionRunners::followPathToAbsolute,
         nullptr
     );
     
-    reg_param("destination var name", MOB_ACTION_PARAM_STRING, true, false);
-    reg_param("center x", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_param("center y", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_param("target x", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_param("target y", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_action(
+    regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
+    regParam("center x", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("center y", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("target x", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("target y", MOB_ACTION_PARAM_FLOAT, false, false);
+    regAction(
         MOB_ACTION_GET_ANGLE,
         "get_angle",
-        mob_action_runners::getAngle,
+        MobActionRunners::getAngle,
         nullptr
     );
     
-    reg_param("destination var name", MOB_ACTION_PARAM_STRING, true, false);
-    reg_param("info", MOB_ACTION_PARAM_STRING, true, false);
-    reg_action(
+    regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
+    regParam("info", MOB_ACTION_PARAM_STRING, true, false);
+    regAction(
         MOB_ACTION_GET_AREA_INFO,
         "get_area_info",
-        mob_action_runners::getAreaInfo,
-        mob_action_loaders::getAreaInfo
+        MobActionRunners::getAreaInfo,
+        MobActionLoaders::getAreaInfo
     );
     
-    reg_action(
+    regAction(
         MOB_ACTION_GET_CHOMPED,
         "get_chomped",
-        mob_action_runners::getChomped,
+        MobActionRunners::getChomped,
         nullptr
     );
     
-    reg_param("x destination var name", MOB_ACTION_PARAM_STRING, true, false);
-    reg_param("y destination var name", MOB_ACTION_PARAM_STRING, true, false);
-    reg_param("angle", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_param("distance", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_action(
+    regParam("x destination var name", MOB_ACTION_PARAM_STRING, true, false);
+    regParam("y destination var name", MOB_ACTION_PARAM_STRING, true, false);
+    regParam("angle", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("distance", MOB_ACTION_PARAM_FLOAT, false, false);
+    regAction(
         MOB_ACTION_GET_COORDINATES_FROM_ANGLE,
         "get_coordinates_from_angle",
-        mob_action_runners::getCoordinatesFromAngle,
+        MobActionRunners::getCoordinatesFromAngle,
         nullptr
     );
     
-    reg_param("destination var name", MOB_ACTION_PARAM_STRING, true, false);
-    reg_param("center x", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_param("center y", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_param("target x", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_param("target y", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_action(
+    regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
+    regParam("center x", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("center y", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("target x", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("target y", MOB_ACTION_PARAM_FLOAT, false, false);
+    regAction(
         MOB_ACTION_GET_DISTANCE,
         "get_distance",
-        mob_action_runners::getDistance,
+        MobActionRunners::getDistance,
         nullptr
     );
     
-    reg_param("destination var name", MOB_ACTION_PARAM_STRING, true, false);
-    reg_param("info", MOB_ACTION_PARAM_STRING, true, false);
-    reg_action(
+    regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
+    regParam("info", MOB_ACTION_PARAM_STRING, true, false);
+    regAction(
         MOB_ACTION_GET_EVENT_INFO,
         "get_event_info",
-        mob_action_runners::getEventInfo,
-        mob_action_loaders::getEventInfo
+        MobActionRunners::getEventInfo,
+        MobActionLoaders::getEventInfo
     );
     
-    reg_param("destination var name", MOB_ACTION_PARAM_STRING, true, false);
-    reg_param("x", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_param("y", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_action(
+    regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
+    regParam("x", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("y", MOB_ACTION_PARAM_FLOAT, false, false);
+    regAction(
         MOB_ACTION_GET_FLOOR_Z,
         "get_floor_z",
-        mob_action_runners::getFloorZ,
+        MobActionRunners::getFloorZ,
         nullptr
     );
     
-    reg_param("destination var name", MOB_ACTION_PARAM_STRING, true, false);
-    reg_param("focused mob's var name", MOB_ACTION_PARAM_STRING, true, false);
-    reg_action(
+    regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
+    regParam("focused mob's var name", MOB_ACTION_PARAM_STRING, true, false);
+    regAction(
         MOB_ACTION_GET_FOCUS_VAR,
         "get_focus_var",
-        mob_action_runners::getFocusVar,
+        MobActionRunners::getFocusVar,
         nullptr
     );
     
-    reg_param("destination var name", MOB_ACTION_PARAM_STRING, true, false);
-    reg_param("target", MOB_ACTION_PARAM_STRING, true, false);
-    reg_param("info", MOB_ACTION_PARAM_STRING, true, false);
-    reg_action(
+    regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
+    regParam("target", MOB_ACTION_PARAM_STRING, true, false);
+    regParam("info", MOB_ACTION_PARAM_STRING, true, false);
+    regAction(
         MOB_ACTION_GET_MOB_INFO,
         "get_mob_info",
-        mob_action_runners::getMobInfo,
-        mob_action_loaders::getMobInfo
+        MobActionRunners::getMobInfo,
+        MobActionLoaders::getMobInfo
     );
     
-    reg_param("destination var name", MOB_ACTION_PARAM_STRING, true, false);
-    reg_param("minimum value", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_param("maximum value", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_action(
+    regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
+    regParam("minimum value", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("maximum value", MOB_ACTION_PARAM_FLOAT, false, false);
+    regAction(
         MOB_ACTION_GET_RANDOM_FLOAT,
         "get_random_float",
-        mob_action_runners::getRandomFloat,
+        MobActionRunners::getRandomFloat,
         nullptr
     );
     
-    reg_param("destination var name", MOB_ACTION_PARAM_STRING, true, false);
-    reg_param("minimum value", MOB_ACTION_PARAM_INT, false, false);
-    reg_param("maximum value", MOB_ACTION_PARAM_INT, false, false);
-    reg_action(
+    regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
+    regParam("minimum value", MOB_ACTION_PARAM_INT, false, false);
+    regParam("maximum value", MOB_ACTION_PARAM_INT, false, false);
+    regAction(
         MOB_ACTION_GET_RANDOM_INT,
         "get_random_int",
-        mob_action_runners::getRandomInt,
+        MobActionRunners::getRandomInt,
         nullptr
     );
     
-    reg_param("label name", MOB_ACTION_PARAM_STRING, true, false);
-    reg_action(
+    regParam("label name", MOB_ACTION_PARAM_STRING, true, false);
+    regAction(
         MOB_ACTION_GOTO,
         "goto",
         nullptr,
         nullptr
     );
     
-    reg_param("body part name", MOB_ACTION_PARAM_ENUM, true, false);
-    reg_param("hold above", MOB_ACTION_PARAM_BOOL, false, true);
-    reg_action(
+    regParam("body part name", MOB_ACTION_PARAM_ENUM, true, false);
+    regParam("hold above", MOB_ACTION_PARAM_BOOL, false, true);
+    regAction(
         MOB_ACTION_HOLD_FOCUS,
         "hold_focused_mob",
-        mob_action_runners::holdFocus,
-        mob_action_loaders::holdFocus
+        MobActionRunners::holdFocus,
+        MobActionLoaders::holdFocus
     );
     
-    reg_param("comparand", MOB_ACTION_PARAM_STRING, false, false);
-    reg_param("operation", MOB_ACTION_PARAM_ENUM, true, false);
-    reg_param("value", MOB_ACTION_PARAM_STRING, false, true);
-    reg_action(
+    regParam("comparand", MOB_ACTION_PARAM_STRING, false, false);
+    regParam("operation", MOB_ACTION_PARAM_ENUM, true, false);
+    regParam("value", MOB_ACTION_PARAM_STRING, false, true);
+    regAction(
         MOB_ACTION_IF,
         "if",
-        mob_action_runners::ifFunction,
-        mob_action_loaders::ifFunction
+        MobActionRunners::ifFunction,
+        MobActionLoaders::ifFunction
     );
     
-    reg_param("label name", MOB_ACTION_PARAM_STRING, true, false);
-    reg_action(
+    regParam("label name", MOB_ACTION_PARAM_STRING, true, false);
+    regAction(
         MOB_ACTION_LABEL,
         "label",
         nullptr,
         nullptr
     );
     
-    reg_action(
+    regAction(
         MOB_ACTION_LINK_WITH_FOCUS,
         "link_with_focused_mob",
-        mob_action_runners::linkWithFocus,
+        MobActionRunners::linkWithFocus,
         nullptr
     );
     
-    reg_param("slot", MOB_ACTION_PARAM_INT, false, false);
-    reg_action(
+    regParam("slot", MOB_ACTION_PARAM_INT, false, false);
+    regAction(
         MOB_ACTION_LOAD_FOCUS_MEMORY,
         "load_focused_mob_memory",
-        mob_action_runners::loadFocusMemory,
+        MobActionRunners::loadFocusMemory,
         nullptr
     );
     
-    reg_param("x", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_param("y", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_param("z", MOB_ACTION_PARAM_FLOAT, false, true);
-    reg_action(
+    regParam("x", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("y", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("z", MOB_ACTION_PARAM_FLOAT, false, true);
+    regAction(
         MOB_ACTION_MOVE_TO_ABSOLUTE,
         "move_to_absolute",
-        mob_action_runners::moveToAbsolute,
+        MobActionRunners::moveToAbsolute,
         nullptr
     );
     
-    reg_param("x", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_param("y", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_param("z", MOB_ACTION_PARAM_FLOAT, false, true);
-    reg_action(
+    regParam("x", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("y", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("z", MOB_ACTION_PARAM_FLOAT, false, true);
+    regAction(
         MOB_ACTION_MOVE_TO_RELATIVE,
         "move_to_relative",
-        mob_action_runners::moveToRelative,
+        MobActionRunners::moveToRelative,
         nullptr
     );
     
-    reg_param("target", MOB_ACTION_PARAM_ENUM, true, false);
-    reg_action(
+    regParam("target", MOB_ACTION_PARAM_ENUM, true, false);
+    regAction(
         MOB_ACTION_MOVE_TO_TARGET,
         "move_to_target",
-        mob_action_runners::moveToTarget,
-        mob_action_loaders::moveToTarget
+        MobActionRunners::moveToTarget,
+        MobActionLoaders::moveToTarget
     );
     
-    reg_action(
+    regAction(
         MOB_ACTION_ORDER_RELEASE,
         "order_release",
-        mob_action_runners::orderRelease,
+        MobActionRunners::orderRelease,
         nullptr
     );
     
-    reg_param("sound data", MOB_ACTION_PARAM_ENUM, true, false);
-    reg_param(
+    regParam("sound data", MOB_ACTION_PARAM_ENUM, true, false);
+    regParam(
         "sound ID destination var name", MOB_ACTION_PARAM_STRING, true, true
     );
-    reg_action(
+    regAction(
         MOB_ACTION_PLAY_SOUND,
         "play_sound",
-        mob_action_runners::playSound,
-        mob_action_loaders::playSound
+        MobActionRunners::playSound,
+        MobActionLoaders::playSound
     );
     
-    reg_param("text", MOB_ACTION_PARAM_STRING, false, true);
-    reg_action(
+    regParam("text", MOB_ACTION_PARAM_STRING, false, true);
+    regAction(
         MOB_ACTION_PRINT,
         "print",
-        mob_action_runners::print,
+        MobActionRunners::print,
         nullptr
     );
     
-    reg_param("status name", MOB_ACTION_PARAM_ENUM, true, false);
-    reg_action(
+    regParam("status name", MOB_ACTION_PARAM_ENUM, true, false);
+    regAction(
         MOB_ACTION_RECEIVE_STATUS,
         "receive_status",
-        mob_action_runners::receiveStatus,
-        mob_action_loaders::receiveStatus
+        MobActionRunners::receiveStatus,
+        MobActionLoaders::receiveStatus
     );
     
-    reg_action(
+    regAction(
         MOB_ACTION_RELEASE,
         "release",
-        mob_action_runners::release,
+        MobActionRunners::release,
         nullptr
     );
     
-    reg_action(
+    regAction(
         MOB_ACTION_RELEASE_STORED_MOBS,
         "release_stored_mobs",
-        mob_action_runners::releaseStoredMobs,
+        MobActionRunners::releaseStoredMobs,
         nullptr
     );
     
-    reg_param("status name", MOB_ACTION_PARAM_ENUM, true, false);
-    reg_action(
+    regParam("status name", MOB_ACTION_PARAM_ENUM, true, false);
+    regAction(
         MOB_ACTION_REMOVE_STATUS,
         "remove_status",
-        mob_action_runners::removeStatus,
-        mob_action_loaders::removeStatus
+        MobActionRunners::removeStatus,
+        MobActionLoaders::removeStatus
     );
     
-    reg_param("slot", MOB_ACTION_PARAM_INT, false, false);
-    reg_action(
+    regParam("slot", MOB_ACTION_PARAM_INT, false, false);
+    regAction(
         MOB_ACTION_SAVE_FOCUS_MEMORY,
         "save_focused_mob_memory",
-        mob_action_runners::saveFocusMemory,
+        MobActionRunners::saveFocusMemory,
         nullptr
     );
     
-    reg_param("message", MOB_ACTION_PARAM_STRING, false, false);
-    reg_action(
+    regParam("message", MOB_ACTION_PARAM_STRING, false, false);
+    regAction(
         MOB_ACTION_SEND_MESSAGE_TO_FOCUS,
         "send_message_to_focus",
-        mob_action_runners::sendMessageToFocus,
+        MobActionRunners::sendMessageToFocus,
         nullptr
     );
     
-    reg_param("message", MOB_ACTION_PARAM_STRING, false, false);
-    reg_action(
+    regParam("message", MOB_ACTION_PARAM_STRING, false, false);
+    regAction(
         MOB_ACTION_SEND_MESSAGE_TO_LINKS,
         "send_message_to_links",
-        mob_action_runners::sendMessageToLinks,
+        MobActionRunners::sendMessageToLinks,
         nullptr
     );
     
-    reg_param("distance", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_param("message", MOB_ACTION_PARAM_STRING, false, false);
-    reg_action(
+    regParam("distance", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("message", MOB_ACTION_PARAM_STRING, false, false);
+    regAction(
         MOB_ACTION_SEND_MESSAGE_TO_NEARBY,
         "send_message_to_nearby",
-        mob_action_runners::sendMessageToNearby,
+        MobActionRunners::sendMessageToNearby,
         nullptr
     );
     
-    reg_param("animation name", MOB_ACTION_PARAM_STRING, true, false);
-    reg_param("options", MOB_ACTION_PARAM_ENUM, true, true);
-    reg_action(
+    regParam("animation name", MOB_ACTION_PARAM_STRING, true, false);
+    regParam("options", MOB_ACTION_PARAM_ENUM, true, true);
+    regAction(
         MOB_ACTION_SET_ANIMATION,
         "set_animation",
-        mob_action_runners::setAnimation,
-        mob_action_loaders::setAnimation
+        MobActionRunners::setAnimation,
+        MobActionLoaders::setAnimation
     );
     
-    reg_param("blocks", MOB_ACTION_PARAM_BOOL, false, false);
-    reg_action(
+    regParam("blocks", MOB_ACTION_PARAM_BOOL, false, false);
+    regAction(
         MOB_ACTION_SET_CAN_BLOCK_PATHS,
         "set_can_block_paths",
-        mob_action_runners::setCanBlockPaths,
+        MobActionRunners::setCanBlockPaths,
         nullptr
     );
     
-    reg_param("reach name", MOB_ACTION_PARAM_ENUM, true, false);
-    reg_action(
+    regParam("reach name", MOB_ACTION_PARAM_ENUM, true, false);
+    regAction(
         MOB_ACTION_SET_FAR_REACH,
         "set_far_reach",
-        mob_action_runners::setFarReach,
-        mob_action_loaders::setFarReach
+        MobActionRunners::setFarReach,
+        MobActionLoaders::setFarReach
     );
     
-    reg_param("flying", MOB_ACTION_PARAM_BOOL, false, false);
-    reg_action(
+    regParam("flying", MOB_ACTION_PARAM_BOOL, false, false);
+    regAction(
         MOB_ACTION_SET_FLYING,
         "set_flying",
-        mob_action_runners::setFlying,
+        MobActionRunners::setFlying,
         nullptr
     );
     
-    reg_param("multiplier", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_action(
+    regParam("multiplier", MOB_ACTION_PARAM_FLOAT, false, false);
+    regAction(
         MOB_ACTION_SET_GRAVITY,
         "set_gravity",
-        mob_action_runners::setGravity,
+        MobActionRunners::setGravity,
         nullptr
     );
     
-    reg_param("amount", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_action(
+    regParam("amount", MOB_ACTION_PARAM_FLOAT, false, false);
+    regAction(
         MOB_ACTION_SET_HEALTH,
         "set_health",
-        mob_action_runners::setHealth,
+        MobActionRunners::setHealth,
         nullptr
     );
     
-    reg_param("height", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_action(
+    regParam("height", MOB_ACTION_PARAM_FLOAT, false, false);
+    regAction(
         MOB_ACTION_SET_HEIGHT,
         "set_height",
-        mob_action_runners::setHeight,
+        MobActionRunners::setHeight,
         nullptr
     );
     
-    reg_param("hiding", MOB_ACTION_PARAM_BOOL, false, false);
-    reg_action(
+    regParam("hiding", MOB_ACTION_PARAM_BOOL, false, false);
+    regAction(
         MOB_ACTION_SET_HIDING,
         "set_hiding",
-        mob_action_runners::setHiding,
+        MobActionRunners::setHiding,
         nullptr
     );
     
-    reg_param("huntable", MOB_ACTION_PARAM_BOOL, false, false);
-    reg_action(
+    regParam("huntable", MOB_ACTION_PARAM_BOOL, false, false);
+    regAction(
         MOB_ACTION_SET_HUNTABLE,
         "set_huntable",
-        mob_action_runners::setHuntable,
+        MobActionRunners::setHuntable,
         nullptr
     );
     
-    reg_param("options", MOB_ACTION_PARAM_ENUM, true, true);
-    reg_action(
+    regParam("options", MOB_ACTION_PARAM_ENUM, true, true);
+    regAction(
         MOB_ACTION_SET_HOLDABLE,
         "set_holdable",
-        mob_action_runners::setHoldable,
-        mob_action_loaders::setHoldable
+        MobActionRunners::setHoldable,
+        MobActionLoaders::setHoldable
     );
     
-    reg_param("animation name", MOB_ACTION_PARAM_STRING, false, false);
-    reg_action(
+    regParam("animation name", MOB_ACTION_PARAM_STRING, false, false);
+    regAction(
         MOB_ACTION_SET_LIMB_ANIMATION,
         "set_limb_animation",
-        mob_action_runners::setLimbAnimation,
+        MobActionRunners::setLimbAnimation,
         nullptr
     );
     
-    reg_param("reach name", MOB_ACTION_PARAM_ENUM, true, false);
-    reg_action(
+    regParam("reach name", MOB_ACTION_PARAM_ENUM, true, false);
+    regAction(
         MOB_ACTION_SET_NEAR_REACH,
         "set_near_reach",
-        mob_action_runners::setNearReach,
-        mob_action_loaders::setNearReach
+        MobActionRunners::setNearReach,
+        MobActionLoaders::setNearReach
     );
     
-    reg_param("radius", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_action(
+    regParam("radius", MOB_ACTION_PARAM_FLOAT, false, false);
+    regAction(
         MOB_ACTION_SET_RADIUS,
         "set_radius",
-        mob_action_runners::setRadius,
+        MobActionRunners::setRadius,
         nullptr
     );
     
-    reg_param("x speed", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_param("y speed", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_action(
+    regParam("x speed", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("y speed", MOB_ACTION_PARAM_FLOAT, false, false);
+    regAction(
         MOB_ACTION_SET_SECTOR_SCROLL,
         "set_sector_scroll",
-        mob_action_runners::setSectorScroll,
+        MobActionRunners::setSectorScroll,
         nullptr
     );
     
-    reg_param("visible", MOB_ACTION_PARAM_BOOL, false, false);
-    reg_action(
+    regParam("visible", MOB_ACTION_PARAM_BOOL, false, false);
+    regAction(
         MOB_ACTION_SET_SHADOW_VISIBILITY,
         "set_shadow_visibility",
-        mob_action_runners::setShadowVisibility,
+        MobActionRunners::setShadowVisibility,
         nullptr
     );
     
-    reg_param("state name", MOB_ACTION_PARAM_STRING, true, false);
-    reg_action(
+    regParam("state name", MOB_ACTION_PARAM_STRING, true, false);
+    regAction(
         MOB_ACTION_SET_STATE,
         "set_state",
-        mob_action_runners::setState,
+        MobActionRunners::setState,
         nullptr
     );
     
-    reg_param("tangible", MOB_ACTION_PARAM_BOOL, false, false);
-    reg_action(
+    regParam("tangible", MOB_ACTION_PARAM_BOOL, false, false);
+    regAction(
         MOB_ACTION_SET_TANGIBLE,
         "set_tangible",
-        mob_action_runners::setTangible,
+        MobActionRunners::setTangible,
         nullptr
     );
     
-    reg_param("team name", MOB_ACTION_PARAM_ENUM, true, false);
-    reg_action(
+    regParam("team name", MOB_ACTION_PARAM_ENUM, true, false);
+    regAction(
         MOB_ACTION_SET_TEAM,
         "set_team",
-        mob_action_runners::setTeam,
-        mob_action_loaders::setTeam
+        MobActionRunners::setTeam,
+        MobActionLoaders::setTeam
     );
     
-    reg_param("time", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_action(
+    regParam("time", MOB_ACTION_PARAM_FLOAT, false, false);
+    regAction(
         MOB_ACTION_SET_TIMER,
         "set_timer",
-        mob_action_runners::setTimer,
+        MobActionRunners::setTimer,
         nullptr
     );
     
-    reg_param("destination var name", MOB_ACTION_PARAM_STRING, true, false);
-    reg_param("value", MOB_ACTION_PARAM_STRING, false, false);
-    reg_action(
+    regParam("destination var name", MOB_ACTION_PARAM_STRING, true, false);
+    regParam("value", MOB_ACTION_PARAM_STRING, false, false);
+    regAction(
         MOB_ACTION_SET_VAR,
         "set_var",
-        mob_action_runners::setVar,
+        MobActionRunners::setVar,
         nullptr
     );
     
-    reg_param("var name", MOB_ACTION_PARAM_STRING, true, false);
-    reg_action(
+    regParam("var name", MOB_ACTION_PARAM_STRING, true, false);
+    regAction(
         MOB_ACTION_SHOW_MESSAGE_FROM_VAR,
         "show_message_from_var",
-        mob_action_runners::showMessageFromVar,
+        MobActionRunners::showMessageFromVar,
         nullptr
     );
     
-    reg_param("spawn data", MOB_ACTION_PARAM_ENUM, true, false);
-    reg_action(
+    regParam("spawn data", MOB_ACTION_PARAM_ENUM, true, false);
+    regAction(
         MOB_ACTION_SPAWN,
         "spawn",
-        mob_action_runners::spawn,
-        mob_action_loaders::spawn
+        MobActionRunners::spawn,
+        MobActionLoaders::spawn
     );
     
-    reg_param("reference", MOB_ACTION_PARAM_ENUM, true, false);
-    reg_param("offset", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_action(
+    regParam("reference", MOB_ACTION_PARAM_ENUM, true, false);
+    regParam("offset", MOB_ACTION_PARAM_FLOAT, false, false);
+    regAction(
         MOB_ACTION_STABILIZE_Z,
         "stabilize_z",
-        mob_action_runners::stabilizeZ,
-        mob_action_loaders::stabilizeZ
+        MobActionRunners::stabilizeZ,
+        MobActionLoaders::stabilizeZ
     );
     
-    reg_param("victim max", MOB_ACTION_PARAM_INT, false, false);
-    reg_param("body part", MOB_ACTION_PARAM_ENUM, true, false);
-    reg_param("more body parts", MOB_ACTION_PARAM_ENUM, true, true);
-    reg_action(
+    regParam("victim max", MOB_ACTION_PARAM_INT, false, false);
+    regParam("body part", MOB_ACTION_PARAM_ENUM, true, false);
+    regParam("more body parts", MOB_ACTION_PARAM_ENUM, true, true);
+    regAction(
         MOB_ACTION_START_CHOMPING,
         "start_chomping",
-        mob_action_runners::startChomping,
-        mob_action_loaders::startChomping
+        MobActionRunners::startChomping,
+        MobActionLoaders::startChomping
     );
     
-    reg_action(
+    regAction(
         MOB_ACTION_START_DYING,
         "start_dying",
-        mob_action_runners::startDying,
+        MobActionRunners::startDying,
         nullptr
     );
     
-    reg_action(
+    regAction(
         MOB_ACTION_START_HEIGHT_EFFECT,
         "start_height_effect",
-        mob_action_runners::startHeightEffect,
+        MobActionRunners::startHeightEffect,
         nullptr
     );
     
-    reg_param("generator name", MOB_ACTION_PARAM_ENUM, true, false);
-    reg_param("offset coordinates", MOB_ACTION_PARAM_FLOAT, false, true);
-    reg_action(
+    regParam("generator name", MOB_ACTION_PARAM_ENUM, true, false);
+    regParam("offset coordinates", MOB_ACTION_PARAM_FLOAT, false, true);
+    regAction(
         MOB_ACTION_START_PARTICLES,
         "start_particles",
-        mob_action_runners::startParticles,
-        mob_action_loaders::startParticles
+        MobActionRunners::startParticles,
+        MobActionLoaders::startParticles
     );
     
-    reg_action(
+    regAction(
         MOB_ACTION_STOP,
         "stop",
-        mob_action_runners::stop,
+        MobActionRunners::stop,
         nullptr
     );
     
-    reg_action(
+    regAction(
         MOB_ACTION_STOP_CHOMPING,
         "stop_chomping",
-        mob_action_runners::stopChomping,
+        MobActionRunners::stopChomping,
         nullptr
     );
     
-    reg_action(
+    regAction(
         MOB_ACTION_STOP_HEIGHT_EFFECT,
         "stop_height_effect",
-        mob_action_runners::stopHeightEffect,
+        MobActionRunners::stopHeightEffect,
         nullptr
     );
     
-    reg_action(
+    regAction(
         MOB_ACTION_STOP_PARTICLES,
         "stop_particles",
-        mob_action_runners::stopParticles,
+        MobActionRunners::stopParticles,
         nullptr
     );
     
-    reg_param("sound ID", MOB_ACTION_PARAM_INT, false, false);
-    reg_action(
+    regParam("sound ID", MOB_ACTION_PARAM_INT, false, false);
+    regAction(
         MOB_ACTION_STOP_SOUND,
         "stop_sound",
-        mob_action_runners::stopSound,
+        MobActionRunners::stopSound,
         nullptr
     );
     
-    reg_action(
+    regAction(
         MOB_ACTION_STOP_VERTICALLY,
         "stop_vertically",
-        mob_action_runners::stopVertically,
+        MobActionRunners::stopVertically,
         nullptr
     );
     
-    reg_action(
+    regAction(
         MOB_ACTION_STORE_FOCUS_INSIDE,
         "store_focus_inside",
-        mob_action_runners::storeFocusInside,
+        MobActionRunners::storeFocusInside,
         nullptr
     );
     
-    reg_param("amount", MOB_ACTION_PARAM_INT, false, false);
-    reg_action(
+    regParam("amount", MOB_ACTION_PARAM_INT, false, false);
+    regAction(
         MOB_ACTION_SWALLOW,
         "swallow",
-        mob_action_runners::swallow,
+        MobActionRunners::swallow,
         nullptr
     );
     
-    reg_action(
+    regAction(
         MOB_ACTION_SWALLOW_ALL,
         "swallow_all",
-        mob_action_runners::swallowAll,
+        MobActionRunners::swallowAll,
         nullptr
     );
     
-    reg_param("x", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_param("y", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_param("z", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_action(
+    regParam("x", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("y", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("z", MOB_ACTION_PARAM_FLOAT, false, false);
+    regAction(
         MOB_ACTION_TELEPORT_TO_ABSOLUTE,
         "teleport_to_absolute",
-        mob_action_runners::teleportToAbsolute,
+        MobActionRunners::teleportToAbsolute,
         nullptr
     );
     
-    reg_param("x", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_param("y", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_param("z", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_action(
+    regParam("x", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("y", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("z", MOB_ACTION_PARAM_FLOAT, false, false);
+    regAction(
         MOB_ACTION_TELEPORT_TO_RELATIVE,
         "teleport_to_relative",
-        mob_action_runners::teleportToRelative,
+        MobActionRunners::teleportToRelative,
         nullptr
     );
     
-    reg_param("x coordinate", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_param("y coordinate", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_param("z coordinate", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_param("max height", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_action(
+    regParam("x coordinate", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("y coordinate", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("z coordinate", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("max height", MOB_ACTION_PARAM_FLOAT, false, false);
+    regAction(
         MOB_ACTION_THROW_FOCUS,
         "throw_focused_mob",
-        mob_action_runners::throwFocus,
+        MobActionRunners::throwFocus,
         nullptr
     );
     
-    reg_param("angle or x coordinate", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_param("y coordinate", MOB_ACTION_PARAM_FLOAT, false, true);
-    reg_action(
+    regParam("angle or x coordinate", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("y coordinate", MOB_ACTION_PARAM_FLOAT, false, true);
+    regAction(
         MOB_ACTION_TURN_TO_ABSOLUTE,
         "turn_to_absolute",
-        mob_action_runners::turnToAbsolute,
+        MobActionRunners::turnToAbsolute,
         nullptr
     );
     
-    reg_param("angle or x coordinate", MOB_ACTION_PARAM_FLOAT, false, false);
-    reg_param("y coordinate", MOB_ACTION_PARAM_FLOAT, false, true);
-    reg_action(
+    regParam("angle or x coordinate", MOB_ACTION_PARAM_FLOAT, false, false);
+    regParam("y coordinate", MOB_ACTION_PARAM_FLOAT, false, true);
+    regAction(
         MOB_ACTION_TURN_TO_RELATIVE,
         "turn_to_relative",
-        mob_action_runners::turnToRelative,
+        MobActionRunners::turnToRelative,
         nullptr
     );
     
-    reg_param("target", MOB_ACTION_PARAM_ENUM, true, false);
-    reg_action(
+    regParam("target", MOB_ACTION_PARAM_ENUM, true, false);
+    regAction(
         MOB_ACTION_TURN_TO_TARGET,
         "turn_to_target",
-        mob_action_runners::turnToTarget,
-        mob_action_loaders::turnToTarget
+        MobActionRunners::turnToTarget,
+        MobActionLoaders::turnToTarget
     );
     
     
-#undef param
-#undef reg_action
+#undef regParam
+#undef regAction
 }
 
 

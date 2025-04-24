@@ -25,21 +25,21 @@
  * is in either plural form or singular form, depending on the amount.
  *
  * @param amount Amount to compare against.
- * @param singular_text Text to write if the amount is singular.
- * @param plural_text Text to write if the amount is plural.
+ * @param singularText Text to write if the amount is singular.
+ * @param pluralText Text to write if the amount is plural.
  * If empty, it'll use the singular text plus an 's'.
  * @return The string.
  */
 string amountStr(
-    int amount, const string &singular_text, const string &plural_text
+    int amount, const string &singularText, const string &pluralText
 ) {
     string result = i2s(amount) + " ";
     if(amount == 1) {
-        result += singular_text;
-    } else if(plural_text.empty()) {
-        result += singular_text + "s";
+        result += singularText;
+    } else if(pluralText.empty()) {
+        result += singularText + "s";
     } else {
-        result += plural_text;
+        result += pluralText;
     }
     return result;
 }
@@ -69,11 +69,11 @@ string b2s(bool b) {
  */
 string boxString(const string &s, size_t size, const string &finisher) {
     assert(size > finisher.size());
-    size_t core_size = std::min(s.size(), size - finisher.size());
+    size_t coreSize = std::min(s.size(), size - finisher.size());
     return
-        s.substr(0, core_size) +
+        s.substr(0, coreSize) +
         finisher +
-        string(size - core_size - finisher.size(), ' ');
+        string(size - coreSize - finisher.size(), ' ');
 }
 
 
@@ -81,16 +81,16 @@ string boxString(const string &s, size_t size, const string &finisher) {
  * @brief Duplicates a string.
  *
  * This is necessary because under C++11, with _GLIBCXX_USE_CXX11_ABI=0,
- * assigning a string to another string (e.g. "str_a = str_b") will cause it
+ * assigning a string to another string (e.g. "strA = strB") will cause it
  * to use the same C-string pointer. This could be undesirable in some cases.
  * This function creates a copy of a string while ensuring the underlying
  * C-string pointer is different.
  *
- * @param orig_str Original string.
- * @param new_str Reference to the new string.
+ * @param origStr Original string.
+ * @param newStr Reference to the new string.
  */
-void duplicateString(const string &orig_str, string &new_str) {
-    new_str = string(orig_str.c_str());
+void duplicateString(const string &origStr, string &newStr) {
+    newStr = string(origStr.c_str());
 }
 
 
@@ -118,31 +118,31 @@ string f2s(float f) {
  * @return The match, or an empty string if there's no match.
  */
 string getMatchingStringStarts(const string &s1, const string &s2) {
-    size_t chars_to_check = std::min(s1.size(), s2.size());
-    size_t nr_matching_chars = 0;
+    size_t charsToCheck = std::min(s1.size(), s2.size());
+    size_t nrMatchingChars = 0;
     
-    for(size_t c = 0; c < chars_to_check; c++) {
+    for(size_t c = 0; c < charsToCheck; c++) {
         if(s1[c] == s2[c]) {
-            nr_matching_chars++;
+            nrMatchingChars++;
         } else {
             break;
         }
     }
     
-    if(nr_matching_chars == 0) return string();
+    if(nrMatchingChars == 0) return string();
     
-    return s1.substr(0, nr_matching_chars);
+    return s1.substr(0, nrMatchingChars);
 }
 
 
 /**
  * @brief Given a path in a string, returns the last component, be it
  * a folder or a file.
- * 
+ *
  * @param s The string to check.
  * @return The last component, or an empty string on error.
  */
-string getPathLastComponent(const string& s) {
+string getPathLastComponent(const string &s) {
     vector<string> components = split(s, "/");
     if(!components.empty()) return components.back();
     return "";
@@ -283,18 +283,18 @@ vector<string> semicolonListToVector(const string &s, const string &sep) {
  *
  * @param text The string to split.
  * @param del The delimiter. Default is space.
- * @param inc_empty If true, include empty substrings on the vector.
+ * @param incEmpty If true, include empty substrings on the vector.
  * i.e. if two delimiters come together in a row,
  * keep an empty substring between.
- * @param inc_del If true, include the delimiters on the vector as a substring.
+ * @param incDel If true, include the delimiters on the vector as a substring.
  * @return The substrings.
  */
 vector<string> split(
-    string text, const string &del, bool inc_empty, bool inc_del
+    string text, const string &del, bool incEmpty, bool incDel
 ) {
     vector<string> v;
     size_t pos;
-    size_t del_size = del.size();
+    size_t delSize = del.size();
     
     do {
         pos = text.find(del);
@@ -303,16 +303,16 @@ vector<string> split(
             string sub = text.substr(0, pos);
             
             //Add the text before the delimiter to the vector.
-            if(sub != "" || inc_empty)
+            if(sub != "" || incEmpty)
                 v.push_back(sub);
                 
             //Add the delimiter to the vector, but only if requested.
-            if(inc_del)
+            if(incDel)
                 v.push_back(del);
                 
             //Delete everything before the delimiter,
             //including the delimiter itself, and search again.
-            text.erase(text.begin(), text.begin() + pos + del_size);
+            text.erase(text.begin(), text.begin() + pos + delSize);
         }
     } while (pos != string::npos);
     
@@ -321,7 +321,7 @@ vector<string> split(
     
     //If it's a blank string,
     //only add it if we want empty strings.
-    if(text != "" || inc_empty) {
+    if(text != "" || incEmpty) {
         v.push_back(text);
     }
     
@@ -331,7 +331,7 @@ vector<string> split(
 
 /**
  * @brief Returns whether the specified string ends with the other string.
- * 
+ *
  * @param s String to check.
  * @param end End to match with.
  * @return Whether it matches.
@@ -359,7 +359,7 @@ bool strPeek(const string &s, size_t where, const string &match) {
 
 /**
  * @brief Returns whether the specified string starts with the other string.
- * 
+ *
  * @param s String to check.
  * @param start Start to match with.
  * @return Whether it matches.
@@ -377,8 +377,8 @@ bool strStartsWith(const string &s, const string &start) {
  * @return The string in lowercase.
  */
 string strToLower(string s) {
-    size_t n_characters = s.size();
-    for(size_t c = 0; c < n_characters; c++) {
+    size_t nCharacters = s.size();
+    for(size_t c = 0; c < nCharacters; c++) {
         s[c] = (char) tolower(s[c]);
     }
     return s;
@@ -407,18 +407,18 @@ string strToSentence(string s) {
  * @return The string in title case.
  */
 string strToTitle(string s) {
-    size_t letter_streak = 0;
-    size_t n_characters = s.size();
-    for(size_t c = 0; c < n_characters; c++) {
+    size_t letterStreak = 0;
+    size_t nCharacters = s.size();
+    for(size_t c = 0; c < nCharacters; c++) {
         if(isalpha(s[c])) {
-            if(letter_streak == 0) {
+            if(letterStreak == 0) {
                 s[c] = (char) toupper(s[c]);
             } else {
                 s[c] = (char) tolower(s[c]);
             }
-            letter_streak++;
+            letterStreak++;
         } else {
-            letter_streak = 0;
+            letterStreak = 0;
         }
     }
     return s;
@@ -432,8 +432,8 @@ string strToTitle(string s) {
  * @return The string in uppercase.
  */
 string strToUpper(string s) {
-    size_t n_characters = s.size();
-    for(size_t c = 0; c < n_characters; c++) {
+    size_t nCharacters = s.size();
+    for(size_t c = 0; c < nCharacters; c++) {
         s[c] = (char) toupper(s[c]);
     }
     return s;
@@ -457,9 +457,9 @@ string timeToStr2(
 ) {
     size_t units1 = units / 60;
     size_t units2 = units % 60;
-    bool has_leading_01 =
+    bool hasLeading01 =
         ((flags & TIME_TO_STR_FLAG_NO_LEADING_ZEROS) == 0) && (units1 < 10);
-    bool has_leading_02 =
+    bool hasLeading02 =
         ((flags & TIME_TO_STR_FLAG_NO_LEADING_ZEROS) == 0) && (units2 < 10);
     string portion1;
     if(
@@ -467,12 +467,12 @@ string timeToStr2(
         units1 != 0
     ) {
         portion1 =
-            (has_leading_01 ? "0" : "") +
+            (hasLeading01 ? "0" : "") +
             i2s(units1) +
             suffix1;
     }
     string portion2 =
-        (has_leading_02 ? "0" : "") +
+        (hasLeading02 ? "0" : "") +
         i2s(units2) +
         suffix2;
         
@@ -500,11 +500,11 @@ string timeToStr3(
     size_t units1 = units / 60 / 60;
     size_t units2 = (units / 60) % 60;
     size_t units3 = units % 60;
-    bool has_leading_01 =
+    bool hasLeading01 =
         ((flags & TIME_TO_STR_FLAG_NO_LEADING_ZEROS) == 0) && (units1 < 10);
-    bool has_leading_02 =
+    bool hasLeading02 =
         ((flags & TIME_TO_STR_FLAG_NO_LEADING_ZEROS) == 0) && (units2 < 10);
-    bool has_leading_03 =
+    bool hasLeading03 =
         ((flags & TIME_TO_STR_FLAG_NO_LEADING_ZEROS) == 0) && (units3 < 10);
     string portion1;
     if(
@@ -512,7 +512,7 @@ string timeToStr3(
         units1 != 0
     ) {
         portion1 =
-            (has_leading_01 ? "0" : "") +
+            (hasLeading01 ? "0" : "") +
             i2s(units1) +
             suffix1;
     }
@@ -523,12 +523,12 @@ string timeToStr3(
         units2 != 0
     ) {
         portion2 =
-            (has_leading_02 ? "0" : "") +
+            (hasLeading02 ? "0" : "") +
             i2s(units2) +
             suffix2;
     }
     string portion3 =
-        (has_leading_03 ? "0" : "") +
+        (hasLeading03 ? "0" : "") +
         i2s(units3) +
         suffix3;
         
@@ -542,10 +542,10 @@ string timeToStr3(
  * This means space and tab characters before and after the 'middle' characters.
  *
  * @param s The original string.
- * @param left_only If true, only trim the spaces at the left.
+ * @param leftOnly If true, only trim the spaces at the left.
  * @return The trimmed string.
  */
-string trimSpaces(const string &s, bool left_only) {
+string trimSpaces(const string &s, bool leftOnly) {
     string orig = s;
     //Spaces before.
     if(orig.size()) {
@@ -555,7 +555,7 @@ string trimSpaces(const string &s, bool left_only) {
         }
     }
     
-    if(!left_only) {
+    if(!leftOnly) {
         //Spaces after.
         if(orig.size()) {
             while(
@@ -584,61 +584,61 @@ string trimWithEllipsis(const string &str, size_t size) {
     if(str.size() <= size) return str;
     
     string result = str;
-    int start_idx = std::max((int) 0, (int) (str.size() - (size - 3)));
-    return "..." + result.substr(start_idx);
+    int startIdx = std::max((int) 0, (int) (str.size() - (size - 3)));
+    return "..." + result.substr(startIdx);
 }
 
 
 /**
  * @brief Given a string, representing a long line of text, it automatically
  * adds line breaks along the text in order to break it up into smaller lines,
- * such that no line exceeds the number of characters in nr_chars_per_line
+ * such that no line exceeds the number of characters in nrCharsPerLine
  * (if possible). Lines are only split at space characters.
  * This is a naive approach, in that it doesn't care about font size.
  *
  * @param s Input string.
- * @param nr_chars_per_line Number of characters that a line cannot exceed,
+ * @param nrCharsPerLine Number of characters that a line cannot exceed,
  * unless it's impossible to split.
  * @return The wrapped string.
  */
-string wordWrap(const string &s, size_t nr_chars_per_line) {
+string wordWrap(const string &s, size_t nrCharsPerLine) {
     string result;
-    string word_in_queue;
-    size_t cur_line_width = 0;
+    string wordInQueue;
+    size_t curLineWidth = 0;
     for(size_t c = 0; c < s.size() + 1; c++) {
     
         if(c < s.size() && s[c] != ' ' && s[c] != '\n') {
             //Keep building the current word.
             
-            word_in_queue.push_back(s[c]);
+            wordInQueue.push_back(s[c]);
             
         } else {
             //Finished the current word.
             
-            if(word_in_queue.empty()) {
+            if(wordInQueue.empty()) {
                 continue;
             }
-            size_t width_after_word = cur_line_width + 1 + word_in_queue.size();
-            bool broke_due_to_length = false;
-            if(width_after_word > nr_chars_per_line && !result.empty()) {
+            size_t widthAfterWord = curLineWidth + 1 + wordInQueue.size();
+            bool brokeDueToLength = false;
+            if(widthAfterWord > nrCharsPerLine && !result.empty()) {
                 //The current word doesn't fit in the current line. Break.
                 result.push_back('\n');
-                cur_line_width = 0;
-                broke_due_to_length = true;
+                curLineWidth = 0;
+                brokeDueToLength = true;
             }
             
-            if(cur_line_width > 0) {
+            if(curLineWidth > 0) {
                 result.push_back(' ');
-                cur_line_width++;
+                curLineWidth++;
             }
-            result += word_in_queue;
-            cur_line_width += word_in_queue.size();
-            word_in_queue.clear();
+            result += wordInQueue;
+            curLineWidth += wordInQueue.size();
+            wordInQueue.clear();
             
-            if(s[c] == '\n' && !broke_due_to_length) {
+            if(s[c] == '\n' && !brokeDueToLength) {
                 //A real line break character. Break.
                 result.push_back('\n');
-                cur_line_width = 0;
+                curLineWidth = 0;
             }
         }
     }

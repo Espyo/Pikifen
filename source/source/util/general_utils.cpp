@@ -53,10 +53,10 @@ void AutoRepeater::stop() {
  * @brief Ticks one frame of gameplay, and returns how many times auto-repeats
  * got triggered this frame.
  *
- * @param delta_t How long the frame's tick is, in seconds.
+ * @param deltaT How long the frame's tick is, in seconds.
  * @return How many triggers happened.
  */
-size_t AutoRepeater::tick(float delta_t) {
+size_t AutoRepeater::tick(float deltaT) {
     if(!settings) {
         stop();
         return 0;
@@ -65,20 +65,20 @@ size_t AutoRepeater::tick(float delta_t) {
     if(time == LARGE_FLOAT) return 0;
     if(time > nextTrigger) return 0;
     
-    time += delta_t;
+    time += deltaT;
     size_t triggers = 0;
     while(time >= nextTrigger) {
         triggers++;
-        float cur_interval =
+        float curInterval =
             settings->slowestInterval +
             (time / settings->rampTime) *
             (settings->fastestInterval - settings->slowestInterval);
-        cur_interval =
+        curInterval =
             std::clamp(
-                cur_interval,
+                curInterval,
                 settings->fastestInterval, settings->slowestInterval
             );
-        nextTrigger += cur_interval;
+        nextTrigger += curInterval;
     }
     
     return triggers;
@@ -233,12 +233,12 @@ void MovementInfo::reset() {
  * @brief Constructs a new timer object.
  *
  * @param duration How long before it reaches the end, in seconds.
- * @param on_end Code to run when time ends.
+ * @param onEnd Code to run when time ends.
  */
-Timer::Timer(float duration, const std::function<void()> &on_end) :
+Timer::Timer(float duration, const std::function<void()> &onEnd) :
     timeLeft(0),
     duration(duration),
-    onEnd(on_end) {
+    onEnd(onEnd) {
     
     
 }
@@ -248,7 +248,7 @@ Timer::Timer(float duration, const std::function<void()> &on_end) :
  * @brief Destroys the timer object.
  */
 Timer::~Timer() {
-    //TODO Valgrind detects a leak with on_end...
+    //TODO Valgrind detects a leak with onEnd...
 }
 
 
@@ -267,11 +267,11 @@ float Timer::getRatioLeft() const {
 /**
  * @brief Starts a timer.
  *
- * @param can_restart If false, calling this while the timer is still
+ * @param canRestart If false, calling this while the timer is still
  * ticking down will not do anything.
  */
-void Timer::start(bool can_restart) {
-    if(!can_restart && timeLeft > 0) return;
+void Timer::start(bool canRestart) {
+    if(!canRestart && timeLeft > 0) return;
     timeLeft = duration;
 }
 
@@ -279,16 +279,16 @@ void Timer::start(bool can_restart) {
 /**
  * @brief Starts a timer, but sets a new duration.
  *
- * @param new_duration Its new duration.
+ * @param newDuration Its new duration.
  */
-void Timer::start(float new_duration) {
-    duration = new_duration;
+void Timer::start(float newDuration) {
+    duration = newDuration;
     start();
 }
 
 
 /**
- * @brief Stops a timer, without executing the on_end callback.
+ * @brief Stops a timer, without executing the onEnd callback.
  */
 void Timer::stop() {
     timeLeft = 0.0f;
@@ -298,11 +298,11 @@ void Timer::stop() {
 /**
  * @brief Ticks time by one frame of logic.
  *
- * @param delta_t How long the frame's tick is, in seconds.
+ * @param deltaT How long the frame's tick is, in seconds.
  */
-void Timer::tick(float delta_t) {
+void Timer::tick(float deltaT) {
     if(timeLeft == 0.0f) return;
-    timeLeft = std::max(timeLeft - delta_t, 0.0f);
+    timeLeft = std::max(timeLeft - deltaT, 0.0f);
     if(timeLeft == 0.0f && onEnd) {
         onEnd();
     }

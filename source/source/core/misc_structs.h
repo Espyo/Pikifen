@@ -113,9 +113,9 @@ struct Camera {
     
     //--- Function declarations ---
     
-    void setPos(const Point &new_pos);
-    void setZoom(float new_zoom);
-    void tick(float delta_t);
+    void setPos(const Point &newPos);
+    void setZoom(float newZoom);
+    void tick(float deltaT);
     
 };
 
@@ -262,7 +262,7 @@ struct RngManager {
     //--- Function declarations ---
     
     void init();
-    void init(int32_t initial_seed);
+    void init(int32_t initialSeed);
     int32_t i(int32_t minimum, int32_t maximum);
     float f(float minimum, float maximum);
     
@@ -293,48 +293,48 @@ struct GetterWriter {
     
     explicit GetterWriter(DataNode* dn = nullptr);
     void write(
-        const string &child_name, const string &var,
-        DataNode** out_child_node = nullptr
+        const string &childName, const string &var,
+        DataNode** outChildNode = nullptr
     );
     void write(
-        const string &child_name, const char* var,
-        DataNode** out_child_node = nullptr
+        const string &childName, const char* var,
+        DataNode** outChildNode = nullptr
     );
     void write(
-        const string &child_name, const size_t &var,
-        DataNode** out_child_node = nullptr
+        const string &childName, const size_t &var,
+        DataNode** outChildNode = nullptr
     );
     void write(
-        const string &child_name, const int &var,
-        DataNode** out_child_node = nullptr
+        const string &childName, const int &var,
+        DataNode** outChildNode = nullptr
     );
     void write(
-        const string &child_name, const unsigned int &var,
-        DataNode** out_child_node = nullptr
+        const string &childName, const unsigned int &var,
+        DataNode** outChildNode = nullptr
     );
     void write(
-        const string &child_name, const unsigned char &var,
-        DataNode** out_child_node = nullptr
+        const string &childName, const unsigned char &var,
+        DataNode** outChildNode = nullptr
     );
     void write(
-        const string &child_name, const bool &var,
-        DataNode** out_child_node = nullptr
+        const string &childName, const bool &var,
+        DataNode** outChildNode = nullptr
     );
     void write(
-        const string &child_name, const float &var,
-        DataNode** out_child_node = nullptr
+        const string &childName, const float &var,
+        DataNode** outChildNode = nullptr
     );
     void write(
-        const string &child_name, const double &var,
-        DataNode** out_child_node = nullptr
+        const string &childName, const double &var,
+        DataNode** outChildNode = nullptr
     );
     void write(
-        const string &child_name, const ALLEGRO_COLOR &var,
-        DataNode** out_child_node = nullptr
+        const string &childName, const ALLEGRO_COLOR &var,
+        DataNode** outChildNode = nullptr
     );
     void write(
-        const string &child_name, const Point &var,
-        DataNode** out_child_node = nullptr
+        const string &childName, const Point &var,
+        DataNode** outChildNode = nullptr
     );
     
 };
@@ -359,44 +359,44 @@ struct ReaderSetter {
     
     explicit ReaderSetter(DataNode* dn = nullptr);
     void set(
-        const string &child_name, string &var,
-        DataNode** out_child_node = nullptr
+        const string &childName, string &var,
+        DataNode** outChildNode = nullptr
     );
     void set(
-        const string &child_name, size_t &var,
-        DataNode** out_child_node = nullptr
+        const string &childName, size_t &var,
+        DataNode** outChildNode = nullptr
     );
     void set(
-        const string &child_name, int &var,
-        DataNode** out_child_node = nullptr
+        const string &childName, int &var,
+        DataNode** outChildNode = nullptr
     );
     void set(
-        const string &child_name, unsigned int &var,
-        DataNode** out_child_node = nullptr
+        const string &childName, unsigned int &var,
+        DataNode** outChildNode = nullptr
     );
     void set(
-        const string &child_name, unsigned char &var,
-        DataNode** out_child_node = nullptr
+        const string &childName, unsigned char &var,
+        DataNode** outChildNode = nullptr
     );
     void set(
-        const string &child_name, bool &var,
-        DataNode** out_child_node = nullptr
+        const string &childName, bool &var,
+        DataNode** outChildNode = nullptr
     );
     void set(
-        const string &child_name, float &var,
-        DataNode** out_child_node = nullptr
+        const string &childName, float &var,
+        DataNode** outChildNode = nullptr
     );
     void set(
-        const string &child_name, double &var,
-        DataNode** out_child_node = nullptr
+        const string &childName, double &var,
+        DataNode** outChildNode = nullptr
     );
     void set(
-        const string &child_name, ALLEGRO_COLOR &var,
-        DataNode** out_child_node = nullptr
+        const string &childName, ALLEGRO_COLOR &var,
+        DataNode** outChildNode = nullptr
     );
     void set(
-        const string &child_name, Point &var,
-        DataNode** out_child_node = nullptr
+        const string &childName, Point &var,
+        DataNode** outChildNode = nullptr
     );
     
 };
@@ -919,11 +919,11 @@ struct FadeManager {
     
     FadeManager(float duration);
     void setNextFadeDuration(float duration);
-    void startFade(bool fade_in, const std::function<void()> &on_end);
+    void startFade(bool fadeIn, const std::function<void()> &onEnd);
     bool isFadeIn() const;
     bool isFading() const;
     float getPercLeft() const;
-    void tick(float delta_t);
+    void tick(float deltaT);
     void draw();
     
     private:
@@ -964,10 +964,10 @@ struct Notification {
     float getVisibility() const;
     void reset();
     void setContents(
-        const PlayerInputSource &input_source, const string &text, const Point &pos
+        const PlayerInputSource &inputSource, const string &text, const Point &pos
     );
     void setEnabled(bool enabled);
-    void tick(float delta_t);
+    void tick(float deltaT);
     
     private:
     
@@ -1171,12 +1171,12 @@ struct SubgroupTypeManager {
     
     void registerType(
         const SUBGROUP_TYPE_CATEGORY category,
-        MobType* specific_type = nullptr,
+        MobType* specificType = nullptr,
         ALLEGRO_BITMAP* icon = nullptr
     );
     SubgroupType* getType(
         const SUBGROUP_TYPE_CATEGORY category,
-        const MobType* specific_type = nullptr
+        const MobType* specificType = nullptr
     ) const;
     SubgroupType* getFirstType() const;
     SubgroupType* getPrevType(const SubgroupType* sgt) const;
@@ -1349,8 +1349,8 @@ struct Whistle {
     void startWhistling();
     void stopWhistling();
     void tick(
-        float delta_t, const Point &center,
-        float whistle_range, float leader_to_cursor_dist
+        float deltaT, const Point &center,
+        float whistleRange, float leaderToCursorDist
     );
     
 };
@@ -1387,9 +1387,9 @@ struct Whistle {
  * the disk again.
  * This manager can also handle other types of asset, like audio samples.
  *
- * @tparam asset_t Asset type.
+ * @tparam AssetT Asset type.
  */
-template<typename asset_t>
+template<typename AssetT>
 class AssetManager {
 
 public:
@@ -1404,21 +1404,21 @@ public:
      * @param name Name of the asset to get.
      * @param node If not nullptr, blame this data node if the file
      * doesn't exist.
-     * @param report_errors Only issues errors if this is true.
+     * @param reportErrors Only issues errors if this is true.
      * @return The asset
      */
-    asset_t get(
+    AssetT get(
         const string &name, DataNode* node = nullptr,
-        bool report_errors = true
+        bool reportErrors = true
     ) {
-        if(name.empty()) return doLoad("", node, report_errors);
+        if(name.empty()) return doLoad("", node, reportErrors);
         
         if(list.find(name) == list.end()) {
-            asset_t asset_ptr =
-                doLoad(name, node, report_errors);
-            list[name] = AssetUse(asset_ptr);
+            AssetT assetPtr =
+                doLoad(name, node, reportErrors);
+            list[name] = AssetUse(assetPtr);
             totalUses++;
-            return asset_ptr;
+            return assetPtr;
         } else {
             list[name].uses++;
             totalUses++;
@@ -1432,7 +1432,7 @@ public:
      *
      * @param ptr Asset to free.
      */
-    void free(const asset_t ptr) {
+    void free(const AssetT ptr) {
         if(!ptr) return;
         auto it = list.begin();
         for(; it != list.end(); ++it) {
@@ -1485,10 +1485,10 @@ protected:
 
     //--- Misc. declarations ---
     
-    virtual asset_t doLoad(
-        const string &path, DataNode* node, bool report_errors
+    virtual AssetT doLoad(
+        const string &path, DataNode* node, bool reportErrors
     ) = 0;
-    virtual void doUnload(asset_t asset) = 0;
+    virtual void doUnload(AssetT asset) = 0;
     
     /**
      * @brief Info about an asset.
@@ -1498,7 +1498,7 @@ protected:
         //--- Members ---
         
         //Asset pointer.
-        asset_t ptr = nullptr;
+        AssetT ptr = nullptr;
         
         //How many uses it has.
         size_t uses = 1;
@@ -1506,7 +1506,7 @@ protected:
         
         //--- Function declarations ---
         
-        explicit AssetUse(asset_t ptr = nullptr) : ptr(ptr) {}
+        explicit AssetUse(AssetT ptr = nullptr) : ptr(ptr) {}
     };
     
     
@@ -1550,7 +1550,7 @@ protected:
     //--- Function declarations ---
     
     ALLEGRO_AUDIO_STREAM* doLoad(
-        const string &name, DataNode* node, bool report_errors
+        const string &name, DataNode* node, bool reportErrors
     ) override;
     void doUnload(ALLEGRO_AUDIO_STREAM* asset) override;
     
@@ -1567,7 +1567,7 @@ protected:
     //--- Function declarations ---
     
     ALLEGRO_BITMAP* doLoad(
-        const string &name, DataNode* node, bool report_errors
+        const string &name, DataNode* node, bool reportErrors
     ) override;
     void doUnload(ALLEGRO_BITMAP* asset) override;
     
@@ -1584,7 +1584,7 @@ protected:
     //--- Function declarations ---
     
     ALLEGRO_SAMPLE* doLoad(
-        const string &name, DataNode* node, bool report_errors
+        const string &name, DataNode* node, bool reportErrors
     ) override;
     void doUnload(ALLEGRO_SAMPLE* asset) override;
     

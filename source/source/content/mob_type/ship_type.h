@@ -71,6 +71,6 @@ public:
     ~ShipType();
     void loadCatProperties(DataNode* file) override;
     void loadCatResources(DataNode* file) override;
-    anim_conversion_vector getAnimConversions() const override;
+    AnimConversionVector getAnimConversions() const override;
     
 };

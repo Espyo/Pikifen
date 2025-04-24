@@ -41,11 +41,11 @@ EnemyType::EnemyType() :
  * @param file File to read from.
  */
 void EnemyType::loadCatProperties(DataNode* file) {
-    ReaderSetter rs(file);
+    ReaderSetter eRS(file);
     
-    rs.set("allow_ground_attacks", allowGroundAttacks);
-    rs.set("drops_corpse", dropsCorpse);
-    rs.set("pikmin_seeds", pikminSeeds);
-    rs.set("points", points);
-    rs.set("is_boss", isBoss);
+    eRS.set("allow_ground_attacks", allowGroundAttacks);
+    eRS.set("drops_corpse", dropsCorpse);
+    eRS.set("pikmin_seeds", pikminSeeds);
+    eRS.set("points", points);
+    eRS.set("is_boss", isBoss);
 }

@@ -28,13 +28,13 @@ using std::unordered_set;
 
 
 //Bitmask with 8 bits.
-typedef uint8_t bitmask_8_t;
+typedef uint8_t Bitmask8;
 
 //Bitmask with 16 bits.
-typedef uint16_t bitmask_16_t;
+typedef uint16_t Bitmask16;
 
 //Bitmask with 32 bits.
-typedef uint32_t bitmask_32_t;
+typedef uint32_t Bitmask32;
 
 
 //Turns a bit in a bitmask off.
@@ -118,7 +118,7 @@ struct AutoRepeater {
     AutoRepeater(AutoRepeaterSettings* settings);
     void start();
     void stop();
-    size_t tick(float delta_t);
+    size_t tick(float deltaT);
     
 };
 
@@ -160,9 +160,9 @@ struct KeyframeInterpolator {
     
     //--- Function definitions ---
     
-    explicit KeyframeInterpolator(const InterT &initial_value = InterT()) {
+    explicit KeyframeInterpolator(const InterT &initialValue = InterT()) {
         keyframeTimes.push_back(0.0f);
-        keyframeValues.push_back(initial_value);
+        keyframeValues.push_back(initialValue);
         keyframeEases.push_back(EASE_METHOD_NONE);
     };
     
@@ -182,12 +182,12 @@ struct KeyframeInterpolator {
         
         for(size_t k = 1; k < keyframeTimes.size(); ++k) {
             if(t <= keyframeTimes[k]) {
-                float delta_t =
+                float deltaT =
                     std::max(keyframeTimes[k] - keyframeTimes[k - 1], 0.01f);
-                float relative_t =
+                float relativeT =
                     t - keyframeTimes[k - 1];
                 float ratio =
-                    relative_t / delta_t;
+                    relativeT / deltaT;
                 ratio = ease(keyframeEases[k], ratio);
                 return
                     interpolate(
@@ -206,20 +206,20 @@ struct KeyframeInterpolator {
      * @param t Time (0 to 1).
      * @param value Value at that point.
      * @param ease Easing method between it and the previous keyframe.
-     * @param out_idx If not nullptr, the index of the newly added keyframe
+     * @param outIdx If not nullptr, the index of the newly added keyframe
      * is returned here.
      */
     void add(
         float t, const InterT &value,
-        EASING_METHOD ease = EASE_METHOD_NONE, size_t* out_idx = nullptr
+        EASING_METHOD ease = EASE_METHOD_NONE, size_t* outIdx = nullptr
     ) {
-        size_t new_idx = getInsertionIdx(t);
+        size_t newIdx = getInsertionIdx(t);
         
-        if(out_idx) *out_idx = new_idx;
+        if(outIdx) *outIdx = newIdx;
         
-        keyframeTimes.insert(keyframeTimes.begin() + new_idx, t);
-        keyframeValues.insert(keyframeValues.begin() + new_idx, value);
-        keyframeEases.insert(keyframeEases.begin() + new_idx, ease);
+        keyframeTimes.insert(keyframeTimes.begin() + newIdx, t);
+        keyframeValues.insert(keyframeValues.begin() + newIdx, value);
+        keyframeEases.insert(keyframeEases.begin() + newIdx, ease);
     }
     
     
@@ -230,22 +230,22 @@ struct KeyframeInterpolator {
      * @param t Time (0 to 1).
      * @param value Value at that point.
      * @param ease Easing method between it and the previous keyframe.
-     * @param out_idx If not nullptr, the index of the newly added keyframe
+     * @param outIdx If not nullptr, the index of the newly added keyframe
      * is returned here.
      */
     void addOrSet(
         float t, const InterT &value,
-        EASING_METHOD ease = EASE_METHOD_NONE, size_t* out_idx = nullptr
+        EASING_METHOD ease = EASE_METHOD_NONE, size_t* outIdx = nullptr
     ) {
         for(size_t k = 0; k < keyframeTimes.size(); ++k) {
             if(keyframeTimes[k] == t) {
-                if(out_idx) *out_idx = k;
+                if(outIdx) *outIdx = k;
                 setKeyframeValue(k, value);
                 return;
             }
         }
         
-        add(t, value, ease, out_idx);
+        add(t, value, ease, outIdx);
     }
     
     
@@ -298,36 +298,36 @@ struct KeyframeInterpolator {
      *
      * @param idx The keyframe's index.
      * @param time The new time.
-     * @param out_new_idx If not nullptr, the new index of the keyframe is
+     * @param outNewIdx If not nullptr, the new index of the keyframe is
      * returned here.
      */
     void setKeyframeTime(
-        size_t idx, float time, size_t* out_new_idx = nullptr
+        size_t idx, float time, size_t* outNewIdx = nullptr
     ) {
-        size_t cur_idx = idx;
+        size_t curIdx = idx;
         
         while(
-            cur_idx > 0 &&
-            time < keyframeTimes[cur_idx - 1]
+            curIdx > 0 &&
+            time < keyframeTimes[curIdx - 1]
         ) {
-            std::swap(keyframeTimes[cur_idx], keyframeTimes[cur_idx - 1]);
-            std::swap(keyframeValues[cur_idx], keyframeValues[cur_idx - 1]);
-            std::swap(keyframeEases[cur_idx], keyframeEases[cur_idx - 1]);
-            cur_idx--;
+            std::swap(keyframeTimes[curIdx], keyframeTimes[curIdx - 1]);
+            std::swap(keyframeValues[curIdx], keyframeValues[curIdx - 1]);
+            std::swap(keyframeEases[curIdx], keyframeEases[curIdx - 1]);
+            curIdx--;
         }
         while(
-            cur_idx < (getKeyframeCount() - 1) &&
-            time > keyframeTimes[cur_idx + 1]
+            curIdx < (getKeyframeCount() - 1) &&
+            time > keyframeTimes[curIdx + 1]
         ) {
-            std::swap(keyframeTimes[cur_idx], keyframeTimes[cur_idx + 1]);
-            std::swap(keyframeValues[cur_idx], keyframeValues[cur_idx + 1]);
-            std::swap(keyframeEases[cur_idx], keyframeEases[cur_idx + 1]);
-            cur_idx++;
+            std::swap(keyframeTimes[curIdx], keyframeTimes[curIdx + 1]);
+            std::swap(keyframeValues[curIdx], keyframeValues[curIdx + 1]);
+            std::swap(keyframeEases[curIdx], keyframeEases[curIdx + 1]);
+            curIdx++;
         }
         
-        if(out_new_idx) *out_new_idx = cur_idx;
+        if(outNewIdx) *outNewIdx = curIdx;
         
-        keyframeTimes[cur_idx] = time;
+        keyframeTimes[curIdx] = time;
     }
     
     
@@ -347,9 +347,9 @@ struct KeyframeInterpolator {
         keyframeEases.clear();
         
         for(size_t c = 0; c < node->getNrOfChildren(); c++) {
-            DataNode* c_node = node->getChild(c);
-            InterT value = fromString<InterT>(c_node->value);
-            add(s2f(c_node->name), value, EASE_METHOD_NONE);
+            DataNode* cNode = node->getChild(c);
+            InterT value = fromString<InterT>(cNode->value);
+            add(s2f(cNode->name), value, EASE_METHOD_NONE);
         }
     }
     
@@ -486,19 +486,19 @@ struct Timer {
     
     explicit Timer(
         float duration = 0,
-        const std::function<void()> &on_end = nullptr
+        const std::function<void()> &onEnd = nullptr
     );
     ~Timer();
-    void start(bool can_restart = true);
-    void start(float new_duration);
+    void start(bool canRestart = true);
+    void start(float newDuration);
     void stop();
-    void tick(float delta_t);
+    void tick(float deltaT);
     float getRatioLeft() const;
     
 };
 
 
-string getCurrentTime(bool file_name_friendly);
+string getCurrentTime(bool fileNameFriendly);
 string sanitizeFileName(const string &s);
 
 
@@ -507,23 +507,23 @@ string sanitizeFileName(const string &s);
  *
  * @tparam t Type of contents of the vector.
  * @param v The vector to shuffle.
- * @param pick_random_floats Vector of previously-determined random floats to
+ * @param pickRandomFloats Vector of previously-determined random floats to
  * calculate the picks with [0, 1]. This vector must be of the same size
  * as the input vector.
  * @return The shuffled vector.
  */
 template<typename t>
 vector<t> shuffleVector(
-    const vector<t> &v, const vector<float> pick_random_floats
+    const vector<t> &v, const vector<float> pickRandomFloats
 ) {
     vector<t> result;
-    vector<t> items_available = v;
+    vector<t> itemsAvailable = v;
     for(size_t i = 0; i < v.size(); i++) {
-        size_t pick = pick_random_floats[i] * (items_available.size());
+        size_t pick = pickRandomFloats[i] * (itemsAvailable.size());
         //Add a safeguard for if the float is exactly 1.0.
-        pick = std::min(pick, items_available.size() - 1);
-        result.push_back(items_available[pick]);
-        items_available.erase(items_available.begin() + pick);
+        pick = std::min(pick, itemsAvailable.size() - 1);
+        result.push_back(itemsAvailable[pick]);
+        itemsAvailable.erase(itemsAvailable.begin() + pick);
     }
     return result;
 }
@@ -553,16 +553,16 @@ bool isInContainer(const t &cont, const i &item) {
  *
  * @tparam t Type of contents of the vector and ban list.
  * @param v Vector to filter.
- * @param ban_list List of items that must be banned.
+ * @param banList List of items that must be banned.
  * @return The filtered vector.
  */
 template<typename t>
 vector<t> filterVectorWithBanList(
-    const vector<t> &v, const vector<t> &ban_list
+    const vector<t> &v, const vector<t> &banList
 ) {
     vector<t> result = v;
     for(size_t i = 0; i < result.size();) {
-        if(isInContainer(ban_list, result[i])) {
+        if(isInContainer(banList, result[i])) {
             result.erase(result.begin() + i);
         } else {
             i++;
@@ -604,7 +604,7 @@ vector<t> removeAllInVector(
  *
  * @tparam t Type of contents of the vector.
  * @param v Vector to sort.
- * @param preference_list Preference list.
+ * @param preferenceList Preference list.
  * @param equal If not nullptr, use this function to compare whether
  * an item of t1 matches an item of t2.
  * @param less If not nullptr, use this function to sort missing items with.
@@ -614,53 +614,53 @@ vector<t> removeAllInVector(
  */
 template<typename t>
 vector<t> sortVectorWithPreferenceList(
-    const vector<t> &v, const vector<t> preference_list,
+    const vector<t> &v, const vector<t> preferenceList,
     vector<t>* unknowns = nullptr
 ) {
     vector<t> result;
-    vector<t> missing_items;
+    vector<t> missingItems;
     result.reserve(v.size());
     
     //Sort the existing items.
-    for(size_t p = 0; p < preference_list.size(); p++) {
-        bool found_in_vector = false;
+    for(size_t p = 0; p < preferenceList.size(); p++) {
+        bool foundInVector = false;
         for(auto &i : v) {
-            if(i == preference_list[p]) {
-                found_in_vector = true;
+            if(i == preferenceList[p]) {
+                foundInVector = true;
                 result.push_back(i);
                 break;
             }
         }
-        if(!found_in_vector && unknowns) {
-            unknowns->push_back(preference_list[p]);
+        if(!foundInVector && unknowns) {
+            unknowns->push_back(preferenceList[p]);
         }
     }
     
     //Find the missing items.
     for(auto &i : v) {
-        bool found_in_preferences = false;
-        for(auto &p : preference_list) {
+        bool foundInPreferences = false;
+        for(auto &p : preferenceList) {
             if(i == p) {
-                found_in_preferences = true;
+                foundInPreferences = true;
                 break;
             }
         }
-        if(!found_in_preferences) {
+        if(!foundInPreferences) {
             //Missing from the list? Add it to the "missing" pile.
-            missing_items.push_back(i);
+            missingItems.push_back(i);
         }
     }
     
     //Sort and place the missing items.
-    if(!missing_items.empty()) {
+    if(!missingItems.empty()) {
         std::sort(
-            missing_items.begin(),
-            missing_items.end()
+            missingItems.begin(),
+            missingItems.end()
         );
         result.insert(
             result.end(),
-            missing_items.begin(),
-            missing_items.end()
+            missingItems.begin(),
+            missingItems.end()
         );
     }
     

@@ -58,15 +58,15 @@ LeaderType::LeaderType() :
         soundDataIdxs[s] = INVALID;
     }
     
-    leader_fsm::createFsm(this);
+    LeaderFsm::createFsm(this);
 }
 
 
 /**
  * @brief Returns the vector of animation conversions.
  */
-anim_conversion_vector LeaderType::getAnimConversions() const {
-    anim_conversion_vector v;
+AnimConversionVector LeaderType::getAnimConversions() const {
+    AnimConversionVector v;
     v.push_back(std::make_pair(LEADER_ANIM_IDLING,       "idling"));
     v.push_back(std::make_pair(LEADER_ANIM_CALLED,       "called"));
     v.push_back(std::make_pair(LEADER_ANIM_WALKING,      "walking"));
@@ -92,12 +92,12 @@ anim_conversion_vector LeaderType::getAnimConversions() const {
  * @param file File to read from.
  */
 void LeaderType::loadCatProperties(DataNode* file) {
-    ReaderSetter rs(file);
+    ReaderSetter lRS(file);
     
-    rs.set("knocked_down_duration", knockedDownDuration);
-    rs.set("knocked_down_whistle_bonus", knockedDownWhistleBonus);
-    rs.set("max_throw_height", maxThrowHeight);
-    rs.set("whistle_range", whistleRange);
+    lRS.set("knocked_down_duration", knockedDownDuration);
+    lRS.set("knocked_down_whistle_bonus", knockedDownWhistleBonus);
+    lRS.set("max_throw_height", maxThrowHeight);
+    lRS.set("whistle_range", whistleRange);
     
     for(size_t s = 0; s < sounds.size(); s++) {
         if(sounds[s].name == "whistling") {
@@ -117,20 +117,20 @@ void LeaderType::loadCatProperties(DataNode* file) {
  * @param file File to read from.
  */
 void LeaderType::loadCatResources(DataNode* file) {
-    ReaderSetter rs(file);
+    ReaderSetter lRS(file);
     
-    string dismiss_sound_str;
-    string icon_str;
-    string name_call_sound_str;
-    string whistle_sound_str;
-    DataNode* icon_node = nullptr;
+    string dismissSoundStr;
+    string iconStr;
+    string nameCallSoundStr;
+    string whistleSoundStr;
+    DataNode* iconNode = nullptr;
     
-    rs.set("dismiss_sound", dismiss_sound_str);
-    rs.set("icon", icon_str, &icon_node);
-    rs.set("name_call_sound", name_call_sound_str);
-    rs.set("whistle_sound", whistle_sound_str);
+    lRS.set("dismiss_sound", dismissSoundStr);
+    lRS.set("icon", iconStr, &iconNode);
+    lRS.set("name_call_sound", nameCallSoundStr);
+    lRS.set("whistle_sound", whistleSoundStr);
     
-    bmpIcon = game.content.bitmaps.list.get(icon_str, icon_node);
+    bmpIcon = game.content.bitmaps.list.get(iconStr, iconNode);
 }
 
 

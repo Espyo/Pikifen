@@ -16,7 +16,7 @@
 /**
  * @brief Functions about the bouncer's finite state machine and behavior.
  */
-namespace bouncer_fsm {
+namespace BouncerFsm {
 void createFsm(MobType* typ);
 
 void handleMob(Mob* m, void* info1, void* info2);

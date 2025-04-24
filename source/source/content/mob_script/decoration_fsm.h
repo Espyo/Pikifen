@@ -16,7 +16,7 @@
 /**
  * @brief Functions about the decoration's finite state machine and behavior.
  */
-namespace decoration_fsm {
+namespace DecorationFsm {
 void createFsm(MobType* typ);
 
 void beBumped(Mob* m, void* info1, void* info2);

@@ -16,13 +16,13 @@
 /**
  * @brief Returns a compiled shader.
  *
- * @param shader_type Type of shader.
+ * @param shaderType Type of shader.
  * @return The shader.
  */
-ALLEGRO_SHADER* ShaderManager::getShader(SHADER_TYPE shader_type) {
-    assert(shader_type < N_SHADER_TYPES);
+ALLEGRO_SHADER* ShaderManager::getShader(SHADER_TYPE shaderType) {
+    assert(shaderType < N_SHADER_TYPES);
     
-    return compiledShaders[(int) shader_type];
+    return compiledShaders[(int) shaderType];
 }
 
 

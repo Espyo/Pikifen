@@ -46,11 +46,11 @@ void Edge::clone(Edge* destination) const {
 /**
  * @brief Returns the sector that ISN'T the specified one.
  *
- * @param s_ptr The sector that ISN'T the one to return.
+ * @param sPtr The sector that ISN'T the one to return.
  * @return The other sector.
  */
-Sector* Edge::getOtherSector(const Sector* s_ptr) const {
-    if(sectors[0] == s_ptr) return sectors[1];
+Sector* Edge::getOtherSector(const Sector* sPtr) const {
+    if(sectors[0] == sPtr) return sectors[1];
     return sectors[0];
 }
 
@@ -58,11 +58,11 @@ Sector* Edge::getOtherSector(const Sector* s_ptr) const {
 /**
  * @brief Returns the vertex that ISN'T the specified one.
  *
- * @param v_ptr The vertex that ISN'T the one to return.
+ * @param vPtr The vertex that ISN'T the one to return.
  * @return The other vertex.
  */
-Vertex* Edge::getOtherVertex(const Vertex* v_ptr) const {
-    if(vertexes[0] == v_ptr) return vertexes[1];
+Vertex* Edge::getOtherVertex(const Vertex* vPtr) const {
+    if(vertexes[0] == vPtr) return vertexes[1];
     return vertexes[0];
 }
 
@@ -70,12 +70,12 @@ Vertex* Edge::getOtherVertex(const Vertex* v_ptr) const {
 /**
  * @brief Returns which side has the specified sector, if any.
  *
- * @param s_ptr Sector to check.
+ * @param sPtr Sector to check.
  * @return The side index, or INVALID if neither.
  */
-size_t Edge::getSideWithSector(const Sector* s_ptr) const {
+size_t Edge::getSideWithSector(const Sector* sPtr) const {
     for(unsigned char s = 0; s < 2; s++) {
-        if(sectors[s] == s_ptr) return s;
+        if(sectors[s] == sPtr) return s;
     }
     return INVALID;
 }
@@ -120,24 +120,24 @@ bool Edge::isValid() const {
  * @return The edge index.
  */
 size_t Edge::removeFromSectors() {
-    size_t e_idx = INVALID;
+    size_t eIdx = INVALID;
     for(unsigned char s = 0; s < 2; s++) {
-        Sector* s_ptr = sectors[s];
-        if(!s_ptr) continue;
-        for(size_t e = 0; e < s_ptr->edges.size(); e++) {
-            Edge* e_ptr = s_ptr->edges[e];
-            if(e_ptr == this) {
-                s_ptr->edges.erase(s_ptr->edges.begin() + e);
-                auto nr_it = s_ptr->edgeIdxs.begin() + e;
-                e_idx = *nr_it;
-                s_ptr->edgeIdxs.erase(nr_it);
+        Sector* sPtr = sectors[s];
+        if(!sPtr) continue;
+        for(size_t e = 0; e < sPtr->edges.size(); e++) {
+            Edge* ePtr = sPtr->edges[e];
+            if(ePtr == this) {
+                sPtr->edges.erase(sPtr->edges.begin() + e);
+                auto nrIt = sPtr->edgeIdxs.begin() + e;
+                eIdx = *nrIt;
+                sPtr->edgeIdxs.erase(nrIt);
                 break;
             }
         }
         sectors[s] = nullptr;
         sectorIdxs[s] = INVALID;
     }
-    return e_idx;
+    return eIdx;
 }
 
 
@@ -148,24 +148,24 @@ size_t Edge::removeFromSectors() {
  * @return The edge index.
  */
 size_t Edge::removeFromVertexes() {
-    size_t e_idx = INVALID;
+    size_t eIdx = INVALID;
     for(unsigned char v = 0; v < 2; v++) {
-        Vertex* v_ptr = vertexes[v];
-        if(!v_ptr) continue;
-        for(size_t e = 0; e < v_ptr->edges.size(); e++) {
-            Edge* e_ptr = v_ptr->edges[e];
-            if(e_ptr == this) {
-                v_ptr->edges.erase(v_ptr->edges.begin() + e);
-                auto nr_it = v_ptr->edgeIdxs.begin() + e;
-                e_idx = *nr_it;
-                v_ptr->edgeIdxs.erase(nr_it);
+        Vertex* vPtr = vertexes[v];
+        if(!vPtr) continue;
+        for(size_t e = 0; e < vPtr->edges.size(); e++) {
+            Edge* ePtr = vPtr->edges[e];
+            if(ePtr == this) {
+                vPtr->edges.erase(vPtr->edges.begin() + e);
+                auto nrIt = vPtr->edgeIdxs.begin() + e;
+                eIdx = *nrIt;
+                vPtr->edgeIdxs.erase(nrIt);
                 break;
             }
         }
         vertexes[v] = nullptr;
         vertexIdxs[v] = INVALID;
     }
-    return e_idx;
+    return eIdx;
 }
 
 
@@ -186,23 +186,23 @@ void Edge::swapVertexes() {
  *
  * @param from Sector to transfer from.
  * @param to Sector to transfer to.
- * @param to_idx Index of the sector to transfer to.
- * @param edge_idx Index of the current edge.
+ * @param toIdx Index of the sector to transfer to.
+ * @param edgeIdx Index of the current edge.
  */
 void Edge::transferSector(
-    Sector* from, Sector* to, size_t to_idx, size_t edge_idx
+    Sector* from, Sector* to, size_t toIdx, size_t edgeIdx
 ) {
     size_t idx = getSideWithSector(from);
     engineAssert(
         idx != INVALID,
-        i2s(to_idx)
+        i2s(toIdx)
     );
     
     sectors[idx] = to;
-    sectorIdxs[idx] = to_idx;
+    sectorIdxs[idx] = toIdx;
     
     if(from) from->removeEdge(this);
-    if(to) to->addEdge(this, edge_idx);
+    if(to) to->addEdge(this, edgeIdx);
 }
 
 

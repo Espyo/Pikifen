@@ -315,34 +315,34 @@ struct ControlsMediator {
         PLAYER_ACTION_CAT category,
         const string &name,
         const string &description,
-        const string &internal_name,
-        const string &default_bind_str,
-        float auto_repeat = 0.0f
+        const string &internalName,
+        const string &defaultBindStr,
+        float autoRepeat = 0.0f
     );
     const vector<PfePlayerActionType> &getAllPlayerActionTypes() const;
     vector<ControlBind> &binds();
     string inputSourceToStr(const PlayerInputSource &s) const;
     ControlBind findBind(
-        const PLAYER_ACTION_TYPE action_type_id
+        const PLAYER_ACTION_TYPE actionTypeId
     ) const;
     ControlBind findBind(
-        const string &action_type_name
+        const string &actionTypeName
     ) const;
-    PfePlayerActionType getPlayerActionType(int action_id) const;
-    string getPlayerActionTypeInternalName(int action_id);
+    PfePlayerActionType getPlayerActionType(int actionId) const;
+    string getPlayerActionTypeInternalName(int actionId);
     float getPlayerActionTypeValue(
-        PLAYER_ACTION_TYPE player_action_type_id
+        PLAYER_ACTION_TYPE playerActionTypeId
     );
-    void loadBindsFromDataNode(DataNode* node, unsigned char player_nr);
+    void loadBindsFromDataNode(DataNode* node, unsigned char playerNr);
     PlayerInputSource strToInputSource(const string &s) const;
     PlayerInput allegroEventToInput(const ALLEGRO_EVENT &ev) const;
     bool handleAllegroEvent(const ALLEGRO_EVENT &ev);
-    vector<PlayerAction> newFrame(float delta_t);
+    vector<PlayerAction> newFrame(float deltaT);
     void releaseAll();
-    void saveBindsToDataNode(DataNode* node, unsigned char player_nr);
+    void saveBindsToDataNode(DataNode* node, unsigned char playerNr);
     void setOptions(const ControlsManagerOptions &options);
     void startIgnoringActions();
-    void startIgnoringInputSource(const PlayerInputSource &input_source);
+    void startIgnoringInputSource(const PlayerInputSource &inputSource);
     void stopIgnoringActions();
     
     private:

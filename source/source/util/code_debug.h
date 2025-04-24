@@ -16,14 +16,14 @@
  * To activate:
  *   1. Define CODE_DEBUG_NEW.
  *   2. Include this header file in all cpp files.
- *   3. Do a global project replace of "new" to "code_debug_new",
- *     and "delete" to "code_debug_delete". Enable case-sensitivity and
+ *   3. Do a global project replace of "new" to "codeDebugNew",
+ *     and "delete" to "codeDebugDelete". Enable case-sensitivity and
  *     "whole word" matching, and don't replace anything in this
  *     header file or the cpp file.
  *   4. At some point in your code, start recording allocations by doing
- *     "code_debug_new_recording = true;"
+ *     "codeDebugNewRecording = true;"
  *   5. Place a breakpoint when you want to stop recording and examine
- *     memory leaks, by watching the code_debug_new_allocs vector's contents.
+ *     memory leaks, by watching the codeDebugNewAllocs vector's contents.
  * With this tool on, all memory allocations and freeings will be recorded.
  * This only applies to operations in the project's code
  * (hence the find-and-replace). This helps in debugging memory leaks in
@@ -53,26 +53,26 @@ using std::size_t;
 using std::string;
 
 
-extern map<void*, string> code_debug_new_allocs;
-extern bool code_debug_new_recording;
+extern map<void*, string> codeDebugNewAllocs;
+extern bool codeDebugNewRecording;
 
 void* operator new(size_t size, char* file, int line);
 void* operator new[](size_t size, char* file, int line);
 void operator delete(void* ptr) noexcept;
 void operator delete[](void* ptr, size_t size) noexcept;
 
-#define code_debug_new new(__FILE__, __LINE__)
-#define code_debug_delete delete
+#define codeDebugNew new(__FILE__, __LINE__)
+#define codeDebugDelete delete
 
 #endif //ifdef CODE_DEBUG_NEW
 
 
 //Timestamp for the start of the current benchmark measurement.
-extern double code_debug_benchmark_measure_start;
+extern double codeDebugBenchmarkMeasureStart;
 //Sum of the durations of all code benchmarking iterations.
-extern double code_debug_benchmark_sum;
+extern double codeDebugBenchmarkSum;
 //Number of code benchmarking iterations so far.
-extern unsigned int code_debug_benchmark_iterations;
+extern unsigned int codeDebugBenchmarkIterations;
 
 void codeDebugBenchmarkStartMeasuring();
 double codeDebugBenchmarkEndMeasuring();

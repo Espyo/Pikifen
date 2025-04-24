@@ -87,11 +87,11 @@ void PelletCategory::eraseMob(Mob* m) {
  * @brief Returns a type of pellet given its name,
  * or nullptr on error.
  *
- * @param internal_name Internal name of the mob type to get.
+ * @param internalName Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-MobType* PelletCategory::getType(const string &internal_name) const {
-    auto it = game.content.mobTypes.list.pellet.find(internal_name);
+MobType* PelletCategory::getType(const string &internalName) const {
+    auto it = game.content.mobTypes.list.pellet.find(internalName);
     if(it == game.content.mobTypes.list.pellet.end()) return nullptr;
     return it->second;
 }
@@ -112,9 +112,9 @@ void PelletCategory::getTypeNames(vector<string> &list) const {
 /**
  * @brief Registers a created type of pellet.
  *
- * @param internal_name Internal name of the mob type.
+ * @param internalName Internal name of the mob type.
  * @param type Mob type to register.
  */
-void PelletCategory::registerType(const string &internal_name, MobType* type) {
-    game.content.mobTypes.list.pellet[internal_name] = (PelletType*) type;
+void PelletCategory::registerType(const string &internalName, MobType* type) {
+    game.content.mobTypes.list.pellet[internalName] = (PelletType*) type;
 }

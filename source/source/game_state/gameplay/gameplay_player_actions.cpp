@@ -24,7 +24,7 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
 
     if(shouldIngorePlayerAction(action)) return;
     
-    bool is_down = (action.value >= 0.5);
+    bool isDown = (action.value >= 0.5);
     
     //Before we do the actions, we'll tell the leader object
     //it's recieved an input, which will trigger an event.
@@ -46,7 +46,7 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
             *           &      *
             *******************/
             
-            if(is_down) { //Button press.
+            if(isDown) { //Button press.
             
                 bool done = false;
                 
@@ -182,16 +182,16 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
             *              '-'  *
             ********************/
             
-            if(is_down) {
+            if(isDown) {
                 //Button pressed.
                 
                 if(curLeaderPtr) {
-                    MobEvent* cancel_ev =
+                    MobEvent* cancelEv =
                         curLeaderPtr->fsm.getEvent(LEADER_EV_CANCEL);
                         
-                    if(cancel_ev) {
+                    if(cancelEv) {
                         //Cancel auto-pluck, lying down, etc.
-                        cancel_ev->run(curLeaderPtr);
+                        cancelEv->run(curLeaderPtr);
                     } else {
                         //Start whistling.
                         curLeaderPtr->fsm.runEvent(LEADER_EV_START_WHISTLE);
@@ -218,7 +218,7 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
             *                    / \  / \ *
             ******************************/
             
-            if(!is_down) return;
+            if(!isDown) return;
             
             changeToNextLeader(
                 action.actionTypeId == PLAYER_ACTION_TYPE_NEXT_LEADER,
@@ -235,7 +235,7 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
             *             / \ \ *  *
             ***********************/
             
-            if(!is_down) return;
+            if(!isDown) return;
             
             if(curLeaderPtr && !curLeaderPtr->group->members.empty()) {
                 curLeaderPtr->fsm.runEvent(LEADER_EV_DISMISS);
@@ -252,7 +252,7 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
             *           +-+ +-+ *
             ********************/
             
-            if(!is_down) return;
+            if(!isDown) return;
             
             pauseMenu =
                 new PauseMenu(
@@ -280,16 +280,16 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
             *             '-'  *
             *******************/
             
-            if(!is_down) return;
+            if(!isDown) return;
             
             if(curLeaderPtr) {
                 if(
                     game.content.sprayTypes.list.size() == 1 ||
                     game.content.sprayTypes.list.size() == 2
                 ) {
-                    size_t spray_idx = 0;
+                    size_t sprayIdx = 0;
                     curLeaderPtr->fsm.runEvent(
-                        LEADER_EV_SPRAY, (void*) &spray_idx
+                        LEADER_EV_SPRAY, (void*) &sprayIdx
                     );
                 }
             }
@@ -298,13 +298,13 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
             
         } case PLAYER_ACTION_TYPE_USE_SPRAY_2: {
     
-            if(!is_down) return;
+            if(!isDown) return;
             
             if(curLeaderPtr) {
                 if(game.content.sprayTypes.list.size() == 2) {
-                    size_t spray_idx = 1;
+                    size_t sprayIdx = 1;
                     curLeaderPtr->fsm.runEvent(
-                        LEADER_EV_SPRAY, (void*) &spray_idx
+                        LEADER_EV_SPRAY, (void*) &sprayIdx
                     );
                 }
             }
@@ -314,7 +314,7 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
         } case PLAYER_ACTION_TYPE_NEXT_SPRAY:
         case PLAYER_ACTION_TYPE_PREV_SPRAY: {
     
-            if(!is_down) return;
+            if(!isDown) return;
             
             if(curLeaderPtr) {
                 if(game.content.sprayTypes.list.size() > 2) {
@@ -336,7 +336,7 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
             
         } case PLAYER_ACTION_TYPE_USE_SPRAY: {
     
-            if(!is_down) return;
+            if(!isDown) return;
             
             if(curLeaderPtr) {
                 if(game.content.sprayTypes.list.size() > 2) {
@@ -357,7 +357,7 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
             *          /   *
             ***************/
             
-            if(!is_down) return;
+            if(!isDown) return;
             
             if(game.view.cam.targetZoom < zoomLevels[1]) {
                 game.view.cam.targetZoom = zoomLevels[0];
@@ -392,12 +392,12 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
                 return;
             }
             
-            float floored_pos = floor(action.value);
+            float flooredPos = floor(action.value);
             
             if(action.actionTypeId == PLAYER_ACTION_TYPE_ZOOM_IN) {
-                game.view.cam.targetZoom = game.view.cam.targetZoom + 0.1 * floored_pos;
+                game.view.cam.targetZoom = game.view.cam.targetZoom + 0.1 * flooredPos;
             } else {
-                game.view.cam.targetZoom = game.view.cam.targetZoom - 0.1 * floored_pos;
+                game.view.cam.targetZoom = game.view.cam.targetZoom - 0.1 * flooredPos;
             }
             
             if(game.view.cam.targetZoom > zoomLevels[0]) {
@@ -407,11 +407,11 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
                 game.view.cam.targetZoom = zoomLevels[2];
             }
             
-            SoundSourceConfig cam_sound_config;
-            cam_sound_config.stackMode = SOUND_STACK_MODE_NEVER;
+            SoundSourceConfig camSoundConfig;
+            camSoundConfig.stackMode = SOUND_STACK_MODE_NEVER;
             game.audio.createUiSoundsource(
                 game.sysContent.sndCamera,
-                cam_sound_config
+                camSoundConfig
             );
             
             break;
@@ -424,7 +424,7 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
             *                     *
             **********************/
             
-            if(!is_down) return;
+            if(!isDown) return;
             
             if(curLeaderPtr) {
                 curLeaderPtr->fsm.runEvent(LEADER_EV_LIE_DOWN);
@@ -441,19 +441,19 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
             *                           *
             ****************************/
             
-            if(!is_down) return;
+            if(!isDown) return;
             
             if(curLeaderPtr) {
                 if(curLeaderPtr->group->members.empty()) return;
                 
-                SubgroupType* starting_subgroup_type =
+                SubgroupType* startingSubgroupType =
                     curLeaderPtr->group->curStandbyType;
                     
-                bool switch_successful;
+                bool switchSuccessful;
                 
                 if(curLeaderPtr->holding.empty()) {
                     //If the leader isn't holding anybody.
-                    switch_successful =
+                    switchSuccessful =
                         curLeaderPtr->group->changeStandbyType(
                             action.actionTypeId == PLAYER_ACTION_TYPE_PREV_TYPE
                         );
@@ -467,18 +467,18 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
                     
                     bool finish = false;
                     do {
-                        switch_successful =
+                        switchSuccessful =
                             curLeaderPtr->group->changeStandbyType(
                                 action.actionTypeId == PLAYER_ACTION_TYPE_PREV_TYPE
                             );
                             
                         if(
-                            !switch_successful ||
+                            !switchSuccessful ||
                             curLeaderPtr->group->curStandbyType ==
-                            starting_subgroup_type
+                            startingSubgroupType
                         ) {
                             //Reached around back to the first subgroup...
-                            switch_successful = false;
+                            switchSuccessful = false;
                             finish = true;
                             
                         } else {
@@ -492,14 +492,14 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
                         
                     } while(!finish);
                     
-                    if(switch_successful) {
+                    if(switchSuccessful) {
                         curLeaderPtr->swapHeldPikmin(
                             closestGroupMember[BUBBLE_RELATION_CURRENT]
                         );
                     }
                 }
                 
-                if(switch_successful) {
+                if(switchSuccessful) {
                     game.audio.createUiSoundsource(
                         game.sysContent.sndSwitchPikmin
                     );
@@ -518,7 +518,7 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
             **********************************/
             
             if(
-                !is_down ||
+                !isDown ||
                 !curLeaderPtr ||
                 curLeaderPtr->holding.empty() ||
                 curLeaderPtr->holding[0]->type->category->id !=
@@ -527,39 +527,39 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
                 return;
             }
             
-            Pikmin* held_p_ptr = (Pikmin*) curLeaderPtr->holding[0];
+            Pikmin* heldPPtr = (Pikmin*) curLeaderPtr->holding[0];
             
-            Pikmin* closest_members[N_MATURITIES];
-            Distance closest_dists[N_MATURITIES];
+            Pikmin* closestMembers[N_MATURITIES];
+            Distance closestDists[N_MATURITIES];
             for(size_t m = 0; m < N_MATURITIES; m++) {
-                closest_members[m] = nullptr;
+                closestMembers[m] = nullptr;
             }
             
             for(size_t m = 0; m < curLeaderPtr->group->members.size(); m++) {
-                Mob* m_ptr = curLeaderPtr->group->members[m];
-                if(m_ptr->type != held_p_ptr->type) continue;
+                Mob* mPtr = curLeaderPtr->group->members[m];
+                if(mPtr->type != heldPPtr->type) continue;
                 
-                Pikmin* p_ptr = (Pikmin*) m_ptr;
-                if(p_ptr->maturity == held_p_ptr->maturity) continue;
+                Pikmin* pPtr = (Pikmin*) mPtr;
+                if(pPtr->maturity == heldPPtr->maturity) continue;
                 
-                Distance d(curLeaderPtr->pos, p_ptr->pos);
+                Distance d(curLeaderPtr->pos, pPtr->pos);
                 if(
-                    !closest_members[p_ptr->maturity] ||
-                    d < closest_dists[p_ptr->maturity]
+                    !closestMembers[pPtr->maturity] ||
+                    d < closestDists[pPtr->maturity]
                 ) {
-                    closest_members[p_ptr->maturity] = p_ptr;
-                    closest_dists[p_ptr->maturity] = d;
+                    closestMembers[pPtr->maturity] = pPtr;
+                    closestDists[pPtr->maturity] = d;
                 }
                 
             }
             
-            size_t next_maturity = held_p_ptr->maturity;
-            Mob* new_pikmin = nullptr;
+            size_t nextMaturity = heldPPtr->maturity;
+            Mob* newPikmin = nullptr;
             bool finished = false;
             do {
-                next_maturity =
+                nextMaturity =
                     (size_t) sumAndWrap(
-                        (int) next_maturity,
+                        (int) nextMaturity,
                         (
                             action.actionTypeId ==
                             PLAYER_ACTION_TYPE_NEXT_MATURITY ? 1 : -1
@@ -568,17 +568,17 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
                     );
                     
                 //Back to the start?
-                if(next_maturity == held_p_ptr->maturity) break;
+                if(nextMaturity == heldPPtr->maturity) break;
                 
-                if(!closest_members[next_maturity]) continue;
+                if(!closestMembers[nextMaturity]) continue;
                 
-                new_pikmin = closest_members[next_maturity];
+                newPikmin = closestMembers[nextMaturity];
                 finished = true;
                 
             } while(!finished);
             
-            if(new_pikmin) {
-                curLeaderPtr->swapHeldPikmin(new_pikmin);
+            if(newPikmin) {
+                curLeaderPtr->swapHeldPikmin(newPikmin);
             }
             
             break;
@@ -592,9 +592,9 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
     } else if(msgBox) {
     
         //Displaying a message.
-        if(action.actionTypeId == PLAYER_ACTION_TYPE_THROW && is_down) {
+        if(action.actionTypeId == PLAYER_ACTION_TYPE_THROW && isDown) {
             msgBox->advance();
-        } else if(action.actionTypeId == PLAYER_ACTION_TYPE_PAUSE && is_down) {
+        } else if(action.actionTypeId == PLAYER_ACTION_TYPE_PAUSE && isDown) {
             msgBox->close();
         }
         
@@ -694,7 +694,7 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
         
     } case PLAYER_ACTION_TYPE_GROUP_CURSOR: {
 
-        swarmCursor = is_down;
+        swarmCursor = isDown;
         
         break;
         
@@ -714,7 +714,7 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
  * @return Whether it should be ignored.
  */
 bool GameplayState::shouldIngorePlayerAction(const PlayerAction &action) {
-    const vector<int> actions_allowed_during_interludes {
+    const vector<int> actionsAllowedDuringInterludes {
         PLAYER_ACTION_TYPE_CHANGE_ZOOM,
         PLAYER_ACTION_TYPE_CURSOR_DOWN,
         PLAYER_ACTION_TYPE_CURSOR_LEFT,
@@ -728,7 +728,7 @@ bool GameplayState::shouldIngorePlayerAction(const PlayerAction &action) {
     if(curInterlude != INTERLUDE_NONE) {
         if(
             !isInContainer(
-                actions_allowed_during_interludes, action.actionTypeId
+                actionsAllowedDuringInterludes, action.actionTypeId
             )
         ) {
             return true;

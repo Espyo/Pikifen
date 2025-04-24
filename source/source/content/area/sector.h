@@ -128,22 +128,22 @@ struct Sector {
     //--- Function declarations ---
     
     ~Sector();
-    void addEdge(Edge* e_ptr, size_t e_idx);
+    void addEdge(Edge* ePtr, size_t eIdx);
     void calculateBoundingBox();
     void clone(Sector* destination) const;
     Vertex* getRightmostVertex() const;
     void getTextureMergeSectors(Sector** s1, Sector** s2) const;
     bool isClockwise() const;
     bool isPointInSector(const Point &p) const;
-    void removeEdge(const Edge* e_ptr);
+    void removeEdge(const Edge* ePtr);
     void getNeighborSectorsConditionally(
         const std::function<bool(Sector* s_ptr)> &condition,
-        vector<Sector*> &sector_list
+        vector<Sector*> &sectorList
     );
     
 };
 
 
 Sector* getSector(
-    const Point &p, size_t* out_sector_idx, bool use_blockmap
+    const Point &p, size_t* outSectorIdx, bool useBlockmap
 );

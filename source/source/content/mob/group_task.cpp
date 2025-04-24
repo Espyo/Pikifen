@@ -28,46 +28,46 @@ GroupTask::GroupTask(
     powerGoal(type->powerGoal) {
     
     //Initialize spots.
-    float row_angle = getAngle(tasType->firstRowP1, tasType->firstRowP2);
-    size_t needed_rows =
+    float rowAngle = getAngle(tasType->firstRowP1, tasType->firstRowP2);
+    size_t neededRows =
         ceil(tasType->maxPikmin / (float) tasType->pikminPerRow);
-    float point_dist =
+    float pointDist =
         Distance(tasType->firstRowP1, tasType->firstRowP2).toFloat();
-    float space_between_neighbors =
-        point_dist / (float) (tasType->pikminPerRow - 1);
+    float spaceBetweenNeighbors =
+        pointDist / (float) (tasType->pikminPerRow - 1);
         
     //Create a transformation based on the anchor -- p1.
     ALLEGRO_TRANSFORM trans;
     al_identity_transform(&trans);
-    al_rotate_transform(&trans, row_angle);
+    al_rotate_transform(&trans, rowAngle);
     al_translate_transform(
         &trans, tasType->firstRowP1.x, tasType->firstRowP1.y
     );
     
-    for(size_t r = 0; r < needed_rows; r++) {
+    for(size_t r = 0; r < neededRows; r++) {
     
         for(size_t s = 0; s < tasType->pikminPerRow; s++) {
         
             float x;
             if(tasType->pikminPerRow % 2 == 0) {
                 x =
-                    space_between_neighbors / 2.0 +
-                    space_between_neighbors * ceil((s - 1.0f) / 2.0);
+                    spaceBetweenNeighbors / 2.0 +
+                    spaceBetweenNeighbors * ceil((s - 1.0f) / 2.0);
                 x *= (s % 2 == 0) ? 1 : -1;
             } else {
                 if(s == 0) {
                     x = 0;
                 } else {
-                    x = space_between_neighbors * ceil(s / 2.0);
+                    x = spaceBetweenNeighbors * ceil(s / 2.0);
                     x *= (s % 2 == 0) ? 1 : -1;
                 }
             }
-            x += point_dist / 2.0f;
+            x += pointDist / 2.0f;
             
-            Point s_pos(x, r * tasType->intervalBetweenRows);
-            al_transform_coordinates(&trans, &s_pos.x, &s_pos.y);
+            Point sPos(x, r * tasType->intervalBetweenRows);
+            al_transform_coordinates(&trans, &sPos.x, &sPos.y);
             
-            spots.push_back(GroupTaskSpot(s_pos));
+            spots.push_back(GroupTaskSpot(sPos));
         }
     }
     
@@ -88,7 +88,7 @@ void GroupTask::addWorker(Pikmin* who) {
         }
     }
     
-    bool had_goal = power >= powerGoal;
+    bool hadGoal = power >= powerGoal;
     
     switch(tasType->contributionMethod) {
     case GROUP_TASK_CONTRIBUTION_NORMAL: {
@@ -106,7 +106,7 @@ void GroupTask::addWorker(Pikmin* who) {
     }
     }
     
-    if(!had_goal && power >= powerGoal) {
+    if(!hadGoal && power >= powerGoal) {
         string msg = "goal_reached";
         who->sendScriptMessage(this, msg);
     }
@@ -121,9 +121,9 @@ void GroupTask::finishTask() {
         size_t p = 0;
         p < game.states.gameplay->mobs.pikmin.size(); p++
     ) {
-        Pikmin* p_ptr = game.states.gameplay->mobs.pikmin[p];
-        if(p_ptr->focusedMob && p_ptr->focusedMob == this) {
-            p_ptr->fsm.runEvent(MOB_EV_FOCUSED_MOB_UNAVAILABLE);
+        Pikmin* pikPtr = game.states.gameplay->mobs.pikmin[p];
+        if(pikPtr->focusedMob && pikPtr->focusedMob == this) {
+            pikPtr->fsm.runEvent(MOB_EV_FOCUSED_MOB_UNAVAILABLE);
         }
     }
 }
@@ -135,12 +135,12 @@ void GroupTask::finishTask() {
  * @param whose Who had the reservation?
  */
 void GroupTask::freeUpSpot(Pikmin* whose) {
-    bool was_contributing = false;
+    bool wasContributing = false;
     
     for(size_t s = 0; s < spots.size(); s++) {
         if(spots[s].pikminHere == whose) {
             if(spots[s].state == 2) {
-                was_contributing = true;
+                wasContributing = true;
             }
             spots[s].state = 0;
             spots[s].pikminHere = nullptr;
@@ -148,8 +148,8 @@ void GroupTask::freeUpSpot(Pikmin* whose) {
         }
     }
     
-    if(was_contributing) {
-        bool had_goal = power >= powerGoal;
+    if(wasContributing) {
+        bool hadGoal = power >= powerGoal;
         
         switch(tasType->contributionMethod) {
         case GROUP_TASK_CONTRIBUTION_NORMAL: {
@@ -167,7 +167,7 @@ void GroupTask::freeUpSpot(Pikmin* whose) {
         }
         }
         
-        if(had_goal && power < powerGoal) {
+        if(hadGoal && power < powerGoal) {
             string msg = "goal_lost";
             whose->sendScriptMessage(this, msg);
         }
@@ -181,19 +181,19 @@ void GroupTask::freeUpSpot(Pikmin* whose) {
  * This only keeps in mind things specific to this class, so it shouldn't
  * check for things like carrying, which is global to all mobs.
  *
- * @param fraction_value_nr The fraction's value (upper) number gets set here.
- * @param fraction_req_nr The fraction's required (lower) number gets set here.
- * @param fraction_color The fraction's color gets set here.
+ * @param fractionValueNr The fraction's value (upper) number gets set here.
+ * @param fractionReqNr The fraction's required (lower) number gets set here.
+ * @param fractionColor The fraction's color gets set here.
  * @return Whether the fraction numbers should be shown.
  */
 bool GroupTask::getFractionNumbersInfo(
-    float* fraction_value_nr, float* fraction_req_nr,
-    ALLEGRO_COLOR* fraction_color
+    float* fractionValueNr, float* fractionReqNr,
+    ALLEGRO_COLOR* fractionColor
 ) const {
     if(getPower() <= 0) return false;
-    *fraction_value_nr = getPower();
-    *fraction_req_nr = powerGoal;
-    *fraction_color = game.config.aestheticGen.carryingColorStop;
+    *fractionValueNr = getPower();
+    *fractionReqNr = powerGoal;
+    *fractionColor = game.config.aestheticGen.carryingColorStop;
     return true;
 }
 
@@ -205,12 +205,12 @@ bool GroupTask::getFractionNumbersInfo(
  * @return The spot, or nullptr if there is none.
  */
 GroupTask::GroupTaskSpot* GroupTask::getFreeSpot() {
-    size_t spots_taken = 0;
+    size_t spotsTaken = 0;
     
     for(size_t s = 0; s < spots.size(); s++) {
         if(spots[s].state != 0) {
-            spots_taken++;
-            if(spots_taken == tasType->maxPikmin) {
+            spotsTaken++;
+            if(spotsTaken == tasType->maxPikmin) {
                 //Max Pikmin reached! The Pikmin can't join,
                 //regardless of there being free spots.
                 return nullptr;
@@ -276,9 +276,9 @@ void GroupTask::reserveSpot(GroupTask::GroupTaskSpot* spot, Pikmin* who) {
 /**
  * @brief Ticks time by one frame of logic.
  *
- * @param delta_t How long the frame's tick is, in seconds.
+ * @param deltaT How long the frame's tick is, in seconds.
  */
-void GroupTask::tickClassSpecifics(float delta_t) {
+void GroupTask::tickClassSpecifics(float deltaT) {
     if(health <= 0 && !ranTaskFinishedCode) {
         ranTaskFinishedCode = true;
         finishTask();

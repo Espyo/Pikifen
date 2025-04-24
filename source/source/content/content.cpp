@@ -20,17 +20,17 @@
  * @param node Data node to load from.
  */
 void Content::loadMetadataFromDataNode(DataNode* node) {
-    ReaderSetter rs(node);
+    ReaderSetter mRS(node);
     
     if(manifest) name = manifest->internalName;
-    rs.set("name", name);
-    rs.set("description", description);
-    rs.set("tags", tags);
-    rs.set("maker", maker);
-    rs.set("version", version);
-    rs.set("engine_version", engineVersion);
-    rs.set("maker_notes", makerNotes);
-    rs.set("notes", notes);
+    mRS.set("name", name);
+    mRS.set("description", description);
+    mRS.set("tags", tags);
+    mRS.set("maker", maker);
+    mRS.set("version", version);
+    mRS.set("engine_version", engineVersion);
+    mRS.set("maker_notes", makerNotes);
+    mRS.set("notes", notes);
 }
 
 
@@ -55,20 +55,20 @@ void Content::resetMetadata() {
  * @param node Data node to save to.
  */
 void Content::saveMetadataToDataNode(DataNode* node) const {
-    GetterWriter gw(node);
-    gw.write("name", name);
+    GetterWriter mGW(node);
+    mGW.write("name", name);
     
-#define save_opt(n, v) if(!v.empty()) gw.write((n), (v))
+#define saveOpt(n, v) if(!v.empty()) mGW.write((n), (v))
     
-    save_opt("description", description);
-    save_opt("tags", tags);
-    save_opt("maker", maker);
-    save_opt("version", version);
-    save_opt("engine_version", engineVersion);
-    save_opt("maker_notes", makerNotes);
-    save_opt("notes", notes);
+    saveOpt("description", description);
+    saveOpt("tags", tags);
+    saveOpt("maker", maker);
+    saveOpt("version", version);
+    saveOpt("engine_version", engineVersion);
+    saveOpt("maker_notes", makerNotes);
+    saveOpt("notes", notes);
     
-#undef save_opt
+#undef saveOpt
 }
 
 
@@ -111,17 +111,17 @@ void ContentManifest::fillFromPath(const string &path) {
     clear();
     
     vector<string> parts = split(path, "/");
-    size_t game_data_idx = string::npos;
+    size_t gameDataIdx = string::npos;
     for(size_t p = 0; p < parts.size(); p++) {
         if(parts[p] == FOLDER_NAMES::GAME_DATA) {
-            game_data_idx = p;
+            gameDataIdx = p;
             break;
         }
     }
-    if(game_data_idx == string::npos) return;
-    if((int) game_data_idx >= (int) parts.size() - 2) return;
+    if(gameDataIdx == string::npos) return;
+    if((int) gameDataIdx >= (int) parts.size() - 2) return;
     
     this->path = path;
-    this->pack = parts[game_data_idx + 1];
+    this->pack = parts[gameDataIdx + 1];
     this->internalName = removeExtension(parts.back());
 }

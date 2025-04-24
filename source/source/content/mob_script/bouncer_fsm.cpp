@@ -24,22 +24,22 @@
  *
  * @param typ Mob type to create the finite state machine for.
  */
-void bouncer_fsm::createFsm(MobType* typ) {
+void BouncerFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;
     efc.newState("idling", BOUNCER_STATE_IDLING); {
         efc.newEvent(MOB_EV_ON_ENTER); {
-            efc.run(bouncer_fsm::setIdlingAnimation);
+            efc.run(BouncerFsm::setIdlingAnimation);
         }
         efc.newEvent(MOB_EV_RIDER_ADDED); {
-            efc.run(bouncer_fsm::handleMob);
+            efc.run(BouncerFsm::handleMob);
         }
     }
     efc.newState("bouncing", BOUNCER_STATE_BOUNCING); {
         efc.newEvent(MOB_EV_ON_ENTER); {
-            efc.run(bouncer_fsm::setBouncingAnimation);
+            efc.run(BouncerFsm::setBouncingAnimation);
         }
         efc.newEvent(MOB_EV_RIDER_ADDED); {
-            efc.run(bouncer_fsm::handleMob);
+            efc.run(BouncerFsm::handleMob);
         }
         efc.newEvent(MOB_EV_ANIMATION_END); {
             efc.changeState("idling");
@@ -66,16 +66,16 @@ void bouncer_fsm::createFsm(MobType* typ) {
  * @param info1 Points to the mob that is on top of it.
  * @param info2 Unused.
  */
-void bouncer_fsm::handleMob(Mob* m, void* info1, void* info2) {
-    Bouncer* bou_ptr = (Bouncer*) m;
+void BouncerFsm::handleMob(Mob* m, void* info1, void* info2) {
+    Bouncer* bouPtr = (Bouncer*) m;
     Mob* toucher = (Mob*) info1;
-    Mob* target_mob = nullptr;
+    Mob* targetMob = nullptr;
     
-    if(!bou_ptr->links.empty()) {
-        target_mob = bou_ptr->links[0];
+    if(!bouPtr->links.empty()) {
+        targetMob = bouPtr->links[0];
     }
     
-    if(!target_mob) {
+    if(!targetMob) {
         game.errors.report(
             "The bouncer (" + getErrorMessageMobInfo(m) +
             ") has no linked mob to serve as a target!"
@@ -87,7 +87,7 @@ void bouncer_fsm::handleMob(Mob* m, void* info1, void* info2) {
     
     //Check if a compatible mob touched it.
     if(
-        hasFlag(bou_ptr->bouType->riders, BOUNCER_RIDER_FLAG_PIKMIN) &&
+        hasFlag(bouPtr->bouType->riders, BOUNCER_RIDER_FLAG_PIKMIN) &&
         toucher->type->category->id == MOB_CATEGORY_PIKMIN
     ) {
     
@@ -95,7 +95,7 @@ void bouncer_fsm::handleMob(Mob* m, void* info1, void* info2) {
         ev = toucher->fsm.getEvent(MOB_EV_TOUCHED_BOUNCER);
         
     } else if(
-        hasFlag(bou_ptr->bouType->riders, BOUNCER_RIDER_FLAG_LEADERS) &&
+        hasFlag(bouPtr->bouType->riders, BOUNCER_RIDER_FLAG_LEADERS) &&
         toucher->type->category->id == MOB_CATEGORY_LEADERS
     ) {
     
@@ -103,7 +103,7 @@ void bouncer_fsm::handleMob(Mob* m, void* info1, void* info2) {
         ev = toucher->fsm.getEvent(MOB_EV_TOUCHED_BOUNCER);
         
     } else if(
-        hasFlag(bou_ptr->bouType->riders, BOUNCER_RIDER_FLAG_PIKMIN) &&
+        hasFlag(bouPtr->bouType->riders, BOUNCER_RIDER_FLAG_PIKMIN) &&
         toucher->pathInfo &&
         hasFlag(
             toucher->pathInfo->settings.flags,
@@ -126,13 +126,13 @@ void bouncer_fsm::handleMob(Mob* m, void* info1, void* info2) {
     //The maximum height has a guaranteed minimum (useful if the destination
     //is below the bouncer), and scales up with how much higher the thrown
     //mob needs to go, to make for a nice smooth arc.
-    float max_h = std::max(128.0f, (target_mob->z - toucher->z) * 1.5f);
+    float maxH = std::max(128.0f, (targetMob->z - toucher->z) * 1.5f);
     calculateThrow(
         toucher->pos,
         toucher->z,
-        target_mob->pos,
-        target_mob->z + target_mob->height,
-        max_h, MOB::GRAVITY_ADDER,
+        targetMob->pos,
+        targetMob->z + targetMob->height,
+        maxH, MOB::GRAVITY_ADDER,
         &toucher->speed,
         &toucher->speedZ,
         &angle
@@ -153,7 +153,7 @@ void bouncer_fsm::handleMob(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void bouncer_fsm::setBouncingAnimation(Mob* m, void* info1, void* info2) {
+void BouncerFsm::setBouncingAnimation(Mob* m, void* info1, void* info2) {
     m->setAnimation(BOUNCER_ANIM_BOUNCING);
 }
 
@@ -165,7 +165,7 @@ void bouncer_fsm::setBouncingAnimation(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void bouncer_fsm::setIdlingAnimation(Mob* m, void* info1, void* info2) {
+void BouncerFsm::setIdlingAnimation(Mob* m, void* info1, void* info2) {
     m->setAnimation(
         BOUNCER_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
     );

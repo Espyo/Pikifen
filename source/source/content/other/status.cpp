@@ -34,11 +34,11 @@ Status::Status(StatusType* type) :
  * @brief Ticks a status effect instance's time by one frame of logic,
  * but does not tick its effects logic.
  *
- * @param delta_t How long the frame's tick is, in seconds.
+ * @param deltaT How long the frame's tick is, in seconds.
  */
-void Status::tick(float delta_t) {
+void Status::tick(float deltaT) {
     if(type->autoRemoveTime > 0.0f) {
-        timeLeft -= delta_t;
+        timeLeft -= deltaT;
         if(timeLeft <= 0.0f) {
             toDelete = true;
         }
@@ -57,114 +57,114 @@ void StatusType::loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level) {
     loadMetadataFromDataNode(node);
     
     //Standard data.
-    ReaderSetter rs(node);
+    ReaderSetter sRS(node);
     
-    string affects_str;
-    string reapply_rule_str;
-    string sc_type_str;
-    string particle_offset_str;
-    string particle_gen_str;
-    DataNode* affects_node = nullptr;
-    DataNode* reapply_rule_node = nullptr;
-    DataNode* sc_type_node = nullptr;
-    DataNode* particle_gen_node = nullptr;
+    string affectsStr;
+    string reapplyRuleStr;
+    string scTypeStr;
+    string particleOffsetStr;
+    string particleGenStr;
+    DataNode* affectsNode = nullptr;
+    DataNode* reapplyRuleNode = nullptr;
+    DataNode* scTypeNode = nullptr;
+    DataNode* particleGenNode = nullptr;
     
-    rs.set("color",                   color);
-    rs.set("tint",                    tint);
-    rs.set("glow",                    glow);
-    rs.set("affects",                 affects_str);
-    rs.set("removable_with_whistle",  removableWithWhistle);
-    rs.set("remove_on_hazard_leave",  removeOnHazardLeave);
-    rs.set("auto_remove_time",        autoRemoveTime);
-    rs.set("reapply_rule",            reapply_rule_str, &reapply_rule_node);
-    rs.set("health_change",           healthChange);
-    rs.set("health_change_ratio",     healthChangeRatio);
-    rs.set("state_change_type",       sc_type_str, &sc_type_node);
-    rs.set("state_change_name",       stateChangeName);
-    rs.set("animation_change",        animationChange);
-    rs.set("speed_multiplier",        speedMultiplier);
-    rs.set("attack_multiplier",       attackMultiplier);
-    rs.set("defense_multiplier",      defenseMultiplier);
-    rs.set("maturity_change_amount",  maturityChangeAmount);
-    rs.set("disables_attack",         disablesAttack);
-    rs.set("turns_inedible",          turnsInedible);
-    rs.set("turns_invisible",         turnsInvisible);
-    rs.set("anim_speed_multiplier",   animSpeedMultiplier);
-    rs.set("freezes_animation",       freezesAnimation);
-    rs.set("shaking_effect",          shakingEffect);
-    rs.set("overlay_animation",       overlayAnimation);
-    rs.set("overlay_anim_mob_scale",  overlayAnimMobScale);
-    rs.set("particle_generator",      particle_gen_str, &particle_gen_node);
-    rs.set("particle_offset",         particle_offset_str);
-    rs.set("replacement_on_timeout",  replacementOnTimeoutStr);
+    sRS.set("color",                   color);
+    sRS.set("tint",                    tint);
+    sRS.set("glow",                    glow);
+    sRS.set("affects",                 affectsStr);
+    sRS.set("removable_with_whistle",  removableWithWhistle);
+    sRS.set("remove_on_hazard_leave",  removeOnHazardLeave);
+    sRS.set("auto_remove_time",        autoRemoveTime);
+    sRS.set("reapply_rule",            reapplyRuleStr, &reapplyRuleNode);
+    sRS.set("health_change",           healthChange);
+    sRS.set("health_change_ratio",     healthChangeRatio);
+    sRS.set("state_change_type",       scTypeStr, &scTypeNode);
+    sRS.set("state_change_name",       stateChangeName);
+    sRS.set("animation_change",        animationChange);
+    sRS.set("speed_multiplier",        speedMultiplier);
+    sRS.set("attack_multiplier",       attackMultiplier);
+    sRS.set("defense_multiplier",      defenseMultiplier);
+    sRS.set("maturity_change_amount",  maturityChangeAmount);
+    sRS.set("disables_attack",         disablesAttack);
+    sRS.set("turns_inedible",          turnsInedible);
+    sRS.set("turns_invisible",         turnsInvisible);
+    sRS.set("anim_speed_multiplier",   animSpeedMultiplier);
+    sRS.set("freezes_animation",       freezesAnimation);
+    sRS.set("shaking_effect",          shakingEffect);
+    sRS.set("overlay_animation",       overlayAnimation);
+    sRS.set("overlay_anim_mob_scale",  overlayAnimMobScale);
+    sRS.set("particle_generator",      particleGenStr, &particleGenNode);
+    sRS.set("particle_offset",         particleOffsetStr);
+    sRS.set("replacement_on_timeout",  replacementOnTimeoutStr);
     
     affects = 0;
-    vector<string> affects_str_parts = semicolonListToVector(affects_str);
-    for(size_t a = 0; a < affects_str_parts.size(); a++) {
-        if(affects_str_parts[a] == "pikmin") {
+    vector<string> affectsStrParts = semicolonListToVector(affectsStr);
+    for(size_t a = 0; a < affectsStrParts.size(); a++) {
+        if(affectsStrParts[a] == "pikmin") {
             enableFlag(affects, STATUS_AFFECTS_FLAG_PIKMIN);
-        } else if(affects_str_parts[a] == "leaders") {
+        } else if(affectsStrParts[a] == "leaders") {
             enableFlag(affects, STATUS_AFFECTS_FLAG_LEADERS);
-        } else if(affects_str_parts[a] == "enemies") {
+        } else if(affectsStrParts[a] == "enemies") {
             enableFlag(affects, STATUS_AFFECTS_FLAG_ENEMIES);
-        } else if(affects_str_parts[a] == "others") {
+        } else if(affectsStrParts[a] == "others") {
             enableFlag(affects, STATUS_AFFECTS_FLAG_OTHERS);
         } else {
             game.errors.report(
-                "Unknown affect target \"" + affects_str_parts[a] + "\"!",
-                affects_node
+                "Unknown affect target \"" + affectsStrParts[a] + "\"!",
+                affectsNode
             );
         }
     }
     
-    if(reapply_rule_node) {
-        if(reapply_rule_str == "keep_time") {
+    if(reapplyRuleNode) {
+        if(reapplyRuleStr == "keep_time") {
             reapplyRule = STATUS_REAPPLY_RULE_KEEP_TIME;
-        } else if(reapply_rule_str == "reset_time") {
+        } else if(reapplyRuleStr == "reset_time") {
             reapplyRule = STATUS_REAPPLY_RULE_RESET_TIME;
-        } else if(reapply_rule_str == "add_time") {
+        } else if(reapplyRuleStr == "add_time") {
             reapplyRule = STATUS_REAPPLY_RULE_ADD_TIME;
         } else {
             game.errors.report(
                 "Unknown reapply rule \"" +
-                reapply_rule_str + "\"!", reapply_rule_node
+                reapplyRuleStr + "\"!", reapplyRuleNode
             );
         }
     }
     
-    if(sc_type_node) {
-        if(sc_type_str == "flailing") {
+    if(scTypeNode) {
+        if(scTypeStr == "flailing") {
             stateChangeType = STATUS_STATE_CHANGE_FLAILING;
-        } else if(sc_type_str == "helpless") {
+        } else if(scTypeStr == "helpless") {
             stateChangeType = STATUS_STATE_CHANGE_HELPLESS;
-        } else if(sc_type_str == "panic") {
+        } else if(scTypeStr == "panic") {
             stateChangeType = STATUS_STATE_CHANGE_PANIC;
-        } else if(sc_type_str == "custom") {
+        } else if(scTypeStr == "custom") {
             stateChangeType = STATUS_STATE_CHANGE_CUSTOM;
         } else {
             game.errors.report(
                 "Unknown state change type \"" +
-                sc_type_str + "\"!", sc_type_node
+                scTypeStr + "\"!", scTypeNode
             );
         }
     }
     
-    if(particle_gen_node) {
+    if(particleGenNode) {
         if(
-            game.content.particleGens.list.find(particle_gen_str) ==
+            game.content.particleGens.list.find(particleGenStr) ==
             game.content.particleGens.list.end()
         ) {
             game.errors.report(
                 "Unknown particle generator \"" +
-                particle_gen_str + "\"!", particle_gen_node
+                particleGenStr + "\"!", particleGenNode
             );
         } else {
             generatesParticles =
                 true;
             particleGen =
-                &game.content.particleGens.list[particle_gen_str];
+                &game.content.particleGens.list[particleGenStr];
             particleOffsetPos =
-                s2p(particle_offset_str, &particleOffsetZ);
+                s2p(particleOffsetStr, &particleOffsetZ);
         }
     }
     

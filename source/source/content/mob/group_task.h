@@ -73,8 +73,8 @@ public:
     void finishTask();
     void freeUpSpot(Pikmin* whose);
     bool getFractionNumbersInfo(
-        float* fraction_value_nr, float* fraction_req_nr,
-        ALLEGRO_COLOR* fraction_color
+        float* fractionValueNr, float* fractionReqNr,
+        ALLEGRO_COLOR* fractionColor
     ) const override;
     GroupTaskSpot* getFreeSpot();
     float getPower() const;
@@ -86,7 +86,7 @@ protected:
 
     //--- Function declarations ---
     
-    void tickClassSpecifics(float delta_t) override;
+    void tickClassSpecifics(float deltaT) override;
     
 private:
 

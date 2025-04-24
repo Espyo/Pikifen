@@ -22,60 +22,60 @@
  *
  * @param typ Mob type to create the finite state machine for.
  */
-void resource_fsm::createFsm(MobType* typ) {
+void ResourceFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;
     
     efc.newState("idle_waiting", RESOURCE_STATE_IDLE_WAITING); {
         efc.newEvent(MOB_EV_ON_ENTER); {
-            efc.run(resource_fsm::startWaiting);
-            efc.run(gen_mob_fsm::carryStopMove);
+            efc.run(ResourceFsm::startWaiting);
+            efc.run(GenMobFsm::carryStopMove);
         }
         efc.newEvent(MOB_EV_CARRIER_ADDED); {
-            efc.run(gen_mob_fsm::handleCarrierAdded);
+            efc.run(GenMobFsm::handleCarrierAdded);
         }
         efc.newEvent(MOB_EV_CARRIER_REMOVED); {
-            efc.run(gen_mob_fsm::handleCarrierRemoved);
+            efc.run(GenMobFsm::handleCarrierRemoved);
         }
         efc.newEvent(MOB_EV_CARRY_BEGIN_MOVE); {
-            efc.run(gen_mob_fsm::carryGetPath);
+            efc.run(GenMobFsm::carryGetPath);
             efc.changeState("idle_moving");
         }
         efc.newEvent(MOB_EV_LANDED); {
-            efc.run(resource_fsm::loseMomentum);
+            efc.run(ResourceFsm::loseMomentum);
         }
         efc.newEvent(MOB_EV_TIMER); {
-            efc.run(resource_fsm::vanish);
+            efc.run(ResourceFsm::vanish);
         }
     }
     
     efc.newState("idle_moving", RESOURCE_STATE_IDLE_MOVING); {
         efc.newEvent(MOB_EV_ON_ENTER); {
-            efc.run(resource_fsm::handleStartMoving);
-            efc.run(gen_mob_fsm::carryBeginMove);
+            efc.run(ResourceFsm::handleStartMoving);
+            efc.run(GenMobFsm::carryBeginMove);
         }
         efc.newEvent(MOB_EV_CARRIER_ADDED); {
-            efc.run(gen_mob_fsm::handleCarrierAdded);
+            efc.run(GenMobFsm::handleCarrierAdded);
         }
         efc.newEvent(MOB_EV_CARRIER_REMOVED); {
-            efc.run(gen_mob_fsm::handleCarrierRemoved);
+            efc.run(GenMobFsm::handleCarrierRemoved);
         }
         efc.newEvent(MOB_EV_CARRY_STOP_MOVE); {
-            efc.run(resource_fsm::handleDropped);
+            efc.run(ResourceFsm::handleDropped);
             efc.changeState("idle_waiting");
         }
         efc.newEvent(MOB_EV_CARRY_BEGIN_MOVE); {
-            efc.run(gen_mob_fsm::carryGetPath);
-            efc.run(gen_mob_fsm::carryBeginMove);
+            efc.run(GenMobFsm::carryGetPath);
+            efc.run(GenMobFsm::carryBeginMove);
         }
         efc.newEvent(MOB_EV_REACHED_DESTINATION); {
-            efc.run(resource_fsm::handleReachDestination);
+            efc.run(ResourceFsm::handleReachDestination);
         }
         efc.newEvent(MOB_EV_PATH_BLOCKED); {
             efc.changeState("idle_stuck");
         }
         efc.newEvent(MOB_EV_PATHS_CHANGED); {
-            efc.run(gen_mob_fsm::carryGetPath);
-            efc.run(gen_mob_fsm::carryBeginMove);
+            efc.run(GenMobFsm::carryGetPath);
+            efc.run(GenMobFsm::carryBeginMove);
         }
         efc.newEvent(MOB_EV_CARRY_DELIVERED); {
             efc.changeState("being_delivered");
@@ -87,47 +87,47 @@ void resource_fsm::createFsm(MobType* typ) {
     
     efc.newState("idle_stuck", RESOURCE_STATE_IDLE_STUCK); {
         efc.newEvent(MOB_EV_ON_ENTER); {
-            efc.run(gen_mob_fsm::carryBecomeStuck);
+            efc.run(GenMobFsm::carryBecomeStuck);
         }
         efc.newEvent(MOB_EV_CARRIER_ADDED); {
-            efc.run(gen_mob_fsm::handleCarrierAdded);
+            efc.run(GenMobFsm::handleCarrierAdded);
         }
         efc.newEvent(MOB_EV_CARRIER_REMOVED); {
-            efc.run(gen_mob_fsm::handleCarrierRemoved);
+            efc.run(GenMobFsm::handleCarrierRemoved);
         }
         efc.newEvent(MOB_EV_CARRY_BEGIN_MOVE); {
-            efc.run(gen_mob_fsm::carryStopBeingStuck);
-            efc.run(gen_mob_fsm::carryGetPath);
+            efc.run(GenMobFsm::carryStopBeingStuck);
+            efc.run(GenMobFsm::carryGetPath);
             efc.changeState("idle_moving");
         }
         efc.newEvent(MOB_EV_CARRY_STOP_MOVE); {
-            efc.run(gen_mob_fsm::carryStopBeingStuck);
-            efc.run(resource_fsm::handleDropped);
+            efc.run(GenMobFsm::carryStopBeingStuck);
+            efc.run(ResourceFsm::handleDropped);
             efc.changeState("idle_waiting");
         }
         efc.newEvent(MOB_EV_PATHS_CHANGED); {
-            efc.run(gen_mob_fsm::carryStopBeingStuck);
-            efc.run(gen_mob_fsm::carryGetPath);
+            efc.run(GenMobFsm::carryStopBeingStuck);
+            efc.run(GenMobFsm::carryGetPath);
             efc.changeState("idle_moving");
         }
     }
     
     efc.newState("idle_thrown", RESOURCE_STATE_IDLE_THROWN); {
         efc.newEvent(MOB_EV_LANDED); {
-            efc.run(gen_mob_fsm::loseMomentum);
-            efc.run(gen_mob_fsm::carryGetPath);
+            efc.run(GenMobFsm::loseMomentum);
+            efc.run(GenMobFsm::carryGetPath);
             efc.changeState("idle_moving");
         }
     }
     
     efc.newState("being_delivered", RESOURCE_STATE_BEING_DELIVERED); {
         efc.newEvent(MOB_EV_ON_ENTER); {
-            efc.run(resource_fsm::startBeingDelivered);
-            efc.run(gen_mob_fsm::startBeingDelivered);
+            efc.run(ResourceFsm::startBeingDelivered);
+            efc.run(GenMobFsm::startBeingDelivered);
         }
         efc.newEvent(MOB_EV_TIMER); {
-            efc.run(resource_fsm::handleDelivery);
-            efc.run(gen_mob_fsm::handleDelivery);
+            efc.run(ResourceFsm::handleDelivery);
+            efc.run(GenMobFsm::handleDelivery);
         }
     }
     
@@ -135,22 +135,22 @@ void resource_fsm::createFsm(MobType* typ) {
         "staying_after_delivery", RESOURCE_STATE_STAYING_AFTER_DELIVERY
     ); {
         efc.newEvent(MOB_EV_ON_ENTER); {
-            efc.run(resource_fsm::startWaiting);
-            efc.run(gen_mob_fsm::carryStopMove);
+            efc.run(ResourceFsm::startWaiting);
+            efc.run(GenMobFsm::carryStopMove);
         }
         efc.newEvent(MOB_EV_CARRIER_ADDED); {
-            efc.run(gen_mob_fsm::handleCarrierAdded);
+            efc.run(GenMobFsm::handleCarrierAdded);
         }
         efc.newEvent(MOB_EV_CARRIER_REMOVED); {
-            efc.run(gen_mob_fsm::handleCarrierRemoved);
+            efc.run(GenMobFsm::handleCarrierRemoved);
         }
         efc.newEvent(MOB_EV_CARRY_BEGIN_MOVE); {
-            efc.run(gen_mob_fsm::carryGetPath);
+            efc.run(GenMobFsm::carryGetPath);
             efc.changeState("idle_moving");
         }
         efc.newEvent(MOB_EV_CARRY_STOP_MOVE); {
-            efc.run(gen_mob_fsm::carryStopBeingStuck);
-            efc.run(resource_fsm::handleDropped);
+            efc.run(GenMobFsm::carryStopBeingStuck);
+            efc.run(ResourceFsm::handleDropped);
             efc.changeState("idle_waiting");
         }
     }
@@ -176,18 +176,18 @@ void resource_fsm::createFsm(MobType* typ) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void resource_fsm::handleDelivery(Mob* m, void* info1, void* info2) {
-    Resource* res_ptr = (Resource*) m;
+void ResourceFsm::handleDelivery(Mob* m, void* info1, void* info2) {
+    Resource* resPtr = (Resource*) m;
     if(
-        res_ptr->resType->deliveryResult ==
+        resPtr->resType->deliveryResult ==
         RESOURCE_DELIVERY_RESULT_DAMAGE_MOB
     ) {
-        res_ptr->focusedMob->setHealth(
-            true, false, -res_ptr->resType->damageMobAmount
+        resPtr->focusedMob->setHealth(
+            true, false, -resPtr->resType->damageMobAmount
         );
         
-        HitboxInteraction ev_info(res_ptr, nullptr, nullptr);
-        res_ptr->fsm.runEvent(MOB_EV_DAMAGE, (void*) &ev_info);
+        HitboxInteraction evInfo(resPtr, nullptr, nullptr);
+        resPtr->fsm.runEvent(MOB_EV_DAMAGE, (void*) &evInfo);
     }
 }
 
@@ -199,14 +199,14 @@ void resource_fsm::handleDelivery(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void resource_fsm::handleDropped(Mob* m, void* info1, void* info2) {
-    Resource* res_ptr = (Resource*) m;
-    if(!res_ptr->resType->vanishOnDrop) return;
+void ResourceFsm::handleDropped(Mob* m, void* info1, void* info2) {
+    Resource* resPtr = (Resource*) m;
+    if(!resPtr->resType->vanishOnDrop) return;
     
-    if(res_ptr->resType->vanishDelay == 0) {
-        resource_fsm::vanish(m, info1, info2);
+    if(resPtr->resType->vanishDelay == 0) {
+        ResourceFsm::vanish(m, info1, info2);
     } else {
-        res_ptr->setTimer(res_ptr->resType->vanishDelay);
+        resPtr->setTimer(resPtr->resType->vanishDelay);
     }
 }
 
@@ -218,13 +218,13 @@ void resource_fsm::handleDropped(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void resource_fsm::handleReachDestination(Mob* m, void* info1, void* info2) {
-    Resource* res_ptr = (Resource*) m;
-    if(res_ptr->resType->deliveryResult == RESOURCE_DELIVERY_RESULT_STAY) {
+void ResourceFsm::handleReachDestination(Mob* m, void* info1, void* info2) {
+    Resource* resPtr = (Resource*) m;
+    if(resPtr->resType->deliveryResult == RESOURCE_DELIVERY_RESULT_STAY) {
         m->stopFollowingPath();
         m->fsm.setState(RESOURCE_STATE_STAYING_AFTER_DELIVERY);
     } else {
-        gen_mob_fsm::carryReachDestination(m, info1, info2);
+        GenMobFsm::carryReachDestination(m, info1, info2);
     }
 }
 
@@ -236,9 +236,9 @@ void resource_fsm::handleReachDestination(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void resource_fsm::handleStartMoving(Mob* m, void* info1, void* info2) {
-    Resource* res_ptr = (Resource*) m;
-    res_ptr->setTimer(0);
+void ResourceFsm::handleStartMoving(Mob* m, void* info1, void* info2) {
+    Resource* resPtr = (Resource*) m;
+    resPtr->setTimer(0);
 }
 
 
@@ -249,7 +249,7 @@ void resource_fsm::handleStartMoving(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void resource_fsm::loseMomentum(Mob* m, void* info1, void* info2) {
+void ResourceFsm::loseMomentum(Mob* m, void* info1, void* info2) {
     m->speed.x = 0;
     m->speed.y = 0;
     m->speedZ = 0;
@@ -263,7 +263,7 @@ void resource_fsm::loseMomentum(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void resource_fsm::startBeingDelivered(Mob* m, void* info1, void* info2) {
+void ResourceFsm::startBeingDelivered(Mob* m, void* info1, void* info2) {
     if(
         m->carryInfo->intendedMob &&
         m->carryInfo->intendedMob->type->category->id == MOB_CATEGORY_BRIDGES
@@ -280,23 +280,23 @@ void resource_fsm::startBeingDelivered(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void resource_fsm::startWaiting(Mob* m, void* info1, void* info2) {
-    Resource* res_ptr = (Resource*) m;
+void ResourceFsm::startWaiting(Mob* m, void* info1, void* info2) {
+    Resource* resPtr = (Resource*) m;
     
-    if(res_ptr->toDelete) return;
+    if(resPtr->toDelete) return;
     
-    if(res_ptr->originPile) {
-        res_ptr->carryInfo->mustReturn = true;
-        res_ptr->carryInfo->returnPoint = res_ptr->originPile->pos;
-        res_ptr->carryInfo->returnDist =
-            res_ptr->originPile->radius +
+    if(resPtr->originPile) {
+        resPtr->carryInfo->mustReturn = true;
+        resPtr->carryInfo->returnPoint = resPtr->originPile->pos;
+        resPtr->carryInfo->returnDist =
+            resPtr->originPile->radius +
             game.config.pikmin.standardRadius +
             game.config.pikmin.idleTaskRange / 2.0f;
     } else {
-        res_ptr->carryInfo->mustReturn = false;
+        resPtr->carryInfo->mustReturn = false;
     }
     
-    res_ptr->setAnimation(
+    resPtr->setAnimation(
         RESOURCE_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
     );
 }
@@ -310,12 +310,12 @@ void resource_fsm::startWaiting(Mob* m, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void resource_fsm::vanish(Mob* m, void* info1, void* info2) {
-    Resource* res_ptr = (Resource*) m;
-    if(res_ptr->resType->returnToPileOnVanish && res_ptr->originPile) {
-        res_ptr->originPile->changeAmount(+1);
+void ResourceFsm::vanish(Mob* m, void* info1, void* info2) {
+    Resource* resPtr = (Resource*) m;
+    if(resPtr->resType->returnToPileOnVanish && resPtr->originPile) {
+        resPtr->originPile->changeAmount(+1);
     }
     
-    res_ptr->becomeUncarriable();
-    res_ptr->toDelete = true;
+    resPtr->becomeUncarriable();
+    resPtr->toDelete = true;
 }

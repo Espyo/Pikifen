@@ -51,7 +51,7 @@ struct OnionMenuPikminType {
     
     //--- Function declarations ---
     
-    OnionMenuPikminType(size_t idx, PikminType* pik_type);
+    OnionMenuPikminType(size_t idx, PikminType* pikType);
     
 };
 
@@ -150,19 +150,19 @@ struct OnionMenu {
     
     //--- Function declarations ---
     
-    OnionMenu(PikminNest* n_ptr, Leader* l_ptr);
+    OnionMenu(PikminNest* nPtr, Leader* lPtr);
     ~OnionMenu();
     void addAllToGroup();
     void addAllToOnion();
-    void addToGroup(size_t type_idx);
-    void addToOnion(size_t type_idx);
+    void addToGroup(size_t typeIdx);
+    void addToOnion(size_t typeIdx);
     void confirm();
     void goToPage(size_t page);
     void growButtons();
     void handleAllegroEvent(const ALLEGRO_EVENT &ev);
     void handlePlayerAction(const PlayerAction &action);
-    void start_closing();
-    void tick(float delta_t);
+    void startClosing();
+    void tick(float deltaT);
     void toggleSelectAll();
     
     private:

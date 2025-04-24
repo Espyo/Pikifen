@@ -16,7 +16,7 @@
 /**
  * @brief Functions about the leader's finite state machine and behavior.
  */
-namespace leader_fsm {
+namespace LeaderFsm {
 void createFsm(MobType* typ);
 
 void beAttacked(Mob* m, void* info1, void* info2);

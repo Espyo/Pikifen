@@ -233,24 +233,24 @@ const float GRID_INTERVAL = 32.0f;
 void Options::loadFromDataNode(DataNode* file) {
     //Advanced.
     {
-        ReaderSetter ars(file->getChildByName("advanced"));
+        ReaderSetter aRS(file->getChildByName("advanced"));
         
-        ars.set("draw_cursor_trail", advanced.drawCursorTrail);
-        ars.set("engine_developer", advanced.engineDev);
-        ars.set("fps", advanced.targetFps);
-        ars.set("joystick_max_deadzone", advanced.joystickMaxDeadzone);
-        ars.set("joystick_min_deadzone", advanced.joystickMinDeadzone);
-        ars.set("max_particles", advanced.maxParticles);
-        ars.set("mipmaps", advanced.mipmapsEnabled);
+        aRS.set("draw_cursor_trail", advanced.drawCursorTrail);
+        aRS.set("engine_developer", advanced.engineDev);
+        aRS.set("fps", advanced.targetFps);
+        aRS.set("joystick_max_deadzone", advanced.joystickMaxDeadzone);
+        aRS.set("joystick_min_deadzone", advanced.joystickMinDeadzone);
+        aRS.set("max_particles", advanced.maxParticles);
+        aRS.set("mipmaps", advanced.mipmapsEnabled);
         for(unsigned char p = 0; p < MAX_PLAYERS; p++) {
-            ars.set(
+            aRS.set(
                 "p" + i2s((p + 1)) + "_mouse_moves_cursor",
                 advanced.mouseMovesCursor[p]
             );
         }
-        ars.set("smooth_scaling", advanced.smoothScaling);
-        ars.set("window_position_hack", advanced.windowPosHack);
-        ars.set("zoom_medium_reach", advanced.zoomMediumReach);
+        aRS.set("smooth_scaling", advanced.smoothScaling);
+        aRS.set("window_position_hack", advanced.windowPosHack);
+        aRS.set("zoom_medium_reach", advanced.zoomMediumReach);
         
         advanced.targetFps = std::max(LOWEST_FRAMERATE, advanced.targetFps);
         
@@ -267,60 +267,60 @@ void Options::loadFromDataNode(DataNode* file) {
     
     //Animation editor.
     {
-        ReaderSetter ars(file->getChildByName("animation_editor"));
-        string history_str;
+        ReaderSetter aRS(file->getChildByName("animation_editor"));
+        string historyStr;
         
-        ars.set("bg_path", animEd.bgPath);
-        ars.set("history", history_str);
+        aRS.set("bg_path", animEd.bgPath);
+        aRS.set("history", historyStr);
         
-        animEd.history = loadEditorHistory(history_str);
+        animEd.history = loadEditorHistory(historyStr);
     }
     
     //Area editor.
     {
-        ReaderSetter ars(file->getChildByName("area_editor"));
-        string history_str;
-        unsigned char snap_mode_c = areaEd.snapMode;
-        unsigned char view_mode_c = areaEd.viewMode;
+        ReaderSetter aRS(file->getChildByName("area_editor"));
+        string historyStr;
+        unsigned char snapModeChar = areaEd.snapMode;
+        unsigned char viewModeChar = areaEd.viewMode;
         
-        ars.set("advanced_mode", areaEd.advancedMode);
-        ars.set("backup_interval", areaEd.backupInterval);
-        ars.set("grid_interval", areaEd.gridInterval);
-        ars.set("history", history_str);
-        ars.set("selection_transformation", areaEd.selTrans);
-        ars.set("show_circular_info", areaEd.showCircularInfo);
-        ars.set("show_edge_length", areaEd.showEdgeLength);
-        ars.set("show_path_link_length", areaEd.showPathLinkLength);
-        ars.set("show_territory", areaEd.showTerritory);
-        ars.set("snap_mode", snap_mode_c);
-        ars.set("snap_threshold", areaEd.snapThreshold);
-        ars.set("undo_limit", areaEd.undoLimit);
-        ars.set("view_mode", view_mode_c);
+        aRS.set("advanced_mode", areaEd.advancedMode);
+        aRS.set("backup_interval", areaEd.backupInterval);
+        aRS.set("grid_interval", areaEd.gridInterval);
+        aRS.set("history", historyStr);
+        aRS.set("selection_transformation", areaEd.selTrans);
+        aRS.set("show_circular_info", areaEd.showCircularInfo);
+        aRS.set("show_edge_length", areaEd.showEdgeLength);
+        aRS.set("show_path_link_length", areaEd.showPathLinkLength);
+        aRS.set("show_territory", areaEd.showTerritory);
+        aRS.set("snap_mode", snapModeChar);
+        aRS.set("snap_threshold", areaEd.snapThreshold);
+        aRS.set("undo_limit", areaEd.undoLimit);
+        aRS.set("view_mode", viewModeChar);
         
-        areaEd.history = loadEditorHistory(history_str);
+        areaEd.history = loadEditorHistory(historyStr);
         
-        snap_mode_c =
+        snapModeChar =
             std::min(
-                snap_mode_c, (unsigned char) (AreaEditor::N_SNAP_MODES - 1)
+                snapModeChar, (unsigned char) (AreaEditor::N_SNAP_MODES - 1)
             );
-        areaEd.snapMode = (AreaEditor::SNAP_MODE) snap_mode_c;
+        areaEd.snapMode = (AreaEditor::SNAP_MODE) snapModeChar;
         
-        view_mode_c =
+        viewModeChar =
             std::min(
-                view_mode_c, (unsigned char) (AreaEditor::N_VIEW_MODES - 1)
+                viewModeChar, (unsigned char) (AreaEditor::N_VIEW_MODES - 1)
             );
-        areaEd.viewMode = (AreaEditor::VIEW_MODE) view_mode_c;
+        areaEd.viewMode = (AreaEditor::VIEW_MODE) viewModeChar;
     }
     
     //Audio.
     {
-        ReaderSetter ars(file->getChildByName("audio"));
+        ReaderSetter aRS(file->getChildByName("audio"));
         
-        ars.set("ambiance_sound_volume", audio.ambianceSoundVol);
-        ars.set("gameplay_sound_volume", audio.gameplaySoundVol);
-        ars.set("master_volume", audio.masterVol);
-        ars.set("music_volume", audio.musicVol);
-        ars.set("ui_sound_volume", audio.uiSoundVol);
+        aRS.set("ambiance_sound_volume", audio.ambianceSoundVol);
+        aRS.set("gameplay_sound_volume", audio.gameplaySoundVol);
+        aRS.set("master_volume", audio.masterVol);
+        aRS.set("music_volume", audio.musicVol);
+        aRS.set("ui_sound_volume", audio.uiSoundVol);
         
         audio.ambianceSoundVol = std::clamp(audio.ambianceSoundVol, 0.0f, 1.0f);
         audio.gameplaySoundVol = std::clamp(audio.gameplaySoundVol, 0.0f, 1.0f);
@@ -333,47 +333,47 @@ void Options::loadFromDataNode(DataNode* file) {
     {
         game.controls.binds().clear();
         for(unsigned char p = 0; p < MAX_PLAYERS; p++) {
-            DataNode* binds_node =
+            DataNode* bindsNode =
                 file->getChildByName("control_binds_p" + i2s(p + 1));
-            game.controls.loadBindsFromDataNode(binds_node, p);
+            game.controls.loadBindsFromDataNode(bindsNode, p);
         }
     }
     
     //Controls.
     {
-        ReaderSetter crs(file->getChildByName("controls"));
-        unsigned char auto_throw_mode_c = controls.autoThrowMode;
+        ReaderSetter cRS(file->getChildByName("controls"));
+        unsigned char autoThrowModeChar = controls.autoThrowMode;
         
-        crs.set("auto_throw_mode", auto_throw_mode_c);
-        crs.set("cursor_speed", controls.cursorSpeed);
+        cRS.set("auto_throw_mode", autoThrowModeChar);
+        cRS.set("cursor_speed", controls.cursorSpeed);
         
-        auto_throw_mode_c =
+        autoThrowModeChar =
             std::min(
-                auto_throw_mode_c, (unsigned char) (N_AUTO_THROW_MODES - 1)
+                autoThrowModeChar, (unsigned char) (N_AUTO_THROW_MODES - 1)
             );
-        controls.autoThrowMode = (AUTO_THROW_MODE) auto_throw_mode_c;
+        controls.autoThrowMode = (AUTO_THROW_MODE) autoThrowModeChar;
     }
     
     //Editors.
     {
-        ReaderSetter ers(file->getChildByName("editors"));
-        string open_nodes_str;
+        ReaderSetter eRS(file->getChildByName("editors"));
+        string openNodesStr;
         
-        ers.set("highlight_color", editors.highlightColor);
-        ers.set("mmb_pan", editors.mmbPan);
-        ers.set("mouse_drag_threshold", editors.mouseDragThreshold);
-        ers.set("open_nodes", open_nodes_str);
-        ers.set("primary_color", editors.primaryColor);
-        ers.set("secondary_color", editors.secondaryColor);
-        ers.set("show_tooltips", editors.showTooltips);
-        ers.set("text_color", editors.textColor);
-        ers.set("use_custom_style", editors.useCustomStyle);
+        eRS.set("highlight_color", editors.highlightColor);
+        eRS.set("mmb_pan", editors.mmbPan);
+        eRS.set("mouse_drag_threshold", editors.mouseDragThreshold);
+        eRS.set("open_nodes", openNodesStr);
+        eRS.set("primary_color", editors.primaryColor);
+        eRS.set("secondary_color", editors.secondaryColor);
+        eRS.set("show_tooltips", editors.showTooltips);
+        eRS.set("text_color", editors.textColor);
+        eRS.set("use_custom_style", editors.useCustomStyle);
         
         editors.openNodes.clear();
-        vector<string> open_nodes_vector =
-            semicolonListToVector(open_nodes_str);
-        for(size_t n = 0; n < open_nodes_vector.size(); n++) {
-            editors.openNodes[open_nodes_vector[n]] = true;
+        vector<string> openNodesVector =
+            semicolonListToVector(openNodesStr);
+        for(size_t n = 0; n < openNodesVector.size(); n++) {
+            editors.openNodes[openNodesVector[n]] = true;
         }
         
         //Force the editor styles to be opaque, otherwise there can be problems.
@@ -385,74 +385,74 @@ void Options::loadFromDataNode(DataNode* file) {
     
     //Graphics.
     {
-        ReaderSetter grs(file->getChildByName("graphics"));
-        string resolution_str;
+        ReaderSetter gRS(file->getChildByName("graphics"));
+        string resolutionStr;
         
-        grs.set("fullscreen", graphics.intendedWinFullscreen);
-        grs.set("resolution", resolution_str);
-        grs.set("true_fullscreen", graphics.trueFullscreen);
+        gRS.set("fullscreen", graphics.intendedWinFullscreen);
+        gRS.set("resolution", resolutionStr);
+        gRS.set("true_fullscreen", graphics.trueFullscreen);
         
-        vector<string> resolution_parts = split(resolution_str);
-        if(resolution_parts.size() >= 2) {
-            graphics.intendedWinW = std::max(1, s2i(resolution_parts[0]));
-            graphics.intendedWinH = std::max(1, s2i(resolution_parts[1]));
+        vector<string> resolutionParts = split(resolutionStr);
+        if(resolutionParts.size() >= 2) {
+            graphics.intendedWinW = std::max(1, s2i(resolutionParts[0]));
+            graphics.intendedWinH = std::max(1, s2i(resolutionParts[1]));
         }
         
     }
     
     //Gui editor.
     {
-        ReaderSetter grs(file->getChildByName("gui_editor"));
-        string history_str;
+        ReaderSetter gRS(file->getChildByName("gui_editor"));
+        string historyStr;
         
-        grs.set("grid_interval", guiEd.gridInterval);
-        grs.set("history", history_str);
-        grs.set("snap", guiEd.snap);
+        gRS.set("grid_interval", guiEd.gridInterval);
+        gRS.set("history", historyStr);
+        gRS.set("snap", guiEd.snap);
         
-        guiEd.history = loadEditorHistory(history_str);
+        guiEd.history = loadEditorHistory(historyStr);
     }
     
     //Misc.
     {
-        ReaderSetter mrs(file->getChildByName("misc"));
-        unsigned char leaving_conf_mode_c = misc.leavingConfMode;
+        ReaderSetter mRS(file->getChildByName("misc"));
+        unsigned char leavingConfModeChar = misc.leavingConfMode;
         
-        mrs.set("cursor_cam_weight", misc.cursorCamWeight);
-        mrs.set("leaving_confirmation_mode", leaving_conf_mode_c);
-        mrs.set("show_hud_input_icons", misc.showHudInputIcons);
+        mRS.set("cursor_cam_weight", misc.cursorCamWeight);
+        mRS.set("leaving_confirmation_mode", leavingConfModeChar);
+        mRS.set("show_hud_input_icons", misc.showHudInputIcons);
         
-        leaving_conf_mode_c =
+        leavingConfModeChar =
             std::min(
-                leaving_conf_mode_c,
+                leavingConfModeChar,
                 (unsigned char) (N_LEAVING_CONF_MODES - 1)
             );
-        misc.leavingConfMode = (LEAVING_CONF_MODE) leaving_conf_mode_c;
+        misc.leavingConfMode = (LEAVING_CONF_MODE) leavingConfModeChar;
         
     }
     
     //Packs.
     {
-        ReaderSetter prs(file->getChildByName("packs"));
-        string packs_disabled_str;
-        string packs_load_order_str;
+        ReaderSetter pRS(file->getChildByName("packs"));
+        string packsDisabledStr;
+        string packsLoadOrderStr;
         
-        prs.set("disabled", packs_disabled_str);
-        prs.set("order", packs_load_order_str);
+        pRS.set("disabled", packsDisabledStr);
+        pRS.set("order", packsLoadOrderStr);
         
-        packs.disabled = semicolonListToVector(packs_disabled_str);
-        packs.order = semicolonListToVector(packs_load_order_str);
+        packs.disabled = semicolonListToVector(packsDisabledStr);
+        packs.order = semicolonListToVector(packsLoadOrderStr);
     }
     
     //Particle editor.
     {
-        ReaderSetter prs(file->getChildByName("particle_editor"));
-        string history_str;
+        ReaderSetter pRS(file->getChildByName("particle_editor"));
+        string historyStr;
         
-        prs.set("bg_path", partEd.bgPath);
-        prs.set("grid_interval", partEd.gridInterval);
-        prs.set("history", history_str);
+        pRS.set("bg_path", partEd.bgPath);
+        pRS.set("grid_interval", partEd.gridInterval);
+        pRS.set("history", historyStr);
         
-        partEd.history = loadEditorHistory(history_str);
+        partEd.history = loadEditorHistory(historyStr);
     }
 }
 
@@ -501,150 +501,150 @@ string Options::saveEditorHistory(
 void Options::saveToDataNode(DataNode* file) const {
     //Advanced.
     {
-        GetterWriter agw(file->addNew("advanced"));
+        GetterWriter aGW(file->addNew("advanced"));
         
-        agw.write("draw_cursor_trail", advanced.drawCursorTrail);
-        agw.write("engine_developer", advanced.engineDev);
-        agw.write("fps", advanced.targetFps);
-        agw.write("joystick_max_deadzone", advanced.joystickMaxDeadzone);
-        agw.write("joystick_min_deadzone", advanced.joystickMinDeadzone);
-        agw.write("max_particles", advanced.maxParticles);
-        agw.write("mipmaps", advanced.mipmapsEnabled);
+        aGW.write("draw_cursor_trail", advanced.drawCursorTrail);
+        aGW.write("engine_developer", advanced.engineDev);
+        aGW.write("fps", advanced.targetFps);
+        aGW.write("joystick_max_deadzone", advanced.joystickMaxDeadzone);
+        aGW.write("joystick_min_deadzone", advanced.joystickMinDeadzone);
+        aGW.write("max_particles", advanced.maxParticles);
+        aGW.write("mipmaps", advanced.mipmapsEnabled);
         for(unsigned char p = 0; p < MAX_PLAYERS; p++) {
-            agw.write(
+            aGW.write(
                 "p" + i2s((p + 1)) + "_mouse_moves_cursor",
                 advanced.mouseMovesCursor[p]
             );
         }
-        agw.write("smooth_scaling", advanced.smoothScaling);
-        agw.write("window_position_hack", advanced.windowPosHack);
-        agw.write("zoom_medium_reach", advanced.zoomMediumReach);
+        aGW.write("smooth_scaling", advanced.smoothScaling);
+        aGW.write("window_position_hack", advanced.windowPosHack);
+        aGW.write("zoom_medium_reach", advanced.zoomMediumReach);
     }
     
     //Animation editor.
     {
-        string history_str = saveEditorHistory(animEd.history);
-        GetterWriter agw(file->addNew("animation_editor"));
+        string historyStr = saveEditorHistory(animEd.history);
+        GetterWriter aGW(file->addNew("animation_editor"));
         
-        agw.write("bg_path", animEd.bgPath);
-        agw.write("history", history_str);
+        aGW.write("bg_path", animEd.bgPath);
+        aGW.write("history", historyStr);
     }
     
     //Area editor.
     {
-        string history_str = saveEditorHistory(areaEd.history);
-        GetterWriter agw(file->addNew("area_editor"));
+        string historyStr = saveEditorHistory(areaEd.history);
+        GetterWriter aGW(file->addNew("area_editor"));
         
-        agw.write("advanced_mode", areaEd.advancedMode);
-        agw.write("backup_interval", areaEd.backupInterval);
-        agw.write("grid_interval", areaEd.gridInterval);
-        agw.write("history", history_str);
-        agw.write("selection_transformation", areaEd.selTrans);
-        agw.write("show_circular_info", areaEd.showCircularInfo);
-        agw.write("show_edge_length", areaEd.showEdgeLength);
-        agw.write("show_path_link_length", areaEd.showPathLinkLength);
-        agw.write("show_territory", areaEd.showTerritory);
-        agw.write("snap_mode", areaEd.snapMode);
-        agw.write("snap_threshold", areaEd.snapThreshold);
-        agw.write("undo_limit", areaEd.undoLimit);
-        agw.write("view_mode", areaEd.viewMode);
+        aGW.write("advanced_mode", areaEd.advancedMode);
+        aGW.write("backup_interval", areaEd.backupInterval);
+        aGW.write("grid_interval", areaEd.gridInterval);
+        aGW.write("history", historyStr);
+        aGW.write("selection_transformation", areaEd.selTrans);
+        aGW.write("show_circular_info", areaEd.showCircularInfo);
+        aGW.write("show_edge_length", areaEd.showEdgeLength);
+        aGW.write("show_path_link_length", areaEd.showPathLinkLength);
+        aGW.write("show_territory", areaEd.showTerritory);
+        aGW.write("snap_mode", areaEd.snapMode);
+        aGW.write("snap_threshold", areaEd.snapThreshold);
+        aGW.write("undo_limit", areaEd.undoLimit);
+        aGW.write("view_mode", areaEd.viewMode);
     }
     
     //Audio.
     {
-        GetterWriter agw(file->addNew("audio"));
+        GetterWriter aGW(file->addNew("audio"));
         
-        agw.write("ambiance_sound_volume", audio.ambianceSoundVol);
-        agw.write("gameplay_sound_volume", audio.gameplaySoundVol);
-        agw.write("master_volume", audio.masterVol);
-        agw.write("music_volume", audio.musicVol);
-        agw.write("ui_sound_volume", audio.uiSoundVol);
+        aGW.write("ambiance_sound_volume", audio.ambianceSoundVol);
+        aGW.write("gameplay_sound_volume", audio.gameplaySoundVol);
+        aGW.write("master_volume", audio.masterVol);
+        aGW.write("music_volume", audio.musicVol);
+        aGW.write("ui_sound_volume", audio.uiSoundVol);
     }
     
     //Control binds.
     {
         for(unsigned char p = 0; p < MAX_PLAYERS; p++) {
-            DataNode* binds_node =
+            DataNode* bindsNode =
                 file->addNew("control_binds_p" + i2s(p + 1));
-            game.controls.saveBindsToDataNode(binds_node, p);
+            game.controls.saveBindsToDataNode(bindsNode, p);
         }
     }
     
     //Controls.
     {
-        GetterWriter cgw(file->addNew("controls"));
+        GetterWriter cGW(file->addNew("controls"));
         
-        cgw.write("auto_throw_mode", controls.autoThrowMode);
-        cgw.write("cursor_speed", controls.cursorSpeed);
+        cGW.write("auto_throw_mode", controls.autoThrowMode);
+        cGW.write("cursor_speed", controls.cursorSpeed);
     }
     
     //Editors.
     {
-        vector<string> open_nodes_strs;
+        vector<string> openNodesStrs;
         for(auto &n : editors.openNodes) {
-            if(n.second) open_nodes_strs.push_back(n.first);
+            if(n.second) openNodesStrs.push_back(n.first);
         }
-        string open_nodes_str = join(open_nodes_strs, ";");
-        GetterWriter egw(file->addNew("editors"));
+        string openNodesStr = join(openNodesStrs, ";");
+        GetterWriter eGW(file->addNew("editors"));
         
-        egw.write("highlight_color", editors.highlightColor);
-        egw.write("mmb_pan", editors.mmbPan);
-        egw.write("mouse_drag_threshold", editors.mouseDragThreshold);
-        egw.write("open_nodes", open_nodes_str);
-        egw.write("primary_color", editors.primaryColor);
-        egw.write("secondary_color", editors.secondaryColor);
-        egw.write("show_tooltips", editors.showTooltips);
-        egw.write("text_color", editors.textColor);
-        egw.write("use_custom_style", editors.useCustomStyle);
+        eGW.write("highlight_color", editors.highlightColor);
+        eGW.write("mmb_pan", editors.mmbPan);
+        eGW.write("mouse_drag_threshold", editors.mouseDragThreshold);
+        eGW.write("open_nodes", openNodesStr);
+        eGW.write("primary_color", editors.primaryColor);
+        eGW.write("secondary_color", editors.secondaryColor);
+        eGW.write("show_tooltips", editors.showTooltips);
+        eGW.write("text_color", editors.textColor);
+        eGW.write("use_custom_style", editors.useCustomStyle);
     }
     
     //Graphics.
     {
-        string resolution_str =
+        string resolutionStr =
             i2s(graphics.intendedWinW) + " " + i2s(graphics.intendedWinH);
-        GetterWriter ggw(file->addNew("graphics"));
+        GetterWriter gGW(file->addNew("graphics"));
         
-        ggw.write("fullscreen", graphics.intendedWinFullscreen);
-        ggw.write("resolution", resolution_str);
-        ggw.write("true_fullscreen", graphics.trueFullscreen);
+        gGW.write("fullscreen", graphics.intendedWinFullscreen);
+        gGW.write("resolution", resolutionStr);
+        gGW.write("true_fullscreen", graphics.trueFullscreen);
     }
     
     //Gui editor.
     {
-        string history_str = saveEditorHistory(guiEd.history);
-        GetterWriter ggw(file->addNew("gui_editor"));
+        string historyStr = saveEditorHistory(guiEd.history);
+        GetterWriter gGW(file->addNew("gui_editor"));
         
-        ggw.write("grid_interval", guiEd.gridInterval);
-        ggw.write("history", history_str);
-        ggw.write("snap", guiEd.snap);
+        gGW.write("grid_interval", guiEd.gridInterval);
+        gGW.write("history", historyStr);
+        gGW.write("snap", guiEd.snap);
     }
     
     //Misc.
     {
-        GetterWriter mgw(file->addNew("misc"));
+        GetterWriter mGW(file->addNew("misc"));
         
-        mgw.write("cursor_cam_weight", misc.cursorCamWeight);
-        mgw.write("leaving_confirmation_mode", misc.leavingConfMode);
-        mgw.write("show_hud_input_icons", misc.showHudInputIcons);
+        mGW.write("cursor_cam_weight", misc.cursorCamWeight);
+        mGW.write("leaving_confirmation_mode", misc.leavingConfMode);
+        mGW.write("show_hud_input_icons", misc.showHudInputIcons);
     }
     
     //Packs.
     {
-        string packs_disabled_str = join(packs.disabled, ";");
-        string pack_load_order_str = join(packs.order, ";");
-        GetterWriter pgw(file->addNew("packs"));
+        string packsDisabledStr = join(packs.disabled, ";");
+        string packsLoadOrderStr = join(packs.order, ";");
+        GetterWriter pGW(file->addNew("packs"));
         
-        pgw.write("disabled", packs_disabled_str);
-        pgw.write("order", pack_load_order_str);
+        pGW.write("disabled", packsDisabledStr);
+        pGW.write("order", packsLoadOrderStr);
     }
     
     //Particle editor.
     {
-        string history_str = saveEditorHistory(partEd.history);
-        GetterWriter pgw(file->addNew("particle_editor"));
+        string historyStr = saveEditorHistory(partEd.history);
+        GetterWriter pGW(file->addNew("particle_editor"));
         
-        pgw.write("bg_path", partEd.bgPath);
-        pgw.write("grid_interval", partEd.gridInterval);
-        pgw.write("history", history_str);
+        pGW.write("bg_path", partEd.bgPath);
+        pGW.write("grid_interval", partEd.gridInterval);
+        pGW.write("history", historyStr);
     }
 }

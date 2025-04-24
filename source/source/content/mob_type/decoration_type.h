@@ -70,6 +70,6 @@ public:
     
     DecorationType();
     void loadCatProperties(DataNode* file) override;
-    anim_conversion_vector getAnimConversions() const override;
+    AnimConversionVector getAnimConversions() const override;
     
 };

@@ -57,18 +57,18 @@ struct Edge {
     
     //--- Function declarations ---
     
-    explicit Edge(size_t v1_idx = INVALID, size_t v2_idx = INVALID);
+    explicit Edge(size_t v1Idx = INVALID, size_t v2Idx = INVALID);
     void clone(Edge* destination) const;
-    Sector* getOtherSector(const Sector* v_ptr) const;
-    Vertex* getOtherVertex(const Vertex* v_ptr) const;
-    size_t getSideWithSector(const Sector* s_ptr) const;
+    Sector* getOtherSector(const Sector* vPtr) const;
+    Vertex* getOtherVertex(const Vertex* vPtr) const;
+    size_t getSideWithSector(const Sector* sPtr) const;
     Vertex* hasNeighbor(const Edge* other) const;
     bool isValid() const;
     size_t removeFromSectors();
     size_t removeFromVertexes();
     void swapVertexes();
     void transferSector(
-        Sector* from, Sector* to, size_t to_idx, size_t edge_idx
+        Sector* from, Sector* to, size_t toIdx, size_t edgeIdx
     );
     
 };

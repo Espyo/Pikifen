@@ -34,65 +34,65 @@ const size_t MAX_SYMBOL_LENGTH = 512;
 
 /**
  * @brief Demangles a mangled debugging symbol.
- * 
+ *
  * @param symbol The symbol to demangle.
  * @return The demangled symbol.
  */
 string demangeSymbol(const string &symbol) {
     //Special thanks: https://oroboro.com/stack-trace-on-crash/
-    size_t module_size = 0;
-    size_t name_size = 0;
-    size_t offset_start = string::npos;
-    size_t offset_size = 0;
+    size_t moduleSize = 0;
+    size_t nameSize = 0;
+    size_t offsetStart = string::npos;
+    size_t offsetSize = 0;
     string ret;
     
 #ifdef __APPLE__ //Mac OS.
-    size_t name_start = symbol.find(" _");
-    if(name_start != string::npos) {
-        module_size = name_start;
-        name_start = name_start + 1;
-        size_t space_pos = symbol.find(" ", name_start + 1);
-        if(space_pos != string::npos) {
-            name_size = space_pos - name_start;
-            offset_start = name_start + name_size + 1;
-            if(offset_start != string::npos) {
-                offset_size = symbol.size();
+    size_t nameStart = symbol.find(" _");
+    if(nameStart != string::npos) {
+        moduleSize = nameStart;
+        nameStart = nameStart + 1;
+        size_t spacePos = symbol.find(" ", nameStart + 1);
+        if(spacePos != string::npos) {
+            nameSize = spacePos - nameStart;
+            offsetStart = nameStart + nameSize + 1;
+            if(offsetStart != string::npos) {
+                offsetSize = symbol.size();
             }
         }
     }
 #else //Linux.
-    size_t name_start = symbol.find("(");
-    if(name_start != string::npos) {
-        module_size = name_start;
-        name_start = name_start + 1;
-        size_t plus_pos = symbol.find("+", name_start + 1);
-        if(plus_pos != string::npos) {
-            name_size = plus_pos - name_start;
-            offset_start = name_start + name_size + 1;
-            if(offset_start != string::npos) {
-                offset_size = symbol.find(")", offset_start) - offset_start;
+    size_t nameStart = symbol.find("(");
+    if(nameStart != string::npos) {
+        moduleSize = nameStart;
+        nameStart = nameStart + 1;
+        size_t plusPos = symbol.find("+", nameStart + 1);
+        if(plusPos != string::npos) {
+            nameSize = plusPos - nameStart;
+            offsetStart = nameStart + nameSize + 1;
+            if(offsetStart != string::npos) {
+                offsetSize = symbol.find(")", offsetStart) - offsetStart;
             }
         }
     }
 #endif
     
-    if(name_start != string::npos && offset_start != string::npos) {
-        string module_str = symbol.substr(0, module_size);
-        string mangled_name = symbol.substr(name_start, name_size);
-        string offset_str = symbol.substr(offset_start, offset_size);
+    if(nameStart != string::npos && offsetStart != string::npos) {
+        string moduleStr = symbol.substr(0, moduleSize);
+        string mangledName = symbol.substr(nameStart, nameSize);
+        string offsetStr = symbol.substr(offsetStart, offsetSize);
         
-        int demangle_status;
-        char* demangled_name =
+        int demangleStatus;
+        char* demangledName =
             abi::__cxa_demangle(
-                mangled_name.c_str(), nullptr, nullptr, &demangle_status
+                mangledName.c_str(), nullptr, nullptr, &demangleStatus
             );
             
-        if(demangle_status == 0) {
+        if(demangleStatus == 0) {
             ret =
-                module_str + " " + demangled_name + " + " + offset_str;
+                moduleStr + " " + demangledName + " + " + offsetStr;
         } else {
             ret =
-                module_str + " " + mangled_name + " + " + offset_str;
+                moduleStr + " " + mangledName + " + " + offsetStr;
         }
     } else {
         ret = symbol;
@@ -103,17 +103,17 @@ string demangeSymbol(const string &symbol) {
 
 /**
  * @brief Returns the backtrace of the current stack.
- * 
+ *
  * @return The backtrace.
  */
 vector<string> getBacktrace() {
     vector<string> result;
     void* stack[BACKTRACE::MAX_FRAMES];
     
-    size_t n_symbols = backtrace(stack, BACKTRACE::MAX_FRAMES);
-    char** symbols = backtrace_symbols(stack, n_symbols);
+    size_t nSymbols = backtrace(stack, BACKTRACE::MAX_FRAMES);
+    char** symbols = backtrace_symbols(stack, nSymbols);
     
-    for(size_t s = 0; s < n_symbols; s++) {
+    for(size_t s = 0; s < nSymbols; s++) {
         result.push_back(demangeSymbol(symbols[s]));
     }
     
@@ -137,7 +137,7 @@ vector<string> getBacktrace() {
 
 /**
  * @brief Returns the backtrace of the current stack.
- * 
+ *
  * @return The backtrace.
  */
 vector<string> getBacktrace() {
@@ -152,23 +152,23 @@ vector<string> getBacktrace() {
         );
     symbol->MaxNameLen = BACKTRACE::MAX_SYMBOL_LENGTH;
     symbol->SizeOfStruct = sizeof(SYMBOL_INFO);
-    DWORD dummy_displacement;
+    DWORD dummyDisplacement;
     
     IMAGEHLP_LINE64* line = (IMAGEHLP_LINE64*) malloc(sizeof(IMAGEHLP_LINE64));
     line->SizeOfStruct = sizeof(IMAGEHLP_LINE64);
     
     SymInitialize(process, nullptr, TRUE);
-    size_t n_symbols =
+    size_t nSymbols =
         CaptureStackBackTrace(0, BACKTRACE::MAX_FRAMES, stack, nullptr);
         
-    for(size_t s = 0; s < n_symbols; s++) {
+    for(size_t s = 0; s < nSymbols; s++) {
         SymFromAddr(process, (DWORD64) stack[s], nullptr, symbol);
         
         std::stringstream str;
         if(
             SymGetLineFromAddr64(
                 process, (DWORD64) stack[s],
-                &dummy_displacement, line
+                &dummyDisplacement, line
             )
         ) {
             str <<
@@ -198,7 +198,7 @@ vector<string> getBacktrace() {
 
 /**
  * @brief Returns the backtrace of the current stack.
- * 
+ *
  * @return The backtrace.
  */
 vector<string> getBacktrace() {

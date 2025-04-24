@@ -111,7 +111,7 @@ public:
     //Does this sprite even have a visible Pikmin top?
     bool topVisible = true;
     
-    //The sprite's actual bitmap. This is a sub-bitmap of parent_bmp.
+    //The sprite's actual bitmap. This is a sub-bitmap of parentBmp.
     ALLEGRO_BITMAP* bitmap = nullptr;
     
     //List of hitboxes on this frame.
@@ -125,8 +125,8 @@ public:
         const vector<Hitbox> &h = vector<Hitbox>()
     );
     Sprite(
-        const string &name, ALLEGRO_BITMAP* const b, const Point &b_pos,
-        const Point &b_size, const vector<Hitbox> &h
+        const string &name, ALLEGRO_BITMAP* const b, const Point &bPos,
+        const Point &bSize, const vector<Hitbox> &h
     );
     Sprite(const Sprite &s2);
     ~Sprite();
@@ -136,8 +136,8 @@ public:
         float height = 0, float radius = 0
     );
     void setBitmap(
-        const string &new_bmp_name,
-        const Point &new_bmp_pos, const Point &new_bmp_size,
+        const string &newBmpName,
+        const Point &newBmpPos, const Point &newBmpSize,
         DataNode* node = nullptr
     );
     
@@ -220,7 +220,7 @@ public:
     explicit Animation(
         const string &name = "",
         const vector<Frame> &frames = vector<Frame>(),
-        size_t loop_frame = 0, unsigned char hit_rate = 100
+        size_t loopFrame = 0, unsigned char hitRate = 100
     );
     Animation(const Animation &a2);
     Animation &operator=(const Animation &a2);
@@ -228,9 +228,9 @@ public:
     float getDuration();
     float getLoopDuration();
     void getFrameAndTime(
-        float t, size_t* frame_idx, float* frame_time
+        float t, size_t* frameIdx, float* frameTime
     );
-    float getTime(size_t frame_idx, float frame_time);
+    float getTime(size_t frameIdx, float frameTime);
     
 };
 
@@ -278,10 +278,10 @@ public:
         const DataNode* file
     );
     void deleteSprite(size_t idx);
-    void fillSoundIdxCaches(MobType* mt_ptr);
+    void fillSoundIdxCaches(MobType* mtPtr);
     void fixBodyPartPointers();
     void loadFromDataNode(DataNode* node);
-    void saveToDataNode(DataNode* node, bool save_top_data);
+    void saveToDataNode(DataNode* node, bool saveTopData);
     void sortAlphabetically();
     void destroy();
     
@@ -312,37 +312,37 @@ public:
     
     //--- Function declarations ---
     
-    explicit AnimationInstance(AnimationDatabase* anim_db = nullptr);
+    explicit AnimationInstance(AnimationDatabase* animDb = nullptr);
     AnimationInstance(const AnimationInstance &ai2);
     AnimationInstance &operator=(const AnimationInstance &ai2);
     void clear();
     void toStart();
     void skipAheadRandomly();
     bool tick(
-        float delta_t,
+        float deltaT,
         vector<size_t>* signals = nullptr,
         vector<size_t>* sounds = nullptr
     );
     bool validFrame() const;
     void getSpriteData(
-        Sprite** out_cur_sprite_ptr, Sprite** out_next_sprite_ptr,
-        float* out_interpolation_factor
+        Sprite** outCurSpritePtr, Sprite** outNextSpritePtr,
+        float* outInterpolationFactor
     ) const;
-    size_t getNextFrameIdx(bool* out_reached_end = nullptr) const;
+    size_t getNextFrameIdx(bool* outReachedEnd = nullptr) const;
     void initToFirstAnim(AnimationDatabase* db);
     
 };
 
 
 void getSpriteBasicEffects(
-    const Point &base_pos, float base_angle,
-    float base_angle_cos_cache, float base_angle_sin_cache,
-    Sprite* cur_s_ptr, Sprite* next_s_ptr, float interpolation_factor,
-    Point* out_eff_trans, float* out_eff_angle,
-    Point* out_eff_scale, ALLEGRO_COLOR* out_eff_tint
+    const Point &basePos, float baseAngle,
+    float baseAngleCosCache, float baseAngleSinCache,
+    Sprite* curSpritePtr, Sprite* nextSpritePtr, float interpolationFactor,
+    Point* outEffTrans, float* outEffAngle,
+    Point* outEffScale, ALLEGRO_COLOR* outEffTint
 );
 void getSpriteBasicTopEffects(
-    Sprite* cur_s_ptr, Sprite* next_s_ptr, float interpolation_factor,
-    Point* out_eff_trans, float* out_eff_angle,
-    Point* out_eff_size
+    Sprite* curSpritePtr, Sprite* nextSpritePtr, float interpolationFactor,
+    Point* outEffTrans, float* outEffAngle,
+    Point* outEffSize
 );

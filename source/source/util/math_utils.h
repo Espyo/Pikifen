@@ -70,14 +70,14 @@ enum EASING_METHOD {
 float ease(const EASING_METHOD method, float n);
 uint32_t hashNr(unsigned int input);
 uint32_t hashNr2(unsigned int input1, unsigned int input2);
-float inchTowards(float start, float target, float max_step);
+float inchTowards(float start, float target, float maxStep);
 float interpolateNumber(
-    float input, float input_start, float input_end,
-    float output_start, float output_end
+    float input, float inputStart, float inputEnd,
+    float outputStart, float outputEnd
 );
 int32_t linearCongruentialGenerator(int32_t* state);
 size_t getRandomIdxWithWeights(
-    const vector<float> &weights, float point_random_float
+    const vector<float> &weights, float pointRandomFloat
 );
-int sumAndWrap(int nr, int sum, int wrap_limit);
+int sumAndWrap(int nr, int sum, int wrapLimit);
 float wrapFloat(float nr, float minimum, float maximum);

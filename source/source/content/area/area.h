@@ -126,7 +126,7 @@ struct MobGen {
         const Point &pos = Point(),
         MobType* type = nullptr, float angle = 0, const string &vars = ""
     );
-    void clone(MobGen* destination, bool include_position = true) const;
+    void clone(MobGen* destination, bool includePosition = true) const;
     
 };
 
@@ -166,7 +166,7 @@ struct TreeShadow {
     explicit TreeShadow(
         const Point &center = Point(), const Point &size = Point(100.0f),
         float angle = 0, unsigned char alpha = 255,
-        const string &bmp_name = "", const Point &sway = Point(1.0f)
+        const string &bmpname = "", const Point &sway = Point(1.0f)
     );
     ~TreeShadow();
     
@@ -262,24 +262,24 @@ struct Area : public Content {
     //--- Function declarations ---
     
     void checkStability();
-    void cleanup(bool* out_deleted_sectors = nullptr);
+    void cleanup(bool* outdeleted_sectors = nullptr);
     void clone(Area &other);
-    void connectEdgeToSector(Edge* e_ptr, Sector* s_ptr, size_t side);
-    void connectEdgeToVertex(Edge* e_ptr, Vertex* v_ptr, size_t endpoint);
-    void connectSectorEdges(Sector* s_ptr);
-    void connectVertexEdges(Vertex* v_ptr);
-    size_t findEdgeIdx(const Edge* e_ptr) const;
-    size_t findMobGenIdx(const MobGen* m_ptr) const;
-    size_t findSectorIdx(const Sector* s_ptr) const;
-    size_t findVertexIdx(const Vertex* v_ptr) const;
-    void fixEdgeIdxs(Edge* e_ptr);
-    void fixEdgePointers(Edge* e_ptr);
-    void fixPathStopIdxs(PathStop* s_ptr);
-    void fixPathStopPointers(PathStop* s_ptr);
-    void fixSectorIdxs(Sector* s_ptr);
-    void fixSectorPointers(Sector* s_ptr);
-    void fixVertexIdxs(Vertex* v_ptr);
-    void fixVertexPointers(Vertex* v_ptr);
+    void connectEdgeToSector(Edge* eptr, Sector* sPtr, size_t side);
+    void connectEdgeToVertex(Edge* ePtr, Vertex* vPtr, size_t endpoint);
+    void connectSectorEdges(Sector* sPtr);
+    void connectVertexEdges(Vertex* vPtr);
+    size_t findEdgeIdx(const Edge* ePtr) const;
+    size_t findMobGenIdx(const MobGen* mPtr) const;
+    size_t findSectorIdx(const Sector* sPtr) const;
+    size_t findVertexIdx(const Vertex* vPtr) const;
+    void fixEdgeIdxs(Edge* ePtr);
+    void fixEdgePointers(Edge* ePtr);
+    void fixPathStopIdxs(PathStop* sPtr);
+    void fixPathStopPointers(PathStop* sPtr);
+    void fixSectorIdxs(Sector* sPtr);
+    void fixSectorPointers(Sector* sPtr);
+    void fixVertexIdxs(Vertex* vPtr);
+    void fixVertexPointers(Vertex* vPtr);
     void generateBlockmap();
     void generateEdgesBlockmap(const vector<Edge*> &edges);
     size_t getNrPathLinks();
@@ -290,20 +290,20 @@ struct Area : public Content {
     void loadGeometryFromDataNode(
         DataNode* node, CONTENT_LOAD_LEVEL level
     );
-    void loadThumbnail(const string &thumbnail_path);
+    void loadThumbnail(const string &thumbnailPath);
     Edge* newEdge();
     Sector* newSector();
     Vertex* newVertex();
-    void removeVertex(size_t v_idx);
-    void removeVertex(const Vertex* v_ptr);
-    void removeEdge(size_t e_idx);
-    void removeEdge(const Edge* e_ptr);
-    void removeSector(size_t s_idx);
-    void removeSector(const Sector* s_ptr);
+    void removeVertex(size_t vIdx);
+    void removeVertex(const Vertex* vPtr);
+    void removeEdge(size_t eIdx);
+    void removeEdge(const Edge* ePtr);
+    void removeSector(size_t sIdx);
+    void removeSector(const Sector* sPtr);
     void saveGeometryToDataNode(DataNode* node);
     void saveMainDataToDataNode(DataNode* node);
     void saveMissionDataToDataNode(DataNode* node);
-    void saveThumbnail(bool to_backup);
+    void saveThumbnail(bool toBackup);
     void clear();
     
 };

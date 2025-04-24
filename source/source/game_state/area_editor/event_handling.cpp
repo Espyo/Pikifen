@@ -404,17 +404,17 @@ void AreaEditor::handleLmbDoubleClick(const ALLEGRO_EVENT &ev) {
     switch(state) {
     case EDITOR_STATE_LAYOUT: {
         if(subState == EDITOR_SUB_STATE_NONE) {
-            Vertex* clicked_vertex =
+            Vertex* clickedVertex =
                 getVertexUnderPoint(game.view.cursorWorldPos);
-            if(!clicked_vertex) {
-                Edge* clicked_edge =
+            if(!clickedVertex) {
+                Edge* clickedEdge =
                     getEdgeUnderPoint(game.view.cursorWorldPos);
-                if(clicked_edge) {
+                if(clickedEdge) {
                     registerChange("edge split");
-                    Vertex* new_vertex =
-                        splitEdge(clicked_edge, game.view.cursorWorldPos);
+                    Vertex* newVertex =
+                        splitEdge(clickedEdge, game.view.cursorWorldPos);
                     clearSelection();
-                    selectedVertexes.insert(new_vertex);
+                    selectedVertexes.insert(newVertex);
                     updateVertexSelection();
                 }
             }
@@ -424,9 +424,9 @@ void AreaEditor::handleLmbDoubleClick(const ALLEGRO_EVENT &ev) {
     }
     case EDITOR_STATE_MOBS: {
         if(subState == EDITOR_SUB_STATE_NONE) {
-            MobGen* clicked_mob =
+            MobGen* clickedMob =
                 getMobUnderPoint(game.view.cursorWorldPos);
-            if(!clicked_mob) {
+            if(!clickedMob) {
                 createMobUnderCursor();
                 //Quit now, otherwise the code after this will simulate a
                 //regular click, and if the mob is on the grid and the cursor
@@ -439,25 +439,25 @@ void AreaEditor::handleLmbDoubleClick(const ALLEGRO_EVENT &ev) {
     }
     case EDITOR_STATE_PATHS: {
         if(subState == EDITOR_SUB_STATE_NONE) {
-            bool clicked_stop =
+            bool clickedStop =
                 getPathStopUnderPoint(game.view.cursorWorldPos);
-            if(!clicked_stop) {
-                PathLink* clicked_link_1;
-                PathLink* clicked_link_2;
-                bool clicked_link =
+            if(!clickedStop) {
+                PathLink* clickedLink1;
+                PathLink* clickedLink2;
+                bool clickedLink =
                     getPathLinkUnderPoint(
                         game.view.cursorWorldPos,
-                        &clicked_link_1, &clicked_link_2
+                        &clickedLink1, &clickedLink2
                     );
-                if(clicked_link) {
+                if(clickedLink) {
                     registerChange("path link split");
-                    PathStop* new_stop =
+                    PathStop* newStop =
                         splitPathLink(
-                            clicked_link_1, clicked_link_2,
+                            clickedLink1, clickedLink2,
                             snapPoint(game.view.cursorWorldPos)
                         );
                     clearSelection();
-                    selectedPathStops.insert(new_stop);
+                    selectedPathStops.insert(newStop);
                 }
             }
         }
@@ -527,10 +527,10 @@ void AreaEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
             
                 checkDrawingLine(hotspot);
                 
-                bool needs_reverse = false;
+                bool needsReverse = false;
                 if(drawingLineResult == DRAWING_LINE_RESULT_HIT_EDGE_OR_VERTEX) {
                     //Instead of throwing an error, let's swap the order around.
-                    needs_reverse = true;
+                    needsReverse = true;
                     drawingLineResult = DRAWING_LINE_RESULT_OK;
                 }
                 
@@ -548,7 +548,7 @@ void AreaEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
                     //Add a new node.
                     drawingNodes.push_back(LayoutDrawingNode(this, hotspot));
                     
-                    if(needs_reverse) {
+                    if(needsReverse) {
                         //This is now a sector split drawing.
                         std::reverse(
                             drawingNodes.begin(), drawingNodes.end()
@@ -622,16 +622,16 @@ void AreaEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
             } else {
                 setNewCircleSectorPoints();
                 
-                bool all_valid = true;
+                bool allValid = true;
                 for(
                     size_t e = 0; e < newCircleSectorValidEdges.size(); e++
                 ) {
                     if(!newCircleSectorValidEdges[e]) {
-                        all_valid = false;
+                        allValid = false;
                         break;
                     }
                 }
-                if(!all_valid) {
+                if(!allValid) {
                     setStatus("Some lines touch existing edges!", true);
                 } else {
                     finishCircleSector();
@@ -645,21 +645,21 @@ void AreaEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
     
             moving = true;
             octeeDragStart = game.view.cursorWorldPos;
-            Sector* s_ptr = *selectedSectors.begin();
-            octeeOrigAngle = s_ptr->textureInfo.rot;
-            octeeOrigOffset = s_ptr->textureInfo.translation;
-            octeeOrigScale = s_ptr->textureInfo.scale;
+            Sector* sPtr = *selectedSectors.begin();
+            octeeOrigAngle = sPtr->textureInfo.rot;
+            octeeOrigOffset = sPtr->textureInfo.translation;
+            octeeOrigScale = sPtr->textureInfo.scale;
             
             break;
             
         } case EDITOR_SUB_STATE_NONE: {
     
-            bool tw_handled = false;
+            bool twHandled = false;
             if(
                 game.options.areaEd.selTrans &&
                 selectedVertexes.size() >= 2
             ) {
-                tw_handled =
+                twHandled =
                     curTransformationWidget.handleMouseDown(
                         game.view.cursorWorldPos,
                         &selectionCenter,
@@ -669,26 +669,26 @@ void AreaEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
                     );
             }
             
-            if(!tw_handled) {
+            if(!twHandled) {
             
                 //Start a new layout selection or select something.
-                bool start_new_selection = true;
+                bool startNewSelection = true;
                 
-                Vertex* clicked_vertex = nullptr;
-                Edge* clicked_edge = nullptr;
-                Sector* clicked_sector = nullptr;
+                Vertex* clickedVertex = nullptr;
+                Edge* clickedEdge = nullptr;
+                Sector* clickedSector = nullptr;
                 getHoveredLayoutElement(
-                    &clicked_vertex, &clicked_edge, &clicked_sector
+                    &clickedVertex, &clickedEdge, &clickedSector
                 );
                 
                 if(!isShiftPressed) {
-                    if(clicked_vertex || clicked_edge || clicked_sector) {
-                        start_new_selection = false;
+                    if(clickedVertex || clickedEdge || clickedSector) {
+                        startNewSelection = false;
                     }
                     
                 }
                 
-                if(start_new_selection) {
+                if(startNewSelection) {
                     if(!isCtrlPressed) clearSelection();
                     selecting = true;
                     selectionStart = game.view.cursorWorldPos;
@@ -696,35 +696,35 @@ void AreaEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
                     
                 } else {
                 
-                    if(clicked_vertex) {
+                    if(clickedVertex) {
                         if(
-                            selectedVertexes.find(clicked_vertex) ==
+                            selectedVertexes.find(clickedVertex) ==
                             selectedVertexes.end()
                         ) {
                             if(!isCtrlPressed) {
                                 clearSelection();
                             }
-                            selectVertex(clicked_vertex);
+                            selectVertex(clickedVertex);
                         }
-                    } else if(clicked_edge) {
+                    } else if(clickedEdge) {
                         if(
-                            selectedEdges.find(clicked_edge) ==
+                            selectedEdges.find(clickedEdge) ==
                             selectedEdges.end()
                         ) {
                             if(!isCtrlPressed) {
                                 clearSelection();
                             }
-                            selectEdge(clicked_edge);
+                            selectEdge(clickedEdge);
                         }
                     } else {
                         if(
-                            selectedSectors.find(clicked_sector) ==
+                            selectedSectors.find(clickedSector) ==
                             selectedSectors.end()
                         ) {
                             if(!isCtrlPressed) {
                                 clearSelection();
                             }
-                            selectSector(clicked_sector);
+                            selectSector(clickedSector);
                         }
                     }
                     
@@ -759,35 +759,35 @@ void AreaEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
             subState = EDITOR_SUB_STATE_NONE;
             Point hotspot = snapPoint(game.view.cursorWorldPos);
             
-            Point selection_tl = (*selectedMobs.begin())->pos;
-            Point selection_br = selection_tl;
+            Point selectionTL = (*selectedMobs.begin())->pos;
+            Point selectionBR = selectionTL;
             for(auto m = selectedMobs.begin(); m != selectedMobs.end(); ++m) {
                 if(m == selectedMobs.begin()) continue;
-                if((*m)->pos.x < selection_tl.x) {
-                    selection_tl.x = (*m)->pos.x;
+                if((*m)->pos.x < selectionTL.x) {
+                    selectionTL.x = (*m)->pos.x;
                 }
-                if((*m)->pos.x > selection_br.x) {
-                    selection_br.x = (*m)->pos.x;
+                if((*m)->pos.x > selectionBR.x) {
+                    selectionBR.x = (*m)->pos.x;
                 }
-                if((*m)->pos.y < selection_tl.y) {
-                    selection_tl.y = (*m)->pos.y;
+                if((*m)->pos.y < selectionTL.y) {
+                    selectionTL.y = (*m)->pos.y;
                 }
-                if((*m)->pos.y > selection_br.y) {
-                    selection_br.y = (*m)->pos.y;
+                if((*m)->pos.y > selectionBR.y) {
+                    selectionBR.y = (*m)->pos.y;
                 }
             }
-            Point new_selection_center = (selection_br + selection_tl) / 2.0;
-            set<MobGen*> mobs_to_select;
+            Point newSelectionCenter = (selectionBR + selectionTL) / 2.0;
+            set<MobGen*> mobsToSelect;
             
             for(auto const &m : selectedMobs) {
-                MobGen* new_mg = new MobGen(*m);
-                new_mg->pos = Point(hotspot + (m->pos) - new_selection_center);
-                game.curAreaData->mobGenerators.push_back(new_mg);
-                mobs_to_select.insert(new_mg);
+                MobGen* newMg = new MobGen(*m);
+                newMg->pos = Point(hotspot + (m->pos) - newSelectionCenter);
+                game.curAreaData->mobGenerators.push_back(newMg);
+                mobsToSelect.insert(newMg);
             }
             
             clearSelection();
-            selectedMobs = mobs_to_select;
+            selectedMobs = mobsToSelect;
             
             setStatus(
                 "Duplicated " +
@@ -799,9 +799,9 @@ void AreaEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
         } case EDITOR_SUB_STATE_STORE_MOB_INSIDE: {
     
             //Store the mob inside another.
-            size_t target_idx;
+            size_t targetIdx;
             MobGen* target =
-                getMobUnderPoint(game.view.cursorWorldPos, &target_idx);
+                getMobUnderPoint(game.view.cursorWorldPos, &targetIdx);
             if(!target) return;
             
             for(auto const &m : selectedMobs) {
@@ -813,8 +813,8 @@ void AreaEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
                     return;
                 }
             }
-            MobGen* m_ptr = *(selectedMobs.begin());
-            if(m_ptr->storedInside == target_idx) {
+            MobGen* mPtr = *(selectedMobs.begin());
+            if(mPtr->storedInside == targetIdx) {
                 setStatus(
                     "The object is already stored inside that object!",
                     true
@@ -824,7 +824,7 @@ void AreaEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
             
             registerChange("Object in object storing");
             
-            m_ptr->storedInside = target_idx;
+            mPtr->storedInside = targetIdx;
             
             homogenizeSelectedMobs();
             
@@ -848,9 +848,9 @@ void AreaEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
                     return;
                 }
             }
-            MobGen* m_ptr = *(selectedMobs.begin());
-            for(size_t l = 0; l < m_ptr->links.size(); l++) {
-                if(m_ptr->links[l] == target) {
+            MobGen* mPtr = *(selectedMobs.begin());
+            for(size_t l = 0; l < mPtr->links.size(); l++) {
+                if(mPtr->links[l] == target) {
                     setStatus(
                         "The object already links to that object!",
                         true
@@ -861,8 +861,8 @@ void AreaEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
             
             registerChange("Object link creation");
             
-            m_ptr->links.push_back(target);
-            m_ptr->linkIdxs.push_back(
+            mPtr->links.push_back(target);
+            mPtr->linkIdxs.push_back(
                 game.curAreaData->findMobGenIdx(target)
             );
             
@@ -877,7 +877,7 @@ void AreaEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
     
             //Delete a mob link.
             MobGen* target = getMobUnderPoint(game.view.cursorWorldPos);
-            MobGen* m_ptr = *(selectedMobs.begin());
+            MobGen* mPtr = *(selectedMobs.begin());
             
             if(!target) {
                 std::pair<MobGen*, MobGen*> data1;
@@ -891,10 +891,10 @@ void AreaEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
                 }
                 
                 if(
-                    data1.first != m_ptr &&
-                    data1.second != m_ptr &&
-                    data2.first != m_ptr &&
-                    data2.second != m_ptr
+                    data1.first != mPtr &&
+                    data1.second != mPtr &&
+                    data2.first != mPtr &&
+                    data2.second != mPtr
                 ) {
                     setStatus(
                         "That link does not belong to the current object!",
@@ -903,21 +903,21 @@ void AreaEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
                     return;
                 }
                 
-                if(data1.first == m_ptr) {
+                if(data1.first == mPtr) {
                     target = data1.second;
-                } else if(data2.first == m_ptr) {
+                } else if(data2.first == mPtr) {
                     target = data2.second;
                 }
             }
             
-            size_t link_i = 0;
-            for(; link_i < m_ptr->links.size(); link_i++) {
-                if(m_ptr->links[link_i] == target) {
+            size_t linkI = 0;
+            for(; linkI < mPtr->links.size(); linkI++) {
+                if(mPtr->links[linkI] == target) {
                     break;
                 }
             }
             
-            if(link_i == m_ptr->links.size()) {
+            if(linkI == mPtr->links.size()) {
                 setStatus(
                     "That object is not linked by the current one!",
                     true
@@ -925,8 +925,8 @@ void AreaEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
                 return;
             } else {
                 registerChange("Object link deletion");
-                m_ptr->links.erase(m_ptr->links.begin() + link_i);
-                m_ptr->linkIdxs.erase(m_ptr->linkIdxs.begin() + link_i);
+                mPtr->links.erase(mPtr->links.begin() + linkI);
+                mPtr->linkIdxs.erase(mPtr->linkIdxs.begin() + linkI);
             }
             
             homogenizeSelectedMobs();
@@ -938,23 +938,23 @@ void AreaEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
             
         } case EDITOR_SUB_STATE_MISSION_MOBS: {
     
-            size_t clicked_mob_idx;
-            MobGen* clicked_mob =
-                getMobUnderPoint(game.view.cursorWorldPos, &clicked_mob_idx);
+            size_t clickedMobIdx;
+            MobGen* clickedMob =
+                getMobUnderPoint(game.view.cursorWorldPos, &clickedMobIdx);
                 
             if(
-                clicked_mob_idx != INVALID &&
+                clickedMobIdx != INVALID &&
                 game.missionGoals[game.curAreaData->mission.goal]->
-                isMobApplicable(clicked_mob->type)
+                isMobApplicable(clickedMob->type)
             ) {
                 registerChange("mission object requirements change");
                 auto it =
                     game.curAreaData->mission.goalMobIdxs.find(
-                        clicked_mob_idx
+                        clickedMobIdx
                     );
                 if(it == game.curAreaData->mission.goalMobIdxs.end()) {
                     game.curAreaData->mission.goalMobIdxs.insert(
-                        clicked_mob_idx
+                        clickedMobIdx
                     );
                 } else {
                     game.curAreaData->mission.goalMobIdxs.erase(it);
@@ -966,27 +966,27 @@ void AreaEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
         } case EDITOR_SUB_STATE_NONE: {
     
             //Start a new mob selection or select something.
-            bool start_new_selection = true;
-            MobGen* clicked_mob = getMobUnderPoint(game.view.cursorWorldPos);
+            bool startNewSelection = true;
+            MobGen* clickedMob = getMobUnderPoint(game.view.cursorWorldPos);
             
             if(!isShiftPressed) {
-                if(clicked_mob) {
-                    start_new_selection = false;
+                if(clickedMob) {
+                    startNewSelection = false;
                 }
             }
             
-            if(start_new_selection) {
+            if(startNewSelection) {
                 if(!isCtrlPressed) clearSelection();
                 selecting = true;
                 selectionStart = game.view.cursorWorldPos;
                 selectionEnd = game.view.cursorWorldPos;
                 
             } else {
-                if(selectedMobs.find(clicked_mob) == selectedMobs.end()) {
+                if(selectedMobs.find(clickedMob) == selectedMobs.end()) {
                     if(!isCtrlPressed) {
                         clearSelection();
                     }
-                    selectedMobs.insert(clicked_mob);
+                    selectedMobs.insert(clickedMob);
                 }
                 
             }
@@ -1009,75 +1009,75 @@ void AreaEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
             //Drawing a path.
             Point hotspot =
                 snapPoint(game.view.cursorWorldPos);
-            PathStop* clicked_stop =
+            PathStop* clickedStop =
                 getPathStopUnderPoint(game.view.cursorWorldPos);
                 
             //Split a link, if one was clicked.
-            if(!clicked_stop) {
-                PathLink* clicked_link_1;
-                PathLink* clicked_link_2;
-                bool clicked_link =
+            if(!clickedStop) {
+                PathLink* clickedLink1;
+                PathLink* clickedLink2;
+                bool clickedLink =
                     getPathLinkUnderPoint(
                         game.view.cursorWorldPos,
-                        &clicked_link_1, &clicked_link_2
+                        &clickedLink1, &clickedLink2
                     );
-                if(clicked_link) {
+                if(clickedLink) {
                     registerChange("path link split");
-                    clicked_stop =
+                    clickedStop =
                         splitPathLink(
-                            clicked_link_1, clicked_link_2,
+                            clickedLink1, clickedLink2,
                             snapPoint(game.view.cursorWorldPos)
                         );
                     clearSelection();
-                    selectedPathStops.insert(clicked_stop);
+                    selectedPathStops.insert(clickedStop);
                 }
             }
             
             if(pathDrawingStop1) {
                 //A starting stop already exists, so now we create a link.
-                PathStop* next_stop = nullptr;
-                if(clicked_stop) {
-                    if(clicked_stop == pathDrawingStop1) {
+                PathStop* nextStop = nullptr;
+                if(clickedStop) {
+                    if(clickedStop == pathDrawingStop1) {
                         pathDrawingStop1 = nullptr;
                     } else {
-                        next_stop = clicked_stop;
+                        nextStop = clickedStop;
                     }
                 } else {
                     registerChange("path stop creation");
-                    next_stop = new PathStop(hotspot);
-                    next_stop->flags = pathDrawingFlags;
-                    next_stop->label = pathDrawingLabel;
-                    game.curAreaData->pathStops.push_back(next_stop);
+                    nextStop = new PathStop(hotspot);
+                    nextStop->flags = pathDrawingFlags;
+                    nextStop->label = pathDrawingLabel;
+                    game.curAreaData->pathStops.push_back(nextStop);
                     setStatus("Created path stop.");
                 }
                 
-                if(next_stop) {
+                if(nextStop) {
                     registerChange("path stop link");
                     pathDrawingStop1->addLink(
-                        next_stop, pathDrawingNormals
+                        nextStop, pathDrawingNormals
                     );
-                    PathLink* l1 = pathDrawingStop1->get_link(next_stop);
-                    PathLink* l2 = next_stop->get_link(pathDrawingStop1);
+                    PathLink* l1 = pathDrawingStop1->getLink(nextStop);
+                    PathLink* l2 = nextStop->getLink(pathDrawingStop1);
                     l1->type = pathDrawingType;
                     if(l2) {
                         l2->type = pathDrawingType;
                     }
                     game.curAreaData->fixPathStopIdxs(pathDrawingStop1);
-                    game.curAreaData->fixPathStopIdxs(next_stop);
-                    next_stop->calculateDistsPlusNeighbors();
+                    game.curAreaData->fixPathStopIdxs(nextStop);
+                    nextStop->calculateDistsPlusNeighbors();
                     setStatus("Created path link.");
                     
-                    if(clicked_stop) {
+                    if(clickedStop) {
                         pathDrawingStop1 = nullptr;
                     } else {
-                        pathDrawingStop1 = next_stop;
+                        pathDrawingStop1 = nextStop;
                     }
                 }
                 
             } else {
                 //We need to create or assign a starting stop.
-                if(clicked_stop) {
-                    pathDrawingStop1 = clicked_stop;
+                if(clickedStop) {
+                    pathDrawingStop1 = clickedStop;
                 } else {
                     registerChange("path stop creation");
                     pathDrawingStop1 = new PathStop(hotspot);
@@ -1117,25 +1117,25 @@ void AreaEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
             }
             
             //Start a new path selection or select something.
-            bool start_new_selection = true;
+            bool startNewSelection = true;
             
-            PathStop* clicked_stop =
+            PathStop* clickedStop =
                 getPathStopUnderPoint(game.view.cursorWorldPos);
-            PathLink* clicked_link_1;
-            PathLink* clicked_link_2;
-            bool clicked_link =
+            PathLink* clickedLink1;
+            PathLink* clickedLink2;
+            bool clickedLink =
                 getPathLinkUnderPoint(
                     game.view.cursorWorldPos,
-                    &clicked_link_1, &clicked_link_2
+                    &clickedLink1, &clickedLink2
                 );
             if(!isShiftPressed) {
-                if(clicked_stop || clicked_link) {
-                    start_new_selection = false;
+                if(clickedStop || clickedLink) {
+                    startNewSelection = false;
                 }
                 
             }
             
-            if(start_new_selection) {
+            if(startNewSelection) {
                 if(!isCtrlPressed) clearSelection();
                 selecting = true;
                 selectionStart = game.view.cursorWorldPos;
@@ -1143,27 +1143,27 @@ void AreaEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
                 
             } else {
             
-                if(clicked_stop) {
+                if(clickedStop) {
                     if(
-                        selectedPathStops.find(clicked_stop) ==
+                        selectedPathStops.find(clickedStop) ==
                         selectedPathStops.end()
                     ) {
                         if(!isCtrlPressed) {
                             clearSelection();
                         }
-                        selectedPathStops.insert(clicked_stop);
+                        selectedPathStops.insert(clickedStop);
                     }
                 } else {
                     if(
-                        selectedPathLinks.find(clicked_link_1) ==
+                        selectedPathLinks.find(clickedLink1) ==
                         selectedPathLinks.end()
                     ) {
                         if(!isCtrlPressed) {
                             clearSelection();
                         }
-                        selectedPathLinks.insert(clicked_link_1);
-                        if(clicked_link_2 != nullptr) {
-                            selectedPathLinks.insert(clicked_link_2);
+                        selectedPathLinks.insert(clickedLink1);
+                        if(clickedLink2 != nullptr) {
+                            selectedPathLinks.insert(clickedLink2);
                         }
                     }
                 }
@@ -1189,20 +1189,20 @@ void AreaEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
             subState = EDITOR_SUB_STATE_NONE;
             Point hotspot = snapPoint(game.view.cursorWorldPos);
             
-            TreeShadow* new_shadow = new TreeShadow(hotspot);
-            new_shadow->bitmap = game.bmpError;
+            TreeShadow* newShadow = new TreeShadow(hotspot);
+            newShadow->bitmap = game.bmpError;
             
-            game.curAreaData->treeShadows.push_back(new_shadow);
+            game.curAreaData->treeShadows.push_back(newShadow);
             
-            selectTreeShadow(new_shadow);
+            selectTreeShadow(newShadow);
             
             break;
             
         } case EDITOR_SUB_STATE_NONE: {
     
-            bool transformation_handled = false;
+            bool twHandled = false;
             if(selectedShadow) {
-                transformation_handled =
+                twHandled =
                     curTransformationWidget.handleMouseDown(
                         game.view.cursorWorldPos,
                         &selectedShadow->center,
@@ -1212,7 +1212,7 @@ void AreaEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
                     );
             }
             
-            if(!transformation_handled) {
+            if(!twHandled) {
                 //Select a tree shadow.
                 selectedShadow = nullptr;
                 for(
@@ -1220,20 +1220,20 @@ void AreaEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
                     s < game.curAreaData->treeShadows.size(); s++
                 ) {
                 
-                    TreeShadow* s_ptr = game.curAreaData->treeShadows[s];
-                    Point min_coords, max_coords;
+                    TreeShadow* sPtr = game.curAreaData->treeShadows[s];
+                    Point minCoords, maxCoords;
                     getTransformedRectangleBBox(
-                        s_ptr->center, s_ptr->size, s_ptr->angle,
-                        &min_coords, &max_coords
+                        sPtr->center, sPtr->size, sPtr->angle,
+                        &minCoords, &maxCoords
                     );
                     
                     if(
-                        game.view.cursorWorldPos.x >= min_coords.x &&
-                        game.view.cursorWorldPos.x <= max_coords.x &&
-                        game.view.cursorWorldPos.y >= min_coords.y &&
-                        game.view.cursorWorldPos.y <= max_coords.y
+                        game.view.cursorWorldPos.x >= minCoords.x &&
+                        game.view.cursorWorldPos.x <= maxCoords.x &&
+                        game.view.cursorWorldPos.y >= minCoords.y &&
+                        game.view.cursorWorldPos.y <= maxCoords.y
                     ) {
-                        selectTreeShadow(s_ptr);
+                        selectTreeShadow(sPtr);
                         break;
                     }
                 }
@@ -1294,9 +1294,9 @@ void AreaEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
 void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT &ev) {
     if(selecting) {
     
-        Point selection_tl = selectionStart;
-        Point selection_br = selectionStart;
-        updateMinMaxCoords(selection_tl, selection_br, selectionEnd);
+        Point selectionTL = selectionStart;
+        Point selectionBR = selectionStart;
+        updateMinMaxCoords(selectionTL, selectionBR, selectionEnd);
         selectionEnd = game.view.cursorWorldPos;
         
         switch(state) {
@@ -1306,63 +1306,63 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT &ev) {
             if(!isCtrlPressed) clearSelection();
             
             for(size_t v = 0; v < game.curAreaData->vertexes.size(); v++) {
-                Vertex* v_ptr = game.curAreaData->vertexes[v];
+                Vertex* vPtr = game.curAreaData->vertexes[v];
                 
                 if(
-                    v_ptr->x >= selection_tl.x &&
-                    v_ptr->x <= selection_br.x &&
-                    v_ptr->y >= selection_tl.y &&
-                    v_ptr->y <= selection_br.y
+                    vPtr->x >= selectionTL.x &&
+                    vPtr->x <= selectionBR.x &&
+                    vPtr->y >= selectionTL.y &&
+                    vPtr->y <= selectionBR.y
                 ) {
-                    selectedVertexes.insert(v_ptr);
+                    selectedVertexes.insert(vPtr);
                 }
             }
             updateVertexSelection();
             
             if(selectionFilter != SELECTION_FILTER_VERTEXES) {
                 for(size_t e = 0; e < game.curAreaData->edges.size(); e++) {
-                    Edge* e_ptr = game.curAreaData->edges[e];
+                    Edge* ePtr = game.curAreaData->edges[e];
                     
                     if(
-                        e_ptr->vertexes[0]->x >= selection_tl.x &&
-                        e_ptr->vertexes[0]->x <= selection_br.x &&
-                        e_ptr->vertexes[0]->y >= selection_tl.y &&
-                        e_ptr->vertexes[0]->y <= selection_br.y &&
-                        e_ptr->vertexes[1]->x >= selection_tl.x &&
-                        e_ptr->vertexes[1]->x <= selection_br.x &&
-                        e_ptr->vertexes[1]->y >= selection_tl.y &&
-                        e_ptr->vertexes[1]->y <= selection_br.y
+                        ePtr->vertexes[0]->x >= selectionTL.x &&
+                        ePtr->vertexes[0]->x <= selectionBR.x &&
+                        ePtr->vertexes[0]->y >= selectionTL.y &&
+                        ePtr->vertexes[0]->y <= selectionBR.y &&
+                        ePtr->vertexes[1]->x >= selectionTL.x &&
+                        ePtr->vertexes[1]->x <= selectionBR.x &&
+                        ePtr->vertexes[1]->y >= selectionTL.y &&
+                        ePtr->vertexes[1]->y <= selectionBR.y
                     ) {
-                        selectedEdges.insert(e_ptr);
+                        selectedEdges.insert(ePtr);
                     }
                 }
             }
             
             if(selectionFilter == SELECTION_FILTER_SECTORS) {
                 for(size_t s = 0; s < game.curAreaData->sectors.size(); s++) {
-                    Sector* s_ptr = game.curAreaData->sectors[s];
-                    bool valid_sector = true;
+                    Sector* sPtr = game.curAreaData->sectors[s];
+                    bool validSector = true;
                     
-                    for(size_t e = 0; e < s_ptr->edges.size(); e++) {
-                        Edge* e_ptr = s_ptr->edges[e];
+                    for(size_t e = 0; e < sPtr->edges.size(); e++) {
+                        Edge* ePtr = sPtr->edges[e];
                         
                         if(
-                            e_ptr->vertexes[0]->x < selection_tl.x ||
-                            e_ptr->vertexes[0]->x > selection_br.x ||
-                            e_ptr->vertexes[0]->y < selection_tl.y ||
-                            e_ptr->vertexes[0]->y > selection_br.y ||
-                            e_ptr->vertexes[1]->x < selection_tl.x ||
-                            e_ptr->vertexes[1]->x > selection_br.x ||
-                            e_ptr->vertexes[1]->y < selection_tl.y ||
-                            e_ptr->vertexes[1]->y > selection_br.y
+                            ePtr->vertexes[0]->x < selectionTL.x ||
+                            ePtr->vertexes[0]->x > selectionBR.x ||
+                            ePtr->vertexes[0]->y < selectionTL.y ||
+                            ePtr->vertexes[0]->y > selectionBR.y ||
+                            ePtr->vertexes[1]->x < selectionTL.x ||
+                            ePtr->vertexes[1]->x > selectionBR.x ||
+                            ePtr->vertexes[1]->y < selectionTL.y ||
+                            ePtr->vertexes[1]->y > selectionBR.y
                         ) {
-                            valid_sector = false;
+                            validSector = false;
                             break;
                         }
                     }
                     
-                    if(valid_sector) {
-                        selectedSectors.insert(s_ptr);
+                    if(validSector) {
+                        selectedSectors.insert(sPtr);
                     }
                 }
             }
@@ -1381,16 +1381,16 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT &ev) {
                 size_t m = 0;
                 m < game.curAreaData->mobGenerators.size(); m++
             ) {
-                MobGen* m_ptr = game.curAreaData->mobGenerators[m];
-                float radius = getMobGenRadius(m_ptr);
+                MobGen* mPtr = game.curAreaData->mobGenerators[m];
+                float radius = getMobGenRadius(mPtr);
                 
                 if(
-                    m_ptr->pos.x - radius >= selection_tl.x &&
-                    m_ptr->pos.x + radius <= selection_br.x &&
-                    m_ptr->pos.y - radius >= selection_tl.y &&
-                    m_ptr->pos.y + radius <= selection_br.y
+                    mPtr->pos.x - radius >= selectionTL.x &&
+                    mPtr->pos.x + radius <= selectionBR.x &&
+                    mPtr->pos.y - radius >= selectionTL.y &&
+                    mPtr->pos.y + radius <= selectionBR.y
                 ) {
-                    selectedMobs.insert(m_ptr);
+                    selectedMobs.insert(mPtr);
                 }
             }
             
@@ -1405,38 +1405,38 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT &ev) {
             if(!isCtrlPressed) clearSelection();
             
             for(size_t s = 0; s < game.curAreaData->pathStops.size(); s++) {
-                PathStop* s_ptr = game.curAreaData->pathStops[s];
+                PathStop* sPtr = game.curAreaData->pathStops[s];
                 
                 if(
-                    s_ptr->pos.x -
-                    s_ptr->radius >= selection_tl.x &&
-                    s_ptr->pos.x +
-                    s_ptr->radius <= selection_br.x &&
-                    s_ptr->pos.y -
-                    s_ptr->radius >= selection_tl.y &&
-                    s_ptr->pos.y +
-                    s_ptr->radius <= selection_br.y
+                    sPtr->pos.x -
+                    sPtr->radius >= selectionTL.x &&
+                    sPtr->pos.x +
+                    sPtr->radius <= selectionBR.x &&
+                    sPtr->pos.y -
+                    sPtr->radius >= selectionTL.y &&
+                    sPtr->pos.y +
+                    sPtr->radius <= selectionBR.y
                 ) {
-                    selectedPathStops.insert(s_ptr);
+                    selectedPathStops.insert(sPtr);
                 }
             }
             
             for(size_t s = 0; s < game.curAreaData->pathStops.size(); s++) {
-                PathStop* s_ptr = game.curAreaData->pathStops[s];
-                for(size_t l = 0; l < s_ptr->links.size(); l++) {
-                    PathStop* s2_ptr = s_ptr->links[l]->endPtr;
+                PathStop* sPtr = game.curAreaData->pathStops[s];
+                for(size_t l = 0; l < sPtr->links.size(); l++) {
+                    PathStop* s2Ptr = sPtr->links[l]->endPtr;
                     
                     if(
-                        s_ptr->pos.x >= selection_tl.x &&
-                        s_ptr->pos.x <= selection_br.x &&
-                        s_ptr->pos.y >= selection_tl.y &&
-                        s_ptr->pos.y <= selection_br.y &&
-                        s2_ptr->pos.x >= selection_tl.x &&
-                        s2_ptr->pos.x <= selection_br.x &&
-                        s2_ptr->pos.y >= selection_tl.y &&
-                        s2_ptr->pos.y <= selection_br.y
+                        sPtr->pos.x >= selectionTL.x &&
+                        sPtr->pos.x <= selectionBR.x &&
+                        sPtr->pos.y >= selectionTL.y &&
+                        sPtr->pos.y <= selectionBR.y &&
+                        s2Ptr->pos.x >= selectionTL.x &&
+                        s2Ptr->pos.x <= selectionBR.x &&
+                        s2Ptr->pos.y >= selectionTL.y &&
+                        s2Ptr->pos.y <= selectionBR.y
                     ) {
-                        selectedPathLinks.insert(s_ptr->links[l]);
+                        selectedPathLinks.insert(sPtr->links[l]);
                     }
                 }
             }
@@ -1454,14 +1454,14 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT &ev) {
         case EDITOR_STATE_GAMEPLAY: {
     
             if(subState == EDITOR_SUB_STATE_MISSION_EXIT) {
-                Point exit_center =
+                Point exitCenter =
                     game.curAreaData->mission.goalExitCenter;
-                Point exit_size =
+                Point exitSize =
                     game.curAreaData->mission.goalExitSize;
                 if(
                     curTransformationWidget.handleMouseMove(
                         snapPoint(game.view.cursorWorldPos, true),
-                        &exit_center, &exit_size,
+                        &exitCenter, &exitSize,
                         nullptr,
                         1.0f / game.view.cam.zoom,
                         false,
@@ -1471,8 +1471,8 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT &ev) {
                     )
                 ) {
                     registerChange("mission exit change");
-                    game.curAreaData->mission.goalExitCenter = exit_center;
-                    game.curAreaData->mission.goalExitSize = exit_size;
+                    game.curAreaData->mission.goalExitCenter = exitCenter;
+                    game.curAreaData->mission.goalExitSize = exitSize;
                 }
             }
             break;
@@ -1480,12 +1480,12 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT &ev) {
         }
         case EDITOR_STATE_LAYOUT: {
     
-            bool tw_handled = false;
+            bool twHandled = false;
             if(
                 game.options.areaEd.selTrans &&
                 selectedVertexes.size() >= 2
             ) {
-                tw_handled =
+                twHandled =
                     curTransformationWidget.handleMouseMove(
                         snapPoint(game.view.cursorWorldPos, true),
                         &selectionCenter,
@@ -1497,7 +1497,7 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT &ev) {
                         AREA_EDITOR::SELECTION_TW_PADDING * 2.0f,
                         isAltPressed
                     );
-                if(tw_handled) {
+                if(twHandled) {
                     if(!moving) {
                         startVertexMove();
                     }
@@ -1531,7 +1531,7 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT &ev) {
             }
             
             if(
-                !tw_handled &&
+                !twHandled &&
                 !selectedVertexes.empty() &&
                 subState == EDITOR_SUB_STATE_NONE
             ) {
@@ -1540,14 +1540,14 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT &ev) {
                     startVertexMove();
                 }
                 
-                Point mouse_offset =
+                Point mouseOffset =
                     game.view.cursorWorldPos - moveMouseStartPos;
-                Point closest_vertex_new_p =
+                Point closestVertexNewP =
                     snapPoint(
-                        moveStartPos + mouse_offset, true
+                        moveStartPos + mouseOffset, true
                     );
                 Point offset =
-                    closest_vertex_new_p - moveStartPos;
+                    closestVertexNewP - moveStartPos;
                 for(Vertex* v : selectedVertexes) {
                     Point orig = preMoveVertexCoords[v];
                     v->x = orig.x + offset.x;
@@ -1558,33 +1558,33 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT &ev) {
                 subState == EDITOR_SUB_STATE_OCTEE && moving
             ) {
                 //Move sector texture transformation property.
-                Sector* s_ptr = *selectedSectors.begin();
+                Sector* sPtr = *selectedSectors.begin();
                 
                 switch(octeeMode) {
                 case OCTEE_MODE_OFFSET: {
                     registerChange("sector texture offset change");
                     Point diff = (game.view.cursorWorldPos - octeeDragStart);
-                    diff = rotatePoint(diff, -s_ptr->textureInfo.rot);
-                    diff = diff / s_ptr->textureInfo.scale;
-                    s_ptr->textureInfo.translation = octeeOrigOffset + diff;
+                    diff = rotatePoint(diff, -sPtr->textureInfo.rot);
+                    diff = diff / sPtr->textureInfo.scale;
+                    sPtr->textureInfo.translation = octeeOrigOffset + diff;
                     break;
                 } case OCTEE_MODE_SCALE: {
                     registerChange("sector texture scale change");
                     Point diff = (game.view.cursorWorldPos - octeeDragStart);
-                    diff = rotatePoint(diff, -s_ptr->textureInfo.rot);
-                    Point drag_start_rot =
+                    diff = rotatePoint(diff, -sPtr->textureInfo.rot);
+                    Point dragStartRot =
                         rotatePoint(
-                            octeeDragStart, -s_ptr->textureInfo.rot
+                            octeeDragStart, -sPtr->textureInfo.rot
                         );
-                    diff = diff / drag_start_rot * octeeOrigScale;
-                    s_ptr->textureInfo.scale = octeeOrigScale + diff;
+                    diff = diff / dragStartRot * octeeOrigScale;
+                    sPtr->textureInfo.scale = octeeOrigScale + diff;
                     break;
                 } case OCTEE_MODE_ANGLE: {
                     registerChange("sector texture angle change");
-                    float drag_start_a = getAngle(octeeDragStart);
-                    float cursor_a = getAngle(game.view.cursorWorldPos);
-                    s_ptr->textureInfo.rot =
-                        octeeOrigAngle + (cursor_a - drag_start_a);
+                    float dragStartA = getAngle(octeeDragStart);
+                    float cursorA = getAngle(game.view.cursorWorldPos);
+                    sPtr->textureInfo.rot =
+                        octeeOrigAngle + (cursorA - dragStartA);
                     break;
                 }
                 };
@@ -1605,11 +1605,11 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT &ev) {
                     startMobMove();
                 }
                 
-                Point mouse_offset =
+                Point mouseOffset =
                     game.view.cursorWorldPos - moveMouseStartPos;
-                Point closest_mob_new_p =
-                    snapPoint(moveStartPos + mouse_offset);
-                Point offset = closest_mob_new_p - moveStartPos;
+                Point closestMobNewP =
+                    snapPoint(moveStartPos + mouseOffset);
+                Point offset = closestMobNewP - moveStartPos;
                 for(
                     auto m = selectedMobs.begin();
                     m != selectedMobs.end(); ++m
@@ -1632,11 +1632,11 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT &ev) {
                     startPathStopMove();
                 }
                 
-                Point mouse_offset =
+                Point mouseOffset =
                     game.view.cursorWorldPos - moveMouseStartPos;
-                Point closest_stop_new_p =
-                    snapPoint(moveStartPos + mouse_offset);
-                Point offset = closest_stop_new_p - moveStartPos;
+                Point closestStopNewP =
+                    snapPoint(moveStartPos + mouseOffset);
+                Point offset = closestStopNewP - moveStartPos;
                 for(
                     auto s = selectedPathStops.begin();
                     s != selectedPathStops.end(); ++s
@@ -1674,15 +1674,15 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT &ev) {
                 subState == EDITOR_SUB_STATE_NONE
             ) {
                 //Move tree shadow.
-                Point shadow_center = selectedShadow->center;
-                Point shadow_size = selectedShadow->size;
-                float shadow_angle = selectedShadow->angle;
+                Point shadowCenter = selectedShadow->center;
+                Point shadowSize = selectedShadow->size;
+                float shadowAngle = selectedShadow->angle;
                 if(
                     curTransformationWidget.handleMouseMove(
                         snapPoint(game.view.cursorWorldPos),
-                        &shadow_center,
-                        &shadow_size,
-                        &shadow_angle,
+                        &shadowCenter,
+                        &shadowSize,
+                        &shadowAngle,
                         1.0f / game.view.cam.zoom,
                         selectedShadowKeepAspectRatio,
                         false,
@@ -1691,9 +1691,9 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT &ev) {
                     )
                 ) {
                     registerChange("tree shadow transformation");
-                    selectedShadow->center = shadow_center;
-                    selectedShadow->size = shadow_size;
-                    selectedShadow->angle = shadow_angle;
+                    selectedShadow->center = shadowCenter;
+                    selectedShadow->size = shadowSize;
+                    selectedShadow->angle = shadowAngle;
                 }
             }
             
@@ -1829,7 +1829,7 @@ void AreaEditor::handleMouseUpdate(const ALLEGRO_EVENT &ev) {
                 getMobUnderPoint(game.view.cursorWorldPos);
             break;
         } case EDITOR_STATE_PATHS: {
-            PathLink* hovered_link_1;
+            PathLink* hoveredLink1;
             
             highlightedPathStop =
                 getPathStopUnderPoint(game.view.cursorWorldPos);
@@ -1839,10 +1839,10 @@ void AreaEditor::handleMouseUpdate(const ALLEGRO_EVENT &ev) {
                 //so keep the link null if there's a stop.
                 getPathLinkUnderPoint(
                     game.view.cursorWorldPos,
-                    &hovered_link_1, &highlightedPathLink
+                    &hoveredLink1, &highlightedPathLink
                 );
                 if(highlightedPathLink == nullptr) {
-                    highlightedPathLink = hovered_link_1;
+                    highlightedPathLink = hoveredLink1;
                 }
             }
             break;

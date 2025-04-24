@@ -55,18 +55,18 @@ PikminType::PikminType() :
     weight = 1;
     showHealth = false;
     
-    MobType::Reach idle_attack_reach;
-    idle_attack_reach.angle1 = TAU;
-    idle_attack_reach.radius1 = game.config.pikmin.idleTaskRange;
-    reaches.push_back(idle_attack_reach);
-    MobType::Reach swarm_attack_reach;
-    swarm_attack_reach.angle1 = TAU;
-    swarm_attack_reach.radius1 = game.config.pikmin.swarmTaskRange;
-    reaches.push_back(swarm_attack_reach);
-    MobType::Reach chase_reach;
-    chase_reach.angle1 = TAU;
-    chase_reach.radius1 = game.config.pikmin.chaseRange;
-    reaches.push_back(chase_reach);
+    MobType::Reach idleAttackReach;
+    idleAttackReach.angle1 = TAU;
+    idleAttackReach.radius1 = game.config.pikmin.idleTaskRange;
+    reaches.push_back(idleAttackReach);
+    MobType::Reach swarmAttackReach;
+    swarmAttackReach.angle1 = TAU;
+    swarmAttackReach.radius1 = game.config.pikmin.swarmTaskRange;
+    reaches.push_back(swarmAttackReach);
+    MobType::Reach chaseReach;
+    chaseReach.angle1 = TAU;
+    chaseReach.radius1 = game.config.pikmin.chaseRange;
+    reaches.push_back(chaseReach);
     targetType = MOB_TARGET_FLAG_PLAYER;
     huntableTargets =
         MOB_TARGET_FLAG_PLAYER |
@@ -84,38 +84,38 @@ PikminType::PikminType() :
         MOB_TARGET_FLAG_EXPLODABLE_PIKMIN_OBSTACLE |
         MOB_TARGET_FLAG_FRAGILE;
         
-    AreaEditorProp aep_maturity;
-    aep_maturity.name = "Maturity";
-    aep_maturity.var = "maturity";
-    aep_maturity.type = AEMP_TYPE_NR_LIST;
-    aep_maturity.defValue = "2";
-    aep_maturity.valueList.push_back("Leaf");
-    aep_maturity.valueList.push_back("Bud");
-    aep_maturity.valueList.push_back("Flower");
-    aep_maturity.tooltip = "The Pikmin's starting maturity.";
-    areaEditorProps.push_back(aep_maturity);
+    AreaEditorProp aepMaturity;
+    aepMaturity.name = "Maturity";
+    aepMaturity.var = "maturity";
+    aepMaturity.type = AEMP_TYPE_NR_LIST;
+    aepMaturity.defValue = "2";
+    aepMaturity.valueList.push_back("Leaf");
+    aepMaturity.valueList.push_back("Bud");
+    aepMaturity.valueList.push_back("Flower");
+    aepMaturity.tooltip = "The Pikmin's starting maturity.";
+    areaEditorProps.push_back(aepMaturity);
     
-    AreaEditorProp aep_sprout;
-    aep_sprout.name = "Sprout";
-    aep_sprout.var = "sprout";
-    aep_sprout.type = AEMP_TYPE_BOOL;
-    aep_sprout.defValue = "false";
-    aep_sprout.tooltip =
+    AreaEditorProp aepSprout;
+    aepSprout.name = "Sprout";
+    aepSprout.var = "sprout";
+    aepSprout.type = AEMP_TYPE_BOOL;
+    aepSprout.defValue = "false";
+    aepSprout.tooltip =
         "True if this Pikmin spawns as a sprout, "
         "false if it spawns as an idle Pikmin.";
-    areaEditorProps.push_back(aep_sprout);
+    areaEditorProps.push_back(aepSprout);
     
-    AreaEditorProp aep_follow_link;
-    aep_sprout.name = "Follow link as leader";
-    aep_sprout.var = "follow_link_as_leader";
-    aep_sprout.type = AEMP_TYPE_BOOL;
-    aep_sprout.defValue = "false";
-    aep_sprout.tooltip =
+    AreaEditorProp aepFollowLink;
+    aepSprout.name = "Follow link as leader";
+    aepSprout.var = "follow_link_as_leader";
+    aepSprout.type = AEMP_TYPE_BOOL;
+    aepSprout.defValue = "false";
+    aepSprout.tooltip =
         "True if this Pikmin should follow its linked object, "
         "as if it were its leader.";
-    areaEditorProps.push_back(aep_sprout);
+    areaEditorProps.push_back(aepSprout);
     
-    pikmin_fsm::createFsm(this);
+    PikminFsm::createFsm(this);
 }
 
 
@@ -124,8 +124,8 @@ PikminType::PikminType() :
  *
  * @return The vector.
  */
-anim_conversion_vector PikminType::getAnimConversions() const {
-    anim_conversion_vector v;
+AnimConversionVector PikminType::getAnimConversions() const {
+    AnimConversionVector v;
     
 #define a(idx, name) \
     v.push_back(std::make_pair(idx, name));
@@ -171,40 +171,40 @@ anim_conversion_vector PikminType::getAnimConversions() const {
  * @param file File to read from.
  */
 void PikminType::loadCatProperties(DataNode* file) {
-    ReaderSetter rs(file);
-    string attack_method_str;
-    string top_leaf_str;
-    string top_bud_str;
-    string top_flower_str;
-    DataNode* attack_method_node = nullptr;
-    DataNode* top_leaf_node = nullptr;
-    DataNode* top_bud_node = nullptr;
-    DataNode* top_flower_node = nullptr;
+    ReaderSetter pRS(file);
+    string attackMethodStr;
+    string topLeafStr;
+    string topBudStr;
+    string topFlowerStr;
+    DataNode* attackMethodNode = nullptr;
+    DataNode* topLeafNode = nullptr;
+    DataNode* topBudNode = nullptr;
+    DataNode* topFlowerNode = nullptr;
     
-    rs.set("attack_method", attack_method_str, &attack_method_node);
-    rs.set("knocked_down_duration", knockedDownDuration);
-    rs.set("knocked_down_whistle_bonus", knockedDownWhistleBonus);
-    rs.set("can_carry_tools", canCarryTools);
-    rs.set("can_fly", canFly);
-    rs.set("carry_strength", carryStrength);
-    rs.set("max_throw_height", maxThrowHeight);
-    rs.set("push_strength", pushStrength);
-    rs.set("sprout_evolution_time_1", sproutEvolutionTime[0]);
-    rs.set("sprout_evolution_time_2", sproutEvolutionTime[1]);
-    rs.set("sprout_evolution_time_3", sproutEvolutionTime[2]);
-    rs.set("top_bud", top_bud_str, &top_bud_node);
-    rs.set("top_flower", top_flower_str, &top_flower_node);
-    rs.set("top_leaf", top_leaf_str, &top_leaf_node);
+    pRS.set("attack_method", attackMethodStr, &attackMethodNode);
+    pRS.set("knocked_down_duration", knockedDownDuration);
+    pRS.set("knocked_down_whistle_bonus", knockedDownWhistleBonus);
+    pRS.set("can_carry_tools", canCarryTools);
+    pRS.set("can_fly", canFly);
+    pRS.set("carry_strength", carryStrength);
+    pRS.set("max_throw_height", maxThrowHeight);
+    pRS.set("push_strength", pushStrength);
+    pRS.set("sprout_evolution_time_1", sproutEvolutionTime[0]);
+    pRS.set("sprout_evolution_time_2", sproutEvolutionTime[1]);
+    pRS.set("sprout_evolution_time_3", sproutEvolutionTime[2]);
+    pRS.set("top_bud", topBudStr, &topBudNode);
+    pRS.set("top_flower", topFlowerStr, &topFlowerNode);
+    pRS.set("top_leaf", topLeafStr, &topLeafNode);
     
-    if(attack_method_node) {
-        if(attack_method_str == "latch") {
+    if(attackMethodNode) {
+        if(attackMethodStr == "latch") {
             attackMethod = PIKMIN_ATTACK_LATCH;
-        } else if(attack_method_str == "impact") {
+        } else if(attackMethodStr == "impact") {
             attackMethod = PIKMIN_ATTACK_IMPACT;
         } else {
             game.errors.report(
-                "Unknown Pikmin attack type \"" + attack_method_str + "\"!",
-                attack_method_node
+                "Unknown Pikmin attack type \"" + attackMethodStr + "\"!",
+                attackMethodNode
             );
         }
     }
@@ -230,9 +230,9 @@ void PikminType::loadCatProperties(DataNode* file) {
     }
     
     //Always load these since they're necessary for the animation editor.
-    bmpTop[0] = game.content.bitmaps.list.get(top_leaf_str, top_leaf_node);
-    bmpTop[1] = game.content.bitmaps.list.get(top_bud_str, top_bud_node);
-    bmpTop[2] = game.content.bitmaps.list.get(top_flower_str, top_flower_node);
+    bmpTop[0] = game.content.bitmaps.list.get(topLeafStr, topLeafNode);
+    bmpTop[1] = game.content.bitmaps.list.get(topBudStr, topBudNode);
+    bmpTop[2] = game.content.bitmaps.list.get(topFlowerStr, topFlowerNode);
 }
 
 
@@ -242,32 +242,32 @@ void PikminType::loadCatProperties(DataNode* file) {
  * @param file File to read from.
  */
 void PikminType::loadCatResources(DataNode* file) {
-    ReaderSetter rs(file);
+    ReaderSetter pRS(file);
     
-    string icon_str;
-    string icon_leaf_str;
-    string icon_bud_str;
-    string icon_flower_str;
-    string icon_onion_str;
-    DataNode* icon_node = nullptr;
-    DataNode* icon_leaf_node = nullptr;
-    DataNode* icon_bud_node = nullptr;
-    DataNode* icon_flower_node = nullptr;
-    DataNode* icon_onion_node = nullptr;
+    string iconStr;
+    string iconLeafStr;
+    string iconBudStr;
+    string iconFlowerStr;
+    string iconOnionStr;
+    DataNode* iconNode = nullptr;
+    DataNode* iconLeafNode = nullptr;
+    DataNode* iconBudNode = nullptr;
+    DataNode* iconFlowerNode = nullptr;
+    DataNode* iconOnionNode = nullptr;
     
-    rs.set("icon", icon_str, &icon_node);
-    rs.set("icon_bud", icon_bud_str, &icon_bud_node);
-    rs.set("icon_flower", icon_flower_str, &icon_flower_node);
-    rs.set("icon_leaf", icon_leaf_str, &icon_leaf_node);
-    rs.set("icon_onion", icon_onion_str, &icon_onion_node);
+    pRS.set("icon", iconStr, &iconNode);
+    pRS.set("icon_bud", iconBudStr, &iconBudNode);
+    pRS.set("icon_flower", iconFlowerStr, &iconFlowerNode);
+    pRS.set("icon_leaf", iconLeafStr, &iconLeafNode);
+    pRS.set("icon_onion", iconOnionStr, &iconOnionNode);
     
-    bmpIcon = game.content.bitmaps.list.get(icon_str, icon_node);
-    bmpMaturityIcon[0] = game.content.bitmaps.list.get(icon_leaf_str, icon_leaf_node);
-    bmpMaturityIcon[1] = game.content.bitmaps.list.get(icon_bud_str, icon_bud_node);
-    bmpMaturityIcon[2] = game.content.bitmaps.list.get(icon_flower_str, icon_flower_node);
+    bmpIcon = game.content.bitmaps.list.get(iconStr, iconNode);
+    bmpMaturityIcon[0] = game.content.bitmaps.list.get(iconLeafStr, iconLeafNode);
+    bmpMaturityIcon[1] = game.content.bitmaps.list.get(iconBudStr, iconBudNode);
+    bmpMaturityIcon[2] = game.content.bitmaps.list.get(iconFlowerStr, iconFlowerNode);
     
-    if(icon_onion_node) {
-        bmpOnionIcon = game.content.bitmaps.list.get(icon_onion_str, icon_onion_node);
+    if(iconOnionNode) {
+        bmpOnionIcon = game.content.bitmaps.list.get(iconOnionStr, iconOnionNode);
     }
 }
 

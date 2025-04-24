@@ -64,6 +64,6 @@ public:
     virtual void handleAllegroEvent(const ALLEGRO_EVENT &ev);
     virtual void handlePlayerAction(const PlayerAction &action);
     virtual void leave();
-    virtual void tick(float delta_t);
+    virtual void tick(float deltaT);
     
 };

@@ -37,7 +37,7 @@ class Hitbox;
  * The second parameter depends on the function.
  * The third parameter depends on the function.
  */
-typedef void (*custom_action_code_t)(Mob* m, void* info1, void* info2);
+typedef void (*CustomActionCode)(Mob* m, void* info1, void* info2);
 
 const unsigned char STATE_HISTORY_SIZE = 3;
 
@@ -339,7 +339,7 @@ public:
         const MOB_EV t,
         const vector<MobActionCall*> &a = vector<MobActionCall*>()
     );
-    void run(Mob* m, void* custom_data_1 = nullptr, void* custom_data_2 = nullptr);
+    void run(Mob* m, void* customData1 = nullptr, void* customData2 = nullptr);
     
 };
 
@@ -408,10 +408,10 @@ public:
     size_t getStateIdx(const string &name) const;
     void runEvent(
         const MOB_EV type,
-        void* custom_data_1 = nullptr, void* custom_data_2 = nullptr
+        void* customData1 = nullptr, void* customData2 = nullptr
     );
     bool setState(
-        size_t new_state, void* info1 = nullptr, void* info2 = nullptr
+        size_t newState, void* info1 = nullptr, void* info2 = nullptr
     );
     
 };
@@ -439,8 +439,8 @@ public:
     
     void newState(const string &name, size_t id);
     void newEvent(const MOB_EV type);
-    void changeState(const string &new_state);
-    void run(custom_action_code_t code);
+    void changeState(const string &newState);
+    void run(CustomActionCode code);
     vector<MobState*> finish();
     
 private:
@@ -493,14 +493,14 @@ struct HitboxInteraction {
 
 
 size_t fixStates(
-    vector<MobState*> &states, const string &starting_state, const MobType* mt
+    vector<MobState*> &states, const string &startingState, const MobType* mt
 );
 void loadScript(
-    MobType* mt, DataNode* script_node, DataNode* global_node,
-    vector<MobState*>* out_states
+    MobType* mt, DataNode* scriptNode, DataNode* globalNode,
+    vector<MobState*>* outStates
 );
 void loadState(
-    MobType* mt, DataNode* state_node, DataNode* global_node,
-    MobState* state_ptr
+    MobType* mt, DataNode* stateNode, DataNode* globalNode,
+    MobState* statePtr
 );
 void unloadScript(MobType* mt);

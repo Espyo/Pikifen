@@ -87,11 +87,11 @@ void ToolCategory::eraseMob(Mob* m) {
  * @brief Returns a type of tool given its name,
  * or nullptr on error.
  *
- * @param internal_name Internal name of the mob type to get.
+ * @param internalName Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-MobType* ToolCategory::getType(const string &internal_name) const {
-    auto it = game.content.mobTypes.list.tool.find(internal_name);
+MobType* ToolCategory::getType(const string &internalName) const {
+    auto it = game.content.mobTypes.list.tool.find(internalName);
     if(it == game.content.mobTypes.list.tool.end()) return nullptr;
     return it->second;
 }
@@ -112,9 +112,9 @@ void ToolCategory::getTypeNames(vector<string> &list) const {
 /**
  * @brief Registers a created type of tool.
  *
- * @param internal_name Internal name of the mob type.
+ * @param internalName Internal name of the mob type.
  * @param type Mob type to register.
  */
-void ToolCategory::registerType(const string &internal_name, MobType* type) {
-    game.content.mobTypes.list.tool[internal_name] = (ToolType*) type;
+void ToolCategory::registerType(const string &internalName, MobType* type) {
+    game.content.mobTypes.list.tool[internalName] = (ToolType*) type;
 }

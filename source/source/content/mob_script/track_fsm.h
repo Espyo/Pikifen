@@ -16,7 +16,7 @@
 /**
  * @brief Functions about the track's finite state machine and behavior.
  */
-namespace track_fsm {
+namespace TrackFsm {
 void createFsm(MobType* typ);
 
 void onTouched(Mob* m, void* info1, void* info2);

@@ -16,7 +16,7 @@
 /**
  * @brief Functions about the resource's finite state machine and behavior.
  */
-namespace resource_fsm {
+namespace ResourceFsm {
 void createFsm(MobType* typ);
 
 void handleDelivery(Mob* m, void* info1, void* info2);

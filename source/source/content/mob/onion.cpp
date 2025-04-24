@@ -78,7 +78,7 @@ Onion::Onion(const Point &pos, OnionType* type, float angle) :
     [this] () { startGenerating(); };
     nextGenerationTimer.onEnd =
     [this] () {
-        for(size_t t = 0; t < oniType->nest->pik_types.size(); t++) {
+        for(size_t t = 0; t < oniType->nest->pikTypes.size(); t++) {
             if(generationQueue[t] > 0) {
                 nextGenerationTimer.start();
                 generate();
@@ -88,7 +88,7 @@ Onion::Onion(const Point &pos, OnionType* type, float angle) :
         stopGenerating();
     };
     
-    for(size_t t = 0; t < oniType->nest->pik_types.size(); t++) {
+    for(size_t t = 0; t < oniType->nest->pikTypes.size(); t++) {
         generationQueue.push_back(0);
     }
 }
@@ -106,15 +106,15 @@ Onion::~Onion() {
  * @brief Draws an Onion.
  */
 void Onion::drawMob() {
-    Sprite* cur_s_ptr;
-    Sprite* next_s_ptr;
-    float interpolation_factor;
-    getSpriteData(&cur_s_ptr, &next_s_ptr, &interpolation_factor);
-    if(!cur_s_ptr) return;
+    Sprite* curSPtr;
+    Sprite* nextSPtr;
+    float interpolationFactor;
+    getSpriteData(&curSPtr, &nextSPtr, &interpolationFactor);
+    if(!curSPtr) return;
     
     BitmapEffect eff;
     getSpriteBitmapEffects(
-        cur_s_ptr, next_s_ptr, interpolation_factor,
+        curSPtr, nextSPtr, interpolationFactor,
         &eff,
         SPRITE_BMP_EFFECT_FLAG_STANDARD |
         SPRITE_BMP_EFFECT_FLAG_STATUS |
@@ -125,7 +125,7 @@ void Onion::drawMob() {
     
     eff.tintColor.a *= (seethrough / 255.0f);
     
-    drawBitmapWithEffects(cur_s_ptr->bitmap, eff);
+    drawBitmapWithEffects(curSPtr->bitmap, eff);
 }
 
 
@@ -153,15 +153,15 @@ void Onion::generate() {
         game.statistics.pikminBirths++;
         game.states.gameplay->pikminBorn++;
         game.states.gameplay->pikminBornPerType[
-            oniType->nest->pik_types[t]
+            oniType->nest->pikTypes[t]
         ]++;
         game.states.gameplay->lastPikminBornPos = pos;
         
-        size_t total_after =
+        size_t totalAfter =
             game.states.gameplay->mobs.pikmin.size() + 1;
             
-        if(total_after > game.config.rules.maxPikminInField) {
-            nest->pikmin_inside[t][0]++;
+        if(totalAfter > game.config.rules.maxPikminInField) {
+            nest->pikminInside[t][0]++;
             
             ParticleGenerator pg =
                 standardParticleGenSetup(
@@ -173,15 +173,15 @@ void Onion::generate() {
             return;
         }
         
-        float horizontal_strength =
+        float horizontalStrength =
             ONION::SPEW_H_SPEED +
             game.rng.f(
                 -ONION::SPEW_H_SPEED_DEVIATION,
                 ONION::SPEW_H_SPEED_DEVIATION
             );
         spewPikminSeed(
-            pos, z + ONION::NEW_SEED_Z_OFFSET, oniType->nest->pik_types[t],
-            nextSpewAngle, horizontal_strength, ONION::SPEW_V_SPEED
+            pos, z + ONION::NEW_SEED_Z_OFFSET, oniType->nest->pikTypes[t],
+            nextSpewAngle, horizontalStrength, ONION::SPEW_V_SPEED
         );
         
         nextSpewAngle += ONION::SPEW_ANGLE_SHIFT;
@@ -219,13 +219,13 @@ void Onion::stopGenerating() {
 /**
  * @brief Ticks time by one frame of logic.
  *
- * @param delta_t How long the frame's tick is, in seconds.
+ * @param deltaT How long the frame's tick is, in seconds.
  */
-void Onion::tickClassSpecifics(float delta_t) {
-    generationDelayTimer.tick(delta_t);
-    nextGenerationTimer.tick(delta_t);
+void Onion::tickClassSpecifics(float deltaT) {
+    generationDelayTimer.tick(deltaT);
+    nextGenerationTimer.tick(deltaT);
     
-    unsigned char final_alpha = 255;
+    unsigned char finalAlpha = 255;
     
     if(
         game.states.gameplay->curLeaderPtr &&
@@ -235,7 +235,7 @@ void Onion::tickClassSpecifics(float delta_t) {
             radius * 3
         )
     ) {
-        final_alpha = ONION::SEETHROUGH_ALPHA;
+        finalAlpha = ONION::SEETHROUGH_ALPHA;
     }
     
     if(
@@ -246,24 +246,24 @@ void Onion::tickClassSpecifics(float delta_t) {
             radius * 3
         )
     ) {
-        final_alpha = ONION::SEETHROUGH_ALPHA;
+        finalAlpha = ONION::SEETHROUGH_ALPHA;
     }
     
-    if(seethrough != final_alpha) {
-        if(final_alpha < seethrough) {
+    if(seethrough != finalAlpha) {
+        if(finalAlpha < seethrough) {
             seethrough =
                 std::max(
-                    (double) final_alpha,
-                    (double) seethrough - ONION::FADE_SPEED * delta_t
+                    (double) finalAlpha,
+                    (double) seethrough - ONION::FADE_SPEED * deltaT
                 );
         } else {
             seethrough =
                 std::min(
-                    (double) final_alpha,
-                    (double) seethrough + ONION::FADE_SPEED * delta_t
+                    (double) finalAlpha,
+                    (double) seethrough + ONION::FADE_SPEED * deltaT
                 );
         }
     }
     
-    nest->tick(delta_t);
+    nest->tick(deltaT);
 }

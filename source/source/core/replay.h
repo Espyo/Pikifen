@@ -157,18 +157,18 @@ public:
     
     Replay();
     void addState(
-        const vector<Leader*> &leader_list,
-        const vector<Pikmin*> &pikmin_list,
-        const vector<Enemy*> &enemy_list,
-        const vector<Treasure*> &treasure_list,
-        const vector<Onion*> &onion_list,
-        const vector<Mob*> &obstacle_list,
-        size_t cur_leader_idx
+        const vector<Leader*> &leaderList,
+        const vector<Pikmin*> &pikminList,
+        const vector<Enemy*> &enemyList,
+        const vector<Treasure*> &treasureList,
+        const vector<Onion*> &onionList,
+        const vector<Mob*> &obstacleList,
+        size_t curLeaderIdx
     );
     void clear();
     void finishRecording();
-    void loadFromFile(const string &file_path);
-    void saveToFile(const string &file_path) const;
+    void loadFromFile(const string &filePath);
+    void saveToFile(const string &filePath) const;
     
 private:
 

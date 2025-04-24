@@ -37,15 +37,15 @@ Pellet::Pellet(const Point &pos, PelletType* type, float angle) :
  * @brief Draws a pellet, with the number and all.
  */
 void Pellet::drawMob() {
-    Sprite* cur_s_ptr;
-    Sprite* next_s_ptr;
-    float interpolation_factor;
-    getSpriteData(&cur_s_ptr, &next_s_ptr, &interpolation_factor);
-    if(!cur_s_ptr) return;
+    Sprite* curSPtr;
+    Sprite* nextSPtr;
+    float interpolationFactor;
+    getSpriteData(&curSPtr, &nextSPtr, &interpolationFactor);
+    if(!curSPtr) return;
     
     BitmapEffect eff;
     getSpriteBitmapEffects(
-        cur_s_ptr, next_s_ptr, interpolation_factor,
+        curSPtr, nextSPtr, interpolationFactor,
         &eff,
         SPRITE_BMP_EFFECT_FLAG_STANDARD |
         SPRITE_BMP_EFFECT_FLAG_STATUS |
@@ -55,9 +55,9 @@ void Pellet::drawMob() {
         SPRITE_BMP_EFFECT_CARRY
     );
     
-    Point bmp_size = getBitmapDimensions(cur_s_ptr->bitmap);
-    eff.scale *= radius * 2.0f / bmp_size;
+    Point bmpSize = getBitmapDimensions(curSPtr->bitmap);
+    eff.scale *= radius * 2.0f / bmpSize;
     
-    drawBitmapWithEffects(cur_s_ptr->bitmap, eff);
+    drawBitmapWithEffects(curSPtr->bitmap, eff);
     drawBitmapWithEffects(pelType->bmpNumber, eff);
 }

@@ -49,19 +49,19 @@ const string SPECS_GUI_FILE_NAME = "area_menu_specs";
  * @param text Text.
  */
 void AreaMenu::addBullet(ListGuiItem* list, const string &text) {
-    size_t bullet_idx = list->children.size();
+    size_t bulletIdx = list->children.size();
     const float BULLET_HEIGHT = 0.18f;
     const float BULLET_PADDING = 0.01f;
     const float BULLETS_OFFSET = 0.01f;
-    const float bullet_center_y =
+    const float bulletCenterY =
         (BULLETS_OFFSET + BULLET_HEIGHT / 2.0f) +
-        ((BULLET_HEIGHT + BULLET_PADDING) * bullet_idx);
+        ((BULLET_HEIGHT + BULLET_PADDING) * bulletIdx);
         
     BulletGuiItem* bullet =
         new BulletGuiItem(
         text, game.sysContent.fntStandard, COLOR_WHITE
     );
-    bullet->ratioCenter = Point(0.50f, bullet_center_y);
+    bullet->ratioCenter = Point(0.50f, bulletCenterY);
     bullet->ratioSize = Point(0.96f, BULLET_HEIGHT);
     list->addChild(bullet);
     gui.addItem(bullet);
@@ -123,11 +123,11 @@ void AreaMenu::animateInfoAndSpecs() {
 /**
  * @brief Changes the area information to a new area's information.
  *
- * @param area_idx Index of the newly-selected area.
+ * @param areaIdx Index of the newly-selected area.
  */
-void AreaMenu::changeInfo(size_t area_idx) {
-    if(area_idx == curAreaIdx) return;
-    curAreaIdx = area_idx;
+void AreaMenu::changeInfo(size_t areaIdx) {
+    if(areaIdx == curAreaIdx) return;
+    curAreaIdx = areaIdx;
     
     //Start by clearing them all, for sanitization's sake.
     infoNameText->text.clear();
@@ -150,22 +150,22 @@ void AreaMenu::changeInfo(size_t area_idx) {
     }
     
     //Fill in the area's info.
-    Area* area_ptr = game.content.areas.list[areaType][area_idx];
-    infoNameText->text = area_ptr->name;
+    Area* areaPtr = game.content.areas.list[areaType][areaIdx];
+    infoNameText->text = areaPtr->name;
     subtitleText->text =
         getSubtitleOrMissionGoal(
-            area_ptr->subtitle,
+            areaPtr->subtitle,
             areaType,
-            area_ptr->mission.goal
+            areaPtr->mission.goal
         );
-    descriptionText->text = area_ptr->description;
-    if(area_ptr->difficulty == 0) {
+    descriptionText->text = areaPtr->description;
+    if(areaPtr->difficulty == 0) {
         difficultyText->text.clear();
     } else {
         difficultyText->text =
             "Difficulty: " +
-            i2s(area_ptr->difficulty) + "/5 - ";
-        switch(area_ptr->difficulty) {
+            i2s(areaPtr->difficulty) + "/5 - ";
+        switch(areaPtr->difficulty) {
         case 1: {
             difficultyText->text += "Very easy";
             break;
@@ -185,47 +185,47 @@ void AreaMenu::changeInfo(size_t area_idx) {
         }
     }
     tagsText->text =
-        (area_ptr->tags.empty() ? "" : "Tags: " + area_ptr->tags);
+        (areaPtr->tags.empty() ? "" : "Tags: " + areaPtr->tags);
     makerText->text =
-        (area_ptr->maker.empty() ? "" : "Maker: " + area_ptr->maker);
+        (areaPtr->maker.empty() ? "" : "Maker: " + areaPtr->maker);
     versionText->text =
-        (area_ptr->version.empty() ? "" : "Version: " + area_ptr->version);
-    curThumb = area_ptr->thumbnail.get();
+        (areaPtr->version.empty() ? "" : "Version: " + areaPtr->version);
+    curThumb = areaPtr->thumbnail.get();
     if(areaType == AREA_TYPE_MISSION) {
-        int score = areaRecords[area_idx].score;
-        bool record_exists = !areaRecords[area_idx].date.empty();
+        int score = areaRecords[areaIdx].score;
+        bool recordExists = !areaRecords[areaIdx].date.empty();
         recordInfoText->text =
-            !record_exists ?
+            !recordExists ?
             "(None)" :
-            area_ptr->mission.gradingMode ==
+            areaPtr->mission.gradingMode ==
             MISSION_GRADING_MODE_POINTS ?
             amountStr(score, "point") :
             "";
         curStamp =
-            !record_exists ?
+            !recordExists ?
             nullptr :
-            areaRecords[area_idx].clear ?
+            areaRecords[areaIdx].clear ?
             game.sysContent.bmpMissionClear :
             game.sysContent.bmpMissionFail;
-        if(!record_exists) {
+        if(!recordExists) {
             curMedal = nullptr;
         } else {
-            switch(area_ptr->mission.gradingMode) {
+            switch(areaPtr->mission.gradingMode) {
             case MISSION_GRADING_MODE_POINTS: {
-                if(score >= area_ptr->mission.platinumReq) {
+                if(score >= areaPtr->mission.platinumReq) {
                     curMedal = game.sysContent.bmpMedalPlatinum;
-                } else if(score >= area_ptr->mission.goldReq) {
+                } else if(score >= areaPtr->mission.goldReq) {
                     curMedal = game.sysContent.bmpMedalGold;
-                } else if(score >= area_ptr->mission.silverReq) {
+                } else if(score >= areaPtr->mission.silverReq) {
                     curMedal = game.sysContent.bmpMedalSilver;
-                } else if(score >= area_ptr->mission.bronzeReq) {
+                } else if(score >= areaPtr->mission.bronzeReq) {
                     curMedal = game.sysContent.bmpMedalBronze;
                 } else {
                     curMedal = game.sysContent.bmpMedalNone;
                 }
                 break;
             } case MISSION_GRADING_MODE_GOAL: {
-                if(areaRecords[area_idx].clear) {
+                if(areaRecords[areaIdx].clear) {
                     curMedal = game.sysContent.bmpMedalPlatinum;
                 }
                 break;
@@ -235,13 +235,13 @@ void AreaMenu::changeInfo(size_t area_idx) {
             }
             }
         }
-        recordDateText->text = areaRecords[area_idx].date;
+        recordDateText->text = areaRecords[areaIdx].date;
     }
     
     //Now fill in the mission specs.
     if(areaType == AREA_TYPE_MISSION) {
-        specsNameText->text = area_ptr->name;
-        MissionData &mission = area_ptr->mission;
+        specsNameText->text = areaPtr->name;
+        MissionData &mission = areaPtr->mission;
         goalText->text =
             game.missionGoals[mission.goal]->
             getPlayerDescription(&mission);
@@ -282,24 +282,24 @@ void AreaMenu::changeInfo(size_t area_idx) {
                 gradingList,
                 "    Bronze: " + i2s(mission.bronzeReq) + "+ points."
             );
-            vector<string> score_notes;
+            vector<string> scoreNotes;
             for(size_t c = 0; c < game.missionScoreCriteria.size(); c++) {
-                MissionScoreCriterion* c_ptr =
+                MissionScoreCriterion* cPtr =
                     game.missionScoreCriteria[c];
-                int mult = c_ptr->getMultiplier(&mission);
+                int mult = cPtr->getMultiplier(&mission);
                 if(mult != 0) {
-                    score_notes.push_back(
-                        "    " + c_ptr->getName() + " x " + i2s(mult) + "."
+                    scoreNotes.push_back(
+                        "    " + cPtr->getName() + " x " + i2s(mult) + "."
                     );
                 }
             }
-            if(!score_notes.empty()) {
+            if(!scoreNotes.empty()) {
                 addBullet(
                     gradingList,
                     "Your score is calculated like so:"
                 );
-                for(size_t s = 0; s < score_notes.size(); s++) {
-                    addBullet(gradingList, score_notes[s]);
+                for(size_t s = 0; s < scoreNotes.size(); s++) {
+                    addBullet(gradingList, scoreNotes[s]);
                 }
             } else {
                 addBullet(
@@ -307,9 +307,9 @@ void AreaMenu::changeInfo(size_t area_idx) {
                     "In this mission, your score will always be 0."
                 );
             }
-            vector<string> loss_notes;
+            vector<string> lossNotes;
             for(size_t c = 0; c < game.missionScoreCriteria.size(); c++) {
-                MissionScoreCriterion* c_ptr =
+                MissionScoreCriterion* cPtr =
                     game.missionScoreCriteria[c];
                 if(
                     hasFlag(
@@ -317,16 +317,16 @@ void AreaMenu::changeInfo(size_t area_idx) {
                         getIdxBitmask(c)
                     )
                 ) {
-                    loss_notes.push_back("    " + c_ptr->getName());
+                    lossNotes.push_back("    " + cPtr->getName());
                 }
             }
-            if(!loss_notes.empty()) {
+            if(!lossNotes.empty()) {
                 addBullet(
                     gradingList,
                     "If you fail, you'll lose your score for:"
                 );
-                for(size_t l = 0; l < loss_notes.size(); l++) {
-                    addBullet(gradingList, loss_notes[l]);
+                for(size_t l = 0; l < lossNotes.size(); l++) {
+                    addBullet(gradingList, lossNotes[l]);
                 }
             }
             if(!mission.makerRecordDate.empty()) {
@@ -398,29 +398,29 @@ void AreaMenu::initGuiInfoPage() {
         gui.addItem(subtitleText, "subtitle");
         
         //Thumbnail.
-        GuiItem* thumb_item = new GuiItem();
-        thumb_item->onDraw =
+        GuiItem* thumbItem = new GuiItem();
+        thumbItem->onDraw =
         [this] (const DrawInfo & draw) {
             //Make it a square.
-            Point final_size(
+            Point finalSize(
                 std::min(draw.size.x, draw.size.y),
                 std::min(draw.size.x, draw.size.y)
             );
             //Align it to the top-right corner.
-            Point final_center(
-                (draw.center.x + draw.size.x / 2.0f) - final_size.x / 2.0f,
-                (draw.center.y - draw.size.y / 2.0f) + final_size.y / 2.0f
+            Point finalCenter(
+                (draw.center.x + draw.size.x / 2.0f) - finalSize.x / 2.0f,
+                (draw.center.y - draw.size.y / 2.0f) + finalSize.y / 2.0f
             );
             if(curThumb) {
-                drawBitmap(curThumb, final_center, final_size - 4.0f);
+                drawBitmap(curThumb, finalCenter, finalSize - 4.0f);
             }
             drawTexturedBox(
-                final_center, final_size, game.sysContent.bmpFrameBox,
+                finalCenter, finalSize, game.sysContent.bmpFrameBox,
                 COLOR_TRANSPARENT_WHITE
             );
         };
-        infoBox->addChild(thumb_item);
-        gui.addItem(thumb_item, "thumbnail");
+        infoBox->addChild(thumbItem);
+        gui.addItem(thumbItem, "thumbnail");
         
         //Description text.
         descriptionText =
@@ -433,10 +433,10 @@ void AreaMenu::initGuiInfoPage() {
         
         if(areaType == AREA_TYPE_MISSION) {
             //Record label.
-            TextGuiItem* record_label_text =
+            TextGuiItem* recordLabelText =
                 new TextGuiItem("Record:", game.sysContent.fntStandard);
-            infoBox->addChild(record_label_text);
-            gui.addItem(record_label_text, "record_label");
+            infoBox->addChild(recordLabelText);
+            gui.addItem(recordLabelText, "record_label");
             
             //Record info.
             recordInfoText =
@@ -445,8 +445,8 @@ void AreaMenu::initGuiInfoPage() {
             gui.addItem(recordInfoText, "record_info");
             
             //Record stamp.
-            GuiItem* record_stamp_item = new GuiItem();
-            record_stamp_item->onDraw =
+            GuiItem* recordStampItem = new GuiItem();
+            recordStampItem->onDraw =
             [this] (const DrawInfo & draw) {
                 if(curStamp) {
                     drawBitmapInBox(
@@ -454,12 +454,12 @@ void AreaMenu::initGuiInfoPage() {
                     );
                 }
             };
-            infoBox->addChild(record_stamp_item);
-            gui.addItem(record_stamp_item, "record_stamp");
+            infoBox->addChild(recordStampItem);
+            gui.addItem(recordStampItem, "record_stamp");
             
             //Record medal.
-            GuiItem* record_medal_item = new GuiItem();
-            record_medal_item->onDraw =
+            GuiItem* recordMedalItem = new GuiItem();
+            recordMedalItem->onDraw =
             [this] (const DrawInfo & draw) {
                 if(curMedal) {
                     drawBitmapInBox(
@@ -467,8 +467,8 @@ void AreaMenu::initGuiInfoPage() {
                     );
                 }
             };
-            infoBox->addChild(record_medal_item);
-            gui.addItem(record_medal_item, "record_medal");
+            infoBox->addChild(recordMedalItem);
+            gui.addItem(recordMedalItem, "record_medal");
             
             //Record date.
             recordDateText =
@@ -552,12 +552,12 @@ void AreaMenu::initGuiMain() {
     guiAddBackInputIcon(&gui);
     
     //Header text.
-    TextGuiItem* header_text =
+    TextGuiItem* headerText =
         new TextGuiItem(
         "PICK AN AREA:",
         game.sysContent.fntAreaName, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_LEFT
     );
-    gui.addItem(header_text, "header");
+    gui.addItem(headerText, "header");
     
     if(!game.content.areas.list[areaType].empty()) {
     
@@ -566,55 +566,55 @@ void AreaMenu::initGuiMain() {
         gui.addItem(listBox, "list");
         
         //Area list scrollbar.
-        ScrollGuiItem* list_scroll = new ScrollGuiItem();
-        list_scroll->listItem = listBox;
-        gui.addItem(list_scroll, "list_scroll");
+        ScrollGuiItem* listScroll = new ScrollGuiItem();
+        listScroll->listItem = listBox;
+        gui.addItem(listScroll, "list_scroll");
         
         //Items for the various areas.
         for(size_t a = 0; a < game.content.areas.list[areaType].size(); a++) {
-            Area* area_ptr = game.content.areas.list[areaType][a];
+            Area* areaPtr = game.content.areas.list[areaType][a];
             const float BUTTON_HEIGHT = 0.09f;
-            const float center_y = 0.045f + a * 0.10f;
+            const float centerY = 0.045f + a * 0.10f;
             
             //Area button.
-            ButtonGuiItem* area_button =
-                new ButtonGuiItem(area_ptr->name, game.sysContent.fntStandard);
-            area_button->ratioCenter =
+            ButtonGuiItem* areaButton =
+                new ButtonGuiItem(areaPtr->name, game.sysContent.fntStandard);
+            areaButton->ratioCenter =
                 Point(
                     areaType == AREA_TYPE_MISSION ? 0.40f : 0.50f,
-                    center_y
+                    centerY
                 );
-            area_button->ratioSize =
+            areaButton->ratioSize =
                 Point(
                     areaType == AREA_TYPE_MISSION ? 0.80f : 1.00f,
                     BUTTON_HEIGHT
                 );
-            area_button->onActivate =
-            [this, area_ptr] (const Point &) {
-                game.states.gameplay->pathOfAreaToLoad = area_ptr->manifest->path;
+            areaButton->onActivate =
+            [this, areaPtr] (const Point &) {
+                game.states.gameplay->pathOfAreaToLoad = areaPtr->manifest->path;
                 game.fadeMgr.startFade(false, [] () {
                     game.changeState(game.states.gameplay);
                 });
             };
-            area_button->onSelected =
+            areaButton->onSelected =
             [this, a] () { changeInfo(a); };
-            area_button->onGetTooltip =
-            [area_ptr] () { return "Play " + area_ptr->name + "."; };
-            listBox->addChild(area_button);
-            gui.addItem(area_button);
-            areaButtons.push_back(area_button);
+            areaButton->onGetTooltip =
+            [areaPtr] () { return "Play " + areaPtr->name + "."; };
+            listBox->addChild(areaButton);
+            gui.addItem(areaButton);
+            areaButtons.push_back(areaButton);
             if(!firstAreaButton) {
-                firstAreaButton = area_button;
+                firstAreaButton = areaButton;
             }
             
             if(areaType == AREA_TYPE_MISSION) {
                 //Stamp item.
-                GuiItem* stamp_item = new GuiItem();
-                stamp_item->ratioCenter =
-                    Point(0.85f, center_y - (BUTTON_HEIGHT * 0.15f));
-                stamp_item->ratioSize =
+                GuiItem* stampItem = new GuiItem();
+                stampItem->ratioCenter =
+                    Point(0.85f, centerY - (BUTTON_HEIGHT * 0.15f));
+                stampItem->ratioSize =
                     Point(0.12f, BUTTON_HEIGHT * 0.60f);
-                stamp_item->onDraw =
+                stampItem->onDraw =
                 [this, a] (const DrawInfo & draw) {
                     if(areaRecords[a].clear) {
                         drawBitmapInBox(
@@ -623,49 +623,49 @@ void AreaMenu::initGuiMain() {
                         );
                     }
                 };
-                listBox->addChild(stamp_item);
-                gui.addItem(stamp_item);
+                listBox->addChild(stampItem);
+                gui.addItem(stampItem);
                 
                 //Medal item.
-                GuiItem* medal_item = new GuiItem();
-                medal_item->ratioCenter =
-                    Point(0.95f, center_y + (BUTTON_HEIGHT * 0.15f));
-                medal_item->ratioSize =
+                GuiItem* medalItem = new GuiItem();
+                medalItem->ratioCenter =
+                    Point(0.95f, centerY + (BUTTON_HEIGHT * 0.15f));
+                medalItem->ratioSize =
                     Point(0.12f, BUTTON_HEIGHT * 0.60f);
-                medal_item->onDraw =
-                [this, area_ptr, a] (const DrawInfo & draw) {
-                    ALLEGRO_BITMAP* medal_bmp = nullptr;
-                    switch(area_ptr->mission.gradingMode) {
+                medalItem->onDraw =
+                [this, areaPtr, a] (const DrawInfo & draw) {
+                    ALLEGRO_BITMAP* medalBmp = nullptr;
+                    switch(areaPtr->mission.gradingMode) {
                     case MISSION_GRADING_MODE_POINTS: {
                         int score = areaRecords[a].score;
-                        if(score >= area_ptr->mission.platinumReq) {
-                            medal_bmp = game.sysContent.bmpMedalPlatinum;
-                        } else if(score >= area_ptr->mission.goldReq) {
-                            medal_bmp = game.sysContent.bmpMedalGold;
-                        } else if(score >= area_ptr->mission.silverReq) {
-                            medal_bmp = game.sysContent.bmpMedalSilver;
-                        } else if(score >= area_ptr->mission.bronzeReq) {
-                            medal_bmp = game.sysContent.bmpMedalBronze;
+                        if(score >= areaPtr->mission.platinumReq) {
+                            medalBmp = game.sysContent.bmpMedalPlatinum;
+                        } else if(score >= areaPtr->mission.goldReq) {
+                            medalBmp = game.sysContent.bmpMedalGold;
+                        } else if(score >= areaPtr->mission.silverReq) {
+                            medalBmp = game.sysContent.bmpMedalSilver;
+                        } else if(score >= areaPtr->mission.bronzeReq) {
+                            medalBmp = game.sysContent.bmpMedalBronze;
                         }
                         break;
                     } case MISSION_GRADING_MODE_GOAL: {
                         if(areaRecords[a].clear) {
-                            medal_bmp = game.sysContent.bmpMedalPlatinum;
+                            medalBmp = game.sysContent.bmpMedalPlatinum;
                         }
                         break;
                     } case MISSION_GRADING_MODE_PARTICIPATION: {
-                        medal_bmp = game.sysContent.bmpMedalPlatinum;
+                        medalBmp = game.sysContent.bmpMedalPlatinum;
                     }
                     }
                     
-                    if(medal_bmp) {
+                    if(medalBmp) {
                         drawBitmapInBox(
-                            medal_bmp, draw.center, draw.size, true
+                            medalBmp, draw.center, draw.size, true
                         );
                     }
                 };
-                listBox->addChild(medal_item);
-                gui.addItem(medal_item);
+                listBox->addChild(medalItem);
+                gui.addItem(medalItem);
             }
         }
         
@@ -681,61 +681,61 @@ void AreaMenu::initGuiMain() {
         gui.addItem(infoBox, "info_box");
         
         //Random button.
-        ButtonGuiItem* random_button =
+        ButtonGuiItem* randomButton =
             new ButtonGuiItem("", game.sysContent.fntStandard);
-        random_button->onDraw =
-        [random_button] (const DrawInfo & draw) {
+        randomButton->onDraw =
+        [randomButton] (const DrawInfo & draw) {
             drawButton(
                 draw.center, draw.size, "", game.sysContent.fntStandard, COLOR_WHITE,
-                random_button->selected
+                randomButton->selected
             );
             drawBitmapInBox(
                 game.sysContent.bmpRandom,
                 draw.center, draw.size - 8, true
             );
         };
-        random_button->onActivate =
+        randomButton->onActivate =
         [this] (const Point &) {
-            size_t area_idx = game.rng.i(0, (int) (areaButtons.size() - 1));
-            areaButtons[area_idx]->onActivate(Point());
+            size_t areaIdx = game.rng.i(0, (int) (areaButtons.size() - 1));
+            areaButtons[areaIdx]->onActivate(Point());
         };
-        random_button->onGetTooltip =
+        randomButton->onGetTooltip =
         [] () { return "Pick a random area."; };
-        gui.addItem(random_button, "random");
+        gui.addItem(randomButton, "random");
         
         if(areaType == AREA_TYPE_MISSION) {
             //View toggle button.
-            ButtonGuiItem* view_toggle_button =
+            ButtonGuiItem* viewToggleButton =
                 new ButtonGuiItem(
                 "Show mission specs",
                 game.sysContent.fntStandard
             );
-            view_toggle_button->onActivate =
-            [this, view_toggle_button] (const Point &) {
-                GuiItem* box_to_show = nullptr;
-                GuiItem* box_to_hide = nullptr;
+            viewToggleButton->onActivate =
+            [this, viewToggleButton] (const Point &) {
+                GuiItem* boxToShow = nullptr;
+                GuiItem* boxToHide = nullptr;
                 if(showMissionSpecs) {
-                    box_to_show = infoBox;
-                    box_to_hide = specsBox;
+                    boxToShow = infoBox;
+                    boxToHide = specsBox;
                     showMissionSpecs = false;
-                    view_toggle_button->text = "Show mission specs";
+                    viewToggleButton->text = "Show mission specs";
                 } else {
-                    box_to_show = specsBox;
-                    box_to_hide = infoBox;
+                    boxToShow = specsBox;
+                    boxToHide = infoBox;
                     showMissionSpecs = true;
-                    view_toggle_button->text = "Show standard info";
+                    viewToggleButton->text = "Show standard info";
                 }
-                box_to_show->visible = true;
-                box_to_show->responsive = true;
-                box_to_hide->visible = false;
-                box_to_hide->responsive = false;
+                boxToShow->visible = true;
+                boxToShow->responsive = true;
+                boxToHide->visible = false;
+                boxToHide->responsive = false;
                 animateInfoAndSpecs();
             };
-            view_toggle_button->onGetTooltip =
+            viewToggleButton->onGetTooltip =
             [] () {
                 return "Toggles between basic area info and mission specs.";
             };
-            gui.addItem(view_toggle_button, "view_toggle");
+            gui.addItem(viewToggleButton, "view_toggle");
             
             //Specs box item.
             specsBox = new GuiItem();
@@ -753,19 +753,19 @@ void AreaMenu::initGuiMain() {
     } else {
     
         //No areas found text.
-        TextGuiItem* no_areas_text =
+        TextGuiItem* noAreasText =
             new TextGuiItem(
             "No areas found! Try making your own in the area editor!",
             game.sysContent.fntStandard
         );
-        gui.addItem(no_areas_text, "no_areas_text");
+        gui.addItem(noAreasText, "no_areas_text");
         
     }
     
     //Tooltip text.
-    TooltipGuiItem* tooltip_text =
+    TooltipGuiItem* tooltipText =
         new TooltipGuiItem(&gui);
-    gui.addItem(tooltip_text, "tooltip");
+    gui.addItem(tooltipText, "tooltip");
 }
 
 
@@ -795,10 +795,10 @@ void AreaMenu::initGuiSpecsPage() {
         gui.addItem(specsNameText, "specs_name");
         
         //Goal header text.
-        TextGuiItem* goal_header_text =
+        TextGuiItem* goalHeaderText =
             new TextGuiItem("Goal", game.sysContent.fntAreaName);
-        specsBox->addChild(goal_header_text);
-        gui.addItem(goal_header_text, "goal_header");
+        specsBox->addChild(goalHeaderText);
+        gui.addItem(goalHeaderText, "goal_header");
         
         //Goal explanation text.
         goalText =
@@ -807,10 +807,10 @@ void AreaMenu::initGuiSpecsPage() {
         gui.addItem(goalText, "goal");
         
         //Fail conditions header text.
-        TextGuiItem* fail_header_text =
+        TextGuiItem* failHeaderText =
             new TextGuiItem("Fail conditions", game.sysContent.fntAreaName);
-        specsBox->addChild(fail_header_text);
-        gui.addItem(fail_header_text, "fail_header");
+        specsBox->addChild(failHeaderText);
+        gui.addItem(failHeaderText, "fail_header");
         
         //Fail condition explanation list.
         failList = new ListGuiItem();
@@ -818,16 +818,16 @@ void AreaMenu::initGuiSpecsPage() {
         gui.addItem(failList, "fail_list");
         
         //Fail condition explanation scrollbar.
-        ScrollGuiItem* fail_scroll = new ScrollGuiItem();
-        fail_scroll->listItem = failList;
-        specsBox->addChild(fail_scroll);
-        gui.addItem(fail_scroll, "fail_scroll");
+        ScrollGuiItem* failScroll = new ScrollGuiItem();
+        failScroll->listItem = failList;
+        specsBox->addChild(failScroll);
+        gui.addItem(failScroll, "fail_scroll");
         
         //Grading header text.
-        TextGuiItem* grading_header_text =
+        TextGuiItem* gradingHeaderText =
             new TextGuiItem("Grading", game.sysContent.fntAreaName);
-        specsBox->addChild(grading_header_text);
-        gui.addItem(grading_header_text, "grading_header");
+        specsBox->addChild(gradingHeaderText);
+        gui.addItem(gradingHeaderText, "grading_header");
         
         //Grading explanation list.
         gradingList = new ListGuiItem();
@@ -835,10 +835,10 @@ void AreaMenu::initGuiSpecsPage() {
         gui.addItem(gradingList, "grading_list");
         
         //Grading explanation scrollbar.
-        ScrollGuiItem* grading_scroll = new ScrollGuiItem();
-        grading_scroll->listItem = gradingList;
-        specsBox->addChild(grading_scroll);
-        gui.addItem(grading_scroll, "grading_scroll");
+        ScrollGuiItem* gradingScroll = new ScrollGuiItem();
+        gradingScroll->listItem = gradingList;
+        specsBox->addChild(gradingScroll);
+        gui.addItem(gradingScroll, "grading_scroll");
     }
 }
 
@@ -849,14 +849,14 @@ void AreaMenu::initGuiSpecsPage() {
 void AreaMenu::load() {
     //Mission records.
     if(areaType == AREA_TYPE_MISSION) {
-        DataNode mission_records;
-        mission_records.loadFile(FILE_PATHS_FROM_ROOT::MISSION_RECORDS, true, false, true);
+        DataNode missionRecords;
+        missionRecords.loadFile(FILE_PATHS_FROM_ROOT::MISSION_RECORDS, true, false, true);
         
         for(size_t a = 0; a < game.content.areas.list[AREA_TYPE_MISSION].size(); a++) {
-            Area* area_ptr = game.content.areas.list[AREA_TYPE_MISSION][a];
+            Area* areaPtr = game.content.areas.list[AREA_TYPE_MISSION][a];
             MissionRecord record;
             
-            loadAreaMissionRecord(&mission_records, area_ptr, record);
+            loadAreaMissionRecord(&missionRecords, areaPtr, record);
             
             areaRecords.push_back(record);
         }

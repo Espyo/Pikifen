@@ -216,14 +216,14 @@ public:
     
     explicit GuiItem(bool selectable = false);
     virtual ~GuiItem() = default;
-    bool activate(const Point &cursor_pos);
+    bool activate(const Point &cursorPos);
     void addChild(GuiItem* item);
     void deleteAllChildren();
     float getChildBottom();
     float getJuiceValue();
     Point getReferenceCenter();
     Point getReferenceSize();
-    bool isMouseOn(const Point &cursor_pos);
+    bool isMouseOn(const Point &cursorPos);
     bool isResponsive();
     bool isVisible();
     void removeChild(GuiItem* item);
@@ -360,7 +360,7 @@ public:
     void defChildDirSelectedCode(const GuiItem* child);
     void defDrawCode(const DrawInfo &draw);
     void defEventCode(const ALLEGRO_EVENT  &ev);
-    void defTickCode(float delta_t);
+    void defTickCode(float deltaT);
     
 };
 
@@ -384,7 +384,7 @@ public:
     //Total amount of options. Optional.
     size_t nrOptions = 0;
     
-    //Index of the currently selected option. Only used if nr_options > 0.
+    //Index of the currently selected option. Only used if nrOptions > 0.
     size_t curOptionIdx = INVALID;
     
     //What to do when the user picks the previous option.
@@ -397,14 +397,14 @@ public:
     //--- Function declarations ---
     
     PickerGuiItem(
-        const string &base_text, const string &option,
-        size_t nr_options = 0, size_t cur_option_idx = INVALID
+        const string &baseText, const string &option,
+        size_t nrOptions = 0, size_t curOptionIdx = INVALID
     );
     
-    void defActivateCode(const Point &cursor_pos);
+    void defActivateCode(const Point &cursorPos);
     void defDrawCode(const DrawInfo &draw);
-    bool defMenuDirCode(size_t button_id);
-    void defMouseOverCode(const Point &cursor_pos);
+    bool defMenuDirCode(size_t buttonId);
+    void defMouseOverCode(const Point &cursorPos);
     
     
 private:
@@ -554,7 +554,7 @@ public:
     GuiManager();
     void addItem(GuiItem* item, const string &id = "");
     void draw();
-    void tick(float delta_t);
+    void tick(float deltaT);
     string getCurrentTooltip();
     bool getItemDrawInfo(GuiItem* item, GuiItem::DrawInfo* draw);
     void handleAllegroEvent(const ALLEGRO_EVENT &ev);

@@ -37,22 +37,22 @@ const string GUI_FILE_NAME = "packs_menu";
  */
 void PacksMenu::changeInfo(int idx) {
     //Figure out what pack this is.
-    Pack* pack_ptr = nullptr;
-    string new_pack_name;
+    Pack* packPtr = nullptr;
+    string newPackName;
     if(idx == -1) {
-        new_pack_name = FOLDER_NAMES::BASE_PACK;
-        pack_ptr = &game.content.packs.list[new_pack_name];
+        newPackName = FOLDER_NAMES::BASE_PACK;
+        packPtr = &game.content.packs.list[newPackName];
     } else if(idx >= 0 && idx < (int) packOrder.size()) {
-        new_pack_name = packOrder[idx];
-        pack_ptr = &game.content.packs.list[new_pack_name];
+        newPackName = packOrder[idx];
+        packPtr = &game.content.packs.list[newPackName];
     }
     
-    if(curPackName == new_pack_name) {
+    if(curPackName == newPackName) {
         return;
     }
     
-    curPackName = new_pack_name;
-    if(!pack_ptr) {
+    curPackName = newPackName;
+    if(!packPtr) {
         packNameText->text.clear();
         packDescriptionText->text.clear();
         packTagsText->text.clear();
@@ -63,31 +63,31 @@ void PacksMenu::changeInfo(int idx) {
     
     //Fill the GUI items.
     packNameText->text =
-        pack_ptr->name;
+        packPtr->name;
     packNameText->startJuiceAnimation(
         GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
     );
     
     packDescriptionText->text =
-        pack_ptr->description;
+        packPtr->description;
     packDescriptionText->startJuiceAnimation(
         GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
     );
     
     packTagsText->text =
-        (pack_ptr->tags.empty() ? "" : "Tags: " + pack_ptr->tags);
+        (packPtr->tags.empty() ? "" : "Tags: " + packPtr->tags);
     packTagsText->startJuiceAnimation(
         GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
     );
     
     packMakerText->text =
-        (pack_ptr->maker.empty() ? "" : "Maker: " + pack_ptr->maker);
+        (packPtr->maker.empty() ? "" : "Maker: " + packPtr->maker);
     packMakerText->startJuiceAnimation(
         GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
     );
     
     packVersionText->text =
-        (pack_ptr->version.empty() ? "" : "Version: " + pack_ptr->version);
+        (packPtr->version.empty() ? "" : "Version: " + packPtr->version);
     packVersionText->startJuiceAnimation(
         GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
     );
@@ -137,13 +137,13 @@ void PacksMenu::initGuiMain() {
     guiAddBackInputIcon(&gui);
     
     //Header text.
-    TextGuiItem* header_text =
+    TextGuiItem* headerText =
         new TextGuiItem(
         "PACKS",
         game.sysContent.fntAreaName,
         COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
     );
-    gui.addItem(header_text, "header");
+    gui.addItem(headerText, "header");
     
     //Packs list.
     packsList = new ListGuiItem();
@@ -154,22 +154,22 @@ void PacksMenu::initGuiMain() {
     const float ITEMS_OFFSET = 0.01f;
     
     //Base pack's bullet.
-    BulletGuiItem* base_bullet =
+    BulletGuiItem* baseBullet =
         new BulletGuiItem(
         "Base", game.sysContent.fntStandard, COLOR_GOLD
     );
-    base_bullet->ratioCenter =
+    baseBullet->ratioCenter =
         Point(0.37f, ITEMS_OFFSET + ITEM_HEIGHT / 2.0f);
-    base_bullet->ratioSize =
+    baseBullet->ratioSize =
         Point(0.70f, ITEM_HEIGHT);
-    base_bullet->onSelected =
+    baseBullet->onSelected =
     [this] () { changeInfo(-1); };
-    packsList->addChild(base_bullet);
-    gui.addItem(base_bullet);
+    packsList->addChild(baseBullet);
+    gui.addItem(baseBullet);
     
     for(size_t p = 0; p < packOrder.size(); p++) {
-        float list_bottom_y = packsList->getChildBottom();
-        float row_center_y = list_bottom_y + ITEM_PADDING + ITEM_HEIGHT / 2.0f;
+        float listBottomY = packsList->getChildBottom();
+        float rowCenterY = listBottomY + ITEM_PADDING + ITEM_HEIGHT / 2.0f;
         
         //Pack bullet.
         BulletGuiItem* bullet =
@@ -177,7 +177,7 @@ void PacksMenu::initGuiMain() {
             "",
             game.sysContent.fntStandard
         );
-        bullet->ratioCenter = Point(0.37f, row_center_y);
+        bullet->ratioCenter = Point(0.37f, rowCenterY);
         bullet->ratioSize = Point(0.70f, ITEM_HEIGHT);
         bullet->onSelected = [p, this] () { changeInfo((int) p); };
         packsList->addChild(bullet);
@@ -189,7 +189,7 @@ void PacksMenu::initGuiMain() {
             new CheckGuiItem(
             false, "", game.sysContent.fntStandard
         );
-        check->ratioCenter = Point(0.78f, row_center_y);
+        check->ratioCenter = Point(0.78f, rowCenterY);
         check->ratioSize = Point(0.08f, ITEM_HEIGHT);
         check->onActivate =
         [p, check, this] (const Point & pos) {
@@ -217,13 +217,13 @@ void PacksMenu::initGuiMain() {
         
         //Move up button.
         if(p > 0) {
-            ButtonGuiItem* up_button =
+            ButtonGuiItem* upButton =
                 new ButtonGuiItem(
                 "U", game.sysContent.fntStandard
             );
-            up_button->ratioCenter = Point(0.87f, row_center_y);
-            up_button->ratioSize = Point(0.08f, ITEM_HEIGHT);
-            up_button->onActivate =
+            upButton->ratioCenter = Point(0.87f, rowCenterY);
+            upButton->ratioSize = Point(0.08f, ITEM_HEIGHT);
+            upButton->onActivate =
             [p, this] (const Point &) {
                 std::iter_swap(
                     packOrder.begin() + p, packOrder.begin() + (p - 1)
@@ -237,24 +237,24 @@ void PacksMenu::initGuiMain() {
                 triggerRestartWarning();
                 populatePacksList();
             };
-            up_button->onSelected = [p, this] () { changeInfo((int) p); };
-            up_button->onGetTooltip =
+            upButton->onSelected = [p, this] () { changeInfo((int) p); };
+            upButton->onGetTooltip =
             [] () {
                 return "Move up on the list (make it be loaded earlier).";
             };
-            packsList->addChild(up_button);
-            gui.addItem(up_button);
+            packsList->addChild(upButton);
+            gui.addItem(upButton);
         }
         
         //Move down button.
         if(p < packOrder.size() - 1) {
-            ButtonGuiItem* down_button =
+            ButtonGuiItem* downButton =
                 new ButtonGuiItem(
                 "D", game.sysContent.fntStandard
             );
-            down_button->ratioCenter = Point(0.95f, row_center_y);
-            down_button->ratioSize = Point(0.08f, ITEM_HEIGHT);
-            down_button->onActivate =
+            downButton->ratioCenter = Point(0.95f, rowCenterY);
+            downButton->ratioSize = Point(0.08f, ITEM_HEIGHT);
+            downButton->onActivate =
             [p, this] (const Point &) {
                 std::iter_swap(
                     packOrder.begin() + p, packOrder.begin() + (p + 1)
@@ -268,31 +268,31 @@ void PacksMenu::initGuiMain() {
                 triggerRestartWarning();
                 populatePacksList();
             };
-            down_button->onSelected = [p, this] () { changeInfo((int) p); };
-            down_button->onGetTooltip =
+            downButton->onSelected = [p, this] () { changeInfo((int) p); };
+            downButton->onGetTooltip =
             [] () {
                 return "Move down on the list (make it be loaded later).";
             };
-            packsList->addChild(down_button);
-            gui.addItem(down_button);
+            packsList->addChild(downButton);
+            gui.addItem(downButton);
         }
     }
     
     //Packs list scrollbar.
-    ScrollGuiItem* list_scroll = new ScrollGuiItem();
-    list_scroll->listItem = packsList;
-    gui.addItem(list_scroll, "list_scroll");
+    ScrollGuiItem* listScroll = new ScrollGuiItem();
+    listScroll->listItem = packsList;
+    gui.addItem(listScroll, "list_scroll");
     
     //Info box item.
-    GuiItem* info_box = new GuiItem();
-    info_box->onDraw =
+    GuiItem* infoBox = new GuiItem();
+    infoBox->onDraw =
     [] (const DrawInfo & draw) {
         drawTexturedBox(
             draw.center, draw.size, game.sysContent.bmpFrameBox,
             COLOR_TRANSPARENT_WHITE
         );
     };
-    gui.addItem(info_box, "info_box");
+    gui.addItem(infoBox, "info_box");
     
     //Pack name text.
     packNameText =
@@ -302,31 +302,31 @@ void PacksMenu::initGuiMain() {
     gui.addItem(packNameText, "pack_name");
     
     //Pack thumbnail.
-    GuiItem* pack_thumb_item = new GuiItem();
-    pack_thumb_item->onDraw =
+    GuiItem* packThumbItem = new GuiItem();
+    packThumbItem->onDraw =
     [this] (const DrawInfo & draw) {
         //Make it a square.
-        Point final_size(
+        Point finalSize(
             std::min(draw.size.x, draw.size.y),
             std::min(draw.size.x, draw.size.y)
         );
         //Align it to the top-right corner.
-        Point final_center(
-            (draw.center.x + draw.size.x / 2.0f) - final_size.x / 2.0f,
-            (draw.center.y - draw.size.y / 2.0f) + final_size.y / 2.0f
+        Point finalCenter(
+            (draw.center.x + draw.size.x / 2.0f) - finalSize.x / 2.0f,
+            (draw.center.y - draw.size.y / 2.0f) + finalSize.y / 2.0f
         );
         if(!curPackName.empty() && packThumbs[curPackName]) {
             drawBitmap(
                 packThumbs[curPackName],
-                final_center, final_size - 4.0f
+                finalCenter, finalSize - 4.0f
             );
         }
         drawTexturedBox(
-            final_center, final_size, game.sysContent.bmpFrameBox,
+            finalCenter, finalSize, game.sysContent.bmpFrameBox,
             COLOR_TRANSPARENT_WHITE
         );
     };
-    gui.addItem(pack_thumb_item, "pack_thumbnail");
+    gui.addItem(packThumbItem, "pack_thumbnail");
     
     //Pack description text.
     packDescriptionText =
@@ -368,24 +368,24 @@ void PacksMenu::initGuiMain() {
     gui.addItem(warningText, "restart_warning");
     
     //Open folder button.
-    ButtonGuiItem* open_folder_button =
+    ButtonGuiItem* openFolderButton =
         new ButtonGuiItem("Open folder", game.sysContent.fntStandard);
-    open_folder_button->onActivate =
+    openFolderButton->onActivate =
     [this] (const Point &) {
         openFileExplorer(FOLDER_PATHS_FROM_ROOT::GAME_DATA);
     };
-    open_folder_button->onGetTooltip =
+    openFolderButton->onGetTooltip =
     [] () {
         return
             "Opens the packs folder on your operative system. "
             "Place downloaded packs here!";
     };
-    gui.addItem(open_folder_button, "open_folder");
+    gui.addItem(openFolderButton, "open_folder");
     
     //Tooltip text.
-    TooltipGuiItem* tooltip_text =
+    TooltipGuiItem* tooltipText =
         new TooltipGuiItem(&gui);
-    gui.addItem(tooltip_text, "tooltip");
+    gui.addItem(tooltipText, "tooltip");
     
     populatePacksList();
     
@@ -412,11 +412,11 @@ void PacksMenu::load() {
         size_t p = 0; p < game.content.packs.manifestsWithBaseRaw.size(); p++
     ) {
         string pack = game.content.packs.manifestsWithBaseRaw[p];
-        string thumb_path =
+        string thumbPath =
             FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" + pack + "/thumbnail.png";
-        ALLEGRO_BITMAP* thumb_bmp =
-            loadBmp(thumb_path, nullptr, true, false, false);
-        packThumbs[pack] = thumb_bmp;
+        ALLEGRO_BITMAP* thumbBmp =
+            loadBmp(thumbPath, nullptr, true, false, false);
+        packThumbs[pack] = thumbBmp;
     }
     
     //Initialize the GUIs.

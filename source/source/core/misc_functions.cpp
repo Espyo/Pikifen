@@ -40,74 +40,74 @@
  *
  * @param p1 First point.
  * @param p2 Second point.
- * @param ignore_walls_below_z Any walls whose sector Zs are below
+ * @param ignoreWallsBelowZ Any walls whose sector Zs are below
  * this value get ignored. Use -FLT_MAX to not ignore any wall.
- * @param out_impassable_walls If not nullptr, true will be returned here if
+ * @param outImpassableWalls If not nullptr, true will be returned here if
  * any of the walls are impassable, i.e. the void or "blocking"-type
  * sectors. False otherwise.
  * @return Whether there are walls between.
  */
 bool areaWallsBetween(
     const Point &p1, const Point &p2,
-    float ignore_walls_below_z, bool* out_impassable_walls
+    float ignoreWallsBelowZ, bool* outImpassableWalls
 ) {
-    Point bb_tl = p1;
-    Point bb_br = p1;
-    updateMinMaxCoords(bb_tl, bb_br, p2);
+    Point bbTL = p1;
+    Point bbBR = p1;
+    updateMinMaxCoords(bbTL, bbBR, p2);
     
-    set<Edge*> candidate_edges;
+    set<Edge*> candidateEdges;
     if(
         !game.curAreaData->bmap.getEdgesInRegion(
-            bb_tl, bb_br,
-            candidate_edges
+            bbTL, bbBR,
+            candidateEdges
         )
     ) {
         //Somehow out of bounds.
-        if(out_impassable_walls) *out_impassable_walls = true;
+        if(outImpassableWalls) *outImpassableWalls = true;
         return true;
     }
     
-    for(auto const &e_ptr : candidate_edges) {
+    for(auto const &ePtr : candidateEdges) {
         if(
             !lineSegsIntersect(
                 p1, p2,
-                v2p(e_ptr->vertexes[0]), v2p(e_ptr->vertexes[1]),
+                v2p(ePtr->vertexes[0]), v2p(ePtr->vertexes[1]),
                 nullptr
             )
         ) {
             continue;
         }
         for(size_t s = 0; s < 2; s++) {
-            if(!e_ptr->sectors[s]) {
+            if(!ePtr->sectors[s]) {
                 //No sectors means there's out-of-bounds geometry in the way.
-                if(out_impassable_walls) *out_impassable_walls = true;
+                if(outImpassableWalls) *outImpassableWalls = true;
                 return true;
             }
-            if(e_ptr->sectors[s]->type == SECTOR_TYPE_BLOCKING) {
+            if(ePtr->sectors[s]->type == SECTOR_TYPE_BLOCKING) {
                 //If a blocking sector is in the way, no clear line.
-                if(out_impassable_walls) *out_impassable_walls = true;
+                if(outImpassableWalls) *outImpassableWalls = true;
                 return true;
             }
         }
         if(
-            e_ptr->sectors[0]->z < ignore_walls_below_z &&
-            e_ptr->sectors[1]->z < ignore_walls_below_z
+            ePtr->sectors[0]->z < ignoreWallsBelowZ &&
+            ePtr->sectors[1]->z < ignoreWallsBelowZ
         ) {
             //This wall was chosen to be ignored.
             continue;
         }
         if(
-            fabs(e_ptr->sectors[0]->z - e_ptr->sectors[1]->z) >
+            fabs(ePtr->sectors[0]->z - ePtr->sectors[1]->z) >
             GEOMETRY::STEP_HEIGHT
         ) {
             //The walls are more than stepping height in difference.
             //So it's a genuine wall in the way.
-            if(out_impassable_walls) *out_impassable_walls = false;
+            if(outImpassableWalls) *outImpassableWalls = false;
             return true;
         }
     }
     
-    if(out_impassable_walls) *out_impassable_walls = false;
+    if(outImpassableWalls) *outImpassableWalls = false;
     return false;
 }
 
@@ -119,13 +119,13 @@ void clearAreaTextures() {
     if(!game.curAreaData) return;
     
     for(size_t s = 0; s < game.curAreaData->sectors.size(); s++) {
-        Sector* s_ptr = game.curAreaData->sectors[s];
+        Sector* sPtr = game.curAreaData->sectors[s];
         if(
-            s_ptr->textureInfo.bitmap &&
-            s_ptr->textureInfo.bitmap != game.bmpError
+            sPtr->textureInfo.bitmap &&
+            sPtr->textureInfo.bitmap != game.bmpError
         ) {
-            game.content.bitmaps.list.free(s_ptr->textureInfo.bmpName);
-            s_ptr->textureInfo.bitmap = nullptr;
+            game.content.bitmaps.list.free(sPtr->textureInfo.bmpName);
+            sPtr->textureInfo.bitmap = nullptr;
         }
     }
 }
@@ -137,9 +137,9 @@ void clearAreaTextures() {
  *
  * @param reason Explanation of the type of crash (assert, SIGSEGV, etc.).
  * @param info Any extra information to report to the logs.
- * @param exit_status Program exit status.
+ * @param exitStatus Program exit status.
  */
-void crash(const string &reason, const string &info, int exit_status) {
+void crash(const string &reason, const string &info, int exitStatus) {
 
     if(game.display) {
         ALLEGRO_BITMAP* backbuffer = al_get_backbuffer(game.display);
@@ -154,16 +154,16 @@ void crash(const string &reason, const string &info, int exit_status) {
         }
     }
     
-    string error_str = "Program crash!\n";
-    error_str +=
+    string errorStr = "Program crash!\n";
+    errorStr +=
         "  Reason: " + reason + ".\n"
         "  Info: " + info + "\n"
         "  Time: " + getCurrentTime(false) + ".\n";
     if(game.errors.sessionHasErrors()) {
-        error_str += "  Error log has messages!\n";
+        errorStr += "  Error log has messages!\n";
     }
-    error_str +=
-        "  Game state: " + game.getCurStateName() + ". delta_t: " +
+    errorStr +=
+        "  Game state: " + game.getCurStateName() + ". deltaT: " +
         (
             game.deltaT == 0.0f ? "0" :
             f2s(game.deltaT) + " (" + f2s(1.0f / game.deltaT) + " FPS)"
@@ -176,33 +176,33 @@ void crash(const string &reason, const string &info, int exit_status) {
         "  Current area: ";
         
     if(game.curAreaData && !game.curAreaData->name.empty()) {
-        error_str +=
+        errorStr +=
             game.curAreaData->name + ", version " +
             game.curAreaData->version + ".\n";
     } else {
-        error_str += "none.\n";
+        errorStr += "none.\n";
     }
     
-    error_str += "  Current leader: ";
+    errorStr += "  Current leader: ";
     
     if(game.states.gameplay->curLeaderPtr) {
-        error_str +=
+        errorStr +=
             game.states.gameplay->curLeaderPtr->type->name + ", at " +
             p2s(game.states.gameplay->curLeaderPtr->pos) +
             ", state history: " +
             game.states.gameplay->curLeaderPtr->fsm.curState->name;
         for(size_t h = 0; h < STATE_HISTORY_SIZE; h++) {
-            error_str +=
+            errorStr +=
                 " " +
                 game.states.gameplay->curLeaderPtr->
                 fsm.prevStateNames[h];
         }
-        error_str += "\n  10 closest Pikmin to that leader:\n";
+        errorStr += "\n  10 closest Pikmin to that leader:\n";
         
-        vector<Pikmin*> closest_pikmin =
+        vector<Pikmin*> closestPikmin =
             game.states.gameplay->mobs.pikmin;
         sort(
-            closest_pikmin.begin(), closest_pikmin.end(),
+            closestPikmin.begin(), closestPikmin.end(),
         [] (const Pikmin * p1, const Pikmin * p2) -> bool {
             return
             Distance(
@@ -216,22 +216,22 @@ void crash(const string &reason, const string &info, int exit_status) {
         }
         );
         
-        size_t closest_p_amount = std::min(closest_pikmin.size(), (size_t) 10);
-        for(size_t p = 0; p < closest_p_amount; p++) {
-            error_str +=
-                "    " + closest_pikmin[p]->type->name + ", at " +
-                p2s(closest_pikmin[p]->pos) + ", history: " +
-                closest_pikmin[p]->fsm.curState->name;
+        size_t closestPAmount = std::min(closestPikmin.size(), (size_t) 10);
+        for(size_t p = 0; p < closestPAmount; p++) {
+            errorStr +=
+                "    " + closestPikmin[p]->type->name + ", at " +
+                p2s(closestPikmin[p]->pos) + ", history: " +
+                closestPikmin[p]->fsm.curState->name;
             for(size_t h = 0; h < STATE_HISTORY_SIZE; h++) {
-                error_str += " " + closest_pikmin[p]->fsm.prevStateNames[h];
+                errorStr += " " + closestPikmin[p]->fsm.prevStateNames[h];
             }
-            error_str += "\n";
+            errorStr += "\n";
         }
     } else {
-        error_str += "none.";
+        errorStr += "none.";
     }
     
-    game.errors.report(error_str);
+    game.errors.report(errorStr);
     
     showSystemMessageBox(
         nullptr, "Program crash!",
@@ -242,7 +242,7 @@ void crash(const string &reason, const string &info, int exit_status) {
         ALLEGRO_MESSAGEBOX_ERROR
     );
     
-    exit(exit_status);
+    exit(exitStatus);
 }
 
 
@@ -250,46 +250,46 @@ void crash(const string &reason, const string &info, int exit_status) {
  * @brief Checks whether a given edge should get a ledge smoothing
  * edge offset effect or not.
  *
- * @param e_ptr Edge to check.
- * @param out_affected_sector If there should be an effect, the affected sector,
+ * @param ePtr Edge to check.
+ * @param outAffectedSector If there should be an effect, the affected sector,
  * i.e. the one getting the smoothing, is returned here.
- * @param out_unaffected_sector If there should be an effect, the
+ * @param outUnaffectedSector If there should be an effect, the
  * unaffected sector, i.e. the lower one, is returned here.
  * @return Whether it has ledge smoothing.
  */
 bool doesEdgeHaveLedgeSmoothing(
-    Edge* e_ptr, Sector** out_affected_sector, Sector** out_unaffected_sector
+    Edge* ePtr, Sector** outAffectedSector, Sector** outUnaffectedSector
 ) {
     //Never-smooth walls don't have the effect.
-    if(e_ptr->ledgeSmoothingLength <= 0.0f) return false;
+    if(ePtr->ledgeSmoothingLength <= 0.0f) return false;
     
     if(
-        (e_ptr->sectors[0] && !e_ptr->sectors[1]) ||
-        e_ptr->sectors[1]->isBottomlessPit
+        (ePtr->sectors[0] && !ePtr->sectors[1]) ||
+        ePtr->sectors[1]->isBottomlessPit
     ) {
         //If 0 exists but 1 doesn't.
-        *out_affected_sector = e_ptr->sectors[0];
-        *out_unaffected_sector = e_ptr->sectors[1];
+        *outAffectedSector = ePtr->sectors[0];
+        *outUnaffectedSector = ePtr->sectors[1];
         return true;
         
     } else if(
-        (!e_ptr->sectors[0] && e_ptr->sectors[1]) ||
-        e_ptr->sectors[0]->isBottomlessPit
+        (!ePtr->sectors[0] && ePtr->sectors[1]) ||
+        ePtr->sectors[0]->isBottomlessPit
     ) {
         //If 1 exists but 0 doesn't.
-        *out_affected_sector = e_ptr->sectors[1];
-        *out_unaffected_sector = e_ptr->sectors[0];
+        *outAffectedSector = ePtr->sectors[1];
+        *outUnaffectedSector = ePtr->sectors[0];
         return true;
         
     } else {
         //Return whichever one is the tallest.
-        if(e_ptr->sectors[0]->z > e_ptr->sectors[1]->z) {
-            *out_affected_sector = e_ptr->sectors[0];
-            *out_unaffected_sector = e_ptr->sectors[1];
+        if(ePtr->sectors[0]->z > ePtr->sectors[1]->z) {
+            *outAffectedSector = ePtr->sectors[0];
+            *outUnaffectedSector = ePtr->sectors[1];
             return true;
-        } else if(e_ptr->sectors[1]->z > e_ptr->sectors[0]->z) {
-            *out_affected_sector = e_ptr->sectors[1];
-            *out_unaffected_sector = e_ptr->sectors[0];
+        } else if(ePtr->sectors[1]->z > ePtr->sectors[0]->z) {
+            *outAffectedSector = ePtr->sectors[1];
+            *outUnaffectedSector = ePtr->sectors[0];
             return true;
         } else {
             return false;
@@ -303,35 +303,35 @@ bool doesEdgeHaveLedgeSmoothing(
  * @brief Checks whether a given edge should get a liquid limit
  * edge offset effect or not.
  *
- * @param e_ptr Edge to check.
- * @param out_affected_sector If there should be an effect, the affected sector,
+ * @param ePtr Edge to check.
+ * @param outAffectedSector If there should be an effect, the affected sector,
  * i.e. the one with the liquid, is returned here.
- * @param out_unaffected_sector If there should be an effect, the
+ * @param outUnaffectedSector If there should be an effect, the
  * unaffected sector, i.e. the one without the liquid, is returned here.
  * @return Whether it has a liquid limit.
  */
 bool doesEdgeHaveLiquidLimit(
-    Edge* e_ptr, Sector** out_affected_sector, Sector** out_unaffected_sector
+    Edge* ePtr, Sector** outAffectedSector, Sector** outUnaffectedSector
 ) {
     //Check if the sectors exist.
-    if(!e_ptr->sectors[0] || !e_ptr->sectors[1]) return false;
+    if(!ePtr->sectors[0] || !ePtr->sectors[1]) return false;
     
     //Check which ones have liquid.
-    bool has_liquid[2] = {false, false};
+    bool hasLiquid[2] = {false, false};
     for(unsigned char s = 0; s < 2; s++) {
-        has_liquid[s] =
-            e_ptr->sectors[s]->hazard &&
-            e_ptr->sectors[s]->hazard->associatedLiquid;
+        hasLiquid[s] =
+            ePtr->sectors[s]->hazard &&
+            ePtr->sectors[s]->hazard->associatedLiquid;
     }
     
     //Return edges with liquid on one side only.
-    if(has_liquid[0] && !has_liquid[1]) {
-        *out_affected_sector = e_ptr->sectors[0];
-        *out_unaffected_sector = e_ptr->sectors[1];
+    if(hasLiquid[0] && !hasLiquid[1]) {
+        *outAffectedSector = ePtr->sectors[0];
+        *outUnaffectedSector = ePtr->sectors[1];
         return true;
-    } else if(has_liquid[1] && !has_liquid[0]) {
-        *out_affected_sector = e_ptr->sectors[1];
-        *out_unaffected_sector = e_ptr->sectors[0];
+    } else if(hasLiquid[1] && !hasLiquid[0]) {
+        *outAffectedSector = ePtr->sectors[1];
+        *outUnaffectedSector = ePtr->sectors[0];
         return true;
     } else {
         return false;
@@ -343,44 +343,44 @@ bool doesEdgeHaveLiquidLimit(
  * @brief Checks whether a given edge should get a wall shadow
  * edge offset effect or not.
  *
- * @param e_ptr Edge to check.
- * @param out_affected_sector If there should be an effect, the affected sector,
+ * @param ePtr Edge to check.
+ * @param outAffectedSector If there should be an effect, the affected sector,
  * i.e. the one getting shaded, is returned here.
- * @param out_unaffected_sector If there should be an effect, the
+ * @param outUnaffectedSector If there should be an effect, the
  * unaffected sector, i.e. the one casting the shadow, is returned here.
  * @return Whether it has a wall shadow.
  */
 bool doesEdgeHaveWallShadow(
-    Edge* e_ptr, Sector** out_affected_sector, Sector** out_unaffected_sector
+    Edge* ePtr, Sector** outAffectedSector, Sector** outUnaffectedSector
 ) {
     //Never-cast walls don't cast.
-    if(e_ptr->wallShadowLength <= 0.0f) return false;
+    if(ePtr->wallShadowLength <= 0.0f) return false;
     
     //Invalid sectors don't cast.
-    if(!e_ptr->sectors[0] || !e_ptr->sectors[1]) return false;
-    if(e_ptr->sectors[0]->isBottomlessPit) return false;
-    if(e_ptr->sectors[1]->isBottomlessPit) return false;
+    if(!ePtr->sectors[0] || !ePtr->sectors[1]) return false;
+    if(ePtr->sectors[0]->isBottomlessPit) return false;
+    if(ePtr->sectors[1]->isBottomlessPit) return false;
     
     //Same-height sectors can't cast.
-    if(e_ptr->sectors[0]->z == e_ptr->sectors[1]->z) return false;
+    if(ePtr->sectors[0]->z == ePtr->sectors[1]->z) return false;
     
     //We can already save which one is highest.
-    if(e_ptr->sectors[0]->z > e_ptr->sectors[1]->z) {
-        *out_unaffected_sector = e_ptr->sectors[0];
-        *out_affected_sector = e_ptr->sectors[1];
+    if(ePtr->sectors[0]->z > ePtr->sectors[1]->z) {
+        *outUnaffectedSector = ePtr->sectors[0];
+        *outAffectedSector = ePtr->sectors[1];
     } else {
-        *out_unaffected_sector = e_ptr->sectors[1];
-        *out_affected_sector = e_ptr->sectors[0];
+        *outUnaffectedSector = ePtr->sectors[1];
+        *outAffectedSector = ePtr->sectors[0];
     }
     
-    if(e_ptr->wallShadowLength != LARGE_FLOAT) {
+    if(ePtr->wallShadowLength != LARGE_FLOAT) {
         //Fixed shadow length.
         return true;
     } else {
         //Auto shadow length.
         return
-            (*out_unaffected_sector)->z >
-            (*out_affected_sector)->z + GEOMETRY::STEP_HEIGHT;
+            (*outUnaffectedSector)->z >
+            (*outAffectedSector)->z + GEOMETRY::STEP_HEIGHT;
     }
 }
 
@@ -388,30 +388,30 @@ bool doesEdgeHaveWallShadow(
 /**
  * @brief Returns the mob that is closest to the mouse cursor.
  *
- * @param must_have_health If true, only count enemies that have health
+ * @param mustHaveHealth If true, only count enemies that have health
  * (health and max health > 0).
  * @return The mob.
  */
-Mob* getClosestMobToCursor(bool must_have_health) {
-    Distance closest_mob_to_cursor_dist;
-    Mob* closest_mob_to_cursor = nullptr;
+Mob* getClosestMobToCursor(bool mustHaveHealth) {
+    Distance closestMobToCursorDist;
+    Mob* closestMobToCursor = nullptr;
     
     for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
-        Mob* m_ptr = game.states.gameplay->mobs.all[m];
+        Mob* mPtr = game.states.gameplay->mobs.all[m];
         
-        bool has_health = m_ptr->health > 0.0f && m_ptr->maxHealth > 0.0f;
-        if(must_have_health && !has_health) continue;
-        if(m_ptr->isStoredInsideMob()) continue;
-        if(!m_ptr->fsm.curState) continue;
+        bool hasHealth = mPtr->health > 0.0f && mPtr->maxHealth > 0.0f;
+        if(mustHaveHealth && !hasHealth) continue;
+        if(mPtr->isStoredInsideMob()) continue;
+        if(!mPtr->fsm.curState) continue;
         
-        Distance d = Distance(game.view.cursorWorldPos, m_ptr->pos);
-        if(!closest_mob_to_cursor || d < closest_mob_to_cursor_dist) {
-            closest_mob_to_cursor = m_ptr;
-            closest_mob_to_cursor_dist = d;
+        Distance d = Distance(game.view.cursorWorldPos, mPtr->pos);
+        if(!closestMobToCursor || d < closestMobToCursorDist) {
+            closestMobToCursor = mPtr;
+            closestMobToCursorDist = d;
         }
     }
     
-    return closest_mob_to_cursor;
+    return closestMobToCursor;
 }
 
 
@@ -431,32 +431,32 @@ string getEngineVersionString() {
 /**
  * @brief Returns the color a ledge's smoothing should be.
  *
- * @param e_ptr Edge with the ledge.
+ * @param ePtr Edge with the ledge.
  * @return The color.
  */
-ALLEGRO_COLOR getLedgeSmoothingColor(Edge* e_ptr) {
-    return e_ptr->ledgeSmoothingColor;
+ALLEGRO_COLOR getLedgeSmoothingColor(Edge* ePtr) {
+    return ePtr->ledgeSmoothingColor;
 }
 
 
 /**
  * @brief Returns the length a ledge's smoothing should be.
  *
- * @param e_ptr Edge with the ledge.
+ * @param ePtr Edge with the ledge.
  * @return The length.
  */
-float getLedgeSmoothingLength(Edge* e_ptr) {
-    return e_ptr->ledgeSmoothingLength;
+float getLedgeSmoothingLength(Edge* ePtr) {
+    return ePtr->ledgeSmoothingLength;
 }
 
 
 /**
  * @brief Returns the color a liquid limit's effect should be.
  *
- * @param e_ptr Edge with the liquid limit.
+ * @param ePtr Edge with the liquid limit.
  * @return The color.
  */
-ALLEGRO_COLOR getLiquidLimitColor(Edge* e_ptr) {
+ALLEGRO_COLOR getLiquidLimitColor(Edge* ePtr) {
     return {1.0f, 1.0f, 1.0f, 0.75f};
 }
 
@@ -464,19 +464,19 @@ ALLEGRO_COLOR getLiquidLimitColor(Edge* e_ptr) {
 /**
  * @brief Returns the length a liquid's limit effect.
  *
- * @param e_ptr Edge with the liquid limit.
+ * @param ePtr Edge with the liquid limit.
  * @return The length.
  */
-float getLiquidLimitLength(Edge* e_ptr) {
+float getLiquidLimitLength(Edge* ePtr) {
     //Let's vary the length randomly by the topleftmost edge coordinates.
     //It's better to use this than using just the first edge, for instance,
     //because that would result in many cases of edges that share a first
     //vertex. So it wouldn't look as random.
     //It is much more rare for two edges to share a topleftmost vertex.
-    Point min_coords = v2p(e_ptr->vertexes[0]);
-    updateMinCoords(min_coords, v2p(e_ptr->vertexes[1]));
+    Point minCoords = v2p(ePtr->vertexes[0]);
+    updateMinCoords(minCoords, v2p(ePtr->vertexes[1]));
     float r =
-        (hashNr2(min_coords.x, min_coords.y) / (float) UINT32_MAX) * 5.0f;
+        (hashNr2(minCoords.x, minCoords.y) / (float) UINT32_MAX) * 5.0f;
     return
         15.0f +
         12.0f * sin((game.states.gameplay->areaTimePassed * 2.0f) + r);
@@ -487,18 +487,18 @@ float getLiquidLimitLength(Edge* e_ptr) {
  * @brief Returns the name of the entry in a player records data file that
  * refers to the given area.
  *
- * @param area_ptr The area.
+ * @param areaPtr The area.
  * @return The entry name.
  */
-string getMissionRecordEntryName(Area* area_ptr) {
+string getMissionRecordEntryName(Area* areaPtr) {
     return
-        area_ptr->name + ";" +
+        areaPtr->name + ";" +
         getSubtitleOrMissionGoal(
-            area_ptr->subtitle, area_ptr->type,
-            area_ptr->mission.goal
+            areaPtr->subtitle, areaPtr->type,
+            areaPtr->mission.goal
         ) + ";" +
-        area_ptr->maker + ";" +
-        area_ptr->version;
+        areaPtr->maker + ";" +
+        areaPtr->version;
 }
 
 
@@ -509,52 +509,52 @@ string getMissionRecordEntryName(Area* area_ptr) {
  * to the lowest.
  *
  * @param pivot Return the mob after this one, or if nullptr, return the lowest.
- * @param must_have_health If true, only count enemies that have health
+ * @param mustHaveHealth If true, only count enemies that have health
  * (health and max health > 0).
  * @return The mob, or nullptr if there is none nearby.
  */
-Mob* getNextMobNearCursor(Mob* pivot, bool must_have_health) {
-    vector<Mob*> mobs_near_cursor;
+Mob* getNextMobNearCursor(Mob* pivot, bool mustHaveHealth) {
+    vector<Mob*> mobsNearCursor;
     
     //First, get all mobs that are close to the cursor.
     for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
-        Mob* m_ptr = game.states.gameplay->mobs.all[m];
+        Mob* mPtr = game.states.gameplay->mobs.all[m];
         
-        bool has_health = m_ptr->health > 0.0f && m_ptr->maxHealth > 0.0f;
-        if(must_have_health && !has_health) continue;
-        if(m_ptr->isStoredInsideMob()) continue;
-        if(!m_ptr->fsm.curState) continue;
+        bool hasHealth = mPtr->health > 0.0f && mPtr->maxHealth > 0.0f;
+        if(mustHaveHealth && !hasHealth) continue;
+        if(mPtr->isStoredInsideMob()) continue;
+        if(!mPtr->fsm.curState) continue;
         
-        Distance d = Distance(game.view.cursorWorldPos, m_ptr->pos);
+        Distance d = Distance(game.view.cursorWorldPos, mPtr->pos);
         if(d < 8.0f) {
-            mobs_near_cursor.push_back(m_ptr);
+            mobsNearCursor.push_back(mPtr);
         }
     }
     
-    if(mobs_near_cursor.empty()) return nullptr;
+    if(mobsNearCursor.empty()) return nullptr;
     
     //Sort them by ID.
     std::sort(
-        mobs_near_cursor.begin(), mobs_near_cursor.end(),
+        mobsNearCursor.begin(), mobsNearCursor.end(),
     [] (const Mob * m1, const Mob * m2) -> bool {
         return m1->id < m2->id;
     }
     );
     
     //Find the pivot's index so we can go to the next one.
-    size_t pivot_idx = INVALID;
-    for(size_t m = 0; m < mobs_near_cursor.size(); m++) {
-        if(mobs_near_cursor[m] == pivot) {
-            pivot_idx = m;
+    size_t pivotIdx = INVALID;
+    for(size_t m = 0; m < mobsNearCursor.size(); m++) {
+        if(mobsNearCursor[m] == pivot) {
+            pivotIdx = m;
             break;
         }
     }
     
     //Return the next one, looping, or just returns the first if not available.
-    if(pivot_idx == INVALID) {
-        return mobs_near_cursor[0];
+    if(pivotIdx == INVALID) {
+        return mobsNearCursor[0];
     } else {
-        return getNextInVector(mobs_near_cursor, pivot_idx);
+        return getNextInVector(mobsNearCursor, pivotIdx);
     }
 }
 
@@ -564,15 +564,15 @@ Mob* getNextMobNearCursor(Mob* pivot, bool must_have_health) {
  * the mission's goal.
  *
  * @param subtitle Area subtitle.
- * @param area_type Type of area.
+ * @param areaType Type of area.
  * @param goal Mission goal.
  * @return The subtitle or goal.
  */
 string getSubtitleOrMissionGoal(
-    const string &subtitle, const AREA_TYPE area_type,
+    const string &subtitle, const AREA_TYPE areaType,
     const MISSION_GOAL goal
 ) {
-    if(subtitle.empty() && area_type == AREA_TYPE_MISSION) {
+    if(subtitle.empty() && areaType == AREA_TYPE_MISSION) {
         return game.missionGoals[goal]->getName();
     }
     
@@ -592,48 +592,48 @@ string getSubtitleOrMissionGoal(
  * @param start Start the line at this point.
  * This is a ratio from the leader (0) to the cursor (1).
  * @param end Same as start, but for the end point.
- * @param leader_pos Position of the leader.
- * @param cursor_pos Position of the cursor.
+ * @param leaderPos Position of the leader.
+ * @param cursorPos Position of the cursor.
  * @param color Color of the line.
- * @param u_offset Offset the texture u by this much.
- * @param u_scale Scale the texture u by this much.
- * @param vary_thickness If true, thickness varies as the line goes
+ * @param uOffset Offset the texture u by this much.
+ * @param uScale Scale the texture u by this much.
+ * @param varyThickness If true, thickness varies as the line goes
  * forward. False makes it use the same thickness (the minimal one) throughout.
  * @return The amount of vertexes needed.
  */
 unsigned char getThrowPreviewVertexes(
     ALLEGRO_VERTEX* vertexes,
     float start, float end,
-    const Point &leader_pos, const Point &cursor_pos,
+    const Point &leaderPos, const Point &cursorPos,
     const ALLEGRO_COLOR &color,
-    float u_offset, float u_scale,
-    bool vary_thickness
+    float uOffset, float uScale,
+    bool varyThickness
 ) {
-    const float segment_points[] = {
+    const float segmentPoints[] = {
         0.0f, LEADER::THROW_PREVIEW_FADE_IN_RATIO,
         0.5f, LEADER::THROW_PREVIEW_FADE_OUT_RATIO,
         1.0f
     };
     
-    float max_thickness =
-        vary_thickness ?
+    float maxThickness =
+        varyThickness ?
         LEADER::THROW_PREVIEW_DEF_MAX_THICKNESS :
         LEADER::THROW_PREVIEW_MIN_THICKNESS;
         
-    float leader_to_cursor_dist = Distance(leader_pos, cursor_pos).toFloat();
-    unsigned char cur_v = 0;
+    float leaderToCursorDist = Distance(leaderPos, cursorPos).toFloat();
+    unsigned char curV = 0;
     
-    auto get_thickness =
-    [max_thickness] (float n) -> float {
+    auto getThickness =
+    [maxThickness] (float n) -> float {
         if(n >= 0.5f) {
             n = 1 - n;
         }
         return
         interpolateNumber(
-            n, 0.0f, 0.5f, LEADER::THROW_PREVIEW_MIN_THICKNESS, max_thickness
+            n, 0.0f, 0.5f, LEADER::THROW_PREVIEW_MIN_THICKNESS, maxThickness
         );
     };
-    auto get_color =
+    auto getColor =
     [&color] (float n) -> ALLEGRO_COLOR {
         if(n >= 0.5f) {
             n = 1 - n;
@@ -652,48 +652,48 @@ unsigned char getThrowPreviewVertexes(
     
     //Get the vertexes of each necessary segment.
     for(unsigned char segment = 0; segment < 4; segment++) {
-        float segment_start = std::max(segment_points[segment], start);
-        float segment_end = std::min(segment_points[segment + 1], end);
+        float segmentStart = std::max(segmentPoints[segment], start);
+        float segmentEnd = std::min(segmentPoints[segment + 1], end);
         
         if(
-            segment_start > segment_points[segment + 1] ||
-            segment_end < segment_points[segment]
+            segmentStart > segmentPoints[segment + 1] ||
+            segmentEnd < segmentPoints[segment]
         ) {
             continue;
         }
         
-        vertexes[cur_v].x = leader_to_cursor_dist * segment_start;
-        vertexes[cur_v].y = -get_thickness(segment_start) / 2.0f;
-        vertexes[cur_v].color = get_color(segment_start);
-        cur_v++;
+        vertexes[curV].x = leaderToCursorDist * segmentStart;
+        vertexes[curV].y = -getThickness(segmentStart) / 2.0f;
+        vertexes[curV].color = getColor(segmentStart);
+        curV++;
         
-        vertexes[cur_v] = vertexes[cur_v - 1];
-        vertexes[cur_v].y = -vertexes[cur_v].y;
-        cur_v++;
+        vertexes[curV] = vertexes[curV - 1];
+        vertexes[curV].y = -vertexes[curV].y;
+        curV++;
         
-        vertexes[cur_v].x = leader_to_cursor_dist * segment_end;
-        vertexes[cur_v].y = get_thickness(segment_end) / 2.0f;
-        vertexes[cur_v].color = get_color(segment_end);
-        cur_v++;
+        vertexes[curV].x = leaderToCursorDist * segmentEnd;
+        vertexes[curV].y = getThickness(segmentEnd) / 2.0f;
+        vertexes[curV].color = getColor(segmentEnd);
+        curV++;
         
-        vertexes[cur_v] = vertexes[cur_v - 1];
-        vertexes[cur_v].y = -vertexes[cur_v].y;
-        cur_v++;
+        vertexes[curV] = vertexes[curV - 1];
+        vertexes[curV].y = -vertexes[curV].y;
+        curV++;
     }
     
     //Final setup on all points.
-    for(unsigned char v = 0; v < cur_v; v++) {
+    for(unsigned char v = 0; v < curV; v++) {
         Point p(vertexes[v].x, vertexes[v].y);
         
         //Apply the texture UVs.
-        vertexes[v].u = vertexes[v].x / u_scale - u_offset;
+        vertexes[v].u = vertexes[v].x / uScale - uOffset;
         vertexes[v].v = vertexes[v].y;
         
         //Rotate and move all points. For the sake of simplicity, up until now,
         //they were assuming the throw is perfectly to the right (0 degrees),
         //and that it starts on the world origin.
-        p = rotatePoint(p, getAngle(leader_pos, cursor_pos));
-        p += leader_pos;
+        p = rotatePoint(p, getAngle(leaderPos, cursorPos));
+        p += leaderPos;
         vertexes[v].x = p.x;
         vertexes[v].y = p.y;
         
@@ -701,7 +701,7 @@ unsigned char getThrowPreviewVertexes(
         vertexes[v].z = 0.0f;
     }
     
-    return cur_v;
+    return curV;
 }
 
 
@@ -710,51 +710,51 @@ unsigned char getThrowPreviewVertexes(
  * returns a map, where every key is a variable, and every value is the
  * variable's value.
  *
- * @param vars_string String with the variables.
+ * @param varsString String with the variables.
  * @return The map.
  */
-map<string, string> getVarMap(const string &vars_string) {
-    map<string, string> final_map;
-    vector<string> raw_vars = semicolonListToVector(vars_string);
+map<string, string> getVarMap(const string &varsString) {
+    map<string, string> finalMap;
+    vector<string> rawVars = semicolonListToVector(varsString);
     
-    for(size_t v = 0; v < raw_vars.size(); v++) {
-        vector<string> raw_parts = split(raw_vars[v], "=");
-        if(raw_parts.size() < 2) {
+    for(size_t v = 0; v < rawVars.size(); v++) {
+        vector<string> rawParts = split(rawVars[v], "=");
+        if(rawParts.size() < 2) {
             continue;
         }
-        final_map[trimSpaces(raw_parts[0])] = trimSpaces(raw_parts[1]);
+        finalMap[trimSpaces(rawParts[0])] = trimSpaces(rawParts[1]);
     }
-    return final_map;
+    return finalMap;
 }
 
 
 /**
  * @brief Returns the color a wall's shadow should be.
  *
- * @param e_ptr Edge with the wall.
+ * @param ePtr Edge with the wall.
  * @return The color.
  */
-ALLEGRO_COLOR getWallShadowColor(Edge* e_ptr) {
-    return e_ptr->wallShadowColor;
+ALLEGRO_COLOR getWallShadowColor(Edge* ePtr) {
+    return ePtr->wallShadowColor;
 }
 
 
 /**
  * @brief Returns the length a wall's shadow should be.
  *
- * @param e_ptr Edge with the wall.
+ * @param ePtr Edge with the wall.
  * @return The length.
  */
-float getWallShadowLength(Edge* e_ptr) {
-    if(e_ptr->wallShadowLength != LARGE_FLOAT) {
-        return e_ptr->wallShadowLength;
+float getWallShadowLength(Edge* ePtr) {
+    if(ePtr->wallShadowLength != LARGE_FLOAT) {
+        return ePtr->wallShadowLength;
     }
     
-    float height_difference =
-        fabs(e_ptr->sectors[0]->z - e_ptr->sectors[1]->z);
+    float heightDifference =
+        fabs(ePtr->sectors[0]->z - ePtr->sectors[1]->z);
     return
         std::clamp(
-            height_difference * GEOMETRY::SHADOW_AUTO_LENGTH_MULT,
+            heightDifference * GEOMETRY::SHADOW_AUTO_LENGTH_MULT,
             GEOMETRY::SHADOW_MIN_AUTO_LENGTH,
             GEOMETRY::SHADOW_MAX_AUTO_LENGTH
         );
@@ -769,11 +769,11 @@ float getWallShadowLength(Edge* e_ptr) {
  */
 vector<std::pair<int, string> > getWeatherTable(DataNode* node) {
     vector<std::pair<int, string> > table;
-    size_t n_points = node->getNrOfChildren();
+    size_t nPoints = node->getNrOfChildren();
     
-    for(size_t p = 0; p < n_points; p++) {
-        DataNode* point_node = node->getChild(p);
-        table.push_back(make_pair(s2i(point_node->name), point_node->value));
+    for(size_t p = 0; p < nPoints; p++) {
+        DataNode* pointNode = node->getChild(p);
+        table.push_back(make_pair(s2i(pointNode->name), pointNode->value));
     }
     
     sort(
@@ -818,11 +818,11 @@ vector<std::pair<int, string> > getWeatherTable(DataNode* node) {
  * @brief Adds a GUI item that shows the input icon for going back in a menu.
  *
  * @param gui GUI manager to add the item to.
- * @param item_name Internal name of the GUI item.
+ * @param itemName Internal name of the GUI item.
  */
-void guiAddBackInputIcon(GuiManager* gui, const string &item_name) {
-    GuiItem* back_input = new GuiItem();
-    back_input->onDraw =
+void guiAddBackInputIcon(GuiManager* gui, const string &itemName) {
+    GuiItem* backInput = new GuiItem();
+    backInput->onDraw =
     [] (const GuiItem::DrawInfo & draw) {
         if(!game.options.misc.showHudInputIcons) return;
         const PlayerInputSource &s =
@@ -833,7 +833,7 @@ void guiAddBackInputIcon(GuiManager* gui, const string &item_name) {
             game.sysContent.fntSlim, s, true, draw.center, draw.size
         );
     };
-    gui->addItem(back_input, item_name);
+    gui->addItem(backInput, itemName);
 }
 
 
@@ -859,27 +859,27 @@ bool monoButton(const char* label, const ImVec2 &size) {
  * to be monospaced.
  *
  * @param label Combo widget label.
- * @param current_item Index number of the current selected item. -1 means none.
+ * @param currentItem Index number of the current selected item. -1 means none.
  * @param items List of items.
- * @param popup_max_height_in_items Maximum height of the popup,
+ * @param popupMaxHeightInItems Maximum height of the popup,
  * in number of items.
  * @return Whether the value was changed.
  */
 bool monoCombo(
-    const string &label, int* current_item, const vector<string> &items,
-    int popup_max_height_in_items
+    const string &label, int* currentItem, const vector<string> &items,
+    int popupMaxHeightInItems
 ) {
-    bool has_text = label[0] != '#';
+    bool hasText = label[0] != '#';
     ImGui::BeginGroup();
     ImGui::PushFont(game.sysContent.fntDearImGuiMonospace);
     bool result =
         ImGui::Combo(
-            has_text ? "##cb" + label : label,
-            current_item, items, popup_max_height_in_items
+            hasText ? "##cb" + label : label,
+            currentItem, items, popupMaxHeightInItems
         );
     ImGui::PopFont();
     
-    if(has_text) {
+    if(hasText) {
         ImGui::SameLine(0.0f, ImGui::GetStyle().ItemInnerSpacing.x);
         ImGui::Text("%s", label.c_str());
     }
@@ -895,27 +895,27 @@ bool monoCombo(
  * as well as a vector of strings for the list of items.
  *
  * @param label Combo widget label.
- * @param current_item Name of the current selected item.
+ * @param currentItem Name of the current selected item.
  * @param items List of items.
- * @param popup_max_height_in_items Maximum height of the popup,
+ * @param popupMaxHeightInItems Maximum height of the popup,
  * in number of items.
  * @return Whether the value was changed.
  */
 bool monoCombo(
-    const string &label, string* current_item, const vector<string> &items,
-    int popup_max_height_in_items
+    const string &label, string* currentItem, const vector<string> &items,
+    int popupMaxHeightInItems
 ) {
-    bool has_text = label[0] != '#';
+    bool hasText = label[0] != '#';
     ImGui::BeginGroup();
     ImGui::PushFont(game.sysContent.fntDearImGuiMonospace);
     bool result =
         ImGui::Combo(
-            has_text ? "##cb" + label : label,
-            current_item, items, popup_max_height_in_items
+            hasText ? "##cb" + label : label,
+            currentItem, items, popupMaxHeightInItems
         );
     ImGui::PopFont();
     
-    if(has_text) {
+    if(hasText) {
         ImGui::SameLine(0.0f, ImGui::GetStyle().ItemInnerSpacing.x);
         ImGui::Text("%s", label.c_str());
     }
@@ -932,31 +932,31 @@ bool monoCombo(
  * the internal values of each item, another with the names to display.
  *
  * @param label Combo widget label.
- * @param current_item Internal value of the current selected item.
- * @param item_internal_values List of internal values for each item.
- * @param item_display_names List of names to show the user for each item.
- * @param popup_max_height_in_items Maximum height of the popup,
+ * @param currentItem Internal value of the current selected item.
+ * @param itemInternalValues List of internal values for each item.
+ * @param itemDisplayNames List of names to show the user for each item.
+ * @param popupMaxHeightInItems Maximum height of the popup,
  * in number of items.
  * @return Whether the value was changed.
  */
 bool monoCombo(
-    const string &label, string* current_item,
-    const vector<string> &item_internal_values,
-    const vector<string> &item_display_names,
-    int popup_max_height_in_items
+    const string &label, string* currentItem,
+    const vector<string> &itemInternalValues,
+    const vector<string> &itemDisplayNames,
+    int popupMaxHeightInItems
 ) {
-    bool has_text = label[0] != '#';
+    bool hasText = label[0] != '#';
     ImGui::BeginGroup();
     ImGui::PushFont(game.sysContent.fntDearImGuiMonospace);
     bool result =
         ImGui::Combo(
-            has_text ? "##cb" + label : label,
-            current_item, item_internal_values,
-            item_display_names, popup_max_height_in_items
+            hasText ? "##cb" + label : label,
+            currentItem, itemInternalValues,
+            itemDisplayNames, popupMaxHeightInItems
         );
     ImGui::PopFont();
     
-    if(has_text) {
+    if(hasText) {
         ImGui::SameLine(0.0f, ImGui::GetStyle().ItemInnerSpacing.x);
         ImGui::Text("%s", label.c_str());
     }
@@ -974,24 +974,24 @@ bool monoCombo(
  * @param str Same as you'd pass to ImGui::InputText().
  * @param flags Same as you'd pass to ImGui::InputText().
  * @param callback Same as you'd pass to ImGui::InputText().
- * @param user_data Same as you'd pass to ImGui::InputText().
+ * @param userData Same as you'd pass to ImGui::InputText().
  * @return Whether the text input in the was changed by the user.
  */
 bool monoInputText(
     const char* label, string* str, ImGuiInputTextFlags flags,
-    ImGuiInputTextCallback callback, void* user_data
+    ImGuiInputTextCallback callback, void* userData
 ) {
-    bool has_text = label[0] != '#';
+    bool hasText = label[0] != '#';
     ImGui::BeginGroup();
     ImGui::PushFont(game.sysContent.fntDearImGuiMonospace);
     bool result =
         ImGui::InputText(
-            has_text ? ("##ti" + string(label)).c_str() : label,
-            str, flags, callback, user_data
+            hasText ? ("##ti" + string(label)).c_str() : label,
+            str, flags, callback, userData
         );
     ImGui::PopFont();
     
-    if(has_text) {
+    if(hasText) {
         ImGui::SameLine(0.0f, ImGui::GetStyle().ItemInnerSpacing.x);
         ImGui::Text("%s", label);
     }
@@ -1010,26 +1010,26 @@ bool monoInputText(
  * @param str Same as you'd pass to ImGui::InputText().
  * @param flags Same as you'd pass to ImGui::InputText().
  * @param callback Same as you'd pass to ImGui::InputText().
- * @param user_data Same as you'd pass to ImGui::InputText().
+ * @param userData Same as you'd pass to ImGui::InputText().
  * @return Whether the text input was changed by the user.
  */
 bool monoInputTextWithHint(
     const char* label, const char* hint, string* str,
     ImGuiInputTextFlags flags, ImGuiInputTextCallback callback,
-    void* user_data
+    void* userData
 ) {
-    bool has_text = label[0] != '#';
-    bool str_empty = str->empty();
+    bool hasText = label[0] != '#';
+    bool strEmpty = str->empty();
     ImGui::BeginGroup();
-    if(!str_empty) ImGui::PushFont(game.sysContent.fntDearImGuiMonospace);
+    if(!strEmpty) ImGui::PushFont(game.sysContent.fntDearImGuiMonospace);
     bool result =
         ImGui::InputTextWithHint(
-            has_text ? ("##ti" + string(label)).c_str() : label,
-            hint, str, flags, callback, user_data
+            hasText ? ("##ti" + string(label)).c_str() : label,
+            hint, str, flags, callback, userData
         );
-    if(!str_empty) ImGui::PopFont();
+    if(!strEmpty) ImGui::PopFont();
     
-    if(has_text) {
+    if(hasText) {
         ImGui::SameLine(0.0f, ImGui::GetStyle().ItemInnerSpacing.x);
         ImGui::Text("%s", label);
     }
@@ -1044,26 +1044,26 @@ bool monoInputTextWithHint(
  * the font to be monospaced.
  *
  * @param label Same as you'd pass to ImGui::InputText().
- * @param current_item Same as you'd pass to ImGui::InputText().
+ * @param currentItem Same as you'd pass to ImGui::InputText().
  * @param items Same as you'd pass to ImGui::InputText().
- * @param height_in_items Same as you'd pass to ImGui::InputText().
+ * @param heightInItems Same as you'd pass to ImGui::InputText().
  * @return Whether the value was changed.
  */
 bool monoListBox(
-    const string &label, int* current_item, const vector<string> &items,
-    int height_in_items
+    const string &label, int* currentItem, const vector<string> &items,
+    int heightInItems
 ) {
-    bool has_text = label[0] != '#';
+    bool hasText = label[0] != '#';
     ImGui::BeginGroup();
     ImGui::PushFont(game.sysContent.fntDearImGuiMonospace);
     bool result =
         ImGui::ListBox(
-            has_text ? ("##lb" + string(label)).c_str() : label,
-            current_item, items, height_in_items
+            hasText ? ("##lb" + string(label)).c_str() : label,
+            currentItem, items, heightInItems
         );
     ImGui::PopFont();
     
-    if(has_text) {
+    if(hasText) {
         ImGui::SameLine(0.0f, ImGui::GetStyle().ItemInnerSpacing.x);
         ImGui::Text("%s", label.c_str());
     }
@@ -1099,17 +1099,17 @@ bool monoSelectable(
  * the font to be monospaced.
  *
  * @param label Same as you'd pass to ImGui::InputText().
- * @param p_selected Same as you'd pass to ImGui::InputText().
+ * @param pSelected Same as you'd pass to ImGui::InputText().
  * @param flags Same as you'd pass to ImGui::InputText().
  * @param size Same as you'd pass to ImGui::InputText().
  * @return Whether the text input was changed by the user.
  */
 bool monoSelectable(
-    const char* label, bool* p_selected, ImGuiSelectableFlags flags,
+    const char* label, bool* pSelected, ImGuiSelectableFlags flags,
     const ImVec2 &size
 ) {
     ImGui::PushFont(game.sysContent.fntDearImGuiMonospace);
-    bool result = ImGui::Selectable(label, p_selected, flags, size);
+    bool result = ImGui::Selectable(label, pSelected, flags, size);
     ImGui::PopFont();
     return result;
 }
@@ -1139,16 +1139,16 @@ bool openManual(const string &page) {
  * @brief Prints a bit of info onto the game window, for some seconds.
  *
  * @param text Text to print. Can use line breaks.
- * @param total_duration Total amount of time in which the text is present.
- * @param fade_duration When closing, fade out in the last N seconds.
+ * @param totalDuration Total amount of time in which the text is present.
+ * @param fadeDuration When closing, fade out in the last N seconds.
  */
 void printInfo(
-    const string &text, float total_duration, float fade_duration
+    const string &text, float totalDuration, float fadeDuration
 ) {
     game.makerTools.infoPrintText = text;
-    game.makerTools.infoPrintDuration = total_duration;
-    game.makerTools.infoPrintFadeDuration = fade_duration;
-    game.makerTools.infoPrintTimer.start(total_duration);
+    game.makerTools.infoPrintDuration = totalDuration;
+    game.makerTools.infoPrintFadeDuration = fadeDuration;
+    game.makerTools.infoPrintTimer.start(totalDuration);
 }
 
 
@@ -1199,29 +1199,29 @@ void saveOptions() {
  * In other words, dumps a screenshot.
  */
 void saveScreenshot() {
-    string base_file_name = "screenshot_" + getCurrentTime(true);
+    string baseFileName = "screenshot_" + getCurrentTime(true);
     
     //Check if a file with this name already exists.
     vector<string> files = folderToVector(FOLDER_PATHS_FROM_ROOT::USER_DATA, false);
-    size_t variant_nr = 1;
-    string final_file_name = base_file_name;
-    bool valid_name = false;
+    size_t variantNr = 1;
+    string finalFileName = baseFileName;
+    bool validName = false;
     
     do {
     
         if(
-            find(files.begin(), files.end(), final_file_name + ".png")
+            find(files.begin(), files.end(), finalFileName + ".png")
             == files.end()
         ) {
             //File name not found.
             //Go ahead and create a screenshot with this name.
-            valid_name = true;
+            validName = true;
         } else {
-            variant_nr++;
-            final_file_name = base_file_name + " " + i2s(variant_nr);
+            variantNr++;
+            finalFileName = baseFileName + " " + i2s(variantNr);
         }
         
-    } while(!valid_name);
+    } while(!validName);
     
     //Before saving, let's set every pixel's alpha to 255.
     //This is because alpha operations on the backbuffer behave weirdly.
@@ -1237,10 +1237,10 @@ void saveScreenshot() {
         );
         
     unsigned char* row = (unsigned char*) region->data;
-    int bmp_w = ceil(al_get_bitmap_width(screenshot));
-    int bmp_h = ceil(al_get_bitmap_height(screenshot));
-    for(int y = 0; y < bmp_h; y++) {
-        for(int x = 0; x < bmp_w; x++) {
+    int bmpW = ceil(al_get_bitmap_width(screenshot));
+    int bmpH = ceil(al_get_bitmap_height(screenshot));
+    for(int y = 0; y < bmpH; y++) {
+        for(int x = 0; x < bmpW; x++) {
             row[(x) * 4 + 3] = 255;
         }
         row += region->pitch;
@@ -1249,7 +1249,7 @@ void saveScreenshot() {
     al_unlock_bitmap(screenshot);
     
     al_save_bitmap(
-        (FOLDER_PATHS_FROM_ROOT::USER_DATA + "/" + final_file_name + ".png").c_str(),
+        (FOLDER_PATHS_FROM_ROOT::USER_DATA + "/" + finalFileName + ".png").c_str(),
         screenshot
     );
     
@@ -1261,30 +1261,30 @@ void saveScreenshot() {
  * @brief Saves the engine's lifetime statistics.
  */
 void saveStatistics() {
-    DataNode stats_file("", "");
+    DataNode statsFile("", "");
     const Statistics &s = game.statistics;
-    GetterWriter gw(&stats_file);
+    GetterWriter sGW(&statsFile);
     
-    gw.write("startups", s.startups);
-    gw.write("runtime", s.runtime);
-    gw.write("gameplay_time", s.gameplayTime);
-    gw.write("area_entries", s.areaEntries);
-    gw.write("pikmin_births", s.pikminBirths);
-    gw.write("pikmin_deaths", s.pikminDeaths);
-    gw.write("pikmin_eaten", s.pikminEaten);
-    gw.write("pikmin_hazard_deaths", s.pikminHazardDeaths);
-    gw.write("pikmin_blooms", s.pikminBlooms);
-    gw.write("pikmin_saved", s.pikminSaved);
-    gw.write("enemy_defeats", s.enemyDefeats);
-    gw.write("pikmin_thrown", s.pikminThrown);
-    gw.write("whistle_uses", s.whistleUses);
-    gw.write("distance_walked", s.distanceWalked);
-    gw.write("leader_damage_suffered", s.leaderDamageSuffered);
-    gw.write("punch_damage_caused", s.punchDamageCaused);
-    gw.write("leader_kos", s.leaderKos);
-    gw.write("sprays_used", s.spraysUsed);
+    sGW.write("startups", s.startups);
+    sGW.write("runtime", s.runtime);
+    sGW.write("gameplay_time", s.gameplayTime);
+    sGW.write("area_entries", s.areaEntries);
+    sGW.write("pikmin_births", s.pikminBirths);
+    sGW.write("pikmin_deaths", s.pikminDeaths);
+    sGW.write("pikmin_eaten", s.pikminEaten);
+    sGW.write("pikmin_hazard_deaths", s.pikminHazardDeaths);
+    sGW.write("pikmin_blooms", s.pikminBlooms);
+    sGW.write("pikmin_saved", s.pikminSaved);
+    sGW.write("enemy_defeats", s.enemyDefeats);
+    sGW.write("pikmin_thrown", s.pikminThrown);
+    sGW.write("whistle_uses", s.whistleUses);
+    sGW.write("distance_walked", s.distanceWalked);
+    sGW.write("leader_damage_suffered", s.leaderDamageSuffered);
+    sGW.write("punch_damage_caused", s.punchDamageCaused);
+    sGW.write("leader_kos", s.leaderKos);
+    sGW.write("sprays_used", s.spraysUsed);
     
-    stats_file.saveFile(FILE_PATHS_FROM_ROOT::STATISTICS, true, true, true);
+    statsFile.saveFile(FILE_PATHS_FROM_ROOT::STATISTICS, true, true, true);
 }
 
 
@@ -1292,32 +1292,32 @@ void saveStatistics() {
  * @brief Sets the width of all string tokens in a vector of tokens.
  *
  * @param tokens Vector of tokens to set the widths of.
- * @param text_font Text font.
- * @param control_font Font for control bind icons.
- * @param max_control_bitmap_height If bitmap icons need to be condensed
+ * @param textFont Text font.
+ * @param controlFont Font for control bind icons.
+ * @param maxControlBitmapHeight If bitmap icons need to be condensed
  * vertically to fit a certain space, then their width will be affected too.
  * Specify the maximum height here. Use 0 to indicate no maximum height.
- * @param control_condensed If true, control bind player icons are condensed.
+ * @param controlCondensed If true, control bind player icons are condensed.
  */
 void setStringTokenWidths(
     vector<StringToken> &tokens,
-    const ALLEGRO_FONT* text_font, const ALLEGRO_FONT* control_font,
-    float max_control_bitmap_height, bool control_condensed
+    const ALLEGRO_FONT* textFont, const ALLEGRO_FONT* controlFont,
+    float maxControlBitmapHeight, bool controlCondensed
 ) {
     for(size_t t = 0; t < tokens.size(); t++) {
         switch(tokens[t].type) {
         case STRING_TOKEN_CHAR: {
             tokens[t].width =
-                al_get_text_width(text_font, tokens[t].content.c_str());
+                al_get_text_width(textFont, tokens[t].content.c_str());
             break;
         } case STRING_TOKEN_CONTROL_BIND: {
             tokens[t].content = trimSpaces(tokens[t].content);
             tokens[t].width =
                 getPlayerInputIconWidth(
-                    control_font,
+                    controlFont,
                     game.controls.findBind(tokens[t].content).inputSource,
-                    control_condensed,
-                    max_control_bitmap_height
+                    controlCondensed,
+                    maxControlBitmapHeight
                 );
         }
         default: {
@@ -1334,27 +1334,27 @@ void setStringTokenWidths(
  * @param signum Signal number.
  */
 void signalHandler(int signum) {
-    volatile static bool already_handling_signal = false;
+    volatile static bool alreadyHandlingSignal = false;
     
-    if(already_handling_signal) {
+    if(alreadyHandlingSignal) {
         //This stops an infinite loop if there's a signal raise
         //inside this function. It shouldn't happen, but better be safe.
         exit(signum);
     }
-    already_handling_signal = true;
+    alreadyHandlingSignal = true;
     
-    string bt_str = "Backtrace:\n";
+    string btStr = "Backtrace:\n";
     vector<string> bt = getBacktrace();
     for(size_t s = 0; s < bt.size(); s++) {
-        bt_str += "    " + bt[s] + "\n";
+        btStr += "    " + bt[s] + "\n";
     }
-    if(bt_str.back() == '\n') {
-        bt_str.pop_back();
+    if(btStr.back() == '\n') {
+        btStr.pop_back();
     }
-    string signal_name(strsignal(signum));
-    string type_str = "Signal " + i2s(signum) + " (" + signal_name + ")";
+    string signalName(strsignal(signum));
+    string typeStr = "Signal " + i2s(signum) + " (" + signalName + ")";
     
-    crash(type_str, bt_str, signum);
+    crash(typeStr, btStr, signum);
 }
 
 
@@ -1363,28 +1363,28 @@ void signalHandler(int signum) {
  *
  * @param pos Point of origin.
  * @param z Z of the point of origin.
- * @param pik_type Type of the Pikmin to spew out.
+ * @param pikType Type of the Pikmin to spew out.
  * @param angle Direction in which to spew.
- * @param horizontal_speed Horizontal speed in which to spew.
- * @param vertical_speed Vertical speed in which to spew.
+ * @param horizontalSpeed Horizontal speed in which to spew.
+ * @param verticalSpeed Vertical speed in which to spew.
  */
 void spewPikminSeed(
-    const Point pos, float z, PikminType* pik_type,
-    float angle, float horizontal_speed, float vertical_speed
+    const Point pos, float z, PikminType* pikType,
+    float angle, float horizontalSpeed, float verticalSpeed
 ) {
-    Pikmin* new_pikmin =
+    Pikmin* newPikmin =
         (
             (Pikmin*)
             createMob(
                 game.mobCategories.get(MOB_CATEGORY_PIKMIN),
-                pos, pik_type, angle, "", nullptr, PIKMIN_STATE_SEED
+                pos, pikType, angle, "", nullptr, PIKMIN_STATE_SEED
             )
         );
-    new_pikmin->z = z;
-    new_pikmin->speed.x = cos(angle) * horizontal_speed;
-    new_pikmin->speed.y = sin(angle) * horizontal_speed;
-    new_pikmin->speedZ = vertical_speed;
-    new_pikmin->maturity = 0;
+    newPikmin->z = z;
+    newPikmin->speed.x = cos(angle) * horizontalSpeed;
+    newPikmin->speed.y = sin(angle) * horizontalSpeed;
+    newPikmin->speedZ = verticalSpeed;
+    newPikmin->maturity = 0;
 }
 
 
@@ -1394,72 +1394,72 @@ void spewPikminSeed(
  * unless necessary.
  *
  * @param tokens Tokens that make up the string.
- * @param max_width Maximum width of each line.
+ * @param maxWidth Maximum width of each line.
  * @return The lines.
  */
 vector<vector<StringToken> > splitLongStringWithTokens(
-    const vector<StringToken> &tokens, int max_width
+    const vector<StringToken> &tokens, int maxWidth
 ) {
-    vector<vector<StringToken> > tokens_per_line;
-    if(tokens.empty()) return tokens_per_line;
+    vector<vector<StringToken> > tokensPerLine;
+    if(tokens.empty()) return tokensPerLine;
     
-    tokens_per_line.push_back(vector<StringToken>());
-    size_t cur_line_idx = 0;
+    tokensPerLine.push_back(vector<StringToken>());
+    size_t curLineIdx = 0;
     unsigned int caret = 0;
-    vector<StringToken> word_buffer;
-    unsigned int word_buffer_width = 0;
+    vector<StringToken> wordBuffer;
+    unsigned int wordBufferWidth = 0;
     
     for(size_t t = 0; t < tokens.size() + 1; t++) {
     
-        bool token_is_space =
+        bool tokenIsSpace =
             t != tokens.size() &&
             tokens[t].type == STRING_TOKEN_CHAR && tokens[t].content == " ";
-        bool token_is_line_break =
+        bool tokenIsLineBreak =
             t != tokens.size() &&
             tokens[t].type == STRING_TOKEN_LINE_BREAK;
             
-        if(t == tokens.size() || token_is_space || token_is_line_break) {
+        if(t == tokens.size() || tokenIsSpace || tokenIsLineBreak) {
             //Found a point where we can end a word.
             
-            int caret_after_word = caret + word_buffer_width;
-            bool line_will_be_too_long =
-                caret > 0 && caret_after_word > max_width;
+            int caretAfterWord = caret + wordBufferWidth;
+            bool lineWillBeTooLong =
+                caret > 0 && caretAfterWord > maxWidth;
                 
-            if(line_will_be_too_long) {
+            if(lineWillBeTooLong) {
                 //Break to a new line before comitting the word.
-                tokens_per_line.push_back(vector<StringToken>());
+                tokensPerLine.push_back(vector<StringToken>());
                 caret = 0;
-                cur_line_idx++;
+                curLineIdx++;
                 
                 //Remove the previous line's trailing space, if any.
-                StringToken &prev_tail =
-                    tokens_per_line[cur_line_idx - 1].back();
+                StringToken &prevTail =
+                    tokensPerLine[curLineIdx - 1].back();
                 if(
-                    prev_tail.type == STRING_TOKEN_CHAR &&
-                    prev_tail.content == " "
+                    prevTail.type == STRING_TOKEN_CHAR &&
+                    prevTail.content == " "
                 ) {
-                    tokens_per_line[cur_line_idx - 1].pop_back();
+                    tokensPerLine[curLineIdx - 1].pop_back();
                 }
             }
             
             //Add the word to the current line.
             if(t < tokens.size()) {
-                word_buffer.push_back(tokens[t]);
-                word_buffer_width += tokens[t].width;
+                wordBuffer.push_back(tokens[t]);
+                wordBufferWidth += tokens[t].width;
             }
-            tokens_per_line[cur_line_idx].insert(
-                tokens_per_line[cur_line_idx].end(),
-                word_buffer.begin(), word_buffer.end()
+            tokensPerLine[curLineIdx].insert(
+                tokensPerLine[curLineIdx].end(),
+                wordBuffer.begin(), wordBuffer.end()
             );
-            caret += word_buffer_width;
-            word_buffer.clear();
-            word_buffer_width = 0;
+            caret += wordBufferWidth;
+            wordBuffer.clear();
+            wordBufferWidth = 0;
             
-            if(token_is_line_break) {
+            if(tokenIsLineBreak) {
                 //Break the line after comitting the word.
-                tokens_per_line.push_back(vector<StringToken>());
+                tokensPerLine.push_back(vector<StringToken>());
                 caret = 0;
-                cur_line_idx++;
+                curLineIdx++;
             }
             
             continue;
@@ -1467,32 +1467,32 @@ vector<vector<StringToken> > splitLongStringWithTokens(
         }
         
         //Add the token to the word buffer.
-        word_buffer.push_back(tokens[t]);
-        word_buffer_width += tokens[t].width;
+        wordBuffer.push_back(tokens[t]);
+        wordBufferWidth += tokens[t].width;
     }
     
-    return tokens_per_line;
+    return tokensPerLine;
 }
 
 
 /**
  * @brief Sets up a typical particle generator called from code.
  *
- * @param internal_name Internal name of the particle generator to make use of
+ * @param internalName Internal name of the particle generator to make use of
  * in the game's content.
- * @param target_mob Mob to follow and such.
+ * @param targetMob Mob to follow and such.
  * @return The prepared particle generator.
  */
 ParticleGenerator standardParticleGenSetup(
-    const string &internal_name, Mob* target_mob
+    const string &internalName, Mob* targetMob
 ) {
     ParticleGenerator pg =
-        game.content.particleGens.list[internal_name];
+        game.content.particleGens.list[internalName];
     pg.restartTimer();
-    pg.followMob = target_mob;
-    pg.followAngle = target_mob ? &target_mob->angle : nullptr;
+    pg.followMob = targetMob;
+    pg.followAngle = targetMob ? &targetMob->angle : nullptr;
     pg.followZOffset =
-        target_mob ? target_mob->getDrawingHeight() + 1.0f : 0.0f;
+        targetMob ? targetMob->getDrawingHeight() + 1.0f : 0.0f;
     return pg;
 }
 
@@ -1505,13 +1505,13 @@ ParticleGenerator standardParticleGenSetup(
  * separate the message into lines.
  *
  * @param text Text to display.
- * @param speaker_bmp Bitmap representing the speaker.
+ * @param speakerBmp Bitmap representing the speaker.
  */
-void startGameplayMessage(const string &text, ALLEGRO_BITMAP* speaker_bmp) {
+void startGameplayMessage(const string &text, ALLEGRO_BITMAP* speakerBmp) {
     if(!text.empty()) {
-        string final_text = unescapeString(text);
+        string finalText = unescapeString(text);
         game.states.gameplay->msgBox =
-            new GameplayMessageBox(final_text, speaker_bmp);
+            new GameplayMessageBox(finalText, speakerBmp);
         game.states.gameplay->hud->gui.startAnimation(
             GUI_MANAGER_ANIM_IN_TO_OUT,
             GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
@@ -1536,46 +1536,46 @@ void startGameplayMessage(const string &text, ALLEGRO_BITMAP* speaker_bmp) {
  */
 vector<StringToken> tokenizeString(const string &s) {
     vector<StringToken> tokens;
-    StringToken cur_token;
-    cur_token.type = STRING_TOKEN_CHAR;
+    StringToken curToken;
+    curToken.type = STRING_TOKEN_CHAR;
     
     for(size_t c = 0; c < s.size(); c++) {
         if(strPeek(s, c, "\\\\")) {
-            cur_token.content.push_back('\\');
-            if(cur_token.type == STRING_TOKEN_CHAR) {
-                tokens.push_back(cur_token);
-                cur_token.content.clear();
+            curToken.content.push_back('\\');
+            if(curToken.type == STRING_TOKEN_CHAR) {
+                tokens.push_back(curToken);
+                curToken.content.clear();
             }
             c++;
             
         } else if(strPeek(s, c, "\\k")) {
-            if(!cur_token.content.empty()) tokens.push_back(cur_token);
-            cur_token.content.clear();
-            if(cur_token.type != STRING_TOKEN_CONTROL_BIND) {
-                cur_token.type = STRING_TOKEN_CONTROL_BIND;
+            if(!curToken.content.empty()) tokens.push_back(curToken);
+            curToken.content.clear();
+            if(curToken.type != STRING_TOKEN_CONTROL_BIND) {
+                curToken.type = STRING_TOKEN_CONTROL_BIND;
             } else {
-                cur_token.type = STRING_TOKEN_CHAR;
+                curToken.type = STRING_TOKEN_CHAR;
             }
             c++;
             
         } else if(s[c] == '\n' || strPeek(s, c, "\\n")) {
-            if(!cur_token.content.empty()) tokens.push_back(cur_token);
-            cur_token.content.clear();
-            cur_token.type = STRING_TOKEN_LINE_BREAK;
-            tokens.push_back(cur_token);
-            cur_token.type = STRING_TOKEN_CHAR;
+            if(!curToken.content.empty()) tokens.push_back(curToken);
+            curToken.content.clear();
+            curToken.type = STRING_TOKEN_LINE_BREAK;
+            tokens.push_back(curToken);
+            curToken.type = STRING_TOKEN_CHAR;
             if(s[c] != '\n') c++;
             
         } else {
-            cur_token.content.push_back(s[c]);
-            if(cur_token.type == STRING_TOKEN_CHAR) {
-                tokens.push_back(cur_token);
-                cur_token.content.clear();
+            curToken.content.push_back(s[c]);
+            if(curToken.type == STRING_TOKEN_CHAR) {
+                tokens.push_back(curToken);
+                curToken.content.clear();
             }
             
         }
     }
-    if(!cur_token.content.empty()) tokens.push_back(cur_token);
+    if(!curToken.content.empty()) tokens.push_back(curToken);
     
     return tokens;
 }

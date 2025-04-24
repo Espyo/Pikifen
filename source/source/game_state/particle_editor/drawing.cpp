@@ -42,42 +42,42 @@ void ParticleEditor::drawCanvas() {
     
     //Background.
     if(useBg && bg) {
-        Point texture_tl = canvasTL;
-        Point texture_br = canvasBR;
+        Point textureTL = canvasTL;
+        Point textureBR = canvasBR;
         al_transform_coordinates(
-            &game.view.windowToWorldTransform, &texture_tl.x, &texture_tl.y
+            &game.view.windowToWorldTransform, &textureTL.x, &textureTL.y
         );
         al_transform_coordinates(
-            &game.view.windowToWorldTransform, &texture_br.x, &texture_br.y
+            &game.view.windowToWorldTransform, &textureBR.x, &textureBR.y
         );
-        ALLEGRO_VERTEX bg_vertexes[4];
+        ALLEGRO_VERTEX bgVertexes[4];
         for(size_t v = 0; v < 4; ++v) {
-            bg_vertexes[v].z = 0;
-            bg_vertexes[v].color = COLOR_WHITE;
+            bgVertexes[v].z = 0;
+            bgVertexes[v].color = COLOR_WHITE;
         }
         //Top-left vertex.
-        bg_vertexes[0].x = canvasTL.x;
-        bg_vertexes[0].y = canvasTL.y;
-        bg_vertexes[0].u = texture_tl.x;
-        bg_vertexes[0].v = texture_tl.y;
+        bgVertexes[0].x = canvasTL.x;
+        bgVertexes[0].y = canvasTL.y;
+        bgVertexes[0].u = textureTL.x;
+        bgVertexes[0].v = textureTL.y;
         //Top-right vertex.
-        bg_vertexes[1].x = canvasBR.x;
-        bg_vertexes[1].y = canvasTL.y;
-        bg_vertexes[1].u = texture_br.x;
-        bg_vertexes[1].v = texture_tl.y;
+        bgVertexes[1].x = canvasBR.x;
+        bgVertexes[1].y = canvasTL.y;
+        bgVertexes[1].u = textureBR.x;
+        bgVertexes[1].v = textureTL.y;
         //Bottom-right vertex.
-        bg_vertexes[2].x = canvasBR.x;
-        bg_vertexes[2].y = canvasBR.y;
-        bg_vertexes[2].u = texture_br.x;
-        bg_vertexes[2].v = texture_br.y;
+        bgVertexes[2].x = canvasBR.x;
+        bgVertexes[2].y = canvasBR.y;
+        bgVertexes[2].u = textureBR.x;
+        bgVertexes[2].v = textureBR.y;
         //Bottom-left vertex.
-        bg_vertexes[3].x = canvasTL.x;
-        bg_vertexes[3].y = canvasBR.y;
-        bg_vertexes[3].u = texture_tl.x;
-        bg_vertexes[3].v = texture_br.y;
+        bgVertexes[3].x = canvasTL.x;
+        bgVertexes[3].y = canvasBR.y;
+        bgVertexes[3].u = textureTL.x;
+        bgVertexes[3].v = textureBR.y;
         
         al_draw_prim(
-            bg_vertexes, nullptr, bg,
+            bgVertexes, nullptr, bg,
             0, 4, ALLEGRO_PRIM_TRIANGLE_FAN
         );
     } else {
@@ -105,31 +105,31 @@ void ParticleEditor::drawCanvas() {
     }
     );
     for(size_t c = 0; c < components.size(); ++c) {
-        WorldComponent* c_ptr = &components[c];
-        if(c_ptr->particle_ptr) {
-            c_ptr->particle_ptr->draw();
+        WorldComponent* cPtr = &components[c];
+        if(cPtr->particlePtr) {
+            cPtr->particlePtr->draw();
         }
     }
     
     //Grid.
     if(gridVisible) {
-        Point cam_top_left_corner(0, 0);
-        Point cam_bottom_right_corner(canvasBR.x, canvasBR.y);
+        Point camTLCorner(0, 0);
+        Point camBRCorner(canvasBR.x, canvasBR.y);
         al_transform_coordinates(
             &game.view.windowToWorldTransform,
-            &cam_top_left_corner.x, &cam_top_left_corner.y
+            &camTLCorner.x, &camTLCorner.y
         );
         al_transform_coordinates(
             &game.view.windowToWorldTransform,
-            &cam_bottom_right_corner.x, &cam_bottom_right_corner.y
+            &camBRCorner.x, &camBRCorner.y
         );
         
         al_draw_line(
-            0, cam_top_left_corner.y, 0, cam_bottom_right_corner.y,
+            0, camTLCorner.y, 0, camBRCorner.y,
             al_map_rgb(240, 240, 240), 1.0f / game.view.cam.zoom
         );
         al_draw_line(
-            cam_top_left_corner.x, 0, cam_bottom_right_corner.x, 0,
+            camTLCorner.x, 0, camBRCorner.x, 0,
             al_map_rgb(240, 240, 240), 1.0f / game.view.cam.zoom
         );
     }
@@ -194,10 +194,10 @@ void ParticleEditor::drawCanvas() {
     
     //Leader silhouette.
     if(leaderSilhouetteVisible) {
-        float x_offset = 32.0f;
+        float xOffset = 32.0f;
         
         drawBitmap(
-            game.sysContent.bmpLeaderSilhouetteTop, Point(x_offset, 0),
+            game.sysContent.bmpLeaderSilhouetteTop, Point(xOffset, 0),
             Point(-1, game.config.leaders.standardRadius * 2.0f),
             0, al_map_rgba(240, 240, 240, 160)
         );

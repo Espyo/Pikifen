@@ -124,11 +124,11 @@ public:
         float height = 128, float radius = 32
     );
     Point getCurPos(
-        const Point &mob_pos, float mob_angle
+        const Point &mobPos, float mobAngle
     ) const;
     Point getCurPos(
-        const Point &mob_pos,
-        float mob_angle_cos, float mob_angle_sin
+        const Point &mobPos,
+        float mobAngleCos, float mobAngleSin
     ) const;
     
 };

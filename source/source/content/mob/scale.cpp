@@ -37,22 +37,22 @@ Scale::Scale(const Point &pos, ScaleType* type, float angle) :
 float Scale::calculateCurWeight() const {
 
     //Start by figuring out which mobs are applying weight.
-    set<Mob*> weighing_mobs;
+    set<Mob*> weighingMobs;
     
     for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
-        Mob* m_ptr = game.states.gameplay->mobs.all[m];
+        Mob* mPtr = game.states.gameplay->mobs.all[m];
         
-        if(m_ptr->standingOnMob == this) {
-            weighing_mobs.insert(m_ptr);
-            for(size_t h = 0; h < m_ptr->holding.size(); h++) {
-                weighing_mobs.insert(m_ptr->holding[h]);
+        if(mPtr->standingOnMob == this) {
+            weighingMobs.insert(mPtr);
+            for(size_t h = 0; h < mPtr->holding.size(); h++) {
+                weighingMobs.insert(mPtr->holding[h]);
             }
         }
     }
     
     //Now, add up their weights.
     float w = 0;
-    for(auto &m : weighing_mobs) {
+    for(auto &m : weighingMobs) {
         w += m->type->weight;
     }
     
@@ -65,20 +65,20 @@ float Scale::calculateCurWeight() const {
  * This only keeps in mind things specific to this class, so it shouldn't
  * check for things like carrying, which is global to all mobs.
  *
- * @param fraction_value_nr The fraction's value (upper) number gets set here.
- * @param fraction_req_nr The fraction's required (lower) number gets set here.
- * @param fraction_color The fraction's color gets set here.
+ * @param fractionvalue_nr The fraction's value (upper) number gets set here.
+ * @param fractionReqNr The fraction's required (lower) number gets set here.
+ * @param fractionColor The fraction's color gets set here.
  * @return Whether the numbers should be shown.
  */
 bool Scale::getFractionNumbersInfo(
-    float* fraction_value_nr, float* fraction_req_nr,
-    ALLEGRO_COLOR* fraction_color
+    float* fractionValueNr, float* fractionReqNr,
+    ALLEGRO_COLOR* fractionColor
 ) const {
     float weight = calculateCurWeight();
     if(weight <= 0 || health <= 0) return false;
-    *fraction_value_nr = weight;
-    *fraction_req_nr = goalNumber;
-    *fraction_color = game.config.aestheticGen.carryingColorStop;
+    *fractionValueNr = weight;
+    *fractionReqNr = goalNumber;
+    *fractionColor = game.config.aestheticGen.carryingColorStop;
     return true;
 }
 

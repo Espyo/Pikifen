@@ -102,7 +102,7 @@ private:
      * current time.
      *
      * @param table Table to read from.
-     * @param cur_time What time it is, in minutes.
+     * @param curTime What time it is, in minutes.
      * @param ratio The ratio between value1 and value2 that results in
      * the final value is returned here.
      * @param value1 First value to interpolate with.
@@ -111,7 +111,7 @@ private:
      */
     template<typename T>
     bool getTableValues(
-        const vector<std::pair<int, T> > &table, int cur_time,
+        const vector<std::pair<int, T> > &table, int curTime,
         float* ratio, T* value1, T* value2
     ) {
         if(table.empty()) {
@@ -125,18 +125,18 @@ private:
         }
         
         for(size_t t = 0; t < table.size() - 1; t++) {
-            auto prev_ptr = &table[t];
-            auto next_ptr = &table[t + 1];
+            auto prevPtr = &table[t];
+            auto nextPtr = &table[t + 1];
             
-            int prev_time = prev_ptr->first;
-            int next_time = next_ptr->first;
+            int prevTime = prevPtr->first;
+            int nextTime = nextPtr->first;
             
-            if(cur_time >= prev_time && cur_time < next_time) {
+            if(curTime >= prevTime && curTime < nextTime) {
                 *ratio =
-                    (cur_time - prev_time) /
-                    (float) (next_time - prev_time);
-                *value1 = prev_ptr->second;
-                *value2 = next_ptr->second;
+                    (curTime - prevTime) /
+                    (float) (nextTime - prevTime);
+                *value1 = prevPtr->second;
+                *value2 = nextPtr->second;
                 return true;
             }
         }

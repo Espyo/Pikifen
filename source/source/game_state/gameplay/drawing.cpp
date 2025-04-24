@@ -29,13 +29,13 @@
 /**
  * @brief Does the drawing for the main game loop.
  *
- * @param bmp_output If not nullptr, draw the area onto this.
- * @param bmp_transform Transformation to use when drawing to a bitmap.
- * @param bmp_settings Settings to use when drawing to a bitmap.
+ * @param bmpOutput If not nullptr, draw the area onto this.
+ * @param bmpTransform Transformation to use when drawing to a bitmap.
+ * @param bmpSettings Settings to use when drawing to a bitmap.
  */
 void GameplayState::doGameDrawing(
-    ALLEGRO_BITMAP* bmp_output, const ALLEGRO_TRANSFORM* bmp_transform,
-    const MakerTools::AreaImageSettings &bmp_settings
+    ALLEGRO_BITMAP* bmpOutput, const ALLEGRO_TRANSFORM* bmpTransform,
+    const MakerTools::AreaImageSettings &bmpSettings
 ) {
 
     /*  ***************************************
@@ -44,17 +44,17 @@ void GameplayState::doGameDrawing(
       ***  \/                             \/  ***
         ***************************************/
     
-    ALLEGRO_TRANSFORM old_world_to_window_transform;
-    int blend_old_op, blend_old_src, blend_old_dst,
-        blend_old_aop, blend_old_asrc, blend_old_adst;
+    ALLEGRO_TRANSFORM oldWorldToWindowTransform;
+    int blendOldOp, blendOldSrc, blendOldDst,
+        blendOldAop, blendOldAsrc, blendOldAdst;
         
-    if(bmp_output) {
-        old_world_to_window_transform = game.view.worldToWindowTransform;
-        game.view.worldToWindowTransform = *bmp_transform;
-        al_set_target_bitmap(bmp_output);
+    if(bmpOutput) {
+        oldWorldToWindowTransform = game.view.worldToWindowTransform;
+        game.view.worldToWindowTransform = *bmpTransform;
+        al_set_target_bitmap(bmpOutput);
         al_get_separate_blender(
-            &blend_old_op, &blend_old_src, &blend_old_dst,
-            &blend_old_aop, &blend_old_asrc, &blend_old_adst
+            &blendOldOp, &blendOldSrc, &blendOldDst,
+            &blendOldAop, &blendOldAsrc, &blendOldAdst
         );
         al_set_separate_blender(
             ALLEGRO_ADD, ALLEGRO_ALPHA,
@@ -69,7 +69,7 @@ void GameplayState::doGameDrawing(
     if(game.perfMon) {
         game.perfMon->startMeasurement("Drawing -- Background");
     }
-    drawBackground(bmp_output);
+    drawBackground(bmpOutput);
     if(game.perfMon) {
         game.perfMon->finishMeasurement();
     }
@@ -79,7 +79,7 @@ void GameplayState::doGameDrawing(
         game.perfMon->startMeasurement("Drawing -- World");
     }
     al_use_transform(&game.view.worldToWindowTransform);
-    drawWorldComponents(bmp_output);
+    drawWorldComponents(bmpOutput);
     if(game.perfMon) {
         game.perfMon->finishMeasurement();
     }
@@ -88,7 +88,7 @@ void GameplayState::doGameDrawing(
     if(game.perfMon) {
         game.perfMon->startMeasurement("Drawing -- In-game text");
     }
-    if(!bmp_output && game.makerTools.hud) {
+    if(!bmpOutput && game.makerTools.hud) {
         drawIngameText();
     }
     if(game.perfMon) {
@@ -99,7 +99,7 @@ void GameplayState::doGameDrawing(
     if(game.perfMon) {
         game.perfMon->startMeasurement("Drawing -- precipitation");
     }
-    if(!bmp_output) {
+    if(!bmpOutput) {
         drawPrecipitation();
     }
     if(game.perfMon) {
@@ -110,7 +110,7 @@ void GameplayState::doGameDrawing(
     if(game.perfMon) {
         game.perfMon->startMeasurement("Drawing -- Tree shadows");
     }
-    if(!(bmp_output && !bmp_settings.shadows)) {
+    if(!(bmpOutput && !bmpSettings.shadows)) {
         drawTreeShadows();
     }
     if(game.perfMon) {
@@ -118,12 +118,12 @@ void GameplayState::doGameDrawing(
     }
     
     //Finish dumping to a bitmap image here.
-    if(bmp_output) {
+    if(bmpOutput) {
         al_set_separate_blender(
-            blend_old_op, blend_old_src, blend_old_dst,
-            blend_old_aop, blend_old_asrc, blend_old_adst
+            blendOldOp, blendOldSrc, blendOldDst,
+            blendOldAop, blendOldAsrc, blendOldAdst
         );
-        game.view.worldToWindowTransform = old_world_to_window_transform;
+        game.view.worldToWindowTransform = oldWorldToWindowTransform;
         al_set_target_backbuffer(game.display);
         return;
     }
@@ -139,15 +139,15 @@ void GameplayState::doGameDrawing(
     
     //Layer 7 -- Leader cursor.
     al_use_transform(&game.view.worldToWindowTransform);
-    ALLEGRO_COLOR cursor_color = game.config.aestheticGen.noPikminColor;
+    ALLEGRO_COLOR cursorColor = game.config.aestheticGen.noPikminColor;
     if(closestGroupMember[BUBBLE_RELATION_CURRENT]) {
-        cursor_color =
+        cursorColor =
             closestGroupMember[BUBBLE_RELATION_CURRENT]->type->mainColor;
     }
     if(curLeaderPtr && game.makerTools.hud) {
-        cursor_color =
-            changeColorLighting(cursor_color, cursorHeightDiffLight);
-        drawLeaderCursor(cursor_color);
+        cursorColor =
+            changeColorLighting(cursorColor, cursorHeightDiffLight);
+        drawLeaderCursor(cursorColor);
     }
     
     //Layer 8 -- HUD.
@@ -169,7 +169,7 @@ void GameplayState::doGameDrawing(
         } else if(pauseMenu) {
             drawPauseMenu();
         } else {
-            drawMouseCursor(cursor_color);
+            drawMouseCursor(cursorColor);
         }
     }
     
@@ -205,63 +205,63 @@ void GameplayState::doGameDrawing(
 /**
  * @brief Draws the area background.
  *
- * @param bmp_output If not nullptr, draw the background onto this.
+ * @param bmpOutput If not nullptr, draw the background onto this.
  */
-void GameplayState::drawBackground(ALLEGRO_BITMAP* bmp_output) {
+void GameplayState::drawBackground(ALLEGRO_BITMAP* bmpOutput) {
     if(!game.curAreaData->bgBmp) return;
     
-    ALLEGRO_VERTEX bg_v[4];
+    ALLEGRO_VERTEX bgV[4];
     for(unsigned char v = 0; v < 4; v++) {
-        bg_v[v].color = COLOR_WHITE;
-        bg_v[v].z = 0;
+        bgV[v].color = COLOR_WHITE;
+        bgV[v].z = 0;
     }
     
     //Not gonna lie, this uses some fancy-shmancy numbers.
     //I mostly got here via trial and error.
     //I apologize if you're trying to understand what it means.
-    int bmp_w = bmp_output ? al_get_bitmap_width(bmp_output) : game.winW;
-    int bmp_h = bmp_output ? al_get_bitmap_height(bmp_output) : game.winH;
-    float zoom_to_use = bmp_output ? 0.5 : game.view.cam.zoom;
-    Point final_zoom(
-        bmp_w * 0.5 * game.curAreaData->bgDist / zoom_to_use,
-        bmp_h * 0.5 * game.curAreaData->bgDist / zoom_to_use
+    int bmpW = bmpOutput ? al_get_bitmap_width(bmpOutput) : game.winW;
+    int bmpH = bmpOutput ? al_get_bitmap_height(bmpOutput) : game.winH;
+    float zoomToUse = bmpOutput ? 0.5 : game.view.cam.zoom;
+    Point finalZoom(
+        bmpW * 0.5 * game.curAreaData->bgDist / zoomToUse,
+        bmpH * 0.5 * game.curAreaData->bgDist / zoomToUse
     );
     
-    bg_v[0].x =
+    bgV[0].x =
         0;
-    bg_v[0].y =
+    bgV[0].y =
         0;
-    bg_v[0].u =
-        (game.view.cam.pos.x - final_zoom.x) / game.curAreaData->bgBmpZoom;
-    bg_v[0].v =
-        (game.view.cam.pos.y - final_zoom.y) / game.curAreaData->bgBmpZoom;
-    bg_v[1].x =
-        bmp_w;
-    bg_v[1].y =
+    bgV[0].u =
+        (game.view.cam.pos.x - finalZoom.x) / game.curAreaData->bgBmpZoom;
+    bgV[0].v =
+        (game.view.cam.pos.y - finalZoom.y) / game.curAreaData->bgBmpZoom;
+    bgV[1].x =
+        bmpW;
+    bgV[1].y =
         0;
-    bg_v[1].u =
-        (game.view.cam.pos.x + final_zoom.x) / game.curAreaData->bgBmpZoom;
-    bg_v[1].v =
-        (game.view.cam.pos.y - final_zoom.y) / game.curAreaData->bgBmpZoom;
-    bg_v[2].x =
-        bmp_w;
-    bg_v[2].y =
-        bmp_h;
-    bg_v[2].u =
-        (game.view.cam.pos.x + final_zoom.x) / game.curAreaData->bgBmpZoom;
-    bg_v[2].v =
-        (game.view.cam.pos.y + final_zoom.y) / game.curAreaData->bgBmpZoom;
-    bg_v[3].x =
+    bgV[1].u =
+        (game.view.cam.pos.x + finalZoom.x) / game.curAreaData->bgBmpZoom;
+    bgV[1].v =
+        (game.view.cam.pos.y - finalZoom.y) / game.curAreaData->bgBmpZoom;
+    bgV[2].x =
+        bmpW;
+    bgV[2].y =
+        bmpH;
+    bgV[2].u =
+        (game.view.cam.pos.x + finalZoom.x) / game.curAreaData->bgBmpZoom;
+    bgV[2].v =
+        (game.view.cam.pos.y + finalZoom.y) / game.curAreaData->bgBmpZoom;
+    bgV[3].x =
         0;
-    bg_v[3].y =
-        bmp_h;
-    bg_v[3].u =
-        (game.view.cam.pos.x - final_zoom.x) / game.curAreaData->bgBmpZoom;
-    bg_v[3].v =
-        (game.view.cam.pos.y + final_zoom.y) / game.curAreaData->bgBmpZoom;
+    bgV[3].y =
+        bmpH;
+    bgV[3].u =
+        (game.view.cam.pos.x - finalZoom.x) / game.curAreaData->bgBmpZoom;
+    bgV[3].v =
+        (game.view.cam.pos.y + finalZoom.y) / game.curAreaData->bgBmpZoom;
         
     al_draw_prim(
-        bg_v, nullptr, game.curAreaData->bgBmp,
+        bgV, nullptr, game.curAreaData->bgBmp,
         0, 4, ALLEGRO_PRIM_TRIANGLE_FAN
     );
 }
@@ -285,26 +285,26 @@ void GameplayState::drawBigMsg() {
         const float TEXT_SHRINK_T = 0.95f;
         const float t = bigMsgTime / GAMEPLAY::BIG_MSG_READY_DUR;
         
-        KeyframeInterpolator<float> ki_y(game.winH * (-0.2f));
-        ki_y.add(TEXT_START_T, game.winH * (-0.2f));
-        ki_y.add(TEXT_MOVE_MID_T, game.winH * 0.40f, EASE_METHOD_IN);
-        ki_y.add(TEXT_PAUSE_T, game.winH / 2.0f, EASE_METHOD_OUT_ELASTIC);
-        ki_y.add(TEXT_SHRINK_T, game.winH / 2.0f);
-        KeyframeInterpolator<float> ki_h(TEXT_INITIAL_HEIGHT);
-        ki_h.add(TEXT_SHRINK_T, TEXT_INITIAL_HEIGHT * 1.4f);
-        ki_h.add(1.0f, 0.0f, EASE_METHOD_IN);
+        KeyframeInterpolator<float> kiY(game.winH * (-0.2f));
+        kiY.add(TEXT_START_T, game.winH * (-0.2f));
+        kiY.add(TEXT_MOVE_MID_T, game.winH * 0.40f, EASE_METHOD_IN);
+        kiY.add(TEXT_PAUSE_T, game.winH / 2.0f, EASE_METHOD_OUT_ELASTIC);
+        kiY.add(TEXT_SHRINK_T, game.winH / 2.0f);
+        KeyframeInterpolator<float> kiH(TEXT_INITIAL_HEIGHT);
+        kiH.add(TEXT_SHRINK_T, TEXT_INITIAL_HEIGHT * 1.4f);
+        kiH.add(1.0f, 0.0f, EASE_METHOD_IN);
         
         for(size_t c = 0; c < GAMEPLAY::BIG_MSG_READY_TEXT.size(); c++) {
-            float char_ratio =
+            float charRatio =
                 c / ((float) GAMEPLAY::BIG_MSG_READY_TEXT.size() - 1);
-            char_ratio = 1.0f - char_ratio;
-            float x_offset = (TEXT_W / 2.0f) - (TEXT_W * char_ratio);
-            float y = ki_y.get(t + char_ratio * TEXT_VARIATION_DUR);
+            charRatio = 1.0f - charRatio;
+            float xOffset = (TEXT_W / 2.0f) - (TEXT_W * charRatio);
+            float y = kiY.get(t + charRatio * TEXT_VARIATION_DUR);
             drawText(
                 string(1, GAMEPLAY::BIG_MSG_READY_TEXT[c]),
                 game.sysContent.fntAreaName,
-                Point((game.winW / 2.0f) + x_offset, y),
-                Point(LARGE_FLOAT, game.winH * ki_h.get(t)), COLOR_GOLD
+                Point((game.winW / 2.0f) + xOffset, y),
+                Point(LARGE_FLOAT, game.winH * kiH.get(t)), COLOR_GOLD
             );
         }
         break;
@@ -314,19 +314,19 @@ void GameplayState::drawBigMsg() {
         const float TEXT_GROW_STOP_T = 0.10f;
         const float t = bigMsgTime / GAMEPLAY::BIG_MSG_GO_DUR;
         
-        KeyframeInterpolator<float> ki_h(0.0f);
-        ki_h.add(TEXT_GROW_STOP_T, 0.20f, EASE_METHOD_OUT_ELASTIC);
-        ki_h.add(1.0f, 0.22f);
-        KeyframeInterpolator<float> ki_a(1.0f);
-        ki_a.add(TEXT_GROW_STOP_T, 1.0f);
-        ki_a.add(1.0f, 0.0f);
+        KeyframeInterpolator<float> kiH(0.0f);
+        kiH.add(TEXT_GROW_STOP_T, 0.20f, EASE_METHOD_OUT_ELASTIC);
+        kiH.add(1.0f, 0.22f);
+        KeyframeInterpolator<float> kiA(1.0f);
+        kiA.add(TEXT_GROW_STOP_T, 1.0f);
+        kiA.add(1.0f, 0.0f);
         
         drawText(
             GAMEPLAY::BIG_MSG_GO_TEXT,
             game.sysContent.fntAreaName,
             Point(game.winW / 2.0f, game.winH / 2.0f),
-            Point(LARGE_FLOAT, game.winH * ki_h.get(t)),
-            changeAlpha(COLOR_GOLD, 255 * ki_a.get(t))
+            Point(LARGE_FLOAT, game.winH * kiH.get(t)),
+            changeAlpha(COLOR_GOLD, 255 * kiA.get(t))
         );
         break;
         
@@ -347,27 +347,27 @@ void GameplayState::drawBigMsg() {
             (bigMsgTime / GAMEPLAY::BIG_MSG_MISSION_CLEAR_DUR) :
             (bigMsgTime / GAMEPLAY::BIG_MSG_MISSION_FAILED_DUR);
             
-        KeyframeInterpolator<float> ki_y(game.winH * (-0.2f));
-        ki_y.add(TEXT_MOVE_MID_T, game.winH * 0.40f, EASE_METHOD_IN);
-        ki_y.add(TEXT_PAUSE_T, game.winH / 2.0f, EASE_METHOD_OUT_ELASTIC);
-        KeyframeInterpolator<float> ki_h(TEXT_INITIAL_HEIGHT);
-        ki_h.add(1.0f, TEXT_INITIAL_HEIGHT * 1.4f, EASE_METHOD_IN);
-        KeyframeInterpolator<float> ki_a(1.0f);
-        ki_a.add(TEXT_FADE_T, 1.0f);
-        ki_a.add(1.0f, 0.0f);
+        KeyframeInterpolator<float> kiY(game.winH * (-0.2f));
+        kiY.add(TEXT_MOVE_MID_T, game.winH * 0.40f, EASE_METHOD_IN);
+        kiY.add(TEXT_PAUSE_T, game.winH / 2.0f, EASE_METHOD_OUT_ELASTIC);
+        KeyframeInterpolator<float> kiH(TEXT_INITIAL_HEIGHT);
+        kiH.add(1.0f, TEXT_INITIAL_HEIGHT * 1.4f, EASE_METHOD_IN);
+        KeyframeInterpolator<float> kiA(1.0f);
+        kiA.add(TEXT_FADE_T, 1.0f);
+        kiA.add(1.0f, 0.0f);
         
-        float alpha = ki_a.get(t);
+        float alpha = kiA.get(t);
         
         for(size_t c = 0; c < TEXT.size(); c++) {
-            float char_ratio = c / ((float) TEXT.size() - 1);
-            char_ratio = 1.0f - char_ratio;
-            float x_offset = (TEXT_W / 2.0f) - (TEXT_W * char_ratio);
-            float y = ki_y.get(t + char_ratio * TEXT_VARIATION_DUR);
+            float charRatio = c / ((float) TEXT.size() - 1);
+            charRatio = 1.0f - charRatio;
+            float xOffset = (TEXT_W / 2.0f) - (TEXT_W * charRatio);
+            float y = kiY.get(t + charRatio * TEXT_VARIATION_DUR);
             
             drawText(
                 string(1, TEXT[c]), game.sysContent.fntAreaName,
-                Point((game.winW / 2.0f) + x_offset, y),
-                Point(LARGE_FLOAT, game.winH * ki_h.get(t)),
+                Point((game.winW / 2.0f) + xOffset, y),
+                Point(LARGE_FLOAT, game.winH * kiH.get(t)),
                 changeAlpha(COLOR_GOLD, 255 * alpha)
             );
         }
@@ -394,13 +394,13 @@ void GameplayState::drawDebugTools() {
     const float RAW_STICK_VIEWER_Y = 8;
     const float RAW_STICK_VIEWER_SIZE = 100;
     
-    point raw_stick_coords;
-    raw_stick_coords.x = game.controls.mgr.rawSticks[0][0][0];
-    raw_stick_coords.y = game.controls.mgr.rawSticks[0][0][1];
-    float raw_stick_angle;
-    float raw_stick_mag;
+    point rawStickCoords;
+    rawStickCoords.x = game.controls.mgr.rawSticks[0][0][0];
+    rawStickCoords.y = game.controls.mgr.rawSticks[0][0][1];
+    float rawStickAngle;
+    float rawStickMag;
     coordinatesToAngle(
-        raw_stick_coords, &raw_stick_angle, &raw_stick_mag
+        rawStickCoords, &rawStickAngle, &rawStickMag
     );
     al_draw_filled_rectangle(
         RAW_STICK_VIEWER_X,
@@ -413,7 +413,7 @@ void GameplayState::drawDebugTools() {
         RAW_STICK_VIEWER_X + RAW_STICK_VIEWER_SIZE / 2.0f,
         RAW_STICK_VIEWER_Y + RAW_STICK_VIEWER_SIZE / 2.0f,
         RAW_STICK_VIEWER_SIZE / 2.0f,
-        raw_stick_mag >= 0.99f ?
+        rawStickMag >= 0.99f ?
         al_map_rgba(240, 64, 64, 200) :
         al_map_rgba(240, 240, 240, 200),
         1
@@ -423,7 +423,7 @@ void GameplayState::drawDebugTools() {
         RAW_STICK_VIEWER_Y + RAW_STICK_VIEWER_SIZE / 2.0f,
         RAW_STICK_VIEWER_X + RAW_STICK_VIEWER_SIZE,
         RAW_STICK_VIEWER_Y + RAW_STICK_VIEWER_SIZE / 2.0f,
-        fabs(raw_stick_coords.y) <= 0.01f ?
+        fabs(rawStickCoords.y) <= 0.01f ?
         al_map_rgba(240, 64, 64, 200) :
         al_map_rgba(240, 240, 240, 200),
         1
@@ -433,18 +433,18 @@ void GameplayState::drawDebugTools() {
         RAW_STICK_VIEWER_Y,
         RAW_STICK_VIEWER_X + RAW_STICK_VIEWER_SIZE / 2.0f,
         RAW_STICK_VIEWER_Y + RAW_STICK_VIEWER_SIZE,
-        fabs(raw_stick_coords.x) <= 0.01f ?
+        fabs(rawStickCoords.x) <= 0.01f ?
         al_map_rgba(240, 64, 64, 200) :
         al_map_rgba(240, 240, 240, 200),
         1
     );
-    point raw_draw_coords =
-        raw_stick_coords * RAW_STICK_VIEWER_SIZE / 2.0f;
+    point rawDrawCoords =
+        rawStickCoords * RAW_STICK_VIEWER_SIZE / 2.0f;
     al_draw_filled_circle(
         RAW_STICK_VIEWER_X + RAW_STICK_VIEWER_SIZE / 2.0f +
-        raw_draw_coords.x,
+        rawDrawCoords.x,
         RAW_STICK_VIEWER_Y + RAW_STICK_VIEWER_SIZE / 2.0f +
-        raw_draw_coords.y,
+        rawDrawCoords.y,
         3.5f, al_map_rgb(255, 64, 64)
     );
     al_draw_filled_rectangle(
@@ -455,32 +455,32 @@ void GameplayState::drawDebugTools() {
         al_map_rgba(0, 0, 0, 200)
     );
     al_draw_text(
-        game.sysContent.fnt_builtin,
+        game.sysContent.fntBuiltin,
         al_map_rgb(255, 64, 64),
         RAW_STICK_VIEWER_X, RAW_STICK_VIEWER_Y + RAW_STICK_VIEWER_SIZE + 1,
         ALLEGRO_ALIGN_LEFT,
         (
             boxString(
-                (raw_stick_coords.x >= 0.0f ? " " : "") +
-                f2s(raw_stick_coords.x), 6
+                (rawStickCoords.x >= 0.0f ? " " : "") +
+                f2s(rawStickCoords.x), 6
             ) + " " + boxString(
-                (raw_stick_coords.y >= 0.0f ? " " : "") +
-                f2s(raw_stick_coords.y), 6
+                (rawStickCoords.y >= 0.0f ? " " : "") +
+                f2s(rawStickCoords.y), 6
             )
         ).c_str()
     );
     al_draw_text(
-        game.sysContent.fnt_builtin,
+        game.sysContent.fntBuiltin,
         al_map_rgb(255, 64, 64),
         RAW_STICK_VIEWER_X, RAW_STICK_VIEWER_Y + RAW_STICK_VIEWER_SIZE + 1 + 8,
         ALLEGRO_ALIGN_LEFT,
         (
             boxString(
-                (raw_stick_angle >= 0.0f ? " " : "") +
-                f2s(raw_stick_angle), 6
+                (rawStickAngle >= 0.0f ? " " : "") +
+                f2s(rawStickAngle), 6
             ) + " " + boxString(
-                (raw_stick_mag >= 0.0f ? " " : "") +
-                f2s(raw_stick_mag), 6
+                (rawStickMag >= 0.0f ? " " : "") +
+                f2s(rawStickMag), 6
             )
         ).c_str()
     );
@@ -492,17 +492,17 @@ void GameplayState::drawDebugTools() {
     const float CLEAN_STICK_VIEWER_Y = 8;
     const float CLEAN_STICK_VIEWER_SIZE = 100;
     
-    point clean_stick_coords;
-    clean_stick_coords.x =
+    point cleanStickCoords;
+    cleanStickCoords.x =
         game.controls.getPlayerActionTypeValue(PLAYER_ACTION_TYPE_RIGHT) -
         game.controls.getPlayerActionTypeValue(PLAYER_ACTION_TYPE_LEFT);
-    clean_stick_coords.y =
+    cleanStickCoords.y =
         game.controls.getPlayerActionTypeValue(PLAYER_ACTION_TYPE_DOWN) -
         game.controls.getPlayerActionTypeValue(PLAYER_ACTION_TYPE_UP);
-    float clean_stick_angle;
-    float clean_stick_mag;
+    float cleanStickAngle;
+    float cleanStickMag;
     coordinatesToAngle(
-        clean_stick_coords, &clean_stick_angle, &clean_stick_mag
+        cleanStickCoords, &cleanStickAngle, &cleanStickMag
     );
     al_draw_filled_rectangle(
         CLEAN_STICK_VIEWER_X,
@@ -515,7 +515,7 @@ void GameplayState::drawDebugTools() {
         CLEAN_STICK_VIEWER_X + CLEAN_STICK_VIEWER_SIZE / 2.0f,
         CLEAN_STICK_VIEWER_Y + CLEAN_STICK_VIEWER_SIZE / 2.0f,
         CLEAN_STICK_VIEWER_SIZE / 2.0f,
-        clean_stick_mag >= 0.99f ?
+        cleanStickMag >= 0.99f ?
         al_map_rgba(240, 64, 64, 200) :
         al_map_rgba(240, 240, 240, 200),
         1
@@ -525,7 +525,7 @@ void GameplayState::drawDebugTools() {
         CLEAN_STICK_VIEWER_Y + CLEAN_STICK_VIEWER_SIZE / 2.0f,
         CLEAN_STICK_VIEWER_X + CLEAN_STICK_VIEWER_SIZE,
         CLEAN_STICK_VIEWER_Y + CLEAN_STICK_VIEWER_SIZE / 2.0f,
-        fabs(clean_stick_coords.y) <= 0.01f ?
+        fabs(cleanStickCoords.y) <= 0.01f ?
         al_map_rgba(240, 64, 64, 200) :
         al_map_rgba(240, 240, 240, 200),
         1
@@ -535,18 +535,18 @@ void GameplayState::drawDebugTools() {
         CLEAN_STICK_VIEWER_Y,
         CLEAN_STICK_VIEWER_X + CLEAN_STICK_VIEWER_SIZE / 2.0f,
         CLEAN_STICK_VIEWER_Y + CLEAN_STICK_VIEWER_SIZE,
-        fabs(clean_stick_coords.x) <= 0.01f ?
+        fabs(cleanStickCoords.x) <= 0.01f ?
         al_map_rgba(240, 64, 64, 200) :
         al_map_rgba(240, 240, 240, 200),
         1
     );
-    point clean_draw_coords =
-        clean_stick_coords * CLEAN_STICK_VIEWER_SIZE / 2.0f;
+    point cleanDrawCoords =
+        cleanStickCoords * CLEAN_STICK_VIEWER_SIZE / 2.0f;
     al_draw_filled_circle(
         CLEAN_STICK_VIEWER_X + CLEAN_STICK_VIEWER_SIZE / 2.0f +
-        clean_draw_coords.x,
+        cleanDrawCoords.x,
         CLEAN_STICK_VIEWER_Y + CLEAN_STICK_VIEWER_SIZE / 2.0f +
-        clean_draw_coords.y,
+        cleanDrawCoords.y,
         3.5f, al_map_rgb(255, 64, 64)
     );
     al_draw_filled_rectangle(
@@ -557,34 +557,34 @@ void GameplayState::drawDebugTools() {
         al_map_rgba(0, 0, 0, 200)
     );
     al_draw_text(
-        game.sysContent.fnt_builtin,
+        game.sysContent.fntBuiltin,
         al_map_rgb(255, 64, 64),
         CLEAN_STICK_VIEWER_X,
         CLEAN_STICK_VIEWER_Y + CLEAN_STICK_VIEWER_SIZE + 1,
         ALLEGRO_ALIGN_LEFT,
         (
             boxString(
-                (clean_stick_coords.x >= 0.0f ? " " : "") +
-                f2s(clean_stick_coords.x), 6
+                (cleanStickCoords.x >= 0.0f ? " " : "") +
+                f2s(cleanStickCoords.x), 6
             ) + " " + boxString(
-                (clean_stick_coords.y >= 0.0f ? " " : "") +
-                f2s(clean_stick_coords.y), 6
+                (cleanStickCoords.y >= 0.0f ? " " : "") +
+                f2s(cleanStickCoords.y), 6
             )
         ).c_str()
     );
     al_draw_text(
-        game.sysContent.fnt_builtin,
+        game.sysContent.fntBuiltin,
         al_map_rgb(255, 64, 64),
         CLEAN_STICK_VIEWER_X, CLEAN_STICK_VIEWER_Y + CLEAN_STICK_VIEWER_SIZE +
         1 + 8,
         ALLEGRO_ALIGN_LEFT,
         (
             boxString(
-                (clean_stick_angle >= 0.0f ? " " : "") +
-                f2s(clean_stick_angle), 6
+                (cleanStickAngle >= 0.0f ? " " : "") +
+                f2s(cleanStickAngle), 6
             ) + " " + boxString(
-                (clean_stick_mag >= 0.0f ? " " : "") +
-                f2s(clean_stick_mag), 6
+                (cleanStickMag >= 0.0f ? " " : "") +
+                f2s(cleanStickMag), 6
             )
         ).c_str()
     );
@@ -594,7 +594,7 @@ void GameplayState::drawDebugTools() {
     /*
     al_use_transform(&game.view.worldToWindowTransform);
     for(size_t m = 0; m < curLeaderPtr->group->members.size(); m++) {
-        point offset = curLeaderPtr->group->get_spot_offset(m);
+        point offset = curLeaderPtr->group->getSpotOffset(m);
         al_draw_filled_circle(
             curLeaderPtr->group->anchor.x + offset.x,
             curLeaderPtr->group->anchor.y + offset.y,
@@ -614,15 +614,15 @@ void GameplayState::drawDebugTools() {
         2.0f
     );
     
-    point group_mid_point =
+    point groupMidPoint =
         curLeaderPtr->group->anchor +
-        rotate_point(
+        rotatePoint(
             point(curLeaderPtr->group->radius, 0.0f),
-            curLeaderPtr->group->anchor_angle
+            curLeaderPtr->group->anchorAngle
         );
     al_draw_filled_circle(
-        group_mid_point.x,
-        group_mid_point.y,
+        groupMidPoint.x,
+        groupMidPoint.y,
         3.0f,
         al_map_rgb(0, 0, 255)
     );
@@ -635,27 +635,27 @@ void GameplayState::drawDebugTools() {
  */
 void GameplayState::drawIngameText() {
     //Mob things.
-    size_t n_mobs = mobs.all.size();
-    for(size_t m = 0; m < n_mobs; m++) {
-        Mob* mob_ptr = mobs.all[m];
+    size_t nMobs = mobs.all.size();
+    for(size_t m = 0; m < nMobs; m++) {
+        Mob* mobPtr = mobs.all[m];
         
         //Fractions and health.
-        if(mob_ptr->healthWheel) {
-            mob_ptr->healthWheel->draw();
+        if(mobPtr->healthWheel) {
+            mobPtr->healthWheel->draw();
         }
-        if(mob_ptr->fraction) {
-            mob_ptr->fraction->draw();
+        if(mobPtr->fraction) {
+            mobPtr->fraction->draw();
         }
         
         //Maker tool -- draw hitboxes.
         if(game.makerTools.hitboxes) {
             Sprite* s;
-            mob_ptr->getSpriteData(&s, nullptr, nullptr);
+            mobPtr->getSpriteData(&s, nullptr, nullptr);
             if(s) {
                 for(size_t h = 0; h < s->hitboxes.size(); h++) {
-                    Hitbox* h_ptr = &s->hitboxes[h];
+                    Hitbox* hPtr = &s->hitboxes[h];
                     ALLEGRO_COLOR hc;
-                    switch(h_ptr->type) {
+                    switch(hPtr->type) {
                     case HITBOX_TYPE_NORMAL: {
                         hc = al_map_rgba(0, 128, 0, 192); //Green.
                         break;
@@ -670,64 +670,64 @@ void GameplayState::drawIngameText() {
                         break;
                     }
                     Point p =
-                        mob_ptr->pos + rotatePoint(h_ptr->pos, mob_ptr->angle);
-                    al_draw_filled_circle(p.x, p.y, h_ptr->radius, hc);
+                        mobPtr->pos + rotatePoint(hPtr->pos, mobPtr->angle);
+                    al_draw_filled_circle(p.x, p.y, hPtr->radius, hc);
                 }
             }
         }
         
         //Maker tool -- draw collision.
         if(game.makerTools.collision) {
-            if(mob_ptr->type->pushesWithHitboxes) {
+            if(mobPtr->type->pushesWithHitboxes) {
                 Sprite* s;
-                mob_ptr->getSpriteData(&s, nullptr, nullptr);
+                mobPtr->getSpriteData(&s, nullptr, nullptr);
                 if(s) {
                     for(size_t h = 0; h < s->hitboxes.size(); h++) {
-                        Hitbox* h_ptr = &s->hitboxes[h];
+                        Hitbox* hPtr = &s->hitboxes[h];
                         Point p =
-                            mob_ptr->pos +
-                            rotatePoint(h_ptr->pos, mob_ptr->angle);
+                            mobPtr->pos +
+                            rotatePoint(hPtr->pos, mobPtr->angle);
                         al_draw_circle(
                             p.x, p.y,
-                            h_ptr->radius, COLOR_WHITE, 1
+                            hPtr->radius, COLOR_WHITE, 1
                         );
                     }
                 }
-            } else if(mob_ptr->rectangularDim.x != 0) {
+            } else if(mobPtr->rectangularDim.x != 0) {
                 Point tl(
-                    -mob_ptr->rectangularDim.x / 2.0f,
-                    -mob_ptr->rectangularDim.y / 2.0f
+                    -mobPtr->rectangularDim.x / 2.0f,
+                    -mobPtr->rectangularDim.y / 2.0f
                 );
                 Point br(
-                    mob_ptr->rectangularDim.x / 2.0f,
-                    mob_ptr->rectangularDim.y / 2.0f
+                    mobPtr->rectangularDim.x / 2.0f,
+                    mobPtr->rectangularDim.y / 2.0f
                 );
-                vector<Point> rect_vertices {
-                    rotatePoint(tl, mob_ptr->angle) +
-                    mob_ptr->pos,
-                    rotatePoint(Point(tl.x, br.y),  mob_ptr->angle) +
-                    mob_ptr->pos,
-                    rotatePoint(br, mob_ptr->angle) +
-                    mob_ptr->pos,
-                    rotatePoint(Point(br.x, tl.y), mob_ptr->angle) +
-                    mob_ptr->pos
+                vector<Point> rectVertices {
+                    rotatePoint(tl, mobPtr->angle) +
+                    mobPtr->pos,
+                    rotatePoint(Point(tl.x, br.y),  mobPtr->angle) +
+                    mobPtr->pos,
+                    rotatePoint(br, mobPtr->angle) +
+                    mobPtr->pos,
+                    rotatePoint(Point(br.x, tl.y), mobPtr->angle) +
+                    mobPtr->pos
                 };
                 float vertices[] {
-                    rect_vertices[0].x,
-                    rect_vertices[0].y,
-                    rect_vertices[1].x,
-                    rect_vertices[1].y,
-                    rect_vertices[2].x,
-                    rect_vertices[2].y,
-                    rect_vertices[3].x,
-                    rect_vertices[3].y
+                    rectVertices[0].x,
+                    rectVertices[0].y,
+                    rectVertices[1].x,
+                    rectVertices[1].y,
+                    rectVertices[2].x,
+                    rectVertices[2].y,
+                    rectVertices[3].x,
+                    rectVertices[3].y
                 };
                 
                 al_draw_polygon(vertices, 4, 0, COLOR_WHITE, 1, 10);
             } else {
                 al_draw_circle(
-                    mob_ptr->pos.x, mob_ptr->pos.y,
-                    mob_ptr->radius, COLOR_WHITE, 1
+                    mobPtr->pos.x, mobPtr->pos.y,
+                    mobPtr->radius, COLOR_WHITE, 1
                 );
             }
         }
@@ -740,7 +740,7 @@ void GameplayState::drawIngameText() {
         game.makerTools.infoLock->pathInfo
     ) {
         Path* path = game.makerTools.infoLock->pathInfo;
-        Point target_pos =
+        Point targetPos =
             hasFlag(path->settings.flags, PATH_FOLLOW_FLAG_FOLLOW_MOB) ?
             path->settings.targetMob->pos :
             path->settings.targetPoint;
@@ -749,11 +749,11 @@ void GameplayState::drawIngameText() {
         
             //Faint lines for the entire path.
             for(size_t s = 0; s < path->path.size() - 1; s++) {
-                bool is_blocked = false;
-                PathLink* l_ptr = path->path[s]->get_link(path->path[s + 1]);
-                auto l_it = pathMgr.obstructions.find(l_ptr);
-                if(l_it != pathMgr.obstructions.end()) {
-                    is_blocked = !l_it->second.empty();
+                bool isBlocked = false;
+                PathLink* lPtr = path->path[s]->getLink(path->path[s + 1]);
+                auto lIt = pathMgr.obstructions.find(lPtr);
+                if(lIt != pathMgr.obstructions.end()) {
+                    isBlocked = !lIt->second.empty();
                 }
                 
                 al_draw_line(
@@ -761,7 +761,7 @@ void GameplayState::drawIngameText() {
                     path->path[s]->pos.y,
                     path->path[s + 1]->pos.x,
                     path->path[s + 1]->pos.y,
-                    is_blocked ?
+                    isBlocked ?
                     al_map_rgba(200, 0, 0, 150) :
                     al_map_rgba(0, 0, 200, 150),
                     2.0f
@@ -787,38 +787,38 @@ void GameplayState::drawIngameText() {
         if(
             path->result == PATH_RESULT_DIRECT ||
             path->result == PATH_RESULT_DIRECT_NO_STOPS ||
-            path->cur_path_stop_idx == path->path.size()
+            path->curPathStopIdx == path->path.size()
         ) {
-            bool is_blocked = path->block_reason != PATH_BLOCK_REASON_NONE;
+            bool isBlocked = path->blockReason != PATH_BLOCK_REASON_NONE;
             //Line directly to the target.
             al_draw_line(
                 game.makerTools.infoLock->pos.x,
                 game.makerTools.infoLock->pos.y,
-                target_pos.x,
-                target_pos.y,
-                is_blocked ?
+                targetPos.x,
+                targetPos.y,
+                isBlocked ?
                 al_map_rgba(255, 0, 0, 200) :
                 al_map_rgba(0, 0, 255, 200),
                 4.0f
             );
-        } else if(path->cur_path_stop_idx < path->path.size()) {
-            bool is_blocked = path->block_reason != PATH_BLOCK_REASON_NONE;
+        } else if(path->curPathStopIdx < path->path.size()) {
+            bool isBlocked = path->blockReason != PATH_BLOCK_REASON_NONE;
             //Line to the next stop, and circle for the next stop in blue.
             al_draw_line(
                 game.makerTools.infoLock->pos.x,
                 game.makerTools.infoLock->pos.y,
-                path->path[path->cur_path_stop_idx]->pos.x,
-                path->path[path->cur_path_stop_idx]->pos.y,
-                is_blocked ?
+                path->path[path->curPathStopIdx]->pos.x,
+                path->path[path->curPathStopIdx]->pos.y,
+                isBlocked ?
                 al_map_rgba(255, 0, 0, 200) :
                 al_map_rgba(0, 0, 255, 200),
                 4.0f
             );
             al_draw_filled_circle(
-                path->path[path->cur_path_stop_idx]->pos.x,
-                path->path[path->cur_path_stop_idx]->pos.y,
+                path->path[path->curPathStopIdx]->pos.x,
+                path->path[path->curPathStopIdx]->pos.y,
                 10.0f,
-                is_blocked ?
+                isBlocked ?
                 al_map_rgba(192, 0, 0, 200) :
                 al_map_rgba(0, 0, 192, 200)
             );
@@ -826,15 +826,15 @@ void GameplayState::drawIngameText() {
         
         //Square on the target spot, and target distance.
         al_draw_filled_rectangle(
-            target_pos.x - 8.0f,
-            target_pos.y - 8.0f,
-            target_pos.x + 8.0f,
-            target_pos.y + 8.0f,
+            targetPos.x - 8.0f,
+            targetPos.y - 8.0f,
+            targetPos.x + 8.0f,
+            targetPos.y + 8.0f,
             al_map_rgba(0, 192, 0, 200)
         );
         al_draw_circle(
-            target_pos.x,
-            target_pos.y,
+            targetPos.x,
+            targetPos.y,
             path->settings.finalTargetDistance,
             al_map_rgba(0, 255, 0, 200),
             1.0f
@@ -865,8 +865,8 @@ void GameplayState::drawIngameText() {
 void GameplayState::drawLeaderCursor(const ALLEGRO_COLOR &color) {
     if(!curLeaderPtr) return;
     
-    size_t n_arrows = curLeaderPtr->swarmArrows.size();
-    for(size_t a = 0; a < n_arrows; a++) {
+    size_t nArrows = curLeaderPtr->swarmArrows.size();
+    for(size_t a = 0; a < nArrows; a++) {
         Point pos(
             cos(swarmAngle) * curLeaderPtr->swarmArrows[a],
             sin(swarmAngle) * curLeaderPtr->swarmArrows[a]
@@ -893,27 +893,27 @@ void GameplayState::drawLeaderCursor(const ALLEGRO_COLOR &color) {
         );
     }
     
-    size_t n_rings = whistle.rings.size();
-    float cursor_angle =
+    size_t nRings = whistle.rings.size();
+    float cursorAngle =
         getAngle(curLeaderPtr->pos, leaderCursorW);
-    float cursor_distance =
+    float cursorDistance =
         Distance(curLeaderPtr->pos, leaderCursorW).toFloat();
-    for(size_t r = 0; r < n_rings; r++) {
+    for(size_t r = 0; r < nRings; r++) {
         Point pos(
-            curLeaderPtr->pos.x + cos(cursor_angle) * whistle.rings[r],
-            curLeaderPtr->pos.y + sin(cursor_angle) * whistle.rings[r]
+            curLeaderPtr->pos.x + cos(cursorAngle) * whistle.rings[r],
+            curLeaderPtr->pos.y + sin(cursorAngle) * whistle.rings[r]
         );
-        float ring_to_whistle_distance = cursor_distance - whistle.rings[r];
+        float ringToWhistleDist = cursorDistance - whistle.rings[r];
         float scale =
             interpolateNumber(
-                ring_to_whistle_distance,
-                0, cursor_distance,
+                ringToWhistleDist,
+                0, cursorDistance,
                 whistle.radius * 2, 0
             );
         float alpha =
             interpolateNumber(
-                ring_to_whistle_distance,
-                0, cursor_distance,
+                ringToWhistleDist,
+                0, cursorDistance,
                 0, 100
             );
         unsigned char n = whistle.ringColors[r];
@@ -938,50 +938,50 @@ void GameplayState::drawLeaderCursor(const ALLEGRO_COLOR &color) {
             al_map_rgba(48, 128, 120, 64)
         );
         
-        unsigned char n_dots = 16 * WHISTLE::N_DOT_COLORS;
+        unsigned char nDots = 16 * WHISTLE::N_DOT_COLORS;
         for(unsigned char d = 0; d < WHISTLE::N_DOT_COLORS; d++) {
             for(unsigned char d2 = 0; d2 < 16; d2++) {
-                unsigned char current_dot = d2 * WHISTLE::N_DOT_COLORS + d;
+                unsigned char currentDot = d2 * WHISTLE::N_DOT_COLORS + d;
                 float angle =
-                    TAU / n_dots *
-                    current_dot -
+                    TAU / nDots *
+                    currentDot -
                     WHISTLE::DOT_SPIN_SPEED * areaTimePassed;
                     
-                Point dot_pos(
+                Point dotPos(
                     whistle.center.x +
                     cos(angle) * whistle.dotRadius[d],
                     whistle.center.y +
                     sin(angle) * whistle.dotRadius[d]
                 );
                 
-                ALLEGRO_COLOR dot_color =
+                ALLEGRO_COLOR dotColor =
                     al_map_rgb(
                         WHISTLE::DOT_COLORS[d][0],
                         WHISTLE::DOT_COLORS[d][1],
                         WHISTLE::DOT_COLORS[d][2]
                     );
-                unsigned char dot_alpha = 255;
+                unsigned char dotAlpha = 255;
                 if(whistle.fadeTimer.timeLeft > 0.0f) {
-                    dot_alpha = 255 * whistle.fadeTimer.getRatioLeft();
+                    dotAlpha = 255 * whistle.fadeTimer.getRatioLeft();
                 }
                 
                 drawBitmap(
                     game.sysContent.bmpBrightCircle,
-                    dot_pos, Point(5.0f),
-                    0.0f, changeAlpha(dot_color, dot_alpha)
+                    dotPos, Point(5.0f),
+                    0.0f, changeAlpha(dotColor, dotAlpha)
                 );
             }
         }
     }
     
     //Leader cursor.
-    Point bmp_cursor_size = getBitmapDimensions(game.sysContent.bmpCursor);
+    Point bmpCursorSize = getBitmapDimensions(game.sysContent.bmpCursor);
     
     drawBitmap(
         game.sysContent.bmpCursor,
         leaderCursorW,
-        bmp_cursor_size / 2.0f,
-        cursor_angle,
+        bmpCursorSize / 2.0f,
+        cursorAngle,
         changeColorLighting(
             color,
             cursorHeightDiffLight
@@ -992,31 +992,31 @@ void GameplayState::drawLeaderCursor(const ALLEGRO_COLOR &color) {
     drawThrowPreview();
     
     //Standby type count.
-    size_t n_standby_pikmin = 0;
+    size_t nStandbyPikmin = 0;
     if(curLeaderPtr->group->curStandbyType) {
         for(
             size_t m = 0; m < curLeaderPtr->group->members.size(); m++
         ) {
-            Mob* m_ptr = curLeaderPtr->group->members[m];
+            Mob* mPtr = curLeaderPtr->group->members[m];
             if(
-                m_ptr->subgroupTypePtr ==
+                mPtr->subgroupTypePtr ==
                 curLeaderPtr->group->curStandbyType
             ) {
-                n_standby_pikmin++;
+                nStandbyPikmin++;
             }
         }
     }
     
     al_use_transform(&game.identityTransform);
     
-    float count_offset =
-        std::max(bmp_cursor_size.x, bmp_cursor_size.y) * 0.18f * game.view.cam.zoom;
+    float countOffset =
+        std::max(bmpCursorSize.x, bmpCursorSize.y) * 0.18f * game.view.cam.zoom;
         
-    if(n_standby_pikmin > 0) {
+    if(nStandbyPikmin > 0) {
         drawText(
-            i2s(n_standby_pikmin), game.sysContent.fntCursorCounter,
+            i2s(nStandbyPikmin), game.sysContent.fntCursorCounter,
             leaderCursorWin +
-            Point(count_offset),
+            Point(countOffset),
             Point(LARGE_FLOAT, game.winH * 0.02f), color,
             ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP
         );
@@ -1033,18 +1033,18 @@ void GameplayState::drawLightingFilter() {
     al_use_transform(&game.identityTransform);
     
     //Draw the fog effect.
-    ALLEGRO_COLOR fog_c =
+    ALLEGRO_COLOR fogC =
         game.curAreaData->weatherCondition.getFogColor();
-    if(fog_c.a > 0) {
+    if(fogC.a > 0) {
         //Start by drawing the central fog fade out effect.
         
-        Point fog_top_left =
+        Point fogTL =
             game.view.cam.pos -
             Point(
                 game.curAreaData->weatherCondition.fogFar,
                 game.curAreaData->weatherCondition.fogFar
             );
-        Point fog_bottom_right =
+        Point fogBR =
             game.view.cam.pos +
             Point(
                 game.curAreaData->weatherCondition.fogFar,
@@ -1052,19 +1052,19 @@ void GameplayState::drawLightingFilter() {
             );
         al_transform_coordinates(
             &game.view.worldToWindowTransform,
-            &fog_top_left.x, &fog_top_left.y
+            &fogTL.x, &fogTL.y
         );
         al_transform_coordinates(
             &game.view.worldToWindowTransform,
-            &fog_bottom_right.x, &fog_bottom_right.y
+            &fogBR.x, &fogBR.y
         );
         
         if(bmpFog) {
             drawBitmap(
                 bmpFog,
-                (fog_top_left + fog_bottom_right) / 2,
-                (fog_bottom_right - fog_top_left),
-                0, fog_c
+                (fogTL + fogBR) / 2,
+                (fogBR - fogTL),
+                0, fogC
             );
         }
         
@@ -1072,52 +1072,52 @@ void GameplayState::drawLightingFilter() {
         //Top-left and top-center.
         al_draw_filled_rectangle(
             0, 0,
-            fog_bottom_right.x, fog_top_left.y,
-            fog_c
+            fogBR.x, fogTL.y,
+            fogC
         );
         //Top-right and center-right.
         al_draw_filled_rectangle(
-            fog_bottom_right.x, 0,
-            game.winW, fog_bottom_right.y,
-            fog_c
+            fogBR.x, 0,
+            game.winW, fogBR.y,
+            fogC
         );
         //Bottom-right and bottom-center.
         al_draw_filled_rectangle(
-            fog_top_left.x, fog_bottom_right.y,
+            fogTL.x, fogBR.y,
             game.winW, game.winH,
-            fog_c
+            fogC
         );
         //Bottom-left and center-left.
         al_draw_filled_rectangle(
-            0, fog_top_left.y,
-            fog_top_left.x, game.winH,
-            fog_c
+            0, fogTL.y,
+            fogTL.x, game.winH,
+            fogC
         );
         
     }
     
     //Draw the daylight.
-    ALLEGRO_COLOR daylight_c =
+    ALLEGRO_COLOR daylightC =
         game.curAreaData->weatherCondition.getDaylightColor();
-    if(daylight_c.a > 0) {
-        al_draw_filled_rectangle(0, 0, game.winW, game.winH, daylight_c);
+    if(daylightC.a > 0) {
+        al_draw_filled_rectangle(0, 0, game.winW, game.winH, daylightC);
     }
     
     //Draw the blackout effect.
-    unsigned char blackout_s =
+    unsigned char blackoutS =
         game.curAreaData->weatherCondition.getBlackoutStrength();
-    if(blackout_s > 0) {
+    if(blackoutS > 0) {
         //First, we'll create the lightmap.
         //This is inverted (white = darkness, black = light), because we'll
         //apply it to the window using a subtraction operation.
         al_set_target_bitmap(lightmapBmp);
         
         //For starters, the whole window is dark (white in the map).
-        al_clear_to_color(mapGray(blackout_s));
+        al_clear_to_color(mapGray(blackoutS));
         
-        int old_op, old_src, old_dst, old_aop, old_asrc, old_adst;
+        int oldOp, oldSrc, oldDst, oldAop, oldAsrc, oldAdst;
         al_get_separate_blender(
-            &old_op, &old_src, &old_dst, &old_aop, &old_asrc, &old_adst
+            &oldOp, &oldSrc, &oldDst, &oldAop, &oldAsrc, &oldAdst
         );
         al_set_separate_blender(
             ALLEGRO_DEST_MINUS_SRC, ALLEGRO_ONE, ALLEGRO_ONE,
@@ -1128,25 +1128,25 @@ void GameplayState::drawLightingFilter() {
         //their lights on the map (as black).
         al_hold_bitmap_drawing(true);
         for(size_t m = 0; m < mobs.all.size(); m++) {
-            Mob* m_ptr = mobs.all[m];
+            Mob* mPtr = mobs.all[m];
             if(
-                hasFlag(m_ptr->flags, MOB_FLAG_HIDDEN) ||
-                m_ptr->type->blackoutRadius == 0.0f
+                hasFlag(mPtr->flags, MOB_FLAG_HIDDEN) ||
+                mPtr->type->blackoutRadius == 0.0f
             ) {
                 continue;
             }
             
-            Point pos = m_ptr->pos;
+            Point pos = mPtr->pos;
             al_transform_coordinates(
                 &game.view.worldToWindowTransform,
                 &pos.x, &pos.y
             );
             float radius = 4.0f * game.view.cam.zoom;
             
-            if(m_ptr->type->blackoutRadius > 0.0f) {
-                radius *= m_ptr->type->blackoutRadius;
+            if(mPtr->type->blackoutRadius > 0.0f) {
+                radius *= mPtr->type->blackoutRadius;
             } else {
-                radius *= m_ptr->radius;
+                radius *= mPtr->radius;
             }
             
             al_draw_scaled_bitmap(
@@ -1165,7 +1165,7 @@ void GameplayState::drawLightingFilter() {
         al_draw_bitmap(lightmapBmp, 0, 0, 0);
         
         al_set_separate_blender(
-            old_op, old_src, old_dst, old_aop, old_asrc, old_adst
+            oldOp, oldSrc, oldDst, oldAop, oldAsrc, oldAdst
         );
         
     }
@@ -1183,29 +1183,29 @@ void GameplayState::drawGameplayMessageBox() {
     al_use_transform(&game.identityTransform);
     
     //Transition things.
-    float transition_ratio =
+    float transitionRatio =
         msgBox->transitionIn ?
         msgBox->transitionTimer / GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME :
         (1 - msgBox->transitionTimer / GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME);
-    int line_height = al_get_font_line_height(game.sysContent.fntStandard);
-    float box_height = line_height * 4;
+    int lineHeight = al_get_font_line_height(game.sysContent.fntStandard);
+    float boxHeight = lineHeight * 4;
     float offset =
-        box_height * ease(EASE_METHOD_IN, transition_ratio);
+        boxHeight * ease(EASE_METHOD_IN, transitionRatio);
         
     //Draw a rectangle to darken gameplay.
     al_draw_filled_rectangle(
         0.0f, 0.0f,
         game.winW, game.winH,
-        al_map_rgba(0, 0, 0, 64 * (1 - transition_ratio))
+        al_map_rgba(0, 0, 0, 64 * (1 - transitionRatio))
     );
     
     //Draw the message box proper.
     drawTexturedBox(
         Point(
             game.winW / 2,
-            game.winH - (box_height / 2.0f) - 4 + offset
+            game.winH - (boxHeight / 2.0f) - 4 + offset
         ),
-        Point(game.winW - 16, box_height),
+        Point(game.winW - 16, boxHeight),
         game.sysContent.bmpBubbleBox
     );
     
@@ -1215,7 +1215,7 @@ void GameplayState::drawGameplayMessageBox() {
             msgBox->speakerIcon,
             Point(
                 40,
-                game.winH - box_height - 16 + offset
+                game.winH - boxHeight - 16 + offset
             ),
             Point(48.0f)
         );
@@ -1223,7 +1223,7 @@ void GameplayState::drawGameplayMessageBox() {
             hud->bmpBubble,
             Point(
                 40,
-                game.winH - box_height - 16 + offset
+                game.winH - boxHeight - 16 + offset
             ),
             Point(64.0f)
         );
@@ -1244,54 +1244,54 @@ void GameplayState::drawGameplayMessageBox() {
     );
     
     //Draw the message's text.
-    size_t token_idx = 0;
+    size_t tokenIdx = 0;
     for(size_t l = 0; l < 3; l++) {
-        size_t line_idx = msgBox->curSection * 3 + l;
-        if(line_idx >= msgBox->tokensPerLine.size()) {
+        size_t lineIdx = msgBox->curSection * 3 + l;
+        if(lineIdx >= msgBox->tokensPerLine.size()) {
             break;
         }
         
         //Figure out what scaling is necessary, if any.
-        unsigned int total_width = 0;
-        float x_scale = 1.0f;
-        for(size_t t = 0; t < msgBox->tokensPerLine[line_idx].size(); t++) {
-            total_width += msgBox->tokensPerLine[line_idx][t].width;
+        unsigned int totalWidth = 0;
+        float xScale = 1.0f;
+        for(size_t t = 0; t < msgBox->tokensPerLine[lineIdx].size(); t++) {
+            totalWidth += msgBox->tokensPerLine[lineIdx][t].width;
         }
-        const float max_text_width = (GAMEPLAY_MSG_BOX::MARGIN + GAMEPLAY_MSG_BOX::PADDING) * 2;
-        if(total_width > game.winW - max_text_width) {
-            x_scale = (game.winW - max_text_width) / total_width;
+        const float maxTextWidth = (GAMEPLAY_MSG_BOX::MARGIN + GAMEPLAY_MSG_BOX::PADDING) * 2;
+        if(totalWidth > game.winW - maxTextWidth) {
+            xScale = (game.winW - maxTextWidth) / totalWidth;
         }
         
         float caret =
             GAMEPLAY_MSG_BOX::MARGIN + GAMEPLAY_MSG_BOX::PADDING;
-        float start_y =
-            game.winH - line_height * 4 + GAMEPLAY_MSG_BOX::PADDING + offset;
+        float startY =
+            game.winH - lineHeight * 4 + GAMEPLAY_MSG_BOX::PADDING + offset;
             
-        for(size_t t = 0; t < msgBox->tokensPerLine[line_idx].size(); t++) {
-            token_idx++;
-            if(token_idx >= msgBox->curToken) break;
-            StringToken &cur_token = msgBox->tokensPerLine[line_idx][t];
+        for(size_t t = 0; t < msgBox->tokensPerLine[lineIdx].size(); t++) {
+            tokenIdx++;
+            if(tokenIdx >= msgBox->curToken) break;
+            StringToken &curToken = msgBox->tokensPerLine[lineIdx][t];
             
             float x = caret;
-            float y = start_y + line_height * l;
+            float y = startY + lineHeight * l;
             unsigned char alpha = 255;
-            float this_token_anim_time;
+            float thisTokenAnimTime;
             
             //Change the token's position and alpha, if it needs animating.
             //First, check for the typing animation.
-            if(token_idx >= msgBox->skippedAtToken) {
-                this_token_anim_time = msgBox->totalSkipAnimTime;
+            if(tokenIdx >= msgBox->skippedAtToken) {
+                thisTokenAnimTime = msgBox->totalSkipAnimTime;
             } else {
-                this_token_anim_time =
+                thisTokenAnimTime =
                     msgBox->totalTokenAnimTime -
-                    ((token_idx + 1) * game.config.aestheticGen.gameplayMsgChInterval);
+                    ((tokenIdx + 1) * game.config.aestheticGen.gameplayMsgChInterval);
             }
             if(
-                this_token_anim_time > 0 &&
-                this_token_anim_time < GAMEPLAY_MSG_BOX::TOKEN_ANIM_DURATION
+                thisTokenAnimTime > 0 &&
+                thisTokenAnimTime < GAMEPLAY_MSG_BOX::TOKEN_ANIM_DURATION
             ) {
                 float ratio =
-                    this_token_anim_time / GAMEPLAY_MSG_BOX::TOKEN_ANIM_DURATION;
+                    thisTokenAnimTime / GAMEPLAY_MSG_BOX::TOKEN_ANIM_DURATION;
                 x +=
                     GAMEPLAY_MSG_BOX::TOKEN_ANIM_X_AMOUNT *
                     ease(EASE_METHOD_UP_AND_DOWN_ELASTIC, ratio);
@@ -1311,29 +1311,29 @@ void GameplayState::drawGameplayMessageBox() {
             }
             
             //Actually draw it now.
-            float token_final_width = cur_token.width * x_scale;
-            switch(cur_token.type) {
+            float tokenFinalWidth = curToken.width * xScale;
+            switch(curToken.type) {
             case STRING_TOKEN_CHAR: {
                 drawText(
-                    cur_token.content, game.sysContent.fntStandard,
+                    curToken.content, game.sysContent.fntStandard,
                     Point(x, y),
-                    Point(token_final_width, LARGE_FLOAT),
+                    Point(tokenFinalWidth, LARGE_FLOAT),
                     mapAlpha(alpha),
                     ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP, 0,
-                    Point(x_scale, 1.0f)
+                    Point(xScale, 1.0f)
                 );
                 break;
             }
             case STRING_TOKEN_CONTROL_BIND: {
                 drawPlayerInputSourceIcon(
                     game.sysContent.fntSlim,
-                    game.controls.findBind(cur_token.content).inputSource,
+                    game.controls.findBind(curToken.content).inputSource,
                     true,
                     Point(
-                        x + token_final_width / 2.0f,
-                        y + line_height / 2.0f
+                        x + tokenFinalWidth / 2.0f,
+                        y + lineHeight / 2.0f
                     ),
-                    Point(token_final_width, line_height)
+                    Point(tokenFinalWidth, lineHeight)
                 );
                 break;
             }
@@ -1341,7 +1341,7 @@ void GameplayState::drawGameplayMessageBox() {
                 break;
             }
             }
-            caret += token_final_width;
+            caret += tokenFinalWidth;
         }
     }
 }
@@ -1385,8 +1385,8 @@ void GameplayState::drawPrecipitation() {
         game.curAreaData->weatherCondition.precipitationType !=
         PRECIPITATION_TYPE_NONE
     ) {
-        size_t n_precipitation_particles = precipitation.size();
-        for(size_t p = 0; p < n_precipitation_particles; p++) {
+        size_t nPrecipitationParticles = precipitation.size();
+        for(size_t p = 0; p < nPrecipitationParticles; p++) {
             al_draw_filled_circle(
                 precipitation[p].x, precipitation[p].y,
                 3, COLOR_WHITE
@@ -1401,32 +1401,32 @@ void GameplayState::drawPrecipitation() {
  */
 void GameplayState::drawSystemStuff() {
     if(!game.makerTools.infoPrintText.empty()) {
-        float alpha_mult = 1;
+        float alphaMult = 1;
         if(
             game.makerTools.infoPrintTimer.timeLeft <
             game.makerTools.infoPrintFadeDuration
         ) {
-            alpha_mult =
+            alphaMult =
                 game.makerTools.infoPrintTimer.timeLeft /
                 game.makerTools.infoPrintFadeDuration;
         }
         
-        size_t n_lines =
+        size_t nLines =
             split(game.makerTools.infoPrintText, "\n", true).size();
         int fh = al_get_font_line_height(game.sysContent.fntBuiltin);
-        //We add n_lines - 1 because there is a 1px gap between each line.
-        int total_height = (int) n_lines * fh + (int) (n_lines - 1);
+        //We add nLines - 1 because there is a 1px gap between each line.
+        int totalHeight = (int) nLines * fh + (int) (nLines - 1);
         
         al_draw_filled_rectangle(
-            0, 0, game.winW, total_height + 16,
-            al_map_rgba(0, 0, 0, 96 * alpha_mult)
+            0, 0, game.winW, totalHeight + 16,
+            al_map_rgba(0, 0, 0, 96 * alphaMult)
         );
         drawTextLines(
             game.makerTools.infoPrintText,
             game.sysContent.fntBuiltin,
             Point(8.0f),
             Point(LARGE_FLOAT),
-            al_map_rgba(255, 255, 255, 128 * alpha_mult),
+            al_map_rgba(255, 255, 255, 128 * alphaMult),
             ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP, TEXT_SETTING_FLAG_CANT_GROW
         );
     }
@@ -1438,8 +1438,8 @@ void GameplayState::drawSystemStuff() {
             game.winW, 100,
             al_map_rgba(0, 0, 0, 192)
         );
-        double chart_min = 1.0f; //1 FPS.
-        double chart_max =
+        double chartMin = 1.0f; //1 FPS.
+        double chartMax =
             game.options.advanced.targetFps + game.options.advanced.targetFps * 0.05f;
         for(size_t f = 0; f < game.framerateHistory.size(); f++) {
             float fps =
@@ -1447,27 +1447,27 @@ void GameplayState::drawSystemStuff() {
                     (float) (1.0f / game.framerateHistory[f]),
                     (float) game.options.advanced.targetFps
                 );
-            float fps_y =
+            float fpsY =
                 interpolateNumber(
                     fps,
-                    chart_min, chart_max,
+                    chartMin, chartMax,
                     0, 100
                 );
             al_draw_line(
                 game.winW - GAME::FRAMERATE_HISTORY_SIZE + f + 0.5, 0,
-                game.winW - GAME::FRAMERATE_HISTORY_SIZE + f + 0.5, fps_y,
+                game.winW - GAME::FRAMERATE_HISTORY_SIZE + f + 0.5, fpsY,
                 al_map_rgba(24, 96, 192, 192), 1
             );
         }
-        float target_fps_y =
+        float targetFpsY =
             interpolateNumber(
                 game.options.advanced.targetFps,
-                chart_min, chart_max,
+                chartMin, chartMax,
                 0, 100
             );
         al_draw_line(
-            game.winW - GAME::FRAMERATE_HISTORY_SIZE, target_fps_y,
-            game.winW, target_fps_y,
+            game.winW - GAME::FRAMERATE_HISTORY_SIZE, targetFpsY,
+            game.winW, targetFpsY,
             al_map_rgba(128, 224, 128, 48), 1
         );
     }
@@ -1484,7 +1484,7 @@ void GameplayState::drawThrowPreview() {
     
     if(!curLeaderPtr->throwee) {
         //Just draw a simple line and leave.
-        unsigned char n_vertexes =
+        unsigned char nVertexes =
             getThrowPreviewVertexes(
                 vertexes, 0.0f, 1.0f,
                 curLeaderPtr->pos, throwDest,
@@ -1495,7 +1495,7 @@ void GameplayState::drawThrowPreview() {
                 0.0f, 1.0f, false
             );
             
-        for(unsigned char v = 0; v < n_vertexes; v += 4) {
+        for(unsigned char v = 0; v < nVertexes; v += 4) {
             al_draw_prim(
                 vertexes, nullptr, nullptr,
                 v, v + 4, ALLEGRO_PRIM_TRIANGLE_FAN
@@ -1506,7 +1506,7 @@ void GameplayState::drawThrowPreview() {
     }
     
     //Check which edges exist near the throw.
-    set<Edge*> candidate_edges;
+    set<Edge*> candidateEdges;
     
     game.curAreaData->bmap.getEdgesInRegion(
         Point(
@@ -1517,26 +1517,26 @@ void GameplayState::drawThrowPreview() {
             std::max(curLeaderPtr->pos.x, throwDest.x),
             std::max(curLeaderPtr->pos.y, throwDest.y)
         ),
-        candidate_edges
+        candidateEdges
     );
     
-    float wall_collision_r = 2.0f;
-    bool wall_is_blocking_sector = false;
-    Distance leader_to_dest_dist(
+    float wallCollisionR = 2.0f;
+    bool wallIsBlockingSector = false;
+    Distance leaderToDestDist(
         curLeaderPtr->pos, throwDest
     );
-    float throw_h_angle = 0.0f;
-    float throw_v_angle = 0.0f;
-    float throw_speed = 0.0f;
-    float throw_h_speed = 0.0f;
+    float throwHAngle = 0.0f;
+    float throwVAngle = 0.0f;
+    float throwSpeed = 0.0f;
+    float throwHSpeed = 0.0f;
     coordinatesToAngle(
-        curLeaderPtr->throweeSpeed, &throw_h_angle, &throw_h_speed
+        curLeaderPtr->throweeSpeed, &throwHAngle, &throwHSpeed
     );
     coordinatesToAngle(
-        Point(throw_h_speed, curLeaderPtr->throweeSpeedZ),
-        &throw_v_angle, &throw_speed
+        Point(throwHSpeed, curLeaderPtr->throweeSpeedZ),
+        &throwVAngle, &throwSpeed
     );
-    float texture_offset =
+    float textureOffset =
         fmod(
             areaTimePassed * GAMEPLAY::PREVIEW_TEXTURE_TIME_MULT,
             al_get_bitmap_width(game.sysContent.bmpThrowPreview) *
@@ -1544,7 +1544,7 @@ void GameplayState::drawThrowPreview() {
         );
         
     //For each edge, check if it crosses the throw line.
-    for(Edge* e : candidate_edges) {
+    for(Edge* e : candidateEdges) {
         if(!e->sectors[0] || !e->sectors[1]) {
             continue;
         }
@@ -1567,10 +1567,10 @@ void GameplayState::drawThrowPreview() {
                 e->sectors[0]->type == SECTOR_TYPE_BLOCKING ||
                 e->sectors[1]->type == SECTOR_TYPE_BLOCKING
             ) &&
-            r < wall_collision_r
+            r < wallCollisionR
         ) {
-            wall_collision_r = r;
-            wall_is_blocking_sector = true;
+            wallCollisionR = r;
+            wallIsBlockingSector = true;
             continue;
         }
         
@@ -1582,24 +1582,24 @@ void GameplayState::drawThrowPreview() {
         }
         
         //Calculate the throwee's vertical position at that point.
-        float edge_z = std::max(e->sectors[0]->z, e->sectors[1]->z);
-        float x_at_edge =
-            leader_to_dest_dist.toFloat() * r;
-        float y_at_edge =
-            tan(throw_v_angle) * x_at_edge -
+        float edgeZ = std::max(e->sectors[0]->z, e->sectors[1]->z);
+        float xAtEdge =
+            leaderToDestDist.toFloat() * r;
+        float yAtEdge =
+            tan(throwVAngle) * xAtEdge -
             (
                 -MOB::GRAVITY_ADDER /
                 (
-                    2 * throw_speed * throw_speed *
-                    cos(throw_v_angle) * cos(throw_v_angle)
+                    2 * throwSpeed * throwSpeed *
+                    cos(throwVAngle) * cos(throwVAngle)
                 )
-            ) * x_at_edge * x_at_edge;
-        y_at_edge += curLeaderPtr->z;
+            ) * xAtEdge * xAtEdge;
+        yAtEdge += curLeaderPtr->z;
         
         //If the throwee would hit the wall at these coordinates, collision.
-        if(edge_z >= y_at_edge && r < wall_collision_r) {
-            wall_collision_r = r;
-            wall_is_blocking_sector = false;
+        if(edgeZ >= yAtEdge && r < wallCollisionR) {
+            wallCollisionR = r;
+            wallIsBlockingSector = false;
         }
     }
     
@@ -1614,10 +1614,10 @@ void GameplayState::drawThrowPreview() {
      *   collision, its trajectory is unpredictable.
      */
     
-    if(wall_collision_r > 1.0f) {
+    if(wallCollisionR > 1.0f) {
         //No collision. Free throw.
         
-        unsigned char n_vertexes =
+        unsigned char nVertexes =
             getThrowPreviewVertexes(
                 vertexes, 0.0f, 1.0f,
                 curLeaderPtr->pos, throwDest,
@@ -1625,10 +1625,10 @@ void GameplayState::drawThrowPreview() {
                     curLeaderPtr->throwee->type->mainColor,
                     GAMEPLAY::PREVIEW_OPACITY
                 ),
-                texture_offset, GAMEPLAY::PREVIEW_TEXTURE_SCALE, true
+                textureOffset, GAMEPLAY::PREVIEW_TEXTURE_SCALE, true
             );
             
-        for(unsigned char v = 0; v < n_vertexes; v += 4) {
+        for(unsigned char v = 0; v < nVertexes; v += 4) {
             al_draw_prim(
                 vertexes, nullptr, game.sysContent.bmpThrowPreview,
                 v, v + 4, ALLEGRO_PRIM_TRIANGLE_FAN
@@ -1638,30 +1638,30 @@ void GameplayState::drawThrowPreview() {
     } else {
         //Wall collision.
         
-        Point collision_point(
+        Point collisionPoint(
             curLeaderPtr->pos.x +
             (throwDest.x - curLeaderPtr->pos.x) *
-            wall_collision_r,
+            wallCollisionR,
             curLeaderPtr->pos.y +
             (throwDest.y - curLeaderPtr->pos.y) *
-            wall_collision_r
+            wallCollisionR
         );
         
-        if(!curLeaderPtr->throweeCanReach || wall_is_blocking_sector) {
+        if(!curLeaderPtr->throweeCanReach || wallIsBlockingSector) {
             //It's impossible to reach.
             
-            unsigned char n_vertexes =
+            unsigned char nVertexes =
                 getThrowPreviewVertexes(
-                    vertexes, 0.0f, wall_collision_r,
+                    vertexes, 0.0f, wallCollisionR,
                     curLeaderPtr->pos, throwDest,
                     changeAlpha(
                         curLeaderPtr->throwee->type->mainColor,
                         GAMEPLAY::PREVIEW_OPACITY
                     ),
-                    texture_offset, GAMEPLAY::PREVIEW_TEXTURE_SCALE, true
+                    textureOffset, GAMEPLAY::PREVIEW_TEXTURE_SCALE, true
                 );
                 
-            for(unsigned char v = 0; v < n_vertexes; v += 4) {
+            for(unsigned char v = 0; v < nVertexes; v += 4) {
                 al_draw_prim(
                     vertexes, nullptr, game.sysContent.bmpThrowPreview,
                     v, v + 4, ALLEGRO_PRIM_TRIANGLE_FAN
@@ -1670,7 +1670,7 @@ void GameplayState::drawThrowPreview() {
             
             drawBitmap(
                 game.sysContent.bmpThrowInvalid,
-                collision_point, Point(32.0f), throw_h_angle,
+                collisionPoint, Point(32.0f), throwHAngle,
                 changeAlpha(
                     curLeaderPtr->throwee->type->mainColor,
                     GAMEPLAY::PREVIEW_OPACITY
@@ -1680,27 +1680,27 @@ void GameplayState::drawThrowPreview() {
         } else {
             //Trajectory is unknown after collision. Can theoretically reach.
             
-            unsigned char n_vertexes =
+            unsigned char nVertexes =
                 getThrowPreviewVertexes(
-                    vertexes, 0.0f, wall_collision_r,
+                    vertexes, 0.0f, wallCollisionR,
                     curLeaderPtr->pos, throwDest,
                     changeAlpha(
                         curLeaderPtr->throwee->type->mainColor,
                         GAMEPLAY::COLLISION_OPACITY
                     ),
-                    texture_offset, GAMEPLAY::PREVIEW_TEXTURE_SCALE, true
+                    textureOffset, GAMEPLAY::PREVIEW_TEXTURE_SCALE, true
                 );
                 
-            for(unsigned char v = 0; v < n_vertexes; v += 4) {
+            for(unsigned char v = 0; v < nVertexes; v += 4) {
                 al_draw_prim(
                     vertexes, nullptr, game.sysContent.bmpThrowPreview,
                     v, v + 4, ALLEGRO_PRIM_TRIANGLE_FAN
                 );
             }
             
-            n_vertexes =
+            nVertexes =
                 getThrowPreviewVertexes(
-                    vertexes, wall_collision_r, 1.0f,
+                    vertexes, wallCollisionR, 1.0f,
                     curLeaderPtr->pos, throwDest,
                     changeAlpha(
                         curLeaderPtr->throwee->type->mainColor,
@@ -1709,7 +1709,7 @@ void GameplayState::drawThrowPreview() {
                     0.0f, 1.0f, true
                 );
                 
-            for(unsigned char v = 0; v < n_vertexes; v += 4) {
+            for(unsigned char v = 0; v < nVertexes; v += 4) {
                 al_draw_prim(
                     vertexes, nullptr, game.sysContent.bmpThrowPreviewDashed,
                     v, v + 4, ALLEGRO_PRIM_TRIANGLE_FAN
@@ -1718,7 +1718,7 @@ void GameplayState::drawThrowPreview() {
             
             drawBitmap(
                 game.sysContent.bmpThrowInvalid,
-                collision_point, Point(16.0f), throw_h_angle,
+                collisionPoint, Point(16.0f), throwHAngle,
                 changeAlpha(
                     curLeaderPtr->throwee->type->mainColor,
                     GAMEPLAY::PREVIEW_OPACITY
@@ -1741,40 +1741,40 @@ ALLEGRO_BITMAP* GameplayState::drawToBitmap(
     const MakerTools::AreaImageSettings &settings
 ) {
     //First, get the full dimensions of the map.
-    Point min_coords(FLT_MAX, FLT_MAX);
-    Point max_coords(-FLT_MAX, -FLT_MAX);
+    Point minCoords(FLT_MAX, FLT_MAX);
+    Point maxCoords(-FLT_MAX, -FLT_MAX);
     
     for(size_t v = 0; v < game.curAreaData->vertexes.size(); v++) {
-        Vertex* v_ptr = game.curAreaData->vertexes[v];
+        Vertex* vPtr = game.curAreaData->vertexes[v];
         updateMinMaxCoords(
-            min_coords, max_coords, v2p(v_ptr)
+            minCoords, maxCoords, v2p(vPtr)
         );
     }
     
     //Figure out the scale that will fit on the image.
-    float area_w = max_coords.x - min_coords.x + settings.padding;
-    float area_h = max_coords.y - min_coords.y + settings.padding;
-    float final_bmp_w = settings.size;
-    float final_bmp_h = settings.size;
+    float areaW = maxCoords.x - minCoords.x + settings.padding;
+    float areaH = maxCoords.y - minCoords.y + settings.padding;
+    float finalBmpW = settings.size;
+    float finalBmpH = settings.size;
     float scale;
     
-    if(area_w > area_h) {
-        scale = settings.size / area_w;
-        final_bmp_h *= area_h / area_w;
+    if(areaW > areaH) {
+        scale = settings.size / areaW;
+        finalBmpH *= areaH / areaW;
     } else {
-        scale = settings.size / area_h;
-        final_bmp_w *= area_w / area_h;
+        scale = settings.size / areaH;
+        finalBmpW *= areaW / areaH;
     }
     
     //Create the bitmap.
-    ALLEGRO_BITMAP* bmp = al_create_bitmap(final_bmp_w, final_bmp_h);
+    ALLEGRO_BITMAP* bmp = al_create_bitmap(finalBmpW, finalBmpH);
     
     ALLEGRO_TRANSFORM t;
     al_identity_transform(&t);
     al_translate_transform(
         &t,
-        -min_coords.x + settings.padding / 2.0f,
-        -min_coords.y + settings.padding / 2.0f
+        -minCoords.x + settings.padding / 2.0f,
+        -minCoords.y + settings.padding / 2.0f
     );
     al_scale_transform(&t, scale, scale);
     
@@ -1790,26 +1790,26 @@ ALLEGRO_BITMAP* GameplayState::drawToBitmap(
  */
 void GameplayState::drawTreeShadows() {
     for(size_t s = 0; s < game.curAreaData->treeShadows.size(); s++) {
-        TreeShadow* s_ptr = game.curAreaData->treeShadows[s];
+        TreeShadow* sPtr = game.curAreaData->treeShadows[s];
         
         unsigned char alpha =
             (
-                (s_ptr->alpha / 255.0) *
+                (sPtr->alpha / 255.0) *
                 game.curAreaData->weatherCondition.getSunStrength()
             ) * 255;
             
         drawBitmap(
-            s_ptr->bitmap,
+            sPtr->bitmap,
             Point(
-                s_ptr->center.x + GAMEPLAY::TREE_SHADOW_SWAY_AMOUNT*
+                sPtr->center.x + GAMEPLAY::TREE_SHADOW_SWAY_AMOUNT*
                 cos(GAMEPLAY::TREE_SHADOW_SWAY_SPEED * areaTimePassed) *
-                s_ptr->sway.x,
-                s_ptr->center.y + GAMEPLAY::TREE_SHADOW_SWAY_AMOUNT*
+                sPtr->sway.x,
+                sPtr->center.y + GAMEPLAY::TREE_SHADOW_SWAY_AMOUNT*
                 sin(GAMEPLAY::TREE_SHADOW_SWAY_SPEED * areaTimePassed) *
-                s_ptr->sway.y
+                sPtr->sway.y
             ),
-            s_ptr->size,
-            s_ptr->angle, mapAlpha(alpha)
+            sPtr->size,
+            sPtr->angle, mapAlpha(alpha)
         );
     }
 }
@@ -1819,12 +1819,12 @@ void GameplayState::drawTreeShadows() {
  * @brief Draws the components that make up the game world:
  * layout, objects, etc.
  *
- * @param bmp_output If not nullptr, draw the area onto this.
+ * @param bmpOutput If not nullptr, draw the area onto this.
  */
-void GameplayState::drawWorldComponents(ALLEGRO_BITMAP* bmp_output) {
-    ALLEGRO_BITMAP* custom_wall_offset_effect_buffer = nullptr;
-    ALLEGRO_BITMAP* custom_liquid_limit_effect_buffer = nullptr;
-    if(!bmp_output) {
+void GameplayState::drawWorldComponents(ALLEGRO_BITMAP* bmpOutput) {
+    ALLEGRO_BITMAP* customWallOffsetEffectBuffer = nullptr;
+    ALLEGRO_BITMAP* customLiquidLimitEffectBuffer = nullptr;
+    if(!bmpOutput) {
         updateOffsetEffectBuffer(
             game.view.box[0], game.view.box[1],
             game.liquidLimitEffectCaches,
@@ -1845,32 +1845,32 @@ void GameplayState::drawWorldComponents(ALLEGRO_BITMAP* bmp_output) {
         );
         
     } else {
-        custom_liquid_limit_effect_buffer =
+        customLiquidLimitEffectBuffer =
             al_create_bitmap(
-                al_get_bitmap_width(bmp_output),
-                al_get_bitmap_height(bmp_output)
+                al_get_bitmap_width(bmpOutput),
+                al_get_bitmap_height(bmpOutput)
             );
-        custom_wall_offset_effect_buffer =
+        customWallOffsetEffectBuffer =
             al_create_bitmap(
-                al_get_bitmap_width(bmp_output),
-                al_get_bitmap_height(bmp_output)
+                al_get_bitmap_width(bmpOutput),
+                al_get_bitmap_height(bmpOutput)
             );
         updateOffsetEffectBuffer(
             Point(-FLT_MAX), Point(FLT_MAX),
             game.liquidLimitEffectCaches,
-            custom_liquid_limit_effect_buffer,
+            customLiquidLimitEffectBuffer,
             true
         );
         updateOffsetEffectBuffer(
             Point(-FLT_MAX), Point(FLT_MAX),
             game.wallSmoothingEffectCaches,
-            custom_wall_offset_effect_buffer,
+            customWallOffsetEffectBuffer,
             true
         );
         updateOffsetEffectBuffer(
             Point(-FLT_MAX), Point(FLT_MAX),
             game.wallShadowEffectCaches,
-            custom_wall_offset_effect_buffer,
+            customWallOffsetEffectBuffer,
             false
         );
         
@@ -1888,12 +1888,12 @@ void GameplayState::drawWorldComponents(ALLEGRO_BITMAP* bmp_output) {
     
     //Sectors.
     for(size_t s = 0; s < game.curAreaData->sectors.size(); s++) {
-        Sector* s_ptr = game.curAreaData->sectors[s];
+        Sector* sPtr = game.curAreaData->sectors[s];
         
         if(
-            !bmp_output &&
+            !bmpOutput &&
             !rectanglesIntersect(
-                s_ptr->bbox[0], s_ptr->bbox[1],
+                sPtr->bbox[0], sPtr->bbox[1],
                 game.view.box[0], game.view.box[1]
             )
         ) {
@@ -1902,8 +1902,8 @@ void GameplayState::drawWorldComponents(ALLEGRO_BITMAP* bmp_output) {
         }
         
         WorldComponent c;
-        c.sector_ptr = s_ptr;
-        c.z = s_ptr->z;
+        c.sectorPtr = sPtr;
+        c.z = sPtr->z;
         components.push_back(c);
     }
     
@@ -1912,66 +1912,66 @@ void GameplayState::drawWorldComponents(ALLEGRO_BITMAP* bmp_output) {
     
     //Mobs.
     for(size_t m = 0; m < mobs.all.size(); m++) {
-        Mob* mob_ptr = mobs.all[m];
+        Mob* mobPtr = mobs.all[m];
         
-        if(!bmp_output && mob_ptr->isOffCamera()) {
+        if(!bmpOutput && mobPtr->isOffCamera()) {
             //Off-camera.
             continue;
         }
         
-        if(hasFlag(mob_ptr->flags, MOB_FLAG_HIDDEN)) continue;
-        if(mob_ptr->isStoredInsideMob()) continue;
+        if(hasFlag(mobPtr->flags, MOB_FLAG_HIDDEN)) continue;
+        if(mobPtr->isStoredInsideMob()) continue;
         
         //Shadows.
         if(
-            mob_ptr->type->castsShadow &&
-            !hasFlag(mob_ptr->flags, MOB_FLAG_SHADOW_INVISIBLE)
+            mobPtr->type->castsShadow &&
+            !hasFlag(mobPtr->flags, MOB_FLAG_SHADOW_INVISIBLE)
         ) {
             WorldComponent c;
-            c.mob_shadow_ptr = mob_ptr;
-            if(mob_ptr->standingOnMob) {
+            c.mobShadowPtr = mobPtr;
+            if(mobPtr->standingOnMob) {
                 c.z =
-                    mob_ptr->standingOnMob->z +
-                    mob_ptr->standingOnMob->getDrawingHeight();
+                    mobPtr->standingOnMob->z +
+                    mobPtr->standingOnMob->getDrawingHeight();
             } else {
-                c.z = mob_ptr->groundSector->z;
+                c.z = mobPtr->groundSector->z;
             }
-            c.z += mob_ptr->getDrawingHeight() - 1;
+            c.z += mobPtr->getDrawingHeight() - 1;
             components.push_back(c);
         }
         
         //Limbs.
-        if(mob_ptr->parent && mob_ptr->parent->limb_anim.animDb) {
-            unsigned char method = mob_ptr->parent->limb_draw_method;
+        if(mobPtr->parent && mobPtr->parent->limbAnim.animDb) {
+            unsigned char method = mobPtr->parent->limbDrawMethod;
             WorldComponent c;
-            c.mob_limb_ptr = mob_ptr;
+            c.mobLimbPtr = mobPtr;
             
             switch(method) {
             case LIMB_DRAW_METHOD_BELOW_BOTH: {
-                c.z = std::min(mob_ptr->z, mob_ptr->parent->m->z);
+                c.z = std::min(mobPtr->z, mobPtr->parent->m->z);
                 break;
             } case LIMB_DRAW_METHOD_BELOW_CHILD: {
-                c.z = mob_ptr->z;
+                c.z = mobPtr->z;
                 break;
             } case LIMB_DRAW_METHOD_BELOW_PARENT: {
-                c.z = mob_ptr->parent->m->z;
+                c.z = mobPtr->parent->m->z;
                 break;
             } case LIMB_DRAW_METHOD_ABOVE_PARENT: {
                 c.z =
-                    mob_ptr->parent->m->z +
-                    mob_ptr->parent->m->getDrawingHeight() +
+                    mobPtr->parent->m->z +
+                    mobPtr->parent->m->getDrawingHeight() +
                     0.001;
                 break;
             } case LIMB_DRAW_METHOD_ABOVE_CHILD: {
-                c.z = mob_ptr->z + mob_ptr->getDrawingHeight() + 0.001;
+                c.z = mobPtr->z + mobPtr->getDrawingHeight() + 0.001;
                 break;
             } case LIMB_DRAW_METHOD_ABOVE_BOTH: {
                 c.z =
                     std::max(
-                        mob_ptr->parent->m->z +
-                        mob_ptr->parent->m->getDrawingHeight() +
+                        mobPtr->parent->m->z +
+                        mobPtr->parent->m->getDrawingHeight() +
                         0.001,
-                        mob_ptr->z + mob_ptr->getDrawingHeight() +
+                        mobPtr->z + mobPtr->getDrawingHeight() +
                         0.001
                     );
                 break;
@@ -1983,10 +1983,10 @@ void GameplayState::drawWorldComponents(ALLEGRO_BITMAP* bmp_output) {
         
         //The mob proper.
         WorldComponent c;
-        c.mob_ptr = mob_ptr;
-        c.z = mob_ptr->z + mob_ptr->getDrawingHeight();
-        if(mob_ptr->holder.m && mob_ptr->holder.forceAboveHolder) {
-            c.z += mob_ptr->holder.m->getDrawingHeight() + 1;
+        c.mobPtr = mobPtr;
+        c.z = mobPtr->z + mobPtr->getDrawingHeight();
+        if(mobPtr->holder.m && mobPtr->holder.forceAboveHolder) {
+            c.z += mobPtr->holder.m->getDrawingHeight() + 1;
         }
         components.push_back(c);
     }
@@ -2006,93 +2006,93 @@ void GameplayState::drawWorldComponents(ALLEGRO_BITMAP* bmp_output) {
     }
     );
     
-    float mob_shadow_stretch = 0;
+    float mobShadowStretch = 0;
     
     if(dayMinutes < 60 * 5 || dayMinutes > 60 * 20) {
-        mob_shadow_stretch = 1;
+        mobShadowStretch = 1;
     } else if(dayMinutes < 60 * 12) {
-        mob_shadow_stretch = 1 - ((dayMinutes - 60 * 5) / (60 * 12 - 60 * 5));
+        mobShadowStretch = 1 - ((dayMinutes - 60 * 5) / (60 * 12 - 60 * 5));
     } else {
-        mob_shadow_stretch = (dayMinutes - 60 * 12) / (60 * 20 - 60 * 12);
+        mobShadowStretch = (dayMinutes - 60 * 12) / (60 * 20 - 60 * 12);
     }
     
     for(size_t c = 0; c < components.size(); c++) {
-        WorldComponent* c_ptr = &components[c];
+        WorldComponent* cPtr = &components[c];
         
-        if(c_ptr->sector_ptr) {
+        if(cPtr->sectorPtr) {
         
-            bool has_liquid = false;
-            if(c_ptr->sector_ptr->hazard && c_ptr->sector_ptr->hazard->associatedLiquid) {
+            bool hasLiquid = false;
+            if(cPtr->sectorPtr->hazard && cPtr->sectorPtr->hazard->associatedLiquid) {
                 drawLiquid(
-                    c_ptr->sector_ptr,
-                    c_ptr->sector_ptr->hazard->associatedLiquid,
+                    cPtr->sectorPtr,
+                    cPtr->sectorPtr->hazard->associatedLiquid,
                     Point(),
                     1.0f,
                     areaTimePassed
                 );
-                has_liquid = true;
+                hasLiquid = true;
             }
-            if(!has_liquid) {
-                drawSectorTexture(c_ptr->sector_ptr, Point(), 1.0f, 1.0f);
+            if(!hasLiquid) {
+                drawSectorTexture(cPtr->sectorPtr, Point(), 1.0f, 1.0f);
             }
-            float liquid_opacity_mult = 1.0f;
-            if(c_ptr->sector_ptr->drainingLiquid) {
-                liquid_opacity_mult =
-                    c_ptr->sector_ptr->liquidDrainLeft /
+            float liquidOpacityMult = 1.0f;
+            if(cPtr->sectorPtr->drainingLiquid) {
+                liquidOpacityMult =
+                    cPtr->sectorPtr->liquidDrainLeft /
                     GEOMETRY::LIQUID_DRAIN_DURATION;
             }
             drawSectorEdgeOffsets(
-                c_ptr->sector_ptr,
-                bmp_output ?
-                custom_liquid_limit_effect_buffer :
+                cPtr->sectorPtr,
+                bmpOutput ?
+                customLiquidLimitEffectBuffer :
                 game.liquidLimitEffectBuffer,
-                liquid_opacity_mult
+                liquidOpacityMult
             );
             drawSectorEdgeOffsets(
-                c_ptr->sector_ptr,
-                bmp_output ?
-                custom_wall_offset_effect_buffer :
+                cPtr->sectorPtr,
+                bmpOutput ?
+                customWallOffsetEffectBuffer :
                 game.wallOffsetEffectBuffer,
                 1.0f
             );
             
-        } else if(c_ptr->mob_shadow_ptr) {
+        } else if(cPtr->mobShadowPtr) {
         
-            float delta_z = 0;
-            if(!c_ptr->mob_shadow_ptr->standingOnMob) {
-                delta_z =
-                    c_ptr->mob_shadow_ptr->z -
-                    c_ptr->mob_shadow_ptr->groundSector->z;
+            float deltaZ = 0;
+            if(!cPtr->mobShadowPtr->standingOnMob) {
+                deltaZ =
+                    cPtr->mobShadowPtr->z -
+                    cPtr->mobShadowPtr->groundSector->z;
             }
             drawMobShadow(
-                c_ptr->mob_shadow_ptr,
-                delta_z,
-                mob_shadow_stretch
+                cPtr->mobShadowPtr,
+                deltaZ,
+                mobShadowStretch
             );
             
-        } else if(c_ptr->mob_limb_ptr) {
+        } else if(cPtr->mobLimbPtr) {
         
-            if(!hasFlag(c_ptr->mob_limb_ptr->flags, MOB_FLAG_HIDDEN)) {
-                c_ptr->mob_limb_ptr->drawLimb();
+            if(!hasFlag(cPtr->mobLimbPtr->flags, MOB_FLAG_HIDDEN)) {
+                cPtr->mobLimbPtr->drawLimb();
             }
             
-        } else if(c_ptr->mob_ptr) {
+        } else if(cPtr->mobPtr) {
         
-            if(!hasFlag(c_ptr->mob_ptr->flags, MOB_FLAG_HIDDEN)) {
-                c_ptr->mob_ptr->drawMob();
-                if(c_ptr->mob_ptr->type->drawMobCallback) {
-                    c_ptr->mob_ptr->type->drawMobCallback(c_ptr->mob_ptr);
+            if(!hasFlag(cPtr->mobPtr->flags, MOB_FLAG_HIDDEN)) {
+                cPtr->mobPtr->drawMob();
+                if(cPtr->mobPtr->type->drawMobCallback) {
+                    cPtr->mobPtr->type->drawMobCallback(cPtr->mobPtr);
                 }
             }
             
-        } else if(c_ptr->particle_ptr) {
+        } else if(cPtr->particlePtr) {
         
-            c_ptr->particle_ptr->draw();
+            cPtr->particlePtr->draw();
             
         }
     }
     
-    if(bmp_output) {
-        al_destroy_bitmap(custom_wall_offset_effect_buffer);
+    if(bmpOutput) {
+        al_destroy_bitmap(customWallOffsetEffectBuffer);
     }
 }

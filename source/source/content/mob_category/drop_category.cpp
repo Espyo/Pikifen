@@ -87,11 +87,11 @@ void DropCategory::eraseMob(Mob* m) {
  * @brief Returns a type of drop given its internal name,
  * or nullptr on error.
  *
- * @param internal_name Internal name of the mob type to get.
+ * @param internalName Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-MobType* DropCategory::getType(const string &internal_name) const {
-    auto it = game.content.mobTypes.list.drop.find(internal_name);
+MobType* DropCategory::getType(const string &internalName) const {
+    auto it = game.content.mobTypes.list.drop.find(internalName);
     if(it == game.content.mobTypes.list.drop.end()) return nullptr;
     return it->second;
 }
@@ -112,9 +112,9 @@ void DropCategory::getTypeNames(vector<string> &list) const {
 /**
  * @brief Registers a created type of drop.
  *
- * @param internal_name Internal name of the mob type.
+ * @param internalName Internal name of the mob type.
  * @param type Mob type to register.
  */
-void DropCategory::registerType(const string &internal_name, MobType* type) {
-    game.content.mobTypes.list.drop[internal_name] = (DropType*) type;
+void DropCategory::registerType(const string &internalName, MobType* type) {
+    game.content.mobTypes.list.drop[internalName] = (DropType*) type;
 }

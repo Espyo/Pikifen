@@ -140,105 +140,105 @@ const string NAMES[N_MAKER_TOOLS] = {
  * @param file File to load from.
  */
 void SystemContentNames::load(DataNode* file) {
-    ReaderSetter gra_rs(file->getChildByName("graphics"));
+    ReaderSetter graRS(file->getChildByName("graphics"));
     
-    gra_rs.set("bright_circle", bmpBrightCircle);
-    gra_rs.set("bright_ring", bmpBrightRing);
-    gra_rs.set("bubble_box", bmpBubbleBox);
-    gra_rs.set("button_box", bmpButtonBox);
-    gra_rs.set("checkbox_check", bmpCheckboxCheck);
-    gra_rs.set("checkbox_no_check", bmpCheckboxNoCheck);
-    gra_rs.set("cursor", bmpCursor);
-    gra_rs.set("discord_icon", bmpDiscordIcon);
-    gra_rs.set("editor_icons", bmpEditorIcons);
-    gra_rs.set("enemy_spirit", bmpEnemySpirit);
-    gra_rs.set("focus_box", bmpFocusBox);
-    gra_rs.set("frame_box", bmpFrameBox);
-    gra_rs.set("github_icon", bmpGithubIcon);
-    gra_rs.set("hard_bubble", bmpHardBubble);
-    gra_rs.set("icon", bmpIcon);
-    gra_rs.set("idle_glow", bmpIdleGlow);
-    gra_rs.set("key_box", bmpKeyBox);
-    gra_rs.set("leader_silhouette_side", bmpLeaderSilhouetteSide);
-    gra_rs.set("leader_silhouette_top", bmpLeaderSilhouetteTop);
-    gra_rs.set("medal_bronze", bmpMedalBronze);
-    gra_rs.set("medal_gold", bmpMedalGold);
-    gra_rs.set("medal_none", bmpMedalNone);
-    gra_rs.set("medal_platinum", bmpMedalPlatinum);
-    gra_rs.set("medal_silver", bmpMedalSilver);
-    gra_rs.set("menu_icons", bmpMenuIcons);
-    gra_rs.set("mission_clear", bmpMissionClear);
-    gra_rs.set("mission_fail", bmpMissionFail);
-    gra_rs.set("more", bmpMore);
-    gra_rs.set("mouse_cursor", bmpMouseCursor);
-    gra_rs.set("notification", bmpNotification);
-    gra_rs.set("pikmin_spirit", bmpPikminSpirit);
-    gra_rs.set("player_input_icons", bmpPlayerInputIcons);
-    gra_rs.set("random", bmpRandom);
-    gra_rs.set("rock", bmpRock);
-    gra_rs.set("shadow", bmpShadow);
-    gra_rs.set("shadow_square", bmpShadowSquare);
-    gra_rs.set("smack", bmpSmack);
-    gra_rs.set("smoke", bmpSmoke);
-    gra_rs.set("sparkle", bmpSparkle);
-    gra_rs.set("spotlight", bmpSpotlight);
-    gra_rs.set("swarm_arrow", bmpSwarmArrow);
-    gra_rs.set("throw_invalid", bmpThrowInvalid);
-    gra_rs.set("throw_preview", bmpThrowPreview);
-    gra_rs.set("throw_preview_dashed", bmpThrowPreviewDashed);
-    gra_rs.set("title_screen_bg", bmpTitleScreenBg);
-    gra_rs.set("wave_ring", bmpWaveRing);
+    graRS.set("bright_circle", bmpBrightCircle);
+    graRS.set("bright_ring", bmpBrightRing);
+    graRS.set("bubble_box", bmpBubbleBox);
+    graRS.set("button_box", bmpButtonBox);
+    graRS.set("checkbox_check", bmpCheckboxCheck);
+    graRS.set("checkbox_no_check", bmpCheckboxNoCheck);
+    graRS.set("cursor", bmpCursor);
+    graRS.set("discord_icon", bmpDiscordIcon);
+    graRS.set("editor_icons", bmpEditorIcons);
+    graRS.set("enemy_spirit", bmpEnemySpirit);
+    graRS.set("focus_box", bmpFocusBox);
+    graRS.set("frame_box", bmpFrameBox);
+    graRS.set("github_icon", bmpGithubIcon);
+    graRS.set("hard_bubble", bmpHardBubble);
+    graRS.set("icon", bmpIcon);
+    graRS.set("idle_glow", bmpIdleGlow);
+    graRS.set("key_box", bmpKeyBox);
+    graRS.set("leader_silhouette_side", bmpLeaderSilhouetteSide);
+    graRS.set("leader_silhouette_top", bmpLeaderSilhouetteTop);
+    graRS.set("medal_bronze", bmpMedalBronze);
+    graRS.set("medal_gold", bmpMedalGold);
+    graRS.set("medal_none", bmpMedalNone);
+    graRS.set("medal_platinum", bmpMedalPlatinum);
+    graRS.set("medal_silver", bmpMedalSilver);
+    graRS.set("menu_icons", bmpMenuIcons);
+    graRS.set("mission_clear", bmpMissionClear);
+    graRS.set("mission_fail", bmpMissionFail);
+    graRS.set("more", bmpMore);
+    graRS.set("mouse_cursor", bmpMouseCursor);
+    graRS.set("notification", bmpNotification);
+    graRS.set("pikmin_spirit", bmpPikminSpirit);
+    graRS.set("player_input_icons", bmpPlayerInputIcons);
+    graRS.set("random", bmpRandom);
+    graRS.set("rock", bmpRock);
+    graRS.set("shadow", bmpShadow);
+    graRS.set("shadow_square", bmpShadowSquare);
+    graRS.set("smack", bmpSmack);
+    graRS.set("smoke", bmpSmoke);
+    graRS.set("sparkle", bmpSparkle);
+    graRS.set("spotlight", bmpSpotlight);
+    graRS.set("swarm_arrow", bmpSwarmArrow);
+    graRS.set("throw_invalid", bmpThrowInvalid);
+    graRS.set("throw_preview", bmpThrowPreview);
+    graRS.set("throw_preview_dashed", bmpThrowPreviewDashed);
+    graRS.set("title_screen_bg", bmpTitleScreenBg);
+    graRS.set("wave_ring", bmpWaveRing);
     
-    ReaderSetter fnt_rs(file->getChildByName("fonts"));
+    ReaderSetter fntRS(file->getChildByName("fonts"));
     
-    fnt_rs.set("area_name", fntAreaName);
-    fnt_rs.set("counter", fntCounter);
-    fnt_rs.set("cursor_counter", fntCursorCounter);
-    fnt_rs.set("editor_header", fntEditorHeader);
-    fnt_rs.set("editor_monospace", fntEditorMonospace);
-    fnt_rs.set("editor_standard", fntEditorStandard);
-    fnt_rs.set("slim", fntSlim);
-    fnt_rs.set("standard", fntStandard);
-    fnt_rs.set("value", fntValue);
+    fntRS.set("area_name", fntAreaName);
+    fntRS.set("counter", fntCounter);
+    fntRS.set("cursor_counter", fntCursorCounter);
+    fntRS.set("editor_header", fntEditorHeader);
+    fntRS.set("editor_monospace", fntEditorMonospace);
+    fntRS.set("editor_standard", fntEditorStandard);
+    fntRS.set("slim", fntSlim);
+    fntRS.set("standard", fntStandard);
+    fntRS.set("value", fntValue);
     
-    ReaderSetter snd_rs(file->getChildByName("sounds"));
+    ReaderSetter sndRS(file->getChildByName("sounds"));
     
-    snd_rs.set("attack", sndAttack);
-    snd_rs.set("camera", sndCamera);
-    snd_rs.set("menu_activate", sndMenuActivate);
-    snd_rs.set("menu_back", sndMenuBack);
-    snd_rs.set("menu_select", sndMenuSelect);
-    snd_rs.set("switch_pikmin", sndSwitchPikmin);
+    sndRS.set("attack", sndAttack);
+    sndRS.set("camera", sndCamera);
+    sndRS.set("menu_activate", sndMenuActivate);
+    sndRS.set("menu_back", sndMenuBack);
+    sndRS.set("menu_select", sndMenuSelect);
+    sndRS.set("switch_pikmin", sndSwitchPikmin);
     
-    ReaderSetter sng_rs(file->getChildByName("songs"));
+    ReaderSetter sngRS(file->getChildByName("songs"));
     
-    sng_rs.set("boss", sngBoss);
-    sng_rs.set("boss_victory", sngBossVictory);
-    sng_rs.set("editors", sngEditors);
-    sng_rs.set("menus", sngMenus);
+    sngRS.set("boss", sngBoss);
+    sngRS.set("boss_victory", sngBossVictory);
+    sngRS.set("editors", sngEditors);
+    sngRS.set("menus", sngMenus);
     
-    ReaderSetter ani_rs(file->getChildByName("animations"));
+    ReaderSetter aniRS(file->getChildByName("animations"));
     
-    ani_rs.set("sparks", anmSparks);
+    aniRS.set("sparks", anmSparks);
     
-    ReaderSetter par_rs(file->getChildByName("particle_generators"));
+    ReaderSetter parRS(file->getChildByName("particle_generators"));
     
-    par_rs.set("converter_insertion", parConverterInsertion);
-    par_rs.set("ding", parDing);
-    par_rs.set("enemy_defeat", parEnemyDefeat);
-    par_rs.set("leader_heal", parLeaderHeal);
-    par_rs.set("leader_land", parLeaderLand);
-    par_rs.set("onion_generating_inside", parOnionGenInside);
-    par_rs.set("onion_insertion", parOnionInsertion);
-    par_rs.set("pikmin_pluck_dirt", parPikminPluckDirt);
-    par_rs.set("pikmin_seed_landed", parPikminSeedLanded);
-    par_rs.set("smack", parSmack);
-    par_rs.set("spray", parSpray);
-    par_rs.set("sprout_evolution", parSproutEvolution);
-    par_rs.set("sprout_regression", parSproutRegression);
-    par_rs.set("throw_trail", parThrowTrail);
-    par_rs.set("treasure", parTreasure);
-    par_rs.set("wave_ring", parWaveRing);
+    parRS.set("converter_insertion", parConverterInsertion);
+    parRS.set("ding", parDing);
+    parRS.set("enemy_defeat", parEnemyDefeat);
+    parRS.set("leader_heal", parLeaderHeal);
+    parRS.set("leader_land", parLeaderLand);
+    parRS.set("onion_generating_inside", parOnionGenInside);
+    parRS.set("onion_insertion", parOnionInsertion);
+    parRS.set("pikmin_pluck_dirt", parPikminPluckDirt);
+    parRS.set("pikmin_seed_landed", parPikminSeedLanded);
+    parRS.set("smack", parSmack);
+    parRS.set("spray", parSpray);
+    parRS.set("sprout_evolution", parSproutEvolution);
+    parRS.set("sprout_regression", parSproutRegression);
+    parRS.set("throw_trail", parThrowTrail);
+    parRS.set("treasure", parTreasure);
+    parRS.set("wave_ring", parWaveRing);
 }
 
 
@@ -247,18 +247,18 @@ void SystemContentNames::load(DataNode* file) {
  *
  * @param name Name of the audio stream to load.
  * @param node If not nullptr, blame this data node if the file doesn't exist.
- * @param report_errors Only issues errors if this is true.
+ * @param reportErrors Only issues errors if this is true.
  * @return The audio stream.
  */
 ALLEGRO_AUDIO_STREAM* AudioStreamManager::doLoad(
-    const string &name, DataNode* node, bool report_errors
+    const string &name, DataNode* node, bool reportErrors
 ) {
     const auto &it = game.content.songTracks.manifests.find(name);
     string path =
         it != game.content.songTracks.manifests.end() ?
         it->second.path :
         name;
-    ALLEGRO_AUDIO_STREAM* stream = loadAudioStream(path, node, report_errors);
+    ALLEGRO_AUDIO_STREAM* stream = loadAudioStream(path, node, reportErrors);
     if(stream) {
         game.registerAudioStreamSource(stream);
     }
@@ -283,18 +283,18 @@ void AudioStreamManager::doUnload(ALLEGRO_AUDIO_STREAM* asset) {
  *
  * @param name Name of the bitmap to load.
  * @param node If not nullptr, blame this data node if the file doesn't exist.
- * @param report_errors Only issues errors if this is true.
+ * @param reportErrors Only issues errors if this is true.
  * @return The bitmap.
  */
 ALLEGRO_BITMAP* BitmapManager::doLoad(
-    const string &name, DataNode* node, bool report_errors
+    const string &name, DataNode* node, bool reportErrors
 ) {
     const auto &it = game.content.bitmaps.manifests.find(name);
     string path =
         it != game.content.bitmaps.manifests.end() ?
         it->second.path :
         name;
-    return loadBmp(path, node, report_errors);
+    return loadBmp(path, node, reportErrors);
 }
 
 
@@ -313,37 +313,37 @@ void BitmapManager::doUnload(ALLEGRO_BITMAP* asset) {
 /**
  * @brief Instantly places the camera at the specified coordinates.
  *
- * @param new_pos Coordinates to place the camera at.
+ * @param newPos Coordinates to place the camera at.
  */
-void Camera::setPos(const Point &new_pos) {
-    pos = new_pos;
-    targetPos = new_pos;
+void Camera::setPos(const Point &newPos) {
+    pos = newPos;
+    targetPos = newPos;
 }
 
 
 /**
  * @brief Instantly places the camera at the specified zoom.
  *
- * @param new_zoom Zoom to set to.
+ * @param newZoom Zoom to set to.
  */
-void Camera::setZoom(float new_zoom) {
-    zoom = new_zoom;
-    targetZoom = new_zoom;
+void Camera::setZoom(float newZoom) {
+    zoom = newZoom;
+    targetZoom = newZoom;
 }
 
 
 /**
  * @brief Ticks camera movement by one frame of logic.
  *
- * @param delta_t How long the frame's tick is, in seconds.
+ * @param deltaT How long the frame's tick is, in seconds.
  */
-void Camera::tick(float delta_t) {
+void Camera::tick(float deltaT) {
     pos.x +=
-        (targetPos.x - pos.x) * (GAMEPLAY::CAMERA_SMOOTHNESS_MULT * delta_t);
+        (targetPos.x - pos.x) * (GAMEPLAY::CAMERA_SMOOTHNESS_MULT * deltaT);
     pos.y +=
-        (targetPos.y - pos.y) * (GAMEPLAY::CAMERA_SMOOTHNESS_MULT * delta_t);
+        (targetPos.y - pos.y) * (GAMEPLAY::CAMERA_SMOOTHNESS_MULT * deltaT);
     zoom +=
-        (targetZoom - zoom) * (GAMEPLAY::CAMERA_SMOOTHNESS_MULT * delta_t);
+        (targetZoom - zoom) * (GAMEPLAY::CAMERA_SMOOTHNESS_MULT * deltaT);
 }
 
 
@@ -353,11 +353,11 @@ void Camera::tick(float delta_t) {
  * @param s Full error description.
  */
 void ErrorManager::emitInGameplay(const string &s) {
-    string info_str =
+    string infoStr =
         "\n\n\n"
         "ERROR: " + s + "\n\n"
         "(Saved to \"" + FILE_PATHS_FROM_ROOT::ERROR_LOG + "\".)\n\n";
-    printInfo(info_str, 30.0f, 3.0f);
+    printInfo(infoStr, 30.0f, 3.0f);
 }
 
 
@@ -377,26 +377,26 @@ void ErrorManager::logToConsole(const string &s) {
  * @param s Full error description.
  */
 void ErrorManager::logToFile(const string &s) {
-    string prev_error_log;
+    string prevErrorLog;
     string output = "";
     
     //Get the previous contents of the log file, if any.
-    ALLEGRO_FILE* file_i =
+    ALLEGRO_FILE* fileI =
         al_fopen(FILE_PATHS_FROM_ROOT::ERROR_LOG.c_str(), "r");
-    if(file_i) {
-        while(!al_feof(file_i)) {
+    if(fileI) {
+        while(!al_feof(fileI)) {
             string line;
-            getline(file_i, line);
-            prev_error_log += line + "\n";
+            getline(fileI, line);
+            prevErrorLog += line + "\n";
         }
-        prev_error_log.erase(prev_error_log.size() - 1);
-        al_fclose(file_i);
+        prevErrorLog.erase(prevErrorLog.size() - 1);
+        al_fclose(fileI);
     }
     
     //Write this session's header, if necessary.
     if(nrSessionErrors == 0) {
         string header;
-        if(!prev_error_log.empty()) {
+        if(!prevErrorLog.empty()) {
             header += "\n\n";
         }
         header += "Pikifen version " + getEngineVersionString();
@@ -416,11 +416,11 @@ void ErrorManager::logToFile(const string &s) {
     }
     
     //Save it.
-    ALLEGRO_FILE* file_o =
+    ALLEGRO_FILE* fileO =
         al_fopen(FILE_PATHS_FROM_ROOT::ERROR_LOG.c_str(), "w");
-    if(file_o) {
-        al_fwrite(file_o, prev_error_log + output);
-        al_fclose(file_o);
+    if(fileO) {
+        al_fwrite(fileO, prevErrorLog + output);
+        al_fclose(fileO);
     }
 }
 
@@ -442,18 +442,18 @@ void ErrorManager::prepareAreaLoad() {
  * and line that caused the error.
  */
 void ErrorManager::report(const string &s, const DataNode* d) {
-    string full_error = s;
+    string fullError = s;
     if(d) {
-        full_error += " (" + d->filePath;
-        if(d->lineNr != 0) full_error += " line " + i2s(d->lineNr);
-        full_error += ")";
+        fullError += " (" + d->filePath;
+        if(d->lineNr != 0) fullError += " line " + i2s(d->lineNr);
+        fullError += ")";
     }
     
-    if(firstAreaLoadError.empty()) firstAreaLoadError = full_error;
+    if(firstAreaLoadError.empty()) firstAreaLoadError = fullError;
     
-    logToConsole(full_error);
-    logToFile(full_error);
-    emitInGameplay(full_error);
+    logToConsole(fullError);
+    logToFile(fullError);
+    emitInGameplay(fullError);
     
     nrSessionErrors++;
 }
@@ -468,19 +468,19 @@ void ErrorManager::report(const string &s, const DataNode* d) {
 void ErrorManager::reportAreaLoadErrors() {
     if(nrSessionErrors <= nrErrorsOnAreaLoad) return;
     
-    size_t nr_errors_found =
+    size_t nrErrorsFound =
         nrSessionErrors - nrErrorsOnAreaLoad;
         
-    string info_str =
+    string infoStr =
         "\n\n\n"
         "ERROR: " + firstAreaLoadError + "\n\n";
-    if(nr_errors_found > 1) {
-        info_str += "(+" + i2s(nr_errors_found - 1) + " more) ";
+    if(nrErrorsFound > 1) {
+        infoStr += "(+" + i2s(nrErrorsFound - 1) + " more) ";
     }
-    info_str +=
+    infoStr +=
         "(Saved to \"" + FILE_PATHS_FROM_ROOT::ERROR_LOG + "\".)\n\n";
         
-    printInfo(info_str, 30.0f, 3.0f);
+    printInfo(infoStr, 30.0f, 3.0f);
 }
 
 
@@ -567,27 +567,27 @@ void FadeManager::setNextFadeDuration(float duration) {
 /**
  * @brief Sets up the start of a fade.
  *
- * @param is_fade_in If true, this fades in. If false, fades out.
- * @param on_end Code to run when the fade finishes.
+ * @param isFadeIn If true, this fades in. If false, fades out.
+ * @param onEnd Code to run when the fade finishes.
  */
 void FadeManager::startFade(
-    bool is_fade_in, const std::function<void()> &on_end
+    bool isFadeIn, const std::function<void()> &onEnd
 ) {
     float curDuration = durationOverride == 0.0f ? duration : durationOverride;
     timeLeft = curDuration;
-    fadeIn = is_fade_in;
-    this->onEnd = on_end;
+    fadeIn = isFadeIn;
+    this->onEnd = onEnd;
 }
 
 
 /**
  * @brief Ticks time by one frame of logic.
  *
- * @param delta_t How long the frame's tick is, in seconds.
+ * @param deltaT How long the frame's tick is, in seconds.
  */
-void FadeManager::tick(float delta_t) {
+void FadeManager::tick(float deltaT) {
     if(timeLeft == 0) return;
-    timeLeft -= delta_t;
+    timeLeft -= deltaT;
     if(timeLeft <= 0) {
         timeLeft = 0;
         if(onEnd) onEnd();
@@ -610,165 +610,165 @@ GetterWriter::GetterWriter(DataNode* dn) :
 /**
  * @brief Gets a variable's value, and writes it to a child node's value.
  *
- * @param child_name Name of the child node.
+ * @param childName Name of the child node.
  * @param var The var to get. This is an Allegro color.
- * @param out_child_node If not nullptr, the new node is returned here.
+ * @param outChildNode If not nullptr, the new node is returned here.
  */
 void GetterWriter::write(
-    const string &child_name, const ALLEGRO_COLOR &var, DataNode** out_child_node
+    const string &childName, const ALLEGRO_COLOR &var, DataNode** outChildNode
 ) {
-    DataNode* new_node = node->addNew(child_name, c2s(var));
-    if(out_child_node) *out_child_node = new_node;
+    DataNode* newNode = node->addNew(childName, c2s(var));
+    if(outChildNode) *outChildNode = newNode;
 }
 
 
 /**
  * @brief Gets a variable's value, and writes it to a child node's value.
  *
- * @param child_name Name of the child node.
+ * @param childName Name of the child node.
  * @param var The var to get. This is a string.
- * @param out_child_node If not nullptr, the new node is returned here.
+ * @param outChildNode If not nullptr, the new node is returned here.
  */
 void GetterWriter::write(
-    const string &child_name, const string &var, DataNode** out_child_node
+    const string &childName, const string &var, DataNode** outChildNode
 ) {
-    DataNode* new_node = node->addNew(child_name, var);
-    if(out_child_node) *out_child_node = new_node;
+    DataNode* newNode = node->addNew(childName, var);
+    if(outChildNode) *outChildNode = newNode;
 }
 
 
 /**
  * @brief Gets a variable's value, and writes it to a child node's value.
  *
- * @param child_name Name of the child node.
+ * @param childName Name of the child node.
  * @param var The var to get. This is a string.
- * @param out_child_node If not nullptr, the new node is returned here.
+ * @param outChildNode If not nullptr, the new node is returned here.
  */
 void GetterWriter::write(
-    const string &child_name, const char* var, DataNode** out_child_node
+    const string &childName, const char* var, DataNode** outChildNode
 ) {
-    DataNode* new_node = node->addNew(child_name, var);
-    if(out_child_node) *out_child_node = new_node;
+    DataNode* newNode = node->addNew(childName, var);
+    if(outChildNode) *outChildNode = newNode;
 }
 
 
 /**
  * @brief Gets a variable's value, and writes it to a child node's value.
  *
- * @param child_name Name of the child node.
+ * @param childName Name of the child node.
  * @param var The var to get. This is an integer.
- * @param out_child_node If not nullptr, the new node is returned here.
+ * @param outChildNode If not nullptr, the new node is returned here.
  */
 void GetterWriter::write(
-    const string &child_name, const size_t &var, DataNode** out_child_node
+    const string &childName, const size_t &var, DataNode** outChildNode
 ) {
-    DataNode* new_node = node->addNew(child_name, i2s(var));
-    if(out_child_node) *out_child_node = new_node;
+    DataNode* newNode = node->addNew(childName, i2s(var));
+    if(outChildNode) *outChildNode = newNode;
 }
 
 
 /**
  * @brief Gets a variable's value, and writes it to a child node's value.
  *
- * @param child_name Name of the child node.
+ * @param childName Name of the child node.
  * @param var The var to get. This is an integer.
- * @param out_child_node If not nullptr, the new node is returned here.
+ * @param outChildNode If not nullptr, the new node is returned here.
  */
 void GetterWriter::write(
-    const string &child_name, const int &var, DataNode** out_child_node
+    const string &childName, const int &var, DataNode** outChildNode
 ) {
-    DataNode* new_node = node->addNew(child_name, i2s(var));
-    if(out_child_node) *out_child_node = new_node;
+    DataNode* newNode = node->addNew(childName, i2s(var));
+    if(outChildNode) *outChildNode = newNode;
 }
 
 
 /**
  * @brief Gets a variable's value, and writes it to a child node's value.
  *
- * @param child_name Name of the child node.
+ * @param childName Name of the child node.
  * @param var The var to get. This is an unsigned integer.
- * @param out_child_node If not nullptr, the new node is returned here.
+ * @param outChildNode If not nullptr, the new node is returned here.
  */
 void GetterWriter::write(
-    const string &child_name, const unsigned int &var, DataNode** out_child_node
+    const string &childName, const unsigned int &var, DataNode** outChildNode
 ) {
-    DataNode* new_node = node->addNew(child_name, i2s(var));
-    if(out_child_node) *out_child_node = new_node;
+    DataNode* newNode = node->addNew(childName, i2s(var));
+    if(outChildNode) *outChildNode = newNode;
 }
 
 
 /**
  * @brief Gets a variable's value, and writes it to a child node's value.
  *
- * @param child_name Name of the child node.
+ * @param childName Name of the child node.
  * @param var The var to get. This is an unsigned char.
- * @param out_child_node If not nullptr, the new node is returned here.
+ * @param outChildNode If not nullptr, the new node is returned here.
  */
 void GetterWriter::write(
-    const string &child_name, const unsigned char &var, DataNode** out_child_node
+    const string &childName, const unsigned char &var, DataNode** outChildNode
 ) {
-    DataNode* new_node = node->addNew(child_name, i2s(var));
-    if(out_child_node) *out_child_node = new_node;
+    DataNode* newNode = node->addNew(childName, i2s(var));
+    if(outChildNode) *outChildNode = newNode;
 }
 
 
 /**
  * @brief Gets a variable's value, and writes it to a child node's value.
  *
- * @param child_name Name of the child node.
+ * @param childName Name of the child node.
  * @param var The var to get. This is a boolean.
- * @param out_child_node If not nullptr, the new node is returned here.
+ * @param outChildNode If not nullptr, the new node is returned here.
  */
 void GetterWriter::write(
-    const string &child_name, const bool &var, DataNode** out_child_node
+    const string &childName, const bool &var, DataNode** outChildNode
 ) {
-    DataNode* new_node = node->addNew(child_name, b2s(var));
-    if(out_child_node) *out_child_node = new_node;
+    DataNode* newNode = node->addNew(childName, b2s(var));
+    if(outChildNode) *outChildNode = newNode;
 }
 
 
 /**
  * @brief Gets a variable's value, and writes it to a child node's value.
  *
- * @param child_name Name of the child node.
+ * @param childName Name of the child node.
  * @param var The var to get. This is a float.
- * @param out_child_node If not nullptr, the new node is returned here.
+ * @param outChildNode If not nullptr, the new node is returned here.
  */
 void GetterWriter::write(
-    const string &child_name, const float &var, DataNode** out_child_node
+    const string &childName, const float &var, DataNode** outChildNode
 ) {
-    DataNode* new_node = node->addNew(child_name, f2s(var));
-    if(out_child_node) *out_child_node = new_node;
+    DataNode* newNode = node->addNew(childName, f2s(var));
+    if(outChildNode) *outChildNode = newNode;
 }
 
 
 /**
  * @brief Gets a variable's value, and writes it to a child node's value.
  *
- * @param child_name Name of the child node.
+ * @param childName Name of the child node.
  * @param var The var to get. This is a double.
- * @param out_child_node If not nullptr, the new node is returned here.
+ * @param outChildNode If not nullptr, the new node is returned here.
  */
 void GetterWriter::write(
-    const string &child_name, const double &var, DataNode** out_child_node
+    const string &childName, const double &var, DataNode** outChildNode
 ) {
-    DataNode* new_node = node->addNew(child_name, f2s(var));
-    if(out_child_node) *out_child_node = new_node;
+    DataNode* newNode = node->addNew(childName, f2s(var));
+    if(outChildNode) *outChildNode = newNode;
 }
 
 
 /**
  * @brief Gets a variable's value, and writes it to a child node's value.
  *
- * @param child_name Name of the child node.
+ * @param childName Name of the child node.
  * @param var The var to get. This is a point.
- * @param out_child_node If not nullptr, the new node is returned here.
+ * @param outChildNode If not nullptr, the new node is returned here.
  */
 void GetterWriter::write(
-    const string &child_name, const Point &var, DataNode** out_child_node
+    const string &childName, const Point &var, DataNode** outChildNode
 ) {
-    DataNode* new_node = node->addNew(child_name, p2s(var));
-    if(out_child_node) *out_child_node = new_node;
+    DataNode* newNode = node->addNew(childName, p2s(var));
+    if(outChildNode) *outChildNode = newNode;
 }
 
 
@@ -803,10 +803,10 @@ void MouseCursor::init() {
  * @brief Resets the cursor's state.
  */
 void MouseCursor::reset() {
-    ALLEGRO_MOUSE_STATE mouse_state;
-    al_get_mouse_state(&mouse_state);
-    game.mouseCursor.winPos.x = al_get_mouse_state_axis(&mouse_state, 0);
-    game.mouseCursor.winPos.y = al_get_mouse_state_axis(&mouse_state, 1);
+    ALLEGRO_MOUSE_STATE mouseState;
+    al_get_mouse_state(&mouseState);
+    game.mouseCursor.winPos.x = al_get_mouse_state_axis(&mouseState, 0);
+    game.mouseCursor.winPos.y = al_get_mouse_state_axis(&mouseState, 1);
     game.view.cursorWorldPos = game.mouseCursor.winPos;
     al_transform_coordinates(
         &game.view.windowToWorldTransform,
@@ -843,7 +843,7 @@ void Notification::draw() const {
     
     float scale = ease(EASE_METHOD_OUT, visibility);
     
-    ALLEGRO_TRANSFORM tra, old_tra;
+    ALLEGRO_TRANSFORM tra, oldTra;
     al_identity_transform(&tra);
     al_scale_transform(&tra, scale, scale);
     al_translate_transform(
@@ -856,36 +856,36 @@ void Notification::draw() const {
         1.0f / game.view.cam.zoom,
         1.0f / game.view.cam.zoom
     );
-    al_copy_transform(&old_tra, al_get_current_transform());
-    al_compose_transform(&tra, &old_tra);
+    al_copy_transform(&oldTra, al_get_current_transform());
+    al_compose_transform(&tra, &oldTra);
     al_use_transform(&tra);
     
-    int bmp_w = al_get_bitmap_width(game.sysContent.bmpNotification);
-    int bmp_h = al_get_bitmap_height(game.sysContent.bmpNotification);
+    int bmpW = al_get_bitmap_width(game.sysContent.bmpNotification);
+    int bmpH = al_get_bitmap_height(game.sysContent.bmpNotification);
     
-    float text_box_x1 = -bmp_w * 0.5 + DRAWING::NOTIFICATION_PADDING;
-    float text_box_x2 = bmp_w * 0.5 - DRAWING::NOTIFICATION_PADDING;
-    float text_box_y1 = -bmp_h - DRAWING::NOTIFICATION_PADDING;
-    float text_box_y2 = DRAWING::NOTIFICATION_PADDING;
+    float textBoxX1 = -bmpW * 0.5 + DRAWING::NOTIFICATION_PADDING;
+    float textBoxX2 = bmpW * 0.5 - DRAWING::NOTIFICATION_PADDING;
+    float textBoxY1 = -bmpH - DRAWING::NOTIFICATION_PADDING;
+    float textBoxY2 = DRAWING::NOTIFICATION_PADDING;
     
     drawBitmap(
         game.sysContent.bmpNotification,
-        Point(0, -bmp_h * 0.5),
-        Point(bmp_w, bmp_h),
+        Point(0, -bmpH * 0.5),
+        Point(bmpW, bmpH),
         0,
         mapAlpha(DRAWING::NOTIFICATION_ALPHA * visibility)
     );
     
     if(inputSource.type != INPUT_SOURCE_TYPE_NONE) {
-        text_box_x1 +=
+        textBoxX1 +=
             DRAWING::NOTIFICATION_CONTROL_SIZE + DRAWING::NOTIFICATION_PADDING;
         drawPlayerInputSourceIcon(
             game.sysContent.fntSlim, inputSource,
             true,
             Point(
-                -bmp_w * 0.5 + DRAWING::NOTIFICATION_PADDING +
+                -bmpW * 0.5 + DRAWING::NOTIFICATION_PADDING +
                 DRAWING::NOTIFICATION_CONTROL_SIZE * 0.5,
-                -bmp_h * 0.5
+                -bmpH * 0.5
             ),
             Point(
                 DRAWING::NOTIFICATION_CONTROL_SIZE,
@@ -898,18 +898,18 @@ void Notification::draw() const {
     drawText(
         text, game.sysContent.fntStandard,
         Point(
-            (text_box_x1 + text_box_x2) * 0.5,
-            (text_box_y1 + text_box_y2) * 0.5
+            (textBoxX1 + textBoxX2) * 0.5,
+            (textBoxY1 + textBoxY2) * 0.5
         ),
         Point(
-            text_box_x2 - text_box_x1,
-            text_box_y2 - text_box_y1
+            textBoxX2 - textBoxX1,
+            textBoxY2 - textBoxY1
         ),
         mapAlpha(DRAWING::NOTIFICATION_ALPHA * visibility),
         ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, TEXT_SETTING_FLAG_CANT_GROW
     );
     
-    al_use_transform(&old_tra);
+    al_use_transform(&oldTra);
 }
 
 
@@ -939,14 +939,14 @@ void Notification::reset() {
 /**
  * @brief Sets the contents to show.
  *
- * @param input_source Player input source icon to show.
+ * @param inputSource Player input source icon to show.
  * @param text Text to show.
  * @param pos Where to show it in the game world.
  */
 void Notification::setContents(
-    const PlayerInputSource &input_source, const string &text, const Point &pos
+    const PlayerInputSource &inputSource, const string &text, const Point &pos
 ) {
-    this->inputSource = input_source;
+    this->inputSource = inputSource;
     this->text = text;
     this->pos = pos;
 }
@@ -965,13 +965,13 @@ void Notification::setEnabled(bool enabled) {
 /**
  * @brief Ticks time by one frame of logic.
  *
- * @param delta_t How long the frame's tick is, in seconds.
+ * @param deltaT How long the frame's tick is, in seconds.
  */
-void Notification::tick(float delta_t) {
+void Notification::tick(float deltaT) {
     if(enabled) {
-        visibility += NOTIFICATION::FADE_SPEED * delta_t;
+        visibility += NOTIFICATION::FADE_SPEED * deltaT;
     } else {
-        visibility -= NOTIFICATION::FADE_SPEED * delta_t;
+        visibility -= NOTIFICATION::FADE_SPEED * deltaT;
     }
     visibility = std::clamp(visibility, 0.0f, 1.0f);
 }
@@ -1024,16 +1024,16 @@ void PerformanceMonitor::finishMeasurement() {
     );
     
     double dur = al_get_time() - curMeasurementStartTime;
-    bool is_new = true;
+    bool isNew = true;
     
     for(size_t m = 0; m < curPage.measurements.size(); m++) {
         if(curPage.measurements[m].first == curMeasurementName) {
             curPage.measurements[m].second += dur;
-            is_new = false;
+            isNew = false;
             break;
         }
     }
-    if(is_new) {
+    if(isNew) {
         curPage.measurements.push_back(
             std::make_pair(curMeasurementName, dur)
         );
@@ -1076,7 +1076,7 @@ void PerformanceMonitor::leaveState() {
         } else {
             frameAvgPage.duration += curPage.duration;
             for(size_t m = 0; m < curPage.measurements.size(); m++) {
-                bool is_new = true;
+                bool isNew = true;
                 for(
                     size_t m2 = 0;
                     m2 < frameAvgPage.measurements.size(); m2++
@@ -1087,11 +1087,11 @@ void PerformanceMonitor::leaveState() {
                     ) {
                         frameAvgPage.measurements[m2].second +=
                             curPage.measurements[m].second;
-                        is_new = false;
+                        isNew = false;
                         break;
                     }
                 }
-                if(is_new) {
+                if(isNew) {
                     frameAvgPage.measurements.push_back(
                         curPage.measurements[m]
                     );
@@ -1165,24 +1165,24 @@ void PerformanceMonitor::saveLog() {
     frameSlowestPage.write(s);
     
     //Finally, write the string to a file.
-    string prev_log;
-    ALLEGRO_FILE* file_i =
+    string prevLog;
+    ALLEGRO_FILE* fileI =
         al_fopen(FILE_PATHS_FROM_ROOT::PERFORMANCE_LOG.c_str(), "r");
-    if(file_i) {
+    if(fileI) {
         string line;
-        while(!al_feof(file_i)) {
-            getline(file_i, line);
-            prev_log += line + "\n";
+        while(!al_feof(fileI)) {
+            getline(fileI, line);
+            prevLog += line + "\n";
         }
-        prev_log.erase(prev_log.size() - 1);
-        al_fclose(file_i);
+        prevLog.erase(prevLog.size() - 1);
+        al_fclose(fileI);
     }
     
-    ALLEGRO_FILE* file_o =
+    ALLEGRO_FILE* fileO =
         al_fopen(FILE_PATHS_FROM_ROOT::PERFORMANCE_LOG.c_str(), "w");
-    if(file_o) {
-        al_fwrite(file_o, prev_log + s);
-        al_fclose(file_o);
+    if(fileO) {
+        al_fwrite(fileO, prevLog + s);
+        al_fclose(fileO);
     }
 }
 
@@ -1235,9 +1235,9 @@ void PerformanceMonitor::startMeasurement(const string &name) {
  */
 void PerformanceMonitor::Page::write(string &s) {
     //Get the total measured time.
-    double total_measured_time = 0.0;
+    double totalMeasuredTime = 0.0;
     for(size_t m = 0; m < measurements.size(); m++) {
-        total_measured_time += measurements[m].second;
+        totalMeasuredTime += measurements[m].second;
     }
     
     //Write each measurement into the string.
@@ -1245,15 +1245,15 @@ void PerformanceMonitor::Page::write(string &s) {
         writeMeasurement(
             s, measurements[m].first,
             measurements[m].second,
-            total_measured_time
+            totalMeasuredTime
         );
     }
     
     //Write the total.
     s +=
         "  TOTAL: " + std::to_string(duration) + "s (" +
-        std::to_string(total_measured_time) + "s measured, " +
-        std::to_string(duration - total_measured_time) + "s not measured).\n";
+        std::to_string(totalMeasuredTime) + "s measured, " +
+        std::to_string(duration - totalMeasuredTime) + "s not measured).\n";
 }
 
 
@@ -1299,21 +1299,21 @@ ReaderSetter::ReaderSetter(DataNode* dn) :
  * @brief Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
  *
- * @param child_name Name of the child node.
+ * @param childName Name of the child node.
  * @param var The var to set. This is an Allegro color.
- * @param out_child_node If not nullptr, the node from whence the value came
+ * @param outChildNode If not nullptr, the node from whence the value came
  * is placed here. nullptr is placed if the property does not exist or has
  * no value.
  */
 void ReaderSetter::set(
-    const string &child_name, ALLEGRO_COLOR &var, DataNode** out_child_node
+    const string &childName, ALLEGRO_COLOR &var, DataNode** outChildNode
 ) {
-    DataNode* n = node->getChildByName(child_name);
+    DataNode* n = node->getChildByName(childName);
     if(!n->value.empty()) {
-        if(out_child_node) *out_child_node = n;
+        if(outChildNode) *outChildNode = n;
         var = s2c(n->value);
     } else {
-        if(out_child_node) *out_child_node = nullptr;
+        if(outChildNode) *outChildNode = nullptr;
     }
 }
 
@@ -1322,21 +1322,21 @@ void ReaderSetter::set(
  * @brief Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
  *
- * @param child_name Name of the child node.
+ * @param childName Name of the child node.
  * @param var The var to set. This is a string.
- * @param out_child_node If not nullptr, the node from whence the value came
+ * @param outChildNode If not nullptr, the node from whence the value came
  * is placed here. nullptr is placed if the property does not exist or has
  * no value.
  */
 void ReaderSetter::set(
-    const string &child_name, string &var, DataNode** out_child_node
+    const string &childName, string &var, DataNode** outChildNode
 ) {
-    DataNode* n = node->getChildByName(child_name);
+    DataNode* n = node->getChildByName(childName);
     if(!n->value.empty()) {
-        if(out_child_node) *out_child_node = n;
+        if(outChildNode) *outChildNode = n;
         var = n->value;
     } else {
-        if(out_child_node) *out_child_node = nullptr;
+        if(outChildNode) *outChildNode = nullptr;
     }
 }
 
@@ -1345,21 +1345,21 @@ void ReaderSetter::set(
  * @brief Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
  *
- * @param child_name Name of the child node.
+ * @param childName Name of the child node.
  * @param var The var to set. This is an integer.
- * @param out_child_node If not nullptr, the node from whence the value came
+ * @param outChildNode If not nullptr, the node from whence the value came
  * is placed here. nullptr is placed if the property does not exist or has
  * no value.
  */
 void ReaderSetter::set(
-    const string &child_name, size_t &var, DataNode** out_child_node
+    const string &childName, size_t &var, DataNode** outChildNode
 ) {
-    DataNode* n = node->getChildByName(child_name);
+    DataNode* n = node->getChildByName(childName);
     if(!n->value.empty()) {
-        if(out_child_node) *out_child_node = n;
+        if(outChildNode) *outChildNode = n;
         var = s2i(n->value);
     } else {
-        if(out_child_node) *out_child_node = nullptr;
+        if(outChildNode) *outChildNode = nullptr;
     }
 }
 
@@ -1368,21 +1368,21 @@ void ReaderSetter::set(
  * @brief Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
  *
- * @param child_name Name of the child node.
+ * @param childName Name of the child node.
  * @param var The var to set. This is an integer.
- * @param out_child_node If not nullptr, the node from whence the value came
+ * @param outChildNode If not nullptr, the node from whence the value came
  * is placed here. nullptr is placed if the property does not exist or has
  * no value.
  */
 void ReaderSetter::set(
-    const string &child_name, int &var, DataNode** out_child_node
+    const string &childName, int &var, DataNode** outChildNode
 ) {
-    DataNode* n = node->getChildByName(child_name);
+    DataNode* n = node->getChildByName(childName);
     if(!n->value.empty()) {
-        if(out_child_node) *out_child_node = n;
+        if(outChildNode) *outChildNode = n;
         var = s2i(n->value);
     } else {
-        if(out_child_node) *out_child_node = nullptr;
+        if(outChildNode) *outChildNode = nullptr;
     }
 }
 
@@ -1391,21 +1391,21 @@ void ReaderSetter::set(
  * @brief Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
  *
- * @param child_name Name of the child node.
+ * @param childName Name of the child node.
  * @param var The var to set. This is an unsigned integer.
- * @param out_child_node If not nullptr, the node from whence the value came
+ * @param outChildNode If not nullptr, the node from whence the value came
  * is placed here. nullptr is placed if the property does not exist or has
  * no value.
  */
 void ReaderSetter::set(
-    const string &child_name, unsigned int &var, DataNode** out_child_node
+    const string &childName, unsigned int &var, DataNode** outChildNode
 ) {
-    DataNode* n = node->getChildByName(child_name);
+    DataNode* n = node->getChildByName(childName);
     if(!n->value.empty()) {
-        if(out_child_node) *out_child_node = n;
+        if(outChildNode) *outChildNode = n;
         var = s2i(n->value);
     } else {
-        if(out_child_node) *out_child_node = nullptr;
+        if(outChildNode) *outChildNode = nullptr;
     }
 }
 
@@ -1414,21 +1414,21 @@ void ReaderSetter::set(
  * @brief Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
  *
- * @param child_name Name of the child node.
+ * @param childName Name of the child node.
  * @param var The var to set. This is an unsigned char.
- * @param out_child_node If not nullptr, the node from whence the value came
+ * @param outChildNode If not nullptr, the node from whence the value came
  * is placed here. nullptr is placed if the property does not exist or has
  * no value.
  */
 void ReaderSetter::set(
-    const string &child_name, unsigned char &var, DataNode** out_child_node
+    const string &childName, unsigned char &var, DataNode** outChildNode
 ) {
-    DataNode* n = node->getChildByName(child_name);
+    DataNode* n = node->getChildByName(childName);
     if(!n->value.empty()) {
-        if(out_child_node) *out_child_node = n;
+        if(outChildNode) *outChildNode = n;
         var = s2i(n->value);
     } else {
-        if(out_child_node) *out_child_node = nullptr;
+        if(outChildNode) *outChildNode = nullptr;
     }
 }
 
@@ -1437,21 +1437,21 @@ void ReaderSetter::set(
  * @brief Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
  *
- * @param child_name Name of the child node.
+ * @param childName Name of the child node.
  * @param var The var to set. This is a boolean.
- * @param out_child_node If not nullptr, the node from whence the value came
+ * @param outChildNode If not nullptr, the node from whence the value came
  * is placed here. nullptr is placed if the property does not exist or has
  * no value.
  */
 void ReaderSetter::set(
-    const string &child_name, bool &var, DataNode** out_child_node
+    const string &childName, bool &var, DataNode** outChildNode
 ) {
-    DataNode* n = node->getChildByName(child_name);
+    DataNode* n = node->getChildByName(childName);
     if(!n->value.empty()) {
-        if(out_child_node) *out_child_node = n;
+        if(outChildNode) *outChildNode = n;
         var = s2b(n->value);
     } else {
-        if(out_child_node) *out_child_node = nullptr;
+        if(outChildNode) *outChildNode = nullptr;
     }
 }
 
@@ -1460,21 +1460,21 @@ void ReaderSetter::set(
  * @brief Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
  *
- * @param child_name Name of the child node.
+ * @param childName Name of the child node.
  * @param var The var to set. This is a float.
- * @param out_child_node If not nullptr, the node from whence the value came
+ * @param outChildNode If not nullptr, the node from whence the value came
  * is placed here. nullptr is placed if the property does not exist or has
  * no value.
  */
 void ReaderSetter::set(
-    const string &child_name, float &var, DataNode** out_child_node
+    const string &childName, float &var, DataNode** outChildNode
 ) {
-    DataNode* n = node->getChildByName(child_name);
+    DataNode* n = node->getChildByName(childName);
     if(!n->value.empty()) {
-        if(out_child_node) *out_child_node = n;
+        if(outChildNode) *outChildNode = n;
         var = s2f(n->value);
     } else {
-        if(out_child_node) *out_child_node = nullptr;
+        if(outChildNode) *outChildNode = nullptr;
     }
 }
 
@@ -1483,21 +1483,21 @@ void ReaderSetter::set(
  * @brief Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
  *
- * @param child_name Name of the child node.
+ * @param childName Name of the child node.
  * @param var The var to set. This is a double.
- * @param out_child_node If not nullptr, the node from whence the value came
+ * @param outChildNode If not nullptr, the node from whence the value came
  * is placed here. nullptr is placed if the property does not exist or has
  * no value.
  */
 void ReaderSetter::set(
-    const string &child_name, double &var, DataNode** out_child_node
+    const string &childName, double &var, DataNode** outChildNode
 ) {
-    DataNode* n = node->getChildByName(child_name);
+    DataNode* n = node->getChildByName(childName);
     if(!n->value.empty()) {
-        if(out_child_node) *out_child_node = n;
+        if(outChildNode) *outChildNode = n;
         var = s2f(n->value);
     } else {
-        if(out_child_node) *out_child_node = nullptr;
+        if(outChildNode) *outChildNode = nullptr;
     }
 }
 
@@ -1506,21 +1506,21 @@ void ReaderSetter::set(
  * @brief Reads a child node's value, and uses it to set a variable.
  * Will not do anything if the child's value is empty.
  *
- * @param child_name Name of the child node.
+ * @param childName Name of the child node.
  * @param var The var to set. This is a point.
- * @param out_child_node If not nullptr, the node from whence the value came
+ * @param outChildNode If not nullptr, the node from whence the value came
  * is placed here. nullptr is placed if the property does not exist or has
  * no value.
  */
 void ReaderSetter::set(
-    const string &child_name, Point &var, DataNode** out_child_node
+    const string &childName, Point &var, DataNode** outChildNode
 ) {
-    DataNode* n = node->getChildByName(child_name);
+    DataNode* n = node->getChildByName(childName);
     if(!n->value.empty()) {
-        if(out_child_node) *out_child_node = n;
+        if(outChildNode) *outChildNode = n;
         var = s2p(n->value);
     } else {
-        if(out_child_node) *out_child_node = nullptr;
+        if(outChildNode) *outChildNode = nullptr;
     }
 }
 
@@ -1596,8 +1596,8 @@ void RngManager::init() {
 /**
  * @brief Initializes the random number generator with the given seed.
  */
-void RngManager::init(int32_t initial_seed) {
-    state = initial_seed;
+void RngManager::init(int32_t initialSeed) {
+    state = initialSeed;
 }
 
 
@@ -1756,18 +1756,18 @@ bool ScriptVarReader::get(const string &name, Point &dest) const {
  *
  * @param name Name of the audio sample to load.
  * @param node If not nullptr, blame this data node if the file doesn't exist.
- * @param report_errors Only issues errors if this is true.
+ * @param reportErrors Only issues errors if this is true.
  * @return The audio sample.
  */
 ALLEGRO_SAMPLE* SampleManager::doLoad(
-    const string &name, DataNode* node, bool report_errors
+    const string &name, DataNode* node, bool reportErrors
 ) {
     const auto &it = game.content.sounds.manifests.find(name);
     string path =
         it != game.content.sounds.manifests.end() ?
         it->second.path :
         name;
-    return loadSample(path, node, report_errors);
+    return loadSample(path, node, reportErrors);
 }
 
 
@@ -1843,20 +1843,20 @@ SubgroupType* SubgroupTypeManager::getPrevType(
  *
  * @param category The category of subgroup type. Pikmin, leader,
  * bomb-rock, etc.
- * @param specific_type Specific type of mob, if you want to specify further.
+ * @param specificType Specific type of mob, if you want to specify further.
  * @return The type, or nullptr if not found.
  */
 SubgroupType* SubgroupTypeManager::getType(
     const SUBGROUP_TYPE_CATEGORY category,
-    const MobType* specific_type
+    const MobType* specificType
 ) const {
     for(size_t t = 0; t < types.size(); t++) {
-        SubgroupType* t_ptr = types[t];
+        SubgroupType* tPtr = types[t];
         if(
-            t_ptr->category == category &&
-            t_ptr->specificType == specific_type
+            tPtr->category == category &&
+            tPtr->specificType == specificType
         ) {
-            return t_ptr;
+            return tPtr;
         }
     }
     return nullptr;
@@ -1868,21 +1868,21 @@ SubgroupType* SubgroupTypeManager::getType(
  *
  * @param category The category of subgroup type. Pikmin, leader,
  * bomb-rock, etc.
- * @param specific_type Specific type of mob, if you want to specify further.
+ * @param specificType Specific type of mob, if you want to specify further.
  * @param icon If not nullptr, use this icon to represent this subgroup.
  */
 void SubgroupTypeManager::registerType(
     const SUBGROUP_TYPE_CATEGORY category,
-    MobType* specific_type,
+    MobType* specificType,
     ALLEGRO_BITMAP* icon
 ) {
-    SubgroupType* new_sg_type = new SubgroupType();
+    SubgroupType* newSgType = new SubgroupType();
     
-    new_sg_type->category = category;
-    new_sg_type->specificType = specific_type;
-    new_sg_type->icon = icon;
+    newSgType->category = category;
+    newSgType->specificType = specificType;
+    newSgType->icon = icon;
     
-    types.push_back(new_sg_type);
+    types.push_back(newSgType);
 }
 
 
@@ -2036,30 +2036,30 @@ void Whistle::stopWhistling() {
 /**
  * @brief Ticks time by one frame of logic.
  *
- * @param delta_t How long the frame's tick is, in seconds.
+ * @param deltaT How long the frame's tick is, in seconds.
  * @param center What its center is on this frame.
- * @param whistle_range How far the whistle can reach from the cursor center.
- * @param leader_to_cursor_dist Distance between the leader and the cursor.
+ * @param whistleRange How far the whistle can reach from the cursor center.
+ * @param leaderToCursorDist Distance between the leader and the cursor.
  */
 void Whistle::tick(
-    float delta_t, const Point &center,
-    float whistle_range, float leader_to_cursor_dist
+    float deltaT, const Point &center,
+    float whistleRange, float leaderToCursorDist
 ) {
     this->center = center;
     
-    fadeTimer.tick(delta_t);
+    fadeTimer.tick(deltaT);
     
     if(whistling) {
         //Create rings.
-        nextRingTimer.tick(delta_t);
-        nextDotTimer.tick(delta_t);
+        nextRingTimer.tick(deltaT);
+        nextDotTimer.tick(deltaT);
         
         for(unsigned char d = 0; d < 6; d++) {
             if(dotRadius[d] == -1) continue;
             
-            dotRadius[d] += game.config.rules.whistleGrowthSpeed * delta_t;
-            if(radius > 0 && dotRadius[d] > whistle_range) {
-                dotRadius[d] = whistle_range;
+            dotRadius[d] += game.config.rules.whistleGrowthSpeed * deltaT;
+            if(radius > 0 && dotRadius[d] > whistleRange) {
+                dotRadius[d] = whistleRange;
                 
             } else if(fadeRadius > 0 && dotRadius[d] > fadeRadius) {
                 dotRadius[d] = fadeRadius;
@@ -2069,8 +2069,8 @@ void Whistle::tick(
     
     for(size_t r = 0; r < rings.size(); ) {
         //Erase rings that go beyond the cursor.
-        rings[r] += WHISTLE::RING_SPEED * delta_t;
-        if(leader_to_cursor_dist < rings[r]) {
+        rings[r] += WHISTLE::RING_SPEED * deltaT;
+        if(leaderToCursorDist < rings[r]) {
             rings.erase(rings.begin() + r);
             ringColors.erase(ringColors.begin() + r);
         } else {

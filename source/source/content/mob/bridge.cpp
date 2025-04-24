@@ -57,49 +57,49 @@ Bridge::Bridge(const Point &pos, BridgeType* type, float angle) :
 bool Bridge::checkHealth() {
     //Figure out how many chunks should exist based on the bridge's completion.
     float completion = 1.0f - std::clamp(health / maxHealth, 0.0f, 1.0f);
-    size_t expected_chunks = floor(totalChunksNeeded * completion);
+    size_t expectedChunks = floor(totalChunksNeeded * completion);
     
-    if(chunks >= expected_chunks) {
+    if(chunks >= expectedChunks) {
         //Nothing to do here.
         return false;
     }
     
-    MobCategory* custom_category =
+    MobCategory* customCategory =
         game.mobCategories.get(MOB_CATEGORY_CUSTOM);
-    MobType* bridge_component_type =
-        custom_category->getType("bridge_component");
-    float chunk_width = totalLength / totalChunksNeeded;
-    vector<Mob*> new_mobs;
+    MobType* bridgeComponentType =
+        customCategory->getType("bridge_component");
+    float chunkWidth = totalLength / totalChunksNeeded;
+    vector<Mob*> newMobs;
     
     //Start creating all the necessary chunks.
-    while(chunks < expected_chunks) {
-        float x_offset = chunk_width / 2.0 + chunk_width * chunks;
+    while(chunks < expectedChunks) {
+        float xOffset = chunkWidth / 2.0 + chunkWidth * chunks;
         
         //Find the Z that this chunk should be at.
-        float z_offset;
+        float zOffset;
         if(chunks == totalChunksNeeded - 1) {
-            z_offset = deltaZ;
+            zOffset = deltaZ;
         } else {
-            size_t steps_needed =
+            size_t stepsNeeded =
                 ceil(fabs(deltaZ) / BRIDGE::STEP_HEIGHT) + 1;
-            float cur_completion =
+            float curCompletion =
                 chunks / (float) totalChunksNeeded;
-            size_t step_idx =
-                cur_completion * steps_needed;
-            z_offset =
-                step_idx * BRIDGE::STEP_HEIGHT * sign(deltaZ);
+            size_t stepIdx =
+                curCompletion * stepsNeeded;
+            zOffset =
+                stepIdx * BRIDGE::STEP_HEIGHT * sign(deltaZ);
         }
         
-        if(z_offset == prevChunkZOffset) {
+        if(zOffset == prevChunkZOffset) {
         
             //Just expand the existing components!
-            float old_component_width = chunk_width * prevChunkCombo;
+            float oldComponentWidth = chunkWidth * prevChunkCombo;
             prevChunkCombo++;
-            float new_component_width = chunk_width * prevChunkCombo;
+            float newComponentWidth = chunkWidth * prevChunkCombo;
             Point offset =
                 rotatePoint(
                     Point(
-                        (new_component_width - old_component_width) / 2.0f,
+                        (newComponentWidth - oldComponentWidth) / 2.0f,
                         0.0f
                     ),
                     angle
@@ -110,7 +110,7 @@ bool Bridge::checkHealth() {
                     offset;
                 prevChunkComponents[m]->setRectangularDim(
                     Point(
-                        new_component_width,
+                        newComponentWidth,
                         prevChunkComponents[m]->rectangularDim.y
                     )
                 );
@@ -119,84 +119,84 @@ bool Bridge::checkHealth() {
         } else {
         
             //Create new components. First, the floor component.
-            Point offset(x_offset, 0.0f);
+            Point offset(xOffset, 0.0f);
             offset = rotatePoint(offset, angle);
-            Mob* floor_component =
+            Mob* floorComponent =
                 createMob(
-                    custom_category,
+                    customCategory,
                     startPos + offset,
-                    bridge_component_type,
+                    bridgeComponentType,
                     angle,
-                    "side=center; offset=" + f2s(x_offset - chunk_width / 2.0f)
+                    "side=center; offset=" + f2s(xOffset - chunkWidth / 2.0f)
                 );
-            if(!floor_component->centerSector) {
+            if(!floorComponent->centerSector) {
                 //Maybe the bridge component was forced to be created over
                 //the void or something? Abort!
                 break;
             }
-            floor_component->z = startZ + z_offset;
-            floor_component->setRectangularDim(
-                Point(chunk_width, BRIDGE::FLOOR_WIDTH)
+            floorComponent->z = startZ + zOffset;
+            floorComponent->setRectangularDim(
+                Point(chunkWidth, BRIDGE::FLOOR_WIDTH)
             );
-            new_mobs.push_back(floor_component);
+            newMobs.push_back(floorComponent);
             
             //Then, the left rail component.
-            offset.x = x_offset;
+            offset.x = xOffset;
             offset.y =
                 -BRIDGE::FLOOR_WIDTH / 2.0f - briType->railWidth / 2.0f;
             offset = rotatePoint(offset, angle);
-            Mob* left_rail_component =
+            Mob* leftRailComponent =
                 createMob(
-                    custom_category,
+                    customCategory,
                     startPos + offset,
-                    bridge_component_type,
+                    bridgeComponentType,
                     angle,
-                    "side=left; offset=" + f2s(x_offset - chunk_width / 2.0f)
+                    "side=left; offset=" + f2s(xOffset - chunkWidth / 2.0f)
                 );
-            if(!left_rail_component->centerSector) {
+            if(!leftRailComponent->centerSector) {
                 //Maybe the bridge component was forced to be created over
                 //the void or something? Abort!
                 break;
             }
-            left_rail_component->z = startZ + z_offset;
-            left_rail_component->setRectangularDim(
+            leftRailComponent->z = startZ + zOffset;
+            leftRailComponent->setRectangularDim(
                 Point(
-                    floor_component->rectangularDim.x,
+                    floorComponent->rectangularDim.x,
                     briType->railWidth
                 )
             );
-            left_rail_component->height += GEOMETRY::STEP_HEIGHT * 2.0 + 1.0f;
-            new_mobs.push_back(left_rail_component);
+            leftRailComponent->height += GEOMETRY::STEP_HEIGHT * 2.0 + 1.0f;
+            newMobs.push_back(leftRailComponent);
             
             //Finally, the right rail component.
-            offset.x = x_offset;
+            offset.x = xOffset;
             offset.y = BRIDGE::FLOOR_WIDTH / 2.0f + briType->railWidth / 2.0f;
             offset = rotatePoint(offset, angle);
-            Mob* right_rail_component =
+            Mob* rightRailComponent =
                 createMob(
-                    custom_category,
+                    customCategory,
                     startPos + offset,
-                    bridge_component_type,
+                    bridgeComponentType,
                     angle,
-                    "side=right; offset=" + f2s(x_offset - chunk_width / 2.0f)
+                    "side=right; offset=" + f2s(xOffset - chunkWidth / 2.0f)
                 );
-            if(!right_rail_component->centerSector) {
+            if(!rightRailComponent->centerSector) {
                 //Maybe the bridge component was forced to be created over
                 //the void or something? Abort!
                 break;
             }
-            right_rail_component->z = startZ + z_offset;
-            right_rail_component->setRectangularDim(
-                left_rail_component->rectangularDim
+            rightRailComponent->z = startZ + zOffset;
+            rightRailComponent->setRectangularDim(
+                leftRailComponent->rectangularDim
             );
-            right_rail_component->height = left_rail_component->height;
-            new_mobs.push_back(right_rail_component);
+            rightRailComponent->height = leftRailComponent->height;
+            newMobs.push_back(rightRailComponent);
             
-            prevChunkZOffset = z_offset;
+            prevChunkZOffset = zOffset;
             prevChunkComponents.clear();
-            prevChunkComponents.push_back(floor_component);
-            prevChunkComponents.push_back(left_rail_component);
-            prevChunkComponents.push_back(right_rail_component);
+            prevChunkComponents.push_back(floorComponent);
+            prevChunkComponents.push_back(leftRailComponent);
+            prevChunkComponents.push_back(rightRailComponent);
             prevChunkCombo = 1;
             
         }
@@ -206,18 +206,18 @@ bool Bridge::checkHealth() {
     }
     
     //Finish setting up the new component mobs.
-    for(size_t m = 0; m < new_mobs.size(); m++) {
-        Mob* m_ptr = new_mobs[m];
-        enableFlag(m_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
-        m_ptr->links.push_back(this);
+    for(size_t m = 0; m < newMobs.size(); m++) {
+        Mob* mPtr = newMobs[m];
+        enableFlag(mPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
+        mPtr->links.push_back(this);
     }
     
     //Move the bridge object proper to the farthest point of the bridge.
-    float mob_radius =
+    float mobRadius =
         rectangularDim.x != 0.0f ?
         rectangularDim.x / 2.0f :
         radius;
-    Point offset(chunk_width * chunks - mob_radius, 0);
+    Point offset(chunkWidth * chunks - mobRadius, 0);
     offset = rotatePoint(offset, angle);
     pos = startPos + offset;
     z = startZ + prevChunkComponents[0]->z;
@@ -241,21 +241,21 @@ void Bridge::drawComponent(Mob* m) {
         SPRITE_BMP_EFFECT_FLAG_SECTOR_BRIGHTNESS
     );
     
-    Bridge* bri_ptr = (Bridge*) m->links[0];
+    Bridge* briPtr = (Bridge*) m->links[0];
     string side = m->vars["side"];
     ALLEGRO_BITMAP* texture =
         side == "left" ?
-        bri_ptr->briType->bmpLeftRailTexture :
+        briPtr->briType->bmpLeftRailTexture :
         side == "right" ?
-        bri_ptr->briType->bmpRightRailTexture :
-        bri_ptr->briType->bmpMainTexture;
-    int texture_h = al_get_bitmap_height(texture);
-    int texture_v0 = texture_h / 2.0f - m->rectangularDim.y / 2.0f;
-    float texture_offset = s2f(m->vars["offset"]);
+        briPtr->briType->bmpRightRailTexture :
+        briPtr->briType->bmpMainTexture;
+    int textureH = al_get_bitmap_height(texture);
+    int textureV0 = textureH / 2.0f - m->rectangularDim.y / 2.0f;
+    float textureOffset = s2f(m->vars["offset"]);
     
-    ALLEGRO_TRANSFORM angle_transform;
-    al_identity_transform(&angle_transform);
-    al_rotate_transform(&angle_transform, m->angle);
+    ALLEGRO_TRANSFORM angleTransform;
+    al_identity_transform(&angleTransform);
+    al_rotate_transform(&angleTransform, m->angle);
     
     ALLEGRO_VERTEX vertexes[8];
     for(size_t v = 0; v < 8; v++) {
@@ -266,50 +266,50 @@ void Bridge::drawComponent(Mob* m) {
     vertexes[0].color = mapGray(100);
     vertexes[0].x = m->rectangularDim.x / 2.0f;
     vertexes[0].y = -m->rectangularDim.y / 2.0f;
-    vertexes[0].u = texture_offset + m->rectangularDim.x;
-    vertexes[0].v = texture_v0;
+    vertexes[0].u = textureOffset + m->rectangularDim.x;
+    vertexes[0].v = textureV0;
     
     vertexes[1].color = mapGray(100);
     vertexes[1].x = -m->rectangularDim.x / 2.0f;
     vertexes[1].y = -m->rectangularDim.y / 2.0f;
-    vertexes[1].u = texture_offset;
-    vertexes[1].v = texture_v0;
+    vertexes[1].u = textureOffset;
+    vertexes[1].v = textureV0;
     
     vertexes[2].x = vertexes[0].x;
     vertexes[2].y = -0.5f * m->rectangularDim.y / 2.0f;
-    vertexes[2].u = texture_offset + m->rectangularDim.x;
-    vertexes[2].v = texture_v0 + 0.25f * m->rectangularDim.y;
+    vertexes[2].u = textureOffset + m->rectangularDim.x;
+    vertexes[2].v = textureV0 + 0.25f * m->rectangularDim.y;
     
     vertexes[3].x = vertexes[1].x;
     vertexes[3].y = -0.5f * m->rectangularDim.y / 2.0f;
-    vertexes[3].u = texture_offset;
-    vertexes[3].v = texture_v0 + 0.25f * m->rectangularDim.y;
+    vertexes[3].u = textureOffset;
+    vertexes[3].v = textureV0 + 0.25f * m->rectangularDim.y;
     
     vertexes[4].x = vertexes[0].x;
     vertexes[4].y = 0.5f * m->rectangularDim.y / 2.0f;
-    vertexes[4].u = texture_offset + m->rectangularDim.x;
-    vertexes[4].v = texture_v0 + 0.75f * m->rectangularDim.y;
+    vertexes[4].u = textureOffset + m->rectangularDim.x;
+    vertexes[4].v = textureV0 + 0.75f * m->rectangularDim.y;
     
     vertexes[5].x = vertexes[1].x;
     vertexes[5].y = 0.5f * m->rectangularDim.y / 2.0f;
-    vertexes[5].u = texture_offset;
-    vertexes[5].v = texture_v0 + 0.75f * m->rectangularDim.y;
+    vertexes[5].u = textureOffset;
+    vertexes[5].v = textureV0 + 0.75f * m->rectangularDim.y;
     
     vertexes[6].color = mapGray(100);
     vertexes[6].x = vertexes[0].x;
     vertexes[6].y = m->rectangularDim.y / 2.0f;
-    vertexes[6].u = texture_offset + m->rectangularDim.x;
-    vertexes[6].v = texture_v0 + m->rectangularDim.y;
+    vertexes[6].u = textureOffset + m->rectangularDim.x;
+    vertexes[6].v = textureV0 + m->rectangularDim.y;
     
     vertexes[7].color = mapGray(100);
     vertexes[7].x = vertexes[1].x;
     vertexes[7].y = m->rectangularDim.y / 2.0f;
-    vertexes[7].u = texture_offset;
-    vertexes[7].v = texture_v0 + m->rectangularDim.y;
+    vertexes[7].u = textureOffset;
+    vertexes[7].v = textureV0 + m->rectangularDim.y;
     
     for(size_t v = 0; v < 8; v++) {
         al_transform_coordinates(
-            &angle_transform, &vertexes[v].x, &vertexes[v].y
+            &angleTransform, &vertexes[v].x, &vertexes[v].y
         );
         vertexes[v].x += m->pos.x;
         vertexes[v].y += m->pos.y;

@@ -153,7 +153,7 @@ public:
     bool canGrabGroupMember(Mob* m) const;
     void dismiss();
     bool orderPikminToOnion(
-        const PikminType* type, PikminNest* n_ptr, size_t amount
+        const PikminType* type, PikminNest* nPtr, size_t amount
     );
     void queueThrow();
     void signalSwarmStart() const;
@@ -163,11 +163,11 @@ public:
     void startWhistling();
     void stopAutoThrowing();
     void stopWhistling();
-    void swapHeldPikmin(Mob* new_pik);
+    void swapHeldPikmin(Mob* newPik);
     void updateThrowVariables();
     bool canReceiveStatus(StatusType* s) const override;
     void getGroupSpotInfo(
-        Point* out_spot, float* out_dist
+        Point* outSpot, float* outDist
     ) const override;
     void drawMob() override;
     
@@ -176,7 +176,7 @@ protected:
 
     //--- Function declarations ---
     
-    void tickClassSpecifics(float delta_t) override;
+    void tickClassSpecifics(float deltaT) override;
     
 private:
 
@@ -186,12 +186,12 @@ private:
     size_t whistleSoundSourceId = 0;
     
     //Returns how many rows are needed for all members' dismissal.
-    size_t getDismissRows(size_t n_members) const;
+    size_t getDismissRows(size_t nMembers) const;
     
 };
 
 
 void changeToNextLeader(
-    bool forward, bool force_success, bool keep_idx
+    bool forward, bool forceSuccess, bool keepIdx
 );
 bool grabClosestGroupMember();

@@ -28,40 +28,40 @@ void SprayType::loadFromDataNode(
     loadMetadataFromDataNode(node);
     
     //Standard data.
-    ReaderSetter rs(node);
+    ReaderSetter sRS(node);
     
-    string effects_str;
-    string icon_str;
-    DataNode* effects_node = nullptr;
-    DataNode* icon_node = nullptr;
+    string effectsStr;
+    string iconStr;
+    DataNode* effectsNode = nullptr;
+    DataNode* iconNode = nullptr;
     
-    rs.set("effects", effects_str, &effects_node);
-    rs.set("icon", icon_str, &icon_node);
-    rs.set("group", group);
-    rs.set("group_pikmin_only", groupPikminOnly);
-    rs.set("affects_user", affectsUser);
-    rs.set("angle", angle);
-    rs.set("distance_range", distanceRange);
-    rs.set("angle_range", angleRange);
-    rs.set("color", mainColor);
-    rs.set("ingredients_needed", ingredientsNeeded);
-    rs.set("buries_pikmin", buriesPikmin);
+    sRS.set("effects", effectsStr, &effectsNode);
+    sRS.set("icon", iconStr, &iconNode);
+    sRS.set("group", group);
+    sRS.set("group_pikmin_only", groupPikminOnly);
+    sRS.set("affects_user", affectsUser);
+    sRS.set("angle", angle);
+    sRS.set("distance_range", distanceRange);
+    sRS.set("angle_range", angleRange);
+    sRS.set("color", mainColor);
+    sRS.set("ingredients_needed", ingredientsNeeded);
+    sRS.set("buries_pikmin", buriesPikmin);
     
-    if(effects_node) {
-        vector<string> effects_strs =
-            semicolonListToVector(effects_node->value);
-        for(size_t e = 0; e < effects_strs.size(); e++) {
-            string effect_name = effects_strs[e];
+    if(effectsNode) {
+        vector<string> effectsStrs =
+            semicolonListToVector(effectsNode->value);
+        for(size_t e = 0; e < effectsStrs.size(); e++) {
+            string effectName = effectsStrs[e];
             if(
-                game.content.statusTypes.list.find(effect_name) ==
+                game.content.statusTypes.list.find(effectName) ==
                 game.content.statusTypes.list.end()
             ) {
                 game.errors.report(
-                    "Unknown status effect \"" + effect_name + "\"!",
-                    effects_node
+                    "Unknown status effect \"" + effectName + "\"!",
+                    effectsNode
                 );
             } else {
-                effects.push_back(game.content.statusTypes.list[effect_name]);
+                effects.push_back(game.content.statusTypes.list[effectName]);
             }
         }
     }
@@ -70,6 +70,6 @@ void SprayType::loadFromDataNode(
     angleRange = degToRad(angleRange);
     
     if(level >= CONTENT_LOAD_LEVEL_FULL) {
-        bmpSpray = game.content.bitmaps.list.get(icon_str, icon_node);
+        bmpSpray = game.content.bitmaps.list.get(iconStr, iconNode);
     }
 }

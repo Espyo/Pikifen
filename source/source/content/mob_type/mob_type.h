@@ -34,7 +34,7 @@ using std::string;
 using std::vector;
 
 
-typedef vector<std::pair<size_t, string> > anim_conversion_vector;
+typedef vector<std::pair<size_t, string> > AnimConversionVector;
 
 namespace MOB_TYPE {
 extern const size_t ANIM_IDLING;
@@ -378,12 +378,12 @@ public:
     MOB_TARGET_FLAG targetType = MOB_TARGET_FLAG_NONE;
     
     //What types of targets this mob can hunt down.
-    bitmask_16_t huntableTargets =
+    Bitmask16 huntableTargets =
         MOB_TARGET_FLAG_PLAYER |
         MOB_TARGET_FLAG_ENEMY;
         
     //What types of targets this mob can hurt.
-    bitmask_16_t hurtableTargets =
+    Bitmask16 hurtableTargets =
         MOB_TARGET_FLAG_PLAYER |
         MOB_TARGET_FLAG_ENEMY |
         MOB_TARGET_FLAG_FRAGILE;
@@ -392,7 +392,7 @@ public:
     MOB_TEAM startingTeam = MOB_TEAM_NONE;
     
     //Logic for when it's inactive. Use INACTIVE_LOGIC_FLAG.
-    bitmask_8_t inactiveLogic = 0;
+    Bitmask8 inactiveLogic = 0;
     
     //Custom behavior callbacks.
     void(*drawMobCallback)(Mob* m) = nullptr;
@@ -484,7 +484,7 @@ public:
     );
     virtual void loadCatProperties(DataNode* file);
     virtual void loadCatResources(DataNode* file);
-    virtual anim_conversion_vector getAnimConversions() const;
+    virtual AnimConversionVector getAnimConversions() const;
     virtual void unloadResources();
     void addCarryingStates();
     
@@ -516,8 +516,8 @@ public:
     //--- Function declarations ---
     
     virtual ~MobTypeWithAnimGroups() = default;
-    anim_conversion_vector getAnimConversionsWithGroups(
-        const anim_conversion_vector &v, size_t base_anim_total
+    AnimConversionVector getAnimConversionsWithGroups(
+        const AnimConversionVector &v, size_t baseAnimTotal
     ) const;
     
 };

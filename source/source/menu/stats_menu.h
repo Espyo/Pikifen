@@ -41,7 +41,7 @@ public:
     
     //--- Function declarations ---
     void load() override;
-    void tick(float delta_t) override;
+    void tick(float deltaT) override;
     
     
 private:

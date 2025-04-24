@@ -30,14 +30,14 @@ void Liquid::loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level) {
     loadMetadataFromDataNode(node);
     
     //Standard data.
-    ReaderSetter rs(node);
+    ReaderSetter lRS(node);
     string animation_str;
     
-    rs.set("body_color", bodyColor);
-    rs.set("shine_color", shineColor);
-    rs.set("radar_color", radarColor);
-    rs.set("shine_min_threshold", shineMinThreshold);
-    rs.set("shine_max_threshold", shineMaxThreshold);
-    rs.set("distortion_amount", distortionAmount);
-    rs.set("animation_speed", animSpeed);
+    lRS.set("body_color", bodyColor);
+    lRS.set("shine_color", shineColor);
+    lRS.set("radar_color", radarColor);
+    lRS.set("shine_min_threshold", shineMinThreshold);
+    lRS.set("shine_max_threshold", shineMaxThreshold);
+    lRS.set("distortion_amount", distortionAmount);
+    lRS.set("animation_speed", animSpeed);
 }

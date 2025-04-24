@@ -74,16 +74,16 @@ string MissionFailDefeatEnemies::getEndReason(
  * end reason.
  *
  * @param gameplay Pointer to the gameplay state to get info from.
- * @param out_cam_pos The final camera position is returned here.
- * @param out_cam_zoom The final camera zoom is returned here.
+ * @param outCamPos The final camera position is returned here.
+ * @param outCamZoom The final camera zoom is returned here.
  * @return Whether the camera should zoom somewhere.
  */
 bool MissionFailDefeatEnemies::getEndZoomData(
-    GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
+    GameplayState* gameplay, Point* outCamPos, float* outCamZoom
 ) const {
     if(gameplay->lastEnemyDefeatedPos.x != LARGE_FLOAT) {
-        *out_cam_pos = gameplay->lastEnemyDefeatedPos;
-        *out_cam_zoom = gameplay->zoomLevels[0];
+        *outCamPos = gameplay->lastEnemyDefeatedPos;
+        *outCamZoom = gameplay->zoomLevels[0];
         return true;
     }
     return false;
@@ -219,16 +219,16 @@ string MissionFailLoseLeaders::getEndReason(
  * end reason.
  *
  * @param gameplay Pointer to the gameplay state to get info from.
- * @param out_cam_pos The final camera position is returned here.
- * @param out_cam_zoom The final camera zoom is returned here.
+ * @param outCamPos The final camera position is returned here.
+ * @param outCamZoom The final camera zoom is returned here.
  * @return Whether the camera should zoom somewhere.
  */
 bool MissionFailLoseLeaders::getEndZoomData(
-    GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
+    GameplayState* gameplay, Point* outCamPos, float* outCamZoom
 ) const {
     if(gameplay->lastHurtLeaderPos.x != LARGE_FLOAT) {
-        *out_cam_pos = gameplay->lastHurtLeaderPos;
-        *out_cam_zoom = gameplay->zoomLevels[0];
+        *outCamPos = gameplay->lastHurtLeaderPos;
+        *outCamZoom = gameplay->zoomLevels[0];
         return true;
     }
     return false;
@@ -362,16 +362,16 @@ string MissionFailLosePikmin::getEndReason(
  * end reason.
  *
  * @param gameplay Pointer to the gameplay state to get info from.
- * @param out_cam_pos The final camera position is returned here.
- * @param out_cam_zoom The final camera zoom is returned here.
+ * @param outCamPos The final camera position is returned here.
+ * @param outCamZoom The final camera zoom is returned here.
  * @return Whether the camera should zoom somewhere.
  */
 bool MissionFailLosePikmin::getEndZoomData(
-    GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
+    GameplayState* gameplay, Point* outCamPos, float* outCamZoom
 ) const {
     if(gameplay->lastPikminDeathPos.x != LARGE_FLOAT) {
-        *out_cam_pos = gameplay->lastPikminDeathPos;
-        *out_cam_zoom = gameplay->zoomLevels[0];
+        *outCamPos = gameplay->lastPikminDeathPos;
+        *outCamZoom = gameplay->zoomLevels[0];
         return true;
     }
     return false;
@@ -500,12 +500,12 @@ string MissionFailPauseMenu::getEndReason(
  * end reason.
  *
  * @param gameplay Pointer to the gameplay state to get info from.
- * @param out_cam_pos The final camera position is returned here.
- * @param out_cam_zoom The final camera zoom is returned here.
+ * @param outCamPos The final camera position is returned here.
+ * @param outCamZoom The final camera zoom is returned here.
  * @return Whether the camera should zoom somewhere.
  */
 bool MissionFailPauseMenu::getEndZoomData(
-    GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
+    GameplayState* gameplay, Point* outCamPos, float* outCamZoom
 ) const {
     return false;
 }
@@ -630,16 +630,16 @@ string MissionFailTakeDamage::getEndReason(
  * end reason.
  *
  * @param gameplay Pointer to the gameplay state to get info from.
- * @param out_cam_pos The final camera position is returned here.
- * @param out_cam_zoom The final camera zoom is returned here.
+ * @param outCamPos The final camera position is returned here.
+ * @param outCamZoom The final camera zoom is returned here.
  * @return Whether the camera should zoom somewhere.
  */
 bool MissionFailTakeDamage::getEndZoomData(
-    GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
+    GameplayState* gameplay, Point* outCamPos, float* outCamZoom
 ) const {
     if(gameplay->lastHurtLeaderPos.x != LARGE_FLOAT) {
-        *out_cam_pos = gameplay->lastHurtLeaderPos;
-        *out_cam_zoom = gameplay->zoomLevels[0];
+        *outCamPos = gameplay->lastHurtLeaderPos;
+        *outCamZoom = gameplay->zoomLevels[0];
         return true;
     }
     return false;
@@ -782,12 +782,12 @@ string MissionFailTimeLimit::getEndReason(
  * end reason.
  *
  * @param gameplay Pointer to the gameplay state to get info from.
- * @param out_cam_pos The final camera position is returned here.
- * @param out_cam_zoom The final camera zoom is returned here.
+ * @param outCamPos The final camera position is returned here.
+ * @param outCamZoom The final camera zoom is returned here.
  * @return Whether the camera should zoom somewhere.
  */
 bool MissionFailTimeLimit::getEndZoomData(
-    GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
+    GameplayState* gameplay, Point* outCamPos, float* outCamZoom
 ) const {
     return false;
 }
@@ -924,16 +924,16 @@ string MissionFailTooFewPikmin::getEndReason(
  * end reason.
  *
  * @param gameplay Pointer to the gameplay state to get info from.
- * @param out_cam_pos The final camera position is returned here.
- * @param out_cam_zoom The final camera zoom is returned here.
+ * @param outCamPos The final camera position is returned here.
+ * @param outCamZoom The final camera zoom is returned here.
  * @return Whether the camera should zoom somewhere.
  */
 bool MissionFailTooFewPikmin::getEndZoomData(
-    GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
+    GameplayState* gameplay, Point* outCamPos, float* outCamZoom
 ) const {
     if(gameplay->lastPikminDeathPos.x != LARGE_FLOAT) {
-        *out_cam_pos = gameplay->lastPikminDeathPos;
-        *out_cam_zoom = gameplay->zoomLevels[0];
+        *outCamPos = gameplay->lastPikminDeathPos;
+        *outCamZoom = gameplay->zoomLevels[0];
         return true;
     }
     return false;
@@ -1067,16 +1067,16 @@ string MissionFailTooManyPikmin::getEndReason(
  * end reason.
  *
  * @param gameplay Pointer to the gameplay state to get info from.
- * @param out_cam_pos The final camera position is returned here.
- * @param out_cam_zoom The final camera zoom is returned here.
+ * @param outCamPos The final camera position is returned here.
+ * @param outCamZoom The final camera zoom is returned here.
  * @return Whether the camera should zoom somewhere.
  */
 bool MissionFailTooManyPikmin::getEndZoomData(
-    GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
+    GameplayState* gameplay, Point* outCamPos, float* outCamZoom
 ) const {
     if(gameplay->lastPikminBornPos.x != LARGE_FLOAT) {
-        *out_cam_pos = gameplay->lastPikminBornPos;
-        *out_cam_zoom = gameplay->zoomLevels[0];
+        *outCamPos = gameplay->lastPikminBornPos;
+        *outCamZoom = gameplay->zoomLevels[0];
         return true;
     }
     return false;
@@ -1222,16 +1222,16 @@ string MissionGoalBattleEnemies::getEndReason(
  * end reason.
  *
  * @param gameplay Pointer to the gameplay state to get info from.
- * @param out_cam_pos The final camera position is returned here.
- * @param out_cam_zoom The final camera zoom is returned here.
+ * @param outCamPos The final camera position is returned here.
+ * @param outCamZoom The final camera zoom is returned here.
  * @return Whether the camera should zoom somewhere.
  */
 bool MissionGoalBattleEnemies::getEndZoomData(
-    GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
+    GameplayState* gameplay, Point* outCamPos, float* outCamZoom
 ) const {
     if(gameplay->lastEnemyDefeatedPos.x != LARGE_FLOAT) {
-        *out_cam_pos = gameplay->lastEnemyDefeatedPos;
-        *out_cam_zoom = gameplay->zoomLevels[0];
+        *outCamPos = gameplay->lastEnemyDefeatedPos;
+        *outCamZoom = gameplay->zoomLevels[0];
         return true;
     }
     return false;
@@ -1374,16 +1374,16 @@ string MissionGoalCollectTreasures::getEndReason(
  * end reason.
  *
  * @param gameplay Pointer to the gameplay state to get info from.
- * @param out_cam_pos The final camera position is returned here.
- * @param out_cam_zoom The final camera zoom is returned here.
+ * @param outCamPos The final camera position is returned here.
+ * @param outCamZoom The final camera zoom is returned here.
  * @return Whether the camera should zoom somewhere.
  */
 bool MissionGoalCollectTreasures::getEndZoomData(
-    GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
+    GameplayState* gameplay, Point* outCamPos, float* outCamZoom
 ) const {
     if(gameplay->lastShipThatGotTreasurePos.x != LARGE_FLOAT) {
-        *out_cam_pos = gameplay->lastShipThatGotTreasurePos;
-        *out_cam_zoom = gameplay->zoomLevels[0];
+        *outCamPos = gameplay->lastShipThatGotTreasurePos;
+        *outCamZoom = gameplay->zoomLevels[0];
         return true;
     }
     return false;
@@ -1492,16 +1492,16 @@ bool MissionGoalCollectTreasures::isMobApplicable(
         break;
     }
     case MOB_CATEGORY_RESOURCES: {
-        ResourceType* res_type = (ResourceType*) type;
+        ResourceType* resType = (ResourceType*) type;
         return
-            res_type->deliveryResult ==
+            resType->deliveryResult ==
             RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS;
         break;
     }
     case MOB_CATEGORY_PILES: {
-        PileType* pil_type = (PileType*) type;
+        PileType* pilType = (PileType*) type;
         return
-            pil_type->contents->deliveryResult ==
+            pilType->contents->deliveryResult ==
             RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS;
         break;
     }
@@ -1545,12 +1545,12 @@ string MissionGoalEndManually::getEndReason(
  * end reason.
  *
  * @param gameplay Pointer to the gameplay state to get info from.
- * @param out_cam_pos The final camera position is returned here.
- * @param out_cam_zoom The final camera zoom is returned here.
+ * @param outCamPos The final camera position is returned here.
+ * @param outCamZoom The final camera zoom is returned here.
  * @return Whether the camera should zoom somewhere.
  */
 bool MissionGoalEndManually::getEndZoomData(
-    GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
+    GameplayState* gameplay, Point* outCamPos, float* outCamZoom
 ) const {
     return false;
 }
@@ -1677,31 +1677,31 @@ string MissionGoalGetToExit::getEndReason(
  * end reason.
  *
  * @param gameplay Pointer to the gameplay state to get info from.
- * @param out_cam_pos The final camera position is returned here.
- * @param out_cam_zoom The final camera zoom is returned here.
+ * @param outCamPos The final camera position is returned here.
+ * @param outCamZoom The final camera zoom is returned here.
  * @return Whether the camera should zoom somewhere.
  */
 bool MissionGoalGetToExit::getEndZoomData(
-    GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
+    GameplayState* gameplay, Point* outCamPos, float* outCamZoom
 ) const {
     if(gameplay->missionRemainingMobIds.empty()) {
         return false;
     }
-    Point avg_pos;
-    for(size_t leader_id : gameplay->missionRemainingMobIds) {
-        Mob* leader_ptr = nullptr;
+    Point avgPos;
+    for(size_t leaderId : gameplay->missionRemainingMobIds) {
+        Mob* leaderPtr = nullptr;
         for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); m++) {
-            Mob* m_ptr = game.states.gameplay->mobs.all[m];
-            if(m_ptr->id == leader_id) {
-                leader_ptr = m_ptr;
+            Mob* mPtr = game.states.gameplay->mobs.all[m];
+            if(mPtr->id == leaderId) {
+                leaderPtr = mPtr;
                 break;
             }
         }
-        if(leader_ptr) avg_pos += leader_ptr->pos;
+        if(leaderPtr) avgPos += leaderPtr->pos;
     }
-    avg_pos.x /= gameplay->missionRemainingMobIds.size();
-    avg_pos.y /= gameplay->missionRemainingMobIds.size();
-    *out_cam_pos = avg_pos;
+    avgPos.x /= gameplay->missionRemainingMobIds.size();
+    avgPos.y /= gameplay->missionRemainingMobIds.size();
+    *outCamPos = avgPos;
     return true;
 }
 
@@ -1841,16 +1841,16 @@ string MissionGoalGrowPikmin::getEndReason(
  * end reason.
  *
  * @param gameplay Pointer to the gameplay state to get info from.
- * @param out_cam_pos The final camera position is returned here.
- * @param out_cam_zoom The final camera zoom is returned here.
+ * @param outCamPos The final camera position is returned here.
+ * @param outCamZoom The final camera zoom is returned here.
  * @return Whether the camera should zoom somewhere.
  */
 bool MissionGoalGrowPikmin::getEndZoomData(
-    GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
+    GameplayState* gameplay, Point* outCamPos, float* outCamZoom
 ) const {
     if(gameplay->lastPikminBornPos.x != LARGE_FLOAT) {
-        *out_cam_pos = gameplay->lastPikminBornPos;
-        *out_cam_zoom = gameplay->zoomLevels[0];
+        *outCamPos = gameplay->lastPikminBornPos;
+        *outCamZoom = gameplay->zoomLevels[0];
         return true;
     }
     return false;
@@ -1984,12 +1984,12 @@ string MissionGoalTimedSurvival::getEndReason(
  * end reason.
  *
  * @param gameplay Pointer to the gameplay state to get info from.
- * @param out_cam_pos The final camera position is returned here.
- * @param out_cam_zoom The final camera zoom is returned here.
+ * @param outCamPos The final camera position is returned here.
+ * @param outCamZoom The final camera zoom is returned here.
  * @return Whether the camera should zoom somewhere.
  */
 bool MissionGoalTimedSurvival::getEndZoomData(
-    GameplayState* gameplay, Point* out_cam_pos, float* out_cam_zoom
+    GameplayState* gameplay, Point* outCamPos, float* outCamZoom
 ) const {
     return false;
 }

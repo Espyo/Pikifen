@@ -40,14 +40,14 @@ enum TIME_TO_STR_FLAG {
 #define i2s(n) std::to_string((long long) (n))
 
 string amountStr(
-    int amount, const string &singular_text,
-    const string &plural_text = ""
+    int amount, const string &singularText,
+    const string &pluralText = ""
 );
 string boxString(
     const string &s, size_t size, const string &finisher = ""
 );
 string b2s(bool b);
-void duplicateString(const string &orig_str, string &new_str);
+void duplicateString(const string &origStr, string &newStr);
 string f2s(float f);
 string getMatchingStringStarts(const string &s1, const string &s2);
 string getPathLastComponent(const string &s);
@@ -64,8 +64,8 @@ vector<string> semicolonListToVector(
     const string &s, const string &sep = ";"
 );
 vector<string> split(
-    string text, const string &del = " ", bool inc_empty = false,
-    bool inc_del = false
+    string text, const string &del = " ", bool incEmpty = false,
+    bool incDel = false
 );
 bool strEndsWith(const string &s, const string &end);
 bool strPeek(const string &s, size_t where, const string &match);
@@ -84,9 +84,9 @@ string timeToStr3(
     const string &suffix1, const string &suffix2, const string &suffix3,
     uint8_t flags = 0
 );
-string trimSpaces(const string &s, bool left_only = false);
+string trimSpaces(const string &s, bool leftOnly = false);
 string trimWithEllipsis(const string &s, size_t size);
-string wordWrap(const string &s, size_t n_chars_per_line);
+string wordWrap(const string &s, size_t nCharsPerLine);
 
 
 

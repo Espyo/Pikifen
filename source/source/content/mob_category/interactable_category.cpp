@@ -87,11 +87,11 @@ void InteractableCategory::eraseMob(Mob* m) {
  * @brief Returns a type of interactable given its name,
  * or nullptr on error.
  *
- * @param internal_name Internal name of the mob type to get.
+ * @param internalName Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-MobType* InteractableCategory::getType(const string &internal_name) const {
-    auto it = game.content.mobTypes.list.interactable.find(internal_name);
+MobType* InteractableCategory::getType(const string &internalName) const {
+    auto it = game.content.mobTypes.list.interactable.find(internalName);
     if(it == game.content.mobTypes.list.interactable.end()) return nullptr;
     return it->second;
 }
@@ -112,9 +112,9 @@ void InteractableCategory::getTypeNames(vector<string> &list) const {
 /**
  * @brief Registers a created type of interactable.
  *
- * @param internal_name Internal name of the mob type.
+ * @param internalName Internal name of the mob type.
  * @param type Mob type to register.
  */
-void InteractableCategory::registerType(const string &internal_name, MobType* type) {
-    game.content.mobTypes.list.interactable[internal_name] = (InteractableType*) type;
+void InteractableCategory::registerType(const string &internalName, MobType* type) {
+    game.content.mobTypes.list.interactable[internalName] = (InteractableType*) type;
 }

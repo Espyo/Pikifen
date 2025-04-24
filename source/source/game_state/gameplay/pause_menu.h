@@ -133,12 +133,12 @@ struct PauseMenu {
     
     //--- Function declarations ---
     
-    explicit PauseMenu(bool start_on_radar);
+    explicit PauseMenu(bool startOnRadar);
     ~PauseMenu();
     void draw();
     void handleAllegroEvent(const ALLEGRO_EVENT &ev);
     void handlePlayerAction(const PlayerAction &action);
-    void tick(float delta_t);
+    void tick(float deltaT);
     
 private:
 
@@ -258,25 +258,25 @@ private:
     );
     void addPikminStatusLine(
         ListGuiItem* list,
-        PikminType* pik_type,
-        const string &group_text,
-        const string &idle_text,
-        const string &field_text,
-        const string &onion_text,
-        const string &total_text,
-        const string &new_text,
-        const string &lost_text,
-        bool is_single, bool is_totals
+        PikminType* pikType,
+        const string &groupText,
+        const string &idleText,
+        const string &fieldText,
+        const string &onionText,
+        const string &totalText,
+        const string &newText,
+        const string &lostText,
+        bool isSingle, bool isTotals
     );
     void calculateGoHerePath();
     void confirmOrLeave();
     ButtonGuiItem* createPageButton(
-        PAUSE_MENU_PAGE target_page, bool left, GuiManager* cur_gui
+        PAUSE_MENU_PAGE targetPage, bool left, GuiManager* curGui
     );
-    void createPageButtons(PAUSE_MENU_PAGE cur_page, GuiManager* cur_gui);
+    void createPageButtons(PAUSE_MENU_PAGE curPage, GuiManager* curGui);
     void drawGoHereSegment(
         const Point &start, const Point &end,
-        const ALLEGRO_COLOR &color, float* texture_point
+        const ALLEGRO_COLOR &color, float* texturePoint
     );
     void drawRadar(const Point &center, const Point &size);
     void fillMissionFailList(ListGuiItem* list);
@@ -289,14 +289,14 @@ private:
     void initStatusPage();
     void panRadar(Point amount);
     void radarConfirm();
-    void startClosing(GuiManager* cur_gui);
+    void startClosing(GuiManager* curGui);
     void startLeavingGameplay();
     void switchPage(
-        GuiManager* cur_gui, PAUSE_MENU_PAGE new_page, bool left
+        GuiManager* curGui, PAUSE_MENU_PAGE newPage, bool left
     );
     void zoomRadar(float amount);
     void zoomRadarWithMouse(
-        float amount, const Point &radar_center, const Point &radar_size
+        float amount, const Point &radarCenter, const Point &radarSize
     );
     
 };
