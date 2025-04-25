@@ -58,19 +58,18 @@ void Pile::changeAmount(int change) {
  * This only keeps in mind things specific to this class, so it shouldn't
  * check for things like carrying, which is global to all mobs.
  *
- * @param fractionValueNr The fraction's value (upper) number gets set here.
- * @param fractionReqNr The fraction's required (lower) number gets set here.
- * @param fractionColor The fraction's color gets set here.
+ * @param outValueNr The fraction's value (upper) number is returned here.
+ * @param outReqNr The fraction's required (lower) number is returned here.
+ * @param outColor The fraction's color is returned here.
  * @return Whether the numbers should be shown.
  */
 bool Pile::getFractionNumbersInfo(
-    float* fractionValueNr, float* fractionReqNr,
-    ALLEGRO_COLOR* fractionColor
+    float* outValueNr, float* outReqNr, ALLEGRO_COLOR* outColor
 ) const {
     if(amount == 0 || !pilType->showAmount) return false;
-    *fractionValueNr = amount;
-    *fractionReqNr = 0;
-    *fractionColor = game.config.aestheticGen.carryingColorStop;
+    *outValueNr = amount;
+    *outReqNr = 0;
+    *outColor = game.config.aestheticGen.carryingColorStop;
     return true;
 }
 

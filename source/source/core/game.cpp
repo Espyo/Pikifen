@@ -383,14 +383,15 @@ int Game::start() {
     
     //Panic check: is there a game_data folder?
     if(folderToVector(FOLDER_PATHS_FROM_ROOT::GAME_DATA, true).empty()) {
-        showSystemMessageBox(
-            nullptr, "game_data folder not found!",
-            "game_data folder not found!",
-            "Could not find the \"game_data\" folder! "
+        string header =
+            FOLDER_NAMES::GAME_DATA + " folder not found!";
+        string text =
+            "Could not find the \"" + FOLDER_NAMES::GAME_DATA + "\" folder! "
             "If you are running the engine from a zip file, "
-            "you have to unpack it first.",
-            nullptr,
-            ALLEGRO_MESSAGEBOX_ERROR
+            "you have to unpack it first.";
+        showSystemMessageBox(
+            nullptr, header.c_str(), header.c_str(), text.c_str(),
+            nullptr, ALLEGRO_MESSAGEBOX_ERROR
         );
         return -1;
     }

@@ -331,6 +331,7 @@ void MakerTools::loadFromDataNode(DataNode* node) {
         };
         for(unsigned char s = 0; s < 3; s++) {
             ReaderSetter aRS(settingsNodes[s]);
+            
             aRS.set("size", areaImageSettings[s].size);
             aRS.set("padding", areaImageSettings[s].padding);
             aRS.set("mobs", areaImageSettings[s].mobs);
@@ -342,6 +343,7 @@ void MakerTools::loadFromDataNode(DataNode* node) {
     {
         DataNode* autoStartNode = node->getChildByName("auto_start");
         ReaderSetter aRS(autoStartNode);
+        
         aRS.set("state", autoStartState);
         aRS.set("option", autoStartOption);
     }
@@ -356,6 +358,7 @@ void MakerTools::loadFromDataNode(DataNode* node) {
         };
         for(unsigned char s = 0; s < 3; s++) {
             ReaderSetter sRS(settingsNodes[s]);
+            
             sRS.set("multiplier", changeSpeedSettings[s]);
         }
     }
@@ -370,9 +373,10 @@ void MakerTools::loadFromDataNode(DataNode* node) {
         };
         for(unsigned char s = 0; s < 3; s++) {
             ReaderSetter hRS(settingsNodes[s]);
-            DataNode* n;
-            hRS.set("percentage", mobHurtingSettings[s], &n);
-            if(n) {
+            
+            DataNode* percentageNode = nullptr;
+            hRS.set("percentage", mobHurtingSettings[s], &percentageNode);
+            if(percentageNode) {
                 mobHurtingSettings[s] /= 100.0f;
             }
         }
@@ -382,6 +386,7 @@ void MakerTools::loadFromDataNode(DataNode* node) {
     {
         DataNode* perfMonNode = node->getChildByName("performance_monitor");
         ReaderSetter pRS(perfMonNode);
+        
         pRS.set("enabled", usePerfMon);
     }
 }
@@ -425,6 +430,7 @@ void MakerTools::saveToDataNode(DataNode* node) {
         };
         for(unsigned char s = 0; s < 3; s++) {
             GetterWriter sGW(settingsNodes[s]);
+            
             sGW.write("size", areaImageSettings[s].size);
             sGW.write("padding", areaImageSettings[s].padding);
             sGW.write("mobs", areaImageSettings[s].mobs);
@@ -436,6 +442,7 @@ void MakerTools::saveToDataNode(DataNode* node) {
     {
         DataNode* autoStartNode = node->addNew("auto_start");
         GetterWriter aGW(autoStartNode);
+        
         aGW.write("state", autoStartState);
         aGW.write("option", autoStartOption);
     }
@@ -450,6 +457,7 @@ void MakerTools::saveToDataNode(DataNode* node) {
         };
         for(unsigned char s = 0; s < 3; s++) {
             GetterWriter sGW(settingsNodes[s]);
+            
             sGW.write("multiplier", changeSpeedSettings[s]);
         }
     }
@@ -464,6 +472,7 @@ void MakerTools::saveToDataNode(DataNode* node) {
         };
         for(unsigned char s = 0; s < 3; s++) {
             GetterWriter sGW(settingsNodes[s]);
+            
             sGW.write("percentage", mobHurtingSettings[s] * 100.0f);
         }
     }
@@ -472,6 +481,7 @@ void MakerTools::saveToDataNode(DataNode* node) {
     {
         DataNode* perfMonNode = node->addNew("performance_monitor");
         GetterWriter pGW(perfMonNode);
+
         pGW.write("enabled", usePerfMon);
     }
 }

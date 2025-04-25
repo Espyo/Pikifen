@@ -268,6 +268,7 @@ void Options::loadFromDataNode(DataNode* file) {
     //Animation editor.
     {
         ReaderSetter aRS(file->getChildByName("animation_editor"));
+        
         string historyStr;
         
         aRS.set("bg_path", animEd.bgPath);
@@ -279,6 +280,7 @@ void Options::loadFromDataNode(DataNode* file) {
     //Area editor.
     {
         ReaderSetter aRS(file->getChildByName("area_editor"));
+        
         string historyStr;
         unsigned char snapModeChar = areaEd.snapMode;
         unsigned char viewModeChar = areaEd.viewMode;
@@ -342,6 +344,7 @@ void Options::loadFromDataNode(DataNode* file) {
     //Controls.
     {
         ReaderSetter cRS(file->getChildByName("controls"));
+        
         unsigned char autoThrowModeChar = controls.autoThrowMode;
         
         cRS.set("auto_throw_mode", autoThrowModeChar);
@@ -357,6 +360,7 @@ void Options::loadFromDataNode(DataNode* file) {
     //Editors.
     {
         ReaderSetter eRS(file->getChildByName("editors"));
+        
         string openNodesStr;
         
         eRS.set("highlight_color", editors.highlightColor);
@@ -386,6 +390,7 @@ void Options::loadFromDataNode(DataNode* file) {
     //Graphics.
     {
         ReaderSetter gRS(file->getChildByName("graphics"));
+        
         string resolutionStr;
         
         gRS.set("fullscreen", graphics.intendedWinFullscreen);
@@ -403,6 +408,7 @@ void Options::loadFromDataNode(DataNode* file) {
     //Gui editor.
     {
         ReaderSetter gRS(file->getChildByName("gui_editor"));
+        
         string historyStr;
         
         gRS.set("grid_interval", guiEd.gridInterval);
@@ -415,6 +421,7 @@ void Options::loadFromDataNode(DataNode* file) {
     //Misc.
     {
         ReaderSetter mRS(file->getChildByName("misc"));
+        
         unsigned char leavingConfModeChar = misc.leavingConfMode;
         
         mRS.set("cursor_cam_weight", misc.cursorCamWeight);
@@ -433,6 +440,7 @@ void Options::loadFromDataNode(DataNode* file) {
     //Packs.
     {
         ReaderSetter pRS(file->getChildByName("packs"));
+        
         string packsDisabledStr;
         string packsLoadOrderStr;
         
@@ -446,6 +454,7 @@ void Options::loadFromDataNode(DataNode* file) {
     //Particle editor.
     {
         ReaderSetter pRS(file->getChildByName("particle_editor"));
+
         string historyStr;
         
         pRS.set("bg_path", partEd.bgPath);

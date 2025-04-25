@@ -172,6 +172,7 @@ AnimConversionVector PikminType::getAnimConversions() const {
  */
 void PikminType::loadCatProperties(DataNode* file) {
     ReaderSetter pRS(file);
+    
     string attackMethodStr;
     string topLeafStr;
     string topBudStr;
@@ -243,7 +244,7 @@ void PikminType::loadCatProperties(DataNode* file) {
  */
 void PikminType::loadCatResources(DataNode* file) {
     ReaderSetter pRS(file);
-    
+
     string iconStr;
     string iconLeafStr;
     string iconBudStr;

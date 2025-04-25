@@ -1908,19 +1908,19 @@ void AreaEditor::loadBackup() {
  * @brief Loads the reference image data from the reference configuration file.
  */
 void AreaEditor::loadReference() {
-    DataNode file(game.curAreaData->userDataPath + "/" + FILE_NAMES::AREA_REFERENCE_CONFIG);
+    DataNode file(
+        game.curAreaData->userDataPath + "/" +
+        FILE_NAMES::AREA_REFERENCE_CONFIG
+    );
     
     if(file.fileWasOpened) {
-        referenceFilePath = file.getChildByName("file")->value;
-        referenceCenter = s2p(file.getChildByName("center")->value);
-        referenceSize = s2p(file.getChildByName("size")->value);
-        referenceAlpha =
-            s2i(
-                file.getChildByName(
-                    "alpha"
-                )->getValueOrDefault(i2s(AREA_EDITOR::DEF_REFERENCE_ALPHA))
-            );
-        showReference = s2b(file.getChildByName("visible")->value);
+        ReaderSetter rRS(&file);
+        
+        rRS.set("file", referenceFilePath);
+        rRS.set("center", referenceCenter);
+        rRS.set("size", referenceSize);
+        rRS.set("alpha", referenceAlpha);
+        rRS.set("visible", showReference);
         
     } else {
         referenceFilePath.clear();

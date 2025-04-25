@@ -178,7 +178,7 @@ struct MissionData {
             MISSION::EXIT_MIN_SIZE
         );
         
-    //Mission fail conditions bitmask. Use MISSION_FAIL_COND_*'s indexes.
+    //Mission fail conditions bitmask. Use MISSION_FAIL_COND's indexes.
     Bitmask8 failConditions = 0;
     
     //Amount for the "reach too few Pikmin" mission fail condition.

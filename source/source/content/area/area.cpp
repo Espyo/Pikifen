@@ -890,6 +890,7 @@ void Area::loadMainDataFromDataNode(
     
     //Area configuration data.
     ReaderSetter aRS(node);
+    
     DataNode* weatherNode = nullptr;
     DataNode* songNode = nullptr;
     
@@ -955,6 +956,7 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
     mission.failHudSecondaryCond = INVALID;
     
     ReaderSetter mRS(node);
+    
     string goalStr;
     string requiredMobsStr;
     int missionGradingModeInt = MISSION_GRADING_MODE_GOAL;
@@ -1058,21 +1060,12 @@ void Area::loadGeometryFromDataNode(
         game.perfMon->startMeasurement("Area -- Vertexes");
     }
     
-    size_t nVertexes =
-        node->getChildByName(
-            "vertexes"
-        )->getNrOfChildrenByName("v");
+    DataNode* vertexesNode = node->getChildByName("vertexes");
+    size_t nVertexes = vertexesNode->getNrOfChildren();
     for(size_t v = 0; v < nVertexes; v++) {
-        DataNode* vertexNode =
-            node->getChildByName(
-                "vertexes"
-            )->getChildByName("v", v);
-        vector<string> words = split(vertexNode->value);
-        if(words.size() == 2) {
-            vertexes.push_back(
-                new Vertex(s2f(words[0]), s2f(words[1]))
-            );
-        }
+        DataNode* vertexNode = vertexesNode->getChild(v);
+        Point coords = s2p(vertexNode->value);
+        vertexes.push_back(new Vertex(coords.x, coords.y));
     }
     
     if(game.perfMon) {
@@ -1084,56 +1077,34 @@ void Area::loadGeometryFromDataNode(
         game.perfMon->startMeasurement("Area -- Edges");
     }
     
-    size_t nEdges =
-        node->getChildByName(
-            "edges"
-        )->getNrOfChildrenByName("e");
+    DataNode* edgesNode = node->getChildByName("edges");
+    size_t nEdges = edgesNode->getNrOfChildren();
     for(size_t e = 0; e < nEdges; e++) {
-        DataNode* edgeNode =
-            node->getChildByName(
-                "edges"
-            )->getChildByName("e", e);
+        DataNode* edgeNode = edgesNode->getChild(e);
+        ReaderSetter eRS(edgeNode);
         Edge* newEdge = new Edge();
         
-        vector<string> sIdxs = split(edgeNode->getChildByName("s")->value);
+        string sectorIdxsStr;
+        string vertexIdxsStr;
+        
+        eRS.set("s", sectorIdxsStr);
+        eRS.set("v", vertexIdxsStr);
+        eRS.set("shadow_length", newEdge->wallShadowLength);
+        eRS.set("shadow_color", newEdge->wallShadowColor);
+        eRS.set("smoothing_length", newEdge->ledgeSmoothingLength);
+        eRS.set("smoothing_color", newEdge->ledgeSmoothingColor);
+        
+        vector<string> sIdxs = split(sectorIdxsStr);
         if(sIdxs.size() < 2) sIdxs.insert(sIdxs.end(), 2, "-1");
         for(size_t s = 0; s < 2; s++) {
             if(sIdxs[s] == "-1") newEdge->sectorIdxs[s] = INVALID;
             else newEdge->sectorIdxs[s] = s2i(sIdxs[s]);
         }
         
-        vector<string> vIdxs = split(edgeNode->getChildByName("v")->value);
+        vector<string> vIdxs = split(vertexIdxsStr);
         if(vIdxs.size() < 2) vIdxs.insert(vIdxs.end(), 2, "0");
-        
         newEdge->vertexIdxs[0] = s2i(vIdxs[0]);
         newEdge->vertexIdxs[1] = s2i(vIdxs[1]);
-        
-        DataNode* shadowLengthNode =
-            edgeNode->getChildByName("shadow_length");
-        if(!shadowLengthNode->value.empty()) {
-            newEdge->wallShadowLength =
-                s2f(shadowLengthNode->value);
-        }
-        
-        DataNode* shadowColorNode =
-            edgeNode->getChildByName("shadow_color");
-        if(!shadowColorNode->value.empty()) {
-            newEdge->wallShadowColor = s2c(shadowColorNode->value);
-        }
-        
-        DataNode* smoothingLengthNode =
-            edgeNode->getChildByName("smoothing_length");
-        if(!smoothingLengthNode->value.empty()) {
-            newEdge->ledgeSmoothingLength =
-                s2f(smoothingLengthNode->value);
-        }
-        
-        DataNode* smoothingColorNode =
-            edgeNode->getChildByName("smoothing_color");
-        if(!smoothingColorNode->value.empty()) {
-            newEdge->ledgeSmoothingColor =
-                s2c(smoothingColorNode->value);
-        }
         
         edges.push_back(newEdge);
     }
@@ -1147,87 +1118,55 @@ void Area::loadGeometryFromDataNode(
         game.perfMon->startMeasurement("Area -- Sectors");
     }
     
-    size_t nSectors =
-        node->getChildByName(
-            "sectors"
-        )->getNrOfChildrenByName("s");
+    DataNode* sectorsNode = node->getChildByName("sectors");
+    size_t nSectors = sectorsNode->getNrOfChildren();
     for(size_t s = 0; s < nSectors; s++) {
-        DataNode* sectorNode =
-            node->getChildByName(
-                "sectors"
-            )->getChildByName("s", s);
+        DataNode* sectorNode = sectorsNode->getChild(s);
+        ReaderSetter sRS(sectorNode);
         Sector* newSector = new Sector();
         
-        size_t newType =
-            game.sectorTypes.getIdx(
-                sectorNode->getChildByName("type")->value
-            );
+        string typeStr;
+        string hazardStr;
+        DataNode* hazardNode = nullptr;
+        
+        sRS.set("brightness", newSector->brightness);
+        sRS.set("fade", newSector->fade);
+        sRS.set("hazard", hazardStr, &hazardNode);
+        sRS.set("hazards_floor", newSector->hazardFloor);
+        sRS.set("is_bottomless_pit", newSector->isBottomlessPit);
+        sRS.set("tag", newSector->tag);
+        sRS.set("texture_rotate", newSector->textureInfo.rot);
+        sRS.set("texture_scale", newSector->textureInfo.scale);
+        sRS.set("texture_tint", newSector->textureInfo.tint);
+        sRS.set("texture_trans", newSector->textureInfo.translation);
+        sRS.set("texture", newSector->textureInfo.bmpName);
+        sRS.set("type", typeStr);
+        sRS.set("z", newSector->z);
+        
+        size_t newType = game.sectorTypes.getIdx(typeStr);
         if(newType == INVALID) {
             newType = SECTOR_TYPE_NORMAL;
         }
         newSector->type = (SECTOR_TYPE) newType;
-        newSector->isBottomlessPit =
-            s2b(
-                sectorNode->getChildByName(
-                    "is_bottomless_pit"
-                )->getValueOrDefault("false")
-            );
-        newSector->brightness =
-            s2f(
-                sectorNode->getChildByName(
-                    "brightness"
-                )->getValueOrDefault(i2s(GEOMETRY::DEF_SECTOR_BRIGHTNESS))
-            );
-        newSector->tag = sectorNode->getChildByName("tag")->value;
-        newSector->z = s2f(sectorNode->getChildByName("z")->value);
-        newSector->fade = s2b(sectorNode->getChildByName("fade")->value);
         
-        newSector->textureInfo.bmpName =
-            sectorNode->getChildByName("texture")->value;
-        newSector->textureInfo.rot =
-            s2f(sectorNode->getChildByName("texture_rotate")->value);
-            
-        vector<string> scales =
-            split(sectorNode->getChildByName("texture_scale")->value);
-        if(scales.size() >= 2) {
-            newSector->textureInfo.scale.x = s2f(scales[0]);
-            newSector->textureInfo.scale.y = s2f(scales[1]);
-        }
-        vector<string> translations =
-            split(sectorNode->getChildByName("texture_trans")->value);
-        if(translations.size() >= 2) {
-            newSector->textureInfo.translation.x = s2f(translations[0]);
-            newSector->textureInfo.translation.y = s2f(translations[1]);
-        }
-        newSector->textureInfo.tint =
-            s2c(
-                sectorNode->getChildByName("texture_tint")->
-                getValueOrDefault("255 255 255")
-            );
-            
         if(!newSector->fade && !newSector->isBottomlessPit) {
             newSector->textureInfo.bitmap =
                 game.content.bitmaps.list.get(newSector->textureInfo.bmpName, nullptr);
         }
         
-        DataNode* hazardNode = sectorNode->getChildByName("hazard");
-        if(!hazardNode->value.empty()) {
-            if(game.content.hazards.list.find(hazardNode->value) == game.content.hazards.list.end()) {
+        if(!hazardStr.empty()) {
+            if(
+                game.content.hazards.list.find(hazardStr) ==
+                game.content.hazards.list.end()
+            ) {
                 game.errors.report(
-                    "Unknown hazard \"" + hazardNode->value +
-                    "\"!", hazardNode
+                    "Unknown hazard \"" + hazardStr + "\"!", hazardNode
                 );
             } else {
-                newSector->hazard = &(game.content.hazards.list[hazardNode->value]);
+                newSector->hazard = &(game.content.hazards.list[hazardStr]);
             }
         }
-        newSector->hazardFloor =
-            s2b(
-                sectorNode->getChildByName(
-                    "hazards_floor"
-                )->getValueOrDefault("true")
-            );
-            
+        
         sectors.push_back(newSector);
     }
     
@@ -1240,58 +1179,45 @@ void Area::loadGeometryFromDataNode(
         game.perfMon->startMeasurement("Area -- Object generators");
     }
     
+    DataNode* mobsNode = node->getChildByName("mobs");
     vector<std::pair<size_t, size_t> > mobLinksBuffer;
-    size_t nMobs =
-        node->getChildByName("mobs")->getNrOfChildren();
-        
+    size_t nMobs = mobsNode->getNrOfChildren();
     for(size_t m = 0; m < nMobs; m++) {
-    
-        DataNode* mobNode =
-            node->getChildByName("mobs")->getChild(m);
-            
+        DataNode* mobNode = mobsNode->getChild(m);
+        ReaderSetter mRS(mobNode);
         MobGen* newMob = new MobGen();
+
+        string typeStr;
+        string linksStr;
         
-        newMob->pos = s2p(mobNode->getChildByName("p")->value);
-        newMob->angle =
-            s2f(
-                mobNode->getChildByName("angle")->getValueOrDefault("0")
-            );
-        newMob->vars = mobNode->getChildByName("vars")->value;
+        mRS.set("p", newMob->pos);
+        mRS.set("angle", newMob->angle);
+        mRS.set("vars", newMob->vars);
+        mRS.set("type", typeStr);
+        mRS.set("links", linksStr);
+        mRS.set("stored_inside", newMob->storedInside);
         
-        string categoryName = mobNode->name;
-        string typeName;
         MobCategory* category =
-            game.mobCategories.getFromInternalName(categoryName);
+            game.mobCategories.getFromInternalName(mobNode->name);
         if(category) {
-            typeName = mobNode->getChildByName("type")->value;
-            newMob->type = category->getType(typeName);
+            newMob->type = category->getType(typeStr);
         } else {
             category = game.mobCategories.get(MOB_CATEGORY_NONE);
-            newMob->type = nullptr;
         }
         
-        vector<string> linkStrs =
-            split(mobNode->getChildByName("links")->value);
+        vector<string> linkStrs = split(linksStr);
         for(size_t l = 0; l < linkStrs.size(); l++) {
             mobLinksBuffer.push_back(std::make_pair(m, s2i(linkStrs[l])));
         }
         
-        DataNode* storedInsideNode =
-            mobNode->getChildByName("stored_inside");
-        if(!storedInsideNode->value.empty()) {
-            newMob->storedInside = s2i(storedInsideNode->value);
-        }
-        
         bool valid =
-            category && category->id != MOB_CATEGORY_NONE &&
-            newMob->type;
+            category && category->id != MOB_CATEGORY_NONE && newMob->type;
             
         if(!valid) {
             //Error.
-            newMob->type = nullptr;
             if(level >= CONTENT_LOAD_LEVEL_FULL) {
                 game.errors.report(
-                    "Unknown mob type \"" + typeName + "\" of category \"" +
+                    "Unknown mob type \"" + typeStr + "\" of category \"" +
                     mobNode->name + "\"!",
                     mobNode
                 );
@@ -1319,24 +1245,21 @@ void Area::loadGeometryFromDataNode(
         game.perfMon->startMeasurement("Area -- Paths");
     }
     
-    size_t nStops =
-        node->getChildByName("path_stops")->getNrOfChildren();
+    DataNode* stopsNode = node->getChildByName("path_stops");
+    size_t nStops = stopsNode->getNrOfChildren();
     for(size_t s = 0; s < nStops; s++) {
-    
-        DataNode* pathStopNode =
-            node->getChildByName("path_stops")->getChild(s);
-            
+        DataNode* stopNode = stopsNode->getChild(s);
+        ReaderSetter sRS(stopNode);
         PathStop* newStop = new PathStop();
         
-        newStop->pos = s2p(pathStopNode->getChildByName("pos")->value);
-        newStop->radius = s2f(pathStopNode->getChildByName("radius")->value);
-        newStop->flags = s2i(pathStopNode->getChildByName("flags")->value);
-        newStop->label = pathStopNode->getChildByName("label")->value;
-        DataNode* linksNode = pathStopNode->getChildByName("links");
+        sRS.set("pos", newStop->pos);
+        sRS.set("radius", newStop->radius);
+        sRS.set("flags", newStop->flags);
+        sRS.set("label", newStop->label);
+        
+        DataNode* linksNode = stopNode->getChildByName("links");
         size_t nLinks = linksNode->getNrOfChildren();
-        
         for(size_t l = 0; l < nLinks; l++) {
-        
             string linkData = linksNode->getChild(l)->value;
             vector<string> linkDataParts = split(linkData);
             
@@ -1347,7 +1270,6 @@ void Area::loadGeometryFromDataNode(
             }
             
             newStop->links.push_back(newLink);
-            
         }
         
         newStop->radius = std::max(newStop->radius, PATHS::MIN_STOP_RADIUS);
@@ -1364,44 +1286,26 @@ void Area::loadGeometryFromDataNode(
         game.perfMon->startMeasurement("Area -- Tree shadows");
     }
     
-    size_t nShadows =
-        node->getChildByName("tree_shadows")->getNrOfChildren();
+    DataNode* shadowsNode = node->getChildByName("tree_shadows");
+    size_t nShadows = shadowsNode->getNrOfChildren();
     for(size_t s = 0; s < nShadows; s++) {
-    
-        DataNode* shadowNode =
-            node->getChildByName("tree_shadows")->getChild(s);
-            
+        DataNode* shadowNode = shadowsNode->getChild(s);
+        ReaderSetter sRS(shadowNode);
         TreeShadow* newShadow = new TreeShadow();
         
-        vector<string> words =
-            split(shadowNode->getChildByName("pos")->value);
-        newShadow->center.x = (words.size() >= 1 ? s2f(words[0]) : 0);
-        newShadow->center.y = (words.size() >= 2 ? s2f(words[1]) : 0);
+        sRS.set("pos", newShadow->center);
+        sRS.set("size", newShadow->size);
+        sRS.set("angle", newShadow->angle);
+        sRS.set("alpha", newShadow->alpha);
+        sRS.set("file", newShadow->bmpName);
+        sRS.set("sway", newShadow->sway);
         
-        words = split(shadowNode->getChildByName("size")->value);
-        newShadow->size.x = (words.size() >= 1 ? s2f(words[0]) : 0);
-        newShadow->size.y = (words.size() >= 2 ? s2f(words[1]) : 0);
-        
-        newShadow->angle =
-            s2f(
-                shadowNode->getChildByName(
-                    "angle"
-                )->getValueOrDefault("0")
-            );
-        newShadow->alpha =
-            s2i(
-                shadowNode->getChildByName(
-                    "alpha"
-                )->getValueOrDefault("255")
-            );
-        newShadow->bmpName = shadowNode->getChildByName("file")->value;
-        newShadow->bitmap = game.content.bitmaps.list.get(newShadow->bmpName, nullptr);
-        
-        words = split(shadowNode->getChildByName("sway")->value);
-        newShadow->sway.x = (words.size() >= 1 ? s2f(words[0]) : 0);
-        newShadow->sway.y = (words.size() >= 2 ? s2f(words[1]) : 0);
-        
-        if(newShadow->bitmap == game.bmpError && level >= CONTENT_LOAD_LEVEL_FULL) {
+        newShadow->bitmap =
+            game.content.bitmaps.list.get(newShadow->bmpName, nullptr);
+        if(
+            newShadow->bitmap == game.bmpError &&
+            level >= CONTENT_LOAD_LEVEL_FULL
+        ) {
             game.errors.report(
                 "Unknown tree shadow texture \"" + newShadow->bmpName + "\"!",
                 shadowNode
@@ -1409,7 +1313,6 @@ void Area::loadGeometryFromDataNode(
         }
         
         treeShadows.push_back(newShadow);
-        
     }
     
     if(game.perfMon) {
@@ -1422,24 +1325,16 @@ void Area::loadGeometryFromDataNode(
     }
     
     for(size_t e = 0; e < edges.size(); e++) {
-        fixEdgePointers(
-            edges[e]
-        );
+        fixEdgePointers(edges[e]);
     }
     for(size_t s = 0; s < sectors.size(); s++) {
-        connectSectorEdges(
-            sectors[s]
-        );
+        connectSectorEdges(sectors[s]);
     }
     for(size_t v = 0; v < vertexes.size(); v++) {
-        connectVertexEdges(
-            vertexes[v]
-        );
+        connectVertexEdges(vertexes[v]);
     }
     for(size_t s = 0; s < pathStops.size(); s++) {
-        fixPathStopPointers(
-            pathStops[s]
-        );
+        fixPathStopPointers(pathStops[s]);
     }
     for(size_t s = 0; s < pathStops.size(); s++) {
         pathStops[s]->calculateDists();
@@ -1454,7 +1349,7 @@ void Area::loadGeometryFromDataNode(
                 Sector* n2 = nullptr;
                 sPtr->getTextureMergeSectors(&n1, &n2);
                 if(n1 && n2) {
-                    sPtr->brightness = (n1->brightness + n2->brightness) / 2;
+                    sPtr->brightness = (n1->brightness + n2->brightness) / 2.0f;
                 }
             }
         }

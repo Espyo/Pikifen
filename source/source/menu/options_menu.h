@@ -51,9 +51,9 @@ enum CONTROL_BINDS_MENU_TYPE {
 /**
  * @brief Info on how a picker GUI item in the options menu should work.
  *
- * @tparam t The type of value the picker controls.
+ * @tparam ValueT The type of value the picker controls.
  */
-template<typename t>
+template<typename ValueT>
 class OptionsMenuPickerGuiItem : public PickerGuiItem {
 
 public:
@@ -61,16 +61,16 @@ public:
     //--- Members ---
     
     //Points to the current value.
-    t* curValue = nullptr;
+    ValueT* curValue = nullptr;
     
     //Default value.
-    const t defValue = t();
+    const ValueT defValue = ValueT();
     
     //Tooltip, sans default. Used if the presets don't have their own tooltips.
     string tooltip;
     
     //Value of each preset.
-    vector<t> presetValues;
+    vector<ValueT> presetValues;
     
     //Name of each preset.
     vector<string> presetNames;
@@ -82,7 +82,7 @@ public:
     std::function<void()> afterChange = nullptr;
     
     //Converts a value to a string. Used in the tooltip's default, if necessary.
-    std::function<string(t)> valueToString = nullptr;
+    std::function<string(ValueT)> valueToString = nullptr;
     
     
     //--- Function definitions ---
@@ -98,8 +98,8 @@ public:
      * @param tooltip Base tooltip.
      */
     OptionsMenuPickerGuiItem(
-        const string &baseText, t* curValue, const t &defValue,
-        const vector<t> &presetValues, const vector<string> &presetNames,
+        const string &baseText, ValueT* curValue, const ValueT &defValue,
+        const vector<ValueT> &presetValues, const vector<string> &presetNames,
         const string &tooltip = ""
     ) :
         PickerGuiItem(baseText, ""),

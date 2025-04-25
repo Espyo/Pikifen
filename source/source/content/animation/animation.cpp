@@ -439,6 +439,7 @@ void AnimationDatabase::loadFromDataNode(DataNode* node) {
         DataNode* spriteNode = spritesNode->getChild(s);
         ReaderSetter sRS(spriteNode);
         Sprite* newSprite = new Sprite(spriteNode->name);
+        
         DataNode* bmpNameNode = nullptr;
         
         sRS.set("file_pos", newSprite->bmpPos);
@@ -460,8 +461,9 @@ void AnimationDatabase::loadFromDataNode(DataNode* node) {
             DataNode* hitboxNode = hitboxesNode->getChild(h);
             ReaderSetter hRS(hitboxNode);
             Hitbox newHitbox;
+            
             string coordsStr;
-            int hitboxTypeInt;
+            int hitboxTypeInt = HITBOX_TYPE_NORMAL;
             string hazardStr;
             DataNode* hazardNode = nullptr;
             
@@ -508,7 +510,6 @@ void AnimationDatabase::loadFromDataNode(DataNode* node) {
     DataNode* animsNode = node->getChildByName("animations");
     size_t nAnims = animsNode->getNrOfChildren();
     for(size_t a = 0; a < nAnims; a++) {
-    
         DataNode* animNode = animsNode->getChild(a);
         ReaderSetter aRS(animNode);
         Animation* newAnim = new Animation(animNode->name);
@@ -525,6 +526,7 @@ void AnimationDatabase::loadFromDataNode(DataNode* node) {
             DataNode* frameNode = framesNode->getChild(f);
             ReaderSetter fRS(frameNode);
             Frame newFrame;
+            
             string signalStr;
             
             fRS.set("signal", signalStr);

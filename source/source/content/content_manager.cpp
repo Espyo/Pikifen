@@ -153,6 +153,7 @@ bool ContentManager::createPack(
     //Create the data file.
     DataNode data;
     GetterWriter pGW(&data);
+
     pGW.write("name", name);
     pGW.write("description", description);
     pGW.write("maker", maker);
@@ -334,9 +335,10 @@ void PackManager::loadAll() {
                 FILE_NAMES::PACK_DATA
             );
             
-        Pack packData;
-        packData.name = manifestsWithBaseRaw[p];
         ReaderSetter pRS(&packFile);
+        Pack packData;
+        
+        packData.name = manifestsWithBaseRaw[p];
         pRS.set("name", packData.name);
         pRS.set("description", packData.description);
         pRS.set("tags", packData.tags);

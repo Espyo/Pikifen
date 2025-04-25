@@ -65,20 +65,19 @@ float Scale::calculateCurWeight() const {
  * This only keeps in mind things specific to this class, so it shouldn't
  * check for things like carrying, which is global to all mobs.
  *
- * @param fractionvalue_nr The fraction's value (upper) number gets set here.
- * @param fractionReqNr The fraction's required (lower) number gets set here.
- * @param fractionColor The fraction's color gets set here.
+ * @param outValueNr The fraction's value (upper) number is returned here.
+ * @param outReqNr The fraction's required (lower) number is returned here.
+ * @param outColor The fraction's color is returned here.
  * @return Whether the numbers should be shown.
  */
 bool Scale::getFractionNumbersInfo(
-    float* fractionValueNr, float* fractionReqNr,
-    ALLEGRO_COLOR* fractionColor
+    float* outValueNr, float* outReqNr, ALLEGRO_COLOR* outColor
 ) const {
     float weight = calculateCurWeight();
     if(weight <= 0 || health <= 0) return false;
-    *fractionValueNr = weight;
-    *fractionReqNr = goalNumber;
-    *fractionColor = game.config.aestheticGen.carryingColorStop;
+    *outValueNr = weight;
+    *outReqNr = goalNumber;
+    *outColor = game.config.aestheticGen.carryingColorStop;
     return true;
 }
 

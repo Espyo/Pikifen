@@ -47,9 +47,9 @@ enum HUD_BUBBLE_MOVE_METHOD {
  * that is in charge of showing it moving. For the second half, it's the new
  * GUI item.
 
- * @tparam t Type of content the bubble holds.
+ * @tparam ContentT Type of content the bubble holds.
  */
-template<typename t>
+template<typename ContentT>
 struct HudBubbleManager {
 
     public:
@@ -70,13 +70,13 @@ struct HudBubbleManager {
         void* ref = nullptr;
         
         //Content that it holds.
-        t content = t();
+        ContentT content = ContentT();
         
         //Reference pre-transition.
         void* preTransitionRef = nullptr;
         
         //Content that it held, pre-transition.
-        t preTransitionContent = t();
+        ContentT preTransitionContent = ContentT();
         
         
         //--- Function definitions ---
@@ -128,20 +128,20 @@ struct HudBubbleManager {
     */
     void getDrawingInfo(
         size_t id,
-        t* content, DrawInfo* draw
+        ContentT* content, DrawInfo* draw
     ) {
         float transitionAnimRatio = transitionTimer / transitionDuration;
         
         auto it = bubbles.find(id);
         if(it == bubbles.end()) {
-            *content = t();
+            *content = ContentT();
             return;
         }
         
         bool visible = hud->getItemDrawInfo(it->second.bubble, draw);
         
         if(!visible) {
-            *content = t();
+            *content = ContentT();
             return;
         }
         
@@ -320,7 +320,7 @@ struct HudBubbleManager {
     * @param newRef New reference.
     * @param newContent New content.
     */
-    void update(size_t id, void* newRef, t newContent) {
+    void update(size_t id, void* newRef, ContentT newContent) {
         auto it = bubbles.find(id);
         if(it == bubbles.end()) return;
         if(it->second.ref != newRef && !transitionIsSetup) {

@@ -85,7 +85,7 @@ enum STRING_TOKEN {
     STRING_TOKEN_LINE_BREAK,
     
     //A control bind icon.
-    STRING_TOKEN_CONTROL_BIND,
+    STRING_TOKEN_BIND_INPUT,
     
 };
 

@@ -238,16 +238,16 @@ Point v2p(const Vertex* v);
  * @brief Goes through all keyframes in a keyframe interpolator, and lets you
  * adjust the value in each one, by running the "predicate" function for each.
  *
- * @tparam t Value type for the interpolator.
+ * @tparam ValueT Value type for the interpolator.
  * @param interpolator Interpolator to adjust.
  * @param predicate Function whose argument is the original value at that
  * keyframe, and whose return value is the new value.
  * @return Whether the operation succeeded.
  */
-template<typename t>
+template<typename ValueT>
 bool adjustKeyframeInterpolatorValues(
-    KeyframeInterpolator<t> &interpolator,
-    std::function<t(const t &)> predicate
+    KeyframeInterpolator<ValueT> &interpolator,
+    std::function<ValueT(const ValueT &)> predicate
 ) {
     bool result = false;
     size_t nKeyframes = interpolator.getKeyframeCount();

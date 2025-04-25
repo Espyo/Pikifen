@@ -42,8 +42,7 @@ public:
     void recharge();
     void update();
     bool getFractionNumbersInfo(
-        float* fractionValueNr, float* fractionReqNr,
-        ALLEGRO_COLOR* fractionColor
+        float* outValueNr, float* outReqNr, ALLEGRO_COLOR* outColor
     ) const override;
     void readScriptVars(const ScriptVarReader &svr) override;
     

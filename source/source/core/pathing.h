@@ -180,7 +180,7 @@ struct PathFollowSettings {
     //the destination, use this for the target distance parameter.
     float finalTargetDistance = PATHS::DEF_CHASE_TARGET_DISTANCE;
     
-    //Some flags. Use PATH_FOLLOW_FLAG_*.
+    //Some flags. Use PATH_FOLLOW_FLAG.
     Bitmask8 flags = 0;
     
     //Invulnerabilities of the mob/carriers.

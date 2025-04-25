@@ -73,8 +73,7 @@ public:
     void finishTask();
     void freeUpSpot(Pikmin* whose);
     bool getFractionNumbersInfo(
-        float* fractionValueNr, float* fractionReqNr,
-        ALLEGRO_COLOR* fractionColor
+        float* outValueNr, float* outReqNr, ALLEGRO_COLOR* outColor
     ) const override;
     GroupTaskSpot* getFreeSpot();
     float getPower() const;

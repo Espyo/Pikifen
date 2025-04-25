@@ -1324,7 +1324,7 @@ void GameplayState::drawGameplayMessageBox() {
                 );
                 break;
             }
-            case STRING_TOKEN_CONTROL_BIND: {
+            case STRING_TOKEN_BIND_INPUT: {
                 drawPlayerInputSourceIcon(
                     game.sysContent.fntSlim,
                     game.controls.findBind(curToken.content).inputSource,

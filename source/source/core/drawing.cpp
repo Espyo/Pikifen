@@ -28,7 +28,7 @@
 #include "game.h"
 #include "misc_functions.h"
 
-namespace CONTROL_BIND_ICON {
+namespace BIND_INPUT_ICON {
 
 //Base rectangle outline color.
 const ALLEGRO_COLOR BASE_OUTLINE_COLOR = {0.10f, 0.10f, 0.10f, 1.0f};
@@ -75,7 +75,7 @@ const float LOADING_SCREEN_TEXT_WIDTH = 0.70f;
 const unsigned char NOTIFICATION_ALPHA = 160;
 
 //Size of a control bind icon in a notification.
-const float NOTIFICATION_CONTROL_SIZE = 24.0f;
+const float NOTIFICATION_INPUT_SIZE = 24.0f;
 
 //Padding between a notification's text and its limit.
 const float NOTIFICATION_PADDING = 8.0f;
@@ -1018,7 +1018,7 @@ void drawPlayerInputSourceIcon(
     
     //Final text color.
     const ALLEGRO_COLOR finalTextColor =
-        changeAlpha(CONTROL_BIND_ICON::BASE_TEXT_COLOR, alpha);
+        changeAlpha(BIND_INPUT_ICON::BASE_TEXT_COLOR, alpha);
         
     //Start by getting the icon's info for drawing.
     PLAYER_INPUT_ICON_SHAPE shape;
@@ -1056,12 +1056,12 @@ void drawPlayerInputSourceIcon(
     );
     float totalWidth =
         std::min(
-            (float) (textW + CONTROL_BIND_ICON::PADDING * 2),
+            (float) (textW + BIND_INPUT_ICON::PADDING * 2),
             (maxSize.x == 0 ? FLT_MAX : maxSize.x)
         );
     float totalHeight =
         std::min(
-            (float) (textH + CONTROL_BIND_ICON::PADDING * 2),
+            (float) (textH + BIND_INPUT_ICON::PADDING * 2),
             (maxSize.y == 0 ? FLT_MAX : maxSize.y)
         );
     //Force it to always be a square or horizontal rectangle. Never vertical.
@@ -1092,8 +1092,8 @@ void drawPlayerInputSourceIcon(
     drawText(
         text, font, where,
         Point(
-            (maxSize.x == 0 ? 0 : maxSize.x - CONTROL_BIND_ICON::PADDING),
-            (maxSize.y == 0 ? 0 : maxSize.y - CONTROL_BIND_ICON::PADDING)
+            (maxSize.x == 0 ? 0 : maxSize.x - BIND_INPUT_ICON::PADDING),
+            (maxSize.y == 0 ? 0 : maxSize.y - BIND_INPUT_ICON::PADDING)
         ),
         finalTextColor, ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
         TEXT_SETTING_FLAG_CANT_GROW | TEXT_SETTING_COMPENSATE_Y_OFFSET
@@ -1265,8 +1265,8 @@ void drawStatusEffectBmp(const Mob* m, BitmapEffect &effects) {
  *
  * @param tokens Vector of tokens to draw.
  * @param textFont Text font.
- * @param controlFont Font for control bind icons.
- * @param controlsCondensed Whether control binds should be condensed.
+ * @param inputFont Font for control bind input icons.
+ * @param inputCondensed Whether control bind inputs should be condensed.
  * @param where Top-left coordinates to draw at.
  * @param flags Allegro text flags.
  * @param maxSize Maximum width and height of the whole thing.
@@ -1274,7 +1274,7 @@ void drawStatusEffectBmp(const Mob* m, BitmapEffect &effects) {
  */
 void drawStringTokens(
     const vector<StringToken> &tokens, const ALLEGRO_FONT* const textFont,
-    const ALLEGRO_FONT* const controlFont, bool controlsCondensed,
+    const ALLEGRO_FONT* const inputFont, bool inputCondensed,
     const Point &where, int flags, const Point &maxSize,
     const Point &scale
 ) {
@@ -1313,11 +1313,11 @@ void drawStringTokens(
             );
             break;
         }
-        case STRING_TOKEN_CONTROL_BIND: {
+        case STRING_TOKEN_BIND_INPUT: {
             drawPlayerInputSourceIcon(
-                controlFont,
+                inputFont,
                 game.controls.findBind(tokens[t].content).inputSource,
-                controlsCondensed,
+                inputCondensed,
                 Point(
                     caret + tokenFinalWidth / 2.0f,
                     where.y + maxSize.y / 2.0f
@@ -1336,7 +1336,8 @@ void drawStringTokens(
 
 
 /**
- * @brief Returns information about how a control bind icon should be drawn.
+ * @brief Returns information about how a control bind input icon should
+ * be drawn.
  *
  * @param s Info on the player input source.
  * If invalid, a "NONE" icon will be used.
@@ -1347,7 +1348,7 @@ void drawStringTokens(
  * it is, etc.
  * @param shape The shape is returned here.
  * @param bitmapSprite If it's one of the icons in the control bind
- * icon spritesheet, the index of the sprite is returned here.
+ * input icon spritesheet, the index of the sprite is returned here.
  * @param text The text to be written inside is returned here, or an
  * empty string is returned if there's nothing to write.
  */
@@ -1545,7 +1546,7 @@ void getPlayerInputIconInfo(
 
 
 /**
- * @brief Returns the width of a control bind icon, for drawing purposes.
+ * @brief Returns the width of a control bind input icon, for drawing purposes.
  *
  * @param font Font to use for the name, if necessary.
  * @param i Info on the player input. If invalid, a "NONE" icon will be used.
@@ -1583,6 +1584,6 @@ float getPlayerInputIconWidth(
     } else {
         return
             al_get_text_width(font, text.c_str()) +
-            CONTROL_BIND_ICON::PADDING * 2;
+            BIND_INPUT_ICON::PADDING * 2;
     }
 }

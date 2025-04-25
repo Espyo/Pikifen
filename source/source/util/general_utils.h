@@ -505,19 +505,19 @@ string sanitizeFileName(const string &s);
 /**
  * @brief Deterministically randomly shuffles the contents of a vector.
  *
- * @tparam t Type of contents of the vector.
+ * @tparam ContentT Type of contents of the vector.
  * @param v The vector to shuffle.
  * @param pickRandomFloats Vector of previously-determined random floats to
  * calculate the picks with [0, 1]. This vector must be of the same size
  * as the input vector.
  * @return The shuffled vector.
  */
-template<typename t>
-vector<t> shuffleVector(
-    const vector<t> &v, const vector<float> pickRandomFloats
+template<typename ContentT>
+vector<ContentT> shuffleVector(
+    const vector<ContentT> &v, const vector<float> pickRandomFloats
 ) {
-    vector<t> result;
-    vector<t> itemsAvailable = v;
+    vector<ContentT> result;
+    vector<ContentT> itemsAvailable = v;
     for(size_t i = 0; i < v.size(); i++) {
         size_t pick = pickRandomFloats[i] * (itemsAvailable.size());
         //Add a safeguard for if the float is exactly 1.0.
@@ -536,14 +536,14 @@ string vectorTailToString(const vector<string> &v, size_t pos);
 /**
  * @brief Shorthand for figuring out if a given item is in a container.
  *
- * @tparam t Type of container.
- * @tparam i Type of contents of the container.
+ * @tparam ContainerT Type of container.
+ * @tparam ContentT Type of contents of the container.
  * @param cont The container.
  * @param item Item to check.
  * @return Whether it contains the item.
  */
-template<typename t, typename i>
-bool isInContainer(const t &cont, const i &item) {
+template<typename ContainerT, typename ContentT>
+bool isInContainer(const ContainerT &cont, const ContentT &item) {
     return std::find(cont.begin(), cont.end(), item) != cont.end();
 }
 
@@ -551,16 +551,16 @@ bool isInContainer(const t &cont, const i &item) {
 /**
  * @brief Removes elements from a vector if they show up in the ban list.
  *
- * @tparam t Type of contents of the vector and ban list.
+ * @tparam ContentT Type of contents of the vector and ban list.
  * @param v Vector to filter.
  * @param banList List of items that must be banned.
  * @return The filtered vector.
  */
-template<typename t>
-vector<t> filterVectorWithBanList(
-    const vector<t> &v, const vector<t> &banList
+template<typename ContentT>
+vector<ContentT> filterVectorWithBanList(
+    const vector<ContentT> &v, const vector<ContentT> &banList
 ) {
-    vector<t> result = v;
+    vector<ContentT> result = v;
     for(size_t i = 0; i < result.size();) {
         if(isInContainer(banList, result[i])) {
             result.erase(result.begin() + i);
@@ -575,16 +575,16 @@ vector<t> filterVectorWithBanList(
 /**
  * @brief Removes all instances of a given item inside of a vector.
  *
- * @tparam t Type of the vector's contents.
+ * @tparam ContentT Type of the vector's contents.
  * @param item Item to compare with.
  * @param vec Vector to check.
  * @return The finished vector.
  */
-template<typename t>
-vector<t> removeAllInVector(
-    const t &item, const vector<t> &vec
+template<typename ContentT>
+vector<ContentT> removeAllInVector(
+    const ContentT &item, const vector<ContentT> &vec
 ) {
-    vector<t> result = vec;
+    vector<ContentT> result = vec;
     for(size_t i = 0; i < result.size();) {
         if(result[i] == item) {
             result.erase(result.begin() + i);
@@ -602,7 +602,7 @@ vector<t> removeAllInVector(
  * to the end, in the same order as they are presented in the original
  * vector.
  *
- * @tparam t Type of contents of the vector.
+ * @tparam ContentT Type of contents of the vector.
  * @param v Vector to sort.
  * @param preferenceList Preference list.
  * @param equal If not nullptr, use this function to compare whether
@@ -612,13 +612,13 @@ vector<t> removeAllInVector(
  * the preference list but not inside the vector) will be added here.
  * @return The sorted vector.
  */
-template<typename t>
-vector<t> sortVectorWithPreferenceList(
-    const vector<t> &v, const vector<t> preferenceList,
-    vector<t>* unknowns = nullptr
+template<typename ContentT>
+vector<ContentT> sortVectorWithPreferenceList(
+    const vector<ContentT> &v, const vector<ContentT> preferenceList,
+    vector<ContentT>* unknowns = nullptr
 ) {
-    vector<t> result;
-    vector<t> missingItems;
+    vector<ContentT> result;
+    vector<ContentT> missingItems;
     result.reserve(v.size());
     
     //Sort the existing items.
@@ -672,13 +672,13 @@ vector<t> sortVectorWithPreferenceList(
  * @brief Returns whether or not the two vectors contain the same items,
  * regardless of order.
  *
- * @tparam t Type of contents of the vector.
+ * @tparam ContentT Type of contents of the vector.
  * @param v1 First vector.
  * @param v2 Second vector.
  * @return Whether they contain the same items.
  */
-template<typename t>
-bool vectorsContainSame(const vector<t> &v1, const vector<t> &v2) {
+template<typename ContentT>
+bool vectorsContainSame(const vector<ContentT> &v1, const vector<ContentT> &v2) {
     if(v1.size() != v2.size()) {
         return false;
     }

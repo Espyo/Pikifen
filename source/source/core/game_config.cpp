@@ -209,6 +209,7 @@ void GameConfig::load(DataNode* file) {
     //Leaders.
     {
         ReaderSetter lRS(file->getChildByName("leaders"));
+        
         string leaderOrderStr;
         
         lRS.set("group_member_grab_range", leaders.groupMemberGrabRange);
@@ -225,6 +226,7 @@ void GameConfig::load(DataNode* file) {
     //Misc.
     {
         ReaderSetter mRS(file->getChildByName("misc"));
+        
         string sprayOrderStr;
         
         mRS.set("day_minutes_end", misc.dayMinutesEnd);
@@ -237,6 +239,7 @@ void GameConfig::load(DataNode* file) {
     //Pikmin.
     {
         ReaderSetter pRS(file->getChildByName("pikmin"));
+
         string pikminOrderStr;
         
         pRS.set("chase_range", pikmin.chaseRange);

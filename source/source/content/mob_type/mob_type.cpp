@@ -529,6 +529,7 @@ void MobType::loadFromDataNode(
         DataNode* spawnNode = spawnsNode->getChild(s);
         ReaderSetter sRS(spawnNode);
         MobType::SpawnInfo newSpawn;
+        
         string coordsStr;
         
         newSpawn.name = spawnNode->name;
@@ -560,8 +561,8 @@ void MobType::loadFromDataNode(
         
         string limbDrawMethod;
         string holdRotationMethod;
-        DataNode* limbDrawNode;
-        DataNode* holdRotationNode;
+        DataNode* limbDrawNode = nullptr;
+        DataNode* holdRotationNode = nullptr;
         
         newChild.name = childNode->name;
         cRS.set("spawn", newChild.spawnName);
@@ -643,11 +644,11 @@ void MobType::loadFromDataNode(
         MobType::Sound newSound;
         
         string fileStr;
-        DataNode* fileNode;
+        DataNode* fileNode = nullptr;
         string typeStr;
-        DataNode* typeNode;
+        DataNode* typeNode = nullptr;
         string stackModeStr;
-        DataNode* stackModeNode;
+        DataNode* stackModeNode = nullptr;
         float volumeFloat = 100.0f;
         float speedFloat = 100.0f;
         bool loopBool = false;
@@ -725,11 +726,12 @@ void MobType::loadFromDataNode(
     
         DataNode* propNode = aePropsNode->getChild(p);
         ReaderSetter pRS(propNode);
+        MobType::AreaEditorProp newProp;
+        
         string typeStr;
         string listStr;
         DataNode* typeNode = nullptr;
         
-        MobType::AreaEditorProp newProp;
         newProp.name = propNode->name;
         
         pRS.set("var", newProp.var);

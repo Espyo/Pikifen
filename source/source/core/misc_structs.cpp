@@ -878,18 +878,18 @@ void Notification::draw() const {
     
     if(inputSource.type != INPUT_SOURCE_TYPE_NONE) {
         textBoxX1 +=
-            DRAWING::NOTIFICATION_CONTROL_SIZE + DRAWING::NOTIFICATION_PADDING;
+            DRAWING::NOTIFICATION_INPUT_SIZE + DRAWING::NOTIFICATION_PADDING;
         drawPlayerInputSourceIcon(
             game.sysContent.fntSlim, inputSource,
             true,
             Point(
                 -bmpW * 0.5 + DRAWING::NOTIFICATION_PADDING +
-                DRAWING::NOTIFICATION_CONTROL_SIZE * 0.5,
+                DRAWING::NOTIFICATION_INPUT_SIZE * 0.5,
                 -bmpH * 0.5
             ),
             Point(
-                DRAWING::NOTIFICATION_CONTROL_SIZE,
-                DRAWING::NOTIFICATION_CONTROL_SIZE
+                DRAWING::NOTIFICATION_INPUT_SIZE,
+                DRAWING::NOTIFICATION_INPUT_SIZE
             ),
             visibility * 255
         );

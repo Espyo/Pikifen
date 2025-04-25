@@ -1087,7 +1087,7 @@ void Mob::causeSpikeDamage(Mob* victim, bool isIngestion) {
  * @param origZ Same as origCoords, but for the Z coordinate.
  * @param offset Offset from origCoords.
  * @param offsetZ Z offset from origZ.
- * @param flags Flags that control how to chase. Use CHASE_FLAG_*.
+ * @param flags Flags that control how to chase. Use CHASE_FLAG.
  * @param targetDistance Distance at which the mob considers the
  * chase finished.
  * @param speed Speed at which to go to the target.
@@ -1126,7 +1126,7 @@ void Mob::chase(
  *
  * @param coords Coordinates of the target.
  * @param coordsZ Z coordinates of the target.
- * @param flags Flags that control how to chase. Use CHASE_FLAG_*.
+ * @param flags Flags that control how to chase. Use CHASE_FLAG.
  * @param targetDistance Distance at which the mob considers the
  * chase finished.
  * @param speed Speed at which to go to the target.
@@ -1879,14 +1879,13 @@ Distance Mob::getDistanceBetween(
  * This only keeps in mind things specific to this class, so it shouldn't
  * check for things like carrying, which is global to all mobs.
  *
- * @param fractionValueNr The fraction's value (upper) number gets set here.
- * @param fractionReqNr The fraction's required (lower) number gets set here.
- * @param fractionColor The fraction's color gets set here.
+ * @param outValueNr The fraction's value (upper) number is returned here.
+ * @param outReqNr The fraction's required (lower) number is returned here.
+ * @param outColor The fraction's color is returned here.
  * @return Whether the numbers should be shown.
  */
 bool Mob::getFractionNumbersInfo(
-    float* fractionValueNr, float* fractionReqNr,
-    ALLEGRO_COLOR* fractionColor
+    float* outValueNr, float* outReqNr, ALLEGRO_COLOR* outColor
 ) const {
     if(!carryInfo || carryInfo->curCarryingStrength <= 0) return false;
     bool destinationHasPikminType =
@@ -1894,23 +1893,23 @@ bool Mob::getFractionNumbersInfo(
         carryInfo->intendedPikType;
     if(type->weight <= 1 && !destinationHasPikminType) return false;
     
-    *fractionValueNr = carryInfo->curCarryingStrength;
-    *fractionReqNr = type->weight;
+    *outValueNr = carryInfo->curCarryingStrength;
+    *outReqNr = type->weight;
     if(carryInfo->isMoving) {
         if(
             carryInfo->destination ==
             CARRY_DESTINATION_SHIP
         ) {
-            *fractionColor = game.config.aestheticGen.carryingColorMove;
+            *outColor = game.config.aestheticGen.carryingColorMove;
             
         } else if(destinationHasPikminType) {
-            *fractionColor =
+            *outColor =
                 carryInfo->intendedPikType->mainColor;
         } else {
-            *fractionColor = game.config.aestheticGen.carryingColorMove;
+            *outColor = game.config.aestheticGen.carryingColorMove;
         }
     } else {
-        *fractionColor = game.config.aestheticGen.carryingColorStop;
+        *outColor = game.config.aestheticGen.carryingColorStop;
     }
     return true;
 }
@@ -3642,7 +3641,7 @@ void Mob::tickAnimation(float deltaT) {
     vector<size_t> frameSignals;
     vector<size_t> frameSounds;
     bool finishedAnim =
-        anim.tick(deltaT* mult, &frameSignals, &frameSounds);
+        anim.tick(deltaT * mult, &frameSignals, &frameSounds);
         
     if(finishedAnim) {
         fsm.runEvent(MOB_EV_ANIMATION_END);
@@ -3664,7 +3663,7 @@ void Mob::tickAnimation(float deltaT) {
     }
     
     if(parent && parent->limbAnim.animDb) {
-        parent->limbAnim.tick(deltaT* mult);
+        parent->limbAnim.tick(deltaT * mult);
     }
 }
 

@@ -140,7 +140,7 @@ struct ChaseInfo {
     //Current chasing state.
     CHASE_STATE state = CHASE_STATE_STOPPED;
     
-    //Flags that control how to chase. Use CHASE_FLAG_*.
+    //Flags that control how to chase. Use CHASE_FLAG.
     Bitmask8 flags = 0;
     
     //Chase after these coordinates, relative to the "origin" coordinates.

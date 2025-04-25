@@ -37,8 +37,6 @@ using std::vector;
 class MobType;
 class PikminType;
 
-extern size_t nextMobId;
-
 namespace MOB {
 extern const float CARRIED_MOB_ACCELERATION;
 extern const float CARRY_STUCK_CIRCLING_RADIUS;
@@ -251,7 +249,7 @@ public:
     //If this mob is a sub-mob, this points to the parent mob.
     Parent* parent = nullptr;
     
-    //Miscellanous flags. Use MOB_FLAG_*.
+    //Miscellanous flags. Use MOB_FLAG.
     Bitmask16 flags = 0;
     
     //-Interactions with other mobs-
@@ -500,8 +498,7 @@ public:
         Point* outSpot, float* outDist
     ) const;
     virtual bool getFractionNumbersInfo(
-        float* fractionValueNr, float* fractionReqNr,
-        ALLEGRO_COLOR* fractionColor
+        float* outValueNr, float* outReqNr, ALLEGRO_COLOR* outColor
     ) const;
     virtual void handleStatusEffectGain(StatusType* staType);
     virtual void handleStatusEffectLoss(StatusType* staType);

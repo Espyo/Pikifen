@@ -119,16 +119,10 @@ void LeaderType::loadCatProperties(DataNode* file) {
 void LeaderType::loadCatResources(DataNode* file) {
     ReaderSetter lRS(file);
     
-    string dismissSoundStr;
     string iconStr;
-    string nameCallSoundStr;
-    string whistleSoundStr;
     DataNode* iconNode = nullptr;
     
-    lRS.set("dismiss_sound", dismissSoundStr);
     lRS.set("icon", iconStr, &iconNode);
-    lRS.set("name_call_sound", nameCallSoundStr);
-    lRS.set("whistle_sound", whistleSoundStr);
     
     bmpIcon = game.content.bitmaps.list.get(iconStr, iconNode);
 }

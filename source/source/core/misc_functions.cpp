@@ -1310,7 +1310,7 @@ void setStringTokenWidths(
             tokens[t].width =
                 al_get_text_width(textFont, tokens[t].content.c_str());
             break;
-        } case STRING_TOKEN_CONTROL_BIND: {
+        } case STRING_TOKEN_BIND_INPUT: {
             tokens[t].content = trimSpaces(tokens[t].content);
             tokens[t].width =
                 getPlayerInputIconWidth(
@@ -1551,8 +1551,8 @@ vector<StringToken> tokenizeString(const string &s) {
         } else if(strPeek(s, c, "\\k")) {
             if(!curToken.content.empty()) tokens.push_back(curToken);
             curToken.content.clear();
-            if(curToken.type != STRING_TOKEN_CONTROL_BIND) {
-                curToken.type = STRING_TOKEN_CONTROL_BIND;
+            if(curToken.type != STRING_TOKEN_BIND_INPUT) {
+                curToken.type = STRING_TOKEN_BIND_INPUT;
             } else {
                 curToken.type = STRING_TOKEN_CHAR;
             }

@@ -31,6 +31,7 @@ void Liquid::loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level) {
     
     //Standard data.
     ReaderSetter lRS(node);
+    
     string animation_str;
     
     lRS.set("body_color", bodyColor);

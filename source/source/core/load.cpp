@@ -471,6 +471,7 @@ void loadStatistics() {
     Statistics &s = game.statistics;
     
     ReaderSetter sRS(&statsFile);
+    
     sRS.set("startups",               s.startups);
     sRS.set("runtime",                s.runtime);
     sRS.set("gameplay_time",          s.gameplayTime);

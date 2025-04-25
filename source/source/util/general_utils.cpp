@@ -148,13 +148,13 @@ void EnumNameDatabase::registerItem(
 /**
  * @brief Reads a generic value from a string.
  *
- * @tparam The generic type.
+ * @tparam GenericT The generic type.
  * @param s The string.
  * @return The value.
  */
-template<typename t>
-t fromString(const string &s) {
-    return t{};
+template<typename GenericT>
+GenericT fromString(const string &s) {
+    return GenericT{};
 }
 
 

@@ -19,7 +19,7 @@
 #include "misc_structs.h"
 
 
-namespace CONTROL_BIND_ICON {
+namespace BIND_INPUT_ICON {
 extern const ALLEGRO_COLOR BASE_OUTLINE_COLOR;
 extern const ALLEGRO_COLOR BASE_RECT_COLOR;
 extern const ALLEGRO_COLOR BASE_TEXT_COLOR;
@@ -37,7 +37,7 @@ extern const float LOADING_SCREEN_SUBTEXT_SCALE;
 extern const float LOADING_SCREEN_TEXT_HEIGHT;
 extern const float LOADING_SCREEN_TEXT_WIDTH;
 extern const unsigned char NOTIFICATION_ALPHA;
-extern const float NOTIFICATION_CONTROL_SIZE;
+extern const float NOTIFICATION_INPUT_SIZE;
 extern const float NOTIFICATION_PADDING;
 }
 
@@ -224,7 +224,7 @@ void drawMobShadow(
 void drawStatusEffectBmp(const Mob* m, BitmapEffect &effects);
 void drawStringTokens(
     const vector<StringToken> &tokens, const ALLEGRO_FONT* const textFont,
-    const ALLEGRO_FONT* const controlFont, bool controlsCondensed,
+    const ALLEGRO_FONT* const inputFont, bool inputCondensed,
     const Point &where, int flags, const Point &maxSize,
     const Point &scale = Point(1.0f)
 );

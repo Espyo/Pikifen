@@ -20,9 +20,10 @@
  * @param node Data node to load from.
  */
 void Content::loadMetadataFromDataNode(DataNode* node) {
+    if(manifest) name = manifest->internalName;
+    
     ReaderSetter mRS(node);
     
-    if(manifest) name = manifest->internalName;
     mRS.set("name", name);
     mRS.set("description", description);
     mRS.set("tags", tags);
@@ -56,6 +57,7 @@ void Content::resetMetadata() {
  */
 void Content::saveMetadataToDataNode(DataNode* node) const {
     GetterWriter mGW(node);
+
     mGW.write("name", name);
     
 #define saveOpt(n, v) if(!v.empty()) mGW.write((n), (v))
