@@ -1136,7 +1136,7 @@ void ParticleEditor::processGuiPanelGenerator() {
                     changesMgr.markAsChanged();
                     setStatus("Picked an image successfully.");
                 },
-                "."
+                "effects"
                 );
             }
             setTooltip("Choose which image to use from the game's content.");

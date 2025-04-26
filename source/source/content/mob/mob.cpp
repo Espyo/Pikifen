@@ -2814,10 +2814,15 @@ void Mob::moveToPathEnd(float speed, float acceleration) {
 size_t Mob::playSound(size_t soundDataIdx) {
     if(soundDataIdx >= type->sounds.size()) return 0;
     
-    //During interludes, don't play any mob sounds. This allows stuff
-    //like obstacles being cleared upon area load and not playing the
-    //obstacle clear jingle.
-    if(game.states.gameplay->curInterlude != INTERLUDE_NONE) return 0;
+    if(
+        game.states.gameplay->areaTimePassed == 0.0f ||
+        game.states.gameplay->curInterlude != INTERLUDE_NONE
+    ) {
+        //During interludes or area load, don't play any mob sounds.
+        //This allows stuff like obstacles being cleared upon starting and
+        //not playing the obstacle clear jingle.
+        return 0;
+    }
     
     MobType::Sound* sound = &type->sounds[soundDataIdx];
     

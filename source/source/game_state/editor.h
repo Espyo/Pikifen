@@ -700,7 +700,7 @@ protected:
     );
     void openBitmapDialog(
         std::function<void(const string &)> okCallback,
-        const string &recommendedFolder
+        const string &recommendedFolder = ""
     );
     void openDialog(
         const string &title,

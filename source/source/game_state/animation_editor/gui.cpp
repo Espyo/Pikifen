@@ -2159,8 +2159,7 @@ void AnimationEditor::processGuiPanelSpriteBitmap() {
             centerCameraOnSpriteBitmap(true);
             changesMgr.markAsChanged();
             setStatus("Picked a spritesheet image successfully.");
-        },
-        "."
+        }
         );
     }
     setTooltip("Choose which spritesheet to use from the game's content.");
