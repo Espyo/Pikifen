@@ -876,6 +876,9 @@ struct SystemContentNames {
     //Dirt that comes out of the floor when a Pikmin gets plucked.
     string parPikminPluckDirt = "pikmin_pluck_dirt";
     
+    //Sparkles for a Pikmin seed in the air.
+    string parPikminSeed = "pikmin_seed";
+    
     //Dirt that comes out of the floor when a Pikmin seed lands.
     string parPikminSeedLanded = "pikmin_seed_landed";
     

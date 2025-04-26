@@ -36,6 +36,7 @@ void PikminFsm::createFsm(MobType* typ) {
     efc.newState("seed", PIKMIN_STATE_SEED); {
         efc.newEvent(MOB_EV_ON_ENTER); {
             efc.run(PikminFsm::becomeSprout);
+            efc.run(PikminFsm::startSeedParticles);
         }
         efc.newEvent(MOB_EV_LANDED); {
             efc.run(PikminFsm::seedLanded);
@@ -3826,6 +3827,9 @@ void PikminFsm::releaseTool(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void PikminFsm::seedLanded(Mob* m, void* info1, void* info2) {
+    //Clear the seed sparkles.
+    m->particleGenerators.clear();
+    
     //Generate the rock particles that come out.
     ParticleGenerator pg =
         standardParticleGenSetup(
@@ -4250,6 +4254,35 @@ void PikminFsm::startRidingTrack(Mob* m, void* info1, void* info2) {
         break;
     }
     }
+}
+
+
+/**
+ * @brief When a Pikmin must start emitting seed particles.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void PikminFsm::startSeedParticles(Mob* m, void* info1, void* info2) {
+    Pikmin* pikPtr = (Pikmin*) m;
+    
+    ParticleGenerator pg =
+        standardParticleGenSetup(
+            game.sysContentNames.parPikminSeed, m
+        );
+    adjustKeyframeInterpolatorValues<ALLEGRO_COLOR>(
+        pg.baseParticle.color,
+    [ = ] (const ALLEGRO_COLOR & c) {
+        ALLEGRO_COLOR newColor = c;
+        newColor.r *= pikPtr->type->mainColor.r;
+        newColor.g *= pikPtr->type->mainColor.g;
+        newColor.b *= pikPtr->type->mainColor.b;
+        newColor.a *= pikPtr->type->mainColor.a;
+        return newColor;
+    }
+    );
+    m->particleGenerators.push_back(pg);
 }
 
 

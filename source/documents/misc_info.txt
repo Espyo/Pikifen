@@ -196,6 +196,8 @@ Bag of notes (useful stuff)
         In testing, it turned out to be slower than accessing by index, in vectors.
     Why does every floating-point number have the f at the end?
         Because I got tired of dealing with std::min and std::max thinking the number I'm sending is a double and giving a compiler error, but most importantly, I'm tired of trying to get a real division between two numbers but instead getting an integer division because the divisor is an integer.
+    Why not use enum class?
+        In doing so I'd have to change the names from all-caps to PascalCase, but when I did it resulted in some conflicts, like MISSION_GOAL and MissionGoal, which would be a bit annoying to clean up. But the main point is that I'd have to do so many conversions to int in so many places... That's not wrong per se, but it's ultra annoying.
     Why not use clang-format?
         It's far too aggressive in its style, meaning that case-by-case doesn't exist and if your style is slightly different, you're out of luck
         There's no option to let it indent empty lines to the level of the code before it

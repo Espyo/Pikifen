@@ -103,6 +103,7 @@ void startPanicking(Mob* m, void* info1, void* info2);
 void startPickingUp(Mob* m, void* info1, void* info2);
 void startReturning(Mob* m, void* info1, void* info2);
 void startRidingTrack(Mob* m, void* info1, void* info2);
+void startSeedParticles(Mob* m, void* info1, void* info2);
 void stopBeingIdle(Mob* m, void* info1, void* info2);
 void stopBeingThrown(Mob* m, void* info1, void* info2);
 void stopCarrying(Mob* m, void* info1, void* info2);

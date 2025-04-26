@@ -87,6 +87,7 @@ particle_generators {
     onion_generating_inside = onion_gen_inside
     onion_insertion = onion_insertion
     pikmin_pluck_dirt = pikmin_pluck_dirt
+    pikmin_seed = pikmin_seed
     pikmin_seed_landed = pikmin_seed_landed
     smack = smack
     spray = spray

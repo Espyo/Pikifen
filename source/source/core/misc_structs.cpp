@@ -231,6 +231,7 @@ void SystemContentNames::load(DataNode* file) {
     parRS.set("onion_generating_inside", parOnionGenInside);
     parRS.set("onion_insertion", parOnionInsertion);
     parRS.set("pikmin_pluck_dirt", parPikminPluckDirt);
+    parRS.set("pikmin_seed", parPikminSeed);
     parRS.set("pikmin_seed_landed", parPikminSeedLanded);
     parRS.set("smack", parSmack);
     parRS.set("spray", parSpray);
