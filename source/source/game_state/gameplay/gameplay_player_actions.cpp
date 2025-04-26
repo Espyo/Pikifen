@@ -237,7 +237,7 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
             
             if(!isDown) return;
             
-            if(curLeaderPtr && !curLeaderPtr->group->members.empty()) {
+            if(curLeaderPtr) {
                 curLeaderPtr->fsm.runEvent(LEADER_EV_DISMISS);
             }
             

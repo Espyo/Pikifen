@@ -281,14 +281,73 @@ bool Leader::checkThrowOk() const {
 
 
 /**
- * @brief Makes a leader dismiss their group.
- * The group is then organized in groups, by type,
+ * @brief Makes a leader (try to) dismiss their group.
+ * The group is then organized in subgroups, by type,
  * and is dismissed close to the leader.
  */
 void Leader::dismiss() {
-    size_t nGroupMembers = group->members.size();
-    if(nGroupMembers == 0) return;
+    dismissDetails();
+    if(!group->members.empty()) {
+        dismissLogic();
+    }
+}
+
+
+/**
+ * @brief Runs the aesthetic and secondary details about dismissing.
+ */
+void Leader::dismissDetails() {
+    //Animation.
+    setAnimation(LEADER_ANIM_DISMISSING);
     
+    //Sound.
+    MobType::Sound* sound = &type->sounds[leaType->soundDataIdxs[LEADER_SOUND_DISMISSING]];
+    SoundSourceConfig soundConfig = sound->config;
+    soundConfig.speed = group->members.empty() ? 0.9f : 1.0f;
+    game.audio.createMobSoundSource(sound->sample, this, false, soundConfig);
+    
+    //Particles.
+    unsigned char particleAlpha =
+        LEADER::DISMISS_PARTICLE_ALPHA * 255 *
+        (group->members.empty() ? 0.75f : 1.0f);
+    for(size_t p = 0; p < LEADER::DISMISS_PARTICLE_AMOUNT; p++) {
+        Particle par;
+        const unsigned char* colorIdx =
+            WHISTLE::DOT_COLORS[p % WHISTLE::N_DOT_COLORS];
+        ALLEGRO_COLOR c =
+            al_map_rgba(colorIdx[0], colorIdx[1], colorIdx[2], particleAlpha);
+        par.color.setKeyframeValue(0, c);
+        par.color.add(1, changeAlpha(c, 0));
+        par.bitmap = game.sysContent.bmpBrightCircle;
+        par.duration =
+            game.rng.f(
+                LEADER::DISMISS_PARTICLE_MIN_DURATION,
+                LEADER::DISMISS_PARTICLE_MAX_DURATION
+            );
+        par.friction = LEADER::DISMISS_PARTICLE_FRICTION;
+        par.pos = pos;
+        par.priority = PARTICLE_PRIORITY_MEDIUM;
+        par.size.setKeyframeValue(0, LEADER::DISMISS_PARTICLE_SIZE * (group->members.empty() ? 0.75f : 1.0f));
+        float parSpeed =
+            game.rng.f(
+                LEADER::DISMISS_PARTICLE_MIN_SPEED,
+                LEADER::DISMISS_PARTICLE_MAX_SPEED
+            );
+        if(group->members.empty()) parSpeed *= 0.75f;
+        float parAngle = TAU / LEADER::DISMISS_PARTICLE_AMOUNT * p;
+        par.linearSpeed = KeyframeInterpolator<Point>(rotatePoint(Point(parSpeed, 0.0f), parAngle));
+        par.time = par.duration;
+        par.z = z + height / 2.0f;
+        game.states.gameplay->particles.add(par);
+    }
+}
+
+
+/**
+ * @brief Runs the logic to actually separate, position, and disband
+ * the group for a dismiss action.
+ */
+void Leader::dismissLogic() {
     //They are dismissed towards this angle.
     //This is then offset a bit for each subgroup, depending on a few factors.
     float baseAngle;
@@ -302,7 +361,7 @@ void Leader::dismiss() {
         //Leftmost member coordinate, rightmost, etc.
         Point minCoords, maxCoords;
         
-        for(size_t m = 0; m < nGroupMembers; m++) {
+        for(size_t m = 0; m < group->members.size(); m++) {
             Mob* memberPtr = group->members[m];
             
             if(memberPtr->pos.x < minCoords.x || m == 0)
@@ -357,7 +416,7 @@ void Leader::dismiss() {
         
             bool subgroupExists = false;
             
-            for(size_t m = 0; m < nGroupMembers; m++) {
+            for(size_t m = 0; m < group->members.size(); m++) {
                 Mob* mPtr = group->members[m];
                 if(mPtr->subgroupTypePtr != curType) continue;
                 
@@ -601,45 +660,6 @@ void Leader::dismiss() {
         group->members[0]->fsm.runEvent(MOB_EV_DISMISSED, nullptr);
         group->members[0]->leaveGroup();
     }
-    
-    //Final things.
-    playSound(leaType->soundDataIdxs[LEADER_SOUND_DISMISSING]);
-    for(size_t p = 0; p < LEADER::DISMISS_PARTICLE_AMOUNT; p++) {
-        Particle par;
-        const unsigned char* colorIdx =
-            WHISTLE::DOT_COLORS[p % WHISTLE::N_DOT_COLORS];
-        ALLEGRO_COLOR c =
-            al_map_rgba(
-                colorIdx[0],
-                colorIdx[1],
-                colorIdx[2],
-                LEADER::DISMISS_PARTICLE_ALPHA * 255
-            );
-            
-        par.color.setKeyframeValue(0, c);
-        par.color.add(1, changeAlpha(c, 0));
-        par.bitmap = game.sysContent.bmpBrightCircle;
-        par.duration =
-            game.rng.f(
-                LEADER::DISMISS_PARTICLE_MIN_DURATION,
-                LEADER::DISMISS_PARTICLE_MAX_DURATION
-            );
-        par.friction = LEADER::DISMISS_PARTICLE_FRICTION;
-        par.pos = pos;
-        par.priority = PARTICLE_PRIORITY_MEDIUM;
-        par.size.setKeyframeValue(0, LEADER::DISMISS_PARTICLE_SIZE);
-        float parSpeed =
-            game.rng.f(
-                LEADER::DISMISS_PARTICLE_MIN_SPEED,
-                LEADER::DISMISS_PARTICLE_MAX_SPEED
-            );
-        float parAngle = TAU / LEADER::DISMISS_PARTICLE_AMOUNT * p;
-        par.linearSpeed = KeyframeInterpolator<Point>(rotatePoint(Point(parSpeed, 0.0f), parAngle));
-        par.time = par.duration;
-        par.z = z + height / 2.0f;
-        game.states.gameplay->particles.add(par);
-    }
-    setAnimation(LEADER_ANIM_DISMISSING);
 }
 
 

@@ -188,6 +188,12 @@ private:
     //Returns how many rows are needed for all members' dismissal.
     size_t getDismissRows(size_t nMembers) const;
     
+    
+    //--- Function declarations ---
+    
+    void dismissDetails();
+    void dismissLogic();
+    
 };
 
 
