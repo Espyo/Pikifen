@@ -1512,9 +1512,7 @@ void Editor::loadCustomMobCatTypes(bool isAreaEditor) {
             
             string customCatName = mtPtr->customCategoryName;
             size_t customCatIdx;
-            map<string, size_t>::iterator customCatIdxIt =
-                customCatNameIdxs.find(customCatName);
-            if(customCatIdxIt == customCatNameIdxs.end()) {
+            if(!isInMap(customCatNameIdxs, customCatName)) {
                 customCatNameIdxs[customCatName] =
                     customCatTypes.size();
                 customCatTypes.push_back(vector<MobType*>());

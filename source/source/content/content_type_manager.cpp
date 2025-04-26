@@ -1211,7 +1211,7 @@ void MobTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
     }
     for(size_t o = 0; o < game.config.pikmin.orderStrings.size(); o++) {
         string s = game.config.pikmin.orderStrings[o];
-        if(list.pikmin.find(s) != list.pikmin.end()) {
+        if(isInMap(list.pikmin, s)) {
             game.config.pikmin.order.push_back(list.pikmin[s]);
         } else {
             game.errors.report(
@@ -1224,13 +1224,7 @@ void MobTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
     //Leader type order.
     vector<string> missingLeaderOrderTypes;
     for(auto &l : list.leader) {
-        if(
-            find(
-                game.config.leaders.orderStrings.begin(),
-                game.config.leaders.orderStrings.end(),
-                l.first
-            ) == game.config.leaders.orderStrings.end()
-        ) {
+        if(!isInContainer(game.config.leaders.orderStrings, l.first)) {
             //Missing from the list? Add it to the "missing" pile.
             missingLeaderOrderTypes.push_back(l.first);
         }
@@ -1248,7 +1242,7 @@ void MobTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
     }
     for(size_t o = 0; o < game.config.leaders.orderStrings.size(); o++) {
         string s = game.config.leaders.orderStrings[o];
-        if(list.leader.find(s) != list.leader.end()) {
+        if(isInMap(list.leader, s)) {
             game.config.leaders.order.push_back(list.leader[s]);
         } else {
             game.errors.report(
@@ -1967,13 +1961,7 @@ void SprayTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
     //Spray type order.
     vector<string> missingSprayOrderTypes;
     for(auto &s : list) {
-        if(
-            find(
-                game.config.misc.sprayOrderStrings.begin(),
-                game.config.misc.sprayOrderStrings.end(),
-                s.first
-            ) == game.config.misc.sprayOrderStrings.end()
-        ) {
+        if(!isInContainer(game.config.misc.sprayOrderStrings, s.first)) {
             //Missing from the list? Add it to the "missing" pile.
             missingSprayOrderTypes.push_back(s.first);
         }
@@ -1991,7 +1979,7 @@ void SprayTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
     }
     for(size_t o = 0; o < game.config.misc.sprayOrderStrings.size(); o++) {
         string s = game.config.misc.sprayOrderStrings[o];
-        if(list.find(s) != list.end()) {
+        if(isInMap(list, s)) {
             game.config.misc.sprayOrder.push_back(&list[s]);
         } else {
             game.errors.report(

@@ -549,6 +549,21 @@ bool isInContainer(const ContainerT &cont, const ContentT &item) {
 
 
 /**
+ * @brief Shorthand for figuring out if a given key is in a map.
+ *
+ * @tparam MapT Type of map.
+ * @tparam KeyT Type of keys of the map.
+ * @param m The map.
+ * @param key Key to check.
+ * @return Whether it contains the item.
+ */
+template<typename MapT, typename KeyT>
+bool isInMap(const MapT &cont, const KeyT &key) {
+    return cont.find(key) != cont.end();
+}
+
+
+/**
  * @brief Removes elements from a vector if they show up in the ban list.
  *
  * @tparam ContentT Type of contents of the vector and ban list.

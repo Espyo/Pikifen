@@ -962,7 +962,7 @@ void TitleScreen::load() {
         
         for(size_t c = 0; c < row.size(); c++) {
             if(row[c] == '.') continue;
-            if(logoTypeBitmaps.find(row[c]) == logoTypeBitmaps.end()) {
+            if(!isInMap(logoTypeBitmaps, row[c])) {
                 mapOk = false;
                 game.errors.report(
                     "Title screen Pikmin logo map has an unknown character \"" +

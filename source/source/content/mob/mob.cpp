@@ -1241,7 +1241,7 @@ PikminType* Mob::decideCarryPikminType(
         pikPtr = (Pikmin*) carryInfo->spotInfo[p].pikPtr;
         
         //If it doesn't have an Onion to carry to, it won't even count.
-        if(availableTypes.find(pikPtr->pikType) == availableTypes.end()) {
+        if(!isInContainer(availableTypes, pikPtr->pikType)) {
             continue;
         }
         
@@ -1263,10 +1263,7 @@ PikminType* Mob::decideCarryPikminType(
     bool forceRandom = false;
     if(majorityTypes.empty()) {
         forceRandom = true;
-        for(
-            auto t = availableTypes.begin();
-            t != availableTypes.end(); ++t
-        ) {
+        for(auto t = availableTypes.begin(); t != availableTypes.end(); ++t) {
             majorityTypes.push_back(*t);
         }
     }
@@ -1284,11 +1281,7 @@ PikminType* Mob::decideCarryPikminType(
         if(
             carryInfo->intendedPikType &&
             !forceRandom &&
-            find(
-                majorityTypes.begin(),
-                majorityTypes.end(),
-                carryInfo->intendedPikType
-            ) != majorityTypes.end()
+            isInContainer(majorityTypes, carryInfo->intendedPikType)
         ) {
             decidedType = carryInfo->intendedPikType;
         } else {

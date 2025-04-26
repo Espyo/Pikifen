@@ -297,18 +297,14 @@ void AreaEditor::drawCanvas() {
             
         }
         
-        bool selected =
-            selectedSectors.find(sPtr) != selectedSectors.end();
+        bool selected = isInContainer(selectedSectors, sPtr);
         bool valid = true;
         bool highlighted =
             sPtr == highlightedSector &&
             selectionFilter == SELECTION_FILTER_SECTORS &&
             state == EDITOR_STATE_LAYOUT;
             
-        if(
-            game.curAreaData->problems.nonSimples.find(sPtr) !=
-            game.curAreaData->problems.nonSimples.end()
-        ) {
+        if(isInMap(game.curAreaData->problems.nonSimples, sPtr)) {
             valid = false;
         }
         if(sPtr == problemSectorPtr) {
@@ -436,18 +432,13 @@ void AreaEditor::drawCanvas() {
             valid = false;
         }
         
-        if(
-            game.curAreaData->problems.loneEdges.find(ePtr) !=
-            game.curAreaData->problems.loneEdges.end()
-        ) {
+        if(isInContainer(game.curAreaData->problems.loneEdges, ePtr)) {
             valid = false;
         }
         
         if(
-            game.curAreaData->problems.nonSimples.find(ePtr->sectors[0]) !=
-            game.curAreaData->problems.nonSimples.end() ||
-            game.curAreaData->problems.nonSimples.find(ePtr->sectors[1]) !=
-            game.curAreaData->problems.nonSimples.end()
+            isInMap(game.curAreaData->problems.nonSimples, ePtr->sectors[0]) ||
+            isInMap(game.curAreaData->problems.nonSimples, ePtr->sectors[1])
         ) {
             valid = false;
         }
@@ -462,7 +453,7 @@ void AreaEditor::drawCanvas() {
             sameZ = true;
         }
         
-        if(selectedEdges.find(ePtr) != selectedEdges.end()) {
+        if(isInContainer(selectedEdges, ePtr)) {
             selected = true;
         }
         
@@ -506,16 +497,14 @@ void AreaEditor::drawCanvas() {
             Point otherPoint;
             if(
                 ePtr->vertexes[0] == moveClosestVertex &&
-                selectedVertexes.find(ePtr->vertexes[1]) ==
-                selectedVertexes.end()
+                !isInContainer(selectedVertexes, ePtr->vertexes[1])
             ) {
                 otherPoint.x = ePtr->vertexes[1]->x;
                 otherPoint.y = ePtr->vertexes[1]->y;
                 drawDist = true;
             } else if(
                 ePtr->vertexes[1] == moveClosestVertex &&
-                selectedVertexes.find(ePtr->vertexes[0]) ==
-                selectedVertexes.end()
+                !isInContainer(selectedVertexes, ePtr->vertexes[0])
             ) {
                 otherPoint.x = ePtr->vertexes[0]->x;
                 otherPoint.y = ePtr->vertexes[0]->y;
@@ -594,10 +583,8 @@ void AreaEditor::drawCanvas() {
         size_t nVertexes = game.curAreaData->vertexes.size();
         for(size_t v = 0; v < nVertexes; v++) {
             Vertex* vPtr = game.curAreaData->vertexes[v];
-            bool selected =
-                (selectedVertexes.find(vPtr) != selectedVertexes.end());
-            bool valid =
-                vPtr != problemVertexPtr;
+            bool selected = isInContainer(selectedVertexes, vPtr);
+            bool valid = vPtr != problemVertexPtr;
             bool highlighted =
                 highlightedVertex == vPtr &&
                 (
@@ -657,16 +644,14 @@ void AreaEditor::drawCanvas() {
             
             if(!mPtr->type) continue;
             
-            bool isSelected =
-                selectedMobs.find(mPtr) != selectedMobs.end();
+            bool isSelected = isInContainer(selectedMobs, mPtr);
                 
             for(size_t l = 0; l < mPtr->links.size(); l++) {
                 m2Ptr = mPtr->links[l];
                 if(!m2Ptr->type) continue;
                 
                 bool showLink =
-                    isSelected ||
-                    selectedMobs.find(m2Ptr) != selectedMobs.end();
+                    isSelected || isInContainer(selectedMobs, m2Ptr);
                     
                 if(showLink) {
                     drawArrow(
@@ -684,8 +669,7 @@ void AreaEditor::drawCanvas() {
                 if(!m2Ptr->type) continue;
                 
                 bool showStore =
-                    isSelected ||
-                    selectedMobs.find(m2Ptr) != selectedMobs.end();
+                    isSelected || isInContainer(selectedMobs, m2Ptr);
                     
                 if(showStore) {
                     drawArrow(
@@ -785,12 +769,10 @@ void AreaEditor::drawCanvas() {
             al_map_rgba(0, 0, 0, mobOpacity * 255)
         );
         
-        bool isSelected =
-            selectedMobs.find(mPtr) != selectedMobs.end();
+        bool isSelected = isInContainer(selectedMobs, mPtr);
         bool isMissionRequirement =
             subState == EDITOR_SUB_STATE_MISSION_MOBS &&
-            game.curAreaData->mission.goalMobIdxs.find(m) !=
-            game.curAreaData->mission.goalMobIdxs.end();
+            isInContainer(game.curAreaData->mission.goalMobIdxs, m);
         bool isHighlighted =
             highlightedMob == mPtr &&
             state == EDITOR_STATE_MOBS;
@@ -865,10 +847,7 @@ void AreaEditor::drawCanvas() {
                 color
             );
             
-            if(
-                selectedPathStops.find(sPtr) !=
-                selectedPathStops.end()
-            ) {
+            if(isInContainer(selectedPathStops, sPtr)) {
                 al_draw_filled_circle(
                     sPtr->pos.x, sPtr->pos.y, sPtr->radius,
                     al_map_rgba(
@@ -903,11 +882,8 @@ void AreaEditor::drawCanvas() {
             for(size_t l = 0; l < sPtr->links.size(); l++) {
                 PathLink* lPtr = sPtr->links[l];
                 PathStop* s2Ptr = lPtr->endPtr;
-                bool oneWay =
-                    !lPtr->endPtr->getLink(sPtr);
-                bool selected =
-                    selectedPathLinks.find(lPtr) !=
-                    selectedPathLinks.end();
+                bool oneWay = !lPtr->endPtr->getLink(sPtr);
+                bool selected = isInContainer(selectedPathLinks, lPtr);
                 bool highlighted = highlightedPathLink == lPtr;
                 ALLEGRO_COLOR color = COLOR_WHITE;
                 if(selected) {
@@ -965,16 +941,14 @@ void AreaEditor::drawCanvas() {
                     Point otherPoint;
                     if(
                         lPtr->startPtr == moveClosestStop &&
-                        selectedPathStops.find(lPtr->endPtr) ==
-                        selectedPathStops.end()
+                        !isInContainer(selectedPathStops, lPtr->endPtr)
                     ) {
                         otherPoint.x = lPtr->endPtr->pos.x;
                         otherPoint.y = lPtr->endPtr->pos.y;
                         drawDist = true;
                     } else if(
                         lPtr->endPtr == moveClosestStop &&
-                        selectedPathStops.find(lPtr->startPtr) ==
-                        selectedPathStops.end()
+                        !isInContainer(selectedPathStops, lPtr->startPtr)
                     ) {
                         otherPoint.x = lPtr->startPtr->pos.x;
                         otherPoint.y = lPtr->startPtr->pos.y;

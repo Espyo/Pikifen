@@ -911,10 +911,7 @@ void Area::loadMainDataFromDataNode(
         if(weatherName.empty()) {
             weatherCondition = Weather();
             
-        } else if(
-            game.content.weatherConditions.list.find(weatherName) ==
-            game.content.weatherConditions.list.end()
-        ) {
+        } else if(!isInMap(game.content.weatherConditions.list, weatherName)) {
             game.errors.report(
                 "Unknown weather condition \"" + weatherName + "\"!",
                 weatherNode
@@ -928,11 +925,7 @@ void Area::loadMainDataFromDataNode(
         }
         
         //Song.
-        if(
-            !songName.empty() &&
-            game.content.songs.list.find(songName) ==
-            game.content.songs.list.end()
-        ) {
+        if(!songName.empty() && !isInMap(game.content.songs.list, songName)) {
             game.errors.report(
                 "Unknown song \"" + songName + "\"!",
                 songNode
@@ -1155,10 +1148,7 @@ void Area::loadGeometryFromDataNode(
         }
         
         if(!hazardStr.empty()) {
-            if(
-                game.content.hazards.list.find(hazardStr) ==
-                game.content.hazards.list.end()
-            ) {
+            if(!isInMap(game.content.hazards.list, hazardStr)) {
                 game.errors.report(
                     "Unknown hazard \"" + hazardStr + "\"!", hazardNode
                 );

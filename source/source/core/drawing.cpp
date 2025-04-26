@@ -376,11 +376,7 @@ void drawLiquid(
             if(otherPtr) {
                 for(size_t h = 0; h < otherPtr->hazards.size(); h++) {
                     if(otherPtr->hazards[h]->associatedLiquid) {
-                        if(
-                            std::find(
-                                checkedS.begin(), checkedS.end(), otherPtr
-                            ) == checkedS.end()
-                        ) {
+                        if(!isInContainer(checkedS, otherPtr)) {
                             checkedS.push_back(otherPtr);
                         }
                     }

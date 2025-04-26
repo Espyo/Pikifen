@@ -150,10 +150,7 @@ void StatusType::loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level) {
     }
     
     if(particleGenNode) {
-        if(
-            game.content.particleGens.list.find(particleGenStr) ==
-            game.content.particleGens.list.end()
-        ) {
+        if(!isInMap(game.content.particleGens.list, particleGenStr)) {
             game.errors.report(
                 "Unknown particle generator \"" +
                 particleGenStr + "\"!", particleGenNode

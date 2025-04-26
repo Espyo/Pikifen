@@ -626,9 +626,9 @@ void AudioManager::markMixTrackStatus(MIX_TRACK_TYPE trackType) {
  * @return Whether it succeeded.
  */
 bool AudioManager::rewindSong(const string &name) {
-    auto songit = game.content.songs.list.find(name);
-    if(songit == game.content.songs.list.end()) return false;
-    Song* songPtr = &songit->second;
+    auto songIt = game.content.songs.list.find(name);
+    if(songIt == game.content.songs.list.end()) return false;
+    Song* songPtr = &songIt->second;
     
     songPtr->stopPoint = 0.0f;
     al_rewind_audio_stream(songPtr->mainTrack);

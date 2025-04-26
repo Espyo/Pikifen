@@ -664,11 +664,7 @@ void loadState(
     if(
         stateNode->name != mt->dyingStateName &&
         !statePtr->events[MOB_EV_ZERO_HEALTH] &&
-        find(
-            mt->statesIgnoringDeath.begin(),
-            mt->statesIgnoringDeath.end(),
-            stateNode->name
-        ) == mt->statesIgnoringDeath.end() &&
+        !isInContainer(mt->statesIgnoringDeath, stateNode->name) &&
         !mt->dyingStateName.empty()
     ) {
         vector<MobActionCall*> deActions;
@@ -692,11 +688,7 @@ void loadState(
     //Inject a spray touch event.
     if(
         !statePtr->events[MOB_EV_TOUCHED_SPRAY] &&
-        find(
-            mt->statesIgnoringSpray.begin(),
-            mt->statesIgnoringSpray.end(),
-            stateNode->name
-        ) == mt->statesIgnoringSpray.end()
+        !isInContainer(mt->statesIgnoringSpray, stateNode->name)
     ) {
         vector<MobActionCall*> sActions;
         sActions.push_back(
@@ -711,11 +703,7 @@ void loadState(
     //Inject a hazard event.
     if(
         !statePtr->events[MOB_EV_TOUCHED_HAZARD] &&
-        find(
-            mt->statesIgnoringHazard.begin(),
-            mt->statesIgnoringHazard.end(),
-            stateNode->name
-        ) == mt->statesIgnoringHazard.end()
+        !isInContainer(mt->statesIgnoringHazard, stateNode->name)
     ) {
         vector<MobActionCall*> hActions;
         hActions.push_back(

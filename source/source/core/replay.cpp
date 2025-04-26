@@ -73,28 +73,16 @@ void Replay::addState(
     
     if(!prevStateMobs.empty()) {
         for(size_t pm = 0; pm < prevStateMobs.size(); pm++) {
-            //Is this mob in the list of new mobs?
-            auto m =
-                find(
-                    newStateMobs.begin(), newStateMobs.end(),
-                    prevStateMobs[pm]
-                );
-            if(m == newStateMobs.end()) {
-                //It isn't. That means it was removed.
+            if(!isInContainer(newStateMobs, prevStateMobs[pm])) {
+                //This isn't in the list of new mobs. That means it was removed.
                 ReplayEvent ev(REPLAY_EVENT_REMOVED, pm);
                 newStatePtr->events.push_back(ev);
             }
         }
         
         for(size_t m = 0; m < newStateMobs.size(); m++) {
-            //Is this mob in the list of previous mobs?
-            auto pm =
-                find(
-                    prevStateMobs.begin(), prevStateMobs.end(),
-                    newStateMobs[m]
-                );
-            if(pm == prevStateMobs.end()) {
-                //It isn't. That means it's new.
+            if(!isInContainer(prevStateMobs, newStateMobs[m])) {
+                //This isn't in the list of previous mobs. That means it's new.
                 ReplayEvent ev(REPLAY_EVENT_ADDED, m);
                 newStatePtr->events.push_back(ev);
             }

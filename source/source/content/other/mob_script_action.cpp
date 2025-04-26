@@ -505,7 +505,7 @@ bool MobActionLoaders::playSound(MobActionCall &call) {
  * @return Whether it succeeded.
  */
 bool MobActionLoaders::receiveStatus(MobActionCall &call) {
-    if(game.content.statusTypes.list.find(call.args[0]) == game.content.statusTypes.list.end()) {
+    if(!isInMap(game.content.statusTypes.list, call.args[0])) {
         call.customError =
             "Unknown status effect \"" + call.args[0] + "\"!";
         return false;
@@ -521,7 +521,7 @@ bool MobActionLoaders::receiveStatus(MobActionCall &call) {
  * @return Whether it succeeded.
  */
 bool MobActionLoaders::removeStatus(MobActionCall &call) {
-    if(game.content.statusTypes.list.find(call.args[0]) == game.content.statusTypes.list.end()) {
+    if(!isInMap(game.content.statusTypes.list, call.args[0])) {
         call.customError =
             "Unknown status effect \"" + call.args[0] + "\"!";
         return false;
@@ -717,10 +717,7 @@ bool MobActionLoaders::startChomping(MobActionCall &call) {
  * @return Whether it succeeded.
  */
 bool MobActionLoaders::startParticles(MobActionCall &call) {
-    if(
-        game.content.particleGens.list.find(call.args[0]) ==
-        game.content.particleGens.list.end()
-    ) {
+    if(!isInMap(game.content.particleGens.list, call.args[0])) {
         call.customError =
             "Unknown particle generator \"" + call.args[0] + "\"!";
         return false;
@@ -2381,7 +2378,7 @@ bool assertActions(
     for(size_t a = 0; a < actions.size(); a++) {
         if(actions[a]->action->type == MOB_ACTION_LABEL) {
             const string &name = actions[a]->args[0];
-            if(labels.find(name) != labels.end()) {
+            if(isInContainer(labels, name)) {
                 game.errors.report(
                     "There are multiple labels called \"" + name + "\"!", dn
                 );
@@ -2393,7 +2390,7 @@ bool assertActions(
     for(size_t a = 0; a < actions.size(); a++) {
         if(actions[a]->action->type == MOB_ACTION_GOTO) {
             const string &name = actions[a]->args[0];
-            if(labels.find(name) == labels.end()) {
+            if(!isInContainer(labels, name)) {
                 game.errors.report(
                     "There is no label called \"" + name + "\", even though "
                     "there are \"goto\" actions that need it!", dn

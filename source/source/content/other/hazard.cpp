@@ -44,10 +44,7 @@ void Hazard::loadFromDataNode(DataNode* node) {
         vector<string> effectsStrs = semicolonListToVector(effectsStr);
         for(size_t e = 0; e < effectsStrs.size(); e++) {
             string effectName = effectsStrs[e];
-            if(
-                game.content.statusTypes.list.find(effectName) ==
-                game.content.statusTypes.list.end()
-            ) {
+            if(!isInMap(game.content.statusTypes.list, effectName)) {
                 game.errors.report(
                     "Unknown status effect \"" + effectName + "\"!",
                     effectsNode
@@ -61,7 +58,7 @@ void Hazard::loadFromDataNode(DataNode* node) {
     }
     
     if(liquidNode) {
-        if(game.content.liquids.list.find(liquidStr) == game.content.liquids.list.end()) {
+        if(!isInMap(game.content.liquids.list, liquidStr)) {
             game.errors.report(
                 "Unknown liquid \"" + liquidStr + "\"!",
                 liquidNode

@@ -587,14 +587,14 @@ void depthFirstSearch(
     for(size_t n = 0; n < nodes.size(); n++) {
         PathStop* nPtr = nodes[n];
         if(nPtr == start) continue;
-        if(visited.find(nPtr) != visited.end()) continue;
+        if(isInContainer(visited, nPtr)) continue;
         if(nPtr->getLink(start)) {
             links.insert(nPtr);
         }
     }
     
     for(auto &l : links) {
-        if(visited.find(l) != visited.end()) continue;
+        if(isInContainer(visited, l)) continue;
         depthFirstSearch(nodes, visited, l);
     }
 }

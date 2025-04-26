@@ -1067,7 +1067,7 @@ void AreaEditor::findProblemsMobStoredInLoop() {
         size_t nextIdx = mPtr->storedInside;
         while(nextIdx != INVALID) {
             MobGen* nextPtr = game.curAreaData->mobGenerators[nextIdx];
-            if(visitedMobs.find(nextPtr) != visitedMobs.end()) {
+            if(isInContainer(visitedMobs, nextPtr)) {
                 problemMobPtr = nextPtr;
                 problemType = EPT_MOB_STORED_IN_LOOP;
                 problemTitle = "Mobs stored in a loop!";
@@ -1361,9 +1361,7 @@ void AreaEditor::findProblemsUnknownTexture() {
         
         if(sPtr->textureInfo.bmpName.empty()) continue;
         
-        const auto &textureIt =
-            game.content.bitmaps.manifests.find(sPtr->textureInfo.bmpName);
-        if(textureIt == game.content.bitmaps.manifests.end()) {
+        if(!isInMap(game.content.bitmaps.manifests, sPtr->textureInfo.bmpName)) {
             problemSectorPtr = sPtr;
             problemType = EPT_UNKNOWN_TEXTURE;
             problemTitle = "Sector with unknown texture!";

@@ -52,10 +52,7 @@ void SprayType::loadFromDataNode(
             semicolonListToVector(effectsNode->value);
         for(size_t e = 0; e < effectsStrs.size(); e++) {
             string effectName = effectsStrs[e];
-            if(
-                game.content.statusTypes.list.find(effectName) ==
-                game.content.statusTypes.list.end()
-            ) {
+            if(!isInMap(game.content.statusTypes.list, effectName)) {
                 game.errors.report(
                     "Unknown status effect \"" + effectName + "\"!",
                     effectsNode

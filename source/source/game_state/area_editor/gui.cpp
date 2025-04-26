@@ -900,7 +900,7 @@ void AreaEditor::processGuiMobScriptVars(MobGen* mPtr) {
     
     //Team property.
     string teamValue;
-    if(varsMap.find("team") != varsMap.end()) {
+    if(isInMap(varsMap, "team")) {
         teamValue = varsMap["team"];
     }
     
@@ -945,11 +945,11 @@ void AreaEditor::processGuiMobScriptVars(MobGen* mPtr) {
     
     //Health property.
     float maxHealth = mPtr->type->maxHealth;
-    if(varsMap.find("max_health") != varsMap.end()) {
+    if(isInMap(varsMap, "max_health")) {
         maxHealth = s2f(varsMap["max_health"]);
     }
     float health = maxHealth;
-    if(varsMap.find("health") != varsMap.end()) {
+    if(isInMap(varsMap, "health")) {
         health = s2f(varsMap["health"]);
     }
     
@@ -993,7 +993,7 @@ void AreaEditor::processGuiMobScriptVars(MobGen* mPtr) {
             &mPtr->type->areaEditorProps[p];
             
         string value;
-        if(varsMap.find(pPtr->var) == varsMap.end()) {
+        if(!isInMap(varsMap, pPtr->var)) {
             value = pPtr->defValue;
         } else {
             value = varsMap[pPtr->var];

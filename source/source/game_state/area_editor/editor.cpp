@@ -1003,7 +1003,7 @@ void AreaEditor::finishLayoutMoving() {
             Vertex* mvPtr = mergeVertexes[mv].second;
             if(
                 mvPtr == v ||
-                selectedVertexes.find(mvPtr) != selectedVertexes.end()
+                isInContainer(selectedVertexes, mvPtr)
             ) {
                 mergeVertexes.erase(mergeVertexes.begin() + mv);
             } else {
@@ -1035,11 +1035,9 @@ void AreaEditor::finishLayoutMoving() {
                 ePtr = getEdgeUnderPoint(p, ePtr);
                 if(ePtr) {
                     ePtrV1Selected =
-                        selectedVertexes.find(ePtr->vertexes[0]) !=
-                        selectedVertexes.end();
+                        isInContainer(selectedVertexes, ePtr->vertexes[0]);
                     ePtrV2Selected =
-                        selectedVertexes.find(ePtr->vertexes[1]) !=
-                        selectedVertexes.end();
+                        isInContainer(selectedVertexes, ePtr->vertexes[1]);
                 }
             } while(
                 ePtr != nullptr &&
@@ -1060,10 +1058,7 @@ void AreaEditor::finishLayoutMoving() {
         Edge* ePtr = game.curAreaData->edges[e];
         bool bothSelected = true;
         for(size_t v = 0; v < 2; v++) {
-            if(
-                selectedVertexes.find(ePtr->vertexes[v]) ==
-                selectedVertexes.end()
-            ) {
+            if(!isInContainer(selectedVertexes, ePtr->vertexes[v])) {
                 bothSelected = false;
                 break;
             }
@@ -1079,7 +1074,7 @@ void AreaEditor::finishLayoutMoving() {
         Vertex* vPtr = game.curAreaData->vertexes[v];
         Point p = v2p(vPtr);
         
-        if(selectedVertexes.find(vPtr) != selectedVertexes.end()) {
+        if(isInContainer(selectedVertexes, vPtr)) {
             continue;
         }
         bool isMergeTarget = false;
@@ -1100,7 +1095,7 @@ void AreaEditor::finishLayoutMoving() {
                 if(vPtr->hasEdge(ePtr)) {
                     valid = false;
                 }
-                if(movedEdges.find(ePtr) == movedEdges.end()) {
+                if(!isInContainer(movedEdges, ePtr)) {
                     valid = false;
                 }
             }

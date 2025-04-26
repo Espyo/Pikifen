@@ -2287,12 +2287,7 @@ void GameplayState::processMobTouches(
                     h1Ptr->type == HITBOX_TYPE_NORMAL &&
                     m2Ptr->chompingMobs.size() <
                     m2Ptr->chompMax &&
-                    find(
-                        m2Ptr->chompBodyParts.begin(),
-                        m2Ptr->chompBodyParts.end(),
-                        h2Ptr->bodyPartIdx
-                    ) !=
-                    m2Ptr->chompBodyParts.end()
+                    isInContainer(m2Ptr->chompBodyParts, h2Ptr->bodyPartIdx)
                 ) {
                     hitboxTouchEatEv->run(
                         mPtr,

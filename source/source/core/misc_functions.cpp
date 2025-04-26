@@ -1209,10 +1209,7 @@ void saveScreenshot() {
     
     do {
     
-        if(
-            find(files.begin(), files.end(), finalFileName + ".png")
-            == files.end()
-        ) {
+        if(!isInContainer(files, finalFileName + ".png")) {
             //File name not found.
             //Go ahead and create a screenshot with this name.
             validName = true;

@@ -803,13 +803,7 @@ FS_DELETE_RESULT wipeFolder(
                     entryName.substr(pos + 1, entryName.size() - pos - 1);
             }
             
-            if(
-                std::find(
-                    nonImportantFiles.begin(),
-                    nonImportantFiles.end(),
-                    entryName
-                ) == nonImportantFiles.end()
-            ) {
+            if(!isInContainer(nonImportantFiles, entryName)) {
                 //Name not found in the non-important file list.
                 hasImportantFiles = true;
             } else {

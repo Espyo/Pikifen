@@ -42,10 +42,7 @@ void SpikeDamageType::loadFromDataNode(DataNode* node) {
     );
     
     if(particleGeneratorNode) {
-        if(
-            game.content.particleGens.list.find(particleGeneratorName) ==
-            game.content.particleGens.list.end()
-        ) {
+        if(!isInMap(game.content.particleGens.list, particleGeneratorName)) {
             game.errors.report(
                 "Unknown particle generator \"" +
                 particleGeneratorName + "\"!", particleGeneratorNode

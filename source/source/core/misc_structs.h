@@ -1413,7 +1413,7 @@ public:
     ) {
         if(name.empty()) return doLoad("", node, reportErrors);
         
-        if(list.find(name) == list.end()) {
+        if(!isInMap(list, name)) {
             AssetT assetPtr =
                 doLoad(name, node, reportErrors);
             list[name] = AssetUse(assetPtr);

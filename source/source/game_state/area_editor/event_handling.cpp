@@ -697,30 +697,21 @@ void AreaEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
                 } else {
                 
                     if(clickedVertex) {
-                        if(
-                            selectedVertexes.find(clickedVertex) ==
-                            selectedVertexes.end()
-                        ) {
+                        if(!isInContainer(selectedVertexes, clickedVertex)) {
                             if(!isCtrlPressed) {
                                 clearSelection();
                             }
                             selectVertex(clickedVertex);
                         }
                     } else if(clickedEdge) {
-                        if(
-                            selectedEdges.find(clickedEdge) ==
-                            selectedEdges.end()
-                        ) {
+                        if(!isInContainer(selectedEdges, clickedEdge)) {
                             if(!isCtrlPressed) {
                                 clearSelection();
                             }
                             selectEdge(clickedEdge);
                         }
                     } else {
-                        if(
-                            selectedSectors.find(clickedSector) ==
-                            selectedSectors.end()
-                        ) {
+                        if(!isInContainer(selectedSectors, clickedSector)) {
                             if(!isCtrlPressed) {
                                 clearSelection();
                             }
@@ -982,7 +973,7 @@ void AreaEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
                 selectionEnd = game.view.cursorWorldPos;
                 
             } else {
-                if(selectedMobs.find(clickedMob) == selectedMobs.end()) {
+                if(!isInContainer(selectedMobs, clickedMob)) {
                     if(!isCtrlPressed) {
                         clearSelection();
                     }
@@ -1144,20 +1135,14 @@ void AreaEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
             } else {
             
                 if(clickedStop) {
-                    if(
-                        selectedPathStops.find(clickedStop) ==
-                        selectedPathStops.end()
-                    ) {
+                    if(!isInContainer(selectedPathStops, clickedStop)) {
                         if(!isCtrlPressed) {
                             clearSelection();
                         }
                         selectedPathStops.insert(clickedStop);
                     }
                 } else {
-                    if(
-                        selectedPathLinks.find(clickedLink1) ==
-                        selectedPathLinks.end()
-                    ) {
+                    if(!isInContainer(selectedPathLinks, clickedLink1)) {
                         if(!isCtrlPressed) {
                             clearSelection();
                         }

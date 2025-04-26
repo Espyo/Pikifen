@@ -1022,10 +1022,7 @@ void PikminNestType::loadProperties(DataNode* file) {
     vector<string> pikTypesStrs = semicolonListToVector(pikTypesStr);
     for(size_t t = 0; t < pikTypesStrs.size(); t++) {
         string &str = pikTypesStrs[t];
-        if(
-            game.content.mobTypes.list.pikmin.find(str) ==
-            game.content.mobTypes.list.pikmin.end()
-        ) {
+        if(!isInMap(game.content.mobTypes.list.pikmin, str)) {
             game.errors.report(
                 "Unknown Pikmin type \"" + str + "\"!",
                 pikTypesNode
