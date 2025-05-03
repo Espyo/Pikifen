@@ -528,6 +528,36 @@ void initControls() {
         "menu_page_right", "k_5", 0.5f
     );
     
+    //General maker tool things.
+    game.controls.addPlayerActionType(
+        PLAYER_ACTION_TYPE_MT_AUTO_START,
+        PLAYER_ACTION_CAT_GENERAL_MAKER_TOOLS,
+        "Auto-start",
+        "Make the game auto-start on the current state (and content).",
+        "mt_auto_start", "k_56"
+    );
+    game.controls.addPlayerActionType(
+        PLAYER_ACTION_TYPE_MT_SET_SONG_POS_NEAR_LOOP,
+        PLAYER_ACTION_CAT_GENERAL_MAKER_TOOLS,
+        "Set song pos near loop",
+        "Set the current song's position to be near the loop point.",
+        "mt_set_song_pos_near_loop", ""
+    );
+    game.controls.addPlayerActionType(
+        PLAYER_ACTION_TYPE_MT_MOD_1,
+        PLAYER_ACTION_CAT_GENERAL_MAKER_TOOLS,
+        "Modifier 1",
+        "Holding this input modifies the behavior of some tools.",
+        "mt_mod_1", ""
+    );
+    game.controls.addPlayerActionType(
+        PLAYER_ACTION_TYPE_MT_MOD_2,
+        PLAYER_ACTION_CAT_GENERAL_MAKER_TOOLS,
+        "Modifier 2",
+        "Holding this input modifies the behavior of some tools.",
+        "mt_mod_2", ""
+    );
+    
     //Gameplay maker tools.
     game.controls.addPlayerActionType(
         PLAYER_ACTION_TYPE_MT_AREA_IMAGE,
@@ -605,22 +635,6 @@ void initControls() {
         "Teleport",
         "Teleport the leader to the cursor.",
         "mt_teleport", "k_29", 0.5f
-    );
-    
-    //Global maker tools.
-    game.controls.addPlayerActionType(
-        PLAYER_ACTION_TYPE_MT_AUTO_START,
-        PLAYER_ACTION_CAT_GLOBAL_MAKER_TOOLS,
-        "Auto-start",
-        "Make the game auto-start on the current state (and content).",
-        "mt_auto_start", "k_56"
-    );
-    game.controls.addPlayerActionType(
-        PLAYER_ACTION_TYPE_MT_SET_SONG_POS_NEAR_LOOP,
-        PLAYER_ACTION_CAT_GLOBAL_MAKER_TOOLS,
-        "Set song pos near loop",
-        "Set the current song's position to be near the loop point.",
-        "mt_set_song_pos_near_loop", ""
     );
     
     //System.

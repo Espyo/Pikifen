@@ -20,7 +20,7 @@
     
     <p>Most of these tools are used while playing the engine, and are called by pressing the key or button bound to them in the options. Their effects vary, but their purpose is to help content makers by making mundane tasks easier and providing helpful information that can be useful in debugging any problems. It is possible to set which tools run on which player input, and it's also possible to change some of the tools' settings. There are also some other tools that are not run on demand and instead affect the behavior of some part of the game.</p>
 
-    <p>You can hold down the input to repeat the effect over and over. This is useful, for instance, for spawning several Pikmin quickly. Some also change their behavior if you were holding Shift or Ctrl before pressing the input. A handful of the tools print out information on the top of the game window, on top of a see-through black box. This info disappears after some seconds, unless you call it again.</p>
+    <p>You can hold down the input to repeat the effect over and over. This is useful, for instance, for spawning several Pikmin quickly. Some also change their behavior if you were holding the "modifier 1" or "modifier 2" inputs before pressing their input. A handful of the tools print out information on the top of the game window, on top of a see-through black box. This info disappears after some seconds, unless you call it again.</p>
 
     <h2 id="config">Configuration file</h2>
     
@@ -30,7 +30,7 @@
 
     <p>The <code>controls</code> block lists what control binds exist for each tool. These should be edited via the options menu. The number keys at the top of the letter keys are recommended!</p>
 
-    <p>The remaining blocks have the name correspond to the internal name of each tool, listed in said tool's section in this page. The properties inside customize how it works, and are also listed in this page. Some of them have a <code>main_settings</code>, a <code>shift_settings</code>, and a <code>ctrl_settings</code> block. These control what happens when you press their input solo, when you press it while holding Shift, and when you press it while holding Ctrl, respectively.</p>
+    <p>The remaining blocks have the name correspond to the internal name of each tool, listed in said tool's section in this page. The properties inside customize how it works, and are also listed in this page. Some of them have a <code>normal_settings</code>, a <code>mod_1_settings</code>, and a <code>mod_2_settings</code> block. These control what happens when you press their input solo, when you press it while holding "modifier 1", and when you press it while holding "modifier 2", respectively.</p>
 
     <h2 id="key-tools">Key tools</h2>
     
@@ -42,7 +42,7 @@
 
     <p><b>Properties</b>:</p>
 
-    <p>Each of the <code>main_settings</code>, <code>shift_settings</code>, and <code>ctrl_settings</code> blocks have these properties:</p>
+    <p>Each of the <code>normal_settings</code>, <code>mod_1_settings</code>, and <code>mod_2_settings</code> blocks have these properties:</p>
     
     <table class="props-t props-t-o">
       <tr>
@@ -102,7 +102,7 @@
 
     <p><b>Properties</b>:</p>
 
-    <p>Each of the <code>main_settings</code>, <code>shift_settings</code>, and <code>ctrl_settings</code> blocks have these properties:</p>
+    <p>Each of the <code>normal_settings</code>, <code>mod_1_settings</code>, and <code>mod_2_settings</code> blocks have these properties:</p>
 
     <table class="props-t props-t-o">
       <tr>
@@ -137,7 +137,7 @@
 
     <p><b>Properties</b>:</p>
 
-    <p>Each of the <code>main_settings</code>, <code>shift_settings</code>, and <code>ctrl_settings</code> blocks have these properties:</p>
+    <p>Each of the <code>normal_settings</code>, <code>mod_1_settings</code>, and <code>mod_2_settings</code> blocks have these properties:</p>
 
     <table class="props-t props-t-o">
       <tr>
@@ -150,7 +150,7 @@
 
     <h3 id="mob-info">Mob info</h3>
     
-    <p>Prints out important information about the mob closest to the cursor, on the top of the game window. It uses the mouse cursor for this, not the leader's cursor. When you press the button, it locks-on to that mob, and only unlocks if the mob is deleted or if you press the button again while pointing to the same mob. Pointing to a different mob will lock to that one instead. This lock-on can also be useful for other maker tools. If you were holding Shift, it will instead scan for mobs whose centers are around the cursor, and iterate between them; this is useful if multiple mobs are bundled in the same spot. If you were holding Ctrl, it will stop locking on. The information shown is:</p>
+    <p>Prints out important information about the mob closest to the cursor, on the top of the game window. It uses the mouse cursor for this, not the leader's cursor. When you press the button, it locks-on to that mob, and only unlocks if the mob is deleted or if you press the button again while pointing to the same mob. Pointing to a different mob will lock to that one instead. This lock-on can also be useful for other maker tools. If you were holding "modifier 1", it will instead scan for mobs whose centers are around the cursor, and iterate between them; this is useful if multiple mobs are bundled in the same spot. If you were holding "modifier 2", it will stop locking on. The information shown is:</p>
     
     <ul>
       <li><b>Name</b>: The name of the type of mob this is (e.g. Red Bulborb, Olimar).</li>
@@ -170,7 +170,7 @@
 
     <h3 id="new-pikmin">New Pikmin</h3>
     
-    <p>Creates a new flower Pikmin where the cursor is, in the idle state. This uses the mouse cursor, not the leader's cursor. The type of the Pikmin created depends on the previous Pikmin created this way, in that it follows a cycle, alphabetically going through all Pikmin types declared in the engine. This tool is very useful if you need more Pikmin with you instantly. You can hold down the key to create a large army of Pikmin in a short time. If you were holding Shift, it will spawn a Pikmin of the same type as the previous. If you were holding Ctrl, the Pikmin will be a leaf Pikmin.</p>
+    <p>Creates a new flower Pikmin where the cursor is, in the idle state. This uses the mouse cursor, not the leader's cursor. The type of the Pikmin created depends on the previous Pikmin created this way, in that it follows a cycle, alphabetically going through all Pikmin types declared in the engine. This tool is very useful if you need more Pikmin with you instantly. You can hold down the key to create a large army of Pikmin in a short time. If you were holding "modifier 1", it will spawn a Pikmin of the same type as the previous. If you were holding "modifier 2", the Pikmin will be a leaf Pikmin.</p>
     
     <p><b>Tool internal name</b>: <code>new_pikmin</code>.</p>
 
@@ -232,7 +232,7 @@
 
     <h3 id="teleport">Teleport</h3>
     
-    <p>Teleports the current leader to the cursor's position. This uses the mouse cursor, not the leader's cursor. Use this to go somewhere instantly or to move around the area quickly. Keep in mind that Pikmin in your party will not teleport with you, so they may have a hard time following you. This also has some technical drawbacks: Pikmin may go to an incorrect spot when trying to stay on the group, and the leader's vertical position may not be updated correctly. Neither of these are critical and eventually fix themselves. You can also hold down the key to repeatedly go to the cursor, which updates with the leader, meaning that this allows you to quickly move through everything in the direction the cursor is. This is however very hard to control. If you were holding Shift, it will instead teleport the mob that's <a href="#mob-info">locked-on</a>.</p>
+    <p>Teleports the current leader to the cursor's position. This uses the mouse cursor, not the leader's cursor. Use this to go somewhere instantly or to move around the area quickly. Keep in mind that Pikmin in your party will not teleport with you, so they may have a hard time following you. This also has some technical drawbacks: Pikmin may go to an incorrect spot when trying to stay on the group, and the leader's vertical position may not be updated correctly. Neither of these are critical and eventually fix themselves. You can also hold down the key to repeatedly go to the cursor, which updates with the leader, meaning that this allows you to quickly move through everything in the direction the cursor is. This is however very hard to control. If you were holding "modifier 1", it will instead teleport the mob that's <a href="#mob-info">locked-on</a>.</p>
 
     <p><b>Tool internal name</b>: <code>teleport</code>.</p>
 

@@ -802,7 +802,7 @@ void OptionsMenu::initGuiTopPage() {
     DataNode* iconsNode = guiFile->getChildByName("icons_to_the_left");
     
 #define iconLeft(name, def) s2b(iconsNode->getChildByName(name)-> \
-                                 getValueOrDefault(def))
+                                getValueOrDefault(def))
     
     bool controlsIconLeft = iconLeft("controls", "true");
     bool graphicsIconLeft = iconLeft("graphics", "true");
@@ -1131,8 +1131,8 @@ void OptionsMenu::populateBinds() {
         break;
     } case CONTROL_BINDS_MENU_SPECIAL: {
         allowedCategories = {
+            PLAYER_ACTION_CAT_GENERAL_MAKER_TOOLS,
             PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
-            PLAYER_ACTION_CAT_GLOBAL_MAKER_TOOLS,
             PLAYER_ACTION_CAT_SYSTEM,
         };
         break;
@@ -1183,11 +1183,11 @@ void OptionsMenu::populateBinds() {
             } case PLAYER_ACTION_CAT_ADVANCED: {
                 sectionName = "Advanced";
                 break;
+            } case PLAYER_ACTION_CAT_GENERAL_MAKER_TOOLS: {
+                sectionName = "General maker tools";
+                break;
             } case PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS: {
                 sectionName = "Gameplay maker tools";
-                break;
-            } case PLAYER_ACTION_CAT_GLOBAL_MAKER_TOOLS: {
-                sectionName = "Global maker tools";
                 break;
             } case PLAYER_ACTION_CAT_SYSTEM: {
                 sectionName = "System";

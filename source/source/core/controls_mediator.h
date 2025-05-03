@@ -191,6 +191,20 @@ enum PLAYER_ACTION_TYPE {
     //Menu navigation page to the right.
     PLAYER_ACTION_TYPE_MENU_PAGE_RIGHT,
     
+    //General maker tool things.
+    
+    //Auto-start.
+    PLAYER_ACTION_TYPE_MT_AUTO_START,
+    
+    //Set song position near loop.
+    PLAYER_ACTION_TYPE_MT_SET_SONG_POS_NEAR_LOOP,
+    
+    //Maker tool modifier 1.
+    PLAYER_ACTION_TYPE_MT_MOD_1,
+    
+    //Maker tool modifier 2.
+    PLAYER_ACTION_TYPE_MT_MOD_2,
+    
     //Gameplay maker tools.
     
     //Area image.
@@ -226,14 +240,6 @@ enum PLAYER_ACTION_TYPE {
     //Teleport.
     PLAYER_ACTION_TYPE_MT_TELEPORT,
     
-    //Global maker tools.
-    
-    //Auto-start.
-    PLAYER_ACTION_TYPE_MT_AUTO_START,
-    
-    //Set song position near loop.
-    PLAYER_ACTION_TYPE_MT_SET_SONG_POS_NEAR_LOOP,
-    
     //System.
     
     //System info.
@@ -260,11 +266,11 @@ enum PLAYER_ACTION_CAT {
     //Advanced.
     PLAYER_ACTION_CAT_ADVANCED,
     
+    //General maker tool things.
+    PLAYER_ACTION_CAT_GENERAL_MAKER_TOOLS,
+    
     //Gameplay maker tools.
     PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
-    
-    //Global maker tools.
-    PLAYER_ACTION_CAT_GLOBAL_MAKER_TOOLS,
     
     //System.
     PLAYER_ACTION_CAT_SYSTEM,

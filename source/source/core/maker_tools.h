@@ -156,6 +156,12 @@ struct MakerTools {
     
     //Different mob hurting settings. When used, dock this much of its max HP.
     float mobHurtingSettings[3] = { 0.75f, 1.0f, -1.0f };
+
+    //Whether the first modifier input is held down.
+    bool mod1 = false;
+    
+    //Whether the second modifier input is held down.
+    bool mod2 = false;
     
     //Show path info?
     bool pathInfo = false;
@@ -171,7 +177,7 @@ struct MakerTools {
     
     MakerTools();
     bool handleGameplayPlayerAction(const PlayerAction &action);
-    bool handleGlobalPlayerAction(const PlayerAction &action);
+    bool handleGeneralPlayerAction(const PlayerAction &action);
     void loadFromDataNode(DataNode* node);
     void resetForGameplay();
     void saveToDataNode(DataNode* node);

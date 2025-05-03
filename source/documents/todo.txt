@@ -192,7 +192,7 @@ Next tasks (roughly sorted most important first)
     Add a screenshot, or better yet, a gif to the readme
     Manual updates
         Update screenshots that still show off the Play area
-        Have an infobox with quick info about content, like its folder
+        Add a favicon
     Cook up a better logo?
     Set the version of all pieces of content to 1.0
     Test everything in the regression tests
@@ -552,6 +552,7 @@ Next tasks (roughly sorted most important first)
         Vignette
         [NEEDS BRAINSTORMING] Floating particles found in caves -- or should this count as something different from weather? Maybe it'd work better as an object that spawns them
         [NEEDS BRAINSTORMING] Position of the sun, and position of the moon?
+        A property that multiplies the speed of the three shadows's sway. This way, windy weather can make the trees shake faster, like in real life
         Add the relevant particles to the base content's weather
         Set the entire area to a hazard during a part of the day (e.g. rain that drowns non-Blue Pikmin)
         Set the direction of the sun -- indoor lighting likely uses a fixed light direction

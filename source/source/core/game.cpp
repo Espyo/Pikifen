@@ -159,7 +159,7 @@ void Game::globalDrawing() {
 void Game::globalLogic() {
     //Player action handling.
     for(size_t a = 0; a < playerActions.size();) {
-        if(makerTools.handleGlobalPlayerAction(playerActions[a])) {
+        if(makerTools.handleGeneralPlayerAction(playerActions[a])) {
             playerActions.erase(playerActions.begin() + a);
         } else if(globalHandleSystemPlayerAction(playerActions[a])) {
             playerActions.erase(playerActions.begin() + a);
