@@ -215,7 +215,7 @@ void drawSectorTexture(
     Sector* sPtr, const Point &where, float scale, float opacity
 );
 void drawSectorEdgeOffsets(
-    Sector* sPtr, ALLEGRO_BITMAP* buffer, float opacity
+    Sector* sPtr, ALLEGRO_BITMAP* buffer, float opacity, const Viewport &view
 );
 void drawMobShadow(
     const Mob* m,

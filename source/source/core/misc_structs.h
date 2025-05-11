@@ -963,7 +963,7 @@ struct Notification {
     
     //--- Function declarations ---
     
-    void draw() const;
+    void draw(const Viewport& view) const;
     float getVisibility() const;
     void reset();
     void setContents(
@@ -1192,23 +1192,6 @@ struct SubgroupTypeManager {
     
     //Known types.
     vector<SubgroupType*> types;
-    
-};
-
-
-/**
- * @brief Info about the current amount of sprays and ingredients
- * for the available spray types.
- */
-struct SprayStats {
-
-    //--- Members ---
-    
-    //Number of sprays of this type owned.
-    size_t nrSprays = 0;
-    
-    //Number of concoction ingredients owned.
-    size_t nrIngredients = 0;
     
 };
 

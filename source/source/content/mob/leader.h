@@ -12,6 +12,7 @@
 
 #include <vector>
 
+#include "../../core/player.h"
 #include "../../util/general_utils.h"
 #include "../mob_type/leader_type.h"
 #include "mob.h"
@@ -72,12 +73,12 @@ class Leader : public Mob {
 public:
 
     //--- Members ---
+
+    //Player that is currently controlling it, if any. Cache for performance.
+    Player* player = nullptr;
     
     //What type of leader it is.
     LeaderType* leaType = nullptr;
-    
-    //Is it active? i.e. being controlled by a player.
-    bool active = false;
     
     //Is it currently auto-plucking?
     bool autoPlucking = false;
@@ -152,6 +153,7 @@ public:
     bool checkThrowOk() const;
     bool canGrabGroupMember(Mob* m) const;
     void dismiss();
+    size_t getAmountOfGroupPikmin(const PikminType* filter);
     bool orderPikminToOnion(
         const PikminType* type, PikminNest* nPtr, size_t amount
     );
@@ -198,6 +200,6 @@ private:
 
 
 void changeToNextLeader(
-    bool forward, bool forceSuccess, bool keepIdx
+    Player* player, bool forward, bool forceSuccess, bool keepIdx
 );
-bool grabClosestGroupMember();
+bool grabClosestGroupMember(Player* player);

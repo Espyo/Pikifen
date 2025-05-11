@@ -29,9 +29,11 @@
  *
  * @param caches List of caches to fetch edge info from.
  * @param eIdx Index of the edge whose effects to draw.
+ * @param view Viewport to draw to.
  */
 void drawEdgeOffsetOnBuffer(
-    const vector<EdgeOffsetCache> &caches, size_t eIdx
+    const vector<EdgeOffsetCache> &caches, size_t eIdx,
+    const Viewport &view
 ) {
     //Keep the end opacity as a constant. Changing it helps with debugging.
     const float END_OPACITY = 0.0f;
@@ -131,7 +133,7 @@ void drawEdgeOffsetOnBuffer(
     //Let's transform the "rectangle" coordinates for the buffer.
     for(unsigned char v = 0; v < 4; v++) {
         al_transform_coordinates(
-            &game.view.worldToWindowTransform, &av[v].x, &av[v].y
+            &view.worldToWindowTransform, &av[v].x, &av[v].y
         );
     }
     
@@ -164,7 +166,7 @@ void drawEdgeOffsetOnBuffer(
             elbowAV[e][v + 2].color = endColors[e];
             elbowAV[e][v + 2].color.a = END_OPACITY;
             al_transform_coordinates(
-                &game.view.worldToWindowTransform,
+                &view.worldToWindowTransform,
                 &elbowAV[e][v + 2].x, &elbowAV[e][v + 2].y
             );
         }
@@ -189,9 +191,11 @@ void drawEdgeOffsetOnBuffer(
  * @param sPtr Sector to draw the effects of.
  * @param buffer Buffer to draw from.
  * @param opacity Draw at this opacity, 0 - 1.
+ * @param view Viewport to draw to.
  */
 void drawSectorEdgeOffsets(
-    Sector* sPtr, ALLEGRO_BITMAP* buffer, float opacity
+    Sector* sPtr, ALLEGRO_BITMAP* buffer, float opacity,
+    const Viewport &view
 ) {
     if(sPtr->isBottomlessPit) return;
     
@@ -207,7 +211,7 @@ void drawSectorEdgeOffsets(
         av[v].x = vx;
         av[v].y = vy;
         al_transform_coordinates(
-            &game.view.worldToWindowTransform, &vx, &vy
+            &view.worldToWindowTransform, &vx, &vy
         );
         av[v].u = vx;
         av[v].v = vy;
@@ -637,11 +641,12 @@ void getNextOffsetEffectEdge(
  * @param caches List of caches to fetch edge info from.
  * @param buffer Buffer to draw to.
  * @param clearFirst If true, the bitmap is cleared before any drawing is done.
+ * @param view Viewport to draw to.
  */
 void updateOffsetEffectBuffer(
     const Point &camTL, const Point &camBR,
     const vector<EdgeOffsetCache> &caches, ALLEGRO_BITMAP* buffer,
-    bool clearFirst
+    bool clearFirst, const Viewport &view
 ) {
     unordered_set<size_t> edges;
     
@@ -710,7 +715,7 @@ void updateOffsetEffectBuffer(
     }
     
     for(size_t eIdx : edges) {
-        drawEdgeOffsetOnBuffer(caches, eIdx);
+        drawEdgeOffsetOnBuffer(caches, eIdx, view);
     }
     
     //Return to the old state of things.

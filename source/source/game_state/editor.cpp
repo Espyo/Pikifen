@@ -126,22 +126,22 @@ void Editor::centerCamera(
     float width = maxC.x - minC.x;
     float height = maxC.y - minC.y;
     
-    game.view.cam.targetPos.x = floor(minC.x + width  / 2);
-    game.view.cam.targetPos.y = floor(minC.y + height / 2);
+    game.editorsView.cam.targetPos.x = floor(minC.x + width  / 2);
+    game.editorsView.cam.targetPos.y = floor(minC.y + height / 2);
     
     float z;
-    if(width > height) z = game.view.size.x / width;
-    else z = game.view.size.y / height;
+    if(width > height) z = game.editorsView.size.x / width;
+    else z = game.editorsView.size.y / height;
     z -= z * 0.1;
     
-    game.view.cam.targetZoom = z;
+    game.editorsView.cam.targetZoom = z;
     
     if(instantaneous) {
-        game.view.cam.pos = game.view.cam.targetPos;
-        game.view.cam.zoom = game.view.cam.targetZoom;
+        game.editorsView.cam.pos = game.editorsView.cam.targetPos;
+        game.editorsView.cam.zoom = game.editorsView.cam.targetZoom;
     }
     
-    game.view.updateTransformations();
+    game.editorsView.updateTransformations();
 }
 
 
@@ -179,12 +179,12 @@ void Editor::doLogicPre() {
         if(doubleClickTime < 0) doubleClickTime = 0;
     }
     
-    game.view.cam.tick(game.deltaT);
-    game.view.updateBox();
+    game.editorsView.cam.tick(game.deltaT);
+    game.editorsView.updateBox();
     
     opErrorFlashTimer.tick(game.deltaT);
     
-    game.view.updateTransformations();
+    game.editorsView.updateTransformations();
 }
 
 
@@ -201,17 +201,17 @@ void Editor::drawGrid(
     float interval,
     const ALLEGRO_COLOR &majorColor, const ALLEGRO_COLOR &minorColor
 ) {
-    Point canvasTL = game.view.getTopLeft();
-    Point canvasBR = game.view.getBottomRight();
+    Point canvasTL = game.editorsView.getTopLeft();
+    Point canvasBR = game.editorsView.getBottomRight();
     
     Point camTLCorner = canvasTL;
     Point camBRCorner = canvasBR;
     al_transform_coordinates(
-        &game.view.windowToWorldTransform,
+        &game.editorsView.windowToWorldTransform,
         &camTLCorner.x, &camTLCorner.y
     );
     al_transform_coordinates(
-        &game.view.windowToWorldTransform,
+        &game.editorsView.windowToWorldTransform,
         &camBRCorner.x, &camBRCorner.y
     );
     
@@ -222,11 +222,11 @@ void Editor::drawGrid(
         
         if(fmod(x, interval * 2) == 0) {
             c = majorColor;
-            if((interval * 2) * game.view.cam.zoom <= 6) {
+            if((interval * 2) * game.editorsView.cam.zoom <= 6) {
                 drawLine = false;
             }
         } else {
-            if(interval * game.view.cam.zoom <= 6) {
+            if(interval * game.editorsView.cam.zoom <= 6) {
                 drawLine = false;
             }
         }
@@ -235,7 +235,7 @@ void Editor::drawGrid(
             al_draw_line(
                 x, camTLCorner.y,
                 x, camBRCorner.y + interval,
-                c, 1.0f / game.view.cam.zoom
+                c, 1.0f / game.editorsView.cam.zoom
             );
         }
         x += interval;
@@ -248,11 +248,11 @@ void Editor::drawGrid(
         
         if(fmod(y, interval * 2) == 0) {
             c = majorColor;
-            if((interval * 2) * game.view.cam.zoom <= 6) {
+            if((interval * 2) * game.editorsView.cam.zoom <= 6) {
                 drawLine = false;
             }
         } else {
-            if(interval * game.view.cam.zoom <= 6) {
+            if(interval * game.editorsView.cam.zoom <= 6) {
                 drawLine = false;
             }
         }
@@ -261,7 +261,7 @@ void Editor::drawGrid(
             al_draw_line(
                 camTLCorner.x, y,
                 camBRCorner.x + interval, y,
-                c, 1.0f / game.view.cam.zoom
+                c, 1.0f / game.editorsView.cam.zoom
             );
         }
         y += interval;
@@ -735,7 +735,9 @@ void Editor::handleMmbUp(const ALLEGRO_EVENT &ev) {}
  *
  * @param ev Event to process.
  */
-void Editor::handleMouseUpdate(const ALLEGRO_EVENT &ev) {}
+void Editor::handleMouseUpdate(const ALLEGRO_EVENT &ev) {
+    game.editorsView.updateCursor(game.mouseCursor.winPos);
+}
 
 
 /**
@@ -1480,9 +1482,9 @@ void Editor::load() {
     setStatus();
     changesMgr.reset();
     game.mouseCursor.show();
-    game.view.updateTransformations();
-    game.view.cam.setPos(Point());
-    game.view.cam.setZoom(1.0f);
+    game.editorsView.updateTransformations();
+    game.editorsView.cam.setPos(Point());
+    game.editorsView.cam.setZoom(1.0f);
     updateStyle();
     
     game.fadeMgr.startFade(true, nullptr);
@@ -1964,10 +1966,10 @@ void Editor::processGuiCanvas() {
     Point curTL(itemTL.x, itemTL.y);
     Point curSize(itemSize.x, itemSize.y);
     Point curCenter = curTL + curSize / 2.0f;
-    if(curCenter != game.view.center || curSize != game.view.size) {
-        game.view.center = curCenter;
-        game.view.size = curSize;
-        game.view.updateTransformations();
+    if(curCenter != game.editorsView.center || curSize != game.editorsView.size) {
+        game.editorsView.center = curCenter;
+        game.editorsView.size = curSize;
+        game.editorsView.updateTransformations();
     }
 }
 
@@ -3007,7 +3009,7 @@ void Editor::updateStyle() {
         //Use the default style.
         memcpy(
             &(ImGui::GetStyle().Colors),
-            game.DearImGuiDefaultStyle,
+            game.dearImGuiDefaultStyle,
             sizeof(ImVec4) * ImGuiCol_COUNT
         );
         
@@ -3144,34 +3146,34 @@ void Editor::updateStyle() {
  */
 void Editor::zoomWithCursor(float newZoom) {
     //Keep a backup of the old mouse coordinates.
-    Point oldMousePos = game.view.cursorWorldPos;
+    Point oldMousePos = game.editorsView.cursorWorldPos;
     
     //Do the zoom.
-    game.view.cam.setZoom(std::clamp(newZoom, zoomMinLevel, zoomMaxLevel));
-    game.view.updateTransformations();
+    game.editorsView.cam.setZoom(std::clamp(newZoom, zoomMinLevel, zoomMaxLevel));
+    game.editorsView.updateTransformations();
     
     //Figure out where the mouse will be after the zoom.
-    game.view.cursorWorldPos = game.mouseCursor.winPos;
+    game.editorsView.cursorWorldPos = game.mouseCursor.winPos;
     al_transform_coordinates(
-        &game.view.windowToWorldTransform,
-        &game.view.cursorWorldPos.x, &game.view.cursorWorldPos.y
+        &game.editorsView.windowToWorldTransform,
+        &game.editorsView.cursorWorldPos.x, &game.editorsView.cursorWorldPos.y
     );
     
     //Readjust the transformation by shifting the camera
     //so that the cursor ends up where it was before.
-    game.view.cam.setPos(
+    game.editorsView.cam.setPos(
         Point(
-            game.view.cam.pos.x += (oldMousePos.x - game.view.cursorWorldPos.x),
-            game.view.cam.pos.y += (oldMousePos.y - game.view.cursorWorldPos.y)
+            game.editorsView.cam.pos.x += (oldMousePos.x - game.editorsView.cursorWorldPos.x),
+            game.editorsView.cam.pos.y += (oldMousePos.y - game.editorsView.cursorWorldPos.y)
         )
     );
     
     //Update the mouse coordinates again.
-    game.view.updateTransformations();
-    game.view.cursorWorldPos = game.mouseCursor.winPos;
+    game.editorsView.updateTransformations();
+    game.editorsView.cursorWorldPos = game.mouseCursor.winPos;
     al_transform_coordinates(
-        &game.view.windowToWorldTransform,
-        &game.view.cursorWorldPos.x, &game.view.cursorWorldPos.y
+        &game.editorsView.windowToWorldTransform,
+        &game.editorsView.cursorWorldPos.x, &game.editorsView.cursorWorldPos.y
     );
 }
 

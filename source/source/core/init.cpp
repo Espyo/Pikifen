@@ -801,7 +801,7 @@ void initDearImGuiColors() {
     
     //Finally, save the default style colors.
     for(size_t c = 0; c < ImGuiCol_COUNT; c++) {
-        game.DearImGuiDefaultStyle[c] = style.Colors[c];
+        game.dearImGuiDefaultStyle[c] = style.Colors[c];
     }
 }
 
@@ -935,18 +935,10 @@ void initMisc() {
     al_reserve_samples(16);
     
     al_identity_transform(&game.identityTransform);
-    game.view.size.x = game.winW;
-    game.view.size.y = game.winH;
-    game.view.center.x = game.winW / 2.0f;
-    game.view.center.y = game.winH / 2.0f;
-    game.view.boxMargin.x = GAMEPLAY::CAMERA_BOX_MARGIN;
-    game.view.boxMargin.y = GAMEPLAY::CAMERA_BOX_MARGIN;
-    game.view.updateTransformations();
     
     game.rng.init();
     
-    game.states.gameplay->whistle.nextDotTimer.start();
-    game.states.gameplay->whistle.nextRingTimer.start();
+    game.states.gameplay->players.push_back(Player());
     
     game.states.gameplay->particles =
         ParticleManager(game.options.advanced.maxParticles);

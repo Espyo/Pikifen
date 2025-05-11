@@ -30,16 +30,16 @@ void GuiEditor::doDrawing() {
  * Dear ImGui rendering process.
  */
 void GuiEditor::drawCanvas() {
-    Point canvasTL = game.view.getTopLeft();
+    Point canvasTL = game.editorsView.getTopLeft();
     
     al_set_clipping_rectangle(
-        canvasTL.x, canvasTL.y, game.view.size.x, game.view.size.y
+        canvasTL.x, canvasTL.y, game.editorsView.size.x, game.editorsView.size.y
     );
     
     //Background.
     al_clear_to_color(COLOR_BLACK);
     
-    al_use_transform(&game.view.worldToWindowTransform);
+    al_use_transform(&game.editorsView.worldToWindowTransform);
     
     //Virtual game window.
     al_draw_filled_rectangle(
@@ -57,12 +57,12 @@ void GuiEditor::drawCanvas() {
     al_draw_line(
         0.0f, 50.0f, 100.0f, 50.0f,
         al_map_rgba(208, 208, 224, 84),
-        1.0f / game.view.cam.zoom
+        1.0f / game.editorsView.cam.zoom
     );
     al_draw_line(
         50.0f, 0.0f, 50.0f, 100.0f,
         al_map_rgba(208, 208, 224, 84),
-        1.0f / game.view.cam.zoom
+        1.0f / game.editorsView.cam.zoom
     );
     
     //Items.
@@ -79,17 +79,17 @@ void GuiEditor::drawCanvas() {
         drawFilledRoundedRectangle(
             items[i].center,
             items[i].size,
-            8.0f / game.view.cam.zoom,
+            8.0f / game.editorsView.cam.zoom,
             al_map_rgba(224, 224, 224, 64)
         );
         
         float clipX = items[i].center.x - items[i].size.x / 2.0f;
         float clipY = items[i].center.y - items[i].size.y / 2.0f;
         al_transform_coordinates(
-            &game.view.worldToWindowTransform, &clipX, &clipY
+            &game.editorsView.worldToWindowTransform, &clipX, &clipY
         );
-        float clipW = items[i].size.x * game.view.cam.zoom;
-        float clipH = items[i].size.y * game.view.cam.zoom;
+        float clipW = items[i].size.x * game.editorsView.cam.zoom;
+        float clipH = items[i].size.y * game.editorsView.cam.zoom;
         setCombinedClippingRectangles(
             origClipX, origClipY, origClipW, origClipH,
             clipX, clipY, clipW, clipH
@@ -98,11 +98,11 @@ void GuiEditor::drawCanvas() {
             items[i].name, game.sysContent.fntBuiltin,
             Point(
                 (items[i].center.x - items[i].size.x / 2.0f) +
-                (4.0f / game.view.cam.zoom),
+                (4.0f / game.editorsView.cam.zoom),
                 (items[i].center.y - items[i].size.y / 2.0f) +
-                (4.0f / game.view.cam.zoom)
+                (4.0f / game.editorsView.cam.zoom)
             ),
-            Point(LARGE_FLOAT, 8.0 / game.view.cam.zoom),
+            Point(LARGE_FLOAT, 8.0 / game.editorsView.cam.zoom),
             al_map_rgb(40, 40, 96), ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP
         );
         al_set_clipping_rectangle(
@@ -113,9 +113,9 @@ void GuiEditor::drawCanvas() {
             drawRoundedRectangle(
                 items[i].center,
                 items[i].size,
-                8.0f / game.view.cam.zoom,
+                8.0f / game.editorsView.cam.zoom,
                 al_map_rgb(224, 224, 224),
-                2.0f / game.view.cam.zoom
+                2.0f / game.editorsView.cam.zoom
             );
         }
     }
@@ -125,7 +125,7 @@ void GuiEditor::drawCanvas() {
             &items[curItem].center,
             &items[curItem].size,
             nullptr,
-            1.0f / game.view.cam.zoom
+            1.0f / game.editorsView.cam.zoom
         );
     }
     

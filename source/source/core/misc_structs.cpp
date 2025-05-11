@@ -806,13 +806,8 @@ void MouseCursor::init() {
 void MouseCursor::reset() {
     ALLEGRO_MOUSE_STATE mouseState;
     al_get_mouse_state(&mouseState);
-    game.mouseCursor.winPos.x = al_get_mouse_state_axis(&mouseState, 0);
-    game.mouseCursor.winPos.y = al_get_mouse_state_axis(&mouseState, 1);
-    game.view.cursorWorldPos = game.mouseCursor.winPos;
-    al_transform_coordinates(
-        &game.view.windowToWorldTransform,
-        &game.view.cursorWorldPos.x, &game.view.cursorWorldPos.y
-    );
+    winPos.x = al_get_mouse_state_axis(&mouseState, 0);
+    winPos.y = al_get_mouse_state_axis(&mouseState, 1);
     history.clear();
 }
 
@@ -838,8 +833,10 @@ void MouseCursor::updatePos(const ALLEGRO_EVENT &ev) {
 
 /**
  * @brief Draws the notification.
+ *
+ * @param view Viewport to draw to.
  */
-void Notification::draw() const {
+void Notification::draw(const Viewport &view) const {
     if(visibility == 0.0f) return;
     
     float scale = ease(EASE_METHOD_OUT, visibility);
@@ -848,14 +845,10 @@ void Notification::draw() const {
     al_identity_transform(&tra);
     al_scale_transform(&tra, scale, scale);
     al_translate_transform(
-        &tra,
-        pos.x * game.view.cam.zoom,
-        pos.y * game.view.cam.zoom
+        &tra, pos.x * view.cam.zoom, pos.y * view.cam.zoom
     );
     al_scale_transform(
-        &tra,
-        1.0f / game.view.cam.zoom,
-        1.0f / game.view.cam.zoom
+        &tra, 1.0f / view.cam.zoom, 1.0f / view.cam.zoom
     );
     al_copy_transform(&oldTra, al_get_current_transform());
     al_compose_transform(&tra, &oldTra);
@@ -1970,43 +1963,13 @@ void Viewport::updateTransformations() {
 /**
  * @brief Constructs a new whistle struct object.
  */
-Whistle::Whistle() :
-    radius(0.0f),
-    fadeRadius(0.0f),
-    fadeTimer(WHISTLE::FADE_TIME),
-    nextDotTimer(WHISTLE::DOT_INTERVAL),
-    nextRingTimer(WHISTLE::RINGS_INTERVAL),
-    ringPrevColor(0),
-    whistling(false) {
-    
+Whistle::Whistle() {
     dotRadius[0] = -1;
     dotRadius[1] = -1;
     dotRadius[2] = -1;
     dotRadius[3] = -1;
     dotRadius[4] = -1;
     dotRadius[5] = -1;
-    
-    nextDotTimer.onEnd = [this] () {
-        nextDotTimer.start();
-        unsigned char dot = 255;
-        for(unsigned char d = 0; d < 6; d++) { //Find WHAT dot to add.
-            if(dotRadius[d] == -1) {
-                dot = d;
-                break;
-            }
-        }
-        
-        if(dot != 255) dotRadius[dot] = 0;
-    };
-    
-    nextRingTimer.onEnd = [this] () {
-        nextRingTimer.start();
-        rings.push_back(0);
-        ringColors.push_back(ringPrevColor);
-        ringPrevColor =
-            sumAndWrap(ringPrevColor, 1, WHISTLE::N_RING_COLORS);
-    };
-    
 }
 
 

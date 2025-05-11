@@ -800,16 +800,9 @@ void Mob::tickVerticalMovementPhysics(
     }
     
     //Held Pikmin are also touching the same hazards as the leader.
-    if(
-        game.states.gameplay->curLeaderPtr &&
-        holder.m == game.states.gameplay->curLeaderPtr
-    ) {
-        Sector* leaderGround =
-            game.states.gameplay->curLeaderPtr->groundSector;
-        if(
-            leaderGround &&
-            game.states.gameplay->curLeaderPtr->z <= leaderGround->z
-        ) {
+    if(holder.m && holder.m->type->category->id == MOB_CATEGORY_LEADERS) {
+        Sector* leaderGround = holder.m->groundSector;
+        if(leaderGround && holder.m->z <= leaderGround->z) {
             if(leaderGround->hazard) {
                 fsm.runEvent(
                     MOB_EV_TOUCHED_HAZARD,

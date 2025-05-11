@@ -117,15 +117,21 @@ void ShipFsm::receiveMob(Mob* m, void* info1, void* info2) {
             }
             break;
         } case RESOURCE_DELIVERY_RESULT_INCREASE_INGREDIENTS: {
-            size_t typeIdx = resPtr->resType->sprayToConcoct;
-            game.states.gameplay->sprayStats[typeIdx].nrIngredients++;
-            if(
-                game.states.gameplay->sprayStats[typeIdx].nrIngredients >=
-                game.config.misc.sprayOrder[typeIdx]->ingredientsNeeded
-            ) {
-                game.states.gameplay->sprayStats[typeIdx].nrIngredients -=
-                    game.config.misc.sprayOrder[typeIdx]->ingredientsNeeded;
-                game.states.gameplay->changeSprayCount(typeIdx, 1);
+            if(resPtr->deliveryInfo->playerTeamIdx != INVALID) {
+                PlayerTeam* team =
+                    &game.states.gameplay->playerTeams[
+                        resPtr->deliveryInfo->playerTeamIdx
+                    ];
+                size_t typeIdx = resPtr->resType->sprayToConcoct;
+                team->sprayStats[typeIdx].nrIngredients++;
+                if(
+                    team->sprayStats[typeIdx].nrIngredients >=
+                    game.config.misc.sprayOrder[typeIdx]->ingredientsNeeded
+                ) {
+                    team->sprayStats[typeIdx].nrIngredients -=
+                        game.config.misc.sprayOrder[typeIdx]->ingredientsNeeded;
+                    game.states.gameplay->changeSprayCount(team, typeIdx, 1);
+                }
             }
             break;
         } case RESOURCE_DELIVERY_RESULT_DAMAGE_MOB:

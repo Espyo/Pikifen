@@ -46,6 +46,9 @@ constexpr size_t N_MATURITIES = 3;
 //Maximum number of players that can play the game.
 constexpr size_t MAX_PLAYERS = 4;
 
+//Maximum number of player teams.
+constexpr size_t MAX_PLAYER_TEAMS = 4;
+
 //Name to display on the "none" option in a combobox.
 const string NONE_OPTION = "(None)";
 

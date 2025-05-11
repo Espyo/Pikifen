@@ -6,6 +6,9 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    If you're panning the camera in an editor's canvas and your cursor goes to the panel, you can left-click to interact with it and with the canvas at the same time
+    Sleeping right after the stage loads (maybe only in the area editor quick play?) puts you in a limbo state
+    Quitting the radar using the Tab key won't play the "back" sound
     Fix #8
 
     --- 0.26 ---
@@ -296,6 +299,7 @@ Next tasks (roughly sorted most important first)
                 Links to the control binds menu and the player setup menu
             Control binds menu
                 The player only edits and creates control schemes, like the list of saved rulesets in Smash Ultimate
+                    Each one should be saved to a folder, that way players can share the data file of a scheme they've created
                 When assigning an input to an action, if it's a controller, also save a controller placeholder number, which can be changed in this menu
                 A button or text or something explaining that this is just a control scheme, and if you want to assign it to player 1, go to the player setup menu
                 It should come pre-packed with a few schemes: "Keyboard+Mouse and Pro Controller" (default), "Keyboard+Mouse", "Single Joy-Con", etc.
@@ -494,6 +498,7 @@ Next tasks (roughly sorted most important first)
             A special "random" ruleset, included with the engine, and that cannot be deleted. Picking this will pick a ruleset at random after every match
                 Maybe add a way for this feature to exclude certain rulesets? Some people can make meme rulesets to use once or twice, and don't want them to be picked during a chill everyday "random ruleset" session
             A handful of rulesets for basic battles, Pikmin 2 battles, Pikmin 3 Bingo Battles, Pikmin 4 Dandori Battles, etc.
+            Rulesets should be saved in a folder, that way players can share the data file of a ruleset they've made
         A way for attack hitboxes to cause no knockback, otherwise Pikmin battles will keep knocking the Pikmin down
             Maybe add three types of knockback: none, flinch (makes leaders reel back in pain and Pikmin fall over), and chuck
         Onions should be able to auto-eject seeds
@@ -879,6 +884,8 @@ Misc things (so I don't forget)
         Actually have things glow by being colored after the glow's color, instead of a janky tint and addition blend operation
         Blur the background of the Onion menu, pause menu, etc.
         Enemy spirits?
+    Pathing
+        Pikmin, leaders, and so on should be able to take climbing sticks, bouncy mushrooms, geysers, etc. in order to traverse paths
     Editor improvements
         Area editor
             Areas should be able to clone the geometry of a different area. Basically instead of having their own geometry, they just have a link to another area's geometry instead. It should allow it to be rotated, too

@@ -105,6 +105,22 @@ vector<Hazard*> CarryInfo::getCarrierInvulnerabilities() const {
 
 
 /**
+ * @brief Returns the player team index number
+ * (0 for team 1, 1 for team 2, etc.) of the Pikmin carrying this.
+ * If none, it returns INVALID.
+ *
+ * @return The player team index, or INVALID.
+ */
+size_t CarryInfo::getPlayerTeamIdx() const {
+    for(size_t s = 0; s < spotInfo.size(); s++) {
+        if(!spotInfo[s].pikPtr) continue;
+        return spotInfo[s].pikPtr->getPlayerTeamIdx();
+    }
+    return INVALID;
+}
+
+
+/**
  * @brief Returns the speed at which the object should move,
  * given the carrier Pikmin.
  *

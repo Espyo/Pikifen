@@ -124,6 +124,7 @@ struct CarryInfo {
     bool isFull() const;
     vector<Hazard*> getCarrierInvulnerabilities() const;
     bool canFly() const;
+    size_t getPlayerTeamIdx() const;
     float getSpeed() const;
     void rotatePoints(float angle);
     
@@ -229,6 +230,8 @@ struct DeliveryInfo {
     //Intended delivery Pikmin type, in the case of Onions.
     PikminType* intendedPikType = nullptr;
     
+    //Index of the player team in charge, or INVALID if none.
+    size_t playerTeamIdx = INVALID;
     
     //--- Function declarations ---
     

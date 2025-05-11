@@ -154,7 +154,7 @@ Hud::Hud() :
         [this, l] (const DrawInfo & draw) {
             LeaderIconBubble icon;
             DrawInfo finalDraw;
-            game.states.gameplay->hud->leaderIconMgr.getDrawingInfo(
+            this->leaderIconMgr.getDrawingInfo(
                 l, &icon, &finalDraw
             );
             
@@ -187,7 +187,7 @@ Hud::Hud() :
         [this, l] (const DrawInfo & draw) {
             LeaderHealthBubble health;
             DrawInfo finalDraw;
-            game.states.gameplay->hud->leaderHealthMgr.getDrawingInfo(
+            this->leaderHealthMgr.getDrawingInfo(
                 l, &health, &finalDraw
             );
             
@@ -396,7 +396,7 @@ Hud::Hud() :
     GuiItem* standbyIcon = new GuiItem();
     standbyIcon->onDraw =
     [this] (const DrawInfo & draw) {
-        game.states.gameplay->hud->drawStandbyIcon(BUBBLE_RELATION_CURRENT);
+        this->drawStandbyIcon(BUBBLE_RELATION_CURRENT);
     };
     gui.addItem(standbyIcon, "standby_icon");
     standbyIconMgr.registerBubble(BUBBLE_RELATION_CURRENT, standbyIcon);
@@ -406,7 +406,7 @@ Hud::Hud() :
     GuiItem* standbyNextIcon = new GuiItem();
     standbyNextIcon->onDraw =
     [this] (const DrawInfo & draw) {
-        game.states.gameplay->hud->drawStandbyIcon(BUBBLE_RELATION_NEXT);
+        this->drawStandbyIcon(BUBBLE_RELATION_NEXT);
     };
     gui.addItem(standbyNextIcon, "standby_next_icon");
     standbyIconMgr.registerBubble(BUBBLE_RELATION_NEXT, standbyNextIcon);
@@ -417,14 +417,14 @@ Hud::Hud() :
     standbyNextInput->onDraw =
     [this] (const DrawInfo & draw) {
         if(!game.options.misc.showHudInputIcons) return;
-        if(!game.states.gameplay->curLeaderPtr) return;
+        if(!player->leaderPtr) return;
         SubgroupType* nextType;
-        game.states.gameplay->curLeaderPtr->group->getNextStandbyType(
+        player->leaderPtr->group->getNextStandbyType(
             false, &nextType
         );
         if(
             nextType ==
-            game.states.gameplay->curLeaderPtr->group->curStandbyType
+            player->leaderPtr->group->curStandbyType
         ) {
             return;
         }
@@ -434,7 +434,7 @@ Hud::Hud() :
         if(s.type == INPUT_SOURCE_TYPE_NONE) return;
         drawPlayerInputSourceIcon(
             game.sysContent.fntSlim, s, true, draw.center, draw.size,
-            game.states.gameplay->hud->standbyItemsOpacity * 255
+            this->standbyItemsOpacity * 255
         );
     };
     gui.addItem(standbyNextInput, "standby_next_input");
@@ -444,7 +444,7 @@ Hud::Hud() :
     GuiItem* standbyPrevIcon = new GuiItem();
     standbyPrevIcon->onDraw =
     [this] (const DrawInfo & draw) {
-        game.states.gameplay->hud->drawStandbyIcon(BUBBLE_RELATION_PREVIOUS);
+        this->drawStandbyIcon(BUBBLE_RELATION_PREVIOUS);
     };
     gui.addItem(standbyPrevIcon, "standby_prev_icon");
     standbyIconMgr.registerBubble(BUBBLE_RELATION_PREVIOUS, standbyPrevIcon);
@@ -455,18 +455,18 @@ Hud::Hud() :
     standbyPrevInput->onDraw =
     [this] (const DrawInfo & draw) {
         if(!game.options.misc.showHudInputIcons) return;
-        if(!game.states.gameplay->curLeaderPtr) return;
+        if(!player->leaderPtr) return;
         SubgroupType* prevType;
-        game.states.gameplay->curLeaderPtr->group->getNextStandbyType(
+        player->leaderPtr->group->getNextStandbyType(
             true, &prevType
         );
         SubgroupType* nextType;
-        game.states.gameplay->curLeaderPtr->group->getNextStandbyType(
+        player->leaderPtr->group->getNextStandbyType(
             false, &nextType
         );
         if(
             prevType ==
-            game.states.gameplay->curLeaderPtr->group->curStandbyType ||
+            player->leaderPtr->group->curStandbyType ||
             prevType == nextType
         ) {
             return;
@@ -477,7 +477,7 @@ Hud::Hud() :
         if(s.type == INPUT_SOURCE_TYPE_NONE) return;
         drawPlayerInputSourceIcon(
             game.sysContent.fntSlim, s, true, draw.center, draw.size,
-            game.states.gameplay->hud->standbyItemsOpacity * 255
+            this->standbyItemsOpacity * 255
         );
     };
     gui.addItem(standbyPrevInput, "standby_prev_input");
@@ -488,12 +488,12 @@ Hud::Hud() :
     standbyMaturityIcon->onDraw =
     [this, standbyMaturityIcon] (const DrawInfo & draw) {
         //Standby group member preparations.
-        Leader* lPtr = game.states.gameplay->curLeaderPtr;
+        Leader* lPtr = player->leaderPtr;
         if(!lPtr || !lPtr->group) return;
         
         ALLEGRO_BITMAP* standbyMatBmp = nullptr;
         Mob* closest =
-            game.states.gameplay->closestGroupMember[BUBBLE_RELATION_CURRENT];
+            player->closestGroupMember[BUBBLE_RELATION_CURRENT];
             
         if(lPtr->group->curStandbyType && closest) {
             SUBGROUP_TYPE_CATEGORY c =
@@ -515,7 +515,7 @@ Hud::Hud() :
         }
         
         ALLEGRO_COLOR color =
-            mapAlpha(game.states.gameplay->hud->standbyItemsOpacity * 255);
+            mapAlpha(this->standbyItemsOpacity * 255);
             
         if(standbyMatBmp) {
             drawBitmapInBox(
@@ -553,7 +553,7 @@ Hud::Hud() :
             bmpCounterBubbleStandby,
             draw.center, draw.size,
             0.0f,
-            mapAlpha(game.states.gameplay->hud->standbyItemsOpacity * 255)
+            mapAlpha(this->standbyItemsOpacity * 255)
         );
     };
     gui.addItem(standbyBubble, "standby_bubble");
@@ -564,7 +564,7 @@ Hud::Hud() :
     standbyAmount->onDraw =
     [this] (const DrawInfo & draw) {
         size_t nStandbyPikmin = 0;
-        Leader* lPtr = game.states.gameplay->curLeaderPtr;
+        Leader* lPtr = player->leaderPtr;
         
         if(lPtr && lPtr->group->curStandbyType) {
             for(size_t m = 0; m < lPtr->group->members.size(); m++) {
@@ -585,7 +585,7 @@ Hud::Hud() :
         drawText(
             i2s(nStandbyPikmin), game.sysContent.fntCounter,
             draw.center, draw.size,
-            mapAlpha(game.states.gameplay->hud->standbyItemsOpacity * 255),
+            mapAlpha(this->standbyItemsOpacity * 255),
             ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
             Point(1.0f + standbyAmount->getJuiceValue())
         );
@@ -597,7 +597,7 @@ Hud::Hud() :
     GuiItem* groupBubble = new GuiItem();
     groupBubble->onDraw =
     [this] (const DrawInfo & draw) {
-        if(!game.states.gameplay->curLeaderPtr) return;
+        if(!player->leaderPtr) return;
         drawBitmap(
             bmpCounterBubbleGroup,
             draw.center, draw.size
@@ -610,8 +610,8 @@ Hud::Hud() :
     groupAmount = new GuiItem();
     groupAmount->onDraw =
     [this] (const DrawInfo & draw) {
-        if(!game.states.gameplay->curLeaderPtr) return;
-        size_t curAmount = game.states.gameplay->getAmountOfGroupPikmin();
+        if(!player->leaderPtr) return;
+        size_t curAmount = game.states.gameplay->getAmountOfGroupPikmin(player);
         
         if(curAmount != groupCountNr) {
             groupAmount->startJuiceAnimation(
@@ -706,7 +706,7 @@ Hud::Hud() :
     [this] (const DrawInfo & draw) {
         drawText(
             "x", game.sysContent.fntCounter, draw.center, draw.size,
-            mapAlpha(game.states.gameplay->hud->standbyItemsOpacity * 255)
+            mapAlpha(this->standbyItemsOpacity * 255)
         );
     };
     gui.addItem(countersX, "counters_x");
@@ -717,7 +717,7 @@ Hud::Hud() :
         GuiItem* counterSlash = new GuiItem();
         counterSlash->onDraw =
         [this] (const DrawInfo & draw) {
-            if(!game.states.gameplay->curLeaderPtr) return;
+            if(!player->leaderPtr) return;
             drawText(
                 "/", game.sysContent.fntCounter, draw.center, draw.size
             );
@@ -740,11 +740,11 @@ Hud::Hud() :
     spray1Amount = new GuiItem();
     spray1Amount->onDraw =
     [this] (const DrawInfo & draw) {
-        if(!game.states.gameplay->curLeaderPtr) return;
+        if(!player->leaderPtr) return;
         
         size_t topSprayIdx = INVALID;
         if(game.content.sprayTypes.list.size() > 2) {
-            topSprayIdx = game.states.gameplay->selectedSpray;
+            topSprayIdx = player->selectedSpray;
         } else if(!game.content.sprayTypes.list.empty() && game.content.sprayTypes.list.size() <= 2) {
             topSprayIdx = 0;
         }
@@ -752,10 +752,10 @@ Hud::Hud() :
         
         drawText(
             "x" +
-            i2s(game.states.gameplay->sprayStats[topSprayIdx].nrSprays),
+            i2s(player->team->sprayStats[topSprayIdx].nrSprays),
             game.sysContent.fntCounter,
             Point(draw.center.x - draw.size.x / 2.0, draw.center.y), draw.size,
-            mapAlpha(game.states.gameplay->hud->sprayItemsOpacity * 255),
+            mapAlpha(this->sprayItemsOpacity * 255),
             ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER, 0,
             Point(1.0f + spray1Amount->getJuiceValue())
         );
@@ -768,16 +768,16 @@ Hud::Hud() :
     spray1Input->onDraw =
     [this] (const DrawInfo & draw) {
         if(!game.options.misc.showHudInputIcons) return;
-        if(!game.states.gameplay->curLeaderPtr) return;
+        if(!player->leaderPtr) return;
         
         size_t topSprayIdx = INVALID;
         if(game.content.sprayTypes.list.size() > 2) {
-            topSprayIdx = game.states.gameplay->selectedSpray;
+            topSprayIdx = player->selectedSpray;
         } else if(!game.content.sprayTypes.list.empty() && game.content.sprayTypes.list.size() <= 2) {
             topSprayIdx = 0;
         }
         if(topSprayIdx == INVALID) return;
-        if(game.states.gameplay->sprayStats[topSprayIdx].nrSprays == 0) {
+        if(player->team->sprayStats[topSprayIdx].nrSprays == 0) {
             return;
         }
         
@@ -800,7 +800,7 @@ Hud::Hud() :
         
         drawPlayerInputSourceIcon(
             game.sysContent.fntSlim, s, true, draw.center, draw.size,
-            game.states.gameplay->hud->sprayItemsOpacity * 255
+            this->sprayItemsOpacity * 255
         );
     };
     gui.addItem(spray1Input, "spray_1_input");
@@ -810,7 +810,7 @@ Hud::Hud() :
     GuiItem* spray2Icon = new GuiItem();
     spray2Icon->onDraw =
     [this] (const DrawInfo & draw) {
-        if(!game.states.gameplay->curLeaderPtr) return;
+        if(!player->leaderPtr) return;
         
         size_t bottomSprayIdx = INVALID;
         if(game.content.sprayTypes.list.size() == 2) {
@@ -822,7 +822,7 @@ Hud::Hud() :
             game.config.misc.sprayOrder[bottomSprayIdx]->bmpSpray,
             draw.center, draw.size, true,
             0.0f,
-            mapAlpha(game.states.gameplay->hud->sprayItemsOpacity * 255)
+            mapAlpha(this->sprayItemsOpacity * 255)
         );
     };
     gui.addItem(spray2Icon, "spray_2_icon");
@@ -832,7 +832,7 @@ Hud::Hud() :
     spray2Amount = new GuiItem();
     spray2Amount->onDraw =
     [this] (const DrawInfo & draw) {
-        if(!game.states.gameplay->curLeaderPtr) return;
+        if(!player->leaderPtr) return;
         
         size_t bottomSprayIdx = INVALID;
         if(game.content.sprayTypes.list.size() == 2) {
@@ -842,10 +842,10 @@ Hud::Hud() :
         
         drawText(
             "x" +
-            i2s(game.states.gameplay->sprayStats[bottomSprayIdx].nrSprays),
+            i2s(player->team->sprayStats[bottomSprayIdx].nrSprays),
             game.sysContent.fntCounter,
             Point(draw.center.x - draw.size.x / 2.0, draw.center.y), draw.size,
-            mapAlpha(game.states.gameplay->hud->sprayItemsOpacity * 255),
+            mapAlpha(this->sprayItemsOpacity * 255),
             ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER, 0,
             Point(1.0f + spray2Amount->getJuiceValue())
         );
@@ -858,14 +858,14 @@ Hud::Hud() :
     spray2Input->onDraw =
     [this] (const DrawInfo & draw) {
         if(!game.options.misc.showHudInputIcons) return;
-        if(!game.states.gameplay->curLeaderPtr) return;
+        if(!player->leaderPtr) return;
         
         size_t bottomSprayIdx = INVALID;
         if(game.content.sprayTypes.list.size() == 2) {
             bottomSprayIdx = 1;
         }
         if(bottomSprayIdx == INVALID) return;
-        if(game.states.gameplay->sprayStats[bottomSprayIdx].nrSprays == 0) {
+        if(player->team->sprayStats[bottomSprayIdx].nrSprays == 0) {
             return;
         }
         
@@ -879,7 +879,7 @@ Hud::Hud() :
         
         drawPlayerInputSourceIcon(
             game.sysContent.fntSlim, s, true, draw.center, draw.size,
-            game.states.gameplay->hud->sprayItemsOpacity * 255
+            this->sprayItemsOpacity * 255
         );
     };
     gui.addItem(spray2Input, "spray_2_input");
@@ -900,13 +900,13 @@ Hud::Hud() :
     prevSprayInput->onDraw =
     [this] (const DrawInfo & draw) {
         if(!game.options.misc.showHudInputIcons) return;
-        if(!game.states.gameplay->curLeaderPtr) return;
+        if(!player->leaderPtr) return;
         
         size_t prevSprayIdx = INVALID;
         if(game.content.sprayTypes.list.size() >= 3) {
             prevSprayIdx =
                 sumAndWrap(
-                    (int) game.states.gameplay->selectedSpray,
+                    (int) player->selectedSpray,
                     -1,
                     (int) game.content.sprayTypes.list.size()
                 );
@@ -923,7 +923,7 @@ Hud::Hud() :
         
         drawPlayerInputSourceIcon(
             game.sysContent.fntSlim, s, true, draw.center, draw.size,
-            game.states.gameplay->hud->sprayItemsOpacity * 255
+            this->sprayItemsOpacity * 255
         );
     };
     gui.addItem(prevSprayInput, "spray_prev_input");
@@ -944,13 +944,13 @@ Hud::Hud() :
     nextSprayInput->onDraw =
     [this] (const DrawInfo & draw) {
         if(!game.options.misc.showHudInputIcons) return;
-        if(!game.states.gameplay->curLeaderPtr) return;
+        if(!player->leaderPtr) return;
         
         size_t nextSprayIdx = INVALID;
         if(game.content.sprayTypes.list.size() >= 3) {
             nextSprayIdx =
                 sumAndWrap(
-                    (int) game.states.gameplay->selectedSpray,
+                    (int) player->selectedSpray,
                     1,
                     (int) game.content.sprayTypes.list.size()
                 );
@@ -967,7 +967,7 @@ Hud::Hud() :
         
         drawPlayerInputSourceIcon(
             game.sysContent.fntSlim, s, true, draw.center, draw.size,
-            game.states.gameplay->hud->sprayItemsOpacity * 255
+            this->sprayItemsOpacity * 255
         );
     };
     gui.addItem(nextSprayInput, "spray_next_input");
@@ -1656,18 +1656,18 @@ void Hud::createMissionFailCondItems(bool primary) {
  * the current type's, or the next type's.
  */
 void Hud::drawSprayIcon(BUBBLE_RELATION which) {
-    if(!game.states.gameplay->curLeaderPtr) return;
+    if(!player->leaderPtr) return;
     
     DrawInfo draw;
     ALLEGRO_BITMAP* icon;
-    game.states.gameplay->hud->sprayIconMgr.getDrawingInfo(
+    sprayIconMgr.getDrawingInfo(
         which, &icon, &draw
     );
     
     if(!icon) return;
     drawBitmapInBox(
         icon, draw.center, draw.size, true, 0.0f,
-        mapAlpha(game.states.gameplay->hud->sprayItemsOpacity * 255)
+        mapAlpha(sprayItemsOpacity * 255)
     );
 }
 
@@ -1679,21 +1679,22 @@ void Hud::drawSprayIcon(BUBBLE_RELATION which) {
  * the current type's, or the next type's.
  */
 void Hud::drawStandbyIcon(BUBBLE_RELATION which) {
+    if(!player) return;
+    
     DrawInfo draw;
     ALLEGRO_BITMAP* icon;
-    game.states.gameplay->hud->standbyIconMgr.getDrawingInfo(
+    standbyIconMgr.getDrawingInfo(
         which, &icon, &draw
     );
     
     if(!icon) return;
     
-    ALLEGRO_COLOR color =
-        mapAlpha(game.states.gameplay->hud->standbyItemsOpacity * 255);
-        
+    ALLEGRO_COLOR color = mapAlpha(standbyItemsOpacity * 255);
+    
     drawBitmapInBox(icon, draw.center, draw.size * 0.8, true, 0.0f, color);
     
     if(
-        game.states.gameplay->closestGroupMemberDistant &&
+        player->closestGroupMemberDistant &&
         which == BUBBLE_RELATION_CURRENT
     ) {
         drawBitmapInBox(
@@ -1715,13 +1716,15 @@ void Hud::drawStandbyIcon(BUBBLE_RELATION which) {
  * @param deltaT How long the frame's tick is, in seconds.
  */
 void Hud::tick(float deltaT) {
+    if(!player) return;
+    
     //Update leader bubbles.
     for(size_t l = 0; l < 3; l++) {
         Leader* lPtr = nullptr;
         if(l < game.states.gameplay->availableLeaders.size()) {
             size_t lIdx =
                 (size_t) sumAndWrap(
-                    (int) game.states.gameplay->curLeaderIdx,
+                    (int) player->leaderIdx,
                     (int) l,
                     (int) game.states.gameplay->availableLeaders.size()
                 );
@@ -1754,8 +1757,8 @@ void Hud::tick(float deltaT) {
     for(unsigned char s = 0; s < 3; s++) {
     
         ALLEGRO_BITMAP* icon = nullptr;
-        Leader* curLeaderPtr = game.states.gameplay->curLeaderPtr;
-        Mob* member = game.states.gameplay->closestGroupMember[s];
+        Leader* curLeaderPtr = player->leaderPtr;
+        Mob* member = player->closestGroupMember[s];
         SubgroupType* type = nullptr;
         
         if(curLeaderPtr) {
@@ -1814,14 +1817,14 @@ void Hud::tick(float deltaT) {
     //Update spray bubbles.
     size_t topSprayIdx = INVALID;
     if(game.content.sprayTypes.list.size() > 2) {
-        topSprayIdx = game.states.gameplay->selectedSpray;
+        topSprayIdx = player->selectedSpray;
     } else if(!game.content.sprayTypes.list.empty() && game.content.sprayTypes.list.size() <= 2) {
         topSprayIdx = 0;
     }
     sprayIconMgr.update(
         BUBBLE_RELATION_CURRENT,
         topSprayIdx == INVALID ? nullptr :
-        &game.states.gameplay->sprayStats[topSprayIdx],
+        &player->team->sprayStats[topSprayIdx],
         topSprayIdx == INVALID ? nullptr :
         game.config.misc.sprayOrder[topSprayIdx]->bmpSpray
     );
@@ -1830,7 +1833,7 @@ void Hud::tick(float deltaT) {
     if(game.content.sprayTypes.list.size() >= 3) {
         prevSprayIdx =
             sumAndWrap(
-                (int) game.states.gameplay->selectedSpray,
+                (int) player->selectedSpray,
                 -1,
                 (int) game.content.sprayTypes.list.size()
             );
@@ -1838,7 +1841,7 @@ void Hud::tick(float deltaT) {
     sprayIconMgr.update(
         BUBBLE_RELATION_PREVIOUS,
         prevSprayIdx == INVALID ? nullptr :
-        &game.states.gameplay->sprayStats[prevSprayIdx],
+        &player->team->sprayStats[prevSprayIdx],
         prevSprayIdx == INVALID ? nullptr :
         game.config.misc.sprayOrder[prevSprayIdx]->bmpSpray
     );
@@ -1847,7 +1850,7 @@ void Hud::tick(float deltaT) {
     if(game.content.sprayTypes.list.size() >= 3) {
         nextSprayIdx =
             sumAndWrap(
-                (int) game.states.gameplay->selectedSpray,
+                (int) player->selectedSpray,
                 1,
                 (int) game.content.sprayTypes.list.size()
             );
@@ -1855,7 +1858,7 @@ void Hud::tick(float deltaT) {
     sprayIconMgr.update(
         BUBBLE_RELATION_NEXT,
         nextSprayIdx == INVALID ? nullptr :
-        &game.states.gameplay->sprayStats[nextSprayIdx],
+        &player->team->sprayStats[nextSprayIdx],
         nextSprayIdx == INVALID ? nullptr :
         game.config.misc.sprayOrder[nextSprayIdx]->bmpSpray
     );
@@ -1864,8 +1867,8 @@ void Hud::tick(float deltaT) {
     
     //Update the standby items opacity.
     if(
-        !game.states.gameplay->curLeaderPtr ||
-        game.states.gameplay->curLeaderPtr->group->members.empty()
+        !player->leaderPtr ||
+        player->leaderPtr->group->members.empty()
     ) {
         if(standbyItemsFadeTimer > 0.0f) {
             standbyItemsFadeTimer -= deltaT;
@@ -1883,9 +1886,9 @@ void Hud::tick(float deltaT) {
     
     //Update the spray items opacity.
     size_t totalSprays = 0;
-    for(size_t s = 0; s < game.states.gameplay->sprayStats.size(); s++) {
+    for(size_t s = 0; s < player->team->sprayStats.size(); s++) {
         totalSprays +=
-            game.states.gameplay->sprayStats[s].nrSprays;
+            player->team->sprayStats[s].nrSprays;
     }
     if(totalSprays == 0) {
         if(sprayItemsFadeTimer > 0.0f) {

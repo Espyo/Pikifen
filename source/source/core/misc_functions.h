@@ -43,11 +43,6 @@
         crash("Assert", info, 1); \
     }
 
-//Returns the task range for whether the Pikmin is idling or being C-sticked.
-#define taskRange(p) \
-    (((p)->followingGroup == curLeaderPtr && swarmMagnitude) ? \
-     game.config.pikmin.swarmTaskRange : game.config.pikmin.idleTaskRange)
-
 
 /**
  * @brief Function that checks if an edge should use a given edge offset effect.
@@ -93,9 +88,9 @@ bool doesEdgeHaveWallShadow(
     Edge* ePtr, Sector** outAffectedSector, Sector** outUnaffectedSector
 );
 void drawEdgeOffsetOnBuffer(
-    const vector<EdgeOffsetCache> &caches, size_t eIdx
+    const vector<EdgeOffsetCache> &caches, size_t eIdx, const Viewport &view
 );
-Mob* getClosestMobToCursor(bool mustHaveHealth = false);
+Mob* getClosestMobToCursor(const Viewport &view, bool mustHaveHealth = false);
 void getEdgeOffsetEdgeInfo(
     Edge* ePtr, Vertex* endVertex, unsigned char endIdx,
     float edgeProcessAngle,
@@ -121,7 +116,7 @@ void getNextEdge(
     const Edge* ignore, Edge** outEdge, float* outAngle, float* outDiff
 );
 Mob* getNextMobNearCursor(
-    Mob* pivot, bool mustHaveHealth = false
+    const Viewport &view, Mob* pivot, bool mustHaveHealth = false
 );
 void getNextOffsetEffectEdge(
     Vertex* vPtr, float pivotAngle, bool clockwise,
@@ -221,7 +216,7 @@ string unescapeString(const string &s);
 void updateOffsetEffectBuffer(
     const Point &camTL, const Point &camBR,
     const vector<EdgeOffsetCache> &caches, ALLEGRO_BITMAP* buffer,
-    bool clearFirst
+    bool clearFirst, const Viewport &view
 );
 void updateOffsetEffectCaches (
     vector<EdgeOffsetCache> &caches,

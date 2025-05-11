@@ -3509,21 +3509,27 @@ void PikminFsm::landOnMobWhileHolding(Mob* m, void* info1, void* info2) {
             );
         }
         
-        if(
-            tooPtr->tooType->pikminReturnsAfterUsing &&
-            game.states.gameplay->curLeaderPtr
-        ) {
+        Distance closestLeaderDist;
+        Leader* closestLeader = nullptr;
+        for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); l++) {
+            Leader* lPtr = game.states.gameplay->mobs.leaders[l];
+            if(lPtr->team != pikPtr->team) continue;
+            if(!lPtr->player) continue;
+            Distance d(pikPtr->pos, lPtr->pos);
+            if(!closestLeader || d < closestLeaderDist) {
+                closestLeaderDist = d;
+                closestLeader = lPtr;
+            }
+        }
+
+        if(tooPtr->tooType->pikminReturnsAfterUsing && closestLeader) {
             if(
                 !pikPtr->holding.empty() &&
                 pikPtr->holding[0]->type->category->id == MOB_CATEGORY_TOOLS
             ) {
-                m->fsm.setState(
-                    PIKMIN_STATE_CALLED_H, game.states.gameplay->curLeaderPtr
-                );
+                m->fsm.setState(PIKMIN_STATE_CALLED_H, closestLeader);
             } else {
-                m->fsm.setState(
-                    PIKMIN_STATE_CALLED, game.states.gameplay->curLeaderPtr
-                );
+                m->fsm.setState(PIKMIN_STATE_CALLED, closestLeader);
             }
         }
     }
@@ -3554,21 +3560,27 @@ void PikminFsm::landWhileHolding(Mob* m, void* info1, void* info2) {
         PikminFsm::releaseTool(m, nullptr, nullptr);
         m->fsm.setState(PIKMIN_STATE_IDLING);
         
-        if(
-            tooPtr->tooType->pikminReturnsAfterUsing &&
-            game.states.gameplay->curLeaderPtr
-        ) {
+        Distance closestLeaderDist;
+        Leader* closestLeader = nullptr;
+        for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); l++) {
+            Leader* lPtr = game.states.gameplay->mobs.leaders[l];
+            if(lPtr->team != pikPtr->team) continue;
+            if(!lPtr->player) continue;
+            Distance d(pikPtr->pos, lPtr->pos);
+            if(!closestLeader || d < closestLeaderDist) {
+                closestLeaderDist = d;
+                closestLeader = lPtr;
+            }
+        }
+
+        if(tooPtr->tooType->pikminReturnsAfterUsing && closestLeader) {
             if(
                 !pikPtr->holding.empty() &&
                 pikPtr->holding[0]->type->category->id == MOB_CATEGORY_TOOLS
             ) {
-                m->fsm.setState(
-                    PIKMIN_STATE_CALLED_H, game.states.gameplay->curLeaderPtr
-                );
+                m->fsm.setState(PIKMIN_STATE_CALLED_H, closestLeader);
             } else {
-                m->fsm.setState(
-                    PIKMIN_STATE_CALLED, game.states.gameplay->curLeaderPtr
-                );
+                m->fsm.setState(PIKMIN_STATE_CALLED, closestLeader);
             }
         }
     } else {
@@ -3814,7 +3826,12 @@ void PikminFsm::releaseTool(Mob* m, void* info1, void* info2) {
         );
     if(m->followingGroup) {
         m->followingGroup->group->changeStandbyTypeIfNeeded();
-        game.states.gameplay->updateClosestGroupMembers();
+        if(m->followingGroup->type->category->id == MOB_CATEGORY_LEADERS) {
+            Leader* leaPtr = (Leader*) m->followingGroup;
+            if(leaPtr->player) {
+                game.states.gameplay->updateClosestGroupMembers(leaPtr->player);
+            }
+        }
     }
 }
 

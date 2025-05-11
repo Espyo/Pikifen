@@ -2039,6 +2039,21 @@ float Mob::getLatchedPikminWeight() const {
 
 
 /**
+ * @brief If this mob belongs to a player's team, this returns the player team
+ * index number (0 for team 1, 1 for team 2, etc.).
+ * Otherwise, it returns INVALID.
+ *
+ * @return The player team index, or INVALID.
+ */
+size_t Mob::getPlayerTeamIdx() const {
+    if(team >= MOB_TEAM_PLAYER_1 && team <= MOB_TEAM_PLAYER_4) {
+        return (team - MOB_TEAM_PLAYER_1);
+    }
+    return INVALID;
+}
+
+
+/**
  * @brief Recalculates the max distance a mob can interact with another mob.
  */
 void Mob::updateInteractionSpan() {
@@ -2660,9 +2675,10 @@ void Mob::hold(
 /**
  * @brief Checks if a mob is completely off-camera.
  *
+ * @param viewport What viewport to calculate with.
  * @return Whether it is off-camera.
  */
-bool Mob::isOffCamera() const {
+bool Mob::isOffCamera(const Viewport &viewport) const {
     if(parent) return false;
     
     float spriteBound = 0;
@@ -2689,7 +2705,7 @@ bool Mob::isOffCamera() const {
     }
     
     float radiusToUse = std::max(spriteBound, collisionBound);
-    return !BBoxCheck(game.view.box[0], game.view.box[1], pos, radiusToUse);
+    return !BBoxCheck(viewport.box[0], viewport.box[1], pos, radiusToUse);
 }
 
 
@@ -2766,7 +2782,12 @@ void Mob::leaveGroup() {
     
     followingGroup = nullptr;
     
-    game.states.gameplay->updateClosestGroupMembers();
+    if(groupLeader->type->category->id == MOB_CATEGORY_LEADERS) {
+        Leader* leaPtr = (Leader*) groupLeader;
+        if(leaPtr->player) {
+            game.states.gameplay->updateClosestGroupMembers(leaPtr->player);
+        }
+    }
 }
 
 
@@ -3945,14 +3966,18 @@ void Mob::tickMiscLogic(float deltaT) {
     //Group stuff.
     if(group && group->members.size()) {
     
+        Player* playerIfLeader = nullptr;
+        if(type->category->id == MOB_CATEGORY_LEADERS) {
+            playerIfLeader = ((Leader*) this)->player;
+        }
+        
         Group::MODE oldMode = group->mode;
         bool isHolding = !holding.empty();
         bool isFarFromGroup =
             Distance(group->getAverageMemberPos(), pos) >
             MOB::GROUP_SHUFFLE_DIST + (group->radius + radius);
         bool isSwarming =
-            game.states.gameplay->swarmMagnitude &&
-            game.states.gameplay->curLeaderPtr == this;
+            playerIfLeader && playerIfLeader->swarmMagnitude != 0.0f;
             
         //Find what mode we're in on this frame.
         if(isSwarming) {
@@ -4011,7 +4036,7 @@ void Mob::tickMiscLogic(float deltaT) {
         } case Group::MODE_SWARM: {
     
             //Swarming.
-            group->anchorAngle = game.states.gameplay->swarmAngle;
+            group->anchorAngle = playerIfLeader->swarmAngle;
             Point newAnchorRelPos =
                 rotatePoint(
                     Point(radius + MOB::GROUP_SPOT_INTERVAL * 2.0f, 0.0f),
@@ -4021,7 +4046,7 @@ void Mob::tickMiscLogic(float deltaT) {
             
             float intensityDist =
                 game.config.rules.cursorMaxDist *
-                game.states.gameplay->swarmMagnitude;
+                playerIfLeader->swarmMagnitude;
             al_identity_transform(&group->transform);
             al_translate_transform(
                 &group->transform, -MOB::SWARM_MARGIN, 0
@@ -4032,7 +4057,7 @@ void Mob::tickMiscLogic(float deltaT) {
                 1 -
                 (
                     MOB::SWARM_VERTICAL_SCALE*
-                    game.states.gameplay->swarmMagnitude
+                    playerIfLeader->swarmMagnitude
                 )
             );
             al_rotate_transform(
@@ -4145,15 +4170,14 @@ void Mob::tickScript(float deltaT) {
     }
     
     //Check if it got whistled.
-    if(
-        game.states.gameplay->curLeaderPtr &&
-        game.states.gameplay->whistle.whistling &&
-        Distance(pos, game.states.gameplay->whistle.center) <=
-        game.states.gameplay->whistle.radius
-    ) {
-        fsm.runEvent(
-            MOB_EV_WHISTLED, (void*) game.states.gameplay->curLeaderPtr
-        );
+    for(const Player &player : game.states.gameplay->players) {
+        if(!player.leaderPtr) continue;
+        if(!player.whistle.whistling) continue;
+        if(Distance(pos, player.whistle.center) > player.whistle.radius) {
+            continue;
+        }
+        
+        fsm.runEvent(MOB_EV_WHISTLED, (void*) player.leaderPtr);
         
         bool savedByWhistle = false;
         for(size_t s = 0; s < statuses.size(); s++) {

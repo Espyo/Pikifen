@@ -26,6 +26,7 @@ using std::vector;
 
 
 class Mob;
+struct Viewport;
 
 
 //Particle priorities.
@@ -256,6 +257,12 @@ struct Particle {
 struct ParticleManager {
 
     public:
+    
+    //--- Members ---
+    
+    //Viewports it should keep in mind for calculating what particles
+    //are off-screen.
+    vector<Viewport*> viewports;
     
     //--- Function declarations ---
     

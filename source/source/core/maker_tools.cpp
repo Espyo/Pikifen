@@ -108,7 +108,7 @@ bool MakerTools::handleGameplayPlayerAction(const PlayerAction &action) {
     } case PLAYER_ACTION_TYPE_MT_HURT_MOB: {
 
         unsigned char settingIdx = getMakerToolSettingIdx();
-        Mob* m = getClosestMobToCursor(true);
+        Mob* m = getClosestMobToCursor(game.states.gameplay->players[0].view, true);
         if(m) {
             m->setHealth(
                 true, true,
@@ -123,11 +123,11 @@ bool MakerTools::handleGameplayPlayerAction(const PlayerAction &action) {
         Mob* prevLockMob = infoLock;
         Mob* m;
         if(mod1) {
-            m = getNextMobNearCursor(prevLockMob, false);
+            m = getNextMobNearCursor(game.states.gameplay->players[0].view, prevLockMob, false);
         } else if(mod2) {
             m = nullptr;
         } else {
-            m = getClosestMobToCursor(false);
+            m = getClosestMobToCursor(game.states.gameplay->players[0].view, false);
         }
         
         infoLock = prevLockMob == m ? nullptr : m;
@@ -170,7 +170,8 @@ bool MakerTools::handleGameplayPlayerAction(const PlayerAction &action) {
             
             createMob(
                 game.mobCategories.get(MOB_CATEGORY_PIKMIN),
-                game.view.cursorWorldPos, newPikminType, 0,
+                game.states.gameplay->players[0].view.cursorWorldPos,
+                newPikminType, 0,
                 mod2 ? "maturity=0" : "maturity=2"
             );
             usedHelpingTools = true;
@@ -202,16 +203,16 @@ bool MakerTools::handleGameplayPlayerAction(const PlayerAction &action) {
         Mob* mobToTeleport =
             (mod1 && infoLock) ?
             infoLock :
-            game.states.gameplay->curLeaderPtr;
+            game.states.gameplay->players[0].leaderPtr;
             
         Sector* mouseSector =
-            getSector(game.view.cursorWorldPos, nullptr, true);
+            getSector(game.states.gameplay->players[0].view.cursorWorldPos, nullptr, true);
         if(mouseSector && mobToTeleport) {
             mobToTeleport->chase(
-                game.view.cursorWorldPos, mouseSector->z,
+                game.states.gameplay->players[0].view.cursorWorldPos, mouseSector->z,
                 CHASE_FLAG_TELEPORT
             );
-            game.view.cam.setPos(game.view.cursorWorldPos);
+            game.states.gameplay->players[0].view.cam.setPos(game.states.gameplay->players[0].view.cursorWorldPos);
         }
         usedHelpingTools = true;
         break;

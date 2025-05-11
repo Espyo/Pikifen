@@ -4677,13 +4677,13 @@ void AreaEditor::processGuiPanelPaths() {
                 ) {
                     //No previous location. Place them on-camera.
                     pathPreviewCheckpoints[0].x =
-                        game.view.cam.pos.x - AREA_EDITOR::COMFY_DIST;
+                        game.editorsView.cam.pos.x - AREA_EDITOR::COMFY_DIST;
                     pathPreviewCheckpoints[0].y =
-                        game.view.cam.pos.y;
+                        game.editorsView.cam.pos.y;
                     pathPreviewCheckpoints[1].x =
-                        game.view.cam.pos.x + AREA_EDITOR::COMFY_DIST;
+                        game.editorsView.cam.pos.x + AREA_EDITOR::COMFY_DIST;
                     pathPreviewCheckpoints[1].y =
-                        game.view.cam.pos.y;
+                        game.editorsView.cam.pos.y;
                 }
                 pathPreviewDist = calculatePreviewPath();
             }
@@ -4934,8 +4934,8 @@ void AreaEditor::processGuiPanelReview() {
         //Show cross-section checkbox.
         if(ImGui::Checkbox("Show cross-section", &showCrossSection)) {
             if(showCrossSection) {
-                crossSectionWindowStart = game.view.getTopLeft();
-                crossSectionWindowEnd = game.view.size / 2.0f;
+                crossSectionWindowStart = game.editorsView.getTopLeft();
+                crossSectionWindowEnd = game.editorsView.size / 2.0f;
                 crossSectionZWindowStart =
                     Point(
                         crossSectionWindowEnd.x,
@@ -4954,13 +4954,13 @@ void AreaEditor::processGuiPanelReview() {
             ) {
                 //No previous location. Place them on-camera.
                 crossSectionCheckpoints[0].x =
-                    game.view.cam.pos.x - AREA_EDITOR::COMFY_DIST;
+                    game.editorsView.cam.pos.x - AREA_EDITOR::COMFY_DIST;
                 crossSectionCheckpoints[0].y =
-                    game.view.cam.pos.y;
+                    game.editorsView.cam.pos.y;
                 crossSectionCheckpoints[1].x =
-                    game.view.cam.pos.x + AREA_EDITOR::COMFY_DIST;
+                    game.editorsView.cam.pos.x + AREA_EDITOR::COMFY_DIST;
                 crossSectionCheckpoints[1].y =
-                    game.view.cam.pos.y;
+                    game.editorsView.cam.pos.y;
             }
         }
         setTooltip(
@@ -5605,8 +5605,8 @@ void AreaEditor::processGuiStatusBar() {
         ImGui::SameLine();
         monoText(
             "%s, %s",
-            boxString(f2s(game.view.cursorWorldPos.x), 7).c_str(),
-            boxString(f2s(game.view.cursorWorldPos.y), 7).c_str()
+            boxString(f2s(game.editorsView.cursorWorldPos.x), 7).c_str(),
+            boxString(f2s(game.editorsView.cursorWorldPos.y), 7).c_str()
         );
     }
 }

@@ -321,7 +321,7 @@ void ControlsManager::processStateTimers(
  * @brief Sets the current value of a given player action type.
  *
  * @param playerActionTypeId ID of the player action type.
- * @param The value.
+ * @param value The value.
  */
 void ControlsManager::setValue(int playerActionTypeId, float value) {
     value = std::min(value, 1.0f);

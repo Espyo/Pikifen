@@ -287,8 +287,28 @@ void Pikmin::getGroupSpotInfo(Point* outSpot, float* outDist) const {
         followingGroup->group->anchor +
         followingGroup->group->getSpotOffset(groupSpotIdx);
     *outDist = 5.0f;
-}
+}    
 
+
+/**
+ * @brief Returns the task range for whether the Pikmin is idling or
+ * swarming.
+ * 
+ * @return The range.
+ */
+float Pikmin::getTaskRange() const {
+    float result = game.config.pikmin.idleTaskRange;
+    if(!followingGroup) return result;
+    if(followingGroup->type->category->id != MOB_CATEGORY_LEADERS) {
+        return result;
+    }
+    Leader* leaPtr = (Leader*) followingGroup;
+    if(!leaPtr->player) return result;
+    if(leaPtr->player->swarmMagnitude == 0.0f) return result;
+
+    result = game.config.pikmin.swarmTaskRange;
+    return result;
+}
 
 /**
  * @brief Handles a status effect being applied.

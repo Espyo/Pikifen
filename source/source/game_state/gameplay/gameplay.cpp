@@ -118,34 +118,37 @@ const float TREE_SHADOW_SWAY_SPEED = TAU / 8;
  * @brief Changes the amount of sprays of a certain type the player owns.
  * It also animates the correct HUD item, if any.
  *
+ * @param team Which team's spray counts to change.
  * @param typeIdx Index number of the spray type.
  * @param amount Amount to change by.
  */
 void GameplayState::changeSprayCount(
-    size_t typeIdx, signed int amount
+    PlayerTeam* team, size_t typeIdx, signed int amount
 ) {
-    sprayStats[typeIdx].nrSprays =
+    team->sprayStats[typeIdx].nrSprays =
         std::max(
-            (signed int) sprayStats[typeIdx].nrSprays + amount,
+            (signed int) team->sprayStats[typeIdx].nrSprays + amount,
             (signed int) 0
         );
         
-    GuiItem* sprayHudItem = nullptr;
-    if(game.content.sprayTypes.list.size() > 2) {
-        if(selectedSpray == typeIdx) {
-            sprayHudItem = hud->spray1Amount;
-        }
-    } else {
-        if(typeIdx == 0) {
-            sprayHudItem = hud->spray1Amount;
+    for(Player* player : team->players) {
+        GuiItem* sprayHudItem = nullptr;
+        if(game.content.sprayTypes.list.size() > 2) {
+            if(player->selectedSpray == typeIdx) {
+                sprayHudItem = player->hud->spray1Amount;
+            }
         } else {
-            sprayHudItem = hud->spray2Amount;
+            if(typeIdx == 0) {
+                sprayHudItem = player->hud->spray1Amount;
+            } else {
+                sprayHudItem = player->hud->spray2Amount;
+            }
         }
-    }
-    if(sprayHudItem) {
-        sprayHudItem->startJuiceAnimation(
-            GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
-        );
+        if(sprayHudItem) {
+            sprayHudItem->startJuiceAnimation(
+                GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
+            );
+        }
     }
 }
 
@@ -186,6 +189,10 @@ void GameplayState::doLogic() {
             ];
     }
     
+    for(Player &player : players) {
+        player.view.updateCursor(game.mouseCursor.winPos);
+    }
+    
     //Controls.
     for(size_t a = 0; a < game.playerActions.size(); a++) {
         handlePlayerAction(game.playerActions[a]);
@@ -216,25 +223,29 @@ void GameplayState::endMission(bool cleared) {
     curInterlude = INTERLUDE_MISSION_END;
     interludeTime = 0.0f;
     deltaTMult = 0.5f;
-    leaderMovement.reset(); //TODO replace with a better solution.
+    for(Player &player : players) {
+        player.leaderMovement.reset(); //TODO replace with a better solution.
+    }
     
     //Zoom in on the reason, if possible.
-    Point newCamPos = game.view.cam.targetPos;
-    float newCamZoom = game.view.cam.targetZoom;
-    if(cleared) {
-        MissionGoal* goal =
-            game.missionGoals[game.curAreaData->mission.goal];
-        if(goal->getEndZoomData(this, &newCamPos, &newCamZoom)) {
-            game.view.cam.targetPos = newCamPos;
-            game.view.cam.targetZoom = newCamZoom;
-        }
-        
-    } else {
-        MissionFail* cond =
-            game.missionFailConds[missionFailReason];
-        if(cond->getEndZoomData(this, &newCamPos, &newCamZoom)) {
-            game.view.cam.targetPos = newCamPos;
-            game.view.cam.targetZoom = newCamZoom;
+    for(Player &player : players) {
+        Point newCamPos = player.view.cam.targetPos;
+        float newCamZoom = player.view.cam.targetZoom;
+        if(cleared) {
+            MissionGoal* goal =
+                game.missionGoals[game.curAreaData->mission.goal];
+            if(goal->getEndZoomData(this, &newCamPos, &newCamZoom)) {
+                player.view.cam.targetPos = newCamPos;
+                player.view.cam.targetZoom = newCamZoom;
+            }
+            
+        } else {
+            MissionFail* cond =
+                game.missionFailConds[missionFailReason];
+            if(cond->getEndZoomData(this, &newCamPos, &newCamZoom)) {
+                player.view.cam.targetPos = newCamPos;
+                player.view.cam.targetZoom = newCamZoom;
+            }
         }
     }
     
@@ -244,10 +255,13 @@ void GameplayState::endMission(bool cleared) {
         curBigMsg = BIG_MESSAGE_MISSION_FAILED;
     }
     bigMsgTime = 0.0f;
-    hud->gui.startAnimation(
-        GUI_MANAGER_ANIM_IN_TO_OUT,
-        GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
-    );
+    
+    for(Player &player : players) {
+        player.hud->gui.startAnimation(
+            GUI_MANAGER_ANIM_IN_TO_OUT,
+            GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
+        );
+    }
 }
 
 
@@ -256,29 +270,38 @@ void GameplayState::endMission(bool cleared) {
  * from the result menu's "keep playing" option.
  */
 void GameplayState::enter() {
-    game.view.size.x = game.winW;
-    game.view.size.y = game.winH;
-    game.view.center.x = game.winW / 2.0f;
-    game.view.center.y = game.winH / 2.0f;
-    game.view.updateTransformations();
+    particles.viewports.clear();
+    
+    for(Player &player : players) {
+        player.view.size.x = game.winW;
+        player.view.size.y = game.winH;
+        player.view.center.x = game.winW / 2.0f;
+        player.view.center.y = game.winH / 2.0f;
+        player.view.boxMargin.x = GAMEPLAY::CAMERA_BOX_MARGIN;
+        player.view.boxMargin.y = GAMEPLAY::CAMERA_BOX_MARGIN;
+        player.view.updateTransformations();
+    }
     
     float zoomReaches[3] = {
         game.config.rules.zoomClosestReach,
         game.options.advanced.zoomMediumReach,
         game.config.rules.zoomFarthestReach
     };
-    float viewportReach = sqrt(game.view.size.x * game.view.size.y);
+    float viewportReach = sqrt(players[0].view.size.x * players[0].view.size.y);
     for(int z = 0; z < 3; z++) {
         zoomLevels[z] = viewportReach / zoomReaches[z];
     }
     
-    if(curLeaderPtr) {
-        game.view.cam.setPos(curLeaderPtr->pos);
-    } else {
-        game.view.cam.setPos(Point());
+    for(Player &player : players) {
+        if(player.leaderPtr) {
+            player.view.cam.setPos(player.leaderPtr->pos);
+        } else {
+            player.view.cam.setPos(Point());
+        }
+        player.view.cam.setZoom(zoomLevels[1]);
+        player.view.updateTransformations();
+        particles.viewports.push_back(&player.view);
     }
-    game.view.cam.setZoom(zoomLevels[1]);
-    game.view.updateTransformations();
     
     lastEnemyDefeatedPos = Point(LARGE_FLOAT);
     lastHurtLeaderPos = Point(LARGE_FLOAT);
@@ -306,7 +329,6 @@ void GameplayState::enter() {
         bigMsgTime = GAMEPLAY::BIG_MSG_READY_DUR;
     }
     
-    hud->gui.hideItems();
     if(wentToResults) {
         game.fadeMgr.startFade(true, nullptr);
         if(pauseMenu) {
@@ -315,17 +337,39 @@ void GameplayState::enter() {
     }
     
     readyForInput = false;
-    
     game.mouseCursor.reset();
-    leaderCursorW = game.view.cursorWorldPos;
-    leaderCursorWin = game.mouseCursor.winPos;
     
-    notification.reset();
-    
-    if(curLeaderPtr) {
-        curLeaderPtr->stopWhistling();
+    for(Player &player : players) {
+        player.hud->gui.hideItems();
+        player.notification.reset();
+        player.leaderCursorWorld = player.view.cursorWorldPos;
+        player.leaderCursorWin = game.mouseCursor.winPos;
+        if(player.leaderPtr) {
+            player.leaderPtr->stopWhistling();
+        }
+        updateClosestGroupMembers(&player);
+        
+        player.whistle.nextDotTimer.onEnd = [&player] () {
+            player.whistle.nextDotTimer.start();
+            unsigned char dot = 255;
+            for(unsigned char d = 0; d < 6; d++) { //Find WHAT dot to add.
+                if(player.whistle.dotRadius[d] == -1) {
+                    dot = d;
+                    break;
+                }
+            }
+            
+            if(dot != 255) player.whistle.dotRadius[dot] = 0;
+        };
+        
+        player.whistle.nextRingTimer.onEnd = [&player] () {
+            player.whistle.nextRingTimer.start();
+            player.whistle.rings.push_back(0);
+            player.whistle.ringColors.push_back(player.whistle.ringPrevColor);
+            player.whistle.ringPrevColor =
+                sumAndWrap(player.whistle.ringPrevColor, 1, WHISTLE::N_RING_COLORS);
+        };
     }
-    updateClosestGroupMembers();
 }
 
 
@@ -437,16 +481,19 @@ size_t GameplayState::getAmountOfFieldPikmin(const PikminType* filter) {
 /**
  * @brief Returns how many Pikmin are in the group.
  *
+ * @param player The player responsible.
  * @param filter If not nullptr, only return Pikmin matching this type.
  * @return The amount.
  */
-size_t GameplayState::getAmountOfGroupPikmin(const PikminType* filter) {
+size_t GameplayState::getAmountOfGroupPikmin(
+    Player* player, const PikminType* filter
+) {
+    if(!player->leaderPtr) return 0;
+    
     size_t total = 0;
     
-    if(!curLeaderPtr) return 0;
-    
-    for(size_t m = 0; m < curLeaderPtr->group->members.size(); m++) {
-        Mob* mPtr = curLeaderPtr->group->members[m];
+    for(size_t m = 0; m < player->leaderPtr->group->members.size(); m++) {
+        Mob* mPtr = player->leaderPtr->group->members[m];
         if(mPtr->type->category->id != MOB_CATEGORY_PIKMIN) continue;
         if(filter && mPtr->type != filter) continue;
         total++;
@@ -556,6 +603,7 @@ long GameplayState::getAmountOfTotalPikmin(const PikminType* filter) {
  * this returns the closest. Otherwise, it returns the closest
  * and more mature one.
  *
+ * @param player The player responsible.
  * @param type Type to search for.
  * @param distant If not nullptr, whether all members are unreachable is
  * returned here.
@@ -563,9 +611,9 @@ long GameplayState::getAmountOfTotalPikmin(const PikminType* filter) {
  * of that subgroup available to grab.
  */
 Mob* GameplayState::getClosestGroupMember(
-    const SubgroupType* type, bool* distant
+    Player* player, const SubgroupType* type, bool* distant
 ) {
-    if(!curLeaderPtr) return nullptr;
+    if(!player->leaderPtr) return nullptr;
     
     Mob* result = nullptr;
     
@@ -579,10 +627,10 @@ Mob* GameplayState::getClosestGroupMember(
     }
     
     //Fetch the closest, for each maturity.
-    size_t nMembers = curLeaderPtr->group->members.size();
+    size_t nMembers = player->leaderPtr->group->members.size();
     for(size_t m = 0; m < nMembers; m++) {
     
-        Mob* memberPtr = curLeaderPtr->group->members[m];
+        Mob* memberPtr = player->leaderPtr->group->members[m];
         if(memberPtr->subgroupTypePtr != type) {
             continue;
         }
@@ -591,14 +639,14 @@ Mob* GameplayState::getClosestGroupMember(
         if(memberPtr->type->category->id == MOB_CATEGORY_PIKMIN) {
             maturity = ((Pikmin*) memberPtr)->maturity;
         }
-        bool canGrab = curLeaderPtr->canGrabGroupMember(memberPtr);
+        bool canGrab = player->leaderPtr->canGrabGroupMember(memberPtr);
         
         if(!canGrab && canGrabClosest[maturity]) {
             //Skip if we'd replace a grabbable Pikmin with a non-grabbable one.
             continue;
         }
         
-        Distance d(curLeaderPtr->pos, memberPtr->pos);
+        Distance d(player->leaderPtr->pos, memberPtr->pos);
         
         if(
             (canGrab && !canGrabClosest[maturity]) ||
@@ -669,16 +717,10 @@ void GameplayState::handleAllegroEvent(ALLEGRO_EVENT &ev) {
     }
     
     //Finally, let the HUD handle events.
-    hud->gui.handleAllegroEvent(ev);
+    for(Player &player : players) {
+        player.hud->gui.handleAllegroEvent(ev);
+    }
     
-}
-
-
-/**
- * @brief Initializes the HUD.
- */
-void GameplayState::initHud() {
-    hud = new Hud();
 }
 
 
@@ -750,9 +792,12 @@ void GameplayState::load() {
     loadGameContent();
     
     //Initialize some important things.
-    for(size_t s = 0; s < game.content.sprayTypes.list.size(); s++) {
-        sprayStats.push_back(SprayStats());
+    for(size_t t = 0; t < MAX_PLAYER_TEAMS; t++) {
+        for(size_t s = 0; s < game.content.sprayTypes.list.size(); s++) {
+            playerTeams[t].sprayStats.push_back(SprayStats());
+        }
     }
+    players[0].team = &playerTeams[0];
     
     areaTimePassed = 0.0f;
     gameplayTimePassed = 0.0f;
@@ -930,13 +975,18 @@ void GameplayState::load() {
     //In case a leader is stored in another mob,
     //update the available list.
     updateAvailableLeaders();
-    
-    curLeaderIdx = INVALID;
-    curLeaderPtr = nullptr;
     startingNrOfLeaders = mobs.leaders.size();
     
-    if(!mobs.leaders.empty()) {
-        changeToNextLeader(true, false, false);
+    for(Player &player : players) {
+        player.leaderIdx = INVALID;
+        player.leaderPtr = nullptr;
+        
+        if(!mobs.leaders.empty()) {
+            changeToNextLeader(&player, true, false, false);
+        }
+        
+        player.whistle.nextDotTimer.start();
+        player.whistle.nextRingTimer.start();
     }
     
     //Memorize mobs required by the mission.
@@ -1036,7 +1086,10 @@ void GameplayState::load() {
     //Initialize some other things.
     pathMgr.handleAreaLoad();
     
-    initHud();
+    for(Player &player : players) {
+        player.hud = new Hud();
+        player.hud->player = &player;
+    }
     
     dayMinutes = game.curAreaData->dayTimeStart;
     
@@ -1059,7 +1112,9 @@ void GameplayState::load() {
             continue;
         }
         
-        sprayStats[sprayIdx].nrSprays = s2i(s.second);
+        for(size_t t = 0; t < MAX_PLAYER_TEAMS; t++) {
+            playerTeams[t].sprayStats[sprayIdx].nrSprays = s2i(s.second);
+        }
     }
     
     //Effect caches.
@@ -1219,22 +1274,26 @@ void GameplayState::startLeaving(const GAMEPLAY_LEAVE_TARGET target) {
 void GameplayState::unload() {
     unloading = true;
     
-    if(hud) {
-        hud->gui.destroy();
-        delete hud;
-        hud = nullptr;
+    for(Player &player : players) {
+        if(player.hud) {
+            player.hud->gui.destroy();
+            delete player.hud;
+            player.hud = nullptr;
+        }
+        
+        player.leaderIdx = INVALID;
+        player.leaderPtr = nullptr;
+        
+        player.closeToInteractableToUse = nullptr;
+        player.closeToNestToOpen = nullptr;
+        player.closeToPikminToPluck = nullptr;
+        player.closeToShipToHeal = nullptr;
+        
+        player.view.cam.setPos(Point());
+        player.view.cam.setZoom(1.0f);
+        
+        player.leaderMovement.reset(); //TODO replace with a better solution.
     }
-    
-    curLeaderIdx = INVALID;
-    curLeaderPtr = nullptr;
-    
-    closeToInteractableToUse = nullptr;
-    closeToNestToOpen = nullptr;
-    closeToPikminToPluck = nullptr;
-    closeToShipToHeal = nullptr;
-    
-    game.view.cam.setPos(Point());
-    game.view.cam.setZoom(1.0f);
     
     while(!mobs.all.empty()) {
         deleteMob(*mobs.all.begin(), true);
@@ -1247,10 +1306,11 @@ void GameplayState::unload() {
     
     missionRemainingMobIds.clear();
     pathMgr.clear();
-    sprayStats.clear();
     particles.clear();
     
-    leaderMovement.reset(); //TODO replace with a better solution.
+    for(size_t t = 0; t < MAX_PLAYER_TEAMS; t++) {
+        playerTeams[t].sprayStats.clear();
+    }
     
     game.sysContent.anmSparks.clear();
     unloadGameContent();
@@ -1341,10 +1401,12 @@ void GameplayState::updateAvailableLeaders() {
     );
     
     //Update the current leader's index, which could've changed.
-    for(size_t l = 0; l < availableLeaders.size(); l++) {
-        if(availableLeaders[l] == curLeaderPtr) {
-            curLeaderIdx = l;
-            break;
+    for(Player &player : players) {
+        for(size_t l = 0; l < availableLeaders.size(); l++) {
+            if(availableLeaders[l] == player.leaderPtr) {
+                player.leaderIdx = l;
+                break;
+            }
         }
     }
 }
@@ -1359,46 +1421,49 @@ void GameplayState::updateAvailableLeaders() {
  * this gets set to the closest. Otherwise, it gets set to the closest
  * and more mature one.
  * Sets to nullptr if there is no member of that subgroup available.
+ *
+ * @param player The player responsible.
  */
-void GameplayState::updateClosestGroupMembers() {
-    closestGroupMember[BUBBLE_RELATION_PREVIOUS] = nullptr;
-    closestGroupMember[BUBBLE_RELATION_CURRENT] = nullptr;
-    closestGroupMember[BUBBLE_RELATION_NEXT] = nullptr;
-    closestGroupMemberDistant = false;
+void GameplayState::updateClosestGroupMembers(Player* player) {
+    player->closestGroupMember[BUBBLE_RELATION_PREVIOUS] = nullptr;
+    player->closestGroupMember[BUBBLE_RELATION_CURRENT] = nullptr;
+    player->closestGroupMember[BUBBLE_RELATION_NEXT] = nullptr;
+    player->closestGroupMemberDistant = false;
     
-    if(!curLeaderPtr) return;
-    if(curLeaderPtr->group->members.empty()) {
-        curLeaderPtr->updateThrowVariables();
+    if(!player->leaderPtr) return;
+    if(player->leaderPtr->group->members.empty()) {
+        player->leaderPtr->updateThrowVariables();
         return;
     }
     
     //Get the closest group members for the three relevant subgroup types.
     SubgroupType* prevType;
-    curLeaderPtr->group->getNextStandbyType(true, &prevType);
+    player->leaderPtr->group->getNextStandbyType(true, &prevType);
     
     if(prevType) {
-        closestGroupMember[BUBBLE_RELATION_PREVIOUS] =
-            getClosestGroupMember(prevType);
+        player->closestGroupMember[BUBBLE_RELATION_PREVIOUS] =
+            getClosestGroupMember(player, prevType);
     }
     
-    if(curLeaderPtr->group->curStandbyType) {
-        closestGroupMember[BUBBLE_RELATION_CURRENT] =
+    if(player->leaderPtr->group->curStandbyType) {
+        player->closestGroupMember[BUBBLE_RELATION_CURRENT] =
             getClosestGroupMember(
-                curLeaderPtr->group->curStandbyType,
-                &closestGroupMemberDistant
+                player,
+                player->leaderPtr->group->curStandbyType,
+                &player->closestGroupMemberDistant
             );
     }
     
     SubgroupType* nextType;
-    curLeaderPtr->group->getNextStandbyType(false, &nextType);
+    player->leaderPtr->group->getNextStandbyType(false, &nextType);
     
     if(nextType) {
-        closestGroupMember[BUBBLE_RELATION_NEXT] =
-            getClosestGroupMember(nextType);
+        player->closestGroupMember[BUBBLE_RELATION_NEXT] =
+            getClosestGroupMember(player, nextType);
     }
     
-    if(closestGroupMember[BUBBLE_RELATION_CURRENT]) {
-        curLeaderPtr->updateThrowVariables();
+    if(player->closestGroupMember[BUBBLE_RELATION_CURRENT]) {
+        player->leaderPtr->updateThrowVariables();
     }
 }
 

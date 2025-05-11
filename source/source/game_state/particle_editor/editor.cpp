@@ -337,6 +337,7 @@ void ParticleEditor::load() {
     game.audio.setCurrentSong(game.sysContentNames.sngEditors, false);
     
     partMgr = ParticleManager(game.options.advanced.maxParticles);
+    partMgr.viewports.push_back(&game.editorsView);
     
     //Set the background.
     if(!game.options.partEd.bgPath.empty()) {
@@ -409,10 +410,10 @@ void ParticleEditor::loadPartGenFile(
  * @param ev Event to handle.
  */
 void ParticleEditor::panCam(const ALLEGRO_EVENT &ev) {
-    game.view.cam.setPos(
+    game.editorsView.cam.setPos(
         Point(
-            game.view.cam.pos.x - ev.mouse.dx / game.view.cam.zoom,
-            game.view.cam.pos.y - ev.mouse.dy / game.view.cam.zoom
+            game.editorsView.cam.pos.x - ev.mouse.dx / game.editorsView.cam.zoom,
+            game.editorsView.cam.pos.y - ev.mouse.dy / game.editorsView.cam.zoom
         )
     );
 }
@@ -626,8 +627,8 @@ void ParticleEditor::setupForNewPartGenPre() {
     selectedOutwardVelocityKeyframe = 0;
     loadedGen = ParticleGenerator();
     
-    game.view.cam.setPos(Point());
-    game.view.cam.setZoom(1.0f);
+    game.editorsView.cam.setPos(Point());
+    game.editorsView.cam.setZoom(1.0f);
 }
 
 
@@ -639,10 +640,10 @@ void ParticleEditor::setupForNewPartGenPre() {
 void ParticleEditor::zoomAndPosResetCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
-    if(game.view.cam.targetZoom == 1.0f) {
-        game.view.cam.targetPos = Point();
+    if(game.editorsView.cam.targetZoom == 1.0f) {
+        game.editorsView.cam.targetPos = Point();
     } else {
-        game.view.cam.targetZoom = 1.0f;
+        game.editorsView.cam.targetZoom = 1.0f;
     }
 }
 
@@ -655,10 +656,10 @@ void ParticleEditor::zoomAndPosResetCmd(float inputValue) {
 void ParticleEditor::zoomInCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
-    game.view.cam.targetZoom =
+    game.editorsView.cam.targetZoom =
         std::clamp(
-            game.view.cam.targetZoom +
-            game.view.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
+            game.editorsView.cam.targetZoom +
+            game.editorsView.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
             zoomMinLevel, zoomMaxLevel
         );
 }
@@ -672,10 +673,10 @@ void ParticleEditor::zoomInCmd(float inputValue) {
 void ParticleEditor::zoomOutCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
-    game.view.cam.targetZoom =
+    game.editorsView.cam.targetZoom =
         std::clamp(
-            game.view.cam.targetZoom -
-            game.view.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
+            game.editorsView.cam.targetZoom -
+            game.editorsView.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
             zoomMinLevel, zoomMaxLevel
         );
 }
@@ -754,7 +755,7 @@ void ParticleEditor::partMgrPlaybackToggleCmd(float inputValue) {
  * @brief Resets the camera's X and Y coordinates.
  */
 void ParticleEditor::resetCamXY() {
-    game.view.cam.targetPos = Point();
+    game.editorsView.cam.targetPos = Point();
 }
 
 

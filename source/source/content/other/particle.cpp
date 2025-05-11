@@ -201,12 +201,19 @@ void ParticleGenerator::emit(ParticleManager &manager) {
     basePPos += offs;
     basePZ += followZOffset;
     
-    if(
-        basePPos.x < game.view.box[0].x ||
-        basePPos.x > game.view.box[1].x ||
-        basePPos.y < game.view.box[0].y ||
-        basePPos.y > game.view.box[1].y
-    ) {
+    bool visible = false;
+    for(size_t v = 0; v < manager.viewports.size(); v++) {
+        if(
+            basePPos.x >= manager.viewports[v]->box[0].x &&
+            basePPos.x <= manager.viewports[v]->box[1].x &&
+            basePPos.y >= manager.viewports[v]->box[0].y &&
+            basePPos.y <= manager.viewports[v]->box[1].y
+        ) {
+            visible = true;
+            break;
+        }
+    }
+    if(!visible) {
         //Too far off-camera.
         return;
     }

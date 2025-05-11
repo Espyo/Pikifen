@@ -20,20 +20,20 @@
  */
 void ParticleEditor::handleKeyCharCanvas(const ALLEGRO_EVENT &ev) {
     if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_LEFT)) {
-        game.view.cam.targetPos.x -=
-            AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.view.cam.zoom;
+        game.editorsView.cam.targetPos.x -=
+            AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.editorsView.cam.zoom;
             
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_RIGHT)) {
-        game.view.cam.targetPos.x +=
-            AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.view.cam.zoom;
+        game.editorsView.cam.targetPos.x +=
+            AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.editorsView.cam.zoom;
             
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_UP)) {
-        game.view.cam.targetPos.y -=
-            AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.view.cam.zoom;
+        game.editorsView.cam.targetPos.y -=
+            AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.editorsView.cam.zoom;
             
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_DOWN)) {
-        game.view.cam.targetPos.y +=
-            AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.view.cam.zoom;
+        game.editorsView.cam.targetPos.y +=
+            AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.editorsView.cam.zoom;
             
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_MINUS)) {
         zoomOutCmd(1.0f);
@@ -132,7 +132,7 @@ void ParticleEditor::handleLmbDoubleClick(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void ParticleEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
-    generatorPosOffset = game.view.cursorWorldPos;
+    generatorPosOffset = game.editorsView.cursorWorldPos;
 }
 
 
@@ -142,7 +142,7 @@ void ParticleEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void ParticleEditor::handleLmbDrag(const ALLEGRO_EVENT &ev) {
-    generatorPosOffset = game.view.cursorWorldPos;
+    generatorPosOffset = game.editorsView.cursorWorldPos;
 }
 
 
@@ -188,7 +188,7 @@ void ParticleEditor::handleMmbDrag(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void ParticleEditor::handleMouseUpdate(const ALLEGRO_EVENT &ev) {
-
+    Editor::handleMouseUpdate(ev);
 }
 
 
@@ -198,7 +198,7 @@ void ParticleEditor::handleMouseUpdate(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void ParticleEditor::handleMouseWheel(const ALLEGRO_EVENT &ev) {
-    zoomWithCursor(game.view.cam.zoom + (game.view.cam.zoom * ev.mouse.dz * 0.1));
+    zoomWithCursor(game.editorsView.cam.zoom + (game.editorsView.cam.zoom * ev.mouse.dz * 0.1));
 }
 
 

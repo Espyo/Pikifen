@@ -173,6 +173,7 @@ void GenMobFsm::carryReachDestination(Mob* m, void* info1, void* info2) {
         m->deliveryInfo->color = m->carryInfo->intendedPikType->mainColor;
         m->deliveryInfo->intendedPikType = m->carryInfo->intendedPikType;
     }
+    m->deliveryInfo->playerTeamIdx = m->carryInfo->getPlayerTeamIdx();
     
     m->fsm.runEvent(MOB_EV_CARRY_DELIVERED);
 }

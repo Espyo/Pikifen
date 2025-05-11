@@ -148,7 +148,7 @@ public:
     ALLEGRO_TRANSFORM identityTransform;
     
     //Default Dear ImGui style.
-    ImVec4 DearImGuiDefaultStyle[ImGuiCol_COUNT];
+    ImVec4 dearImGuiDefaultStyle[ImGuiCol_COUNT];
     
     //Set to false to stop program execution next frame.
     bool isGameRunning = true;
@@ -236,8 +236,8 @@ public:
     //How much time has passed since the program booted.
     float timePassed = 0.0f;
     
-    //Player 1's viewport.
-    Viewport view;
+    //Viewport for the editor canvases.
+    Viewport editorsView;
     
     //Buffer with the wall shadows and ledge smoothings.
     ALLEGRO_BITMAP* wallOffsetEffectBuffer = nullptr;

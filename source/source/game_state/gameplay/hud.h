@@ -49,6 +49,9 @@ enum BUBBLE_RELATION {
 };
 
 
+struct Player;
+
+
 /**
  * @brief Holds information about the in-game HUD.
  */
@@ -91,6 +94,9 @@ struct Hud {
     
     //GUI manager.
     GuiManager gui;
+
+    //Whose player this HUD belongs to.
+    Player* player = nullptr;
     
     //Bubble graphic, used for the HUD.
     ALLEGRO_BITMAP* bmpBubble = nullptr;

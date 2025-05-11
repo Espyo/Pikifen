@@ -2042,8 +2042,8 @@ void AnimationEditor::processGuiPanelSprite() {
         
         //Sprite bitmap button.
         if(ImGui::Button("Bitmap", modeButtonsSize)) {
-            preSpriteBmpCamPos = game.view.cam.targetPos;
-            preSpriteBmpCamZoom = game.view.cam.targetZoom;
+            preSpriteBmpCamPos = game.editorsView.cam.targetPos;
+            preSpriteBmpCamZoom = game.editorsView.cam.targetZoom;
             centerCameraOnSpriteBitmap(true);
             changeState(EDITOR_STATE_SPRITE_BITMAP);
         }
@@ -2103,8 +2103,8 @@ void AnimationEditor::processGuiPanelSpriteBitmap() {
     
     //Back button.
     if(ImGui::Button("Back")) {
-        game.view.cam.setPos(preSpriteBmpCamPos);
-        game.view.cam.setZoom(preSpriteBmpCamZoom);
+        game.editorsView.cam.setPos(preSpriteBmpCamPos);
+        game.editorsView.cam.setZoom(preSpriteBmpCamZoom);
         changeState(EDITOR_STATE_SPRITE);
     }
     
@@ -2974,8 +2974,8 @@ void AnimationEditor::processGuiStatusBar() {
         ImGui::SameLine();
         monoText(
             "%s, %s",
-            boxString(f2s(game.view.cursorWorldPos.x), 7).c_str(),
-            boxString(f2s(game.view.cursorWorldPos.y), 7).c_str()
+            boxString(f2s(game.editorsView.cursorWorldPos.x), 7).c_str(),
+            boxString(f2s(game.editorsView.cursorWorldPos.y), 7).c_str()
         );
     }
     

@@ -380,10 +380,10 @@ void GuiEditor::loadGuiDefFile(
  * @param ev Event to handle.
  */
 void GuiEditor::panCam(const ALLEGRO_EVENT &ev) {
-    game.view.cam.setPos(
+    game.editorsView.cam.setPos(
         Point(
-            game.view.cam.pos.x - ev.mouse.dx / game.view.cam.zoom,
-            game.view.cam.pos.y - ev.mouse.dy / game.view.cam.zoom
+            game.editorsView.cam.pos.x - ev.mouse.dx / game.editorsView.cam.zoom,
+            game.editorsView.cam.pos.y - ev.mouse.dy / game.editorsView.cam.zoom
         )
     );
 }
@@ -597,10 +597,10 @@ void GuiEditor::zoomAndPosResetCmd(float inputValue) {
 void GuiEditor::zoomInCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
-    game.view.cam.targetZoom =
+    game.editorsView.cam.targetZoom =
         std::clamp(
-            game.view.cam.targetZoom +
-            game.view.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
+            game.editorsView.cam.targetZoom +
+            game.editorsView.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
             zoomMinLevel, zoomMaxLevel
         );
 }
@@ -614,10 +614,10 @@ void GuiEditor::zoomInCmd(float inputValue) {
 void GuiEditor::zoomOutCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
-    game.view.cam.targetZoom =
+    game.editorsView.cam.targetZoom =
         std::clamp(
-            game.view.cam.targetZoom -
-            game.view.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
+            game.editorsView.cam.targetZoom -
+            game.editorsView.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
             zoomMinLevel, zoomMaxLevel
         );
 }

@@ -60,10 +60,10 @@ void AreaEditor::drawArrow(
 ) {
     al_draw_line(
         start.x, start.y, end.x, end.y,
-        color, thickness / game.view.cam.zoom
+        color, thickness / game.editorsView.cam.zoom
     );
     
-    if(game.view.cam.zoom >= 0.25) {
+    if(game.editorsView.cam.zoom >= 0.25) {
         float angle =
             getAngle(start, end);
         Point finalStart = Point(startOffset, 0);
@@ -78,7 +78,7 @@ void AreaEditor::drawArrow(
             finalStart.y + (finalEnd.y - finalStart.y) * 0.55
         );
         const float delta =
-            (thickness * 4) / game.view.cam.zoom;
+            (thickness * 4) / game.editorsView.cam.zoom;
             
         al_draw_filled_triangle(
             pivot.x + cos(angle) * delta,
@@ -99,10 +99,10 @@ void AreaEditor::drawArrow(
  * This is called as a callback inside the Dear ImGui rendering process.
  */
 void AreaEditor::drawCanvas() {
-    Point canvasTL = game.view.getTopLeft();
+    Point canvasTL = game.editorsView.getTopLeft();
     
     al_set_clipping_rectangle(
-        canvasTL.x, canvasTL.y, game.view.size.x, game.view.size.y
+        canvasTL.x, canvasTL.y, game.editorsView.size.x, game.editorsView.size.y
     );
     
     al_clear_to_color(COLOR_BLACK);
@@ -112,7 +112,7 @@ void AreaEditor::drawCanvas() {
         return;
     }
     
-    al_use_transform(&game.view.worldToWindowTransform);
+    al_use_transform(&game.editorsView.worldToWindowTransform);
     
     float lowestSectorZ = 0.0f;
     float highestSectorZ = 0.0f;
@@ -224,22 +224,22 @@ void AreaEditor::drawCanvas() {
     //Sectors.
     if(wallShadowsOpacity > 0.0f) {
         updateOffsetEffectBuffer(
-            game.view.box[0], game.view.box[1],
+            game.editorsView.box[0], game.editorsView.box[1],
             game.liquidLimitEffectCaches,
             game.liquidLimitEffectBuffer,
-            true
+            true, game.editorsView
         );
         updateOffsetEffectBuffer(
-            game.view.box[0], game.view.box[1],
+            game.editorsView.box[0], game.editorsView.box[1],
             game.wallSmoothingEffectCaches,
             game.wallOffsetEffectBuffer,
-            true
+            true, game.editorsView
         );
         updateOffsetEffectBuffer(
-            game.view.box[0], game.view.box[1],
+            game.editorsView.box[0], game.editorsView.box[1],
             game.wallShadowEffectCaches,
             game.wallOffsetEffectBuffer,
-            false
+            false, game.editorsView
         );
     }
     size_t nSectors = game.curAreaData->sectors.size();
@@ -282,10 +282,11 @@ void AreaEditor::drawCanvas() {
             
             if(wallShadowsOpacity > 0.0f) {
                 drawSectorEdgeOffsets(
-                    sPtr, game.liquidLimitEffectBuffer, 1.0f
+                    sPtr, game.liquidLimitEffectBuffer, 1.0f, game.editorsView
                 );
                 drawSectorEdgeOffsets(
-                    sPtr, game.wallOffsetEffectBuffer, wallShadowsOpacity
+                    sPtr, game.wallOffsetEffectBuffer, wallShadowsOpacity,
+                    game.editorsView
                 );
             }
             
@@ -388,13 +389,13 @@ void AreaEditor::drawCanvas() {
         -(AREA_EDITOR::COMFY_DIST * 2), 0,
         AREA_EDITOR::COMFY_DIST * 2, 0,
         al_map_rgba(192, 192, 224, gridOpacity * 255),
-        1.0f / game.view.cam.zoom
+        1.0f / game.editorsView.cam.zoom
     );
     al_draw_line(
         0, -(AREA_EDITOR::COMFY_DIST * 2), 0,
         AREA_EDITOR::COMFY_DIST * 2,
         al_map_rgba(192, 192, 224, gridOpacity * 255),
-        1.0f / game.view.cam.zoom
+        1.0f / game.editorsView.cam.zoom
     );
     
     //Edges.
@@ -485,7 +486,7 @@ void AreaEditor::drawCanvas() {
                 al_map_rgba(128, 128, 128, edgesOpacity * 255) :
                 al_map_rgba(150, 150, 150, edgesOpacity * 255)
             ),
-            (selected ? 3.0 : 2.0) / game.view.cam.zoom
+            (selected ? 3.0 : 2.0) / game.editorsView.cam.zoom
         );
         
         if(
@@ -528,7 +529,7 @@ void AreaEditor::drawCanvas() {
                     tPtr->points[2]->x,
                     tPtr->points[2]->y,
                     al_map_rgb(192, 0, 160),
-                    2.0f / game.view.cam.zoom
+                    2.0f / game.editorsView.cam.zoom
                 );
             }
         }
@@ -593,7 +594,7 @@ void AreaEditor::drawCanvas() {
                     selectionFilter == SELECTION_FILTER_VERTEXES
                 );
             drawFilledDiamond(
-                v2p(vPtr), 3.0 / game.view.cam.zoom,
+                v2p(vPtr), 3.0 / game.editorsView.cam.zoom,
                 selected ?
                 al_map_rgba(
                     AREA_EDITOR::SELECTION_COLOR[0],
@@ -632,7 +633,7 @@ void AreaEditor::drawCanvas() {
             &selectionCenter,
             &selectionSize,
             &selectionAngle,
-            1.0f / game.view.cam.zoom
+            1.0f / game.editorsView.cam.zoom
         );
     }
     
@@ -645,7 +646,7 @@ void AreaEditor::drawCanvas() {
             if(!mPtr->type) continue;
             
             bool isSelected = isInContainer(selectedMobs, mPtr);
-                
+            
             for(size_t l = 0; l < mPtr->links.size(); l++) {
                 m2Ptr = mPtr->links[l];
                 if(!m2Ptr->type) continue;
@@ -698,7 +699,7 @@ void AreaEditor::drawCanvas() {
         if(mPtr->type && mPtr->type->rectangularDim.x != 0) {
             drawRotatedRectangle(
                 mPtr->pos, mPtr->type->rectangularDim,
-                mPtr->angle, color, 1.0f / game.view.cam.zoom
+                mPtr->angle, color, 1.0f / game.editorsView.cam.zoom
             );
         }
         
@@ -724,12 +725,12 @@ void AreaEditor::drawCanvas() {
                     float cRot = mPtr->angle + spawnInfo->angle;
                     drawRotatedRectangle(
                         cPos, cType->rectangularDim,
-                        cRot, color, 1.0f / game.view.cam.zoom
+                        cRot, color, 1.0f / game.editorsView.cam.zoom
                     );
                 } else {
                     al_draw_circle(
                         cPos.x, cPos.y, cType->radius,
-                        color, 1.0f / game.view.cam.zoom
+                        color, 1.0f / game.editorsView.cam.zoom
                     );
                 }
                 
@@ -796,7 +797,7 @@ void AreaEditor::drawCanvas() {
             ) {
                 al_draw_circle(
                     mPtr->pos.x, mPtr->pos.y, mPtr->type->territoryRadius,
-                    al_map_rgb(240, 240, 192), 1.0f / game.view.cam.zoom
+                    al_map_rgb(240, 240, 192), 1.0f / game.editorsView.cam.zoom
                 );
             }
             if(
@@ -807,7 +808,7 @@ void AreaEditor::drawCanvas() {
             ) {
                 al_draw_circle(
                     mPtr->pos.x, mPtr->pos.y, mPtr->type->terrainRadius,
-                    al_map_rgb(240, 192, 192), 1.0f / game.view.cam.zoom
+                    al_map_rgb(240, 192, 192), 1.0f / game.editorsView.cam.zoom
                 );
             }
         } else if(isHighlighted) {
@@ -929,7 +930,7 @@ void AreaEditor::drawCanvas() {
                     s2Ptr->pos.x - offset2.x,
                     s2Ptr->pos.y - offset2.y,
                     color,
-                    AREA_EDITOR::PATH_LINK_THICKNESS / game.view.cam.zoom
+                    AREA_EDITOR::PATH_LINK_THICKNESS / game.editorsView.cam.zoom
                 );
                 
                 if(
@@ -979,7 +980,7 @@ void AreaEditor::drawCanvas() {
                     float midY =
                         (sPtr->pos.y + s2Ptr->pos.y) / 2.0f;
                     const float delta =
-                        (AREA_EDITOR::PATH_LINK_THICKNESS * 4) / game.view.cam.zoom;
+                        (AREA_EDITOR::PATH_LINK_THICKNESS * 4) / game.editorsView.cam.zoom;
                         
                     al_draw_filled_triangle(
                         midX + cos(angle) * delta,
@@ -1001,7 +1002,7 @@ void AreaEditor::drawCanvas() {
             for(size_t s = 0; s < game.curAreaData->pathStops.size(); s++) {
                 PathStop* sPtr = game.curAreaData->pathStops[s];
                 float d =
-                    Distance(game.view.cursorWorldPos, sPtr->pos).toFloat() -
+                    Distance(game.editorsView.cursorWorldPos, sPtr->pos).toFloat() -
                     sPtr->radius;
                     
                 if(!closest || d < closestDist) {
@@ -1012,9 +1013,9 @@ void AreaEditor::drawCanvas() {
             
             if(closest) {
                 al_draw_line(
-                    game.view.cursorWorldPos.x, game.view.cursorWorldPos.y,
+                    game.editorsView.cursorWorldPos.x, game.editorsView.cursorWorldPos.y,
                     closest->pos.x, closest->pos.y,
-                    al_map_rgb(192, 128, 32), 2.0 / game.view.cam.zoom
+                    al_map_rgb(192, 128, 32), 2.0 / game.editorsView.cam.zoom
                 );
             }
         }
@@ -1024,7 +1025,7 @@ void AreaEditor::drawCanvas() {
             //Draw the lines of the path.
             ALLEGRO_COLOR linesColor = al_map_rgb(255, 187, 136);
             ALLEGRO_COLOR invalidLinesColor = al_map_rgb(221, 17, 17);
-            float linesThickness = 4.0f / game.view.cam.zoom;
+            float linesThickness = 4.0f / game.editorsView.cam.zoom;
             
             if(!pathPreview.empty()) {
                 al_draw_line(
@@ -1080,7 +1081,7 @@ void AreaEditor::drawCanvas() {
                 string letter = (c == 0 ? "A" : "B");
                 
                 const float factor =
-                    AREA_EDITOR::PATH_PREVIEW_CHECKPOINT_RADIUS / game.view.cam.zoom;
+                    AREA_EDITOR::PATH_PREVIEW_CHECKPOINT_RADIUS / game.editorsView.cam.zoom;
                 al_draw_filled_rectangle(
                     pathPreviewCheckpoints[c].x - factor,
                     pathPreviewCheckpoints[c].y - factor,
@@ -1093,9 +1094,9 @@ void AreaEditor::drawCanvas() {
                     pathPreviewCheckpoints[c],
                     Point(
                         AREA_EDITOR::PATH_PREVIEW_CHECKPOINT_RADIUS * 1.8f /
-                        game.view.cam.zoom,
+                        game.editorsView.cam.zoom,
                         AREA_EDITOR::PATH_PREVIEW_CHECKPOINT_RADIUS * 1.8f /
-                        game.view.cam.zoom
+                        game.editorsView.cam.zoom
                     ),
                     al_map_rgb(0, 64, 64)
                 );
@@ -1152,7 +1153,7 @@ void AreaEditor::drawCanvas() {
                 if(selectedShadow != sPtr) {
                     al_draw_rectangle(
                         minCoords.x, minCoords.y, maxCoords.x, maxCoords.y,
-                        al_map_rgb(128, 128, 64), 2.0 / game.view.cam.zoom
+                        al_map_rgb(128, 128, 64), 2.0 / game.editorsView.cam.zoom
                     );
                 }
             }
@@ -1162,7 +1163,7 @@ void AreaEditor::drawCanvas() {
                 &selectedShadow->center,
                 &selectedShadow->size,
                 &selectedShadow->angle,
-                1.0f / game.view.cam.zoom
+                1.0f / game.editorsView.cam.zoom
             );
         }
     }
@@ -1173,7 +1174,7 @@ void AreaEditor::drawCanvas() {
             &game.curAreaData->mission.goalExitCenter,
             &game.curAreaData->mission.goalExitSize,
             nullptr,
-            1.0f / game.view.cam.zoom
+            1.0f / game.editorsView.cam.zoom
         );
     }
     
@@ -1184,13 +1185,13 @@ void AreaEditor::drawCanvas() {
             
             al_draw_filled_rectangle(
                 crossSectionCheckpoints[p].x -
-                (AREA_EDITOR::CROSS_SECTION_POINT_RADIUS / game.view.cam.zoom),
+                (AREA_EDITOR::CROSS_SECTION_POINT_RADIUS / game.editorsView.cam.zoom),
                 crossSectionCheckpoints[p].y -
-                (AREA_EDITOR::CROSS_SECTION_POINT_RADIUS / game.view.cam.zoom),
+                (AREA_EDITOR::CROSS_SECTION_POINT_RADIUS / game.editorsView.cam.zoom),
                 crossSectionCheckpoints[p].x +
-                (AREA_EDITOR::CROSS_SECTION_POINT_RADIUS / game.view.cam.zoom),
+                (AREA_EDITOR::CROSS_SECTION_POINT_RADIUS / game.editorsView.cam.zoom),
                 crossSectionCheckpoints[p].y +
-                (AREA_EDITOR::CROSS_SECTION_POINT_RADIUS / game.view.cam.zoom),
+                (AREA_EDITOR::CROSS_SECTION_POINT_RADIUS / game.editorsView.cam.zoom),
                 al_map_rgb(255, 255, 32)
             );
             drawText(
@@ -1198,9 +1199,9 @@ void AreaEditor::drawCanvas() {
                 crossSectionCheckpoints[p],
                 Point(
                     AREA_EDITOR::CROSS_SECTION_POINT_RADIUS * 1.8f /
-                    game.view.cam.zoom,
+                    game.editorsView.cam.zoom,
                     AREA_EDITOR::CROSS_SECTION_POINT_RADIUS * 1.8f /
-                    game.view.cam.zoom
+                    game.editorsView.cam.zoom
                 ),
                 al_map_rgb(0, 64, 64)
             );
@@ -1210,7 +1211,7 @@ void AreaEditor::drawCanvas() {
             crossSectionCheckpoints[0].y,
             crossSectionCheckpoints[1].x,
             crossSectionCheckpoints[1].y,
-            al_map_rgb(255, 0, 0), 3.0 / game.view.cam.zoom
+            al_map_rgb(255, 0, 0), 3.0 / game.editorsView.cam.zoom
         );
     }
     
@@ -1233,7 +1234,7 @@ void AreaEditor::drawCanvas() {
                 &referenceCenter,
                 &referenceSize,
                 nullptr,
-                1.0f / game.view.cam.zoom
+                1.0f / game.editorsView.cam.zoom
             );
         }
     }
@@ -1247,7 +1248,7 @@ void AreaEditor::drawCanvas() {
                 drawingNodes[n].snappedSpot.x,
                 drawingNodes[n].snappedSpot.y,
                 al_map_rgb(128, 255, 128),
-                3.0 / game.view.cam.zoom
+                3.0 / game.editorsView.cam.zoom
             );
         }
         if(!drawingNodes.empty()) {
@@ -1258,7 +1259,7 @@ void AreaEditor::drawCanvas() {
                     al_map_rgb(255, 0, 0),
                     al_map_rgb(64, 255, 64)
                 );
-            Point hotspot = snapPoint(game.view.cursorWorldPos);
+            Point hotspot = snapPoint(game.editorsView.cursorWorldPos);
             
             al_draw_line(
                 drawingNodes.back().snappedSpot.x,
@@ -1266,7 +1267,7 @@ void AreaEditor::drawCanvas() {
                 hotspot.x,
                 hotspot.y,
                 newLineColor,
-                3.0 / game.view.cam.zoom
+                3.0 / game.editorsView.cam.zoom
             );
             
             if(game.options.areaEd.showEdgeLength) {
@@ -1288,7 +1289,7 @@ void AreaEditor::drawCanvas() {
                 newCircleSectorCenter.y,
                 circleRadius,
                 al_map_rgb(64, 255, 64),
-                3.0 / game.view.cam.zoom
+                3.0 / game.editorsView.cam.zoom
             );
             if(game.options.areaEd.showCircularInfo) {
                 drawLineDist(
@@ -1311,7 +1312,7 @@ void AreaEditor::drawCanvas() {
                 al_draw_line(
                     curPoint.x, curPoint.y,
                     nextPoint.x, nextPoint.y,
-                    color, 3.0 / game.view.cam.zoom
+                    color, 3.0 / game.editorsView.cam.zoom
                 );
             }
             
@@ -1319,7 +1320,7 @@ void AreaEditor::drawCanvas() {
                 al_draw_filled_circle(
                     newCircleSectorPoints[p].x,
                     newCircleSectorPoints[p].y,
-                    3.0 / game.view.cam.zoom, al_map_rgb(192, 255, 192)
+                    3.0 / game.editorsView.cam.zoom, al_map_rgb(192, 255, 192)
                 );
             }
             
@@ -1340,7 +1341,7 @@ void AreaEditor::drawCanvas() {
         Point nrCoords = quickHeightSetStartPos;
         nrCoords.x += 100.0f;
         al_transform_coordinates(
-            &game.view.windowToWorldTransform, &nrCoords.x, &nrCoords.y
+            &game.editorsView.windowToWorldTransform, &nrCoords.x, &nrCoords.y
         );
         float offset = getQuickHeightSetOffset();
         drawDebugText(
@@ -1359,14 +1360,14 @@ void AreaEditor::drawCanvas() {
     //Path drawing.
     if(subState == EDITOR_SUB_STATE_PATH_DRAWING) {
         if(pathDrawingStop1) {
-            Point hotspot = snapPoint(game.view.cursorWorldPos);
+            Point hotspot = snapPoint(game.editorsView.cursorWorldPos);
             al_draw_line(
                 pathDrawingStop1->pos.x,
                 pathDrawingStop1->pos.y,
                 hotspot.x,
                 hotspot.y,
                 al_map_rgb(64, 255, 64),
-                3.0 / game.view.cam.zoom
+                3.0 / game.editorsView.cam.zoom
             );
             
             if(game.options.areaEd.showPathLinkLength) {
@@ -1387,7 +1388,7 @@ void AreaEditor::drawCanvas() {
                 AREA_EDITOR::SELECTION_COLOR[1],
                 AREA_EDITOR::SELECTION_COLOR[2]
             ),
-            2.0 / game.view.cam.zoom
+            2.0 / game.editorsView.cam.zoom
             
         );
     }
@@ -1403,25 +1404,25 @@ void AreaEditor::drawCanvas() {
         subState == EDITOR_SUB_STATE_PATH_DRAWING ||
         subState == EDITOR_SUB_STATE_NEW_SHADOW
     ) {
-        Point marker = game.view.cursorWorldPos;
+        Point marker = game.editorsView.cursorWorldPos;
         
         if(subState != EDITOR_SUB_STATE_ADD_MOB_LINK) {
             marker = snapPoint(marker);
         }
         
         al_draw_line(
-            marker.x - 10 / game.view.cam.zoom,
+            marker.x - 10 / game.editorsView.cam.zoom,
             marker.y,
-            marker.x + 10 / game.view.cam.zoom,
+            marker.x + 10 / game.editorsView.cam.zoom,
             marker.y,
-            COLOR_WHITE, 2.0 / game.view.cam.zoom
+            COLOR_WHITE, 2.0 / game.editorsView.cam.zoom
         );
         al_draw_line(
             marker.x,
-            marker.y - 10 / game.view.cam.zoom,
+            marker.y - 10 / game.editorsView.cam.zoom,
             marker.x,
-            marker.y + 10 / game.view.cam.zoom,
-            COLOR_WHITE, 2.0 / game.view.cam.zoom
+            marker.y + 10 / game.editorsView.cam.zoom,
+            COLOR_WHITE, 2.0 / game.editorsView.cam.zoom
         );
     }
     
@@ -1429,21 +1430,21 @@ void AreaEditor::drawCanvas() {
     if(
         subState == EDITOR_SUB_STATE_DEL_MOB_LINK
     ) {
-        Point marker = game.view.cursorWorldPos;
+        Point marker = game.editorsView.cursorWorldPos;
         
         al_draw_line(
-            marker.x - 10 / game.view.cam.zoom,
-            marker.y - 10 / game.view.cam.zoom,
-            marker.x + 10 / game.view.cam.zoom,
-            marker.y + 10 / game.view.cam.zoom,
-            COLOR_WHITE, 2.0 / game.view.cam.zoom
+            marker.x - 10 / game.editorsView.cam.zoom,
+            marker.y - 10 / game.editorsView.cam.zoom,
+            marker.x + 10 / game.editorsView.cam.zoom,
+            marker.y + 10 / game.editorsView.cam.zoom,
+            COLOR_WHITE, 2.0 / game.editorsView.cam.zoom
         );
         al_draw_line(
-            marker.x - 10 / game.view.cam.zoom,
-            marker.y + 10 / game.view.cam.zoom,
-            marker.x + 10 / game.view.cam.zoom,
-            marker.y - 10 / game.view.cam.zoom,
-            COLOR_WHITE, 2.0 / game.view.cam.zoom
+            marker.x - 10 / game.editorsView.cam.zoom,
+            marker.y + 10 / game.editorsView.cam.zoom,
+            marker.x + 10 / game.editorsView.cam.zoom,
+            marker.y - 10 / game.editorsView.cam.zoom,
+            COLOR_WHITE, 2.0 / game.editorsView.cam.zoom
         );
     }
     
@@ -1685,7 +1686,7 @@ void AreaEditor::drawCanvas() {
         float cursorSegmentRatio = 0;
         getClosestPointInLineSeg(
             crossSectionCheckpoints[0], crossSectionCheckpoints[1],
-            Point(game.view.cursorWorldPos.x, game.view.cursorWorldPos.y),
+            Point(game.editorsView.cursorWorldPos.x, game.editorsView.cursorWorldPos.y),
             &cursorSegmentRatio
         );
         if(cursorSegmentRatio >= 0 && cursorSegmentRatio <= 1) {
@@ -1798,8 +1799,8 @@ void AreaEditor::drawDebugText(
         &dox, &doy, &dw, &dh
     );
     
-    float bboxW = (dw * AREA_EDITOR::DEBUG_TEXT_SCALE) / game.view.cam.zoom;
-    float bboxH = (dh * AREA_EDITOR::DEBUG_TEXT_SCALE) / game.view.cam.zoom;
+    float bboxW = (dw * AREA_EDITOR::DEBUG_TEXT_SCALE) / game.editorsView.cam.zoom;
+    float bboxH = (dh * AREA_EDITOR::DEBUG_TEXT_SCALE) / game.editorsView.cam.zoom;
     
     al_draw_filled_rectangle(
         where.x - bboxW * 0.5, where.y - bboxH * 0.5,
@@ -1814,34 +1815,34 @@ void AreaEditor::drawDebugText(
     
     if(dots > 0) {
         al_draw_filled_rectangle(
-            where.x - 3.0f / game.view.cam.zoom,
+            where.x - 3.0f / game.editorsView.cam.zoom,
             where.y + bboxH * 0.5f,
-            where.x + 3.0f / game.view.cam.zoom,
-            where.y + bboxH * 0.5f + 3.0f / game.view.cam.zoom,
+            where.x + 3.0f / game.editorsView.cam.zoom,
+            where.y + bboxH * 0.5f + 3.0f / game.editorsView.cam.zoom,
             al_map_rgba(0, 0, 0, 128)
         );
         
         if(dots == 1) {
             al_draw_filled_rectangle(
-                where.x - 1.0f / game.view.cam.zoom,
-                where.y + bboxH * 0.5f + 1.0f / game.view.cam.zoom,
-                where.x + 1.0f / game.view.cam.zoom,
-                where.y + bboxH * 0.5f + 3.0f / game.view.cam.zoom,
+                where.x - 1.0f / game.editorsView.cam.zoom,
+                where.y + bboxH * 0.5f + 1.0f / game.editorsView.cam.zoom,
+                where.x + 1.0f / game.editorsView.cam.zoom,
+                where.y + bboxH * 0.5f + 3.0f / game.editorsView.cam.zoom,
                 color
             );
         } else {
             al_draw_filled_rectangle(
-                where.x - 3.0f / game.view.cam.zoom,
-                where.y + bboxH * 0.5f + 1.0f / game.view.cam.zoom,
-                where.x - 1.0f / game.view.cam.zoom,
-                where.y + bboxH * 0.5f + 3.0f / game.view.cam.zoom,
+                where.x - 3.0f / game.editorsView.cam.zoom,
+                where.y + bboxH * 0.5f + 1.0f / game.editorsView.cam.zoom,
+                where.x - 1.0f / game.editorsView.cam.zoom,
+                where.y + bboxH * 0.5f + 3.0f / game.editorsView.cam.zoom,
                 color
             );
             al_draw_filled_rectangle(
-                where.x + 1.0f / game.view.cam.zoom,
-                where.y + bboxH * 0.5f + 1.0f / game.view.cam.zoom,
-                where.x + 3.0f / game.view.cam.zoom,
-                where.y + bboxH * 0.5f + 3.0f / game.view.cam.zoom,
+                where.x + 1.0f / game.editorsView.cam.zoom,
+                where.y + bboxH * 0.5f + 1.0f / game.editorsView.cam.zoom,
+                where.x + 3.0f / game.editorsView.cam.zoom,
+                where.y + bboxH * 0.5f + 3.0f / game.editorsView.cam.zoom,
                 color
             );
         }

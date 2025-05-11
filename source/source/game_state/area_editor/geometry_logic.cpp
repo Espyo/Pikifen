@@ -229,7 +229,7 @@ void AreaEditor::checkDrawingLine(const Point &pos) {
             ) {
                 if(
                     Distance(intersection, drawingNodes.begin()->snappedSpot) >
-                    AREA_EDITOR::VERTEX_MERGE_RADIUS / game.view.cam.zoom
+                    AREA_EDITOR::VERTEX_MERGE_RADIUS / game.editorsView.cam.zoom
                 ) {
                     //Only a problem if this isn't the user's drawing finish.
                     drawingLineResult = DRAWING_LINE_RESULT_CROSSES_DRAWING;
@@ -240,7 +240,7 @@ void AreaEditor::checkDrawingLine(const Point &pos) {
         
         if(
             circleIntersectsLineSeg(
-                pos, 8.0 / game.view.cam.zoom,
+                pos, 8.0 / game.editorsView.cam.zoom,
                 prevNode->snappedSpot,
                 drawingNodes[drawingNodes.size() - 2].snappedSpot
             )
@@ -1693,7 +1693,7 @@ Edge* AreaEditor::getEdgeUnderPoint(
         
         if(
             circleIntersectsLineSeg(
-                p, 8 / game.view.cam.zoom,
+                p, 8 / game.editorsView.cam.zoom,
                 v2p(ePtr->vertexes[0]), v2p(ePtr->vertexes[1])
             )
         ) {
@@ -1768,7 +1768,7 @@ bool AreaEditor::getMobLinkUnderPoint(
             MobGen* m2Ptr = mPtr->links[l];
             if(
                 circleIntersectsLineSeg(
-                    p, 8 / game.view.cam.zoom, mPtr->pos, m2Ptr->pos
+                    p, 8 / game.editorsView.cam.zoom, mPtr->pos, m2Ptr->pos
                 )
             ) {
                 *data1 = std::make_pair(mPtr, m2Ptr);
@@ -1836,7 +1836,7 @@ bool AreaEditor::getPathLinkUnderPoint(
             PathStop* s2Ptr = sPtr->links[l]->endPtr;
             if(
                 circleIntersectsLineSeg(
-                    p, 8 / game.view.cam.zoom, sPtr->pos, s2Ptr->pos
+                    p, 8 / game.editorsView.cam.zoom, sPtr->pos, s2Ptr->pos
                 )
             ) {
                 *link1 = sPtr->links[l];
@@ -1895,15 +1895,15 @@ Vertex* AreaEditor::getVertexUnderPoint(const Point &p) const {
         
         if(
             rectanglesIntersect(
-                p - (4 / game.view.cam.zoom),
-                p + (4 / game.view.cam.zoom),
+                p - (4 / game.editorsView.cam.zoom),
+                p + (4 / game.editorsView.cam.zoom),
                 Point(
-                    vPtr->x - (4 / game.view.cam.zoom),
-                    vPtr->y - (4 / game.view.cam.zoom)
+                    vPtr->x - (4 / game.editorsView.cam.zoom),
+                    vPtr->y - (4 / game.editorsView.cam.zoom)
                 ),
                 Point(
-                    vPtr->x + (4 / game.view.cam.zoom),
-                    vPtr->y + (4 / game.view.cam.zoom)
+                    vPtr->x + (4 / game.editorsView.cam.zoom),
+                    vPtr->y + (4 / game.editorsView.cam.zoom)
                 )
             )
         ) {
@@ -2515,7 +2515,7 @@ Point AreaEditor::snapPoint(const Point &p, bool ignoreSelected) {
         vector<std::pair<Distance, Vertex*> > snappableVertexes =
             getMergeVertexes(
                 finalPoint, vertexesToCheck,
-                game.options.areaEd.snapThreshold / game.view.cam.zoom
+                game.options.areaEd.snapThreshold / game.editorsView.cam.zoom
             );
         if(snappableVertexes.empty()) {
             cursorSnapCache = finalPoint;
@@ -2580,7 +2580,7 @@ Point AreaEditor::snapPoint(const Point &p, bool ignoreSelected) {
             }
             
             Distance d(finalPoint, edgeP);
-            if(d > game.options.areaEd.snapThreshold / game.view.cam.zoom) {
+            if(d > game.options.areaEd.snapThreshold / game.editorsView.cam.zoom) {
                 continue;
             }
             

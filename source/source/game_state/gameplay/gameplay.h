@@ -19,6 +19,7 @@
 #include "../../content/other/gui.h"
 #include "../../core/controls_mediator.h"
 #include "../../core/maker_tools.h"
+#include "../../core/player.h"
 #include "../../core/replay.h"
 #include "../../util/general_utils.h"
 #include "../game_state.h"
@@ -143,18 +144,6 @@ public:
     //Fog effect buffer.
     ALLEGRO_BITMAP* bmpFog = nullptr;
     
-    //Closest to player 1's leader, for the previous, current, next type.
-    Mob* closestGroupMember[3] = { nullptr, nullptr, nullptr };
-    
-    //Is the group member closest to player 1's leader distant?
-    bool closestGroupMemberDistant = false;
-    
-    //Index of player 1's current leader, in the array of available leaders.
-    size_t curLeaderIdx = 0;
-    
-    //Pointer to player 1's leader. Cache for convenience.
-    Leader* curLeaderPtr = nullptr;
-    
     //What day it is, in-game.
     size_t day = 1;
     
@@ -169,9 +158,6 @@ public:
     
     //How many seconds of actual playtime. Only counts on player control.
     float gameplayTimePassed = 0.0f;
-    
-    //Information about the in-game HUD.
-    Hud* hud = nullptr;
     
     //Position of the last enemy defeated. LARGE_FLOAT for none.
     Point lastEnemyDefeatedPos;
@@ -188,26 +174,14 @@ public:
     //Position of the last ship that got a treasure. LARGE_FLOAT for none.
     Point lastShipThatGotTreasurePos;
     
-    //Player 1's leader cursor, in window coordinates.
-    Point leaderCursorWin;
-    
-    //Sector that player 1's leader cursor is on, if any.
-    Sector* leaderCursorSector = nullptr;
-    
-    //Player 1's leader cursor, in world coordinates.
-    Point leaderCursorW;
-    
     //List of all mobs in the area.
     MobLists mobs;
     
-    //Information about the message box currently active on player 1, if any.
+    //Information about the message box currently active, if any.
     GameplayMessageBox* msgBox = nullptr;
     
     //ID of the next mob to be created.
     size_t nextMobId = 0;
-    
-    //Current notification.
-    Notification notification;
     
     //Manager of all particles.
     ParticleManager particles;
@@ -218,35 +192,20 @@ public:
     //Path of the folder of the area to be loaded.
     string pathOfAreaToLoad;
     
+    //Possible teams for the players.
+    PlayerTeam playerTeams[MAX_PLAYER_TEAMS];
+    
+    //Players that are participating.
+    vector<Player> players;
+    
     //All droplets of precipitation.
     vector<Point> precipitation;
     
     //Time until the next drop of precipitation.
     Timer precipitationTimer;
     
-    //Spray that player 1 has currently selected.
-    size_t selectedSpray = 0;
-    
-    //How many of each spray/ingredients player 1 has.
-    vector<SprayStats> sprayStats;
-    
     //All types of subgroups.
     SubgroupTypeManager subgroupTypes;
-    
-    //Angle at which player 1 is swarming.
-    float swarmAngle = 0.0f;
-    
-    //General intensity of player 1's swarm in the specified angle.
-    float swarmMagnitude = 0.0f;
-    
-    //Destination of player 1's throw.
-    Point throwDest;
-    
-    //Mob that player 1's throw will land on, if any.
-    Mob* throwDestMob = nullptr;
-    
-    //Sector that player 1's throw will land on, if any.
-    Sector* throwDestSector = nullptr;
     
     //Are we currently loading the gameplay state?
     bool loading = false;
@@ -256,9 +215,6 @@ public:
     
     //Have we went to the results screen yet?
     bool wentToResults = false;
-    
-    //Information about player 1's whistle.
-    Whistle whistle;
     
     //IDs of mobs remaining for the current mission goal, if applicable.
     unordered_set<size_t> missionRemainingMobIds;
@@ -371,9 +327,6 @@ public:
     //Current state of the boss music.
     BOSS_MUSIC_STATE bossMusicState = BOSS_MUSIC_STATE_NEVER_PLAYED;
     
-    //Zoom level to use on the radar.
-    float radarZoom = PAUSE_MENU::RADAR_DEF_ZOOM;
-    
     //Number of Pikmin born so far, per type.
     map<PikminType*, long> pikminBornPerType;
     
@@ -392,15 +345,15 @@ public:
     void enter();
     void leave(const GAMEPLAY_LEAVE_TARGET target);
     void startLeaving(const GAMEPLAY_LEAVE_TARGET target);
-    void changeSprayCount(size_t typeIdx, signed int amount);
+    void changeSprayCount(PlayerTeam* team, size_t typeIdx, signed int amount);
     size_t getAmountOfFieldPikmin(const PikminType* filter = nullptr);
-    size_t getAmountOfGroupPikmin(const PikminType* filter = nullptr);
+    size_t getAmountOfGroupPikmin(Player* player, const PikminType* filter = nullptr);
     size_t getAmountOfIdlePikmin(const PikminType* filter = nullptr);
     long getAmountOfOnionPikmin(const PikminType* filter = nullptr);
     long getAmountOfTotalPikmin(const PikminType* filter = nullptr);
     void isNearEnemyAndBoss(bool* nearEnemy, bool* nearBoss);
     void updateAvailableLeaders();
-    void updateClosestGroupMembers();
+    void updateClosestGroupMembers(Player* player);
     void load() override;
     void unload() override;
     void handleAllegroEvent(ALLEGRO_EVENT &ev) override;
@@ -412,32 +365,11 @@ private:
 
     //--- Members ---
     
-    //Points to an interactable close enough for player 1 to use, if any.
-    Interactable* closeToInteractableToUse = nullptr;
-    
-    //Points to a nest-like object close enough for player 1 to open, if any.
-    PikminNest* closeToNestToOpen = nullptr;
-    
-    //Points to a Pikmin close enough for player 1 to pluck, if any.
-    Pikmin* closeToPikminToPluck = nullptr;
-    
-    //Points to a ship close enough for player 1 to heal in, if any.
-    Ship* closeToShipToHeal = nullptr;
-    
-    //Ligthten player 1's cursor by this due to leader/cursor height difference.
-    float cursorHeightDiffLight = 0.0f;
-    
-    //Movement of player 1's cursor via non-mouse means.
-    MovementInfo cursorMovement;
-    
     //Is input enabled, for reasons outside the readyForInput variable?
     bool isInputAllowed = false;
     
     //Bitmap that lights up the area when in blackout mode.
     ALLEGRO_BITMAP* lightmapBmp = nullptr;
-    
-    //Movement of player 1's leader.
-    MovementInfo leaderMovement;
     
     //Information about the current Onion menu, if any.
     OnionMenu* onionMenu = nullptr;
@@ -456,16 +388,10 @@ private:
     //Timer for the next replay state save.
     Timer replayTimer;
     
-    //Is player 1 holding the "swarm to cursor" button?
-    bool swarmCursor = false;
-    
-    //Reach of player 1's swarm.
-    MovementInfo swarmMovement;
-    
     
     //--- Function declarations ---
     
-    void doAestheticLeaderLogic(float deltaT);
+    void doAestheticLeaderLogic(Player* player, float deltaT);
     void doAestheticLogic(float deltaT);
     void doGameDrawing(
         ALLEGRO_BITMAP* bmpOutput = nullptr,
@@ -473,30 +399,29 @@ private:
         const MakerTools::AreaImageSettings &bmpSettings =
             MakerTools::AreaImageSettings()
     );
-    void doGameplayLeaderLogic(float deltaT);
+    void doGameplayLeaderLogic(Player* player, float deltaT);
     void doGameplayLogic(float deltaT);
     void doMenuLogic();
-    void drawBackground(ALLEGRO_BITMAP* bmpOutput);
+    void drawBackground(const Viewport &view, ALLEGRO_BITMAP* bmpOutput);
     void drawDebugTools();
-    void drawLeaderCursor(const ALLEGRO_COLOR &color);
-    void drawIngameText();
+    void drawLeaderCursor(Player* player, const ALLEGRO_COLOR &color);
+    void drawIngameText(Player* player);
     void drawBigMsg();
-    void drawLightingFilter();
+    void drawLightingFilter(const Viewport &view);
     void drawGameplayMessageBox();
     void drawOnionMenu();
     void drawPauseMenu();
     void drawPrecipitation();
     void drawSystemStuff();
-    void drawThrowPreview();
+    void drawThrowPreview(Player* player);
     void drawTreeShadows();
-    void drawWorldComponents(ALLEGRO_BITMAP* bmpOutput);
+    void drawWorldComponents(const Viewport &view, ALLEGRO_BITMAP* bmpOutput);
     void endMission(bool cleared);
     ALLEGRO_BITMAP* generateFogBitmap(
         float nearRadius, float farRadius
     );
-    Mob* getClosestGroupMember(const SubgroupType* type, bool* distant = nullptr);
+    Mob* getClosestGroupMember(Player* player, const SubgroupType* type, bool* distant = nullptr);
     void handlePlayerAction(const PlayerAction &action);
-    void initHud();
     bool isMissionClearMet();
     bool isMissionFailMet(MISSION_FAIL_COND* reason);
     void loadGameContent();

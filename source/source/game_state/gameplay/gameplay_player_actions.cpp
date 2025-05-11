@@ -21,15 +21,15 @@
  * @param action Data about the action.
  */
 void GameplayState::handlePlayerAction(const PlayerAction &action) {
-
     if(shouldIngorePlayerAction(action)) return;
     
+    Player* player = &players[0];
     bool isDown = (action.value >= 0.5);
     
     //Before we do the actions, we'll tell the leader object
     //it's recieved an input, which will trigger an event.
-    if(curLeaderPtr) {
-        curLeaderPtr->fsm.runEvent(
+    if(player->leaderPtr) {
+        player->leaderPtr->fsm.runEvent(
             MOB_EV_INPUT_RECEIVED,
             (void*) &action
         );
@@ -52,33 +52,33 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
                 
                 //Check if the player wants to cancel auto-throw.
                 if(
-                    curLeaderPtr &&
+                    player->leaderPtr &&
                     game.options.controls.autoThrowMode == AUTO_THROW_MODE_TOGGLE &&
-                    curLeaderPtr->autoThrowRepeater.time != LARGE_FLOAT
+                    player->leaderPtr->autoThrowRepeater.time != LARGE_FLOAT
                 ) {
-                    curLeaderPtr->stopAutoThrowing();
+                    player->leaderPtr->stopAutoThrowing();
                     done = true;
                 }
                 
                 //Check if the leader should heal themselves on the ship.
                 if(
                     !done &&
-                    curLeaderPtr &&
-                    closeToShipToHeal
+                    player->leaderPtr &&
+                    player->closeToShipToHeal
                 ) {
-                    closeToShipToHeal->healLeader(curLeaderPtr);
+                    player->closeToShipToHeal->healLeader(player->leaderPtr);
                     done = true;
                 }
                 
                 //Check if the leader should pluck a Pikmin.
                 if(
                     !done &&
-                    curLeaderPtr &&
-                    closeToPikminToPluck
+                    player->leaderPtr &&
+                    player->closeToPikminToPluck
                 ) {
-                    curLeaderPtr->fsm.runEvent(
+                    player->leaderPtr->fsm.runEvent(
                         LEADER_EV_GO_PLUCK,
-                        (void*)closeToPikminToPluck
+                        (void*) player->closeToPikminToPluck
                     );
                     done = true;
                 }
@@ -86,14 +86,14 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
                 //Now check if the leader should open an Onion's menu.
                 if(
                     !done &&
-                    curLeaderPtr &&
-                    closeToNestToOpen
+                    player->leaderPtr &&
+                    player->closeToNestToOpen
                 ) {
                     onionMenu = new OnionMenu(
-                        closeToNestToOpen,
-                        curLeaderPtr
+                        player->closeToNestToOpen,
+                        player->leaderPtr
                     );
-                    hud->gui.startAnimation(
+                    player->hud->gui.startAnimation(
                         GUI_MANAGER_ANIM_IN_TO_OUT,
                         GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
                     );
@@ -101,7 +101,7 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
                     game.audio.handleWorldPause();
                     
                     //TODO replace with a better solution.
-                    curLeaderPtr->fsm.runEvent(LEADER_EV_STOP_WHISTLE);
+                    player->leaderPtr->fsm.runEvent(LEADER_EV_STOP_WHISTLE);
                     
                     done = true;
                 }
@@ -109,12 +109,12 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
                 //Now check if the leader should interact with an interactable.
                 if(
                     !done &&
-                    curLeaderPtr &&
-                    closeToInteractableToUse
+                    player->leaderPtr &&
+                    player->closeToInteractableToUse
                 ) {
                     string msg = "interact";
-                    curLeaderPtr->sendScriptMessage(
-                        closeToInteractableToUse, msg
+                    player->leaderPtr->sendScriptMessage(
+                        player->closeToInteractableToUse, msg
                     );
                     done = true;
                 }
@@ -122,18 +122,18 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
                 //Now check if the leader should grab a Pikmin.
                 if(
                     !done &&
-                    curLeaderPtr &&
-                    curLeaderPtr->holding.empty() &&
-                    curLeaderPtr->group->curStandbyType &&
-                    !closestGroupMemberDistant
+                    player->leaderPtr &&
+                    player->leaderPtr->holding.empty() &&
+                    player->leaderPtr->group->curStandbyType &&
+                    !player->closestGroupMemberDistant
                 ) {
                     switch (game.options.controls.autoThrowMode) {
                     case AUTO_THROW_MODE_OFF: {
-                        done = grabClosestGroupMember();
+                        done = grabClosestGroupMember(player);
                         break;
                     } case AUTO_THROW_MODE_HOLD:
                     case AUTO_THROW_MODE_TOGGLE: {
-                        curLeaderPtr->startAutoThrowing();
+                        player->leaderPtr->startAutoThrowing();
                         done = true;
                         break;
                     }
@@ -146,21 +146,21 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
                 //Now check if the leader should punch.
                 if(
                     !done &&
-                    curLeaderPtr
+                    player->leaderPtr
                 ) {
-                    curLeaderPtr->fsm.runEvent(LEADER_EV_PUNCH);
+                    player->leaderPtr->fsm.runEvent(LEADER_EV_PUNCH);
                     done = true;
                 }
                 
             } else { //Button release.
             
-                if(curLeaderPtr) {
+                if(player->leaderPtr) {
                     switch (game.options.controls.autoThrowMode) {
                     case AUTO_THROW_MODE_OFF: {
-                        curLeaderPtr->queueThrow();
+                        player->leaderPtr->queueThrow();
                         break;
                     } case AUTO_THROW_MODE_HOLD: {
-                        curLeaderPtr->stopAutoThrowing();
+                        player->leaderPtr->stopAutoThrowing();
                         break;
                     } case AUTO_THROW_MODE_TOGGLE: {
                         break;
@@ -185,24 +185,24 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
             if(isDown) {
                 //Button pressed.
                 
-                if(curLeaderPtr) {
+                if(player->leaderPtr) {
                     MobEvent* cancelEv =
-                        curLeaderPtr->fsm.getEvent(LEADER_EV_CANCEL);
+                        player->leaderPtr->fsm.getEvent(LEADER_EV_CANCEL);
                         
                     if(cancelEv) {
                         //Cancel auto-pluck, lying down, etc.
-                        cancelEv->run(curLeaderPtr);
+                        cancelEv->run(player->leaderPtr);
                     } else {
                         //Start whistling.
-                        curLeaderPtr->fsm.runEvent(LEADER_EV_START_WHISTLE);
+                        player->leaderPtr->fsm.runEvent(LEADER_EV_START_WHISTLE);
                     }
                 }
                 
             } else {
                 //Button released.
                 
-                if(curLeaderPtr) {
-                    curLeaderPtr->fsm.runEvent(LEADER_EV_STOP_WHISTLE);
+                if(player->leaderPtr) {
+                    player->leaderPtr->fsm.runEvent(LEADER_EV_STOP_WHISTLE);
                 }
                 
             }
@@ -221,6 +221,7 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
             if(!isDown) return;
             
             changeToNextLeader(
+                player,
                 action.actionTypeId == PLAYER_ACTION_TYPE_NEXT_LEADER,
                 false, false
             );
@@ -237,8 +238,8 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
             
             if(!isDown) return;
             
-            if(curLeaderPtr) {
-                curLeaderPtr->fsm.runEvent(LEADER_EV_DISMISS);
+            if(player->leaderPtr) {
+                player->leaderPtr->fsm.runEvent(LEADER_EV_DISMISS);
             }
             
             break;
@@ -260,14 +261,14 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
             );
             paused = true;
             game.audio.handleWorldPause();
-            hud->gui.startAnimation(
+            player->hud->gui.startAnimation(
                 GUI_MANAGER_ANIM_IN_TO_OUT,
                 GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
             );
             
             //TODO replace with a better solution.
-            if(curLeaderPtr) {
-                curLeaderPtr->fsm.runEvent(LEADER_EV_STOP_WHISTLE);
+            if(player->leaderPtr) {
+                player->leaderPtr->fsm.runEvent(LEADER_EV_STOP_WHISTLE);
             }
             
             break;
@@ -282,13 +283,13 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
             
             if(!isDown) return;
             
-            if(curLeaderPtr) {
+            if(player->leaderPtr) {
                 if(
                     game.content.sprayTypes.list.size() == 1 ||
                     game.content.sprayTypes.list.size() == 2
                 ) {
                     size_t sprayIdx = 0;
-                    curLeaderPtr->fsm.runEvent(
+                    player->leaderPtr->fsm.runEvent(
                         LEADER_EV_SPRAY, (void*) &sprayIdx
                     );
                 }
@@ -300,10 +301,10 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
     
             if(!isDown) return;
             
-            if(curLeaderPtr) {
+            if(player->leaderPtr) {
                 if(game.content.sprayTypes.list.size() == 2) {
                     size_t sprayIdx = 1;
-                    curLeaderPtr->fsm.runEvent(
+                    player->leaderPtr->fsm.runEvent(
                         LEADER_EV_SPRAY, (void*) &sprayIdx
                     );
                 }
@@ -316,16 +317,16 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
     
             if(!isDown) return;
             
-            if(curLeaderPtr) {
+            if(player->leaderPtr) {
                 if(game.content.sprayTypes.list.size() > 2) {
-                    selectedSpray =
+                    player->selectedSpray =
                         sumAndWrap(
-                            (int) selectedSpray,
+                            (int) player->selectedSpray,
                             action.actionTypeId ==
                             PLAYER_ACTION_TYPE_NEXT_SPRAY ? +1 : -1,
                             (int) game.content.sprayTypes.list.size()
                         );
-                    game.states.gameplay->hud->
+                    player->hud->
                     spray1Amount->startJuiceAnimation(
                         GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
                     );
@@ -338,11 +339,11 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
     
             if(!isDown) return;
             
-            if(curLeaderPtr) {
+            if(player->leaderPtr) {
                 if(game.content.sprayTypes.list.size() > 2) {
-                    curLeaderPtr->fsm.runEvent(
+                    player->leaderPtr->fsm.runEvent(
                         LEADER_EV_SPRAY,
-                        (void*) &selectedSpray
+                        (void*) &player->selectedSpray
                     );
                 }
             }
@@ -359,15 +360,15 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
             
             if(!isDown) return;
             
-            if(game.view.cam.targetZoom < zoomLevels[1]) {
-                game.view.cam.targetZoom = zoomLevels[0];
-            } else if(game.view.cam.targetZoom > zoomLevels[1]) {
-                game.view.cam.targetZoom = zoomLevels[1];
+            if(player->view.cam.targetZoom < zoomLevels[1]) {
+                player->view.cam.targetZoom = zoomLevels[0];
+            } else if(player->view.cam.targetZoom > zoomLevels[1]) {
+                player->view.cam.targetZoom = zoomLevels[1];
             } else {
                 if(game.options.advanced.zoomMediumReach == game.config.rules.zoomFarthestReach) {
-                    game.view.cam.targetZoom = zoomLevels[0];
+                    player->view.cam.targetZoom = zoomLevels[0];
                 } else {
-                    game.view.cam.targetZoom = zoomLevels[2];
+                    player->view.cam.targetZoom = zoomLevels[2];
                 }
             }
             
@@ -379,14 +380,14 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
         case PLAYER_ACTION_TYPE_ZOOM_OUT: {
     
             if(
-                game.view.cam.targetZoom >= zoomLevels[0] &&
+                player->view.cam.targetZoom >= zoomLevels[0] &&
                 action.actionTypeId == PLAYER_ACTION_TYPE_ZOOM_IN
             ) {
                 return;
             }
             
             if(
-                game.view.cam.targetZoom <= zoomLevels[2] &&
+                player->view.cam.targetZoom <= zoomLevels[2] &&
                 action.actionTypeId == PLAYER_ACTION_TYPE_ZOOM_OUT
             ) {
                 return;
@@ -395,16 +396,16 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
             float flooredPos = floor(action.value);
             
             if(action.actionTypeId == PLAYER_ACTION_TYPE_ZOOM_IN) {
-                game.view.cam.targetZoom = game.view.cam.targetZoom + 0.1 * flooredPos;
+                player->view.cam.targetZoom = player->view.cam.targetZoom + 0.1 * flooredPos;
             } else {
-                game.view.cam.targetZoom = game.view.cam.targetZoom - 0.1 * flooredPos;
+                player->view.cam.targetZoom = player->view.cam.targetZoom - 0.1 * flooredPos;
             }
             
-            if(game.view.cam.targetZoom > zoomLevels[0]) {
-                game.view.cam.targetZoom = zoomLevels[0];
+            if(player->view.cam.targetZoom > zoomLevels[0]) {
+                player->view.cam.targetZoom = zoomLevels[0];
             }
-            if(game.view.cam.targetZoom < zoomLevels[2]) {
-                game.view.cam.targetZoom = zoomLevels[2];
+            if(player->view.cam.targetZoom < zoomLevels[2]) {
+                player->view.cam.targetZoom = zoomLevels[2];
             }
             
             SoundSourceConfig camSoundConfig;
@@ -426,8 +427,8 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
             
             if(!isDown) return;
             
-            if(curLeaderPtr) {
-                curLeaderPtr->fsm.runEvent(LEADER_EV_LIE_DOWN);
+            if(player->leaderPtr) {
+                player->leaderPtr->fsm.runEvent(LEADER_EV_LIE_DOWN);
             }
             
             break;
@@ -443,18 +444,18 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
             
             if(!isDown) return;
             
-            if(curLeaderPtr) {
-                if(curLeaderPtr->group->members.empty()) return;
+            if(player->leaderPtr) {
+                if(player->leaderPtr->group->members.empty()) return;
                 
                 SubgroupType* startingSubgroupType =
-                    curLeaderPtr->group->curStandbyType;
+                    player->leaderPtr->group->curStandbyType;
                     
                 bool switchSuccessful;
                 
-                if(curLeaderPtr->holding.empty()) {
+                if(player->leaderPtr->holding.empty()) {
                     //If the leader isn't holding anybody.
                     switchSuccessful =
-                        curLeaderPtr->group->changeStandbyType(
+                        player->leaderPtr->group->changeStandbyType(
                             action.actionTypeId == PLAYER_ACTION_TYPE_PREV_TYPE
                         );
                         
@@ -468,13 +469,13 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
                     bool finish = false;
                     do {
                         switchSuccessful =
-                            curLeaderPtr->group->changeStandbyType(
+                            player->leaderPtr->group->changeStandbyType(
                                 action.actionTypeId == PLAYER_ACTION_TYPE_PREV_TYPE
                             );
                             
                         if(
                             !switchSuccessful ||
-                            curLeaderPtr->group->curStandbyType ==
+                            player->leaderPtr->group->curStandbyType ==
                             startingSubgroupType
                         ) {
                             //Reached around back to the first subgroup...
@@ -483,8 +484,8 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
                             
                         } else {
                             //Switched to a new subgroup.
-                            updateClosestGroupMembers();
-                            if(!closestGroupMemberDistant) {
+                            updateClosestGroupMembers(player);
+                            if(!player->closestGroupMemberDistant) {
                                 finish = true;
                             }
                             
@@ -493,8 +494,8 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
                     } while(!finish);
                     
                     if(switchSuccessful) {
-                        curLeaderPtr->swapHeldPikmin(
-                            closestGroupMember[BUBBLE_RELATION_CURRENT]
+                        player->leaderPtr->swapHeldPikmin(
+                            player->closestGroupMember[BUBBLE_RELATION_CURRENT]
                         );
                     }
                 }
@@ -519,15 +520,15 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
             
             if(
                 !isDown ||
-                !curLeaderPtr ||
-                curLeaderPtr->holding.empty() ||
-                curLeaderPtr->holding[0]->type->category->id !=
+                !player->leaderPtr ||
+                player->leaderPtr->holding.empty() ||
+                player->leaderPtr->holding[0]->type->category->id !=
                 MOB_CATEGORY_PIKMIN
             ) {
                 return;
             }
             
-            Pikmin* heldPPtr = (Pikmin*) curLeaderPtr->holding[0];
+            Pikmin* heldPPtr = (Pikmin*) player->leaderPtr->holding[0];
             
             Pikmin* closestMembers[N_MATURITIES];
             Distance closestDists[N_MATURITIES];
@@ -535,14 +536,14 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
                 closestMembers[m] = nullptr;
             }
             
-            for(size_t m = 0; m < curLeaderPtr->group->members.size(); m++) {
-                Mob* mPtr = curLeaderPtr->group->members[m];
+            for(size_t m = 0; m < player->leaderPtr->group->members.size(); m++) {
+                Mob* mPtr = player->leaderPtr->group->members[m];
                 if(mPtr->type != heldPPtr->type) continue;
                 
                 Pikmin* pPtr = (Pikmin*) mPtr;
                 if(pPtr->maturity == heldPPtr->maturity) continue;
                 
-                Distance d(curLeaderPtr->pos, pPtr->pos);
+                Distance d(player->leaderPtr->pos, pPtr->pos);
                 if(
                     !closestMembers[pPtr->maturity] ||
                     d < closestDists[pPtr->maturity]
@@ -578,7 +579,7 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
             } while(!finished);
             
             if(newPikmin) {
-                curLeaderPtr->swapHeldPikmin(newPikmin);
+                player->leaderPtr->swapHeldPikmin(newPikmin);
             }
             
             break;
@@ -614,16 +615,16 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
         
         switch(action.actionTypeId) {
         case PLAYER_ACTION_TYPE_RIGHT: {
-            leaderMovement.right = action.value;
+            player->leaderMovement.right = action.value;
             break;
         } case PLAYER_ACTION_TYPE_LEFT: {
-            leaderMovement.left = action.value;
+            player->leaderMovement.left = action.value;
             break;
         } case PLAYER_ACTION_TYPE_UP: {
-            leaderMovement.up = action.value;
+            player->leaderMovement.up = action.value;
             break;
         } case PLAYER_ACTION_TYPE_DOWN: {
-            leaderMovement.down = action.value;
+            player->leaderMovement.down = action.value;
             break;
         } default: {
             break;
@@ -644,16 +645,16 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
         
         switch(action.actionTypeId) {
         case PLAYER_ACTION_TYPE_CURSOR_RIGHT: {
-            cursorMovement.right = action.value;
+            player->cursorMovement.right = action.value;
             break;
         } case PLAYER_ACTION_TYPE_CURSOR_LEFT: {
-            cursorMovement.left = action.value;
+            player->cursorMovement.left = action.value;
             break;
         } case PLAYER_ACTION_TYPE_CURSOR_UP: {
-            cursorMovement.up = action.value;
+            player->cursorMovement.up = action.value;
             break;
         } case PLAYER_ACTION_TYPE_CURSOR_DOWN: {
-            cursorMovement.down = action.value;
+            player->cursorMovement.down = action.value;
             break;
         } default: {
             break;
@@ -674,16 +675,16 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
         
         switch(action.actionTypeId) {
         case PLAYER_ACTION_TYPE_GROUP_RIGHT: {
-            swarmMovement.right = action.value;
+            player->swarmMovement.right = action.value;
             break;
         } case PLAYER_ACTION_TYPE_GROUP_LEFT: {
-            swarmMovement.left = action.value;
+            player->swarmMovement.left = action.value;
             break;
         } case PLAYER_ACTION_TYPE_GROUP_UP: {
-            swarmMovement.up = action.value;
+            player->swarmMovement.up = action.value;
             break;
         } case PLAYER_ACTION_TYPE_GROUP_DOWN: {
-            swarmMovement.down = action.value;
+            player->swarmMovement.down = action.value;
             break;
         } default: {
             break;
@@ -694,7 +695,7 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
         
     } case PLAYER_ACTION_TYPE_GROUP_CURSOR: {
 
-        swarmCursor = isDown;
+        player->swarmCursor = isDown;
         
         break;
         

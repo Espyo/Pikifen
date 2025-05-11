@@ -407,12 +407,13 @@ public:
     ) const;
     size_t getLatchedPikminAmount() const;
     float getLatchedPikminWeight() const;
+    size_t getPlayerTeamIdx() const;
     void doAttackEffects(
         const Mob* attacker, const Hitbox* attackH, const Hitbox* victimH,
         float damage, float knockback
     );
     bool isStoredInsideMob() const;
-    bool isOffCamera() const;
+    bool isOffCamera(const Viewport &viewport) const;
     bool isPointOn(const Point &p) const;
     void focusOnMob(Mob* m);
     void unfocusFromMob();

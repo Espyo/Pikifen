@@ -227,26 +227,25 @@ void Onion::tickClassSpecifics(float deltaT) {
     
     unsigned char finalAlpha = 255;
     
-    if(
-        game.states.gameplay->curLeaderPtr &&
-        BBoxCheck(
-            game.states.gameplay->curLeaderPtr->pos, pos,
-            game.states.gameplay->curLeaderPtr->radius +
-            radius * 3
-        )
-    ) {
-        finalAlpha = ONION::SEETHROUGH_ALPHA;
-    }
-    
-    if(
-        game.states.gameplay->curLeaderPtr &&
-        BBoxCheck(
-            game.states.gameplay->leaderCursorW, pos,
-            game.states.gameplay->curLeaderPtr->radius +
-            radius * 3
-        )
-    ) {
-        finalAlpha = ONION::SEETHROUGH_ALPHA;
+    for(const Player &player : game.states.gameplay->players) {
+        if(!player.leaderPtr) continue;
+        if(
+            BBoxCheck(
+                player.leaderPtr->pos, pos,
+                player.leaderPtr->radius + radius * 3
+            )
+        ) {
+            finalAlpha = ONION::SEETHROUGH_ALPHA;
+        }
+        
+        if(
+            BBoxCheck(
+                player.leaderCursorWorld, pos,
+                player.leaderPtr->radius + radius * 3
+            )
+        ) {
+            finalAlpha = ONION::SEETHROUGH_ALPHA;
+        }
     }
     
     if(seethrough != finalAlpha) {

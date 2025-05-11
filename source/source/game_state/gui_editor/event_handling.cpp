@@ -20,20 +20,20 @@
  */
 void GuiEditor::handleKeyCharCanvas(const ALLEGRO_EVENT &ev) {
     if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_LEFT)) {
-        game.view.cam.targetPos.x -=
-            AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.view.cam.zoom;
+        game.editorsView.cam.targetPos.x -=
+            AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.editorsView.cam.zoom;
             
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_RIGHT)) {
-        game.view.cam.targetPos.x +=
-            AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.view.cam.zoom;
+        game.editorsView.cam.targetPos.x +=
+            AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.editorsView.cam.zoom;
             
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_UP)) {
-        game.view.cam.targetPos.y -=
-            AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.view.cam.zoom;
+        game.editorsView.cam.targetPos.y -=
+            AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.editorsView.cam.zoom;
             
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_DOWN)) {
-        game.view.cam.targetPos.y +=
-            AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.view.cam.zoom;
+        game.editorsView.cam.targetPos.y +=
+            AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.editorsView.cam.zoom;
             
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_MINUS)) {
         zoomOutCmd(1.0f);
@@ -120,11 +120,11 @@ void GuiEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
     if(curItem != INVALID && items[curItem].size.x != 0.0f) {
         twHandled =
             curTransformationWidget.handleMouseDown(
-                game.view.cursorWorldPos,
+                game.editorsView.cursorWorldPos,
                 &items[curItem].center,
                 &items[curItem].size,
                 nullptr,
-                1.0f / game.view.cam.zoom
+                1.0f / game.editorsView.cam.zoom
             );
     }
     
@@ -134,7 +134,7 @@ void GuiEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
             Item* itemPtr = &items[i];
             if(
                 isPointInRectangle(
-                    game.view.cursorWorldPos,
+                    game.editorsView.cursorWorldPos,
                     itemPtr->center,
                     itemPtr->size
                 )
@@ -180,11 +180,11 @@ void GuiEditor::handleLmbDrag(const ALLEGRO_EVENT &ev) {
     if(curItem != INVALID && items[curItem].size.x != 0.0f) {
         bool twHandled =
             curTransformationWidget.handleMouseMove(
-                snapPoint(game.view.cursorWorldPos),
+                snapPoint(game.editorsView.cursorWorldPos),
                 &items[curItem].center,
                 &items[curItem].size,
                 nullptr,
-                1.0f / game.view.cam.zoom,
+                1.0f / game.editorsView.cam.zoom,
                 false,
                 false,
                 0.10f,
@@ -239,7 +239,7 @@ void GuiEditor::handleMmbDrag(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void GuiEditor::handleMouseUpdate(const ALLEGRO_EVENT &ev) {
-
+    Editor::handleMouseUpdate(ev);
 }
 
 
@@ -249,7 +249,7 @@ void GuiEditor::handleMouseUpdate(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void GuiEditor::handleMouseWheel(const ALLEGRO_EVENT &ev) {
-    zoomWithCursor(game.view.cam.zoom + (game.view.cam.zoom * ev.mouse.dz * 0.1));
+    zoomWithCursor(game.editorsView.cam.zoom + (game.editorsView.cam.zoom * ev.mouse.dz * 0.1));
 }
 
 

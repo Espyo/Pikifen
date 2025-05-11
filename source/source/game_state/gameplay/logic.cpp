@@ -29,29 +29,30 @@
  * If the game is paused, these can be frozen in place without
  * any negative impact.
  *
+ * @param player The player responsible.
  * @param deltaT How long the frame's tick is, in seconds.
  */
-void GameplayState::doAestheticLeaderLogic(float deltaT) {
-    if(!curLeaderPtr) return;
+void GameplayState::doAestheticLeaderLogic(Player* player, float deltaT) {
+    if(!player->leaderPtr) return;
     
     //Swarming arrows.
-    if(swarmMagnitude) {
-        curLeaderPtr->swarmNextArrowTimer.tick(deltaT);
+    if(player->swarmMagnitude) {
+        player->leaderPtr->swarmNextArrowTimer.tick(deltaT);
     }
     
-    Distance leaderToCursorDist(curLeaderPtr->pos, leaderCursorW);
-    for(size_t a = 0; a < curLeaderPtr->swarmArrows.size(); ) {
-        curLeaderPtr->swarmArrows[a] +=
+    Distance leaderToCursorDist(player->leaderPtr->pos, player->leaderCursorWorld);
+    for(size_t a = 0; a < player->leaderPtr->swarmArrows.size(); ) {
+        player->leaderPtr->swarmArrows[a] +=
             GAMEPLAY::SWARM_ARROW_SPEED * deltaT;
             
         Distance maxDist =
-            (swarmMagnitude > 0) ?
-            Distance(game.config.rules.cursorMaxDist * swarmMagnitude) :
+            (player->swarmMagnitude > 0) ?
+            Distance(game.config.rules.cursorMaxDist * player->swarmMagnitude) :
             leaderToCursorDist;
             
-        if(maxDist < curLeaderPtr->swarmArrows[a]) {
-            curLeaderPtr->swarmArrows.erase(
-                curLeaderPtr->swarmArrows.begin() + a
+        if(maxDist < player->leaderPtr->swarmArrows[a]) {
+            player->leaderPtr->swarmArrows.erase(
+                player->leaderPtr->swarmArrows.begin() + a
             );
         } else {
             a++;
@@ -65,36 +66,36 @@ void GameplayState::doAestheticLeaderLogic(float deltaT) {
     if(leaderToCursorDist > game.config.rules.whistleMaxDist) {
         whistleDist = game.config.rules.whistleMaxDist;
         float whistleAngle =
-            getAngle(curLeaderPtr->pos, leaderCursorW);
+            getAngle(player->leaderPtr->pos, player->leaderCursorWorld);
         whistlePos = angleToCoordinates(whistleAngle, whistleDist);
-        whistlePos += curLeaderPtr->pos;
+        whistlePos += player->leaderPtr->pos;
     } else {
         whistleDist = leaderToCursorDist.toFloat();
-        whistlePos = leaderCursorW;
+        whistlePos = player->leaderCursorWorld;
     }
     
-    whistle.tick(
+    player->whistle.tick(
         deltaT, whistlePos,
-        curLeaderPtr->leaType->whistleRange, whistleDist
+        player->leaderPtr->leaType->whistleRange, whistleDist
     );
     
     //Where the cursor is.
-    cursorHeightDiffLight = 0;
+    player->cursorHeightDiffLight = 0;
     
     if(leaderToCursorDist > game.config.rules.throwMaxDist) {
         float throwAngle =
-            getAngle(curLeaderPtr->pos, leaderCursorW);
-        throwDest =
+            getAngle(player->leaderPtr->pos, player->leaderCursorWorld);
+        player->throwDest =
             angleToCoordinates(throwAngle, game.config.rules.throwMaxDist);
-        throwDest += curLeaderPtr->pos;
+        player->throwDest += player->leaderPtr->pos;
     } else {
-        throwDest = leaderCursorW;
+        player->throwDest = player->leaderCursorWorld;
     }
     
-    throwDestMob = nullptr;
+    player->throwDestMob = nullptr;
     for(size_t m = 0; m < mobs.all.size(); m++) {
         Mob* mPtr = mobs.all[m];
-        if(!BBoxCheck(throwDest, mPtr->pos, mPtr->physicalSpan)) {
+        if(!BBoxCheck(player->throwDest, mPtr->pos, mPtr->physicalSpan)) {
             //Too far away; of course the cursor isn't on it.
             continue;
         }
@@ -104,33 +105,33 @@ void GameplayState::doAestheticLeaderLogic(float deltaT) {
             continue;
         }
         if(
-            throwDestMob &&
+            player->throwDestMob &&
             mPtr->z + mPtr->height <
-            throwDestMob->z + throwDestMob->height
+            player->throwDestMob->z + player->throwDestMob->height
         ) {
             //If this mob is lower than the previous known "under cursor" mob,
             //then forget it.
             continue;
         }
-        if(!mPtr->isPointOn(throwDest)) {
+        if(!mPtr->isPointOn(player->throwDest)) {
             //The cursor is not really on top of this mob.
             continue;
         }
         
-        throwDestMob = mPtr;
+        player->throwDestMob = mPtr;
     }
     
-    leaderCursorSector =
-        getSector(leaderCursorW, nullptr, true);
+    player->leaderCursorSector =
+        getSector(player->leaderCursorWorld, nullptr, true);
         
-    throwDestSector =
-        getSector(throwDest, nullptr, true);
+    player->throwDestSector =
+        getSector(player->throwDest, nullptr, true);
         
-    if(leaderCursorSector) {
-        cursorHeightDiffLight =
-            (leaderCursorSector->z - curLeaderPtr->z) * 0.001;
-        cursorHeightDiffLight =
-            std::clamp(cursorHeightDiffLight, -0.1f, 0.1f);
+    if(player->leaderCursorSector) {
+        player->cursorHeightDiffLight =
+            (player->leaderCursorSector->z - player->leaderPtr->z) * 0.001;
+        player->cursorHeightDiffLight =
+            std::clamp(player->cursorHeightDiffLight, -0.1f, 0.1f);
     }
     
 }
@@ -143,7 +144,9 @@ void GameplayState::doAestheticLeaderLogic(float deltaT) {
  */
 void GameplayState::doAestheticLogic(float deltaT) {
     //Leader stuff.
-    doAestheticLeaderLogic(deltaT);
+    for(Player &player : players) {
+        doAestheticLeaderLogic(&player, deltaT);
+    }
     
     //Specific animations.
     game.sysContent.anmSparks.tick(deltaT);
@@ -153,18 +156,19 @@ void GameplayState::doAestheticLogic(float deltaT) {
 /**
  * @brief Ticks the logic of leader gameplay-related things.
  *
+ * @param player The player responsible.
  * @param deltaT How long the frame's tick is, in seconds.
  */
-void GameplayState::doGameplayLeaderLogic(float deltaT) {
-    if(!curLeaderPtr) return;
+void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
+    if(!player->leaderPtr) return;
     
     if(game.perfMon) {
         game.perfMon->startMeasurement("Logic -- Current leader");
     }
     
-    if(curLeaderPtr->toDelete) {
+    if(player->leaderPtr->toDelete) {
         game.states.gameplay->updateAvailableLeaders();
-        changeToNextLeader(true, true, true);
+        changeToNextLeader(player, true, true, true);
     }
     
     /********************
@@ -174,12 +178,12 @@ void GameplayState::doGameplayLeaderLogic(float deltaT) {
     ********************/
     
     if(
-        whistle.whistling &&
-        whistle.radius < curLeaderPtr->leaType->whistleRange
+        player->whistle.whistling &&
+        player->whistle.radius < player->leaderPtr->leaType->whistleRange
     ) {
-        whistle.radius += game.config.rules.whistleGrowthSpeed * deltaT;
-        if(whistle.radius > curLeaderPtr->leaType->whistleRange) {
-            whistle.radius = curLeaderPtr->leaType->whistleRange;
+        player->whistle.radius += game.config.rules.whistleGrowthSpeed * deltaT;
+        if(player->whistle.radius > player->leaderPtr->leaType->whistleRange) {
+            player->whistle.radius = player->leaderPtr->leaType->whistleRange;
         }
     }
     
@@ -187,16 +191,16 @@ void GameplayState::doGameplayLeaderLogic(float deltaT) {
     Point dummyCoords;
     float dummyAngle;
     float leaderMoveMagnitude;
-    leaderMovement.getInfo(
+    player->leaderMovement.getInfo(
         &dummyCoords, &dummyAngle, &leaderMoveMagnitude
     );
     if(leaderMoveMagnitude < 0.75) {
-        curLeaderPtr->fsm.runEvent(
-            LEADER_EV_MOVE_END, (void*) &leaderMovement
+        player->leaderPtr->fsm.runEvent(
+            LEADER_EV_MOVE_END, (void*) &player->leaderMovement
         );
     } else {
-        curLeaderPtr->fsm.runEvent(
-            LEADER_EV_MOVE_START, (void*) &leaderMovement
+        player->leaderPtr->fsm.runEvent(
+            LEADER_EV_MOVE_START, (void*) &player->leaderMovement
         );
     }
     
@@ -206,12 +210,12 @@ void GameplayState::doGameplayLeaderLogic(float deltaT) {
         float cursorWeight = game.options.misc.cursorCamWeight;
         float groupWeight = 0.0f;
         
-        Point groupCenter = curLeaderPtr->pos;
-        if(!curLeaderPtr->group->members.empty()) {
-            Point tl = curLeaderPtr->group->members[0]->pos;
+        Point groupCenter = player->leaderPtr->pos;
+        if(!player->leaderPtr->group->members.empty()) {
+            Point tl = player->leaderPtr->group->members[0]->pos;
             Point br = tl;
-            for(size_t m = 1; m < curLeaderPtr->group->members.size(); m++) {
-                Mob* member = curLeaderPtr->group->members[m];
+            for(size_t m = 1; m < player->leaderPtr->group->members.size(); m++) {
+                Mob* member = player->leaderPtr->group->members[m];
                 updateMinMaxCoords(tl, br, member->pos);
             }
             groupCenter.x = (tl.x + br.x) / 2.0f;
@@ -225,29 +229,29 @@ void GameplayState::doGameplayLeaderLogic(float deltaT) {
         cursorWeight /= weightSums;
         groupWeight /= weightSums;
         
-        game.view.cam.targetPos =
-            curLeaderPtr->pos * leaderWeight +
-            leaderCursorW * cursorWeight +
+        player->view.cam.targetPos =
+            player->leaderPtr->pos * leaderWeight +
+            player->leaderCursorWorld * cursorWeight +
             groupCenter * groupWeight;
     }
     
     //Check what to show on the notification, if anything.
-    notification.setEnabled(false);
+    player->notification.setEnabled(false);
     
     bool notificationDone = false;
     
     //Lying down stop notification.
     if(
         !notificationDone &&
-        curLeaderPtr->carryInfo
+        player->leaderPtr->carryInfo
     ) {
-        notification.setEnabled(true);
-        notification.setContents(
+        player->notification.setEnabled(true);
+        player->notification.setContents(
             game.controls.findBind(PLAYER_ACTION_TYPE_WHISTLE).inputSource,
             "Get up",
             Point(
-                curLeaderPtr->pos.x,
-                curLeaderPtr->pos.y - curLeaderPtr->radius
+                player->leaderPtr->pos.x,
+                player->leaderPtr->pos.y - player->leaderPtr->radius
             )
         );
         notificationDone = true;
@@ -256,15 +260,15 @@ void GameplayState::doGameplayLeaderLogic(float deltaT) {
     //Get up notification.
     if(
         !notificationDone &&
-        curLeaderPtr->fsm.curState->id == LEADER_STATE_KNOCKED_DOWN
+        player->leaderPtr->fsm.curState->id == LEADER_STATE_KNOCKED_DOWN
     ) {
-        notification.setEnabled(true);
-        notification.setContents(
+        player->notification.setEnabled(true);
+        player->notification.setContents(
             game.controls.findBind(PLAYER_ACTION_TYPE_WHISTLE).inputSource,
             "Get up",
             Point(
-                curLeaderPtr->pos.x,
-                curLeaderPtr->pos.y - curLeaderPtr->radius
+                player->leaderPtr->pos.x,
+                player->leaderPtr->pos.y - player->leaderPtr->radius
             )
         );
         notificationDone = true;
@@ -272,16 +276,16 @@ void GameplayState::doGameplayLeaderLogic(float deltaT) {
     //Auto-throw stop notification.
     if(
         !notificationDone &&
-        curLeaderPtr->autoThrowRepeater.time != LARGE_FLOAT &&
+        player->leaderPtr->autoThrowRepeater.time != LARGE_FLOAT &&
         game.options.controls.autoThrowMode == AUTO_THROW_MODE_TOGGLE
     ) {
-        notification.setEnabled(true);
-        notification.setContents(
+        player->notification.setEnabled(true);
+        player->notification.setContents(
             game.controls.findBind(PLAYER_ACTION_TYPE_THROW).inputSource,
             "Stop throwing",
             Point(
-                curLeaderPtr->pos.x,
-                curLeaderPtr->pos.y - curLeaderPtr->radius
+                player->leaderPtr->pos.x,
+                player->leaderPtr->pos.y - player->leaderPtr->radius
             )
         );
         notificationDone = true;
@@ -290,15 +294,15 @@ void GameplayState::doGameplayLeaderLogic(float deltaT) {
     //Pluck stop notification.
     if(
         !notificationDone &&
-        curLeaderPtr->autoPlucking
+        player->leaderPtr->autoPlucking
     ) {
-        notification.setEnabled(true);
-        notification.setContents(
+        player->notification.setEnabled(true);
+        player->notification.setContents(
             game.controls.findBind(PLAYER_ACTION_TYPE_WHISTLE).inputSource,
             "Stop",
             Point(
-                curLeaderPtr->pos.x,
-                curLeaderPtr->pos.y - curLeaderPtr->radius
+                player->leaderPtr->pos.x,
+                player->leaderPtr->pos.y - player->leaderPtr->radius
             )
         );
         notificationDone = true;
@@ -307,49 +311,49 @@ void GameplayState::doGameplayLeaderLogic(float deltaT) {
     //Go Here stop notification.
     if(
         !notificationDone &&
-        curLeaderPtr->midGoHere
+        player->leaderPtr->midGoHere
     ) {
-        notification.setEnabled(true);
-        notification.setContents(
+        player->notification.setEnabled(true);
+        player->notification.setContents(
             game.controls.findBind(PLAYER_ACTION_TYPE_WHISTLE).inputSource,
             "Stop",
             Point(
-                curLeaderPtr->pos.x,
-                curLeaderPtr->pos.y - curLeaderPtr->radius
+                player->leaderPtr->pos.x,
+                player->leaderPtr->pos.y - player->leaderPtr->radius
             )
         );
         notificationDone = true;
     }
     
-    if(!curLeaderPtr->autoPlucking) {
+    if(!player->leaderPtr->autoPlucking) {
         Distance closestD;
         Distance d;
         
         //Ship healing notification.
-        closeToShipToHeal = nullptr;
+        player->closeToShipToHeal = nullptr;
         for(size_t s = 0; s < mobs.ships.size(); s++) {
             Ship* sPtr = mobs.ships[s];
-            d = Distance(curLeaderPtr->pos, sPtr->pos);
-            if(!sPtr->isLeaderOnCp(curLeaderPtr)) {
+            d = Distance(player->leaderPtr->pos, sPtr->pos);
+            if(!sPtr->isLeaderOnCp(player->leaderPtr)) {
                 continue;
             }
-            if(curLeaderPtr->health == curLeaderPtr->maxHealth) {
+            if(player->leaderPtr->health == player->leaderPtr->maxHealth) {
                 continue;
             }
             if(!sPtr->shiType->canHeal) {
                 continue;
             }
-            if(d < closestD || !closeToShipToHeal) {
-                closeToShipToHeal = sPtr;
+            if(d < closestD || !player->closeToShipToHeal) {
+                player->closeToShipToHeal = sPtr;
                 closestD = d;
-                notification.setEnabled(true);
-                notification.setContents(
+                player->notification.setEnabled(true);
+                player->notification.setContents(
                     game.controls.findBind(PLAYER_ACTION_TYPE_THROW).inputSource,
                     "Repair suit",
                     Point(
-                        closeToShipToHeal->pos.x,
-                        closeToShipToHeal->pos.y -
-                        closeToShipToHeal->radius
+                        player->closeToShipToHeal->pos.x,
+                        player->closeToShipToHeal->pos.y -
+                        player->closeToShipToHeal->radius
                     )
                 );
                 notificationDone = true;
@@ -359,25 +363,25 @@ void GameplayState::doGameplayLeaderLogic(float deltaT) {
         //Interactable mob notification.
         closestD = 0;
         d = 0;
-        closeToInteractableToUse = nullptr;
+        player->closeToInteractableToUse = nullptr;
         if(!notificationDone) {
             for(size_t i = 0; i < mobs.interactables.size(); i++) {
-                d = Distance(curLeaderPtr->pos, mobs.interactables[i]->pos);
+                d = Distance(player->leaderPtr->pos, mobs.interactables[i]->pos);
                 if(d > mobs.interactables[i]->intType->triggerRange) {
                     continue;
                 }
-                if(d < closestD || !closeToInteractableToUse) {
-                    closeToInteractableToUse = mobs.interactables[i];
+                if(d < closestD || !player->closeToInteractableToUse) {
+                    player->closeToInteractableToUse = mobs.interactables[i];
                     closestD = d;
-                    notification.setEnabled(true);
-                    notification.setContents(
+                    player->notification.setEnabled(true);
+                    player->notification.setContents(
                         game.controls.findBind(PLAYER_ACTION_TYPE_THROW).
                         inputSource,
-                        closeToInteractableToUse->intType->promptText,
+                        player->closeToInteractableToUse->intType->promptText,
                         Point(
-                            closeToInteractableToUse->pos.x,
-                            closeToInteractableToUse->pos.y -
-                            closeToInteractableToUse->radius
+                            player->closeToInteractableToUse->pos.x,
+                            player->closeToInteractableToUse->pos.y -
+                            player->closeToInteractableToUse->radius
                         )
                     );
                     notificationDone = true;
@@ -388,13 +392,13 @@ void GameplayState::doGameplayLeaderLogic(float deltaT) {
         //Pikmin pluck notification.
         closestD = 0;
         d = 0;
-        closeToPikminToPluck = nullptr;
+        player->closeToPikminToPluck = nullptr;
         if(!notificationDone) {
-            Pikmin* p = getClosestSprout(curLeaderPtr->pos, &d, false);
+            Pikmin* p = getClosestSprout(player->leaderPtr->pos, &d, false);
             if(p && d <= game.config.leaders.pluckRange) {
-                closeToPikminToPluck = p;
-                notification.setEnabled(true);
-                notification.setContents(
+                player->closeToPikminToPluck = p;
+                player->notification.setEnabled(true);
+                player->notification.setContents(
                     game.controls.findBind(PLAYER_ACTION_TYPE_THROW).
                     inputSource,
                     "Pluck",
@@ -411,48 +415,48 @@ void GameplayState::doGameplayLeaderLogic(float deltaT) {
         //Nest open notification.
         closestD = 0;
         d = 0;
-        closeToNestToOpen = nullptr;
+        player->closeToNestToOpen = nullptr;
         if(!notificationDone) {
             for(size_t o = 0; o < mobs.onions.size(); o++) {
-                d = Distance(curLeaderPtr->pos, mobs.onions[o]->pos);
+                d = Distance(player->leaderPtr->pos, mobs.onions[o]->pos);
                 if(d > game.config.leaders.onionOpenRange) continue;
-                if(d < closestD || !closeToNestToOpen) {
-                    closeToNestToOpen = mobs.onions[o]->nest;
+                if(d < closestD || !player->closeToNestToOpen) {
+                    player->closeToNestToOpen = mobs.onions[o]->nest;
                     closestD = d;
-                    notification.setEnabled(true);
-                    notification.setContents(
+                    player->notification.setEnabled(true);
+                    player->notification.setContents(
                         game.controls.findBind(PLAYER_ACTION_TYPE_THROW).
                         inputSource,
                         "Check",
                         Point(
-                            closeToNestToOpen->mPtr->pos.x,
-                            closeToNestToOpen->mPtr->pos.y -
-                            closeToNestToOpen->mPtr->radius
+                            player->closeToNestToOpen->mPtr->pos.x,
+                            player->closeToNestToOpen->mPtr->pos.y -
+                            player->closeToNestToOpen->mPtr->radius
                         )
                     );
                     notificationDone = true;
                 }
             }
             for(size_t s = 0; s < mobs.ships.size(); s++) {
-                d = Distance(curLeaderPtr->pos, mobs.ships[s]->pos);
-                if(!mobs.ships[s]->isLeaderOnCp(curLeaderPtr)) {
+                d = Distance(player->leaderPtr->pos, mobs.ships[s]->pos);
+                if(!mobs.ships[s]->isLeaderOnCp(player->leaderPtr)) {
                     continue;
                 }
                 if(mobs.ships[s]->shiType->nest->pikTypes.empty()) {
                     continue;
                 }
-                if(d < closestD || !closeToNestToOpen) {
-                    closeToNestToOpen = mobs.ships[s]->nest;
+                if(d < closestD || !player->closeToNestToOpen) {
+                    player->closeToNestToOpen = mobs.ships[s]->nest;
                     closestD = d;
-                    notification.setEnabled(true);
-                    notification.setContents(
+                    player->notification.setEnabled(true);
+                    player->notification.setContents(
                         game.controls.findBind(PLAYER_ACTION_TYPE_THROW).
                         inputSource,
                         "Check",
                         Point(
-                            closeToNestToOpen->mPtr->pos.x,
-                            closeToNestToOpen->mPtr->pos.y -
-                            closeToNestToOpen->mPtr->radius
+                            player->closeToNestToOpen->mPtr->pos.x,
+                            player->closeToNestToOpen->mPtr->pos.y -
+                            player->closeToNestToOpen->mPtr->radius
                         )
                     );
                     notificationDone = true;
@@ -461,7 +465,7 @@ void GameplayState::doGameplayLeaderLogic(float deltaT) {
         }
     }
     
-    notification.tick(deltaT);
+    player->notification.tick(deltaT);
     
     /********************
     *             .-.   *
@@ -471,42 +475,42 @@ void GameplayState::doGameplayLeaderLogic(float deltaT) {
     
     Point mouseCursorSpeed;
     float dummyMagnitude;
-    cursorMovement.getInfo(
+    player->cursorMovement.getInfo(
         &mouseCursorSpeed, &dummyAngle, &dummyMagnitude
     );
     mouseCursorSpeed =
-        mouseCursorSpeed * deltaT* game.options.controls.cursorSpeed;
+        mouseCursorSpeed * deltaT * game.options.controls.cursorSpeed;
         
-    leaderCursorW = game.view.cursorWorldPos;
+    player->leaderCursorWorld = player->view.cursorWorldPos;
     
-    float cursorAngle = getAngle(curLeaderPtr->pos, leaderCursorW);
+    float cursorAngle = getAngle(player->leaderPtr->pos, player->leaderCursorWorld);
     
-    Distance leaderToCursorDist(curLeaderPtr->pos, leaderCursorW);
+    Distance leaderToCursorDist(player->leaderPtr->pos, player->leaderCursorWorld);
     if(leaderToCursorDist > game.config.rules.cursorMaxDist) {
         //Cursor goes beyond the range limit.
-        leaderCursorW.x =
-            curLeaderPtr->pos.x +
+        player->leaderCursorWorld.x =
+            player->leaderPtr->pos.x +
             (cos(cursorAngle) * game.config.rules.cursorMaxDist);
-        leaderCursorW.y =
-            curLeaderPtr->pos.y +
+        player->leaderCursorWorld.y =
+            player->leaderPtr->pos.y +
             (sin(cursorAngle) * game.config.rules.cursorMaxDist);
             
         if(mouseCursorSpeed.x != 0 || mouseCursorSpeed.y != 0) {
             //If we're speeding the mouse cursor (via analog stick),
             //don't let it go beyond the edges.
-            game.view.cursorWorldPos = leaderCursorW;
-            game.mouseCursor.winPos = game.view.cursorWorldPos;
+            player->view.cursorWorldPos = player->leaderCursorWorld;
+            game.mouseCursor.winPos = player->view.cursorWorldPos;
             al_transform_coordinates(
-                &game.view.worldToWindowTransform,
+                &player->view.worldToWindowTransform,
                 &game.mouseCursor.winPos.x, &game.mouseCursor.winPos.y
             );
         }
     }
     
-    leaderCursorWin = leaderCursorW;
+    player->leaderCursorWin = player->leaderCursorWorld;
     al_transform_coordinates(
-        &game.view.worldToWindowTransform,
-        &leaderCursorWin.x, &leaderCursorWin.y
+        &player->view.worldToWindowTransform,
+        &player->leaderCursorWin.x, &player->leaderCursorWin.y
     );
     
     
@@ -516,35 +520,35 @@ void GameplayState::doGameplayLeaderLogic(float deltaT) {
     *                             ***  *
     ************************************/
     
-    updateClosestGroupMembers();
-    if(!curLeaderPtr->holding.empty()) {
-        closestGroupMember[BUBBLE_RELATION_CURRENT] = curLeaderPtr->holding[0];
+    updateClosestGroupMembers(player);
+    if(!player->leaderPtr->holding.empty()) {
+        player->closestGroupMember[BUBBLE_RELATION_CURRENT] = player->leaderPtr->holding[0];
     }
     
-    float oldSwarmMagnitude = swarmMagnitude;
+    float oldSwarmMagnitude = player->swarmMagnitude;
     Point swarmCoords;
     float newSwarmAngle;
-    swarmMovement.getInfo(
-        &swarmCoords, &newSwarmAngle, &swarmMagnitude
+    player->swarmMovement.getInfo(
+        &swarmCoords, &newSwarmAngle, &player->swarmMagnitude
     );
-    if(swarmMagnitude > 0) {
+    if(player->swarmMagnitude > 0) {
         //This stops arrows that were fading away to the left from
         //turning to angle 0 because the magnitude reached 0.
-        swarmAngle = newSwarmAngle;
+        player->swarmAngle = newSwarmAngle;
     }
     
-    if(swarmCursor) {
-        swarmAngle = cursorAngle;
-        leaderToCursorDist = Distance(curLeaderPtr->pos, leaderCursorW);
-        swarmMagnitude =
+    if(player->swarmCursor) {
+        player->swarmAngle = cursorAngle;
+        leaderToCursorDist = Distance(player->leaderPtr->pos, player->leaderCursorWorld);
+        player->swarmMagnitude =
             leaderToCursorDist.toFloat() / game.config.rules.cursorMaxDist;
     }
     
-    if(oldSwarmMagnitude != swarmMagnitude) {
-        if(swarmMagnitude != 0) {
-            curLeaderPtr->signalSwarmStart();
+    if(oldSwarmMagnitude != player->swarmMagnitude) {
+        if(player->swarmMagnitude != 0) {
+            player->leaderPtr->signalSwarmStart();
         } else {
-            curLeaderPtr->signalSwarmEnd();
+            player->leaderPtr->signalSwarmEnd();
         }
     }
     
@@ -609,23 +613,25 @@ void GameplayState::doGameplayLeaderLogic(float deltaT) {
  */
 void GameplayState::doGameplayLogic(float deltaT) {
 
-    //Camera movement.
-    if(!curLeaderPtr) {
-        //If there's no leader being controlled, might as well move the camera.
-        Point coords;
-        float dummyAngle;
-        float dummyMagnitude;
-        leaderMovement.getInfo(&coords, &dummyAngle, &dummyMagnitude);
-        game.view.cam.targetPos = game.view.cam.pos + (coords * 120.0f / game.view.cam.zoom);
+    for(Player &player : players) {
+        //Manual camera movement.
+        if(!player.leaderPtr) {
+            //If there's no leader being controlled, might as well move the camera.
+            Point coords;
+            float dummyAngle;
+            float dummyMagnitude;
+            player.leaderMovement.getInfo(&coords, &dummyAngle, &dummyMagnitude);
+            player.view.cam.targetPos = player.view.cam.pos + (coords * 120.0f / player.view.cam.zoom);
+        }
+        
+        player.view.cam.tick(deltaT);
+        player.view.updateTransformations();
+        player.view.updateBox();
+        game.audio.setCameraPos(
+            player.view.box[0] + player.view.boxMargin,
+            player.view.box[1] - player.view.boxMargin
+        );
     }
-    
-    game.view.cam.tick(deltaT);
-    game.view.updateTransformations();
-    game.view.updateBox();
-    game.audio.setCameraPos(
-        game.view.box[0] + game.view.boxMargin,
-        game.view.box[1] - game.view.boxMargin
-    );
     
     if(!msgBox) {
     
@@ -639,18 +645,18 @@ void GameplayState::doGameplayLogic(float deltaT) {
         Point mouseCursorSpeed;
         float dummyAngle;
         float dummyMagnitude;
-        cursorMovement.getInfo(
+        players[0].cursorMovement.getInfo(
             &mouseCursorSpeed, &dummyAngle, &dummyMagnitude
         );
         mouseCursorSpeed =
-            mouseCursorSpeed * deltaT* game.options.controls.cursorSpeed;
+            mouseCursorSpeed * deltaT * game.options.controls.cursorSpeed;
             
         game.mouseCursor.winPos += mouseCursorSpeed;
         
-        game.view.cursorWorldPos = game.mouseCursor.winPos;
+        game.editorsView.cursorWorldPos = game.mouseCursor.winPos;
         al_transform_coordinates(
-            &game.view.windowToWorldTransform,
-            &game.view.cursorWorldPos.x, &game.view.cursorWorldPos.y
+            &game.editorsView.windowToWorldTransform,
+            &game.editorsView.cursorWorldPos.x, &game.editorsView.cursorWorldPos.y
         );
         
         areaTimePassed += deltaT;
@@ -737,23 +743,29 @@ void GameplayState::doGameplayLogic(float deltaT) {
         ******************/
         
         size_t oldNrLivingLeaders = nrLivingLeaders;
-        //Some setup to calculate how far the leader walks.
-        Leader* oldLeader = curLeaderPtr;
-        Point oldLeaderPos;
-        bool oldLeaderWasWalking = false;
-        if(curLeaderPtr) {
-            oldLeaderPos = curLeaderPtr->pos;
-            oldLeaderWasWalking =
-                curLeaderPtr->active &&
-                !hasFlag(
-                    curLeaderPtr->chaseInfo.flags,
-                    CHASE_FLAG_TELEPORT
-                ) &&
-                !hasFlag(
-                    curLeaderPtr->chaseInfo.flags,
-                    CHASE_FLAG_TELEPORTS_CONSTANTLY
-                ) &&
-                curLeaderPtr->chaseInfo.state == CHASE_STATE_CHASING;
+        
+        Leader* oldLeaders[MAX_PLAYERS];
+        Point oldLeaderPos[MAX_PLAYERS];
+        bool oldLeaderWasWalking[MAX_PLAYERS];
+        for(size_t p = 0; p < players.size(); p++) {
+            Player* player = &players[p];
+            //Some setup to calculate how far the leader walks.
+            oldLeaders[p] = player->leaderPtr;
+            oldLeaderWasWalking[p] = false;
+            if(player->leaderPtr) {
+                oldLeaderPos[p] = player->leaderPtr->pos;
+                oldLeaderWasWalking[p] =
+                    player->leaderPtr->player &&
+                    !hasFlag(
+                        player->leaderPtr->chaseInfo.flags,
+                        CHASE_FLAG_TELEPORT
+                    ) &&
+                    !hasFlag(
+                        player->leaderPtr->chaseInfo.flags,
+                        CHASE_FLAG_TELEPORTS_CONSTANTLY
+                    ) &&
+                    player->leaderPtr->chaseInfo.state == CHASE_STATE_CHASING;
+            }
         }
         
         updateAreaActiveCells();
@@ -790,21 +802,24 @@ void GameplayState::doGameplayLogic(float deltaT) {
             m++;
         }
         
-        doGameplayLeaderLogic(deltaT);
-        
-        if(
-            curLeaderPtr && curLeaderPtr == oldLeader &&
-            oldLeaderWasWalking
-        ) {
-            //This more or less tells us how far the leader walked in this
-            //frame. It's not perfect, since it will also count the leader
-            //getting pushed and knocked back whilst in the chasing state.
-            //It also won't count the movement if the active leader changed
-            //midway through.
-            //But those are rare cases that don't really affect much in the
-            //grand scheme of things, and don't really matter for a fun stat.
-            game.statistics.distanceWalked +=
-                Distance(oldLeaderPos, curLeaderPtr->pos).toFloat();
+        for(size_t p = 0; p < players.size(); p++) {
+            Player* player = &players[p];
+            doGameplayLeaderLogic(player, deltaT);
+            
+            if(
+                player->leaderPtr && player->leaderPtr == oldLeaders[p] &&
+                oldLeaderWasWalking[p]
+            ) {
+                //This more or less tells us how far the leader walked in this
+                //frame. It's not perfect, since it will also count the leader
+                //getting pushed and knocked back whilst in the chasing state.
+                //It also won't count the movement if the active leader changed
+                //midway through.
+                //But those are rare cases that don't really affect much in the
+                //grand scheme of things, and don't really matter for a fun stat.
+                game.statistics.distanceWalked +=
+                    Distance(oldLeaderPos[p], player->leaderPtr->pos).toFloat();
+            }
         }
         
         nrLivingLeaders = 0;
@@ -1035,8 +1050,9 @@ void GameplayState::doGameplayLogic(float deltaT) {
             
         }
         
-    } else { //Displaying a gameplay message.
+    } else {
     
+        //Displaying a gameplay message.
         msgBox->tick(deltaT);
         if(msgBox->toDelete) {
             startGameplayMessage("", nullptr);
@@ -1078,7 +1094,9 @@ void GameplayState::doMenuLogic() {
         }
     }
     
-    hud->tick(game.deltaT);
+    for(Player &player : players) {
+        player.hud->tick(game.deltaT);
+    }
     
     //Process and print framerate and system info.
     if(game.showSystemInfo) {
@@ -1349,17 +1367,17 @@ void GameplayState::doMenuLogic() {
     //Print mouse coordinates.
     if(game.makerTools.geometryInfo) {
         Sector* mouseSector =
-            getSector(game.view.cursorWorldPos, nullptr, true);
+            getSector(players[0].view.cursorWorldPos, nullptr, true);
             
         string coordsStr =
-            boxString(f2s(game.view.cursorWorldPos.x), 6) + " " +
-            boxString(f2s(game.view.cursorWorldPos.y), 6);
+            boxString(f2s(players[0].view.cursorWorldPos.x), 6) + " " +
+            boxString(f2s(players[0].view.cursorWorldPos.y), 6);
         string blockmapStr =
             boxString(
-                i2s(game.curAreaData->bmap.getCol(game.view.cursorWorldPos.x)),
+                i2s(game.curAreaData->bmap.getCol(players[0].view.cursorWorldPos.x)),
                 5, " "
             ) +
-            i2s(game.curAreaData->bmap.getRow(game.view.cursorWorldPos.y));
+            i2s(game.curAreaData->bmap.getRow(players[0].view.cursorWorldPos.y));
         string sectorZStr, sectorLightStr, sectorTexStr;
         if(mouseSector) {
             sectorZStr =
@@ -1436,10 +1454,12 @@ void GameplayState::doMenuLogic() {
         if(interludeTime >= GAMEPLAY::BIG_MSG_READY_DUR) {
             curInterlude = INTERLUDE_NONE;
             deltaTMult = 1.0f;
-            hud->gui.startAnimation(
-                GUI_MANAGER_ANIM_OUT_TO_IN,
-                GAMEPLAY::AREA_INTRO_HUD_MOVE_TIME
-            );
+            for(Player &player : players) {
+                player.hud->gui.startAnimation(
+                    GUI_MANAGER_ANIM_OUT_TO_IN,
+                    GAMEPLAY::AREA_INTRO_HUD_MOVE_TIME
+                );
+            }
             game.audio.setCurrentSong(game.curAreaData->songName);
         }
         break;
@@ -1473,23 +1493,26 @@ void GameplayState::doMenuLogic() {
 void GameplayState::isNearEnemyAndBoss(bool* nearEnemy, bool* nearBoss) {
     bool foundEnemy = false;
     bool foundBoss = false;
-    for(size_t e = 0; e < game.states.gameplay->mobs.enemies.size(); e++) {
-        Enemy* ePtr = game.states.gameplay->mobs.enemies[e];
-        if(ePtr->health <= 0.0f) continue;
-        
-        Distance d = curLeaderPtr->getDistanceBetween(ePtr);
-        
-        if(!ePtr->eneType->isBoss) {
-            if(d <= GAMEPLAY::ENEMY_MIX_DISTANCE) {
-                foundEnemy = true;
+    for(Player &player : players) {
+        if(!player.leaderPtr) continue;
+        for(size_t e = 0; e < game.states.gameplay->mobs.enemies.size(); e++) {
+            Enemy* ePtr = game.states.gameplay->mobs.enemies[e];
+            if(ePtr->health <= 0.0f) continue;
+            
+            Distance d = player.leaderPtr->getDistanceBetween(ePtr);
+            
+            if(!ePtr->eneType->isBoss) {
+                if(d <= GAMEPLAY::ENEMY_MIX_DISTANCE) {
+                    foundEnemy = true;
+                }
+            } else {
+                if(d <= GAMEPLAY::BOSS_MUSIC_DISTANCE) {
+                    foundBoss = true;
+                }
             }
-        } else {
-            if(d <= GAMEPLAY::BOSS_MUSIC_DISTANCE) {
-                foundBoss = true;
-            }
+            
+            if(foundEnemy && foundBoss) break;
         }
-        
-        if(foundEnemy && foundBoss) break;
     }
     
     if(nearEnemy) *nearEnemy = foundEnemy;
@@ -1721,9 +1744,11 @@ void GameplayState::processMobMiscInteractions(
     if(
         ncoEvent &&
         m2Ptr->carryInfo &&
+        mPtr->type->category->id == MOB_CATEGORY_PIKMIN &&
         !m2Ptr->carryInfo->isFull()
     ) {
-        if(dBetween <= taskRange(mPtr)) {
+        Pikmin* pikPtr = (Pikmin*) mPtr;
+        if(dBetween <= pikPtr->getTaskRange()) {
             pendingIntermobEvents.push_back(
                 PendingIntermobEvent(dBetween, ncoEvent, m2Ptr)
             );
@@ -1735,9 +1760,11 @@ void GameplayState::processMobMiscInteractions(
         mPtr->fsm.getEvent(MOB_EV_NEAR_TOOL);
     if(
         ntoEvent &&
-        typeid(*m2Ptr) == typeid(Tool)
+        mPtr->type->category->id == MOB_CATEGORY_PIKMIN &&
+        m2Ptr->type->category->id == MOB_CATEGORY_TOOLS
     ) {
-        if(dBetween <= taskRange(mPtr)) {
+        Pikmin* pikPtr = (Pikmin*) mPtr;
+        if(dBetween <= pikPtr->getTaskRange()) {
             Tool* tooPtr = (Tool*) m2Ptr;
             if(tooPtr->reserved && tooPtr->reserved != mPtr) {
                 //Another Pikmin is already going for it. Ignore it.
@@ -1755,9 +1782,11 @@ void GameplayState::processMobMiscInteractions(
     if(
         ngtoEvent &&
         m2Ptr->health > 0 &&
-        typeid(*m2Ptr) == typeid(GroupTask)
+        mPtr->type->category->id == MOB_CATEGORY_PIKMIN &&
+        m2Ptr->type->category->id == MOB_CATEGORY_GROUP_TASKS
     ) {
-        if(dBetween <= taskRange(mPtr)) {
+        Pikmin* pikPtr = (Pikmin*) mPtr;
+        if(dBetween <= pikPtr->getTaskRange()) {
             GroupTask* tasPtr = (GroupTask*) m2Ptr;
             GroupTask::GroupTaskSpot* freeSpot = tasPtr->getFreeSpot();
             if(!freeSpot) {
@@ -1771,21 +1800,24 @@ void GameplayState::processMobMiscInteractions(
         
     }
     
-    //"Bumped" by the active leader being nearby.
+    //"Bumped" by an active leader being nearby.
     MobEvent* touchLeEv =
         mPtr->fsm.getEvent(MOB_EV_TOUCHED_ACTIVE_LEADER);
-    if(
-        touchLeEv &&
-        m2Ptr == curLeaderPtr &&
-        //Small hack. This way,
-        //Pikmin don't get bumped by leaders that are,
-        //for instance, lying down.
-        m2Ptr->fsm.curState->id == LEADER_STATE_ACTIVE &&
-        d <= game.config.pikmin.idleBumpRange
-    ) {
-        pendingIntermobEvents.push_back(
-            PendingIntermobEvent(dBetween, touchLeEv, m2Ptr)
-        );
+    if(touchLeEv) {
+        for(Player &player : players) {
+            if(
+                m2Ptr == player.leaderPtr &&
+                //Small hack. This way,
+                //Pikmin don't get bumped by leaders that are,
+                //for instance, lying down.
+                m2Ptr->fsm.curState->id == LEADER_STATE_ACTIVE &&
+                d <= game.config.pikmin.idleBumpRange
+            ) {
+                pendingIntermobEvents.push_back(
+                    PendingIntermobEvent(dBetween, touchLeEv, m2Ptr)
+                );
+            }
+        }
     }
 }
 
@@ -2382,7 +2414,9 @@ void GameplayState::updateAreaActiveCells() {
     }
     
     //Mark the region in-camera (plus padding) as active.
-    markAreaCellsActive(game.view.box[0], game.view.box[1]);
+    for(Player &player : players) {
+        markAreaCellsActive(player.view.box[0], player.view.box[1]);
+    }
 }
 
 

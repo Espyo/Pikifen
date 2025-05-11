@@ -156,6 +156,7 @@ Leader::Leader(const Point &pos, LeaderType* type, float angle) :
         );
         
     swarmNextArrowTimer.onEnd = [this] () {
+        if(!player) return;
         swarmNextArrowTimer.start();
         swarmArrows.push_back(0);
         
@@ -183,14 +184,14 @@ Leader::Leader(const Point &pos, LeaderType* type, float angle) :
         p.priority = PARTICLE_PRIORITY_MEDIUM;
         p.size.setKeyframeValue(0, LEADER::SWARM_PARTICLE_SIZE);
         float pSpeed =
-            game.states.gameplay->swarmMagnitude *
+            player->swarmMagnitude *
             LEADER::SWARM_PARTICLE_SPEED_MULT +
             game.rng.f(
                 -LEADER::SWARM_PARTICLE_SPEED_DEVIATION,
                 LEADER::SWARM_PARTICLE_SPEED_DEVIATION
             );
         float pAngle =
-            game.states.gameplay->swarmAngle +
+            player->swarmAngle +
             game.rng.f(
                 -LEADER::SWARM_PARTICLE_ANGLE_DEVIATION,
                 LEADER::SWARM_PARTICLE_ANGLE_DEVIATION
@@ -348,15 +349,17 @@ void Leader::dismissDetails() {
  * the group for a dismiss action.
  */
 void Leader::dismissLogic() {
+    if(!player) return;
+    
     //They are dismissed towards this angle.
     //This is then offset a bit for each subgroup, depending on a few factors.
     float baseAngle;
     
     //First, calculate what direction the group should be dismissed to.
-    if(game.states.gameplay->swarmMagnitude > 0) {
+    if(player->swarmMagnitude > 0) {
         //If the leader's swarming,
         //they should be dismissed in that direction.
-        baseAngle = game.states.gameplay->swarmAngle;
+        baseAngle = player->swarmAngle;
     } else {
         //Leftmost member coordinate, rightmost, etc.
         Point minCoords, maxCoords;
@@ -707,6 +710,26 @@ void Leader::drawMob() {
 
 
 /**
+ * @brief Returns how many Pikmin are in the group.
+ *
+ * @param filter If not nullptr, only return Pikmin matching this type.
+ * @return The amount.
+ */
+size_t Leader::getAmountOfGroupPikmin(const PikminType* filter) {
+    size_t total = 0;
+    
+    for(size_t m = 0; m < group->members.size(); m++) {
+        Mob* mPtr = group->members[m];
+        if(mPtr->type->category->id != MOB_CATEGORY_PIKMIN) continue;
+        if(filter && mPtr->type != filter) continue;
+        total++;
+    }
+    
+    return total;
+}
+
+
+/**
  * @brief Returns how many rows will be needed to fit all of the members.
  * Used to calculate how subgroup members will be placed when dismissing.
  *
@@ -917,7 +940,9 @@ void Leader::startThrowTrail() {
  * @brief Makes the leader start whistling.
  */
 void Leader::startWhistling() {
-    game.states.gameplay->whistle.startWhistling();
+    if(!player) return;
+    
+    player->whistle.startWhistling();
     
     size_t whistlingSoundIdx =
         leaType->soundDataIdxs[LEADER_SOUND_WHISTLING];
@@ -927,7 +952,7 @@ void Leader::startWhistling() {
         whistleSoundSourceId =
             game.audio.createPosSoundSource(
                 whistlingSound->sample,
-                game.states.gameplay->leaderCursorW, false,
+                player->leaderCursorWorld, false,
                 whistlingSound->config
             );
     }
@@ -949,8 +974,9 @@ void Leader::stopAutoThrowing() {
  * @brief Makes the leader stop whistling.
  */
 void Leader::stopWhistling() {
-    if(!game.states.gameplay->whistle.whistling) return;
-    game.states.gameplay->whistle.stopWhistling();
+    if(!player) return;
+    if(!player->whistle.whistling) return;
+    player->whistle.stopWhistling();
     game.audio.destroySoundSource(whistleSoundSourceId);
     whistleSoundSourceId = 0;
 }
@@ -998,7 +1024,7 @@ void Leader::tickClassSpecifics(float deltaT) {
     
     size_t nAutoThrows = autoThrowRepeater.tick(deltaT);
     if(nAutoThrows > 0) {
-        bool grabbed = grabClosestGroupMember();
+        bool grabbed = grabClosestGroupMember(player);
         if(grabbed) {
             queueThrow();
         }
@@ -1023,10 +1049,9 @@ void Leader::tickClassSpecifics(float deltaT) {
         stopAutoThrowing();
     }
     
-    if(game.states.gameplay->whistle.whistling) {
+    if(player && player->whistle.whistling) {
         game.audio.setSoundSourcePos(
-            whistleSoundSourceId,
-            game.states.gameplay->leaderCursorW
+            whistleSoundSourceId, player->leaderCursorWorld
         );
     }
     
@@ -1052,10 +1077,12 @@ void Leader::tickClassSpecifics(float deltaT) {
  */
 void Leader::updateThrowVariables() {
     throwee = nullptr;
+    if(!player) return;
+    
     if(!holding.empty()) {
         throwee = holding[0];
-    } else if(game.states.gameplay->curLeaderPtr == this) {
-        throwee = game.states.gameplay->closestGroupMember[BUBBLE_RELATION_CURRENT];
+    } else {
+        throwee = player->closestGroupMember[BUBBLE_RELATION_CURRENT];
     }
     
     if(!throwee) {
@@ -1063,12 +1090,10 @@ void Leader::updateThrowVariables() {
     }
     
     float targetZ;
-    if(game.states.gameplay->throwDestMob) {
-        targetZ =
-            game.states.gameplay->throwDestMob->z +
-            game.states.gameplay->throwDestMob->height;
-    } else if(game.states.gameplay->throwDestSector) {
-        targetZ = game.states.gameplay->throwDestSector->z;
+    if(player->throwDestMob) {
+        targetZ = player->throwDestMob->z + player->throwDestMob->height;
+    } else if(player->throwDestSector) {
+        targetZ = player->throwDestSector->z;
     } else {
         targetZ = z;
     }
@@ -1107,7 +1132,7 @@ void Leader::updateThrowVariables() {
     calculateThrow(
         pos,
         z,
-        game.states.gameplay->throwDest,
+        player->throwDest,
         targetZ,
         maxHeight,
         MOB::GRAVITY_ADDER,
@@ -1121,6 +1146,7 @@ void Leader::updateThrowVariables() {
 /**
  * @brief Switch active leader.
  *
+ * @param player The player responsible.
  * @param forward If true, switch to the next one. If false, to the previous.
  * @param forceSuccess If true, switch to this leader even if they can't
  * currently handle the leader switch script event.
@@ -1129,30 +1155,28 @@ void Leader::updateThrowVariables() {
  * Usually this is used because the current leader is no longer available.
  */
 void changeToNextLeader(
-    bool forward, bool forceSuccess, bool keepIdx
+    Player* player, bool forward, bool forceSuccess, bool keepIdx
 ) {
     if(game.states.gameplay->availableLeaders.empty()) {
         //There are no leaders remaining. Set the current leader to none.
-        game.states.gameplay->curLeaderIdx = INVALID;
-        game.states.gameplay->curLeaderPtr = nullptr;
-        game.states.gameplay->updateClosestGroupMembers();
+        if(player->leaderPtr) player->leaderPtr->player = NULL;
+        player->leaderIdx = INVALID;
+        player->leaderPtr = nullptr;
+        game.states.gameplay->updateClosestGroupMembers(player);
         return;
     }
     
     if(
         game.states.gameplay->availableLeaders.size() == 1 &&
-        game.states.gameplay->curLeaderPtr &&
-        !keepIdx
+        player->leaderPtr && !keepIdx
     ) {
         return;
     }
     
     if(
         (
-            game.states.gameplay->curLeaderPtr &&
-            !game.states.gameplay->curLeaderPtr->fsm.getEvent(
-                LEADER_EV_INACTIVATED
-            )
+            player->leaderPtr &&
+            !player->leaderPtr->fsm.getEvent(LEADER_EV_INACTIVATED)
         ) &&
         !forceSuccess
     ) {
@@ -1166,13 +1190,13 @@ void changeToNextLeader(
     //If we return to the current leader without anything being
     //changed, then stop trying; no leader can be switched to.
     
-    int newLeaderIdx = (int) game.states.gameplay->curLeaderIdx;
+    int newLeaderIdx = (int) player->leaderIdx;
     if(keepIdx) {
         forward ? newLeaderIdx-- : newLeaderIdx++;
     }
     Leader* newLeaderPtr = nullptr;
     bool searching = true;
-    Leader* originalLeaderPtr = game.states.gameplay->curLeaderPtr;
+    Leader* originalLeaderPtr = player->leaderPtr;
     bool cantFindNewLeader = false;
     bool success = false;
     
@@ -1191,12 +1215,12 @@ void changeToNextLeader(
             searching = false;
         }
         
-        newLeaderPtr->fsm.runEvent(LEADER_EV_ACTIVATED);
+        newLeaderPtr->fsm.runEvent(LEADER_EV_ACTIVATED, (void*) player);
         
         //If after we called the event, the leader is the same,
         //then that means the leader can't be switched to.
         //Try a new one.
-        if(game.states.gameplay->curLeaderPtr != originalLeaderPtr) {
+        if(player->leaderPtr != originalLeaderPtr) {
             searching = false;
             success = true;
         }
@@ -1204,25 +1228,23 @@ void changeToNextLeader(
     
     if(cantFindNewLeader && forceSuccess) {
         //Ok, we need to force a leader to accept the focus. Let's do so.
-        game.states.gameplay->curLeaderIdx =
+        player->leaderIdx =
             sumAndWrap(
                 newLeaderIdx,
                 (forward ? 1 : -1),
                 (int) game.states.gameplay->availableLeaders.size()
             );
-        game.states.gameplay->curLeaderPtr =
-            game.states.gameplay->
-            availableLeaders[game.states.gameplay->curLeaderIdx];
+        player->leaderPtr =
+            game.states.gameplay->availableLeaders[player->leaderIdx];
             
-        game.states.gameplay->curLeaderPtr->fsm.setState(
-            LEADER_STATE_ACTIVE
-        );
+        player->leaderPtr->fsm.setState(LEADER_STATE_ACTIVE);
         success = true;
     }
     
     if(success) {
-        game.states.gameplay->updateClosestGroupMembers();
-        game.states.gameplay->curLeaderPtr->swarmArrows.clear();
+        game.states.gameplay->updateClosestGroupMembers(player);
+        player->leaderPtr->swarmArrows.clear();
+        if(originalLeaderPtr) originalLeaderPtr->player = nullptr;
     }
 }
 
@@ -1231,34 +1253,32 @@ void changeToNextLeader(
  * @brief Makes the current leader grab the closest group member of the
  * standby type.
  *
+ * @param player The player responsible.
  * @return Whether it succeeded.
  */
-bool grabClosestGroupMember() {
-    if(!game.states.gameplay->curLeaderPtr) return false;
+bool grabClosestGroupMember(Player* player) {
+    if(!player->leaderPtr) return false;
     
     //Check if there is even a closest group member.
-    if(!game.states.gameplay->closestGroupMember[BUBBLE_RELATION_CURRENT]) {
+    if(!player->closestGroupMember[BUBBLE_RELATION_CURRENT]) {
         return false;
     }
     
     //Check if the leader can grab, and the group member can be grabbed.
     MobEvent* grabbedEv =
-        game.states.gameplay->
-        closestGroupMember[BUBBLE_RELATION_CURRENT]->fsm.getEvent(
+        player->closestGroupMember[BUBBLE_RELATION_CURRENT]->fsm.getEvent(
             MOB_EV_GRABBED_BY_FRIEND
         );
     MobEvent* grabberEv =
-        game.states.gameplay->curLeaderPtr->fsm.getEvent(
-            LEADER_EV_HOLDING
-        );
+        player->leaderPtr->fsm.getEvent(LEADER_EV_HOLDING);
     if(!grabberEv || !grabbedEv) {
         return false;
     }
     
     //Check if there's anything in the way.
     if(
-        !game.states.gameplay->curLeaderPtr->hasClearLine(
-            game.states.gameplay->closestGroupMember[BUBBLE_RELATION_CURRENT]
+        !player->leaderPtr->hasClearLine(
+            player->closestGroupMember[BUBBLE_RELATION_CURRENT]
         )
     ) {
         return false;
@@ -1266,12 +1286,12 @@ bool grabClosestGroupMember() {
     
     //Run the grabbing logic then.
     grabberEv->run(
-        game.states.gameplay->curLeaderPtr,
-        (void*) game.states.gameplay->closestGroupMember[BUBBLE_RELATION_CURRENT]
+        player->leaderPtr,
+        (void*) player->closestGroupMember[BUBBLE_RELATION_CURRENT]
     );
     grabbedEv->run(
-        game.states.gameplay->closestGroupMember[BUBBLE_RELATION_CURRENT],
-        (void*) game.states.gameplay->curLeaderPtr
+        player->closestGroupMember[BUBBLE_RELATION_CURRENT],
+        (void*) player->leaderPtr
     );
     
     return true;

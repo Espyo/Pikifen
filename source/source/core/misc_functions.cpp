@@ -185,16 +185,19 @@ void crash(const string &reason, const string &info, int exitStatus) {
     
     errorStr += "  Current leader: ";
     
-    if(game.states.gameplay->curLeaderPtr) {
+    if(
+        !game.states.gameplay->players.empty() &&
+        game.states.gameplay->players[0].leaderPtr
+    ) {
         errorStr +=
-            game.states.gameplay->curLeaderPtr->type->name + ", at " +
-            p2s(game.states.gameplay->curLeaderPtr->pos) +
+            game.states.gameplay->players[0].leaderPtr->type->name + ", at " +
+            p2s(game.states.gameplay->players[0].leaderPtr->pos) +
             ", state history: " +
-            game.states.gameplay->curLeaderPtr->fsm.curState->name;
+            game.states.gameplay->players[0].leaderPtr->fsm.curState->name;
         for(size_t h = 0; h < STATE_HISTORY_SIZE; h++) {
             errorStr +=
                 " " +
-                game.states.gameplay->curLeaderPtr->
+                game.states.gameplay->players[0].leaderPtr->
                 fsm.prevStateNames[h];
         }
         errorStr += "\n  10 closest Pikmin to that leader:\n";
@@ -206,11 +209,11 @@ void crash(const string &reason, const string &info, int exitStatus) {
         [] (const Pikmin * p1, const Pikmin * p2) -> bool {
             return
             Distance(
-                game.states.gameplay->curLeaderPtr->pos,
+                game.states.gameplay->players[0].leaderPtr->pos,
                 p1->pos
             ).toFloat() <
             Distance(
-                game.states.gameplay->curLeaderPtr->pos,
+                game.states.gameplay->players[0].leaderPtr->pos,
                 p2->pos
             ).toFloat();
         }
@@ -388,11 +391,12 @@ bool doesEdgeHaveWallShadow(
 /**
  * @brief Returns the mob that is closest to the mouse cursor.
  *
+ * @param view Viewport to calculate from.
  * @param mustHaveHealth If true, only count enemies that have health
  * (health and max health > 0).
  * @return The mob.
  */
-Mob* getClosestMobToCursor(bool mustHaveHealth) {
+Mob* getClosestMobToCursor(const Viewport &view, bool mustHaveHealth) {
     Distance closestMobToCursorDist;
     Mob* closestMobToCursor = nullptr;
     
@@ -404,7 +408,7 @@ Mob* getClosestMobToCursor(bool mustHaveHealth) {
         if(mPtr->isStoredInsideMob()) continue;
         if(!mPtr->fsm.curState) continue;
         
-        Distance d = Distance(game.view.cursorWorldPos, mPtr->pos);
+        Distance d = Distance(view.cursorWorldPos, mPtr->pos);
         if(!closestMobToCursor || d < closestMobToCursorDist) {
             closestMobToCursor = mPtr;
             closestMobToCursorDist = d;
@@ -508,12 +512,13 @@ string getMissionRecordEntryName(Area* areaPtr) {
  * highest ID number. If it's already the highest, it loops back around
  * to the lowest.
  *
+ * @param view Viewport to calculate from.
  * @param pivot Return the mob after this one, or if nullptr, return the lowest.
  * @param mustHaveHealth If true, only count enemies that have health
  * (health and max health > 0).
  * @return The mob, or nullptr if there is none nearby.
  */
-Mob* getNextMobNearCursor(Mob* pivot, bool mustHaveHealth) {
+Mob* getNextMobNearCursor(const Viewport &view, Mob* pivot, bool mustHaveHealth) {
     vector<Mob*> mobsNearCursor;
     
     //First, get all mobs that are close to the cursor.
@@ -525,7 +530,7 @@ Mob* getNextMobNearCursor(Mob* pivot, bool mustHaveHealth) {
         if(mPtr->isStoredInsideMob()) continue;
         if(!mPtr->fsm.curState) continue;
         
-        Distance d = Distance(game.view.cursorWorldPos, mPtr->pos);
+        Distance d = Distance(view.cursorWorldPos, mPtr->pos);
         if(d < 8.0f) {
             mobsNearCursor.push_back(mPtr);
         }
@@ -1509,17 +1514,21 @@ void startGameplayMessage(const string &text, ALLEGRO_BITMAP* speakerBmp) {
         string finalText = unescapeString(text);
         game.states.gameplay->msgBox =
             new GameplayMessageBox(finalText, speakerBmp);
-        game.states.gameplay->hud->gui.startAnimation(
-            GUI_MANAGER_ANIM_IN_TO_OUT,
-            GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
-        );
+        for(Player &player : game.states.gameplay->players) {
+            player.hud->gui.startAnimation(
+                GUI_MANAGER_ANIM_IN_TO_OUT,
+                GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
+            );
+        }
     } else {
         delete game.states.gameplay->msgBox;
         game.states.gameplay->msgBox = nullptr;
-        game.states.gameplay->hud->gui.startAnimation(
-            GUI_MANAGER_ANIM_OUT_TO_IN,
-            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
-        );
+        for(Player &player : game.states.gameplay->players) {
+            player.hud->gui.startAnimation(
+                GUI_MANAGER_ANIM_OUT_TO_IN,
+                GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+            );
+        }
     }
 }
 

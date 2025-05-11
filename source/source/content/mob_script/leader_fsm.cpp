@@ -1337,7 +1337,7 @@ void LeaderFsm::createFsm(MobType* typ) {
         }
         efc.newEvent(MOB_EV_THROWN); {
             efc.run(LeaderFsm::beThrown);
-            efc.changeState("thrown");
+            efc.changeState("inactive_thrown");
         }
         efc.newEvent(MOB_EV_RELEASED); {
             efc.changeState("in_group_chasing");
@@ -1514,11 +1514,11 @@ void LeaderFsm::beAttacked(Mob* m, void* info1, void* info2) {
     
     if(knockback > 0) {
         m->invulnPeriod.start(LEADER::INVULN_PERIOD_KB);
-        if(leaPtr->active) m->fsm.setState(LEADER_STATE_KNOCKED_BACK);
+        if(leaPtr->player) m->fsm.setState(LEADER_STATE_KNOCKED_BACK);
         else m->fsm.setState(LEADER_STATE_INACTIVE_KNOCKED_BACK);
     } else {
         m->invulnPeriod.start(LEADER::INVULN_PERIOD_NORMAL);
-        if(leaPtr->active) m->fsm.setState(LEADER_STATE_PAIN);
+        if(leaPtr->player) m->fsm.setState(LEADER_STATE_PAIN);
         else m->fsm.setState(LEADER_STATE_INACTIVE_PAIN);
     }
     
@@ -1588,7 +1588,7 @@ void LeaderFsm::beThrown(Mob* m, void* info1, void* info2) {
 void LeaderFsm::beThrownByBouncer(Mob* m, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) m;
     leaPtr->startThrowTrail();
-    if(!leaPtr->active) {
+    if(!leaPtr->player) {
         leaPtr->leaveGroup();
     }
 }
@@ -1598,16 +1598,15 @@ void LeaderFsm::beThrownByBouncer(Mob* m, void* info1, void* info2) {
  * @brief When a leader is meant to become the active one.
  *
  * @param m The mob.
- * @param info1 Unused.
+ * @param info1 Pointer to the player in charge.
  * @param info2 Unused.
  */
 void LeaderFsm::becomeActive(Mob* m, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) m;
+    Player* player = (Player*) info1;
     
-    if(game.states.gameplay->curLeaderPtr) {
-        game.states.gameplay->curLeaderPtr->fsm.runEvent(
-            LEADER_EV_INACTIVATED
-        );
+    if(player->leaderPtr) {
+        player->leaderPtr->fsm.runEvent(LEADER_EV_INACTIVATED);
     }
     
     //Normally the player can't swap to leaders that are following another,
@@ -1624,7 +1623,7 @@ void LeaderFsm::becomeActive(Mob* m, void* info1, void* info2) {
     }
     
     //Update pointers and such.
-    size_t newLeaderIdx = game.states.gameplay->curLeaderIdx;
+    size_t newLeaderIdx = player->leaderIdx;
     for(size_t l = 0; l < game.states.gameplay->availableLeaders.size(); l++) {
         if(game.states.gameplay->availableLeaders[l] == leaPtr) {
             newLeaderIdx = l;
@@ -1632,9 +1631,9 @@ void LeaderFsm::becomeActive(Mob* m, void* info1, void* info2) {
         }
     }
     
-    game.states.gameplay->curLeaderPtr = leaPtr;
-    game.states.gameplay->curLeaderIdx = newLeaderIdx;
-    leaPtr->active = true;
+    player->leaderPtr = leaPtr;
+    player->leaderIdx = newLeaderIdx;
+    leaPtr->player = player;
     
     //Check if we're in the middle of loading or of an interlude. If so
     //that probably means it's the first leader at the start of the area.
@@ -1668,7 +1667,7 @@ void LeaderFsm::becomeActive(Mob* m, void* info1, void* info2) {
  */
 void LeaderFsm::becomeInactive(Mob* m, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) m;
-    leaPtr->active = false;
+    leaPtr->player = nullptr;
     leaPtr->stopAutoThrowing();
 }
 
@@ -1828,12 +1827,14 @@ void LeaderFsm::die(Mob* m, void* info1, void* info2) {
         return;
     }
     
+    Leader* leaPtr = (Leader*) m;
+    
     m->startDying();
     m->finishDying();
     
     game.states.gameplay->updateAvailableLeaders();
-    if(m == game.states.gameplay->curLeaderPtr) {
-        changeToNextLeader(true, true, true);
+    if(leaPtr->player) {
+        changeToNextLeader(leaPtr->player, true, true, true);
     }
     
     LeaderFsm::release(m, info1, info2);
@@ -1992,12 +1993,16 @@ void LeaderFsm::finishCalledAnim(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void LeaderFsm::finishDrinking(Mob* m, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) m;
     engineAssert(m->focusedMob != nullptr, m->printStateHistory());
     Drop* droPtr = (Drop*) m->focusedMob;
     
     switch(droPtr->droType->effect) {
     case DROP_EFFECT_INCREASE_SPRAYS: {
+        size_t playerTeamIdx = leaPtr->getPlayerTeamIdx();
+        if(playerTeamIdx == INVALID) break;
         game.states.gameplay->changeSprayCount(
+            &game.states.gameplay->playerTeams[playerTeamIdx],
             droPtr->droType->sprayTypeToIncrease,
             droPtr->droType->increaseAmount
         );
@@ -2022,9 +2027,10 @@ void LeaderFsm::finishDrinking(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void LeaderFsm::finishGettingUp(Mob* m, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) m;
     Mob* prevFocusedMob = m->focusedMob;
     
-    if(m == game.states.gameplay->curLeaderPtr) {
+    if(leaPtr->player) {
         m->fsm.setState(LEADER_STATE_ACTIVE);
     } else {
         m->fsm.setState(LEADER_STATE_IDLING);
@@ -2229,12 +2235,13 @@ void LeaderFsm::joinGroup(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void LeaderFsm::land(Mob* m, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) m;
     m->stopChasing();
     m->speed.x = m->speed.y = 0;
     
     m->removeParticleGenerator(MOB_PARTICLE_GENERATOR_ID_THROW);
     
-    if(m == game.states.gameplay->curLeaderPtr) {
+    if(leaPtr->player) {
         m->fsm.setState(LEADER_STATE_ACTIVE);
     } else {
         m->fsm.setState(LEADER_STATE_IDLING);
@@ -2504,16 +2511,17 @@ void LeaderFsm::signalStopAutoPluck(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void LeaderFsm::spray(Mob* m, void* info1, void* info2) {
+    Leader* leaPtr = (Leader*) m;
     size_t sprayIdx = *((size_t*) info1);
     SprayType &sprayTypeRef = *game.config.misc.sprayOrder[sprayIdx];
     
-    if(game.states.gameplay->sprayStats[sprayIdx].nrSprays == 0) {
+    if(leaPtr->player->team->sprayStats[sprayIdx].nrSprays == 0) {
         m->fsm.setState(LEADER_STATE_ACTIVE);
         return;
     }
     
     float cursorAngle =
-        getAngle(m->pos, game.states.gameplay->leaderCursorW);
+        getAngle(m->pos, leaPtr->player->leaderCursorWorld);
     float shootAngle =
         cursorAngle + ((sprayTypeRef.angle) ? TAU / 2 : 0);
         
@@ -2602,7 +2610,7 @@ void LeaderFsm::spray(Mob* m, void* info1, void* info2) {
     pg.baseParticle.priority = PARTICLE_PRIORITY_HIGH;
     m->particleGenerators.push_back(pg);
     
-    game.states.gameplay->changeSprayCount(sprayIdx, -1);
+    game.states.gameplay->changeSprayCount(leaPtr->player->team, sprayIdx, -1);
     
     m->stopChasing();
     m->setAnimation(LEADER_ANIM_SPRAYING);
@@ -2729,7 +2737,7 @@ void LeaderFsm::startGoHere(Mob* m, void* info1, void* info2) {
         
     if(success) {
         leaPtr->fsm.setState(
-            leaPtr->active ?
+            leaPtr->player ?
             LEADER_STATE_MID_GO_HERE :
             LEADER_STATE_INACTIVE_MID_GO_HERE
         );
@@ -2895,7 +2903,8 @@ void LeaderFsm::stopWhistle(Mob* m, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void LeaderFsm::tickActiveState(Mob* m, void* info1, void* info2) {
-    m->face(getAngle(m->pos, game.states.gameplay->leaderCursorW), nullptr);
+    Leader* leaPtr = (Leader*) m;
+    m->face(getAngle(m->pos, leaPtr->player->leaderCursorWorld), nullptr);
     
     bool shouldBeTurning =
         getAngleSmallestDiff(m->angle, m->intendedTurnAngle) > TAU / 300.0f;
@@ -2917,9 +2926,10 @@ void LeaderFsm::tickActiveState(Mob* m, void* info1, void* info2) {
 void LeaderFsm::tickTrackRide(Mob* m, void* info1, void* info2) {
     engineAssert(m->trackInfo != nullptr, m->printStateHistory());
     
+    Leader* leaPtr = (Leader*) m;
     if(m->tickTrackRide()) {
         //Finished!
-        if(((Leader*) m)->active) {
+        if(leaPtr->player) {
             m->fsm.setState(LEADER_STATE_ACTIVE, nullptr, nullptr);
         } else {
             m->fsm.setState(LEADER_STATE_IDLING, nullptr, nullptr);
@@ -2938,20 +2948,20 @@ void LeaderFsm::tickTrackRide(Mob* m, void* info1, void* info2) {
 void LeaderFsm::touchedHazard(Mob* m, void* info1, void* info2) {
     engineAssert(info1 != nullptr, m->printStateHistory());
     
-    Leader* l = (Leader*) m;
-    Hazard* h = (Hazard*) info1;
-    MobType::Vulnerability vuln = m->getHazardVulnerability(h);
+    Leader* leaPtr = (Leader*) m;
+    Hazard* hazPtr = (Hazard*) info1;
+    MobType::Vulnerability vuln = m->getHazardVulnerability(hazPtr);
     
     if(!vuln.statusToApply || !vuln.statusOverrides) {
-        for(size_t e = 0; e < h->effects.size(); e++) {
-            l->applyStatusEffect(h->effects[e], false, true);
+        for(size_t e = 0; e < hazPtr->effects.size(); e++) {
+            leaPtr->applyStatusEffect(hazPtr->effects[e], false, true);
         }
     }
     if(vuln.statusToApply) {
-        l->applyStatusEffect(vuln.statusToApply, false, true);
+        leaPtr->applyStatusEffect(vuln.statusToApply, false, true);
     }
     
-    if(h->associatedLiquid) {
+    if(hazPtr->associatedLiquid) {
         bool alreadyGenerating = false;
         for(size_t g = 0; g < m->particleGenerators.size(); g++) {
             if(

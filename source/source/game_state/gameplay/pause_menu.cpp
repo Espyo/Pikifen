@@ -141,12 +141,12 @@ PauseMenu::PauseMenu(bool startOnRadar) {
     radarMinCoords = radarMinCoords - 16.0f;
     radarMaxCoords = radarMaxCoords + 16.0f;
     
-    radarSelectedLeader = game.states.gameplay->curLeaderPtr;
+    radarSelectedLeader = game.states.gameplay->players[0].leaderPtr;
     
     if(radarSelectedLeader) {
         radarView.cam.setPos(radarSelectedLeader->pos);
     }
-    radarView.cam.setZoom(game.states.gameplay->radarZoom);
+    radarView.cam.setZoom(game.states.gameplay->players[0].radarZoom);
     
     //Start the process.
     openingLockoutTimer = PAUSE_MENU::ENTRY_LOCKOUT_TIME;
@@ -2302,7 +2302,7 @@ void PauseMenu::initRadarPage() {
     //Group Pikmin number text.
     TextGuiItem* groupPikNrText =
         new TextGuiItem(
-        i2s(game.states.gameplay->getAmountOfGroupPikmin()),
+        i2s(game.states.gameplay->getAmountOfGroupPikmin(&game.states.gameplay->players[0])),
         game.sysContent.fntCounter,
         COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
     );
@@ -2588,7 +2588,7 @@ void PauseMenu::initStatusPage() {
         PikminType* ptPtr = game.config.pikmin.order[p];
         
         size_t inGroup =
-            game.states.gameplay->getAmountOfGroupPikmin(ptPtr);
+            game.states.gameplay->getAmountOfGroupPikmin(&game.states.gameplay->players[0], ptPtr);
         size_t idling =
             game.states.gameplay->getAmountOfIdlePikmin(ptPtr);
         size_t onField =
@@ -2707,14 +2707,14 @@ void PauseMenu::startClosing(GuiManager* curGui) {
         GUI_MANAGER_ANIM_CENTER_TO_UP,
         GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
     );
-    game.states.gameplay->hud->gui.startAnimation(
+    game.states.gameplay->players[0].hud->gui.startAnimation(
         GUI_MANAGER_ANIM_OUT_TO_IN,
         GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
     );
     closing = true;
     closingTimer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
     
-    game.states.gameplay->radarZoom = radarView.cam.zoom;
+    game.states.gameplay->players[0].radarZoom = radarView.cam.zoom;
 }
 
 
