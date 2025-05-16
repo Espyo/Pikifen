@@ -233,6 +233,29 @@ private:
         size_t uselessSplitPart2Checkpoint = INVALID;
         
     };
+
+    //Style of the different things to draw in the canvas.
+    struct AreaEdCanvasStyle : CanvasStyle {
+
+        //Texture alpha.
+        float textureAlpha = 1.0f;
+
+        //Wall shadow alpha.
+        float wallShadowAlpha = 1.0f;
+
+        //Edge line alpha.
+        float edgeAlpha = 1.0f;
+
+        //Mob alpha.
+        float mobAlpha = 1.0f;
+
+        //Z of the lowest sector.
+        float lowestSectorZ = 0.0f;
+
+        //Z of the highest sector.
+        float highestSectorZ = 0.0f;
+
+    };
     
     //Possible results after a line drawing operation.
     enum DRAWING_LINE_RESULT {
@@ -1072,6 +1095,7 @@ private:
     static void drawCanvasDearImGuiCallback(
         const ImDrawList* parentList, const ImDrawCmd* cmd
     );
+    void drawCrossSectionGraph();
     void drawCrossSectionSector(
         float startRatio, float endRatio, float proportion,
         float lowestZ, const Sector* sectorPtr
@@ -1080,9 +1104,15 @@ private:
         const ALLEGRO_COLOR color, const Point &where, const string &text,
         unsigned char dots = 0
     );
+    void drawEdges(const AreaEdCanvasStyle& style);
     void drawLineDist(
         const Point &focus, const Point &other, const string &prefix = ""
     );
+    void drawMobs(const AreaEdCanvasStyle& style);
+    void drawPaths(const AreaEdCanvasStyle& style);
+    void drawSectors(const AreaEdCanvasStyle& style);
+    void drawTreeShadows(const AreaEdCanvasStyle& style);
+    void drawVertexes(const AreaEdCanvasStyle& style);
     void openLoadDialog();
     void openNewDialog();
     void openOptionsDialog();

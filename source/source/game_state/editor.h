@@ -493,6 +493,20 @@ protected:
         
     };
     
+    //Style of the different things to draw in the canvas.
+    struct CanvasStyle {
+
+        //Alpha for the selection effects.
+        float selectionAlpha = 0.75f;
+
+        //Grid alpha.
+        float gridAlpha = 1.0f;
+
+        //Highlights color.
+        ALLEGRO_COLOR highlightColor = COLOR_WHITE;
+
+    };
+
     
     /**
      * @brief Function executed by some command in the editor.
