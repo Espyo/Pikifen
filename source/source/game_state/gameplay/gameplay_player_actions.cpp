@@ -16,12 +16,529 @@
 
 
 /**
+ * @brief Does the logic for the dismiss player action.
+ * 
+ * @param player The player responsible.
+ * @param isDown Whether the input value makes for a "down" or an "up" input.
+ */
+void GameplayState::doPlayerActionDismiss(Player* player, bool isDown) {
+    if(!isDown) return;
+    if(!player->leaderPtr) return;
+    
+    player->leaderPtr->fsm.runEvent(LEADER_EV_DISMISS);
+}
+
+
+/**
+ * @brief Does the logic for the lie down player action.
+ * 
+ * @param player The player responsible.
+ * @param isDown Whether the input value makes for a "down" or an "up" input.
+ */
+void GameplayState::doPlayerActionLieDown(Player* player, bool isDown) {
+    if(!isDown) return;
+    if(!player->leaderPtr) return;
+
+    player->leaderPtr->fsm.runEvent(LEADER_EV_LIE_DOWN);
+}
+
+
+/**
+ * @brief Does the logic for the pause or radar player actions.
+ * 
+ * @param player The player responsible.
+ * @param isDown Whether the input value makes for a "down" or an "up" input.
+ * @param radar Whether to open the radar page.
+ */
+void GameplayState::doPlayerActionPause(
+    Player* player, bool isDown, bool radar
+) {
+    if(!isDown) return;
+    
+    pauseMenu = new PauseMenu(radar);
+    paused = true;
+    game.audio.handleWorldPause();
+    player->hud->gui.startAnimation(
+        GUI_MANAGER_ANIM_IN_TO_OUT,
+        GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
+    );
+    
+    //TODO replace with a better solution.
+    if(player->leaderPtr) {
+        player->leaderPtr->fsm.runEvent(LEADER_EV_STOP_WHISTLE);
+    }
+}
+
+
+/**
+ * @brief Does the logic for the leader switch player actions.
+ * 
+ * @param player The player responsible.
+ * @param isDown Whether the input value makes for a "down" or an "up" input.
+ * @param isNext Whether it's the action for the next leader or the previous.
+ */
+void GameplayState::doPlayerActionSwitchLeader(
+    Player* player, bool isDown, bool isNext
+) {
+    if(!isDown) return;
+    
+    changeToNextLeader(player, isNext, false, false);
+}
+
+
+/**
+ * @brief Does the logic for the maturity switch player actions.
+ * 
+ * @param player The player responsible.
+ * @param isDown Whether the input value makes for a "down" or an "up" input.
+ * @param isNext Whether it's the action for the next maturity or the previous.
+ */
+void GameplayState::doPlayerActionSwitchMaturity(
+    Player* player, bool isDown, bool isNext
+) {
+    if(!isDown) return;
+    if(!player->leaderPtr) return;
+    
+    if(
+        player->leaderPtr->holding.empty() ||
+        player->leaderPtr->holding[0]->type->category->id !=
+        MOB_CATEGORY_PIKMIN
+    ) {
+        return;
+    }
+    
+    Pikmin* heldPPtr = (Pikmin*) player->leaderPtr->holding[0];
+    
+    Pikmin* closestMembers[N_MATURITIES];
+    Distance closestDists[N_MATURITIES];
+    for(size_t m = 0; m < N_MATURITIES; m++) {
+        closestMembers[m] = nullptr;
+    }
+    
+    for(size_t m = 0; m < player->leaderPtr->group->members.size(); m++) {
+        Mob* mPtr = player->leaderPtr->group->members[m];
+        if(mPtr->type != heldPPtr->type) continue;
+        
+        Pikmin* pPtr = (Pikmin*) mPtr;
+        if(pPtr->maturity == heldPPtr->maturity) continue;
+        
+        Distance d(player->leaderPtr->pos, pPtr->pos);
+        if(
+            !closestMembers[pPtr->maturity] ||
+            d < closestDists[pPtr->maturity]
+        ) {
+            closestMembers[pPtr->maturity] = pPtr;
+            closestDists[pPtr->maturity] = d;
+        }
+        
+    }
+    
+    size_t nextMaturity = heldPPtr->maturity;
+    Mob* newPikmin = nullptr;
+    bool finished = false;
+    do {
+        nextMaturity =
+            (size_t) sumAndWrap(
+                (int) nextMaturity, isNext ? 1 : -1, N_MATURITIES
+            );
+            
+        //Back to the start?
+        if(nextMaturity == heldPPtr->maturity) break;
+        
+        if(!closestMembers[nextMaturity]) continue;
+        
+        newPikmin = closestMembers[nextMaturity];
+        finished = true;
+        
+    } while(!finished);
+    
+    if(newPikmin) {
+        player->leaderPtr->swapHeldPikmin(newPikmin);
+    }
+}
+
+
+/**
+ * @brief Does the logic for the spray switch player actions.
+ * 
+ * @param player The player responsible.
+ * @param isDown Whether the input value makes for a "down" or an "up" input.
+ * @param isNext Whether it's the action for the next spray or the previous.
+ */
+void GameplayState::doPlayerActionSwitchSpray(
+    Player* player, bool isDown, bool isNext
+) {
+    if(!isDown) return;
+    if(!player->leaderPtr) return;
+
+    if(game.content.sprayTypes.list.size() > 2) {
+        player->selectedSpray =
+            sumAndWrap(
+                (int) player->selectedSpray,
+                isNext ? +1 : -1,
+                (int) game.content.sprayTypes.list.size()
+            );
+        player->hud->spray1Amount->startJuiceAnimation(
+            GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
+        );
+    }
+}
+
+
+/**
+ * @brief Does the logic for the standby type switch player actions.
+ * 
+ * @param player The player responsible.
+ * @param isDown Whether the input value makes for a "down" or an "up" input.
+ * @param isNext Whether it's the action for the next type or the previous.
+ */
+void GameplayState::doPlayerActionSwitchType(
+    Player* player, bool isDown, bool isNext
+) {
+    if(!isDown) return;
+    if(!player->leaderPtr) return;
+    
+    if(player->leaderPtr->group->members.empty()) return;
+                
+    SubgroupType* startingSubgroupType =
+        player->leaderPtr->group->curStandbyType;
+        
+    bool switchSuccessful;
+    
+    if(player->leaderPtr->holding.empty()) {
+        //If the leader isn't holding anybody.
+        switchSuccessful =
+            player->leaderPtr->group->changeStandbyType(!isNext);
+            
+    } else {
+        //If the leader is holding a Pikmin, we can't let it
+        //swap to a Pikmin that's far away.
+        //So, every time that happens, skip that subgroup and
+        //try the next. Also, make sure to cancel everything if
+        //the loop already went through all types.
+        
+        bool finish = false;
+        do {
+            switchSuccessful =
+                player->leaderPtr->group->changeStandbyType(!isNext);
+                
+            if(
+                !switchSuccessful ||
+                player->leaderPtr->group->curStandbyType ==
+                startingSubgroupType
+            ) {
+                //Reached around back to the first subgroup...
+                switchSuccessful = false;
+                finish = true;
+                
+            } else {
+                //Switched to a new subgroup.
+                updateClosestGroupMembers(player);
+                if(!player->closestGroupMemberDistant) {
+                    finish = true;
+                }
+                
+            }
+            
+        } while(!finish);
+        
+        if(switchSuccessful) {
+            player->leaderPtr->swapHeldPikmin(
+                player->closestGroupMember[BUBBLE_RELATION_CURRENT]
+            );
+        }
+    }
+    
+    if(switchSuccessful) {
+        game.audio.createUiSoundsource(
+            game.sysContent.sndSwitchPikmin
+        );
+    }
+}
+
+
+/**
+ * @brief Does the logic for the throw player action.
+ * 
+ * @param player The player responsible.
+ * @param isDown Whether the input value makes for a "down" or an "up" input.
+ */
+void GameplayState::doPlayerActionThrow(Player* player, bool isDown) {
+    if(!player->leaderPtr) return;
+
+    if(isDown) { //Button press.
+        bool done = false;
+        
+        //Check if the player wants to cancel auto-throw.
+        if(
+            game.options.controls.autoThrowMode == AUTO_THROW_MODE_TOGGLE &&
+            player->leaderPtr->autoThrowRepeater.time != LARGE_FLOAT
+        ) {
+            player->leaderPtr->stopAutoThrowing();
+            done = true;
+        }
+        
+        //Check if the leader should heal themselves on the ship.
+        if(
+            !done &&
+            player->closeToShipToHeal
+        ) {
+            player->closeToShipToHeal->healLeader(player->leaderPtr);
+            done = true;
+        }
+        
+        //Check if the leader should pluck a Pikmin.
+        if(
+            !done &&
+            player->closeToPikminToPluck
+        ) {
+            player->leaderPtr->fsm.runEvent(
+                LEADER_EV_GO_PLUCK,
+                (void*) player->closeToPikminToPluck
+            );
+            done = true;
+        }
+        
+        //Now check if the leader should open an Onion's menu.
+        if(
+            !done &&
+            player->closeToNestToOpen
+        ) {
+            onionMenu = new OnionMenu(
+                player->closeToNestToOpen,
+                player->leaderPtr
+            );
+            player->hud->gui.startAnimation(
+                GUI_MANAGER_ANIM_IN_TO_OUT,
+                GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
+            );
+            paused = true;
+            game.audio.handleWorldPause();
+            
+            //TODO replace with a better solution.
+            player->leaderPtr->fsm.runEvent(LEADER_EV_STOP_WHISTLE);
+            
+            done = true;
+        }
+        
+        //Now check if the leader should interact with an interactable.
+        if(
+            !done &&
+            player->closeToInteractableToUse
+        ) {
+            string msg = "interact";
+            player->leaderPtr->sendScriptMessage(
+                player->closeToInteractableToUse, msg
+            );
+            done = true;
+        }
+        
+        //Now check if the leader should grab a Pikmin.
+        if(
+            !done &&
+            player->leaderPtr->holding.empty() &&
+            player->leaderPtr->group->curStandbyType &&
+            !player->closestGroupMemberDistant
+        ) {
+            switch (game.options.controls.autoThrowMode) {
+            case AUTO_THROW_MODE_OFF: {
+                done = grabClosestGroupMember(player);
+                break;
+            } case AUTO_THROW_MODE_HOLD:
+            case AUTO_THROW_MODE_TOGGLE: {
+                player->leaderPtr->startAutoThrowing();
+                done = true;
+                break;
+            }
+            default: {
+                break;
+            }
+            }
+        }
+        
+        //Now check if the leader should punch.
+        if(!done) {
+            player->leaderPtr->fsm.runEvent(LEADER_EV_PUNCH);
+            done = true;
+        }
+        
+    } else { //Button release.
+        switch (game.options.controls.autoThrowMode) {
+        case AUTO_THROW_MODE_OFF: {
+            player->leaderPtr->queueThrow();
+            break;
+        } case AUTO_THROW_MODE_HOLD: {
+            player->leaderPtr->stopAutoThrowing();
+            break;
+        } case AUTO_THROW_MODE_TOGGLE: {
+            break;
+        } default: {
+            break;
+        }
+        }
+        
+    }
+}
+
+
+/**
+ * @brief Does the logic for the zoom toggle player action.
+ * 
+ * @param player The player responsible.
+ * @param isDown Whether the input value makes for a "down" or an "up" input.
+ */
+void GameplayState::doPlayerActionToggleZoom(Player* player, bool isDown) {
+    if(!isDown) return;
+            
+    if(player->view.cam.targetZoom < zoomLevels[1]) {
+        player->view.cam.targetZoom = zoomLevels[0];
+    } else if(player->view.cam.targetZoom > zoomLevels[1]) {
+        player->view.cam.targetZoom = zoomLevels[1];
+    } else {
+        if(game.options.advanced.zoomMediumReach == game.config.rules.zoomFarthestReach) {
+            player->view.cam.targetZoom = zoomLevels[0];
+        } else {
+            player->view.cam.targetZoom = zoomLevels[2];
+        }
+    }
+    
+    game.audio.createUiSoundsource(game.sysContent.sndCamera);
+}
+
+/**
+ * @brief Does the logic for the current spray usage player action.
+ * 
+ * @param player The player responsible.
+ * @param isDown Whether the input value makes for a "down" or an "up" input.
+ */
+void GameplayState::doPlayerActionUseCurrentSpray(Player* player, bool isDown) {
+    if(!isDown) return;
+    if(!player->leaderPtr) return;
+
+    if(game.content.sprayTypes.list.size() > 2) {
+        player->leaderPtr->fsm.runEvent(
+            LEADER_EV_SPRAY,
+            (void*) &player->selectedSpray
+        );
+    }
+}
+
+
+/**
+ * @brief Does the logic for the spray usage player actions.
+ * 
+ * @param player The player responsible.
+ * @param isDown Whether the input value makes for a "down" or an "up" input.
+ * @param second Whether it's the first or the second spray.
+ */
+void GameplayState::doPlayerActionUseSpray(
+    Player* player, bool isDown, bool second
+) {
+    if(!isDown) return;
+    if(!player->leaderPtr) return;
+
+    if(!second) {
+        if(
+            game.content.sprayTypes.list.size() == 1 ||
+            game.content.sprayTypes.list.size() == 2
+        ) {
+            size_t sprayIdx = 0;
+            player->leaderPtr->fsm.runEvent(
+                LEADER_EV_SPRAY, (void*) &sprayIdx
+            );
+        }
+
+    } else {
+        if(game.content.sprayTypes.list.size() == 2) {
+            size_t sprayIdx = 1;
+            player->leaderPtr->fsm.runEvent(
+                LEADER_EV_SPRAY, (void*) &sprayIdx
+            );
+        }
+
+    }
+}
+
+
+/**
+ * @brief Does the logic for the whistle player action.
+ * 
+ * @param player The player responsible.
+ * @param isDown Whether the input value makes for a "down" or an "up" input.
+ */
+void GameplayState::doPlayerActionWhistle(Player* player, bool isDown) {
+    if(!player->leaderPtr) return;
+
+    if(isDown) {
+        MobEvent* cancelEv = player->leaderPtr->fsm.getEvent(LEADER_EV_CANCEL);
+            
+        if(cancelEv) {
+            //Cancel auto-pluck, lying down, etc.
+            cancelEv->run(player->leaderPtr);
+        } else {
+            //Start whistling.
+            player->leaderPtr->fsm.runEvent(LEADER_EV_START_WHISTLE);
+        }
+        
+    } else {
+        //Stop whistling.
+        player->leaderPtr->fsm.runEvent(LEADER_EV_STOP_WHISTLE);
+        
+    }
+}
+
+
+/**
+ * @brief Does the logic for the zoom player action.
+ * 
+ * @param player The player responsible.
+ * @param inputValue Value of the player input.
+ * @param zoomIn Whether it zooms in or out.
+ */
+void GameplayState::doPlayerActionZoom(
+    Player* player, float inputValue, bool zoomIn
+) {
+    if(player->view.cam.targetZoom >= zoomLevels[0] && zoomIn) {
+        return;
+    }
+    
+    if(player->view.cam.targetZoom <= zoomLevels[2] && !zoomIn) {
+        return;
+    }
+    
+    float flooredPos = floor(inputValue);
+    
+    if(zoomIn) {
+        player->view.cam.targetZoom =
+            player->view.cam.targetZoom + 0.1 * flooredPos;
+    } else {
+        player->view.cam.targetZoom =
+            player->view.cam.targetZoom - 0.1 * flooredPos;
+    }
+    
+    if(player->view.cam.targetZoom > zoomLevels[0]) {
+        player->view.cam.targetZoom = zoomLevels[0];
+    }
+    if(player->view.cam.targetZoom < zoomLevels[2]) {
+        player->view.cam.targetZoom = zoomLevels[2];
+    }
+    
+    SoundSourceConfig camSoundConfig;
+    camSoundConfig.stackMode = SOUND_STACK_MODE_NEVER;
+    game.audio.createUiSoundsource(
+        game.sysContent.sndCamera,
+        camSoundConfig
+    );
+}
+
+
+/**
  * @brief Handles a player action.
  *
  * @param action Data about the action.
  */
 void GameplayState::handlePlayerAction(const PlayerAction &action) {
-    if(shouldIngorePlayerAction(action)) return;
+    if(shouldIgnorePlayerAction(action)) return;
     
     Player* player = &players[0];
     bool isDown = (action.value >= 0.5);
@@ -39,549 +556,83 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
     
         switch(action.actionTypeId) {
         case PLAYER_ACTION_TYPE_THROW: {
-    
-            /*******************
-            *             .-.  *
-            *   Throw    /   O *
-            *           &      *
-            *******************/
-            
-            if(isDown) { //Button press.
-            
-                bool done = false;
-                
-                //Check if the player wants to cancel auto-throw.
-                if(
-                    player->leaderPtr &&
-                    game.options.controls.autoThrowMode == AUTO_THROW_MODE_TOGGLE &&
-                    player->leaderPtr->autoThrowRepeater.time != LARGE_FLOAT
-                ) {
-                    player->leaderPtr->stopAutoThrowing();
-                    done = true;
-                }
-                
-                //Check if the leader should heal themselves on the ship.
-                if(
-                    !done &&
-                    player->leaderPtr &&
-                    player->closeToShipToHeal
-                ) {
-                    player->closeToShipToHeal->healLeader(player->leaderPtr);
-                    done = true;
-                }
-                
-                //Check if the leader should pluck a Pikmin.
-                if(
-                    !done &&
-                    player->leaderPtr &&
-                    player->closeToPikminToPluck
-                ) {
-                    player->leaderPtr->fsm.runEvent(
-                        LEADER_EV_GO_PLUCK,
-                        (void*) player->closeToPikminToPluck
-                    );
-                    done = true;
-                }
-                
-                //Now check if the leader should open an Onion's menu.
-                if(
-                    !done &&
-                    player->leaderPtr &&
-                    player->closeToNestToOpen
-                ) {
-                    onionMenu = new OnionMenu(
-                        player->closeToNestToOpen,
-                        player->leaderPtr
-                    );
-                    player->hud->gui.startAnimation(
-                        GUI_MANAGER_ANIM_IN_TO_OUT,
-                        GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
-                    );
-                    paused = true;
-                    game.audio.handleWorldPause();
-                    
-                    //TODO replace with a better solution.
-                    player->leaderPtr->fsm.runEvent(LEADER_EV_STOP_WHISTLE);
-                    
-                    done = true;
-                }
-                
-                //Now check if the leader should interact with an interactable.
-                if(
-                    !done &&
-                    player->leaderPtr &&
-                    player->closeToInteractableToUse
-                ) {
-                    string msg = "interact";
-                    player->leaderPtr->sendScriptMessage(
-                        player->closeToInteractableToUse, msg
-                    );
-                    done = true;
-                }
-                
-                //Now check if the leader should grab a Pikmin.
-                if(
-                    !done &&
-                    player->leaderPtr &&
-                    player->leaderPtr->holding.empty() &&
-                    player->leaderPtr->group->curStandbyType &&
-                    !player->closestGroupMemberDistant
-                ) {
-                    switch (game.options.controls.autoThrowMode) {
-                    case AUTO_THROW_MODE_OFF: {
-                        done = grabClosestGroupMember(player);
-                        break;
-                    } case AUTO_THROW_MODE_HOLD:
-                    case AUTO_THROW_MODE_TOGGLE: {
-                        player->leaderPtr->startAutoThrowing();
-                        done = true;
-                        break;
-                    }
-                    default: {
-                        break;
-                    }
-                    }
-                }
-                
-                //Now check if the leader should punch.
-                if(
-                    !done &&
-                    player->leaderPtr
-                ) {
-                    player->leaderPtr->fsm.runEvent(LEADER_EV_PUNCH);
-                    done = true;
-                }
-                
-            } else { //Button release.
-            
-                if(player->leaderPtr) {
-                    switch (game.options.controls.autoThrowMode) {
-                    case AUTO_THROW_MODE_OFF: {
-                        player->leaderPtr->queueThrow();
-                        break;
-                    } case AUTO_THROW_MODE_HOLD: {
-                        player->leaderPtr->stopAutoThrowing();
-                        break;
-                    } case AUTO_THROW_MODE_TOGGLE: {
-                        break;
-                    } default: {
-                        break;
-                    }
-                    }
-                }
-                
-            }
-            
+            doPlayerActionThrow(player, isDown);
             break;
             
         } case PLAYER_ACTION_TYPE_WHISTLE: {
-    
-            /********************
-            *              .--= *
-            *   Whistle   ( @ ) *
-            *              '-'  *
-            ********************/
-            
-            if(isDown) {
-                //Button pressed.
-                
-                if(player->leaderPtr) {
-                    MobEvent* cancelEv =
-                        player->leaderPtr->fsm.getEvent(LEADER_EV_CANCEL);
-                        
-                    if(cancelEv) {
-                        //Cancel auto-pluck, lying down, etc.
-                        cancelEv->run(player->leaderPtr);
-                    } else {
-                        //Start whistling.
-                        player->leaderPtr->fsm.runEvent(LEADER_EV_START_WHISTLE);
-                    }
-                }
-                
-            } else {
-                //Button released.
-                
-                if(player->leaderPtr) {
-                    player->leaderPtr->fsm.runEvent(LEADER_EV_STOP_WHISTLE);
-                }
-                
-            }
-            
+            doPlayerActionWhistle(player, isDown);
             break;
             
         } case PLAYER_ACTION_TYPE_NEXT_LEADER:
         case PLAYER_ACTION_TYPE_PREV_LEADER: {
-    
-            /******************************
-            *                    \O/  \O/ *
-            *   Switch leader     | -> |  *
-            *                    / \  / \ *
-            ******************************/
-            
-            if(!isDown) return;
-            
-            changeToNextLeader(
-                player,
-                action.actionTypeId == PLAYER_ACTION_TYPE_NEXT_LEADER,
-                false, false
+            doPlayerActionSwitchLeader(
+                player, isDown,
+                action.actionTypeId == PLAYER_ACTION_TYPE_NEXT_LEADER
             );
-            
             break;
             
         } case PLAYER_ACTION_TYPE_DISMISS: {
-    
-            /***********************
-            *             \O/ / *  *
-            *   Dismiss    |   - * *
-            *             / \ \ *  *
-            ***********************/
-            
-            if(!isDown) return;
-            
-            if(player->leaderPtr) {
-                player->leaderPtr->fsm.runEvent(LEADER_EV_DISMISS);
-            }
-            
+            doPlayerActionDismiss(player, isDown);
             break;
             
         } case PLAYER_ACTION_TYPE_PAUSE:
         case PLAYER_ACTION_TYPE_RADAR: {
-    
-            /********************
-            *           +-+ +-+ *
-            *   Pause   | | | | *
-            *           +-+ +-+ *
-            ********************/
-            
-            if(!isDown) return;
-            
-            pauseMenu =
-                new PauseMenu(
+            doPlayerActionPause(
+                player, isDown,
                 action.actionTypeId == PLAYER_ACTION_TYPE_RADAR
             );
-            paused = true;
-            game.audio.handleWorldPause();
-            player->hud->gui.startAnimation(
-                GUI_MANAGER_ANIM_IN_TO_OUT,
-                GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
+            break;
+            
+        } case PLAYER_ACTION_TYPE_USE_SPRAY_1:
+        case PLAYER_ACTION_TYPE_USE_SPRAY_2: {
+            doPlayerActionUseSpray(
+                player, isDown,
+                action.actionTypeId == PLAYER_ACTION_TYPE_USE_SPRAY_1
             );
-            
-            //TODO replace with a better solution.
-            if(player->leaderPtr) {
-                player->leaderPtr->fsm.runEvent(LEADER_EV_STOP_WHISTLE);
-            }
-            
-            break;
-            
-        } case PLAYER_ACTION_TYPE_USE_SPRAY_1: {
-    
-            /*******************
-            *             +=== *
-            *   Sprays   (   ) *
-            *             '-'  *
-            *******************/
-            
-            if(!isDown) return;
-            
-            if(player->leaderPtr) {
-                if(
-                    game.content.sprayTypes.list.size() == 1 ||
-                    game.content.sprayTypes.list.size() == 2
-                ) {
-                    size_t sprayIdx = 0;
-                    player->leaderPtr->fsm.runEvent(
-                        LEADER_EV_SPRAY, (void*) &sprayIdx
-                    );
-                }
-            }
-            
-            break;
-            
-        } case PLAYER_ACTION_TYPE_USE_SPRAY_2: {
-    
-            if(!isDown) return;
-            
-            if(player->leaderPtr) {
-                if(game.content.sprayTypes.list.size() == 2) {
-                    size_t sprayIdx = 1;
-                    player->leaderPtr->fsm.runEvent(
-                        LEADER_EV_SPRAY, (void*) &sprayIdx
-                    );
-                }
-            }
-            
             break;
             
         } case PLAYER_ACTION_TYPE_NEXT_SPRAY:
         case PLAYER_ACTION_TYPE_PREV_SPRAY: {
-    
-            if(!isDown) return;
-            
-            if(player->leaderPtr) {
-                if(game.content.sprayTypes.list.size() > 2) {
-                    player->selectedSpray =
-                        sumAndWrap(
-                            (int) player->selectedSpray,
-                            action.actionTypeId ==
-                            PLAYER_ACTION_TYPE_NEXT_SPRAY ? +1 : -1,
-                            (int) game.content.sprayTypes.list.size()
-                        );
-                    player->hud->
-                    spray1Amount->startJuiceAnimation(
-                        GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
-                    );
-                }
-            }
-            
+            doPlayerActionSwitchSpray(
+                player, isDown,
+                action.actionTypeId == PLAYER_ACTION_TYPE_NEXT_SPRAY
+            );
             break;
             
         } case PLAYER_ACTION_TYPE_USE_SPRAY: {
-    
-            if(!isDown) return;
-            
-            if(player->leaderPtr) {
-                if(game.content.sprayTypes.list.size() > 2) {
-                    player->leaderPtr->fsm.runEvent(
-                        LEADER_EV_SPRAY,
-                        (void*) &player->selectedSpray
-                    );
-                }
-            }
-            
+            doPlayerActionUseCurrentSpray(player, isDown);
             break;
             
         } case PLAYER_ACTION_TYPE_CHANGE_ZOOM: {
-    
-            /***************
-            *           _  *
-            *   Zoom   (_) *
-            *          /   *
-            ***************/
-            
-            if(!isDown) return;
-            
-            if(player->view.cam.targetZoom < zoomLevels[1]) {
-                player->view.cam.targetZoom = zoomLevels[0];
-            } else if(player->view.cam.targetZoom > zoomLevels[1]) {
-                player->view.cam.targetZoom = zoomLevels[1];
-            } else {
-                if(game.options.advanced.zoomMediumReach == game.config.rules.zoomFarthestReach) {
-                    player->view.cam.targetZoom = zoomLevels[0];
-                } else {
-                    player->view.cam.targetZoom = zoomLevels[2];
-                }
-            }
-            
-            game.audio.createUiSoundsource(game.sysContent.sndCamera);
-            
+            doPlayerActionToggleZoom(player, isDown);
             break;
             
         } case PLAYER_ACTION_TYPE_ZOOM_IN:
         case PLAYER_ACTION_TYPE_ZOOM_OUT: {
-    
-            if(
-                player->view.cam.targetZoom >= zoomLevels[0] &&
+            doPlayerActionZoom(
+                player, action.value,
                 action.actionTypeId == PLAYER_ACTION_TYPE_ZOOM_IN
-            ) {
-                return;
-            }
-            
-            if(
-                player->view.cam.targetZoom <= zoomLevels[2] &&
-                action.actionTypeId == PLAYER_ACTION_TYPE_ZOOM_OUT
-            ) {
-                return;
-            }
-            
-            float flooredPos = floor(action.value);
-            
-            if(action.actionTypeId == PLAYER_ACTION_TYPE_ZOOM_IN) {
-                player->view.cam.targetZoom = player->view.cam.targetZoom + 0.1 * flooredPos;
-            } else {
-                player->view.cam.targetZoom = player->view.cam.targetZoom - 0.1 * flooredPos;
-            }
-            
-            if(player->view.cam.targetZoom > zoomLevels[0]) {
-                player->view.cam.targetZoom = zoomLevels[0];
-            }
-            if(player->view.cam.targetZoom < zoomLevels[2]) {
-                player->view.cam.targetZoom = zoomLevels[2];
-            }
-            
-            SoundSourceConfig camSoundConfig;
-            camSoundConfig.stackMode = SOUND_STACK_MODE_NEVER;
-            game.audio.createUiSoundsource(
-                game.sysContent.sndCamera,
-                camSoundConfig
             );
-            
             break;
             
         } case PLAYER_ACTION_TYPE_LIE_DOWN: {
-    
-            /**********************
-            *                     *
-            *   Lie down  -()/__/ *
-            *                     *
-            **********************/
-            
-            if(!isDown) return;
-            
-            if(player->leaderPtr) {
-                player->leaderPtr->fsm.runEvent(LEADER_EV_LIE_DOWN);
-            }
-            
+            doPlayerActionLieDown(player, isDown);
             break;
             
         } case PLAYER_ACTION_TYPE_NEXT_TYPE:
         case PLAYER_ACTION_TYPE_PREV_TYPE: {
-    
-            /****************************
-            *                     -->   *
-            *   Switch type   <( )> (o) *
-            *                           *
-            ****************************/
-            
-            if(!isDown) return;
-            
-            if(player->leaderPtr) {
-                if(player->leaderPtr->group->members.empty()) return;
-                
-                SubgroupType* startingSubgroupType =
-                    player->leaderPtr->group->curStandbyType;
-                    
-                bool switchSuccessful;
-                
-                if(player->leaderPtr->holding.empty()) {
-                    //If the leader isn't holding anybody.
-                    switchSuccessful =
-                        player->leaderPtr->group->changeStandbyType(
-                            action.actionTypeId == PLAYER_ACTION_TYPE_PREV_TYPE
-                        );
-                        
-                } else {
-                    //If the leader is holding a Pikmin, we can't let it
-                    //swap to a Pikmin that's far away.
-                    //So, every time that happens, skip that subgroup and
-                    //try the next. Also, make sure to cancel everything if
-                    //the loop already went through all types.
-                    
-                    bool finish = false;
-                    do {
-                        switchSuccessful =
-                            player->leaderPtr->group->changeStandbyType(
-                                action.actionTypeId == PLAYER_ACTION_TYPE_PREV_TYPE
-                            );
-                            
-                        if(
-                            !switchSuccessful ||
-                            player->leaderPtr->group->curStandbyType ==
-                            startingSubgroupType
-                        ) {
-                            //Reached around back to the first subgroup...
-                            switchSuccessful = false;
-                            finish = true;
-                            
-                        } else {
-                            //Switched to a new subgroup.
-                            updateClosestGroupMembers(player);
-                            if(!player->closestGroupMemberDistant) {
-                                finish = true;
-                            }
-                            
-                        }
-                        
-                    } while(!finish);
-                    
-                    if(switchSuccessful) {
-                        player->leaderPtr->swapHeldPikmin(
-                            player->closestGroupMember[BUBBLE_RELATION_CURRENT]
-                        );
-                    }
-                }
-                
-                if(switchSuccessful) {
-                    game.audio.createUiSoundsource(
-                        game.sysContent.sndSwitchPikmin
-                    );
-                }
-            }
-            
+            doPlayerActionSwitchType(
+                player, isDown,
+                action.actionTypeId == PLAYER_ACTION_TYPE_NEXT_TYPE
+            );
             break;
             
         } case PLAYER_ACTION_TYPE_NEXT_MATURITY:
         case PLAYER_ACTION_TYPE_PREV_MATURITY: {
-    
-            /**********************************
-            *                      V  -->  *  *
-            *   Switch maturity    |       |  *
-            *                     ( )     ( ) *
-            **********************************/
-            
-            if(
-                !isDown ||
-                !player->leaderPtr ||
-                player->leaderPtr->holding.empty() ||
-                player->leaderPtr->holding[0]->type->category->id !=
-                MOB_CATEGORY_PIKMIN
-            ) {
-                return;
-            }
-            
-            Pikmin* heldPPtr = (Pikmin*) player->leaderPtr->holding[0];
-            
-            Pikmin* closestMembers[N_MATURITIES];
-            Distance closestDists[N_MATURITIES];
-            for(size_t m = 0; m < N_MATURITIES; m++) {
-                closestMembers[m] = nullptr;
-            }
-            
-            for(size_t m = 0; m < player->leaderPtr->group->members.size(); m++) {
-                Mob* mPtr = player->leaderPtr->group->members[m];
-                if(mPtr->type != heldPPtr->type) continue;
-                
-                Pikmin* pPtr = (Pikmin*) mPtr;
-                if(pPtr->maturity == heldPPtr->maturity) continue;
-                
-                Distance d(player->leaderPtr->pos, pPtr->pos);
-                if(
-                    !closestMembers[pPtr->maturity] ||
-                    d < closestDists[pPtr->maturity]
-                ) {
-                    closestMembers[pPtr->maturity] = pPtr;
-                    closestDists[pPtr->maturity] = d;
-                }
-                
-            }
-            
-            size_t nextMaturity = heldPPtr->maturity;
-            Mob* newPikmin = nullptr;
-            bool finished = false;
-            do {
-                nextMaturity =
-                    (size_t) sumAndWrap(
-                        (int) nextMaturity,
-                        (
-                            action.actionTypeId ==
-                            PLAYER_ACTION_TYPE_NEXT_MATURITY ? 1 : -1
-                        ),
-                        N_MATURITIES
-                    );
-                    
-                //Back to the start?
-                if(nextMaturity == heldPPtr->maturity) break;
-                
-                if(!closestMembers[nextMaturity]) continue;
-                
-                newPikmin = closestMembers[nextMaturity];
-                finished = true;
-                
-            } while(!finished);
-            
-            if(newPikmin) {
-                player->leaderPtr->swapHeldPikmin(newPikmin);
-            }
-            
+            doPlayerActionSwitchMaturity(
+                player, isDown,
+                action.actionTypeId == PLAYER_ACTION_TYPE_NEXT_MATURITY
+            );
             break;
             
         }
@@ -714,7 +765,7 @@ void GameplayState::handlePlayerAction(const PlayerAction &action) {
  * @param action Action to check.
  * @return Whether it should be ignored.
  */
-bool GameplayState::shouldIngorePlayerAction(const PlayerAction &action) {
+bool GameplayState::shouldIgnorePlayerAction(const PlayerAction &action) {
     const vector<int> actionsAllowedDuringInterludes {
         PLAYER_ACTION_TYPE_CHANGE_ZOOM,
         PLAYER_ACTION_TYPE_CURSOR_DOWN,

@@ -402,6 +402,19 @@ private:
     void doGameplayLeaderLogic(Player* player, float deltaT);
     void doGameplayLogic(float deltaT);
     void doMenuLogic();
+    void doPlayerActionDismiss(Player* player, bool isDown);
+    void doPlayerActionLieDown(Player* player, bool isDown);
+    void doPlayerActionPause(Player* player, bool isDown, bool radar);
+    void doPlayerActionSwitchLeader(Player* player, bool isDown, bool isNext);
+    void doPlayerActionSwitchMaturity(Player* player, bool isDown, bool isNext);
+    void doPlayerActionSwitchSpray(Player* player, bool isDown, bool isNext);
+    void doPlayerActionSwitchType(Player* player, bool isDown, bool isNext);
+    void doPlayerActionThrow(Player* player, bool isDown);
+    void doPlayerActionToggleZoom(Player* player, bool isDown);
+    void doPlayerActionUseCurrentSpray(Player* player, bool isDown);
+    void doPlayerActionUseSpray(Player* player, bool isDown, bool second);
+    void doPlayerActionWhistle(Player* player, bool isDown);
+    void doPlayerActionZoom(Player* player, float inputValue, bool zoomIn);
     void drawBackground(const Viewport &view, ALLEGRO_BITMAP* bmpOutput);
     void drawDebugTools();
     void drawLeaderCursor(Player* player, const ALLEGRO_COLOR &color);
@@ -444,7 +457,7 @@ private:
     void processMobTouches(
         Mob* mPtr, Mob* m2Ptr, size_t m, size_t m2, Distance &d
     );
-    bool shouldIngorePlayerAction(const PlayerAction &action);
+    bool shouldIgnorePlayerAction(const PlayerAction &action);
     void unloadGameContent();
     void updateAreaActiveCells();
     void updateMobIsActiveFlag();

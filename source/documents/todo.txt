@@ -184,11 +184,7 @@ Next tasks (roughly sorted most important first)
         Spectralids shouldn't have their body dead center and only have the wings flap, their body should bob up and down aggressively like real butterflies
         Pikmin movement and other actions should have random offsets and delays of tiny amounts, just so that the army feels like a group of individuals, instead of several robots
     New mobs
-        Burrowing Snagret
-        Bulbears
-        A tall grass mob
         Nuggets
-        Add Helodity's Plasm Wraith
         Mobs for decorative pebbles, stones, sticks, cobwebs
     More particles
         More across the board -- check all mobs too
@@ -198,10 +194,10 @@ Next tasks (roughly sorted most important first)
         Add a favicon
     Cook up a better logo?
     Set the version of all pieces of content to 1.0
+    Test it on the Steam Deck
     Test everything in the regression tests
     Test everything in DEV Lab
     Test all Pikmin and leader states
-    Test it on the Steam Deck
     Check one final time for leaks, run a static analysis, etc.
     Format the whole code with Astyle, once #563 is fixed
         This setup seemed to work ok, or at least as a start:
@@ -692,18 +688,16 @@ Next tasks (roughly sorted most important first)
             A way to view all states, with arrows pointing to which events lead to which states
             One possible layout is four columns; first one is a list of states, second is a list of events in the chosen state, third is a list of actions in the chosen event, and fourth is parameters and info about the state
             Actions that are critical to the logic flow should be colored or styled different from actions that are aesthetic
-        Weather editor
     
     
 Small tasks (for when I'm feeling lazy)
     Style
         Document the code with comments
         Use #pragma region in header files?
-        Remove parameter names in function declarations
+        Remove parameter names in function declarations?
     Cleanup
         Remove magic numbers and magic strings (make numbers and strings into constants)
         Try to refactor the mission strategy patterns to also work for the area editor logic
-        Use enum class, and hopefully there won't be any problems due to all the times I need to cast to and from int, or use values from multiple enums.
         Clean up some coupling problems using https://github.com/larspensjo/SimpleSignal
     
     
@@ -954,6 +948,9 @@ Misc things (so I don't forget)
         Also useful for stating that an obstacle was destroyed and stuff like that [PIKMIN 4]
     Areas should be able to include "decals", in the same vein as tree shadows. These are a lightweight way to add leaves, rocks, pebbles, sticks, etc. to the area's terrain without using sectors or objects
     Reorganize tree shadows - they should be building blocks that area makers can mix and match so people don't have to paint their own texture just to get a different pattern going
+    The leader and Pikmin FSMs are pretty messy with the whole active/inactive, not holding/holding thing
+        For leaders, rename active and inactive to controlled and not controlled
+        Maybe merge the duplicate states for controlled/not controlled, and not holding/holding. The logic inside checks an if and figures out what to do depending on if that binary state. This would also help in those edge cases where a leader is controlled but in one of the uncontrolled states or vice-versa, because that'd be controlled in every relevant FSM function instead of being up to the whims of the flow of the state machine
     Automatically choose Pikmin maturity in some contexts, like throwing Pikmin at nectar should automatically pick leaf Pikmin [PIKMIN 4]
     Save centiseconds in the mission's record (and display them in a smaller font) (thanks Helodity)
     Treasure collection should probably count when the ship retrieval starts (thanks Helodity)
@@ -968,11 +965,15 @@ Misc things (so I don't forget)
         This would allow mobs to cast light, which would just lighten up that zone of the lightmap
     Base game content to add
         Enemies
+            Add Helodity's Plasm Wraith
+            Burrowing Snagret
+            Bulbears
             Scuttlebug?
         More puzzle elements
             A cyclic lever? It automatically flips on and off over time
             A moving platform, useful to traverse a hazardous floor. Maybe Stemples?
         Pellet Posies could have properties that make them regrow
+        A tall grass mob
         A turnstyle mob
     Base game content to tweak
         Dwarf Red Bulborbs should scream to wake up nearby Red Bulborbs
