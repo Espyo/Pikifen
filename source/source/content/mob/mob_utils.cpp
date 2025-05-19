@@ -1272,9 +1272,9 @@ void deleteMob(Mob* mPtr, bool completeDestruction) {
                     m2Ptr->chompingMobs[c] = nullptr;
                 }
             }
-            for(size_t l = 0; l < m2Ptr->links.size(); l++) {
-                if(m2Ptr->links[l] == mPtr) {
-                    m2Ptr->links[l] = nullptr;
+            for (const auto& [identifier, link] : m2Ptr->links) {
+                if(link == mPtr) {
+                    m2Ptr->links[identifier] = nullptr;
                 }
             }
             if(m2Ptr->storedInsideAnother == mPtr) {

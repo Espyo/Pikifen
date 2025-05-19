@@ -929,7 +929,7 @@ void GameplayState::load() {
         for(size_t l = 0; l < genPtr->linkIdxs.size(); l++) {
             size_t linkTargetGenIdx = genPtr->linkIdxs[l];
             Mob* linkTargetMobPtr = mobsPerGen[linkTargetGenIdx];
-            mobPtr->links.push_back(linkTargetMobPtr);
+            mobPtr->push_anonymous_link(linkTargetMobPtr);
         }
     }
     

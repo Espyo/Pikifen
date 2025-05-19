@@ -252,6 +252,13 @@ void Mob::addToGroup(Mob* newMember) {
     }
 }
 
+/**
+ * @brief counts the number of non identified links
+ */
+void Mob::push_anonymous_link(Mob* linkPtr) {
+    links[i2s(link_anon_size)]= linkPtr;
+    link_anon_size +=1;
+}
 
 /**
  * @brief Applies the damage caused by an attack from another mob to this one.
@@ -451,18 +458,21 @@ void Mob::arachnorbHeadTurnLogic() {
     float angleDeviationAvg = 0;
     size_t nFeet = 0;
     
-    for(size_t l = 0; l < links.size(); l++) {
-        if(!links[l]) {
+    for (const auto& [identifier, link] : links) {
+        if (!isNumber(identifier)){
+            continue;
+        }
+        if(!link) {
             continue;
         }
         
-        if(!links[l]->parent) {
+        if(!link->parent) {
             continue;
         }
-        if(links[l]->parent->m != this) {
+        if(link->parent->m != this) {
             continue;
         }
-        if(links[l]->parent->limbParentBodyPart == INVALID) {
+        if(link->parent->limbParentBodyPart == INVALID) {
             continue;
         }
         
@@ -472,11 +482,11 @@ void Mob::arachnorbHeadTurnLogic() {
             getAngle(
                 Point(),
                 getHitbox(
-                    links[l]->parent->limbParentBodyPart
+                    link->parent->limbParentBodyPart
                 )->pos
             );
         float curAngle =
-            getAngle(pos, links[l]->pos) - angle;
+            getAngle(pos, link->pos) - angle;
         float angleDeviation =
             getAngleCwDiff(defaultAngle, curAngle);
         if(angleDeviation > M_PI) {
@@ -664,12 +674,14 @@ bool Mob::calculateCarryingDestination(
         //If it's towards a linked mob, just go to the closest one.
         Mob* closestLink = nullptr;
         Distance closestLinkDist;
-        
-        for(size_t s = 0; s < links.size(); s++) {
-            Distance d(pos, links[s]->pos);
+        for (const auto& [identifier, link] : links) {
+            if (!isNumber(identifier)){
+                continue;
+            }
+            Distance d(pos, link->pos);
             
             if(!closestLink || d < closestLinkDist) {
-                closestLink = links[s];
+                closestLink = link;
                 closestLinkDist = d;
             }
         }
@@ -692,12 +704,15 @@ bool Mob::calculateCarryingDestination(
         }
         
         unordered_set<PikminType*> availableTypes;
-        vector<std::pair<Mob*, PikminType*> > mobsPerType;
+        vector<std::pair<string, PikminType*> > mobsPerType;
         
-        for(size_t l = 0; l < links.size(); l++) {
-            if(!links[l]) continue;
+        for (const auto& [identifier, link] : links) {
+            if (!isNumber(identifier)){
+                continue;
+            }
+            if(!link) continue;
             string typeName =
-                links[l]->vars["carry_destination_type"];
+                link->vars["carry_destination_type"];
             MobType* pikType =
                 game.mobCategories.get(MOB_CATEGORY_PIKMIN)->
                 getType(typeName);
@@ -707,7 +722,7 @@ bool Mob::calculateCarryingDestination(
                 (PikminType*) pikType
             );
             mobsPerType.push_back(
-                std::make_pair(links[l], (PikminType*) pikType)
+                std::make_pair(identifier,(PikminType*) pikType)
             );
         }
         
@@ -720,21 +735,21 @@ bool Mob::calculateCarryingDestination(
             decideCarryPikminType(availableTypes, added, removed);
             
         //Figure out which linked mob matches the decided type.
-        size_t closestTargetIdx = INVALID;
+        string closestTargetKey = "";
         Distance closestTargetDist;
         for(size_t m = 0; m < mobsPerType.size(); m++) {
             if(mobsPerType[m].second != decidedType) continue;
             
-            Distance d(pos, mobsPerType[m].first->pos);
-            if(closestTargetIdx == INVALID || d < closestTargetDist) {
+            Distance d(pos, links.at(mobsPerType[m].first)->pos);
+            if(closestTargetKey.empty() || d < closestTargetDist) {
                 closestTargetDist = d;
-                closestTargetIdx = m;
+                closestTargetKey = mobsPerType[m].first;
             }
         }
         
         //Finally, set the destination data.
         *targetType = decidedType;
-        *targetMob = links[closestTargetIdx];
+        *targetMob = links.at(closestTargetKey);
         *targetPoint = (*targetMob)->pos;
         
         return true;
@@ -1589,6 +1604,7 @@ void Mob::focusOnMob(Mob* m2) {
     unfocusFromMob();
     focusedMob = m2;
 }
+
 
 
 /**
@@ -3296,10 +3312,10 @@ Mob* Mob::spawn(const MobType::SpawnInfo* info, MobType* typePtr) {
     }
     
     if(info->linkObjectToSpawn) {
-        links.push_back(newMob);
+        push_anonymous_link(newMob);
     }
     if(info->linkSpawnToObject) {
-        newMob->links.push_back(this);
+        newMob->push_anonymous_link(this);
     }
     if(info->momentum != 0) {
         float a = game.rng.f(0, TAU);

@@ -71,8 +71,8 @@ void BouncerFsm::handleMob(Mob* m, void* info1, void* info2) {
     Mob* toucher = (Mob*) info1;
     Mob* targetMob = nullptr;
     
-    if(!bouPtr->links.empty()) {
-        targetMob = bouPtr->links[0];
+    if(!bouPtr->link_anon_size ==0 && bouPtr->links["0"]) {
+        targetMob = bouPtr->links["0"];
     }
     
     if(!targetMob) {

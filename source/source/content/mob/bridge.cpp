@@ -209,7 +209,7 @@ bool Bridge::checkHealth() {
     for(size_t m = 0; m < newMobs.size(); m++) {
         Mob* mPtr = newMobs[m];
         enableFlag(mPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
-        mPtr->links.push_back(this);
+        mPtr->push_anonymous_link(this);
     }
     
     //Move the bridge object proper to the farthest point of the bridge.
@@ -233,7 +233,7 @@ bool Bridge::checkHealth() {
  * @param m Bridge component mob.
  */
 void Bridge::drawComponent(Mob* m) {
-    if(m->links.empty() || !m->links[0]) return;
+    if(m->link_anon_size==0 || !m->links["0"]) return;
     
     BitmapEffect eff;
     m->getSpriteBitmapEffects(
@@ -241,7 +241,7 @@ void Bridge::drawComponent(Mob* m) {
         SPRITE_BMP_EFFECT_FLAG_SECTOR_BRIGHTNESS
     );
     
-    Bridge* briPtr = (Bridge*) m->links[0];
+    Bridge* briPtr = (Bridge*) m->links["0"];
     string side = m->vars["side"];
     ALLEGRO_BITMAP* texture =
         side == "left" ?
@@ -346,10 +346,10 @@ void Bridge::readScriptVars(const ScriptVarReader &svr) {
  * like its linked destination object.
  */
 void Bridge::setup() {
-    if(!links.empty() && links[0]) {
-        totalLength = Distance(pos, links[0]->pos).toFloat();
-        face(getAngle(pos, links[0]->pos), nullptr, true);
-        deltaZ = links[0]->z - z;
+    if(!link_anon_size == 0 && links["0"]) {
+        totalLength = Distance(pos, links["0"]->pos).toFloat();
+        face(getAngle(pos, links["0"]->pos), nullptr, true);
+        deltaZ = links["0"]->z - z;
         totalChunksNeeded =
             std::max(
                 totalChunksNeeded,

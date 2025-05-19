@@ -440,9 +440,12 @@ bool MobActionLoaders::loadMobTargetType(
         call.args[argIdx] = i2s(MOB_ACTION_MOB_TARGET_TYPE_FOCUS);
     } else if(call.args[argIdx] == "trigger") {
         call.args[argIdx] = i2s(MOB_ACTION_MOB_TARGET_TYPE_TRIGGER);
-    } else if(call.args[argIdx] == "link") {
+    } else if(call.args[argIdx].find("link")==0) {
+        call.args.resize(17,"");
+        call.args[16]= call.args[argIdx].substr(4);
         call.args[argIdx] = i2s(MOB_ACTION_MOB_TARGET_TYPE_LINK);
-    } else if(call.args[argIdx] == "parent") {
+    }
+    else if(call.args[argIdx] == "parent") {
         call.args[argIdx] = i2s(MOB_ACTION_MOB_TARGET_TYPE_PARENT);
     } else {
         reportEnumError(call, argIdx);
@@ -1349,8 +1352,12 @@ Mob* getTargetMob(
         return getTriggerMob(data);
         break;
     } case MOB_ACTION_MOB_TARGET_TYPE_LINK: {
-        if(!data.m->links.empty() && data.m->links[0]) {
-            return data.m->links[0];
+    
+        if(data.args[16] == "" && !data.m->link_anon_size ==0 && data.m->links.find("0")!= data.m->links.end() && data.m->links["0"]) {
+            return data.m->links["0"];
+        }
+        if(data.args[16] != "" && data.m->links.find(data.args[16]) != data.m->links.end()){
+            return data.m->links[data.args[16]];
         }
         break;
     } case MOB_ACTION_MOB_TARGET_TYPE_PARENT: {
@@ -1441,14 +1448,17 @@ void MobActionRunners::linkWithFocus(MobActionRunData &data) {
         return;
     }
     
-    for(size_t l = 0; l < data.m->links.size(); l++) {
-        if(data.m->links[l] == data.m->focusedMob) {
+    for (const auto& [identifier, link] : data.m->links) {
+        if(link == data.m->focusedMob) {
             //Already linked.
             return;
         }
     }
-    
-    data.m->links.push_back(data.m->focusedMob);
+    if (data.args.size() <= 0){
+        data.m->push_anonymous_link(data.m->focusedMob);
+    }else{
+        data.m->links[data.args[0]] = data.m->focusedMob;
+    }
 }
 
 
@@ -1543,9 +1553,9 @@ void MobActionRunners::moveToTarget(MobActionRunData &data) {
         }
         
         Point des;
-        for(size_t l = 0; l < data.m->links.size(); l++) {
-            if(!data.m->links[l]) continue;
-            des += data.m->links[l]->pos;
+        for (const auto& [identifier, link] : data.m->links) {
+            if(!link) continue;
+            des += link->pos;
         }
         des = des / data.m->links.size();
         
@@ -1671,10 +1681,12 @@ void MobActionRunners::sendMessageToFocus(MobActionRunData &data) {
  * @param data Data about the action call.
  */
 void MobActionRunners::sendMessageToLinks(MobActionRunData &data) {
-    for(size_t l = 0; l < data.m->links.size(); l++) {
-        if(data.m->links[l] == data.m) continue;
-        if(!data.m->links[l]) continue;
-        data.m->sendScriptMessage(data.m->links[l], data.args[0]);
+    string receipient = data.args.size() > 1? data.args[1] : "0";
+    for (const auto& [identifier, link] : data.m->links) {
+        if(link == data.m) continue;
+        if(!link) continue;
+        if(receipient != "0" && identifier != receipient) continue;
+        data.m->sendScriptMessage(link, data.args[0]);
     }
 }
 
@@ -2002,28 +2014,28 @@ void MobActionRunners::spawn(MobActionRunData &data) {
  * @param data Data about the action call.
  */
 void MobActionRunners::stabilizeZ(MobActionRunData &data) {
-    if(data.m->links.empty() || !data.m->links[0]) {
+    if(data.m->links.empty() || !data.m->links.begin()->second) {
         return;
     }
     
-    float bestMatchZ = data.m->links[0]->z;
+    float bestMatchZ = data.m->links.begin()->second->z;
     MOB_ACTION_STABILIZE_Z_TYPE t =
         (MOB_ACTION_STABILIZE_Z_TYPE) s2i(data.args[0]);
         
-    for(size_t l = 1; l < data.m->links.size(); l++) {
+    for (const auto& [identifier, link] : data.m->links) {
     
-        if(!data.m->links[l]) continue;
+        if(!link) continue;
         
         switch(t) {
         case MOB_ACTION_STABILIZE_Z_TYPE_HIGHEST: {
-            if(data.m->links[l]->z > bestMatchZ) {
-                bestMatchZ = data.m->links[l]->z;
+            if(link->z > bestMatchZ) {
+                bestMatchZ = link->z;
             }
             break;
             
         } case MOB_ACTION_STABILIZE_Z_TYPE_LOWEST: {
-            if(data.m->links[l]->z < bestMatchZ) {
-                bestMatchZ = data.m->links[l]->z;
+            if(link->z < bestMatchZ) {
+                bestMatchZ = link->z;
             }
             break;
             

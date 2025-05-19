@@ -255,8 +255,11 @@ public:
     //-Interactions with other mobs-
     
     //Mobs it is linked to.
-    vector<Mob*> links;
+    map<string,Mob*> links;
     
+    //How many Anonymous Links there are
+    size_t link_anon_size=0;
+
     //If it's being held by another mob, the information is kept here.
     HoldInfo holder;
     
@@ -375,6 +378,7 @@ public:
     void becomeCarriable(const CARRY_DESTINATION destination);
     void becomeUncarriable();
     
+    void push_anonymous_link(Mob* linkPtr);
     void applyAttackDamage(
         Mob* attacker, Hitbox* attackH, Hitbox* victimH, float damage
     );

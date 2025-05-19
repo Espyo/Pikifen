@@ -587,8 +587,8 @@ void Pikmin::tickClassSpecifics(float deltaT) {
     bumpLock = std::max(bumpLock - deltaT, 0.0f);
     
     //Forcefully follow another mob as a leader.
-    if(mustFollowLinkAsLeader && !links.empty()) {
-        Mob* leader = links[0];
+    if(mustFollowLinkAsLeader && !link_anon_size == 0 && links["0"]) {
+        Mob* leader = links["0"];
         fsm.runEvent(
             MOB_EV_TOUCHED_ACTIVE_LEADER,
             (void*) (leader),

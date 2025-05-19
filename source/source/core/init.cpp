@@ -1298,6 +1298,7 @@ void initMobActions() {
         nullptr
     );
     
+    regParam("identifier", MOB_ACTION_PARAM_STRING, false, true);
     regAction(
         MOB_ACTION_LINK_WITH_FOCUS,
         "link_with_focused_mob",
@@ -1414,6 +1415,7 @@ void initMobActions() {
     );
     
     regParam("message", MOB_ACTION_PARAM_STRING, false, false);
+    regParam("identifier", MOB_ACTION_PARAM_STRING, false, true);
     regAction(
         MOB_ACTION_SEND_MESSAGE_TO_LINKS,
         "send_message_to_links",
