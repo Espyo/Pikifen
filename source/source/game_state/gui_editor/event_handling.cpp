@@ -249,7 +249,10 @@ void GuiEditor::handleMouseUpdate(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void GuiEditor::handleMouseWheel(const ALLEGRO_EVENT &ev) {
-    zoomWithCursor(game.editorsView.cam.zoom + (game.editorsView.cam.zoom * ev.mouse.dz * 0.1));
+    zoomWithCursor(
+        game.editorsView.cam.zoom +
+        (game.editorsView.cam.zoom * ev.mouse.dz * 0.1)
+    );
 }
 
 

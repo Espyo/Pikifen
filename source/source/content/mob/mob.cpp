@@ -2217,7 +2217,8 @@ void Mob::getSpriteBitmapEffects(
                     Point v1 = v2p(fadeEdges[n][e]->vertexes[0]);
                     Point v2 = v2p(fadeEdges[n][e]->vertexes[1]);
                     float segmentRatio;
-                    Point closestPos = getClosestPointInLineSeg(v1, v2, pos, &segmentRatio);
+                    Point closestPos =
+                        getClosestPointInLineSeg(v1, v2, pos, &segmentRatio);
                     if(segmentRatio < 0) {
                         Point v2ToV1 = v2 - v1;
                         closestPos -= v2ToV1 * abs(segmentRatio);

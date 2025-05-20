@@ -97,7 +97,8 @@ public:
     CARRY_DESTINATION carryingDestination = CARRY_DESTINATION_SHIP;
     
     //Result when successfully delivered.
-    RESOURCE_DELIVERY_RESULT deliveryResult = RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS;
+    RESOURCE_DELIVERY_RESULT deliveryResult =
+        RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS;
     
     //If it damages the mob it was carried to, this is the damage amount.
     float damageMobAmount = 1.0f;

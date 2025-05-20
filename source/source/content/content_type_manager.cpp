@@ -378,7 +378,8 @@ void BitmapContentManager::unloadAll(CONTENT_LOAD_LEVEL level) {
  * @param folders True if the content is folders, false if it's files.
  */
 void ContentTypeManager::fillManifestsMap(
-    map<string, ContentManifest> &manifests, const string &contentRelPath, bool folders
+    map<string, ContentManifest> &manifests,
+    const string &contentRelPath, bool folders
 ) {
     for(const auto &p : game.content.packs.manifestsWithBase) {
         fillManifestsMapFromPack(manifests, p, contentRelPath, folders);
@@ -408,7 +409,10 @@ void ContentTypeManager::fillManifestsMapFromPack(
         
     for(size_t i = 0; i < items.size(); i++) {
         string internalName = removeExtension(items[i]);
-        manifests[internalName] = ContentManifest(internalName, folderPath + "/" + items[i], packName);
+        manifests[internalName] =
+            ContentManifest(
+                internalName, folderPath + "/" + items[i], packName
+            );
     }
 }
 
@@ -425,7 +429,9 @@ void GlobalAnimContentManager::clearManifests() {
  * @brief Fills in the manifests.
  */
 void GlobalAnimContentManager::fillManifests() {
-    fillManifestsMap(manifests, FOLDER_PATHS_FROM_PACK::GLOBAL_ANIMATIONS, false);
+    fillManifestsMap(
+        manifests, FOLDER_PATHS_FROM_PACK::GLOBAL_ANIMATIONS, false
+    );
 }
 
 
@@ -467,7 +473,9 @@ void GlobalAnimContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
  * @param manifest Manifest of the animation database.
  * @param level Level to load at.
  */
-void GlobalAnimContentManager::loadAnimationDb(ContentManifest* manifest, CONTENT_LOAD_LEVEL level) {
+void GlobalAnimContentManager::loadAnimationDb(
+    ContentManifest* manifest, CONTENT_LOAD_LEVEL level
+) {
     DataNode file(manifest->path);
     AnimationDatabase db;
     db.manifest = manifest;
@@ -1036,7 +1044,9 @@ void MobAnimContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
  * @param level Level to load at.
  * @param categoryId Mob category ID.
  */
-void MobAnimContentManager::loadAnimationDb(ContentManifest* manifest, CONTENT_LOAD_LEVEL level, MOB_CATEGORY categoryId) {
+void MobAnimContentManager::loadAnimationDb(
+    ContentManifest* manifest, CONTENT_LOAD_LEVEL level, MOB_CATEGORY categoryId
+) {
     DataNode file(manifest->path);
     AnimationDatabase db;
     db.manifest = manifest;
@@ -1263,7 +1273,9 @@ void MobTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
  * @param category Pointer to the mob category.
  * @param level Level to load at.
  */
-void MobTypeContentManager::loadMobTypesOfCategory(MobCategory* category, CONTENT_LOAD_LEVEL level) {
+void MobTypeContentManager::loadMobTypesOfCategory(
+    MobCategory* category, CONTENT_LOAD_LEVEL level
+) {
     if(category->folderName.empty()) return;
     
     map<string, ContentManifest> &man = manifests[category->id];
@@ -1348,7 +1360,9 @@ void MobTypeContentManager::unloadAll(CONTENT_LOAD_LEVEL level) {
  * @param mt Mob type to unload.
  * @param level Should match the level at which the content got loaded.
  */
-void MobTypeContentManager::unloadMobType(MobType* mt, CONTENT_LOAD_LEVEL level) {
+void MobTypeContentManager::unloadMobType(
+    MobType* mt, CONTENT_LOAD_LEVEL level
+) {
     for(size_t s = 0; s < mt->sounds.size(); s++) {
         ALLEGRO_SAMPLE* sPtr = mt->sounds[s].sample;
         if(!s) continue;
@@ -1367,7 +1381,9 @@ void MobTypeContentManager::unloadMobType(MobType* mt, CONTENT_LOAD_LEVEL level)
  * @param category Pointer to the mob category.
  * @param level Should match the level at which the content got loaded.
  */
-void MobTypeContentManager::unloadMobTypesOfCategory(MobCategory* category, CONTENT_LOAD_LEVEL level) {
+void MobTypeContentManager::unloadMobTypesOfCategory(
+    MobCategory* category, CONTENT_LOAD_LEVEL level
+) {
 
     vector<string> typeNames;
     category->getTypeNames(typeNames);
@@ -1393,7 +1409,9 @@ void ParticleGenContentManager::clearManifests() {
  * @brief Fills in the manifests.
  */
 void ParticleGenContentManager::fillManifests() {
-    fillManifestsMap(manifests, FOLDER_PATHS_FROM_PACK::PARTICLE_GENERATORS, false);
+    fillManifestsMap(
+        manifests, FOLDER_PATHS_FROM_PACK::PARTICLE_GENERATORS, false
+    );
 }
 
 
@@ -1647,7 +1665,9 @@ void SongContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
  * @param manifest Manifest of the song.
  * @param level Level to load at.
  */
-void SongContentManager::loadSong(ContentManifest* manifest, CONTENT_LOAD_LEVEL level) {
+void SongContentManager::loadSong(
+    ContentManifest* manifest, CONTENT_LOAD_LEVEL level
+) {
     DataNode file = loadDataFile(manifest->path);
     if(!file.fileWasOpened) return;
     
@@ -1816,7 +1836,9 @@ void SpikeDamageTypeContentManager::clearManifests() {
  * @brief Fills in the manifests.
  */
 void SpikeDamageTypeContentManager::fillManifests() {
-    fillManifestsMap(manifests, FOLDER_PATHS_FROM_PACK::SPIKE_DAMAGES_TYPES, false);
+    fillManifestsMap(
+        manifests, FOLDER_PATHS_FROM_PACK::SPIKE_DAMAGES_TYPES, false
+    );
 }
 
 
@@ -1858,7 +1880,9 @@ void SpikeDamageTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
  * @param manifest Manifest of the spike damage type.
  * @param level Level to load at.
  */
-void SpikeDamageTypeContentManager::loadSpikeDamageType(ContentManifest* manifest, CONTENT_LOAD_LEVEL level) {
+void SpikeDamageTypeContentManager::loadSpikeDamageType(
+    ContentManifest* manifest, CONTENT_LOAD_LEVEL level
+) {
     DataNode file = loadDataFile(manifest->path);
     if(!file.fileWasOpened) return;
     
@@ -1997,7 +2021,9 @@ void SprayTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
  * @param manifest Manifest of the spray type.
  * @param level Level to load at.
  */
-void SprayTypeContentManager::loadSprayType(ContentManifest* manifest, CONTENT_LOAD_LEVEL level) {
+void SprayTypeContentManager::loadSprayType(
+    ContentManifest* manifest, CONTENT_LOAD_LEVEL level
+) {
     DataNode file = loadDataFile(manifest->path);
     if(!file.fileWasOpened) return;
     
@@ -2142,7 +2168,9 @@ void StatusTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
  * @param manifest Manifest of the status type.
  * @param level Level to load at.
  */
-void StatusTypeContentManager::loadStatusType(ContentManifest* manifest, CONTENT_LOAD_LEVEL level) {
+void StatusTypeContentManager::loadStatusType(
+    ContentManifest* manifest, CONTENT_LOAD_LEVEL level
+) {
     DataNode file = loadDataFile(manifest->path);
     if(!file.fileWasOpened) return;
     
@@ -2253,7 +2281,9 @@ void WeatherConditionContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
  * @param manifest Manifest of the weather condition.
  * @param level Level to load at.
  */
-void WeatherConditionContentManager::loadWeatherCondition(ContentManifest* manifest, CONTENT_LOAD_LEVEL level) {
+void WeatherConditionContentManager::loadWeatherCondition(
+    ContentManifest* manifest, CONTENT_LOAD_LEVEL level
+) {
     DataNode file = loadDataFile(manifest->path);
     if(!file.fileWasOpened) return;
     

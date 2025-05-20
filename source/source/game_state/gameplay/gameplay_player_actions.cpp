@@ -395,7 +395,10 @@ void GameplayState::doPlayerActionToggleZoom(Player* player, bool isDown) {
     } else if(player->view.cam.targetZoom > zoomLevels[1]) {
         player->view.cam.targetZoom = zoomLevels[1];
     } else {
-        if(game.options.advanced.zoomMediumReach == game.config.rules.zoomFarthestReach) {
+        if(
+            game.options.advanced.zoomMediumReach ==
+            game.config.rules.zoomFarthestReach
+        ) {
             player->view.cam.targetZoom = zoomLevels[0];
         } else {
             player->view.cam.targetZoom = zoomLevels[2];

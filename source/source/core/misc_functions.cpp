@@ -171,7 +171,8 @@ void crash(const string &reason, const string &info, int exitStatus) {
         "  Mob count: " +
         i2s(game.states.gameplay->mobs.all.size()) + ". Particle count: " +
         i2s(game.states.gameplay->particles.getCount()) + ".\n" +
-        "  Bitmaps loaded: " + i2s(game.content.bitmaps.list.getListSize()) + " (" +
+        "  Bitmaps loaded: " + i2s(game.content.bitmaps.list.getListSize()) +
+        " (" +
         i2s(game.content.bitmaps.list.getTotalUses()) + " total uses).\n" +
         "  Current area: ";
         
@@ -518,7 +519,9 @@ string getMissionRecordEntryName(Area* areaPtr) {
  * (health and max health > 0).
  * @return The mob, or nullptr if there is none nearby.
  */
-Mob* getNextMobNearCursor(const Viewport &view, Mob* pivot, bool mustHaveHealth) {
+Mob* getNextMobNearCursor(
+    const Viewport &view, Mob* pivot, bool mustHaveHealth
+) {
     vector<Mob*> mobsNearCursor;
     
     //First, get all mobs that are close to the cursor.
@@ -1207,7 +1210,8 @@ void saveScreenshot() {
     string baseFileName = "screenshot_" + getCurrentTime(true);
     
     //Check if a file with this name already exists.
-    vector<string> files = folderToVector(FOLDER_PATHS_FROM_ROOT::USER_DATA, false);
+    vector<string> files =
+        folderToVector(FOLDER_PATHS_FROM_ROOT::USER_DATA, false);
     size_t variantNr = 1;
     string finalFileName = baseFileName;
     bool validName = false;
@@ -1251,7 +1255,9 @@ void saveScreenshot() {
     al_unlock_bitmap(screenshot);
     
     al_save_bitmap(
-        (FOLDER_PATHS_FROM_ROOT::USER_DATA + "/" + finalFileName + ".png").c_str(),
+        (
+            FOLDER_PATHS_FROM_ROOT::USER_DATA + "/" + finalFileName + ".png"
+        ).c_str(),
         screenshot
     );
     

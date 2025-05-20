@@ -117,7 +117,9 @@ void GuiEditor::processGui() {
     
     //Draw the canvas now.
     processGuiCanvas();
-    ImGui::GetWindowDrawList()->AddCallback(drawCanvasDearImGuiCallback, nullptr);
+    ImGui::GetWindowDrawList()->AddCallback(
+        drawCanvasDearImGuiCallback, nullptr
+    );
     
     //Small hack. Recenter the camera, if necessary.
     if(mustRecenterCam) {

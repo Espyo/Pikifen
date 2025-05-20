@@ -89,7 +89,9 @@ void ParticleEditor::drawCanvas() {
     //Particles.
     vector<WorldComponent> components;
     components.reserve(partMgr.getCount());
-    partMgr.fillComponentList(components, game.editorsView.box[0], game.editorsView.box[1]);
+    partMgr.fillComponentList(
+        components, game.editorsView.box[0], game.editorsView.box[1]
+    );
     
     for(size_t c = 0; c < components.size(); ++c) {
         components[c].idx = c;

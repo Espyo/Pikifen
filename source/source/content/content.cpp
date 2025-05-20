@@ -87,7 +87,9 @@ ContentManifest::ContentManifest() {}
  * @param path Path to the content, relative to the packs folder.
  * @param pack Pack it belongs to.
  */
-ContentManifest::ContentManifest(const string &name, const string &path, const string &pack) :
+ContentManifest::ContentManifest(
+    const string &name, const string &path, const string &pack
+) :
     internalName(name),
     path(path),
     pack(pack) {

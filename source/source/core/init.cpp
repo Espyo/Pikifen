@@ -773,7 +773,9 @@ void initDearImGuiColors() {
     };
     
     for(size_t c = 0; c < colorsToChange.size(); c++) {
-        ImGui::AdjustColorHSV(style.Colors[colorsToChange[c]], -0.25f, 0.0f, 0.0f);
+        ImGui::AdjustColorHSV(
+            style.Colors[colorsToChange[c]], -0.25f, 0.0f, 0.0f
+        );
     }
     
     //Manually adjust some of them.

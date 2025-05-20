@@ -144,7 +144,8 @@ void GameplayState::doGameDrawing(
         ALLEGRO_COLOR cursorColor = game.config.aestheticGen.noPikminColor;
         if(player.closestGroupMember[BUBBLE_RELATION_CURRENT]) {
             cursorColor =
-                player.closestGroupMember[BUBBLE_RELATION_CURRENT]->type->mainColor;
+                player.closestGroupMember[BUBBLE_RELATION_CURRENT]->
+                type->mainColor;
         }
         if(player.leaderPtr && game.makerTools.hud) {
             cursorColor =
@@ -212,7 +213,9 @@ void GameplayState::doGameDrawing(
  * @param view Viewport to draw to.
  * @param bmpOutput If not nullptr, draw the background onto this.
  */
-void GameplayState::drawBackground(const Viewport &view, ALLEGRO_BITMAP* bmpOutput) {
+void GameplayState::drawBackground(
+    const Viewport &view, ALLEGRO_BITMAP* bmpOutput
+) {
     if(!game.curAreaData->bgBmp) return;
     
     ALLEGRO_VERTEX bgV[4];
@@ -870,7 +873,9 @@ void GameplayState::drawIngameText(Player* player) {
  * @param player Player whose viewport to draw to.
  * @param color Color to tint it by.
  */
-void GameplayState::drawLeaderCursor(Player* player, const ALLEGRO_COLOR &color) {
+void GameplayState::drawLeaderCursor(
+    Player* player, const ALLEGRO_COLOR &color
+) {
     if(!player->leaderPtr) return;
     
     size_t nArrows = player->leaderPtr->swarmArrows.size();
@@ -908,8 +913,10 @@ void GameplayState::drawLeaderCursor(Player* player, const ALLEGRO_COLOR &color)
         Distance(player->leaderPtr->pos, player->leaderCursorWorld).toFloat();
     for(size_t r = 0; r < nRings; r++) {
         Point pos(
-            player->leaderPtr->pos.x + cos(cursorAngle) * player->whistle.rings[r],
-            player->leaderPtr->pos.y + sin(cursorAngle) * player->whistle.rings[r]
+            player->leaderPtr->pos.x + cos(cursorAngle) *
+            player->whistle.rings[r],
+            player->leaderPtr->pos.y + sin(cursorAngle) *
+            player->whistle.rings[r]
         );
         float ringToWhistleDist = cursorDistance - player->whistle.rings[r];
         float scale =
@@ -939,7 +946,10 @@ void GameplayState::drawLeaderCursor(Player* player, const ALLEGRO_COLOR &color)
         );
     }
     
-    if(player->whistle.radius > 0 || player->whistle.fadeTimer.timeLeft > 0.0f) {
+    if(
+        player->whistle.radius > 0 ||
+        player->whistle.fadeTimer.timeLeft > 0.0f
+    ) {
         al_draw_filled_circle(
             player->whistle.center.x, player->whistle.center.y,
             player->whistle.radius,
@@ -1018,7 +1028,8 @@ void GameplayState::drawLeaderCursor(Player* player, const ALLEGRO_COLOR &color)
     al_use_transform(&game.identityTransform);
     
     float countOffset =
-        std::max(bmpCursorSize.x, bmpCursorSize.y) * 0.18f * player->view.cam.zoom;
+        std::max(bmpCursorSize.x, bmpCursorSize.y) * 0.18f *
+        player->view.cam.zoom;
         
     if(nStandbyPikmin > 0) {
         drawText(
@@ -1221,8 +1232,10 @@ void GameplayState::drawGameplayMessageBox() {
         game.controls.findBind(PLAYER_ACTION_TYPE_THROW).inputSource,
         true,
         Point(
-            game.winW - (GAMEPLAY_MSG_BOX::MARGIN + GAMEPLAY_MSG_BOX::PADDING + 8.0f),
-            game.winH - (GAMEPLAY_MSG_BOX::MARGIN + GAMEPLAY_MSG_BOX::PADDING + 8.0f) +
+            game.winW -
+            (GAMEPLAY_MSG_BOX::MARGIN + GAMEPLAY_MSG_BOX::PADDING + 8.0f),
+            game.winH -
+            (GAMEPLAY_MSG_BOX::MARGIN + GAMEPLAY_MSG_BOX::PADDING + 8.0f) +
             offset
         ),
         Point(32.0f),
@@ -1243,7 +1256,8 @@ void GameplayState::drawGameplayMessageBox() {
         for(size_t t = 0; t < msgBox->tokensPerLine[lineIdx].size(); t++) {
             totalWidth += msgBox->tokensPerLine[lineIdx][t].width;
         }
-        const float maxTextWidth = (GAMEPLAY_MSG_BOX::MARGIN + GAMEPLAY_MSG_BOX::PADDING) * 2;
+        const float maxTextWidth =
+            (GAMEPLAY_MSG_BOX::MARGIN + GAMEPLAY_MSG_BOX::PADDING) * 2;
         if(totalWidth > game.winW - maxTextWidth) {
             xScale = (game.winW - maxTextWidth) / totalWidth;
         }
@@ -1270,7 +1284,10 @@ void GameplayState::drawGameplayMessageBox() {
             } else {
                 thisTokenAnimTime =
                     msgBox->totalTokenAnimTime -
-                    ((tokenIdx + 1) * game.config.aestheticGen.gameplayMsgChInterval);
+                    (
+                        (tokenIdx + 1) *
+                        game.config.aestheticGen.gameplayMsgChInterval
+                    );
             }
             if(
                 thisTokenAnimTime > 0 &&
@@ -1290,7 +1307,11 @@ void GameplayState::drawGameplayMessageBox() {
             //Now, for the swiping animation.
             if(msgBox->swipeTimer > 0.0f) {
                 float ratio =
-                    1 - (msgBox->swipeTimer / GAMEPLAY_MSG_BOX::TOKEN_SWIPE_DURATION);
+                    1.0f -
+                    (
+                        msgBox->swipeTimer /
+                        GAMEPLAY_MSG_BOX::TOKEN_SWIPE_DURATION
+                    );
                 x += GAMEPLAY_MSG_BOX::TOKEN_SWIPE_X_AMOUNT * ratio;
                 y += GAMEPLAY_MSG_BOX::TOKEN_SWIPE_Y_AMOUNT * ratio;
                 alpha = std::max(0, (signed int) (alpha - ratio * 255));
@@ -1426,7 +1447,8 @@ void GameplayState::drawSystemStuff() {
         );
         double chartMin = 1.0f; //1 FPS.
         double chartMax =
-            game.options.advanced.targetFps + game.options.advanced.targetFps * 0.05f;
+            game.options.advanced.targetFps +
+            game.options.advanced.targetFps * 0.05f;
         for(size_t f = 0; f < game.framerateHistory.size(); f++) {
             float fps =
                 std::min(
@@ -2013,7 +2035,10 @@ void GameplayState::drawWorldComponents(
         if(cPtr->sectorPtr) {
         
             bool hasLiquid = false;
-            if(cPtr->sectorPtr->hazard && cPtr->sectorPtr->hazard->associatedLiquid) {
+            if(
+                cPtr->sectorPtr->hazard &&
+                cPtr->sectorPtr->hazard->associatedLiquid
+            ) {
                 drawLiquid(
                     cPtr->sectorPtr,
                     cPtr->sectorPtr->hazard->associatedLiquid,

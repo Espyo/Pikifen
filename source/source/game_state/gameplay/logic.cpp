@@ -40,7 +40,9 @@ void GameplayState::doAestheticLeaderLogic(Player* player, float deltaT) {
         player->leaderPtr->swarmNextArrowTimer.tick(deltaT);
     }
     
-    Distance leaderToCursorDist(player->leaderPtr->pos, player->leaderCursorWorld);
+    Distance leaderToCursorDist(
+        player->leaderPtr->pos, player->leaderCursorWorld
+    );
     for(size_t a = 0; a < player->leaderPtr->swarmArrows.size(); ) {
         player->leaderPtr->swarmArrows[a] +=
             GAMEPLAY::SWARM_ARROW_SPEED * deltaT;
@@ -214,7 +216,9 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
         if(!player->leaderPtr->group->members.empty()) {
             Point tl = player->leaderPtr->group->members[0]->pos;
             Point br = tl;
-            for(size_t m = 1; m < player->leaderPtr->group->members.size(); m++) {
+            for(
+                size_t m = 1; m < player->leaderPtr->group->members.size(); m++
+            ) {
                 Mob* member = player->leaderPtr->group->members[m];
                 updateMinMaxCoords(tl, br, member->pos);
             }
@@ -348,7 +352,9 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
                 closestD = d;
                 player->notification.setEnabled(true);
                 player->notification.setContents(
-                    game.controls.findBind(PLAYER_ACTION_TYPE_THROW).inputSource,
+                    game.controls.findBind(
+                        PLAYER_ACTION_TYPE_THROW
+                    ).inputSource,
                     "Repair suit",
                     Point(
                         player->closeToShipToHeal->pos.x,
@@ -366,7 +372,10 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
         player->closeToInteractableToUse = nullptr;
         if(!notificationDone) {
             for(size_t i = 0; i < mobs.interactables.size(); i++) {
-                d = Distance(player->leaderPtr->pos, mobs.interactables[i]->pos);
+                d =
+                    Distance(
+                        player->leaderPtr->pos, mobs.interactables[i]->pos
+                    );
                 if(d > mobs.interactables[i]->intType->triggerRange) {
                     continue;
                 }
@@ -483,9 +492,12 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
         
     player->leaderCursorWorld = player->view.cursorWorldPos;
     
-    float cursorAngle = getAngle(player->leaderPtr->pos, player->leaderCursorWorld);
+    float cursorAngle =
+        getAngle(player->leaderPtr->pos, player->leaderCursorWorld);
     
-    Distance leaderToCursorDist(player->leaderPtr->pos, player->leaderCursorWorld);
+    Distance leaderToCursorDist(
+        player->leaderPtr->pos, player->leaderCursorWorld
+    );
     if(leaderToCursorDist > game.config.rules.cursorMaxDist) {
         //Cursor goes beyond the range limit.
         player->leaderCursorWorld.x =
@@ -522,7 +534,8 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
     
     updateClosestGroupMembers(player);
     if(!player->leaderPtr->holding.empty()) {
-        player->closestGroupMember[BUBBLE_RELATION_CURRENT] = player->leaderPtr->holding[0];
+        player->closestGroupMember[BUBBLE_RELATION_CURRENT] =
+            player->leaderPtr->holding[0];
     }
     
     float oldSwarmMagnitude = player->swarmMagnitude;
@@ -539,7 +552,8 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
     
     if(player->swarmCursor) {
         player->swarmAngle = cursorAngle;
-        leaderToCursorDist = Distance(player->leaderPtr->pos, player->leaderCursorWorld);
+        leaderToCursorDist =
+            Distance(player->leaderPtr->pos, player->leaderCursorWorld);
         player->swarmMagnitude =
             leaderToCursorDist.toFloat() / game.config.rules.cursorMaxDist;
     }
@@ -575,7 +589,9 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
         if(nearBoss) {
             switch(bossMusicState) {
             case BOSS_MUSIC_STATE_NEVER_PLAYED: {
-                game.audio.setCurrentSong(game.sysContentNames.sngBoss, true, false);
+                game.audio.setCurrentSong(
+                    game.sysContentNames.sngBoss, true, false
+                );
                 bossMusicState = BOSS_MUSIC_STATE_PLAYING;
                 break;
             } case BOSS_MUSIC_STATE_PAUSED: {
@@ -616,12 +632,16 @@ void GameplayState::doGameplayLogic(float deltaT) {
     for(Player &player : players) {
         //Manual camera movement.
         if(!player.leaderPtr) {
-            //If there's no leader being controlled, might as well move the camera.
+            //If there's no leader being controlled,
+            //might as well move the camera.
             Point coords;
             float dummyAngle;
             float dummyMagnitude;
-            player.leaderMovement.getInfo(&coords, &dummyAngle, &dummyMagnitude);
-            player.view.cam.targetPos = player.view.cam.pos + (coords * 120.0f / player.view.cam.zoom);
+            player.leaderMovement.getInfo(
+                &coords, &dummyAngle, &dummyMagnitude
+            );
+            player.view.cam.targetPos =
+                player.view.cam.pos + (coords * 120.0f / player.view.cam.zoom);
         }
         
         player.view.cam.tick(deltaT);
@@ -656,7 +676,8 @@ void GameplayState::doGameplayLogic(float deltaT) {
         game.editorsView.cursorWorldPos = game.mouseCursor.winPos;
         al_transform_coordinates(
             &game.editorsView.windowToWorldTransform,
-            &game.editorsView.cursorWorldPos.x, &game.editorsView.cursorWorldPos.y
+            &game.editorsView.cursorWorldPos.x,
+            &game.editorsView.cursorWorldPos.y
         );
         
         areaTimePassed += deltaT;
@@ -816,7 +837,8 @@ void GameplayState::doGameplayLogic(float deltaT) {
                 //It also won't count the movement if the active leader changed
                 //midway through.
                 //But those are rare cases that don't really affect much in the
-                //grand scheme of things, and don't really matter for a fun stat.
+                //grand scheme of things, and don't really matter
+                //for a fun stat.
                 game.statistics.distanceWalked +=
                     Distance(oldLeaderPos[p], player->leaderPtr->pos).toFloat();
             }
@@ -1195,7 +1217,9 @@ void GameplayState::doMenuLogic() {
             boxString("Frame time:", 12) +
             boxString(std::to_string(game.curFrameProcessTime), 12) +
             boxString(std::to_string(sampleAvg), 12) +
-            boxString(std::to_string(1.0f / game.options.advanced.targetFps), 12);
+            boxString(
+                std::to_string(1.0f / game.options.advanced.targetFps), 12
+            );
         string nMobsStr =
             boxString(i2s(mobs.all.size()), 7);
         string nParticlesStr =
@@ -1211,7 +1235,8 @@ void GameplayState::doMenuLogic() {
             "-" :
             game.curAreaData->maker;
         string gameVStr =
-            game.config.general.version.empty() ? "-" : game.config.general.version;
+            game.config.general.version.empty() ?
+            "-" : game.config.general.version;
             
         printInfo(
             headerStr +
@@ -1374,10 +1399,18 @@ void GameplayState::doMenuLogic() {
             boxString(f2s(players[0].view.cursorWorldPos.y), 6);
         string blockmapStr =
             boxString(
-                i2s(game.curAreaData->bmap.getCol(players[0].view.cursorWorldPos.x)),
+                i2s(
+                    game.curAreaData->bmap.getCol(
+                        players[0].view.cursorWorldPos.x
+                    )
+                ),
                 5, " "
             ) +
-            i2s(game.curAreaData->bmap.getRow(players[0].view.cursorWorldPos.y));
+            i2s(
+                game.curAreaData->bmap.getRow(
+                    players[0].view.cursorWorldPos.y
+                )
+            );
         string sectorZStr, sectorLightStr, sectorTexStr;
         if(mouseSector) {
             sectorZStr =

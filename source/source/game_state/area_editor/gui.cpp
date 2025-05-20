@@ -31,7 +31,9 @@ void AreaEditor::openLoadDialog() {
     //Set up the picker's behavior and data.
     vector<PickerItem> areas;
     
-    for(size_t a = 0; a < game.content.areas.list[AREA_TYPE_SIMPLE].size(); a++) {
+    for(
+        size_t a = 0; a < game.content.areas.list[AREA_TYPE_SIMPLE].size(); a++
+    ) {
         Area* areaPtr = game.content.areas.list[AREA_TYPE_SIMPLE][a];
         ContentManifest* man = areaPtr->manifest;
         areas.push_back(
@@ -44,7 +46,9 @@ void AreaEditor::openLoadDialog() {
             )
         );
     }
-    for(size_t a = 0; a < game.content.areas.list[AREA_TYPE_MISSION].size(); a++) {
+    for(
+        size_t a = 0; a < game.content.areas.list[AREA_TYPE_MISSION].size(); a++
+    ) {
         Area* areaPtr = game.content.areas.list[AREA_TYPE_MISSION][a];
         ContentManifest* man = areaPtr->manifest;
         areas.push_back(
@@ -139,7 +143,9 @@ void AreaEditor::processGui() {
     
     //Draw the canvas now.
     processGuiCanvas();
-    ImGui::GetWindowDrawList()->AddCallback(drawCanvasDearImGuiCallback, nullptr);
+    ImGui::GetWindowDrawList()->AddCallback(
+        drawCanvasDearImGuiCallback, nullptr
+    );
     
     //Status bar.
     processGuiStatusBar();
@@ -2069,7 +2075,9 @@ void AreaEditor::processGuiPanelInfo() {
                 game.audio.setCurrentSong(previewSong);
                 previewing = true;
             } else if(canStopPreviewing) {
-                game.audio.setCurrentSong(game.sysContentNames.sngEditors, false);
+                game.audio.setCurrentSong(
+                    game.sysContentNames.sngEditors, false
+                );
                 previewSong.clear();
                 previewing = false;
             }
@@ -4831,7 +4839,9 @@ void AreaEditor::processGuiPanelPaths() {
             
             //Select stops with label popup.
             static string labelName;
-            if(processGuiInputPopup("selectStops", "Label:", &labelName, true)) {
+            if(
+                processGuiInputPopup("selectStops", "Label:", &labelName, true)
+            ) {
                 selectPathStopsWithLabel(labelName);
             }
             
@@ -5519,7 +5529,8 @@ void AreaEditor::processGuiPanelTools() {
                 bool backupExists = false;
                 if(!manifest.internalName.empty()) {
                     string filePath =
-                        game.curAreaData->userDataPath + "/" + FILE_NAMES::AREA_GEOMETRY;
+                        game.curAreaData->userDataPath + "/" +
+                        FILE_NAMES::AREA_GEOMETRY;
                     if(al_filename_exists(filePath.c_str())) {
                         backupExists = true;
                     }

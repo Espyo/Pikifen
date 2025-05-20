@@ -281,7 +281,8 @@ void loadMakerTools() {
  */
 void loadMiscGraphics() {
     //Icon.
-    game.sysContent.bmpIcon = game.content.bitmaps.list.get(game.sysContentNames.bmpIcon);
+    game.sysContent.bmpIcon =
+        game.content.bitmaps.list.get(game.sysContentNames.bmpIcon);
     al_set_display_icon(game.display, game.sysContent.bmpIcon);
     
     //Graphics.
@@ -318,9 +319,13 @@ void loadMiscGraphics() {
     game.sysContent.bmpKeyBox =
         game.content.bitmaps.list.get(game.sysContentNames.bmpKeyBox);
     game.sysContent.bmpLeaderSilhouetteSide =
-        game.content.bitmaps.list.get(game.sysContentNames.bmpLeaderSilhouetteSide);
+        game.content.bitmaps.list.get(
+            game.sysContentNames.bmpLeaderSilhouetteSide
+        );
     game.sysContent.bmpLeaderSilhouetteTop =
-        game.content.bitmaps.list.get(game.sysContentNames.bmpLeaderSilhouetteTop);
+        game.content.bitmaps.list.get(
+            game.sysContentNames.bmpLeaderSilhouetteTop
+        );
     game.sysContent.bmpMedalBronze =
         game.content.bitmaps.list.get(game.sysContentNames.bmpMedalBronze);
     game.sysContent.bmpMedalGold =
@@ -370,7 +375,9 @@ void loadMiscGraphics() {
     game.sysContent.bmpThrowPreview =
         game.content.bitmaps.list.get(game.sysContentNames.bmpThrowPreview);
     game.sysContent.bmpThrowPreviewDashed =
-        game.content.bitmaps.list.get(game.sysContentNames.bmpThrowPreviewDashed);
+        game.content.bitmaps.list.get(
+            game.sysContentNames.bmpThrowPreviewDashed
+        );
     game.sysContent.bmpWaveRing =
         game.content.bitmaps.list.get(game.sysContentNames.bmpWaveRing);
 }

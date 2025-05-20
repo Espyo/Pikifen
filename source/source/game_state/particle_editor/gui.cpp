@@ -120,7 +120,9 @@ void ParticleEditor::processGui() {
     
     //Draw the canvas now.
     processGuiCanvas();
-    ImGui::GetWindowDrawList()->AddCallback(drawCanvasDearImGuiCallback, nullptr);
+    ImGui::GetWindowDrawList()->AddCallback(
+        drawCanvasDearImGuiCallback, nullptr
+    );
     
     //Status bar.
     processGuiStatusBar();
@@ -847,7 +849,8 @@ void ParticleEditor::processGuiPanelGenerator() {
             ImGui::SetNextItemWidth(85);
             if(
                 ImGui::DragInt(
-                    "##number", &numberInt, 1, 1, (int) game.options.advanced.maxParticles
+                    "##number", &numberInt, 1, 1,
+                    (int) game.options.advanced.maxParticles
                 )
             ) {
                 changesMgr.markAsChanged();
@@ -869,7 +872,8 @@ void ParticleEditor::processGuiPanelGenerator() {
             if(
                 ImGui::DragInt(
                     "##numberDeviation",
-                    &numberDevInt, 1, 0, (int) game.options.advanced.maxParticles
+                    &numberDevInt, 1, 0,
+                    (int) game.options.advanced.maxParticles
                 )
             ) {
                 changesMgr.markAsChanged();

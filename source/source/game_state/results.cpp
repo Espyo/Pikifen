@@ -269,7 +269,9 @@ void Results::load() {
     MissionRecord oldRecord;
     
     DataNode missionRecords;
-    missionRecords.loadFile(FILE_PATHS_FROM_ROOT::MISSION_RECORDS, true, false, true);
+    missionRecords.loadFile(
+        FILE_PATHS_FROM_ROOT::MISSION_RECORDS, true, false, true
+    );
     string recordEntryName =
         getMissionRecordEntryName(game.curAreaData);
     DataNode* entryNode;
@@ -293,7 +295,8 @@ void Results::load() {
         isNewRecord = true;
     } else if(oldRecord.clear == goalWasCleared) {
         if(
-            game.curAreaData->mission.gradingMode == MISSION_GRADING_MODE_POINTS &&
+            game.curAreaData->mission.gradingMode ==
+            MISSION_GRADING_MODE_POINTS &&
             oldRecord.score < finalMissionScore
         ) {
             isNewRecord = true;
@@ -324,7 +327,8 @@ void Results::load() {
             "Could not save this result!",
             (
                 "An error occured while saving the mission record to the "
-                "file \"" + FILE_PATHS_FROM_ROOT::MISSION_RECORDS + "\". Make sure that "
+                "file \"" + FILE_PATHS_FROM_ROOT::MISSION_RECORDS +
+                "\". Make sure that "
                 "the folder it is saving to exists and it is not read-only, "
                 "and try beating the mission again."
             ).c_str(),
@@ -353,7 +357,9 @@ void Results::load() {
     gui.registerCoords("pick_area_input",  91, 91,  4,  4);
     gui.registerCoords("tooltip",          50, 96, 96,  4);
     gui.readCoords(
-        game.content.guiDefs.list[RESULTS::GUI_FILE_NAME].getChildByName("positions")
+        game.content.guiDefs.list[RESULTS::GUI_FILE_NAME].getChildByName(
+            "positions"
+        )
     );
     
     //Area name text.
@@ -552,7 +558,8 @@ void Results::load() {
                 "Maker tools were used, "
                 "so the result won't be saved.";
         } else if(
-            game.curAreaData->mission.gradingMode == MISSION_GRADING_MODE_POINTS &&
+            game.curAreaData->mission.gradingMode ==
+            MISSION_GRADING_MODE_POINTS &&
             oldRecord.clear &&
             !goalWasCleared &&
             oldRecord.score < finalMissionScore

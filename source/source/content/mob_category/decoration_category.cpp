@@ -115,6 +115,9 @@ void DecorationCategory::getTypeNames(vector<string> &list) const {
  * @param internalName Internal name of the mob type.
  * @param type Mob type to register.
  */
-void DecorationCategory::registerType(const string &internalName, MobType* type) {
-    game.content.mobTypes.list.decoration[internalName] = (DecorationType*) type;
+void DecorationCategory::registerType(
+    const string &internalName, MobType* type
+) {
+    game.content.mobTypes.list.decoration[internalName] =
+        (DecorationType*) type;
 }

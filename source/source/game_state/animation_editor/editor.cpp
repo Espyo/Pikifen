@@ -646,7 +646,9 @@ void AnimationEditor::loadAnimDbFile(
     changesMgr.reset();
     setupForNewAnimDbPost();
     if(shouldUpdateHistory) {
-        updateHistory(game.options.animEd.history, manifest, getNameForHistory());
+        updateHistory(
+            game.options.animEd.history, manifest, getNameForHistory()
+        );
     }
     
     setStatus("Loaded file \"" + manifest.internalName + "\" successfully.");
@@ -661,8 +663,10 @@ void AnimationEditor::loadAnimDbFile(
 void AnimationEditor::panCam(const ALLEGRO_EVENT &ev) {
     game.editorsView.cam.setPos(
         Point(
-            game.editorsView.cam.pos.x - ev.mouse.dx / game.editorsView.cam.zoom,
-            game.editorsView.cam.pos.y - ev.mouse.dy / game.editorsView.cam.zoom
+            game.editorsView.cam.pos.x -
+            ev.mouse.dx / game.editorsView.cam.zoom,
+            game.editorsView.cam.pos.y -
+            ev.mouse.dy / game.editorsView.cam.zoom
         )
     );
 }
@@ -1322,7 +1326,9 @@ bool AnimationEditor::saveAnimDb() {
     } else {
         setStatus("Saved file successfully.");
         changesMgr.markAsSaved();
-        updateHistory(game.options.animEd.history, manifest, getNameForHistory());
+        updateHistory(
+            game.options.animEd.history, manifest, getNameForHistory()
+        );
         return true;
         
     }
@@ -1337,7 +1343,10 @@ bool AnimationEditor::saveAnimDb() {
 void AnimationEditor::setupForNewAnimDbPost() {
     vector<string> filePathParts = split(manifest.path, "/");
     
-    if(manifest.path.find(FOLDER_PATHS_FROM_PACK::MOB_TYPES + "/") != string::npos) {
+    if(
+        manifest.path.find(FOLDER_PATHS_FROM_PACK::MOB_TYPES + "/") !=
+        string::npos
+    ) {
         vector<string> pathParts = split(manifest.path, "/");
         if(
             pathParts.size() > 3 &&

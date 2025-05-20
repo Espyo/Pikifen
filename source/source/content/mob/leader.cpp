@@ -196,7 +196,10 @@ Leader::Leader(const Point &pos, LeaderType* type, float angle) :
                 -LEADER::SWARM_PARTICLE_ANGLE_DEVIATION,
                 LEADER::SWARM_PARTICLE_ANGLE_DEVIATION
             );
-        p.linearSpeed = KeyframeInterpolator<Point>(rotatePoint(Point(pSpeed, 0.0f), pAngle));
+        p.linearSpeed =
+            KeyframeInterpolator<Point>(
+                rotatePoint(Point(pSpeed, 0.0f), pAngle)
+            );
         p.time = p.duration;
         p.z = this->z + this->height / 2.0f;
         game.states.gameplay->particles.add(p);
@@ -302,7 +305,8 @@ void Leader::dismissDetails() {
     setAnimation(LEADER_ANIM_DISMISSING);
     
     //Sound.
-    MobType::Sound* sound = &type->sounds[leaType->soundDataIdxs[LEADER_SOUND_DISMISSING]];
+    MobType::Sound* sound =
+        &type->sounds[leaType->soundDataIdxs[LEADER_SOUND_DISMISSING]];
     SoundSourceConfig soundConfig = sound->config;
     soundConfig.speed = group->members.empty() ? 0.9f : 1.0f;
     game.audio.createMobSoundSource(sound->sample, this, false, soundConfig);
@@ -328,7 +332,11 @@ void Leader::dismissDetails() {
         par.friction = LEADER::DISMISS_PARTICLE_FRICTION;
         par.pos = pos;
         par.priority = PARTICLE_PRIORITY_MEDIUM;
-        par.size.setKeyframeValue(0, LEADER::DISMISS_PARTICLE_SIZE * (group->members.empty() ? 0.75f : 1.0f));
+        par.size.setKeyframeValue(
+            0,
+            LEADER::DISMISS_PARTICLE_SIZE *
+            (group->members.empty() ? 0.75f : 1.0f)
+        );
         float parSpeed =
             game.rng.f(
                 LEADER::DISMISS_PARTICLE_MIN_SPEED,
@@ -336,7 +344,10 @@ void Leader::dismissDetails() {
             );
         if(group->members.empty()) parSpeed *= 0.75f;
         float parAngle = TAU / LEADER::DISMISS_PARTICLE_AMOUNT * p;
-        par.linearSpeed = KeyframeInterpolator<Point>(rotatePoint(Point(parSpeed, 0.0f), parAngle));
+        par.linearSpeed =
+            KeyframeInterpolator<Point>(
+                rotatePoint(Point(parSpeed, 0.0f), parAngle)
+            );
         par.time = par.duration;
         par.z = z + height / 2.0f;
         game.states.gameplay->particles.add(par);

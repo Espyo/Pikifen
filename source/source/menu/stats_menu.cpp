@@ -106,7 +106,8 @@ void StatsMenu::initGuiMain() {
     gui.registerCoords("list_scroll", 91, 51,  2, 82);
     gui.registerCoords("tooltip",     50, 96, 96,  4);
     gui.readCoords(
-        game.content.guiDefs.list[STATS_MENU::GUI_FILE_NAME].getChildByName("positions")
+        game.content.guiDefs.list[STATS_MENU::GUI_FILE_NAME].
+        getChildByName("positions")
     );
     
     //Back button.
@@ -128,7 +129,8 @@ void StatsMenu::initGuiMain() {
     TextGuiItem* headerText =
         new TextGuiItem(
         "STATISTICS",
-        game.sysContent.fntAreaName, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
+        game.sysContent.fntAreaName,
+        COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
     );
     gui.addItem(headerText, "header");
     
@@ -171,20 +173,32 @@ void StatsMenu::load() {
  */
 void StatsMenu::populateStatsList() {
     addHeader(
-        (game.config.general.name.empty() ? "Pikifen" : game.config.general.name) +
+        (
+            game.config.general.name.empty() ?
+            "Pikifen" :
+            game.config.general.name
+        ) +
         " use"
     );
     addStat(
         "Startups", i2s(game.statistics.startups),
         "Total number of times " +
-        (game.config.general.name.empty() ? "Pikifen" : game.config.general.name) +
+        (
+            game.config.general.name.empty() ?
+            "Pikifen" :
+            game.config.general.name
+        ) +
         " was started."
     );
     runtimeValueText =
         addStat(
             "Runtime", "",
             "Total amount of time " +
-            (game.config.general.name.empty() ? "Pikifen" : game.config.general.name) +
+            (
+                game.config.general.name.empty() ?
+                "Pikifen" :
+                game.config.general.name
+            ) +
             " was running for, in seconds."
         );
     updateRuntimeValueText();
@@ -272,7 +286,10 @@ void StatsMenu::populateStatsList() {
     size_t missionPlatinums = 0;
     long missionScores = 0;
     
-    for(size_t a = 0; a < game.content.areas.list[AREA_TYPE_MISSION].size(); a++) {
+    for(
+        size_t a = 0;
+        a < game.content.areas.list[AREA_TYPE_MISSION].size(); a++
+    ) {
         Area* areaPtr = game.content.areas.list[AREA_TYPE_MISSION][a];
         MissionRecord record;
         loadAreaMissionRecord(&missionRecordsFile, areaPtr, record);
@@ -290,12 +307,14 @@ void StatsMenu::populateStatsList() {
     addHeader("Missions");
     addStat(
         "Cleared",
-        i2s(missionClears) + "/" + i2s(game.content.areas.list[AREA_TYPE_MISSION].size()),
+        i2s(missionClears) + "/" +
+        i2s(game.content.areas.list[AREA_TYPE_MISSION].size()),
         "Total amount of missions where the current record is a goal clear."
     );
     addStat(
         "Platinum medals",
-        i2s(missionPlatinums) + "/" + i2s(game.content.areas.list[AREA_TYPE_MISSION].size()),
+        i2s(missionPlatinums) + "/" +
+        i2s(game.content.areas.list[AREA_TYPE_MISSION].size()),
         "Total amount of missions where the current record is a platinum medal."
     );
     addStat(

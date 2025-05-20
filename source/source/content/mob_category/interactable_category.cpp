@@ -115,6 +115,9 @@ void InteractableCategory::getTypeNames(vector<string> &list) const {
  * @param internalName Internal name of the mob type.
  * @param type Mob type to register.
  */
-void InteractableCategory::registerType(const string &internalName, MobType* type) {
-    game.content.mobTypes.list.interactable[internalName] = (InteractableType*) type;
+void InteractableCategory::registerType(
+    const string &internalName, MobType* type
+) {
+    game.content.mobTypes.list.interactable[internalName] =
+        (InteractableType*) type;
 }

@@ -367,7 +367,9 @@ void GameplayState::enter() {
             player.whistle.rings.push_back(0);
             player.whistle.ringColors.push_back(player.whistle.ringPrevColor);
             player.whistle.ringPrevColor =
-                sumAndWrap(player.whistle.ringPrevColor, 1, WHISTLE::N_RING_COLORS);
+                sumAndWrap(
+                    player.whistle.ringPrevColor, 1, WHISTLE::N_RING_COLORS
+                );
         };
     }
 }
@@ -1099,7 +1101,10 @@ void GameplayState::load() {
     for(auto &s : sprayStrs) {
         size_t sprayIdx = 0;
         for(; sprayIdx < game.config.misc.sprayOrder.size(); sprayIdx++) {
-            if(game.config.misc.sprayOrder[sprayIdx]->manifest->internalName == s.first) {
+            if(
+                game.config.misc.sprayOrder[sprayIdx]->manifest->internalName ==
+                s.first
+            ) {
                 break;
             }
         }
@@ -1475,7 +1480,9 @@ void GameplayState::updateClosestGroupMembers(Player* player) {
  * @param speakerIcon If not nullptr, use this bitmap to represent who
  * is talking.
  */
-GameplayMessageBox::GameplayMessageBox(const string &text, ALLEGRO_BITMAP* speakerIcon):
+GameplayMessageBox::GameplayMessageBox(
+    const string &text, ALLEGRO_BITMAP* speakerIcon
+):
     speakerIcon(speakerIcon) {
     
     string message = unescapeString(text);

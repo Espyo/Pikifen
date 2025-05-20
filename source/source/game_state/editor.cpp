@@ -1591,7 +1591,8 @@ void Editor::openBitmapDialog(
     bitmapDialogRecommendedFolder = recommendedFolder;
     bitmapDialogPicker.pickCallback =
         [this] (
-            const string &newBmpName, const string &, const string &, void*, bool
+            const string &newBmpName, const string &,
+            const string &, void*, bool
     ) {
         bitmapDialogNewBmpName = newBmpName;
     };
@@ -1966,7 +1967,10 @@ void Editor::processGuiCanvas() {
     Point curTL(itemTL.x, itemTL.y);
     Point curSize(itemSize.x, itemSize.y);
     Point curCenter = curTL + curSize / 2.0f;
-    if(curCenter != game.editorsView.center || curSize != game.editorsView.size) {
+    if(
+        curCenter != game.editorsView.center ||
+        curSize != game.editorsView.size
+    ) {
         game.editorsView.center = curCenter;
         game.editorsView.size = curSize;
         game.editorsView.updateTransformations();
@@ -2569,7 +2573,9 @@ void Editor::processGuiNewPackDialog() {
         game.content.createPack(
             internalName, name, description, maker
         );
-        for(size_t p = 0; p < game.content.packs.manifestsWithBase.size(); p++) {
+        for(
+            size_t p = 0; p < game.content.packs.manifestsWithBase.size(); p++
+        ) {
             if(game.content.packs.manifestsWithBase[p] == internalName) {
                 newContentDialogPackIdx = p;
                 break;
@@ -3149,7 +3155,9 @@ void Editor::zoomWithCursor(float newZoom) {
     Point oldMousePos = game.editorsView.cursorWorldPos;
     
     //Do the zoom.
-    game.editorsView.cam.setZoom(std::clamp(newZoom, zoomMinLevel, zoomMaxLevel));
+    game.editorsView.cam.setZoom(
+        std::clamp(newZoom, zoomMinLevel, zoomMaxLevel)
+    );
     game.editorsView.updateTransformations();
     
     //Figure out where the mouse will be after the zoom.
@@ -3163,8 +3171,10 @@ void Editor::zoomWithCursor(float newZoom) {
     //so that the cursor ends up where it was before.
     game.editorsView.cam.setPos(
         Point(
-            game.editorsView.cam.pos.x += (oldMousePos.x - game.editorsView.cursorWorldPos.x),
-            game.editorsView.cam.pos.y += (oldMousePos.y - game.editorsView.cursorWorldPos.y)
+            game.editorsView.cam.pos.x +=
+                (oldMousePos.x - game.editorsView.cursorWorldPos.x),
+            game.editorsView.cam.pos.y +=
+                (oldMousePos.y - game.editorsView.cursorWorldPos.y)
         )
     );
     
@@ -3704,7 +3714,8 @@ void Editor::Picker::process() {
                         
                     if(buttonPressed) {
                         pickCallback(
-                            iPtr->name, iPtr->topCategory, iPtr->secCategory, iPtr->info, false
+                            iPtr->name, iPtr->topCategory,
+                            iPtr->secCategory, iPtr->info, false
                         );
                         if(dialogPtr) {
                             dialogPtr->isOpen = false;
@@ -3726,9 +3737,15 @@ void Editor::Picker::process() {
                 
                     //Item button.
                     buttonSize = Point(EDITOR::PICKER_IMG_BUTTON_SIZE, 32.0f);
-                    if(ImGui::Button(iPtr->name.c_str(), ImVec2(buttonSize.x, buttonSize.y))) {
+                    if(
+                        ImGui::Button(
+                            iPtr->name.c_str(),
+                            ImVec2(buttonSize.x, buttonSize.y)
+                        )
+                    ) {
                         pickCallback(
-                            iPtr->name, iPtr->topCategory, iPtr->secCategory, iPtr->info, false
+                            iPtr->name, iPtr->topCategory,
+                            iPtr->secCategory, iPtr->info, false
                         );
                         if(dialogPtr) {
                             dialogPtr->isOpen = false;
@@ -3915,7 +3932,8 @@ Point Editor::TransformationWidget::getOldCenter() const {
  *
  * @param mouseCoords Mouse coordinates.
  * @param center Center point.
- * @param size Width and height. If nullptr, no scale handling will be performed.
+ * @param size Width and height. If nullptr, no scale handling
+ * will be performed.
  * @param angle Angle. If nullptr, no rotation handling will be performed.
  * @param zoom Zoom the widget's components by this much.
  * @return Whether the user clicked on a handle.
@@ -3932,7 +3950,10 @@ bool Editor::TransformationWidget::handleMouseDown(
     
     //Check if the user clicked on a translation or scale handle.
     for(unsigned char h = 0; h < 9; h++) {
-        if(Distance(handles[h], mouseCoords) <= EDITOR::TW_HANDLE_RADIUS * zoom) {
+        if(
+            Distance(handles[h], mouseCoords) <=
+            EDITOR::TW_HANDLE_RADIUS * zoom
+        ) {
             if(h == 4) {
                 movingHandle = h;
                 oldCenter = *center;
@@ -3968,7 +3989,8 @@ bool Editor::TransformationWidget::handleMouseDown(
  *
  * @param mouseCoords Mouse coordinates.
  * @param center Center point.
- * @param size Width and height. If nullptr, no scale handling will be performed.
+ * @param size Width and height. If nullptr, no scale handling
+ * will be performed.
  * @param angle Angle. If nullptr, no rotation handling will be performed.
  * @param zoom Zoom the widget's components by this much.
  * @param keepAspectRatio If true, aspect ratio is kept when resizing.

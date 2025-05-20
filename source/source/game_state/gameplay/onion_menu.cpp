@@ -91,13 +91,15 @@ OnionMenu::OnionMenu(
     gui.registerCoords("group_right_more", 95, 60,  3,  4);
     gui.registerCoords("tooltip",          50, 95, 95,  8);
     gui.readCoords(
-        game.content.guiDefs.list[ONION_MENU::GUI_FILE_NAME].getChildByName("positions")
+        game.content.guiDefs.list[ONION_MENU::GUI_FILE_NAME].
+        getChildByName("positions")
     );
     
     //Instructions text.
     TextGuiItem* instructionsText =
         new TextGuiItem(
-        "Call or store Pikmin", game.sysContent.fntStandard, al_map_rgb(188, 230, 230)
+        "Call or store Pikmin", game.sysContent.fntStandard,
+        al_map_rgb(188, 230, 230)
     );
     gui.addItem(instructionsText, "instructions");
     
@@ -465,7 +467,8 @@ OnionMenu::OnionMenu(
         );
         
         drawButton(
-            draw.center, draw.size, "", game.sysContent.fntStandard, COLOR_WHITE,
+            draw.center, draw.size, "",
+            game.sysContent.fntStandard, COLOR_WHITE,
             prevPageButton->selected,
             prevPageButton->getJuiceValue()
         );
@@ -490,7 +493,8 @@ OnionMenu::OnionMenu(
         );
         
         drawButton(
-            draw.center, draw.size, "", game.sysContent.fntStandard, COLOR_WHITE,
+            draw.center, draw.size, "",
+            game.sysContent.fntStandard, COLOR_WHITE,
             nextPageButton->selected,
             nextPageButton->getJuiceValue()
         );
@@ -919,12 +923,14 @@ void OnionMenu::update() {
         leftmost =
             std::min(
                 leftmost,
-                onionMoreLIcon->ratioCenter.x - onionMoreLIcon->ratioSize.x / 2.0f
+                onionMoreLIcon->ratioCenter.x -
+                onionMoreLIcon->ratioSize.x / 2.0f
             );
         rightmost =
             std::max(
                 rightmost,
-                onionMoreRIcon->ratioCenter.x + onionMoreRIcon->ratioSize.x / 2.0f
+                onionMoreRIcon->ratioCenter.x +
+                onionMoreRIcon->ratioSize.x / 2.0f
             );
     }
     

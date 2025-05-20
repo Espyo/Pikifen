@@ -693,7 +693,9 @@ vector<ContentT> sortVectorWithPreferenceList(
  * @return Whether they contain the same items.
  */
 template<typename ContentT>
-bool vectorsContainSame(const vector<ContentT> &v1, const vector<ContentT> &v2) {
+bool vectorsContainSame(
+    const vector<ContentT> &v1, const vector<ContentT> &v2
+) {
     if(v1.size() != v2.size()) {
         return false;
     }

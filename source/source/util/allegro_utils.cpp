@@ -271,7 +271,9 @@ vector<string> folderToVectorRecursively(
     //Go recursively.
     for(size_t s = 0; s < subfolders.size(); s++) {
         vector<string> recursiveResult =
-            folderToVectorRecursively(folderPath + "/" + subfolders[s], folders);
+            folderToVectorRecursively(
+                folderPath + "/" + subfolders[s], folders
+            );
         for(size_t r = 0; r < recursiveResult.size(); r++) {
             v.push_back(subfolders[s] + "/" + recursiveResult[r]);
         }

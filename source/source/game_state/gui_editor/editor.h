@@ -133,7 +133,8 @@ private:
     void openNewDialog();
     void openOptionsDialog();
     void pickGuiDefFile(
-        const string &name, const string &topCat, const string &secCat, void* info, bool isNew
+        const string &name, const string &topCat, const string &secCat,
+        void* info, bool isNew
     );
     bool saveGuiDef();
     void setupForNewGuiDef();

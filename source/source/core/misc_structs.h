@@ -967,7 +967,8 @@ struct Notification {
     float getVisibility() const;
     void reset();
     void setContents(
-        const PlayerInputSource &inputSource, const string &text, const Point &pos
+        const PlayerInputSource &inputSource,
+        const string &text, const Point &pos
     );
     void setEnabled(bool enabled);
     void tick(float deltaT);

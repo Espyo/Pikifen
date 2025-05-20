@@ -1361,7 +1361,9 @@ void AreaEditor::findProblemsUnknownTexture() {
         
         if(sPtr->textureInfo.bmpName.empty()) continue;
         
-        if(!isInMap(game.content.bitmaps.manifests, sPtr->textureInfo.bmpName)) {
+        if(
+            !isInMap(game.content.bitmaps.manifests, sPtr->textureInfo.bmpName)
+        ) {
             problemSectorPtr = sPtr;
             problemType = EPT_UNKNOWN_TEXTURE;
             problemTitle = "Sector with unknown texture!";
@@ -1669,7 +1671,8 @@ bool AreaEditor::getDrawingOuterSector(Sector** result) const {
 
 
 /**
- * @brief Returns the edge currently under the specified point, or nullptr if none.
+ * @brief Returns the edge currently under the specified point,
+ * or nullptr if none.
  *
  * @param p The point.
  * @param after Only check edges that come after this one.
@@ -1818,7 +1821,8 @@ MobGen* AreaEditor::getMobUnderPoint(const Point &p, size_t* outIdx) const {
 /**
  * @brief Returns true if there are path links currently under the specified
  * point. link1 takes the info of the found link. If there's also a link in
- * the opposite direction, link2 gets that data, otherwise link2 receives nullptr.
+ * the opposite direction, link2 gets that data,
+ * otherwise link2 receives nullptr.
  *
  * @param p The point to check against.
  * @param link1 If there is a path link under that point,
@@ -2524,7 +2528,8 @@ Point AreaEditor::snapPoint(const Point &p, bool ignoreSelected) {
             sort(
                 snappableVertexes.begin(), snappableVertexes.end(),
                 [] (
-                    std::pair<Distance, Vertex*> v1, std::pair<Distance, Vertex*> v2
+                    std::pair<Distance, Vertex*> v1,
+                    std::pair<Distance, Vertex*> v2
             ) -> bool {
                 return v1.first < v2.first;
             }
@@ -2580,7 +2585,10 @@ Point AreaEditor::snapPoint(const Point &p, bool ignoreSelected) {
             }
             
             Distance d(finalPoint, edgeP);
-            if(d > game.options.areaEd.snapThreshold / game.editorsView.cam.zoom) {
+            if(
+                d >
+                game.options.areaEd.snapThreshold / game.editorsView.cam.zoom
+            ) {
                 continue;
             }
             

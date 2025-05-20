@@ -269,7 +269,9 @@ void Area::clone(Area &other) {
         sPtr->clone(osPtr);
         osPtr->textureInfo.bmpName = sPtr->textureInfo.bmpName;
         osPtr->textureInfo.bitmap =
-            game.content.bitmaps.list.get(sPtr->textureInfo.bmpName, nullptr, false);
+            game.content.bitmaps.list.get(
+                sPtr->textureInfo.bmpName, nullptr, false
+            );
         osPtr->edges.reserve(sPtr->edges.size());
         osPtr->edgeIdxs.reserve(sPtr->edgeIdxs.size());
         for(size_t e = 0; e < sPtr->edges.size(); e++) {
@@ -334,7 +336,8 @@ void Area::clone(Area &other) {
         otPtr->bmpName = tPtr->bmpName;
         otPtr->size = tPtr->size;
         otPtr->sway = tPtr->sway;
-        otPtr->bitmap = game.content.bitmaps.list.get(tPtr->bmpName, nullptr, false);
+        otPtr->bitmap =
+            game.content.bitmaps.list.get(tPtr->bmpName, nullptr, false);
     }
     
     other.manifest = manifest;
@@ -974,7 +977,9 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
     mRS.set("mission_points_per_pikmin_death", mission.pointsPerPikminDeath);
     mRS.set("mission_points_per_sec_left", mission.pointsPerSecLeft);
     mRS.set("mission_points_per_sec_passed", mission.pointsPerSecPassed);
-    mRS.set("mission_points_per_treasure_point", mission.pointsPerTreasurePoint);
+    mRS.set(
+        "mission_points_per_treasure_point", mission.pointsPerTreasurePoint
+    );
     mRS.set("mission_points_per_enemy_point", mission.pointsPerEnemyPoint);
     mRS.set("enemy_points_on_collection", mission.enemyPointsOnCollection);
     mRS.set("mission_point_loss_data", mission.pointLossData);
@@ -1144,7 +1149,9 @@ void Area::loadGeometryFromDataNode(
         
         if(!newSector->fade && !newSector->isBottomlessPit) {
             newSector->textureInfo.bitmap =
-                game.content.bitmaps.list.get(newSector->textureInfo.bmpName, nullptr);
+                game.content.bitmaps.list.get(
+                    newSector->textureInfo.bmpName, nullptr
+                );
         }
         
         if(!hazardStr.empty()) {
@@ -1354,7 +1361,10 @@ void Area::loadGeometryFromDataNode(
         TRIANGULATION_ERROR res =
             triangulateSector(sPtr, &loneEdges, false);
             
-        if(res != TRIANGULATION_ERROR_NONE && level == CONTENT_LOAD_LEVEL_EDITOR) {
+        if(
+            res != TRIANGULATION_ERROR_NONE &&
+            level == CONTENT_LOAD_LEVEL_EDITOR
+        ) {
             problems.nonSimples[sPtr] = res;
             problems.loneEdges.insert(
                 loneEdges.begin(), loneEdges.end()
@@ -1855,7 +1865,9 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
             getIdxBitmask(MISSION_FAIL_COND_TOO_FEW_PIKMIN)
         )
     ) {
-        mGW.write("mission_fail_too_few_pik_amount", mission.failTooFewPikAmount);
+        mGW.write(
+            "mission_fail_too_few_pik_amount", mission.failTooFewPikAmount
+        );
     }
     if(
         hasFlag(
@@ -1863,7 +1875,9 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
             getIdxBitmask(MISSION_FAIL_COND_TOO_MANY_PIKMIN)
         )
     ) {
-        mGW.write("mission_fail_too_many_pik_amount", mission.failTooManyPikAmount);
+        mGW.write(
+            "mission_fail_too_many_pik_amount", mission.failTooManyPikAmount
+        );
     }
     if(
         hasFlag(
@@ -1898,33 +1912,52 @@ void Area::saveMissionDataToDataNode(DataNode* node) {
         mGW.write("mission_fail_time_limit", mission.failTimeLimit);
     }
     if(mission.failHudPrimaryCond != INVALID) {
-        mGW.write("mission_fail_hud_primary_cond", mission.failHudPrimaryCond);
+        mGW.write(
+            "mission_fail_hud_primary_cond", mission.failHudPrimaryCond
+        );
     }
     if(mission.failHudSecondaryCond != INVALID) {
-        mGW.write("mission_fail_hud_secondary_cond", mission.failHudSecondaryCond);
+        mGW.write(
+            "mission_fail_hud_secondary_cond", mission.failHudSecondaryCond
+        );
     }
     mGW.write("mission_grading_mode", mission.gradingMode);
     if(mission.gradingMode == MISSION_GRADING_MODE_POINTS) {
         if(mission.pointsPerPikminBorn != 0) {
-            mGW.write("mission_points_per_pikmin_born", mission.pointsPerPikminBorn);
+            mGW.write(
+                "mission_points_per_pikmin_born", mission.pointsPerPikminBorn
+            );
         }
         if(mission.pointsPerPikminDeath != 0) {
-            mGW.write("mission_points_per_pikmin_death", mission.pointsPerPikminDeath);
+            mGW.write(
+                "mission_points_per_pikmin_death", mission.pointsPerPikminDeath
+            );
         }
         if(mission.pointsPerSecLeft != 0) {
-            mGW.write("mission_points_per_sec_left", mission.pointsPerSecLeft);
+            mGW.write(
+                "mission_points_per_sec_left", mission.pointsPerSecLeft
+            );
         }
         if(mission.pointsPerSecPassed != 0) {
-            mGW.write("mission_points_per_sec_passed", mission.pointsPerSecPassed);
+            mGW.write(
+                "mission_points_per_sec_passed", mission.pointsPerSecPassed
+            );
         }
         if(mission.pointsPerTreasurePoint != 0) {
-            mGW.write("mission_points_per_treasure_point", mission.pointsPerTreasurePoint);
+            mGW.write(
+                "mission_points_per_treasure_point",
+                mission.pointsPerTreasurePoint
+            );
         }
         if(mission.pointsPerEnemyPoint != 0) {
-            mGW.write("mission_points_per_enemy_point", mission.pointsPerEnemyPoint);
+            mGW.write(
+                "mission_points_per_enemy_point", mission.pointsPerEnemyPoint
+            );
         }
         if(mission.enemyPointsOnCollection) {
-            mGW.write("enemy_points_on_collection", mission.enemyPointsOnCollection);
+            mGW.write(
+                "enemy_points_on_collection", mission.enemyPointsOnCollection
+            );
         }
         if(mission.pointLossData > 0) {
             mGW.write("mission_point_loss_data", mission.pointLossData);

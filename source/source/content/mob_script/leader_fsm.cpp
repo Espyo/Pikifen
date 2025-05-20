@@ -2662,7 +2662,8 @@ void LeaderFsm::startBoredomAnim(Mob* m, void* info1, void* info2) {
     }
     
     if(boredomAnims.empty()) return;
-    size_t animIdx = boredomAnims[game.rng.i(0, (int) (boredomAnims.size() - 1))];
+    size_t animIdx =
+        boredomAnims[game.rng.i(0, (int) (boredomAnims.size() - 1))];
     m->setAnimation(animIdx, START_ANIM_OPTION_NORMAL, false);
     leaPtr->inBoredAnimation = true;
 }

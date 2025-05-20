@@ -100,8 +100,8 @@ Mob* Mob::getMobToWalkOn() const {
  *
  * @param newPos Position to check.
  * @param intersectingEdges List of edges it is intersecting with.
- * @return H_MOVE_RESULT_OK if everything is okay, H_MOVE_RESULT_FAIL if movement is
- * impossible.
+ * @return H_MOVE_RESULT_OK if everything is okay, H_MOVE_RESULT_FAIL if
+ * movement is impossible.
  */
 H_MOVE_RESULT Mob::getMovementEdgeIntersections(
     const Point &newPos, vector<Edge*>* intersectingEdges
@@ -209,9 +209,9 @@ H_MOVE_RESULT Mob::getMovementEdgeIntersections(
  * @param deltaT How long the frame's tick is, in seconds.
  * @param moveSpeedMult Movement speed is multiplied by this.
  * @param moveSpeed The calculated move speed is placed in this struct.
- * @return H_MOVE_RESULT_OK on normal movement, H_MOVE_RESULT_TELEPORTED if the mob's X
- * and Y have been set and movement logic can be skipped, and H_MOVE_RESULT_FAIL if
- * movement is entirely impossible this frame.
+ * @return H_MOVE_RESULT_OK on normal movement, H_MOVE_RESULT_TELEPORTED if
+ * the mob's X and Y have been set and movement logic can be skipped,
+ * and H_MOVE_RESULT_FAIL if movement is entirely impossible this frame.
  */
 H_MOVE_RESULT Mob::getPhysicsHorizontalMovement(
     float deltaT, float moveSpeedMult, Point* moveSpeed

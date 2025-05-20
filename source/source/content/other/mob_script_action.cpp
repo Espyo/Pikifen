@@ -904,7 +904,8 @@ void MobActionRunners::finishDying(MobActionRunData &data) {
  */
 void MobActionRunners::focus(MobActionRunData &data) {
 
-    MOB_ACTION_MOB_TARGET_TYPE s = (MOB_ACTION_MOB_TARGET_TYPE) s2i(data.args[0]);
+    MOB_ACTION_MOB_TARGET_TYPE s =
+        (MOB_ACTION_MOB_TARGET_TYPE) s2i(data.args[0]);
     Mob* target = getTargetMob(data, s);
     
     if(!target) return;
@@ -1216,7 +1217,8 @@ void MobActionRunners::getFocusVar(MobActionRunData &data) {
  * @param data Data about the action call.
  */
 void MobActionRunners::getMobInfo(MobActionRunData &data) {
-    MOB_ACTION_MOB_TARGET_TYPE s = (MOB_ACTION_MOB_TARGET_TYPE) s2i(data.args[1]);
+    MOB_ACTION_MOB_TARGET_TYPE s =
+        (MOB_ACTION_MOB_TARGET_TYPE) s2i(data.args[1]);
     Mob* target = getTargetMob(data, s);
     
     if(!target) return;
@@ -1602,7 +1604,9 @@ void MobActionRunners::print(MobActionRunData &data) {
  * @param data Data about the action call.
  */
 void MobActionRunners::receiveStatus(MobActionRunData &data) {
-    data.m->applyStatusEffect(game.content.statusTypes.list[data.args[0]], false, false);
+    data.m->applyStatusEffect(
+        game.content.statusTypes.list[data.args[0]], false, false
+    );
 }
 
 

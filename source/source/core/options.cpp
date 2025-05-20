@@ -255,14 +255,18 @@ void Options::loadFromDataNode(DataNode* file) {
         advanced.targetFps = std::max(LOWEST_FRAMERATE, advanced.targetFps);
         
         if(advanced.joystickMinDeadzone > advanced.joystickMaxDeadzone) {
-            std::swap(advanced.joystickMinDeadzone, advanced.joystickMaxDeadzone);
+            std::swap(
+                advanced.joystickMinDeadzone, advanced.joystickMaxDeadzone
+            );
         }
         if(advanced.joystickMinDeadzone == advanced.joystickMaxDeadzone) {
             advanced.joystickMinDeadzone -= 0.1;
             advanced.joystickMaxDeadzone += 0.1;
         }
-        advanced.joystickMinDeadzone = std::clamp(advanced.joystickMinDeadzone, 0.0f, 1.0f);
-        advanced.joystickMaxDeadzone = std::clamp(advanced.joystickMaxDeadzone, 0.0f, 1.0f);
+        advanced.joystickMinDeadzone =
+            std::clamp(advanced.joystickMinDeadzone, 0.0f, 1.0f);
+        advanced.joystickMaxDeadzone =
+            std::clamp(advanced.joystickMaxDeadzone, 0.0f, 1.0f);
     }
     
     //Animation editor.

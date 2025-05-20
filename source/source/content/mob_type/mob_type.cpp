@@ -340,7 +340,8 @@ void MobType::loadFromDataNode(
             );
             
         } else if(
-            !statusName.empty() && statusIt == game.content.statusTypes.list.end()
+            !statusName.empty() &&
+            statusIt == game.content.statusTypes.list.end()
         ) {
             game.errors.report(
                 "Unknown status type \"" + statusName + "\"!",
@@ -433,7 +434,8 @@ void MobType::loadFromDataNode(
             );
             
         } else if(
-            !statusName.empty() && statusIt == game.content.statusTypes.list.end()
+            !statusName.empty() &&
+            statusIt == game.content.statusTypes.list.end()
         ) {
             game.errors.report(
                 "Unknown status type \"" + statusName + "\"!",
@@ -466,7 +468,8 @@ void MobType::loadFromDataNode(
         if(words.size() >= 2) {
             statusOverrideName = words[1];
         }
-        auto statusOverrideIt = game.content.statusTypes.list.find(statusOverrideName);
+        auto statusOverrideIt =
+            game.content.statusTypes.list.find(statusOverrideName);
         
         if(svIt == game.content.statusTypes.list.end()) {
             game.errors.report(
@@ -772,7 +775,10 @@ void MobType::loadFromDataNode(
             std::swap(newProp.minValue, newProp.maxValue);
         }
         
-        if(newProp.type == AEMP_TYPE_LIST || newProp.type == AEMP_TYPE_NR_LIST) {
+        if(
+            newProp.type == AEMP_TYPE_LIST ||
+            newProp.type == AEMP_TYPE_NR_LIST
+        ) {
             if(listStr.empty()) {
                 game.errors.report(
                     "For this area editor property type, you need to specify "
@@ -837,7 +843,8 @@ void MobType::loadFromDataNode(
     
     //Resources.
     if(level >= CONTENT_LOAD_LEVEL_FULL) {
-        animDb = &game.content.mobAnimDbs.list[category->id][manifest->internalName];
+        animDb =
+            &game.content.mobAnimDbs.list[category->id][manifest->internalName];
         animDb->fillSoundIdxCaches(this);
         
         DataNode scriptFile;

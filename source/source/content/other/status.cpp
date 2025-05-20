@@ -167,7 +167,9 @@ void StatusType::loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level) {
     
     if(level >= CONTENT_LOAD_LEVEL_FULL) {
         if(!overlayAnimation.empty()) {
-            overlayAnim.initToFirstAnim(&game.content.globalAnimDbs.list[overlayAnimation]);
+            overlayAnim.initToFirstAnim(
+                &game.content.globalAnimDbs.list[overlayAnimation]
+            );
         }
     }
 }

@@ -262,7 +262,8 @@ void Pikmin::forceCarry(Mob* m) {
  */
 float Pikmin::getBaseSpeed() const {
     float base = Mob::getBaseSpeed();
-    return base + (base * this->maturity * game.config.pikmin.maturitySpeedMult);
+    return
+        base + (base * this->maturity * game.config.pikmin.maturitySpeedMult);
 }
 
 

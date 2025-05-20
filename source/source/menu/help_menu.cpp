@@ -46,7 +46,9 @@ void HelpMenu::drawTidbit(
     
     int lineHeight = al_get_font_line_height(font);
     
-    setStringTokenWidths(tokens, font, game.sysContent.fntSlim, lineHeight, true);
+    setStringTokenWidths(
+        tokens, font, game.sysContent.fntSlim, lineHeight, true
+    );
     
     //Split long lines.
     vector<vector<StringToken> > tokensPerLine =
@@ -67,7 +69,8 @@ void HelpMenu::drawTidbit(
     //Draw!
     for(size_t l = 0; l < tokensPerLine.size(); l++) {
         drawStringTokens(
-            tokensPerLine[l], game.sysContent.fntStandard, game.sysContent.fntSlim,
+            tokensPerLine[l],
+            game.sysContent.fntStandard, game.sysContent.fntSlim,
             true,
             Point(
                 where.x,
@@ -106,7 +109,10 @@ void HelpMenu::load() {
             Tidbit newT;
             newT.name = parts.size() > 0 ? parts[0] : "";
             newT.description = parts.size() > 1 ? parts[1] : "";
-            newT.image = parts.size() > 2 ? game.content.bitmaps.list.get(parts[2]) : nullptr;
+            newT.image =
+                parts.size() > 2 ?
+                game.content.bitmaps.list.get(parts[2]) :
+                nullptr;
             categoryTidbits.push_back(newT);
         }
     }
@@ -357,7 +363,9 @@ void HelpMenu::unload() {
         if(c == HELP_CATEGORY_PIKMIN) continue;
         for(size_t t = 0; t < tidbits[(HELP_CATEGORY) c].size(); t++) {
             if(tidbits[(HELP_CATEGORY) c][t].image) {
-                game.content.bitmaps.list.free(tidbits[(HELP_CATEGORY) c][t].image);
+                game.content.bitmaps.list.free(
+                    tidbits[(HELP_CATEGORY) c][t].image
+                );
             }
         }
     }

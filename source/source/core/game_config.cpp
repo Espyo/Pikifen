@@ -172,7 +172,9 @@ void GameConfig::load(DataNode* file) {
         aRS.set("carrying_color_move", aestheticGen.carryingColorMove);
         aRS.set("carrying_color_stop", aestheticGen.carryingColorStop);
         aRS.set("cursor_spin_speed", aestheticGen.cursorSpinSpeed);
-        aRS.set("gameplay_msg_char_interval", aestheticGen.gameplayMsgChInterval);
+        aRS.set(
+            "gameplay_msg_char_interval", aestheticGen.gameplayMsgChInterval
+        );
         aRS.set("no_pikmin_color", aestheticGen.noPikminColor);
         
         aestheticGen.cursorSpinSpeed =

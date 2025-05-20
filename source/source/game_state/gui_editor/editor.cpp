@@ -382,8 +382,10 @@ void GuiEditor::loadGuiDefFile(
 void GuiEditor::panCam(const ALLEGRO_EVENT &ev) {
     game.editorsView.cam.setPos(
         Point(
-            game.editorsView.cam.pos.x - ev.mouse.dx / game.editorsView.cam.zoom,
-            game.editorsView.cam.pos.y - ev.mouse.dy / game.editorsView.cam.zoom
+            game.editorsView.cam.pos.x -
+            ev.mouse.dx / game.editorsView.cam.zoom,
+            game.editorsView.cam.pos.y -
+            ev.mouse.dy / game.editorsView.cam.zoom
         )
     );
 }

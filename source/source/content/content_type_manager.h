@@ -50,7 +50,8 @@ protected:
 
     //--- Function declarations ---
     void fillManifestsMap(
-        map<string, ContentManifest> &manifests, const string &contentPath, bool folders
+        map<string, ContentManifest> &manifests,
+        const string &contentPath, bool folders
     );
     void fillManifestsMapFromPack(
         map<string, ContentManifest> &manifests, const string &packName,
@@ -81,7 +82,9 @@ public:
     
     void clearManifests() override;
     void fillManifests() override;
-    ContentManifest* findManifest(const string &areaName, const string &pack, AREA_TYPE type);
+    ContentManifest* findManifest(
+        const string &areaName, const string &pack, AREA_TYPE type
+    );
     string getName() const override;
     string getPerfMonMeasurementName() const override;
     void loadAll(CONTENT_LOAD_LEVEL level) override;
@@ -370,7 +373,10 @@ private:
     void fillCatManifestsFromPack(
         MobCategory* category, const string &packName
     );
-    void loadAnimationDb(ContentManifest* manifest, CONTENT_LOAD_LEVEL level, MOB_CATEGORY categoryId);
+    void loadAnimationDb(
+        ContentManifest* manifest,
+        CONTENT_LOAD_LEVEL level, MOB_CATEGORY categoryId
+    );
     
 };
 
@@ -412,9 +418,13 @@ public:
 private:
 
     //--- Function declarations ---
-    void loadMobTypesOfCategory(MobCategory* category, CONTENT_LOAD_LEVEL level);
+    void loadMobTypesOfCategory(
+        MobCategory* category, CONTENT_LOAD_LEVEL level
+    );
     void unloadMobType(MobType* mt, CONTENT_LOAD_LEVEL level);
-    void unloadMobTypesOfCategory(MobCategory* category, CONTENT_LOAD_LEVEL level);
+    void unloadMobTypesOfCategory(
+        MobCategory* category, CONTENT_LOAD_LEVEL level
+    );
 };
 
 
@@ -602,7 +612,9 @@ public:
 private:
 
     //--- Function declarations ---
-    void loadSpikeDamageType(ContentManifest* manifest, CONTENT_LOAD_LEVEL level);
+    void loadSpikeDamageType(
+        ContentManifest* manifest, CONTENT_LOAD_LEVEL level
+    );
     
 };
 
@@ -719,6 +731,8 @@ public:
 private:
 
     //--- Function declarations ---
-    void loadWeatherCondition(ContentManifest* manifest, CONTENT_LOAD_LEVEL level);
+    void loadWeatherCondition(
+        ContentManifest* manifest, CONTENT_LOAD_LEVEL level
+    );
     
 };

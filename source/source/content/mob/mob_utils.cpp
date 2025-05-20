@@ -326,7 +326,8 @@ vector<Hazard*> Group::getGroupInvulnerabilities(
 
 
 /**
- * @brief Returns the next available standby group member type, or nullptr if none.
+ * @brief Returns the next available standby group member type, or
+ * nullptr if none.
  *
  * @param moveBackwards If true, go through the list backwards.
  * @param newType The new type is returned here.

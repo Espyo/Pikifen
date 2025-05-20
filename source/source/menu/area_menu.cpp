@@ -381,7 +381,8 @@ void AreaMenu::initGuiInfoPage() {
     gui.registerCoords("maker",        28, 95, 52,  6);
     gui.registerCoords("version",      76, 95, 44,  6);
     gui.readCoords(
-        game.content.guiDefs.list[AREA_MENU::INFO_GUI_FILE_NAME].getChildByName("positions")
+        game.content.guiDefs.list[AREA_MENU::INFO_GUI_FILE_NAME].
+        getChildByName("positions")
     );
     
     if(!game.content.areas.list[areaType].empty()) {
@@ -532,7 +533,8 @@ void AreaMenu::initGuiMain() {
     gui.registerCoords("no_areas_text", 50, 50, 96, 10);
     
     gui.readCoords(
-        game.content.guiDefs.list[AREA_MENU::GUI_FILE_NAME].getChildByName("positions")
+        game.content.guiDefs.list[AREA_MENU::GUI_FILE_NAME].
+        getChildByName("positions")
     );
     
     //Back button.
@@ -591,7 +593,8 @@ void AreaMenu::initGuiMain() {
                 );
             areaButton->onActivate =
             [this, areaPtr] (const Point &) {
-                game.states.gameplay->pathOfAreaToLoad = areaPtr->manifest->path;
+                game.states.gameplay->pathOfAreaToLoad =
+                    areaPtr->manifest->path;
                 game.fadeMgr.startFade(false, [] () {
                     game.changeState(game.states.gameplay);
                 });
@@ -686,7 +689,8 @@ void AreaMenu::initGuiMain() {
         randomButton->onDraw =
         [randomButton] (const DrawInfo & draw) {
             drawButton(
-                draw.center, draw.size, "", game.sysContent.fntStandard, COLOR_WHITE,
+                draw.center, draw.size, "",
+                game.sysContent.fntStandard, COLOR_WHITE,
                 randomButton->selected
             );
             drawBitmapInBox(
@@ -783,7 +787,8 @@ void AreaMenu::initGuiSpecsPage() {
     gui.registerCoords("grading_list",   47, 85, 90, 26);
     gui.registerCoords("grading_scroll", 96, 85,  4, 26);
     gui.readCoords(
-        game.content.guiDefs.list[AREA_MENU::SPECS_GUI_FILE_NAME].getChildByName("positions")
+        game.content.guiDefs.list[AREA_MENU::SPECS_GUI_FILE_NAME].
+        getChildByName("positions")
     );
     
     if(!game.content.areas.list[areaType].empty()) {
@@ -850,9 +855,14 @@ void AreaMenu::load() {
     //Mission records.
     if(areaType == AREA_TYPE_MISSION) {
         DataNode missionRecords;
-        missionRecords.loadFile(FILE_PATHS_FROM_ROOT::MISSION_RECORDS, true, false, true);
+        missionRecords.loadFile(
+            FILE_PATHS_FROM_ROOT::MISSION_RECORDS, true, false, true
+        );
         
-        for(size_t a = 0; a < game.content.areas.list[AREA_TYPE_MISSION].size(); a++) {
+        for(
+            size_t a = 0;
+            a < game.content.areas.list[AREA_TYPE_MISSION].size(); a++
+        ) {
             Area* areaPtr = game.content.areas.list[AREA_TYPE_MISSION][a];
             MissionRecord record;
             
@@ -865,7 +875,10 @@ void AreaMenu::load() {
     //Initialize the GUIs.
     initGuiMain();
     initGuiInfoPage();
-    if(areaType == AREA_TYPE_MISSION && !game.content.areas.list[AREA_TYPE_MISSION].empty()) {
+    if(
+        areaType == AREA_TYPE_MISSION &&
+        !game.content.areas.list[AREA_TYPE_MISSION].empty()
+    ) {
         initGuiSpecsPage();
         specsBox->visible = false;
         specsBox->responsive = false;

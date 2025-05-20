@@ -403,7 +403,8 @@ void ErrorManager::logToFile(const string &s) {
         header += "Pikifen version " + getEngineVersionString();
         if(!game.config.general.version.empty()) {
             header +=
-                ", " + game.config.general.name + " version " + game.config.general.version;
+                ", " + game.config.general.name +
+                " version " + game.config.general.version;
         }
         header += ":\n";
         output += header;

@@ -492,7 +492,8 @@ void TitleScreen::initGuiMainPage() {
  * @brief Loads the GUI elements for the main menu's make page.
  */
 void TitleScreen::initGuiMakePage() {
-    DataNode* guiFile = &game.content.guiDefs.list[TITLE_SCREEN::MAKE_GUI_FILE_NAME];
+    DataNode* guiFile =
+        &game.content.guiDefs.list[TITLE_SCREEN::MAKE_GUI_FILE_NAME];
     
     //Button icon positions.
     DataNode* iconsNode = guiFile->getChildByName("icons_to_the_left");
@@ -574,7 +575,8 @@ void TitleScreen::initGuiMakePage() {
     partEdButton->onDraw =
     [ = ](const DrawInfo & draw) {
         drawMenuButtonIcon(
-            MENU_ICON_PARTICLE_EDITOR, draw.center, draw.size, particleEditorIconLeft
+            MENU_ICON_PARTICLE_EDITOR, draw.center, draw.size,
+            particleEditorIconLeft
         );
         drawButton(
             draw.center, draw.size,
@@ -674,7 +676,8 @@ void TitleScreen::initGuiMakePage() {
  * @brief Loads the GUI elements for the main menu's play page.
  */
 void TitleScreen::initGuiPlayPage() {
-    DataNode* guiFile = &game.content.guiDefs.list[TITLE_SCREEN::PLAY_GUI_FILE_NAME];
+    DataNode* guiFile =
+        &game.content.guiDefs.list[TITLE_SCREEN::PLAY_GUI_FILE_NAME];
     
     //Button icon positions.
     DataNode* iconsNode = guiFile->getChildByName("icons_to_the_left");
@@ -798,7 +801,8 @@ void TitleScreen::initGuiPlayPage() {
  * @brief Loads the GUI elements for the main menu's tutorial question page.
  */
 void TitleScreen::initGuiTutorialPage() {
-    DataNode* guiFile = &game.content.guiDefs.list[TITLE_SCREEN::TUTORIAL_GUI_FILE_NAME];
+    DataNode* guiFile =
+        &game.content.guiDefs.list[TITLE_SCREEN::TUTORIAL_GUI_FILE_NAME];
     
     //Menu items.
     tutorialGui.registerCoords("question", 50,     60, 60,  12.5);
@@ -918,10 +922,12 @@ void TitleScreen::load() {
     }
     pageToLoad = MAIN_MENU_PAGE_MAIN;
     
-    DataNode* settingsFile = &game.content.guiDefs.list[TITLE_SCREEN::GUI_FILE_NAME];
+    DataNode* settingsFile =
+        &game.content.guiDefs.list[TITLE_SCREEN::GUI_FILE_NAME];
     
     //Resources.
-    bmpMenuBg = game.content.bitmaps.list.get(game.sysContentNames.bmpTitleScreenBg);
+    bmpMenuBg =
+        game.content.bitmaps.list.get(game.sysContentNames.bmpTitleScreenBg);
     
     //Logo pikmin.
     DataNode* logoNode = settingsFile->getChildByName("logo");

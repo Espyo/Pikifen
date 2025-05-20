@@ -218,14 +218,17 @@ void AnimationEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
                         if(
                             BBoxCheck(
                                 tl, br,
-                                game.editorsView.cursorWorldPos, 1.0f / game.editorsView.cam.zoom
+                                game.editorsView.cursorWorldPos,
+                                1.0f / game.editorsView.cam.zoom
                             )
                         ) {
                             clickedHitboxes.push_back(h);
                         }
                     } else {
                         if(
-                            Distance(game.editorsView.cursorWorldPos, hPtr->pos) <=
+                            Distance(
+                                game.editorsView.cursorWorldPos, hPtr->pos
+                            ) <=
                             hPtr->radius
                         ) {
                             clickedHitboxes.push_back(h);
@@ -292,7 +295,10 @@ void AnimationEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
             }
             
             bool* selectionPixels = new bool[(int) (bmpSize.x * bmpSize.y)];
-            memset(selectionPixels, 0, sizeof(bool) * ((int) (bmpSize.x * bmpSize.y)));
+            memset(
+                selectionPixels, 0,
+                sizeof(bool) * ((int) (bmpSize.x * bmpSize.y))
+            );
             
             al_lock_bitmap(
                 curSprite->parentBmp,
@@ -555,7 +561,10 @@ void AnimationEditor::handleMouseUpdate(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void AnimationEditor::handleMouseWheel(const ALLEGRO_EVENT &ev) {
-    zoomWithCursor(game.editorsView.cam.zoom + (game.editorsView.cam.zoom * ev.mouse.dz * 0.1));
+    zoomWithCursor(
+        game.editorsView.cam.zoom +
+        (game.editorsView.cam.zoom * ev.mouse.dz * 0.1)
+    );
 }
 
 

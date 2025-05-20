@@ -15,7 +15,8 @@
 
 
 /**
- * @brief A pile is an object that represents a collection of resource-type mobs.
+ * @brief A pile is an object that represents a collection of
+ * resource-type mobs.
  * Pikmin attack it in some form, and it ends up yeilding a resource, bit by
  * bit, until it is exhausted.
  */

@@ -2788,7 +2788,9 @@ void PikminFsm::finishCarrying(Mob* m, void* info1, void* info2) {
     
     if(pikPtr->carryingMob->carryInfo->mustReturn) {
         //The Pikmin should return somewhere (like a pile).
-        pikPtr->fsm.setState(PIKMIN_STATE_RETURNING, (void*) pikPtr->carryingMob);
+        pikPtr->fsm.setState(
+            PIKMIN_STATE_RETURNING, (void*) pikPtr->carryingMob
+        );
         
     } else {
         //The Pikmin can just sit and chill.
@@ -3785,7 +3787,9 @@ void PikminFsm::rechaseOpponent(Mob* m, void* info1, void* info2) {
         //The opponent cannot be chased down. Become idle.
         m->fsm.setState(PIKMIN_STATE_IDLING);
         
-    } else if(game.rng.f(0.0f, 1.0f) <= PIKMIN::CIRCLE_OPPONENT_CHANCE_GROUNDED) {
+    } else if(
+        game.rng.f(0.0f, 1.0f) <= PIKMIN::CIRCLE_OPPONENT_CHANCE_GROUNDED
+    ) {
         //Circle around it a bit before attacking from a new angle.
         pikPtr->fsm.setState(PIKMIN_STATE_CIRCLING_OPPONENT);
         
@@ -3998,7 +4002,8 @@ void PikminFsm::startBoredomAnim(Mob* m, void* info1, void* info2) {
     }
     
     if(boredomAnims.empty()) return;
-    size_t animIdx = boredomAnims[game.rng.i(0, (int) (boredomAnims.size() - 1))];
+    size_t animIdx =
+        boredomAnims[game.rng.i(0, (int) (boredomAnims.size() - 1))];
     m->setAnimation(animIdx, START_ANIM_OPTION_NORMAL, false);
     pikPtr->inBoredAnimation = true;
 }

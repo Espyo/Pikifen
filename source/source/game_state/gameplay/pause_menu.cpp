@@ -274,7 +274,9 @@ void PauseMenu::addPikminStatusLine(
     const float itemY = y1 + itemHeight / 2.0f + itemYSpacing;
     
     ALLEGRO_FONT* font =
-        (isSingle && !isTotals) ? game.sysContent.fntStandard : game.sysContent.fntCounter;
+        (isSingle && !isTotals) ?
+        game.sysContent.fntStandard :
+        game.sysContent.fntCounter;
     string tooltipStart =
         pikType ?
         "Number of " + pikType->name + " " :
@@ -1566,7 +1568,9 @@ void PauseMenu::handleAllegroEvent(const ALLEGRO_EVENT &ev) {
             mouseInRadar && ev.mouse.dz != 0.0f
         ) {
             //Zoom in or out, using the radar/mouse cursor as the anchor.
-            zoomRadarWithMouse(ev.mouse.dz * 0.1f, radarDraw.center, radarDraw.size);
+            zoomRadarWithMouse(
+                ev.mouse.dz * 0.1f, radarDraw.center, radarDraw.size
+            );
             
         }
     }
@@ -1664,7 +1668,8 @@ void PauseMenu::handlePlayerAction(const PlayerAction &action) {
                 size_t newPageIdx =
                     sumAndWrap(
                         (int) curPageIdx,
-                        action.actionTypeId == PLAYER_ACTION_TYPE_MENU_PAGE_LEFT ?
+                        action.actionTypeId ==
+                        PLAYER_ACTION_TYPE_MENU_PAGE_LEFT ?
                         -1 :
                         1,
                         (int) pages.size()
@@ -1687,7 +1692,8 @@ void PauseMenu::handlePlayerAction(const PlayerAction &action) {
  * @brief Initializes the leaving confirmation page.
  */
 void PauseMenu::initConfirmationPage() {
-    DataNode* guiFile = &game.content.guiDefs.list[PAUSE_MENU::CONFIRMATION_GUI_FILE_NAME];
+    DataNode* guiFile =
+        &game.content.guiDefs.list[PAUSE_MENU::CONFIRMATION_GUI_FILE_NAME];
     
     //Menu items.
     confirmationGui.registerCoords("cancel",           19, 83, 30, 10);
@@ -1791,7 +1797,8 @@ void PauseMenu::initMainPauseMenu() {
     gui.registerCoords("quit",             87,   88, 22,  8);
     gui.registerCoords("tooltip",          50,   96, 96,  4);
     gui.readCoords(
-        game.content.guiDefs.list[PAUSE_MENU::GUI_FILE_NAME].getChildByName("positions")
+        game.content.guiDefs.list[PAUSE_MENU::GUI_FILE_NAME].
+        getChildByName("positions")
     );
     
     //Header.
@@ -2067,7 +2074,8 @@ void PauseMenu::initMainPauseMenu() {
  * @brief Initializes the mission page.
  */
 void PauseMenu::initMissionPage() {
-    DataNode* guiFile = &game.content.guiDefs.list[PAUSE_MENU::MISSION_GUI_FILE_NAME];
+    DataNode* guiFile =
+        &game.content.guiDefs.list[PAUSE_MENU::MISSION_GUI_FILE_NAME];
     
     //Menu items.
     missionGui.registerCoords("header",           50,  5, 52,  6);
@@ -2197,17 +2205,18 @@ void PauseMenu::initMissionPage() {
  * @brief Initializes the radar page.
  */
 void PauseMenu::initRadarPage() {
-    DataNode* guiFile = &game.content.guiDefs.list[PAUSE_MENU::RADAR_GUI_FILE_NAME];
+    DataNode* guiFile =
+        &game.content.guiDefs.list[PAUSE_MENU::RADAR_GUI_FILE_NAME];
     
     //Assets.
     DataNode* bitmapsNode = guiFile->getChildByName("files");
     
 #define loader(var, name) \
     var = \
-          game.content.bitmaps.list.get( \
-                                         bitmapsNode->getChildByName(name)->value, \
-                                         bitmapsNode->getChildByName(name) \
-                                       );
+    game.content.bitmaps.list.get( \
+        bitmapsNode->getChildByName(name)->value, \
+        bitmapsNode->getChildByName(name) \
+    );
     
     loader(bmpRadarCursor,        "cursor");
     loader(bmpRadarPikmin,        "pikmin");
@@ -2302,7 +2311,11 @@ void PauseMenu::initRadarPage() {
     //Group Pikmin number text.
     TextGuiItem* groupPikNrText =
         new TextGuiItem(
-        i2s(game.states.gameplay->getAmountOfGroupPikmin(&game.states.gameplay->players[0])),
+        i2s(
+            game.states.gameplay->getAmountOfGroupPikmin(
+                &game.states.gameplay->players[0]
+            )
+        ),
         game.sysContent.fntCounter,
         COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
     );
@@ -2353,7 +2366,8 @@ void PauseMenu::initRadarPage() {
         int lineHeight = al_get_font_line_height(cursorInfoText->font);
         vector<StringToken> tokens = tokenizeString(cursorInfoText->text);
         setStringTokenWidths(
-            tokens, game.sysContent.fntStandard, game.sysContent.fntSlim, lineHeight, false
+            tokens, game.sysContent.fntStandard,
+            game.sysContent.fntSlim, lineHeight, false
         );
         vector<vector<StringToken> > tokensPerLine =
             splitLongStringWithTokens(tokens, draw.size.x);
@@ -2361,7 +2375,8 @@ void PauseMenu::initRadarPage() {
         
         for(size_t l = 0; l < tokensPerLine.size(); l++) {
             drawStringTokens(
-                tokensPerLine[l], game.sysContent.fntStandard, game.sysContent.fntSlim,
+                tokensPerLine[l], game.sysContent.fntStandard,
+                game.sysContent.fntSlim,
                 false,
                 Point(
                     draw.center.x,
@@ -2379,7 +2394,9 @@ void PauseMenu::initRadarPage() {
         );
         
         //Draw a connection from here to the radar cursor.
-        Point lineAnchor(draw.center.x - draw.size.x / 2.0f - 16.0f, draw.center.y);
+        Point lineAnchor(
+            draw.center.x - draw.size.x / 2.0f - 16.0f, draw.center.y
+        );
         Point cursorWindowPos = radarCursor;
         al_transform_coordinates(
             &radarView.worldToWindowTransform,
@@ -2478,7 +2495,8 @@ void PauseMenu::initRadarPage() {
  * @brief Initializes the status page.
  */
 void PauseMenu::initStatusPage() {
-    DataNode* guiFile = &game.content.guiDefs.list[PAUSE_MENU::STATUS_GUI_FILE_NAME];
+    DataNode* guiFile =
+        &game.content.guiDefs.list[PAUSE_MENU::STATUS_GUI_FILE_NAME];
     
     //Menu items.
     statusGui.registerCoords("header",           50,     5,   52,    6);
@@ -2588,7 +2606,9 @@ void PauseMenu::initStatusPage() {
         PikminType* ptPtr = game.config.pikmin.order[p];
         
         size_t inGroup =
-            game.states.gameplay->getAmountOfGroupPikmin(&game.states.gameplay->players[0], ptPtr);
+            game.states.gameplay->getAmountOfGroupPikmin(
+                &game.states.gameplay->players[0], ptPtr
+            );
         size_t idling =
             game.states.gameplay->getAmountOfIdlePikmin(ptPtr);
         size_t onField =
@@ -2840,7 +2860,9 @@ void PauseMenu::tick(float deltaT) {
         
         radarZoom.getInfo(&radarMovCoords, &dummyAngle, &dummyMagnitude);
         if(radarMovCoords.y != 0.0f) {
-            zoomRadar((-radarMovCoords.y) * PAUSE_MENU::RADAR_ZOOM_SPEED * deltaT);
+            zoomRadar(
+                (-radarMovCoords.y) * PAUSE_MENU::RADAR_ZOOM_SPEED * deltaT
+            );
         }
         
         bool mouseInRadar =

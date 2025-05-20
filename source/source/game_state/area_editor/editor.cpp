@@ -286,7 +286,9 @@ void AreaEditor::clearCurrentArea() {
     
     if(game.curAreaData) {
         for(size_t s = 0; s < game.curAreaData->treeShadows.size(); s++) {
-            game.content.bitmaps.list.free(game.curAreaData->treeShadows[s]->bmpName);
+            game.content.bitmaps.list.free(
+                game.curAreaData->treeShadows[s]->bmpName
+            );
         }
     }
     
@@ -1013,7 +1015,9 @@ void AreaEditor::finishLayoutMoving() {
         
         sort(
             mergeVertexes.begin(), mergeVertexes.end(),
-        [] (std::pair<Distance, Vertex*> v1, std::pair<Distance, Vertex*> v2) -> bool {
+        [] (
+            std::pair<Distance, Vertex*> v1, std::pair<Distance, Vertex*> v2
+        ) -> bool {
             return v1.first < v2.first;
         }
         );
@@ -1870,7 +1874,9 @@ void AreaEditor::loadAreaFolder(
     changesMgr.reset();
     setupForNewAreaPost();
     if(shouldUpdateHistory) {
-        updateHistory(game.options.areaEd.history, manifest, game.curAreaData->name);
+        updateHistory(
+            game.options.areaEd.history, manifest, game.curAreaData->name
+        );
     }
     setStatus(
         "Loaded area \"" + manifest.internalName + "\" " +
@@ -1937,8 +1943,10 @@ void AreaEditor::loadReference() {
 void AreaEditor::panCam(const ALLEGRO_EVENT &ev) {
     game.editorsView.cam.setPos(
         Point(
-            game.editorsView.cam.pos.x - ev.mouse.dx / game.editorsView.cam.zoom,
-            game.editorsView.cam.pos.y - ev.mouse.dy / game.editorsView.cam.zoom
+            game.editorsView.cam.pos.x -
+            ev.mouse.dx / game.editorsView.cam.zoom,
+            game.editorsView.cam.pos.y -
+            ev.mouse.dy / game.editorsView.cam.zoom
         )
     );
 }
@@ -3158,7 +3166,9 @@ bool AreaEditor::saveArea(bool toBackup) {
         changesMgr.markAsSaved();
         setStatus("Saved area successfully.");
         
-        updateHistory(game.options.areaEd.history, manifest, game.curAreaData->name);
+        updateHistory(
+            game.options.areaEd.history, manifest, game.curAreaData->name
+        );
     }
     
     return saveSuccessful;
@@ -3182,7 +3192,8 @@ void AreaEditor::saveBackup() {
  */
 void AreaEditor::saveReference() {
     string filePath =
-        game.curAreaData->userDataPath + "/" + FILE_NAMES::AREA_REFERENCE_CONFIG;
+        game.curAreaData->userDataPath + "/" +
+        FILE_NAMES::AREA_REFERENCE_CONFIG;
         
     if(!referenceBitmap) {
         //The user doesn't want a reference any more.
@@ -4015,7 +4026,9 @@ AreaEditor::LayoutDrawingNode::LayoutDrawingNode(
     if(!mergeVertexes.empty()) {
         sort(
             mergeVertexes.begin(), mergeVertexes.end(),
-        [] (std::pair<Distance, Vertex*> v1, std::pair<Distance, Vertex*> v2) -> bool {
+        [] (
+            std::pair<Distance, Vertex*> v1, std::pair<Distance, Vertex*> v2
+        ) -> bool {
             return v1.first < v2.first;
         }
         );

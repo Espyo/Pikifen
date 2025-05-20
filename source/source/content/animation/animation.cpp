@@ -645,7 +645,8 @@ void AnimationDatabase::saveToDataNode(
             
                 //Hitbox.
                 Hitbox* hitboxPtr = &spritePtr->hitboxes[h];
-                DataNode* hitboxNode = hitboxesNode->addNew(hitboxPtr->bodyPartName);
+                DataNode* hitboxNode =
+                    hitboxesNode->addNew(hitboxPtr->bodyPartName);
                 GetterWriter hGW(hitboxNode);
                 
                 hGW.write("coords", p2s(hitboxPtr->pos, &hitboxPtr->z));
@@ -660,7 +661,9 @@ void AnimationDatabase::saveToDataNode(
                     hGW.write("can_pikmin_latch", hitboxPtr->canPikminLatch);
                 }
                 if(hitboxPtr->hazard) {
-                    hGW.write("hazard", hitboxPtr->hazard->manifest->internalName);
+                    hGW.write(
+                        "hazard", hitboxPtr->hazard->manifest->internalName
+                    );
                 }
                 if(
                     hitboxPtr->type == HITBOX_TYPE_ATTACK &&
@@ -1165,7 +1168,8 @@ void Sprite::setBitmap(
     }
     
     if(newBmpName != bmpName || !parentBmp) {
-        parentBmp = game.content.bitmaps.list.get(newBmpName, node, node != nullptr);
+        parentBmp =
+            game.content.bitmaps.list.get(newBmpName, node, node != nullptr);
     }
     
     Point parentSize = getBitmapDimensions(parentBmp);

@@ -412,8 +412,10 @@ void ParticleEditor::loadPartGenFile(
 void ParticleEditor::panCam(const ALLEGRO_EVENT &ev) {
     game.editorsView.cam.setPos(
         Point(
-            game.editorsView.cam.pos.x - ev.mouse.dx / game.editorsView.cam.zoom,
-            game.editorsView.cam.pos.y - ev.mouse.dy / game.editorsView.cam.zoom
+            game.editorsView.cam.pos.x -
+            ev.mouse.dx / game.editorsView.cam.zoom,
+            game.editorsView.cam.pos.y -
+            ev.mouse.dy / game.editorsView.cam.zoom
         )
     );
 }
@@ -503,7 +505,10 @@ void ParticleEditor::gridIntervalIncreaseCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
     float newGridInterval = PARTICLE_EDITOR::GRID_INTERVALS.back();
-    for(int i = (int) (PARTICLE_EDITOR::GRID_INTERVALS.size() - 1); i >= 0; --i) {
+    for(
+        int i = (int) (PARTICLE_EDITOR::GRID_INTERVALS.size() - 1);
+        i >= 0; --i
+    ) {
         if(
             PARTICLE_EDITOR::GRID_INTERVALS[i] <=
             game.options.partEd.gridInterval
@@ -783,7 +788,8 @@ bool ParticleEditor::savePartGen() {
             nullptr, "Save failed!",
             "Could not save the particle file!",
             (
-                "An error occured while saving the particle generator to the file \"" +
+                "An error occured while saving the particle generator "
+                "to the file \"" +
                 manifest.path + "\". Make sure that the folder it is saving to "
                 "exists and it is not read-only, and try again."
             ).c_str(),

@@ -625,7 +625,8 @@ private:
     vector<bool> newCircleSectorValidEdges;
     
     //Time left to keep the error-redness of the new sector's line(s) for.
-    Timer newSectorErrorTintTimer = Timer(AREA_EDITOR::NEW_SECTOR_ERROR_TINT_DURATION);
+    Timer newSectorErrorTintTimer =
+        Timer(AREA_EDITOR::NEW_SECTOR_ERROR_TINT_DURATION);
     
     //Mouse drag start coordinates, when using on-canvas texture effect editing.
     Point octeeDragStart;
@@ -700,7 +701,8 @@ private:
     string problemDescription;
     
     //Information about the problematic intersecting edges, if any.
-    EdgeIntersection problemEdgeIntersection = EdgeIntersection(nullptr, nullptr);
+    EdgeIntersection problemEdgeIntersection =
+        EdgeIntersection(nullptr, nullptr);
     
     //Pointer to the problematic mob, if any.
     MobGen* problemMobPtr = nullptr;

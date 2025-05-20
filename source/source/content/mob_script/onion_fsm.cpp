@@ -128,7 +128,8 @@ void OnionFsm::receiveMob(Mob* m, void* info1, void* info2) {
         seeds = ((Enemy*) delivery)->eneType->pikminSeeds;
         
         if(game.curAreaData->mission.enemyPointsOnCollection) {
-            game.states.gameplay->enemyPointsCollected += ((Enemy*) delivery)->eneType->points;
+            game.states.gameplay->enemyPointsCollected +=
+                ((Enemy*) delivery)->eneType->points;
         }
         
         break;

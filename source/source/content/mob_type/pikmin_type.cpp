@@ -263,12 +263,16 @@ void PikminType::loadCatResources(DataNode* file) {
     pRS.set("icon_onion", iconOnionStr, &iconOnionNode);
     
     bmpIcon = game.content.bitmaps.list.get(iconStr, iconNode);
-    bmpMaturityIcon[0] = game.content.bitmaps.list.get(iconLeafStr, iconLeafNode);
-    bmpMaturityIcon[1] = game.content.bitmaps.list.get(iconBudStr, iconBudNode);
-    bmpMaturityIcon[2] = game.content.bitmaps.list.get(iconFlowerStr, iconFlowerNode);
+    bmpMaturityIcon[0] =
+        game.content.bitmaps.list.get(iconLeafStr, iconLeafNode);
+    bmpMaturityIcon[1] =
+        game.content.bitmaps.list.get(iconBudStr, iconBudNode);
+    bmpMaturityIcon[2] =
+        game.content.bitmaps.list.get(iconFlowerStr, iconFlowerNode);
     
     if(iconOnionNode) {
-        bmpOnionIcon = game.content.bitmaps.list.get(iconOnionStr, iconOnionNode);
+        bmpOnionIcon =
+            game.content.bitmaps.list.get(iconOnionStr, iconOnionNode);
     }
 }
 

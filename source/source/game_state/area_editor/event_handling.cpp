@@ -1623,14 +1623,16 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT &ev) {
                 switch(octeeMode) {
                 case OCTEE_MODE_OFFSET: {
                     registerChange("sector texture offset change");
-                    Point diff = (game.editorsView.cursorWorldPos - octeeDragStart);
+                    Point diff =
+                        game.editorsView.cursorWorldPos - octeeDragStart;
                     diff = rotatePoint(diff, -sPtr->textureInfo.rot);
                     diff = diff / sPtr->textureInfo.scale;
                     sPtr->textureInfo.translation = octeeOrigOffset + diff;
                     break;
                 } case OCTEE_MODE_SCALE: {
                     registerChange("sector texture scale change");
-                    Point diff = (game.editorsView.cursorWorldPos - octeeDragStart);
+                    Point diff =
+                        game.editorsView.cursorWorldPos - octeeDragStart;
                     diff = rotatePoint(diff, -sPtr->textureInfo.rot);
                     Point dragStartRot =
                         rotatePoint(
@@ -1930,7 +1932,10 @@ void AreaEditor::handleMouseUpdate(const ALLEGRO_EVENT &ev) {
  * @param ev Event to handle.
  */
 void AreaEditor::handleMouseWheel(const ALLEGRO_EVENT &ev) {
-    zoomWithCursor(game.editorsView.cam.zoom + (game.editorsView.cam.zoom * ev.mouse.dz * 0.1));
+    zoomWithCursor(
+        game.editorsView.cam.zoom +
+        (game.editorsView.cam.zoom * ev.mouse.dz * 0.1)
+    );
 }
 
 

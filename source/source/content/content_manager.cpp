@@ -10,9 +10,9 @@
 
 #include "content_manager.h"
 
-#include "../core/misc_functions.h"
 #include "../core/game.h"
 #include "../core/load.h"
+#include "../core/misc_functions.h"
 #include "../util/allegro_utils.h"
 
 
@@ -101,7 +101,9 @@ ContentTypeManager* ContentManager::getMgrPtr(CONTENT_TYPE type) {
  * @param types Types of game content to load.
  * @param level Level to load at.
  */
-void ContentManager::loadAll(const vector<CONTENT_TYPE> &types, CONTENT_LOAD_LEVEL level) {
+void ContentManager::loadAll(
+    const vector<CONTENT_TYPE> &types, CONTENT_LOAD_LEVEL level
+) {
     //Fill in all manifests first. This is because some content may rely on
     //another's manifest.
     for(size_t t = 0; t < types.size(); t++) {

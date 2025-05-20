@@ -13,9 +13,9 @@ def change_version_numbers():
     new = input('What is the new version (X.Y.Z)? ')
     new_parts = new.split('.')
     source_dir_to_use = get_source_dir_to_use()
-    system_call('sed -i "s/VERSION_MAJOR = .*;/VERSION_MAJOR = ' + new_parts[0] + ';/g" ' + source_dir_to_use + '/const.h')
-    system_call('sed -i "s/VERSION_MINOR = .*;/VERSION_MINOR = ' + new_parts[1] + ';/g" ' + source_dir_to_use + '/const.h')
-    system_call('sed -i "s/VERSION_REV   = .*;/VERSION_REV   = ' + new_parts[2] + ';/g" ' + source_dir_to_use + '/const.h')
+    system_call('sed -i "s/VERSION_MAJOR = .*;/VERSION_MAJOR = ' + new_parts[0] + ';/g" ' + source_dir_to_use + '/core/const.h')
+    system_call('sed -i "s/VERSION_MINOR = .*;/VERSION_MINOR = ' + new_parts[1] + ';/g" ' + source_dir_to_use + '/core/const.h')
+    system_call('sed -i "s/VERSION_REV   = .*;/VERSION_REV   = ' + new_parts[2] + ';/g" ' + source_dir_to_use + '/core/const.h')
     
     rc_files = [source_dir_to_use + '/pikifen.rc', source_dir_to_use + '/../visual_studio_2019/resource.rc']
     for fn in rc_files:
@@ -190,11 +190,11 @@ if __name__ == '__main__':
         if not debug_mode:
             latest = system_call('git describe --abbrev=0 --tags')
         
-            aux = system_call('grep -oP "VERSION_MAJOR = .*;" source/source/const.h')
+            aux = system_call('grep -oP "VERSION_MAJOR = .*;" source/source/core/const.h')
             cur_major = aux[16:-1]
-            aux = system_call('grep -oP "VERSION_MINOR = .*;" source/source/const.h')
+            aux = system_call('grep -oP "VERSION_MINOR = .*;" source/source/core/const.h')
             cur_minor = aux[16:-1]
-            aux = system_call('grep -oP "VERSION_REV   = .*;" source/source/const.h')
+            aux = system_call('grep -oP "VERSION_REV   = .*;" source/source/core/const.h')
             cur_rev = aux[16:-1]
             current = cur_major + '.' + cur_minor + '.' + cur_rev
             

@@ -283,16 +283,14 @@ void AreaEditor::drawCanvas() {
     if(state == EDITOR_STATE_REVIEW && showCrossSection) {
         for(unsigned char p = 0; p < 2; p++) {
             string letter = (p == 0 ? "A" : "B");
-            
+            float radius =
+                AREA_EDITOR::CROSS_SECTION_POINT_RADIUS /
+                game.editorsView.cam.zoom;
             al_draw_filled_rectangle(
-                crossSectionCheckpoints[p].x -
-                (AREA_EDITOR::CROSS_SECTION_POINT_RADIUS / game.editorsView.cam.zoom),
-                crossSectionCheckpoints[p].y -
-                (AREA_EDITOR::CROSS_SECTION_POINT_RADIUS / game.editorsView.cam.zoom),
-                crossSectionCheckpoints[p].x +
-                (AREA_EDITOR::CROSS_SECTION_POINT_RADIUS / game.editorsView.cam.zoom),
-                crossSectionCheckpoints[p].y +
-                (AREA_EDITOR::CROSS_SECTION_POINT_RADIUS / game.editorsView.cam.zoom),
+                crossSectionCheckpoints[p].x - radius,
+                crossSectionCheckpoints[p].y - radius,
+                crossSectionCheckpoints[p].x + radius,
+                crossSectionCheckpoints[p].y + radius,
                 al_map_rgb(255, 255, 32)
             );
             drawText(
@@ -798,7 +796,10 @@ void AreaEditor::drawCrossSectionGraph() {
         float cursorSegmentRatio = 0;
         getClosestPointInLineSeg(
             crossSectionCheckpoints[0], crossSectionCheckpoints[1],
-            Point(game.editorsView.cursorWorldPos.x, game.editorsView.cursorWorldPos.y),
+            Point(
+                game.editorsView.cursorWorldPos.x,
+                game.editorsView.cursorWorldPos.y
+            ),
             &cursorSegmentRatio
         );
         if(cursorSegmentRatio >= 0 && cursorSegmentRatio <= 1) {
@@ -907,8 +908,10 @@ void AreaEditor::drawDebugText(
         &dox, &doy, &dw, &dh
     );
     
-    float bboxW = (dw * AREA_EDITOR::DEBUG_TEXT_SCALE) / game.editorsView.cam.zoom;
-    float bboxH = (dh * AREA_EDITOR::DEBUG_TEXT_SCALE) / game.editorsView.cam.zoom;
+    float bboxW =
+        (dw * AREA_EDITOR::DEBUG_TEXT_SCALE) / game.editorsView.cam.zoom;
+    float bboxH =
+        (dh * AREA_EDITOR::DEBUG_TEXT_SCALE) / game.editorsView.cam.zoom;
     
     al_draw_filled_rectangle(
         where.x - bboxW * 0.5, where.y - bboxH * 0.5,
@@ -1529,7 +1532,8 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
                     float midY =
                         (sPtr->pos.y + s2Ptr->pos.y) / 2.0f;
                     const float delta =
-                        (AREA_EDITOR::PATH_LINK_THICKNESS * 4) / game.editorsView.cam.zoom;
+                        (AREA_EDITOR::PATH_LINK_THICKNESS * 4) /
+                        game.editorsView.cam.zoom;
                         
                     al_draw_filled_triangle(
                         midX + cos(angle) * delta,
@@ -1551,7 +1555,9 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
             for(size_t s = 0; s < game.curAreaData->pathStops.size(); s++) {
                 PathStop* sPtr = game.curAreaData->pathStops[s];
                 float d =
-                    Distance(game.editorsView.cursorWorldPos, sPtr->pos).toFloat() -
+                    Distance(
+                        game.editorsView.cursorWorldPos, sPtr->pos
+                    ).toFloat() -
                     sPtr->radius;
                     
                 if(!closest || d < closestDist) {
@@ -1562,7 +1568,8 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
             
             if(closest) {
                 al_draw_line(
-                    game.editorsView.cursorWorldPos.x, game.editorsView.cursorWorldPos.y,
+                    game.editorsView.cursorWorldPos.x,
+                    game.editorsView.cursorWorldPos.y,
                     closest->pos.x, closest->pos.y,
                     al_map_rgb(192, 128, 32), 2.0 / game.editorsView.cam.zoom
                 );
@@ -1630,7 +1637,8 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
                 string letter = (c == 0 ? "A" : "B");
                 
                 const float factor =
-                    AREA_EDITOR::PATH_PREVIEW_CHECKPOINT_RADIUS / game.editorsView.cam.zoom;
+                    AREA_EDITOR::PATH_PREVIEW_CHECKPOINT_RADIUS /
+                    game.editorsView.cam.zoom;
                 al_draw_filled_rectangle(
                     pathPreviewCheckpoints[c].x - factor,
                     pathPreviewCheckpoints[c].y - factor,
@@ -1878,7 +1886,8 @@ void AreaEditor::drawTreeShadows(const AreaEdCanvasStyle& style) {
                 if(selectedShadow != sPtr) {
                     al_draw_rectangle(
                         minCoords.x, minCoords.y, maxCoords.x, maxCoords.y,
-                        al_map_rgb(128, 128, 64), 2.0 / game.editorsView.cam.zoom
+                        al_map_rgb(128, 128, 64),
+                        2.0 / game.editorsView.cam.zoom
                     );
                 }
             }

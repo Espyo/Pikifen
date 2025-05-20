@@ -247,7 +247,8 @@ void OptionsMenu::initGuiAudioPage() {
     TextGuiItem* headerText =
         new TextGuiItem(
         "AUDIO OPTIONS",
-        game.sysContent.fntAreaName, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
+        game.sysContent.fntAreaName,
+        COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
     );
     audioGui.addItem(headerText, "header");
     
@@ -398,7 +399,8 @@ void OptionsMenu::initGuiControlBindsPage() {
     TextGuiItem* headerText =
         new TextGuiItem(
         "CONTROL BINDS",
-        game.sysContent.fntAreaName, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
+        game.sysContent.fntAreaName,
+        COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
     );
     bindsGui.addItem(headerText, "header");
     
@@ -469,13 +471,16 @@ void OptionsMenu::initGuiControlsPage() {
     TextGuiItem* headerText =
         new TextGuiItem(
         "CONTROLS OPTIONS",
-        game.sysContent.fntAreaName, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
+        game.sysContent.fntAreaName,
+        COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
     );
     controlsGui.addItem(headerText, "header");
     
     //Normal control binds button.
     ButtonGuiItem* normalBindsButton =
-        new ButtonGuiItem("Normal control binds...", game.sysContent.fntStandard);
+        new ButtonGuiItem(
+            "Normal control binds...", game.sysContent.fntStandard
+        );
     normalBindsButton->onActivate =
     [this] (const Point &) {
         bindsMenuType = CONTROL_BINDS_MENU_NORMAL;
@@ -497,7 +502,9 @@ void OptionsMenu::initGuiControlsPage() {
     
     //Special control binds button.
     ButtonGuiItem* specialBindsButton =
-        new ButtonGuiItem("Special control binds...", game.sysContent.fntStandard);
+        new ButtonGuiItem(
+            "Special control binds...", game.sysContent.fntStandard
+        );
     specialBindsButton->onActivate =
     [this] (const Point &) {
         bindsMenuType = CONTROL_BINDS_MENU_SPECIAL;
@@ -606,7 +613,8 @@ void OptionsMenu::initGuiGraphicsPage() {
     TextGuiItem* headerText =
         new TextGuiItem(
         "GRAPHICS OPTIONS",
-        game.sysContent.fntAreaName, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
+        game.sysContent.fntAreaName,
+        COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
     );
     graphicsGui.addItem(headerText, "header");
     
@@ -725,7 +733,8 @@ void OptionsMenu::initGuiMiscPage() {
     TextGuiItem* headerText =
         new TextGuiItem(
         "MISC. OPTIONS",
-        game.sysContent.fntAreaName, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
+        game.sysContent.fntAreaName,
+        COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
     );
     miscGui.addItem(headerText, "header");
     
@@ -796,7 +805,8 @@ void OptionsMenu::initGuiMiscPage() {
  * @brief Initializes the top-level menu GUI.
  */
 void OptionsMenu::initGuiTopPage() {
-    DataNode* guiFile = &game.content.guiDefs.list[OPTIONS_MENU::TOP_GUI_FILE_NAME];
+    DataNode* guiFile =
+        &game.content.guiDefs.list[OPTIONS_MENU::TOP_GUI_FILE_NAME];
     
     //Button icon positions.
     DataNode* iconsNode = guiFile->getChildByName("icons_to_the_left");
@@ -844,7 +854,8 @@ void OptionsMenu::initGuiTopPage() {
     TextGuiItem* headerText =
         new TextGuiItem(
         "OPTIONS",
-        game.sysContent.fntAreaName, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
+        game.sysContent.fntAreaName,
+        COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
     );
     topGui.addItem(headerText, "header");
     
@@ -1146,7 +1157,9 @@ void OptionsMenu::populateBinds() {
     vector<ControlBind> &allBinds = game.controls.binds();
     
     bindsPerActionType.clear();
-    bindsPerActionType.assign(allPlayerActionTypes.size(), vector<ControlBind>());
+    bindsPerActionType.assign(
+        allPlayerActionTypes.size(), vector<ControlBind>()
+    );
     
     //Read all binds and sort them by player action type.
     for(size_t b = 0; b < allBinds.size(); b++) {
@@ -1303,7 +1316,8 @@ void OptionsMenu::populateBinds() {
                     [this, removeBindButton]
                 (const DrawInfo & draw) {
                     drawButton(
-                        draw.center, draw.size, "X", game.sysContent.fntStandard, COLOR_WHITE,
+                        draw.center, draw.size, "X",
+                        game.sysContent.fntStandard, COLOR_WHITE,
                         removeBindButton->selected,
                         removeBindButton->getJuiceValue()
                     );
@@ -1346,7 +1360,8 @@ void OptionsMenu::populateBinds() {
                 [this, bindButton]
             (const DrawInfo & draw) {
                 drawButton(
-                    draw.center, draw.size, "", game.sysContent.fntStandard, COLOR_WHITE,
+                    draw.center, draw.size, "",
+                    game.sysContent.fntStandard, COLOR_WHITE,
                     bindButton->selected,
                     bindButton->getJuiceValue()
                 );
@@ -1398,7 +1413,9 @@ void OptionsMenu::populateBinds() {
         
             //Restore default button.
             ButtonGuiItem* restoreButton =
-                new ButtonGuiItem("Restore defaults", game.sysContent.fntStandard);
+                new ButtonGuiItem(
+                    "Restore defaults", game.sysContent.fntStandard
+                );
             restoreButton->ratioCenter =
                 Point(0.63f, curY);
             restoreButton->ratioSize =
@@ -1422,7 +1439,8 @@ void OptionsMenu::populateBinds() {
             //Default label.
             TextGuiItem* defaultLabelText =
                 new TextGuiItem(
-                "Default:", game.sysContent.fntStandard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
+                "Default:", game.sysContent.fntStandard,
+                COLOR_WHITE, ALLEGRO_ALIGN_LEFT
             );
             defaultLabelText->ratioCenter =
                 Point(0.63f, curY);
@@ -1445,7 +1463,8 @@ void OptionsMenu::populateBinds() {
             defaultIcon->onDraw =
             [defInputSource] (const DrawInfo & draw) {
                 drawPlayerInputSourceIcon(
-                    game.sysContent.fntSlim, defInputSource, false, draw.center, draw.size
+                    game.sysContent.fntSlim, defInputSource,
+                    false, draw.center, draw.size
                 );
             };
             bindsListBox->addChild(defaultIcon);

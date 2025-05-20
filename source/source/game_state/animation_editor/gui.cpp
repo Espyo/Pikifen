@@ -34,7 +34,8 @@ void AnimationEditor::openLoadDialog() {
         fileItems.push_back(
             PickerItem(
                 a.second.name,
-                "Pack: " + game.content.packs.list[a.second.manifest->pack].name,
+                "Pack: " +
+                game.content.packs.list[a.second.manifest->pack].name,
                 "Global animations",
                 (void*) a.second.manifest,
                 getFileTooltip(a.second.manifest->path)
@@ -149,7 +150,9 @@ void AnimationEditor::processGui() {
     
     //Draw the canvas now.
     processGuiCanvas();
-    ImGui::GetWindowDrawList()->AddCallback(drawCanvasDearImGuiCallback, nullptr);
+    ImGui::GetWindowDrawList()->AddCallback(
+        drawCanvasDearImGuiCallback, nullptr
+    );
     
     //Status bar.
     processGuiStatusBar();
@@ -905,7 +908,9 @@ void AnimationEditor::processGuiPanelAnimationHeader() {
                         -1,
                         (int) db.animations.size()
                     );
-                pickAnimation(db.animations[newIdx]->name, "", "", nullptr, false);
+                pickAnimation(
+                    db.animations[newIdx]->name, "", "", nullptr, false
+                );
             }
         }
     }
@@ -938,7 +943,9 @@ void AnimationEditor::processGuiPanelAnimationHeader() {
                 }
             }
             animNames.push_back(
-                PickerItem(db.animations[a]->name, "", "", nullptr, "", animFrame1)
+                PickerItem(
+                    db.animations[a]->name, "", "", nullptr, "", animFrame1
+                )
             );
         }
         openPickerDialog(
@@ -977,7 +984,9 @@ void AnimationEditor::processGuiPanelAnimationHeader() {
                         1,
                         (int) db.animations.size()
                     );
-                pickAnimation(db.animations[newIdx]->name, "", "", nullptr, false);
+                pickAnimation(
+                    db.animations[newIdx]->name, "", "", nullptr, false
+                );
             }
         }
     }
@@ -1068,7 +1077,11 @@ void AnimationEditor::processGuiPanelAnimationHeader() {
         );
         
         //Rename animation popup.
-        if(processGuiInputPopup("renameAnim", "New name:", &renameAnimName, true)) {
+        if(
+            processGuiInputPopup(
+                "renameAnim", "New name:", &renameAnimName, true
+            )
+        ) {
             renameAnimation(curAnimInst.curAnim, renameAnimName);
         }
     }
@@ -1199,7 +1212,11 @@ void AnimationEditor::processGuiPanelBodyPart() {
         );
         
         //Rename body part popup.
-        if(processGuiInputPopup("renamePart", "New name:", &renamePartName, true)) {
+        if(
+            processGuiInputPopup(
+                "renamePart", "New name:", &renamePartName, true
+            )
+        ) {
             renameBodyPart(
                 db.bodyParts[selectedPart], renamePartName
             );
@@ -2013,7 +2030,11 @@ void AnimationEditor::processGuiPanelSprite() {
         );
         
         //Rename sprite popup.
-        if(processGuiInputPopup("renameSprite", "New name:", &renameSpriteName, true)) {
+        if(
+            processGuiInputPopup(
+                "renameSprite", "New name:", &renameSpriteName, true
+            )
+        ) {
             renameSprite(curSprite, renameSpriteName);
         }
         
@@ -2034,7 +2055,11 @@ void AnimationEditor::processGuiPanelSprite() {
         );
         
         //Resize sprite popup.
-        if(processGuiInputPopup("resizeSprite", "Resize by:", &resizeSpriteMult)) {
+        if(
+            processGuiInputPopup(
+                "resizeSprite", "Resize by:", &resizeSpriteMult
+            )
+        ) {
             resizeSprite(curSprite, s2f(resizeSpriteMult));
         }
         

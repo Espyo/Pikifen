@@ -215,7 +215,8 @@ Hud::Hud() :
                         192, 0
                     );
                 float cautionRingSize =
-                    std::min(finalDraw.size.x, finalDraw.size.y) * cautionRingScale;
+                    std::min(finalDraw.size.x, finalDraw.size.y) *
+                    cautionRingScale;
                     
                 drawBitmap(
                     game.sysContent.bmpBrightRing,
@@ -622,7 +623,8 @@ Hud::Hud() :
         
         drawText(
             i2s(curAmount), game.sysContent.fntCounter,
-            draw.center, Point(draw.size.x * 0.70f, draw.size.y * 0.50f), COLOR_WHITE,
+            draw.center,
+            Point(draw.size.x * 0.70f, draw.size.y * 0.50f), COLOR_WHITE,
             ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
             Point(1.0f + groupAmount->getJuiceValue())
         );
@@ -657,7 +659,8 @@ Hud::Hud() :
         
         drawText(
             i2s(curAmount), game.sysContent.fntCounter,
-            draw.center, Point(draw.size.x * 0.70f, draw.size.y * 0.50f), COLOR_WHITE,
+            draw.center,
+            Point(draw.size.x * 0.70f, draw.size.y * 0.50f), COLOR_WHITE,
             ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
             Point(1.0f + fieldAmount->getJuiceValue())
         );
@@ -692,7 +695,8 @@ Hud::Hud() :
         
         drawText(
             i2s(totalCountNr), game.sysContent.fntCounter,
-            draw.center, Point(draw.size.x * 0.70f, draw.size.y * 0.50f), COLOR_WHITE,
+            draw.center,
+            Point(draw.size.x * 0.70f, draw.size.y * 0.50f), COLOR_WHITE,
             ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
             Point(1.0f + totalAmount->getJuiceValue())
         );
@@ -745,7 +749,10 @@ Hud::Hud() :
         size_t topSprayIdx = INVALID;
         if(game.content.sprayTypes.list.size() > 2) {
             topSprayIdx = player->selectedSpray;
-        } else if(!game.content.sprayTypes.list.empty() && game.content.sprayTypes.list.size() <= 2) {
+        } else if(
+            !game.content.sprayTypes.list.empty() &&
+            game.content.sprayTypes.list.size() <= 2
+        ) {
             topSprayIdx = 0;
         }
         if(topSprayIdx == INVALID) return;
@@ -773,7 +780,10 @@ Hud::Hud() :
         size_t topSprayIdx = INVALID;
         if(game.content.sprayTypes.list.size() > 2) {
             topSprayIdx = player->selectedSpray;
-        } else if(!game.content.sprayTypes.list.empty() && game.content.sprayTypes.list.size() <= 2) {
+        } else if(
+            !game.content.sprayTypes.list.empty() &&
+            game.content.sprayTypes.list.size() <= 2
+        ) {
             topSprayIdx = 0;
         }
         if(topSprayIdx == INVALID) return;
@@ -1151,7 +1161,8 @@ Hud::Hud() :
         [this] (const DrawInfo & draw) {
             drawText(
                 "Score:", game.sysContent.fntStandard,
-                Point(draw.center.x + draw.size.x / 2.0f, draw.center.y), draw.size,
+                Point(draw.center.x + draw.size.x / 2.0f, draw.center.y),
+                draw.size,
                 al_map_rgba(255, 255, 255, 128), ALLEGRO_ALIGN_RIGHT
             );
         };
@@ -1181,7 +1192,8 @@ Hud::Hud() :
         [this] (const DrawInfo & draw) {
             drawText(
                 "pts", game.sysContent.fntStandard,
-                Point(draw.center.x + draw.size.x / 2.0f, draw.center.y), draw.size,
+                Point(draw.center.x + draw.size.x / 2.0f, draw.center.y),
+                draw.size,
                 al_map_rgba(255, 255, 255, 128), ALLEGRO_ALIGN_RIGHT
             );
         };
@@ -1369,13 +1381,15 @@ Hud::Hud() :
             al_draw_filled_triangle(
                 draw.center.x, draw.center.y + draw.size.y / 2.0f,
                 draw.center.x, draw.center.y,
-                draw.center.x + (draw.size.y * 0.4), draw.center.y + draw.size.y / 2.0f,
+                draw.center.x + (draw.size.y * 0.4),
+                draw.center.y + draw.size.y / 2.0f,
                 al_map_rgb(105, 161, 105)
             );
             al_draw_filled_triangle(
                 draw.center.x, draw.center.y + draw.size.y / 2.0f,
                 draw.center.x, draw.center.y,
-                draw.center.x - (draw.size.y * 0.4), draw.center.y + draw.size.y / 2.0f,
+                draw.center.x - (draw.size.y * 0.4),
+                draw.center.y + draw.size.y / 2.0f,
                 al_map_rgb(124, 191, 124)
             );
         };
@@ -1401,10 +1415,10 @@ Hud::Hud() :
     
 #define loader(var, name) \
     var = \
-          game.content.bitmaps.list.get( \
-                                         bitmapsNode->getChildByName(name)->value, \
-                                         bitmapsNode->getChildByName(name) \
-                                       );
+        game.content.bitmaps.list.get( \
+            bitmapsNode->getChildByName(name)->value, \
+            bitmapsNode->getChildByName(name) \
+        );
     
     loader(bmpBubble,               "bubble");
     loader(bmpCounterBubbleField,   "counter_bubble_field");
@@ -1818,7 +1832,10 @@ void Hud::tick(float deltaT) {
     size_t topSprayIdx = INVALID;
     if(game.content.sprayTypes.list.size() > 2) {
         topSprayIdx = player->selectedSpray;
-    } else if(!game.content.sprayTypes.list.empty() && game.content.sprayTypes.list.size() <= 2) {
+    } else if(
+        !game.content.sprayTypes.list.empty() &&
+        game.content.sprayTypes.list.size() <= 2
+    ) {
         topSprayIdx = 0;
     }
     sprayIconMgr.update(

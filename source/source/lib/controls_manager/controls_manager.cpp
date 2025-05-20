@@ -24,7 +24,8 @@
  * @param input Input to clean.
  */
 void ControlsManager::cleanStick(const PlayerInput &input) {
-    rawSticks[input.source.deviceNr][input.source.stickNr][input.source.axisNr] =
+    rawSticks[input.source.deviceNr]
+    [input.source.stickNr][input.source.axisNr] =
         input.source.type == INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS ?
         input.value :
         -input.value;
@@ -140,28 +141,40 @@ void ControlsManager::handleInput(
         xPosInput.source.type = INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS;
         xPosInput.source.axisNr = 0;
         xPosInput.value =
-            std::max(0.0f, cleanSticks[input.source.deviceNr][input.source.stickNr][0]);
+            std::max(
+                0.0f,
+                cleanSticks[input.source.deviceNr][input.source.stickNr][0]
+            );
         handleCleanInput(xPosInput, false);
         
         PlayerInput xNegInput = input;
         xNegInput.source.type = INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG;
         xNegInput.source.axisNr = 0;
         xNegInput.value =
-            std::max(0.0f, -cleanSticks[input.source.deviceNr][input.source.stickNr][0]);
+            std::max(
+                0.0f,
+                -cleanSticks[input.source.deviceNr][input.source.stickNr][0]
+            );
         handleCleanInput(xNegInput, false);
         
         PlayerInput yPosInput = input;
         yPosInput.source.type = INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS;
         yPosInput.source.axisNr = 1;
         yPosInput.value =
-            std::max(0.0f, cleanSticks[input.source.deviceNr][input.source.stickNr][1]);
+            std::max(
+                0.0f,
+                cleanSticks[input.source.deviceNr][input.source.stickNr][1]
+            );
         handleCleanInput(yPosInput, false);
         
         PlayerInput yNegInput = input;
         yNegInput.source.type = INPUT_SOURCE_TYPE_CONTROLLER_AXIS_NEG;
         yNegInput.source.axisNr = 1;
         yNegInput.value =
-            std::max(0.0f, -cleanSticks[input.source.deviceNr][input.source.stickNr][1]);
+            std::max(
+                0.0f,
+                -cleanSticks[input.source.deviceNr][input.source.stickNr][1]
+            );
         handleCleanInput(yNegInput, false);
         
     } else if(

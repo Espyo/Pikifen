@@ -1527,7 +1527,9 @@ void PickerGuiItem::defDrawCode(const DrawInfo &draw) {
     
     float juicyGrowAmount = this->getJuiceValue();
     
-    Point textBox(draw.size.x * 0.80, draw.size.y * GUI::STANDARD_CONTENT_SIZE.y);
+    Point textBox(
+        draw.size.x * 0.80, draw.size.y * GUI::STANDARD_CONTENT_SIZE.y
+    );
     drawText(
         this->baseText + this->option,
         game.sysContent.fntStandard,

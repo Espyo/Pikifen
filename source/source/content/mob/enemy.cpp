@@ -113,7 +113,8 @@ void Enemy::finishDyingClassSpecifics() {
     par.linearSpeed.add(0.5f, Point(50, -50));
     par.linearSpeed.add(1, Point(-50, -50));
     
-    par.color = KeyframeInterpolator<ALLEGRO_COLOR>(al_map_rgba(255, 192, 255, 0));
+    par.color =
+        KeyframeInterpolator<ALLEGRO_COLOR>(al_map_rgba(255, 192, 255, 0));
     par.color.add(0.1f, al_map_rgb(255, 192, 255));
     par.color.add(0.6f, al_map_rgb(255, 192, 255));
     par.color.add(1, al_map_rgba(255, 192, 255, 0));

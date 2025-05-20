@@ -34,8 +34,8 @@
  */
 Particle::Particle(
     const Point &pos, const float z,
-    const float initialSize, const float duration, const PARTICLE_PRIORITY priority,
-    const ALLEGRO_COLOR initialColor
+    const float initialSize, const float duration,
+    const PARTICLE_PRIORITY priority, const ALLEGRO_COLOR initialColor
 ) :
     duration(duration),
     time(duration),

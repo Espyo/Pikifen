@@ -325,10 +325,12 @@ struct Options {
         //Player's intended option for fullscreen, before restarting the game.
         bool intendedWinFullscreen = GRAPHICS_D::WIN_FULLSCREEN;
         
-        //Player's intended option for window height, before restarting the game.
+        //Player's intended option for window height,
+        //before restarting the game.
         int intendedWinH = GRAPHICS_D::WIN_H;
         
-        //Player's intended option for window width, before restarting the game.
+        //Player's intended option for window width,
+        //before restarting the game.
         int intendedWinW = GRAPHICS_D::WIN_W;
         
         //When using fullscreen, is this true fullscreen, or borderless window?

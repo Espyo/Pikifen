@@ -347,7 +347,9 @@ public:
     void startLeaving(const GAMEPLAY_LEAVE_TARGET target);
     void changeSprayCount(PlayerTeam* team, size_t typeIdx, signed int amount);
     size_t getAmountOfFieldPikmin(const PikminType* filter = nullptr);
-    size_t getAmountOfGroupPikmin(Player* player, const PikminType* filter = nullptr);
+    size_t getAmountOfGroupPikmin(
+        Player* player, const PikminType* filter = nullptr
+    );
     size_t getAmountOfIdlePikmin(const PikminType* filter = nullptr);
     long getAmountOfOnionPikmin(const PikminType* filter = nullptr);
     long getAmountOfTotalPikmin(const PikminType* filter = nullptr);
@@ -433,7 +435,9 @@ private:
     ALLEGRO_BITMAP* generateFogBitmap(
         float nearRadius, float farRadius
     );
-    Mob* getClosestGroupMember(Player* player, const SubgroupType* type, bool* distant = nullptr);
+    Mob* getClosestGroupMember(
+        Player* player, const SubgroupType* type, bool* distant = nullptr
+    );
     void handlePlayerAction(const PlayerAction &action);
     bool isMissionClearMet();
     bool isMissionFailMet(MISSION_FAIL_COND* reason);
