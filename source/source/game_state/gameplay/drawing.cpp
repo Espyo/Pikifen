@@ -639,6 +639,190 @@ void GameplayState::drawDebugTools() {
 
 
 /**
+ * @brief Draws a gameplay message box.
+ */
+void GameplayState::drawGameplayMessageBox() {
+    //Mouse cursor.
+    drawMouseCursor(GAME::CURSOR_STANDARD_COLOR);
+    
+    al_use_transform(&game.identityTransform);
+    
+    //Transition things.
+    float transitionRatio =
+        msgBox->transitionIn ?
+        msgBox->transitionTimer / GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME :
+        (1 - msgBox->transitionTimer / GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME);
+    int lineHeight = al_get_font_line_height(game.sysContent.fntStandard);
+    float boxHeight = lineHeight * 4;
+    float offset =
+        boxHeight * ease(EASE_METHOD_IN, transitionRatio);
+        
+    //Draw a rectangle to darken gameplay.
+    al_draw_filled_rectangle(
+        0.0f, 0.0f,
+        game.winW, game.winH,
+        al_map_rgba(0, 0, 0, 64 * (1 - transitionRatio))
+    );
+    
+    //Draw the message box proper.
+    drawTexturedBox(
+        Point(
+            game.winW / 2,
+            game.winH - (boxHeight / 2.0f) - 4 + offset
+        ),
+        Point(game.winW - 16, boxHeight),
+        game.sysContent.bmpBubbleBox
+    );
+    
+    //Draw the speaker's icon, if any.
+    if(msgBox->speakerIcon) {
+        drawBitmap(
+            msgBox->speakerIcon,
+            Point(
+                40,
+                game.winH - boxHeight - 16 + offset
+            ),
+            Point(48.0f)
+        );
+        drawBitmap(
+            players[0].hud->bmpBubble,
+            Point(
+                40,
+                game.winH - boxHeight - 16 + offset
+            ),
+            Point(64.0f)
+        );
+    }
+    
+    //Draw the button to advance, if it's time.
+    drawPlayerInputSourceIcon(
+        game.sysContent.fntSlim,
+        game.controls.findBind(PLAYER_ACTION_TYPE_THROW).inputSource,
+        true,
+        Point(
+            game.winW -
+            (GAMEPLAY_MSG_BOX::MARGIN + GAMEPLAY_MSG_BOX::PADDING + 8.0f),
+            game.winH -
+            (GAMEPLAY_MSG_BOX::MARGIN + GAMEPLAY_MSG_BOX::PADDING + 8.0f) +
+            offset
+        ),
+        Point(32.0f),
+        msgBox->advanceButtonAlpha * 255
+    );
+    
+    //Draw the message's text.
+    size_t tokenIdx = 0;
+    for(size_t l = 0; l < 3; l++) {
+        size_t lineIdx = msgBox->curSection * 3 + l;
+        if(lineIdx >= msgBox->tokensPerLine.size()) {
+            break;
+        }
+        
+        //Figure out what scaling is necessary, if any.
+        unsigned int totalWidth = 0;
+        float xScale = 1.0f;
+        for(size_t t = 0; t < msgBox->tokensPerLine[lineIdx].size(); t++) {
+            totalWidth += msgBox->tokensPerLine[lineIdx][t].width;
+        }
+        const float maxTextWidth =
+            (GAMEPLAY_MSG_BOX::MARGIN + GAMEPLAY_MSG_BOX::PADDING) * 2;
+        if(totalWidth > game.winW - maxTextWidth) {
+            xScale = (game.winW - maxTextWidth) / totalWidth;
+        }
+        
+        float caret =
+            GAMEPLAY_MSG_BOX::MARGIN + GAMEPLAY_MSG_BOX::PADDING;
+        float startY =
+            game.winH - lineHeight * 4 + GAMEPLAY_MSG_BOX::PADDING + offset;
+            
+        for(size_t t = 0; t < msgBox->tokensPerLine[lineIdx].size(); t++) {
+            tokenIdx++;
+            if(tokenIdx >= msgBox->curToken) break;
+            StringToken &curToken = msgBox->tokensPerLine[lineIdx][t];
+            
+            float x = caret;
+            float y = startY + lineHeight * l;
+            unsigned char alpha = 255;
+            float thisTokenAnimTime;
+            
+            //Change the token's position and alpha, if it needs animating.
+            //First, check for the typing animation.
+            if(tokenIdx >= msgBox->skippedAtToken) {
+                thisTokenAnimTime = msgBox->totalSkipAnimTime;
+            } else {
+                thisTokenAnimTime =
+                    msgBox->totalTokenAnimTime -
+                    (
+                        (tokenIdx + 1) *
+                        game.config.aestheticGen.gameplayMsgChInterval
+                    );
+            }
+            if(
+                thisTokenAnimTime > 0 &&
+                thisTokenAnimTime < GAMEPLAY_MSG_BOX::TOKEN_ANIM_DURATION
+            ) {
+                float ratio =
+                    thisTokenAnimTime / GAMEPLAY_MSG_BOX::TOKEN_ANIM_DURATION;
+                x +=
+                    GAMEPLAY_MSG_BOX::TOKEN_ANIM_X_AMOUNT *
+                    ease(EASE_METHOD_UP_AND_DOWN_ELASTIC, ratio);
+                y +=
+                    GAMEPLAY_MSG_BOX::TOKEN_ANIM_Y_AMOUNT *
+                    ease(EASE_METHOD_UP_AND_DOWN_ELASTIC, ratio);
+                alpha = ratio * 255;
+            }
+            
+            //Now, for the swiping animation.
+            if(msgBox->swipeTimer > 0.0f) {
+                float ratio =
+                    1.0f -
+                    (
+                        msgBox->swipeTimer /
+                        GAMEPLAY_MSG_BOX::TOKEN_SWIPE_DURATION
+                    );
+                x += GAMEPLAY_MSG_BOX::TOKEN_SWIPE_X_AMOUNT * ratio;
+                y += GAMEPLAY_MSG_BOX::TOKEN_SWIPE_Y_AMOUNT * ratio;
+                alpha = std::max(0, (signed int) (alpha - ratio * 255));
+            }
+            
+            //Actually draw it now.
+            float tokenFinalWidth = curToken.width * xScale;
+            switch(curToken.type) {
+            case STRING_TOKEN_CHAR: {
+                drawText(
+                    curToken.content, game.sysContent.fntStandard,
+                    Point(x, y),
+                    Point(tokenFinalWidth, LARGE_FLOAT),
+                    mapAlpha(alpha),
+                    ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP, 0,
+                    Point(xScale, 1.0f)
+                );
+                break;
+            }
+            case STRING_TOKEN_BIND_INPUT: {
+                drawPlayerInputSourceIcon(
+                    game.sysContent.fntSlim,
+                    game.controls.findBind(curToken.content).inputSource,
+                    true,
+                    Point(
+                        x + tokenFinalWidth / 2.0f,
+                        y + lineHeight / 2.0f
+                    ),
+                    Point(tokenFinalWidth, lineHeight)
+                );
+                break;
+            }
+            default: {
+                break;
+            }
+            }
+            caret += tokenFinalWidth;
+        }
+    }
+}
+
+
+/**
  * @brief Draws the in-game text.
  *
  * @param player Player whose viewport to draw to.
@@ -1167,190 +1351,6 @@ void GameplayState::drawLightingFilter(const Viewport &view) {
         
     }
     
-}
-
-
-/**
- * @brief Draws a gameplay message box.
- */
-void GameplayState::drawGameplayMessageBox() {
-    //Mouse cursor.
-    drawMouseCursor(GAME::CURSOR_STANDARD_COLOR);
-    
-    al_use_transform(&game.identityTransform);
-    
-    //Transition things.
-    float transitionRatio =
-        msgBox->transitionIn ?
-        msgBox->transitionTimer / GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME :
-        (1 - msgBox->transitionTimer / GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME);
-    int lineHeight = al_get_font_line_height(game.sysContent.fntStandard);
-    float boxHeight = lineHeight * 4;
-    float offset =
-        boxHeight * ease(EASE_METHOD_IN, transitionRatio);
-        
-    //Draw a rectangle to darken gameplay.
-    al_draw_filled_rectangle(
-        0.0f, 0.0f,
-        game.winW, game.winH,
-        al_map_rgba(0, 0, 0, 64 * (1 - transitionRatio))
-    );
-    
-    //Draw the message box proper.
-    drawTexturedBox(
-        Point(
-            game.winW / 2,
-            game.winH - (boxHeight / 2.0f) - 4 + offset
-        ),
-        Point(game.winW - 16, boxHeight),
-        game.sysContent.bmpBubbleBox
-    );
-    
-    //Draw the speaker's icon, if any.
-    if(msgBox->speakerIcon) {
-        drawBitmap(
-            msgBox->speakerIcon,
-            Point(
-                40,
-                game.winH - boxHeight - 16 + offset
-            ),
-            Point(48.0f)
-        );
-        drawBitmap(
-            players[0].hud->bmpBubble,
-            Point(
-                40,
-                game.winH - boxHeight - 16 + offset
-            ),
-            Point(64.0f)
-        );
-    }
-    
-    //Draw the button to advance, if it's time.
-    drawPlayerInputSourceIcon(
-        game.sysContent.fntSlim,
-        game.controls.findBind(PLAYER_ACTION_TYPE_THROW).inputSource,
-        true,
-        Point(
-            game.winW -
-            (GAMEPLAY_MSG_BOX::MARGIN + GAMEPLAY_MSG_BOX::PADDING + 8.0f),
-            game.winH -
-            (GAMEPLAY_MSG_BOX::MARGIN + GAMEPLAY_MSG_BOX::PADDING + 8.0f) +
-            offset
-        ),
-        Point(32.0f),
-        msgBox->advanceButtonAlpha * 255
-    );
-    
-    //Draw the message's text.
-    size_t tokenIdx = 0;
-    for(size_t l = 0; l < 3; l++) {
-        size_t lineIdx = msgBox->curSection * 3 + l;
-        if(lineIdx >= msgBox->tokensPerLine.size()) {
-            break;
-        }
-        
-        //Figure out what scaling is necessary, if any.
-        unsigned int totalWidth = 0;
-        float xScale = 1.0f;
-        for(size_t t = 0; t < msgBox->tokensPerLine[lineIdx].size(); t++) {
-            totalWidth += msgBox->tokensPerLine[lineIdx][t].width;
-        }
-        const float maxTextWidth =
-            (GAMEPLAY_MSG_BOX::MARGIN + GAMEPLAY_MSG_BOX::PADDING) * 2;
-        if(totalWidth > game.winW - maxTextWidth) {
-            xScale = (game.winW - maxTextWidth) / totalWidth;
-        }
-        
-        float caret =
-            GAMEPLAY_MSG_BOX::MARGIN + GAMEPLAY_MSG_BOX::PADDING;
-        float startY =
-            game.winH - lineHeight * 4 + GAMEPLAY_MSG_BOX::PADDING + offset;
-            
-        for(size_t t = 0; t < msgBox->tokensPerLine[lineIdx].size(); t++) {
-            tokenIdx++;
-            if(tokenIdx >= msgBox->curToken) break;
-            StringToken &curToken = msgBox->tokensPerLine[lineIdx][t];
-            
-            float x = caret;
-            float y = startY + lineHeight * l;
-            unsigned char alpha = 255;
-            float thisTokenAnimTime;
-            
-            //Change the token's position and alpha, if it needs animating.
-            //First, check for the typing animation.
-            if(tokenIdx >= msgBox->skippedAtToken) {
-                thisTokenAnimTime = msgBox->totalSkipAnimTime;
-            } else {
-                thisTokenAnimTime =
-                    msgBox->totalTokenAnimTime -
-                    (
-                        (tokenIdx + 1) *
-                        game.config.aestheticGen.gameplayMsgChInterval
-                    );
-            }
-            if(
-                thisTokenAnimTime > 0 &&
-                thisTokenAnimTime < GAMEPLAY_MSG_BOX::TOKEN_ANIM_DURATION
-            ) {
-                float ratio =
-                    thisTokenAnimTime / GAMEPLAY_MSG_BOX::TOKEN_ANIM_DURATION;
-                x +=
-                    GAMEPLAY_MSG_BOX::TOKEN_ANIM_X_AMOUNT *
-                    ease(EASE_METHOD_UP_AND_DOWN_ELASTIC, ratio);
-                y +=
-                    GAMEPLAY_MSG_BOX::TOKEN_ANIM_Y_AMOUNT *
-                    ease(EASE_METHOD_UP_AND_DOWN_ELASTIC, ratio);
-                alpha = ratio * 255;
-            }
-            
-            //Now, for the swiping animation.
-            if(msgBox->swipeTimer > 0.0f) {
-                float ratio =
-                    1.0f -
-                    (
-                        msgBox->swipeTimer /
-                        GAMEPLAY_MSG_BOX::TOKEN_SWIPE_DURATION
-                    );
-                x += GAMEPLAY_MSG_BOX::TOKEN_SWIPE_X_AMOUNT * ratio;
-                y += GAMEPLAY_MSG_BOX::TOKEN_SWIPE_Y_AMOUNT * ratio;
-                alpha = std::max(0, (signed int) (alpha - ratio * 255));
-            }
-            
-            //Actually draw it now.
-            float tokenFinalWidth = curToken.width * xScale;
-            switch(curToken.type) {
-            case STRING_TOKEN_CHAR: {
-                drawText(
-                    curToken.content, game.sysContent.fntStandard,
-                    Point(x, y),
-                    Point(tokenFinalWidth, LARGE_FLOAT),
-                    mapAlpha(alpha),
-                    ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP, 0,
-                    Point(xScale, 1.0f)
-                );
-                break;
-            }
-            case STRING_TOKEN_BIND_INPUT: {
-                drawPlayerInputSourceIcon(
-                    game.sysContent.fntSlim,
-                    game.controls.findBind(curToken.content).inputSource,
-                    true,
-                    Point(
-                        x + tokenFinalWidth / 2.0f,
-                        y + lineHeight / 2.0f
-                    ),
-                    Point(tokenFinalWidth, lineHeight)
-                );
-                break;
-            }
-            default: {
-                break;
-            }
-            }
-            caret += tokenFinalWidth;
-        }
-    }
 }
 
 

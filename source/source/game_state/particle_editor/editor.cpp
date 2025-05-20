@@ -80,6 +80,19 @@ ParticleEditor::ParticleEditor() :
 
 
 /**
+ * @brief Code to run for the particle clearing command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void ParticleEditor::clearParticlesCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    partMgr.clear();
+    setStatus("Cleared particles.");
+}
+
+
+/**
  * @brief Code to run when the load dialog is closed.
  */
 void ParticleEditor::closeLoadDialog() {
@@ -279,6 +292,20 @@ void ParticleEditor::drawCanvasDearImGuiCallback(
 
 
 /**
+ * @brief Code to run for the emission shape toggle command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void ParticleEditor::emissionShapeToggleCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    emissionShapeVisible = !emissionShapeVisible;
+    string stateStr = (emissionShapeVisible ? "Enabled" : "Disabled");
+    setStatus(stateStr + " emission shape visibility.");
+}
+
+
+/**
  * @brief Returns some tooltip text that represents a particle generator
  * file's manifest.
  *
@@ -315,158 +342,6 @@ string ParticleEditor::getName() const {
  */
 string ParticleEditor::getOpenedContentPath() const {
     return manifest.path;
-}
-
-
-/**
- * @brief Loads the GUI editor.
- */
-void ParticleEditor::load() {
-    Editor::load();
-    
-    //Load necessary game content.
-    game.content.reloadPacks();
-    game.content.loadAll(
-    vector<CONTENT_TYPE> {
-        CONTENT_TYPE_PARTICLE_GEN,
-    },
-    CONTENT_LOAD_LEVEL_BASIC
-    );
-    
-    //Misc. setup.
-    game.audio.setCurrentSong(game.sysContentNames.sngEditors, false);
-    
-    partMgr = ParticleManager(game.options.advanced.maxParticles);
-    partMgr.viewports.push_back(&game.editorsView);
-    
-    //Set the background.
-    if(!game.options.partEd.bgPath.empty()) {
-        bg =
-            loadBmp(
-                game.options.partEd.bgPath,
-                nullptr, false, false, false
-            );
-        useBg = true;
-    } else {
-        useBg = false;
-    }
-    
-    //Automatically load a file if needed, or show the load dialog.
-    if(!autoLoadFile.empty()) {
-        loadPartGenFile(autoLoadFile, true);
-    } else {
-        openLoadDialog();
-    }
-}
-
-
-/**
- * @brief Loads a particle generator.
- *
- * @param path Path to the file.
- * @param shouldUpdateHistory If true, this loading process should update
- * the user's file open history.
- */
-void ParticleEditor::loadPartGenFile(
-    const string &path, const bool shouldUpdateHistory
-) {
-    //Setup.
-    setupForNewPartGenPre();
-    changesMgr.markAsNonExistent();
-    
-    //Load.
-    manifest.fillFromPath(path);
-    DataNode file = DataNode(manifest.path);
-    
-    if(!file.fileWasOpened) {
-        openMessageDialog(
-            "Load failed!",
-            "Failed to load the particle generator file \"" +
-            manifest.path + "\"!",
-        [this] () { openLoadDialog(); }
-        );
-        manifest.clear();
-        return;
-    }
-    
-    loadedGen.manifest = &manifest;
-    loadedGen.loadFromDataNode(&file, CONTENT_LOAD_LEVEL_FULL);
-    
-    //Finish up.
-    setupForNewPartGenPost();
-    changesMgr.reset();
-    
-    if(shouldUpdateHistory) {
-        updateHistory(game.options.partEd.history, manifest, loadedGen.name);
-    }
-    
-    setStatus("Loaded file \"" + manifest.internalName + "\" successfully.");
-}
-
-
-/**
- * @brief Pans the camera around.
- *
- * @param ev Event to handle.
- */
-void ParticleEditor::panCam(const ALLEGRO_EVENT &ev) {
-    game.editorsView.cam.setPos(
-        Point(
-            game.editorsView.cam.pos.x -
-            ev.mouse.dx / game.editorsView.cam.zoom,
-            game.editorsView.cam.pos.y -
-            ev.mouse.dy / game.editorsView.cam.zoom
-        )
-    );
-}
-
-
-/**
- * @brief Callback for when the user picks a file from the picker.
- *
- * @param name Name of the file.
- * @param topCat Unused.
- * @param secCat Unused.
- * @param info Pointer to the file's content manifest.
- * @param isNew Unused.
- */
-void ParticleEditor::pickPartGenFile(
-    const string &name, const string &topCat, const string &secCat,
-    void* info, bool isNew
-) {
-    ContentManifest* tempManif = (ContentManifest*) info;
-    
-    auto reallyLoad = [this, tempManif] () {
-        closeTopDialog();
-        loadPartGenFile(tempManif->path, true);
-    };
-    
-    if(
-        tempManif->pack == FOLDER_NAMES::BASE_PACK &&
-        !game.options.advanced.engineDev
-    ) {
-        openBaseContentWarningDialog(reallyLoad);
-    } else {
-        reallyLoad();
-    }
-}
-
-
-/**
- * @brief Reloads all loaded particle generators.
- */
-void ParticleEditor::reloadPartGens() {
-    game.content.unloadAll(
-    vector<CONTENT_TYPE> {
-        CONTENT_TYPE_PARTICLE_GEN,
-    }
-    );
-    game.content.loadAll(
-    vector<CONTENT_TYPE> {
-        CONTENT_TYPE_PARTICLE_GEN,
-    },
-    CONTENT_LOAD_LEVEL_BASIC
-    );
 }
 
 
@@ -540,6 +415,62 @@ void ParticleEditor::gridToggleCmd(float inputValue) {
 
 
 /**
+ * @brief Code to run for the leader silhouette toggle command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void ParticleEditor::leaderSilhouetteToggleCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    leaderSilhouetteVisible = !leaderSilhouetteVisible;
+    string stateStr = (leaderSilhouetteVisible ? "Enabled" : "Disabled");
+    setStatus(stateStr + " leader silhouette visibility.");
+}
+
+
+/**
+ * @brief Loads the GUI editor.
+ */
+void ParticleEditor::load() {
+    Editor::load();
+    
+    //Load necessary game content.
+    game.content.reloadPacks();
+    game.content.loadAll(
+    vector<CONTENT_TYPE> {
+        CONTENT_TYPE_PARTICLE_GEN,
+    },
+    CONTENT_LOAD_LEVEL_BASIC
+    );
+    
+    //Misc. setup.
+    game.audio.setCurrentSong(game.sysContentNames.sngEditors, false);
+    
+    partMgr = ParticleManager(game.options.advanced.maxParticles);
+    partMgr.viewports.push_back(&game.editorsView);
+    
+    //Set the background.
+    if(!game.options.partEd.bgPath.empty()) {
+        bg =
+            loadBmp(
+                game.options.partEd.bgPath,
+                nullptr, false, false, false
+            );
+        useBg = true;
+    } else {
+        useBg = false;
+    }
+    
+    //Automatically load a file if needed, or show the load dialog.
+    if(!autoLoadFile.empty()) {
+        loadPartGenFile(autoLoadFile, true);
+    } else {
+        openLoadDialog();
+    }
+}
+
+
+/**
  * @brief Code to run for the load command.
  *
  * @param inputValue Value of the player input for the command.
@@ -553,6 +484,126 @@ void ParticleEditor::loadCmd(float inputValue) {
         std::bind(&ParticleEditor::openLoadDialog, this),
         std::bind(&ParticleEditor::savePartGen, this)
     );
+}
+
+
+/**
+ * @brief Loads a particle generator.
+ *
+ * @param path Path to the file.
+ * @param shouldUpdateHistory If true, this loading process should update
+ * the user's file open history.
+ */
+void ParticleEditor::loadPartGenFile(
+    const string &path, const bool shouldUpdateHistory
+) {
+    //Setup.
+    setupForNewPartGenPre();
+    changesMgr.markAsNonExistent();
+    
+    //Load.
+    manifest.fillFromPath(path);
+    DataNode file = DataNode(manifest.path);
+    
+    if(!file.fileWasOpened) {
+        openMessageDialog(
+            "Load failed!",
+            "Failed to load the particle generator file \"" +
+            manifest.path + "\"!",
+        [this] () { openLoadDialog(); }
+        );
+        manifest.clear();
+        return;
+    }
+    
+    loadedGen.manifest = &manifest;
+    loadedGen.loadFromDataNode(&file, CONTENT_LOAD_LEVEL_FULL);
+    
+    //Finish up.
+    setupForNewPartGenPost();
+    changesMgr.reset();
+    
+    if(shouldUpdateHistory) {
+        updateHistory(game.options.partEd.history, manifest, loadedGen.name);
+    }
+    
+    setStatus("Loaded file \"" + manifest.internalName + "\" successfully.");
+}
+
+
+/**
+ * @brief Pans the camera around.
+ *
+ * @param ev Event to handle.
+ */
+void ParticleEditor::panCam(const ALLEGRO_EVENT &ev) {
+    game.editorsView.cam.setPos(
+        Point(
+            game.editorsView.cam.pos.x -
+            ev.mouse.dx / game.editorsView.cam.zoom,
+            game.editorsView.cam.pos.y -
+            ev.mouse.dy / game.editorsView.cam.zoom
+        )
+    );
+}
+
+
+/**
+ * @brief Code to run for the particle generator playback toggle command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void ParticleEditor::partGenPlaybackToggleCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    genRunning = !genRunning;
+    string stateStr = (genRunning ? "Enabled" : "Disabled");
+    setStatus(stateStr + " particle generator playback.");
+}
+
+
+/**
+ * @brief Code to run for the particle manager playback toggle command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void ParticleEditor::partMgrPlaybackToggleCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    mgrRunning = !mgrRunning;
+    string stateStr = (mgrRunning ? "Enabled" : "Disabled");
+    setStatus(stateStr + " particle system playback.");
+}
+
+
+/**
+ * @brief Callback for when the user picks a file from the picker.
+ *
+ * @param name Name of the file.
+ * @param topCat Unused.
+ * @param secCat Unused.
+ * @param info Pointer to the file's content manifest.
+ * @param isNew Unused.
+ */
+void ParticleEditor::pickPartGenFile(
+    const string &name, const string &topCat, const string &secCat,
+    void* info, bool isNew
+) {
+    ContentManifest* tempManif = (ContentManifest*) info;
+    
+    auto reallyLoad = [this, tempManif] () {
+        closeTopDialog();
+        loadPartGenFile(tempManif->path, true);
+    };
+    
+    if(
+        tempManif->pack == FOLDER_NAMES::BASE_PACK &&
+        !game.options.advanced.engineDev
+    ) {
+        openBaseContentWarningDialog(reallyLoad);
+    } else {
+        reallyLoad();
+    }
 }
 
 
@@ -591,6 +642,40 @@ void ParticleEditor::reloadCmd(float inputValue) {
 
 
 /**
+ * @brief Reloads all loaded particle generators.
+ */
+void ParticleEditor::reloadPartGens() {
+    game.content.unloadAll(
+    vector<CONTENT_TYPE> {
+        CONTENT_TYPE_PARTICLE_GEN,
+    }
+    );
+    game.content.loadAll(
+    vector<CONTENT_TYPE> {
+        CONTENT_TYPE_PARTICLE_GEN,
+    },
+    CONTENT_LOAD_LEVEL_BASIC
+    );
+}
+
+
+/**
+ * @brief Resets the camera's X and Y coordinates.
+ */
+void ParticleEditor::resetCamXY() {
+    game.editorsView.cam.targetPos = Point();
+}
+
+
+/**
+ * @brief Resets the camera's zoom.
+ */
+void ParticleEditor::resetCamZoom() {
+    zoomWithCursor(1.0f);
+}
+
+
+/**
  * @brief Code to run for the save command.
  *
  * @param inputValue Value of the player input for the command.
@@ -599,6 +684,43 @@ void ParticleEditor::saveCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
     savePartGen();
+}
+
+
+/**
+ * @brief Saves the particle generator onto the disk.
+ *
+ * @return Whether it succeded.
+ */
+bool ParticleEditor::savePartGen() {
+    loadedGen.engineVersion = getEngineVersionString();
+    
+    DataNode fileNode = DataNode("", "");
+    loadedGen.saveToDataNode(&fileNode);
+    
+    if(!fileNode.saveFile(manifest.path)) {
+        showSystemMessageBox(
+            nullptr, "Save failed!",
+            "Could not save the particle file!",
+            (
+                "An error occured while saving the particle generator "
+                "to the file \"" +
+                manifest.path + "\". Make sure that the folder it is saving to "
+                "exists and it is not read-only, and try again."
+            ).c_str(),
+            nullptr,
+            ALLEGRO_MESSAGEBOX_WARN
+        );
+        setStatus("Could not save the particle generator file!", true);
+        return false;
+    } else {
+        setStatus("Saved file successfully.");
+        changesMgr.markAsSaved();
+        updateHistory(game.options.partEd.history, manifest, loadedGen.name);
+        return true;
+    }
+    
+    return false;
 }
 
 
@@ -634,6 +756,22 @@ void ParticleEditor::setupForNewPartGenPre() {
     
     game.editorsView.cam.setPos(Point());
     game.editorsView.cam.setZoom(1.0f);
+}
+
+
+/**
+ * @brief Unloads the editor from memory.
+ */
+void ParticleEditor::unload() {
+    Editor::unload();
+    
+    partMgr.clear();
+    
+    game.content.unloadAll(
+    vector<CONTENT_TYPE> {
+        CONTENT_TYPE_PARTICLE_GEN,
+    }
+    );
 }
 
 
@@ -684,142 +822,4 @@ void ParticleEditor::zoomOutCmd(float inputValue) {
             game.editorsView.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
             zoomMinLevel, zoomMaxLevel
         );
-}
-
-
-/**
- * @brief Code to run for the leader silhouette toggle command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void ParticleEditor::leaderSilhouetteToggleCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    leaderSilhouetteVisible = !leaderSilhouetteVisible;
-    string stateStr = (leaderSilhouetteVisible ? "Enabled" : "Disabled");
-    setStatus(stateStr + " leader silhouette visibility.");
-}
-
-
-/**
- * @brief Code to run for the particle clearing command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void ParticleEditor::clearParticlesCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    partMgr.clear();
-    setStatus("Cleared particles.");
-}
-
-
-/**
- * @brief Code to run for the emission shape toggle command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void ParticleEditor::emissionShapeToggleCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    emissionShapeVisible = !emissionShapeVisible;
-    string stateStr = (emissionShapeVisible ? "Enabled" : "Disabled");
-    setStatus(stateStr + " emission shape visibility.");
-}
-
-
-/**
- * @brief Code to run for the particle generator playback toggle command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void ParticleEditor::partGenPlaybackToggleCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    genRunning = !genRunning;
-    string stateStr = (genRunning ? "Enabled" : "Disabled");
-    setStatus(stateStr + " particle generator playback.");
-}
-
-
-/**
- * @brief Code to run for the particle manager playback toggle command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void ParticleEditor::partMgrPlaybackToggleCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    mgrRunning = !mgrRunning;
-    string stateStr = (mgrRunning ? "Enabled" : "Disabled");
-    setStatus(stateStr + " particle system playback.");
-}
-
-
-/**
- * @brief Resets the camera's X and Y coordinates.
- */
-void ParticleEditor::resetCamXY() {
-    game.editorsView.cam.targetPos = Point();
-}
-
-
-/**
- * @brief Resets the camera's zoom.
- */
-void ParticleEditor::resetCamZoom() {
-    zoomWithCursor(1.0f);
-}
-
-
-/**
- * @brief Saves the particle generator onto the disk.
- *
- * @return Whether it succeded.
- */
-bool ParticleEditor::savePartGen() {
-    loadedGen.engineVersion = getEngineVersionString();
-    
-    DataNode fileNode = DataNode("", "");
-    loadedGen.saveToDataNode(&fileNode);
-    
-    if(!fileNode.saveFile(manifest.path)) {
-        showSystemMessageBox(
-            nullptr, "Save failed!",
-            "Could not save the particle file!",
-            (
-                "An error occured while saving the particle generator "
-                "to the file \"" +
-                manifest.path + "\". Make sure that the folder it is saving to "
-                "exists and it is not read-only, and try again."
-            ).c_str(),
-            nullptr,
-            ALLEGRO_MESSAGEBOX_WARN
-        );
-        setStatus("Could not save the particle generator file!", true);
-        return false;
-    } else {
-        setStatus("Saved file successfully.");
-        changesMgr.markAsSaved();
-        updateHistory(game.options.partEd.history, manifest, loadedGen.name);
-        return true;
-    }
-    
-    return false;
-}
-
-
-/**
- * @brief Unloads the editor from memory.
- */
-void ParticleEditor::unload() {
-    Editor::unload();
-    
-    partMgr.clear();
-    
-    game.content.unloadAll(
-    vector<CONTENT_TYPE> {
-        CONTENT_TYPE_PARTICLE_GEN,
-    }
-    );
 }

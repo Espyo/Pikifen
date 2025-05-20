@@ -275,26 +275,6 @@ void AnimationDatabase::createConversions(
 
 
 /**
- * @brief Destroys an animation database and all of its content.
- */
-void AnimationDatabase::destroy() {
-    resetMetadata();
-    for(size_t a = 0; a < animations.size(); a++) {
-        delete animations[a];
-    }
-    for(size_t s = 0; s < sprites.size(); s++) {
-        delete sprites[s];
-    }
-    for(size_t b = 0; b < bodyParts.size(); b++) {
-        delete bodyParts[b];
-    }
-    animations.clear();
-    sprites.clear();
-    bodyParts.clear();
-}
-
-
-/**
  * @brief Deletes a sprite, adjusting any animations that use it.
  *
  * @param idx Sprite index.
@@ -321,6 +301,26 @@ void AnimationDatabase::deleteSprite(size_t idx) {
             fPtr->spriteIdx = findSprite(fPtr->spriteName);
         }
     }
+}
+
+
+/**
+ * @brief Destroys an animation database and all of its content.
+ */
+void AnimationDatabase::destroy() {
+    resetMetadata();
+    for(size_t a = 0; a < animations.size(); a++) {
+        delete animations[a];
+    }
+    for(size_t s = 0; s < sprites.size(); s++) {
+        delete sprites[s];
+    }
+    for(size_t b = 0; b < bodyParts.size(); b++) {
+        delete bodyParts[b];
+    }
+    animations.clear();
+    sprites.clear();
+    bodyParts.clear();
 }
 
 
@@ -780,6 +780,42 @@ AnimationInstance &AnimationInstance::operator=(
 
 
 /**
+ * @brief Clears everything.
+ */
+void AnimationInstance::clear() {
+    curAnim = nullptr;
+    animDb = nullptr;
+    curFrameTime = 0;
+    curFrameIdx = INVALID;
+}
+
+
+/**
+ * @brief Returns the index of the next frame of animation, the one after
+ * the current one.
+ *
+ * @param outReachedEnd If not nullptr, true is returned here if we've reached
+ * the end and the next frame loops back to the beginning.
+ * @return The index, or INVALID on error.
+ */
+size_t AnimationInstance::getNextFrameIdx(bool* outReachedEnd) const {
+    if(outReachedEnd) *outReachedEnd = false;
+    if(!curAnim) return INVALID;
+    
+    if(curFrameIdx < curAnim->frames.size() - 1) {
+        return curFrameIdx + 1;
+    } else {
+        if(outReachedEnd) *outReachedEnd = true;
+        if(curAnim->loopFrame < curAnim->frames.size()) {
+            return curAnim->loopFrame;
+        } else {
+            return 0;
+        }
+    }
+}
+
+
+/**
  * @brief Returns the sprite of the current frame of animation.
  *
  * @param outCurSpritePtr If not nullptr, the current sprite is
@@ -836,31 +872,6 @@ void AnimationInstance::getSpriteData(
 
 
 /**
- * @brief Returns the index of the next frame of animation, the one after
- * the current one.
- *
- * @param outReachedEnd If not nullptr, true is returned here if we've reached
- * the end and the next frame loops back to the beginning.
- * @return The index, or INVALID on error.
- */
-size_t AnimationInstance::getNextFrameIdx(bool* outReachedEnd) const {
-    if(outReachedEnd) *outReachedEnd = false;
-    if(!curAnim) return INVALID;
-    
-    if(curFrameIdx < curAnim->frames.size() - 1) {
-        return curFrameIdx + 1;
-    } else {
-        if(outReachedEnd) *outReachedEnd = true;
-        if(curAnim->loopFrame < curAnim->frames.size()) {
-            return curAnim->loopFrame;
-        } else {
-            return 0;
-        }
-    }
-}
-
-
-/**
  * @brief Initializes the instance by setting its database to the given one,
  * its animation to the first one in the database, and setting the time
  * to the beginning.
@@ -893,17 +904,6 @@ void AnimationInstance::skipAheadRandomly() {
     }
     
     tick(game.rng.f(0, totalDuration));
-}
-
-
-/**
- * @brief Clears everything.
- */
-void AnimationInstance::clear() {
-    curAnim = nullptr;
-    animDb = nullptr;
-    curFrameTime = 0;
-    curFrameIdx = INVALID;
 }
 
 

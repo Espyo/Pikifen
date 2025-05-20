@@ -130,18 +130,6 @@ void Onion::drawMob() {
 
 
 /**
- * @brief Reads the provided script variables, if any, and does stuff with them.
- *
- * @param svr Script var reader to use.
- */
-void Onion::readScriptVars(const ScriptVarReader &svr) {
-    Mob::readScriptVars(svr);
-    
-    nest->readScriptVars(svr);
-}
-
-
-/**
  * @brief Spew a Pikmin seed in the queue or add it to the Onion's storage.
  */
 void Onion::generate() {
@@ -195,6 +183,18 @@ void Onion::generate() {
 
 
 /**
+ * @brief Reads the provided script variables, if any, and does stuff with them.
+ *
+ * @param svr Script var reader to use.
+ */
+void Onion::readScriptVars(const ScriptVarReader &svr) {
+    Mob::readScriptVars(svr);
+    
+    nest->readScriptVars(svr);
+}
+
+
+/**
  * @brief Starts generating Pikmin.
  */
 void Onion::startGenerating() {
@@ -230,7 +230,7 @@ void Onion::tickClassSpecifics(float deltaT) {
     for(const Player &player : game.states.gameplay->players) {
         if(!player.leaderPtr) continue;
         if(
-            BBoxCheck(
+            bBoxCheck(
                 player.leaderPtr->pos, pos,
                 player.leaderPtr->radius + radius * 3
             )
@@ -239,7 +239,7 @@ void Onion::tickClassSpecifics(float deltaT) {
         }
         
         if(
-            BBoxCheck(
+            bBoxCheck(
                 player.leaderCursorWorld, pos,
                 player.leaderPtr->radius + radius * 3
             )

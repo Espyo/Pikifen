@@ -1332,42 +1332,6 @@ void MobActionRunners::getRandomInt(MobActionRunData &data) {
 
 
 /**
- * @brief Returns the mob matching the mob target type.
- *
- * @param data Data about the action call.
- * @param type Type of target.
- */
-Mob* getTargetMob(
-    MobActionRunData &data, MOB_ACTION_MOB_TARGET_TYPE type
-) {
-    switch (type) {
-    case MOB_ACTION_MOB_TARGET_TYPE_SELF: {
-        return data.m;
-        break;
-    } case MOB_ACTION_MOB_TARGET_TYPE_FOCUS: {
-        return data.m->focusedMob;
-        break;
-    } case MOB_ACTION_MOB_TARGET_TYPE_TRIGGER: {
-        return getTriggerMob(data);
-        break;
-    } case MOB_ACTION_MOB_TARGET_TYPE_LINK: {
-        if(!data.m->links.empty() && data.m->links[0]) {
-            return data.m->links[0];
-        }
-        break;
-    } case MOB_ACTION_MOB_TARGET_TYPE_PARENT: {
-        if(data.m->parent) {
-            return data.m->parent->m;
-        }
-        break;
-    }
-    }
-    
-    return nullptr;
-}
-
-
-/**
  * @brief Code for the hold focused mob mob script action.
  *
  * @param data Data about the action call.
@@ -2436,6 +2400,42 @@ bool assertActions(
     }
     
     return true;
+}
+
+
+/**
+ * @brief Returns the mob matching the mob target type.
+ *
+ * @param data Data about the action call.
+ * @param type Type of target.
+ */
+Mob* getTargetMob(
+    MobActionRunData &data, MOB_ACTION_MOB_TARGET_TYPE type
+) {
+    switch (type) {
+    case MOB_ACTION_MOB_TARGET_TYPE_SELF: {
+        return data.m;
+        break;
+    } case MOB_ACTION_MOB_TARGET_TYPE_FOCUS: {
+        return data.m->focusedMob;
+        break;
+    } case MOB_ACTION_MOB_TARGET_TYPE_TRIGGER: {
+        return getTriggerMob(data);
+        break;
+    } case MOB_ACTION_MOB_TARGET_TYPE_LINK: {
+        if(!data.m->links.empty() && data.m->links[0]) {
+            return data.m->links[0];
+        }
+        break;
+    } case MOB_ACTION_MOB_TARGET_TYPE_PARENT: {
+        if(data.m->parent) {
+            return data.m->parent->m;
+        }
+        break;
+    }
+    }
+    
+    return nullptr;
 }
 
 

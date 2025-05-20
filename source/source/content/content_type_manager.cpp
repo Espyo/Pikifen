@@ -960,23 +960,6 @@ void MobAnimContentManager::clearManifests() {
 
 
 /**
- * @brief Fills in the manifests.
- */
-void MobAnimContentManager::fillManifests() {
-    for(size_t c = 0; c < N_MOB_CATEGORIES; c++) {
-        manifests.push_back(map<string, ContentManifest>());
-        if(c == MOB_CATEGORY_NONE) continue;
-        MobCategory* category = game.mobCategories.get((MOB_CATEGORY) c);
-        if(category->folderName.empty()) return;
-        
-        for(const auto &p : game.content.packs.manifestsWithBase) {
-            fillCatManifestsFromPack(category, p);
-        }
-    }
-}
-
-
-/**
  * @brief Fills in the manifests from a specific pack.
  * 
  * @param category Mob category this applies to.
@@ -1001,6 +984,23 @@ void MobAnimContentManager::fillCatManifestsFromPack(
                 FILE_NAMES::MOB_TYPE_ANIMATION,
                 FOLDER_NAMES::BASE_PACK
             );
+    }
+}
+
+
+/**
+ * @brief Fills in the manifests.
+ */
+void MobAnimContentManager::fillManifests() {
+    for(size_t c = 0; c < N_MOB_CATEGORIES; c++) {
+        manifests.push_back(map<string, ContentManifest>());
+        if(c == MOB_CATEGORY_NONE) continue;
+        MobCategory* category = game.mobCategories.get((MOB_CATEGORY) c);
+        if(category->folderName.empty()) return;
+        
+        for(const auto &p : game.content.packs.manifestsWithBase) {
+            fillCatManifestsFromPack(category, p);
+        }
     }
 }
 
@@ -1518,105 +1518,6 @@ void ParticleGenContentManager::unloadAll(CONTENT_LOAD_LEVEL level) {
 /**
  * @brief Clears the manifests.
  */
-void SoundContentManager::clearManifests() {
-    manifests.clear();
-}
-
-
-/**
- * @brief Fills in the manifests.
- */
-void SoundContentManager::fillManifests() {
-    fillManifestsMap(manifests, FOLDER_PATHS_FROM_PACK::SOUNDS, false);
-}
-
-
-/**
- * @brief Returns the content type's name.
- *
- * @return The name.
- */
-string SoundContentManager::getName() const {
-    return "audio sample";
-}
-
-
-/**
- * @brief Returns the name to use for the performance monitor, if any.
- *
- * @return The name.
- */
-string SoundContentManager::getPerfMonMeasurementName() const {
-    return "";
-}
-
-
-/**
- * @brief Loads all content in the manifests.
- *
- * @param level Level to load at.
- */
-void SoundContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
-}
-
-
-/**
- * @brief Returns the path to a sample given a manifest
- * (that's missing the path).
- *
- * @param manifest Manifest of the sample.
- * @param extension Extension of the sample file, dot included.
- * @return The path.
- */
-string SoundContentManager::manifestToPath(
-    const ContentManifest &manifest,
-    const string &extension
-) const {
-    return
-        FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
-        manifest.pack + "/" +
-        FOLDER_PATHS_FROM_PACK::SOUNDS + "/" +
-        manifest.internalName + extension;
-}
-
-
-/**
- * @brief Returns the manifest of a sample given its path.
- *
- * @param path Path to the sample.
- * @param outManifest If not nullptr, the manifest is returned here.
- * @param outExtension If not nullptr, the file extension is returned here.
- */
-void SoundContentManager::pathToManifest(
-    const string &path, ContentManifest* outManifest, string* outExtension
-) const {
-    if(outManifest) {
-        outManifest->fillFromPath(path);
-    }
-    
-    if(outExtension) {
-        size_t i = path.find_last_of(".");
-        if(i == string::npos) {
-            *outExtension = "";
-        } else {
-            *outExtension = path.substr(i);
-        }
-    }
-}
-
-
-/**
- * @brief Unloads all loaded content.
- *
- * @param level Load level. Should match the level used to load the content.
- */
-void SoundContentManager::unloadAll(CONTENT_LOAD_LEVEL level) {
-}
-
-
-/**
- * @brief Clears the manifests.
- */
 void SongContentManager::clearManifests() {
     manifests.clear();
 }
@@ -1824,6 +1725,105 @@ void SongTrackContentManager::pathToManifest(
  */
 void SongTrackContentManager::unloadAll(CONTENT_LOAD_LEVEL level) {
 
+}
+
+
+/**
+ * @brief Clears the manifests.
+ */
+void SoundContentManager::clearManifests() {
+    manifests.clear();
+}
+
+
+/**
+ * @brief Fills in the manifests.
+ */
+void SoundContentManager::fillManifests() {
+    fillManifestsMap(manifests, FOLDER_PATHS_FROM_PACK::SOUNDS, false);
+}
+
+
+/**
+ * @brief Returns the content type's name.
+ *
+ * @return The name.
+ */
+string SoundContentManager::getName() const {
+    return "audio sample";
+}
+
+
+/**
+ * @brief Returns the name to use for the performance monitor, if any.
+ *
+ * @return The name.
+ */
+string SoundContentManager::getPerfMonMeasurementName() const {
+    return "";
+}
+
+
+/**
+ * @brief Loads all content in the manifests.
+ *
+ * @param level Level to load at.
+ */
+void SoundContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
+}
+
+
+/**
+ * @brief Returns the path to a sample given a manifest
+ * (that's missing the path).
+ *
+ * @param manifest Manifest of the sample.
+ * @param extension Extension of the sample file, dot included.
+ * @return The path.
+ */
+string SoundContentManager::manifestToPath(
+    const ContentManifest &manifest,
+    const string &extension
+) const {
+    return
+        FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
+        manifest.pack + "/" +
+        FOLDER_PATHS_FROM_PACK::SOUNDS + "/" +
+        manifest.internalName + extension;
+}
+
+
+/**
+ * @brief Returns the manifest of a sample given its path.
+ *
+ * @param path Path to the sample.
+ * @param outManifest If not nullptr, the manifest is returned here.
+ * @param outExtension If not nullptr, the file extension is returned here.
+ */
+void SoundContentManager::pathToManifest(
+    const string &path, ContentManifest* outManifest, string* outExtension
+) const {
+    if(outManifest) {
+        outManifest->fillFromPath(path);
+    }
+    
+    if(outExtension) {
+        size_t i = path.find_last_of(".");
+        if(i == string::npos) {
+            *outExtension = "";
+        } else {
+            *outExtension = path.substr(i);
+        }
+    }
+}
+
+
+/**
+ * @brief Unloads all loaded content.
+ *
+ * @param level Load level. Should match the level used to load the content.
+ */
+void SoundContentManager::unloadAll(CONTENT_LOAD_LEVEL level) {
 }
 
 

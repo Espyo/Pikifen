@@ -144,8 +144,8 @@ Point angleToCoordinates(
     float angle, float magnitude
 );
 float angularDistToLinear(float angularDist, float radius);
-bool BBoxCheck(const Point &center1, const Point &center2, float r);
-bool BBoxCheck(
+bool bBoxCheck(const Point &center1, const Point &center2, float r);
+bool bBoxCheck(
     const Point &tl1, const Point &br1,
     const Point &center2, float r
 );

@@ -104,6 +104,31 @@ float ease(const EASING_METHOD method, float n) {
 
 
 /**
+ * @brief Performs a deterministic weighted random pick,
+ * and returns the index of the chosen item.
+ *
+ * @param weights A vector with the weight of each item.
+ * @param pointRandomFloat A previously-determined random float to
+ * calculate the weight sum point with [0, 1].
+ * @return Index of the chosen item, or 0 on error.
+ */
+size_t getRandomIdxWithWeights(
+    const vector<float> &weights, float pointRandomFloat
+) {
+    float weightSum = 0.0f;
+    for(size_t i = 0; i < weights.size(); i++) {
+        weightSum += weights[i];
+    }
+    float r = pointRandomFloat * weightSum;
+    for(size_t i = 0; i < weights.size(); i++) {
+        if(r < weights[i]) return i;
+        r -= weights[i];
+    }
+    return 0;
+}
+
+
+/**
  * @brief Given an input, it returns a 32-bit unsigned integer hash of
  * that input.
  *
@@ -199,31 +224,6 @@ int32_t linearCongruentialGenerator(int32_t* state) {
     int32_t result = ((*state * 1103515245U) + 12345U) & 0x7fffffff;
     *state = result;
     return result;
-}
-
-
-/**
- * @brief Performs a deterministic weighted random pick,
- * and returns the index of the chosen item.
- *
- * @param weights A vector with the weight of each item.
- * @param pointRandomFloat A previously-determined random float to
- * calculate the weight sum point with [0, 1].
- * @return Index of the chosen item, or 0 on error.
- */
-size_t getRandomIdxWithWeights(
-    const vector<float> &weights, float pointRandomFloat
-) {
-    float weightSum = 0.0f;
-    for(size_t i = 0; i < weights.size(); i++) {
-        weightSum += weights[i];
-    }
-    float r = pointRandomFloat * weightSum;
-    for(size_t i = 0; i < weights.size(); i++) {
-        if(r < weights[i]) return i;
-        r -= weights[i];
-    }
-    return 0;
 }
 
 

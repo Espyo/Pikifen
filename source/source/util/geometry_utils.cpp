@@ -606,7 +606,7 @@ float angularDistToLinear(float angularDist, float radius) {
  * @param r Range of the bounding box.
  * @return Whether they are colliding.
  */
-bool BBoxCheck(const Point &center1, const Point &center2, float r) {
+bool bBoxCheck(const Point &center1, const Point &center2, float r) {
     return
         (
             fabs(center1.x - center2.x) <= r &&
@@ -625,7 +625,7 @@ bool BBoxCheck(const Point &center1, const Point &center2, float r) {
  * @param r Radius of the sphere.
  * @return Whether they are colliding.
  */
-bool BBoxCheck(
+bool bBoxCheck(
     const Point &tl1, const Point &br1,
     const Point &center2, float r
 ) {
@@ -1174,34 +1174,6 @@ float getPointSign(const Point &p, const Point &lp1, const Point &lp2) {
 
 
 /**
- * @brief Returns a point inside of a circular ring. Used when you want multiple
- * points inside the ring, evenly distributed. Which of the points this is
- * is defined by the ratio, which is
- * <current point number> / <total number of points>. The distance from the
- * center point is the mid-point of the inner and outer ring.
- *
- * @param innerDist Radius of the inner circle of the ring.
- * @param outerDist Radius of the outer circle of the ring.
- * @param arc Arc of the ring, or M_TAU for the whole ring.
- * @param arcRot Rotation of the arc.
- * @param ratio Ratio of the current point number.
- * @return The point.
- */
-Point getRatioPointInRing(
-    float innerDist, float outerDist,
-    float arc, float arcRot, float ratio
-) {
-
-    float radius = (innerDist + outerDist) / 2.0f;
-    float angle1 = -arc / 2.0f + arcRot;
-    float angle2 = arc / 2.0f + arcRot;
-    float finalAngle = (angle2 - angle1) * ratio + angle1;
-    
-    return angleToCoordinates(finalAngle, radius);
-}
-
-
-/**
  * @brief Returns a deterministically random point inside of a rectangular
  * ring, with uniform distribution.
  *
@@ -1325,6 +1297,34 @@ Point getRandomPointInRing(
 
 
 /**
+ * @brief Returns a point inside of a circular ring. Used when you want multiple
+ * points inside the ring, evenly distributed. Which of the points this is
+ * is defined by the ratio, which is
+ * <current point number> / <total number of points>. The distance from the
+ * center point is the mid-point of the inner and outer ring.
+ *
+ * @param innerDist Radius of the inner circle of the ring.
+ * @param outerDist Radius of the outer circle of the ring.
+ * @param arc Arc of the ring, or M_TAU for the whole ring.
+ * @param arcRot Rotation of the arc.
+ * @param ratio Ratio of the current point number.
+ * @return The point.
+ */
+Point getRatioPointInRing(
+    float innerDist, float outerDist,
+    float arc, float arcRot, float ratio
+) {
+
+    float radius = (innerDist + outerDist) / 2.0f;
+    float angle1 = -arc / 2.0f + arcRot;
+    float angle2 = arc / 2.0f + arcRot;
+    float finalAngle = (angle2 - angle1) * ratio + angle1;
+    
+    return angleToCoordinates(finalAngle, radius);
+}
+
+
+/**
  * @brief Gets the bounding box coordinates of a rectangle that has undergone
  * translation, scale, and/or rotation transformations, and places it
  * in the specified point structs.
@@ -1375,6 +1375,24 @@ void getTransformedRectangleBBox(
             gotMaxY = true;
         }
     }
+}
+
+
+/**
+ * @brief Returns how much to vertically offset something so that it aligns
+ * with either the top, center, or bottom of a box.
+ *
+ * @param mode Vertical alignment mode.
+ * @param height Total height of the box.
+ * @return The vertical offset.
+ */
+float getVerticalAlignOffset(V_ALIGN_MODE mode, float height) {
+    return
+        mode == V_ALIGN_MODE_BOTTOM ?
+        height :
+        mode == V_ALIGN_MODE_CENTER ?
+        height / 2.0f :
+        0.0f;
 }
 
 
@@ -1927,55 +1945,6 @@ bool pointsAreCollinear(
 
 
 /**
- * @brief Given new coordinates, updates the maximum coordinates record,
- * if the new coordinates are a new maximum in either axis.
- * Each axis is processed separately.
- *
- * @param maxCoords Maximum coordinates so far.
- * @param newCoords New coordinates to process and, if necessary, update with.
- */
-void updateMaxCoords(Point &maxCoords, const Point &newCoords) {
-    maxCoords.x =
-        std::max(maxCoords.x, newCoords.x);
-    maxCoords.y =
-        std::max(maxCoords.y, newCoords.y);
-}
-
-
-/**
- * @brief Given new coordinates, updates the minimum coordinates record,
- * if the new coordinates are a new minimum in either axis.
- * Each axis is processed separately.
- *
- * @param minCoords Minimum coordinates so far.
- * @param newCoords New coordinates to process and, if necessary, update with.
- */
-void updateMinCoords(Point &minCoords, const Point &newCoords) {
-    minCoords.x =
-        std::min(minCoords.x, newCoords.x);
-    minCoords.y =
-        std::min(minCoords.y, newCoords.y);
-}
-
-
-/**
- * @brief Given new coordinates, updates the minimum coordinates record
- * and maximum coordinates record, if the new coordinates are a new
- * minimum or maximum in either axis. Each axis is processed separately.
- *
- * @param minCoords Minimum coordinates so far.
- * @param maxCoords Maximum coordinates so far.
- * @param newCoords New coordinates to process and, if necessary, update with.
- */
-void updateMinMaxCoords(
-    Point &minCoords, Point &maxCoords, const Point &newCoords
-) {
-    updateMinCoords(minCoords, newCoords);
-    updateMaxCoords(maxCoords, newCoords);
-}
-
-
-/**
  * @brief Projects a set of vertexes onto an axis.
  *
  * @param v Vertexes to project.
@@ -2375,18 +2344,49 @@ size_t selectNextItemDirectionally(
 
 
 /**
- * @brief Returns how much to vertically offset something so that it aligns
- * with either the top, center, or bottom of a box.
+ * @brief Given new coordinates, updates the maximum coordinates record,
+ * if the new coordinates are a new maximum in either axis.
+ * Each axis is processed separately.
  *
- * @param mode Vertical alignment mode.
- * @param height Total height of the box.
- * @return The vertical offset.
+ * @param maxCoords Maximum coordinates so far.
+ * @param newCoords New coordinates to process and, if necessary, update with.
  */
-float getVerticalAlignOffset(V_ALIGN_MODE mode, float height) {
-    return
-        mode == V_ALIGN_MODE_BOTTOM ?
-        height :
-        mode == V_ALIGN_MODE_CENTER ?
-        height / 2.0f :
-        0.0f;
+void updateMaxCoords(Point &maxCoords, const Point &newCoords) {
+    maxCoords.x =
+        std::max(maxCoords.x, newCoords.x);
+    maxCoords.y =
+        std::max(maxCoords.y, newCoords.y);
+}
+
+
+/**
+ * @brief Given new coordinates, updates the minimum coordinates record,
+ * if the new coordinates are a new minimum in either axis.
+ * Each axis is processed separately.
+ *
+ * @param minCoords Minimum coordinates so far.
+ * @param newCoords New coordinates to process and, if necessary, update with.
+ */
+void updateMinCoords(Point &minCoords, const Point &newCoords) {
+    minCoords.x =
+        std::min(minCoords.x, newCoords.x);
+    minCoords.y =
+        std::min(minCoords.y, newCoords.y);
+}
+
+
+/**
+ * @brief Given new coordinates, updates the minimum coordinates record
+ * and maximum coordinates record, if the new coordinates are a new
+ * minimum or maximum in either axis. Each axis is processed separately.
+ *
+ * @param minCoords Minimum coordinates so far.
+ * @param maxCoords Maximum coordinates so far.
+ * @param newCoords New coordinates to process and, if necessary, update with.
+ */
+void updateMinMaxCoords(
+    Point &minCoords, Point &maxCoords, const Point &newCoords
+) {
+    updateMinCoords(minCoords, newCoords);
+    updateMaxCoords(maxCoords, newCoords);
 }

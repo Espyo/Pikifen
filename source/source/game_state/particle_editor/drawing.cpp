@@ -8,9 +8,9 @@
  * Particle editor drawing function.
  */
 
-#include "editor.h"
-
 #include <algorithm>
+
+#include "editor.h"
 
 #include "../../content/mob/mob_utils.h"
 #include "../../core/game.h"

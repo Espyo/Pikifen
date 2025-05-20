@@ -84,56 +84,6 @@ void HelpMenu::drawTidbit(
 
 
 /**
- * @brief Loads the menu.
- */
-void HelpMenu::load() {
-    //Initial setup.
-    const vector<string> categoryNodeNames {
-        "gameplay_basics", "advanced_gameplay", "controls", "", "objects"
-    };
-    DataNode* guiFile = &game.content.guiDefs.list[HELP_MENU::GUI_FILE_NAME];
-    
-    //Load the tidbits.
-    DataNode* tidbitsNode = guiFile->getChildByName("tidbits");
-    
-    for(size_t c = 0; c < N_HELP_CATEGORIES; c++) {
-        if(categoryNodeNames[c].empty()) continue;
-        DataNode* categoryNode =
-            tidbitsNode->getChildByName(categoryNodeNames[c]);
-        size_t nTidbits = categoryNode->getNrOfChildren();
-        vector<Tidbit> &categoryTidbits = tidbits[(HELP_CATEGORY) c];
-        categoryTidbits.reserve(nTidbits);
-        for(size_t t = 0; t < nTidbits; t++) {
-            vector<string> parts =
-                semicolonListToVector(categoryNode->getChild(t)->name);
-            Tidbit newT;
-            newT.name = parts.size() > 0 ? parts[0] : "";
-            newT.description = parts.size() > 1 ? parts[1] : "";
-            newT.image =
-                parts.size() > 2 ?
-                game.content.bitmaps.list.get(parts[2]) :
-                nullptr;
-            categoryTidbits.push_back(newT);
-        }
-    }
-    for(size_t p = 0; p < game.config.pikmin.order.size(); p++) {
-        Tidbit newT;
-        newT.name = game.config.pikmin.order[p]->name;
-        newT.description = game.config.pikmin.order[p]->description;
-        newT.image = game.config.pikmin.order[p]->bmpIcon;
-        tidbits[HELP_CATEGORY_PIKMIN].push_back(newT);
-    }
-    
-    //Initialize the GUIs.
-    initGuiMain(guiFile);
-    
-    //Finish the menu class setup.
-    guis.push_back(&gui);
-    Menu::load();
-}
-
-
-/**
  * @brief Initializes the main GUI.
  * 
  * @param guiFile The GUI definition's file.
@@ -294,6 +244,56 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
     [this] () {
         curTidbit = nullptr;
     };
+}
+
+
+/**
+ * @brief Loads the menu.
+ */
+void HelpMenu::load() {
+    //Initial setup.
+    const vector<string> categoryNodeNames {
+        "gameplay_basics", "advanced_gameplay", "controls", "", "objects"
+    };
+    DataNode* guiFile = &game.content.guiDefs.list[HELP_MENU::GUI_FILE_NAME];
+    
+    //Load the tidbits.
+    DataNode* tidbitsNode = guiFile->getChildByName("tidbits");
+    
+    for(size_t c = 0; c < N_HELP_CATEGORIES; c++) {
+        if(categoryNodeNames[c].empty()) continue;
+        DataNode* categoryNode =
+            tidbitsNode->getChildByName(categoryNodeNames[c]);
+        size_t nTidbits = categoryNode->getNrOfChildren();
+        vector<Tidbit> &categoryTidbits = tidbits[(HELP_CATEGORY) c];
+        categoryTidbits.reserve(nTidbits);
+        for(size_t t = 0; t < nTidbits; t++) {
+            vector<string> parts =
+                semicolonListToVector(categoryNode->getChild(t)->name);
+            Tidbit newT;
+            newT.name = parts.size() > 0 ? parts[0] : "";
+            newT.description = parts.size() > 1 ? parts[1] : "";
+            newT.image =
+                parts.size() > 2 ?
+                game.content.bitmaps.list.get(parts[2]) :
+                nullptr;
+            categoryTidbits.push_back(newT);
+        }
+    }
+    for(size_t p = 0; p < game.config.pikmin.order.size(); p++) {
+        Tidbit newT;
+        newT.name = game.config.pikmin.order[p]->name;
+        newT.description = game.config.pikmin.order[p]->description;
+        newT.image = game.config.pikmin.order[p]->bmpIcon;
+        tidbits[HELP_CATEGORY_PIKMIN].push_back(newT);
+    }
+    
+    //Initialize the GUIs.
+    initGuiMain(guiFile);
+    
+    //Finish the menu class setup.
+    guis.push_back(&gui);
+    Menu::load();
 }
 
 

@@ -27,6 +27,50 @@ ContentManager::ContentManager() {
 
 
 /**
+ * @brief Creates a new pack and updates the list of packs.
+ *
+ * @param internalName Internal name of the pack, i.e. the pack's folder name.
+ * @param name Proper name of the pack.
+ * @param description Description.
+ * @param maker Maker(s).
+ * @return Whether it succeeded.
+ */
+bool ContentManager::createPack(
+    const string &internalName, const string &name,
+    const string &description, const string &maker
+) {
+    string packPath = FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" + internalName;
+    
+    //Create the folder first.
+    bool couldMakeFolder = al_make_directory(packPath.c_str());
+    if(!couldMakeFolder) return false;
+    
+    //Create the data file.
+    DataNode data;
+    GetterWriter pGW(&data);
+
+    pGW.write("name", name);
+    pGW.write("description", description);
+    pGW.write("maker", maker);
+    pGW.write("version", "1.0.0");
+    pGW.write("engine_version", getEngineVersionString());
+    pGW.write("tags", "");
+    pGW.write("dependencies", "");
+    pGW.write("conflicts", "");
+    pGW.write("notes", "");
+    data.saveFile(packPath + "/" + FILE_NAMES::PACK_DATA, true, true);
+    
+    //Update the list and manifest.
+    packs.unloadAll();
+    packs.clearManifests();
+    packs.fillManifests();
+    packs.loadAll();
+    
+    return true;
+}
+
+
+/**
  * @brief Returns the relevant content type manager for a given content type.
  *
  * @param type The content type.
@@ -134,50 +178,6 @@ void ContentManager::loadAll(
 
 
 /**
- * @brief Creates a new pack and updates the list of packs.
- *
- * @param internalName Internal name of the pack, i.e. the pack's folder name.
- * @param name Proper name of the pack.
- * @param description Description.
- * @param maker Maker(s).
- * @return Whether it succeeded.
- */
-bool ContentManager::createPack(
-    const string &internalName, const string &name,
-    const string &description, const string &maker
-) {
-    string packPath = FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" + internalName;
-    
-    //Create the folder first.
-    bool couldMakeFolder = al_make_directory(packPath.c_str());
-    if(!couldMakeFolder) return false;
-    
-    //Create the data file.
-    DataNode data;
-    GetterWriter pGW(&data);
-
-    pGW.write("name", name);
-    pGW.write("description", description);
-    pGW.write("maker", maker);
-    pGW.write("version", "1.0.0");
-    pGW.write("engine_version", getEngineVersionString());
-    pGW.write("tags", "");
-    pGW.write("dependencies", "");
-    pGW.write("conflicts", "");
-    pGW.write("notes", "");
-    data.saveFile(packPath + "/" + FILE_NAMES::PACK_DATA, true, true);
-    
-    //Update the list and manifest.
-    packs.unloadAll();
-    packs.clearManifests();
-    packs.fillManifests();
-    packs.loadAll();
-    
-    return true;
-}
-
-
-/**
  * @brief Loads an area as the "current area". This does not load it into
  * the vector of areas.
  *
@@ -231,19 +231,6 @@ void ContentManager::reloadPacks() {
 
 
 /**
- * @brief Unloads the "current area".
- *
- * @param level Should match the level at which the content got loaded.
- */
-void ContentManager::unloadCurrentArea(CONTENT_LOAD_LEVEL level) {
-    if(!game.curAreaData) return;
-    game.curAreaData->clear();
-    delete game.curAreaData;
-    game.curAreaData = nullptr;
-}
-
-
-/**
  * @brief Unloads some loaded content.
  *
  * @param types Types of content to unload.
@@ -263,6 +250,19 @@ void ContentManager::unloadAll(const vector<CONTENT_TYPE> &types) {
         
         loadLevels[types[t]] = CONTENT_LOAD_LEVEL_UNLOADED;
     }
+}
+
+
+/**
+ * @brief Unloads the "current area".
+ *
+ * @param level Should match the level at which the content got loaded.
+ */
+void ContentManager::unloadCurrentArea(CONTENT_LOAD_LEVEL level) {
+    if(!game.curAreaData) return;
+    game.curAreaData->clear();
+    delete game.curAreaData;
+    game.curAreaData = nullptr;
 }
 
 

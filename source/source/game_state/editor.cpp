@@ -831,6 +831,277 @@ bool Editor::keyCheck(
 
 
 /**
+ * @brief Processes Dear ImGui widgets for visualizing and editing a color
+ * keyframe interpolator.
+ *
+ * @param label Label for a keyframe's value.
+ * @param interpolator Interpolator to edit.
+ * @param selKeyframeIdx Index of the currently selected keyframe.
+ * @return Whether anything in the interpolator was changed.
+ */
+bool Editor::keyframeEditor(
+    const string &label,
+    KeyframeInterpolator<ALLEGRO_COLOR> &interpolator,
+    size_t &selKeyframeIdx
+) {
+    //Visualizer.
+    keyframeVisualizer(interpolator, selKeyframeIdx);
+    
+    //Organizer.
+    bool result = keyframeOrganizer(label, interpolator, selKeyframeIdx);
+    
+    if(interpolator.getKeyframeCount() > 1) {
+        //Time value.
+        float time = interpolator.getKeyframe(selKeyframeIdx).first;
+        if(ImGui::SliderFloat("Time", &time, 0.0f, 1.0f)) {
+            interpolator.setKeyframeTime(
+                selKeyframeIdx, time, &selKeyframeIdx
+            );
+            result = true;
+        }
+        setTooltip(
+            "Time at which this keyframe occurs.\n"
+            "0 means the beginning, 1 means the end.",
+            "", WIDGET_EXPLANATION_SLIDER
+        );
+    }
+    
+    //Color editor.
+    ALLEGRO_COLOR value = interpolator.getKeyframe(selKeyframeIdx).second;
+    if(ImGui::ColorEdit4(label.c_str(), (float*) &value)) {
+        interpolator.setKeyframeValue(selKeyframeIdx, value);
+        result = true;
+    }
+    setTooltip("What color to use at this keyframe.");
+    
+    return result;
+}
+
+
+/**
+ * @brief Processes Dear ImGui widgets for visualizing and editing a float
+ * keyframe interpolator.
+ *
+ * @param label Label for a keyframe's value.
+ * @param interpolator Interpolator to edit.
+ * @param selKeyframeIdx Index of the currently selected keyframe.
+ * @return Whether anything in the interpolator was changed.
+ */
+bool Editor::keyframeEditor(
+    const string &label,
+    KeyframeInterpolator<float> &interpolator,
+    size_t &selKeyframeIdx
+) {
+    //Visualizer.
+    keyframeVisualizer(interpolator, selKeyframeIdx);
+    
+    //Organizer.
+    bool result = keyframeOrganizer(label, interpolator, selKeyframeIdx);
+    
+    if(interpolator.getKeyframeCount() > 1) {
+        //Time value.
+        float time = interpolator.getKeyframe(selKeyframeIdx).first;
+        if(ImGui::SliderFloat("Time", &time, 0.0f, 1.0f)) {
+            interpolator.setKeyframeTime(
+                selKeyframeIdx, time, &selKeyframeIdx
+            );
+            result = true;
+        }
+        setTooltip(
+            "Time at which this keyframe occurs.\n"
+            "0 means the beginning, 1 means the end.",
+            "", WIDGET_EXPLANATION_SLIDER
+        );
+    }
+    
+    //Float value.
+    float value = interpolator.getKeyframe(selKeyframeIdx).second;
+    if(ImGui::DragFloat(label.c_str(), &value)) {
+        interpolator.setKeyframeValue(selKeyframeIdx, value);
+        result = true;
+    }
+    setTooltip("What value to use at this keyframe.");
+    
+    return result;
+}
+
+
+/**
+ * @brief Processes Dear ImGui widgets for visualizing and editing a point
+ * keyframe interpolator.
+ *
+ * @param label Label for a keyframe's value.
+ * @param interpolator Interpolator to edit.
+ * @param selKeyframeIdx Index of the currently selected keyframe.
+ * @return Whether anything in the interpolator was changed.
+ */
+bool Editor::keyframeEditor(
+    const string &label,
+    KeyframeInterpolator<Point> &interpolator,
+    size_t &selKeyframeIdx
+) {
+    //Visualizer.
+    keyframeVisualizer(interpolator, selKeyframeIdx);
+    
+    //Organizer.
+    bool result = keyframeOrganizer(label, interpolator, selKeyframeIdx);
+    
+    if(interpolator.getKeyframeCount() > 1) {
+        //Time value.
+        float time = interpolator.getKeyframe(selKeyframeIdx).first;
+        if(ImGui::SliderFloat("Time", &time, 0.0f, 1.0f)) {
+            interpolator.setKeyframeTime(
+                selKeyframeIdx, time, &selKeyframeIdx
+            );
+            result = true;
+        }
+        setTooltip(
+            "Time at which this keyframe occurs.\n"
+            "0 means the beginning, 1 means the end.",
+            "", WIDGET_EXPLANATION_SLIDER
+        );
+    }
+    
+    //Float values.
+    Point value = interpolator.getKeyframe(selKeyframeIdx).second;
+    if(ImGui::DragFloat2(label.c_str(), (float*) &value)) {
+        interpolator.setKeyframeValue(selKeyframeIdx, value);
+        result = true;
+    }
+    setTooltip("What coordinates to use at this keyframe.");
+    
+    return result;
+}
+
+
+/**
+ * @brief Processes Dear ImGui widgets tha allow organizing keyframe
+ * interpolators.
+ *
+ * @tparam InterT Type of the interpolator value.
+ * @param buttonId Prefix for the Dear ImGui ID of the navigation buttons.
+ * @param interpolator Interpolator to get data from.
+ * @param selKeyframeIdx Index of the currently selected keyframe.
+ * @return Whether anything in the interpolator was changed.
+ */
+template <class InterT>
+bool Editor::keyframeOrganizer(
+    const string &buttonId,
+    KeyframeInterpolator<InterT> &interpolator,
+    size_t &selKeyframeIdx
+) {
+    bool result = false;
+    
+    //First, some utility setup.
+    if(interpolator.getKeyframeCount() == 1) {
+        interpolator.setKeyframeTime(0, 0.0f);
+    }
+    
+    //Current keyframe text.
+    ImGui::Text(
+        "Keyframe: %lu/%lu",
+        selKeyframeIdx + 1,
+        interpolator.getKeyframeCount()
+    );
+    
+    if(interpolator.getKeyframeCount() > 1) {
+        //Previous keyframe button.
+        ImGui::SameLine();
+        string prevLabel = buttonId + "prevButton";
+        if(
+            ImGui::ImageButton(
+                prevLabel, editorIcons[EDITOR_ICON_PREVIOUS],
+                Point(EDITOR::ICON_BMP_SIZE / 2.0f)
+            )
+        ) {
+            if(selKeyframeIdx == 0) {
+                selKeyframeIdx = interpolator.getKeyframeCount() - 1;
+            } else {
+                selKeyframeIdx--;
+            }
+        }
+        setTooltip(
+            "Select the previous keyframe."
+        );
+        
+        //Next keyframe button.
+        ImGui::SameLine();
+        string nextLabel = buttonId + "nextButton";
+        if(
+            ImGui::ImageButton(
+                nextLabel, editorIcons[EDITOR_ICON_NEXT],
+                Point(EDITOR::ICON_BMP_SIZE / 2.0f)
+            )
+        ) {
+            if(selKeyframeIdx == interpolator.getKeyframeCount() - 1) {
+                selKeyframeIdx = 0;
+            } else {
+                selKeyframeIdx++;
+            }
+        }
+        setTooltip(
+            "Select the next keyframe."
+        );
+    }
+    
+    //Add keyframe button.
+    ImGui::SameLine();
+    string addLabel = buttonId + "addButton";
+    if(
+        ImGui::ImageButton(
+            addLabel, editorIcons[EDITOR_ICON_ADD],
+            Point(EDITOR::ICON_BMP_SIZE / 2.0f)
+        )
+    ) {
+        float prevT = interpolator.getKeyframe(selKeyframeIdx).first;
+        float nextT =
+            selKeyframeIdx == interpolator.getKeyframeCount() - 1 ?
+            1.0f :
+            interpolator.getKeyframe(selKeyframeIdx + 1).first;
+        float newT = (prevT + nextT) / 2.0f;
+        
+        interpolator.add(newT, interpolator.get(newT));
+        selKeyframeIdx++;
+        setStatus(
+            "Added keyframe #" + i2s(selKeyframeIdx + 1) + "."
+        );
+        result = true;
+    }
+    setTooltip(
+        "Add a new keyframe after the currently selected one.\n"
+        "It will go between the current one and the one after."
+    );
+    
+    if(interpolator.getKeyframeCount() > 1) {
+        //Delete frame button.
+        ImGui::SameLine();
+        string removeButton = buttonId + "removeButton";
+        if(
+            ImGui::ImageButton(
+                removeButton, editorIcons[EDITOR_ICON_REMOVE],
+                Point(EDITOR::ICON_BMP_SIZE / 2.0f)
+            )
+        ) {
+            size_t deletedFrameIdx = selKeyframeIdx;
+            interpolator.remove(deletedFrameIdx);
+            if(selKeyframeIdx == interpolator.getKeyframeCount()) {
+                selKeyframeIdx--;
+            }
+            setStatus(
+                "Deleted keyframe #" + i2s(deletedFrameIdx + 1) + "."
+            );
+            result = true;
+        }
+        setTooltip(
+            "Delete the currently selected keyframe."
+        );
+    }
+    
+    return result;
+}
+
+
+/**
  * @brief Draws a Dear ImGui-like visualizer for keyframes involving colors.
  *
  * @param interpolator Interpolator to get the information from.
@@ -1080,277 +1351,6 @@ void Editor::keyframeVisualizer(
     //Draw the two visualizers.
     keyframeVisualizer(xInter, selKeyframeIdx);
     keyframeVisualizer(yInter, selKeyframeIdx);
-}
-
-
-/**
- * @brief Processes Dear ImGui widgets tha allow organizing keyframe
- * interpolators.
- *
- * @tparam InterT Type of the interpolator value.
- * @param buttonId Prefix for the Dear ImGui ID of the navigation buttons.
- * @param interpolator Interpolator to get data from.
- * @param selKeyframeIdx Index of the currently selected keyframe.
- * @return Whether anything in the interpolator was changed.
- */
-template <class InterT>
-bool Editor::keyframeOrganizer(
-    const string &buttonId,
-    KeyframeInterpolator<InterT> &interpolator,
-    size_t &selKeyframeIdx
-) {
-    bool result = false;
-    
-    //First, some utility setup.
-    if(interpolator.getKeyframeCount() == 1) {
-        interpolator.setKeyframeTime(0, 0.0f);
-    }
-    
-    //Current keyframe text.
-    ImGui::Text(
-        "Keyframe: %lu/%lu",
-        selKeyframeIdx + 1,
-        interpolator.getKeyframeCount()
-    );
-    
-    if(interpolator.getKeyframeCount() > 1) {
-        //Previous keyframe button.
-        ImGui::SameLine();
-        string prevLabel = buttonId + "prevButton";
-        if(
-            ImGui::ImageButton(
-                prevLabel, editorIcons[EDITOR_ICON_PREVIOUS],
-                Point(EDITOR::ICON_BMP_SIZE / 2.0f)
-            )
-        ) {
-            if(selKeyframeIdx == 0) {
-                selKeyframeIdx = interpolator.getKeyframeCount() - 1;
-            } else {
-                selKeyframeIdx--;
-            }
-        }
-        setTooltip(
-            "Select the previous keyframe."
-        );
-        
-        //Next keyframe button.
-        ImGui::SameLine();
-        string nextLabel = buttonId + "nextButton";
-        if(
-            ImGui::ImageButton(
-                nextLabel, editorIcons[EDITOR_ICON_NEXT],
-                Point(EDITOR::ICON_BMP_SIZE / 2.0f)
-            )
-        ) {
-            if(selKeyframeIdx == interpolator.getKeyframeCount() - 1) {
-                selKeyframeIdx = 0;
-            } else {
-                selKeyframeIdx++;
-            }
-        }
-        setTooltip(
-            "Select the next keyframe."
-        );
-    }
-    
-    //Add keyframe button.
-    ImGui::SameLine();
-    string addLabel = buttonId + "addButton";
-    if(
-        ImGui::ImageButton(
-            addLabel, editorIcons[EDITOR_ICON_ADD],
-            Point(EDITOR::ICON_BMP_SIZE / 2.0f)
-        )
-    ) {
-        float prevT = interpolator.getKeyframe(selKeyframeIdx).first;
-        float nextT =
-            selKeyframeIdx == interpolator.getKeyframeCount() - 1 ?
-            1.0f :
-            interpolator.getKeyframe(selKeyframeIdx + 1).first;
-        float newT = (prevT + nextT) / 2.0f;
-        
-        interpolator.add(newT, interpolator.get(newT));
-        selKeyframeIdx++;
-        setStatus(
-            "Added keyframe #" + i2s(selKeyframeIdx + 1) + "."
-        );
-        result = true;
-    }
-    setTooltip(
-        "Add a new keyframe after the currently selected one.\n"
-        "It will go between the current one and the one after."
-    );
-    
-    if(interpolator.getKeyframeCount() > 1) {
-        //Delete frame button.
-        ImGui::SameLine();
-        string removeButton = buttonId + "removeButton";
-        if(
-            ImGui::ImageButton(
-                removeButton, editorIcons[EDITOR_ICON_REMOVE],
-                Point(EDITOR::ICON_BMP_SIZE / 2.0f)
-            )
-        ) {
-            size_t deletedFrameIdx = selKeyframeIdx;
-            interpolator.remove(deletedFrameIdx);
-            if(selKeyframeIdx == interpolator.getKeyframeCount()) {
-                selKeyframeIdx--;
-            }
-            setStatus(
-                "Deleted keyframe #" + i2s(deletedFrameIdx + 1) + "."
-            );
-            result = true;
-        }
-        setTooltip(
-            "Delete the currently selected keyframe."
-        );
-    }
-    
-    return result;
-}
-
-
-/**
- * @brief Processes Dear ImGui widgets for visualizing and editing a color
- * keyframe interpolator.
- *
- * @param label Label for a keyframe's value.
- * @param interpolator Interpolator to edit.
- * @param selKeyframeIdx Index of the currently selected keyframe.
- * @return Whether anything in the interpolator was changed.
- */
-bool Editor::keyframeEditor(
-    const string &label,
-    KeyframeInterpolator<ALLEGRO_COLOR> &interpolator,
-    size_t &selKeyframeIdx
-) {
-    //Visualizer.
-    keyframeVisualizer(interpolator, selKeyframeIdx);
-    
-    //Organizer.
-    bool result = keyframeOrganizer(label, interpolator, selKeyframeIdx);
-    
-    if(interpolator.getKeyframeCount() > 1) {
-        //Time value.
-        float time = interpolator.getKeyframe(selKeyframeIdx).first;
-        if(ImGui::SliderFloat("Time", &time, 0.0f, 1.0f)) {
-            interpolator.setKeyframeTime(
-                selKeyframeIdx, time, &selKeyframeIdx
-            );
-            result = true;
-        }
-        setTooltip(
-            "Time at which this keyframe occurs.\n"
-            "0 means the beginning, 1 means the end.",
-            "", WIDGET_EXPLANATION_SLIDER
-        );
-    }
-    
-    //Color editor.
-    ALLEGRO_COLOR value = interpolator.getKeyframe(selKeyframeIdx).second;
-    if(ImGui::ColorEdit4(label.c_str(), (float*) &value)) {
-        interpolator.setKeyframeValue(selKeyframeIdx, value);
-        result = true;
-    }
-    setTooltip("What color to use at this keyframe.");
-    
-    return result;
-}
-
-
-/**
- * @brief Processes Dear ImGui widgets for visualizing and editing a float
- * keyframe interpolator.
- *
- * @param label Label for a keyframe's value.
- * @param interpolator Interpolator to edit.
- * @param selKeyframeIdx Index of the currently selected keyframe.
- * @return Whether anything in the interpolator was changed.
- */
-bool Editor::keyframeEditor(
-    const string &label,
-    KeyframeInterpolator<float> &interpolator,
-    size_t &selKeyframeIdx
-) {
-    //Visualizer.
-    keyframeVisualizer(interpolator, selKeyframeIdx);
-    
-    //Organizer.
-    bool result = keyframeOrganizer(label, interpolator, selKeyframeIdx);
-    
-    if(interpolator.getKeyframeCount() > 1) {
-        //Time value.
-        float time = interpolator.getKeyframe(selKeyframeIdx).first;
-        if(ImGui::SliderFloat("Time", &time, 0.0f, 1.0f)) {
-            interpolator.setKeyframeTime(
-                selKeyframeIdx, time, &selKeyframeIdx
-            );
-            result = true;
-        }
-        setTooltip(
-            "Time at which this keyframe occurs.\n"
-            "0 means the beginning, 1 means the end.",
-            "", WIDGET_EXPLANATION_SLIDER
-        );
-    }
-    
-    //Float value.
-    float value = interpolator.getKeyframe(selKeyframeIdx).second;
-    if(ImGui::DragFloat(label.c_str(), &value)) {
-        interpolator.setKeyframeValue(selKeyframeIdx, value);
-        result = true;
-    }
-    setTooltip("What value to use at this keyframe.");
-    
-    return result;
-}
-
-
-/**
- * @brief Processes Dear ImGui widgets for visualizing and editing a point
- * keyframe interpolator.
- *
- * @param label Label for a keyframe's value.
- * @param interpolator Interpolator to edit.
- * @param selKeyframeIdx Index of the currently selected keyframe.
- * @return Whether anything in the interpolator was changed.
- */
-bool Editor::keyframeEditor(
-    const string &label,
-    KeyframeInterpolator<Point> &interpolator,
-    size_t &selKeyframeIdx
-) {
-    //Visualizer.
-    keyframeVisualizer(interpolator, selKeyframeIdx);
-    
-    //Organizer.
-    bool result = keyframeOrganizer(label, interpolator, selKeyframeIdx);
-    
-    if(interpolator.getKeyframeCount() > 1) {
-        //Time value.
-        float time = interpolator.getKeyframe(selKeyframeIdx).first;
-        if(ImGui::SliderFloat("Time", &time, 0.0f, 1.0f)) {
-            interpolator.setKeyframeTime(
-                selKeyframeIdx, time, &selKeyframeIdx
-            );
-            result = true;
-        }
-        setTooltip(
-            "Time at which this keyframe occurs.\n"
-            "0 means the beginning, 1 means the end.",
-            "", WIDGET_EXPLANATION_SLIDER
-        );
-    }
-    
-    //Float values.
-    Point value = interpolator.getKeyframe(selKeyframeIdx).second;
-    if(ImGui::DragFloat2(label.c_str(), (float*) &value)) {
-        interpolator.setKeyframeValue(selKeyframeIdx, value);
-        result = true;
-    }
-    setTooltip("What coordinates to use at this keyframe.");
-    
-    return result;
 }
 
 

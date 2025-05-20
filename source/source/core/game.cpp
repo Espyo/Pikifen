@@ -154,35 +154,6 @@ void Game::globalDrawing() {
 
 
 /**
- * @brief Performs some global logic to run every frame.
- */
-void Game::globalLogic() {
-    //Player action handling.
-    for(size_t a = 0; a < playerActions.size();) {
-        if(makerTools.handleGeneralPlayerAction(playerActions[a])) {
-            playerActions.erase(playerActions.begin() + a);
-        } else if(globalHandleSystemPlayerAction(playerActions[a])) {
-            playerActions.erase(playerActions.begin() + a);
-        } else {
-            a++;
-        }
-    }
-    
-    //Cursor trail.
-    if(options.advanced.drawCursorTrail) {
-        mouseCursor.saveTimer.tick(deltaT);
-    }
-    
-    //Audio.
-    audio.tick(deltaT);
-    
-    //Dear ImGui.
-    ImGui_ImplAllegro5_NewFrame();
-    ImGui::NewFrame();
-}
-
-
-/**
  * @brief Handles an Allegro event.
  *
  * @param ev Event to handle.
@@ -244,6 +215,35 @@ bool Game::globalHandleSystemPlayerAction(const PlayerAction &action) {
     }
     
     return true;
+}
+
+
+/**
+ * @brief Performs some global logic to run every frame.
+ */
+void Game::globalLogic() {
+    //Player action handling.
+    for(size_t a = 0; a < playerActions.size();) {
+        if(makerTools.handleGeneralPlayerAction(playerActions[a])) {
+            playerActions.erase(playerActions.begin() + a);
+        } else if(globalHandleSystemPlayerAction(playerActions[a])) {
+            playerActions.erase(playerActions.begin() + a);
+        } else {
+            a++;
+        }
+    }
+    
+    //Cursor trail.
+    if(options.advanced.drawCursorTrail) {
+        mouseCursor.saveTimer.tick(deltaT);
+    }
+    
+    //Audio.
+    audio.tick(deltaT);
+    
+    //Dear ImGui.
+    ImGui_ImplAllegro5_NewFrame();
+    ImGui::NewFrame();
 }
 
 
@@ -324,6 +324,20 @@ void Game::mainLoop() {
 
 
 /**
+ * @brief Registers an Allegro audio stream's event source into the event
+ * queue.
+ *
+ * @param stream The audio stream.
+ */
+void Game::registerAudioStreamSource(ALLEGRO_AUDIO_STREAM* stream) {
+    al_register_event_source(
+        eventQueue,
+        al_get_audio_stream_event_source(stream)
+    );
+}
+
+
+/**
  * @brief Shuts down the program, cleanly freeing everything.
  */
 void Game::shutdown() {
@@ -353,20 +367,6 @@ void Game::shutdown() {
     destroyMisc();
     destroyEventThings(mainTimer, eventQueue);
     destroyAllegro();
-}
-
-
-/**
- * @brief Registers an Allegro audio stream's event source into the event
- * queue.
- *
- * @param stream The audio stream.
- */
-void Game::registerAudioStreamSource(ALLEGRO_AUDIO_STREAM* stream) {
-    al_register_event_source(
-        eventQueue,
-        al_get_audio_stream_event_source(stream)
-    );
 }
 
 

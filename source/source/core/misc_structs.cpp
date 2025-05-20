@@ -135,115 +135,6 @@ const string NAMES[N_MAKER_TOOLS] = {
 
 
 /**
- * @brief Loads the system content names from a file.
- *
- * @param file File to load from.
- */
-void SystemContentNames::load(DataNode* file) {
-    ReaderSetter graRS(file->getChildByName("graphics"));
-    
-    graRS.set("bright_circle", bmpBrightCircle);
-    graRS.set("bright_ring", bmpBrightRing);
-    graRS.set("bubble_box", bmpBubbleBox);
-    graRS.set("button_box", bmpButtonBox);
-    graRS.set("checkbox_check", bmpCheckboxCheck);
-    graRS.set("checkbox_no_check", bmpCheckboxNoCheck);
-    graRS.set("cursor", bmpCursor);
-    graRS.set("discord_icon", bmpDiscordIcon);
-    graRS.set("editor_icons", bmpEditorIcons);
-    graRS.set("enemy_spirit", bmpEnemySpirit);
-    graRS.set("focus_box", bmpFocusBox);
-    graRS.set("frame_box", bmpFrameBox);
-    graRS.set("github_icon", bmpGithubIcon);
-    graRS.set("hard_bubble", bmpHardBubble);
-    graRS.set("icon", bmpIcon);
-    graRS.set("idle_glow", bmpIdleGlow);
-    graRS.set("key_box", bmpKeyBox);
-    graRS.set("leader_silhouette_side", bmpLeaderSilhouetteSide);
-    graRS.set("leader_silhouette_top", bmpLeaderSilhouetteTop);
-    graRS.set("medal_bronze", bmpMedalBronze);
-    graRS.set("medal_gold", bmpMedalGold);
-    graRS.set("medal_none", bmpMedalNone);
-    graRS.set("medal_platinum", bmpMedalPlatinum);
-    graRS.set("medal_silver", bmpMedalSilver);
-    graRS.set("menu_icons", bmpMenuIcons);
-    graRS.set("mission_clear", bmpMissionClear);
-    graRS.set("mission_fail", bmpMissionFail);
-    graRS.set("more", bmpMore);
-    graRS.set("mouse_cursor", bmpMouseCursor);
-    graRS.set("notification", bmpNotification);
-    graRS.set("pikmin_spirit", bmpPikminSpirit);
-    graRS.set("player_input_icons", bmpPlayerInputIcons);
-    graRS.set("random", bmpRandom);
-    graRS.set("rock", bmpRock);
-    graRS.set("shadow", bmpShadow);
-    graRS.set("shadow_square", bmpShadowSquare);
-    graRS.set("smack", bmpSmack);
-    graRS.set("smoke", bmpSmoke);
-    graRS.set("sparkle", bmpSparkle);
-    graRS.set("spotlight", bmpSpotlight);
-    graRS.set("swarm_arrow", bmpSwarmArrow);
-    graRS.set("throw_invalid", bmpThrowInvalid);
-    graRS.set("throw_preview", bmpThrowPreview);
-    graRS.set("throw_preview_dashed", bmpThrowPreviewDashed);
-    graRS.set("title_screen_bg", bmpTitleScreenBg);
-    graRS.set("wave_ring", bmpWaveRing);
-    
-    ReaderSetter fntRS(file->getChildByName("fonts"));
-    
-    fntRS.set("area_name", fntAreaName);
-    fntRS.set("counter", fntCounter);
-    fntRS.set("cursor_counter", fntCursorCounter);
-    fntRS.set("editor_header", fntEditorHeader);
-    fntRS.set("editor_monospace", fntEditorMonospace);
-    fntRS.set("editor_standard", fntEditorStandard);
-    fntRS.set("slim", fntSlim);
-    fntRS.set("standard", fntStandard);
-    fntRS.set("value", fntValue);
-    
-    ReaderSetter sndRS(file->getChildByName("sounds"));
-    
-    sndRS.set("attack", sndAttack);
-    sndRS.set("camera", sndCamera);
-    sndRS.set("menu_activate", sndMenuActivate);
-    sndRS.set("menu_back", sndMenuBack);
-    sndRS.set("menu_select", sndMenuSelect);
-    sndRS.set("switch_pikmin", sndSwitchPikmin);
-    
-    ReaderSetter sngRS(file->getChildByName("songs"));
-    
-    sngRS.set("boss", sngBoss);
-    sngRS.set("boss_victory", sngBossVictory);
-    sngRS.set("editors", sngEditors);
-    sngRS.set("menus", sngMenus);
-    
-    ReaderSetter aniRS(file->getChildByName("animations"));
-    
-    aniRS.set("sparks", anmSparks);
-    
-    ReaderSetter parRS(file->getChildByName("particle_generators"));
-    
-    parRS.set("converter_insertion", parConverterInsertion);
-    parRS.set("ding", parDing);
-    parRS.set("enemy_defeat", parEnemyDefeat);
-    parRS.set("leader_heal", parLeaderHeal);
-    parRS.set("leader_land", parLeaderLand);
-    parRS.set("onion_generating_inside", parOnionGenInside);
-    parRS.set("onion_insertion", parOnionInsertion);
-    parRS.set("pikmin_pluck_dirt", parPikminPluckDirt);
-    parRS.set("pikmin_seed", parPikminSeed);
-    parRS.set("pikmin_seed_landed", parPikminSeedLanded);
-    parRS.set("smack", parSmack);
-    parRS.set("spray", parSpray);
-    parRS.set("sprout_evolution", parSproutEvolution);
-    parRS.set("sprout_regression", parSproutRegression);
-    parRS.set("throw_trail", parThrowTrail);
-    parRS.set("treasure", parTreasure);
-    parRS.set("wave_ring", parWaveRing);
-}
-
-
-/**
  * @brief Loads an audio stream for the manager.
  *
  * @param name Name of the audio stream to load.
@@ -1600,6 +1491,37 @@ void RngManager::init(int32_t initialSeed) {
 
 
 /**
+ * @brief Loads an audio sample for the manager.
+ *
+ * @param name Name of the audio sample to load.
+ * @param node If not nullptr, blame this data node if the file doesn't exist.
+ * @param reportErrors Only issues errors if this is true.
+ * @return The audio sample.
+ */
+ALLEGRO_SAMPLE* SampleManager::doLoad(
+    const string &name, DataNode* node, bool reportErrors
+) {
+    const auto &it = game.content.sounds.manifests.find(name);
+    string path =
+        it != game.content.sounds.manifests.end() ?
+        it->second.path :
+        name;
+    return loadSample(path, node, reportErrors);
+}
+
+
+/**
+ * @brief Unloads an audio sample for the manager.
+ *
+ * @param asset Audio sample to unload.
+ */
+void SampleManager::doUnload(ALLEGRO_SAMPLE* asset) {
+    al_destroy_sample(asset);
+}
+
+
+
+/**
  * @brief Constructs a new script var reader object.
  *
  * @param vars Map of variables to read from.
@@ -1749,36 +1671,6 @@ bool ScriptVarReader::get(const string &name, Point &dest) const {
 
 
 /**
- * @brief Loads an audio sample for the manager.
- *
- * @param name Name of the audio sample to load.
- * @param node If not nullptr, blame this data node if the file doesn't exist.
- * @param reportErrors Only issues errors if this is true.
- * @return The audio sample.
- */
-ALLEGRO_SAMPLE* SampleManager::doLoad(
-    const string &name, DataNode* node, bool reportErrors
-) {
-    const auto &it = game.content.sounds.manifests.find(name);
-    string path =
-        it != game.content.sounds.manifests.end() ?
-        it->second.path :
-        name;
-    return loadSample(path, node, reportErrors);
-}
-
-
-/**
- * @brief Unloads an audio sample for the manager.
- *
- * @param asset Audio sample to unload.
- */
-void SampleManager::doUnload(ALLEGRO_SAMPLE* asset) {
-    al_destroy_sample(asset);
-}
-
-
-/**
  * @brief Clears the list of registered subgroup types.
  */
 void SubgroupTypeManager::clear() {
@@ -1880,6 +1772,115 @@ void SubgroupTypeManager::registerType(
     newSgType->icon = icon;
     
     types.push_back(newSgType);
+}
+
+
+/**
+ * @brief Loads the system content names from a file.
+ *
+ * @param file File to load from.
+ */
+void SystemContentNames::load(DataNode* file) {
+    ReaderSetter graRS(file->getChildByName("graphics"));
+    
+    graRS.set("bright_circle", bmpBrightCircle);
+    graRS.set("bright_ring", bmpBrightRing);
+    graRS.set("bubble_box", bmpBubbleBox);
+    graRS.set("button_box", bmpButtonBox);
+    graRS.set("checkbox_check", bmpCheckboxCheck);
+    graRS.set("checkbox_no_check", bmpCheckboxNoCheck);
+    graRS.set("cursor", bmpCursor);
+    graRS.set("discord_icon", bmpDiscordIcon);
+    graRS.set("editor_icons", bmpEditorIcons);
+    graRS.set("enemy_spirit", bmpEnemySpirit);
+    graRS.set("focus_box", bmpFocusBox);
+    graRS.set("frame_box", bmpFrameBox);
+    graRS.set("github_icon", bmpGithubIcon);
+    graRS.set("hard_bubble", bmpHardBubble);
+    graRS.set("icon", bmpIcon);
+    graRS.set("idle_glow", bmpIdleGlow);
+    graRS.set("key_box", bmpKeyBox);
+    graRS.set("leader_silhouette_side", bmpLeaderSilhouetteSide);
+    graRS.set("leader_silhouette_top", bmpLeaderSilhouetteTop);
+    graRS.set("medal_bronze", bmpMedalBronze);
+    graRS.set("medal_gold", bmpMedalGold);
+    graRS.set("medal_none", bmpMedalNone);
+    graRS.set("medal_platinum", bmpMedalPlatinum);
+    graRS.set("medal_silver", bmpMedalSilver);
+    graRS.set("menu_icons", bmpMenuIcons);
+    graRS.set("mission_clear", bmpMissionClear);
+    graRS.set("mission_fail", bmpMissionFail);
+    graRS.set("more", bmpMore);
+    graRS.set("mouse_cursor", bmpMouseCursor);
+    graRS.set("notification", bmpNotification);
+    graRS.set("pikmin_spirit", bmpPikminSpirit);
+    graRS.set("player_input_icons", bmpPlayerInputIcons);
+    graRS.set("random", bmpRandom);
+    graRS.set("rock", bmpRock);
+    graRS.set("shadow", bmpShadow);
+    graRS.set("shadow_square", bmpShadowSquare);
+    graRS.set("smack", bmpSmack);
+    graRS.set("smoke", bmpSmoke);
+    graRS.set("sparkle", bmpSparkle);
+    graRS.set("spotlight", bmpSpotlight);
+    graRS.set("swarm_arrow", bmpSwarmArrow);
+    graRS.set("throw_invalid", bmpThrowInvalid);
+    graRS.set("throw_preview", bmpThrowPreview);
+    graRS.set("throw_preview_dashed", bmpThrowPreviewDashed);
+    graRS.set("title_screen_bg", bmpTitleScreenBg);
+    graRS.set("wave_ring", bmpWaveRing);
+    
+    ReaderSetter fntRS(file->getChildByName("fonts"));
+    
+    fntRS.set("area_name", fntAreaName);
+    fntRS.set("counter", fntCounter);
+    fntRS.set("cursor_counter", fntCursorCounter);
+    fntRS.set("editor_header", fntEditorHeader);
+    fntRS.set("editor_monospace", fntEditorMonospace);
+    fntRS.set("editor_standard", fntEditorStandard);
+    fntRS.set("slim", fntSlim);
+    fntRS.set("standard", fntStandard);
+    fntRS.set("value", fntValue);
+    
+    ReaderSetter sndRS(file->getChildByName("sounds"));
+    
+    sndRS.set("attack", sndAttack);
+    sndRS.set("camera", sndCamera);
+    sndRS.set("menu_activate", sndMenuActivate);
+    sndRS.set("menu_back", sndMenuBack);
+    sndRS.set("menu_select", sndMenuSelect);
+    sndRS.set("switch_pikmin", sndSwitchPikmin);
+    
+    ReaderSetter sngRS(file->getChildByName("songs"));
+    
+    sngRS.set("boss", sngBoss);
+    sngRS.set("boss_victory", sngBossVictory);
+    sngRS.set("editors", sngEditors);
+    sngRS.set("menus", sngMenus);
+    
+    ReaderSetter aniRS(file->getChildByName("animations"));
+    
+    aniRS.set("sparks", anmSparks);
+    
+    ReaderSetter parRS(file->getChildByName("particle_generators"));
+    
+    parRS.set("converter_insertion", parConverterInsertion);
+    parRS.set("ding", parDing);
+    parRS.set("enemy_defeat", parEnemyDefeat);
+    parRS.set("leader_heal", parLeaderHeal);
+    parRS.set("leader_land", parLeaderLand);
+    parRS.set("onion_generating_inside", parOnionGenInside);
+    parRS.set("onion_insertion", parOnionInsertion);
+    parRS.set("pikmin_pluck_dirt", parPikminPluckDirt);
+    parRS.set("pikmin_seed", parPikminSeed);
+    parRS.set("pikmin_seed_landed", parPikminSeedLanded);
+    parRS.set("smack", parSmack);
+    parRS.set("spray", parSpray);
+    parRS.set("sprout_evolution", parSproutEvolution);
+    parRS.set("sprout_regression", parSproutRegression);
+    parRS.set("throw_trail", parThrowTrail);
+    parRS.set("treasure", parTreasure);
+    parRS.set("wave_ring", parWaveRing);
 }
 
 

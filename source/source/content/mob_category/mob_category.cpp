@@ -23,33 +23,6 @@ using std::string;
 
 
 /**
- * @brief Constructs a new mob category object.
- *
- * @param id This category's ID.
- * @param internalName Internal name.
- * @param name Standard category name, in singular.
- * @param pluralName Standard category name, in plural.
- * @param folderName Name of the folder where the mob types for this
- * category are.
- * @param editorColor In the area editor, objects of this category get
- * this color.
- */
-MobCategory::MobCategory(
-    const MOB_CATEGORY id, const string &internalName,
-    const string &name, const string &pluralName,
-    const string &folderName, const ALLEGRO_COLOR editorColor
-) :
-    internalName(internalName),
-    name(name),
-    id(id),
-    pluralName(pluralName),
-    folderName(folderName),
-    editorColor(editorColor) {
-    
-}
-
-
-/**
  * @brief Clears the list of registered categories, freeing memory.
  */
 void CategoryManager::clear() {
@@ -169,6 +142,33 @@ void CategoryManager::registerCategory(
         );
     }
     categories[id] = category;
+}
+
+
+/**
+ * @brief Constructs a new mob category object.
+ *
+ * @param id This category's ID.
+ * @param internalName Internal name.
+ * @param name Standard category name, in singular.
+ * @param pluralName Standard category name, in plural.
+ * @param folderName Name of the folder where the mob types for this
+ * category are.
+ * @param editorColor In the area editor, objects of this category get
+ * this color.
+ */
+MobCategory::MobCategory(
+    const MOB_CATEGORY id, const string &internalName,
+    const string &name, const string &pluralName,
+    const string &folderName, const ALLEGRO_COLOR editorColor
+) :
+    internalName(internalName),
+    name(name),
+    id(id),
+    pluralName(pluralName),
+    folderName(folderName),
+    editorColor(editorColor) {
+    
 }
 
 

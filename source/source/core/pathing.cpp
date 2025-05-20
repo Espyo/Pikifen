@@ -388,6 +388,146 @@ void PathStop::removeLink(const PathStop* otherStop) {
 
 
 /**
+ * @brief Uses A* to get the shortest path between two nodes.
+ *
+ * @param outPath The stops to visit, in order, are returned here.
+ * @param startNode Start node.
+ * @param endNode End node.
+ * @param settings Settings about how the path should be followed.
+ * @param outTotalDist If not nullptr, the total path distance is
+ * returned here.
+ * @return The operation's result.
+ */
+PATH_RESULT aStar(
+    vector<PathStop*> &outPath,
+    PathStop* startNode, PathStop* endNode,
+    const PathFollowSettings &settings,
+    float* outTotalDist
+) {
+    //https://en.wikipedia.org/wiki/A*_search_algorithm
+    
+    /**
+     * @brief Represents a node's data in the algorithm.
+     */
+    struct Node {
+        //In the best known path to this node, this is the known
+        //distance from the start node to this one.
+        float sinceStart = FLT_MAX;
+        
+        //In the best known path to this node, this is the node that
+        //came before this one.
+        PathStop* prev = nullptr;
+        
+        //Estimated distance if the final path takes this node.
+        float estimated = FLT_MAX;
+    };
+    
+    //All nodes that we want to visit.
+    unordered_set<PathStop*> toVisit;
+    //Data for all the nodes.
+    map<PathStop*, Node> data;
+    
+    //Part 1: Initialize the algorithm.
+    toVisit.insert(startNode);
+    data[startNode].sinceStart = 0.0f;
+    data[startNode].estimated = 0.0f;
+    
+    //Start iterating.
+    while(!toVisit.empty()) {
+    
+        //Part 2: Figure out what node to work on in this iteration.
+        PathStop* curNode = nullptr;
+        float curNodeDist = 0.0f;
+        Node curNodeData;
+        
+        for(auto u = toVisit.begin(); u != toVisit.end(); u++) {
+            Node n = data[*u];
+            float estDist = n.estimated;
+            
+            if(!curNode || estDist < curNodeDist) {
+                curNode = *u;
+                curNodeDist = estDist;
+                curNodeData = n;
+            }
+        }
+        
+        //Part 3: If the node we're processing is the end node, then
+        //that's it, best path found!
+        if(curNode == endNode) {
+        
+            //Construct the path.
+            float td = data[endNode].sinceStart;
+            outPath.clear();
+            outPath.push_back(endNode);
+            PathStop* next = data[endNode].prev;
+            while(next) {
+                outPath.insert(outPath.begin(), next);
+                next = data[next].prev;
+            }
+            
+            if(outTotalDist) *outTotalDist = td;
+            return PATH_RESULT_NORMAL_PATH;
+            
+        }
+        
+        //This node's been visited.
+        toVisit.erase(curNode);
+        
+        //Part 4: Check the neighbors.
+        for(size_t l = 0; l < curNode->links.size(); l++) {
+            PathLink* lPtr = curNode->links[l];
+            PathStop* neighbor = lPtr->endPtr;
+            
+            //Can this link be traversed?
+            if(!canTraversePathLink(lPtr, settings)) {
+                continue;
+            }
+            
+            float tentativeScore =
+                data[curNode].sinceStart + lPtr->distance;
+                
+            if(tentativeScore < data[neighbor].sinceStart) {
+                //Found a better path from the start to this neighbor.
+                data[neighbor].sinceStart = tentativeScore;
+                data[neighbor].prev = curNode;
+                data[neighbor].estimated =
+                    tentativeScore +
+                    Distance(neighbor->pos, endNode->pos).toFloat();
+                toVisit.insert(neighbor);
+            }
+        }
+    }
+    
+    //If we got to this point, there means that there is no available path!
+    
+    if(!hasFlag(settings.flags, PATH_FOLLOW_FLAG_IGNORE_OBSTACLES)) {
+        //Let's try again, this time ignoring obstacles.
+        PathFollowSettings newSettings = settings;
+        enableFlag(newSettings.flags, PATH_FOLLOW_FLAG_IGNORE_OBSTACLES);
+        PATH_RESULT newResult =
+            aStar(
+                outPath,
+                startNode, endNode,
+                newSettings,
+                outTotalDist
+            );
+        if(newResult == PATH_RESULT_NORMAL_PATH) {
+            //If we only managed to succeed with this ignore-obstacle attempt,
+            //then that means a path exists, but there are obstacles.
+            return PATH_RESULT_PATH_WITH_OBSTACLES;
+        } else {
+            return newResult;
+        }
+    }
+    
+    //Nothing that can be done. No path.
+    outPath.clear();
+    if(outTotalDist) *outTotalDist = 0;
+    return PATH_RESULT_END_STOP_UNREACHABLE;
+}
+
+
+/**
  * @brief Checks if a path stop can be taken given some contraints.
  *
  * @param stopPtr Stop to check.
@@ -597,146 +737,6 @@ void depthFirstSearch(
         if(isInContainer(visited, l)) continue;
         depthFirstSearch(nodes, visited, l);
     }
-}
-
-
-/**
- * @brief Uses A* to get the shortest path between two nodes.
- *
- * @param outPath The stops to visit, in order, are returned here.
- * @param startNode Start node.
- * @param endNode End node.
- * @param settings Settings about how the path should be followed.
- * @param outTotalDist If not nullptr, the total path distance is
- * returned here.
- * @return The operation's result.
- */
-PATH_RESULT aStar(
-    vector<PathStop*> &outPath,
-    PathStop* startNode, PathStop* endNode,
-    const PathFollowSettings &settings,
-    float* outTotalDist
-) {
-    //https://en.wikipedia.org/wiki/A*_search_algorithm
-    
-    /**
-     * @brief Represents a node's data in the algorithm.
-     */
-    struct Node {
-        //In the best known path to this node, this is the known
-        //distance from the start node to this one.
-        float sinceStart = FLT_MAX;
-        
-        //In the best known path to this node, this is the node that
-        //came before this one.
-        PathStop* prev = nullptr;
-        
-        //Estimated distance if the final path takes this node.
-        float estimated = FLT_MAX;
-    };
-    
-    //All nodes that we want to visit.
-    unordered_set<PathStop*> toVisit;
-    //Data for all the nodes.
-    map<PathStop*, Node> data;
-    
-    //Part 1: Initialize the algorithm.
-    toVisit.insert(startNode);
-    data[startNode].sinceStart = 0.0f;
-    data[startNode].estimated = 0.0f;
-    
-    //Start iterating.
-    while(!toVisit.empty()) {
-    
-        //Part 2: Figure out what node to work on in this iteration.
-        PathStop* curNode = nullptr;
-        float curNodeDist = 0.0f;
-        Node curNodeData;
-        
-        for(auto u = toVisit.begin(); u != toVisit.end(); u++) {
-            Node n = data[*u];
-            float estDist = n.estimated;
-            
-            if(!curNode || estDist < curNodeDist) {
-                curNode = *u;
-                curNodeDist = estDist;
-                curNodeData = n;
-            }
-        }
-        
-        //Part 3: If the node we're processing is the end node, then
-        //that's it, best path found!
-        if(curNode == endNode) {
-        
-            //Construct the path.
-            float td = data[endNode].sinceStart;
-            outPath.clear();
-            outPath.push_back(endNode);
-            PathStop* next = data[endNode].prev;
-            while(next) {
-                outPath.insert(outPath.begin(), next);
-                next = data[next].prev;
-            }
-            
-            if(outTotalDist) *outTotalDist = td;
-            return PATH_RESULT_NORMAL_PATH;
-            
-        }
-        
-        //This node's been visited.
-        toVisit.erase(curNode);
-        
-        //Part 4: Check the neighbors.
-        for(size_t l = 0; l < curNode->links.size(); l++) {
-            PathLink* lPtr = curNode->links[l];
-            PathStop* neighbor = lPtr->endPtr;
-            
-            //Can this link be traversed?
-            if(!canTraversePathLink(lPtr, settings)) {
-                continue;
-            }
-            
-            float tentativeScore =
-                data[curNode].sinceStart + lPtr->distance;
-                
-            if(tentativeScore < data[neighbor].sinceStart) {
-                //Found a better path from the start to this neighbor.
-                data[neighbor].sinceStart = tentativeScore;
-                data[neighbor].prev = curNode;
-                data[neighbor].estimated =
-                    tentativeScore +
-                    Distance(neighbor->pos, endNode->pos).toFloat();
-                toVisit.insert(neighbor);
-            }
-        }
-    }
-    
-    //If we got to this point, there means that there is no available path!
-    
-    if(!hasFlag(settings.flags, PATH_FOLLOW_FLAG_IGNORE_OBSTACLES)) {
-        //Let's try again, this time ignoring obstacles.
-        PathFollowSettings newSettings = settings;
-        enableFlag(newSettings.flags, PATH_FOLLOW_FLAG_IGNORE_OBSTACLES);
-        PATH_RESULT newResult =
-            aStar(
-                outPath,
-                startNode, endNode,
-                newSettings,
-                outTotalDist
-            );
-        if(newResult == PATH_RESULT_NORMAL_PATH) {
-            //If we only managed to succeed with this ignore-obstacle attempt,
-            //then that means a path exists, but there are obstacles.
-            return PATH_RESULT_PATH_WITH_OBSTACLES;
-        } else {
-            return newResult;
-        }
-    }
-    
-    //Nothing that can be done. No path.
-    outPath.clear();
-    if(outTotalDist) *outTotalDist = 0;
-    return PATH_RESULT_END_STOP_UNREACHABLE;
 }
 
 

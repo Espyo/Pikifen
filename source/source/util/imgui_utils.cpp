@@ -282,41 +282,6 @@ bool ImGui::ImageButton(
 
 
 /**
- * @brief Wrapper for creating a Dear ImGui image button widget, but
- * using Allegro bitmaps, and keeping the bitmap centered and in proportion,
- * while also allowing the button size to be specified.
- *
- * @param strId Button widget ID.
- * @param bitmap Bitmap to show on the button.
- * @param maxBitmapSize Maximum size to display the bitmap at in the GUI.
- * @param buttonSize Size of the button.
- * @param bgCol Bitmap background color.
- * @param tintCol Bitmap tint color.
- * @return Whether the button was pressed.
- */
-bool ImGui::ImageButtonOrganized(
-    const string &strId, ALLEGRO_BITMAP* bitmap,
-    const Point &maxBitmapSize, const Point &buttonSize,
-    const ALLEGRO_COLOR &bgCol, const ALLEGRO_COLOR &tintCol
-) {
-    Point finalBmpSize =
-        resizeToBoxKeepingAspectRatio(
-            getBitmapDimensions(bitmap), maxBitmapSize
-        );
-        
-    Point padding = (buttonSize - finalBmpSize) / 2.0f;
-    
-    PushStyleVar(
-        ImGuiStyleVar_FramePadding, ImVec2(padding.x, padding.y)
-    );
-    bool result = ImageButton(strId, bitmap, finalBmpSize);
-    PopStyleVar();
-    
-    return result;
-}
-
-
-/**
  * @brief Wrapper for creating a Dear ImGui image button widget, followed
  * by a text widget.
  *
@@ -349,6 +314,41 @@ bool ImGui::ImageButtonAndText(
     ImGui::EndGroup();
     
     ImGui::EndGroup();
+    
+    return result;
+}
+
+
+/**
+ * @brief Wrapper for creating a Dear ImGui image button widget, but
+ * using Allegro bitmaps, and keeping the bitmap centered and in proportion,
+ * while also allowing the button size to be specified.
+ *
+ * @param strId Button widget ID.
+ * @param bitmap Bitmap to show on the button.
+ * @param maxBitmapSize Maximum size to display the bitmap at in the GUI.
+ * @param buttonSize Size of the button.
+ * @param bgCol Bitmap background color.
+ * @param tintCol Bitmap tint color.
+ * @return Whether the button was pressed.
+ */
+bool ImGui::ImageButtonOrganized(
+    const string &strId, ALLEGRO_BITMAP* bitmap,
+    const Point &maxBitmapSize, const Point &buttonSize,
+    const ALLEGRO_COLOR &bgCol, const ALLEGRO_COLOR &tintCol
+) {
+    Point finalBmpSize =
+        resizeToBoxKeepingAspectRatio(
+            getBitmapDimensions(bitmap), maxBitmapSize
+        );
+        
+    Point padding = (buttonSize - finalBmpSize) / 2.0f;
+    
+    PushStyleVar(
+        ImGuiStyleVar_FramePadding, ImVec2(padding.x, padding.y)
+    );
+    bool result = ImageButton(strId, bitmap, finalBmpSize);
+    PopStyleVar();
     
     return result;
 }
@@ -420,17 +420,6 @@ void ImGui::Reset() {
 
 
 /**
- * @brief Prepares the "cursor X" so that the next widgets will be centered.
- *
- * @param upcomingItemsWidth Width of the items that will belong to this line.
- */
-void ImGui::SetupCentering(int upcomingItemsWidth) {
-    int windowWidth = ImGui::GetWindowSize().x;
-    ImGui::SetCursorPosX((windowWidth - upcomingItemsWidth) * 0.5f);
-}
-
-
-/**
  * @brief Prepares the state of the GUI to either place the next button
  * on the same line, or to break to a new line if it wouldn't fit.
  *
@@ -450,6 +439,17 @@ void ImGui::SetupButtonWrapping(
     if(nextButtonIdx < totalNButtons && nextX2 < windowX2) {
         ImGui::SameLine();
     }
+}
+
+
+/**
+ * @brief Prepares the "cursor X" so that the next widgets will be centered.
+ *
+ * @param upcomingItemsWidth Width of the items that will belong to this line.
+ */
+void ImGui::SetupCentering(int upcomingItemsWidth) {
+    int windowWidth = ImGui::GetWindowSize().x;
+    ImGui::SetCursorPosX((windowWidth - upcomingItemsWidth) * 0.5f);
 }
 
 

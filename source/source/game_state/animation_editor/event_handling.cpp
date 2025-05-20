@@ -216,7 +216,7 @@ void AnimationEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
                             br.y = FLT_MAX;
                         }
                         if(
-                            BBoxCheck(
+                            bBoxCheck(
                                 tl, br,
                                 game.editorsView.cursorWorldPos,
                                 1.0f / game.editorsView.cam.zoom

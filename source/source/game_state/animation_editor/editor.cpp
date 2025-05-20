@@ -435,6 +435,34 @@ string AnimationEditor::getOpenedContentPath() const {
 
 
 /**
+ * @brief Code to run for the grid toggle command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AnimationEditor::gridToggleCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    gridVisible = !gridVisible;
+    string stateStr = (gridVisible ? "Enabled" : "Disabled");
+    setStatus(stateStr + " grid visibility.");
+}
+
+
+/**
+ * @brief Code to run for the hitboxes toggle command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AnimationEditor::hitboxesToggleCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    hitboxesVisible = !hitboxesVisible;
+    string stateStr = (hitboxesVisible ? "Enabled" : "Disabled");
+    setStatus(stateStr + " hitbox visibility.");
+}
+
+
+/**
  * @brief Imports the animation data from a different animation to the current.
  *
  * @param name Name of the animation to import.
@@ -531,6 +559,20 @@ bool AnimationEditor::isCursorInTimeline() {
         game.mouseCursor.winPos.y >= canvasBR.y -
         ANIM_EDITOR::TIMELINE_HEIGHT &&
         game.mouseCursor.winPos.y <= canvasBR.y;
+}
+
+
+/**
+ * @brief Code to run for the leader silhouette toggle command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AnimationEditor::leaderSilhouetteToggleCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    leaderSilhouetteVisible = !leaderSilhouetteVisible;
+    string stateStr = (leaderSilhouetteVisible ? "Enabled" : "Disabled");
+    setStatus(stateStr + " leader silhouette visibility.");
 }
 
 
@@ -656,6 +698,37 @@ void AnimationEditor::loadAnimDbFile(
 
 
 /**
+ * @brief Code to run for the load file command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AnimationEditor::loadCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    changesMgr.askIfUnsaved(
+        loadWidgetPos,
+        "loading a file", "load",
+        std::bind(&AnimationEditor::openLoadDialog, this),
+        std::bind(&AnimationEditor::saveAnimDb, this)
+    );
+}
+
+
+/**
+ * @brief Code to run for the mob radius toggle command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AnimationEditor::mobRadiusToggleCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    mobRadiusVisible = !mobRadiusVisible;
+    string stateStr = (mobRadiusVisible ? "Enabled" : "Disabled");
+    setStatus(stateStr + " object radius visibility.");
+}
+
+
+/**
  * @brief Pans the camera around.
  *
  * @param ev Event to handle.
@@ -669,6 +742,37 @@ void AnimationEditor::panCam(const ALLEGRO_EVENT &ev) {
             ev.mouse.dy / game.editorsView.cam.zoom
         )
     );
+}
+
+
+/**
+ * @brief Callback for when the user picks a file from the picker.
+ *
+ * @param name Name of the file.
+ * @param topCat Unused.
+ * @param secCat Unused.
+ * @param info Pointer to the file's content manifest.
+ * @param isNew Unused.
+ */
+void AnimationEditor::pickAnimDbFile(
+    const string &name, const string &topCat, const string &secCat,
+    void* info, bool isNew
+) {
+    ContentManifest* tempManif = (ContentManifest*) info;
+    string path = tempManif->path;
+    auto reallyLoad = [this, path] () {
+        closeTopDialog();
+        loadAnimDbFile(path, true);
+    };
+    
+    if(
+        tempManif->pack == FOLDER_NAMES::BASE_PACK &&
+        !game.options.advanced.engineDev
+    ) {
+        openBaseContentWarningDialog(reallyLoad);
+    } else {
+        reallyLoad();
+    }
 }
 
 
@@ -734,123 +838,6 @@ void AnimationEditor::pickSprite(
 
 
 /**
- * @brief Plays one of the mob's sounds.
- *
- * @param soundIdx Index of the sound data in the mob type's sound list.
- */
-void AnimationEditor::playSound(size_t soundIdx) {
-    if(!loadedMobType) return;
-    MobType::Sound* soundData = &loadedMobType->sounds[soundIdx];
-    if(!soundData->sample) return;
-    game.audio.createUiSoundsource(soundData->sample, soundData->config);
-}
-
-
-/**
- * @brief Code to run for the grid toggle command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AnimationEditor::gridToggleCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    gridVisible = !gridVisible;
-    string stateStr = (gridVisible ? "Enabled" : "Disabled");
-    setStatus(stateStr + " grid visibility.");
-}
-
-
-/**
- * @brief Code to run for the hitboxes toggle command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AnimationEditor::hitboxesToggleCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    hitboxesVisible = !hitboxesVisible;
-    string stateStr = (hitboxesVisible ? "Enabled" : "Disabled");
-    setStatus(stateStr + " hitbox visibility.");
-}
-
-
-/**
- * @brief Code to run for the leader silhouette toggle command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AnimationEditor::leaderSilhouetteToggleCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    leaderSilhouetteVisible = !leaderSilhouetteVisible;
-    string stateStr = (leaderSilhouetteVisible ? "Enabled" : "Disabled");
-    setStatus(stateStr + " leader silhouette visibility.");
-}
-
-
-/**
- * @brief Code to run for the load file command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AnimationEditor::loadCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    changesMgr.askIfUnsaved(
-        loadWidgetPos,
-        "loading a file", "load",
-        std::bind(&AnimationEditor::openLoadDialog, this),
-        std::bind(&AnimationEditor::saveAnimDb, this)
-    );
-}
-
-
-/**
- * @brief Code to run for the mob radius toggle command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AnimationEditor::mobRadiusToggleCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    mobRadiusVisible = !mobRadiusVisible;
-    string stateStr = (mobRadiusVisible ? "Enabled" : "Disabled");
-    setStatus(stateStr + " object radius visibility.");
-}
-
-
-/**
- * @brief Callback for when the user picks a file from the picker.
- *
- * @param name Name of the file.
- * @param topCat Unused.
- * @param secCat Unused.
- * @param info Pointer to the file's content manifest.
- * @param isNew Unused.
- */
-void AnimationEditor::pickAnimDbFile(
-    const string &name, const string &topCat, const string &secCat,
-    void* info, bool isNew
-) {
-    ContentManifest* tempManif = (ContentManifest*) info;
-    string path = tempManif->path;
-    auto reallyLoad = [this, path] () {
-        closeTopDialog();
-        loadAnimDbFile(path, true);
-    };
-    
-    if(
-        tempManif->pack == FOLDER_NAMES::BASE_PACK &&
-        !game.options.advanced.engineDev
-    ) {
-        openBaseContentWarningDialog(reallyLoad);
-    } else {
-        reallyLoad();
-    }
-}
-
-
-/**
  * @brief Code to run for the play/pause animation command.
  *
  * @param inputValue Value of the player input for the command.
@@ -873,6 +860,19 @@ void AnimationEditor::playPauseAnimCmd(float inputValue) {
 
 
 /**
+ * @brief Plays one of the mob's sounds.
+ *
+ * @param soundIdx Index of the sound data in the mob type's sound list.
+ */
+void AnimationEditor::playSound(size_t soundIdx) {
+    if(!loadedMobType) return;
+    MobType::Sound* soundData = &loadedMobType->sounds[soundIdx];
+    if(!soundData->sample) return;
+    game.audio.createUiSoundsource(soundData->sample, soundData->config);
+}
+
+
+/**
  * @brief Code to run for the quit command.
  *
  * @param inputValue Value of the player input for the command.
@@ -886,150 +886,6 @@ void AnimationEditor::quitCmd(float inputValue) {
         std::bind(&AnimationEditor::leave, this),
         std::bind(&AnimationEditor::saveAnimDb, this)
     );
-}
-
-
-/**
- * @brief Code to run for the reload command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AnimationEditor::reloadCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    if(!changesMgr.existsOnDisk()) return;
-    
-    changesMgr.askIfUnsaved(
-        reloadWidgetPos,
-        "reloading the current file", "reload",
-    [this] () { loadAnimDbFile(string(manifest.path), false); },
-    std::bind(&AnimationEditor::saveAnimDb, this)
-    );
-}
-
-
-/**
- * @brief Code to run for the restart animation command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AnimationEditor::restartAnimCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    if(!curAnimInst.validFrame()) {
-        animPlaying = false;
-        return;
-    }
-    
-    curAnimInst.toStart();
-    animPlaying = true;
-    setStatus("Animation playback started from the beginning.");
-}
-
-
-/**
- * @brief Code to run for the save command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AnimationEditor::saveCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    saveAnimDb();
-}
-
-
-/**
- * @brief Code to run when the zoom and position reset button widget is pressed.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AnimationEditor::zoomAndPosResetCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    if(game.editorsView.cam.targetZoom == 1.0f) {
-        game.editorsView.cam.targetPos = Point();
-    } else {
-        game.editorsView.cam.targetZoom = 1.0f;
-    }
-}
-
-
-/**
- * @brief Code to run for the zoom everything command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AnimationEditor::zoomEverythingCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    Sprite* sPtr = curSprite;
-    if(!sPtr && curAnimInst.validFrame()) {
-        const string &name =
-            curAnimInst.curAnim->frames[curAnimInst.curFrameIdx].spriteName;
-        size_t sPos = db.findSprite(name);
-        if(sPos != INVALID) sPtr = db.sprites[sPos];
-    }
-    if(!sPtr || !sPtr->bitmap) return;
-    
-    Point cmin, cmax;
-    getTransformedRectangleBBox(
-        sPtr->offset, sPtr->bmpSize * sPtr->scale,
-        sPtr->angle, &cmin, &cmax
-    );
-    
-    if(sPtr->topVisible) {
-        Point topMin, topMax;
-        getTransformedRectangleBBox(
-            sPtr->topPos, sPtr->topSize,
-            sPtr->topAngle,
-            &topMin, &topMax
-        );
-        updateMinCoords(cmin, topMin);
-        updateMaxCoords(cmax, topMax);
-    }
-    
-    for(size_t h = 0; h < sPtr->hitboxes.size(); h++) {
-        Hitbox* hPtr = &sPtr->hitboxes[h];
-        updateMinCoords(cmin, hPtr->pos - hPtr->radius);
-        updateMaxCoords(cmax, hPtr->pos + hPtr->radius);
-    }
-    
-    centerCamera(cmin, cmax);
-}
-
-
-/**
- * @brief Code to run for the zoom in command
- *
- * @param inputValue Value of the player input for the command.
- */
-void AnimationEditor::zoomInCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    game.editorsView.cam.targetZoom =
-        std::clamp(
-            game.editorsView.cam.targetZoom +
-            game.editorsView.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
-            zoomMinLevel, zoomMaxLevel
-        );
-}
-
-
-/**
- * @brief Code to run for the zoom out command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AnimationEditor::zoomOutCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    game.editorsView.cam.targetZoom =
-        std::clamp(
-            game.editorsView.cam.targetZoom -
-            game.editorsView.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
-            zoomMinLevel, zoomMaxLevel
-        );
 }
 
 
@@ -1049,6 +905,25 @@ void AnimationEditor::reloadAnimDbs() {
         CONTENT_TYPE_GLOBAL_ANIMATION,
     },
     CONTENT_LOAD_LEVEL_BASIC
+    );
+}
+
+
+/**
+ * @brief Code to run for the reload command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AnimationEditor::reloadCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    if(!changesMgr.existsOnDisk()) return;
+    
+    changesMgr.askIfUnsaved(
+        reloadWidgetPos,
+        "reloading the current file", "reload",
+    [this] () { loadAnimDbFile(string(manifest.path), false); },
+    std::bind(&AnimationEditor::saveAnimDb, this)
     );
 }
 
@@ -1292,6 +1167,25 @@ void AnimationEditor::resizeSprite(Sprite* s, float mult) {
 
 
 /**
+ * @brief Code to run for the restart animation command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AnimationEditor::restartAnimCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    if(!curAnimInst.validFrame()) {
+        animPlaying = false;
+        return;
+    }
+    
+    curAnimInst.toStart();
+    animPlaying = true;
+    setStatus("Animation playback started from the beginning.");
+}
+
+
+/**
  * @brief Saves the animation database onto the mob's file.
  *
  * @return Whether it succeded.
@@ -1336,89 +1230,14 @@ bool AnimationEditor::saveAnimDb() {
 
 
 /**
- * @brief Sets up the editor for a new animation database,
- * be it from an existing file or from scratch, after the actual creation/load
- * takes place.
+ * @brief Code to run for the save command.
+ *
+ * @param inputValue Value of the player input for the command.
  */
-void AnimationEditor::setupForNewAnimDbPost() {
-    vector<string> filePathParts = split(manifest.path, "/");
+void AnimationEditor::saveCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
     
-    if(
-        manifest.path.find(FOLDER_PATHS_FROM_PACK::MOB_TYPES + "/") !=
-        string::npos
-    ) {
-        vector<string> pathParts = split(manifest.path, "/");
-        if(
-            pathParts.size() > 3 &&
-            pathParts[pathParts.size() - 1] == FILE_NAMES::MOB_TYPE_ANIMATION
-        ) {
-            MobCategory* cat =
-                game.mobCategories.getFromFolderName(
-                    pathParts[pathParts.size() - 3]
-                );
-            if(cat) {
-                loadedMobType =
-                    cat->getType(pathParts[pathParts.size() - 2]);
-            }
-        }
-    }
-    
-    //Top bitmaps.
-    for(unsigned char t = 0; t < N_MATURITIES; t++) {
-        if(topBmp[t]) topBmp[t] = nullptr;
-    }
-    
-    if(
-        loadedMobType &&
-        loadedMobType->category->id == MOB_CATEGORY_PIKMIN
-    ) {
-        for(size_t m = 0; m < N_MATURITIES; m++) {
-            topBmp[m] = ((PikminType*) loadedMobType)->bmpTop[m];
-        }
-    }
-    
-    if(loadedMobType && db.name == "animations") {
-        //Let's give it a proper default name, instead of the internal name
-        //in the manifest, which is just "animations".
-        db.name = loadedMobType->name + " animations";
-    }
-    
-    if(loadedMobType) db.fillSoundIdxCaches(loadedMobType);
-}
-
-
-/**
- * @brief Sets up the editor for a new animation database,
- * be it from an existing file or from scratch, before the actual creation/load
- * takes place.
- */
-void AnimationEditor::setupForNewAnimDbPre() {
-    game.editorsView.updateTransformations();
-    
-    if(state == EDITOR_STATE_SPRITE_BITMAP) {
-        //Ideally, states would be handled by a state machine, and this
-        //logic would be placed in the sprite bitmap state's "on exit" code...
-        game.editorsView.cam.setPos(preSpriteBmpCamPos);
-        game.editorsView.cam.setZoom(preSpriteBmpCamZoom);
-    }
-    
-    db.destroy();
-    curAnimInst.clear();
-    manifest.clear();
-    animPlaying = false;
-    curSprite = nullptr;
-    curHitbox = nullptr;
-    curHitboxIdx = 0;
-    loadedMobType = nullptr;
-    
-    game.editorsView.cam.setPos(Point());
-    game.editorsView.cam.setZoom(1.0f);
-    changeState(EDITOR_STATE_MAIN);
-    
-    //At this point we'll have nearly unloaded stuff like the current sprite.
-    //Since Dear ImGui still hasn't rendered the current frame, which could
-    //have had those assets visible, if it tries now it'll crash. So skip.
-    game.skipDearImGuiFrame = true;
+    saveAnimDb();
 }
 
 
@@ -1516,6 +1335,93 @@ void AnimationEditor::setBestFrameSprite() {
     curFramePtr->spriteIdx = finalSpriteIdx;
     curFramePtr->spritePtr = db.sprites[finalSpriteIdx];
     curFramePtr->spriteName = db.sprites[finalSpriteIdx]->name;
+}
+
+
+/**
+ * @brief Sets up the editor for a new animation database,
+ * be it from an existing file or from scratch, after the actual creation/load
+ * takes place.
+ */
+void AnimationEditor::setupForNewAnimDbPost() {
+    vector<string> filePathParts = split(manifest.path, "/");
+    
+    if(
+        manifest.path.find(FOLDER_PATHS_FROM_PACK::MOB_TYPES + "/") !=
+        string::npos
+    ) {
+        vector<string> pathParts = split(manifest.path, "/");
+        if(
+            pathParts.size() > 3 &&
+            pathParts[pathParts.size() - 1] == FILE_NAMES::MOB_TYPE_ANIMATION
+        ) {
+            MobCategory* cat =
+                game.mobCategories.getFromFolderName(
+                    pathParts[pathParts.size() - 3]
+                );
+            if(cat) {
+                loadedMobType =
+                    cat->getType(pathParts[pathParts.size() - 2]);
+            }
+        }
+    }
+    
+    //Top bitmaps.
+    for(unsigned char t = 0; t < N_MATURITIES; t++) {
+        if(topBmp[t]) topBmp[t] = nullptr;
+    }
+    
+    if(
+        loadedMobType &&
+        loadedMobType->category->id == MOB_CATEGORY_PIKMIN
+    ) {
+        for(size_t m = 0; m < N_MATURITIES; m++) {
+            topBmp[m] = ((PikminType*) loadedMobType)->bmpTop[m];
+        }
+    }
+    
+    if(loadedMobType && db.name == "animations") {
+        //Let's give it a proper default name, instead of the internal name
+        //in the manifest, which is just "animations".
+        db.name = loadedMobType->name + " animations";
+    }
+    
+    if(loadedMobType) db.fillSoundIdxCaches(loadedMobType);
+}
+
+
+/**
+ * @brief Sets up the editor for a new animation database,
+ * be it from an existing file or from scratch, before the actual creation/load
+ * takes place.
+ */
+void AnimationEditor::setupForNewAnimDbPre() {
+    game.editorsView.updateTransformations();
+    
+    if(state == EDITOR_STATE_SPRITE_BITMAP) {
+        //Ideally, states would be handled by a state machine, and this
+        //logic would be placed in the sprite bitmap state's "on exit" code...
+        game.editorsView.cam.setPos(preSpriteBmpCamPos);
+        game.editorsView.cam.setZoom(preSpriteBmpCamZoom);
+    }
+    
+    db.destroy();
+    curAnimInst.clear();
+    manifest.clear();
+    animPlaying = false;
+    curSprite = nullptr;
+    curHitbox = nullptr;
+    curHitboxIdx = 0;
+    loadedMobType = nullptr;
+    
+    game.editorsView.cam.setPos(Point());
+    game.editorsView.cam.setZoom(1.0f);
+    changeState(EDITOR_STATE_MAIN);
+    
+    //At this point we'll have nearly unloaded stuff like the current sprite.
+    //Since Dear ImGui still hasn't rendered the current frame, which could
+    //have had those assets visible, if it tries now it'll crash. So skip.
+    game.skipDearImGuiFrame = true;
 }
 
 
@@ -1778,4 +1684,98 @@ void AnimationEditor::updateHitboxes() {
         }
         );
     }
+}
+
+
+/**
+ * @brief Code to run when the zoom and position reset button widget is pressed.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AnimationEditor::zoomAndPosResetCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    if(game.editorsView.cam.targetZoom == 1.0f) {
+        game.editorsView.cam.targetPos = Point();
+    } else {
+        game.editorsView.cam.targetZoom = 1.0f;
+    }
+}
+
+
+/**
+ * @brief Code to run for the zoom everything command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AnimationEditor::zoomEverythingCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    Sprite* sPtr = curSprite;
+    if(!sPtr && curAnimInst.validFrame()) {
+        const string &name =
+            curAnimInst.curAnim->frames[curAnimInst.curFrameIdx].spriteName;
+        size_t sPos = db.findSprite(name);
+        if(sPos != INVALID) sPtr = db.sprites[sPos];
+    }
+    if(!sPtr || !sPtr->bitmap) return;
+    
+    Point cmin, cmax;
+    getTransformedRectangleBBox(
+        sPtr->offset, sPtr->bmpSize * sPtr->scale,
+        sPtr->angle, &cmin, &cmax
+    );
+    
+    if(sPtr->topVisible) {
+        Point topMin, topMax;
+        getTransformedRectangleBBox(
+            sPtr->topPos, sPtr->topSize,
+            sPtr->topAngle,
+            &topMin, &topMax
+        );
+        updateMinCoords(cmin, topMin);
+        updateMaxCoords(cmax, topMax);
+    }
+    
+    for(size_t h = 0; h < sPtr->hitboxes.size(); h++) {
+        Hitbox* hPtr = &sPtr->hitboxes[h];
+        updateMinCoords(cmin, hPtr->pos - hPtr->radius);
+        updateMaxCoords(cmax, hPtr->pos + hPtr->radius);
+    }
+    
+    centerCamera(cmin, cmax);
+}
+
+
+/**
+ * @brief Code to run for the zoom in command
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AnimationEditor::zoomInCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    game.editorsView.cam.targetZoom =
+        std::clamp(
+            game.editorsView.cam.targetZoom +
+            game.editorsView.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
+            zoomMinLevel, zoomMaxLevel
+        );
+}
+
+
+/**
+ * @brief Code to run for the zoom out command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AnimationEditor::zoomOutCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    game.editorsView.cam.targetZoom =
+        std::clamp(
+            game.editorsView.cam.targetZoom -
+            game.editorsView.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
+            zoomMinLevel, zoomMaxLevel
+        );
 }

@@ -146,55 +146,6 @@ void EnumNameDatabase::registerItem(
 
 
 /**
- * @brief Reads a generic value from a string.
- *
- * @tparam GenericT The generic type.
- * @param s The string.
- * @return The value.
- */
-template<typename GenericT>
-GenericT fromString(const string &s) {
-    return GenericT{};
-}
-
-
-/**
- * @brief Reads a float value from a string.
- *
- * @param s The string.
- * @return The value.
- */
-template<>
-float fromString<float>(const string &s) {
-    return s2f(s);
-}
-
-
-/**
- * @brief Reads a color value from a string.
- *
- * @param s The string.
- * @return The value.
- */
-template<>
-ALLEGRO_COLOR fromString<ALLEGRO_COLOR>(const string &s) {
-    return s2c(s);
-}
-
-
-/**
- * @brief Reads a point value from a string.
- *
- * @param s The string.
- * @return The value.
- */
-template<>
-Point fromString<Point>(const string &s) {
-    return s2p(s);
-}
-
-
-/**
  * @brief Returns the values of the coordinates, magnitude, and angle,
  * but "cleaned" up.
  * All parameters are mandatory.
@@ -307,6 +258,57 @@ void Timer::tick(float deltaT) {
         onEnd();
     }
 }
+
+
+
+/**
+ * @brief Reads a generic value from a string.
+ *
+ * @tparam GenericT The generic type.
+ * @param s The string.
+ * @return The value.
+ */
+template<typename GenericT>
+GenericT fromString(const string &s) {
+    return GenericT{};
+}
+
+
+/**
+ * @brief Reads a color value from a string.
+ *
+ * @param s The string.
+ * @return The value.
+ */
+template<>
+ALLEGRO_COLOR fromString<ALLEGRO_COLOR>(const string &s) {
+    return s2c(s);
+}
+
+
+/**
+ * @brief Reads a float value from a string.
+ *
+ * @param s The string.
+ * @return The value.
+ */
+template<>
+float fromString<float>(const string &s) {
+    return s2f(s);
+}
+
+
+/**
+ * @brief Reads a point value from a string.
+ *
+ * @param s The string.
+ * @return The value.
+ */
+template<>
+Point fromString<Point>(const string &s) {
+    return s2p(s);
+}
+
 
 
 /**

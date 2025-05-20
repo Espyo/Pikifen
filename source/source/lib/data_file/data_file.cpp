@@ -224,68 +224,6 @@ void DataNode::encryptString(string &s) {
 
 
 /**
- * @brief Like an std::getline(), but for ALLEGRO_FILE*.
- *
- * @param file Allegro file handle.
- * @param line String to save the line into.
- * @param encrypted If true, the document is encrypted and needs decrypting.
- */
-void DataNode::getline(
-    ALLEGRO_FILE* file, string &line, bool encrypted
-) {
-    line.clear();
-    if(!file) {
-        return;
-    }
-    
-    size_t bytesRead;
-    char* cPtr = new char;
-    
-    bytesRead = al_fread(file, cPtr, 1);
-    while(bytesRead > 0) {
-        unsigned char c = *((unsigned char*) cPtr);
-        
-        if(encrypted) {
-            c = decryptChar(c);
-        }
-        
-        if(c == '\r') {
-            //Let's check if the next character is a \n. If so, they should
-            //both be consumed by al_fread().
-            bytesRead = al_fread(file, cPtr, 1);
-            unsigned char peekC = *((unsigned char*) cPtr);
-            if(encrypted) {
-                peekC = decryptChar(peekC);
-            }
-            if(bytesRead > 0) {
-                if(peekC == '\n') {
-                    //Yep. Done.
-                    break;
-                } else {
-                    //Oops, we're reading an entirely new line. Let's go back.
-                    al_fseek(file, -1, ALLEGRO_SEEK_CUR);
-                    break;
-                }
-            }
-            
-        } else if(c == '\n') {
-            //Standard line break.
-            break;
-            
-        } else {
-            //Line content.
-            line.push_back(c);
-            
-        }
-        
-        bytesRead = al_fread(file, cPtr, 1);
-    }
-    
-    delete cPtr;
-}
-
-
-/**
  * @brief Returns a child node given its number on the list
  * (direct children only).
  *
@@ -363,6 +301,68 @@ size_t DataNode::getNrOfChildrenByName(const string &name) const {
  */
 string DataNode::getValueOrDefault(const string &def) const {
     return (value.empty() ? def : value);
+}
+
+
+/**
+ * @brief Like an std::getline(), but for ALLEGRO_FILE*.
+ *
+ * @param file Allegro file handle.
+ * @param line String to save the line into.
+ * @param encrypted If true, the document is encrypted and needs decrypting.
+ */
+void DataNode::getline(
+    ALLEGRO_FILE* file, string &line, bool encrypted
+) {
+    line.clear();
+    if(!file) {
+        return;
+    }
+    
+    size_t bytesRead;
+    char* cPtr = new char;
+    
+    bytesRead = al_fread(file, cPtr, 1);
+    while(bytesRead > 0) {
+        unsigned char c = *((unsigned char*) cPtr);
+        
+        if(encrypted) {
+            c = decryptChar(c);
+        }
+        
+        if(c == '\r') {
+            //Let's check if the next character is a \n. If so, they should
+            //both be consumed by al_fread().
+            bytesRead = al_fread(file, cPtr, 1);
+            unsigned char peekC = *((unsigned char*) cPtr);
+            if(encrypted) {
+                peekC = decryptChar(peekC);
+            }
+            if(bytesRead > 0) {
+                if(peekC == '\n') {
+                    //Yep. Done.
+                    break;
+                } else {
+                    //Oops, we're reading an entirely new line. Let's go back.
+                    al_fseek(file, -1, ALLEGRO_SEEK_CUR);
+                    break;
+                }
+            }
+            
+        } else if(c == '\n') {
+            //Standard line break.
+            break;
+            
+        } else {
+            //Line content.
+            line.push_back(c);
+            
+        }
+        
+        bytesRead = al_fread(file, cPtr, 1);
+    }
+    
+    delete cPtr;
 }
 
 

@@ -329,35 +329,6 @@ void ControlsMediator::loadBindsFromDataNode(
 
 
 /**
- * @brief Ignore player actions from here on.
- */
-void ControlsMediator::startIgnoringActions() {
-    mgr.ignoringActions = true;
-}
-
-
-/**
- * @brief Ignores an input source from now on until the player performs the
- * input with value 0, at which point it becomes unignored.
- *
- * @param inputSource Input source to ignore.
- */
-void ControlsMediator::startIgnoringInputSource(
-    const PlayerInputSource &inputSource
-) {
-    mgr.startIgnoringInputSource(inputSource);
-}
-
-
-/**
- * @brief No longer ignore player actions from here on.
- */
-void ControlsMediator::stopIgnoringActions() {
-    mgr.ignoringActions = false;
-}
-
-
-/**
  * @brief Returns the player actions that occurred during the last frame
  * of gameplay, and begins a new frame.
  *
@@ -427,6 +398,35 @@ void ControlsMediator::saveBindsToDataNode(
  */
 void ControlsMediator::setOptions(const ControlsManagerOptions &options) {
     mgr.options = options;
+}
+
+
+/**
+ * @brief Ignore player actions from here on.
+ */
+void ControlsMediator::startIgnoringActions() {
+    mgr.ignoringActions = true;
+}
+
+
+/**
+ * @brief Ignores an input source from now on until the player performs the
+ * input with value 0, at which point it becomes unignored.
+ *
+ * @param inputSource Input source to ignore.
+ */
+void ControlsMediator::startIgnoringInputSource(
+    const PlayerInputSource &inputSource
+) {
+    mgr.startIgnoringInputSource(inputSource);
+}
+
+
+/**
+ * @brief No longer ignore player actions from here on.
+ */
+void ControlsMediator::stopIgnoringActions() {
+    mgr.ignoringActions = false;
 }
 
 

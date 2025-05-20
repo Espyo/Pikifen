@@ -1794,37 +1794,6 @@ Hitbox* Mob::getClosestHitbox(
 
 
 /**
- * @brief Returns data for figuring out the state of the current sprite
- * of animation.
- *
- * Normally, this returns the current animation's current sprite,
- * but it can return a forced sprite (e.g. from a status effect that
- * freezes animations).
- *
- * @param outCurSpritePtr If not nullptr, the current frame's sprite is
- * returned here.
- * @param outNextSpritePtr If not nullptr, the next frame's sprite is
- * returned here.
- * @param outInterpolationFactor If not nullptr, the interpolation factor
- * (0 to 1) between the two is returned here.
- */
-void Mob::getSpriteData(
-    Sprite** outCurSpritePtr, Sprite** outNextSpritePtr,
-    float* outInterpolationFactor
-) const {
-    if(forcedSprite) {
-        if(outCurSpritePtr) *outCurSpritePtr = forcedSprite;
-        if(outNextSpritePtr) *outNextSpritePtr = forcedSprite;
-        if(outInterpolationFactor) *outInterpolationFactor = 0.0f;
-    } else {
-        anim.getSpriteData(
-            outCurSpritePtr, outNextSpritePtr, outInterpolationFactor
-        );
-    }
-}
-
-
-/**
  * @brief Returns the distance between the limits of this mob and
  * the limits of another.
  *
@@ -1864,6 +1833,16 @@ Distance Mob::getDistanceBetween(
     }
     mobToHotspotDist -= distPadding;
     return mobToHotspotDist;
+}
+
+
+/**
+ * @brief Returns the height that should be used in calculating
+ * drawing order.
+ */
+float Mob::getDrawingHeight() const {
+    //We can't use FLT_MAX since multiple mobs with max height can stack.
+    return height == 0 ? 1000000 : height;
 }
 
 
@@ -2050,35 +2029,6 @@ size_t Mob::getPlayerTeamIdx() const {
         return (team - MOB_TEAM_PLAYER_1);
     }
     return INVALID;
-}
-
-
-/**
- * @brief Recalculates the max distance a mob can interact with another mob.
- */
-void Mob::updateInteractionSpan() {
-    interactionSpan = physicalSpan;
-    
-    if(farReach != INVALID) {
-        interactionSpan =
-            std::max(
-                std::max(
-                    type->reaches[farReach].radius1,
-                    type->reaches[farReach].radius2
-                ),
-                physicalSpan
-            );
-    }
-    if(nearReach != INVALID) {
-        interactionSpan =
-            std::max(
-                std::max(
-                    type->reaches[nearReach].radius1,
-                    type->reaches[nearReach].radius2
-                ),
-                physicalSpan
-            );
-    }
 }
 
 
@@ -2489,6 +2439,37 @@ void Mob::getSpriteBitmapEffects(
 
 
 /**
+ * @brief Returns data for figuring out the state of the current sprite
+ * of animation.
+ *
+ * Normally, this returns the current animation's current sprite,
+ * but it can return a forced sprite (e.g. from a status effect that
+ * freezes animations).
+ *
+ * @param outCurSpritePtr If not nullptr, the current frame's sprite is
+ * returned here.
+ * @param outNextSpritePtr If not nullptr, the next frame's sprite is
+ * returned here.
+ * @param outInterpolationFactor If not nullptr, the interpolation factor
+ * (0 to 1) between the two is returned here.
+ */
+void Mob::getSpriteData(
+    Sprite** outCurSpritePtr, Sprite** outNextSpritePtr,
+    float* outInterpolationFactor
+) const {
+    if(forcedSprite) {
+        if(outCurSpritePtr) *outCurSpritePtr = forcedSprite;
+        if(outNextSpritePtr) *outNextSpritePtr = forcedSprite;
+        if(outInterpolationFactor) *outInterpolationFactor = 0.0f;
+    } else {
+        anim.getSpriteData(
+            outCurSpritePtr, outNextSpritePtr, outInterpolationFactor
+        );
+    }
+}
+
+
+/**
  * @brief Returns the current sprite of one of the status effects
  * that the mob is under.
  *
@@ -2706,7 +2687,7 @@ bool Mob::isOffCamera(const Viewport &viewport) const {
     }
     
     float radiusToUse = std::max(spriteBound, collisionBound);
-    return !BBoxCheck(viewport.box[0], viewport.box[1], pos, radiusToUse);
+    return !bBoxCheck(viewport.box[0], viewport.box[1], pos, radiusToUse);
 }
 
 
@@ -3356,16 +3337,6 @@ void Mob::startDying() {
  * This function is meant to be overridden by child classes.
  */
 void Mob::startDyingClassSpecifics() {
-}
-
-
-/**
- * @brief Returns the height that should be used in calculating
- * drawing order.
- */
-float Mob::getDrawingHeight() const {
-    //We can't use FLT_MAX since multiple mobs with max height can stack.
-    return height == 0 ? 1000000 : height;
 }
 
 
@@ -4301,6 +4272,35 @@ bool Mob::tickTrackRide() {
  */
 void Mob::unfocusFromMob() {
     focusedMob = nullptr;
+}
+
+
+/**
+ * @brief Recalculates the max distance a mob can interact with another mob.
+ */
+void Mob::updateInteractionSpan() {
+    interactionSpan = physicalSpan;
+    
+    if(farReach != INVALID) {
+        interactionSpan =
+            std::max(
+                std::max(
+                    type->reaches[farReach].radius1,
+                    type->reaches[farReach].radius2
+                ),
+                physicalSpan
+            );
+    }
+    if(nearReach != INVALID) {
+        interactionSpan =
+            std::max(
+                std::max(
+                    type->reaches[nearReach].radius1,
+                    type->reaches[nearReach].radius2
+                ),
+                physicalSpan
+            );
+    }
 }
 
 

@@ -90,6 +90,40 @@ void Particle::draw() {
 
 
 /**
+ * @brief Sets the bitmap, according to the given information.
+ * This automatically manages bitmap un/loading and such.
+ * If the file name string is empty, sets to a nullptr bitmap
+ * (and still unloads the old bitmap).
+ *
+ * @param newBmpName Internal name of the bitmap.
+ * @param node If not nullptr, this will be used to report an error with,
+ * in case something happens.
+ */
+void Particle::setBitmap(
+    const string &newBmpName, DataNode* node
+) {
+    if(newBmpName != bmpName && bitmap) {
+        game.content.bitmaps.list.free(bmpName);
+        bitmap = nullptr;
+    }
+    
+    if(newBmpName.empty()) {
+        bmpName.clear();
+        return;
+    }
+    
+    if(newBmpName != bmpName || !bitmap) {
+        bitmap =
+            game.content.bitmaps.list.get(
+                newBmpName, node, node != nullptr
+            );
+    }
+    
+    bmpName = newBmpName;
+}
+
+
+/**
  * @brief Ticks a particle's time by one frame of logic.
  *
  * @param deltaT How long the frame's tick is, in seconds.
@@ -133,36 +167,64 @@ void Particle::tick(const float deltaT) {
 
 
 /**
- * @brief Sets the bitmap, according to the given information.
- * This automatically manages bitmap un/loading and such.
- * If the file name string is empty, sets to a nullptr bitmap
- * (and still unloads the old bitmap).
+ * @brief Constructs a new particle emission object.
  *
- * @param newBmpName Internal name of the bitmap.
- * @param node If not nullptr, this will be used to report an error with,
- * in case something happens.
+ * @param emissionInterval Interval to spawn a new set of particles in,
+ * in seconds. 0 means it spawns only one set and that's it.
+ * @param num Number of particles to spawn.
+ * This number is also deviated by numberDeviation.
  */
-void Particle::setBitmap(
-    const string &newBmpName, DataNode* node
+ParticleEmission::ParticleEmission(
+    const float emissionInterval, const size_t num
 ) {
-    if(newBmpName != bmpName && bitmap) {
-        game.content.bitmaps.list.free(bmpName);
-        bitmap = nullptr;
-    }
-    
-    if(newBmpName.empty()) {
-        bmpName.clear();
-        return;
-    }
-    
-    if(newBmpName != bmpName || !bitmap) {
-        bitmap =
-            game.content.bitmaps.list.get(
-                newBmpName, node, node != nullptr
+    number = num;
+    interval = emissionInterval;
+}
+
+
+/**
+ * @brief Returns a randomly-picked offset for a new particle.
+ *
+ * @param numberRatio Ratio of which number particle this is in the emission,
+ * over the total particles to emit in this emission.
+ * @return The offset.
+ */
+Point ParticleEmission::getEmissionOffset(float numberRatio) {
+    switch (shape) {
+    case PARTICLE_EMISSION_SHAPE_CIRCLE: {
+        if(evenlySpread) {
+            return
+                getRatioPointInRing(
+                    circleInnerDist, circleOuterDist,
+                    circleArc, circleArcRot, numberRatio
+                );
+        } else {
+            return
+                getRandomPointInRing(
+                    circleInnerDist, circleOuterDist,
+                    circleArc, circleArcRot,
+                    game.rng.f(0.0, 1.0f), game.rng.f(0.0, 1.0f)
+                );
+        }
+        break;
+        
+    } case PARTICLE_EMISSION_SHAPE_RECTANGLE: {
+        return
+            getRandomPointInRectangularRing(
+                rectInnerDist, rectOuterDist,
+                game.rng.i(0.0, 1.0f), game.rng.f(0.0, 1.0f),
+                game.rng.f(0.0, 1.0f), game.rng.f(0.0, 1.0f),
+                game.rng.i(0.0, 1.0f)
             );
+        break;
+        
+    } default: {
+        return Point();
+        break;
+        
+    }
     }
     
-    bmpName = newBmpName;
 }
 
 
@@ -421,6 +483,23 @@ void ParticleGenerator::loadFromDataNode(
 
 
 /**
+ * @brief Resets timer information about the particle generator.
+ * Call this when copying from another generator.
+ */
+void ParticleGenerator::restartTimer() {
+    if(emission.intervalDeviation == 0.0f) {
+        emissionTimer = emission.interval;
+    } else {
+        emissionTimer =
+            game.rng.f(
+                std::max(0.0f, emission.interval - emission.intervalDeviation),
+                emission.interval + emission.intervalDeviation
+            );
+    }
+}
+
+
+/**
  * @brief Saves particle generator data to a data node.
  *
  * @param node Node to save to.
@@ -517,23 +596,6 @@ void ParticleGenerator::saveToDataNode(DataNode* node) {
     gGW.write("angle_deviation", radToDeg(linearSpeedAngleDeviation));
     gGW.write("linear_speed_deviation", linearSpeedDeviation);
     gGW.write("angles_are_absolute", anglesAreAbsolute);
-}
-
-
-/**
- * @brief Resets timer information about the particle generator.
- * Call this when copying from another generator.
- */
-void ParticleGenerator::restartTimer() {
-    if(emission.intervalDeviation == 0.0f) {
-        emissionTimer = emission.interval;
-    } else {
-        emissionTimer =
-            game.rng.f(
-                std::max(0.0f, emission.interval - emission.intervalDeviation),
-                emission.interval + emission.intervalDeviation
-            );
-    }
 }
 
 
@@ -768,66 +830,4 @@ void ParticleManager::tickAll(float deltaT) {
             c++;
         }
     }
-}
-
-
-/**
- * @brief Constructs a new particle em object.
- *
- * @param emissionInterval Interval to spawn a new set of particles in,
- * in seconds. 0 means it spawns only one set and that's it.
- * @param num Number of particles to spawn.
- * This number is also deviated by numberDeviation.
- */
-ParticleEmission::ParticleEmission(
-    const float emissionInterval, const size_t num
-) {
-    number = num;
-    interval = emissionInterval;
-}
-
-
-/**
- * @brief Returns a randomly-picked offset for a new particle.
- *
- * @param numberRatio Ratio of which number particle this is in the emission,
- * over the total particles to emit in this emission.
- * @return The offset.
- */
-Point ParticleEmission::getEmissionOffset(float numberRatio) {
-    switch (shape) {
-    case PARTICLE_EMISSION_SHAPE_CIRCLE: {
-        if(evenlySpread) {
-            return
-                getRatioPointInRing(
-                    circleInnerDist, circleOuterDist,
-                    circleArc, circleArcRot, numberRatio
-                );
-        } else {
-            return
-                getRandomPointInRing(
-                    circleInnerDist, circleOuterDist,
-                    circleArc, circleArcRot,
-                    game.rng.f(0.0, 1.0f), game.rng.f(0.0, 1.0f)
-                );
-        }
-        break;
-        
-    } case PARTICLE_EMISSION_SHAPE_RECTANGLE: {
-        return
-            getRandomPointInRectangularRing(
-                rectInnerDist, rectOuterDist,
-                game.rng.i(0.0, 1.0f), game.rng.f(0.0, 1.0f),
-                game.rng.f(0.0, 1.0f), game.rng.f(0.0, 1.0f),
-                game.rng.i(0.0, 1.0f)
-            );
-        break;
-        
-    } default: {
-        return Point();
-        break;
-        
-    }
-    }
-    
 }

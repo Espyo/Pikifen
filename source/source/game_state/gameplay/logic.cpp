@@ -97,7 +97,7 @@ void GameplayState::doAestheticLeaderLogic(Player* player, float deltaT) {
     player->throwDestMob = nullptr;
     for(size_t m = 0; m < mobs.all.size(); m++) {
         Mob* mPtr = mobs.all[m];
-        if(!BBoxCheck(player->throwDest, mPtr->pos, mPtr->physicalSpan)) {
+        if(!bBoxCheck(player->throwDest, mPtr->pos, mPtr->physicalSpan)) {
             //Too far away; of course the cursor isn't on it.
             continue;
         }
@@ -1515,6 +1515,40 @@ void GameplayState::doMenuLogic() {
 
 
 /**
+ * @brief Checks if the mission goal has been met.
+ *
+ * @return Whether the goal is met.
+ */
+bool GameplayState::isMissionClearMet() {
+    return game.missionGoals[game.curAreaData->mission.goal]->isMet(this);
+}
+
+
+/**
+ * @brief Checks if a mission fail condition has been met.
+ *
+ * @param reason The reason gets returned here, if any.
+ * @return Whether a failure condition is met.
+ */
+bool GameplayState::isMissionFailMet(MISSION_FAIL_COND* reason) {
+    for(size_t f = 0; f < game.missionFailConds.size(); f++) {
+        if(
+            hasFlag(
+                game.curAreaData->mission.failConditions,
+                getIdxBitmask(f)
+            )
+        ) {
+            if(game.missionFailConds[f]->isMet(this)) {
+                *reason = (MISSION_FAIL_COND) f;
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+
+/**
  * @brief Checks if the player is close to any living enemy and also if
  * they are close to any living boss.
  *
@@ -1550,40 +1584,6 @@ void GameplayState::isNearEnemyAndBoss(bool* nearEnemy, bool* nearBoss) {
     
     if(nearEnemy) *nearEnemy = foundEnemy;
     if(nearBoss) *nearBoss = foundBoss;
-}
-
-
-/**
- * @brief Checks if the mission goal has been met.
- *
- * @return Whether the goal is met.
- */
-bool GameplayState::isMissionClearMet() {
-    return game.missionGoals[game.curAreaData->mission.goal]->isMet(this);
-}
-
-
-/**
- * @brief Checks if a mission fail condition has been met.
- *
- * @param reason The reason gets returned here, if any.
- * @return Whether a failure condition is met.
- */
-bool GameplayState::isMissionFailMet(MISSION_FAIL_COND* reason) {
-    for(size_t f = 0; f < game.missionFailConds.size(); f++) {
-        if(
-            hasFlag(
-                game.curAreaData->mission.failConditions,
-                getIdxBitmask(f)
-            )
-        ) {
-            if(game.missionFailConds[f]->isMet(this)) {
-                *reason = (MISSION_FAIL_COND) f;
-                return true;
-            }
-        }
-    }
-    return false;
 }
 
 

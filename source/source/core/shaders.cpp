@@ -14,19 +14,6 @@
 
 
 /**
- * @brief Returns a compiled shader.
- *
- * @param shaderType Type of shader.
- * @return The shader.
- */
-ALLEGRO_SHADER* ShaderManager::getShader(SHADER_TYPE shaderType) {
-    assert(shaderType < N_SHADER_TYPES);
-    
-    return compiledShaders[(int) shaderType];
-}
-
-
-/**
  * @brief Compiles all shaders from their source.
  */
 void ShaderManager::compileShaders() {
@@ -44,6 +31,19 @@ void ShaderManager::compileShaders() {
     );
     al_build_shader(compiledShaders[SHADER_TYPE_LIQUID]);
     
+}
+
+
+/**
+ * @brief Returns a compiled shader.
+ *
+ * @param shaderType Type of shader.
+ * @return The shader.
+ */
+ALLEGRO_SHADER* ShaderManager::getShader(SHADER_TYPE shaderType) {
+    assert(shaderType < N_SHADER_TYPES);
+    
+    return compiledShaders[(int) shaderType];
 }
 
 

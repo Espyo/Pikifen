@@ -67,6 +67,19 @@ vector<int> ControlsManager::getActionTypesFromInput(
 
 
 /**
+ * @brief Returns the current value of a given player action type.
+ *
+ * @param playerActionTypeId ID of the player action type.
+ * @return The value, or 0 on failure.
+ */
+float ControlsManager::getValue(int playerActionTypeId) const {
+    auto it = actionTypeStatuses.find(playerActionTypeId);
+    if(it == actionTypeStatuses.end()) return 0.0f;
+    return it->second.value;
+}
+
+
+/**
  * @brief Handles a final clean input.
  *
  * @param input Player input to process.
@@ -100,19 +113,6 @@ void ControlsManager::handleCleanInput(
             actionTypeStatuses[actionTypes[a]].value = input.value;
         }
     }
-}
-
-
-/**
- * @brief Returns the current value of a given player action type.
- *
- * @param playerActionTypeId ID of the player action type.
- * @return The value, or 0 on failure.
- */
-float ControlsManager::getValue(int playerActionTypeId) const {
-    auto it = actionTypeStatuses.find(playerActionTypeId);
-    if(it == actionTypeStatuses.end()) return 0.0f;
-    return it->second.value;
 }
 
 

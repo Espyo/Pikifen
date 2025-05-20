@@ -1230,7 +1230,7 @@ void AreaEditor::handleLmbDownPaths(const ALLEGRO_EVENT &ev) {
         if(showPathPreview) {
             for(unsigned char c = 0; c < 2; c++) {
                 if(
-                    BBoxCheck(
+                    bBoxCheck(
                         pathPreviewCheckpoints[c],
                         game.editorsView.cursorWorldPos,
                         AREA_EDITOR::PATH_PREVIEW_CHECKPOINT_RADIUS /
@@ -1312,7 +1312,7 @@ void AreaEditor::handleLmbDownReview(const ALLEGRO_EVENT &ev) {
         movingCrossSectionPoint = -1;
         for(unsigned char p = 0; p < 2; p++) {
             if(
-                BBoxCheck(
+                bBoxCheck(
                     crossSectionCheckpoints[p],
                     game.editorsView.cursorWorldPos,
                     AREA_EDITOR::CROSS_SECTION_POINT_RADIUS /

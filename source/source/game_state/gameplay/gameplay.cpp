@@ -115,6 +115,181 @@ const float TREE_SHADOW_SWAY_SPEED = TAU / 8;
 
 
 /**
+ * @brief Constructs a new message box info object.
+ *
+ * @param text Text to display.
+ * @param speakerIcon If not nullptr, use this bitmap to represent who
+ * is talking.
+ */
+GameplayMessageBox::GameplayMessageBox(
+    const string &text, ALLEGRO_BITMAP* speakerIcon
+):
+    speakerIcon(speakerIcon) {
+    
+    string message = unescapeString(text);
+    if(message.size() && message.back() == '\n') {
+        message.pop_back();
+    }
+    vector<StringToken> tokens = tokenizeString(message);
+    setStringTokenWidths(
+        tokens, game.sysContent.fntStandard, game.sysContent.fntSlim,
+        al_get_font_line_height(game.sysContent.fntStandard), true
+    );
+    
+    vector<StringToken> line;
+    for(size_t t = 0; t < tokens.size(); t++) {
+        if(tokens[t].type == STRING_TOKEN_LINE_BREAK) {
+            tokensPerLine.push_back(line);
+            line.clear();
+        } else {
+            line.push_back(tokens[t]);
+        }
+    }
+    if(!line.empty()) {
+        tokensPerLine.push_back(line);
+    }
+}
+
+
+/**
+ * @brief Handles the user having pressed the button to continue the message,
+ * or to skip to showing everything in the current section.
+ */
+void GameplayMessageBox::advance() {
+    if(
+        transitionTimer > 0.0f ||
+        misinputProtectionTimer > 0.0f ||
+        swipeTimer > 0.0f
+    ) return;
+    
+    size_t lastToken = 0;
+    for(size_t l = 0; l < 3; l++) {
+        size_t lineIdx = curSection * 3 + l;
+        if(lineIdx >= tokensPerLine.size()) break;
+        lastToken += tokensPerLine[lineIdx].size();
+    }
+    
+    if(curToken >= lastToken + 1) {
+        if(curSection >= ceil(tokensPerLine.size() / 3.0f) - 1) {
+            //End of the message. Start closing the message box.
+            close();
+        } else {
+            //Start swiping to go to the next section.
+            swipeTimer = GAMEPLAY_MSG_BOX::TOKEN_SWIPE_DURATION;
+        }
+    } else {
+        //Skip the text typing and show everything in this section.
+        skippedAtToken = curToken;
+        curToken = lastToken + 1;
+    }
+}
+
+
+/**
+ * @brief Closes the message box, even if it is still writing something.
+ */
+void GameplayMessageBox::close() {
+    if(!transitionIn && transitionTimer > 0.0f) return;
+    transitionIn = false;
+    transitionTimer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
+}
+
+
+/**
+ * @brief Ticks time by one frame of logic.
+ *
+ * @param deltaT How long the frame's tick is, in seconds.
+ */
+void GameplayMessageBox::tick(float deltaT) {
+    size_t tokensInSection = 0;
+    for(size_t l = 0; l < 3; l++) {
+        size_t lineIdx = curSection * 3 + l;
+        if(lineIdx >= tokensPerLine.size()) break;
+        tokensInSection += tokensPerLine[lineIdx].size();
+    }
+    
+    //Animate the swipe animation.
+    if(swipeTimer > 0.0f) {
+        swipeTimer -= deltaT;
+        if(swipeTimer <= 0.0f) {
+            //Go to the next section.
+            swipeTimer = 0.0f;
+            curSection++;
+            totalTokenAnimTime = 0.0f;
+            totalSkipAnimTime = 0.0f;
+            skippedAtToken = INVALID;
+        }
+    }
+    
+    if(!transitionIn || transitionTimer == 0.0f) {
+    
+        //Animate the text.
+        if(game.config.aestheticGen.gameplayMsgChInterval == 0.0f) {
+            skippedAtToken = 0;
+            curToken = tokensInSection + 1;
+        } else {
+            totalTokenAnimTime += deltaT;
+            if(skippedAtToken == INVALID) {
+                size_t prevToken = curToken;
+                curToken =
+                    totalTokenAnimTime /
+                    game.config.aestheticGen.gameplayMsgChInterval;
+                curToken =
+                    std::min(curToken, tokensInSection + 1);
+                if(
+                    curToken == tokensInSection + 1 &&
+                    prevToken != curToken
+                ) {
+                    //We've reached the last token organically.
+                    //Start a misinput protection timer, so the player
+                    //doesn't accidentally go to the next section when they
+                    //were just trying to skip the text.
+                    misinputProtectionTimer =
+                        GAMEPLAY_MSG_BOX::MISINPUT_PROTECTION_DURATION;
+                }
+            } else {
+                totalSkipAnimTime += deltaT;
+            }
+        }
+        
+    }
+    
+    //Animate the transition.
+    transitionTimer -= deltaT;
+    transitionTimer = std::max(0.0f, transitionTimer);
+    if(!transitionIn && transitionTimer == 0.0f) {
+        toDelete = true;
+    }
+    
+    //Misinput protection logic.
+    misinputProtectionTimer -= deltaT;
+    misinputProtectionTimer = std::max(0.0f, misinputProtectionTimer);
+    
+    //Button opacity logic.
+    if(
+        transitionTimer == 0.0f &&
+        misinputProtectionTimer == 0.0f &&
+        swipeTimer == 0.0f &&
+        curToken >= tokensInSection + 1
+    ) {
+        advanceButtonAlpha =
+            std::min(
+                advanceButtonAlpha +
+                GAMEPLAY_MSG_BOX::ADVANCE_BUTTON_FADE_SPEED * deltaT,
+                1.0f
+            );
+    } else {
+        advanceButtonAlpha =
+            std::max(
+                0.0f,
+                advanceButtonAlpha -
+                GAMEPLAY_MSG_BOX::ADVANCE_BUTTON_FADE_SPEED * deltaT
+            );
+    }
+}
+
+
+/**
  * @brief Changes the amount of sprays of a certain type the player owns.
  * It also animates the correct HUD item, if any.
  *
@@ -1469,180 +1644,5 @@ void GameplayState::updateClosestGroupMembers(Player* player) {
     
     if(player->closestGroupMember[BUBBLE_RELATION_CURRENT]) {
         player->leaderPtr->updateThrowVariables();
-    }
-}
-
-
-/**
- * @brief Constructs a new message box info object.
- *
- * @param text Text to display.
- * @param speakerIcon If not nullptr, use this bitmap to represent who
- * is talking.
- */
-GameplayMessageBox::GameplayMessageBox(
-    const string &text, ALLEGRO_BITMAP* speakerIcon
-):
-    speakerIcon(speakerIcon) {
-    
-    string message = unescapeString(text);
-    if(message.size() && message.back() == '\n') {
-        message.pop_back();
-    }
-    vector<StringToken> tokens = tokenizeString(message);
-    setStringTokenWidths(
-        tokens, game.sysContent.fntStandard, game.sysContent.fntSlim,
-        al_get_font_line_height(game.sysContent.fntStandard), true
-    );
-    
-    vector<StringToken> line;
-    for(size_t t = 0; t < tokens.size(); t++) {
-        if(tokens[t].type == STRING_TOKEN_LINE_BREAK) {
-            tokensPerLine.push_back(line);
-            line.clear();
-        } else {
-            line.push_back(tokens[t]);
-        }
-    }
-    if(!line.empty()) {
-        tokensPerLine.push_back(line);
-    }
-}
-
-
-/**
- * @brief Handles the user having pressed the button to continue the message,
- * or to skip to showing everything in the current section.
- */
-void GameplayMessageBox::advance() {
-    if(
-        transitionTimer > 0.0f ||
-        misinputProtectionTimer > 0.0f ||
-        swipeTimer > 0.0f
-    ) return;
-    
-    size_t lastToken = 0;
-    for(size_t l = 0; l < 3; l++) {
-        size_t lineIdx = curSection * 3 + l;
-        if(lineIdx >= tokensPerLine.size()) break;
-        lastToken += tokensPerLine[lineIdx].size();
-    }
-    
-    if(curToken >= lastToken + 1) {
-        if(curSection >= ceil(tokensPerLine.size() / 3.0f) - 1) {
-            //End of the message. Start closing the message box.
-            close();
-        } else {
-            //Start swiping to go to the next section.
-            swipeTimer = GAMEPLAY_MSG_BOX::TOKEN_SWIPE_DURATION;
-        }
-    } else {
-        //Skip the text typing and show everything in this section.
-        skippedAtToken = curToken;
-        curToken = lastToken + 1;
-    }
-}
-
-
-/**
- * @brief Closes the message box, even if it is still writing something.
- */
-void GameplayMessageBox::close() {
-    if(!transitionIn && transitionTimer > 0.0f) return;
-    transitionIn = false;
-    transitionTimer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
-}
-
-
-/**
- * @brief Ticks time by one frame of logic.
- *
- * @param deltaT How long the frame's tick is, in seconds.
- */
-void GameplayMessageBox::tick(float deltaT) {
-    size_t tokensInSection = 0;
-    for(size_t l = 0; l < 3; l++) {
-        size_t lineIdx = curSection * 3 + l;
-        if(lineIdx >= tokensPerLine.size()) break;
-        tokensInSection += tokensPerLine[lineIdx].size();
-    }
-    
-    //Animate the swipe animation.
-    if(swipeTimer > 0.0f) {
-        swipeTimer -= deltaT;
-        if(swipeTimer <= 0.0f) {
-            //Go to the next section.
-            swipeTimer = 0.0f;
-            curSection++;
-            totalTokenAnimTime = 0.0f;
-            totalSkipAnimTime = 0.0f;
-            skippedAtToken = INVALID;
-        }
-    }
-    
-    if(!transitionIn || transitionTimer == 0.0f) {
-    
-        //Animate the text.
-        if(game.config.aestheticGen.gameplayMsgChInterval == 0.0f) {
-            skippedAtToken = 0;
-            curToken = tokensInSection + 1;
-        } else {
-            totalTokenAnimTime += deltaT;
-            if(skippedAtToken == INVALID) {
-                size_t prevToken = curToken;
-                curToken =
-                    totalTokenAnimTime /
-                    game.config.aestheticGen.gameplayMsgChInterval;
-                curToken =
-                    std::min(curToken, tokensInSection + 1);
-                if(
-                    curToken == tokensInSection + 1 &&
-                    prevToken != curToken
-                ) {
-                    //We've reached the last token organically.
-                    //Start a misinput protection timer, so the player
-                    //doesn't accidentally go to the next section when they
-                    //were just trying to skip the text.
-                    misinputProtectionTimer =
-                        GAMEPLAY_MSG_BOX::MISINPUT_PROTECTION_DURATION;
-                }
-            } else {
-                totalSkipAnimTime += deltaT;
-            }
-        }
-        
-    }
-    
-    //Animate the transition.
-    transitionTimer -= deltaT;
-    transitionTimer = std::max(0.0f, transitionTimer);
-    if(!transitionIn && transitionTimer == 0.0f) {
-        toDelete = true;
-    }
-    
-    //Misinput protection logic.
-    misinputProtectionTimer -= deltaT;
-    misinputProtectionTimer = std::max(0.0f, misinputProtectionTimer);
-    
-    //Button opacity logic.
-    if(
-        transitionTimer == 0.0f &&
-        misinputProtectionTimer == 0.0f &&
-        swipeTimer == 0.0f &&
-        curToken >= tokensInSection + 1
-    ) {
-        advanceButtonAlpha =
-            std::min(
-                advanceButtonAlpha +
-                GAMEPLAY_MSG_BOX::ADVANCE_BUTTON_FADE_SPEED * deltaT,
-                1.0f
-            );
-    } else {
-        advanceButtonAlpha =
-            std::max(
-                0.0f,
-                advanceButtonAlpha -
-                GAMEPLAY_MSG_BOX::ADVANCE_BUTTON_FADE_SPEED * deltaT
-            );
     }
 }

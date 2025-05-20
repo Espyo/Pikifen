@@ -262,6 +262,44 @@ void AreaEditor::changeState(const EDITOR_STATE newState) {
 
 
 /**
+ * @brief Code to run for the circle sector command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::circleSectorCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    if(moving || selecting) {
+        return;
+    }
+    
+    if(
+        subState == EDITOR_SUB_STATE_DRAWING ||
+        subState == EDITOR_SUB_STATE_CIRCLE_SECTOR
+    ) {
+        return;
+    }
+    
+    if(
+        !game.curAreaData->problems.nonSimples.empty() ||
+        !game.curAreaData->problems.loneEdges.empty()
+    ) {
+        setStatus(
+            "Please fix any broken sectors or edges before trying to make "
+            "a new sector!",
+            true
+        );
+        return;
+    }
+    
+    clearSelection();
+    clearCircleSector();
+    setStatus("Use the canvas to place a circular sector.");
+    subState = EDITOR_SUB_STATE_CIRCLE_SECTOR;
+}
+
+
+/**
  * @brief Clears the data about the circular sector creation.
  */
 void AreaEditor::clearCircleSector() {
@@ -431,6 +469,33 @@ void AreaEditor::closeOptionsDialog() {
 
 
 /**
+ * @brief Code to run for the copy properties command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::copyPropertiesCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    switch(state) {
+    case EDITOR_STATE_LAYOUT: {
+        if(!selectedSectors.empty()) {
+            copySectorProperties();
+        } else {
+            copyEdgeProperties();
+        }
+        break;
+    } case EDITOR_STATE_MOBS: {
+        copyMobProperties();
+        break;
+    } case EDITOR_STATE_PATHS: {
+        copyPathLinkProperties();
+        break;
+    }
+    }
+}
+
+
+/**
  * @brief Creates a new area to work on.
  *
  * @param requestedAreaPath Path to the requested area's folder.
@@ -564,6 +629,48 @@ void AreaEditor::createMobUnderCursor() {
 
 
 /**
+ * @brief Code to run for the delete current area command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::deleteAreaCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    openDialog(
+        "Delete area?",
+        std::bind(&AreaEditor::processGuiDeleteAreaDialog, this)
+    );
+    dialogs.back()->customSize = Point(600, 0);
+}
+
+
+/**
+ * @brief Code to run for the delete command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::deleteCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    switch(state) {
+    case EDITOR_STATE_LAYOUT: {
+        deleteEdgeCmd(1.0f);
+        break;
+    } case EDITOR_STATE_MOBS: {
+        deleteMobCmd(1.0f);
+        break;
+    } case EDITOR_STATE_PATHS: {
+        deletePathCmd(1.0f);
+        break;
+    } case EDITOR_STATE_DETAILS: {
+        deleteTreeShadowCmd(1.0f);
+        break;
+    }
+    }
+}
+
+
+/**
  * @brief Deletes the current area.
  */
 void AreaEditor::deleteCurrentArea() {
@@ -662,6 +769,179 @@ void AreaEditor::deleteCurrentArea() {
             messageBoxText,
             finishUp
         );
+    }
+}
+
+
+/**
+ * @brief Code to run for the delete edge command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::deleteEdgeCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    //Check if the user can delete.
+    if(moving || selecting) {
+        return;
+    }
+    
+    if(selectedEdges.empty()) {
+        setStatus("You have to select edges to delete!", true);
+        return;
+    }
+    
+    //Prepare everything.
+    registerChange("edge deletion");
+    size_t nBefore = game.curAreaData->edges.size();
+    size_t nSelected = selectedEdges.size();
+    
+    //Delete!
+    bool success = deleteEdges(selectedEdges);
+    
+    //Cleanup.
+    clearSelection();
+    subState = EDITOR_SUB_STATE_NONE;
+    
+    //Report.
+    if(success) {
+        setStatus(
+            "Deleted " +
+            amountStr(
+                (int) (nBefore - game.curAreaData->edges.size()),
+                "edge"
+            ) +
+            " (" + i2s(nSelected) + " were selected)."
+        );
+    }
+}
+
+
+/**
+ * @brief Code to run for the delete mob command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::deleteMobCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    //Check if the user can delete.
+    if(moving || selecting) {
+        return;
+    }
+    
+    if(selectedMobs.empty()) {
+        setStatus("You have to select mobs to delete!", true);
+        return;
+    }
+    
+    //Prepare everything.
+    registerChange("object deletion");
+    size_t nBefore = game.curAreaData->mobGenerators.size();
+    
+    //Delete!
+    deleteMobs(selectedMobs);
+    
+    //Cleanup.
+    clearSelection();
+    subState = EDITOR_SUB_STATE_NONE;
+    
+    //Report.
+    setStatus(
+        "Deleted " +
+        amountStr(
+            (int) (nBefore - game.curAreaData->mobGenerators.size()),
+            "object"
+        ) +
+        "."
+    );
+}
+
+
+/**
+ * @brief Code to run for the delete path command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::deletePathCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    //Check if the user can delete.
+    if(moving || selecting) {
+        return;
+    }
+    
+    if(selectedPathLinks.empty() && selectedPathStops.empty()) {
+        setStatus("You have to select something to delete!", true);
+        return;
+    }
+    
+    //Prepare everything.
+    registerChange("path deletion");
+    size_t nStopsBefore = game.curAreaData->pathStops.size();
+    size_t nLinksBefore = game.curAreaData->getNrPathLinks();
+    
+    //Delete!
+    deletePathLinks(selectedPathLinks);
+    deletePathStops(selectedPathStops);
+    
+    //Cleanup.
+    clearSelection();
+    subState = EDITOR_SUB_STATE_NONE;
+    pathPreview.clear(); //Clear so it doesn't reference deleted stops.
+    pathPreviewTimer.start(false);
+    
+    //Report.
+    setStatus(
+        "Deleted " +
+        amountStr(
+            (int) (nStopsBefore - game.curAreaData->pathStops.size()),
+            "path stop"
+        ) +
+        ", " +
+        amountStr(
+            (int) (nLinksBefore - game.curAreaData->getNrPathLinks()),
+            "path link"
+        ) +
+        "."
+    );
+}
+
+
+/**
+ * @brief Code to run for the remove tree shadow command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::deleteTreeShadowCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    if(moving || selecting) {
+        return;
+    }
+    
+    if(!selectedShadow) {
+        setStatus("You have to select a shadow to delete!", true);
+    } else {
+        registerChange("tree shadow deletion");
+        for(
+            size_t s = 0;
+            s < game.curAreaData->treeShadows.size();
+            s++
+        ) {
+            if(
+                game.curAreaData->treeShadows[s] ==
+                selectedShadow
+            ) {
+                game.curAreaData->treeShadows.erase(
+                    game.curAreaData->treeShadows.begin() + s
+                );
+                delete selectedShadow;
+                selectedShadow = nullptr;
+                break;
+            }
+        }
+        setStatus("Deleted tree shadow.");
     }
 }
 
@@ -918,6 +1198,33 @@ void AreaEditor::drawCanvasDearImGuiCallback(
     const ImDrawList* parentList, const ImDrawCmd* cmd
 ) {
     game.states.areaEd->drawCanvas();
+}
+
+
+/**
+ * @brief Code to run for the duplicate mobs command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::duplicateMobsCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    if(
+        subState == EDITOR_SUB_STATE_NEW_MOB ||
+        subState == EDITOR_SUB_STATE_DUPLICATE_MOB ||
+        subState == EDITOR_SUB_STATE_STORE_MOB_INSIDE ||
+        subState == EDITOR_SUB_STATE_ADD_MOB_LINK ||
+        subState == EDITOR_SUB_STATE_DEL_MOB_LINK
+    ) {
+        return;
+    }
+    
+    if(selectedMobs.empty()) {
+        setStatus("You have to select mobs to duplicate!", true);
+    } else {
+        setStatus("Use the canvas to place the duplicated objects.");
+        subState = EDITOR_SUB_STATE_DUPLICATE_MOB;
+    }
 }
 
 
@@ -1701,6 +2008,46 @@ void AreaEditor::goToProblem() {
 
 
 /**
+ * @brief Code to run for the grid interval decrease command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::gridIntervalDecreaseCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    game.options.areaEd.gridInterval =
+        std::max(
+            game.options.areaEd.gridInterval * 0.5f,
+            AREA_EDITOR::MIN_GRID_INTERVAL
+        );
+    setStatus(
+        "Decreased grid interval to " +
+        i2s(game.options.areaEd.gridInterval) + "."
+    );
+}
+
+
+/**
+ * @brief Code to run for the grid interval increase command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::gridIntervalIncreaseCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    game.options.areaEd.gridInterval =
+        std::min(
+            game.options.areaEd.gridInterval * 2.0f,
+            AREA_EDITOR::MAX_GRID_INTERVAL
+        );
+    setStatus(
+        "Increased grid interval to " +
+        i2s(game.options.areaEd.gridInterval) + "."
+    );
+}
+
+
+/**
  * @brief Handles an error in the line the user is trying to draw.
  */
 void AreaEditor::handleLineError() {
@@ -1736,6 +2083,44 @@ void AreaEditor::handleLineError() {
         break;
     }
     }
+}
+
+
+/**
+ * @brief Code to run for the layout drawing command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::layoutDrawingCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    if(moving || selecting) {
+        return;
+    }
+    
+    if(
+        subState == EDITOR_SUB_STATE_DRAWING ||
+        subState == EDITOR_SUB_STATE_CIRCLE_SECTOR
+    ) {
+        return;
+    }
+    
+    if(
+        !game.curAreaData->problems.nonSimples.empty() ||
+        !game.curAreaData->problems.loneEdges.empty()
+    ) {
+        setStatus(
+            "Please fix any broken sectors or edges before trying to make "
+            "a new sector!",
+            true
+        );
+        return;
+    }
+    
+    clearSelection();
+    clearLayoutDrawing();
+    updateLayoutDrawingStatusText();
+    subState = EDITOR_SUB_STATE_DRAWING;
 }
 
 
@@ -1906,6 +2291,27 @@ void AreaEditor::loadBackup() {
 
 
 /**
+ * @brief Code to run for the load area command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::loadCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    if(moving || selecting) {
+        return;
+    }
+    
+    changesMgr.askIfUnsaved(
+        loadWidgetPos,
+        "loading an area", "load",
+        std::bind(&AreaEditor::openLoadDialog, this),
+    [this] () { return saveArea(false); }
+    );
+}
+
+
+/**
  * @brief Loads the reference image data from the reference configuration file.
  */
 void AreaEditor::loadReference() {
@@ -1936,6 +2342,79 @@ void AreaEditor::loadReference() {
 
 
 /**
+ * @brief Code to run for the new mob command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::newMobCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    if(moving || selecting) {
+        return;
+    }
+    
+    if(
+        subState == EDITOR_SUB_STATE_NEW_MOB ||
+        subState == EDITOR_SUB_STATE_DUPLICATE_MOB ||
+        subState == EDITOR_SUB_STATE_STORE_MOB_INSIDE ||
+        subState == EDITOR_SUB_STATE_ADD_MOB_LINK ||
+        subState == EDITOR_SUB_STATE_DEL_MOB_LINK
+    ) {
+        return;
+    }
+    
+    clearSelection();
+    setStatus("Use the canvas to place a new object.");
+    subState = EDITOR_SUB_STATE_NEW_MOB;
+}
+
+
+/**
+ * @brief Code to run for the new path command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::newPathCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    if(moving || selecting) {
+        return;
+    }
+    
+    if(subState == EDITOR_SUB_STATE_PATH_DRAWING) {
+        return;
+    }
+    
+    clearSelection();
+    pathDrawingStop1 = nullptr;
+    setStatus("Use the canvas to draw a path.");
+    subState = EDITOR_SUB_STATE_PATH_DRAWING;
+}
+
+
+/**
+ * @brief Code to run for the new tree shadow command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::newTreeShadowCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    if(moving || selecting) {
+        return;
+    }
+    
+    if(subState == EDITOR_SUB_STATE_NEW_SHADOW) {
+        return;
+    }
+    
+    clearSelection();
+    setStatus("Use the canvas to place a new tree shadow.");
+    subState = EDITOR_SUB_STATE_NEW_SHADOW;
+}
+
+
+/**
  * @brief Pans the camera around.
  *
  * @param ev Event to handle.
@@ -1949,6 +2428,48 @@ void AreaEditor::panCam(const ALLEGRO_EVENT &ev) {
             ev.mouse.dy / game.editorsView.cam.zoom
         )
     );
+}
+
+
+/**
+ * @brief Code to run for the paste properties command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::pastePropertiesCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    if(subState != EDITOR_SUB_STATE_NONE) return;
+    switch(state) {
+    case EDITOR_STATE_LAYOUT: {
+        if(!selectedSectors.empty()) {
+            pasteSectorProperties();
+        } else {
+            pasteEdgeProperties();
+        }
+        break;
+    } case EDITOR_STATE_MOBS: {
+        pasteMobProperties();
+        break;
+    } case EDITOR_STATE_PATHS: {
+        pastePathLinkProperties();
+        break;
+    }
+    }
+}
+
+
+/**
+ * @brief Code to run for the paste texture command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::pasteTextureCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    if(state != EDITOR_STATE_LAYOUT) return;
+    if(subState != EDITOR_SUB_STATE_NONE) return;
+    pasteSectorTexture();
 }
 
 
@@ -2038,354 +2559,6 @@ Area* AreaEditor::prepareState() {
 
 
 /**
- * @brief Code to run for the circle sector command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AreaEditor::circleSectorCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    if(moving || selecting) {
-        return;
-    }
-    
-    if(
-        subState == EDITOR_SUB_STATE_DRAWING ||
-        subState == EDITOR_SUB_STATE_CIRCLE_SECTOR
-    ) {
-        return;
-    }
-    
-    if(
-        !game.curAreaData->problems.nonSimples.empty() ||
-        !game.curAreaData->problems.loneEdges.empty()
-    ) {
-        setStatus(
-            "Please fix any broken sectors or edges before trying to make "
-            "a new sector!",
-            true
-        );
-        return;
-    }
-    
-    clearSelection();
-    clearCircleSector();
-    setStatus("Use the canvas to place a circular sector.");
-    subState = EDITOR_SUB_STATE_CIRCLE_SECTOR;
-}
-
-
-/**
- * @brief Code to run for the copy properties command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AreaEditor::copyPropertiesCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    switch(state) {
-    case EDITOR_STATE_LAYOUT: {
-        if(!selectedSectors.empty()) {
-            copySectorProperties();
-        } else {
-            copyEdgeProperties();
-        }
-        break;
-    } case EDITOR_STATE_MOBS: {
-        copyMobProperties();
-        break;
-    } case EDITOR_STATE_PATHS: {
-        copyPathLinkProperties();
-        break;
-    }
-    }
-}
-
-
-/**
- * @brief Code to run for the delete current area command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AreaEditor::deleteAreaCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    openDialog(
-        "Delete area?",
-        std::bind(&AreaEditor::processGuiDeleteAreaDialog, this)
-    );
-    dialogs.back()->customSize = Point(600, 0);
-}
-
-
-/**
- * @brief Code to run for the delete command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AreaEditor::deleteCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    switch(state) {
-    case EDITOR_STATE_LAYOUT: {
-        deleteEdgeCmd(1.0f);
-        break;
-    } case EDITOR_STATE_MOBS: {
-        deleteMobCmd(1.0f);
-        break;
-    } case EDITOR_STATE_PATHS: {
-        deletePathCmd(1.0f);
-        break;
-    } case EDITOR_STATE_DETAILS: {
-        deleteTreeShadowCmd(1.0f);
-        break;
-    }
-    }
-}
-
-
-/**
- * @brief Code to run for the duplicate mobs command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AreaEditor::duplicateMobsCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    if(
-        subState == EDITOR_SUB_STATE_NEW_MOB ||
-        subState == EDITOR_SUB_STATE_DUPLICATE_MOB ||
-        subState == EDITOR_SUB_STATE_STORE_MOB_INSIDE ||
-        subState == EDITOR_SUB_STATE_ADD_MOB_LINK ||
-        subState == EDITOR_SUB_STATE_DEL_MOB_LINK
-    ) {
-        return;
-    }
-    
-    if(selectedMobs.empty()) {
-        setStatus("You have to select mobs to duplicate!", true);
-    } else {
-        setStatus("Use the canvas to place the duplicated objects.");
-        subState = EDITOR_SUB_STATE_DUPLICATE_MOB;
-    }
-}
-
-
-/**
- * @brief Code to run for the grid interval decrease command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AreaEditor::gridIntervalDecreaseCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    game.options.areaEd.gridInterval =
-        std::max(
-            game.options.areaEd.gridInterval * 0.5f,
-            AREA_EDITOR::MIN_GRID_INTERVAL
-        );
-    setStatus(
-        "Decreased grid interval to " +
-        i2s(game.options.areaEd.gridInterval) + "."
-    );
-}
-
-
-/**
- * @brief Code to run for the grid interval increase command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AreaEditor::gridIntervalIncreaseCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    game.options.areaEd.gridInterval =
-        std::min(
-            game.options.areaEd.gridInterval * 2.0f,
-            AREA_EDITOR::MAX_GRID_INTERVAL
-        );
-    setStatus(
-        "Increased grid interval to " +
-        i2s(game.options.areaEd.gridInterval) + "."
-    );
-}
-
-
-/**
- * @brief Code to run for the layout drawing command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AreaEditor::layoutDrawingCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    if(moving || selecting) {
-        return;
-    }
-    
-    if(
-        subState == EDITOR_SUB_STATE_DRAWING ||
-        subState == EDITOR_SUB_STATE_CIRCLE_SECTOR
-    ) {
-        return;
-    }
-    
-    if(
-        !game.curAreaData->problems.nonSimples.empty() ||
-        !game.curAreaData->problems.loneEdges.empty()
-    ) {
-        setStatus(
-            "Please fix any broken sectors or edges before trying to make "
-            "a new sector!",
-            true
-        );
-        return;
-    }
-    
-    clearSelection();
-    clearLayoutDrawing();
-    updateLayoutDrawingStatusText();
-    subState = EDITOR_SUB_STATE_DRAWING;
-}
-
-
-/**
- * @brief Code to run for the load area command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AreaEditor::loadCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    if(moving || selecting) {
-        return;
-    }
-    
-    changesMgr.askIfUnsaved(
-        loadWidgetPos,
-        "loading an area", "load",
-        std::bind(&AreaEditor::openLoadDialog, this),
-    [this] () { return saveArea(false); }
-    );
-}
-
-
-/**
- * @brief Code to run for the new mob command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AreaEditor::newMobCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    if(moving || selecting) {
-        return;
-    }
-    
-    if(
-        subState == EDITOR_SUB_STATE_NEW_MOB ||
-        subState == EDITOR_SUB_STATE_DUPLICATE_MOB ||
-        subState == EDITOR_SUB_STATE_STORE_MOB_INSIDE ||
-        subState == EDITOR_SUB_STATE_ADD_MOB_LINK ||
-        subState == EDITOR_SUB_STATE_DEL_MOB_LINK
-    ) {
-        return;
-    }
-    
-    clearSelection();
-    setStatus("Use the canvas to place a new object.");
-    subState = EDITOR_SUB_STATE_NEW_MOB;
-}
-
-
-/**
- * @brief Code to run for the new path command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AreaEditor::newPathCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    if(moving || selecting) {
-        return;
-    }
-    
-    if(subState == EDITOR_SUB_STATE_PATH_DRAWING) {
-        return;
-    }
-    
-    clearSelection();
-    pathDrawingStop1 = nullptr;
-    setStatus("Use the canvas to draw a path.");
-    subState = EDITOR_SUB_STATE_PATH_DRAWING;
-}
-
-
-/**
- * @brief Code to run for the new tree shadow command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AreaEditor::newTreeShadowCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    if(moving || selecting) {
-        return;
-    }
-    
-    if(subState == EDITOR_SUB_STATE_NEW_SHADOW) {
-        return;
-    }
-    
-    clearSelection();
-    setStatus("Use the canvas to place a new tree shadow.");
-    subState = EDITOR_SUB_STATE_NEW_SHADOW;
-}
-
-
-/**
- * @brief Code to run for the paste properties command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AreaEditor::pastePropertiesCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    if(subState != EDITOR_SUB_STATE_NONE) return;
-    switch(state) {
-    case EDITOR_STATE_LAYOUT: {
-        if(!selectedSectors.empty()) {
-            pasteSectorProperties();
-        } else {
-            pasteEdgeProperties();
-        }
-        break;
-    } case EDITOR_STATE_MOBS: {
-        pasteMobProperties();
-        break;
-    } case EDITOR_STATE_PATHS: {
-        pastePathLinkProperties();
-        break;
-    }
-    }
-}
-
-
-/**
- * @brief Code to run for the paste texture command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AreaEditor::pasteTextureCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    if(state != EDITOR_STATE_LAYOUT) return;
-    if(subState != EDITOR_SUB_STATE_NONE) return;
-    pasteSectorTexture();
-}
-
-
-/**
  * @brief Code to run for the quick play command.
  *
  * @param inputValue Value of the player input for the command.
@@ -2415,530 +2588,6 @@ void AreaEditor::quitCmd(float inputValue) {
         std::bind(&AreaEditor::leave, this),
     [this] () { return saveArea(false); }
     );
-}
-
-
-/**
- * @brief Code to run for the redo command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AreaEditor::redoCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    if(
-        subState != EDITOR_SUB_STATE_NONE ||
-        moving || selecting || curTransformationWidget.isMovingHandle()
-    ) {
-        setStatus("Can't redo in the middle of an operation!", true);
-        return;
-    }
-    
-    redo();
-}
-
-
-/**
- * @brief Code to run for the reference toggle command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AreaEditor::referenceToggleCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    showReference = !showReference;
-    string stateStr = (showReference ? "Enabled" : "Disabled");
-    saveReference();
-    setStatus(stateStr + " reference image visibility.");
-}
-
-
-/**
- * @brief Code to run for the reload command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AreaEditor::reloadCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    if(!changesMgr.existsOnDisk()) {
-        setStatus(
-            "You can't reload this area since it's never been saved!", true
-        );
-        return;
-    }
-    
-    changesMgr.askIfUnsaved(
-        reloadWidgetPos,
-        "reloading the current area", "reload",
-    [this] () {
-        loadAreaFolder(string(manifest.path), false, false);
-    },
-    [this] () { return saveArea(false); }
-    );
-}
-
-
-/**
- * @brief Code to run for the delete edge command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AreaEditor::deleteEdgeCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    //Check if the user can delete.
-    if(moving || selecting) {
-        return;
-    }
-    
-    if(selectedEdges.empty()) {
-        setStatus("You have to select edges to delete!", true);
-        return;
-    }
-    
-    //Prepare everything.
-    registerChange("edge deletion");
-    size_t nBefore = game.curAreaData->edges.size();
-    size_t nSelected = selectedEdges.size();
-    
-    //Delete!
-    bool success = deleteEdges(selectedEdges);
-    
-    //Cleanup.
-    clearSelection();
-    subState = EDITOR_SUB_STATE_NONE;
-    
-    //Report.
-    if(success) {
-        setStatus(
-            "Deleted " +
-            amountStr(
-                (int) (nBefore - game.curAreaData->edges.size()),
-                "edge"
-            ) +
-            " (" + i2s(nSelected) + " were selected)."
-        );
-    }
-}
-
-
-/**
- * @brief Code to run for the delete mob command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AreaEditor::deleteMobCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    //Check if the user can delete.
-    if(moving || selecting) {
-        return;
-    }
-    
-    if(selectedMobs.empty()) {
-        setStatus("You have to select mobs to delete!", true);
-        return;
-    }
-    
-    //Prepare everything.
-    registerChange("object deletion");
-    size_t nBefore = game.curAreaData->mobGenerators.size();
-    
-    //Delete!
-    deleteMobs(selectedMobs);
-    
-    //Cleanup.
-    clearSelection();
-    subState = EDITOR_SUB_STATE_NONE;
-    
-    //Report.
-    setStatus(
-        "Deleted " +
-        amountStr(
-            (int) (nBefore - game.curAreaData->mobGenerators.size()),
-            "object"
-        ) +
-        "."
-    );
-}
-
-
-/**
- * @brief Code to run for the delete path command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AreaEditor::deletePathCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    //Check if the user can delete.
-    if(moving || selecting) {
-        return;
-    }
-    
-    if(selectedPathLinks.empty() && selectedPathStops.empty()) {
-        setStatus("You have to select something to delete!", true);
-        return;
-    }
-    
-    //Prepare everything.
-    registerChange("path deletion");
-    size_t nStopsBefore = game.curAreaData->pathStops.size();
-    size_t nLinksBefore = game.curAreaData->getNrPathLinks();
-    
-    //Delete!
-    deletePathLinks(selectedPathLinks);
-    deletePathStops(selectedPathStops);
-    
-    //Cleanup.
-    clearSelection();
-    subState = EDITOR_SUB_STATE_NONE;
-    pathPreview.clear(); //Clear so it doesn't reference deleted stops.
-    pathPreviewTimer.start(false);
-    
-    //Report.
-    setStatus(
-        "Deleted " +
-        amountStr(
-            (int) (nStopsBefore - game.curAreaData->pathStops.size()),
-            "path stop"
-        ) +
-        ", " +
-        amountStr(
-            (int) (nLinksBefore - game.curAreaData->getNrPathLinks()),
-            "path link"
-        ) +
-        "."
-    );
-}
-
-
-/**
- * @brief Code to run for the remove tree shadow command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AreaEditor::deleteTreeShadowCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    if(moving || selecting) {
-        return;
-    }
-    
-    if(!selectedShadow) {
-        setStatus("You have to select a shadow to delete!", true);
-    } else {
-        registerChange("tree shadow deletion");
-        for(
-            size_t s = 0;
-            s < game.curAreaData->treeShadows.size();
-            s++
-        ) {
-            if(
-                game.curAreaData->treeShadows[s] ==
-                selectedShadow
-            ) {
-                game.curAreaData->treeShadows.erase(
-                    game.curAreaData->treeShadows.begin() + s
-                );
-                delete selectedShadow;
-                selectedShadow = nullptr;
-                break;
-            }
-        }
-        setStatus("Deleted tree shadow.");
-    }
-}
-
-
-/**
- * @brief Code to run for the save button command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AreaEditor::saveCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    if(!saveArea(false)) {
-        return;
-    }
-}
-
-
-/**
- * @brief Code to run for the select all command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AreaEditor::selectAllCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    if(subState == EDITOR_SUB_STATE_NONE && !selecting && !moving) {
-        if(state == EDITOR_STATE_LAYOUT) {
-            selectedEdges.insert(
-                game.curAreaData->edges.begin(),
-                game.curAreaData->edges.end()
-            );
-            selectedSectors.insert(
-                game.curAreaData->sectors.begin(),
-                game.curAreaData->sectors.end()
-            );
-            selectedVertexes.insert(
-                game.curAreaData->vertexes.begin(),
-                game.curAreaData->vertexes.end()
-            );
-            
-        } else if(state == EDITOR_STATE_MOBS) {
-            selectedMobs.insert(
-                game.curAreaData->mobGenerators.begin(),
-                game.curAreaData->mobGenerators.end()
-            );
-            
-        } else if(state == EDITOR_STATE_PATHS) {
-            selectedPathStops.insert(
-                game.curAreaData->pathStops.begin(),
-                game.curAreaData->pathStops.end()
-            );
-        }
-        
-        updateVertexSelection();
-        setSelectionStatusText();
-        
-    } else if(
-        subState == EDITOR_SUB_STATE_MISSION_MOBS
-    ) {
-        registerChange("mission object requirements change");
-        for(
-            size_t m = 0; m < game.curAreaData->mobGenerators.size(); m++
-        ) {
-            MobGen* mPtr = game.curAreaData->mobGenerators[m];
-            if(
-                game.missionGoals[game.curAreaData->mission.goal]->
-                isMobApplicable(mPtr->type)
-            ) {
-                game.curAreaData->mission.goalMobIdxs.insert(m);
-            }
-        }
-    }
-}
-
-
-/**
- * @brief Code to run for the selection filter command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AreaEditor::selectionFilterCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    clearSelection();
-    if(!isShiftPressed) {
-        selectionFilter =
-            (SELECTION_FILTER)
-            sumAndWrap(selectionFilter, 1, N_SELECTION_FILTERS);
-    } else {
-        selectionFilter =
-            (SELECTION_FILTER)
-            sumAndWrap(selectionFilter, -1, N_SELECTION_FILTERS);
-    }
-    
-    string finalStatusText = "Set selection filter to ";
-    switch(selectionFilter) {
-    case SELECTION_FILTER_SECTORS: {
-        finalStatusText += "sectors + edges + vertexes";
-        break;
-    } case SELECTION_FILTER_EDGES: {
-        finalStatusText += "edges + vertexes";
-        break;
-    } case SELECTION_FILTER_VERTEXES: {
-        finalStatusText += "vertexes";
-        break;
-    } case N_SELECTION_FILTERS: {
-        break;
-    }
-    }
-    finalStatusText += ".";
-    setStatus(finalStatusText);
-}
-
-
-/**
- * @brief Code to run for the snap mode command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AreaEditor::snapModeCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    if(!isShiftPressed) {
-        game.options.areaEd.snapMode =
-            (AreaEditor::SNAP_MODE)
-            sumAndWrap(game.options.areaEd.snapMode, 1, N_SNAP_MODES);
-    } else {
-        game.options.areaEd.snapMode =
-            (AreaEditor::SNAP_MODE)
-            sumAndWrap(game.options.areaEd.snapMode, -1, N_SNAP_MODES);
-    }
-    
-    string finalStatusText = "Set snap mode to ";
-    switch(game.options.areaEd.snapMode) {
-    case SNAP_MODE_GRID: {
-        finalStatusText += "grid";
-        break;
-    } case SNAP_MODE_VERTEXES: {
-        finalStatusText += "vertexes";
-        break;
-    } case SNAP_MODE_EDGES: {
-        finalStatusText += "edges";
-        break;
-    } case SNAP_MODE_NOTHING: {
-        finalStatusText += "nothing";
-        break;
-    } case N_SNAP_MODES: {
-        break;
-    }
-    }
-    finalStatusText += ".";
-    setStatus(finalStatusText);
-}
-
-
-/**
- * @brief Code to run for the undo command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AreaEditor::undoCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    if(
-        subState != EDITOR_SUB_STATE_NONE ||
-        moving || selecting || curTransformationWidget.isMovingHandle()
-    ) {
-        setStatus("Can't undo in the middle of an operation!", true);
-        return;
-    }
-    
-    undo();
-}
-
-
-/**
- * @brief Code to run for the zoom and position reset command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AreaEditor::zoomAndPosResetCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    if(game.editorsView.cam.targetZoom == 1.0f) {
-        game.editorsView.cam.targetPos = Point();
-    } else {
-        game.editorsView.cam.targetZoom = 1.0f;
-    }
-}
-
-
-/**
- * @brief Code to run for the zoom everything command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AreaEditor::zoomEverythingCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    bool gotSomething = false;
-    Point minCoords, maxCoords;
-    
-    for(size_t v = 0; v < game.curAreaData->vertexes.size(); v++) {
-        Vertex* vPtr = game.curAreaData->vertexes[v];
-        if(vPtr->x < minCoords.x || !gotSomething) {
-            minCoords.x = vPtr->x;
-        }
-        if(vPtr->y < minCoords.y || !gotSomething) {
-            minCoords.y = vPtr->y;
-        }
-        if(vPtr->x > maxCoords.x || !gotSomething) {
-            maxCoords.x = vPtr->x;
-        }
-        if(vPtr->y > maxCoords.y || !gotSomething) {
-            maxCoords.y = vPtr->y;
-        }
-        gotSomething = true;
-    }
-    
-    for(size_t m = 0; m < game.curAreaData->mobGenerators.size(); m++) {
-        MobGen* mPtr = game.curAreaData->mobGenerators[m];
-        if(mPtr->pos.x < minCoords.x || !gotSomething) {
-            minCoords.x = mPtr->pos.x;
-        }
-        if(mPtr->pos.y < minCoords.y || !gotSomething) {
-            minCoords.y = mPtr->pos.y;
-        }
-        if(mPtr->pos.x > maxCoords.x || !gotSomething) {
-            maxCoords.x = mPtr->pos.x;
-        }
-        if(mPtr->pos.y > maxCoords.y || !gotSomething) {
-            maxCoords.y = mPtr->pos.y;
-        }
-        gotSomething = true;
-    }
-    
-    for(size_t s = 0; s < game.curAreaData->pathStops.size(); s++) {
-        PathStop* sPtr = game.curAreaData->pathStops[s];
-        if(sPtr->pos.x < minCoords.x || !gotSomething) {
-            minCoords.x = sPtr->pos.x;
-        }
-        if(sPtr->pos.y < minCoords.y || !gotSomething) {
-            minCoords.y = sPtr->pos.y;
-        }
-        if(sPtr->pos.x > maxCoords.x || !gotSomething) {
-            maxCoords.x = sPtr->pos.x;
-        }
-        if(sPtr->pos.y > maxCoords.y || !gotSomething) {
-            maxCoords.y = sPtr->pos.y;
-        }
-        gotSomething = true;
-    }
-    
-    if(!gotSomething) return;
-    
-    centerCamera(minCoords, maxCoords);
-}
-
-
-/**
- * @brief Code to run for the zoom in command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AreaEditor::zoomInCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    game.editorsView.cam.targetZoom =
-        std::clamp(
-            game.editorsView.cam.targetZoom +
-            game.editorsView.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
-            zoomMinLevel, zoomMaxLevel
-        );
-}
-
-
-/**
- * @brief Code to run for the zoom out command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void AreaEditor::zoomOutCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    game.editorsView.cam.targetZoom =
-        std::clamp(
-            game.editorsView.cam.targetZoom -
-            game.editorsView.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
-            zoomMinLevel, zoomMaxLevel
-        );
 }
 
 
@@ -2980,6 +2629,41 @@ void AreaEditor::redo() {
     redoHistory.pop_front();
     
     setStatus("Redo successful: " + operationName + ".");
+}
+
+
+/**
+ * @brief Code to run for the redo command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::redoCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    if(
+        subState != EDITOR_SUB_STATE_NONE ||
+        moving || selecting || curTransformationWidget.isMovingHandle()
+    ) {
+        setStatus("Can't redo in the middle of an operation!", true);
+        return;
+    }
+    
+    redo();
+}
+
+
+/**
+ * @brief Code to run for the reference toggle command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::referenceToggleCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    showReference = !showReference;
+    string stateStr = (showReference ? "Enabled" : "Disabled");
+    saveReference();
+    setStatus(stateStr + " reference image visibility.");
 }
 
 
@@ -3048,6 +2732,32 @@ void AreaEditor::reloadAreas() {
         CONTENT_TYPE_AREA,
     },
     CONTENT_LOAD_LEVEL_BASIC
+    );
+}
+
+
+/**
+ * @brief Code to run for the reload command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::reloadCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    if(!changesMgr.existsOnDisk()) {
+        setStatus(
+            "You can't reload this area since it's never been saved!", true
+        );
+        return;
+    }
+    
+    changesMgr.askIfUnsaved(
+        reloadWidgetPos,
+        "reloading the current area", "reload",
+    [this] () {
+        loadAreaFolder(string(manifest.path), false, false);
+    },
+    [this] () { return saveArea(false); }
     );
 }
 
@@ -3188,6 +2898,20 @@ void AreaEditor::saveBackup() {
 
 
 /**
+ * @brief Code to run for the save button command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::saveCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    if(!saveArea(false)) {
+        return;
+    }
+}
+
+
+/**
  * @brief Saves the reference data to disk, in the area's reference config file.
  */
 void AreaEditor::saveReference() {
@@ -3212,6 +2936,64 @@ void AreaEditor::saveReference() {
     rGW.write("visible", showReference);
     
     referenceFile.saveFile(filePath);
+}
+
+
+/**
+ * @brief Code to run for the select all command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::selectAllCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    if(subState == EDITOR_SUB_STATE_NONE && !selecting && !moving) {
+        if(state == EDITOR_STATE_LAYOUT) {
+            selectedEdges.insert(
+                game.curAreaData->edges.begin(),
+                game.curAreaData->edges.end()
+            );
+            selectedSectors.insert(
+                game.curAreaData->sectors.begin(),
+                game.curAreaData->sectors.end()
+            );
+            selectedVertexes.insert(
+                game.curAreaData->vertexes.begin(),
+                game.curAreaData->vertexes.end()
+            );
+            
+        } else if(state == EDITOR_STATE_MOBS) {
+            selectedMobs.insert(
+                game.curAreaData->mobGenerators.begin(),
+                game.curAreaData->mobGenerators.end()
+            );
+            
+        } else if(state == EDITOR_STATE_PATHS) {
+            selectedPathStops.insert(
+                game.curAreaData->pathStops.begin(),
+                game.curAreaData->pathStops.end()
+            );
+        }
+        
+        updateVertexSelection();
+        setSelectionStatusText();
+        
+    } else if(
+        subState == EDITOR_SUB_STATE_MISSION_MOBS
+    ) {
+        registerChange("mission object requirements change");
+        for(
+            size_t m = 0; m < game.curAreaData->mobGenerators.size(); m++
+        ) {
+            MobGen* mPtr = game.curAreaData->mobGenerators[m];
+            if(
+                game.missionGoals[game.curAreaData->mission.goal]->
+                isMobApplicable(mPtr->type)
+            ) {
+                game.curAreaData->mission.goalMobIdxs.insert(m);
+            }
+        }
+    }
 }
 
 
@@ -3282,6 +3064,45 @@ void AreaEditor::selectVertex(Vertex* v) {
     selectedVertexes.insert(v);
     setSelectionStatusText();
     updateVertexSelection();
+}
+
+
+/**
+ * @brief Code to run for the selection filter command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::selectionFilterCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    clearSelection();
+    if(!isShiftPressed) {
+        selectionFilter =
+            (SELECTION_FILTER)
+            sumAndWrap(selectionFilter, 1, N_SELECTION_FILTERS);
+    } else {
+        selectionFilter =
+            (SELECTION_FILTER)
+            sumAndWrap(selectionFilter, -1, N_SELECTION_FILTERS);
+    }
+    
+    string finalStatusText = "Set selection filter to ";
+    switch(selectionFilter) {
+    case SELECTION_FILTER_SECTORS: {
+        finalStatusText += "sectors + edges + vertexes";
+        break;
+    } case SELECTION_FILTER_EDGES: {
+        finalStatusText += "edges + vertexes";
+        break;
+    } case SELECTION_FILTER_VERTEXES: {
+        finalStatusText += "vertexes";
+        break;
+    } case N_SELECTION_FILTERS: {
+        break;
+    }
+    }
+    finalStatusText += ".";
+    setStatus(finalStatusText);
 }
 
 
@@ -3457,6 +3278,39 @@ void AreaEditor::setStateFromUndoOrRedoHistory(Area* state) {
 
 
 /**
+ * @brief Sets up the editor for a new area,
+ * be it from an existing file or from scratch, after the actual creation/load
+ * takes place.
+ */
+void AreaEditor::setupForNewAreaPost() {
+    clearUndoHistory();
+    updateUndoHistory();
+    updateAllEdgeOffsetCaches();
+}
+
+
+/**
+ * @brief Sets up the editor for a new area,
+ * be it from an existing file or from scratch, before the actual creation/load
+ * takes place.
+ */
+void AreaEditor::setupForNewAreaPre() {
+    clearCurrentArea();
+    manifest.clear();
+    
+    game.editorsView.cam.zoom = 1.0f;
+    game.editorsView.cam.pos = Point();
+    
+    state = EDITOR_STATE_MAIN;
+    
+    //At this point we'll have nearly unloaded some assets like the thumbnail.
+    //Since Dear ImGui still hasn't rendered the current frame, which could
+    //have had those assets visible, if it tries now it'll crash. So skip.
+    game.skipDearImGuiFrame = true;
+}
+
+
+/**
  * @brief Sets up the editor's logic to split a sector.
  */
 void AreaEditor::setupSectorSplit() {
@@ -3507,35 +3361,43 @@ void AreaEditor::setupSectorSplit() {
 
 
 /**
- * @brief Sets up the editor for a new area,
- * be it from an existing file or from scratch, after the actual creation/load
- * takes place.
+ * @brief Code to run for the snap mode command.
+ *
+ * @param inputValue Value of the player input for the command.
  */
-void AreaEditor::setupForNewAreaPost() {
-    clearUndoHistory();
-    updateUndoHistory();
-    updateAllEdgeOffsetCaches();
-}
-
-
-/**
- * @brief Sets up the editor for a new area,
- * be it from an existing file or from scratch, before the actual creation/load
- * takes place.
- */
-void AreaEditor::setupForNewAreaPre() {
-    clearCurrentArea();
-    manifest.clear();
+void AreaEditor::snapModeCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
     
-    game.editorsView.cam.zoom = 1.0f;
-    game.editorsView.cam.pos = Point();
+    if(!isShiftPressed) {
+        game.options.areaEd.snapMode =
+            (AreaEditor::SNAP_MODE)
+            sumAndWrap(game.options.areaEd.snapMode, 1, N_SNAP_MODES);
+    } else {
+        game.options.areaEd.snapMode =
+            (AreaEditor::SNAP_MODE)
+            sumAndWrap(game.options.areaEd.snapMode, -1, N_SNAP_MODES);
+    }
     
-    state = EDITOR_STATE_MAIN;
-    
-    //At this point we'll have nearly unloaded some assets like the thumbnail.
-    //Since Dear ImGui still hasn't rendered the current frame, which could
-    //have had those assets visible, if it tries now it'll crash. So skip.
-    game.skipDearImGuiFrame = true;
+    string finalStatusText = "Set snap mode to ";
+    switch(game.options.areaEd.snapMode) {
+    case SNAP_MODE_GRID: {
+        finalStatusText += "grid";
+        break;
+    } case SNAP_MODE_VERTEXES: {
+        finalStatusText += "vertexes";
+        break;
+    } case SNAP_MODE_EDGES: {
+        finalStatusText += "edges";
+        break;
+    } case SNAP_MODE_NOTHING: {
+        finalStatusText += "nothing";
+        break;
+    } case N_SNAP_MODES: {
+        break;
+    }
+    }
+    finalStatusText += ".";
+    setStatus(finalStatusText);
 }
 
 
@@ -3737,6 +3599,26 @@ void AreaEditor::undo() {
     undoHistory.pop_front();
     
     setStatus("Undo successful: " + operationName + ".");
+}
+
+
+/**
+ * @brief Code to run for the undo command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::undoCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    if(
+        subState != EDITOR_SUB_STATE_NONE ||
+        moving || selecting || curTransformationWidget.isMovingHandle()
+    ) {
+        setStatus("Can't undo in the middle of an operation!", true);
+        return;
+    }
+    
+    undo();
 }
 
 
@@ -4003,6 +3885,124 @@ void AreaEditor::updateVertexSelection() {
     selectionOrigCenter = selectionCenter;
     selectionOrigSize = selectionSize;
     selectionOrigAngle = selectionAngle;
+}
+
+
+/**
+ * @brief Code to run for the zoom and position reset command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::zoomAndPosResetCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    if(game.editorsView.cam.targetZoom == 1.0f) {
+        game.editorsView.cam.targetPos = Point();
+    } else {
+        game.editorsView.cam.targetZoom = 1.0f;
+    }
+}
+
+
+/**
+ * @brief Code to run for the zoom everything command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::zoomEverythingCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    bool gotSomething = false;
+    Point minCoords, maxCoords;
+    
+    for(size_t v = 0; v < game.curAreaData->vertexes.size(); v++) {
+        Vertex* vPtr = game.curAreaData->vertexes[v];
+        if(vPtr->x < minCoords.x || !gotSomething) {
+            minCoords.x = vPtr->x;
+        }
+        if(vPtr->y < minCoords.y || !gotSomething) {
+            minCoords.y = vPtr->y;
+        }
+        if(vPtr->x > maxCoords.x || !gotSomething) {
+            maxCoords.x = vPtr->x;
+        }
+        if(vPtr->y > maxCoords.y || !gotSomething) {
+            maxCoords.y = vPtr->y;
+        }
+        gotSomething = true;
+    }
+    
+    for(size_t m = 0; m < game.curAreaData->mobGenerators.size(); m++) {
+        MobGen* mPtr = game.curAreaData->mobGenerators[m];
+        if(mPtr->pos.x < minCoords.x || !gotSomething) {
+            minCoords.x = mPtr->pos.x;
+        }
+        if(mPtr->pos.y < minCoords.y || !gotSomething) {
+            minCoords.y = mPtr->pos.y;
+        }
+        if(mPtr->pos.x > maxCoords.x || !gotSomething) {
+            maxCoords.x = mPtr->pos.x;
+        }
+        if(mPtr->pos.y > maxCoords.y || !gotSomething) {
+            maxCoords.y = mPtr->pos.y;
+        }
+        gotSomething = true;
+    }
+    
+    for(size_t s = 0; s < game.curAreaData->pathStops.size(); s++) {
+        PathStop* sPtr = game.curAreaData->pathStops[s];
+        if(sPtr->pos.x < minCoords.x || !gotSomething) {
+            minCoords.x = sPtr->pos.x;
+        }
+        if(sPtr->pos.y < minCoords.y || !gotSomething) {
+            minCoords.y = sPtr->pos.y;
+        }
+        if(sPtr->pos.x > maxCoords.x || !gotSomething) {
+            maxCoords.x = sPtr->pos.x;
+        }
+        if(sPtr->pos.y > maxCoords.y || !gotSomething) {
+            maxCoords.y = sPtr->pos.y;
+        }
+        gotSomething = true;
+    }
+    
+    if(!gotSomething) return;
+    
+    centerCamera(minCoords, maxCoords);
+}
+
+
+/**
+ * @brief Code to run for the zoom in command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::zoomInCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    game.editorsView.cam.targetZoom =
+        std::clamp(
+            game.editorsView.cam.targetZoom +
+            game.editorsView.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
+            zoomMinLevel, zoomMaxLevel
+        );
+}
+
+
+/**
+ * @brief Code to run for the zoom out command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::zoomOutCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    game.editorsView.cam.targetZoom =
+        std::clamp(
+            game.editorsView.cam.targetZoom -
+            game.editorsView.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
+            zoomMinLevel, zoomMaxLevel
+        );
 }
 
 

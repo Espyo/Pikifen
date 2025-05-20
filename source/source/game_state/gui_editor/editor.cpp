@@ -293,6 +293,58 @@ string GuiEditor::getOpenedContentPath() const {
 
 
 /**
+ * @brief Code to run for the grid interval decrease command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void GuiEditor::gridIntervalDecreaseCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    float newGridInterval = GUI_EDITOR::GRID_INTERVALS[0];
+    for(size_t i = 0; i < GUI_EDITOR::GRID_INTERVALS.size(); i++) {
+        if(
+            GUI_EDITOR::GRID_INTERVALS[i] >=
+            game.options.guiEd.gridInterval
+        ) {
+            break;
+        }
+        newGridInterval = GUI_EDITOR::GRID_INTERVALS[i];
+    }
+    game.options.guiEd.gridInterval = newGridInterval;
+    setStatus(
+        "Decreased grid interval to " +
+        f2s(game.options.guiEd.gridInterval) + "."
+    );
+}
+
+
+/**
+ * @brief Code to run for the grid interval increase command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void GuiEditor::gridIntervalIncreaseCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    float newGridInterval = GUI_EDITOR::GRID_INTERVALS.back();
+    for(int i = (int) (GUI_EDITOR::GRID_INTERVALS.size() - 1); i >= 0; --i) {
+        if(
+            GUI_EDITOR::GRID_INTERVALS[i] <=
+            game.options.guiEd.gridInterval
+        ) {
+            break;
+        }
+        newGridInterval = GUI_EDITOR::GRID_INTERVALS[i];
+    }
+    game.options.guiEd.gridInterval = newGridInterval;
+    setStatus(
+        "Increased grid interval to " +
+        f2s(game.options.guiEd.gridInterval) + "."
+    );
+}
+
+
+/**
  * @brief Loads the GUI editor.
  */
 void GuiEditor::load() {
@@ -318,6 +370,23 @@ void GuiEditor::load() {
     } else {
         openLoadDialog();
     }
+}
+
+
+/**
+ * @brief Code to run for the load command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void GuiEditor::loadCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    changesMgr.askIfUnsaved(
+        loadWidgetPos,
+        "loading a file", "load",
+        std::bind(&GuiEditor::openLoadDialog, this),
+        std::bind(&GuiEditor::saveGuiDef, this)
+    );
 }
 
 
@@ -423,75 +492,6 @@ void GuiEditor::pickGuiDefFile(
 
 
 /**
- * @brief Code to run for the grid interval decrease command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void GuiEditor::gridIntervalDecreaseCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    float newGridInterval = GUI_EDITOR::GRID_INTERVALS[0];
-    for(size_t i = 0; i < GUI_EDITOR::GRID_INTERVALS.size(); i++) {
-        if(
-            GUI_EDITOR::GRID_INTERVALS[i] >=
-            game.options.guiEd.gridInterval
-        ) {
-            break;
-        }
-        newGridInterval = GUI_EDITOR::GRID_INTERVALS[i];
-    }
-    game.options.guiEd.gridInterval = newGridInterval;
-    setStatus(
-        "Decreased grid interval to " +
-        f2s(game.options.guiEd.gridInterval) + "."
-    );
-}
-
-
-/**
- * @brief Code to run for the grid interval increase command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void GuiEditor::gridIntervalIncreaseCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    float newGridInterval = GUI_EDITOR::GRID_INTERVALS.back();
-    for(int i = (int) (GUI_EDITOR::GRID_INTERVALS.size() - 1); i >= 0; --i) {
-        if(
-            GUI_EDITOR::GRID_INTERVALS[i] <=
-            game.options.guiEd.gridInterval
-        ) {
-            break;
-        }
-        newGridInterval = GUI_EDITOR::GRID_INTERVALS[i];
-    }
-    game.options.guiEd.gridInterval = newGridInterval;
-    setStatus(
-        "Increased grid interval to " +
-        f2s(game.options.guiEd.gridInterval) + "."
-    );
-}
-
-
-/**
- * @brief Code to run for the load command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void GuiEditor::loadCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    changesMgr.askIfUnsaved(
-        loadWidgetPos,
-        "loading a file", "load",
-        std::bind(&GuiEditor::openLoadDialog, this),
-        std::bind(&GuiEditor::saveGuiDef, this)
-    );
-}
-
-
-/**
  * @brief Code to run for the quit command.
  *
  * @param inputValue Value of the player input for the command.
@@ -546,6 +546,17 @@ void GuiEditor::reloadGuiDefs() {
 
 
 /**
+ * @brief Resets the camera.
+ *
+ * @param instantaneous Whether the camera moves to its spot instantaneously
+ * or not.
+ */
+void GuiEditor::resetCam(bool instantaneous) {
+    centerCamera(Point(0.0f), Point(100.0f), instantaneous);
+}
+
+
+/**
  * @brief Code to run for the save command.
  *
  * @param inputValue Value of the player input for the command.
@@ -556,83 +567,6 @@ void GuiEditor::saveCmd(float inputValue) {
     if(!saveGuiDef()) {
         return;
     }
-}
-
-
-/**
- * @brief Code to run for the snap mode command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void GuiEditor::snapModeCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    game.options.guiEd.snap = !game.options.guiEd.snap;
-    string finalStatusText = "Set snap mode to ";
-    if(game.options.guiEd.snap) {
-        finalStatusText += "nothing";
-    } else {
-        finalStatusText += "grid";
-    }
-    finalStatusText += ".";
-    setStatus(finalStatusText);
-}
-
-
-/**
- * @brief Code to run for the zoom and position reset command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void GuiEditor::zoomAndPosResetCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    resetCam(false);
-}
-
-
-/**
- * @brief Code to run for the zoom in command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void GuiEditor::zoomInCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    game.editorsView.cam.targetZoom =
-        std::clamp(
-            game.editorsView.cam.targetZoom +
-            game.editorsView.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
-            zoomMinLevel, zoomMaxLevel
-        );
-}
-
-
-/**
- * @brief Code to run for the zoom out command.
- *
- * @param inputValue Value of the player input for the command.
- */
-void GuiEditor::zoomOutCmd(float inputValue) {
-    if(inputValue < 0.5f) return;
-    
-    game.editorsView.cam.targetZoom =
-        std::clamp(
-            game.editorsView.cam.targetZoom -
-            game.editorsView.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
-            zoomMinLevel, zoomMaxLevel
-        );
-}
-
-
-/**
- * @brief Resets the camera.
- *
- * @param instantaneous Whether the camera moves to its spot instantaneously
- * or not.
- */
-void GuiEditor::resetCam(bool instantaneous) {
-    centerCamera(Point(0.0f), Point(100.0f), instantaneous);
 }
 
 
@@ -691,6 +625,26 @@ void GuiEditor::setupForNewGuiDef() {
 
 
 /**
+ * @brief Code to run for the snap mode command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void GuiEditor::snapModeCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    game.options.guiEd.snap = !game.options.guiEd.snap;
+    string finalStatusText = "Set snap mode to ";
+    if(game.options.guiEd.snap) {
+        finalStatusText += "nothing";
+    } else {
+        finalStatusText += "grid";
+    }
+    finalStatusText += ".";
+    setStatus(finalStatusText);
+}
+
+
+/**
  * @brief Snaps a point to the nearest available grid spot,
  * or keeps the point as is if Shift is pressed.
  *
@@ -742,4 +696,50 @@ void GuiEditor::unload() {
         CONTENT_TYPE_GUI,
     }
     );
+}
+
+
+/**
+ * @brief Code to run for the zoom and position reset command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void GuiEditor::zoomAndPosResetCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    resetCam(false);
+}
+
+
+/**
+ * @brief Code to run for the zoom in command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void GuiEditor::zoomInCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    game.editorsView.cam.targetZoom =
+        std::clamp(
+            game.editorsView.cam.targetZoom +
+            game.editorsView.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
+            zoomMinLevel, zoomMaxLevel
+        );
+}
+
+
+/**
+ * @brief Code to run for the zoom out command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void GuiEditor::zoomOutCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    game.editorsView.cam.targetZoom =
+        std::clamp(
+            game.editorsView.cam.targetZoom -
+            game.editorsView.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
+            zoomMinLevel, zoomMaxLevel
+        );
 }

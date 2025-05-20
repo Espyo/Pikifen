@@ -4065,19 +4065,6 @@ void PikminFsm::startDying(Mob* m, void* info1, void* info2) {
 
 
 /**
- * @brief When a Pikmin is killed after being knocked down.
- *
- * @param m The mob.
- * @param info1 Unused.
- * @param info2 Unused.
- */
-void PikminFsm::startKnockedDownDying(Mob* m, void* info1, void* info2) {
-    PikminFsm::startDying(m, info1, info2);
-    m->setAnimation(PIKMIN_ANIM_KNOCKED_DOWN_DYING);
-}
-
-
-/**
  * @brief When a Pikmin starts flailing.
  *
  * @param m The mob.
@@ -4136,6 +4123,19 @@ void PikminFsm::startImpactLunge(Mob* m, void* info1, void* info2) {
     
     m->chase(&m->focusedMob->pos, &m->focusedMob->z);
     m->setAnimation(PIKMIN_ANIM_ATTACKING);
+}
+
+
+/**
+ * @brief When a Pikmin is killed after being knocked down.
+ *
+ * @param m The mob.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void PikminFsm::startKnockedDownDying(Mob* m, void* info1, void* info2) {
+    PikminFsm::startDying(m, info1, info2);
+    m->setAnimation(PIKMIN_ANIM_KNOCKED_DOWN_DYING);
 }
 
 

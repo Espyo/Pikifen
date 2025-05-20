@@ -90,6 +90,36 @@ void Area::checkStability() {
 
 
 /**
+ * @brief Cleans up redundant data and such.
+ *
+ * @param outDeletedSectors If not nullptr, whether any sectors got deleted
+ * is returned here.
+ */
+void Area::cleanup(bool* outDeletedSectors) {
+    //Get rid of unused sectors.
+    bool deletedSectors = false;
+    for(size_t s = 0; s < sectors.size(); ) {
+        if(sectors[s]->edges.empty()) {
+            removeSector(s);
+            deletedSectors = true;
+        } else {
+            s++;
+        }
+    }
+    if(outDeletedSectors) *outDeletedSectors = deletedSectors;
+    
+    //And some other cleanup.
+    if(songName == NONE_OPTION) {
+        songName.clear();
+    }
+    if(weatherName == NONE_OPTION) {
+        weatherName.clear();
+    }
+    engineVersion = getEngineVersionString();
+}
+
+
+/**
  * @brief Clears the info of an area map.
  */
 void Area::clear() {
@@ -147,36 +177,6 @@ void Area::clear() {
     
     problems.nonSimples.clear();
     problems.loneEdges.clear();
-}
-
-
-/**
- * @brief Cleans up redundant data and such.
- *
- * @param outDeletedSectors If not nullptr, whether any sectors got deleted
- * is returned here.
- */
-void Area::cleanup(bool* outDeletedSectors) {
-    //Get rid of unused sectors.
-    bool deletedSectors = false;
-    for(size_t s = 0; s < sectors.size(); ) {
-        if(sectors[s]->edges.empty()) {
-            removeSector(s);
-            deletedSectors = true;
-        } else {
-            s++;
-        }
-    }
-    if(outDeletedSectors) *outDeletedSectors = deletedSectors;
-    
-    //And some other cleanup.
-    if(songName == NONE_OPTION) {
-        songName.clear();
-    }
-    if(weatherName == NONE_OPTION) {
-        weatherName.clear();
-    }
-    engineVersion = getEngineVersionString();
 }
 
 
@@ -880,171 +880,6 @@ size_t Area::getNrPathLinks() {
 
 
 /**
- * @brief Loads the area's main data from a data node.
- *
- * @param node Data node to load from.
- * @param level Level to load at.
- */
-void Area::loadMainDataFromDataNode(
-    DataNode* node, CONTENT_LOAD_LEVEL level
-) {
-    //Content metadata.
-    loadMetadataFromDataNode(node);
-    
-    //Area configuration data.
-    ReaderSetter aRS(node);
-    
-    DataNode* weatherNode = nullptr;
-    DataNode* songNode = nullptr;
-    
-    aRS.set("subtitle", subtitle);
-    aRS.set("difficulty", difficulty);
-    aRS.set("spray_amounts", sprayAmounts);
-    aRS.set("song", songName, &songNode);
-    aRS.set("weather", weatherName, &weatherNode);
-    aRS.set("day_time_start", dayTimeStart);
-    aRS.set("day_time_speed", dayTimeSpeed);
-    aRS.set("bg_bmp", bgBmpName);
-    aRS.set("bg_color", bgColor);
-    aRS.set("bg_dist", bgDist);
-    aRS.set("bg_zoom", bgBmpZoom);
-    
-    //Weather.
-    if(level > CONTENT_LOAD_LEVEL_BASIC) {
-        if(weatherName.empty()) {
-            weatherCondition = Weather();
-            
-        } else if(!isInMap(game.content.weatherConditions.list, weatherName)) {
-            game.errors.report(
-                "Unknown weather condition \"" + weatherName + "\"!",
-                weatherNode
-            );
-            weatherCondition = Weather();
-            
-        } else {
-            weatherCondition =
-                game.content.weatherConditions.list[weatherName];
-                
-        }
-        
-        //Song.
-        if(!songName.empty() && !isInMap(game.content.songs.list, songName)) {
-            game.errors.report(
-                "Unknown song \"" + songName + "\"!",
-                songNode
-            );
-        }
-    }
-    
-    if(level >= CONTENT_LOAD_LEVEL_FULL && !bgBmpName.empty()) {
-        bgBmp = game.content.bitmaps.list.get(bgBmpName, node);
-    }
-}
-
-
-/**
- * @brief Loads the area's mission data from a data node.
- *
- * @param node Data node to load from.
- */
-void Area::loadMissionDataFromDataNode(DataNode* node) {
-    mission.failHudPrimaryCond = INVALID;
-    mission.failHudSecondaryCond = INVALID;
-    
-    ReaderSetter mRS(node);
-    
-    string goalStr;
-    string requiredMobsStr;
-    int missionGradingModeInt = MISSION_GRADING_MODE_GOAL;
-    
-    mRS.set("mission_goal", goalStr);
-    mRS.set("mission_goal_amount", mission.goalAmount);
-    mRS.set("mission_goal_all_mobs", mission.goalAllMobs);
-    mRS.set("mission_required_mobs", requiredMobsStr);
-    mRS.set("mission_goal_exit_center", mission.goalExitCenter);
-    mRS.set("mission_goal_exit_size", mission.goalExitSize);
-    mRS.set("mission_fail_conditions", mission.failConditions);
-    mRS.set("mission_fail_too_few_pik_amount", mission.failTooFewPikAmount);
-    mRS.set("mission_fail_too_many_pik_amount", mission.failTooManyPikAmount);
-    mRS.set("mission_fail_pik_killed", mission.failPikKilled);
-    mRS.set("mission_fail_leaders_kod", mission.failLeadersKod);
-    mRS.set("mission_fail_enemies_defeated", mission.failEnemiesDefeated);
-    mRS.set("mission_fail_time_limit", mission.failTimeLimit);
-    mRS.set("mission_fail_hud_primary_cond", mission.failHudPrimaryCond);
-    mRS.set("mission_fail_hud_secondary_cond", mission.failHudSecondaryCond);
-    mRS.set("mission_grading_mode", missionGradingModeInt);
-    mRS.set("mission_points_per_pikmin_born", mission.pointsPerPikminBorn);
-    mRS.set("mission_points_per_pikmin_death", mission.pointsPerPikminDeath);
-    mRS.set("mission_points_per_sec_left", mission.pointsPerSecLeft);
-    mRS.set("mission_points_per_sec_passed", mission.pointsPerSecPassed);
-    mRS.set(
-        "mission_points_per_treasure_point", mission.pointsPerTreasurePoint
-    );
-    mRS.set("mission_points_per_enemy_point", mission.pointsPerEnemyPoint);
-    mRS.set("enemy_points_on_collection", mission.enemyPointsOnCollection);
-    mRS.set("mission_point_loss_data", mission.pointLossData);
-    mRS.set("mission_point_hud_data", mission.pointHudData);
-    mRS.set("mission_starting_points", mission.startingPoints);
-    mRS.set("mission_bronze_req", mission.bronzeReq);
-    mRS.set("mission_silver_req", mission.silverReq);
-    mRS.set("mission_gold_req", mission.goldReq);
-    mRS.set("mission_platinum_req", mission.platinumReq);
-    mRS.set("mission_maker_record", mission.makerRecord);
-    mRS.set("mission_maker_record_date", mission.makerRecordDate);
-    
-    mission.goal = MISSION_GOAL_END_MANUALLY;
-    for(size_t g = 0; g < game.missionGoals.size(); g++) {
-        if(game.missionGoals[g]->getName() == goalStr) {
-            mission.goal = (MISSION_GOAL) g;
-            break;
-        }
-    }
-    vector<string> missionRequiredMobsStr =
-        semicolonListToVector(requiredMobsStr);
-    mission.goalMobIdxs.reserve(
-        missionRequiredMobsStr.size()
-    );
-    for(size_t m = 0; m < missionRequiredMobsStr.size(); m++) {
-        mission.goalMobIdxs.insert(
-            s2i(missionRequiredMobsStr[m])
-        );
-    }
-    mission.gradingMode = (MISSION_GRADING_MODE) missionGradingModeInt;
-    
-    //Automatically turn the pause menu fail condition on/off for convenience.
-    if(mission.goal == MISSION_GOAL_END_MANUALLY) {
-        disableFlag(
-            mission.failConditions,
-            getIdxBitmask(MISSION_FAIL_COND_PAUSE_MENU)
-        );
-    } else {
-        enableFlag(
-            mission.failConditions,
-            getIdxBitmask(MISSION_FAIL_COND_PAUSE_MENU)
-        );
-    }
-    
-    //Automatically turn off the seconds left score criterion for convenience.
-    if(
-        !hasFlag(
-            mission.failConditions,
-            getIdxBitmask(MISSION_FAIL_COND_TIME_LIMIT)
-        )
-    ) {
-        mission.pointsPerSecLeft = 0;
-        disableFlag(
-            mission.pointHudData,
-            getIdxBitmask(MISSION_SCORE_CRITERIA_SEC_LEFT)
-        );
-        disableFlag(
-            mission.pointLossData,
-            getIdxBitmask(MISSION_SCORE_CRITERIA_SEC_LEFT)
-        );
-    }
-}
-
-
-/**
  * @brief Loads the area's geometry from a data node.
  *
  * @param node Data node to load from.
@@ -1378,6 +1213,171 @@ void Area::loadGeometryFromDataNode(
     
     if(game.perfMon) {
         game.perfMon->finishMeasurement();
+    }
+}
+
+
+/**
+ * @brief Loads the area's main data from a data node.
+ *
+ * @param node Data node to load from.
+ * @param level Level to load at.
+ */
+void Area::loadMainDataFromDataNode(
+    DataNode* node, CONTENT_LOAD_LEVEL level
+) {
+    //Content metadata.
+    loadMetadataFromDataNode(node);
+    
+    //Area configuration data.
+    ReaderSetter aRS(node);
+    
+    DataNode* weatherNode = nullptr;
+    DataNode* songNode = nullptr;
+    
+    aRS.set("subtitle", subtitle);
+    aRS.set("difficulty", difficulty);
+    aRS.set("spray_amounts", sprayAmounts);
+    aRS.set("song", songName, &songNode);
+    aRS.set("weather", weatherName, &weatherNode);
+    aRS.set("day_time_start", dayTimeStart);
+    aRS.set("day_time_speed", dayTimeSpeed);
+    aRS.set("bg_bmp", bgBmpName);
+    aRS.set("bg_color", bgColor);
+    aRS.set("bg_dist", bgDist);
+    aRS.set("bg_zoom", bgBmpZoom);
+    
+    //Weather.
+    if(level > CONTENT_LOAD_LEVEL_BASIC) {
+        if(weatherName.empty()) {
+            weatherCondition = Weather();
+            
+        } else if(!isInMap(game.content.weatherConditions.list, weatherName)) {
+            game.errors.report(
+                "Unknown weather condition \"" + weatherName + "\"!",
+                weatherNode
+            );
+            weatherCondition = Weather();
+            
+        } else {
+            weatherCondition =
+                game.content.weatherConditions.list[weatherName];
+                
+        }
+        
+        //Song.
+        if(!songName.empty() && !isInMap(game.content.songs.list, songName)) {
+            game.errors.report(
+                "Unknown song \"" + songName + "\"!",
+                songNode
+            );
+        }
+    }
+    
+    if(level >= CONTENT_LOAD_LEVEL_FULL && !bgBmpName.empty()) {
+        bgBmp = game.content.bitmaps.list.get(bgBmpName, node);
+    }
+}
+
+
+/**
+ * @brief Loads the area's mission data from a data node.
+ *
+ * @param node Data node to load from.
+ */
+void Area::loadMissionDataFromDataNode(DataNode* node) {
+    mission.failHudPrimaryCond = INVALID;
+    mission.failHudSecondaryCond = INVALID;
+    
+    ReaderSetter mRS(node);
+    
+    string goalStr;
+    string requiredMobsStr;
+    int missionGradingModeInt = MISSION_GRADING_MODE_GOAL;
+    
+    mRS.set("mission_goal", goalStr);
+    mRS.set("mission_goal_amount", mission.goalAmount);
+    mRS.set("mission_goal_all_mobs", mission.goalAllMobs);
+    mRS.set("mission_required_mobs", requiredMobsStr);
+    mRS.set("mission_goal_exit_center", mission.goalExitCenter);
+    mRS.set("mission_goal_exit_size", mission.goalExitSize);
+    mRS.set("mission_fail_conditions", mission.failConditions);
+    mRS.set("mission_fail_too_few_pik_amount", mission.failTooFewPikAmount);
+    mRS.set("mission_fail_too_many_pik_amount", mission.failTooManyPikAmount);
+    mRS.set("mission_fail_pik_killed", mission.failPikKilled);
+    mRS.set("mission_fail_leaders_kod", mission.failLeadersKod);
+    mRS.set("mission_fail_enemies_defeated", mission.failEnemiesDefeated);
+    mRS.set("mission_fail_time_limit", mission.failTimeLimit);
+    mRS.set("mission_fail_hud_primary_cond", mission.failHudPrimaryCond);
+    mRS.set("mission_fail_hud_secondary_cond", mission.failHudSecondaryCond);
+    mRS.set("mission_grading_mode", missionGradingModeInt);
+    mRS.set("mission_points_per_pikmin_born", mission.pointsPerPikminBorn);
+    mRS.set("mission_points_per_pikmin_death", mission.pointsPerPikminDeath);
+    mRS.set("mission_points_per_sec_left", mission.pointsPerSecLeft);
+    mRS.set("mission_points_per_sec_passed", mission.pointsPerSecPassed);
+    mRS.set(
+        "mission_points_per_treasure_point", mission.pointsPerTreasurePoint
+    );
+    mRS.set("mission_points_per_enemy_point", mission.pointsPerEnemyPoint);
+    mRS.set("enemy_points_on_collection", mission.enemyPointsOnCollection);
+    mRS.set("mission_point_loss_data", mission.pointLossData);
+    mRS.set("mission_point_hud_data", mission.pointHudData);
+    mRS.set("mission_starting_points", mission.startingPoints);
+    mRS.set("mission_bronze_req", mission.bronzeReq);
+    mRS.set("mission_silver_req", mission.silverReq);
+    mRS.set("mission_gold_req", mission.goldReq);
+    mRS.set("mission_platinum_req", mission.platinumReq);
+    mRS.set("mission_maker_record", mission.makerRecord);
+    mRS.set("mission_maker_record_date", mission.makerRecordDate);
+    
+    mission.goal = MISSION_GOAL_END_MANUALLY;
+    for(size_t g = 0; g < game.missionGoals.size(); g++) {
+        if(game.missionGoals[g]->getName() == goalStr) {
+            mission.goal = (MISSION_GOAL) g;
+            break;
+        }
+    }
+    vector<string> missionRequiredMobsStr =
+        semicolonListToVector(requiredMobsStr);
+    mission.goalMobIdxs.reserve(
+        missionRequiredMobsStr.size()
+    );
+    for(size_t m = 0; m < missionRequiredMobsStr.size(); m++) {
+        mission.goalMobIdxs.insert(
+            s2i(missionRequiredMobsStr[m])
+        );
+    }
+    mission.gradingMode = (MISSION_GRADING_MODE) missionGradingModeInt;
+    
+    //Automatically turn the pause menu fail condition on/off for convenience.
+    if(mission.goal == MISSION_GOAL_END_MANUALLY) {
+        disableFlag(
+            mission.failConditions,
+            getIdxBitmask(MISSION_FAIL_COND_PAUSE_MENU)
+        );
+    } else {
+        enableFlag(
+            mission.failConditions,
+            getIdxBitmask(MISSION_FAIL_COND_PAUSE_MENU)
+        );
+    }
+    
+    //Automatically turn off the seconds left score criterion for convenience.
+    if(
+        !hasFlag(
+            mission.failConditions,
+            getIdxBitmask(MISSION_FAIL_COND_TIME_LIMIT)
+        )
+    ) {
+        mission.pointsPerSecLeft = 0;
+        disableFlag(
+            mission.pointHudData,
+            getIdxBitmask(MISSION_SCORE_CRITERIA_SEC_LEFT)
+        );
+        disableFlag(
+            mission.pointLossData,
+            getIdxBitmask(MISSION_SCORE_CRITERIA_SEC_LEFT)
+        );
     }
 }
 

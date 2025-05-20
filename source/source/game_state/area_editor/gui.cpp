@@ -430,104 +430,6 @@ void AreaEditor::processGuiLoadDialog() {
 
 
 /**
- * @brief Processes the Dear ImGui "new" dialog for this frame.
- */
-void AreaEditor::processGuiNewDialog() {
-    string problem;
-    bool hitCreateButton = false;
-    
-    //Pack widgets.
-    processGuiNewDialogPackWidgets(&newDialog.pack);
-    
-    //Internal name input.
-    ImGui::Spacer();
-    ImGui::FocusOnInputText(newDialog.needsTextFocus);
-    if(
-        monoInputText(
-            "Internal name", &newDialog.internalName,
-            ImGuiInputTextFlags_EnterReturnsTrue
-        )
-    ) {
-        hitCreateButton = true;
-    }
-    setTooltip(
-        "Internal name of the new area.\n"
-        "Remember to keep it simple, type in lowercase, and use underscores!"
-    );
-    
-    //Simple area radio.
-    ImGui::Spacer();
-    ImGui::RadioButton("Simple area", &newDialog.type, AREA_TYPE_SIMPLE);
-    setTooltip("Choose this to make your area a simple area.");
-    
-    //Mission area radio.
-    ImGui::SameLine();
-    ImGui::RadioButton("Mission", &newDialog.type, AREA_TYPE_MISSION);
-    setTooltip("Choose this to make your area a mission area.");
-    
-    //Check if everything's ok.
-    ContentManifest tempMan;
-    tempMan.pack = newDialog.pack;
-    tempMan.internalName = newDialog.internalName;
-    newDialog.areaPath =
-        game.content.areas.manifestToPath(
-            tempMan, (AREA_TYPE) newDialog.type
-        );
-    if(newDialog.lastCheckedAreaPath != newDialog.areaPath) {
-        newDialog.areaPathExists = folderExists(newDialog.areaPath);
-        newDialog.lastCheckedAreaPath = newDialog.areaPath;
-    }
-    
-    if(newDialog.internalName.empty()) {
-        problem = "You have to type an internal name first!";
-    } else if(!isInternalNameGood(newDialog.internalName)) {
-        problem =
-            "The internal name should only have lowercase letters,\n"
-            "numbers, and underscores!";
-    } else if(newDialog.areaPathExists) {
-        problem =
-            "There is already an area of that type with\n"
-            "that internal name in that pack!";
-    }
-    
-    //Create button.
-    ImGui::Spacer();
-    ImGui::SetupCentering(100);
-    if(!problem.empty()) {
-        ImGui::BeginDisabled();
-    }
-    if(ImGui::Button("Create area", ImVec2(100, 40))) {
-        hitCreateButton = true;
-    }
-    if(!problem.empty()) {
-        ImGui::EndDisabled();
-    }
-    setTooltip(
-        problem.empty() ? "Create the area!" : problem
-    );
-    
-    //Creation logic.
-    if(hitCreateButton) {
-        if(!problem.empty()) return;
-        auto reallyCreate = [this] () {
-            createArea(newDialog.areaPath);
-            closeTopDialog();
-            closeTopDialog(); //Close the load dialog.
-        };
-        
-        if(
-            newDialog.pack == FOLDER_NAMES::BASE_PACK &&
-            !game.options.advanced.engineDev
-        ) {
-            openBaseContentWarningDialog(reallyCreate);
-        } else {
-            reallyCreate();
-        }
-    }
-}
-
-
-/**
  * @brief Processes the Dear ImGui menu bar for this frame.
  */
 void AreaEditor::processGuiMenuBar() {
@@ -1127,6 +1029,104 @@ void AreaEditor::processGuiMobScriptVars(MobGen* mPtr) {
         "wrong format will be removed.\n"
         "Format example: \"sleep=y;jumping=n\"."
     );
+}
+
+
+/**
+ * @brief Processes the Dear ImGui "new" dialog for this frame.
+ */
+void AreaEditor::processGuiNewDialog() {
+    string problem;
+    bool hitCreateButton = false;
+    
+    //Pack widgets.
+    processGuiNewDialogPackWidgets(&newDialog.pack);
+    
+    //Internal name input.
+    ImGui::Spacer();
+    ImGui::FocusOnInputText(newDialog.needsTextFocus);
+    if(
+        monoInputText(
+            "Internal name", &newDialog.internalName,
+            ImGuiInputTextFlags_EnterReturnsTrue
+        )
+    ) {
+        hitCreateButton = true;
+    }
+    setTooltip(
+        "Internal name of the new area.\n"
+        "Remember to keep it simple, type in lowercase, and use underscores!"
+    );
+    
+    //Simple area radio.
+    ImGui::Spacer();
+    ImGui::RadioButton("Simple area", &newDialog.type, AREA_TYPE_SIMPLE);
+    setTooltip("Choose this to make your area a simple area.");
+    
+    //Mission area radio.
+    ImGui::SameLine();
+    ImGui::RadioButton("Mission", &newDialog.type, AREA_TYPE_MISSION);
+    setTooltip("Choose this to make your area a mission area.");
+    
+    //Check if everything's ok.
+    ContentManifest tempMan;
+    tempMan.pack = newDialog.pack;
+    tempMan.internalName = newDialog.internalName;
+    newDialog.areaPath =
+        game.content.areas.manifestToPath(
+            tempMan, (AREA_TYPE) newDialog.type
+        );
+    if(newDialog.lastCheckedAreaPath != newDialog.areaPath) {
+        newDialog.areaPathExists = folderExists(newDialog.areaPath);
+        newDialog.lastCheckedAreaPath = newDialog.areaPath;
+    }
+    
+    if(newDialog.internalName.empty()) {
+        problem = "You have to type an internal name first!";
+    } else if(!isInternalNameGood(newDialog.internalName)) {
+        problem =
+            "The internal name should only have lowercase letters,\n"
+            "numbers, and underscores!";
+    } else if(newDialog.areaPathExists) {
+        problem =
+            "There is already an area of that type with\n"
+            "that internal name in that pack!";
+    }
+    
+    //Create button.
+    ImGui::Spacer();
+    ImGui::SetupCentering(100);
+    if(!problem.empty()) {
+        ImGui::BeginDisabled();
+    }
+    if(ImGui::Button("Create area", ImVec2(100, 40))) {
+        hitCreateButton = true;
+    }
+    if(!problem.empty()) {
+        ImGui::EndDisabled();
+    }
+    setTooltip(
+        problem.empty() ? "Create the area!" : problem
+    );
+    
+    //Creation logic.
+    if(hitCreateButton) {
+        if(!problem.empty()) return;
+        auto reallyCreate = [this] () {
+            createArea(newDialog.areaPath);
+            closeTopDialog();
+            closeTopDialog(); //Close the load dialog.
+        };
+        
+        if(
+            newDialog.pack == FOLDER_NAMES::BASE_PACK &&
+            !game.options.advanced.engineDev
+        ) {
+            openBaseContentWarningDialog(reallyCreate);
+        } else {
+            reallyCreate();
+        }
+    }
 }
 
 

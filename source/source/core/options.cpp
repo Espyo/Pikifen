@@ -227,6 +227,24 @@ const float GRID_INTERVAL = 32.0f;
 
 
 /**
+ * @brief Loads an editor's history from a string in the options file.
+ *
+ * @param str The string.
+ * @return Vector with the history.
+ */
+vector<pair<string, string> > Options::loadEditorHistory(
+    const string &str
+) const {
+    vector<pair<string, string> > result;
+    vector<string> parts = semicolonListToVector(str);
+    for(size_t e = 0; e < parts.size(); e += 2) {
+        result.push_back(make_pair(parts[e], parts[e + 1]));
+    }
+    return result;
+}
+
+
+/**
  * @brief Loads the player options from a file.
  *
  * @param file File to read from.
@@ -468,24 +486,6 @@ void Options::loadFromDataNode(DataNode* file) {
         
         partEd.history = loadEditorHistory(historyStr);
     }
-}
-
-
-/**
- * @brief Loads an editor's history from a string in the options file.
- *
- * @param str The string.
- * @return Vector with the history.
- */
-vector<pair<string, string> > Options::loadEditorHistory(
-    const string &str
-) const {
-    vector<pair<string, string> > result;
-    vector<string> parts = semicolonListToVector(str);
-    for(size_t e = 0; e < parts.size(); e += 2) {
-        result.push_back(make_pair(parts[e], parts[e + 1]));
-    }
-    return result;
 }
 
 
