@@ -483,487 +483,227 @@ void AreaEditor::handleLmbDoubleClick(const ALLEGRO_EVENT &ev) {
 void AreaEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
     switch(state) {
     case EDITOR_STATE_GAMEPLAY: {
-
-        if(subState == EDITOR_SUB_STATE_MISSION_EXIT) {
-            curTransformationWidget.handleMouseDown(
-                game.editorsView.cursorWorldPos,
-                &game.curAreaData->mission.goalExitCenter,
-                &game.curAreaData->mission.goalExitSize,
-                nullptr,
-                1.0f / game.editorsView.cam.zoom
-            );
-        }
+        handleLmbDownGameplay(ev);
         break;
         
     }
     case EDITOR_STATE_LAYOUT: {
-
-        switch(subState) {
-        case EDITOR_SUB_STATE_DRAWING: {
-    
-            //Drawing the layout.
-            Point hotspot = snapPoint(game.editorsView.cursorWorldPos);
-            
-            //First, check if the user is trying to undo the previous node.
-            if(
-                !drawingNodes.empty() &&
-                Distance(
-                    hotspot,
-                    Point(
-                        drawingNodes.back().snappedSpot.x,
-                        drawingNodes.back().snappedSpot.y
-                    )
-                ) <= AREA_EDITOR::VERTEX_MERGE_RADIUS / game.editorsView.cam.zoom
-            ) {
-                undoLayoutDrawingNode();
-                return;
-            }
-            
-            if(drawingNodes.empty()) {
-                //First node.
-                drawingNodes.push_back(LayoutDrawingNode(this, hotspot));
-                
-            } else {
-            
-                checkDrawingLine(hotspot);
-                
-                bool needsReverse = false;
-                if(drawingLineResult == DRAWING_LINE_RESULT_HIT_EDGE_OR_VERTEX) {
-                    //Instead of throwing an error, let's swap the order around.
-                    needsReverse = true;
-                    drawingLineResult = DRAWING_LINE_RESULT_OK;
-                }
-                
-                if(drawingLineResult != DRAWING_LINE_RESULT_OK) {
-                    handleLineError();
-                    
-                } else if(
-                    Distance(hotspot, drawingNodes.begin()->snappedSpot) <=
-                    AREA_EDITOR::VERTEX_MERGE_RADIUS / game.editorsView.cam.zoom
-                ) {
-                    //Back to the first vertex. Finish the drawing.
-                    finishNewSectorDrawing();
-                    
-                } else {
-                    //Add a new node.
-                    drawingNodes.push_back(LayoutDrawingNode(this, hotspot));
-                    
-                    if(needsReverse) {
-                        //This is now a sector split drawing.
-                        std::reverse(
-                            drawingNodes.begin(), drawingNodes.end()
-                        );
-                    }
-                    
-                    if(
-                        drawingNodes.back().onEdge ||
-                        drawingNodes.back().onVertex
-                    ) {
-                        //Split the sector.
-                        setupSectorSplit();
-                        SECTOR_SPLIT_RESULT result =
-                            getSectorSplitEvaluation();
-                        switch(result) {
-                        case SECTOR_SPLIT_RESULT_OK: {
-                            doSectorSplit();
-                            break;
-                            
-                        } case SECTOR_SPLIT_RESULT_INVALID: {
-                            rollbackToPreparedState(
-                                sectorSplitInfo.preSplitAreaData
-                            );
-                            forgetPreparedState(
-                                sectorSplitInfo.preSplitAreaData
-                            );
-                            clearSelection();
-                            clearLayoutDrawing();
-                            subState = EDITOR_SUB_STATE_NONE;
-                            setStatus(
-                                "That's not a valid split!",
-                                true
-                            );
-                            break;
-                            
-                        } case SECTOR_SPLIT_RESULT_USELESS: {
-                            rollbackToPreparedState(
-                                sectorSplitInfo.preSplitAreaData
-                            );
-                            forgetPreparedState(
-                                sectorSplitInfo.preSplitAreaData
-                            );
-                            recreateDrawingNodes();
-                            sectorSplitInfo.uselessSplitPart2Checkpoint =
-                                drawingNodes.size();
-                            updateLayoutDrawingStatusText();
-                            break;
-                        }
-                        }
-                    }
-                }
-            }
-            
-            break;
-            
-        } case EDITOR_SUB_STATE_CIRCLE_SECTOR: {
-    
-            //Create a new circular sector.
-            Point hotspot = snapPoint(game.editorsView.cursorWorldPos);
-            
-            if(newCircleSectorStep == 0) {
-                newCircleSectorCenter = hotspot;
-                newCircleSectorAnchor = newCircleSectorCenter;
-                newCircleSectorStep++;
-                
-            } else if(newCircleSectorStep == 1) {
-                newCircleSectorAnchor = hotspot;
-                setNewCircleSectorPoints();
-                newCircleSectorStep++;
-                
-            } else {
-                setNewCircleSectorPoints();
-                
-                bool allValid = true;
-                for(
-                    size_t e = 0; e < newCircleSectorValidEdges.size(); e++
-                ) {
-                    if(!newCircleSectorValidEdges[e]) {
-                        allValid = false;
-                        break;
-                    }
-                }
-                if(!allValid) {
-                    setStatus("Some lines touch existing edges!", true);
-                } else {
-                    finishCircleSector();
-                }
-                
-            }
-            
-            break;
-            
-        } case EDITOR_SUB_STATE_OCTEE: {
-    
-            moving = true;
-            octeeDragStart = game.editorsView.cursorWorldPos;
-            Sector* sPtr = *selectedSectors.begin();
-            octeeOrigAngle = sPtr->textureInfo.rot;
-            octeeOrigOffset = sPtr->textureInfo.translation;
-            octeeOrigScale = sPtr->textureInfo.scale;
-            
-            break;
-            
-        } case EDITOR_SUB_STATE_NONE: {
-    
-            bool twHandled = false;
-            if(
-                game.options.areaEd.selTrans &&
-                selectedVertexes.size() >= 2
-            ) {
-                twHandled =
-                    curTransformationWidget.handleMouseDown(
-                        game.editorsView.cursorWorldPos,
-                        &selectionCenter,
-                        &selectionSize,
-                        &selectionAngle,
-                        1.0f / game.editorsView.cam.zoom
-                    );
-            }
-            
-            if(!twHandled) {
-            
-                //Start a new layout selection or select something.
-                bool startNewSelection = true;
-                
-                Vertex* clickedVertex = nullptr;
-                Edge* clickedEdge = nullptr;
-                Sector* clickedSector = nullptr;
-                getHoveredLayoutElement(
-                    &clickedVertex, &clickedEdge, &clickedSector
-                );
-                
-                if(!isShiftPressed) {
-                    if(clickedVertex || clickedEdge || clickedSector) {
-                        startNewSelection = false;
-                    }
-                    
-                }
-                
-                if(startNewSelection) {
-                    if(!isCtrlPressed) clearSelection();
-                    selecting = true;
-                    selectionStart = game.editorsView.cursorWorldPos;
-                    selectionEnd = game.editorsView.cursorWorldPos;
-                    
-                } else {
-                
-                    if(clickedVertex) {
-                        if(!isInContainer(selectedVertexes, clickedVertex)) {
-                            if(!isCtrlPressed) {
-                                clearSelection();
-                            }
-                            selectVertex(clickedVertex);
-                        }
-                    } else if(clickedEdge) {
-                        if(!isInContainer(selectedEdges, clickedEdge)) {
-                            if(!isCtrlPressed) {
-                                clearSelection();
-                            }
-                            selectEdge(clickedEdge);
-                        }
-                    } else {
-                        if(!isInContainer(selectedSectors, clickedSector)) {
-                            if(!isCtrlPressed) {
-                                clearSelection();
-                            }
-                            selectSector(clickedSector);
-                        }
-                    }
-                    
-                }
-                
-                selectionHomogenized = false;
-                setSelectionStatusText();
-                
-            }
-            
-            break;
-            
-        }
-        }
-        
+        handleLmbDownLayout(ev);
         break;
         
     } case EDITOR_STATE_MOBS: {
+        handleLmbDownMobs(ev);
+        break;
+        
+    } case EDITOR_STATE_PATHS: {
+        handleLmbDownPaths(ev);
+        break;
+        
+    } case EDITOR_STATE_DETAILS: {
+        handleLmbDownDetails(ev);
+        break;
+        
+    } case EDITOR_STATE_TOOLS: {
+        handleLmbDownTools(ev);
+        break;
+        
+    } case EDITOR_STATE_REVIEW: {
+        handleLmbDownReview(ev);
+        break;
+        
+    }
+    }
+}
 
-        switch(subState) {
-        case EDITOR_SUB_STATE_NEW_MOB: {
-    
-            //Create a mob where the cursor is.
-            createMobUnderCursor();
-            
-            break;
-            
-        } case EDITOR_SUB_STATE_DUPLICATE_MOB: {
-    
-            //Duplicate the current mobs to where the cursor is.
-            registerChange("object duplication");
-            subState = EDITOR_SUB_STATE_NONE;
-            Point hotspot = snapPoint(game.editorsView.cursorWorldPos);
-            
-            Point selectionTL = (*selectedMobs.begin())->pos;
-            Point selectionBR = selectionTL;
-            for(auto m = selectedMobs.begin(); m != selectedMobs.end(); ++m) {
-                if(m == selectedMobs.begin()) continue;
-                if((*m)->pos.x < selectionTL.x) {
-                    selectionTL.x = (*m)->pos.x;
-                }
-                if((*m)->pos.x > selectionBR.x) {
-                    selectionBR.x = (*m)->pos.x;
-                }
-                if((*m)->pos.y < selectionTL.y) {
-                    selectionTL.y = (*m)->pos.y;
-                }
-                if((*m)->pos.y > selectionBR.y) {
-                    selectionBR.y = (*m)->pos.y;
-                }
-            }
-            Point newSelectionCenter = (selectionBR + selectionTL) / 2.0;
-            set<MobGen*> mobsToSelect;
-            
-            for(auto const &m : selectedMobs) {
-                MobGen* newMg = new MobGen(*m);
-                newMg->pos = Point(hotspot + (m->pos) - newSelectionCenter);
-                game.curAreaData->mobGenerators.push_back(newMg);
-                mobsToSelect.insert(newMg);
-            }
-            
-            clearSelection();
-            selectedMobs = mobsToSelect;
-            
-            setStatus(
-                "Duplicated " +
-                amountStr((int) selectedMobs.size(), "object") + "."
-            );
-            
-            break;
-            
-        } case EDITOR_SUB_STATE_STORE_MOB_INSIDE: {
-    
-            //Store the mob inside another.
-            size_t targetIdx;
-            MobGen* target =
-                getMobUnderPoint(game.editorsView.cursorWorldPos, &targetIdx);
-            if(!target) return;
-            
-            for(auto const &m : selectedMobs) {
-                if(m == target) {
-                    setStatus(
-                        "You can't store to an object inside itself!",
-                        true
-                    );
-                    return;
-                }
-            }
-            MobGen* mPtr = *(selectedMobs.begin());
-            if(mPtr->storedInside == targetIdx) {
-                setStatus(
-                    "The object is already stored inside that object!",
-                    true
+
+/**
+ * @brief Handles the left mouse button being pressed in the canvas exclusively,
+ * while in the details mode.
+ *
+ * @param ev Event to handle.
+ */
+void AreaEditor::handleLmbDownDetails(const ALLEGRO_EVENT &ev) {
+    switch(subState) {
+    case EDITOR_SUB_STATE_NEW_SHADOW: {
+
+        //Create a new shadow where the cursor is.
+        registerChange("tree shadow creation");
+        subState = EDITOR_SUB_STATE_NONE;
+        Point hotspot = snapPoint(game.editorsView.cursorWorldPos);
+        
+        TreeShadow* newShadow = new TreeShadow(hotspot);
+        newShadow->bitmap = game.bmpError;
+        
+        game.curAreaData->treeShadows.push_back(newShadow);
+        
+        selectTreeShadow(newShadow);
+        
+        break;
+        
+    } case EDITOR_SUB_STATE_NONE: {
+
+        bool twHandled = false;
+        if(selectedShadow) {
+            twHandled =
+                curTransformationWidget.handleMouseDown(
+                    game.editorsView.cursorWorldPos,
+                    &selectedShadow->center,
+                    &selectedShadow->size,
+                    &selectedShadow->angle,
+                    1.0f / game.editorsView.cam.zoom
                 );
-                return;
-            }
+        }
+        
+        if(!twHandled) {
+            //Select a tree shadow.
+            selectedShadow = nullptr;
+            for(
+                size_t s = 0;
+                s < game.curAreaData->treeShadows.size(); s++
+            ) {
             
-            registerChange("Object in object storing");
-            
-            mPtr->storedInside = targetIdx;
-            
-            homogenizeSelectedMobs();
-            
-            subState = EDITOR_SUB_STATE_NONE;
-            setStatus("Stored the object inside another.");
-            
-            break;
-            
-        } case EDITOR_SUB_STATE_ADD_MOB_LINK: {
-    
-            //Link two mobs.
-            MobGen* target = getMobUnderPoint(game.editorsView.cursorWorldPos);
-            if(!target) return;
-            
-            for(auto const &m : selectedMobs) {
-                if(m == target) {
-                    setStatus(
-                        "You can't link to an object to itself!",
-                        true
-                    );
-                    return;
-                }
-            }
-            MobGen* mPtr = *(selectedMobs.begin());
-            for(size_t l = 0; l < mPtr->links.size(); l++) {
-                if(mPtr->links[l] == target) {
-                    setStatus(
-                        "The object already links to that object!",
-                        true
-                    );
-                    return;
-                }
-            }
-            
-            registerChange("Object link creation");
-            
-            mPtr->links.push_back(target);
-            mPtr->linkIdxs.push_back(
-                game.curAreaData->findMobGenIdx(target)
-            );
-            
-            homogenizeSelectedMobs();
-            
-            subState = EDITOR_SUB_STATE_NONE;
-            setStatus("Linked the two objects.");
-            
-            break;
-            
-        } case EDITOR_SUB_STATE_DEL_MOB_LINK: {
-    
-            //Delete a mob link.
-            MobGen* target = getMobUnderPoint(game.editorsView.cursorWorldPos);
-            MobGen* mPtr = *(selectedMobs.begin());
-            
-            if(!target) {
-                std::pair<MobGen*, MobGen*> data1;
-                std::pair<MobGen*, MobGen*> data2;
-                if(
-                    !getMobLinkUnderPoint(
-                        game.editorsView.cursorWorldPos, &data1, &data2
-                    )
-                ) {
-                    return;
-                }
+                TreeShadow* sPtr = game.curAreaData->treeShadows[s];
+                Point minCoords, maxCoords;
+                getTransformedRectangleBBox(
+                    sPtr->center, sPtr->size, sPtr->angle,
+                    &minCoords, &maxCoords
+                );
                 
                 if(
-                    data1.first != mPtr &&
-                    data1.second != mPtr &&
-                    data2.first != mPtr &&
-                    data2.second != mPtr
+                    game.editorsView.cursorWorldPos.x >= minCoords.x &&
+                    game.editorsView.cursorWorldPos.x <= maxCoords.x &&
+                    game.editorsView.cursorWorldPos.y >= minCoords.y &&
+                    game.editorsView.cursorWorldPos.y <= maxCoords.y
                 ) {
-                    setStatus(
-                        "That link does not belong to the current object!",
-                        true
-                    );
-                    return;
-                }
-                
-                if(data1.first == mPtr) {
-                    target = data1.second;
-                } else if(data2.first == mPtr) {
-                    target = data2.second;
-                }
-            }
-            
-            size_t linkI = 0;
-            for(; linkI < mPtr->links.size(); linkI++) {
-                if(mPtr->links[linkI] == target) {
+                    selectTreeShadow(sPtr);
                     break;
                 }
             }
             
-            if(linkI == mPtr->links.size()) {
-                setStatus(
-                    "That object is not linked by the current one!",
-                    true
-                );
-                return;
-            } else {
-                registerChange("Object link deletion");
-                mPtr->links.erase(mPtr->links.begin() + linkI);
-                mPtr->linkIdxs.erase(mPtr->linkIdxs.begin() + linkI);
-            }
+            setSelectionStatusText();
+        }
+        
+        break;
+        
+    }
+    }
+}
+
+
+/**
+ * @brief Handles the left mouse button being pressed in the canvas exclusively,
+ * while in the gameplay mode.
+ *
+ * @param ev Event to handle.
+ */
+void AreaEditor::handleLmbDownGameplay(const ALLEGRO_EVENT &ev) {
+    if(subState == EDITOR_SUB_STATE_MISSION_EXIT) {
+        curTransformationWidget.handleMouseDown(
+            game.editorsView.cursorWorldPos,
+            &game.curAreaData->mission.goalExitCenter,
+            &game.curAreaData->mission.goalExitSize,
+            nullptr,
+            1.0f / game.editorsView.cam.zoom
+        );
+    }
+}
+
+
+/**
+ * @brief Handles the left mouse button being pressed in the canvas exclusively,
+ * while in the layout mode.
+ *
+ * @param ev Event to handle.
+ */
+void AreaEditor::handleLmbDownLayout(const ALLEGRO_EVENT &ev) {
+    switch(subState) {
+    case EDITOR_SUB_STATE_DRAWING: {
+
+        handleLmbDownLayoutDrawing(ev);
+        break;
+        
+    } case EDITOR_SUB_STATE_CIRCLE_SECTOR: {
+
+        //Create a new circular sector.
+        Point hotspot = snapPoint(game.editorsView.cursorWorldPos);
+        
+        if(newCircleSectorStep == 0) {
+            newCircleSectorCenter = hotspot;
+            newCircleSectorAnchor = newCircleSectorCenter;
+            newCircleSectorStep++;
             
-            homogenizeSelectedMobs();
+        } else if(newCircleSectorStep == 1) {
+            newCircleSectorAnchor = hotspot;
+            setNewCircleSectorPoints();
+            newCircleSectorStep++;
             
-            subState = EDITOR_SUB_STATE_NONE;
-            setStatus("Deleted object link.");
+        } else {
+            setNewCircleSectorPoints();
             
-            break;
-            
-        } case EDITOR_SUB_STATE_MISSION_MOBS: {
-    
-            size_t clickedMobIdx;
-            MobGen* clickedMob =
-                getMobUnderPoint(game.editorsView.cursorWorldPos, &clickedMobIdx);
-                
-            if(
-                clickedMobIdx != INVALID &&
-                game.missionGoals[game.curAreaData->mission.goal]->
-                isMobApplicable(clickedMob->type)
+            bool allValid = true;
+            for(
+                size_t e = 0; e < newCircleSectorValidEdges.size(); e++
             ) {
-                registerChange("mission object requirements change");
-                auto it =
-                    game.curAreaData->mission.goalMobIdxs.find(
-                        clickedMobIdx
-                    );
-                if(it == game.curAreaData->mission.goalMobIdxs.end()) {
-                    game.curAreaData->mission.goalMobIdxs.insert(
-                        clickedMobIdx
-                    );
-                } else {
-                    game.curAreaData->mission.goalMobIdxs.erase(it);
+                if(!newCircleSectorValidEdges[e]) {
+                    allValid = false;
+                    break;
                 }
             }
+            if(!allValid) {
+                setStatus("Some lines touch existing edges!", true);
+            } else {
+                finishCircleSector();
+            }
             
-            break;
-            
-        } case EDITOR_SUB_STATE_NONE: {
-    
-            //Start a new mob selection or select something.
+        }
+        
+        break;
+        
+    } case EDITOR_SUB_STATE_OCTEE: {
+
+        moving = true;
+        octeeDragStart = game.editorsView.cursorWorldPos;
+        Sector* sPtr = *selectedSectors.begin();
+        octeeOrigAngle = sPtr->textureInfo.rot;
+        octeeOrigOffset = sPtr->textureInfo.translation;
+        octeeOrigScale = sPtr->textureInfo.scale;
+        
+        break;
+        
+    } case EDITOR_SUB_STATE_NONE: {
+
+        bool twHandled = false;
+        if(
+            game.options.areaEd.selTrans &&
+            selectedVertexes.size() >= 2
+        ) {
+            twHandled =
+                curTransformationWidget.handleMouseDown(
+                    game.editorsView.cursorWorldPos,
+                    &selectionCenter,
+                    &selectionSize,
+                    &selectionAngle,
+                    1.0f / game.editorsView.cam.zoom
+                );
+        }
+        
+        if(!twHandled) {
+        
+            //Start a new layout selection or select something.
             bool startNewSelection = true;
-            MobGen* clickedMob = getMobUnderPoint(game.editorsView.cursorWorldPos);
+            
+            Vertex* clickedVertex = nullptr;
+            Edge* clickedEdge = nullptr;
+            Sector* clickedSector = nullptr;
+            getHoveredLayoutElement(
+                &clickedVertex, &clickedEdge, &clickedSector
+            );
             
             if(!isShiftPressed) {
-                if(clickedMob) {
+                if(clickedVertex || clickedEdge || clickedSector) {
                     startNewSelection = false;
                 }
+                
             }
             
             if(startNewSelection) {
@@ -973,11 +713,28 @@ void AreaEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
                 selectionEnd = game.editorsView.cursorWorldPos;
                 
             } else {
-                if(!isInContainer(selectedMobs, clickedMob)) {
-                    if(!isCtrlPressed) {
-                        clearSelection();
+            
+                if(clickedVertex) {
+                    if(!isInContainer(selectedVertexes, clickedVertex)) {
+                        if(!isCtrlPressed) {
+                            clearSelection();
+                        }
+                        selectVertex(clickedVertex);
                     }
-                    selectedMobs.insert(clickedMob);
+                } else if(clickedEdge) {
+                    if(!isInContainer(selectedEdges, clickedEdge)) {
+                        if(!isCtrlPressed) {
+                            clearSelection();
+                        }
+                        selectEdge(clickedEdge);
+                    }
+                } else {
+                    if(!isInContainer(selectedSectors, clickedSector)) {
+                        if(!isCtrlPressed) {
+                            clearSelection();
+                        }
+                        selectSector(clickedSector);
+                    }
                 }
                 
             }
@@ -985,133 +742,406 @@ void AreaEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
             selectionHomogenized = false;
             setSelectionStatusText();
             
-            break;
-            
         }
+        break;
+        
+    }
+    }
+}
+
+
+/**
+ * @brief Handles the left mouse button being pressed in the canvas exclusively,
+ * while drawing in the layout mode.
+ *
+ * @param ev Event to handle.
+ */
+void AreaEditor::handleLmbDownLayoutDrawing(const ALLEGRO_EVENT &ev) {
+    //Drawing the layout.
+    Point hotspot = snapPoint(game.editorsView.cursorWorldPos);
+    
+    //First, check if the user is trying to undo the previous node.
+    if(
+        !drawingNodes.empty() &&
+        Distance(
+            hotspot,
+            Point(
+                drawingNodes.back().snappedSpot.x,
+                drawingNodes.back().snappedSpot.y
+            )
+        ) <= AREA_EDITOR::VERTEX_MERGE_RADIUS / game.editorsView.cam.zoom
+    ) {
+        undoLayoutDrawingNode();
+        return;
+    }
+    
+    if(drawingNodes.empty()) {
+        //First node.
+        drawingNodes.push_back(LayoutDrawingNode(this, hotspot));
+        
+    } else {
+    
+        checkDrawingLine(hotspot);
+        
+        bool needsReverse = false;
+        if(drawingLineResult == DRAWING_LINE_RESULT_HIT_EDGE_OR_VERTEX) {
+            //Instead of throwing an error, let's swap the order around.
+            needsReverse = true;
+            drawingLineResult = DRAWING_LINE_RESULT_OK;
+        }
+        
+        if(drawingLineResult != DRAWING_LINE_RESULT_OK) {
+            handleLineError();
+            
+        } else if(
+            Distance(hotspot, drawingNodes.begin()->snappedSpot) <=
+            AREA_EDITOR::VERTEX_MERGE_RADIUS / game.editorsView.cam.zoom
+        ) {
+            //Back to the first vertex. Finish the drawing.
+            finishNewSectorDrawing();
+            
+        } else {
+            //Add a new node.
+            drawingNodes.push_back(LayoutDrawingNode(this, hotspot));
+            
+            if(needsReverse) {
+                //This is now a sector split drawing.
+                std::reverse(
+                    drawingNodes.begin(), drawingNodes.end()
+                );
+            }
+            
+            if(
+                drawingNodes.back().onEdge ||
+                drawingNodes.back().onVertex
+            ) {
+                //Split the sector.
+                setupSectorSplit();
+                SECTOR_SPLIT_RESULT result =
+                    getSectorSplitEvaluation();
+                switch(result) {
+                case SECTOR_SPLIT_RESULT_OK: {
+                    doSectorSplit();
+                    break;
+                    
+                } case SECTOR_SPLIT_RESULT_INVALID: {
+                    rollbackToPreparedState(
+                        sectorSplitInfo.preSplitAreaData
+                    );
+                    forgetPreparedState(
+                        sectorSplitInfo.preSplitAreaData
+                    );
+                    clearSelection();
+                    clearLayoutDrawing();
+                    subState = EDITOR_SUB_STATE_NONE;
+                    setStatus(
+                        "That's not a valid split!",
+                        true
+                    );
+                    break;
+                    
+                } case SECTOR_SPLIT_RESULT_USELESS: {
+                    rollbackToPreparedState(
+                        sectorSplitInfo.preSplitAreaData
+                    );
+                    forgetPreparedState(
+                        sectorSplitInfo.preSplitAreaData
+                    );
+                    recreateDrawingNodes();
+                    sectorSplitInfo.uselessSplitPart2Checkpoint =
+                        drawingNodes.size();
+                    updateLayoutDrawingStatusText();
+                    break;
+                }
+                }
+            }
+        }
+    }
+}
+
+
+/**
+ * @brief Handles the left mouse button being pressed in the canvas exclusively,
+ * while in the mobs mode.
+ *
+ * @param ev Event to handle.
+ */
+void AreaEditor::handleLmbDownMobs(const ALLEGRO_EVENT &ev) {
+    switch(subState) {
+    case EDITOR_SUB_STATE_NEW_MOB: {
+
+        //Create a mob where the cursor is.
+        createMobUnderCursor();
+        
+        break;
+        
+    } case EDITOR_SUB_STATE_DUPLICATE_MOB: {
+
+        //Duplicate the current mobs to where the cursor is.
+        registerChange("object duplication");
+        subState = EDITOR_SUB_STATE_NONE;
+        Point hotspot = snapPoint(game.editorsView.cursorWorldPos);
+        
+        Point selectionTL = (*selectedMobs.begin())->pos;
+        Point selectionBR = selectionTL;
+        for(auto m = selectedMobs.begin(); m != selectedMobs.end(); ++m) {
+            if(m == selectedMobs.begin()) continue;
+            if((*m)->pos.x < selectionTL.x) {
+                selectionTL.x = (*m)->pos.x;
+            }
+            if((*m)->pos.x > selectionBR.x) {
+                selectionBR.x = (*m)->pos.x;
+            }
+            if((*m)->pos.y < selectionTL.y) {
+                selectionTL.y = (*m)->pos.y;
+            }
+            if((*m)->pos.y > selectionBR.y) {
+                selectionBR.y = (*m)->pos.y;
+            }
+        }
+        Point newSelectionCenter = (selectionBR + selectionTL) / 2.0;
+        set<MobGen*> mobsToSelect;
+        
+        for(auto const &m : selectedMobs) {
+            MobGen* newMg = new MobGen(*m);
+            newMg->pos = Point(hotspot + (m->pos) - newSelectionCenter);
+            game.curAreaData->mobGenerators.push_back(newMg);
+            mobsToSelect.insert(newMg);
+        }
+        
+        clearSelection();
+        selectedMobs = mobsToSelect;
+        
+        setStatus(
+            "Duplicated " +
+            amountStr((int) selectedMobs.size(), "object") + "."
+        );
+        
+        break;
+        
+    } case EDITOR_SUB_STATE_STORE_MOB_INSIDE: {
+
+        //Store the mob inside another.
+        size_t targetIdx;
+        MobGen* target =
+            getMobUnderPoint(game.editorsView.cursorWorldPos, &targetIdx);
+        if(!target) return;
+        
+        for(auto const &m : selectedMobs) {
+            if(m == target) {
+                setStatus(
+                    "You can't store to an object inside itself!",
+                    true
+                );
+                return;
+            }
+        }
+        MobGen* mPtr = *(selectedMobs.begin());
+        if(mPtr->storedInside == targetIdx) {
+            setStatus(
+                "The object is already stored inside that object!",
+                true
+            );
+            return;
+        }
+        
+        registerChange("Object in object storing");
+        
+        mPtr->storedInside = targetIdx;
+        
+        homogenizeSelectedMobs();
+        
+        subState = EDITOR_SUB_STATE_NONE;
+        setStatus("Stored the object inside another.");
+        
+        break;
+        
+    } case EDITOR_SUB_STATE_ADD_MOB_LINK: {
+
+        //Link two mobs.
+        MobGen* target = getMobUnderPoint(game.editorsView.cursorWorldPos);
+        if(!target) return;
+        
+        for(auto const &m : selectedMobs) {
+            if(m == target) {
+                setStatus(
+                    "You can't link to an object to itself!",
+                    true
+                );
+                return;
+            }
+        }
+        MobGen* mPtr = *(selectedMobs.begin());
+        for(size_t l = 0; l < mPtr->links.size(); l++) {
+            if(mPtr->links[l] == target) {
+                setStatus(
+                    "The object already links to that object!",
+                    true
+                );
+                return;
+            }
+        }
+        
+        registerChange("Object link creation");
+        
+        mPtr->links.push_back(target);
+        mPtr->linkIdxs.push_back(
+            game.curAreaData->findMobGenIdx(target)
+        );
+        
+        homogenizeSelectedMobs();
+        
+        subState = EDITOR_SUB_STATE_NONE;
+        setStatus("Linked the two objects.");
+        
+        break;
+        
+    } case EDITOR_SUB_STATE_DEL_MOB_LINK: {
+
+        //Delete a mob link.
+        MobGen* target = getMobUnderPoint(game.editorsView.cursorWorldPos);
+        MobGen* mPtr = *(selectedMobs.begin());
+        
+        if(!target) {
+            std::pair<MobGen*, MobGen*> data1;
+            std::pair<MobGen*, MobGen*> data2;
+            if(
+                !getMobLinkUnderPoint(
+                    game.editorsView.cursorWorldPos, &data1, &data2
+                )
+            ) {
+                return;
+            }
+            
+            if(
+                data1.first != mPtr &&
+                data1.second != mPtr &&
+                data2.first != mPtr &&
+                data2.second != mPtr
+            ) {
+                setStatus(
+                    "That link does not belong to the current object!",
+                    true
+                );
+                return;
+            }
+            
+            if(data1.first == mPtr) {
+                target = data1.second;
+            } else if(data2.first == mPtr) {
+                target = data2.second;
+            }
+        }
+        
+        size_t linkI = 0;
+        for(; linkI < mPtr->links.size(); linkI++) {
+            if(mPtr->links[linkI] == target) {
+                break;
+            }
+        }
+        
+        if(linkI == mPtr->links.size()) {
+            setStatus(
+                "That object is not linked by the current one!",
+                true
+            );
+            return;
+        } else {
+            registerChange("Object link deletion");
+            mPtr->links.erase(mPtr->links.begin() + linkI);
+            mPtr->linkIdxs.erase(mPtr->linkIdxs.begin() + linkI);
+        }
+        
+        homogenizeSelectedMobs();
+        
+        subState = EDITOR_SUB_STATE_NONE;
+        setStatus("Deleted object link.");
+        
+        break;
+        
+    } case EDITOR_SUB_STATE_MISSION_MOBS: {
+
+        size_t clickedMobIdx;
+        MobGen* clickedMob =
+            getMobUnderPoint(game.editorsView.cursorWorldPos, &clickedMobIdx);
+            
+        if(
+            clickedMobIdx != INVALID &&
+            game.missionGoals[game.curAreaData->mission.goal]->
+            isMobApplicable(clickedMob->type)
+        ) {
+            registerChange("mission object requirements change");
+            auto it =
+                game.curAreaData->mission.goalMobIdxs.find(
+                    clickedMobIdx
+                );
+            if(it == game.curAreaData->mission.goalMobIdxs.end()) {
+                game.curAreaData->mission.goalMobIdxs.insert(
+                    clickedMobIdx
+                );
+            } else {
+                game.curAreaData->mission.goalMobIdxs.erase(it);
+            }
         }
         
         break;
         
-    } case EDITOR_STATE_PATHS: {
+    } case EDITOR_SUB_STATE_NONE: {
 
-        switch(subState) {
-        case EDITOR_SUB_STATE_PATH_DRAWING: {
-    
-            //Drawing a path.
-            Point hotspot =
-                snapPoint(game.editorsView.cursorWorldPos);
-            PathStop* clickedStop =
-                getPathStopUnderPoint(game.editorsView.cursorWorldPos);
-                
-            //Split a link, if one was clicked.
-            if(!clickedStop) {
-                PathLink* clickedLink1;
-                PathLink* clickedLink2;
-                bool clickedLink =
-                    getPathLinkUnderPoint(
-                        game.editorsView.cursorWorldPos,
-                        &clickedLink1, &clickedLink2
-                    );
-                if(clickedLink) {
-                    registerChange("path link split");
-                    clickedStop =
-                        splitPathLink(
-                            clickedLink1, clickedLink2,
-                            snapPoint(game.editorsView.cursorWorldPos)
-                        );
+        //Start a new mob selection or select something.
+        bool startNewSelection = true;
+        MobGen* clickedMob = getMobUnderPoint(game.editorsView.cursorWorldPos);
+        
+        if(!isShiftPressed) {
+            if(clickedMob) {
+                startNewSelection = false;
+            }
+        }
+        
+        if(startNewSelection) {
+            if(!isCtrlPressed) clearSelection();
+            selecting = true;
+            selectionStart = game.editorsView.cursorWorldPos;
+            selectionEnd = game.editorsView.cursorWorldPos;
+            
+        } else {
+            if(!isInContainer(selectedMobs, clickedMob)) {
+                if(!isCtrlPressed) {
                     clearSelection();
-                    selectedPathStops.insert(clickedStop);
                 }
+                selectedMobs.insert(clickedMob);
             }
             
-            if(pathDrawingStop1) {
-                //A starting stop already exists, so now we create a link.
-                PathStop* nextStop = nullptr;
-                if(clickedStop) {
-                    if(clickedStop == pathDrawingStop1) {
-                        pathDrawingStop1 = nullptr;
-                    } else {
-                        nextStop = clickedStop;
-                    }
-                } else {
-                    registerChange("path stop creation");
-                    nextStop = new PathStop(hotspot);
-                    nextStop->flags = pathDrawingFlags;
-                    nextStop->label = pathDrawingLabel;
-                    game.curAreaData->pathStops.push_back(nextStop);
-                    setStatus("Created path stop.");
-                }
-                
-                if(nextStop) {
-                    registerChange("path stop link");
-                    pathDrawingStop1->addLink(
-                        nextStop, pathDrawingNormals
-                    );
-                    PathLink* l1 = pathDrawingStop1->getLink(nextStop);
-                    PathLink* l2 = nextStop->getLink(pathDrawingStop1);
-                    l1->type = pathDrawingType;
-                    if(l2) {
-                        l2->type = pathDrawingType;
-                    }
-                    game.curAreaData->fixPathStopIdxs(pathDrawingStop1);
-                    game.curAreaData->fixPathStopIdxs(nextStop);
-                    nextStop->calculateDistsPlusNeighbors();
-                    setStatus("Created path link.");
-                    
-                    if(clickedStop) {
-                        pathDrawingStop1 = nullptr;
-                    } else {
-                        pathDrawingStop1 = nextStop;
-                    }
-                }
-                
-            } else {
-                //We need to create or assign a starting stop.
-                if(clickedStop) {
-                    pathDrawingStop1 = clickedStop;
-                } else {
-                    registerChange("path stop creation");
-                    pathDrawingStop1 = new PathStop(hotspot);
-                    pathDrawingStop1->flags = pathDrawingFlags;
-                    pathDrawingStop1->label = pathDrawingLabel;
-                    game.curAreaData->pathStops.push_back(
-                        pathDrawingStop1
-                    );
-                    setStatus("Created path stop.");
-                }
-                
-            }
+        }
+        
+        selectionHomogenized = false;
+        setSelectionStatusText();
+        
+        break;
+        
+    }
+    }
+}
+
+
+/**
+ * @brief Handles the left mouse button being pressed in the canvas exclusively,
+ * while in the paths mode.
+ *
+ * @param ev Event to handle.
+ */
+void AreaEditor::handleLmbDownPaths(const ALLEGRO_EVENT &ev) {
+    switch(subState) {
+    case EDITOR_SUB_STATE_PATH_DRAWING: {
+
+        //Drawing a path.
+        Point hotspot =
+            snapPoint(game.editorsView.cursorWorldPos);
+        PathStop* clickedStop =
+            getPathStopUnderPoint(game.editorsView.cursorWorldPos);
             
-            pathPreview.clear(); //Clear so it doesn't reference deleted stops.
-            pathPreviewTimer.start(false);
-            
-            break;
-            
-        } case EDITOR_SUB_STATE_NONE: {
-    
-            //First, check if the user clicked on a path preview checkpoint.
-            if(showPathPreview) {
-                for(unsigned char c = 0; c < 2; c++) {
-                    if(
-                        BBoxCheck(
-                            pathPreviewCheckpoints[c],
-                            game.editorsView.cursorWorldPos,
-                            AREA_EDITOR::PATH_PREVIEW_CHECKPOINT_RADIUS /
-                            game.editorsView.cam.zoom
-                        )
-                    ) {
-                        clearSelection();
-                        movingPathPreviewCheckpoint = c;
-                        return;
-                    }
-                }
-            }
-            
-            //Start a new path selection or select something.
-            bool startNewSelection = true;
-            
-            PathStop* clickedStop =
-                getPathStopUnderPoint(game.editorsView.cursorWorldPos);
+        //Split a link, if one was clicked.
+        if(!clickedStop) {
             PathLink* clickedLink1;
             PathLink* clickedLink2;
             bool clickedLink =
@@ -1119,154 +1149,199 @@ void AreaEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
                     game.editorsView.cursorWorldPos,
                     &clickedLink1, &clickedLink2
                 );
-            if(!isShiftPressed) {
-                if(clickedStop || clickedLink) {
-                    startNewSelection = false;
-                }
-                
+            if(clickedLink) {
+                registerChange("path link split");
+                clickedStop =
+                    splitPathLink(
+                        clickedLink1, clickedLink2,
+                        snapPoint(game.editorsView.cursorWorldPos)
+                    );
+                clearSelection();
+                selectedPathStops.insert(clickedStop);
             }
-            
-            if(startNewSelection) {
-                if(!isCtrlPressed) clearSelection();
-                selecting = true;
-                selectionStart = game.editorsView.cursorWorldPos;
-                selectionEnd = game.editorsView.cursorWorldPos;
-                
-            } else {
-            
-                if(clickedStop) {
-                    if(!isInContainer(selectedPathStops, clickedStop)) {
-                        if(!isCtrlPressed) {
-                            clearSelection();
-                        }
-                        selectedPathStops.insert(clickedStop);
-                    }
+        }
+        
+        if(pathDrawingStop1) {
+            //A starting stop already exists, so now we create a link.
+            PathStop* nextStop = nullptr;
+            if(clickedStop) {
+                if(clickedStop == pathDrawingStop1) {
+                    pathDrawingStop1 = nullptr;
                 } else {
-                    if(!isInContainer(selectedPathLinks, clickedLink1)) {
-                        if(!isCtrlPressed) {
-                            clearSelection();
-                        }
-                        selectedPathLinks.insert(clickedLink1);
-                        if(clickedLink2 != nullptr) {
-                            selectedPathLinks.insert(clickedLink2);
-                        }
-                    }
+                    nextStop = clickedStop;
                 }
-                
-                setSelectionStatusText();
-                
+            } else {
+                registerChange("path stop creation");
+                nextStop = new PathStop(hotspot);
+                nextStop->flags = pathDrawingFlags;
+                nextStop->label = pathDrawingLabel;
+                game.curAreaData->pathStops.push_back(nextStop);
+                setStatus("Created path stop.");
             }
             
-            break;
-            
-        }
-        }
-        
-        break;
-        
-    } case EDITOR_STATE_DETAILS: {
-
-        switch(subState) {
-        case EDITOR_SUB_STATE_NEW_SHADOW: {
-    
-            //Create a new shadow where the cursor is.
-            registerChange("tree shadow creation");
-            subState = EDITOR_SUB_STATE_NONE;
-            Point hotspot = snapPoint(game.editorsView.cursorWorldPos);
-            
-            TreeShadow* newShadow = new TreeShadow(hotspot);
-            newShadow->bitmap = game.bmpError;
-            
-            game.curAreaData->treeShadows.push_back(newShadow);
-            
-            selectTreeShadow(newShadow);
-            
-            break;
-            
-        } case EDITOR_SUB_STATE_NONE: {
-    
-            bool twHandled = false;
-            if(selectedShadow) {
-                twHandled =
-                    curTransformationWidget.handleMouseDown(
-                        game.editorsView.cursorWorldPos,
-                        &selectedShadow->center,
-                        &selectedShadow->size,
-                        &selectedShadow->angle,
-                        1.0f / game.editorsView.cam.zoom
-                    );
-            }
-            
-            if(!twHandled) {
-                //Select a tree shadow.
-                selectedShadow = nullptr;
-                for(
-                    size_t s = 0;
-                    s < game.curAreaData->treeShadows.size(); s++
-                ) {
-                
-                    TreeShadow* sPtr = game.curAreaData->treeShadows[s];
-                    Point minCoords, maxCoords;
-                    getTransformedRectangleBBox(
-                        sPtr->center, sPtr->size, sPtr->angle,
-                        &minCoords, &maxCoords
-                    );
-                    
-                    if(
-                        game.editorsView.cursorWorldPos.x >= minCoords.x &&
-                        game.editorsView.cursorWorldPos.x <= maxCoords.x &&
-                        game.editorsView.cursorWorldPos.y >= minCoords.y &&
-                        game.editorsView.cursorWorldPos.y <= maxCoords.y
-                    ) {
-                        selectTreeShadow(sPtr);
-                        break;
-                    }
+            if(nextStop) {
+                registerChange("path stop link");
+                pathDrawingStop1->addLink(
+                    nextStop, pathDrawingNormals
+                );
+                PathLink* l1 = pathDrawingStop1->getLink(nextStop);
+                PathLink* l2 = nextStop->getLink(pathDrawingStop1);
+                l1->type = pathDrawingType;
+                if(l2) {
+                    l2->type = pathDrawingType;
                 }
+                game.curAreaData->fixPathStopIdxs(pathDrawingStop1);
+                game.curAreaData->fixPathStopIdxs(nextStop);
+                nextStop->calculateDistsPlusNeighbors();
+                setStatus("Created path link.");
                 
-                setSelectionStatusText();
+                if(clickedStop) {
+                    pathDrawingStop1 = nullptr;
+                } else {
+                    pathDrawingStop1 = nextStop;
+                }
             }
             
-            break;
+        } else {
+            //We need to create or assign a starting stop.
+            if(clickedStop) {
+                pathDrawingStop1 = clickedStop;
+            } else {
+                registerChange("path stop creation");
+                pathDrawingStop1 = new PathStop(hotspot);
+                pathDrawingStop1->flags = pathDrawingFlags;
+                pathDrawingStop1->label = pathDrawingLabel;
+                game.curAreaData->pathStops.push_back(
+                    pathDrawingStop1
+                );
+                setStatus("Created path stop.");
+            }
             
         }
-        }
+        
+        pathPreview.clear(); //Clear so it doesn't reference deleted stops.
+        pathPreviewTimer.start(false);
         
         break;
         
-    } case EDITOR_STATE_TOOLS: {
+    } case EDITOR_SUB_STATE_NONE: {
 
-        if(referenceBitmap) {
-            curTransformationWidget.handleMouseDown(
-                game.editorsView.cursorWorldPos,
-                &referenceCenter,
-                &referenceSize,
-                nullptr,
-                1.0f / game.editorsView.cam.zoom
-            );
-        }
-        
-        break;
-        
-    } case EDITOR_STATE_REVIEW: {
-
-        if(showCrossSection) {
-            movingCrossSectionPoint = -1;
-            for(unsigned char p = 0; p < 2; p++) {
+        //First, check if the user clicked on a path preview checkpoint.
+        if(showPathPreview) {
+            for(unsigned char c = 0; c < 2; c++) {
                 if(
                     BBoxCheck(
-                        crossSectionCheckpoints[p], game.editorsView.cursorWorldPos,
-                        AREA_EDITOR::CROSS_SECTION_POINT_RADIUS / game.editorsView.cam.zoom
+                        pathPreviewCheckpoints[c],
+                        game.editorsView.cursorWorldPos,
+                        AREA_EDITOR::PATH_PREVIEW_CHECKPOINT_RADIUS /
+                        game.editorsView.cam.zoom
                     )
                 ) {
-                    movingCrossSectionPoint = p;
-                    break;
+                    clearSelection();
+                    movingPathPreviewCheckpoint = c;
+                    return;
                 }
             }
+        }
+        
+        //Start a new path selection or select something.
+        bool startNewSelection = true;
+        
+        PathStop* clickedStop =
+            getPathStopUnderPoint(game.editorsView.cursorWorldPos);
+        PathLink* clickedLink1;
+        PathLink* clickedLink2;
+        bool clickedLink =
+            getPathLinkUnderPoint(
+                game.editorsView.cursorWorldPos,
+                &clickedLink1, &clickedLink2
+            );
+        if(!isShiftPressed) {
+            if(clickedStop || clickedLink) {
+                startNewSelection = false;
+            }
+            
+        }
+        
+        if(startNewSelection) {
+            if(!isCtrlPressed) clearSelection();
+            selecting = true;
+            selectionStart = game.editorsView.cursorWorldPos;
+            selectionEnd = game.editorsView.cursorWorldPos;
+            
+        } else {
+        
+            if(clickedStop) {
+                if(!isInContainer(selectedPathStops, clickedStop)) {
+                    if(!isCtrlPressed) {
+                        clearSelection();
+                    }
+                    selectedPathStops.insert(clickedStop);
+                }
+            } else {
+                if(!isInContainer(selectedPathLinks, clickedLink1)) {
+                    if(!isCtrlPressed) {
+                        clearSelection();
+                    }
+                    selectedPathLinks.insert(clickedLink1);
+                    if(clickedLink2 != nullptr) {
+                        selectedPathLinks.insert(clickedLink2);
+                    }
+                }
+            }
+            
+            setSelectionStatusText();
+            
         }
         
         break;
         
     }
+    }
+}
+
+
+/**
+ * @brief Handles the left mouse button being pressed in the canvas exclusively,
+ * while in the review mode.
+ *
+ * @param ev Event to handle.
+ */
+void AreaEditor::handleLmbDownReview(const ALLEGRO_EVENT &ev) {
+    if(showCrossSection) {
+        movingCrossSectionPoint = -1;
+        for(unsigned char p = 0; p < 2; p++) {
+            if(
+                BBoxCheck(
+                    crossSectionCheckpoints[p],
+                    game.editorsView.cursorWorldPos,
+                    AREA_EDITOR::CROSS_SECTION_POINT_RADIUS /
+                    game.editorsView.cam.zoom
+                )
+            ) {
+                movingCrossSectionPoint = p;
+                break;
+            }
+        }
+    }
+}
+
+
+/**
+ * @brief Handles the left mouse button being pressed in the canvas exclusively,
+ * while in the tools mode.
+ *
+ * @param ev Event to handle.
+ */
+void AreaEditor::handleLmbDownTools(const ALLEGRO_EVENT &ev) {
+    if(referenceBitmap) {
+        curTransformationWidget.handleMouseDown(
+            game.editorsView.cursorWorldPos,
+            &referenceCenter,
+            &referenceSize,
+            nullptr,
+            1.0f / game.editorsView.cam.zoom
+        );
     }
 }
 

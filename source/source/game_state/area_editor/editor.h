@@ -1198,6 +1198,14 @@ private:
     void processGuiOptionsDialog();
     void processGuiStatusBar();
     void processGuiToolbar();
+    void handleLmbDownDetails(const ALLEGRO_EVENT &ev);
+    void handleLmbDownGameplay(const ALLEGRO_EVENT &ev);
+    void handleLmbDownLayout(const ALLEGRO_EVENT &ev);
+    void handleLmbDownLayoutDrawing(const ALLEGRO_EVENT &ev);
+    void handleLmbDownMobs(const ALLEGRO_EVENT &ev);
+    void handleLmbDownPaths(const ALLEGRO_EVENT &ev);
+    void handleLmbDownReview(const ALLEGRO_EVENT &ev);
+    void handleLmbDownTools(const ALLEGRO_EVENT &ev);
     void handleKeyCharAnywhere(const ALLEGRO_EVENT &ev) override;
     void handleKeyCharCanvas(const ALLEGRO_EVENT &ev) override;
     void handleKeyDownAnywhere(const ALLEGRO_EVENT &ev) override;
