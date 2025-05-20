@@ -33,7 +33,7 @@ BouncerCategory::BouncerCategory() :
  * @brief Clears the list of registered types of bouncers.
  */
 void BouncerCategory::clearTypes() {
-    for(auto &t : game.content.mobTypes.list.bouncer) {
+    for(auto& t : game.content.mobTypes.list.bouncer) {
         delete t.second;
     }
     game.content.mobTypes.list.bouncer.clear();
@@ -49,7 +49,7 @@ void BouncerCategory::clearTypes() {
  * @return The created mob.
  */
 Mob* BouncerCategory::createMob(
-    const Point &pos, MobType* type, float angle
+    const Point& pos, MobType* type, float angle
 ) {
     Bouncer* m = new Bouncer(pos, (BouncerType*) type, angle);
     game.states.gameplay->mobs.bouncers.push_back(m);
@@ -90,7 +90,7 @@ void BouncerCategory::eraseMob(Mob* m) {
  * @param internalName Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-MobType* BouncerCategory::getType(const string &internalName) const {
+MobType* BouncerCategory::getType(const string& internalName) const {
     auto it = game.content.mobTypes.list.bouncer.find(internalName);
     if(it == game.content.mobTypes.list.bouncer.end()) return nullptr;
     return it->second;
@@ -102,8 +102,8 @@ MobType* BouncerCategory::getType(const string &internalName) const {
  *
  * @param list This list gets filled with the mob type internal names.
  */
-void BouncerCategory::getTypeNames(vector<string> &list) const {
-    for(auto &t : game.content.mobTypes.list.bouncer) {
+void BouncerCategory::getTypeNames(vector<string>& list) const {
+    for(auto& t : game.content.mobTypes.list.bouncer) {
         list.push_back(t.first);
     }
 }
@@ -115,6 +115,6 @@ void BouncerCategory::getTypeNames(vector<string> &list) const {
  * @param internalName Internal name of the mob type.
  * @param type Mob type to register.
  */
-void BouncerCategory::registerType(const string &internalName, MobType* type) {
+void BouncerCategory::registerType(const string& internalName, MobType* type) {
     game.content.mobTypes.list.bouncer[internalName] = (BouncerType*) type;
 }

@@ -49,7 +49,7 @@ public:
         
         //--- Function declarations ---
         
-        explicit GroupTaskSpot(const Point &pos);
+        explicit GroupTaskSpot(const Point& pos);
         
     };
     
@@ -68,7 +68,7 @@ public:
     
     //--- Function declarations ---
     
-    GroupTask(const Point &pos, GroupTaskType* type, float angle);
+    GroupTask(const Point& pos, GroupTaskType* type, float angle);
     void addWorker(Pikmin* who);
     void finishTask();
     void freeUpSpot(Pikmin* whose);
@@ -79,7 +79,7 @@ public:
     float getPower() const;
     Point getSpotPos(const Pikmin* whose) const;
     void reserveSpot(GroupTaskSpot* spot, Pikmin* who);
-    void readScriptVars(const ScriptVarReader &svr) override;
+    void readScriptVars(const ScriptVarReader& svr) override;
     
 protected:
 

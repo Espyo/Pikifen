@@ -157,7 +157,7 @@ void InWorldFraction::draw() {
  *
  * @param newColor Color to set to.
  */
-void InWorldFraction::setColor(const ALLEGRO_COLOR &newColor) {
+void InWorldFraction::setColor(const ALLEGRO_COLOR& newColor) {
     if(color == newColor) return;
     
     color = newColor;

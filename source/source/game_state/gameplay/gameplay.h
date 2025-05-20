@@ -342,7 +342,7 @@ public:
     //--- Function declarations ---
     
     ALLEGRO_BITMAP* drawToBitmap(
-        const MakerTools::AreaImageSettings &settings
+        const MakerTools::AreaImageSettings& settings
     );
     void enter();
     void leave(const GAMEPLAY_LEAVE_TARGET target);
@@ -360,7 +360,7 @@ public:
     void updateClosestGroupMembers(Player* player);
     void load() override;
     void unload() override;
-    void handleAllegroEvent(ALLEGRO_EVENT &ev) override;
+    void handleAllegroEvent(ALLEGRO_EVENT& ev) override;
     void doLogic() override;
     void doDrawing() override;
     string getName() const override;
@@ -400,7 +400,7 @@ private:
     void doGameDrawing(
         ALLEGRO_BITMAP* bmpOutput = nullptr,
         const ALLEGRO_TRANSFORM* bmpTransform = nullptr,
-        const MakerTools::AreaImageSettings &bmpSettings =
+        const MakerTools::AreaImageSettings& bmpSettings =
             MakerTools::AreaImageSettings()
     );
     void doGameplayLeaderLogic(Player* player, float deltaT);
@@ -419,12 +419,12 @@ private:
     void doPlayerActionUseSpray(Player* player, bool isDown, bool second);
     void doPlayerActionWhistle(Player* player, bool isDown);
     void doPlayerActionZoom(Player* player, float inputValue, bool zoomIn);
-    void drawBackground(const Viewport &view, ALLEGRO_BITMAP* bmpOutput);
+    void drawBackground(const Viewport& view, ALLEGRO_BITMAP* bmpOutput);
     void drawDebugTools();
-    void drawLeaderCursor(Player* player, const ALLEGRO_COLOR &color);
+    void drawLeaderCursor(Player* player, const ALLEGRO_COLOR& color);
     void drawIngameText(Player* player);
     void drawBigMsg();
-    void drawLightingFilter(const Viewport &view);
+    void drawLightingFilter(const Viewport& view);
     void drawGameplayMessageBox();
     void drawOnionMenu();
     void drawPauseMenu();
@@ -432,7 +432,7 @@ private:
     void drawSystemStuff();
     void drawThrowPreview(Player* player);
     void drawTreeShadows();
-    void drawWorldComponents(const Viewport &view, ALLEGRO_BITMAP* bmpOutput);
+    void drawWorldComponents(const Viewport& view, ALLEGRO_BITMAP* bmpOutput);
     void endMission(bool cleared);
     ALLEGRO_BITMAP* generateFogBitmap(
         float nearRadius, float farRadius
@@ -440,12 +440,12 @@ private:
     Mob* getClosestGroupMember(
         Player* player, const SubgroupType* type, bool* distant = nullptr
     );
-    void handlePlayerAction(const PlayerAction &action);
+    void handlePlayerAction(const PlayerAction& action);
     bool isMissionClearMet();
     bool isMissionFailMet(MISSION_FAIL_COND* reason);
     void loadGameContent();
     void markAreaCellsActive(
-        const Point &top_left, const Point &bottomRight
+        const Point& top_left, const Point& bottomRight
     );
     void markAreaCellsActive(
         int fromX, int toX, int fromY, int toY
@@ -453,17 +453,17 @@ private:
     void processMobInteractions(Mob* mPtr, size_t m);
     void processMobMiscInteractions(
         Mob* mPtr, Mob* m2Ptr, size_t m, size_t m2,
-        const Distance &d, const Distance &dBetween,
-        vector<PendingIntermobEvent> &pendingIntermobEvents
+        const Distance& d, const Distance& dBetween,
+        vector<PendingIntermobEvent>& pendingIntermobEvents
     );
     void processMobReaches(
-        Mob* mPtr, Mob* m2Ptr, size_t m, size_t m2, const Distance &dBetween,
-        vector<PendingIntermobEvent> &pendingIntermobEvents
+        Mob* mPtr, Mob* m2Ptr, size_t m, size_t m2, const Distance& dBetween,
+        vector<PendingIntermobEvent>& pendingIntermobEvents
     );
     void processMobTouches(
-        Mob* mPtr, Mob* m2Ptr, size_t m, size_t m2, Distance &d
+        Mob* mPtr, Mob* m2Ptr, size_t m, size_t m2, Distance& d
     );
-    bool shouldIgnorePlayerAction(const PlayerAction &action);
+    bool shouldIgnorePlayerAction(const PlayerAction& action);
     void unloadGameContent();
     void updateAreaActiveCells();
     void updateMobIsActiveFlag();
@@ -520,7 +520,7 @@ struct GameplayMessageBox {
     
     //--- Function declarations ---
     
-    GameplayMessageBox(const string &text, ALLEGRO_BITMAP* speakerIcon);
+    GameplayMessageBox(const string& text, ALLEGRO_BITMAP* speakerIcon);
     void advance();
     void close();
     void tick(float deltaT);

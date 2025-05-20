@@ -16,7 +16,7 @@
  *
  * @param name Its name.
  */
-BodyPart::BodyPart(const string &name) :
+BodyPart::BodyPart(const string& name) :
     name(name) {
     
 }
@@ -35,7 +35,7 @@ BodyPart::BodyPart(const string &name) :
  * @param radius Hitbox radius.
  */
 Hitbox::Hitbox(
-    const string &bpn, size_t bpi, BodyPart* bpp, const Point &pos,
+    const string& bpn, size_t bpi, BodyPart* bpp, const Point& pos,
     float z, float height, float radius
 ) :
     bodyPartName(bpn),
@@ -57,7 +57,7 @@ Hitbox::Hitbox(
  * @param mobAngle The angle the mob is facing.
  * @return The position.
  */
-Point Hitbox::getCurPos(const Point &mobPos, float mobAngle) const {
+Point Hitbox::getCurPos(const Point& mobPos, float mobAngle) const {
     float mobAngleCos = cos(mobAngle);
     float mobAngleSin = sin(mobAngle);
     return
@@ -80,7 +80,7 @@ Point Hitbox::getCurPos(const Point &mobPos, float mobAngle) const {
  * @return The position.
  */
 Point Hitbox::getCurPos(
-    const Point &mobPos, float mobAngleCos, float mobAngleSin
+    const Point& mobPos, float mobAngleCos, float mobAngleSin
 ) const {
     return
         Point(

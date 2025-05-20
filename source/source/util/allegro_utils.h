@@ -63,21 +63,21 @@ enum FS_DELETE_RESULT {
 #define mapGray(g) al_map_rgb((g), (g), (g))
 
 
-bool operator==(const ALLEGRO_COLOR &c1, const ALLEGRO_COLOR &c2);
-bool operator!=(const ALLEGRO_COLOR &c1, const ALLEGRO_COLOR &c2);
-void al_fwrite(ALLEGRO_FILE* f, const string &s);
-string c2s(const ALLEGRO_COLOR &c);
-ALLEGRO_COLOR changeAlpha(const ALLEGRO_COLOR &c, unsigned char a);
-ALLEGRO_COLOR changeColorLighting(const ALLEGRO_COLOR &c, float l);
-FS_DELETE_RESULT deleteFile(const string &filePath);
+bool operator==(const ALLEGRO_COLOR& c1, const ALLEGRO_COLOR& c2);
+bool operator!=(const ALLEGRO_COLOR& c1, const ALLEGRO_COLOR& c2);
+void al_fwrite(ALLEGRO_FILE* f, const string& s);
+string c2s(const ALLEGRO_COLOR& c);
+ALLEGRO_COLOR changeAlpha(const ALLEGRO_COLOR& c, unsigned char a);
+ALLEGRO_COLOR changeColorLighting(const ALLEGRO_COLOR& c, float l);
+FS_DELETE_RESULT deleteFile(const string& filePath);
 Point getBitmapDimensions(ALLEGRO_BITMAP* bmp);
 string getKeyName(int keycode, bool condensed);
 void getShiftCtrlAltState(
     bool* outShiftState, bool* outCtrlState, bool* outAltState
 );
-void getline(ALLEGRO_FILE* file, string &line);
-bool fileExists(const string &path);
-bool folderExists(const string &path);
+void getline(ALLEGRO_FILE* file, string& line);
+bool fileExists(const string& path);
+bool folderExists(const string& path);
 vector<string> folderToVector(
     string folderName, bool folders, bool* outFolderFound = nullptr
 );
@@ -86,19 +86,19 @@ vector<string> folderToVectorRecursively(
 );
 ALLEGRO_COLOR interpolateColor(
     float input, float inputStart, float inputEnd,
-    const ALLEGRO_COLOR &outputStart, const ALLEGRO_COLOR &outputEnd
+    const ALLEGRO_COLOR& outputStart, const ALLEGRO_COLOR& outputEnd
 );
 vector<string> promptFileDialog(
-    const string &initialPath, const string &title,
-    const string &patterns, int mode, ALLEGRO_DISPLAY* display
+    const string& initialPath, const string& title,
+    const string& patterns, int mode, ALLEGRO_DISPLAY* display
 );
 vector<string> promptFileDialogLockedToFolder(
-    const string &folderPath, const string &title,
-    const string &patterns, int mode, FILE_DIALOG_RESULT* result,
+    const string& folderPath, const string& title,
+    const string& patterns, int mode, FILE_DIALOG_RESULT* result,
     ALLEGRO_DISPLAY* display
 );
 ALLEGRO_BITMAP* recreateBitmap(ALLEGRO_BITMAP* b);
-ALLEGRO_COLOR s2c(const string &s);
+ALLEGRO_COLOR s2c(const string& s);
 void setCombinedClippingRectangles(
     float x1, float y1, float w1, float h1,
     float x2, float y2, float w2, float h2
@@ -108,5 +108,5 @@ int showSystemMessageBox(
     char const* text, char const* buttons, int flags
 );
 FS_DELETE_RESULT wipeFolder(
-    const string &folderPath, const vector<string> &nonImportantFiles
+    const string& folderPath, const vector<string>& nonImportantFiles
 );

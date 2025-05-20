@@ -109,7 +109,7 @@ OnionMenu::OnionMenu(
         "Cancel", game.sysContent.fntStandard, al_map_rgb(226, 112, 112)
     );
     gui.backItem->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         startClosing();
     };
     gui.backItem->onGetTooltip =
@@ -125,7 +125,7 @@ OnionMenu::OnionMenu(
         "Ok", game.sysContent.fntStandard, al_map_rgb(96, 226, 80)
     );
     okButton->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         confirm();
         startClosing();
     };
@@ -149,7 +149,7 @@ OnionMenu::OnionMenu(
         );
         
         ALLEGRO_COLOR color = al_map_rgb(188, 230, 230);
-        const auto &redIt = this->redItems.find(fieldAmountText);
+        const auto& redIt = this->redItems.find(fieldAmountText);
         if(redIt != this->redItems.end()) {
             color =
                 interpolateColor(
@@ -178,7 +178,7 @@ OnionMenu::OnionMenu(
         "Select all", game.sysContent.fntStandard, al_map_rgb(188, 230, 230)
     );
     selectAllCheck->onActivate =
-    [this, selectAllCheck] (const Point &) {
+    [this, selectAllCheck] (const Point&) {
         growButtons();
         selectAllCheck->startJuiceAnimation(
             GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
@@ -223,7 +223,7 @@ OnionMenu::OnionMenu(
             );
         };
         onionButton->onActivate =
-        [this, t] (const Point &) {
+        [this, t] (const Point&) {
             addToOnion(onWindowTypes[t]->typeIdx);
         };
         onionButton->canAutoRepeat = true;
@@ -250,7 +250,7 @@ OnionMenu::OnionMenu(
         );
     };
     onionAllButton->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         addAllToOnion();
     };
     onionAllButton->canAutoRepeat = true;
@@ -275,7 +275,7 @@ OnionMenu::OnionMenu(
             );
             
             ALLEGRO_COLOR color = al_map_rgb(255, 255, 255);
-            const auto &redIt = this->redItems.find(onionAmountText);
+            const auto& redIt = this->redItems.find(onionAmountText);
             if(redIt != this->redItems.end()) {
                 color =
                     interpolateColor(
@@ -330,7 +330,7 @@ OnionMenu::OnionMenu(
             );
         };
         groupButton->onActivate =
-        [this, t] (const Point &) {
+        [this, t] (const Point&) {
             addToGroup(onWindowTypes[t]->typeIdx);
         };
         groupButton->canAutoRepeat = true;
@@ -357,7 +357,7 @@ OnionMenu::OnionMenu(
         );
     };
     groupAllButton->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         addAllToGroup();
     };
     groupAllButton->canAutoRepeat = true;
@@ -382,7 +382,7 @@ OnionMenu::OnionMenu(
             );
             
             ALLEGRO_COLOR color = al_map_rgb(255, 255, 255);
-            const auto &redIt = this->redItems.find(groupAmountText);
+            const auto& redIt = this->redItems.find(groupAmountText);
             if(redIt != this->redItems.end()) {
                 color =
                     interpolateColor(
@@ -474,7 +474,7 @@ OnionMenu::OnionMenu(
         );
     };
     prevPageButton->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         goToPage(sumAndWrap((int) page, -1, (int) nrPages));
     };
     prevPageButton->visible = nrPages > 1;
@@ -500,7 +500,7 @@ OnionMenu::OnionMenu(
         );
     };
     nextPageButton->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         goToPage(sumAndWrap((int) page, 1, (int) nrPages));
     };
     nextPageButton->visible = nrPages > 1;
@@ -695,7 +695,7 @@ void OnionMenu::growButtons() {
  *
  * @param ev Event to handle.
  */
-void OnionMenu::handleAllegroEvent(const ALLEGRO_EVENT &ev) {
+void OnionMenu::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
     if(!closing) gui.handleAllegroEvent(ev);
 }
 
@@ -705,7 +705,7 @@ void OnionMenu::handleAllegroEvent(const ALLEGRO_EVENT &ev) {
  *
  * @param action Data about the player action.
  */
-void OnionMenu::handlePlayerAction(const PlayerAction &action) {
+void OnionMenu::handlePlayerAction(const PlayerAction& action) {
     gui.handlePlayerAction(action);
 }
 
@@ -729,7 +729,7 @@ void OnionMenu::startClosing() {
     gui.startAnimation(
         GUI_MANAGER_ANIM_CENTER_TO_UP, GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
     );
-    for(Player &player : game.states.gameplay->players) {
+    for(Player& player : game.states.gameplay->players) {
         player.hud->gui.startAnimation(
             GUI_MANAGER_ANIM_OUT_TO_IN,
             GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME

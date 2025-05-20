@@ -79,7 +79,7 @@ struct Blockmap {
     size_t getCol(float x) const;
     size_t getRow(float y) const;
     bool getEdgesInRegion(
-        const Point &tl, const Point &br, set<Edge*> &edges
+        const Point& tl, const Point& br, set<Edge*>& edges
     ) const;
     Point getTopLeftCorner(size_t col, size_t row) const;
     void clear();
@@ -123,8 +123,8 @@ struct MobGen {
     //--- Function declarations ---
     
     explicit MobGen(
-        const Point &pos = Point(),
-        MobType* type = nullptr, float angle = 0, const string &vars = ""
+        const Point& pos = Point(),
+        MobType* type = nullptr, float angle = 0, const string& vars = ""
     );
     void clone(MobGen* destination, bool includePosition = true) const;
     
@@ -164,9 +164,9 @@ struct TreeShadow {
     //--- Function declarations ---
     
     explicit TreeShadow(
-        const Point &center = Point(), const Point &size = Point(100.0f),
+        const Point& center = Point(), const Point& size = Point(100.0f),
         float angle = 0, unsigned char alpha = 255,
-        const string &bmpname = "", const Point &sway = Point(1.0f)
+        const string& bmpname = "", const Point& sway = Point(1.0f)
     );
     ~TreeShadow();
     
@@ -263,7 +263,7 @@ struct Area : public Content {
     
     void checkStability();
     void cleanup(bool* outdeleted_sectors = nullptr);
-    void clone(Area &other);
+    void clone(Area& other);
     void connectEdgeToSector(Edge* eptr, Sector* sPtr, size_t side);
     void connectEdgeToVertex(Edge* ePtr, Vertex* vPtr, size_t endpoint);
     void connectSectorEdges(Sector* sPtr);
@@ -281,7 +281,7 @@ struct Area : public Content {
     void fixVertexIdxs(Vertex* vPtr);
     void fixVertexPointers(Vertex* vPtr);
     void generateBlockmap();
-    void generateEdgesBlockmap(const vector<Edge*> &edges);
+    void generateEdgesBlockmap(const vector<Edge*>& edges);
     size_t getNrPathLinks();
     void loadMainDataFromDataNode(
         DataNode* node, CONTENT_LOAD_LEVEL level
@@ -290,7 +290,7 @@ struct Area : public Content {
     void loadGeometryFromDataNode(
         DataNode* node, CONTENT_LOAD_LEVEL level
     );
-    void loadThumbnail(const string &thumbnailPath);
+    void loadThumbnail(const string& thumbnailPath);
     Edge* newEdge();
     Sector* newSector();
     Vertex* newVertex();

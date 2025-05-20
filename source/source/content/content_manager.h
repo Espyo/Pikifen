@@ -119,16 +119,16 @@ struct ContentManager {
     
     ContentManager();
     bool createPack(
-        const string &internalName, const string &name,
-        const string &description = "", const string &maker = ""
+        const string& internalName, const string& name,
+        const string& description = "", const string& maker = ""
     );
     bool loadAreaAsCurrent(
-        const string &requestedAreaPath, ContentManifest* manifPtr,
+        const string& requestedAreaPath, ContentManifest* manifPtr,
         CONTENT_LOAD_LEVEL level, bool fromBackup
     );
-    void loadAll(const vector<CONTENT_TYPE> &types, CONTENT_LOAD_LEVEL level);
+    void loadAll(const vector<CONTENT_TYPE>& types, CONTENT_LOAD_LEVEL level);
     void reloadPacks();
-    void unloadAll(const vector<CONTENT_TYPE> &types);
+    void unloadAll(const vector<CONTENT_TYPE>& types);
     void unloadCurrentArea(CONTENT_LOAD_LEVEL level);
     
     private:

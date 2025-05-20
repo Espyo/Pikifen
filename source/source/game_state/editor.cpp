@@ -113,7 +113,7 @@ Editor::Editor() :
  * If false, it smoothly gets there over time.
  */
 void Editor::centerCamera(
-    const Point &minCoords, const Point &maxCoords,
+    const Point& minCoords, const Point& maxCoords,
     bool instantaneous
 ) {
     Point minC = minCoords;
@@ -199,7 +199,7 @@ void Editor::doLogicPre() {
  */
 void Editor::drawGrid(
     float interval,
-    const ALLEGRO_COLOR &majorColor, const ALLEGRO_COLOR &minorColor
+    const ALLEGRO_COLOR& majorColor, const ALLEGRO_COLOR& minorColor
 ) {
     Point canvasTL = game.editorsView.getTopLeft();
     Point canvasBR = game.editorsView.getBottomRight();
@@ -357,7 +357,7 @@ bool Editor::guiNeedsKeyboard() {
  *
  * @param ev Event to handle.
  */
-void Editor::handleAllegroEvent(ALLEGRO_EVENT &ev) {
+void Editor::handleAllegroEvent(ALLEGRO_EVENT& ev) {
     if(game.fadeMgr.isFading()) return;
     
     bool isMouseInCanvas =
@@ -615,7 +615,7 @@ void Editor::handleAllegroEvent(ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to process.
  */
-void Editor::handleKeyCharAnywhere(const ALLEGRO_EVENT &ev) {}
+void Editor::handleKeyCharAnywhere(const ALLEGRO_EVENT& ev) {}
 
 
 /**
@@ -623,7 +623,7 @@ void Editor::handleKeyCharAnywhere(const ALLEGRO_EVENT &ev) {}
  *
  * @param ev Event to process.
  */
-void Editor::handleKeyCharCanvas(const ALLEGRO_EVENT &ev) {}
+void Editor::handleKeyCharCanvas(const ALLEGRO_EVENT& ev) {}
 
 
 /**
@@ -631,7 +631,7 @@ void Editor::handleKeyCharCanvas(const ALLEGRO_EVENT &ev) {}
  *
  * @param ev Event to process.
  */
-void Editor::handleKeyDownAnywhere(const ALLEGRO_EVENT &ev) {}
+void Editor::handleKeyDownAnywhere(const ALLEGRO_EVENT& ev) {}
 
 
 /**
@@ -639,7 +639,7 @@ void Editor::handleKeyDownAnywhere(const ALLEGRO_EVENT &ev) {}
  *
  * @param ev Event to process.
  */
-void Editor::handleKeyDownCanvas(const ALLEGRO_EVENT &ev) {}
+void Editor::handleKeyDownCanvas(const ALLEGRO_EVENT& ev) {}
 
 
 /**
@@ -647,7 +647,7 @@ void Editor::handleKeyDownCanvas(const ALLEGRO_EVENT &ev) {}
  *
  * @param ev Event to process.
  */
-void Editor::handleKeyUpAnywhere(const ALLEGRO_EVENT &ev) {}
+void Editor::handleKeyUpAnywhere(const ALLEGRO_EVENT& ev) {}
 
 
 /**
@@ -655,7 +655,7 @@ void Editor::handleKeyUpAnywhere(const ALLEGRO_EVENT &ev) {}
  *
  * @param ev Event to process.
  */
-void Editor::handleKeyUpCanvas(const ALLEGRO_EVENT &ev) {}
+void Editor::handleKeyUpCanvas(const ALLEGRO_EVENT& ev) {}
 
 
 /**
@@ -664,7 +664,7 @@ void Editor::handleKeyUpCanvas(const ALLEGRO_EVENT &ev) {}
  *
  * @param ev Event to process.
  */
-void Editor::handleLmbDoubleClick(const ALLEGRO_EVENT &ev) {}
+void Editor::handleLmbDoubleClick(const ALLEGRO_EVENT& ev) {}
 
 
 /**
@@ -673,7 +673,7 @@ void Editor::handleLmbDoubleClick(const ALLEGRO_EVENT &ev) {}
  *
  * @param ev Event to process.
  */
-void Editor::handleLmbDown(const ALLEGRO_EVENT &ev) {}
+void Editor::handleLmbDown(const ALLEGRO_EVENT& ev) {}
 
 
 /**
@@ -682,7 +682,7 @@ void Editor::handleLmbDown(const ALLEGRO_EVENT &ev) {}
  *
  * @param ev Event to process.
  */
-void Editor::handleLmbDrag(const ALLEGRO_EVENT &ev) {}
+void Editor::handleLmbDrag(const ALLEGRO_EVENT& ev) {}
 
 
 /**
@@ -691,7 +691,7 @@ void Editor::handleLmbDrag(const ALLEGRO_EVENT &ev) {}
  *
  * @param ev Event to process.
  */
-void Editor::handleLmbUp(const ALLEGRO_EVENT &ev) {}
+void Editor::handleLmbUp(const ALLEGRO_EVENT& ev) {}
 
 
 /**
@@ -700,7 +700,7 @@ void Editor::handleLmbUp(const ALLEGRO_EVENT &ev) {}
  *
  * @param ev Event to process.
  */
-void Editor::handleMmbDoubleClick(const ALLEGRO_EVENT &ev) {}
+void Editor::handleMmbDoubleClick(const ALLEGRO_EVENT& ev) {}
 
 
 /**
@@ -709,7 +709,7 @@ void Editor::handleMmbDoubleClick(const ALLEGRO_EVENT &ev) {}
  *
  * @param ev Event to process.
  */
-void Editor::handleMmbDown(const ALLEGRO_EVENT &ev) {}
+void Editor::handleMmbDown(const ALLEGRO_EVENT& ev) {}
 
 
 /**
@@ -718,7 +718,7 @@ void Editor::handleMmbDown(const ALLEGRO_EVENT &ev) {}
  *
  * @param ev Event to process.
  */
-void Editor::handleMmbDrag(const ALLEGRO_EVENT &ev) {}
+void Editor::handleMmbDrag(const ALLEGRO_EVENT& ev) {}
 
 
 /**
@@ -727,7 +727,7 @@ void Editor::handleMmbDrag(const ALLEGRO_EVENT &ev) {}
  *
  * @param ev Event to process.
  */
-void Editor::handleMmbUp(const ALLEGRO_EVENT &ev) {}
+void Editor::handleMmbUp(const ALLEGRO_EVENT& ev) {}
 
 
 /**
@@ -735,7 +735,7 @@ void Editor::handleMmbUp(const ALLEGRO_EVENT &ev) {}
  *
  * @param ev Event to process.
  */
-void Editor::handleMouseUpdate(const ALLEGRO_EVENT &ev) {
+void Editor::handleMouseUpdate(const ALLEGRO_EVENT& ev) {
     game.editorsView.updateCursor(game.mouseCursor.winPos);
 }
 
@@ -745,7 +745,7 @@ void Editor::handleMouseUpdate(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to process.
  */
-void Editor::handleMouseWheel(const ALLEGRO_EVENT &ev) {}
+void Editor::handleMouseWheel(const ALLEGRO_EVENT& ev) {}
 
 
 /**
@@ -754,7 +754,7 @@ void Editor::handleMouseWheel(const ALLEGRO_EVENT &ev) {}
  *
  * @param ev Event to process.
  */
-void Editor::handleRmbDoubleClick(const ALLEGRO_EVENT &ev) {}
+void Editor::handleRmbDoubleClick(const ALLEGRO_EVENT& ev) {}
 
 
 /**
@@ -763,7 +763,7 @@ void Editor::handleRmbDoubleClick(const ALLEGRO_EVENT &ev) {}
  *
  * @param ev Event to process.
  */
-void Editor::handleRmbDown(const ALLEGRO_EVENT &ev) {}
+void Editor::handleRmbDown(const ALLEGRO_EVENT& ev) {}
 
 
 /**
@@ -772,7 +772,7 @@ void Editor::handleRmbDown(const ALLEGRO_EVENT &ev) {}
  *
  * @param ev Event to process.
  */
-void Editor::handleRmbDrag(const ALLEGRO_EVENT &ev) {}
+void Editor::handleRmbDrag(const ALLEGRO_EVENT& ev) {}
 
 
 /**
@@ -781,7 +781,7 @@ void Editor::handleRmbDrag(const ALLEGRO_EVENT &ev) {}
  *
  * @param ev Event to process.
  */
-void Editor::handleRmbUp(const ALLEGRO_EVENT &ev) {}
+void Editor::handleRmbUp(const ALLEGRO_EVENT& ev) {}
 
 
 /**
@@ -790,7 +790,7 @@ void Editor::handleRmbUp(const ALLEGRO_EVENT &ev) {}
  * @param name The internal name to check.
  * @return Whether it's good.
  */
-bool Editor::isInternalNameGood(const string &name) const {
+bool Editor::isInternalNameGood(const string& name) const {
     for(size_t c = 0; c < name.size(); c++) {
         char ch = name[c];
         const bool isLowercase = ch >= 'a' && ch <= 'z';
@@ -840,9 +840,9 @@ bool Editor::keyCheck(
  * @return Whether anything in the interpolator was changed.
  */
 bool Editor::keyframeEditor(
-    const string &label,
-    KeyframeInterpolator<ALLEGRO_COLOR> &interpolator,
-    size_t &selKeyframeIdx
+    const string& label,
+    KeyframeInterpolator<ALLEGRO_COLOR>& interpolator,
+    size_t& selKeyframeIdx
 ) {
     //Visualizer.
     keyframeVisualizer(interpolator, selKeyframeIdx);
@@ -888,9 +888,9 @@ bool Editor::keyframeEditor(
  * @return Whether anything in the interpolator was changed.
  */
 bool Editor::keyframeEditor(
-    const string &label,
-    KeyframeInterpolator<float> &interpolator,
-    size_t &selKeyframeIdx
+    const string& label,
+    KeyframeInterpolator<float>& interpolator,
+    size_t& selKeyframeIdx
 ) {
     //Visualizer.
     keyframeVisualizer(interpolator, selKeyframeIdx);
@@ -936,9 +936,9 @@ bool Editor::keyframeEditor(
  * @return Whether anything in the interpolator was changed.
  */
 bool Editor::keyframeEditor(
-    const string &label,
-    KeyframeInterpolator<Point> &interpolator,
-    size_t &selKeyframeIdx
+    const string& label,
+    KeyframeInterpolator<Point>& interpolator,
+    size_t& selKeyframeIdx
 ) {
     //Visualizer.
     keyframeVisualizer(interpolator, selKeyframeIdx);
@@ -986,9 +986,9 @@ bool Editor::keyframeEditor(
  */
 template <class InterT>
 bool Editor::keyframeOrganizer(
-    const string &buttonId,
-    KeyframeInterpolator<InterT> &interpolator,
-    size_t &selKeyframeIdx
+    const string& buttonId,
+    KeyframeInterpolator<InterT>& interpolator,
+    size_t& selKeyframeIdx
 ) {
     bool result = false;
     
@@ -1108,7 +1108,7 @@ bool Editor::keyframeOrganizer(
  * @param selKeyframeIdx Index of the currently selected keyframe.
  */
 void Editor::keyframeVisualizer(
-    KeyframeInterpolator<ALLEGRO_COLOR> &interpolator,
+    KeyframeInterpolator<ALLEGRO_COLOR>& interpolator,
     size_t selKeyframeIdx
 ) {
     if(interpolator.getKeyframeCount() <= 1) return;
@@ -1202,7 +1202,7 @@ void Editor::keyframeVisualizer(
  * @param selKeyframeIdx Index of the currently selected keyframe.
  */
 void Editor::keyframeVisualizer(
-    KeyframeInterpolator<float> &interpolator,
+    KeyframeInterpolator<float>& interpolator,
     size_t selKeyframeIdx
 ) {
     if(interpolator.getKeyframeCount() <= 1) return;
@@ -1330,7 +1330,7 @@ void Editor::keyframeVisualizer(
  * @param selKeyframeIdx Index of the currently selected keyframe.
  */
 void Editor::keyframeVisualizer(
-    KeyframeInterpolator<Point> &interpolator,
+    KeyframeInterpolator<Point>& interpolator,
     size_t selKeyframeIdx
 ) {
     if(interpolator.getKeyframeCount() <= 1) return;
@@ -1387,7 +1387,7 @@ void Editor::leave() {
  * @return Whether an item was clicked on.
  */
 bool Editor::listPopup(
-    const char* label, const vector<string> &items, string* pickedItem,
+    const char* label, const vector<string>& items, string* pickedItem,
     bool useMonospace
 ) {
     bool ret = false;
@@ -1425,7 +1425,7 @@ bool Editor::listPopup(
  * @return Whether an item was clicked on.
  */
 bool Editor::listPopup(
-    const char* label, const vector<string> &items, int* pickedItemIdx,
+    const char* label, const vector<string>& items, int* pickedItemIdx,
     bool useMonospace
 ) {
     bool ret = false;
@@ -1528,14 +1528,14 @@ void Editor::loadCustomMobCatTypes(bool isAreaEditor) {
     //Sort.
     std::sort(
         customCatTypes.begin(), customCatTypes.end(),
-    [] (const vector<MobType*> &c1, const vector<MobType*> &c2) -> bool {
+    [] (const vector<MobType*>& c1, const vector<MobType*>& c2) -> bool {
         return
         c1.front()->customCategoryName <
         c2.front()->customCategoryName;
     }
     );
     for(size_t c = 0; c < customCatTypes.size(); c++) {
-        vector<MobType*> &types = customCatTypes[c];
+        vector<MobType*>& types = customCatTypes[c];
         //Sort the types within a custom category.
         std::sort(
             types.begin(), types.end(),
@@ -1559,7 +1559,7 @@ void Editor::loadCustomMobCatTypes(bool isAreaEditor) {
  * @param doPickCallback Callback for if we actually have to do the pick.
  */
 void Editor::openBaseContentWarningDialog(
-    const std::function<void()> &doPickCallback
+    const std::function<void()>& doPickCallback
 ) {
     if(game.options.advanced.engineDev) {
         doPickCallback();
@@ -1584,15 +1584,15 @@ void Editor::openBaseContentWarningDialog(
  * with this folder name. Use "." for the graphics root folder.
  */
 void Editor::openBitmapDialog(
-    std::function<void(const string &)> okCallback,
-    const string &recommendedFolder
+    std::function<void(const string&)> okCallback,
+    const string& recommendedFolder
 ) {
     bitmapDialogOkCallback = okCallback;
     bitmapDialogRecommendedFolder = recommendedFolder;
     bitmapDialogPicker.pickCallback =
         [this] (
-            const string &newBmpName, const string &,
-            const string &, void*, bool
+            const string& newBmpName, const string&,
+            const string&, void*, bool
     ) {
         bitmapDialogNewBmpName = newBmpName;
     };
@@ -1624,8 +1624,8 @@ void Editor::openBitmapDialog(
  * the contents inside the dialog.
  */
 void Editor::openDialog(
-    const string &title,
-    const std::function<void()> &processCallback
+    const string& title,
+    const std::function<void()>& processCallback
 ) {
     Dialog* newDialog = new Dialog();
     
@@ -1645,7 +1645,7 @@ void Editor::openDialog(
  * more detail.
  */
 void Editor::openHelpDialog(
-    const string &message, const string &page
+    const string& message, const string& page
 ) {
     helpDialogMessage = message;
     helpDialogPage = page;
@@ -1674,8 +1674,8 @@ void Editor::openInputPopup(const char* label) {
  * @param closeCallback Code to run when the dialog is closed, if any.
  */
 void Editor::openMessageDialog(
-    const string &title, const string &message,
-    const std::function<void()> &closeCallback
+    const string& title, const string& message,
+    const std::function<void()>& closeCallback
 ) {
     messageDialogMessage = message;
     openDialog(title, std::bind(&Editor::processGuiMessageDialog, this));
@@ -1717,15 +1717,15 @@ void Editor::openNewPackDialog() {
  * @param filter Filter of names. Only items that match this will appear.
  */
 void Editor::openPickerDialog(
-    const string &title,
-    const vector<PickerItem> &items,
+    const string& title,
+    const vector<PickerItem>& items,
     const std::function <void(
-        const string &, const string &, const string &, void*, bool
-    )> &pickCallback,
-    const string &listHeader,
+        const string&, const string&, const string&, void*, bool
+    )>& pickCallback,
+    const string& listHeader,
     bool canMakeNew,
     bool useMonospace,
-    const string &filter
+    const string& filter
 ) {
     Picker* newPicker = new Picker(this);
     
@@ -1856,7 +1856,7 @@ void Editor::processGuiBitmapDialog() {
     
     //Fill the picker's items.
     bitmapDialogPicker.items.clear();
-    for(auto &b : game.content.bitmaps.manifests) {
+    for(auto& b : game.content.bitmaps.manifests) {
         if(
             !bitmapDialogRecommendedFolder.empty() &&
             filterWithRecommendedFolder
@@ -2062,12 +2062,12 @@ void Editor::processGuiEditorStyle() {
  * @param selectedHazardIname Internal name of the currently selected hazard.
  * @return Whether the hazard was changed.
  */
-bool Editor::processGuiHazardManagementWidgets(string &selectedHazardIname) {
+bool Editor::processGuiHazardManagementWidgets(string& selectedHazardIname) {
     //Hazard combo.
     int selectedHazardIdx = -1;
     vector<string> allHazardInames = {""};
     vector<string> allHazardLabels = {NONE_OPTION + "##(none)"};
-    for(auto &h : game.content.hazards.list) {
+    for(auto& h : game.content.hazards.list) {
         allHazardInames.push_back(h.first);
         allHazardLabels.push_back(h.second.name + "##" + h.first);
         if(selectedHazardIname == h.first) {
@@ -2124,10 +2124,10 @@ void Editor::processGuiHelpDialog() {
  * @param tooltipCallback Code to obtain an entry's tooltip with, if any.
  */
 void Editor::processGuiHistory(
-    const vector<pair<string, string> > &history,
-    const std::function<string(const string &)> &nameDisplayCallback,
-    const std::function<void(const string &)> &pickCallback,
-    const std::function<string(const string &)> &tooltipCallback
+    const vector<pair<string, string> >& history,
+    const std::function<string(const string&)>& nameDisplayCallback,
+    const std::function<void(const string&)>& pickCallback,
+    const std::function<string(const string&)>& tooltipCallback
 ) {
     if(saveableTreeNode("load", "History")) {
     
@@ -2259,7 +2259,7 @@ void Editor::processGuiMessageDialog() {
  * @return Whether the user changed the category/type.
  */
 bool Editor::processGuiMobTypeWidgets(
-    string* customCatName, MobType** type, const string &packFilter
+    string* customCatName, MobType** type, const string& packFilter
 ) {
     bool result = false;
     
@@ -2325,7 +2325,7 @@ bool Editor::processGuiMobTypeWidgets(
         openPickerDialog(
             "Pick an object type", items,
             [this, finalList] (
-                const string &n, const string &tc, const string &sc, void*, bool
+                const string& n, const string& tc, const string& sc, void*, bool
         ) {
             //For clarity, this code will NOT be run within the context
             //of editor::processGuiMobTypeWidgets, but will instead
@@ -2334,7 +2334,7 @@ bool Editor::processGuiMobTypeWidgets(
             internalCustomCatName = tc;
             internalMobType = nullptr;
             size_t customCatIdx = customCatNameIdxs[tc];
-            const vector<MobType*> &types =
+            const vector<MobType*>& types =
                 finalList[customCatIdx];
             for(size_t t = 0; t < types.size(); t++) {
                 if(types[t]->name == n) {
@@ -2381,7 +2381,7 @@ bool Editor::processGuiMobTypeWidgets(
         //Object type combobox.
         vector<string> typeNames;
         size_t customCatIdx = customCatNameIdxs[internalCustomCatName];
-        const vector<MobType*> &types = finalList[customCatIdx];
+        const vector<MobType*>& types = finalList[customCatIdx];
         for(size_t t = 0; t < types.size(); t++) {
             MobType* tPtr = types[t];
             typeNames.push_back(tPtr->name);
@@ -2426,7 +2426,7 @@ bool Editor::processGuiNewDialogPackWidgets(string* pack) {
     
     //Pack combo.
     vector<string> packs;
-    for(const auto &p : game.content.packs.manifestsWithBase) {
+    for(const auto& p : game.content.packs.manifestsWithBase) {
         packs.push_back(game.content.packs.list[p].name);
     }
     if(packs.empty()) {
@@ -2541,7 +2541,7 @@ void Editor::processGuiNewPackDialog() {
             "The internal name should only have lowercase letters,\n"
             "numbers, and underscores!";
     } else {
-        for(const auto &p : game.content.packs.manifestsWithBase) {
+        for(const auto& p : game.content.packs.manifestsWithBase) {
             if(internalName == p) {
                 problem = "There is already a pack with that internal name!";
                 break;
@@ -2608,7 +2608,7 @@ void Editor::processGuiNewPackDialog() {
  * @return Whether the user changed one of the values.
  */
 bool Editor::processGuiSizeWidgets(
-    const char* label, Point &size, float vSpeed,
+    const char* label, Point& size, float vSpeed,
     bool keepAspectRatio,
     bool keepArea,
     float minSize
@@ -2752,9 +2752,9 @@ void Editor::processGuiUnsavedChangesDialog() {
     ImGui::SameLine(0.0f, 10);
     if(ImGui::Button("Save", ImVec2(180, 30))) {
         closeTopDialog();
-        const std::function<bool()> &saveCallback =
+        const std::function<bool()>& saveCallback =
             changesMgr.getUnsavedWarningSaveCallback();
-        const std::function<void()> &actionCallback =
+        const std::function<void()>& actionCallback =
             changesMgr.getUnsavedWarningActionCallback();
         if(saveCallback()) {
             actionCallback();
@@ -2796,7 +2796,7 @@ void Editor::processGuiUnsavedChangesDialog() {
  * @param label Label to give to Dear ImGui.
  * @return Whether the node is open.
  */
-bool Editor::saveableTreeNode(const string &category, const string &label) {
+bool Editor::saveableTreeNode(const string& category, const string& label) {
     string nodeName = getName() + "/" + category + "/" + label;
     ImGui::SetNextItemOpen(game.options.editors.openNodes[nodeName]);
     ImGui::PushFont(game.sysContent.fntDearImGuiHeader);
@@ -2814,7 +2814,7 @@ bool Editor::saveableTreeNode(const string &category, const string &label) {
  * @param text Text to put in the status bar.
  * @param error Whether there was an error or not.
  */
-void Editor::setStatus(const string &text, bool error) {
+void Editor::setStatus(const string& text, bool error) {
     statusText = text;
     if(error) {
         opErrorFlashTimer.start();
@@ -2832,7 +2832,7 @@ void Editor::setStatus(const string &text, bool error) {
  * specify the explanation type here.
  */
 void Editor::setTooltip(
-    const string &explanation, const string &shortcut,
+    const string& explanation, const string& shortcut,
     const WIDGET_EXPLANATION widgetExplanation
 ) {
     if(!game.options.editors.showTooltips) {
@@ -2903,7 +2903,7 @@ void Editor::setTooltip(
  * @param anchor Anchor point.
  * @return The snapped point.
  */
-Point Editor::snapPointToAxis(const Point &p, const Point &anchor) {
+Point Editor::snapPointToAxis(const Point& p, const Point& anchor) {
     float hDiff = fabs(p.x - anchor.x);
     float vDiff = fabs(p.y - anchor.y);
     if(hDiff > vDiff) {
@@ -2921,7 +2921,7 @@ Point Editor::snapPointToAxis(const Point &p, const Point &anchor) {
  * @param gridInterval Current grid interval.
  * @return The snapped point.
  */
-Point Editor::snapPointToGrid(const Point &p, float gridInterval) {
+Point Editor::snapPointToGrid(const Point& p, float gridInterval) {
     return
         Point(
             round(p.x / gridInterval) * gridInterval,
@@ -2956,8 +2956,8 @@ void Editor::unload() {
  * @param name Proper name of the entry.
  */
 void Editor::updateHistory(
-    vector<pair<string, string> > &history,
-    const ContentManifest &manifest, const string &name
+    vector<pair<string, string> >& history,
+    const ContentManifest& manifest, const string& name
 ) {
     string finalName = name.empty() ? manifest.internalName : name;
     
@@ -3219,10 +3219,10 @@ Editor::ChangesManager::ChangesManager(Editor* ed) :
  * @return Whether there were unsaved changes.
  */
 bool Editor::ChangesManager::askIfUnsaved(
-    const Point &pos,
-    const string &actionLong, const string &actionShort,
-    const std::function<void()> &actionCallback,
-    const std::function<bool()> &saveCallback
+    const Point& pos,
+    const string& actionLong, const string& actionShort,
+    const std::function<void()>& actionCallback,
+    const std::function<bool()>& saveCallback
 ) {
     if(unsavedChanges > 0) {
         unsavedWarningActionLong = actionLong;
@@ -3243,9 +3243,9 @@ bool Editor::ChangesManager::askIfUnsaved(
                     ed->keyCheck(ev->keyboard.keycode, ALLEGRO_KEY_S, true)
                 ) {
                     ed->closeTopDialog();
-                    const std::function<bool()> &saveCallback =
+                    const std::function<bool()>& saveCallback =
                         this->getUnsavedWarningSaveCallback();
-                    const std::function<void()> &actionCallback =
+                    const std::function<void()>& actionCallback =
                         this->getUnsavedWarningActionCallback();
                     if(saveCallback()) {
                         actionCallback();
@@ -3254,7 +3254,7 @@ bool Editor::ChangesManager::askIfUnsaved(
                     ed->keyCheck(ev->keyboard.keycode, ALLEGRO_KEY_D, true)
                 ) {
                     ed->closeTopDialog();
-                    const std::function<void()> &actionCallback =
+                    const std::function<void()>& actionCallback =
                         this->getUnsavedWarningActionCallback();
                     actionCallback();
                 }
@@ -3310,7 +3310,7 @@ float Editor::ChangesManager::getUnsavedTimeDelta() const {
  *
  * @return The text.
  */
-const string &Editor::ChangesManager::getUnsavedWarningActionLong()
+const string& Editor::ChangesManager::getUnsavedWarningActionLong()
 const {
     return unsavedWarningActionLong;
 }
@@ -3321,7 +3321,7 @@ const {
  *
  * @return The text.
  */
-const string &Editor::ChangesManager::getUnsavedWarningActionShort()
+const string& Editor::ChangesManager::getUnsavedWarningActionShort()
 const {
     return unsavedWarningActionShort;
 }
@@ -3332,7 +3332,7 @@ const {
  *
  * @return The callback.
  */
-const std::function<void()> &
+const std::function<void()>&
 Editor::ChangesManager::getUnsavedWarningActionCallback() const {
     return unsavedWarningActionCallback;
 }
@@ -3343,7 +3343,7 @@ Editor::ChangesManager::getUnsavedWarningActionCallback() const {
  *
  * @return The callback.
  */
-const std::function<bool()> &
+const std::function<bool()>&
 Editor::ChangesManager::getUnsavedWarningSaveCallback() const {
     return unsavedWarningSaveCallback;
 }
@@ -3411,7 +3411,7 @@ void Editor::ChangesManager::reset() {
  * @param f Function to run.
  * @param n Name.
  */
-Editor::Command::Command(CommandFunc f, const string &n) :
+Editor::Command::Command(CommandFunc f, const string& n) :
     func(f),
     name(n) {
 }
@@ -3795,8 +3795,8 @@ void Editor::Picker::process() {
  * @param bitmap Bitmap to display on the item. If none, use nullptr.
  */
 Editor::PickerItem::PickerItem(
-    const string &name, const string &topCategory, const string &secCategory,
-    void* info, const string &tooltip, ALLEGRO_BITMAP* bitmap
+    const string& name, const string& topCategory, const string& secCategory,
+    void* info, const string& tooltip, ALLEGRO_BITMAP* bitmap
 ) :
     name(name),
     topCategory(topCategory),
@@ -3941,7 +3941,7 @@ Point Editor::TransformationWidget::getOldCenter() const {
  * @return Whether the user clicked on a handle.
  */
 bool Editor::TransformationWidget::handleMouseDown(
-    const Point &mouseCoords, const Point* const center,
+    const Point& mouseCoords, const Point* const center,
     const Point* const size, const float* const angle, float zoom
 ) {
     if(!center) return false;
@@ -4005,7 +4005,7 @@ bool Editor::TransformationWidget::handleMouseDown(
  * @return Whether the user is dragging a handle.
  */
 bool Editor::TransformationWidget::handleMouseMove(
-    const Point &mouseCoords, Point* center, Point* size, float* angle,
+    const Point& mouseCoords, Point* center, Point* size, float* angle,
     float zoom, bool keepAspectRatio, bool keepArea,
     float minSize, bool lockCenter
 ) {

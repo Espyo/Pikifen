@@ -149,7 +149,7 @@ public:
     
     //--- Function declarations ---
     
-    Leader(const Point &pos, LeaderType* type, float angle);
+    Leader(const Point& pos, LeaderType* type, float angle);
     bool checkThrowOk() const;
     bool canGrabGroupMember(Mob* m) const;
     void dismiss();

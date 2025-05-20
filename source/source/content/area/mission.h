@@ -278,7 +278,7 @@ struct MissionRecord {
     
     //--- Function declarations ---
     
-    bool isPlatinum(const MissionData &mission);
+    bool isPlatinum(const MissionData& mission);
     
 };
 

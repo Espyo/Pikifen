@@ -159,7 +159,7 @@ const float SWARM_VERTICAL_SCALE = 0.5f;
  * @param type Mob type this mob belongs to.
  * @param angle Starting angle.
  */
-Mob::Mob(const Point &pos, MobType* type, float angle) :
+Mob::Mob(const Point& pos, MobType* type, float angle) :
     type(type),
     pos(pos),
     angle(angle),
@@ -1097,7 +1097,7 @@ void Mob::causeSpikeDamage(Mob* victim, bool isIngestion) {
  */
 void Mob::chase(
     Point* origCoords, float* origZ,
-    const Point &offset, float offsetZ,
+    const Point& offset, float offsetZ,
     Bitmask8 flags,
     float targetDistance, float speed, float acceleration
 ) {
@@ -1135,7 +1135,7 @@ void Mob::chase(
  * LARGE_FLOAT makes it use the mob's standard acceleration.
  */
 void Mob::chase(
-    const Point &coords, float coordsZ,
+    const Point& coords, float coordsZ,
     unsigned char flags,
     float targetDistance, float speed, float acceleration
 ) {
@@ -1197,7 +1197,7 @@ void Mob::chomp(Mob* m, const Hitbox* hitboxInfo) {
  * @param canFreeMove Can the mob move freely, or only forward?
  */
 void Mob::circleAround(
-    Mob* m, const Point &p, float radius, bool clockwise,
+    Mob* m, const Point& p, float radius, bool clockwise,
     float speed, bool canFreeMove
 ) {
     if(!circlingInfo) {
@@ -1224,7 +1224,7 @@ void Mob::circleAround(
  * @return The Pikmin type.
  */
 PikminType* Mob::decideCarryPikminType(
-    const unordered_set<PikminType*> &availableTypes,
+    const unordered_set<PikminType*>& availableTypes,
     Mob* added, Mob* removed
 ) const {
     //How many of each Pikmin type are carrying.
@@ -1250,7 +1250,7 @@ PikminType* Mob::decideCarryPikminType(
     
     //Then figure out what are the majority types.
     unsigned most = 0;
-    for(auto &t : typeQuantity) {
+    for(auto& t : typeQuantity) {
         if(t.second > most) {
             most = t.second;
             majorityTypes.clear();
@@ -1304,7 +1304,7 @@ void Mob::deleteOldStatusEffects() {
     bool removedForcedSprite = false;
     
     for(size_t s = 0; s < statuses.size(); ) {
-        Status &sPtr = statuses[s];
+        Status& sPtr = statuses[s];
         if(sPtr.toDelete) {
             handleStatusEffectLoss(sPtr.type);
             
@@ -1602,7 +1602,7 @@ void Mob::focusOnMob(Mob* m2) {
  * @return Whether there is a path available.
  */
 bool Mob::followPath(
-    const PathFollowSettings &settings,
+    const PathFollowSettings& settings,
     float speed, float acceleration
 ) {
     bool wasBlocked = false;
@@ -1655,7 +1655,7 @@ bool Mob::followPath(
             group->getGroupInvulnerabilities(this);
     } else {
         //Use the object's standard invulnerabilities.
-        for(auto &v : type->hazardVulnerabilities) {
+        for(auto& v : type->hazardVulnerabilities) {
             if(v.second.effectMult == 0.0f) {
                 finalSettings.invulnerabilities.push_back(v.first);
             }
@@ -1765,7 +1765,7 @@ Point Mob::getChaseTarget(float* outZ) const {
  * @return The hitbox.
  */
 Hitbox* Mob::getClosestHitbox(
-    const Point &p, size_t hType, Distance* d
+    const Point& p, size_t hType, Distance* d
 ) const {
     Sprite* s;
     getSpriteData(&s, nullptr, nullptr);
@@ -2660,7 +2660,7 @@ void Mob::hold(
  * @param viewport What viewport to calculate with.
  * @return Whether it is off-camera.
  */
-bool Mob::isOffCamera(const Viewport &viewport) const {
+bool Mob::isOffCamera(const Viewport& viewport) const {
     if(parent) return false;
     
     float spriteBound = 0;
@@ -2697,7 +2697,7 @@ bool Mob::isOffCamera(const Viewport &viewport) const {
  * @param p Point to check.
  * @return Whether it is on top.
  */
-bool Mob::isPointOn(const Point &p) const {
+bool Mob::isPointOn(const Point& p) const {
     if(rectangularDim.x == 0) {
         return Distance(p, pos) <= radius;
         
@@ -2720,7 +2720,7 @@ bool Mob::isPointOn(const Point &p) const {
  * @param hazards List of hazards to check.
  * @return Whether it is resitant.
  */
-bool Mob::isResistantToHazards(const vector<Hazard*> &hazards) const {
+bool Mob::isResistantToHazards(const vector<Hazard*>& hazards) const {
     for(size_t h = 0; h < hazards.size(); h++) {
         if(getHazardVulnerability(hazards[h]).effectMult != 0.0f) {
             return false;
@@ -2783,7 +2783,7 @@ void Mob::moveToPathEnd(float speed, float acceleration) {
     if(!pathInfo) return;
     if(
         (
-            pathInfo->settings.flags &
+            pathInfo->settings.flags&
             PATH_FOLLOW_FLAG_FOLLOW_MOB
         ) &&
         pathInfo->settings.targetMob
@@ -2896,7 +2896,7 @@ string Mob::printStateHistory() const {
  *
  * @param svr Script var reader to use.
  */
-void Mob::readScriptVars(const ScriptVarReader &svr) {
+void Mob::readScriptVars(const ScriptVarReader& svr) {
     string teamVar;
     
     if(svr.get("team", teamVar)) {
@@ -3021,7 +3021,7 @@ void Mob::respawn() {
  * @param receiver Mob that will receive the message.
  * @param msg The message.
  */
-void Mob::sendScriptMessage(Mob* receiver, string &msg) const {
+void Mob::sendScriptMessage(Mob* receiver, string& msg) const {
     MobEvent* ev = receiver->fsm.getEvent(MOB_EV_RECEIVE_MESSAGE);
     if(!ev) return;
     ev->run(receiver, (void*) &msg, (void*) this);
@@ -3101,7 +3101,7 @@ void Mob::setAnimation(
  * the mob's speed, using this value as a baseline (for 1.0x speed).
  */
 void Mob::setAnimation(
-    const string &name, const START_ANIM_OPTION options,
+    const string& name, const START_ANIM_OPTION options,
     float mobSpeedAnimBaseline
 ) {
     size_t idx = anim.animDb->findAnimation(name);
@@ -3173,7 +3173,7 @@ void Mob::setRadius(float radius) {
  *
  * @param rectangularDim New rectangular dimensions.
  */
-void Mob::setRectangularDim(const Point &rectangularDim) {
+void Mob::setRectangularDim(const Point& rectangularDim) {
     this->rectangularDim = rectangularDim;
     physicalSpan =
         calculateMobPhysicalSpan(
@@ -3202,7 +3202,7 @@ void Mob::setTimer(float time) {
  * @param name The variable's name.
  * @param value The variable's new value.
  */
-void Mob::setVar(const string &name, const string &value) {
+void Mob::setVar(const string& name, const string& value) {
     vars[name] = value;
 }
 
@@ -3756,7 +3756,7 @@ void Mob::tickBrain(float deltaT) {
                         float nextStopZ = z;
                         if(
                             (
-                                pathInfo->settings.flags &
+                                pathInfo->settings.flags&
                                 PATH_FOLLOW_FLAG_AIRBORNE
                             ) &&
                             nextStop->sectorPtr
@@ -4143,7 +4143,7 @@ void Mob::tickScript(float deltaT) {
     }
     
     //Check if it got whistled.
-    for(const Player &player : game.states.gameplay->players) {
+    for(const Player& player : game.states.gameplay->players) {
         if(!player.leaderPtr) continue;
         if(!player.whistle.whistling) continue;
         if(Distance(pos, player.whistle.center) > player.whistle.radius) {

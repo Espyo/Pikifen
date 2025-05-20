@@ -23,7 +23,7 @@
  *
  * @param input Input to clean.
  */
-void ControlsManager::cleanStick(const PlayerInput &input) {
+void ControlsManager::cleanStick(const PlayerInput& input) {
     rawSticks[input.source.deviceNr]
     [input.source.stickNr][input.source.axisNr] =
         input.source.type == INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS ?
@@ -51,12 +51,12 @@ void ControlsManager::cleanStick(const PlayerInput &input) {
  * @return The action types.
  */
 vector<int> ControlsManager::getActionTypesFromInput(
-    const PlayerInput &input
+    const PlayerInput& input
 ) {
     vector<int> actionTypes;
     
     for(size_t b = 0; b < binds.size(); b++) {
-        const ControlBind &bind = binds[b];
+        const ControlBind& bind = binds[b];
         if(bind.inputSource == input.source) {
             actionTypes.push_back(bind.actionTypeId);
         }
@@ -90,7 +90,7 @@ float ControlsManager::getValue(int playerActionTypeId) const {
  * from the last frame's state.
  */
 void ControlsManager::handleCleanInput(
-    const PlayerInput &input, bool addDirectly
+    const PlayerInput& input, bool addDirectly
 ) {
     if(processInputIgnoring(input)) {
         //We have to ignore this one.
@@ -122,7 +122,7 @@ void ControlsManager::handleCleanInput(
  * @param input The input.
  */
 void ControlsManager::handleInput(
-    const PlayerInput &input
+    const PlayerInput& input
 ) {
     if(
         input.source.type == INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS ||
@@ -209,7 +209,7 @@ void ControlsManager::handleInput(
  * @return The actions.
  */
 vector<PlayerAction> ControlsManager::newFrame(float deltaT) {
-    for(auto &a : actionTypeStatuses) {
+    for(auto& a : actionTypeStatuses) {
         if(a.second.oldValue != a.second.value) {
             PlayerAction newAction;
             newAction.actionTypeId = a.first;
@@ -218,7 +218,7 @@ vector<PlayerAction> ControlsManager::newFrame(float deltaT) {
         }
     }
     
-    for(auto &a : actionTypeStatuses) {
+    for(auto& a : actionTypeStatuses) {
         processStateTimers(a, deltaT);
         processAutoRepeats(a, deltaT);
     }
@@ -229,7 +229,7 @@ vector<PlayerAction> ControlsManager::newFrame(float deltaT) {
     }
     
     //Prepare things for the next frame.
-    for(auto &a : actionTypeStatuses) {
+    for(auto& a : actionTypeStatuses) {
         a.second.oldValue = a.second.value;
     }
     actionQueue.clear();
@@ -245,7 +245,7 @@ vector<PlayerAction> ControlsManager::newFrame(float deltaT) {
  * @param deltaT How much time has passed since the last frame.
  */
 void ControlsManager::processAutoRepeats(
-    std::pair<const int, ActionTypeStatus> &it, float deltaT
+    std::pair<const int, ActionTypeStatus>& it, float deltaT
 ) {
     float actionTypeAutoRepeat = actionTypes[it.first].autoRepeat;
     if(actionTypeAutoRepeat == 0.0f) return;
@@ -288,7 +288,7 @@ void ControlsManager::processAutoRepeats(
  * @return Whether it should be ignored.
  */
 bool ControlsManager::processInputIgnoring(
-    const PlayerInput &input
+    const PlayerInput& input
 ) {
     for(size_t i = 0; i < ignoredInputSources.size(); i++) {
         if(ignoredInputSources[i] == input.source) {
@@ -315,7 +315,7 @@ bool ControlsManager::processInputIgnoring(
  * @param deltaT How much time has passed since the last frame.
  */
 void ControlsManager::processStateTimers(
-    std::pair<const int, ActionTypeStatus> &it, float deltaT
+    std::pair<const int, ActionTypeStatus>& it, float deltaT
 ) {
     bool isActive = it.second.value != 0.0f;
     bool wasActive = it.second.oldValue != 0.0f;
@@ -350,7 +350,7 @@ void ControlsManager::setValue(int playerActionTypeId, float value) {
  * @param inputSource Input source to ignore.
  */
 void ControlsManager::startIgnoringInputSource(
-    const PlayerInputSource &inputSource
+    const PlayerInputSource& inputSource
 ) {
     for(size_t i = 0; i < ignoredInputSources.size(); i++) {
         if(ignoredInputSources[i] == inputSource) {
@@ -368,7 +368,7 @@ void ControlsManager::startIgnoringInputSource(
  * @param s2 The other input source.
  * @return Whether they are the same.
  */
-bool PlayerInputSource::operator==(const PlayerInputSource &s2) const {
+bool PlayerInputSource::operator==(const PlayerInputSource& s2) const {
     return
         type == s2.type &&
         deviceNr == s2.deviceNr &&

@@ -97,7 +97,7 @@ void GuiEditor::closeOptionsDialog() {
  * @param pack The existing pack's internal name.
  */
 void GuiEditor::createGuiDef(
-    const string &internalName, const string &pack
+    const string& internalName, const string& pack
 ) {
     //Load the base pack one first.
     ContentManifest tempOrigMan;
@@ -259,7 +259,7 @@ void GuiEditor::drawCanvasDearImGuiCallback(
  * @param path Path to the file.
  * @return The tooltip text.
  */
-string GuiEditor::getFileTooltip(const string &path) const {
+string GuiEditor::getFileTooltip(const string& path) const {
     ContentManifest tempManif;
     game.content.guiDefs.pathToManifest(
         path, &tempManif
@@ -398,7 +398,7 @@ void GuiEditor::loadCmd(float inputValue) {
  * the user's file open history.
  */
 void GuiEditor::loadGuiDefFile(
-    const string &path, bool shouldUpdateHistory
+    const string& path, bool shouldUpdateHistory
 ) {
     //Setup.
     setupForNewGuiDef();
@@ -448,7 +448,7 @@ void GuiEditor::loadGuiDefFile(
  *
  * @param ev Event to handle.
  */
-void GuiEditor::panCam(const ALLEGRO_EVENT &ev) {
+void GuiEditor::panCam(const ALLEGRO_EVENT& ev) {
     game.editorsView.cam.setPos(
         Point(
             game.editorsView.cam.pos.x -
@@ -470,7 +470,7 @@ void GuiEditor::panCam(const ALLEGRO_EVENT &ev) {
  * @param isNew Unused.
  */
 void GuiEditor::pickGuiDefFile(
-    const string &name, const string &topCat, const string &secCat,
+    const string& name, const string& topCat, const string& secCat,
     void* info, bool isNew
 ) {
     ContentManifest* tempManif = (ContentManifest*) info;
@@ -651,7 +651,7 @@ void GuiEditor::snapModeCmd(float inputValue) {
  * @param p Point to snap.
  * @return The snapped point.
  */
-Point GuiEditor::snapPoint(const Point &p) {
+Point GuiEditor::snapPoint(const Point& p) {
     Point finalPoint = p;
     bool doSnap = game.options.guiEd.snap;
     

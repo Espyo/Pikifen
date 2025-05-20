@@ -31,7 +31,7 @@
  * @return The string.
  */
 string amountStr(
-    int amount, const string &singularText, const string &pluralText
+    int amount, const string& singularText, const string& pluralText
 ) {
     string result = i2s(amount) + " ";
     if(amount == 1) {
@@ -67,7 +67,7 @@ string b2s(bool b) {
  * get truncated.
  * @return The boxed string.
  */
-string boxString(const string &s, size_t size, const string &finisher) {
+string boxString(const string& s, size_t size, const string& finisher) {
     assert(size > finisher.size());
     size_t coreSize = std::min(s.size(), size - finisher.size());
     return
@@ -89,7 +89,7 @@ string boxString(const string &s, size_t size, const string &finisher) {
  * @param origStr Original string.
  * @param newStr Reference to the new string.
  */
-void duplicateString(const string &origStr, string &newStr) {
+void duplicateString(const string& origStr, string& newStr) {
     newStr = string(origStr.c_str());
 }
 
@@ -117,7 +117,7 @@ string f2s(float f) {
  * @param s2 Second string.
  * @return The match, or an empty string if there's no match.
  */
-string getMatchingStringStarts(const string &s1, const string &s2) {
+string getMatchingStringStarts(const string& s1, const string& s2) {
     size_t charsToCheck = std::min(s1.size(), s2.size());
     size_t nrMatchingChars = 0;
     
@@ -142,7 +142,7 @@ string getMatchingStringStarts(const string &s1, const string &s2) {
  * @param s The string to check.
  * @return The last component, or an empty string on error.
  */
-string getPathLastComponent(const string &s) {
+string getPathLastComponent(const string& s) {
     vector<string> components = split(s, "/");
     if(!components.empty()) return components.back();
     return "";
@@ -155,7 +155,7 @@ string getPathLastComponent(const string &s) {
  * @param s String to check.
  * @return Whether it is a number.
  */
-bool isNumber(const string &s) {
+bool isNumber(const string& s) {
     for(size_t c = 0; c < s.size(); c++) {
         unsigned char ch = s[c];
         if((ch < '0' || ch > '9') && ch != '-' && ch != ',' && ch != '.') {
@@ -176,7 +176,7 @@ bool isNumber(const string &s) {
  * @param padding What character to pad with.
  * @return The padded string.
  */
-string padString(const string &s, size_t size, char padding) {
+string padString(const string& s, size_t size, char padding) {
     string result = s;
     if(size > s.size()) {
         result.insert(0, size - s.size(), padding);
@@ -192,7 +192,7 @@ string padString(const string &s, size_t size, char padding) {
  * @return The file name without an extension, or the original string if there
  * was no extension.
  */
-string removeExtension(const string &s) {
+string removeExtension(const string& s) {
     size_t pos = s.find_last_of('.');
     if(pos == string::npos) {
         return s;
@@ -209,7 +209,7 @@ string removeExtension(const string &s) {
  * @param replacement What to replace found search terms with.
  * @return The string with the instances replaced.
  */
-string replaceAll(string s, const string &search, const string &replacement) {
+string replaceAll(string s, const string& search, const string& replacement) {
     size_t pos = s.find(search);
     while(pos != string::npos) {
         s.replace(pos, search.size(), replacement);
@@ -227,7 +227,7 @@ string replaceAll(string s, const string &search, const string &replacement) {
  * @param s String to convert.
  * @return The boolean.
  */
-bool s2b(const string &s) {
+bool s2b(const string& s) {
     string s2 = s;
     s2 = strToLower(s2);
     s2 = trimSpaces(s2);
@@ -243,7 +243,7 @@ bool s2b(const string &s) {
  * @param s String to convert.
  * @return The float.
  */
-double s2f(const string &s) {
+double s2f(const string& s) {
     string s2 = trimSpaces(s);
     replace(s2.begin(), s2.end(), ',', '.');
     return atof(s2.c_str());
@@ -256,7 +256,7 @@ double s2f(const string &s) {
  * @param s String to convert.
  * @return The integer.
  */
-int s2i(const string &s) {
+int s2i(const string& s) {
     return (int) s2f(s);
 }
 
@@ -269,7 +269,7 @@ int s2i(const string &s) {
  * Default is semicolon.
  * @return The vector.
  */
-vector<string> semicolonListToVector(const string &s, const string &sep) {
+vector<string> semicolonListToVector(const string& s, const string& sep) {
     vector<string> parts = split(s, sep);
     for(size_t p = 0; p < parts.size(); p++) {
         parts[p] = trimSpaces(parts[p]);
@@ -290,7 +290,7 @@ vector<string> semicolonListToVector(const string &s, const string &sep) {
  * @return The substrings.
  */
 vector<string> split(
-    string text, const string &del, bool incEmpty, bool incDel
+    string text, const string& del, bool incEmpty, bool incDel
 ) {
     vector<string> v;
     size_t pos;
@@ -336,7 +336,7 @@ vector<string> split(
  * @param end End to match with.
  * @return Whether it matches.
  */
-bool strEndsWith(const string &s, const string &end) {
+bool strEndsWith(const string& s, const string& end) {
     if(end.size() > s.size()) return false;
     return s.compare(s.length() - end.length(), end.length(), end) == 0;
 }
@@ -351,7 +351,7 @@ bool strEndsWith(const string &s, const string &end) {
  * @param match What string to match with.
  * @return Whether it matches.
  */
-bool strPeek(const string &s, size_t where, const string &match) {
+bool strPeek(const string& s, size_t where, const string& match) {
     if(where + match.size() > s.size()) return false;
     return s.substr(where, match.size()) == match;
 }
@@ -364,7 +364,7 @@ bool strPeek(const string &s, size_t where, const string &match) {
  * @param start Start to match with.
  * @return Whether it matches.
  */
-bool strStartsWith(const string &s, const string &start) {
+bool strStartsWith(const string& s, const string& start) {
     if(start.size() > s.size()) return false;
     return s.compare(0, start.length(), start) == 0;
 }
@@ -452,7 +452,7 @@ string strToUpper(string s) {
  */
 string timeToStr2(
     size_t units,
-    const string &suffix1, const string &suffix2,
+    const string& suffix1, const string& suffix2,
     uint8_t flags
 ) {
     size_t units1 = units / 60;
@@ -494,7 +494,7 @@ string timeToStr2(
  */
 string timeToStr3(
     size_t units,
-    const string &suffix1, const string &suffix2, const string &suffix3,
+    const string& suffix1, const string& suffix2, const string& suffix3,
     uint8_t flags
 ) {
     size_t units1 = units / 60 / 60;
@@ -545,7 +545,7 @@ string timeToStr3(
  * @param leftOnly If true, only trim the spaces at the left.
  * @return The trimmed string.
  */
-string trimSpaces(const string &s, bool leftOnly) {
+string trimSpaces(const string& s, bool leftOnly) {
     string orig = s;
     //Spaces before.
     if(orig.size()) {
@@ -580,7 +580,7 @@ string trimSpaces(const string &s, bool leftOnly) {
  * @param size Maximum size allowed.
  * @return The trimmed string.
  */
-string trimWithEllipsis(const string &str, size_t size) {
+string trimWithEllipsis(const string& str, size_t size) {
     if(str.size() <= size) return str;
     
     string result = str;
@@ -601,7 +601,7 @@ string trimWithEllipsis(const string &str, size_t size) {
  * unless it's impossible to split.
  * @return The wrapped string.
  */
-string wordWrap(const string &s, size_t nrCharsPerLine) {
+string wordWrap(const string& s, size_t nrCharsPerLine) {
     string result;
     string wordInQueue;
     size_t curLineWidth = 0;

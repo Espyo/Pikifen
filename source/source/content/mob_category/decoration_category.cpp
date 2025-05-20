@@ -33,7 +33,7 @@ DecorationCategory::DecorationCategory() :
  * @brief Clears the list of registered types of decorations.
  */
 void DecorationCategory::clearTypes() {
-    for(auto &t : game.content.mobTypes.list.decoration) {
+    for(auto& t : game.content.mobTypes.list.decoration) {
         delete t.second;
     }
     game.content.mobTypes.list.decoration.clear();
@@ -49,7 +49,7 @@ void DecorationCategory::clearTypes() {
  * @return The mob.
  */
 Mob* DecorationCategory::createMob(
-    const Point &pos, MobType* type, float angle
+    const Point& pos, MobType* type, float angle
 ) {
     Decoration* m = new Decoration(pos, (DecorationType*) type, angle);
     game.states.gameplay->mobs.decorations.push_back(m);
@@ -90,7 +90,7 @@ void DecorationCategory::eraseMob(Mob* m) {
  * @param internalName Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-MobType* DecorationCategory::getType(const string &internalName) const {
+MobType* DecorationCategory::getType(const string& internalName) const {
     auto it = game.content.mobTypes.list.decoration.find(internalName);
     if(it == game.content.mobTypes.list.decoration.end()) return nullptr;
     return it->second;
@@ -102,8 +102,8 @@ MobType* DecorationCategory::getType(const string &internalName) const {
  *
  * @param list This list gets filled with the mob type internal names.
  */
-void DecorationCategory::getTypeNames(vector<string> &list) const {
-    for(auto &t : game.content.mobTypes.list.decoration) {
+void DecorationCategory::getTypeNames(vector<string>& list) const {
+    for(auto& t : game.content.mobTypes.list.decoration) {
         list.push_back(t.first);
     }
 }
@@ -116,7 +116,7 @@ void DecorationCategory::getTypeNames(vector<string> &list) const {
  * @param type Mob type to register.
  */
 void DecorationCategory::registerType(
-    const string &internalName, MobType* type
+    const string& internalName, MobType* type
 ) {
     game.content.mobTypes.list.decoration[internalName] =
         (DecorationType*) type;

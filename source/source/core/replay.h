@@ -85,7 +85,7 @@ struct ReplayElement {
     
     //--- Function declarations ---
     
-    ReplayElement(const REPLAY_ELEMENT type, const Point &pos);
+    ReplayElement(const REPLAY_ELEMENT type, const Point& pos);
     
 };
 
@@ -157,18 +157,18 @@ public:
     
     Replay();
     void addState(
-        const vector<Leader*> &leaderList,
-        const vector<Pikmin*> &pikminList,
-        const vector<Enemy*> &enemyList,
-        const vector<Treasure*> &treasureList,
-        const vector<Onion*> &onionList,
-        const vector<Mob*> &obstacleList,
+        const vector<Leader*>& leaderList,
+        const vector<Pikmin*>& pikminList,
+        const vector<Enemy*>& enemyList,
+        const vector<Treasure*>& treasureList,
+        const vector<Onion*>& onionList,
+        const vector<Mob*>& obstacleList,
         size_t curLeaderIdx
     );
     void clear();
     void finishRecording();
-    void loadFromFile(const string &filePath);
-    void saveToFile(const string &filePath) const;
+    void loadFromFile(const string& filePath);
+    void saveToFile(const string& filePath) const;
     
 private:
 

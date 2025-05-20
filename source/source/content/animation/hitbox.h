@@ -54,7 +54,7 @@ public:
     
     //--- Function declarations ---
     
-    explicit BodyPart(const string &name = "");
+    explicit BodyPart(const string& name = "");
     
 };
 
@@ -119,15 +119,15 @@ public:
     //--- Function declarations ---
     
     explicit Hitbox(
-        const string &bpn = "", size_t bpi = INVALID, BodyPart* bpp = nullptr,
-        const Point &pos = Point(), float z = 0,
+        const string& bpn = "", size_t bpi = INVALID, BodyPart* bpp = nullptr,
+        const Point& pos = Point(), float z = 0,
         float height = 128, float radius = 32
     );
     Point getCurPos(
-        const Point &mobPos, float mobAngle
+        const Point& mobPos, float mobAngle
     ) const;
     Point getCurPos(
-        const Point &mobPos,
+        const Point& mobPos,
         float mobAngleCos, float mobAngleSin
     ) const;
     

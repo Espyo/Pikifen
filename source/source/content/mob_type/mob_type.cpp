@@ -210,7 +210,7 @@ void MobType::loadCatResources(DataNode*) { }
  * @param folderPath Path to the folder this mob type is in.
  */
 void MobType::loadFromDataNode(
-    DataNode* node, CONTENT_LOAD_LEVEL level, const string &folderPath
+    DataNode* node, CONTENT_LOAD_LEVEL level, const string& folderPath
 ) {
     //Content metadata.
     loadMetadataFromDataNode(node);
@@ -349,7 +349,7 @@ void MobType::loadFromDataNode(
             );
             
         } else {
-            MobType::Vulnerability &vuln =
+            MobType::Vulnerability& vuln =
                 hazardVulnerabilities[&(hazardIt->second)];
             vuln.effectMult = percentage / 100.0f;
             if(!statusName.empty()) {
@@ -443,7 +443,7 @@ void MobType::loadFromDataNode(
             );
             
         } else {
-            auto &s = spikeDamageVulnerabilities[&(sdvIt->second)];
+            auto& s = spikeDamageVulnerabilities[&(sdvIt->second)];
             s.effectMult = percentage / 100.0f;
             s.statusToApply = statusIt->second;
             
@@ -487,7 +487,7 @@ void MobType::loadFromDataNode(
             );
             
         } else {
-            auto &s = statusVulnerabilities[svIt->second];
+            auto& s = statusVulnerabilities[svIt->second];
             s.effectMult = percentage / 100.0f;
             if(statusOverrideIt != game.content.statusTypes.list.end()) {
                 s.statusToApply = statusOverrideIt->second;
@@ -963,7 +963,7 @@ void MobType::unloadResources() {
  */
 AnimConversionVector
 MobTypeWithAnimGroups::getAnimConversionsWithGroups(
-    const AnimConversionVector &v, size_t baseAnimTotal
+    const AnimConversionVector& v, size_t baseAnimTotal
 ) const {
     AnimConversionVector newV;
     

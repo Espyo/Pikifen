@@ -24,28 +24,28 @@ using std::string;
 
 
 void loadAreaMissionRecord(
-    DataNode* file, Area* areaPtr, MissionRecord &record
+    DataNode* file, Area* areaPtr, MissionRecord& record
 );
 ALLEGRO_AUDIO_STREAM* loadAudioStream(
-    const string &fileName, DataNode* node = nullptr,
+    const string& fileName, DataNode* node = nullptr,
     bool reportErrors = true
 );
 ALLEGRO_BITMAP* loadBmp(
-    const string &path, DataNode* node = nullptr,
+    const string& path, DataNode* node = nullptr,
     bool reportError = true, bool errorBmpOnError = true,
     bool errorBmpOnEmpty = true
 );
-DataNode loadDataFile(const string &filePath);
+DataNode loadDataFile(const string& filePath);
 void loadMakerTools();
 ALLEGRO_FONT* loadFont(
-    const string &fileName, int n, const int ranges[], int size
+    const string& fileName, int n, const int ranges[], int size
 );
 void loadFonts();
 void loadMiscGraphics();
 void loadMiscSounds();
 void loadOptions();
 ALLEGRO_SAMPLE* loadSample(
-    const string &fileName, DataNode* node = nullptr,
+    const string& fileName, DataNode* node = nullptr,
     bool reportErrors = true
 );
 void loadStatistics();

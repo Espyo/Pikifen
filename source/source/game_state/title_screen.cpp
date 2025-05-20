@@ -185,7 +185,7 @@ string TitleScreen::getName() const {
  *
  * @param ev Event to handle.
  */
-void TitleScreen::handleAllegroEvent(ALLEGRO_EVENT &ev) {
+void TitleScreen::handleAllegroEvent(ALLEGRO_EVENT& ev) {
     if(game.fadeMgr.isFading()) return;
     
     mainGui.handleAllegroEvent(ev);
@@ -245,7 +245,7 @@ void TitleScreen::initGuiMainPage() {
         );
     };
     playButton->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         mainGui.responsive = false;
         mainGui.startAnimation(
             GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
@@ -285,7 +285,7 @@ void TitleScreen::initGuiMainPage() {
         );
     };
     makeButton->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         mainGui.responsive = false;
         mainGui.startAnimation(
             GUI_MANAGER_ANIM_CENTER_TO_LEFT,
@@ -317,7 +317,7 @@ void TitleScreen::initGuiMainPage() {
         );
     };
     helpButton->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         game.fadeMgr.startFade(false, [] () {
             game.changeState(game.states.annexScreen);
         });
@@ -346,7 +346,7 @@ void TitleScreen::initGuiMainPage() {
         );
     };
     optionsButton->onActivate =
-    [] (const Point &) {
+    [] (const Point&) {
         game.fadeMgr.startFade(false, [] () {
             game.states.annexScreen->menuToLoad =
                 ANNEX_SCREEN_MENU_OPTIONS;
@@ -377,7 +377,7 @@ void TitleScreen::initGuiMainPage() {
         );
     };
     statsButton->onActivate =
-    [] (const Point &) {
+    [] (const Point&) {
         game.fadeMgr.startFade(false, [] () {
             game.states.annexScreen->menuToLoad =
                 ANNEX_SCREEN_MENU_STATS;
@@ -408,7 +408,7 @@ void TitleScreen::initGuiMainPage() {
         );
     };
     discordButton->onActivate =
-    [] (const Point &) {
+    [] (const Point&) {
         openWebBrowser(DISCORD_SERVER_URL);
     };
     discordButton->onGetTooltip =
@@ -435,7 +435,7 @@ void TitleScreen::initGuiMainPage() {
         );
     };
     githubButton->onActivate =
-    [] (const Point &) {
+    [] (const Point&) {
         openWebBrowser(GITHUB_PAGE_URL);
     };
     githubButton->onGetTooltip =
@@ -460,7 +460,7 @@ void TitleScreen::initGuiMainPage() {
         );
     };
     mainGui.backItem->onActivate =
-    [] (const Point &) {
+    [] (const Point&) {
         saveStatistics();
         game.isGameRunning = false;
     };
@@ -535,7 +535,7 @@ void TitleScreen::initGuiMakePage() {
         );
     };
     animEdButton->onActivate =
-    [] (const Point &) {
+    [] (const Point&) {
         game.fadeMgr.startFade(false, [] () {
             game.changeState(game.states.animationEd);
         });
@@ -560,7 +560,7 @@ void TitleScreen::initGuiMakePage() {
         );
     };
     areaEdButton->onActivate =
-    [] (const Point &) {
+    [] (const Point&) {
         game.fadeMgr.startFade(false, [] () {
             game.changeState(game.states.areaEd);
         });
@@ -586,7 +586,7 @@ void TitleScreen::initGuiMakePage() {
         );
     };
     partEdButton->onActivate =
-    [](const Point &) {
+    [](const Point&) {
         game.fadeMgr.startFade(false, []() {
             game.changeState(game.states.particleEd);
         });
@@ -611,7 +611,7 @@ void TitleScreen::initGuiMakePage() {
         );
     };
     guiEdButton->onActivate =
-    [] (const Point &) {
+    [] (const Point&) {
         game.fadeMgr.startFade(false, [] () {
             game.changeState(game.states.guiEd);
         });
@@ -624,7 +624,7 @@ void TitleScreen::initGuiMakePage() {
     makeGui.backItem =
         new ButtonGuiItem("Back", game.sysContent.fntAreaName);
     makeGui.backItem->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         makeGui.responsive = false;
         makeGui.startAnimation(
             GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
@@ -649,7 +649,7 @@ void TitleScreen::initGuiMakePage() {
     BulletGuiItem* moreBullet =
         new BulletGuiItem("More...", game.sysContent.fntStandard);
     moreBullet->onActivate =
-    [] (const Point &) {
+    [] (const Point&) {
         openManual("making.html");
     };
     moreBullet->onGetTooltip =
@@ -714,7 +714,7 @@ void TitleScreen::initGuiPlayPage() {
         );
     };
     simpleButton->onActivate =
-    [] (const Point &) {
+    [] (const Point&) {
         game.fadeMgr.startFade(false, [] () {
             game.states.annexScreen->areaMenuAreaType =
                 AREA_TYPE_SIMPLE;
@@ -743,7 +743,7 @@ void TitleScreen::initGuiPlayPage() {
         );
     };
     missionButton->onActivate =
-    [] (const Point &) {
+    [] (const Point&) {
         game.fadeMgr.startFade(false, [] () {
             game.states.annexScreen->areaMenuAreaType =
                 AREA_TYPE_MISSION;
@@ -764,7 +764,7 @@ void TitleScreen::initGuiPlayPage() {
     playGui.backItem =
         new ButtonGuiItem("Back", game.sysContent.fntAreaName);
     playGui.backItem->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         playGui.responsive = false;
         playGui.startAnimation(
             GUI_MANAGER_ANIM_CENTER_TO_LEFT,
@@ -827,7 +827,7 @@ void TitleScreen::initGuiTutorialPage() {
     tutorialGui.backItem =
         new ButtonGuiItem("No", game.sysContent.fntStandard);
     tutorialGui.backItem->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         tutorialGui.responsive = false;
         tutorialGui.startAnimation(
             GUI_MANAGER_ANIM_CENTER_TO_LEFT,
@@ -853,7 +853,7 @@ void TitleScreen::initGuiTutorialPage() {
     ButtonGuiItem* yesButton =
         new ButtonGuiItem("Yes", game.sysContent.fntStandard);
     yesButton->onActivate =
-    [] (const Point &) {
+    [] (const Point&) {
         game.states.gameplay->pathOfAreaToLoad =
             game.content.areas.manifestToPath(
                 ContentManifest(
@@ -1037,7 +1037,7 @@ void TitleScreen::unload() {
     //Resources.
     game.content.bitmaps.list.free(bmpMenuBg);
     bmpMenuBg = nullptr;
-    for(const auto &t : logoTypeBitmaps) {
+    for(const auto& t : logoTypeBitmaps) {
         game.content.bitmaps.list.free(t.second);
     }
     logoTypeBitmaps.clear();

@@ -344,26 +344,26 @@ public:
     //--- Members ---
     
     //Callback for when a song ends, if any.
-    std::function<void(const string &name)> onSongFinished = nullptr;
+    std::function<void(const string& name)> onSongFinished = nullptr;
     
     
     //--- Function declarations ---
     
     size_t createMobSoundSource(
         ALLEGRO_SAMPLE* sample, Mob* mPtr, bool ambiance = false,
-        const SoundSourceConfig &config = SoundSourceConfig()
+        const SoundSourceConfig& config = SoundSourceConfig()
     );
     size_t createGlobalSoundSource(
         ALLEGRO_SAMPLE* sample, bool ambiance = false,
-        const SoundSourceConfig &config = SoundSourceConfig()
+        const SoundSourceConfig& config = SoundSourceConfig()
     );
     size_t createPosSoundSource(
-        ALLEGRO_SAMPLE* sample, const Point &pos, bool ambiance = false,
-        const SoundSourceConfig &config = SoundSourceConfig()
+        ALLEGRO_SAMPLE* sample, const Point& pos, bool ambiance = false,
+        const SoundSourceConfig& config = SoundSourceConfig()
     );
     size_t createUiSoundsource(
         ALLEGRO_SAMPLE* sample,
-        const SoundSourceConfig &config = SoundSourceConfig()
+        const SoundSourceConfig& config = SoundSourceConfig()
     );
     bool destroySoundSource(size_t sourceId);
     void destroy();
@@ -377,15 +377,15 @@ public:
         float ambianceSoundVolume, float uiSoundVolume
     );
     void markMixTrackStatus(MIX_TRACK_TYPE trackType);
-    bool rewindSong(const string &name);
+    bool rewindSong(const string& name);
     bool scheduleEmission(size_t sourceId, bool first);
-    void setCameraPos(const Point &camTL, const Point &camBR);
+    void setCameraPos(const Point& camTL, const Point& camBR);
     bool setCurrentSong(
-        const string &name, bool fromStart = true, bool fadeIn = true,
+        const string& name, bool fromStart = true, bool fadeIn = true,
         bool loop = true
     );
     void setSongPosNearLoop();
-    bool setSoundSourcePos(size_t sourceId, const Point &pos);
+    bool setSoundSourcePos(size_t sourceId, const Point& pos);
     void stopAllPlaybacks(const ALLEGRO_SAMPLE* filter = nullptr);
     void tick(float deltaT);
     void updateVolumes(
@@ -445,8 +445,8 @@ private:
     size_t createSoundSource(
         ALLEGRO_SAMPLE* sample,
         SOUND_TYPE type,
-        const SoundSourceConfig &config,
-        const Point &pos
+        const SoundSourceConfig& config,
+        const Point& pos
     );
     bool destroySoundPlayback(size_t playbackIdx);
     SoundSource* getSource(size_t sourceId);

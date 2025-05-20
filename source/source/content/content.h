@@ -116,9 +116,9 @@ struct ContentManifest {
     //--- Function declarations ---
     
     ContentManifest();
-    ContentManifest(const string &name, const string &path, const string &pack);
+    ContentManifest(const string& name, const string& path, const string& pack);
     void clear();
-    void fillFromPath(const string &path);
+    void fillFromPath(const string& path);
     
 };
 

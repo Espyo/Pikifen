@@ -26,51 +26,51 @@ using std::vector;
 
 namespace ImGui {
 
-void AdjustColorHSV(ImVec4 &color, float hDelta, float sDelta, float vDelta);
+void AdjustColorHSV(ImVec4& color, float hDelta, float sDelta, float vDelta);
 bool Combo(
-    const string &label, int* currentItem, const vector<string> &items,
+    const string& label, int* currentItem, const vector<string>& items,
     int popupMaxHeightInItems = -1
 );
 bool Combo(
-    const string &label, string* currentItem, const vector<string> &items,
+    const string& label, string* currentItem, const vector<string>& items,
     int popupMaxHeightInItems = -1
 );
 bool Combo(
-    const string &label, string* currentItem,
-    const vector<string> &itemInternalValues,
-    const vector<string> &itemDisplayNames,
+    const string& label, string* currentItem,
+    const vector<string>& itemInternalValues,
+    const vector<string>& itemDisplayNames,
     int popupMaxHeightInItems = -1
 );
 bool DragTime2(
-    const string &label, int* totalAmount,
-    const string &format1 = "m", const string &format2 = "s",
+    const string& label, int* totalAmount,
+    const string& format1 = "m", const string& format2 = "s",
     int limit1 = INT_MAX, int limit2 = 59
 );
-void FocusOnInputText(bool &condition);
+void FocusOnInputText(bool& condition);
 void Image(
-    ALLEGRO_BITMAP* bitmap, const Point &bitmapSize,
-    const Point &uv0 = Point(), const Point &uv1 = Point(1.0f),
-    const ALLEGRO_COLOR &tintCol = al_map_rgb(255, 255, 255),
-    const ALLEGRO_COLOR &borderCol = al_map_rgba(0, 0, 0, 0)
+    ALLEGRO_BITMAP* bitmap, const Point& bitmapSize,
+    const Point& uv0 = Point(), const Point& uv1 = Point(1.0f),
+    const ALLEGRO_COLOR& tintCol = al_map_rgb(255, 255, 255),
+    const ALLEGRO_COLOR& borderCol = al_map_rgba(0, 0, 0, 0)
 );
 bool ImageButton(
-    const string &strId, ALLEGRO_BITMAP* bitmap, const Point &bitmapSize,
-    const Point &uv0 = Point(), const Point &uv1 = Point(1.0f),
-    const ALLEGRO_COLOR &bgCol = al_map_rgba(0, 0, 0, 0),
-    const ALLEGRO_COLOR &tintCol = al_map_rgb(255, 255, 255)
+    const string& strId, ALLEGRO_BITMAP* bitmap, const Point& bitmapSize,
+    const Point& uv0 = Point(), const Point& uv1 = Point(1.0f),
+    const ALLEGRO_COLOR& bgCol = al_map_rgba(0, 0, 0, 0),
+    const ALLEGRO_COLOR& tintCol = al_map_rgb(255, 255, 255)
 );
 bool ImageButtonOrganized(
-    const string &strId, ALLEGRO_BITMAP* bitmap,
-    const Point &maxBitmapSize, const Point &buttonSize,
-    const ALLEGRO_COLOR &bgCol = al_map_rgba(0, 0, 0, 0),
-    const ALLEGRO_COLOR &tintCol = al_map_rgb(255, 255, 255)
+    const string& strId, ALLEGRO_BITMAP* bitmap,
+    const Point& maxBitmapSize, const Point& buttonSize,
+    const ALLEGRO_COLOR& bgCol = al_map_rgba(0, 0, 0, 0),
+    const ALLEGRO_COLOR& tintCol = al_map_rgb(255, 255, 255)
 );
 bool ImageButtonAndText(
-    const string &id, ALLEGRO_BITMAP* icon, const Point &iconSize,
-    float buttonPadding, const string &text
+    const string& id, ALLEGRO_BITMAP* icon, const Point& iconSize,
+    float buttonPadding, const string& text
 );
 bool ListBox(
-    const string &label, int* currentItem, const vector<string> &items,
+    const string& label, int* currentItem, const vector<string>& items,
     int heightInItems = -1
 );
 void Reset();

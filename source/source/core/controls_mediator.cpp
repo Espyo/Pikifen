@@ -39,8 +39,8 @@
  */
 void ControlsMediator::addPlayerActionType(
     PLAYER_ACTION_TYPE id, PLAYER_ACTION_CAT category,
-    const string &name, const string &description, const string &internalName,
-    const string &defaultBindStr, float autoRepeat
+    const string& name, const string& description, const string& internalName,
+    const string& defaultBindStr, float autoRepeat
 ) {
     PfePlayerActionType a;
     a.id = id;
@@ -65,7 +65,7 @@ void ControlsMediator::addPlayerActionType(
  * INPUT_SOURCE_TYPE_NONE is returned.
  */
 PlayerInput ControlsMediator::allegroEventToInput(
-    const ALLEGRO_EVENT &ev
+    const ALLEGRO_EVENT& ev
 ) const {
     PlayerInput input;
     
@@ -132,7 +132,7 @@ PlayerInput ControlsMediator::allegroEventToInput(
  *
  * @return The binds.
  */
-vector<ControlBind> &ControlsMediator::binds() {
+vector<ControlBind>& ControlsMediator::binds() {
     return mgr.binds;
 }
 
@@ -164,7 +164,7 @@ ControlBind ControlsMediator::findBind(
  * @return The bind.
  */
 ControlBind ControlsMediator::findBind(
-    const string &actionName
+    const string& actionName
 ) const {
     for(size_t b = 0; b < playerActionTypes.size(); b++) {
         if(playerActionTypes[b].internalName == actionName) {
@@ -181,7 +181,7 @@ ControlBind ControlsMediator::findBind(
  * @return The types.
  */
 const vector<PfePlayerActionType>
-&ControlsMediator::getAllPlayerActionTypes() const {
+& ControlsMediator::getAllPlayerActionTypes() const {
     return playerActionTypes;
 }
 
@@ -242,7 +242,7 @@ float ControlsMediator::getPlayerActionTypeValue(
  * @param ev The Allegro event.
  * @return Whether the event was handled.
  */
-bool ControlsMediator::handleAllegroEvent(const ALLEGRO_EVENT &ev) {
+bool ControlsMediator::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
     PlayerInput input = allegroEventToInput(ev);
     
     if(input.source.type != INPUT_SOURCE_TYPE_NONE) {
@@ -262,7 +262,7 @@ bool ControlsMediator::handleAllegroEvent(const ALLEGRO_EVENT &ev) {
  * @return The string, or an empty string on error.
  */
 string ControlsMediator::inputSourceToStr(
-    const PlayerInputSource &s
+    const PlayerInputSource& s
 ) const {
     switch(s.type) {
     case INPUT_SOURCE_TYPE_KEYBOARD_KEY: {
@@ -304,7 +304,7 @@ string ControlsMediator::inputSourceToStr(
 void ControlsMediator::loadBindsFromDataNode(
     DataNode* node, unsigned char playerNr
 ) {
-    const vector<PfePlayerActionType> &playerActionTypes =
+    const vector<PfePlayerActionType>& playerActionTypes =
         getAllPlayerActionTypes();
         
     for(size_t a = 0; a < playerActionTypes.size(); a++) {
@@ -345,7 +345,7 @@ vector<PlayerAction> ControlsMediator::newFrame(float deltaT) {
  * Useful for when the game state is changed, or the window is out of focus.
  */
 void ControlsMediator::releaseAll() {
-    for(auto &a : mgr.actionTypes) {
+    for(auto& a : mgr.actionTypes) {
         mgr.setValue(a.first, 0.0f);
     }
 }
@@ -361,9 +361,9 @@ void ControlsMediator::saveBindsToDataNode(
     DataNode* node, unsigned char playerNr
 ) {
     map<string, string> bindStrs;
-    const vector<PfePlayerActionType> &playerActionTypes =
+    const vector<PfePlayerActionType>& playerActionTypes =
         getAllPlayerActionTypes();
-    const vector<ControlBind> &allBinds = binds();
+    const vector<ControlBind>& allBinds = binds();
     
     //Fill the defaults, which are all empty strings.
     for(size_t b = 0; b < playerActionTypes.size(); b++) {
@@ -382,7 +382,7 @@ void ControlsMediator::saveBindsToDataNode(
     }
     
     //Save them all.
-    for(auto &c : bindStrs) {
+    for(auto& c : bindStrs) {
         //Remove the final character, which is always an extra semicolon.
         if(c.second.size()) c.second.erase(c.second.size() - 1);
         
@@ -396,7 +396,7 @@ void ControlsMediator::saveBindsToDataNode(
  *
  * @param options Options.
  */
-void ControlsMediator::setOptions(const ControlsManagerOptions &options) {
+void ControlsMediator::setOptions(const ControlsManagerOptions& options) {
     mgr.options = options;
 }
 
@@ -416,7 +416,7 @@ void ControlsMediator::startIgnoringActions() {
  * @param inputSource Input source to ignore.
  */
 void ControlsMediator::startIgnoringInputSource(
-    const PlayerInputSource &inputSource
+    const PlayerInputSource& inputSource
 ) {
     mgr.startIgnoringInputSource(inputSource);
 }
@@ -445,7 +445,7 @@ void ControlsMediator::stopIgnoringActions() {
  * @return The input, or a default input instance on error.
  */
 PlayerInputSource ControlsMediator::strToInputSource(
-    const string &s
+    const string& s
 ) const {
     PlayerInputSource inputSource;
     

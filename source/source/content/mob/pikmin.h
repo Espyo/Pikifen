@@ -106,7 +106,7 @@ public:
     
     //--- Function declarations ---
     
-    Pikmin(const Point &pos, PikminType* type, float angle);
+    Pikmin(const Point& pos, PikminType* type, float angle);
     void forceCarry(Mob* m);
     bool processAttackMiss(HitboxInteraction* info);
     bool increaseMaturity(int amount);
@@ -119,7 +119,7 @@ public:
     float getTaskRange() const;
     void handleStatusEffectGain(StatusType* s) override;
     void handleStatusEffectLoss(StatusType* s) override;
-    void readScriptVars(const ScriptVarReader &svr) override;
+    void readScriptVars(const ScriptVarReader& svr) override;
     void finishDyingClassSpecifics() override;
     void startDyingClassSpecifics() override;
     
@@ -132,6 +132,6 @@ protected:
 
 
 Pikmin* getClosestSprout(
-    const Point &pos, Distance* d, bool ignoreReserved
+    const Point& pos, Distance* d, bool ignoreReserved
     
 );

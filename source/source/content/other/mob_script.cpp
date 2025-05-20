@@ -29,7 +29,7 @@
  *
  * @param newState State to change to.
  */
-void EasyFsmCreator::changeState(const string &newState) {
+void EasyFsmCreator::changeState(const string& newState) {
     curEvent->actions.push_back(new MobActionCall(MOB_ACTION_SET_STATE));
     curEvent->actions.back()->args.push_back(newState);
     curEvent->actions.back()->argIsVar.push_back(false);
@@ -94,7 +94,7 @@ void EasyFsmCreator::newEvent(const MOB_EV type) {
  * @param name Name of the state.
  * @param id Its ID.
  */
-void EasyFsmCreator::newState(const string &name, size_t id) {
+void EasyFsmCreator::newState(const string& name, size_t id) {
     commitState();
     curState = new MobState(name, id);
     states.push_back(curState);
@@ -135,14 +135,14 @@ HitboxInteraction::HitboxInteraction(
  * @param actions Its actions.
  */
 MobEvent::MobEvent(
-    const DataNode* node, const vector<MobActionCall*> &actions
+    const DataNode* node, const vector<MobActionCall*>& actions
 ) :
     actions(actions) {
     
 #define r(name, number) \
     else if(n == (name)) type = (number)
     
-    const string &n = node->name;
+    const string& n = node->name;
     if(n == "on_enter") type =          MOB_EV_ON_ENTER;
     r("on_leave",                       MOB_EV_ON_LEAVE);
     r("on_tick",                        MOB_EV_ON_TICK);
@@ -194,7 +194,7 @@ MobEvent::MobEvent(
  * @param t The event type.
  * @param a Its actions.
  */
-MobEvent::MobEvent(const MOB_EV t, const vector<MobActionCall*> &a) :
+MobEvent::MobEvent(const MOB_EV t, const vector<MobActionCall*>& a) :
     type(t),
     actions(a) {
     
@@ -328,7 +328,7 @@ MobEvent* MobFsm::getEvent(const MOB_EV type) const {
  * @param name The state's name.
  * @return The index, or INVALID if it doesn't exist.
  */
-size_t MobFsm::getStateIdx(const string &name) const {
+size_t MobFsm::getStateIdx(const string& name) const {
     for(size_t s = 0; s < m->type->states.size(); s++) {
         if(m->type->states[s]->name == name) {
             return s;
@@ -412,7 +412,7 @@ bool MobFsm::setState(size_t newState, void* info1, void* info2) {
  *
  * @param name The state's name.
  */
-MobState::MobState(const string &name) :
+MobState::MobState(const string& name) :
     name(name) {
     
     for(size_t e = 0; e < N_MOB_EVENTS; e++) {
@@ -427,7 +427,7 @@ MobState::MobState(const string &name) :
  * @param name The state's name.
  * @param evs Its events.
  */
-MobState::MobState(const string &name, MobEvent* evs[N_MOB_EVENTS]) :
+MobState::MobState(const string& name, MobEvent* evs[N_MOB_EVENTS]) :
     name(name) {
     
     for(size_t e = 0; e < N_MOB_EVENTS; e++) {
@@ -442,7 +442,7 @@ MobState::MobState(const string &name, MobEvent* evs[N_MOB_EVENTS]) :
  * @param name The state's name.
  * @param id Its ID, for sorting on the vector of states.
  */
-MobState::MobState(const string &name, size_t id) :
+MobState::MobState(const string& name, size_t id) :
     name(name),
     id(id) {
     
@@ -474,7 +474,7 @@ MobEvent* MobState::getEvent(const MOB_EV type) const {
  * @return The index of the starting state.
  */
 size_t fixStates(
-    vector<MobState*> &states, const string &startingState, const MobType* mt
+    vector<MobState*>& states, const string& startingState, const MobType* mt
 ) {
     size_t startingStateIdx = INVALID;
     

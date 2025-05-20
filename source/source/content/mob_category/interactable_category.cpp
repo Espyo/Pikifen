@@ -33,7 +33,7 @@ InteractableCategory::InteractableCategory() :
  * @brief Clears the list of registered types of interactables.
  */
 void InteractableCategory::clearTypes() {
-    for(auto &t : game.content.mobTypes.list.interactable) {
+    for(auto& t : game.content.mobTypes.list.interactable) {
         delete t.second;
     }
     game.content.mobTypes.list.interactable.clear();
@@ -49,7 +49,7 @@ void InteractableCategory::clearTypes() {
  * @return The mob.
  */
 Mob* InteractableCategory::createMob(
-    const Point &pos, MobType* type, float angle
+    const Point& pos, MobType* type, float angle
 ) {
     Interactable* m = new Interactable(pos, (InteractableType*) type, angle);
     game.states.gameplay->mobs.interactables.push_back(m);
@@ -90,7 +90,7 @@ void InteractableCategory::eraseMob(Mob* m) {
  * @param internalName Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-MobType* InteractableCategory::getType(const string &internalName) const {
+MobType* InteractableCategory::getType(const string& internalName) const {
     auto it = game.content.mobTypes.list.interactable.find(internalName);
     if(it == game.content.mobTypes.list.interactable.end()) return nullptr;
     return it->second;
@@ -102,8 +102,8 @@ MobType* InteractableCategory::getType(const string &internalName) const {
  *
  * @param list This list gets filled with the mob type internal names.
  */
-void InteractableCategory::getTypeNames(vector<string> &list) const {
-    for(auto &t : game.content.mobTypes.list.interactable) {
+void InteractableCategory::getTypeNames(vector<string>& list) const {
+    for(auto& t : game.content.mobTypes.list.interactable) {
         list.push_back(t.first);
     }
 }
@@ -116,7 +116,7 @@ void InteractableCategory::getTypeNames(vector<string> &list) const {
  * @param type Mob type to register.
  */
 void InteractableCategory::registerType(
-    const string &internalName, MobType* type
+    const string& internalName, MobType* type
 ) {
     game.content.mobTypes.list.interactable[internalName] =
         (InteractableType*) type;

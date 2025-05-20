@@ -66,13 +66,13 @@ constexpr float LARGE_FLOAT = 999999.0f;
 
 
 template<typename t>
-t fromString(const string &s);
+t fromString(const string& s);
 template<>
-float fromString<float>(const string &s);
+float fromString<float>(const string& s);
 template<>
-ALLEGRO_COLOR fromString<ALLEGRO_COLOR>(const string &s);
+ALLEGRO_COLOR fromString<ALLEGRO_COLOR>(const string& s);
 template<>
-Point fromString<Point>(const string &s);
+Point fromString<Point>(const string& s);
 
 
 /**
@@ -132,8 +132,8 @@ struct EnumNameDatabase {
     
     //--- Function declarations ---
     
-    void registerItem(size_t enum_idx, const string &name);
-    size_t getIdx(const string &name) const;
+    void registerItem(size_t enum_idx, const string& name);
+    size_t getIdx(const string& name) const;
     string getName(size_t idx) const;
     size_t getNrOfItems() const;
     void clear();
@@ -160,7 +160,7 @@ struct KeyframeInterpolator {
     
     //--- Function definitions ---
     
-    explicit KeyframeInterpolator(const InterT &initialValue = InterT()) {
+    explicit KeyframeInterpolator(const InterT& initialValue = InterT()) {
         keyframeTimes.push_back(0.0f);
         keyframeValues.push_back(initialValue);
         keyframeEases.push_back(EASE_METHOD_NONE);
@@ -210,7 +210,7 @@ struct KeyframeInterpolator {
      * is returned here.
      */
     void add(
-        float t, const InterT &value,
+        float t, const InterT& value,
         EASING_METHOD ease = EASE_METHOD_NONE, size_t* outIdx = nullptr
     ) {
         size_t newIdx = getInsertionIdx(t);
@@ -234,7 +234,7 @@ struct KeyframeInterpolator {
      * is returned here.
      */
     void addOrSet(
-        float t, const InterT &value,
+        float t, const InterT& value,
         EASING_METHOD ease = EASE_METHOD_NONE, size_t* outIdx = nullptr
     ) {
         for(size_t k = 0; k < keyframeTimes.size(); ++k) {
@@ -288,7 +288,7 @@ struct KeyframeInterpolator {
      * @param idx They keyframe's index.
      * @param value The new value.
      */
-    void setKeyframeValue(size_t idx, const InterT &value) {
+    void setKeyframeValue(size_t idx, const InterT& value) {
         keyframeValues[idx] = value;
     }
     
@@ -410,7 +410,7 @@ private:
      * @return The color.
      */
     ALLEGRO_COLOR interpolate(
-        const ALLEGRO_COLOR &c1, const ALLEGRO_COLOR &c2, float time
+        const ALLEGRO_COLOR& c1, const ALLEGRO_COLOR& c2, float time
     ) {
         return interpolateColor(time, 0.0f, 1.0f, c1, c2);
     }
@@ -426,7 +426,7 @@ private:
      * @return The point.
      */
     Point interpolate(
-        const Point &p1, const Point &p2, float time
+        const Point& p1, const Point& p2, float time
     ) {
         return interpolatePoint(time, 0.0f, 1.0f, p1, p2);
     }
@@ -486,7 +486,7 @@ struct Timer {
     
     explicit Timer(
         float duration = 0,
-        const std::function<void()> &onEnd = nullptr
+        const std::function<void()>& onEnd = nullptr
     );
     ~Timer();
     void start(bool canRestart = true);
@@ -499,7 +499,7 @@ struct Timer {
 
 
 string getCurrentTime(bool fileNameFriendly);
-string sanitizeFileName(const string &s);
+string sanitizeFileName(const string& s);
 
 
 /**
@@ -514,7 +514,7 @@ string sanitizeFileName(const string &s);
  */
 template<typename ContentT>
 vector<ContentT> shuffleVector(
-    const vector<ContentT> &v, const vector<float> pickRandomFloats
+    const vector<ContentT>& v, const vector<float> pickRandomFloats
 ) {
     vector<ContentT> result;
     vector<ContentT> itemsAvailable = v;
@@ -529,8 +529,8 @@ vector<ContentT> shuffleVector(
 }
 
 
-string standardizePath(const string &path);
-string vectorTailToString(const vector<string> &v, size_t pos);
+string standardizePath(const string& path);
+string vectorTailToString(const vector<string>& v, size_t pos);
 
 
 /**
@@ -543,7 +543,7 @@ string vectorTailToString(const vector<string> &v, size_t pos);
  * @return Whether it contains the item.
  */
 template<typename ContainerT, typename ContentT>
-bool isInContainer(const ContainerT &cont, const ContentT &item) {
+bool isInContainer(const ContainerT& cont, const ContentT& item) {
     return std::find(cont.begin(), cont.end(), item) != cont.end();
 }
 
@@ -558,7 +558,7 @@ bool isInContainer(const ContainerT &cont, const ContentT &item) {
  * @return Whether it contains the item.
  */
 template<typename MapT, typename KeyT>
-bool isInMap(const MapT &cont, const KeyT &key) {
+bool isInMap(const MapT& cont, const KeyT& key) {
     return cont.find(key) != cont.end();
 }
 
@@ -573,7 +573,7 @@ bool isInMap(const MapT &cont, const KeyT &key) {
  */
 template<typename ContentT>
 vector<ContentT> filterVectorWithBanList(
-    const vector<ContentT> &v, const vector<ContentT> &banList
+    const vector<ContentT>& v, const vector<ContentT>& banList
 ) {
     vector<ContentT> result = v;
     for(size_t i = 0; i < result.size();) {
@@ -597,7 +597,7 @@ vector<ContentT> filterVectorWithBanList(
  */
 template<typename ContentT>
 vector<ContentT> removeAllInVector(
-    const ContentT &item, const vector<ContentT> &vec
+    const ContentT& item, const vector<ContentT>& vec
 ) {
     vector<ContentT> result = vec;
     for(size_t i = 0; i < result.size();) {
@@ -629,7 +629,7 @@ vector<ContentT> removeAllInVector(
  */
 template<typename ContentT>
 vector<ContentT> sortVectorWithPreferenceList(
-    const vector<ContentT> &v, const vector<ContentT> preferenceList,
+    const vector<ContentT>& v, const vector<ContentT> preferenceList,
     vector<ContentT>* unknowns = nullptr
 ) {
     vector<ContentT> result;
@@ -639,7 +639,7 @@ vector<ContentT> sortVectorWithPreferenceList(
     //Sort the existing items.
     for(size_t p = 0; p < preferenceList.size(); p++) {
         bool foundInVector = false;
-        for(auto &i : v) {
+        for(auto& i : v) {
             if(i == preferenceList[p]) {
                 foundInVector = true;
                 result.push_back(i);
@@ -652,9 +652,9 @@ vector<ContentT> sortVectorWithPreferenceList(
     }
     
     //Find the missing items.
-    for(auto &i : v) {
+    for(auto& i : v) {
         bool foundInPreferences = false;
-        for(auto &p : preferenceList) {
+        for(auto& p : preferenceList) {
             if(i == p) {
                 foundInPreferences = true;
                 break;
@@ -694,7 +694,7 @@ vector<ContentT> sortVectorWithPreferenceList(
  */
 template<typename ContentT>
 bool vectorsContainSame(
-    const vector<ContentT> &v1, const vector<ContentT> &v2
+    const vector<ContentT>& v1, const vector<ContentT>& v2
 ) {
     if(v1.size() != v2.size()) {
         return false;

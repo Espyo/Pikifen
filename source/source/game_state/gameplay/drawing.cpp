@@ -35,7 +35,7 @@
  */
 void GameplayState::doGameDrawing(
     ALLEGRO_BITMAP* bmpOutput, const ALLEGRO_TRANSFORM* bmpTransform,
-    const MakerTools::AreaImageSettings &bmpSettings
+    const MakerTools::AreaImageSettings& bmpSettings
 ) {
 
     /*  ***************************************
@@ -64,7 +64,7 @@ void GameplayState::doGameDrawing(
     }
     
     for(size_t p = 0; p < players.size(); p++) {
-        Player &player = players[p];
+        Player& player = players[p];
         al_clear_to_color(game.curAreaData->bgColor);
         
         //Layer 1 -- Background.
@@ -214,7 +214,7 @@ void GameplayState::doGameDrawing(
  * @param bmpOutput If not nullptr, draw the background onto this.
  */
 void GameplayState::drawBackground(
-    const Viewport &view, ALLEGRO_BITMAP* bmpOutput
+    const Viewport& view, ALLEGRO_BITMAP* bmpOutput
 ) {
     if(!game.curAreaData->bgBmp) return;
     
@@ -340,7 +340,7 @@ void GameplayState::drawBigMsg() {
         
     } case BIG_MESSAGE_MISSION_CLEAR:
     case BIG_MESSAGE_MISSION_FAILED: {
-        const string &TEXT =
+        const string& TEXT =
             curBigMsg == BIG_MESSAGE_MISSION_CLEAR ?
             GAMEPLAY::BIG_MSG_MISSION_CLEAR_TEXT :
             GAMEPLAY::BIG_MSG_MISSION_FAILED_TEXT;
@@ -738,7 +738,7 @@ void GameplayState::drawGameplayMessageBox() {
         for(size_t t = 0; t < msgBox->tokensPerLine[lineIdx].size(); t++) {
             tokenIdx++;
             if(tokenIdx >= msgBox->curToken) break;
-            StringToken &curToken = msgBox->tokensPerLine[lineIdx][t];
+            StringToken& curToken = msgBox->tokensPerLine[lineIdx][t];
             
             float x = caret;
             float y = startY + lineHeight * l;
@@ -1058,7 +1058,7 @@ void GameplayState::drawIngameText(Player* player) {
  * @param color Color to tint it by.
  */
 void GameplayState::drawLeaderCursor(
-    Player* player, const ALLEGRO_COLOR &color
+    Player* player, const ALLEGRO_COLOR& color
 ) {
     if(!player->leaderPtr) return;
     
@@ -1234,7 +1234,7 @@ void GameplayState::drawLeaderCursor(
  *
  * @param view Viewport to draw to.
  */
-void GameplayState::drawLightingFilter(const Viewport &view) {
+void GameplayState::drawLightingFilter(const Viewport& view) {
     al_use_transform(&game.identityTransform);
     
     //Draw the fog effect.
@@ -1748,7 +1748,7 @@ void GameplayState::drawThrowPreview(Player* player) {
  * @return The bitmap.
  */
 ALLEGRO_BITMAP* GameplayState::drawToBitmap(
-    const MakerTools::AreaImageSettings &settings
+    const MakerTools::AreaImageSettings& settings
 ) {
     //First, get the full dimensions of the map.
     Point minCoords(FLT_MAX, FLT_MAX);
@@ -1833,7 +1833,7 @@ void GameplayState::drawTreeShadows() {
  * @param bmpOutput If not nullptr, draw the area onto this.
  */
 void GameplayState::drawWorldComponents(
-    const Viewport &view, ALLEGRO_BITMAP* bmpOutput
+    const Viewport& view, ALLEGRO_BITMAP* bmpOutput
 ) {
     ALLEGRO_BITMAP* customWallOffsetEffectBuffer = nullptr;
     ALLEGRO_BITMAP* customLiquidLimitEffectBuffer = nullptr;

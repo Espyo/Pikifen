@@ -88,7 +88,7 @@ ContentManifest::ContentManifest() {}
  * @param pack Pack it belongs to.
  */
 ContentManifest::ContentManifest(
-    const string &name, const string &path, const string &pack
+    const string& name, const string& path, const string& pack
 ) :
     internalName(name),
     path(path),
@@ -113,7 +113,7 @@ void ContentManifest::clear() {
  *
  * @param path Path to fill from.
  */
-void ContentManifest::fillFromPath(const string &path) {
+void ContentManifest::fillFromPath(const string& path) {
     clear();
     
     vector<string> parts = split(path, "/");

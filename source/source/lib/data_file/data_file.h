@@ -88,30 +88,30 @@ public:
     //--- Function declarations ---
     
     DataNode();
-    explicit DataNode(const string &filePath);
-    DataNode(const string &name, const string &value);
-    DataNode(const DataNode &dn2);
-    DataNode &operator=(const DataNode &dn2);
+    explicit DataNode(const string& filePath);
+    DataNode(const string& name, const string& value);
+    DataNode(const DataNode& dn2);
+    DataNode& operator=(const DataNode& dn2);
     ~DataNode();
     void clear();
-    string getValueOrDefault(const string &def) const;
+    string getValueOrDefault(const string& def) const;
     size_t getNrOfChildren() const;
     DataNode* getChild(size_t number);
-    size_t getNrOfChildrenByName(const string &name) const;
+    size_t getNrOfChildrenByName(const string& name) const;
     DataNode* getChildByName(
-        const string &name, size_t occurrenceNumber = 0
+        const string& name, size_t occurrenceNumber = 0
     );
     size_t add(DataNode* newNode);
-    DataNode* addNew(const string &name, const string &value = "");
+    DataNode* addNew(const string& name, const string& value = "");
     bool remove(DataNode* nodeToRemove);
     void loadFile(
-        const string &filePath,
+        const string& filePath,
         bool trimValues = true,
         bool namesOnlyAfterRoot = false,
         bool encrypted = false
     );
     size_t loadNode(
-        const vector<string> &lines, bool trimValues,
+        const vector<string>& lines, bool trimValues,
         size_t startLine = 0, size_t depth = 0,
         bool namesOnlyAfterRoot = false
     );
@@ -142,10 +142,10 @@ private:
     DataNode* createDummy();
     static unsigned char decryptChar(unsigned char c);
     static unsigned char encryptChar(unsigned char c);
-    static void encryptString(string &s);
+    static void encryptString(string& s);
     static void getline(
-        ALLEGRO_FILE* file, string &line, bool encrypted = false
+        ALLEGRO_FILE* file, string& line, bool encrypted = false
     );
-    static string trimSpaces(const string &s, bool leftOnly = false);
+    static string trimSpaces(const string& s, bool leftOnly = false);
     
 };

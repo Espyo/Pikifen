@@ -32,8 +32,8 @@
  * @param view Viewport to draw to.
  */
 void drawEdgeOffsetOnBuffer(
-    const vector<EdgeOffsetCache> &caches, size_t eIdx,
-    const Viewport &view
+    const vector<EdgeOffsetCache>& caches, size_t eIdx,
+    const Viewport& view
 ) {
     //Keep the end opacity as a constant. Changing it helps with debugging.
     const float END_OPACITY = 0.0f;
@@ -195,7 +195,7 @@ void drawEdgeOffsetOnBuffer(
  */
 void drawSectorEdgeOffsets(
     Sector* sPtr, ALLEGRO_BITMAP* buffer, float opacity,
-    const Viewport &view
+    const Viewport& view
 ) {
     if(sPtr->isBottomlessPit) return;
     
@@ -644,9 +644,9 @@ void getNextOffsetEffectEdge(
  * @param view Viewport to draw to.
  */
 void updateOffsetEffectBuffer(
-    const Point &camTL, const Point &camBR,
-    const vector<EdgeOffsetCache> &caches, ALLEGRO_BITMAP* buffer,
-    bool clearFirst, const Viewport &view
+    const Point& camTL, const Point& camBR,
+    const vector<EdgeOffsetCache>& caches, ALLEGRO_BITMAP* buffer,
+    bool clearFirst, const Viewport& view
 ) {
     unordered_set<size_t> edges;
     
@@ -739,8 +739,8 @@ void updateOffsetEffectBuffer(
  * @param colorGetter Function that returns the color of the effect.
  */
 void updateOffsetEffectCaches (
-    vector<EdgeOffsetCache> &caches,
-    const unordered_set<Vertex*> &vertexesToUpdate,
+    vector<EdgeOffsetCache>& caches,
+    const unordered_set<Vertex*>& vertexesToUpdate,
     OffsetEffectChecker checker,
     OffsetEffectLengthGetter lengthGetter,
     OffsetEffectColorGetter colorGetter

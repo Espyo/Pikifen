@@ -45,7 +45,7 @@ struct PendingIntermobEvent {
     //--- Function definitions ---
     
     PendingIntermobEvent(
-        const Distance &d, MobEvent* eventPtr, Mob* mobPtr
+        const Distance& d, MobEvent* eventPtr, Mob* mobPtr
     ):
         d(d),
         eventPtr(eventPtr),

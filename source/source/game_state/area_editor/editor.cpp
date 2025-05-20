@@ -240,7 +240,7 @@ void AreaEditor::cancelLayoutDrawing() {
  * @brief Cancels the vertex moving operation.
  */
 void AreaEditor::cancelLayoutMoving() {
-    for(auto const &v : selectedVertexes) {
+    for(auto const& v : selectedVertexes) {
         v->x = preMoveVertexCoords[v].x;
         v->y = preMoveVertexCoords[v].y;
     }
@@ -500,7 +500,7 @@ void AreaEditor::copyPropertiesCmd(float inputValue) {
  *
  * @param requestedAreaPath Path to the requested area's folder.
  */
-void AreaEditor::createArea(const string &requestedAreaPath) {
+void AreaEditor::createArea(const string& requestedAreaPath) {
     //Setup.
     setupForNewAreaPre();
     changesMgr.markAsNonExistent();
@@ -1299,7 +1299,7 @@ void AreaEditor::finishLayoutMoving() {
     unordered_set<Sector*> mergeAffectedSectors;
     
     //Find merge vertexes and edges to split, if any.
-    for(auto &v : selectedVertexes) {
+    for(auto& v : selectedVertexes) {
         Point p = v2p(v);
         
         vector<std::pair<Distance, Vertex*> > mergeVertexes =
@@ -1389,7 +1389,7 @@ void AreaEditor::finishLayoutMoving() {
             continue;
         }
         bool isMergeTarget = false;
-        for(auto const &m : merges) {
+        for(auto const& m : merges) {
             if(m.second == vPtr) {
                 //This vertex will have some other vertex merge into it; skip.
                 isMergeTarget = true;
@@ -1421,7 +1421,7 @@ void AreaEditor::finishLayoutMoving() {
     //come from edge splits or vertex merges.
     vector<EdgeIntersection> intersections =
         getIntersectingEdges();
-    for(auto &m : merges) {
+    for(auto& m : merges) {
         for(size_t e1 = 0; e1 < m.first->edges.size(); e1++) {
             for(size_t e2 = 0; e2 < m.second->edges.size(); e2++) {
                 for(size_t i = 0; i < intersections.size();) {
@@ -1437,7 +1437,7 @@ void AreaEditor::finishLayoutMoving() {
             }
         }
     }
-    for(auto &v : edgesToSplit) {
+    for(auto& v : edgesToSplit) {
         for(size_t e = 0; e < v.first->edges.size(); e++) {
             for(size_t i = 0; i < intersections.size();) {
                 if(
@@ -1466,11 +1466,11 @@ void AreaEditor::finishLayoutMoving() {
     //When the first merge happens, this vertex will be gone, and we'll be
     //unable to use it for the second merge. There are no plans to support
     //this complex corner case, so abort!
-    for(auto &m : merges) {
+    for(auto& m : merges) {
         Vertex* crushedVertex = nullptr;
         if(m.first->is2ndDegreeNeighbor(m.second, &crushedVertex)) {
         
-            for(auto const &m2 : merges) {
+            for(auto const& m2 : merges) {
                 if(m2.second == crushedVertex) {
                     cancelLayoutMoving();
                     forgetPreparedState(preMoveAreaData);
@@ -1499,7 +1499,7 @@ void AreaEditor::finishLayoutMoving() {
                 getCorrectPostSplitEdge(v2->first, v2->second, newEdge);
         }
     }
-    for(auto const &m : merges) {
+    for(auto const& m : merges) {
         mergeVertex(m.first, m.second, &mergeAffectedSectors);
     }
     
@@ -1655,7 +1655,7 @@ void AreaEditor::forgetPreparedState(Area* preparedState) {
  * @return The tooltip text.
  */
 string AreaEditor::getFolderTooltip(
-    const string &path, const string &userDataPath
+    const string& path, const string& userDataPath
 ) const {
     ContentManifest tempManif;
     AREA_TYPE type;
@@ -2195,7 +2195,7 @@ void AreaEditor::load() {
  * the user's folder open history.
  */
 void AreaEditor::loadAreaFolder(
-    const string &requestedAreaPath,
+    const string& requestedAreaPath,
     bool fromBackup, bool shouldUpdateHistory
 ) {
     //Setup.
@@ -2227,11 +2227,11 @@ void AreaEditor::loadAreaFolder(
     vector<std::pair<string, size_t> > textureUsesVector;
     
     for(size_t s = 0; s < game.curAreaData->sectors.size(); s++) {
-        const string &n = game.curAreaData->sectors[s]->textureInfo.bmpName;
+        const string& n = game.curAreaData->sectors[s]->textureInfo.bmpName;
         if(n.empty()) continue;
         textureUsesMap[n]++;
     }
-    for(auto &u : textureUsesMap) {
+    for(auto& u : textureUsesMap) {
         textureUsesVector.push_back(make_pair(u.first, u.second));
     }
     sort(
@@ -2419,7 +2419,7 @@ void AreaEditor::newTreeShadowCmd(float inputValue) {
  *
  * @param ev Event to handle.
  */
-void AreaEditor::panCam(const ALLEGRO_EVENT &ev) {
+void AreaEditor::panCam(const ALLEGRO_EVENT& ev) {
     game.editorsView.cam.setPos(
         Point(
             game.editorsView.cam.pos.x -
@@ -2483,7 +2483,7 @@ void AreaEditor::pasteTextureCmd(float inputValue) {
  * @param isNew Is it a new area, or an existing one?
  */
 void AreaEditor::pickAreaFolder(
-    const string &name, const string &topCat, const string &secCat,
+    const string& name, const string& topCat, const string& secCat,
     void* info, bool isNew
 ) {
     ContentManifest* tempManif = (ContentManifest*) info;
@@ -2514,7 +2514,7 @@ void AreaEditor::pickAreaFolder(
  * @param isNew Unused.
  */
 void AreaEditor::pickTexture(
-    const string &name, const string &topCat, const string &secCat,
+    const string& name, const string& topCat, const string& secCat,
     void* info, bool isNew
 ) {
     Sector* sPtr = nullptr;
@@ -2525,7 +2525,7 @@ void AreaEditor::pickTexture(
     
     if(name == "Choose another...") {
         openBitmapDialog(
-        [this, sPtr] (const string &bmp) {
+        [this, sPtr] (const string& bmp) {
             if(sPtr->textureInfo.bmpName == bmp) return;
             registerChange("sector texture change");
             updateTextureSuggestions(bmp);
@@ -2681,7 +2681,7 @@ void AreaEditor::referenceToggleCmd(float inputValue) {
  * Otherwise, it uses the current area state.
  */
 void AreaEditor::registerChange(
-    const string &operationName, Area* prePreparedState
+    const string& operationName, Area* prePreparedState
 ) {
     changesMgr.markAsChanged();
     
@@ -3017,7 +3017,7 @@ void AreaEditor::selectEdge(Edge* e) {
  *
  * @param label Label to search for.
  */
-void AreaEditor::selectPathStopsWithLabel(const string &label) {
+void AreaEditor::selectPathStopsWithLabel(const string& label) {
     clearSelection();
     for(size_t s = 0; s < game.curAreaData->pathStops.size(); s++) {
         PathStop* sPtr = game.curAreaData->pathStops[s];
@@ -3217,7 +3217,7 @@ void AreaEditor::setSelectionStatusText() {
         if(!selectedPathLinks.empty() || !selectedPathStops.empty()) {
             size_t normalsFound = 0;
             size_t oneWaysFound = 0;
-            for(const auto &l : selectedPathLinks) {
+            for(const auto& l : selectedPathLinks) {
                 if(l->endPtr->getLink(l->startPtr)) {
                     //They both link to each other. So it's a two-way.
                     normalsFound++;
@@ -3409,7 +3409,7 @@ void AreaEditor::startMobMove() {
     
     moveClosestMob = nullptr;
     Distance moveClosestMobDist;
-    for(auto const &m : selectedMobs) {
+    for(auto const& m : selectedMobs) {
         preMoveMobCoords[m] = m->pos;
         
         Distance d(game.editorsView.cursorWorldPos, m->pos);
@@ -3460,7 +3460,7 @@ void AreaEditor::startVertexMove() {
     
     moveClosestVertex = nullptr;
     Distance moveClosestVertexDist;
-    for(auto const &v : selectedVertexes) {
+    for(auto const& v : selectedVertexes) {
         Point p = v2p(v);
         preMoveVertexCoords[v] = p;
         
@@ -3804,7 +3804,7 @@ void AreaEditor::updateReference() {
  * @param internalName Internal name of the new texture.
  */
 void AreaEditor::updateSectorTexture(
-    Sector* sPtr, const string &internalName
+    Sector* sPtr, const string& internalName
 ) {
     game.content.bitmaps.list.free(sPtr->textureInfo.bmpName);
     sPtr->textureInfo.bmpName = internalName;
@@ -3818,7 +3818,7 @@ void AreaEditor::updateSectorTexture(
  *
  * @param n Name of the chosen texture.
  */
-void AreaEditor::updateTextureSuggestions(const string &n) {
+void AreaEditor::updateTextureSuggestions(const string& n) {
     //First, check if it exists.
     size_t pos = INVALID;
     
@@ -4013,7 +4013,7 @@ void AreaEditor::zoomOutCmd(float inputValue) {
  * @param mouseClick Coordinates of the mouse click.
  */
 AreaEditor::LayoutDrawingNode::LayoutDrawingNode(
-    const AreaEditor* aePtr, const Point &mouseClick
+    const AreaEditor* aePtr, const Point& mouseClick
 ) :
     rawSpot(mouseClick),
     snappedSpot(mouseClick) {
@@ -4073,7 +4073,7 @@ AreaEditor::LayoutDrawingNode::LayoutDrawingNode() {
  * @param n File name of the texture.
  */
 AreaEditor::TextureSuggestion::TextureSuggestion(
-    const string &n
+    const string& n
 ) :
     bmp(nullptr),
     name(n) {

@@ -98,7 +98,7 @@ struct PlayerInputSource {
     
     //--- Function declarations ---
     
-    bool operator==(const PlayerInputSource &s2) const;
+    bool operator==(const PlayerInputSource& s2) const;
     
 };
 
@@ -266,8 +266,8 @@ public:
     //--- Function declarations ---
     
     float getValue(int playerActionTypeId) const;
-    void handleInput(const PlayerInput &input);
-    void startIgnoringInputSource(const PlayerInputSource &inputSource);
+    void handleInput(const PlayerInput& input);
+    void startIgnoringInputSource(const PlayerInputSource& inputSource);
     vector<PlayerAction> newFrame(float deltaT);
     void setValue(int playerActionTypeId, float value);
     
@@ -294,16 +294,16 @@ private:
     
     //--- Function declarations ---
     
-    void cleanStick(const PlayerInput &input);
+    void cleanStick(const PlayerInput& input);
     vector<int> getActionTypesFromInput(
-        const PlayerInput &input
+        const PlayerInput& input
     );
-    void handleCleanInput(const PlayerInput &input, bool addDirectly);
+    void handleCleanInput(const PlayerInput& input, bool addDirectly);
     void processAutoRepeats(
-        std::pair<const int, ActionTypeStatus> &it, float deltaT
+        std::pair<const int, ActionTypeStatus>& it, float deltaT
     );
-    bool processInputIgnoring(const PlayerInput &input);
+    bool processInputIgnoring(const PlayerInput& input);
     void processStateTimers(
-        std::pair<const int, ActionTypeStatus> &it, float deltaT
+        std::pair<const int, ActionTypeStatus>& it, float deltaT
     );
 };

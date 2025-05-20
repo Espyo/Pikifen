@@ -20,13 +20,13 @@ void initDearImGui();
 void initDearImGuiColors();
 void initErrorBitmap();
 void initEssentials();
-void initEventThings(ALLEGRO_TIMER* &timer, ALLEGRO_EVENT_QUEUE* &queue);
+void initEventThings(ALLEGRO_TIMER*& timer, ALLEGRO_EVENT_QUEUE*& queue);
 void initMisc();
 void initMiscDatabases();
 void initMobActions();
 void initMobCategories();
 
 void destroyAllegro();
-void destroyEventThings(ALLEGRO_TIMER* &timer, ALLEGRO_EVENT_QUEUE* &queue);
+void destroyEventThings(ALLEGRO_TIMER*& timer, ALLEGRO_EVENT_QUEUE*& queue);
 void destroyMisc();
 void destroyMobCategories();

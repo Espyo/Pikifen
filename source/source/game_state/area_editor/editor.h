@@ -155,7 +155,7 @@ private:
         
         //--- Function declarations ---
         
-        explicit TextureSuggestion(const string &n);
+        explicit TextureSuggestion(const string& n);
         void destroy();
         
     };
@@ -198,7 +198,7 @@ private:
         //--- Function declarations ---
         
         LayoutDrawingNode(
-            const AreaEditor* aePtr, const Point &mouseClick
+            const AreaEditor* aePtr, const Point& mouseClick
         );
         LayoutDrawingNode();
         
@@ -895,8 +895,8 @@ private:
     //--- Function declarations ---
     
     bool areNodesTraversable(
-        const LayoutDrawingNode &n1,
-        const LayoutDrawingNode &n2
+        const LayoutDrawingNode& n1,
+        const LayoutDrawingNode& n2
     ) const;
     float calculateDaySpeed(
         float dayStartMin, float dayEndMin,
@@ -907,7 +907,7 @@ private:
     void cancelLayoutMoving();
     float calculatePreviewPath();
     void changeState(const EDITOR_STATE newState);
-    void checkDrawingLine(const Point &pos);
+    void checkDrawingLine(const Point& pos);
     void clearCircleSector();
     void clearCurrentArea();
     void clearLayoutDrawing();
@@ -922,16 +922,16 @@ private:
     void copyMobProperties();
     void copyPathLinkProperties();
     void copySectorProperties();
-    void createArea(const string &requestedAreaPath);
+    void createArea(const string& requestedAreaPath);
     void createDrawingVertexes();
     void createMobUnderCursor();
     Sector* createSectorForLayoutDrawing(const Sector* copyFrom);
     void deleteCurrentArea();
     void deleteEdge(Edge* ePtr);
-    bool deleteEdges(const set<Edge*> &which);
-    void deleteMobs(const set<MobGen*> &which);
-    void deletePathLinks(const set<PathLink*> &which);
-    void deletePathStops(const set<PathStop*> &which);
+    bool deleteEdges(const set<Edge*>& which);
+    void deleteMobs(const set<MobGen*>& which);
+    void deletePathLinks(const set<PathLink*>& which);
+    void deletePathStops(const set<PathStop*>& which);
     void doSectorSplit();
     void emitTriangulationErrorStatusBarMessage(
         const TRIANGULATION_ERROR error
@@ -964,13 +964,13 @@ private:
     void finishNewSectorDrawing();
     void forgetPreparedState(Area* preparedChange);
     void getAffectedSectors(
-        Sector* sPtr, unordered_set<Sector*> &list
+        Sector* sPtr, unordered_set<Sector*>& list
     ) const;
     void getAffectedSectors(
-        const set<Sector*> &sectors, unordered_set<Sector*> &list
+        const set<Sector*>& sectors, unordered_set<Sector*>& list
     ) const;
     void getAffectedSectors(
-        const set<Vertex*> &vertexes, unordered_set<Sector*> &list
+        const set<Vertex*>& vertexes, unordered_set<Sector*>& list
     ) const;
     void getHoveredLayoutElement(
         Vertex** clickedVertex, Edge** clickedEdge, Sector** clickedSector
@@ -980,37 +980,37 @@ private:
         float* outClosestEdgeAngle
     ) const;
     bool getCommonSector(
-        vector<Vertex*> &vertexes, vector<Edge*> &edges, Sector** result
+        vector<Vertex*>& vertexes, vector<Edge*>& edges, Sector** result
     ) const;
     Edge* getCorrectPostSplitEdge(
         const Vertex* vPtr, Edge* e1Ptr, Edge* e2Ptr
     ) const;
     bool getDrawingOuterSector(Sector** result) const;
     Edge* getEdgeUnderPoint(
-        const Point &p, const Edge* after = nullptr
+        const Point& p, const Edge* after = nullptr
     ) const;
     string getFolderTooltip(
-        const string &path, const string &userDataPath
+        const string& path, const string& userDataPath
     ) const;
     vector<EdgeIntersection> getIntersectingEdges() const;
     size_t getMissionRequiredMobCount() const;
     float getMobGenRadius(MobGen* m) const;
     bool getMobLinkUnderPoint(
-        const Point &p,
+        const Point& p,
         std::pair<MobGen*, MobGen*>* data1,
         std::pair<MobGen*, MobGen*>* data2
     ) const;
     MobGen* getMobUnderPoint(
-        const Point &p, size_t* outIdx = nullptr
+        const Point& p, size_t* outIdx = nullptr
     ) const;
     bool getPathLinkUnderPoint(
-        const Point &p, PathLink** link1, PathLink** link2
+        const Point& p, PathLink** link1, PathLink** link2
     ) const;
-    PathStop* getPathStopUnderPoint(const Point &p) const;
+    PathStop* getPathStopUnderPoint(const Point& p) const;
     float getQuickHeightSetOffset() const;
     SECTOR_SPLIT_RESULT getSectorSplitEvaluation();
-    Sector* getSectorUnderPoint(const Point &p) const;
-    Vertex* getVertexUnderPoint(const Point &p) const;
+    Sector* getSectorUnderPoint(const Point& p) const;
+    Vertex* getVertexUnderPoint(const Point& p) const;
     void goToUndoHistoryPoint(size_t p);
     void goToProblem();
     void handleLineError();
@@ -1020,7 +1020,7 @@ private:
     void homogenizeSelectedPathStops();
     void homogenizeSelectedSectors();
     void loadAreaFolder(
-        const string &requestedAreaPath,
+        const string& requestedAreaPath,
         bool fromBackup, bool shouldUpdateHistory
     );
     void loadBackup();
@@ -1038,18 +1038,18 @@ private:
     void recreateDrawingNodes();
     void redo();
     void registerChange(
-        const string &operationName, Area* prePreparedChange = nullptr
+        const string& operationName, Area* prePreparedChange = nullptr
     );
     void reloadAreas();
     void removeThumbnail();
     void resizeEverything(float mults[2]);
     void rollbackToPreparedState(Area* preparedState);
-    void rotateMobGensToPoint(const Point &pos);
+    void rotateMobGensToPoint(const Point& pos);
     bool saveArea(bool toBackup);
     void saveBackup();
     void saveReference();
     void selectEdge(Edge* ePtr);
-    void selectPathStopsWithLabel(const string &label);
+    void selectPathStopsWithLabel(const string& label);
     void selectSector(Sector* sPtr);
     void selectTreeShadow(TreeShadow* sPtr);
     void selectVertex(Vertex* vPtr);
@@ -1059,11 +1059,11 @@ private:
     void setupForNewAreaPost();
     void setupForNewAreaPre();
     void setupSectorSplit();
-    Point snapPoint(const Point &p, bool ignoreSelected = false);
-    Vertex* splitEdge(Edge* ePtr, const Point &where);
+    Point snapPoint(const Point& p, bool ignoreSelected = false);
+    Vertex* splitEdge(Edge* ePtr, const Point& where);
     PathStop* splitPathLink(
         PathLink* l1, PathLink* l2,
-        const Point &where
+        const Point& where
     );
     void startMobMove();
     void startPathStopMove();
@@ -1076,23 +1076,23 @@ private:
     void undo();
     void undoLayoutDrawingNode();
     void updateAffectedSectors(
-        const unordered_set<Sector*> &affectedSectors
+        const unordered_set<Sector*>& affectedSectors
     );
     void updateAllEdgeOffsetCaches();
     void updateInnerSectorsOuterSector(
-        const vector<Edge*> &edgesToCheck,
+        const vector<Edge*>& edgesToCheck,
         const Sector* oldOuter, Sector* newOuter
     );
     void updateReference();
     void updateLayoutDrawingStatusText();
-    void updateSectorTexture(Sector* sPtr, const string &internalName);
-    void updateTextureSuggestions(const string &n);
+    void updateSectorTexture(Sector* sPtr, const string& internalName);
+    void updateTextureSuggestions(const string& n);
     void updateUndoHistory();
     void updateVertexSelection();
     void drawArrow(
-        const Point &start, const Point &end,
+        const Point& start, const Point& end,
         float startOffset, float endOffset,
-        float thickness, const ALLEGRO_COLOR &color
+        float thickness, const ALLEGRO_COLOR& color
     );
     static void drawCanvasDearImGuiCallback(
         const ImDrawList* parentList, const ImDrawCmd* cmd
@@ -1103,27 +1103,27 @@ private:
         float lowestZ, const Sector* sectorPtr
     );
     void drawDebugText(
-        const ALLEGRO_COLOR color, const Point &where, const string &text,
+        const ALLEGRO_COLOR color, const Point& where, const string& text,
         unsigned char dots = 0
     );
-    void drawEdges(const AreaEdCanvasStyle &style);
+    void drawEdges(const AreaEdCanvasStyle& style);
     void drawLineDist(
-        const Point &focus, const Point &other, const string &prefix = ""
+        const Point& focus, const Point& other, const string& prefix = ""
     );
-    void drawMobs(const AreaEdCanvasStyle &style);
-    void drawPaths(const AreaEdCanvasStyle &style);
-    void drawSectors(const AreaEdCanvasStyle &style);
-    void drawTreeShadows(const AreaEdCanvasStyle &style);
-    void drawVertexes(const AreaEdCanvasStyle &style);
+    void drawMobs(const AreaEdCanvasStyle& style);
+    void drawPaths(const AreaEdCanvasStyle& style);
+    void drawSectors(const AreaEdCanvasStyle& style);
+    void drawTreeShadows(const AreaEdCanvasStyle& style);
+    void drawVertexes(const AreaEdCanvasStyle& style);
     void openLoadDialog();
     void openNewDialog();
     void openOptionsDialog();
     void pickAreaFolder(
-        const string &name, const string &topCat, const string &secCat,
+        const string& name, const string& topCat, const string& secCat,
         void* info, bool isNew
     );
     void pickTexture(
-        const string &name, const string &topCat, const string &secCat,
+        const string& name, const string& topCat, const string& secCat,
         void* info, bool isNew
     );
     void circleSectorCmd(float inputValue);
@@ -1163,15 +1163,15 @@ private:
     void processGuiDeleteAreaDialog();
     void processGuiGradingCriterionWidgets(
         int* valuePtr, MISSION_SCORE_CRITERIA criterionIdx,
-        const string &widgetLabel, const string &tooltip
+        const string& widgetLabel, const string& tooltip
     );
     void processGuiGradingMedalWidgets(
-        int* requirementPtr, const string &widgetLabel,
+        int* requirementPtr, const string& widgetLabel,
         int widgetMinValue, int widgetMaxValue,
-        const string &tooltip
+        const string& tooltip
     );
     void processGuiGradingModeWidgets(
-        int value, const string &widgetLabel, const string &tooltip
+        int value, const string& widgetLabel, const string& tooltip
     );
     void processGuiLoadDialog();
     void processGuiNewDialog();
@@ -1200,32 +1200,32 @@ private:
     void processGuiOptionsDialog();
     void processGuiStatusBar();
     void processGuiToolbar();
-    void handleLmbDownDetails(const ALLEGRO_EVENT &ev);
-    void handleLmbDownGameplay(const ALLEGRO_EVENT &ev);
-    void handleLmbDownLayout(const ALLEGRO_EVENT &ev);
-    void handleLmbDownLayoutDrawing(const ALLEGRO_EVENT &ev);
-    void handleLmbDownMobs(const ALLEGRO_EVENT &ev);
-    void handleLmbDownPaths(const ALLEGRO_EVENT &ev);
-    void handleLmbDownReview(const ALLEGRO_EVENT &ev);
-    void handleLmbDownTools(const ALLEGRO_EVENT &ev);
-    void handleKeyCharAnywhere(const ALLEGRO_EVENT &ev) override;
-    void handleKeyCharCanvas(const ALLEGRO_EVENT &ev) override;
-    void handleKeyDownAnywhere(const ALLEGRO_EVENT &ev) override;
-    void handleKeyDownCanvas(const ALLEGRO_EVENT &ev) override;
-    void handleKeyUpAnywhere(const ALLEGRO_EVENT &ev) override;
-    void handleLmbDoubleClick(const ALLEGRO_EVENT &ev) override;
-    void handleLmbDown(const ALLEGRO_EVENT &ev) override;
-    void handleLmbDrag(const ALLEGRO_EVENT &ev) override;
-    void handleLmbUp(const ALLEGRO_EVENT &ev) override;
-    void handleMmbDoubleClick(const ALLEGRO_EVENT &ev) override;
-    void handleMmbDown(const ALLEGRO_EVENT &ev) override;
-    void handleMmbDrag(const ALLEGRO_EVENT &ev) override;
-    void handleMouseUpdate(const ALLEGRO_EVENT &ev) override;
-    void handleMouseWheel(const ALLEGRO_EVENT &ev) override;
-    void handleRmbDoubleClick(const ALLEGRO_EVENT &ev) override;
-    void handleRmbDown(const ALLEGRO_EVENT &ev) override;
-    void handleRmbDrag(const ALLEGRO_EVENT &ev) override;
-    void panCam(const ALLEGRO_EVENT &ev);
+    void handleLmbDownDetails(const ALLEGRO_EVENT& ev);
+    void handleLmbDownGameplay(const ALLEGRO_EVENT& ev);
+    void handleLmbDownLayout(const ALLEGRO_EVENT& ev);
+    void handleLmbDownLayoutDrawing(const ALLEGRO_EVENT& ev);
+    void handleLmbDownMobs(const ALLEGRO_EVENT& ev);
+    void handleLmbDownPaths(const ALLEGRO_EVENT& ev);
+    void handleLmbDownReview(const ALLEGRO_EVENT& ev);
+    void handleLmbDownTools(const ALLEGRO_EVENT& ev);
+    void handleKeyCharAnywhere(const ALLEGRO_EVENT& ev) override;
+    void handleKeyCharCanvas(const ALLEGRO_EVENT& ev) override;
+    void handleKeyDownAnywhere(const ALLEGRO_EVENT& ev) override;
+    void handleKeyDownCanvas(const ALLEGRO_EVENT& ev) override;
+    void handleKeyUpAnywhere(const ALLEGRO_EVENT& ev) override;
+    void handleLmbDoubleClick(const ALLEGRO_EVENT& ev) override;
+    void handleLmbDown(const ALLEGRO_EVENT& ev) override;
+    void handleLmbDrag(const ALLEGRO_EVENT& ev) override;
+    void handleLmbUp(const ALLEGRO_EVENT& ev) override;
+    void handleMmbDoubleClick(const ALLEGRO_EVENT& ev) override;
+    void handleMmbDown(const ALLEGRO_EVENT& ev) override;
+    void handleMmbDrag(const ALLEGRO_EVENT& ev) override;
+    void handleMouseUpdate(const ALLEGRO_EVENT& ev) override;
+    void handleMouseWheel(const ALLEGRO_EVENT& ev) override;
+    void handleRmbDoubleClick(const ALLEGRO_EVENT& ev) override;
+    void handleRmbDown(const ALLEGRO_EVENT& ev) override;
+    void handleRmbDrag(const ALLEGRO_EVENT& ev) override;
+    void panCam(const ALLEGRO_EVENT& ev);
     void resetCamXY();
     void resetCamZoom();
     

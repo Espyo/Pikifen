@@ -37,8 +37,8 @@ const string GUI_FILE_NAME = "help";
  * @param text Text to draw.
  */
 void HelpMenu::drawTidbit(
-    const ALLEGRO_FONT* const font, const Point &where,
-    const Point &maxSize, const string &text
+    const ALLEGRO_FONT* const font, const Point& where,
+    const Point& maxSize, const string& text
 ) {
     //Get the tokens that make up the tidbit.
     vector<StringToken> tokens = tokenizeString(text);
@@ -111,7 +111,7 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
         "Back", game.sysContent.fntStandard
     );
     gui.backItem->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         leave();
     };
     gui.backItem->onGetTooltip =
@@ -125,7 +125,7 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
     ButtonGuiItem* gameplay1Button =
         new ButtonGuiItem("Gameplay basics", game.sysContent.fntStandard);
     gameplay1Button->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         populateTidbits(HELP_CATEGORY_GAMEPLAY1);
     };
     gameplay1Button->onGetTooltip =
@@ -138,7 +138,7 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
     ButtonGuiItem* gameplay2Button =
         new ButtonGuiItem("Advanced gameplay", game.sysContent.fntStandard);
     gameplay2Button->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         populateTidbits(HELP_CATEGORY_GAMEPLAY2);
     };
     gameplay2Button->onGetTooltip =
@@ -151,7 +151,7 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
     ButtonGuiItem* controlsButton =
         new ButtonGuiItem("Controls", game.sysContent.fntStandard);
     controlsButton->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         populateTidbits(HELP_CATEGORY_CONTROLS);
     };
     controlsButton->onGetTooltip =
@@ -164,7 +164,7 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
     ButtonGuiItem* pikminButton =
         new ButtonGuiItem("Pikmin types", game.sysContent.fntStandard);
     pikminButton->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         populateTidbits(HELP_CATEGORY_PIKMIN);
     };
     pikminButton->onGetTooltip =
@@ -177,7 +177,7 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
     ButtonGuiItem* objectsButton =
         new ButtonGuiItem("Objects", game.sysContent.fntStandard);
     objectsButton->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         populateTidbits(HELP_CATEGORY_OBJECTS);
     };
     objectsButton->onGetTooltip =
@@ -190,7 +190,7 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
     BulletGuiItem* manualBullet =
         new BulletGuiItem("More help...", game.sysContent.fntStandard);
     manualBullet->onActivate =
-    [] (const Point &) {
+    [] (const Point&) {
         openManual("home.html");
     };
     manualBullet->onGetTooltip = [] () {
@@ -265,7 +265,7 @@ void HelpMenu::load() {
         DataNode* categoryNode =
             tidbitsNode->getChildByName(categoryNodeNames[c]);
         size_t nTidbits = categoryNode->getNrOfChildren();
-        vector<Tidbit> &categoryTidbits = tidbits[(HELP_CATEGORY) c];
+        vector<Tidbit>& categoryTidbits = tidbits[(HELP_CATEGORY) c];
         categoryTidbits.reserve(nTidbits);
         for(size_t t = 0; t < nTidbits; t++) {
             vector<string> parts =
@@ -303,7 +303,7 @@ void HelpMenu::load() {
  * @param category Category of tidbits to use.
  */
 void HelpMenu::populateTidbits(const HELP_CATEGORY category) {
-    vector<Tidbit> &categoryTidbits = tidbits[category];
+    vector<Tidbit>& categoryTidbits = tidbits[category];
     
     switch(category) {
     case HELP_CATEGORY_GAMEPLAY1: {

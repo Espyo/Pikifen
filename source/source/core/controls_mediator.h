@@ -319,20 +319,20 @@ struct ControlsMediator {
     void addPlayerActionType(
         PLAYER_ACTION_TYPE id,
         PLAYER_ACTION_CAT category,
-        const string &name,
-        const string &description,
-        const string &internalName,
-        const string &defaultBindStr,
+        const string& name,
+        const string& description,
+        const string& internalName,
+        const string& defaultBindStr,
         float autoRepeat = 0.0f
     );
-    const vector<PfePlayerActionType> &getAllPlayerActionTypes() const;
-    vector<ControlBind> &binds();
-    string inputSourceToStr(const PlayerInputSource &s) const;
+    const vector<PfePlayerActionType>& getAllPlayerActionTypes() const;
+    vector<ControlBind>& binds();
+    string inputSourceToStr(const PlayerInputSource& s) const;
     ControlBind findBind(
         const PLAYER_ACTION_TYPE actionTypeId
     ) const;
     ControlBind findBind(
-        const string &actionTypeName
+        const string& actionTypeName
     ) const;
     PfePlayerActionType getPlayerActionType(int actionId) const;
     string getPlayerActionTypeInternalName(int actionId);
@@ -340,15 +340,15 @@ struct ControlsMediator {
         PLAYER_ACTION_TYPE playerActionTypeId
     );
     void loadBindsFromDataNode(DataNode* node, unsigned char playerNr);
-    PlayerInputSource strToInputSource(const string &s) const;
-    PlayerInput allegroEventToInput(const ALLEGRO_EVENT &ev) const;
-    bool handleAllegroEvent(const ALLEGRO_EVENT &ev);
+    PlayerInputSource strToInputSource(const string& s) const;
+    PlayerInput allegroEventToInput(const ALLEGRO_EVENT& ev) const;
+    bool handleAllegroEvent(const ALLEGRO_EVENT& ev);
     vector<PlayerAction> newFrame(float deltaT);
     void releaseAll();
     void saveBindsToDataNode(DataNode* node, unsigned char playerNr);
-    void setOptions(const ControlsManagerOptions &options);
+    void setOptions(const ControlsManagerOptions& options);
     void startIgnoringActions();
-    void startIgnoringInputSource(const PlayerInputSource &inputSource);
+    void startIgnoringInputSource(const PlayerInputSource& inputSource);
     void stopIgnoringActions();
     
     private:

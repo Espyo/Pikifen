@@ -20,7 +20,7 @@
  * @param type Scale type this mob belongs to.
  * @param angle Starting angle.
  */
-Scale::Scale(const Point &pos, ScaleType* type, float angle) :
+Scale::Scale(const Point& pos, ScaleType* type, float angle) :
     Mob(pos, type, angle),
     scaType(type),
     goalNumber(type->goalNumber) {
@@ -52,7 +52,7 @@ float Scale::calculateCurWeight() const {
     
     //Now, add up their weights.
     float w = 0;
-    for(auto &m : weighingMobs) {
+    for(auto& m : weighingMobs) {
         w += m->type->weight;
     }
     
@@ -87,7 +87,7 @@ bool Scale::getFractionNumbersInfo(
  *
  * @param svr Script var reader to use.
  */
-void Scale::readScriptVars(const ScriptVarReader &svr) {
+void Scale::readScriptVars(const ScriptVarReader& svr) {
     Mob::readScriptVars(svr);
     
     svr.get("goal_number", goalNumber);

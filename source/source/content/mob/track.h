@@ -31,6 +31,6 @@ public:
     
     //--- Function declarations ---
     
-    Track(const Point &pos, TrackType* type, float angle);
+    Track(const Point& pos, TrackType* type, float angle);
     
 };

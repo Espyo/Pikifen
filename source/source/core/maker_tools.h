@@ -176,8 +176,8 @@ struct MakerTools {
     //--- Function declarations ---
     
     MakerTools();
-    bool handleGameplayPlayerAction(const PlayerAction &action);
-    bool handleGeneralPlayerAction(const PlayerAction &action);
+    bool handleGameplayPlayerAction(const PlayerAction& action);
+    bool handleGeneralPlayerAction(const PlayerAction& action);
     void loadFromDataNode(DataNode* node);
     void resetForGameplay();
     void saveToDataNode(DataNode* node);

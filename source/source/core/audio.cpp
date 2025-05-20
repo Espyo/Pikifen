@@ -75,7 +75,7 @@ const float SONG_SOFTENED_GAIN = 0.4f;
  */
 size_t AudioManager::createGlobalSoundSource(
     ALLEGRO_SAMPLE* sample, bool ambiance,
-    const SoundSourceConfig &config
+    const SoundSourceConfig& config
 ) {
     return
         createSoundSource(
@@ -102,7 +102,7 @@ size_t AudioManager::createGlobalSoundSource(
 size_t AudioManager::createMobSoundSource(
     ALLEGRO_SAMPLE* sample,
     Mob* mPtr, bool ambiance,
-    const SoundSourceConfig &config
+    const SoundSourceConfig& config
 ) {
     size_t sourceId =
         createSoundSource(
@@ -128,8 +128,8 @@ size_t AudioManager::createMobSoundSource(
  * @return The ID, or 0 on failure.
  */
 size_t AudioManager::createPosSoundSource(
-    ALLEGRO_SAMPLE* sample, const Point &pos, bool ambiance,
-    const SoundSourceConfig &config
+    ALLEGRO_SAMPLE* sample, const Point& pos, bool ambiance,
+    const SoundSourceConfig& config
 ) {
     return
         createSoundSource(
@@ -152,8 +152,8 @@ size_t AudioManager::createPosSoundSource(
 size_t AudioManager::createSoundSource(
     ALLEGRO_SAMPLE* sample,
     SOUND_TYPE type,
-    const SoundSourceConfig &config,
-    const Point &pos
+    const SoundSourceConfig& config,
+    const Point& pos
 ) {
     if(!sample) return 0;
     
@@ -190,7 +190,7 @@ size_t AudioManager::createSoundSource(
  */
 size_t AudioManager::createUiSoundsource(
     ALLEGRO_SAMPLE* sample,
-    const SoundSourceConfig &config
+    const SoundSourceConfig& config
 ) {
     return createSoundSource(sample, SOUND_TYPE_UI, config, Point());
 }
@@ -448,7 +448,7 @@ void AudioManager::handleMobDeletion(const Mob* mPtr) {
  * @param stream Stream that finished.
  */
 void AudioManager::handleStreamFinished(ALLEGRO_AUDIO_STREAM* stream) {
-    for(const auto &s : game.content.songs.list) {
+    for(const auto& s : game.content.songs.list) {
         if(s.second.mainTrack == stream) {
             if(onSongFinished) onSongFinished(s.first);
         }
@@ -481,7 +481,7 @@ void AudioManager::handleWorldPause() {
     }
     
     //Soften songs.
-    for(auto &s : game.content.songs.list) {
+    for(auto& s : game.content.songs.list) {
         if(
             s.second.state == SONG_STATE_STOPPING ||
             s.second.state == SONG_STATE_STOPPED
@@ -526,7 +526,7 @@ void AudioManager::handleWorldUnpause() {
     }
     
     //Unsoften songs.
-    for(auto &s : game.content.songs.list) {
+    for(auto& s : game.content.songs.list) {
         if(
             s.second.state == SONG_STATE_STOPPING ||
             s.second.state == SONG_STATE_STOPPED
@@ -625,14 +625,14 @@ void AudioManager::markMixTrackStatus(MIX_TRACK_TYPE trackType) {
  * @param name Name of the song in the list of loaded songs.
  * @return Whether it succeeded.
  */
-bool AudioManager::rewindSong(const string &name) {
+bool AudioManager::rewindSong(const string& name) {
     auto songIt = game.content.songs.list.find(name);
     if(songIt == game.content.songs.list.end()) return false;
     Song* songPtr = &songIt->second;
     
     songPtr->stopPoint = 0.0f;
     al_rewind_audio_stream(songPtr->mainTrack);
-    for(auto const &m : songPtr->mixTracks) {
+    for(auto const& m : songPtr->mixTracks) {
         al_rewind_audio_stream(m.second);
     }
     
@@ -668,7 +668,7 @@ bool AudioManager::scheduleEmission(size_t sourceId, bool first) {
  * @param camTL Current coordinates of the camera's top-left corner.
  * @param camBR Current coordinates of the camera's bottom-right corner.
  */
-void AudioManager::setCameraPos(const Point &camTL, const Point &camBR) {
+void AudioManager::setCameraPos(const Point& camTL, const Point& camBR) {
     this->camTL = camTL;
     this->camBR = camBR;
 }
@@ -690,11 +690,11 @@ void AudioManager::setCameraPos(const Point &camTL, const Point &camBR) {
  * @return Whether it succeeded.
  */
 bool AudioManager::setCurrentSong(
-    const string &name, bool fromStart, bool fadeIn, bool loop
+    const string& name, bool fromStart, bool fadeIn, bool loop
 ) {
 
     //Stop all other songs first.
-    for(auto &s : game.content.songs.list) {
+    for(auto& s : game.content.songs.list) {
         Song* songPtr = &s.second;
         if(songPtr->name == name) {
             //This is the song we want to play. Let's not handle it here.
@@ -746,7 +746,7 @@ bool AudioManager::setCurrentSong(
             startSongTrack(
                 songPtr, songPtr->mainTrack, fromStart, fadeIn, loop
             );
-            for(auto const &m : songPtr->mixTracks) {
+            for(auto const& m : songPtr->mixTracks) {
                 startSongTrack(songPtr, m.second, fromStart, fadeIn, loop);
             }
         }
@@ -767,7 +767,7 @@ void AudioManager::setSongPosNearLoop() {
     for(auto s : game.content.songs.list) {
         double pos = std::max(0.0, s.second.loopEnd - 4.0f);
         al_seek_audio_stream_secs(s.second.mainTrack, pos);
-        for(auto const &m : s.second.mixTracks) {
+        for(auto const& m : s.second.mixTracks) {
             al_seek_audio_stream_secs(m.second, pos);
         }
     }
@@ -781,7 +781,7 @@ void AudioManager::setSongPosNearLoop() {
  * @param pos New position.
  * @return Whether it succeeded.
  */
-bool AudioManager::setSoundSourcePos(size_t sourceId, const Point &pos) {
+bool AudioManager::setSoundSourcePos(size_t sourceId, const Point& pos) {
     SoundSource* sourcePtr = getSource(sourceId);
     if(!sourcePtr) return false;
     
@@ -880,7 +880,7 @@ void AudioManager::tick(float deltaT) {
     }
     
     //Update the position of sources tied to mobs.
-    for(auto &s : sources) {
+    for(auto& s : sources) {
         if(s.second.destroyed) continue;
         auto mobSourceIt = mobSources.find(s.first);
         if(mobSourceIt == mobSources.end()) continue;
@@ -890,7 +890,7 @@ void AudioManager::tick(float deltaT) {
     }
     
     //Emit playbacks from sources that want to emit.
-    for(auto &s : sources) {
+    for(auto& s : sources) {
         if(s.second.destroyed) continue;
         if(s.second.emitTimeLeft == 0.0f) continue;
         
@@ -996,7 +996,7 @@ void AudioManager::tick(float deltaT) {
     }
     
     //Update the volume of songs depending on their state.
-    for(auto &s : game.content.songs.list) {
+    for(auto& s : game.content.songs.list) {
         Song* songPtr = &s.second;
         
         switch(songPtr->state) {
@@ -1053,7 +1053,7 @@ void AudioManager::tick(float deltaT) {
             if(songPtr->gain == 0.0f) {
                 al_set_audio_stream_playing(songPtr->mainTrack, false);
                 al_detach_audio_stream(songPtr->mainTrack);
-                for(auto &m : songPtr->mixTracks) {
+                for(auto& m : songPtr->mixTracks) {
                     al_set_audio_stream_playing(m.second, false);
                     al_detach_audio_stream(m.second);
                 }
@@ -1078,7 +1078,7 @@ void AudioManager::tick(float deltaT) {
                 AUDIO::MIX_TRACK_GAIN_SPEED * deltaT
             );
             
-        for(auto &s : game.content.songs.list) {
+        for(auto& s : game.content.songs.list) {
             Song* songPtr = &s.second;
             if(songPtr->state == SONG_STATE_STOPPED) {
                 continue;
@@ -1273,7 +1273,7 @@ void Song::loadFromDataNode(DataNode* node) {
  */
 void Song::unload() {
     game.content.songTracks.list.free(mainTrack);
-    for(auto &t : mixTracks) {
+    for(auto& t : mixTracks) {
         game.content.songTracks.list.free(t.second);
     }
 }

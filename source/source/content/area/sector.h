@@ -135,16 +135,16 @@ struct Sector {
     Vertex* getRightmostVertex() const;
     void getTextureMergeSectors(Sector** s1, Sector** s2) const;
     bool isClockwise() const;
-    bool isPointInSector(const Point &p) const;
+    bool isPointInSector(const Point& p) const;
     void removeEdge(const Edge* ePtr);
     void getNeighborSectorsConditionally(
-        const std::function<bool(Sector* s_ptr)> &condition,
-        vector<Sector*> &sectorList
+        const std::function<bool(Sector* s_ptr)>& condition,
+        vector<Sector*>& sectorList
     );
     
 };
 
 
 Sector* getSector(
-    const Point &p, size_t* outSectorIdx, bool useBlockmap
+    const Point& p, size_t* outSectorIdx, bool useBlockmap
 );

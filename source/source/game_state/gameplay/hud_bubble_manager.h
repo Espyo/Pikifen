@@ -326,7 +326,7 @@ struct HudBubbleManager {
         auto it = bubbles.find(id);
         if(it == bubbles.end()) return;
         if(it->second.ref != newRef && !transitionIsSetup) {
-            for(auto &b : bubbles) {
+            for(auto& b : bubbles) {
                 b.second.preTransitionRef = b.second.ref;
                 b.second.preTransitionContent = b.second.content;
             }

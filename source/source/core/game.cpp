@@ -158,7 +158,7 @@ void Game::globalDrawing() {
  *
  * @param ev Event to handle.
  */
-void Game::globalHandleAllegroEvent(const ALLEGRO_EVENT &ev) {
+void Game::globalHandleAllegroEvent(const ALLEGRO_EVENT& ev) {
     if(
         ev.type == ALLEGRO_EVENT_MOUSE_AXES ||
         ev.type == ALLEGRO_EVENT_MOUSE_WARPED ||
@@ -196,7 +196,7 @@ void Game::globalHandleAllegroEvent(const ALLEGRO_EVENT &ev) {
  * @param action The action.
  * @return Whether it got handled.
  */
-bool Game::globalHandleSystemPlayerAction(const PlayerAction &action) {
+bool Game::globalHandleSystemPlayerAction(const PlayerAction& action) {
     bool isSystemAction =
         controls.getPlayerActionType(action.actionTypeId).category ==
         PLAYER_ACTION_CAT_SYSTEM;

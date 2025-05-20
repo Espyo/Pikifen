@@ -55,9 +55,9 @@ void AreaContentManager::fillManifests() {
  * @return The manifest, or nullptr.
  */
 ContentManifest* AreaContentManager::findManifest(
-    const string &areaName, const string &pack, AREA_TYPE type
+    const string& areaName, const string& pack, AREA_TYPE type
 ) {
-    for(auto &m : manifests[type]) {
+    for(auto& m : manifests[type]) {
         if(m.first == areaName && m.second.pack == pack) {
             return &m.second;
         }
@@ -94,7 +94,7 @@ string AreaContentManager::getPerfMonMeasurementName() const {
 void AreaContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
     for(size_t t = 0; t < N_AREA_TYPES; t++) {
         list.push_back(vector<Area*>());
-        for(auto &a : manifests[t]) {
+        for(auto& a : manifests[t]) {
             loadAreaIntoVector(&a.second, (AREA_TYPE) t, false);
         }
     }
@@ -113,7 +113,7 @@ void AreaContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
  * @return Whether it succeeded.
  */
 bool AreaContentManager::loadArea(
-    Area* areaPtr, const string &requestedAreaPath,
+    Area* areaPtr, const string& requestedAreaPath,
     ContentManifest* manifPtr, CONTENT_LOAD_LEVEL level, bool fromBackup
 ) {
     //Setup.
@@ -217,7 +217,7 @@ void AreaContentManager::loadAreaIntoVector(
  * @return The path.
  */
 string AreaContentManager::manifestToPath(
-    const ContentManifest &manifest, AREA_TYPE type
+    const ContentManifest& manifest, AREA_TYPE type
 ) const {
     return
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
@@ -239,7 +239,7 @@ string AreaContentManager::manifestToPath(
  * @param outType If not nullptr, the area type is returned here.
  */
 void AreaContentManager::pathToManifest(
-    const string &path, ContentManifest* outManifest, AREA_TYPE* outType
+    const string& path, ContentManifest* outManifest, AREA_TYPE* outType
 ) const {
     if(outManifest) {
         outManifest->fillFromPath(path);
@@ -324,8 +324,8 @@ void BitmapContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
  * @return The path.
  */
 string BitmapContentManager::manifestToPath(
-    const ContentManifest &manifest,
-    const string &extension
+    const ContentManifest& manifest,
+    const string& extension
 ) const {
     return
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
@@ -343,7 +343,7 @@ string BitmapContentManager::manifestToPath(
  * @param outExtension If not nullptr, the file extension is returned here.
  */
 void BitmapContentManager::pathToManifest(
-    const string &path, ContentManifest* outManifest, string* outExtension
+    const string& path, ContentManifest* outManifest, string* outExtension
 ) const {
     if(outManifest) {
         outManifest->fillFromPath(path);
@@ -378,10 +378,10 @@ void BitmapContentManager::unloadAll(CONTENT_LOAD_LEVEL level) {
  * @param folders True if the content is folders, false if it's files.
  */
 void ContentTypeManager::fillManifestsMap(
-    map<string, ContentManifest> &manifests,
-    const string &contentRelPath, bool folders
+    map<string, ContentManifest>& manifests,
+    const string& contentRelPath, bool folders
 ) {
-    for(const auto &p : game.content.packs.manifestsWithBase) {
+    for(const auto& p : game.content.packs.manifestsWithBase) {
         fillManifestsMapFromPack(manifests, p, contentRelPath, folders);
     }
 }
@@ -397,8 +397,8 @@ void ContentTypeManager::fillManifestsMap(
  * @param folders True if the content is folders, false if it's files.
  */
 void ContentTypeManager::fillManifestsMapFromPack(
-    map<string, ContentManifest> &manifests, const string &packName,
-    const string &contentRelPath, bool folders
+    map<string, ContentManifest>& manifests, const string& packName,
+    const string& contentRelPath, bool folders
 ) {
     const string folderPath =
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" + packName +
@@ -461,7 +461,7 @@ string GlobalAnimContentManager::getPerfMonMeasurementName() const {
  * @param level Level to load at.
  */
 void GlobalAnimContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
-    for(auto &a : manifests) {
+    for(auto& a : manifests) {
         loadAnimationDb(&a.second, level);
     }
 }
@@ -492,7 +492,7 @@ void GlobalAnimContentManager::loadAnimationDb(
  * @return The path.
  */
 string GlobalAnimContentManager::manifestToPath(
-    const ContentManifest &manifest
+    const ContentManifest& manifest
 ) const {
     return
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
@@ -509,7 +509,7 @@ string GlobalAnimContentManager::manifestToPath(
  * @param outManifest If not nullptr, the manifest is returned here.
  */
 void GlobalAnimContentManager::pathToManifest(
-    const string &path, ContentManifest* outManifest
+    const string& path, ContentManifest* outManifest
 ) const {
     if(outManifest) {
         outManifest->fillFromPath(path);
@@ -523,7 +523,7 @@ void GlobalAnimContentManager::pathToManifest(
  * @param level Load level. Should match the level used to load the content.
  */
 void GlobalAnimContentManager::unloadAll(CONTENT_LOAD_LEVEL level) {
-    for(auto &a : list) {
+    for(auto& a : list) {
         a.second.destroy();
     }
     list.clear();
@@ -572,7 +572,7 @@ string GuiContentManager::getPerfMonMeasurementName() const {
  * @param level Level to load at.
  */
 void GuiContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
-    for(const auto &g : manifests) {
+    for(const auto& g : manifests) {
         list[g.first] = loadDataFile(g.second.path);
     }
 }
@@ -586,7 +586,7 @@ void GuiContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
  * @return The path.
  */
 string GuiContentManager::manifestToPath(
-    const ContentManifest &manifest
+    const ContentManifest& manifest
 ) const {
     return
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
@@ -603,7 +603,7 @@ string GuiContentManager::manifestToPath(
  * @param outManifest If not nullptr, the manifest is returned here.
  */
 void GuiContentManager::pathToManifest(
-    const string &path, ContentManifest* outManifest
+    const string& path, ContentManifest* outManifest
 ) const {
     if(outManifest) {
         outManifest->fillFromPath(path);
@@ -663,7 +663,7 @@ string HazardContentManager::getPerfMonMeasurementName() const {
  * @param level Level to load at.
  */
 void HazardContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
-    for(auto &h : manifests) {
+    for(auto& h : manifests) {
         loadHazard(&h.second, level);
     }
 }
@@ -696,7 +696,7 @@ void HazardContentManager::loadHazard(
  * @return The path.
  */
 string HazardContentManager::manifestToPath(
-    const ContentManifest &manifest
+    const ContentManifest& manifest
 ) const {
     return
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
@@ -713,7 +713,7 @@ string HazardContentManager::manifestToPath(
  * @param outManifest If not nullptr, the manifest is returned here.
  */
 void HazardContentManager::pathToManifest(
-    const string &path, ContentManifest* outManifest
+    const string& path, ContentManifest* outManifest
 ) const {
     if(outManifest) {
         outManifest->fillFromPath(path);
@@ -773,7 +773,7 @@ string LiquidContentManager::getPerfMonMeasurementName() const {
  * @param level Level to load at.
  */
 void LiquidContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
-    for(auto &l : manifests) {
+    for(auto& l : manifests) {
         loadLiquid(&l.second, level);
     }
 }
@@ -806,7 +806,7 @@ void LiquidContentManager::loadLiquid(
  * @return The path.
  */
 string LiquidContentManager::manifestToPath(
-    const ContentManifest &manifest
+    const ContentManifest& manifest
 ) const {
     return
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
@@ -823,7 +823,7 @@ string LiquidContentManager::manifestToPath(
  * @param outManifest If not nullptr, the manifest is returned here.
  */
 void LiquidContentManager::pathToManifest(
-    const string &path, ContentManifest* outManifest
+    const string& path, ContentManifest* outManifest
 ) const {
     if(outManifest) {
         outManifest->fillFromPath(path);
@@ -837,7 +837,7 @@ void LiquidContentManager::pathToManifest(
  * @param level Load level. Should match the level used to load the content.
  */
 void LiquidContentManager::unloadAll(CONTENT_LOAD_LEVEL level) {
-    for(const auto &l : list) {
+    for(const auto& l : list) {
         delete l.second;
     }
     list.clear();
@@ -917,7 +917,7 @@ void MiscConfigContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
  * @return The path.
  */
 string MiscConfigContentManager::manifestToPath(
-    const ContentManifest &manifest
+    const ContentManifest& manifest
 ) const {
     return
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
@@ -934,7 +934,7 @@ string MiscConfigContentManager::manifestToPath(
  * @param outManifest If not nullptr, the manifest is returned here.
  */
 void MiscConfigContentManager::pathToManifest(
-    const string &path, ContentManifest* outManifest
+    const string& path, ContentManifest* outManifest
 ) const {
     if(outManifest) {
         outManifest->fillFromPath(path);
@@ -966,7 +966,7 @@ void MobAnimContentManager::clearManifests() {
  * @param packName Internal name of the pack.
  */
 void MobAnimContentManager::fillCatManifestsFromPack(
-    MobCategory* category, const string &packName
+    MobCategory* category, const string& packName
 ) {
     const string categoryPath =
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
@@ -998,7 +998,7 @@ void MobAnimContentManager::fillManifests() {
         MobCategory* category = game.mobCategories.get((MOB_CATEGORY) c);
         if(category->folderName.empty()) return;
         
-        for(const auto &p : game.content.packs.manifestsWithBase) {
+        for(const auto& p : game.content.packs.manifestsWithBase) {
             fillCatManifestsFromPack(category, p);
         }
     }
@@ -1033,7 +1033,7 @@ string MobAnimContentManager::getPerfMonMeasurementName() const {
 void MobAnimContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
     for(size_t c = 0; c < N_MOB_CATEGORIES; c++) {
         list.push_back(map<string, AnimationDatabase>());
-        for(auto &a : manifests[c]) {
+        for(auto& a : manifests[c]) {
             loadAnimationDb(&a.second, level, (MOB_CATEGORY) c);
         }
     }
@@ -1068,8 +1068,8 @@ void MobAnimContentManager::loadAnimationDb(
  * @return The path.
  */
 string MobAnimContentManager::manifestToPath(
-    const ContentManifest &manifest, const string &category,
-    const string &type
+    const ContentManifest& manifest, const string& category,
+    const string& type
 ) const {
     return
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
@@ -1092,7 +1092,7 @@ string MobAnimContentManager::manifestToPath(
  * is returned here.
  */
 void MobAnimContentManager::pathToManifest(
-    const string &path, ContentManifest* outManifest,
+    const string& path, ContentManifest* outManifest,
     string* outCategory, string* outType
 ) const {
     if(outManifest) {
@@ -1124,7 +1124,7 @@ void MobAnimContentManager::pathToManifest(
  */
 void MobAnimContentManager::unloadAll(CONTENT_LOAD_LEVEL level) {
     for(size_t t = 0; t < list.size(); t++) {
-        for(auto &a : list[t]) {
+        for(auto& a : list[t]) {
             a.second.destroy();
         }
     }
@@ -1205,7 +1205,7 @@ void MobTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
     
     //Pikmin type order.
     vector<string> missingPikminOrderTypes;
-    for(auto &p : list.pikmin) {
+    for(auto& p : list.pikmin) {
         if(!isInContainer(game.config.pikmin.orderStrings, p.first)) {
             //Missing from the list? Add it to the "missing" pile.
             missingPikminOrderTypes.push_back(p.first);
@@ -1236,7 +1236,7 @@ void MobTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
     
     //Leader type order.
     vector<string> missingLeaderOrderTypes;
-    for(auto &l : list.leader) {
+    for(auto& l : list.leader) {
         if(!isInContainer(game.config.leaders.orderStrings, l.first)) {
             //Missing from the list? Add it to the "missing" pile.
             missingLeaderOrderTypes.push_back(l.first);
@@ -1281,8 +1281,8 @@ void MobTypeContentManager::loadMobTypesOfCategory(
 ) {
     if(category->folderName.empty()) return;
     
-    map<string, ContentManifest> &man = manifests[category->id];
-    for(auto &t : man) {
+    map<string, ContentManifest>& man = manifests[category->id];
+    for(auto& t : man) {
         DataNode file(t.second.path + "/data.txt");
         if(!file.fileWasOpened) continue;
         
@@ -1305,7 +1305,7 @@ void MobTypeContentManager::loadMobTypesOfCategory(
  * @return The path.
  */
 string MobTypeContentManager::manifestToPath(
-    const ContentManifest &manifest, const string &category
+    const ContentManifest& manifest, const string& category
 ) const {
     return
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
@@ -1325,7 +1325,7 @@ string MobTypeContentManager::manifestToPath(
  * is returned here.
  */
 void MobTypeContentManager::pathToManifest(
-    const string &path, ContentManifest* outManifest, string* outCategory
+    const string& path, ContentManifest* outManifest, string* outCategory
 ) const {
     if(outManifest) {
         outManifest->fillFromPath(path);
@@ -1444,7 +1444,7 @@ string ParticleGenContentManager::getPerfMonMeasurementName() const {
  * @param level Level to load at.
  */
 void ParticleGenContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
-    for(auto &g : manifests) {
+    for(auto& g : manifests) {
         loadGenerator(&g.second, level);
     }
 }
@@ -1477,7 +1477,7 @@ void ParticleGenContentManager::loadGenerator(
  * @return The path.
  */
 string ParticleGenContentManager::manifestToPath(
-    const ContentManifest &manifest
+    const ContentManifest& manifest
 ) const {
     return
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
@@ -1494,7 +1494,7 @@ string ParticleGenContentManager::manifestToPath(
  * @param outManifest If not nullptr, the manifest is returned here.
  */
 void ParticleGenContentManager::pathToManifest(
-    const string &path, ContentManifest* outManifest
+    const string& path, ContentManifest* outManifest
 ) const {
     if(outManifest) {
         outManifest->fillFromPath(path);
@@ -1557,7 +1557,7 @@ string SongContentManager::getPerfMonMeasurementName() const {
  * @param level Level to load at.
  */
 void SongContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
-    for(auto &s : manifests) {
+    for(auto& s : manifests) {
         loadSong(&s.second, level);
     }
 }
@@ -1590,7 +1590,7 @@ void SongContentManager::loadSong(
  * @return The path.
  */
 string SongContentManager::manifestToPath(
-    const ContentManifest &manifest
+    const ContentManifest& manifest
 ) const {
     return
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
@@ -1607,7 +1607,7 @@ string SongContentManager::manifestToPath(
  * @param outManifest If not nullptr, the manifest is returned here.
  */
 void SongContentManager::pathToManifest(
-    const string &path, ContentManifest* outManifest
+    const string& path, ContentManifest* outManifest
 ) const {
     if(outManifest) {
         outManifest->fillFromPath(path);
@@ -1621,7 +1621,7 @@ void SongContentManager::pathToManifest(
  * @param level Load level. Should match the level used to load the content.
  */
 void SongContentManager::unloadAll(CONTENT_LOAD_LEVEL level) {
-    for(auto &s : list) {
+    for(auto& s : list) {
         s.second.unload();
     }
     list.clear();
@@ -1682,8 +1682,8 @@ void SongTrackContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
  * @return The path.
  */
 string SongTrackContentManager::manifestToPath(
-    const ContentManifest &manifest,
-    const string &extension
+    const ContentManifest& manifest,
+    const string& extension
 ) const {
     return
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
@@ -1701,7 +1701,7 @@ string SongTrackContentManager::manifestToPath(
  * @param outExtension If not nullptr, the file extension is returned here.
  */
 void SongTrackContentManager::pathToManifest(
-    const string &path, ContentManifest* outManifest, string* outExtension
+    const string& path, ContentManifest* outManifest, string* outExtension
 ) const {
     if(outManifest) {
         outManifest->fillFromPath(path);
@@ -1782,8 +1782,8 @@ void SoundContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
  * @return The path.
  */
 string SoundContentManager::manifestToPath(
-    const ContentManifest &manifest,
-    const string &extension
+    const ContentManifest& manifest,
+    const string& extension
 ) const {
     return
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
@@ -1801,7 +1801,7 @@ string SoundContentManager::manifestToPath(
  * @param outExtension If not nullptr, the file extension is returned here.
  */
 void SoundContentManager::pathToManifest(
-    const string &path, ContentManifest* outManifest, string* outExtension
+    const string& path, ContentManifest* outManifest, string* outExtension
 ) const {
     if(outManifest) {
         outManifest->fillFromPath(path);
@@ -1871,7 +1871,7 @@ string SpikeDamageTypeContentManager::getPerfMonMeasurementName() const {
  * @param level Level to load at.
  */
 void SpikeDamageTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
-    for(auto &s : manifests) {
+    for(auto& s : manifests) {
         loadSpikeDamageType(&s.second, level);
     }
 }
@@ -1904,7 +1904,7 @@ void SpikeDamageTypeContentManager::loadSpikeDamageType(
  * @return The path.
  */
 string SpikeDamageTypeContentManager::manifestToPath(
-    const ContentManifest &manifest
+    const ContentManifest& manifest
 ) const {
     return
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
@@ -1921,7 +1921,7 @@ string SpikeDamageTypeContentManager::manifestToPath(
  * @param outManifest If not nullptr, the manifest is returned here.
  */
 void SpikeDamageTypeContentManager::pathToManifest(
-    const string &path, ContentManifest* outManifest
+    const string& path, ContentManifest* outManifest
 ) const {
     if(outManifest) {
         outManifest->fillFromPath(path);
@@ -1981,13 +1981,13 @@ string SprayTypeContentManager::getPerfMonMeasurementName() const {
  * @param level Level to load at.
  */
 void SprayTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
-    for(auto &s : manifests) {
+    for(auto& s : manifests) {
         loadSprayType(&s.second, level);
     }
     
     //Spray type order.
     vector<string> missingSprayOrderTypes;
-    for(auto &s : list) {
+    for(auto& s : list) {
         if(!isInContainer(game.config.misc.sprayOrderStrings, s.first)) {
             //Missing from the list? Add it to the "missing" pile.
             missingSprayOrderTypes.push_back(s.first);
@@ -2045,7 +2045,7 @@ void SprayTypeContentManager::loadSprayType(
  * @return The path.
  */
 string SprayTypeContentManager::manifestToPath(
-    const ContentManifest &manifest
+    const ContentManifest& manifest
 ) const {
     return
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
@@ -2062,7 +2062,7 @@ string SprayTypeContentManager::manifestToPath(
  * @param outManifest If not nullptr, the manifest is returned here.
  */
 void SprayTypeContentManager::pathToManifest(
-    const string &path, ContentManifest* outManifest
+    const string& path, ContentManifest* outManifest
 ) const {
     if(outManifest) {
         outManifest->fillFromPath(path);
@@ -2076,7 +2076,7 @@ void SprayTypeContentManager::pathToManifest(
  * @param level Load level. Should match the level used to load the content.
  */
 void SprayTypeContentManager::unloadAll(CONTENT_LOAD_LEVEL level) {
-    for(const auto &s : list) {
+    for(const auto& s : list) {
         game.content.bitmaps.list.free(s.second.bmpSpray);
     }
     game.config.misc.sprayOrder.clear();
@@ -2129,11 +2129,11 @@ void StatusTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
     vector<StatusType*> typesWithReplacements;
     vector<string> typesWithReplacementsNames;
     
-    for(auto &s : manifests) {
+    for(auto& s : manifests) {
         loadStatusType(&s.second, level);
     }
     
-    for(auto &s : list) {
+    for(auto& s : list) {
         if(!s.second->replacementOnTimeoutStr.empty()) {
             typesWithReplacements.push_back(s.second);
             typesWithReplacementsNames.push_back(
@@ -2145,7 +2145,7 @@ void StatusTypeContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
     for(size_t s = 0; s < typesWithReplacements.size(); s++) {
         string rn = typesWithReplacementsNames[s];
         bool found = false;
-        for(auto &s2 : list) {
+        for(auto& s2 : list) {
             if(s2.first == rn) {
                 typesWithReplacements[s]->replacementOnTimeout =
                     s2.second;
@@ -2192,7 +2192,7 @@ void StatusTypeContentManager::loadStatusType(
  * @return The path.
  */
 string StatusTypeContentManager::manifestToPath(
-    const ContentManifest &manifest
+    const ContentManifest& manifest
 ) const {
     return
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
@@ -2209,7 +2209,7 @@ string StatusTypeContentManager::manifestToPath(
  * @param outManifest If not nullptr, the manifest is returned here.
  */
 void StatusTypeContentManager::pathToManifest(
-    const string &path, ContentManifest* outManifest
+    const string& path, ContentManifest* outManifest
 ) const {
     if(outManifest) {
         outManifest->fillFromPath(path);
@@ -2272,7 +2272,7 @@ string WeatherConditionContentManager::getPerfMonMeasurementName() const {
  * @param level Level to load at.
  */
 void WeatherConditionContentManager::loadAll(CONTENT_LOAD_LEVEL level) {
-    for(auto &w : manifests) {
+    for(auto& w : manifests) {
         loadWeatherCondition(&w.second, level);
     }
 }
@@ -2305,7 +2305,7 @@ void WeatherConditionContentManager::loadWeatherCondition(
  * @return The path.
  */
 string WeatherConditionContentManager::manifestToPath(
-    const ContentManifest &manifest
+    const ContentManifest& manifest
 ) const {
     return
         FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" +
@@ -2322,7 +2322,7 @@ string WeatherConditionContentManager::manifestToPath(
  * @param outManifest If not nullptr, the manifest is returned here.
  */
 void WeatherConditionContentManager::pathToManifest(
-    const string &path, ContentManifest* outManifest
+    const string& path, ContentManifest* outManifest
 ) const {
     if(outManifest) {
         outManifest->fillFromPath(path);

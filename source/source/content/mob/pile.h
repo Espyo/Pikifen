@@ -38,14 +38,14 @@ public:
     
     //--- Function declarations ---
     
-    Pile(const Point &pos, PileType* type, float angle);
+    Pile(const Point& pos, PileType* type, float angle);
     void changeAmount(int change);
     void recharge();
     void update();
     bool getFractionNumbersInfo(
         float* outValueNr, float* outReqNr, ALLEGRO_COLOR* outColor
     ) const override;
-    void readScriptVars(const ScriptVarReader &svr) override;
+    void readScriptVars(const ScriptVarReader& svr) override;
     
 protected:
 

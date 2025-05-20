@@ -103,7 +103,7 @@ void ShipFsm::receiveMob(Mob* m, void* info1, void* info2) {
                 game.curAreaData->mission.goal ==
                 MISSION_GOAL_COLLECT_TREASURE
             ) {
-                unordered_set<size_t> &goalMobs =
+                unordered_set<size_t>& goalMobs =
                     game.states.gameplay->missionRemainingMobIds;
                 auto it = goalMobs.find(delivery->id);
                 if(it != goalMobs.end()) {

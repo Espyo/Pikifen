@@ -58,9 +58,9 @@ private:
     
     //--- Function declarations ---
     
-    void addHeader(const string &label);
+    void addHeader(const string& label);
     TextGuiItem* addStat(
-        const string &label, const string &value, const string &description
+        const string& label, const string& value, const string& description
     );
     void initGuiMain();
     void populateStatsList();

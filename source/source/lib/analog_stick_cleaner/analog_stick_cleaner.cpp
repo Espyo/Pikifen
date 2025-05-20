@@ -22,7 +22,7 @@
  * the cleaned up coordinates.
  * @param settings Settings to use.
  */
-void AnalogStickCleaner::clean(float coords[2], const Settings &settings) {
+void AnalogStickCleaner::clean(float coords[2], const Settings& settings) {
     //First, sanitize the function arguments.
     coords[0] = std::clamp(coords[0], -1.0f, 1.0f);
     coords[1] = std::clamp(coords[1], -1.0f, 1.0f);
@@ -46,7 +46,7 @@ void AnalogStickCleaner::clean(float coords[2], const Settings &settings) {
  * @return The deadzone size.
  */
 float AnalogStickCleaner::getSnapDirDeadzone(
-    int snapDirIdx, const Settings &settings
+    int snapDirIdx, const Settings& settings
 ) {
     switch(snapDirIdx % 8) {
     case 0:
@@ -98,7 +98,7 @@ float AnalogStickCleaner::interpolateAndClamp(
  * @param settings Settings to use.
  */
 void AnalogStickCleaner::processAngularDeadzones(
-    float coords[2], const Settings &settings
+    float coords[2], const Settings& settings
 ) {
     //Get the basics.
     float radius, angle;
@@ -161,7 +161,7 @@ void AnalogStickCleaner::processAngularDeadzones(
  * @param settings Settings to use.
  */
 void AnalogStickCleaner::processRadialDeadzones(
-    float coords[2], const Settings &settings
+    float coords[2], const Settings& settings
 ) {
     //Get the basics.
     float radius, angle;
@@ -225,7 +225,7 @@ void AnalogStickCleaner::toCartesian(
  * @param radius Radius to save to.
  */
 void AnalogStickCleaner::toPolar(
-    float coords[2], float &angle, float &radius
+    float coords[2], float& angle, float& radius
 ) {
     angle = (float) atan2(coords[1], coords[0]);
     radius = (float) sqrt(coords[0] * coords[0] + coords[1] * coords[1]);

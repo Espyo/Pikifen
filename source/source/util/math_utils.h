@@ -78,7 +78,7 @@ float interpolateNumber(
 );
 int32_t linearCongruentialGenerator(int32_t* state);
 size_t getRandomIdxWithWeights(
-    const vector<float> &weights, float pointRandomFloat
+    const vector<float>& weights, float pointRandomFloat
 );
 int sumAndWrap(int nr, int sum, int wrapLimit);
 float wrapFloat(float nr, float minimum, float maximum);

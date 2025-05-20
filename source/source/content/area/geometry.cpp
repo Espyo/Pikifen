@@ -84,7 +84,7 @@ Polygon::Polygon() {
  *
  * @param vertexes Vertexes that make up the polygon.
  */
-Polygon::Polygon(const vector<Vertex*> &vertexes) :
+Polygon::Polygon(const vector<Vertex*>& vertexes) :
     vertexes(vertexes) {
 }
 
@@ -448,7 +448,7 @@ bool Polygon::insertChild(Polygon* p) {
  * @param p Point to check.
  * @return Whether it is inside.
  */
-bool Polygon::isPointInside(const Point &p) const {
+bool Polygon::isPointInside(const Point& p) const {
     //http://paulbourke.net/geometry/polygonmesh/index.html#insidepoly
     
     Point p1 = v2p(vertexes[0]);
@@ -590,8 +590,8 @@ void findTraceEdge(
  * @param concaveVertexes List of concave vertexes found.
  */
 void getCCE(
-    const vector<Vertex*> &vertexesLeft, vector<size_t> &ears,
-    vector<size_t> &convexVertexes, vector<size_t> &concaveVertexes
+    const vector<Vertex*>& vertexesLeft, vector<size_t>& ears,
+    vector<size_t>& convexVertexes, vector<size_t>& concaveVertexes
 ) {
     ears.clear();
     convexVertexes.clear();
@@ -625,7 +625,7 @@ void getCCE(
  * @return The merge vertexes.
  */
 vector<std::pair<Distance, Vertex*> > getMergeVertexes(
-    const Point &pos, const vector<Vertex*> &allVertexes,
+    const Point& pos, const vector<Vertex*>& allVertexes,
     float mergeRadius
 ) {
 
@@ -724,7 +724,7 @@ TRIANGULATION_ERROR getPolys(
  * @return Whether it is an outer polygon.
  */
 bool getPolysIsOuter(
-    Vertex* vPtr, const Sector* sPtr, const unordered_set<Edge*> &edgesLeft,
+    Vertex* vPtr, const Sector* sPtr, const unordered_set<Edge*>& edgesLeft,
     bool doingFirstPolygon
 ) {
     if(doingFirstPolygon) {
@@ -794,10 +794,10 @@ bool getPolysIsOuter(
  * @param edges Edges to check.
  * @return The vertex.
  */
-Vertex* getRightmostVertex(const unordered_set<Edge*> &edges) {
+Vertex* getRightmostVertex(const unordered_set<Edge*>& edges) {
     Vertex* rightmost = nullptr;
     
-    for(auto &e : edges) {
+    for(auto& e : edges) {
         if(!rightmost) rightmost = e->vertexes[0];
         
         for(unsigned char v = 0; v < 2; v++) {
@@ -834,7 +834,7 @@ Vertex* getRightmostVertex(Vertex* v1, Vertex* v2) {
  * @param vertexes Vertexes to check.
  * @return Whether it is clockwise.
  */
-bool isPolygonClockwise(vector<Vertex*> &vertexes) {
+bool isPolygonClockwise(vector<Vertex*>& vertexes) {
     //Solution by http://stackoverflow.com/a/1165943
     float sum = 0;
     for(size_t v = 0; v < vertexes.size(); v++) {
@@ -853,7 +853,7 @@ bool isPolygonClockwise(vector<Vertex*> &vertexes) {
  * @param idx Index of the vertex to check.
  * @return Whether it is convex.
  */
-bool isVertexConvex(const vector<Vertex*> &vec, size_t idx) {
+bool isVertexConvex(const vector<Vertex*>& vec, size_t idx) {
     const Vertex* curV = vec[idx];
     const Vertex* prevV = getPrevInVector(vec, idx);
     const Vertex* nextV = getNextInVector(vec, idx);
@@ -872,7 +872,7 @@ bool isVertexConvex(const vector<Vertex*> &vec, size_t idx) {
  * @return Whether it is an ear.
  */
 bool isVertexEar(
-    const vector<Vertex*> &vec, const vector<size_t> &concaves, size_t idx
+    const vector<Vertex*>& vec, const vector<size_t>& concaves, size_t idx
 ) {
     //A vertex is an ear if the triangle of it, the previous, and next vertexes
     //does not contain any other vertex inside. Also, if it has vertexes inside,

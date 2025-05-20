@@ -62,8 +62,8 @@ public:
     virtual void unload();
     virtual void draw();
     virtual void enter();
-    virtual void handleAllegroEvent(const ALLEGRO_EVENT &ev);
-    virtual void handlePlayerAction(const PlayerAction &action);
+    virtual void handleAllegroEvent(const ALLEGRO_EVENT& ev);
+    virtual void handlePlayerAction(const PlayerAction& action);
     virtual void leave();
     virtual void tick(float deltaT);
     

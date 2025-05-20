@@ -33,7 +33,7 @@
  * @param initialColor Initial color.
  */
 Particle::Particle(
-    const Point &pos, const float z,
+    const Point& pos, const float z,
     const float initialSize, const float duration,
     const PARTICLE_PRIORITY priority, const ALLEGRO_COLOR initialColor
 ) :
@@ -100,7 +100,7 @@ void Particle::draw() {
  * in case something happens.
  */
 void Particle::setBitmap(
-    const string &newBmpName, DataNode* node
+    const string& newBmpName, DataNode* node
 ) {
     if(newBmpName != bmpName && bitmap) {
         game.content.bitmaps.list.free(bmpName);
@@ -241,7 +241,7 @@ Point ParticleEmission::getEmissionOffset(float numberRatio) {
  */
 ParticleGenerator::ParticleGenerator(
     const float emissionInterval,
-    const Particle &baseParticle, const size_t number
+    const Particle& baseParticle, const size_t number
 ) :
     baseParticle(baseParticle) {
     emission = ParticleEmission(emissionInterval, number);
@@ -253,7 +253,7 @@ ParticleGenerator::ParticleGenerator(
  *
  * @param manager The particle manager to place these particles on.
  */
-void ParticleGenerator::emit(ParticleManager &manager) {
+void ParticleGenerator::emit(ParticleManager& manager) {
     Point basePPos = baseParticle.pos;
     float basePZ = baseParticle.z;
     Point offs = followPosOffset;
@@ -605,7 +605,7 @@ void ParticleGenerator::saveToDataNode(DataNode* node) {
  * @param deltaT How long the frame's tick is, in seconds.
  * @param manager The manager of all particles.
  */
-void ParticleGenerator::tick(float deltaT, ParticleManager &manager) {
+void ParticleGenerator::tick(float deltaT, ParticleManager& manager) {
     if(followMob) {
         baseParticle.pos = followMob->pos;
         baseParticle.z = followMob->z;
@@ -647,7 +647,7 @@ ParticleManager::ParticleManager(size_t maxNr) :
  *
  * @param pm2 Particle manager to copy from.
  */
-ParticleManager::ParticleManager(const ParticleManager &pm2) :
+ParticleManager::ParticleManager(const ParticleManager& pm2) :
     count(pm2.count),
     maxNr(pm2.maxNr) {
     
@@ -664,8 +664,8 @@ ParticleManager::ParticleManager(const ParticleManager &pm2) :
  * @param pm2 Particle manager to copy from.
  * @return The current object.
  */
-ParticleManager &ParticleManager::operator =(
-    const ParticleManager &pm2
+ParticleManager& ParticleManager::operator =(
+    const ParticleManager& pm2
 ) {
 
     if(this != &pm2) {
@@ -700,7 +700,7 @@ ParticleManager::~ParticleManager() {
  *
  * @param p Particle to add.
  */
-void ParticleManager::add(const Particle &p) {
+void ParticleManager::add(const Particle& p) {
     if(maxNr == 0) return;
     
     //The first "count" particles are alive. Add the new one after.
@@ -748,8 +748,8 @@ void ParticleManager::clear() {
  * @param camBR Only draw particles above and to the left of this coordinate.
  */
 void ParticleManager::fillComponentList(
-    vector<WorldComponent> &list,
-    const Point &camTL, const Point &camBR
+    vector<WorldComponent>& list,
+    const Point& camTL, const Point& camBR
 ) {
     for(size_t c = 0; c < count; c++) {
     

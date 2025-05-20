@@ -38,7 +38,7 @@ const size_t MAX_SYMBOL_LENGTH = 512;
  * @param symbol The symbol to demangle.
  * @return The demangled symbol.
  */
-string demangeSymbol(const string &symbol) {
+string demangeSymbol(const string& symbol) {
     //Special thanks: https://oroboro.com/stack-trace-on-crash/
     size_t moduleSize = 0;
     size_t nameSize = 0;

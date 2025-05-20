@@ -253,7 +253,7 @@ Hud::Hud() :
     [this] (const DrawInfo & draw) {
         if(!game.options.misc.showHudInputIcons) return;
         if(game.states.gameplay->availableLeaders.size() < 2) return;
-        const PlayerInputSource &s =
+        const PlayerInputSource& s =
             game.controls.findBind(PLAYER_ACTION_TYPE_NEXT_LEADER).
             inputSource;
         if(s.type == INPUT_SOURCE_TYPE_NONE) return;
@@ -429,7 +429,7 @@ Hud::Hud() :
         ) {
             return;
         }
-        const PlayerInputSource &s =
+        const PlayerInputSource& s =
             game.controls.findBind(PLAYER_ACTION_TYPE_NEXT_TYPE).
             inputSource;
         if(s.type == INPUT_SOURCE_TYPE_NONE) return;

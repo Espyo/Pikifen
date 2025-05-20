@@ -33,7 +33,7 @@ EnemyCategory::EnemyCategory() :
  * @brief Clears the list of registered types of enemy.
  */
 void EnemyCategory::clearTypes() {
-    for(auto &t : game.content.mobTypes.list.enemy) {
+    for(auto& t : game.content.mobTypes.list.enemy) {
         delete t.second;
     }
     game.content.mobTypes.list.enemy.clear();
@@ -49,7 +49,7 @@ void EnemyCategory::clearTypes() {
  * @return The mob.
  */
 Mob* EnemyCategory::createMob(
-    const Point &pos, MobType* type, float angle
+    const Point& pos, MobType* type, float angle
 ) {
     Enemy* m = new Enemy(pos, (EnemyType*) type, angle);
     game.states.gameplay->mobs.enemies.push_back(m);
@@ -90,7 +90,7 @@ void EnemyCategory::eraseMob(Mob* m) {
  * @param internalName Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-MobType* EnemyCategory::getType(const string &internalName) const {
+MobType* EnemyCategory::getType(const string& internalName) const {
     auto it = game.content.mobTypes.list.enemy.find(internalName);
     if(it == game.content.mobTypes.list.enemy.end()) return nullptr;
     return it->second;
@@ -102,8 +102,8 @@ MobType* EnemyCategory::getType(const string &internalName) const {
  *
  * @param list This list gets filled with the mob type internal names.
  */
-void EnemyCategory::getTypeNames(vector<string> &list) const {
-    for(auto &t : game.content.mobTypes.list.enemy) {
+void EnemyCategory::getTypeNames(vector<string>& list) const {
+    for(auto& t : game.content.mobTypes.list.enemy) {
         list.push_back(t.first);
     }
 }
@@ -115,6 +115,6 @@ void EnemyCategory::getTypeNames(vector<string> &list) const {
  * @param internalName Internal name of the mob type.
  * @param type Mob type to register.
  */
-void EnemyCategory::registerType(const string &internalName, MobType* type) {
+void EnemyCategory::registerType(const string& internalName, MobType* type) {
     game.content.mobTypes.list.enemy[internalName] = (EnemyType*) type;
 }

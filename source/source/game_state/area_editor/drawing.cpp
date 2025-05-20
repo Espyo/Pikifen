@@ -54,9 +54,9 @@ void AreaEditor::doDrawing() {
  * @param color Arrow color.
  */
 void AreaEditor::drawArrow(
-    const Point &start, const Point &end,
+    const Point& start, const Point& end,
     float startOffset, float endOffset,
-    float thickness, const ALLEGRO_COLOR &color
+    float thickness, const ALLEGRO_COLOR& color
 ) {
     al_draw_line(
         start.x, start.y, end.x, end.y,
@@ -653,7 +653,7 @@ void AreaEditor::drawCrossSectionGraph() {
         if(!splits.empty()) {
             sort(
                 splits.begin(), splits.end(),
-            [] (const Split  & i1, const Split  & i2) -> bool {
+            [] (const Split & i1, const Split & i2) -> bool {
                 return i1.l2r < i2.l2r;
             }
             );
@@ -896,7 +896,7 @@ void AreaEditor::drawCrossSectionSector(
  * @param dots How many dots to draw above the text. 0, 1, or 2.
  */
 void AreaEditor::drawDebugText(
-    const ALLEGRO_COLOR color, const Point &where, const string &text,
+    const ALLEGRO_COLOR color, const Point& where, const string& text,
     unsigned char dots
 ) {
     int dox = 0;
@@ -966,7 +966,7 @@ void AreaEditor::drawDebugText(
  *
  * @param style Canvas style.
  */
-void AreaEditor::drawEdges(const AreaEdCanvasStyle &style) {
+void AreaEditor::drawEdges(const AreaEdCanvasStyle& style) {
     size_t nEdges = game.curAreaData->edges.size();
     for(size_t e = 0; e < nEdges; e++) {
         Edge* ePtr = game.curAreaData->edges[e];
@@ -1158,7 +1158,7 @@ void AreaEditor::drawEdges(const AreaEdCanvasStyle &style) {
  * @param prefix Text to show before the measurement, if any.
  */
 void AreaEditor::drawLineDist(
-    const Point &focus, const Point &other, const string &prefix
+    const Point& focus, const Point& other, const string& prefix
 ) {
     float d = Distance(other, focus).toFloat();
     if(d < 64) return;
@@ -1181,7 +1181,7 @@ void AreaEditor::drawLineDist(
  *
  * @param style Canvas style.
  */
-void AreaEditor::drawMobs(const AreaEdCanvasStyle &style) {
+void AreaEditor::drawMobs(const AreaEdCanvasStyle& style) {
     //Linking and containing.
     if(state == EDITOR_STATE_MOBS && style.mobAlpha > 0.0f) {
         for(size_t m = 0; m < game.curAreaData->mobGenerators.size(); m++) {
@@ -1378,7 +1378,7 @@ void AreaEditor::drawMobs(const AreaEdCanvasStyle &style) {
  *
  * @param style Canvas style.
  */
-void AreaEditor::drawPaths(const AreaEdCanvasStyle &style) {
+void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
     if(state == EDITOR_STATE_PATHS) {
         //Stops.
         for(size_t s = 0; s < game.curAreaData->pathStops.size(); s++) {
@@ -1668,7 +1668,7 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle &style) {
  *
  * @param style Canvas style.
  */
-void AreaEditor::drawSectors(const AreaEdCanvasStyle &style) {
+void AreaEditor::drawSectors(const AreaEdCanvasStyle& style) {
     //Edge offset effect updates.
     if(style.wallShadowAlpha > 0.0f) {
         updateOffsetEffectBuffer(
@@ -1837,7 +1837,7 @@ void AreaEditor::drawSectors(const AreaEdCanvasStyle &style) {
  *
  * @param style Canvas style.
  */
-void AreaEditor::drawTreeShadows(const AreaEdCanvasStyle &style) {
+void AreaEditor::drawTreeShadows(const AreaEdCanvasStyle& style) {
     if(
         state == EDITOR_STATE_DETAILS ||
         (previewMode && showShadows)
@@ -1909,7 +1909,7 @@ void AreaEditor::drawTreeShadows(const AreaEdCanvasStyle &style) {
  *
  * @param style Canvas style.
  */
-void AreaEditor::drawVertexes(const AreaEdCanvasStyle &style) {
+void AreaEditor::drawVertexes(const AreaEdCanvasStyle& style) {
     if(state == EDITOR_STATE_LAYOUT) {
         size_t nVertexes = game.curAreaData->vertexes.size();
         for(size_t v = 0; v < nVertexes; v++) {

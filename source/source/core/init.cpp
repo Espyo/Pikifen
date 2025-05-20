@@ -73,7 +73,7 @@ void destroyAllegro() {
  * @param eventQueue Queue of Allegro events.
  */
 void destroyEventThings(
-    ALLEGRO_TIMER* &mainTimer, ALLEGRO_EVENT_QUEUE* &eventQueue
+    ALLEGRO_TIMER*& mainTimer, ALLEGRO_EVENT_QUEUE*& eventQueue
 ) {
     al_destroy_event_queue(eventQueue);
     al_destroy_timer(mainTimer);
@@ -656,10 +656,10 @@ void initControls() {
     
     //Populate the control binds with some default control binds for player 1.
     //If the options are loaded successfully, these binds are overwritten.
-    const vector<PfePlayerActionType> &actionTypes =
+    const vector<PfePlayerActionType>& actionTypes =
         game.controls.getAllPlayerActionTypes();
     for(size_t a = 0; a < actionTypes.size(); a++) {
-        const string &def = actionTypes[a].defaultBindStr;
+        const string& def = actionTypes[a].defaultBindStr;
         if(def.empty()) continue;
         
         ControlBind bind;
@@ -683,14 +683,14 @@ void initDearImGui() {
     ImGui::GetIO().ConfigDragClickToInputText = true;
     
     //Fonts.
-    ImGuiIO &io = ImGui::GetIO();
+    ImGuiIO& io = ImGui::GetIO();
     ImFontConfig editorFontCfg;
     editorFontCfg.OversampleH = editorFontCfg.OversampleV = 1;
     editorFontCfg.PixelSnapH = true;
     
     const auto addFont =
-    [ = ] (ImFont** targetVar, const string &assetInternalName, int height) {
-        const string &path =
+    [ = ] (ImFont** targetVar, const string& assetInternalName, int height) {
+        const string& path =
             game.content.bitmaps.manifests
             [assetInternalName].path;
             
@@ -732,7 +732,7 @@ void initDearImGui() {
  * @brief Initializes the Dear ImGui color style.
  */
 void initDearImGuiColors() {
-    ImGuiStyle &style = ImGui::GetStyle();
+    ImGuiStyle& style = ImGui::GetStyle();
     
     //Since the default Dear ImGui style is based around blue,
     //we can shift the hue left to get an equivalent green.
@@ -849,7 +849,7 @@ void initEssentials() {
  * @param eventQueue Queue of Allegro events.
  */
 void initEventThings(
-    ALLEGRO_TIMER* &mainTimer, ALLEGRO_EVENT_QUEUE* &eventQueue
+    ALLEGRO_TIMER*& mainTimer, ALLEGRO_EVENT_QUEUE*& eventQueue
 ) {
     al_set_new_display_flags(
         al_get_new_display_flags() |

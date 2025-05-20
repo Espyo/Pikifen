@@ -48,7 +48,7 @@ const string SPECS_GUI_FILE_NAME = "area_menu_specs";
  * @param list List to add to.
  * @param text Text.
  */
-void AreaMenu::addBullet(ListGuiItem* list, const string &text) {
+void AreaMenu::addBullet(ListGuiItem* list, const string& text) {
     size_t bulletIdx = list->children.size();
     const float BULLET_HEIGHT = 0.18f;
     const float BULLET_PADDING = 0.01f;
@@ -241,7 +241,7 @@ void AreaMenu::changeInfo(size_t areaIdx) {
     //Now fill in the mission specs.
     if(areaType == AREA_TYPE_MISSION) {
         specsNameText->text = areaPtr->name;
-        MissionData &mission = areaPtr->mission;
+        MissionData& mission = areaPtr->mission;
         goalText->text =
             game.missionGoals[mission.goal]->
             getPlayerDescription(&mission);
@@ -543,7 +543,7 @@ void AreaMenu::initGuiMain() {
         "Back", game.sysContent.fntStandard
     );
     gui.backItem->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         leave();
     };
     gui.backItem->onGetTooltip =
@@ -592,7 +592,7 @@ void AreaMenu::initGuiMain() {
                     BUTTON_HEIGHT
                 );
             areaButton->onActivate =
-            [this, areaPtr] (const Point &) {
+            [this, areaPtr] (const Point&) {
                 game.states.gameplay->pathOfAreaToLoad =
                     areaPtr->manifest->path;
                 game.fadeMgr.startFade(false, [] () {
@@ -699,7 +699,7 @@ void AreaMenu::initGuiMain() {
             );
         };
         randomButton->onActivate =
-        [this] (const Point &) {
+        [this] (const Point&) {
             size_t areaIdx = game.rng.i(0, (int) (areaButtons.size() - 1));
             areaButtons[areaIdx]->onActivate(Point());
         };
@@ -715,7 +715,7 @@ void AreaMenu::initGuiMain() {
                 game.sysContent.fntStandard
             );
             viewToggleButton->onActivate =
-            [this, viewToggleButton] (const Point &) {
+            [this, viewToggleButton] (const Point&) {
                 GuiItem* boxToShow = nullptr;
                 GuiItem* boxToHide = nullptr;
                 if(showMissionSpecs) {

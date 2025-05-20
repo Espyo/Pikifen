@@ -99,7 +99,7 @@ void EnumNameDatabase::clear() {
  * @param name Name of the item.
  * @return The index, or INVALID on error.
  */
-size_t EnumNameDatabase::getIdx(const string &name) const {
+size_t EnumNameDatabase::getIdx(const string& name) const {
     for(size_t n = 0; n < names.size(); n++) {
         if(names[n] == name) return n;
     }
@@ -136,7 +136,7 @@ size_t EnumNameDatabase::getNrOfItems() const {
  * @param name Its name.
  */
 void EnumNameDatabase::registerItem(
-    size_t idx, const string &name
+    size_t idx, const string& name
 ) {
     if(idx >= names.size()) {
         names.insert(names.end(), (idx + 1) - names.size(), "");
@@ -186,7 +186,7 @@ void MovementInfo::reset() {
  * @param duration How long before it reaches the end, in seconds.
  * @param onEnd Code to run when time ends.
  */
-Timer::Timer(float duration, const std::function<void()> &onEnd) :
+Timer::Timer(float duration, const std::function<void()>& onEnd) :
     timeLeft(0),
     duration(duration),
     onEnd(onEnd) {
@@ -269,7 +269,7 @@ void Timer::tick(float deltaT) {
  * @return The value.
  */
 template<typename GenericT>
-GenericT fromString(const string &s) {
+GenericT fromString(const string& s) {
     return GenericT{};
 }
 
@@ -281,7 +281,7 @@ GenericT fromString(const string &s) {
  * @return The value.
  */
 template<>
-ALLEGRO_COLOR fromString<ALLEGRO_COLOR>(const string &s) {
+ALLEGRO_COLOR fromString<ALLEGRO_COLOR>(const string& s) {
     return s2c(s);
 }
 
@@ -293,7 +293,7 @@ ALLEGRO_COLOR fromString<ALLEGRO_COLOR>(const string &s) {
  * @return The value.
  */
 template<>
-float fromString<float>(const string &s) {
+float fromString<float>(const string& s) {
     return s2f(s);
 }
 
@@ -305,7 +305,7 @@ float fromString<float>(const string &s) {
  * @return The value.
  */
 template<>
-Point fromString<Point>(const string &s) {
+Point fromString<Point>(const string& s) {
     return s2p(s);
 }
 
@@ -319,7 +319,7 @@ Point fromString<Point>(const string &s) {
  * @param s File name to sanitize.
  * @return The sanitized file name.
  */
-string sanitizeFileName(const string &s) {
+string sanitizeFileName(const string& s) {
     string ret;
     ret.reserve(s.size());
     for(size_t c = 0; c < s.size(); c++) {
@@ -346,7 +346,7 @@ string sanitizeFileName(const string &s) {
  * @param path Path to standardize.
  * @return The standardized path.
  */
-string standardizePath(const string &path) {
+string standardizePath(const string& path) {
     string res = replaceAll(path, "\\", "/");
     if(res.back() == '/') res.pop_back();
     return res;
@@ -362,7 +362,7 @@ string standardizePath(const string &path) {
  * @param pos Use the string at this position and onward.
  * @return The joined string.
  */
-string vectorTailToString(const vector<string> &v, size_t pos) {
+string vectorTailToString(const vector<string>& v, size_t pos) {
     string result = v[pos];
     for(size_t p = pos + 1; p < v.size(); p++) {
         result += " " + v[p];

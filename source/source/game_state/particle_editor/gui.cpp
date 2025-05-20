@@ -27,7 +27,7 @@ void ParticleEditor::openLoadDialog() {
     
     //Set up the picker's behavior and data.
     vector<PickerItem> fileItems;
-    for(const auto &g : game.content.particleGens.list) {
+    for(const auto& g : game.content.particleGens.list) {
         ContentManifest* man = g.second.manifest;
         fileItems.push_back(
             PickerItem(
@@ -246,14 +246,14 @@ void ParticleEditor::processGuiLoadDialog() {
     //History node.
     processGuiHistory(
         game.options.partEd.history,
-    [this](const string &path) -> string {
+    [this](const string& path) -> string {
         return path;
     },
-    [this](const string &path) {
+    [this](const string& path) {
         closeTopDialog();
         loadPartGenFile(path, true);
     },
-    [this](const string &path) {
+    [this](const string& path) {
         return getFileTooltip(path);
     }
     );
@@ -1132,7 +1132,7 @@ void ParticleEditor::processGuiPanelGenerator() {
             ImGui::SameLine();
             if(ImGui::Button("Choose image...")) {
                 openBitmapDialog(
-                [this] (const string &bmp) {
+                [this] (const string& bmp) {
                     //We can't have living particles with destroyed bitmaps,
                     //so clear them all.
                     partMgr.clear();

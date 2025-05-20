@@ -58,7 +58,7 @@ string getCurrentTime(bool fileNameFriendly) {
  * @param path Path of the folder to open.
  * @return Whether it succeeded.
  */
-bool openFileExplorer(const string &path) {
+bool openFileExplorer(const string& path) {
 #ifdef _WIN32
     string command = "explorer " + path;
 #elif __APPLE__
@@ -78,7 +78,7 @@ bool openFileExplorer(const string &path) {
  * @param url URL to open.
  * @return Whether it succeeded.
  */
-bool openWebBrowser(const string &url) {
+bool openWebBrowser(const string& url) {
 #ifdef _WIN32
     string command = "start " + url;
 #elif __APPLE__

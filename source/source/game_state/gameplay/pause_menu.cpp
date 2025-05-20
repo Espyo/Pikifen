@@ -210,8 +210,8 @@ PauseMenu::~PauseMenu() {
  * @param color Text color.
  */
 void PauseMenu::addBullet(
-    ListGuiItem* list, const string &text,
-    const ALLEGRO_COLOR &color
+    ListGuiItem* list, const string& text,
+    const ALLEGRO_COLOR& color
 ) {
     size_t bulletIdx = list->children.size();
     const float BULLET_HEIGHT = 0.18f;
@@ -250,13 +250,13 @@ void PauseMenu::addBullet(
 void PauseMenu::addPikminStatusLine(
     ListGuiItem* list,
     PikminType* pikType,
-    const string &groupText,
-    const string &idleText,
-    const string &fieldText,
-    const string &onionText,
-    const string &totalText,
-    const string &newText,
-    const string &lostText,
+    const string& groupText,
+    const string& idleText,
+    const string& fieldText,
+    const string& onionText,
+    const string& totalText,
+    const string& newText,
+    const string& lostText,
     bool isSingle, bool isTotals
 ) {
 
@@ -687,7 +687,7 @@ ButtonGuiItem* PauseMenu::createPageButton(
         game.sysContent.fntStandard
     );
     newButton->onActivate =
-    [this, curGui, targetPage, left] (const Point &) {
+    [this, curGui, targetPage, left] (const Point&) {
         switchPage(curGui, targetPage, left);
     };
     newButton->onGetTooltip =
@@ -726,7 +726,7 @@ void PauseMenu::createPageButtons(
     leftPageInput->onDraw =
     [this] (const DrawInfo & draw) {
         if(!game.options.misc.showHudInputIcons) return;
-        const PlayerInputSource &s =
+        const PlayerInputSource& s =
             game.controls.findBind(PLAYER_ACTION_TYPE_MENU_PAGE_LEFT).
             inputSource;
         if(s.type == INPUT_SOURCE_TYPE_NONE) return;
@@ -746,7 +746,7 @@ void PauseMenu::createPageButtons(
     rightPageInput->onDraw =
     [this] (const DrawInfo & draw) {
         if(!game.options.misc.showHudInputIcons) return;
-        const PlayerInputSource &s =
+        const PlayerInputSource& s =
             game.controls.findBind(PLAYER_ACTION_TYPE_MENU_PAGE_RIGHT).
             inputSource;
         if(s.type == INPUT_SOURCE_TYPE_NONE) return;
@@ -782,8 +782,8 @@ void PauseMenu::draw() {
  * between segments.
  */
 void PauseMenu::drawGoHereSegment(
-    const Point &start, const Point &end,
-    const ALLEGRO_COLOR &color, float* texturePoint
+    const Point& start, const Point& end,
+    const ALLEGRO_COLOR& color, float* texturePoint
 ) {
     const float PATH_SEGMENT_THICKNESS = 12.0f / radarView.cam.zoom;
     const float PATH_SEGMENT_TIME_MULT = 10.0f;
@@ -835,7 +835,7 @@ void PauseMenu::drawGoHereSegment(
  * @param size Width and height of the radar on-window.
  */
 void PauseMenu::drawRadar(
-    const Point &center, const Point &size
+    const Point& center, const Point& size
 ) {
     //Setup.
     ALLEGRO_TRANSFORM oldTransform;
@@ -1084,10 +1084,10 @@ void PauseMenu::drawRadar(
     
     //Obstacle icons.
     unordered_set<Mob*> obstacles;
-    for(const auto &o : game.states.gameplay->pathMgr.obstructions) {
+    for(const auto& o : game.states.gameplay->pathMgr.obstructions) {
         obstacles.insert(o.second.begin(), o.second.end());
     }
-    for(const auto &o : obstacles) {
+    for(const auto& o : obstacles) {
         drawBitmap(
             bmpRadarObstacle, o->pos,
             Point(40.0f / radarView.cam.zoom),
@@ -1508,7 +1508,7 @@ string PauseMenu::getMissionGoalStatus() {
  *
  * @param ev Event to handle.
  */
-void PauseMenu::handleAllegroEvent(const ALLEGRO_EVENT &ev) {
+void PauseMenu::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
     radarView.updateCursor(game.mouseCursor.winPos);
     
     gui.handleAllegroEvent(ev);
@@ -1582,7 +1582,7 @@ void PauseMenu::handleAllegroEvent(const ALLEGRO_EVENT &ev) {
  *
  * @param action Data about the player action.
  */
-void PauseMenu::handlePlayerAction(const PlayerAction &action) {
+void PauseMenu::handlePlayerAction(const PlayerAction& action) {
     if(openingLockoutTimer > 0.0f) {
         //Don't accept inputs shortly after the menu opens.
         //This helps errant inputs from before the menu bleeding into the menu
@@ -1711,7 +1711,7 @@ void PauseMenu::initConfirmationPage() {
         "Cancel", game.sysContent.fntStandard
     );
     confirmationGui.backItem->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         confirmationGui.responsive = false;
         confirmationGui.startAnimation(
             GUI_MANAGER_ANIM_CENTER_TO_UP,
@@ -1734,7 +1734,7 @@ void PauseMenu::initConfirmationPage() {
     ButtonGuiItem* confirmButton =
         new ButtonGuiItem("Confirm", game.sysContent.fntStandard);
     confirmButton->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         startLeavingGameplay();
     };
     confirmButton->onGetTooltip =
@@ -1849,7 +1849,7 @@ void PauseMenu::initMainPauseMenu() {
     gui.backItem =
         new ButtonGuiItem("Continue", game.sysContent.fntStandard);
     gui.backItem->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         startClosing(&gui);
     };
     gui.backItem->onGetTooltip =
@@ -1868,7 +1868,7 @@ void PauseMenu::initMainPauseMenu() {
         game.sysContent.fntStandard
     );
     retryButton->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         leaveTarget = GAMEPLAY_LEAVE_TARGET_RETRY;
         confirmOrLeave();
     };
@@ -1890,7 +1890,7 @@ void PauseMenu::initMainPauseMenu() {
         game.sysContent.fntStandard
     );
     endButton->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         leaveTarget = GAMEPLAY_LEAVE_TARGET_END;
         confirmOrLeave();
     };
@@ -1914,7 +1914,7 @@ void PauseMenu::initMainPauseMenu() {
     ButtonGuiItem* helpButton =
         new ButtonGuiItem("Help", game.sysContent.fntStandard);
     helpButton->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         gui.responsive = false;
         gui.startAnimation(
             GUI_MANAGER_ANIM_CENTER_TO_UP,
@@ -1955,7 +1955,7 @@ void PauseMenu::initMainPauseMenu() {
     ButtonGuiItem* optionsButton =
         new ButtonGuiItem("Options", game.sysContent.fntStandard);
     optionsButton->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         gui.responsive = false;
         gui.startAnimation(
             GUI_MANAGER_ANIM_CENTER_TO_UP,
@@ -1996,7 +1996,7 @@ void PauseMenu::initMainPauseMenu() {
     ButtonGuiItem* statsButton =
         new ButtonGuiItem("Statistics", game.sysContent.fntStandard);
     statsButton->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         gui.responsive = false;
         gui.startAnimation(
             GUI_MANAGER_ANIM_CENTER_TO_UP,
@@ -2042,7 +2042,7 @@ void PauseMenu::initMainPauseMenu() {
         game.sysContent.fntStandard
     );
     quitButton->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         leaveTarget = GAMEPLAY_LEAVE_TARGET_AREA_SELECT;
         confirmOrLeave();
     };
@@ -2126,7 +2126,7 @@ void PauseMenu::initMissionPage() {
     missionGui.backItem =
         new ButtonGuiItem("Continue", game.sysContent.fntStandard);
     missionGui.backItem->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         startClosing(&missionGui);
     };
     missionGui.backItem->onGetTooltip =
@@ -2282,7 +2282,7 @@ void PauseMenu::initRadarPage() {
     radarGui.backItem =
         new ButtonGuiItem("Continue", game.sysContent.fntStandard);
     radarGui.backItem->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         startClosing(&radarGui);
     };
     radarGui.backItem->onGetTooltip =
@@ -2543,7 +2543,7 @@ void PauseMenu::initStatusPage() {
     statusGui.backItem =
         new ButtonGuiItem("Continue", game.sysContent.fntStandard);
     statusGui.backItem->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         startClosing(&statusGui);
     };
     statusGui.backItem->onGetTooltip =
@@ -2556,7 +2556,7 @@ void PauseMenu::initStatusPage() {
     //Pikmin list header box.
     ListGuiItem* listHeader = new ListGuiItem();
     listHeader->onDraw =
-    [] (const DrawInfo &) {};
+    [] (const DrawInfo&) {};
     statusGui.addItem(listHeader, "list_header");
     
     //Pikmin list box.
@@ -2571,7 +2571,7 @@ void PauseMenu::initStatusPage() {
     //Pikmin totals box.
     ListGuiItem* totals = new ListGuiItem();
     totals->onDraw =
-    [] (const DrawInfo &) {};
+    [] (const DrawInfo&) {};
     statusGui.addItem(totals, "totals");
     
     //Tooltip text.
@@ -2913,7 +2913,7 @@ void PauseMenu::zoomRadar(float amount) {
  * @param radarSize Dimensions of the radar.
  */
 void PauseMenu::zoomRadarWithMouse(
-    float amount, const Point &radarCenter, const Point &radarSize
+    float amount, const Point& radarCenter, const Point& radarSize
 ) {
     //Keep a backup of the old cursor coordinates.
     Point oldCursorPos = radarCursor;

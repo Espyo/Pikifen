@@ -30,7 +30,7 @@ void AnimationEditor::openLoadDialog() {
     
     //Set up the picker's behavior and data.
     vector<PickerItem> fileItems;
-    for(const auto &a : game.content.globalAnimDbs.list) {
+    for(const auto& a : game.content.globalAnimDbs.list) {
         fileItems.push_back(
             PickerItem(
                 a.second.name,
@@ -47,7 +47,7 @@ void AnimationEditor::openLoadDialog() {
             MobType* mtPtr = customCatTypes[c][a];
             if(!mtPtr) continue;
             if(!mtPtr->manifest) continue;
-            auto &catAnimDbs =
+            auto& catAnimDbs =
                 game.content.mobAnimDbs.list[mtPtr->category->id];
             auto mtCatAnimIt =
                 catAnimDbs.find(mtPtr->manifest->internalName);
@@ -306,14 +306,14 @@ void AnimationEditor::processGuiLoadDialog() {
     //History node.
     processGuiHistory(
         game.options.animEd.history,
-    [this](const string &path) -> string {
+    [this](const string& path) -> string {
         return path;
     },
-    [this](const string &path) {
+    [this](const string& path) {
         closeTopDialog();
         loadAnimDbFile(path, true);
     },
-    [this](const string &path) {
+    [this](const string& path) {
         return getFileTooltip(path);
     }
     );
@@ -1284,7 +1284,7 @@ void AnimationEditor::processGuiPanelBodyPart() {
  *
  * @param framePtr Pointer to the currently selected frame.
  */
-void AnimationEditor::processGuiPanelFrame(Frame* &framePtr) {
+void AnimationEditor::processGuiPanelFrame(Frame*& framePtr) {
     //Sprite combobox.
     vector<string> spriteNames;
     for(size_t s = 0; s < db.sprites.size(); s++) {
@@ -1440,7 +1440,7 @@ void AnimationEditor::processGuiPanelFrame(Frame* &framePtr) {
  *
  * @param framePtr Pointer to the current frame.
  */
-void AnimationEditor::processGuiPanelFrameHeader(Frame* &framePtr) {
+void AnimationEditor::processGuiPanelFrameHeader(Frame*& framePtr) {
     //Current frame text.
     ImGui::Text(
         "Current frame: %s / %i",
@@ -2178,7 +2178,7 @@ void AnimationEditor::processGuiPanelSpriteBitmap() {
     ImGui::Spacer();
     if(ImGui::Button("Choose image...")) {
         openBitmapDialog(
-        [this] (const string &bmp) {
+        [this] (const string& bmp) {
             curSprite->setBitmap(
                 bmp, curSprite->bmpPos, curSprite->bmpSize
             );

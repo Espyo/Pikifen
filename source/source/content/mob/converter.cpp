@@ -43,7 +43,7 @@ const float SPEW_V_SPEED = 1200.0f;
  * @param angle Starting angle.
  */
 Converter::Converter(
-    const Point &pos, ConverterType* type, float angle
+    const Point& pos, ConverterType* type, float angle
 ) :
     Mob(pos, type, angle),
     conType(type),

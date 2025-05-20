@@ -113,7 +113,7 @@ float ease(const EASING_METHOD method, float n) {
  * @return Index of the chosen item, or 0 on error.
  */
 size_t getRandomIdxWithWeights(
-    const vector<float> &weights, float pointRandomFloat
+    const vector<float>& weights, float pointRandomFloat
 ) {
     float weightSum = 0.0f;
     for(size_t i = 0; i < weights.size(); i++) {

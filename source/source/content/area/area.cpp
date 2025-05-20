@@ -185,7 +185,7 @@ void Area::clear() {
  *
  * @param other The area data object to clone to.
  */
-void Area::clone(Area &other) {
+void Area::clone(Area& other) {
     other.clear();
     
     if(!other.bgBmpName.empty() && other.bgBmp) {
@@ -393,7 +393,7 @@ void Area::clone(Area &other) {
     other.problems.nonSimples.clear();
     other.problems.loneEdges.clear();
     other.problems.loneEdges.reserve(problems.loneEdges.size());
-    for(const auto &s : problems.nonSimples) {
+    for(const auto& s : problems.nonSimples) {
         size_t nr = findSectorIdx(s.first);
         other.problems.nonSimples[other.sectors[nr]] = s.second;
     }
@@ -798,7 +798,7 @@ void Area::generateBlockmap() {
  *
  * @param edgeList Edges to generate the blockmap around.
  */
-void Area::generateEdgesBlockmap(const vector<Edge*> &edgeList) {
+void Area::generateEdgesBlockmap(const vector<Edge*>& edgeList) {
     for(size_t e = 0; e < edgeList.size(); e++) {
     
         //Get which blocks this edge belongs to, via bounding-box,
@@ -1388,7 +1388,7 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
  *
  * @param thumbnailPath Path to the bitmap.
  */
-void Area::loadThumbnail(const string &thumbnailPath) {
+void Area::loadThumbnail(const string& thumbnailPath) {
     if(thumbnail) {
         thumbnail = nullptr;
     }
@@ -2034,7 +2034,7 @@ size_t Blockmap::getCol(float x) const {
  * @return Whether it succeeded.
  */
 bool Blockmap::getEdgesInRegion(
-    const Point &tl, const Point &br, set<Edge*> &outEdges
+    const Point& tl, const Point& br, set<Edge*>& outEdges
 ) const {
 
     size_t bx1 = getCol(tl.x);
@@ -2053,7 +2053,7 @@ bool Blockmap::getEdgesInRegion(
     for(size_t bx = bx1; bx <= bx2; bx++) {
         for(size_t by = by1; by <= by2; by++) {
         
-            const vector<Edge*> &blockEdges = edges[bx][by];
+            const vector<Edge*>& blockEdges = edges[bx][by];
             
             for(size_t e = 0; e < blockEdges.size(); e++) {
                 outEdges.insert(blockEdges[e]);
@@ -2104,7 +2104,7 @@ Point Blockmap::getTopLeftCorner(size_t col, size_t row) const {
  * @param vars String representation of the script vars.
  */
 MobGen::MobGen(
-    const Point &pos, MobType* type, float angle, const string &vars
+    const Point& pos, MobType* type, float angle, const string& vars
 ) :
     type(type),
     pos(pos),
@@ -2143,8 +2143,8 @@ void MobGen::clone(MobGen* destination, bool includePosition) const {
  * vertically.
  */
 TreeShadow::TreeShadow(
-    const Point &center, const Point &size, float angle,
-    unsigned char alpha, const string &bmpName, const Point &sway
+    const Point& center, const Point& size, float angle,
+    unsigned char alpha, const string& bmpName, const Point& sway
 ) :
     bmpName(bmpName),
     bitmap(nullptr),

@@ -137,8 +137,8 @@ struct PauseMenu {
     explicit PauseMenu(bool startOnRadar);
     ~PauseMenu();
     void draw();
-    void handleAllegroEvent(const ALLEGRO_EVENT &ev);
-    void handlePlayerAction(const PlayerAction &action);
+    void handleAllegroEvent(const ALLEGRO_EVENT& ev);
+    void handlePlayerAction(const PlayerAction& action);
     void tick(float deltaT);
     
 private:
@@ -254,19 +254,19 @@ private:
     //--- Function declarations ---
     
     void addBullet(
-        ListGuiItem* list, const string &text,
-        const ALLEGRO_COLOR &color = COLOR_WHITE
+        ListGuiItem* list, const string& text,
+        const ALLEGRO_COLOR& color = COLOR_WHITE
     );
     void addPikminStatusLine(
         ListGuiItem* list,
         PikminType* pikType,
-        const string &groupText,
-        const string &idleText,
-        const string &fieldText,
-        const string &onionText,
-        const string &totalText,
-        const string &newText,
-        const string &lostText,
+        const string& groupText,
+        const string& idleText,
+        const string& fieldText,
+        const string& onionText,
+        const string& totalText,
+        const string& newText,
+        const string& lostText,
         bool isSingle, bool isTotals
     );
     void calculateGoHerePath();
@@ -276,10 +276,10 @@ private:
     );
     void createPageButtons(PAUSE_MENU_PAGE curPage, GuiManager* curGui);
     void drawGoHereSegment(
-        const Point &start, const Point &end,
-        const ALLEGRO_COLOR &color, float* texturePoint
+        const Point& start, const Point& end,
+        const ALLEGRO_COLOR& color, float* texturePoint
     );
-    void drawRadar(const Point &center, const Point &size);
+    void drawRadar(const Point& center, const Point& size);
     void fillMissionFailList(ListGuiItem* list);
     void fillMissionGradingList(ListGuiItem* list);
     string getMissionGoalStatus();
@@ -297,7 +297,7 @@ private:
     );
     void zoomRadar(float amount);
     void zoomRadarWithMouse(
-        float amount, const Point &radarCenter, const Point &radarSize
+        float amount, const Point& radarCenter, const Point& radarSize
     );
     
 };

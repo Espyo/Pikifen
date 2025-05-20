@@ -137,17 +137,17 @@ private:
     
     void closeLoadDialog();
     void closeOptionsDialog();
-    void createPartGen(const string &partGenPath);
+    void createPartGen(const string& partGenPath);
     void deleteCurrentPartGen();
-    string getFileTooltip(const string &path) const;
+    string getFileTooltip(const string& path) const;
     void loadPartGenFile(
-        const string &path, const bool shouldUpdateHistory
+        const string& path, const bool shouldUpdateHistory
     );
     void openLoadDialog();
     void openNewDialog();
     void openOptionsDialog();
     void pickPartGenFile(
-        const string &name, const string &topCat, const string &secCat,
+        const string& name, const string& topCat, const string& secCat,
         void* info, bool isNew
     );
     void reloadPartGens();
@@ -183,20 +183,20 @@ private:
     void processGuiPanelGenerator();
     void processGuiStatusBar();
     void processGuiToolbar();
-    void handleKeyCharCanvas(const ALLEGRO_EVENT &ev) override;
-    void handleKeyDownAnywhere(const ALLEGRO_EVENT &ev) override;
-    void handleKeyDownCanvas(const ALLEGRO_EVENT &ev) override;
-    void handleLmbDoubleClick(const ALLEGRO_EVENT &ev) override;
-    void handleLmbDown(const ALLEGRO_EVENT &ev) override;
-    void handleLmbDrag(const ALLEGRO_EVENT &ev) override;
-    void handleLmbUp(const ALLEGRO_EVENT &ev) override;
-    void handleMmbDown(const ALLEGRO_EVENT &ev) override;
-    void handleMmbDrag(const ALLEGRO_EVENT &ev) override;
-    void handleMouseUpdate(const ALLEGRO_EVENT &ev) override;
-    void handleMouseWheel(const ALLEGRO_EVENT &ev) override;
-    void handleRmbDown(const ALLEGRO_EVENT &ev) override;
-    void handleRmbDrag(const ALLEGRO_EVENT &ev) override;
-    void panCam(const ALLEGRO_EVENT &ev);
+    void handleKeyCharCanvas(const ALLEGRO_EVENT& ev) override;
+    void handleKeyDownAnywhere(const ALLEGRO_EVENT& ev) override;
+    void handleKeyDownCanvas(const ALLEGRO_EVENT& ev) override;
+    void handleLmbDoubleClick(const ALLEGRO_EVENT& ev) override;
+    void handleLmbDown(const ALLEGRO_EVENT& ev) override;
+    void handleLmbDrag(const ALLEGRO_EVENT& ev) override;
+    void handleLmbUp(const ALLEGRO_EVENT& ev) override;
+    void handleMmbDown(const ALLEGRO_EVENT& ev) override;
+    void handleMmbDrag(const ALLEGRO_EVENT& ev) override;
+    void handleMouseUpdate(const ALLEGRO_EVENT& ev) override;
+    void handleMouseWheel(const ALLEGRO_EVENT& ev) override;
+    void handleRmbDown(const ALLEGRO_EVENT& ev) override;
+    void handleRmbDrag(const ALLEGRO_EVENT& ev) override;
+    void panCam(const ALLEGRO_EVENT& ev);
     void resetCamXY();
     void resetCamZoom();
     

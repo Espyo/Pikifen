@@ -305,8 +305,8 @@ private:
     
     void globalDrawing();
     void globalLogic();
-    void globalHandleAllegroEvent(const ALLEGRO_EVENT &ev);
-    bool globalHandleSystemPlayerAction(const PlayerAction &action);
+    void globalHandleAllegroEvent(const ALLEGRO_EVENT& ev);
+    bool globalHandleSystemPlayerAction(const PlayerAction& action);
     
 };
 

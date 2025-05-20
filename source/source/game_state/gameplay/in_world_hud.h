@@ -102,7 +102,7 @@ public:
     
     explicit InWorldFraction(Mob* m);
     void draw() override;
-    void setColor(const ALLEGRO_COLOR &newColor);
+    void setColor(const ALLEGRO_COLOR& newColor);
     void setRequirementNumber(float newReqNr);
     void setValueNumber(float newValueNr);
     void startFading() override;

@@ -98,9 +98,9 @@ public:
      * @param tooltip Base tooltip.
      */
     OptionsMenuPickerGuiItem(
-        const string &baseText, ValueT* curValue, const ValueT &defValue,
-        const vector<ValueT> &presetValues, const vector<string> &presetNames,
-        const string &tooltip = ""
+        const string& baseText, ValueT* curValue, const ValueT& defValue,
+        const vector<ValueT>& presetValues, const vector<string>& presetNames,
+        const string& tooltip = ""
     ) :
         PickerGuiItem(baseText, ""),
         curValue(curValue),
@@ -229,8 +229,8 @@ public:
     
     void draw() override;
     void load() override;
-    void handleAllegroEvent(const ALLEGRO_EVENT &ev) override;
-    void handlePlayerAction(const PlayerAction &action) override;
+    void handleAllegroEvent(const ALLEGRO_EVENT& ev) override;
+    void handlePlayerAction(const PlayerAction& action) override;
     void unload() override;
     void tick(float deltaT);
     

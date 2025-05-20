@@ -40,53 +40,53 @@ enum TIME_TO_STR_FLAG {
 #define i2s(n) std::to_string((long long) (n))
 
 string amountStr(
-    int amount, const string &singularText,
-    const string &pluralText = ""
+    int amount, const string& singularText,
+    const string& pluralText = ""
 );
 string boxString(
-    const string &s, size_t size, const string &finisher = ""
+    const string& s, size_t size, const string& finisher = ""
 );
 string b2s(bool b);
-void duplicateString(const string &origStr, string &newStr);
+void duplicateString(const string& origStr, string& newStr);
 string f2s(float f);
-string getMatchingStringStarts(const string &s1, const string &s2);
-string getPathLastComponent(const string &s);
-bool isNumber(const string &s);
-string padString(const string &s, size_t size, char padding);
-string removeExtension(const string &s);
+string getMatchingStringStarts(const string& s1, const string& s2);
+string getPathLastComponent(const string& s);
+bool isNumber(const string& s);
+string padString(const string& s, size_t size, char padding);
+string removeExtension(const string& s);
 string replaceAll(
-    string s, const string &search, const string &replacement
+    string s, const string& search, const string& replacement
 );
-bool s2b(const string &s);
-double s2f(const string &s);
-int s2i(const string &s);
+bool s2b(const string& s);
+double s2f(const string& s);
+int s2i(const string& s);
 vector<string> semicolonListToVector(
-    const string &s, const string &sep = ";"
+    const string& s, const string& sep = ";"
 );
 vector<string> split(
-    string text, const string &del = " ", bool incEmpty = false,
+    string text, const string& del = " ", bool incEmpty = false,
     bool incDel = false
 );
-bool strEndsWith(const string &s, const string &end);
-bool strPeek(const string &s, size_t where, const string &match);
-bool strStartsWith(const string &s, const string &start);
+bool strEndsWith(const string& s, const string& end);
+bool strPeek(const string& s, size_t where, const string& match);
+bool strStartsWith(const string& s, const string& start);
 string strToLower(string s);
 string strToSentence(string s);
 string strToTitle(string s);
 string strToUpper(string s);
 string timeToStr2(
     size_t units,
-    const string &suffix1, const string &suffix2,
+    const string& suffix1, const string& suffix2,
     uint8_t flags = 0
 );
 string timeToStr3(
     size_t units,
-    const string &suffix1, const string &suffix2, const string &suffix3,
+    const string& suffix1, const string& suffix2, const string& suffix3,
     uint8_t flags = 0
 );
-string trimSpaces(const string &s, bool leftOnly = false);
-string trimWithEllipsis(const string &s, size_t size);
-string wordWrap(const string &s, size_t nCharsPerLine);
+string trimSpaces(const string& s, bool leftOnly = false);
+string trimWithEllipsis(const string& s, size_t size);
+string wordWrap(const string& s, size_t nCharsPerLine);
 
 
 
@@ -100,9 +100,9 @@ string wordWrap(const string &s, size_t nCharsPerLine);
  * @return The joined string.
  */
 template<typename ContentT>
-string join(const ContentT &parts, const string &delimiter = " ") {
+string join(const ContentT& parts, const string& delimiter = " ") {
     string result;
-    for(const auto &p : parts) {
+    for(const auto& p : parts) {
         if(!result.empty()) result += ";";
         result += p;
     }

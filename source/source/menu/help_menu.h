@@ -110,8 +110,8 @@ private:
     //--- Function declarations ---
     
     void drawTidbit(
-        const ALLEGRO_FONT* const font, const Point &where,
-        const Point &maxSize, const string &text
+        const ALLEGRO_FONT* const font, const Point& where,
+        const Point& maxSize, const string& text
     );
     void initGuiMain(DataNode* guiFile);
     void populateTidbits(const HELP_CATEGORY category);

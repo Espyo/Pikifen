@@ -551,7 +551,7 @@ struct MobActionParam {
     //--- Function declarations ---
     
     MobActionParam(
-        const string &name, const MOB_ACTION_PARAM type,
+        const string& name, const MOB_ACTION_PARAM type,
         bool forceConst, bool isExtras
     );
     
@@ -596,7 +596,7 @@ struct MobActionRunData {
  *
  * The first parameter is the data to run with.
  */
-typedef void (MobActionCode)(MobActionRunData &data);
+typedef void (MobActionCode)(MobActionRunData& data);
 
 /**
  * @brief Function to run when a mob action is loaded from a script.
@@ -604,7 +604,7 @@ typedef void (MobActionCode)(MobActionRunData &data);
  * The first parameter is the action call data.
  * Returns whether it loaded successfully.
  */
-typedef bool (MobActionLoadCode)(MobActionCall &call);
+typedef bool (MobActionLoadCode)(MobActionCall& call);
 
 
 /**
@@ -673,128 +673,128 @@ struct MobActionCall {
 
 
 namespace MobActionRunners {
-void addHealth(MobActionRunData &data);
-void arachnorbPlanLogic(MobActionRunData &data);
-void calculate(MobActionRunData &data);
-void deleteFunction(MobActionRunData &data);
-void drainLiquid(MobActionRunData &data);
-void finishDying(MobActionRunData &data);
-void focus(MobActionRunData &data);
-void followPathRandomly(MobActionRunData &data);
-void followPathToAbsolute(MobActionRunData &data);
-void getAngle(MobActionRunData &data);
-void getChomped(MobActionRunData &data);
-void getCoordinatesFromAngle(MobActionRunData &data);
-void getDistance(MobActionRunData &data);
-void getEventInfo(MobActionRunData &data);
-void getAreaInfo(MobActionRunData &data);
-void getFloorZ(MobActionRunData &data);
-void getMobInfo(MobActionRunData &data);
-void getFocusVar(MobActionRunData &data);
-void getRandomFloat(MobActionRunData &data);
-void getRandomInt(MobActionRunData &data);
-void gotoFunction(MobActionRunData &data);
-void holdFocus(MobActionRunData &data);
-void ifFunction(MobActionRunData &data);
-void linkWithFocus(MobActionRunData &data);
-void loadFocusMemory(MobActionRunData &data);
-void moveToAbsolute(MobActionRunData &data);
-void moveToRelative(MobActionRunData &data);
-void moveToTarget(MobActionRunData &data);
-void orderRelease(MobActionRunData &data);
-void playSound(MobActionRunData &data);
-void print(MobActionRunData &data);
-void receiveStatus(MobActionRunData &data);
-void release(MobActionRunData &data);
-void releaseStoredMobs(MobActionRunData &data);
-void removeStatus(MobActionRunData &data);
-void saveFocusMemory(MobActionRunData &data);
-void sendMessageToFocus(MobActionRunData &data);
-void sendMessageToLinks(MobActionRunData &data);
-void sendMessageToNearby(MobActionRunData &data);
-void setAnimation(MobActionRunData &data);
-void setCanBlockPaths(MobActionRunData &data);
-void setFarReach(MobActionRunData &data);
-void setFlying(MobActionRunData &data);
-void setGravity(MobActionRunData &data);
-void setHealth(MobActionRunData &data);
-void setHeight(MobActionRunData &data);
-void setHiding(MobActionRunData &data);
-void setHoldable(MobActionRunData &data);
-void setHuntable(MobActionRunData &data);
-void setLimbAnimation(MobActionRunData &data);
-void setNearReach(MobActionRunData &data);
-void setRadius(MobActionRunData &data);
-void setState(MobActionRunData &data);
-void setSectorScroll(MobActionRunData &data);
-void setShadowVisibility(MobActionRunData &data);
-void setTangible(MobActionRunData &data);
-void setTeam(MobActionRunData &data);
-void setTimer(MobActionRunData &data);
-void setVar(MobActionRunData &data);
-void showMessageFromVar(MobActionRunData &data);
-void spawn(MobActionRunData &data);
-void stabilizeZ(MobActionRunData &data);
-void startChomping(MobActionRunData &data);
-void startDying(MobActionRunData &data);
-void startHeightEffect(MobActionRunData &data);
-void startParticles(MobActionRunData &data);
-void stop(MobActionRunData &data);
-void stopChomping(MobActionRunData &data);
-void stopHeightEffect(MobActionRunData &data);
-void stopParticles(MobActionRunData &data);
-void stopSound(MobActionRunData &data);
-void stopVertically(MobActionRunData &data);
-void storeFocusInside(MobActionRunData &data);
-void swallow(MobActionRunData &data);
-void swallowAll(MobActionRunData &data);
-void teleportToAbsolute(MobActionRunData &data);
-void teleportToRelative(MobActionRunData &data);
-void throwFocus(MobActionRunData &data);
-void turnToAbsolute(MobActionRunData &data);
-void turnToRelative(MobActionRunData &data);
-void turnToTarget(MobActionRunData &data);
+void addHealth(MobActionRunData& data);
+void arachnorbPlanLogic(MobActionRunData& data);
+void calculate(MobActionRunData& data);
+void deleteFunction(MobActionRunData& data);
+void drainLiquid(MobActionRunData& data);
+void finishDying(MobActionRunData& data);
+void focus(MobActionRunData& data);
+void followPathRandomly(MobActionRunData& data);
+void followPathToAbsolute(MobActionRunData& data);
+void getAngle(MobActionRunData& data);
+void getChomped(MobActionRunData& data);
+void getCoordinatesFromAngle(MobActionRunData& data);
+void getDistance(MobActionRunData& data);
+void getEventInfo(MobActionRunData& data);
+void getAreaInfo(MobActionRunData& data);
+void getFloorZ(MobActionRunData& data);
+void getMobInfo(MobActionRunData& data);
+void getFocusVar(MobActionRunData& data);
+void getRandomFloat(MobActionRunData& data);
+void getRandomInt(MobActionRunData& data);
+void gotoFunction(MobActionRunData& data);
+void holdFocus(MobActionRunData& data);
+void ifFunction(MobActionRunData& data);
+void linkWithFocus(MobActionRunData& data);
+void loadFocusMemory(MobActionRunData& data);
+void moveToAbsolute(MobActionRunData& data);
+void moveToRelative(MobActionRunData& data);
+void moveToTarget(MobActionRunData& data);
+void orderRelease(MobActionRunData& data);
+void playSound(MobActionRunData& data);
+void print(MobActionRunData& data);
+void receiveStatus(MobActionRunData& data);
+void release(MobActionRunData& data);
+void releaseStoredMobs(MobActionRunData& data);
+void removeStatus(MobActionRunData& data);
+void saveFocusMemory(MobActionRunData& data);
+void sendMessageToFocus(MobActionRunData& data);
+void sendMessageToLinks(MobActionRunData& data);
+void sendMessageToNearby(MobActionRunData& data);
+void setAnimation(MobActionRunData& data);
+void setCanBlockPaths(MobActionRunData& data);
+void setFarReach(MobActionRunData& data);
+void setFlying(MobActionRunData& data);
+void setGravity(MobActionRunData& data);
+void setHealth(MobActionRunData& data);
+void setHeight(MobActionRunData& data);
+void setHiding(MobActionRunData& data);
+void setHoldable(MobActionRunData& data);
+void setHuntable(MobActionRunData& data);
+void setLimbAnimation(MobActionRunData& data);
+void setNearReach(MobActionRunData& data);
+void setRadius(MobActionRunData& data);
+void setState(MobActionRunData& data);
+void setSectorScroll(MobActionRunData& data);
+void setShadowVisibility(MobActionRunData& data);
+void setTangible(MobActionRunData& data);
+void setTeam(MobActionRunData& data);
+void setTimer(MobActionRunData& data);
+void setVar(MobActionRunData& data);
+void showMessageFromVar(MobActionRunData& data);
+void spawn(MobActionRunData& data);
+void stabilizeZ(MobActionRunData& data);
+void startChomping(MobActionRunData& data);
+void startDying(MobActionRunData& data);
+void startHeightEffect(MobActionRunData& data);
+void startParticles(MobActionRunData& data);
+void stop(MobActionRunData& data);
+void stopChomping(MobActionRunData& data);
+void stopHeightEffect(MobActionRunData& data);
+void stopParticles(MobActionRunData& data);
+void stopSound(MobActionRunData& data);
+void stopVertically(MobActionRunData& data);
+void storeFocusInside(MobActionRunData& data);
+void swallow(MobActionRunData& data);
+void swallowAll(MobActionRunData& data);
+void teleportToAbsolute(MobActionRunData& data);
+void teleportToRelative(MobActionRunData& data);
+void throwFocus(MobActionRunData& data);
+void turnToAbsolute(MobActionRunData& data);
+void turnToRelative(MobActionRunData& data);
+void turnToTarget(MobActionRunData& data);
 };
 
 
 namespace MobActionLoaders {
-bool arachnorbPlanLogic(MobActionCall &call);
-bool calculate(MobActionCall &call);
-bool focus(MobActionCall &call);
-bool getAreaInfo(MobActionCall &call);
-bool getEventInfo(MobActionCall &call);
-bool getMobInfo(MobActionCall &call);
-bool holdFocus(MobActionCall &call);
-bool ifFunction(MobActionCall &call);
-bool moveToTarget(MobActionCall &call);
-bool playSound(MobActionCall &call);
-bool receiveStatus(MobActionCall &call);
-bool removeStatus(MobActionCall &call);
-bool setAnimation(MobActionCall &call);
-bool setFarReach(MobActionCall &call);
-bool setHoldable(MobActionCall &call);
-bool setNearReach(MobActionCall &call);
-bool setTeam(MobActionCall &call);
-bool spawn(MobActionCall &call);
-bool stabilizeZ(MobActionCall &call);
-bool startChomping(MobActionCall &call);
-bool startParticles(MobActionCall &call);
-bool turnToTarget(MobActionCall &call);
+bool arachnorbPlanLogic(MobActionCall& call);
+bool calculate(MobActionCall& call);
+bool focus(MobActionCall& call);
+bool getAreaInfo(MobActionCall& call);
+bool getEventInfo(MobActionCall& call);
+bool getMobInfo(MobActionCall& call);
+bool holdFocus(MobActionCall& call);
+bool ifFunction(MobActionCall& call);
+bool moveToTarget(MobActionCall& call);
+bool playSound(MobActionCall& call);
+bool receiveStatus(MobActionCall& call);
+bool removeStatus(MobActionCall& call);
+bool setAnimation(MobActionCall& call);
+bool setFarReach(MobActionCall& call);
+bool setHoldable(MobActionCall& call);
+bool setNearReach(MobActionCall& call);
+bool setTeam(MobActionCall& call);
+bool spawn(MobActionCall& call);
+bool stabilizeZ(MobActionCall& call);
+bool startChomping(MobActionCall& call);
+bool startParticles(MobActionCall& call);
+bool turnToTarget(MobActionCall& call);
 
-void reportEnumError(MobActionCall &call, size_t argIdx);
-bool loadMobTargetType(MobActionCall &call, size_t argIdx);
+void reportEnumError(MobActionCall& call, size_t argIdx);
+bool loadMobTargetType(MobActionCall& call, size_t argIdx);
 };
 
 
 bool assertActions(
-    const vector<MobActionCall*> &actions, const DataNode* dn
+    const vector<MobActionCall*>& actions, const DataNode* dn
 );
-Mob* getTriggerMob(MobActionRunData &data);
+Mob* getTriggerMob(MobActionRunData& data);
 Mob* getTargetMob(
-    MobActionRunData &data, MOB_ACTION_MOB_TARGET_TYPE type
+    MobActionRunData& data, MOB_ACTION_MOB_TARGET_TYPE type
 );
 void insertEventActions(
-    MobEvent* ev, const vector<MobActionCall*> &actions, bool atEnd
+    MobEvent* ev, const vector<MobActionCall*>& actions, bool atEnd
 );
 void loadActions(
     MobType* mt, DataNode* node,

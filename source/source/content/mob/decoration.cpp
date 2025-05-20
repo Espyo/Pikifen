@@ -24,7 +24,7 @@
  * @param angle Starting angle.
  */
 Decoration::Decoration(
-    const Point &pos, DecorationType* type, float angle
+    const Point& pos, DecorationType* type, float angle
 ) :
     Mob(pos, type, angle),
     decType(type) {
@@ -99,7 +99,7 @@ void Decoration::drawMob() {
  *
  * @param svr Script var reader to use.
  */
-void Decoration::readScriptVars(const ScriptVarReader &svr) {
+void Decoration::readScriptVars(const ScriptVarReader& svr) {
     Mob::readScriptVars(svr);
     
     bool randomAnimationDelayVar;

@@ -19,7 +19,7 @@
  * @param angle Starting angle.
  */
 Tool::Tool(
-    const Point &pos, ToolType* type, float angle
+    const Point& pos, ToolType* type, float angle
 ):
     Mob(pos, type, angle),
     tooType(type) {

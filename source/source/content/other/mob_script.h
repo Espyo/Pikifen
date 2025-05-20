@@ -333,11 +333,11 @@ public:
     //--- Function declarations ---
     
     MobEvent(
-        const DataNode* node, const vector<MobActionCall*> &actions
+        const DataNode* node, const vector<MobActionCall*>& actions
     );
     explicit MobEvent(
         const MOB_EV t,
-        const vector<MobActionCall*> &a = vector<MobActionCall*>()
+        const vector<MobActionCall*>& a = vector<MobActionCall*>()
     );
     void run(Mob* m, void* customData1 = nullptr, void* customData2 = nullptr);
     
@@ -366,9 +366,9 @@ public:
     
     //--- Function declarations ---
     
-    explicit MobState(const string &name);
-    MobState(const string &name, MobEvent* evs[N_MOB_EVENTS]);
-    MobState(const string &name, size_t id);
+    explicit MobState(const string& name);
+    MobState(const string& name, MobEvent* evs[N_MOB_EVENTS]);
+    MobState(const string& name, size_t id);
     MobEvent* getEvent(const MOB_EV type) const;
     
 };
@@ -405,7 +405,7 @@ public:
     
     explicit MobFsm(Mob* m = nullptr);
     MobEvent* getEvent(const MOB_EV type) const;
-    size_t getStateIdx(const string &name) const;
+    size_t getStateIdx(const string& name) const;
     void runEvent(
         const MOB_EV type,
         void* customData1 = nullptr, void* customData2 = nullptr
@@ -437,9 +437,9 @@ public:
 
     //--- Function declarations ---
     
-    void newState(const string &name, size_t id);
+    void newState(const string& name, size_t id);
     void newEvent(const MOB_EV type);
-    void changeState(const string &newState);
+    void changeState(const string& newState);
     void run(CustomActionCode code);
     vector<MobState*> finish();
     
@@ -493,7 +493,7 @@ struct HitboxInteraction {
 
 
 size_t fixStates(
-    vector<MobState*> &states, const string &startingState, const MobType* mt
+    vector<MobState*>& states, const string& startingState, const MobType* mt
 );
 void loadScript(
     MobType* mt, DataNode* scriptNode, DataNode* globalNode,

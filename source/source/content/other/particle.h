@@ -235,7 +235,7 @@ struct Particle {
     //--- Function declarations ---
     
     explicit Particle(
-        const Point &pos = Point(), const float z = 0.0f,
+        const Point& pos = Point(), const float z = 0.0f,
         const float initialSize = 0.0f,
         const float duration = 0.0f, const PARTICLE_PRIORITY priority =
             PARTICLE_PRIORITY_MEDIUM,
@@ -243,7 +243,7 @@ struct Particle {
     );
     void draw();
     void setBitmap(
-        const string &newBmpName,
+        const string& newBmpName,
         DataNode* node = nullptr
     );
     void tick(float deltaT);
@@ -267,14 +267,14 @@ struct ParticleManager {
     //--- Function declarations ---
     
     explicit ParticleManager(size_t max_nr = 0);
-    ParticleManager(const ParticleManager &pm2);
-    ParticleManager &operator=(const ParticleManager &pm2);
+    ParticleManager(const ParticleManager& pm2);
+    ParticleManager& operator=(const ParticleManager& pm2);
     ~ParticleManager();
-    void add(const Particle &p);
+    void add(const Particle& p);
     void clear();
     void fillComponentList(
-        vector<WorldComponent> &list,
-        const Point &camTL = Point(), const Point &camBR = Point()
+        vector<WorldComponent>& list,
+        const Point& camTL = Point(), const Point& camBR = Point()
     );
     size_t getCount() const;
     void tickAll(float deltaT);
@@ -369,10 +369,10 @@ struct ParticleGenerator : public Content {
     
     explicit ParticleGenerator(
         float emissionInterval = 0.0f,
-        const Particle &baseParticle = Particle(), size_t number = 1
+        const Particle& baseParticle = Particle(), size_t number = 1
     );
-    void tick(float deltaT, ParticleManager &manager);
-    void emit(ParticleManager &manager);
+    void tick(float deltaT, ParticleManager& manager);
+    void emit(ParticleManager& manager);
     void restartTimer();
     void loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level);
     void saveToDataNode(DataNode* node);

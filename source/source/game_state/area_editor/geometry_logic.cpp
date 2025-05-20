@@ -30,7 +30,7 @@
  * @return Whether they are traversable.
  */
 bool AreaEditor::areNodesTraversable(
-    const LayoutDrawingNode &n1, const LayoutDrawingNode &n2
+    const LayoutDrawingNode& n1, const LayoutDrawingNode& n2
 ) const {
     if(n1.onSector || n2.onSector) return false;
     
@@ -101,7 +101,7 @@ float AreaEditor::calculatePreviewPath() {
  *
  * @param pos Position the user is trying to finish the line on.
  */
-void AreaEditor::checkDrawingLine(const Point &pos) {
+void AreaEditor::checkDrawingLine(const Point& pos) {
     drawingLineResult = DRAWING_LINE_RESULT_OK;
     
     if(drawingNodes.empty()) {
@@ -503,7 +503,7 @@ void AreaEditor::deleteEdge(Edge* ePtr) {
  * @param which Edges to delete.
  * @return Whether all edges were deleted successfully.
  */
-bool AreaEditor::deleteEdges(const set<Edge*> &which) {
+bool AreaEditor::deleteEdges(const set<Edge*>& which) {
     bool ret = true;
     
     for(Edge* ePtr : which) {
@@ -526,8 +526,8 @@ bool AreaEditor::deleteEdges(const set<Edge*> &which) {
  *
  * @param which Mobs to delete.
  */
-void AreaEditor::deleteMobs(const set<MobGen*> &which) {
-    for(auto const &sm : which) {
+void AreaEditor::deleteMobs(const set<MobGen*>& which) {
+    for(auto const& sm : which) {
         //Get its index.
         size_t mIdx = 0;
         for(; mIdx < game.curAreaData->mobGenerators.size(); mIdx++) {
@@ -588,8 +588,8 @@ void AreaEditor::deleteMobs(const set<MobGen*> &which) {
  *
  * @param which Path links to delete.
  */
-void AreaEditor::deletePathLinks(const set<PathLink*> &which) {
-    for(auto &l : which) {
+void AreaEditor::deletePathLinks(const set<PathLink*>& which) {
+    for(auto& l : which) {
         l->startPtr->removeLink(l);
     }
 }
@@ -600,8 +600,8 @@ void AreaEditor::deletePathLinks(const set<PathLink*> &which) {
  *
  * @param which Path stops to delete.
  */
-void AreaEditor::deletePathStops(const set<PathStop*> &which) {
-    for(auto &s : which) {
+void AreaEditor::deletePathStops(const set<PathStop*>& which) {
+    for(auto& s : which) {
         //Check all links that end at this stop.
         for(size_t s2 = 0; s2 < game.curAreaData->pathStops.size(); s2++) {
             PathStop* s2Ptr = game.curAreaData->pathStops[s2];
@@ -634,7 +634,7 @@ void AreaEditor::deletePathStops(const set<PathStop*> &which) {
  */
 string AreaEditor::findGoodFirstTexture() {
     //First, if there's any "grass" texture, use that.
-    for(const auto &g : game.content.bitmaps.manifests) {
+    for(const auto& g : game.content.bitmaps.manifests) {
         string lcName = strToLower(g.first);
         if(
             lcName.find("texture") != string::npos &&
@@ -645,7 +645,7 @@ string AreaEditor::findGoodFirstTexture() {
     }
     
     //No grass texture? Try one with "dirt".
-    for(const auto &g : game.content.bitmaps.manifests) {
+    for(const auto& g : game.content.bitmaps.manifests) {
         string lcName = strToLower(g.first);
         if(
             lcName.find("texture") != string::npos &&
@@ -656,7 +656,7 @@ string AreaEditor::findGoodFirstTexture() {
     }
     
     //If there's no good texture, just pick the first one.
-    for(const auto &g : game.content.bitmaps.manifests) {
+    for(const auto& g : game.content.bitmaps.manifests) {
         string lcName = strToLower(g.first);
         if(lcName.find("texture") != string::npos) {
             return g.first;
@@ -1403,7 +1403,7 @@ void AreaEditor::findProblemsUnknownTreeShadow() {
  * @param list The list of affected sectors to fill out.
  */
 void AreaEditor::getAffectedSectors(
-    Sector* sPtr, unordered_set<Sector*> &list
+    Sector* sPtr, unordered_set<Sector*>& list
 ) const {
     for(size_t e = 0; e < sPtr->edges.size(); e++) {
         list.insert(sPtr->edges[e]->sectors[0]);
@@ -1421,9 +1421,9 @@ void AreaEditor::getAffectedSectors(
  * @param list The list of affected sectors to fill out.
  */
 void AreaEditor::getAffectedSectors(
-    const set<Sector*> &sectors, unordered_set<Sector*> &list
+    const set<Sector*>& sectors, unordered_set<Sector*>& list
 ) const {
-    for(auto &s : sectors) {
+    for(auto& s : sectors) {
         getAffectedSectors(s, list);
     }
 }
@@ -1437,9 +1437,9 @@ void AreaEditor::getAffectedSectors(
  * @param list The list of affected sectors to fill out.
  */
 void AreaEditor::getAffectedSectors(
-    const set<Vertex*> &vertexes, unordered_set<Sector*> &list
+    const set<Vertex*>& vertexes, unordered_set<Sector*>& list
 ) const {
-    for(auto &v : vertexes) {
+    for(auto& v : vertexes) {
         for(size_t e = 0; e < v->edges.size(); e++) {
             list.insert(v->edges[e]->sectors[0]);
             list.insert(v->edges[e]->sectors[1]);
@@ -1505,7 +1505,7 @@ Edge* AreaEditor::getClosestEdgeToAngle(
  * @return Whether there is a common sector.
  */
 bool AreaEditor::getCommonSector(
-    vector<Vertex*> &vertexes, vector<Edge*> &edges, Sector** result
+    vector<Vertex*>& vertexes, vector<Edge*>& edges, Sector** result
 ) const {
     unordered_set<Sector*> sectors;
     
@@ -1576,7 +1576,7 @@ bool AreaEditor::getCommonSector(
     //and we can easily find out which is the inner one with this method.
     float bestRightmostX = 0;
     Sector* bestRightmostSector = nullptr;
-    for(auto &s : sectors) {
+    for(auto& s : sectors) {
         if(s == nullptr) continue;
         Vertex* vPtr = s->getRightmostVertex();
         if(!bestRightmostSector || vPtr->x < bestRightmostX) {
@@ -1679,7 +1679,7 @@ bool AreaEditor::getDrawingOuterSector(Sector** result) const {
  * @return The edge.
  */
 Edge* AreaEditor::getEdgeUnderPoint(
-    const Point &p, const Edge* after
+    const Point& p, const Edge* after
 ) const {
     bool foundAfter = (!after ? true : false);
     
@@ -1762,7 +1762,7 @@ float AreaEditor::getMobGenRadius(MobGen* m) const {
  * @return Whether there are links under the point.
  */
 bool AreaEditor::getMobLinkUnderPoint(
-    const Point &p,
+    const Point& p,
     std::pair<MobGen*, MobGen*>* data1, std::pair<MobGen*, MobGen*>* data2
 ) const {
     for(size_t m = 0; m < game.curAreaData->mobGenerators.size(); m++) {
@@ -1801,7 +1801,7 @@ bool AreaEditor::getMobLinkUnderPoint(
  * If no mob matches, INVALID is returned instead.
  * @return The mob.
  */
-MobGen* AreaEditor::getMobUnderPoint(const Point &p, size_t* outIdx) const {
+MobGen* AreaEditor::getMobUnderPoint(const Point& p, size_t* outIdx) const {
     for(size_t m = 0; m < game.curAreaData->mobGenerators.size(); m++) {
         MobGen* mPtr = game.curAreaData->mobGenerators[m];
         
@@ -1832,7 +1832,7 @@ MobGen* AreaEditor::getMobUnderPoint(const Point &p, size_t* outIdx) const {
  * @return The link.
  */
 bool AreaEditor::getPathLinkUnderPoint(
-    const Point &p, PathLink** link1, PathLink** link2
+    const Point& p, PathLink** link1, PathLink** link2
 ) const {
     for(size_t s = 0; s < game.curAreaData->pathStops.size(); s++) {
         PathStop* sPtr = game.curAreaData->pathStops[s];
@@ -1861,7 +1861,7 @@ bool AreaEditor::getPathLinkUnderPoint(
  * @param p Point to check against.
  * @return The stop.
  */
-PathStop* AreaEditor::getPathStopUnderPoint(const Point &p) const {
+PathStop* AreaEditor::getPathStopUnderPoint(const Point& p) const {
     for(size_t s = 0; s < game.curAreaData->pathStops.size(); s++) {
         PathStop* sPtr = game.curAreaData->pathStops[s];
         
@@ -1881,7 +1881,7 @@ PathStop* AreaEditor::getPathStopUnderPoint(const Point &p) const {
  * @param p Point to check against.
  * @return The sector.
  */
-Sector* AreaEditor::getSectorUnderPoint(const Point &p) const {
+Sector* AreaEditor::getSectorUnderPoint(const Point& p) const {
     return getSector(p, nullptr, false);
 }
 
@@ -1893,7 +1893,7 @@ Sector* AreaEditor::getSectorUnderPoint(const Point &p) const {
  * @param p Point to check against.
  * @return The vertex.
  */
-Vertex* AreaEditor::getVertexUnderPoint(const Point &p) const {
+Vertex* AreaEditor::getVertexUnderPoint(const Point& p) const {
     for(size_t v = 0; v < game.curAreaData->vertexes.size(); v++) {
         Vertex* vPtr = game.curAreaData->vertexes[v];
         
@@ -2439,7 +2439,7 @@ void AreaEditor::resizeEverything(float mults[2]) {
  *
  * @param pos Point that the mobs must face.
  */
-void AreaEditor::rotateMobGensToPoint(const Point &pos) {
+void AreaEditor::rotateMobGensToPoint(const Point& pos) {
     if(selectedMobs.empty()) {
         setStatus(
             "To rotate objects, you must first select some objects!",
@@ -2450,7 +2450,7 @@ void AreaEditor::rotateMobGensToPoint(const Point &pos) {
     
     registerChange("object rotation");
     selectionHomogenized = false;
-    for(auto const &m : selectedMobs) {
+    for(auto const& m : selectedMobs) {
         m->angle = getAngle(m->pos, pos);
     }
     setStatus("Rotated objects to face " + p2s(pos) + ".");
@@ -2466,7 +2466,7 @@ void AreaEditor::rotateMobGensToPoint(const Point &pos) {
  * when snapping to vertexes or edges.
  * @return The snapped point.
  */
-Point AreaEditor::snapPoint(const Point &p, bool ignoreSelected) {
+Point AreaEditor::snapPoint(const Point& p, bool ignoreSelected) {
     SNAP_MODE modeToUse = game.options.areaEd.snapMode;
     Point finalPoint = p;
     
@@ -2623,7 +2623,7 @@ Point AreaEditor::snapPoint(const Point &p, bool ignoreSelected) {
  * @param where Point to split at.
  * @return The newly-created vertex.
  */
-Vertex* AreaEditor::splitEdge(Edge* ePtr, const Point &where) {
+Vertex* AreaEditor::splitEdge(Edge* ePtr, const Point& where) {
     Point newVPos =
         getClosestPointInLineSeg(
             v2p(ePtr->vertexes[0]), v2p(ePtr->vertexes[1]),
@@ -2672,7 +2672,7 @@ Vertex* AreaEditor::splitEdge(Edge* ePtr, const Point &where) {
  * @return The newly-created stop.
  */
 PathStop* AreaEditor::splitPathLink(
-    PathLink* l1, PathLink* l2, const Point &where
+    PathLink* l1, PathLink* l2, const Point& where
 ) {
     bool normalLink = (l2 != nullptr);
     Point newStopPos =
@@ -2724,7 +2724,7 @@ PathStop* AreaEditor::splitPathLink(
  * @param affectedSectors The list of affected sectors.
  */
 void AreaEditor::updateAffectedSectors(
-    const unordered_set<Sector*> &affectedSectors
+    const unordered_set<Sector*>& affectedSectors
 ) {
     TRIANGULATION_ERROR lastTriangulationError = TRIANGULATION_ERROR_NONE;
     
@@ -2773,7 +2773,7 @@ void AreaEditor::updateAffectedSectors(
  * @param newOuter What the new outer sector is.
  */
 void AreaEditor::updateInnerSectorsOuterSector(
-    const vector<Edge*> &edgesToCheck,
+    const vector<Edge*>& edgesToCheck,
     const Sector* oldOuter, Sector* newOuter
 ) {
     for(size_t e = 0; e < edgesToCheck.size(); e++) {

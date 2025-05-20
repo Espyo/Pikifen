@@ -26,7 +26,7 @@
  * @param vDelta Value amount (0-1) to add or subtract.
  */
 void ImGui::AdjustColorHSV(
-    ImVec4 &color, float hDelta, float sDelta, float vDelta
+    ImVec4& color, float hDelta, float sDelta, float vDelta
 ) {
     float h, s, v;
     ImGui::ColorConvertRGBtoHSV(color.x, color.y, color.z, h, s, v);
@@ -49,7 +49,7 @@ void ImGui::AdjustColorHSV(
  * @return Whether the value was changed.
  */
 bool ImGui::Combo(
-    const string &label, int* currentItem, const vector<string> &items,
+    const string& label, int* currentItem, const vector<string>& items,
     int popupMaxHeightInItems
 ) {
     string itemsStr;
@@ -78,7 +78,7 @@ bool ImGui::Combo(
  * @return Whether the value was changed.
  */
 bool ImGui::Combo(
-    const string &label, string* currentItem, const vector<string> &items,
+    const string& label, string* currentItem, const vector<string>& items,
     int popupMaxHeightInItems
 ) {
 
@@ -122,9 +122,9 @@ bool ImGui::Combo(
  * @return Whether the value was changed.
  */
 bool ImGui::Combo(
-    const string &label, string* currentItem,
-    const vector<string> &itemInternalValues,
-    const vector<string> &itemDisplayNames,
+    const string& label, string* currentItem,
+    const vector<string>& itemInternalValues,
+    const vector<string>& itemDisplayNames,
     int popupMaxHeightInItems
 ) {
     int currentItemIdx = -1;
@@ -166,8 +166,8 @@ bool ImGui::Combo(
  * @return Whether either value was changed.
  */
 bool ImGui::DragTime2(
-    const string &label, int* totalAmount,
-    const string &format1, const string &format2,
+    const string& label, int* totalAmount,
+    const string& format1, const string& format2,
     int limit1, int limit2
 ) {
     int part1 = floor(*totalAmount / 60.0f);
@@ -214,7 +214,7 @@ bool ImGui::DragTime2(
  * when you want, like when the dialog is first shown, instead of doing it
  * every frame.
  */
-void ImGui::FocusOnInputText(bool &condition) {
+void ImGui::FocusOnInputText(bool& condition) {
     if(!ImGui::IsAnyItemActive() && condition) {
         ImGui::SetKeyboardFocusHere();
         condition = false;
@@ -235,9 +235,9 @@ void ImGui::FocusOnInputText(bool &condition) {
  * @return Whether the button was pressed.
  */
 void ImGui::Image(
-    ALLEGRO_BITMAP* bitmap, const Point &bitmapSize,
-    const Point &uv0, const Point &uv1,
-    const ALLEGRO_COLOR &tintCol, const ALLEGRO_COLOR &borderCol
+    ALLEGRO_BITMAP* bitmap, const Point& bitmapSize,
+    const Point& uv0, const Point& uv1,
+    const ALLEGRO_COLOR& tintCol, const ALLEGRO_COLOR& borderCol
 ) {
     ImGui::Image(
         (ImTextureID) (intptr_t) bitmap,
@@ -264,10 +264,10 @@ void ImGui::Image(
  * @return Whether the button was pressed.
  */
 bool ImGui::ImageButton(
-    const string &strId, ALLEGRO_BITMAP* bitmap, const Point &bitmapSize,
-    const Point &uv0, const Point &uv1,
-    const ALLEGRO_COLOR &bgCol,
-    const ALLEGRO_COLOR &tintCol
+    const string& strId, ALLEGRO_BITMAP* bitmap, const Point& bitmapSize,
+    const Point& uv0, const Point& uv1,
+    const ALLEGRO_COLOR& bgCol,
+    const ALLEGRO_COLOR& tintCol
 ) {
     return
         ImGui::ImageButton(
@@ -293,8 +293,8 @@ bool ImGui::ImageButton(
  * @return Whether the button was pressed.
  */
 bool ImGui::ImageButtonAndText(
-    const string &id, ALLEGRO_BITMAP* icon, const Point &iconSize,
-    float buttonPadding, const string &text
+    const string& id, ALLEGRO_BITMAP* icon, const Point& iconSize,
+    float buttonPadding, const string& text
 ) {
     ImGui::BeginGroup();
     
@@ -333,9 +333,9 @@ bool ImGui::ImageButtonAndText(
  * @return Whether the button was pressed.
  */
 bool ImGui::ImageButtonOrganized(
-    const string &strId, ALLEGRO_BITMAP* bitmap,
-    const Point &maxBitmapSize, const Point &buttonSize,
-    const ALLEGRO_COLOR &bgCol, const ALLEGRO_COLOR &tintCol
+    const string& strId, ALLEGRO_BITMAP* bitmap,
+    const Point& maxBitmapSize, const Point& buttonSize,
+    const ALLEGRO_COLOR& bgCol, const ALLEGRO_COLOR& tintCol
 ) {
     Point finalBmpSize =
         resizeToBoxKeepingAspectRatio(
@@ -365,7 +365,7 @@ bool ImGui::ImageButtonOrganized(
  * @return Whether the value was changed.
  */
 bool ImGui::ListBox(
-    const string &label, int* currentItem, const vector<string> &items,
+    const string& label, int* currentItem, const vector<string>& items,
     int heightInItems
 ) {
     //TODO check if items is empty
@@ -389,7 +389,7 @@ bool ImGui::ListBox(
  * @brief Resets some variables inside the ImGui namespace.
  */
 void ImGui::Reset() {
-    ImGuiIO &io = ImGui::GetIO();
+    ImGuiIO& io = ImGui::GetIO();
     
     io.MousePos = ImVec2(-FLT_MAX, -FLT_MAX);
     io.MouseWheel = 0.0f;

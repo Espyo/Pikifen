@@ -37,7 +37,7 @@ using std::set;
  * @param record Record object to fill.
  */
 void loadAreaMissionRecord(
-    DataNode* file, Area* areaPtr, MissionRecord &record
+    DataNode* file, Area* areaPtr, MissionRecord& record
 ) {
     string missionRecordEntryName =
         getMissionRecordEntryName(areaPtr);
@@ -68,7 +68,7 @@ void loadAreaMissionRecord(
  * @return The stream.
  */
 ALLEGRO_AUDIO_STREAM* loadAudioStream(
-    const string &filePath, DataNode* node, bool reportErrors
+    const string& filePath, DataNode* node, bool reportErrors
 ) {
     ALLEGRO_AUDIO_STREAM* stream =
         al_load_audio_stream((filePath).c_str(), 4, 2048);
@@ -97,7 +97,7 @@ ALLEGRO_AUDIO_STREAM* loadAudioStream(
  * @return The bitmap.
  */
 ALLEGRO_BITMAP* loadBmp(
-    const string &path, DataNode* node,
+    const string& path, DataNode* node,
     bool reportError, bool errorBmpOnError,
     bool errorBmpOnEmpty
 ) {
@@ -132,7 +132,7 @@ ALLEGRO_BITMAP* loadBmp(
  *
  * @param filePath Path to the file, relative to the program root folder.
  */
-DataNode loadDataFile(const string &filePath) {
+DataNode loadDataFile(const string& filePath) {
     DataNode n = DataNode(filePath);
     if(!n.fileWasOpened) {
         game.errors.report(
@@ -156,9 +156,9 @@ DataNode loadDataFile(const string &filePath) {
  * @param size Font size, if it's a font file.
  */
 ALLEGRO_FONT* loadFont(
-    const string &path, int n, const int ranges[], int size
+    const string& path, int n, const int ranges[], int size
 ) {
-    const string &finalPath =
+    const string& finalPath =
         game.content.bitmaps.manifests[path].path;
         
     ALLEGRO_FONT* result = nullptr;
@@ -450,7 +450,7 @@ void loadOptions() {
  * @return The sample.
  */
 ALLEGRO_SAMPLE* loadSample(
-    const string &path, DataNode* node, bool reportErrors
+    const string& path, DataNode* node, bool reportErrors
 ) {
     ALLEGRO_SAMPLE* sample = al_load_sample((path).c_str());
     
@@ -473,7 +473,7 @@ void loadStatistics() {
     statsFile.loadFile(FILE_PATHS_FROM_ROOT::STATISTICS, true, false, true);
     if(!statsFile.fileWasOpened) return;
     
-    Statistics &s = game.statistics;
+    Statistics& s = game.statistics;
     
     ReaderSetter sRS(&statsFile);
     

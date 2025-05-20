@@ -36,7 +36,7 @@ public:
     
     //--- Function declarations ---
     
-    Enemy(const Point &pos, EnemyType* type, float angle);
+    Enemy(const Point& pos, EnemyType* type, float angle);
     bool canReceiveStatus(StatusType* s) const override;
     void drawMob() override;
     void finishDyingClassSpecifics() override;

@@ -400,8 +400,8 @@ void AnimationEditor::drawComparison() {
  * @param outlineThickness Thickness of the hitbox's outline.
  */
 void AnimationEditor::drawSideViewHitbox(
-    Hitbox* hPtr, const ALLEGRO_COLOR &color,
-    const ALLEGRO_COLOR &outlineColor, float outlineThickness
+    Hitbox* hPtr, const ALLEGRO_COLOR& color,
+    const ALLEGRO_COLOR& outlineColor, float outlineThickness
 ) {
     float dummy = 0;
     float zToUse = hPtr->z;
@@ -651,8 +651,8 @@ void AnimationEditor::drawTimeline() {
  * @param outlineThickness Thickness of the hitbox's outline.
  */
 void AnimationEditor::drawTopDownViewHitbox(
-    Hitbox* hPtr, const ALLEGRO_COLOR &color,
-    const ALLEGRO_COLOR &outlineColor, float outlineThickness
+    Hitbox* hPtr, const ALLEGRO_COLOR& color,
+    const ALLEGRO_COLOR& outlineColor, float outlineThickness
 ) {
     if(hPtr->radius <= 0) return;
     

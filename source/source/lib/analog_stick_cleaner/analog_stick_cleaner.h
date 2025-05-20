@@ -118,7 +118,7 @@ public:
     //--- Function declarations ---
     
     static void clean(
-        float coords[2], const Settings &settings = Settings()
+        float coords[2], const Settings& settings = Settings()
     );
     
     
@@ -127,18 +127,18 @@ private:
     //--- Function declarations ---
     
     static float getSnapDirDeadzone(
-        int snapDirIdx, const Settings &settings
+        int snapDirIdx, const Settings& settings
     );
     static float interpolateAndClamp(
         float input, float inputStart, float inputEnd,
         float outputStart, float outputEnd
     );
     static void processAngularDeadzones(
-        float coords[2], const Settings &settings
+        float coords[2], const Settings& settings
     );
     static void processRadialDeadzones(
-        float coords[2], const Settings &settings
+        float coords[2], const Settings& settings
     );
     static void toCartesian(float coords[2], float angle, float radius);
-    static void toPolar(float coords[2], float &angle, float &radius);
+    static void toPolar(float coords[2], float& angle, float& radius);
 };

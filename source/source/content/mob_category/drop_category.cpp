@@ -33,7 +33,7 @@ DropCategory::DropCategory() :
  * @brief Clears the list of registered types of drops.
  */
 void DropCategory::clearTypes() {
-    for(auto &t : game.content.mobTypes.list.drop) {
+    for(auto& t : game.content.mobTypes.list.drop) {
         delete t.second;
     }
     game.content.mobTypes.list.drop.clear();
@@ -49,7 +49,7 @@ void DropCategory::clearTypes() {
  * @return The mob.
  */
 Mob* DropCategory::createMob(
-    const Point &pos, MobType* type, float angle
+    const Point& pos, MobType* type, float angle
 ) {
     Drop* m = new Drop(pos, (DropType*) type, angle);
     game.states.gameplay->mobs.drops.push_back(m);
@@ -90,7 +90,7 @@ void DropCategory::eraseMob(Mob* m) {
  * @param internalName Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-MobType* DropCategory::getType(const string &internalName) const {
+MobType* DropCategory::getType(const string& internalName) const {
     auto it = game.content.mobTypes.list.drop.find(internalName);
     if(it == game.content.mobTypes.list.drop.end()) return nullptr;
     return it->second;
@@ -102,8 +102,8 @@ MobType* DropCategory::getType(const string &internalName) const {
  *
  * @param list This list gets filled with the mob type internal names.
  */
-void DropCategory::getTypeNames(vector<string> &list) const {
-    for(auto &t : game.content.mobTypes.list.drop) {
+void DropCategory::getTypeNames(vector<string>& list) const {
+    for(auto& t : game.content.mobTypes.list.drop) {
         list.push_back(t.first);
     }
 }
@@ -115,6 +115,6 @@ void DropCategory::getTypeNames(vector<string> &list) const {
  * @param internalName Internal name of the mob type.
  * @param type Mob type to register.
  */
-void DropCategory::registerType(const string &internalName, MobType* type) {
+void DropCategory::registerType(const string& internalName, MobType* type) {
     game.content.mobTypes.list.drop[internalName] = (DropType*) type;
 }

@@ -2096,7 +2096,7 @@ bool MissionGoalTimedSurvival::isMobApplicable(
  * @param mission Mission data to get info from.
  * @return Whether it is platinum.
  */
-bool MissionRecord::isPlatinum(const MissionData &mission) {
+bool MissionRecord::isPlatinum(const MissionData& mission) {
     switch(mission.gradingMode) {
     case MISSION_GRADING_MODE_POINTS: {
         return score >= mission.platinumReq;

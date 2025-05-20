@@ -122,23 +122,23 @@ public:
     //--- Function declarations ---
     
     explicit Sprite(
-        const string &name = "", ALLEGRO_BITMAP* const b = nullptr,
-        const vector<Hitbox> &h = vector<Hitbox>()
+        const string& name = "", ALLEGRO_BITMAP* const b = nullptr,
+        const vector<Hitbox>& h = vector<Hitbox>()
     );
     Sprite(
-        const string &name, ALLEGRO_BITMAP* const b, const Point &bPos,
-        const Point &bSize, const vector<Hitbox> &h
+        const string& name, ALLEGRO_BITMAP* const b, const Point& bPos,
+        const Point& bSize, const vector<Hitbox>& h
     );
-    Sprite(const Sprite &s2);
+    Sprite(const Sprite& s2);
     ~Sprite();
-    Sprite &operator=(const Sprite &s2);
+    Sprite& operator=(const Sprite& s2);
     void createHitboxes(
         AnimationDatabase* const adb,
         float height = 0, float radius = 0
     );
     void setBitmap(
-        const string &newBmpName,
-        const Point &newBmpPos, const Point &newBmpSize,
+        const string& newBmpName,
+        const Point& newBmpPos, const Point& newBmpSize,
         DataNode* node = nullptr
     );
     
@@ -184,9 +184,9 @@ public:
     //--- Function declarations ---
     
     explicit Frame(
-        const string &sn = "", size_t si = INVALID,
+        const string& sn = "", size_t si = INVALID,
         Sprite* sp = nullptr, float d = 0.1,
-        bool in = false, const string &snd = "", size_t s = INVALID
+        bool in = false, const string& snd = "", size_t s = INVALID
     );
     
 };
@@ -219,12 +219,12 @@ public:
     //--- Function declarations ---
     
     explicit Animation(
-        const string &name = "",
-        const vector<Frame> &frames = vector<Frame>(),
+        const string& name = "",
+        const vector<Frame>& frames = vector<Frame>(),
         size_t loopFrame = 0, unsigned char hitRate = 100
     );
-    Animation(const Animation &a2);
-    Animation &operator=(const Animation &a2);
+    Animation(const Animation& a2);
+    Animation& operator=(const Animation& a2);
     void deleteFrame(size_t idx);
     float getDuration();
     float getLoopDuration();
@@ -266,16 +266,16 @@ public:
     //--- Function declarations ---
     
     explicit AnimationDatabase(
-        const vector<Animation*> &a = vector<Animation*>(),
-        const vector<Sprite*>    &s = vector<Sprite*>(),
-        const vector<BodyPart*> &b = vector<BodyPart*>()
+        const vector<Animation*>& a = vector<Animation*>(),
+        const vector<Sprite*>& s = vector<Sprite*>(),
+        const vector<BodyPart*>& b = vector<BodyPart*>()
     );
-    size_t findAnimation(const string &name) const;
-    size_t findSprite(const string &name) const;
-    size_t findBodyPart(const string &name) const;
+    size_t findAnimation(const string& name) const;
+    size_t findSprite(const string& name) const;
+    size_t findBodyPart(const string& name) const;
     void calculateHitboxSpan();
     void createConversions(
-        const vector<std::pair<size_t, string> > &conversions,
+        const vector<std::pair<size_t, string> >& conversions,
         const DataNode* file
     );
     void deleteSprite(size_t idx);
@@ -314,8 +314,8 @@ public:
     //--- Function declarations ---
     
     explicit AnimationInstance(AnimationDatabase* animDb = nullptr);
-    AnimationInstance(const AnimationInstance &ai2);
-    AnimationInstance &operator=(const AnimationInstance &ai2);
+    AnimationInstance(const AnimationInstance& ai2);
+    AnimationInstance& operator=(const AnimationInstance& ai2);
     void clear();
     void toStart();
     void skipAheadRandomly();
@@ -336,7 +336,7 @@ public:
 
 
 void getSpriteBasicEffects(
-    const Point &basePos, float baseAngle,
+    const Point& basePos, float baseAngle,
     float baseAngleCosCache, float baseAngleSinCache,
     Sprite* curSpritePtr, Sprite* nextSpritePtr, float interpolationFactor,
     Point* outEffTrans, float* outEffAngle,

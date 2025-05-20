@@ -63,7 +63,7 @@ const float SPEW_V_SPEED = 600.0f;
  * @param type Onion type this mob belongs to.
  * @param angle Starting angle.
  */
-Onion::Onion(const Point &pos, OnionType* type, float angle) :
+Onion::Onion(const Point& pos, OnionType* type, float angle) :
     Mob(pos, type, angle),
     oniType(type) {
     
@@ -187,7 +187,7 @@ void Onion::generate() {
  *
  * @param svr Script var reader to use.
  */
-void Onion::readScriptVars(const ScriptVarReader &svr) {
+void Onion::readScriptVars(const ScriptVarReader& svr) {
     Mob::readScriptVars(svr);
     
     nest->readScriptVars(svr);
@@ -227,7 +227,7 @@ void Onion::tickClassSpecifics(float deltaT) {
     
     unsigned char finalAlpha = 255;
     
-    for(const Player &player : game.states.gameplay->players) {
+    for(const Player& player : game.states.gameplay->players) {
         if(!player.leaderPtr) continue;
         if(
             bBoxCheck(

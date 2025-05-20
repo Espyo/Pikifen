@@ -72,10 +72,10 @@ public:
     
     //--- Function declarations ---
     
-    Onion(const Point &pos, OnionType* type, float angle);
+    Onion(const Point& pos, OnionType* type, float angle);
     ~Onion();
     void drawMob() override;
-    void readScriptVars(const ScriptVarReader &svr) override;
+    void readScriptVars(const ScriptVarReader& svr) override;
     void startGenerating();
     void stopGenerating();
     

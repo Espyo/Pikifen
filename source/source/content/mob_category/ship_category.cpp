@@ -33,7 +33,7 @@ ShipCategory::ShipCategory() :
  * @brief Clears the list of registered types of ship.
  */
 void ShipCategory::clearTypes() {
-    for(auto &t : game.content.mobTypes.list.ship) {
+    for(auto& t : game.content.mobTypes.list.ship) {
         delete t.second;
     }
     game.content.mobTypes.list.ship.clear();
@@ -49,7 +49,7 @@ void ShipCategory::clearTypes() {
  * @return The mob.
  */
 Mob* ShipCategory::createMob(
-    const Point &pos, MobType* type, float angle
+    const Point& pos, MobType* type, float angle
 ) {
     Ship* m = new Ship(pos, (ShipType*) type, angle);
     game.states.gameplay->mobs.ships.push_back(m);
@@ -90,7 +90,7 @@ void ShipCategory::eraseMob(Mob* m) {
  * @param internalName Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-MobType* ShipCategory::getType(const string &internalName) const {
+MobType* ShipCategory::getType(const string& internalName) const {
     auto it = game.content.mobTypes.list.ship.find(internalName);
     if(it == game.content.mobTypes.list.ship.end()) return nullptr;
     return it->second;
@@ -102,8 +102,8 @@ MobType* ShipCategory::getType(const string &internalName) const {
  *
  * @param list This list gets filled with the mob type internal names.
  */
-void ShipCategory::getTypeNames(vector<string> &list) const {
-    for(auto &t : game.content.mobTypes.list.ship) {
+void ShipCategory::getTypeNames(vector<string>& list) const {
+    for(auto& t : game.content.mobTypes.list.ship) {
         list.push_back(t.first);
     }
 }
@@ -115,6 +115,6 @@ void ShipCategory::getTypeNames(vector<string> &list) const {
  * @param internalName Internal name of the mob type.
  * @param type Mob type to register.
  */
-void ShipCategory::registerType(const string &internalName, MobType* type) {
+void ShipCategory::registerType(const string& internalName, MobType* type) {
     game.content.mobTypes.list.ship[internalName] = (ShipType*) type;
 }

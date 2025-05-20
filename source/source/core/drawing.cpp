@@ -98,8 +98,8 @@ const float NOTIFICATION_PADDING = 8.0f;
  */
 void drawBackgroundLogos(
     float timeSpent, size_t rows, size_t cols,
-    const Point &logoSize, const ALLEGRO_COLOR &tint,
-    const Point &speed, float rotationSpeed
+    const Point& logoSize, const ALLEGRO_COLOR& tint,
+    const Point& speed, float rotationSpeed
 ) {
     al_hold_bitmap_drawing(true);
     
@@ -145,7 +145,7 @@ void drawBackgroundLogos(
  * @param effects Effects to use.
  */
 void drawBitmapWithEffects(
-    ALLEGRO_BITMAP* bmp, const BitmapEffect &effects
+    ALLEGRO_BITMAP* bmp, const BitmapEffect& effects
 ) {
 
     Point bmpSize = getBitmapDimensions(bmp);
@@ -198,8 +198,8 @@ void drawBitmapWithEffects(
  * specify the amount here.
  */
 void drawButton(
-    const Point &center, const Point &size, const string &text,
-    const ALLEGRO_FONT* font, const ALLEGRO_COLOR &color,
+    const Point& center, const Point& size, const string& text,
+    const ALLEGRO_FONT* font, const ALLEGRO_COLOR& color,
     bool selected, float juicyGrowAmount
 ) {
     drawText(
@@ -238,8 +238,8 @@ void drawButton(
  * @param scale Scale the text by this much.
  */
 void drawFraction(
-    const Point &bottom, size_t valueNr,
-    size_t requirementNr, const ALLEGRO_COLOR &color, float scale
+    const Point& bottom, size_t valueNr,
+    size_t requirementNr, const ALLEGRO_COLOR& color, float scale
 ) {
     const float valueNrY = bottom.y - IN_WORLD_FRACTION::ROW_HEIGHT * 3;
     const float valueNrScale = valueNr >= requirementNr ? 1.2f : 1.0f;
@@ -281,7 +281,7 @@ void drawFraction(
  * Used for leader HP on the HUD.
  */
 void drawHealth(
-    const Point &center,
+    const Point& center,
     float ratio, float alpha,
     float radius, bool justChart
 ) {
@@ -318,7 +318,7 @@ void drawHealth(
  * @param time How much time has passed. Used to animate.
  */
 void drawLiquid(
-    Sector* sPtr, Liquid* lPtr, const Point &where, float scale,
+    Sector* sPtr, Liquid* lPtr, const Point& where, float scale,
     float time
 ) {
     //Setup.
@@ -578,7 +578,7 @@ void drawLiquid(
  * much faster.
  */
 void drawLoadingScreen(
-    const string &text, const string &subtext, float opacity
+    const string& text, const string& subtext, float opacity
 ) {
     const float textW = game.winW * DRAWING::LOADING_SCREEN_TEXT_WIDTH;
     const float textH = game.winH * DRAWING::LOADING_SCREEN_TEXT_HEIGHT;
@@ -788,7 +788,7 @@ void drawLoadingScreen(
  * If false, place it to the right.
  */
 void drawMenuButtonIcon(
-    MENU_ICON icon, const Point &buttonCenter, const Point &buttonSize,
+    MENU_ICON icon, const Point& buttonCenter, const Point& buttonSize,
     bool leftSide
 ) {
     //All icons are square, and in a row, so the spritesheet height works.
@@ -871,7 +871,7 @@ void drawMobShadow(const Mob* m, float deltaZ, float shadowStretch) {
  *
  * @param color Color to tint it with.
  */
-void drawMouseCursor(const ALLEGRO_COLOR &color) {
+void drawMouseCursor(const ALLEGRO_COLOR& color) {
     al_use_transform(&game.identityTransform);
     
     //Cursor trail.
@@ -1007,8 +1007,8 @@ void drawMouseCursor(const ALLEGRO_COLOR &color) {
  * @param alpha Opacity.
  */
 void drawPlayerInputSourceIcon(
-    const ALLEGRO_FONT* const font, const PlayerInputSource &s,
-    bool condensed, const Point &where, const Point &maxSize,
+    const ALLEGRO_FONT* const font, const PlayerInputSource& s,
+    bool condensed, const Point& where, const Point& maxSize,
     unsigned char alpha
 ) {
     if(alpha == 0) return;
@@ -1107,7 +1107,7 @@ void drawPlayerInputSourceIcon(
  * @param opacity Draw the textures at this opacity, 0 - 1.
  */
 void drawSectorTexture(
-    Sector* sPtr, const Point &where, float scale, float opacity
+    Sector* sPtr, const Point& where, float scale, float opacity
 ) {
     if(!sPtr) return;
     if(sPtr->isBottomlessPit) return;
@@ -1243,7 +1243,7 @@ void drawSectorTexture(
  * @param m Mob that has this status effect.
  * @param effects List of bitmap effects to use.
  */
-void drawStatusEffectBmp(const Mob* m, BitmapEffect &effects) {
+void drawStatusEffectBmp(const Mob* m, BitmapEffect& effects) {
     float statusBmpScale;
     ALLEGRO_BITMAP* statusBmp = m->getStatusBitmap(&statusBmpScale);
     
@@ -1270,10 +1270,10 @@ void drawStatusEffectBmp(const Mob* m, BitmapEffect &effects) {
  * @param scale Scale each token by this amount.
  */
 void drawStringTokens(
-    const vector<StringToken> &tokens, const ALLEGRO_FONT* const textFont,
+    const vector<StringToken>& tokens, const ALLEGRO_FONT* const textFont,
     const ALLEGRO_FONT* const inputFont, bool inputCondensed,
-    const Point &where, int flags, const Point &maxSize,
-    const Point &scale
+    const Point& where, int flags, const Point& maxSize,
+    const Point& scale
 ) {
     unsigned int totalWidth = 0;
     float xScale = 1.0f;
@@ -1350,7 +1350,7 @@ void drawStringTokens(
  * empty string is returned if there's nothing to write.
  */
 void getPlayerInputIconInfo(
-    const PlayerInputSource &s, bool condensed,
+    const PlayerInputSource& s, bool condensed,
     PLAYER_INPUT_ICON_SHAPE* shape,
     PLAYER_INPUT_ICON_SPRITE* bitmapSprite,
     string* text
@@ -1558,7 +1558,7 @@ void getPlayerInputIconInfo(
  * @return The width.
  */
 float getPlayerInputIconWidth(
-    const ALLEGRO_FONT* font, const PlayerInputSource &s, bool condensed,
+    const ALLEGRO_FONT* font, const PlayerInputSource& s, bool condensed,
     float maxBitmapHeight
 ) {
     PLAYER_INPUT_ICON_SHAPE shape;

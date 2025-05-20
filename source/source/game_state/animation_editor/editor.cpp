@@ -178,7 +178,7 @@ void AnimationEditor::closeOptionsDialog() {
  *
  * @param path Path to the requested animation database's file.
  */
-void AnimationEditor::createAnimDb(const string &path) {
+void AnimationEditor::createAnimDb(const string& path) {
     setupForNewAnimDbPre();
     changesMgr.markAsNonExistent();
     
@@ -368,7 +368,7 @@ float AnimationEditor::getCursorTimelineTime() {
  * @param path Path to the file.
  * @return The tooltip text.
  */
-string AnimationEditor::getFileTooltip(const string &path) const {
+string AnimationEditor::getFileTooltip(const string& path) const {
     if(path.find(FOLDER_PATHS_FROM_PACK::MOB_TYPES + "/") != string::npos) {
         ContentManifest tempManif;
         string cat;
@@ -467,7 +467,7 @@ void AnimationEditor::hitboxesToggleCmd(float inputValue) {
  *
  * @param name Name of the animation to import.
  */
-void AnimationEditor::importAnimationData(const string &name) {
+void AnimationEditor::importAnimationData(const string& name) {
     Animation* a = db.animations[db.findAnimation(name)];
     
     curAnimInst.curAnim->frames = a->frames;
@@ -483,7 +483,7 @@ void AnimationEditor::importAnimationData(const string &name) {
  *
  * @param name Name of the sprite to import from.
  */
-void AnimationEditor::importSpriteBmpData(const string &name) {
+void AnimationEditor::importSpriteBmpData(const string& name) {
     Sprite* s = db.sprites[db.findSprite(name)];
     
     curSprite->setBitmap(s->bmpName, s->bmpPos, s->bmpSize);
@@ -497,7 +497,7 @@ void AnimationEditor::importSpriteBmpData(const string &name) {
  *
  * @param name Name of the animation to import.
  */
-void AnimationEditor::importSpriteHitboxData(const string &name) {
+void AnimationEditor::importSpriteHitboxData(const string& name) {
     for(size_t s = 0; s < db.sprites.size(); s++) {
         if(db.sprites[s]->name == name) {
             curSprite->hitboxes = db.sprites[s]->hitboxes;
@@ -515,7 +515,7 @@ void AnimationEditor::importSpriteHitboxData(const string &name) {
  *
  * @param name Name of the animation to import.
  */
-void AnimationEditor::importSpriteTopData(const string &name) {
+void AnimationEditor::importSpriteTopData(const string& name) {
     Sprite* s = db.sprites[db.findSprite(name)];
     curSprite->topVisible = s->topVisible;
     curSprite->topPos = s->topPos;
@@ -532,7 +532,7 @@ void AnimationEditor::importSpriteTopData(const string &name) {
  *
  * @param name Name of the animation to import.
  */
-void AnimationEditor::importSpriteTransformationData(const string &name) {
+void AnimationEditor::importSpriteTransformationData(const string& name) {
     Sprite* s = db.sprites[db.findSprite(name)];
     curSprite->offset = s->offset;
     curSprite->scale = s->scale;
@@ -636,7 +636,7 @@ void AnimationEditor::load() {
  * the user's file open history.
  */
 void AnimationEditor::loadAnimDbFile(
-    const string &path, bool shouldUpdateHistory
+    const string& path, bool shouldUpdateHistory
 ) {
     //Setup.
     setupForNewAnimDbPre();
@@ -669,7 +669,7 @@ void AnimationEditor::loadAnimDbFile(
         for(size_t f = 0; f < db.sprites.size(); f++) {
             fileUsesMap[db.sprites[f]->bmpName]++;
         }
-        for(auto &u : fileUsesMap) {
+        for(auto& u : fileUsesMap) {
             fileUsesVector.push_back(make_pair(u.second, u.first));
         }
         std::sort(
@@ -733,7 +733,7 @@ void AnimationEditor::mobRadiusToggleCmd(float inputValue) {
  *
  * @param ev Event to handle.
  */
-void AnimationEditor::panCam(const ALLEGRO_EVENT &ev) {
+void AnimationEditor::panCam(const ALLEGRO_EVENT& ev) {
     game.editorsView.cam.setPos(
         Point(
             game.editorsView.cam.pos.x -
@@ -755,7 +755,7 @@ void AnimationEditor::panCam(const ALLEGRO_EVENT &ev) {
  * @param isNew Unused.
  */
 void AnimationEditor::pickAnimDbFile(
-    const string &name, const string &topCat, const string &secCat,
+    const string& name, const string& topCat, const string& secCat,
     void* info, bool isNew
 ) {
     ContentManifest* tempManif = (ContentManifest*) info;
@@ -786,7 +786,7 @@ void AnimationEditor::pickAnimDbFile(
  * @param isNew Is this a new animation or an existing one?
  */
 void AnimationEditor::pickAnimation(
-    const string &name, const string &topCat, const string &secCat,
+    const string& name, const string& topCat, const string& secCat,
     void* info, bool isNew
 ) {
     if(isNew) {
@@ -811,7 +811,7 @@ void AnimationEditor::pickAnimation(
  * @param isNew Is this a new sprite or an existing one?
  */
 void AnimationEditor::pickSprite(
-    const string &name, const string &topCat, const string &secCat,
+    const string& name, const string& topCat, const string& secCat,
     void* info, bool isNew
 ) {
     if(isNew) {
@@ -935,7 +935,7 @@ void AnimationEditor::reloadCmd(float inputValue) {
  * @param newName Its new name.
  */
 void AnimationEditor::renameAnimation(
-    Animation* anim, const string &newName
+    Animation* anim, const string& newName
 ) {
     //Check if it's valid.
     if(!anim) {
@@ -984,7 +984,7 @@ void AnimationEditor::renameAnimation(
  * @param newName Its new name.
  */
 void AnimationEditor::renameBodyPart(
-    BodyPart* part, const string &newName
+    BodyPart* part, const string& newName
 ) {
     //Check if it's valid.
     if(!part) {
@@ -1041,7 +1041,7 @@ void AnimationEditor::renameBodyPart(
  * @param newName Its new name.
  */
 void AnimationEditor::renameSprite(
-    Sprite* spr, const string &newName
+    Sprite* spr, const string& newName
 ) {
     //Check if it's valid.
     if(!spr) {
@@ -1469,7 +1469,7 @@ void AnimationEditor::spriteBmpFloodFill(
          *
          * @param p The float point coordinates.
          */
-        explicit IntPoint(const Point &p) :
+        explicit IntPoint(const Point& p) :
             x(p.x),
             y(p.y) { }
             
@@ -1650,7 +1650,7 @@ void AnimationEditor::updateHitboxes() {
         //Add missing hitboxes.
         for(size_t b = 0; b < db.bodyParts.size(); b++) {
             bool hitboxFound = false;
-            const string &name = db.bodyParts[b]->name;
+            const string& name = db.bodyParts[b]->name;
             
             for(size_t h = 0; h < sPtr->hitboxes.size(); h++) {
                 if(sPtr->hitboxes[h].bodyPartName == name) {
@@ -1713,7 +1713,7 @@ void AnimationEditor::zoomEverythingCmd(float inputValue) {
     
     Sprite* sPtr = curSprite;
     if(!sPtr && curAnimInst.validFrame()) {
-        const string &name =
+        const string& name =
             curAnimInst.curAnim->frames[curAnimInst.curFrameIdx].spriteName;
         size_t sPos = db.findSprite(name);
         if(sPos != INVALID) sPtr = db.sprites[sPos];

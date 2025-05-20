@@ -25,7 +25,7 @@ void GuiEditor::openLoadDialog() {
     
     //Set up the picker's behavior and data.
     vector<PickerItem> fileItems;
-    for(const auto &f : game.content.guiDefs.manifests) {
+    for(const auto& f : game.content.guiDefs.manifests) {
         fileItems.push_back(
             PickerItem(
                 f.first,
@@ -254,14 +254,14 @@ void GuiEditor::processGuiLoadDialog() {
     //History node.
     processGuiHistory(
         game.options.guiEd.history,
-    [this](const string &path) -> string {
+    [this](const string& path) -> string {
         return path;
     },
-    [this](const string &path) {
+    [this](const string& path) {
         closeTopDialog();
         loadGuiDefFile(path, true);
     },
-    [this](const string &path) {
+    [this](const string& path) {
         return getFileTooltip(path);
     }
     );
@@ -457,7 +457,7 @@ void GuiEditor::processGuiNewDialog() {
         
     //GUI definition combo.
     vector<string> guiFiles;
-    for(const auto &g : game.content.guiDefs.manifests) {
+    for(const auto& g : game.content.guiDefs.manifests) {
         guiFiles.push_back(g.first);
     }
     ImGui::Spacer();

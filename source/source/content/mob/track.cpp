@@ -19,7 +19,7 @@
  * @param angle Starting angle.
  */
 Track::Track(
-    const Point &pos, TrackType* type, float angle
+    const Point& pos, TrackType* type, float angle
 ):
     Mob(pos, type, angle),
     traType(type) {

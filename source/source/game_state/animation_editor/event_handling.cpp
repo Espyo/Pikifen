@@ -22,7 +22,7 @@
  *
  * @param ev Event to handle.
  */
-void AnimationEditor::handleKeyCharCanvas(const ALLEGRO_EVENT &ev) {
+void AnimationEditor::handleKeyCharCanvas(const ALLEGRO_EVENT& ev) {
     if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_LEFT)) {
         game.editorsView.cam.targetPos.x -=
             AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.editorsView.cam.zoom;
@@ -63,7 +63,7 @@ void AnimationEditor::handleKeyCharCanvas(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void AnimationEditor::handleKeyDownAnywhere(const ALLEGRO_EVENT &ev) {
+void AnimationEditor::handleKeyDownAnywhere(const ALLEGRO_EVENT& ev) {
     if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_G, true)) {
         gridToggleCmd(1.0f);
         
@@ -110,7 +110,7 @@ void AnimationEditor::handleKeyDownAnywhere(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void AnimationEditor::handleKeyDownCanvas(const ALLEGRO_EVENT &ev) {
+void AnimationEditor::handleKeyDownCanvas(const ALLEGRO_EVENT& ev) {
     if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_SPACE)) {
         playPauseAnimCmd(1.0f);
         
@@ -130,7 +130,7 @@ void AnimationEditor::handleKeyDownCanvas(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void AnimationEditor::handleLmbDoubleClick(const ALLEGRO_EVENT &ev) {
+void AnimationEditor::handleLmbDoubleClick(const ALLEGRO_EVENT& ev) {
     if(state == EDITOR_STATE_HITBOXES || state == EDITOR_STATE_SPRITE_BITMAP) {
         handleLmbDown(ev);
     }
@@ -143,7 +143,7 @@ void AnimationEditor::handleLmbDoubleClick(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void AnimationEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
+void AnimationEditor::handleLmbDown(const ALLEGRO_EVENT& ev) {
     if(isCursorInTimeline()) {
         handleLmbDragInTimeline();
         return;
@@ -356,7 +356,7 @@ void AnimationEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void AnimationEditor::handleLmbDrag(const ALLEGRO_EVENT &ev) {
+void AnimationEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
     if(isCursorInTimeline()) {
         handleLmbDragInTimeline();
         return;
@@ -483,7 +483,7 @@ void AnimationEditor::handleLmbDragInTimeline() {
  *
  * @param ev Event to handle.
  */
-void AnimationEditor::handleLmbUp(const ALLEGRO_EVENT &ev) {
+void AnimationEditor::handleLmbUp(const ALLEGRO_EVENT& ev) {
     switch(state) {
     case EDITOR_STATE_SPRITE_TRANSFORM: {
         curTransformationWidget.handleMouseUp();
@@ -512,7 +512,7 @@ void AnimationEditor::handleLmbUp(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void AnimationEditor::handleMmbDoubleClick(const ALLEGRO_EVENT &ev) {
+void AnimationEditor::handleMmbDoubleClick(const ALLEGRO_EVENT& ev) {
     if(!game.options.editors.mmbPan) {
         resetCamXY();
     }
@@ -525,7 +525,7 @@ void AnimationEditor::handleMmbDoubleClick(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void AnimationEditor::handleMmbDown(const ALLEGRO_EVENT &ev) {
+void AnimationEditor::handleMmbDown(const ALLEGRO_EVENT& ev) {
     if(!game.options.editors.mmbPan) {
         resetCamZoom();
     }
@@ -538,7 +538,7 @@ void AnimationEditor::handleMmbDown(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void AnimationEditor::handleMmbDrag(const ALLEGRO_EVENT &ev) {
+void AnimationEditor::handleMmbDrag(const ALLEGRO_EVENT& ev) {
     if(game.options.editors.mmbPan) {
         panCam(ev);
     }
@@ -550,7 +550,7 @@ void AnimationEditor::handleMmbDrag(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void AnimationEditor::handleMouseUpdate(const ALLEGRO_EVENT &ev) {
+void AnimationEditor::handleMouseUpdate(const ALLEGRO_EVENT& ev) {
     Editor::handleMouseUpdate(ev);
 }
 
@@ -560,7 +560,7 @@ void AnimationEditor::handleMouseUpdate(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void AnimationEditor::handleMouseWheel(const ALLEGRO_EVENT &ev) {
+void AnimationEditor::handleMouseWheel(const ALLEGRO_EVENT& ev) {
     zoomWithCursor(
         game.editorsView.cam.zoom +
         (game.editorsView.cam.zoom * ev.mouse.dz * 0.1)
@@ -574,7 +574,7 @@ void AnimationEditor::handleMouseWheel(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void AnimationEditor::handleRmbDoubleClick(const ALLEGRO_EVENT &ev) {
+void AnimationEditor::handleRmbDoubleClick(const ALLEGRO_EVENT& ev) {
     if(game.options.editors.mmbPan) {
         resetCamXY();
     }
@@ -587,7 +587,7 @@ void AnimationEditor::handleRmbDoubleClick(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void AnimationEditor::handleRmbDown(const ALLEGRO_EVENT &ev) {
+void AnimationEditor::handleRmbDown(const ALLEGRO_EVENT& ev) {
     if(game.options.editors.mmbPan) {
         resetCamZoom();
     }
@@ -600,7 +600,7 @@ void AnimationEditor::handleRmbDown(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void AnimationEditor::handleRmbDrag(const ALLEGRO_EVENT &ev) {
+void AnimationEditor::handleRmbDrag(const ALLEGRO_EVENT& ev) {
     if(!game.options.editors.mmbPan) {
         panCam(ev);
     }

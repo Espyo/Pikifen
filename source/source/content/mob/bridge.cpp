@@ -38,7 +38,7 @@ const float STEP_HEIGHT = 10;
  * @param type Bridge type this mob belongs to.
  * @param angle Starting angle.
  */
-Bridge::Bridge(const Point &pos, BridgeType* type, float angle) :
+Bridge::Bridge(const Point& pos, BridgeType* type, float angle) :
     Mob(pos, type, angle),
     startPos(pos),
     briType(type) {
@@ -334,7 +334,7 @@ Point Bridge::getStartPoint() {
  *
  * @param svr Script var reader to use.
  */
-void Bridge::readScriptVars(const ScriptVarReader &svr) {
+void Bridge::readScriptVars(const ScriptVarReader& svr) {
     Mob::readScriptVars(svr);
     
     svr.get("chunks", totalChunksNeeded);

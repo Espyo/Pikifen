@@ -480,7 +480,7 @@ public:
     explicit MobType(MOB_CATEGORY category_id);
     virtual ~MobType();
     void loadFromDataNode(
-        DataNode* node, CONTENT_LOAD_LEVEL level, const string &folder
+        DataNode* node, CONTENT_LOAD_LEVEL level, const string& folder
     );
     virtual void loadCatProperties(DataNode* file);
     virtual void loadCatResources(DataNode* file);
@@ -517,7 +517,7 @@ public:
     
     virtual ~MobTypeWithAnimGroups() = default;
     AnimConversionVector getAnimConversionsWithGroups(
-        const AnimConversionVector &v, size_t baseAnimTotal
+        const AnimConversionVector& v, size_t baseAnimTotal
     ) const;
     
 };

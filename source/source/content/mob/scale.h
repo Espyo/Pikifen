@@ -34,11 +34,11 @@ public:
     
     //--- Function declarations ---
     
-    Scale(const Point &pos, ScaleType* type, float angle);
+    Scale(const Point& pos, ScaleType* type, float angle);
     float calculateCurWeight() const;
     bool getFractionNumbersInfo(
         float* outValueNr, float* outReqNr, ALLEGRO_COLOR* outColor
     ) const override;
-    void readScriptVars(const ScriptVarReader &svr) override;
+    void readScriptVars(const ScriptVarReader& svr) override;
     
 };

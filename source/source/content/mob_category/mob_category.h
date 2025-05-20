@@ -133,17 +133,17 @@ public:
     //--- Function declarations ---
     
     MobCategory(
-        const MOB_CATEGORY id, const string &internalName,
-        const string &name, const string &pluralName,
-        const string &folderName, const ALLEGRO_COLOR editor_color
+        const MOB_CATEGORY id, const string& internalName,
+        const string& name, const string& pluralName,
+        const string& folderName, const ALLEGRO_COLOR editor_color
     );
     virtual ~MobCategory() = default;
-    virtual void getTypeNames(vector<string> &list) const = 0;
-    virtual MobType* getType(const string &internalName) const = 0;
+    virtual void getTypeNames(vector<string>& list) const = 0;
+    virtual MobType* getType(const string& internalName) const = 0;
     virtual MobType* createType() = 0;
-    virtual void registerType(const string &internalName, MobType* type) = 0;
+    virtual void registerType(const string& internalName, MobType* type) = 0;
     virtual Mob* createMob(
-        const Point &pos, MobType* type, float angle
+        const Point& pos, MobType* type, float angle
     ) = 0;
     virtual void eraseMob(Mob* m) = 0;
     virtual void clearTypes() = 0;
@@ -164,12 +164,12 @@ struct CategoryManager {
     //--- Function declarations ---
     
     void registerCategory(MOB_CATEGORY id, MobCategory* category);
-    MobType* findMobType(const string &name) const;
+    MobType* findMobType(const string& name) const;
     MobCategory* get(const MOB_CATEGORY id) const;
-    MobCategory* getFromFolderName(const string &internalName) const;
-    MobCategory* getFromInternalName(const string &name) const;
-    MobCategory* getFromName(const string &name) const;
-    MobCategory* getFromPName(const string &pname) const;
+    MobCategory* getFromFolderName(const string& internalName) const;
+    MobCategory* getFromInternalName(const string& name) const;
+    MobCategory* getFromName(const string& name) const;
+    MobCategory* getFromPName(const string& pname) const;
     void clear();
     
     private:
@@ -192,12 +192,12 @@ public:
     //--- Function declarations ---
     
     NoneCategory();
-    void getTypeNames(vector<string> &list) const override;
-    MobType* getType(const string &internalName) const override;
+    void getTypeNames(vector<string>& list) const override;
+    MobType* getType(const string& internalName) const override;
     MobType* createType() override;
-    void registerType(const string &internalName, MobType* type) override;
+    void registerType(const string& internalName, MobType* type) override;
     Mob* createMob(
-        const Point &pos, MobType* type, float angle
+        const Point& pos, MobType* type, float angle
     ) override;
     void eraseMob(Mob* m) override;
     void clearTypes() override;

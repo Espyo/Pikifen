@@ -184,19 +184,19 @@ public:
     float juiceTimer = 0.0f;
     
     //What to do when it's time to draw it.
-    std::function<void(const DrawInfo &draw)> onDraw = nullptr;
+    std::function<void(const DrawInfo& draw)> onDraw = nullptr;
     
     //What to do when it's time to tick one frame.
     std::function<void(float time)> onTick = nullptr;
     
     //What to do when it receives any Allegro event.
-    std::function<void(const ALLEGRO_EVENT &ev)> onAllegroEvent = nullptr;
+    std::function<void(const ALLEGRO_EVENT& ev)> onAllegroEvent = nullptr;
     
     //What to do when the item is activated.
-    std::function<void(const Point &cursor_pos)> onActivate = nullptr;
+    std::function<void(const Point& cursor_pos)> onActivate = nullptr;
     
     //What to do when the mouse cursor is on top of it this frame.
-    std::function<void(const Point &cursor_pos)> onMouseOver = nullptr;
+    std::function<void(const Point& cursor_pos)> onMouseOver = nullptr;
     
     //What to do when a directional button's pressed with the item selected.
     std::function<bool(size_t button_id)> onMenuDirButton = nullptr;
@@ -216,14 +216,14 @@ public:
     
     explicit GuiItem(bool selectable = false);
     virtual ~GuiItem() = default;
-    bool activate(const Point &cursorPos);
+    bool activate(const Point& cursorPos);
     void addChild(GuiItem* item);
     void deleteAllChildren();
     float getChildBottom();
     float getJuiceValue();
     Point getReferenceCenter();
     Point getReferenceSize();
-    bool isMouseOn(const Point &cursorPos);
+    bool isMouseOn(const Point& cursorPos);
     bool isResponsive();
     bool isVisible();
     void removeChild(GuiItem* item);
@@ -255,11 +255,11 @@ public:
     //--- Function declarations ---
     
     BulletGuiItem(
-        const string &text, ALLEGRO_FONT* font,
-        const ALLEGRO_COLOR &color = COLOR_WHITE
+        const string& text, ALLEGRO_FONT* font,
+        const ALLEGRO_COLOR& color = COLOR_WHITE
     );
     
-    void defDrawCode(const DrawInfo &draw);
+    void defDrawCode(const DrawInfo& draw);
     
 };
 
@@ -286,11 +286,11 @@ public:
     //--- Function declarations ---
     
     ButtonGuiItem(
-        const string &text, ALLEGRO_FONT* font,
-        const ALLEGRO_COLOR &color = COLOR_WHITE
+        const string& text, ALLEGRO_FONT* font,
+        const ALLEGRO_COLOR& color = COLOR_WHITE
     );
     
-    void defDrawCode(const DrawInfo &draw);
+    void defDrawCode(const DrawInfo& draw);
     
 };
 
@@ -324,16 +324,16 @@ public:
     //--- Function declarations ---
     
     explicit CheckGuiItem(
-        bool value, const string &text, ALLEGRO_FONT* font,
-        const ALLEGRO_COLOR &color = COLOR_WHITE
+        bool value, const string& text, ALLEGRO_FONT* font,
+        const ALLEGRO_COLOR& color = COLOR_WHITE
     );
     explicit CheckGuiItem(
-        bool* value_ptr, const string &text, ALLEGRO_FONT* font,
-        const ALLEGRO_COLOR &color = COLOR_WHITE
+        bool* value_ptr, const string& text, ALLEGRO_FONT* font,
+        const ALLEGRO_COLOR& color = COLOR_WHITE
     );
     
     void defActivateCode();
-    void defDrawCode(const DrawInfo &draw);
+    void defDrawCode(const DrawInfo& draw);
     
 };
 
@@ -358,8 +358,8 @@ public:
     ListGuiItem();
     
     void defChildDirSelectedCode(const GuiItem* child);
-    void defDrawCode(const DrawInfo &draw);
-    void defEventCode(const ALLEGRO_EVENT  &ev);
+    void defDrawCode(const DrawInfo& draw);
+    void defEventCode(const ALLEGRO_EVENT& ev);
     void defTickCode(float deltaT);
     
 };
@@ -397,14 +397,14 @@ public:
     //--- Function declarations ---
     
     PickerGuiItem(
-        const string &baseText, const string &option,
+        const string& baseText, const string& option,
         size_t nrOptions = 0, size_t curOptionIdx = INVALID
     );
     
-    void defActivateCode(const Point &cursorPos);
-    void defDrawCode(const DrawInfo &draw);
+    void defActivateCode(const Point& cursorPos);
+    void defDrawCode(const DrawInfo& draw);
     bool defMenuDirCode(size_t buttonId);
-    void defMouseOverCode(const Point &cursorPos);
+    void defMouseOverCode(const Point& cursorPos);
     
     
 private:
@@ -434,8 +434,8 @@ public:
     
     ScrollGuiItem();
     
-    void defDrawCode(const DrawInfo &draw);
-    void defEventCode(const ALLEGRO_EVENT  &ev);
+    void defDrawCode(const DrawInfo& draw);
+    void defEventCode(const ALLEGRO_EVENT& ev);
     
 };
 
@@ -472,12 +472,12 @@ public:
     //--- Function declarations ---
     
     TextGuiItem(
-        const string &text, ALLEGRO_FONT* font,
-        const ALLEGRO_COLOR &color = COLOR_WHITE,
+        const string& text, ALLEGRO_FONT* font,
+        const ALLEGRO_COLOR& color = COLOR_WHITE,
         int flags = ALLEGRO_ALIGN_CENTER
     );
     
-    void defDrawCode(const DrawInfo &draw);
+    void defDrawCode(const DrawInfo& draw);
     
 };
 
@@ -500,7 +500,7 @@ public:
     
     explicit TooltipGuiItem(GuiManager* gui);
     
-    void defDrawCode(const DrawInfo &draw);
+    void defDrawCode(const DrawInfo& draw);
     
     
 private:
@@ -552,17 +552,17 @@ public:
     //--- Function declarations ---
     
     GuiManager();
-    void addItem(GuiItem* item, const string &id = "");
+    void addItem(GuiItem* item, const string& id = "");
     void draw();
     void tick(float deltaT);
     string getCurrentTooltip();
     bool getItemDrawInfo(GuiItem* item, GuiItem::DrawInfo* draw);
-    void handleAllegroEvent(const ALLEGRO_EVENT &ev);
-    bool handlePlayerAction(const PlayerAction &action);
+    void handleAllegroEvent(const ALLEGRO_EVENT& ev);
+    bool handlePlayerAction(const PlayerAction& action);
     void hideItems();
     void readCoords(DataNode* node);
     void registerCoords(
-        const string &id,
+        const string& id,
         float cx, float cy, float w, float h
     );
     void removeItem(GuiItem* item);

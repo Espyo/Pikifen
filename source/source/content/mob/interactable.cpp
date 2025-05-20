@@ -19,7 +19,7 @@
  * @param angle Starting angle.
  */
 Interactable::Interactable(
-    const Point &pos, InteractableType* type, float angle
+    const Point& pos, InteractableType* type, float angle
 ):
     Mob(pos, type, angle),
     intType(type) {

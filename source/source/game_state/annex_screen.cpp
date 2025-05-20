@@ -72,7 +72,7 @@ string AnnexScreen::getName() const {
  *
  * @param ev Event to handle.
  */
-void AnnexScreen::handleAllegroEvent(ALLEGRO_EVENT &ev) {
+void AnnexScreen::handleAllegroEvent(ALLEGRO_EVENT& ev) {
     if(game.fadeMgr.isFading()) return;
     
     if(curMenu) curMenu->handleAllegroEvent(ev);

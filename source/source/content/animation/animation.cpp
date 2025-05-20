@@ -36,7 +36,7 @@ using std::vector;
  * 0 - 100.
  */
 Animation::Animation(
-    const string &name, const vector<Frame> &frames,
+    const string& name, const vector<Frame>& frames,
     size_t loopFrame, unsigned char hitRate
 ) :
     name(name),
@@ -52,7 +52,7 @@ Animation::Animation(
  *
  * @param a2 The other animation.
  */
-Animation::Animation(const Animation &a2) :
+Animation::Animation(const Animation& a2) :
     name(a2.name),
     frames(a2.frames),
     loopFrame(a2.loopFrame),
@@ -66,7 +66,7 @@ Animation::Animation(const Animation &a2) :
  * @param a2 The other animation.
  * @return The current object.
  */
-Animation &Animation::operator=(const Animation &a2) {
+Animation& Animation::operator=(const Animation& a2) {
     if(this != &a2) {
         name = a2.name;
         frames = a2.frames;
@@ -197,8 +197,8 @@ float Animation::getTime(size_t frameIdx, float frameTime) {
  * @param b List of body parts.
  */
 AnimationDatabase::AnimationDatabase(
-    const vector<Animation*> &a, const vector<Sprite*> &s,
-    const vector<BodyPart*> &b
+    const vector<Animation*>& a, const vector<Sprite*>& s,
+    const vector<BodyPart*>& b
 ) :
     animations(a),
     sprites(s),
@@ -246,7 +246,7 @@ void AnimationDatabase::calculateHitboxSpan() {
  * report errors.
  */
 void AnimationDatabase::createConversions(
-    const vector<std::pair<size_t, string> > &conversions,
+    const vector<std::pair<size_t, string> >& conversions,
     const DataNode* file
 ) {
     preNamedConversions.clear();
@@ -353,7 +353,7 @@ void AnimationDatabase::fillSoundIdxCaches(MobType* mtPtr) {
  * @param name Name of the animation to search for.
  * @return The index, or INVALID if not found.
  */
-size_t AnimationDatabase::findAnimation(const string &name) const {
+size_t AnimationDatabase::findAnimation(const string& name) const {
     for(size_t a = 0; a < animations.size(); a++) {
         if(animations[a]->name == name) return a;
     }
@@ -367,7 +367,7 @@ size_t AnimationDatabase::findAnimation(const string &name) const {
  * @param name Name of the body part to search for.
  * @return The index, or INVALID if not found.
  */
-size_t AnimationDatabase::findBodyPart(const string &name) const {
+size_t AnimationDatabase::findBodyPart(const string& name) const {
     for(size_t b = 0; b < bodyParts.size(); b++) {
         if(bodyParts[b]->name == name) return b;
     }
@@ -381,7 +381,7 @@ size_t AnimationDatabase::findBodyPart(const string &name) const {
  * @param name Name of the sprite to search for.
  * @return The index, or INVALID if not found.
  */
-size_t AnimationDatabase::findSprite(const string &name) const {
+size_t AnimationDatabase::findSprite(const string& name) const {
     for(size_t s = 0; s < sprites.size(); s++) {
         if(sprites[s]->name == name) return s;
     }
@@ -751,7 +751,7 @@ AnimationInstance::AnimationInstance(AnimationDatabase* animDb) :
  *
  * @param ai2 The other animation instance.
  */
-AnimationInstance::AnimationInstance(const AnimationInstance &ai2) :
+AnimationInstance::AnimationInstance(const AnimationInstance& ai2) :
     curAnim(ai2.curAnim),
     animDb(ai2.animDb) {
     
@@ -765,8 +765,8 @@ AnimationInstance::AnimationInstance(const AnimationInstance &ai2) :
  * @param ai2 The other animation instance.
  * @return The current object.
  */
-AnimationInstance &AnimationInstance::operator=(
-    const AnimationInstance &ai2
+AnimationInstance& AnimationInstance::operator=(
+    const AnimationInstance& ai2
 ) {
     if(this != &ai2) {
         curAnim = ai2.curAnim;
@@ -988,8 +988,8 @@ bool AnimationInstance::validFrame() const {
  * @param s Signal.
  */
 Frame::Frame(
-    const string &sn, size_t si, Sprite* sp, float d,
-    bool in, const string &snd, size_t s
+    const string& sn, size_t si, Sprite* sp, float d,
+    bool in, const string& snd, size_t s
 ) :
     spriteName(sn),
     spriteIdx(si),
@@ -1010,7 +1010,7 @@ Frame::Frame(
  * @param h List of hitboxes.
  */
 Sprite::Sprite(
-    const string &name, ALLEGRO_BITMAP* const b, const vector<Hitbox> &h
+    const string& name, ALLEGRO_BITMAP* const b, const vector<Hitbox>& h
 ) :
     name(name),
     bitmap(b),
@@ -1030,8 +1030,8 @@ Sprite::Sprite(
  * @param h List of hitboxes.
  */
 Sprite::Sprite(
-    const string &name, ALLEGRO_BITMAP* const b, const Point &bPos,
-    const Point &bSize, const vector<Hitbox> &h
+    const string& name, ALLEGRO_BITMAP* const b, const Point& bPos,
+    const Point& bSize, const vector<Hitbox>& h
 ) :
     name(name),
     parentBmp(b),
@@ -1052,7 +1052,7 @@ Sprite::Sprite(
  *
  * @param s2 The other sprite.
  */
-Sprite::Sprite(const Sprite &s2) :
+Sprite::Sprite(const Sprite& s2) :
     name(s2.name),
     parentBmp(nullptr),
     bmpName(s2.bmpName),
@@ -1111,7 +1111,7 @@ void Sprite::createHitboxes(
  * @param s2 The other sprite.
  * @return The current object.
  */
-Sprite &Sprite::operator=(const Sprite &s2) {
+Sprite& Sprite::operator=(const Sprite& s2) {
     if(this != &s2) {
         name = s2.name;
         parentBmp = nullptr;
@@ -1147,8 +1147,8 @@ Sprite &Sprite::operator=(const Sprite &s2) {
  * in case something happens.
  */
 void Sprite::setBitmap(
-    const string &newBmpName,
-    const Point &newBmpPos, const Point &newBmpSize,
+    const string& newBmpName,
+    const Point& newBmpPos, const Point& newBmpSize,
     DataNode* node
 ) {
     if(bitmap) {
@@ -1217,7 +1217,7 @@ void Sprite::setBitmap(
  * returned here.
  */
 void getSpriteBasicEffects(
-    const Point &basePos, float baseAngle,
+    const Point& basePos, float baseAngle,
     float baseAngleCosCache, float baseAngleSinCache,
     Sprite* curSpritePtr, Sprite* nextSpritePtr, float interpolationFactor,
     Point* outEffTrans, float* outEffAngle,

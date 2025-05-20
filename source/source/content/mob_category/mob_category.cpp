@@ -41,7 +41,7 @@ void CategoryManager::clear() {
  * @param name Name of the mob type.
  * @return The type, or nullptr on error.
  */
-MobType* CategoryManager::findMobType(const string &name) const {
+MobType* CategoryManager::findMobType(const string& name) const {
     for(size_t n = 0; n < categories.size(); n++) {
         MobType* t = categories[n]->getType(name);
         if(t) return t;
@@ -69,7 +69,7 @@ MobCategory* CategoryManager::get(const MOB_CATEGORY id) const {
  * @return The category, or nullptr on error.
  */
 MobCategory* CategoryManager::getFromFolderName(
-    const string &name
+    const string& name
 ) const {
     for(size_t n = 0; n < categories.size(); n++) {
         if(categories[n]->folderName == name) return categories[n];
@@ -88,7 +88,7 @@ MobCategory* CategoryManager::getFromFolderName(
  * @return The category, or nullptr on error.
  */
 MobCategory* CategoryManager::getFromInternalName(
-    const string &internalName
+    const string& internalName
 ) const {
     for(size_t n = 0; n < categories.size(); n++) {
         if(categories[n]->internalName == internalName) return categories[n];
@@ -103,7 +103,7 @@ MobCategory* CategoryManager::getFromInternalName(
  * @param name Name of the category.
  * @return The category, or nullptr on error.
  */
-MobCategory* CategoryManager::getFromName(const string &name) const {
+MobCategory* CategoryManager::getFromName(const string& name) const {
     for(size_t n = 0; n < categories.size(); n++) {
         if(categories[n]->name == name) return categories[n];
     }
@@ -117,7 +117,7 @@ MobCategory* CategoryManager::getFromName(const string &name) const {
  * @param pname Plural name of the category.
  * @return The category, or nullptr on error.
  */
-MobCategory* CategoryManager::getFromPName(const string &pname) const {
+MobCategory* CategoryManager::getFromPName(const string& pname) const {
     for(size_t n = 0; n < categories.size(); n++) {
         if(categories[n]->pluralName == pname) return categories[n];
     }
@@ -158,9 +158,9 @@ void CategoryManager::registerCategory(
  * this color.
  */
 MobCategory::MobCategory(
-    const MOB_CATEGORY id, const string &internalName,
-    const string &name, const string &pluralName,
-    const string &folderName, const ALLEGRO_COLOR editorColor
+    const MOB_CATEGORY id, const string& internalName,
+    const string& name, const string& pluralName,
+    const string& folderName, const ALLEGRO_COLOR editorColor
 ) :
     internalName(internalName),
     name(name),
@@ -200,7 +200,7 @@ void NoneCategory::clearTypes() { }
  * @return The mob.
  */
 Mob* NoneCategory::createMob(
-    const Point &pos, MobType* type, float angle
+    const Point& pos, MobType* type, float angle
 ) { return nullptr; }
 
 
@@ -227,7 +227,7 @@ void NoneCategory::eraseMob(Mob* m) { }
  * @param internalName Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-MobType* NoneCategory::getType(const string &internalName) const {
+MobType* NoneCategory::getType(const string& internalName) const {
     return nullptr;
 }
 
@@ -237,7 +237,7 @@ MobType* NoneCategory::getType(const string &internalName) const {
  *
  * @param list This list gets filled with the mob type internal names.
  */
-void NoneCategory::getTypeNames(vector<string> &list) const { }
+void NoneCategory::getTypeNames(vector<string>& list) const { }
 
 
 /**
@@ -246,4 +246,4 @@ void NoneCategory::getTypeNames(vector<string> &list) const { }
  * @param internalName Internal name of the mob type.
  * @param type Mob type to register.
  */
-void NoneCategory::registerType(const string &internalName, MobType* type) { }
+void NoneCategory::registerType(const string& internalName, MobType* type) { }

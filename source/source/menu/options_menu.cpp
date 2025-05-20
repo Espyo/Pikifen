@@ -72,7 +72,7 @@ void OptionsMenu::chooseInput(
     capturingInputTimeout = OPTIONS_MENU::INPUT_CAPTURE_TIMEOUT_DURATION;
     game.controls.startIgnoringActions();
     
-    const vector<ControlBind> &allBinds = game.controls.binds();
+    const vector<ControlBind>& allBinds = game.controls.binds();
     size_t bindsCounted = 0;
     curActionType = actionType;
     curBindIdx = allBinds.size();
@@ -98,7 +98,7 @@ void OptionsMenu::chooseInput(
 void OptionsMenu::deleteBind(
     const PLAYER_ACTION_TYPE actionType, size_t bindIdx
 ) {
-    vector<ControlBind> &allBinds = game.controls.binds();
+    vector<ControlBind>& allBinds = game.controls.binds();
     size_t bindsCounted = 0;
     
     for(size_t b = 0; b < allBinds.size(); b++) {
@@ -148,7 +148,7 @@ void OptionsMenu::draw() {
  *
  * @param ev The event.
  */
-void OptionsMenu::handleAllegroEvent(const ALLEGRO_EVENT &ev) {
+void OptionsMenu::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
     if(!active) return;
     
     switch(capturingInput) {
@@ -159,7 +159,7 @@ void OptionsMenu::handleAllegroEvent(const ALLEGRO_EVENT &ev) {
         //Actively capturing.
         PlayerInput input = game.controls.allegroEventToInput(ev);
         if(input.value >= 0.5f) {
-            vector<ControlBind> &allBinds = game.controls.binds();
+            vector<ControlBind>& allBinds = game.controls.binds();
             if(curBindIdx >= allBinds.size()) {
                 ControlBind newBind;
                 newBind.actionTypeId = curActionType;
@@ -194,7 +194,7 @@ void OptionsMenu::handleAllegroEvent(const ALLEGRO_EVENT &ev) {
  *
  * @param action Data about the player action.
  */
-void OptionsMenu::handlePlayerAction(const PlayerAction &action) {
+void OptionsMenu::handlePlayerAction(const PlayerAction& action) {
     if(capturingInput != 0) return;
     Menu::handlePlayerAction(action);
     if(packsMenu) packsMenu->handlePlayerAction(action);
@@ -224,7 +224,7 @@ void OptionsMenu::initGuiAudioPage() {
     audioGui.backItem =
         new ButtonGuiItem("Back", game.sysContent.fntStandard);
     audioGui.backItem->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         audioGui.responsive = false;
         audioGui.startAnimation(
             GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
@@ -374,7 +374,7 @@ void OptionsMenu::initGuiControlBindsPage() {
     bindsGui.backItem =
         new ButtonGuiItem("Back", game.sysContent.fntStandard);
     bindsGui.backItem->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         bindsGui.responsive = false;
         bindsGui.startAnimation(
             GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
@@ -448,7 +448,7 @@ void OptionsMenu::initGuiControlsPage() {
     controlsGui.backItem =
         new ButtonGuiItem("Back", game.sysContent.fntStandard);
     controlsGui.backItem->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         controlsGui.responsive = false;
         controlsGui.startAnimation(
             GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
@@ -482,7 +482,7 @@ void OptionsMenu::initGuiControlsPage() {
         "Normal control binds...", game.sysContent.fntStandard
     );
     normalBindsButton->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         bindsMenuType = CONTROL_BINDS_MENU_NORMAL;
         controlsGui.responsive = false;
         controlsGui.startAnimation(
@@ -506,7 +506,7 @@ void OptionsMenu::initGuiControlsPage() {
         "Special control binds...", game.sysContent.fntStandard
     );
     specialBindsButton->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         bindsMenuType = CONTROL_BINDS_MENU_SPECIAL;
         controlsGui.responsive = false;
         controlsGui.startAnimation(
@@ -590,7 +590,7 @@ void OptionsMenu::initGuiGraphicsPage() {
     graphicsGui.backItem =
         new ButtonGuiItem("Back", game.sysContent.fntStandard);
     graphicsGui.backItem->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         graphicsGui.responsive = false;
         graphicsGui.startAnimation(
             GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
@@ -625,7 +625,7 @@ void OptionsMenu::initGuiGraphicsPage() {
         "Fullscreen", game.sysContent.fntStandard
     );
     fullscreenCheck->onActivate =
-    [this, fullscreenCheck] (const Point &) {
+    [this, fullscreenCheck] (const Point&) {
         fullscreenCheck->defActivateCode();
         triggerRestartWarning();
     };
@@ -661,7 +661,7 @@ void OptionsMenu::initGuiGraphicsPage() {
         game.options.graphics.intendedWinH = curResolutionOption.second;
         triggerRestartWarning();
     };
-    resolutionPicker->valueToString = [] (const std::pair<int, int> &v) {
+    resolutionPicker->valueToString = [] (const std::pair<int, int>& v) {
         return i2s(v.first) + "x" + i2s(v.second);
     };
     resolutionPicker->init();
@@ -710,7 +710,7 @@ void OptionsMenu::initGuiMiscPage() {
     miscGui.backItem =
         new ButtonGuiItem("Back", game.sysContent.fntStandard);
     miscGui.backItem->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         miscGui.responsive = false;
         miscGui.startAnimation(
             GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
@@ -839,7 +839,7 @@ void OptionsMenu::initGuiTopPage() {
     topGui.backItem =
         new ButtonGuiItem("Back", game.sysContent.fntStandard);
     topGui.backItem->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         saveOptions();
         leave();
     };
@@ -875,7 +875,7 @@ void OptionsMenu::initGuiTopPage() {
         );
     };
     controlsButton->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         topGui.responsive = false;
         topGui.startAnimation(
             GUI_MANAGER_ANIM_CENTER_TO_LEFT,
@@ -907,7 +907,7 @@ void OptionsMenu::initGuiTopPage() {
         );
     };
     graphicsButton->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         topGui.responsive = false;
         topGui.startAnimation(
             GUI_MANAGER_ANIM_CENTER_TO_LEFT,
@@ -939,7 +939,7 @@ void OptionsMenu::initGuiTopPage() {
         );
     };
     audioButton->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         topGui.responsive = false;
         topGui.startAnimation(
             GUI_MANAGER_ANIM_CENTER_TO_LEFT,
@@ -971,7 +971,7 @@ void OptionsMenu::initGuiTopPage() {
         );
     };
     packsButton->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         topGui.responsive = false;
         topGui.startAnimation(
             GUI_MANAGER_ANIM_CENTER_TO_LEFT,
@@ -1019,7 +1019,7 @@ void OptionsMenu::initGuiTopPage() {
         );
     };
     miscButton->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         topGui.responsive = false;
         topGui.startAnimation(
             GUI_MANAGER_ANIM_CENTER_TO_LEFT,
@@ -1039,7 +1039,7 @@ void OptionsMenu::initGuiTopPage() {
     BulletGuiItem* advancedBullet =
         new BulletGuiItem("Advanced...", game.sysContent.fntStandard);
     advancedBullet->onActivate =
-    [] (const Point &) {
+    [] (const Point&) {
         openManual("options.html");
     };
     advancedBullet->onGetTooltip =
@@ -1152,9 +1152,9 @@ void OptionsMenu::populateBinds() {
     
     bindsListBox->deleteAllChildren();
     
-    const vector<PfePlayerActionType> &allPlayerActionTypes =
+    const vector<PfePlayerActionType>& allPlayerActionTypes =
         game.controls.getAllPlayerActionTypes();
-    vector<ControlBind> &allBinds = game.controls.binds();
+    vector<ControlBind>& allBinds = game.controls.binds();
     
     bindsPerActionType.clear();
     bindsPerActionType.assign(
@@ -1163,7 +1163,7 @@ void OptionsMenu::populateBinds() {
     
     //Read all binds and sort them by player action type.
     for(size_t b = 0; b < allBinds.size(); b++) {
-        const ControlBind &bind = allBinds[b];
+        const ControlBind& bind = allBinds[b];
         if(bind.playerNr != 0) continue;
         bindsPerActionType[bind.actionTypeId].push_back(bind);
     }
@@ -1171,7 +1171,7 @@ void OptionsMenu::populateBinds() {
     PLAYER_ACTION_CAT lastCat = PLAYER_ACTION_CAT_NONE;
     
     for(size_t a = 0; a < allPlayerActionTypes.size(); a++) {
-        const PfePlayerActionType &actionType = allPlayerActionTypes[a];
+        const PfePlayerActionType& actionType = allPlayerActionTypes[a];
         
         if(actionType.internalName.empty()) continue;
         if(!isInContainer(allowedCategories, actionType.category)) continue;
@@ -1245,7 +1245,7 @@ void OptionsMenu::populateBinds() {
         ButtonGuiItem* moreButton =
             new ButtonGuiItem("...", game.sysContent.fntStandard);
         moreButton->onActivate =
-        [this, actionType] (const Point &) {
+        [this, actionType] (const Point&) {
             if(showingBindsMore && actionType.id == curActionType) {
                 showingBindsMore = false;
             } else {
@@ -1277,7 +1277,7 @@ void OptionsMenu::populateBinds() {
             ButtonGuiItem* bindButton =
                 new ButtonGuiItem("", game.sysContent.fntStandard);
             bindButton->onActivate =
-            [this, actionType, b] (const Point &) {
+            [this, actionType, b] (const Point&) {
                 chooseInput(actionType.id, b);
             };
             bindButton->onDraw =
@@ -1309,7 +1309,7 @@ void OptionsMenu::populateBinds() {
                 ButtonGuiItem* removeBindButton =
                     new ButtonGuiItem("", game.sysContent.fntStandard);
                 removeBindButton->onActivate =
-                [this, actionType, b] (const Point &) {
+                [this, actionType, b] (const Point&) {
                     deleteBind(actionType.id, b);
                 };
                 removeBindButton->onDraw =
@@ -1353,7 +1353,7 @@ void OptionsMenu::populateBinds() {
             ButtonGuiItem* bindButton =
                 new ButtonGuiItem("", game.sysContent.fntStandard);
             bindButton->onActivate =
-            [this, actionType] (const Point &) {
+            [this, actionType] (const Point&) {
                 chooseInput(actionType.id, 0);
             };
             bindButton->onDraw =
@@ -1392,7 +1392,7 @@ void OptionsMenu::populateBinds() {
             addButton->ratioSize =
                 Point(0.34f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
             addButton->onActivate =
-            [this, actionType, aBinds] (const Point &) {
+            [this, actionType, aBinds] (const Point&) {
                 chooseInput(actionType.id, aBinds.size());
             };
             addButton->onGetTooltip =
@@ -1421,7 +1421,7 @@ void OptionsMenu::populateBinds() {
             restoreButton->ratioSize =
                 Point(0.34f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
             restoreButton->onActivate =
-            [this, actionType] (const Point &) {
+            [this, actionType] (const Point&) {
                 restoreDefaultBinds(actionType.id);
             };
             restoreButton->onGetTooltip =
@@ -1510,9 +1510,9 @@ void OptionsMenu::populateBinds() {
 void OptionsMenu::restoreDefaultBinds(
     const PLAYER_ACTION_TYPE actionTypeId
 ) {
-    const PfePlayerActionType &actionType =
+    const PfePlayerActionType& actionType =
         game.controls.getPlayerActionType(actionTypeId);
-    vector<ControlBind> &allBinds =
+    vector<ControlBind>& allBinds =
         game.controls.binds();
         
     for(size_t b = 0; b < allBinds.size();) {

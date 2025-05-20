@@ -72,7 +72,7 @@ const Point STANDARD_CONTENT_SIZE = Point(0.95f, 0.80f);
  * @param color Color of the button's text.
  */
 BulletGuiItem::BulletGuiItem(
-    const string &text, ALLEGRO_FONT* font, const ALLEGRO_COLOR &color
+    const string& text, ALLEGRO_FONT* font, const ALLEGRO_COLOR& color
 ) :
     GuiItem(true),
     text(text),
@@ -92,7 +92,7 @@ BulletGuiItem::BulletGuiItem(
  * @param draw Information on how to draw.
  */
 void BulletGuiItem::defDrawCode(
-    const DrawInfo &draw
+    const DrawInfo& draw
 ) {
     float itemXStart = draw.center.x - draw.size.x * 0.5;
     float textXOffset =
@@ -139,7 +139,7 @@ void BulletGuiItem::defDrawCode(
  * @param color Color of the button's text.
  */
 ButtonGuiItem::ButtonGuiItem(
-    const string &text, ALLEGRO_FONT* font, const ALLEGRO_COLOR &color
+    const string& text, ALLEGRO_FONT* font, const ALLEGRO_COLOR& color
 ) :
     GuiItem(true),
     text(text),
@@ -159,7 +159,7 @@ ButtonGuiItem::ButtonGuiItem(
  * @param draw Information on how to draw.
  */
 void ButtonGuiItem::defDrawCode(
-    const DrawInfo &draw
+    const DrawInfo& draw
 ) {
     drawButton(
         draw.center, draw.size,
@@ -178,8 +178,8 @@ void ButtonGuiItem::defDrawCode(
  * @param color Color of the checkbox's text.
  */
 CheckGuiItem::CheckGuiItem(
-    bool value, const string &text, ALLEGRO_FONT* font,
-    const ALLEGRO_COLOR &color
+    bool value, const string& text, ALLEGRO_FONT* font,
+    const ALLEGRO_COLOR& color
 ) :
     GuiItem(true),
     value(value),
@@ -193,7 +193,7 @@ CheckGuiItem::CheckGuiItem(
     };
     
     onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         this->defActivateCode();
     };
 }
@@ -208,8 +208,8 @@ CheckGuiItem::CheckGuiItem(
  * @param color Color of the checkbox's text.
  */
 CheckGuiItem::CheckGuiItem(
-    bool* valuePtr, const string &text, ALLEGRO_FONT* font,
-    const ALLEGRO_COLOR &color
+    bool* valuePtr, const string& text, ALLEGRO_FONT* font,
+    const ALLEGRO_COLOR& color
 ) :
     CheckGuiItem(*valuePtr, text, font, color) {
     
@@ -232,7 +232,7 @@ void CheckGuiItem::defActivateCode() {
  *
  * @param draw Information on how to draw.
  */
-void CheckGuiItem::defDrawCode(const DrawInfo &draw) {
+void CheckGuiItem::defDrawCode(const DrawInfo& draw) {
     float juicyGrowAmount = getJuiceValue();
     drawText(
         this->text, this->font,
@@ -287,7 +287,7 @@ GuiItem::GuiItem(bool selectable) :
  * @param cursorPos Cursor coordinates, if applicable.
  * @return Whether it could activate it.
  */
-bool GuiItem::activate(const Point &cursorPos) {
+bool GuiItem::activate(const Point& cursorPos) {
     if(!onActivate) return false;
     onActivate(cursorPos);
     
@@ -456,7 +456,7 @@ Point GuiItem::getReferenceSize() {
  * @param cursorPos Position of the mouse cursor, in window coordinates.
  * @return Whether the cursor is on top.
  */
-bool GuiItem::isMouseOn(const Point &cursorPos) {
+bool GuiItem::isMouseOn(const Point& cursorPos) {
     if(parent && !parent->isMouseOn(cursorPos)) {
         return false;
     }
@@ -574,7 +574,7 @@ GuiManager::GuiManager() :
  * @param id If this item has an associated ID, specify it here.
  * Empty string if none.
  */
-void GuiManager::addItem(GuiItem* item, const string &id) {
+void GuiManager::addItem(GuiItem* item, const string& id) {
     auto c = registeredCenters.find(id);
     if(c != registeredCenters.end()) {
         item->ratioCenter = c->second;
@@ -807,7 +807,7 @@ bool GuiManager::getItemDrawInfo(
  *
  * @param ev Event.
  */
-void GuiManager::handleAllegroEvent(const ALLEGRO_EVENT &ev) {
+void GuiManager::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
     if(!responsive) return;
     if(animTimer.getRatioLeft() > 0.0f && ignoreInputOnAnimation) return;
     
@@ -870,7 +870,7 @@ void GuiManager::handleAllegroEvent(const ALLEGRO_EVENT &ev) {
  * @param action Data about the player action.
  * @return Whether the input was used.
  */
-bool GuiManager::handlePlayerAction(const PlayerAction &action) {
+bool GuiManager::handlePlayerAction(const PlayerAction& action) {
     if(!responsive) {
         return false;
     }
@@ -1087,7 +1087,7 @@ void GuiManager::readCoords(DataNode* node) {
  * @param h Height, in window percentage.
  */
 void GuiManager::registerCoords(
-    const string &id,
+    const string& id,
     float cx, float cy, float w, float h
 ) {
     registeredCenters[id] =
@@ -1282,7 +1282,7 @@ void ListGuiItem::defChildDirSelectedCode(const GuiItem* child) {
  *
  * @param draw Information on how to draw.
  */
-void ListGuiItem::defDrawCode(const DrawInfo &draw) {
+void ListGuiItem::defDrawCode(const DrawInfo& draw) {
     drawTexturedBox(
         draw.center, draw.size, game.sysContent.bmpFrameBox,
         COLOR_TRANSPARENT_WHITE
@@ -1372,7 +1372,7 @@ void ListGuiItem::defDrawCode(const DrawInfo &draw) {
  *
  * @param ev The Allegro event.
  */
-void ListGuiItem::defEventCode(const ALLEGRO_EVENT &ev) {
+void ListGuiItem::defEventCode(const ALLEGRO_EVENT& ev) {
     if(
         ev.type == ALLEGRO_EVENT_MOUSE_AXES &&
         isMouseOn(Point(ev.mouse.x, ev.mouse.y)) &&
@@ -1425,7 +1425,7 @@ void ListGuiItem::defTickCode(float deltaT) {
  * @param curOptionIdx Index of the currently selected option.
  */
 PickerGuiItem::PickerGuiItem(
-    const string &baseText, const string &option,
+    const string& baseText, const string& option,
     size_t nrOptions, size_t curOptionIdx
 ) :
     GuiItem(true),
@@ -1461,7 +1461,7 @@ PickerGuiItem::PickerGuiItem(
  *
  * @param cursorPos Cursor position.
  */
-void PickerGuiItem::defActivateCode(const Point &cursorPos) {
+void PickerGuiItem::defActivateCode(const Point& cursorPos) {
     if(cursorPos.x >= getReferenceCenter().x) {
         onNext();
     } else {
@@ -1475,7 +1475,7 @@ void PickerGuiItem::defActivateCode(const Point &cursorPos) {
  *
  * @param draw Information on how to draw.
  */
-void PickerGuiItem::defDrawCode(const DrawInfo &draw) {
+void PickerGuiItem::defDrawCode(const DrawInfo& draw) {
     if(this->nrOptions != 0 && selected) {
         Point optionBoxesStart(
             draw.center.x - draw.size.x / 2.0f + 20.0f,
@@ -1597,7 +1597,7 @@ bool PickerGuiItem::defMenuDirCode(size_t actionId) {
  *
  * @param cursorPos Cursor position.
  */
-void PickerGuiItem::defMouseOverCode(const Point &cursorPos) {
+void PickerGuiItem::defMouseOverCode(const Point& cursorPos) {
     arrowHighlight =
         cursorPos.x >= getReferenceCenter().x ? 1 : 0;
 }
@@ -1625,7 +1625,7 @@ ScrollGuiItem::ScrollGuiItem() :
  *
  * @param draw Information on how to draw.
  */
-void ScrollGuiItem::defDrawCode(const DrawInfo &draw) {
+void ScrollGuiItem::defDrawCode(const DrawInfo& draw) {
     float barY = 0.0f; //Top, in height ratio.
     float barH = 0.0f; //In height ratio.
     float listBottom = listItem->getChildBottom();
@@ -1662,7 +1662,7 @@ void ScrollGuiItem::defDrawCode(const DrawInfo &draw) {
  *
  * @param ev The Allegro event.
  */
-void ScrollGuiItem::defEventCode(const ALLEGRO_EVENT  &ev) {
+void ScrollGuiItem::defEventCode(const ALLEGRO_EVENT& ev) {
     if(
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN &&
         ev.mouse.button == 1 &&
@@ -1695,7 +1695,7 @@ void ScrollGuiItem::defEventCode(const ALLEGRO_EVENT  &ev) {
  * @param flags Allegro text flags to use.
  */
 TextGuiItem::TextGuiItem(
-    const string &text, ALLEGRO_FONT* font, const ALLEGRO_COLOR &color,
+    const string& text, ALLEGRO_FONT* font, const ALLEGRO_COLOR& color,
     int flags
 ) :
     GuiItem(),
@@ -1716,7 +1716,7 @@ TextGuiItem::TextGuiItem(
  *
  * @param draw Information on how to draw.
  */
-void TextGuiItem::defDrawCode(const DrawInfo &draw) {
+void TextGuiItem::defDrawCode(const DrawInfo& draw) {
     int textX = draw.center.x;
     switch(this->flags) {
     case ALLEGRO_ALIGN_LEFT: {
@@ -1799,7 +1799,7 @@ TooltipGuiItem::TooltipGuiItem(GuiManager* gui) :
  *
  * @param draw Information on how to draw.
  */
-void TooltipGuiItem::defDrawCode(const DrawInfo &draw) {
+void TooltipGuiItem::defDrawCode(const DrawInfo& draw) {
     string curText = this->gui->getCurrentTooltip();
     if(curText != this->prevText) {
         this->startJuiceAnimation(JUICE_TYPE_GROW_TEXT_LOW);

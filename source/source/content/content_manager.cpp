@@ -36,8 +36,8 @@ ContentManager::ContentManager() {
  * @return Whether it succeeded.
  */
 bool ContentManager::createPack(
-    const string &internalName, const string &name,
-    const string &description, const string &maker
+    const string& internalName, const string& name,
+    const string& description, const string& maker
 ) {
     string packPath = FOLDER_PATHS_FROM_ROOT::GAME_DATA + "/" + internalName;
     
@@ -146,7 +146,7 @@ ContentTypeManager* ContentManager::getMgrPtr(CONTENT_TYPE type) {
  * @param level Level to load at.
  */
 void ContentManager::loadAll(
-    const vector<CONTENT_TYPE> &types, CONTENT_LOAD_LEVEL level
+    const vector<CONTENT_TYPE>& types, CONTENT_LOAD_LEVEL level
 ) {
     //Fill in all manifests first. This is because some content may rely on
     //another's manifest.
@@ -163,7 +163,7 @@ void ContentManager::loadAll(
     //Now load the content.
     for(size_t t = 0; t < types.size(); t++) {
         ContentTypeManager* mgrPtr = getMgrPtr(types[t]);
-        const string &perfMonName = mgrPtr->getPerfMonMeasurementName();
+        const string& perfMonName = mgrPtr->getPerfMonMeasurementName();
         if(!perfMonName.empty() && game.perfMon) {
             game.perfMon->startMeasurement(perfMonName);
         }
@@ -189,7 +189,7 @@ void ContentManager::loadAll(
  * @return Whether it succeeded.
  */
 bool ContentManager::loadAreaAsCurrent(
-    const string &requestedAreaPath, ContentManifest* manifPtr,
+    const string& requestedAreaPath, ContentManifest* manifPtr,
     CONTENT_LOAD_LEVEL level, bool fromBackup
 ) {
     engineAssert(
@@ -235,7 +235,7 @@ void ContentManager::reloadPacks() {
  *
  * @param types Types of content to unload.
  */
-void ContentManager::unloadAll(const vector<CONTENT_TYPE> &types) {
+void ContentManager::unloadAll(const vector<CONTENT_TYPE>& types) {
     for(size_t t = 0; t < types.size(); t++) {
         ContentTypeManager* mgrPtr = getMgrPtr(types[t]);
         

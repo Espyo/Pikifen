@@ -64,12 +64,12 @@ public:
     
     //--- Function declarations ---
     
-    Ship(const Point &pos, ShipType* type, float angle);
+    Ship(const Point& pos, ShipType* type, float angle);
     ~Ship();
     void healLeader(Leader* l) const;
     bool isLeaderOnCp(const Leader* l) const;
     void drawMob() override;
-    void readScriptVars(const ScriptVarReader &svr) override;
+    void readScriptVars(const ScriptVarReader& svr) override;
     void tickClassSpecifics(float deltaT) override;
     
 };

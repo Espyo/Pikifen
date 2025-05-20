@@ -347,7 +347,7 @@ public:
     
     //--- Function declarations ---
     
-    Mob(const Point &pos, MobType* type, float angle);
+    Mob(const Point& pos, MobType* type, float angle);
     virtual ~Mob();
     
     void tick(float deltaT);
@@ -361,15 +361,15 @@ public:
         float mobSpeedBaseline = 0.0f
     );
     void setAnimation(
-        const string &name,
+        const string& name,
         const START_ANIM_OPTION options = START_ANIM_OPTION_NORMAL,
         float mobSpeedBaseline = 0.0f
     );
     void setHealth(bool add, bool ratio, float amount);
     void setTimer(float time);
-    void setVar(const string &name, const string &value);
+    void setVar(const string& name, const string& value);
     void setRadius(float radius);
-    void setRectangularDim(const Point &rectangularDim);
+    void setRectangularDim(const Point& rectangularDim);
     void setCanBlockPaths(bool blocks);
     
     void becomeCarriable(const CARRY_DESTINATION destination);
@@ -413,8 +413,8 @@ public:
         float damage, float knockback
     );
     bool isStoredInsideMob() const;
-    bool isOffCamera(const Viewport &viewport) const;
-    bool isPointOn(const Point &p) const;
+    bool isOffCamera(const Viewport& viewport) const;
+    bool isPointOn(const Point& p) const;
     void focusOnMob(Mob* m);
     void unfocusFromMob();
     void leaveGroup();
@@ -428,7 +428,7 @@ public:
     bool canHurt(Mob* m) const;
     bool canHunt(Mob* m) const;
     MobType::Vulnerability getHazardVulnerability(Hazard* hPtr) const;
-    bool isResistantToHazards(const vector<Hazard*> &hazards) const;
+    bool isResistantToHazards(const vector<Hazard*>& hazards) const;
     size_t playSound(size_t soundDataIdx);
     void swallowChompedPikmin(size_t amount);
     void swallowChompedPikmin(Mob* mPtr);
@@ -438,7 +438,7 @@ public:
     void storeMobInside(Mob* m);
     void releaseChompedPikmin();
     void releaseStoredMobs();
-    void sendScriptMessage(Mob* receiver, string &msg) const;
+    void sendScriptMessage(Mob* receiver, string& msg) const;
     Mob* spawn(const MobType::SpawnInfo* info, MobType* typePtr = nullptr);
     void startDying();
     void finishDying();
@@ -448,19 +448,19 @@ public:
     ) const;
     Hitbox* getHitbox(size_t idx) const;
     Hitbox* getClosestHitbox(
-        const Point &p, size_t hType = INVALID, Distance* d = nullptr
+        const Point& p, size_t hType = INVALID, Distance* d = nullptr
     ) const;
     bool hasClearLine(const Mob* targetMob) const;
     
     void chase(
         Point* origCoords, float* origZ,
-        const Point &offset = Point(), float offsetZ = 0.0f,
+        const Point& offset = Point(), float offsetZ = 0.0f,
         unsigned char flags = 0,
         float targetDistance = PATHS::DEF_CHASE_TARGET_DISTANCE,
         float speed = LARGE_FLOAT, float acceleration = LARGE_FLOAT
     );
     void chase(
-        const Point &coords, float coordsZ,
+        const Point& coords, float coordsZ,
         Bitmask8 flags = 0,
         float targetDistance = PATHS::DEF_CHASE_TARGET_DISTANCE,
         float speed = LARGE_FLOAT, float acceleration = LARGE_FLOAT
@@ -468,12 +468,12 @@ public:
     void stopChasing();
     void stopTurning();
     bool followPath(
-        const PathFollowSettings &settings,
+        const PathFollowSettings& settings,
         float speed, float acceleration
     );
     void stopFollowingPath();
     void circleAround(
-        Mob* m, const Point &p, float radius, bool clockwise,
+        Mob* m, const Point& p, float radius, bool clockwise,
         float speed, bool canFreeMove
     );
     void stopCircling();
@@ -503,7 +503,7 @@ public:
     ) const;
     virtual void handleStatusEffectGain(StatusType* staType);
     virtual void handleStatusEffectLoss(StatusType* staType);
-    virtual void readScriptVars(const ScriptVarReader &svr);
+    virtual void readScriptVars(const ScriptVarReader& svr);
     virtual void startDyingClassSpecifics();
     virtual void finishDyingClassSpecifics();
     bool tickTrackRide();
@@ -529,12 +529,12 @@ protected:
     //--- Function declarations ---
     
     PikminType* decideCarryPikminType(
-        const unordered_set<PikminType*> &availableTypes,
+        const unordered_set<PikminType*>& availableTypes,
         Mob* added, Mob* removed
     ) const;
     Mob* getMobToWalkOn() const;
     H_MOVE_RESULT getMovementEdgeIntersections(
-        const Point &newPos, vector<Edge*>* intersectingEdges
+        const Point& newPos, vector<Edge*>* intersectingEdges
     ) const;
     H_MOVE_RESULT getPhysicsHorizontalMovement(
         float deltaT, float moveSpeedMult, Point* moveSpeed
@@ -547,7 +547,7 @@ protected:
     void tickAnimation(float deltaT);
     void tickBrain(float deltaT);
     void tickHorizontalMovementPhysics(
-        float deltaT, const Point &attemptedMoveSpeed,
+        float deltaT, const Point& attemptedMoveSpeed,
         bool* touchedWall
     );
     void tickMiscLogic(float deltaT);

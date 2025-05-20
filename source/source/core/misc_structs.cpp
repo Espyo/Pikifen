@@ -143,9 +143,9 @@ const string NAMES[N_MAKER_TOOLS] = {
  * @return The audio stream.
  */
 ALLEGRO_AUDIO_STREAM* AudioStreamManager::doLoad(
-    const string &name, DataNode* node, bool reportErrors
+    const string& name, DataNode* node, bool reportErrors
 ) {
-    const auto &it = game.content.songTracks.manifests.find(name);
+    const auto& it = game.content.songTracks.manifests.find(name);
     string path =
         it != game.content.songTracks.manifests.end() ?
         it->second.path :
@@ -179,9 +179,9 @@ void AudioStreamManager::doUnload(ALLEGRO_AUDIO_STREAM* asset) {
  * @return The bitmap.
  */
 ALLEGRO_BITMAP* BitmapManager::doLoad(
-    const string &name, DataNode* node, bool reportErrors
+    const string& name, DataNode* node, bool reportErrors
 ) {
-    const auto &it = game.content.bitmaps.manifests.find(name);
+    const auto& it = game.content.bitmaps.manifests.find(name);
     string path =
         it != game.content.bitmaps.manifests.end() ?
         it->second.path :
@@ -207,7 +207,7 @@ void BitmapManager::doUnload(ALLEGRO_BITMAP* asset) {
  *
  * @param newPos Coordinates to place the camera at.
  */
-void Camera::setPos(const Point &newPos) {
+void Camera::setPos(const Point& newPos) {
     pos = newPos;
     targetPos = newPos;
 }
@@ -244,7 +244,7 @@ void Camera::tick(float deltaT) {
  *
  * @param s Full error description.
  */
-void ErrorManager::emitInGameplay(const string &s) {
+void ErrorManager::emitInGameplay(const string& s) {
     string infoStr =
         "\n\n\n"
         "ERROR: " + s + "\n\n"
@@ -258,7 +258,7 @@ void ErrorManager::emitInGameplay(const string &s) {
  *
  * @param s Full error description.
  */
-void ErrorManager::logToConsole(const string &s) {
+void ErrorManager::logToConsole(const string& s) {
     std::cout << s << std::endl;
 }
 
@@ -268,7 +268,7 @@ void ErrorManager::logToConsole(const string &s) {
  *
  * @param s Full error description.
  */
-void ErrorManager::logToFile(const string &s) {
+void ErrorManager::logToFile(const string& s) {
     string prevErrorLog;
     string output = "";
     
@@ -334,7 +334,7 @@ void ErrorManager::prepareAreaLoad() {
  * @param d If not null, this will be used to obtain the file name
  * and line that caused the error.
  */
-void ErrorManager::report(const string &s, const DataNode* d) {
+void ErrorManager::report(const string& s, const DataNode* d) {
     string fullError = s;
     if(d) {
         fullError += " (" + d->filePath;
@@ -464,7 +464,7 @@ void FadeManager::setNextFadeDuration(float duration) {
  * @param onEnd Code to run when the fade finishes.
  */
 void FadeManager::startFade(
-    bool isFadeIn, const std::function<void()> &onEnd
+    bool isFadeIn, const std::function<void()>& onEnd
 ) {
     float curDuration = durationOverride == 0.0f ? duration : durationOverride;
     timeLeft = curDuration;
@@ -508,7 +508,7 @@ GetterWriter::GetterWriter(DataNode* dn) :
  * @param outChildNode If not nullptr, the new node is returned here.
  */
 void GetterWriter::write(
-    const string &childName, const ALLEGRO_COLOR &var, DataNode** outChildNode
+    const string& childName, const ALLEGRO_COLOR& var, DataNode** outChildNode
 ) {
     DataNode* newNode = node->addNew(childName, c2s(var));
     if(outChildNode) *outChildNode = newNode;
@@ -523,7 +523,7 @@ void GetterWriter::write(
  * @param outChildNode If not nullptr, the new node is returned here.
  */
 void GetterWriter::write(
-    const string &childName, const string &var, DataNode** outChildNode
+    const string& childName, const string& var, DataNode** outChildNode
 ) {
     DataNode* newNode = node->addNew(childName, var);
     if(outChildNode) *outChildNode = newNode;
@@ -538,7 +538,7 @@ void GetterWriter::write(
  * @param outChildNode If not nullptr, the new node is returned here.
  */
 void GetterWriter::write(
-    const string &childName, const char* var, DataNode** outChildNode
+    const string& childName, const char* var, DataNode** outChildNode
 ) {
     DataNode* newNode = node->addNew(childName, var);
     if(outChildNode) *outChildNode = newNode;
@@ -553,7 +553,7 @@ void GetterWriter::write(
  * @param outChildNode If not nullptr, the new node is returned here.
  */
 void GetterWriter::write(
-    const string &childName, const size_t &var, DataNode** outChildNode
+    const string& childName, const size_t& var, DataNode** outChildNode
 ) {
     DataNode* newNode = node->addNew(childName, i2s(var));
     if(outChildNode) *outChildNode = newNode;
@@ -568,7 +568,7 @@ void GetterWriter::write(
  * @param outChildNode If not nullptr, the new node is returned here.
  */
 void GetterWriter::write(
-    const string &childName, const int &var, DataNode** outChildNode
+    const string& childName, const int& var, DataNode** outChildNode
 ) {
     DataNode* newNode = node->addNew(childName, i2s(var));
     if(outChildNode) *outChildNode = newNode;
@@ -583,7 +583,7 @@ void GetterWriter::write(
  * @param outChildNode If not nullptr, the new node is returned here.
  */
 void GetterWriter::write(
-    const string &childName, const unsigned int &var, DataNode** outChildNode
+    const string& childName, const unsigned int& var, DataNode** outChildNode
 ) {
     DataNode* newNode = node->addNew(childName, i2s(var));
     if(outChildNode) *outChildNode = newNode;
@@ -598,7 +598,7 @@ void GetterWriter::write(
  * @param outChildNode If not nullptr, the new node is returned here.
  */
 void GetterWriter::write(
-    const string &childName, const unsigned char &var, DataNode** outChildNode
+    const string& childName, const unsigned char& var, DataNode** outChildNode
 ) {
     DataNode* newNode = node->addNew(childName, i2s(var));
     if(outChildNode) *outChildNode = newNode;
@@ -613,7 +613,7 @@ void GetterWriter::write(
  * @param outChildNode If not nullptr, the new node is returned here.
  */
 void GetterWriter::write(
-    const string &childName, const bool &var, DataNode** outChildNode
+    const string& childName, const bool& var, DataNode** outChildNode
 ) {
     DataNode* newNode = node->addNew(childName, b2s(var));
     if(outChildNode) *outChildNode = newNode;
@@ -628,7 +628,7 @@ void GetterWriter::write(
  * @param outChildNode If not nullptr, the new node is returned here.
  */
 void GetterWriter::write(
-    const string &childName, const float &var, DataNode** outChildNode
+    const string& childName, const float& var, DataNode** outChildNode
 ) {
     DataNode* newNode = node->addNew(childName, f2s(var));
     if(outChildNode) *outChildNode = newNode;
@@ -643,7 +643,7 @@ void GetterWriter::write(
  * @param outChildNode If not nullptr, the new node is returned here.
  */
 void GetterWriter::write(
-    const string &childName, const double &var, DataNode** outChildNode
+    const string& childName, const double& var, DataNode** outChildNode
 ) {
     DataNode* newNode = node->addNew(childName, f2s(var));
     if(outChildNode) *outChildNode = newNode;
@@ -658,7 +658,7 @@ void GetterWriter::write(
  * @param outChildNode If not nullptr, the new node is returned here.
  */
 void GetterWriter::write(
-    const string &childName, const Point &var, DataNode** outChildNode
+    const string& childName, const Point& var, DataNode** outChildNode
 ) {
     DataNode* newNode = node->addNew(childName, p2s(var));
     if(outChildNode) *outChildNode = newNode;
@@ -717,7 +717,7 @@ void MouseCursor::show() const {
  *
  * @param ev Event to handle.
  */
-void MouseCursor::updatePos(const ALLEGRO_EVENT &ev) {
+void MouseCursor::updatePos(const ALLEGRO_EVENT& ev) {
     winPos.x = ev.mouse.x;
     winPos.y = ev.mouse.y;
 }
@@ -728,7 +728,7 @@ void MouseCursor::updatePos(const ALLEGRO_EVENT &ev) {
  *
  * @param view Viewport to draw to.
  */
-void Notification::draw(const Viewport &view) const {
+void Notification::draw(const Viewport& view) const {
     if(visibility == 0.0f) return;
     
     float scale = ease(EASE_METHOD_OUT, visibility);
@@ -830,7 +830,7 @@ void Notification::reset() {
  * @param pos Where to show it in the game world.
  */
 void Notification::setContents(
-    const PlayerInputSource &inputSource, const string &text, const Point &pos
+    const PlayerInputSource& inputSource, const string& text, const Point& pos
 ) {
     this->inputSource = inputSource;
     this->text = text;
@@ -1078,7 +1078,7 @@ void PerformanceMonitor::saveLog() {
  *
  * @param name Name of the area.
  */
-void PerformanceMonitor::setAreaName(const string &name) {
+void PerformanceMonitor::setAreaName(const string& name) {
     areaName = name;
 }
 
@@ -1098,7 +1098,7 @@ void PerformanceMonitor::setPaused(bool paused) {
  *
  * @param name Name of the measurement.
  */
-void PerformanceMonitor::startMeasurement(const string &name) {
+void PerformanceMonitor::startMeasurement(const string& name) {
     if(paused) return;
     
     //Check if we were already measuring something.
@@ -1119,7 +1119,7 @@ void PerformanceMonitor::startMeasurement(const string &name) {
  *
  * @param s String to write to.
  */
-void PerformanceMonitor::Page::write(string &s) {
+void PerformanceMonitor::Page::write(string& s) {
     //Get the total measured time.
     double totalMeasuredTime = 0.0;
     for(size_t m = 0; m < measurements.size(); m++) {
@@ -1152,7 +1152,7 @@ void PerformanceMonitor::Page::write(string &s) {
  * @param total How long the entire procedure lasted for.
  */
 void PerformanceMonitor::Page::writeMeasurement(
-    string &str, const string &name, double dur, float total
+    string& str, const string& name, double dur, float total
 ) {
     float perc = dur / total * 100.0;
     str +=
@@ -1192,7 +1192,7 @@ ReaderSetter::ReaderSetter(DataNode* dn) :
  * no value.
  */
 void ReaderSetter::set(
-    const string &childName, ALLEGRO_COLOR &var, DataNode** outChildNode
+    const string& childName, ALLEGRO_COLOR& var, DataNode** outChildNode
 ) {
     DataNode* n = node->getChildByName(childName);
     if(!n->value.empty()) {
@@ -1215,7 +1215,7 @@ void ReaderSetter::set(
  * no value.
  */
 void ReaderSetter::set(
-    const string &childName, string &var, DataNode** outChildNode
+    const string& childName, string& var, DataNode** outChildNode
 ) {
     DataNode* n = node->getChildByName(childName);
     if(!n->value.empty()) {
@@ -1238,7 +1238,7 @@ void ReaderSetter::set(
  * no value.
  */
 void ReaderSetter::set(
-    const string &childName, size_t &var, DataNode** outChildNode
+    const string& childName, size_t& var, DataNode** outChildNode
 ) {
     DataNode* n = node->getChildByName(childName);
     if(!n->value.empty()) {
@@ -1261,7 +1261,7 @@ void ReaderSetter::set(
  * no value.
  */
 void ReaderSetter::set(
-    const string &childName, int &var, DataNode** outChildNode
+    const string& childName, int& var, DataNode** outChildNode
 ) {
     DataNode* n = node->getChildByName(childName);
     if(!n->value.empty()) {
@@ -1284,7 +1284,7 @@ void ReaderSetter::set(
  * no value.
  */
 void ReaderSetter::set(
-    const string &childName, unsigned int &var, DataNode** outChildNode
+    const string& childName, unsigned int& var, DataNode** outChildNode
 ) {
     DataNode* n = node->getChildByName(childName);
     if(!n->value.empty()) {
@@ -1307,7 +1307,7 @@ void ReaderSetter::set(
  * no value.
  */
 void ReaderSetter::set(
-    const string &childName, unsigned char &var, DataNode** outChildNode
+    const string& childName, unsigned char& var, DataNode** outChildNode
 ) {
     DataNode* n = node->getChildByName(childName);
     if(!n->value.empty()) {
@@ -1330,7 +1330,7 @@ void ReaderSetter::set(
  * no value.
  */
 void ReaderSetter::set(
-    const string &childName, bool &var, DataNode** outChildNode
+    const string& childName, bool& var, DataNode** outChildNode
 ) {
     DataNode* n = node->getChildByName(childName);
     if(!n->value.empty()) {
@@ -1353,7 +1353,7 @@ void ReaderSetter::set(
  * no value.
  */
 void ReaderSetter::set(
-    const string &childName, float &var, DataNode** outChildNode
+    const string& childName, float& var, DataNode** outChildNode
 ) {
     DataNode* n = node->getChildByName(childName);
     if(!n->value.empty()) {
@@ -1376,7 +1376,7 @@ void ReaderSetter::set(
  * no value.
  */
 void ReaderSetter::set(
-    const string &childName, double &var, DataNode** outChildNode
+    const string& childName, double& var, DataNode** outChildNode
 ) {
     DataNode* n = node->getChildByName(childName);
     if(!n->value.empty()) {
@@ -1399,7 +1399,7 @@ void ReaderSetter::set(
  * no value.
  */
 void ReaderSetter::set(
-    const string &childName, Point &var, DataNode** outChildNode
+    const string& childName, Point& var, DataNode** outChildNode
 ) {
     DataNode* n = node->getChildByName(childName);
     if(!n->value.empty()) {
@@ -1499,9 +1499,9 @@ void RngManager::init(int32_t initialSeed) {
  * @return The audio sample.
  */
 ALLEGRO_SAMPLE* SampleManager::doLoad(
-    const string &name, DataNode* node, bool reportErrors
+    const string& name, DataNode* node, bool reportErrors
 ) {
-    const auto &it = game.content.sounds.manifests.find(name);
+    const auto& it = game.content.sounds.manifests.find(name);
     string path =
         it != game.content.sounds.manifests.end() ?
         it->second.path :
@@ -1526,7 +1526,7 @@ void SampleManager::doUnload(ALLEGRO_SAMPLE* asset) {
  *
  * @param vars Map of variables to read from.
  */
-ScriptVarReader::ScriptVarReader(map<string, string> &vars) :
+ScriptVarReader::ScriptVarReader(map<string, string>& vars) :
     vars(vars) {
     
 }
@@ -1540,7 +1540,7 @@ ScriptVarReader::ScriptVarReader(map<string, string> &vars) :
  * @param dest Destination for the value.
  * @return Whether it exists.
  */
-bool ScriptVarReader::get(const string &name, ALLEGRO_COLOR &dest) const {
+bool ScriptVarReader::get(const string& name, ALLEGRO_COLOR& dest) const {
     auto v = vars.find(name);
     if(v == vars.end()) {
         return false;
@@ -1557,7 +1557,7 @@ bool ScriptVarReader::get(const string &name, ALLEGRO_COLOR &dest) const {
  * @param dest Destination for the value.
  * @return Whether it exists.
  */
-bool ScriptVarReader::get(const string &name, string &dest) const {
+bool ScriptVarReader::get(const string& name, string& dest) const {
     auto v = vars.find(name);
     if(v == vars.end()) {
         return false;
@@ -1574,7 +1574,7 @@ bool ScriptVarReader::get(const string &name, string &dest) const {
  * @param dest Destination for the value.
  * @return Whether it exists.
  */
-bool ScriptVarReader::get(const string &name, size_t &dest) const {
+bool ScriptVarReader::get(const string& name, size_t& dest) const {
     auto v = vars.find(name);
     if(v == vars.end()) {
         return false;
@@ -1591,7 +1591,7 @@ bool ScriptVarReader::get(const string &name, size_t &dest) const {
  * @param dest Destination for the value.
  * @return Whether it exists.
  */
-bool ScriptVarReader::get(const string &name, int &dest) const {
+bool ScriptVarReader::get(const string& name, int& dest) const {
     auto v = vars.find(name);
     if(v == vars.end()) {
         return false;
@@ -1609,7 +1609,7 @@ bool ScriptVarReader::get(const string &name, int &dest) const {
  * @param dest Destination for the value.
  * @return Whether it exists.
  */
-bool ScriptVarReader::get(const string &name, unsigned char &dest) const {
+bool ScriptVarReader::get(const string& name, unsigned char& dest) const {
     auto v = vars.find(name);
     if(v == vars.end()) {
         return false;
@@ -1626,7 +1626,7 @@ bool ScriptVarReader::get(const string &name, unsigned char &dest) const {
  * @param dest Destination for the value.
  * @return Whether it exists.
  */
-bool ScriptVarReader::get(const string &name, bool &dest) const {
+bool ScriptVarReader::get(const string& name, bool& dest) const {
     auto v = vars.find(name);
     if(v == vars.end()) {
         return false;
@@ -1643,7 +1643,7 @@ bool ScriptVarReader::get(const string &name, bool &dest) const {
  * @param dest Destination for the value.
  * @return Whether it exists.
  */
-bool ScriptVarReader::get(const string &name, float &dest) const {
+bool ScriptVarReader::get(const string& name, float& dest) const {
     auto v = vars.find(name);
     if(v == vars.end()) {
         return false;
@@ -1660,7 +1660,7 @@ bool ScriptVarReader::get(const string &name, float &dest) const {
  * @param dest Destination for the value.
  * @return Whether it exists.
  */
-bool ScriptVarReader::get(const string &name, Point &dest) const {
+bool ScriptVarReader::get(const string& name, Point& dest) const {
     auto v = vars.find(name);
     if(v == vars.end()) {
         return false;
@@ -1933,7 +1933,7 @@ void Viewport::updateBox() {
  *
  * @param windowPos Window coordinates.
  */
-void Viewport::updateCursor(const Point &windowPos) {
+void Viewport::updateCursor(const Point& windowPos) {
     cursorWorldPos = windowPos;
     al_transform_coordinates(
         &windowToWorldTransform,
@@ -2010,7 +2010,7 @@ void Whistle::stopWhistling() {
  * @param leaderToCursorDist Distance between the leader and the cursor.
  */
 void Whistle::tick(
-    float deltaT, const Point &center,
+    float deltaT, const Point& center,
     float whistleRange, float leaderToCursorDist
 ) {
     this->center = center;

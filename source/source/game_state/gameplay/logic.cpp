@@ -146,7 +146,7 @@ void GameplayState::doAestheticLeaderLogic(Player* player, float deltaT) {
  */
 void GameplayState::doAestheticLogic(float deltaT) {
     //Leader stuff.
-    for(Player &player : players) {
+    for(Player& player : players) {
         doAestheticLeaderLogic(&player, deltaT);
     }
     
@@ -629,7 +629,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
  */
 void GameplayState::doGameplayLogic(float deltaT) {
 
-    for(Player &player : players) {
+    for(Player& player : players) {
         //Manual camera movement.
         if(!player.leaderPtr) {
             //If there's no leader being controlled,
@@ -702,7 +702,7 @@ void GameplayState::doGameplayLogic(float deltaT) {
         }
         
         //Tick all status effect animations.
-        for(auto &s : game.content.statusTypes.list) {
+        for(auto& s : game.content.statusTypes.list) {
             s.second->overlayAnim.tick(deltaT);
         }
         
@@ -1116,7 +1116,7 @@ void GameplayState::doMenuLogic() {
         }
     }
     
-    for(Player &player : players) {
+    for(Player& player : players) {
         player.hud->tick(game.deltaT);
     }
     
@@ -1487,7 +1487,7 @@ void GameplayState::doMenuLogic() {
         if(interludeTime >= GAMEPLAY::BIG_MSG_READY_DUR) {
             curInterlude = INTERLUDE_NONE;
             deltaTMult = 1.0f;
-            for(Player &player : players) {
+            for(Player& player : players) {
                 player.hud->gui.startAnimation(
                     GUI_MANAGER_ANIM_OUT_TO_IN,
                     GAMEPLAY::AREA_INTRO_HUD_MOVE_TIME
@@ -1560,7 +1560,7 @@ bool GameplayState::isMissionFailMet(MISSION_FAIL_COND* reason) {
 void GameplayState::isNearEnemyAndBoss(bool* nearEnemy, bool* nearBoss) {
     bool foundEnemy = false;
     bool foundBoss = false;
-    for(Player &player : players) {
+    for(Player& player : players) {
         if(!player.leaderPtr) continue;
         for(size_t e = 0; e < game.states.gameplay->mobs.enemies.size(); e++) {
             Enemy* ePtr = game.states.gameplay->mobs.enemies[e];
@@ -1596,7 +1596,7 @@ void GameplayState::isNearEnemyAndBoss(bool* nearEnemy, bool* nearBoss) {
  * of the region.
  */
 void GameplayState::markAreaCellsActive(
-    const Point &topLeft, const Point &bottomRight
+    const Point& topLeft, const Point& bottomRight
 ) {
     int fromX =
         (topLeft.x - game.curAreaData->bmap.topLeftCorner.x) /
@@ -1768,8 +1768,8 @@ void GameplayState::processMobInteractions(Mob* mPtr, size_t m) {
  */
 void GameplayState::processMobMiscInteractions(
     Mob* mPtr, Mob* m2Ptr, size_t m, size_t m2,
-    const Distance &d, const Distance &dBetween,
-    vector<PendingIntermobEvent> &pendingIntermobEvents
+    const Distance& d, const Distance& dBetween,
+    vector<PendingIntermobEvent>& pendingIntermobEvents
 ) {
     //Find a carriable mob to grab.
     MobEvent* ncoEvent =
@@ -1837,7 +1837,7 @@ void GameplayState::processMobMiscInteractions(
     MobEvent* touchLeEv =
         mPtr->fsm.getEvent(MOB_EV_TOUCHED_ACTIVE_LEADER);
     if(touchLeEv) {
-        for(Player &player : players) {
+        for(Player& player : players) {
             if(
                 m2Ptr == player.leaderPtr &&
                 //Small hack. This way,
@@ -1867,8 +1867,8 @@ void GameplayState::processMobMiscInteractions(
  * @param pendingIntermobEvents Vector of events to be processed.
  */
 void GameplayState::processMobReaches(
-    Mob* mPtr, Mob* m2Ptr, size_t m, size_t m2, const Distance &dBetween,
-    vector<PendingIntermobEvent> &pendingIntermobEvents
+    Mob* mPtr, Mob* m2Ptr, size_t m, size_t m2, const Distance& dBetween,
+    vector<PendingIntermobEvent>& pendingIntermobEvents
 ) {
     //Check reaches.
     MobEvent* obirEv =
@@ -1915,7 +1915,7 @@ void GameplayState::processMobReaches(
  * @param d Distance between the two.
  */
 void GameplayState::processMobTouches(
-    Mob* mPtr, Mob* m2Ptr, size_t m, size_t m2, Distance &d
+    Mob* mPtr, Mob* m2Ptr, size_t m, size_t m2, Distance& d
 ) {
     //Check if mob 1 should be pushed by mob 2.
     bool bothIdlePikmin =
@@ -2447,7 +2447,7 @@ void GameplayState::updateAreaActiveCells() {
     }
     
     //Mark the region in-camera (plus padding) as active.
-    for(Player &player : players) {
+    for(Player& player : players) {
         markAreaCellsActive(player.view.box[0], player.view.box[1]);
     }
 }
@@ -2486,11 +2486,11 @@ void GameplayState::updateMobIsActiveFlag() {
         if(mPtr->parent && mPtr->parent->m) childMobs.insert(mPtr);
     }
     
-    for(const auto &m : childMobs) {
+    for(const auto& m : childMobs) {
         if(m->isActive) m->parent->m->isActive = true;
     }
     
-    for(auto &m : childMobs) {
+    for(auto& m : childMobs) {
         if(m->parent->m->isActive) m->isActive = true;
     }
 }

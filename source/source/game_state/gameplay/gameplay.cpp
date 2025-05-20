@@ -122,7 +122,7 @@ const float TREE_SHADOW_SWAY_SPEED = TAU / 8;
  * is talking.
  */
 GameplayMessageBox::GameplayMessageBox(
-    const string &text, ALLEGRO_BITMAP* speakerIcon
+    const string& text, ALLEGRO_BITMAP* speakerIcon
 ):
     speakerIcon(speakerIcon) {
     
@@ -364,7 +364,7 @@ void GameplayState::doLogic() {
             ];
     }
     
-    for(Player &player : players) {
+    for(Player& player : players) {
         player.view.updateCursor(game.mouseCursor.winPos);
     }
     
@@ -398,12 +398,12 @@ void GameplayState::endMission(bool cleared) {
     curInterlude = INTERLUDE_MISSION_END;
     interludeTime = 0.0f;
     deltaTMult = 0.5f;
-    for(Player &player : players) {
+    for(Player& player : players) {
         player.leaderMovement.reset(); //TODO replace with a better solution.
     }
     
     //Zoom in on the reason, if possible.
-    for(Player &player : players) {
+    for(Player& player : players) {
         Point newCamPos = player.view.cam.targetPos;
         float newCamZoom = player.view.cam.targetZoom;
         if(cleared) {
@@ -431,7 +431,7 @@ void GameplayState::endMission(bool cleared) {
     }
     bigMsgTime = 0.0f;
     
-    for(Player &player : players) {
+    for(Player& player : players) {
         player.hud->gui.startAnimation(
             GUI_MANAGER_ANIM_IN_TO_OUT,
             GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
@@ -447,7 +447,7 @@ void GameplayState::endMission(bool cleared) {
 void GameplayState::enter() {
     particles.viewports.clear();
     
-    for(Player &player : players) {
+    for(Player& player : players) {
         player.view.size.x = game.winW;
         player.view.size.y = game.winH;
         player.view.center.x = game.winW / 2.0f;
@@ -467,7 +467,7 @@ void GameplayState::enter() {
         zoomLevels[z] = viewportReach / zoomReaches[z];
     }
     
-    for(Player &player : players) {
+    for(Player& player : players) {
         if(player.leaderPtr) {
             player.view.cam.setPos(player.leaderPtr->pos);
         } else {
@@ -514,7 +514,7 @@ void GameplayState::enter() {
     readyForInput = false;
     game.mouseCursor.reset();
     
-    for(Player &player : players) {
+    for(Player& player : players) {
         player.hud->gui.hideItems();
         player.notification.reset();
         player.leaderCursorWorld = player.view.cursorWorldPos;
@@ -881,7 +881,7 @@ string GameplayState::getName() const {
  *
  * @param ev Event to handle.
  */
-void GameplayState::handleAllegroEvent(ALLEGRO_EVENT &ev) {
+void GameplayState::handleAllegroEvent(ALLEGRO_EVENT& ev) {
     //Handle the Onion menu first so events don't bleed from gameplay to it.
     if(onionMenu) {
         onionMenu->handleAllegroEvent(ev);
@@ -894,7 +894,7 @@ void GameplayState::handleAllegroEvent(ALLEGRO_EVENT &ev) {
     }
     
     //Finally, let the HUD handle events.
-    for(Player &player : players) {
+    for(Player& player : players) {
         player.hud->gui.handleAllegroEvent(ev);
     }
     
@@ -1009,7 +1009,7 @@ void GameplayState::load() {
     
     bossMusicState = BOSS_MUSIC_STATE_NEVER_PLAYED;
     game.audio.setCurrentSong("");
-    game.audio.onSongFinished = [this] (const string &name) {
+    game.audio.onSongFinished = [this] (const string& name) {
         if(name == game.sysContentNames.sngBossVictory) {
             switch(bossMusicState) {
             case BOSS_MUSIC_STATE_VICTORY: {
@@ -1154,7 +1154,7 @@ void GameplayState::load() {
     updateAvailableLeaders();
     startingNrOfLeaders = mobs.leaders.size();
     
-    for(Player &player : players) {
+    for(Player& player : players) {
         player.leaderIdx = INVALID;
         player.leaderPtr = nullptr;
         
@@ -1263,7 +1263,7 @@ void GameplayState::load() {
     //Initialize some other things.
     pathMgr.handleAreaLoad();
     
-    for(Player &player : players) {
+    for(Player& player : players) {
         player.hud = new Hud();
         player.hud->player = &player;
     }
@@ -1273,7 +1273,7 @@ void GameplayState::load() {
     map<string, string> sprayStrs =
         getVarMap(game.curAreaData->sprayAmounts);
         
-    for(auto &s : sprayStrs) {
+    for(auto& s : sprayStrs) {
         size_t sprayIdx = 0;
         for(; sprayIdx < game.config.misc.sprayOrder.size(); sprayIdx++) {
             if(
@@ -1423,7 +1423,7 @@ void GameplayState::loadGameContent() {
     }
     
     vector<string> toolTypesVector;
-    for(auto &t : game.content.mobTypes.list.tool) {
+    for(auto& t : game.content.mobTypes.list.tool) {
         toolTypesVector.push_back(t.first);
     }
     sort(toolTypesVector.begin(), toolTypesVector.end());
@@ -1454,7 +1454,7 @@ void GameplayState::startLeaving(const GAMEPLAY_LEAVE_TARGET target) {
 void GameplayState::unload() {
     unloading = true;
     
-    for(Player &player : players) {
+    for(Player& player : players) {
         if(player.hud) {
             player.hud->gui.destroy();
             delete player.hud;
@@ -1581,7 +1581,7 @@ void GameplayState::updateAvailableLeaders() {
     );
     
     //Update the current leader's index, which could've changed.
-    for(Player &player : players) {
+    for(Player& player : players) {
         for(size_t l = 0; l < availableLeaders.size(); l++) {
             if(availableLeaders[l] == player.leaderPtr) {
                 player.leaderIdx = l;

@@ -18,7 +18,7 @@
  *
  * @param ev Event to handle.
  */
-void ParticleEditor::handleKeyCharCanvas(const ALLEGRO_EVENT &ev) {
+void ParticleEditor::handleKeyCharCanvas(const ALLEGRO_EVENT& ev) {
     if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_LEFT)) {
         game.editorsView.cam.targetPos.x -=
             AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.editorsView.cam.zoom;
@@ -61,7 +61,7 @@ void ParticleEditor::handleKeyCharCanvas(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void ParticleEditor::handleKeyDownAnywhere(const ALLEGRO_EVENT &ev) {
+void ParticleEditor::handleKeyDownAnywhere(const ALLEGRO_EVENT& ev) {
     if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_G, true)) {
         gridToggleCmd(1.0f);
         
@@ -109,7 +109,7 @@ void ParticleEditor::handleKeyDownAnywhere(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void ParticleEditor::handleKeyDownCanvas(const ALLEGRO_EVENT &ev) {
+void ParticleEditor::handleKeyDownCanvas(const ALLEGRO_EVENT& ev) {
 
 }
 
@@ -120,7 +120,7 @@ void ParticleEditor::handleKeyDownCanvas(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void ParticleEditor::handleLmbDoubleClick(const ALLEGRO_EVENT &ev) {
+void ParticleEditor::handleLmbDoubleClick(const ALLEGRO_EVENT& ev) {
     handleLmbDown(ev);
 }
 
@@ -131,7 +131,7 @@ void ParticleEditor::handleLmbDoubleClick(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void ParticleEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
+void ParticleEditor::handleLmbDown(const ALLEGRO_EVENT& ev) {
     generatorPosOffset = game.editorsView.cursorWorldPos;
 }
 
@@ -141,7 +141,7 @@ void ParticleEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void ParticleEditor::handleLmbDrag(const ALLEGRO_EVENT &ev) {
+void ParticleEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
     generatorPosOffset = game.editorsView.cursorWorldPos;
 }
 
@@ -151,7 +151,7 @@ void ParticleEditor::handleLmbDrag(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void ParticleEditor::handleLmbUp(const ALLEGRO_EVENT &ev) {
+void ParticleEditor::handleLmbUp(const ALLEGRO_EVENT& ev) {
     generatorPosOffset = Point();
 }
 
@@ -162,7 +162,7 @@ void ParticleEditor::handleLmbUp(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void ParticleEditor::handleMmbDown(const ALLEGRO_EVENT &ev) {
+void ParticleEditor::handleMmbDown(const ALLEGRO_EVENT& ev) {
     if(!game.options.editors.mmbPan) {
         zoomAndPosResetCmd(1.0f);
     }
@@ -175,7 +175,7 @@ void ParticleEditor::handleMmbDown(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void ParticleEditor::handleMmbDrag(const ALLEGRO_EVENT &ev) {
+void ParticleEditor::handleMmbDrag(const ALLEGRO_EVENT& ev) {
     if(game.options.editors.mmbPan) {
         panCam(ev);
     }
@@ -187,7 +187,7 @@ void ParticleEditor::handleMmbDrag(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void ParticleEditor::handleMouseUpdate(const ALLEGRO_EVENT &ev) {
+void ParticleEditor::handleMouseUpdate(const ALLEGRO_EVENT& ev) {
     Editor::handleMouseUpdate(ev);
 }
 
@@ -197,7 +197,7 @@ void ParticleEditor::handleMouseUpdate(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void ParticleEditor::handleMouseWheel(const ALLEGRO_EVENT &ev) {
+void ParticleEditor::handleMouseWheel(const ALLEGRO_EVENT& ev) {
     zoomWithCursor(
         game.editorsView.cam.zoom +
         (game.editorsView.cam.zoom * ev.mouse.dz * 0.1)
@@ -211,7 +211,7 @@ void ParticleEditor::handleMouseWheel(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void ParticleEditor::handleRmbDown(const ALLEGRO_EVENT &ev) {
+void ParticleEditor::handleRmbDown(const ALLEGRO_EVENT& ev) {
     if(game.options.editors.mmbPan) {
         zoomAndPosResetCmd(1.0f);
     }
@@ -224,7 +224,7 @@ void ParticleEditor::handleRmbDown(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void ParticleEditor::handleRmbDrag(const ALLEGRO_EVENT &ev) {
+void ParticleEditor::handleRmbDrag(const ALLEGRO_EVENT& ev) {
     if(!game.options.editors.mmbPan) {
         panCam(ev);
     }

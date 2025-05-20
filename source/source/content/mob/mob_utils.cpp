@@ -30,7 +30,7 @@ using std::size_t;
  *
  * @param pos The spot's relative coordinates.
  */
-CarrierSpot::CarrierSpot(const Point &pos) :
+CarrierSpot::CarrierSpot(const Point& pos) :
     pos(pos) {
     
 }
@@ -460,7 +460,7 @@ void Group::initSpots(Mob* affectedMobPtr) {
          *
          * @param p The position.
          */
-        explicit AlphaSpot(const Point &p) :
+        explicit AlphaSpot(const Point& p) :
             pos(p) { }
             
     };
@@ -751,7 +751,7 @@ Parent::Parent(Mob* m) :
  */
 Path::Path(
     Mob* m,
-    const PathFollowSettings &settings
+    const PathFollowSettings& settings
 ) :
     m(m),
     settings(settings) {
@@ -908,7 +908,7 @@ size_t PikminNest::getAmountByType(const PikminType* type) {
  *
  * @param svr Script var reader to use.
  */
-void PikminNest::readScriptVars(const ScriptVarReader &svr) {
+void PikminNest::readScriptVars(const ScriptVarReader& svr) {
     string pikminInsideVar;
     
     if(svr.get("pikmin_inside", pikminInsideVar)) {
@@ -1038,7 +1038,7 @@ void PikminNestType::loadProperties(DataNode* file) {
     
     vector<string> pikTypesStrs = semicolonListToVector(pikTypesStr);
     for(size_t t = 0; t < pikTypesStrs.size(); t++) {
-        string &str = pikTypesStrs[t];
+        string& str = pikTypesStrs[t];
         if(!isInMap(game.content.mobTypes.list.pikmin, str)) {
             game.errors.report(
                 "Unknown Pikmin type \"" + str + "\"!",
@@ -1059,7 +1059,7 @@ void PikminNestType::loadProperties(DataNode* file) {
  * @param rideSpeed Speed to ride at, in ratio per second.
  */
 TrackRideInfo::TrackRideInfo(
-    Mob* m, const vector<size_t> &checkpoints, float rideSpeed
+    Mob* m, const vector<size_t>& checkpoints, float rideSpeed
 ) :
     m(m),
     checkpoints(checkpoints),
@@ -1079,7 +1079,7 @@ TrackRideInfo::TrackRideInfo(
  */
 float calculateMobPhysicalSpan(
     float radius, float animHitboxSpan,
-    const Point &rectangularDim
+    const Point& rectangularDim
 ) {
     float finalSpan = std::max(radius, animHitboxSpan);
     
@@ -1110,8 +1110,8 @@ float calculateMobPhysicalSpan(
  * @return The new mob.
  */
 Mob* createMob(
-    MobCategory* category, const Point &pos, MobType* type,
-    float angle, const string &vars,
+    MobCategory* category, const Point& pos, MobType* type,
+    float angle, const string& vars,
     std::function<void(Mob*)> codeAfterCreation,
     size_t firstStateOverride
 ) {
@@ -1135,7 +1135,7 @@ Mob* createMob(
         
         mPtr->readScriptVars(svr);
         
-        for(auto &v : varsMap) {
+        for(auto& v : varsMap) {
             mPtr->vars[v.first] = v.second;
         }
     }
@@ -1355,12 +1355,12 @@ string getErrorMessageMobInfo(Mob* m) {
  * @return The invulnerabilities.
  */
 vector<Hazard*> getMobTypeListInvulnerabilities(
-    const unordered_set<MobType*> &types
+    const unordered_set<MobType*>& types
 ) {
     //Count how many types are invulnerable to each detected hazard.
     map<Hazard*, size_t> invInstances;
-    for(auto &t : types) {
-        for(auto &h : t->hazardVulnerabilities) {
+    for(auto& t : types) {
+        for(auto& h : t->hazardVulnerabilities) {
             if(h.second.effectMult == 0.0f) {
                 invInstances[h.first]++;
             }
@@ -1369,7 +1369,7 @@ vector<Hazard*> getMobTypeListInvulnerabilities(
     
     //Only accept those that ALL types are invulnerable to.
     vector<Hazard*> invulnerabilities;
-    for(auto &i : invInstances) {
+    for(auto& i : invInstances) {
         if(i.second == types.size()) {
             invulnerabilities.push_back(i.first);
         }
@@ -1408,7 +1408,7 @@ MobType::SpawnInfo* getSpawnInfoFromChildInfo(
  * @return Whether it's in reach.
  */
 bool isMobInReach(
-    MobType::Reach* reachTPtr, const Distance &distBetween, float angleDiff
+    MobType::Reach* reachTPtr, const Distance& distBetween, float angleDiff
 ) {
     bool inReach =
         (
@@ -1431,7 +1431,7 @@ bool isMobInReach(
  * @param typeStr Text representation of the target type.
  * @return The type, or INVALID if invalid.
  */
-MOB_TARGET_FLAG stringToMobTargetType(const string &typeStr) {
+MOB_TARGET_FLAG stringToMobTargetType(const string& typeStr) {
     if(typeStr == "none") {
         return MOB_TARGET_FLAG_NONE;
     } else if(typeStr == "player") {
@@ -1461,7 +1461,7 @@ MOB_TARGET_FLAG stringToMobTargetType(const string &typeStr) {
  * @param teamStr Text representation of the team.
  * @return The team, or INVALID if invalid.
  */
-MOB_TEAM stringToTeamNr(const string &teamStr) {
+MOB_TEAM stringToTeamNr(const string& teamStr) {
     for(size_t t = 0; t < N_MOB_TEAMS; t++) {
         if(teamStr == game.teamInternalNames[t]) {
             return (MOB_TEAM) t;

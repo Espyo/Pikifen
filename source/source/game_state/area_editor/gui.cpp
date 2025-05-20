@@ -279,7 +279,7 @@ void AreaEditor::processGuiDeleteAreaDialog() {
  */
 void AreaEditor::processGuiGradingCriterionWidgets(
     int* valuePtr, MISSION_SCORE_CRITERIA criterionIdx,
-    const string &widgetLabel, const string &tooltip
+    const string& widgetLabel, const string& tooltip
 ) {
     //Main value.
     ImGui::SetNextItemWidth(50);
@@ -348,9 +348,9 @@ void AreaEditor::processGuiGradingCriterionWidgets(
  * @param tooltip Tooltip for the value widget.
  */
 void AreaEditor::processGuiGradingMedalWidgets(
-    int* requirementPtr, const string &widgetLabel,
+    int* requirementPtr, const string& widgetLabel,
     int widgetMinValue, int widgetMaxValue,
-    const string &tooltip
+    const string& tooltip
 ) {
     //Requirement value.
     int req = *requirementPtr;
@@ -376,7 +376,7 @@ void AreaEditor::processGuiGradingMedalWidgets(
  * @param tooltip Tooltip for the radio widget.
  */
 void AreaEditor::processGuiGradingModeWidgets(
-    int value, const string &widgetLabel, const string &tooltip
+    int value, const string& widgetLabel, const string& tooltip
 ) {
     //Radio button.
     int mode = game.curAreaData->mission.gradingMode;
@@ -396,14 +396,14 @@ void AreaEditor::processGuiLoadDialog() {
     //History node.
     processGuiHistory(
         game.options.areaEd.history,
-    [this](const string &name) -> string {
+    [this](const string& name) -> string {
         return name;
     },
-    [this](const string &path) {
+    [this](const string& path) {
         closeTopDialog();
         loadAreaFolder(path, false, true);
     },
-    [this](const string &path) {
+    [this](const string& path) {
         return getFolderTooltip(path, "");
     }
     );
@@ -1000,14 +1000,14 @@ void AreaEditor::processGuiMobScriptVars(MobGen* mPtr) {
     }
     
     string otherVarsStr;
-    for(auto const &v : varsMap) {
+    for(auto const& v : varsMap) {
         if(!varsInWidgets[v.first]) {
             otherVarsStr += v.first + "=" + v.second + ";";
         }
     }
     
     mPtr->vars.clear();
-    for(auto const &v : newVarsMap) {
+    for(auto const& v : newVarsMap) {
         mPtr->vars += v.first + "=" + v.second + ";";
     }
     mPtr->vars += otherVarsStr;
@@ -1499,7 +1499,7 @@ void AreaEditor::processGuiPanelDetails() {
                 //Choose the tree shadow image button.
                 if(ImGui::Button("Choose image...")) {
                     openBitmapDialog(
-                    [this] (const string &bmp) {
+                    [this] (const string& bmp) {
                         if(bmp != selectedShadow->bmpName) {
                             //New image, delete the old one.
                             registerChange("tree shadow image change");
@@ -1838,7 +1838,7 @@ void AreaEditor::processGuiPanelGameplay() {
                     registerChange("area spray amounts change");
                     sprayStrs[sprayInternalName] = i2s(amount);
                     game.curAreaData->sprayAmounts.clear();
-                    for(auto const &v : sprayStrs) {
+                    for(auto const& v : sprayStrs) {
                         game.curAreaData->sprayAmounts +=
                             v.first + "=" + v.second + ";";
                     }
@@ -2112,7 +2112,7 @@ void AreaEditor::processGuiPanelInfo() {
         vector<string> songNames;
         songInternals.push_back("");
         songNames.push_back(NONE_OPTION);
-        for(auto &s : game.content.songs.list) {
+        for(auto& s : game.content.songs.list) {
             songInternals.push_back(s.first);
             songNames.push_back(s.second.name);
         }
@@ -2130,7 +2130,7 @@ void AreaEditor::processGuiPanelInfo() {
         vector<string> weatherCondNames;
         weatherCondInternals.push_back("");
         weatherCondNames.push_back(NONE_OPTION);
-        for(auto &w : game.content.weatherConditions.list) {
+        for(auto& w : game.content.weatherConditions.list) {
             weatherCondInternals.push_back(w.first);
             weatherCondNames.push_back(w.second.name);
         }
@@ -2346,7 +2346,7 @@ void AreaEditor::processGuiPanelInfo() {
         ImGui::SameLine();
         if(ImGui::Button("Choose image...")) {
             openBitmapDialog(
-            [this] (const string &bmp) {
+            [this] (const string& bmp) {
                 registerChange("area background change");
                 game.curAreaData->bgBmpName = bmp;
                 setStatus("Picked a background image successfully.");

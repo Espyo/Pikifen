@@ -50,12 +50,12 @@ protected:
 
     //--- Function declarations ---
     void fillManifestsMap(
-        map<string, ContentManifest> &manifests,
-        const string &contentPath, bool folders
+        map<string, ContentManifest>& manifests,
+        const string& contentPath, bool folders
     );
     void fillManifestsMapFromPack(
-        map<string, ContentManifest> &manifests, const string &packName,
-        const string &contentRelPath, bool folders
+        map<string, ContentManifest>& manifests, const string& packName,
+        const string& contentRelPath, bool folders
     );
     
 };
@@ -83,21 +83,21 @@ public:
     void clearManifests() override;
     void fillManifests() override;
     ContentManifest* findManifest(
-        const string &areaName, const string &pack, AREA_TYPE type
+        const string& areaName, const string& pack, AREA_TYPE type
     );
     string getName() const override;
     string getPerfMonMeasurementName() const override;
     void loadAll(CONTENT_LOAD_LEVEL level) override;
     bool loadArea(
-        Area* areaPtr, const string &requestedAreaPath,
+        Area* areaPtr, const string& requestedAreaPath,
         ContentManifest* manifPtr,
         CONTENT_LOAD_LEVEL level, bool fromBackup
     );
     string manifestToPath(
-        const ContentManifest &manifest, AREA_TYPE type
+        const ContentManifest& manifest, AREA_TYPE type
     ) const;
     void pathToManifest(
-        const string &path, ContentManifest* outManifest = nullptr,
+        const string& path, ContentManifest* outManifest = nullptr,
         AREA_TYPE* outType = nullptr
     ) const;
     void unloadAll(CONTENT_LOAD_LEVEL level) override;
@@ -139,11 +139,11 @@ public:
     string getPerfMonMeasurementName() const override;
     void loadAll(CONTENT_LOAD_LEVEL level) override;
     string manifestToPath(
-        const ContentManifest &manifest,
-        const string &extension
+        const ContentManifest& manifest,
+        const string& extension
     ) const;
     void pathToManifest(
-        const string &path, ContentManifest* outManifest = nullptr,
+        const string& path, ContentManifest* outManifest = nullptr,
         string* outExtension = nullptr
     ) const;
     void unloadAll(CONTENT_LOAD_LEVEL level) override;
@@ -175,9 +175,9 @@ public:
     string getName() const override;
     string getPerfMonMeasurementName() const override;
     void loadAll(CONTENT_LOAD_LEVEL level) override;
-    string manifestToPath(const ContentManifest &manifest) const;
+    string manifestToPath(const ContentManifest& manifest) const;
     void pathToManifest(
-        const string &path, ContentManifest* outManifest = nullptr
+        const string& path, ContentManifest* outManifest = nullptr
     ) const;
     void unloadAll(CONTENT_LOAD_LEVEL level) override;
     
@@ -214,9 +214,9 @@ public:
     string getName() const override;
     string getPerfMonMeasurementName() const override;
     void loadAll(CONTENT_LOAD_LEVEL level) override;
-    string manifestToPath(const ContentManifest &manifest) const;
+    string manifestToPath(const ContentManifest& manifest) const;
     void pathToManifest(
-        const string &path, ContentManifest* outManifest = nullptr
+        const string& path, ContentManifest* outManifest = nullptr
     ) const;
     void unloadAll(CONTENT_LOAD_LEVEL level) override;
     
@@ -247,9 +247,9 @@ public:
     string getName() const override;
     string getPerfMonMeasurementName() const override;
     void loadAll(CONTENT_LOAD_LEVEL level) override;
-    string manifestToPath(const ContentManifest &manifest) const;
+    string manifestToPath(const ContentManifest& manifest) const;
     void pathToManifest(
-        const string &path, ContentManifest* outManifest = nullptr
+        const string& path, ContentManifest* outManifest = nullptr
     ) const;
     void unloadAll(CONTENT_LOAD_LEVEL level) override;
     
@@ -286,9 +286,9 @@ public:
     string getName() const override;
     string getPerfMonMeasurementName() const override;
     void loadAll(CONTENT_LOAD_LEVEL level) override;
-    string manifestToPath(const ContentManifest &manifest) const;
+    string manifestToPath(const ContentManifest& manifest) const;
     void pathToManifest(
-        const string &path, ContentManifest* outManifest = nullptr
+        const string& path, ContentManifest* outManifest = nullptr
     ) const;
     void unloadAll(CONTENT_LOAD_LEVEL level) override;
     
@@ -322,9 +322,9 @@ public:
     string getName() const override;
     string getPerfMonMeasurementName() const override;
     void loadAll(CONTENT_LOAD_LEVEL level) override;
-    string manifestToPath(const ContentManifest &manifest) const;
+    string manifestToPath(const ContentManifest& manifest) const;
     void pathToManifest(
-        const string &path, ContentManifest* outManifest = nullptr
+        const string& path, ContentManifest* outManifest = nullptr
     ) const;
     void unloadAll(CONTENT_LOAD_LEVEL level) override;
     
@@ -357,11 +357,11 @@ public:
     string getPerfMonMeasurementName() const override;
     void loadAll(CONTENT_LOAD_LEVEL level) override;
     string manifestToPath(
-        const ContentManifest &manifest, const string &category,
-        const string &type
+        const ContentManifest& manifest, const string& category,
+        const string& type
     ) const;
     void pathToManifest(
-        const string &path, ContentManifest* outManifest = nullptr,
+        const string& path, ContentManifest* outManifest = nullptr,
         string* outCategory = nullptr, string* outType = nullptr
     ) const;
     void unloadAll(CONTENT_LOAD_LEVEL level) override;
@@ -371,7 +371,7 @@ private:
 
     //--- Function declarations ---
     void fillCatManifestsFromPack(
-        MobCategory* category, const string &packName
+        MobCategory* category, const string& packName
     );
     void loadAnimationDb(
         ContentManifest* manifest,
@@ -406,10 +406,10 @@ public:
     string getPerfMonMeasurementName() const override;
     void loadAll(CONTENT_LOAD_LEVEL level) override;
     string manifestToPath(
-        const ContentManifest &manifest, const string &category
+        const ContentManifest& manifest, const string& category
     ) const;
     void pathToManifest(
-        const string &path, ContentManifest* outManifest = nullptr,
+        const string& path, ContentManifest* outManifest = nullptr,
         string* outCategory = nullptr
     ) const;
     void unloadAll(CONTENT_LOAD_LEVEL level) override;
@@ -452,9 +452,9 @@ public:
     string getName() const override;
     string getPerfMonMeasurementName() const override;
     void loadAll(CONTENT_LOAD_LEVEL level) override;
-    string manifestToPath(const ContentManifest &manifest) const;
+    string manifestToPath(const ContentManifest& manifest) const;
     void pathToManifest(
-        const string &path, ContentManifest* outManifest = nullptr
+        const string& path, ContentManifest* outManifest = nullptr
     ) const;
     void unloadAll(CONTENT_LOAD_LEVEL level) override;
     
@@ -491,9 +491,9 @@ public:
     string getName() const override;
     string getPerfMonMeasurementName() const override;
     void loadAll(CONTENT_LOAD_LEVEL level) override;
-    string manifestToPath(const ContentManifest &manifest) const;
+    string manifestToPath(const ContentManifest& manifest) const;
     void pathToManifest(
-        const string &path, ContentManifest* outManifest = nullptr
+        const string& path, ContentManifest* outManifest = nullptr
     ) const;
     void unloadAll(CONTENT_LOAD_LEVEL level) override;
     
@@ -531,10 +531,10 @@ public:
     string getPerfMonMeasurementName() const override;
     void loadAll(CONTENT_LOAD_LEVEL level) override;
     string manifestToPath(
-        const ContentManifest &manifest, const string &extension
+        const ContentManifest& manifest, const string& extension
     ) const;
     void pathToManifest(
-        const string &path, ContentManifest* outManifest = nullptr,
+        const string& path, ContentManifest* outManifest = nullptr,
         string* outExtension = nullptr
     ) const;
     void unloadAll(CONTENT_LOAD_LEVEL level) override;
@@ -567,10 +567,10 @@ public:
     string getPerfMonMeasurementName() const override;
     void loadAll(CONTENT_LOAD_LEVEL level) override;
     string manifestToPath(
-        const ContentManifest &manifest, const string &extension
+        const ContentManifest& manifest, const string& extension
     ) const;
     void pathToManifest(
-        const string &path, ContentManifest* outManifest = nullptr,
+        const string& path, ContentManifest* outManifest = nullptr,
         string* outExtension = nullptr
     ) const;
     void unloadAll(CONTENT_LOAD_LEVEL level) override;
@@ -602,9 +602,9 @@ public:
     string getName() const override;
     string getPerfMonMeasurementName() const override;
     void loadAll(CONTENT_LOAD_LEVEL level) override;
-    string manifestToPath(const ContentManifest &manifest) const;
+    string manifestToPath(const ContentManifest& manifest) const;
     void pathToManifest(
-        const string &path, ContentManifest* outManifest = nullptr
+        const string& path, ContentManifest* outManifest = nullptr
     ) const;
     void unloadAll(CONTENT_LOAD_LEVEL level) override;
     
@@ -643,9 +643,9 @@ public:
     string getName() const override;
     string getPerfMonMeasurementName() const override;
     void loadAll(CONTENT_LOAD_LEVEL level) override;
-    string manifestToPath(const ContentManifest &manifest) const;
+    string manifestToPath(const ContentManifest& manifest) const;
     void pathToManifest(
-        const string &path, ContentManifest* outManifest = nullptr
+        const string& path, ContentManifest* outManifest = nullptr
     ) const;
     void unloadAll(CONTENT_LOAD_LEVEL level) override;
     
@@ -682,9 +682,9 @@ public:
     string getName() const override;
     string getPerfMonMeasurementName() const override;
     void loadAll(CONTENT_LOAD_LEVEL level) override;
-    string manifestToPath(const ContentManifest &manifest) const;
+    string manifestToPath(const ContentManifest& manifest) const;
     void pathToManifest(
-        const string &path, ContentManifest* outManifest = nullptr
+        const string& path, ContentManifest* outManifest = nullptr
     ) const;
     void unloadAll(CONTENT_LOAD_LEVEL level) override;
     
@@ -721,9 +721,9 @@ public:
     string getName() const override;
     string getPerfMonMeasurementName() const override;
     void loadAll(CONTENT_LOAD_LEVEL level) override;
-    string manifestToPath(const ContentManifest &manifest) const;
+    string manifestToPath(const ContentManifest& manifest) const;
     void pathToManifest(
-        const string &path, ContentManifest* outManifest = nullptr
+        const string& path, ContentManifest* outManifest = nullptr
     ) const;
     void unloadAll(CONTENT_LOAD_LEVEL level) override;
     

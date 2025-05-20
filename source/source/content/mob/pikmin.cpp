@@ -78,7 +78,7 @@ const float THROW_VER_SPEED = 900.0f;
  * @param type Pikmin type this mob belongs to.
  * @param angle Starting angle.
  */
-Pikmin::Pikmin(const Point &pos, PikminType* type, float angle) :
+Pikmin::Pikmin(const Point& pos, PikminType* type, float angle) :
     Mob(pos, type, angle),
     pikType(type) {
     
@@ -505,7 +505,7 @@ bool Pikmin::processAttackMiss(HitboxInteraction* info) {
  *
  * @param svr Script var reader to use.
  */
-void Pikmin::readScriptVars(const ScriptVarReader &svr) {
+void Pikmin::readScriptVars(const ScriptVarReader& svr) {
     Mob::readScriptVars(svr);
     
     int maturityVar;
@@ -618,7 +618,7 @@ void Pikmin::tickClassSpecifics(float deltaT) {
  * @return The sprout.
  */
 Pikmin* getClosestSprout(
-    const Point &pos, Distance* d, bool ignoreReserved
+    const Point& pos, Distance* d, bool ignoreReserved
 ) {
     Distance closestDist;
     Pikmin* closestPikmin = nullptr;

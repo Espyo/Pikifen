@@ -48,7 +48,7 @@ DataNode::DataNode() {
  *
  * @param dn2 The node to copy data from.
  */
-DataNode::DataNode(const DataNode &dn2) :
+DataNode::DataNode(const DataNode& dn2) :
     name(dn2.name),
     value(dn2.value),
     fileWasOpened(dn2.fileWasOpened),
@@ -69,7 +69,7 @@ DataNode::DataNode(const DataNode &dn2) :
  *
  * @param filePath Name of the file to load.
  */
-DataNode::DataNode(const string &filePath) :
+DataNode::DataNode(const string& filePath) :
     filePath(filePath) {
     
     loadFile(filePath);
@@ -82,7 +82,7 @@ DataNode::DataNode(const string &filePath) :
  * @param name The node's name.
  * @param value Its value.
  */
-DataNode::DataNode(const string &name, const string &value) :
+DataNode::DataNode(const string& name, const string& value) :
     name(name),
     value(value) {
     
@@ -117,7 +117,7 @@ size_t DataNode::add(DataNode* newNode) {
  * @param value Value of the new node.
  * @return The new node.
  */
-DataNode* DataNode::addNew(const string &name, const string &value) {
+DataNode* DataNode::addNew(const string& name, const string& value) {
     DataNode* newNode = new DataNode(name, value);
     add(newNode);
     return newNode;
@@ -216,7 +216,7 @@ unsigned char DataNode::encryptChar(unsigned char c) {
  *
  * @param s String to encrypt.
  */
-void DataNode::encryptString(string &s) {
+void DataNode::encryptString(string& s) {
     for(size_t c = 0; c < s.size(); c++) {
         s[c] = encryptChar(s[c]);
     }
@@ -246,7 +246,7 @@ DataNode* DataNode::getChild(size_t number) {
  * @return The node.
  */
 DataNode* DataNode::getChildByName(
-    const string &name, size_t occurrenceNr
+    const string& name, size_t occurrenceNr
 ) {
     size_t curOccurrenceNr = 0;
     
@@ -282,7 +282,7 @@ size_t DataNode::getNrOfChildren() const {
  * @param name Name the children must have.
  * @return The number.
  */
-size_t DataNode::getNrOfChildrenByName(const string &name) const {
+size_t DataNode::getNrOfChildrenByName(const string& name) const {
     size_t number = 0;
     
     for(size_t c = 0; c < children.size(); c++) {
@@ -299,7 +299,7 @@ size_t DataNode::getNrOfChildrenByName(const string &name) const {
  * @param def Default value.
  * @return The value.
  */
-string DataNode::getValueOrDefault(const string &def) const {
+string DataNode::getValueOrDefault(const string& def) const {
     return (value.empty() ? def : value);
 }
 
@@ -312,7 +312,7 @@ string DataNode::getValueOrDefault(const string &def) const {
  * @param encrypted If true, the document is encrypted and needs decrypting.
  */
 void DataNode::getline(
-    ALLEGRO_FILE* file, string &line, bool encrypted
+    ALLEGRO_FILE* file, string& line, bool encrypted
 ) {
     line.clear();
     if(!file) {
@@ -379,7 +379,7 @@ void DataNode::getline(
  * @param encrypted If true, the file is encrypted, and needs decrypting.
  */
 void DataNode::loadFile(
-    const string &filePath, bool trimValues,
+    const string& filePath, bool trimValues,
     bool namesOnlyAfterRoot, bool encrypted
 ) {
     vector<string> lines;
@@ -430,7 +430,7 @@ void DataNode::loadFile(
  * judging by startLine. This is used for the recursion.
  */
 size_t DataNode::loadNode(
-    const vector<string> &lines, bool trimValues,
+    const vector<string>& lines, bool trimValues,
     size_t startLine, size_t depth,
     bool namesOnlyAfterRoot
 ) {
@@ -525,7 +525,7 @@ size_t DataNode::loadNode(
  * @param dn2 Node to copy from.
  * @return The current node.
  */
-DataNode &DataNode::operator=(const DataNode &dn2) {
+DataNode& DataNode::operator=(const DataNode& dn2) {
     if(this != &dn2) {
         clear();
         
@@ -669,7 +669,7 @@ void DataNode::saveNode(
  * @param leftOnly If true, only trim the spaces at the left.
  * @return The trimmed string.
  */
-string DataNode::trimSpaces(const string &s, bool leftOnly) {
+string DataNode::trimSpaces(const string& s, bool leftOnly) {
     string orig = s;
     //Spaces before.
     if(orig.size()) {

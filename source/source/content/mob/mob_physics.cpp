@@ -104,7 +104,7 @@ Mob* Mob::getMobToWalkOn() const {
  * movement is impossible.
  */
 H_MOVE_RESULT Mob::getMovementEdgeIntersections(
-    const Point &newPos, vector<Edge*>* intersectingEdges
+    const Point& newPos, vector<Edge*>* intersectingEdges
 ) const {
     //Before checking the edges, let's consult the blockmap and look at
     //the edges in the same blocks the mob is on.
@@ -130,7 +130,7 @@ H_MOVE_RESULT Mob::getMovementEdgeIntersections(
     }
     
     //Go through each edge, and figure out if it is a valid wall for our mob.
-    for(auto &ePtr : candidateEdges) {
+    for(auto& ePtr : candidateEdges) {
     
         bool isEdgeBlocking = false;
         
@@ -382,7 +382,7 @@ H_MOVE_RESULT Mob::getWallSlideAngle(
  * @param touchedWall Holds whether or not the mob touched a wall in this move.
  */
 void Mob::tickHorizontalMovementPhysics(
-    float deltaT, const Point &attemptedMoveSpeed,
+    float deltaT, const Point& attemptedMoveSpeed,
     bool* touchedWall
 ) {
     if(attemptedMoveSpeed.x == 0 && attemptedMoveSpeed.y == 0) {

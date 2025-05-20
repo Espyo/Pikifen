@@ -105,8 +105,8 @@ void Sector::clone(Sector* destination) const {
  * Also doubles as the list of visited sectors.
  */
 void Sector::getNeighborSectorsConditionally(
-    const std::function<bool(Sector* s_ptr)> &condition,
-    vector<Sector*> &sectorList
+    const std::function<bool(Sector* s_ptr)>& condition,
+    vector<Sector*>& sectorList
 ) {
 
     //If this sector is already on the list, skip.
@@ -190,7 +190,7 @@ void Sector::getTextureMergeSectors(Sector** s1, Sector** s2) const {
     
     //Find the two lengthiest ones.
     vector<std::pair<Distance, Sector*> > neighborsVec;
-    for(auto &n : neighbors) {
+    for(auto& n : neighbors) {
         neighborsVec.push_back(
             std::make_pair(
                 //Yes, we do need these casts, for g++.
@@ -249,7 +249,7 @@ bool Sector::isClockwise() const {
  * @param p Point to check.
  * @return Whether it is in the sector.
  */
-bool Sector::isPointInSector(const Point &p) const {
+bool Sector::isPointInSector(const Point& p) const {
     for(size_t t = 0; t < triangles.size(); t++) {
         const Triangle* tPtr = &triangles[t];
         if(
@@ -298,7 +298,7 @@ void Sector::removeEdge(const Edge* ePtr) {
  * @return The sector.
  */
 Sector* getSector(
-    const Point &p, size_t* outSectorIdx, bool useBlockmap
+    const Point& p, size_t* outSectorIdx, bool useBlockmap
 ) {
 
     if(useBlockmap) {
@@ -312,7 +312,7 @@ Sector* getSector(
             
         if(sectors->size() == 1) return *sectors->begin();
         
-        for(auto &s : (*sectors)) {
+        for(auto& s : (*sectors)) {
         
             if(!s) {
                 continue;

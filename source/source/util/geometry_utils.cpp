@@ -28,7 +28,7 @@ using std::vector;
  * @param p1 First point.
  * @param p2 Second point.
  */
-Distance::Distance(const Point &p1, const Point &p2) :
+Distance::Distance(const Point& p1, const Point& p2) :
     distanceSquared(
         (p2.x - p1.x) * (p2.x - p1.x) +
         (p2.y - p1.y) * (p2.y - p1.y)
@@ -56,7 +56,7 @@ Distance::Distance(float d) :
  * @param d Regular, non-squared distance.
  * @return The current object.
  */
-Distance &Distance::operator =(float d) {
+Distance& Distance::operator =(float d) {
     distanceSquared = d * d;
     normalDistance = d;
     hasNormalDistance = true;
@@ -136,7 +136,7 @@ bool Distance::operator!=(float d2) const {
  * @param d2 Distance object to check.
  * @return Whether it is smaller.
  */
-bool Distance::operator<(const Distance &d2) const {
+bool Distance::operator<(const Distance& d2) const {
     return distanceSquared < d2.distanceSquared;
 }
 
@@ -147,7 +147,7 @@ bool Distance::operator<(const Distance &d2) const {
  * @param d2 Distance object to check.
  * @return Whether it is larger.
  */
-bool Distance::operator>(const Distance &d2) const {
+bool Distance::operator>(const Distance& d2) const {
     return distanceSquared > d2.distanceSquared;
 }
 
@@ -158,7 +158,7 @@ bool Distance::operator>(const Distance &d2) const {
  * @param d2 Distance object to check.
  * @return Whether it is the same.
  */
-bool Distance::operator==(const Distance &d2) const {
+bool Distance::operator==(const Distance& d2) const {
     return distanceSquared == d2.distanceSquared;
 }
 
@@ -169,7 +169,7 @@ bool Distance::operator==(const Distance &d2) const {
  * @param d2 Distance object to check.
  * @return Whether it is smaller or equal.
  */
-bool Distance::operator<=(const Distance &d2) const {
+bool Distance::operator<=(const Distance& d2) const {
     return !operator>(d2);
 }
 
@@ -180,7 +180,7 @@ bool Distance::operator<=(const Distance &d2) const {
  * @param d2 Distance object to check.
  * @return Whether it is larger or equal.
  */
-bool Distance::operator>=(const Distance &d2) const {
+bool Distance::operator>=(const Distance& d2) const {
     return !operator<(d2);
 }
 
@@ -191,7 +191,7 @@ bool Distance::operator>=(const Distance &d2) const {
  * @param d2 Distance object to check.
  * @return Whether it is different.
  */
-bool Distance::operator!=(const Distance &d2) const {
+bool Distance::operator!=(const Distance& d2) const {
     return !operator==(d2);
 }
 
@@ -216,7 +216,7 @@ void Distance::operator+=(float d2) {
  *
  * @param d2 Amount of distance to add.
  */
-void Distance::operator+=(const Distance &d2) {
+void Distance::operator+=(const Distance& d2) {
     distanceSquared += d2.distanceSquared;
     if(hasNormalDistance) {
         if(d2.hasNormalDistance) {
@@ -243,7 +243,7 @@ void Distance::operator-=(float d2) {
  *
  * @param d2 Amount of distance to remove.
  */
-void Distance::operator-=(const Distance &d2) {
+void Distance::operator-=(const Distance& d2) {
     distanceSquared -= d2.distanceSquared;
     if(hasNormalDistance) {
         if(d2.hasNormalDistance) {
@@ -308,7 +308,7 @@ Point::Point() {
  * @param p Point with values to add with.
  * @return The new point.
  */
-const Point Point::operator +(const Point &p) const {
+const Point Point::operator +(const Point& p) const {
     return Point(x + p.x, y + p.y);
 }
 
@@ -319,7 +319,7 @@ const Point Point::operator +(const Point &p) const {
  * @param p Point with values to subtract with.
  * @return The new point.
  */
-const Point Point::operator -(const Point &p) const {
+const Point Point::operator -(const Point& p) const {
     return Point(x - p.x, y - p.y);
 }
 
@@ -330,7 +330,7 @@ const Point Point::operator -(const Point &p) const {
  * @param p Point with values to multiply with.
  * @return The new point.
  */
-const Point Point::operator *(const Point &p) const {
+const Point Point::operator *(const Point& p) const {
     return Point(x * p.x, y * p.y);
 }
 
@@ -341,7 +341,7 @@ const Point Point::operator *(const Point &p) const {
  * @param p Point with values to divide with.
  * @return The new point.
  */
-const Point Point::operator /(const Point &p) const {
+const Point Point::operator /(const Point& p) const {
     return Point(x / p.x, y / p.y);
 }
 
@@ -396,7 +396,7 @@ const Point Point::operator /(float n) const {
  * @param p Point with the values to add with.
  * @return The current object.
  */
-Point Point::operator +=(const Point &p) {
+Point Point::operator +=(const Point& p) {
     x += p.x;
     y += p.y;
     return Point(x, y);
@@ -409,7 +409,7 @@ Point Point::operator +=(const Point &p) {
  * @param p Point with the values to subtract with.
  * @return The current object.
  */
-Point Point::operator -=(const Point &p) {
+Point Point::operator -=(const Point& p) {
     x -= p.x;
     y -= p.y;
     return Point(x, y);
@@ -422,7 +422,7 @@ Point Point::operator -=(const Point &p) {
  * @param p Point with the values to multiply by.
  * @return The current object.
  */
-Point Point::operator *=(const Point &p) {
+Point Point::operator *=(const Point& p) {
     x *= p.x;
     y *= p.y;
     return Point(x, y);
@@ -435,7 +435,7 @@ Point Point::operator *=(const Point &p) {
  * @param p Point with the values to divide by.
  * @return The current object.
  */
-Point Point::operator /=(const Point &p) {
+Point Point::operator /=(const Point& p) {
     x /= p.x;
     y /= p.y;
     return Point(x, y);
@@ -500,7 +500,7 @@ Point Point::operator /=(float n) {
  * @param p Other point to compare against.
  * @return Whether they are the same.
  */
-bool Point::operator ==(const Point &p) const {
+bool Point::operator ==(const Point& p) const {
     return x == p.x && y == p.y;
 }
 
@@ -511,7 +511,7 @@ bool Point::operator ==(const Point &p) const {
  * @param p Other point to compare against.
  * @return Whether they are different.
  */
-bool Point::operator !=(const Point &p) const {
+bool Point::operator !=(const Point& p) const {
     return x != p.x || y != p.y;
 }
 
@@ -523,7 +523,7 @@ bool Point::operator !=(const Point &p) const {
  * @param p Coordinates to add to.
  * @return The new point.
  */
-const Point operator+(float n, const Point &p) {
+const Point operator+(float n, const Point& p) {
     return Point(n + p.x, n + p.y);
 }
 
@@ -536,7 +536,7 @@ const Point operator+(float n, const Point &p) {
  * @param p Coordinates to subtract with.
  * @return The new point.
  */
-const Point operator-(float n, const Point &p) {
+const Point operator-(float n, const Point& p) {
     return Point(n - p.x, n - p.y);
 }
 
@@ -549,7 +549,7 @@ const Point operator-(float n, const Point &p) {
  * @param p Coordinates to multiply with.
  * @return The new point.
  */
-const Point operator*(float n, const Point &p) {
+const Point operator*(float n, const Point& p) {
     return Point(n * p.x, n * p.y);
 }
 
@@ -562,7 +562,7 @@ const Point operator*(float n, const Point &p) {
  * @param p Coordinates to divide with.
  * @return The new point.
  */
-const Point operator/(float n, const Point &p) {
+const Point operator/(float n, const Point& p) {
     return Point(n / p.x, n / p.y);
 }
 
@@ -606,7 +606,7 @@ float angularDistToLinear(float angularDist, float radius) {
  * @param r Range of the bounding box.
  * @return Whether they are colliding.
  */
-bool bBoxCheck(const Point &center1, const Point &center2, float r) {
+bool bBoxCheck(const Point& center1, const Point& center2, float r) {
     return
         (
             fabs(center1.x - center2.x) <= r &&
@@ -626,8 +626,8 @@ bool bBoxCheck(const Point &center1, const Point &center2, float r) {
  * @return Whether they are colliding.
  */
 bool bBoxCheck(
-    const Point &tl1, const Point &br1,
-    const Point &center2, float r
+    const Point& tl1, const Point& br1,
+    const Point& center2, float r
 ) {
     return
         rectanglesIntersect(
@@ -658,8 +658,8 @@ bool bBoxCheck(
  * returned here.
  */
 void calculateThrow(
-    const Point &startXY, float startZ,
-    const Point &targetXY, float targetZ,
+    const Point& startXY, float startZ,
+    const Point& targetXY, float targetZ,
     float maxH, float gravity,
     Point* reqSpeedXY, float* reqSpeedZ, float* outHAngle
 ) {
@@ -731,8 +731,8 @@ void calculateThrow(
  * @return Whether they intersect.
  */
 bool circleIntersectsLineSeg(
-    const Point &circle, float radius,
-    const Point &lineP1, const Point &lineP2,
+    const Point& circle, float radius,
+    const Point& lineP1, const Point& lineP2,
     float* outLix, float* outLiy
 ) {
 
@@ -790,8 +790,8 @@ bool circleIntersectsLineSeg(
  * @return Whether they intersect.
  */
 bool circleIntersectsRectangle(
-    const Point &circle, float radius,
-    const Point &rectangle, const Point &rectDim,
+    const Point& circle, float radius,
+    const Point& rectangle, const Point& rectDim,
     float rectAngle,
     float* outOverlapDist, float* outRectangleSideAngle
 ) {
@@ -880,7 +880,7 @@ bool circleIntersectsRectangle(
  * @return Whether they intersect.
  */
 bool collinearLineSegsIntersect(
-    const Point &a, const Point &b, const Point &c, const Point &d,
+    const Point& a, const Point& b, const Point& c, const Point& d,
     Point* outIntersectionTL, Point* outIntersectionBR
 ) {
     Point min1(std::min(a.x, b.x), std::min(a.y, b.y));
@@ -914,7 +914,7 @@ bool collinearLineSegsIntersect(
  * @param magnitude Variable to return the magnitude to.
  */
 void coordinatesToAngle(
-    const Point &coordinates, float* angle, float* magnitude
+    const Point& coordinates, float* angle, float* magnitude
 ) {
     if(angle) {
         *angle = (float) atan2(coordinates.y, coordinates.x);
@@ -943,7 +943,7 @@ float degToRad(float deg) {
  * @param v2 Second vector.
  * @return The dot product.
  */
-float dotProduct(const Point &v1, const Point &v2) {
+float dotProduct(const Point& v1, const Point& v2) {
     return v1.x * v2.x + v1.y * v2.y;
 }
 
@@ -954,7 +954,7 @@ float dotProduct(const Point &v1, const Point &v2) {
  * @param focus Point that the origin is focusing on.
  * @return The angle.
  */
-float getAngle(const Point &focus) {
+float getAngle(const Point& focus) {
     return (float) atan2(focus.y, focus.x);
 }
 
@@ -968,7 +968,7 @@ float getAngle(const Point &focus) {
  * @param focus Point that the center is focusing on.
  * @return The angle.
  */
-float getAngle(const Point &center, const Point &focus) {
+float getAngle(const Point& center, const Point& focus) {
     return (float) atan2(focus.y - center.y, focus.x - center.x);
 }
 
@@ -1016,7 +1016,7 @@ float getAngleSmallestDiff(float a1, float a2) {
  * @return The closest point.
  */
 Point getClosestPointInLineSeg(
-    const Point &l1, const Point &l2, const Point &p, float* outSegmentRatio
+    const Point& l1, const Point& l2, const Point& p, float* outSegmentRatio
 ) {
 
     //Code by http://stackoverflow.com/a/3122532
@@ -1054,8 +1054,8 @@ Point getClosestPointInLineSeg(
  * @return The closest point.
  */
 Point getClosestPointInRotatedRectangle(
-    const Point &p,
-    const Point &rectCenter, const Point &rectDim, float rectAngle,
+    const Point& p,
+    const Point& rectCenter, const Point& rectDim, float rectAngle,
     bool* outIsInside
 ) {
     Point closestPoint;
@@ -1123,7 +1123,7 @@ Point getClosestPointInRotatedRectangle(
  * @param maxMiterLength If not 0, the miter is limited to this length.
  */
 void getMiterPoints(
-    const Point &a, const Point &b, const Point &c, float thickness,
+    const Point& a, const Point& b, const Point& c, float thickness,
     Point* miterPoint1, Point* miterPoint2, float maxMiterLength
 ) {
     //https://blog.scottlogic.com/2019/11/18/drawing-lines-with-webgl.html
@@ -1168,7 +1168,7 @@ void getMiterPoints(
  * @param lp2 Ending point of the line segment.
  * @return The sign.
  */
-float getPointSign(const Point &p, const Point &lp1, const Point &lp2) {
+float getPointSign(const Point& p, const Point& lp1, const Point& lp2) {
     return (p.x - lp2.x) * (lp1.y - lp2.y) - (lp1.x - lp2.x) * (p.y - lp2.y);
 }
 
@@ -1192,7 +1192,7 @@ float getPointSign(const Point &p, const Point &lp1, const Point &lp2) {
  * @return The point.
  */
 Point getRandomPointInRectangularRing(
-    const Point &innerDist, const Point &outerDist,
+    const Point& innerDist, const Point& outerDist,
     int axisRandomInt, float axisRandomFloat, float pxRandomFloat,
     float pyRandomFloat, int sideRandomInt
 ) {
@@ -1336,7 +1336,7 @@ Point getRatioPointInRing(
  * @param maxCoords The bottom-right coordinates are returned here.
  */
 void getTransformedRectangleBBox(
-    const Point &center, const Point &dimensions, float angle,
+    const Point& center, const Point& dimensions, float angle,
     Point* minCoords, Point* maxCoords
 ) {
 
@@ -1411,7 +1411,7 @@ float getVerticalAlignOffset(V_ALIGN_MODE mode, float height) {
  */
 float interpolateAngle(
     float input, float inputStart, float inputEnd,
-    float &outputStart, float &outputEnd
+    float& outputStart, float& outputEnd
 ) {
     float angleCwDiff = getAngleCwDiff(outputStart, outputEnd);
     float angleDelta;
@@ -1441,7 +1441,7 @@ float interpolateAngle(
  */
 Point interpolatePoint(
     float input, float inputStart, float inputEnd,
-    const Point &outputStart, const Point &outputEnd
+    const Point& outputStart, const Point& outputEnd
 ) {
     return
         Point(
@@ -1465,7 +1465,7 @@ Point interpolatePoint(
  * @return Whether it is inside.
  */
 bool isPointInRectangle(
-    const Point &p, const Point &rectCenter, const Point &rectSize
+    const Point& p, const Point& rectCenter, const Point& rectSize
 ) {
     if(p.x < rectCenter.x - rectSize.x / 2.0f) return false;
     if(p.x > rectCenter.x + rectSize.x / 2.0f) return false;
@@ -1488,7 +1488,7 @@ bool isPointInRectangle(
  * @return Whether it is inside.
  */
 bool isPointInTriangle(
-    const Point &p, const Point &tp1, const Point &tp2, const Point &tp3,
+    const Point& p, const Point& tp1, const Point& tp2, const Point& tp3,
     bool loq
 ) {
 
@@ -1527,8 +1527,8 @@ bool isPointInTriangle(
  * @return Whether they intersect.
  */
 bool lineSegIntersectsRectangle(
-    const Point &r1, const Point &r2,
-    const Point &l1, const Point &l2
+    const Point& r1, const Point& r2,
+    const Point& l1, const Point& l2
 ) {
     //Line crosses left side?
     if(
@@ -1590,8 +1590,8 @@ bool lineSegIntersectsRectangle(
  * @return Whether they intersect.
  */
 bool lineSegIntersectsRotatedRectangle(
-    const Point &lp1, const Point &lp2,
-    const Point &rectCenter, const Point &rectDim, float rectAngle
+    const Point& lp1, const Point& lp2,
+    const Point& rectCenter, const Point& rectDim, float rectAngle
 ) {
     //First, transform the coordinates so the rectangle is axis-aligned, and
     //the rectangle's center is at the origin.
@@ -1668,7 +1668,7 @@ bool lineSegIntersectsRotatedRectangle(
  * @return Whether they are collinear.
  */
 bool lineSegsAreCollinear(
-    const Point &a, const Point &b, const Point &c, const Point &d
+    const Point& a, const Point& b, const Point& c, const Point& d
 ) {
     return
         pointsAreCollinear(a, b, c) &&
@@ -1690,7 +1690,7 @@ bool lineSegsAreCollinear(
  * @return Whether they intersect.
  */
 bool lineSegsIntersect(
-    const Point &l1p1, const Point &l1p2, const Point &l2p1, const Point &l2p2,
+    const Point& l1p1, const Point& l1p2, const Point& l2p1, const Point& l2p2,
     float* outFinalL1r, float* outFinalL2r
 ) {
     float l1r = 0.0f;
@@ -1722,7 +1722,7 @@ bool lineSegsIntersect(
  * @return Whether they intersect.
  */
 bool lineSegsIntersect(
-    const Point &l1p1, const Point &l1p2, const Point &l2p1, const Point &l2p2,
+    const Point& l1p1, const Point& l1p2, const Point& l2p1, const Point& l2p2,
     Point* outIntersection
 ) {
     float r;
@@ -1766,8 +1766,8 @@ float linearDistToAngular(float linearDist, float radius) {
  * @return Whether they intersect.
  */
 bool linesIntersect(
-    const Point &l1p1, const Point &l1p2,
-    const Point &l2p1, const Point &l2p2,
+    const Point& l1p1, const Point& l1p2,
+    const Point& l2p1, const Point& l2p2,
     float* outL1r, float* outL2r
 ) {
     float div =
@@ -1822,8 +1822,8 @@ bool linesIntersect(
  * @return Whether they intersect.
  */
 bool linesIntersect(
-    const Point &l1p1, const Point &l1p2,
-    const Point &l2p1, const Point &l2p2,
+    const Point& l1p1, const Point& l1p2,
+    const Point& l2p1, const Point& l2p2,
     Point* outPoint
 ) {
     if(outPoint) {
@@ -1859,7 +1859,7 @@ bool linesIntersect(
  * @param deltaT How long the frame's tick is, in seconds.
  */
 void movePoint(
-    const Point &start, const Point &target,
+    const Point& start, const Point& target,
     float speed, float reachRadius,
     Point* mov, float* angle, bool* reached, float deltaT
 ) {
@@ -1903,7 +1903,7 @@ float normalizeAngle(float a) {
  * @param v Vector to normalize.
  * @return The normalized vector.
  */
-Point normalizeVector(const Point &v) {
+Point normalizeVector(const Point& v) {
     float length = Distance(Point(), v).toFloat();
     if(length == 0.0f) return v;
     return
@@ -1921,7 +1921,7 @@ Point normalizeVector(const Point &v) {
  * @param z If not nullptr, add a third word which is this Z coordinate.
  * @return The string.
  */
-string p2s(const Point &p, const float* z) {
+string p2s(const Point& p, const float* z) {
     return f2s(p.x) + " " + f2s(p.y) + (z ? " " + f2s(*z) : "");
 }
 
@@ -1935,7 +1935,7 @@ string p2s(const Point &p, const float* z) {
  * @return Whether they are collinear.
  */
 bool pointsAreCollinear(
-    const Point &a, const Point &b, const Point &c
+    const Point& a, const Point& b, const Point& c
 ) {
     //https://math.stackexchange.com/a/405981
     return
@@ -1953,7 +1953,7 @@ bool pointsAreCollinear(
  * @param max The largest value of all the vertexes.
  */
 void projectVertexes(
-    const vector<Point> &v, const Point axis, float* min, float* max
+    const vector<Point>& v, const Point axis, float* min, float* max
 ) {
     for(size_t i = 0; i < v.size(); i++) {
         Point p = v[i];
@@ -1986,8 +1986,8 @@ float radToDeg(float rad) {
  * @return Whether they intersect.
  */
 bool rectanglesIntersect(
-    const Point &tl1, const Point &br1,
-    const Point &tl2, const Point &br2
+    const Point& tl1, const Point& br1,
+    const Point& tl2, const Point& br2
 ) {
     if(tl1.x > br2.x) return false;
     if(br1.x < tl2.x) return false;
@@ -2014,8 +2014,8 @@ bool rectanglesIntersect(
  * @return Whether they intersect.
  */
 bool rectanglesIntersect(
-    const Point &rect1, const Point &rectDim1, float rectAngle1,
-    const Point &rect2, const Point &rectDim2, float rectAngle2,
+    const Point& rect1, const Point& rectDim1, float rectAngle1,
+    const Point& rect2, const Point& rectDim2, float rectAngle2,
     float* outOverlapDist, float* outOverlapAngle
 ) {
     //Start by getting the vertexes of the rectangles.
@@ -2115,8 +2115,8 @@ bool rectanglesIntersect(
  * @return The resized dimensions.
  */
 Point resizeToBoxKeepingAspectRatio(
-    const Point &originalSize,
-    const Point &boxSize
+    const Point& originalSize,
+    const Point& boxSize
 ) {
     if(originalSize.y == 0.0f || boxSize.y == 0.0f) return Point();
     float originalAspectRatio = originalSize.x / originalSize.y;
@@ -2146,7 +2146,7 @@ Point resizeToBoxKeepingAspectRatio(
  * @param angle Angle to rotate by.
  * @return The rotated point.
  */
-Point rotatePoint(const Point &coords, float angle) {
+Point rotatePoint(const Point& coords, float angle) {
     float c = (float) cos(angle);
     float s = (float) sin(angle);
     return Point(c * coords.x - s * coords.y, s * coords.x + c * coords.y);
@@ -2160,7 +2160,7 @@ Point rotatePoint(const Point &coords, float angle) {
  * @param outZ If not nullptr, the third word is returned here.
  * @return The (X and Y) coordinates.
  */
-Point s2p(const string &s, float* outZ) {
+Point s2p(const string& s, float* outZ) {
     vector<string> words = split(s);
     Point p;
     if(words.size() >= 1) {
@@ -2192,7 +2192,7 @@ Point s2p(const string &s, float* outZ) {
  * @return The scale factor for X and for Y.
  */
 Point scaleRectangleToBox(
-    const Point &rectSize, const Point &boxSize,
+    const Point& rectSize, const Point& boxSize,
     bool canGrowX, bool canGrowY,
     bool canShrinkX, bool canShrinkY,
     bool canChangeRatio
@@ -2244,14 +2244,14 @@ Point scaleRectangleToBox(
  * @return The next item's index in the list.
  */
 size_t selectNextItemDirectionally(
-    const vector<Point> &itemCoordinates, size_t selectedItem,
-    float direction, const Point &loopRegion
+    const vector<Point>& itemCoordinates, size_t selectedItem,
+    float direction, const Point& loopRegion
 ) {
     const float MIN_BLINDSPOT_ANGLE = (float) (TAU * 0.17f);
     const float MAX_BLINDSPOT_ANGLE = (float) (TAU * 0.33f);
     
     float normalizedDir = normalizeAngle(direction);
-    const Point &selCoords = itemCoordinates[selectedItem];
+    const Point& selCoords = itemCoordinates[selectedItem];
     float bestScore = FLT_MAX;
     size_t bestItem = selectedItem;
     
@@ -2351,7 +2351,7 @@ size_t selectNextItemDirectionally(
  * @param maxCoords Maximum coordinates so far.
  * @param newCoords New coordinates to process and, if necessary, update with.
  */
-void updateMaxCoords(Point &maxCoords, const Point &newCoords) {
+void updateMaxCoords(Point& maxCoords, const Point& newCoords) {
     maxCoords.x =
         std::max(maxCoords.x, newCoords.x);
     maxCoords.y =
@@ -2367,7 +2367,7 @@ void updateMaxCoords(Point &maxCoords, const Point &newCoords) {
  * @param minCoords Minimum coordinates so far.
  * @param newCoords New coordinates to process and, if necessary, update with.
  */
-void updateMinCoords(Point &minCoords, const Point &newCoords) {
+void updateMinCoords(Point& minCoords, const Point& newCoords) {
     minCoords.x =
         std::min(minCoords.x, newCoords.x);
     minCoords.y =
@@ -2385,7 +2385,7 @@ void updateMinCoords(Point &minCoords, const Point &newCoords) {
  * @param newCoords New coordinates to process and, if necessary, update with.
  */
 void updateMinMaxCoords(
-    Point &minCoords, Point &maxCoords, const Point &newCoords
+    Point& minCoords, Point& maxCoords, const Point& newCoords
 ) {
     updateMinCoords(minCoords, newCoords);
     updateMaxCoords(maxCoords, newCoords);

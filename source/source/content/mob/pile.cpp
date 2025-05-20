@@ -25,7 +25,7 @@
  * @param type Pile type this mob belongs to.
  * @param angle Starting angle.
  */
-Pile::Pile(const Point &pos, PileType* type, float angle) :
+Pile::Pile(const Point& pos, PileType* type, float angle) :
     Mob(pos, type, angle),
     pilType(type),
     amount(type->maxAmount) {
@@ -79,7 +79,7 @@ bool Pile::getFractionNumbersInfo(
  *
  * @param svr Script var reader to use.
  */
-void Pile::readScriptVars(const ScriptVarReader &svr) {
+void Pile::readScriptVars(const ScriptVarReader& svr) {
     Mob::readScriptVars(svr);
     
     size_t amountVar;

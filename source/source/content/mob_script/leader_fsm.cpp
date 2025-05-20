@@ -2513,7 +2513,7 @@ void LeaderFsm::signalStopAutoPluck(Mob* m, void* info1, void* info2) {
 void LeaderFsm::spray(Mob* m, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) m;
     size_t sprayIdx = *((size_t*) info1);
-    SprayType &sprayTypeRef = *game.config.misc.sprayOrder[sprayIdx];
+    SprayType& sprayTypeRef = *game.config.misc.sprayOrder[sprayIdx];
     
     if(leaPtr->player->team->sprayStats[sprayIdx].nrSprays == 0) {
         m->fsm.setState(LEADER_STATE_ACTIVE);
@@ -2575,7 +2575,7 @@ void LeaderFsm::spray(Mob* m, void* info1, void* info2) {
         
     }
     
-    for(auto &am : affectedMobs) {
+    for(auto& am : affectedMobs) {
         am->fsm.runEvent(
             MOB_EV_TOUCHED_SPRAY, (void*) game.config.misc.sprayOrder[sprayIdx]
         );
@@ -2592,7 +2592,7 @@ void LeaderFsm::spray(Mob* m, void* info1, void* info2) {
         );
     adjustKeyframeInterpolatorValues<Point>(
         pg.baseParticle.linearSpeed,
-    [ = ] (const Point &) { return particleSpeedVector; }
+    [ = ] (const Point&) { return particleSpeedVector; }
     );
     adjustKeyframeInterpolatorValues<ALLEGRO_COLOR>(
         pg.baseParticle.color,

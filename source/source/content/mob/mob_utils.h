@@ -66,7 +66,7 @@ struct CarrierSpot {
     
     //--- Function declarations ---
     
-    explicit CarrierSpot(const Point &pos);
+    explicit CarrierSpot(const Point& pos);
     
 };
 
@@ -282,7 +282,7 @@ struct Group {
         
         //--- Function declarations ---
         
-        explicit GroupSpot(const Point &p = Point(), Mob* m = nullptr) :
+        explicit GroupSpot(const Point& p = Point(), Mob* m = nullptr) :
             pos(p), mobPtr(m) {}
             
     };
@@ -628,7 +628,7 @@ struct Path {
     
     Path(
         Mob* m,
-        const PathFollowSettings &settings
+        const PathFollowSettings& settings
     );
     bool checkBlockage(PATH_BLOCK_REASON* outReason = nullptr);
     
@@ -697,7 +697,7 @@ struct PikminNest {
     PikminNest(Mob* mPtr, PikminNestType* type);
     bool callPikmin(Mob* mPtr, size_t typeIdx);
     size_t getAmountByType(const PikminType* type);
-    void readScriptVars(const ScriptVarReader &svr);
+    void readScriptVars(const ScriptVarReader& svr);
     void requestPikmin(
         size_t typeIdx, size_t amount, Leader* lPtr
     );
@@ -735,7 +735,7 @@ struct TrackRideInfo {
     //--- Function declarations ---
     
     TrackRideInfo(
-        Mob* m, const vector<size_t> &checkpoints, float speed
+        Mob* m, const vector<size_t>& checkpoints, float speed
     );
     
 };
@@ -743,24 +743,24 @@ struct TrackRideInfo {
 
 float calculateMobPhysicalSpan(
     float radius, float animHitboxSpan,
-    const Point &rectangularDim
+    const Point& rectangularDim
 );
 Mob* createMob(
-    MobCategory* category, const Point &pos, MobType* type,
-    float angle, const string &vars,
+    MobCategory* category, const Point& pos, MobType* type,
+    float angle, const string& vars,
     std::function<void(Mob*)> codeAfterCreation = nullptr,
     size_t firstStateOverride = INVALID
 );
 void deleteMob(Mob* m, bool completeDestruction = false);
 string getErrorMessageMobInfo(Mob* m);
 vector<Hazard*> getMobTypeListInvulnerabilities(
-    const unordered_set<MobType*> &types
+    const unordered_set<MobType*>& types
 );
 MobType::SpawnInfo* getSpawnInfoFromChildInfo(
     MobType* type, const MobType::Child* childInfo
 );
 bool isMobInReach(
-    MobType::Reach* reachTPtr, const Distance &distBetween, float angleDiff
+    MobType::Reach* reachTPtr, const Distance& distBetween, float angleDiff
 );
-MOB_TARGET_FLAG stringToMobTargetType(const string &typeStr);
-MOB_TEAM stringToTeamNr(const string &teamStr);
+MOB_TARGET_FLAG stringToMobTargetType(const string& typeStr);
+MOB_TEAM stringToTeamNr(const string& teamStr);

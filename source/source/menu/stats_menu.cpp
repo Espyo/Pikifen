@@ -28,7 +28,7 @@ const string GUI_FILE_NAME = "statistics_menu";
  * @brief Adds a new header to the stats list GUI item.
  * @param label Name of the header.
  */
-void StatsMenu::addHeader(const string &label) {
+void StatsMenu::addHeader(const string& label) {
     float listBottomY = statsList->getChildBottom();
     const float HEADER_HEIGHT = 0.09f;
     const float STAT_PADDING = 0.02f;
@@ -57,7 +57,7 @@ void StatsMenu::addHeader(const string &label) {
  * @return The text GUI item for the value.
  */
 TextGuiItem* StatsMenu::addStat(
-    const string &label, const string &value, const string &description
+    const string& label, const string& value, const string& description
 ) {
     float listBottomY = statsList->getChildBottom();
     const float STAT_HEIGHT = 0.08f;
@@ -114,7 +114,7 @@ void StatsMenu::initGuiMain() {
     gui.backItem =
         new ButtonGuiItem("Back", game.sysContent.fntStandard);
     gui.backItem->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         saveStatistics();
         leave();
     };

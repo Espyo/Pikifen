@@ -123,7 +123,7 @@ void PacksMenu::initGuiMain() {
     gui.backItem =
         new ButtonGuiItem("Back", game.sysContent.fntStandard);
     gui.backItem->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         game.options.packs.order = packOrder;
         game.options.packs.disabled = packsDisabled;
         saveOptions();
@@ -224,7 +224,7 @@ void PacksMenu::initGuiMain() {
             upButton->ratioCenter = Point(0.87f, rowCenterY);
             upButton->ratioSize = Point(0.08f, ITEM_HEIGHT);
             upButton->onActivate =
-            [p, this] (const Point &) {
+            [p, this] (const Point&) {
                 std::iter_swap(
                     packOrder.begin() + p, packOrder.begin() + (p - 1)
                 );
@@ -255,7 +255,7 @@ void PacksMenu::initGuiMain() {
             downButton->ratioCenter = Point(0.95f, rowCenterY);
             downButton->ratioSize = Point(0.08f, ITEM_HEIGHT);
             downButton->onActivate =
-            [p, this] (const Point &) {
+            [p, this] (const Point&) {
                 std::iter_swap(
                     packOrder.begin() + p, packOrder.begin() + (p + 1)
                 );
@@ -371,7 +371,7 @@ void PacksMenu::initGuiMain() {
     ButtonGuiItem* openFolderButton =
         new ButtonGuiItem("Open folder", game.sysContent.fntStandard);
     openFolderButton->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         openFileExplorer(FOLDER_PATHS_FROM_ROOT::GAME_DATA);
     };
     openFolderButton->onGetTooltip =
@@ -457,7 +457,7 @@ void PacksMenu::triggerRestartWarning() {
  * @brief Unloads the menu.
  */
 void PacksMenu::unload() {
-    for(auto &t : packThumbs) {
+    for(auto& t : packThumbs) {
         al_destroy_bitmap(t.second);
     }
     packThumbs.clear();

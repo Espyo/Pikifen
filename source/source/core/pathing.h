@@ -234,8 +234,8 @@ struct PathStop {
     //--- Function declarations ---
     
     explicit PathStop(
-        const Point &pos = Point(),
-        const vector<PathLink*> &links = vector<PathLink*>()
+        const Point& pos = Point(),
+        const vector<PathLink*>& links = vector<PathLink*>()
     );
     ~PathStop();
     void clone(PathStop* destination) const;
@@ -321,31 +321,31 @@ struct PathManager {
 
 
 bool canTakePathStop(
-    PathStop* stopPtr, const PathFollowSettings &settings,
+    PathStop* stopPtr, const PathFollowSettings& settings,
     PATH_BLOCK_REASON* outReason = nullptr
 );
 bool canTakePathStop(
-    const PathStop* stopPtr, const PathFollowSettings &settings,
+    const PathStop* stopPtr, const PathFollowSettings& settings,
     Sector* sectorPtr, PATH_BLOCK_REASON* outReason = nullptr
 );
 bool canTraversePathLink(
-    PathLink* linkPtr, const PathFollowSettings &settings,
+    PathLink* linkPtr, const PathFollowSettings& settings,
     PATH_BLOCK_REASON* outReason = nullptr
 );
 void depthFirstSearch(
-    vector<PathStop*> &nodes,
-    unordered_set<PathStop*> &visited, PathStop* start
+    vector<PathStop*>& nodes,
+    unordered_set<PathStop*>& visited, PathStop* start
 );
 PATH_RESULT aStar(
-    vector<PathStop*> &outPath,
+    vector<PathStop*>& outPath,
     PathStop* startNode, PathStop* endNode,
-    const PathFollowSettings &settings,
+    const PathFollowSettings& settings,
     float* outTotalDist
 );
 PATH_RESULT getPath(
-    const Point &start, const Point &end,
-    const PathFollowSettings &settings,
-    vector<PathStop*> &fullPath, float* outTotalDist,
+    const Point& start, const Point& end,
+    const PathFollowSettings& settings,
+    vector<PathStop*>& fullPath, float* outTotalDist,
     PathStop** outStartStop, PathStop** outEndStop
 );
 string pathBlockReasonToString(PATH_BLOCK_REASON reason);

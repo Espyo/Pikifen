@@ -33,7 +33,7 @@ ToolCategory::ToolCategory() :
  * @brief Clears the list of registered types of tools.
  */
 void ToolCategory::clearTypes() {
-    for(auto &t : game.content.mobTypes.list.tool) {
+    for(auto& t : game.content.mobTypes.list.tool) {
         delete t.second;
     }
     game.content.mobTypes.list.tool.clear();
@@ -49,7 +49,7 @@ void ToolCategory::clearTypes() {
  * @return The mob.
  */
 Mob* ToolCategory::createMob(
-    const Point &pos, MobType* type, float angle
+    const Point& pos, MobType* type, float angle
 ) {
     Tool* m = new Tool(pos, (ToolType*) type, angle);
     game.states.gameplay->mobs.tools.push_back(m);
@@ -90,7 +90,7 @@ void ToolCategory::eraseMob(Mob* m) {
  * @param internalName Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-MobType* ToolCategory::getType(const string &internalName) const {
+MobType* ToolCategory::getType(const string& internalName) const {
     auto it = game.content.mobTypes.list.tool.find(internalName);
     if(it == game.content.mobTypes.list.tool.end()) return nullptr;
     return it->second;
@@ -102,8 +102,8 @@ MobType* ToolCategory::getType(const string &internalName) const {
  *
  * @param list This list gets filled with the mob type internal names.
  */
-void ToolCategory::getTypeNames(vector<string> &list) const {
-    for(auto &t : game.content.mobTypes.list.tool) {
+void ToolCategory::getTypeNames(vector<string>& list) const {
+    for(auto& t : game.content.mobTypes.list.tool) {
         list.push_back(t.first);
     }
 }
@@ -115,6 +115,6 @@ void ToolCategory::getTypeNames(vector<string> &list) const {
  * @param internalName Internal name of the mob type.
  * @param type Mob type to register.
  */
-void ToolCategory::registerType(const string &internalName, MobType* type) {
+void ToolCategory::registerType(const string& internalName, MobType* type) {
     game.content.mobTypes.list.tool[internalName] = (ToolType*) type;
 }

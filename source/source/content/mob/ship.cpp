@@ -45,7 +45,7 @@ const float TRACTOR_BEAM_RING_ANIM_DUR = 0.8f;
  * @param type Ship type this mob belongs to.
  * @param angle Starting angle.
  */
-Ship::Ship(const Point &pos, ShipType* type, float angle) :
+Ship::Ship(const Point& pos, ShipType* type, float angle) :
     Mob(pos, type, angle),
     shiType(type),
     controlPointFinalPos(
@@ -241,7 +241,7 @@ bool Ship::isLeaderOnCp(const Leader* l) const {
  *
  * @param svr Script var reader to use.
  */
-void Ship::readScriptVars(const ScriptVarReader &svr) {
+void Ship::readScriptVars(const ScriptVarReader& svr) {
     Mob::readScriptVars(svr);
     
     nest->readScriptVars(svr);

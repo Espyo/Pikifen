@@ -113,7 +113,7 @@ struct Camera {
     
     //--- Function declarations ---
     
-    void setPos(const Point &newPos);
+    void setPos(const Point& newPos);
     void setZoom(float newZoom);
     void tick(float deltaT);
     
@@ -159,7 +159,7 @@ struct Viewport {
     Point getBottomRight();
     Point getTopLeft();
     void updateBox();
-    void updateCursor(const Point &windowPos);
+    void updateCursor(const Point& windowPos);
     void updateTransformations();
     
 };
@@ -172,7 +172,7 @@ struct ErrorManager {
 
     //--- Function declarations ---
     
-    void report(const string &s, const DataNode* d = nullptr);
+    void report(const string& s, const DataNode* d = nullptr);
     void reportAreaLoadErrors();
     void prepareAreaLoad();
     bool sessionHasErrors();
@@ -193,9 +193,9 @@ struct ErrorManager {
     
     //--- Function declarations ---
     
-    void emitInGameplay(const string &s);
-    void logToConsole(const string &s);
-    void logToFile(const string &s);
+    void emitInGameplay(const string& s);
+    void logToConsole(const string& s);
+    void logToFile(const string& s);
     
 };
 
@@ -243,7 +243,7 @@ struct MouseCursor {
     void init();
     void reset();
     void show() const;
-    void updatePos(const ALLEGRO_EVENT &ev);
+    void updatePos(const ALLEGRO_EVENT& ev);
     
 };
 
@@ -293,47 +293,47 @@ struct GetterWriter {
     
     explicit GetterWriter(DataNode* dn = nullptr);
     void write(
-        const string &childName, const string &var,
+        const string& childName, const string& var,
         DataNode** outChildNode = nullptr
     );
     void write(
-        const string &childName, const char* var,
+        const string& childName, const char* var,
         DataNode** outChildNode = nullptr
     );
     void write(
-        const string &childName, const size_t &var,
+        const string& childName, const size_t& var,
         DataNode** outChildNode = nullptr
     );
     void write(
-        const string &childName, const int &var,
+        const string& childName, const int& var,
         DataNode** outChildNode = nullptr
     );
     void write(
-        const string &childName, const unsigned int &var,
+        const string& childName, const unsigned int& var,
         DataNode** outChildNode = nullptr
     );
     void write(
-        const string &childName, const unsigned char &var,
+        const string& childName, const unsigned char& var,
         DataNode** outChildNode = nullptr
     );
     void write(
-        const string &childName, const bool &var,
+        const string& childName, const bool& var,
         DataNode** outChildNode = nullptr
     );
     void write(
-        const string &childName, const float &var,
+        const string& childName, const float& var,
         DataNode** outChildNode = nullptr
     );
     void write(
-        const string &childName, const double &var,
+        const string& childName, const double& var,
         DataNode** outChildNode = nullptr
     );
     void write(
-        const string &childName, const ALLEGRO_COLOR &var,
+        const string& childName, const ALLEGRO_COLOR& var,
         DataNode** outChildNode = nullptr
     );
     void write(
-        const string &childName, const Point &var,
+        const string& childName, const Point& var,
         DataNode** outChildNode = nullptr
     );
     
@@ -359,43 +359,43 @@ struct ReaderSetter {
     
     explicit ReaderSetter(DataNode* dn = nullptr);
     void set(
-        const string &childName, string &var,
+        const string& childName, string& var,
         DataNode** outChildNode = nullptr
     );
     void set(
-        const string &childName, size_t &var,
+        const string& childName, size_t& var,
         DataNode** outChildNode = nullptr
     );
     void set(
-        const string &childName, int &var,
+        const string& childName, int& var,
         DataNode** outChildNode = nullptr
     );
     void set(
-        const string &childName, unsigned int &var,
+        const string& childName, unsigned int& var,
         DataNode** outChildNode = nullptr
     );
     void set(
-        const string &childName, unsigned char &var,
+        const string& childName, unsigned char& var,
         DataNode** outChildNode = nullptr
     );
     void set(
-        const string &childName, bool &var,
+        const string& childName, bool& var,
         DataNode** outChildNode = nullptr
     );
     void set(
-        const string &childName, float &var,
+        const string& childName, float& var,
         DataNode** outChildNode = nullptr
     );
     void set(
-        const string &childName, double &var,
+        const string& childName, double& var,
         DataNode** outChildNode = nullptr
     );
     void set(
-        const string &childName, ALLEGRO_COLOR &var,
+        const string& childName, ALLEGRO_COLOR& var,
         DataNode** outChildNode = nullptr
     );
     void set(
-        const string &childName, Point &var,
+        const string& childName, Point& var,
         DataNode** outChildNode = nullptr
     );
     
@@ -413,20 +413,20 @@ struct ScriptVarReader {
     //--- Members ---
     
     //Reference to the list of script variables it pertains to.
-    map<string, string> &vars;
+    map<string, string>& vars;
     
     
     //--- Function declarations ---
     
-    explicit ScriptVarReader(map<string, string> &vars);
-    bool get(const string &name, string &dest) const;
-    bool get(const string &name, size_t &dest) const;
-    bool get(const string &name, int &dest) const;
-    bool get(const string &name, unsigned char &dest) const;
-    bool get(const string &name, bool &dest) const;
-    bool get(const string &name, float &dest) const;
-    bool get(const string &name, ALLEGRO_COLOR &dest) const;
-    bool get(const string &name, Point &dest) const;
+    explicit ScriptVarReader(map<string, string>& vars);
+    bool get(const string& name, string& dest) const;
+    bool get(const string& name, size_t& dest) const;
+    bool get(const string& name, int& dest) const;
+    bool get(const string& name, unsigned char& dest) const;
+    bool get(const string& name, bool& dest) const;
+    bool get(const string& name, float& dest) const;
+    bool get(const string& name, ALLEGRO_COLOR& dest) const;
+    bool get(const string& name, Point& dest) const;
     
 };
 
@@ -922,7 +922,7 @@ struct FadeManager {
     
     FadeManager(float duration);
     void setNextFadeDuration(float duration);
-    void startFade(bool fadeIn, const std::function<void()> &onEnd);
+    void startFade(bool fadeIn, const std::function<void()>& onEnd);
     bool isFadeIn() const;
     bool isFading() const;
     float getPercLeft() const;
@@ -963,12 +963,12 @@ struct Notification {
     
     //--- Function declarations ---
     
-    void draw(const Viewport &view) const;
+    void draw(const Viewport& view) const;
     float getVisibility() const;
     void reset();
     void setContents(
-        const PlayerInputSource &inputSource,
-        const string &text, const Point &pos
+        const PlayerInputSource& inputSource,
+        const string& text, const Point& pos
     );
     void setEnabled(bool enabled);
     void tick(float deltaT);
@@ -1045,11 +1045,11 @@ struct PerformanceMonitor {
     //--- Function declarations ---
     
     PerformanceMonitor();
-    void setAreaName(const string &name);
+    void setAreaName(const string& name);
     void setPaused(bool paused);
     void enterState(const PERF_MON_STATE mode);
     void leaveState();
-    void startMeasurement(const string &name);
+    void startMeasurement(const string& name);
     void finishMeasurement();
     void saveLog();
     void reset();
@@ -1076,14 +1076,14 @@ struct PerformanceMonitor {
         
         //--- Function declarations ---
         
-        void write(string &s);
+        void write(string& s);
         
         private:
         
         //--- Function declarations ---
         
         void writeMeasurement(
-            string &str, const string &name,
+            string& str, const string& name,
             double time, float total
         );
     };
@@ -1336,7 +1336,7 @@ struct Whistle {
     void startWhistling();
     void stopWhistling();
     void tick(
-        float deltaT, const Point &center,
+        float deltaT, const Point& center,
         float whistleRange, float leaderToCursorDist
     );
     
@@ -1395,7 +1395,7 @@ public:
      * @return The asset
      */
     AssetT get(
-        const string &name, DataNode* node = nullptr,
+        const string& name, DataNode* node = nullptr,
         bool reportErrors = true
     ) {
         if(name.empty()) return doLoad("", node, reportErrors);
@@ -1434,7 +1434,7 @@ public:
      *
      * @param ptr Name of the asset to free.
      */
-    void free(const string &name) {
+    void free(const string& name) {
         if(name.empty()) return;
         free(list.find(name));
     }
@@ -1443,7 +1443,7 @@ public:
      * @brief Unloads all assets loaded and clears the list.
      */
     void clear() {
-        for(auto &asset : list) {
+        for(auto& asset : list) {
             doUnload(asset.second.ptr);
         }
         list.clear();
@@ -1473,7 +1473,7 @@ protected:
     //--- Misc. declarations ---
     
     virtual AssetT doLoad(
-        const string &path, DataNode* node, bool reportErrors
+        const string& path, DataNode* node, bool reportErrors
     ) = 0;
     virtual void doUnload(AssetT asset) = 0;
     
@@ -1537,7 +1537,7 @@ protected:
     //--- Function declarations ---
     
     ALLEGRO_AUDIO_STREAM* doLoad(
-        const string &name, DataNode* node, bool reportErrors
+        const string& name, DataNode* node, bool reportErrors
     ) override;
     void doUnload(ALLEGRO_AUDIO_STREAM* asset) override;
     
@@ -1554,7 +1554,7 @@ protected:
     //--- Function declarations ---
     
     ALLEGRO_BITMAP* doLoad(
-        const string &name, DataNode* node, bool reportErrors
+        const string& name, DataNode* node, bool reportErrors
     ) override;
     void doUnload(ALLEGRO_BITMAP* asset) override;
     
@@ -1571,7 +1571,7 @@ protected:
     //--- Function declarations ---
     
     ALLEGRO_SAMPLE* doLoad(
-        const string &name, DataNode* node, bool reportErrors
+        const string& name, DataNode* node, bool reportErrors
     ) override;
     void doUnload(ALLEGRO_SAMPLE* asset) override;
     

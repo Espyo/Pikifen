@@ -21,7 +21,7 @@
  * @param angle Starting angle.
  */
 GroupTask::GroupTask(
-    const Point &pos, GroupTaskType* type, float angle
+    const Point& pos, GroupTaskType* type, float angle
 ):
     Mob(pos, type, angle),
     tasType(type),
@@ -253,7 +253,7 @@ Point GroupTask::getSpotPos(const Pikmin* whose) const {
  *
  * @param svr Script var reader to use.
  */
-void GroupTask::readScriptVars(const ScriptVarReader &svr) {
+void GroupTask::readScriptVars(const ScriptVarReader& svr) {
     Mob::readScriptVars(svr);
     
     svr.get("power_goal", powerGoal);
@@ -328,7 +328,7 @@ void GroupTask::updateSpotAbsolutePositions() {
  *
  * @param pos Position of the spot, in relative coordinates.
  */
-GroupTask::GroupTaskSpot::GroupTaskSpot(const Point &pos) :
+GroupTask::GroupTaskSpot::GroupTaskSpot(const Point& pos) :
     relativePos(pos),
     absolutePos(pos) {
     

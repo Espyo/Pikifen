@@ -33,7 +33,7 @@ public:
     
     //--- Function declarations ---
     
-    Pellet(const Point &pos, PelletType* type, float angle);
+    Pellet(const Point& pos, PelletType* type, float angle);
     void drawMob() override;
     
 };

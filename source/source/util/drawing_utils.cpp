@@ -28,8 +28,8 @@
  * @param tint Tint the bitmap with this color.
  */
 void drawBitmap(
-    ALLEGRO_BITMAP* bmp, const Point &center,
-    const Point &size, float angle, const ALLEGRO_COLOR &tint
+    ALLEGRO_BITMAP* bmp, const Point& center,
+    const Point& size, float angle, const ALLEGRO_COLOR& tint
 ) {
 
     if(size.x == 0 && size.y == 0) return;
@@ -63,8 +63,8 @@ void drawBitmap(
  * @param tint Tint the bitmap with this color.
  */
 void drawBitmapInBox(
-    ALLEGRO_BITMAP* bmp, const Point &center, const Point &boxSize,
-    bool scaleUp, float angle, const ALLEGRO_COLOR &tint
+    ALLEGRO_BITMAP* bmp, const Point& center, const Point& boxSize,
+    bool scaleUp, float angle, const ALLEGRO_COLOR& tint
 ) {
     if(boxSize.x == 0 || boxSize.y == 0) return;
     int bmpW = al_get_bitmap_width(bmp);
@@ -92,8 +92,8 @@ void drawBitmapInBox(
  * @param thickness Thickness of the lines.
  */
 void drawEquilateralTriangle(
-    const Point &center, float radius, float angle,
-    const ALLEGRO_COLOR &color, float thickness
+    const Point& center, float radius, float angle,
+    const ALLEGRO_COLOR& color, float thickness
 ) {
     Point v1 = center + rotatePoint(Point(radius, 0.0f), angle);
     Point v2 = center + rotatePoint(Point(radius, 0.0f), angle + TAU / 3.0f);
@@ -110,7 +110,7 @@ void drawEquilateralTriangle(
  * @param color Color the diamond with this color.
  */
 void drawFilledDiamond(
-    const Point &center, float radius, const ALLEGRO_COLOR &color
+    const Point& center, float radius, const ALLEGRO_COLOR& color
 ) {
     ALLEGRO_VERTEX vert[4];
     for(unsigned char v = 0; v < 4; v++) {
@@ -140,8 +140,8 @@ void drawFilledDiamond(
  * @param color Its color.
  */
 void drawFilledEquilateralTriangle(
-    const Point &center, float radius, float angle,
-    const ALLEGRO_COLOR &color
+    const Point& center, float radius, float angle,
+    const ALLEGRO_COLOR& color
 ) {
     Point v1 = center + rotatePoint(Point(radius, 0.0f), angle);
     Point v2 = center + rotatePoint(Point(radius, 0.0f), angle + TAU / 3.0f);
@@ -161,8 +161,8 @@ void drawFilledEquilateralTriangle(
  * @param color Color the rectangle with this color.
  */
 void drawFilledRoundedRectangle(
-    const Point &center, const Point &size, float radii,
-    const ALLEGRO_COLOR &color
+    const Point& center, const Point& size, float radii,
+    const ALLEGRO_COLOR& color
 ) {
     float finalRadii = std::min(radii, size.x / 2.0f);
     finalRadii = std::min(finalRadii, size.y / 2.0f);
@@ -186,8 +186,8 @@ void drawFilledRoundedRectangle(
  * @param thickness Thickness to use.
  */
 void drawRotatedRectangle(
-    const Point &center, const Point &dimensions,
-    float angle, const ALLEGRO_COLOR &color, float thickness
+    const Point& center, const Point& dimensions,
+    float angle, const ALLEGRO_COLOR& color, float thickness
 ) {
     ALLEGRO_TRANSFORM rotTransform, oldTransform;
     al_copy_transform(&oldTransform, al_get_current_transform());
@@ -218,8 +218,8 @@ void drawRotatedRectangle(
  * @param thickness Line thickness.
  */
 void drawRoundedRectangle(
-    const Point &center, const Point &size, float radii,
-    const ALLEGRO_COLOR &color, float thickness
+    const Point& center, const Point& size, float radii,
+    const ALLEGRO_COLOR& color, float thickness
 ) {
     float finalRadii = std::min(radii, size.x / 2.0f);
     finalRadii = std::min(finalRadii, size.y / 2.0f);
@@ -249,10 +249,10 @@ void drawRoundedRectangle(
  * text by this much before drawing.
  */
 void drawText(
-    const string &text, const ALLEGRO_FONT* const font,
-    const Point &where, const Point &boxSize, const ALLEGRO_COLOR &color,
+    const string& text, const ALLEGRO_FONT* const font,
+    const Point& where, const Point& boxSize, const ALLEGRO_COLOR& color,
     int textFlags, V_ALIGN_MODE vAlign, Bitmask8 settings,
-    const Point &furtherScale
+    const Point& furtherScale
 ) {
     //Initial checks.
     if(text.empty()) return;
@@ -322,10 +322,10 @@ void drawText(
  * text by this much before drawing.
  */
 void drawTextLines(
-    const string &text, const ALLEGRO_FONT* const font,
-    const Point &where, const Point &boxSize, const ALLEGRO_COLOR &color,
+    const string& text, const ALLEGRO_FONT* const font,
+    const Point& where, const Point& boxSize, const ALLEGRO_COLOR& color,
     int textFlags, V_ALIGN_MODE vAlign, Bitmask8 settings,
-    const Point &furtherScale
+    const Point& furtherScale
 ) {
     //Initial checks.
     if(text.empty()) return;
@@ -393,8 +393,8 @@ void drawTextLines(
  * @param tint Tint the texture with this color.
  */
 void drawTexturedBox(
-    const Point &center, const Point &size, ALLEGRO_BITMAP* texture,
-    const ALLEGRO_COLOR &tint
+    const Point& center, const Point& size, ALLEGRO_BITMAP* texture,
+    const ALLEGRO_COLOR& tint
 ) {
     //While using al_hold_bitmap_drawing is an optimization, we can't use it
     //since it stops using the transformation, meaning any textured boxes
@@ -540,7 +540,7 @@ void drawTexturedBox(
  * @param outLineHeight If not nullptr, the line height is returned here.
  */
 void getMultilineTextDimensions(
-    const vector<string> &lines, const ALLEGRO_FONT* const font,
+    const vector<string>& lines, const ALLEGRO_FONT* const font,
     int* outWidth, int* outHeight, int* outLineHeight
 ) {
     int lh = al_get_font_line_height(font);
@@ -578,7 +578,7 @@ void getMultilineTextDimensions(
  * @param outOldTransform The old (current) transform is returned here.
  */
 void getTextDrawingTransforms(
-    const Point &where, const Point &scale,
+    const Point& where, const Point& scale,
     float textOrigOY, float vAlignOffset,
     ALLEGRO_TRANSFORM* outTextTransform, ALLEGRO_TRANSFORM* outOldTransform
 ) {

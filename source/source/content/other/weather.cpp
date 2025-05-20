@@ -36,9 +36,9 @@ Weather::Weather() {
  * @param pt Precipitation type.
  */
 Weather::Weather(
-    const string &n, const vector<std::pair<int, ALLEGRO_COLOR> > &dl,
-    const vector<std::pair<int, unsigned char> > &ss,
-    const vector<std::pair<int, unsigned char> > &bs,
+    const string& n, const vector<std::pair<int, ALLEGRO_COLOR> >& dl,
+    const vector<std::pair<int, unsigned char> >& ss,
+    const vector<std::pair<int, unsigned char> >& bs,
     const PRECIPITATION_TYPE pt
 ) :
     daylight(dl),

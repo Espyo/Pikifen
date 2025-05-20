@@ -82,9 +82,9 @@ public:
     
     Weather();
     Weather(
-        const string &n, const vector<std::pair<int, ALLEGRO_COLOR> > &dl,
-        const vector<std::pair<int, unsigned char> > &ss,
-        const vector<std::pair<int, unsigned char> > &bs,
+        const string& n, const vector<std::pair<int, ALLEGRO_COLOR> >& dl,
+        const vector<std::pair<int, unsigned char> >& ss,
+        const vector<std::pair<int, unsigned char> >& bs,
         const PRECIPITATION_TYPE pt
     );
     unsigned char getBlackoutStrength();
@@ -111,7 +111,7 @@ private:
      */
     template<typename T>
     bool getTableValues(
-        const vector<std::pair<int, T> > &table, int curTime,
+        const vector<std::pair<int, T> >& table, int curTime,
         float* ratio, T* value1, T* value2
     ) {
         if(table.empty()) {

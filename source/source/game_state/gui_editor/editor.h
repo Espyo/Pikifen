@@ -126,23 +126,23 @@ private:
     
     void closeLoadDialog();
     void closeOptionsDialog();
-    void createGuiDef(const string &internalName, const string &pack);
+    void createGuiDef(const string& internalName, const string& pack);
     void deleteCurrentGuiDef();
-    void loadGuiDefFile(const string &path, bool shouldUpdateHistory);
+    void loadGuiDefFile(const string& path, bool shouldUpdateHistory);
     void openLoadDialog();
     void openNewDialog();
     void openOptionsDialog();
     void pickGuiDefFile(
-        const string &name, const string &topCat, const string &secCat,
+        const string& name, const string& topCat, const string& secCat,
         void* info, bool isNew
     );
     bool saveGuiDef();
     void setupForNewGuiDef();
-    Point snapPoint(const Point &p);
+    Point snapPoint(const Point& p);
     static void drawCanvasDearImGuiCallback(
         const ImDrawList* parentList, const ImDrawCmd* cmd
     );
-    string getFileTooltip(const string &path) const;
+    string getFileTooltip(const string& path) const;
     void gridIntervalDecreaseCmd(float inputValue);
     void gridIntervalIncreaseCmd(float inputValue);
     void deleteGuiDefCmd(float inputValue);
@@ -166,20 +166,20 @@ private:
     void processGuiPanelItems();
     void processGuiStatusBar();
     void processGuiToolbar();
-    void handleKeyCharCanvas(const ALLEGRO_EVENT &ev) override;
-    void handleKeyDownAnywhere(const ALLEGRO_EVENT &ev) override;
-    void handleKeyDownCanvas(const ALLEGRO_EVENT &ev) override;
-    void handleLmbDoubleClick(const ALLEGRO_EVENT &ev) override;
-    void handleLmbDown(const ALLEGRO_EVENT &ev) override;
-    void handleLmbDrag(const ALLEGRO_EVENT &ev) override;
-    void handleLmbUp(const ALLEGRO_EVENT &ev) override;
-    void handleMmbDown(const ALLEGRO_EVENT &ev) override;
-    void handleMmbDrag(const ALLEGRO_EVENT &ev) override;
-    void handleMouseUpdate(const ALLEGRO_EVENT &ev) override;
-    void handleMouseWheel(const ALLEGRO_EVENT &ev) override;
-    void handleRmbDown(const ALLEGRO_EVENT &ev) override;
-    void handleRmbDrag(const ALLEGRO_EVENT &ev) override;
-    void panCam(const ALLEGRO_EVENT &ev);
+    void handleKeyCharCanvas(const ALLEGRO_EVENT& ev) override;
+    void handleKeyDownAnywhere(const ALLEGRO_EVENT& ev) override;
+    void handleKeyDownCanvas(const ALLEGRO_EVENT& ev) override;
+    void handleLmbDoubleClick(const ALLEGRO_EVENT& ev) override;
+    void handleLmbDown(const ALLEGRO_EVENT& ev) override;
+    void handleLmbDrag(const ALLEGRO_EVENT& ev) override;
+    void handleLmbUp(const ALLEGRO_EVENT& ev) override;
+    void handleMmbDown(const ALLEGRO_EVENT& ev) override;
+    void handleMmbDrag(const ALLEGRO_EVENT& ev) override;
+    void handleMouseUpdate(const ALLEGRO_EVENT& ev) override;
+    void handleMouseWheel(const ALLEGRO_EVENT& ev) override;
+    void handleRmbDown(const ALLEGRO_EVENT& ev) override;
+    void handleRmbDrag(const ALLEGRO_EVENT& ev) override;
+    void panCam(const ALLEGRO_EVENT& ev);
     void resetCam(bool instantaneous);
     
 };

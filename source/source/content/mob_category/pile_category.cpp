@@ -33,7 +33,7 @@ PileCategory::PileCategory() :
  * @brief Clears the list of registered types of pile.
  */
 void PileCategory::clearTypes() {
-    for(auto &t : game.content.mobTypes.list.pile) {
+    for(auto& t : game.content.mobTypes.list.pile) {
         delete t.second;
     }
     game.content.mobTypes.list.pile.clear();
@@ -49,7 +49,7 @@ void PileCategory::clearTypes() {
  * @return The mob.
  */
 Mob* PileCategory::createMob(
-    const Point &pos, MobType* type, float angle
+    const Point& pos, MobType* type, float angle
 ) {
     Pile* m = new Pile(pos, (PileType*) type, angle);
     game.states.gameplay->mobs.piles.push_back(m);
@@ -90,7 +90,7 @@ void PileCategory::eraseMob(Mob* m) {
  * @param internalName Internal name of the mob type to get.
  * @return The type, or nullptr on error.
  */
-MobType* PileCategory::getType(const string &internalName) const {
+MobType* PileCategory::getType(const string& internalName) const {
     auto it = game.content.mobTypes.list.pile.find(internalName);
     if(it == game.content.mobTypes.list.pile.end()) return nullptr;
     return it->second;
@@ -102,8 +102,8 @@ MobType* PileCategory::getType(const string &internalName) const {
  *
  * @param list This list gets filled with the mob type internal names.
  */
-void PileCategory::getTypeNames(vector<string> &list) const {
-    for(auto &t : game.content.mobTypes.list.pile) {
+void PileCategory::getTypeNames(vector<string>& list) const {
+    for(auto& t : game.content.mobTypes.list.pile) {
         list.push_back(t.first);
     }
 }
@@ -115,6 +115,6 @@ void PileCategory::getTypeNames(vector<string> &list) const {
  * @param internalName Internal name of the mob type.
  * @param type Mob type to register.
  */
-void PileCategory::registerType(const string &internalName, MobType* type) {
+void PileCategory::registerType(const string& internalName, MobType* type) {
     game.content.mobTypes.list.pile[internalName] = (PileType*) type;
 }

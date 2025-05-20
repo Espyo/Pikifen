@@ -33,7 +33,7 @@ using std::vector;
  * @param c2 Second color.
  * @return Whether they are the same.
  */
-bool operator==(const ALLEGRO_COLOR &c1, const ALLEGRO_COLOR &c2) {
+bool operator==(const ALLEGRO_COLOR& c1, const ALLEGRO_COLOR& c2) {
     if(c1.r != c2.r) return false;
     if(c1.g != c2.g) return false;
     if(c1.b != c2.b) return false;
@@ -48,7 +48,7 @@ bool operator==(const ALLEGRO_COLOR &c1, const ALLEGRO_COLOR &c2) {
  * @param c2 Second color.
  * @return Whether they are the same.
  */
-bool operator!=(const ALLEGRO_COLOR &c1, const ALLEGRO_COLOR &c2) {
+bool operator!=(const ALLEGRO_COLOR& c1, const ALLEGRO_COLOR& c2) {
     return !operator==(c1, c2);
 }
 
@@ -59,7 +59,7 @@ bool operator!=(const ALLEGRO_COLOR &c1, const ALLEGRO_COLOR &c2) {
  * @param f Allegro file.
  * @param s String to write.
  */
-void al_fwrite(ALLEGRO_FILE* f, const string &s) {
+void al_fwrite(ALLEGRO_FILE* f, const string& s) {
     al_fwrite(f, s.c_str(), s.size());
 }
 
@@ -70,7 +70,7 @@ void al_fwrite(ALLEGRO_FILE* f, const string &s) {
  * @param c Color to convert.
  * @return The string.
  */
-string c2s(const ALLEGRO_COLOR &c) {
+string c2s(const ALLEGRO_COLOR& c) {
     return i2s(c.r * 255) + " " + i2s(c.g * 255) + " " + i2s(c.b * 255) +
            (c.a == 1 ? "" : " " + i2s(c.a * 255));
 }
@@ -83,7 +83,7 @@ string c2s(const ALLEGRO_COLOR &c) {
  * @param a The new alpha, [0-255].
  * @return The new color.
  */
-ALLEGRO_COLOR changeAlpha(const ALLEGRO_COLOR &c, unsigned char a) {
+ALLEGRO_COLOR changeAlpha(const ALLEGRO_COLOR& c, unsigned char a) {
     ALLEGRO_COLOR c2;
     c2.r = c.r; c2.g = c.g; c2.b = c.b;
     c2.a = a / 255.0;
@@ -98,7 +98,7 @@ ALLEGRO_COLOR changeAlpha(const ALLEGRO_COLOR &c, unsigned char a) {
  * @param l Lighting amount, positive or negative, from 0 to 1.
  * @return The new color.
  */
-ALLEGRO_COLOR changeColorLighting(const ALLEGRO_COLOR &c, float l) {
+ALLEGRO_COLOR changeColorLighting(const ALLEGRO_COLOR& c, float l) {
     ALLEGRO_COLOR c2;
     c2.r = std::clamp(c.r + l, 0.0f, 1.0f);
     c2.g = std::clamp(c.g + l, 0.0f, 1.0f);
@@ -114,7 +114,7 @@ ALLEGRO_COLOR changeColorLighting(const ALLEGRO_COLOR &c, float l) {
  * @param filePath Path to the file.
  * @return A status code.
  */
-FS_DELETE_RESULT deleteFile(const string &filePath) {
+FS_DELETE_RESULT deleteFile(const string& filePath) {
     //Panic check to make sure nothing went wrong and it's an important file.
     //"", "C:", "C:/, "/", etc. are all 3 characters or fewer, so this works.
     engineAssert(
@@ -149,7 +149,7 @@ FS_DELETE_RESULT deleteFile(const string &filePath) {
  * @param path Path to the file.
  * @return Whether it exists.
  */
-bool fileExists(const string &path) {
+bool fileExists(const string& path) {
     return al_filename_exists(path.c_str());
 }
 
@@ -160,7 +160,7 @@ bool fileExists(const string &path) {
  * @param path Path to the folder.
  * @return Whether it exists.
  */
-bool folderExists(const string &path) {
+bool folderExists(const string& path) {
     bool result = true;
     ALLEGRO_FS_ENTRY* fsEntry = al_create_fs_entry(path.c_str());
     if(!fsEntry || !al_open_directory(fsEntry)) {
@@ -227,7 +227,7 @@ vector<string> folderToVector(
     al_destroy_fs_entry(folder);
     
     
-    sort(v.begin(), v.end(), [] (const string  &s1, const string  &s2) -> bool {
+    sort(v.begin(), v.end(), [] (const string& s1, const string& s2) -> bool {
         return strToLower(s1) < strToLower(s2);
     });
     
@@ -479,7 +479,7 @@ void getShiftCtrlAltState(
  * @param file Allegro file handle.
  * @param line String to save the line into.
  */
-void getline(ALLEGRO_FILE* file, string &line) {
+void getline(ALLEGRO_FILE* file, string& line) {
     line.clear();
     if(!file) {
         return;
@@ -540,7 +540,7 @@ void getline(ALLEGRO_FILE* file, string &line) {
  */
 ALLEGRO_COLOR interpolateColor(
     float input, float inputStart, float inputEnd,
-    const ALLEGRO_COLOR &outputStart, const ALLEGRO_COLOR &outputEnd
+    const ALLEGRO_COLOR& outputStart, const ALLEGRO_COLOR& outputEnd
 ) {
     float progress =
         (float) (input - inputStart) / (float) (inputEnd - inputStart);
@@ -565,8 +565,8 @@ ALLEGRO_COLOR interpolateColor(
  * @return The user's choice(s).
  */
 vector<string> promptFileDialog(
-    const string &initialPath, const string &title,
-    const string &patterns, int mode, ALLEGRO_DISPLAY* display
+    const string& initialPath, const string& title,
+    const string& patterns, int mode, ALLEGRO_DISPLAY* display
 ) {
     ALLEGRO_FILECHOOSER* dialog =
         al_create_native_file_dialog(
@@ -614,8 +614,8 @@ vector<string> promptFileDialog(
  * @return The user's choice(s).
  */
 vector<string> promptFileDialogLockedToFolder(
-    const string &folderPath, const string &title,
-    const string &patterns, int mode, FILE_DIALOG_RESULT* result,
+    const string& folderPath, const string& title,
+    const string& patterns, int mode, FILE_DIALOG_RESULT* result,
     ALLEGRO_DISPLAY* display
 ) {
     vector<string> f =
@@ -664,7 +664,7 @@ ALLEGRO_BITMAP* recreateBitmap(ALLEGRO_BITMAP* b) {
  * @param s String to convert.
  * @return The color.
  */
-ALLEGRO_COLOR s2c(const string &s) {
+ALLEGRO_COLOR s2c(const string& s) {
     string s2 = s;
     s2 = trimSpaces(s2);
     
@@ -769,7 +769,7 @@ int showSystemMessageBox(
  * @return An error code.
  */
 FS_DELETE_RESULT wipeFolder(
-    const string &folderPath, const vector<string> &nonImportantFiles
+    const string& folderPath, const vector<string>& nonImportantFiles
 ) {
     //Panic check to make sure nothing went wrong and it's an important folder.
     //"", "C:", "C:/, "/", etc. are all 3 characters or fewer, so this works.

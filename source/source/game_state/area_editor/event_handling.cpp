@@ -26,7 +26,7 @@ using std::set;
  *
  * @param ev Event to handle.
  */
-void AreaEditor::handleKeyCharAnywhere(const ALLEGRO_EVENT &ev) {
+void AreaEditor::handleKeyCharAnywhere(const ALLEGRO_EVENT& ev) {
     if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_F2)) {
         debugEdgeIdxs = !debugEdgeIdxs;
         if(debugEdgeIdxs) {
@@ -82,7 +82,7 @@ void AreaEditor::handleKeyCharAnywhere(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void AreaEditor::handleKeyCharCanvas(const ALLEGRO_EVENT &ev) {
+void AreaEditor::handleKeyCharCanvas(const ALLEGRO_EVENT& ev) {
     if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_LEFT)) {
         game.editorsView.cam.targetPos.x -=
             AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.editorsView.cam.zoom;
@@ -140,7 +140,7 @@ void AreaEditor::handleKeyCharCanvas(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void AreaEditor::handleKeyDownAnywhere(const ALLEGRO_EVENT &ev) {
+void AreaEditor::handleKeyDownAnywhere(const ALLEGRO_EVENT& ev) {
     if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_L, true)) {
         loadCmd(1.0f);
         
@@ -222,7 +222,7 @@ void AreaEditor::handleKeyDownAnywhere(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void AreaEditor::handleKeyDownCanvas(const ALLEGRO_EVENT &ev) {
+void AreaEditor::handleKeyDownCanvas(const ALLEGRO_EVENT& ev) {
     if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_1)) {
         if(state == EDITOR_STATE_PATHS) {
             pathDrawingNormals = false;
@@ -287,7 +287,7 @@ void AreaEditor::handleKeyDownCanvas(const ALLEGRO_EVENT &ev) {
             } else {
                 subState = EDITOR_SUB_STATE_QUICK_HEIGHT_SET;
                 quickHeightSetStartPos = game.mouseCursor.winPos;
-                for(const auto &s : selectedSectors) {
+                for(const auto& s : selectedSectors) {
                     quickHeightSetStartHeights[s] = s->z;
                 }
                 setStatus(
@@ -375,7 +375,7 @@ void AreaEditor::handleKeyDownCanvas(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void AreaEditor::handleKeyUpAnywhere(const ALLEGRO_EVENT &ev) {
+void AreaEditor::handleKeyUpAnywhere(const ALLEGRO_EVENT& ev) {
     if(ev.keyboard.keycode == ALLEGRO_KEY_H) {
         if(
             state == EDITOR_STATE_LAYOUT &&
@@ -395,7 +395,7 @@ void AreaEditor::handleKeyUpAnywhere(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void AreaEditor::handleLmbDoubleClick(const ALLEGRO_EVENT &ev) {
+void AreaEditor::handleLmbDoubleClick(const ALLEGRO_EVENT& ev) {
     if(isCtrlPressed) {
         handleLmbDown(ev);
         return;
@@ -480,7 +480,7 @@ void AreaEditor::handleLmbDoubleClick(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void AreaEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
+void AreaEditor::handleLmbDown(const ALLEGRO_EVENT& ev) {
     switch(state) {
     case EDITOR_STATE_GAMEPLAY: {
         handleLmbDownGameplay(ev);
@@ -522,7 +522,7 @@ void AreaEditor::handleLmbDown(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void AreaEditor::handleLmbDownDetails(const ALLEGRO_EVENT &ev) {
+void AreaEditor::handleLmbDownDetails(const ALLEGRO_EVENT& ev) {
     switch(subState) {
     case EDITOR_SUB_STATE_NEW_SHADOW: {
 
@@ -596,7 +596,7 @@ void AreaEditor::handleLmbDownDetails(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void AreaEditor::handleLmbDownGameplay(const ALLEGRO_EVENT &ev) {
+void AreaEditor::handleLmbDownGameplay(const ALLEGRO_EVENT& ev) {
     if(subState == EDITOR_SUB_STATE_MISSION_EXIT) {
         curTransformationWidget.handleMouseDown(
             game.editorsView.cursorWorldPos,
@@ -615,7 +615,7 @@ void AreaEditor::handleLmbDownGameplay(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void AreaEditor::handleLmbDownLayout(const ALLEGRO_EVENT &ev) {
+void AreaEditor::handleLmbDownLayout(const ALLEGRO_EVENT& ev) {
     switch(subState) {
     case EDITOR_SUB_STATE_DRAWING: {
 
@@ -756,7 +756,7 @@ void AreaEditor::handleLmbDownLayout(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void AreaEditor::handleLmbDownLayoutDrawing(const ALLEGRO_EVENT &ev) {
+void AreaEditor::handleLmbDownLayoutDrawing(const ALLEGRO_EVENT& ev) {
     //Drawing the layout.
     Point hotspot = snapPoint(game.editorsView.cursorWorldPos);
     
@@ -866,7 +866,7 @@ void AreaEditor::handleLmbDownLayoutDrawing(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void AreaEditor::handleLmbDownMobs(const ALLEGRO_EVENT &ev) {
+void AreaEditor::handleLmbDownMobs(const ALLEGRO_EVENT& ev) {
     switch(subState) {
     case EDITOR_SUB_STATE_NEW_MOB: {
 
@@ -902,7 +902,7 @@ void AreaEditor::handleLmbDownMobs(const ALLEGRO_EVENT &ev) {
         Point newSelectionCenter = (selectionBR + selectionTL) / 2.0;
         set<MobGen*> mobsToSelect;
         
-        for(auto const &m : selectedMobs) {
+        for(auto const& m : selectedMobs) {
             MobGen* newMg = new MobGen(*m);
             newMg->pos = Point(hotspot + (m->pos) - newSelectionCenter);
             game.curAreaData->mobGenerators.push_back(newMg);
@@ -927,7 +927,7 @@ void AreaEditor::handleLmbDownMobs(const ALLEGRO_EVENT &ev) {
             getMobUnderPoint(game.editorsView.cursorWorldPos, &targetIdx);
         if(!target) return;
         
-        for(auto const &m : selectedMobs) {
+        for(auto const& m : selectedMobs) {
             if(m == target) {
                 setStatus(
                     "You can't store to an object inside itself!",
@@ -962,7 +962,7 @@ void AreaEditor::handleLmbDownMobs(const ALLEGRO_EVENT &ev) {
         MobGen* target = getMobUnderPoint(game.editorsView.cursorWorldPos);
         if(!target) return;
         
-        for(auto const &m : selectedMobs) {
+        for(auto const& m : selectedMobs) {
             if(m == target) {
                 setStatus(
                     "You can't link to an object to itself!",
@@ -1130,7 +1130,7 @@ void AreaEditor::handleLmbDownMobs(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void AreaEditor::handleLmbDownPaths(const ALLEGRO_EVENT &ev) {
+void AreaEditor::handleLmbDownPaths(const ALLEGRO_EVENT& ev) {
     switch(subState) {
     case EDITOR_SUB_STATE_PATH_DRAWING: {
 
@@ -1307,7 +1307,7 @@ void AreaEditor::handleLmbDownPaths(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void AreaEditor::handleLmbDownReview(const ALLEGRO_EVENT &ev) {
+void AreaEditor::handleLmbDownReview(const ALLEGRO_EVENT& ev) {
     if(showCrossSection) {
         movingCrossSectionPoint = -1;
         for(unsigned char p = 0; p < 2; p++) {
@@ -1333,7 +1333,7 @@ void AreaEditor::handleLmbDownReview(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void AreaEditor::handleLmbDownTools(const ALLEGRO_EVENT &ev) {
+void AreaEditor::handleLmbDownTools(const ALLEGRO_EVENT& ev) {
     if(referenceBitmap) {
         curTransformationWidget.handleMouseDown(
             game.editorsView.cursorWorldPos,
@@ -1351,7 +1351,7 @@ void AreaEditor::handleLmbDownTools(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT &ev) {
+void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
     if(selecting) {
     
         Point selectionTL = selectionStart;
@@ -1800,7 +1800,7 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void AreaEditor::handleLmbUp(const ALLEGRO_EVENT &ev) {
+void AreaEditor::handleLmbUp(const ALLEGRO_EVENT& ev) {
     selecting = false;
     
     if(moving) {
@@ -1825,7 +1825,7 @@ void AreaEditor::handleLmbUp(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void AreaEditor::handleMmbDoubleClick(const ALLEGRO_EVENT &ev) {
+void AreaEditor::handleMmbDoubleClick(const ALLEGRO_EVENT& ev) {
     if(!game.options.editors.mmbPan) {
         resetCamXY();
     }
@@ -1838,7 +1838,7 @@ void AreaEditor::handleMmbDoubleClick(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void AreaEditor::handleMmbDown(const ALLEGRO_EVENT &ev) {
+void AreaEditor::handleMmbDown(const ALLEGRO_EVENT& ev) {
     if(!game.options.editors.mmbPan) {
         resetCamZoom();
     }
@@ -1851,7 +1851,7 @@ void AreaEditor::handleMmbDown(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void AreaEditor::handleMmbDrag(const ALLEGRO_EVENT &ev) {
+void AreaEditor::handleMmbDrag(const ALLEGRO_EVENT& ev) {
     if(game.options.editors.mmbPan) {
         panCam(ev);
     }
@@ -1863,7 +1863,7 @@ void AreaEditor::handleMmbDrag(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void AreaEditor::handleMouseUpdate(const ALLEGRO_EVENT &ev) {
+void AreaEditor::handleMouseUpdate(const ALLEGRO_EVENT& ev) {
     Editor::handleMouseUpdate(ev);
     
     //Update highlighted elements.
@@ -1918,7 +1918,7 @@ void AreaEditor::handleMouseUpdate(const ALLEGRO_EVENT &ev) {
     if(subState == EDITOR_SUB_STATE_QUICK_HEIGHT_SET) {
         float offset = getQuickHeightSetOffset();
         registerChange("quick sector height set");
-        for(auto &s : selectedSectors) {
+        for(auto& s : selectedSectors) {
             s->z = quickHeightSetStartHeights[s] + offset;
         }
         updateAllEdgeOffsetCaches();
@@ -1931,7 +1931,7 @@ void AreaEditor::handleMouseUpdate(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void AreaEditor::handleMouseWheel(const ALLEGRO_EVENT &ev) {
+void AreaEditor::handleMouseWheel(const ALLEGRO_EVENT& ev) {
     zoomWithCursor(
         game.editorsView.cam.zoom +
         (game.editorsView.cam.zoom * ev.mouse.dz * 0.1)
@@ -1945,7 +1945,7 @@ void AreaEditor::handleMouseWheel(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void AreaEditor::handleRmbDoubleClick(const ALLEGRO_EVENT &ev) {
+void AreaEditor::handleRmbDoubleClick(const ALLEGRO_EVENT& ev) {
     if(game.options.editors.mmbPan) {
         resetCamXY();
     }
@@ -1958,7 +1958,7 @@ void AreaEditor::handleRmbDoubleClick(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void AreaEditor::handleRmbDown(const ALLEGRO_EVENT &ev) {
+void AreaEditor::handleRmbDown(const ALLEGRO_EVENT& ev) {
     if(game.options.editors.mmbPan) {
         resetCamZoom();
     }
@@ -1971,7 +1971,7 @@ void AreaEditor::handleRmbDown(const ALLEGRO_EVENT &ev) {
  *
  * @param ev Event to handle.
  */
-void AreaEditor::handleRmbDrag(const ALLEGRO_EVENT &ev) {
+void AreaEditor::handleRmbDrag(const ALLEGRO_EVENT& ev) {
     if(!game.options.editors.mmbPan) {
         panCam(ev);
     }

@@ -32,7 +32,7 @@ public:
     
     void load() override;
     void unload() override;
-    void handleAllegroEvent(ALLEGRO_EVENT &ev) override;
+    void handleAllegroEvent(ALLEGRO_EVENT& ev) override;
     void doLogic() override;
     void doDrawing() override;
     string getName() const override;
@@ -61,8 +61,8 @@ private:
     
     void addScoreStat(const MISSION_SCORE_CRITERIA criterion);
     void addStat(
-        const string &label, const string &value,
-        const ALLEGRO_COLOR &color = COLOR_WHITE
+        const string& label, const string& value,
+        const ALLEGRO_COLOR& color = COLOR_WHITE
     );
     void continuePlaying();
     void leave();

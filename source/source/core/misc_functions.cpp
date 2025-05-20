@@ -48,7 +48,7 @@
  * @return Whether there are walls between.
  */
 bool areaWallsBetween(
-    const Point &p1, const Point &p2,
+    const Point& p1, const Point& p2,
     float ignoreWallsBelowZ, bool* outImpassableWalls
 ) {
     Point bbTL = p1;
@@ -67,7 +67,7 @@ bool areaWallsBetween(
         return true;
     }
     
-    for(auto const &ePtr : candidateEdges) {
+    for(auto const& ePtr : candidateEdges) {
         if(
             !lineSegsIntersect(
                 p1, p2,
@@ -139,7 +139,7 @@ void clearAreaTextures() {
  * @param info Any extra information to report to the logs.
  * @param exitStatus Program exit status.
  */
-void crash(const string &reason, const string &info, int exitStatus) {
+void crash(const string& reason, const string& info, int exitStatus) {
 
     if(game.display) {
         ALLEGRO_BITMAP* backbuffer = al_get_backbuffer(game.display);
@@ -397,7 +397,7 @@ bool doesEdgeHaveWallShadow(
  * (health and max health > 0).
  * @return The mob.
  */
-Mob* getClosestMobToCursor(const Viewport &view, bool mustHaveHealth) {
+Mob* getClosestMobToCursor(const Viewport& view, bool mustHaveHealth) {
     Distance closestMobToCursorDist;
     Mob* closestMobToCursor = nullptr;
     
@@ -520,7 +520,7 @@ string getMissionRecordEntryName(Area* areaPtr) {
  * @return The mob, or nullptr if there is none nearby.
  */
 Mob* getNextMobNearCursor(
-    const Viewport &view, Mob* pivot, bool mustHaveHealth
+    const Viewport& view, Mob* pivot, bool mustHaveHealth
 ) {
     vector<Mob*> mobsNearCursor;
     
@@ -577,7 +577,7 @@ Mob* getNextMobNearCursor(
  * @return The subtitle or goal.
  */
 string getSubtitleOrMissionGoal(
-    const string &subtitle, const AREA_TYPE areaType,
+    const string& subtitle, const AREA_TYPE areaType,
     const MISSION_GOAL goal
 ) {
     if(subtitle.empty() && areaType == AREA_TYPE_MISSION) {
@@ -612,8 +612,8 @@ string getSubtitleOrMissionGoal(
 unsigned char getThrowPreviewVertexes(
     ALLEGRO_VERTEX* vertexes,
     float start, float end,
-    const Point &leaderPos, const Point &cursorPos,
-    const ALLEGRO_COLOR &color,
+    const Point& leaderPos, const Point& cursorPos,
+    const ALLEGRO_COLOR& color,
     float uOffset, float uScale,
     bool varyThickness
 ) {
@@ -721,7 +721,7 @@ unsigned char getThrowPreviewVertexes(
  * @param varsString String with the variables.
  * @return The map.
  */
-map<string, string> getVarMap(const string &varsString) {
+map<string, string> getVarMap(const string& varsString) {
     map<string, string> finalMap;
     vector<string> rawVars = semicolonListToVector(varsString);
     
@@ -828,12 +828,12 @@ vector<std::pair<int, string> > getWeatherTable(DataNode* node) {
  * @param gui GUI manager to add the item to.
  * @param itemName Internal name of the GUI item.
  */
-void guiAddBackInputIcon(GuiManager* gui, const string &itemName) {
+void guiAddBackInputIcon(GuiManager* gui, const string& itemName) {
     GuiItem* backInput = new GuiItem();
     backInput->onDraw =
     [] (const GuiItem::DrawInfo & draw) {
         if(!game.options.misc.showHudInputIcons) return;
-        const PlayerInputSource &s =
+        const PlayerInputSource& s =
             game.controls.findBind(PLAYER_ACTION_TYPE_MENU_BACK).
             inputSource;
         if(s.type == INPUT_SOURCE_TYPE_NONE) return;
@@ -853,7 +853,7 @@ void guiAddBackInputIcon(GuiManager* gui, const string &itemName) {
  * @param size Same as you'd pass to ImGui::InputText().
  * @return Whether the button was activated.
  */
-bool monoButton(const char* label, const ImVec2 &size) {
+bool monoButton(const char* label, const ImVec2& size) {
     ImGui::PushFont(game.sysContent.fntDearImGuiMonospace);
     bool result = ImGui::Button(label, size);
     ImGui::PopFont();
@@ -874,7 +874,7 @@ bool monoButton(const char* label, const ImVec2 &size) {
  * @return Whether the value was changed.
  */
 bool monoCombo(
-    const string &label, int* currentItem, const vector<string> &items,
+    const string& label, int* currentItem, const vector<string>& items,
     int popupMaxHeightInItems
 ) {
     bool hasText = label[0] != '#';
@@ -910,7 +910,7 @@ bool monoCombo(
  * @return Whether the value was changed.
  */
 bool monoCombo(
-    const string &label, string* currentItem, const vector<string> &items,
+    const string& label, string* currentItem, const vector<string>& items,
     int popupMaxHeightInItems
 ) {
     bool hasText = label[0] != '#';
@@ -948,9 +948,9 @@ bool monoCombo(
  * @return Whether the value was changed.
  */
 bool monoCombo(
-    const string &label, string* currentItem,
-    const vector<string> &itemInternalValues,
-    const vector<string> &itemDisplayNames,
+    const string& label, string* currentItem,
+    const vector<string>& itemInternalValues,
+    const vector<string>& itemDisplayNames,
     int popupMaxHeightInItems
 ) {
     bool hasText = label[0] != '#';
@@ -1058,7 +1058,7 @@ bool monoInputTextWithHint(
  * @return Whether the value was changed.
  */
 bool monoListBox(
-    const string &label, int* currentItem, const vector<string> &items,
+    const string& label, int* currentItem, const vector<string>& items,
     int heightInItems
 ) {
     bool hasText = label[0] != '#';
@@ -1093,7 +1093,7 @@ bool monoListBox(
  */
 bool monoSelectable(
     const char* label, bool selected, ImGuiSelectableFlags flags,
-    const ImVec2 &size
+    const ImVec2& size
 ) {
     ImGui::PushFont(game.sysContent.fntDearImGuiMonospace);
     bool result = ImGui::Selectable(label, selected, flags, size);
@@ -1114,7 +1114,7 @@ bool monoSelectable(
  */
 bool monoSelectable(
     const char* label, bool* pSelected, ImGuiSelectableFlags flags,
-    const ImVec2 &size
+    const ImVec2& size
 ) {
     ImGui::PushFont(game.sysContent.fntDearImGuiMonospace);
     bool result = ImGui::Selectable(label, pSelected, flags, size);
@@ -1129,7 +1129,7 @@ bool monoSelectable(
  * @param page Page to open, with the .html extension and any anchors.
  * @return Whether it succeeded in opening the browser.
  */
-bool openManual(const string &page) {
+bool openManual(const string& page) {
     //This function could have a page argument and an anchor argument,
     //and it could have included the .html extension automatically, but doing
     //it this way makes it so that the string, e.g. "page.html#anchor" is
@@ -1151,7 +1151,7 @@ bool openManual(const string &page) {
  * @param fadeDuration When closing, fade out in the last N seconds.
  */
 void printInfo(
-    const string &text, float totalDuration, float fadeDuration
+    const string& text, float totalDuration, float fadeDuration
 ) {
     game.makerTools.infoPrintText = text;
     game.makerTools.infoPrintDuration = totalDuration;
@@ -1166,7 +1166,7 @@ void printInfo(
  * @param s String explaining the error.
  * @param dn File to log the error into, if any.
  */
-void reportFatalError(const string &s, const DataNode* dn) {
+void reportFatalError(const string& s, const DataNode* dn) {
     game.errors.report(s, dn);
     
     showSystemMessageBox(
@@ -1270,7 +1270,7 @@ void saveScreenshot() {
  */
 void saveStatistics() {
     DataNode statsFile("", "");
-    const Statistics &s = game.statistics;
+    const Statistics& s = game.statistics;
     GetterWriter sGW(&statsFile);
     
     sGW.write("startups", s.startups);
@@ -1308,7 +1308,7 @@ void saveStatistics() {
  * @param controlCondensed If true, control bind player icons are condensed.
  */
 void setStringTokenWidths(
-    vector<StringToken> &tokens,
+    vector<StringToken>& tokens,
     const ALLEGRO_FONT* textFont, const ALLEGRO_FONT* controlFont,
     float maxControlBitmapHeight, bool controlCondensed
 ) {
@@ -1406,7 +1406,7 @@ void spewPikminSeed(
  * @return The lines.
  */
 vector<vector<StringToken> > splitLongStringWithTokens(
-    const vector<StringToken> &tokens, int maxWidth
+    const vector<StringToken>& tokens, int maxWidth
 ) {
     vector<vector<StringToken> > tokensPerLine;
     if(tokens.empty()) return tokensPerLine;
@@ -1440,7 +1440,7 @@ vector<vector<StringToken> > splitLongStringWithTokens(
                 curLineIdx++;
                 
                 //Remove the previous line's trailing space, if any.
-                StringToken &prevTail =
+                StringToken& prevTail =
                     tokensPerLine[curLineIdx - 1].back();
                 if(
                     prevTail.type == STRING_TOKEN_CHAR &&
@@ -1492,7 +1492,7 @@ vector<vector<StringToken> > splitLongStringWithTokens(
  * @return The prepared particle generator.
  */
 ParticleGenerator standardParticleGenSetup(
-    const string &internalName, Mob* targetMob
+    const string& internalName, Mob* targetMob
 ) {
     ParticleGenerator pg =
         game.content.particleGens.list[internalName];
@@ -1515,12 +1515,12 @@ ParticleGenerator standardParticleGenSetup(
  * @param text Text to display.
  * @param speakerBmp Bitmap representing the speaker.
  */
-void startGameplayMessage(const string &text, ALLEGRO_BITMAP* speakerBmp) {
+void startGameplayMessage(const string& text, ALLEGRO_BITMAP* speakerBmp) {
     if(!text.empty()) {
         string finalText = unescapeString(text);
         game.states.gameplay->msgBox =
             new GameplayMessageBox(finalText, speakerBmp);
-        for(Player &player : game.states.gameplay->players) {
+        for(Player& player : game.states.gameplay->players) {
             player.hud->gui.startAnimation(
                 GUI_MANAGER_ANIM_IN_TO_OUT,
                 GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
@@ -1529,7 +1529,7 @@ void startGameplayMessage(const string &text, ALLEGRO_BITMAP* speakerBmp) {
     } else {
         delete game.states.gameplay->msgBox;
         game.states.gameplay->msgBox = nullptr;
-        for(Player &player : game.states.gameplay->players) {
+        for(Player& player : game.states.gameplay->players) {
             player.hud->gui.startAnimation(
                 GUI_MANAGER_ANIM_OUT_TO_IN,
                 GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
@@ -1546,7 +1546,7 @@ void startGameplayMessage(const string &text, ALLEGRO_BITMAP* speakerBmp) {
  * @param s String to tokenize.
  * @return The tokens.
  */
-vector<StringToken> tokenizeString(const string &s) {
+vector<StringToken> tokenizeString(const string& s) {
     vector<StringToken> tokens;
     StringToken curToken;
     curToken.type = STRING_TOKEN_CHAR;
@@ -1600,7 +1600,7 @@ vector<StringToken> tokenizeString(const string &s) {
  * @param s String to unescape.
  * @return The unescaped string.
  */
-string unescapeString(const string &s) {
+string unescapeString(const string& s) {
     if(s.empty()) return s;
     
     string ret;

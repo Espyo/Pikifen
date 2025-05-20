@@ -242,7 +242,7 @@ void PathManager::handleSectorHazardChange(Sector* sectorPtr) {
  * @param pos Its coordinates.
  * @param links List of path links, linking it to other stops.
  */
-PathStop::PathStop(const Point &pos, const vector<PathLink*> &links) :
+PathStop::PathStop(const Point& pos, const vector<PathLink*>& links) :
     pos(pos),
     links(links) {
     
@@ -399,9 +399,9 @@ void PathStop::removeLink(const PathStop* otherStop) {
  * @return The operation's result.
  */
 PATH_RESULT aStar(
-    vector<PathStop*> &outPath,
+    vector<PathStop*>& outPath,
     PathStop* startNode, PathStop* endNode,
-    const PathFollowSettings &settings,
+    const PathFollowSettings& settings,
     float* outTotalDist
 ) {
     //https://en.wikipedia.org/wiki/A*_search_algorithm
@@ -536,7 +536,7 @@ PATH_RESULT aStar(
  * @return Whether it can be taken.
  */
 bool canTakePathStop(
-    PathStop* stopPtr, const PathFollowSettings &settings,
+    PathStop* stopPtr, const PathFollowSettings& settings,
     PATH_BLOCK_REASON* outReason
 ) {
     Sector* sectorPtr = stopPtr->sectorPtr;
@@ -566,7 +566,7 @@ bool canTakePathStop(
  * @return Whether it can take it.
  */
 bool canTakePathStop(
-    const PathStop* stopPtr, const PathFollowSettings &settings,
+    const PathStop* stopPtr, const PathFollowSettings& settings,
     Sector* sectorPtr, PATH_BLOCK_REASON* outReason
 ) {
     //Check if the end stop has limitations based on the stop flags.
@@ -643,7 +643,7 @@ bool canTakePathStop(
  * @return Whether it can traverse it.
  */
 bool canTraversePathLink(
-    PathLink* linkPtr, const PathFollowSettings &settings,
+    PathLink* linkPtr, const PathFollowSettings& settings,
     PATH_BLOCK_REASON* outReason
 ) {
     if(outReason) *outReason = PATH_BLOCK_REASON_NONE;
@@ -714,7 +714,7 @@ bool canTraversePathLink(
  * @param start Starting node.
  */
 void depthFirstSearch(
-    vector<PathStop*> &nodes, unordered_set<PathStop*> &visited,
+    vector<PathStop*>& nodes, unordered_set<PathStop*>& visited,
     PathStop* start
 ) {
     visited.insert(start);
@@ -733,7 +733,7 @@ void depthFirstSearch(
         }
     }
     
-    for(auto &l : links) {
+    for(auto& l : links) {
         if(isInContainer(visited, l)) continue;
         depthFirstSearch(nodes, visited, l);
     }
@@ -757,9 +757,9 @@ void depthFirstSearch(
  * @return The operation's result.
  */
 PATH_RESULT getPath(
-    const Point &start, const Point &end,
-    const PathFollowSettings &settings,
-    vector<PathStop*> &fullPath, float* outTotalDist,
+    const Point& start, const Point& end,
+    const PathFollowSettings& settings,
+    vector<PathStop*>& fullPath, float* outTotalDist,
     PathStop** outStartStop, PathStop** outEndStop
 ) {
 

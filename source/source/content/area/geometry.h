@@ -114,14 +114,14 @@ struct Polygon {
     //--- Function declarations ---
     
     Polygon();
-    explicit Polygon(const vector<Vertex*> &vertexes);
+    explicit Polygon(const vector<Vertex*>& vertexes);
     void clean(bool recursive);
     void cut();
     void cutAllAsRoot();
     void destroy();
     Vertex* getRightmostVertex() const;
     bool insertChild(Polygon* p);
-    bool isPointInside(const Point &p) const;
+    bool isPointInside(const Point& p) const;
     
 };
 
@@ -149,26 +149,26 @@ void findTraceEdge(
     unordered_set<Edge*>* excludedEdges
 );
 void getCCE(
-    const vector<Vertex> &vertexesLeft, vector<size_t> &ears,
-    vector<size_t> &convexVertexes, vector<size_t> &concaveVertexes
+    const vector<Vertex>& vertexesLeft, vector<size_t>& ears,
+    vector<size_t>& convexVertexes, vector<size_t>& concaveVertexes
 );
 vector<std::pair<Distance, Vertex*> > getMergeVertexes(
-    const Point &p, const vector<Vertex*> &allVertexes,
+    const Point& p, const vector<Vertex*>& allVertexes,
     float mergeRadius
 );
 TRIANGULATION_ERROR getPolys(
     Sector* sPtr, vector<Polygon>* outers, vector<vector<Polygon>>* inners
 );
 bool getPolysIsOuter(
-    Vertex* vPtr, const Sector* sPtr, const unordered_set<Edge*> &edgesLeft,
+    Vertex* vPtr, const Sector* sPtr, const unordered_set<Edge*>& edgesLeft,
     bool doingFirstPolygon
 );
-Vertex* getRightmostVertex(const unordered_set<Edge*> &edges);
+Vertex* getRightmostVertex(const unordered_set<Edge*>& edges);
 Vertex* getRightmostVertex(Vertex* v1, Vertex* v2);
-bool isPolygonClockwise(vector<Vertex*> &vertexes);
-bool isVertexConvex(const vector<Vertex*> &vec, size_t idx);
+bool isPolygonClockwise(vector<Vertex*>& vertexes);
+bool isVertexConvex(const vector<Vertex*>& vec, size_t idx);
 bool isVertexEar(
-    const vector<Vertex*> &vec, const vector<size_t> &concaves, size_t idx
+    const vector<Vertex*>& vec, const vector<size_t>& concaves, size_t idx
 );
 TRIANGULATION_ERROR traceEdges(
     Vertex* startVPtr, const Sector* sPtr, bool goingCw,

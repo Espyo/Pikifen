@@ -85,8 +85,8 @@ void Results::addScoreStat(const MISSION_SCORE_CRITERIA criterion) {
  * @param color Color.
  */
 void Results::addStat(
-    const string &label, const string &value,
-    const ALLEGRO_COLOR &color
+    const string& label, const string& value,
+    const ALLEGRO_COLOR& color
 ) {
     size_t statIdx = statsList->children.size() / 2.0f;
     const float STAT_HEIGHT = 0.12f;
@@ -210,7 +210,7 @@ string Results::getName() const {
  *
  * @param ev Event to handle.
  */
-void Results::handleAllegroEvent(ALLEGRO_EVENT &ev) {
+void Results::handleAllegroEvent(ALLEGRO_EVENT& ev) {
     if(game.fadeMgr.isFading()) return;
     
     gui.handleAllegroEvent(ev);
@@ -746,7 +746,7 @@ void Results::load() {
     ButtonGuiItem* retryButton =
         new ButtonGuiItem("Retry", game.sysContent.fntStandard);
     retryButton->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         retryArea();
     };
     retryButton->onGetTooltip =
@@ -761,7 +761,7 @@ void Results::load() {
         ButtonGuiItem* continueButton =
             new ButtonGuiItem("Keep playing", game.sysContent.fntStandard);
         continueButton->onActivate =
-        [this] (const Point &) {
+        [this] (const Point&) {
             continuePlaying();
         };
         continueButton->onGetTooltip =
@@ -782,7 +782,7 @@ void Results::load() {
         game.sysContent.fntStandard
     );
     gui.backItem->onActivate =
-    [this] (const Point &) {
+    [this] (const Point&) {
         leave();
     };
     gui.backItem->onGetTooltip =

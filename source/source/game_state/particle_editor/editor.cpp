@@ -121,7 +121,7 @@ void ParticleEditor::closeOptionsDialog() {
  * @param partGenPath Path to the new particle generator.
  */
 void ParticleEditor::createPartGen(
-    const string &partGenPath
+    const string& partGenPath
 ) {
     //Setup.
     setupForNewPartGenPre();
@@ -312,7 +312,7 @@ void ParticleEditor::emissionShapeToggleCmd(float inputValue) {
  * @param path Path to the file.
  * @return The tooltip text.
  */
-string ParticleEditor::getFileTooltip(const string &path) const {
+string ParticleEditor::getFileTooltip(const string& path) const {
     ContentManifest tempManif;
     game.content.particleGens.pathToManifest(
         path, &tempManif
@@ -495,7 +495,7 @@ void ParticleEditor::loadCmd(float inputValue) {
  * the user's file open history.
  */
 void ParticleEditor::loadPartGenFile(
-    const string &path, const bool shouldUpdateHistory
+    const string& path, const bool shouldUpdateHistory
 ) {
     //Setup.
     setupForNewPartGenPre();
@@ -536,7 +536,7 @@ void ParticleEditor::loadPartGenFile(
  *
  * @param ev Event to handle.
  */
-void ParticleEditor::panCam(const ALLEGRO_EVENT &ev) {
+void ParticleEditor::panCam(const ALLEGRO_EVENT& ev) {
     game.editorsView.cam.setPos(
         Point(
             game.editorsView.cam.pos.x -
@@ -586,7 +586,7 @@ void ParticleEditor::partMgrPlaybackToggleCmd(float inputValue) {
  * @param isNew Unused.
  */
 void ParticleEditor::pickPartGenFile(
-    const string &name, const string &topCat, const string &secCat,
+    const string& name, const string& topCat, const string& secCat,
     void* info, bool isNew
 ) {
     ContentManifest* tempManif = (ContentManifest*) info;

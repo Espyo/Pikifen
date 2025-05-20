@@ -40,12 +40,12 @@ Replay::Replay() {
  * @param curLeaderIdx Index number of the current leader.
  */
 void Replay::addState(
-    const vector<Leader*> &leaderList,
-    const vector<Pikmin*> &pikminList,
-    const vector<Enemy*> &enemyList,
-    const vector<Treasure*> &treasureList,
-    const vector<Onion*> &onionList,
-    const vector<Mob*> &obstacleList,
+    const vector<Leader*>& leaderList,
+    const vector<Pikmin*>& pikminList,
+    const vector<Enemy*>& enemyList,
+    const vector<Treasure*>& treasureList,
+    const vector<Onion*>& onionList,
+    const vector<Mob*>& obstacleList,
     size_t curLeaderIdx
 ) {
     states.push_back(ReplayState());
@@ -161,7 +161,7 @@ void Replay::finishRecording() {
  *
  * @param filePath Path to the file to load from.
  */
-void Replay::loadFromFile(const string &filePath) {
+void Replay::loadFromFile(const string& filePath) {
     clear();
     ALLEGRO_FILE* file = al_fopen(filePath.c_str(), "rb");
     
@@ -206,7 +206,7 @@ void Replay::loadFromFile(const string &filePath) {
  *
  * @param filePath Path to the file to save to.
  */
-void Replay::saveToFile(const string &filePath) const {
+void Replay::saveToFile(const string& filePath) const {
     ALLEGRO_FILE* file = al_fopen(filePath.c_str(), "wb");
     
     al_fwrite32be(file, (int32_t) states.size());
@@ -238,7 +238,7 @@ void Replay::saveToFile(const string &filePath) const {
  * @param pos Its coordinates.
  */
 ReplayElement::ReplayElement(
-    const REPLAY_ELEMENT type, const Point &pos
+    const REPLAY_ELEMENT type, const Point& pos
 ) :
     type(type),
     pos(pos) {
