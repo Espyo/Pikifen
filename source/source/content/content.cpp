@@ -110,6 +110,8 @@ void ContentManifest::clear() {
 /**
  * @brief Fills in the information using the provided path. It'll all be empty
  * if the path is not valid.
+ * 
+ * @param path Path to fill from.
  */
 void ContentManifest::fillFromPath(const string &path) {
     clear();

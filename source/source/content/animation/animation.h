@@ -28,6 +28,7 @@ using std::size_t;
 using std::string;
 using std::vector;
 
+
 class AnimationDatabase;
 class MobType;
 

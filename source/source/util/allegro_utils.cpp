@@ -111,7 +111,7 @@ ALLEGRO_COLOR changeColorLighting(const ALLEGRO_COLOR &c, float l) {
 /**
  * @brief Deletes a file on the disk.
  *
- * @param path Path to the file.
+ * @param filePath Path to the file.
  * @return A status code.
  */
 FS_DELETE_RESULT deleteFile(const string &filePath) {

@@ -11,9 +11,9 @@
 #include "leader_type.h"
 
 #include "../../core/const.h"
-#include "../../core/misc_functions.h"
 #include "../../core/game.h"
 #include "../../core/load.h"
+#include "../../core/misc_functions.h"
 #include "../../util/string_utils.h"
 #include "../mob_script/gen_mob_fsm.h"
 #include "../mob_script/leader_fsm.h"

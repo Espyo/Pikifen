@@ -1590,6 +1590,8 @@ void RngManager::init() {
 
 /**
  * @brief Initializes the random number generator with the given seed.
+ * 
+ * @param initialSeed The seed.
  */
 void RngManager::init(int32_t initialSeed) {
     state = initialSeed;

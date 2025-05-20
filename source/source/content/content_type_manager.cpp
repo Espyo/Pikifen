@@ -12,10 +12,10 @@
 
 #include "content_type_manager.h"
 
-#include "../core/misc_functions.h"
 #include "../core/game.h"
 #include "../core/init.h"
 #include "../core/load.h"
+#include "../core/misc_functions.h"
 #include "../util/allegro_utils.h"
 #include "../util/string_utils.h"
 
@@ -340,7 +340,7 @@ string BitmapContentManager::manifestToPath(
  *
  * @param path Path to the bitmap.
  * @param outManifest If not nullptr, the manifest is returned here.
- * @param outType If not nullptr, the file extension is returned here.
+ * @param outExtension If not nullptr, the file extension is returned here.
  */
 void BitmapContentManager::pathToManifest(
     const string &path, ContentManifest* outManifest, string* outExtension
@@ -978,6 +978,9 @@ void MobAnimContentManager::fillManifests() {
 
 /**
  * @brief Fills in the manifests from a specific pack.
+ * 
+ * @param category Mob category this applies to.
+ * @param packName Internal name of the pack.
  */
 void MobAnimContentManager::fillCatManifestsFromPack(
     MobCategory* category, const string &packName
@@ -1582,7 +1585,7 @@ string SoundContentManager::manifestToPath(
  *
  * @param path Path to the sample.
  * @param outManifest If not nullptr, the manifest is returned here.
- * @param outType If not nullptr, the file extension is returned here.
+ * @param outExtension If not nullptr, the file extension is returned here.
  */
 void SoundContentManager::pathToManifest(
     const string &path, ContentManifest* outManifest, string* outExtension
@@ -1794,7 +1797,7 @@ string SongTrackContentManager::manifestToPath(
  *
  * @param path Path to the song track.
  * @param outManifest If not nullptr, the manifest is returned here.
- * @param outType If not nullptr, the file extension is returned here.
+ * @param outExtension If not nullptr, the file extension is returned here.
  */
 void SongTrackContentManager::pathToManifest(
     const string &path, ContentManifest* outManifest, string* outExtension
@@ -1915,7 +1918,7 @@ string SpikeDamageTypeContentManager::manifestToPath(
  * @brief Returns the manifest of a spike damage type given its path.
  *
  * @param path Path to the spike damage type.
- * @param outmanifest If not nullptr, the manifest is returned here.
+ * @param outManifest If not nullptr, the manifest is returned here.
  */
 void SpikeDamageTypeContentManager::pathToManifest(
     const string &path, ContentManifest* outManifest

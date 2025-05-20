@@ -10,8 +10,8 @@
 
 #include "mission.h"
 
-#include "../../core/misc_functions.h"
 #include "../../core/game.h"
+#include "../../core/misc_functions.h"
 #include "../../game_state/area_editor/editor.h"
 #include "../../util/general_utils.h"
 #include "../../util/string_utils.h"

@@ -35,6 +35,7 @@ extern const float GAMEPLAY_MSG_CHAR_INTERVAL;
 extern const ALLEGRO_COLOR NO_PIKMIN_COLOR;
 }
 
+
 namespace AESTHETIC_RADAR_D {
 extern const ALLEGRO_COLOR BG_COLOR;
 extern const ALLEGRO_COLOR EDGE_COLOR;
@@ -42,11 +43,13 @@ extern const ALLEGRO_COLOR HIGHEST_COLOR;
 extern const ALLEGRO_COLOR LOWEST_COLOR;
 }
 
+
 namespace CARRYING_D {
 extern const float SPEED_BASE_MULT;
 extern const float SPEED_MAX_MULT;
 extern const float SPEED_WEIGHT_MULT;
 }
+
 
 namespace LEADERS_D {
 extern const float GROUP_MEMBER_GRAB_RANGE;
@@ -57,10 +60,12 @@ extern const float STANDARD_HEIGHT;
 extern const float STANDARD_RADIUS;
 }
 
+
 namespace MISC_D {
 extern const float DAY_MINUTES_END;
 extern const float DAY_MINUTES_START;
 }
+
 
 namespace PIKMIN_D {
 extern const float CHASE_RANGE;
@@ -74,6 +79,7 @@ extern const float STANDARD_RADIUS;
 extern const float SWARM_TASK_RANGE;
 }
 
+
 namespace RULES_D {
 extern const bool CAN_THROW_LEADERS;
 extern const float CURSOR_MAX_DIST;
@@ -85,10 +91,12 @@ extern const float ZOOM_CLOSEST_REACH;
 extern const float ZOOM_FARTHEST_REACH;
 }
 
+
 }
 
 
 using namespace GAME_CONFIG;
+
 
 /**
  * @brief The game's configuration. It controls some rules about the game.

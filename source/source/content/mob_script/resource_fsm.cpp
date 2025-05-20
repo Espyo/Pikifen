@@ -10,8 +10,8 @@
 
 #include "resource_fsm.h"
 
-#include "../../core/misc_functions.h"
 #include "../../core/game.h"
+#include "../../core/misc_functions.h"
 #include "../../util/string_utils.h"
 #include "../mob/resource.h"
 #include "gen_mob_fsm.h"

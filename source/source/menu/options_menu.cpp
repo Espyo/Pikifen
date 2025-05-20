@@ -12,9 +12,9 @@
 
 #include "options_menu.h"
 
-#include "../core/misc_functions.h"
 #include "../core/game.h"
 #include "../core/load.h"
+#include "../core/misc_functions.h"
 #include "../util/string_utils.h"
 #include "menu.h"
 

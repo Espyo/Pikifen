@@ -37,6 +37,7 @@ extern const float OP_ERROR_CURSOR_SHAKE_WIDTH;
 extern const float OP_ERROR_CURSOR_SIZE;
 extern const float OP_ERROR_CURSOR_THICKNESS;
 extern const float OP_ERROR_FLASH_DURATION;
+extern const float PICKER_IMG_BUTTON_MIN_SIZE;
 extern const float PICKER_IMG_BUTTON_SIZE;
 extern const float STATUS_BAR_HEIGHT;
 extern const float TW_DEF_SIZE;

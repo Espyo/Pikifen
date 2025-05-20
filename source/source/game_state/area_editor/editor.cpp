@@ -12,9 +12,9 @@
 
 #include "editor.h"
 
-#include "../../core/misc_functions.h"
 #include "../../core/game.h"
 #include "../../core/load.h"
+#include "../../core/misc_functions.h"
 #include "../../lib/imgui/imgui_impl_allegro5.h"
 #include "../../util/allegro_utils.h"
 #include "../../util/general_utils.h"
@@ -205,14 +205,14 @@ AreaEditor::AreaEditor() :
  * @return The day speed.
  */
 float AreaEditor::calculateDaySpeed(
-    float dayStartmin, float dayEndMin, float missionMin
+    float dayStartMin, float dayEndMin, float missionMin
 ) {
     if(missionMin == 0.0f) return 0.0f;
     float auxDayEndMin = dayEndMin;
-    if(dayEndMin < dayStartmin) {
+    if(dayEndMin < dayStartMin) {
         auxDayEndMin += 24 * 60;
     }
-    return (auxDayEndMin - dayStartmin) / missionMin;
+    return (auxDayEndMin - dayStartMin) / missionMin;
 }
 
 

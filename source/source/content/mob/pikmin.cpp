@@ -13,8 +13,8 @@
 #include "pikmin.h"
 
 #include "../../core/drawing.h"
-#include "../../core/misc_functions.h"
 #include "../../core/game.h"
+#include "../../core/misc_functions.h"
 #include "../../util/allegro_utils.h"
 #include "../../util/general_utils.h"
 #include "../../util/geometry_utils.h"
@@ -310,6 +310,7 @@ float Pikmin::getTaskRange() const {
     result = game.config.pikmin.swarmTaskRange;
     return result;
 }
+
 
 /**
  * @brief Handles a status effect being applied.

@@ -28,6 +28,7 @@
 #include "game.h"
 #include "misc_functions.h"
 
+
 namespace BIND_INPUT_ICON {
 
 //Base rectangle outline color.
@@ -1545,7 +1546,7 @@ void getPlayerInputIconInfo(
  * @brief Returns the width of a control bind input icon, for drawing purposes.
  *
  * @param font Font to use for the name, if necessary.
- * @param i Info on the player input. If invalid, a "NONE" icon will be used.
+ * @param s Info on the player input. If invalid, a "NONE" icon will be used.
  * @param condensed If true, only the icon's fundamental information is
  * presented. If false, disambiguation information is included too.
  * For instance, keyboard keys that come in pairs specify whether they are

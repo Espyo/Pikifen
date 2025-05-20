@@ -94,8 +94,6 @@ ALLEGRO_AUDIO_STREAM* loadAudioStream(
  * error. Otherwise, returns nullptr.
  * @param errorBmpOnEmpty If true, returns the error bitmap in the case of an
  * empty file name. Otherwise, returns nullptr.
- * @param pathFromRoot Normally, files are fetched from the images folder.
- * If this parameter is true, the path starts from the game's root.
  * @return The bitmap.
  */
 ALLEGRO_BITMAP* loadBmp(

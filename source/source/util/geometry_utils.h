@@ -76,6 +76,7 @@ struct Point {
     
 };
 
+
 const Point operator+(float n, const Point &p);
 const Point operator-(float n, const Point &p);
 const Point operator*(float n, const Point &p);

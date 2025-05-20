@@ -571,7 +571,7 @@ void getMultilineTextDimensions(
  *
  * @param where Coordinates to draw the text at.
  * @param scale Text scale.
- * @param textOrigOy The text's original Y offset,
+ * @param textOrigOY The text's original Y offset,
  * from al_get_text_dimensions.
  * @param vAlignOffset Vertical alignment offset.
  * @param outTextTransform The text transform is returned here.

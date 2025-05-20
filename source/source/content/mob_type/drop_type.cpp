@@ -10,8 +10,8 @@
 
 #include "drop_type.h"
 
-#include "../../core/misc_functions.h"
 #include "../../core/game.h"
+#include "../../core/misc_functions.h"
 #include "../mob_script/drop_fsm.h"
 
 

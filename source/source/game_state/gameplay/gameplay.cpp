@@ -19,9 +19,9 @@
 #include "../../content/mob/pile.h"
 #include "../../content/mob/resource.h"
 #include "../../core/drawing.h"
-#include "../../core/misc_functions.h"
 #include "../../core/game.h"
 #include "../../core/load.h"
+#include "../../core/misc_functions.h"
 #include "../../core/misc_structs.h"
 #include "../../lib/data_file/data_file.h"
 #include "../../util/allegro_utils.h"
@@ -78,17 +78,17 @@ const float ENEMY_MIX_DISTANCE = 150.0f;
 //Width and height of the fog bitmap.
 const int FOG_BITMAP_SIZE = 128;
 
-//How long the HUD moves for when a menu is entered.
-const float MENU_ENTRY_HUD_MOVE_TIME = 0.4f;
-
-//How long the HUD moves for when a menu is exited.
-const float MENU_EXIT_HUD_MOVE_TIME = 0.5f;
-
 //When a leader lands, this is the maximum size of the particles.
 extern const float LEADER_LAND_PART_MAX_SIZE = 64.0f;
 
 //When a leader lands, scale the particles by the fall distance and this factor.
 extern const float LEADER_LAND_PART_SIZE_MULT = 0.1f;
+
+//How long the HUD moves for when a menu is entered.
+const float MENU_ENTRY_HUD_MOVE_TIME = 0.4f;
+
+//How long the HUD moves for when a menu is exited.
+const float MENU_EXIT_HUD_MOVE_TIME = 0.5f;
 
 //Opacity of the throw preview.
 const unsigned char PREVIEW_OPACITY = 160;

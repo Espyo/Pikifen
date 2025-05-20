@@ -10,9 +10,9 @@
 
 #include "editor.h"
 
-#include "../../core/misc_functions.h"
 #include "../../core/game.h"
 #include "../../core/load.h"
+#include "../../core/misc_functions.h"
 #include "../../util/allegro_utils.h"
 #include "../../util/string_utils.h"
 

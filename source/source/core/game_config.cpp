@@ -35,6 +35,7 @@ const ALLEGRO_COLOR NO_PIKMIN_COLOR = { 0.66f, 0.74f, 0.90f, 1.0f };
 
 }
 
+
 namespace AESTHETIC_RADAR_D {
 
 //Default value for the radar background color.
@@ -51,6 +52,7 @@ const ALLEGRO_COLOR LOWEST_COLOR = al_map_rgb(80, 64, 0);
 
 }
 
+
 namespace CARRYING_D {
 
 //Default value for the carrying speed base multiplier.
@@ -63,6 +65,7 @@ const float SPEED_MAX_MULT = 0.8f;
 const float SPEED_WEIGHT_MULT = 0.0004f;
 
 }
+
 
 namespace LEADERS_D {
 
@@ -86,6 +89,7 @@ const float STANDARD_RADIUS = 16.0f;
 
 }
 
+
 namespace MISC_D {
 
 //Default value for the day end time.
@@ -95,6 +99,7 @@ const float DAY_MINUTES_END = 60 * 19;
 const float DAY_MINUTES_START = 60 * 7;
 
 }
+
 
 namespace PIKMIN_D {
 
@@ -127,6 +132,7 @@ const float SWARM_TASK_RANGE = 3.0f;
 
 }
 
+
 namespace RULES_D {
 
 //Default value for whether leaders can throw leaders.
@@ -154,6 +160,7 @@ const float ZOOM_CLOSEST_REACH = 295.0f;
 const float ZOOM_FARTHEST_REACH = 1340.0f;
 
 }
+
 
 }
 

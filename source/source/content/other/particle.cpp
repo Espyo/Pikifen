@@ -14,8 +14,8 @@
 
 #include "../../content/mob/mob.h"
 #include "../../core/drawing.h"
-#include "../../core/misc_functions.h"
 #include "../../core/game.h"
+#include "../../core/misc_functions.h"
 #include "../../util/allegro_utils.h"
 #include "../../util/geometry_utils.h"
 #include "../../util/string_utils.h"
@@ -24,13 +24,13 @@
 /**
  * @brief Constructs a new particle object.
  *
- * @param type The type of particle.
  * @param pos Starting coordinates.
  * @param z Starting Z coordinate.
- * @param diameter Diameter.
+ * @param initialSize Initial size.
  * @param duration Total lifespan.
  * @param priority Lower priority particles will be removed in favor
  * of higher ones.
+ * @param initialColor Initial color.
  */
 Particle::Particle(
     const Point &pos, const float z,
@@ -309,9 +309,7 @@ void ParticleGenerator::emit(ParticleManager &manager) {
  * @brief Loads particle generator data from a data node.
  *
  * @param node Data node to load from.
- * @param loadResources If true, things like bitmaps and the like will
- * be loaded as well. If you don't need those, set this to false to make
- * it load faster.
+ * @param level Level to load at.
  */
 void ParticleGenerator::loadFromDataNode(
     DataNode* node, CONTENT_LOAD_LEVEL level
@@ -772,15 +770,13 @@ void ParticleManager::tickAll(float deltaT) {
     }
 }
 
+
 /**
  * @brief Constructs a new particle em object.
  *
  * @param emissionInterval Interval to spawn a new set of particles in,
  * in seconds. 0 means it spawns only one set and that's it.
- * @param baseParticle All particles created will be based on this one.
- * Their properties will deviate randomly based on the
- * deviation members of the particle generator object.
- * @param number Number of particles to spawn.
+ * @param num Number of particles to spawn.
  * This number is also deviated by numberDeviation.
  */
 ParticleEmission::ParticleEmission(

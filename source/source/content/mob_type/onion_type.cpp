@@ -10,8 +10,8 @@
 
 #include "onion_type.h"
 
-#include "../../core/misc_functions.h"
 #include "../../core/game.h"
+#include "../../core/misc_functions.h"
 #include "../mob_script/onion_fsm.h"
 #include "../mob/onion.h"
 

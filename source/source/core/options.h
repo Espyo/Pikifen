@@ -77,6 +77,7 @@ extern const bool WINDOW_POS_HACK;
 extern const float ZOOM_MEDIUM_REACH;
 }
 
+
 namespace AUDIO_D {
 extern const float AMBIANCE_SOUND_VOl;
 extern const float GAMEPLAY_SOUND_VOL;
@@ -85,9 +86,11 @@ extern const float MUSIC_VOL;
 extern const float UI_SOUND_VOL;
 }
 
+
 namespace ANIM_ED_D {
 extern const char* BG_PATH;
 }
+
 
 namespace AREA_ED_D {
 extern const bool ADVANCED_MODE;
@@ -104,10 +107,12 @@ extern const size_t UNDO_LIMIT;
 extern const AreaEditor::VIEW_MODE VIEW_MODE;
 }
 
+
 namespace CONTROLS_D {
 extern const AUTO_THROW_MODE AUTO_THROW;
 extern const float CURSOR_SPEED;
 }
+
 
 namespace EDITORS_D {
 extern const ALLEGRO_COLOR HIGHLIGHT_COLOR;
@@ -120,6 +125,7 @@ extern const ALLEGRO_COLOR TEXT_COLOR;
 extern const bool USE_CUSTOM_STYLE;
 }
 
+
 namespace GRAPHICS_D {
 extern const bool TRUE_FULLSCREEN;
 extern const bool WIN_FULLSCREEN;
@@ -127,10 +133,12 @@ extern const unsigned int WIN_H;
 extern const unsigned int WIN_W;
 }
 
+
 namespace GUI_ED_D {
 extern const float GRID_INTERVAL;
 extern const bool SNAP;
 }
+
 
 namespace MISC_D {
 extern const float CURSOR_CAM_WEIGHT;
@@ -138,15 +146,18 @@ extern const LEAVING_CONF_MODE LEAVING_CONF;
 extern const bool SHOW_HUD_INPUT_ICONS;
 }
 
+
 namespace PART_ED_D {
 extern const char* BG_PATH;
 extern const float GRID_INTERVAL;
 }
 
+
 }
 
 
 using namespace OPTIONS;
+
 
 /**
  * @brief Game options.

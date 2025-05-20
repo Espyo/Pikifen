@@ -10,8 +10,8 @@
 
 #include "pile_type.h"
 
-#include "../../core/misc_functions.h"
 #include "../../core/game.h"
+#include "../../core/misc_functions.h"
 #include "../../util/string_utils.h"
 #include "../mob_script/pile_fsm.h"
 #include "../mob/pile.h"

@@ -12,8 +12,8 @@
 
 #include "mob_category.h"
 
-#include "../../core/misc_functions.h"
 #include "../../core/game.h"
+#include "../../core/misc_functions.h"
 #include "../mob_type/mob_type.h"
 #include "../mob/mob.h"
 

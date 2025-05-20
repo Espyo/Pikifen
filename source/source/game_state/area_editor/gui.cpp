@@ -12,8 +12,8 @@
 
 #include "editor.h"
 
-#include "../../core/misc_functions.h"
 #include "../../core/game.h"
+#include "../../core/misc_functions.h"
 #include "../../lib/imgui/imgui_impl_allegro5.h"
 #include "../../lib/imgui/imgui_stdlib.h"
 #include "../../util/allegro_utils.h"

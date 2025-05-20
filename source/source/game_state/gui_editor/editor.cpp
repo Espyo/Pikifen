@@ -10,8 +10,8 @@
 
 #include "editor.h"
 
-#include "../../core/misc_functions.h"
 #include "../../core/game.h"
+#include "../../core/misc_functions.h"
 #include "../../util/allegro_utils.h"
 #include "../../util/string_utils.h"
 
@@ -94,7 +94,7 @@ void GuiEditor::closeOptionsDialog() {
  * one in the base pack.
  *
  * @param internalName Internal name of the GUI definition.
- * @param destPack The new definition's pack.
+ * @param pack The existing pack's internal name.
  */
 void GuiEditor::createGuiDef(
     const string &internalName, const string &pack

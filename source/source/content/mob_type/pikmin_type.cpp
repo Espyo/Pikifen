@@ -11,8 +11,8 @@
 #include "pikmin_type.h"
 
 #include "../../core/const.h"
-#include "../../core/misc_functions.h"
 #include "../../core/game.h"
+#include "../../core/misc_functions.h"
 #include "../../util/string_utils.h"
 #include "../mob_script/pikmin_fsm.h"
 #include "../mob/leader.h"

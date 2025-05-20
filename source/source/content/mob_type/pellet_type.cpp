@@ -10,11 +10,11 @@
 
 #include "pellet_type.h"
 
-#include "../../core/misc_functions.h"
 #include "../../core/game.h"
+#include "../../core/misc_functions.h"
+#include "../../util/string_utils.h"
 #include "../mob_script/gen_mob_fsm.h"
 #include "../mob_script/pellet_fsm.h"
-#include "../../util/string_utils.h"
 
 
 /**

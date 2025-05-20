@@ -12,8 +12,8 @@
 
 #include "leader_fsm.h"
 
-#include "../../core/misc_functions.h"
 #include "../../core/game.h"
+#include "../../core/misc_functions.h"
 #include "../../game_state/gameplay/gameplay.h"
 #include "../../util/general_utils.h"
 #include "../../util/string_utils.h"

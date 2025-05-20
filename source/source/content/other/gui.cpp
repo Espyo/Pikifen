@@ -15,8 +15,8 @@
 #include "gui.h"
 
 #include "../../core/drawing.h"
-#include "../../core/misc_functions.h"
 #include "../../core/game.h"
+#include "../../core/misc_functions.h"
 #include "../../util/string_utils.h"
 
 
@@ -88,6 +88,8 @@ BulletGuiItem::BulletGuiItem(
 
 /**
  * @brief Default bullet GUI item draw code.
+ * 
+ * @param draw Information on how to draw.
  */
 void BulletGuiItem::defDrawCode(
     const DrawInfo &draw
@@ -153,9 +155,11 @@ ButtonGuiItem::ButtonGuiItem(
 
 /**
  * @brief Default button GUI item draw code.
+ * 
+ * @param draw Information on how to draw.
  */
 void ButtonGuiItem::defDrawCode(
-    const DrawInfo  &draw
+    const DrawInfo &draw
 ) {
     drawButton(
         draw.center, draw.size,
@@ -225,6 +229,8 @@ void CheckGuiItem::defActivateCode() {
 
 /**
  * @brief Default check GUI item draw code.
+ * 
+ * @param draw Information on how to draw.
  */
 void CheckGuiItem::defDrawCode(const DrawInfo &draw) {
     float juicyGrowAmount = getJuiceValue();
@@ -660,8 +666,7 @@ string GuiManager::getCurrentTooltip() {
  * @brief Returns a given item's drawing information.
  *
  * @param item What item to check.
- * @param drawCenter The drawing center coordinates to use.
- * @param drawSize The drawing width and height to use.
+ * @param draw Information on how to draw.
  * @return True if the item exists and is meant to be drawn, false otherwise.
  */
 bool GuiManager::getItemDrawInfo(
@@ -1254,6 +1259,8 @@ ListGuiItem::ListGuiItem() :
 
 /**
  * @brief Default list GUI item child directionally selected code.
+ * 
+ * @param child The child item.
  */
 void ListGuiItem::defChildDirSelectedCode(const GuiItem* child) {
     //Try to center the child.
@@ -1272,6 +1279,8 @@ void ListGuiItem::defChildDirSelectedCode(const GuiItem* child) {
 
 /**
  * @brief Default list GUI item draw code.
+ * 
+ * @param draw Information on how to draw.
  */
 void ListGuiItem::defDrawCode(const DrawInfo &draw) {
     drawTexturedBox(
@@ -1360,8 +1369,10 @@ void ListGuiItem::defDrawCode(const DrawInfo &draw) {
 
 /**
  * @brief Default list GUI item event code.
+ * 
+ * @param ev The Allegro event.
  */
-void ListGuiItem::defEventCode(const ALLEGRO_EVENT  &ev) {
+void ListGuiItem::defEventCode(const ALLEGRO_EVENT &ev) {
     if(
         ev.type == ALLEGRO_EVENT_MOUSE_AXES &&
         isMouseOn(Point(ev.mouse.x, ev.mouse.y)) &&
@@ -1383,6 +1394,8 @@ void ListGuiItem::defEventCode(const ALLEGRO_EVENT  &ev) {
 
 /**
  * @brief Default list GUI item tick code.
+ * 
+ * @param deltaT How long the frame's tick is, in seconds.
  */
 void ListGuiItem::defTickCode(float deltaT) {
     float childBottom = getChildBottom();
@@ -1406,7 +1419,7 @@ void ListGuiItem::defTickCode(float deltaT) {
 /**
  * @brief Constructs a new picker gui item object.
  *
- * @param basetext Text to display before the current option's name.
+ * @param baseText Text to display before the current option's name.
  * @param option Text that matches the current option.
  * @param nrOptions Total amount of options.
  * @param curOptionIdx Index of the currently selected option.
@@ -1445,6 +1458,8 @@ PickerGuiItem::PickerGuiItem(
 
 /**
  * @brief Default picker GUI item activate code.
+ * 
+ * @param cursorPos Cursor position.
  */
 void PickerGuiItem::defActivateCode(const Point &cursorPos) {
     if(cursorPos.x >= getReferenceCenter().x) {
@@ -1457,6 +1472,8 @@ void PickerGuiItem::defActivateCode(const Point &cursorPos) {
 
 /**
  * @brief Default picker GUI item draw code.
+ * 
+ * @param draw Information on how to draw.
  */
 void PickerGuiItem::defDrawCode(const DrawInfo &draw) {
     if(this->nrOptions != 0 && selected) {
@@ -1560,12 +1577,14 @@ void PickerGuiItem::defDrawCode(const DrawInfo &draw) {
 
 /**
  * @brief Default picker GUI item menu dir code.
+ * 
+ * @param actionId ID of the player action.
  */
-bool PickerGuiItem::defMenuDirCode(size_t buttonId) {
-    if(buttonId == PLAYER_ACTION_TYPE_MENU_RIGHT) {
+bool PickerGuiItem::defMenuDirCode(size_t actionId) {
+    if(actionId == PLAYER_ACTION_TYPE_MENU_RIGHT) {
         onNext();
         return true;
-    } else if(buttonId == PLAYER_ACTION_TYPE_MENU_LEFT) {
+    } else if(actionId == PLAYER_ACTION_TYPE_MENU_LEFT) {
         onPrevious();
         return true;
     }
@@ -1575,8 +1594,10 @@ bool PickerGuiItem::defMenuDirCode(size_t buttonId) {
 
 /**
  * @brief Default picker GUI item mouse over code.
+ * 
+ * @param cursorPos Cursor position.
  */
-void PickerGuiItem::defMouseOverCode(const Point  &cursorPos) {
+void PickerGuiItem::defMouseOverCode(const Point &cursorPos) {
     arrowHighlight =
         cursorPos.x >= getReferenceCenter().x ? 1 : 0;
 }
@@ -1601,6 +1622,8 @@ ScrollGuiItem::ScrollGuiItem() :
 
 /**
  * @brief Default scroll GUI item draw code.
+ * 
+ * @param draw Information on how to draw.
  */
 void ScrollGuiItem::defDrawCode(const DrawInfo &draw) {
     float barY = 0.0f; //Top, in height ratio.
@@ -1636,6 +1659,8 @@ void ScrollGuiItem::defDrawCode(const DrawInfo &draw) {
 
 /**
  * @brief Default scroll GUI item event code.
+ * 
+ * @param ev The Allegro event.
  */
 void ScrollGuiItem::defEventCode(const ALLEGRO_EVENT  &ev) {
     if(
@@ -1688,6 +1713,8 @@ TextGuiItem::TextGuiItem(
 
 /**
  * @brief Default text GUI item draw code.
+ * 
+ * @param draw Information on how to draw.
  */
 void TextGuiItem::defDrawCode(const DrawInfo &draw) {
     int textX = draw.center.x;
@@ -1769,6 +1796,8 @@ TooltipGuiItem::TooltipGuiItem(GuiManager* gui) :
 
 /**
  * @brief Default tooltip GUI item draw code.
+ * 
+ * @param draw Information on how to draw.
  */
 void TooltipGuiItem::defDrawCode(const DrawInfo &draw) {
     string curText = this->gui->getCurrentTooltip();

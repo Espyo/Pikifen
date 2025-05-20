@@ -184,7 +184,6 @@ bool ContentManager::createPack(
  * @param requestedAreaPath Path to the area folder.
  * @param manifPtr Set the manifest pointer to this. If nullptr, it'll be
  * set from the list of manifests.
- * @param type Type of area this is.
  * @param level Level to load at.
  * @param fromBackup If true, load from a backup, if any.
  * @return Whether it succeeded.

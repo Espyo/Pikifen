@@ -408,6 +408,7 @@ void GameplayState::doPlayerActionToggleZoom(Player* player, bool isDown) {
     game.audio.createUiSoundsource(game.sysContent.sndCamera);
 }
 
+
 /**
  * @brief Does the logic for the current spray usage player action.
  * 

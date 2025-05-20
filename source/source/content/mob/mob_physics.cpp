@@ -12,8 +12,8 @@
 
 #include "mob.h"
 
-#include "../../core/misc_functions.h"
 #include "../../core/game.h"
+#include "../../core/misc_functions.h"
 #include "../../util/general_utils.h"
 
 

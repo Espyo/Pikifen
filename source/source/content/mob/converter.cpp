@@ -10,8 +10,8 @@
 
 #include "converter.h"
 
-#include "../../core/misc_functions.h"
 #include "../../core/game.h"
+#include "../../core/misc_functions.h"
 #include "../../core/misc_structs.h"
 
 

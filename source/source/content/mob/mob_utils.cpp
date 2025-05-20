@@ -13,8 +13,8 @@
 
 #include "mob_utils.h"
 
-#include "../../core/misc_functions.h"
 #include "../../core/game.h"
+#include "../../core/misc_functions.h"
 #include "../../util/general_utils.h"
 #include "../../util/string_utils.h"
 #include "../other/mob_script_action.h"

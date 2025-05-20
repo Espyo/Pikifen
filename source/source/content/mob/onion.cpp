@@ -13,8 +13,8 @@
 #include "onion.h"
 
 #include "../../core/drawing.h"
-#include "../../core/misc_functions.h"
 #include "../../core/game.h"
+#include "../../core/misc_functions.h"
 #include "../../util/geometry_utils.h"
 #include "../../util/string_utils.h"
 

@@ -15,9 +15,9 @@
 #include "../content/mob_category/mob_category.h"
 #include "../content/mob_type/mob_type.h"
 #include "../core/drawing.h"
-#include "../core/misc_functions.h"
 #include "../core/game.h"
 #include "../core/load.h"
+#include "../core/misc_functions.h"
 #include "../lib/imgui/imgui_impl_allegro5.h"
 #include "../lib/imgui/imgui_internal.h"
 #include "../lib/imgui/imgui_stdlib.h"
@@ -63,11 +63,11 @@ const float OP_ERROR_CURSOR_THICKNESS = 5.0f;
 //Duration of the operation error red flash effect.
 const float OP_ERROR_FLASH_DURATION = 1.5f;
 
-//Picker dialog button size.
-const float PICKER_IMG_BUTTON_SIZE = 168.0f;
-
 //Picker dialog minimum button size.
 const float PICKER_IMG_BUTTON_MIN_SIZE = 32.0f;
+
+//Picker dialog button size.
+const float PICKER_IMG_BUTTON_SIZE = 168.0f;
 
 //Height of the status bar.
 const float STATUS_BAR_HEIGHT = 22.0f;
@@ -2116,6 +2116,7 @@ void Editor::processGuiHelpDialog() {
 /**
  * @brief Processes the widgets that show the editor's history.
  *
+ * @param history History data to use.
  * @param nameDisplayCallback When an entry's name needs to be displayed as
  * button text, this function gets called with the entry name as an argument,
  * to determine what the final button text will be.
@@ -2950,6 +2951,7 @@ void Editor::unload() {
 /**
  * @brief Updates the history list, by adding a new entry or bumping it up.
  *
+ * @param history History data to update.
  * @param manifest Manifest of the entry's content.
  * @param name Proper name of the entry.
  */

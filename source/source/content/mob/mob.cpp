@@ -14,8 +14,8 @@
 
 #include "../../core/const.h"
 #include "../../core/drawing.h"
-#include "../../core/misc_functions.h"
 #include "../../core/game.h"
+#include "../../core/misc_functions.h"
 #include "../../util/allegro_utils.h"
 #include "../../util/general_utils.h"
 #include "../../util/geometry_utils.h"
@@ -753,7 +753,7 @@ bool Mob::calculateCarryingDestination(
  *
  * @param added Newly added Pikmin, if any.
  * @param removed Newly removed Pikmin, if any.
- * @param targettype If not nullptr, the target Pikmin type is returned here.
+ * @param targetType If not nullptr, the target Pikmin type is returned here.
  * @return The Onion.
  */
 Onion* Mob::calculateCarryingOnion(
@@ -929,7 +929,7 @@ bool Mob::calculateDamage(
  * @brief Calculates how much knockback an attack will cause.
  *
  * @param victim The mob that'll take the damage.
- * @param attackh The hitbox of the attacker mob, if any.
+ * @param attackH The hitbox of the attacker mob, if any.
  * @param victimH The hitbox of the victim mob, if any.
  * @param kbStrength The variable to return the knockback amount to.
  * @param kbAngle The variable to return the angle of the knockback to.
@@ -1081,7 +1081,7 @@ void Mob::causeSpikeDamage(Mob* victim, bool isIngestion) {
 /**
  * @brief Sets a target for the mob to follow.
  *
- * @param origcoords Pointer to changing coordinates. If nullptr, it is
+ * @param origCoords Pointer to changing coordinates. If nullptr, it is
  * the world origin. Use this to make the mob follow another mob
  * wherever they go, for instance.
  * @param origZ Same as origCoords, but for the Z coordinate.
@@ -3367,6 +3367,7 @@ float Mob::getDrawingHeight() const {
     //We can't use FLT_MAX since multiple mobs with max height can stack.
     return height == 0 ? 1000000 : height;
 }
+
 
 /**
  * @brief From here on out, the mob's Z changes will be reflected in the height

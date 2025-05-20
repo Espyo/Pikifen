@@ -645,14 +645,14 @@ bool BBoxCheck(
  * If the calculation is impossible (like if the peak height is lower than the
  * starting height), the speed variables will all be set to 0.
  *
- * @param startXy Starting X and Y coordinates.
+ * @param startXY Starting X and Y coordinates.
  * @param startZ Starting Z coordinate.
- * @param targetXy Target destination's X and Y coordinates.
+ * @param targetXY Target destination's X and Y coordinates.
  * @param targetZ Target destination's Z coordinate.
  * @param maxH Maximum height, using the starting Z as the reference.
  * @param gravity Constant for the force of gravity, in units per
  * second squared.
- * @param reqSpeedXy The required X and Y speed is returned here.
+ * @param reqSpeedXY The required X and Y speed is returned here.
  * @param reqSpeedZ The required Z speed is returned here.
  * @param outHAngle If not nullptr, the final horizontal angle is
  * returned here.

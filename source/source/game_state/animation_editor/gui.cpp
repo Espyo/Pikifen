@@ -12,9 +12,9 @@
 
 #include "editor.h"
 
-#include "../../core/misc_functions.h"
 #include "../../core/game.h"
 #include "../../core/load.h"
+#include "../../core/misc_functions.h"
 #include "../../lib/imgui/imgui_impl_allegro5.h"
 #include "../../lib/imgui/imgui_stdlib.h"
 #include "../../util/allegro_utils.h"
@@ -1437,6 +1437,8 @@ void AnimationEditor::processGuiPanelFrame(Frame* &framePtr) {
 /**
  * @brief Processes the Dear ImGui animation control panel's frame
  * header for this frame.
+ * 
+ * @param framePtr Pointer to the current frame.
  */
 void AnimationEditor::processGuiPanelFrameHeader(Frame* &framePtr) {
     //Current frame text.

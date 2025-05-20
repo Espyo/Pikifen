@@ -10,8 +10,8 @@
 
 #include "ship_type.h"
 
-#include "../../core/misc_functions.h"
 #include "../../core/game.h"
+#include "../../core/misc_functions.h"
 #include "../../util/string_utils.h"
 #include "../mob_script/ship_fsm.h"
 #include "../mob/ship.h"

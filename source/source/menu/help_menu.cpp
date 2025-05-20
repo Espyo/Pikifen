@@ -10,8 +10,8 @@
 
 #include "help_menu.h"
 
-#include "../core/misc_functions.h"
 #include "../core/game.h"
+#include "../core/misc_functions.h"
 #include "../util/string_utils.h"
 
 
@@ -135,6 +135,8 @@ void HelpMenu::load() {
 
 /**
  * @brief Initializes the main GUI.
+ * 
+ * @param guiFile The GUI definition's file.
  */
 void HelpMenu::initGuiMain(DataNode* guiFile) {
     //Menu items.

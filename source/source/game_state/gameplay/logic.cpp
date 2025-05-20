@@ -18,8 +18,8 @@
 #include "../../content/mob/tool.h"
 #include "../../core/const.h"
 #include "../../core/drawing.h"
-#include "../../core/misc_functions.h"
 #include "../../core/game.h"
+#include "../../core/misc_functions.h"
 #include "../../util/general_utils.h"
 #include "../../util/string_utils.h"
 

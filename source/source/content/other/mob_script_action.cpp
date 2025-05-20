@@ -16,8 +16,8 @@
 #include "../../content/mob/group_task.h"
 #include "../../content/mob/scale.h"
 #include "../../content/mob/tool.h"
-#include "../../core/misc_functions.h"
 #include "../../core/game.h"
+#include "../../core/misc_functions.h"
 #include "../../util/general_utils.h"
 #include "../../util/string_utils.h"
 
