@@ -375,7 +375,7 @@ public:
     
     //Standby maturity icons.
     ALLEGRO_BITMAP* bmpMaturityIcon[N_MATURITIES] =
-        { nullptr, nullptr, nullptr };
+    { nullptr, nullptr, nullptr };
     
     //Icon for its Onion.
     ALLEGRO_BITMAP* bmpOnionIcon = nullptr;

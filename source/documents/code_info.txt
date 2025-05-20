@@ -1,7 +1,5 @@
 Code style:
-    Although I try to have my code clean by following a concise style, I don't expect to follow it 100% of the time. But 99%, sure. I use AStyle http://astyle.sourceforge.net/ to stylize the code for me, but there are some other things I also do to make the code pretty.
-    AStyle command line settings:
-        --style=java --indent=spaces=4 --align-pointer=type --align-reference=name --indent-preproc-define --indent-col1-comments --pad-oper --fill-empty-lines --keep-one-line-blocks --keep-one-line-statements --convert-tabs --mode=c
+    Although I try to have my code clean by following a concise style, I don't expect to follow it 100% of the time. But 99%, sure. I use AStyle http://astyle.sourceforge.net/ to stylize the code for me, but there are some other things I also do to make the code pretty. The options I use can be found in the astyle.txt file. All versions have problems, but the one I use is 3.2.1, which seems to be the one with the fewest harmful problems.
     Other things:
         Keep two empty lines between functions in .cpp files.
         80 column limit

@@ -273,12 +273,12 @@ struct HudBubbleManager {
                 //First half of the animation. Fade out.
                 draw->size *=
                     ease(EASE_METHOD_OUT, (transitionAnimRatio - 0.5f) * 2.0f);
-                
+                    
             } else {
                 //Second half of the animation. Fade in.
                 draw->size *=
                     ease(EASE_METHOD_OUT, 1 - transitionAnimRatio * 2.0f);
-                
+                    
             }
         }
         

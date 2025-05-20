@@ -88,7 +88,7 @@ BulletGuiItem::BulletGuiItem(
 
 /**
  * @brief Default bullet GUI item draw code.
- * 
+ *
  * @param draw Information on how to draw.
  */
 void BulletGuiItem::defDrawCode(
@@ -155,7 +155,7 @@ ButtonGuiItem::ButtonGuiItem(
 
 /**
  * @brief Default button GUI item draw code.
- * 
+ *
  * @param draw Information on how to draw.
  */
 void ButtonGuiItem::defDrawCode(
@@ -229,7 +229,7 @@ void CheckGuiItem::defActivateCode() {
 
 /**
  * @brief Default check GUI item draw code.
- * 
+ *
  * @param draw Information on how to draw.
  */
 void CheckGuiItem::defDrawCode(const DrawInfo &draw) {
@@ -1259,7 +1259,7 @@ ListGuiItem::ListGuiItem() :
 
 /**
  * @brief Default list GUI item child directionally selected code.
- * 
+ *
  * @param child The child item.
  */
 void ListGuiItem::defChildDirSelectedCode(const GuiItem* child) {
@@ -1279,7 +1279,7 @@ void ListGuiItem::defChildDirSelectedCode(const GuiItem* child) {
 
 /**
  * @brief Default list GUI item draw code.
- * 
+ *
  * @param draw Information on how to draw.
  */
 void ListGuiItem::defDrawCode(const DrawInfo &draw) {
@@ -1369,7 +1369,7 @@ void ListGuiItem::defDrawCode(const DrawInfo &draw) {
 
 /**
  * @brief Default list GUI item event code.
- * 
+ *
  * @param ev The Allegro event.
  */
 void ListGuiItem::defEventCode(const ALLEGRO_EVENT &ev) {
@@ -1394,7 +1394,7 @@ void ListGuiItem::defEventCode(const ALLEGRO_EVENT &ev) {
 
 /**
  * @brief Default list GUI item tick code.
- * 
+ *
  * @param deltaT How long the frame's tick is, in seconds.
  */
 void ListGuiItem::defTickCode(float deltaT) {
@@ -1458,7 +1458,7 @@ PickerGuiItem::PickerGuiItem(
 
 /**
  * @brief Default picker GUI item activate code.
- * 
+ *
  * @param cursorPos Cursor position.
  */
 void PickerGuiItem::defActivateCode(const Point &cursorPos) {
@@ -1472,7 +1472,7 @@ void PickerGuiItem::defActivateCode(const Point &cursorPos) {
 
 /**
  * @brief Default picker GUI item draw code.
- * 
+ *
  * @param draw Information on how to draw.
  */
 void PickerGuiItem::defDrawCode(const DrawInfo &draw) {
@@ -1577,7 +1577,7 @@ void PickerGuiItem::defDrawCode(const DrawInfo &draw) {
 
 /**
  * @brief Default picker GUI item menu dir code.
- * 
+ *
  * @param actionId ID of the player action.
  */
 bool PickerGuiItem::defMenuDirCode(size_t actionId) {
@@ -1594,7 +1594,7 @@ bool PickerGuiItem::defMenuDirCode(size_t actionId) {
 
 /**
  * @brief Default picker GUI item mouse over code.
- * 
+ *
  * @param cursorPos Cursor position.
  */
 void PickerGuiItem::defMouseOverCode(const Point &cursorPos) {
@@ -1622,7 +1622,7 @@ ScrollGuiItem::ScrollGuiItem() :
 
 /**
  * @brief Default scroll GUI item draw code.
- * 
+ *
  * @param draw Information on how to draw.
  */
 void ScrollGuiItem::defDrawCode(const DrawInfo &draw) {
@@ -1659,7 +1659,7 @@ void ScrollGuiItem::defDrawCode(const DrawInfo &draw) {
 
 /**
  * @brief Default scroll GUI item event code.
- * 
+ *
  * @param ev The Allegro event.
  */
 void ScrollGuiItem::defEventCode(const ALLEGRO_EVENT  &ev) {
@@ -1713,7 +1713,7 @@ TextGuiItem::TextGuiItem(
 
 /**
  * @brief Default text GUI item draw code.
- * 
+ *
  * @param draw Information on how to draw.
  */
 void TextGuiItem::defDrawCode(const DrawInfo &draw) {
@@ -1796,7 +1796,7 @@ TooltipGuiItem::TooltipGuiItem(GuiManager* gui) :
 
 /**
  * @brief Default tooltip GUI item draw code.
- * 
+ *
  * @param draw Information on how to draw.
  */
 void TooltipGuiItem::defDrawCode(const DrawInfo &draw) {

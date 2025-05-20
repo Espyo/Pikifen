@@ -73,7 +73,7 @@ class Leader : public Mob {
 public:
 
     //--- Members ---
-
+    
     //Player that is currently controlling it, if any. Cache for performance.
     Player* player = nullptr;
     

@@ -511,6 +511,7 @@ Procedure for every version release
         Add to the todo for the start of the next version:
             Update Dear ImGui, and try compiling with IMGUI_DISABLE_OBSOLETE_FUNCTIONS defined
             Pass all code files through AStyle
+                for f in $(find . -type f | egrep '.+\.(cpp|h)'); do astyle --options=../documents/astyle.txt -n $f; done
             If this is a big release:
                 Compile with -Wall and correct all problems
                 Use cppcheck on the code and correct the problems

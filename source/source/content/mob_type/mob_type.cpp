@@ -470,7 +470,7 @@ void MobType::loadFromDataNode(
         }
         auto statusOverrideIt =
             game.content.statusTypes.list.find(statusOverrideName);
-        
+            
         if(svIt == game.content.statusTypes.list.end()) {
             game.errors.report(
                 "Unknown status type \"" + vulNode->name + "\"!",

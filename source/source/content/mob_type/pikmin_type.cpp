@@ -244,7 +244,7 @@ void PikminType::loadCatProperties(DataNode* file) {
  */
 void PikminType::loadCatResources(DataNode* file) {
     ReaderSetter pRS(file);
-
+    
     string iconStr;
     string iconLeafStr;
     string iconBudStr;
@@ -269,7 +269,7 @@ void PikminType::loadCatResources(DataNode* file) {
         game.content.bitmaps.list.get(iconBudStr, iconBudNode);
     bmpMaturityIcon[2] =
         game.content.bitmaps.list.get(iconFlowerStr, iconFlowerNode);
-    
+        
     if(iconOnionNode) {
         bmpOnionIcon =
             game.content.bitmaps.list.get(iconOnionStr, iconOnionNode);

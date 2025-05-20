@@ -248,7 +248,7 @@ void GameConfig::load(DataNode* file) {
     //Pikmin.
     {
         ReaderSetter pRS(file->getChildByName("pikmin"));
-
+        
         string pikminOrderStr;
         
         pRS.set("chase_range", pikmin.chaseRange);

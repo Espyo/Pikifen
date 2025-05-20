@@ -1437,7 +1437,7 @@ void AnimationEditor::processGuiPanelFrame(Frame* &framePtr) {
 /**
  * @brief Processes the Dear ImGui animation control panel's frame
  * header for this frame.
- * 
+ *
  * @param framePtr Pointer to the current frame.
  */
 void AnimationEditor::processGuiPanelFrameHeader(Frame* &framePtr) {

@@ -156,7 +156,7 @@ struct MakerTools {
     
     //Different mob hurting settings. When used, dock this much of its max HP.
     float mobHurtingSettings[3] = { 0.75f, 1.0f, -1.0f };
-
+    
     //Whether the first modifier input is held down.
     bool mod1 = false;
     

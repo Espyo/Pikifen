@@ -48,7 +48,7 @@ bool ContentManager::createPack(
     //Create the data file.
     DataNode data;
     GetterWriter pGW(&data);
-
+    
     pGW.write("name", name);
     pGW.write("description", description);
     pGW.write("maker", maker);

@@ -494,7 +494,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
     
     float cursorAngle =
         getAngle(player->leaderPtr->pos, player->leaderCursorWorld);
-    
+        
     Distance leaderToCursorDist(
         player->leaderPtr->pos, player->leaderCursorWorld
     );

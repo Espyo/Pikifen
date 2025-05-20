@@ -233,28 +233,28 @@ private:
         size_t uselessSplitPart2Checkpoint = INVALID;
         
     };
-
+    
     //Style of the different things to draw in the canvas.
     struct AreaEdCanvasStyle : CanvasStyle {
-
+    
         //Texture alpha.
         float textureAlpha = 1.0f;
-
+        
         //Wall shadow alpha.
         float wallShadowAlpha = 1.0f;
-
+        
         //Edge line alpha.
         float edgeAlpha = 1.0f;
-
+        
         //Mob alpha.
         float mobAlpha = 1.0f;
-
+        
         //Z of the lowest sector.
         float lowestSectorZ = 0.0f;
-
+        
         //Z of the highest sector.
         float highestSectorZ = 0.0f;
-
+        
     };
     
     //Possible results after a line drawing operation.
@@ -627,7 +627,7 @@ private:
     //Time left to keep the error-redness of the new sector's line(s) for.
     Timer newSectorErrorTintTimer =
         Timer(AREA_EDITOR::NEW_SECTOR_ERROR_TINT_DURATION);
-    
+        
     //Mouse drag start coordinates, when using on-canvas texture effect editing.
     Point octeeDragStart;
     
@@ -703,7 +703,7 @@ private:
     //Information about the problematic intersecting edges, if any.
     EdgeIntersection problemEdgeIntersection =
         EdgeIntersection(nullptr, nullptr);
-    
+        
     //Pointer to the problematic mob, if any.
     MobGen* problemMobPtr = nullptr;
     
@@ -1106,15 +1106,15 @@ private:
         const ALLEGRO_COLOR color, const Point &where, const string &text,
         unsigned char dots = 0
     );
-    void drawEdges(const AreaEdCanvasStyle& style);
+    void drawEdges(const AreaEdCanvasStyle &style);
     void drawLineDist(
         const Point &focus, const Point &other, const string &prefix = ""
     );
-    void drawMobs(const AreaEdCanvasStyle& style);
-    void drawPaths(const AreaEdCanvasStyle& style);
-    void drawSectors(const AreaEdCanvasStyle& style);
-    void drawTreeShadows(const AreaEdCanvasStyle& style);
-    void drawVertexes(const AreaEdCanvasStyle& style);
+    void drawMobs(const AreaEdCanvasStyle &style);
+    void drawPaths(const AreaEdCanvasStyle &style);
+    void drawSectors(const AreaEdCanvasStyle &style);
+    void drawTreeShadows(const AreaEdCanvasStyle &style);
+    void drawVertexes(const AreaEdCanvasStyle &style);
     void openLoadDialog();
     void openNewDialog();
     void openOptionsDialog();

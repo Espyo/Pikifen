@@ -409,8 +409,8 @@ void Mob::tickHorizontalMovementPhysics(
         //It's pretty naive...but it works!
         bool successfulMove = true;
         
-        newPos.x = pos.x + deltaT* moveSpeed.x;
-        newPos.y = pos.y + deltaT* moveSpeed.y;
+        newPos.x = pos.x + deltaT * moveSpeed.x;
+        newPos.y = pos.y + deltaT * moveSpeed.y;
         float newZ = z;
         
         //Get the sector the mob will be on.
@@ -757,8 +757,8 @@ void Mob::tickVerticalMovementPhysics(
         //https://youtu.be/hG9SzQxaCm8
         z +=
             (speedZ * deltaT) +
-            ((MOB::GRAVITY_ADDER * gravityMult / 2.0f) * deltaT* deltaT);
-        speedZ += MOB::GRAVITY_ADDER * deltaT* gravityMult;
+            ((MOB::GRAVITY_ADDER * gravityMult / 2.0f) * deltaT * deltaT);
+        speedZ += MOB::GRAVITY_ADDER * deltaT * gravityMult;
     }
     
     //Landing.

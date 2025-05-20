@@ -1694,7 +1694,7 @@ void PauseMenu::handlePlayerAction(const PlayerAction &action) {
 void PauseMenu::initConfirmationPage() {
     DataNode* guiFile =
         &game.content.guiDefs.list[PAUSE_MENU::CONFIRMATION_GUI_FILE_NAME];
-    
+        
     //Menu items.
     confirmationGui.registerCoords("cancel",           19, 83, 30, 10);
     confirmationGui.registerCoords("cancel_input",      5, 87,  4,  4);
@@ -2076,7 +2076,7 @@ void PauseMenu::initMainPauseMenu() {
 void PauseMenu::initMissionPage() {
     DataNode* guiFile =
         &game.content.guiDefs.list[PAUSE_MENU::MISSION_GUI_FILE_NAME];
-    
+        
     //Menu items.
     missionGui.registerCoords("header",           50,  5, 52,  6);
     missionGui.registerCoords("left_page",        12,  5, 20,  6);
@@ -2207,7 +2207,7 @@ void PauseMenu::initMissionPage() {
 void PauseMenu::initRadarPage() {
     DataNode* guiFile =
         &game.content.guiDefs.list[PAUSE_MENU::RADAR_GUI_FILE_NAME];
-    
+        
     //Assets.
     DataNode* bitmapsNode = guiFile->getChildByName("files");
     
@@ -2497,7 +2497,7 @@ void PauseMenu::initRadarPage() {
 void PauseMenu::initStatusPage() {
     DataNode* guiFile =
         &game.content.guiDefs.list[PAUSE_MENU::STATUS_GUI_FILE_NAME];
-    
+        
     //Menu items.
     statusGui.registerCoords("header",           50,     5,   52,    6);
     statusGui.registerCoords("left_page",        12,     5,   20,    6);

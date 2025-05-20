@@ -477,7 +477,7 @@ void Options::loadFromDataNode(DataNode* file) {
     //Particle editor.
     {
         ReaderSetter pRS(file->getChildByName("particle_editor"));
-
+        
         string historyStr;
         
         pRS.set("bg_path", partEd.bgPath);

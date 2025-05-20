@@ -117,7 +117,7 @@ size_t DataNode::add(DataNode* newNode) {
  * @param value Value of the new node.
  * @return The new node.
  */
-DataNode* DataNode::addNew(const string& name, const string& value) {
+DataNode* DataNode::addNew(const string &name, const string &value) {
     DataNode* newNode = new DataNode(name, value);
     add(newNode);
     return newNode;

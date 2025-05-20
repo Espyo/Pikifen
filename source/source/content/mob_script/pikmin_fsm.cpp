@@ -3523,7 +3523,7 @@ void PikminFsm::landOnMobWhileHolding(Mob* m, void* info1, void* info2) {
                 closestLeader = lPtr;
             }
         }
-
+        
         if(tooPtr->tooType->pikminReturnsAfterUsing && closestLeader) {
             if(
                 !pikPtr->holding.empty() &&
@@ -3574,7 +3574,7 @@ void PikminFsm::landWhileHolding(Mob* m, void* info1, void* info2) {
                 closestLeader = lPtr;
             }
         }
-
+        
         if(tooPtr->tooType->pikminReturnsAfterUsing && closestLeader) {
             if(
                 !pikPtr->holding.empty() &&

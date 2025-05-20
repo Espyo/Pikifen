@@ -142,7 +142,7 @@ const float THROW_PREVIEW_MIN_THICKNESS = 2.0f;
  * @param type Leader type this mob belongs to.
  * @param angle Starting angle.
  */
-Leader::Leader(const Point &pos, LeaderType* type, float angle) :
+Leader::Leader(const Point& pos, LeaderType* type, float angle) :
     Mob(pos, type, angle),
     leaType(type),
     autoThrowRepeater(&game.autoThrowSettings) {
@@ -241,10 +241,11 @@ bool Leader::canGrabGroupMember(Mob* m) const {
     
     //Check if the mob isn't too far under the leader
     //when on the same height sector.
-    if(z - m->z > GEOMETRY::STEP_HEIGHT &&
-       centerSector->z == m->centerSector->z
-       && standingOnMob == m->standingOnMob
-      ) {
+    if(
+        z - m->z > GEOMETRY::STEP_HEIGHT &&
+        centerSector->z == m->centerSector->z &&
+        standingOnMob == m->standingOnMob
+    ) {
         return false;
     }
     
@@ -841,8 +842,8 @@ bool Leader::orderPikminToOnion(
         candidates.begin(),
         candidates.end(),
         [] (
-            const std::pair<Distance, Pikmin*> &p1,
-            const std::pair<Distance, Pikmin*> &p2
+            const std::pair<Distance, Pikmin*>& p1,
+            const std::pair<Distance, Pikmin*>& p2
     ) -> bool {
         if(p1.second->maturity != p2.second->maturity) {
             return p1.second->maturity < p2.second->maturity;

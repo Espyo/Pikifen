@@ -94,7 +94,7 @@ struct Hud {
     
     //GUI manager.
     GuiManager gui;
-
+    
     //Whose player this HUD belongs to.
     Player* player = nullptr;
     

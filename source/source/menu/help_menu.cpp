@@ -85,7 +85,7 @@ void HelpMenu::drawTidbit(
 
 /**
  * @brief Initializes the main GUI.
- * 
+ *
  * @param guiFile The GUI definition's file.
  */
 void HelpMenu::initGuiMain(DataNode* guiFile) {

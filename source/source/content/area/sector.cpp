@@ -200,8 +200,8 @@ void Sector::getTextureMergeSectors(Sector** s1, Sector** s2) const {
     }
     sort(
         neighborsVec.begin(), neighborsVec.end(),
-    [this] (
-        std::pair<Distance, Sector*> p1, std::pair<Distance, Sector*> p2
+        [this] (
+            std::pair<Distance, Sector*> p1, std::pair<Distance, Sector*> p2
     ) -> bool {
         return p1.first < p2.first;
     }

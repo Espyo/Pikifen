@@ -114,7 +114,7 @@ void AreaEditor::drawCanvas() {
     }
     
     al_use_transform(&game.editorsView.worldToWindowTransform);
-
+    
     AreaEdCanvasStyle style {
         .textureAlpha = 0.4f,
         .wallShadowAlpha = 0.0f,
@@ -221,7 +221,7 @@ void AreaEditor::drawCanvas() {
         selectionMinAlpha +
         (sin(selectionEffect) + 1) *
         (selectionMaxAlpha - selectionMinAlpha) / 2.0;
-
+        
     //Draw!
     drawSectors(style);
     
@@ -244,9 +244,9 @@ void AreaEditor::drawCanvas() {
         al_map_rgba(192, 192, 224, style.gridAlpha * 255),
         1.0f / game.editorsView.cam.zoom
     );
-
+    
     drawEdges(style);
-
+    
     drawVertexes(style);
     
     //Selection transformation widget.
@@ -262,9 +262,9 @@ void AreaEditor::drawCanvas() {
             1.0f / game.editorsView.cam.zoom
         );
     }
-
+    
     drawMobs(style);
-
+    
     drawPaths(style);
     
     drawTreeShadows(style);
@@ -548,7 +548,7 @@ void AreaEditor::drawCanvas() {
     }
     
     al_use_transform(&game.identityTransform);
-
+    
     drawCrossSectionGraph();
     
     //Finish up.
@@ -912,7 +912,7 @@ void AreaEditor::drawDebugText(
         (dw * AREA_EDITOR::DEBUG_TEXT_SCALE) / game.editorsView.cam.zoom;
     float bboxH =
         (dh * AREA_EDITOR::DEBUG_TEXT_SCALE) / game.editorsView.cam.zoom;
-    
+        
     al_draw_filled_rectangle(
         where.x - bboxW * 0.5, where.y - bboxH * 0.5,
         where.x + bboxW * 0.5, where.y + bboxH * 0.5,
@@ -966,7 +966,7 @@ void AreaEditor::drawDebugText(
  *
  * @param style Canvas style.
  */
-void AreaEditor::drawEdges(const AreaEdCanvasStyle& style) {
+void AreaEditor::drawEdges(const AreaEdCanvasStyle &style) {
     size_t nEdges = game.curAreaData->edges.size();
     for(size_t e = 0; e < nEdges; e++) {
         Edge* ePtr = game.curAreaData->edges[e];
@@ -1181,7 +1181,7 @@ void AreaEditor::drawLineDist(
  *
  * @param style Canvas style.
  */
-void AreaEditor::drawMobs(const AreaEdCanvasStyle& style) {
+void AreaEditor::drawMobs(const AreaEdCanvasStyle &style) {
     //Linking and containing.
     if(state == EDITOR_STATE_MOBS && style.mobAlpha > 0.0f) {
         for(size_t m = 0; m < game.curAreaData->mobGenerators.size(); m++) {
@@ -1378,7 +1378,7 @@ void AreaEditor::drawMobs(const AreaEdCanvasStyle& style) {
  *
  * @param style Canvas style.
  */
-void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
+void AreaEditor::drawPaths(const AreaEdCanvasStyle &style) {
     if(state == EDITOR_STATE_PATHS) {
         //Stops.
         for(size_t s = 0; s < game.curAreaData->pathStops.size(); s++) {
@@ -1668,7 +1668,7 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
  *
  * @param style Canvas style.
  */
-void AreaEditor::drawSectors(const AreaEdCanvasStyle& style) {
+void AreaEditor::drawSectors(const AreaEdCanvasStyle &style) {
     //Edge offset effect updates.
     if(style.wallShadowAlpha > 0.0f) {
         updateOffsetEffectBuffer(
@@ -1690,7 +1690,7 @@ void AreaEditor::drawSectors(const AreaEdCanvasStyle& style) {
             false, game.editorsView
         );
     }
-
+    
     //Draw each one.
     size_t nSectors = game.curAreaData->sectors.size();
     for(size_t s = 0; s < nSectors; s++) {
@@ -1837,7 +1837,7 @@ void AreaEditor::drawSectors(const AreaEdCanvasStyle& style) {
  *
  * @param style Canvas style.
  */
-void AreaEditor::drawTreeShadows(const AreaEdCanvasStyle& style) {
+void AreaEditor::drawTreeShadows(const AreaEdCanvasStyle &style) {
     if(
         state == EDITOR_STATE_DETAILS ||
         (previewMode && showShadows)
@@ -1909,7 +1909,7 @@ void AreaEditor::drawTreeShadows(const AreaEdCanvasStyle& style) {
  *
  * @param style Canvas style.
  */
-void AreaEditor::drawVertexes(const AreaEdCanvasStyle& style) {
+void AreaEditor::drawVertexes(const AreaEdCanvasStyle &style) {
     if(state == EDITOR_STATE_LAYOUT) {
         size_t nVertexes = game.curAreaData->vertexes.size();
         for(size_t v = 0; v < nVertexes; v++) {

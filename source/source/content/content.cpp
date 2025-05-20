@@ -57,7 +57,7 @@ void Content::resetMetadata() {
  */
 void Content::saveMetadataToDataNode(DataNode* node) const {
     GetterWriter mGW(node);
-
+    
     mGW.write("name", name);
     
 #define saveOpt(n, v) if(!v.empty()) mGW.write((n), (v))
@@ -110,7 +110,7 @@ void ContentManifest::clear() {
 /**
  * @brief Fills in the information using the provided path. It'll all be empty
  * if the path is not valid.
- * 
+ *
  * @param path Path to fill from.
  */
 void ContentManifest::fillFromPath(const string &path) {

@@ -494,7 +494,7 @@ void TitleScreen::initGuiMainPage() {
 void TitleScreen::initGuiMakePage() {
     DataNode* guiFile =
         &game.content.guiDefs.list[TITLE_SCREEN::MAKE_GUI_FILE_NAME];
-    
+        
     //Button icon positions.
     DataNode* iconsNode = guiFile->getChildByName("icons_to_the_left");
     
@@ -678,7 +678,7 @@ void TitleScreen::initGuiMakePage() {
 void TitleScreen::initGuiPlayPage() {
     DataNode* guiFile =
         &game.content.guiDefs.list[TITLE_SCREEN::PLAY_GUI_FILE_NAME];
-    
+        
     //Button icon positions.
     DataNode* iconsNode = guiFile->getChildByName("icons_to_the_left");
     
@@ -803,7 +803,7 @@ void TitleScreen::initGuiPlayPage() {
 void TitleScreen::initGuiTutorialPage() {
     DataNode* guiFile =
         &game.content.guiDefs.list[TITLE_SCREEN::TUTORIAL_GUI_FILE_NAME];
-    
+        
     //Menu items.
     tutorialGui.registerCoords("question", 50,     60, 60,  12.5);
     tutorialGui.registerCoords("no",       26, 80.875, 40, 10.25);
@@ -924,11 +924,11 @@ void TitleScreen::load() {
     
     DataNode* settingsFile =
         &game.content.guiDefs.list[TITLE_SCREEN::GUI_FILE_NAME];
-    
+        
     //Resources.
     bmpMenuBg =
         game.content.bitmaps.list.get(game.sysContentNames.bmpTitleScreenBg);
-    
+        
     //Logo pikmin.
     DataNode* logoNode = settingsFile->getChildByName("logo");
     ReaderSetter lRS(logoNode);

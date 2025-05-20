@@ -961,7 +961,7 @@ void MobAnimContentManager::clearManifests() {
 
 /**
  * @brief Fills in the manifests from a specific pack.
- * 
+ *
  * @param category Mob category this applies to.
  * @param packName Internal name of the pack.
  */

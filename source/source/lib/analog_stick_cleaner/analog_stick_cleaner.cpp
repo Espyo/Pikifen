@@ -3,7 +3,7 @@
  *
  * === FILE DESCRIPTION ===
  * Analog stick cleaner class and related functions.
- * 
+ *
  * Please read the header file for more information.
  */
 

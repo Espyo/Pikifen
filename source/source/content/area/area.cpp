@@ -1018,7 +1018,7 @@ void Area::loadGeometryFromDataNode(
         DataNode* mobNode = mobsNode->getChild(m);
         ReaderSetter mRS(mobNode);
         MobGen* newMob = new MobGen();
-
+        
         string typeStr;
         string linksStr;
         

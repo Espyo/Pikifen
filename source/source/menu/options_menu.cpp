@@ -479,8 +479,8 @@ void OptionsMenu::initGuiControlsPage() {
     //Normal control binds button.
     ButtonGuiItem* normalBindsButton =
         new ButtonGuiItem(
-            "Normal control binds...", game.sysContent.fntStandard
-        );
+        "Normal control binds...", game.sysContent.fntStandard
+    );
     normalBindsButton->onActivate =
     [this] (const Point &) {
         bindsMenuType = CONTROL_BINDS_MENU_NORMAL;
@@ -503,8 +503,8 @@ void OptionsMenu::initGuiControlsPage() {
     //Special control binds button.
     ButtonGuiItem* specialBindsButton =
         new ButtonGuiItem(
-            "Special control binds...", game.sysContent.fntStandard
-        );
+        "Special control binds...", game.sysContent.fntStandard
+    );
     specialBindsButton->onActivate =
     [this] (const Point &) {
         bindsMenuType = CONTROL_BINDS_MENU_SPECIAL;
@@ -807,7 +807,7 @@ void OptionsMenu::initGuiMiscPage() {
 void OptionsMenu::initGuiTopPage() {
     DataNode* guiFile =
         &game.content.guiDefs.list[OPTIONS_MENU::TOP_GUI_FILE_NAME];
-    
+        
     //Button icon positions.
     DataNode* iconsNode = guiFile->getChildByName("icons_to_the_left");
     
@@ -1414,8 +1414,8 @@ void OptionsMenu::populateBinds() {
             //Restore default button.
             ButtonGuiItem* restoreButton =
                 new ButtonGuiItem(
-                    "Restore defaults", game.sysContent.fntStandard
-                );
+                "Restore defaults", game.sysContent.fntStandard
+            );
             restoreButton->ratioCenter =
                 Point(0.63f, curY);
             restoreButton->ratioSize =

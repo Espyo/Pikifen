@@ -963,7 +963,7 @@ struct Notification {
     
     //--- Function declarations ---
     
-    void draw(const Viewport& view) const;
+    void draw(const Viewport &view) const;
     float getVisibility() const;
     void reset();
     void setContents(

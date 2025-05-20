@@ -1,0 +1,11 @@
+--align-pointer=type
+--align-reference=name
+--convert-tabs
+--fill-empty-lines
+--indent-col1-comments
+--indent=spaces=4
+--keep-one-line-blocks
+--keep-one-line-statements
+--mode=c
+--pad-oper
+--style=java

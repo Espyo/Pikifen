@@ -246,7 +246,7 @@ private:
     
     //Radar pan inputs direction and amount.
     MovementInfo radarPan;
-
+    
     //Radar zoom inputs direction and amount.
     MovementInfo radarZoom;
     

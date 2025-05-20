@@ -1322,8 +1322,8 @@ void AreaEditor::finishLayoutMoving() {
         
         sort(
             mergeVertexes.begin(), mergeVertexes.end(),
-        [] (
-            std::pair<Distance, Vertex*> v1, std::pair<Distance, Vertex*> v2
+            [] (
+                std::pair<Distance, Vertex*> v1, std::pair<Distance, Vertex*> v2
         ) -> bool {
             return v1.first < v2.first;
         }
@@ -4026,8 +4026,8 @@ AreaEditor::LayoutDrawingNode::LayoutDrawingNode(
     if(!mergeVertexes.empty()) {
         sort(
             mergeVertexes.begin(), mergeVertexes.end(),
-        [] (
-            std::pair<Distance, Vertex*> v1, std::pair<Distance, Vertex*> v2
+            [] (
+                std::pair<Distance, Vertex*> v1, std::pair<Distance, Vertex*> v2
         ) -> bool {
             return v1.first < v2.first;
         }

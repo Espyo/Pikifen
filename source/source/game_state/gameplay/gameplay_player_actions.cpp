@@ -17,7 +17,7 @@
 
 /**
  * @brief Does the logic for the dismiss player action.
- * 
+ *
  * @param player The player responsible.
  * @param isDown Whether the input value makes for a "down" or an "up" input.
  */
@@ -31,21 +31,21 @@ void GameplayState::doPlayerActionDismiss(Player* player, bool isDown) {
 
 /**
  * @brief Does the logic for the lie down player action.
- * 
+ *
  * @param player The player responsible.
  * @param isDown Whether the input value makes for a "down" or an "up" input.
  */
 void GameplayState::doPlayerActionLieDown(Player* player, bool isDown) {
     if(!isDown) return;
     if(!player->leaderPtr) return;
-
+    
     player->leaderPtr->fsm.runEvent(LEADER_EV_LIE_DOWN);
 }
 
 
 /**
  * @brief Does the logic for the pause or radar player actions.
- * 
+ *
  * @param player The player responsible.
  * @param isDown Whether the input value makes for a "down" or an "up" input.
  * @param radar Whether to open the radar page.
@@ -72,7 +72,7 @@ void GameplayState::doPlayerActionPause(
 
 /**
  * @brief Does the logic for the leader switch player actions.
- * 
+ *
  * @param player The player responsible.
  * @param isDown Whether the input value makes for a "down" or an "up" input.
  * @param isNext Whether it's the action for the next leader or the previous.
@@ -88,7 +88,7 @@ void GameplayState::doPlayerActionSwitchLeader(
 
 /**
  * @brief Does the logic for the maturity switch player actions.
- * 
+ *
  * @param player The player responsible.
  * @param isDown Whether the input value makes for a "down" or an "up" input.
  * @param isNext Whether it's the action for the next maturity or the previous.
@@ -160,7 +160,7 @@ void GameplayState::doPlayerActionSwitchMaturity(
 
 /**
  * @brief Does the logic for the spray switch player actions.
- * 
+ *
  * @param player The player responsible.
  * @param isDown Whether the input value makes for a "down" or an "up" input.
  * @param isNext Whether it's the action for the next spray or the previous.
@@ -170,7 +170,7 @@ void GameplayState::doPlayerActionSwitchSpray(
 ) {
     if(!isDown) return;
     if(!player->leaderPtr) return;
-
+    
     if(game.content.sprayTypes.list.size() > 2) {
         player->selectedSpray =
             sumAndWrap(
@@ -187,7 +187,7 @@ void GameplayState::doPlayerActionSwitchSpray(
 
 /**
  * @brief Does the logic for the standby type switch player actions.
- * 
+ *
  * @param player The player responsible.
  * @param isDown Whether the input value makes for a "down" or an "up" input.
  * @param isNext Whether it's the action for the next type or the previous.
@@ -199,7 +199,7 @@ void GameplayState::doPlayerActionSwitchType(
     if(!player->leaderPtr) return;
     
     if(player->leaderPtr->group->members.empty()) return;
-                
+    
     SubgroupType* startingSubgroupType =
         player->leaderPtr->group->curStandbyType;
         
@@ -259,13 +259,13 @@ void GameplayState::doPlayerActionSwitchType(
 
 /**
  * @brief Does the logic for the throw player action.
- * 
+ *
  * @param player The player responsible.
  * @param isDown Whether the input value makes for a "down" or an "up" input.
  */
 void GameplayState::doPlayerActionThrow(Player* player, bool isDown) {
     if(!player->leaderPtr) return;
-
+    
     if(isDown) { //Button press.
         bool done = false;
         
@@ -383,13 +383,13 @@ void GameplayState::doPlayerActionThrow(Player* player, bool isDown) {
 
 /**
  * @brief Does the logic for the zoom toggle player action.
- * 
+ *
  * @param player The player responsible.
  * @param isDown Whether the input value makes for a "down" or an "up" input.
  */
 void GameplayState::doPlayerActionToggleZoom(Player* player, bool isDown) {
     if(!isDown) return;
-            
+    
     if(player->view.cam.targetZoom < zoomLevels[1]) {
         player->view.cam.targetZoom = zoomLevels[0];
     } else if(player->view.cam.targetZoom > zoomLevels[1]) {
@@ -411,14 +411,14 @@ void GameplayState::doPlayerActionToggleZoom(Player* player, bool isDown) {
 
 /**
  * @brief Does the logic for the current spray usage player action.
- * 
+ *
  * @param player The player responsible.
  * @param isDown Whether the input value makes for a "down" or an "up" input.
  */
 void GameplayState::doPlayerActionUseCurrentSpray(Player* player, bool isDown) {
     if(!isDown) return;
     if(!player->leaderPtr) return;
-
+    
     if(game.content.sprayTypes.list.size() > 2) {
         player->leaderPtr->fsm.runEvent(
             LEADER_EV_SPRAY,
@@ -430,7 +430,7 @@ void GameplayState::doPlayerActionUseCurrentSpray(Player* player, bool isDown) {
 
 /**
  * @brief Does the logic for the spray usage player actions.
- * 
+ *
  * @param player The player responsible.
  * @param isDown Whether the input value makes for a "down" or an "up" input.
  * @param second Whether it's the first or the second spray.
@@ -440,7 +440,7 @@ void GameplayState::doPlayerActionUseSpray(
 ) {
     if(!isDown) return;
     if(!player->leaderPtr) return;
-
+    
     if(!second) {
         if(
             game.content.sprayTypes.list.size() == 1 ||
@@ -451,7 +451,7 @@ void GameplayState::doPlayerActionUseSpray(
                 LEADER_EV_SPRAY, (void*) &sprayIdx
             );
         }
-
+        
     } else {
         if(game.content.sprayTypes.list.size() == 2) {
             size_t sprayIdx = 1;
@@ -459,23 +459,23 @@ void GameplayState::doPlayerActionUseSpray(
                 LEADER_EV_SPRAY, (void*) &sprayIdx
             );
         }
-
+        
     }
 }
 
 
 /**
  * @brief Does the logic for the whistle player action.
- * 
+ *
  * @param player The player responsible.
  * @param isDown Whether the input value makes for a "down" or an "up" input.
  */
 void GameplayState::doPlayerActionWhistle(Player* player, bool isDown) {
     if(!player->leaderPtr) return;
-
+    
     if(isDown) {
         MobEvent* cancelEv = player->leaderPtr->fsm.getEvent(LEADER_EV_CANCEL);
-            
+        
         if(cancelEv) {
             //Cancel auto-pluck, lying down, etc.
             cancelEv->run(player->leaderPtr);
@@ -494,7 +494,7 @@ void GameplayState::doPlayerActionWhistle(Player* player, bool isDown) {
 
 /**
  * @brief Does the logic for the zoom player action.
- * 
+ *
  * @param player The player responsible.
  * @param inputValue Value of the player input.
  * @param zoomIn Whether it zooms in or out.

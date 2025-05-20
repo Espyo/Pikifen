@@ -42,7 +42,7 @@ enum CARRY_DESTINATION {
     
     //To an Onion.
     CARRY_DESTINATION_ONION,
-
+    
     //To the Onion, or to the ship if there is none.
     CARRY_DESTINATION_SHIP_NO_ONION,
     
